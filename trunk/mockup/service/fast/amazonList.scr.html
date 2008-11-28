@@ -1,0 +1,312 @@
+<div id="list" class="x-hide-display">
+	<object id="list_obj" width="100%" height="100%">
+		<html>
+		    <head>
+		        <meta http-equiv="Content-Type" content="application/xhtml+xml; charset=UTF-8" />
+		        <link type="text/css" rel="stylesheet" href="http://piccolo.ls.fi.upm.es/amazonScreens/style/table.css" />
+		        <link type="text/css" rel="stylesheet" href="http://piccolo.ls.fi.upm.es/amazonScreens/style/screen.css" />
+				<style type="text/css">
+					#pages{
+						color:#FEBF43;
+						font-weight: bold;
+						padding: 10px;
+					}
+					#previousButton, #nextButton {
+						visibility:hidden;
+					}
+					#loadingImg{
+						margin:auto;
+						padding-top: 10px;
+					}
+					#amazonImage{
+						position:absolute;
+						right:0px;
+						top:3px;
+					}
+				</style>
+		        <script language="JavaScript">
+		            
+		            function List(){
+		            	//Last page fetched from Amazon Service	
+		            	this.lastPageFetched = 0;
+			            //Next set of products to print in the table (0-9)
+			            this.currentPage = 0;
+			            //Product list fetched from the Service
+			            this.productList = new Array();
+			            //Are we waiting for data?
+			            this.waiting = true;
+						//Total number of pages
+						this.numPages = 1;
+		            };
+		            
+		            List.prototype.init = function (){
+						$("nextButton").observe("click", list.nextPage);
+		                $("previousButton").observe("click", list.previousPage);
+						$$('input[type="button"]').each(function(element){
+							element.observe("mouseover",function(event){
+								var e = Event.element(event);
+								e.setStyle({cursor:"pointer"});
+							});
+						
+						});
+						var tableBody = $("listBody");
+		                tableBody.update("");
+						list.lastPageFetched = 0;
+			            list.currentPage = 0;
+						list.numPages = 1;
+			            list.productList = new Array();
+			            list.waiting = true;
+						list.showProgress();
+		                list.fetch();
+		            }
+		            
+		            List.prototype.fetch = function (){
+		                if (list.lastPageFetched < ((list.numPages)/2)) { //Only for the 5 pages provided by the service
+		                    list.search();
+		                }
+						else
+							list.showTable();
+		            }
+		            
+		            List.prototype.search = function (){
+	                    //Get the facts to invoke the service
+	                    var filter = EngineFactory.getInstance().getFact('filter');
+	                    var user = EngineFactory.getInstance().getFact('user');
+	                    //Add the ItemSearch parameters
+	                    var productType = filter.productType;
+	                    if(!productType){
+	                    	productType = 'All'
+	                    }
+	                    var parameters = "";
+						parameters += "&SearchIndex=" + productType;
+						parameters += "&Keywords=" + filter.searchText;
+	                    //Add the page number (if is set)
+	                    parameters += "&ItemPage=" + (list.lastPageFetched + 1);
+	                    
+	                    //Base URL of the REST Service
+						var url = "http://webservices.amazon.com/onca/xml?Service=AWSECommerceService";
+						//Add the AccessKeyId (get from the user fact)
+						if (user)
+							url += "&AWSAccessKeyId=" + user.KeyId;
+						else // if the KB doesn't contain a user key Id, add one by default
+							url += "&AWSAccessKeyId=15TNKDQJGH6BD0Z4KY02";
+						//Add the operation Type
+						url +="&Operation=ItemSearch";
+						//Add the parameters
+						url += parameters;
+						//Add the responseGroup
+						url +="&ResponseGroup=Medium";
+						//Add the current version of the API
+						url += "&Version=2008-06-26";
+
+						//Invoke the service
+	                    EzWebAPI.send_get(url, this, list.addToList, list.onError);
+		            }
+		            
+		            List.prototype.addToList = function (transport){
+		                var xml = transport.responseXML;
+		                //Check if the service returned an error
+		                if (xml.getElementsByTagName("IsValid")[0].childNodes[0].nodeValue == "False") {
+		                    //alert(xml.getElementsByTagName("Message")[0].childNodes[0].nodeValue);
+		                }
+		                else { //Correct response, create the result List
+		                    var _list = xml.getElementsByTagName("Items")[0].getElementsByTagName("Item");
+		                    //Fill the table, 1 row per item
+		                    $A(_list).each(function(item){
+								if (item.getElementsByTagName("Title").length > 0) 
+								    var title = item.getElementsByTagName("Title")[0].firstChild.nodeValue;
+								else
+								    var title = "&nbsp;";
+								if (item.getElementsByTagName("FormattedPrice").length > 0) 
+								    var price = item.getElementsByTagName("FormattedPrice")[0].firstChild.nodeValue;
+								else
+								    var price = "&nbsp;";
+								if (item.getElementsByTagName("ProductGroup").length > 0) 
+								    var pGroup = item.getElementsByTagName("ProductGroup")[0].firstChild.nodeValue;
+								else
+								    var pGroup = "&nbsp;";
+								if (item.getElementsByTagName("ASIN").length > 0) 
+								    var ASIN = item.getElementsByTagName("ASIN")[0].firstChild.nodeValue;
+		                        var row = {
+		                            title: title,
+		                            price: price,
+		                            pGroup: pGroup,
+		                            ASIN: ASIN
+		                        };
+		                        list.productList.push(row);
+		                    });
+							if (xml.getElementsByTagName("TotalPages").length > 0){
+								var totalPages = parseInt(xml.getElementsByTagName("TotalPages")[0].firstChild.nodeValue);
+								var totalResults = parseInt(xml.getElementsByTagName("TotalResults")[0].firstChild.nodeValue);
+								//Recalculate the last page
+								if (totalPages > 0)
+									list.numPages = totalPages*2 - 1 + ((totalResults % 10) > 5 ? 1:0);
+								else
+									list.numPages = 0;
+								if (list.numPages > 10)
+									list.numPages = 10;
+							}
+							$("totalPages").update(list.numPages);
+		                    list.lastPageFetched++;
+		                    if (list.waiting) {
+		                        list.waiting = false;
+		                        list.showTable();
+		                    }
+		                }
+		            }
+		            
+		            List.prototype.productDetail = function (nodeElement,_ASIN){
+						list.clearSelected ();
+						//select the element
+						nodeElement.parentNode.parentNode.setStyle({background: "#FFF8E8"});
+						var item = {name: 'item', ASIN: _ASIN, title: nodeElement.parentNode.parentNode.firstChild.firstChild.nodeValue};
+						EngineFactory.getInstance().manageFacts([item],[]);
+					}
+					
+					List.prototype.clearSelected = function (){
+						$$("tbody tr").each(function (element){
+							element.setStyle ({background: "transparent url(http://piccolo.ls.fi.upm.es/amazonScreens/style/bg_td1.jpg) repeat-x top"});
+						});
+					}
+					
+					List.prototype.onError = function (transport){
+		                //alert(transport.responseText);
+		            }
+		            
+		            List.prototype.showProgress = function (){
+		                list.waiting = true;
+		                $("loadingImg").show();
+		            }
+		            
+		            List.prototype.showTable = function (){
+		                $("loadingImg").hide();
+				//$("listBody").setStyle({visibility:"visible"});
+		                var templateString = '<tr><td>#{title}</td><td>#{price}</td><td>#{pGroup}</td>';
+		                templateString += '<td style="border-right:none;"><input type="button" onclick="list.productDetail(this,\'#{ASIN}\');"';
+						templateString += ' onmouseover="this.setStyle({cursor:\'pointer\'});" value="Select"/></td></tr>';
+		                var rowTemplate = new Template(templateString);
+		                
+		                var tableBody = $("listBody");
+		                for (var i = 5 * list.currentPage; i < 5 * (list.currentPage + 1); i++) { //print the appropriate elements
+		                    if (list.productList[i]) { //only if the product table is fetched
+		                        tableBody.innerHTML += rowTemplate.evaluate(list.productList[i]);
+		                    }
+		                }
+						list.updateCurrentPage();
+		                //Update Interface
+		                if (list.currentPage < (list.numPages - 1)) {
+		                    $("nextButton").setStyle({
+		                        visibility: "visible"
+		                    });
+		                }
+		                else {
+		                    $("nextButton").setStyle({
+		                        visibility: "hidden"
+		                    });
+		                }
+		                if (list.currentPage > 0) {
+		                    $("previousButton").setStyle({
+		                        visibility: "visible"
+		                    });
+		                }
+		                else {
+		                    $("previousButton").setStyle({
+		                        visibility: "hidden"
+		                    });
+		                }
+						
+		            }
+		            
+		            List.prototype.nextPage = function (){
+		                //Clear the table
+		                var tableBody = $("listBody");
+		                tableBody.update("");
+		                list.currentPage++;
+		                if (list.productList.length >= (list.currentPage + 1) * 5) {
+		                    list.showTable();
+		                    
+		                    // Lookahead
+		                    if ((list.currentPage + 1) * 5 >= list.productList.length) {
+		                        list.fetch();
+		                    }
+		                }
+		                else {
+		                    list.showProgress();
+		                    list.fetch();
+		                }
+						list.updateCurrentPage();
+		            }
+		            
+		            List.prototype.previousPage = function (){
+		                //Clear the table
+		                var tableBody = $("listBody");
+		                tableBody.update("");
+		                list.currentPage--;
+		                list.showTable();
+						list.updateCurrentPage();
+		            }
+		            
+		            //update the current page in the interface
+		            List.prototype.updateCurrentPage = function (){
+		            	(list.currentPage<9 && list.numPages > 9)?$("curPage").update("0"):$("curPage").update("");
+						if (list.numPages > 0)
+							$("curPage").innerHTML +=list.currentPage+1;
+						else
+							$("curPage").innerHTML += "0";
+		            }
+		            
+		            var list = new List();
+					EngineFactory.getInstance().addScreenLoader("List", list.init);
+		        </script>
+		    </head>
+		    <body>
+		        <div id="bodyDiv">
+		        	<span id="amazonImage"><img src="http://piccolo.ls.fi.upm.es/amazonScreens/images/amazon.png" /></span>
+		            <h1 id="title">Item list</h1>
+		            <div id="listDiv">
+
+		                <table>
+		                    <thead>
+		                        <tr>
+		                            <th style="width:60%; -moz-border-radius: 13px 0px 0px 0px;">
+		                                Title
+		                            </th>
+		                            <th style="width:10%">
+		                                Price
+		                            </th>
+		                            <th style="width:20%">
+		                                Product Group
+		                            </th>
+		                            <th style="width:10%; -moz-border-radius: 0px 13px 0px 0px;">
+		                                &nbsp;
+		                            </th>
+		                        </tr>
+		                    </thead>
+		                    <tbody id="listBody">
+		                            <tr>
+						<td>&nbsp;</td>
+					    </tr>
+		                            <tr>
+						<td>&nbsp;</td>
+					    </tr>
+		                            <tr>
+						<td>&nbsp;</td>
+					    </tr>
+		                            <tr>
+						<td>&nbsp;</td>
+					    </tr>
+		                    </tbody>
+		                </table>
+		                <img id="loadingImg" src="http://piccolo.ls.fi.upm.es/amazonScreens/images/ajaxLoader.gif" />
+		                <div id="buttonContainerDiv">
+		                    <input type="button" id="previousButton" class="button" value="<"/>
+							<span id="pages">
+							Page <span id="curPage">-</span>/<span id="totalPages">-</span>
+							</span><input type="button" id="nextButton" class="button" value=">"/>
+		                </div>
+		            </div>
+		        </div>
+		    </body>
+		</html>
+	</object>
+</div>

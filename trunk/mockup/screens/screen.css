@@ -1,0 +1,35 @@
+
+#bodyDiv{
+	text-align:center;
+	margin: 0px auto;
+	max-width: 700px;
+	max-height: 500px;
+}
+#title {
+	color:#FEBF43;
+	font-family:Arial,Helvetica,sans-serif;
+	font-style:italic;
+	margin:5px;
+	font-size: 24px;
+	font-weight: bold;
+}
+
+table {
+	margin: auto;
+}
+input[type="button"] {
+	background-color: #FFCA5E;
+	padding: 2px 4px;
+	margin: 3px;
+	border: none;
+	color: white;
+	font-weight: bold;
+	-moz-border-radius: 5px 5px;
+}
+.button {
+	background: url(bg_th.jpg) no-repeat right;
+	border-top: 2px solid #FCF1D4;
+	border-left: 2px solid #FCF1D4;
+	border-right: 2px solid #FFCA5E;
+	border-bottom: 2px solid #FFCA5E;
+}

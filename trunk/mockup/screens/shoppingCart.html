@@ -1,0 +1,123 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="application/xhtml+xml; charset=UTF-8" />
+        <link type="text/css" rel="stylesheet" href="table.css" />
+        <link type="text/css" rel="stylesheet" href="screen.css" />
+		<style type="text/css">
+			#loadingImg{
+				margin:auto;
+				
+			}
+			#info{
+				margin:auto;
+				font-family:Arial,Helvetica,sans-serif;
+				font-style:italic;
+				padding-top: 10px;
+				color: #AAA;
+			}
+			.productTitle{
+				font-weight:bold;
+				font-style:normal;
+			}
+			#buttonContainerDiv{
+				margin-top: 5px;
+				display:none;
+			}
+		</style>
+        <script language="JavaScript" src="../js/prototype/prototype.js">
+        </script>
+        <script language="JavaScript">
+            //Product list fetched from the Service
+            var productList = new Array();
+			//Subtotal
+			var subTotal;
+			// number of items in the cart
+			var itemTotal = 0;
+			//Purchase URL
+            
+            function init(){
+				$$('input[type="button"]').each(function(element){
+					element.observe("mouseover",function(event){
+						var e = Event.element(event);
+						e.setStyle({cursor:"pointer"});
+					});
+				});
+				productList = [{
+								title: "Product 1",
+								price: "$1.0",
+								quantity: 2
+							},{
+								title: "Product 2",
+								price: "$2.0",
+								quantity: 1
+							}];
+							itemTotal = "3";
+							subTotal = "$3.0";
+               showTable();
+            }     
+            function showTable(){
+                $("loadingImg").hide();
+				var tableBody = $("listBody");
+				tableBody.update("");
+				if (productList.length == 0) {//Empty shopping cart
+					$("info").update("Your Shopping Cart is empty");
+					$("buttonContainerDiv").hide();
+					return;
+				}
+				$("buttonContainerDiv").setStyle({display:"inline"});
+                var templateString = '<tr><td><a>#{title}</a></td>';
+				templateString += '<td>#{price}</td>';
+				templateString += '<td><input type="text" maxlength="3" size="2"';
+				templateString += 'value="#{quantity}"/></td></tr>';
+                var rowTemplate = new Template(templateString);
+                
+                
+                for (var i = 0; i < productList.length; i++) {
+                    if (productList[i]) { //only if the product table is fetched
+                        tableBody.innerHTML += rowTemplate.evaluate(productList[i]);
+                    }
+                }
+				//Last row, including subtotal
+				var lastRow = "<tr><th style='text-align:right'>Subtotal</th><th>";
+				lastRow += subTotal;
+				lastRow += "</th><th>";
+				lastRow += itemTotal; 
+				lastRow += "</th></tr>";
+				tableBody.innerHTML += lastRow;
+            }
+            
+        </script>
+    </head>
+    <body onload="init();">
+        <div id="bodyDiv">
+            <h1 id="title">Shopping Cart</h1>
+            <div id="listDiv">
+                <table>
+                    <thead>
+                        <tr>
+                            <th style="width:70%;-moz-border-radius: 13px 0px 0px 0px;">
+                                Shopping Cart Items
+                            </th>
+                            <th style="width:10%">
+                                Price
+                            </th>
+                            <th style="width:10%;-moz-border-radius: 0px 13px 0px 0px;">
+                                Quantity
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody id="listBody">
+                    </tbody>
+                </table>
+               <div id="info"><img id="loadingImg" src="images/ajaxLoader.gif" /></div>		
+                <div id="buttonContainerDiv">
+                    <input type="button" id="clearButton" class="button" value="Clear Cart"/>
+					<input type="button" id="updateButton" class="button" value="Update Cart"/>
+					<input type="button" id="checkoutButton" class="button" value="Proceed to Checkout"/>
+                </div>
+				
+            </div>
+        </div>
+    </body>
+</html>

@@ -1,0 +1,548 @@
+<html>
+  <head>
+    <title>FAST Application Mockup</title>
+
+    <!-- Set style and Dojo initialization -->
+    <style type="text/css">
+        @import "js/dojo/dijit/themes/soria/soria.css";
+        @import "js/dojo/dojo/resources/dojo.css";
+		html, body { height: 100%; width: 100%; padding: 0; border: 0; }
+		#main { height: 100%; width: 100%; padding: 0; border: 0; }
+		#leftAccordion { width: 25%; }
+		h1{
+			margin-top:2px;
+			font-family:helvetica,sans-serif;
+			font-size:30px;
+		}
+		.resource {		
+			padding: 0px;
+			margin: 5px;
+			text-align:center;
+			font-weight: bold;
+		}
+
+		
+		.screenTop {
+			height:15px;
+			width:100%;
+			background-color: green;
+			padding-top:3px;
+			color:white;
+			font-weight:normal;
+			-moz-border-radius-topleft:3px;
+			-moz-border-radius-topright:3px;
+		}
+		.screen{
+			border: 1px solid green;
+			width: 100px;
+			height: 80px;
+			background-color:white;
+			position: relative;
+			-moz-border-radius: 7px;
+		}
+		.flow {
+			width: 50px;
+			
+		}
+		.operator,.service,.form {
+			border:1px solid grey;
+			width: 100px;
+			height: 80px;
+		}
+		.concept{
+			border:1px solid grey;
+			width: 25px;
+			height: 20px;
+			-moz-border-radius: 13px;
+			padding-top: 5px;
+		}
+		.canvas {
+			position: absolute;
+			top: 0px;
+			left: 0px;
+			right: 0px;
+			bottom: 0px;
+			overflow: hidden;
+			background: url("images/grid.jpg") repeat;
+			text-align:center;
+		}
+		.properties {
+			font-weight: bold;
+			color: #243C5F;
+			overflow:visible;
+		}
+		table {
+			width: 100%;
+			border-collapse: collapse;
+			
+		}
+		table td {
+			border-bottom: 1px solid grey;
+			padding: 1px;
+		}
+		.inspectorIcon {
+			border-right: 1px solid grey;
+			width: 24px;
+		}
+		.inspectorName {
+			border-right: 1px solid grey;
+
+		}
+		.inspectorDesc {
+			border-right: 1px solid grey;
+	
+		}
+		.inspectorSem {
+		}
+		#properties, #prepostContainer, #inspector {
+			overflow:auto;
+		}
+		.preArea {
+			position:absolute;
+			top:18px;
+			bottom: 0;
+			left: 0;
+			right: 50%;
+			margin:0;
+		}
+		.postArea {
+			position:absolute;
+			top:18px;
+			bottom: 0;
+			left: 70%;
+			right: 0;
+			margin:0;
+		}
+		.prepostSeparator {
+			position: absolute;
+			right: 50%;
+			left: 50%;
+			top: 18px;
+			bottom: 0px;
+			border-left: 1px dashed #aaa;
+		}
+		.fact {
+			width: 22px;
+			height: 20px;
+			line-height: 20px;
+			text-align: center;
+			margin-left: 3px;
+			font-weight: bold;
+			color: white; 
+		}
+		.factIcon {
+			width: 17px;
+			height: 15px;
+			line-height: 15px;
+			text-align: center;
+			margin-left: 1px;
+			font-weight: bold;
+			font-size: 10px;
+			color: white; 
+		}
+		.fact.satisfeable {
+			background: url("images/greenCircle.png") no-repeat center center;
+		}
+		.fact.unsatisfeable {
+			background: url("images/redCircle.png") no-repeat center center;
+		}
+		.screen.satisfeable.selected {
+			background-color: #DDF7DD;
+		}
+
+		.screen.selected .screenTop {
+			font-weight: bold;
+		}
+
+		
+		.screen.unsatisfeable.selected {
+			background-color: #F5D9D9;
+		}
+		.concept.slot{
+			background-color: green;
+			color:white;
+		}
+		.concept.event{
+			background-color: #5482c8;
+			color:white;
+		}
+
+
+		.concept.selected{
+			color:yellow;
+
+		}
+		.satisfeableIcon {
+			background: url("images/smallGreenCircle.png") no-repeat center center;
+		}
+		.unsatisfeableIcon {
+			background: url("images/smallRedCircle.png") no-repeat center center;
+		}
+		.unknownIcon{
+			background: url("images/smallGreyCircle.png") no-repeat center center;
+		}
+		.bold {
+			font-weight: bold;
+		}
+		.left {
+			width: 50%;
+			font-weight: bold;
+			border-right: 1px solid grey;
+		}
+		.tableHeader {
+			background-color: #BED7F0;
+			border-top: 1px solid grey;
+		}
+		.tableHeader td {
+			padding: 3px;
+		}
+		#tab2 {
+			padding:0px;
+			display:none;
+		}
+		#showDialog{
+			font-size:18px;
+			margin-right:180px;
+			margin-top:5px;
+			position:absolute;
+			right:0px;
+			top:0px;
+			visibility:hidden;
+		}
+		#showDialog2{
+			font-size:18px;
+			margin-right:20px;
+			margin-top:5px;
+			position:absolute;
+			right:0px;
+			top:0px;
+			visibility:hidden;
+		}
+		h2{
+			margin:5px 0;
+		}
+		h3{
+			margin:2px 0;
+			font-size:14px;
+		}
+		h4{
+			margin:4px 0;
+			font-size:13px;
+		}
+		#wizardInfo{
+			margin:5px;
+			width:450px;
+			text-align:justify;
+		}
+		.line{
+			margin-bottom:10px;
+		}
+		label{
+			float:left;
+			margin-top:3px;
+			width:10em;
+		}
+		input[type="text"]{
+			width:26em;
+		}
+		#wizardButtons{
+			text-align:center;
+		}
+		.soria .dijitTooltipContainer {
+			width: 250px;
+		}
+		.factsButton {
+			font-size: 8px;
+			height: 6px;
+			width: 6px;
+		}
+		.factsText {
+			float:left;
+		}
+		.inspectorSem .dijitButton {
+			float:right;
+		}
+		.inspectorDesc{
+			width:45%;
+		}
+		#factName, #variableName, #friendCode, #label {
+			width: 200px;
+		}
+		#factError{
+			color:red;
+			opacity:0;
+		}
+		/*#slotsArea, #screensArea, #eventsArea{
+			float:left;
+			height:100%;
+			border-right: 3px dashed #AAAAAA;
+		}
+		#slotsArea,#eventsArea{
+			width:135px;
+		}
+		#eventsArea{
+			border:none;
+		}
+		#screensArea{
+			width:60%;
+		}*/
+		.canvasTitle{
+			width:100%;
+			text-align: center;
+			font-size: 20px;
+			color: #AAAAAA;
+			font-weight:bold;
+		}
+		.screenImage{
+			height:100%;
+			position:relative;
+			top: 10px;
+		}
+        .dijitDialogCloseIcon{
+            display:none;
+        }
+</style>
+
+     <script type="text/javascript" src="js/dojo/dojo/dojo.js" djConfig="parseOnLoad:true,isDebug:false"></script>
+	 <script type="text/javascript" src="js/prototype/prototype.js"></script>
+	 <script type="text/javascript" src="js/dragndrop/BrowserUtils.js"></script>
+	 <script type="text/javascript" src="js/dragndrop/Draggable.js"></script>
+	 <script type="text/javascript" src="js/Handlers.js"></script>
+	 <script type="text/javascript" src="js/palette/Palette.js"></script>
+	 <script type="text/javascript" src="js/utils/Utils.js"></script>
+	 <script type="text/javascript">
+	 
+	 var selectedElement;
+     var previousElement;
+	 
+	 var KB = new Object (); //Knowledge Base
+	 
+	 var environmentFacts = {};
+	 var slots = {};
+	 var events = {};
+	 
+	 var conceptualModel = {
+	 	filter: {
+			name: "filter",
+			shortcut: "F",
+			desc: "Filter Search Criteria",
+			sem: "Amazon#SearchCriteria",
+			attributes:["productType", "searchText"]
+			},
+		item: {
+			name: "item",
+			shortcut: "I",
+			desc: "Amazon item fact. Normally, its identifier will be an ASIN number",
+			sem: "Amazon#Item",
+			attributes:["ASIN", "title"]
+		},
+		cart: {
+			name: "cart",
+			shortcut: "C",
+			desc: "Amazon shopping cart fact. It represents a non-purchased shopping cart at Amazon",
+			sem: "Amazon#ShoppingCart",
+			attributes:["id","HMAC"]
+		},
+		purchase: {
+			name: "purchase",
+			shortcut: "P",
+			desc: "Amazon purchase fact. It represents the URL that allows to purchase the Shopping Cart",
+			sem: "Amazon#PurchaseURL",
+			attributes:["url"]
+		},
+		eBayItem: {
+			name: "eBayItem",
+			shortcut: "EI",
+			desc: "eBay Item. It represents an Item sold by eBay",
+			sem: "eBay#Item",
+			attributes:["itemId","title"]
+		}
+	 };
+	 
+	 //URL of the gagdet production service
+	 var baseURL= "http://piccolo.ls.fi.upm.es:8008/fast";
+	 var ezWebStoreURL= "http://piccolo.ls.fi.upm.es:8008/store";
+	 
+	 var start = false;
+	 
+	 //Array of screen identifiers of the actual screenflow
+	 var screens = new Array();
+	
+	 
+	 function init (){
+		var palette = new Palette();
+		palette.load();
+		$$(".canvas").each(function(canvas){canvas.observe("click",onClickCanvas, true)});
+		$("showDialog").observe("click",showDialog);
+		$("showDialog2").observe("click",showDialog2);
+		Element.observe(document, "keypress",onKeyPressCanvas);
+		satisfeabilityUpdate ();
+		selectElement(null);
+        dojo.connect(dijit.byId("topTabs"), "selectChild",  changeTab);
+         
+        $ ("dijit_layout__TabButton_0").observe("focus",function(e){
+           var element = Event.element(e);
+           element.blur();
+        })
+	 }
+	 
+	 </script>
+      
+    <!-- We tell Dojo to load the needed modules -->
+    <script type="text/javascript">
+    	// We load Dojo's code relating to the needed components (widgets)
+    	// Typical Components
+		dojo.require("dijit.form.TextBox");
+    	dojo.require("dijit.form.Button");
+		dojo.require("dijit.form.ComboBox");
+    	dojo.require("dijit.InlineEditBox");
+		dojo.require("dijit.Tooltip");
+
+    	// layouts used in page
+		dojo.require("dijit.layout.AccordionContainer");
+		dojo.require("dijit.layout.ContentPane");
+		dojo.require("dijit.layout.TabContainer");
+		dojo.require("dijit.layout.BorderContainer");
+		dojo.require("dijit.layout.SplitContainer");
+		dojo.require("dijit.Dialog");
+        dojo.require("dojo.parser"); 
+		dojo.addOnLoad(init);
+    </script>
+    
+  </head>
+
+  <body class="soria">
+  
+    <!-- Setting the layout of the page. --> 
+  	<!-- First: The app wrapper. It is the main Div and contains all other Divs -->
+  	<div dojoType="dijit.layout.BorderContainer" id="main">
+  		<!-- Header on TOP-->
+  		<h1 id="header" dojoType="dijit.layout.ContentPane" region="top">
+  			<img style="vertical-align: text-bottom;" src="images/logo-fast.png"/> 
+			Gadget Visual Studio 
+			<span id="showDialog" dojoType="dijit.form.Button">Create Gadget!</span>
+			<span id="showDialog2" dojoType="dijit.form.Button">Store Gadget!</span>
+		</h1>
+  		<!-- "mainSplit" BorderContainer has all the real content -->
+       	<div dojoType="dijit.layout.BorderContainer" liveSplitters="false" design="sidebar"
+       	     region="center" id="mainSplit">
+       	
+       		<!-- We'll split the main area of the screen in two (left | right) -->
+    		<!-- LEFT part: Components Area -->
+    		<div dojoType="dijit.layout.AccordionContainer" duration="200" minSize="110"
+                style="width: 200px;" id="leftAccordion" region="leading" splitter="true">
+                <!-- Each of the panels -->
+        		<div dojoType="dijit.layout.AccordionPane" title="Screens" selected="true" id="aScreens">
+        			<div id="screens" class="pContainer"></div>
+				</div>
+        		<div dojoType="dijit.layout.AccordionPane" title="Flow Controls" id="aFlows">
+        			<div id="flows" class="pContainer"></div>
+        		</div>
+        		<div dojoType="dijit.layout.AccordionPane" title="Operators" id="aOperators">
+        			<div id="operators" class="pContainer"></div>
+				</div>
+        		<div dojoType="dijit.layout.AccordionPane" title="Backend Services" id="aServices">
+        			<div id="services" class="pContainer"></div>
+        		</div>
+        		<div dojoType="dijit.layout.AccordionPane" title="Domain Concepts" id="aConcepts">
+        			<div id="concepts" class="pContainer"></div>
+				</div>
+        		<div dojoType="dijit.layout.AccordionPane" title="Forms" id="aForms">
+        			<div id="forms" class="pContainer"></div>
+				</div>
+    		</div>
+			
+    		<!-- RIGHT part: Main area --> 
+    		<!-- top tabs (marked as "center" to take up the main part of the BorderContainer) -->				
+			<div dojoType="dijit.layout.TabContainer" id="topTabs" region="center">
+				<!-- first tab? -->
+				<div id="tab1" dojoType="dijit.layout.ContentPane" title="ScreenFlow" 
+					 style="padding:0px;display:none;">
+					 <div class="canvas" id="screenFlowCanvas">
+					 </div>
+				</div><!-- end first tab -->
+
+				<!-- second upper tab -->
+				<!--<div id="tab2" dojoType="dijit.layout.ContentPane" title="Screen"
+					style="padding:0px; display:none;">
+					 <div class="canvas" id="screenCanvas"></div>
+				</div>-->
+				<!-- end:second upper tab -->
+
+				<!-- start third upper tab -->
+				<!--<div id="tab3" dojoType="dijit.layout.ContentPane" title="Form"
+					style="padding:0px; display:none;  ">
+					 <div class="canvas" id="formCanvas"></div>
+				</div>-->
+				<!-- end third upper tab-->
+			</div> <!-- end of TabContainer -->
+			<div dojoType="dijit.layout.SplitContainer" region="bottom"  orientation="horizontal" activeSizing="false" style="height: 180px;" persist="false" splitter="true">
+				<div dojoType="dijit.layout.ContentPane" minSize="100px" sizeShare="10">
+					<div class="dijitAccordionTitle properties" id="detailsTitle">Properties</div>
+					<div id="properties">
+						<table>
+							<tr class="tableHeader"><td class="left">Property</td><td class="left">Value</td></tr>
+							<tr><td class="left">Title</td><td class="right"><span id="details.title"></span></td></tr>
+							<tr><td class="left">Identifier</td><td class="right"><span id="details.id"></span></td></tr>
+							<tr><td class="left">Description</td><td class="right"><span id="details.desc"></td></tr>
+							<tr><td class="left">Tags</td><td class="right"><span id="details.tags"></td></tr>
+							<tr><td class="left">&nbsp;</td><td class="right">&nbsp;</td></tr>
+		
+						</table>
+					</div>
+				</div>
+				
+				<div dojoType="dijit.layout.ContentPane" minSize="100px" sizeShare="10">
+					<div class="dijitAccordionTitle properties">PRE / POST</div>
+					<table id="prepostContainer">
+					</table>
+				</div>
+				<div dojoType="dijit.layout.ContentPane" minSize="100px" sizeShare="10">
+					<div class="dijitAccordionTitle properties">Fact Inspector</div>
+					<div id="inspector">
+						<table>
+							<tr class="tableHeader"><td class="inspectorIcon bold">&nbsp;</td><td class="inspectorName bold">Name</td><td class="inspectorDesc bold">Description</td><td class="inspectorSem bold">Semantics</td></tr>
+							<tbody id="inspectorContainer" style="overflow:auto">
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div><!-- end Bottom TabContainer -->	
+		</div> <!-- end of "mainSplit" BorderContainer -->
+	</div><!-- end of "main" BorderContainer -->
+	<div id="dialog1" dojoType="dijit.Dialog" title="Create Gadget" style="display:none;" href="gadgetWizard.html"></div>
+	<div id="dialog2" dojoType="dijit.Dialog" title="Store Gadget" style="display:none;" href="gadgetStoreWizard.html"></div>
+	<div id="factBehaviour" dojoType="dijit.Dialog" title="Add Event/Slot" style="display:none;">
+		<h2>Check <span id="behaviour"></span> details</h2>
+		<div id="wizardInfo">
+			<div class="line">
+				<label>Fact: </label>
+				<select id="fact" onchange="updateSelectedFact();">
+				</select>
+				<span id="factError">Please choose one valid fact</span>
+			</div>
+			<div class="line">
+				<label>Fact attribute: </label>
+				<select id="attribute" onchange="updateFriendcode();">
+				</select>
+			</div> 
+			<div class="line">
+				<label>Variable Name: </label>
+				<input type="text" dojoType="dijit.form.TextBox" id="variableName" />
+			</div> 
+			<div class="line">
+				<label>Label: </label>
+				<input type="text" id="label" dojoType="dijit.form.TextBox"/>
+			</div>
+			<div class="line">
+				<label>Friend Code: </label>
+				<input type="text" id="friendcode" dojoType="dijit.form.TextBox"/>
+			</div>  
+		</div>
+		<div id="factWizardButtons">
+			<button dojoType="dijit.form.Button" id="sendButton" onclick="addOnKeyListener();updateFactBehaviour();">Save</button>
+			<button dojoType="dijit.form.Button" id="cancelButton" onclick="addOnKeyListener();dijit.byId('factBehaviour').hide();">Cancel</button>
+		</div>	
+	</div>
+  </body>
+</html>

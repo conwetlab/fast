@@ -1,0 +1,81 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="application/xhtml+xml; charset=UTF-8" />
+        <link type="text/css" rel="stylesheet" href="table.css" />
+        <link type="text/css" rel="stylesheet" href="screen.css" />
+		<style type="text/css">
+			#pages{
+				color:#FEBF43;
+				font-weight: bold;
+				padding: 10px;
+			}
+			#previousButton, #nextButton {
+				visibility:visible;
+			}
+			#loadingImg{
+				margin:auto;
+				padding-top: 10px;
+			}
+			#like{
+				padding: 5px;
+				color: #777777;
+			}
+			.productTitle{
+				font-weight:bold;
+				font-style:normal;
+			}
+		</style>
+        <script language="JavaScript" src="../js/prototype/prototype.js"></script>
+    </head>
+    <body>
+        <div id="bodyDiv">
+        	<span id="eBayImage"><img src="http://piccolo.ls.fi.upm.es/amazonScreens/images/logo-ebay.gif" /></span>
+		    <h1 id="title">eBay Item list</h1>
+		    <div id="listDiv">
+                <table>
+                    <thead>
+                        <tr>
+                        	<th style="width: 10%; -moz-border-radius-topleft: 13px; -moz-border-radius-topright: 0px; -moz-border-radius-bottomright: 0px; -moz-border-radius-bottomleft: 0px;">
+                                &nbsp;
+                            </th>
+                            <th style="width: 60%;" nowrap="nowrap">
+                                Title
+                            </th>
+                            <th style="width: 10%;" nowrap="nowrap">
+                                Category
+                            </th>
+                            <th style="width: 10%;" nowrap="nowrap">
+                                Current Price
+                            </th>
+                            <th style="width: 20%;" nowrap="nowrap">
+                                Shipping Service Cost
+                            </th>
+                            <th style="width: 10%; -moz-border-radius-topleft: 0px; -moz-border-radius-topright: 13px; -moz-border-radius-bottomright: 0px; -moz-border-radius-bottomleft: 0px;">
+                                &nbsp;
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody id="listBodyEBayList">
+		                <tr>
+							<td>&nbsp;</td>
+							<td>Product 1</td>
+							<td>DVD</td>
+							<td>$12.0</td>
+							<td>$3.50</td>
+							<td style="border-right:none;"><input type="button" value="Select"/></td>
+					    <tr>
+					    <tr>
+							<td>&nbsp;</td>
+							<td>Product 2</td>
+							<td>CD</td>
+							<td>$6.0</td>
+							<td>$2.50</td>
+							<td style="border-right:none;"><input type="button" value="Select"/></td>
+					    <tr>
+		    		</tbody>
+                </table>
+                <img style="display: none;" id="loadingImgEBayList" src="http://piccolo.ls.fi.upm.es/amazonScreens/images/ajaxLoader.gif">
+            </div>
+        </div>
+</html>

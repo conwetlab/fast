@@ -1,0 +1,85 @@
+<html>
+  <head>
+    <title>FAST Application Mockup</title>
+
+    <!-- Set style and Dojo initialization -->
+    <style type="text/css">
+		h1{
+			margin-top:2px;
+			font-family:helvetica,sans-serif;
+			font-size:30px;
+			position:relative;
+		}
+		.properties {
+			font-weight: bold;
+			color: #243C5F;
+			overflow:visible;
+		}
+		.tableHeader {
+			background-color: #BED7F0;
+			border-top: 1px solid grey;
+		}
+		.tableHeader td {
+			padding: 3px;
+		}
+		.mashup {
+			font-weight: bold;
+		}
+		table {
+			width: 100%;
+			border-collapse: collapse;
+			
+		}
+		table td {
+			border-bottom: 1px solid grey;
+			padding: 1px;
+		}
+		.left {
+			font-weight: bold;
+			border-right: 1px solid grey;
+		}
+</style>
+    
+  </head>
+  
+  <script type="text/javascript">
+  
+  function ezWebDeploy(uri){
+  	document.Deploy.template_uri.value = uri;
+  	document.Deploy.submit();
+  }
+  </script>
+
+  <body>
+  	<form name="Deploy" method="post" action="http://demo.ezweb.morfeo-project.com/user/admin/catalogue/resource">
+  		<input type="hidden" name="template_uri"/>
+  	</form>
+        <h1 id="detailsTitle">Deployment Information</h1>
+		<div id="properties">
+			<table>
+				<tbody>
+					<tr class="tableHeader">
+						<td class="left">Mashup Platform</td>
+						<td class="left">Gadget Deployment</td>
+						<td class="left"></td>
+					</tr>
+					<tr>
+						<td class="mashup">EzWeb</td>
+						<td>$$ezwebGadgetURL$$</td>
+						<td><button id="b1" onclick="ezWebDeploy('$$ezwebGadgetURL$$');">Deploy it!</button></td>
+					</tr>
+					<tr>
+						<td class="mashup">iGoogle</td>
+						<td>Deployment information not available</td>
+						<td><button id="b2" onclick="alert('Deployment service not available');">Deploy it!</button></td>
+					</tr>
+					<tr>
+						<td class="mashup">Netvibes</td>
+						<td>Deployment information not available</td>
+						<td><button id="b3" onclick="alert('Deployment service not available');">Deploy it!</button></td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+  </body>
+</html>

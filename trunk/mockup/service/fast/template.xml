@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Template schemaLocation="http://morfeo-project.org/2007/Template">
+<!-- Meta tags define gadgets properties -->
+	<Catalog.ResourceDescription>
+		<Vendor>$$gadget_vendor$$</Vendor>
+		<Name>$$gadget_title$$</Name>
+		<Version>$$gadget_version$$</Version>
+		<Author>$$gadget_author$$</Author>
+		<Mail>$$gadget_mail$$</Mail>
+		<Description>$$gadget_description$$</Description>
+		<ImageURI>http://demo.ezweb.morfeo-project.org/repository/fast/amazon/amazon.png</ImageURI>
+		<WikiURI>http://ezweb.morfeo-project.org/</WikiURI>
+	</Catalog.ResourceDescription>
+<!-- EzWeb Gadgets Tags -->
+	<Platform.Preferences>
+	</Platform.Preferences>
+<!-- EzWeb Gadget Persistent State -->
+	<Platform.StateProperties>
+	</Platform.StateProperties>
+<!-- EzWeb Gadget Data Wiring -->
+	<Platform.Wiring>
+	$$gadget_slot$$
+	$$gadget_event$$
+	</Platform.Wiring>
+	<Platform.Link>
+		<XHTML href="$$gadgetURI$$" />
+	</Platform.Link>
+	<Platform.Rendering width="10" height="38" />
+</Template>

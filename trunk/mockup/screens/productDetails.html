@@ -1,0 +1,231 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="application/xhtml+xml; charset=UTF-8" />
+        <link type="text/css" rel="stylesheet" href="screen.css" />
+		<style type="text/css">
+			#productImage{
+				height: 170px;
+				-moz-border-radius: 13px 13px;
+				background: #FFF8E8 url(style/bg_td2.jpg) repeat-x;
+				border:1px solid #F8A704;
+				margin:0px auto 13px;
+				text-align:center;
+				width:88%;
+				padding-bottom:5px;
+				padding-top:10px;
+			}
+			#title{
+				font-size: 20px;
+				text-align: left;
+			}
+			#leftColumn{
+				position: relative;
+				float:left;
+				height: 100%;
+				width: 35%;
+			}
+			#rightColumn{
+				position: relative;
+				float:right;
+				height: 268px;
+				width: 60%;
+				-moz-border-radius:13px 13px;
+				background:#FFF8E8 url(style/bg_td2.jpg) repeat-x;
+				border:1px solid #F8A704;
+				padding-top:5px;
+				padding-right:0px;
+				padding-left:5px;
+				padding-bottom: 5px;
+				position:relative;
+			}
+			#bodyDiv{
+				max-width: 550px;
+			}
+			#infoArea{
+				text-align: left;
+			}
+			#titleInfo{
+				float:left;
+				margin: 5px;
+				width:35%;
+				overflow: hidden;
+			}
+			#valueInfo{
+				float:left;
+				margin: 5px 15px 5px 5px;
+				width: 50%;
+			}
+			#moreInfo{
+				float:left;
+				margin-left: 5px;
+			}
+			.title{
+				padding: 2px;
+				color:#AAAAAA;
+				font-weight: bold;
+				font-family:Arial,Helvetica,sans-serif;	
+				white-space:nowrap;
+				overflow: hidden;
+			}
+			.info{
+				padding: 2px;
+				color:#888888;
+				font-family:Arial,Helvetica,sans-serif;
+				font-weight: bold;
+				text-align: justify;
+				white-space: nowrap;
+				overflow: hidden;
+			}
+			a {
+				color: #777777;
+				text-decoration:none;
+			}
+			a:hover {
+				color: #F8A704;
+				text-decoration: underline;
+			}
+			#quantity {
+				margin: 5px;
+				color:#777777;
+				font-weight: bold;
+				font-family:Arial,Helvetica,sans-serif;
+			}
+			#cart {
+				border: 1px solid #F8A704;
+				-moz-border-radius:13px 13px;
+				background:#FFF8E8 url(style/bg_td2.jpg) repeat-x;
+				border:1px solid #F8A704;
+				height:78px;
+				margin:5px auto 0px;
+				padding:0px;
+				text-align:center;
+				width:88%;
+			}
+			#moreInfoText {
+				color:#888888;
+				font-family:Arial,Helvetica,sans-serif;
+				font-size:13px;
+				height:125px;
+				margin:0;
+				overflow:auto;
+				padding:2px 15px 2px 2px;
+				text-align:left;
+				width:300px;
+				max-width:300px;
+			}
+			ul {
+				list-style-type:circle;
+				margin-bottom:2px;
+				margin-top:0px;
+				padding-left:15px;
+			}
+			ul li {
+				padding-top:5px;
+			}
+			.detailsElement {
+				color:#888888;
+				font-weight:bold;
+			}
+			img{
+				width:140px;
+			}
+		</style>
+        <script language="JavaScript" src="../js/prototype/prototype.js">
+        </script>
+        <script language="JavaScript">
+        	function init (){
+				var product = {
+					title: "Product 1",
+					price: "$1.0",
+					pGroup: "Books",
+					url: "url",
+					image: "amazon.jpg"
+				};
+				showProductInfo (product);
+			}
+			function showProductInfo (_product){
+				if (_product.title){
+					$("title").update(_product.title);
+					if (_product.title.length > 33){//Big title
+						//Big title, adapt styles
+						$("title").setStyle ({"fontSize":"16px"});
+						if ($("title").clientHeight > 19) {//More than one line
+							if ($("title").clientHeight > 38){//More than two lines
+								if ($("title").clientHeight >57){//More than three lines
+									$("moreInfoText").setStyle({
+										"height": "100px"
+									});
+									$("title").setStyle ({"fontSize":"13px"});	
+								} 
+								else{//Three lines
+									$("moreInfoText").setStyle({
+										"height": "100px"
+									});
+									$("title").setStyle ({"fontSize":"14px"});	
+								}
+							}
+							else //Two lines
+								$("moreInfoText").setStyle({
+									"height": "110px"
+								});	
+						}
+					}
+				}
+				if (_product.price){
+					$("price").update(_product.price);
+				}
+				if (_product.pGroup){
+					$("pGroup").update(_product.pGroup);
+				}						
+			}
+        </script>
+    </head>
+    <body onload="init();">
+        <div id="bodyDiv">
+        	<div id="leftColumn">
+		     	<div id="productImage">
+		     		<img src="amazon.jpg"/>
+				</div>
+				<div id="cart">
+					<div id="quantity">Quantity:  	<select id="quantitySelect">
+								  	<option value ="1">1</option>
+								  	<option value ="2">2</option>
+								  	<option value ="3">3</option>
+								  	<option value ="4">4</option>
+								  	<option value ="5">5</option>	
+								 	<option value ="6">6</option>
+								  	<option value ="7">7</option>	
+								  	<option value ="8">8</option>		
+									<option value ="9">9</option>	
+								  	<option value ="10">10</option>						
+									</select>
+					</div>
+					<input border="0" height="27" width="160" type="image" id="addToCart" alt="Add to Shopping Cart" src="addToCart.gif"/>
+				</div>       	
+			</div>
+			<div id="rightColumn">
+				<div id="title"></div>
+				<div id="infoArea">
+					<span id="titleInfo">
+						<div class="title">Product Type: </div>
+						<div class="title">Price: </div>
+						<div class="title">Product Site: </div>
+						<div class="title" id="titleInfo1"></div>
+					</span>
+					<span id="valueInfo">
+						<div id="pGroup" class="info"></div>
+						<div id="price" class="info"></div>
+						<div id="url" class="info"><a>Amazon</a></div>
+						<div id="info1" class="info"></div>
+					</span>
+					<div id="moreInfo">
+						<div class="title" id="moreInfoTitle"></div>
+						<div id="moreInfoText">
+						</div>
+					</div>
+				</div>
+			</div>
+        </div>
+    </body>
+</html>

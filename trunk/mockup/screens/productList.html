@@ -1,0 +1,105 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="application/xhtml+xml; charset=UTF-8" />
+        <link type="text/css" rel="stylesheet" href="table.css" />
+        <link type="text/css" rel="stylesheet" href="screen.css" />
+		<style type="text/css">
+			#pages{
+				color:#FEBF43;
+				font-weight: bold;
+				padding: 10px;
+			}
+			#previousButton, #nextButton {
+				visibility:visible;
+			}
+			#loadingImg{
+				margin:auto;
+				padding-top: 10px;
+			}
+		</style>
+        <script language="JavaScript" src="../js/prototype/prototype.js">
+        </script>
+        <script language="JavaScript">
+            //Product list fetched from the Service
+            var productList = new Array();
+			productList = [{
+                            title: "Element1",
+                            price: "$1.0",
+                            pGroup: "Books"
+                        },{
+                            title: "Element2",
+                            price: "$1.0",
+                            pGroup: "Books"
+                        },{
+                            title: "Element3",
+                            price: "$1.0",
+                            pGroup: "Books"
+                        }];
+            
+            function init(){
+                //$("nextButton").observe("click", nextPage);
+                //$("previousButton").observe("click", previousPage);
+				$$('input[type="button"]').each(function(element){
+					element.observe("mouseover",function(event){
+						var e = Event.element(event);
+						e.setStyle({cursor:"pointer"});
+					});
+				
+				});
+            	showTable();
+            }
+   
+            
+            function showTable(){
+                var templateString = '<tr><td>#{title}</td><td>#{price}</td><td>#{pGroup}</td>';
+                templateString += '<td style="border-right:none;"><input type="button"';
+				templateString += ' onmouseover="this.setStyle({cursor:\'pointer\'});" value="Select"/></td>';
+                var rowTemplate = new Template(templateString);
+                
+                var tableBody = $("listBody");
+                for (var i = 0; i < 3 ; i++) { //print the appropriate elements
+                    if (productList[i]) { //only if the product table is fetched
+                        tableBody.innerHTML += rowTemplate.evaluate(productList[i]);
+                    }
+                }
+            }
+            
+      
+        </script>
+    </head>
+    <body onload="init();">
+        <div id="bodyDiv">
+            <h1 id="title">Item list</h1>
+            <div id="listDiv">
+                <table>
+                    <thead>
+                        <tr>
+                            <th style="width:60%; -moz-border-radius: 13px 0px 0px 0px;">
+                                Title
+                            </th>
+                            <th style="width:10%">
+                                Price
+                            </th>
+                            <th style="width:20%">
+                                Product Group
+                            </th>
+                            <th style="width:10%; -moz-border-radius: 0px 13px 0px 0px;">
+                                &nbsp;
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody id="listBody">
+                    </tbody>
+                </table>
+                <div id="buttonContainerDiv">
+                    <input type="button" id="previousButton" class="button" value="<"/>
+					<span id="pages">
+					Page <span id="curPage">01</span>/10
+					</span><input type="button" id="nextButton" class="button" value=">"/>
+                </div>
+				
+            </div>
+        </div>
+    </body>
+</html>

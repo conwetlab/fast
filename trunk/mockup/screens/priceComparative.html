@@ -1,0 +1,81 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="application/xhtml+xml; charset=UTF-8" />
+        <link type="text/css" rel="stylesheet" href="table.css" />
+        <link type="text/css" rel="stylesheet" href="screen.css" />
+		<style type="text/css">
+			#pages{
+				color:#FEBF43;
+				font-weight: bold;
+				padding: 10px;
+			}
+			#previousButton, #nextButton {
+				visibility:visible;
+			}
+			#loadingImg{
+				margin:auto;
+				padding-top: 10px;
+			}
+			#like{
+				padding: 5px;
+				color: #777777;
+			}
+			.productTitle{
+				font-weight:bold;
+				font-style:normal;
+			}
+		</style>
+        <script language="JavaScript" src="../js/prototype/prototype.js">
+        </script>
+    </head>
+    <body>
+        <div id="bodyDiv">
+            <h1 id="title">Related products to</h1>
+			<h1 id="title"><span class="productTitle"></span></h1>
+			<div id="like">Customers who bought <span class="productTitle">Product 1</span>, also bought ...</div>
+            <div id="listDiv">
+                <table>
+                    <thead>
+                        <tr>
+                            <th style="width:60%;-moz-border-radius: 13px 0px 0px 0px;">
+                                Title
+                            </th>
+                            <th style="width:10%">
+                                Price
+                            </th>
+                            <th style="width:20%">
+                                Product Group
+                            </th>
+                            <th style="width:10%;-moz-border-radius: 0px 13px 0px 0px;">
+                                &nbsp;
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody id="listBody">
+                    	<tr>
+                    		<td>Product 2</td>
+                    		<td>$15.70</td>
+                    		<td>Books</td>
+                    		<td style="border-right:none;"><input type="button" value="Select"/></td>
+                    	</tr>
+                    	<tr>
+                    		<td>Product 3</td>
+                    		<td>$12.20</td>
+                    		<td>Books</td>
+                    		<td style="border-right:none;"><input type="button" value="Select"/></td>
+                    	</tr>
+                    </tbody>
+                </table>
+                <img id="loadingImg" src="images/ajaxLoader.gif" />
+                <div id="buttonContainerDiv">
+                    <input type="button" id="previousButton" class="button" value="<"/>
+					<span id="pages">
+					Page <span id="curPage">1</span>/2
+					</span><input type="button" id="nextButton" class="button" value=">"/>
+                </div>
+				
+            </div>
+        </div>
+    </body>
+</html>

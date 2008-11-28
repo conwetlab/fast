@@ -1,0 +1,658 @@
+<div id="product" class="x-hide-display">
+	<object id="product_obj" width="100%" height="100%">
+		<html>
+		    <head>
+		        <meta http-equiv="Content-Type" content="application/xhtml+xml; charset=UTF-8" />
+		        <link type="text/css" rel="stylesheet" href="http://piccolo.ls.fi.upm.es/amazonScreens/style/screen.css" />
+				<style type="text/css">
+					#productImage{
+						height: 170px;
+						-moz-border-radius: 13px 13px;
+						background: #FFF8E8 url(http://piccolo.ls.fi.upm.es/amazonScreens/style/bg_td2.jpg) repeat-x;
+						border:1px solid #F8A704;
+						margin:0px auto 13px;
+						text-align:center;
+						width:88%;
+						padding-bottom:5px;
+						padding-top:10px;
+					}
+					#leftColumn{
+						position: relative;
+						float:left;
+						height: 100%;
+						width: 35%;
+					}
+					#rightColumn{
+						position: relative;
+						float:right;
+						height: 268px;
+						width: 60%;
+						-moz-border-radius:13px 13px;
+						background:#FFF8E8 url(http://piccolo.ls.fi.upm.es/amazonScreens/style/bg_td2.jpg) repeat-x;
+						border:1px solid #F8A704;
+						padding-top:5px;
+						padding-right:0px;
+						padding-left:5px;
+						padding-bottom: 5px;
+						position:relative;
+					}
+					#infoArea{
+						text-align: left;
+					}
+					#titleInfo{
+						float:left;
+						margin: 5px;
+						width:35%;
+						overflow: hidden;
+					}
+					#valueInfo{
+						float:left;
+						margin: 5px 15px 5px 5px;
+						width: 50%;
+					}
+					#moreInfo{
+						float:left;
+						margin-left: 5px;
+					}
+					.title{
+						padding: 2px;
+						color:#AAAAAA;
+						font-weight: bold;
+						font-family:Arial,Helvetica,sans-serif;	
+						white-space:nowrap;
+						overflow: hidden;
+					}
+					.info{
+						padding: 2px;
+						color:#888888;
+						font-family:Arial,Helvetica,sans-serif;
+						font-weight: bold;
+						text-align: justify;
+						white-space: nowrap;
+						overflow: hidden;
+					}
+					#quantity {
+						margin: 5px;
+						color:#777777;
+						font-weight: bold;
+						font-family:Arial,Helvetica,sans-serif;
+					}
+					#cart {
+						border: 1px solid #F8A704;
+						-moz-border-radius:13px 13px;
+						background:#FFF8E8 url(http://piccolo.ls.fi.upm.es/amazonScreens/bg_td2.jpg) repeat-x;
+						border:1px solid #F8A704;
+						height:78px;
+						margin:5px auto 0px;
+						padding:0px;
+						text-align:center;
+						width:88%;
+					}
+					#moreInfoText {
+						color:#888888;
+						font-family:Arial,Helvetica,sans-serif;
+						font-size:13px;
+						height:133px;
+						margin:0;
+						overflow:auto;
+						padding:2px 15px 2px 2px;
+						text-align:left;
+						width:300px;
+						max-width:300px;
+					}
+					.detailsElement {
+						color:#888888;
+						font-weight:bold;
+					}
+					#bodyDivDetails {
+						max-width:550px;
+						text-align:center;
+						margin: 8px auto 20px auto;
+						height:270px;
+					}
+					#amazonImage{
+						position:absolute;
+						right:0px;
+						top:3px;
+					}
+				</style>
+		        <script language="JavaScript">
+		        
+		        	function Product(){};
+		        	
+		        	Product.prototype.init = function (){
+						var user = EngineFactory.getInstance().getFact('user');
+						var item = EngineFactory.getInstance().getFact('item');
+						$("addToCart").observe("click", product.addToCart);
+						//Base URL of the REST Service
+						var url = "http://webservices.amazon.com/onca/xml?Service=AWSECommerceService";
+						//Add the AccessKeyId (get from the user fact)
+						if (user)
+							url += "&AWSAccessKeyId=" + user.KeyId;
+						else // if the KB doesn't contain a user key Id, add one by default
+							url += "&AWSAccessKeyId=15TNKDQJGH6BD0Z4KY02";
+						//Add the operation Type
+						url +="&Operation=ItemLookup";
+						//Add the responseGroup
+						url +="&ResponseGroup=Medium";
+						//Add the current version of the API
+						url += "&Version=2008-06-26";
+						//Add item ID
+						url += "&ItemId=" + item.ASIN;
+						
+						//Invoke the service
+                    	EzWebAPI.send_get(url, this, product.fetchProductInfo, product.onError);
+					}
+					
+					Product.prototype.fetchProductInfo = function (transport){
+						var xml = transport.responseXML;
+						var item = xml.getElementsByTagName("Item")[0];
+						if (item.getElementsByTagName("Title").length > 0)
+							var title = item.getElementsByTagName("Title")[0].firstChild.nodeValue;
+						 if (item.getElementsByTagName("FormattedPrice").length > 0) 
+		                    var price = item.getElementsByTagName("FormattedPrice")[0].firstChild.nodeValue;
+		                if (item.getElementsByTagName("ProductGroup").length > 0) 
+		                    var pGroup = item.getElementsByTagName("ProductGroup")[0].firstChild.nodeValue;
+		                if (item.getElementsByTagName("DetailPageURL").length > 0) 
+		                    var url = item.getElementsByTagName("DetailPageURL")[0].firstChild.nodeValue;
+		                if (item.getElementsByTagName("MediumImage").length > 0) 
+		                    var image = item.getElementsByTagName("MediumImage")[0].getElementsByTagName("URL")[0].firstChild.nodeValue;
+						var _product = {
+							title: title,
+							price: price,
+							pGroup: pGroup,
+							url: url,
+							image: image
+						};
+						product.showProductInfo (_product);
+						product.showAdvancedDetails (item,pGroup);
+						
+						$("quantitySelect").value=1;
+					}
+					
+					Product.prototype.showProductInfo = function (_product){
+						if (_product.title){
+							//Reset styles
+							$("productTitle").setStyle ({"fontSize":"20px"});
+							$("moreInfoText").setStyle({"height": "133px"});
+							$("productTitle").update(_product.title);
+							if ($("productTitle").clientHeight > 28){//Big title
+								//Big title, adapt styles
+								$("productTitle").setStyle ({"fontSize":"16px"});
+								if ($("productTitle").clientHeight > 23) {//More than one line
+									if ($("productTitle").clientHeight > 46){//More than two lines
+										if ($("productTitle").clientHeight > 69){//More than three lines
+											$("productTitle").setStyle ({"fontSize":"13px"});
+											if ($("productTitle").clientHeight > 49) //Still more than three lines
+												$("moreInfoText").setStyle({"height": "90px"});
+											else
+												$("moreInfoText").setStyle({"height": "110px"});
+										} 
+										else{//Three lines
+											$("moreInfoText").setStyle({"height": "110px"});
+											$("productTitle").setStyle ({"fontSize":"14px"});	
+										}
+									}
+									else //Two lines
+										$("moreInfoText").setStyle({"height": "115px"});	
+								}
+								/*else //One line, 16px title
+		 							$("moreInfoText").setStyle({
+										"height": "125px"
+									});*/
+							}
+							
+						}
+						if (_product.price){
+							$("price").update(_product.price);
+						} else {
+							$("price").update("");
+						}
+						if (_product.pGroup){
+							$("pGroup").update(_product.pGroup);
+						} else {
+							$("pGroup").update("");
+						}
+						if (_product.url){
+							var a = new Element('a',{href:_product.url,target:"_blank"}).update ("Amazon");
+							$("url").update (a);
+						} else {
+							$("url").update ("");
+						}
+						if (_product.image){
+							var img = new Element ('img',{src: _product.image});
+							$("productImage").update(img);
+						} else {
+							var img = new Element ('img',{src: "http://piccolo.ls.fi.upm.es/amazonScreens/images/amazon.jpg"});
+							$("productImage").update(img);	
+						}
+										
+					}
+					
+					Product.prototype.showAdvancedDetails = function (element,pGroup){
+						/*List of possible product groups (with * groups already considered)
+						 * Apparel,Baby Product,Beauty,*Book,*CE,*DVD,*eBooks,Furniture,Gourmet,Health and Beauty,
+						 * Home,Home Improvement,Kitchen,Lawn & Patio,Magazine,*Music,Musical Instruments,
+						 * Office Product,*Personal Computer,Pet Products,*Photography,Single Detail Page Misc,
+						 * *Software,Sports,*Theatrical Release,Toy,*Video,*Video Games,Watch,*Wireless,*Wireless Phone Accessory
+						 */
+						var itemAttributes = element.getElementsByTagName("ItemAttributes")[0];
+						var attributesHTML = "<ul>";
+						//List of elements to be shown
+						var elementList = [];
+						switch (pGroup){
+							case "eBooks":
+							case "Book":
+								//Print all book authors
+								attributesHTML += product.elementDetail("Author",itemAttributes,"Author(s)");
+								//Print the remainder features
+								elementList = [{nodeElement:"PublicationDate",caption:"Publication Date"},
+											   "ISBN",
+											   "Format",
+											   {nodeElement:"Label", caption:"Publisher"},
+											   {nodeElement:"NumberOfPages", caption:"Pages"}];	
+							    attributesHTML += product.productDetailsList(elementList,itemAttributes);	
+								break;
+							case "Theatrical Release":
+							case "Video":
+							case "DVD":
+								//Print all actors
+								attributesHTML += product.elementDetail("Actor",itemAttributes,"Cast");
+								//Print all directors
+								attributesHTML += product.elementDetail("Director",itemAttributes);
+								elementList = 	["Genre",
+												{nodeElement:"RunningTime",caption: "Run Time"},
+												{nodeElement:"AudienceRating", caption:"Audience Rating"},
+												"Label",
+												"Binding",
+												"Region",
+												{nodeElement:"AspectRatio", caption:"Aspect Ratio"},
+												{nodeElement:"OriginalReleaseDate", caption:"Release Date"}
+												];
+								attributesHTML += product.productDetailsList(elementList,itemAttributes);
+								attributesHTML += product.twoElements ("DVDLayers","DVDSides",itemAttributes,"DVD Layers / Sides");
+								//Print technical details
+								attributesHTML += product.elementDetail("Format",itemAttributes);
+								break;
+							case "Digital Music Track":
+							case "Music":
+								elementList = 	["Artist",
+												"Genre",
+												"Label",
+												"Binding",
+												"Format",
+												{nodeElement:"NumberOfDiscs", caption:"Number of Discs"},
+												{nodeElement:"ReleaseDate", caption:"Release Date"},
+												{nodeElement:"OriginalReleaseDate", caption:"Original Release Date"}
+												];
+								attributesHTML += product.productDetailsList(elementList,itemAttributes);
+								break;
+							case "Photography":
+								//Print details 
+								elementList = ["Brand","Model"];
+								attributesHTML += product.productDetailsList(elementList,itemAttributes);	
+								//Print all camera features
+								attributesHTML += product.elementDetail("Feature",itemAttributes,"Features",".");
+								break;
+							case "Personal Computer":
+								elementList = 	["Model",
+												"Label",
+												"Binding"];
+								attributesHTML += product.productDetailsList(elementList,itemAttributes);
+								attributesHTML += product.twoElements ("CPUType","CPUSpeed",itemAttributes,"CPU", " ");
+								elementList = 	[{nodeElement:"DisplaySize", caption:"Display Size"},
+												{nodeElement:"HardDiskSize", caption:"Hard Disk Size"},
+												{nodeElement:"DataLinkProtocol", caption:"Data Link Protocol"},
+												{nodeElement:"FloppyDiskDriveDescription", caption:"Floppy Disk Drive"}];
+								attributesHTML += product.productDetailsList(elementList,itemAttributes);
+								attributesHTML += product.twoElements ("SystemMemorySize","SystemMemoryType",itemAttributes,"Memory", " ");								
+								elementList = 	[{nodeElement:"HardwarePlatform", caption:"Hardware Platform"},
+												{nodeElement:"OperatingSystem", caption:"Operating System"},
+												{nodeElement:"ReleaseDate",caption:"Release Date"},
+												"Warranty",
+												{nodeElement:"LegalDisclaimer",caption:"Legal Disclaimer"}
+												];	
+								attributesHTML += product.productDetailsList(elementList,itemAttributes);
+								//Print technical details
+								attributesHTML += product.elementDetail("Feature",itemAttributes, "Features",".");
+								//Print special features
+								attributesHTML += product.specialElementDetail("SpecialFeatures",itemAttributes,"|","Special Features",".");
+								break;
+							case "CE":
+							case "Video Games":						
+							case "Software":
+							case "Wireless":
+							case "Wireless Phone Accessory":
+								elementList = 	["Model",
+												"Color",
+												"Label",
+												"Binding",
+												{nodeElement:"DisplaySize", caption:"Display Size"},
+												{nodeElement:"ESRBAgeRating", caption:"Age Rating"},
+												{nodeElement:"HardwarePlatform", caption:"Hardware Platform"},
+												{nodeElement:"OperatingSystem", caption:"Operating System"},
+												{nodeElement:"ReleaseDate",caption:"Release Date"},
+												{nodeElement:"LegalDisclaimer",caption:"Legal Disclaimer"}
+												];
+								attributesHTML += product.productDetailsList(elementList,itemAttributes);
+								//Print technical details
+								attributesHTML += product.elementDetail("Feature",itemAttributes, "Features",".");
+								//Print special features (only CE)
+								attributesHTML += product.specialElementDetail("SpecialFeatures",itemAttributes,"|","Special Features",".");
+								break;
+							default:
+								elementList = 	["Model",
+												"Color",
+												"Label",
+												"Binding",
+												{nodeElement:"ReleaseDate",caption:"Release Date"}
+												];
+								attributesHTML += product.productDetailsList(elementList,itemAttributes);
+								attributesHTML += product.elementDetail("Feature",itemAttributes, "Features",".");
+								break;				
+						}
+						attributesHTML += "</ul>";
+						if (attributesHTML.length>9){//There is something to show
+							$("moreInfoText").update(attributesHTML);
+							$("moreInfoText").setStyle({"borderTop":"1px dotted #AAAAAA"});
+							$("moreInfoTitle").update("Product Details");
+						} 
+							
+					}
+					//This function returns a html with pre-formatted details list
+					//Each element of attributesList can be an object with two elements (nodeElement and caption)
+					//or simply a string representing both of them
+					Product.prototype.productDetailsList = function (attributesList,attributesNode){
+						var result = "";
+						$A(attributesList).each(function(attribute){
+								var element = attributesNode.getElementsByTagName ((attribute.nodeElement?attribute.nodeElement:attribute));						
+								if (element.length > 0) {
+									result += "<li>" + (attribute.caption?attribute.caption:attribute) + ": ";
+									result += "<span class='detailsElement'>";
+									result += element[0].firstChild.nodeValue;
+									if (element[0].getAttribute("Units") && element[0].getAttribute("Units")!= "unknown-units")
+										result += " " + element[0].getAttribute("Units");
+									result += "</span></li>";
+								}
+						});
+						return result;
+					}
+					//This function produces a single li with a list of elements (authors, features...)
+					//caption parameter is optional
+					//separationCharacter parameter is optional
+					Product.prototype.elementDetail = function (element,attributesNode,caption,separationCharacter){
+							var list = attributesNode.getElementsByTagName(element);
+							var result = "";
+							if (list.length > 0){
+								result += "<li>" + (caption?caption:element)  + ": <span class='detailsElement'>";
+								$A(list).each (function (e){
+									result += e.firstChild.nodeValue + (separationCharacter?separationCharacter + " ":", ");
+								});
+								//Remove last ", "
+								result = result.substring(0,result.length-2);
+								result += "</span></li>";							
+							}
+							return result;			
+					}
+					//This function produces a single li with a list of features. The original line has 
+					//extrange separators
+					//caption parameter is optional
+					//separationCharacter parameter is optional
+					Product.prototype.specialElementDetail = function (element,attributesNode,beforeSeparationCharacter,caption,separationCharacter){
+							var element = attributesNode.getElementsByTagName(element);
+							var result = "";
+							if (element.length > 0){
+								result += "<li>" + (caption?caption:element)  + ": <span class='detailsElement'>";
+								var list = element[0].firstChild.nodeValue.split(beforeSeparationCharacter);
+								$A(list).each (function (e){
+									result += e + (separationCharacter?separationCharacter + " ":", ");
+								});
+								//Remove last ", "
+								result = result.substring(0,result.length-2);
+								result += "</span></li>";							
+							}
+							return result;			
+					}
+					//This function produces a single li two elements separated by "/"
+					//caption parameter is optional
+					//separationCharacter is optional
+					Product.prototype.twoElements = function (element1,element2,attributesNode, caption, separationCharacter){
+							var _element1 = attributesNode.getElementsByTagName(element1);
+							var _element2 = attributesNode.getElementsByTagName(element2);
+							var result = "";
+							//At least one correct element
+							if (_element1.length > 0 || _element2.length > 0){
+								result += "<li>" + (caption?caption:(element1 + " / " + element2))  + ": <span class='detailsElement'>";
+								result += (_element1[0]?_element1[0].firstChild.nodeValue:"-");
+								if (_element1[0].getAttribute("Units") && _element1[0].getAttribute("Units")!= "unknown-units")
+										result += " " + _element1[0].getAttribute("Units");
+								result += (separationCharacter?separationCharacter:" / ");
+								result += (_element2[0]?_element2[0].firstChild.nodeValue:"-");
+								if (_element2[0].getAttribute("Units") && _element2[0].getAttribute("Units")!= "unknown-units")
+										result += " " + _element2[0].getAttribute("Units");
+								result += "</span></li>";							
+							}
+							return result;
+					}
+					
+					Product.prototype.onError = function (transport){
+		                //alert(transport.responseText);
+		            }
+		            
+		            Product.prototype.addToCart = function (){
+						var item = EngineFactory.getInstance().getFact('item');
+						var cart = EngineFactory.getInstance().getFact('cart');
+						var user = EngineFactory.getInstance().getFact('user');
+						if (cart){//If the cart is already created, it will have an ID in the User Fact
+							var url = "http://webservices.amazon.com/onca/xml?Service=AWSECommerceService";
+							//Add the AccessKeyId (get from the user fact)
+							if (user)
+								url += "&AWSAccessKeyId=" + user.KeyId;
+							else // if the KB doesn't contain a user key Id, add one by default
+								url += "&AWSAccessKeyId=15TNKDQJGH6BD0Z4KY02";
+							//Add the operation Type
+							url +="&Operation=CartGet";
+							//Add the current version of the API
+							url += "&Version=2008-06-26";
+							//Add item ID
+							url += "&CartId=" + cart.id;
+							url += "&HMAC=" + cart.HMAC;
+							
+							//Invoke the service
+	                    	EzWebAPI.send_get(url, this, product.isProductOnCart, product.onError);
+						}
+						else { //Cart doesn't exist: Create a new cart with the product
+							var url = "http://webservices.amazon.com/onca/xml?Service=AWSECommerceService";
+							//Add the AccessKeyId (get from the user fact)
+							if (user)
+								url += "&AWSAccessKeyId=" + user.KeyId;
+							else // if the KB doesn't contain a user key Id, add one by default
+								url += "&AWSAccessKeyId=15TNKDQJGH6BD0Z4KY02";
+							//Add the operation Type
+							url +="&Operation=CartCreate";
+							//Add the current version of the API
+							url += "&Version=2008-06-26";
+							//Add item ID
+							url += "&Item.1.ASIN=" + item.ASIN;
+							url += "&Item.1.Quantity=" + $F("quantitySelect");
+							
+							//Invoke the service
+	                    	EzWebAPI.send_get(url, this, product.cartCreated, product.onError);
+						}
+					}
+					
+					Product.prototype.cartCreated = function (transport){
+						var xml = transport.responseXML;
+						
+						//The product is added to the cart,
+						//tell it to the user	
+						if (xml.getElementsByTagName("IsValid")[0].firstChild.nodeValue == "True"){
+							
+							//Check if the product is eligible for shopping
+							if ((xml.getElementsByTagName("Error").length > 0) && 
+								xml.getElementsByTagName("Error")[0].firstChild.firstChild.nodeValue == "AWS.ECommerceService.ItemNotEligibleForCart"){
+								//The product is not elegible
+								alert ("The product is not eligible to be added to the cart");
+								return;
+							}
+							//Add the Cart ID to the KB
+							var cart = {name: 'cart',
+										id: xml.getElementsByTagName("CartId")[0].firstChild.nodeValue,
+										HMAC: xml.getElementsByTagName("URLEncodedHMAC")[0].firstChild.nodeValue};
+							EngineFactory.getInstance().manageFacts([cart],[]);
+							alert ("Product added to the shopping Cart");
+						}		
+						else 
+							alert ("Error adding the product to the cart");
+					}
+					
+					Product.prototype.productAdded = function (transport){
+						var xml = transport.responseXML;
+						//Check if the product is eligible for shopping
+						if ((xml.getElementsByTagName("Error").length > 0) && 
+							xml.getElementsByTagName("Error")[0].firstChild.firstChild.nodeValue == "AWS.ECommerceService.ItemNotEligibleForCart"){
+							//The product is not elegible
+							alert ("The product is not eligible to be added to the cart");
+							return;
+						}
+						//If the product is added to the cart,
+						//tell it to the user	
+						if (xml.getElementsByTagName("IsValid")[0].firstChild.nodeValue == "True")
+							alert ("Product added to the shopping Cart");
+						else 
+							alert ("Error adding the product to the cart");
+					}		
+					
+					Product.prototype.isProductOnCart = function (transport){
+						
+						var xml = transport.responseXML;
+						var item = EngineFactory.getInstance().getFact('item');
+						var cart = EngineFactory.getInstance().getFact('cart');
+						var user = EngineFactory.getInstance().getFact('user');
+						//products node
+						if (xml.getElementsByTagName ("CartItems").length>0){ //There are products on the cart
+								var products = xml.getElementsByTagName ("CartItems")[0];
+								//Product list (ASINs) added to the cart
+								var asins = $A(products.getElementsByTagName ("ASIN"));
+								//Check if the product is already added to the cart
+								var found = false;
+								//product Node
+								var _product; 
+								asins.each (function(asin){
+									if (asin.firstChild.nodeValue == item.ASIN)
+									{
+										found = true; //The product is in the list
+										_product = asin.parentNode; //product = CartItem
+									}
+								});
+						}
+						else {//If there aren't elements, the product will not be on the list
+							found = false;
+						}
+						if (found) { 
+							//If the product is already added to the cart,
+							//increase the number of items of that product (CartModify)			
+							//Get the item quantity
+							var prevQuantity = _product.getElementsByTagName("Quantity")[0].firstChild.nodeValue;
+							//Add the new quantity to the previously stored
+							var quantity = parseInt($F("quantitySelect")) + parseInt (prevQuantity);
+							
+							//Get the product Id within the cart
+							var productId = _product.getElementsByTagName("CartItemId")[0].firstChild.nodeValue;	
+		
+							//Create the call
+							var url = "http://webservices.amazon.com/onca/xml?Service=AWSECommerceService";
+							//Add the AccessKeyId (get from the user fact)
+							if (user)
+								url += "&AWSAccessKeyId=" + user.KeyId;
+							else // if the KB doesn't contain a user key Id, add one by default
+								url += "&AWSAccessKeyId=15TNKDQJGH6BD0Z4KY02";
+							//Add the operation Type
+							url +="&Operation=CartModify";
+							//Add the current version of the API
+							url += "&Version=2008-06-26";
+							//Add item ID
+							url += "&CartId=" + cart.id;
+							url += "&HMAC=" + cart.HMAC;
+							url += "&Item.1.CartItemId=" + productId;
+							url += "&Item.1.Quantity=" + quantity;
+							
+							//Invoke the service
+	                    	EzWebAPI.send_get(url, this, product.productAdded, product.onError);
+						}
+						else {
+		                    //Create the call
+							var url = "http://webservices.amazon.com/onca/xml?Service=AWSECommerceService";
+							//Add the AccessKeyId (get from the user fact)
+							if (user)
+								url += "&AWSAccessKeyId=" + user.KeyId;
+							else // if the KB doesn't contain a user key Id, add one by default
+								url += "&AWSAccessKeyId=15TNKDQJGH6BD0Z4KY02";
+							//Add the operation Type
+							url +="&Operation=CartAdd";
+							//Add the current version of the API
+							url += "&Version=2008-06-26";
+							//Add item ID
+							url += "&CartId=" + cart.id;
+							url += "&HMAC=" + cart.HMAC;
+							url += "&Item.1.ASIN=" + item.ASIN;
+							url += "&Item.1.Quantity=" + $F("quantitySelect");
+							
+							//Invoke the service
+	                    	EzWebAPI.send_get(url, this, product.productAdded, product.onError);
+						}
+					}
+					
+					var product = new Product();
+					EngineFactory.getInstance().addScreenLoader("Product", product.init);
+		        </script>
+		    </head>
+		    <body>
+		        <div id="bodyDivDetails">
+		        	<div id="leftColumn">
+				     	<div id="productImage">
+						</div>
+						<div id="cart">
+							<div id="quantity">Quantity:  	<select id="quantitySelect">
+										  	<option value ="1">1</option>
+										  	<option value ="2">2</option>
+										  	<option value ="3">3</option>
+										  	<option value ="4">4</option>
+										  	<option value ="5">5</option>	
+										 	<option value ="6">6</option>
+										  	<option value ="7">7</option>	
+										  	<option value ="8">8</option>		
+											<option value ="9">9</option>	
+										  	<option value ="10">10</option>						
+											</select>
+							</div>
+							<input border="0" height="27" width="160" type="image" id="addToCart" alt="Add to Shopping Cart" src="http://piccolo.ls.fi.upm.es/amazonScreens/images/addToCart.gif"/>
+						</div>       	
+					</div>
+					<div id="rightColumn">
+						<div id="productTitle" style="font-size: 20px; padding: 2px; color:#F8A704; font-weight: bold; font-style: italic; font-family:Arial,Helvetica,sans-serif; overflow: hidden;"></div>
+						<div id="infoArea">
+							<span id="titleInfo">
+								<div class="title">Product Type: </div>
+								<div class="title">Price: </div>
+								<div class="title">Product Site: </div>
+								<div class="title" id="titleInfo1"></div>
+							</span>
+							<span id="valueInfo">
+								<div id="pGroup" class="info"></div>
+								<div id="price" class="info"></div>
+								<div id="url" class="info"></div>
+								<div id="info1" class="info"></div>
+							</span>
+							<div id="moreInfo">
+								<div class="title" id="moreInfoTitle"></div>
+								<div id="moreInfoText">
+								</div>
+							</div>
+						</div>
+					</div>
+		        </div>
+		    </body>
+		</html>
+	</object>
+</div>

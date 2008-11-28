@@ -1,0 +1,217 @@
+<div id="eBayList" class="x-hide-display">
+	<object id="eBayList_obj" width="100%" height="100%">
+	<html>
+	<head>
+        <meta http-equiv="Content-Type" content="application/xhtml+xml; charset=UTF-8">
+		<link type="text/css" rel="stylesheet" href="http://piccolo.ls.fi.upm.es/amazonScreens/style/table.css" />
+        <link type="text/css" rel="stylesheet" href="http://piccolo.ls.fi.upm.es/amazonScreens/style/screen.css" />
+		<style type="text/css">
+			#loadingImgEBayList{
+				margin:auto;
+				padding-top: 10px;
+			}
+			#like{
+				padding: 5px;
+				color: #777777;
+			}
+			.productTitle{
+				font-weight:bold;
+				font-style:normal;
+			}
+			#eBayImage{
+				position:absolute;
+				right:0px;
+				top:3px;
+			}
+		</style>
+        <script language="JavaScript">
+        
+        	function EBayList(){
+	            //Product list fetched from the Service
+	            this.productList = new Array();
+	            //Are we waiting for data?
+	            this.waiting = true;
+            };
+            
+            EBayList.prototype.init = function (){
+                $$('input[type="button"]').each(function(element){
+					element.observe("mouseover",function(event){
+						var e = Event.element(event);
+						e.setStyle({cursor:"pointer"});
+					});
+				
+				});
+				var tableBody = $("listBodyEBayList");
+                tableBody.update("");
+	            eBayList.productList = new Array();
+	            eBayList.waiting = true;
+	            eBayList.showProgress();
+                eBayList.fetch();
+            }
+            
+            EBayList.prototype.fetch = function (){
+            
+            	//Get the facts to invoke the service
+                var item = EngineFactory.getInstance().getFact('item');	
+                
+                //URL of the Service
+				var url = "http://open.api.ebay.com/shopping?";
+				url += "&callname=FindItems";
+				url += "&ItemSort=BestMatch";
+				url += "&version=515";
+				url += "&responseencoding=XML";
+				url += "&appid=eBayAPID-73f4-45f2-b9a3-c8f6388b38d8";
+				url += "&callback=true";
+				url += "&QueryKeywords=" + escape(item.title.replace(/ /g,"+"));
+
+				//Invoke the service
+                EzWebAPI.send_get(url, this, eBayList.addToList, eBayList.onError);
+            }
+            
+            EBayList.prototype.addToList = function (transport){
+            	var xml = transport.responseXML;
+                var items = xml.getElementsByTagName("Item");
+                //Fill the table, 1 row per item
+                $A(items).each(function(item){
+                     if (item.getElementsByTagName("ItemID").length > 0) 
+                         var itemID = item.getElementsByTagName("ItemID")[0].firstChild.nodeValue;
+					 else
+    					var itemID = "&nbsp;";
+    				 if (item.getElementsByTagName("Title").length > 0) 
+                         var title = item.getElementsByTagName("Title")[0].firstChild.nodeValue;
+					 else
+    					var title = "&nbsp;";
+    				 if (item.getElementsByTagName("PrimaryCategoryName").length > 0) 
+                         var category = item.getElementsByTagName("PrimaryCategoryName")[0].firstChild.nodeValue;
+					 else
+    					var category = "&nbsp;";
+    				 if (item.getElementsByTagName("ConvertedCurrentPrice").length > 0) 
+                         var currentPrice = '$' + item.getElementsByTagName("ConvertedCurrentPrice")[0].firstChild.nodeValue;
+					 else
+    					var currentPrice = "&nbsp;";
+    				 if (item.getElementsByTagName("ShippingServiceCost").length > 0) 
+                         var shippingServiceCost = '$' + item.getElementsByTagName("ShippingServiceCost")[0].firstChild.nodeValue;
+					 else
+    					var shippingServiceCost = "&nbsp;";
+    				 if (item.getElementsByTagName("GalleryURL").length > 0) 
+                         var image = item.getElementsByTagName("GalleryURL")[0].firstChild.nodeValue;
+                     else
+                     	var image = "";
+                     var row = {
+                     	 itemID: itemID,
+                         title:  title.replace(/\x27/g,"`"),
+                         category: category,
+                         currentPrice: currentPrice,
+                         shippingServiceCost: shippingServiceCost,
+                         image: image
+                     };
+                     eBayList.productList.push(row);
+                 });
+                 if (eBayList.waiting) {
+                     eBayList.waiting = false;
+                     eBayList.showTable();
+                 }
+            }
+            
+            
+            EBayList.prototype.productDetail = function (nodeElement, itemID, title){
+				eBayList.clearSelected ();
+				//select the element
+				nodeElement.parentNode.parentNode.setStyle({background: "#FFF8E8"});
+				var ebayItem = {name: 'ebayItem', itemID: itemID, title: title};
+				EngineFactory.getInstance().manageFacts([ebayItem],[]);
+			}
+			
+			EBayList.prototype.clearSelected = function (){
+				$$("tbody tr").each(function (element){
+					element.setStyle ({background: "transparent url(http://piccolo.ls.fi.upm.es/amazonScreens/style/bg_td1.jpg) repeat-x top"});
+				});
+			}
+			
+			EBayList.prototype.onError = function (transport){
+                //alert(transport.responseText);
+            }
+            
+            EBayList.prototype.showProgress = function (){
+                eBayList.waiting = true;
+                $("loadingImgEBayList").show();
+            }
+            
+            EBayList.prototype.showTable = function (){
+            	if($("loadingImgEBayList")){
+                	$("loadingImgEBayList").hide();
+                }
+                var templateString = '<tr>';
+                templateString += '<td><img src="#{image}"/></td>';
+                templateString += '<td>#{title}</td><td>#{category}</td><td>#{currentPrice}</td><td>#{shippingServiceCost}</td>';
+                templateString += '<td style="border-right:none;"><input type="button" onclick="eBayList.productDetail(this,\'#{itemID}\',\'#{title}\');"';
+				templateString += ' onmouseover="this.setStyle({cursor:\'pointer\'});" value="Select"/></td></tr>';
+                var rowTemplate = new Template(templateString);
+                
+                var tableBody = $("listBodyEBayList");
+                for (var i = 0; i < eBayList.productList.length; i++) { //print the appropriate elements
+                    if (eBayList.productList[i]) { //only if the product table is fetched
+                        tableBody.innerHTML += rowTemplate.evaluate(eBayList.productList[i]);
+                    }
+                }
+            }
+            
+            var eBayList = new EBayList();
+			EngineFactory.getInstance().addScreenLoader("eBay List", eBayList.init);
+			
+        </script></head><body>
+        <div id="bodyDiv">
+        	<span id="eBayImage"><img src="http://piccolo.ls.fi.upm.es/amazonScreens/images/logo-ebay.gif" /></span>
+		    <h1 id="title">eBay Item list</h1>
+		    <div id="listDiv">
+                <table>
+                    <thead>
+                        <tr>
+                        	<th style="width: 10%; -moz-border-radius-topleft: 13px; -moz-border-radius-topright: 0px; -moz-border-radius-bottomright: 0px; -moz-border-radius-bottomleft: 0px;">
+                                &nbsp;
+                            </th>
+                            <th style="width: 60%;" nowrap="nowrap">
+                                Title
+                            </th>
+                            <th style="width: 10%;" nowrap="nowrap">
+                                Category
+                            </th>
+                            <th style="width: 10%;" nowrap="nowrap">
+                                Current Price
+                            </th>
+                            <th style="width: 20%;" nowrap="nowrap">
+                                Shipping Service Cost
+                            </th>
+                            <th style="width: 10%; -moz-border-radius-topleft: 0px; -moz-border-radius-topright: 13px; -moz-border-radius-bottomright: 0px; -moz-border-radius-bottomleft: 0px;">
+                                &nbsp;
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody id="listBodyEBayList">
+	                            <tr>
+					<td>&nbsp;</td>
+				    </tr>
+	                            <tr>
+					<td>&nbsp;</td>
+				    </tr>
+	                            <tr>
+					<td>&nbsp;</td>
+				    </tr>
+	                            <tr>
+					<td>&nbsp;</td>
+				    </tr>
+	                            <tr>
+					<td>&nbsp;</td>
+				    </tr>
+	                            <tr>
+					<td>&nbsp;</td>
+				    </tr>
+		    </tbody>
+                </table>
+                <img style="display: none;" id="loadingImgEBayList" src="http://piccolo.ls.fi.upm.es/amazonScreens/images/ajaxLoader.gif">
+            </div>
+        </div>
+    </body>
+    </html>
+	</object>
+</div>
