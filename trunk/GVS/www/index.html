@@ -1,0 +1,169 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"> 
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+    <head>
+        <title>FAST: Gadget Visual Studio</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <style type="text/css">
+        /*<![CDATA[*/
+            @import "js/lib/dojo/dijit/themes/soria/soria.css";
+            @import "js/lib/dojo/dojo/resources/dojo.css";
+        /*]]>*/
+        </style>
+        <link rel="stylesheet" type="text/css" href="style/gvs.css" />
+
+        <script type="text/javascript">
+        /* <![CDATA[ */
+           //Dojo Configuration parameters
+            var djConfig = {
+                isDebug:false, parseOnLoad:true
+            };
+        /* ]]> */
+        </script>
+        <script type="text/javascript" src="js/lib/dojo/dojo/dojo.js"></script>
+        
+        <script type="text/javascript" src="js/lib/prototype/prototype.js"></script>
+
+        <!-- GVS Code -->
+        <!-- Drag n Drop support -->
+        <script type="text/javascript" 
+            src="js/gvs/dragndrop/DragHandler.js"></script>
+        <script type="text/javascript" 
+            src="js/gvs/dragndrop/DragSource.js"></script>
+        
+        <!-- Catalogue Classes -->
+        <script type="text/javascript"
+            src="js/gvs/catalogue/Catalogue.js"></script>
+		<script type="text/javascript"
+            src="js/gvs/catalogue/ResourceDescription.js"></script>
+        <script type="text/javascript"
+            src="js/gvs/catalogue/ResourceFactory.js"></script>
+        <script type="text/javascript" 
+            src="js/gvs/catalogue/ScreenDescription.js"></script>
+        <script type="text/javascript"
+            src="js/gvs/catalogue/ScreenFactory.js"></script>
+
+        <!-- Document classes -->
+        <script type="text/javascript"
+            src="js/gvs/documents/AbstractDocument.js"></script>
+        <script type="text/javascript"
+            src="js/gvs/documents/WelcomeDocument.js"></script>
+        <script type="text/javascript"
+            src="js/gvs/documents/DocumentController.js"></script>
+        <script type="text/javascript"
+            src="js/gvs/documents/ScreenflowDocument.js"></script>
+    
+        <!-- Fact classes -->
+        <script type="text/javascript" 
+            src="js/gvs/facts/Fact.js"></script>
+        <script type="text/javascript" 
+            src="js/gvs/facts/FactFactory.js"></script>  
+        <script type="text/javascript" 
+            src="js/gvs/facts/FactIcon.js"></script>
+
+        <!-- Component instance classes -->
+        <script type="text/javascript"
+            src="js/gvs/instances/ComponentInstance.js"></script>
+        <script type="text/javascript"
+            src="js/gvs/instances/ScreenInstance.js"></script>
+
+        <!-- Palette classes -->         
+        <script type="text/javascript" 
+            src="js/gvs/palette/Palette.js"></script>
+        <script type="text/javascript" 
+            src="js/gvs/palette/PaletteComponent.js"></script>
+        <script type="text/javascript" 
+            src="js/gvs/palette/PaletteController.js"></script>
+        <script type="text/javascript" 
+            src="js/gvs/palette/ScreenComponent.js"></script>    
+
+        <!-- Resource views classes -->         
+        <script type="text/javascript" 
+            src="js/gvs/views/ResourceView.js"></script>
+        <script type="text/javascript" 
+            src="js/gvs/views/ScreenView.js"></script>
+
+        <!-- Miscelaneous utilities -->
+        <script type="text/javascript" 
+            src="js/gvs/utils/UIDGenerator.js"></script>
+        <script type="text/javascript"
+            src="js/gvs/utils/BrowserUtils.js"></script>
+
+        <!-- GVS Entry point -->
+        <script type="text/javascript"
+            src="js/gvs/GVS.js"></script>
+        
+        <!-- We tell Dojo to load the needed modules -->
+        <script type="text/javascript">
+        /* <![CDATA[ */
+
+            // We load Dojo's code relating to the needed components
+            // ... typical Components
+            dojo.require("dijit.form.TextBox");
+            dojo.require("dijit.form.Button");
+            dojo.require("dijit.InlineEditBox");
+            dojo.require("dijit.Tooltip");
+            
+            // ... layouts used in page
+            dojo.require("dijit.layout.AccordionContainer");
+            dojo.require("dijit.layout.ContentPane");
+            dojo.require("dijit.layout.TabContainer");
+            dojo.require("dijit.layout.BorderContainer");
+            dojo.require("dijit.Toolbar");
+            dojo.require("dijit.Dialog");
+            dojo.require("dojo.parser"); 
+
+            // Arming the GVS initialization method
+            dojo.addOnLoad(function() {
+                GVSSingleton.getInstance().init();
+            });
+
+        /* ]]> */
+        </script>
+    </head>
+
+    <body class="soria">
+        <!-- Setting the layout of the page. --> 
+        <div id="main" dojoType="dijit.layout.BorderContainer" liveSplitters="false">
+            
+            <!-- Header -->
+            <div id="header" dojoType="dijit.layout.ContentPane" region="top">
+                <img src="images/gui/fastLogo.png" alt="FAST Logo"/> 
+                <h1>Gadget Visual Studio</h1>
+                <span id="showDialog" dojoType="dijit.form.Button">Create Gadget!</span>
+                <!-- Menu area -->
+                <div id="menu" dojoType="dijit.Toolbar">
+                    Menu
+                </div>
+            </div>  
+            
+            <!-- LEFT part: Palette -->
+            <div dojoType="dijit.layout.AccordionContainer" minSize="170" maxSize="250"
+                 id="palette" region="leading" splitter="true">
+                 <div dojoType="dijit.layout.AccordionPane" id="screenPalette" title="Screens" class="paletteElement">
+                 </div> 
+                 <!--<div dojoType="dijit.layout.AccordionPane" id="flowControlPalette" title="Flow controls" class="paletteElement">
+                 </div> 
+                 <div dojoType="dijit.layout.AccordionPane" id="formPalette" title="Forms" class="paletteElement">
+                 </div>-->
+            </div>
+            <!-- end of Palette area -->
+            
+            <!-- Workspace area -->
+            <div dojoType="dijit.layout.BorderContainer" liveSplitters="false" design="sidebar" id="workspace" region="center">
+                
+                <!-- CENTER part: Document area -->         
+                <div dojoType="dijit.layout.TabContainer" id="documentContainer" region="center">
+                </div> 
+                <!-- end of Document area -->
+                
+                <!-- BOTTOM part: Inspectors area -->       
+                <div dojoType="dijit.layout.ContentPane" id="inspectorContainer" region="bottom">
+                    <div>&nbsp;</div>
+                </div> 
+                <!-- end of Inspectors area -->
+            </div> 
+        </div>
+    </body>
+</html>
+<!-- vim: set ts=4 sw=4 et:  -->

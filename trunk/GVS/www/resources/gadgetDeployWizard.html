@@ -1,0 +1,39 @@
+<h2>Fulfill Gadget Information</h2>
+<div id="wizardInfo">
+<div class="line">Please fulfill the required information in order to deploy
+a gadget.</div>
+
+<form id="gadgetDeployForm" method="post">
+	<h3>Gadget information</h3>
+	<div class="line">
+		<label>Gadget Name: </label>
+		<input type="text" id="name" name="name" value="FAST Gadget" />
+	</div> 
+	<div class="line">
+		<label>Vendor: </label>
+		<input type="text" id="vendor" name="vendor" value="Morfeo" />
+	</div> 
+	<div class="line">
+		<label>Version: </label>
+		<input type="text" id="version" name="version" value="1.0" />
+	</div> 
+	<div class="line">
+		<label>Gadget Description: </label>
+		<input type="text" id="info" name="info" value="Write your description here..." />
+	</div>
+	<h3>Author Information</h3> 
+		<div class="line">
+		<label>Author Name: </label>
+		<input type="text" id="author" name="author" value="Your Author name" />
+	</div> 
+	<div class="line">
+		<label>E-Mail: </label>
+		<input type="text" id="email" name="email" value="email@yourcompany.com" />
+	</div> 
+	<input type="hidden" id="deployScreens" name="screens" />
+</form>
+</div>
+<div id="wizardButtons">
+	<button dojoType="dijit.form.Button" id="sendButton" onclick="deployGadget();">Send</button>
+	<button dojoType="dijit.form.Button" id="cancelButton" onclick="dijit.byId('dialog2').hide();">Cancel</button>
+</div>
