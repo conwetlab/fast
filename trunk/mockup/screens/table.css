@@ -1,5 +1,5 @@
 table {
-	width: 650px;
+	width: 95%;
 	border:1px solid #FFCA5E;
 	-moz-border-radius: 13px 13px;
 }
@@ -60,3 +60,4 @@ tfoot td {
 	color: #FFFFFF;
 	height: 30px;
 }
+
