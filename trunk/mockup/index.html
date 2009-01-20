@@ -302,14 +302,23 @@
             display:none;
         }
 </style>
+         <script type="text/javascript">
+		/** CONFIGURATION PROPERTIES */		
 
-     <script type="text/javascript" src="js/dojo/dojo/dojo.js" djConfig="parseOnLoad:true,isDebug:false"></script>
+		//This variable is the hostname in which the service is deployed
+		//It is normally the same host as the fast tool
+		var fastURL = "http://piccolo.ls.fi.upm.es";
+
+         </script>
+         <script type="text/javascript" src="js/dojo/dojo/dojo.js" djConfig="parseOnLoad:true,isDebug:false"></script>
 	 <script type="text/javascript" src="js/prototype/prototype.js"></script>
 	 <script type="text/javascript" src="js/dragndrop/BrowserUtils.js"></script>
 	 <script type="text/javascript" src="js/dragndrop/Draggable.js"></script>
 	 <script type="text/javascript" src="js/Handlers.js"></script>
 	 <script type="text/javascript" src="js/palette/Palette.js"></script>
 	 <script type="text/javascript" src="js/utils/Utils.js"></script>
+         
+
 	 <script type="text/javascript">
 	 
 	 var selectedElement;
@@ -360,8 +369,8 @@
 	 };
 	 
 	 //URL of the gagdet production service
-	 var baseURL= "http://piccolo.ls.fi.upm.es:8008/fast";
-	 var ezWebStoreURL= "http://piccolo.ls.fi.upm.es:8008/store";
+	 var baseURL= fastURL + ":8008/fast";
+	 var ezWebStoreURL= fastURL + ":8008/store";
 	 
 	 var start = false;
 	 
