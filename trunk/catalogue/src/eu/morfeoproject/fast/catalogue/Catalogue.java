@@ -40,7 +40,7 @@ import eu.morfeoproject.fast.vocabulary.DC;
 import eu.morfeoproject.fast.vocabulary.FCO;
 
 /**
- * 
+ * Catalogue
  * @author irivera
  */
 public class Catalogue {
