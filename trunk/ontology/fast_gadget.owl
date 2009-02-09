@@ -1,0 +1,32 @@
+# FAST Gadget Ontology
+# 
+# developed as part of the EU FAST Project (FP7-ICT-2007-1-216048)
+# 
+# editor: Knud Hinnerk Möller, DERI, National Unversity of Ireland, Galway
+#
+# $Id:$
+
+@base <http://purl.oclc.org/fast/ontology/gadget#> .
+@prefix fast: <http://purl.oclc.org/fast/ontology/gadget#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>  .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix doap: <http://usefulinc.com/ns/doap#> .
+@prefix sioc: <http://rdfs.org/sioc/ns#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+
+<> a owl:Ontology ;
+	rdfs:label "The FAST Gagdet Ontology v0.1" ;
+	rdfs:comment "This ontology defines terms for modelling semantic, interoperable gadgets (or widgets)." ;
+	dcterms:created "2009-02-09" ;
+	dcterms:creator <http://kantenwerk.org/metadata/foaf.rdf#me> ;
+	doap:revision "$Id:$" .
+	
+	
+<http://kantenwerk.org/metadata/foaf.rdf#me> a foaf:Person ;
+	foaf:name "Knud Möller" ;
+	foaf:mbox <mailto:knud.moeller@deri.org> ;
+	rdfs:seeAlso <http://kantenwerk.org/metadata/foaf.rdf> .
+	
