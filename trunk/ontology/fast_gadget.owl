@@ -23,12 +23,73 @@
 	dcterms:created "2009-02-09" ;
 	dcterms:modified "$Date: 2009-02-09 17:13:59 +0000 (Mon, 09 Feb 2009) $" ;
 	dcterms:creator <http://kantenwerk.org/metadata/foaf.rdf#me> ;
-	doap:revision "$Revision:$" .
-	
+	doap:revision "$Revision$" .
 	
 <http://kantenwerk.org/metadata/foaf.rdf#me> a foaf:Person ;
 	foaf:name "Knud Möller" ;
 	foaf:mbox <mailto:knud.moeller@deri.org> ;
 	rdfs:seeAlso <http://kantenwerk.org/metadata/foaf.rdf> .
+
+# Classes
+
+<Resource> a owl:Class ;
+	rdfs:label "Resource"@en ;
+	rdfs:description "Anything that is part of a gadget (or the gadget itself). Tentatively anything that can be 'touched' and moved around in the FAST IDE."@en .
+
+<Screen_Flow> a owl:Class ;
+rdfs:subClassOf <Resource> ;
+rdfs:label "Screen Flow"@en ;
+rdfs:description "The complete gadget, a set of screens."@en .
+
+<Screen> a owl:Class ;
+rdfs:subClassOf <Resource> ;
+rdfs:label "Screen"@en ;
+rdfs:description "An individual screen."@en .
+
+<Backend_Service> a owl:Class ;
+rdfs:subClassOf <Resource> ;
+rdfs:label "Backend Service"@en ;
+rdfs:description "A Web service which provides data and/or functionality to a screen. A backend service will often be external to FAST, and will probably have to be wrapped by the screen."@en .
+
+<Flow_Control_Element> a owl:Class ;
+rdfs:subClassOf <Resource> ;
+rdfs:label "Flow Control Element"@en ;
+rdfs:description "Any kind of component which can restrict the default flow of screens in a gadget."@en .
+
+<Screen_Flow_Start> a owl:Class ;
+rdfs:subClassOf <Flow_Control_Element> ;
+rdfs:label "Screen Flow Start"@en ;
+rdfs:description "The entry point to a wigdet; the first screen."@en .
+
+<Screen_Flow_End> a owl:Class ;
+rdfs:subClassOf <Flow_Control_Element> ;
+rdfs:label "Screen Flow End"@en ;
+rdfs:description "A screen that ends the workflow of the gadget."@en .
+
+<Connector> a owl:Class ;
+rdfs:subClassOf <Flow_Control_Element> ;
+rdfs:label "Connector"@en ;
+rdfs:description "An explicit connection between two screens."@en .
+
+<Form_Element> a owl:Class ;
+rdfs:subClassOf <Resource> ;
+rdfs:label "Form Element"@en ;
+rdfs:description "Form elements are UI elements in a particular screen."@en .
+
+<Condition> a owl:Class ;
+rdfs:subClassOf <Resource> ;
+rdfs:label "Condition"@en ;
+rdfs:description "The pre- or post-condition of either a screen or a screenflow. In the latter case, this corresponds to the terms slot and event as they are used in the EzWeb platform."@en .
+
+# Properties
+
+# terms used from other ontologies
+
+<otherTerms> a rdf:Bag ;
+	rdfs:label "Integrated terms" ;
+	rdfs:comment "A list of terms integrated from other ontologies and vocabularies." ;
+	rdf:li  sioc:User, foaf:Person,foaf:Image, foaf:OnlineAccount, foaf:holdsAccount,
+		foaf:depiction, foaf:name, foaf:mbox, foaf:mbox_sha1sum, foaf:interest, foaf:accountName,
+		dcterms:title, dcterms:creator, dcterms:description, dcterms:created, 
+		dcterms:rights, dcterms:RightsStatement, dcterms:rightsHolder .
 	
-lala
