@@ -21,7 +21,7 @@
 	rdfs:label "The FAST Gagdet Ontology v0.1" ;
 	rdfs:comment "This ontology defines terms for modelling semantic, interoperable gadgets (or widgets)." ;
 	dcterms:created "2009-02-09" ;
-	dcterms:modified "$Date:$" ;
+	dcterms:modified "$Date: 2009-02-09 17:13:59 +0000 (Mon, 09 Feb 2009) $" ;
 	dcterms:creator <http://kantenwerk.org/metadata/foaf.rdf#me> ;
 	doap:revision "$Revision:$" .
 	
@@ -31,3 +31,4 @@
 	foaf:mbox <mailto:knud.moeller@deri.org> ;
 	rdfs:seeAlso <http://kantenwerk.org/metadata/foaf.rdf> .
 	
+lala
