@@ -1,9 +1,10 @@
+# -*- coding: utf-8 -*-
 # MORFEO Project
 # http://morfeo-project.org
 #
 # Component: FAST
 #
-# (C) Copyright 2008 Telefónica Investigación y Desarrollo
+# (C) Copyright 2008 Telefonica Investigación y Desarrollo
 #     S.A.Unipersonal (Telefónica I+D)
 #
 # Info about members and contributors of the MORFEO project
