@@ -4,7 +4,7 @@
 # 
 # editor: Knud Hinnerk Möller, DERI, National Unversity of Ireland, Galway
 #
-# $Id: fast_gadget.owl 29 2009-02-09 17:07:11Z knud $
+# $Id$
 
 @prefix fast: <http://purl.oclc.org/fast/ontology/gadget#> .
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>  .
@@ -15,14 +15,14 @@
 @prefix doap: <http://usefulinc.com/ns/doap#> .
 @prefix sioc: <http://rdfs.org/sioc/ns#> .
 @prefix dcterms: <http://purl.org/dc/terms/> .
-
+  
 <http://purl.oclc.org/fast/ontology/gadget> a owl:Ontology ;
 	rdfs:label "The FAST Gagdet Ontology v0.1"@en ;
 	rdfs:comment "This ontology defines terms for modelling semantic, interoperable gadgets or widgets)."@en ;
 	dcterms:created "2009-02-09"@en ;
 	dcterms:modified "$Date: 2009-02-09 17:13:59 +0000 (Mon, 09 Feb 2009) $"@en ;
 	dcterms:creator <http://kantenwerk.org/metadata/foaf.rdf#me> ;
-	doap:revision "$Revision$" .
+	doap:revision "$Revision: 34 $" .
 	
 <http://kantenwerk.org/metadata/foaf.rdf#me> a foaf:Person ;
 	foaf:name "Knud Möller"@en ;
