@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<rdf:RDF 
+    xmlns:foaf="http://xmlns.com/foaf/0.1/"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+    xmlns:dc="http://purl.org/dc/elements/1.1/"
+    xmlns:bibtex="http://purl.oclc.org/NET/nknouf/ns/bibtex#"
+    xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+
+<rdf:Description rdf:about="http://www.deri.ie/about/team/member/Andreas_Harth">
+  <rdfs:label>FOAF file of Andreas Harth</rdfs:label> 
+</rdf:Description>
+  
+<foaf:Person rdf:about="http://www.deri.ie/about/team/member/Andreas_Harth#me">
+  <foaf:name>Andreas Harth</foaf:name><foaf:firstName>Andreas</foaf:firstName>
+  <foaf:surname>Harth</foaf:surname>
+  <foaf:phone rdf:resource="tel:+353 91 495133"/>
+  <foaf:mbox_sha1sum>349ba1da7307ffb78517ae557ade1dd5177a6dbb</foaf:mbox_sha1sum>
+  <foaf:workplaceHomepage rdf:resource="http://www.deri.ie/"/>
+  <foaf:img rdf:resource="http://www.deri.ie/uploads/tx_derimp/andreas_harth_01.jpg"/>
+  <foaf:currentProject>
+    <foaf:Project rdf:about="http://www.tripcom.org">
+      <foaf:name>TripCom</foaf:name>
+      <foaf:homepage rdf:resource="http://www.tripcom.org"/>
+    </foaf:Project>
+  </foaf:currentProject>
+</foaf:Person>
+
+<foaf:Group rdf:about="http://sw.deri.ie">
+  <foaf:name>Semantic Web</foaf:name>
+  <foaf:member rdf:resource="http://www.deri.ie/about/team/member/Andreas_Harth#me"/>
+</foaf:Group>
+
+</rdf:RDF>
+
+
+
