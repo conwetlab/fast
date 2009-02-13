@@ -1,10 +1,6 @@
 package eu.morfeoproject.fast.catalogue;
 
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
-import java.util.Properties;
 
 import org.apache.log4j.Logger;
 import org.openrdf.repository.Repository;
@@ -27,14 +23,15 @@ import eu.morfeoproject.fast.catalogue.repository.simpleinferencer.SimpleRDFSInf
  * by the class loader) than the moment that getInstance() is called. Thus, this 
  * solution is thread-safe without requiring special language constructs (i.e. 
  * volatile and/or synchronised).
- * 
+ * 	
  * @author Ismael Rivera
  */
 public class PersistentRepository {
 	
 	static Logger logger = Logger.getLogger(PersistentRepository.class);
 	
-	static final String defaultStorageDir = "repository";
+	static File storageDir = null;
+	static String defaultStorageDir = "repository";
 	static final String defaultIndexes = "spoc, posc";
 	static final int defaultInferencer = TripleStore.FORWARD_CHAINING_RDFS_INFERENCER;
 	
@@ -43,19 +40,18 @@ public class PersistentRepository {
 	// Protected constructor is sufficient to suppress unauthorised calls to the 
 	// constructor
 	protected PersistentRepository() {
-		File storageDir = null;
 		String indexes = null;
-		try {
-			Properties properties = new Properties();
+//		try {
+//			Properties properties = new Properties();
 			//TODO: fix the problem with the repository.properties path
-			properties.load(new FileReader("bin\\repository.properties"));
-			storageDir = new File(properties.getProperty("storageDir"));
-			indexes = properties.getProperty("indexes");
-		} catch (FileNotFoundException e) {
-			logger.warn("repository.properties file not found.");
-		} catch (IOException e) {
-			logger.warn("problem found reading repository.properties file.");
-		} finally {
+//			properties.load(new FileReader("repository.properties"));
+//			storageDir = new File(properties.getProperty("storageDir"));
+//			indexes = properties.getProperty("indexes");
+//		} catch (FileNotFoundException e) {
+//			logger.warn("repository.properties file not found.");
+//		} catch (IOException e) {
+//			logger.warn("problem found reading repository.properties file.");
+//		} finally {
 			if (storageDir == null) {
 				logger.warn("repository storage directory set to default ("+defaultStorageDir+").");
 				storageDir = new File(defaultStorageDir);
@@ -64,7 +60,7 @@ public class PersistentRepository {
 				logger.warn("repository indexes set to default ("+defaultIndexes+").");
 				indexes = defaultIndexes;
 			}
-		}
+//		}
 
 		// persistent store
 		NotifyingSail sail = new NativeStore(storageDir, indexes);

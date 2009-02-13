@@ -7,23 +7,29 @@ import org.ontoware.rdf2go.model.Statement;
 
 public class Condition {
 	
-	private List<Statement> statements;
+	private String patternString;
+	private List<Statement> pattern;
 	
-	public List<Statement> getStatements() {
-		if (statements == null)
-			statements = new ArrayList<Statement>();
-		return statements;
+	public String getPatternString() {
+		return patternString;
+	}
+	
+	public void setPatternString(String patternString) {
+		this.patternString = patternString;
+	}
+	
+	public List<Statement> getPattern() {
+		if (pattern == null)
+			pattern = new ArrayList<Statement>();
+		return pattern;
 	}
 
-	public void setStatements(List<Statement> statements) {
-		this.statements = statements;
+	public void setPattern(List<Statement> pattern) {
+		this.pattern = pattern;
 	}
 
 	public String toString() {
-		StringBuffer sb = new StringBuffer();
-		for (Statement st : statements)
-			sb.append(st.toString()+" .\n");
-		return sb.toString();
+		return patternString;
 	}
 	
 }

@@ -1,25 +1,24 @@
 package eu.morfeoproject.fast.catalogue;
 
+import java.io.File;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 import org.apache.log4j.Logger;
-import org.ontoware.aifbcommons.collection.ClosableIterable;
 import org.ontoware.aifbcommons.collection.ClosableIterator;
 import org.ontoware.rdf2go.RDF2Go;
 import org.ontoware.rdf2go.exception.ModelRuntimeException;
 import org.ontoware.rdf2go.model.Model;
-import org.ontoware.rdf2go.model.ModelSet;
 import org.ontoware.rdf2go.model.QueryResultTable;
 import org.ontoware.rdf2go.model.QueryRow;
 import org.ontoware.rdf2go.model.Statement;
 import org.ontoware.rdf2go.model.Syntax;
+import org.ontoware.rdf2go.model.node.BlankNode;
+import org.ontoware.rdf2go.model.node.LanguageTagLiteral;
 import org.ontoware.rdf2go.model.node.Node;
 import org.ontoware.rdf2go.model.node.URI;
 import org.ontoware.rdf2go.model.node.Variable;
@@ -53,28 +52,30 @@ public class Catalogue {
 	public static final int SUBSUME = 3;
 	public static final int INTERSECTION = 4;
 
-	public static final String XMLS_PREFIX = "http://www.w3.org/2001/XMLSchema#";
-	public static final String RDF_PREFIX 	= "http://www.w3.org/1999/02/22-rdf-syntax-ns#";
-	public static final String RDFS_PREFIX = "http://www.w3.org/2000/01/rdf-schema#";
-	public static final String OWL_PREFIX 	= "http://www.w3.org/2002/07/owl#";
-	public static final String FCO_PREFIX = "http://www.morfeoproject.eu/fast/fco#";
+	public static final URI TAGS_NAMESPACE = new URIImpl("http://www.morfeoproject.eu/fast/tags/");
 	
-	public static final String DEFAULT_PREFIXES =
-			"PREFIX xmls: <" + XMLS_PREFIX + "> " +
-			"PREFIX rdf: <" + RDF_PREFIX + "> " +
-			"PREFIX rdfs: <" + RDFS_PREFIX + "> " +
-			"PREFIX owl: <" + OWL_PREFIX + "> " +
-			"PREFIX fco: <" + FCO_PREFIX + "> ";
-
 	private TripleStore tripleStore;
-//	private Model canvas;
 	
 	/**
 	 * Returns a opened connection to the catalogue
 	 */
-	public Catalogue() {
+//	public Catalogue() {
+//		// creates a new triple store
+//		tripleStore = new TripleStore();
+//    	tripleStore.open();
+//    	
+//		// check if the catalogue is correct
+//		if (!check()) {
+//			// recover the catalogue
+//			restore();
+//		}
+//		
+////		dumpStatements();
+//	}
+	
+	public Catalogue(File dir) {
 		// creates a new triple store
-		tripleStore = new TripleStore();
+		tripleStore = new TripleStore(dir);
     	tripleStore.open();
     	
 		// check if the catalogue is correct
@@ -82,10 +83,6 @@ public class Catalogue {
 			// recover the catalogue
 			restore();
 		}
-		
-		// initialise the canvas
-		//TODO: the namespace has to be the user namespace
-//		canvas = RDF2Go.getModelFactory().createModel(tripleStore.createUniqueUriWithName(FCO.NS_FCO, "canvas"));
 	}
 	
 	// TODO remove this method
@@ -133,7 +130,7 @@ public class Catalogue {
     // TODO: tiene sentido??
     // check if user is there.
     /**
-     * check if the PIMO is not created yet and {@link #createNewPimo()} needs to be called.
+     * Check if the PIMO is not created yet and {@link #createNewPimo()} needs to be called.
      * @return false, if {@link #restore()} needs to be called.
      */
     public boolean checkUser() {
@@ -155,15 +152,13 @@ public class Catalogue {
 	}
 
 	public void close() {
+		// stops the garbage collector
+//		tripleStoreGarbargeCollector.
 		tripleStore.close();
-	}
-
-	private ModelSet getPersistentModelSet() {
-		return tripleStore.getPersistentModelSet();
 	}
 	
 	/**
-	 * add the passed ontology to the main repository. The passed RDF model must only contain one ontology
+	 * Add the passed ontology to the main repository. The passed RDF model must only contain one ontology
 	 * at a time. The ontology should have declared imports statements for other ontologies it 
 	 * needs, these will be automatically compared to the list of ontologies, if a prerequisite
 	 * misses, an  OntologyImportsNotSatisfiedException will be thrown.
@@ -193,11 +188,8 @@ public class Catalogue {
 		}
 	}
 
-
-
-
 	/**
-	 * add the passed ontology to the main repository. The passed RDF model must only contain one ontology
+	 * Add the passed ontology to the main repository. The passed RDF model must only contain one ontology
 	 * at a time. The ontology should have declared imports statements for other ontologies it 
 	 * needs, these will be automatically compared to the list of ontologies, if a prerequisite
 	 * misses, an  OntologyImportsNotSatisfiedException will be thrown.
@@ -298,33 +290,156 @@ public class Catalogue {
 	}
 
 	// FIXME finish this method
-	public void addScreenFlow(ScreenFlow sf) throws DuplicatedScreenException,
-	OntologyInvalidException, OntologyReadonlyException, NotFoundException  {
-//		if (containsScreen(sf))
-//			throw new DuplicatedScreenException();
-		
-		URI sfUri = tripleStore.createResource(sf.getUri(), FCO.Screen);
-		tripleStore.setLabel(sfUri, sf.getName());
-		for (Screen screen : sf.getScreens()) {
-			tripleStore.addStatement(sfUri, FCO.hasScreen, screen.getUri());
+	public void addScreenFlow(ScreenFlow sf) throws DuplicatedScreenFlowException,
+	OntologyInvalidException, OntologyReadonlyException, NotFoundException {
+		URI sfUri = null;
+		if (sf.getUri() != null) {
+			sfUri = sf.getUri();
+			if (containsScreenFlow(sf))
+				throw new DuplicatedScreenFlowException();
+		} else {
+			sfUri = tripleStore.createResource(FCO.ScreenFlow);
+			sf.setUri(sfUri);
 		}
-		logger.info("ScreenFlow " + sf.getUri() + " added.");
+		// persists the screen
+		saveScreenFlow(sf);
 	}
 	
-	public void addScreen(Screen screen) throws DuplicatedScreenException,
-	OntologyInvalidException, OntologyReadonlyException, NotFoundException  {
+	private void saveScreenFlow(ScreenFlow sf) throws OntologyReadonlyException, NotFoundException {
+		URI sfUri = sf.getUri();
+		for (String key : sf.getLabels().keySet())
+			tripleStore.addStatement(sfUri, RDFS.label, tripleStore.createLanguageTagLiteral(sf.getLabels().get(key), key));
+		for (String key : sf.getDescriptions().keySet())
+			tripleStore.addStatement(sfUri, DC.description, tripleStore.createLanguageTagLiteral(sf.getDescriptions().get(key), key));
+		if (sf.getCreator() != null)
+			tripleStore.addStatement(sfUri, DC.creator, sf.getCreator());
+		if (sf.getRights() != null)
+			tripleStore.addStatement(sfUri, DC.rights, sf.getRights());
+		if (sf.getVersion() != null)
+			tripleStore.addStatement(sfUri, FCO.version, sf.getVersion());
+		if (sf.getCreationDate() != null)
+			tripleStore.addStatement(sfUri, DC.date, FormatterUtil.formatDateISO8601(sf.getCreationDate()));
+		if (sf.getIcon() != null)
+			tripleStore.addStatement(sfUri, FCO.icon, sf.getIcon());
+		if (sf.getScreenshot() != null)
+			tripleStore.addStatement(sfUri, FCO.screenshot, sf.getScreenshot());
+		for (URI tag : sf.getDomainContext())
+			tripleStore.addStatement(sfUri, FCO.hasTag, tag);
+		if (sf.getHomepage() != null)
+			// TODO change to FOAF:homepage??
+			tripleStore.addStatement(sfUri, FCO.homepage, sf.getHomepage());
+		if (sf.getVersion() != null)
+			tripleStore.addStatement(sfUri, FCO.version, sf.getVersion());
+		for (Condition con : sf.getPreconditions()) {
+			BlankNode c = tripleStore.createBlankNode();
+			tripleStore.addStatement(sfUri, FCO.hasPrecondition, c);
+			tripleStore.addStatement(c, FCO.hasPatternString, con.getPatternString());
+			URI p = tripleStore.getCleanUniqueURI(FCO.NS_FCO, "pattern", false);
+			tripleStore.addStatement(c, FCO.hasPattern, p);
+			for (Statement st : con.getPattern()) {
+				tripleStore.addStatement(p, st.getSubject(), st.getPredicate(), st.getObject());
+			}
+		}
+		for (Condition con : sf.getPostconditions()) {
+			BlankNode c = tripleStore.createBlankNode();
+			tripleStore.addStatement(sfUri, FCO.hasPostcondition, c);
+			tripleStore.addStatement(c, FCO.hasPatternString, con.getPatternString());
+			URI p = tripleStore.getCleanUniqueURI(FCO.NS_FCO, "pattern", false);
+			tripleStore.addStatement(c, FCO.hasPattern, p);
+			for (Statement st : con.getPattern()) {
+				tripleStore.addStatement(p, st.getSubject(), st.getPredicate(), st.getObject());
+			}
+		}
+		for (Screen s : sf.getScreens())
+			tripleStore.addStatement(sfUri, FCO.hasScreen, s.getUri());
+		
+		logger.info("Screen " + sf.getUri() + " added.");
+	}
+	
+	public void updateScreenFlow(ScreenFlow screenFlow) throws NotFoundException, OntologyReadonlyException  {
+		logger.info("Updating screenflow " + screenFlow.getUri() + "...");
+		removeScreenFlow(screenFlow.getUri());
+		// do not call addScreenFlow because it does not need to create a new URI for the screenflow
+		saveScreenFlow(screenFlow);
+		logger.info("Screenflow " + screenFlow.getUri() + " updated.");
+	}
+	
+	/**
+	 * Delete a screen flow from the catalogue
+	 * NOTE: Do NOT delete the screens which is composed by.
+	 * @param sfUri the URI of the screen flow to be deleted
+	 * @throws NotFoundException
+	 */
+	public void removeScreenFlow(URI sfUri) throws NotFoundException {
+		if (!containsScreenFlow(sfUri))
+			throw new NotFoundException();
+		// remove all preconditions
+		ClosableIterator<Statement> preconditions = tripleStore.findStatements(sfUri, FCO.hasPrecondition, Variable.ANY);
+		for ( ; preconditions.hasNext(); ) {
+			BlankNode cNode = preconditions.next().getObject().asBlankNode();
+			ClosableIterator<Statement> patterns = tripleStore.findStatements(cNode, FCO.hasPattern, Variable.ANY);
+			for ( ; patterns.hasNext(); ) {
+				tripleStore.removeModel(patterns.next().getObject().asURI());
+			}
+			patterns.close();
+			tripleStore.removeResource(cNode);
+		}
+		preconditions.close();
+		// remove all postconditions
+		ClosableIterator<Statement> postconditions = tripleStore.findStatements(sfUri, FCO.hasPostcondition, Variable.ANY);
+		for ( ; postconditions.hasNext(); ) {
+			BlankNode cNode = postconditions.next().getObject().asBlankNode();
+			ClosableIterator<Statement> patterns = tripleStore.findStatements(cNode, FCO.hasPattern, Variable.ANY);
+			for ( ; patterns.hasNext(); ) {
+				tripleStore.removeModel(patterns.next().getObject().asURI());
+			}
+			patterns.close();
+			tripleStore.removeResource(cNode);
+		}
+		postconditions.close();
+		// remove the screen itself
+		tripleStore.removeResource(sfUri);
+		logger.info("Screenflow " + sfUri + " removed.");
+	}
+	
+	/**
+	 * Creates a new Screen into the catalogue
+	 * @param screen
+	 * @throws DuplicatedScreenException
+	 * @throws OntologyInvalidException
+	 * @throws OntologyReadonlyException
+	 * @throws NotFoundException
+	 * @throws RepositoryException 
+	 */
+	public void addScreen(Screen screen)
+	throws DuplicatedScreenException, OntologyInvalidException, OntologyReadonlyException, NotFoundException, RepositoryException {
 		URI screenUri = null;
 		if (screen.getUri() != null) {
 			screenUri = screen.getUri();
-			if (containsScreen(screenUri))
+			if (containsScreen(screen))
 				throw new DuplicatedScreenException();
 		} else {
 			screenUri = tripleStore.createResource(FCO.Screen);
 			screen.setUri(screenUri);
 		}
-		tripleStore.setLabel(screenUri, screen.getLabel());
-		if (screen.getDescription() != null)
-			tripleStore.addStatement(screenUri, DC.description, screen.getDescription());
+		// persists the screen
+		saveScreen(screen);
+	}
+	
+	/**
+	 * Do not check if the screen already exists, and assumes the screen has a well-formed unique URI
+	 * To be invoked by addScreen and updateScreen methods
+	 * @throws NotFoundException 
+	 * @throws OntologyReadonlyException 
+	 * @throws OntologyInvalidException 
+	 * @throws RepositoryException 
+	 */
+	private void saveScreen(Screen screen) throws OntologyReadonlyException, NotFoundException, RepositoryException, OntologyInvalidException {
+		URI screenUri = screen.getUri();
+		for (String key : screen.getLabels().keySet())
+			tripleStore.addStatement(screenUri, RDFS.label, tripleStore.createLanguageTagLiteral(screen.getLabels().get(key), key));
+		for (String key : screen.getDescriptions().keySet())
+			tripleStore.addStatement(screenUri, DC.description, tripleStore.createLanguageTagLiteral(screen.getDescriptions().get(key), key));
 		if (screen.getCreator() != null)
 			tripleStore.addStatement(screenUri, DC.creator, screen.getCreator());
 		if (screen.getRights() != null)
@@ -332,69 +447,95 @@ public class Catalogue {
 		if (screen.getVersion() != null)
 			tripleStore.addStatement(screenUri, FCO.version, screen.getVersion());
 		if (screen.getCreationDate() != null)
-			tripleStore.addStatement(screenUri, DC.date, FormatterUtil.formatDate(screen.getCreationDate()));
+			tripleStore.addStatement(screenUri, DC.date, FormatterUtil.formatDateISO8601(screen.getCreationDate()));
 		if (screen.getIcon() != null)
 			tripleStore.addStatement(screenUri, FCO.icon, screen.getIcon());
 		if (screen.getScreenshot() != null)
 			tripleStore.addStatement(screenUri, FCO.screenshot, screen.getScreenshot());
-		for (URI tag : screen.getDomainContext())
-			tripleStore.addStatement(screenUri, FCO.hasTag, tag);
+		for (String tag : screen.getDomainContext().getTags())
+			tripleStore.addStatement(screenUri, FCO.hasTag, getOrCreateTag(tag));
+		if (screen.getHomepage() != null)
+			// TODO change to FOAF:homepage??
+			tripleStore.addStatement(screenUri, FCO.homepage, screen.getHomepage());
 		if (screen.getVersion() != null)
 			tripleStore.addStatement(screenUri, FCO.version, screen.getVersion());
 		for (Condition con : screen.getPreconditions()) {
-			boolean first = true;
-			for (Statement st : con.getStatements()) {
-				// FIXME take the first statement as the precondition, maybe problems!!
-				if (first) {
-					tripleStore.addStatement(screenUri, FCO.hasPrecondition, st.getSubject());
-					first = false;
-				}
-				tripleStore.addStatement(st);
+			BlankNode c = tripleStore.createBlankNode();
+			tripleStore.addStatement(screenUri, FCO.hasPrecondition, c);
+			tripleStore.addStatement(c, FCO.hasPatternString, con.getPatternString());
+			URI p = tripleStore.getCleanUniqueURI(FCO.NS_FCO, "pattern", false);
+			tripleStore.addStatement(c, FCO.hasPattern, p);
+			for (Statement st : con.getPattern()) {
+				tripleStore.addStatement(p, st.getSubject(), st.getPredicate(), st.getObject());
 			}
 		}
 		for (Condition con : screen.getPostconditions()) {
-			boolean first = true;
-			for (Statement st : con.getStatements()) {
-				// FIXME take the first statement as the postcondition, maybe problems!!
-				if (first) {
-					tripleStore.addStatement(screenUri, FCO.hasPostcondition, st.getSubject());
-					first = false;
-				}
-				tripleStore.addStatement(st);
+			BlankNode c = tripleStore.createBlankNode();
+			tripleStore.addStatement(screenUri, FCO.hasPostcondition, c);
+			tripleStore.addStatement(c, FCO.hasPatternString, con.getPatternString());
+			URI p = tripleStore.getCleanUniqueURI(FCO.NS_FCO, "pattern", false);
+			tripleStore.addStatement(c, FCO.hasPattern, p);
+			for (Statement st : con.getPattern()) {
+				tripleStore.addStatement(p, st.getSubject(), st.getPredicate(), st.getObject());
 			}
 		}
 		logger.info("Screen " + screen.getUri() + " added.");
 	}
 	
-	public void updateScreen(Screen screen) throws NotFoundException, 
-	DuplicatedScreenException, OntologyInvalidException, OntologyReadonlyException {
-		// TODO No actualiza la screen, porque al insertar no utiliza la misma URI sino que inventa
-		// una nueva
+	public void updateScreen(Screen screen) throws NotFoundException, OntologyReadonlyException, RepositoryException, OntologyInvalidException  {
 		logger.info("Updating screen " + screen.getUri() + "...");
 		removeScreen(screen.getUri());
-		addScreen(screen);
+		// do not call addScreen because it does not need to create a new URI for the screen
+		saveScreen(screen);
 		logger.info("Screen " + screen.getUri() + " updated.");
 	}
 	
 	public void removeScreen(URI screenUri) throws NotFoundException {
 		if (!containsScreen(screenUri))
 			throw new NotFoundException();
-		
-//		Model model = tripleStore.getPersistentModelSet().getModel(FCO.NS_FCO);
-		// TODO: remove all the preconditions
-		// TODO: remove all the postconditions
-		// remove the screen
+		// remove all preconditions
+		ClosableIterator<Statement> preconditions = tripleStore.findStatements(screenUri, FCO.hasPrecondition, Variable.ANY);
+		for ( ; preconditions.hasNext(); ) {
+			BlankNode cNode = preconditions.next().getObject().asBlankNode();
+			ClosableIterator<Statement> patterns = tripleStore.findStatements(cNode, FCO.hasPattern, Variable.ANY);
+			for ( ; patterns.hasNext(); ) {
+				tripleStore.removeModel(patterns.next().getObject().asURI());
+			}
+			patterns.close();
+			tripleStore.removeResource(cNode);
+		}
+		preconditions.close();
+		// remove all postconditions
+		ClosableIterator<Statement> postconditions = tripleStore.findStatements(screenUri, FCO.hasPostcondition, Variable.ANY);
+		for ( ; postconditions.hasNext(); ) {
+			BlankNode cNode = postconditions.next().getObject().asBlankNode();
+			ClosableIterator<Statement> patterns = tripleStore.findStatements(cNode, FCO.hasPattern, Variable.ANY);
+			for ( ; patterns.hasNext(); ) {
+				tripleStore.removeModel(patterns.next().getObject().asURI());
+			}
+			patterns.close();
+			tripleStore.removeResource(cNode);
+		}
+		postconditions.close();
+		// remove the screen itself
 		tripleStore.removeResource(screenUri);
-
 		logger.info("Screen " + screenUri + " removed.");
 	}
 
-	public boolean containsScreenFlow(ScreenFlow sf) {
-		return tripleStore.isResource(sf.getUri(), FCO.ScreenFlow);
+	public boolean containsScreenFlow(URI sfUri) {
+		return tripleStore.isResource(sfUri, FCO.ScreenFlow);
 	}
-	
+
+	public boolean containsScreenFlow(ScreenFlow sf) {
+		return containsScreenFlow(sf.getUri());
+	}
+
 	public boolean containsScreen(URI screenUri) {
 		return tripleStore.isResource(screenUri, FCO.Screen);
+	}
+	
+	public boolean containsScreen(Screen screen) {
+		return containsScreen(screen.getUri());
 	}
 
 	/*
@@ -427,12 +568,12 @@ public class Catalogue {
 	
 	public URI getOrCreateClass(String name)
 	throws OntologyInvalidException, RepositoryException {
-		return tripleStore.getOrCreateClass(name, tripleStore.getWorkingModel());
+		return tripleStore.getOrCreateClass(name);
 	}
 	
 	public URI getOrCreateClass(String name, URI superClass)
 	throws OntologyInvalidException, RepositoryException {
-		return tripleStore.getOrCreateClass(name, superClass, tripleStore.getWorkingModel());
+		return tripleStore.getOrCreateClass(name, superClass);
 	}
 	
 	// TODO has to create a new class to a specific ontology (namespace) 
@@ -443,23 +584,7 @@ public class Catalogue {
 	
 	public URI getOrCreateTag(String name)
 	throws OntologyInvalidException, RepositoryException {
-		return tripleStore.getOrCreateTag(name, tripleStore.getWorkingModel());
-	}
-	
-	@Deprecated
-	public URI createClass(String name)
-    throws OntologyInvalidException, RepositoryException {
-    	return createClass(name, RDFS.Class);
-    }
-	
-	@Deprecated
-	public URI createClass(String name, URI superClass)
-    throws OntologyInvalidException, RepositoryException {
-    	return tripleStore.createClass(name, superClass, tripleStore.getWorkingModel());
-    }
-	
-	public Set<Screen> find(Set<Screen> screenSet) {
-		return null;
+		return tripleStore.getOrCreateTag(name, TAGS_NAMESPACE);
 	}
 	
     public ArrayList<Statement> listStatements(URI thingUri) {
@@ -470,124 +595,76 @@ public class Catalogue {
     	it.close();
     	return listStatements;
     }
-    
-    public Collection<Screen> find(List<URI> tags) {
-    	HashMap<URI, Screen> results = new HashMap<URI, Screen>();
-    	for (URI tag : tags) {
-    		ClosableIterator<Statement> it = tripleStore.findStatements(Variable.ANY, FCO.hasTag, tag);
-    		for ( ; it.hasNext(); ) {
-    			URI screenUri = it.next().getSubject().asURI();
-    			Screen s = FastModelFactory.createScreen();
-    			s.setUri(screenUri);
-    			if (!results.containsKey(s.getUri()))
-    				results.put(s.getUri(), s);
-    		}
-    		it.close();
-    	}
-    	return results.values();
-    }
-    
-    //TODO remove this method
-    public void printStatements() {
-    	ClosableIterator<Statement> it = tripleStore.findStatements(Variable.ANY, Variable.ANY, Variable.ANY);
-    	for ( ; it.hasNext(); )
-    		System.out.println(it.next());
-    }
-    
-    //TODO remove this method
-    public void printTags() {
-    	ClosableIterator<Statement> it = tripleStore.findStatements(Variable.ANY, RDF.type, FCO.Tag);
-    	for ( ; it.hasNext(); )
-    		System.out.println(it.next().getSubject().asURI());
-    }
-    
-    public Set<Screen> find(Set<Screen> screenSet,
-    		boolean plugin,
-    		boolean subsume,
-    		int offset,
-    		int limit,
-    		Set<URI> domainContext) { // TODO take into account the domainContext
-    	Set<Screen> results = null;
-    	//TODO: the URI of this model has to be a different one
-    	Model screens = RDF2Go.getModelFactory().createModel(FCO.NS_FCO);
-    	screens.open();
-    	for (Screen screen : screenSet) {
-    		if (screen.getUri() == null)
-    			screen.setUri(tripleStore.createUniqueUriWithName(screens.getContextURI(), "Screen"));
-    		screens.addStatement(screen.getUri(), RDF.type, FCO.Screen);
-    		screens.addStatement(screen.getUri(), RDFS.label, screen.getLabel());
-    		// TODO add only relevant information wrt the search
-    		for (Condition con : screen.getPreconditions()) {
-    			boolean first = true;
-    			for (Statement st : con.getStatements()) {
-    				// FIXME take the first statement as the precondition, maybe problems!!
-    				if (first) {
-    					screens.addStatement(screen.getUri(), FCO.hasPrecondition, st.getSubject());
-    					first = false;
-    				}
-    				screens.addStatement(st);
-    			}
-    		}
-    		for (Condition con : screen.getPostconditions()) {
-    			boolean first = true;
-    			for (Statement st : con.getStatements()) {
-    				// FIXME take the first statement as the precondition, maybe problems!!
-    				if (first) {
-    					screens.addStatement(screen.getUri(), FCO.hasPostcondition, st.getSubject());
-    					first = false;
-    				}
-    				screens.addStatement(st);
-    			}
-    		}
-    	}
-    	results = find(screens, screenSet, plugin, subsume, offset, limit, domainContext);
-    	screens.close();
-    	return results;
-    }
-    
-    /*
-     * Search for screen which has at least one of the concepts of the list given
-     * if limit is a negative number, there were no limit
+
+    /**
+     * Search for screens inside the catalogue which satisfy the unsatisfied preconditions of a set of screens
+     * and also takes into account the domain context composed by a list of tags.
+     * If within the set of screens there are not unsatisfied preconditions, no screens will be returned because
+     * it is assume that there is no need to satisfied any condition.
+     * If any tag is given, the set of screens to be returned will be filtered by this tag. If no tag is given,
+     * no tag filter will be done.
+     * If the number of screens returned is high, you can use the parameters OFFSET and LIMIT in order to
+     * retrieve small sets of screens.
+     * @param screens
+     * @param plugin ignored at this version
+     * @param subsume ignored at this version
+     * @param offset indicate the start of the set of screens to be returned
+     * @param limit specify the maximum number of screens to be returned [negative means no limit]
+     * @param domainContext the domain context contains information such a as tags, a user, etc.
+     * @return a recommended set of screens according to the input given
+     * @throws ClassCastException
+     * @throws ModelRuntimeException
      */
-    private Set<Screen> find(Model screens,
-    		Set<Screen> screenSet,
+    public Set<Screen> find(
+    		Set<Screen> screens,
     		boolean plugin,
     		boolean subsume,
     		int offset,
     		int limit,
     		Set<URI> domainContext) throws ClassCastException, ModelRuntimeException {
-    	Set<Screen> results = new HashSet<Screen>();
-    	ArrayList<Condition> unCon = getUnsatisfiedPreconditions(screens, screenSet, plugin, subsume);
+    	HashSet<Screen> results = new HashSet<Screen>();
+    	ArrayList<Condition> unCon = getUnsatisfiedPreconditions(screens, plugin, subsume);
     	if (unCon.size() > 0) {
         	String queryString = 
 	    		"SELECT DISTINCT ?screen \n" +
 	    		"WHERE {\n" +
-	    		"?screen " + RDF.type + " " + FCO.Screen + " . ";
-        	queryString = queryString.concat("{");
-        	for (URI tag : domainContext)
-	    		queryString = queryString.concat(" { ?screen "+FCO.hasTag+" "+tag+ " } UNION");
-        	// remove last 'UNION'
-	    	if (queryString.endsWith("UNION"))
-				queryString = queryString.substring(0, queryString.length() - 5);
-			queryString = queryString.concat("}\n");
-	    	queryString = queryString.concat("?screen " + FCO.hasPostcondition + " " + unCon.get(0).getStatements().get(0).getSubject() + " . "); // FIXME only get the subject of the first statement
-        	for (Condition c : unCon) {
-        		logger.debug("[UNSATISFIED] "+c.toString());
-        		queryString = queryString.concat("\n{");
-        		for (Statement st : c.getStatements())
-        			queryString = queryString.concat(st.getSubject()+" "+st.getPredicate()+" "+st.getObject()+" . ");
-        		queryString = queryString.concat("\n} UNION");
+	    		"?screen "+RDF.type.toSPARQL()+" "+FCO.Screen.toSPARQL()+" . ";
+        	if (domainContext.size() > 0) {
+	        	queryString = queryString.concat("{");
+	        	for (URI tag : domainContext)
+		    		queryString = queryString.concat(" { ?screen "+FCO.hasTag.toSPARQL()+" "+tag.toSPARQL()+ " } UNION");
+	        	// remove last 'UNION'
+		    	if (queryString.endsWith("UNION"))
+					queryString = queryString.substring(0, queryString.length() - 5);
+				queryString = queryString.concat("} . ");
         	}
-        	// remove last 'UNION'
-	    	if (queryString.endsWith("UNION"))
-				queryString = queryString.substring(0, queryString.length() - 5);
+        	if (unCon.size() > 0) {
+	        	queryString = queryString.concat("{");
+				for (Condition con : unCon) {
+					if (logger.isDebugEnabled())
+						logger.debug("[UNSATISFIED] "+con.toString());
+					queryString = queryString.concat("{ ?screen "+FCO.hasPostcondition.toSPARQL()+" ?c . ");
+					queryString = queryString.concat(" ?c "+FCO.hasPattern.toSPARQL()+" ?p . ");
+        			queryString = queryString.concat("GRAPH ?p {");
+	        		for (Statement st : con.getPattern()) {
+	        			String s = (st.getSubject() instanceof BlankNode) ? st.getSubject().toString() : st.getSubject().toSPARQL();
+	        			String o = (st.getObject() instanceof BlankNode) ? st.getObject().toString() : st.getObject().toSPARQL();
+	        			queryString = queryString.concat(s+" "+st.getPredicate().toSPARQL()+" "+o+" . ");
+	        		}
+	        		queryString = queryString.concat("} } UNION");
+	        	}
+	        	// remove last 'UNION'
+		    	if (queryString.endsWith("UNION"))
+					queryString = queryString.substring(0, queryString.length() - 5);
+				queryString = queryString.concat("}");
+	    	}
 			queryString = queryString.concat("\n}");
-			queryString = queryString.concat("\nLIMIT "+limit);
+        	queryString = queryString.concat("\nLIMIT "+limit);
 			queryString = queryString.concat("\nOFFSET "+offset);
-			// replace prefixes 'http://...' by 'prefix:'
+			// replace ':_' by '?' to make the query
 			queryString = replaceBlankNodes(queryString);
-			queryString = DEFAULT_PREFIXES + replacePrefixes(queryString);
-			logger.debug("Executing SPARQL query:\n"+queryString+"\n-----");
+			if (logger.isDebugEnabled())
+				logger.debug("Executing SPARQL query:\n"+queryString+"\n-----");
 	    	QueryResultTable qrt = tripleStore.sparqlSelect(queryString);
 	    	ClosableIterator<QueryRow> itResults = qrt.iterator();
 	    	while (itResults.hasNext()) {
@@ -599,21 +676,41 @@ public class Catalogue {
 	    	}
 	    	itResults.close();
     	} else { // TODO delete this!!
-    		logger.debug("NO PRECONDITIONS UNSATISFIED, FIND DOES NOT NEED TO BE EXECUTED");    		
+    		if (logger.isDebugEnabled())
+    			logger.debug("NO PRECONDITIONS UNSATISFIED, FIND DOES NOT NEED TO BE EXECUTED");
     	}
     	return results;
     }
     
-	public ArrayList<Condition> getUnsatisfiedPreconditions(Model screens, Set<Screen> screenSet, boolean plugin, boolean subsume) {
+    /**
+     * Retrieves all the unsatisfied preconditions of a set of screens
+     * @param screens The set of screens where the preconditions are obtained
+     * @param plugin ignored at this version
+     * @param subsume ignored at this version
+     * @return a list of conditions which are unsatisfied
+     */
+	private ArrayList<Condition> getUnsatisfiedPreconditions(Set<Screen> screens, boolean plugin, boolean subsume) {
 		ArrayList<Condition> unsatisfied = new ArrayList<Condition>();
-		for (Screen s : screenSet)
+		for (Screen s : screens)
 			for (Condition c : s.getPreconditions())
 				if (!isSatisfied(screens, c, plugin, subsume, s.getUri()))
 					unsatisfied.add(c);
 		return unsatisfied;
 	}
 	
-	public boolean isSatisfied(Model screens, Condition precondition, boolean plugin, boolean subsume, URI screenExcluded) {
+	/**
+	 * Determines if a specific precondition is satisfied by a set of screens, in other words, check if any postcondition of
+	 * the set of screens satisfy the precondition.
+	 * Usually the set of screens will include the screen which the precondition belongs to, hence you can set if a screen
+	 * has to be excluded while checking.
+	 * @param screens a set of screens which might satisfy the precondition
+	 * @param precondition the condition to check if it is satisfied
+	 * @param plugin not yet implemented
+	 * @param subsume not yet implemented
+	 * @param screenExcluded the URI of the screen which will be ignored while checking
+	 * @return true if the condition is satisfied
+	 */
+	public boolean isSatisfied(Set<Screen> screens, Condition precondition, boolean plugin, boolean subsume, URI screenExcluded) {
 		boolean satisfied = false;
 		int degree = degreeOfMatch(screens, precondition, screenExcluded);
 		
@@ -627,7 +724,21 @@ public class Catalogue {
 		return satisfied;
 	}
 	
-	public int degreeOfMatch(Model screens, Condition condition, URI screenExcluded) {
+	/**
+	 * A condition can be satisfied by different degrees of matches: EXACT, PLUGIN, SUBSUME and FAIL.
+	 * Given a condition C, the degree of match with another condition C' is:
+	 * <ul> 
+	 *   <li>EXACT: C and C' are exactly the same condition</li>
+	 *   <li>PLUGIN (not yet implemented): C is a super-condition of C'. For instance, if C says "there is a Person" and C' says "there is a Woman".</li>
+	 *   <li>SUBSUME (not yet implemented): C is a sub-condition of C', in other words, it is the inverse of PLUGIN</li>
+	 *   <li>FAIL: the condition is not satisfied</li>
+	 * </ul>
+	 * @param screens 
+	 * @param condition
+	 * @param screenExcluded
+	 * @return
+	 */
+	private int degreeOfMatch(Set<Screen> screens, Condition condition, URI screenExcluded) {
 		// by default it is FAIL
 		int degree = FAIL;
 		
@@ -637,22 +748,9 @@ public class Catalogue {
 		// check if is a EXACT case
 		preList = new ArrayList<URI>();
 		
-		
-		/*
-		 * COMPROBAR QUE LA LISTA DE STATEMENTS DENTRO DE LA CONDICION SE CUMPLE
-		 * DENTRO DEL MODELO screens QUE CONTIENE EL 'CANVAS'
-		 * SINO, SE METERA EN UNA LISTA DE CONDICIONES PARA LANZAR A BUSCAR
-		 * 
-		 */
 		if (screenHasPostcondition(screens, condition, screenExcluded))
 			degree = EXACT;
-
 		
-		
-//		preList.add(getType(screens, precondition));
-//	    if (screenHasPostcondition(screens, preList, screenExcluded))
-//	    	degree = EXACT;
-	    
 	    // TODO check if is a PLUGIN case
 //	    if (degree == FAIL) {
 //	    	preList = this.getSubClasses(getType(screens, precondition));
@@ -670,82 +768,91 @@ public class Catalogue {
 		return degree;
 	}
 	
-	private List<URI> getSuperClasses(URI clazz) {
-		return tripleStore.getSuperClasses(clazz);
-	}
-
-	private List<URI> getSubClasses(URI clazz) {
-		return tripleStore.getSubClasses(clazz);
-	}
-
-	public URI getType(Model model, Variable concept) {
-		URI type = null;
-		ClosableIterator<Statement> it = model.findStatements(concept, RDF.type, Variable.ANY);
-		if (it.hasNext())
-			type = it.next().getObject().asURI();
-		it.close();
-	    return type;
-	}
-	
-	private boolean screenHasPostcondition(Model screens, Condition condition, URI screenExcluded) {
+	/**
+	 * 
+	 * @param screens
+	 * @param condition
+	 * @param screenExcluded
+	 * @return
+	 */
+	private boolean screenHasPostcondition(Set<Screen> screens, Condition condition, URI screenExcluded) {
 		boolean result = false;
-		
-		if (condition == null || condition.getStatements().isEmpty())
+
+		if (screens.size() < 1)
 			return false;
 		
-    	String queryString = 
-    		"ASK {" +
-			"?screen " + RDF.type + " " + FCO.Screen + " . " +
-			// exclude the same screen of the precondition to check
-			// e.g.: a screen has a User as PRE and POST
-    		"FILTER (?screen != " + screenExcluded + ") . ";
-    	String nodeID = condition.getStatements().get(0).getSubject().asBlankNode().toString();
-    	queryString = queryString.concat("?screen " + FCO.hasPostcondition + " " + nodeID + " . ");
-    	for (Statement st : condition.getStatements())
-        	queryString = queryString.concat(st.getSubject()+" "+st.getPredicate()+" "+st.getObject()+" . ");
-    	queryString = queryString.concat("}");
-		queryString = DEFAULT_PREFIXES + replacePrefixes(queryString);
+		if (screens.size() < 2 && screenExcluded != null)
+			return false; // only screenExcluded is in the set, the condition can't be satisfied
 		
-		result = screens.sparqlAsk(queryString);
+		if (condition == null || condition.getPattern().isEmpty())
+			return false; // TODO is this necessary??
+		
+    	String queryString = "ASK { {";
+    	for (Screen s : screens) {
+    		if (screenExcluded == null || !s.getUri().equals(screenExcluded))
+    	    	queryString = queryString.concat(" { "+s.getUri().toSPARQL()+" "+FCO.hasPostcondition.toSPARQL()+" ?condition } UNION");
+    	}
+    	queryString = queryString.substring(0, queryString.length() - 5); // remove last 'UNION'
+    	queryString = queryString.concat(" } . ");
+    	
+    	queryString = queryString.concat("?condition "+FCO.hasPattern.toSPARQL()+" ?pattern . ");
+		queryString = queryString.concat("GRAPH ?pattern { ");
+    	for (Statement st : condition.getPattern()) {
+			String su = (st.getSubject() instanceof BlankNode) ? st.getSubject().toString() : st.getSubject().toSPARQL();
+			String ob = (st.getObject() instanceof BlankNode) ? st.getObject().toString() : st.getObject().toSPARQL();
+			queryString = queryString.concat(su+" "+st.getPredicate().toSPARQL()+" "+ob+" . ");
+    	}
+    	queryString = queryString.concat("} }");
+
+    	result = tripleStore.sparqlAsk(queryString);
 	    return result;
 	}
 	
 	/**
-	 * Determines if there is a screen in a given model which has at least a postcondition 
-	 * of one of the types within the type list. 
+	 * Returns the set of screens which contains only screens reachable in a set of screens
 	 * @param screens
-	 * @param types
-	 * @param screenExcluded
 	 * @return
 	 */
-	@Deprecated
-	private boolean screenHasPostcondition(Model screens, List<URI> types, URI screenExcluded) {
-		boolean result = false;
-		
-		if (types == null || types.isEmpty())
-			return false;
-		
-    	String queryString = 
-			"SELECT DISTINCT ?screen \n" +
-			"WHERE {\n" +
-			"?screen " + FCO.hasPostcondition + " ?post . " +
-			// exclude the same screen of the precondition to check
-			// e.g.: a screen has a User as PRE and POST
-			"FILTER (?screen != " + screenExcluded + ") " +
-			"{";
-		
-		for (URI type : types)
-			queryString = queryString.concat(" { ?post rdf:type " + type + " } UNION");
-		
-		// remove last 'UNION'
-		queryString = queryString.substring(0, queryString.length() - 5);
-		queryString = queryString.concat("} }");		
-		queryString = DEFAULT_PREFIXES + replacePrefixes(queryString);
-		
-		QueryResultTable qrt = screens.sparqlSelect(queryString);
-		result = qrt.iterator().hasNext();
-		
-	    return result;
+	public Set<Screen> filterReachableScreens(Set<Screen> screens) {
+    	HashSet<Screen> results = new HashSet<Screen>();
+    	HashSet<Screen> toCheck = new HashSet<Screen>();
+    	for (Screen s : screens) {
+    		if (s.getPreconditions().isEmpty())
+    			results.add(s);
+    		else
+    			toCheck.add(s);
+    	}
+    	results.addAll(filterReachableScreens(results, toCheck));
+    	return results;
+	}
+	
+	private Set<Screen> filterReachableScreens(Set<Screen> reachables, Set<Screen> screens) {
+    	HashSet<Screen> results = new HashSet<Screen>();
+    	HashSet<Screen> toCheck = new HashSet<Screen>();
+    	for (Screen s : screens) {
+    		boolean reachable = true;
+    		for (Condition c : s.getPreconditions())
+    			reachable = reachable & screenHasPostcondition(reachables, c, null);
+    		if (reachable)
+    			results.add(s);
+    		else
+    			toCheck.add(s);
+    	}
+    	// if there are new reachable screens and there are screens to check
+    	if (results.size() > 0 && toCheck.size() > 0) {
+    		reachables.addAll(results);
+    		results.addAll(filterReachableScreens(reachables, toCheck));
+    	}
+    	return results;
+	}
+	
+	public Collection<ScreenFlow> listScreenFlows() {
+		ArrayList<ScreenFlow> results = new ArrayList<ScreenFlow>();
+		ClosableIterator<Statement> it = tripleStore.findStatements(Variable.ANY, RDF.type, FCO.ScreenFlow);
+		while (it.hasNext())
+			results.add(getScreenFlow(it.next().getSubject().asURI()));
+		it.close();
+		return results;
 	}
 	
 	public Collection<Screen> listScreens() {
@@ -757,157 +864,61 @@ public class Catalogue {
 		return results;
 	}
 	
-	@Deprecated
-	public ArrayList<Condition> getUnsatisfiedPreconditions(Set<Screen> screenSet, boolean plugin, boolean subsume) {
-		ArrayList<Condition> unsatisfied = new ArrayList<Condition>();
-		
-		// check all the preconditions of all the screens
-		for (Screen screen : screenSet) {
-			// get all the preconditions of the screen
-			for (Condition pre : screen.getPreconditions()) {
-				// add the preconditions which are not satisfied
-				if (!isSatisfied(pre, plugin, subsume, screen))
-					unsatisfied.add(pre);
-			}
-		}
-		
-		return unsatisfied;
-	}
-	
-	@Deprecated
-	public int degreeOfMatch(Condition precondition, Screen screenExcluded) {
-		// by default it is FAIL
-		int degree = FAIL;
-		
-		// list of the preconditions to match
-		ArrayList<String> preList;
-		
-		// check if is a EXACT case
-		preList = new ArrayList<String>();
-//		preList.add(precondition.getClazz().toString());
-	    if (buscarnombremetodo(preList, screenExcluded))
-	    	degree = EXACT;
-			    
-	    // check if is a PLUGIN case
-//	    if (degree == FAIL) {
-//	    	preList = subClassesOfExtended(precondition.getClazz());
-//	    	if (buscarnombremetodo(preList, screenExcluded))
-//		    	degree = PLUGIN;
-//	    }
-	    
-	    // check if is a SUBSUME case
-//	    if (degree == FAIL) {
-//	    	preList = superClassesOfExtended(precondition.getClazz());
-//	    	if (buscarnombremetodo(preList, screenExcluded))
-//		    	degree = SUBSUME;
-//	    }
-			
-		return degree;
-	}
-	
-	@Deprecated
-	public boolean isSatisfied(Condition precondition, boolean plugin, boolean subsume, Screen screenExcluded) {
-		boolean satisfied = false;
-		int degree = degreeOfMatch(precondition, screenExcluded);
-		
-		if (degree == EXACT)
-			satisfied = true;
-		else if ((degree == PLUGIN) && plugin)
-			satisfied = true;
-		else if ((degree == SUBSUME) && subsume)
-			satisfied = true;
-		
-		return satisfied;
-	}
-	
-	private boolean buscarnombremetodo(ArrayList<String> types, Screen screenExcluded) {
-		boolean result = false;
-		
-		if (types == null || types.isEmpty())
-			return false;
-    	String queryString = 
-			"\nASK {" +
-			"\n?screen " + FCO.hasPostcondition + " ?post . " +
-			// exclude the same screen of the precondition to check
-			// e.g.: a screen has a User as PRE and POST
-			"\nFILTER (?screen != " + screenExcluded.getUri() + ") . " +
-			"\n{";
-		
-		for (String type : types)
-			queryString = queryString.concat(" { ?post rdf:type " + type + " } UNION");
-		
-		// remove last 'UNION'
-		queryString = queryString.substring(0, queryString.length() - 5);
-		queryString = queryString.concat("}\n}");
-		
-		// replace prefixes 'http://...' by 'prefix:'
-		queryString = DEFAULT_PREFIXES + replacePrefixes(queryString);
-		
-		result = tripleStore.sparqlAsk(queryString);
-
-	    return result;
-	}
-	
-    private String replacePrefixes(String origin) {
-    	String result = new String(origin);
-    	Map<String, String> prefixes = getPersistentModelSet().getNamespaces();
-    	for (String prefix : prefixes.keySet()) {
-    		if (prefix.length() > 0)
-    			result = result.replaceAll(prefixes.get(prefix), prefix + ":");
-    	}
-    	return result;
-    }
-    
     private String replaceBlankNodes(String origin) {
     	return origin.replaceAll("_:", "?");
     }
-    
-    // TODO only for debug purposes
-    public void dump() {
-		tripleStore.dump();
-	}
-	
-    @Deprecated
-	public void find(Condition c) {
-		int limit = 10;
-		int offset = 0;
-    	String queryString = 
-    		"SELECT DISTINCT ?screen \n" +
-    		"WHERE {\n" +
-    		"?screen " + RDF.type + " " + FCO.Screen + " . ";
-    	queryString = queryString.concat("?screen " + FCO.hasPostcondition + " " + c.getStatements().get(0).getSubject() + " . ");
-    	for (Statement st : c.getStatements())
-        	queryString = queryString.concat(st.getSubject() + " " + st.getPredicate() + " " + st.getObject() + " . ");
-    	queryString = queryString.concat("}");
-    	queryString = queryString.concat("\nLIMIT "+limit);
-		queryString = queryString.concat("\nOFFSET "+offset);
-		// replace prefixes 'http://...' by 'prefix:'
-		queryString = DEFAULT_PREFIXES + replacePrefixes(queryString);
-    	logger.debug(queryString);
-    	QueryResultTable qrt = tripleStore.sparqlSelect(queryString);
-    	ClosableIterator<QueryRow> itResults = qrt.iterator();
-    	while (itResults.hasNext()) {
-    		// gets the URI of a screen
-    		URI screenUri = itResults.next().getValue("screen").asURI();
-    		
-    		System.out.println(screenUri);
-    	}
-    	itResults.close();
-	}
-	
-    // TODO only for debug purposes
-	public void dumpStatements() {
-		ClosableIterator<Statement> it = tripleStore.findStatements(Variable.ANY, Variable.ANY, Variable.ANY);
-		for ( ; it.hasNext(); ) {
-			Statement st = it.next();
-			System.out.println(st.getSubject()+"-"+st.getPredicate()+"-"+st.getObject());
+
+	public ScreenFlow getScreenFlow(URI uri) {
+		ScreenFlow sf = FastModelFactory.createScreenFlow();
+		
+		// find all the info related to a screenflow
+		ClosableIterator<Statement> sfTriples = tripleStore.findStatements(uri, Variable.ANY, Variable.ANY);
+		if (!sfTriples.hasNext()) // the screen does not exist
+			return null;
+		sf.setUri(uri);
+		for ( ; sfTriples.hasNext(); ) {
+			Statement st = sfTriples.next();
+			URI predicate = st.getPredicate();
+			Node object = st.getObject();
+			if (predicate.equals(RDFS.label)) {
+				if (object instanceof LanguageTagLiteral) {
+					LanguageTagLiteral label = object.asLanguageTagLiteral();
+					sf.getLabels().put(label.getLanguageTag(), label.getValue());
+				}
+			} else if (predicate.equals(DC.description)) {
+				LanguageTagLiteral description = object.asLanguageTagLiteral();
+				sf.getDescriptions().put(description.getLanguageTag(), description.getValue());
+			} else if (predicate.equals(DC.creator)) {
+				sf.setCreator(object.asURI());
+			} else if (predicate.equals(DC.rights)) {
+				sf.setRights(object.asURI());
+			} else if (predicate.equals(FCO.version)) {
+				sf.setVersion(object.toString());
+			} else if (predicate.equals(DC.date)) {
+				sf.setCreationDate(FormatterUtil.parseDateISO8601(object.toString()));
+			} else if (predicate.equals(FCO.icon)) {
+				sf.setIcon(object.asURI());
+			} else if (predicate.equals(FCO.screenshot)) {
+				sf.setScreenshot(object.asURI());
+			} else if (predicate.equals(FCO.hasTag)) {
+				sf.getDomainContext().add(object.asURI());
+			} else if (predicate.equals(FCO.homepage)) {
+				sf.setHomepage(object.asURI());
+			} else if (predicate.equals(FCO.hasPrecondition)) {
+				sf.getPreconditions().add(getCondition(object));
+			} else if (predicate.equals(FCO.hasPostcondition)) {
+				sf.getPostconditions().add(getCondition(object));
+			} else if (predicate.equals(FCO.hasScreen)) {
+				sf.getScreens().add(getScreen(object.asURI()));
+			}
 		}
-		it.close();
+		sfTriples.close();
+		
+		return sf;
 	}
 
 	public Screen getScreen(URI uri) {
 		Screen screen = FastModelFactory.createScreen();
-		
 		// find all the info related to a screen
 		ClosableIterator<Statement> screenTriples = tripleStore.findStatements(uri, Variable.ANY, Variable.ANY);
 		if (!screenTriples.hasNext()) // the screen does not exist
@@ -918,9 +929,13 @@ public class Catalogue {
 			URI predicate = st.getPredicate();
 			Node object = st.getObject();
 			if (predicate.equals(RDFS.label)) {
-				screen.setLabel(object.toString());
+				if (object instanceof LanguageTagLiteral) {
+					LanguageTagLiteral label = object.asLanguageTagLiteral();
+					screen.getLabels().put(label.getLanguageTag(), label.getValue());
+				}
 			} else if (predicate.equals(DC.description)) {
-				screen.setDescription(object.toString());
+				LanguageTagLiteral description = object.asLanguageTagLiteral();
+				screen.getDescriptions().put(description.getLanguageTag(), description.getValue());
 			} else if (predicate.equals(DC.creator)) {
 				screen.setCreator(object.asURI());
 			} else if (predicate.equals(DC.rights)) {
@@ -928,38 +943,22 @@ public class Catalogue {
 			} else if (predicate.equals(FCO.version)) {
 				screen.setVersion(object.toString());
 			} else if (predicate.equals(DC.date)) {
-				// FIXME the dates has to be fixed and contemplate the zone offsets
-				screen.setCreationDate(FormatterUtil.parseDate(object.toString()));
+				screen.setCreationDate(FormatterUtil.parseDateISO8601(object.toString()));
 			} else if (predicate.equals(FCO.icon)) {
 				screen.setIcon(object.asURI());
 			} else if (predicate.equals(FCO.screenshot)) {
 				screen.setScreenshot(object.asURI());
 			} else if (predicate.equals(FCO.hasTag)) {
-				screen.getDomainContext().add(object.asURI());
+				ClosableIterator<Statement> tagLabel = tripleStore.findStatements(object.asURI(), RDFS.label, Variable.ANY);
+				if (tagLabel.hasNext())
+					screen.getDomainContext().getTags().add(tagLabel.next().getObject().asLiteral().toString());
+				tagLabel.close();
 			} else if (predicate.equals(FCO.homepage)) {
 				screen.setHomepage(object.asURI());
 			} else if (predicate.equals(FCO.hasPrecondition)) {
-				// FIXME it will not retrieve complex conditions
-				Condition c = FastModelFactory.createCondition();
-				ClosableIterator<Statement> it = tripleStore.findStatements(object.asBlankNode(), Variable.ANY, Variable.ANY);
-				for ( ; it.hasNext(); ) {
-					Statement stmt = it.next();
-					if (stmt.getContext() != null) // null means it was inferred
-						c.getStatements().add(stmt);
-				}
-				it.close();
-				screen.getPreconditions().add(c);
+				screen.getPreconditions().add(getCondition(object));
 			} else if (predicate.equals(FCO.hasPostcondition)) {
-				// FIXME it will not retrieve complex conditions
-				Condition c = FastModelFactory.createCondition();
-				ClosableIterator<Statement> it = tripleStore.findStatements(object.asBlankNode(), Variable.ANY, Variable.ANY);
-				for ( ; it.hasNext(); ) {
-					Statement stmt = it.next();
-					if (stmt.getContext() != null) // null means it was inferred
-						c.getStatements().add(stmt);
-				}
-				it.close();
-				screen.getPostconditions().add(c);
+				screen.getPostconditions().add(getCondition(object));
 			}
 		}
 		screenTriples.close();
@@ -967,4 +966,76 @@ public class Catalogue {
 		return screen;
 	}
 
+	/*
+	 * Each condition will have only one pattern at most
+	 */
+	private Condition getCondition(Node subject) {
+		Condition c = FastModelFactory.createCondition();
+		ClosableIterator<Statement> pIt = tripleStore.findStatements(subject.asBlankNode(), FCO.hasPatternString, Variable.ANY);
+		if (pIt.hasNext())
+			c.setPatternString(pIt.next().getObject().toString());
+		ClosableIterator<Statement> cIt = tripleStore.findStatements(subject.asBlankNode(), FCO.hasPattern, Variable.ANY);
+		if (cIt.hasNext()) {
+			Statement st = cIt.next();
+			URI pattern = st.getObject().asURI();
+			ClosableIterator<Statement> it = tripleStore.findStatements(pattern, Variable.ANY, Variable.ANY, Variable.ANY);
+			for ( ; it.hasNext(); )
+				c.getPattern().add(it.next());
+			it.close();
+		}
+		cIt.close();
+		return c;
+	}
+
+	
+	
+    
+	
+	
+	
+	
+	
+    //TODO remove this method
+    public void printStatements() {
+    	ClosableIterator<Statement> it = tripleStore.findStatements(Variable.ANY, Variable.ANY, Variable.ANY);
+    	for ( ; it.hasNext(); )
+    		System.out.println(it.next());
+    }
+    
+    //TODO remove this method
+    public void printTags() {
+    	ClosableIterator<Statement> it = tripleStore.findStatements(Variable.ANY, RDF.type, FCO.Tag);
+    	for ( ; it.hasNext(); )
+    		System.out.println(it.next().getSubject().asURI());
+    }
+    
+//	private List<URI> getSuperClasses(URI clazz) {
+//	return tripleStore.getSuperClasses(clazz);
+//}
+//
+//private List<URI> getSubClasses(URI clazz) {
+//	return tripleStore.getSubClasses(clazz);
+//}
+
+//public URI getType(Model model, Variable concept) {
+//	URI type = null;
+//	ClosableIterator<Statement> it = model.findStatements(concept, RDF.type, Variable.ANY);
+//	if (it.hasNext())
+//		type = it.next().getObject().asURI();
+//	it.close();
+//    return type;
+//}
+	
+    // TODO only for debug purposes
+    public void dump() {
+		tripleStore.dump();
+	}
+    public void dumpStatements() {
+    	ClosableIterator<Statement> it = listAllStatements();
+    	for ( ; it.hasNext(); ) {
+    		Statement st = it.next();
+    		System.out.println(st.getContext()+" - "+st.getSubject()+" - "+st.getPredicate()+" - "+st.getObject());
+    	}
+    }
+	
 }

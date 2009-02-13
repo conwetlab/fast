@@ -4,6 +4,8 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import org.apache.log4j.Logger;
+
 /**
  * Provide several functions to format the string representation of a date
  * into a Date and vice versa.
@@ -11,20 +13,19 @@ import java.util.Date;
  */
 public class FormatterUtil {
 	
-	private static final String DATEPATTERN = "yyyy-MM-dd hh:mm:ss";
+	static Logger logger = Logger.getLogger(FormatterUtil.class);
 	
-	public static String formatDate(Date date) {
-		SimpleDateFormat sdf = new SimpleDateFormat(DATEPATTERN);
-		return sdf.format(date);
+	public  static SimpleDateFormat ISO8601FORMAT = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ");
+	
+	public static String formatDateISO8601(Date date) {
+		return ISO8601FORMAT.format(date);
 	}
 	
-	public static Date parseDate(String text) {
-		SimpleDateFormat sdf = new SimpleDateFormat(DATEPATTERN);
+	public static Date parseDateISO8601(String text) {
 		try {
-			return sdf.parse(text);
+			return ISO8601FORMAT.parse(text);
 		} catch (ParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.warn("Cannot parse date with value: "+text);
 			return null;
 		}
 	}

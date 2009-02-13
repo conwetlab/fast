@@ -18,10 +18,10 @@ public class FastModelFactory {
 		return new Condition();
 	}
 	
-	public static Condition createCondition(List<Statement> statements) {
+	public static Condition createCondition(List<Statement> pattern) {
 		Condition condition = new Condition();
-		for (Statement st : statements)
-			condition.getStatements().add(st);
+		for (Statement st : pattern)
+			condition.getPattern().add(st);
 		return condition;
 	}	
 }

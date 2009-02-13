@@ -32,7 +32,6 @@ import org.ontoware.rdf2go.model.node.ResourceOrVariable;
 import org.ontoware.rdf2go.model.node.URI;
 import org.ontoware.rdf2go.model.node.UriOrVariable;
 import org.ontoware.rdf2go.model.node.Variable;
-import org.ontoware.rdf2go.model.node.impl.LiteralImpl;
 import org.ontoware.rdf2go.model.node.impl.URIImpl;
 import org.ontoware.rdf2go.util.RDFTool;
 import org.ontoware.rdf2go.vocabulary.OWL;
@@ -69,20 +68,31 @@ public class TripleStore {
 	private ModelSet persistentModelSet;
 
 	/**
-	 * actual working model
+	 * default model is FCO
 	 */
-	private Model workingModel;
-
+	private Model defaultModel;
+	
 	private List<URI> createdURIs;
 	
-	public TripleStore() {
+//	public TripleStore() {
+//		Repository repository = PersistentRepository.getInstance().getGroundingRepository();
+//		persistentModelSet = new RepositoryModelSet(repository);
+//		createdURIs = new ArrayList<URI>();
+//		
+//		// TODO: Now create the screen under the ScreenOnt namespace, but this has to be
+//		//       created in the user's namespace
+//		defaultModel = getPersistentModelSet().getModel(FCO.NS_FCO);
+//	}
+	
+	public TripleStore(File dir) {
+		PersistentRepository.storageDir = dir;
 		Repository repository = PersistentRepository.getInstance().getGroundingRepository();
 		persistentModelSet = new RepositoryModelSet(repository);
 		createdURIs = new ArrayList<URI>();
 		
 		// TODO: Now create the screen under the ScreenOnt namespace, but this has to be
 		//       created in the user's namespace
-		workingModel = getPersistentModelSet().getModel(FCO.NS_FCO);
+		defaultModel = getPersistentModelSet().getModel(FCO.NS_FCO);
 	}
 	
 	public void open() {
@@ -90,20 +100,28 @@ public class TripleStore {
 	}
 	
 	public void close() {
-		getWorkingModel().close();//TODO i am not sure
+		// close the default model
+		getDefaultModel().close();
+		// close every model in the pool
+		
+		// close the model set
 		getPersistentModelSet().close();
 	}
 	
-    public Model getWorkingModel() {
-		return workingModel;
+    private Model getDefaultModel() {
+		return defaultModel;
 	}
 
-	public void setWorkingModel(Model workingModel) throws ModelInvalidException {
-//		this.workingModel.close();//TODO i am not sure
-		if (workingModel == null)
-			throw new ModelInvalidException("The working model cannot be null");
-		this.workingModel = workingModel;
-//		this.workingModel.open();//TODO i am not sure
+//	public void setWorkingModel(Model workingModel) throws ModelInvalidException {
+////		this.workingModel.close();//TODO i am not sure
+//		if (workingModel == null)
+//			throw new ModelInvalidException("The working model cannot be null");
+//		this.workingModel = workingModel;
+////		this.workingModel.open();//TODO i am not sure
+//	}
+	
+	public boolean isValidURI(String uri) {
+		return persistentModelSet.isValidURI(uri);
 	}
 	
 	public BlankNode createBlankNode() {
@@ -162,7 +180,7 @@ public class TripleStore {
 //			e.printStackTrace();
 //		}
 //	}
-
+	
 	/**
      * add the passed ontology to the main repository. The passed RDF model must only contain one ontology
      * at a time. The ontology should have declared imports statements for other ontologies it 
@@ -291,6 +309,12 @@ public class TripleStore {
 //    	} catch (NullPointerException e) {
 //    		return false;
 //    	}
+    }
+    
+    public boolean removeModel(URI uriModel) {
+    	if (uriModel == null)
+    		throw new IllegalArgumentException("uriModel is null");
+    	return getPersistentModelSet().removeModel(uriModel);
     }
     
     public List<URI> getDirectSubClasses(URI clazz) {
@@ -587,19 +611,23 @@ public class TripleStore {
             RDF.type,
             clazz);
         if (!contains)
-        	contains = getWorkingModel().contains(resource, RDF.type, clazz);
+        	contains = getPersistentModelSet().containsStatements(Variable.ANY, resource, RDF.type, clazz);
+//        	contains = getWorkingModel().contains(resource, RDF.type, clazz);
         return contains;
     }    
     
     ///// NO SE SI ESTOS METODOS DEBERIAN EXISTIR
     public void addStatement(Statement statement) {
-    	getWorkingModel().addStatement(statement);
+    	getDefaultModel().addStatement(statement);
     }
     public void addStatement(Resource subject, URI predicate, Node object) {
-    	getWorkingModel().addStatement(subject, predicate, object);
+    	getDefaultModel().addStatement(subject, predicate, object);
     }
     public void addStatement(Resource subject, URI predicate, String object) {
-    	getWorkingModel().addStatement(subject, predicate, object);
+    	getDefaultModel().addStatement(subject, predicate, object);
+    }
+    public void addStatement(URI context, Resource subject, URI predicate, Node object) {
+    	getPersistentModelSet().addStatement(context, subject, predicate, object);
     }
     /////
     
@@ -624,7 +652,12 @@ public class TripleStore {
 
     //////////// METODOS EXTRAIDOS DE CLIENTSESSION ///////////////
     
-    public URI getOrCreateClass(String name, Model inModel) 
+    public URI getOrCreateClass(String name)
+    throws RepositoryException, OntologyInvalidException {
+    	return getOrCreateClass(name, getDefaultModel()); 
+    }
+    
+    private URI getOrCreateClass(String name, Model inModel)
     throws RepositoryException, OntologyInvalidException {
     	ClosableIterator<Statement> it = inModel.findStatements(Variable.ANY, RDF.type, RDFS.Class);
     	for ( ; it.hasNext(); ) {
@@ -639,7 +672,12 @@ public class TripleStore {
     	return createClass(name, inModel);
     }
     
-    public URI getOrCreateClass(String name, URI superClass, Model inModel) 
+    public URI getOrCreateClass(String name, URI superClass) 
+    throws RepositoryException, OntologyInvalidException {
+    	return getOrCreateClass(name, superClass, getDefaultModel());
+    }
+
+    private URI getOrCreateClass(String name, URI superClass, Model inModel) 
     throws RepositoryException, OntologyInvalidException {
     	ClosableIterator<Statement> it = inModel.findStatements(Variable.ANY, RDF.type, RDFS.Class);
     	for ( ; it.hasNext(); ) {
@@ -740,7 +778,7 @@ public class TripleStore {
      *         class in the pimo.
      */
     public URI createResource(URI ofClass) throws OntologyInvalidException {
-    	return createResource(ofClass, getWorkingModel());
+    	return createResource(ofClass, getDefaultModel());
     }
     
     /**
@@ -751,7 +789,7 @@ public class TripleStore {
      * @throws OntologyInvalidException
      */
     public URI createResource(URI uri, URI ofClass) throws OntologyInvalidException {
-    	return createResource(uri, RDFTool.getLabel(ofClass), ofClass, getWorkingModel());
+    	return createResource(uri, RDFTool.getLabel(ofClass), ofClass, getDefaultModel());
     }
     
     /**
@@ -777,7 +815,7 @@ public class TripleStore {
 	    	uri = createUniqueUriWithName(inModel.getContextURI(), name);
 	    
 	    inModel.addStatement(uri, RDF.type, ofClass);
-	    inModel.addStatement(uri, RDFS.label, name);
+//	    inModel.addStatement(uri, RDFS.label, name);
 //    inModel.addStatement(result, NAO.prefLabel, name);
 //    inModel.addStatement(result, NAO.created, 
 //        new DatatypeLiteralImpl(RDFTool.dateTime2String(new Date()), XSD._dateTime));
@@ -800,14 +838,14 @@ public class TripleStore {
         return createResource(resourceUri, name, ofClass, inModel);
     }
     
-    public void removeResource(URI resource) throws NotFoundException {
+    public void removeResource(Resource resource) throws NotFoundException {
 //    	if(!isResource(resource))
 //    		throw new NotFoundException();
     	// TODO: Only removes statements which subject is the resource, but the resource
     	// can still be in other statements as an object, and other resources only used
     	// by this resource are still in the store.
-    	if (getWorkingModel().contains(resource, Variable.ANY, Variable.ANY))
-    		getWorkingModel().removeStatements(resource, Variable.ANY, Variable.ANY);
+    	if (getDefaultModel().contains(resource, Variable.ANY, Variable.ANY))
+    		getDefaultModel().removeStatements(resource, Variable.ANY, Variable.ANY);
     	else if (getPersistentModelSet().containsStatements(Variable.ANY, resource, Variable.ANY, Variable.ANY)) {
     		logger.debug("size="+getPersistentModelSet().size());
     		getPersistentModelSet().removeStatements(Variable.ANY, resource, Variable.ANY, Variable.ANY);
@@ -815,9 +853,10 @@ public class TripleStore {
     	}
     }
     
-    public URI getOrCreateTag(String name, Model inModel)
+    public URI getOrCreateTag(String name, URI namespace)
     throws OntologyInvalidException, RepositoryException {
-    	ClosableIterator<Statement> it = inModel.findStatements(Variable.ANY, RDF.type, FCO.Tag);
+    	Model tagModel = getPersistentModel(namespace);
+    	ClosableIterator<Statement> it = tagModel.findStatements(Variable.ANY, RDF.type, FCO.Tag);
     	for ( ; it.hasNext(); ) {
 			Resource r = it.next().getSubject();
 			if (RDFTool.getLabel(r).equals(toCleanName(name))) {
@@ -828,7 +867,9 @@ public class TripleStore {
     	}
     	it.close();
     	// the tag was not found
-    	return createResource(name, FCO.Tag, inModel);
+    	URI tag = createResource(name, FCO.Tag, tagModel);
+    	tagModel.addStatement(tag, RDFS.label, name);
+    	return tag;
     }
     
 	/**
@@ -843,7 +884,7 @@ public class TripleStore {
      * connected to an ontology in which it is defined
      */
     public void setLabel(URI resource, String label) throws OntologyReadonlyException, NotFoundException {
-    	setLabel(resource, label, getWorkingModel());
+    	setLabel(resource, label, getDefaultModel());
     }
     
 	/**
@@ -920,7 +961,7 @@ public class TripleStore {
     	return findStatements(Variable.ANY, subject, predicate, object);
     }
     
-    private ClosableIterator<Statement> findStatements(
+    public ClosableIterator<Statement> findStatements(
     		UriOrVariable context,
     		ResourceOrVariable subject,
     		UriOrVariable predicate,

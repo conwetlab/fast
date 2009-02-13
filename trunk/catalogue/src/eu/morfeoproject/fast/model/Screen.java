@@ -2,34 +2,35 @@ package eu.morfeoproject.fast.model;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.ontoware.rdf2go.model.Statement;
 import org.ontoware.rdf2go.model.node.URI;
+
+import eu.morfeoproject.fast.util.FormatterUtil;
 
 public class Screen {
 	
 	private URI uri;
-	private String label;
-//	private Map<String, String> label;
+	private Map<String, String> labels;
 	private URI creator;
-	private String description;
+	private Map<String, String> descriptions;
 	private URI rights;
 	private String version;
     private Date creationDate;
     private URI icon;
     private URI screenshot;
     private URI homepage; 
-	private List<URI> domainContext;
+	private DomainContext domainContext;
 	private List<Condition> preconditions;
 	private List<Condition> postconditions;
 	
 	protected Screen(URI uri) {
 		this.uri = uri;
-//		this.label = new HashMap<String, String>();
 	}
 	
 	public URI getUri() {
@@ -40,20 +41,14 @@ public class Screen {
 		this.uri = uri;
 	}
 
-//	public String getLabel(String language) {
-//		return label.get(language);
-//	}
-//
-//	public void setLabel(String language, String label) {
-//		this.label.put(language, label);
-//	}
-
-	public String getLabel() {
-		return label;
+	public Map<String, String> getLabels() {
+		if (labels == null)
+			labels = new HashMap<String, String>();
+		return labels;
 	}
 
-	public void setLabel(String label) {
-		this.label = label;
+	public void setLabels(Map<String, String> labels) {
+		this.labels = labels;
 	}
 
 	public URI getCreator() {
@@ -64,14 +59,15 @@ public class Screen {
 		this.creator = creator;
 	}
 
-	public String getDescription() {
-		return description;
+	public Map<String, String> getDescriptions() {
+		if (descriptions == null)
+			descriptions = new HashMap<String, String>();
+		return descriptions;
 	}
 
-	public void setDescription(String description) {
-		this.description = description;
+	public void setDescriptions(Map<String, String> descriptions) {
+		this.descriptions = descriptions;
 	}
-
 	public URI getRights() {
 		return rights;
 	}
@@ -120,13 +116,13 @@ public class Screen {
 		this.homepage = homepage;
 	}
 
-	public List<URI> getDomainContext() {
+	public DomainContext getDomainContext() {
 		if (domainContext == null)
-			domainContext = new ArrayList<URI>();
+			domainContext = new DomainContext();
 		return domainContext;
 	}
 
-	public void setDomainContext(List<URI> domainContext) {
+	public void setDomainContext(DomainContext domainContext) {
 		this.domainContext = domainContext;
 	}
 
@@ -161,14 +157,22 @@ public class Screen {
 				json.put("uri", JSONObject.NULL);
 			else
 				json.put("uri", getUri().toString());
-			if (getLabel() == null)
+			if (getLabels() == null || getLabels().isEmpty())
 				json.put("label", JSONObject.NULL);
-			else
-				json.put("label", getLabel().toString());
-			if (getDescription() == null)
+			else {
+				JSONObject jsonLabels = new JSONObject();
+				for (String key : getLabels().keySet())
+					jsonLabels.put(key, getLabels().get(key));
+				json.put("label", jsonLabels);
+			}
+			if (getDescriptions() == null || getDescriptions().isEmpty())
 				json.put("description", JSONObject.NULL);
-			else
-				json.put("description", getDescription().toString());
+			else {
+				JSONObject jsonDescriptions = new JSONObject();
+				for (String key : getDescriptions().keySet())
+					jsonDescriptions.put(key, getDescriptions().get(key));
+				json.put("description", jsonDescriptions);
+			}
 			if (getCreator() == null)
 				json.put("creator", JSONObject.NULL);
 			else
@@ -184,7 +188,7 @@ public class Screen {
 			if (getCreationDate() == null)
 				json.put("creationDate", JSONObject.NULL);
 			else
-				json.put("creationDate", getCreationDate().toString());
+				json.put("creationDate", FormatterUtil.formatDateISO8601(getCreationDate()));
 			if (getIcon() == null)
 				json.put("icon", JSONObject.NULL);
 			else
@@ -193,29 +197,21 @@ public class Screen {
 				json.put("screenshot", JSONObject.NULL);
 			else
 				json.put("screenshot", getScreenshot().toString());
-			JSONArray domainContext = new JSONArray();
-			for (URI domain : getDomainContext())
-				domainContext.put(domain.toString());
-			json.put("domainContext", domainContext);
+			if (getDomainContext() == null)
+				json.put("domainContext", JSONObject.NULL);
+			else
+				json.put("domainContext", getDomainContext().toJSON());
 			if (getHomepage() == null)
 				json.put("homepage", JSONObject.NULL);
 			else
 				json.put("homepage", getHomepage().toString());
 			JSONArray preconditions = new JSONArray();
-			for (Condition con : getPreconditions()) {
-				StringBuffer sb = new StringBuffer();
-				for (Statement st : con.getStatements())
-					sb.append(st.getSubject() + " " + st.getPredicate() + " " + st.getObject() + " . ");
-				preconditions.put(sb.toString());
-			}				
+			for (Condition con : getPreconditions())
+				preconditions.put(con.toString());
 			json.put("preconditions", preconditions);
 			JSONArray postconditions = new JSONArray();
-			for (Condition con : getPostconditions()) {
-				StringBuffer sb = new StringBuffer();
-				for (Statement st : con.getStatements())
-					sb.append(st.getSubject() + " " + st.getPredicate() + " " + st.getObject() + " . ");
-				postconditions.put(sb.toString());
-			}				
+			for (Condition con : getPostconditions())
+				postconditions.put(con.toString());
 			json.put("postconditions", postconditions);
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
@@ -223,18 +219,5 @@ public class Screen {
 		}
 		return json;
 	}
-	
-//	public boolean equals(Screen s) {
-//		return compareTo(s) == 0;
-//	}
-//
-//	@Override
-//	public int compareTo(Object arg0) {
-//		if (arg0 instanceof Screen) {
-//			Screen s = (Screen)arg0;
-//			return s.getUri().compareTo(getUri());
-//		} else {
-//			return -1;
-//		}
-//	}
+
 }

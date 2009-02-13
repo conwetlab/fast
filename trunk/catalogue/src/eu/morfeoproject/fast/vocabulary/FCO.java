@@ -4,7 +4,7 @@ import org.ontoware.rdf2go.model.node.URI;
 import org.ontoware.rdf2go.model.node.impl.URIImpl;
 
 /**
- * Vocabulary File. Created by org.ontoware.rdf2go.util.VocabularyWriter on Fri Jan 16 17:40:02 GMT 2009
+ * Vocabulary File. Created by org.ontoware.rdf2go.util.VocabularyWriter on Tue Feb 10 19:02:12 GMT 2009
  * input file: src/eu/morfeoproject/fast/catalogue/ontologies/fco.rdf
  * namespace: http://www.morfeoproject.eu/fast/fco#
  */
@@ -14,6 +14,10 @@ public interface FCO {
     /**
      */
     public static final URI Screen = new URIImpl("http://www.morfeoproject.eu/fast/fco#Screen", false);
+
+    /**
+     */
+    public static final URI Condition = new URIImpl("http://www.morfeoproject.eu/fast/fco#Condition", false);
 
     /**
      */
@@ -48,28 +52,40 @@ public interface FCO {
     public static final URI version = new URIImpl("http://www.morfeoproject.eu/fast/fco#version", false);
 
     /**
-     * Comment: http://www.w3.org/2000/01/rdf-schema#Resource 
+     * Comment: http://www.morfeoproject.eu/fast/fco#Condition 
      * Range: http://www.morfeoproject.eu/fast/fco#Screen 
      */
     public static final URI isPostcondition = new URIImpl("http://www.morfeoproject.eu/fast/fco#isPostcondition", false);
 
     /**
      * Comment: http://www.morfeoproject.eu/fast/fco#Screen 
-     * Range: http://www.w3.org/2000/01/rdf-schema#Resource 
+     * Range: http://www.morfeoproject.eu/fast/fco#Condition 
      */
     public static final URI hasPostcondition = new URIImpl("http://www.morfeoproject.eu/fast/fco#hasPostcondition", false);
 
     /**
-     * Comment: http://www.w3.org/2000/01/rdf-schema#Resource 
+     * Comment: http://www.morfeoproject.eu/fast/fco#Condition 
      * Range: http://www.morfeoproject.eu/fast/fco#Screen 
      */
     public static final URI isPrecondition = new URIImpl("http://www.morfeoproject.eu/fast/fco#isPrecondition", false);
 
     /**
      * Comment: http://www.morfeoproject.eu/fast/fco#Screen 
-     * Range: http://www.w3.org/2000/01/rdf-schema#Resource 
+     * Range: http://www.morfeoproject.eu/fast/fco#Condition 
      */
     public static final URI hasPrecondition = new URIImpl("http://www.morfeoproject.eu/fast/fco#hasPrecondition", false);
+
+    /**
+     * Comment: http://www.morfeoproject.eu/fast/fco#Condition 
+     * Range: http://www.w3.org/2000/01/rdf-schema#Resource 
+     */
+    public static final URI hasPattern = new URIImpl("http://www.morfeoproject.eu/fast/fco#hasPattern", false);
+
+    /**
+     * Comment: http://www.morfeoproject.eu/fast/fco#Condition 
+     * Range: http://www.w3.org/2000/01/rdf-schema#Literal 
+     */
+    public static final URI hasPatternString = new URIImpl("http://www.morfeoproject.eu/fast/fco#hasPatternString", false);
 
     /**
      * Comment: http://www.morfeoproject.eu/fast/fco#ScreenFlow 

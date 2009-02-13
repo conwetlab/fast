@@ -21,17 +21,26 @@ public class DefaultOntologies {
     private static ArrayList<Ontology> defaults = new ArrayList<Ontology>();
     
     public static Ontology RDF = 
-           new Ontology(new URIImpl("http://www.w3.org/1999/02/22-rdf-syntax-ns#"),
-               "rdf.xml");
+    	new Ontology(new URIImpl("http://www.w3.org/1999/02/22-rdf-syntax-ns#"), "rdf.rdf");
     public static Ontology RDFS = 
-        new Ontology(new URIImpl("http://www.w3.org/2000/01/rdf-schema#"),
-        "rdfs.xml");
+        new Ontology(new URIImpl("http://www.w3.org/2000/01/rdf-schema#"), "rdfs.rdf");
     public static Ontology FCO =
-    	new Ontology(new URIImpl("http://www.morfeoproject.eu/fast/fco#"),
-    	"fco.rdf");
-    public static Ontology DBPEDIA =
-    	new Ontology(new URIImpl("http://dbpedia.org/ontology/#"),
-    	"dbpedia.owl");
+    	new Ontology(new URIImpl("http://www.morfeoproject.eu/fast/fco#"), "fco.rdf");
+    public static Ontology FOAF =
+    	new Ontology(new URIImpl("http://xmlns.com/foaf/0.1/"), "foaf.rdf");
+    
+    public static Ontology EXAMPLE =
+    	new Ontology(new URIImpl("http://www.morfeoproject.eu/fast/example#"), "example.rdf");
+    public static Ontology AMAZON =
+    	new Ontology(new URIImpl("http://www.morfeoproject.eu/fast/example#"), "example.rdf");
+    
+    public static Ontology BRESLIN =
+    	new Ontology(new URIImpl("http://www.johnbreslin.com/foaf/foaf.rdf#"), "breslin-foaf.rdf");
+//    public static Ontology ANDREAS =
+//    	new Ontology(new URIImpl("http://www.deri.ie/about/team/member/Andreas_Harth"), "andreas-foaf.rdf");
+    
+//    public static Ontology DBPEDIA = // TODO not supported yet!
+//    	new Ontology(new URIImpl("http://dbpedia.org/ontology/#"), "dbpedia.owl");
     
 //    public static Ontology PIMO = 
 //    	new Ontology ("http://www.semanticdesktop.org/ontologies/2007/11/01/pimo#",
@@ -74,7 +83,7 @@ public class DefaultOntologies {
             InputStream result = getClass().getResourceAsStream(filename);
             if (result == null)
                 throw new RuntimeException("Cannot load default ontology from class "+this.getClass().getName()+" from resource: "+filename);
-            return result; 
+            return result;
         }
     }
     
