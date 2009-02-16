@@ -69,6 +69,11 @@ rdfs:subClassOf fast:Flow_Control_Element ;
 rdfs:label "Connector"@en ;
 rdfs:comment "An explicit connection between two screens."@en .
 
+fast:Operator a owl:Class ;
+rdfs:subClassOf fast:Resource ;
+rdfs:label "Operator"@en ;
+rdfs:comment "Any kind of component that is used to connect backend services to form elements. Examples are simple pipes, aggregators or various kinds of filters."@en .
+
 fast:Form_Element a owl:Class ;
 rdfs:subClassOf fast:Resource ;
 rdfs:label "Form Element"@en ;
