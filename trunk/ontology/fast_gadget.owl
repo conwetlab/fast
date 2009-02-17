@@ -17,24 +17,24 @@
 @prefix dcterms: <http://purl.org/dc/terms/> .
   
 <http://purl.oclc.org/fast/ontology/gadget> a owl:Ontology ;
-	rdfs:label "The FAST Gagdet Ontology v0.1"@en ;
-	rdfs:comment """This ontology defines terms for modelling semantic, interoperable 
-		gadgets or widgets)."""@en ;
-	dcterms:created "2009-02-09"@en ;
-	dcterms:modified "$Date$"@en ;
-	dcterms:creator <http://kantenwerk.org/metadata/foaf.rdf#me> ;
-	doap:revision "$Revision$" .
-	
+    rdfs:label "The FAST Gagdet Ontology v0.1"@en ;
+    rdfs:comment """This ontology defines terms for modelling semantic, interoperable 
+        gadgets or widgets)."""@en ;
+    dcterms:created "2009-02-09"@en ;
+    dcterms:modified "$Date$"@en ;
+    dcterms:creator <http://kantenwerk.org/metadata/foaf.rdf#me> ;
+    doap:revision "$Revision$" .
+    
 <http://kantenwerk.org/metadata/foaf.rdf#me> a foaf:Person ;
-	foaf:name "Knud Möller"@en ;
-	rdfs:seeAlso <http://kantenwerk.org/metadata/foaf.rdf> .
+    foaf:name "Knud Möller"@en ;
+    rdfs:seeAlso <http://kantenwerk.org/metadata/foaf.rdf> .
 
 # Classes
 
 fast:Resource a owl:Class ;
 rdfs:label "Resource"@en ;
 rdfs:comment """Anything that is part of a gadget (or the gadget itself). Tentatively 
-	anything that can be 'touched' and moved around in the FAST IDE."""@en .
+    anything that can be 'touched' and moved around in the FAST IDE."""@en .
 
 fast:Screen_Flow a owl:Class ;
 rdfs:subClassOf fast:Resource ;
@@ -50,14 +50,14 @@ fast:Backend_Service a owl:Class ;
 rdfs:subClassOf fast:Resource ;
 rdfs:label "Backend Service"@en ;
 rdfs:comment """A Web service which provides data and/or functionality to a screen. 
-	A backend service will often be external to FAST, and will probably have to be 
-	wrapped by the screen."""@en .
+    A backend service will often be external to FAST, and will probably have to be 
+    wrapped by the screen."""@en .
 
 fast:Flow_Control_Element a owl:Class ;
 rdfs:subClassOf fast:Resource ;
 rdfs:label "Flow Control Element"@en ;
 rdfs:comment """Any kind of component which can restrict the default flow of screens 
-	in a gadget."""@en .
+    in a gadget."""@en .
 
 fast:Screen_Flow_Start a owl:Class ;
 rdfs:subClassOf fast:Flow_Control_Element ;
@@ -78,8 +78,8 @@ fast:Operator a owl:Class ;
 rdfs:subClassOf fast:Resource ;
 rdfs:label "Operator"@en ;
 rdfs:comment """Any kind of component that is used to connect backend services to 
-	form elements. Examples are simple pipes, aggregators or various kinds of 
-	filters."""@en .
+    form elements. Examples are simple pipes, aggregators or various kinds of 
+    filters."""@en .
 
 fast:Form_Element a owl:Class ;
 rdfs:subClassOf fast:Resource ;
@@ -90,56 +90,56 @@ fast:Condition a owl:Class ;
 rdfs:subClassOf fast:Resource ;
 rdfs:label "Condition"@en ;
 rdfs:comment """The pre- or post-condition of either a screen or a screenflow. In 
-	the latter case, each target platform will use these condition in its own way, 
-	or may also ignore them. E.g., in EzWeb pre- and post-conditions correspond to 
-	the concepts of slot and event."""@en .
+    the latter case, each target platform will use these condition in its own way, 
+    or may also ignore them. E.g., in EzWeb pre- and post-conditions correspond to 
+    the concepts of slot and event."""@en .
 
 fast:WithConditions a owl:Class ;
 rdfs:subClassOf fast:Resource ;
 owl:unionOf (fast:Screen fast:Screen_Flow) ;
 rdfs:label "With Condition"@en ;
 rdfs:comment """Those kinds of resource which can have pre- or post-conditions 
-	(i.e., screens and screen flows)."""@en .
+    (i.e., screens and screen flows)."""@en .
 
 # Properties
 
 fast:contains a owl:ObjectProperty ;
 rdfs:label "contains"@en ;
 rdfs:comment """Many kinds of components in FAST can contain other components: 
-	screenflows contain screens, screens contain forms or form elements, etc."""@en ;
+    screenflows contain screens, screens contain forms or form elements, etc."""@en ;
 rdfs:domain fast:Resource ;
 rdfs:range fast:Resource .
 
 fast:hasPreCondition a owl:ObjectProperty ;
 rdfs:label "has pre-condition"@en ;
 rdfs:comment """This property links a screen or screenflow to its pre-condition, i.e., 
-	the facts that need to be fulfilled in order for this screen or screenflow to be 
-	reachable."""@en ;
+    the facts that need to be fulfilled in order for this screen or screenflow to be 
+    reachable."""@en ;
 rdfs:domain fast:WithConditions ;
 rdfs:range fast:Condition .
 
 fast:hasPostCondition a owl:ObjectProperty ;
 rdfs:label "has post-condition"@en ;
 rdfs:comment """This property links a screen or screenflow to its post-condition, 
-	i.e., the facts that are produced once the screen or screenflow has been 
-	executed."""@en ;
+    i.e., the facts that are produced once the screen or screenflow has been 
+    executed."""@en ;
 rdfs:domain fast:WithConditions ;
 rdfs:range fast:Condition .
 
 fast:hasPattern a owl:DatatypeProperty ;
 rdfs:label "has pattern"@en ;
 rdfs:comment """This property links a screen or screenflow to its pre-condition, 
-	i.e., the facts that need to be fulfilled in order for this screen or screenflow 
-	to be reachable."""@en ;
+    i.e., the facts that need to be fulfilled in order for this screen or screenflow 
+    to be reachable."""@en ;
 rdfs:domain fast:Condition ;
 rdfs:range xsd:string .
 
 fast:isPositive a owl:DatatypeProperty ;
 rdfs:label "is positive"@en ;
 rdfs:comment """Conditions can be positive or negative, depending on whether they 
-	must be fulfilled or must not be fulfilled (in the case of pre-conditions), or 
-	whether their facts will be added to the canvas or removed (in the case of 
-	post-conditions)."""@en ;
+    must be fulfilled or must not be fulfilled (in the case of pre-conditions), or 
+    whether their facts will be added to the canvas or removed (in the case of 
+    post-conditions)."""@en ;
 rdfs:domain fast:Condition ;
 rdfs:range xsd:boolean .
 
@@ -153,7 +153,7 @@ rdfs:range foaf:Image .
 fast:hasScreenshot a owl:ObjectProperty ;
 rdfs:label "has screenshot"@en ;
 rdfs:comment """An image which shows a particular screen or screenflow in action, to 
-	aid users in deciding which screen or screenflow to choose out of many."""@en ;
+    aid users in deciding which screen or screenflow to choose out of many."""@en ;
 rdfs:subPropertyOf foaf:depiction ;
 rdfs:domain fast:Resource ;
 rdfs:range foaf:Image .
@@ -163,15 +163,15 @@ rdfs:range foaf:Image .
 fast:integratesTerm a owl:ObjectProperty ;
 rdfs:label "integratesTerm"@en ;
 rdfs:comment """A way to explicitly say that an ontology uses terms from another namespace. 
-	Maybe a bit redundant, but why not."""@en .
+    Maybe a bit redundant, but why not."""@en .
 
 <http://purl.oclc.org/fast/ontology/gadget> fast:integratesTerm  
-	sioc:User, foaf:Person,foaf:Image, foaf:OnlineAccount, foaf:holdsAccount,
-	foaf:depiction, foaf:name, foaf:mbox, foaf:mbox_sha1sum, foaf:interest, foaf:accountName,
-	dcterms:title, dcterms:creator, dcterms:description, dcterms:created, dcterms:subject, 
-	dcterms:rights, dcterms:RightsStatement, dcterms:rightsHolder,
-	doap:revision .
-		
+    sioc:User, foaf:Person,foaf:Image, foaf:OnlineAccount, foaf:holdsAccount,
+    foaf:depiction, foaf:name, foaf:mbox, foaf:mbox_sha1sum, foaf:interest, foaf:accountName,
+    dcterms:title, dcterms:creator, dcterms:description, dcterms:created, dcterms:subject, 
+    dcterms:rights, dcterms:RightsStatement, dcterms:rightsHolder,
+    doap:revision .
+        
 # statements to ensure that the ontology stays in DL
 # according to Pellet reasoner: http://www.mindswap.org/cgi-bin/2003/pellet
 
