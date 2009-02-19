@@ -40,6 +40,11 @@ public class CatalogueServer extends Application {
 		component.getDefaultHost().attach("", this);
 	}
 
+	/**
+	 * Starts the server, creates the REST services for every offered service and
+	 * open a new session in the catalogue repository.
+	 * @throws Exception
+	 */
 	public void startServer() throws Exception {
 		catalogue = new Catalogue(dir);
 		catalogue.open();
@@ -53,11 +58,19 @@ public class CatalogueServer extends Application {
 		component.start();
 	}
 	
+	/**
+	 * Stops the server and close the instance of the catalogue repository
+	 * @throws Exception
+	 */
 	public void stopServer() throws Exception {
 		component.stop();
 		catalogue.close();
 	}
 
+	/**
+	 * Routes are individual rules that map matching URLs to specific controllers and actions.
+	 * This method creates the routes for every Restlet in the server
+	 */
 	@Override
 	public Restlet createRoot() {
 		Router router = new Router(getContext());

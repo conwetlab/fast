@@ -21,9 +21,6 @@ public class CatalogueGUI extends JFrame {
 	
 	private static final long serialVersionUID = 6163545064005769050L;
 	
-	private static final int HEIGHT = 120;
-	private static final int WIDTH = 600;
-	
     private JButton startButton;
     private JButton stopButton;
     private JLabel dirLabel;
@@ -36,16 +33,13 @@ public class CatalogueGUI extends JFrame {
     
     public CatalogueGUI() {
 		super("FAST Catalogue Server");
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		try {
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 		} catch (Exception e) {	}
-	    Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+	    
+		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 	    int screenHeight = screenSize.height;
 	    int screenWidth = screenSize.width;
-	    setLocation((screenWidth-WIDTH)/2, (screenHeight-HEIGHT)/2);
-	    setSize(WIDTH, HEIGHT);
-//	    setResizable(false);
 	    
 	    dirLabel = new JLabel("Repository directory: ");
 	    dirTextField = new JTextField();
@@ -86,7 +80,7 @@ public class CatalogueGUI extends JFrame {
 	    // add elements to the screen
 	    getContentPane().setLayout(new BorderLayout());
 	    JPanel mainPanel = new JPanel();
-	    mainPanel.setLayout(new FlowLayout());
+	    mainPanel.setLayout(new BorderLayout());
 	    JPanel panel1 = new JPanel();
 	    panel1.setLayout(new FlowLayout());
 	    panel1.add(dirLabel);
@@ -103,11 +97,15 @@ public class CatalogueGUI extends JFrame {
 	    panel3.add(startButton);
 	    panel3.add(stopButton);
 
-	    mainPanel.add(panel1);
-	    mainPanel.add(panel2);
-	    mainPanel.add(panel3);
+	    mainPanel.add(panel1, BorderLayout.NORTH);
+	    mainPanel.add(panel2, BorderLayout.WEST);
+	    mainPanel.add(panel3, BorderLayout.EAST);
 	    getContentPane().add(mainPanel);
 		
+	    pack();
+	    setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	    setLocation((screenWidth-WIDTH)/2, (screenHeight-HEIGHT)/2);
+	    setResizable(false);
 		setVisible(true);
 	}
 	
