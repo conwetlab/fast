@@ -19,14 +19,16 @@
 <http://purl.oclc.org/fast/ontology/gadget> a owl:Ontology ;
     rdfs:label "The FAST Gagdet Ontology v0.1"@en ;
     rdfs:comment """This ontology defines terms for modelling semantic, interoperable 
-        gadgets or widgets)."""@en ;
+        gadgets or widgets."""@en ;
     dcterms:created "2009-02-09"@en ;
     dcterms:modified "$Date$"@en ;
     dcterms:creator <http://kantenwerk.org/metadata/foaf.rdf#me> ;
+    foaf:maker <http://kantenwerk.org/metadata/foaf.rdf#me> ;
     doap:revision "$Revision$" .
     
 <http://kantenwerk.org/metadata/foaf.rdf#me> a foaf:Person ;
     foaf:name "Knud Möller"@en ;
+	foaf:homepage <http://kantenwerk.org> ;
     rdfs:seeAlso <http://kantenwerk.org/metadata/foaf.rdf> .
 
 # Classes
@@ -90,14 +92,14 @@ fast:Condition a owl:Class ;
 rdfs:subClassOf fast:Resource ;
 rdfs:label "Condition"@en ;
 rdfs:comment """The pre- or post-condition of either a screen or a screenflow. In 
-    the latter case, each target platform will use these condition in its own way, 
+    the latter case, each target platform will use these conditions in its own way, 
     or may also ignore them. E.g., in EzWeb pre- and post-conditions correspond to 
     the concepts of slot and event."""@en .
 
 fast:WithConditions a owl:Class ;
 rdfs:subClassOf fast:Resource ;
 owl:unionOf (fast:Screen fast:Screen_Flow) ;
-rdfs:label "With Condition"@en ;
+rdfs:label "With-condition"@en ;
 rdfs:comment """Those kinds of resource which can have pre- or post-conditions 
     (i.e., screens and screen flows)."""@en .
 
