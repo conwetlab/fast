@@ -4,8 +4,8 @@
 *
 * Component: FAST
 *
-* (C) Copyright 2008 TelefÃ³nica InvestigaciÃ³n y Desarrollo
-*     S.A.Unipersonal (TelefÃ³nica I+D)
+* (C) Copyright 2008 Telefónica Investigación y Desarrollo
+*     S.A.Unipersonal (Telefónica I+D)
 *
 * Info about members and contributors of the MORFEO project
 * is available at:
@@ -317,10 +317,13 @@ function satisfeabilityUpdate (){
 			});
 	} while (anyUpdate);
 	
+	var unsatisfeablePres = getUnsatisfeableScreenPre();
+	var generatedFacts = getGeneratedFacts();
+	
 	Element.childElements($("screenFlowCanvas")).each(
 		function(node){
 			if (node.data) { // only for screens
-				node.data.colorize(node);
+				node.data.colorize(node, false, unsatisfeablePres, generatedFacts);
 			}
 		});
 		
@@ -328,12 +331,48 @@ function satisfeabilityUpdate (){
 		function(node){
 			if (node.firstChild.data) { // only for screens
 				node.firstChild.data.updateSatisfeability(KB);
-				node.firstChild.data.colorize(node.firstChild);
+				node.firstChild.data.colorize(node.firstChild, true, unsatisfeablePres, generatedFacts);
 			}
 		});
 
 	inspectorUpdate();
 	screenFactsUpdate();
+}
+
+function getUnsatisfeableScreenPre(){
+	var unsatisfeablePre = {};
+	// Screen Facts
+	Element.childElements($("screenFlowCanvas")).each(
+		function(node){
+			if (node.data) { // only for screens
+				for (var factName in node.data.pre) {
+					if (!node.data.pre[factName].satisfeable){
+						unsatisfeablePre[factName] = true;
+					}
+				}
+			}
+		});
+	return unsatisfeablePre;
+}
+
+function getGeneratedFacts(){
+	var facts = {};
+	// Screen Post Facts
+	Element.childElements($("screenFlowCanvas")).each(
+		function(node){
+			if (node.data) {
+				for (var factName in node.data.post) {
+					facts[factName] = true;
+				}
+			}
+		});
+	// Slots
+	for (var slot in slots) {
+		if (slots[slot].fact.satisfeable){
+			facts[slots[slot].fact.name] = true;	
+		}
+	}
+	return facts;
 }
 
 var rowTemplate = new Template ('<tr><td class="inspectorIcon"><div class="factIcon #{satisfeable}">#{shortcut}</div></td><td class="inspectorName">#{name}</td><td class="inspectorDesc">#{desc}</td><td class="inspectorSem">#{sem}</td></tr>');

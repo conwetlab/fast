@@ -366,7 +366,7 @@ function addInferredFacts (KB){
 	return changed;	
 }
 
-function colorizeScreen (node){
+function colorizeScreen (node, isInPalette, unsatisfeablePres, generatedFacts){
 	
 	var globalColor = (this.satisfeable)? "green" : "#B90000";  
 	
@@ -405,8 +405,24 @@ function colorizeScreen (node){
 		node.removeClassName("satisfeable");
 			node.addClassName("unsatisfeable");
 	}
-
+	
+	if(isInPalette){
+		for (var factName in node.data.post) {
+			if(!KB[factName] 
+				&& !generatedFacts[factName] 
+				&& unsatisfeablePres[factName] 
+				&& (!node.data.pre || node.data.pre[factName]==undefined)){
+				node.addClassName("highlighted");
+			} else {
+				node.removeClassName("highlighted");
+			}
+		}
+	} else {
+		node.removeClassName("highlighted");
+	}
 }
+
+
 function showContainers (type){ //type=screenflow/screen
 	var accordion = dijit.byId("leftAccordion");
 	switch (type){
