@@ -362,7 +362,9 @@ function getGeneratedFacts(){
 		function(node){
 			if (node.data) {
 				for (var factName in node.data.post) {
-					facts[factName] = true;
+					if(!node.data.pre || node.data.pre[factName]==undefined){
+						facts[factName] = true; 
+					}
 				}
 			}
 		});
