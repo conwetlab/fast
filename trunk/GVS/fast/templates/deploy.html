@@ -1,0 +1,49 @@
+<!-- TODO: Implement deployment functions
+<script type="text/javascript">
+  
+    function ezWebDeploy(uri){
+        document.Deploy.template_uri.value = uri;
+        document.Deploy.submit();
+    }
+    
+    function igoogleDeploy(uri){
+        alert("iGoogle Deployment service being developed");    
+    }
+</script>
+-->
+<form name="Deploy" method="post"
+    action="http://demo.ezweb.morfeo-project.com/user/admin/catalogue/resource">
+<input type="hidden" name="template_uri" /></form>
+<h1 id="detailsTitle">Deployment Information</h1>
+<div id="properties">
+<table>
+    <tbody>
+        <tr class="tableHeader">
+            <td class="left">Mashup Platform</td>
+            <td class="left">Gadget Deployment</td>
+            <td class="left"></td>
+        </tr>
+        <tr>
+            <td class="mashup">EzWeb</td>
+            <td>{{ ezwebGadgetURL }}</td>
+            <td>
+                <button id="b1" onclick="ezWebDeploy('{{ ezwebGadgetURL }}');">Deploy it!</button>
+            </td>
+        </tr>
+        <tr>
+            <td class="mashup">iGoogle</td>
+            <td>{{ igoogleGadgetURL }}</td>
+            <td>
+                <button id="b2" onclick="iGoogleDeploy('{{ igoogleGadgetURL }});">Deploy it!</button>
+            </td>
+        </tr>
+        <tr>
+            <td class="mashup">Netvibes</td>
+            <td>Deployment information not available</td>
+            <td>
+                <button id="b3" onclick="alert('Deployment service not available');">Deploy it!</button>
+            </td>
+        </tr>
+    </tbody>
+</table>
+</div>

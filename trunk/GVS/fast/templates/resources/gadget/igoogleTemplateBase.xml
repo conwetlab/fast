@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+<Module>
+<ModulePrefs title="{{ gadget_title }}"
+        title_url="{{ gadget_templateURI }}"
+        author="{{ gadget_author }}"
+        author_email="{{ gadget_mail }}"
+        description="{{ gadget_description }}"
+        scrolling="true" height="400">
+    <Require feature="dynamic-height"/>
+</ModulePrefs>
+<Content type="html">
+<![CDATA[
+{% block content %}{% endblock %}
+]]>
+</Content>
+</Module>

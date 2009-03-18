@@ -1,0 +1,64 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+<title>{{ gadget_title }}</title>
+<link rel="stylesheet" type="text/css" href="{{ gadget_URI }}/resources/menu/css/menu.css" />
+<SCRIPT language="javascript" src="{{ gadget_URI }}/js/fast/menu.js"></SCRIPT>
+<SCRIPT language="javascript" src="{{ gadget_URI }}/js/fast/engine.js"></SCRIPT>
+<SCRIPT language="javascript" src="{{ gadget_URI }}/js/prototype/prototype.js"></SCRIPT>
+<SCRIPT language="javascript" src="{{ gadget_URI }}/js/fastAPI/fastAPI.js"></SCRIPT>
+<SCRIPT language="javascript" src="{{ gadget_URI }}/js/fastAPI/fastAPI_ezweb.js"></SCRIPT>
+<SCRIPT language="javascript" src="/ezweb/js/EzWebAPI/EzWebAPI.js"></SCRIPT>
+<SCRIPT language="javascript">
+	var menu = null;
+	var screens = new Hash();
+{# Here the screens involved inside the gadget are defined #}
+{% load fastfilters %}
+{% for screen in gadget_screens %}
+    screens.set("{{ screen.name|cut:" " }}",
+        {title: "{{ screen.name|cut:" " }}",
+        contentEl:"{{ screen.name|cut:" " }}",
+        pre: [{% for pre in screen.preconditions %}'{{ pre }}'{% if not forloop.last %}, {% endif %}{% endfor %}]});
+{% endfor %}
+
+    var events = new Hash();
+
+{# TODO: Fix the slot/events #}
+{% for slot in gadget_slots %}
+{% comment %}
+    var {{ slot.name }} = EzWebAPI.createRGadgetVariable("{{ slot.name }}",set{{ slot.name }});
+    function set{{ slot.name }}(val){
+        var fact = EngineFactory.getInstance().transformFact("{{ slot.fact_name }}", "{{ slot.fact_attr }}", val);
+        EngineFactory.getInstance().manageVarFacts([fact],[]);
+    }
+{% endcomment %}
+{% endfor %}
+
+{% for event in gadget_events %}
+{% comment %}
+    var {{ event.name }} = EzWebAPI.createRWGadgetVariable("{{ event.name }}");
+    getEventVariables(events, "{{ event.fact_name }}").set("{{ event.name }}", {variable: {{ event.name }}, fact_attr: "{{ event.fact_attr }}"});
+{% endcomment %}
+{% endfor %}
+
+	function loadMenu(){
+		menu = new FASTMenu({renderTo: "menu"});
+	    
+	    EngineFactory.getInstance().setEngine(screens, events, menu);
+	    
+	    EngineFactory.getInstance().run();
+	}
+</SCRIPT>
+</head>
+<body style="margin:1;padding:1;" onload="javascrip:loadMenu();">
+<div id="menu"></div>
+{# TODO: screen in screens should have a code field #}
+{% for screen in gadget_screens %}
+<div id="{{ screen.name|cut:" " }}" class="tabcontentHide">
+    <object id="{{ screen.name|cut:" " }}_obj" width="100%" height="100%">
+        {{ screen.code|safe }}
+    </object>
+</div>
+{% endfor %}
+</body>
+</html>
