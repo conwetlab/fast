@@ -1,0 +1,169 @@
+<html><head><meta http-equiv="content-type" content="text/html; charset=utf-8"> <style>
+	.KEYW {color: #933;}
+	.COMM {color: #bbb; font-style: italic;}
+	.NUMB {color: #393;}
+	.STRN {color: #393;}
+	.REGX {color: #339;}
+	.line {border-right: 1px dotted #666; color: #666; font-style: normal;}
+	</style></head><body><pre><span class='line'>  1</span> <span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">PaletteComponent</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">Class.create</span><span class="PUNC">(</span><span class="NAME">DragSource</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>  2</span>     </span><span class="COMM">/** @lends PaletteComponent.prototype */</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>  3</span> 
+<span class='line'>  4</span>     </span><span class="COMM">/**
+<span class='line'>  5</span>      * GUI element that represents a palette element.
+<span class='line'>  6</span>      * @constructs
+<span class='line'>  7</span>      * @extends DragSource
+<span class='line'>  8</span>      */</span><span class="WHIT"> 
+<span class='line'>  9</span>     </span><span class="NAME">initialize</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">$super</span><span class="PUNC">,</span><span class="COMM">/** ResourceDescription */</span><span class="WHIT"> </span><span class="NAME">resourceDescription</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 10</span>         </span><span class="NAME">$super</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 11</span>  
+<span class='line'> 12</span>         </span><span class="COMM">/**
+<span class='line'> 13</span>          * Handles the drag'n'drop stuff
+<span class='line'> 14</span>          * @type DragHandler
+<span class='line'> 15</span>          * @private
+<span class='line'> 16</span>          */</span><span class="WHIT">
+<span class='line'> 17</span>         </span><span class="COMM">//TODO: FIX THIS!!!</span><span class="WHIT">
+<span class='line'> 18</span>         </span><span class="NAME">this._dragHandler</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">DragHandler</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">'tabContent_2'</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 19</span>  
+<span class='line'> 20</span>         </span><span class="COMM">/**
+<span class='line'> 21</span>          * Resource in which this component is based.
+<span class='line'> 22</span>          * @type ResourceDescription
+<span class='line'> 23</span>          * @private
+<span class='line'> 24</span>          */</span><span class="WHIT">
+<span class='line'> 25</span>         </span><span class="NAME">this._resourceDescription</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">resourceDescription</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 26</span> 
+<span class='line'> 27</span>         </span><span class="COMM">/**
+<span class='line'> 28</span>          * Screen component view
+<span class='line'> 29</span>          * @type ScreenView
+<span class='line'> 30</span>          * @private
+<span class='line'> 31</span>          */</span><span class="WHIT">
+<span class='line'> 32</span>         </span><span class="NAME">this._view</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this._resourceDescription.createView</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 33</span>         
+<span class='line'> 34</span>         </span><span class="COMM">/**
+<span class='line'> 35</span>          * Node of the component.
+<span class='line'> 36</span>          * @type DOMNode
+<span class='line'> 37</span>          * @private
+<span class='line'> 38</span>          */</span><span class="WHIT">
+<span class='line'> 39</span>         </span><span class="NAME">this._node</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this._createSlot</span><span class="PUNC">(</span><span class="NAME">this._resourceDescription.name</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 40</span>                 </span><span class="NAME">this._view.getNode</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 41</span> 
+<span class='line'> 42</span>     </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 43</span>     
+<span class='line'> 44</span> 
+<span class='line'> 45</span>     </span><span class="COMM">// **************** PUBLIC METHODS **************** //</span><span class="WHIT">
+<span class='line'> 46</span> 
+<span class='line'> 47</span> 
+<span class='line'> 48</span>     </span><span class="COMM">/**
+<span class='line'> 49</span>      * Gets the component root node.
+<span class='line'> 50</span>      * @type DOMNode
+<span class='line'> 51</span>      * @public
+<span class='line'> 52</span>      */</span><span class="WHIT">
+<span class='line'> 53</span>     </span><span class="NAME">getNode</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 54</span>         </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">this._node</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 55</span>     </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 56</span>     
+<span class='line'> 57</span>      </span><span class="COMM">/**
+<span class='line'> 58</span>      * Gets the component content node.
+<span class='line'> 59</span>      * @type DOMNode
+<span class='line'> 60</span>      * @public
+<span class='line'> 61</span>      */</span><span class="WHIT">
+<span class='line'> 62</span>     </span><span class="NAME">getContent</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 63</span>         </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">this._view.getNode</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 64</span>     </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 65</span>     
+<span class='line'> 66</span> 
+<span class='line'> 67</span>     </span><span class="COMM">// **************** PROTECTED METHODS **************** //</span><span class="WHIT">
+<span class='line'> 68</span> 
+<span class='line'> 69</span> 
+<span class='line'> 70</span>     </span><span class="COMM">/**
+<span class='line'> 71</span>      * Creates an slot (GUI frame around a component) with a given title.
+<span class='line'> 72</span>      *
+<span class='line'> 73</span>      * @private
+<span class='line'> 74</span>      */</span><span class="WHIT">
+<span class='line'> 75</span>     </span><span class="NAME">_createSlot</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">title</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">contentNode</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 76</span>         </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">node</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">Element</span><span class="PUNC">(</span><span class="STRN">"div"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="STRN">"class"</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">"slot"</span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 77</span>         </span><span class="NAME">node.appendChild</span><span class="PUNC">(</span><span class="NAME">contentNode</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 78</span>         </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">titleNode</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">Element</span><span class="PUNC">(</span><span class="STRN">"div"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="STRN">"class"</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">"slotTitle"</span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">update</span><span class="PUNC">(</span><span class="NAME">title</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 79</span>         </span><span class="NAME">node.appendChild</span><span class="PUNC">(</span><span class="NAME">titleNode</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 80</span>         </span><span class="NAME">this._dragHandler.initializeDragnDropHandlers</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 81</span> 
+<span class='line'> 82</span>         </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">node</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 83</span>     </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 84</span>     
+<span class='line'> 85</span> 
+<span class='line'> 86</span>     </span><span class="COMM">/**
+<span class='line'> 87</span>      * Returns the node that can be clicked to start a drag-n-drop operation.
+<span class='line'> 88</span>      * @type DOMNode
+<span class='line'> 89</span>      * @override
+<span class='line'> 90</span>      */</span><span class="WHIT">
+<span class='line'> 91</span>     </span><span class="NAME">getHandlerNode</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 92</span>         </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">this._view.getNode</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 93</span>     </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 94</span>                          
+<span class='line'> 95</span>                          
+<span class='line'> 96</span>     </span><span class="COMM">/**
+<span class='line'> 97</span>      * Creates a new palette component to be dragged.
+<span class='line'> 98</span>      * Returned object must have a getNode() method.
+<span class='line'> 99</span>      * @type Object
+<span class='line'>100</span>      * @override
+<span class='line'>101</span>      */</span><span class="WHIT">
+<span class='line'>102</span>     </span><span class="NAME">getDraggableObject</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>103</span>         </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">instance</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this._createInstance</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>104</span>         </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">node</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">instance.getNode</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>105</span>         </span><span class="NAME">dijit.byId</span><span class="PUNC">(</span><span class="STRN">"main"</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">domNode.appendChild</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">node</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>106</span>         </span><span class="NAME">node.setStyle</span><span class="PUNC">(</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>107</span>             </span><span class="STRN">'top'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">this._getContentOffsetTop</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="STRN">'px'</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>108</span>             </span><span class="STRN">'left'</span><span class="PUNC">:</span><span class="WHIT">  </span><span class="NAME">this._getContentOffsetLeft</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="STRN">'px'</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>109</span>             </span><span class="STRN">'position'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">'absolute'</span><span class="WHIT">
+<span class='line'>110</span>         </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>111</span>         </span><span class="COMM">//TODO: Add getDragHandler, or think about the method</span><span class="WHIT">
+<span class='line'>112</span>         </span><span class="NAME">instance._dragHandler.initializeDragnDropHandlers</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>113</span>         </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">instance</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>114</span>     </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>115</span>     
+<span class='line'>116</span> 
+<span class='line'>117</span>     </span><span class="COMM">// **************** PRIVATE METHODS **************** //</span><span class="WHIT">
+<span class='line'>118</span>     </span><span class="COMM">/**
+<span class='line'>119</span>      * Creates a new component to be dragged.
+<span class='line'>120</span>      * @type ComponentInstance
+<span class='line'>121</span>      * @abstract
+<span class='line'>122</span>      */</span><span class="WHIT">
+<span class='line'>123</span>     </span><span class="NAME">_createInstance</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>124</span>         </span><span class="KEYW">throw</span><span class="WHIT"> </span><span class="STRN">"Abstract Method invocation: PaletteComponent::_createInstance"</span><span class="WHIT">
+<span class='line'>125</span>     </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>126</span> 
+<span class='line'>127</span>     </span><span class="COMM">/**
+<span class='line'>128</span>      * Calculates the distance from the window top to the palette component.
+<span class='line'>129</span>      * @type Integer
+<span class='line'>130</span>      * @private
+<span class='line'>131</span>      */</span><span class="WHIT">
+<span class='line'>132</span>     </span><span class="NAME">_getContentOffsetTop</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>133</span>         </span><span class="COMM">//FIXME: we suspect something is missing from the calculation</span><span class="WHIT">
+<span class='line'>134</span>         
+<span class='line'>135</span>         </span><span class="COMM">// find the element which has the scrollOffset</span><span class="WHIT">
+<span class='line'>136</span>         </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">paletteContent</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this._node.parentNode</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>137</span>         </span><span class="KEYW">while</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">paletteContent.className</span><span class="WHIT"> </span><span class="PUNC">!=</span><span class="WHIT"> </span><span class="STRN">"paletteContent"</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>138</span>                 </span><span class="NAME">paletteContent</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">paletteContent.parentNode</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>139</span>         </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>140</span> 
+<span class='line'>141</span>         </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">scrollOffset</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">paletteContent.parentNode.scrollTop</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>142</span>         </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">headerOffset</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">dijit.byId</span><span class="PUNC">(</span><span class="STRN">"header"</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">domNode.offsetTop</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT">
+<span class='line'>143</span>                 </span><span class="NAME">dijit.byId</span><span class="PUNC">(</span><span class="STRN">"header"</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">domNode.offsetHeight</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>144</span>         </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">this._view.getNode</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">offsetTop</span><span class="WHIT"> </span><span class="PUNC">-</span><span class="WHIT"> </span><span class="NAME">scrollOffset</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">headerOffset</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>145</span>     </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>146</span>     
+<span class='line'>147</span> 
+<span class='line'>148</span>     </span><span class="COMM">/**
+<span class='line'>149</span>      * Calculates the distance from the window left border to the palette
+<span class='line'>150</span>      * component.
+<span class='line'>151</span>      * @type Integer
+<span class='line'>152</span>      * @private
+<span class='line'>153</span>      */</span><span class="WHIT">
+<span class='line'>154</span>     </span><span class="NAME">_getContentOffsetLeft</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>155</span>         </span><span class="COMM">//FIXME: we suspect something is missing from the calculation</span><span class="WHIT">
+<span class='line'>156</span> 
+<span class='line'>157</span>         </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">this._view.getNode</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">offsetLeft</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>158</span>     </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>159</span> </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>160</span> 
+<span class='line'>161</span> </span><span class="COMM">// vim:ts=4:sw=4:et:</span><span class="WHIT">
+<span class='line'>162</span> </span></pre></body></html>

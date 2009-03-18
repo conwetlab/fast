@@ -1,0 +1,125 @@
+<html><head><meta http-equiv="content-type" content="text/html; charset=utf-8"> <style>
+	.KEYW {color: #933;}
+	.COMM {color: #bbb; font-style: italic;}
+	.NUMB {color: #393;}
+	.STRN {color: #393;}
+	.REGX {color: #339;}
+	.line {border-right: 1px dotted #666; color: #666; font-style: normal;}
+	</style></head><body><pre><span class='line'>  1</span> <span class="COMM">/**
+<span class='line'>  2</span>  * &lt;p>This class implements the Singleton Design Pattern to make sure there is 
+<span class='line'>  3</span>  * only one instance of the class GVS.
+<span class='line'>  4</span>  *
+<span class='line'>  5</span>  * &lt;p> It should be accessed as follows.
+<span class='line'>  6</span>  *
+<span class='line'>  7</span>  * @constructor
+<span class='line'>  8</span>  * @example
+<span class='line'>  9</span>  * var gvs = GVSSingleton.getInstance();
+<span class='line'> 10</span>  */</span><span class="WHIT"> 
+<span class='line'> 11</span> </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">GVSSingleton</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 12</span> 
+<span class='line'> 13</span>     </span><span class="COMM">/**
+<span class='line'> 14</span>      * Singleton instance
+<span class='line'> 15</span>      * @private @member
+<span class='line'> 16</span>      */</span><span class="WHIT">
+<span class='line'> 17</span>     </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">_instance</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 18</span>     
+<span class='line'> 19</span> 
+<span class='line'> 20</span>     </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">GVS</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">Class.create</span><span class="PUNC">(</span><span class="WHIT">
+<span class='line'> 21</span>         </span><span class="COMM">/** @lends GVSSingleton-GVS.prototype */</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 22</span> 
+<span class='line'> 23</span>         </span><span class="COMM">/** 
+<span class='line'> 24</span>          * GVS is the system facade.
+<span class='line'> 25</span>          * @constructs
+<span class='line'> 26</span>          */</span><span class="WHIT">
+<span class='line'> 27</span>         </span><span class="NAME">initialize</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 28</span>             </span><span class="COMM">/** 
+<span class='line'> 29</span>              * @type DocumentController
+<span class='line'> 30</span>              * @private @member
+<span class='line'> 31</span>              */</span><span class="WHIT">
+<span class='line'> 32</span>             </span><span class="NAME">this._documentController</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 33</span> 
+<span class='line'> 34</span>             </span><span class="COMM">/** 
+<span class='line'> 35</span>              * Hash keeping the action implementations.
+<span class='line'> 36</span>              * @type Hash
+<span class='line'> 37</span>              * @private @member
+<span class='line'> 38</span>              */</span><span class="WHIT">
+<span class='line'> 39</span>             </span><span class="NAME">this._actions</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 40</span>         </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 41</span>         
+<span class='line'> 42</span> 
+<span class='line'> 43</span>         </span><span class="COMM">// **************** PUBLIC METHODS **************** //</span><span class="WHIT">
+<span class='line'> 44</span>         
+<span class='line'> 45</span> 
+<span class='line'> 46</span>         </span><span class="COMM">/**
+<span class='line'> 47</span>          * Creates all the other objects and installs the event 
+<span class='line'> 48</span>          * handlers.
+<span class='line'> 49</span>          * @public
+<span class='line'> 50</span>          */</span><span class="WHIT">
+<span class='line'> 51</span>         </span><span class="NAME">init</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 52</span>             </span><span class="NAME">this._actions</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 53</span>                 </span><span class="NAME">openScreenflow</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 54</span>                     </span><span class="NAME">alert</span><span class="PUNC">(</span><span class="STRN">"open"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 55</span>                 </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 56</span>                 </span><span class="NAME">newScreenflow</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">this._newScreenflow.bind</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">)</span><span class="WHIT">
+<span class='line'> 57</span>             </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 58</span>             </span><span class="NAME">this._paletteController</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">PaletteController</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 59</span>             </span><span class="NAME">this._documentController</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">DocumentController</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 60</span>         </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 61</span> 
+<span class='line'> 62</span>         </span><span class="COMM">/**
+<span class='line'> 63</span>          * Ask the GVS application to perform a high-level action.
+<span class='line'> 64</span>          * @public
+<span class='line'> 65</span>          */</span><span class="WHIT">
+<span class='line'> 66</span>         </span><span class="NAME">action</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="COMM">/** String */</span><span class="WHIT"> </span><span class="NAME">actionName</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 67</span>             </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">this._actions</span><span class="PUNC">[</span><span class="NAME">actionName</span><span class="PUNC">]</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 68</span>                 </span><span class="COMM">// Execute the action</span><span class="WHIT">
+<span class='line'> 69</span>                 </span><span class="NAME">this._actions</span><span class="PUNC">[</span><span class="NAME">actionName</span><span class="PUNC">]</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 70</span>             </span><span class="PUNC">}</span><span class="WHIT"> </span><span class="KEYW">else</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 71</span>                 </span><span class="COMM">// TODO: Add error handling</span><span class="WHIT">
+<span class='line'> 72</span>                 </span><span class="NAME">alert</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="STRN">"Invalid action"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 73</span>             </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'> 74</span>         </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 75</span>         
+<span class='line'> 76</span>         </span><span class="COMM">/**
+<span class='line'> 77</span>          * Gets the palette controller
+<span class='line'> 78</span>          * @type PaletteController
+<span class='line'> 79</span>          * @public
+<span class='line'> 80</span>          */</span><span class="WHIT">
+<span class='line'> 81</span>         </span><span class="NAME">getPaletteController</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 82</span>             </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">this._paletteController</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 83</span>         </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 84</span>         
+<span class='line'> 85</span>         </span><span class="COMM">// **************** PRIVATE METHODS **************** //</span><span class="WHIT">
+<span class='line'> 86</span> 
+<span class='line'> 87</span>         </span><span class="COMM">/** 
+<span class='line'> 88</span>          * High-level action for creating a new screenflow.
+<span class='line'> 89</span>          *
+<span class='line'> 90</span>          * @private
+<span class='line'> 91</span>          */</span><span class="WHIT">
+<span class='line'> 92</span>         </span><span class="NAME">_newScreenflow</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 93</span>             </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">title</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">prompt</span><span class="PUNC">(</span><span class="STRN">"Choose Screenflow name"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">"NewScreenflow"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 94</span>             </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">title</span><span class="WHIT"> </span><span class="PUNC">&&</span><span class="WHIT"> </span><span class="NAME">title</span><span class="WHIT"> </span><span class="PUNC">!=</span><span class="WHIT"> </span><span class="STRN">""</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 95</span>                 </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">screenflow</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">ScreenflowDocument</span><span class="PUNC">(</span><span class="NAME">title</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 96</span>                 </span><span class="NAME">this._documentController.addDocument</span><span class="PUNC">(</span><span class="NAME">screenflow</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">   
+<span class='line'> 97</span>             </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'> 98</span>         </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'> 99</span>         
+<span class='line'>100</span>     </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>101</span>     
+<span class='line'>102</span>   
+<span class='line'>103</span>     </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>104</span>         </span><span class="COMM">/**
+<span class='line'>105</span>          * Returns the singleton instance
+<span class='line'>106</span>          * @type GVS
+<span class='line'>107</span>          */</span><span class="WHIT">
+<span class='line'>108</span>         </span><span class="NAME">this.getInstance</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>109</span>             </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">_instance</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>110</span>                 </span><span class="NAME">_instance</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">GVS</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>111</span>             </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>112</span>             </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">_instance</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>113</span>         </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>114</span>     </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>115</span> </span><span class="PUNC">}</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>116</span> 
+<span class='line'>117</span> </span><span class="COMM">// vim:ts=4:sw=4:et:</span><span class="WHIT">
+<span class='line'>118</span> </span></pre></body></html>
