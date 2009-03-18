@@ -1,0 +1,20 @@
+<html>
+		    <head>
+		        <script language="JavaScript">
+		        	function Order(){};
+		        	
+		        	Order.prototype.init = function (){
+		        		var purchase = EngineFactory.getInstance().getFact('http://TODO/amazon#purchase');
+						var obj = new Element ('object',{type: "text/html", data: purchase.url, standby: "Loading...", width: "100%",  height: "100%"});
+						$("bodyDivOrder").update(obj);
+					}
+					
+					var order = new Order();
+					EngineFactory.getInstance().addScreenLoader("Order", order.init);
+		        </script>
+		    </head>
+		    <body>
+		        <div id="bodyDivOrder">
+		        </div>
+		    </body>
+</html>

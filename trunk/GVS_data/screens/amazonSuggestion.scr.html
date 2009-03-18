@@ -1,0 +1,273 @@
+<html>
+	<head>
+        <meta http-equiv="Content-Type" content="application/xhtml+xml; charset=UTF-8">
+		<link type="text/css" rel="stylesheet" href="http://piccolo.ls.fi.upm.es/amazonScreens/style/table.css" />
+        <link type="text/css" rel="stylesheet" href="http://piccolo.ls.fi.upm.es/amazonScreens/style/screen.css" />
+		<style type="text/css">
+			#pagesSuggestion{
+				color:#FEBF43;
+				font-weight: bold;
+				padding: 10px;
+			}
+			#previousButtonSuggestion, #nextButtonSuggestion {
+				visibility:hidden;
+			}
+			#loadingImgSuggestion{
+				margin:auto;
+				padding-top: 10px;
+			}
+			#like{
+				padding: 5px;
+				color: #777777;
+			}
+			.productTitle{
+				font-weight:bold;
+				font-style:normal;
+			}
+			#amazonImage{
+				position:absolute;
+				right:0px;
+				top:3px;
+			}
+		</style>
+        <script language="JavaScript">
+        
+        	function SuggestionList(){
+	            //Next set of products to print in the table (0-9)
+	            this.currentPage = 0;
+	            //Product list fetched from the Service
+	            this.productList = new Array();
+	            //Are we waiting for data?
+	            this.waiting = true;
+            };
+            
+            SuggestionList.prototype.init = function (){
+                $("nextButtonSuggestion").observe("click", suggestionList.nextPage);
+                $("previousButtonSuggestion").observe("click", suggestionList.previousPage);
+				$$('input[type="button"]').each(function(element){
+					element.observe("mouseover",function(event){
+						var e = Event.element(event);
+						e.setStyle({cursor:"pointer"});
+					});
+				
+				});
+				var item = EngineFactory.getInstance().getFact('http://TODO/amazon#item');
+				$$(".productTitle").each(function(element){
+					element.update(item.title);
+				});
+				var tableBody = $("listBodySuggestion");
+                tableBody.update("");
+                suggestionList.currentPage = 0;
+	            suggestionList.productList = new Array();
+	            suggestionList.waiting = true;
+	            suggestionList.showProgress();
+                suggestionList.fetch();
+            }
+            
+            SuggestionList.prototype.fetch = function (){
+            
+            	//Get the facts to invoke the service
+                var item = EngineFactory.getInstance().getFact('http://TODO/amazon#item');
+                var user = EngineFactory.getInstance().getFact('user');
+                //Add the ItemSearch parameters
+                var parameters = "";
+				parameters += "&ItemId=" + item.ASIN;
+                
+                //Base URL of the REST Service
+				var url = "http://webservices.amazon.com/onca/xml?Service=AWSECommerceService";
+				//Add the AccessKeyId (get from the user fact)
+				if (user)
+					url += "&AWSAccessKeyId=" + user.KeyId;
+				else // if the KB doesn't contain a user key Id, add one by default
+					url += "&AWSAccessKeyId=15TNKDQJGH6BD0Z4KY02";
+				//Add the operation Type
+				url +="&Operation=SimilarityLookup";
+				//Add the parameters
+				url += parameters;
+				//Add the responseGroup
+				url +="&ResponseGroup=Medium";
+				//Add the current version of the API
+				url += "&Version=2008-06-26";
+
+				//Invoke the service
+                FastAPI.getXML(url, this, suggestionList.addToList);
+            }
+            
+            SuggestionList.prototype.addToList = function (transport){
+                var xml = transport;
+                //Check if the service returned an error
+                if (xml.getElementsByTagName("IsValid")[0].childNodes[0].nodeValue == "False") {
+                    alert(xml.getElementsByTagName("Message")[0].childNodes[0].nodeValue);
+                }
+                else { //Correct response, create the result List
+                    var suggestionlist = xml.getElementsByTagName("Items")[0].getElementsByTagName("Item");
+                    //Fill the table, 1 row per item
+                    $A(suggestionlist).each(function(item){
+                        if (item.getElementsByTagName("Title").length > 0) 
+                            var title = item.getElementsByTagName("Title")[0].firstChild.nodeValue;
+			else
+			    var title = "&nbsp;";
+                        if (item.getElementsByTagName("FormattedPrice").length > 0) 
+                            var price = item.getElementsByTagName("FormattedPrice")[0].firstChild.nodeValue;
+			else
+			    var price = "&nbsp;";
+                        if (item.getElementsByTagName("ProductGroup").length > 0) 
+                            var pGroup = item.getElementsByTagName("ProductGroup")[0].firstChild.nodeValue;
+			else
+			    var pGroup = "&nbsp;";
+                        if (item.getElementsByTagName("ASIN").length > 0) 
+                            var ASIN = item.getElementsByTagName("ASIN")[0].firstChild.nodeValue;
+                        var row = {
+                            title: title,
+                            price: price,
+                            pGroup: pGroup,
+                            ASIN: ASIN
+                        };
+                        suggestionList.productList.push(row);
+                    });
+                    if (suggestionList.waiting) {
+                        suggestionList.waiting = false;
+                        suggestionList.showTable();
+                    }
+                }
+            }
+            
+            
+            SuggestionList.prototype.productDetail = function (nodeElement,_ASIN){
+				list.clearSelected ();
+				//select the element
+				nodeElement.parentNode.parentNode.setStyle({background: "#FFF8E8"});
+				var item = {name: 'http://TODO/amazon#item', ASIN: _ASIN, title: nodeElement.parentNode.parentNode.firstChild.firstChild.nodeValue};
+				EngineFactory.getInstance().manageFacts([item],['product']);
+			}
+			
+			SuggestionList.prototype.clearSelected = function (){
+				$$("tbody tr").each(function (element){
+					element.setStyle ({background: "transparent url(http://piccolo.ls.fi.upm.es/amazonScreens/style/bg_td1.jpg) repeat-x top"});
+				});
+			}
+			
+			SuggestionList.prototype.onError = function (transport){
+                //alert(transport.responseText);
+            }
+            
+            SuggestionList.prototype.showProgress = function (){
+                suggestionList.waiting = true;
+                $("loadingImgSuggestion").show();
+            }
+            
+            SuggestionList.prototype.showTable = function (){
+            	if($("loadingImgSuggestion")){
+                	$("loadingImgSuggestion").hide();
+                }
+                var templateString = '<tr><td>#{title}</td><td>#{price}</td><td>#{pGroup}</td>';
+                templateString += '<td style="border-right:none;"><input type="button" onclick="suggestionList.productDetail(this,\'#{ASIN}\');"';
+				templateString += ' onmouseover="this.setStyle({cursor:\'pointer\'});" value="Select"/></td></tr>';
+                var rowTemplate = new Template(templateString);
+                
+                var tableBody = $("listBodySuggestion");
+                for (var i = 5 * suggestionList.currentPage; i < 5 * (suggestionList.currentPage + 1); i++) { //print the appropriate elements
+                    if (suggestionList.productList[i]) { //only if the product table is fetched
+                        tableBody.innerHTML += rowTemplate.evaluate(suggestionList.productList[i]);
+                    }
+                }
+                //Update Interface
+                if (suggestionList.currentPage < 1) {
+                    $("nextButtonSuggestion").setStyle({
+                        visibility: "visible"
+                    });
+                }
+                else {
+                    $("nextButtonSuggestion").setStyle({
+                        visibility: "hidden"
+                    });
+                }
+                if (suggestionList.currentPage > 0) {
+                    $("previousButtonSuggestion").setStyle({
+                        visibility: "visible"
+                    });
+                }
+                else {
+                    $("previousButtonSuggestion").setStyle({
+                        visibility: "hidden"
+                    });
+                }
+            }
+            
+            SuggestionList.prototype.nextPage = function (){
+                //Clear the table
+                var tableBody = $("listBodySuggestion");
+                tableBody.update("");
+                suggestionList.currentPage++;
+                suggestionList.showTable();
+				//update the current page in the interface
+				 $("curPageSuggestion").update(suggestionList.currentPage+1);
+            }
+            
+            SuggestionList.prototype.previousPage = function (){
+                //Clear the table
+                var tableBody = $("listBodySuggestion");
+                tableBody.update("");
+                suggestionList.currentPage--;
+                suggestionList.showTable();
+				//update the current page in the interface;
+				$("curPageSuggestion").update(suggestionList.currentPage+1);
+            }
+            
+            var suggestionList = new SuggestionList();
+			EngineFactory.getInstance().addScreenLoader("SuggestionList", suggestionList.init);
+			
+        </script></head><body>
+        <div id="bodyDiv">
+        	<span id="amazonImage"><img src="http://piccolo.ls.fi.upm.es/amazonScreens/images/amazon.png" /></span>
+            <h1 id="title">Related products to</h1>
+			<h1 id="title"><span class="productTitle"></span></h1>
+			<div id="like">Customers who bought <span class="productTitle"></span>, also bought ...</div>
+            <div id="listDiv">
+                <table>
+                    <thead>
+                        <tr>
+                            <th style="width: 60%; -moz-border-radius-topleft: 13px; -moz-border-radius-topright: 0px; -moz-border-radius-bottomright: 0px; -moz-border-radius-bottomleft: 0px;">
+                                Title
+                            </th>
+                            <th style="width: 10%;">
+                                Price
+                            </th>
+                            <th style="width: 20%;">
+                                Product Group
+                            </th>
+                            <th style="width: 10%; -moz-border-radius-topleft: 0px; -moz-border-radius-topright: 13px; -moz-border-radius-bottomright: 0px; -moz-border-radius-bottomleft: 0px;">
+                                &nbsp;
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody id="listBodySuggestion">
+	                            <tr>
+					<td>&nbsp;</td>
+				    </tr>
+	                            <tr>
+					<td>&nbsp;</td>
+				    </tr>
+	                            <tr>
+					<td>&nbsp;</td>
+				    </tr>
+	                            <tr>
+					<td>&nbsp;</td>
+				    </tr>
+	                            <tr>
+					<td>&nbsp;</td>
+				    </tr>
+		    </tbody>
+                </table>
+                <img style="display: none;" id="loadingImgSuggestion" src="http://piccolo.ls.fi.upm.es/amazonScreens/images/ajaxLoader.gif">
+                <div id="buttonContainerDiv">
+                    <input style="visibility: hidden;" id="previousButtonSuggestion" class="button" value="&lt;" type="button">
+					<span id="pagesSuggestion">
+					Page <span id="curPageSuggestion">1</span>/2
+					</span><input style="visibility: visible;" id="nextButtonSuggestion" class="button" value="&gt;" type="button">
+                </div>
+				
+            </div>
+        </div>
+    </body>
+</html>
