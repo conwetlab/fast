@@ -1,0 +1,439 @@
+/******************
+ * #main area     *
+ ******************/
+html, body,#main { 
+    height: 100%; 
+    width: 100%; 
+    overflow: auto;
+    padding: 0; 
+    border: 0; 
+}
+
+h1{
+    margin-top:0px;
+    font-family:helvetica,sans-serif;
+    font-size:30px;
+    display: inline;
+}
+
+h2{
+    margin:5px 0;
+}
+h3{
+    margin:2px 0;
+    font-size:14px;
+}
+h4{
+    margin:4px 0;
+    font-size:13px;
+}
+
+/******************
+ * #header area   *
+ ******************/
+#header {
+    padding-top:5px;
+}
+#header img {
+    vertical-align: middle;	
+}
+#menu {
+    padding: 2px;
+}
+
+#header_button{
+    position:absolute;
+    right:330px;
+    top:6px;
+}	
+
+#showDeployGadgetDialog{
+	font-size:18px;
+	visibility:visible;
+}
+
+/******************
+ * workspace	  *
+ ******************/
+#workspace {
+    padding: 0;
+    border: 0;
+}
+.document {
+    position: absolute;
+    width:100%;
+    top: 0px;
+    left: 0px;
+    right: 0px;
+    bottom: 0px;
+    overflow: auto;
+    text-align:center;
+}
+.documentTitle {
+    font-size:22px;
+    margin:5px;
+}
+
+/******************
+ * welcome doc	  *
+ ******************/
+.welcome #intro {
+    margin: 10px;
+}
+.welcome button {
+    width: 200px;
+}
+
+/******************
+ * screenflow doc *
+ ******************/
+
+.screenflow {
+    background: transparent url("../images/gui/document/grid.png") repeat;
+}
+
+/******************
+ * deployment doc *
+ ******************/
+
+.deployment h1 {
+    margin-top: 2px;
+    font-family: helvetica, sans-serif;
+    font-size: 30px;
+    position: relative;
+    font-weight:bold;
+}
+
+.deployment .properties {
+    font-weight: bold;
+    color: #243C5F;
+    overflow: visible;
+}
+
+.deployment .tableHeader {
+    background-color: #BED7F0;
+    border-top: 1px solid grey;
+    width:0;
+}
+
+.deployment .tableHeader td {
+    padding: 3px;
+}
+
+.deployment .mashup {
+    font-weight: bold;
+}
+
+.deployment table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+}
+
+.deployment table td {
+    border-bottom: 1px solid grey;
+    padding: 1px;
+}
+
+.deployment .left {
+    font-weight: bold;
+    border-right: 1px solid grey;
+}
+
+/******************
+ * palette	  *
+ ******************/
+#palette {
+    width: 210px;
+    background: #e3e3e3 url("../images/gui/palette/background.png") repeat-x;
+}
+
+.paletteSeparator {
+    clear: both;
+    width: 100%;
+}
+.paletteElement {
+    width:100%;
+}
+
+/******************
+ * palette components *
+ ******************/
+.view {
+    padding: 0px;
+    margin: 5px;
+    text-align:center;
+    font-weight: bold;
+    float: left;
+    clear: both;
+    cursor: move;
+}
+.view.disabled {
+    opacity:0.4;
+    -moz-opacity:0.4;
+    filter:alpha(opacity=40);
+}
+
+.slotTitle {
+    padding-top: 1ex;
+}
+
+    /*******************
+    * screen component *
+    *******************/
+    .screen{
+        width: 100px;
+        height: 80px;
+        background-color:white;
+        position: relative;
+        -moz-border-radius: 7px 7px;
+        -webkit-border-radius: 7px 7px;
+    }
+
+    .screen.unknown {
+        border: 1px solid #808080;
+    }
+
+    .screen.satisfeable {
+        border: 1px solid green;
+    }
+
+    .screen.unsatisfeable {
+        border: 1px solid #B90000;
+    }
+
+    .screenTitle {
+        height:15px;
+        width:100%;
+        padding-top:3px;
+        color:white;
+        font-weight:normal;
+        -moz-border-radius:3px 3px 0 0;
+        -webkit-border-top-left-radius:3px; 
+        -webkit-border-top-right-radius:3px;
+    }
+
+    .screenImage{
+        height:100%;
+        position:relative;
+        top: 10px;
+    }
+    .screenTitle.unknown {
+        background-color: #808080;
+    }
+
+    .screenTitle.satisfeable {
+        background-color: green;
+    }
+
+    .screenTitle.unsatisfeable {
+        background-color: #B90000;
+    }
+
+    .preArea, .postArea {
+        position:absolute;
+        top:18px;
+        bottom: 0;
+        margin:0;
+    }
+    .preArea {
+        left: 0;
+        right: 50%;
+    }
+
+    .postArea {
+        left: 70%;
+        right: 0;
+    }
+
+    .prePostSeparator {
+        position: absolute;
+        right: 50%;
+        left: 50%;
+        top: 18px;
+        bottom: 0px;
+        border-left: 1px dashed #aaa;
+    }
+
+    /*******************
+    * connector component *
+    *******************/
+    .connectorImage{
+        height:100%;
+        position:inherit;
+        top: 10px;
+        }
+/******************/
+
+/******************
+ * facts		  *
+ ******************/
+.small_fact {
+    width: 17px;
+    height: 15px;
+    line-height: 15px;
+    text-align: center;
+    margin-left: 1px;
+    font-weight: bold;
+    font-size: 10px;
+    color: white; 
+} 
+.medium_fact{
+    width: 22px;
+    height: 20px;
+    line-height: 20px;
+    text-align: center;
+    margin-left: 3px;
+    font-weight: bold;
+    color: white; 
+}
+.big_fact.unknown {
+    background: url("../images/facts/XxX/grey.png") no-repeat center center;
+}
+.big_fact.satisfeable {
+    background: url("../images/facts/XxX/green.png") no-repeat center center;
+}
+.big_fact.unsatisfeable {
+    background: url("../images/facts/XxX/red.png") no-repeat center center;
+}
+.medium_fact.unknown {
+    background: url("../images/facts/20x20/grey.png") no-repeat center center;
+}
+.medium_fact.satisfeable {
+    background: url("../images/facts/20x20/green.png") no-repeat center center;
+}
+.medium_fact.unsatisfeable {
+    background: url("../images/facts/20x20/red.png") no-repeat center center;
+}
+.small_fact.unknown {
+    background: url("../images/facts/15x15/grey.png") no-repeat center center;
+}
+.small_fact.satisfeable {
+    background: url("../images/facts/15x15/green.png") no-repeat center center;
+}
+.small_fact.unsatisfeable {
+    background: url("../images/facts/15x15/red.png") no-repeat center center;
+}
+
+
+/******************
+ * this is sparta *
+ ******************/
+
+#left {
+    width:0px;
+}
+.flow {
+    width: 50px;
+}
+.operator,.service,.concept,.form {
+    border:1px solid #808080;
+    width: 100px;
+    height: 80px;
+}
+
+.properties {
+    font-weight: bold;
+    color: #243C5F;
+    overflow:visible;
+}
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+table td {
+    border-bottom: 1px solid #808080;
+    padding: 1px;
+}
+.inspectorIcon {
+    border-right: 1px solid #808080;
+    width: 24px;
+}
+.inspectorName {
+    border-right: 1px solid #808080;
+}
+.inspectorDesc {
+    border-right: 1px solid #808080;
+
+}
+.inspectorSem {
+}
+#properties, #prepostContainer, #inspector {
+    overflow:auto;
+}
+
+
+
+.screen.satisfeable.selected {
+    background-color: #DDF7DD;
+}
+
+.screen.selected .screenTop {
+    font-weight: bold;
+}
+
+
+.screen.unsatisfeable.selected {
+    background-color: #F5D9D9;
+}
+
+
+.bold {
+    font-weight: bold;
+}
+.left {
+    width: 50%;
+    font-weight: bold;
+    border-right: 1px solid #808080;
+}
+.tableHeader {
+    background-color: #BED7F0;
+    border-top: 1px solid #808080;
+}
+.tableHeader td {
+    padding: 3px;
+}
+#tab2 {
+    padding:0px;
+    display:none;
+}
+#showDialog{
+    font-size:18px;
+    margin-right:20px;
+    margin-top:5px;
+    position:absolute;
+    right:0px;
+    top:0px;
+    visibility:hidden;
+}
+
+#wizardInfo{
+    margin:5px;
+    width:450px;
+    text-align:justify;
+}
+.line{
+    margin-bottom:10px;
+}
+label{
+    float:left;
+    margin-top:3px;
+    width:10em;
+}
+input[type="text"]{
+    width:26em;
+}
+#newSFDocDialogDiv{
+    margin:5px;
+    width:450px;
+    text-align:justify;
+}
+#SFButtons{
+    text-align:center;
+}
+#wizardButtons{
+    text-align:center;
+}
+.soria .dijitTooltipContainer {
+    width: 250px;
+}
