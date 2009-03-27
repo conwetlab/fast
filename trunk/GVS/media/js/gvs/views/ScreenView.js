@@ -1,26 +1,18 @@
 var ScreenView = Class.create( ResourceView,
     /** @lends ScreenView.prototype */ {
-    
+
     /**
      * Screens graphical representation
      * @constructs
      * @extends ResourceView
      */ 
     initialize: function($super,/** ResourceDescription */ screenResourceDescription) {
-            
+
         $super();
 
         var uidGenerator = UIDGeneratorSingleton.getInstance();
-        
         this._id = uidGenerator.generate("screenView");
-         
-        /**
-         * ResourceDescription this view is based of
-         * @type ResourceDescription
-         * @private
-         */
-        this._resourceDescription = screenResourceDescription;
-         
+
         /**
          * Precondition Icons
          * @type {FactIcon[]}
@@ -36,12 +28,12 @@ var ScreenView = Class.create( ResourceView,
         this._postIcons;
 
         var title = new Element("div", {"class":"screenTitle unknown"});
-        title.update(this._resourceDescription.name);
-        
+        title.update(screenResourceDescription.name);
+
         var factFactory = FactFactorySingleton.getInstance();
         var preArea = new Element("div", {"class": "preArea"});
         var preIcons = [];
-        $A(this._resourceDescription.preconditions).each(
+        $A(screenResourceDescription.preconditions).each(
                 function(pre) {
                     var preFact = factFactory.getFactIcon(pre, "medium");
                     preIcons.push(preFact);
@@ -49,10 +41,10 @@ var ScreenView = Class.create( ResourceView,
                 }
         );
         this._preIcons = preIcons;
-        
+
         var postArea = new Element("div", {"class": "postArea"});
         postIcons = [];
-        $A(this._resourceDescription.postconditions).each(
+        $A(screenResourceDescription.postconditions).each(
                 function(post) {
                     var postFact = factFactory.getFactIcon(post, "medium");
                     postIcons.push(postFact);
@@ -64,14 +56,14 @@ var ScreenView = Class.create( ResourceView,
         var prePostSeparator = new Element("div",
                 {"class": "prePostSeparator"});  
 
-        if (this._resourceDescription.icon){
+        if (screenResourceDescription.icon){
             var imageContainer = new Element ('div',
                     {'class': 'screenImage' });
             var image = new Element ('img',
-                    {'class': 'img', 'src': this._resourceDescription.icon});
+                    {'class': 'img', 'src': screenResourceDescription.icon});
             imageContainer.appendChild (image); 
         }
-        
+
         this._node = new Element("div", {
             "id":     this._id,
             "class": "view screen unknown"
@@ -79,12 +71,11 @@ var ScreenView = Class.create( ResourceView,
         this._node.appendChild(title);
         this._node.appendChild(preArea);
         this._node.appendChild(prePostSeparator);
-        if (this._resourceDescription.icon){
+        if (screenResourceDescription.icon){
             this._node.appendChild(imageContainer);
         }
         this._node.appendChild(postArea);
     },
-    
 
     // **************** PUBLIC METHODS **************** //
     
@@ -96,10 +87,8 @@ var ScreenView = Class.create( ResourceView,
         // Let the garbage collector to do its job
         this._preIcons = null;
         this._postIcons = null;
-        this._resorceDescription = null;
         this._node = null;
-    },
-
+    }
 
 });
 

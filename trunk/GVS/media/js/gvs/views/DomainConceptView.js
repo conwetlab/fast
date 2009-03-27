@@ -1,35 +1,25 @@
 var DomainConceptView = Class.create( ResourceView,
     /** @lends DomainConceptView.prototype */ {
-    
+
     /**
      * Domain Concepts graphical representation
      * @constructs
      * @extends ResourceView
      */ 
     initialize: function($super,/** ResourceDescription */ domainConceptResourceDescription) {
-            
         $super();
 
         var uidGenerator = UIDGeneratorSingleton.getInstance();
-        
         this._id = uidGenerator.generate("domainConceptView");
-         
-        /**
-         * ResourceDescription this view is based of
-         * @type ResourceDescription
-         * @private
-         */
-        this._resourceDescription = domainConceptResourceDescription;
-
 
         var title = new Element("div", {"class":"domainConceptTitle unknown"});
-        title.update(this._resourceDescription.name);
+        title.update(domainConceptResourceDescription.name);
 
-        if (this._resourceDescription.image){
+        if (domainConceptResourceDescription.image){
             var imageContainer = new Element ('div',
                     {'class': 'domainConceptImage' });
             var image = new Element ('img',
-                    {'class': 'img', 'src': this._resourceDescription.image});
+                    {'class': 'img', 'src': domainConceptResourceDescription.image});
             imageContainer.appendChild (image);
         }
         
@@ -38,11 +28,10 @@ var DomainConceptView = Class.create( ResourceView,
             "class": "view domainConcept unknown"
         });
         this._node.appendChild(title);
-        if (this._resourceDescription.image){
+        if (domainConceptResourceDescription.image){
             this._node.appendChild(imageContainer);
         }
     },
-    
 
     // **************** PUBLIC METHODS **************** //
     
@@ -52,11 +41,9 @@ var DomainConceptView = Class.create( ResourceView,
      */
     destroy: function () {
         // Let the garbage collector to do its job
-        this._resorceDescription = null;
         this._node = null;
-    } 
+    }
 
-    
 });
 
 // vim:ts=4:sw=4:et:

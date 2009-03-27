@@ -20,7 +20,7 @@ var ConnectorFactory = Class.create(ResourceFactory,
                 fact_attribute:'',
                 variable_name:'',
                 label:'',
-                friendcode:'',
+                friendcode:''
             }),
             new ConnectorDescription ({
                 name: 'Event',
@@ -29,7 +29,7 @@ var ConnectorFactory = Class.create(ResourceFactory,
                 fact_attribute:'',
                 variable_name:'',
                 label:'',
-                friendcode:'',
+                friendcode:''
             }),
             new ConnectorDescription ({
                 name: 'User Preferences',
@@ -38,7 +38,7 @@ var ConnectorFactory = Class.create(ResourceFactory,
                 fact_attribute:'',
                 variable_name:'',
                 label:'',
-                friendcode:'',
+                friendcode:''
             }),
             new ConnectorDescription ({
                 name: 'Context Information',
@@ -47,8 +47,8 @@ var ConnectorFactory = Class.create(ResourceFactory,
                 fact_attribute:'',
                 variable_name:'',
                 label:'',
-                friendcode:'',
-            }),
+                friendcode:''
+            })
         ];
     }
 });

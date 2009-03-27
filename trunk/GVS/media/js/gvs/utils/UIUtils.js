@@ -8,32 +8,42 @@ function UIUtils()
 // TODO: comments
 
 UIUtils.prueba = null;
-UIUtils.selectedElement = null;
 
 UIUtils.selectElement = function(screen) {
-    if (UIUtils.selectedElement) {
-        UIUtils.selectedElement.removeClassName("selected");
+    var currentDocument = GVSSingleton.getInstance().getDocumentController().getCurrentDocument();
+    if (currentDocument.getSelectedElement()) {
+        currentDocument.getSelectedElement().removeClassName("selected");
     }
-    UIUtils.selectedElement = $(screen.getView()._id);
-    if (UIUtils.selectedElement) {
-        UIUtils.selectedElement.addClassName("selected");
+    if (screen) {
+        currentDocument.setSelectedElement($(screen));
+        currentDocument.getSelectedElement().addClassName("selected");
+        UIUtils.inspectorAreaUpdate(screen);
+    } else {
+        currentDocument.setSelectedElement(null);
     }
-    UIUtils.inspectorAreaUpdate(screen);
 }
 
 
 UIUtils.inspectorAreaUpdate = function(screen){
-    UIUtils.propertiesPaneUpdate(screen);
+    //UIUtils.propertiesPaneUpdate(screen);
+    //UIUtils.prePostPaneUpdate(screen);
+    //UIUtils.factsPaneUpdate(screen);
 }
 
 UIUtils.propertiesPaneUpdate = function(screen){
     var currentDocument = GVSSingleton.getInstance().getDocumentController().getCurrentDocument();
-    var resourceDescription = screen.getResourceDescription();
-    $(currentDocument._detailsTitle).innerHTML = "Properties of " + resourceDescription.name;
-    $(currentDocument._title).innerHTML = resourceDescription.name;
-    $(currentDocument._id).innerHTML = resourceDescription.uri;
-    $(currentDocument._desc).innerHTML = resourceDescription.description;
-    $(currentDocument._tags).innerHTML = resourceDescription.label;
+    var resourceDescription = currentDocument.getScreenDescription(screen);
+    $(currentDocument._detailsTitle['detailsTitle']).innerHTML = "Properties of " + resourceDescription.name;
+    $(currentDocument._detailsTitle['title']).innerHTML = resourceDescription.name;
+    $(currentDocument._detailsTitle['id']).innerHTML = resourceDescription.uri;
+    $(currentDocument._detailsTitle['desc']).innerHTML = resourceDescription.description;
+    $(currentDocument._detailsTitle['tags']).innerHTML = resourceDescription.domainContext;
+}
+
+UIUtils.prePostPaneUpdate = function(screen){
+}
+
+UIUtils.factsPaneUpdate = function(screen){
 }
 
 UIUtils.showNewSFDocDialog = function() {
@@ -98,7 +108,14 @@ UIUtils.createNewSFDocDialog = function() {
             "id" : "acceptSFButton",
             "label" : "Accept",
             onClick : function() {
-                UIUtils.createNewSFDoc();
+                var name = $('SFName').getValue(); 
+                if(name && name != "") {
+                    var domainContext = $("SFDomainContext").getValue();
+                    var screenflowDoc = GVSSingleton.getInstance().getDocumentController().createSFDocument(name, domainContext);
+                    UIUtils.hideNewSFDocDialog();
+                }else{
+                    alert("A Screenflow name must be provided");
+                }
             }
         });
         divSFButtons.insert(acceptSFButton.domNode);
@@ -117,25 +134,6 @@ UIUtils.createNewSFDocDialog = function() {
     } else {
         return dijit.byId("newSFDocDialog");
     }
-}
-
-UIUtils.createNewSFDoc = function() {
-    var name = $('SFName').getValue(); 
-    if(name && name != "") {
-        var screenflow = new ScreenflowDocument(name);
-        var domainContext = $("SFDomainContext").getValue();
-        if(domainContext && domainContext != "") {
-            screenflow.getResourceDescription().setDomainContexts(domainContext);
-            console.log(screenflow.getResourceDescription().getDomainContexts());
-        }
-        GVSSingleton.getInstance().getDocumentController().addDocument(screenflow);
-        UIUtils.hideNewSFDocDialog();
-    } else {
-        alert("A Screenflow name must be provided");
-    }
-}
-
-UIUtils.prePostPaneUpdate = function(screen){
 }
 
 UIUtils.showDeployGadgetDialog = function() {
@@ -329,16 +327,9 @@ UIUtils.hide = function(dijitObject) {
 }
 
 UIUtils.sendDeployGadgetDialog = function() {
-    console.log("sending...");
     GVSSingleton.getInstance().getDocumentController().deployCurrentDocument();
 }
 
-UIUtils.addScreen = function(){
-    //TODO update screen palette and document
-
-    // document persistence
-    // 
-}
 
 UIUtils.updateSFDocAndScreenPalette = function(/** map id->value*/ screenList) {
     UIUtils.updateScreenPaletteReachability(screenList);
@@ -346,7 +337,7 @@ UIUtils.updateSFDocAndScreenPalette = function(/** map id->value*/ screenList) {
 }
 
 UIUtils.updateScreenPaletteReachability = function(/** map id->value*/ screenList) {
-    var screens = GVSSingleton.getInstance().getPaletteController().getPalette("screen")._components;
+    var screens = GVSSingleton.getInstance().getDocumentController().getCurrentDocument().getPaletteController().getPalette("screen")._components;
     for (var i=0; i<screens.length; i++) {
         for (var j=0; j<screenList.length; j++) {
             if ((screens[i]._resourceDescription.uri==screenList[j].uri) && (screenList[j].value=='true')) {
@@ -357,7 +348,6 @@ UIUtils.updateScreenPaletteReachability = function(/** map id->value*/ screenLis
             }
         }
         UIUtils.colorizeScreen(screens[i]);
-        //'http://TODO/amazonSearch' 'http://TODO/amazonList'
     }
 }
 
@@ -373,7 +363,6 @@ UIUtils.updateSFDocumentReachability = function(/** map id->value*/ screenList) 
             }
         }
         UIUtils.colorizeScreen(screens[i]);
-        //'http://TODO/amazonSearch' 'http://TODO/amazonList'
     }
 }
 
@@ -414,5 +403,79 @@ UIUtils.colorizeScreen = function(screen){
         $(screen._view._id).removeClassName("satisfeable");
         $(screen._view._id).addClassName("unsatisfeable");
     }
+}
 
+UIUtils.onClickCanvas = function(e){
+    var canvas = Event.element(e);
+    if (canvas.id.startsWith("tabContent"))
+    {
+        //Element.childElements(canvas).each(function(s){s.style.borderWidth = "1px"});
+        var currentDocument = GVSSingleton.getInstance().getDocumentController().getCurrentDocument();
+        UIUtils.emptyPropertiesPane(currentDocument)
+        //previousElement = null;
+        UIUtils.selectElement(null);
+    }
+
+}
+
+UIUtils.onClick = function(e, el){
+    if (!el)
+        var element = Event.element(e);
+    else
+        var element = $(el);
+
+    var elementClass = $w(element.className);
+    elementClass = elementClass.without("unknown").without("satisfeable").without("unsatisfeable").without("selected").without("view");
+    var resourceType = (elementClass.size()>=1)?elementClass[0] : "unknown";
+    var currentDocument = GVSSingleton.getInstance().getDocumentController().getCurrentDocument();
+    switch (resourceType){
+        case "img":
+        case "fact":
+        case "medium_fact":
+            element = element.parentNode;
+        case "screenTitle":
+        case "preArea":
+        case "postArea":
+        case "prepostSeparator":
+        case "screenImage":
+            //Workaround for title bar
+            element = element.parentNode;
+        case "screen":
+            UIUtils.propertiesPaneUpdate(element.id);
+            break;
+        default:
+            UIUtils.emptyPropertiesPane(currentDocument);
+            break;
+    }
+    UIUtils.selectElement(element.id);
+}
+
+UIUtils.onKeyPressCanvas = function(e){
+    var currentDocument = GVSSingleton.getInstance().getDocumentController().getCurrentDocument();
+    var selectedElement = currentDocument.getSelectedElement();
+    if (e.keyCode == Event.KEY_DELETE && selectedElement){ //Delete an element from the canvas
+        var title = (selectedElement.title)?selectedElement.title:"the selected element";
+        if(confirm("You are about to remove " + title + " from canvas. Are you sure?")) { //delete if ok
+            //if it is a screen, Delete it from the screen list
+            if (currentDocument.getScreenDescription(selectedElement.id)){
+                currentDocument.deleteScreen(selectedElement.id);
+                //If there are no screens in the screenflow, hide the generate button
+                //if (screens.length == 0){
+                    //screenflowButton(false);
+                //}
+            }
+            //Delete the element
+            $(selectedElement.parentNode).removeChild (selectedElement);
+            UIUtils.emptyPropertiesPane(currentDocument);
+            UIUtils.selectElement(null);
+        }
+    }
+}
+
+UIUtils.emptyPropertiesPane = function(currentDocument){
+    $(currentDocument._detailsTitle['detailsTitle']).innerHTML = "Properties";
+    $(currentDocument._detailsTitle['title']).innerHTML = "&nbsp;";
+    $(currentDocument._detailsTitle['id']).innerHTML = "&nbsp;";
+    $(currentDocument._detailsTitle['desc']).innerHTML = "&nbsp;";
+    $(currentDocument._detailsTitle['tags']).innerHTML = "&nbsp;";
 }

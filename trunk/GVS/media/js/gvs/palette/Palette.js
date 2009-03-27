@@ -6,46 +6,34 @@ var Palette = Class.create( /** @lends Palette.prototype */ {
      * @param {String} resourceType  Identifier of the class or resource (e.g.: screen) 
      * @constructs
      */
-    initialize: function(/** String */ resourceType) {
-        var resourceFactory = CatalogueSingleton.getInstance().getResourceFactory(resourceType);
-        var uidGenerator = UIDGeneratorSingleton.getInstance();
-
+    initialize: function(/** String */ resourceType, /** String */ docId) {
         /**
          * Node id of the accordion pane.
          * @type String
          * @private @member
          */
         this._id = resourceType + "Palette";
-        
-        /**
-         * Accordion pane node.
-         * @type DOMNode
-         * @private @member
-         */
-        this._node = dijit.byId(this._id);
 
+        this._resourceType = resourceType;
+        
+        this._docId = docId;
+        
         /**
          * Collection of components the palette offers.
          * @type PaletteComponent
          * @private @member
          */
-        this._components = this._createComponents(resourceFactory);
+        this._components = [];
 
         /**
-         * Node of the palette body.
+         * Accordion pane node.
          * @type DOMNode
          * @private @member
          */
-        this._content = this._renderContent();
-        this._node.setContent(this._content);
-
-        //Hidden by default
-        this.setVisible(false);
+        this._node = this._renderContent(); 
     },
-    
 
     // **************** PUBLIC METHODS **************** //
-    
 
     /**
      * Gets the node of the accordion pane
@@ -55,18 +43,36 @@ var Palette = Class.create( /** @lends Palette.prototype */ {
     getNode: function() {
         return this._node;
     },
-    
 
-    /**
-     * Shows or hides the palette.
-     * @public
-     */
-    setVisible: function (/** Boolean */ visible) {
-        this._node.domNode.setStyle({
-                "display": (visible ? "block" : "none")
-        });
+    updateComponents: function() {
+        switch(this._resourceType){
+            case "screen":
+                //find Screens and check
+                // the canvas is empty because it is a new document
+                // this is a proof
+                var canvas = [];
+                var domainContext = {
+                    "tags":GVSSingleton.getInstance().getDocumentController().getCurrentDocument().getResourceDescription().getDomainContexts(),
+                    "user":null
+                };
+                //element list is empty TODO get the actual element list from the palette
+                var elements = [];
+                CatalogueSingleton.getInstance().get_screens(canvas, domainContext, elements, 'reachability');
+                break;
+            case "domainContext":
+                this.paintComponents();
+                break;
+            case "connector":
+                this.paintComponents();
+                break;
+        }
     },
-    
+
+    paintComponents: function () {
+        this._components = this._createComponents(CatalogueSingleton.getInstance().getResourceFactory(this._resourceType));
+        this._content = this._renderComponents();
+        this._node.setContent(this._content);
+    },
 
     // **************** PRIVATE METHODS **************** //
 
@@ -79,12 +85,14 @@ var Palette = Class.create( /** @lends Palette.prototype */ {
     _createComponents: function(resourceFactory) {
         var descs = resourceFactory.getResourceDescriptions();
         var components = [];
+        var docId = this._docId;
         $A(descs).each(
-                function(desc) { components.push(desc.createPaletteComponent()); } 
+            function(desc) {
+                components.push(desc.createPaletteComponent(docId));
+            }
         );
         return components;
     },
-    
 
     /**
      * Creates the GUI stuff that shows the content: components and separators.
@@ -92,7 +100,21 @@ var Palette = Class.create( /** @lends Palette.prototype */ {
      * @private
      */
     _renderContent: function() {
-        var content   = new Element("div", {"class": "paletteContent", "id" : this._id + "Content"});
+        var uidGenerator = UIDGeneratorSingleton.getInstance();
+        var paneId = uidGenerator.generate(this._id);
+        
+        var pane = new dijit.layout.AccordionPane({
+            "id":paneId,
+            "title":this._resourceType,
+            "class":"paletteElement"
+        });
+        return pane;
+    },
+
+    _renderComponents: function() {
+        var uidGenerator = UIDGeneratorSingleton.getInstance();
+        var contentId = uidGenerator.generate(this._id+ "Content");
+        var content   = new Element("div", {"class": "paletteContent", "id" : contentId});
         var separator = new Element("div", {"class": "paletteSeparator"});
         $A(this._components).each(
                 function(component) {

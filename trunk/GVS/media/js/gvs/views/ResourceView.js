@@ -3,7 +3,7 @@ var ResourceView = Class.create( /** @lends ResourceView.prototype */ {
      * This interface is met by all the resource graphical representations.
      * @abstract
      * @constructs
-     */ 
+     */
     initialize: function() {
         /** 
          * DOM Node
@@ -11,7 +11,7 @@ var ResourceView = Class.create( /** @lends ResourceView.prototype */ {
          * @private @member
          */
         this._node = null;
-        
+
         /**
          * DOM node identifier
          * @type String
@@ -19,7 +19,6 @@ var ResourceView = Class.create( /** @lends ResourceView.prototype */ {
          */
         this._id = null;
     },
-    
 
     // **************** PUBLIC METHODS **************** //
 
@@ -39,12 +38,12 @@ var ResourceView = Class.create( /** @lends ResourceView.prototype */ {
     getId: function () {
         return this._id;
     },
-    
+
     /**
      * Removes the DOM Elements and frees resources
      */
     destroy: function () {
-    }    
+    }
 });
 
 // vim:ts=4:sw=4:et:

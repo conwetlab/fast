@@ -1,6 +1,6 @@
 var ComponentInstance = Class.create(DragSource,
     /** @lends ComponentInstance.prototype */ {
-    
+
     /**
      * This class is an instance of a palette component
      * in the Document area
@@ -9,22 +9,28 @@ var ComponentInstance = Class.create(DragSource,
      */ 
     initialize: function($super, /**ResourceDescription*/ resourceDescription) {
         $super();
-        
+
         /**
          * Handles the drag'n'drop stuff
          * @type DragHandler
          * @private
          */
-        //TODO: FIX THIS!!!
-        this._dragHandler = new DragHandler(this, "tabContent_2");
-        
+        this._dragHandler = new DragHandler(this, GVSSingleton.getInstance().getDocumentController().getCurrentDocument().getContentId());
+
+        /**
+         * DOM node identifier
+         * @type String
+         * @private
+         */
+        this._id = null;
+
         /**
          * Resource description graphical representation
          * @type ResourceView
          * @private
-         */ 
+         */
         this._view = resourceDescription.createView();
-        
+
         /** 
          * Resource description this class is instance of
          * @type ResourceDescription
@@ -36,6 +42,15 @@ var ComponentInstance = Class.create(DragSource,
 
     // **************** PUBLIC METHODS **************** //
     /**
+     * Returns the handler that manages the drag-n-drop operation.
+     * @type DOMNode
+     * @override
+     */
+    getDragHandler: function() {
+        return this._dragHandler;
+    },
+
+    /**
      * Returns the node that can be clicked to start a drag-n-drop operation.
      * @type DOMNode
      * @override
@@ -43,7 +58,7 @@ var ComponentInstance = Class.create(DragSource,
     getHandlerNode: function() {
         return this._view.getNode();
     },
-    
+
     /**
      * Returns the node that is going to be moved in drag-n-drop operation.
      * @type DOMNode
@@ -52,7 +67,7 @@ var ComponentInstance = Class.create(DragSource,
     getDraggableObject: function() {
         return this;
     },
-    
+
         /**
      * Returns the root node
      * @type DOMNode
@@ -63,12 +78,36 @@ var ComponentInstance = Class.create(DragSource,
     },
 
     /**
-     * Returns the root node
-     * @type DOMNode
+     * getId
+     * @type String
+     */
+    getId: function () {
+        return this._id;
+    },
+
+    /**
+     * Gets the component position
+     * @type Object
      * @public
      */
-    getNode: function() {
-        return this._view.getNode();
+    getPosition: function() {
+        var left = parseInt(this.getHandlerNode().offsetLeft)-parseInt(this.getHandlerNode().getStyle("margin-left"));
+        var top = parseInt(this.getHandlerNode().offsetTop)-parseInt(this.getHandlerNode().getStyle("margin-top"));
+        var position = {
+            "left": left,
+            "top": top
+        };
+        return position;
+    },
+
+    /**
+     * Sets the component position
+     * @params Object
+     * @public
+     */
+    setPosition: function( /**Object*/ position) {
+        this.getHandlerNode().style.left = position.left + "px";
+        this.getHandlerNode().style.top = position.top + "px";
     },
 
     /**
@@ -87,20 +126,9 @@ var ComponentInstance = Class.create(DragSource,
         this._view.destroy();
         this._view = null;
     },
-    
-    /**
-     * Drop event handler for the DragSource
-     * @override
-     * @abstract
-     */
-    // FIXME: is this method useful?
-    onFinish: function() {
-        throw "Abstract Method invocation: ComponentInstance::onFinish"
-    }
 
     // **************** PRIVATE METHODS **************** //
 
-    
 });
 
 // vim:ts=4:sw=4:et:

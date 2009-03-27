@@ -57,7 +57,18 @@ var ResourceFactory = Class.create(
      */
     getResourceDescriptions: function (){
         return this._resourceDescriptions;
-    }   
+    },
+
+    /*updateResourceDescriptions: function (resourceDescriptions) {
+        //TODO no vaciar resourceDescription y hacer comprobación de si estaban o no
+        this._resourceDescriptions=[];
+        if (this._resourceType=='screen') {
+            var screen_metadata = resourceDescriptions.screen_metadata;
+            for (var i=0; i<screen_metadata.length ; i++) {
+                this._resourceDescriptions.push(new ScreenDescription (screen_metadata[i]));
+            }
+        }
+    }*/
 });
 
 // vim:ts=4:sw=4:et: 

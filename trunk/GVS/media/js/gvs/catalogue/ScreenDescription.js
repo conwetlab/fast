@@ -17,8 +17,8 @@ var ScreenDescription = Class.create(ResourceDescription,
      * Creates a new screen component
      * @override
      */
-    createPaletteComponent: function () {
-        return new ScreenComponent(this);
+    createPaletteComponent: function (docId) {
+        return new ScreenComponent(this, docId);
     },
 
     /**

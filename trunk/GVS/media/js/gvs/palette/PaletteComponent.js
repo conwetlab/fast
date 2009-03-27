@@ -6,25 +6,15 @@ var PaletteComponent = Class.create(DragSource,
      * @constructs
      * @extends DragSource
      */ 
-    initialize: function($super,/** ResourceDescription */ resourceDescription) {
+    initialize: function($super,/** ResourceDescription */ resourceDescription, /** String */ docId) {
         $super();
- 
         /**
          * Handles the drag'n'drop stuff
          * @type DragHandler
          * @private
          */
-        //TODO: FIX THIS!!!
-        /*var controller = GVSSingleton.getInstance().getDocumentController();
-        var currentDocument = controller.getCurrentDocument();
-        if(currentDocument) {
-        	this._dragHandler = new DragHandler(this, currentDocument);
-        }
-        else{
-        	this._dragHandler = new DragHandler(this, 'tabContent_2');
-        }*/
-        this._dragHandler = new DragHandler(this, 'tabContent_2');
- 
+        this._dragHandler = new DragHandler(this, GVSSingleton.getInstance().getDocumentController().getDocument(docId).getContentId());
+
         /**
          * Resource in which this component is based.
          * @type ResourceDescription
@@ -46,12 +36,9 @@ var PaletteComponent = Class.create(DragSource,
          */
         this._node = this._createSlot(this._resourceDescription.name,
                 this._view.getNode());
-
     },
-    
 
     // **************** PUBLIC METHODS **************** //
-
 
     /**
      * Gets the component root node.
@@ -62,19 +49,37 @@ var PaletteComponent = Class.create(DragSource,
         return this._node;
     },
     
-     /**
-     * Gets the component content node.
+
+    /**
+     * Returns the node that can be clicked to start a drag-n-drop operation.
      * @type DOMNode
-     * @public
+     * @override
      */
-    getContent: function() {
+    getHandlerNode: function() {
         return this._view.getNode();
     },
-    
 
-    // **************** PROTECTED METHODS **************** //
+    /**
+     * Creates a new palette component to be dragged.
+     * Returned object must have a getNode() method.
+     * @type Object
+     * @override
+     */
+    getDraggableObject: function() {
+        var instance = this._createInstance();
+        var node = instance.getHandlerNode();
+        dijit.byId("main").domNode.appendChild(node);
+        node.setStyle({
+            'top': this._getContentOffsetTop() + 'px',
+            'left':  this._getContentOffsetLeft() + 'px',
+            'position': 'absolute'
+        });
+        instance.getDragHandler().initializeDragnDropHandlers();
+        return instance;
+    },
 
 
+    // **************** PRIVATE METHODS **************** //
     /**
      * Creates an slot (GUI frame around a component) with a given title.
      *
@@ -89,40 +94,7 @@ var PaletteComponent = Class.create(DragSource,
 
         return node;
     },
-    
 
-    /**
-     * Returns the node that can be clicked to start a drag-n-drop operation.
-     * @type DOMNode
-     * @override
-     */
-    getHandlerNode: function() {
-        return this._view.getNode();
-    },
-                         
-                         
-    /**
-     * Creates a new palette component to be dragged.
-     * Returned object must have a getNode() method.
-     * @type Object
-     * @override
-     */
-    getDraggableObject: function() {
-        var instance = this._createInstance();
-        var node = instance.getNode();
-        dijit.byId("main").domNode.appendChild (node);
-        node.setStyle({
-            'top': this._getContentOffsetTop() + 'px',
-            'left':  this._getContentOffsetLeft() + 'px',
-            'position': 'absolute'
-        });
-        //TODO: Add getDragHandler, or think about the method
-        instance._dragHandler.initializeDragnDropHandlers();
-        return instance;
-    },
-    
-
-    // **************** PRIVATE METHODS **************** //
     /**
      * Creates a new component to be dragged.
      * @type ComponentInstance
@@ -151,7 +123,6 @@ var PaletteComponent = Class.create(DragSource,
                 dijit.byId("header").domNode.offsetHeight;
         return this._view.getNode().offsetTop - scrollOffset + headerOffset;
     },
-    
 
     /**
      * Calculates the distance from the window left border to the palette
@@ -164,15 +135,7 @@ var PaletteComponent = Class.create(DragSource,
 
         return this._view.getNode().offsetLeft;
     },
-    
-    /**
-     * Drop event handler for the DragSource
-     * @override
-     * @abstract
-     */
-    onFinish: function() {
-        throw "Abstract Method invocation: PaletteComponent::onFinish"
-    }
+
 });
 
 // vim:ts=4:sw=4:et:

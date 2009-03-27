@@ -8,13 +8,10 @@ var DomainConceptFactory = Class.create(ResourceFactory,
      */
     initialize: function($super) {
         $super();
-        var cataloguePath = 'images/catalogue/';
 
         this._resourceType = 'domainConcept';
         this._resourceName = 'Domain Concepts';
-        this._resourceDescriptions = [
-
-        ];
+        this._resourceDescriptions = [];
     }
 });
 

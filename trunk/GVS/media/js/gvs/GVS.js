@@ -55,7 +55,6 @@ var GVSSingleton = function() {
                 },
                 newScreenflow: this._newScreenflow.bind(this)
             };
-            this._paletteController = new PaletteController();
             this._documentController = new DocumentController();
         },
 
@@ -72,7 +71,7 @@ var GVSSingleton = function() {
                 alert ("Invalid action");
             }
         },
-        
+
         /**
          * Gets the document controller
          * @type DocumentController
@@ -80,15 +79,6 @@ var GVSSingleton = function() {
          */
         getDocumentController: function () {
             return this._documentController;
-        },
-        
-        /**
-         * Gets the palette controller
-         * @type PaletteController
-         * @public
-         */
-        getPaletteController: function () {
-            return this._paletteController;
         },
         
         // **************** PRIVATE METHODS **************** //
@@ -101,7 +91,7 @@ var GVSSingleton = function() {
         _newScreenflow: function (){
             UIUtils.showNewSFDocDialog();
         },
-        
+
         /** 
          * High-level action for deploying a screenflow.
          *

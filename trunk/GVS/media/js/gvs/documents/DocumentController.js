@@ -41,7 +41,19 @@ var DocumentController = Class.create(
         
     // **************** PUBLIC METHODS **************** //
         
-        
+    /**
+     * Creates a new screenflow document
+     */
+    createSFDocument: function(name, domainContext){
+        var screenflow = new ScreenflowDocument(name);
+        if(name && name != "") {
+            screenflow.getResourceDescription().setDomainContexts(domainContext);
+        }
+        this.addDocument(screenflow);
+        screenflow.getPaletteController().updatePalettes();
+        return screenflow;
+    },
+
     /**
      * Adds a new document.
      */
@@ -49,9 +61,16 @@ var DocumentController = Class.create(
         this._documents[document.getTabId()] = document;
         dijit.byId("documentContainer").addChild(document.getTab());
         dijit.byId("documentContainer").selectChild(document.getTabId());
-        
     },
-
+    
+    /**
+     * Gets a document.
+     * @param docId: document Id
+     * @type AbstractDocument
+     */
+    getDocument: function(docId) {
+        return this._documents[docId];
+    },
 
     /**
      * Gets the currently focused document.
@@ -119,13 +138,8 @@ var DocumentController = Class.create(
         } else { //it is a string id
             id = tab;
         }
-
         this._currentDocument = this._documents[id];
-
-        var controller = GVSSingleton.getInstance().getPaletteController();
-        controller.showValidPalettes(this._currentDocument.getValidResources());
     }
-    
 });
 
 // vim:ts=4:sw=4:et:

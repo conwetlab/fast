@@ -7,10 +7,8 @@ var ScreenComponent = Class.create(PaletteComponent,
      * @constructs
      * @extends PaletteComponent
      */
-    initialize: function($super, screenResourceDescription) {
-
-        $super(screenResourceDescription);
-
+    initialize: function($super, screenResourceDescription, /** String */ docId) {
+        $super(screenResourceDescription, docId);
     },
 
 
@@ -28,13 +26,7 @@ var ScreenComponent = Class.create(PaletteComponent,
     _createInstance: function () {
         return new ScreenInstance(this._resourceDescription);
     },
-    
-    /**
-     * Drop event handler for the DragSource
-     * @override
-     */
-    // FIXME: is this method useful?
-    onFinish: function(finishedOK, draggedObject) {}
+
 });
 
 // vim:ts=4:sw=4:et:

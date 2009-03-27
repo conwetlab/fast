@@ -6,10 +6,8 @@ var DragSource = Class.create( /** @lends DragSource.prototype */ {
      * @constructs
      */ 
     initialize: function() {},
-    
 
     // **************** PUBLIC METHODS **************** //
-
 
     /**
      * Returns the node of the area that can start a dragging operation.

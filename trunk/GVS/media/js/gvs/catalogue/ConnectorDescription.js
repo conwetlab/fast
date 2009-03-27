@@ -9,7 +9,6 @@ var ConnectorDescription = Class.create(ResourceDescription,
      */
     initialize: function($super, /** Hash */ properties) {
         $super(properties);
-
     },
 
 
@@ -17,8 +16,8 @@ var ConnectorDescription = Class.create(ResourceDescription,
      * Creates a new connector component
      * @override
      */
-    createPaletteComponent: function () {
-        return new ConnectorComponent(this);
+    createPaletteComponent: function (/** String */ docId) {
+        return new ConnectorComponent(this, docId);
     },
 
     /**

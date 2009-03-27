@@ -9,7 +9,7 @@ var ScreenflowDescription = Class.create(ResourceDescription,
      */
     initialize: function($super, /** Hash */ properties) {
         var mine = this;
-        mine['screens'] = [];
+        mine['screens'] = new Hash();
         mine['connectors'] = [];
         mine['description'] = new Hash();
         mine['label'] = new Hash();
@@ -45,12 +45,26 @@ var ScreenflowDescription = Class.create(ResourceDescription,
      *      Screen to be added to the
      *      Screenflow document.
      */
-    addScreen: function (/** ScreenDescription */ screen) {
+    addScreen: function (/** String */ id, /** ScreenDescription */ screen, /**Object*/ position) {
         if(screen!=null) {
-            this['screens'].push(screen);
+            var screenInfo = {
+                "screen":screen,
+                "position":position
+            };
+            this['screens'].set(id,screenInfo);
         }
     },
-    
+
+    /**
+     * Delete a screen.
+     * @param ScreenDescription
+     *      Screen to be deleted from the
+     *      Screenflow document.
+     */
+    deleteScreen: function(/** String */ id) {
+        this['screens'].unset(id);
+    },
+
     /**
      * Returns the screens of the screenflowdescription
      * @type {ScreenDescription[]}
@@ -58,7 +72,23 @@ var ScreenflowDescription = Class.create(ResourceDescription,
     getScreens: function () {
         return this['screens'];
     },
-    
+
+    /**
+     * Returns the screens of the screenflowdescription
+     * @type {ScreenDescription[]}
+     */
+    getScreenDescriptions: function () {
+        var screens = new Array();
+        $H(this.getScreens()).each(function(pair){
+            screens.push(pair.value.screen);
+        });
+        /* TODO: equal screensdescriptions are deleted for convenience
+         * of the deployment. When "equal screens" can be deployed in 
+         * the same gadget, fix this. */
+        screens = screens.uniq();
+        return screens;
+    },
+
     /**
      * Adds a new Label.
      * @param Tag
@@ -227,7 +257,7 @@ var ScreenflowDescription = Class.create(ResourceDescription,
         data.preconditions = this.getPreconditions();
         data.postconditions = this.getPostconditions();
         data.definition = new Object();
-        data.definition.screens = this.getScreens();
+        data.definition.screens = this.getScreenDescriptions();
         //data.definition.connectors = ;
         return Object.toJSON(data);
     },
@@ -239,7 +269,7 @@ var ScreenflowDescription = Class.create(ResourceDescription,
     deployGadget: function () {
         UIUtils.hideDeployGadgetDialog();
         console.log("gadget deployment");
-        var screensdesc = this.getScreens();
+        var screensdesc = this.getScreenDescriptions();
         var screenList = '';
         for(i=0;i<screensdesc.length;i++){
             console.log(screensdesc[i].name);
@@ -281,7 +311,7 @@ var ScreenflowDescription = Class.create(ResourceDescription,
         console.log(result);
         console.log(datajson);
         var persistenceEngine = PersistenceEngineFactory.getInstance();
-        persistenceEngine.send_post(URIs.GET_POST_SCREENFLOW, result, null, this, onSuccess, onError);
+        persistenceEngine.send_post(URIs.GET_POST_SCREENFLOW, result,null, this, onSuccess, onError);
     }
 });
 

@@ -98,8 +98,7 @@ INSTALLED_APPS = (
 )
 
 # Url to the server that holds the semantic catalogue
-#CATALOGUE_URL = 'http://192.168.154.15:8010/'
-CATALOGUE_URL = 'http://10.95.39.252:8010/GVS_data/'
+CATALOGUE_URL = 'http://192.168.154.15:8010/'
 
 # Flow of operations against the catalogue in order to refresh the screens
 CATALOGUE_FLOW = 'check'

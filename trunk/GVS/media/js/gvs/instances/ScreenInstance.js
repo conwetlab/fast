@@ -8,20 +8,12 @@ var ScreenInstance = Class.create(ComponentInstance,
      */
     initialize: function($super, /**ResourceDescription*/ resourceDescription) {
         $super(resourceDescription);
-     
+        var uidGenerator = UIDGeneratorSingleton.getInstance();
+        this._id = uidGenerator.generate("screenInstance");
     },
 
     // **************** PUBLIC METHODS **************** //
-    /**
-     * Drop event handler for the DragSource
-     * @override
-     */
-    // FIXME: is this method useful?
-    onFinish: function(finishedOK, draggedObject) {
-        // FIXME: remove this
-        //alert("Dragging screeninstance: " +draggedObject.getNode().id + "; Finished: "+ finishedOK);
-    },
-    
+
     /**
      * Drop event handler for the DragSource
      * @param finishState
@@ -33,7 +25,8 @@ var ScreenInstance = Class.create(ComponentInstance,
         // FIXME: remove this
         if(finishState) {
             GVSSingleton.getInstance().getDocumentController().getCurrentDocument().addScreen(this);
-            UIUtils.selectElement(this);
+            UIUtils.onClick(null, this.getView().getId());
+            this.getView().getNode().observe('click', UIUtils.onClick);
             //TODO check to the catalogue
             // get the screens from the canvas
             var canvas = [];
@@ -46,7 +39,6 @@ var ScreenInstance = Class.create(ComponentInstance,
                 CatalogueSingleton.getInstance().get_screens(canvas, domainContext, elements, 'reachability');
             }
         }
-        //alert("Dragging screeninstance simply");
     }
 
     // **************** PRIVATE METHODS **************** //

@@ -368,7 +368,7 @@ table td {
     background-color: #DDF7DD;
 }
 
-.screen.selected .screenTop {
+.screen.selected .screenTitle {
     font-weight: bold;
 }
 

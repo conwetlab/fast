@@ -17,8 +17,8 @@ var DomainConceptDescription = Class.create(ResourceDescription,
      * Creates a new screen component
      * @override
      */
-    createPaletteComponent: function () {
-        return new DomainConceptComponent(this);
+    createPaletteComponent: function (docId) {
+        return new DomainConceptComponent(this, docId);
     },
 
     /**

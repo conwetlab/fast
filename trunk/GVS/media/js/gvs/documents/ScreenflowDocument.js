@@ -8,24 +8,16 @@ var ScreenflowDocument = Class.create(AbstractDocument,
      */
     initialize: function($super, /** String */ title) {
         $super(title);
-        this._tabContent.addClassName('screenflow');
+        Element.observe(document, "keypress",UIUtils.onKeyPressCanvas);
+
         this._validResources = ['screen','flowControl','connector', 'domainConcept'];
-        this._populate();
         this._documentType='screenflow';
         /*Screenflow Definition*/
-        // TODO: comment these properties and delete initial values
         this._resourceDescription = new ScreenflowDescription();
         this._screens = [];
-
-        //find Screens and check
-        // the canvas is empty because it is a new document
-        // this is a proof
-        var canvas = [];
-        var domainContext = {'tags':this._resourceDescription.getDomainContexts(), 'user':null};
-        //element list is empty TODO get the actual element list from the palette
-        var elements = [];
-
-        CatalogueSingleton.getInstance().get_screens(canvas, domainContext, elements, 'reachability');
+        this._selectedElement = null;
+        this._paletteController = new PaletteController(this.getTabId());
+        this._populate();
     },
 
 
@@ -45,7 +37,20 @@ var ScreenflowDocument = Class.create(AbstractDocument,
     getScreens: function () {
         return this._screens;
     },
-    
+
+    /**
+     * Returns the screen description for the screen view id passed as a parameter of the screenflow document
+     * @type {String[]}
+     */
+    getScreenDescription: function (screenViewId) {
+        for (var i=0; i<this._screens.length; i++) {
+            if (this._screens[i].getView()._id==screenViewId) {
+                return this._screens[i].getResourceDescription();
+            }
+        }
+        return null;
+    },
+
     /**
      * Adds a new screen.
      * @param screen
@@ -55,8 +60,53 @@ var ScreenflowDocument = Class.create(AbstractDocument,
     addScreen: function (screen) {
         if(screen!=null) {
             this._screens.push(screen);
-            this.getResourceDescription().addScreen(screen.getResourceDescription());
+            this.getResourceDescription().addScreen(screen.getId(),screen.getResourceDescription(), screen.getPosition());
         }
+    },
+
+    /**
+     * Delete a screen.
+     * @param ScreenView.id
+     *      Screen to be deleted from the
+     *      Screenflow document.
+     */
+    deleteScreen: function(screenViewId) {
+        var screenToDelete = null;
+        for (var i=0; i<this._screens.length; i++) {
+            if (this._screens[i].getView()._id==screenViewId) {
+                screenToDelete = this._screens[i];
+                this._screens[i] = null;
+            }
+        }
+        this._resourceDescription.deleteScreen(screenToDelete.getId());
+        this._screens = this._screens.compact();
+    },
+
+    /**
+     * Gets the palette controller
+     * @type PaletteController
+     * @public
+     */
+    getPaletteController: function () {
+        return this._paletteController;
+    },
+
+    /**
+     * Returns the selected element for the screenflow document
+     * @type {String[]}
+     */
+    getSelectedElement: function () {
+        return this._selectedElement;
+    },
+    
+    /**
+     * Select a screen in the screenflow document
+     * @param screen view
+     *      Screen to be selected for the
+     *      Screenflow document.
+     */
+    setSelectedElement: function (element) {
+        this._selectedElement = element;
     },
     
     /**
@@ -75,20 +125,29 @@ var ScreenflowDocument = Class.create(AbstractDocument,
     _populate: function(){
         var uidGenerator = UIDGeneratorSingleton.getInstance();
         var borderContainerId = uidGenerator.generate("borderContainer");
-        var borderContainer = new dijit.layout.BorderContainer({
+        var mainBorderContainer = new dijit.layout.BorderContainer({
             id:borderContainerId,
             design:"sidebar",
             liveSplitters:"false",
+            splitter:"true"
+        });
+        
+        var rightBorderContainer = new dijit.layout.BorderContainer({
+            id:borderContainerId + "Child",
+            design:"headline",
+            liveSplitters:"false",
+            region:"center"
         });
 
         var documentContent = new Element("div", {
             "id": this._tabContentId,
-            "class": "document screenflow"
+            "class": "document screenflow canvas"
         });
+        documentContent.observe('click',UIUtils.onClickCanvas);
         var documentPaneId = uidGenerator.generate("documentPane");
         var documentPane = new dijit.layout.ContentPane({
             id:documentPaneId,
-            region:"center",
+            region:"center"
         });
         documentPane.setContent(documentContent);
 
@@ -105,9 +164,13 @@ var ScreenflowDocument = Class.create(AbstractDocument,
         inspectorArea.addChild(propertiesPane);
         inspectorArea.addChild(prePostPane);
         inspectorArea.addChild(factsPane);
-        borderContainer.addChild(documentPane);
-        borderContainer.addChild(inspectorArea);
-        this._tab.setContent(borderContainer.domNode);
+
+        rightBorderContainer.addChild(documentPane);
+        rightBorderContainer.addChild(inspectorArea);
+        mainBorderContainer.addChild(this.getPaletteController().getNode());
+        mainBorderContainer.addChild(rightBorderContainer);
+
+        this._tab.setContent(mainBorderContainer.domNode);
     },
     
     _createInspectorArea: function(){
@@ -133,20 +196,21 @@ var ScreenflowDocument = Class.create(AbstractDocument,
             minSize:"100px",
             sizeShare:"10"
         });
-        this._detailsTitle = uidGenerator.generate("detailsTitle");
-        this._title = uidGenerator.generate("details")+".title";
-        this._id = uidGenerator.generate("details")+".id";
-        this._desc = uidGenerator.generate("details")+".desc";
-        this._tags = uidGenerator.generate("details")+".tags";
+        this._detailsTitle = new Array();
+        this._detailsTitle['detailsTitle'] = uidGenerator.generate("detailsTitle");
+        this._detailsTitle['title'] = uidGenerator.generate("details")+".title";
+        this._detailsTitle['id'] = uidGenerator.generate("details")+".id";
+        this._detailsTitle['desc'] = uidGenerator.generate("details")+".desc";
+        this._detailsTitle['tags'] = uidGenerator.generate("details")+".tags";
 
-        var content = "<div class='dijitAccordionTitle properties' id='"+this._detailsTitle +"'>Properties</div>";
+        var content = "<div class='dijitAccordionTitle properties' id='"+this._detailsTitle['detailsTitle'] +"'>Properties</div>";
         content += "<div id="+uidGenerator.generate("properties")+">";
         content += "<table>";
         content += "<tr class='tableHeader'><td class='left'>Property</td><td class='left'>Value</td></tr>";
-        content += "<tr><td class='left'>Title</td><td class='right'><span id='"+this._title+"'></span></td></tr>";
-        content += "<tr><td class='left'>Identifier</td><td class='right'><span id='"+this._id+"'></span></td></tr>";
-        content += "<tr><td class='left'>Description</td><td class='right'><span id='"+this._desc+"'></td></tr>";
-        content += "<tr><td class='left'>Tags</td><td class='right'><span id='"+this._tags+"'></td></tr>";
+        content += "<tr><td class='left'>Title</td><td class='right'><span id='"+this._detailsTitle['title']+"'></span></td></tr>";
+        content += "<tr><td class='left'>Identifier</td><td class='right'><span id='"+this._detailsTitle['id']+"'></span></td></tr>";
+        content += "<tr><td class='left'>Description</td><td class='right'><span id='"+this._detailsTitle['desc']+"'></td></tr>";
+        content += "<tr><td class='left'>Tags</td><td class='right'><span id='"+this._detailsTitle['tags']+"'></td></tr>";
         content += "<tr><td class='left'>&nbsp;</td><td class='right'>&nbsp;</td></tr>";
         content += "</table>";
         content += "</div>";

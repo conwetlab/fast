@@ -14,7 +14,6 @@ var CatalogueSingleton = function() {
      * @private @member
      */
     var instance = null;
-    
 
     var Catalogue = Class.create( /** @lends CatalogueSingleton-Catalogue.prototype */ {
         /** @constructs */
@@ -30,10 +29,8 @@ var CatalogueSingleton = function() {
                     'domainConcept': new DomainConceptFactory()
             };
         },
-        
 
         // **************** PUBLIC METHODS **************** //
-        
 
         /**
          * Gets a resource factory for a given type of resources
@@ -49,10 +46,8 @@ var CatalogueSingleton = function() {
             //construct the data to be sent
             var body = {'canvas': canvas, 'domainContext': domainContext, 'elements': elements, 'criterion':criteria};
             body= Object.toJSON(body);
-
             //find_and_check
             this.find_and_check(body);
-
         },
 
         find_and_check: function (/** json*/ postData) {
@@ -80,12 +75,11 @@ var CatalogueSingleton = function() {
                 //update the Screen Factory
                 this.getResourceFactory('screen').updateScreenDescriptions(screenMetadata);
                 //repaint the Screen Palette
-                var screenPalette = GVSSingleton.getInstance().getPaletteController().getPalette("screen");
-                screenPalette._components = screenPalette._createComponents(this.getResourceFactory("screen"));
-                screenPalette._content = screenPalette._renderContent();
-                screenPalette._node.setContent(screenPalette._content);
-                UIUtils.updateSFDocAndScreenPalette(screenList);
+                var paletteController = GVSSingleton.getInstance().getDocumentController().getCurrentDocument().getPaletteController();
+                var screenPalette = paletteController.getPalette("screen");
+                screenPalette.paintComponents();
 
+                UIUtils.updateSFDocAndScreenPalette(screenList);
             }
 
             var screensOnError = function (transport, e) {
@@ -103,7 +97,6 @@ var CatalogueSingleton = function() {
             var screensOnSuccess = function (response) {
                 var responseJSON = response.responseText;
                 var screenList = eval ('(' + responseJSON + ')');
-                UIUtils.prueba=screenList.list_uris;
                 UIUtils.updateSFDocAndScreenPalette(screenList.list_uris);
 
             }
@@ -121,7 +114,7 @@ var CatalogueSingleton = function() {
         },
 
         find: function (/** String*/ criteria) {
-            //TODO:
+            //TODO: Remove this
 
             var screensOnSuccess = function (response) {
                 var responseJSON = '{screen_metadata:'+response.responseText+'}';

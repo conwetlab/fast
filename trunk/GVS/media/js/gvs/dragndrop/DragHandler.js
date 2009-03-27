@@ -7,7 +7,6 @@ var DragHandler = Class.create(
      * @param dragSource
      *      An object implementing DragSource.
      * @param dropZone
-     *      An object with method getNode.
      *      This node is the valid area in 
      *      which the dragSource can be dropped
      * @constructs
@@ -86,7 +85,7 @@ var DragHandler = Class.create(
         // An object is retrieved to be dragged
         this._draggedObject = this._dragSource.getDraggableObject();
         
-         var draggableElement = this._draggedObject.getNode();
+         var draggableElement = this._draggedObject.getHandlerNode();
         
         var parentNode = draggableElement.parentNode;
         var x = draggableElement.offsetTop;
@@ -111,8 +110,8 @@ var DragHandler = Class.create(
         this._yStart = parseInt(e.screenY);
         this._y = draggableElement.offsetTop;
         this._x = draggableElement.offsetLeft;
-        draggableElement.style.top  = this._y + 'px';
-        draggableElement.style.left = this._x + 'px';
+        //draggableElement.style.top  = this._y + 'px';
+        //draggableElement.style.left = this._x + 'px';
         Event.observe (document, 'mouseup',   this._bindedEndDrag, true);
         Event.observe (document, 'mousemove', this._bindedUpdate, true);
 
@@ -146,11 +145,11 @@ var DragHandler = Class.create(
         this._y = this._y - yDelta;
         this._x = this._x - xDelta;
 
-        var draggableElement = this._draggedObject.getNode();
+        var draggableElement = this._draggedObject.getHandlerNode();
         draggableElement.style.top = this._y + 'px';
         draggableElement.style.left = this._x + 'px';
         
-        this._updateNodeStatus(this._isValidPosition());   
+        this._updateNodeStatus(this._isValidPosition());
         
         this._dragSource.onUpdate(this._x, this._y);
     },
@@ -181,7 +180,7 @@ var DragHandler = Class.create(
             }
         }
 
-        var draggableElement = this._draggedObject.getNode();
+        var draggableElement = this._draggedObject.getHandlerNode();
         draggableElement.style.zIndex = "";
 
         //Remove element transparency        
@@ -204,7 +203,7 @@ var DragHandler = Class.create(
             }
             // If we are moving an element in the same zone...
             else {
-            	finishState=false;
+                finishState=false;
             }
         }
         // If the dropzone is not valid...
@@ -246,10 +245,10 @@ var DragHandler = Class.create(
         document.oncontextmenu = null;
        
         this._dragSource.onFinish(finishState,this._draggedObject);
- 		if(this._draggedObject != null){
- 			this._draggedObject.onDragFinish(finishState);
- 		}
- 		this._draggedObject = null;
+        if(this._draggedObject != null){
+            this._draggedObject.onDragFinish(finishState);
+        }
+        this._draggedObject = null;
         return false;
     },
   
@@ -265,7 +264,7 @@ var DragHandler = Class.create(
         var result = true;
         //TODO: FIX THIS!!!
         var node = $(this._dropZone);
-        var draggableElement = this._draggedObject.getNode();
+        var draggableElement = this._draggedObject.getHandlerNode();
         // If we are moving an element from one zone to another...
         if (this._initialArea.node != node) {
             //Check if we are over the dropZone
@@ -299,10 +298,10 @@ var DragHandler = Class.create(
      */
     _updateNodeStatus: function(/** Boolean */ isValid){
         if (isValid){
-            this._draggedObject.getNode().removeClassName('disabled');
+            this._draggedObject.getHandlerNode().removeClassName('disabled');
         }
         else {
-            this._draggedObject.getNode().addClassName('disabled');
+            this._draggedObject.getHandlerNode().addClassName('disabled');
         }
     },
  
