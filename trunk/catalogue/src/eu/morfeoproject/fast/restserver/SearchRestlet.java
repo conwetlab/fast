@@ -31,15 +31,19 @@ public class SearchRestlet extends CatalogueRestlet {
 
 	static Logger logger = Logger.getLogger(SearchRestlet.class);
 	
-	public SearchRestlet(Catalogue catalogue) throws RepositoryException {
+	//TODO remove this; only for the find recursive demo
+	private boolean recursive = false;
+	
+	public SearchRestlet(Catalogue catalogue, boolean recursive) throws RepositoryException {
 		super();
 		this.catalogue = catalogue;
+		this.recursive = recursive;
 	}
 
 	@Override
 	public void handle(Request request, Response response) {
 		if (request.getMethod().equals(Method.POST)) {
-			logger.debug("Entering FIND operation...");
+			logger.info("Entering FIND operation...");
 			try {
 				// create JSON representation of the input
 				JSONObject input = new JSONObject(request.getEntity().getText());
@@ -76,15 +80,19 @@ public class SearchRestlet extends CatalogueRestlet {
 				}
 				
 				// make the call to the catalogue
-				Set<Screen> results = catalogue.find(canvas, true, true, 0, 100000, tags);
+				Set<Screen> results = null;
+				if (!this.recursive)
+					results = catalogue.find(canvas, true, true, 0, 100000, tags);
+				else
+					results = catalogue.findRecursive(canvas, true, true, 0, 100000, tags);
 
 				// write the results in the output
 				JSONArray output = new JSONArray();
 				for (Iterator<Screen> it = results.iterator(); it.hasNext(); ) {
 					Screen s = it.next();
 					output.put(s.toJSON());
-					if (logger.isDebugEnabled())
-						logger.debug("[MATCH] "+s.getUri());
+//					if (logger.isDebugEnabled())
+						logger.info("[MATCH] "+s.getUri());
 				}
 				response.setEntity(output.toString(2), MediaType.APPLICATION_JSON);
 				response.setStatus(Status.SUCCESS_OK);
@@ -105,7 +113,7 @@ public class SearchRestlet extends CatalogueRestlet {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			logger.debug("...Exiting FIND operation");
+			logger.info("...Exiting FIND operation");
 		} else {
 			response.setStatus(Status.CLIENT_ERROR_METHOD_NOT_ALLOWED);
 		}

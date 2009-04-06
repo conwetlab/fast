@@ -45,12 +45,11 @@ public class CatalogueServer extends Application {
 	 * open a new session in the catalogue repository.
 	 * @throws Exception
 	 */
-	public void startServer() throws Exception {
+	public void startServer(boolean recursive) throws Exception {
 		catalogue = new Catalogue(dir);
-		catalogue.open();
 		screenRestlet = new ScreenRestlet(catalogue);
 		screenFlowRestlet = new ScreenFlowRestlet(catalogue);
-		searchRestlet = new SearchRestlet(catalogue);
+		searchRestlet = new SearchRestlet(catalogue, recursive);
 		checkRestlet = new CheckRestlet(catalogue);
 		metadataRestlet = new MetadataRestlet(catalogue);
 
@@ -84,6 +83,11 @@ public class CatalogueServer extends Application {
 		return router;
 	}
 
+	//TODO delete, only for debugging
+	public void dump() {
+//		catalogue.dump();
+		catalogue.dumpStatements();
+	}
 	
 	// to run from the console
 	// parameters:
@@ -94,7 +98,7 @@ public class CatalogueServer extends Application {
 		File dir = new File(args[1]);
 		
 		CatalogueServer server = new CatalogueServer(port, dir);
-		server.startServer();
+		server.startServer(false);
 		logger.info("Catalogue server listening on port "+port);
 	}
 	

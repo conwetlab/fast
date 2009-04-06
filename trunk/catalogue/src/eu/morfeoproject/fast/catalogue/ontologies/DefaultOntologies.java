@@ -29,13 +29,13 @@ public class DefaultOntologies {
     public static Ontology FOAF =
     	new Ontology(new URIImpl("http://xmlns.com/foaf/0.1/"), "foaf.rdf");
     
-    public static Ontology EXAMPLE =
-    	new Ontology(new URIImpl("http://www.morfeoproject.eu/fast/example#"), "example.rdf");
-    public static Ontology AMAZON =
-    	new Ontology(new URIImpl("http://www.morfeoproject.eu/fast/example#"), "example.rdf");
+    public static Ontology AMAZON_MOCKUP =
+    	new Ontology(new URIImpl("http://aws.amazon.com/AWSECommerceService#"), "amazon-mockup.rdf");
+    public static Ontology DEMO =
+    	new Ontology(new URIImpl("http://www.morfeoproject.eu/fast/demo#"), "demo.rdf");
     
-    public static Ontology BRESLIN =
-    	new Ontology(new URIImpl("http://www.johnbreslin.com/foaf/foaf.rdf#"), "breslin-foaf.rdf");
+//    public static Ontology BRESLIN =
+//    	new Ontology(new URIImpl("http://www.johnbreslin.com/foaf/foaf.rdf#"), "breslin-foaf.rdf");
 //    public static Ontology ANDREAS =
 //    	new Ontology(new URIImpl("http://www.deri.ie/about/team/member/Andreas_Harth"), "andreas-foaf.rdf");
     

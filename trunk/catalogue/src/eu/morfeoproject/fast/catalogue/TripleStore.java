@@ -85,8 +85,9 @@ public class TripleStore {
 //	}
 	
 	public TripleStore(File dir) {
-		PersistentRepository.storageDir = dir;
-		Repository repository = PersistentRepository.getInstance().getGroundingRepository();
+//		PersistentRepository.storageDir = dir;
+//		Repository repository = PersistentRepository.getInstance().getGroundingRepository();
+		Repository repository = PersistentRepository.getRepository(dir);
 		persistentModelSet = new RepositoryModelSet(repository);
 		createdURIs = new ArrayList<URI>();
 		
@@ -96,6 +97,7 @@ public class TripleStore {
 	}
 	
 	public void open() {
+		getDefaultModel().open();
 		getPersistentModelSet().open();
 	}
 	
@@ -420,15 +422,14 @@ public class TripleStore {
 	}
 
 	/** return an in-memory Model, opened */
-	public Model getTempModel(URI uri) {
-		// IMPROVE for hardcore scalability use persistent modlsets here
-		ModelSet inMemoryModelSet = new RepositoryModelFactory()
-		.createModelSet();
-		inMemoryModelSet.open();
-		Model m = inMemoryModelSet.getModel(uri);
-		m.open();
-		return new ClosingModel(m,inMemoryModelSet);
-	}
+//	public Model getTempModel(URI uri) {
+//		// IMPROVE for hardcore scalability use persistent modlsets here
+//		ModelSet inMemoryModelSet = new RepositoryModelFactory().createModelSet();
+//		inMemoryModelSet.open();
+//		Model m = inMemoryModelSet.getModel(uri);
+//		m.open();
+//		return new ClosingModel(m,inMemoryModelSet);
+//	}
 
 	class ClosingModel extends DelegatingModel {
 		private ModelSet modelset;
@@ -451,23 +452,23 @@ public class TripleStore {
 	 * @param m
 	 * @return the persistent Model, opened
 	 */
-	public Model addModelAndPersist(Model m) {
-		assert m != null;
-
-		// if m is a persistent model already: copy to memory first
-		if (m.getContextURI() != null
-				&& getPersistentModelSet().containsModel(m.getContextURI())) {
-			throw new RuntimeException("A model with URI "+m.getContextURI()+" is already in the persistent store");
-		} else {
-			URI u = getPersistentModelSet().newRandomUniqueURI();
-			Model persistent = getPersistentModel(u);
-			ClosableIterator<Statement> it = m.iterator();
-			persistent.addAll(it);
-			it.close();
-			return persistent;
-		}
-
-	}
+//	public Model addModelAndPersist(Model m) {
+//		assert m != null;
+//
+//		// if m is a persistent model already: copy to memory first
+//		if (m.getContextURI() != null
+//				&& getPersistentModelSet().containsModel(m.getContextURI())) {
+//			throw new RuntimeException("A model with URI "+m.getContextURI()+" is already in the persistent store");
+//		} else {
+//			URI u = getPersistentModelSet().newRandomUniqueURI();
+//			Model persistent = getPersistentModel(u);
+//			ClosableIterator<Statement> it = m.iterator();
+//			persistent.addAll(it);
+//			it.close();
+//			return persistent;
+//		}
+//
+//	}
 
 	public void dump() {
 		getPersistentModelSet().dump();
@@ -541,14 +542,14 @@ public class TripleStore {
 	 * return a non-persistent copy of the model stored at the given URI.
 	 * Returned model is open
 	 */
-	public Model getAsTempCopy(URI modelURI) {
-		Model p = getPersistentModel(modelURI);
-		Model copy = getTempModel(newRandomUniqueURI());
-		ClosableIterator<Statement> it = p.iterator();
-		copy.addAll(it);
-		it.close();
-		return copy;
-	}
+//	public Model getAsTempCopy(URI modelURI) {
+//		Model p = getPersistentModel(modelURI);
+//		Model copy = getTempModel(newRandomUniqueURI());
+//		ClosableIterator<Statement> it = p.iterator();
+//		copy.addAll(it);
+//		it.close();
+//		return copy;
+//	}
 
 	public void finalize() {
 		getPersistentModelSet().close();
@@ -697,9 +698,14 @@ public class TripleStore {
     public URI getOrCreateClass(String name, URI superClass, URI namespace) throws OntologyInvalidException {
     	URI uri = new URIImpl(namespace+name);
     	ClosableIterator<Statement> it = persistentModelSet.findStatements(namespace, uri, RDF.type, RDFS.Class);
-    	if (it.hasNext())
-    		return it.next().getSubject().asURI();
-    	return createClass(name, superClass, namespace);
+    	URI result = null;
+    	if (it.hasNext()) {
+    		result = it.next().getSubject().asURI();
+    		it.close();
+    	} else {
+    		result = createClass(name, superClass, namespace);
+    	}
+    	return result;
     }    
     
     /**
@@ -759,9 +765,11 @@ public class TripleStore {
     	if (isClass(uriClass))
     		throw new OntologyInvalidException("There already exists a class with the same name '"
     				+name+"' with URI "+uriClass);
-    	assertClass(superClass);
+    	if (superClass != null)
+    		assertClass(superClass);
     	persistentModelSet.addStatement(namespace, uriClass, RDF.type, RDFS.Class);
-    	persistentModelSet.addStatement(namespace, uriClass, RDFS.subClassOf, superClass);
+    	if (superClass != null)
+    		persistentModelSet.addStatement(namespace, uriClass, RDFS.subClassOf, superClass);
 //    	persistentModelSet.addStatement(namespace, uriClass, RDFS.label, new LiteralImpl(name));
     	logger.info("Created '"+uriClass+"' class in "+namespace+".");
     	return uriClass;
@@ -869,6 +877,7 @@ public class TripleStore {
     	// the tag was not found
     	URI tag = createResource(name, FCO.Tag, tagModel);
     	tagModel.addStatement(tag, RDFS.label, name);
+    	tagModel.close();
     	return tag;
     }
     

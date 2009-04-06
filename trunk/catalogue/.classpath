@@ -36,11 +36,6 @@
 	<classpathentry kind="lib" path="lib/org.restlet.jar"/>
 	<classpathentry kind="lib" path="lib/org.simpleframework.jar"/>
 	<classpathentry kind="lib" path="lib/postgresql-8.3-603.jdbc4.jar"/>
-	<classpathentry kind="lib" path="lib/rdf2go.api-4.6.2.jar"/>
-	<classpathentry kind="lib" path="lib/rdf2go.impl.base-4.6.2.jar"/>
-	<classpathentry kind="lib" path="lib/rdf2go.impl.base.test-4.6.1.jar"/>
-	<classpathentry kind="lib" path="lib/rdf2go.impl.sesame20-4.6.2.jar"/>
-	<classpathentry kind="lib" path="lib/rdf2go.impl.util-4.6.1.jar"/>
 	<classpathentry kind="lib" path="lib/sesame-console-2.2.3.jar"/>
 	<classpathentry kind="lib" path="lib/sesame-http-client-2.2.3.jar"/>
 	<classpathentry kind="lib" path="lib/sesame-http-protocol-2.2.3.jar"/>
@@ -83,6 +78,11 @@
 	<classpathentry kind="lib" path="lib/wstx-lgpl-3.1.1.jar"/>
 	<classpathentry kind="lib" path="lib/xercesImpl-2.7.1.jar"/>
 	<classpathentry kind="lib" path="lib/xml-apis-1.3.02.jar"/>
+	<classpathentry kind="lib" path="lib/rdf2go.api-4.7.0.jar"/>
+	<classpathentry kind="lib" path="lib/rdf2go.impl.base.test-4.7.0.jar"/>
+	<classpathentry kind="lib" path="lib/rdf2go.impl.jena24-4.7.0.jar"/>
+	<classpathentry kind="lib" path="lib/rdf2go.impl.sesame22-4.7.0.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/WSMX"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

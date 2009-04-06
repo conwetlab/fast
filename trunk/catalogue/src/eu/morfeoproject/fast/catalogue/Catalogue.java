@@ -83,6 +83,8 @@ public class Catalogue {
 			// recover the catalogue
 			restore();
 		}
+		
+//		dumpStatements();
 	}
 	
 	// TODO remove this method
@@ -95,7 +97,7 @@ public class Catalogue {
      * Should only be done when {@link #check()} returns true.
      * @throws Exception if something goes wrong.
      */
-    private void restore() {  
+    private void restore() {
         // add default ontologies
         for (DefaultOntologies.Ontology ont : DefaultOntologies.getDefaults()) {
             try {
@@ -152,8 +154,6 @@ public class Catalogue {
 	}
 
 	public void close() {
-		// stops the garbage collector
-//		tripleStoreGarbargeCollector.
 		tripleStore.close();
 	}
 	
@@ -623,62 +623,85 @@ public class Catalogue {
     		int limit,
     		Set<URI> domainContext) throws ClassCastException, ModelRuntimeException {
     	HashSet<Screen> results = new HashSet<Screen>();
+
+    	String queryString = 
+    		"SELECT DISTINCT ?screen \n" +
+    		"WHERE {\n" +
+    		"?screen "+RDF.type.toSPARQL()+" "+FCO.Screen.toSPARQL()+" . ";
+//    	for (Screen s : screens)
+//    		queryString = queryString.concat("FILTER (?screen != " + s.getUri().toSPARQL() + ") . ");
+
+    	if (domainContext.size() > 0) {
+        	queryString = queryString.concat("{");
+        	for (URI tag : domainContext)
+	    		queryString = queryString.concat(" { ?screen "+FCO.hasTag.toSPARQL()+" "+tag.toSPARQL()+ " } UNION");
+        	// remove last 'UNION'
+	    	if (queryString.endsWith("UNION"))
+				queryString = queryString.substring(0, queryString.length() - 5);
+			queryString = queryString.concat("} . ");
+    	}
+    	
     	ArrayList<Condition> unCon = getUnsatisfiedPreconditions(screens, plugin, subsume);
     	if (unCon.size() > 0) {
-        	String queryString = 
-	    		"SELECT DISTINCT ?screen \n" +
-	    		"WHERE {\n" +
-	    		"?screen "+RDF.type.toSPARQL()+" "+FCO.Screen.toSPARQL()+" . ";
-        	if (domainContext.size() > 0) {
-	        	queryString = queryString.concat("{");
-	        	for (URI tag : domainContext)
-		    		queryString = queryString.concat(" { ?screen "+FCO.hasTag.toSPARQL()+" "+tag.toSPARQL()+ " } UNION");
-	        	// remove last 'UNION'
-		    	if (queryString.endsWith("UNION"))
-					queryString = queryString.substring(0, queryString.length() - 5);
-				queryString = queryString.concat("} . ");
+        	queryString = queryString.concat("{");
+			for (Condition con : unCon) {
+				if (logger.isDebugEnabled())
+					logger.debug("[UNSATISFIED] "+con.toString());
+				queryString = queryString.concat("{ ?screen "+FCO.hasPostcondition.toSPARQL()+" ?c . ");
+				queryString = queryString.concat(" ?c "+FCO.hasPattern.toSPARQL()+" ?p . ");
+    			queryString = queryString.concat("GRAPH ?p {");
+        		for (Statement st : con.getPattern()) {
+        			String s = (st.getSubject() instanceof BlankNode) ? st.getSubject().toString() : st.getSubject().toSPARQL();
+        			String o = (st.getObject() instanceof BlankNode) ? st.getObject().toString() : st.getObject().toSPARQL();
+        			queryString = queryString.concat(s+" "+st.getPredicate().toSPARQL()+" "+o+" . ");
+        		}
+        		queryString = queryString.concat("} } UNION");
         	}
-        	if (unCon.size() > 0) {
-	        	queryString = queryString.concat("{");
-				for (Condition con : unCon) {
-					if (logger.isDebugEnabled())
-						logger.debug("[UNSATISFIED] "+con.toString());
-					queryString = queryString.concat("{ ?screen "+FCO.hasPostcondition.toSPARQL()+" ?c . ");
-					queryString = queryString.concat(" ?c "+FCO.hasPattern.toSPARQL()+" ?p . ");
-        			queryString = queryString.concat("GRAPH ?p {");
-	        		for (Statement st : con.getPattern()) {
-	        			String s = (st.getSubject() instanceof BlankNode) ? st.getSubject().toString() : st.getSubject().toSPARQL();
-	        			String o = (st.getObject() instanceof BlankNode) ? st.getObject().toString() : st.getObject().toSPARQL();
-	        			queryString = queryString.concat(s+" "+st.getPredicate().toSPARQL()+" "+o+" . ");
-	        		}
-	        		queryString = queryString.concat("} } UNION");
-	        	}
-	        	// remove last 'UNION'
-		    	if (queryString.endsWith("UNION"))
-					queryString = queryString.substring(0, queryString.length() - 5);
-				queryString = queryString.concat("}");
-	    	}
-			queryString = queryString.concat("\n}");
-        	queryString = queryString.concat("\nLIMIT "+limit);
-			queryString = queryString.concat("\nOFFSET "+offset);
-			// replace ':_' by '?' to make the query
-			queryString = replaceBlankNodes(queryString);
-			if (logger.isDebugEnabled())
-				logger.debug("Executing SPARQL query:\n"+queryString+"\n-----");
-	    	QueryResultTable qrt = tripleStore.sparqlSelect(queryString);
-	    	ClosableIterator<QueryRow> itResults = qrt.iterator();
-	    	while (itResults.hasNext()) {
-	    		// gets the URI of a screen
-	    		URI screenUri = itResults.next().getValue("screen").asURI();
-	    		// creates and populates a Screen object
-	    		Screen s = getScreen(screenUri);
-	    		results.add(s);
-	    	}
-	    	itResults.close();
-    	} else { // TODO delete this!!
-    		if (logger.isDebugEnabled())
-    			logger.debug("NO PRECONDITIONS UNSATISFIED, FIND DOES NOT NEED TO BE EXECUTED");
+        	// remove last 'UNION'
+	    	if (queryString.endsWith("UNION"))
+				queryString = queryString.substring(0, queryString.length() - 5);
+			queryString = queryString.concat("}");
     	}
+		queryString = queryString.concat("\n}");
+		if (limit > 0)
+			queryString = queryString.concat("\nLIMIT "+limit);
+		queryString = queryString.concat("\nOFFSET "+offset);
+		// replace ':_' by '?' to make the query
+		queryString = replaceBlankNodes(queryString);
+//		if (logger.isDebugEnabled())
+//			logger.debug("Executing SPARQL query:\n"+queryString+"\n-----");
+    	QueryResultTable qrt = tripleStore.sparqlSelect(queryString);
+    	ClosableIterator<QueryRow> itResults = qrt.iterator();
+    	while (itResults.hasNext()) {
+    		// gets the URI of a screen
+    		URI screenUri = itResults.next().getValue("screen").asURI();
+    		// creates and populates a Screen object
+    		Screen s = getScreen(screenUri);
+    		results.add(s);
+    	}
+    	itResults.close();
+
+    	return results;
+    }
+
+    public Set<Screen> findRecursive(
+    		Set<Screen> screens,
+    		boolean plugin,
+    		boolean subsume,
+    		int offset,
+    		int limit,
+    		Set<URI> domainContext) throws ClassCastException, ModelRuntimeException {
+    	HashSet<Screen> results = new HashSet<Screen>();
+     	
+		boolean stop = false;
+		while (!stop) {
+			Set<Screen> aux = find(screens, plugin, subsume, offset, limit, domainContext);
+			results.addAll(aux);
+			if (getUnsatisfiedPreconditions(aux, plugin, subsume).size() < 1)
+				stop = true;
+			screens = aux;
+		}
+    	
     	return results;
     }
     
@@ -689,7 +712,7 @@ public class Catalogue {
      * @param subsume ignored at this version
      * @return a list of conditions which are unsatisfied
      */
-	private ArrayList<Condition> getUnsatisfiedPreconditions(Set<Screen> screens, boolean plugin, boolean subsume) {
+	protected ArrayList<Condition> getUnsatisfiedPreconditions(Set<Screen> screens, boolean plugin, boolean subsume) {
 		ArrayList<Condition> unsatisfied = new ArrayList<Condition>();
 		for (Screen s : screens)
 			for (Condition c : s.getPreconditions())
@@ -864,7 +887,7 @@ public class Catalogue {
 		return results;
 	}
 	
-    private String replaceBlankNodes(String origin) {
+    protected String replaceBlankNodes(String origin) {
     	return origin.replaceAll("_:", "?");
     }
 
@@ -974,6 +997,7 @@ public class Catalogue {
 		ClosableIterator<Statement> pIt = tripleStore.findStatements(subject.asBlankNode(), FCO.hasPatternString, Variable.ANY);
 		if (pIt.hasNext())
 			c.setPatternString(pIt.next().getObject().toString());
+		pIt.close();
 		ClosableIterator<Statement> cIt = tripleStore.findStatements(subject.asBlankNode(), FCO.hasPattern, Variable.ANY);
 		if (cIt.hasNext()) {
 			Statement st = cIt.next();
@@ -1036,6 +1060,10 @@ public class Catalogue {
     		Statement st = it.next();
     		System.out.println(st.getContext()+" - "+st.getSubject()+" - "+st.getPredicate()+" - "+st.getObject());
     	}
+    	it.close();
     }
 	
+    public ClosableIterator<Statement> screensIterator() {
+    	return tripleStore.findStatements(Variable.ANY, RDF.type, FCO.Screen);
+    }
 }

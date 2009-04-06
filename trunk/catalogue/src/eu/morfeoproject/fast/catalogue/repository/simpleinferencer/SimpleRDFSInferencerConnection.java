@@ -18,6 +18,7 @@ import org.openrdf.model.Statement;
 import org.openrdf.model.URI;
 import org.openrdf.model.Value;
 import org.openrdf.model.impl.GraphImpl;
+import org.openrdf.model.vocabulary.OWL;
 import org.openrdf.model.vocabulary.RDF;
 import org.openrdf.model.vocabulary.RDFS;
 import org.openrdf.sail.Sail;
@@ -28,6 +29,8 @@ import org.openrdf.sail.inferencer.InferencerConnectionWrapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import eu.morfeoproject.fast.vocabulary.FCO;
+
 /**
  * A reduced set of forward-chaining RDF Schema inferencer, using the rules from the <a
  * href="http://www.w3.org/TR/2004/REC-rdf-mt-20040210/">RDF Semantics
@@ -35,7 +38,6 @@ import org.slf4j.LoggerFactory;
  * Schema semantics to any Sail that returns {@link InferencerConnection}s from
  * their {@link Sail#getConnection()} method.
  */
-// TODO anadir un metodo que compruebe si ya existe el statement antes de llamar a addInferredStatement
 class SimpleRDFSInferencerConnection extends InferencerConnectionWrapper implements
 		SailConnectionListener
 {
@@ -257,6 +259,8 @@ class SimpleRDFSInferencerConnection extends InferencerConnectionWrapper impleme
 //			nofInferred += applyRule(RDFSRules.Rdfs12);
 //			nofInferred += applyRule(RDFSRules.Rdfs13);
 //			nofInferred += applyRule(RDFSRules.RX1);
+//			nofInferred += applyRule(RDFSRules.Rdfs9_1b);
+//			nofInferred += applyRule(RDFSRules.Rdfs9_2b);
 
 			logger.debug("iteration " + iteration + " done; inferred " + nofInferred + " new statements");
 			totalInferred += nofInferred;
@@ -385,6 +389,12 @@ class SimpleRDFSInferencerConnection extends InferencerConnectionWrapper impleme
 				break;
 			case RDFSRules.RX1:
 				result = applyRuleX1();
+				break;
+			case RDFSRules.Rdfs9_1b:
+				result = applyRuleRdfs9_1b();
+				break;
+			case RDFSRules.Rdfs9_2b:
+				result = applyRuleRdfs9_2b();
 				break;
 			default:
 				// FIXME throw exception here?
@@ -798,6 +808,9 @@ class SimpleRDFSInferencerConnection extends InferencerConnectionWrapper impleme
 		while (ntIter.hasNext()) {
 			Statement nt = ntIter.next();
 
+			// this store all the inferred statements of a pattern inside its graph
+			Resource context = nt.getContext() != null && nt.getContext().stringValue().startsWith(FCO.NS_FCO+"pattern") ? nt.getContext() : null;
+
 			Resource xxx = nt.getSubject();
 			Value yyy = nt.getObject();
 
@@ -811,7 +824,7 @@ class SimpleRDFSInferencerConnection extends InferencerConnectionWrapper impleme
 					Resource aaa = t1.getSubject();
 
 					if (!getStatements(aaa, RDF.TYPE, yyy, true).hasNext()) { // avoid repeated statements
-						boolean added = addInferredStatement(aaa, RDF.TYPE, yyy);
+						boolean added = addInferredStatement(aaa, RDF.TYPE, yyy, context);
 						if (added) {
 							nofInferred++;
 						}
@@ -835,7 +848,10 @@ class SimpleRDFSInferencerConnection extends InferencerConnectionWrapper impleme
 
 		while (ntIter.hasNext()) {
 			Statement nt = ntIter.next();
-
+			
+			// this store all the inferred statements of a pattern inside its graph
+			Resource context = nt.getContext() != null && nt.getContext().stringValue().startsWith(FCO.NS_FCO+"pattern") ? nt.getContext() : null;
+			
 			Resource aaa = nt.getSubject();
 			Value xxx = nt.getObject();
 
@@ -850,7 +866,7 @@ class SimpleRDFSInferencerConnection extends InferencerConnectionWrapper impleme
 
 					if (yyy instanceof Resource) {
 						if (!getStatements(aaa, RDF.TYPE, yyy, true).hasNext()) { // avoid repeated statements
-							boolean added = addInferredStatement(aaa, RDF.TYPE, yyy);
+							boolean added = addInferredStatement(aaa, RDF.TYPE, yyy, context);
 							if (added) {
 								nofInferred++;
 							}
@@ -1027,6 +1043,96 @@ class SimpleRDFSInferencerConnection extends InferencerConnectionWrapper impleme
 				if (added) {
 					nofInferred++;
 				}
+			}
+		}
+
+		return nofInferred;
+	}
+
+	// xxx rdfs:subClassOf yyy (nt) && aaa rdf:type yyy (t1) --> aaa rdf:type xxx
+	// irivera: modified in order to not repeat statements
+	private int applyRuleRdfs9_1b()
+		throws SailException
+	{
+		int nofInferred = 0;
+
+		Iterator<Statement> ntIter = newThisIteration.match(null, RDFS.SUBCLASSOF, null);
+
+		while (ntIter.hasNext()) {
+			Statement nt = ntIter.next();
+
+			// this store all the inferred statements of a pattern inside its graph
+			Resource context = nt.getContext() != null && nt.getContext().stringValue().startsWith(FCO.NS_FCO+"pattern") ? nt.getContext() : null;
+
+			Resource xxx = nt.getSubject();
+			Value yyy = nt.getObject();
+
+			if (yyy instanceof Resource && !xxx.equals(yyy)
+					&& !yyy.stringValue().startsWith(RDF.NAMESPACE)  // do not include every subclass of RDF, RDFS or OWL concepts
+					&& !yyy.stringValue().startsWith(RDFS.NAMESPACE)
+					&& !yyy.stringValue().startsWith(OWL.NAMESPACE)) {
+				CloseableIteration<? extends Statement, SailException> t1Iter;
+				t1Iter = getWrappedConnection().getStatements(null, RDF.TYPE, yyy, true);
+
+				while (t1Iter.hasNext()) {
+					Statement t1 = t1Iter.next();
+
+					Resource aaa = t1.getSubject();
+
+					if (!getStatements(aaa, RDF.TYPE, xxx, true).hasNext()) { // avoid repeated statements
+						boolean added = addInferredStatement(aaa, RDF.TYPE, xxx, context);
+						if (added) {
+							nofInferred++;
+						}
+					}
+				}
+				t1Iter.close();
+			}
+		}
+
+		return nofInferred;
+	}
+
+	// aaa rdf:type yyy (nt) && xxx rdfs:subClassOf yyy (t1) --> aaa rdf:type xxx
+	// irivera: modified in order to not repeat statements
+	private int applyRuleRdfs9_2b()
+		throws SailException
+	{
+		int nofInferred = 0;
+
+		Iterator<Statement> ntIter = newThisIteration.match(null, RDF.TYPE, null);
+
+		while (ntIter.hasNext()) {
+			Statement nt = ntIter.next();
+
+			// this store all the inferred statements of a pattern inside its graph
+			Resource context = nt.getContext() != null && nt.getContext().stringValue().startsWith(FCO.NS_FCO+"pattern") ? nt.getContext() : null;
+
+			Resource aaa = nt.getSubject();
+			Value yyy = nt.getObject();
+
+			if (yyy instanceof Resource && !aaa.equals(yyy)) {
+				CloseableIteration<? extends Statement, SailException> t1Iter;
+				t1Iter = getWrappedConnection().getStatements(null, RDFS.SUBCLASSOF, (Value)yyy, true);
+
+				while (t1Iter.hasNext()) {
+					Statement t1 = t1Iter.next();
+
+					Resource xxx = t1.getSubject();
+
+					if (xxx instanceof Resource
+							&& !xxx.stringValue().startsWith(RDF.NAMESPACE)  // do not include every subclass of RDF, RDFS or OWL concepts
+							&& !xxx.stringValue().startsWith(RDFS.NAMESPACE)
+							&& !xxx.stringValue().startsWith(OWL.NAMESPACE)) {
+						if (!getStatements(aaa, RDF.TYPE, xxx, true).hasNext()) { // avoid repeated statements
+							boolean added = addInferredStatement(aaa, RDF.TYPE, xxx, context);
+							if (added) {
+								nofInferred++;
+							}
+						}
+					}
+				}
+				t1Iter.close();
 			}
 		}
 

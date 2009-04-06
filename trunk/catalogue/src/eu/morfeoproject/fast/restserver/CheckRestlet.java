@@ -36,7 +36,7 @@ public class CheckRestlet extends CatalogueRestlet {
 	@Override
 	public void handle(Request request, Response response) {
 		if (request.getMethod().equals(Method.POST)) {
-			logger.debug("Entering CHECK operation...");
+			logger.info("Entering CHECK operation...");
 			try {
 				// creates JSON representation of the input
 				JSONObject input = new JSONObject(request.getEntity().getText());
@@ -94,10 +94,14 @@ public class CheckRestlet extends CatalogueRestlet {
 							else
 								satisfied = catalogue.isSatisfied(reachables, c, true, true, null);
 							jsonPre.put("satisfied", satisfied);
+							String strSatisfy = satisfied ? "SATISFIED" : "NO SATISFIED";
+							logger.info("["+strSatisfy+"] "+c.getPatternString());
 							reachability = reachability && satisfied;
 							preArray.put(jsonPre);
 						}
 						jsonScreen.put("reachability", reachability);
+						String strReachability = reachability ? "REACHABLE" : "NO REACHABLE";
+						logger.info("["+strReachability+"] "+s.getUri());
 						jsonScreen.put("preconditions", preArray);
 						canvasOut.put(jsonScreen);
 					}
@@ -143,7 +147,7 @@ public class CheckRestlet extends CatalogueRestlet {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			logger.debug("...Exiting CHECK operation");
+			logger.info("...Exiting CHECK operation");
 		} else {
 			response.setStatus(Status.CLIENT_ERROR_METHOD_NOT_ALLOWED);
 		}
