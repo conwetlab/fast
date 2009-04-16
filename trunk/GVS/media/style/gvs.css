@@ -418,7 +418,7 @@ table td {
 label{
     float:left;
     margin-top:3px;
-    width:10em;
+    width:100%;
 }
 input[type="text"]{
     width:26em;
@@ -431,6 +431,16 @@ input[type="text"]{
 #SFButtons{
     text-align:center;
 }
+
+#addScDialogDiv{
+    margin:5px;
+    width:450px;
+    text-align:justify;
+}
+#ScButtons{
+    text-align:center;
+}
+
 #wizardButtons{
     text-align:center;
 }
