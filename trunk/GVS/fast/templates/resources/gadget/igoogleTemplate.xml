@@ -1,17 +1,17 @@
 {% extends "resources/gadget/igoogleTemplateBase.xml" %}
 {% block content %}
-<link rel="stylesheet" type="text/css" href="{{ gadget_URI }}/resources/menu/css/menu.css" />
-<SCRIPT language="javascript" src="{{ gadget_URI }}/js/fast/menu.js"></SCRIPT>
-<SCRIPT language="javascript" src="{{ gadget_URI }}/js/fast/engine.js"></SCRIPT>
-<SCRIPT language="javascript" src="{{ gadget_URI }}/js/prototype/prototype.js"></SCRIPT>
-<SCRIPT language="javascript" src="{{ gadget_URI }}/js/fastAPI/fastAPI.js"></SCRIPT>
-<SCRIPT language="javascript" src="{{ gadget_URI }}/js/fastAPI/fastAPI_igoogle.js"></SCRIPT>
+<link rel="stylesheet" type="text/css" href="{{ gadgetUri }}/resources/menu/css/menu.css" />
+<SCRIPT language="javascript" src="{{ gadgetUri }}/js/fast/menu.js"></SCRIPT>
+<SCRIPT language="javascript" src="{{ gadgetUri }}/js/fast/engine.js"></SCRIPT>
+<SCRIPT language="javascript" src="{{ gadgetUri }}/js/prototype/prototype.js"></SCRIPT>
+<SCRIPT language="javascript" src="{{ gadgetUri }}/js/fastAPI/fastAPI.js"></SCRIPT>
+<SCRIPT language="javascript" src="{{ gadgetUri }}/js/fastAPI/fastAPI_igoogle.js"></SCRIPT>
 <SCRIPT language="javascript">
     var menu = null;
     var screens = new Hash();
 {# Here the screens involved inside the gadget are defined #}
-{% load fastfilters %}
-{% for screen in gadget_screens %}
+{% load fastFilters %}
+{% for screen in gadgetScreens %}
     screens.set("{{ screen.name|cut:" " }}",
         {title: "{{ screen.name|cut:" " }}",
         contentEl:"{{ screen.name|cut:" " }}",
@@ -29,7 +29,7 @@
 </SCRIPT>
 <div id="menu"></div>
 {# TODO: screen in screens should have a code field #}
-{% for screen in gadget_screens %}
+{% for screen in gadgetScreens %}
 <div id="{{ screen.name|cut:" " }}" class="tabcontentHide">
     <object id="{{ screen.name|cut:" " }}_obj" width="100%" height="100%">
         {{ screen.code|safe }}

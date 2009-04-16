@@ -2,12 +2,12 @@
 <Template schemaLocation="http://morfeo-project.org/2007/Template">
 <!-- Meta tags define gadgets properties -->
     <Catalog.ResourceDescription>
-        <Vendor>{{ gadget_vendor }}</Vendor>
-        <Name>{{ gadget_title }}</Name>
-        <Version>{{ gadget_version }}</Version>
-        <Author>{{ gadget_author }}</Author>
-        <Mail>{{ gadget_mail }}</Mail>
-        <Description>{{ gadget_description }}</Description>
+        <Vendor>{{ gadgetVendor }}</Vendor>
+        <Name>{{ gadgetTitle }}</Name>
+        <Version>{{ gadgetVersion }}</Version>
+        <Author>{{ gadgetAuthor }}</Author>
+        <Mail>{{ gadgetMail }}</Mail>
+        <Description>{{ gadgetDescription }}</Description>
         <ImageURI>http://demo.ezweb.morfeo-project.org/repository/fast/amazon/amazon.png</ImageURI>
         <WikiURI>http://ezweb.morfeo-project.org/</WikiURI>
     </Catalog.ResourceDescription>
@@ -19,15 +19,15 @@
     </Platform.StateProperties>
 <!-- EzWeb Gadget Data Wiring -->
     <Platform.Wiring>
-{% for slot in gadget_slots %}
+{% for slot in gadgetSlots %}
         <Slot name="{{ slot.label }}" type="text" label="{{ slot.label }}" friendcode="{{ slot.expression }}"/>
 {% endfor %}
-{% for event in gadget_events %}
+{% for event in gadgetEvents %}
         <Event name="{{ event.label }}" type="text" label="{{ event.label }}" friendcode="{{ event.expression }}"/>
 {% endfor %}
     </Platform.Wiring>
     <Platform.Link>
-        <XHTML href="{{ gadget_URI }}" />
+        <XHTML href="{{ gadgetUri }}" />
     </Platform.Link>
     <Platform.Rendering width="10" height="38" />
 </Template>

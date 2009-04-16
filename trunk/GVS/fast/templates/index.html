@@ -2,7 +2,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"> 
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
     <head>
-        <title>FAST: Gadget Visual Studio</title>
+        <title>FAST: Gadget Visual Storyboard</title>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
         <style type="text/css">
         /*<![CDATA[*/
@@ -30,14 +30,14 @@
         <!-- URI constants -->
         <script type="text/javascript" language="javascript">
             _URIConstants = function(){}
-            _URIConstants.prototype.GET_POST_SCREENFLOW = "/deploy/";
-            _URIConstants.prototype.CATALOGUE_SCREENS = "catalogue/screens";
-            _URIConstants.prototype.CATALOGUE_FIND = "catalogue/find";
-            _URIConstants.prototype.CATALOGUE_FIND_AND_CHECK = "catalogue/find_and_check";
-            _URIConstants.prototype.CATALOGUE_CHECK = "catalogue/check_amazonSearch.scr.html";
-            _URIConstants.prototype.CATALOGUE_GETMETADATA = "catalogue/get_metadata";
-
-            _URIConstants.prototype.CATALOGUE_FLOW = "{{CATALOGUE_FLOW}}";
+            _URIConstants.prototype.getPostScreenflow = "/deploy/";
+            _URIConstants.prototype.catalogueScreens = "catalogue/screens";
+            _URIConstants.prototype.catalogueFind = "catalogue/find";
+            _URIConstants.prototype.catalogueFindAndCheck = "catalogue/findAndCheck";
+            _URIConstants.prototype.catalogueCheck = "catalogue/checkAmazonSearch.scr.html";
+            _URIConstants.prototype.catalogueGetMetadata = "catalogue/getMetadata";
+            _URIConstants.prototype.catalogueGetFacts = "catalogue/getFacts";
+            _URIConstants.prototype.catalogueFlow = "{{CATALOGUE_FLOW}}";
 
             var URIs = new _URIConstants();
         </script>
@@ -176,12 +176,12 @@
 
     <body class="soria">
         <!-- Setting the layout of the page. --> 
-        <div id="main" dojoType="dijit.layout.BorderContainer" liveSplitters="false">
+        <div id="main" dojoType="dijit.layout.BorderContainer" liveSplitters="false" design="headline" splitter="false" gutter="false">
             
             <!-- Header -->
             <div id="header" dojoType="dijit.layout.ContentPane" region="top">
                 <img src="{{ MEDIA_URL }}images/gui/fastLogo.png" alt="FAST Logo"/> 
-                <h1>Gadget Visual Studio</h1>
+                <h1>Gadget Visual Storyboard</h1>
                 <div id="header_button"><button id="showDeployGadgetDialog" dojoType="dijit.form.Button" label="Create Gadget!"></button></div>
                 <!-- Menu area -->
                 <div id="menu" dojoType="dijit.Toolbar">
