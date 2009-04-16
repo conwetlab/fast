@@ -1,5 +1,5 @@
 var _fastAPI_ezweb = Class.create(_fastAPI,{
-    
+
     initialize: function() {
     },
 
@@ -15,22 +15,22 @@ var _fastAPI_ezweb = Class.create(_fastAPI,{
             null;
         }
     },
-    
+
     getText: function (url, handler) {
         //TODO: Do something
         null;
     },
-    
+
     getJson: function (url, handler) {
         //TODO: Do something
         null;
     },
-    
+
     getFeed: function (url, handler) {
         //TODO: Do something
         null;
     },
-    
+
     request: function (url, handler) {
         //TODO: Do something
         null;
