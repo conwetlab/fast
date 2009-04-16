@@ -98,7 +98,7 @@ INSTALLED_APPS = (
 )
 
 # Url to the server that holds the semantic catalogue
-CATALOGUE_URL = 'http://192.168.154.15:8010/'
+CATALOGUE_URL = 'http://localhost:8010/'
 
 # Flow of operations against the catalogue in order to refresh the screens
 CATALOGUE_FLOW = 'check'
