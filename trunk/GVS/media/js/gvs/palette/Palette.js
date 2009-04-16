@@ -48,16 +48,14 @@ var Palette = Class.create( /** @lends Palette.prototype */ {
         switch(this._resourceType){
             case "screen":
                 //find Screens and check
-                // the canvas is empty because it is a new document
-                // this is a proof
-                var canvas = [];
+                var currentDocument = GVSSingleton.getInstance().getDocumentController().getCurrentDocument();
+                var canvas = currentDocument.getCanvas();
                 var domainContext = {
-                    "tags":GVSSingleton.getInstance().getDocumentController().getCurrentDocument().getResourceDescription().getDomainContexts(),
+                    "tags":currentDocument.getResourceDescription().getDomainContexts(),
                     "user":null
                 };
-                //element list is empty TODO get the actual element list from the palette
-                var elements = [];
-                CatalogueSingleton.getInstance().get_screens(canvas, domainContext, elements, 'reachability');
+                var elements = currentDocument.getPaletteElements();
+                CatalogueSingleton.getInstance().getScreens(canvas, domainContext, elements, 'reachability');
                 break;
             case "domainContext":
                 this.paintComponents();
@@ -70,8 +68,12 @@ var Palette = Class.create( /** @lends Palette.prototype */ {
 
     paintComponents: function () {
         this._components = this._createComponents(CatalogueSingleton.getInstance().getResourceFactory(this._resourceType));
-        this._content = this._renderComponents();
-        this._node.setContent(this._content);
+        var content = this._renderComponents();
+        this._node.setContent(content);
+    },
+
+    getComponents: function() {
+        return this._components;
     },
 
     // **************** PRIVATE METHODS **************** //

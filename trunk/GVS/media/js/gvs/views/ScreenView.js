@@ -43,7 +43,7 @@ var ScreenView = Class.create( ResourceView,
         this._preIcons = preIcons;
 
         var postArea = new Element("div", {"class": "postArea"});
-        postIcons = [];
+        var postIcons = [];
         $A(screenResourceDescription.postconditions).each(
                 function(post) {
                     var postFact = factFactory.getFactIcon(post, "medium");
@@ -54,7 +54,7 @@ var ScreenView = Class.create( ResourceView,
         this._postIcons = postIcons;
 
         var prePostSeparator = new Element("div",
-                {"class": "prePostSeparator"});  
+                {"class": "prePostSeparator"});
 
         if (screenResourceDescription.icon){
             var imageContainer = new Element ('div',

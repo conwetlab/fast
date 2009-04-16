@@ -78,7 +78,18 @@ var PaletteComponent = Class.create(DragSource,
         return instance;
     },
 
+    getResourceDescription: function() {
+        return this._resourceDescription;
+    },
 
+    /**
+     * Returns the root node
+     * @type DOMNode
+     * @public
+     */
+    getView: function() {
+        return this._view;
+    },
     // **************** PRIVATE METHODS **************** //
     /**
      * Creates an slot (GUI frame around a component) with a given title.
@@ -121,7 +132,7 @@ var PaletteComponent = Class.create(DragSource,
         var scrollOffset = paletteContent.parentNode.scrollTop;
         var headerOffset = dijit.byId("header").domNode.offsetTop +
                 dijit.byId("header").domNode.offsetHeight;
-        return this._view.getNode().offsetTop - scrollOffset + headerOffset;
+        return this.getView().getNode().offsetTop - scrollOffset + headerOffset;
     },
 
     /**
@@ -133,8 +144,8 @@ var PaletteComponent = Class.create(DragSource,
     _getContentOffsetLeft: function() {
         //FIXME: we suspect something is missing from the calculation
 
-        return this._view.getNode().offsetLeft;
-    },
+        return this.getView().getNode().offsetLeft;
+    }
 
 });
 

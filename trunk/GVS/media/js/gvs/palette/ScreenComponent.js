@@ -25,7 +25,7 @@ var ScreenComponent = Class.create(PaletteComponent,
      */
     _createInstance: function () {
         return new ScreenInstance(this._resourceDescription);
-    },
+    }
 
 });
 

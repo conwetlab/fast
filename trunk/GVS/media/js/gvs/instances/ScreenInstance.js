@@ -27,13 +27,14 @@ var ScreenInstance = Class.create(ComponentInstance,
             GVSSingleton.getInstance().getDocumentController().getCurrentDocument().addScreen(this);
             UIUtils.onClick(null, this.getView().getId());
             this.getView().getNode().observe('click', UIUtils.onClick);
-            //TODO check to the catalogue
-            // get the screens from the canvas
-            var canvas = [];
-            var domainContext = {'tags':null, 'user':null};
-            //element list is empty TODO get the actual element list from the palette
-            var elements = [];
-            if (URIs.CATALOGUE_FLOW=='check'){
+            var currentDocument = GVSSingleton.getInstance().getDocumentController().getCurrentDocument();
+            var canvas = currentDocument.getCanvas();
+            var domainContext = {
+                "tags":currentDocument.getResourceDescription().getDomainContexts(),
+                "user":null
+            };
+            var elements = currentDocument.getPaletteElements();
+            if (URIs.catalogueFlow =='check'){
                 CatalogueSingleton.getInstance().check(canvas, domainContext, elements, 'reachability');
             } else {
                 CatalogueSingleton.getInstance().get_screens(canvas, domainContext, elements, 'reachability');

@@ -5,9 +5,15 @@ function UIUtils()
     // *********************************
 }
 
-// TODO: comments
+// TODO: include comments
 
-UIUtils.prueba = null;
+UIUtils.show = function(dijitObject) {
+    dijitObject.show();
+}
+
+UIUtils.hide = function(dijitObject) {
+    dijitObject.hide();
+}
 
 UIUtils.selectElement = function(screen) {
     var currentDocument = GVSSingleton.getInstance().getDocumentController().getCurrentDocument();
@@ -33,11 +39,11 @@ UIUtils.inspectorAreaUpdate = function(screen){
 UIUtils.propertiesPaneUpdate = function(screen){
     var currentDocument = GVSSingleton.getInstance().getDocumentController().getCurrentDocument();
     var resourceDescription = currentDocument.getScreenDescription(screen);
-    $(currentDocument._detailsTitle['detailsTitle']).innerHTML = "Properties of " + resourceDescription.name;
-    $(currentDocument._detailsTitle['title']).innerHTML = resourceDescription.name;
-    $(currentDocument._detailsTitle['id']).innerHTML = resourceDescription.uri;
-    $(currentDocument._detailsTitle['desc']).innerHTML = resourceDescription.description;
-    $(currentDocument._detailsTitle['tags']).innerHTML = resourceDescription.domainContext;
+    $(currentDocument.getDetailsTitle('detailsTitle')).innerHTML = "Properties of " + resourceDescription.name;
+    $(currentDocument.getDetailsTitle('title')).innerHTML = resourceDescription.name;
+    $(currentDocument.getDetailsTitle('id')).innerHTML = resourceDescription.uri;
+    $(currentDocument.getDetailsTitle('desc')).innerHTML = resourceDescription.description;
+    $(currentDocument.getDetailsTitle('tags')).innerHTML = resourceDescription.domainContext;
 }
 
 UIUtils.prePostPaneUpdate = function(screen){
@@ -318,18 +324,278 @@ UIUtils.createDeployGadgetDialog = function() {
     }
 }
 
-UIUtils.show = function(dijitObject) {
-    dijitObject.show();
-}
-
-UIUtils.hide = function(dijitObject) {
-    dijitObject.hide();
-}
-
 UIUtils.sendDeployGadgetDialog = function() {
     GVSSingleton.getInstance().getDocumentController().deployCurrentDocument();
 }
 
+UIUtils.showAddScDialog = function() {
+    var addScDialog = UIUtils.createAddScDialog();
+    UIUtils.show(addScDialog);
+}
+
+UIUtils.hideAddScDialog = function(){
+    UIUtils.hide(dijit.byId('addScDialog'));
+}
+
+UIUtils.createAddScDialog = function() {
+    if (dijit.byId("addScDialog") == null) {
+        var dialog = new dijit.Dialog({
+            "id" : "addScDialog",
+            "title" : "Add Screen",
+            "style" : "display:none;"
+        });
+
+        var dialogDiv = new Element("div", {
+            "id" : "addScDialogDiv"
+        });
+        var h2 = new Element("h2").update("Fulfill Screen Information");
+        dialogDiv.insert(h2);
+        var divScInfo = new Element("div", {
+            "class" : "line"
+        }).update("Please fulfill the required information in order to"
+            + " add a new screen to the catalogue.");
+        dialogDiv.insert(divScInfo);
+        
+        var form2 = new Element('form', {
+            "id" : "addScreenForm",
+            method : "post"
+        });
+        
+        var hScreenInformation = new Element('h3').update("Screen information");
+        form2.insert(hScreenInformation);
+
+        var divScUri = new Element("div", {
+            "class" : "line"
+        });
+        var labelScUri = new Element("label").update("URI:");
+        divScUri.insert(labelScUri);
+        var inputScUri = new Element("input", {
+            type : "text",
+            id : "ScUri",
+            name : "ScUri",
+            value : "new Screen URI..."
+        });
+        divScUri.insert(inputScUri);
+        form2.insert(divScUri);
+        
+        var divScLabel = new Element("div", {
+            "class" : "line"
+        });
+        var labelScLabel = new Element("label").update("Label:");
+        divScLabel.insert(labelScLabel);
+        var inputScLabel = new Element("input", {
+            type : "text",
+            id : "ScLabel",
+            Name : "ScLabel",
+            value : ""
+        });
+        divScLabel.insert(inputScLabel);
+        form2.insert(divScLabel);
+
+        var divScName = new Element("div", {
+            "class" : "line"
+        });
+        var labelScName = new Element("label").update("Name:");
+        divScLabel.insert(labelScName);
+        var inputScName = new Element("input", {
+            type : "text",
+            id : "ScName",
+            Name : "ScName",
+            value : ""
+        });
+        divScName.insert(inputScName);
+        form2.insert(divScName);
+
+        var divScDesc = new Element("div", {
+            "class" : "line"
+        });
+        var labelScDesc = new Element("label").update("Description:");
+        divScDesc.insert(labelScDesc);
+        var inputScDesc = new Element("input", {
+            type : "text",
+            id : "ScDesc",
+            name : "ScDesc",
+            value : ""
+        });
+        divScDesc.insert(inputScDesc);
+        form2.insert(divScDesc);
+
+        var divScCreator = new Element("div", {
+            "class" : "line"
+        });
+        var labelScCreator = new Element("label").update("Creator:");
+        divScCreator.insert(labelScCreator);
+        var inputScCreator = new Element("input", {
+            type : "text",
+            id : "ScCreator",
+            name : "ScCreator",
+            value : ""
+        });
+        divScCreator.insert(inputScCreator);
+        form2.insert(divScCreator);
+        
+        var divScRights = new Element("div", {
+            "class" : "line"
+        });
+        var labelScRights = new Element("label").update("Rights:");
+        divScRights.insert(labelScRights);
+        var inputScRights = new Element("input", {
+            type : "text",
+            id : "ScRights",
+            name : "ScRights",
+            value : ""
+        });
+        divScRights.insert(inputScRights);
+        form2.insert(divScRights);
+
+        var divScVersion = new Element("div", {
+            "class" : "line"
+        });
+        var labelScVersion = new Element("label").update("Version:");
+        divScVersion.insert(labelScVersion);
+        var inputScVersion = new Element("input", {
+            type : "text",
+            id : "ScVersion",
+            name : "ScVersion",
+            value : ""
+        });
+        divScVersion.insert(inputScVersion);
+        form2.insert(divScVersion);
+
+        var divScCreationDate = new Element("div", {
+            "class" : "line"
+        });
+        var labelScCreationDate = new Element("label").update("Creation Date:");
+        divScCreationDate.insert(labelScCreationDate);
+        var inputScCreationDate = new Element("input", {
+            type : "text",
+            id : "ScCreationDate",
+            name : "ScCreationDate",
+            value : ""
+        });
+        divScCreationDate.insert(inputScCreationDate);
+        form2.insert(divScCreationDate);
+
+        var divScIcon = new Element("div", {
+            "class" : "line"
+        });
+        var labelScIcon = new Element("label").update("Icon URL:");
+        divScIcon.insert(labelScIcon);
+        var inputScIcon = new Element("input", {
+            type : "text",
+            id : "ScIcon",
+            name : "ScIcon",
+            value : ""
+        });
+        divScIcon.insert(inputScIcon);
+        form2.insert(divScIcon);
+
+        var divScScshot = new Element("div", {
+            "class" : "line"
+        });
+        var labelScScshot = new Element("label").update("Screenshot URL:");
+        divScScshot.insert(labelScScshot);
+        var inputScScshot = new Element("input", {
+            type : "text",
+            id : "ScScshot",
+            name : "ScScshot",
+            value : ""
+        });
+        divScScshot.insert(inputScScshot);
+        form2.insert(divScScshot);
+
+        var divScDomainContext = new Element("div", {
+            "class" : "line"
+        });
+        var labelScDomainContext = new Element("label").update("Domain Context:");
+        divScDomainContext.insert(labelScDomainContext);
+        var inputScDomainContext = new Element("input", {
+            type : "text",
+            id : "ScDomainContext",
+            name : "ScDomainContext",
+            value : ""
+        });
+        divScDomainContext.insert(inputScDomainContext);
+        form2.insert(divScDomainContext);
+
+        var divScHomepage = new Element("div", {
+            "class" : "line"
+        });
+        var labelScHomepage = new Element("label").update("Homepage:");
+        divScHomepage.insert(labelScHomepage);
+        var inputScHomepage = new Element("input", {
+            type : "text",
+            id : "ScHomepage",
+            name : "ScHomepage",
+            value : ""
+        });
+        divScHomepage.insert(inputScHomepage);
+        form2.insert(divScHomepage);
+
+        var divScPrecs = new Element("div", {
+            "class" : "line"
+        });
+        var labelScPrecs = new Element("label").update("Preconditions:");
+        divScPrecs.insert(labelScPrecs);
+        var inputScPrecs = new Element("input", {
+            type : "text",
+            id : "ScPrecs",
+            name : "ScPrecs",
+            value : ""
+        });
+        divScPrecs.insert(inputScPrecs);
+        form2.insert(divScPrecs);
+
+        var divScPosts = new Element("div", {
+            "class" : "line"
+        });
+        var labelScPosts = new Element("label").update("Postconditions:");
+        divScPosts.insert(labelScPosts);
+        var inputScPosts = new Element("input", {
+            type : "text",
+            id : "ScPosts",
+            name : "ScPosts",
+            value : ""
+        });
+        divScPosts.insert(inputScPosts);
+        form2.insert(divScPosts);
+
+        dialogDiv.insert(form2);
+
+        var divScButtons = new Element("div", {
+            "id" : "ScButtons"
+        });
+        var acceptScButton = new dijit.form.Button({
+            "id" : "acceptScButton",
+            "label" : "Accept",
+            onClick : function() {
+                var uri = $('ScUri').getValue(); 
+                if(uri && uri != "") {
+                    //TODO: Add the screen to the catalogue
+                    UIUtils.hideAddScDialog();
+                }else{
+                    alert("A Screen uri must be provided");
+                }
+            }
+        });
+        divScButtons.insert(acceptScButton.domNode);
+        
+        var cancelScButton = new dijit.form.Button({
+            id : "cancelScButton",
+            label : "Cancel",
+            onClick : function() {
+                UIUtils.hideAddScDialog();
+            }
+        });
+        divScButtons.insert(cancelScButton.domNode);
+        dialogDiv.insert(divScButtons);
+        dialog.setContent(dialogDiv);
+        return dialog;
+        
+    } else {
+        return dijit.byId("addScDialog");
+    }
+}
 
 UIUtils.updateSFDocAndScreenPalette = function(/** map id->value*/ screenList) {
     UIUtils.updateScreenPaletteReachability(screenList);
@@ -337,14 +603,16 @@ UIUtils.updateSFDocAndScreenPalette = function(/** map id->value*/ screenList) {
 }
 
 UIUtils.updateScreenPaletteReachability = function(/** map id->value*/ screenList) {
-    var screens = GVSSingleton.getInstance().getDocumentController().getCurrentDocument().getPaletteController().getPalette("screen")._components;
+    var screens = GVSSingleton.getInstance().getDocumentController().getCurrentDocument().getPaletteController().getPalette("screen").getComponents();
     for (var i=0; i<screens.length; i++) {
         for (var j=0; j<screenList.length; j++) {
-            if ((screens[i]._resourceDescription.uri==screenList[j].uri) && (screenList[j].value=='true')) {
-                screens[i]._resourceDescription.satisfeable=true;
-                break;
-            } else {
-                screens[i]._resourceDescription.satisfeable=false;
+            if (screens[i].getResourceDescription().uri==screenList[j].uri) {
+                if (screenList[j].value=='true'){
+                    screens[i].getResourceDescription().satisfeable=true;
+                    break;
+                } else {
+                    screens[i].getResourceDescription().satisfeable=false;
+                }
             }
         }
         UIUtils.colorizeScreen(screens[i]);
@@ -352,14 +620,16 @@ UIUtils.updateScreenPaletteReachability = function(/** map id->value*/ screenLis
 }
 
 UIUtils.updateSFDocumentReachability = function(/** map id->value*/ screenList) {
-    var screens = GVSSingleton.getInstance().getDocumentController()._currentDocument.getScreens();
+    var screens = GVSSingleton.getInstance().getDocumentController().getCurrentDocument().getScreens();
     for (var i=0; i<screens.length; i++) {
         for (var j=0; j<screenList.length; j++) {
-            if ((screens[i]._resourceDescription.uri==screenList[j].uri) && (screenList[j].value=='true')) {
-                screens[i]._resourceDescription.satisfeable=true;
-                break;
-            } else {
-                screens[i]._resourceDescription.satisfeable=false;
+            if (screens[i].getResourceDescription().uri==screenList[j].uri) {
+                if (screenList[j].value=='true'){
+                    screens[i].getResourceDescription().satisfeable=true;
+                    break;
+                } else {
+                    screens[i].getResourceDescription().satisfeable=false;
+                }
             }
         }
         UIUtils.colorizeScreen(screens[i]);
@@ -368,14 +638,14 @@ UIUtils.updateSFDocumentReachability = function(/** map id->value*/ screenList) 
 
 UIUtils.colorizeScreen = function(screen){
 
-    var globalColor = (screen._resourceDescription.satisfeable)? "green" : "#B90000";  
+    var globalColor = (screen.getResourceDescription().satisfeable)? "green" : "#B90000";
 
     // border and posts
-    $(screen._view._id).style.borderColor = globalColor;
-    $$("#" + screen._view._id + " .screenTitle")[0].style.backgroundColor = globalColor;
+    $(screen.getView().getId()).style.borderColor = globalColor;
+    $$("#" + screen.getView().getId() + " .screenTitle")[0].style.backgroundColor = globalColor;
 
-    $$("#" + screen._view._id + " .postArea .fact").each (function(node){
-        if (screen._resourceDescription.satisfeable) {
+    $$("#" + screen.getView().getId() + " .postArea .fact").each (function(node){
+        if (screen.getResourceDescription().satisfeable) {
             node.removeClassName("unsatisfeable");
             node.addClassName("satisfeable");
         } else {
@@ -385,8 +655,8 @@ UIUtils.colorizeScreen = function(screen){
     });
 
     //pres
-    $$("#" + screen._view._id + " .preArea .fact").each (function(node){
-        if (screen._resourceDescription.satisfeable){
+    $$("#" + screen.getView().getId() + " .preArea .fact").each (function(node){
+        if (screen.getResourceDescription().satisfeable){
             node.removeClassName("unsatisfeable");
             node.addClassName("satisfeable");
         } else {
@@ -396,12 +666,12 @@ UIUtils.colorizeScreen = function(screen){
     });
 
     // Screen Class
-    if (screen._resourceDescription.satisfeable) {
-        $(screen._view._id).removeClassName("unsatisfeable");
-        $(screen._view._id).addClassName("satisfeable");
+    if (screen.getResourceDescription().satisfeable) {
+        $(screen.getView().getId()).removeClassName("unsatisfeable");
+        $(screen.getView().getId()).addClassName("satisfeable");
     } else {
-        $(screen._view._id).removeClassName("satisfeable");
-        $(screen._view._id).addClassName("unsatisfeable");
+        $(screen.getView().getId()).removeClassName("satisfeable");
+        $(screen.getView().getId()).addClassName("unsatisfeable");
     }
 }
 
@@ -464,8 +734,8 @@ UIUtils.onKeyPressCanvas = function(e){
                     //screenflowButton(false);
                 //}
             }
-            //Delete the element
-            $(selectedElement.parentNode).removeChild (selectedElement);
+            //Delete the element from the canvas
+            $(selectedElement.parentNode).removeChild(selectedElement);
             UIUtils.emptyPropertiesPane(currentDocument);
             UIUtils.selectElement(null);
         }
@@ -473,9 +743,9 @@ UIUtils.onKeyPressCanvas = function(e){
 }
 
 UIUtils.emptyPropertiesPane = function(currentDocument){
-    $(currentDocument._detailsTitle['detailsTitle']).innerHTML = "Properties";
-    $(currentDocument._detailsTitle['title']).innerHTML = "&nbsp;";
-    $(currentDocument._detailsTitle['id']).innerHTML = "&nbsp;";
-    $(currentDocument._detailsTitle['desc']).innerHTML = "&nbsp;";
-    $(currentDocument._detailsTitle['tags']).innerHTML = "&nbsp;";
+    $(currentDocument.getDetailsTitle('detailsTitle')).innerHTML = "Properties";
+    $(currentDocument.getDetailsTitle('title')).innerHTML = "&nbsp;";
+    $(currentDocument.getDetailsTitle('id')).innerHTML = "&nbsp;";
+    $(currentDocument.getDetailsTitle('desc')).innerHTML = "&nbsp;";
+    $(currentDocument.getDetailsTitle('tags')).innerHTML = "&nbsp;";
 }

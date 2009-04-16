@@ -36,7 +36,7 @@ var PersistenceEngineFactory = function () {
         // ****************
         // PUBLIC METHODS 
         // ****************
-        PersitenceEngine.prototype.send_get = function (url, context, successHandler, errorHandler) {
+        PersitenceEngine.prototype.sendGet = function (url, context, successHandler, errorHandler) {
             new Ajax.Request(url, {
                 method: 'get',
                 parameters: arguments[4],
@@ -46,7 +46,7 @@ var PersistenceEngineFactory = function () {
             });
         }
 
-        PersitenceEngine.prototype.send_post = function (url, params, body, context, successHandler, errorHandler) {
+        PersitenceEngine.prototype.sendPost = function (url, params, body, context, successHandler, errorHandler) {
             new Ajax.Request(url, {
                 method: 'post',
                 parameters: params,
@@ -57,7 +57,7 @@ var PersistenceEngineFactory = function () {
             });
         }
 
-        PersitenceEngine.prototype.send_delete = function (url, context, successHandler, errorHandler){
+        PersitenceEngine.prototype.sendDelete = function (url, context, successHandler, errorHandler){
             new Ajax.Request(url, {
                 method: 'delete',
                 onSuccess: successHandler.bind(context),
@@ -66,7 +66,7 @@ var PersistenceEngineFactory = function () {
             });
         }
 
-        PersitenceEngine.prototype.send_update = function (url, params, context, successHandler, errorHandler){
+        PersitenceEngine.prototype.sendUpdate = function (url, params, context, successHandler, errorHandler){
             new Ajax.Request(url, {
                 method: 'put',
                 parameters: params,
