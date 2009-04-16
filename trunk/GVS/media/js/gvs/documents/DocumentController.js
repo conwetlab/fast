@@ -27,6 +27,9 @@ var DocumentController = Class.create(
         this.addDocument(welcome);
         dijit.byId("documentContainer").layout();
 
+        // FIXME: Work around for updating the Fact Factory
+        FactFactorySingleton.getInstance().updateFacts();
+        
         //Arming onFocus callback
         var mine = this;
         dojo.connect(dijit.byId("documentContainer"), "selectChild", function(tab){
@@ -37,8 +40,7 @@ var DocumentController = Class.create(
             DocumentController.prototype._closeDocument.apply(mine, arguments);
         });
     },
-        
-        
+
     // **************** PUBLIC METHODS **************** //
         
     /**
@@ -55,14 +57,27 @@ var DocumentController = Class.create(
     },
 
     /**
+     * Creates a new deployment document
+     */
+    createDeploymentDocument: function(deploymentContent){
+        var deployment = new DeploymentDocument();
+        this.addDocument(deployment);
+        deployment.populate(deploymentContent);
+    },
+
+    /**
      * Adds a new document.
      */
     addDocument: function(document){
         this._documents[document.getTabId()] = document;
         dijit.byId("documentContainer").addChild(document.getTab());
         dijit.byId("documentContainer").selectChild(document.getTabId());
+        $$(".tabLabel").each(function(canvas){canvas.observe("focus",function(e){
+           var element = Event.element(e);
+           element.blur();
+        })});
     },
-    
+
     /**
      * Gets a document.
      * @param docId: document Id
@@ -79,7 +94,7 @@ var DocumentController = Class.create(
     getCurrentDocument: function(){
         return this._currentDocument;
     },
-    
+
     /**
      * Deploy the currently focused document.
      */
@@ -98,7 +113,6 @@ var DocumentController = Class.create(
 
     // **************** PRIVATE METHODS **************** //
 
-        
     /**
      * Close document event handler.
      * @private

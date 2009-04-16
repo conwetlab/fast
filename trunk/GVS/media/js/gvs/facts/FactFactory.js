@@ -31,6 +31,10 @@ var FactFactorySingleton = function() {
              * @type Hash
              * @private @member
              */
+            this._cachedFacts = new Hash();
+            
+            // This is the old hardcoded structure, kept because of the temporary nature of the solution
+            /*
             this._cachedFacts = {
                     "http://TODO/amazon#filter": new Fact("http://TODO/amazon#filter", "F", "Filter Search Criteria"),
                     "http://TODO/amazon#item":   new Fact("http://TODO/amazon#item",   "I", "Amazon item fact. Normally, its identifier will be an ASIN number"),
@@ -38,22 +42,44 @@ var FactFactorySingleton = function() {
                     "http://TODO/amazon#purchase": new Fact("http://TODO/amazon#purchase", "P", "Amazon purchase fact. It represents the URL that allows to purchase the Shopping Cart"),
                     "http://TODO/ebay#item":     new Fact("http://TODO/ebay#item", "EI", "eBay Item. It represents an Item selled by eBay")
             };
+            */
         },
         
-
         // **************** PUBLIC METHODS **************** //
         
-
         /**
          * Gets a fact identified by uri.
          * @type ResourceDescription
          * @public
          */
         getFact: function (/** String */ uri) {
-            return this._cachedFacts[uri];
+            // If the fact does not exist in the cached ones, then a default one is created.
+            if(this._cachedFacts.get(uri)==null){
+                this._cachedFacts.set(uri, new Fact(uri, "DF", "Default Fact"));
+            }
+            return this._cachedFacts.get(uri);
         },
 
-        
+        /**
+         * Updates the facts from the catalogue.
+         * @public
+         */
+        updateFacts: function () {
+            CatalogueSingleton.getInstance().getFacts();
+        },
+
+        /**
+         * Sets a fact identified by uri.
+         * @params String: Facts in JSON
+         * @public
+         */
+        setFacts: function(factMetadata) {
+            var fact_metadata = factMetadata.fact_metadata;
+            for (var i=0; i<fact_metadata.length ; i++) {
+                this._cachedFacts.set(fact_metadata[i].uri,new Fact(fact_metadata[i].uri, fact_metadata[i].shortcut, fact_metadata[i].description));
+            }
+        },
+
         /**
          * Gets the root node of a icon for a give fact identified by uri.
          * @param String uri   Fact Resource identifier
@@ -65,7 +91,6 @@ var FactFactorySingleton = function() {
             return new FactIcon(fact, size);
         }
 
-        
         // **************** PUBLIC METHODS **************** //
     });
     

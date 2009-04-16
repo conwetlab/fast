@@ -53,7 +53,8 @@ var GVSSingleton = function() {
                 openScreenflow: function (){
                     alert("open");
                 },
-                newScreenflow: this._newScreenflow.bind(this)
+                newScreenflow: this._newScreenflow.bind(this),
+                addScreen: this._addScreen.bind(this)
             };
             this._documentController = new DocumentController();
         },
@@ -91,16 +92,14 @@ var GVSSingleton = function() {
         _newScreenflow: function (){
             UIUtils.showNewSFDocDialog();
         },
-
+        
         /** 
-         * High-level action for deploying a screenflow.
+         * High-level action for adding a new screen to the catalogue.
          *
          * @private
          */
-        deployScreenflow: function (deploymentContent){
-            var deployment = new DeploymentDocument();
-            this._documentController.addDocument(deployment);
-            deployment.populate(deploymentContent);
+        _addScreen: function (){
+            UIUtils.showAddScDialog();
         }
     });
     

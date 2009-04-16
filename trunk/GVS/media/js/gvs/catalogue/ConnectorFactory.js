@@ -50,7 +50,16 @@ var ConnectorFactory = Class.create(ResourceFactory,
                 friendcode:''
             })
         ];
+    },
+
+    // **************** PUBLIC METHODS **************** //
+
+    updateResourceDescriptions: function (resourceDescriptions) {
+    },
+
+    getResources: function (/** Array*/ resourceIds) {
     }
+
 });
 
 // vim:ts=4:sw=4:et: 

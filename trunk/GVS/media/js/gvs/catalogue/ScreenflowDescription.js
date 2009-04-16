@@ -45,10 +45,10 @@ var ScreenflowDescription = Class.create(ResourceDescription,
      *      Screen to be added to the
      *      Screenflow document.
      */
-    addScreen: function (/** String */ id, /** ScreenDescription */ screen, /**Object*/ position) {
-        if(screen!=null) {
+    addScreen: function (/** String */ id, /** String */ screen_uri, /**Object*/ position) {
+        if(screen_uri!=null) {
             var screenInfo = {
-                "screen":screen,
+                "screen":screen_uri,
                 "position":position
             };
             this['screens'].set(id,screenInfo);
@@ -78,14 +78,15 @@ var ScreenflowDescription = Class.create(ResourceDescription,
      * @type {ScreenDescription[]}
      */
     getScreenDescriptions: function () {
-        var screens = new Array();
+        var screenUris = new Array();
         $H(this.getScreens()).each(function(pair){
-            screens.push(pair.value.screen);
+            screenUris.push(pair.value.screen);
         });
         /* TODO: equal screensdescriptions are deleted for convenience
          * of the deployment. When "equal screens" can be deployed in 
          * the same gadget, fix this. */
-        screens = screens.uniq();
+        screenUris = screenUris.uniq();
+        var screens = CatalogueSingleton.getInstance().getResourceFactory("screen").getResources(screenUris);
         return screens;
     },
 
@@ -129,9 +130,9 @@ var ScreenflowDescription = Class.create(ResourceDescription,
      */      
     setDomainContexts: function (domainContexts) {
         var domainContext = "";
-        var domainContexts_array = domainContexts.split(",");
-        for(var i = 0; i < domainContexts_array.length ; i++) {
-            domainContext = domainContexts_array[i].strip();
+        var domainContextsArray = domainContexts.split(",");
+        for(var i = 0; i < domainContextsArray.length ; i++) {
+            domainContext = domainContextsArray[i].strip();
             if(domainContext && domainContext!=""){
                 this.addDomainContext(domainContext);
             }
@@ -277,8 +278,7 @@ var ScreenflowDescription = Class.create(ResourceDescription,
         }
 
         function onSuccess(transport) {
-            var gvs = GVSSingleton.getInstance();
-            gvs.deployScreenflow(transport.responseText);
+            GVSSingleton.getInstance().getDocumentController().createDeploymentDocument(transport.responseText);
         }
 
         function onError(transport, e) {
@@ -311,7 +311,7 @@ var ScreenflowDescription = Class.create(ResourceDescription,
         console.log(result);
         console.log(datajson);
         var persistenceEngine = PersistenceEngineFactory.getInstance();
-        persistenceEngine.send_post(URIs.GET_POST_SCREENFLOW, result,null, this, onSuccess, onError);
+        persistenceEngine.sendPost(URIs.getPostScreenflow, result,null, this, onSuccess, onError);
     }
 });
 

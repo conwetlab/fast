@@ -12,6 +12,15 @@ var DomainConceptFactory = Class.create(ResourceFactory,
         this._resourceType = 'domainConcept';
         this._resourceName = 'Domain Concepts';
         this._resourceDescriptions = [];
+    },
+
+
+    // **************** PUBLIC METHODS **************** //
+
+    updateResourceDescriptions: function (resourceDescriptions) {
+    },
+
+    getResources: function (/** Array*/ resourceIds) {
     }
 });
 

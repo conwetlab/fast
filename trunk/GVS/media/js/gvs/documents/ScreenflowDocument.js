@@ -9,7 +9,7 @@ var ScreenflowDocument = Class.create(AbstractDocument,
     initialize: function($super, /** String */ title) {
         $super(title);
         Element.observe(document, "keypress",UIUtils.onKeyPressCanvas);
-
+        this._detailsTitle = null;
         this._validResources = ['screen','flowControl','connector', 'domainConcept'];
         this._documentType='screenflow';
         /*Screenflow Definition*/
@@ -44,7 +44,7 @@ var ScreenflowDocument = Class.create(AbstractDocument,
      */
     getScreenDescription: function (screenViewId) {
         for (var i=0; i<this._screens.length; i++) {
-            if (this._screens[i].getView()._id==screenViewId) {
+            if (this._screens[i].getView().getId()==screenViewId) {
                 return this._screens[i].getResourceDescription();
             }
         }
@@ -60,7 +60,8 @@ var ScreenflowDocument = Class.create(AbstractDocument,
     addScreen: function (screen) {
         if(screen!=null) {
             this._screens.push(screen);
-            this.getResourceDescription().addScreen(screen.getId(),screen.getResourceDescription(), screen.getPosition());
+            var screenDescUri = $H(screen.getResourceDescription()).get('uri');
+            this.getResourceDescription().addScreen(screen.getId(), screenDescUri, screen.getPosition());
         }
     },
 
@@ -71,15 +72,22 @@ var ScreenflowDocument = Class.create(AbstractDocument,
      *      Screenflow document.
      */
     deleteScreen: function(screenViewId) {
-        var screenToDelete = null;
         for (var i=0; i<this._screens.length; i++) {
-            if (this._screens[i].getView()._id==screenViewId) {
-                screenToDelete = this._screens[i];
+            if (this._screens[i].getView().getId()==screenViewId) {
+                this._resourceDescription.deleteScreen(this._screens[i].getId());
                 this._screens[i] = null;
+                break;
             }
         }
-        this._resourceDescription.deleteScreen(screenToDelete.getId());
         this._screens = this._screens.compact();
+        var currentDocument = GVSSingleton.getInstance().getDocumentController().getCurrentDocument();
+        var canvas = currentDocument.getCanvas();
+        var domainContext = {
+            "tags":currentDocument.getResourceDescription().getDomainContexts(),
+            "user":null
+        };
+        var elements = currentDocument.getPaletteElements();
+        CatalogueSingleton.getInstance().check(canvas, domainContext, elements, 'reachability');
     },
 
     /**
@@ -98,7 +106,7 @@ var ScreenflowDocument = Class.create(AbstractDocument,
     getSelectedElement: function () {
         return this._selectedElement;
     },
-    
+
     /**
      * Select a screen in the screenflow document
      * @param screen view
@@ -108,7 +116,7 @@ var ScreenflowDocument = Class.create(AbstractDocument,
     setSelectedElement: function (element) {
         this._selectedElement = element;
     },
-    
+
     /**
      * Creates a gadget deployment for the screenflow
      * @public
@@ -116,7 +124,47 @@ var ScreenflowDocument = Class.create(AbstractDocument,
     deployGadget: function () {
         this.getResourceDescription().deployGadget();
     },
+
+    /**
+     * Gets the elements of the canvas
+     * @type String[]
+     * @public
+     */
+    getCanvas: function () {
+        var canvas = [];
+        var screen_uris = [];
+        $H(this._resourceDescription.getScreens()).each(function(pair){
+            screen_uris.push(pair.value.screen);
+        });
+        screen_uris = screen_uris.uniq();
+        screen_uris.each(function(uri){
+            canvas.push({'uri': uri});
+        });
+        return canvas;
+    },
+
+    /**
+     * Gets the elements of the palette
+     * @type String[]
+     * @public
+     */
+    getPaletteElements: function () {
+        var elements = [];
+        (this._paletteController.getPalette("screen").getComponents()).each(function(component){
+            elements.push({'uri':component.getResourceDescription().uri});
+        });
+        return elements;
+    },
     
+    /**
+     * Gets a detail from the detailPane
+     * @type String
+     * @public
+     */
+    getDetailsTitle: function ( /** String */ detail ) {
+        return this._detailsTitle[detail];
+    },
+
     // **************** PRIVATE METHODS **************** //
     /**
      * Constructs the document content.

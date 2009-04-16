@@ -16,16 +16,28 @@ var ScreenFactory = Class.create(ResourceFactory,
 
     // **************** PUBLIC METHODS **************** //
 
-    updateScreenDescriptions: function (screenDescriptions) {
-        //TODO no vaciar resourceDescription y hacer comprobación de si estaban o no
-        this._resourceDescriptions=[];
+
+    updateResourceDescriptions: function (screenDescriptions) {
+
         var screen_metadata = screenDescriptions.screen_metadata;
         for (var i=0; i<screen_metadata.length ; i++) {
             this._resourceDescriptions.push(new ScreenDescription (screen_metadata[i]));
         }
     },
 
-    getScreenDescriptions: function (/** Array*/ screenURIs) {
+    getResources: function (/** Array*/ screenURIs) {
+        var screenDescriptions = [];
+
+        for (var i=0; i<screenURIs.length ; i++) {
+            for (var j=0; j<this._resourceDescriptions.length ; j++) {
+                if (screenURIs[i]==this._resourceDescriptions[j].uri)
+                {
+                    screenDescriptions.push(this._resourceDescriptions[j]);
+                    break;
+                }
+            }
+        }
+        return screenDescriptions;
     }
 
 

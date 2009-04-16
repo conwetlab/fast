@@ -41,39 +41,51 @@ var CatalogueSingleton = function() {
             return this._factories[resourceType];
         },
 
-        get_screens: function (/**Array*/ canvas, /** Hash*/ domainContext, /** Array*/ elements,/** String*/ criteria) {
+        getFacts: function () {
+            var onSuccess = function(response) {
+                var responseJSON = response.responseText;
+                var factMetadata = eval ('(' + responseJSON + ')');
+                FactFactorySingleton.getInstance().setFacts(factMetadata);
+            }
+            var onError = function(response, e) {
+                console.error(e);
+            }
+            
+            var persistenceEngine = PersistenceEngineFactory.getInstance();
+            persistenceEngine.sendGet(URIs.catalogueGetFacts,this, onSuccess, onError);
+        },
+        
+        getScreens: function (/**Array*/ canvas, /** Hash*/ domainContext, /** Array*/ elements,/** String*/ criteria) {
 
             //construct the data to be sent
             var body = {'canvas': canvas, 'domainContext': domainContext, 'elements': elements, 'criterion':criteria};
             body= Object.toJSON(body);
             //find_and_check
-            this.find_and_check(body);
+            this.findAndCheck(body);
         },
 
-        find_and_check: function (/** json*/ postData) {
+        findAndCheck: function (/** json*/ postData) {
 
-            var screensOnSuccess = function (response) {
-                var responseJSON = response.responseText;
+            var findOnSuccess = function (transport) {
+                var responseJSON = transport.responseText;
                 var screenList = eval ('(' + responseJSON + ')');
-                // get the uris list and call get_metadata
-                this.get_metadata(screenList.list_uris);
+                this.getMetadata(screenList.list_uris);
             }
 
-            var screensOnError = function (transport, e) {
-                //TODO tratar errores
-                UIUtils.prueba=e;
+            var findOnError = function (transport, e) {
+                //TODO error handling
             }
             var persistenceEngine = PersistenceEngineFactory.getInstance();
-            persistenceEngine.send_get(URIs.CATALOGUE_FIND_AND_CHECK,this, screensOnSuccess, screensOnError);
+            persistenceEngine.sendGet(URIs.catalogueFindAndCheck,this, findOnSuccess, findOnError);
         },
 
-        get_metadata: function (/** Array*/ screenList) {
+        getMetadata: function (/** Array*/ screenList) {
 
-            var screensOnSuccess = function (response) {
+            var getDataOnSuccess = function (response) {
                 var responseJSON = response.responseText;
                 var screenMetadata = eval ('(' + responseJSON + ')');
                 //update the Screen Factory
-                this.getResourceFactory('screen').updateScreenDescriptions(screenMetadata);
+                this.getResourceFactory('screen').updateResourceDescriptions(screenMetadata);
                 //repaint the Screen Palette
                 var paletteController = GVSSingleton.getInstance().getDocumentController().getCurrentDocument().getPaletteController();
                 var screenPalette = paletteController.getPalette("screen");
@@ -82,34 +94,50 @@ var CatalogueSingleton = function() {
                 UIUtils.updateSFDocAndScreenPalette(screenList);
             }
 
-            var screensOnError = function (transport, e) {
-                //TODO tratar errores
-                UIUtils.prueba=e;
+            var getDataOnError = function (transport, e) {
+                //TODO error handling
             }
 
-            var persistenceEngine = PersistenceEngineFactory.getInstance();
-            persistenceEngine.send_get(URIs.CATALOGUE_GETMETADATA,this, screensOnSuccess, screensOnError);
+            var screenUris = screenList.clone();
+            // get the uris list and call get_metadata
+            var screenDescriptions = this.getResourceFactory('screen').getResourceDescriptions();
+            screenUris.each(function(uri, index){
+                screenDescriptions.each(function(screen){
+                    if (uri.uri==screen.uri) {
+                        screenUris[index]=null;
+                        throw $break;
+                    }
+                });
+            });
+            screenUris=screenUris.compact();
 
+            if (screenUris.size()>0){
+                //TODO get the uris from the screenList argument in order to do the get_metadata request to the catalogue
+                var persistenceEngine = PersistenceEngineFactory.getInstance();
+                persistenceEngine.sendGet(URIs.catalogueGetMetadata,this, getDataOnSuccess, getDataOnError);
+            } else {
+                GVSSingleton.getInstance().getDocumentController().getCurrentDocument().getPaletteController().getPalette("screen").paintComponents();
+                UIUtils.updateSFDocAndScreenPalette(screenList);
+            }
         },
 
         check: function (/**Array*/ canvas, /** Hash*/ domainContext, /** Array*/ elements,/** String*/ criteria) {
 
-            var screensOnSuccess = function (response) {
+            var checkOnSuccess = function (response) {
                 var responseJSON = response.responseText;
                 var screenList = eval ('(' + responseJSON + ')');
                 UIUtils.updateSFDocAndScreenPalette(screenList.list_uris);
 
             }
 
-            var screensOnError = function (transport, e) {
-                //TODO tratar errores
-                UIUtils.prueba=e;
+            var checkOnError = function (transport, e) {
+                //TODO error handling
             }
             //construct the data to be sent
             var body = {'canvas': canvas, 'domainContext': domainContext, 'elements': elements, 'criterion':criteria};
             body= Object.toJSON(body);
             var persistenceEngine = PersistenceEngineFactory.getInstance();
-            persistenceEngine.send_get(URIs.CATALOGUE_CHECK,this, screensOnSuccess, screensOnError);
+            persistenceEngine.sendGet(URIs.catalogueCheck,this, checkOnSuccess, checkOnError);
 
         },
 
@@ -130,7 +158,7 @@ var CatalogueSingleton = function() {
             }
 
             var screensOnError = function (transport, e) {
-                //UIUtils.prueba=e;
+                //TODO error handling
             }
             var persistenceEngine = PersistenceEngineFactory.getInstance();
             var body = {
@@ -146,7 +174,7 @@ var CatalogueSingleton = function() {
             };
             body= Object.toJSON(body);
 
-            persistenceEngine.send_post(URIs.CATALOGUE_SCREENS, null, body, this, screensOnSuccess, screensOnError);
+            persistenceEngine.sendPost(URIs.catalogueScreens, null, body, this, screensOnSuccess, screensOnError);
 
         }
 

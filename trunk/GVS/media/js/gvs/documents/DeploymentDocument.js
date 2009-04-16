@@ -41,7 +41,7 @@ var DeploymentDocument = Class.create(AbstractDocument,
         content.update(deploymentContent);
         /*
         var documentTitle = new Element ("div", {"class": "documentTitle"}).
-            update("Welcome to the Gadget Visual Studio!");
+            update("Welcome to the Gadget Visual Storyboard!");
         content.appendChild(documentTitle);
         var welcomeIntro = new Element ("div", {"id": "intro"}).
             update("Choose your desired action:");
