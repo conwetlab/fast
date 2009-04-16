@@ -3,34 +3,34 @@ from django.conf import settings
 from os import path, mkdir
 import shutil
 
-def copyLibraries(gadget_path, mashup_platform):
-    js_path = path.join(settings.BASEDIR,'deploy','deploy_libs','js')
-    resources_path = path.join(settings.BASEDIR,'deploy','deploy_libs','resources')
+def copyLibraries(gadgetPath, mashupPlatform):
+    jsPath = path.join(settings.BASEDIR,'deploy','deployLibs','js')
+    resourcesPath = path.join(settings.BASEDIR,'deploy','deployLibs','resources')
 
     #Copying resources...
-    if(path.isdir(resources_path)):
-        shutil.copytree(resources_path, path.join(gadget_path,'resources'))
+    if(path.isdir(resourcesPath)):
+        shutil.copytree(resourcesPath, path.join(gadgetPath,'resources'))
     else:
         raise Exception('Gadget resources not available')
 
     #Copying gadget libraries...
-    if(path.isdir(path.join(js_path,'fast'))&
-       path.isdir(path.join(js_path,'prototype'))):
-        shutil.copytree(path.join(js_path,'fast'), path.join(gadget_path,'js','fast'))
-        shutil.copytree(path.join(js_path,'prototype'), path.join(gadget_path,'js','prototype'))
+    if(path.isdir(path.join(jsPath,'fast'))&
+       path.isdir(path.join(jsPath,'prototype'))):
+        shutil.copytree(path.join(jsPath,'fast'), path.join(gadgetPath,'js','fast'))
+        shutil.copytree(path.join(jsPath,'prototype'), path.join(gadgetPath,'js','prototype'))
     else:
         raise Exception('Gadget libraries not available')
 
     #Copying API libraries...
-    if(path.isdir(path.join(js_path,'fastAPI'))&
-       path.isfile(path.join(js_path,'fastAPI','fastAPI.js'))):
-        mkdir(path.join(gadget_path,'js','fastAPI'))
-        shutil.copy2(path.join(js_path,'fastAPI','fastAPI.js'),path.join(gadget_path,'js','fastAPI'))
+    if(path.isdir(path.join(jsPath,'fastAPI'))&
+       path.isfile(path.join(jsPath,'fastAPI','fastAPI.js'))):
+        mkdir(path.join(gadgetPath,'js','fastAPI'))
+        shutil.copy2(path.join(jsPath,'fastAPI','fastAPI.js'),path.join(gadgetPath,'js','fastAPI'))
     else:
         raise Exception('fastAPI.js not available')
 
     #Copying API implementation for a specific mashup platform...
-    if(path.isfile(path.join(js_path,'fastAPI','fastAPI_' + mashup_platform + '.js'))):
-        shutil.copy2(path.join(js_path,'fastAPI','fastAPI_' + mashup_platform + '.js'),path.join(gadget_path,'js','fastAPI'))
+    if(path.isfile(path.join(jsPath,'fastAPI','fastAPI_' + mashupPlatform + '.js'))):
+        shutil.copy2(path.join(jsPath,'fastAPI','fastAPI_' + mashupPlatform + '.js'),path.join(gadgetPath,'js','fastAPI'))
     else:
-        raise Exception('FastAPI implementation not available for platform: ' + mashup_platform)
+        raise Exception('FastAPI implementation not available for platform: ' + mashupPlatform)

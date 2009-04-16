@@ -6,7 +6,7 @@ from urllib import urlopen, urlcleanup
 
 from django.conf import settings
 
-def download_http_content (uri):
+def downloadHttpContent (uri):
     urlcleanup()
     
     try:

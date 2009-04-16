@@ -4,7 +4,7 @@ from django.conf import settings
 from django.http import HttpResponse
 
 from python_rest_client.restful_lib import Connection
-from commons.utils import json_encode
+from commons.utils import jsonEncode
 
 
 def catalogueProxy(request, operation):
@@ -12,7 +12,10 @@ def catalogueProxy(request, operation):
     # Get the base url to the Catalogue
     if hasattr(settings,'CATALOGUE_URL'):
         urlBase=settings.CATALOGUE_URL
-        url=urlBase+"json_data/"+operation+".json"
+        if (operation == "getMetadata"):
+            url=urlBase+"json_data/"+operation+".json"
+        else:
+            url=urlBase+"json_data/"+operation+".json"
         # Get a file handler in order to get the data
         fileHandler = urllib2.FileHandler()
         opener = urllib2.build_opener(fileHandler)
@@ -24,11 +27,11 @@ def catalogueProxy(request, operation):
 
 def find(request):
 
-    base_url = 'http://localhost:8082'
-    conn = Connection(base_url)
+    baseUrl = 'http://localhost:8082'
+    conn = Connection(baseUrl)
     # Obtain the json from the request
     body = request.raw_post_data
-    #body = json_encode(body)
+    #body = jsonEncode(body)
     result = conn.request_post("/find",body=body, headers={'Accept':'text/json'})
     response = HttpResponse(result['body'], mimetype='application/json; charset=UTF-8')
     return response
@@ -36,10 +39,10 @@ def find(request):
 
 def getmetadata(request):
 
-    base_url = 'http://localhost:8082'
-    conn = Connection(base_url)
+    baseUrl = 'http://localhost:8082'
+    conn = Connection(baseUrl)
     # Obtain the json from the request
-    body = json_encode(body)
+    body = jsonEncode(body)
     result = conn.request_post("/getmetadata",body=body, headers={'Accept':'text/json'})
     response = HttpResponse(result['body'], mimetype='application/json; charset=UTF-8')
     return response
@@ -47,10 +50,10 @@ def getmetadata(request):
 
 def check(request):
 
-    base_url = 'http://localhost:8082'
-    conn = Connection(base_url)
+    baseUrl = 'http://localhost:8082'
+    conn = Connection(baseUrl)
     # Obtain the json from the request
-    body = json_encode(body)
+    body = jsonEncode(body)
     result = conn.request_post("/check",body=body, headers={'Accept':'text/json'})
     response = HttpResponse(result['body'], mimetype='application/json; charset=UTF-8')
     return response
@@ -58,23 +61,23 @@ def check(request):
 
 def get(request):
 
-    base_url = 'http://localhost:8082'
-    conn = Connection(base_url)
+    baseUrl = 'http://localhost:8082'
+    conn = Connection(baseUrl)
     result = conn.request_get("/screens",headers={'Accept':'text/json'})
     response = HttpResponse(result['body'], mimetype='application/json; charset=UTF-8')
     return response
 
 def delete(request):
 
-    base_url = 'http://localhost:8082'
-    conn = Connection(base_url)
+    baseUrl = 'http://localhost:8082'
+    conn = Connection(baseUrl)
     result = conn.request_delete("/screens/1236597883500",headers={'Accept':'text/json'})
     response = HttpResponse(result['body'], mimetype='application/json; charset=UTF-8')
     return response
 
 def post(request):
 
-    base_url = 'http://localhost:8082'
+    baseUrl = 'http://localhost:8082'
     body = { "uri": None,
         "label": {"en-GB": "Screen - DERI"},
         "description": {"en-GB": "Returns people working in DERI"},
@@ -92,8 +95,8 @@ def post(request):
         "preconditions": [],
         "postconditions": ["?person rdf:type foaf:Person . ?person foaf:workplaceHomepage http://www.deri.ie/"]
     }
-    body = json_encode(body)
-    conn = Connection(base_url)
+    body = jsonEncode(body)
+    conn = Connection(baseUrl)
     result = conn.request_post("/screens", body=body, headers={'Accept':'text/json'})
     response = HttpResponse(result['body'], mimetype='application/json; charset=UTF-8')
     return response

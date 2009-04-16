@@ -37,7 +37,7 @@ from django.db import models
 from django.core.serializers.json import DateTimeAwareJSONEncoder
 from django.utils import simplejson
 
-def json_encode(data, ensure_ascii=False):
+def jsonEncode(data, ensure_ascii=False):
     """
     The main issues with django's default json serializer is that properties that
     had been added to a object dynamically are being ignored (and it also has 

@@ -4,18 +4,19 @@ from django.utils import simplejson
 from django.template import RequestContext, Template, Context, loader
 from django.shortcuts import render_to_response
 from django.http import HttpResponse, HttpResponseBadRequest, HttpResponseServerError
-from gadget_ezweb import createEzwebGadget
-from gadget_igoogle import createIgoogleGadget
+from gadgetEzweb import createEzwebGadget
+from gadgetIgoogle import createIgoogleGadget
 from os import path, mkdir
 import urllib2
+from django.utils.encoding import smart_unicode
 
 def deployGadget(request):
     print "gadget creation request"
     try:
         #If folder "static" does not exist, create it
-        static_path=path.join(settings.BASEDIR,'static')
-        if (not path.isdir(static_path)):
-            mkdir(static_path)
+        staticPath=path.join(settings.BASEDIR,'static')
+        if (not path.isdir(staticPath)):
+            mkdir(staticPath)
         
         #Getting the gadget parameters
         if request.POST.has_key('gadget'):
@@ -54,10 +55,21 @@ def deployGadget(request):
                 screens=definition['screens']
                 for screen in screens:
                     url = screen['uri']
+                    print url
                     data = ""
-                    req = urllib2.Request(url)
-                    response = urllib2.urlopen(req)
-                    screen['code'] = response.read()
+                    charset = "utf-8"
+                    try:
+                        req = urllib2.Request(url)
+                        response = urllib2.urlopen(req)
+                        data = response.read()
+                        info = response.info()
+                        print "INFO: ", info
+                        ignore, charset = info['Content-Type'].split('charset=')
+                        print "CHARSET: ", charset
+                        screen['code']=smart_unicode(data)
+                    except:
+                        print "Default CHARSET: ", charset
+                        screen['code']=smart_unicode(data)
             else:
                 screens=[]
             if (definition.has_key('connectors')):
@@ -77,23 +89,22 @@ def deployGadget(request):
             post = []
         print "parameters correctly obtained from json"
 
-        gadget_name = (vendor + '-' + label['en-GB'] + '-' + version).replace(' ', '_')
-        gadget_path = path.join(static_path,gadget_name)
+        gadgetName = (vendor + '-' + label['en-GB'] + '-' + version).replace(' ', '_')
+        gadgetPath = path.join(staticPath,gadgetName)
 
-        if (not path.isdir(gadget_path)):
-            mkdir(gadget_path)
+        if (not path.isdir(gadgetPath)):
+            mkdir(gadgetPath)
         else:
             print "Gadget already exists"
             raise Exception ('Gadget already exists')
         
         base_uri = request.build_absolute_uri('/static')
         #TODO: create uri with python api
-        gadget_uri = base_uri + '/' + gadget_name
+        gadgetUri = base_uri + '/' + gadgetName
+        ezwebUri = createEzwebGadget(gadgetName, gadgetUri, gadgetPath, label, vendor, version, description, author, email, screens, prec, post)
+        igoogleUri = createIgoogleGadget(gadgetName, gadgetUri, gadgetPath, label, vendor, version, description, author, email, screens, prec, post)
         
-        ezweb_uri = createEzwebGadget(gadget_name, gadget_uri, gadget_path, label, vendor, version, description, author, email, screens, prec, post)
-        igoogle_uri = createIgoogleGadget(gadget_name, gadget_uri, gadget_path, label, vendor, version, description, author, email, screens, prec, post)
-        
-        gadgetContext = Context({'ezwebGadgetURL': ezweb_uri,'igoogleGadgetURL': igoogle_uri})
+        gadgetContext = Context({'ezwebGadgetURL': ezwebUri,'igoogleGadgetURL': igoogleUri})
         return render_to_response('deploy.html', gadgetContext);
 
     except Exception, e:
