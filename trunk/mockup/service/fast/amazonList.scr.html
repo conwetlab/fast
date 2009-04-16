@@ -115,7 +115,7 @@
 	                    }
 	                    var parameters = "";
 						parameters += "&SearchIndex=" + productType;
-						parameters += "&Keywords=" + escape(filter.searchText);
+						parameters += "&Keywords=" + encodeURIComponent(filter.searchText);
 	                    //Add the page number (if is set)
 	                    parameters += "&ItemPage=" + (list.lastPageFetched + 1);
 	                    
