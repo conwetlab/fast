@@ -1,0 +1,88 @@
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="application/xhtml+xml; charset=UTF-8" />
+        <link type="text/css" rel="stylesheet" href="http://ezgadget.googlecode.com/svn/trunk/ezgadget/CanalOnline/screens/css.css" />
+        <link type="text/css" rel="stylesheet" href="http://ezgadget.googlecode.com/svn/trunk/ezgadget/CanalOnline/screens/internet.css" />
+		<style type="text/css">
+			#loadingImgCart{
+				margin:auto;	
+			}
+			#info{
+				margin:auto;
+				font-family:Arial,Helvetica,sans-serif;
+				font-style:italic;
+				padding-top: 10px;
+				color: #AAA;
+			}
+			.productTitle{
+				font-weight:bold;
+				font-style:normal;
+			}
+			#buttonContainerDivCart{
+				margin-top: 5px;
+				display:none;
+			}
+			#amazonImage{
+				position:absolute;
+				right:0px;
+				top:3px;
+			}
+		</style>
+        <script language="JavaScript">
+        		
+        	function ShoppingCart(){
+		    };
+            
+            ShoppingCart.prototype.init = function (){
+                   //Get the facts to invoke the service
+                    var cart = EngineFactory.getInstance().getFact('http://TODO/canalonline#shoppingCart');
+                    var product = document.getElementById("product");
+                    product.innerHTML = cart.product;
+                    $("checkoutButton").observe("click", shoppingCart.checkout);
+            }
+			
+			ShoppingCart.prototype.checkout = function (){
+				var purchase = {name:'http://TODO/canalonline#purchase', url: shoppingCart.purchaseURL};
+				EngineFactory.getInstance().manageFacts([purchase],[]);
+			}
+            
+            
+            var shoppingCart = new ShoppingCart();
+			EngineFactory.getInstance().addScreenLoader("ShoppingCart", shoppingCart.init);
+					
+        </script>
+    </head>
+    <body>
+        <div id="bodyDiv" style="text-align: center;">
+            <h1 id="title" class="texto1_1_bold">Carro de la compra</h1>
+            <div id="listDivCart" style="text-align: center;">
+                <table class="tabla_generica2" style="text-align: center;">
+                    <thead>
+                        <tr>
+                            <th class="texto5_1_bold">
+                                Elementos
+                            </th>
+                            <th class="texto5_1_bold">
+                                Precio
+                            </th>
+                            <th class="texto5_1_bold">
+                                Cantidad
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody id="listBodyCart">
+                    	<tr>
+							<td><div id="product" class="D_textoazul2arial_13"></div></td>
+							<td class="D_textoazul2arial_13">18,80</td>
+							<td class="D_textoazul2arial_13">1</td>
+					    </tr>
+                    </tbody>
+                </table>
+                <div>
+					<input type="button" id="checkoutButton" class="boton_generico" value="Contratar"/>
+                </div>
+				
+            </div>
+        </div>
+    </body>
+</html>

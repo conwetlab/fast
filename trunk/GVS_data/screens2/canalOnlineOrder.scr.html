@@ -1,0 +1,92 @@
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="application/xhtml+xml; charset=UTF-8" />
+        <link type="text/css" rel="stylesheet" href="http://ezgadget.googlecode.com/svn/trunk/ezgadget/CanalOnline/screens/css.css" />
+        <link type="text/css" rel="stylesheet" href="http://ezgadget.googlecode.com/svn/trunk/ezgadget/CanalOnline/screens/internet.css" />
+		<style type="text/css">
+			#loadingImgCart{
+				margin:auto;	
+			}
+			#info{
+				margin:auto;
+				font-family:Arial,Helvetica,sans-serif;
+				font-style:italic;
+				padding-top: 10px;
+				color: #AAA;
+			}
+			.productTitle{
+				font-weight:bold;
+				font-style:normal;
+			}
+			#buttonContainerDivCart{
+				margin-top: 5px;
+				display:none;
+			}
+			#amazonImage{
+				position:absolute;
+				right:0px;
+				top:3px;
+			}
+		</style>
+        <script language="JavaScript">
+        		
+		        	function Order(){};
+		        	
+		        	Order.prototype.init = function (){
+//		        		var purchase = EngineFactory.getInstance().getFact('purchase');
+//						var obj = new Element ('object',{type: "text/html", data: purchase.url, standby: "Loading...", width: "100%",  height: "100%"});
+//						$("bodyDivOrder").update(obj);
+					}
+					
+					var order = new Order();
+					EngineFactory.getInstance().addScreenLoader("Order", order.init);
+					
+        </script>
+    </head>
+    <body>
+        <div id="bodyDiv">
+            <h1 id="title">Orden de pedido</h1>
+            <div id="listDivCart">
+<form name="main" method="post" action="qxaa00jsBuyController" target="oculto"><p><p> 
+<table width="550" border="0" cellspacing="2" cellpadding="2" align="center"> 
+  <tr>  
+    <td colspan="5" class="texto2_4" align="center">Como paso previo a la contrataci&oacute;n, se comprobar&aacute; la cobertura, es decir, la disponibilidad del servicio en su domicilio.</td> 
+  </tr> 
+
+	<tr> 
+		<td class="texto5_1_bold">Nombre de la v&iacute;a</td> 
+		<td class="texto5_1_bold">N&uacute;mero</td> 
+		<td class="texto5_1_bold">Planta</td> 
+		<td class="texto5_1_bold">Letra</td> 
+		<td rowspan=2> 
+		<font class="texto5_2" size="1"><b><a href="#" onClick="comprar_ePersonal(document.main,document.main.codProducto.value,	document.main.v_procede.value,document.main.version.value,document.main.segmento.value,	document.main.idioma.value);">Datos adicionales </b> </href><A ONMOUSEOVER='ayuda.mostrar("Si su direcci&oacute;n no se ajusta a los datos b&aacute;sicos solicitados, introduzca los Datos complementarios necesarios en el formulario que le aparecer&aacute; al pulsar en el enlace")' ONMOUSEOUT='ayuda.ocultar()'> </A> 
+          <a href="#" onClick="comprar_ePersonal(document.main,document.main.codProducto.value,	document.main.v_procede.value,document.main.version.value,document.main.segmento.value,	document.main.idioma.value);">(opcionales)</href> 
+		</td> 
+	</tr> 
+<tr> 
+<td><INPUT TYPE=TEXT   NAME="CALL_DS_CALLE_P"  VALUE="" CLASS="txtFrm" MAXLENGTH=60 SIZE=28 AYUDA="Introduzca directamente el nombre de su calle, avenida, plaza, etc. Por ejemplo, su Ud. Vive en la Avenida de Valladolid, escriba Valladolid"  ><A ONMOUSEOVER='ayuda.mostrar("Introduzca directamente el nombre de su calle, avenida, plaza, etc. Por ejemplo, su Ud. Vive en la Avenida de Valladolid, escriba Valladolid")' ONMOUSEOUT='ayuda.ocultar()'> </A></td> 
+<td><input TYPE="text" name="FINC_NU_FINCA_KJ_P" class="txtFrm" SIZE="6" maxlength="5"></td> 
+<td><INPUT TYPE=TEXT   NAME="NUMERO_PLANTA_P"  VALUE="" CLASS="txtFrm" MAXLENGTH=3 SIZE=6 AYUDA="Si su planta no se ajusta a una numeraci&oacute;n est&aacute;ndar (bajos, &aacute;ticos, entresuelos, etc.), pulse en Datos adicionales e introd&uacute;zcala en el campo de Tipo de Planta"  ><A ONMOUSEOVER='ayuda.mostrar("Si su planta no se ajusta a una numeraci&oacute;n est&aacute;ndar (bajos, &aacute;ticos, entresuelos, etc.), pulse en Datos adicionales e introd&uacute;zcala en el campo de Tipo de Planta")' ONMOUSEOUT='ayuda.ocultar()'> </A></td> 
+<td><input TYPE="text" name="NUMERO_MANO_P" class="txtFrm" SIZE="6" maxlength="1"></td> 
+</tr> 
+<tr><td colspan="5"> </td></tr> 
+	<tr> 
+		<td class="texto5_1_bold">Provincia</td> 
+		<td class="texto5_1_bold" colspan="3">Poblaci&oacute;n</td> 
+		<td class="texto5_1_bold" colspan="3">C&oacute;d.Postal</td> 
+	</tr> 
+	<tr> 
+	<td> <SELECT NAME="PROV_CO_PROVINCIA_P" class="txtFrm" AYUDA=""  > <OPTION VALUE ="">   </OPTION> <OPTION VALUE ="15"> A CORUÑA </OPTION> <OPTION VALUE ="02"> ALBACETE </OPTION> <OPTION VALUE ="03"> ALICANTE </OPTION> <OPTION VALUE ="04"> ALMERIA </OPTION> <OPTION VALUE ="01"> ARABA </OPTION> <OPTION VALUE ="33"> ASTURIAS </OPTION> <OPTION VALUE ="05"> AVILA </OPTION> <OPTION VALUE ="06"> BADAJOZ </OPTION> <OPTION VALUE ="07"> BALEARES </OPTION> <OPTION VALUE ="08"> BARCELONA </OPTION> <OPTION VALUE ="48"> BIZKAIA </OPTION> <OPTION VALUE ="09"> BURGOS </OPTION> <OPTION VALUE ="10"> CACERES </OPTION> <OPTION VALUE ="11"> CADIZ </OPTION> <OPTION VALUE ="39"> CANTABRIA </OPTION> <OPTION VALUE ="12"> CASTELLON </OPTION> <OPTION VALUE ="51"> CEUTA </OPTION> <OPTION VALUE ="13"> CIUDAD REAL </OPTION> <OPTION VALUE ="14"> CORDOBA </OPTION> <OPTION VALUE ="16"> CUENCA </OPTION> <OPTION VALUE ="20"> GIPUZKOA </OPTION> <OPTION VALUE ="17"> GIRONA </OPTION> <OPTION VALUE ="18"> GRANADA </OPTION> <OPTION VALUE ="19"> GUADALAJARA </OPTION> <OPTION VALUE ="21"> HUELVA </OPTION> <OPTION VALUE ="22"> HUESCA </OPTION> <OPTION VALUE ="23"> JAEN </OPTION> <OPTION VALUE ="26"> LA RIOJA </OPTION> <OPTION VALUE ="35"> LAS PALMAS </OPTION> <OPTION VALUE ="24"> LEON </OPTION> <OPTION VALUE ="25"> LLEIDA </OPTION> <OPTION VALUE ="27"> LUGO </OPTION> <OPTION VALUE ="28"> MADRID </OPTION> <OPTION VALUE ="29"> MALAGA </OPTION> <OPTION VALUE ="52"> MELILLA </OPTION> <OPTION VALUE ="30"> MURCIA </OPTION> <OPTION VALUE ="31"> NAVARRA </OPTION> <OPTION VALUE ="32"> OURENSE </OPTION> <OPTION VALUE ="34"> PALENCIA </OPTION> <OPTION VALUE ="36"> PONTEVEDRA </OPTION> <OPTION VALUE ="37"> SALAMANCA </OPTION> <OPTION VALUE ="40"> SEGOVIA </OPTION> <OPTION VALUE ="41"> SEVILLA </OPTION> <OPTION VALUE ="42"> SORIA </OPTION> <OPTION VALUE ="43"> TARRAGONA </OPTION> <OPTION VALUE ="38"> TENERIFE </OPTION> <OPTION VALUE ="44"> TERUEL </OPTION> <OPTION VALUE ="45"> TOLEDO </OPTION> <OPTION VALUE ="46"> VALENCIA </OPTION> <OPTION VALUE ="47"> VALLADOLID </OPTION> <OPTION VALUE ="49"> ZAMORA </OPTION> <OPTION VALUE ="50"> ZARAGOZA </OPTION> </SELECT>  </td> 
+<script>main.PROV_CO_PROVINCIA_P.style.width="160px";</script> 
+		<td colspan="3"><INPUT TYPE=TEXT   NAME="EMPO_NO_POBLACION_P"  VALUE="" CLASS="txtFrm" MAXLENGTH=100 SIZE=36 AYUDA=""  ></td> 
+<td><INPUT TYPE=TEXT   NAME="CPOS_NU_CODIGO_POS_QP_P"  VALUE="" CLASS="txtFrm" MAXLENGTH=5 SIZE=5 AYUDA=""  ></td>	
+</tr> 
+	<tr><td colspan="5"> </td></tr> 
+</table> 
+
+ 
+
+</form>             </div>
+        </div>
+    </body>
+</html>

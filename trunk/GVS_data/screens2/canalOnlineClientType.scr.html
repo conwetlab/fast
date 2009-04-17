@@ -1,0 +1,105 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" 
+    content="application/xhtml+xml; charset=UTF-8" />
+<link type="text/css" rel="stylesheet"
+    href="http://ezgadget.googlecode.com/svn/trunk/ezgadget/CanalOnline/screens/css.css" />
+<link type="text/css" rel="stylesheet"
+    href="http://ezgadget.googlecode.com/svn/trunk/ezgadget/CanalOnline/screens/internet.css" />
+<style type="text/css">
+#bodyDiv {
+    max-width: 550px;
+}
+
+#searchArea {
+    border: 1px solid #F8A704;
+    -moz-border-radius: 13px 13px;
+    background: #FFF8E8 url(http://ezgadget.googlecode.com/svn/trunk/ezgadget/CanalOnline/screens/bg_td2.jpg)
+        repeat-x;
+    border: 1px solid #F8A704;
+    height: 100px;
+    margin: 5px auto 0px;
+    padding: 0px;
+    text-align: center;
+    width: 100%;
+}
+
+#contents {
+    padding: 12px;
+}
+
+#send {
+    margin-left: 15px;
+}
+
+#amazonImage {
+    position: absolute;
+    right: 2px;
+    top: 3px;
+}
+
+.title {
+    padding: 2px;
+    color: #AAAAAA;
+    font-weight: bold;
+    font-family: Arial, Helvetica, sans-serif;
+    white-space: nowrap;
+    overflow: hidden;
+}
+</style>
+<script language="JavaScript">
+    function Cliente(){
+        var servicio = null;
+        var segmento = null;
+        var telefono = null;
+    };
+    Cliente.prototype.init = function (){}
+    Cliente.prototype.send = function (tipo, valor ){
+        cliente.telefono = {'name': 'http://TODO/canalonline#clientPhone', 'type': tipo, 'value': null};
+        cliente.segmento = {'name': 'http://TODO/canalonline#clientSegment', 'type': tipo, 'value': valor};
+        if (cliente.servicio != null){
+            EngineFactory.getInstance().manageFacts([cliente.servicio,cliente.segmento,cliente.telefono],['promotions']);
+        }
+    }
+    Cliente.prototype.send2 = function (tipo, valor ){
+        cliente.servicio = {'name': 'http://TODO/canalonline#clientService', 'tipo': tipo, 'value': valor};
+        if (cliente.segmento != null){
+            EngineFactory.getInstance().manageFacts([cliente.servicio,cliente.segmento,cliente.telefono],['promotions']);
+        }
+    }
+    var cliente = new Cliente();
+    EngineFactory.getInstance().addScreenLoader("ClientType", cliente.init);
+</script>
+</head>
+<body>
+<div id="bodyDiv" style="text-align: center;">
+    <h1 id="title">Selecci&oacute;n de cliente</h1>
+
+<!-- table style="width:100%;border:1px;"><tr>
+							<td><img src="http://192.168.55.228:8082/img/btnSector1_on.gif" onclick="cliente.send('Sg','H');"></td>
+							<td><img src="http://192.168.55.228:8082/img/btnSector2_on.gif" onclick="cliente.send('Sg','P');"></td>
+						 </tr></table>
+
+						<table border="0"><tr>
+							<td><img src="http://192.168.55.228:8082/img/menuOpc1Off.gif" onclick="cliente.send2('Sv','I');"></td>
+							<td><img src="http://192.168.55.228:8082/img/menuOpc2Off.gif" onclick="cliente.send2('Sv','Tf');"></td>
+							<td><img src="http://192.168.55.228:8082/img/menuOpc3Off.gif" onclick="cliente.send2('Sv','Tv');"></td>
+						 </tr></table -->
+    <img
+    	src="http://ezgadget.googlecode.com/svn/trunk/ezgadget/CanalOnline/images/btnSector1_on.gif"
+    	onclick="cliente.send('Sg','H');">
+    <img
+    	src="http://ezgadget.googlecode.com/svn/trunk/ezgadget/CanalOnline/images/btnSector2_on.gif"
+    	onclick="cliente.send('Sg','P');">
+    <BR>
+    <img src="http://ezgadget.googlecode.com/svn/trunk/ezgadget/CanalOnline/images/menuOpc1Off.gif"
+	   onclick="cliente.send2('Sv','I');">
+    <img
+    	src="http://ezgadget.googlecode.com/svn/trunk/ezgadget/CanalOnline/images/menuOpc2Off.gif"
+    	onclick="cliente.send2('Sv','Tf');">
+    <img
+    	src="http://ezgadget.googlecode.com/svn/trunk/ezgadget/CanalOnline/images/menuOpc3Off.gif"
+        onclick="cliente.send2('Sv','Tv');">
+</div>
+</body>
+</html>

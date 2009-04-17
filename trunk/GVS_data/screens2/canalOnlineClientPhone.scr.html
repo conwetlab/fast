@@ -1,0 +1,70 @@
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="application/xhtml+xml; charset=UTF-8" />
+        <link type="text/css" rel="stylesheet" href="http://ezgadget.googlecode.com/svn/trunk/ezgadget/CanalOnline/screens/css.css" />
+        <link type="text/css" rel="stylesheet" href="http://ezgadget.googlecode.com/svn/trunk/ezgadget/CanalOnline/screens/internet.css" />
+        <style type="text/css">
+            #bodyDiv{
+                max-width: 550px;
+            }
+            #searchArea {
+                border: 1px solid #F8A704;
+                -moz-border-radius:13px 13px;
+                background:#FFF8E8 url(http://ezgadget.googlecode.com/svn/trunk/ezgadget/CanalOnline/screens/bg_td2.jpg) repeat-x;
+                border:1px solid #F8A704;
+                height:100px;
+                margin:5px auto 0px;
+                padding:0px;
+                text-align:center;
+                width:100%;
+            }
+            #contents{
+                padding:12px;
+            }
+            #send{
+                margin-left: 15px;
+            }
+            #amazonImage{
+                position:absolute;
+                right:2px;
+                top:3px;
+            }
+            .title{
+                padding: 2px;
+                color:#AAAAAA;
+                font-weight: bold;
+                font-family:Arial,Helvetica,sans-serif;	
+                white-space:nowrap;
+                overflow: hidden;
+            }
+        </style>
+        <script language="JavaScript">
+            function Telefono(){
+            };
+            Telefono.prototype.init = function (){
+                $("send").observe("click", telefono.send);
+                $("send").observe("mouseover",function(event){
+                    var e = Event.element(event);
+                    e.setStyle({cursor:"pointer"});
+                });
+            }
+            Telefono.prototype.send = function (){
+                var telefono_sel = {'name': 'http://TODO/canalonline#clientPhone', 'value': $F("tel")};
+                var servicio = {'name': 'http://TODO/canalonline#clientService', 'value': null};
+                var segmento = {'name': 'http://TODO/canalonline#clientSegment', 'value': null};
+                EngineFactory.getInstance().manageFacts([servicio,segmento,telefono_sel],['promotions']);
+            }
+            var telefono = new Telefono();
+            EngineFactory.getInstance().addScreenLoader("ClientPhone", telefono.init);
+        </script>
+    </head>
+    <body>
+        <div id="bodyDiv" style="text-align: center;">
+            <h1 id="title" class="texto1_1_bold">Selecci&oacute;n de cliente</h1>
+            <div id="contents" >
+                <span class="title">Tel&eacute;fono: </span> <input type="text" id="tel" />
+                <input type="button" id="send" value="Buscar" class="boton_generico" />
+            </div>
+        </div>
+    </body>
+</html>
