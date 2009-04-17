@@ -1,0 +1,79 @@
+{fact_metadata: [
+    {
+        uri: "http://TODO/amazon#filter",
+        label: "filter",
+        shortcut: "F",
+        description: "Filter Search Criteria",
+        attributes: ["productType", "searchText"]
+    },
+    {
+        uri: "http://TODO/amazon#item",
+        label: "item",
+        shortcut: "I",
+        description: "Amazon item fact. Normally, its identifier will be an ASIN number",
+        attributes: ["ASIN", "title"]
+    },
+    {
+        uri: "http://TODO/amazon#shoppingCart",
+        label: "cart",
+        shortcut: "C",
+        description: "Amazon shopping cart fact. It represents a non-purchased shopping cart at Amazon",
+        attributes: ["id","HMAC"]
+    },
+    {
+        uri: "http://TODO/amazon#purchase",
+        label: "purchase",
+        shortcut: "P",
+        description: "Amazon purchase fact. It represents the URL that allows to purchase the Shopping Cart",
+        attributes: ["url"]
+    },
+    {
+        uri: "http://TODO/ebay#item",
+        label: "eBayItem",
+        shortcut: "EI",
+        description: "eBay Item. It represents an Item sold by eBay",
+        attributes:["itemId","title"]
+    },
+    {
+        uri: "http://TODO/canalonline#clientType",
+        label: "clientType",
+        shortcut: "CT",
+        description: "client Type. It represents the type of client for Canal Online",
+        attributes:["name","type","value"]
+    },
+    {
+        uri: "http://TODO/canalonline#clientPhone",
+        label: "clientPhone",
+        shortcut: "CP",
+        description: "client Phone. It represents the phone of the client for Canal Online",
+        attributes:["name","type","value"]
+    },
+    {
+        uri: "http://TODO/canalonline#clientService",
+        label: "clientService",
+        shortcut: "CSv",
+        description: "client Service. It represents the client service for Canal Online",
+        attributes:["name","type","value"]
+    },
+    {
+        uri: "http://TODO/canalonline#clientSegment",
+        label: "clientSegment",
+        shortcut: "CSg",
+        description: "client Segment. It represents the client segment for Canal Online",
+        attributes:["name","type","value"]
+    },
+    {
+        uri: "http://TODO/canalonline#shoppingCart",
+        label: "cart",
+        shortcut: "SC",
+        description: "shopping Cart",
+        attributes:["name","product"]
+    },
+    {
+        uri: "http://TODO/canalonline#purchase",
+        label: "purchase",
+        shortcut: "Pch",
+        description: "purchase",
+        attributes:["name","url"]
+    }
+]}

@@ -1,6 +1,6 @@
         {screen_metadata: [
             {
-                uri: 'http://192.168.154.15:8010/screens/amazonSearch.scr.html',
+                uri: 'http://localhost:8010/screens/amazonSearch.scr.html',
                 label:null,
                 name: 'Product Search',
                 description: 'This screen allows users to look for a product in Amazon, providing a ' + 
@@ -9,7 +9,7 @@
                 rights: "URI",
                 version: "...",
                 creationDate: "ISO date",
-                icon: 'http://192.168.154.15:8010/images/catalogue/amazonSearch.png',
+                icon: 'http://localhost:8010/images/catalogue/amazonSearch.png',
                 screenshot: "URL",
                 domainContext: ["tag1", "tag2"],
                 homepage: "URL",
@@ -19,7 +19,7 @@
                 satisfeable: true
             },
             {
-                uri: 'http://192.168.154.15:8010/screens/amazonList.scr.html',
+                uri: 'http://localhost:8010/screens/amazonList.scr.html',
                 label:null,
                 name: 'Product List',
                 description: 'This screen shows the results of a given search in Amazon.' +  
@@ -28,7 +28,7 @@
                 rights: "URI",
                 version: "...",
                 creationDate: "ISO date",
-                icon: 'http://192.168.154.15:8010/images/catalogue/amazonList.png',
+                icon: 'http://localhost:8010/images/catalogue/amazonList.png',
                 screenshot: "URL",
                 domainContext: ["tag1", "tag2"],
                 homepage: "URL",
@@ -37,7 +37,7 @@
                 code: "URL"
             },
             {
-                uri: 'http://192.168.154.15:8010/screens/amazonProduct.scr.html',
+                uri: 'http://localhost:8010/screens/amazonProduct.scr.html',
                 label:null,
                 name: 'Product Details',
                 description:'This screen shows the details for a given product selled ' +
@@ -46,7 +46,7 @@
                 rights: "URI",
                 version: "...",
                 creationDate: "ISO date",
-                icon: 'http://192.168.154.15:8010/images/catalogue/amazonProduct.png',
+                icon: 'http://localhost:8010/images/catalogue/amazonProduct.png',
                 screenshot: "URL",
                 domainContext: ["tag1", "tag2"],
                 homepage: "URL",
@@ -55,7 +55,7 @@
                 code: "URL"
             },
             {
-                uri: 'http://192.168.154.15:8010/screens/amazonShopping.scr.html',
+                uri: 'http://localhost:8010/screens/amazonShopping.scr.html',
                 label:null,
                 name: 'Shopping Cart',
                 description: 'This screen shows the list of products added to the user ' +
@@ -65,7 +65,7 @@
                 rights: "URI",
                 version: "...",
                 creationDate: "ISO date",
-                icon: 'http://192.168.154.15:8010/images/catalogue/amazonShopping.png',
+                icon: 'http://localhost:8010/images/catalogue/amazonShopping.png',
                 screenshot: "URL",
                 domainContext: ["tag1", "tag2"],
                 homepage: "URL",
@@ -74,7 +74,7 @@
                 code: "URL"
             },
             {
-                uri: 'http://192.168.154.15:8010/screens/amazonOrder.scr.html',
+                uri: 'http://localhost:8010/screens/amazonOrder.scr.html',
                 label:null,
                 name: 'Order',
                 description: 'This screen allows users to purchase their shopping cart. ' + 
@@ -84,7 +84,7 @@
                 rights: "URI",
                 version: "...",
                 creationDate: "ISO date",
-                icon: 'http://192.168.154.15:8010/images/catalogue/amazonOrder.png',
+                icon: 'http://localhost:8010/images/catalogue/amazonOrder.png',
                 screenshot: "URL",
                 domainContext: ["tag1", "tag2"],
                 homepage: "URL",
@@ -93,7 +93,7 @@
                 code: "URL"
             },
             {
-                uri: 'http://192.168.154.15:8010/screens/amazonSuggestion.scr.html',
+                uri: 'http://localhost:8010/screens/amazonSuggestion.scr.html',
                 label: null,
                 name: 'Suggestion List',
                 description: 'This screen shows the list of products related to a given one. ' +
@@ -102,7 +102,7 @@
                 rights: "URI",
                 version: "...",
                 creationDate: "ISO date",
-                icon: 'http://192.168.154.15:8010/images/catalogue/amazonSuggestion.png',
+                icon: 'http://localhost:8010/images/catalogue/amazonSuggestion.png',
                 screenshot: "URL",
                 domainContext: ["tag1", "tag2"],
                 homepage: "URL",
@@ -111,7 +111,7 @@
                 code: "URL"
             },
             {
-                uri: 'http://192.168.154.15:8010/screens/amazonPrice.scr.html',
+                uri: 'http://localhost:8010/screens/amazonPrice.scr.html',
                 label: null,
                 name: 'Price Comparative',
                 description: 'This screen shows a price comparative for a given product',
@@ -119,7 +119,7 @@
                 rights: "URI",
                 version: "...",
                 creationDate: "ISO date",
-                icon: 'http://192.168.154.15:8010/images/catalogue/amazonPrice.png',
+                icon: 'http://localhost:8010/images/catalogue/amazonPrice.png',
                 screenshot: "URL",
                 domainContext: ["tag1", "tag2"],
                 homepage: "URL",
@@ -129,4 +129,3 @@
             }
 
         ]}
-
