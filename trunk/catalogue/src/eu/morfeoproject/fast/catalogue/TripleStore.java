@@ -861,25 +861,25 @@ public class TripleStore {
     	}
     }
     
-    public URI getOrCreateTag(String name, URI namespace)
-    throws OntologyInvalidException, RepositoryException {
-    	Model tagModel = getPersistentModel(namespace);
-    	ClosableIterator<Statement> it = tagModel.findStatements(Variable.ANY, RDF.type, FCO.Tag);
-    	for ( ; it.hasNext(); ) {
-			Resource r = it.next().getSubject();
-			if (RDFTool.getLabel(r).equals(toCleanName(name))) {
-				it.close();
-				return r.asURI();
-			//TODO: should be checked if the class is a subClass of the superClass URI?
-			}
-    	}
-    	it.close();
-    	// the tag was not found
-    	URI tag = createResource(name, FCO.Tag, tagModel);
-    	tagModel.addStatement(tag, RDFS.label, name);
-    	tagModel.close();
-    	return tag;
-    }
+//    public URI getOrCreateTag(String name, URI namespace)
+//    throws OntologyInvalidException, RepositoryException {
+//    	Model tagModel = getPersistentModel(namespace);
+//    	ClosableIterator<Statement> it = tagModel.findStatements(Variable.ANY, RDF.type, FCO.Tag);
+//    	for ( ; it.hasNext(); ) {
+//			Resource r = it.next().getSubject();
+//			if (RDFTool.getLabel(r).equals(toCleanName(name))) {
+//				it.close();
+//				return r.asURI();
+//			//TODO: should be checked if the class is a subClass of the superClass URI?
+//			}
+//    	}
+//    	it.close();
+//    	// the tag was not found
+//    	URI tag = createResource(name, FCO.Tag, tagModel);
+//    	tagModel.addStatement(tag, RDFS.label, name);
+//    	tagModel.close();
+//    	return tag;
+//    }
     
 	/**
      * Set the preflabel and RDFSlabel of the resource to the 

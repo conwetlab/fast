@@ -4,99 +4,291 @@ import org.ontoware.rdf2go.model.node.URI;
 import org.ontoware.rdf2go.model.node.impl.URIImpl;
 
 /**
- * Vocabulary File. Created by org.ontoware.rdf2go.util.VocabularyWriter on Tue Feb 10 19:02:12 GMT 2009
- * input file: src/eu/morfeoproject/fast/catalogue/ontologies/fco.rdf
- * namespace: http://www.morfeoproject.eu/fast/fco#
+ * Vocabulary File. Created by org.ontoware.rdf2go.util.VocabularyWriter on Tue Apr 21 13:58:27 BST 2009
+ * input file: src/eu/morfeoproject/fast/catalogue/ontologies/fco20090224.rdf
+ * namespace: http://purl.oclc.org/fast/ontology/gadget#
  */
 public interface FCO {
-	public static final URI NS_FCO = new URIImpl("http://www.morfeoproject.eu/fast/fco#",false);
+	public static final URI NS_FCO = new URIImpl("http://purl.oclc.org/fast/ontology/gadget#",false);
+
+    /**
+     * Label: Operator@en 
+     * Comment: Any kind of component that is used to connect backend services to 
+    form elements. Examples are simple pipes, aggregators or various kinds of 
+    filters.@en 
+     */
+    public static final URI Operator = new URIImpl("http://purl.oclc.org/fast/ontology/gadget#Operator", false);
 
     /**
      */
-    public static final URI Screen = new URIImpl("http://www.morfeoproject.eu/fast/fco#Screen", false);
+    public static final URI Person = new URIImpl("http://xmlns.com/foaf/0.1/Person", false);
+
+    /**
+     * Label: Connector@en 
+     * Comment: An explicit connection between two screens.@en 
+     */
+    public static final URI Connector = new URIImpl("http://purl.oclc.org/fast/ontology/gadget#Connector", false);
+
+    /**
+     * Label: Flow Control Element@en 
+     * Comment: Any kind of component which can restrict the default flow of screens 
+    in a gadget.@en 
+     */
+    public static final URI FlowControlElement = new URIImpl("http://purl.oclc.org/fast/ontology/gadget#FlowControlElement", false);
+
+    /**
+     * Label: Resource@en 
+     * Comment: Anything that is part of a gadget (or the gadget itself). Tentatively 
+    anything that can be 'touched' and moved around in the FAST IDE.@en 
+     */
+    public static final URI Resource = new URIImpl("http://purl.oclc.org/fast/ontology/gadget#Resource", false);
+
+    /**
+     * Label: Form Element@en 
+     * Comment: Form elements are UI elements in a particular screen.@en 
+     */
+    public static final URI FormElement = new URIImpl("http://purl.oclc.org/fast/ontology/gadget#FormElement", false);
+
+    /**
+     * Label: Screen Flow@en 
+     * Comment: The complete gadget, a set of screens.@en 
+     */
+    public static final URI ScreenFlow = new URIImpl("http://purl.oclc.org/fast/ontology/gadget#ScreenFlow", false);
+
+    /**
+     * Label: Screen Flow End@en 
+     * Comment: A screen that ends the workflow of the gadget.@en 
+     */
+    public static final URI ScreenFlowEnd = new URIImpl("http://purl.oclc.org/fast/ontology/gadget#ScreenFlowEnd", false);
+
+    /**
+     * Label: Screen@en 
+     * Comment: An individual screen.@en 
+     */
+    public static final URI Screen = new URIImpl("http://purl.oclc.org/fast/ontology/gadget#Screen", false);
 
     /**
      */
-    public static final URI Condition = new URIImpl("http://www.morfeoproject.eu/fast/fco#Condition", false);
+    public static final URI OnlineAccount = new URIImpl("http://xmlns.com/foaf/0.1/OnlineAccount", false);
+
+    /**
+     * Label: Screen Flow Start@en 
+     * Comment: The entry point to a wigdet; the first screen.@en 
+     */
+    public static final URI ScreenFlowStart = new URIImpl("http://purl.oclc.org/fast/ontology/gadget#ScreenFlowStart", false);
 
     /**
      */
-    public static final URI ScreenFlow = new URIImpl("http://www.morfeoproject.eu/fast/fco#ScreenFlow", false);
+    public static final URI User = new URIImpl("http://rdfs.org/sioc/ns#User", false);
 
     /**
      */
-    public static final URI Tag = new URIImpl("http://www.morfeoproject.eu/fast/fco#Tag", false);
+    public static final URI RightsStatement = new URIImpl("http://purl.org/dc/terms/RightsStatement", false);
 
     /**
-     * Comment: http://www.morfeoproject.eu/fast/fco#Screen 
-     * Range: http://www.w3.org/2000/01/rdf-schema#Literal 
+     * Label: With-condition@en 
+     * Comment: Those kinds of resource which can have pre- or post-conditions 
+    (i.e., screens and screen flows).@en 
      */
-    public static final URI icon = new URIImpl("http://www.morfeoproject.eu/fast/fco#icon", false);
+    public static final URI WithConditions = new URIImpl("http://purl.oclc.org/fast/ontology/gadget#WithConditions", false);
 
     /**
-     * Comment: http://www.morfeoproject.eu/fast/fco#Screen 
-     * Range: http://www.w3.org/2000/01/rdf-schema#Literal 
      */
-    public static final URI screenshot = new URIImpl("http://www.morfeoproject.eu/fast/fco#screenshot", false);
+    public static final URI Organization = new URIImpl("http://xmlns.com/foaf/0.1/Organization", false);
 
     /**
-     * Comment: http://www.morfeoproject.eu/fast/fco#Screen 
-     * Range: http://www.w3.org/2000/01/rdf-schema#Literal 
+     * Label: Backend Service@en 
+     * Comment: A Web service which provides data and/or functionality to a screen. 
+    A backend service will often be external to FAST, and will probably have to be 
+    wrapped by the screen.@en 
      */
-    public static final URI homepage = new URIImpl("http://www.morfeoproject.eu/fast/fco#homepage", false);
+    public static final URI BackendService = new URIImpl("http://purl.oclc.org/fast/ontology/gadget#BackendService", false);
 
     /**
-     * Comment: http://www.morfeoproject.eu/fast/fco#Screen 
-     * Range: http://www.w3.org/2000/01/rdf-schema#Literal 
+     * Label: Condition@en 
+     * Comment: The pre- or post-condition of either a screen or a screenflow. In 
+    the latter case, each target platform will use these conditions in its own way, 
+    or may also ignore them. E.g., in EzWeb pre- and post-conditions correspond to 
+    the concepts of slot and event.@en 
      */
-    public static final URI version = new URIImpl("http://www.morfeoproject.eu/fast/fco#version", false);
+    public static final URI Condition = new URIImpl("http://purl.oclc.org/fast/ontology/gadget#Condition", false);
 
     /**
-     * Comment: http://www.morfeoproject.eu/fast/fco#Condition 
-     * Range: http://www.morfeoproject.eu/fast/fco#Screen 
      */
-    public static final URI isPostcondition = new URIImpl("http://www.morfeoproject.eu/fast/fco#isPostcondition", false);
+    public static final URI Image = new URIImpl("http://xmlns.com/foaf/0.1/Image", false);
 
     /**
-     * Comment: http://www.morfeoproject.eu/fast/fco#Screen 
-     * Range: http://www.morfeoproject.eu/fast/fco#Condition 
      */
-    public static final URI hasPostcondition = new URIImpl("http://www.morfeoproject.eu/fast/fco#hasPostcondition", false);
+    public static final URI accountName = new URIImpl("http://xmlns.com/foaf/0.1/accountName", false);
 
     /**
-     * Comment: http://www.morfeoproject.eu/fast/fco#Condition 
-     * Range: http://www.morfeoproject.eu/fast/fco#Screen 
      */
-    public static final URI isPrecondition = new URIImpl("http://www.morfeoproject.eu/fast/fco#isPrecondition", false);
+    public static final URI name = new URIImpl("http://xmlns.com/foaf/0.1/name", false);
 
     /**
-     * Comment: http://www.morfeoproject.eu/fast/fco#Screen 
-     * Range: http://www.morfeoproject.eu/fast/fco#Condition 
+     * Label: has pattern string@en 
+     * Comment: This property is the textual representation of a condition.@en 
+     * Comment: http://purl.oclc.org/fast/ontology/gadget#Condition 
+     * Range: http://www.w3.org/2001/XMLSchema#string 
      */
-    public static final URI hasPrecondition = new URIImpl("http://www.morfeoproject.eu/fast/fco#hasPrecondition", false);
+    public static final URI hasPatternString = new URIImpl("http://purl.oclc.org/fast/ontology/gadget#hasPatternString", false);
 
     /**
-     * Comment: http://www.morfeoproject.eu/fast/fco#Condition 
+     * Label: is positive@en 
+     * Comment: Conditions can be positive or negative, depending on whether they 
+    must be fulfilled or must not be fulfilled (in the case of pre-conditions), or 
+    whether their facts will be added to the canvas or removed (in the case of 
+    post-conditions).@en 
+     * Comment: http://purl.oclc.org/fast/ontology/gadget#Condition 
+     * Range: http://www.w3.org/2001/XMLSchema#boolean 
+     */
+    public static final URI isPositive = new URIImpl("http://purl.oclc.org/fast/ontology/gadget#isPositive", false);
+
+    /**
+     * Label: has version@en 
+     * Comment: The version of a particular screen or screenflow, such as 1.0, 0.2beta, etc.@en 
+     * Comment: http://purl.oclc.org/fast/ontology/gadget#Resource 
+     * Range: http://www.w3.org/2001/XMLSchema#string 
+     */
+    public static final URI hasVersion = new URIImpl("http://purl.oclc.org/fast/ontology/gadget#hasVersion", false);
+
+    /**
+     * Label: has tag@en 
+     * Comment: A tag is used to annotate keywords of a particular resource.@en 
+     * Comment: http://purl.oclc.org/fast/ontology/gadget#Resource 
+     * Range: http://www.w3.org/2001/XMLSchema#string 
+     */
+    public static final URI hasTag = new URIImpl("http://purl.oclc.org/fast/ontology/gadget#hasTag", false);
+
+    /**
+     */
+    public static final URI title = new URIImpl("http://purl.org/dc/terms/title", false);
+
+    /**
+     */
+    public static final URI mbox_sha1sum = new URIImpl("http://xmlns.com/foaf/0.1/mbox_sha1sum", false);
+
+    /**
+     */
+    public static final URI revision = new URIImpl("http://usefulinc.com/ns/doap#revision", false);
+
+    /**
+     */
+    public static final URI modified = new URIImpl("http://purl.org/dc/terms/modified", false);
+
+    /**
+     */
+    public static final URI description = new URIImpl("http://purl.org/dc/terms/description", false);
+
+    /**
+     */
+    public static final URI created = new URIImpl("http://purl.org/dc/terms/created", false);
+
+    /**
+     * Label: contains@en 
+     * Comment: Many kinds of components in FAST can contain other components: 
+    screenflows contain screens, screens contain forms or form elements, etc.@en 
+     * Comment: http://purl.oclc.org/fast/ontology/gadget#Resource 
+     * Range: http://purl.oclc.org/fast/ontology/gadget#Resource 
+     */
+    public static final URI contains = new URIImpl("http://purl.oclc.org/fast/ontology/gadget#contains", false);
+
+    /**
+     * Label: has post-condition@en 
+     * Comment: This property links a screen or screenflow to its post-condition, 
+    i.e., the facts that are produced once the screen or screenflow has been 
+    executed.@en 
+     * Comment: http://purl.oclc.org/fast/ontology/gadget#WithConditions 
+     * Range: http://purl.oclc.org/fast/ontology/gadget#Condition 
+     */
+    public static final URI hasPostCondition = new URIImpl("http://purl.oclc.org/fast/ontology/gadget#hasPostCondition", false);
+
+    /**
+     */
+    public static final URI creator = new URIImpl("http://purl.org/dc/terms/creator", false);
+
+    /**
+     * Label: has code@en 
+     * Comment: URL of the executable code of a particular screen.@en 
+     * Comment: http://purl.oclc.org/fast/ontology/gadget#Screen 
+     * Range: http://xmlns.com/foaf/0.1/Document 
+     */
+    public static final URI hasCode = new URIImpl("http://purl.oclc.org/fast/ontology/gadget#hasCode", false);
+
+    /**
+     */
+    public static final URI interest = new URIImpl("http://xmlns.com/foaf/0.1/interest", false);
+
+    /**
+     */
+    public static final URI depiction = new URIImpl("http://xmlns.com/foaf/0.1/depiction", false);
+
+    /**
+     * Label: integratesTerm@en 
+     * Comment: A way to explicitly say that an ontology uses terms from another namespace. 
+    Maybe a bit redundant, but why not.@en 
+     */
+    public static final URI integratesTerm = new URIImpl("http://purl.oclc.org/fast/ontology/gadget#integratesTerm", false);
+
+    /**
+     * Label: has pre-condition@en 
+     * Comment: This property links a screen or screenflow to its pre-condition, i.e., 
+    the facts that need to be fulfilled in order for this screen or screenflow to be 
+    reachable.@en 
+     * Comment: http://purl.oclc.org/fast/ontology/gadget#WithConditions 
+     * Range: http://purl.oclc.org/fast/ontology/gadget#Condition 
+     */
+    public static final URI hasPreCondition = new URIImpl("http://purl.oclc.org/fast/ontology/gadget#hasPreCondition", false);
+
+    /**
+     */
+    public static final URI rights = new URIImpl("http://purl.org/dc/terms/rights", false);
+
+    /**
+     * Label: has pattern@en 
+     * Comment: This property links a screen or screenflow to its pre-condition, 
+    i.e., the facts that need to be fulfilled in order for this screen or screenflow 
+    to be reachable.@en 
+     * Comment: http://purl.oclc.org/fast/ontology/gadget#Condition 
      * Range: http://www.w3.org/2000/01/rdf-schema#Resource 
      */
-    public static final URI hasPattern = new URIImpl("http://www.morfeoproject.eu/fast/fco#hasPattern", false);
+    public static final URI hasPattern = new URIImpl("http://purl.oclc.org/fast/ontology/gadget#hasPattern", false);
 
     /**
-     * Comment: http://www.morfeoproject.eu/fast/fco#Condition 
-     * Range: http://www.w3.org/2000/01/rdf-schema#Literal 
      */
-    public static final URI hasPatternString = new URIImpl("http://www.morfeoproject.eu/fast/fco#hasPatternString", false);
+    public static final URI mbox = new URIImpl("http://xmlns.com/foaf/0.1/mbox", false);
 
     /**
-     * Comment: http://www.morfeoproject.eu/fast/fco#ScreenFlow 
-     * Range: http://www.morfeoproject.eu/fast/fco#Screen 
      */
-    public static final URI hasScreen = new URIImpl("http://www.morfeoproject.eu/fast/fco#hasScreen", false);
+    public static final URI holdsAccount = new URIImpl("http://xmlns.com/foaf/0.1/holdsAccount", false);
 
     /**
-     * Comment: http://www.morfeoproject.eu/fast/fco#ScreenFlow http://www.morfeoproject.eu/fast/fco#Screen 
-     * Range: http://www.morfeoproject.eu/fast/fco#Tag 
      */
-    public static final URI hasTag = new URIImpl("http://www.morfeoproject.eu/fast/fco#hasTag", false);
+    public static final URI rightsHolder = new URIImpl("http://purl.org/dc/terms/rightsHolder", false);
+
+    /**
+     */
+    public static final URI subject = new URIImpl("http://purl.org/dc/terms/subject", false);
+
+    /**
+     */
+    public static final URI member = new URIImpl("http://xmlns.com/foaf/0.1/member", false);
+
+    /**
+     * Label: has icon@en 
+     * Comment: A small graphical representation of any FAST component or sub-component.@en 
+     * Comment: http://purl.oclc.org/fast/ontology/gadget#Resource 
+     * Range: http://xmlns.com/foaf/0.1/Image 
+     */
+    public static final URI hasIcon = new URIImpl("http://purl.oclc.org/fast/ontology/gadget#hasIcon", false);
+
+    /**
+     * Label: has screenshot@en 
+     * Comment: An image which shows a particular screen or screenflow in action, to 
+    aid users in deciding which screen or screenflow to choose out of many.@en 
+     * Comment: http://purl.oclc.org/fast/ontology/gadget#Resource 
+     * Range: http://xmlns.com/foaf/0.1/Image 
+     */
+    public static final URI hasScreenshot = new URIImpl("http://purl.oclc.org/fast/ontology/gadget#hasScreenshot", false);
 
 }

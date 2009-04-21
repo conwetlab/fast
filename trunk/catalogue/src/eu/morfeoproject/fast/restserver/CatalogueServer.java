@@ -89,17 +89,4 @@ public class CatalogueServer extends Application {
 		catalogue.dumpStatements();
 	}
 	
-	// to run from the console
-	// parameters:
-	//  - port
-	//  - repository directory
-	public static void main(String [] args) throws Exception {
-		int port = Integer.parseInt(args[0]);
-		File dir = new File(args[1]);
-		
-		CatalogueServer server = new CatalogueServer(port, dir);
-		server.startServer(false);
-		logger.info("Catalogue server listening on port "+port);
-	}
-	
 }

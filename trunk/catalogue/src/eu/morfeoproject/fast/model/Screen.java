@@ -24,7 +24,8 @@ public class Screen {
     private Date creationDate;
     private URI icon;
     private URI screenshot;
-    private URI homepage; 
+    private URI homepage;
+    private URI code;
 	private DomainContext domainContext;
 	private List<Condition> preconditions;
 	private List<Condition> postconditions;
@@ -114,6 +115,14 @@ public class Screen {
 
 	public void setHomepage(URI homepage) {
 		this.homepage = homepage;
+	}
+
+	public URI getCode() {
+		return code;
+	}
+
+	public void setCode(URI code) {
+		this.code = code;
 	}
 
 	public DomainContext getDomainContext() {
@@ -213,6 +222,10 @@ public class Screen {
 			for (Condition con : getPostconditions())
 				postconditions.put(con.toString());
 			json.put("postconditions", postconditions);
+			if (getCode() == null)
+				json.put("code", JSONObject.NULL);
+			else
+				json.put("code", getCode().toString());
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

@@ -24,8 +24,10 @@ public class DefaultOntologies {
     	new Ontology(new URIImpl("http://www.w3.org/1999/02/22-rdf-syntax-ns#"), "rdf.rdf");
     public static Ontology RDFS = 
         new Ontology(new URIImpl("http://www.w3.org/2000/01/rdf-schema#"), "rdfs.rdf");
+//    public static Ontology FCO =
+//    	new Ontology(new URIImpl("http://www.morfeoproject.eu/fast/fco#"), "fco.rdf");
     public static Ontology FCO =
-    	new Ontology(new URIImpl("http://www.morfeoproject.eu/fast/fco#"), "fco.rdf");
+    	new Ontology(new URIImpl("http://purl.oclc.org/fast/ontology/gadget#"), "fco20090224.rdf");
     public static Ontology FOAF =
     	new Ontology(new URIImpl("http://xmlns.com/foaf/0.1/"), "foaf.rdf");
     

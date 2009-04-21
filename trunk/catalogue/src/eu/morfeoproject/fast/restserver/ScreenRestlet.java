@@ -1,20 +1,13 @@
 package eu.morfeoproject.fast.restserver;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.StringTokenizer;
 
 import org.apache.log4j.Logger;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.ontoware.rdf2go.model.Statement;
-import org.ontoware.rdf2go.model.node.Resource;
 import org.ontoware.rdf2go.model.node.impl.URIImpl;
 import org.openrdf.repository.RepositoryException;
-import org.restlet.Restlet;
 import org.restlet.data.MediaType;
 import org.restlet.data.Method;
 import org.restlet.data.Request;
@@ -26,10 +19,7 @@ import eu.morfeoproject.fast.catalogue.DuplicatedScreenException;
 import eu.morfeoproject.fast.catalogue.NotFoundException;
 import eu.morfeoproject.fast.catalogue.OntologyInvalidException;
 import eu.morfeoproject.fast.catalogue.OntologyReadonlyException;
-import eu.morfeoproject.fast.model.Condition;
-import eu.morfeoproject.fast.model.FastModelFactory;
 import eu.morfeoproject.fast.model.Screen;
-import eu.morfeoproject.fast.util.FormatterUtil;
 import eu.morfeoproject.fast.vocabulary.FCO;
 
 /**

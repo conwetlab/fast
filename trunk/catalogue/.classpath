@@ -82,7 +82,7 @@
 	<classpathentry kind="lib" path="lib/rdf2go.impl.base.test-4.7.0.jar"/>
 	<classpathentry kind="lib" path="lib/rdf2go.impl.jena24-4.7.0.jar"/>
 	<classpathentry kind="lib" path="lib/rdf2go.impl.sesame22-4.7.0.jar"/>
+	<classpathentry kind="lib" path="lib/commons-cli-1.2.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/WSMX"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

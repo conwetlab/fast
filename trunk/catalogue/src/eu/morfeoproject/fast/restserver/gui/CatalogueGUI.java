@@ -137,7 +137,7 @@ public class CatalogueGUI extends JFrame {
 	    panel3.add(startButton);
 	    panel3.add(stopButton);
 	    panel3.add(showLogButton);
-//	    panel3.add(dumpButton);
+	    panel3.add(dumpButton);
 
 	    mainPanel.add(panel1, BorderLayout.NORTH);
 	    mainPanel.add(panel2, BorderLayout.WEST);
@@ -229,10 +229,5 @@ public class CatalogueGUI extends JFrame {
 	private void showErrorDialog(String msg, String title) {
 		JOptionPane.showMessageDialog(getContentPane(), msg, title, JOptionPane.ERROR_MESSAGE);
 	}
-	
-	/* main */
-	public static void main(String[] args) {
-		new CatalogueGUI();
-	}
-	
+
 }

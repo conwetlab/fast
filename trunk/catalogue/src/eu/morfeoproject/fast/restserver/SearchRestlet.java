@@ -46,7 +46,12 @@ public class SearchRestlet extends CatalogueRestlet {
 			logger.info("Entering FIND operation...");
 			try {
 				// create JSON representation of the input
-				JSONObject input = new JSONObject(request.getEntity().getText());
+				long st = System.currentTimeMillis();
+				String text = request.getEntity().getText();
+				System.out.println(System.currentTimeMillis()-st);
+				st = System.currentTimeMillis();
+				JSONObject input = new JSONObject(text);
+				System.out.println(System.currentTimeMillis()-st);
 				// parse the canvas
 				Set<Screen> canvas = new HashSet<Screen>();
 				JSONArray jsonCanvas = input.getJSONArray("canvas");
@@ -60,11 +65,11 @@ public class SearchRestlet extends CatalogueRestlet {
 				// parse the domain context
 				JSONObject jsonDomainContext = input.getJSONObject("domainContext");
 				JSONArray jsonTags = jsonDomainContext.getJSONArray("tags");
-				Set<URI> tags = new HashSet<URI>();
+				Set<String> tags = new HashSet<String>();
 				for (int i = 0; i < jsonTags.length(); i++)
-					tags.add(catalogue.getOrCreateTag(jsonTags.getString(i)));
+					tags.add(jsonTags.getString(i));
 				StringBuffer sb = new StringBuffer();
-				for (URI tag : tags)
+				for (String tag : tags)
 					sb.append(tag+" ");
 				// TODO do something with the user
 				String user = jsonDomainContext.getString("user");
@@ -78,7 +83,7 @@ public class SearchRestlet extends CatalogueRestlet {
 						throw new NotFoundException("Screen "+uri+" does not exist.");
 					canvas.add(s); 
 				}
-				
+
 				// make the call to the catalogue
 				Set<Screen> results = null;
 				if (!this.recursive)
@@ -90,9 +95,10 @@ public class SearchRestlet extends CatalogueRestlet {
 				JSONArray output = new JSONArray();
 				for (Iterator<Screen> it = results.iterator(); it.hasNext(); ) {
 					Screen s = it.next();
-					output.put(s.toJSON());
-//					if (logger.isDebugEnabled())
-						logger.info("[MATCH] "+s.getUri());
+					JSONObject sJson = new JSONObject();
+					sJson.put("uri", s.getUri());
+					output.put(sJson);
+					logger.info("[MATCH] "+s.getUri());
 				}
 				response.setEntity(output.toString(2), MediaType.APPLICATION_JSON);
 				response.setStatus(Status.SUCCESS_OK);
@@ -106,12 +112,12 @@ public class SearchRestlet extends CatalogueRestlet {
 				response.setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
 			} catch (NotFoundException e) {
 				response.setStatus(Status.CLIENT_ERROR_BAD_REQUEST, e.getMessage());
-			} catch (RepositoryException e) {
+//			} catch (RepositoryException e) {
 				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (OntologyInvalidException e) {
+//				e.printStackTrace();
+//			} catch (OntologyInvalidException e) {
 				// TODO Auto-generated catch block
-				e.printStackTrace();
+//				e.printStackTrace();
 			}
 			logger.info("...Exiting FIND operation");
 		} else {

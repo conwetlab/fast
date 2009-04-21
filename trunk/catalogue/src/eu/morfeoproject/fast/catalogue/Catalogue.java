@@ -37,6 +37,7 @@ import eu.morfeoproject.fast.services.rdfrepository.RepositoryStorageException;
 import eu.morfeoproject.fast.util.FormatterUtil;
 import eu.morfeoproject.fast.vocabulary.DC;
 import eu.morfeoproject.fast.vocabulary.FCO;
+import eu.morfeoproject.fast.vocabulary.FOAF;
 
 /**
  * Catalogue
@@ -52,7 +53,7 @@ public class Catalogue {
 	public static final int SUBSUME = 3;
 	public static final int INTERSECTION = 4;
 
-	public static final URI TAGS_NAMESPACE = new URIImpl("http://www.morfeoproject.eu/fast/tags/");
+//	public static final URI TAGS_NAMESPACE = new URIImpl("http://www.morfeoproject.eu/fast/tags/");
 	
 	private TripleStore tripleStore;
 	
@@ -316,23 +317,22 @@ public class Catalogue {
 		if (sf.getRights() != null)
 			tripleStore.addStatement(sfUri, DC.rights, sf.getRights());
 		if (sf.getVersion() != null)
-			tripleStore.addStatement(sfUri, FCO.version, sf.getVersion());
+			tripleStore.addStatement(sfUri, FCO.hasVersion, sf.getVersion());
 		if (sf.getCreationDate() != null)
 			tripleStore.addStatement(sfUri, DC.date, FormatterUtil.formatDateISO8601(sf.getCreationDate()));
 		if (sf.getIcon() != null)
-			tripleStore.addStatement(sfUri, FCO.icon, sf.getIcon());
+			tripleStore.addStatement(sfUri, FCO.hasIcon, sf.getIcon());
 		if (sf.getScreenshot() != null)
-			tripleStore.addStatement(sfUri, FCO.screenshot, sf.getScreenshot());
+			tripleStore.addStatement(sfUri, FCO.hasScreenshot, sf.getScreenshot());
 		for (URI tag : sf.getDomainContext())
 			tripleStore.addStatement(sfUri, FCO.hasTag, tag);
 		if (sf.getHomepage() != null)
-			// TODO change to FOAF:homepage??
-			tripleStore.addStatement(sfUri, FCO.homepage, sf.getHomepage());
+			tripleStore.addStatement(sfUri, FOAF.homepage, sf.getHomepage());
 		if (sf.getVersion() != null)
-			tripleStore.addStatement(sfUri, FCO.version, sf.getVersion());
+			tripleStore.addStatement(sfUri, FCO.hasVersion, sf.getVersion());
 		for (Condition con : sf.getPreconditions()) {
 			BlankNode c = tripleStore.createBlankNode();
-			tripleStore.addStatement(sfUri, FCO.hasPrecondition, c);
+			tripleStore.addStatement(sfUri, FCO.hasPreCondition, c);
 			tripleStore.addStatement(c, FCO.hasPatternString, con.getPatternString());
 			URI p = tripleStore.getCleanUniqueURI(FCO.NS_FCO, "pattern", false);
 			tripleStore.addStatement(c, FCO.hasPattern, p);
@@ -342,7 +342,7 @@ public class Catalogue {
 		}
 		for (Condition con : sf.getPostconditions()) {
 			BlankNode c = tripleStore.createBlankNode();
-			tripleStore.addStatement(sfUri, FCO.hasPostcondition, c);
+			tripleStore.addStatement(sfUri, FCO.hasPostCondition, c);
 			tripleStore.addStatement(c, FCO.hasPatternString, con.getPatternString());
 			URI p = tripleStore.getCleanUniqueURI(FCO.NS_FCO, "pattern", false);
 			tripleStore.addStatement(c, FCO.hasPattern, p);
@@ -351,7 +351,7 @@ public class Catalogue {
 			}
 		}
 		for (Screen s : sf.getScreens())
-			tripleStore.addStatement(sfUri, FCO.hasScreen, s.getUri());
+			tripleStore.addStatement(sfUri, FCO.contains, s.getUri());
 		
 		logger.info("Screen " + sf.getUri() + " added.");
 	}
@@ -374,7 +374,7 @@ public class Catalogue {
 		if (!containsScreenFlow(sfUri))
 			throw new NotFoundException();
 		// remove all preconditions
-		ClosableIterator<Statement> preconditions = tripleStore.findStatements(sfUri, FCO.hasPrecondition, Variable.ANY);
+		ClosableIterator<Statement> preconditions = tripleStore.findStatements(sfUri, FCO.hasPreCondition, Variable.ANY);
 		for ( ; preconditions.hasNext(); ) {
 			BlankNode cNode = preconditions.next().getObject().asBlankNode();
 			ClosableIterator<Statement> patterns = tripleStore.findStatements(cNode, FCO.hasPattern, Variable.ANY);
@@ -386,7 +386,7 @@ public class Catalogue {
 		}
 		preconditions.close();
 		// remove all postconditions
-		ClosableIterator<Statement> postconditions = tripleStore.findStatements(sfUri, FCO.hasPostcondition, Variable.ANY);
+		ClosableIterator<Statement> postconditions = tripleStore.findStatements(sfUri, FCO.hasPostCondition, Variable.ANY);
 		for ( ; postconditions.hasNext(); ) {
 			BlankNode cNode = postconditions.next().getObject().asBlankNode();
 			ClosableIterator<Statement> patterns = tripleStore.findStatements(cNode, FCO.hasPattern, Variable.ANY);
@@ -445,23 +445,22 @@ public class Catalogue {
 		if (screen.getRights() != null)
 			tripleStore.addStatement(screenUri, DC.rights, screen.getRights());
 		if (screen.getVersion() != null)
-			tripleStore.addStatement(screenUri, FCO.version, screen.getVersion());
+			tripleStore.addStatement(screenUri, FCO.hasVersion, screen.getVersion());
 		if (screen.getCreationDate() != null)
 			tripleStore.addStatement(screenUri, DC.date, FormatterUtil.formatDateISO8601(screen.getCreationDate()));
 		if (screen.getIcon() != null)
-			tripleStore.addStatement(screenUri, FCO.icon, screen.getIcon());
+			tripleStore.addStatement(screenUri, FCO.hasIcon, screen.getIcon());
 		if (screen.getScreenshot() != null)
-			tripleStore.addStatement(screenUri, FCO.screenshot, screen.getScreenshot());
+			tripleStore.addStatement(screenUri, FCO.hasScreenshot, screen.getScreenshot());
 		for (String tag : screen.getDomainContext().getTags())
-			tripleStore.addStatement(screenUri, FCO.hasTag, getOrCreateTag(tag));
+			tripleStore.addStatement(screenUri, FCO.hasTag, tag);
 		if (screen.getHomepage() != null)
-			// TODO change to FOAF:homepage??
-			tripleStore.addStatement(screenUri, FCO.homepage, screen.getHomepage());
+			tripleStore.addStatement(screenUri, FOAF.homepage, screen.getHomepage());
 		if (screen.getVersion() != null)
-			tripleStore.addStatement(screenUri, FCO.version, screen.getVersion());
+			tripleStore.addStatement(screenUri, FCO.hasVersion, screen.getVersion());
 		for (Condition con : screen.getPreconditions()) {
 			BlankNode c = tripleStore.createBlankNode();
-			tripleStore.addStatement(screenUri, FCO.hasPrecondition, c);
+			tripleStore.addStatement(screenUri, FCO.hasPreCondition, c);
 			tripleStore.addStatement(c, FCO.hasPatternString, con.getPatternString());
 			URI p = tripleStore.getCleanUniqueURI(FCO.NS_FCO, "pattern", false);
 			tripleStore.addStatement(c, FCO.hasPattern, p);
@@ -471,7 +470,7 @@ public class Catalogue {
 		}
 		for (Condition con : screen.getPostconditions()) {
 			BlankNode c = tripleStore.createBlankNode();
-			tripleStore.addStatement(screenUri, FCO.hasPostcondition, c);
+			tripleStore.addStatement(screenUri, FCO.hasPostCondition, c);
 			tripleStore.addStatement(c, FCO.hasPatternString, con.getPatternString());
 			URI p = tripleStore.getCleanUniqueURI(FCO.NS_FCO, "pattern", false);
 			tripleStore.addStatement(c, FCO.hasPattern, p);
@@ -479,6 +478,8 @@ public class Catalogue {
 				tripleStore.addStatement(p, st.getSubject(), st.getPredicate(), st.getObject());
 			}
 		}
+		if (screen.getCode() != null)
+			tripleStore.addStatement(screenUri, FCO.hasCode, screen.getCode());
 		logger.info("Screen " + screen.getUri() + " added.");
 	}
 	
@@ -494,7 +495,7 @@ public class Catalogue {
 		if (!containsScreen(screenUri))
 			throw new NotFoundException();
 		// remove all preconditions
-		ClosableIterator<Statement> preconditions = tripleStore.findStatements(screenUri, FCO.hasPrecondition, Variable.ANY);
+		ClosableIterator<Statement> preconditions = tripleStore.findStatements(screenUri, FCO.hasPreCondition, Variable.ANY);
 		for ( ; preconditions.hasNext(); ) {
 			BlankNode cNode = preconditions.next().getObject().asBlankNode();
 			ClosableIterator<Statement> patterns = tripleStore.findStatements(cNode, FCO.hasPattern, Variable.ANY);
@@ -506,7 +507,7 @@ public class Catalogue {
 		}
 		preconditions.close();
 		// remove all postconditions
-		ClosableIterator<Statement> postconditions = tripleStore.findStatements(screenUri, FCO.hasPostcondition, Variable.ANY);
+		ClosableIterator<Statement> postconditions = tripleStore.findStatements(screenUri, FCO.hasPostCondition, Variable.ANY);
 		for ( ; postconditions.hasNext(); ) {
 			BlankNode cNode = postconditions.next().getObject().asBlankNode();
 			ClosableIterator<Statement> patterns = tripleStore.findStatements(cNode, FCO.hasPattern, Variable.ANY);
@@ -582,10 +583,10 @@ public class Catalogue {
 		return tripleStore.getOrCreateClass(name, superClass, namespace);
 	}
 	
-	public URI getOrCreateTag(String name)
-	throws OntologyInvalidException, RepositoryException {
-		return tripleStore.getOrCreateTag(name, TAGS_NAMESPACE);
-	}
+//	public URI getOrCreateTag(String name)
+//	throws OntologyInvalidException, RepositoryException {
+//		return tripleStore.getOrCreateTag(name, TAGS_NAMESPACE);
+//	}
 	
     public ArrayList<Statement> listStatements(URI thingUri) {
     	ArrayList<Statement> listStatements = new ArrayList<Statement>();
@@ -621,7 +622,7 @@ public class Catalogue {
     		boolean subsume,
     		int offset,
     		int limit,
-    		Set<URI> domainContext) throws ClassCastException, ModelRuntimeException {
+    		Set<String> domainContext) throws ClassCastException, ModelRuntimeException {
     	HashSet<Screen> results = new HashSet<Screen>();
 
     	String queryString = 
@@ -633,8 +634,8 @@ public class Catalogue {
 
     	if (domainContext.size() > 0) {
         	queryString = queryString.concat("{");
-        	for (URI tag : domainContext)
-	    		queryString = queryString.concat(" { ?screen "+FCO.hasTag.toSPARQL()+" "+tag.toSPARQL()+ " } UNION");
+        	for (String tag : domainContext)
+	    		queryString = queryString.concat(" { ?screen "+FCO.hasTag.toSPARQL()+" ?tag . FILTER regex(?tag, \""+tag+"\", \"i\")} UNION");
         	// remove last 'UNION'
 	    	if (queryString.endsWith("UNION"))
 				queryString = queryString.substring(0, queryString.length() - 5);
@@ -647,7 +648,7 @@ public class Catalogue {
 			for (Condition con : unCon) {
 				if (logger.isDebugEnabled())
 					logger.debug("[UNSATISFIED] "+con.toString());
-				queryString = queryString.concat("{ ?screen "+FCO.hasPostcondition.toSPARQL()+" ?c . ");
+				queryString = queryString.concat("{ ?screen "+FCO.hasPostCondition.toSPARQL()+" ?c . ");
 				queryString = queryString.concat(" ?c "+FCO.hasPattern.toSPARQL()+" ?p . ");
     			queryString = queryString.concat("GRAPH ?p {");
         		for (Statement st : con.getPattern()) {
@@ -668,8 +669,8 @@ public class Catalogue {
 		queryString = queryString.concat("\nOFFSET "+offset);
 		// replace ':_' by '?' to make the query
 		queryString = replaceBlankNodes(queryString);
-//		if (logger.isDebugEnabled())
-//			logger.debug("Executing SPARQL query:\n"+queryString+"\n-----");
+		if (logger.isDebugEnabled())
+			logger.debug("Executing SPARQL query:\n"+queryString+"\n-----");
     	QueryResultTable qrt = tripleStore.sparqlSelect(queryString);
     	ClosableIterator<QueryRow> itResults = qrt.iterator();
     	while (itResults.hasNext()) {
@@ -690,7 +691,7 @@ public class Catalogue {
     		boolean subsume,
     		int offset,
     		int limit,
-    		Set<URI> domainContext) throws ClassCastException, ModelRuntimeException {
+    		Set<String> domainContext) throws ClassCastException, ModelRuntimeException {
     	HashSet<Screen> results = new HashSet<Screen>();
      	
 		boolean stop = false;
@@ -813,7 +814,7 @@ public class Catalogue {
     	String queryString = "ASK { {";
     	for (Screen s : screens) {
     		if (screenExcluded == null || !s.getUri().equals(screenExcluded))
-    	    	queryString = queryString.concat(" { "+s.getUri().toSPARQL()+" "+FCO.hasPostcondition.toSPARQL()+" ?condition } UNION");
+    	    	queryString = queryString.concat(" { "+s.getUri().toSPARQL()+" "+FCO.hasPostCondition.toSPARQL()+" ?condition } UNION");
     	}
     	queryString = queryString.substring(0, queryString.length() - 5); // remove last 'UNION'
     	queryString = queryString.concat(" } . ");
@@ -915,23 +916,23 @@ public class Catalogue {
 				sf.setCreator(object.asURI());
 			} else if (predicate.equals(DC.rights)) {
 				sf.setRights(object.asURI());
-			} else if (predicate.equals(FCO.version)) {
+			} else if (predicate.equals(FCO.hasVersion)) {
 				sf.setVersion(object.toString());
 			} else if (predicate.equals(DC.date)) {
 				sf.setCreationDate(FormatterUtil.parseDateISO8601(object.toString()));
-			} else if (predicate.equals(FCO.icon)) {
+			} else if (predicate.equals(FCO.hasIcon)) {
 				sf.setIcon(object.asURI());
-			} else if (predicate.equals(FCO.screenshot)) {
+			} else if (predicate.equals(FCO.hasScreenshot)) {
 				sf.setScreenshot(object.asURI());
 			} else if (predicate.equals(FCO.hasTag)) {
 				sf.getDomainContext().add(object.asURI());
-			} else if (predicate.equals(FCO.homepage)) {
+			} else if (predicate.equals(FOAF.homepage)) {
 				sf.setHomepage(object.asURI());
-			} else if (predicate.equals(FCO.hasPrecondition)) {
+			} else if (predicate.equals(FCO.hasPreCondition)) {
 				sf.getPreconditions().add(getCondition(object));
-			} else if (predicate.equals(FCO.hasPostcondition)) {
+			} else if (predicate.equals(FCO.hasPostCondition)) {
 				sf.getPostconditions().add(getCondition(object));
-			} else if (predicate.equals(FCO.hasScreen)) {
+			} else if (predicate.equals(FCO.contains)) {
 				sf.getScreens().add(getScreen(object.asURI()));
 			}
 		}
@@ -963,25 +964,28 @@ public class Catalogue {
 				screen.setCreator(object.asURI());
 			} else if (predicate.equals(DC.rights)) {
 				screen.setRights(object.asURI());
-			} else if (predicate.equals(FCO.version)) {
+			} else if (predicate.equals(FCO.hasVersion)) {
 				screen.setVersion(object.toString());
 			} else if (predicate.equals(DC.date)) {
 				screen.setCreationDate(FormatterUtil.parseDateISO8601(object.toString()));
-			} else if (predicate.equals(FCO.icon)) {
+			} else if (predicate.equals(FCO.hasIcon)) {
 				screen.setIcon(object.asURI());
-			} else if (predicate.equals(FCO.screenshot)) {
+			} else if (predicate.equals(FCO.hasScreenshot)) {
 				screen.setScreenshot(object.asURI());
 			} else if (predicate.equals(FCO.hasTag)) {
-				ClosableIterator<Statement> tagLabel = tripleStore.findStatements(object.asURI(), RDFS.label, Variable.ANY);
-				if (tagLabel.hasNext())
-					screen.getDomainContext().getTags().add(tagLabel.next().getObject().asLiteral().toString());
-				tagLabel.close();
-			} else if (predicate.equals(FCO.homepage)) {
+				screen.getDomainContext().getTags().add(object.asLiteral().toString());
+//				ClosableIterator<Statement> tagLabel = tripleStore.findStatements(object.asURI(), RDFS.label, Variable.ANY);
+//				if (tagLabel.hasNext())
+//					screen.getDomainContext().getTags().add(tagLabel.next().getObject().asLiteral().toString());
+//				tagLabel.close();
+			} else if (predicate.equals(FOAF.homepage)) {
 				screen.setHomepage(object.asURI());
-			} else if (predicate.equals(FCO.hasPrecondition)) {
+			} else if (predicate.equals(FCO.hasPreCondition)) {
 				screen.getPreconditions().add(getCondition(object));
-			} else if (predicate.equals(FCO.hasPostcondition)) {
+			} else if (predicate.equals(FCO.hasPostCondition)) {
 				screen.getPostconditions().add(getCondition(object));
+			} else if (predicate.equals(FCO.hasCode)) {
+				screen.setCode(object.asURI());
 			}
 		}
 		screenTriples.close();
@@ -1027,11 +1031,11 @@ public class Catalogue {
     }
     
     //TODO remove this method
-    public void printTags() {
-    	ClosableIterator<Statement> it = tripleStore.findStatements(Variable.ANY, RDF.type, FCO.Tag);
-    	for ( ; it.hasNext(); )
-    		System.out.println(it.next().getSubject().asURI());
-    }
+//    public void printTags() {
+//    	ClosableIterator<Statement> it = tripleStore.findStatements(Variable.ANY, RDF.type, FCO.Tag);
+//    	for ( ; it.hasNext(); )
+//    		System.out.println(it.next().getSubject().asURI());
+//    }
     
 //	private List<URI> getSuperClasses(URI clazz) {
 //	return tripleStore.getSuperClasses(clazz);
@@ -1058,7 +1062,7 @@ public class Catalogue {
     	ClosableIterator<Statement> it = listAllStatements();
     	for ( ; it.hasNext(); ) {
     		Statement st = it.next();
-    		System.out.println(st.getContext()+" - "+st.getSubject()+" - "+st.getPredicate()+" - "+st.getObject());
+    		logger.debug(st.getContext()+" - "+st.getSubject()+" - "+st.getPredicate()+" - "+st.getObject());
     	}
     	it.close();
     }

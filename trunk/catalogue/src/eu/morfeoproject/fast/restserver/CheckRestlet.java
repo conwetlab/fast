@@ -63,11 +63,11 @@ public class CheckRestlet extends CatalogueRestlet {
 				// parses the domain context
 				JSONObject jsonDomainContext = input.getJSONObject("domainContext");
 				JSONArray jsonTags = jsonDomainContext.getJSONArray("tags");
-				Set<URI> tags = new HashSet<URI>();
+				Set<String> tags = new HashSet<String>();
 				for (int i = 0; i < jsonTags.length(); i++)
-					tags.add(catalogue.getOrCreateTag(jsonTags.getString(i)));
+					tags.add(jsonTags.getString(i));
 				StringBuffer sb = new StringBuffer();
-				for (URI tag : tags)
+				for (String tag : tags)
 					sb.append(tag+" ");
 				// TODO do something with the user
 				String user = jsonDomainContext.getString("user");
@@ -140,12 +140,12 @@ public class CheckRestlet extends CatalogueRestlet {
 				response.setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
 			} catch (NotFoundException e) {
 				response.setStatus(Status.CLIENT_ERROR_BAD_REQUEST, e.getMessage());
-			} catch (RepositoryException e) {
+//			} catch (RepositoryException e) {
 				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (OntologyInvalidException e) {
+//				e.printStackTrace();
+//			} catch (OntologyInvalidException e) {
 				// TODO Auto-generated catch block
-				e.printStackTrace();
+//				e.printStackTrace();
 			}
 			logger.info("...Exiting CHECK operation");
 		} else {
