@@ -95,9 +95,7 @@ public class SearchRestlet extends CatalogueRestlet {
 				JSONArray output = new JSONArray();
 				for (Iterator<Screen> it = results.iterator(); it.hasNext(); ) {
 					Screen s = it.next();
-					JSONObject sJson = new JSONObject();
-					sJson.put("uri", s.getUri());
-					output.put(sJson);
+					output.put(s.getUri());
 					logger.info("[MATCH] "+s.getUri());
 				}
 				response.setEntity(output.toString(2), MediaType.APPLICATION_JSON);
