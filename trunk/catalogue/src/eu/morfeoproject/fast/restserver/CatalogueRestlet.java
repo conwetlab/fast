@@ -117,7 +117,7 @@ public abstract class CatalogueRestlet extends Restlet {
 			screen.setHomepage(new URIImpl(jsonScreen.getString("homepage")));
 		screen.setPreconditions(parseConditions(jsonScreen.getJSONArray("preconditions")));
 		screen.setPostconditions(parseConditions(jsonScreen.getJSONArray("postconditions")));
-		if (jsonScreen.get("code") != null)
+		if (jsonScreen.get("code") != null && !jsonScreen.getString("code").equalsIgnoreCase("null"))
 			screen.setCode(new URIImpl(jsonScreen.getString("code")));
 		return screen;
 	}
