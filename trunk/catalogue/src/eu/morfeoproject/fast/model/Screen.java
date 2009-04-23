@@ -155,8 +155,16 @@ public class Screen {
 		this.postconditions = postconditions;
 	}
 	
+	public boolean equals(Screen o) {
+//		if (o instanceof Screen)
+			return ((Screen)o).getUri().equals(this.uri);
+//		else
+//			return false;
+	}
+	
+	@Override
 	public String toString() {
-		return getUri().toString();
+		return uri.toString();
 	}
 
 	public JSONObject toJSON() {

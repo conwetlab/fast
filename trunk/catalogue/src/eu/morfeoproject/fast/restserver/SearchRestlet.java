@@ -20,7 +20,6 @@ import org.restlet.data.Status;
 
 import eu.morfeoproject.fast.catalogue.Catalogue;
 import eu.morfeoproject.fast.catalogue.NotFoundException;
-import eu.morfeoproject.fast.catalogue.OntologyInvalidException;
 import eu.morfeoproject.fast.model.Screen;
 
 /**
@@ -74,7 +73,6 @@ public class SearchRestlet extends CatalogueRestlet {
 				// TODO do something with the user
 				String user = jsonDomainContext.getString("user");
 				// parse the elements
-//				Set<Screen> elements = new HashSet<Screen>();
 				JSONArray jsonElements = input.getJSONArray("elements");
 				for (int i = 0; i < jsonElements.length(); i++) {
 					URI uri = new URIImpl(((JSONObject)jsonElements.get(i)).getString("uri"));
@@ -110,12 +108,6 @@ public class SearchRestlet extends CatalogueRestlet {
 				response.setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
 			} catch (NotFoundException e) {
 				response.setStatus(Status.CLIENT_ERROR_BAD_REQUEST, e.getMessage());
-//			} catch (RepositoryException e) {
-				// TODO Auto-generated catch block
-//				e.printStackTrace();
-//			} catch (OntologyInvalidException e) {
-				// TODO Auto-generated catch block
-//				e.printStackTrace();
 			}
 			logger.info("...Exiting FIND operation");
 		} else {

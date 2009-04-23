@@ -54,8 +54,6 @@ public class Catalogue {
 	public static final int SUBSUME = 3;
 	public static final int INTERSECTION = 4;
 
-//	public static final URI TAGS_NAMESPACE = new URIImpl("http://www.morfeoproject.eu/fast/tags/");
-	
 	private TripleStore tripleStore;
 	
 	/**
@@ -104,7 +102,10 @@ public class Catalogue {
         for (DefaultOntologies.Ontology ont : DefaultOntologies.getDefaults()) {
             try {
                 logger.info("adding default ontology '"+ont.getUri()+"'");
-                tripleStore.addOntology(ont.getUri(), ont.getAsRDFXML(), Syntax.RdfXml);
+//                if (ont.getUri().toString().equals("http://purl.oclc.org/fast/ontology/gadget#"))
+//                	tripleStore.addOntology(ont.getUri(), ont.getAsRDFXML(), Syntax.Turtle);
+//                else
+                	tripleStore.addOntology(ont.getUri(), ont.getAsRDFXML(), Syntax.RdfXml);
             } catch (OntologyInvalidException e) {
                 logger.error("Cannot add default ontology '"+ont.getUri()+"': "+e, e);
             }
@@ -480,11 +481,6 @@ public class Catalogue {
 		return tripleStore.getOrCreateClass(name, superClass, namespace);
 	}
 	
-//	public URI getOrCreateTag(String name)
-//	throws OntologyInvalidException, RepositoryException {
-//		return tripleStore.getOrCreateTag(name, TAGS_NAMESPACE);
-//	}
-	
     public ArrayList<Statement> listStatements(URI thingUri) {
     	ArrayList<Statement> listStatements = new ArrayList<Statement>();
     	ClosableIterator<Statement> it = tripleStore.findStatements(thingUri, Variable.ANY, Variable.ANY);
@@ -526,8 +522,8 @@ public class Catalogue {
     		"SELECT DISTINCT ?screen \n" +
     		"WHERE {\n" +
     		"?screen "+RDF.type.toSPARQL()+" "+FCO.Screen.toSPARQL()+" . ";
-//    	for (Screen s : screens)
-//    		queryString = queryString.concat("FILTER (?screen != " + s.getUri().toSPARQL() + ") . ");
+    	for (Screen s : screens)
+    		queryString = queryString.concat("FILTER (?screen != " + s.getUri().toSPARQL() + ") . ");
 
     	if (domainContext.size() > 0) {
         	queryString = queryString.concat("{");

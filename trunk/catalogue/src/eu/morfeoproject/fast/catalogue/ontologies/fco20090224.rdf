@@ -1,9 +1,4 @@
-
-
-<!-- Processed by Id: cwm.py,v 1.144 2003/09/14 20:20:20 timbl Exp -->
-<!--     using base file:/tmp/tmp5X4mPH-rdfconverter-->
-
-
+﻿<?xml version="1.0" encoding="UTF-8"?>
 <rdf:RDF xmlns="http://purl.oclc.org/fast/ontology/gadget#"
     xmlns:dcterms="http://purl.org/dc/terms/"
     xmlns:doap="http://usefulinc.com/ns/doap#"
@@ -26,7 +21,7 @@
     <foaf:Person rdf:about="http://kantenwerk.org/metadata/foaf.rdf#me">
         <rdfs:seeAlso rdf:resource="http://kantenwerk.org/metadata/foaf.rdf"/>
         <foaf:homepage rdf:resource="http://kantenwerk.org"/>
-        <foaf:name xml:lang="en">Knud Moeller</foaf:name>
+        <foaf:name xml:lang="en">Knud Möller</foaf:name>
     </foaf:Person>
 
     <owl:Ontology rdf:about="http://purl.oclc.org/fast/ontology/gadget">

@@ -25,6 +25,8 @@ public class CatalogueServer extends Application {
 	private Restlet searchRestlet;
 	private Restlet checkRestlet;
 	private Restlet metadataRestlet;
+	private Restlet searchCheckRestlet;
+	
 	private Catalogue catalogue;
 	
 	private Component component;
@@ -52,6 +54,7 @@ public class CatalogueServer extends Application {
 		searchRestlet = new SearchRestlet(catalogue, recursive);
 		checkRestlet = new CheckRestlet(catalogue);
 		metadataRestlet = new MetadataRestlet(catalogue);
+		searchCheckRestlet = new SearchCheckRestlet(catalogue, recursive);
 
 		// start the restlet server
 		component.start();
@@ -80,6 +83,7 @@ public class CatalogueServer extends Application {
 		router.attach("/find", searchRestlet);
 		router.attach("/check", checkRestlet);
 		router.attach("/getmetadata", metadataRestlet);
+		router.attach("/findcheck", searchCheckRestlet);
 		return router;
 	}
 
