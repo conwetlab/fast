@@ -28,7 +28,7 @@ var ScreenView = Class.create( ResourceView,
         this._postIcons;
 
         var title = new Element("div", {"class":"screenTitle unknown"});
-        title.update(screenResourceDescription.name);
+        title.update(screenResourceDescription.label['en-gb']);
 
         var factFactory = FactFactorySingleton.getInstance();
         var preArea = new Element("div", {"class": "preArea"});

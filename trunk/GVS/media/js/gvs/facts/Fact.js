@@ -28,8 +28,7 @@ var Fact = Class.create(
          */
         this._description = description;
     },
-
-
+    
     // **************** PUBLIC METHODS **************** //
 
 

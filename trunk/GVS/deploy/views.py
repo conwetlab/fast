@@ -54,7 +54,10 @@ def deployGadget(request):
             if (definition.has_key('screens')):
                 screens=definition['screens']
                 for screen in screens:
-                    url = screen['uri']
+                    aux = screen['label']
+                    screen['label'] = aux['en-gb']
+
+                    url = screen['code']
                     print url
                     data = ""
                     charset = "utf-8"
@@ -66,10 +69,10 @@ def deployGadget(request):
                         print "INFO: ", info
                         ignore, charset = info['Content-Type'].split('charset=')
                         print "CHARSET: ", charset
-                        screen['code']=smart_unicode(data)
+                        screen['allCode']=smart_unicode(data)
                     except:
                         print "Default CHARSET: ", charset
-                        screen['code']=smart_unicode(data)
+                        screen['allCode']=smart_unicode(data)
             else:
                 screens=[]
             if (definition.has_key('connectors')):

@@ -64,6 +64,15 @@ var DocumentController = Class.create(
         this.addDocument(deployment);
         deployment.populate(deploymentContent);
     },
+    
+    /**
+     * Creates a preview document
+     */
+    createPreviewDocument: function(resourceDesc){
+        var preview = new PreviewDocument(resourceDesc.label['en-gb']);
+        this.addDocument(preview);
+        preview.populate(resourceDesc);
+    },
 
     /**
      * Adds a new document.

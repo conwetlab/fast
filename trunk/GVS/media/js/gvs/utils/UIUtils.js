@@ -36,16 +36,6 @@ UIUtils.inspectorAreaUpdate = function(screen){
     //UIUtils.factsPaneUpdate(screen);
 }
 
-UIUtils.propertiesPaneUpdate = function(screen){
-    var currentDocument = GVSSingleton.getInstance().getDocumentController().getCurrentDocument();
-    var resourceDescription = currentDocument.getScreenDescription(screen);
-    $(currentDocument.getDetailsTitle('detailsTitle')).innerHTML = "Properties of " + resourceDescription.name;
-    $(currentDocument.getDetailsTitle('title')).innerHTML = resourceDescription.name;
-    $(currentDocument.getDetailsTitle('id')).innerHTML = resourceDescription.uri;
-    $(currentDocument.getDetailsTitle('desc')).innerHTML = resourceDescription.description;
-    $(currentDocument.getDetailsTitle('tags')).innerHTML = resourceDescription.domainContext;
-}
-
 UIUtils.prePostPaneUpdate = function(screen){
 }
 
@@ -363,20 +353,6 @@ UIUtils.createAddScDialog = function() {
         
         var hScreenInformation = new Element('h3').update("Screen information");
         form2.insert(hScreenInformation);
-
-        var divScUri = new Element("div", {
-            "class" : "line"
-        });
-        var labelScUri = new Element("label").update("URI:");
-        divScUri.insert(labelScUri);
-        var inputScUri = new Element("input", {
-            type : "text",
-            id : "ScUri",
-            name : "ScUri",
-            value : "new Screen URI..."
-        });
-        divScUri.insert(inputScUri);
-        form2.insert(divScUri);
         
         var divScLabel = new Element("div", {
             "class" : "line"
@@ -386,25 +362,11 @@ UIUtils.createAddScDialog = function() {
         var inputScLabel = new Element("input", {
             type : "text",
             id : "ScLabel",
-            Name : "ScLabel",
-            value : ""
+            Name : "label",
+            value : "Label of the screen..."
         });
         divScLabel.insert(inputScLabel);
         form2.insert(divScLabel);
-
-        var divScName = new Element("div", {
-            "class" : "line"
-        });
-        var labelScName = new Element("label").update("Name:");
-        divScLabel.insert(labelScName);
-        var inputScName = new Element("input", {
-            type : "text",
-            id : "ScName",
-            Name : "ScName",
-            value : ""
-        });
-        divScName.insert(inputScName);
-        form2.insert(divScName);
 
         var divScDesc = new Element("div", {
             "class" : "line"
@@ -414,8 +376,8 @@ UIUtils.createAddScDialog = function() {
         var inputScDesc = new Element("input", {
             type : "text",
             id : "ScDesc",
-            name : "ScDesc",
-            value : ""
+            name : "description",
+            value : "Short description of the screen..."
         });
         divScDesc.insert(inputScDesc);
         form2.insert(divScDesc);
@@ -423,13 +385,13 @@ UIUtils.createAddScDialog = function() {
         var divScCreator = new Element("div", {
             "class" : "line"
         });
-        var labelScCreator = new Element("label").update("Creator:");
+        var labelScCreator = new Element("label").update("Creator URL (*):");
         divScCreator.insert(labelScCreator);
         var inputScCreator = new Element("input", {
             type : "text",
             id : "ScCreator",
-            name : "ScCreator",
-            value : ""
+            name : "creator",
+            value : "creator URL..."
         });
         divScCreator.insert(inputScCreator);
         form2.insert(divScCreator);
@@ -437,13 +399,13 @@ UIUtils.createAddScDialog = function() {
         var divScRights = new Element("div", {
             "class" : "line"
         });
-        var labelScRights = new Element("label").update("Rights:");
+        var labelScRights = new Element("label").update("Rights URL (*):");
         divScRights.insert(labelScRights);
         var inputScRights = new Element("input", {
             type : "text",
             id : "ScRights",
-            name : "ScRights",
-            value : ""
+            name : "rights",
+            value : "rights URL..."
         });
         divScRights.insert(inputScRights);
         form2.insert(divScRights);
@@ -456,36 +418,30 @@ UIUtils.createAddScDialog = function() {
         var inputScVersion = new Element("input", {
             type : "text",
             id : "ScVersion",
-            name : "ScVersion",
-            value : ""
+            name : "version",
+            value : "1.0"
         });
         divScVersion.insert(inputScVersion);
         form2.insert(divScVersion);
 
-        var divScCreationDate = new Element("div", {
-            "class" : "line"
-        });
-        var labelScCreationDate = new Element("label").update("Creation Date:");
-        divScCreationDate.insert(labelScCreationDate);
         var inputScCreationDate = new Element("input", {
-            type : "text",
+            type : "hidden",
             id : "ScCreationDate",
-            name : "ScCreationDate",
+            name : "creationDate",
             value : ""
         });
-        divScCreationDate.insert(inputScCreationDate);
-        form2.insert(divScCreationDate);
+        form2.insert(inputScCreationDate);
 
         var divScIcon = new Element("div", {
             "class" : "line"
         });
-        var labelScIcon = new Element("label").update("Icon URL:");
+        var labelScIcon = new Element("label").update("Icon URL (*):");
         divScIcon.insert(labelScIcon);
         var inputScIcon = new Element("input", {
             type : "text",
             id : "ScIcon",
-            name : "ScIcon",
-            value : ""
+            name : "icon",
+            value : "icon URL..."
         });
         divScIcon.insert(inputScIcon);
         form2.insert(divScIcon);
@@ -493,13 +449,13 @@ UIUtils.createAddScDialog = function() {
         var divScScshot = new Element("div", {
             "class" : "line"
         });
-        var labelScScshot = new Element("label").update("Screenshot URL:");
+        var labelScScshot = new Element("label").update("Screenshot URL (*):");
         divScScshot.insert(labelScScshot);
         var inputScScshot = new Element("input", {
             type : "text",
             id : "ScScshot",
-            name : "ScScshot",
-            value : ""
+            name : "screenshot",
+            value : "screenshot URL..."
         });
         divScScshot.insert(inputScScshot);
         form2.insert(divScScshot);
@@ -512,8 +468,8 @@ UIUtils.createAddScDialog = function() {
         var inputScDomainContext = new Element("input", {
             type : "text",
             id : "ScDomainContext",
-            name : "ScDomainContext",
-            value : ""
+            name : "domainContext",
+            value : "Write domain context as tags separated by ','..."
         });
         divScDomainContext.insert(inputScDomainContext);
         form2.insert(divScDomainContext);
@@ -521,13 +477,13 @@ UIUtils.createAddScDialog = function() {
         var divScHomepage = new Element("div", {
             "class" : "line"
         });
-        var labelScHomepage = new Element("label").update("Homepage:");
+        var labelScHomepage = new Element("label").update("Homepage (*):");
         divScHomepage.insert(labelScHomepage);
         var inputScHomepage = new Element("input", {
             type : "text",
             id : "ScHomepage",
-            name : "ScHomepage",
-            value : ""
+            name : "homepage",
+            value : "homepage URL..."
         });
         divScHomepage.insert(inputScHomepage);
         form2.insert(divScHomepage);
@@ -540,8 +496,8 @@ UIUtils.createAddScDialog = function() {
         var inputScPrecs = new Element("input", {
             type : "text",
             id : "ScPrecs",
-            name : "ScPrecs",
-            value : ""
+            name : "preconditions",
+            value : "If any, write preconditions separated by ','..."
         });
         divScPrecs.insert(inputScPrecs);
         form2.insert(divScPrecs);
@@ -554,13 +510,30 @@ UIUtils.createAddScDialog = function() {
         var inputScPosts = new Element("input", {
             type : "text",
             id : "ScPosts",
-            name : "ScPosts",
-            value : ""
+            name : "postconditions",
+            value : "If any, write postconditions separated by ','..."
         });
         divScPosts.insert(inputScPosts);
         form2.insert(divScPosts);
 
+        var divScCode = new Element("div", {
+            "class" : "line"
+        });
+        var labelScCode = new Element("label").update("Screen code URL (*):");
+        divScCode.insert(labelScCode);
+        var inputScCode = new Element("input", {
+            type : "text",
+            id : "ScCode",
+            name : "code",
+            value : "Screencode URL..."
+        });
+        divScCode.insert(inputScCode);
+        form2.insert(divScCode);
+
         dialogDiv.insert(form2);
+
+        var labelExplanation = new Element("label").update("(*): Required Field");
+        dialogDiv.insert(labelExplanation);
 
         var divScButtons = new Element("div", {
             "id" : "ScButtons"
@@ -569,13 +542,59 @@ UIUtils.createAddScDialog = function() {
             "id" : "acceptScButton",
             "label" : "Accept",
             onClick : function() {
-                var uri = $('ScUri').getValue(); 
-                if(uri && uri != "") {
-                    //TODO: Add the screen to the catalogue
-                    UIUtils.hideAddScDialog();
-                }else{
-                    alert("A Screen uri must be provided");
+                var formu = $('addScreenForm');
+                var creationDate = new Date();
+                formu.creationDate.setValue(Utils.getIsoDateNow(creationDate));
+
+                var formToSend = formu.serialize(true);
+                formToSend.label = {"en-GB":formu.label.getValue()};
+                formToSend.description = {"en-GB":formu.description.getValue()};
+                
+                var domainContextArray = formu.domainContext.getValue().split(',');
+                for(var i = 0; i < domainContextArray.length ; i++) {
+                    var aux = domainContextArray[i].strip();
+                    if(aux && aux != ""){
+                        domainContextArray[i] = aux;
+                    }else{
+                        domainContextArray[i] = null;
+                    }
                 }
+                domainContextArray = domainContextArray.compact();
+                formToSend.domainContext = {"tags":domainContextArray,"user":null};
+                
+                var preconditionsArray = formu.preconditions.getValue().split(',');
+                for(var i = 0; i < preconditionsArray.length ; i++) {
+                    var aux = preconditionsArray[i].strip();
+                    if(aux && aux != ""){
+                        preconditionsArray[i] = aux;
+                    }else{
+                        preconditionsArray[i] = null;
+                    }
+                }
+                preconditionsArray = preconditionsArray.compact();
+                formToSend.preconditions = preconditionsArray;
+
+                var postconditionsArray = formu.postconditions.getValue().split(',');
+                for(var i = 0; i < postconditionsArray.length ; i++) {
+                    var aux = postconditionsArray[i].strip();
+                    if(aux && aux != ""){
+                        postconditionsArray[i] = aux;
+                    }else{
+                        postconditionsArray[i] = null;
+                    }
+                }
+                postconditionsArray = postconditionsArray.compact();
+                formToSend.postconditions = postconditionsArray;
+
+                console.log("Before json");
+                console.log(formToSend);
+                console.log("After json");
+                console.log(Object.toJSON(formToSend));
+                
+                var catalogueInstance = 
+                CatalogueSingleton.getInstance().createScreen(Object.toJSON(formToSend));
+                
+                UIUtils.hideAddScDialog();
             }
         });
         divScButtons.insert(acceptScButton.domNode);
@@ -591,7 +610,6 @@ UIUtils.createAddScDialog = function() {
         dialogDiv.insert(divScButtons);
         dialog.setContent(dialogDiv);
         return dialog;
-        
     } else {
         return dijit.byId("addScDialog");
     }
@@ -607,7 +625,7 @@ UIUtils.updateScreenPaletteReachability = function(/** map id->value*/ screenLis
     for (var i=0; i<screens.length; i++) {
         for (var j=0; j<screenList.length; j++) {
             if (screens[i].getResourceDescription().uri==screenList[j].uri) {
-                if (screenList[j].value=='true'){
+                if (screenList[j].reachability==true){
                     screens[i].getResourceDescription().satisfeable=true;
                     break;
                 } else {
@@ -624,7 +642,7 @@ UIUtils.updateSFDocumentReachability = function(/** map id->value*/ screenList) 
     for (var i=0; i<screens.length; i++) {
         for (var j=0; j<screenList.length; j++) {
             if (screens[i].getResourceDescription().uri==screenList[j].uri) {
-                if (screenList[j].value=='true'){
+                if (screenList[j].reachability==true){
                     screens[i].getResourceDescription().satisfeable=true;
                     break;
                 } else {
@@ -720,6 +738,37 @@ UIUtils.onClick = function(e, el){
     UIUtils.selectElement(element.id);
 }
 
+UIUtils.onDblClick = function(e, el){
+    if (!el)
+        var element = Event.element(e);
+    else
+        var element = $(el);
+    var elementClass = $w(element.className);
+    elementClass = elementClass.without("unknown").without("satisfeable").without("unsatisfeable").without("selected").without("view");
+    var resourceType = (elementClass.size()>=1)?elementClass[0] : "unknown";
+    var currentDocument = GVSSingleton.getInstance().getDocumentController().getCurrentDocument();
+    switch (resourceType){
+        case "img":
+        case "fact":
+        case "medium_fact":
+            element = element.parentNode;
+        case "screenTitle":
+        case "preArea":
+        case "postArea":
+        case "prepostSeparator":
+        case "screenImage":
+            //Workaround for title bar
+            element = element.parentNode;
+        case "screen":
+            UIUtils.updatePreviewTab(element.id);
+            break;
+        default:
+            //UIUtils.emptyPropertiesPane(currentDocument);
+            break;
+    }
+    //UIUtils.selectElement(element.id);
+}
+
 UIUtils.onKeyPressCanvas = function(e){
     var currentDocument = GVSSingleton.getInstance().getDocumentController().getCurrentDocument();
     var selectedElement = currentDocument.getSelectedElement();
@@ -742,10 +791,26 @@ UIUtils.onKeyPressCanvas = function(e){
     }
 }
 
+UIUtils.propertiesPaneUpdate = function(screenId){
+    var currentDocument = GVSSingleton.getInstance().getDocumentController().getCurrentDocument();
+    var resourceDescription = currentDocument.getScreenDescription(screenId);
+    $(currentDocument.getDetailsTitle('detailsTitle')).innerHTML = "Properties of " + resourceDescription.name;
+    $(currentDocument.getDetailsTitle('title')).innerHTML = resourceDescription.name;
+    $(currentDocument.getDetailsTitle('id')).innerHTML = resourceDescription.uri;
+    $(currentDocument.getDetailsTitle('desc')).innerHTML = resourceDescription.description;
+    $(currentDocument.getDetailsTitle('tags')).innerHTML = resourceDescription.domainContext;
+}
+
 UIUtils.emptyPropertiesPane = function(currentDocument){
     $(currentDocument.getDetailsTitle('detailsTitle')).innerHTML = "Properties";
     $(currentDocument.getDetailsTitle('title')).innerHTML = "&nbsp;";
     $(currentDocument.getDetailsTitle('id')).innerHTML = "&nbsp;";
     $(currentDocument.getDetailsTitle('desc')).innerHTML = "&nbsp;";
     $(currentDocument.getDetailsTitle('tags')).innerHTML = "&nbsp;";
+}
+
+UIUtils.updatePreviewTab = function(screenId){
+    var documentController = GVSSingleton.getInstance().getDocumentController();
+    var screenDescription = documentController.getCurrentDocument().getScreenDescription(screenId);
+    var screenflowDoc = documentController.createPreviewDocument(screenDescription);
 }

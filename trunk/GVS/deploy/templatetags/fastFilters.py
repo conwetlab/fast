@@ -9,8 +9,6 @@ register = template.Library()
 # STRINGS         #
 ###################
 
-#TODO is this class needed?
-
 @register.filter
 @stringfilter
 def capAndCut(value):
@@ -19,3 +17,15 @@ def capAndCut(value):
     """
     return value.replace(' ', '_')
 capAndCut.is_safe = True
+
+@register.filter
+@stringfilter
+def hash(h,key):
+    """
+    Extracts a key value from a hash 
+    """
+    if key in h:
+        return h[key]
+    else:
+        return None
+hash.is_safe = True

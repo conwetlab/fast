@@ -34,7 +34,7 @@ var PaletteComponent = Class.create(DragSource,
          * @type DOMNode
          * @private
          */
-        this._node = this._createSlot(this._resourceDescription.name,
+        this._node = this._createSlot(this._resourceDescription.label['en-gb'],
                 this._view.getNode());
     },
 

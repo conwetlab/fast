@@ -273,8 +273,8 @@ var ScreenflowDescription = Class.create(ResourceDescription,
         var screensdesc = this.getScreenDescriptions();
         var screenList = '';
         for(i=0;i<screensdesc.length;i++){
-            console.log(screensdesc[i].name);
-            screenList += screensdesc[i].name + ",";
+            console.log(screensdesc[i].label['en-gb']);
+            screenList += screensdesc[i].label['en-gb'] + ",";
         }
 
         function onSuccess(transport) {

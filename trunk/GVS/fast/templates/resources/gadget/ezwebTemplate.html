@@ -15,9 +15,9 @@
 {# Here the screens involved inside the gadget are defined #}
 {% load fastFilters %}
 {% for screen in gadgetScreens %}
-    screens.set("{{ screen.name|cut:" " }}",
-        {title: "{{ screen.name|cut:" " }}",
-        contentEl:"{{ screen.name|cut:" " }}",
+    screens.set("{{ screen.label|cut:" " }}",
+        {title: "{{ screen.label|cut:" " }}",
+        contentEl:"{{ screen.label|cut:" " }}",
         pre: [{% for pre in screen.preconditions %}'{{ pre }}'{% if not forloop.last %}, {% endif %}{% endfor %}]});
 {% endfor %}
 
@@ -54,11 +54,12 @@
 <div id="menu"></div>
 {# TODO: screen in screens should have a code field #}
 {% for screen in gadgetScreens %}
-<div id="{{ screen.name|cut:" " }}" class="tabcontentHide">
-    <object id="{{ screen.name|cut:" " }}_obj" width="100%" height="100%">
-        {{ screen.code|safe }}
+<div id="{{ screen.label|cut:" " }}" class="tabcontentHide">
+    <object id="{{ screen.label|cut:" " }}_obj" width="100%" height="100%">
+        {{ screen.allCode|safe }}
     </object>
 </div>
 {% endfor %}
 </body>
 </html>
+

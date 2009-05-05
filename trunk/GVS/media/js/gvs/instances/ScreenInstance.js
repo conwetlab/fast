@@ -27,6 +27,7 @@ var ScreenInstance = Class.create(ComponentInstance,
             GVSSingleton.getInstance().getDocumentController().getCurrentDocument().addScreen(this);
             UIUtils.onClick(null, this.getView().getId());
             this.getView().getNode().observe('click', UIUtils.onClick);
+            this.getView().getNode().observe('dblclick', UIUtils.onDblClick);
             var currentDocument = GVSSingleton.getInstance().getDocumentController().getCurrentDocument();
             var canvas = currentDocument.getCanvas();
             var domainContext = {

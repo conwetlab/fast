@@ -90,4 +90,7 @@ def jsonEncode(data, ensure_ascii=False):
     
     return simplejson.dumps(ret, cls=DateTimeAwareJSONEncoder, ensure_ascii=ensure_ascii)
 
-
+def cleanUrl(data):
+    if data.endswith('/'):
+        data = data[:-1]
+    return data

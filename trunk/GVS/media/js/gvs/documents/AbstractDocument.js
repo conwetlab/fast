@@ -106,7 +106,6 @@ var AbstractDocument = Class.create( /** @lends AbstractDocument.prototype */ {
         return this._title;
     },
 
-    
     /**
      * Gets the content node.
      * @type DOMNode

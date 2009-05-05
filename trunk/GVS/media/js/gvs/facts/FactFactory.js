@@ -55,19 +55,37 @@ var FactFactorySingleton = function() {
         getFact: function (/** String */ uri) {
             // If the fact does not exist in the cached ones, then a default one is created.
             if(this._cachedFacts.get(uri)==null){
-                this._cachedFacts.set(uri, new Fact(uri, "DF", "Default Fact"));
+                this.updateFactFromUri(uri);
+                if(this._cachedFacts.get(uri)==null){
+                    this._cachedFacts.set(uri, new Fact(uri, "DF", "Default Fact"));
+                }
             }
             return this._cachedFacts.get(uri);
         },
 
         /**
-         * Updates the facts from the catalogue.
+         * Updates the facts from a JSON file.
          * @public
          */
         updateFacts: function () {
             CatalogueSingleton.getInstance().getFacts();
         },
-
+        
+        /**
+         * Updates the facts from the fact uri.
+         * @public
+         */
+        updateFactFromUri: function (/**String*/ stringUri) {
+            if(stringUri.startsWith('?')){
+                factUri = stringUri.split(' ');
+                var shortcut = factUri[0].split('?')[1].truncate(2, '');
+                
+                var uri = factUri[2];
+                var desc = factUri[2];
+                this._cachedFacts.set(stringUri,new Fact(stringUri, shortcut, desc));
+            }
+        },
+        
         /**
          * Sets a fact identified by uri.
          * @params String: Facts in JSON
