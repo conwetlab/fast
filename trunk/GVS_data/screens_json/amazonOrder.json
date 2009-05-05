@@ -1,0 +1,22 @@
+{
+    "code": "http://localhost:8010/screens/amazonOrder.scr.html",
+    "creationDate": "2009-04-20T17:00:00+0100",
+    "creator": "http://www.evdlt.es/",
+    "description": {"en-gb": "This screen allows users to purchase their shopping cart. It shows an Amazon interface to fulfill the required data to purchase the shopping cart"},
+    "domainContext": {
+      "tags": [
+        "amazon",
+        "order",
+        "purchase"
+      ],
+      "user": null
+    },
+    "homepage": "http://www.deri.ie/amazonOrder",
+    "icon": "http://localhost:8010/images/catalogue/amazonOrder.png",
+    "label": {"en-gb": "Order"},
+    "postconditions": [],
+    "preconditions": ["?Purchase http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#PurchaseURL"],
+    "rights": "http://creativecommons.org/",
+    "screenshot": "http://www.deri.ie/amazonOrder-screenshot.jpg",
+    "version": "1.0"
+}
