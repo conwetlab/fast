@@ -1,0 +1,69 @@
+{
+"canvas": [
+    {
+        "preconditions": [{
+            "expression": "?person rdf:type foaf:Person . ?person foaf:workplaceHomepage http://www.deri.ie/",
+            "satisfied": false
+        }],
+        "reachability": true,
+        "uri": "http://www.morfeoproject.eu/fast/fco#Screen1001"
+    }
+],
+"elements": [
+    {
+        "preconditions": [{
+            "expression": "?person rdf:type foaf:Person",
+            "satisfied": false
+        }],
+        "reachability": true,
+        "uri": "http://www.morfeoproject.eu/fast/fco#Screen1001"
+    },
+    {
+        "preconditions": [{
+            "expression": "?person rdf:type foaf:Person . ?person foaf:workplaceHomepage http://www.deri.ie/",
+            "satisfied": false
+        }],
+        "reachability": false,
+        "uri": "http://www.morfeoproject.eu/fast/fco#Screen1002"
+    },
+    {
+        "preconditions": [{
+            "expression": "?person rdf:type foaf:Person . ?person foaf:workplaceHomepage http://www.deri.ie/",
+            "satisfied": false
+        }],
+        "reachability": false,
+        "uri": "http://www.morfeoproject.eu/fast/fco#Screen1003"
+    },
+    {
+        "preconditions": [{
+            "expression": "?person rdf:type foaf:Person . ?person foaf:workplaceHomepage http://www.deri.ie/",
+            "satisfied": false
+        }],
+        "reachability": false,
+        "uri": "http://www.morfeoproject.eu/fast/fco#Screen1004"
+    },
+    {
+        "preconditions": [{
+            "expression": "?person rdf:type foaf:Person . ?person foaf:workplaceHomepage http://www.deri.ie/",
+            "satisfied": false
+        }],
+        "reachability": false,
+        "uri": "http://www.morfeoproject.eu/fast/fco#Screen1005"
+    },
+    {
+        "preconditions": [{
+            "expression": "?person rdf:type foaf:Person . ?person foaf:workplaceHomepage http://www.deri.ie/",
+            "satisfied": false
+        }],
+        "reachability": false,
+        "uri": "http://www.morfeoproject.eu/fast/fco#Screen1006"
+    },
+    {
+        "preconditions": [{
+            "expression": "?person rdf:type foaf:Person . ?person foaf:workplaceHomepage http://www.deri.ie/",
+            "satisfied": false
+        }],
+        "reachability": false,
+        "uri": "http://www.morfeoproject.eu/fast/fco#Screen1007"
+    }
+]}
