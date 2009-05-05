@@ -120,7 +120,7 @@
 		        	
 		        	Product.prototype.init = function (){
 						var user = EngineFactory.getInstance().getFact('user');
-						var item = EngineFactory.getInstance().getFact('http://TODO/amazon#item');
+						var item = EngineFactory.getInstance().getFact('?Item http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#Item');
 						$("addToCart").observe("click", product.addToCart);
 						//Base URL of the REST Service
 						var url = "http://webservices.amazon.com/onca/xml?Service=AWSECommerceService";
@@ -438,8 +438,8 @@
 		            }
 		            
 		            Product.prototype.addToCart = function (){
-						var item = EngineFactory.getInstance().getFact('http://TODO/amazon#item');
-						var cart = EngineFactory.getInstance().getFact('http://TODO/amazon#shoppingCart');
+						var item = EngineFactory.getInstance().getFact('?Item http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#Item');
+						var cart = EngineFactory.getInstance().getFact('?Cart http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#ShoppingCart');
 						var user = EngineFactory.getInstance().getFact('user');
 						if (cart){//If the cart is already created, it will have an ID in the User Fact
 							var url = "http://webservices.amazon.com/onca/xml?Service=AWSECommerceService";
@@ -494,7 +494,7 @@
 								return;
 							}
 							//Add the Cart ID to the KB
-							var cart = {name: 'http://TODO/amazon#shoppingCart',
+							var cart = {name: '?Cart http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#ShoppingCart',
 										id: xml.getElementsByTagName("CartId")[0].firstChild.nodeValue,
 										HMAC: xml.getElementsByTagName("URLEncodedHMAC")[0].firstChild.nodeValue};
 							EngineFactory.getInstance().manageFacts([cart],[]);
@@ -524,8 +524,8 @@
 					Product.prototype.isProductOnCart = function (transport){
 						
 						var xml = transport;
-						var item = EngineFactory.getInstance().getFact('http://TODO/amazon#item');
-						var cart = EngineFactory.getInstance().getFact('http://TODO/amazon#shoppingCart');
+						var item = EngineFactory.getInstance().getFact('?Item http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#Item');
+						var cart = EngineFactory.getInstance().getFact('?Cart http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#ShoppingCart');
 						var user = EngineFactory.getInstance().getFact('user');
 						//products node
 						if (xml.getElementsByTagName ("CartItems").length>0){ //There are products on the cart

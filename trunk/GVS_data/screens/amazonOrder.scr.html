@@ -4,7 +4,7 @@
 		        	function Order(){};
 		        	
 		        	Order.prototype.init = function (){
-		        		var purchase = EngineFactory.getInstance().getFact('http://TODO/amazon#purchase');
+		        		var purchase = EngineFactory.getInstance().getFact('?Purchase http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#PurchaseURL');
 						var obj = new Element ('object',{type: "text/html", data: purchase.url, standby: "Loading...", width: "100%",  height: "100%"});
 						$("bodyDivOrder").update(obj);
 					}

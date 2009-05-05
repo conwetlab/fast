@@ -51,7 +51,7 @@
 					});
 				
 				});
-				var item = EngineFactory.getInstance().getFact('http://TODO/amazon#item');
+				var item = EngineFactory.getInstance().getFact('?Item http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#Item');
 				$$(".productTitle").each(function(element){
 					element.update(item.title);
 				});
@@ -67,7 +67,7 @@
             SuggestionList.prototype.fetch = function (){
             
             	//Get the facts to invoke the service
-                var item = EngineFactory.getInstance().getFact('http://TODO/amazon#item');
+                var item = EngineFactory.getInstance().getFact('?Item http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#Item');
                 var user = EngineFactory.getInstance().getFact('user');
                 //Add the ItemSearch parameters
                 var parameters = "";
@@ -137,7 +137,7 @@
 				list.clearSelected ();
 				//select the element
 				nodeElement.parentNode.parentNode.setStyle({background: "#FFF8E8"});
-				var item = {name: 'http://TODO/amazon#item', ASIN: _ASIN, title: nodeElement.parentNode.parentNode.firstChild.firstChild.nodeValue};
+				var item = {name: '?Item http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#Item', ASIN: _ASIN, title: nodeElement.parentNode.parentNode.firstChild.firstChild.nodeValue};
 				EngineFactory.getInstance().manageFacts([item],['product']);
 			}
 			

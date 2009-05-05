@@ -96,7 +96,7 @@
 							alert ("You must introduce at least one keyword");
 							return;
 						}
-						var filter = {name: 'http://TODO/amazon#filter', productType: $F("productType"), searchText: $F("searchText")};
+						var filter = {name: '?Filter http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#SearchCriteria', productType: $F("productType"), searchText: $F("searchText")};
 						EngineFactory.getInstance().manageFacts([filter],[]);
 					}
 					
