@@ -16,7 +16,7 @@ urlpatterns = patterns('',
     (r'^', include('fast.urls')),
 
     # Deploy
-    (r'^deploy/(.*)', include('deploy.urls')),
+    (r'^deploy/', include('deploy.urls')),
 
     #
     (r'^catalogue/', include('catalogue.urls')),

@@ -311,7 +311,7 @@ var ScreenflowDescription = Class.create(ResourceDescription,
         console.log(result);
         console.log(datajson);
         var persistenceEngine = PersistenceEngineFactory.getInstance();
-        persistenceEngine.sendPost(URIs.getPostScreenflow, result,null, this, onSuccess, onError);
+        persistenceEngine.sendPost(URIs.deploy, result,null, this, onSuccess, onError);
     }
 });
 

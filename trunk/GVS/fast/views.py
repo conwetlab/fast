@@ -4,7 +4,7 @@ from django.template import RequestContext
 
 #@login_required
 def index(request):
-    """ Vista principal """
+    """ Main View """
 
     
     return render_to_response('index.html',{}, 

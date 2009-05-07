@@ -73,6 +73,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'django.core.context_processors.i18n',
     'django.core.context_processors.media',
     'processors.context_processors.catalogue_url',
+    'processors.context_processors.gvs_data_url',
     'processors.context_processors.catalogue_flow')
 
 MIDDLEWARE_CLASSES = (
@@ -98,7 +99,13 @@ INSTALLED_APPS = (
 )
 
 # Url to the server that holds the semantic catalogue
-CATALOGUE_URL = 'http://localhost:8010/'
+CATALOGUE_URL = 'http://localhost:8082/'
+
+# Url to the server that holds the GVS Data
+GVS_DATA_URL = 'http://localhost:8010/'
+
+# Url to the ezweb platform where the gadgets will be deployed
+EZWEB_URL = 'http://localhost:8001/'
 
 # Flow of operations against the catalogue in order to refresh the screens
 CATALOGUE_FLOW = 'check'

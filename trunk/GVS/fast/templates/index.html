@@ -30,7 +30,8 @@
         <!-- URI constants -->
         <script type="text/javascript" language="javascript">
             _URIConstants = function(){}
-            _URIConstants.prototype.getPostScreenflow = "/deploy/";
+            _URIConstants.prototype.deploy = "/deploy/";
+			_URIConstants.prototype.deployEzwebGadget = "/deploy/ezweb";
             _URIConstants.prototype.catalogueScreens = "catalogue/screens";
             _URIConstants.prototype.catalogueFind = "catalogue/find";
             _URIConstants.prototype.catalogueFindAndCheck = "catalogue/findandcheck";
@@ -39,8 +40,9 @@
             _URIConstants.prototype.catalogueGetFacts = "catalogue/getFacts";
             _URIConstants.prototype.catalogueFlow = "{{CATALOGUE_FLOW}}";
             _URIConstants.prototype.catalogueCreateScreen = "catalogue/createscreen";
+
             _URIConstants.prototype.logoFast = "{{ MEDIA_URL }}images/gui/fastLogo.png";
-            
+
             var URIs = new _URIConstants();
         </script>
 

@@ -9,6 +9,7 @@ from gadgetIgoogle import createIgoogleGadget
 from os import path, mkdir
 import urllib2
 from django.utils.encoding import smart_unicode
+from python_rest_client.restful_lib import Connection
 
 def deployGadget(request):
     print "gadget creation request"
@@ -114,3 +115,26 @@ def deployGadget(request):
         print e.message
         response = HttpResponseServerError(e.message)
         return response
+    
+#FIXME!!!: This method is not over
+def deployEzwebGadget(request):
+    print "EZWEB"
+    print request.POST.__getitem__('template_uri')
+    # Get the base url to the Catalogue
+    if hasattr(settings,'EZWEB_URL'):
+        baseUrl = settings.EZWEB_URL
+        conn = Connection(baseUrl)
+        params = request.POST
+
+        #body = jsonEncode(body)
+        body = request.raw_post_data
+
+        #result = conn.request_post("/user/admin/catalogue/resource",body=body, headers={'Accept':'text/json'})
+        result = conn.request_post("/user/admin/catalogue/resource", args=params, headers={'Accept':'application/xml'})
+        
+        response = HttpResponse(result['body'], mimetype='application/xml; charset=UTF-8')
+        return response
+
+def deployIgoogleGadget(request):
+
+    return response
