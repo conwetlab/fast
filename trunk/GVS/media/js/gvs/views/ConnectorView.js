@@ -7,31 +7,29 @@ var ConnectorView = Class.create( ResourceView,
      * @extends ResourceView
      */ 
     initialize: function($super,/** ResourceDescription */ connectorResourceDescription) {
-
         $super();
 
         var uidGenerator = UIDGeneratorSingleton.getInstance();
         this._id = uidGenerator.generate("connectorView");
 
-        var title = new Element("div", {"class":"connectorTitle unknown"});
-        title.update(connectorResourceDescription.name);
-
-        if (connectorResourceDescription.image){
-            var imageContainer = new Element ('div',
-                    {'class': 'connectorImage' });
-            var image = new Element ('img',
-                    {'class': 'img', 'src': connectorResourceDescription.image});
-            imageContainer.appendChild (image);
+        var container = new Element('div', {'class': 'connectorImage'}).update(connectorResourceDescription.name);
+        switch(connectorResourceDescription.name){
+            case "In":
+                container.addClassName('connectorIn')
+                break;
+            case "Out":
+                container.addClassName('connectorOut')
+                break;
+            default:
+                container.addClassName('connectorDefault')
+                break;
         }
         
         this._node = new Element("div", {
             "id":     this._id,
             "class": "view connector unknown"
         });
-        //this._node.appendChild(title);
-        if (connectorResourceDescription.image){
-            this._node.appendChild(imageContainer);
-        }
+        this._node.appendChild(container);
     },
 
     // **************** PUBLIC METHODS **************** //

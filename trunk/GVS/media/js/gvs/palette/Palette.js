@@ -57,8 +57,8 @@ var Palette = Class.create( /** @lends Palette.prototype */ {
                 var elements = currentDocument.getPaletteElements();
                 CatalogueSingleton.getInstance().getScreens(canvas, domainContext, elements, 'reachability');
                 break;
-            case "domainContext":
-                this.paintComponents();
+            case "domainConcept":
+                CatalogueSingleton.getInstance().getDomainConcepts();
                 break;
             case "connector":
                 this.paintComponents();

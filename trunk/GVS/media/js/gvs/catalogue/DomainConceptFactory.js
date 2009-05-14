@@ -17,7 +17,10 @@ var DomainConceptFactory = Class.create(ResourceFactory,
 
     // **************** PUBLIC METHODS **************** //
 
-    updateResourceDescriptions: function (resourceDescriptions) {
+    updateResourceDescriptions: function (domainConceptDescriptions) {
+        for (var i=0; i<domainConceptDescriptions.length ; i++) {
+            this._resourceDescriptions.push(new DomainConceptDescription (domainConceptDescriptions[i]));
+        }
     },
 
     getResources: function (/** Array*/ resourceIds) {

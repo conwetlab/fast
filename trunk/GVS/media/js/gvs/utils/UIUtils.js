@@ -15,25 +15,25 @@ UIUtils.hide = function(dijitObject) {
     dijitObject.hide();
 }
 
-UIUtils.selectElement = function(screen) {
+UIUtils.selectElement = function(resourceId) {
     var currentDocument = GVSSingleton.getInstance().getDocumentController().getCurrentDocument();
     if (currentDocument.getSelectedElement()) {
         currentDocument.getSelectedElement().removeClassName("selected");
     }
-    if (screen) {
-        currentDocument.setSelectedElement($(screen));
+    if (resourceId) {
+        currentDocument.setSelectedElement($(resourceId));
         currentDocument.getSelectedElement().addClassName("selected");
-        UIUtils.inspectorAreaUpdate(screen);
+        UIUtils.inspectorAreaUpdate(resourceId);
     } else {
         currentDocument.setSelectedElement(null);
     }
 }
 
 
-UIUtils.inspectorAreaUpdate = function(screen){
-    //UIUtils.propertiesPaneUpdate(screen);
-    //UIUtils.prePostPaneUpdate(screen);
-    //UIUtils.factsPaneUpdate(screen);
+UIUtils.inspectorAreaUpdate = function(resourceId){
+    //UIUtils.propertiesPaneUpdate(resourceId);
+    //UIUtils.prePostPaneUpdate(resourceId);
+    //UIUtils.factsPaneUpdate(resourceId);
 }
 
 UIUtils.prePostPaneUpdate = function(screen){
@@ -711,25 +711,51 @@ UIUtils.onClick = function(e, el){
         var element = Event.element(e);
     else
         var element = $(el);
-
+    
+    var aux = 1;
+    while(aux){
+        var elementClass = $w(element.className);
+        elementClass = elementClass.without("unknown").without("satisfeable").without("unsatisfeable").without("selected").without("view");
+        var resourceType = (elementClass.size()>=1)?elementClass[0] : "unknown";
+        var currentDocument = GVSSingleton.getInstance().getDocumentController().getCurrentDocument();
+        switch (resourceType){
+            case "img":
+            case "fact":
+            case "medium_fact":
+            case "screenTitle":
+            case "preArea":
+            case "postArea":
+            case "prepostSeparator":
+            case "screenImage":
+            
+            case "domainConceptImage":
+            
+            case "connectorImage":
+                element = element.parentNode;
+                break;
+            default:
+                aux = 0;
+                break;
+        }   
+    }
+    
     var elementClass = $w(element.className);
     elementClass = elementClass.without("unknown").without("satisfeable").without("unsatisfeable").without("selected").without("view");
     var resourceType = (elementClass.size()>=1)?elementClass[0] : "unknown";
     var currentDocument = GVSSingleton.getInstance().getDocumentController().getCurrentDocument();
-    switch (resourceType){
-        case "img":
-        case "fact":
-        case "medium_fact":
-            element = element.parentNode;
-        case "screenTitle":
-        case "preArea":
-        case "postArea":
-        case "prepostSeparator":
-        case "screenImage":
-            //Workaround for title bar
-            element = element.parentNode;
+
+    switch(resourceType){
         case "screen":
-            UIUtils.propertiesPaneUpdate(element.id);
+            console.log("screen selected");
+            UIUtils.updatePropertiesPane(currentDocument, element.id, "screen");
+            break;
+        case "domainConcept":
+            console.log("domain concept selected");
+            UIUtils.updatePropertiesPane(currentDocument, element.id, "domainConcept");
+            break;
+        case "connector":
+            console.log("connector selected");
+            UIUtils.updatePropertiesPane(currentDocument, element.id, "connector");
             break;
         default:
             UIUtils.emptyPropertiesPane(currentDocument);
@@ -791,22 +817,32 @@ UIUtils.onKeyPressCanvas = function(e){
     }
 }
 
-UIUtils.propertiesPaneUpdate = function(screenId){
-    var currentDocument = GVSSingleton.getInstance().getDocumentController().getCurrentDocument();
-    var resourceDescription = currentDocument.getScreenDescription(screenId);
-    $(currentDocument.getDetailsTitle('detailsTitle')).innerHTML = "Properties of " + resourceDescription.name;
-    $(currentDocument.getDetailsTitle('title')).innerHTML = resourceDescription.name;
-    $(currentDocument.getDetailsTitle('id')).innerHTML = resourceDescription.uri;
-    $(currentDocument.getDetailsTitle('desc')).innerHTML = resourceDescription.description;
-    $(currentDocument.getDetailsTitle('tags')).innerHTML = resourceDescription.domainContext;
+UIUtils.updatePropertiesPane = function(doc, resourceId, resourceType){
+    switch(resourceType){
+        case "screen":
+            var resourceDescription = doc.getScreenDescription(resourceId);
+            $(doc.getDetailsTitle('detailsTitle')).innerHTML = "Properties of " + resourceDescription.name;
+            $(doc.getDetailsTitle('title')).innerHTML = resourceDescription.name;
+            $(doc.getDetailsTitle('id')).innerHTML = resourceDescription.uri;
+            $(doc.getDetailsTitle('desc')).innerHTML = resourceDescription.description;
+            $(doc.getDetailsTitle('tags')).innerHTML = resourceDescription.domainContext;
+            break;
+        case "connector":
+            break;
+        case "domainConcept":
+            break;
+        default:
+            console.debug("properties pane called without resourcetype", resourceType);
+            break;
+    }
 }
 
-UIUtils.emptyPropertiesPane = function(currentDocument){
-    $(currentDocument.getDetailsTitle('detailsTitle')).innerHTML = "Properties";
-    $(currentDocument.getDetailsTitle('title')).innerHTML = "&nbsp;";
-    $(currentDocument.getDetailsTitle('id')).innerHTML = "&nbsp;";
-    $(currentDocument.getDetailsTitle('desc')).innerHTML = "&nbsp;";
-    $(currentDocument.getDetailsTitle('tags')).innerHTML = "&nbsp;";
+UIUtils.emptyPropertiesPane = function(doc){
+    $(doc.getDetailsTitle('detailsTitle')).innerHTML = "Properties";
+    $(doc.getDetailsTitle('title')).innerHTML = "&nbsp;";
+    $(doc.getDetailsTitle('id')).innerHTML = "&nbsp;";
+    $(doc.getDetailsTitle('desc')).innerHTML = "&nbsp;";
+    $(doc.getDetailsTitle('tags')).innerHTML = "&nbsp;";
 }
 
 UIUtils.updatePreviewTab = function(screenId){

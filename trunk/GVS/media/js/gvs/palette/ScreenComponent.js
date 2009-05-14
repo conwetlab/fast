@@ -25,8 +25,16 @@ var ScreenComponent = Class.create(PaletteComponent,
      */
     _createInstance: function () {
         return new ScreenInstance(this._resourceDescription);
+    },
+    
+    /**
+     * Gets the title of the palette component
+     * @type String
+     * @private
+     */
+    _getTitle: function() {
+        return this._resourceDescription.label['en-gb'];  
     }
-
 });
 
 // vim:ts=4:sw=4:et:

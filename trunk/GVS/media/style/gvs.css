@@ -255,14 +255,64 @@ h4{
         border-left: 1px dashed #aaa;
     }
 
-    /*******************
+    /**********************
     * connector component *
-    *******************/
+    ***********************/
     .connectorImage{
-        height:100%;
         position:inherit;
         top: 10px;
-        }
+        -moz-border-radius-bottomleft:13px;
+		-moz-border-radius-bottomright:13px;
+		-moz-border-radius-topleft:13px;
+		-moz-border-radius-topright:13px;
+		border:1px solid grey;
+		height:20px;
+		padding-top:5px;
+		width:25px;
+    }
+    .connectorIn{
+        background-color:green;
+        color:white;
+    }
+    .connectorOut{
+        background-color:blue;
+        color:white;
+    }
+    .connectorDefault{
+        background-color:black;
+        color:white;
+    }
+
+    .connector.selected .connectorIn{
+        color:yellow;
+    }
+    
+    .connector.selected .connectorOut{
+        color:yellow;
+    }
+
+    /***************************
+    * domain concept component *
+    ****************************/
+    .domainConceptImage{
+        position:inherit;
+        top: 10px;
+        -moz-border-radius-bottomleft:13px;
+        -moz-border-radius-bottomright:13px;
+        -moz-border-radius-topleft:13px;
+        -moz-border-radius-topright:13px;
+        border:1px solid grey;
+        height:20px;
+        padding-top:5px;
+        width:25px;
+        background-color:green;
+        color:white;
+    }
+
+    .domainConcept.selected .domainConceptImage{
+        color:yellow;
+    }
+
 /******************/
 
 /******************

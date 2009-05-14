@@ -12,6 +12,18 @@ var DomainConceptView = Class.create( ResourceView,
         var uidGenerator = UIDGeneratorSingleton.getInstance();
         this._id = uidGenerator.generate("domainConceptView");
 
+        var container = new Element('div', {'class': 'domainConceptImage'}).update(domainConceptResourceDescription.shortcut);
+        
+        this._node = new Element("div", {
+            "id":     this._id,
+            "class": "view domainConcept unknown"
+        });
+        this._node.appendChild(container);
+
+        /*
+        var uidGenerator = UIDGeneratorSingleton.getInstance();
+        this._id = uidGenerator.generate("domainConceptView");
+
         var title = new Element("div", {"class":"domainConceptTitle unknown"});
         title.update(domainConceptResourceDescription.name);
 
@@ -30,7 +42,7 @@ var DomainConceptView = Class.create( ResourceView,
         this._node.appendChild(title);
         if (domainConceptResourceDescription.image){
             this._node.appendChild(imageContainer);
-        }
+        }*/
     },
 
     // **************** PUBLIC METHODS **************** //

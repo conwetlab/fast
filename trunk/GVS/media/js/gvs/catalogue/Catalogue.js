@@ -55,6 +55,23 @@ var CatalogueSingleton = function() {
             persistenceEngine.sendGet(URIs.catalogueGetFacts,this, onSuccess, onError);
         },
 
+        getDomainConcepts: function () {
+            var onDConceptsSuccess = function(response) {
+                var responseJSON = response.responseText;
+                var domainConceptMetadata = eval ('(' + responseJSON + ')');
+                this.getResourceFactory('domainConcept').updateResourceDescriptions(domainConceptMetadata.domainConcepts);
+                var paletteController = GVSSingleton.getInstance().getDocumentController().getCurrentDocument().getPaletteController();
+                var domainConceptPalette = paletteController.getPalette("domainConcept");
+                domainConceptPalette.paintComponents();
+            }
+            var onDConceptsError = function(response, e) {
+                console.error(e);
+            }
+
+            var persistenceEngine = PersistenceEngineFactory.getInstance();
+            persistenceEngine.sendGet(URIs.catalogueGetDomainConcepts,this, onDConceptsSuccess, onDConceptsError);
+        },
+        
         getScreens: function (/**Array*/ canvas, /** Hash*/ domainContext, /** Array*/ elements,/** String*/ criteria) {
 
             //construct the data to be sent

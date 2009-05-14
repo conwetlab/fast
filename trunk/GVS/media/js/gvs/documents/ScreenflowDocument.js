@@ -15,6 +15,8 @@ var ScreenflowDocument = Class.create(AbstractDocument,
         /*Screenflow Definition*/
         this._resourceDescription = new ScreenflowDescription();
         this._screens = [];
+        this._connectors = [];
+        this._domainConcepts = [];
         this._selectedElement = null;
         this._paletteController = new PaletteController(this.getTabId());
         this._populate();
@@ -32,10 +34,26 @@ var ScreenflowDocument = Class.create(AbstractDocument,
 
     /**
      * Returns the list of screens for the screenflow document
-     * @type {String[]}
+     * @type {ScreenInstance[]}
      */
     getScreens: function () {
         return this._screens;
+    },
+    
+    /**
+     * Returns the list of connectors for the screenflow document
+     * @type {ConnectorInstance[]}
+     */
+    getConnectors: function () {
+        return this._connectors;
+    },
+
+    /**
+     * Returns the list of domain concepts for the screenflow document
+     * @type {DomainConceptInstance[]}
+     */
+    getDomainConcepts: function () {
+        return this._domainConcepts;
     },
 
     /**
@@ -62,6 +80,32 @@ var ScreenflowDocument = Class.create(AbstractDocument,
             this._screens.push(screen);
             var screenDescUri = $H(screen.getResourceDescription()).get('uri');
             this.getResourceDescription().addScreen(screen.getId(), screenDescUri, screen.getPosition());
+        }
+    },
+    
+    /**
+     * Adds a new connector.
+     * @param connector
+     *      Connector to be added to the
+     *      Screenflow document.
+     */
+    addConnector: function (connector) {
+        if(connector!=null) {
+            this._connectors.push(connector);
+            //TODO: add the connector somehow inside the screenflowdescription
+        }
+    },
+
+    /**
+     * Adds a new domain concept.
+     * @param domainConcept
+     *      Domain Concept to be added to the
+     *      Screenflow document.
+     */
+    addDomainConcept: function (domainConcept) {
+        if(domainConcept!=null) {
+            this._domainConcepts.push(domainConcept);
+            //TODO: add the domain concept somehow inside the screenflowdescription
         }
     },
 

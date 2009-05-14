@@ -34,8 +34,7 @@ var PaletteComponent = Class.create(DragSource,
          * @type DOMNode
          * @private
          */
-        this._node = this._createSlot(this._resourceDescription.label['en-gb'],
-                this._view.getNode());
+        this._node = this._createSlot();
     },
 
     // **************** PUBLIC METHODS **************** //
@@ -96,14 +95,23 @@ var PaletteComponent = Class.create(DragSource,
      *
      * @private
      */
-    _createSlot: function (title, contentNode) {
+    _createSlot: function () {
         var node = new Element("div", {"class": "slot"});
-        node.appendChild(contentNode);
-        var titleNode = new Element("div", {"class": "slotTitle"}).update(title);
+        node.appendChild(this._view.getNode());
+        var titleNode = new Element("div", {"class": "slotTitle"}).update(this._getTitle());
         node.appendChild(titleNode);
         this._dragHandler.initializeDragnDropHandlers();
 
         return node;
+    },
+    
+    /**
+     * Gets the title of the palette component
+     * @type String
+     * @abstract
+     */
+    _getTitle: function () {
+        throw "Abstract Method invocation: PaletteComponent::_createInstance"
     },
 
     /**

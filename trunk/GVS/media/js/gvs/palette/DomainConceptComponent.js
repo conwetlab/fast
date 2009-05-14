@@ -25,6 +25,15 @@ var DomainConceptComponent = Class.create(PaletteComponent,
      */
     _createInstance: function () {
         return new DomainConceptInstance(this._resourceDescription);
+    },
+    
+    /**
+     * Gets the title of the palette component
+     * @type String
+     * @private
+     */
+    _getTitle: function() {
+        return this._resourceDescription.name;  
     }
 });
 

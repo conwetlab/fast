@@ -17,6 +17,12 @@ def catalogueProxy(request, operation):
             else:
                 #TODO: check error control
                 url = ""
+        elif (operation == "getdomainconcepts"):
+            if hasattr(settings,'GVS_DATA_URL'):
+                url = settings.GVS_DATA_URL + "json_data/getdomainconcepts.json"
+            else:
+                #TODO: check error control
+                url = ""
         else:
             url=urlBase+"catalogue/"+operation+".json"
         # Get a file handler in order to get the data

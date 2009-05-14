@@ -14,6 +14,29 @@ var ConnectorFactory = Class.create(ResourceFactory,
         this._resourceName = 'Connectors';
         this._resourceDescriptions = [
             new ConnectorDescription ({
+                name: 'In',
+                image: connectorsPath + 'greenCircle.png',
+                type: '',
+                fact: '',
+                fact_attribute:'',
+                variable_name:'',
+                label:'',
+                friendcode:''
+            }),
+            new ConnectorDescription ({
+                name: 'Out',
+                image: connectorsPath + 'greenCircle.png',
+                type: '',
+                fact: '',
+                fact_attribute:'',
+                variable_name:'',
+                label:'',
+                friendcode:''
+            })
+            ];
+        /*
+        this._resourceDescriptions = [
+            new ConnectorDescription ({
                 name: 'Slot',
                 image: connectorsPath + 'greenCircle.png',
                 fact: '',
@@ -50,6 +73,7 @@ var ConnectorFactory = Class.create(ResourceFactory,
                 friendcode:''
             })
         ];
+        */
     },
 
     // **************** PUBLIC METHODS **************** //
