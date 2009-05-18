@@ -8,7 +8,6 @@ var ScreenflowDocument = Class.create(AbstractDocument,
      */
     initialize: function($super, /** String */ title) {
         $super(title);
-        Element.observe(document, "keypress",UIUtils.onKeyPressCanvas);
         this._detailsTitle = null;
         this._validResources = ['screen','flowControl','connector', 'domainConcept'];
         this._documentType='screenflow';
@@ -57,13 +56,24 @@ var ScreenflowDocument = Class.create(AbstractDocument,
     },
 
     /**
-     * Returns the screen description for the screen view id passed as a parameter of the screenflow document
-     * @type {String[]}
+     * Returns an array with the resource description and the resource type for the resource view id 
+     * passed as a parameter of the screenflow document
+     * @type {[ResourceDescription, String]}
      */
-    getScreenDescription: function (screenViewId) {
+    getElementDescription: function (resourceViewId) {
         for (var i=0; i<this._screens.length; i++) {
-            if (this._screens[i].getView().getId()==screenViewId) {
-                return this._screens[i].getResourceDescription();
+            if (this._screens[i].getView().getId()==resourceViewId) {
+                return [this._screens[i].getResourceDescription(), 'screen'];
+            }
+        }
+        for (var i=0; i<this._connectors.length; i++) {
+            if (this._connectors[i].getView().getId()==resourceViewId) {
+                return [this._connectors[i].getResourceDescription(), 'connector'];
+            }
+        }
+        for (var i=0; i<this._domainConcepts.length; i++) {
+            if (this._domainConcepts[i].getView().getId()==resourceViewId) {
+                return [this._domainConcepts[i].getResourceDescription(), 'domainConcept'];
             }
         }
         return null;
@@ -124,6 +134,58 @@ var ScreenflowDocument = Class.create(AbstractDocument,
             }
         }
         this._screens = this._screens.compact();
+        var currentDocument = GVSSingleton.getInstance().getDocumentController().getCurrentDocument();
+        var canvas = currentDocument.getCanvas();
+        var domainContext = {
+            "tags":currentDocument.getResourceDescription().getDomainContexts(),
+            "user":null
+        };
+        var elements = currentDocument.getPaletteElements();
+        CatalogueSingleton.getInstance().check(canvas, domainContext, elements, 'reachability');
+    },
+
+    /**
+     * Delete a connector.
+     * @param ConnectorView.id
+     *      Connector to be deleted from the
+     *      Screenflow document.
+     */
+    deleteConnector: function(connectorViewId) {
+        for (var i=0; i<this._connectors.length; i++) {
+            if (this._connectors[i].getView().getId()==connectorViewId) {
+                //TODO: fix this
+                //this._resourceDescription.deleteConnector(this._connectors[i].getId());
+                this._connectors[i] = null;
+                break;
+            }
+        }
+        this._connectors = this._connectors.compact();
+        var currentDocument = GVSSingleton.getInstance().getDocumentController().getCurrentDocument();
+        var canvas = currentDocument.getCanvas();
+        var domainContext = {
+            "tags":currentDocument.getResourceDescription().getDomainContexts(),
+            "user":null
+        };
+        var elements = currentDocument.getPaletteElements();
+        CatalogueSingleton.getInstance().check(canvas, domainContext, elements, 'reachability');
+    },
+
+    /**
+     * Delete a domain concept.
+     * @param DomainConceptView.id
+     *      Domain Concept to be deleted from the
+     *      Screenflow document.
+     */
+    deleteDomainConcept: function(domainConceptViewId) {
+        for (var i=0; i<this._domainConcepts.length; i++) {
+            if (this._domainConcepts[i].getView().getId()==domainConceptViewId) {
+                //TODO: fix this
+                //this._resourceDescription.deleteDomainConcept(this._domainConcepts[i].getId());
+                this._domainConcepts[i] = null;
+                break;
+            }
+        }
+        this._domainConcepts = this._domainConcepts.compact();
         var currentDocument = GVSSingleton.getInstance().getDocumentController().getCurrentDocument();
         var canvas = currentDocument.getCanvas();
         var domainContext = {
@@ -236,6 +298,7 @@ var ScreenflowDocument = Class.create(AbstractDocument,
             "class": "document screenflow canvas"
         });
         documentContent.observe('click',UIUtils.onClickCanvas);
+        documentContent.observe('dblclick',UIUtils.onDblClickCanvas);
         var documentPaneId = uidGenerator.generate("documentPane");
         var documentPane = new dijit.layout.ContentPane({
             id:documentPaneId,

@@ -693,126 +693,154 @@ UIUtils.colorizeScreen = function(screen){
     }
 }
 
-UIUtils.onClickCanvas = function(e){
-    var canvas = Event.element(e);
-    if (canvas.id.startsWith("tabContent"))
-    {
-        //Element.childElements(canvas).each(function(s){s.style.borderWidth = "1px"});
-        var currentDocument = GVSSingleton.getInstance().getDocumentController().getCurrentDocument();
-        UIUtils.emptyPropertiesPane(currentDocument)
-        //previousElement = null;
-        UIUtils.selectElement(null);
-    }
-
-}
-
-UIUtils.onClick = function(e, el){
-    if (!el)
-        var element = Event.element(e);
-    else
-        var element = $(el);
-    
-    var aux = 1;
-    while(aux){
-        var elementClass = $w(element.className);
-        elementClass = elementClass.without("unknown").without("satisfeable").without("unsatisfeable").without("selected").without("view");
-        var resourceType = (elementClass.size()>=1)?elementClass[0] : "unknown";
-        var currentDocument = GVSSingleton.getInstance().getDocumentController().getCurrentDocument();
-        switch (resourceType){
-            case "img":
-            case "fact":
-            case "medium_fact":
-            case "screenTitle":
-            case "preArea":
-            case "postArea":
-            case "prepostSeparator":
-            case "screenImage":
-            
-            case "domainConceptImage":
-            
-            case "connectorImage":
-                element = element.parentNode;
-                break;
-            default:
-                aux = 0;
-                break;
-        }   
-    }
-    
+UIUtils.checkCanvas = function(element) {
     var elementClass = $w(element.className);
     elementClass = elementClass.without("unknown").without("satisfeable").without("unsatisfeable").without("selected").without("view");
-    var resourceType = (elementClass.size()>=1)?elementClass[0] : "unknown";
-    var currentDocument = GVSSingleton.getInstance().getDocumentController().getCurrentDocument();
+    var checking = 0;
+    for (var i = 0; i < elementClass.length; i++) {
+        switch (elementClass[i]){
+            case "document":
+            case "canvas":
+                checking++;
+                break;
+        }
+    }
+    if (checking == 2){
+        return true;
+    } else {
+        return false;
+    }
+}
 
+UIUtils.getResourceType = function(clickedElement) {
+    var parentElement = clickedElement; 
+    var resourceType = "unknown";
+
+    var aux = 0;
+    if(!UIUtils.checkCanvas(parentElement)){
+        while(!UIUtils.checkCanvas(parentElement)&&aux<10){
+            clickedElement = parentElement;
+            parentElement = parentElement.parentNode;
+            aux++;
+        }
+        var elementClass = $w(clickedElement.className);
+        elementClass = elementClass.without("unknown").without("satisfeable").without("unsatisfeable").without("selected").without("view");
+        resourceType = (elementClass.size()>=1)?elementClass[0] : "unknown";
+    } else {
+        resourceType = "canvas";
+    }
+    return [clickedElement, resourceType];
+}
+
+UIUtils.onClickCanvas = function(e, /**Optional element*/element){
+    var clickedElement = null;
+    if(element){
+        clickedElement = element;
+    } else {
+        clickedElement = e.element();
+    }
+    var resourceType = "unknown";
+    [clickedElement, resourceType] = UIUtils.getResourceType(clickedElement);
+    var currentDocument = GVSSingleton.getInstance().getDocumentController().getCurrentDocument();
     switch(resourceType){
         case "screen":
-            console.log("screen selected");
-            UIUtils.updatePropertiesPane(currentDocument, element.id, "screen");
+            console.log("screen clicked");
+            UIUtils.selectElement(clickedElement.id);
+            UIUtils.updatePropertiesPane(currentDocument, clickedElement.id, "screen");
             break;
         case "domainConcept":
-            console.log("domain concept selected");
-            UIUtils.updatePropertiesPane(currentDocument, element.id, "domainConcept");
+            console.log("domain concept clicked");
+            UIUtils.selectElement(clickedElement.id);
+            UIUtils.updatePropertiesPane(currentDocument, clickedElement.id, "domainConcept");
             break;
         case "connector":
-            console.log("connector selected");
-            UIUtils.updatePropertiesPane(currentDocument, element.id, "connector");
+            console.log("connector clicked");
+            UIUtils.selectElement(clickedElement.id);
+            UIUtils.updatePropertiesPane(currentDocument, clickedElement.id, "connector");
             break;
+        case "canvas":
+            console.log("canvas clicked");
+            UIUtils.selectElement(null);
+            UIUtils.emptyPropertiesPane(currentDocument);
+            break;
+        case "unknown":
         default:
+            console.log("unknown clicked");
+            UIUtils.selectElement(null);
             UIUtils.emptyPropertiesPane(currentDocument);
             break;
     }
-    UIUtils.selectElement(element.id);
 }
 
-UIUtils.onDblClick = function(e, el){
-    if (!el)
-        var element = Event.element(e);
-    else
-        var element = $(el);
-    var elementClass = $w(element.className);
-    elementClass = elementClass.without("unknown").without("satisfeable").without("unsatisfeable").without("selected").without("view");
-    var resourceType = (elementClass.size()>=1)?elementClass[0] : "unknown";
+UIUtils.onDblClickCanvas = function(e){
+    var clickedElement = Event.element(e);
+    var resourceType = "unknown";
+    [clickedElement, resourceType] = UIUtils.getResourceType(clickedElement);
     var currentDocument = GVSSingleton.getInstance().getDocumentController().getCurrentDocument();
-    switch (resourceType){
-        case "img":
-        case "fact":
-        case "medium_fact":
-            element = element.parentNode;
-        case "screenTitle":
-        case "preArea":
-        case "postArea":
-        case "prepostSeparator":
-        case "screenImage":
-            //Workaround for title bar
-            element = element.parentNode;
+    switch(resourceType){
         case "screen":
-            UIUtils.updatePreviewTab(element.id);
+            console.log("screen dbl-clicked");
+            UIUtils.updatePreviewTab(clickedElement.id);
             break;
+        case "domainConcept":
+            console.log("domain concept dbl-clicked");
+            break;
+        case "connector":
+            console.log("connector dbl-clicked");
+            break;
+        case "canvas":
+            console.log("canvas dbl-clicked");
+            break;
+        case "unknown":
         default:
-            //UIUtils.emptyPropertiesPane(currentDocument);
+            console.log("unknown dbl-clicked");
             break;
     }
-    //UIUtils.selectElement(element.id);
 }
 
 UIUtils.onKeyPressCanvas = function(e){
     var currentDocument = GVSSingleton.getInstance().getDocumentController().getCurrentDocument();
     var selectedElement = currentDocument.getSelectedElement();
     if (e.keyCode == Event.KEY_DELETE && selectedElement){ //Delete an element from the canvas
-        var title = (selectedElement.title)?selectedElement.title:"the selected element";
-        if(confirm("You are about to remove " + title + " from canvas. Are you sure?")) { //delete if ok
-            //if it is a screen, Delete it from the screen list
-            if (currentDocument.getScreenDescription(selectedElement.id)){
-                currentDocument.deleteScreen(selectedElement.id);
-                //If there are no screens in the screenflow, hide the generate button
-                //if (screens.length == 0){
-                    //screenflowButton(false);
-                //}
-            }
-            //Delete the element from the canvas
-            $(selectedElement.parentNode).removeChild(selectedElement);
-            UIUtils.emptyPropertiesPane(currentDocument);
-            UIUtils.selectElement(null);
+        var title = null;
+        var selectedElementType = null;
+        var selectedElementResourceDescription = null;
+        [selectedElementResourceDescription, selectedElementType] = currentDocument.getElementDescription(selectedElement.id);
+        UIUtils.getResourceType(selectedElement)[1];
+        switch(selectedElementType){
+            case 'screen':
+                var label = selectedElementResourceDescription.label['en-gb'];
+                title = (label)?('the screen "' + label + '"'):"the selected screen";
+                if(confirm("You are about to remove " + title + " from canvas. Are you sure?")) { //delete if ok
+                    currentDocument.deleteScreen(selectedElement.id);
+                    $(selectedElement.parentNode).removeChild(selectedElement);
+                    UIUtils.emptyPropertiesPane(currentDocument);
+                    UIUtils.selectElement(null);
+                }
+                break;
+            case 'domainConcept':
+                var label = selectedElementResourceDescription.name;
+                title = (label)?('the domain concept "' + label + '"'):"the selected domain concept";
+                if(confirm("You are about to remove " + title + " from canvas. Are you sure?")) { //delete if ok
+                    currentDocument.deleteDomainConcept(selectedElement.id);
+                    $(selectedElement.parentNode).removeChild(selectedElement);
+                    UIUtils.emptyPropertiesPane(currentDocument);
+                    UIUtils.selectElement(null);
+                }
+                break;
+            case 'connector':
+                var label = selectedElementResourceDescription.name;
+                title = (label)?('the connector "' + label + '"'):"the selected connector";
+                if(confirm("You are about to remove " + title + " from canvas. Are you sure?")) { //delete if ok
+                    currentDocument.deleteConnector(selectedElement.id);
+                    $(selectedElement.parentNode).removeChild(selectedElement);
+                    UIUtils.emptyPropertiesPane(currentDocument);
+                    UIUtils.selectElement(null);
+                }
+                break;
+            default:
+                console.error("Element not possible to be deleted ");
+                break;
         }
     }
 }
@@ -820,16 +848,19 @@ UIUtils.onKeyPressCanvas = function(e){
 UIUtils.updatePropertiesPane = function(doc, resourceId, resourceType){
     switch(resourceType){
         case "screen":
-            var resourceDescription = doc.getScreenDescription(resourceId);
-            $(doc.getDetailsTitle('detailsTitle')).innerHTML = "Properties of " + resourceDescription.name;
-            $(doc.getDetailsTitle('title')).innerHTML = resourceDescription.name;
+            var resourceDescription = doc.getElementDescription(resourceId)[0];
+            console.log(resourceDescription);
+            $(doc.getDetailsTitle('detailsTitle')).innerHTML = "Properties of " + resourceDescription.label['en-gb'];
+            $(doc.getDetailsTitle('title')).innerHTML = resourceDescription.label['en-gb'];
             $(doc.getDetailsTitle('id')).innerHTML = resourceDescription.uri;
-            $(doc.getDetailsTitle('desc')).innerHTML = resourceDescription.description;
-            $(doc.getDetailsTitle('tags')).innerHTML = resourceDescription.domainContext;
+            $(doc.getDetailsTitle('desc')).innerHTML = resourceDescription.description['en-gb'];
+            $(doc.getDetailsTitle('tags')).innerHTML = resourceDescription.domainContext.tags;
             break;
         case "connector":
+            UIUtils.emptyPropertiesPane(doc);
             break;
         case "domainConcept":
+            UIUtils.emptyPropertiesPane(doc);
             break;
         default:
             console.debug("properties pane called without resourcetype", resourceType);
@@ -847,6 +878,6 @@ UIUtils.emptyPropertiesPane = function(doc){
 
 UIUtils.updatePreviewTab = function(screenId){
     var documentController = GVSSingleton.getInstance().getDocumentController();
-    var screenDescription = documentController.getCurrentDocument().getScreenDescription(screenId);
+    var screenDescription = documentController.getCurrentDocument().getElementDescription(screenId)[0];
     var screenflowDoc = documentController.createPreviewDocument(screenDescription);
 }

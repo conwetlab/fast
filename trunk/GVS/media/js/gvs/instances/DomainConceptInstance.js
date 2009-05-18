@@ -25,9 +25,7 @@ var DomainConceptInstance = Class.create(ComponentInstance,
         // FIXME: remove this
         if(finishState) {
             GVSSingleton.getInstance().getDocumentController().getCurrentDocument().addDomainConcept(this);
-            UIUtils.onClick(null, this.getView().getId());
-            this.getView().getNode().observe('click', UIUtils.onClick);
-            this.getView().getNode().observe('dblclick', UIUtils.onDblClick);
+            UIUtils.onClickCanvas(null, this.getView().getNode());
             var currentDocument = GVSSingleton.getInstance().getDocumentController().getCurrentDocument();
             var canvas = currentDocument.getCanvas();
             var domainContext = {
