@@ -9,6 +9,8 @@ var ScreenflowDocument = Class.create(AbstractDocument,
     initialize: function($super, /** String */ title) {
         $super(title);
         this._detailsTitle = null;
+        this._detailsTable = null;
+        
         this._validResources = ['screen','flowControl','connector', 'domainConcept'];
         this._documentType='screenflow';
         /*Screenflow Definition*/
@@ -270,6 +272,52 @@ var ScreenflowDocument = Class.create(AbstractDocument,
     getDetailsTitle: function ( /** String */ detail ) {
         return this._detailsTitle[detail];
     },
+    
+    updatePropertiesPane: function( /** ResourceDescription */ resourceDescription, /** String */ resourceType) {
+        this.emptyPropertiesPane();
+        switch(resourceType){
+            case "screen":
+                console.debug(resourceDescription);
+                $(this.getDetailsTitle('detailsTitle')).update('Properties of screen: ' + resourceDescription.label['en-gb']);
+                var propertiesHash = new Hash();
+                propertiesHash.set('title',resourceDescription.label['en-gb']);
+                propertiesHash.set('id',resourceDescription.uri);
+                propertiesHash.set('desc',resourceDescription.description['en-gb']);
+                propertiesHash.set('tags',resourceDescription.domainContext.tags);
+                this._updatePropertiesTable(propertiesHash);
+                break;
+
+            case "connector":
+                console.debug(resourceDescription);
+                $(this.getDetailsTitle('detailsTitle')).update('Properties of connector: ' + resourceDescription.name);
+                var propertiesHash = new Hash();
+                propertiesHash.set('name',resourceDescription.name);
+                this._updatePropertiesTable(propertiesHash);
+                break;
+
+            case "domainConcept":
+                console.debug(resourceDescription);
+                $(this.getDetailsTitle('detailsTitle')).update('Properties of domain concept: ' + resourceDescription.name);
+                var propertiesHash = new Hash();
+                propertiesHash.set('name',resourceDescription.name);
+                propertiesHash.set('description',resourceDescription.description);
+                propertiesHash.set('semantics',resourceDescription.semantics);
+                this._updatePropertiesTable(propertiesHash);
+                break;
+
+            default:
+                console.debug("properties pane called without resourcetype", resourceType);
+                break;
+        }
+    },
+
+    emptyPropertiesPane: function() {
+        $(this.getDetailsTitle('detailsTitle')).update('Properties');
+        var detArray = $A(this._detailsTable.childElements());
+        for (var i = 0; i < detArray.length-1; i++){
+            this._detailsTable.removeChild(detArray[detArray.length-1-i]);
+        }
+    },
 
     // **************** PRIVATE METHODS **************** //
     /**
@@ -358,19 +406,49 @@ var ScreenflowDocument = Class.create(AbstractDocument,
         this._detailsTitle['desc'] = uidGenerator.generate("details")+".desc";
         this._detailsTitle['tags'] = uidGenerator.generate("details")+".tags";
 
-        var content = "<div class='dijitAccordionTitle properties' id='"+this._detailsTitle['detailsTitle'] +"'>Properties</div>";
-        content += "<div id="+uidGenerator.generate("properties")+">";
-        content += "<table>";
-        content += "<tr class='tableHeader'><td class='left'>Property</td><td class='left'>Value</td></tr>";
-        content += "<tr><td class='left'>Title</td><td class='right'><span id='"+this._detailsTitle['title']+"'></span></td></tr>";
-        content += "<tr><td class='left'>Identifier</td><td class='right'><span id='"+this._detailsTitle['id']+"'></span></td></tr>";
-        content += "<tr><td class='left'>Description</td><td class='right'><span id='"+this._detailsTitle['desc']+"'></td></tr>";
-        content += "<tr><td class='left'>Tags</td><td class='right'><span id='"+this._detailsTitle['tags']+"'></td></tr>";
-        content += "<tr><td class='left'>&nbsp;</td><td class='right'>&nbsp;</td></tr>";
-        content += "</table>";
-        content += "</div>";
-        propertiesPane.setContent(content);
+        var detailsTitle = new Element('div', {
+            'id': this._detailsTitle['detailsTitle'],
+            'class': 'dijitAccordionTitle properties'
+        }).update('Properties');
+        
+        var propertiesDiv = new Element('div', {
+            'id': uidGenerator.generate("properties")
+        });
+        
+        this._detailsTable = new Element('table');
+        var tr = new Element('tr', {
+            'class': 'tableHeader'
+        });
+        var td_p = new Element('td', {
+            'class': 'left'
+        }).update('Property');
+        var td_v = new Element('td', {
+            'class': 'left'
+        }).update('Value');
+        tr.insert(td_p);
+        tr.insert(td_v);
+        this._detailsTable.insert(tr);
+        propertiesDiv.insert(this._detailsTable);
+        
+        propertiesPane.domNode.insert(detailsTitle);
+        propertiesPane.domNode.insert(propertiesDiv);
         return propertiesPane;
+    },
+
+    _updatePropertiesTable: function( /** Hash */ propertiesHash) {
+        var detTable = this._detailsTable;
+        propertiesHash.each(function(pair) {
+            var tr = new Element('tr');
+            var td_p = new Element('td', {
+                'class': 'left'
+            }).update(pair.key);
+            var td_v = new Element('td', {
+                'class': 'right'
+            }).update(pair.value);
+            tr.insert(td_p);
+            tr.insert(td_v);
+            detTable.insert(tr);
+        });
     },
 
     _createPrePostPane: function() {

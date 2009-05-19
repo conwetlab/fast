@@ -29,7 +29,6 @@ UIUtils.selectElement = function(resourceId) {
     }
 }
 
-
 UIUtils.inspectorAreaUpdate = function(resourceId){
     //UIUtils.propertiesPaneUpdate(resourceId);
     //UIUtils.prePostPaneUpdate(resourceId);
@@ -846,34 +845,12 @@ UIUtils.onKeyPressCanvas = function(e){
 }
 
 UIUtils.updatePropertiesPane = function(doc, resourceId, resourceType){
-    switch(resourceType){
-        case "screen":
-            var resourceDescription = doc.getElementDescription(resourceId)[0];
-            console.log(resourceDescription);
-            $(doc.getDetailsTitle('detailsTitle')).innerHTML = "Properties of " + resourceDescription.label['en-gb'];
-            $(doc.getDetailsTitle('title')).innerHTML = resourceDescription.label['en-gb'];
-            $(doc.getDetailsTitle('id')).innerHTML = resourceDescription.uri;
-            $(doc.getDetailsTitle('desc')).innerHTML = resourceDescription.description['en-gb'];
-            $(doc.getDetailsTitle('tags')).innerHTML = resourceDescription.domainContext.tags;
-            break;
-        case "connector":
-            UIUtils.emptyPropertiesPane(doc);
-            break;
-        case "domainConcept":
-            UIUtils.emptyPropertiesPane(doc);
-            break;
-        default:
-            console.debug("properties pane called without resourcetype", resourceType);
-            break;
-    }
+    var resourceDescription = doc.getElementDescription(resourceId)[0];
+    doc.updatePropertiesPane(resourceDescription, resourceType);
 }
 
 UIUtils.emptyPropertiesPane = function(doc){
-    $(doc.getDetailsTitle('detailsTitle')).innerHTML = "Properties";
-    $(doc.getDetailsTitle('title')).innerHTML = "&nbsp;";
-    $(doc.getDetailsTitle('id')).innerHTML = "&nbsp;";
-    $(doc.getDetailsTitle('desc')).innerHTML = "&nbsp;";
-    $(doc.getDetailsTitle('tags')).innerHTML = "&nbsp;";
+    doc.emptyPropertiesPane();
 }
 
 UIUtils.updatePreviewTab = function(screenId){

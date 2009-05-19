@@ -137,7 +137,7 @@ h4{
 
 .deployment .left {
     font-weight: bold;
-    border-right: 1px solid grey;
+    border: 1px solid grey;
 }
 
 /******************
@@ -389,7 +389,8 @@ h4{
 }
 table {
     width: 100%;
-    border-collapse: collapse;
+    border-collapse: separate;
+    border-spacing: 0px;
 }
 table td {
     border-bottom: 1px solid #808080;
@@ -427,14 +428,20 @@ table td {
     background-color: #F5D9D9;
 }
 
-
 .bold {
     font-weight: bold;
 }
 .left {
     width: 50%;
     font-weight: bold;
+    border-left: 1px solid #808080;
+    border-bottom: 1px solid #808080;
+}
+.right {
+    width: 50%;
+    border-left: 1px solid #808080;
     border-right: 1px solid #808080;
+    border-bottom: 1px solid #808080;
 }
 .tableHeader {
     background-color: #BED7F0;
@@ -442,6 +449,7 @@ table td {
 }
 .tableHeader td {
     padding: 3px;
+    border: 1px solid #808080;
 }
 #tab2 {
     padding:0px;
