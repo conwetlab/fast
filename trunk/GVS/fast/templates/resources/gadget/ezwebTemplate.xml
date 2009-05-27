@@ -20,10 +20,10 @@
 <!-- EzWeb Gadget Data Wiring -->
     <Platform.Wiring>
 {% for slot in gadgetSlots %}
-        <Slot name="{{ slot.label }}" type="text" label="{{ slot.label }}" friendcode="{{ slot.expression }}"/>
+        <Slot name="{{ slot.variableName }}" type="text" label="{{ slot.label }}" friendcode="{{ slot.friendcode }}"/>
 {% endfor %}
 {% for event in gadgetEvents %}
-        <Event name="{{ event.label }}" type="text" label="{{ event.label }}" friendcode="{{ event.expression }}"/>
+        <Event name="{{ event.variableName }}" type="text" label="{{ event.label }}" friendcode="{{ event.friendcode }}"/>
 {% endfor %}
     </Platform.Wiring>
     <Platform.Link>

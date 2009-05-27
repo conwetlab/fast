@@ -10,11 +10,21 @@ var ConnectorInstance = Class.create(ComponentInstance,
         $super(resourceDescription);
         var uidGenerator = UIDGeneratorSingleton.getInstance();
         this._id = uidGenerator.generate("connectorInstance");
+        this._properties = new Hash();
     },
 
 
     // **************** PUBLIC METHODS **************** //
 
+    setProperties: function(properties) {
+        console.log(properties);
+        this._properties = $H(properties);
+    },
+    
+    getProperties: function() {
+        return this._properties;
+    },
+    
     /**
      * Drop event handler for the DragSource
      * @param finishState

@@ -62,20 +62,20 @@ var ScreenflowDocument = Class.create(AbstractDocument,
      * passed as a parameter of the screenflow document
      * @type {[ResourceDescription, String]}
      */
-    getElementDescription: function (resourceViewId) {
+    getResourceInstance: function (resourceViewId) {
         for (var i=0; i<this._screens.length; i++) {
             if (this._screens[i].getView().getId()==resourceViewId) {
-                return [this._screens[i].getResourceDescription(), 'screen'];
+                return [this._screens[i], 'screen'];
             }
         }
         for (var i=0; i<this._connectors.length; i++) {
             if (this._connectors[i].getView().getId()==resourceViewId) {
-                return [this._connectors[i].getResourceDescription(), 'connector'];
+                return [this._connectors[i], 'connector'];
             }
         }
         for (var i=0; i<this._domainConcepts.length; i++) {
             if (this._domainConcepts[i].getView().getId()==resourceViewId) {
-                return [this._domainConcepts[i].getResourceDescription(), 'domainConcept'];
+                return [this._domainConcepts[i], 'domainConcept'];
             }
         }
         return null;
@@ -104,8 +104,17 @@ var ScreenflowDocument = Class.create(AbstractDocument,
     addConnector: function (connector) {
         if(connector!=null) {
             this._connectors.push(connector);
-            //TODO: add the connector somehow inside the screenflowdescription
+            this.getResourceDescription().addConnector(connector.getId(), connector, connector.getPosition());
         }
+    },
+    
+    //TODO
+    updateConnector: function (connector) {
+        /*
+        if(connector!=null) {
+            this.getResourceDescription().updateConnector(connector.getId(), connector, connector.getPosition());
+        }
+        */
     },
 
     /**
@@ -155,8 +164,7 @@ var ScreenflowDocument = Class.create(AbstractDocument,
     deleteConnector: function(connectorViewId) {
         for (var i=0; i<this._connectors.length; i++) {
             if (this._connectors[i].getView().getId()==connectorViewId) {
-                //TODO: fix this
-                //this._resourceDescription.deleteConnector(this._connectors[i].getId());
+                this._resourceDescription.deleteConnector(this._connectors[i].getId());
                 this._connectors[i] = null;
                 break;
             }
@@ -273,7 +281,9 @@ var ScreenflowDocument = Class.create(AbstractDocument,
         return this._detailsTitle[detail];
     },
     
-    updatePropertiesPane: function( /** ResourceDescription */ resourceDescription, /** String */ resourceType) {
+    updatePropertiesPane: function( /** ResourceId */ resourceId, /** String */ resourceType) {
+        var resourceInstance = this.getResourceInstance(resourceId)[0];
+        var resourceDescription = resourceInstance.getResourceDescription();
         this.emptyPropertiesPane();
         switch(resourceType){
             case "screen":
@@ -290,7 +300,7 @@ var ScreenflowDocument = Class.create(AbstractDocument,
             case "connector":
                 console.debug(resourceDescription);
                 $(this.getDetailsTitle('detailsTitle')).update('Properties of connector: ' + resourceDescription.name);
-                var propertiesHash = new Hash();
+                var propertiesHash = resourceInstance.getProperties().clone();
                 propertiesHash.set('name',resourceDescription.name);
                 this._updatePropertiesTable(propertiesHash);
                 break;

@@ -614,6 +614,234 @@ UIUtils.createAddScDialog = function() {
     }
 }
 
+UIUtils.showConnectorDialog = function() {
+    var connectorDialog = UIUtils.createConnectorDialog();
+    UIUtils.show(connectorDialog);
+}
+
+UIUtils.hideConnectorDialog = function(){
+    UIUtils.hide(dijit.byId('connectorDialog'));
+}
+
+UIUtils.createConnectorDialog = function() {
+    if (dijit.byId("connectorDialog") == null) {
+        var dialog = new dijit.Dialog({
+            "id" : "connectorDialog",
+            "title" : "Connector properties",
+            "style" : "display:none;"
+        });
+
+        var dialogDiv = new Element("div", {
+            "id" : "connectorDialogDiv"
+        });
+        var h2 = new Element("h2").update("Check connector details");
+        dialogDiv.insert(h2);
+        var divConnectorInfo = new Element("div", {
+            "class" : "line"
+        }).update("Please fulfill the required information in order to"
+            + " set up the connector.");
+        dialogDiv.insert(divConnectorInfo);
+        
+        var form2 = new Element('form', {
+            "id" : "checkConnectorForm",
+            method : "post"
+        });
+        
+        var divConnectorFact = new Element("div", {
+            "class" : "line"
+        });
+        var labelConnFact = new Element("label").update("Fact:");
+        divConnectorFact.insert(labelConnFact);
+        var inputConnFact = new Element("select", {
+            id : 'ConnFact',
+            name : 'fact',
+            onChange : 'UIUtils.onChangeFact($F("ConnFact"));'
+        });
+        
+        var option_none = new Element("option", {
+            value : "none"
+        });
+        option_none.innerHTML = "Choose a fact...";
+        inputConnFact.insert(option_none);
+        
+        var descs = CatalogueSingleton.getInstance().getResourceFactory('domainConcept').getResourceDescriptions();
+        $A(descs).each(
+            function(desc) {
+                var option = new Element("option", {
+                    value : desc.name
+                });
+                option.innerHTML = desc.name;
+                inputConnFact.insert(option);
+            }
+        );
+
+        divConnectorFact.insert(inputConnFact);
+
+        var errorConnFact = new Element("span", {
+            'id' : 'errorConnFact'
+        }).update('Please choose one valid fact');
+        divConnectorFact.insert(errorConnFact);
+
+        form2.insert(divConnectorFact);
+        
+        var inputConnFactSemantics = new Element("input", {
+            id : 'ConnFactSemantics',
+            name : 'semantics',
+            type : 'hidden'
+        });
+        form2.insert(inputConnFactSemantics);
+        
+        var divConnectorFactAttr = new Element("div", {
+            "class" : "line"
+        });
+        var labelConnFactAttr = new Element("label").update("Fact attribute:");
+        divConnectorFactAttr.insert(labelConnFactAttr);
+        var inputConnFactAttr = new Element("select", {
+            id : "ConnFactAttr",
+            name : "factAttr"
+        });
+        
+        var option_all = new Element("option", {
+            value : "all"
+        });
+        option_all.innerHTML = "All attributes";
+        inputConnFactAttr.insert(option_all);
+        
+        divConnectorFactAttr.insert(inputConnFactAttr);
+        form2.insert(divConnectorFactAttr);
+
+        var divConnectorVariableName = new Element("div", {
+            "class" : "line"
+        });
+        var labelConnVariableName = new Element("label").update("Variable name:");
+        divConnectorVariableName.insert(labelConnVariableName);
+        var inputConnVariableName = new Element("input", {
+            type : "text",
+            id : "ConnVariableName",
+            name : "variableName",
+            value : "variableName"
+        });
+        divConnectorVariableName.insert(inputConnVariableName);
+        form2.insert(divConnectorVariableName);
+        
+        var divConnectorLabel = new Element("div", {
+            "class" : "line"
+        });
+        var labelConnLabel = new Element("label").update("Label:");
+        divConnectorLabel.insert(labelConnLabel);
+        var inputConnLabel = new Element("input", {
+            type : "text",
+            id : "ConnLabel",
+            name : "label",
+            value : "Variable Label"
+        });
+        divConnectorLabel.insert(inputConnLabel);
+        form2.insert(divConnectorLabel);
+
+        var divConnectorFriendCode = new Element("div", {
+            "class" : "line"
+        });
+        var labelConnFriendCode = new Element("label").update("Friend Code:");
+        divConnectorFriendCode.insert(labelConnFriendCode);
+        var inputConnFriendCode = new Element("input", {
+            type : "text",
+            id : "ConnFriendCode",
+            name : "friendcode",
+            value : "friendcode"
+        });
+        divConnectorFriendCode.insert(inputConnFriendCode);
+        form2.insert(divConnectorFriendCode);
+
+        dialogDiv.insert(form2);
+
+        var divConnButtons = new Element("div", {
+            "id" : "ScButtons"
+        });
+        var acceptConnButton = new dijit.form.Button({
+            "id" : "acceptConnButton",
+            "label" : "Accept",
+            onClick : function() {
+                // If no fact is selected, an error message is shown
+                if ($F("ConnFact") == "none"){
+                    $("errorConnFact").setStyle({opacity:"100"});
+                    dojo.fadeOut({node:"errorConnFact",duration:750,delay:750}).play();
+                    return;
+                }
+                
+                var formu = $('checkConnectorForm');
+                var currentDocument = GVSSingleton.getInstance().getDocumentController().getCurrentDocument();
+                var selectedElement = currentDocument.getSelectedElement();
+                
+                var resourceInstance = null;
+                var resourceType = null;
+                [resourceInstance, resourceType] = currentDocument.getResourceInstance(selectedElement.id);
+                if (resourceType=='connector'){
+                    resourceInstance.setProperties(formu.serialize(true))
+                    currentDocument.updateConnector(resourceInstance);
+                }
+                UIUtils.onClickCanvas(null, selectedElement);
+                UIUtils.hideConnectorDialog();
+            }
+        });
+        divConnButtons.insert(acceptConnButton.domNode);
+        
+        var cancelConnButton = new dijit.form.Button({
+            id : "cancelConnButton",
+            label : "Cancel",
+            onClick : function() {
+                UIUtils.hideConnectorDialog();
+            }
+        });
+        divConnButtons.insert(cancelConnButton.domNode);
+        dialogDiv.insert(divConnButtons);
+        dialog.setContent(dialogDiv);
+        return dialog;
+    } else {
+        return dijit.byId("connectorDialog");
+    }
+}
+
+UIUtils.onChangeFact = function (/** String */ value) {
+    if (value == 'none') {
+        UIUtils.updateConnectorFactAttr(null);
+    }
+    var descs = CatalogueSingleton.getInstance().getResourceFactory('domainConcept').getResourceDescriptions();
+    $A(descs).each(
+        function(desc) {
+            if(desc.name == value) {
+                UIUtils.updateConnectorFactAttr(desc);
+            }
+        }
+    );
+    console.log(value);
+}
+
+UIUtils.updateConnectorFactAttr = function ( /** Domain Concept Description */ desc) {
+    var connFactAttr = $('ConnFactAttr');
+    while( connFactAttr.length > 0 ){
+        connFactAttr.remove(connFactAttr.length-1);
+    }
+    
+    var option_all = new Element("option", {
+        value : "all"
+    });
+    option_all.innerHTML = "All attributes";
+    connFactAttr.insert(option_all);
+    if(desc != null){
+        $A(desc.attributes).each(
+            function(attr) {
+                var option = new Element("option", {
+                    value : attr
+                });
+                option.innerHTML = attr;
+                connFactAttr.insert(option);
+            }
+        )
+        var connFactSemantics = $('ConnFactSemantics');
+        connFactSemantics.setValue(desc.semantics);
+    }
+}
+
 UIUtils.updateSFDocAndScreenPalette = function(/** map id->value*/ screenList) {
     UIUtils.updateScreenPaletteReachability(screenList);
     UIUtils.updateSFDocumentReachability(screenList);
@@ -745,17 +973,17 @@ UIUtils.onClickCanvas = function(e, /**Optional element*/element){
         case "screen":
             console.log("screen clicked");
             UIUtils.selectElement(clickedElement.id);
-            UIUtils.updatePropertiesPane(currentDocument, clickedElement.id, "screen");
+            currentDocument.updatePropertiesPane(clickedElement.id, "screen");
             break;
         case "domainConcept":
             console.log("domain concept clicked");
             UIUtils.selectElement(clickedElement.id);
-            UIUtils.updatePropertiesPane(currentDocument, clickedElement.id, "domainConcept");
+            currentDocument.updatePropertiesPane(clickedElement.id, "domainConcept");
             break;
         case "connector":
             console.log("connector clicked");
             UIUtils.selectElement(clickedElement.id);
-            UIUtils.updatePropertiesPane(currentDocument, clickedElement.id, "connector");
+            currentDocument.updatePropertiesPane(clickedElement.id, "connector");
             break;
         case "canvas":
             console.log("canvas clicked");
@@ -786,6 +1014,7 @@ UIUtils.onDblClickCanvas = function(e){
             break;
         case "connector":
             console.log("connector dbl-clicked");
+            UIUtils.showConnectorDialog(clickedElement.id);
             break;
         case "canvas":
             console.log("canvas dbl-clicked");
@@ -799,54 +1028,51 @@ UIUtils.onDblClickCanvas = function(e){
 
 UIUtils.onKeyPressCanvas = function(e){
     var currentDocument = GVSSingleton.getInstance().getDocumentController().getCurrentDocument();
-    var selectedElement = currentDocument.getSelectedElement();
-    if (e.keyCode == Event.KEY_DELETE && selectedElement){ //Delete an element from the canvas
-        var title = null;
-        var selectedElementType = null;
-        var selectedElementResourceDescription = null;
-        [selectedElementResourceDescription, selectedElementType] = currentDocument.getElementDescription(selectedElement.id);
-        UIUtils.getResourceType(selectedElement)[1];
-        switch(selectedElementType){
-            case 'screen':
-                var label = selectedElementResourceDescription.label['en-gb'];
-                title = (label)?('the screen "' + label + '"'):"the selected screen";
-                if(confirm("You are about to remove " + title + " from canvas. Are you sure?")) { //delete if ok
-                    currentDocument.deleteScreen(selectedElement.id);
-                    $(selectedElement.parentNode).removeChild(selectedElement);
-                    UIUtils.emptyPropertiesPane(currentDocument);
-                    UIUtils.selectElement(null);
-                }
-                break;
-            case 'domainConcept':
-                var label = selectedElementResourceDescription.name;
-                title = (label)?('the domain concept "' + label + '"'):"the selected domain concept";
-                if(confirm("You are about to remove " + title + " from canvas. Are you sure?")) { //delete if ok
-                    currentDocument.deleteDomainConcept(selectedElement.id);
-                    $(selectedElement.parentNode).removeChild(selectedElement);
-                    UIUtils.emptyPropertiesPane(currentDocument);
-                    UIUtils.selectElement(null);
-                }
-                break;
-            case 'connector':
-                var label = selectedElementResourceDescription.name;
-                title = (label)?('the connector "' + label + '"'):"the selected connector";
-                if(confirm("You are about to remove " + title + " from canvas. Are you sure?")) { //delete if ok
-                    currentDocument.deleteConnector(selectedElement.id);
-                    $(selectedElement.parentNode).removeChild(selectedElement);
-                    UIUtils.emptyPropertiesPane(currentDocument);
-                    UIUtils.selectElement(null);
-                }
-                break;
-            default:
-                console.error("Element not possible to be deleted ");
-                break;
+    if(currentDocument.getDocumentType == 'screenflow') {
+        var selectedElement = currentDocument.getSelectedElement();
+        if (e.keyCode == Event.KEY_DELETE && selectedElement){ //Delete an element from the canvas
+            var title = null;
+            var selectedElementType = null;
+            var selectedElementResourceInstance = null;
+            [selectedElementResourceInstance, selectedElementType] = currentDocument.getResourceInstance(selectedElement.id);
+            UIUtils.getResourceType(selectedElement)[1];
+            switch(selectedElementType){
+                case 'screen':
+                    var label = selectedElementResourceInstance.getResourceDescription().label['en-gb'];
+                    title = (label)?('the screen "' + label + '"'):"the selected screen";
+                    if(confirm("You are about to remove " + title + " from canvas. Are you sure?")) { //delete if ok
+                        currentDocument.deleteScreen(selectedElement.id);
+                        $(selectedElement.parentNode).removeChild(selectedElement);
+                        UIUtils.emptyPropertiesPane(currentDocument);
+                        UIUtils.selectElement(null);
+                    }
+                    break;
+                case 'domainConcept':
+                    var label = selectedElementResourceInstance.getResourceDescription().name;
+                    title = (label)?('the domain concept "' + label + '"'):"the selected domain concept";
+                    if(confirm("You are about to remove " + title + " from canvas. Are you sure?")) { //delete if ok
+                        currentDocument.deleteDomainConcept(selectedElement.id);
+                        $(selectedElement.parentNode).removeChild(selectedElement);
+                        UIUtils.emptyPropertiesPane(currentDocument);
+                        UIUtils.selectElement(null);
+                    }
+                    break;
+                case 'connector':
+                    var label = selectedElementResourceInstance.getResourceDescription().name;
+                    title = (label)?('the connector "' + label + '"'):"the selected connector";
+                    if(confirm("You are about to remove " + title + " from canvas. Are you sure?")) { //delete if ok
+                        currentDocument.deleteConnector(selectedElement.id);
+                        $(selectedElement.parentNode).removeChild(selectedElement);
+                        UIUtils.emptyPropertiesPane(currentDocument);
+                        UIUtils.selectElement(null);
+                    }
+                    break;
+                default:
+                    console.error("Element not possible to be deleted ");
+                    break;
+            }
         }
     }
-}
-
-UIUtils.updatePropertiesPane = function(doc, resourceId, resourceType){
-    var resourceDescription = doc.getElementDescription(resourceId)[0];
-    doc.updatePropertiesPane(resourceDescription, resourceType);
 }
 
 UIUtils.emptyPropertiesPane = function(doc){
@@ -855,6 +1081,7 @@ UIUtils.emptyPropertiesPane = function(doc){
 
 UIUtils.updatePreviewTab = function(screenId){
     var documentController = GVSSingleton.getInstance().getDocumentController();
-    var screenDescription = documentController.getCurrentDocument().getElementDescription(screenId)[0];
+    var screenInstance = documentController.getCurrentDocument().getResourceInstance(screenId)[0];
+    var screenDescription = screenInstance.getResourceDescription();
     var screenflowDoc = documentController.createPreviewDocument(screenDescription);
 }

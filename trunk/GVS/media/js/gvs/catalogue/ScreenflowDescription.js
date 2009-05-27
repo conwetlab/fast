@@ -16,8 +16,8 @@ var ScreenflowDescription = Class.create(ResourceDescription,
         mine['domainContext'] = [];
         mine['creator']='';
         mine['version']='';
-        mine['preconditions']='';
-        mine['postconditions']='';
+        mine['preconditions'] = new Hash();
+        mine['postconditions'] = new Hash();
         $super(properties);
     },
 
@@ -202,47 +202,112 @@ var ScreenflowDescription = Class.create(ResourceDescription,
     getUri: function () {
         return this['uri'];
     },
-    
+
     /**
-     * Adds a new precondition.
+     * Adds a new connector.
+     * @param Connector
+     *      Connector to be added to the
+     *      Screenflow description.
+     */
+    addConnector: function ( id, connector, position) {
+        if(connector!=null) {
+            switch(connector.getResourceDescription()['name']){
+                case 'In':
+                    var preconditionInfo = {
+                        'precondition': connector,
+                        'position': position
+                    };
+                    this['preconditions'].set( id, preconditionInfo );
+                    break;
+                case 'Out':
+                    var postconditionInfo = {
+                        'postcondition': connector,
+                        'position': position
+                    };
+                    this['postconditions'].set( id, postconditionInfo );
+                    break;
+                default:
+            }
+        }
+    },
+
+    /**
+     * Updates a connector.
      * @param Precondition
      *      Precondition to be added to the
-     *      Screenflow document.
+     *      Screenflow description.
      */
-    addPrecondition: function (precondition) {
-        if(precondition!=null) {
-            this['preconditions'].push(precondition);
+    updateConnector: function ( id, connector, position) {
+        if(connector!=null) {
+            switch(connector.getResourceDescription()['name']){
+                case 'In':
+                    if (this['preconditions'].get(id) != undefined){
+                        var preconditionInfo = {
+                            'precondition': connector,
+                            'position': position
+                        };
+                        this['preconditions'].set( id, preconditionInfo );
+                    }
+                    break;
+                case 'Out':
+                    if (this['postconditions'].get(id) != undefined){
+                        var postconditionInfo = {
+                            'postcondition': connector,
+                            'position': position
+                        };
+                        this['postconditions'].set( id, postconditionInfo );
+                    }
+                    break;
+                default:
+            }
         }
+    },
+
+    /**
+     * Delete a precondition.
+     * @param Precondition Id
+     *      Precondition to be deleted from the
+     *      Screenflow description.
+     */
+    deleteConnector: function( id ) {
+        this['preconditions'].unset(id);
+        this['postconditions'].unset(id);
     },
     
     /**
-     * Returns a precondition of the screenflowdescription
-     * @type {Precondition[]}
+     * Returns the preconditions of the screenflowdescription
+     * @type {Preconditions[]}
      */
     getPreconditions: function () {
         return this['preconditions'];
     },
     
-    /**
-     * Adds a new postcondition.
-     * @param Postcondition
-     *      Postcondition to be added to the
-     *      Screenflow document.
-     */
-    addPostcondition: function (postcondition) {
-        if(postcondition!=null) {
-            this['postconditions'].push(postcondition);
-        }
+    getPrecDescs: function () {
+        var precDescs = new Array();
+        $H(this.getPreconditions()).each(function(pair){
+            precDescs.push(pair.value.precondition.getProperties());
+        });
+        precDescs = precDescs.uniq();
+        return precDescs;
     },
     
     /**
-     * Returns a postcondition of the screenflowdescription
-     * @type {Postcondition[]}
+     * Returns the postconditions of the screenflowdescription
+     * @type {Postconditions[]}
      */
     getPostconditions: function () {
         return this['postconditions'];
     },
     
+    getPostDescs: function () {
+        var postDescs = new Array();
+        $H(this.getPostconditions()).each(function(pair){
+            postDescs.push(pair.value.postcondition.getProperties());
+        });
+        postDescs = postDescs.uniq();
+        return postDescs;
+    },
+
     /**
      * Returns the screenflowDescription coded in JSON
      * @type {String}
@@ -255,8 +320,8 @@ var ScreenflowDescription = Class.create(ResourceDescription,
         data.description = this.getDescription();
         data.creator = this.getCreator();
         data.version = this.getVersion();
-        data.preconditions = this.getPreconditions();
-        data.postconditions = this.getPostconditions();
+        data.preconditions = this.getPrecDescs();
+        data.postconditions = this.getPostDescs();
         data.definition = new Object();
         data.definition.screens = this.getScreenDescriptions();
         //data.definition.connectors = ;

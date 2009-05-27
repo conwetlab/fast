@@ -23,23 +23,26 @@
 
     var events = new Hash();
 
-{# TODO: Fix the slot/events #}
 {% for slot in gadgetSlots %}
-{% comment %}
-    var {{ slot.name }} = EzWebAPI.createRGadgetVariable("{{ slot.name }}",set{{ slot.name }});
-    function set{{ slot.name }}(val){
-        var fact = EngineFactory.getInstance().transformFact("{{ slot.fact_name }}", "{{ slot.fact_attr }}", val);
+    var {{ slot.variableName }} = EzWebAPI.createRGadgetVariable("{{ slot.variableName }}",set{{ slot.variableName }});
+    function set{{ slot.variableName }}(val){
+        var fact = EngineFactory.getInstance().transformFact("{{ slot.semantics }}", "{{ slot.factAttr }}", val);
         EngineFactory.getInstance().manageVarFacts([fact],[]);
     }
-{% endcomment %}
 {% endfor %}
 
 {% for event in gadgetEvents %}
-{% comment %}
-    var {{ event.name }} = EzWebAPI.createRWGadgetVariable("{{ event.name }}");
-    getEventVariables(events, "{{ event.fact_name }}").set("{{ event.name }}", {variable: {{ event.name }}, fact_attr: "{{ event.fact_attr }}"});
-{% endcomment %}
+    var {{ event.variableName }} = EzWebAPI.createRWGadgetVariable("{{ event.variableName }}");
+    getEventVariables(events, "{{ event.semantics }}").set("{{ event.variableName }}", {variable: {{ event.variableName }}, fact_attr: "{{ event.factAttr }}"});
 {% endfor %}
+
+    function getEventVariables(evs, fact_name){
+        var variables = evs.get(fact_name);
+        if(!variables){
+            variables = evs.set(fact_name, new Hash());
+        }
+        return variables;
+    }
 
 	function loadMenu(){
 		menu = new FASTMenu({renderTo: "menu"});
