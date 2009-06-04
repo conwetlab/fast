@@ -24,7 +24,21 @@ var DomainConceptComponent = Class.create(PaletteComponent,
      * @override
      */
     _createInstance: function () {
-        return new DomainConceptInstance(this._resourceDescription);
+        var instance = new ConnectorInstance(        
+                            new ConnectorDescription ({
+                                type: 'None'
+                            })
+                        );
+        var properties = new Hash();
+        properties.set('fact',this.getResourceDescription().name);
+        properties.set('type','None');
+        properties.set('shortcut',this.getResourceDescription().shortcut);
+        properties.set('semantics',this.getResourceDescription().semantics);
+        properties.set('factAttr',this.getResourceDescription().attributes);
+        instance.setProperties(properties);
+
+        return instance;
+        //return new DomainConceptInstance(this._resourceDescription);
     },
     
     /**

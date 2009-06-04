@@ -125,7 +125,7 @@ var ComponentInstance = Class.create(DragSource,
     destroy: function() {
         this._view.destroy();
         this._view = null;
-    },
+    }
 
     // **************** PRIVATE METHODS **************** //
 

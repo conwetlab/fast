@@ -24,7 +24,13 @@ var ConnectorComponent = Class.create(PaletteComponent,
      * @override
      */
     _createInstance: function () {
-        return new ConnectorInstance(this._resourceDescription);
+        var instance = new ConnectorInstance(this._resourceDescription);
+        var properties = new Hash();
+        properties.set('fact','none');
+        properties.set('type',this.getResourceDescription().type);
+        instance.setProperties(properties);
+        instance.getView().update(properties);
+        return instance;
     },
     
     /**
@@ -33,7 +39,7 @@ var ConnectorComponent = Class.create(PaletteComponent,
      * @private
      */
     _getTitle: function() {
-        return this._resourceDescription.name;  
+        return this._resourceDescription.type;  
     }
 });
 

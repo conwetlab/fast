@@ -19,6 +19,7 @@ var ConnectorInstance = Class.create(ComponentInstance,
     setProperties: function(properties) {
         console.log(properties);
         this._properties = $H(properties);
+        this.getView().update(this._properties);
     },
     
     getProperties: function() {

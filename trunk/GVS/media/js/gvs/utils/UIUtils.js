@@ -616,6 +616,15 @@ UIUtils.createAddScDialog = function() {
 
 UIUtils.showConnectorDialog = function() {
     var connectorDialog = UIUtils.createConnectorDialog();
+    var currentDocument = GVSSingleton.getInstance().getDocumentController().getCurrentDocument();
+    var selectedElement = currentDocument.getSelectedElement();
+    var selectedElementType = null;
+    var selectedElementResourceInstance = null;
+    [selectedElementResourceInstance, selectedElementType] = currentDocument.getResourceInstance(selectedElement.id);
+    console.log(selectedElementResourceInstance);
+    console.log(selectedElementType);
+    var selectedElemProps = selectedElementResourceInstance.getProperties();
+    UIUtils.updateConnectorDialog(selectedElemProps);
     UIUtils.show(connectorDialog);
 }
 
@@ -630,7 +639,7 @@ UIUtils.createConnectorDialog = function() {
             "title" : "Connector properties",
             "style" : "display:none;"
         });
-
+        
         var dialogDiv = new Element("div", {
             "id" : "connectorDialogDiv"
         });
@@ -646,6 +655,42 @@ UIUtils.createConnectorDialog = function() {
             "id" : "checkConnectorForm",
             method : "post"
         });
+        
+        var divConnectorType = new Element("div", {
+            "class" : "line"
+        });
+        var labelConnType = new Element("label").update("Type:");
+        divConnectorType.insert(labelConnType);
+        var inputConnType = new Element("select", {
+            id : 'ConnType',
+            name : 'type'
+        });
+        
+        var option_none = new Element("option", {
+            value : "None"
+        });
+        option_none.innerHTML = "Choose a type...";
+        inputConnType.insert(option_none);
+        
+        var option_in = new Element("option", {
+            value : "In"
+        });
+        option_in.innerHTML = 'In';
+        inputConnType.insert(option_in);
+        var option_out = new Element("option", {
+            value : "Out"
+        });
+        option_out.innerHTML = 'Out';
+
+        inputConnType.insert(option_out);
+        divConnectorType.insert(inputConnType);
+        
+        var errorConnType = new Element("span", {
+            'id' : 'errorConnType'
+        }).update('Please choose one valid type');
+        divConnectorType.insert(errorConnType);
+        
+        form2.insert(divConnectorType);
         
         var divConnectorFact = new Element("div", {
             "class" : "line"
@@ -676,6 +721,13 @@ UIUtils.createConnectorDialog = function() {
         );
 
         divConnectorFact.insert(inputConnFact);
+        
+        var inputConnFactShortcut = new Element("input", {
+            id : 'ConnFactShortcut',
+            name : 'shortcut',
+            type : 'hidden'
+        });
+        form2.insert(inputConnFactShortcut);
 
         var errorConnFact = new Element("span", {
             'id' : 'errorConnFact'
@@ -702,7 +754,7 @@ UIUtils.createConnectorDialog = function() {
         });
         
         var option_all = new Element("option", {
-            value : "all"
+            value : ""
         });
         option_all.innerHTML = "All attributes";
         inputConnFactAttr.insert(option_all);
@@ -762,12 +814,18 @@ UIUtils.createConnectorDialog = function() {
             "label" : "Accept",
             onClick : function() {
                 // If no fact is selected, an error message is shown
+                if ($F("ConnType") == "None"){
+                    $("errorConnType").setStyle({opacity:"100"});
+                    dojo.fadeOut({node:"errorConnType",duration:750,delay:750}).play();
+                    return;
+                }
+
                 if ($F("ConnFact") == "none"){
                     $("errorConnFact").setStyle({opacity:"100"});
                     dojo.fadeOut({node:"errorConnFact",duration:750,delay:750}).play();
                     return;
                 }
-                
+
                 var formu = $('checkConnectorForm');
                 var currentDocument = GVSSingleton.getInstance().getDocumentController().getCurrentDocument();
                 var selectedElement = currentDocument.getSelectedElement();
@@ -789,6 +847,7 @@ UIUtils.createConnectorDialog = function() {
             id : "cancelConnButton",
             label : "Cancel",
             onClick : function() {
+                //dijit.byId("connectorDialog").destroyRecursive();
                 UIUtils.hideConnectorDialog();
             }
         });
@@ -801,6 +860,28 @@ UIUtils.createConnectorDialog = function() {
     }
 }
 
+UIUtils.updateConnectorDialog = function(properties) {
+    $A($('ConnType').options).each(
+        function(option, index){
+            console.log(option.value);
+            console.log(properties.get('type'));
+            if(properties.get('type') == option.value){
+                $('ConnType').selectedIndex = index;
+            }
+        }
+    )
+    
+    $A($('ConnFact').options).each(
+        function(option, index){
+            if(properties.get('fact') == option.value){
+                $('ConnFact').selectedIndex = index;
+            }
+        }
+    )
+    
+    UIUtils.onChangeFact(properties.get('fact'));
+}
+
 UIUtils.onChangeFact = function (/** String */ value) {
     if (value == 'none') {
         UIUtils.updateConnectorFactAttr(null);
@@ -810,10 +891,15 @@ UIUtils.onChangeFact = function (/** String */ value) {
         function(desc) {
             if(desc.name == value) {
                 UIUtils.updateConnectorFactAttr(desc);
+                UIUtils.updateConnectorFactShortcut(desc);
             }
         }
     );
     console.log(value);
+}
+
+UIUtils.updateConnectorFactShortcut = function (desc) {
+     $('ConnFactShortcut').setValue(desc.shortcut);
 }
 
 UIUtils.updateConnectorFactAttr = function ( /** Domain Concept Description */ desc) {
@@ -823,7 +909,7 @@ UIUtils.updateConnectorFactAttr = function ( /** Domain Concept Description */ d
     }
     
     var option_all = new Element("option", {
-        value : "all"
+        value : ""
     });
     option_all.innerHTML = "All attributes";
     connFactAttr.insert(option_all);
@@ -1028,7 +1114,7 @@ UIUtils.onDblClickCanvas = function(e){
 
 UIUtils.onKeyPressCanvas = function(e){
     var currentDocument = GVSSingleton.getInstance().getDocumentController().getCurrentDocument();
-    if(currentDocument.getDocumentType == 'screenflow') {
+    if(currentDocument.getDocumentType() == 'screenflow') {
         var selectedElement = currentDocument.getSelectedElement();
         if (e.keyCode == Event.KEY_DELETE && selectedElement){ //Delete an element from the canvas
             var title = null;

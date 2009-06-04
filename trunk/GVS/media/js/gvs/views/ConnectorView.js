@@ -12,16 +12,19 @@ var ConnectorView = Class.create( ResourceView,
         var uidGenerator = UIDGeneratorSingleton.getInstance();
         this._id = uidGenerator.generate("connectorView");
 
-        var container = new Element('div', {'class': 'connectorImage'}).update(connectorResourceDescription.name);
-        switch(connectorResourceDescription.name){
+        var container = new Element('div', {'class': 'connectorImage'});
+        switch(connectorResourceDescription.type){
             case "In":
-                container.addClassName('connectorIn')
+                container.addClassName('connectorIn');
                 break;
             case "Out":
-                container.addClassName('connectorOut')
+                container.addClassName('connectorOut');
+                break;
+            case "None":
+                container.addClassName('connectorNone');
                 break;
             default:
-                container.addClassName('connectorDefault')
+                container.addClassName('connectorDefault');
                 break;
         }
         
@@ -41,8 +44,31 @@ var ConnectorView = Class.create( ResourceView,
     destroy: function () {
         // Let the garbage collector to do its job
         this._node = null;
-    }
+    },
+    
+    update: function (properties){
+        var container = this._node.firstDescendant();
+        container.update(properties.get('shortcut'));
 
+        container.removeClassName('connectorIn');
+        container.removeClassName('connectorOut');
+        container.removeClassName('connectorNone');
+        container.removeClassName('connectorDefault');
+        switch(properties.get('type')){
+            case "In":
+                container.addClassName('connectorIn');
+                break;
+            case "Out":
+                container.addClassName('connectorOut');
+                break;
+            case "None":
+                container.addClassName('connectorNone');
+                break;
+            default:
+                container.addClassName('connectorDefault');
+                break;
+        }
+    }
 });
 
 // vim:ts=4:sw=4:et:

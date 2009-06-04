@@ -299,9 +299,10 @@ var ScreenflowDocument = Class.create(AbstractDocument,
 
             case "connector":
                 console.debug(resourceDescription);
-                $(this.getDetailsTitle('detailsTitle')).update('Properties of connector: ' + resourceDescription.name);
                 var propertiesHash = resourceInstance.getProperties().clone();
-                propertiesHash.set('name',resourceDescription.name);
+                $(this.getDetailsTitle('detailsTitle')).update('Properties of connector: ' + propertiesHash.get('type'));
+                
+                //propertiesHash.set('type',resourceDescription.type);
                 this._updatePropertiesTable(propertiesHash);
                 break;
 

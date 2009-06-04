@@ -19,7 +19,15 @@ var DomainConceptFactory = Class.create(ResourceFactory,
 
     updateResourceDescriptions: function (domainConceptDescriptions) {
         for (var i=0; i<domainConceptDescriptions.length ; i++) {
-            this._resourceDescriptions.push(new DomainConceptDescription (domainConceptDescriptions[i]));
+            var already_exists = false;
+            for (var j=0; j<this._resourceDescriptions.length; j++) {
+                if(this._resourceDescriptions[j].name==domainConceptDescriptions[i].name){
+                    already_exists = true;
+                }
+            }
+            if(!already_exists){
+                this._resourceDescriptions.push(new DomainConceptDescription (domainConceptDescriptions[i]));
+            }
         }
     },
 

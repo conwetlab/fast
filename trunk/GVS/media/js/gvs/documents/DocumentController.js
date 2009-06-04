@@ -23,10 +23,6 @@ var DocumentController = Class.create(
         // The welcome document is the initial document
         var welcome = new WelcomeDocument();
 
-        // FIXME: Work around for tab rendering bug when there is only one tab.
-        this.addDocument(welcome);
-        dijit.byId("documentContainer").layout();
-
         // FIXME: Work around for updating the Fact Factory
         FactFactorySingleton.getInstance().updateFacts();
         
@@ -39,6 +35,10 @@ var DocumentController = Class.create(
         dojo.connect(dijit.byId("documentContainer"), "closeChild", function(tab){
             DocumentController.prototype._closeDocument.apply(mine, arguments);
         });
+        
+        // FIXME: Work around for tab rendering bug when there is only one tab.
+        this.addDocument(welcome);
+        dijit.byId("documentContainer").layout();
     },
 
     // **************** PUBLIC METHODS **************** //

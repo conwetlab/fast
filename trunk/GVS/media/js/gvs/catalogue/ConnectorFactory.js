@@ -14,24 +14,10 @@ var ConnectorFactory = Class.create(ResourceFactory,
         this._resourceName = 'Connectors';
         this._resourceDescriptions = [
             new ConnectorDescription ({
-                name: 'In',
-                image: connectorsPath + 'greenCircle.png',
-                type: '',
-                fact: '',
-                fact_attribute:'',
-                variable_name:'',
-                label:'',
-                friendcode:''
+                type: 'In'
             }),
             new ConnectorDescription ({
-                name: 'Out',
-                image: connectorsPath + 'greenCircle.png',
-                type: '',
-                fact: '',
-                fact_attribute:'',
-                variable_name:'',
-                label:'',
-                friendcode:''
+                type: 'Out'
             })
             ];
         /*

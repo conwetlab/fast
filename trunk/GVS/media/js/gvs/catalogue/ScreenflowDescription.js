@@ -211,7 +211,7 @@ var ScreenflowDescription = Class.create(ResourceDescription,
      */
     addConnector: function ( id, connector, position) {
         if(connector!=null) {
-            switch(connector.getResourceDescription()['name']){
+            switch(connector.getProperties().get('type')){
                 case 'In':
                     var preconditionInfo = {
                         'precondition': connector,
@@ -239,7 +239,7 @@ var ScreenflowDescription = Class.create(ResourceDescription,
      */
     updateConnector: function ( id, connector, position) {
         if(connector!=null) {
-            switch(connector.getResourceDescription()['name']){
+            switch(connector.getResourceDescription().type){
                 case 'In':
                     if (this['preconditions'].get(id) != undefined){
                         var preconditionInfo = {
