@@ -121,24 +121,26 @@ var CatalogueSingleton = function() {
                 console.log("getMetadataError");
                 //TODO error handling
             }
+
             var listElementUris = new Array();
             for(var i=0; i<listElements.length; i++){
                 listElementUris.push(listElements[i].uri);
             }
-            
+
             var newListElements = listElementUris.clone();
             // get the uris list and call get_metadata
             var screenDescriptions = this.getResourceFactory('screen').getResourceDescriptions();
             newListElements.each(function(uri, index){
                 screenDescriptions.each(function(screen){
-                    if (uri.uri==screen.uri) {
+                    if (uri==screen.uri) {
                         newListElements[index]=null;
                         throw $break;
                     }
                 });
             });
-            newListElements=newListElements.compact();
-            if (newListElements.size()>0){
+
+            newListElements = newListElements.compact();
+            if (newListElements.size() > 0){
                 //TODO get the uris from the screenList argument in order to do the get_metadata request to the catalogue
                 var postData = newListElements;
                 postData = Object.toJSON(postData);
