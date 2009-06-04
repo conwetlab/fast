@@ -2,7 +2,17 @@ var _fastAPI = Class.create({
     
     initialize: function() {
     },
-    
+
+    createRGadgetVariable: function ( /** string */ variable, /** string */ method) {
+        throw 'Abstract Method invocation. ' + 
+              'FastAPI :: createRGadgetVariable';
+    },
+
+    createRWGadgetVariable: function ( /** string */ variable) {
+        throw 'Abstract Method invocation. ' + 
+              'FastAPI :: createRWGadgetVariable';
+    },
+
     getXML: function (url, context, handler) {
         throw 'Abstract Method invocation. ' + 
               'FastAPI :: getXML';

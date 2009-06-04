@@ -24,7 +24,7 @@
     var events = new Hash();
 
 {% for slot in gadgetSlots %}
-    var {{ slot.variableName }} = EzWebAPI.createRGadgetVariable("{{ slot.variableName }}",set{{ slot.variableName }});
+    var {{ slot.variableName }} = FastAPI.createRGadgetVariable("{{ slot.variableName }}", set{{ slot.variableName }}.bind(this));
     function set{{ slot.variableName }}(val){
         var fact = EngineFactory.getInstance().transformFact("{{ slot.semantics }}", "{{ slot.factAttr }}", val);
         EngineFactory.getInstance().manageVarFacts([fact],[]);
@@ -32,7 +32,7 @@
 {% endfor %}
 
 {% for event in gadgetEvents %}
-    var {{ event.variableName }} = EzWebAPI.createRWGadgetVariable("{{ event.variableName }}");
+    var {{ event.variableName }} = FastAPI.createRWGadgetVariable("{{ event.variableName }}");
     getEventVariables(events, "{{ event.semantics }}").set("{{ event.variableName }}", {variable: {{ event.variableName }}, fact_attr: "{{ event.factAttr }}"});
 {% endfor %}
 
