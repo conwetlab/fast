@@ -63,7 +63,8 @@ var PaletteController = Class.create(
                 "minSize":"170",
                 "maxSize":"300",
                 "splitter":"true",
-                "livesplitters":"false"
+                "livesplitters":"false",
+                "style":"width:220px;"
                 });
             this._containerNode = palettePane;
         }
