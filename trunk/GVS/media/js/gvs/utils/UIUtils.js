@@ -691,6 +691,37 @@ UIUtils.createConnectorDialog = function() {
         divConnectorType.insert(errorConnType);
         
         form2.insert(divConnectorType);
+
+        var divConnectorKind = new Element("div", {
+            "class" : "line"
+        });
+        var labelConnKind = new Element("label").update("Kind of connection:");
+        divConnectorKind.insert(labelConnKind);
+        var inputConnKind = new Element("select", {
+            id : 'ConnKind',
+            name : 'kind'
+        });
+        
+        var option_event_slot = new Element('option', {
+            value : 'event_slot'
+        });
+        option_event_slot.innerHTML = 'Event/slot';
+        inputConnKind.insert(option_event_slot);
+        
+        var option_user_context = new Element('option', {
+            value : 'user_context'
+        });
+        option_user_context.innerHTML = 'User context';
+        inputConnKind.insert(option_user_context);
+        
+        var option_application_context = new Element('option', {
+            value : 'application_context'
+        });
+        option_application_context.innerHTML = 'Application context';
+        inputConnKind.insert(option_application_context);
+        
+        divConnectorKind.insert(inputConnKind);
+        form2.insert(divConnectorKind);
         
         var divConnectorFact = new Element("div", {
             "class" : "line"
