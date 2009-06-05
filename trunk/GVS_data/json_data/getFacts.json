@@ -1,27 +1,27 @@
 {fact_metadata: [
     {
-        uri: "http://TODO/amazon#filter",
+        uri: "?Filter http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#SearchCriteria",
         label: "filter",
         shortcut: "F",
         description: "Filter Search Criteria",
         attributes: ["productType", "searchText"]
     },
     {
-        uri: "http://TODO/amazon#item",
+        uri: "?Item http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#Item",
         label: "item",
         shortcut: "I",
         description: "Amazon item fact. Normally, its identifier will be an ASIN number",
         attributes: ["ASIN", "title"]
     },
     {
-        uri: "http://TODO/amazon#shoppingCart",
+        uri: "?Cart http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#ShoppingCart",
         label: "cart",
         shortcut: "C",
         description: "Amazon shopping cart fact. It represents a non-purchased shopping cart at Amazon",
         attributes: ["id","HMAC"]
     },
     {
-        uri: "http://TODO/amazon#purchase",
+        uri: "?Purchase http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#PurchaseURL",
         label: "purchase",
         shortcut: "P",
         description: "Amazon purchase fact. It represents the URL that allows to purchase the Shopping Cart",
