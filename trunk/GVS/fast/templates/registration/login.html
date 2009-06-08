@@ -1,0 +1,54 @@
+{% load i18n %}
+<!DOCTYPE html
+    PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="{{ LANGUAGE_CODE }}" lang="{{ LANGUAGE_CODE }}">
+<head>
+<title>{% trans "FAST: Gadget Visual Storyboard" %}</title>
+<meta name="viewport" content="width=device-width" />
+<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+
+<link rel="stylesheet" type="text/css" media="screen,projection" href="{{ MEDIA_URL }}style/gvs.css" />
+
+</head>
+
+<body>
+
+<!-- HEADER -->
+<div id="header">
+  <img id="logo" src="{{ MEDIA_URL }}images/gui/fastLogo.png" alt="FAST Logo">
+  <h1>Gadget Visual Storyboard</h1>
+</div>
+
+<div id="content-main">
+	<form action="{{ app_path }}" method="post" id="login-form">
+	  <div class="form-row">
+	  	<table>
+	  		<tr><td>
+	    		<label for="id_username">{% trans 'Username:' %}</label> 
+	    	</td><td>
+	    		<input type="text" name="username" id="id_username"/>
+	    	</td></tr>
+	    	<tr><td>
+	    		<label for="id_password">{% trans 'Password:' %}</label> 
+	    	</td><td>	
+	    		<input type="password" name="password" id="id_password"/>
+	    	</td></tr>
+	    </table>
+	    <input type="submit" value="{% trans 'Log in' %}" />
+	  </div>
+	  <div class="registration">
+		{% trans 'Access with your username and password or ' %}<a href="/register">{% trans 'register' %}</a>
+	  </div>
+	  {% if expired %}
+	  <div class="message">{% trans 'Your register has expired' %}</div>
+	  {% endif %}
+	  <script type="text/javascript">
+		document.getElementById('id_username').focus()
+		</script>
+	</form>
+</div>
+
+</body>
+
+</html>

@@ -1,3 +1,4 @@
+{% load i18n %}
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"> 
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
@@ -192,6 +193,12 @@
                 <img src="{{ MEDIA_URL }}images/gui/fastLogo.png" alt="FAST Logo"/> 
                 <h1>Gadget Visual Storyboard</h1>
                 <div id="header_button"><button id="showDeployGadgetDialog" dojoType="dijit.form.Button" label="Create Gadget!"></button></div>
+                <div id="greeting">
+						<span id="user_section">
+						  {% if is_anonymous %}{% trans "anonymous" %}</span> | <a href="/accounts/login/?next=/">{% trans "Sign in" %}</a>
+						  {% else %} {% trans "Welcome" %}, {{ user.username }} | <a href="/logout">{% trans "Exit" %}</a></span>
+						  {% endif %}
+				</div>
                 <!-- Menu area -->
                 <div id="menu" dojoType="dijit.Toolbar">
                     Menu

@@ -29,6 +29,37 @@ h4{
 }
 
 /******************
+ * #login   *
+ ******************/
+.form-row {
+	width: 300px;
+	margin: auto;
+	text-align: center;
+	padding: 10px;
+}
+
+.form-row input[type="submit"]{
+	padding: 3px;
+	background-color:#D9E9F9;
+	border: 1px solid #B1BADF;
+	color: #000000;
+	margin-top: 5px;
+}
+
+.form-row table {
+	text-align: left;
+}
+
+#content-main .registration {
+	text-align:center;
+}
+
+#content-main .message {
+	color:red;
+	text-align:center;
+}
+
+/******************
  * #header area   *
  ******************/
 #header {
@@ -45,7 +76,13 @@ h4{
     position:absolute;
     right:330px;
     top:6px;
-}	
+}
+
+#user_section{
+    position:absolute;
+    right:10px;
+    top:6px;
+}
 
 #showDeployGadgetDialog{
 	font-size:18px;
@@ -317,7 +354,18 @@ h4{
         color:yellow;
     }
 
-/******************/
+/******************
+ * inspector tables		  *
+ ******************/
+.inspector_table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0px;
+}
+.inspector_table td {
+    border-bottom: 1px solid #808080;
+    padding: 1px;
+}
 
 /******************
  * facts		  *
@@ -390,15 +438,6 @@ h4{
     font-weight: bold;
     color: #243C5F;
     overflow:visible;
-}
-table {
-    width: 100%;
-    border-collapse: separate;
-    border-spacing: 0px;
-}
-table td {
-    border-bottom: 1px solid #808080;
-    padding: 1px;
 }
 .inspectorIcon {
     border-right: 1px solid #808080;
@@ -482,9 +521,15 @@ label{
     margin-top:3px;
     width:100%;
 }
-input[type="text"]{
+
+.input_GadgetInfo{
     width:26em;
 }
+
+.input_SFDialog{
+    width:26em;
+}
+
 #newSFDocDialogDiv{
     margin:5px;
     width:450px;
@@ -520,4 +565,19 @@ input[type="text"]{
     color:red;
     opacity:0;
     margin-left: 10px;
+}
+
+#help_section .help_button{
+	padding-left: 18px;
+}
+
+.help_button {
+  background: transparent url(/fast/images/gui/info.png) no-repeat scroll 0 0;
+  position: absolute;
+  right: 10px;
+  margin-left: 5px;
+  border: none;
+  display: inline;
+  vertical-align: middle;
+  cursor: pointer;
 }

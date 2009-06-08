@@ -23,4 +23,8 @@ urlpatterns = patterns('',
 
     #Admin interface
     (r'^admin/(.*)', admin.site.root),
+    
+    (r'^accounts/login/$', 'django.contrib.auth.views.login'),
+    (r'^logout$', 'commons.authentication.logout', {'login_url': '/'}),
+    (r'^admin/logout/$', 'commons.authentication.logout', {'next_page': '/'}),
 )

@@ -19,9 +19,9 @@ ADMINS = (
 MANAGERS = ADMINS
 
 DATABASE_ENGINE = 'postgresql_psycopg2'           # 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
-DATABASE_NAME = ''             # Or path to database file if using sqlite3.
-DATABASE_USER = ''             # Not used with sqlite3.
-DATABASE_PASSWORD = ''         # Not used with sqlite3.
+DATABASE_NAME = 'fast'             # Or path to database file if using sqlite3.
+DATABASE_USER = 'fast'             # Not used with sqlite3.
+DATABASE_PASSWORD = 'fast'         # Not used with sqlite3.
 DATABASE_HOST = ''             # Set to empty string for localhost. Not used with sqlite3.
 DATABASE_PORT = ''             # Set to empty string for default. Not used with sqlite3.
 
@@ -96,7 +96,30 @@ INSTALLED_APPS = (
     'django.contrib.admin',
     'fast',
     'deploy',
+    'user',
 )
+
+#Authentication
+AUTHENTICATION_BACKENDS = (  
+'django.contrib.auth.backends.ModelBackend',
+)
+
+LOGIN_REDIRECT_URL = "/"
+
+SESSION_COOKIE_AGE = 5184000    #2 months
+
+SESSION_EXPIRE_AT_BROWSER_CLOSE = False
+
+REGISTRATION_CONFIRMATION = False
+ACCOUNT_ACTIVATION_DAYS = 7
+REGISTRATION_SENDER="noreply@host.com"
+EMAIL_USE_TLS = True
+EMAIL_HOST = 'hostname'
+EMAIL_HOST_USER = 'username'
+EMAIL_HOST_PASSWORD = 'pwd'
+EMAIL_PORT = 25
+
+AUTH_PROFILE_MODULE = 'user.UserProfile'
 
 # Url to the server that holds the semantic catalogue
 CATALOGUE_URL = 'http://localhost:8082/'

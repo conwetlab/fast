@@ -77,7 +77,8 @@ UIUtils.createNewSFDocDialog = function() {
             type : "text",
             id : "SFName",
             name : "SFName",
-            value : "New Screenflow"
+            value : "New Screenflow",
+            "class" : "input_SFDialog" 
         });
         divSFName.insert(inputSFName);
         dialogDiv.insert(divSFName);
@@ -91,7 +92,8 @@ UIUtils.createNewSFDocDialog = function() {
             type : "text",
             id : "SFDomainContext",
             name : "SFDomainContext",
-            value : ""
+            value : "",
+            "class" : "input_SFDialog" 
         });
         divSFDomainContext.insert(inputSFDomainContext);
         dialogDiv.insert(divSFDomainContext);
@@ -183,7 +185,8 @@ UIUtils.createDeployGadgetDialog = function() {
             type : "text",
             id : "name",
             name : "name",
-            value : "FAST Gadget"
+            value : "FAST Gadget",
+            "class" : "input_GadgetInfo"
         });
         divGadgetName.insert(inputGadgetName);
         form1.insert(divGadgetName);
@@ -197,7 +200,8 @@ UIUtils.createDeployGadgetDialog = function() {
             type : "text",
             id : "vendor",
             name : "vendor",
-            value : "Morfeo"
+            value : "Morfeo",
+            "class" : "input_GadgetInfo"
         });
         divVendor.insert(inputVendor);
         form1.insert(divVendor);
@@ -211,7 +215,8 @@ UIUtils.createDeployGadgetDialog = function() {
             type : "text",
             id : "version",
             name : "version",
-            value : "1.0"
+            value : "1.0",
+            "class" : "input_GadgetInfo"
         });
         divVersion.insert(inputVersion);
         form1.insert(divVersion);
@@ -226,7 +231,8 @@ UIUtils.createDeployGadgetDialog = function() {
             type : "text",
             id : "info",
             name : "info",
-            value : "Write your description here..."
+            value : "Write your description here...",
+            "class" : "input_GadgetInfo"
         });
         divGadgetDescription.insert(inputGadgetDescription);
         form1.insert(divGadgetDescription);
@@ -243,7 +249,8 @@ UIUtils.createDeployGadgetDialog = function() {
             type : "text",
             id : "author",
             name : "author",
-            value : "Your Author name"
+            value : "Your Author name",
+            "class" : "input_GadgetInfo"
         });
         divAuthorName.insert(inputAuthorName);
         form1.insert(divAuthorName);
@@ -257,7 +264,8 @@ UIUtils.createDeployGadgetDialog = function() {
             type : "text",
             id : "email",
             name : "email",
-            value : "email@yourcompany.com"
+            value : "email@yourcompany.com",
+            "class" : "input_GadgetInfo"
         });
         divEmail.insert(inputEmail);
         form1.insert(divEmail);
@@ -265,7 +273,8 @@ UIUtils.createDeployGadgetDialog = function() {
         var inputDeployScreens = new Element("input", {
             type : "hidden",
             id : "deployScreens",
-            name : "screens"
+            name : "screens",
+            "class" : "input_GadgetInfo"
         });
         form1.insert(inputDeployScreens);
 

@@ -426,7 +426,9 @@ var ScreenflowDocument = Class.create(AbstractDocument,
             'id': uidGenerator.generate("properties")
         });
         
-        this._detailsTable = new Element('table');
+        this._detailsTable = new Element('table', {
+            'class': 'inspector_table'
+        });
         var tr = new Element('tr', {
             'class': 'tableHeader'
         });
@@ -471,7 +473,7 @@ var ScreenflowDocument = Class.create(AbstractDocument,
             sizeShare:"10"
         });
         content = "<div class='dijitAccordionTitle properties'>PRE / POST</div>";
-        content += "<table id='"+uidGenerator.generate("prepostContainer")+"'>";
+        content += "<table id='"+uidGenerator.generate("prepostContainer")+"' class='inspector_table'>";
         content += '<tr class="tableHeader"><td class="inspectorIcon bold">&nbsp;</td>';
         content += '<td class="inspectorName bold">PRE Name</td>';
         content += '<td class="inspectorDesc bold">Description</td>';
@@ -495,7 +497,7 @@ var ScreenflowDocument = Class.create(AbstractDocument,
         });
         content = "<div class='dijitAccordionTitle properties'>Fact Inspector</div>";
         content += "<div id='"+uidGenerator.generate("inspector")+"'>";
-        content += "<table>";
+        content += "<table class='inspector_table'>";
         content += "<tr class='tableHeader'><td class='inspectorIcon bold'>&nbsp;</td><td class='inspectorName bold'>Name</td><td class='inspectorDesc bold'>Description</td><td class='inspectorSem bold'>Semantics</td></tr>";
         content += "<tbody id='"+uidGenerator.generate("inspectorContainer")+"' style='overflow:auto'>";
         content += "</tbody>";
