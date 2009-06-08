@@ -10,14 +10,12 @@ var ScreenflowDescription = Class.create(ResourceDescription,
     initialize: function($super, /** Hash */ properties) {
         var mine = this;
         mine['screens'] = new Hash();
-        mine['connectors'] = [];
+        mine['connectors'] = new Hash();
         mine['description'] = new Hash();
         mine['label'] = new Hash();
         mine['domainContext'] = [];
         mine['creator']='';
         mine['version']='';
-        mine['preconditions'] = new Hash();
-        mine['postconditions'] = new Hash();
         $super(properties);
     },
 
@@ -211,23 +209,11 @@ var ScreenflowDescription = Class.create(ResourceDescription,
      */
     addConnector: function ( id, connector, position) {
         if(connector!=null) {
-            switch(connector.getProperties().get('type')){
-                case 'In':
-                    var preconditionInfo = {
-                        'precondition': connector,
-                        'position': position
-                    };
-                    this['preconditions'].set( id, preconditionInfo );
-                    break;
-                case 'Out':
-                    var postconditionInfo = {
-                        'postcondition': connector,
-                        'position': position
-                    };
-                    this['postconditions'].set( id, postconditionInfo );
-                    break;
-                default:
-            }
+            var connectorInfo = {
+                'connector': connector,
+                'position': position
+            };
+            this['connectors'].set( id, connectorInfo);
         }
     },
 
@@ -239,26 +225,12 @@ var ScreenflowDescription = Class.create(ResourceDescription,
      */
     updateConnector: function ( id, connector, position) {
         if(connector!=null) {
-            switch(connector.getResourceDescription().type){
-                case 'In':
-                    if (this['preconditions'].get(id) != undefined){
-                        var preconditionInfo = {
-                            'precondition': connector,
-                            'position': position
-                        };
-                        this['preconditions'].set( id, preconditionInfo );
-                    }
-                    break;
-                case 'Out':
-                    if (this['postconditions'].get(id) != undefined){
-                        var postconditionInfo = {
-                            'postcondition': connector,
-                            'position': position
-                        };
-                        this['postconditions'].set( id, postconditionInfo );
-                    }
-                    break;
-                default:
+            if (this['connectors'].get(id) != undefined){
+                var connectorInfo = {
+                    'connector': connector,
+                    'position': position
+                };
+                this['connectors'].set( id, connectorInfo);
             }
         }
     },
@@ -270,22 +242,27 @@ var ScreenflowDescription = Class.create(ResourceDescription,
      *      Screenflow description.
      */
     deleteConnector: function( id ) {
-        this['preconditions'].unset(id);
-        this['postconditions'].unset(id);
+        this['connectors'].unset(id);
     },
     
+    /**
+     * Returns the connectors of the screenflowdescription
+     * @type {connectors[]}
+     */
+    getConnectors: function () {
+        return this['connectors'];
+    },
+
     /**
      * Returns the preconditions of the screenflowdescription
      * @type {Preconditions[]}
      */
     getPreconditions: function () {
-        return this['preconditions'];
-    },
-    
-    getPrecDescs: function () {
         var precDescs = new Array();
-        $H(this.getPreconditions()).each(function(pair){
-            precDescs.push(pair.value.precondition.getProperties());
+        $H(this.getConnectors()).each(function(pair){
+            if (pair.value.connector.getProperties().get('type')=='In'){
+                precDescs.push(pair.value.connector.getProperties());
+            }
         });
         precDescs = precDescs.uniq();
         return precDescs;
@@ -296,13 +273,11 @@ var ScreenflowDescription = Class.create(ResourceDescription,
      * @type {Postconditions[]}
      */
     getPostconditions: function () {
-        return this['postconditions'];
-    },
-    
-    getPostDescs: function () {
         var postDescs = new Array();
-        $H(this.getPostconditions()).each(function(pair){
-            postDescs.push(pair.value.postcondition.getProperties());
+        $H(this.getConnectors()).each(function(pair){
+            if (pair.value.connector.getProperties().get('type')=='Out'){
+                postDescs.push(pair.value.connector.getProperties());
+            }
         });
         postDescs = postDescs.uniq();
         return postDescs;
@@ -320,8 +295,8 @@ var ScreenflowDescription = Class.create(ResourceDescription,
         data.description = this.getDescription();
         data.creator = this.getCreator();
         data.version = this.getVersion();
-        data.preconditions = this.getPrecDescs();
-        data.postconditions = this.getPostDescs();
+        data.preconditions = this.getPreconditions();
+        data.postconditions = this.getPostconditions();
         data.definition = new Object();
         data.definition.screens = this.getScreenDescriptions();
         //data.definition.connectors = ;
