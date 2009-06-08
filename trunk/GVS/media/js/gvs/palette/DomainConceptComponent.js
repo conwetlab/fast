@@ -34,7 +34,9 @@ var DomainConceptComponent = Class.create(PaletteComponent,
         properties.set('type','None');
         properties.set('shortcut',this.getResourceDescription().shortcut);
         properties.set('semantics',this.getResourceDescription().semantics);
-        properties.set('factAttr',this.getResourceDescription().attributes);
+        // By default, the factAttr of the instance will be 'All atributtes'
+        // represented by an empty string in the Engine.js.
+        properties.set('factAttr','');
         instance.setProperties(properties);
 
         return instance;
