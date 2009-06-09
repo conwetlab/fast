@@ -53,7 +53,9 @@ var EngineFactory = function () {
 		Engine.prototype.manageVarFacts = function (addedFacts, deletedFacts){
 			this.manageFacts(addedFacts, deletedFacts);
 			var func = this.loaders.get(this.menu.getActiveTab().title);
-			func();
+			if(func){
+				func();
+			}
 		}
 		
 		Engine.prototype.manageFacts = function (addedFacts, deletedFacts){
@@ -141,11 +143,13 @@ var EngineFactory = function () {
 				this.emptyTab = this.menu.addTab({title: 'Gadget Message', html:'No reachable screens'});
 				this.menu.setActiveTab(this.emptyTab);
 			} else {
+				var emptyTabDeleted = false;
 				if(this.emptyTab != null){
 					this.menu.destroyTab(this.emptyTab);
 					this.emptyTab = null;
+					emptyTabDeleted = true;
 				}
-				if(screenNumber==1){
+				if(screenNumber==1 || emptyTabDeleted){
 					this.menu.setActiveTab(this.screenTabs.get(keys[0]));
 				}
 			}
