@@ -19,28 +19,13 @@ var _fastAPI_ezweb = Class.create(_fastAPI,{
         }
         
         function onError(transport) {
-            //FIXME
+            //TODO
             null;
         }
     },
 
-    getText: function (url, handler) {
-        //TODO: Do something
-        null;
-    },
-
-    getJson: function (url, handler) {
-        //TODO: Do something
-        null;
-    },
-
-    getFeed: function (url, handler) {
-        //TODO: Do something
-        null;
-    },
-
-    request: function (url, handler) {
-        //TODO: Do something
+    getText: function (url, context, handler) {
+        //TODO
         null;
     }
 });
