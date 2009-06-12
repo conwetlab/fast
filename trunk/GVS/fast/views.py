@@ -66,8 +66,8 @@ def signup(request):
                     key_expires = datetime.datetime.today() + datetime.timedelta(settings.ACCOUNT_ACTIVATION_DAYS)                                                                                                                         
                     new_profile = UserProfile(user=user,activation_key=activation_key,key_expires=key_expires)
                     new_profile.save()
-
-                    confirm_url =  ('%s://%s/confirm/%s') % (lower(split(request.META['SERVER_PROTOCOL'],'/')[0]), request.META['HTTP_HOST'], new_profile.activation_key)
+                    
+                    confirm_url = request.build_absolute_uri('/confirm/' + new_profile.activation_key)
                     email_subject = _("Your new FAST account confirmation")
                     email_body = _("Hello, %s, and thanks for signing up for an FAST account.\n\nTo activate your account, click this link within %s days:\n\n%s") % (user.username, settings.ACCOUNT_ACTIVATION_DAYS, confirm_url)
                     
