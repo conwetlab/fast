@@ -24,7 +24,11 @@
     var events = new Hash();
 
 {% for slot in gadgetSlots %}
-    var {{ slot.variableName }} = FastAPI.createRGadgetVariable("{{ slot.variableName }}", set{{ slot.variableName }}.bind(this));
+{% comment %}
+    var {{ slot.variableName }} = FastAPI.createRGadgetVariable("{{ slot.variableName }}", set{{ slot.variableName }});
+{% endcomment %}
+    var {{ slot.variableName }}_IO = new FastAPI.IO("{{ slot.variableName }}");
+    var {{ slot.variableName }} = {{ slot.variableName }}_IO.createInVariable(set{{ slot.variableName }});
     function set{{ slot.variableName }}(val){
         var fact = EngineFactory.getInstance().transformFact("{{ slot.semantics }}", "{{ slot.factAttr }}", val);
         EngineFactory.getInstance().manageVarFacts([fact],[]);
@@ -32,7 +36,11 @@
 {% endfor %}
 
 {% for event in gadgetEvents %}
+{% comment %}
     var {{ event.variableName }} = FastAPI.createRWGadgetVariable("{{ event.variableName }}");
+{% endcomment %}
+    var {{ event.variableName }}_IO = new FastAPI.IO("{{ event.variableName }}");
+    var {{ event.variableName }} = {{ event.variableName }}_IO.createOutVariable();
     getEventVariables(events, "{{ event.semantics }}").set("{{ event.variableName }}", {variable: {{ event.variableName }}, fact_attr: "{{ event.factAttr }}"});
 {% endfor %}
 

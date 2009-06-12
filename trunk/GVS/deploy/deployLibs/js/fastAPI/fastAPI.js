@@ -1,40 +1,78 @@
-var _fastAPI = Class.create({
-    
-    initialize: function() {
+var FastBaseAPI = {};
+
+FastBaseAPI.IO = Class.create({
+    /**
+     * Creates an IO variable
+     * @param variable
+     *      variable name to be created
+     */
+    initialize: function(variable) {
+        this.variable = variable;
     },
 
-    createRGadgetVariable: function ( /** string */ variable, /** string */ method) {
+    createInVariable: function (handler) {
         throw 'Abstract Method invocation. ' + 
-              'FastAPI :: createRGadgetVariable';
+              'FastAPI :: createInVariable';
     },
 
-    createRWGadgetVariable: function ( /** string */ variable) {
+    createOutVariable: function () {
         throw 'Abstract Method invocation. ' + 
-              'FastAPI :: createRWGadgetVariable';
-    },
+              'FastAPI :: createOutVariable';
+    }
+});
 
-    getXML: function (url, context, handler) {
-        throw 'Abstract Method invocation. ' + 
-              'FastAPI :: getXML';
+FastBaseAPI.Request = Class.create({
+    initialize: function(url, options) {
+        this.url = url;
+        
+        /*
+         * Firstly, only 2 callback methods will be considered:
+         *  - onSuccess
+         *  - onFailure
+         */
+        this.options = {
+            method:         'post',
+            asynchronous:   true,
+            contentType:    'application/x-www-form-urlencoded',
+            encoding:       'UTF-8',
+            parameters:     '',
+            content:        'xml',
+            onSuccess:      Prototype.emptyFunction,
+            onFailure:      Prototype.emptyFunction
+        };
+        Object.extend(this.options, options || { });
+
+        this.options.method = this.options.method.toLowerCase();
+        
+        if (Object.isString(this.options.parameters))
+            this.options.parameters = this.options.parameters.toQueryParams();
+        else if (Object.isHash(this.options.parameters))
+            this.options.parameters = this.options.parameters.toObject();
+        this.setRequestHeaders();
+        this.request();
     },
     
-    getText: function (url, handler) {
-        throw 'Abstract Method invocation. ' + 
-              'FastAPI :: getText';
+    /*        
+     * sets the default headers, this method can be overriden and augmented by the implementations.
+     *  - Accept defaults to 'text/javascript, text/html, application/xml, text/xml, *\/*'
+     *  - Content-type is built based on the contentType and encoding options.
+     */
+    setRequestHeaders: function() {
+        var headers = {
+            'Accept': 'text/javascript, text/html, application/xml, text/xml, application/json, */*'
+        };
+        
+        if (this.options.method == 'post') {
+            headers['Content-type'] = this.options.contentType +
+                (this.options.encoding ? '; charset=' + this.options.encoding : '');
+        }
+        
+        Object.extend(headers, this.options.requestHeaders || { });
+        this.options.requestHeaders = headers;
     },
     
-    getJson: function (url, handler) {
+    request: function() {
         throw 'Abstract Method invocation. ' + 
-              'FastAPI :: getJson';
-    },
-    
-    getFeed: function (url, handler) {
-        throw 'Abstract Method invocation. ' + 
-              'FastAPI :: getFeed';
-    },
-    
-    request: function (url, request) {
-        throw 'Abstract Method invocation. ' + 
-              'FastAPI :: request';
+              'FastAPI.Request :: request';
     }
 });
