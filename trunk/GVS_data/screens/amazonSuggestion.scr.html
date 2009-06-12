@@ -90,7 +90,13 @@
 				url += "&Version=2008-06-26";
 
 				//Invoke the service
-                FastAPI.getXML(url, this, suggestionList.addToList);
+                new FastAPI.Request(url,{
+                    'method':       'get',
+                    'content':      'xml',
+                    'context':      this,
+                    'onSuccess':    suggestionList.addToList
+                });
+                //FastAPI.getXML(url, this, suggestionList.addToList);
             }
             
             SuggestionList.prototype.addToList = function (transport){

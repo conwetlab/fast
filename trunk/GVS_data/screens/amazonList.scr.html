@@ -94,7 +94,13 @@
         //Add the current version of the API
         url += "&Version=2008-06-26";
         //Invoke the service
-        FastAPI.getXML(url, this, list.addToList);
+        new FastAPI.Request(url,{
+            'method':       'get',
+            'content':      'xml',
+            'context':      this,
+            'onSuccess':    list.addToList
+        });
+        //FastAPI.getXML(url, this, list.addToList);
     }
     List.prototype.addToList = function (transport){
         var xml = transport;

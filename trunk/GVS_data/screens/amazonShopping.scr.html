@@ -88,7 +88,13 @@
 					url += "&HMAC=" + cart.HMAC;
 					
 					//Invoke the service
-                   	FastAPI.getXML(url, this, shoppingCart.fetch);
+           	        new FastAPI.Request(url,{
+                        'method':       'get',
+                        'content':      'xml',
+                        'context':      this,
+                        'onSuccess':    shoppingCart.fetch
+                    });
+                   	//FastAPI.getXML(url, this, shoppingCart.fetch);
 				}	
 			}
 			
@@ -121,7 +127,13 @@
 						url += "&Item." + (i+1) + ".Quantity=" + $F(shoppingCart.productList[i]["id"]);
 					}
 					//Create the call
-                   	FastAPI.getXML(url, this, shoppingCart.fetch);
+                    new FastAPI.Request(url,{
+                        'method':       'get',
+                        'content':      'xml',
+                        'context':      this,
+                        'onSuccess':    shoppingCart.fetch
+                    });
+                   	//FastAPI.getXML(url, this, shoppingCart.fetch);
 				}
 			}
 			
@@ -160,7 +172,13 @@
 				url += "&HMAC=" + cart.HMAC;
 				
 				//Create the call
-                FastAPI.getXML(url, this, shoppingCart.addToList);
+                new FastAPI.Request(url,{
+                    'method':       'get',
+                    'content':      'xml',
+                    'context':      this,
+                    'onSuccess':    shoppingCart.addToList
+                });
+                //FastAPI.getXML(url, this, shoppingCart.addToList);
             }
             
             ShoppingCart.prototype.addToList = function (transport){

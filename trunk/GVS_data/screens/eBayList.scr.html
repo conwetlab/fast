@@ -63,7 +63,13 @@
 				url += "&QueryKeywords=" + escape(item.title.replace(/ /g,"+"));
 
 				//Invoke the service
-                FastAPI.getXML(url, this, eBayList.addToList);
+                new FastAPI.Request(url,{
+                    'method':       'get',
+                    'content':      'xml',
+                    'context':      this,
+                    'onSuccess':    eBayList.addToList
+                });
+                //FastAPI.getXML(url, this, eBayList.addToList);
             }
             
             EBayList.prototype.addToList = function (transport){

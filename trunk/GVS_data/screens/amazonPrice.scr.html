@@ -97,7 +97,13 @@
 				url += "&Version=2008-06-26";
 
 				//Invoke the service
-                FastAPI.getXML(url, this, priceComparative.addToList);
+		        new FastAPI.Request(url,{
+		            'method':       'get',
+		            'content':      'xml',
+		            'context':      this,
+		            'onSuccess':    priceComparative.addToList
+		        });
+                //FastAPI.getXML(url, this, priceComparative.addToList);
             }
             
             PriceComparative.prototype.addToList = function (transport){
@@ -201,7 +207,13 @@
 					url += "&Item.1.Quantity=" + 1;
 					
 					//Invoke the service
-                	FastAPI.getXML(url, this, priceComparative.productAdded);
+					new FastAPI.Request(url,{
+	                    'method':       'get',
+	                    'content':      'xml',
+	                    'context':      this,
+	                    'onSuccess':    priceComparative.productAdded
+	                });
+                	//FastAPI.getXML(url, this, priceComparative.productAdded);
 				}
 				else { //Cart doesn't exist: Create a new cart with the product
 					var url = "http://webservices.amazon.com/onca/xml?Service=AWSECommerceService";
@@ -219,7 +231,13 @@
 					url += "&Item.1.Quantity=" + 1;
 					
 					//Invoke the service
-                	FastAPI.getXML(url, this, priceComparative.cartCreated);
+	                new FastAPI.Request(url,{
+	                    'method':       'get',
+	                    'content':      'xml',
+	                    'context':      this,
+	                    'onSuccess':    priceComparative.cartCreated
+	                });
+                	//FastAPI.getXML(url, this, priceComparative.cartCreated);
 				}
 			}
 			
