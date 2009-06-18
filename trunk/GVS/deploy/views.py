@@ -60,20 +60,20 @@ def deployGadget(request):
 
                     url = screen['code']
                     print url
-                    data = ""
-                    charset = "utf-8"
+                    data = ''
+                    charset = u'utf-8'
                     try:
                         req = urllib2.Request(url)
                         response = urllib2.urlopen(req)
                         data = response.read()
                         info = response.info()
-                        print "INFO: ", info
+                        print 'INFO: ', str(info)
                         ignore, charset = info['Content-Type'].split('charset=')
-                        print "CHARSET: ", charset
-                        screen['allCode']=smart_unicode(data)
+                        print 'CHARSET: ', str(charset)
+                        screen['allCode']=smart_unicode(data, charset)
                     except:
-                        print "Default CHARSET: ", charset
-                        screen['allCode']=smart_unicode(data)
+                        print 'Default CHARSET: ', str(charset)
+                        screen['allCode']=smart_unicode(data, charset)
             else:
                 screens=[]
             if (definition.has_key('connectors')):
