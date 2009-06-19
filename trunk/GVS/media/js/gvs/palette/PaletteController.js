@@ -69,6 +69,28 @@ var PaletteController = Class.create(
             this._containerNode = palettePane;
         }
         return this._containerNode;
+    },
+    
+    /**
+     * Updates the reachability of each palette component
+     */
+    updateReachability: function(/** map id->value*/screenList){
+        //TODO: Currently, only the screen palette is updated...
+        var screens = this.getPalette("screen").getComponents();
+        for (var i = 0; i < screens.length; i++) {
+            for (var j = 0; j < screenList.length; j++) {
+                if (screens[i].getResourceDescription().uri == screenList[j].uri) {
+                    if (screenList[j].reachability == true) {
+                        screens[i].getResourceDescription().satisfeable = true;
+                        break;
+                    }
+                    else {
+                        screens[i].getResourceDescription().satisfeable = false;
+                    }
+                }
+            }
+            UIUtils.colorizeScreen(screens[i]);
+        }
     }
 
     // **************** PRIVATE METHODS **************** //

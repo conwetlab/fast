@@ -91,7 +91,7 @@ var GVSSingleton = function() {
          * @private
          */
         _newScreenflow: function (){
-            UIUtils.showNewSFDocDialog();
+            this.getDocumentController().showNewSFDocDialog();
         },
         
         /** 

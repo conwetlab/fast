@@ -505,6 +505,24 @@ var ScreenflowDocument = Class.create(AbstractDocument,
         content += "</div>";
         factsPane.setContent(content);
         return factsPane;
+    },
+    
+    updateReachability: function(/** map id->value*/screenList){
+        var screens = this.getScreens();
+        for (var i = 0; i < screens.length; i++) {
+            for (var j = 0; j < screenList.length; j++) {
+                if (screens[i].getResourceDescription().uri == screenList[j].uri) {
+                    if (screenList[j].reachability == true) {
+                        screens[i].getResourceDescription().satisfeable = true;
+                        break;
+                    }
+                    else {
+                        screens[i].getResourceDescription().satisfeable = false;
+                    }
+                }
+            }
+            UIUtils.colorizeScreen(screens[i]);
+        }
     }
 });
 
