@@ -4,7 +4,7 @@ from os import path, mkdir
 from gadget import copyLibraries
 from django.utils.encoding import smart_str
 
-def createIgoogleGadget(gadgetName, gadgetUri, gadgetPath, label, vendor, version, description, author, email, screens, prec, post):
+def createIgoogleGadget(gadgetName, gadgetUri, gadgetPath, label, vendor, version, description, creator, email, screens, prec, post):
     #print "creating gadget for igoogle..."
     mashup='igoogle'
 
@@ -15,7 +15,7 @@ def createIgoogleGadget(gadgetName, gadgetUri, gadgetPath, label, vendor, versio
     templateUri = gadgetUri + '/' + gadgetName + '.xml'
     #print templateUri 
     
-    iGoogleTemplate = getiGoogleTemplate(gadgetUri, templateUri, label['en-GB'], vendor, version, description['en-GB'], author, email, screens)
+    iGoogleTemplate = getiGoogleTemplate(gadgetUri, templateUri, label['en-GB'], vendor, version, description['en-GB'], creator, email, screens)
 
     templateFile = open(path.join(gadgetPath, gadgetName + '.xml'), 'w')
     templateFile.write(smart_str(iGoogleTemplate,'utf-8'))
@@ -26,7 +26,7 @@ def createIgoogleGadget(gadgetName, gadgetUri, gadgetPath, label, vendor, versio
     return templateUri
 
 #TODO Use pre and postconditions
-def getiGoogleTemplate(gadgetUri, templateUri, label, vendor, version, description, author, email, screens):
+def getiGoogleTemplate(gadgetUri, templateUri, label, vendor, version, description, creator, email, screens):
     #FIXME
     gadgetUri = "http://ezgadget.googlecode.com/svn/trunk/ezgadget/GVS"
     igoogleContext = Context({'gadgetUri': gadgetUri,
@@ -34,7 +34,7 @@ def getiGoogleTemplate(gadgetUri, templateUri, label, vendor, version, descripti
                             'gadgetTitle': label,
                             'gadgetVendor': vendor,
                             'gadgetVersion': version,
-                            'gadgetAuthor': author,
+                            'gadgetCreator': creator,
                             'gadgetMail': email,
                             'gadgetDescription': description,
                             'gadgetScreens':screens})

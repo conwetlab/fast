@@ -2,7 +2,7 @@
 <Module>
 <ModulePrefs title="{{ gadgetTitle }}"
         title_url="{{ gadgetTemplateURI }}"
-        author="{{ gadgetAuthor }}"
+        author="{{ gadgetCreator }}"
         author_email="{{ gadgetMail }}"
         description="{{ gadgetDescription }}"
         scrolling="true" height="400">

@@ -184,7 +184,7 @@
                 GVSSingleton.getInstance().init();
                 var prefs = PreferencesSingleton.getInstance();
                 //Adding the events
-                $("showDeployGadgetDialog").observe("click",UIUtils.showDeployGadgetDialog);
+                dojo.connect(dojo.byId("showDeployGadgetDialog"),"onclick", GVSSingleton.getInstance().getDocumentController().showDeployCurrentDocDialog.bind(GVSSingleton.getInstance().getDocumentController()));
                 dojo.connect(dojo.byId("toolbar.preferences"),"onclick", prefs.showDialog.bind(prefs));
             });
 

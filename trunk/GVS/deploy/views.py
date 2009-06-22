@@ -46,10 +46,10 @@ def deployGadget(request):
             email = json['email']
         else:
             email = "author@email.com"
-        if (json.has_key('author')):
-            author = json['author']
+        if (json.has_key('creator')):
+            creator = json['creator']
         else:
-            author = "Author"
+            creator = "Creator"
         if (json.has_key('definition')):
             definition = json['definition']
             if (definition.has_key('screens')):
@@ -92,8 +92,8 @@ def deployGadget(request):
         base_uri = request.build_absolute_uri('/static')
         #TODO: create uri with python api
         gadgetUri = base_uri + '/' + gadgetName
-        ezwebUri = createEzwebGadget(gadgetName, gadgetUri, gadgetPath, label, vendor, version, description, author, email, screens, prec, post)
-        igoogleUri = createIgoogleGadget(gadgetName, gadgetUri, gadgetPath, label, vendor, version, description, author, email, screens, prec, post)
+        ezwebUri = createEzwebGadget(gadgetName, gadgetUri, gadgetPath, label, vendor, version, description, creator, email, screens, prec, post)
+        igoogleUri = createIgoogleGadget(gadgetName, gadgetUri, gadgetPath, label, vendor, version, description, creator, email, screens, prec, post)
         
         gadgetContext = Context({'ezwebGadgetURL': ezwebUri,'igoogleGadgetURL': igoogleUri})
         return render_to_response('deploy.html', gadgetContext);

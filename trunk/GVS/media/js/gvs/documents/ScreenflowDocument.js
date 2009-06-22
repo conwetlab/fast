@@ -21,6 +21,13 @@ var ScreenflowDocument = Class.create(AbstractDocument,
         this._selectedElement = null;
         this._paletteController = new PaletteController(this.getTabId());
         this._populate();
+        
+        /**
+         * Dialog to create a new document
+         * @type FormDialog
+         * @private
+         */
+        this._DeployGadgetDialog = null;
     },
 
 
@@ -31,6 +38,22 @@ var ScreenflowDocument = Class.create(AbstractDocument,
      */
     getResourceDescription: function () {
         return this._resourceDescription;
+    },
+    
+    updateResourceDescription: function () {
+        var form = this.getDeployGadgetDialog().getForm();
+        this.getResourceDescription().setLabel("en-GB", $F(form.name));
+        this.getResourceDescription().setVersion($F(form.version));
+        this.getResourceDescription().setDescription("en-GB", $F(form.info));
+        this.getResourceDescription().setCreator($F(form.author));
+    },
+    
+    /**
+     * Returns the Gadget Deployment Dialog
+     * @type {FormDialog}
+     */
+    getDeployGadgetDialog: function (){
+        return this._DeployGadgetDialog;
     },
 
     /**
@@ -330,6 +353,188 @@ var ScreenflowDocument = Class.create(AbstractDocument,
         }
     },
 
+    updateReachability: function(/** map id->value*/screenList){
+        var screens = this.getScreens();
+        for (var i = 0; i < screens.length; i++) {
+            for (var j = 0; j < screenList.length; j++) {
+                if (screens[i].getResourceDescription().uri == screenList[j].uri) {
+                    if (screenList[j].reachability == true) {
+                        screens[i].getResourceDescription().satisfeable = true;
+                        break;
+                    }
+                    else {
+                        screens[i].getResourceDescription().satisfeable = false;
+                    }
+                }
+            }
+            UIUtils.colorizeScreen(screens[i]);
+        }
+    },
+    
+    showDeployGadgetDialog: function(){
+        if (this._DeployGadgetDialog == null) {
+            this._DeployGadgetDialog = new FormDialog({
+                "title": "Deploy Gadget",
+                "style": "display:none;"
+            });
+            
+            var dialogDiv = new Element("div");
+            var h2 = new Element("h2").update("Fulfill Gadget Information");
+            dialogDiv.appendChild(h2);
+            
+            var divWizardInfo = new Element('div');
+            var divInfo = new Element("div", {
+                "class": "line"
+            }).update("Please fulfill the required information in order to" +
+            " deploy a gadget.");
+            
+            divWizardInfo.insert(divInfo);
+
+            var form1 = new Element('form', {
+                method: "post"
+            });
+            var hGadgetInformation = new Element('h3').update("Gadget information");
+            form1.insert(hGadgetInformation);
+            
+            var divGadgetName = new Element("div", {
+                "class": "line"
+            });
+            var labelGadgetName = new Element("label").update("Gadget Name:");
+            divGadgetName.insert(labelGadgetName);
+            var inputGadgetName = new Element("input", {
+                type: "text",
+                name: "name",
+                value: this.getTitle(),
+                "class": "input_GadgetInfo"
+            });
+            divGadgetName.insert(inputGadgetName);
+            form1.insert(divGadgetName);
+            
+            var divVendor = new Element("div", {
+                "class": "line"
+            });
+            var labelVendor = new Element("label").update("Vendor:");
+            divVendor.insert(labelVendor);
+            var inputVendor = new Element("input", {
+                type: "text",
+                name: "vendor",
+                value: "Morfeo",
+                "class": "input_GadgetInfo"
+            });
+            divVendor.insert(inputVendor);
+            form1.insert(divVendor);
+            
+            var divVersion = new Element("div", {
+                "class": "line"
+            });
+            var labelVersion = new Element("label").update("Version:");
+            divVersion.insert(labelVersion);
+            var inputVersion = new Element("input", {
+                type: "text",
+                name: "version",
+                value: "1.0",
+                "class": "input_GadgetInfo"
+            });
+            divVersion.insert(inputVersion);
+            form1.insert(divVersion);
+            
+            var divGadgetDescription = new Element("div", {
+                "class": "line"
+            });
+            var labelGadgetDescription = new Element("label").update("Gadget Description:");
+            divGadgetDescription.insert(labelGadgetDescription);
+            var inputGadgetDescription = new Element("input", {
+                type: "text",
+                name: "info",
+                value: "Write your description here...",
+                "class": "input_GadgetInfo"
+            });
+            divGadgetDescription.insert(inputGadgetDescription);
+            form1.insert(divGadgetDescription);
+            
+            var hAuthorInformation = new Element('h3').update("Author information");
+            form1.insert(hAuthorInformation);
+            
+            var divAuthorName = new Element("div", {
+                "class": "line"
+            });
+            var labelAuthorName = new Element("label").update("Author Name:");
+            divAuthorName.insert(labelAuthorName);
+            var inputAuthorName = new Element("input", {
+                type: "text",
+                name: "author",
+                value: "Your Author name",
+                "class": "input_GadgetInfo"
+            });
+            divAuthorName.insert(inputAuthorName);
+            form1.insert(divAuthorName);
+            
+            var divEmail = new Element("div", {
+                "class": "line"
+            });
+            var labelEmail = new Element("label").update("E-Mail:");
+            divEmail.insert(labelEmail);
+            var inputEmail = new Element("input", {
+                type: "text",
+                name: "email",
+                value: "email@yourcompany.com",
+                "class": "input_GadgetInfo"
+            });
+            divEmail.insert(inputEmail);
+            form1.insert(divEmail);
+            
+            var inputDeployScreens = new Element("input", {
+                type: "hidden",
+                name: "screens",
+                "class": "input_GadgetInfo"
+            });
+            form1.insert(inputDeployScreens);
+            
+            var inputDeploySlots = new Element("input", {
+                type: "hidden",
+                name: "slots"
+            });
+            form1.insert(inputDeploySlots);
+            
+            var inputDeployEvents = new Element("input", {
+                type: "hidden",
+                name: "events"
+            });
+            form1.insert(inputDeployEvents);
+            
+            divWizardInfo.insert(form1);
+            dialogDiv.appendChild(divWizardInfo);
+            
+            var divWizardButtons = new Element("div");
+            var mine = this;
+            var sendButton = new dijit.form.Button({
+                'label': 'Send',
+                onClick: function(){
+                    ScreenflowDocument.prototype.updateResourceDescription.apply(mine, arguments);
+                    ScreenflowDocument.prototype.deployGadget.apply(mine, arguments);
+                    ScreenflowDocument.prototype.hideDeployGadgetDialog.apply(mine, arguments);
+                }
+            });
+            divWizardButtons.insert(sendButton.domNode);
+            var cancelButton = new dijit.form.Button({
+                'label': 'Cancel',
+                onClick: function(){
+                    ScreenflowDocument.prototype.hideDeployGadgetDialog.apply(mine, arguments);
+                }
+            });
+            divWizardButtons.appendChild(cancelButton.domNode);
+            dialogDiv.appendChild(divWizardButtons);
+            this._DeployGadgetDialog.getDialog().setContent(dialogDiv);
+        } else {
+            this._DeployGadgetDialog.getForm().name.setValue(this.getTitle());
+        }
+        this._DeployGadgetDialog.show();
+    },
+    
+    hideDeployGadgetDialog: function(){
+        this._DeployGadgetDialog.hide();
+    },
+
     // **************** PRIVATE METHODS **************** //
     /**
      * Constructs the document content.
@@ -505,24 +710,6 @@ var ScreenflowDocument = Class.create(AbstractDocument,
         content += "</div>";
         factsPane.setContent(content);
         return factsPane;
-    },
-    
-    updateReachability: function(/** map id->value*/screenList){
-        var screens = this.getScreens();
-        for (var i = 0; i < screens.length; i++) {
-            for (var j = 0; j < screenList.length; j++) {
-                if (screens[i].getResourceDescription().uri == screenList[j].uri) {
-                    if (screenList[j].reachability == true) {
-                        screens[i].getResourceDescription().satisfeable = true;
-                        break;
-                    }
-                    else {
-                        screens[i].getResourceDescription().satisfeable = false;
-                    }
-                }
-            }
-            UIUtils.colorizeScreen(screens[i]);
-        }
     }
 });
 

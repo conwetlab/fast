@@ -203,14 +203,14 @@ var DocumentController = Class.create(
     },
 
     /**
-     * Deploy the currently focused document.
+     * Shows the deployment dialog of the currently focused document.
      */
-    deployCurrentDocument: function(){
+    showDeployCurrentDocDialog: function(){
         switch(this._currentDocument.getDocumentType()) {
             case 'welcome':
                 break;
             case 'screenflow':
-                this.getCurrentDocument().deployGadget();
+                this.getCurrentDocument().showDeployGadgetDialog();
                 break;
             // TODO: there can be something similar for other documents...?
             default:

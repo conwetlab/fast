@@ -308,7 +308,6 @@ var ScreenflowDescription = Class.create(ResourceDescription,
      * @public
      */
     deployGadget: function () {
-        UIUtils.hideDeployGadgetDialog();
         console.log("gadget deployment");
         var screensdesc = this.getScreenDescriptions();
         var screenList = '';
@@ -340,12 +339,7 @@ var ScreenflowDescription = Class.create(ResourceDescription,
             //LogManagerFactory.getInstance().log(msg);
             alert (msg);
         }
-        var form = $('gadgetDeployForm');
-        //TODO: deal with en-GB tags and so on
-        this.setLabel("en-GB",form.name.value);
-        this.setVersion(form.version.value);
-        this.setDescription("en-GB",form.info.value);
-        this.setCreator(form.author.value);
+
         var datajson = this.toJSON();
         var result = {gadget: datajson};
         console.log(result);

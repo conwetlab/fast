@@ -4,7 +4,7 @@ from os import path, mkdir
 from gadget import copyLibraries
 from django.utils.encoding import smart_str
 
-def createEzwebGadget(gadgetName, gadgetUri, gadgetPath, label, vendor, version, description, author, email, screens, prec, post):
+def createEzwebGadget(gadgetName, gadgetUri, gadgetPath, label, vendor, version, description, creator, email, screens, prec, post):
     #print "creating gadget for ezweb..."
     mashup='ezweb'
 
@@ -17,7 +17,7 @@ def createEzwebGadget(gadgetName, gadgetUri, gadgetPath, label, vendor, version,
     #print htmlUri
     #print templateUri 
     
-    ezWebTemplate = getEzWebTemplate(htmlUri, label['en-GB'], vendor, version, description['en-GB'], author, email, prec, post)
+    ezWebTemplate = getEzWebTemplate(htmlUri, label['en-GB'], vendor, version, description['en-GB'], creator, email, prec, post)
     templateFile = open(path.join(gadgetPath, gadgetName + '.xml'), 'w')
     templateFile.write(smart_str(ezWebTemplate,'utf-8'))
     templateFile.close()
@@ -31,12 +31,12 @@ def createEzwebGadget(gadgetName, gadgetUri, gadgetPath, label, vendor, version,
 
     return templateUri
   
-def getEzWebTemplate(url, label, vendor, version, description, author, email, prec, post):
+def getEzWebTemplate(url, label, vendor, version, description, creator, email, prec, post):
     ezWebContext = Context({'gadgetUri': url,
                             'gadgetTitle': label,
                             'gadgetVendor': vendor,
                             'gadgetVersion': version,
-                            'gadgetAuthor': author,
+                            'gadgetCreator': creator,
                             'gadgetMail': email,
                             'gadgetDescription': description,
                             'gadgetSlots': prec,

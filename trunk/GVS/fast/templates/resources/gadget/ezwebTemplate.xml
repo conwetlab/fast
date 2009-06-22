@@ -5,7 +5,7 @@
         <Vendor>{{ gadgetVendor }}</Vendor>
         <Name>{{ gadgetTitle }}</Name>
         <Version>{{ gadgetVersion }}</Version>
-        <Author>{{ gadgetAuthor }}</Author>
+        <Author>{{ gadgetCreator }}</Author>
         <Mail>{{ gadgetMail }}</Mail>
         <Description>{{ gadgetDescription }}</Description>
         <ImageURI>http://demo.ezweb.morfeo-project.org/repository/fast/amazon/amazon.png</ImageURI>
