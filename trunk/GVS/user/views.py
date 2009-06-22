@@ -35,4 +35,4 @@ class Preferences(Resource):
             return HttpResponse(ok, mimetype='application/json; charset=UTF-8')
     
         except Exception, ex:
-            return HttpResponseServerError(serializers.serialize("json", {"message":unicode(ex)}), mimetype='application/json; charset=UTF-8')
+            return HttpResponseServerError(json_encode({"message":unicode(ex)}), mimetype='application/json; charset=UTF-8')
