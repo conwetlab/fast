@@ -83,10 +83,6 @@ var GVSSingleton = function() {
             return this._documentController;
         },
         
-        showDeployCurrentDocDialog: function () {
-            this._documentController.showDeployCurrentDocDialog();
-        },
-        
         // **************** PRIVATE METHODS **************** //
 
         /** 

@@ -19,7 +19,6 @@ UIUtils.selectElement = function(resourceId) {
     if (resourceId) {
         currentDocument.setSelectedElement($(resourceId));
         currentDocument.getSelectedElement().addClassName("selected");
-        UIUtils.inspectorAreaUpdate(resourceId);
     } else {
         currentDocument.setSelectedElement(null);
     }
