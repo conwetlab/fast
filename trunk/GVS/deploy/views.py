@@ -12,7 +12,7 @@ import urllib2
 from python_rest_client.restful_lib import Connection
 
 def deployGadget(request):
-    print "gadget creation request"
+    #print "gadget creation request"
     try:
         #If folder "static" does not exist, create it
         staticPath=path.join(settings.BASEDIR,'static')
@@ -21,10 +21,10 @@ def deployGadget(request):
         
         #Getting the gadget parameters
         if request.POST.has_key('gadget'):
-            print "reading screenflow json"
+            #print "reading screenflow json"
             json = simplejson.loads(request.POST['gadget'])
         else:
-            print "Gadget parameter expected in screenflow json"
+            #print "Gadget parameter expected in screenflow json"
             raise Exception ('Gadget parameter expected in screenflow json')
         if (json.has_key('label')):
             label = json['label']
@@ -78,7 +78,7 @@ def deployGadget(request):
             post = json['postconditions']
         else:
             post = []
-        print "parameters correctly obtained from json"
+        #print "parameters correctly obtained from json"
 
         gadgetName = (vendor + '-' + label['en-GB'] + '-' + version).replace(' ', '_')
         gadgetPath = path.join(staticPath,gadgetName)
@@ -86,7 +86,7 @@ def deployGadget(request):
         if (not path.isdir(gadgetPath)):
             mkdir(gadgetPath)
         else:
-            print "Gadget already exists"
+            #print "Gadget already exists"
             raise Exception ('Gadget already exists')
         
         base_uri = request.build_absolute_uri('/static')
@@ -99,14 +99,14 @@ def deployGadget(request):
         return render_to_response('deploy.html', gadgetContext);
 
     except Exception, e:
-        print e.message
+        #print e.message
         response = HttpResponseServerError(e.message)
         return response
     
 #FIXME!!!: This method is not over
 def deployEzwebGadget(request):
-    print "EZWEB"
-    print request.POST.__getitem__('template_uri')
+    #print "EZWEB"
+    #print request.POST.__getitem__('template_uri')
     # Get the base url to the Catalogue
     if hasattr(settings,'EZWEB_URL'):
         baseUrl = settings.EZWEB_URL

@@ -5,7 +5,7 @@ from gadget import copyLibraries
 from django.utils.encoding import smart_str
 
 def createEzwebGadget(gadgetName, gadgetUri, gadgetPath, label, vendor, version, description, author, email, screens, prec, post):
-    print "creating gadget for ezweb..."
+    #print "creating gadget for ezweb..."
     mashup='ezweb'
 
     gadgetUri = gadgetUri + '/' + mashup
@@ -14,8 +14,8 @@ def createEzwebGadget(gadgetName, gadgetUri, gadgetPath, label, vendor, version,
 
     htmlUri = gadgetUri + '/' + gadgetName + '.html'
     templateUri = gadgetUri + '/' + gadgetName + '.xml'
-    print htmlUri
-    print templateUri 
+    #print htmlUri
+    #print templateUri 
     
     ezWebTemplate = getEzWebTemplate(htmlUri, label['en-GB'], vendor, version, description['en-GB'], author, email, prec, post)
     templateFile = open(path.join(gadgetPath, gadgetName + '.xml'), 'w')

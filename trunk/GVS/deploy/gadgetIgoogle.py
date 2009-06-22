@@ -5,7 +5,7 @@ from gadget import copyLibraries
 from django.utils.encoding import smart_str
 
 def createIgoogleGadget(gadgetName, gadgetUri, gadgetPath, label, vendor, version, description, author, email, screens, prec, post):
-    print "creating gadget for igoogle..."
+    #print "creating gadget for igoogle..."
     mashup='igoogle'
 
     gadgetUri = gadgetUri + '/' + mashup
@@ -13,7 +13,7 @@ def createIgoogleGadget(gadgetName, gadgetUri, gadgetPath, label, vendor, versio
     mkdir(gadgetPath)
     
     templateUri = gadgetUri + '/' + gadgetName + '.xml'
-    print templateUri 
+    #print templateUri 
     
     iGoogleTemplate = getiGoogleTemplate(gadgetUri, templateUri, label['en-GB'], vendor, version, description['en-GB'], author, email, screens)
 
