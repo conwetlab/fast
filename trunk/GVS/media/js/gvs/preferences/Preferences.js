@@ -151,7 +151,7 @@ var PreferencesSingleton = function() {
 			form["ezweb_url"].value = response.ezweb_url;
 			form["ezweb_username"].value = response.ezweb_username;
         	
-        	UIUtils.show(prefDialog);
+        	prefDialog.show();
         },
 
         /**
