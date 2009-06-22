@@ -100,7 +100,7 @@ var GVSSingleton = function() {
          * @private
          */
         _addScreen: function (){
-            UIUtils.showAddScDialog();
+            CatalogueSingleton.getInstance().showAddScDialog();
         }
     });
     
