@@ -6,9 +6,9 @@ from django.shortcuts import render_to_response
 from django.http import HttpResponse, HttpResponseBadRequest, HttpResponseServerError
 from gadgetEzweb import createEzwebGadget
 from gadgetIgoogle import createIgoogleGadget
+from commons.httpUtils import download_http_content
 from os import path, mkdir
 import urllib2
-from django.utils.encoding import smart_unicode
 from python_rest_client.restful_lib import Connection
 
 def deployGadget(request):
@@ -59,21 +59,8 @@ def deployGadget(request):
                     screen['label'] = aux['en-gb']
 
                     url = screen['code']
-                    print url
-                    data = ''
-                    charset = u'utf-8'
-                    try:
-                        req = urllib2.Request(url)
-                        response = urllib2.urlopen(req)
-                        data = response.read()
-                        info = response.info()
-                        print 'INFO: ', str(info)
-                        ignore, charset = info['Content-Type'].split('charset=')
-                        print 'CHARSET: ', str(charset)
-                        screen['allCode']=smart_unicode(data, charset)
-                    except:
-                        print 'Default CHARSET: ', str(charset)
-                        screen['allCode']=smart_unicode(data, charset)
+                    data = download_http_content(url)
+                    screen['allCode']=data
             else:
                 screens=[]
             if (definition.has_key('connectors')):

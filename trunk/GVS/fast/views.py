@@ -10,7 +10,6 @@ from django.core.mail import EmailMessage
 from django.conf import settings
 from django.db import transaction
 from user.models import UserProfile
-from string import split, lower
 
 
 class RegisterForm(forms.Form):
@@ -42,7 +41,7 @@ def index(request):
     
 def register(request):
     form = RegisterForm()
-    return render_to_response('registration/register.html',{'form': form,}, 
+    return render_to_response('registration/register.html',{'form': form}, 
                   context_instance=RequestContext(request))
 
 @transaction.commit_manually
@@ -56,7 +55,8 @@ def signup(request):
                 user.first_name = form.cleaned_data['first_name']
                 user.last_name = form.cleaned_data['last_name']
                 
-                user.save()
+                new_profile = UserProfile(user=user)
+                new_profile.ezweb_url = settings.EZWEB_URL
                 
                 if settings.REGISTRATION_CONFIRMATION:
                     user.is_active = False
@@ -64,8 +64,8 @@ def signup(request):
                     salt = sha.new(str(random.random())).hexdigest()[:5]
                     activation_key = sha.new(salt+user.username).hexdigest()
                     key_expires = datetime.datetime.today() + datetime.timedelta(settings.ACCOUNT_ACTIVATION_DAYS)                                                                                                                         
-                    new_profile = UserProfile(user=user,activation_key=activation_key,key_expires=key_expires)
-                    new_profile.save()
+                    new_profile.activation_key=activation_key
+                    new_profile.key_expires=key_expires
                     
                     confirm_url = request.build_absolute_uri('/confirm/' + new_profile.activation_key)
                     email_subject = _("Your new FAST account confirmation")
@@ -73,13 +73,14 @@ def signup(request):
                     
                     email = EmailMessage(subject=email_subject, body=email_body, from_email=settings.REGISTRATION_SENDER, to = [user.email])
                     email.send()
-                
-                    user.save()
-
+                                
+                user.save()
+                new_profile.save()
+                    
                 transaction.commit()
                 return HttpResponseRedirect('/accounts/login/?next=/')
             else:
-                return render_to_response('registration/register.html',{'form': form,}, 
+                return render_to_response('registration/register.html',{'form': form}, 
                   context_instance=RequestContext(request))
     except Exception, e:
         transaction.rollback()

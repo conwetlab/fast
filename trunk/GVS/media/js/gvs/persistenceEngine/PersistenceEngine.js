@@ -36,43 +36,48 @@ var PersistenceEngineFactory = function () {
         // ****************
         // PUBLIC METHODS 
         // ****************
-        PersitenceEngine.prototype.sendGet = function (url, context, successHandler, errorHandler) {
+        PersitenceEngine.prototype.sendGet = function (url, context, successHandler, errorHandler, requestHeaders) {
             new Ajax.Request(url, {
                 method: 'get',
                 parameters: arguments[4],
                 onSuccess: successHandler.bind(context),
                 onFailure: errorHandler.bind(context),
-                onException: errorHandler.bind(context)
+                onException: errorHandler.bind(context),
+				requestHeaders: requestHeaders
             });
         }
 
-        PersitenceEngine.prototype.sendPost = function (url, params, body, context, successHandler, errorHandler) {
+        PersitenceEngine.prototype.sendPost = function (url, params, body, context, successHandler, errorHandler, requestHeaders) {
             new Ajax.Request(url, {
                 method: 'post',
                 parameters: params,
                 postBody: body,
                 onSuccess: successHandler.bind(context),
                 onFailure: errorHandler.bind(context),
-               onException: errorHandler.bind(context)
+                onException: errorHandler.bind(context),
+				requestHeaders: requestHeaders
             });
         }
 
-        PersitenceEngine.prototype.sendDelete = function (url, context, successHandler, errorHandler){
+        PersitenceEngine.prototype.sendDelete = function (url, context, successHandler, errorHandler, requestHeaders){
             new Ajax.Request(url, {
                 method: 'delete',
                 onSuccess: successHandler.bind(context),
                 onFailure: errorHandler.bind(context),
-                onException: errorHandler.bind(context)
+                onException: errorHandler.bind(context),
+				requestHeaders: requestHeaders
             });
         }
 
-        PersitenceEngine.prototype.sendUpdate = function (url, params, context, successHandler, errorHandler){
+        PersitenceEngine.prototype.sendUpdate = function (url, params, body, context, successHandler, errorHandler, requestHeaders){
             new Ajax.Request(url, {
                 method: 'put',
                 parameters: params,
+                postBody: body,
                 onSuccess: successHandler.bind(context),
                 onFailure: errorHandler.bind(context),
-                onException: errorHandler.bind(context)
+                onException: errorHandler.bind(context),
+				requestHeaders: requestHeaders
             });
         }
     }

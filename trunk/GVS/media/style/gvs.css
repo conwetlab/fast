@@ -29,6 +29,20 @@ h4{
 }
 
 /******************
+ * #preferences   *
+ ******************/
+ .dijitToolbarIcon
+/* All of the selectors for the icons go here */
+{
+        background-image: url('../images/gui/toolbar/toolbar_24x24.png'); /* mega-image */
+        background-repeat: no-repeat;
+        width: 24px;
+        height: 24px;
+        text-align: center;
+}
+.dijitToolbarIconPreferences { background-position: 0px; }
+
+/******************
  * #login   *
  ******************/
 .form-row {
@@ -527,6 +541,18 @@ label{
 }
 
 .input_SFDialog{
+    width:26em;
+}
+
+.input_PrefDialog{
+    width:26em;
+}
+
+.input_PrefDialog{
+    width:26em;
+}
+
+.input_AddScreenCatalog{
     width:26em;
 }
 

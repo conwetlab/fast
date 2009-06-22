@@ -42,6 +42,7 @@
             _URIConstants.prototype.catalogueFlow = "{{CATALOGUE_FLOW}}";
             _URIConstants.prototype.catalogueCreateScreen = "catalogue/createscreen";
             _URIConstants.prototype.catalogueGetDomainConcepts = "catalogue/getdomainconcepts"
+            _URIConstants.prototype.userPreferences = "user/preferences"
             
             _URIConstants.prototype.logoFast = "{{ MEDIA_URL }}images/gui/fastLogo.png";
 
@@ -136,6 +137,10 @@
         <!-- Persistence Engine class -->
         <script type="text/javascript" 
             src="{{ MEDIA_URL }}js/gvs/persistenceEngine/PersistenceEngine.js"></script>
+            
+        <!-- Preferences -->
+        <script type="text/javascript" 
+            src="{{ MEDIA_URL }}js/gvs/preferences/Preferences.js"></script>
 
         <!-- Miscelaneous utilities -->
         <script type="text/javascript" 
@@ -177,9 +182,10 @@
             // Arming the GVS initialization method
             dojo.addOnLoad(function() {
                 GVSSingleton.getInstance().init();
+                var prefs = PreferencesSingleton.getInstance();
                 //Adding the events
                 $("showDeployGadgetDialog").observe("click",UIUtils.showDeployGadgetDialog);
-                
+                dojo.connect(dojo.byId("toolbar.preferences"),"onclick", prefs.showDialog.bind(prefs));
             });
 
         /* ]]> */
@@ -203,7 +209,7 @@
 				</div>
                 <!-- Menu area -->
                 <div id="menu" dojoType="dijit.Toolbar">
-                    Menu
+                    <div dojoType="dijit.form.Button" id="toolbar.preferences" iconClass="dijitToolbarIcon dijitToolbarIconPreferences" showLabel="false">Preferences</div>
                 </div>
             </div>  
             

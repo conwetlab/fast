@@ -121,6 +121,8 @@ EMAIL_PORT = 25
 
 AUTH_PROFILE_MODULE = 'user.UserProfile'
 
+NOT_PROXY_FOR = ['localhost', '127.0.0.1']
+
 # Url to the server that holds the semantic catalogue
 CATALOGUE_URL = 'http://localhost:8082/'
 

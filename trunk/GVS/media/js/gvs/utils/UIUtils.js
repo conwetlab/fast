@@ -278,6 +278,7 @@ UIUtils.createAddScDialog = function() {
         var inputScLabel = new Element("input", {
             type : "text",
             id : "ScLabel",
+            "class" : "input_AddScreenCatalog", 
             Name : "label",
             value : "Label of the screen..."
         });
@@ -292,6 +293,7 @@ UIUtils.createAddScDialog = function() {
         var inputScDesc = new Element("input", {
             type : "text",
             id : "ScDesc",
+            "class" : "input_AddScreenCatalog", 
             name : "description",
             value : "Short description of the screen..."
         });
@@ -306,6 +308,7 @@ UIUtils.createAddScDialog = function() {
         var inputScCreator = new Element("input", {
             type : "text",
             id : "ScCreator",
+            "class" : "input_AddScreenCatalog", 
             name : "creator",
             value : "creator URL..."
         });
@@ -320,6 +323,7 @@ UIUtils.createAddScDialog = function() {
         var inputScRights = new Element("input", {
             type : "text",
             id : "ScRights",
+            "class" : "input_AddScreenCatalog", 
             name : "rights",
             value : "rights URL..."
         });
@@ -334,6 +338,7 @@ UIUtils.createAddScDialog = function() {
         var inputScVersion = new Element("input", {
             type : "text",
             id : "ScVersion",
+            "class" : "input_AddScreenCatalog", 
             name : "version",
             value : "1.0"
         });
@@ -343,6 +348,7 @@ UIUtils.createAddScDialog = function() {
         var inputScCreationDate = new Element("input", {
             type : "hidden",
             id : "ScCreationDate",
+            "class" : "input_AddScreenCatalog", 
             name : "creationDate",
             value : ""
         });
@@ -356,6 +362,7 @@ UIUtils.createAddScDialog = function() {
         var inputScIcon = new Element("input", {
             type : "text",
             id : "ScIcon",
+            "class" : "input_AddScreenCatalog", 
             name : "icon",
             value : "icon URL..."
         });
@@ -370,6 +377,7 @@ UIUtils.createAddScDialog = function() {
         var inputScScshot = new Element("input", {
             type : "text",
             id : "ScScshot",
+            "class" : "input_AddScreenCatalog", 
             name : "screenshot",
             value : "screenshot URL..."
         });
@@ -384,6 +392,7 @@ UIUtils.createAddScDialog = function() {
         var inputScDomainContext = new Element("input", {
             type : "text",
             id : "ScDomainContext",
+            "class" : "input_AddScreenCatalog", 
             name : "domainContext",
             value : "Write domain context as tags separated by ','..."
         });
@@ -398,6 +407,7 @@ UIUtils.createAddScDialog = function() {
         var inputScHomepage = new Element("input", {
             type : "text",
             id : "ScHomepage",
+            "class" : "input_AddScreenCatalog", 
             name : "homepage",
             value : "homepage URL..."
         });
@@ -412,6 +422,7 @@ UIUtils.createAddScDialog = function() {
         var inputScPrecs = new Element("input", {
             type : "text",
             id : "ScPrecs",
+            "class" : "input_AddScreenCatalog", 
             name : "preconditions",
             value : "If any, write preconditions separated by ','..."
         });
@@ -426,6 +437,7 @@ UIUtils.createAddScDialog = function() {
         var inputScPosts = new Element("input", {
             type : "text",
             id : "ScPosts",
+            "class" : "input_AddScreenCatalog", 
             name : "postconditions",
             value : "If any, write postconditions separated by ','..."
         });
@@ -440,6 +452,7 @@ UIUtils.createAddScDialog = function() {
         var inputScCode = new Element("input", {
             type : "text",
             id : "ScCode",
+            "class" : "input_AddScreenCatalog", 
             name : "code",
             value : "Screencode URL..."
         });

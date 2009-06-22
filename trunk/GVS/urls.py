@@ -18,8 +18,11 @@ urlpatterns = patterns('',
     # Deploy
     (r'^deploy/', include('deploy.urls')),
 
-    #
+    # Catalogue
     (r'^catalogue/', include('catalogue.urls')),
+    
+    # User
+    (r'^user/', include('user.urls')),
 
     #Admin interface
     (r'^admin/(.*)', admin.site.root),
