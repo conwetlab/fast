@@ -128,8 +128,8 @@ var DocumentController = Class.create(
             dialogDiv.insert(divSFButtons);
             this._newSFDocDialog.getDialog().setContent(dialogDiv);
         } else {
-            this._newSFDocDialog.getForm().SFName.setValue("New Screenflow 2");
-            this._newSFDocDialog.getForm().SFDomainContext.setValue("2");
+            this._newSFDocDialog.getForm().SFName.setValue("New Screenflow");
+            this._newSFDocDialog.getForm().SFDomainContext.setValue("");
         }
         this._newSFDocDialog.show();
     },
