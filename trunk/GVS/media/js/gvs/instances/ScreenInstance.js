@@ -10,6 +10,7 @@ var ScreenInstance = Class.create(ComponentInstance,
         $super(resourceDescription);
         var uidGenerator = UIDGeneratorSingleton.getInstance();
         this._id = uidGenerator.generate("screenInstance");
+        this._buildingBlockType = 'screen';
     },
 
     // **************** PUBLIC METHODS **************** //

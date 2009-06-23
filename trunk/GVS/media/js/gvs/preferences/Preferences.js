@@ -118,7 +118,7 @@ var PreferencesSingleton = function() {
          * 
          */
         hideDialog : function() {
-            UIUtils.hide(dijit.byId("preferencesDialog"));
+            dijit.byId("preferencesDialog").hide();
         },
         
         /**

@@ -10,6 +10,7 @@ var DomainConceptInstance = Class.create(ComponentInstance,
         $super(domainConceptDescription);
         var uidGenerator = UIDGeneratorSingleton.getInstance();
         this._id = uidGenerator.generate("domainConceptInstance");
+        this._buildingBlockType = 'domainConcept';
     },
 
     // **************** PUBLIC METHODS **************** //

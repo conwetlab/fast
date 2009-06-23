@@ -88,17 +88,17 @@ var ScreenflowDocument = Class.create(AbstractDocument,
     getResourceInstance: function (resourceViewId) {
         for (var i=0; i<this._screens.length; i++) {
             if (this._screens[i].getView().getId()==resourceViewId) {
-                return [this._screens[i], 'screen'];
+                return this._screens[i];
             }
         }
         for (var i=0; i<this._connectors.length; i++) {
             if (this._connectors[i].getView().getId()==resourceViewId) {
-                return [this._connectors[i], 'connector'];
+                return this._connectors[i];
             }
         }
         for (var i=0; i<this._domainConcepts.length; i++) {
             if (this._domainConcepts[i].getView().getId()==resourceViewId) {
-                return [this._domainConcepts[i], 'domainConcept'];
+                return this._domainConcepts[i];
             }
         }
         return null;
@@ -253,7 +253,15 @@ var ScreenflowDocument = Class.create(AbstractDocument,
      *      Screenflow document.
      */
     setSelectedElement: function (element) {
-        this._selectedElement = element;
+        if (this.getSelectedElement() != null) {
+            this.getSelectedElement().removeClassName("selected");
+        }
+        if (element != undefined) {
+            this._selectedElement = element;
+            this.getSelectedElement().addClassName("selected");
+        } else {
+            this._selectedElement = null;
+        }
     },
 
     /**
@@ -305,12 +313,11 @@ var ScreenflowDocument = Class.create(AbstractDocument,
     },
     
     updatePropertiesPane: function( /** ResourceId */ resourceId, /** String */ resourceType) {
-        var resourceInstance = this.getResourceInstance(resourceId)[0];
+        var resourceInstance = this.getResourceInstance(resourceId);
         var resourceDescription = resourceInstance.getResourceDescription();
         this.emptyPropertiesPane();
         switch(resourceType){
             case "screen":
-                console.debug(resourceDescription);
                 $(this.getDetailsTitle('detailsTitle')).update('Properties of screen: ' + resourceDescription.label['en-gb']);
                 var propertiesHash = new Hash();
                 propertiesHash.set('title',resourceDescription.label['en-gb']);
@@ -321,7 +328,6 @@ var ScreenflowDocument = Class.create(AbstractDocument,
                 break;
 
             case "connector":
-                console.debug(resourceDescription);
                 var propertiesHash = resourceInstance.getProperties().clone();
                 $(this.getDetailsTitle('detailsTitle')).update('Properties of connector: ' + propertiesHash.get('type'));
                 
@@ -330,7 +336,6 @@ var ScreenflowDocument = Class.create(AbstractDocument,
                 break;
 
             case "domainConcept":
-                console.debug(resourceDescription);
                 $(this.getDetailsTitle('detailsTitle')).update('Properties of domain concept: ' + resourceDescription.name);
                 var propertiesHash = new Hash();
                 propertiesHash.set('name',resourceDescription.name);

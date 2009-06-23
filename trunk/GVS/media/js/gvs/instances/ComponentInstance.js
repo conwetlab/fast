@@ -37,6 +37,13 @@ var ComponentInstance = Class.create(DragSource,
          * @private @member
          */
         this._resourceDescription = resourceDescription;
+        
+        /**
+         * Building block type this class represents
+         * @type String
+         * @private
+         */
+        this._buildingBlockType = 'unknown';
     },
     
 
@@ -116,6 +123,14 @@ var ComponentInstance = Class.create(DragSource,
      */
     getResourceDescription: function() {
         return this._resourceDescription;
+    },
+
+    /**
+     * Returns the building block type of this class
+     * @public
+     */
+    getBuildingBlockType: function() {
+        return this._buildingBlockType;
     },
     
     /**

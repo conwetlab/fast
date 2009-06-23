@@ -577,17 +577,12 @@ label{
 #wizardButtons{
     text-align:center;
 }
+
 .soria .dijitTooltipContainer {
     width: 250px;
 }
 
-#errorConnType{
-    color:red;
-    opacity:0;
-    margin-left: 10px;
-}
-
-#errorConnFact{
+.errorDialogDiv{
     color:red;
     opacity:0;
     margin-left: 10px;
