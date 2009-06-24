@@ -106,8 +106,8 @@ var ConnectorInstance = Class.create(ComponentInstance,
             option_out.innerHTML = 'Out';
             
             inputConnType.insert(option_out);
-            var i;
             if (this.getProperties().get('type') != undefined) {
+                var i;
                 for (i = inputConnType.length - 1; i >= 0; i--) {
                     console.log(inputConnType.options[i].value);
                     if (inputConnType.options[i].value == this.getProperties().get('type')) {
@@ -115,6 +115,7 @@ var ConnectorInstance = Class.create(ComponentInstance,
                     }
                 }
             }
+            inputConnType.observe('change', this.onPropertiesDialogChange.bind(this));
             divConnectorType.insert(inputConnType);
             
             var errorConnType = new Element("span", {
@@ -136,7 +137,20 @@ var ConnectorInstance = Class.create(ComponentInstance,
             var option_event_slot = new Element('option', {
                 value: 'event_slot'
             });
-            option_event_slot.innerHTML = 'Event/slot';
+            if (this.getProperties().get('type') != undefined) {
+                switch(this.getProperties().get('type').toLowerCase()){
+                    case 'in':
+                        option_event_slot.innerHTML = 'Slot';
+                        break;
+                    case 'out':
+                        option_event_slot.innerHTML = 'Event';
+                        break;
+                    default:
+                        option_event_slot.innerHTML = 'Event/slot';
+                }
+            } else {
+                option_event_slot.innerHTML = 'Event/slot';
+            }
             inputConnKind.insert(option_event_slot);
             
             var option_user_context = new Element('option', {
@@ -145,11 +159,11 @@ var ConnectorInstance = Class.create(ComponentInstance,
             option_user_context.innerHTML = 'User context';
             inputConnKind.insert(option_user_context);
             
-            var option_application_context = new Element('option', {
-                value: 'application_context'
+            var option_user_preferences = new Element('option', {
+                value: 'user_preferences'
             });
-            option_application_context.innerHTML = 'Application context';
-            inputConnKind.insert(option_application_context);
+            option_user_preferences.innerHTML = 'User preferences';
+            inputConnKind.insert(option_user_preferences);
             
             divConnectorKind.insert(inputConnKind);
             form.insert(divConnectorKind);
@@ -368,6 +382,25 @@ var ConnectorInstance = Class.create(ComponentInstance,
                             form.shortcut.setValue(desc.shortcut);
                         }
                     });
+                }
+                break;
+            case 'type':
+                var kind = this.getPropertiesDialog().getForm().kind;
+                var type = $F(event.element());
+                var i;
+                for (i = kind.length - 1; i >= 0; i--) {
+                    if (kind.options[i].value == 'event_slot') {
+                        switch (type.toLowerCase()) {
+                            case 'in':
+                                kind.options[i].innerHTML = 'Slot';
+                                break;
+                            case 'out':
+                                kind.options[i].innerHTML = 'Event';
+                                break;
+                            default:
+                                kind.options[i].innerHTML = 'Event/slot';
+                        }
+                    }
                 }
                 break;
             default:
