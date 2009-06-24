@@ -19,7 +19,6 @@ var ConnectorInstance = Class.create(ComponentInstance,
     // **************** PUBLIC METHODS **************** //
 
     setProperties: function(properties) {
-        console.log(properties);
         this._properties = $H(properties);
         this.getView().update(this._properties);
     },
@@ -39,7 +38,7 @@ var ConnectorInstance = Class.create(ComponentInstance,
         // FIXME: remove this
         if(finishState) {
             GVSSingleton.getInstance().getDocumentController().getCurrentDocument().addConnector(this);
-            UIUtils.onClickCanvas(null, this.getView().getNode());
+            this.getView().getNode().click();
             var currentDocument = GVSSingleton.getInstance().getDocumentController().getCurrentDocument();
             var canvas = currentDocument.getCanvas();
             var domainContext = {
@@ -109,7 +108,6 @@ var ConnectorInstance = Class.create(ComponentInstance,
             if (this.getProperties().get('type') != undefined) {
                 var i;
                 for (i = inputConnType.length - 1; i >= 0; i--) {
-                    console.log(inputConnType.options[i].value);
                     if (inputConnType.options[i].value == this.getProperties().get('type')) {
                         inputConnType.selectedIndex = i;
                     }
@@ -326,10 +324,8 @@ var ConnectorInstance = Class.create(ComponentInstance,
                     }
 
                     ConnectorInstance.prototype.setProperties.apply(mine, [form.serialize(true)]);
-                    
                     GVSSingleton.getInstance().getDocumentController().getCurrentDocument().updateConnector(this);
-                    
-                    UIUtils.onClickCanvas(null, mine.getHandlerNode());
+                    mine.getHandlerNode().click();
                     FormDialog.prototype.hide.apply(mine._propertiesDialog, arguments);
                 }
             });

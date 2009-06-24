@@ -27,7 +27,7 @@ var ScreenInstance = Class.create(ComponentInstance,
         if(finishState) {
             GVSSingleton.getInstance().getDocumentController().getCurrentDocument().addScreen(this);
             var currentDocument = GVSSingleton.getInstance().getDocumentController().getCurrentDocument();
-            UIUtils.onClickCanvas(null, this.getView().getNode());
+            this.getView().getNode().click();
             var canvas = currentDocument.getCanvas();
             var domainContext = {
                 "tags":currentDocument.getResourceDescription().getDomainContexts(),

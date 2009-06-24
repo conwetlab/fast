@@ -31,7 +31,6 @@ var PreviewDocument = Class.create(AbstractDocument,
      * @private
      */
     populate: function(/** String **/ resourceDesc){
-        console.log("TODO: populating");
         var content = this.getContent();
         var previewDiv = new Element ("div", {"id": "previewDivContent" ,"class": "documentTitle"}).
             update("Preview of the Screen: " + resourceDesc.label['en-gb']);

@@ -539,6 +539,65 @@ var ScreenflowDocument = Class.create(AbstractDocument,
     hideDeployGadgetDialog: function(){
         this._DeployGadgetDialog.hide();
     },
+    
+    onClickCanvas: function( /**Event*/ e){
+        var clickedElement = UIUtils.getResourceDiv(e.element());
+        var resourceType = UIUtils.getResourceType(clickedElement);
+        switch (resourceType) {
+            case "screen":
+                console.log("screen clicked");
+                this.setSelectedElement(clickedElement);
+                this.updatePropertiesPane(clickedElement.id, "screen");
+                break;
+            case "domainConcept":
+                console.log("domain concept clicked");
+                this.setSelectedElement(clickedElement);
+                this.updatePropertiesPane(clickedElement.id, "domainConcept");
+                break;
+            case "connector":
+                console.log("connector clicked");
+                this.setSelectedElement(clickedElement);
+                this.updatePropertiesPane(clickedElement.id, "connector");
+                break;
+            case "canvas":
+                console.log("canvas clicked");
+                this.setSelectedElement();
+                this.emptyPropertiesPane();
+                break;
+            case "unknown":
+            default:
+                console.log("unknown clicked");
+                this.setSelectedElement();
+                this.emptyPropertiesPane();
+                break;
+        }
+    },
+    
+    onDblClickCanvas: function( /**Event*/ e){
+        var clickedElement = UIUtils.getResourceDiv(e.element());
+        var resourceType = UIUtils.getResourceType(clickedElement);
+        switch (resourceType) {
+            case "screen":
+                console.log("screen dbl-clicked");
+                var screenDescription = this.getResourceInstance(clickedElement.id).getResourceDescription();
+                var screenflowDoc = GVSSingleton.getInstance().getDocumentController().createPreviewDocument(screenDescription);
+                break;
+            case "domainConcept":
+                console.log("domain concept dbl-clicked");
+                break;
+            case "connector":
+                console.log("connector dbl-clicked");
+                this.getResourceInstance(clickedElement.id).showPropertiesDialog();
+                break;
+            case "canvas":
+                console.log("canvas dbl-clicked");
+                break;
+            case "unknown":
+            default:
+                console.log("unknown dbl-clicked");
+                break;
+        }
+    },
 
     // **************** PRIVATE METHODS **************** //
     /**
@@ -566,8 +625,8 @@ var ScreenflowDocument = Class.create(AbstractDocument,
             "id": this._tabContentId,
             "class": "document screenflow canvas"
         });
-        documentContent.observe('click',UIUtils.onClickCanvas);
-        documentContent.observe('dblclick',UIUtils.onDblClickCanvas);
+        documentContent.observe('click',this.onClickCanvas.bind(this));
+        documentContent.observe('dblclick',this.onDblClickCanvas.bind(this));
         var documentPaneId = uidGenerator.generate("documentPane");
         var documentPane = new dijit.layout.ContentPane({
             id:documentPaneId,
