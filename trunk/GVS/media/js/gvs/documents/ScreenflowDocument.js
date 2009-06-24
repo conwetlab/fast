@@ -372,7 +372,7 @@ var ScreenflowDocument = Class.create(AbstractDocument,
                     }
                 }
             }
-            UIUtils.colorizeScreen(screens[i]);
+            screens[i].colorize();
         }
     },
     
@@ -540,9 +540,9 @@ var ScreenflowDocument = Class.create(AbstractDocument,
         this._DeployGadgetDialog.hide();
     },
     
-    onClickCanvas: function( /**Event*/ e){
-        var clickedElement = UIUtils.getResourceDiv(e.element());
-        var resourceType = UIUtils.getResourceType(clickedElement);
+    onClickCanvas: function( /**Element*/ element){
+        var clickedElement = this.getBuildingBlockElement(element);
+        var resourceType = this.getBuildingBlockType(clickedElement);
         switch (resourceType) {
             case "screen":
                 console.log("screen clicked");
@@ -572,10 +572,10 @@ var ScreenflowDocument = Class.create(AbstractDocument,
                 break;
         }
     },
-    
-    onDblClickCanvas: function( /**Event*/ e){
-        var clickedElement = UIUtils.getResourceDiv(e.element());
-        var resourceType = UIUtils.getResourceType(clickedElement);
+
+    onDblClickCanvas: function( /**Element*/ element){
+        var clickedElement = this.getBuildingBlockElement(element);
+        var resourceType = this.getBuildingBlockType(clickedElement);
         switch (resourceType) {
             case "screen":
                 console.log("screen dbl-clicked");
@@ -596,6 +596,35 @@ var ScreenflowDocument = Class.create(AbstractDocument,
             default:
                 console.log("unknown dbl-clicked");
                 break;
+        }
+    },
+
+    /**
+     * Gets the building block div in the canvas
+     * @param {Element} element
+     */
+    getBuildingBlockElement: function(element){
+        if (element.hasClassName('canvas') && element.hasClassName('document')) {
+            return element;
+        } else {
+            while (element.up(0) != undefined) {
+                if (element.up(0).hasClassName('canvas') && element.up(0).hasClassName('document')) {
+                    return element;
+                } else {
+                    element = element.up(0);
+                }
+            }
+        }
+        return null;
+    },
+
+    getBuildingBlockType: function(element){
+        if (element.hasClassName('canvas') && element.hasClassName('document')) {
+            return 'canvas';
+        } else {
+            var elementClass = $w(element.className);
+            elementClass = elementClass.without("unknown").without("satisfeable").without("unsatisfeable").without("selected").without("view");
+            return ((elementClass.size() >= 1) ? elementClass[0] : 'unknown');
         }
     },
 
@@ -625,8 +654,12 @@ var ScreenflowDocument = Class.create(AbstractDocument,
             "id": this._tabContentId,
             "class": "document screenflow canvas"
         });
-        documentContent.observe('click',this.onClickCanvas.bind(this));
-        documentContent.observe('dblclick',this.onDblClickCanvas.bind(this));
+        documentContent.observe('click', function(event){
+            this.onClickCanvas(event.element());
+        }.bind(this));
+        documentContent.observe('dblclick', function(event){
+            this.onDblClickCanvas(event.element());
+        }.bind(this));
         var documentPaneId = uidGenerator.generate("documentPane");
         var documentPane = new dijit.layout.ContentPane({
             id:documentPaneId,

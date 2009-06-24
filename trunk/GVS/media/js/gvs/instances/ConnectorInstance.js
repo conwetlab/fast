@@ -38,7 +38,7 @@ var ConnectorInstance = Class.create(ComponentInstance,
         // FIXME: remove this
         if(finishState) {
             GVSSingleton.getInstance().getDocumentController().getCurrentDocument().addConnector(this);
-            this.getView().getNode().click();
+            GVSSingleton.getInstance().getDocumentController().getCurrentDocument().onClickCanvas(this.getHandlerNode());
             var currentDocument = GVSSingleton.getInstance().getDocumentController().getCurrentDocument();
             var canvas = currentDocument.getCanvas();
             var domainContext = {
@@ -325,7 +325,7 @@ var ConnectorInstance = Class.create(ComponentInstance,
 
                     ConnectorInstance.prototype.setProperties.apply(mine, [form.serialize(true)]);
                     GVSSingleton.getInstance().getDocumentController().getCurrentDocument().updateConnector(this);
-                    mine.getHandlerNode().click();
+                    GVSSingleton.getInstance().getDocumentController().getCurrentDocument().onClickCanvas(mine.getHandlerNode());
                     FormDialog.prototype.hide.apply(mine._propertiesDialog, arguments);
                 }
             });

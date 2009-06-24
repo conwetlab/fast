@@ -132,7 +132,16 @@ var ComponentInstance = Class.create(DragSource,
     getBuildingBlockType: function() {
         return this._buildingBlockType;
     },
-    
+
+    /**
+     * Colorize the component depending on the reachability
+     * @public
+     */
+    colorize: function() {
+        throw 'Abstract Method invocation. ' + 
+            'PaletteComponent :: colorize';
+    },
+
     /**
      * Destroys the view
      * @public

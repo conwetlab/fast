@@ -11,6 +11,13 @@ var ScreenComponent = Class.create(PaletteComponent,
         $super(screenResourceDescription, docId);
     },
 
+    /**
+     * Colorize the component depending on the reachability
+     * @public
+     */
+    colorize: function(){
+        this.getView().colorize(this.getResourceDescription().satisfeable);
+    },
 
     // **************** PUBLIC METHODS **************** //
 

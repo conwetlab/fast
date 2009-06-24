@@ -40,6 +40,15 @@ var ResourceView = Class.create( /** @lends ResourceView.prototype */ {
     },
 
     /**
+     * Colorize the component depending on the reachability
+     * @public
+     */
+    colorize: function( /** Boolean */ satisfeable) {
+        throw 'Abstract Method invocation. ' + 
+            'ResourceView :: colorize';
+    },
+
+    /**
      * Removes the DOM Elements and frees resources
      */
     destroy: function () {

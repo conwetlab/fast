@@ -79,6 +79,42 @@ var ScreenView = Class.create( ResourceView,
 
     // **************** PUBLIC METHODS **************** //
     
+    colorize: function( /** Boolean */ satisfeable) {
+        var globalColor = (satisfeable) ? "green" : "#B90000";
+        // border
+        this.getNode().style.borderColor = globalColor;
+        
+        //screen
+        this.getNode().removeClassName(satisfeable ? 'unsatisfeable' : 'satisfeable');
+        this.getNode().addClassName(satisfeable ? 'satisfeable' : 'unsatisfeable');
+        
+        //descendants
+        this.getNode().descendants().each(function(node){
+            //title
+            if (node.hasClassName('screenTitle')) {
+                node.style.backgroundColor = globalColor;
+            }
+            //posts
+            if (node.hasClassName('postArea')) {
+                node.descendants().each(function(fact){
+                    if (fact.hasClassName('fact')) {
+                        fact.removeClassName(satisfeable ? 'unsatisfeable' : 'satisfeable');
+                        fact.addClassName(satisfeable ? 'satisfeable' : 'unsatisfeable');
+                    }
+                });
+            }
+            //pres
+            if (node.hasClassName('preArea')) {
+                node.descendants().each(function(fact){
+                    if (fact.hasClassName('fact')) {
+                        fact.removeClassName(satisfeable ? 'unsatisfeable' : 'satisfeable');
+                        fact.addClassName(satisfeable ? 'satisfeable' : 'unsatisfeable');
+                    }
+                });
+            }
+        });
+    },
+    
     /**
      * Removes the DOM Elements and frees resources
      * @override

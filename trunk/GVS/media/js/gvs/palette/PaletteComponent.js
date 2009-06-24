@@ -89,6 +89,16 @@ var PaletteComponent = Class.create(DragSource,
     getView: function() {
         return this._view;
     },
+
+    /**
+     * Colorize the component depending on the reachability
+     * @public
+     */
+    colorize: function() {
+        throw 'Abstract Method invocation. ' + 
+            'PaletteComponent :: colorize';
+    },
+    
     // **************** PRIVATE METHODS **************** //
     /**
      * Creates an slot (GUI frame around a component) with a given title.

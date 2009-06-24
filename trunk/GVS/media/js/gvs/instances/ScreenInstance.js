@@ -16,6 +16,14 @@ var ScreenInstance = Class.create(ComponentInstance,
     // **************** PUBLIC METHODS **************** //
 
     /**
+     * Colorize the component depending on the reachability
+     * @public
+     */
+    colorize: function(){
+        this.getView().colorize(this.getResourceDescription().satisfeable);
+    },
+
+    /**
      * Drop event handler for the DragSource
      * @param finishState
      *      True if a new ScreenInstance has
@@ -25,9 +33,9 @@ var ScreenInstance = Class.create(ComponentInstance,
     onDragFinish: function(finishState) {
         // FIXME: remove this
         if(finishState) {
-            GVSSingleton.getInstance().getDocumentController().getCurrentDocument().addScreen(this);
             var currentDocument = GVSSingleton.getInstance().getDocumentController().getCurrentDocument();
-            this.getView().getNode().click();
+            currentDocument.addScreen(this);
+            currentDocument.onClickCanvas(this.getHandlerNode());
             var canvas = currentDocument.getCanvas();
             var domainContext = {
                 "tags":currentDocument.getResourceDescription().getDomainContexts(),

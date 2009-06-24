@@ -89,7 +89,7 @@ var PaletteController = Class.create(
                     }
                 }
             }
-            UIUtils.colorizeScreen(screens[i]);
+            screens[i].colorize();
         }
     }
 
