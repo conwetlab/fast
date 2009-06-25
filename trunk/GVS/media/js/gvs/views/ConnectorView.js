@@ -48,20 +48,22 @@ var ConnectorView = Class.create( ResourceView,
     
     update: function (properties){
         var container = this._node.firstDescendant();
-        container.update(properties.get('shortcut'));
+        if (properties.get('shortcut') != undefined) {
+            container.update(properties.get('shortcut') + ((properties.get('factAttr') != '') ? '*' : ''));
+        }
 
         container.removeClassName('connectorIn');
         container.removeClassName('connectorOut');
         container.removeClassName('connectorNone');
         container.removeClassName('connectorDefault');
-        switch(properties.get('type')){
-            case "In":
+        switch(properties.get('type').toLowerCase()){
+            case 'in':
                 container.addClassName('connectorIn');
                 break;
-            case "Out":
+            case 'out':
                 container.addClassName('connectorOut');
                 break;
-            case "None":
+            case 'none':
                 container.addClassName('connectorNone');
                 break;
             default:
