@@ -1,6 +1,7 @@
 from django.shortcuts import render_to_response,get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.template import RequestContext
+from django.contrib.auth import authenticate, login
 from django.contrib.auth.models import User
 from django.http import HttpResponseServerError, HttpResponseRedirect
 from django import forms
@@ -32,10 +33,8 @@ class RegisterForm(forms.Form):
             return self.cleaned_data["password"]
         self.errors["password"] = forms.util.ErrorList([_("The passwords do not match")])
 
-
 @login_required
 def index(request):
-
     return render_to_response('index.html',{}, 
                   context_instance=RequestContext(request))
     
@@ -44,14 +43,17 @@ def register(request):
     return render_to_response('registration/register.html',{'form': form}, 
                   context_instance=RequestContext(request))
 
-@transaction.commit_manually
+@transaction.commit_on_success
 def signup(request):
     try:    
         if request.method == 'POST': 
             form = RegisterForm(request.POST) # A form bound to the POST data
             form.full_clean()
             if form.is_valid():
-                user = User.objects.create_user(form.cleaned_data['username'], form.cleaned_data['email'], form.cleaned_data['password'])
+                username = form.cleaned_data['username']
+                email = form.cleaned_data['email']
+                password = form.cleaned_data['password']
+                user = User.objects.create_user(username, email, password)
                 user.first_name = form.cleaned_data['first_name']
                 user.last_name = form.cleaned_data['last_name']
                 
@@ -76,14 +78,17 @@ def signup(request):
                                 
                 user.save()
                 new_profile.save()
-                    
-                transaction.commit()
-                return HttpResponseRedirect('/accounts/login/?next=/')
-            else:
-                return render_to_response('registration/register.html',{'form': form}, 
+                
+                user = authenticate(username=username, password=password)
+                if user.is_active:
+                    login(request, user)
+                    return render_to_response('index.html',{}, context_instance=RequestContext(request))
+                else:
+                    return HttpResponseRedirect('/accounts/login/?next=/')
+            
+        return render_to_response('registration/register.html',{'form': form}, 
                   context_instance=RequestContext(request))
     except Exception, e:
-        transaction.rollback()
         return render_to_response('registration/register.html',{'form': RegisterForm(),}, 
                   context_instance=RequestContext(request))
 

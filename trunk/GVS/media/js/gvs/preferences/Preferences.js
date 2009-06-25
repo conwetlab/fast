@@ -155,15 +155,6 @@ var PreferencesSingleton = function() {
         },
 
         /**
-         * Handles the preference query error
-         * 
-         * @private
-         */
-         _getPrefOnError : function(/** XMLHttpRequest **/ transport) {
-        	alert(transport.statusText);
-        },
-        
-        /**
          * Handles the successful saving
          * 
          * @private
@@ -184,14 +175,19 @@ var PreferencesSingleton = function() {
 			} else if (transport.responseXML) {
 				msg = transport.responseXML.documentElement.textContent;
 			} else {
-				msg = "HTTP Error #{status} - #{text}".interpolate({status: transport.status, text: transport.statusText});
+				try {
+					m = eval ('(' + transport.responseText + ')')
+					msg = m.message;
+				} catch (e) {}
+				if(!msg){
+					msg = "HTTP Error #{status} - #{text}".interpolate({status: transport.status, text: transport.statusText});
+				}
 			}
 			alert(msg);
          }
         
     });
-    
-  
+
     return new function(){
         /**
          * Returns the singleton instance

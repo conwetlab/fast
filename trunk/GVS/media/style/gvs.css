@@ -536,23 +536,7 @@ label{
     width:100%;
 }
 
-.input_GadgetInfo{
-    width:26em;
-}
-
-.input_SFDialog{
-    width:26em;
-}
-
-.input_PrefDialog{
-    width:26em;
-}
-
-.input_PrefDialog{
-    width:26em;
-}
-
-.input_AddScreenCatalog{
+.input_GadgetInfo, .input_SFDialog, .input_PrefDialog, .input_PrefDialog, .input_AddScreenCatalog{
     width:26em;
 }
 
