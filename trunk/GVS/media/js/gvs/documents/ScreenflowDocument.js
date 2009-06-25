@@ -11,8 +11,8 @@ var ScreenflowDocument = Class.create(AbstractDocument,
         this._detailsTitle = null;
         this._detailsTable = null;
         
-        this._validBuildingBlocks = ['screen','flowControl','connector', 'domainConcept'];
-        this._documentType='screenflow';
+        this._validBuildingBlocks = [Constants.BuildingBlock.SCREEN, Constants.BuildingBlock.CONNECTOR, Constants.BuildingBlock.DOMAIN_CONCEPT];
+        this._documentType=Constants.DocumentType.SCREENFLOW;
         /*Screenflow Definition*/
         this._buildingBlockDescription = new ScreenflowDescription();
         this._screens = [];
@@ -287,7 +287,7 @@ var ScreenflowDocument = Class.create(AbstractDocument,
      */
     getPaletteElements: function () {
         var elements = [];
-        (this._paletteController.getPalette("screen").getComponents()).each(function(component){
+        (this._paletteController.getPalette(Constants.BuildingBlock.SCREEN).getComponents()).each(function(component){
             elements.push({'uri':component.getBuildingBlockDescription().uri});
         });
         return elements;
@@ -307,7 +307,7 @@ var ScreenflowDocument = Class.create(AbstractDocument,
         var buildingBlockDescription = buildingBlockInstance.getBuildingBlockDescription();
         this.emptyPropertiesPane();
         switch(buildingBlockType){
-            case "screen":
+            case Constants.BuildingBlock.SCREEN:
                 $(this.getDetailsTitle('detailsTitle')).update('Properties of screen: ' + buildingBlockDescription.label['en-gb']);
                 var propertiesHash = new Hash();
                 propertiesHash.set('title',buildingBlockDescription.label['en-gb']);
@@ -317,7 +317,7 @@ var ScreenflowDocument = Class.create(AbstractDocument,
                 this._updatePropertiesTable(propertiesHash);
                 break;
 
-            case "connector":
+            case Constants.BuildingBlock.CONNECTOR:
                 var propertiesHash = buildingBlockInstance.getProperties().clone();
                 $(this.getDetailsTitle('detailsTitle')).update('Properties of connector: ' + propertiesHash.get('type'));
                 
@@ -325,7 +325,7 @@ var ScreenflowDocument = Class.create(AbstractDocument,
                 this._updatePropertiesTable(propertiesHash);
                 break;
 
-            case "domainConcept":
+            case Constants.BuildingBlock.DOMAIN_CONCEPT:
                 $(this.getDetailsTitle('detailsTitle')).update('Properties of domain concept: ' + buildingBlockDescription.name);
                 var propertiesHash = new Hash();
                 propertiesHash.set('name',buildingBlockDescription.name);
@@ -534,22 +534,22 @@ var ScreenflowDocument = Class.create(AbstractDocument,
         var clickedElement = this.getBuildingBlockElement(element);
         var buildingBlockType = this.getBuildingBlockType(clickedElement);
         switch (buildingBlockType) {
-            case "screen":
+            case Constants.BuildingBlock.SCREEN:
                 console.log("screen clicked");
                 this.setSelectedElement(clickedElement);
-                this.updatePropertiesPane(clickedElement.id, "screen");
+                this.updatePropertiesPane(clickedElement.id, Constants.BuildingBlock.SCREEN);
                 break;
-            case "domainConcept":
+            case Constants.BuildingBlock.DOMAIN_CONCEPT:
                 console.log("domain concept clicked");
                 this.setSelectedElement(clickedElement);
-                this.updatePropertiesPane(clickedElement.id, "domainConcept");
+                this.updatePropertiesPane(clickedElement.id, Constants.BuildingBlock.DOMAIN_CONCEPT);
                 break;
-            case "connector":
+            case Constants.BuildingBlock.CONNECTOR:
                 console.log("connector clicked");
                 this.setSelectedElement(clickedElement);
-                this.updatePropertiesPane(clickedElement.id, "connector");
+                this.updatePropertiesPane(clickedElement.id, Constants.BuildingBlock.CONNECTOR);
                 break;
-            case "canvas":
+            case 'canvas':
                 console.log("canvas clicked");
                 this.setSelectedElement();
                 this.emptyPropertiesPane();
@@ -567,15 +567,15 @@ var ScreenflowDocument = Class.create(AbstractDocument,
         var clickedElement = this.getBuildingBlockElement(element);
         var buildingBlockType = this.getBuildingBlockType(clickedElement);
         switch (buildingBlockType) {
-            case "screen":
+            case Constants.BuildingBlock.SCREEN:
                 console.log("screen dbl-clicked");
                 var screenDescription = this.getBuildingBlockInstance(clickedElement.id).getBuildingBlockDescription();
                 var screenflowDoc = GVSSingleton.getInstance().getDocumentController().createPreviewDocument(screenDescription);
                 break;
-            case "domainConcept":
+            case Constants.BuildingBlock.DOMAIN_CONCEPT:
                 console.log("domain concept dbl-clicked");
                 break;
-            case "connector":
+            case Constants.BuildingBlock.CONNECTOR:
                 console.log("connector dbl-clicked");
                 this.getBuildingBlockInstance(clickedElement.id).showPropertiesDialog();
                 break;

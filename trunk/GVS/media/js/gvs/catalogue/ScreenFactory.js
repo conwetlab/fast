@@ -9,7 +9,7 @@ var ScreenFactory = Class.create(BuildingBlockFactory,
     initialize: function($super) {
         $super();
 
-        this._buildingBlockType = 'screen';
+        this._buildingBlockType = Constants.BuildingBlock.SCREEN;
         this._buildingBlockName = 'Screens';
         this._buildingBlockDescriptions = [];
     },

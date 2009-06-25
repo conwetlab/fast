@@ -10,7 +10,7 @@ var ConnectorFactory = Class.create(BuildingBlockFactory,
         $super();
         var connectorsPath = '/fast/images/palette/connectors/';
 
-        this._buildingBlockType = 'connector';
+        this._buildingBlockType = Constants.BuildingBlock.CONNECTOR;
         this._buildingBlockName = 'Connectors';
         this._buildingBlockDescriptions = [
             new ConnectorDescription ({

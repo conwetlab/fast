@@ -46,7 +46,7 @@ var Palette = Class.create( /** @lends Palette.prototype */ {
 
     updateComponents: function() {
         switch(this._buildingBlockType){
-            case "screen":
+            case Constants.BuildingBlock.SCREEN:
                 //find Screens and check
                 var currentDocument = GVSSingleton.getInstance().getDocumentController().getCurrentDocument();
                 var canvas = currentDocument.getCanvas();
@@ -55,12 +55,12 @@ var Palette = Class.create( /** @lends Palette.prototype */ {
                     "user":null
                 };
                 var elements = currentDocument.getPaletteElements();
-                CatalogueSingleton.getInstance().getScreens(canvas, domainContext, elements, 'reachability');
+                CatalogueSingleton.getInstance().findAndCheck(canvas, domainContext, elements, 'reachability');
                 break;
-            case "domainConcept":
+            case Constants.BuildingBlock.DOMAIN_CONCEPT:
                 CatalogueSingleton.getInstance().getDomainConcepts();
                 break;
-            case "connector":
+            case Constants.BuildingBlock.CONNECTOR:
                 this.paintComponents();
                 break;
         }

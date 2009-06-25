@@ -10,7 +10,7 @@ var ScreenInstance = Class.create(ComponentInstance,
         $super(buildingBlockDescription);
         var uidGenerator = UIDGeneratorSingleton.getInstance();
         this._id = uidGenerator.generate("screenInstance");
-        this._buildingBlockType = 'screen';
+        this._buildingBlockType = Constants.BuildingBlock.SCREEN;
     },
 
     // **************** PUBLIC METHODS **************** //
@@ -45,7 +45,7 @@ var ScreenInstance = Class.create(ComponentInstance,
             if (URIs.catalogueFlow =='check'){
                 CatalogueSingleton.getInstance().check(canvas, domainContext, elements, 'reachability');
             } else {
-                CatalogueSingleton.getInstance().get_screens(canvas, domainContext, elements, 'reachability');
+                CatalogueSingleton.getInstance().findAndCheck(canvas, domainContext, elements, 'reachability');
             }
         }
     }

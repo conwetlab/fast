@@ -18,12 +18,12 @@ var PaletteController = Class.create(
         this._paletteId = uidGenerator.generate("palette");
 
         // TODO: create all the palettes
-        var screenPalette = new Palette("screen", docId);
-        var connectorPalette = new Palette("connector", docId);
-        var domainConceptPalette = new Palette("domainConcept", docId);
-        this._palettes["screen"] = screenPalette;
-        this._palettes["connector"] = connectorPalette;
-        this._palettes["domainConcept"] = domainConceptPalette;
+        var screenPalette = new Palette(Constants.BuildingBlock.SCREEN, docId);
+        var connectorPalette = new Palette(Constants.BuildingBlock.CONNECTOR, docId);
+        var domainConceptPalette = new Palette(Constants.BuildingBlock.DOMAIN_CONCEPT, docId);
+        this._palettes[Constants.BuildingBlock.SCREEN] = screenPalette;
+        this._palettes[Constants.BuildingBlock.CONNECTOR] = connectorPalette;
+        this._palettes[Constants.BuildingBlock.DOMAIN_CONCEPT] = domainConceptPalette;
         
         this.getNode().addChild(screenPalette.getNode());
         this.getNode().addChild(connectorPalette.getNode());
@@ -76,7 +76,7 @@ var PaletteController = Class.create(
      */
     updateReachability: function(/** map id->value*/screenList){
         //TODO: Currently, only the screen palette is updated...
-        var screens = this.getPalette("screen").getComponents();
+        var screens = this.getPalette(Constants.BuildingBlock.SCREEN).getComponents();
         for (var i = 0; i < screens.length; i++) {
             for (var j = 0; j < screenList.length; j++) {
                 if (screens[i].getBuildingBlockDescription().uri == screenList[j].uri) {

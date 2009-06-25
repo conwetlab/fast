@@ -10,7 +10,7 @@ function UIUtils()
 UIUtils.onKeyPressCanvas = function(e){
     if (e.keyCode == Event.KEY_DELETE) {
         var currentDocument = GVSSingleton.getInstance().getDocumentController().getCurrentDocument();
-        if (currentDocument.getDocumentType() == 'screenflow') {
+        if (currentDocument.getDocumentType() == Constants.DocumentType.SCREENFLOW) {
             var selectedElement = currentDocument.getSelectedElement();
             if (selectedElement != null) { //Delete an element from the canvas
                 var title = null;
@@ -19,7 +19,7 @@ UIUtils.onKeyPressCanvas = function(e){
                 selectedElementBuildingBlockInstance = currentDocument.getBuildingBlockInstance(selectedElement.id);
                 selectedElementType = selectedElementBuildingBlockInstance.getBuildingBlockType();
                 switch (selectedElementType) {
-                    case 'screen':
+                    case Constants.BuildingBlock.SCREEN:
                         var label = selectedElementBuildingBlockInstance.getBuildingBlockDescription().label['en-gb'];
                         title = (label) ? ('the screen "' + label + '"') : "the selected screen";
                         if (confirm("You are about to remove " + title + " from canvas. Are you sure?")) { //delete if ok
@@ -29,7 +29,7 @@ UIUtils.onKeyPressCanvas = function(e){
                             currentDocument.setSelectedElement();
                         }
                         break;
-                    case 'domainConcept':
+                    case Constants.BuildingBlock.DOMAIN_CONCEPT:
                         var label = selectedElementBuildingBlockInstance.getBuildingBlockDescription().name;
                         title = (label) ? ('the domain concept "' + label + '"') : "the selected domain concept";
                         if (confirm("You are about to remove " + title + " from canvas. Are you sure?")) { //delete if ok
@@ -39,7 +39,7 @@ UIUtils.onKeyPressCanvas = function(e){
                             currentDocument.setSelectedElement();
                         }
                         break;
-                    case 'connector':
+                    case Constants.BuildingBlock.CONNECTOR:
                         var label = selectedElementBuildingBlockInstance.getBuildingBlockDescription().name;
                         title = (label) ? ('the connector "' + label + '"') : "the selected connector";
                         if (confirm("You are about to remove " + title + " from canvas. Are you sure?")) { //delete if ok

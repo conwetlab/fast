@@ -84,7 +84,7 @@ var ScreenflowDescription = Class.create(BuildingBlockDescription,
          * of the deployment. When "equal screens" can be deployed in 
          * the same gadget, fix this. */
         screenUris = screenUris.uniq();
-        var screens = CatalogueSingleton.getInstance().getBuildingBlockFactory("screen").getBuildingBlocks(screenUris);
+        var screens = CatalogueSingleton.getInstance().getBuildingBlockFactory(Constants.BuildingBlock.SCREEN).getBuildingBlocks(screenUris);
         return screens;
     },
 

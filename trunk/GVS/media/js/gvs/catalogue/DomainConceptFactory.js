@@ -9,7 +9,7 @@ var DomainConceptFactory = Class.create(BuildingBlockFactory,
     initialize: function($super) {
         $super();
 
-        this._buildingBlockType = 'domainConcept';
+        this._buildingBlockType = Constants.BuildingBlock.DOMAIN_CONCEPT;
         this._buildingBlockName = 'Domain Concepts';
         this._buildingBlockDescriptions = [];
     },

@@ -10,7 +10,7 @@ var DomainConceptInstance = Class.create(ComponentInstance,
         $super(domainConceptDescription);
         var uidGenerator = UIDGeneratorSingleton.getInstance();
         this._id = uidGenerator.generate("domainConceptInstance");
-        this._buildingBlockType = 'domainConcept';
+        this._buildingBlockType = Constants.BuildingBlock.DOMAIN_CONCEPT;
     },
 
     // **************** PUBLIC METHODS **************** //
@@ -37,7 +37,7 @@ var DomainConceptInstance = Class.create(ComponentInstance,
             if (URIs.catalogueFlow =='check'){
                 CatalogueSingleton.getInstance().check(canvas, domainContext, elements, 'reachability');
             } else {
-                CatalogueSingleton.getInstance().get_screens(canvas, domainContext, elements, 'reachability');
+                CatalogueSingleton.getInstance().findAndCheck(canvas, domainContext, elements, 'reachability');
             }
         }
     }

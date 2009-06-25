@@ -62,7 +62,7 @@ var AbstractDocument = Class.create( /** @lends AbstractDocument.prototype */ {
          * @type String
          * @private
          */       
-        this._documentType='abstract';
+        this._documentType=null;
         
         /**
          * Palette Controller

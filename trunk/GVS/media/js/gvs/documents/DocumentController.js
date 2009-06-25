@@ -207,9 +207,9 @@ var DocumentController = Class.create(
      */
     showDeployCurrentDocDialog: function(){
         switch(this._currentDocument.getDocumentType()) {
-            case 'welcome':
+            case Constants.DocumentType.WELCOME:
                 break;
-            case 'screenflow':
+            case Constants.DocumentType.SCREENFLOW:
                 this.getCurrentDocument().showDeployGadgetDialog();
                 break;
             // TODO: there can be something similar for other documents...?
