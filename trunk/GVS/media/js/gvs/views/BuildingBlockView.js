@@ -1,6 +1,6 @@
-var ResourceView = Class.create( /** @lends ResourceView.prototype */ {
+var BuildingBlockView = Class.create( /** @lends BuildingBlockView.prototype */ {
     /**
-     * This interface is met by all the resource graphical representations.
+     * This interface is met by all the building block graphical representations.
      * @abstract
      * @constructs
      */
@@ -45,11 +45,11 @@ var ResourceView = Class.create( /** @lends ResourceView.prototype */ {
      */
     colorize: function( /** Boolean */ satisfeable) {
         throw 'Abstract Method invocation. ' + 
-            'ResourceView :: colorize';
+            'BuildingBlockView :: colorize';
     },
 
     /**
-     * Removes the DOM Elements and frees resources
+     * Removes the DOM Elements and frees building blocks
      */
     destroy: function () {
     }

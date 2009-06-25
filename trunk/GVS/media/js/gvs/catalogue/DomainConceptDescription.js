@@ -1,11 +1,11 @@
-var DomainConceptDescription = Class.create(ResourceDescription,
+var DomainConceptDescription = Class.create(BuildingBlockDescription,
     /** @lends DomainConceptDescription.prototype */ {
 
     /**
-     * Domain Concept resource description.
+     * Domain Concept building block description.
      * TODO: replace with the object the remote catalogue will send
      * @constructs
-     * @extends ResourceDescription
+     * @extends BuildingBlockDescription
      */
     initialize: function($super, /** Hash */ properties) {
         $super(properties);

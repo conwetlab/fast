@@ -1,18 +1,18 @@
-var DomainConceptView = Class.create( ResourceView,
+var DomainConceptView = Class.create( BuildingBlockView,
     /** @lends DomainConceptView.prototype */ {
 
     /**
      * Domain Concepts graphical representation
      * @constructs
-     * @extends ResourceView
+     * @extends BuildingBlockView
      */ 
-    initialize: function($super,/** ResourceDescription */ domainConceptResourceDescription) {
+    initialize: function($super,/** BuildingBlockDescription */ domainConceptBuildingBlockDescription) {
         $super();
 
         var uidGenerator = UIDGeneratorSingleton.getInstance();
         this._id = uidGenerator.generate("domainConceptView");
 
-        var container = new Element('div', {'class': 'domainConceptImage'}).update(domainConceptResourceDescription.shortcut);
+        var container = new Element('div', {'class': 'domainConceptImage'}).update(domainConceptBuildingBlockDescription.shortcut);
         
         this._node = new Element("div", {
             "id":     this._id,
@@ -25,13 +25,13 @@ var DomainConceptView = Class.create( ResourceView,
         this._id = uidGenerator.generate("domainConceptView");
 
         var title = new Element("div", {"class":"domainConceptTitle unknown"});
-        title.update(domainConceptResourceDescription.name);
+        title.update(domainConceptBuildingBlockDescription.name);
 
-        if (domainConceptResourceDescription.image){
+        if (domainConceptBuildingBlockDescription.image){
             var imageContainer = new Element ('div',
                     {'class': 'domainConceptImage' });
             var image = new Element ('img',
-                    {'class': 'img', 'src': domainConceptResourceDescription.image});
+                    {'class': 'img', 'src': domainConceptBuildingBlockDescription.image});
             imageContainer.appendChild (image);
         }
         
@@ -40,7 +40,7 @@ var DomainConceptView = Class.create( ResourceView,
             "class": "view domainConcept unknown"
         });
         this._node.appendChild(title);
-        if (domainConceptResourceDescription.image){
+        if (domainConceptBuildingBlockDescription.image){
             this._node.appendChild(imageContainer);
         }*/
     },
@@ -48,7 +48,7 @@ var DomainConceptView = Class.create( ResourceView,
     // **************** PUBLIC METHODS **************** //
     
     /**
-     * Removes the DOM Elements and frees resources
+     * Removes the DOM Elements and frees building blocks
      * @override
      */
     destroy: function () {

@@ -3,18 +3,18 @@ var Palette = Class.create( /** @lends Palette.prototype */ {
     /**
      * Represents a palette of droppable components of a given type.
      *
-     * @param {String} resourceType  Identifier of the class or resource (e.g.: screen) 
+     * @param {String} buildingBlockType  Identifier of the class or building block (e.g.: screen) 
      * @constructs
      */
-    initialize: function(/** String */ resourceType, /** String */ docId) {
+    initialize: function(/** String */ buildingBlockType, /** String */ docId) {
         /**
          * Node id of the accordion pane.
          * @type String
          * @private @member
          */
-        this._id = resourceType + "Palette";
+        this._id = buildingBlockType + "Palette";
 
-        this._resourceType = resourceType;
+        this._buildingBlockType = buildingBlockType;
         
         this._docId = docId;
         
@@ -45,13 +45,13 @@ var Palette = Class.create( /** @lends Palette.prototype */ {
     },
 
     updateComponents: function() {
-        switch(this._resourceType){
+        switch(this._buildingBlockType){
             case "screen":
                 //find Screens and check
                 var currentDocument = GVSSingleton.getInstance().getDocumentController().getCurrentDocument();
                 var canvas = currentDocument.getCanvas();
                 var domainContext = {
-                    "tags":currentDocument.getResourceDescription().getDomainContexts(),
+                    "tags":currentDocument.getBuildingBlockDescription().getDomainContexts(),
                     "user":null
                 };
                 var elements = currentDocument.getPaletteElements();
@@ -67,7 +67,7 @@ var Palette = Class.create( /** @lends Palette.prototype */ {
     },
 
     paintComponents: function () {
-        this._components = this._createComponents(CatalogueSingleton.getInstance().getResourceFactory(this._resourceType));
+        this._components = this._createComponents(CatalogueSingleton.getInstance().getBuildingBlockFactory(this._buildingBlockType));
         var content = this._renderComponents();
         this._node.setContent(content);
     },
@@ -80,12 +80,12 @@ var Palette = Class.create( /** @lends Palette.prototype */ {
 
 
     /**
-     * Creates the palette components from resources by querying a resource factory.
-     * @type {ResourceDescription[]}
+     * Creates the palette components from building blocks by querying a building block factory.
+     * @type {BuildingBlockDescription[]}
      * @private
      */
-    _createComponents: function(resourceFactory) {
-        var descs = resourceFactory.getResourceDescriptions();
+    _createComponents: function(buildingBlockFactory) {
+        var descs = buildingBlockFactory.getBuildingBlockDescriptions();
         var components = [];
         var docId = this._docId;
         $A(descs).each(
@@ -107,7 +107,7 @@ var Palette = Class.create( /** @lends Palette.prototype */ {
         
         var pane = new dijit.layout.AccordionPane({
             "id":paneId,
-            "title":this._resourceType,
+            "title":this._buildingBlockType,
             "class":"paletteElement"
         });
         return pane;

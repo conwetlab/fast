@@ -1,11 +1,11 @@
-var ScreenflowDescription = Class.create(ResourceDescription,
+var ScreenflowDescription = Class.create(BuildingBlockDescription,
     /** @lends ScreenflowDescription.prototype */ {
 
     /**
-     * Screenflow resource description.
+     * Screenflow building block description.
      * TODO: replace with the object the remote catalogue will send
      * @constructs
-     * @extends ResourceDescription
+     * @extends BuildingBlockDescription
      */
     initialize: function($super, /** Hash */ properties) {
         var mine = this;
@@ -84,7 +84,7 @@ var ScreenflowDescription = Class.create(ResourceDescription,
          * of the deployment. When "equal screens" can be deployed in 
          * the same gadget, fix this. */
         screenUris = screenUris.uniq();
-        var screens = CatalogueSingleton.getInstance().getResourceFactory("screen").getResources(screenUris);
+        var screens = CatalogueSingleton.getInstance().getBuildingBlockFactory("screen").getBuildingBlocks(screenUris);
         return screens;
     },
 

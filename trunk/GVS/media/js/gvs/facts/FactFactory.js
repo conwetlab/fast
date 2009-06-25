@@ -49,7 +49,7 @@ var FactFactorySingleton = function() {
         
         /**
          * Gets a fact identified by uri.
-         * @type ResourceDescription
+         * @type BuildingBlockDescription
          * @public
          */
         getFact: function (/** String */ uri) {
@@ -100,7 +100,7 @@ var FactFactorySingleton = function() {
 
         /**
          * Gets the root node of a icon for a give fact identified by uri.
-         * @param String uri   Fact Resource identifier
+         * @param String uri   Fact Building Block identifier
          * @param String size  Icon size ("small"|"medium"|"big")
          * @type FactIcon
          */

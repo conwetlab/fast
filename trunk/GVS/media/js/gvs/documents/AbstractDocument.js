@@ -9,11 +9,11 @@ var AbstractDocument = Class.create( /** @lends AbstractDocument.prototype */ {
         var uidGenerator = UIDGeneratorSingleton.getInstance();
 
         /**
-         * Accepted resources
+         * Accepted building blocks
          * @type {String[]}
          * @private
          */
-        this._validResources = [];
+        this._validBuildingBlocks = [];
         
         /**
          * Tab title
@@ -72,11 +72,11 @@ var AbstractDocument = Class.create( /** @lends AbstractDocument.prototype */ {
     
 
     /**
-     * Returns the list of valid resources for the document type
+     * Returns the list of valid building blocks for the document type
      * @type {String[]}
      */
-    getValidResources: function () {
-        return this._validResources;
+    getValidBuildingBlocks: function () {
+        return this._validBuildingBlocks;
     },
     
     

@@ -6,7 +6,7 @@ var DomainConceptInstance = Class.create(ComponentInstance,
      * @constructs
      * @extends ComponentInstance
      */
-    initialize: function($super, /**ResourceDescription*/ domainConceptDescription) {
+    initialize: function($super, /**BuildingBlockDescription*/ domainConceptDescription) {
         $super(domainConceptDescription);
         var uidGenerator = UIDGeneratorSingleton.getInstance();
         this._id = uidGenerator.generate("domainConceptInstance");
@@ -30,7 +30,7 @@ var DomainConceptInstance = Class.create(ComponentInstance,
             var currentDocument = GVSSingleton.getInstance().getDocumentController().getCurrentDocument();
             var canvas = currentDocument.getCanvas();
             var domainContext = {
-                "tags":currentDocument.getResourceDescription().getDomainContexts(),
+                "tags":currentDocument.getBuildingBlockDescription().getDomainContexts(),
                 "user":null
             };
             var elements = currentDocument.getPaletteElements();

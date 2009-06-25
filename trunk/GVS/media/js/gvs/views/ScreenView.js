@@ -1,12 +1,12 @@
-var ScreenView = Class.create( ResourceView,
+var ScreenView = Class.create( BuildingBlockView,
     /** @lends ScreenView.prototype */ {
 
     /**
      * Screens graphical representation
      * @constructs
-     * @extends ResourceView
+     * @extends BuildingBlockView
      */ 
-    initialize: function($super,/** ResourceDescription */ screenResourceDescription) {
+    initialize: function($super,/** BuildingBlockDescription */ screenBuildingBlockDescription) {
 
         $super();
 
@@ -28,12 +28,12 @@ var ScreenView = Class.create( ResourceView,
         this._postIcons;
 
         var title = new Element("div", {"class":"screenTitle unknown"});
-        title.update(screenResourceDescription.label['en-gb']);
+        title.update(screenBuildingBlockDescription.label['en-gb']);
 
         var factFactory = FactFactorySingleton.getInstance();
         var preArea = new Element("div", {"class": "preArea"});
         var preIcons = [];
-        $A(screenResourceDescription.preconditions).each(
+        $A(screenBuildingBlockDescription.preconditions).each(
                 function(pre) {
                     var preFact = factFactory.getFactIcon(pre, "medium");
                     preIcons.push(preFact);
@@ -44,7 +44,7 @@ var ScreenView = Class.create( ResourceView,
 
         var postArea = new Element("div", {"class": "postArea"});
         var postIcons = [];
-        $A(screenResourceDescription.postconditions).each(
+        $A(screenBuildingBlockDescription.postconditions).each(
                 function(post) {
                     var postFact = factFactory.getFactIcon(post, "medium");
                     postIcons.push(postFact);
@@ -56,11 +56,11 @@ var ScreenView = Class.create( ResourceView,
         var prePostSeparator = new Element("div",
                 {"class": "prePostSeparator"});
 
-        if (screenResourceDescription.icon){
+        if (screenBuildingBlockDescription.icon){
             var imageContainer = new Element ('div',
                     {'class': 'screenImage' });
             var image = new Element ('img',
-                    {'class': 'img', 'src': screenResourceDescription.icon});
+                    {'class': 'img', 'src': screenBuildingBlockDescription.icon});
             imageContainer.appendChild (image); 
         }
 
@@ -71,7 +71,7 @@ var ScreenView = Class.create( ResourceView,
         this._node.appendChild(title);
         this._node.appendChild(preArea);
         this._node.appendChild(prePostSeparator);
-        if (screenResourceDescription.icon){
+        if (screenBuildingBlockDescription.icon){
             this._node.appendChild(imageContainer);
         }
         this._node.appendChild(postArea);
@@ -116,7 +116,7 @@ var ScreenView = Class.create( ResourceView,
     },
     
     /**
-     * Removes the DOM Elements and frees resources
+     * Removes the DOM Elements and frees building blocks
      * @override
      */
     destroy: function () {

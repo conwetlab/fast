@@ -19,7 +19,7 @@ var CatalogueSingleton = function(){
         /** @constructs */
         initialize: function(){
             /**
-             * Resource factories
+             * BuildingBlock factories
              * @type Hash
              * @private
              */
@@ -40,12 +40,12 @@ var CatalogueSingleton = function(){
         // **************** PUBLIC METHODS **************** //
         
         /**
-         * Gets a resource factory for a given type of resources
-         * @type ResourceFactory
+         * Gets a building block factory for a given type of building blocks
+         * @type BuildingBlockFactory
          * @public
          */
-        getResourceFactory: function(/** String */resourceType){
-            return this._factories[resourceType];
+        getBuildingBlockFactory: function(/** String */buildingBlockType){
+            return this._factories[buildingBlockType];
         },
         
         getFacts: function(){
@@ -66,7 +66,7 @@ var CatalogueSingleton = function(){
             var onDConceptsSuccess = function(response){
                 var responseJSON = response.responseText;
                 var domainConceptMetadata = eval('(' + responseJSON + ')');
-                this.getResourceFactory('domainConcept').updateResourceDescriptions(domainConceptMetadata.domainConcepts);
+                this.getBuildingBlockFactory('domainConcept').updateBuildingBlockDescriptions(domainConceptMetadata.domainConcepts);
                 var paletteController = GVSSingleton.getInstance().getDocumentController().getCurrentDocument().getPaletteController();
                 var domainConceptPalette = paletteController.getPalette("domainConcept");
                 domainConceptPalette.paintComponents();
@@ -121,7 +121,7 @@ var CatalogueSingleton = function(){
                 var responseJSON = response.responseText;
                 var screenMetadata = eval('(' + responseJSON + ')');
                 //update the Screen Factory
-                this.getResourceFactory('screen').updateResourceDescriptions(screenMetadata.screens);
+                this.getBuildingBlockFactory('screen').updateBuildingBlockDescriptions(screenMetadata.screens);
                 //repaint the Screen Palette
                 var paletteController = GVSSingleton.getInstance().getDocumentController().getCurrentDocument().getPaletteController();
                 var screenPalette = paletteController.getPalette("screen");
@@ -141,7 +141,7 @@ var CatalogueSingleton = function(){
             
             var newListElements = listElementUris.clone();
             // get the uris list and call get_metadata
-            var screenDescriptions = this.getResourceFactory('screen').getResourceDescriptions();
+            var screenDescriptions = this.getBuildingBlockFactory('screen').getBuildingBlockDescriptions();
             newListElements.each(function(uri, index){
                 screenDescriptions.each(function(screen){
                     if (uri == screen.uri) {
@@ -185,7 +185,7 @@ var CatalogueSingleton = function(){
             
             var newListElements = listElementUris.clone();
             // get the uris list and call get_metadata
-            var screenDescriptions = this.getResourceFactory('screen').getResourceDescriptions();
+            var screenDescriptions = this.getBuildingBlockFactory('screen').getBuildingBlockDescriptions();
             newListElements.each(function(uri, index){
                 screenDescriptions.each(function(screen){
                     if (uri.uri == screen.uri) {
@@ -215,7 +215,7 @@ var CatalogueSingleton = function(){
                 var screenMetadata = eval('(' + responseJSON + ')');
                 console.log(screenMetadata);
                 //update the Screen Factory
-                this.getResourceFactory('screen').updateResourceDescriptions(screenMetadata.screens);
+                this.getBuildingBlockFactory('screen').updateBuildingBlockDescriptions(screenMetadata.screens);
                 //repaint the Screen Palette
                 var paletteController = GVSSingleton.getInstance().getDocumentController().getCurrentDocument().getPaletteController();
                 var screenPalette = paletteController.getPalette("screen");
@@ -231,7 +231,7 @@ var CatalogueSingleton = function(){
             
             var newScreenUris = screenUris.clone();
             // get the uris list and call get_metadata
-            var screenDescriptions = this.getResourceFactory('screen').getResourceDescriptions();
+            var screenDescriptions = this.getBuildingBlockFactory('screen').getBuildingBlockDescriptions();
             newScreenUris.each(function(uri, index){
                 screenDescriptions.each(function(screen){
                     if (uri.uri == screen.uri) {

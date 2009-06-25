@@ -18,11 +18,11 @@ var PreviewDocument = Class.create(AbstractDocument,
 
 
     /**
-     * Checks if it is possible to drop a kind of resource within the
+     * Checks if it is possible to drop a kind of building block within the
      * document area.
      * @type Boolean
      */
-    isAccepted: function (/** String **/ resourceType) {
+    isAccepted: function (/** String **/ buildingBlockType) {
         return false;
     },
     
@@ -30,16 +30,16 @@ var PreviewDocument = Class.create(AbstractDocument,
      * Constructs the document content.
      * @private
      */
-    populate: function(/** String **/ resourceDesc){
+    populate: function(/** String **/ buildingBlockDesc){
         var content = this.getContent();
         var previewDiv = new Element ("div", {"id": "previewDivContent" ,"class": "documentTitle"}).
-            update("Preview of the Screen: " + resourceDesc.label['en-gb']);
+            update("Preview of the Screen: " + buildingBlockDesc.label['en-gb']);
         content.update(previewDiv);
 
         var imageDiv = new Element ("img", {
-            "src": resourceDesc.screenshot, 
+            "src": buildingBlockDesc.screenshot, 
             "onerror": "this.parentNode.childNodes[0].update('Image " + 
-                resourceDesc.screenshot + 
+                buildingBlockDesc.screenshot + 
                 " not available');this.src='"+URIs.logoFast+"';"
         })
         content.appendChild(imageDiv);

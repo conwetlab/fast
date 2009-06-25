@@ -2,13 +2,13 @@ var ScreenComponent = Class.create(PaletteComponent,
     /** @lends ScreenComponent.prototype */ {
         
     /**
-     * Palette component of a screen resource.
-     * @param ResourceDescription screenResourceDescription
+     * Palette component of a screen building block.
+     * @param BuildingBlockDescription screenBuildingBlockDescription
      * @constructs
      * @extends PaletteComponent
      */
-    initialize: function($super, screenResourceDescription, /** String */ docId) {
-        $super(screenResourceDescription, docId);
+    initialize: function($super, screenBuildingBlockDescription, /** String */ docId) {
+        $super(screenBuildingBlockDescription, docId);
     },
 
     /**
@@ -16,7 +16,7 @@ var ScreenComponent = Class.create(PaletteComponent,
      * @public
      */
     colorize: function(){
-        this.getView().colorize(this.getResourceDescription().satisfeable);
+        this.getView().colorize(this.getBuildingBlockDescription().satisfeable);
     },
 
     // **************** PUBLIC METHODS **************** //
@@ -31,7 +31,7 @@ var ScreenComponent = Class.create(PaletteComponent,
      * @override
      */
     _createInstance: function () {
-        return new ScreenInstance(this._resourceDescription);
+        return new ScreenInstance(this._buildingBlockDescription);
     },
     
     /**
@@ -40,7 +40,7 @@ var ScreenComponent = Class.create(PaletteComponent,
      * @private
      */
     _getTitle: function() {
-        return this._resourceDescription.label['en-gb'];  
+        return this._buildingBlockDescription.label['en-gb'];  
     }
 });
 

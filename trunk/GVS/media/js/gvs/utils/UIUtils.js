@@ -15,12 +15,12 @@ UIUtils.onKeyPressCanvas = function(e){
             if (selectedElement != null) { //Delete an element from the canvas
                 var title = null;
                 var selectedElementType = null;
-                var selectedElementResourceInstance = null;
-                selectedElementResourceInstance = currentDocument.getResourceInstance(selectedElement.id);
-                selectedElementType = selectedElementResourceInstance.getBuildingBlockType();
+                var selectedElementBuildingBlockInstance = null;
+                selectedElementBuildingBlockInstance = currentDocument.getBuildingBlockInstance(selectedElement.id);
+                selectedElementType = selectedElementBuildingBlockInstance.getBuildingBlockType();
                 switch (selectedElementType) {
                     case 'screen':
-                        var label = selectedElementResourceInstance.getResourceDescription().label['en-gb'];
+                        var label = selectedElementBuildingBlockInstance.getBuildingBlockDescription().label['en-gb'];
                         title = (label) ? ('the screen "' + label + '"') : "the selected screen";
                         if (confirm("You are about to remove " + title + " from canvas. Are you sure?")) { //delete if ok
                             currentDocument.deleteScreen(selectedElement.id);
@@ -30,7 +30,7 @@ UIUtils.onKeyPressCanvas = function(e){
                         }
                         break;
                     case 'domainConcept':
-                        var label = selectedElementResourceInstance.getResourceDescription().name;
+                        var label = selectedElementBuildingBlockInstance.getBuildingBlockDescription().name;
                         title = (label) ? ('the domain concept "' + label + '"') : "the selected domain concept";
                         if (confirm("You are about to remove " + title + " from canvas. Are you sure?")) { //delete if ok
                             currentDocument.deleteDomainConcept(selectedElement.id);
@@ -40,7 +40,7 @@ UIUtils.onKeyPressCanvas = function(e){
                         }
                         break;
                     case 'connector':
-                        var label = selectedElementResourceInstance.getResourceDescription().name;
+                        var label = selectedElementBuildingBlockInstance.getBuildingBlockDescription().name;
                         title = (label) ? ('the connector "' + label + '"') : "the selected connector";
                         if (confirm("You are about to remove " + title + " from canvas. Are you sure?")) { //delete if ok
                             currentDocument.deleteConnector(selectedElement.id);

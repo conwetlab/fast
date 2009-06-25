@@ -19,11 +19,11 @@ var WelcomeDocument = Class.create(AbstractDocument,
 
 
     /**
-     * Checks if it is possible to drop a kind of resource within the
+     * Checks if it is possible to drop a kind of building block within the
      * document area.
      * @type Boolean
      */
-    isAccepted: function (/** String **/ resourceType) {
+    isAccepted: function (/** String **/ buildingBlockType) {
         return false;
     },
 

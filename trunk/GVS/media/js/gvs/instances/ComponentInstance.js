@@ -7,7 +7,7 @@ var ComponentInstance = Class.create(DragSource,
      * @constructs
      * @extends DragSource
      */ 
-    initialize: function($super, /**ResourceDescription*/ resourceDescription) {
+    initialize: function($super, /**BuildingBlockDescription*/ buildingBlockDescription) {
         $super();
 
         /**
@@ -25,18 +25,18 @@ var ComponentInstance = Class.create(DragSource,
         this._id = null;
 
         /**
-         * Resource description graphical representation
-         * @type ResourceView
+         * BuildingBlock description graphical representation
+         * @type BuildingBlockView
          * @private
          */
-        this._view = resourceDescription.createView();
+        this._view = buildingBlockDescription.createView();
 
         /** 
-         * Resource description this class is instance of
-         * @type ResourceDescription
+         * BuildingBlock description this class is instance of
+         * @type BuildingBlockDescription
          * @private @member
          */
-        this._resourceDescription = resourceDescription;
+        this._buildingBlockDescription = buildingBlockDescription;
         
         /**
          * Building block type this class represents
@@ -118,11 +118,11 @@ var ComponentInstance = Class.create(DragSource,
     },
 
     /**
-     * Returns the resourcedescription
+     * Returns the building block description
      * @public
      */
-    getResourceDescription: function() {
-        return this._resourceDescription;
+    getBuildingBlockDescription: function() {
+        return this._buildingBlockDescription;
     },
 
     /**

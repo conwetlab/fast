@@ -2,13 +2,13 @@ var DomainConceptComponent = Class.create(PaletteComponent,
     /** @lends DomainConceptComponent.prototype */ {
         
     /**
-     * Palette component of a domain concept resource.
-     * @param ResourceDescription domainConceptResourceDescription
+     * Palette component of a domain concept building block.
+     * @param BuildingBlockDescription domainConceptBuildingBlockDescription
      * @constructs
      * @extends PaletteComponent
      */
-    initialize: function($super, domainConceptResourceDescription, /** String */ docId) {
-        $super(domainConceptResourceDescription, docId);
+    initialize: function($super, domainConceptBuildingBlockDescription, /** String */ docId) {
+        $super(domainConceptBuildingBlockDescription, docId);
     },
 
 
@@ -30,17 +30,17 @@ var DomainConceptComponent = Class.create(PaletteComponent,
                             })
                         );
         var properties = new Hash();
-        properties.set('fact',this.getResourceDescription().name);
+        properties.set('fact',this.getBuildingBlockDescription().name);
         properties.set('type','None');
-        properties.set('shortcut',this.getResourceDescription().shortcut);
-        properties.set('semantics',this.getResourceDescription().semantics);
+        properties.set('shortcut',this.getBuildingBlockDescription().shortcut);
+        properties.set('semantics',this.getBuildingBlockDescription().semantics);
         // By default, the factAttr of the instance will be 'All atributtes'
         // represented by an empty string in the Engine.js.
         properties.set('factAttr','');
         instance.setProperties(properties);
 
         return instance;
-        //return new DomainConceptInstance(this._resourceDescription);
+        //return new DomainConceptInstance(this._buildingBlockDescription);
     },
     
     /**
@@ -49,7 +49,7 @@ var DomainConceptComponent = Class.create(PaletteComponent,
      * @private
      */
     _getTitle: function() {
-        return this._resourceDescription.name;  
+        return this._buildingBlockDescription.name;  
     }
 });
 

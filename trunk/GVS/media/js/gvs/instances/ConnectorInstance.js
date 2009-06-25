@@ -6,8 +6,8 @@ var ConnectorInstance = Class.create(ComponentInstance,
      * @constructs
      * @extends ComponentInstance
      */
-    initialize: function($super, /**ResourceDescription*/ resourceDescription) {
-        $super(resourceDescription);
+    initialize: function($super, /**BuildingBlockDescription*/ buildingBlockDescription) {
+        $super(buildingBlockDescription);
         var uidGenerator = UIDGeneratorSingleton.getInstance();
         this._id = uidGenerator.generate("connectorInstance");
         this._properties = new Hash();
@@ -42,7 +42,7 @@ var ConnectorInstance = Class.create(ComponentInstance,
             var currentDocument = GVSSingleton.getInstance().getDocumentController().getCurrentDocument();
             var canvas = currentDocument.getCanvas();
             var domainContext = {
-                "tags":currentDocument.getResourceDescription().getDomainContexts(),
+                "tags":currentDocument.getBuildingBlockDescription().getDomainContexts(),
                 "user":null
             };
             var elements = currentDocument.getPaletteElements();
@@ -182,7 +182,7 @@ var ConnectorInstance = Class.create(ComponentInstance,
             option_none.innerHTML = "Choose a fact...";
             inputConnFact.insert(option_none);
             
-            var descs = CatalogueSingleton.getInstance().getResourceFactory('domainConcept').getResourceDescriptions();
+            var descs = CatalogueSingleton.getInstance().getBuildingBlockFactory('domainConcept').getBuildingBlockDescriptions();
             var mine = this;
             $A(descs).each(function(desc){
                 var option = new Element("option", {
@@ -231,7 +231,7 @@ var ConnectorInstance = Class.create(ComponentInstance,
 
             var fact = this.getProperties().get('fact')
             if (fact != undefined) {
-                var descs = CatalogueSingleton.getInstance().getResourceFactory('domainConcept').getResourceDescriptions();
+                var descs = CatalogueSingleton.getInstance().getBuildingBlockFactory('domainConcept').getBuildingBlockDescriptions();
                 $A(descs).each(function(desc){
                     if (desc.name == fact) {
                         $A(desc.attributes).each(function(attr){
@@ -358,7 +358,7 @@ var ConnectorInstance = Class.create(ComponentInstance,
                     }
                 }
                 else {
-                    var descs = CatalogueSingleton.getInstance().getResourceFactory('domainConcept').getResourceDescriptions();
+                    var descs = CatalogueSingleton.getInstance().getBuildingBlockFactory('domainConcept').getBuildingBlockDescriptions();
                     $A(descs).each(function(desc){
                         if (desc.name == fact) {
                             var i;

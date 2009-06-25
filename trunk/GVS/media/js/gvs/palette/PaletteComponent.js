@@ -6,7 +6,7 @@ var PaletteComponent = Class.create(DragSource,
      * @constructs
      * @extends DragSource
      */ 
-    initialize: function($super,/** ResourceDescription */ resourceDescription, /** String */ docId) {
+    initialize: function($super,/** BuildingBlockDescription */ buildingBlockDescription, /** String */ docId) {
         $super();
         /**
          * Handles the drag'n'drop stuff
@@ -16,18 +16,18 @@ var PaletteComponent = Class.create(DragSource,
         this._dragHandler = new DragHandler(this, GVSSingleton.getInstance().getDocumentController().getDocument(docId).getContentId());
 
         /**
-         * Resource in which this component is based.
-         * @type ResourceDescription
+         * BuildingBlock in which this component is based.
+         * @type BuildingBlockDescription
          * @private
          */
-        this._resourceDescription = resourceDescription;
+        this._buildingBlockDescription = buildingBlockDescription;
 
         /**
          * Screen component view
          * @type ScreenView
          * @private
          */
-        this._view = this._resourceDescription.createView();
+        this._view = this._buildingBlockDescription.createView();
         
         /**
          * Node of the component.
@@ -77,8 +77,8 @@ var PaletteComponent = Class.create(DragSource,
         return instance;
     },
 
-    getResourceDescription: function() {
-        return this._resourceDescription;
+    getBuildingBlockDescription: function() {
+        return this._buildingBlockDescription;
     },
 
     /**

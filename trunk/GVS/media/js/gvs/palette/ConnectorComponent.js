@@ -1,14 +1,14 @@
 var ConnectorComponent = Class.create(PaletteComponent, 
     /** @lends ConnectorComponent.prototype */ {
-        
+
     /**
-     * Palette component of a connector resource.
-     * @param ResourceDescription connectorResourceDescription
+     * Palette component of a connector building block.
+     * @param BuildingBlockDescription connectorBuildingBlockDescription
      * @constructs
      * @extends PaletteComponent
      */
-    initialize: function($super, connectorResourceDescription, /** String */ docId) {
-        $super(connectorResourceDescription, docId);
+    initialize: function($super, connectorBuildingBlockDescription, /** String */ docId) {
+        $super(connectorBuildingBlockDescription, docId);
     },
 
 
@@ -24,10 +24,10 @@ var ConnectorComponent = Class.create(PaletteComponent,
      * @override
      */
     _createInstance: function () {
-        var instance = new ConnectorInstance(this._resourceDescription);
+        var instance = new ConnectorInstance(this._buildingBlockDescription);
         var properties = new Hash();
         properties.set('fact','none');
-        properties.set('type',this.getResourceDescription().type);
+        properties.set('type',this.getBuildingBlockDescription().type);
         instance.setProperties(properties);
         instance.getView().update(properties);
         return instance;
@@ -39,7 +39,7 @@ var ConnectorComponent = Class.create(PaletteComponent,
      * @private
      */
     _getTitle: function() {
-        return this._resourceDescription.type;  
+        return this._buildingBlockDescription.type;  
     }
 });
 

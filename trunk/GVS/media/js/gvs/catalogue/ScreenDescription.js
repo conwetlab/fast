@@ -1,11 +1,11 @@
-var ScreenDescription = Class.create(ResourceDescription,
+var ScreenDescription = Class.create(BuildingBlockDescription,
     /** @lends ScreenDescription.prototype */ {
 
     /**
-     * Screen resource description.
+     * Screen building block description.
      * TODO: replace with the object the remote catalogue will send
      * @constructs
-     * @extends ResourceDescription
+     * @extends BuildingBlockDescription
      */
     initialize: function($super, /** Hash */ properties) {
         $super(properties);

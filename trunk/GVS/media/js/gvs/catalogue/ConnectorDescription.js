@@ -1,11 +1,11 @@
-var ConnectorDescription = Class.create(ResourceDescription,
+var ConnectorDescription = Class.create(BuildingBlockDescription,
     /** @lends ConnectorDescription.prototype */ {
 
     /**
-     * Connector resource description.
+     * Connector building block description.
      * TODO: replace with the object the remote catalogue will send
      * @constructs
-     * @extends ResourceDescription
+     * @extends BuildingBlockDescription
      */
     initialize: function($super, /** Hash */ properties) {
         $super(properties);

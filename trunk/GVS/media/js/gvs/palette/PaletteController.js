@@ -79,13 +79,13 @@ var PaletteController = Class.create(
         var screens = this.getPalette("screen").getComponents();
         for (var i = 0; i < screens.length; i++) {
             for (var j = 0; j < screenList.length; j++) {
-                if (screens[i].getResourceDescription().uri == screenList[j].uri) {
+                if (screens[i].getBuildingBlockDescription().uri == screenList[j].uri) {
                     if (screenList[j].reachability == true) {
-                        screens[i].getResourceDescription().satisfeable = true;
+                        screens[i].getBuildingBlockDescription().satisfeable = true;
                         break;
                     }
                     else {
-                        screens[i].getResourceDescription().satisfeable = false;
+                        screens[i].getBuildingBlockDescription().satisfeable = false;
                     }
                 }
             }

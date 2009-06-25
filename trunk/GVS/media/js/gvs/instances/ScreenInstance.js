@@ -6,8 +6,8 @@ var ScreenInstance = Class.create(ComponentInstance,
      * @constructs
      * @extends ComponentInstance
      */
-    initialize: function($super, /**ResourceDescription*/ resourceDescription) {
-        $super(resourceDescription);
+    initialize: function($super, /**BuildingBlockDescription*/ buildingBlockDescription) {
+        $super(buildingBlockDescription);
         var uidGenerator = UIDGeneratorSingleton.getInstance();
         this._id = uidGenerator.generate("screenInstance");
         this._buildingBlockType = 'screen';
@@ -20,7 +20,7 @@ var ScreenInstance = Class.create(ComponentInstance,
      * @public
      */
     colorize: function(){
-        this.getView().colorize(this.getResourceDescription().satisfeable);
+        this.getView().colorize(this.getBuildingBlockDescription().satisfeable);
     },
 
     /**
@@ -38,7 +38,7 @@ var ScreenInstance = Class.create(ComponentInstance,
             currentDocument.onClickCanvas(this.getHandlerNode());
             var canvas = currentDocument.getCanvas();
             var domainContext = {
-                "tags":currentDocument.getResourceDescription().getDomainContexts(),
+                "tags":currentDocument.getBuildingBlockDescription().getDomainContexts(),
                 "user":null
             };
             var elements = currentDocument.getPaletteElements();

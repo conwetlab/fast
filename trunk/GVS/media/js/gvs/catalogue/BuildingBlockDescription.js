@@ -1,8 +1,8 @@
-var ResourceDescription = Class.create(
-    /** @lends ResourceDescription.prototype */ {
+var BuildingBlockDescription = Class.create(
+    /** @lends BuildingBlockDescription.prototype */ {
     
     /**
-     * Generic resource description. All the resource classes extends
+     * Generic building block description. All the building block classes extends
      * this one.
      * @constructs
      */
@@ -21,7 +21,7 @@ var ResourceDescription = Class.create(
 
 
     /**
-     * Creates and returns a palette component based on the resource.
+     * Creates and returns a palette component based on the building block.
      * This method must be overriden on child classes.
      *
      * @type PaletteComponent
@@ -29,19 +29,19 @@ var ResourceDescription = Class.create(
      */
     createPaletteComponent: function () {
         throw 'Abstract Method invocation. ' + 
-            'ResourceDescription :: createPaletteComponent';
+            'BuildingBlockDescription :: createPaletteComponent';
     },
     
     /**
-     * Creates and returns a view based on the resource.
+     * Creates and returns a view based on the building block.
      * This method must be overriden on child classes.
      *
-     * @type ResourceView
+     * @type BuildingBlockView
      * @public @abstract
      */
     createView: function () {
         throw 'Abstract Method invocation. ' +
-            'ResourceDescription :: createView';
+            'BuildingBlockDescription :: createView';
     }
 
 

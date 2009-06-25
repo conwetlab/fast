@@ -1,18 +1,18 @@
-var ConnectorFactory = Class.create(ResourceFactory,
+var ConnectorFactory = Class.create(BuildingBlockFactory,
     /** @lends ConnectorFactory.prototype */ {
 
     /**
-     * Factory of connector resources.
+     * Factory of connector building blocks.
      * @constructs
-     * @extends ResouceFactory
+     * @extends BuildingBlockFactory
      */
     initialize: function($super) {
         $super();
         var connectorsPath = '/fast/images/palette/connectors/';
 
-        this._resourceType = 'connector';
-        this._resourceName = 'Connectors';
-        this._resourceDescriptions = [
+        this._buildingBlockType = 'connector';
+        this._buildingBlockName = 'Connectors';
+        this._buildingBlockDescriptions = [
             new ConnectorDescription ({
                 type: 'In'
             }),
@@ -21,7 +21,7 @@ var ConnectorFactory = Class.create(ResourceFactory,
             })
             ];
         /*
-        this._resourceDescriptions = [
+        this._buildingBlockDescriptions = [
             new ConnectorDescription ({
                 name: 'Slot',
                 image: connectorsPath + 'greenCircle.png',
@@ -64,10 +64,10 @@ var ConnectorFactory = Class.create(ResourceFactory,
 
     // **************** PUBLIC METHODS **************** //
 
-    updateResourceDescriptions: function (resourceDescriptions) {
+    updateBuildingBlockDescriptions: function (buildingBlockDescriptions) {
     },
 
-    getResources: function (/** Array*/ resourceIds) {
+    getBuildingBlocks: function (/** Array*/ buildingBlockIds) {
     }
 
 });

@@ -147,7 +147,7 @@ var DocumentController = Class.create(
     createSFDocument: function(name, domainContext){
         var screenflow = new ScreenflowDocument(name);
         if(name && name != "") {
-            screenflow.getResourceDescription().setDomainContexts(domainContext);
+            screenflow.getBuildingBlockDescription().setDomainContexts(domainContext);
         }
         this.addDocument(screenflow);
         screenflow.getPaletteController().updatePalettes();
@@ -166,10 +166,10 @@ var DocumentController = Class.create(
     /**
      * Creates a preview document
      */
-    createPreviewDocument: function(resourceDesc){
-        var preview = new PreviewDocument(resourceDesc.label['en-gb']);
+    createPreviewDocument: function(buildingBlockDesc){
+        var preview = new PreviewDocument(buildingBlockDesc.label['en-gb']);
         this.addDocument(preview);
-        preview.populate(resourceDesc);
+        preview.populate(buildingBlockDesc);
     },
 
     /**

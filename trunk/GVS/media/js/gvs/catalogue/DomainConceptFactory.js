@@ -1,37 +1,37 @@
-var DomainConceptFactory = Class.create(ResourceFactory,
+var DomainConceptFactory = Class.create(BuildingBlockFactory,
     /** @lends DomainConceptFactory.prototype */ {
 
     /**
-     * Factory of domain concept resources.
+     * Factory of domain concept building blocks.
      * @constructs
-     * @extends ResourceFactory
+     * @extends BuildingBlockFactory
      */
     initialize: function($super) {
         $super();
 
-        this._resourceType = 'domainConcept';
-        this._resourceName = 'Domain Concepts';
-        this._resourceDescriptions = [];
+        this._buildingBlockType = 'domainConcept';
+        this._buildingBlockName = 'Domain Concepts';
+        this._buildingBlockDescriptions = [];
     },
 
 
     // **************** PUBLIC METHODS **************** //
 
-    updateResourceDescriptions: function (domainConceptDescriptions) {
+    updateBuildingBlockDescriptions: function (domainConceptDescriptions) {
         for (var i=0; i<domainConceptDescriptions.length ; i++) {
             var already_exists = false;
-            for (var j=0; j<this._resourceDescriptions.length; j++) {
-                if(this._resourceDescriptions[j].name==domainConceptDescriptions[i].name){
+            for (var j=0; j<this._buildingBlockDescriptions.length; j++) {
+                if(this._buildingBlockDescriptions[j].name==domainConceptDescriptions[i].name){
                     already_exists = true;
                 }
             }
             if(!already_exists){
-                this._resourceDescriptions.push(new DomainConceptDescription (domainConceptDescriptions[i]));
+                this._buildingBlockDescriptions.push(new DomainConceptDescription (domainConceptDescriptions[i]));
             }
         }
     },
 
-    getResources: function (/** Array*/ resourceIds) {
+    getBuildingBlocks: function (/** Array*/ buildingBlockIds) {
     }
 });
 

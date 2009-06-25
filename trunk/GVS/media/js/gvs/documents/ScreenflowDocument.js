@@ -11,10 +11,10 @@ var ScreenflowDocument = Class.create(AbstractDocument,
         this._detailsTitle = null;
         this._detailsTable = null;
         
-        this._validResources = ['screen','flowControl','connector', 'domainConcept'];
+        this._validBuildingBlocks = ['screen','flowControl','connector', 'domainConcept'];
         this._documentType='screenflow';
         /*Screenflow Definition*/
-        this._resourceDescription = new ScreenflowDescription();
+        this._buildingBlockDescription = new ScreenflowDescription();
         this._screens = [];
         this._connectors = [];
         this._domainConcepts = [];
@@ -33,19 +33,19 @@ var ScreenflowDocument = Class.create(AbstractDocument,
 
     // **************** PUBLIC METHODS **************** //
     /**
-     * Returns the Resource Description for the screenflow document
+     * Returns the BuildingBlock Description for the screenflow document
      * @type {ScreenflowDescription}
      */
-    getResourceDescription: function () {
-        return this._resourceDescription;
+    getBuildingBlockDescription: function () {
+        return this._buildingBlockDescription;
     },
     
-    updateResourceDescription: function () {
+    updateBuildingBlockDescription: function () {
         var form = this.getDeployGadgetDialog().getForm();
-        this.getResourceDescription().setLabel("en-GB", $F(form.name));
-        this.getResourceDescription().setVersion($F(form.version));
-        this.getResourceDescription().setDescription("en-GB", $F(form.info));
-        this.getResourceDescription().setCreator($F(form.author));
+        this.getBuildingBlockDescription().setLabel("en-GB", $F(form.name));
+        this.getBuildingBlockDescription().setVersion($F(form.version));
+        this.getBuildingBlockDescription().setDescription("en-GB", $F(form.info));
+        this.getBuildingBlockDescription().setCreator($F(form.author));
     },
     
     /**
@@ -81,23 +81,23 @@ var ScreenflowDocument = Class.create(AbstractDocument,
     },
 
     /**
-     * Returns an array with the resource description and the resource type for the resource view id 
-     * passed as a parameter of the screenflow document
-     * @type {[ResourceDescription, String]}
+     * Returns an array with the building block description and the Building block type
+     * for the building block view id passed as a parameter of the screenflow document
+     * @type {[BuildingBlockDescription, String]}
      */
-    getResourceInstance: function (resourceViewId) {
+    getBuildingBlockInstance: function (buildingBlockViewId) {
         for (var i=0; i<this._screens.length; i++) {
-            if (this._screens[i].getView().getId()==resourceViewId) {
+            if (this._screens[i].getView().getId()==buildingBlockViewId) {
                 return this._screens[i];
             }
         }
         for (var i=0; i<this._connectors.length; i++) {
-            if (this._connectors[i].getView().getId()==resourceViewId) {
+            if (this._connectors[i].getView().getId()==buildingBlockViewId) {
                 return this._connectors[i];
             }
         }
         for (var i=0; i<this._domainConcepts.length; i++) {
-            if (this._domainConcepts[i].getView().getId()==resourceViewId) {
+            if (this._domainConcepts[i].getView().getId()==buildingBlockViewId) {
                 return this._domainConcepts[i];
             }
         }
@@ -113,8 +113,8 @@ var ScreenflowDocument = Class.create(AbstractDocument,
     addScreen: function (screen) {
         if(screen!=null) {
             this._screens.push(screen);
-            var screenDescUri = $H(screen.getResourceDescription()).get('uri');
-            this.getResourceDescription().addScreen(screen.getId(), screenDescUri, screen.getPosition());
+            var screenDescUri = $H(screen.getBuildingBlockDescription()).get('uri');
+            this.getBuildingBlockDescription().addScreen(screen.getId(), screenDescUri, screen.getPosition());
         }
     },
     
@@ -127,7 +127,7 @@ var ScreenflowDocument = Class.create(AbstractDocument,
     addConnector: function (connector) {
         if(connector!=null) {
             this._connectors.push(connector);
-            this.getResourceDescription().addConnector(connector.getId(), connector, connector.getPosition());
+            this.getBuildingBlockDescription().addConnector(connector.getId(), connector, connector.getPosition());
         }
     },
     
@@ -135,7 +135,7 @@ var ScreenflowDocument = Class.create(AbstractDocument,
     updateConnector: function (connector) {
         /*
         if(connector!=null) {
-            this.getResourceDescription().updateConnector(connector.getId(), connector, connector.getPosition());
+            this.getBuildingBlockDescription().updateConnector(connector.getId(), connector, connector.getPosition());
         }
         */
     },
@@ -162,7 +162,7 @@ var ScreenflowDocument = Class.create(AbstractDocument,
     deleteScreen: function(screenViewId) {
         for (var i=0; i<this._screens.length; i++) {
             if (this._screens[i].getView().getId()==screenViewId) {
-                this._resourceDescription.deleteScreen(this._screens[i].getId());
+                this._buildingBlockDescription.deleteScreen(this._screens[i].getId());
                 this._screens[i] = null;
                 break;
             }
@@ -171,7 +171,7 @@ var ScreenflowDocument = Class.create(AbstractDocument,
         var currentDocument = GVSSingleton.getInstance().getDocumentController().getCurrentDocument();
         var canvas = currentDocument.getCanvas();
         var domainContext = {
-            "tags":currentDocument.getResourceDescription().getDomainContexts(),
+            "tags":currentDocument.getBuildingBlockDescription().getDomainContexts(),
             "user":null
         };
         var elements = currentDocument.getPaletteElements();
@@ -187,7 +187,7 @@ var ScreenflowDocument = Class.create(AbstractDocument,
     deleteConnector: function(connectorViewId) {
         for (var i=0; i<this._connectors.length; i++) {
             if (this._connectors[i].getView().getId()==connectorViewId) {
-                this._resourceDescription.deleteConnector(this._connectors[i].getId());
+                this._buildingBlockDescription.deleteConnector(this._connectors[i].getId());
                 this._connectors[i] = null;
                 break;
             }
@@ -196,7 +196,7 @@ var ScreenflowDocument = Class.create(AbstractDocument,
         var currentDocument = GVSSingleton.getInstance().getDocumentController().getCurrentDocument();
         var canvas = currentDocument.getCanvas();
         var domainContext = {
-            "tags":currentDocument.getResourceDescription().getDomainContexts(),
+            "tags":currentDocument.getBuildingBlockDescription().getDomainContexts(),
             "user":null
         };
         var elements = currentDocument.getPaletteElements();
@@ -213,7 +213,7 @@ var ScreenflowDocument = Class.create(AbstractDocument,
         for (var i=0; i<this._domainConcepts.length; i++) {
             if (this._domainConcepts[i].getView().getId()==domainConceptViewId) {
                 //TODO: fix this
-                //this._resourceDescription.deleteDomainConcept(this._domainConcepts[i].getId());
+                //this._buildingBlockDescription.deleteDomainConcept(this._domainConcepts[i].getId());
                 this._domainConcepts[i] = null;
                 break;
             }
@@ -222,7 +222,7 @@ var ScreenflowDocument = Class.create(AbstractDocument,
         var currentDocument = GVSSingleton.getInstance().getDocumentController().getCurrentDocument();
         var canvas = currentDocument.getCanvas();
         var domainContext = {
-            "tags":currentDocument.getResourceDescription().getDomainContexts(),
+            "tags":currentDocument.getBuildingBlockDescription().getDomainContexts(),
             "user":null
         };
         var elements = currentDocument.getPaletteElements();
@@ -269,7 +269,7 @@ var ScreenflowDocument = Class.create(AbstractDocument,
      * @public
      */
     deployGadget: function () {
-        this.getResourceDescription().deployGadget();
+        this.getBuildingBlockDescription().deployGadget();
     },
 
     /**
@@ -280,7 +280,7 @@ var ScreenflowDocument = Class.create(AbstractDocument,
     getCanvas: function () {
         var canvas = [];
         var screen_uris = [];
-        $H(this._resourceDescription.getScreens()).each(function(pair){
+        $H(this._buildingBlockDescription.getScreens()).each(function(pair){
             screen_uris.push(pair.value.screen);
         });
         screen_uris = screen_uris.uniq();
@@ -298,7 +298,7 @@ var ScreenflowDocument = Class.create(AbstractDocument,
     getPaletteElements: function () {
         var elements = [];
         (this._paletteController.getPalette("screen").getComponents()).each(function(component){
-            elements.push({'uri':component.getResourceDescription().uri});
+            elements.push({'uri':component.getBuildingBlockDescription().uri});
         });
         return elements;
     },
@@ -312,40 +312,40 @@ var ScreenflowDocument = Class.create(AbstractDocument,
         return this._detailsTitle[detail];
     },
     
-    updatePropertiesPane: function( /** ResourceId */ resourceId, /** String */ resourceType) {
-        var resourceInstance = this.getResourceInstance(resourceId);
-        var resourceDescription = resourceInstance.getResourceDescription();
+    updatePropertiesPane: function( /** BuildingBlockId */ buildingBlockId, /** String */ buildingBlockType) {
+        var buildingBlockInstance = this.getBuildingBlockInstance(buildingBlockId);
+        var buildingBlockDescription = buildingBlockInstance.getBuildingBlockDescription();
         this.emptyPropertiesPane();
-        switch(resourceType){
+        switch(buildingBlockType){
             case "screen":
-                $(this.getDetailsTitle('detailsTitle')).update('Properties of screen: ' + resourceDescription.label['en-gb']);
+                $(this.getDetailsTitle('detailsTitle')).update('Properties of screen: ' + buildingBlockDescription.label['en-gb']);
                 var propertiesHash = new Hash();
-                propertiesHash.set('title',resourceDescription.label['en-gb']);
-                propertiesHash.set('id',resourceDescription.uri);
-                propertiesHash.set('desc',resourceDescription.description['en-gb']);
-                propertiesHash.set('tags',resourceDescription.domainContext.tags);
+                propertiesHash.set('title',buildingBlockDescription.label['en-gb']);
+                propertiesHash.set('id',buildingBlockDescription.uri);
+                propertiesHash.set('desc',buildingBlockDescription.description['en-gb']);
+                propertiesHash.set('tags',buildingBlockDescription.domainContext.tags);
                 this._updatePropertiesTable(propertiesHash);
                 break;
 
             case "connector":
-                var propertiesHash = resourceInstance.getProperties().clone();
+                var propertiesHash = buildingBlockInstance.getProperties().clone();
                 $(this.getDetailsTitle('detailsTitle')).update('Properties of connector: ' + propertiesHash.get('type'));
                 
-                //propertiesHash.set('type',resourceDescription.type);
+                //propertiesHash.set('type',buildingBlockDescription.type);
                 this._updatePropertiesTable(propertiesHash);
                 break;
 
             case "domainConcept":
-                $(this.getDetailsTitle('detailsTitle')).update('Properties of domain concept: ' + resourceDescription.name);
+                $(this.getDetailsTitle('detailsTitle')).update('Properties of domain concept: ' + buildingBlockDescription.name);
                 var propertiesHash = new Hash();
-                propertiesHash.set('name',resourceDescription.name);
-                propertiesHash.set('description',resourceDescription.description);
-                propertiesHash.set('semantics',resourceDescription.semantics);
+                propertiesHash.set('name',buildingBlockDescription.name);
+                propertiesHash.set('description',buildingBlockDescription.description);
+                propertiesHash.set('semantics',buildingBlockDescription.semantics);
                 this._updatePropertiesTable(propertiesHash);
                 break;
 
             default:
-                console.debug("properties pane called without resourcetype", resourceType);
+                console.debug("properties pane called without buildingBlocktype", buildingBlockType);
                 break;
         }
     },
@@ -362,13 +362,13 @@ var ScreenflowDocument = Class.create(AbstractDocument,
         var screens = this.getScreens();
         for (var i = 0; i < screens.length; i++) {
             for (var j = 0; j < screenList.length; j++) {
-                if (screens[i].getResourceDescription().uri == screenList[j].uri) {
+                if (screens[i].getBuildingBlockDescription().uri == screenList[j].uri) {
                     if (screenList[j].reachability == true) {
-                        screens[i].getResourceDescription().satisfeable = true;
+                        screens[i].getBuildingBlockDescription().satisfeable = true;
                         break;
                     }
                     else {
-                        screens[i].getResourceDescription().satisfeable = false;
+                        screens[i].getBuildingBlockDescription().satisfeable = false;
                     }
                 }
             }
@@ -515,7 +515,7 @@ var ScreenflowDocument = Class.create(AbstractDocument,
             var sendButton = new dijit.form.Button({
                 'label': 'Send',
                 onClick: function(){
-                    ScreenflowDocument.prototype.updateResourceDescription.apply(mine, arguments);
+                    ScreenflowDocument.prototype.updateBuildingBlockDescription.apply(mine, arguments);
                     ScreenflowDocument.prototype.deployGadget.apply(mine, arguments);
                     ScreenflowDocument.prototype.hideDeployGadgetDialog.apply(mine, arguments);
                 }
@@ -542,8 +542,8 @@ var ScreenflowDocument = Class.create(AbstractDocument,
     
     onClickCanvas: function( /**Element*/ element){
         var clickedElement = this.getBuildingBlockElement(element);
-        var resourceType = this.getBuildingBlockType(clickedElement);
-        switch (resourceType) {
+        var buildingBlockType = this.getBuildingBlockType(clickedElement);
+        switch (buildingBlockType) {
             case "screen":
                 console.log("screen clicked");
                 this.setSelectedElement(clickedElement);
@@ -575,11 +575,11 @@ var ScreenflowDocument = Class.create(AbstractDocument,
 
     onDblClickCanvas: function( /**Element*/ element){
         var clickedElement = this.getBuildingBlockElement(element);
-        var resourceType = this.getBuildingBlockType(clickedElement);
-        switch (resourceType) {
+        var buildingBlockType = this.getBuildingBlockType(clickedElement);
+        switch (buildingBlockType) {
             case "screen":
                 console.log("screen dbl-clicked");
-                var screenDescription = this.getResourceInstance(clickedElement.id).getResourceDescription();
+                var screenDescription = this.getBuildingBlockInstance(clickedElement.id).getBuildingBlockDescription();
                 var screenflowDoc = GVSSingleton.getInstance().getDocumentController().createPreviewDocument(screenDescription);
                 break;
             case "domainConcept":
@@ -587,7 +587,7 @@ var ScreenflowDocument = Class.create(AbstractDocument,
                 break;
             case "connector":
                 console.log("connector dbl-clicked");
-                this.getResourceInstance(clickedElement.id).showPropertiesDialog();
+                this.getBuildingBlockInstance(clickedElement.id).showPropertiesDialog();
                 break;
             case "canvas":
                 console.log("canvas dbl-clicked");

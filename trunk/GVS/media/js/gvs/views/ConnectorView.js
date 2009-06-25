@@ -1,19 +1,19 @@
-var ConnectorView = Class.create( ResourceView,
+var ConnectorView = Class.create( BuildingBlockView,
     /** @lends ConnectorView.prototype */ {
     
     /**
      * Connectors graphical representation
      * @constructs
-     * @extends ResourceView
+     * @extends BuildingBlockView
      */ 
-    initialize: function($super,/** ResourceDescription */ connectorResourceDescription) {
+    initialize: function($super,/** BuildingBlockDescription */ connectorBuildingBlockDescription) {
         $super();
 
         var uidGenerator = UIDGeneratorSingleton.getInstance();
         this._id = uidGenerator.generate("connectorView");
 
         var container = new Element('div', {'class': 'connectorImage'});
-        switch(connectorResourceDescription.type){
+        switch(connectorBuildingBlockDescription.type){
             case "In":
                 container.addClassName('connectorIn');
                 break;
@@ -38,7 +38,7 @@ var ConnectorView = Class.create( ResourceView,
     // **************** PUBLIC METHODS **************** //
     
     /**
-     * Removes the DOM Elements and frees resources
+     * Removes the DOM Elements and frees building blocks
      * @override
      */
     destroy: function () {
