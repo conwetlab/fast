@@ -19,7 +19,6 @@ var ScreenflowDocument = Class.create(AbstractDocument,
         this._connectors = [];
         this._domainConcepts = [];
         this._selectedElement = null;
-        this._paletteController = new PaletteController(this.getTabId());
         this._populate();
         
         /**
@@ -227,15 +226,6 @@ var ScreenflowDocument = Class.create(AbstractDocument,
         };
         var elements = currentDocument.getPaletteElements();
         CatalogueSingleton.getInstance().check(canvas, domainContext, elements, 'reachability');
-    },
-
-    /**
-     * Gets the palette controller
-     * @type PaletteController
-     * @public
-     */
-    getPaletteController: function () {
-        return this._paletteController;
     },
 
     /**

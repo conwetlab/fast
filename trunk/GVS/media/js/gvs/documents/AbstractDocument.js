@@ -62,7 +62,14 @@ var AbstractDocument = Class.create( /** @lends AbstractDocument.prototype */ {
          * @type String
          * @private
          */       
-        this._documentType="abstract";
+        this._documentType='abstract';
+        
+        /**
+         * Palette Controller
+         * @type PaletteController
+         * @private
+         */ 
+        this._paletteController = new PaletteController(this.getTabId());
         
         this._tab.setContent(this._tabContent);
     },
@@ -78,8 +85,16 @@ var AbstractDocument = Class.create( /** @lends AbstractDocument.prototype */ {
     getValidBuildingBlocks: function () {
         return this._validBuildingBlocks;
     },
-    
-    
+
+    /**
+     * Gets the palette controller
+     * @type PaletteController
+     * @public
+     */
+    getPaletteController: function () {
+        return this._paletteController;
+    },
+
     /**
      * Gets the tab id.
      * @type String

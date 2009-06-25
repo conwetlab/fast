@@ -106,9 +106,9 @@ var Palette = Class.create( /** @lends Palette.prototype */ {
         var paneId = uidGenerator.generate(this._id);
         
         var pane = new dijit.layout.AccordionPane({
-            "id":paneId,
-            "title":this._buildingBlockType,
-            "class":"paletteElement"
+            'id':paneId,
+            'title':CatalogueSingleton.getInstance().getBuildingBlockFactory(this._buildingBlockType).getBuildingBlockName(),
+            'class':'paletteElement'
         });
         return pane;
     },
