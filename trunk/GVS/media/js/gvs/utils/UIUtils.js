@@ -24,7 +24,7 @@ UIUtils.onKeyPressCanvas = function(e){
                         title = (label) ? ('the screen "' + label + '"') : "the selected screen";
                         if (confirm("You are about to remove " + title + " from canvas. Are you sure?")) { //delete if ok
                             currentDocument.deleteScreen(selectedElement.id);
-                            $(selectedElement.parentNode).removeChild(selectedElement);
+                            selectedElement.parentNode.removeChild(selectedElement);
                             currentDocument.emptyPropertiesPane();
                             currentDocument.setSelectedElement();
                         }
@@ -34,7 +34,7 @@ UIUtils.onKeyPressCanvas = function(e){
                         title = (label) ? ('the domain concept "' + label + '"') : "the selected domain concept";
                         if (confirm("You are about to remove " + title + " from canvas. Are you sure?")) { //delete if ok
                             currentDocument.deleteDomainConcept(selectedElement.id);
-                            $(selectedElement.parentNode).removeChild(selectedElement);
+                            selectedElement.parentNode.removeChild(selectedElement);
                             currentDocument.emptyPropertiesPane();
                             currentDocument.setSelectedElement();
                         }
@@ -44,7 +44,7 @@ UIUtils.onKeyPressCanvas = function(e){
                         title = (label) ? ('the connector "' + label + '"') : "the selected connector";
                         if (confirm("You are about to remove " + title + " from canvas. Are you sure?")) { //delete if ok
                             currentDocument.deleteConnector(selectedElement.id);
-                            $(selectedElement.parentNode).removeChild(selectedElement);
+                            selectedElement.parentNode.removeChild(selectedElement);
                             currentDocument.emptyPropertiesPane();
                             currentDocument.setSelectedElement();
                         }
