@@ -1,26 +1,6 @@
+{% extends "registration/base.html" %}
 {% load i18n %}
-<!DOCTYPE html
-    PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
-    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="{{ LANGUAGE_CODE }}" lang="{{ LANGUAGE_CODE }}">
-<head>
-<title>{% trans "FAST: Gadget Visual Storyboard" %}</title>
-<meta name="viewport" content="width=device-width" />
-<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
-
-<link rel="stylesheet" type="text/css" media="screen,projection" href="{{ MEDIA_URL }}style/gvs.css" />
-
-</head>
-
-<body>
-
-<!-- HEADER -->
-<div id="header">
-  <img id="logo" src="{{ MEDIA_URL }}images/gui/fastLogo.png" alt="FAST Logo">
-  <h1>Gadget Visual Storyboard</h1>
-</div>
-
-<div id="content-main">
+{% block content %}
 	<form action="{{ app_path }}" method="post" id="login-form">
 	  <div class="form-row">
 	  	<table>
@@ -47,8 +27,4 @@
 		document.getElementById('id_username').focus()
 		</script>
 	</form>
-</div>
-
-</body>
-
-</html>
+{% endblock %}
