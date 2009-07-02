@@ -80,8 +80,10 @@ FastAPI.Request = Class.create(FastBaseAPI.Request,{
             switch(params.content){
                 case 'xml':
                     (params.onSuccess || Prototype.emptyFunction)(transport.responseXML);
+                    break;
                 case 'text':
                     (params.onSuccess || Prototype.emptyFunction)(transport.responseText);
+                    break;
             }
         }
 
