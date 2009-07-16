@@ -8,6 +8,9 @@ VocabularyWriter -i <inputrdfsfile> -o <outputdir>
  
 -namespacestrict If true, only elements from within the namespace (-a)
 are generated. Default false.
+
+It only allows RDF/XML files, transform from other formats using for
+instance: http://www.mindswap.org/2002/rdfconvert/
  
 Example values
 --------------

@@ -22,7 +22,7 @@ import eu.morfeoproject.fast.model.FastModelFactory;
 import eu.morfeoproject.fast.model.Screen;
 import eu.morfeoproject.fast.model.ScreenFlow;
 import eu.morfeoproject.fast.util.FormatterUtil;
-import eu.morfeoproject.fast.vocabulary.FCO;
+import eu.morfeoproject.fast.vocabulary.FGO;
 
 public abstract class CatalogueRestlet extends Restlet {
 	
@@ -32,7 +32,7 @@ public abstract class CatalogueRestlet extends Restlet {
 	protected ScreenFlow parseScreenFlow(JSONObject jsonScreenFlow, String id) throws JSONException {
 		ScreenFlow screenFlow = FastModelFactory.createScreenFlow();
 		if (id != null)
-			screenFlow.setUri(catalogue.getTripleStore().createURI(FCO.ScreenFlow+id));
+			screenFlow.setUri(catalogue.getTripleStore().createURI(FGO.ScreenFlow+id));
 		if (jsonScreenFlow.get("label") != null) {
 			JSONObject jsonLabels = jsonScreenFlow.getJSONObject("label");
 			Iterator<String> labels = jsonLabels.keys();
@@ -78,7 +78,7 @@ public abstract class CatalogueRestlet extends Restlet {
 	protected Screen parseScreen(JSONObject jsonScreen, String id) throws JSONException {
 		Screen screen = FastModelFactory.createScreen();
 		if (id != null)
-			screen.setUri(new URIImpl(FCO.Screen+id));
+			screen.setUri(new URIImpl(FGO.Screen+id));
 		if (jsonScreen.get("label") != null) {
 			JSONObject jsonLabels = jsonScreen.getJSONObject("label");
 			Iterator<String> labels = jsonLabels.keys();
@@ -115,8 +115,19 @@ public abstract class CatalogueRestlet extends Restlet {
 		screen.getDomainContext().setUser(user);
 		if (jsonScreen.get("homepage") != null)
 			screen.setHomepage(new URIImpl(jsonScreen.getString("homepage")));
-		screen.setPreconditions(parseConditions(jsonScreen.getJSONArray("preconditions")));
-		screen.setPostconditions(parseConditions(jsonScreen.getJSONArray("postconditions")));
+		// preconditions
+		JSONArray preArray = jsonScreen.getJSONArray("preconditions");
+		ArrayList<List<Condition>> preconditions = new ArrayList<List<Condition>>();
+		for (int i = 0; i < preArray.length(); i++)
+			preconditions.add(parseConditions(preArray.getJSONArray(i)));
+		screen.setPreconditions(preconditions);
+		// postconditions
+		JSONArray postArray = jsonScreen.getJSONArray("postconditions");
+		ArrayList<List<Condition>> postconditions = new ArrayList<List<Condition>>();
+		for (int i = 0; i < postArray.length(); i++)
+			postconditions.add(parseConditions(postArray.getJSONArray(i)));
+		screen.setPostconditions(postconditions);
+		// code
 		if (jsonScreen.get("code") != null && !jsonScreen.getString("code").equalsIgnoreCase("null"))
 			screen.setCode(new URIImpl(jsonScreen.getString("code")));
 		return screen;
@@ -133,42 +144,58 @@ public abstract class CatalogueRestlet extends Restlet {
 	 * @return
 	 * @throws JSONException
 	 */
+	@SuppressWarnings("unchecked")
 	protected List<Condition> parseConditions(JSONArray conditionsArray) throws JSONException {
 		ArrayList<Condition> conditions = new ArrayList<Condition>();
 		HashMap<String, BlankNode> blankNodes = new HashMap<String, BlankNode>();
 		for (int i = 0; i < conditionsArray.length(); i++) {
+			JSONObject cJson = conditionsArray.getJSONObject(i);
 			Condition c = FastModelFactory.createCondition();
-			String patternString = conditionsArray.getString(i);
-			c.setPatternString(patternString);
-			ArrayList<Statement> stmts = new ArrayList<Statement>();
-			StringTokenizer tokens = new StringTokenizer(patternString);//, " . ");
-			for ( ; tokens.hasMoreTokens(); ) {
-				String subject = tokens.nextToken();
-				String predicate = tokens.nextToken();
-				String object = tokens.nextToken();
-				if (tokens.hasMoreTokens())
-					tokens.nextToken(); // discard the .
-				// gets if exists or creates the subject
-				BlankNode subjectNode = blankNodes.get(subject);
-				if (subjectNode == null) {
-					subjectNode = catalogue.getTripleStore().createBlankNode();
-					blankNodes.put(subject, subjectNode);
+			String scope = cJson.getString("scope");
+			c.setScope(scope);
+			if (cJson.get("label") != null) {
+				JSONObject jsonLabels = cJson.getJSONObject("label");
+				Iterator<String> labels = jsonLabels.keys();
+				for ( ; labels.hasNext(); ) {
+					String key = labels.next();
+					c.getLabels().put(key, jsonLabels.getString(key));
 				}
-				// creates a URI or BlankNode for the object
-				Node objectNode;
-				try {
-					objectNode = new URIImpl(object);
-				} catch (IllegalArgumentException e) { 
-					objectNode = blankNodes.get(object);
-					if (objectNode == null) {
-						objectNode = catalogue.getTripleStore().createBlankNode();
+			}
+			String patternString = cJson.getString("pattern");
+			c.setPatternString(patternString);
+			// only create the triples for the pattern in case of the scope
+			// is 'design time' or 'both'
+			if (!scope.equalsIgnoreCase("execution")) {
+				ArrayList<Statement> stmts = new ArrayList<Statement>();
+				StringTokenizer tokens = new StringTokenizer(patternString);//, " . ");
+				for ( ; tokens.hasMoreTokens(); ) {
+					String subject = tokens.nextToken();
+					String predicate = tokens.nextToken();
+					String object = tokens.nextToken();
+					if (tokens.hasMoreTokens())
+						tokens.nextToken(); // discard the .
+					// gets if exists or creates the subject
+					BlankNode subjectNode = blankNodes.get(subject);
+					if (subjectNode == null) {
+						subjectNode = catalogue.getTripleStore().createBlankNode();
 						blankNodes.put(subject, subjectNode);
 					}
+					// creates a URI or BlankNode for the object
+					Node objectNode;
+					try {
+						objectNode = new URIImpl(object);
+					} catch (IllegalArgumentException e) { 
+						objectNode = blankNodes.get(object);
+						if (objectNode == null) {
+							objectNode = catalogue.getTripleStore().createBlankNode();
+							blankNodes.put(subject, subjectNode);
+						}
+					}
+					Statement st = catalogue.getTripleStore().createStatement(subjectNode, new URIImpl(predicate), objectNode);
+					stmts.add(st);
 				}
-				Statement st = catalogue.getTripleStore().createStatement(subjectNode, new URIImpl(predicate), objectNode);
-				stmts.add(st);
+				c.setPattern(stmts);
 			}
-			c.setPattern(stmts);
 			conditions.add(c);
 		}
 		return conditions;

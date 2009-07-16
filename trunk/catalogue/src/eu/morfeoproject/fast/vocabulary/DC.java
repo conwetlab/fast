@@ -9,7 +9,7 @@ import org.ontoware.rdf2go.model.node.impl.URIImpl;
  * namespace: http://purl.org/dc/elements/1.1/#
  */
 public interface DC {
-	public static final URI NS_DC = new URIImpl("http://purl.org/dc/elements/1.1/#",false);
+	public static final URI NS_DC = new URIImpl("http://purl.org/dc/terms/",false);
 
     /**
      * Label: Agent@en-us 

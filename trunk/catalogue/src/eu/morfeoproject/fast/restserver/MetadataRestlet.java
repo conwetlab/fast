@@ -2,7 +2,6 @@ package eu.morfeoproject.fast.restserver;
 
 import java.io.IOException;
 
-import org.apache.log4j.Logger;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -14,12 +13,14 @@ import org.restlet.data.Method;
 import org.restlet.data.Request;
 import org.restlet.data.Response;
 import org.restlet.data.Status;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import eu.morfeoproject.fast.catalogue.Catalogue;
 
 public class MetadataRestlet extends CatalogueRestlet {
 	
-	static Logger logger = Logger.getLogger(MetadataRestlet.class);
+	final Logger logger = LoggerFactory.getLogger(MetadataRestlet.class);
 	
 	public MetadataRestlet(Catalogue catalogue) throws RepositoryException {
 		super();

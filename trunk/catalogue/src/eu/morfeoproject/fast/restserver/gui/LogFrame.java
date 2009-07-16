@@ -9,8 +9,6 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.UIManager;
 
-import eu.morfeoproject.fast.util.TextAreaAppender;
-
 public class LogFrame extends JFrame {
 
 	private static final long serialVersionUID = 8212198329624600069L;
@@ -31,7 +29,7 @@ public class LogFrame extends JFrame {
 		logText = new JTextArea();
 		logText.setEditable(false);
 		logText.setFont(new Font("Serif", Font.PLAIN, 12));
-		TextAreaAppender.setTextArea(logText);
+//		TextAreaAppender.setTextArea(logText);
 		
 		logPane = new JScrollPane(logText);
 		

@@ -5,11 +5,11 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
 import org.ontoware.aifbcommons.collection.ClosableIterable;
 import org.ontoware.aifbcommons.collection.ClosableIterator;
 import org.ontoware.rdf2go.RDF2Go;
@@ -37,15 +37,15 @@ import org.ontoware.rdf2go.util.RDFTool;
 import org.ontoware.rdf2go.vocabulary.OWL;
 import org.ontoware.rdf2go.vocabulary.RDF;
 import org.ontoware.rdf2go.vocabulary.RDFS;
-import org.openrdf.rdf2go.RepositoryModelFactory;
 import org.openrdf.rdf2go.RepositoryModelSet;
 import org.openrdf.repository.Repository;
-import org.openrdf.repository.RepositoryConnection;
 import org.openrdf.repository.RepositoryException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import eu.morfeoproject.fast.services.rdfrepository.RDFRepository;
 import eu.morfeoproject.fast.services.rdfrepository.RepositoryStorageException;
-import eu.morfeoproject.fast.vocabulary.FCO;
+import eu.morfeoproject.fast.vocabulary.FGO;
 
 // TODO: The triple store must guarantee safe operations to the rdf repository
 // 		 using synchronised statements when adding, deleting, and querying.
@@ -56,7 +56,7 @@ import eu.morfeoproject.fast.vocabulary.FCO;
  */
 public class TripleStore {
 
-	private static Logger logger = Logger.getLogger(TripleStore.class);
+	final Logger logger = LoggerFactory.getLogger(TripleStore.class);
 
 	public static final String SPARQL_PREAMBLE = "";
 	
@@ -93,7 +93,7 @@ public class TripleStore {
 		
 		// TODO: Now create the screen under the ScreenOnt namespace, but this has to be
 		//       created in the user's namespace
-		defaultModel = getPersistentModelSet().getModel(FCO.NS_FCO);
+		defaultModel = getPersistentModelSet().getModel(FGO.NS_FGO);
 	}
 	
 	public void open() {
@@ -385,27 +385,6 @@ public class TripleStore {
 		} finally {
 			model.close();
 		}
-		
-		RepositoryConnection con;
-		
-//		try {
-//			con = repository.getConnection();
-//			try {
-//				con.add(file, baseURI, rdfFormat);
-//				logger.info("Added "+file.getAbsolutePath()+" file to triple store.");
-//			} catch (RDFParseException e) {
-//				// TODO Auto-generated catch block
-//				e.printStackTrace();
-//			} catch (IOException e) {
-//				// TODO Auto-generated catch block
-//				e.printStackTrace();
-//			} finally {
-//				con.close();
-//			}
-//		} catch (RepositoryException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
 	}
 
 	/**
@@ -1007,9 +986,9 @@ public class TripleStore {
         boolean nullifexists) {
         String cleanName = toCleanName(name);
         
-        URI uri = new URIImpl(namespace + cleanName);
+        long millis = System.currentTimeMillis();
+        URI uri = new URIImpl(namespace + cleanName + millis);
         try {
-            long millis = System.currentTimeMillis();
             boolean ok = false;
             while (!ok) {
                 ok = true;
@@ -1102,5 +1081,12 @@ public class TripleStore {
 	public QueryResultTable sparqlSelect(String query) {
         return getPersistentModelSet().sparqlSelect(query);
 	}
-	
+
+	public void export(OutputStream output, Syntax syntax) {
+		try {
+            persistentModelSet.writeTo(output, syntax);       
+        } catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 }

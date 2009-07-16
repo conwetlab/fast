@@ -4,7 +4,9 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 
 /**
  * Provide several functions to format the string representation of a date
@@ -13,7 +15,7 @@ import org.apache.log4j.Logger;
  */
 public class FormatterUtil {
 	
-	static Logger logger = Logger.getLogger(FormatterUtil.class);
+	final static Logger logger = LoggerFactory.getLogger(FormatterUtil.class);
 	
 	public  static SimpleDateFormat ISO8601FORMAT = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ");
 	

@@ -2,9 +2,9 @@ package eu.morfeoproject.fast.restserver;
 
 import java.io.IOException;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
-import org.apache.log4j.Logger;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -16,16 +16,17 @@ import org.restlet.data.Method;
 import org.restlet.data.Request;
 import org.restlet.data.Response;
 import org.restlet.data.Status;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import eu.morfeoproject.fast.catalogue.Catalogue;
 import eu.morfeoproject.fast.catalogue.NotFoundException;
-import eu.morfeoproject.fast.catalogue.OntologyInvalidException;
 import eu.morfeoproject.fast.model.Condition;
 import eu.morfeoproject.fast.model.Screen;
 
 public class CheckRestlet extends CatalogueRestlet {
 
-	static Logger logger = Logger.getLogger(CheckRestlet.class);
+	final Logger logger = LoggerFactory.getLogger(CheckRestlet.class);
 	
 	public CheckRestlet(Catalogue catalogue) throws RepositoryException {
 		super();
@@ -81,24 +82,41 @@ public class CheckRestlet extends CatalogueRestlet {
 					JSONArray canvasOut = new JSONArray();
 					boolean reachability = true;
 					for (Screen s : canvas) {
-						reachability = true;
 						JSONObject jsonScreen = new JSONObject();
 						jsonScreen.put("uri", s.getUri());
 						JSONArray preArray = new JSONArray();
-						for (Condition c : s.getPreconditions()) {
-							JSONObject jsonPre = new JSONObject();
-							jsonPre.put("expression", c.toString());
-							boolean satisfied = false;
-							if (reachables.contains(s))
-								satisfied = true;
-							else
-								satisfied = catalogue.isSatisfied(reachables, c, true, true, null);
-							jsonPre.put("satisfied", satisfied);
-							String strSatisfy = satisfied ? "SATISFIED" : "NO SATISFIED";
-							logger.info("["+strSatisfy+"] "+c.getPatternString());
-							reachability = reachability && satisfied;
-							preArray.put(jsonPre);
+						for (List<Condition> conList : s.getPreconditions()) {
+							reachability = true;
+							for (Condition c : conList) {
+								JSONObject jsonPre = c.toJSON();
+								boolean satisfied = false;
+								if (reachables.contains(s))
+									satisfied = true;
+//								else
+//									satisfied = catalogue.isSatisfied(reachables, c, true, true, null);
+								jsonPre.put("satisfied", satisfied);
+								String strSatisfy = satisfied ? "SATISFIED" : "NO SATISFIED";
+								logger.info("["+strSatisfy+"] "+c.getPatternString());
+								reachability = reachability && satisfied;
+								preArray.put(jsonPre);
+							}
+							if (reachability)
+								break;
 						}
+//						for (Condition c : s.getPreconditions()) {
+//							JSONObject jsonPre = new JSONObject();
+//							jsonPre.put("expression", c.toString());
+//							boolean satisfied = false;
+//							if (reachables.contains(s))
+//								satisfied = true;
+//							else
+//								satisfied = catalogue.isSatisfied(reachables, c, true, true, null);
+//							jsonPre.put("satisfied", satisfied);
+//							String strSatisfy = satisfied ? "SATISFIED" : "NO SATISFIED";
+//							logger.info("["+strSatisfy+"] "+c.getPatternString());
+//							reachability = reachability && satisfied;
+//							preArray.put(jsonPre);
+//						}
 						jsonScreen.put("reachability", reachability);
 						String strReachability = reachability ? "REACHABLE" : "NO REACHABLE";
 						logger.info("["+strReachability+"] "+s.getUri());
@@ -112,14 +130,14 @@ public class CheckRestlet extends CatalogueRestlet {
 						JSONObject jsonScreen = new JSONObject();
 						jsonScreen.put("uri", s.getUri());
 						JSONArray preArray = new JSONArray();
-						for (Condition c : s.getPreconditions()) {
-							JSONObject jsonPre = new JSONObject();
-							jsonPre.put("expression", c.toString());
-							boolean satisfied = catalogue.isSatisfied(reachables, c, true, true, null);
-							jsonPre.put("satisfied", satisfied);
-							reachability = reachability && satisfied;
-							preArray.put(jsonPre);
-						}
+//						for (Condition c : s.getPreconditions()) {
+//							JSONObject jsonPre = new JSONObject();
+//							jsonPre.put("expression", c.toString());
+//							boolean satisfied = catalogue.isSatisfied(reachables, c, true, true, null);
+//							jsonPre.put("satisfied", satisfied);
+//							reachability = reachability && satisfied;
+//							preArray.put(jsonPre);
+//						}
 						jsonScreen.put("reachability", reachability);
 						jsonScreen.put("preconditions", preArray);
 						elementsOut.put(jsonScreen);

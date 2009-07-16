@@ -4,12 +4,12 @@ import org.ontoware.rdf2go.model.node.URI;
 import org.ontoware.rdf2go.model.node.impl.URIImpl;
 
 /**
- * Vocabulary File. Created by org.ontoware.rdf2go.util.VocabularyWriter on Tue Apr 21 13:58:27 BST 2009
- * input file: src/eu/morfeoproject/fast/catalogue/ontologies/fco20090224.rdf
+ * Vocabulary File. Created by org.ontoware.rdf2go.util.VocabularyWriter on Wed Jul 15 11:07:14 BST 2009
+ * input file: src/eu/morfeoproject/fast/catalogue/ontologies/fgo.rdf
  * namespace: http://purl.oclc.org/fast/ontology/gadget#
  */
-public interface FCO {
-	public static final URI NS_FCO = new URIImpl("http://purl.oclc.org/fast/ontology/gadget#",false);
+public interface FGO {
+	public static final URI NS_FGO = new URIImpl("http://purl.oclc.org/fast/ontology/gadget#",false);
 
     /**
      * Label: Operator@en 
@@ -28,6 +28,13 @@ public interface FCO {
      * Comment: An explicit connection between two screens.@en 
      */
     public static final URI Connector = new URIImpl("http://purl.oclc.org/fast/ontology/gadget#Connector", false);
+
+    /**
+     * Label: Fact@en 
+     * Comment: A fact is the atomic formal representation of a part of a condition.
+	Therefore, several facts compose a condition.@en 
+     */
+    public static final URI Fact = new URIImpl("http://purl.oclc.org/fast/ontology/gadget#Fact", false);
 
     /**
      * Label: Flow Control Element@en 
@@ -78,12 +85,26 @@ public interface FCO {
     public static final URI ScreenFlowStart = new URIImpl("http://purl.oclc.org/fast/ontology/gadget#ScreenFlowStart", false);
 
     /**
+     * Label: Slot@en 
+     * Comment: A slot is a satisfied condition within a screenflow. It can be seen
+    as an input of the screenflow.@en 
+     */
+    public static final URI Slot = new URIImpl("http://purl.oclc.org/fast/ontology/gadget#Slot", false);
+
+    /**
      */
     public static final URI User = new URIImpl("http://rdfs.org/sioc/ns#User", false);
 
     /**
      */
     public static final URI RightsStatement = new URIImpl("http://purl.org/dc/terms/RightsStatement", false);
+
+    /**
+     * Label: Event@en 
+     * Comment: A event is a result condition within a screenflow. It can be seen
+    as an output of the screenflow.@en 
+     */
+    public static final URI Event = new URIImpl("http://purl.oclc.org/fast/ontology/gadget#Event", false);
 
     /**
      * Label: With-condition@en 
@@ -109,7 +130,9 @@ public interface FCO {
      * Comment: The pre- or post-condition of either a screen or a screenflow. In 
     the latter case, each target platform will use these conditions in its own way, 
     or may also ignore them. E.g., in EzWeb pre- and post-conditions correspond to 
-    the concepts of slot and event.@en 
+    the concepts of slot and event.
+	A condition can be seen as a RDF bag of facts, where every fact has to be true
+	for the condition be true as well.@en 
      */
     public static final URI Condition = new URIImpl("http://purl.oclc.org/fast/ontology/gadget#Condition", false);
 
@@ -128,21 +151,10 @@ public interface FCO {
     /**
      * Label: has pattern string@en 
      * Comment: This property is the textual representation of a condition.@en 
-     * Comment: http://purl.oclc.org/fast/ontology/gadget#Condition 
+     * Comment: http://purl.oclc.org/fast/ontology/gadget#Fact 
      * Range: http://www.w3.org/2001/XMLSchema#string 
      */
     public static final URI hasPatternString = new URIImpl("http://purl.oclc.org/fast/ontology/gadget#hasPatternString", false);
-
-    /**
-     * Label: is positive@en 
-     * Comment: Conditions can be positive or negative, depending on whether they 
-    must be fulfilled or must not be fulfilled (in the case of pre-conditions), or 
-    whether their facts will be added to the canvas or removed (in the case of 
-    post-conditions).@en 
-     * Comment: http://purl.oclc.org/fast/ontology/gadget#Condition 
-     * Range: http://www.w3.org/2001/XMLSchema#boolean 
-     */
-    public static final URI isPositive = new URIImpl("http://purl.oclc.org/fast/ontology/gadget#isPositive", false);
 
     /**
      * Label: has version@en 
@@ -181,6 +193,16 @@ public interface FCO {
     public static final URI description = new URIImpl("http://purl.org/dc/terms/description", false);
 
     /**
+     * Label: is positive@en 
+     * Comment: Facts can be set to a specific scope: design time, execution time,
+	or both of them. This will define when they have to be taken into account by the
+	inference engine or reasoner.@en 
+     * Comment: http://purl.oclc.org/fast/ontology/gadget#Fact 
+     * Range: http://www.w3.org/2001/XMLSchema#boolean 
+     */
+    public static final URI hasScope = new URIImpl("http://purl.oclc.org/fast/ontology/gadget#hasScope", false);
+
+    /**
      */
     public static final URI created = new URIImpl("http://purl.org/dc/terms/created", false);
 
@@ -199,7 +221,7 @@ public interface FCO {
     i.e., the facts that are produced once the screen or screenflow has been 
     executed.@en 
      * Comment: http://purl.oclc.org/fast/ontology/gadget#WithConditions 
-     * Range: http://purl.oclc.org/fast/ontology/gadget#Condition 
+     * Range: http://www.w3.org/1999/02/22-rdf-syntax-ns#Bag http://purl.oclc.org/fast/ontology/gadget#Condition 
      */
     public static final URI hasPostCondition = new URIImpl("http://purl.oclc.org/fast/ontology/gadget#hasPostCondition", false);
 
@@ -236,7 +258,7 @@ public interface FCO {
     the facts that need to be fulfilled in order for this screen or screenflow to be 
     reachable.@en 
      * Comment: http://purl.oclc.org/fast/ontology/gadget#WithConditions 
-     * Range: http://purl.oclc.org/fast/ontology/gadget#Condition 
+     * Range: http://www.w3.org/1999/02/22-rdf-syntax-ns#Bag http://purl.oclc.org/fast/ontology/gadget#Condition 
      */
     public static final URI hasPreCondition = new URIImpl("http://purl.oclc.org/fast/ontology/gadget#hasPreCondition", false);
 
@@ -249,7 +271,7 @@ public interface FCO {
      * Comment: This property links a screen or screenflow to its pre-condition, 
     i.e., the facts that need to be fulfilled in order for this screen or screenflow 
     to be reachable.@en 
-     * Comment: http://purl.oclc.org/fast/ontology/gadget#Condition 
+     * Comment: http://purl.oclc.org/fast/ontology/gadget#Fact 
      * Range: http://www.w3.org/2000/01/rdf-schema#Resource 
      */
     public static final URI hasPattern = new URIImpl("http://purl.oclc.org/fast/ontology/gadget#hasPattern", false);
@@ -261,6 +283,14 @@ public interface FCO {
     /**
      */
     public static final URI holdsAccount = new URIImpl("http://xmlns.com/foaf/0.1/holdsAccount", false);
+
+    /**
+     * Label: has condition@en 
+     * Comment: This property links a slot or event to a certain condition.@en 
+     * Comment: http://purl.oclc.org/fast/ontology/gadget#Slot http://purl.oclc.org/fast/ontology/gadget#Event 
+     * Range: http://www.w3.org/1999/02/22-rdf-syntax-ns#Bag http://purl.oclc.org/fast/ontology/gadget#Condition 
+     */
+    public static final URI hasCondition = new URIImpl("http://purl.oclc.org/fast/ontology/gadget#hasCondition", false);
 
     /**
      */

@@ -9,11 +9,19 @@ import java.util.Map;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.ontoware.rdf2go.RDF2Go;
+import org.ontoware.rdf2go.model.Model;
+import org.ontoware.rdf2go.model.node.BlankNode;
 import org.ontoware.rdf2go.model.node.URI;
+import org.ontoware.rdf2go.vocabulary.RDF;
+import org.ontoware.rdf2go.vocabulary.RDFS;
 
 import eu.morfeoproject.fast.util.FormatterUtil;
+import eu.morfeoproject.fast.vocabulary.DC;
+import eu.morfeoproject.fast.vocabulary.FGO;
+import eu.morfeoproject.fast.vocabulary.FOAF;
 
-public class Screen {
+public class Screen implements Resource {
 	
 	private URI uri;
 	private Map<String, String> labels;
@@ -27,8 +35,8 @@ public class Screen {
     private URI homepage;
     private URI code;
 	private DomainContext domainContext;
-	private List<Condition> preconditions;
-	private List<Condition> postconditions;
+	private List<List<Condition>> preconditions;
+	private List<List<Condition>> postconditions;
 	
 	protected Screen(URI uri) {
 		this.uri = uri;
@@ -69,6 +77,7 @@ public class Screen {
 	public void setDescriptions(Map<String, String> descriptions) {
 		this.descriptions = descriptions;
 	}
+	
 	public URI getRights() {
 		return rights;
 	}
@@ -135,31 +144,28 @@ public class Screen {
 		this.domainContext = domainContext;
 	}
 
-	public List<Condition> getPreconditions() {
+	public List<List<Condition>> getPreconditions() {
 		if (preconditions == null)
-			preconditions = new ArrayList<Condition>();
+			preconditions = new ArrayList<List<Condition>>();
 		return preconditions;
 	}
 
-	public void setPreconditions(List<Condition> preconditions) {
+	public void setPreconditions(List<List<Condition>> preconditions) {
 		this.preconditions = preconditions;
 	}
 
-	public List<Condition> getPostconditions() {
+	public List<List<Condition>> getPostconditions() {
 		if (postconditions == null)
-			postconditions = new ArrayList<Condition>();
+			postconditions = new ArrayList<List<Condition>>();
 		return postconditions;
 	}
 
-	public void setPostconditions(List<Condition> postconditions) {
+	public void setPostconditions(List<List<Condition>> postconditions) {
 		this.postconditions = postconditions;
 	}
 	
 	public boolean equals(Screen o) {
-//		if (o instanceof Screen)
-			return ((Screen)o).getUri().equals(this.uri);
-//		else
-//			return false;
+		return ((Screen)o).getUri().equals(this.uri);
 	}
 	
 	@Override
@@ -223,12 +229,20 @@ public class Screen {
 			else
 				json.put("homepage", getHomepage().toString());
 			JSONArray preconditions = new JSONArray();
-			for (Condition con : getPreconditions())
-				preconditions.put(con.toString());
+			for (List<Condition> conditionList : getPreconditions()) {
+				JSONArray conditionArray = new JSONArray();
+				for (Condition con : conditionList)
+					conditionArray.put(con.toJSON());
+				preconditions.put(conditionArray);
+			}
 			json.put("preconditions", preconditions);
 			JSONArray postconditions = new JSONArray();
-			for (Condition con : getPostconditions())
-				postconditions.put(con.toString());
+			for (List<Condition> conditionList : getPostconditions()) {
+				JSONArray conditionArray = new JSONArray();
+				for (Condition con : conditionList)
+					conditionArray.put(con.toJSON());
+				postconditions.put(conditionArray);
+			}
 			json.put("postconditions", postconditions);
 			if (getCode() == null)
 				json.put("code", JSONObject.NULL);
@@ -239,6 +253,71 @@ public class Screen {
 			e.printStackTrace();
 		}
 		return json;
+	}
+	
+	public Model createModel() {
+		Model model = RDF2Go.getModelFactory().createModel();
+		model.open();
+		model.setNamespace("dc", DC.NS_DC.toString());
+		model.setNamespace("FGO", FGO.NS_FGO.toString());
+		
+		URI screenUri = this.getUri();
+		if (screenUri != null)
+			model.addStatement(screenUri, RDF.type, FGO.Screen);
+		for (String key : this.getLabels().keySet())
+			model.addStatement(screenUri, RDFS.label, model.createLanguageTagLiteral(this.getLabels().get(key), key));
+		for (String key : this.getDescriptions().keySet())
+			model.addStatement(screenUri, DC.description, model.createLanguageTagLiteral(this.getDescriptions().get(key), key));
+		if (this.getCreator() != null)
+			model.addStatement(screenUri, DC.creator, this.getCreator());
+		if (this.getRights() != null)
+			model.addStatement(screenUri, DC.rights, this.getRights());
+		if (this.getVersion() != null)
+			model.addStatement(screenUri, FGO.hasVersion, this.getVersion());
+		if (this.getCreationDate() != null)
+			model.addStatement(screenUri, DC.date, FormatterUtil.formatDateISO8601(this.getCreationDate()));
+		if (this.getIcon() != null)
+			model.addStatement(screenUri, FGO.hasIcon, this.getIcon());
+		if (this.getScreenshot() != null)
+			model.addStatement(screenUri, FGO.hasScreenshot, this.getScreenshot());
+		for (String tag : this.getDomainContext().getTags())
+			model.addStatement(screenUri, FGO.hasTag, tag);
+		if (this.getHomepage() != null)
+			model.addStatement(screenUri, FOAF.homepage, this.getHomepage());
+		if (this.getVersion() != null)
+			model.addStatement(screenUri, FGO.hasVersion, this.getVersion());
+		for (List<Condition> conList : this.getPreconditions()) {
+			BlankNode bag = model.createBlankNode();
+			model.addStatement(bag, RDF.type, RDF.Bag);
+			model.addStatement(screenUri, FGO.hasPreCondition, bag);
+			int i = 1;
+			for (Condition con : conList) {
+				BlankNode c = model.createBlankNode();
+				model.addStatement(bag, RDF.li(i++), c);
+				model.addStatement(c, FGO.hasPatternString, con.getPatternString());
+				model.addStatement(c, FGO.hasScope, con.getScope());
+				for (String key : con.getLabels().keySet())
+					model.addStatement(c, RDFS.label, model.createLanguageTagLiteral(con.getLabels().get(key), key));
+			}
+		}
+		for (List<Condition> conList : this.getPostconditions()) {
+			BlankNode bag = model.createBlankNode();
+			model.addStatement(bag, RDF.type, RDF.Bag);
+			model.addStatement(screenUri, FGO.hasPostCondition, bag);
+			int i = 1;
+			for (Condition con : conList) {
+				BlankNode c = model.createBlankNode();
+				model.addStatement(bag, RDF.li(i++), c);
+				model.addStatement(c, FGO.hasPatternString, con.getPatternString());
+				model.addStatement(c, FGO.hasScope, con.getScope());
+				for (String key : con.getLabels().keySet())
+					model.addStatement(c, RDFS.label, model.createLanguageTagLiteral(con.getLabels().get(key), key));
+			}
+		}
+		if (this.getCode() != null)
+			model.addStatement(screenUri, FGO.hasCode, this.getCode());
+		
+		return model;
 	}
 
 }

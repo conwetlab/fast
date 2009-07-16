@@ -18,13 +18,14 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.UIManager;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import eu.morfeoproject.fast.restserver.CatalogueServer;
 
 public class CatalogueGUI extends JFrame {
 	
-	static Logger logger = Logger.getLogger(CatalogueGUI.class);
+	final static Logger logger = LoggerFactory.getLogger(CatalogueGUI.class);
 
 	private static final long serialVersionUID = 6163545064005769050L;
 	
@@ -180,6 +181,7 @@ public class CatalogueGUI extends JFrame {
 	}
 	
 	private void showLogFrame() {
+		server.export();
 		logFrame.setVisible(true);
 		logFrame.toFront();
 	}

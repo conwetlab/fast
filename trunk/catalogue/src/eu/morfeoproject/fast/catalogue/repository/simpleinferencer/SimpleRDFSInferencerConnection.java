@@ -29,7 +29,7 @@ import org.openrdf.sail.inferencer.InferencerConnectionWrapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import eu.morfeoproject.fast.vocabulary.FCO;
+import eu.morfeoproject.fast.vocabulary.FGO;
 
 /**
  * A reduced set of forward-chaining RDF Schema inferencer, using the rules from the <a
@@ -809,7 +809,7 @@ class SimpleRDFSInferencerConnection extends InferencerConnectionWrapper impleme
 			Statement nt = ntIter.next();
 
 			// this store all the inferred statements of a pattern inside its graph
-			Resource context = nt.getContext() != null && nt.getContext().stringValue().startsWith(FCO.NS_FCO+"pattern") ? nt.getContext() : null;
+			Resource context = nt.getContext() != null && nt.getContext().stringValue().startsWith(FGO.NS_FGO+"pattern") ? nt.getContext() : null;
 
 			Resource xxx = nt.getSubject();
 			Value yyy = nt.getObject();
@@ -850,7 +850,7 @@ class SimpleRDFSInferencerConnection extends InferencerConnectionWrapper impleme
 			Statement nt = ntIter.next();
 			
 			// this store all the inferred statements of a pattern inside its graph
-			Resource context = nt.getContext() != null && nt.getContext().stringValue().startsWith(FCO.NS_FCO+"pattern") ? nt.getContext() : null;
+			Resource context = nt.getContext() != null && nt.getContext().stringValue().startsWith(FGO.NS_FGO+"pattern") ? nt.getContext() : null;
 			
 			Resource aaa = nt.getSubject();
 			Value xxx = nt.getObject();
@@ -1062,7 +1062,7 @@ class SimpleRDFSInferencerConnection extends InferencerConnectionWrapper impleme
 			Statement nt = ntIter.next();
 
 			// this store all the inferred statements of a pattern inside its graph
-			Resource context = nt.getContext() != null && nt.getContext().stringValue().startsWith(FCO.NS_FCO+"pattern") ? nt.getContext() : null;
+			Resource context = nt.getContext() != null && nt.getContext().stringValue().startsWith(FGO.NS_FGO+"pattern") ? nt.getContext() : null;
 
 			Resource xxx = nt.getSubject();
 			Value yyy = nt.getObject();
@@ -1106,7 +1106,7 @@ class SimpleRDFSInferencerConnection extends InferencerConnectionWrapper impleme
 			Statement nt = ntIter.next();
 
 			// this store all the inferred statements of a pattern inside its graph
-			Resource context = nt.getContext() != null && nt.getContext().stringValue().startsWith(FCO.NS_FCO+"pattern") ? nt.getContext() : null;
+			Resource context = nt.getContext() != null && nt.getContext().stringValue().startsWith(FGO.NS_FGO+"pattern") ? nt.getContext() : null;
 
 			Resource aaa = nt.getSubject();
 			Value yyy = nt.getObject();

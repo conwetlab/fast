@@ -1,21 +1,16 @@
 package eu.morfeoproject.fast.catalogue;
 
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Properties;
 
-import org.apache.log4j.Logger;
 import org.openrdf.repository.Repository;
 import org.openrdf.repository.RepositoryException;
 import org.openrdf.repository.sail.SailRepository;
 import org.openrdf.sail.NotifyingSail;
 import org.openrdf.sail.nativerdf.NativeStore;
-
-import eu.morfeoproject.fast.catalogue.repository.simpleinferencer.SimpleRDFSInferencer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 /**
@@ -34,7 +29,7 @@ import eu.morfeoproject.fast.catalogue.repository.simpleinferencer.SimpleRDFSInf
  */
 public class PersistentRepository {
 	
-	static Logger logger = Logger.getLogger(PersistentRepository.class);
+	final Logger logger = LoggerFactory.getLogger(PersistentRepository.class);
 	
 	static File storageDir = null;
 	static String defaultStorageDir = "repository";

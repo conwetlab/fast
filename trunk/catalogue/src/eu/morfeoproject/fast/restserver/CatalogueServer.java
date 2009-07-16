@@ -2,13 +2,13 @@ package eu.morfeoproject.fast.restserver;
 
 import java.io.File;
 
-import org.apache.log4j.BasicConfigurator;
-import org.apache.log4j.Logger;
 import org.restlet.Application;
 import org.restlet.Component;
 import org.restlet.Restlet;
 import org.restlet.Router;
 import org.restlet.data.Protocol;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import eu.morfeoproject.fast.catalogue.Catalogue;
 
@@ -18,7 +18,7 @@ import eu.morfeoproject.fast.catalogue.Catalogue;
  */
 public class CatalogueServer extends Application {
 	
-	static Logger logger = Logger.getLogger(SearchRestlet.class);
+	final Logger logger = LoggerFactory.getLogger(SearchRestlet.class);
 
 	private Restlet screenRestlet;
 	private Restlet screenFlowRestlet;
@@ -34,7 +34,7 @@ public class CatalogueServer extends Application {
 	
 	public CatalogueServer(int port, File dir) {
 		// Set up a configuration for the logger.
-		BasicConfigurator.configure();
+//		BasicConfigurator.configure();
 
 		this.dir = dir;
 		this.component = new Component();
@@ -91,6 +91,9 @@ public class CatalogueServer extends Application {
 	public void dump() {
 //		catalogue.dump();
 		catalogue.dumpStatements();
+	}
+	public void export() {
+		catalogue.exportToTrig();
 	}
 	
 }

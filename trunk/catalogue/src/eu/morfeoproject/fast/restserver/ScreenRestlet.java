@@ -2,7 +2,6 @@ package eu.morfeoproject.fast.restserver;
 
 import java.io.IOException;
 
-import org.apache.log4j.Logger;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -13,6 +12,8 @@ import org.restlet.data.Method;
 import org.restlet.data.Request;
 import org.restlet.data.Response;
 import org.restlet.data.Status;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import eu.morfeoproject.fast.catalogue.Catalogue;
 import eu.morfeoproject.fast.catalogue.DuplicatedScreenException;
@@ -20,7 +21,7 @@ import eu.morfeoproject.fast.catalogue.NotFoundException;
 import eu.morfeoproject.fast.catalogue.OntologyInvalidException;
 import eu.morfeoproject.fast.catalogue.OntologyReadonlyException;
 import eu.morfeoproject.fast.model.Screen;
-import eu.morfeoproject.fast.vocabulary.FCO;
+import eu.morfeoproject.fast.vocabulary.FGO;
 
 /**
  * 
@@ -28,7 +29,7 @@ import eu.morfeoproject.fast.vocabulary.FCO;
  */
 public class ScreenRestlet extends CatalogueRestlet {
 
-	static Logger logger = Logger.getLogger(ScreenRestlet.class);
+	final Logger logger = LoggerFactory.getLogger(ScreenRestlet.class);
 
 	public ScreenRestlet(Catalogue catalogue) throws RepositoryException {
 		super();
@@ -56,9 +57,9 @@ public class ScreenRestlet extends CatalogueRestlet {
 			} else {
 				// Retrieve the addressed member of the collection
 				logger.info("Retrieving screen "+id);
-				Screen s = catalogue.getScreen(catalogue.getTripleStore().createURI(FCO.Screen+id));
+				Screen s = catalogue.getScreen(catalogue.getTripleStore().createURI(FGO.Screen+id));
 				if (s == null)
-					response.setStatus(Status.CLIENT_ERROR_BAD_REQUEST, "The resource "+FCO.Screen+id+" has not been found.");
+					response.setStatus(Status.CLIENT_ERROR_BAD_REQUEST, "The resource "+FGO.Screen+id+" has not been found.");
 				else {
 					try {
 						response.setEntity(s.toJSON().toString(2), MediaType.APPLICATION_JSON);
@@ -92,7 +93,7 @@ public class ScreenRestlet extends CatalogueRestlet {
 			} catch (NotFoundException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
-				response.setStatus(Status.CLIENT_ERROR_BAD_REQUEST, "The resource "+FCO.Screen+id+" has not been found.");
+				response.setStatus(Status.CLIENT_ERROR_BAD_REQUEST, "The resource "+FGO.Screen+id+" has not been found.");
 			} catch (OntologyReadonlyException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -128,7 +129,7 @@ public class ScreenRestlet extends CatalogueRestlet {
 				} catch (NotFoundException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
-					response.setStatus(Status.CLIENT_ERROR_BAD_REQUEST, "The resource "+FCO.Screen+id+" has not been found.");
+					response.setStatus(Status.CLIENT_ERROR_BAD_REQUEST, "The resource "+FGO.Screen+id+" has not been found.");
 				} catch (RepositoryException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -146,15 +147,14 @@ public class ScreenRestlet extends CatalogueRestlet {
 		} else if (request.getMethod().equals(Method.DELETE) && id != null) {
 			// Delete the addressed member of the collection.
 			try {
-				catalogue.removeScreen(new URIImpl(FCO.Screen+id));
+				catalogue.removeScreen(new URIImpl(FGO.Screen+id));
 				response.setStatus(Status.SUCCESS_OK);
 			} catch (NotFoundException e1) {
-				response.setStatus(Status.CLIENT_ERROR_NOT_FOUND, "The resource "+FCO.Screen+id+" has not been found.");
+				response.setStatus(Status.CLIENT_ERROR_NOT_FOUND, "The resource "+FGO.Screen+id+" has not been found.");
 			}
 		} else {
 			response.setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
 		}
-//		catalogue.dumpStatements();
 	}
 		
 }

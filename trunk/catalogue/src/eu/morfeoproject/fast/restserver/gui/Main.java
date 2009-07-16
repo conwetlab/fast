@@ -2,14 +2,15 @@ package eu.morfeoproject.fast.restserver.gui;
 
 import java.io.File;
 
-import org.apache.log4j.Logger;
 
 import eu.morfeoproject.fast.restserver.CatalogueServer;
 import org.apache.commons.cli.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class Main {
 
-	static Logger logger = Logger.getLogger(Main.class);
+	final static Logger logger = LoggerFactory.getLogger(Main.class);
 
 	private static final String PROPERTIES_PORT_OPTION = "p";
 	private static final String PROPERTIES_DIRECTORY_OPTION = "d";

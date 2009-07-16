@@ -5,7 +5,6 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
-import org.apache.log4j.Logger;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -17,6 +16,8 @@ import org.restlet.data.Method;
 import org.restlet.data.Request;
 import org.restlet.data.Response;
 import org.restlet.data.Status;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import eu.morfeoproject.fast.catalogue.Catalogue;
 import eu.morfeoproject.fast.catalogue.NotFoundException;
@@ -28,7 +29,7 @@ import eu.morfeoproject.fast.model.Screen;
  */
 public class SearchRestlet extends CatalogueRestlet {
 
-	static Logger logger = Logger.getLogger(SearchRestlet.class);
+	final Logger logger = LoggerFactory.getLogger(SearchRestlet.class);
 	
 	//TODO remove this; only for the find recursive demo
 	private boolean recursive = false;

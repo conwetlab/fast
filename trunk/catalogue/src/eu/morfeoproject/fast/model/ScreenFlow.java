@@ -9,12 +9,13 @@ import java.util.Map;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.ontoware.rdf2go.model.Model;
 import org.ontoware.rdf2go.model.Statement;
 import org.ontoware.rdf2go.model.node.URI;
 
 import eu.morfeoproject.fast.util.FormatterUtil;
 
-public class ScreenFlow {
+public class ScreenFlow implements Resource {
 	
 	private URI uri;
 	private Map<String, String> labels;
@@ -243,6 +244,11 @@ public class ScreenFlow {
 			e.printStackTrace();
 		}
 		return json;
+	}
+
+	public Model createModel() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 	
 }

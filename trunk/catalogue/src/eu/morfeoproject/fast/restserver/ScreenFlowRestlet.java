@@ -2,7 +2,6 @@ package eu.morfeoproject.fast.restserver;
 
 import java.io.IOException;
 
-import org.apache.log4j.Logger;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -13,15 +12,16 @@ import org.restlet.data.Method;
 import org.restlet.data.Request;
 import org.restlet.data.Response;
 import org.restlet.data.Status;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import eu.morfeoproject.fast.catalogue.Catalogue;
 import eu.morfeoproject.fast.catalogue.DuplicatedScreenFlowException;
 import eu.morfeoproject.fast.catalogue.NotFoundException;
 import eu.morfeoproject.fast.catalogue.OntologyInvalidException;
 import eu.morfeoproject.fast.catalogue.OntologyReadonlyException;
-import eu.morfeoproject.fast.model.Screen;
 import eu.morfeoproject.fast.model.ScreenFlow;
-import eu.morfeoproject.fast.vocabulary.FCO;
+import eu.morfeoproject.fast.vocabulary.FGO;
 
 /**
  * 
@@ -29,7 +29,7 @@ import eu.morfeoproject.fast.vocabulary.FCO;
  */
 public class ScreenFlowRestlet extends CatalogueRestlet {
 
-	static Logger logger = Logger.getLogger(ScreenFlowRestlet.class);
+	final Logger logger = LoggerFactory.getLogger(ScreenFlowRestlet.class);
 
 	public ScreenFlowRestlet(Catalogue catalogue) throws RepositoryException {
 		super();
@@ -56,7 +56,7 @@ public class ScreenFlowRestlet extends CatalogueRestlet {
 			} else {
 				// Retrieve the addressed member of the collection
 				logger.info("Retrieving screenflow "+id);
-				ScreenFlow sf = catalogue.getScreenFlow(catalogue.getTripleStore().createURI(FCO.ScreenFlow+id));
+				ScreenFlow sf = catalogue.getScreenFlow(catalogue.getTripleStore().createURI(FGO.ScreenFlow+id));
 				if (sf == null)
 					response.setStatus(Status.SUCCESS_NO_CONTENT);
 				else {
@@ -137,10 +137,10 @@ public class ScreenFlowRestlet extends CatalogueRestlet {
 		} else if (request.getMethod().equals(Method.DELETE) && id != null) {
 			// Delete the addressed member of the collection.
 			try {
-				catalogue.removeScreenFlow(new URIImpl(FCO.ScreenFlow+id));
+				catalogue.removeScreenFlow(new URIImpl(FGO.ScreenFlow+id));
 				response.setStatus(Status.SUCCESS_OK);
 			} catch (NotFoundException e1) {
-				response.setStatus(Status.CLIENT_ERROR_NOT_FOUND, "The resource "+FCO.Screen+id+" has not been found.");
+				response.setStatus(Status.CLIENT_ERROR_NOT_FOUND, "The resource "+FGO.Screen+id+" has not been found.");
 			}
 		} else {
 			response.setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
