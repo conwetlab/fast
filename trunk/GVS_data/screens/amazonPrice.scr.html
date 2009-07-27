@@ -57,9 +57,9 @@
 					});
 				
 				});
-				var item = EngineFactory.getInstance().getFact('?Item http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#Item');
+				var item = ScreenflowEngineFactory.getInstance().getFact('?Item http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#Item');
 				$$(".productTitle").each(function(element){
-					element.update(item.title);
+					element.update(item.data.title);
 				});
 				var tableBody = $("listBodyComparative");
                 tableBody.update("");
@@ -73,18 +73,18 @@
             PriceComparative.prototype.fetch = function (){
             
             	//Get the facts to invoke the service
-                var item = EngineFactory.getInstance().getFact('?Item http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#Item');
-                var user = EngineFactory.getInstance().getFact('user');
+                var item = ScreenflowEngineFactory.getInstance().getFact('?Item http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#Item');
+                var user = ScreenflowEngineFactory.getInstance().getFact('user');
                 //Add the ItemSearch parameters
                 var parameters = "";
-				parameters += "&ItemId=" + item.ASIN;
+				parameters += "&ItemId=" + item.data.ASIN;
 				parameters += "&MerchantId=All&Condition=All";
                 
                 //Base URL of the REST Service
 				var url = "http://webservices.amazon.com/onca/xml?Service=AWSECommerceService";
 				//Add the AccessKeyId (get from the user fact)
 				if (user)
-					url += "&AWSAccessKeyId=" + user.KeyId;
+					url += "&AWSAccessKeyId=" + user.data.KeyId;
 				else // if the KB doesn't contain a user key Id, add one by default
 					url += "&AWSAccessKeyId=15TNKDQJGH6BD0Z4KY02";
 				//Add the operation Type
@@ -187,13 +187,13 @@
             }
             
 			PriceComparative.prototype.addToCart = function (offerId){
-				var cart = EngineFactory.getInstance().getFact('?Cart http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#ShoppingCart');
-				var user = EngineFactory.getInstance().getFact('user');
+				var cart = ScreenflowEngineFactory.getInstance().getFact('?Cart http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#ShoppingCart');
+				var user = ScreenflowEngineFactory.getInstance().getFact('user');
 				if (cart){//If the cart is already created, it will have an ID in the User Fact
 					var url = "http://webservices.amazon.com/onca/xml?Service=AWSECommerceService";
 					//Add the AccessKeyId (get from the user fact)
 					if (user)
-						url += "&AWSAccessKeyId=" + user.KeyId;
+						url += "&AWSAccessKeyId=" + user.data.KeyId;
 					else // if the KB doesn't contain a user key Id, add one by default
 						url += "&AWSAccessKeyId=15TNKDQJGH6BD0Z4KY02";
 					//Add the operation Type
@@ -201,8 +201,8 @@
 					//Add the current version of the API
 					url += "&Version=2008-06-26";
 					//Add item ID
-					url += "&CartId=" + cart.id;
-					url += "&HMAC=" + cart.HMAC;
+					url += "&CartId=" + cart.data.id;
+					url += "&HMAC=" + cart.data.HMAC;
 					url += "&Item.1.OfferListingId=" + offerId;
 					url += "&Item.1.Quantity=" + 1;
 					
@@ -219,7 +219,7 @@
 					var url = "http://webservices.amazon.com/onca/xml?Service=AWSECommerceService";
 					//Add the AccessKeyId (get from the user fact)
 					if (user)
-						url += "&AWSAccessKeyId=" + user.KeyId;
+						url += "&AWSAccessKeyId=" + user.data.KeyId;
 					else // if the KB doesn't contain a user key Id, add one by default
 						url += "&AWSAccessKeyId=15TNKDQJGH6BD0Z4KY02";
 					//Add the operation Type
@@ -257,9 +257,9 @@
 					}
 					//Add the Cart ID to the KB
 					var cart = {name: '?Cart http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#ShoppingCart',
-								id: xml.getElementsByTagName("CartId")[0].firstChild.nodeValue,
-								HMAC: xml.getElementsByTagName("URLEncodedHMAC")[0].firstChild.nodeValue};
-					EngineFactory.getInstance().manageFacts([cart],[]);
+								data:{id: xml.getElementsByTagName("CartId")[0].firstChild.nodeValue,
+									HMAC: xml.getElementsByTagName("URLEncodedHMAC")[0].firstChild.nodeValue}};
+					ScreenflowEngineFactory.getInstance().manageFacts([cart],[]);
 					alert ("Product added to the shopping Cart");
 				}
 				else {
@@ -356,7 +356,7 @@
             }
             
             var priceComparative = new PriceComparative();
-			EngineFactory.getInstance().addScreenLoader("PriceComparative", priceComparative.init);
+			ScreenflowEngineFactory.getInstance().addScreenLoader("PriceComparative", priceComparative.init);
 			
         </script>
 	</head>

@@ -4,60 +4,47 @@
 <title>{{ gadgetTitle }}</title>
 <link rel="stylesheet" type="text/css" href="{{ gadgetUri }}/resources/menu/css/menu.css" />
 <SCRIPT language="javascript" src="{{ gadgetUri }}/js/fast/menu.js"></SCRIPT>
-<SCRIPT language="javascript" src="{{ gadgetUri }}/js/fast/engine.js"></SCRIPT>
+<SCRIPT language="javascript" src="{{ gadgetUri }}/js/fast/screenflowEngine.js"></SCRIPT>
 <SCRIPT language="javascript" src="{{ gadgetUri }}/js/prototype/prototype.js"></SCRIPT>
 <SCRIPT language="javascript" src="{{ gadgetUri }}/js/fastAPI/fastAPI.js"></SCRIPT>
 <SCRIPT language="javascript" src="{{ gadgetUri }}/js/fastAPI/fastAPI_ezweb.js"></SCRIPT>
 <SCRIPT language="javascript" src="/ezweb/js/EzWebAPI/EzWebAPI.js"></SCRIPT>
 <SCRIPT language="javascript">
 	var menu = null;
-	var screens = new Hash();
+	var screens = [
 {# Here the screens involved inside the gadget are defined #}
 {% load fastFilters %}
 {% for screen in gadgetScreens %}
-    screens.set("{{ screen.label|cut:" " }}",
-        {title: "{{ screen.label|cut:" " }}",
+		{id:"{{ screen.label|cut:" " }}",
+		title: "{{ screen.label|cut:" " }}",
         contentEl:"{{ screen.label|cut:" " }}",
-        pre: [{% for pre in screen.preconditions %}'{{ pre }}'{% if not forloop.last %}, {% endif %}{% endfor %}]});
+        {# TODO: negative facts #}
+        pre: [{% for pre in screen.preconditions %}{name:'{{ pre }}', positive:true}{% if not forloop.last %}, {% endif %}{% endfor %}]}{% if not forloop.last %},{% endif %}
 {% endfor %}
+		];
 
-    var events = new Hash();
+	var _io = new FastAPI.IO();
 
 {% for slot in gadgetSlots %}
-{% comment %}
-    var {{ slot.variableName }} = FastAPI.createRGadgetVariable("{{ slot.variableName }}", set{{ slot.variableName }});
-{% endcomment %}
-    var {{ slot.variableName }}_IO = new FastAPI.IO("{{ slot.variableName }}");
-    var {{ slot.variableName }} = {{ slot.variableName }}_IO.createInVariable(set{{ slot.variableName }});
+    var {{ slot.variableName }} = _io.createInVariable("{{ slot.variableName }}", set{{ slot.variableName }});
     function set{{ slot.variableName }}(val){
-        var fact = EngineFactory.getInstance().transformFact("{{ slot.semantics }}", "{{ slot.factAttr }}", val);
-        EngineFactory.getInstance().manageVarFacts([fact],[]);
+        var fact = ScreenflowEngineFactory.getInstance().transformFact("{{ slot.semantics }}", "{{ slot.factAttr }}", val);
+        ScreenflowEngineFactory.getInstance().manageVarFacts([fact],[]);
     }
 {% endfor %}
 
+    var events = [
 {% for event in gadgetEvents %}
-{% comment %}
-    var {{ event.variableName }} = FastAPI.createRWGadgetVariable("{{ event.variableName }}");
-{% endcomment %}
-    var {{ event.variableName }}_IO = new FastAPI.IO("{{ event.variableName }}");
-    var {{ event.variableName }} = {{ event.variableName }}_IO.createOutVariable();
-    getEventVariables(events, "{{ event.semantics }}").set("{{ event.variableName }}", {variable: {{ event.variableName }}, fact_attr: "{{ event.factAttr }}"});
+    {variable: _io.createOutVariable("{{ event.variableName }}"), fact_name: "{{ event.semantics }}", fact_attr: "{{ event.factAttr }}"}{% if not forloop.last %},{% endif %}
 {% endfor %}
-
-    function getEventVariables(evs, fact_name){
-        var variables = evs.get(fact_name);
-        if(!variables){
-            variables = evs.set(fact_name, new Hash());
-        }
-        return variables;
-    }
+		];
 
 	function loadMenu(){
 		menu = new FASTMenu({renderTo: "menu"});
 	    
-	    EngineFactory.getInstance().setEngine(screens, events, menu);
+		ScreenflowEngineFactory.getInstance().setEngine(screens, events, menu);
 	    
-	    EngineFactory.getInstance().run();
+		ScreenflowEngineFactory.getInstance().run();
 	}
 </SCRIPT>
 </head>

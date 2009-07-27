@@ -8,22 +8,23 @@
 <SCRIPT language="javascript" src="{{ gadgetUri }}/js/fastAPI/fastAPI_igoogle.js"></SCRIPT>
 <SCRIPT language="javascript">
     var menu = null;
-    var screens = new Hash();
+	var screens = [
 {# Here the screens involved inside the gadget are defined #}
 {% load fastFilters %}
 {% for screen in gadgetScreens %}
-    screens.set("{{ screen.label|cut:" " }}",
-        {title: "{{ screen.label|cut:" " }}",
+		{id:"{{ screen.label|cut:" " }}",
+		title: "{{ screen.label|cut:" " }}",
         contentEl:"{{ screen.label|cut:" " }}",
-        pre: [{% for pre in screen.preconditions %}'{{ pre }}'{% if not forloop.last %}, {% endif %}{% endfor %}]});
+        pre: [{% for pre in screen.preconditions %}'{{ pre }}'{% if not forloop.last %}, {% endif %}{% endfor %}]}{% if not forloop.last %},{% endif %}
 {% endfor %}
+		];
     var events = new Hash();
     function loadMenu(){
         menu = new FASTMenu({renderTo: "menu"});
         
-        EngineFactory.getInstance().setEngine(screens, events, menu);
+        ScreenflowEngineFactory.getInstance().setEngine(screens, events, menu);
         
-        EngineFactory.getInstance().run();
+        ScreenflowEngineFactory.getInstance().run();
     }
     _IG_RegisterOnloadHandler(loadMenu);
 </SCRIPT>

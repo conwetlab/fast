@@ -119,14 +119,14 @@
 		        	function Product(){};
 		        	
 		        	Product.prototype.init = function (){
-						var user = EngineFactory.getInstance().getFact('user');
-						var item = EngineFactory.getInstance().getFact('?Item http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#Item');
+						var user = ScreenflowEngineFactory.getInstance().getFact('user');
+						var item = ScreenflowEngineFactory.getInstance().getFact('?Item http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#Item');
 						$("addToCart").observe("click", product.addToCart);
 						//Base URL of the REST Service
 						var url = "http://webservices.amazon.com/onca/xml?Service=AWSECommerceService";
 						//Add the AccessKeyId (get from the user fact)
 						if (user)
-							url += "&AWSAccessKeyId=" + user.KeyId;
+							url += "&AWSAccessKeyId=" + user.data.KeyId;
 						else // if the KB doesn't contain a user key Id, add one by default
 							url += "&AWSAccessKeyId=15TNKDQJGH6BD0Z4KY02";
 						//Add the operation Type
@@ -136,7 +136,7 @@
 						//Add the current version of the API
 						url += "&Version=2008-06-26";
 						//Add item ID
-						url += "&ItemId=" + item.ASIN;
+						url += "&ItemId=" + item.data.ASIN;
 						
 						//Invoke the service
 		                new FastAPI.Request(url,{
@@ -444,14 +444,14 @@
 		            }
 		            
 		            Product.prototype.addToCart = function (){
-						var item = EngineFactory.getInstance().getFact('?Item http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#Item');
-						var cart = EngineFactory.getInstance().getFact('?Cart http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#ShoppingCart');
-						var user = EngineFactory.getInstance().getFact('user');
+						var item = ScreenflowEngineFactory.getInstance().getFact('?Item http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#Item');
+						var cart = ScreenflowEngineFactory.getInstance().getFact('?Cart http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#ShoppingCart');
+						var user = ScreenflowEngineFactory.getInstance().getFact('user');
 						if (cart){//If the cart is already created, it will have an ID in the User Fact
 							var url = "http://webservices.amazon.com/onca/xml?Service=AWSECommerceService";
 							//Add the AccessKeyId (get from the user fact)
 							if (user)
-								url += "&AWSAccessKeyId=" + user.KeyId;
+								url += "&AWSAccessKeyId=" + user.data.KeyId;
 							else // if the KB doesn't contain a user key Id, add one by default
 								url += "&AWSAccessKeyId=15TNKDQJGH6BD0Z4KY02";
 							//Add the operation Type
@@ -459,8 +459,8 @@
 							//Add the current version of the API
 							url += "&Version=2008-06-26";
 							//Add item ID
-							url += "&CartId=" + cart.id;
-							url += "&HMAC=" + cart.HMAC;
+							url += "&CartId=" + cart.data.id;
+							url += "&HMAC=" + cart.data.HMAC;
 							
 							//Invoke the service
 	                        new FastAPI.Request(url,{
@@ -475,7 +475,7 @@
 							var url = "http://webservices.amazon.com/onca/xml?Service=AWSECommerceService";
 							//Add the AccessKeyId (get from the user fact)
 							if (user)
-								url += "&AWSAccessKeyId=" + user.KeyId;
+								url += "&AWSAccessKeyId=" + user.data.KeyId;
 							else // if the KB doesn't contain a user key Id, add one by default
 								url += "&AWSAccessKeyId=15TNKDQJGH6BD0Z4KY02";
 							//Add the operation Type
@@ -483,7 +483,7 @@
 							//Add the current version of the API
 							url += "&Version=2008-06-26";
 							//Add item ID
-							url += "&Item.1.ASIN=" + item.ASIN;
+							url += "&Item.1.ASIN=" + item.data.ASIN;
 							url += "&Item.1.Quantity=" + $F("quantitySelect");
 							
 							//Invoke the service
@@ -513,9 +513,9 @@
 							}
 							//Add the Cart ID to the KB
 							var cart = {name: '?Cart http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#ShoppingCart',
-										id: xml.getElementsByTagName("CartId")[0].firstChild.nodeValue,
-										HMAC: xml.getElementsByTagName("URLEncodedHMAC")[0].firstChild.nodeValue};
-							EngineFactory.getInstance().manageFacts([cart],[]);
+										data:{id: xml.getElementsByTagName("CartId")[0].firstChild.nodeValue,
+											HMAC: xml.getElementsByTagName("URLEncodedHMAC")[0].firstChild.nodeValue}};
+							ScreenflowEngineFactory.getInstance().manageFacts([cart],[]);
 							alert ("Product added to the shopping Cart");
 						}		
 						else 
@@ -542,9 +542,9 @@
 					Product.prototype.isProductOnCart = function (transport){
 						
 						var xml = transport;
-						var item = EngineFactory.getInstance().getFact('?Item http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#Item');
-						var cart = EngineFactory.getInstance().getFact('?Cart http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#ShoppingCart');
-						var user = EngineFactory.getInstance().getFact('user');
+						var item = ScreenflowEngineFactory.getInstance().getFact('?Item http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#Item');
+						var cart = ScreenflowEngineFactory.getInstance().getFact('?Cart http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#ShoppingCart');
+						var user = ScreenflowEngineFactory.getInstance().getFact('user');
 						//products node
 						if (xml.getElementsByTagName ("CartItems").length>0){ //There are products on the cart
 								var products = xml.getElementsByTagName ("CartItems")[0];
@@ -555,7 +555,7 @@
 								//product Node
 								var _product; 
 								asins.each (function(asin){
-									if (asin.firstChild.nodeValue == item.ASIN)
+									if (asin.firstChild.nodeValue == item.data.ASIN)
 									{
 										found = true; //The product is in the list
 										_product = asin.parentNode; //product = CartItem
@@ -580,7 +580,7 @@
 							var url = "http://webservices.amazon.com/onca/xml?Service=AWSECommerceService";
 							//Add the AccessKeyId (get from the user fact)
 							if (user)
-								url += "&AWSAccessKeyId=" + user.KeyId;
+								url += "&AWSAccessKeyId=" + user.data.KeyId;
 							else // if the KB doesn't contain a user key Id, add one by default
 								url += "&AWSAccessKeyId=15TNKDQJGH6BD0Z4KY02";
 							//Add the operation Type
@@ -588,8 +588,8 @@
 							//Add the current version of the API
 							url += "&Version=2008-06-26";
 							//Add item ID
-							url += "&CartId=" + cart.id;
-							url += "&HMAC=" + cart.HMAC;
+							url += "&CartId=" + cart.data.id;
+							url += "&HMAC=" + cart.data.HMAC;
 							url += "&Item.1.CartItemId=" + productId;
 							url += "&Item.1.Quantity=" + quantity;
 							
@@ -607,7 +607,7 @@
 							var url = "http://webservices.amazon.com/onca/xml?Service=AWSECommerceService";
 							//Add the AccessKeyId (get from the user fact)
 							if (user)
-								url += "&AWSAccessKeyId=" + user.KeyId;
+								url += "&AWSAccessKeyId=" + user.data.KeyId;
 							else // if the KB doesn't contain a user key Id, add one by default
 								url += "&AWSAccessKeyId=15TNKDQJGH6BD0Z4KY02";
 							//Add the operation Type
@@ -615,9 +615,9 @@
 							//Add the current version of the API
 							url += "&Version=2008-06-26";
 							//Add item ID
-							url += "&CartId=" + cart.id;
-							url += "&HMAC=" + cart.HMAC;
-							url += "&Item.1.ASIN=" + item.ASIN;
+							url += "&CartId=" + cart.data.id;
+							url += "&HMAC=" + cart.data.HMAC;
+							url += "&Item.1.ASIN=" + item.data.ASIN;
 							url += "&Item.1.Quantity=" + $F("quantitySelect");
 							
 							//Invoke the service
@@ -632,7 +632,7 @@
 					}
 					
 					var product = new Product();
-					EngineFactory.getInstance().addScreenLoader("ProductDetails", product.init);
+					ScreenflowEngineFactory.getInstance().addScreenLoader("ProductDetails", product.init);
 		        </script>
 		    </head>
 		    <body>

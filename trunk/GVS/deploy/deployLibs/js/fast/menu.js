@@ -21,6 +21,7 @@ function FASTMenu (properties) {
 
 
 FASTMenu.prototype.addTab = function (properties) {
+	var id = properties["id"];
 	var title = properties["title"];
 	var content = properties["contentEl"];
 	var contentElement = null;
@@ -35,8 +36,6 @@ FASTMenu.prototype.addTab = function (properties) {
 			return;
 		}
 	}
-	
-	var id = this.nextTabId++
 	var tabElement = new Element("li");
 	var linkElement = new Element("a");
 	var titleElement = new Element("span");

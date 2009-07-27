@@ -50,7 +50,7 @@
             EBayList.prototype.fetch = function (){
             
             	//Get the facts to invoke the service
-                var item = EngineFactory.getInstance().getFact('http://TODO/ebay#item');	
+                var item = ScreenflowEngineFactory.getInstance().getFact('?Item http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#Item');
                 
                 //URL of the Service
 				var url = "http://open.api.ebay.com/shopping?";
@@ -60,7 +60,7 @@
 				url += "&responseencoding=XML";
 				url += "&appid=eBayAPID-73f4-45f2-b9a3-c8f6388b38d8";
 				url += "&callback=true";
-				url += "&QueryKeywords=" + escape(item.title.replace(/ /g,"+"));
+				url += "&QueryKeywords=" +  encodeURIComponent(item.data.title);
 
 				//Invoke the service
                 new FastAPI.Request(url,{
@@ -122,8 +122,8 @@
 				eBayList.clearSelected ();
 				//select the element
 				nodeElement.parentNode.parentNode.setStyle({background: "#FFF8E8"});
-				var ebayItem = {name: 'http://TODO/ebay#item', itemID: itemID, title: title};
-				EngineFactory.getInstance().manageFacts([ebayItem],[]);
+				var ebayItem = {name: 'http://TODO/ebay#item', data:{itemID: itemID, title: title}};
+				ScreenflowEngineFactory.getInstance().manageFacts([ebayItem],[]);
 			}
 			
 			EBayList.prototype.clearSelected = function (){
@@ -161,7 +161,7 @@
             }
             
             var eBayList = new EBayList();
-			EngineFactory.getInstance().addScreenLoader("eBayList", eBayList.init);
+			ScreenflowEngineFactory.getInstance().addScreenLoader("eBayList", eBayList.init);
 			
         </script></head><body>
         <div id="bodyDiv">

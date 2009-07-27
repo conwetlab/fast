@@ -6,16 +6,15 @@ FastBaseAPI.IO = Class.create({
      * @param variable
      *      variable name to be created
      */
-    initialize: function(variable) {
-        this.variable = variable;
+    initialize: function() {
     },
 
-    createInVariable: function (handler) {
+    createInVariable: function (variable, handler) {
         throw 'Abstract Method invocation. ' + 
               'FastAPI :: createInVariable';
     },
 
-    createOutVariable: function () {
+    createOutVariable: function (variable) {
         throw 'Abstract Method invocation. ' + 
               'FastAPI :: createOutVariable';
     }

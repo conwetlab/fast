@@ -69,14 +69,14 @@
             ShoppingCart.prototype.clearCart = function (){
 				//Ask the user to confirm the operation
 				if (confirm("Are you sure you want to empty your Shopping Cart?")) {
-					var cart = EngineFactory.getInstance().getFact('?Cart http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#ShoppingCart');
-					var user = EngineFactory.getInstance().getFact('user');
+					var cart = ScreenflowEngineFactory.getInstance().getFact('?Cart http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#ShoppingCart');
+					var user = ScreenflowEngineFactory.getInstance().getFact('user');
 					
 					//Create the call
 					var url = "http://webservices.amazon.com/onca/xml?Service=AWSECommerceService";
 					//Add the AccessKeyId (get from the user fact)
 					if (user)
-						url += "&AWSAccessKeyId=" + user.KeyId;
+						url += "&AWSAccessKeyId=" + user.data.KeyId;
 					else // if the KB doesn't contain a user key Id, add one by default
 						url += "&AWSAccessKeyId=15TNKDQJGH6BD0Z4KY02";
 					//Add the operation Type
@@ -84,8 +84,8 @@
 					//Add the current version of the API
 					url += "&Version=2008-06-26";
 					//Add item ID
-					url += "&CartId=" + cart.id;
-					url += "&HMAC=" + cart.HMAC;
+					url += "&CartId=" + cart.data.id;
+					url += "&HMAC=" + cart.data.HMAC;
 					
 					//Invoke the service
            	        new FastAPI.Request(url,{
@@ -99,19 +99,19 @@
 			}
 			
 			ShoppingCart.prototype.checkout = function (){
-				var purchase = {name:'?Purchase http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#PurchaseURL', url: shoppingCart.purchaseURL};
-				EngineFactory.getInstance().manageFacts([purchase],[]);
+				var purchase = {name:'?Purchase http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#PurchaseURL', data:{url: shoppingCart.purchaseURL}};
+				ScreenflowEngineFactory.getInstance().manageFacts([purchase],[]);
 			}
 			
 			ShoppingCart.prototype.update = function (){
 				if (shoppingCart.productList.length > 0) { //Only if there is something to update
-					var cart = EngineFactory.getInstance().getFact('?Cart http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#ShoppingCart');
-					var user = EngineFactory.getInstance().getFact('user');
+					var cart = ScreenflowEngineFactory.getInstance().getFact('?Cart http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#ShoppingCart');
+					var user = ScreenflowEngineFactory.getInstance().getFact('user');
 					//Create the call
 					var url = "http://webservices.amazon.com/onca/xml?Service=AWSECommerceService";
 					//Add the AccessKeyId (get from the user fact)
 					if (user)
-						url += "&AWSAccessKeyId=" + user.KeyId;
+						url += "&AWSAccessKeyId=" + user.data.KeyId;
 					else // if the KB doesn't contain a user key Id, add one by default
 						url += "&AWSAccessKeyId=15TNKDQJGH6BD0Z4KY02";
 					//Add the operation Type
@@ -119,8 +119,8 @@
 					//Add the current version of the API
 					url += "&Version=2008-06-26";
 					//Add item ID
-					url += "&CartId=" + cart.id;
-					url += "&HMAC=" + cart.HMAC;
+					url += "&CartId=" + cart.data.id;
+					url += "&HMAC=" + cart.data.HMAC;
 					//Build the parameter list
 					for (var i=0; i < shoppingCart.productList.length; i++){
 						url += "&Item." + (i+1) + ".CartItemId=" + shoppingCart.productList[i]["id"];
@@ -139,10 +139,10 @@
 			
 			//Change the current Item Fact
 			ShoppingCart.prototype.productDetail = function (_ASIN,_title){
-				var item = EngineFactory.getInstance().getFact('?Item http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#Item');
-				item.ASIN = _ASIN;
-				item.title = _title;
-				EngineFactory.getInstance().manageFacts([item],['product']);
+				var item = ScreenflowEngineFactory.getInstance().getFact('?Item http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#Item');
+				item.data.ASIN = _ASIN;
+				item.data.title = _title;
+				ScreenflowEngineFactory.getInstance().manageFacts([item],['product']);
 			}
 			
 			ShoppingCart.prototype.fetch = function (){
@@ -153,14 +153,14 @@
 				
                 //Get the facts to invoke the service
                 //TODO add error handling
-                var cart = EngineFactory.getInstance().getFact('?Cart http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#ShoppingCart');
-                var user = EngineFactory.getInstance().getFact('user');
+                var cart = ScreenflowEngineFactory.getInstance().getFact('?Cart http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#ShoppingCart');
+                var user = ScreenflowEngineFactory.getInstance().getFact('user');
 				
                 //Invoke the service CartGet to retrieve the product list
                 var url = "http://webservices.amazon.com/onca/xml?Service=AWSECommerceService";
 				//Add the AccessKeyId (get from the user fact)
 				if (user)
-					url += "&AWSAccessKeyId=" + user.KeyId;
+					url += "&AWSAccessKeyId=" + user.data.KeyId;
 				else // if the KB doesn't contain a user key Id, add one by default
 					url += "&AWSAccessKeyId=15TNKDQJGH6BD0Z4KY02";
 				//Add the operation Type
@@ -168,8 +168,8 @@
 				//Add the current version of the API
 				url += "&Version=2008-06-26";
 				//Add item ID
-				url += "&CartId=" + cart.id;
-				url += "&HMAC=" + cart.HMAC;
+				url += "&CartId=" + cart.data.id;
+				url += "&HMAC=" + cart.data.HMAC;
 				
 				//Create the call
                 new FastAPI.Request(url,{
@@ -244,7 +244,7 @@
 				if (shoppingCart.productList.length == 0) {//Empty shopping cart
 					$("info").update("Your Shopping Cart is empty");
 					$("buttonContainerDivCart").hide();
-					EngineFactory.getInstance().manageFacts([],['?Purchase http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#PurchaseURL']);	
+					ScreenflowEngineFactory.getInstance().manageFacts([],['?Purchase http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#PurchaseURL']);	
 					return;
 				}else{
 					$("info").update("");
@@ -272,7 +272,7 @@
             }
             
             var shoppingCart = new ShoppingCart();
-			EngineFactory.getInstance().addScreenLoader("ShoppingCart", shoppingCart.init);
+			ScreenflowEngineFactory.getInstance().addScreenLoader("ShoppingCart", shoppingCart.init);
 					
         </script>
     </head>

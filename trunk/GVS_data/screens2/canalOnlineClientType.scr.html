@@ -55,20 +55,20 @@
     };
     Cliente.prototype.init = function (){}
     Cliente.prototype.send = function (tipo, valor ){
-        cliente.telefono = {'name': 'http://TODO/canalonline#clientPhone', 'type': tipo, 'value': null};
-        cliente.segmento = {'name': 'http://TODO/canalonline#clientSegment', 'type': tipo, 'value': valor};
+        cliente.telefono = {'name': 'http://TODO/canalonline#clientPhone', data:{'type': tipo, 'value': null}};
+        cliente.segmento = {'name': 'http://TODO/canalonline#clientSegment', data:{'type': tipo, 'value': valor}};
         if (cliente.servicio != null){
-            EngineFactory.getInstance().manageFacts([cliente.servicio,cliente.segmento,cliente.telefono],['promotions']);
+            ScreenflowEngineFactory.getInstance().manageFacts([cliente.servicio,cliente.segmento,cliente.telefono],['promotions']);
         }
     }
     Cliente.prototype.send2 = function (tipo, valor ){
-        cliente.servicio = {'name': 'http://TODO/canalonline#clientService', 'tipo': tipo, 'value': valor};
+        cliente.servicio = {'name': 'http://TODO/canalonline#clientService', data:{'tipo': tipo, 'value': valor}};
         if (cliente.segmento != null){
-            EngineFactory.getInstance().manageFacts([cliente.servicio,cliente.segmento,cliente.telefono],['promotions']);
+            ScreenflowEngineFactory.getInstance().manageFacts([cliente.servicio,cliente.segmento,cliente.telefono],['promotions']);
         }
     }
     var cliente = new Cliente();
-    EngineFactory.getInstance().addScreenLoader("ClientType", cliente.init);
+    ScreenflowEngineFactory.getInstance().addScreenLoader("ClientType", cliente.init);
 </script>
 </head>
 <body>

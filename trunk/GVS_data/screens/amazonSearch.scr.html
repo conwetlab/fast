@@ -1,121 +1,121 @@
-		<html>
-		    <head>
-		        <meta http-equiv="Content-Type" content="application/xhtml+xml; charset=UTF-8" />
-		        <link type="text/css" rel="stylesheet" href="http://piccolo.ls.fi.upm.es/amazonScreens/style/screen.css" />
-				<style type="text/css">
-					#bodyDiv{
-						max-width: 550px;
-					}
-					#searchArea {
-						border: 1px solid #F8A704;
-						-moz-border-radius:13px 13px;
-						background:#FFF8E8 url(http://piccolo.ls.fi.upm.es/amazonScreens/style/bg_td2.jpg) repeat-x;
-						border:1px solid #F8A704;
-						height:50px;
-						margin:5px auto 0px;
-						padding:0px;
-						text-align:center;
-						width:98%;
-					}
-					#contents{
-						padding:12px;
-					}
-					#send{
-						margin-left: 15px;
-					}
-					#amazonImage{
-						position:absolute;
-						right:2px;
-						top:3px;
-					}
-					.title{
-						padding: 2px;
-						color:#AAAAAA;
-						font-weight: bold;
-						font-family:Arial,Helvetica,sans-serif;	
-						white-space:nowrap;
-						overflow: hidden;
-					}
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="application/xhtml+xml; charset=UTF-8" />
+        <link type="text/css" rel="stylesheet" href="http://piccolo.ls.fi.upm.es/amazonScreens/style/screen.css" />
+		<style type="text/css">
+			#bodyDiv{
+				max-width: 550px;
+			}
+			#searchArea {
+				border: 1px solid #F8A704;
+				-moz-border-radius:13px 13px;
+				background:#FFF8E8 url(http://piccolo.ls.fi.upm.es/amazonScreens/style/bg_td2.jpg) repeat-x;
+				border:1px solid #F8A704;
+				height:50px;
+				margin:5px auto 0px;
+				padding:0px;
+				text-align:center;
+				width:98%;
+			}
+			#contents{
+				padding:12px;
+			}
+			#send{
+				margin-left: 15px;
+			}
+			#amazonImage{
+				position:absolute;
+				right:2px;
+				top:3px;
+			}
+			.title{
+				padding: 2px;
+				color:#AAAAAA;
+				font-weight: bold;
+				font-family:Arial,Helvetica,sans-serif;	
+				white-space:nowrap;
+				overflow: hidden;
+			}
 
-				</style>
-		        <script language="JavaScript">
-		        	function Search(){};
-		        	
-		        	Search.prototype.init = function (){
-						//List of possible searches
-						var searchIndices = ["All","Apparel","Automotive","Baby","Beauty","Blended",
-											 "Books","Classical", "DigitalMusic","DVD","Electronics",
-											 "GourmetFood","HealthPersonalCare","HomeGarden","Industrial",
-											 "Jewelry","KindleStore","Kitchen","Magazines","Merchants",
-											 "Miscellaneous","MP3Downloads","Music","MusicalInstruments",
-											 "MusicTracks","OfficeProducts","OutdoorLiving","PCHardware",
-											 "PetSupplies","Photo","SilverMerchants","Software","SportingGoods",
-											 "Tools","Toys","UnboxVideo","VHS","Video","VideoGames","Watches",
-											 "Wireless","WirelessAccessories"];
-						$("send").observe("click", search.send);
-						$("send").observe("mouseover",function(event){
-								var e = Event.element(event);
-								e.setStyle({cursor:"pointer"});
-							});
-						//Populate the product type select element
-						search.populateOptions(searchIndices);
-					}
-					
-					Search.prototype.populateOptions = function (_list){
-						var templateString = "<option value ='#{element}'>#{caption}</option>";
-						var template = new Template(templateString);
-						var optionHTML = "";
-						$A(_list).each (function (element){
-							optionHTML += template.evaluate({"element":element,"caption":search.separate(element)});
-						});
-						$("productType").update(optionHTML);
-					}
-					
-					//This function returns a human readable element, 
-					//separating words by white-spaces
-					Search.prototype.separate = function (element){
-						//Workaround for special cases
-						//TODO: Create a generic solution, maybe another regexp?
-						if (element=="DVD" || element=="VHS" || element=="MP3Downloads" || element=="PCHardware"){
-							if (element=="MP3Downloads")
-								return "MP3 Downloads";
-							if (element=="PCHardware")
-								return "PC Hardware";
-							return element;
-						}
-						else{
-							var result = element.replace(/([A-Z])/g, " $1");
-							//Remove first white-space when necessary
-							result = (result[0]==" "?result.substring(1,result.length):result);
-							return result;
-						}
-					}
-					
-					Search.prototype.send = function (){
-						if ($F("searchText").length==0){ //Empty keywords are forbidden
-							alert ("You must introduce at least one keyword");
-							return;
-						}
-						var filter = {name: '?Filter http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#SearchCriteria', productType: $F("productType"), searchText: $F("searchText")};
-						EngineFactory.getInstance().manageFacts([filter],[]);
-					}
-					
-					var search = new Search();
-					EngineFactory.getInstance().addScreenLoader("ProductSearch", search.init);
-		        </script>
-		    </head>
-		    <body>
-		        <div id="bodyDiv">
-		        	<span id="amazonImage"><img src="http://piccolo.ls.fi.upm.es/amazonScreens/images/amazon.png" /></span>
-		        	<h1 id="title">Product Search</h1>
-					<div id="searchArea">
-						<div id="contents">
-							<span class="title">Keywords: </span> <input type="text" id="searchText" />
-							<select id="productType">			
-							</select>
-							<input type="button" id="send" value="Search" />
-						</div>
-					</div>       
-		        </div>
-		    </body>
-		</html>
+		</style>
+        <script language="JavaScript">
+        	function Search(){};
+        	
+        	Search.prototype.init = function (){
+				//List of possible searches
+				var searchIndices = ["All","Apparel","Automotive","Baby","Beauty","Blended",
+									 "Books","Classical", "DigitalMusic","DVD","Electronics",
+									 "GourmetFood","HealthPersonalCare","HomeGarden","Industrial",
+									 "Jewelry","KindleStore","Kitchen","Magazines","Merchants",
+									 "Miscellaneous","MP3Downloads","Music","MusicalInstruments",
+									 "MusicTracks","OfficeProducts","OutdoorLiving","PCHardware",
+									 "PetSupplies","Photo","SilverMerchants","Software","SportingGoods",
+									 "Tools","Toys","UnboxVideo","VHS","Video","VideoGames","Watches",
+									 "Wireless","WirelessAccessories"];
+				$("send").observe("click", search.send);
+				$("send").observe("mouseover",function(event){
+						var e = Event.element(event);
+						e.setStyle({cursor:"pointer"});
+					});
+				//Populate the product type select element
+				search.populateOptions(searchIndices);
+			}
+			
+			Search.prototype.populateOptions = function (_list){
+				var templateString = "<option value ='#{element}'>#{caption}</option>";
+				var template = new Template(templateString);
+				var optionHTML = "";
+				$A(_list).each (function (element){
+					optionHTML += template.evaluate({"element":element,"caption":search.separate(element)});
+				});
+				$("productType").update(optionHTML);
+			}
+			
+			//This function returns a human readable element, 
+			//separating words by white-spaces
+			Search.prototype.separate = function (element){
+				//Workaround for special cases
+				//TODO: Create a generic solution, maybe another regexp?
+				if (element=="DVD" || element=="VHS" || element=="MP3Downloads" || element=="PCHardware"){
+					if (element=="MP3Downloads")
+						return "MP3 Downloads";
+					if (element=="PCHardware")
+						return "PC Hardware";
+					return element;
+				}
+				else{
+					var result = element.replace(/([A-Z])/g, " $1");
+					//Remove first white-space when necessary
+					result = (result[0]==" "?result.substring(1,result.length):result);
+					return result;
+				}
+			}
+			
+			Search.prototype.send = function (){
+				if ($F("searchText").length==0){ //Empty keywords are forbidden
+					alert ("You must introduce at least one keyword");
+					return;
+				}
+				var filter = {name: '?Filter http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#SearchCriteria', data:{productType: $F("productType"), searchText: $F("searchText")}};
+				ScreenflowEngineFactory.getInstance().manageFacts([filter],[]);
+			}
+			
+			var search = new Search();
+			ScreenflowEngineFactory.getInstance().addScreenLoader("ProductSearch", search.init);
+        </script>
+    </head>
+    <body>
+        <div id="bodyDiv">
+        	<span id="amazonImage"><img src="http://piccolo.ls.fi.upm.es/amazonScreens/images/amazon.png" /></span>
+        	<h1 id="title">Product Search</h1>
+			<div id="searchArea">
+				<div id="contents">
+					<span class="title">Keywords: </span> <input type="text" id="searchText" />
+					<select id="productType">			
+					</select>
+					<input type="button" id="send" value="Search" />
+				</div>
+			</div>       
+        </div>
+    </body>
+</html>

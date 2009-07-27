@@ -126,6 +126,23 @@
                 preconditions: ['http://TODO/amazon#item'],
                 postconditions:['http://TODO/amazon#shoppingCart'],
                 code: "URL"
+            },
+            {
+                uri: 'http://localhost:8010/screens/eBayList.scr.html',
+                label: null,
+                name: 'Ebay List',
+                description: 'This screen shows a ebay price comparative for a given amazon product',
+                creator: "URI",
+                rights: "URI",
+                version: "...",
+                creationDate: "ISO date",
+                icon: 'http://localhost:8010/images/catalogue/eBayList.png',
+                screenshot: "URL",
+                domainContext: ["tag1", "tag2"],
+                homepage: "URL",
+                preconditions: ['http://TODO/amazon#item'],
+                postconditions:['http://TODO/ebay#item'],
+                code: "URL"
             }
 
         ]}

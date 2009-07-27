@@ -66,23 +66,23 @@
     }
     List.prototype.search = function (){
         //Get the facts to invoke the service
-        var filter = EngineFactory.getInstance().getFact('?Filter http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#SearchCriteria');
-        var user = EngineFactory.getInstance().getFact('user');
+        var filter = ScreenflowEngineFactory.getInstance().getFact('?Filter http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#SearchCriteria');
+        var user = ScreenflowEngineFactory.getInstance().getFact('user');
         //Add the ItemSearch parameters
-        var productType = filter.productType;
+        var productType = filter.data.productType;
         if(!productType){
             productType = 'All'
         }
         var parameters = "";
         parameters += "&SearchIndex=" + productType;
-        parameters += "&Keywords=" + filter.searchText;
+        parameters += "&Keywords=" + encodeURIComponent(filter.data.searchText);
         //Add the page number (if is set)
         parameters += "&ItemPage=" + (list.lastPageFetched + 1);
         //Base URL of the REST Service
         var url = "http://webservices.amazon.com/onca/xml?Service=AWSECommerceService";
         //Add the AccessKeyId (get from the user fact)
         if (user)
-            url += "&AWSAccessKeyId=" + user.KeyId;
+            url += "&AWSAccessKeyId=" + user.data.KeyId;
         else // if the KB doesn't contain a user key Id, add one by default
             url += "&AWSAccessKeyId=15TNKDQJGH6BD0Z4KY02";
         //Add the operation Type
@@ -157,8 +157,8 @@
         list.clearSelected ();
         //select the element
         nodeElement.parentNode.parentNode.setStyle({background: "#FFF8E8"});
-        var item = {name: '?Item http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#Item', ASIN: _ASIN, title: nodeElement.parentNode.parentNode.firstChild.firstChild.nodeValue};
-        EngineFactory.getInstance().manageFacts([item],[]);
+        var item = {name: '?Item http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#Item', data:{ASIN: _ASIN, title: nodeElement.parentNode.parentNode.firstChild.firstChild.nodeValue}};
+        ScreenflowEngineFactory.getInstance().manageFacts([item],[]);
     }
     List.prototype.clearSelected = function (){
         $$("tbody tr").each(function (element){
@@ -232,7 +232,7 @@
             $("curPage").innerHTML += "0";
     }
     var list = new List();
-    EngineFactory.getInstance().addScreenLoader("ProductList", list.init);
+    ScreenflowEngineFactory.getInstance().addScreenLoader("ProductList", list.init);
 </script>
 </head>
 <body>

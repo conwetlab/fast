@@ -49,13 +49,13 @@
                 });
             }
             Telefono.prototype.send = function (){
-                var telefono_sel = {'name': 'http://TODO/canalonline#clientPhone', 'value': $F("tel")};
-                var servicio = {'name': 'http://TODO/canalonline#clientService', 'value': null};
-                var segmento = {'name': 'http://TODO/canalonline#clientSegment', 'value': null};
-                EngineFactory.getInstance().manageFacts([servicio,segmento,telefono_sel],['promotions']);
+                var telefono_sel = {'name': 'http://TODO/canalonline#clientPhone', data:{'value': $F("tel")}};
+                var servicio = {'name': 'http://TODO/canalonline#clientService', data:{'value': null}};
+                var segmento = {'name': 'http://TODO/canalonline#clientSegment', data:{'value': null}};
+                ScreenflowEngineFactory.getInstance().manageFacts([servicio,segmento,telefono_sel],['promotions']);
             }
             var telefono = new Telefono();
-            EngineFactory.getInstance().addScreenLoader("ClientPhone", telefono.init);
+            ScreenflowEngineFactory.getInstance().addScreenLoader("ClientPhone", telefono.init);
         </script>
     </head>
     <body>

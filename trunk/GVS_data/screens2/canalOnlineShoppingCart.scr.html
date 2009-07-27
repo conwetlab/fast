@@ -35,20 +35,20 @@
             
             ShoppingCart.prototype.init = function (){
                    //Get the facts to invoke the service
-                    var cart = EngineFactory.getInstance().getFact('http://TODO/canalonline#shoppingCart');
+                    var cart = ScreenflowEngineFactory.getInstance().getFact('http://TODO/canalonline#shoppingCart');
                     var product = document.getElementById("product");
                     product.innerHTML = cart.product;
                     $("checkoutButton").observe("click", shoppingCart.checkout);
             }
 			
 			ShoppingCart.prototype.checkout = function (){
-				var purchase = {name:'http://TODO/canalonline#purchase', url: shoppingCart.purchaseURL};
-				EngineFactory.getInstance().manageFacts([purchase],[]);
+				var purchase = {name:'http://TODO/canalonline#purchase', data:{url: shoppingCart.purchaseURL}};
+				ScreenflowEngineFactory.getInstance().manageFacts([purchase],[]);
 			}
             
             
             var shoppingCart = new ShoppingCart();
-			EngineFactory.getInstance().addScreenLoader("ShoppingCart", shoppingCart.init);
+			ScreenflowEngineFactory.getInstance().addScreenLoader("ShoppingCart", shoppingCart.init);
 					
         </script>
     </head>

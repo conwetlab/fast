@@ -571,18 +571,3 @@ label{
     opacity:0;
     margin-left: 10px;
 }
-
-#help_section .help_button{
-	padding-left: 18px;
-}
-
-.help_button {
-  background: transparent url(/fast/images/gui/info.png) no-repeat scroll 0 0;
-  position: absolute;
-  right: 10px;
-  margin-left: 5px;
-  border: none;
-  display: inline;
-  vertical-align: middle;
-  cursor: pointer;
-}

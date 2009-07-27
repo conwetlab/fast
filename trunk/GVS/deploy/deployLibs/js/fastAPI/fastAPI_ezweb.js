@@ -6,8 +6,8 @@ var FastAPI = {};
  * @extends FastBaseAPI.IO
  */
 FastAPI.IO = Class.create(FastBaseAPI.IO,{
-    initialize: function($super, variable) {
-        $super(variable);
+    initialize: function($super) {
+        $super();
     },
 
     /**
@@ -15,15 +15,15 @@ FastAPI.IO = Class.create(FastBaseAPI.IO,{
      * @param handler
      *      represents the handler for a slot variable when its value is set
      */
-    createInVariable: function (handler) {
-        return EzWebAPI.createRGadgetVariable(this.variable, handler);
+    createInVariable: function (variable, handler) {
+        return EzWebAPI.createRGadgetVariable(variable, handler);
     },
 
     /**
      * Creates an Event Variable for EzWeb.
      */
-    createOutVariable: function () {
-        return EzWebAPI.createRWGadgetVariable(this.variable);
+    createOutVariable: function (variable) {
+        return EzWebAPI.createRWGadgetVariable(variable);
     }
 });
 

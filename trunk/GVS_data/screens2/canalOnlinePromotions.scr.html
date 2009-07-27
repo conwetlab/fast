@@ -53,11 +53,11 @@
     };
 
     Ofertas.prototype.init = function (){
-        ofertas.p = {name: 'http://TODO/canalonline#shoppingCart', 'product': 'Linea + DUO ADSL + Llamadas Nacionales'};
+        ofertas.p = {name: 'http://TODO/canalonline#shoppingCart', data:{'product': 'Linea + DUO ADSL + Llamadas Nacionales'}};
         //Get the facts to invoke the service
-        var servicio = EngineFactory.getInstance().getFact('http://TODO/canalonline#clientService');
-        var segmento = EngineFactory.getInstance().getFact('http://TODO/canalonline#clientSegment');
-        var telefono = EngineFactory.getInstance().getFact('http://TODO/canalonline#clientPhone');
+        var servicio = ScreenflowEngineFactory.getInstance().getFact('http://TODO/canalonline#clientService');
+        var segmento = ScreenflowEngineFactory.getInstance().getFact('http://TODO/canalonline#clientSegment');
+        var telefono = ScreenflowEngineFactory.getInstance().getFact('http://TODO/canalonline#clientPhone');
         var img = document.getElementById("oferta_img");
         var txt = document.getElementById("coment_tfno");
         if(telefono.valor != null) {
@@ -67,21 +67,21 @@
         }
         if(servicio.value == 'I') {
             img.src="http://ezgadget.googlecode.com/svn/trunk/ezgadget/CanalOnline/images/Internet_yacliente.gif";
-            ofertas.p = {name: 'http://TODO/canalonline#shoppingCart', product: 'DUO ADSL + Llamadas Nacionales'};
+            ofertas.p = {name: 'http://TODO/canalonline#shoppingCart', data:{product: 'DUO ADSL + Llamadas Nacionales'}};
         } else if(servicio.value == 'Tf') {
             img.src="http://ezgadget.googlecode.com/svn/trunk/ezgadget/CanalOnline/images/TF_NOcliente.gif";	                    
-            ofertas.p = {name: 'http://TODO/canalonline#shoppingCart', product: 'Linea + Telefono + Servicios'};
+            ofertas.p = {name: 'http://TODO/canalonline#shoppingCart', data:{product: 'Linea + Telefono + Servicios'}};
         } else if(servicio.value == 'Tv') {
             img.src="http://ezgadget.googlecode.com/svn/trunk/ezgadget/CanalOnline/images/TV_yacliente.gif";	                    
-            ofertas.p = {name: 'http://TODO/canalonline#shoppingCart', product: 'TRIO'};
+            ofertas.p = {name: 'http://TODO/canalonline#shoppingCart', data:{product: 'TRIO'}};
         }
     }
 
     Ofertas.prototype.send = function (){
-        EngineFactory.getInstance().manageFacts([ofertas.p],['promotion']);
+        ScreenflowEngineFactory.getInstance().manageFacts([ofertas.p],['promotion']);
     }
     var ofertas = new Ofertas();
-    EngineFactory.getInstance().addScreenLoader("Promotions", ofertas.init);
+    ScreenflowEngineFactory.getInstance().addScreenLoader("Promotions", ofertas.init);
 </script>
 </head>
 <body>
