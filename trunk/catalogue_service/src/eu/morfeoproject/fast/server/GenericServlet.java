@@ -21,6 +21,7 @@ import org.ontoware.rdf2go.model.node.BlankNode;
 import org.ontoware.rdf2go.model.node.Node;
 import org.ontoware.rdf2go.model.node.URI;
 import org.ontoware.rdf2go.model.node.impl.URIImpl;
+import org.ontoware.rdf2go.vocabulary.RDF;
 
 import eu.morfeoproject.fast.model.Condition;
 import eu.morfeoproject.fast.model.Event;
@@ -219,9 +220,10 @@ public abstract class GenericServlet extends HttpServlet {
 	protected JSONObject statements2JSON(Set<Statement> statements) {
 		JSONObject result = new JSONObject();
 		for (Iterator<Statement> it = statements.iterator(); it.hasNext(); ) {
-			Statement st = it.next();
 			try {
-				result.accumulate(st.getPredicate().toString(), st.getObject().toString());
+				Statement st = it.next();
+				if (!st.getPredicate().asURI().equals(RDF.type))
+					result.accumulate(st.getPredicate().toString(), st.getObject().toString());
 			} catch (JSONException e) {
 				e.printStackTrace();
 			}

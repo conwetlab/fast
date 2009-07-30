@@ -43,7 +43,8 @@ public class ConceptServlet extends GenericServlet {
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 * To retrieve all the concepts: /concepts
-	 * To retrieve all the concepts annotated with some tag: /concepts/<tag1>+...+<tagN>
+	 * To retrieve a specific concept: /concepts/<uri>
+	 * To retrieve all the concepts annotated with some tag: /tags/<tag1>+...+<tagN>/concepts
 	 * Doesn't make sense to retrieve a concept with a certain id
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -75,9 +76,12 @@ public class ConceptServlet extends GenericServlet {
 					response.setContentType(MediaType.APPLICATION_JSON);
 					JSONArray concepts = new JSONArray();
 					for (URI uri : CatalogueAccessPoint.getCatalogue().listConcepts(tags)) {
-						Set<Statement> concept = CatalogueAccessPoint.getCatalogue().getConcept(uri);
-						if (concept != null && concept.size() > 0)
-							concepts.put(statements2JSON(concept));
+						Set<Statement> conceptStmt = CatalogueAccessPoint.getCatalogue().getConcept(uri);
+						if (conceptStmt != null && conceptStmt.size() > 0) {
+							JSONObject concept = statements2JSON(conceptStmt);
+							concept.accumulate("uri", uri);
+							concepts.put(concept);
+						}
 					}
 					writer.print(concepts.toString(2));
 				} else if (format.equals(MediaType.APPLICATION_RDF_XML)) {
