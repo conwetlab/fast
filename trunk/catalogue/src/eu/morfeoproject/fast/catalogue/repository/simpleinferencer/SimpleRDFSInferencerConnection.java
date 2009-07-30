@@ -11,7 +11,6 @@ import info.aduna.text.ASCIIUtil;
 
 import java.util.Iterator;
 
-import org.ontoware.rdf2go.model.node.Variable;
 import org.openrdf.model.Graph;
 import org.openrdf.model.Resource;
 import org.openrdf.model.Statement;
@@ -238,27 +237,27 @@ class SimpleRDFSInferencerConnection extends InferencerConnectionWrapper impleme
 			prepareIteration();
 
 			nofInferred = 0;
-//			nofInferred += applyRule(RDFSRules.Rdf1);
-//			nofInferred += applyRule(RDFSRules.Rdfs2_1);
-//			nofInferred += applyRule(RDFSRules.Rdfs2_2);
-//			nofInferred += applyRule(RDFSRules.Rdfs3_1);
-//			nofInferred += applyRule(RDFSRules.Rdfs3_2);
-//			nofInferred += applyRule(RDFSRules.Rdfs4a);
-//			nofInferred += applyRule(RDFSRules.Rdfs4b);
-			//nofInferred += applyRule(RDFSRules.Rdfs5_1);
-			//nofInferred += applyRule(RDFSRules.Rdfs5_2);
-			//nofInferred += applyRule(RDFSRules.Rdfs6);
-			//nofInferred += applyRule(RDFSRules.Rdfs7_1);
-			//nofInferred += applyRule(RDFSRules.Rdfs7_2);
-//			nofInferred += applyRule(RDFSRules.Rdfs8);
+			nofInferred += applyRule(RDFSRules.Rdf1);
+			nofInferred += applyRule(RDFSRules.Rdfs2_1);
+			nofInferred += applyRule(RDFSRules.Rdfs2_2);
+			nofInferred += applyRule(RDFSRules.Rdfs3_1);
+			nofInferred += applyRule(RDFSRules.Rdfs3_2);
+			nofInferred += applyRule(RDFSRules.Rdfs4a);
+			nofInferred += applyRule(RDFSRules.Rdfs4b);
+			nofInferred += applyRule(RDFSRules.Rdfs5_1);
+			nofInferred += applyRule(RDFSRules.Rdfs5_2);
+			nofInferred += applyRule(RDFSRules.Rdfs6);
+			nofInferred += applyRule(RDFSRules.Rdfs7_1);
+			nofInferred += applyRule(RDFSRules.Rdfs7_2);
+			nofInferred += applyRule(RDFSRules.Rdfs8);
 			nofInferred += applyRule(RDFSRules.Rdfs9_1);
 			nofInferred += applyRule(RDFSRules.Rdfs9_2);
-//			nofInferred += applyRule(RDFSRules.Rdfs10);
+			nofInferred += applyRule(RDFSRules.Rdfs10);
 			nofInferred += applyRule(RDFSRules.Rdfs11_1);
 			nofInferred += applyRule(RDFSRules.Rdfs11_2);
-//			nofInferred += applyRule(RDFSRules.Rdfs12);
-//			nofInferred += applyRule(RDFSRules.Rdfs13);
-//			nofInferred += applyRule(RDFSRules.RX1);
+			nofInferred += applyRule(RDFSRules.Rdfs12);
+			nofInferred += applyRule(RDFSRules.Rdfs13);
+			nofInferred += applyRule(RDFSRules.RX1);
 //			nofInferred += applyRule(RDFSRules.Rdfs9_1b);
 //			nofInferred += applyRule(RDFSRules.Rdfs9_2b);
 
