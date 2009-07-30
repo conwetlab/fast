@@ -89,6 +89,7 @@ public class TripleStore {
 //		Repository repository = PersistentRepository.getInstance().getGroundingRepository();
 		Repository repository = PersistentRepository.getRepository(dir);
 		persistentModelSet = new RepositoryModelSet(repository);
+
 		createdURIs = new ArrayList<URI>();
 		
 		// TODO: Now create the screen under the ScreenOnt namespace, but this has to be

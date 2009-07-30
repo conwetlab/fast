@@ -20,6 +20,7 @@ import org.ontoware.rdf2go.model.node.LanguageTagLiteral;
 import org.ontoware.rdf2go.model.node.Node;
 import org.ontoware.rdf2go.model.node.URI;
 import org.ontoware.rdf2go.model.node.Variable;
+import org.ontoware.rdf2go.vocabulary.OWL;
 import org.ontoware.rdf2go.vocabulary.RDF;
 import org.ontoware.rdf2go.vocabulary.RDFS;
 import org.openrdf.repository.RepositoryException;
@@ -79,6 +80,8 @@ public class Catalogue {
 		// creates a new triple store
 		tripleStore = new TripleStore(dir);
     	tripleStore.open();
+    	
+//    	tripleStore.clear();
     	
 		// check if the catalogue is correct
 		if (!check()) {
@@ -1321,7 +1324,7 @@ public class Catalogue {
     	String queryString = 
     		"SELECT DISTINCT ?concept \n" +
     		"WHERE {\n";
-		queryString = queryString.concat("?concept "+RDF.type.toSPARQL()+" "+RDFS.Class.toSPARQL()+" . ");
+		queryString = queryString.concat("{ { ?concept "+RDF.type.toSPARQL()+" "+RDFS.Class.toSPARQL()+" } UNION { ?concept "+RDF.type.toSPARQL()+" "+OWL.Class.toSPARQL()+" } } ");
     	if (tags.length > 0) {
         	queryString = queryString.concat("{");
         	for (String tag : tags)
