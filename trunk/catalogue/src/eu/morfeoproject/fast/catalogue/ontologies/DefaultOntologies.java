@@ -35,6 +35,8 @@ public class DefaultOntologies {
     	new Ontology(new URIImpl("http://purl.oclc.org/fast/ontology/gadget#"), "fgo20090713.ttl", Syntax.Turtle);
     public static Ontology FOAF =
     	new Ontology(new URIImpl("http://xmlns.com/foaf/0.1/"), "foaf.rdf", Syntax.RdfXml);
+    public static Ontology SIOC =
+    	new Ontology(new URIImpl("http://rdfs.org/sioc/ns#"), "sioc.owl", Syntax.RdfXml);
     
     public static Ontology AMAZON_MOCKUP =
     	new Ontology(new URIImpl("http://aws.amazon.com/AWSECommerceService#"), "amazon-mockup.rdf", Syntax.RdfXml);
