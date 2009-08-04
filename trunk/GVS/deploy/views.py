@@ -7,13 +7,18 @@ from django.http import HttpResponse, HttpResponseBadRequest, HttpResponseServer
 from gadgetEzweb import createEzwebGadget
 from gadgetIgoogle import createIgoogleGadget
 from commons.httpUtils import download_http_content
+from commons.authentication import get_user_authentication
 from os import path, mkdir
 import urllib2
 from python_rest_client.restful_lib import Connection
+from user.models import UserProfile
 
 def deployGadget(request):
     #print "gadget creation request"
     try:
+        user = get_user_authentication(request)
+        profile =  UserProfile.objects.get(user=user)
+        
         #If folder "static" does not exist, create it
         staticPath=path.join(settings.BASEDIR,'static')
         if (not path.isdir(staticPath)):
@@ -95,7 +100,7 @@ def deployGadget(request):
         ezwebUri = createEzwebGadget(gadgetName, gadgetUri, gadgetPath, label, vendor, version, description, creator, email, screens, prec, post)
         igoogleUri = createIgoogleGadget(gadgetName, gadgetUri, gadgetPath, label, vendor, version, description, creator, email, screens, prec, post)
         
-        gadgetContext = Context({'ezwebGadgetURL': ezwebUri,'igoogleGadgetURL': igoogleUri})
+        gadgetContext = Context({'ezwebURL': profile.ezweb_url, 'ezwebGadgetURL': ezwebUri,'igoogleGadgetURL': igoogleUri})
         return render_to_response('deploy.html', gadgetContext);
 
     except Exception, e:

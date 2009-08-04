@@ -17,20 +17,10 @@ Utils.getIsoDateNow = function(/**Date*/ dateObject) {
     return dateString;
 }
 
-Utils.ezWebDeploy = function(/**String*/ uri) {
-    var onEzwebDeploySuccess = function(response) {
-        var responseXML = response.responseXML;
-        //TODO: finish this event management
-        alert("ezWeb Deployment service being developed");
-    }
-
-    var onEzwebDeployError = function(response, e) {
-        console.error(e);
-    }
-    
-    var params = {"template_uri": uri}; 
-    var persistenceEngine = PersistenceEngineFactory.getInstance();
-    persistenceEngine.sendPost(URIs.deployEzwebGadget, params, null, this, onEzwebDeploySuccess, onEzwebDeployError);
+Utils.ezWebDeploy = function(/**String*/ ezWebUri,/**String*/ templateUri) {
+   document.Deploy.action = ezWebUri;
+   document.Deploy.template_uri.value = templateUri;
+   document.Deploy.submit();
 }
 
 Utils.igoogleDeploy = function(/**String*/ uri) {

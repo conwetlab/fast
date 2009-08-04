@@ -16,7 +16,9 @@ class Preferences(Resource):
         try:
             user = get_user_authentication(request)
             profile =  UserProfile.objects.get(user=user)
+            
             data = json_encode(profile)
+            
             return HttpResponse(data, mimetype='application/json; charset=UTF-8')
         except Http403, ex:
             return HttpResponseForbidden(json_encode({"message":unicode(ex)}), mimetype='application/json; charset=UTF-8')
@@ -31,8 +33,7 @@ class Preferences(Resource):
             preferences = simplejson.loads(PUT_parameter(request, 'preferences'))
             
             profile = UserProfile.objects.get(user=request.user)
-            profile.ezweb_url = preferences["ezweb_url"]
-            profile.ezweb_username = preferences["ezweb_username"]           
+            profile.ezweb_url = preferences["ezweb_url"]        
             profile.save()
                 
             ok = json_encode({"message":"OK"})

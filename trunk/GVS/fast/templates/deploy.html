@@ -1,5 +1,4 @@
-<form name="Deploy" method="post"
-    action="http://demo.ezweb.morfeo-project.com/user/admin/catalogue/resource">
+<form name="Deploy" method="get" method="post" target="_blank">
 <input type="hidden" name="template_uri" /></form>
 <h1 id="detailsTitle">Deployment Information</h1>
 <div id="properties">
@@ -14,7 +13,7 @@
             <td class="mashup">EzWeb</td>
             <td>{{ ezwebGadgetURL }}</td>
             <td>
-                <button id="b1" onclick="Utils.ezWebDeploy('{{ ezwebGadgetURL }}');">Deploy it!</button>
+                <button id="b1" onclick="Utils.ezWebDeploy('{{ ezwebURL }}/interfaces/gadget', '{{ ezwebGadgetURL }}');">Deploy it!</button>
             </td>
         </tr>
         <tr>
