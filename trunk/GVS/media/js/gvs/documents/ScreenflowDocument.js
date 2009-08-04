@@ -617,6 +617,12 @@ var ScreenflowDocument = Class.create(AbstractDocument,
             return ((elementClass.size() >= 1) ? elementClass[0] : 'unknown');
         }
     },
+    /**
+     * @override
+     */
+    updateToolbar: function () {
+           $("header_button").show();
+    },
 
     // **************** PRIVATE METHODS **************** //
     /**

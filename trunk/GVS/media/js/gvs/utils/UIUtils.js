@@ -50,7 +50,7 @@ UIUtils.onKeyPressCanvas = function(e){
                         }
                         break;
                     default:
-                        console.error("Element not possible to be deleted ");
+                        console.error("Element cannot be deleted ");
                         break;
                 }
             }

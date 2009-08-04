@@ -87,15 +87,12 @@ h4{
 }
 
 #header_button{
-    position:absolute;
-    right:330px;
-    top:6px;
+    float:right;
+    margin-right:10px;
 }
 
-#user_section{
-    position:absolute;
-    right:10px;
-    top:6px;
+#greeting{
+    float:right;
 }
 
 #showDeployGadgetDialog{

@@ -151,6 +151,14 @@ var AbstractDocument = Class.create( /** @lends AbstractDocument.prototype */ {
      */
     select: function() {
         dijit.byId("documentContainer").selectChild(this._tabId);
+    },
+    /**
+     * Updates the set of buttons to be shown, depending on the
+     * document type
+     * @abstract
+     */
+    updateToolbar: function () {
+          throw "Abstract Method invocation: AbstractDocument::updateToolbar";
     }
 
 

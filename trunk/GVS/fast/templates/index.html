@@ -188,7 +188,12 @@
                 GVSSingleton.getInstance().init();
                 var prefs = PreferencesSingleton.getInstance();
                 //Adding the events
-                dojo.connect(dojo.byId("showDeployGadgetDialog"),"onclick", GVSSingleton.getInstance().getDocumentController().showDeployCurrentDocDialog.bind(GVSSingleton.getInstance().getDocumentController()));
+                //TODO: Review this. Sentence to long
+                dojo.connect(dojo.byId("showDeployGadgetDialog"),"onclick", 
+                            GVSSingleton.getInstance().getDocumentController().
+                             showDeployCurrentDocDialog.bind(GVSSingleton.getInstance().
+                             getDocumentController()));
+                $("header_button").hide();
                 dojo.connect(dojo.byId("toolbar.preferences"),"onclick", prefs.showDialog.bind(prefs));
             });
 
@@ -204,13 +209,13 @@
             <div id="header" dojoType="dijit.layout.ContentPane" region="top">
                 <img src="{{ MEDIA_URL }}images/gui/fastLogo.png" alt="FAST Logo"/> 
                 <h1>Gadget Visual Storyboard</h1>
-                <div id="header_button"><button id="showDeployGadgetDialog" dojoType="dijit.form.Button" label="Create Gadget!"></button></div>
                 <div id="greeting">
 						<span id="user_section">
 						  {% if is_anonymous %}{% trans "anonymous" %}</span> | <a href="/accounts/login/?next=/">{% trans "Sign in" %}</a>
 						  {% else %} {% trans "Welcome" %}, {{ user.username }} | <a href="/logout">{% trans "Exit" %}</a></span>
 						  {% endif %}
 				</div>
+                <div id="header_button"><button id="showDeployGadgetDialog" dojoType="dijit.form.Button" label="Create Gadget!"></button></div>
                 <!-- Menu area -->
                 <div id="menu" dojoType="dijit.Toolbar">
                     <div dojoType="dijit.form.Button" id="toolbar.preferences" iconClass="dijitToolbarIcon dijitToolbarIconPreferences" showLabel="false">Preferences</div>
@@ -218,7 +223,6 @@
             </div>  
             
             <!-- Workspace area -->
-
                 
             <!-- CENTER part: Document area -->
             <div dojoType="dijit.layout.TabContainer" id="documentContainer" region="center">

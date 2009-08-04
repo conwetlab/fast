@@ -63,6 +63,12 @@ var DeploymentDocument = Class.create(AbstractDocument,
         buttonsContainer.appendChild(openScreenflowButton.domNode);
         content.appendChild (buttonsContainer);
         */
+    },
+    /**
+     * @override
+     */
+    updateToolbar: function () {
+           $("header_button").hide();
     }
 });
 

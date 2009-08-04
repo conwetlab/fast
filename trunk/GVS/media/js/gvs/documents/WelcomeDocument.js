@@ -27,6 +27,12 @@ var WelcomeDocument = Class.create(AbstractDocument,
         return false;
     },
 
+    /**
+     * @override
+     */
+    updateToolbar: function () {
+           $("header_button").hide();
+    },
 
     // **************** PRIVATE METHODS **************** //
 

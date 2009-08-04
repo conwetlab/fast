@@ -260,6 +260,8 @@ var DocumentController = Class.create(
             id = tab;
         }
         this._currentDocument = this._documents[id];
+        //Update the set of buttons
+        this._currentDocument.updateToolbar();
     }
 });
 
