@@ -32,6 +32,7 @@
 
 import types
 from decimal import Decimal
+from xml.dom.minidom import getDOMImplementation
 
 from django.db import models
 from django.core.serializers.json import DateTimeAwareJSONEncoder
