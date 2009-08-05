@@ -114,6 +114,7 @@ var ScreenflowDocument = Class.create(AbstractDocument,
             this._screens.push(screen);
             var screenDescUri = $H(screen.getBuildingBlockDescription()).get('uri');
             this.getBuildingBlockDescription().addScreen(screen.getId(), screenDescUri, screen.getPosition());
+            this.updateToolbar();
         }
     },
     
@@ -175,6 +176,7 @@ var ScreenflowDocument = Class.create(AbstractDocument,
         };
         var elements = currentDocument.getPaletteElements();
         CatalogueSingleton.getInstance().check(canvas, domainContext, elements, 'reachability');
+        this.updateToolbar();
     },
 
     /**
@@ -622,6 +624,14 @@ var ScreenflowDocument = Class.create(AbstractDocument,
      */
     updateToolbar: function () {
            $("header_button").show();
+           //TODO: Enable or disable the button checking 
+           //reachability and not the number of screens
+           if (this.getScreens().length > 0){
+               dijit.byId("showDeployGadgetDialog").attr("disabled",false);
+           }
+           else{
+               dijit.byId("showDeployGadgetDialog").attr("disabled",true);               
+           }
     },
 
     // **************** PRIVATE METHODS **************** //

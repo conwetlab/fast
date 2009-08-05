@@ -69,8 +69,7 @@ var GVSSingleton = function() {
                 // Execute the action
                 this._actions[actionName]();
             } else{
-                // TODO: Add error handling
-                alert ("Invalid action");
+                throw "Unexpected exception: GVS::action";
             }
         },
 
