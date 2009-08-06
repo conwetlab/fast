@@ -97,6 +97,7 @@ INSTALLED_APPS = (
     'fast',
     'deploy',
     'user',
+    'buildingblock',
 )
 
 #Authentication

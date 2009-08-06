@@ -23,6 +23,9 @@ urlpatterns = patterns('',
     
     # User
     (r'^user/', include('user.urls')),
+    
+    # BuildingBlock
+    (r'^buildingblock/', include('buildingblock.urls')),
 
     #Admin interface
     (r'^admin/(.*)', admin.site.root),
