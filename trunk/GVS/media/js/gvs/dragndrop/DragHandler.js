@@ -88,8 +88,8 @@ var DragHandler = Class.create(
          var draggableElement = this._draggedObject.getHandlerNode();
         
         var parentNode = draggableElement.parentNode;
-        var x = draggableElement.offsetTop;
-        var y = draggableElement.offsetLeft;
+        var x = this._draggedObject.getHandlerNode().offsetTop;
+        var y = this._draggedObject.getHandlerNode().offsetLeft;
         this._initialArea = {
             'node': parentNode,
             'top': x,
@@ -108,10 +108,10 @@ var DragHandler = Class.create(
        
         this._xStart = parseInt(e.screenX);
         this._yStart = parseInt(e.screenY);
-        this._y = draggableElement.offsetTop;
-        this._x = draggableElement.offsetLeft;
-        //draggableElement.style.top  = this._y + 'px';
-        //draggableElement.style.left = this._x + 'px';
+        this._y = this._draggedObject.getHandlerNode().offsetTop;
+        this._x = this._draggedObject.getHandlerNode().offsetLeft;
+        draggableElement.style.top  = this._y + 'px';
+        draggableElement.style.left = this._x + 'px';
         Event.observe (document, 'mouseup',   this._bindedEndDrag, true);
         Event.observe (document, 'mousemove', this._bindedUpdate, true);
 

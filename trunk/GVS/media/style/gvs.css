@@ -365,19 +365,32 @@ h4{
         color:yellow;
     }
 
-/******************
- * inspector tables		  *
- ******************/
-.inspector_table {
+/*********************
+ * properties tables *	 
+ *********************/
+.properties_table {
     width: 100%;
     border-collapse: separate;
     border-spacing: 0px;
+    border-left: 1px solid #808080;
 }
-.inspector_table td {
+.properties_table td {
     border-bottom: 1px solid #808080;
-    padding: 1px;
+    padding: 3px;
+    text-align: center;
+    border-right: 1px solid #808080;
+    overflow: auto;
+    max-width:80px;
 }
 
+.properties_table td div {
+    overflow: auto;
+}
+
+.tableHeader td{
+    background-color: #BED7F0;
+    border-top: 1px solid #808080;
+}
 /******************
  * facts		  *
  ******************/
@@ -497,14 +510,7 @@ h4{
     border-right: 1px solid #808080;
     border-bottom: 1px solid #808080;
 }
-.tableHeader {
-    background-color: #BED7F0;
-    border-top: 1px solid #808080;
-}
-.tableHeader td {
-    padding: 3px;
-    border: 1px solid #808080;
-}
+
 #tab2 {
     padding:0px;
     display:none;

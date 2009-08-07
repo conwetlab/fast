@@ -8,11 +8,31 @@ var ScreenflowDocument = Class.create(AbstractDocument,
      */
     initialize: function($super, /** String */ title) {
         $super(title);
-        this._detailsTitle = null;
-        this._detailsTable = null;
+       
+        /** 
+         * Variable
+         * @type PropertiesPane
+         * @private @member
+         */
+        this._propertiesPane = null;
+        
+        /** 
+         * Variable
+         * @type PrePostPane
+         * @private @member
+         */
+        this._prePostPane = null;
+        
+        /** 
+         * Variable
+         * @type FactsPane
+         * @private @member
+         */
+        this._factsPane = null;
         
         this._validBuildingBlocks = [Constants.BuildingBlock.SCREEN, Constants.BuildingBlock.CONNECTOR, Constants.BuildingBlock.DOMAIN_CONCEPT];
-        this._documentType=Constants.DocumentType.SCREENFLOW;
+        this._documentType= Constants.DocumentType.SCREENFLOW;
+        
         /*Screenflow Definition*/
         this._buildingBlockDescription = new ScreenflowDescription();
         this._screens = [];
@@ -307,33 +327,33 @@ var ScreenflowDocument = Class.create(AbstractDocument,
     updatePropertiesPane: function( /** BuildingBlockId */ buildingBlockId, /** String */ buildingBlockType) {
         var buildingBlockInstance = this.getBuildingBlockInstance(buildingBlockId);
         var buildingBlockDescription = buildingBlockInstance.getBuildingBlockDescription();
-        this.emptyPropertiesPane();
+        //this.emptyPropertiesPane();
         switch(buildingBlockType){
             case Constants.BuildingBlock.SCREEN:
-                $(this.getDetailsTitle('detailsTitle')).update('Properties of screen: ' + buildingBlockDescription.label['en-gb']);
+                //$(this.getDetailsTitle('detailsTitle')).update('Properties of screen: ' + buildingBlockDescription.label['en-gb']);
                 var propertiesHash = new Hash();
                 propertiesHash.set('title',buildingBlockDescription.label['en-gb']);
                 propertiesHash.set('id',buildingBlockDescription.uri);
                 propertiesHash.set('desc',buildingBlockDescription.description['en-gb']);
                 propertiesHash.set('tags',buildingBlockDescription.domainContext.tags);
-                this._updatePropertiesTable(propertiesHash);
+                this._propertiesPane.selectElement(propertiesHash,"screen",buildingBlockDescription.label['en-gb']);
                 break;
 
             case Constants.BuildingBlock.CONNECTOR:
                 var propertiesHash = buildingBlockInstance.getProperties().clone();
-                $(this.getDetailsTitle('detailsTitle')).update('Properties of connector: ' + propertiesHash.get('type'));
+                //$(this.getDetailsTitle('detailsTitle')).update('Properties of connector: ' + propertiesHash.get('type'));
                 
                 //propertiesHash.set('type',buildingBlockDescription.type);
-                this._updatePropertiesTable(propertiesHash);
+                this._propertiesPane.selectElement(propertiesHash,"connector",propertiesHash.get('type'));
                 break;
 
             case Constants.BuildingBlock.DOMAIN_CONCEPT:
-                $(this.getDetailsTitle('detailsTitle')).update('Properties of domain concept: ' + buildingBlockDescription.name);
+                //$(this.getDetailsTitle('detailsTitle')).update('Properties of domain concept: ' + buildingBlockDescription.name);
                 var propertiesHash = new Hash();
                 propertiesHash.set('name',buildingBlockDescription.name);
                 propertiesHash.set('description',buildingBlockDescription.description);
                 propertiesHash.set('semantics',buildingBlockDescription.semantics);
-                this._updatePropertiesTable(propertiesHash);
+                this._propertiesPane.selectElement(propertiesHash,"domain concept", buildingBlockDescription.name);
                 break;
 
             default:
@@ -342,13 +362,6 @@ var ScreenflowDocument = Class.create(AbstractDocument,
         }
     },
 
-    emptyPropertiesPane: function() {
-        $(this.getDetailsTitle('detailsTitle')).update('Properties');
-        var detArray = $A(this._detailsTable.childElements());
-        for (var i = 0; i < detArray.length-1; i++){
-            this._detailsTable.removeChild(detArray[detArray.length-1-i]);
-        }
-    },
 
     updateReachability: function(/** map id->value*/screenList){
         var screens = this.getScreens();
@@ -554,13 +567,13 @@ var ScreenflowDocument = Class.create(AbstractDocument,
             case 'canvas':
                 console.log("canvas clicked");
                 this.setSelectedElement();
-                this.emptyPropertiesPane();
+                this._propertiesPane.clearElement();
                 break;
             case "unknown":
             default:
                 console.log("unknown clicked");
                 this.setSelectedElement();
-                this.emptyPropertiesPane();
+                this._propertiesPane.clearElement();
                 break;
         }
     },
@@ -672,20 +685,18 @@ var ScreenflowDocument = Class.create(AbstractDocument,
             region:"center"
         });
         documentPane.setContent(documentContent);
+        
+        var inspectorArea = this._createInspectorArea();   
 
         /* Properties pane*/
-        var propertiesPane = this._createPropertiesPane();
+        this._propertiesPane = new PropertiesPane (inspectorArea);
 
         /* Pre/Post pane*/
-        var prePostPane = this._createPrePostPane();
+        this._prePostPane = new PrePostPane(inspectorArea);
 
         /* Facts pane*/
-        var factsPane = this._createFactsPane();
+        this._factsPane = new InspectorPane(inspectorArea);
 
-        var inspectorArea = this._createInspectorArea();
-        inspectorArea.addChild(propertiesPane);
-        inspectorArea.addChild(prePostPane);
-        inspectorArea.addChild(factsPane);
 
         rightBorderContainer.addChild(documentPane);
         rightBorderContainer.addChild(inspectorArea);
@@ -698,121 +709,15 @@ var ScreenflowDocument = Class.create(AbstractDocument,
     _createInspectorArea: function(){
         var uidGenerator = UIDGeneratorSingleton.getInstance();
         var inspectorAreaId = uidGenerator.generate("inspectorArea");
-        var inspectorArea = new dijit.layout.SplitContainer({
+        var inspectorArea = new dijit.layout.BorderContainer({
             id:inspectorAreaId,
             region:"bottom",
-            orientation:"horizontal",
-            activeSizing:"false",
+            design:"horizontal",
             style:"height: 180px;",
             persist:"false",
             splitter:true
             });
         return inspectorArea;
-    },
-    
-    _createPropertiesPane: function(){
-        var uidGenerator = UIDGeneratorSingleton.getInstance();
-        var propertiesPaneId = uidGenerator.generate("propertiesPane");
-        var propertiesPane = new dijit.layout.ContentPane({
-            id:propertiesPaneId,
-            minSize:"100px",
-            sizeShare:"10"
-        });
-        this._detailsTitle = new Array();
-        this._detailsTitle['detailsTitle'] = uidGenerator.generate("detailsTitle");
-        this._detailsTitle['title'] = uidGenerator.generate("details")+".title";
-        this._detailsTitle['id'] = uidGenerator.generate("details")+".id";
-        this._detailsTitle['desc'] = uidGenerator.generate("details")+".desc";
-        this._detailsTitle['tags'] = uidGenerator.generate("details")+".tags";
-
-        var detailsTitle = new Element('div', {
-            'id': this._detailsTitle['detailsTitle'],
-            'class': 'dijitAccordionTitle properties'
-        }).update('Properties');
-        
-        var propertiesDiv = new Element('div', {
-            'id': uidGenerator.generate("properties")
-        });
-        
-        this._detailsTable = new Element('table', {
-            'class': 'inspector_table'
-        });
-        var tr = new Element('tr', {
-            'class': 'tableHeader'
-        });
-        var td_p = new Element('td', {
-            'class': 'left'
-        }).update('Property');
-        var td_v = new Element('td', {
-            'class': 'left'
-        }).update('Value');
-        tr.insert(td_p);
-        tr.insert(td_v);
-        this._detailsTable.insert(tr);
-        propertiesDiv.insert(this._detailsTable);
-        
-        propertiesPane.domNode.insert(detailsTitle);
-        propertiesPane.domNode.insert(propertiesDiv);
-        return propertiesPane;
-    },
-
-    _updatePropertiesTable: function( /** Hash */ propertiesHash) {
-        var detTable = this._detailsTable;
-        propertiesHash.each(function(pair) {
-            var tr = new Element('tr');
-            var td_p = new Element('td', {
-                'class': 'left'
-            }).update(pair.key);
-            var td_v = new Element('td', {
-                'class': 'right'
-            }).update(pair.value);
-            tr.insert(td_p);
-            tr.insert(td_v);
-            detTable.insert(tr);
-        });
-    },
-
-    _createPrePostPane: function() {
-        var uidGenerator = UIDGeneratorSingleton.getInstance();
-        var prePostPaneId = uidGenerator.generate("prePostPane");
-        var prePostPane = new dijit.layout.ContentPane({
-            id:prePostPaneId,
-            minSize:"100px",
-            sizeShare:"10"
-        });
-        content = "<div class='dijitAccordionTitle properties'>PRE / POST</div>";
-        content += "<table id='"+uidGenerator.generate("prepostContainer")+"' class='inspector_table'>";
-        content += '<tr class="tableHeader"><td class="inspectorIcon bold">&nbsp;</td>';
-        content += '<td class="inspectorName bold">PRE Name</td>';
-        content += '<td class="inspectorDesc bold">Description</td>';
-        content += '<td class="inspectorSem bold">Semantics</td></tr>';
-        content += '<tr class="tableHeader"><td class="inspectorIcon bold">&nbsp;</td>';
-        content += '<td class="inspectorName bold">POST Name</td>';
-        content += '<td class="inspectorDesc bold">Description</td>';
-        content += '<td class="inspectorSem bold">Semantics</td></tr>';
-        content += "</table>";
-        prePostPane.setContent(content);
-        return prePostPane;
-    },
-
-    _createFactsPane: function() {
-        var uidGenerator = UIDGeneratorSingleton.getInstance();
-        var factsPaneId = uidGenerator.generate("factsPane");
-        var factsPane = new dijit.layout.ContentPane({
-            id:factsPaneId,
-            minSize:"100px",
-            sizeShare:"10"
-        });
-        content = "<div class='dijitAccordionTitle properties'>Fact Inspector</div>";
-        content += "<div id='"+uidGenerator.generate("inspector")+"'>";
-        content += "<table class='inspector_table'>";
-        content += "<tr class='tableHeader'><td class='inspectorIcon bold'>&nbsp;</td><td class='inspectorName bold'>Name</td><td class='inspectorDesc bold'>Description</td><td class='inspectorSem bold'>Semantics</td></tr>";
-        content += "<tbody id='"+uidGenerator.generate("inspectorContainer")+"' style='overflow:auto'>";
-        content += "</tbody>";
-        content += "</table>";
-        content += "</div>";
-        factsPane.setContent(content);
-        return factsPane;
     }
 });
 
