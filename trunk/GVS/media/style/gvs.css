@@ -390,6 +390,7 @@ h4{
 .tableHeader td{
     background-color: #BED7F0;
     border-top: 1px solid #808080;
+    font-weight:bold;
 }
 /******************
  * facts		  *
@@ -495,9 +496,6 @@ h4{
     background-color: #F5D9D9;
 }
 
-.bold {
-    font-weight: bold;
-}
 .left {
     width: 50%;
     font-weight: bold;

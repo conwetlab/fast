@@ -97,9 +97,7 @@ var Table = Class.create( /** @lends Table.prototype */ {
         });
         
         fieldTitles.each (function(title){
-           var td = new Element ('td',{ //TODO: Review this classname
-              'class': 'bold'  
-           }).update(title);
+           var td = new Element ('td').update(title);
            tr.insert(td);
         });
         
