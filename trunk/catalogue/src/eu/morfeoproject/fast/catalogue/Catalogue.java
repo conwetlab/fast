@@ -618,14 +618,14 @@ public class Catalogue {
      * @throws ClassCastException
      * @throws ModelRuntimeException
      */
-    public Set<Resource> find(
+    public Set<URI> find(
     		Set<Resource> resources,
     		boolean plugin,
     		boolean subsume,
     		int offset,
     		int limit,
     		Set<String> domainContext) throws ClassCastException, ModelRuntimeException {
-    	HashSet<Resource> results = new HashSet<Resource>();
+    	HashSet<URI> results = new HashSet<URI>();
 
     	String queryString = 
     		"SELECT DISTINCT ?screen \n" +
@@ -681,11 +681,7 @@ public class Catalogue {
     	QueryResultTable qrt = tripleStore.sparqlSelect(queryString);
     	ClosableIterator<QueryRow> itResults = qrt.iterator();
     	while (itResults.hasNext()) {
-    		// gets the URI of a screen
-    		URI screenUri = itResults.next().getValue("screen").asURI();
-    		// creates and populates a Screen object
-    		Screen s = getScreen(screenUri);
-    		results.add(s);
+    		results.add(itResults.next().getValue("screen").asURI());
     	}
     	itResults.close();
 
@@ -701,14 +697,14 @@ public class Catalogue {
     		Set<String> domainContext) throws ClassCastException, ModelRuntimeException {
     	HashSet<Resource> results = new HashSet<Resource>();
      	
-		boolean stop = false;
-		while (!stop) {
-			Set<Resource> aux = find(resources, plugin, subsume, offset, limit, domainContext);
-			results.addAll(aux);
-			if (getUnsatisfiedPreconditions(aux, plugin, subsume).size() < 1)
-				stop = true;
-			resources = aux;
-		}
+//		boolean stop = false;
+//		while (!stop) {
+//			Set<Resource> aux = find(resources, plugin, subsume, offset, limit, domainContext);
+//			results.addAll(aux);
+//			if (getUnsatisfiedPreconditions(aux, plugin, subsume).size() < 1)
+//				stop = true;
+//			resources = aux;
+//		}
     	
     	return results;
     }
@@ -1079,7 +1075,31 @@ public class Catalogue {
 		it.close();
 		return results;
 	}
-	
+
+	public Collection<URI> listConcepts(String[] tags) {
+    	ArrayList<URI> results = new ArrayList<URI>();
+    	String queryString = 
+    		"SELECT DISTINCT ?concept \n" +
+    		"WHERE {\n";
+		queryString = queryString.concat("{ { ?concept "+RDF.type.toSPARQL()+" "+RDFS.Class.toSPARQL()+" } UNION { ?concept "+RDF.type.toSPARQL()+" "+OWL.Class.toSPARQL()+" } } ");
+    	if (tags != null && tags.length > 0) {
+        	queryString = queryString.concat("{");
+        	for (String tag : tags)
+	    		queryString = queryString.concat(" { ?concept "+FGO.hasTag.toSPARQL()+" ?tag . FILTER regex(?tag, \""+tag+"\", \"i\")} UNION");
+        	// remove last 'UNION'
+	    	if (queryString.endsWith("UNION"))
+				queryString = queryString.substring(0, queryString.length() - 5);
+			queryString = queryString.concat("} . ");
+    	}
+		queryString = queryString.concat("}");
+		QueryResultTable qrt = tripleStore.sparqlSelect(queryString);
+    	ClosableIterator<QueryRow> itResults = qrt.iterator();
+    	while (itResults.hasNext())
+    		results.add(itResults.next().getValue("concept").asURI());
+    	itResults.close();
+    	return results;
+	}
+
 	protected String replaceBlankNodes(String origin) {
     	return origin.replaceAll("_:", "?");
     }
@@ -1318,35 +1338,6 @@ public class Catalogue {
 		return result;
 	}
 	
-	public Set<URI> listConcepts(String[] tags) {
-    	HashSet<URI> results = new HashSet<URI>();
-    	
-    	String queryString = 
-    		"SELECT DISTINCT ?concept \n" +
-    		"WHERE {\n";
-		queryString = queryString.concat("{ { ?concept "+RDF.type.toSPARQL()+" "+RDFS.Class.toSPARQL()+" } UNION { ?concept "+RDF.type.toSPARQL()+" "+OWL.Class.toSPARQL()+" } } ");
-    	if (tags.length > 0) {
-        	queryString = queryString.concat("{");
-        	for (String tag : tags)
-	    		queryString = queryString.concat(" { ?concept "+FGO.hasTag.toSPARQL()+" ?tag . FILTER regex(?tag, \""+tag+"\", \"i\")} UNION");
-        	// remove last 'UNION'
-	    	if (queryString.endsWith("UNION"))
-				queryString = queryString.substring(0, queryString.length() - 5);
-			queryString = queryString.concat("} . ");
-    	}
-		queryString = queryString.concat("}");
-		System.out.println(queryString);
-		QueryResultTable qrt = tripleStore.sparqlSelect(queryString);
-    	ClosableIterator<QueryRow> itResults = qrt.iterator();
-    	while (itResults.hasNext()) {
-    		URI conceptUri = itResults.next().getValue("concept").asURI();
-    		results.add(conceptUri);
-    	}
-    	itResults.close();
-
-    	return results;
-	}
-
 	/**
 	 * Remove a concept given its URI.
 	 * Only removes the triples which start with the given URI, if there are
