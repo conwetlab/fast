@@ -48,6 +48,15 @@
 		<description>
 		</description>
 		<display-name>
+		FindCheckServlet</display-name>
+		<servlet-name>FindCheckServlet</servlet-name>
+		<servlet-class>
+		eu.morfeoproject.fast.server.FindCheckServlet</servlet-class>
+	</servlet>
+	<servlet>
+		<description>
+		</description>
+		<display-name>
 		MetadataServlet</display-name>
 		<servlet-name>MetadataServlet</servlet-name>
 		<servlet-class>
@@ -80,6 +89,10 @@
 	<servlet-mapping>
 		<servlet-name>CheckServlet</servlet-name>
 		<url-pattern>/check</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>FindCheckServlet</servlet-name>
+		<url-pattern>/findcheck</url-pattern>
 	</servlet-mapping>
 	<servlet-mapping>
 		<servlet-name>MetadataServlet</servlet-name>
