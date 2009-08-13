@@ -1,0 +1,96 @@
+<?xml version="1.0"?>
+<rdf:RDF xmlns="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+     xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+     xmlns:owl="http://www.w3.org/2002/07/owl#"
+     xmlns:fco="http://www.morfeoproject.eu/fast/fco#">
+  
+  <Description rdf:about="http://www.morfeoproject.eu/fast/fco#fastOntology">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Ontology"/>
+  </Description>
+
+  <Description rdf:about="http://www.morfeoproject.eu/fast/fco#Screen">
+    <rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
+  </Description>  
+  <Description rdf:about="http://www.morfeoproject.eu/fast/fco#icon">
+    <rdfs:domain rdf:resource="http://www.morfeoproject.eu/fast/fco#Screen"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
+    <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+  </Description>
+  <Description rdf:about="http://www.morfeoproject.eu/fast/fco#screenshot">
+    <rdfs:domain rdf:resource="http://www.morfeoproject.eu/fast/fco#Screen"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
+    <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+  </Description>
+  <Description rdf:about="http://www.morfeoproject.eu/fast/fco#homepage">
+    <rdfs:domain rdf:resource="http://www.morfeoproject.eu/fast/fco#Screen"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
+    <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+  </Description>
+  <Description rdf:about="http://www.morfeoproject.eu/fast/fco#code">
+    <rdfs:domain rdf:resource="http://www.morfeoproject.eu/fast/fco#Screen"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
+    <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+  </Description>
+  <Description rdf:about="http://www.morfeoproject.eu/fast/fco#version">
+    <rdfs:domain rdf:resource="http://www.morfeoproject.eu/fast/fco#Screen"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
+    <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+  </Description>
+  <Description rdf:about="http://www.morfeoproject.eu/fast/fco#isPostcondition">
+    <rdfs:domain rdf:resource="http://www.morfeoproject.eu/fast/fco#Condition"/>
+    <rdfs:range rdf:resource="http://www.morfeoproject.eu/fast/fco#ScreenFlow"/>
+    <rdfs:range rdf:resource="http://www.morfeoproject.eu/fast/fco#Screen"/>
+    <owl:inverseOf rdf:resource="http://www.morfeoproject.eu/fast/fco#hasPostcondition"/>
+    <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+  </Description>
+  <Description rdf:about="http://www.morfeoproject.eu/fast/fco#hasPostcondition">
+    <rdfs:domain rdf:resource="http://www.morfeoproject.eu/fast/fco#Screen"/>
+    <rdfs:range rdf:resource="http://www.morfeoproject.eu/fast/fco#Condition"/>
+    <owl:inverseOf rdf:resource="http://www.morfeoproject.eu/fast/fco#isPostcondition"/>
+    <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+  </Description>
+  <Description rdf:about="http://www.morfeoproject.eu/fast/fco#isPrecondition">
+    <rdfs:domain rdf:resource="http://www.morfeoproject.eu/fast/fco#Condition"/>
+    <rdfs:range rdf:resource="http://www.morfeoproject.eu/fast/fco#Screen"/>
+    <owl:inverseOf rdf:resource="http://www.morfeoproject.eu/fast/fco#hasPrecondition"/>
+    <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+  </Description>
+  <Description rdf:about="http://www.morfeoproject.eu/fast/fco#hasPrecondition">
+    <rdfs:domain rdf:resource="http://www.morfeoproject.eu/fast/fco#Screen"/>
+    <rdfs:range rdf:resource="http://www.morfeoproject.eu/fast/fco#Condition"/>
+    <owl:inverseOf rdf:resource="http://www.morfeoproject.eu/fast/fco#isPrecondition"/>
+    <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+  </Description>
+
+  <Description rdf:about="http://www.morfeoproject.eu/fast/fco#Condition">
+    <rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
+  </Description>
+  <Description rdf:about="http://www.morfeoproject.eu/fast/fco#hasPattern">
+    <rdfs:domain rdf:resource="http://www.morfeoproject.eu/fast/fco#Condition"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+    <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+  </Description>
+  <Description rdf:about="http://www.morfeoproject.eu/fast/fco#hasPatternString">
+    <rdfs:domain rdf:resource="http://www.morfeoproject.eu/fast/fco#Condition"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
+    <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+  </Description>
+  
+  <Description rdf:about="http://www.morfeoproject.eu/fast/fco#ScreenFlow">
+    <rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
+  </Description>
+  <Description rdf:about="http://www.morfeoproject.eu/fast/fco#hasScreen">
+    <rdfs:domain rdf:resource="http://www.morfeoproject.eu/fast/fco#ScreenFlow"/>
+    <rdfs:range rdf:resource="http://www.morfeoproject.eu/fast/fco#Screen"/>
+    <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+  </Description>
+  
+  <Description rdf:about="http://www.morfeoproject.eu/fast/fco#hasTag">
+    <rdfs:domain rdf:resource="http://www.morfeoproject.eu/fast/fco#ScreenFlow"/>
+    <rdfs:domain rdf:resource="http://www.morfeoproject.eu/fast/fco#Screen"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
+    <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+  </Description>
+  
+</rdf:RDF>

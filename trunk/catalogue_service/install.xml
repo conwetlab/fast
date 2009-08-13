@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+
+<!-- 
+    Installation file for the FAST Catalogue.
+    
+    To compile it and create the installer:
+    - go in the bin directory where you installed IzPack
+    - call "<IZPACK-DIR>/bin/compile <DIR>/install.xml -b <DIR> -o <DIR>/NAME-INSTALLER.jar -k standard"
+    Example:
+      compile install.xml -b . -o catalogue-installer.jar -k standard
+-->
+
+<installation version="1.0">
+
+    <!-- 
+        The info section.
+        The meaning of the tags should be natural ...
+    -->
+    <info>
+        <appname>FAST Catalogue</appname>
+        <appversion>0.1 beta</appversion>
+        <authors>
+            <author name="Ismael Rivera" email="ismael.rivera@deri.org"/>
+            <author name="FAST Project (FP7-ICT-2007-1-216048)" email=""/>
+        </authors>
+        <url>http://fast.morfeo-project.eu/</url>
+    </info>
+
+    <!-- 
+        The gui preferences indication.
+        Sets the installer window to 640x480. It will not be able to change the size.
+    -->
+    <guiprefs width="640" height="480" resizable="no"/>
+
+    <!-- 
+        The locale section.
+        Asks here to include the English and French langpacks.
+    -->
+    <locale>
+        <langpack iso3="eng"/>
+    </locale>
+
+    <!-- 
+        The resources section.
+        The ids must be these ones if you want to use the LicencePanel and/or the InfoPanel.
+    -->
+    <resources>
+        <!-- res id="LicencePanel.licence" src="licence.txt"/-->
+        <res id="InfoPanel.info" src="readme.txt"/>
+    </resources>
+
+    <!-- 
+        The panels section.
+        We indicate here which panels we want to use. The order will be respected.
+    -->
+    <panels>
+        <panel classname="HelloPanel"/>
+        <panel classname="InfoPanel"/>
+        <!-- panel classname="LicencePanel"/ -->
+        <panel classname="TargetPanel"/>
+        <panel classname="PacksPanel"/>
+        <panel classname="InstallPanel"/>
+        <panel classname="SimpleFinishPanel"/>
+    </panels>
+
+    <!-- 
+        The packs section.
+        We specify here our packs.
+    -->
+    <packs>
+        <pack name="Base" required="yes">
+            <description>The base files</description>
+            <file src="catalogue.jar" targetdir="$INSTALL_PATH"/>
+            <file src="log4j.properties" targetdir="$INSTALL_PATH"/>
+            <file src="repository.properties" targetdir="$INSTALL_PATH"/>
+            <file src="readme.txt" targetdir="$INSTALL_PATH"/>
+            <!-- file src="run.bat" targetdir="$INSTALL_PATH"/>
+            <parsable targetfile="$INSTALL_PATH/run.bat"/-->
+            <!-- The file will be parsed -->
+        </pack>
+        <!--pack name="Docs" required="no">
+            <description>The documentation</description>
+            <file src="doc" targetdir="$INSTALL_PATH"/>
+        </pack-->
+        <pack name="Sources" required="no">
+            <description>The sources</description>
+            <file src="src" targetdir="$INSTALL_PATH"/>
+        </pack>
+        <pack name="Mockup Repository" required="no">
+            <description>A repository including the screens from the mock-up</description>
+            <file src="mockup" targetdir="$INSTALL_PATH"/>
+        </pack>
+    </packs>
+
+</installation>

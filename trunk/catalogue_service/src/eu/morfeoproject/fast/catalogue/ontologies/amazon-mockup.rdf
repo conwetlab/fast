@@ -1,0 +1,52 @@
+<?xml version="1.0"?>
+<rdf:RDF xmlns="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+     xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+     xmlns:owl="http://www.w3.org/2002/07/owl#"
+     xmlns:amazon="http://aws.amazon.com/AWSECommerceService#">
+  
+  <Description rdf:about="http://aws.amazon.com/AWSECommerceService#ontology">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Ontology"/>
+  </Description>
+
+  <Description rdf:about="http://aws.amazon.com/AWSECommerceService#SearchCriteria">
+    <rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
+  </Description>  
+  <Description rdf:about="http://aws.amazon.com/AWSECommerceService#AdvancedSearchCriteria">
+    <rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
+	<rdfs:subClassOf rdf:resource="http://aws.amazon.com/AWSECommerceService#SearchCriteria"/>
+  </Description>
+  
+  <Description rdf:about="http://aws.amazon.com/AWSECommerceService#User">
+    <rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
+  </Description>
+  <Description rdf:about="http://aws.amazon.com/AWSECommerceService#Customer">
+    <rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
+	<rdfs:subClassOf rdf:resource="http://aws.amazon.com/AWSECommerceService#User"/>
+  </Description>
+  <Description rdf:about="http://aws.amazon.com/AWSECommerceService#Administrator">
+    <rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
+	<rdfs:subClassOf rdf:resource="http://aws.amazon.com/AWSECommerceService#User"/>
+  </Description>
+  
+  <Description rdf:about="http://aws.amazon.com/AWSECommerceService#Category">
+    <rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
+  </Description>
+  <Description rdf:about="http://aws.amazon.com/AWSECommerceService#SubCategory">
+    <rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
+	<rdfs:subClassOf rdf:resource="http://aws.amazon.com/AWSECommerceService#Category"/>
+  </Description>
+  <Description rdf:about="http://aws.amazon.com/AWSECommerceService#ItemGroup">
+    <rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
+  </Description>  
+  <Description rdf:about="http://aws.amazon.com/AWSECommerceService#Item">
+    <rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
+  </Description>
+  <Description rdf:about="http://aws.amazon.com/AWSECommerceService#ShoppingCart">
+    <rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
+  </Description> 
+  <Description rdf:about="http://aws.amazon.com/AWSECommerceService#PurchaseURL">
+    <rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
+  </Description>   
+  
+</rdf:RDF>
