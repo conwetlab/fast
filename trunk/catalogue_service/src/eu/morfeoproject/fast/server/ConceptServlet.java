@@ -52,21 +52,10 @@ public class ConceptServlet extends GenericServlet {
 		String format = request.getHeader("accept") != null ? request.getHeader("accept") : MediaType.APPLICATION_JSON;
 		String[] chunks = request.getRequestURI().split("/");
 		String id = chunks[chunks.length-1];
-		String[] tags = new String[0];
-		
-		if (id.equalsIgnoreCase("concepts") && chunks[chunks.length-3].equalsIgnoreCase("tags")) {
-			if (chunks[chunks.length-2].contains("+"))
-				tags = chunks[chunks.length-2].split("+");
-			else {
-				tags = new String[1];
-				tags[0] = chunks[chunks.length-2];
-			}
-			id = null;
-		} else if (id.equalsIgnoreCase("concepts")) {
-			id = null;
-		} else {
-			id = URLUTF8Encoder.decode(id);
-		}
+		if (id.equalsIgnoreCase("concepts")) id = null;
+		String[] tags = null;
+		if (chunks[chunks.length-3].equalsIgnoreCase("tags"))
+			tags = splitTags(chunks[chunks.length-2]);
 		
 		if (id == null) {
 			// List the members of the collection
@@ -101,6 +90,7 @@ public class ConceptServlet extends GenericServlet {
 				response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			}
 		} else {
+			id = URLUTF8Encoder.decode(id);
 			// Retrieve the addressed member of the collection
 			logger.info("Retrieving concept "+id);
 			Set<Statement> concept = CatalogueAccessPoint.getCatalogue().getConcept(new URIImpl(id));
@@ -251,5 +241,24 @@ public class ConceptServlet extends GenericServlet {
 				response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			}
 		}
+	}
+	
+	/**
+	 * Transform a string of tags into an array. The tags are
+	 * separated by +. Example: amazon+shopping
+	 * @param tagsStr
+	 * @return an array of tags
+	 */
+	private String [] splitTags(String tagsStr) {
+		String[] tags = null;
+		if (tagsStr == null)
+			return new String[0];
+		else if (tagsStr.contains("+"))
+			tags = tagsStr.split("+");
+		else {
+			tags = new String[1];
+			tags[0] = tagsStr;
+		}
+		return tags;
 	}
 }

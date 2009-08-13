@@ -21,10 +21,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import eu.morfeoproject.fast.catalogue.NotFoundException;
-import eu.morfeoproject.fast.model.Event;
 import eu.morfeoproject.fast.model.Resource;
-import eu.morfeoproject.fast.model.Screen;
-import eu.morfeoproject.fast.model.Slot;
 
 /**
  * Servlet implementation class FindServlet
@@ -63,7 +60,7 @@ public class FindServlet extends GenericServlet {
 			// create JSON representation of the input
 			JSONObject input = new JSONObject(body);
 			// parse the canvas
-			Set<Resource> canvas = new HashSet<Resource>();
+			HashSet<Resource> canvas = new HashSet<Resource>();
 			JSONArray jsonCanvas = input.getJSONArray("canvas");
 			for (int i = 0; i < jsonCanvas.length(); i++) {
 				URI uri = new URIImpl(((JSONObject)jsonCanvas.get(i)).getString("uri"));
@@ -75,7 +72,7 @@ public class FindServlet extends GenericServlet {
 			// parse the domain context
 			JSONObject jsonDomainContext = input.getJSONObject("domainContext");
 			JSONArray jsonTags = jsonDomainContext.getJSONArray("tags");
-			Set<String> tags = new HashSet<String>();
+			HashSet<String> tags = new HashSet<String>();
 			for (int i = 0; i < jsonTags.length(); i++)
 				tags.add(jsonTags.getString(i));
 			StringBuffer sb = new StringBuffer();
@@ -94,18 +91,18 @@ public class FindServlet extends GenericServlet {
 			}
 
 			// make the call to the catalogue
-			Set<Resource> results = null;
+			Set<URI> results = null;
 			if (!this.recursive)
 				results = CatalogueAccessPoint.getCatalogue().find(canvas, true, true, 0, 100000, tags);
-			else
-				results = CatalogueAccessPoint.getCatalogue().findRecursive(canvas, true, true, 0, 100000, tags);
+//			else
+//				results = CatalogueAccessPoint.getCatalogue().findRecursive(canvas, true, true, 0, 100000, tags);
 
 			// write the results in the output
 			JSONArray output = new JSONArray();
-			for (Iterator<Resource> it = results.iterator(); it.hasNext(); ) {
-				Resource r = it.next();
-				output.put(r.getUri());
-				logger.info("[MATCH] "+r.getUri());
+			for (Iterator<URI> it = results.iterator(); it.hasNext(); ) {
+				URI r = it.next();
+				output.put(r);
+//				logger.info("[MATCH] "+r);
 			}
 			writer.print(output.toString(2));
 			response.setContentType(MediaType.APPLICATION_JSON);

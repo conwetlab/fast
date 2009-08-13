@@ -30,7 +30,7 @@ import eu.morfeoproject.fast.model.Slot;
 /**
  * Servlet implementation class CheckServlet
  */
-public class CheckServlet extends HttpServlet {
+public class FindCheckServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
 	final Logger logger = LoggerFactory.getLogger(CheckServlet.class);
@@ -38,7 +38,7 @@ public class CheckServlet extends HttpServlet {
 	/**
      * @see HttpServlet#HttpServlet()
      */
-    public CheckServlet() {
+    public FindCheckServlet() {
         super();
     }
 
@@ -96,6 +96,13 @@ public class CheckServlet extends HttpServlet {
 			String criterion = input.getString("criterion");
 			
 			// do the real work
+			HashSet<Resource> all = new HashSet<Resource>();
+			all.addAll(canvas);
+			all.addAll(elements);
+			Set<URI> results = CatalogueAccessPoint.getCatalogue().find(all, true, true, 0, 100000, tags);
+			// add results of 'find' to the list of elements
+			for (URI uri : results)
+				elements.add(CatalogueAccessPoint.getCatalogue().getResource(uri));
 			Set<Resource> reachables = CatalogueAccessPoint.getCatalogue().filterReachableResources(canvas);
 			JSONObject output = new JSONObject();
 			if (criterion.equalsIgnoreCase("reachability")) {
