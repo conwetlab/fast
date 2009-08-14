@@ -84,6 +84,9 @@ FastAPI.Request = Class.create(FastBaseAPI.Request,{
                 case 'text':
                     (params.onSuccess || Prototype.emptyFunction)(transport.responseText);
                     break;
+                default:
+                	(params.onSuccess || Prototype.emptyFunction)(transport);
+                	break;
             }
         }
 

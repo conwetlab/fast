@@ -35,7 +35,7 @@ FastBaseAPI.Request = Class.create({
             contentType:    'application/x-www-form-urlencoded',
             encoding:       'UTF-8',
             parameters:     '',
-            content:        'xml',
+            content:        '',
             onSuccess:      Prototype.emptyFunction,
             onFailure:      Prototype.emptyFunction
         };
