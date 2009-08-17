@@ -37,6 +37,13 @@ var GVSSingleton = function() {
              * @private @member
              */
             this._actions = null;
+            
+            /** 
+             * User data object
+             * @type User
+             * @private @member
+             */
+            this._user = null;
         },
         
 
@@ -82,6 +89,23 @@ var GVSSingleton = function() {
             return this._documentController;
         },
         
+        /**
+         * Gets the user account object
+         * @type User
+         * @public
+         */
+        getUser: function () {
+            return this._user;
+        },
+        
+        /**
+         * Sets user account object
+         * @public
+         */
+        setUser: function (username /**String */,realname /**String */, email /** String */) {
+            this._user = new User (username, realname, email);
+        },
+        
         // **************** PRIVATE METHODS **************** //
 
         /** 
@@ -101,6 +125,7 @@ var GVSSingleton = function() {
         _addScreen: function (){
             CatalogueSingleton.getInstance().showAddScDialog();
         }
+        
     });
     
   
