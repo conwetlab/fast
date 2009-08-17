@@ -1,0 +1,25 @@
+{
+    "code": "http://localhost:8010/forms/amazonShopping.scr.html",
+    "creationDate": "2009-04-20T17:00:00+0100",
+    "creator": "http://www.fabio.es/",
+    "description": {"en-gb": "This screen shows the list of products added to the user shopping cart. It allows users to update product quantity and clear the cart."},
+    "domainContext": {
+      "tags": [
+        "amazon",
+        "cart"
+      ],
+      "user": null
+    },
+    "homepage": "http://www.deri.ie/amazonShopping",
+    "icon": "http://localhost:8010/images/catalogue/amazonShopping.png",
+    "label": {"en-gb": "Shopping Cart"},
+    "rights": "http://creativecommons.org/",
+    "screenshot": "http://www.deri.ie/amazonList-screenshot.jpg",
+    "version": "1.0",
+    "actions": [{"action":"init", "preconditions":[]},
+	            {"action":"showTable", "preconditions":[{"id":"list", "name":"?PList http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#ProductList", "positive":true}]}],
+	"postconditions": [{"id":"updateCart", "name":"?UCart http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#UpdatingCart", "positive":true},
+	                 {"id":"purchase", "name":"?Purchase http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#PurchaseURL", "positive":true},
+	                 {"id":"item", "name":"?Item http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#Item", "positive":true}],
+	"triggers":["purchase", "clearCart", "updateCart", "newItem"]
+}

@@ -1,0 +1,25 @@
+{
+    "code": "http://localhost:8010/resources/amazonAddOfferToCartService.src.js",
+    "creationDate": "2009-04-20T17:00:00+0100",
+    "creator": "http://www.fabio.es/",
+    "description": {"en-gb": "This service adds offers to an Amazon shopping cart"},
+    "domainContext": {
+      "tags": [
+        "amazon",
+        "shopping",
+        "cart",
+        "offer"
+      ],
+      "user": null
+    },
+    "homepage": "http://www.deri.ie/amazonAddOfferToCartService",
+    "icon": "http://localhost:8010/images/catalogue/amazonAddOfferToCartService.png",
+    "label": {"en-gb": "Add Offer To Amazon Shopping Cart"},
+    "rights": "http://creativecommons.org/",
+    "screenshot": "http://www.deri.ie/amazonAddOfferToCartService.jpg",
+    "version": "1.0",
+    "actions": [{"action":"add", "preconditions":[{"id":"item", "name":"?Item http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#Item", "positive":true}]: "uses":[{"id":"user", "name":"?User http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#User"}, {"id":"cart", "name":"http://TODO/amazon#shoppingCart"}]}],
+	"postconditions": [{"id":"cart", "name":"?Cart http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#ShoppingCart", "positive":true},
+	                 {"id":"message", "name":"?Message http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#Message", "positive":true}],
+	"triggers":["message"]
+}

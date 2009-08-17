@@ -1,0 +1,174 @@
+<html>
+	<head>
+        <meta http-equiv="Content-Type" content="application/xhtml+xml; charset=UTF-8">
+		<link type="text/css" rel="stylesheet" href="http://piccolo.ls.fi.upm.es/amazonScreens/style/table.css" />
+        <link type="text/css" rel="stylesheet" href="http://piccolo.ls.fi.upm.es/amazonScreens/style/screen.css" />
+		<style type="text/css">
+			#pagesEBayList{
+				color:#FEBF43;
+				font-weight: bold;
+				padding: 10px;
+			}
+			#previousButtonEBayList, #nextButtonEBayList {
+				visibility:hidden;
+			}
+			#loadingImgEBayList{
+				margin:auto;
+				padding-top: 10px;
+			}
+			#like{
+				padding: 5px;
+				color: #777777;
+			}
+			.productTitle{
+				font-weight:bold;
+				font-style:normal;
+			}
+			#eBayImage{
+				position:absolute;
+				right:0px;
+				top:3px;
+			}
+		</style>
+        <script language="JavaScript">
+/**{
+	uri:"http://TODO/form#eBayList",
+	id:"eBayListForm1",
+	actions: [	{action:"init", preconditions:[], uses:[]},
+	            {action:"showTable", preconditions:[{id:"list", name:"http://TODO/ebay#list", positive:true}], uses:[]}],
+	postconditions: [	{id:"item", name:"http://TODO/ebay#item", positive:true},
+	                 	{id:"filterEbay", name:"http://TODO/ebay#filter", positive:true}],
+	triggers:["ebayItem", "nextPage", "previousPage"]
+}**/
+				{{element.name}}.prototype.init = function (){
+	            	$("nextButtonEbayList").observe("click", {{element.instance}}.nextPage);
+	                $("previousButtonEbayList").observe("click", {{element.instance}}.previousPage);
+	                $$('input[type="button"]').each(function(element){
+						element.observe("mouseover",function(event){
+							var e = Event.element(event);
+							e.setStyle({cursor:"pointer"});
+						});
+					
+					});
+					var tableBody = $("listBodyEBayList");
+	                tableBody.update("");
+	                {{element.instance}}.showProgress();
+	            }
+	
+				{{element.name}}.prototype.showProgress = function (){
+	                $("loadingImgEBayList").show();
+	            }
+	            
+				{{element.name}}.prototype.showTable = function (l){
+	            	if ($("loadingImgEBayList")) {
+	                	$("loadingImgEBayList").hide();
+	                }
+	                var templateString = '<tr>';
+	                templateString += '<td><img src="#{image}"/></td>';
+	                templateString += '<td>#{title}</td><td>#{category}</td><td>#{currentPrice}</td><td>#{shippingServiceCost}</td>';
+	                templateString += '<td style="border-right:none;"><input type="button" onclick="{{element.instance}}.productDetail(this,\'#{itemID}\',\'#{title}\');"';
+					templateString += ' onmouseover="this.setStyle({cursor:\'pointer\'});" value="Select"/></td></tr>';
+	                var rowTemplate = new Template(templateString);
+	                
+	                var tableBody = $("listBodyEBayList");
+	                for (var i = 0; i < l.data.productList.length; i++) { //print the appropriate elements
+	                    if (l.data.productList[i]) { //only if the product table is fetched
+	                        tableBody.innerHTML += rowTemplate.evaluate(l.data.productList[i]);
+	                    }
+	                }
+	
+	              //Update Interface
+			        if (l.data.currentPage < l.data.totalPages) {
+			            $("nextButtonEbayList").setStyle({visibility: "visible"});
+			        } else {
+			            $("nextButtonEbayList").setStyle({visibility: "hidden"});
+			        }
+			        if (l.data.currentPage > 1) {
+			            $("previousButtonEbayList").setStyle({visibility: "visible"});
+			        } else {
+			            $("previousButtonEbayList").setStyle({visibility: "hidden"});
+			        }
+	
+			        if (l.data.totalPages>0) {
+			        	$("curPageEBayList").update(l.data.currentPage);
+			        	$("totalPagesEBayList").update(l.data.totalPages);
+			        } else {
+			        	$("curPageEBayList").update("-");
+			        	$("totalPagesEBayList").update("-");
+				    }
+	
+			        $("CPebayList").value = l.data.currentPage;
+			        $("MEebayList").value = l.data.maxEntries;
+			        $("KebayList").value = l.data.keywords;
+	            }
+	
+				{{element.name}}.prototype.productDetail = function (nodeElement, itemID, title){
+					{{element.instance}}.clearSelected ();
+					//select the element
+					nodeElement.parentNode.parentNode.setStyle({background: "#FFF8E8"});
+					var ebayItem = {id: 'ebayItem', data:{itemID: itemID, title: title}};
+					{{element.instance}}.manageData(["ebayItem"], [ebayItem], []);
+				}
+				
+				{{element.name}}.prototype.clearSelected = function (){
+					$$("tbody tr").each(function (element){
+						element.setStyle ({background: "transparent url(http://piccolo.ls.fi.upm.es/amazonScreens/style/bg_td1.jpg) repeat-x top"});
+					});
+				}
+	
+				{{element.name}}.prototype.nextPage = function (){
+			    	var tableBody = $("listBodyEBayList");
+			        tableBody.update("");
+			        {{element.instance}}.showProgress();
+			        var filter = {id: 'filterEbay', data:{keywords: $F("KebayList"), maxEntries: $F("MEebayList"), currentPage: parseInt($F("CPebayList")) + 1}};
+			        {{element.instance}}.manageData(["newFilter"], [filter], []);
+			    }
+			    
+				{{element.name}}.prototype.previousPage = function (){
+			    	var tableBody = $("listBodyEBayList");
+			        tableBody.update("");
+			        {{element.instance}}.showProgress();
+			        var filter = {id: 'filterEbay', data:{keywords: $F("KebayList"), maxEntries: $F("MEebayList"), currentPage: parseInt($F("CPebayList")) - 1}};
+			        {{element.instance}}.manageData(["newFilter"], [filter], []);
+			    }	            
+		</script>
+    </head>
+    <body>
+        <div id="bodyDiv">
+        	<input type="hidden" id="CPebayList" />
+        	<input type="hidden" id="MEebayList" />
+        	<input type="hidden" id="KebayList" />
+        	<span id="eBayImage"><img src="http://piccolo.ls.fi.upm.es/amazonScreens/images/logo-ebay.gif" /></span>
+		    <h1 id="title">eBay Item list</h1>
+		    <div id="listDiv">
+                <table>
+                    <thead>
+                        <tr>
+                        	<th style="width: 10%; -moz-border-radius-topleft: 13px; -moz-border-radius-topright: 0px; -moz-border-radius-bottomright: 0px; -moz-border-radius-bottomleft: 0px;">&nbsp;</th>
+                            <th style="width: 60%;" nowrap="nowrap">Title</th>
+                            <th style="width: 10%;" nowrap="nowrap">Category</th>
+                            <th style="width: 10%;" nowrap="nowrap">Current Price</th>
+                            <th style="width: 20%;" nowrap="nowrap">Shipping Cost</th>
+                            <th style="width: 10%; -moz-border-radius-topleft: 0px; -moz-border-radius-topright: 13px; -moz-border-radius-bottomright: 0px; -moz-border-radius-bottomleft: 0px;">&nbsp;</th>
+                        </tr>
+                    </thead>
+                    <tbody id="listBodyEBayList">
+                           <tr><td>&nbsp;</td></tr>
+                           <tr><td>&nbsp;</td></tr>
+                           <tr><td>&nbsp;</td></tr>
+                           <tr><td>&nbsp;</td></tr>
+                           <tr><td>&nbsp;</td></tr>
+                           <tr><td>&nbsp;</td></tr>
+		    		</tbody>
+                </table>
+                <img style="display: none;" id="loadingImgEBayList" src="http://piccolo.ls.fi.upm.es/amazonScreens/images/ajaxLoader.gif">
+                <div id="buttonContainerDiv">
+                    <input style="visibility: hidden;" id="previousButtonEbayList" class="button" value="&lt;" type="button">
+					<span id="pagesEBayList">
+					Page <span id="curPageEBayList">-</span>/<span id="totalPagesEBayList">-</span>
+					</span><input style="visibility: visible;" id="nextButtonEbayList" class="button" value="&gt;" type="button">
+                </div>
+            </div>
+        </div>
+   	</body>
+  	</html>

@@ -1,0 +1,452 @@
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="application/xhtml+xml; charset=UTF-8" />
+        <link type="text/css" rel="stylesheet" href="http://piccolo.ls.fi.upm.es/amazonScreens/style/screen.css" />
+		<style type="text/css">
+			#productImage{
+				height: 170px;
+				-moz-border-radius: 13px 13px;
+				background: #FFF8E8 url(http://piccolo.ls.fi.upm.es/amazonScreens/style/bg_td2.jpg) repeat-x;
+				border:1px solid #F8A704;
+				margin:0px auto 13px;
+				text-align:center;
+				width:88%;
+				padding-bottom:5px;
+				padding-top:10px;
+			}
+			#leftColumn{
+				position: relative;
+				float:left;
+				height: 100%;
+				width: 35%;
+			}
+			#rightColumn{
+				position: relative;
+				float:right;
+				height: 268px;
+				width: 60%;
+				-moz-border-radius:13px 13px;
+				background:#FFF8E8 url(http://piccolo.ls.fi.upm.es/amazonScreens/style/bg_td2.jpg) repeat-x;
+				border:1px solid #F8A704;
+				padding-top:5px;
+				padding-right:0px;
+				padding-left:5px;
+				padding-bottom: 5px;
+				position:relative;
+			}
+			#infoArea{
+				text-align: left;
+			}
+			#titleInfo{
+				float:left;
+				margin: 5px;
+				width:35%;
+				overflow: hidden;
+			}
+			#valueInfo{
+				float:left;
+				margin: 5px 15px 5px 5px;
+				width: 50%;
+			}
+			#moreInfo{
+				float:left;
+				margin-left: 5px;
+			}
+			.title{
+				padding: 2px;
+				color:#AAAAAA;
+				font-weight: bold;
+				font-family:Arial,Helvetica,sans-serif;	
+				white-space:nowrap;
+				overflow: hidden;
+			}
+			.info{
+				padding: 2px;
+				color:#888888;
+				font-family:Arial,Helvetica,sans-serif;
+				font-weight: bold;
+				text-align: justify;
+				white-space: nowrap;
+				overflow: hidden;
+			}
+			#quantity {
+				margin: 5px;
+				color:#777777;
+				font-weight: bold;
+				font-family:Arial,Helvetica,sans-serif;
+			}
+			#cart {
+				border: 1px solid #F8A704;
+				-moz-border-radius:13px 13px;
+				background:#FFF8E8 url(http://piccolo.ls.fi.upm.es/amazonScreens/bg_td2.jpg) repeat-x;
+				border:1px solid #F8A704;
+				height:78px;
+				margin:5px auto 0px;
+				padding:0px;
+				text-align:center;
+				width:88%;
+			}
+			#moreInfoText {
+				color:#888888;
+				font-family:Arial,Helvetica,sans-serif;
+				font-size:13px;
+				height:133px;
+				margin:0;
+				overflow:auto;
+				padding:2px 15px 2px 2px;
+				text-align:left;
+				width:300px;
+				max-width:300px;
+			}
+			.detailsElement {
+				color:#888888;
+				font-weight:bold;
+			}
+			#bodyDivDetails {
+				max-width:550px;
+				text-align:center;
+				margin: 8px auto 20px auto;
+				height:270px;
+			}
+			#amazonImage{
+				position:absolute;
+				right:0px;
+				top:3px;
+			}
+		</style>
+        <script language="JavaScript">
+/**{
+	uri:"http://TODO/form#amazonProduct",
+	id:"amazonProductForm1",
+	actions: [{action:"init", preconditions:[], uses: []},
+	            {action:"showProductInfo", preconditions:[{id:"product", name:"http://TODO/amazon#product", positive:true}], uses:[]}],
+	postconditions: [],
+	triggers:["addToCart"]
+}**/
+
+					{{element.name}}.prototype.init = function (){
+						$("addToCart").observe("click", {{element.instance}}.addToCart);
+					}
+
+					{{element.name}}.prototype.showProductInfo = function (_product){
+						$("quantitySelect").value=1;
+						if (_product.data.title) {
+							//Reset styles
+							$("productTitle").setStyle ({"fontSize":"20px"});
+							$("moreInfoText").setStyle({"height": "133px"});
+							$("productTitle").update(_product.data.title);
+							if ($("productTitle").clientHeight > 28) {//Big title
+								//Big title, adapt styles
+								$("productTitle").setStyle ({"fontSize":"16px"});
+								if ($("productTitle").clientHeight > 23) {//More than one line
+									if ($("productTitle").clientHeight > 46) {//More than two lines
+										if ($("productTitle").clientHeight > 69) {//More than three lines
+											$("productTitle").setStyle ({"fontSize":"13px"});
+											if ($("productTitle").clientHeight > 49) {//Still more than three lines
+												$("moreInfoText").setStyle({"height": "90px"});
+											} else {
+												$("moreInfoText").setStyle({"height": "110px"});
+											}
+										} 
+										else{//Three lines
+											$("moreInfoText").setStyle({"height": "110px"});
+											$("productTitle").setStyle ({"fontSize":"14px"});	
+										}
+									} else {//Two lines
+										$("moreInfoText").setStyle({"height": "115px"});
+									}	
+								}
+							}
+							
+						}
+						if (_product.data.price) {
+							$("price").update(_product.data.price);
+						} else {
+							$("price").update("");
+						}
+						if (_product.data.pGroup) {
+							$("pGroup").update(_product.data.pGroup);
+						} else {
+							$("pGroup").update("");
+						}
+						if (_product.data.url) {
+							var a = new Element('a',{href:_product.data.url,target:"_blank"}).update ("Amazon");
+							$("url").update (a);
+						} else {
+							$("url").update ("");
+						}
+						if (_product.data.image) {
+							var img = new Element ('img',{src: _product.data.image});
+							$("productImage").update(img);
+						} else {
+							var img = new Element ('img',{src: "http://piccolo.ls.fi.upm.es/amazonScreens/images/amazon.jpg"});
+							$("productImage").update(img);	
+						}
+						{{element.instance}}.showAdvancedDetails(_product);				 
+					}
+					
+					{{element.name}}.prototype.showAdvancedDetails = function (_product){
+						var element = _product.data.item;
+						var pGroup = _product.data.pGroup;
+
+						var itemAttributes = element.getElementsByTagName("ItemAttributes")[0];
+						var attributesHTML = "<ul>";
+						//List of elements to be shown
+						var elementList = [];
+						switch (pGroup){
+							case "eBooks":
+							case "Book":
+								//Print all book authors
+								attributesHTML += {{element.instance}}.elementDetail("Author",itemAttributes,"Author(s)");
+								//Print the remainder features
+								elementList = [{nodeElement:"PublicationDate",caption:"Publication Date"},
+											   "ISBN",
+											   "Format",
+											   {nodeElement:"Label", caption:"Publisher"},
+											   {nodeElement:"NumberOfPages", caption:"Pages"}];	
+							    attributesHTML += {{element.instance}}.productDetailsList(elementList,itemAttributes);	
+								break;
+							case "Theatrical Release":
+							case "Video":
+							case "DVD":
+								//Print all actors
+								attributesHTML += {{element.instance}}.elementDetail("Actor",itemAttributes,"Cast");
+								//Print all directors
+								attributesHTML += {{element.instance}}.elementDetail("Director",itemAttributes);
+								elementList = 	["Genre",
+												{nodeElement:"RunningTime",caption: "Run Time"},
+												{nodeElement:"AudienceRating", caption:"Audience Rating"},
+												"Label",
+												"Binding",
+												"Region",
+												{nodeElement:"AspectRatio", caption:"Aspect Ratio"},
+												{nodeElement:"OriginalReleaseDate", caption:"Release Date"}
+												];
+								attributesHTML += {{element.instance}}.productDetailsList(elementList,itemAttributes);
+								attributesHTML += {{element.instance}}.twoElements ("DVDLayers","DVDSides",itemAttributes,"DVD Layers / Sides");
+								//Print technical details
+								attributesHTML += {{element.instance}}.elementDetail("Format",itemAttributes);
+								break;
+							case "Digital Music Track":
+							case "Music":
+								elementList = 	["Artist",
+												"Genre",
+												"Label",
+												"Binding",
+												"Format",
+												{nodeElement:"NumberOfDiscs", caption:"Number of Discs"},
+												{nodeElement:"ReleaseDate", caption:"Release Date"},
+												{nodeElement:"OriginalReleaseDate", caption:"Original Release Date"}
+												];
+								attributesHTML += {{element.instance}}.productDetailsList(elementList,itemAttributes);
+								break;
+							case "Photography":
+								//Print details 
+								elementList = ["Brand","Model"];
+								attributesHTML += {{element.instance}}.productDetailsList(elementList,itemAttributes);	
+								//Print all camera features
+								attributesHTML += {{element.instance}}.elementDetail("Feature",itemAttributes,"Features",".");
+								break;
+							case "Personal Computer":
+								elementList = 	["Model",
+												"Label",
+												"Binding"];
+								attributesHTML += {{element.instance}}.productDetailsList(elementList,itemAttributes);
+								attributesHTML += {{element.instance}}.twoElements ("CPUType","CPUSpeed",itemAttributes,"CPU", " ");
+								elementList = 	[{nodeElement:"DisplaySize", caption:"Display Size"},
+												{nodeElement:"HardDiskSize", caption:"Hard Disk Size"},
+												{nodeElement:"DataLinkProtocol", caption:"Data Link Protocol"},
+												{nodeElement:"FloppyDiskDriveDescription", caption:"Floppy Disk Drive"}];
+								attributesHTML += {{element.instance}}.productDetailsList(elementList,itemAttributes);
+								attributesHTML += {{element.instance}}.twoElements ("SystemMemorySize","SystemMemoryType",itemAttributes,"Memory", " ");								
+								elementList = 	[{nodeElement:"HardwarePlatform", caption:"Hardware Platform"},
+												{nodeElement:"OperatingSystem", caption:"Operating System"},
+												{nodeElement:"ReleaseDate",caption:"Release Date"},
+												"Warranty",
+												{nodeElement:"LegalDisclaimer",caption:"Legal Disclaimer"}
+												];	
+								attributesHTML += {{element.instance}}.productDetailsList(elementList,itemAttributes);
+								//Print technical details
+								attributesHTML += {{element.instance}}.elementDetail("Feature",itemAttributes, "Features",".");
+								//Print special features
+								attributesHTML += {{element.instance}}.specialElementDetail("SpecialFeatures",itemAttributes,"|","Special Features",".");
+								break;
+							case "CE":
+							case "Video Games":						
+							case "Software":
+							case "Wireless":
+							case "Wireless Phone Accessory":
+								elementList = 	["Model",
+												"Color",
+												"Label",
+												"Binding",
+												{nodeElement:"DisplaySize", caption:"Display Size"},
+												{nodeElement:"ESRBAgeRating", caption:"Age Rating"},
+												{nodeElement:"HardwarePlatform", caption:"Hardware Platform"},
+												{nodeElement:"OperatingSystem", caption:"Operating System"},
+												{nodeElement:"ReleaseDate",caption:"Release Date"},
+												{nodeElement:"LegalDisclaimer",caption:"Legal Disclaimer"}
+												];
+								attributesHTML += {{element.instance}}.productDetailsList(elementList,itemAttributes);
+								//Print technical details
+								attributesHTML += {{element.instance}}.elementDetail("Feature",itemAttributes, "Features",".");
+								//Print special features (only CE)
+								attributesHTML += {{element.instance}}.specialElementDetail("SpecialFeatures",itemAttributes,"|","Special Features",".");
+								break;
+							default:
+								elementList = 	["Model",
+												"Color",
+												"Label",
+												"Binding",
+												{nodeElement:"ReleaseDate",caption:"Release Date"}
+												];
+								attributesHTML += {{element.instance}}.productDetailsList(elementList,itemAttributes);
+								attributesHTML += {{element.instance}}.elementDetail("Feature",itemAttributes, "Features",".");
+								break;				
+						}
+						attributesHTML += "</ul>";
+						if (attributesHTML.length>9) {//There is something to show
+							$("moreInfoText").update(attributesHTML);
+							$("moreInfoText").setStyle({"borderTop":"1px dotted #AAAAAA"});
+							$("moreInfoTitle").update("Product Details");
+						} 
+							
+					}
+					
+					//This function returns a html with pre-formatted details list
+					//Each element of attributesList can be an object with two elements (nodeElement and caption)
+					//or simply a string representing both of them
+					{{element.name}}.prototype.productDetailsList = function (attributesList,attributesNode){
+						var result = "";
+						$A(attributesList).each(function(attribute){
+								var element = attributesNode.getElementsByTagName ((attribute.nodeElement?attribute.nodeElement:attribute));						
+								if (element.length > 0) {
+									result += "<li>" + (attribute.caption?attribute.caption:attribute) + ": ";
+									result += "<span class='detailsElement'>";
+									result += element[0].firstChild.nodeValue;
+									if (element[0].getAttribute("Units") && element[0].getAttribute("Units")!= "unknown-units") {
+										result += " " + element[0].getAttribute("Units");
+									}
+									result += "</span></li>";
+								}
+						});
+						return result;
+					}
+					
+					//This function produces a single li with a list of elements (authors, features...)
+					//caption parameter is optional
+					//separationCharacter parameter is optional
+					{{element.name}}.prototype.elementDetail = function (element,attributesNode,caption,separationCharacter){
+							var list = attributesNode.getElementsByTagName(element);
+							var result = "";
+							if (list.length > 0) {
+								result += "<li>" + (caption?caption:element)  + ": <span class='detailsElement'>";
+								$A(list).each (function (e){
+									result += e.firstChild.nodeValue + (separationCharacter?separationCharacter + " ":", ");
+								});
+								//Remove last ", "
+								result = result.substring(0,result.length-2);
+								result += "</span></li>";							
+							}
+							return result;			
+					}
+					
+					//This function produces a single li with a list of features. The original line has 
+					//extrange separators
+					//caption parameter is optional
+					//separationCharacter parameter is optional
+					{{element.name}}.prototype.specialElementDetail = function (element,attributesNode,beforeSeparationCharacter,caption,separationCharacter){
+							var element = attributesNode.getElementsByTagName(element);
+							var result = "";
+							if (element.length > 0) {
+								result += "<li>" + (caption?caption:element)  + ": <span class='detailsElement'>";
+								var list = element[0].firstChild.nodeValue.split(beforeSeparationCharacter);
+								$A(list).each (function (e){
+									result += e + (separationCharacter?separationCharacter + " ":", ");
+								});
+								//Remove last ", "
+								result = result.substring(0,result.length-2);
+								result += "</span></li>";							
+							}
+							return result;			
+					}
+					
+					//This function produces a single li two elements separated by "/"
+					//caption parameter is optional
+					//separationCharacter is optional
+					{{element.name}}.prototype.twoElements = function (element1,element2,attributesNode, caption, separationCharacter){
+							var _element1 = attributesNode.getElementsByTagName(element1);
+							var _element2 = attributesNode.getElementsByTagName(element2);
+							var result = "";
+							//At least one correct element
+							if (_element1.length > 0 || _element2.length > 0) {
+								result += "<li>" + (caption?caption:(element1 + " / " + element2))  + ": <span class='detailsElement'>";
+								result += (_element1[0]?_element1[0].firstChild.nodeValue:"-");
+								if (_element1[0].getAttribute("Units") && _element1[0].getAttribute("Units")!= "unknown-units") {
+									result += " " + _element1[0].getAttribute("Units");
+								}
+								result += (separationCharacter?separationCharacter:" / ");
+								result += (_element2[0]?_element2[0].firstChild.nodeValue:"-");
+								if (_element2[0].getAttribute("Units") && _element2[0].getAttribute("Units")!= "unknown-units") {
+									result += " " + _element2[0].getAttribute("Units");
+								}
+								result += "</span></li>";							
+							}
+							return result;
+					}
+
+					{{element.name}}.prototype.showMessage = function (message){
+						alert(message.data.message);
+					}
+
+					{{element.name}}.prototype.addToCart = function (){
+						ScreenEngineFactory.getInstance("ProductDetails").manageData(["addToCart"], [], [], "amazonProductForm1");	
+					}
+		        </script>
+    </head>
+    <body>
+        <div id="bodyDivDetails">
+        	<div id="leftColumn">
+		     	<div id="productImage"></div>
+				<div id="cart">
+					<div id="quantity">Quantity:  	<select id="quantitySelect">
+								  	<option value ="1">1</option>
+								  	<option value ="2">2</option>
+								  	<option value ="3">3</option>
+								  	<option value ="4">4</option>
+								  	<option value ="5">5</option>	
+								 	<option value ="6">6</option>
+								  	<option value ="7">7</option>	
+								  	<option value ="8">8</option>		
+									<option value ="9">9</option>	
+								  	<option value ="10">10</option>						
+									</select>
+					</div>
+					<input border="0" height="27" width="160" type="image" id="addToCart" alt="Add to Shopping Cart" src="http://piccolo.ls.fi.upm.es/amazonScreens/images/addToCart.gif"/>
+				</div>       	
+			</div>
+			<div id="rightColumn">
+				<div id="productTitle" style="font-size: 20px; padding: 2px; color:#F8A704; font-weight: bold; font-style: italic; font-family:Arial,Helvetica,sans-serif; overflow: hidden;"></div>
+				<div id="infoArea">
+					<span id="titleInfo">
+						<div class="title">Product Type: </div>
+						<div class="title">Price: </div>
+						<div class="title">Product Site: </div>
+						<div class="title" id="titleInfo1"></div>
+					</span>
+					<span id="valueInfo">
+						<div id="pGroup" class="info"></div>
+						<div id="price" class="info"></div>
+						<div id="url" class="info"></div>
+						<div id="info1" class="info"></div>
+					</span>
+					<div id="moreInfo">
+						<div class="title" id="moreInfoTitle"></div>
+						<div id="moreInfoText">
+						</div>
+					</div>
+				</div>
+			</div>
+        </div>
+    </body>
+</html>

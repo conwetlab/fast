@@ -1,0 +1,23 @@
+{
+    "code": "http://localhost:8010/resources/amazonPriceComparativeService.src.js",
+    "creationDate": "2009-04-20T17:00:00+0100",
+    "creator": "http://www.fabio.es/",
+    "description": {"en-gb": "This service provides a price comparative related to an Amazon product"},
+    "domainContext": {
+      "tags": [
+        "amazon",
+        "price",
+        "comparative"
+      ],
+      "user": null
+    },
+    "homepage": "http://www.deri.ie/amazonPriceComparativeService",
+    "icon": "http://localhost:8010/images/catalogue/amazonPriceComparativeService.png",
+    "label": {"en-gb": "Amazon Price Comparative"},
+    "rights": "http://creativecommons.org/",
+    "screenshot": "http://www.deri.ie/amazonPriceComparativeService.jpg",
+    "version": "1.0",
+    "actions": [{"action":"fetch", "preconditions":[{"id":"item", "name":"?Item http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#Item", "positive":true}], "uses":[{"id":"user", "name":"?User http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#User"}]}],
+	"postconditions": [{"id":"pricecomparativelist", "name":"?OList http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#OfferList", "positive":true}],
+	"triggers":["productList"]
+}

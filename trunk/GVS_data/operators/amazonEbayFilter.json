@@ -1,0 +1,23 @@
+{
+    "code": "http://localhost:8010/operators/amazonEbayFilter.src.js",
+    "creationDate": "2009-04-20T18:00:00+0200",
+    "creator": "http://www.fabio.es/",
+    "description": {"en-gb": "This operator generates an eBay filter from a Amazon item"},
+    "domainContext": {
+      "tags": [
+        "ebay",
+        "amazon",
+        "filter"
+      ],
+      "user": null
+    },
+    "homepage": "http://www.deri.ie/eBayList",
+    "icon": "http://localhost:8010/images/catalogue/eBayList.png",
+    "label": {"en-gb": "Ebay List"},
+    "rights": "http://creativecommons.org/",
+    "screenshot": "http://www.deri.ie/eBayList-screenshot.jpg",
+    "version": "1.0",
+    "actions": [{"action":"filter", "preconditions":[{"id":"item", "name":"?Item http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#Item", "positive":true}], "uses":[]}],
+	"postconditions": [{"id":"filterEbay", "name":"?eFilter http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://developer.ebay.com/DevZone/shopping/docs/CallRef/FindItemsAdvanced.html#Request", "positive":true}],
+	"triggers":["filterEbay"]
+}

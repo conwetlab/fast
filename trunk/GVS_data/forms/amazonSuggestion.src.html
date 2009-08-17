@@ -1,0 +1,183 @@
+<html>
+	<head>
+        <meta http-equiv="Content-Type" content="application/xhtml+xml; charset=UTF-8">
+		<link type="text/css" rel="stylesheet" href="http://piccolo.ls.fi.upm.es/amazonScreens/style/table.css" />
+        <link type="text/css" rel="stylesheet" href="http://piccolo.ls.fi.upm.es/amazonScreens/style/screen.css" />
+		<style type="text/css">
+			#pagesSuggestion{
+				color:#FEBF43;
+				font-weight: bold;
+				padding: 10px;
+			}
+			#previousButtonSuggestion, #nextButtonSuggestion {
+				visibility:hidden;
+			}
+			#loadingImgSuggestion{
+				margin:auto;
+				padding-top: 10px;
+			}
+			#like{
+				padding: 5px;
+				color: #777777;
+			}
+			.productTitle{
+				font-weight:bold;
+				font-style:normal;
+			}
+			#amazonImage{
+				position:absolute;
+				right:0px;
+				top:3px;
+			}
+		</style>
+        <script language="JavaScript">
+/**{
+	uri:"http://TODO/form#amazonSuggestionList",
+	id:"amazonSuggestionListForm1",
+	actions: [{action:"init", preconditions:[]},
+	          {action:"showTable", preconditions:[{id:"list", name:"http://TODO/amazon#suggestionList", positive:true},
+	           {action:"showMessage", preconditions:[{id:"message", name:"http://TODO/amazon#message", positive:true}]}],
+	postconditions: [{id:"item", name:"http://TODO/amazon#item", positive:true}],
+	triggers:["item"]
+}**/
+			{{element.name}}.prototype.init = function (item){
+                $("nextButtonSuggestion").observe("click", {{element.instance}}.nextPage);
+                $("previousButtonSuggestion").observe("click", {{element.instance}}.previousPage);
+				$$('input[type="button"]').each(function(element){
+					element.observe("mouseover",function(event){
+						var e = Event.element(event);
+						e.setStyle({cursor:"pointer"});
+					});
+				
+				});
+				$$(".productTitle").each(function(element){
+					element.update(item.data.title);
+				});
+				var tableBody = $("listBodySuggestion");
+                tableBody.update("");
+	            {{element.instance}}.showProgress();
+            }
+            
+			{{element.name}}.prototype.showTable = function (l){
+            	{{element.instance}}.list = l;
+            	var tableBody = $("listBodySuggestion");
+                tableBody.update("");
+                
+            	if ($("loadingImgSuggestion")) {
+                	$("loadingImgSuggestion").hide();
+                }
+                var templateString = '<tr><td>#{title}</td><td>#{price}</td><td>#{pGroup}</td>';
+                templateString += '<td style="border-right:none;"><input type="button" onclick="{{element.instance}}.productDetail(this,\'#{ASIN}\');"';
+				templateString += ' onmouseover="this.setStyle({cursor:\'pointer\'});" value="Select"/></td></tr>';
+                var rowTemplate = new Template(templateString);
+                
+                var tableBody = $("listBodySuggestion");
+                for (var i = 5 * l.data.currentPage; i < 5 * (l.data.currentPage + 1); i++) { //print the appropriate elements
+                    if (l.data.productList[i]) { //only if the product table is fetched
+                        tableBody.innerHTML += rowTemplate.evaluate(l.data.productList[i]);
+                    }
+                }
+                //Update Interface
+                if (l.data.currentPage < 1 && (5*(l.data.currentPage + 1)< l.data.productList.length)) {
+                    $("nextButtonSuggestion").setStyle({
+                        visibility: "visible"
+                    });
+                }
+                else {
+                    $("nextButtonSuggestion").setStyle({
+                        visibility: "hidden"
+                    });
+                }
+                if (l.data.currentPage > 0) {
+                    $("previousButtonSuggestion").setStyle({
+                        visibility: "visible"
+                    });
+                } else {
+                    $("previousButtonSuggestion").setStyle({
+                        visibility: "hidden"
+                    });
+                }
+                //update the current page in the interface
+                if (l.data.productList.length>0) {
+                	$("curPageSuggestion").update(l.data.currentPage+1);
+                	$("totalPagesSuggestion").update(Math.ceil(l.data.productList.length/5));
+                } else {
+                	$("curPageSuggestion").update("-");
+                	$("totalPagesSuggestion").update("-");
+                }
+            }
+
+			{{element.name}}.prototype.nextPage = function (){
+            	var tableBody = $("listBodySuggestion");
+                tableBody.update("");
+                {{element.instance}}.showProgress();
+                {{element.instance}}.list.data.currentPage++;
+            	{{element.instance}}.showTable({{element.instance}}.list);
+            }
+            
+			{{element.name}}.prototype.previousPage = function (){
+            	var tableBody = $("listBodySuggestion");
+                tableBody.update("");
+	            {{element.instance}}.showProgress();
+                {{element.instance}}.list.data.currentPage--;
+            	{{element.instance}}.showTable({{element.instance}}.list);
+            }
+
+			{{element.name}}.prototype.showMessage = function (message){
+				alert(message.data.message);
+			}
+
+			{{element.name}}.prototype.productDetail = function (nodeElement,_ASIN){
+				list.clearSelected ();
+				//select the element
+				nodeElement.parentNode.parentNode.setStyle({background: "#FFF8E8"});
+				var item = {id: 'item', data:{ASIN: _ASIN, title: nodeElement.parentNode.parentNode.firstChild.firstChild.nodeValue}};
+				ScreenEngineFactory.getInstance("SuggestionList").manageData(["item"], [item], [], "amazonSuggestionListForm1");
+			}
+			
+			{{element.name}}.prototype.clearSelected = function (){
+				$$("tbody tr").each(function (element){
+					element.setStyle ({background: "transparent url(http://piccolo.ls.fi.upm.es/amazonScreens/style/bg_td1.jpg) repeat-x top"});
+				});
+			}
+
+			{{element.name}}.prototype.showProgress = function (){
+                $("loadingImgSuggestion").show();
+            }
+		</script>
+    </head>
+    <body>
+        <div id="bodyDiv">
+        	<span id="amazonImage"><img src="http://piccolo.ls.fi.upm.es/amazonScreens/images/amazon.png" /></span>
+            <h1 id="title">Related products to</h1>
+			<h1 id="title"><span class="productTitle"></span></h1>
+			<div id="like">Customers who bought <span class="productTitle"></span>, also bought ...</div>
+            <div id="listDiv">
+                <table>
+                    <thead>
+                        <tr>
+                            <th style="width: 60%; -moz-border-radius-topleft: 13px; -moz-border-radius-topright: 0px; -moz-border-radius-bottomright: 0px; -moz-border-radius-bottomleft: 0px;">Title</th>
+                            <th style="width: 10%;">Price</th>
+                            <th style="width: 20%;">Product Group</th>
+                            <th style="width: 10%; -moz-border-radius-topleft: 0px; -moz-border-radius-topright: 13px; -moz-border-radius-bottomright: 0px; -moz-border-radius-bottomleft: 0px;">&nbsp;</th>
+                        </tr>
+                    </thead>
+                    <tbody id="listBodySuggestion">
+                           <tr><td>&nbsp;</td></tr>
+                           <tr><td>&nbsp;</td></tr>
+                           <tr><td>&nbsp;</td></tr>
+                           <tr><td>&nbsp;</td></tr>
+                           <tr><td>&nbsp;</td></tr>
+		    		</tbody>
+                </table>
+                <img style="display: none;" id="loadingImgSuggestion" src="http://piccolo.ls.fi.upm.es/amazonScreens/images/ajaxLoader.gif">
+                <div id="buttonContainerDiv">
+                    <input style="visibility: hidden;" id="previousButtonSuggestion" class="button" value="&lt;" type="button">
+					<span id="pagesSuggestion">
+					Page <span id="curPageSuggestion">-</span>/<span id="totalPagesSuggestion">-</span>
+					</span><input style="visibility: visible;" id="nextButtonSuggestion" class="button" value="&gt;" type="button">
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

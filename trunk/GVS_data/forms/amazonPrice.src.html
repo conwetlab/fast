@@ -1,0 +1,186 @@
+<html>
+	<head>
+        <meta http-equiv="Content-Type" content="application/xhtml+xml; charset=UTF-8">
+		<link type="text/css" rel="stylesheet" href="http://piccolo.ls.fi.upm.es/amazonScreens/style/table.css" />
+        <link type="text/css" rel="stylesheet" href="http://piccolo.ls.fi.upm.es/amazonScreens/style/screen.css" />
+		<style type="text/css">
+			#pagesComparative{
+				color:#FEBF43;
+				font-weight: bold;
+				padding: 10px;
+			}
+			#previousButtonComparative, #nextButtonComparative {
+				visibility:hidden;
+			}
+			#loadingImgComparative{
+				margin:auto;
+				padding-top: 10px;
+			}
+			#like{
+				padding: 5px;
+				color: #777777;
+			}
+			.productTitle{
+				font-weight:bold;
+				font-style:normal;
+			}
+			#listDiv tbody td {
+				text-align: justify;
+			}
+			.tiny{
+				font-size:10px;
+			}
+			#amazonImage{
+				position:absolute;
+				right:0px;
+				top:3px;
+			}
+		</style>
+        <script language="JavaScript">
+/**{
+	uri:"http://TODO/form#amazonPriceComparative",
+	id:"PriceComparativeForm1",
+	actions: [	{action:"init", preconditions:[{id:"item", name:"http://TODO/amazon#item", positive:true}], uses:[]},
+	            {action:"showTable", preconditions:[{id:"list", name:"http://TODO/amazon#list", positive:true}], uses:[]},
+	            {action:"showMessage", preconditions:[{id:"message", name:"http://TODO/amazon#message", positive:true}], uses:[]}],
+	postconditions: [	{id:"item", name:"http://TODO/amazon#item", positive:true}],
+	triggers:["offer"]
+}**/
+			{{element.name}}.prototype.init = function (item){
+                $("nextButtonComparative").observe("click", {{element.instance}}.nextPage);
+                $("previousButtonComparative").observe("click", {{element.instance}}.previousPage);
+				$$('input[type="button"]').each(function(element){
+					element.observe("mouseover",function(event){
+						var e = Event.element(event);
+						e.setStyle({cursor:"pointer"});
+					});
+				
+				});
+				var tableBody = $("listBodyComparative");
+                tableBody.update("");
+                $$(".productTitle").each(function(element){
+					element.update(item.data.title);
+				});
+	            {{element.instance}}.showProgress();
+            }
+
+			{{element.name}}.prototype.showProgress = function (){
+                $("loadingImgComparative").show();
+            }
+            
+			{{element.name}}.prototype.showTable = function (l){
+            	{{element.instance}}.list = l;
+				
+            	if ($("loadingImgComparative")) {
+                	$("loadingImgComparative").hide();
+                }
+
+                var tableBody = $("listBodyComparative");
+                tableBody.update("");
+                
+                var templateString = '<tr><td><span class="info">#{price}</span> <br /><span class="tiny">You save #{amountSaved} (#{percentageSaved}%)</span></td>';
+				templateString += '<td>#{condition} #{conditionNote} </td>'; 
+			    templateString += '<td><a target="_blank" href="http://www.amazon.com/gp/help/seller/at-a-glance.html?seller=#{sellerId}">';
+				templateString += '#{sellerName}</a><br /><span class="info">Rating:</span> #{averageRating} of #{totalFeedback} user reviews';
+				templateString += '<br /><span class="info">Availability:</span> #{availability}</td>';
+				templateString += '<td><input width="112" type="image" height="21" border="0" align="absmiddle"';
+				templateString += 'alt="Add to cart" src="http://piccolo.ls.fi.upm.es/amazonScreens/images/addToCart-small.gif"';
+				templateString += 'onclick="{{element.instance}}.add(\'#{offerId}\'); /></td></tr>';
+                var rowTemplate = new Template(templateString);
+                
+                var tableBody = $("listBodyComparative");
+                for (var i = 5 * l.data.currentPage; i < 5 * (l.data.currentPage + 1); i++) { //print the appropriate elements
+                    if (l.data.productList[i]) { //only if the product table is fetched
+                        tableBody.innerHTML += rowTemplate.evaluate(l.data.productList[i]);
+                    }
+                }
+                //Update Interface
+                if (l.data.currentPage < 1 && (5*(l.data.currentPage + 1)< l.data.productList.length)) {
+                    $("nextButtonComparative").setStyle({
+                        visibility: "visible"
+                    });
+                } else {
+                    $("nextButtonComparative").setStyle({
+                        visibility: "hidden"
+                    });
+                }
+                if (l.data.currentPage > 0) {
+                    $("previousButtonComparative").setStyle({
+                        visibility: "visible"
+                    });
+                } else {
+                    $("previousButtonComparative").setStyle({
+                        visibility: "hidden"
+                    });
+                }
+
+                if(l.data.productList.length>0) {
+                	$("curPageComparative").update(l.data.currentPage+1);
+                	$("totalPagesComparative").update(Math.ceil(l.data.productList.length/5));
+                } else {
+                	$("curPageComparative").update("-");
+                	$("totalPagesComparative").update("-");
+                }
+            }
+            
+			{{element.name}}.prototype.nextPage = function (){
+            	var tableBody = $("listBodyComparative");
+                tableBody.update("");
+	            {{element.instance}}.showProgress();
+            	{{element.instance}}.list.data.currentPage++;
+            	{{element.instance}}.showTable({{element.instance}}.list);
+            }
+            
+			{{element.name}}.prototype.previousPage = function (){
+				var tableBody = $("listBodyComparative");
+				tableBody.update("");
+	            {{element.instance}}.showProgress();
+	            {{element.instance}}.list.data.currentPage--;
+            	{{element.instance}}.showTable({{element.instance}}.list);
+            }
+
+			{{element.name}}.prototype.showMessage = function (message){
+				alert(message.data.message);
+			}
+
+			{{element.name}}.prototype.add = function (offerId){
+            	var offer = {id: 'offer',
+            			data:{offerId: offerId}};
+				ScreenEngineFactory.getInstance("PriceComparative").manageData(["offer"], [offer],[], "PriceComparativeForm1");
+			}
+		</script>
+	</head>
+	<body>
+        <div id="bodyDiv">
+        	<span id="amazonImage"><img src="http://piccolo.ls.fi.upm.es/amazonScreens/images/amazon.png" /></span>
+            <h1 id="title">Price Comparative</h1>
+			<div id="like">Offers for <span class="productTitle"></span></div>
+            <div id="listDiv">
+                <table>
+                    <thead>
+                        <tr>
+                            <th style="width: 20%; -moz-border-radius-topleft: 13px; -moz-border-radius-topright: 0px; -moz-border-radius-bottomright: 0px; -moz-border-radius-bottomleft: 0px;">Price</th>
+                            <th style="width: 30%;">Condition</th>
+                            <th style="width: 40%;">Seller Information</th>
+                            <th style="width: 10%; -moz-border-radius-topleft: 0px; -moz-border-radius-topright: 13px; -moz-border-radius-bottomright: 0px; -moz-border-radius-bottomleft: 0px;">Ready to Buy?</th>
+                        </tr>
+                    </thead>
+                    <tbody id="listBodyComparative">
+                           <tr><td>&nbsp;</td></tr>
+                           <tr><td>&nbsp;</td></tr>
+                           <tr><td>&nbsp;</td></tr>
+                           <tr><td>&nbsp;</td></tr>
+                           <tr><td>&nbsp;</td></tr>
+		    		</tbody>
+                </table>
+                <img style="display: none;" id="loadingImgComparative" src="http://piccolo.ls.fi.upm.es/amazonScreens/images/ajaxLoader.gif">
+                <div id="buttonContainerDiv">
+                    <input style="visibility: hidden;" id="previousButtonComparative" class="button" value="&lt;" type="button">
+					<span id="pagesComparative">
+					Page <span id="curPageComparative">-</span>/<span id="totalPagesComparative">-</span>
+					</span><input style="visibility: visible;" id="nextButtonComparative" class="button" value="&gt;" type="button">
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

@@ -1,0 +1,170 @@
+<html>
+	<head>
+		<meta http-equiv="Content-Type"
+		    content="application/xhtml+xml; charset=UTF-8" />
+		<link type="text/css" rel="stylesheet"
+		    href="http://piccolo.ls.fi.upm.es/amazonScreens/style/table.css" />
+		<link type="text/css" rel="stylesheet"
+		    href="http://piccolo.ls.fi.upm.es/amazonScreens/style/screen.css" />
+		<style type="text/css">
+			#pages {
+			    color: #FEBF43;
+			    font-weight: bold;
+			    padding: 10px;
+			}
+			
+			#previousButton,#nextButton {
+			    visibility: hidden;
+			}
+			
+			#loadingImg {
+			    margin: auto;
+			    padding-top: 10px;
+			}
+			
+			#amazonImage {
+			    position: absolute;
+			    right: 0px;
+			    top: 3px;
+			}
+		</style>
+		
+		<script language="JavaScript">
+/**{
+	uri:"http://TODO/form#amazonList",
+	id:"amazonListForm1",
+	actions: [	{action:"init", preconditions:[], uses:[]},
+	            {action:"showTable", preconditions:[{id:"list", name:"http://TODO/amazon#list", positive:true}, {id:"filter", name:"http://TODO/amazon#filter", positive:true}], uses:[]}],
+	postconditions: [	{id:"item", name:"http://TODO/amazon#item", positive:true},
+	                 	{id:"filter", name:"http://TODO/amazon#filter", positive:true}],
+	triggers:[]
+}**/
+			{{element.name}}.prototype.init = function (){
+		        $("nextButton").observe("click", {{element.instance}}.nextPage);
+		        $("previousButton").observe("click", {{element.instance}}.previousPage);
+		        $$('input[type="button"]').each(function(element){
+		            element.observe("mouseover",function(event){
+			            var e = Event.element(event);
+		                e.setStyle({cursor:"pointer"});
+		            });		
+		        });
+		
+		        var tableBody = $("listBody");
+		        tableBody.update("");
+		        {{element.instance}}.showProgress();
+		    }
+
+			{{element.name}}.prototype.productDetail = function (nodeElement,_ASIN){
+				{{element.instance}}.clearSelected ();
+		        //select the element
+		        nodeElement.parentNode.parentNode.setStyle({background: "#FFF8E8"});
+		        var item = {id: 'item', data:{ASIN: _ASIN, title: nodeElement.parentNode.parentNode.firstChild.firstChild.nodeValue}};
+		        {{element.instance}}.manageData(null, [item], []);
+		    }
+		    
+		    {{element.name}}.prototype.clearSelected = function (){
+		        $$("tbody tr").each(function (element){
+		            element.setStyle({background: "transparent url(http://piccolo.ls.fi.upm.es/amazonScreens/style/bg_td1.jpg) repeat-x top"});
+		        });
+		    }
+
+		    {{element.name}}.prototype.showProgress = function (){
+		        $("loadingImg").show();
+		    }
+		    
+		    {{element.name}}.prototype.showTable = function (l){
+		    	$("loadingImg").hide();
+		        var templateString = '<tr><td>#{title}</td><td>#{price}</td><td>#{pGroup}</td>';
+		        templateString += '<td style="border-right:none;"><input type="button" onclick="{{element.instance}}.productDetail(this,\'#{ASIN}\');"';
+		        templateString += ' onmouseover="this.setStyle({cursor:\'pointer\'});" value="Select"/></td></tr>';
+		        var rowTemplate = new Template(templateString);
+		        var tableBody = $("listBody");
+		        tableBody.update("");
+		        for (var i = 0; i < l.data.productList.length; i++) { //print the appropriate elements
+		            if (l.data.productList[i]) { //only if the product table is fetched
+		                tableBody.innerHTML += rowTemplate.evaluate(l.data.productList[i]);
+		            }
+		        }
+		        //Update Interface
+		        if (l.data.currentPage < (l.data.totalPages - 1)) {
+		            $("nextButton").setStyle({visibility: "visible"});
+		        } else {
+		            $("nextButton").setStyle({visibility: "hidden"});
+		        }
+		        if (l.data.currentPage > 1) {
+		            $("previousButton").setStyle({visibility: "visible"});
+		        } else {
+		            $("previousButton").setStyle({visibility: "hidden"});
+		        }
+
+		        $("CP").value = l.data.currentPage;
+		        $("TP").value = l.data.totalPages;
+		        $("ST").value = l.data.searchText;
+		        $("PT").value = l.data.productType;
+		        if(l.data.totalPages>0){
+			        $("curPage").innerHTML = l.data.currentPage;
+			        $("totalPages").update(l.data.totalPages);
+		        } else {
+		        	$("curPage").innerHTML = "-";
+			        $("totalPages").update("-");
+			    }
+		    }
+		    
+		    {{element.name}}.prototype.nextPage = function (){
+		    	var tableBody = $("listBody");
+		        tableBody.update("");
+		        {{element.instance}}.showProgress();
+		        var filter = {id: "filter", data: {productType: $F("PT"), searchText: $F("ST"), currentPage:(parseInt($F("CP"))+1) }};
+		        {{element.instance}}.manageData(["newFilter"], [filter], []);
+		    }
+		    
+		    {{element.name}}.prototype.previousPage = function (){
+		    	var tableBody = $("listBody");
+		        tableBody.update("");
+		        {{element.instance}}.showProgress();
+		        var filter = {id: "filter", data: {productType: $F("PT"), searchText: $F("ST"), currentPage:(parseInt($F("CP"))-1) }};
+		        {{element.instance}}.manageData(["newFilter"], [filter], []);
+		    }
+
+		    {{element.name}}.prototype.showMessage = function (message){
+		    	$("loadingImg").hide();
+				alert(message.data.message);
+			}
+		</script>
+	</head>
+	
+	<body>
+		<div id="bodyDiv">
+			<input type="hidden" id="CP" />
+			<input type="hidden" id="TP" />
+			<input type="hidden" id="ST" />
+			<input type="hidden" id="PT" />
+		    <span id="amazonImage"><img src="http://piccolo.ls.fi.upm.es/amazonScreens/images/amazon.png" /></span>
+			<h1 id="title">Item list</h1>
+			<div id="listDiv">
+				<table>
+				    <thead>
+				        <tr>
+				            <th style="width: 60%; -moz-border-radius: 13px 0px 0px 0px;">Title</th>
+				            <th style="width: 10%">Price</th>
+				            <th style="width: 20%">Product Group</th>
+				            <th style="width: 10%; -moz-border-radius: 0px 13px 0px 0px;">&nbsp;</th>
+				        </tr>
+				    </thead>
+				    <tbody id="listBody">
+				        <tr><td>&nbsp;</td></tr>
+				        <tr><td>&nbsp;</td></tr>
+				        <tr><td>&nbsp;</td></tr>
+				        <tr><td>&nbsp;</td></tr>
+				    </tbody>
+				</table>
+				<img id="loadingImg" src="http://piccolo.ls.fi.upm.es/amazonScreens/images/ajaxLoader.gif" />
+				<div id="buttonContainerDiv">
+				    <input type="button" id="previousButton" class="button" value="<" />
+				    <span id="pages"> Page <span id="curPage">-</span>/<span id="totalPages">-</span></span>
+				    <input type="button" id="nextButton" class="button" value=">" />
+				</div>
+			</div>
+		</div>
+	</body>
+</html>
