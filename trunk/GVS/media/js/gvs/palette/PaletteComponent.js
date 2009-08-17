@@ -121,7 +121,7 @@ var PaletteComponent = Class.create(DragSource,
      * @abstract
      */
     _getTitle: function () {
-        throw "Abstract Method invocation: PaletteComponent::_createInstance"
+        throw "Abstract Method invocation: PaletteComponent::_getTitle"
     },
 
     /**
@@ -139,18 +139,9 @@ var PaletteComponent = Class.create(DragSource,
      * @private
      */
     _getContentOffsetTop: function() {
-        //FIXME: we suspect something is missing from the calculation
+        //TODO: we suspect something is missing from the calculation
         
-        // find the element which has the scrollOffset
-        var paletteContent = this._node.parentNode;
-        while (paletteContent.className != "paletteContent") {
-                paletteContent = paletteContent.parentNode;
-        }
-
-        var scrollOffset = paletteContent.parentNode.scrollTop;
-        var headerOffset = dijit.byId("header").domNode.offsetTop +
-                dijit.byId("header").domNode.offsetHeight;
-        return this.getView().getNode().offsetTop - scrollOffset + headerOffset;
+        return getElementAbsolutePos(this.getView().getNode()).y;
     },
 
     /**
@@ -160,9 +151,9 @@ var PaletteComponent = Class.create(DragSource,
      * @private
      */
     _getContentOffsetLeft: function() {
-        //FIXME: we suspect something is missing from the calculation
+        //TODO: we suspect something is missing from the calculation
 
-        return this.getView().getNode().offsetLeft;
+       return getElementAbsolutePos(this.getView().getNode()).x;
     }
 
 });
