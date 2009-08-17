@@ -1,0 +1,2962 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+<title>New Screenflow</title>
+<link rel="stylesheet" type="text/css" href="http://10.95.9.35:8020/static/Morfeo-New_Screenflow-1.0/ezweb/resources/menu/css/menu.css" />
+<SCRIPT language="javascript" src="http://10.95.9.35:8020/static/Morfeo-New_Screenflow-1.0/ezweb/js/prototype/prototype.js"></SCRIPT>
+<SCRIPT language="javascript" src="http://10.95.9.35:8020/static/Morfeo-New_Screenflow-1.0/ezweb/js/fast/menu.js"></SCRIPT>
+<SCRIPT language="javascript" src="http://10.95.9.35:8020/static/Morfeo-New_Screenflow-1.0/ezweb/js/fast/screenflowEngine.js"></SCRIPT>
+<SCRIPT language="javascript" src="http://10.95.9.35:8020/static/Morfeo-New_Screenflow-1.0/ezweb/js/fast/screenEngine.js"></SCRIPT>
+<SCRIPT language="javascript" src="http://10.95.9.35:8020/static/Morfeo-New_Screenflow-1.0/ezweb/js/fastAPI/fastAPI.js"></SCRIPT>
+<SCRIPT language="javascript" src="http://10.95.9.35:8020/static/Morfeo-New_Screenflow-1.0/ezweb/js/fastAPI/fastAPI_ezweb.js"></SCRIPT>
+<SCRIPT language="javascript" src="/ezweb/js/EzWebAPI/EzWebAPI.js"></SCRIPT>
+<SCRIPT language="javascript">
+	var menu = null;
+	var screens = new Hash();
+
+
+
+    screens.set("ProductSearch",
+        {title: "ProductSearch",
+        contentEl:"ProductSearch",
+        pre: []});
+
+    screens.set("ProductList",
+        {title: "ProductList",
+        contentEl:"ProductList",
+        pre: [{name: 'http://TODO/amazon#filter', positive: true}]});
+
+    screens.set("ProductDetails",
+            {title: "ProductDetails",
+            contentEl:"ProductDetails",
+            pre: [{name: 'http://TODO/amazon#item', positive: true}]} );
+
+    screens.set("ShoppingCart",
+            {title: "ShoppingCart",
+            contentEl:"ShoppingCart",
+            pre: [{name: 'http://TODO/amazon#shoppingCart', positive: true}]});
+
+    screens.set("Order",
+            {title: "Order",
+            contentEl:"Order",
+            pre: [{name: 'http://TODO/amazon#purchase', positive: true}]});
+
+    screens.set("SuggestionList",
+            {title: "SuggestionList",
+            contentEl:"SuggestionList",
+            pre: [{name: 'http://TODO/amazon#item', positive: true}]});
+
+    screens.set("PriceComparative",
+            {title: "PriceComparative",
+            contentEl:"PriceComparative",
+            pre: [{name: 'http://TODO/amazon#item', positive: true}]});
+
+    screens.set('eBayList',
+            {title: 'eBay List',
+            contentEl:'eBayList',
+            pre: [{name: 'http://TODO/amazon#item', positive: true}]});
+
+
+    var events = new Hash();
+
+
+
+
+
+
+	function loadMenu(){
+		menu = new FASTMenu({renderTo: "menu"});
+	    
+		ScreenflowEngineFactory.getInstance().setEngine(screens, events, menu);
+	    
+		ScreenflowEngineFactory.getInstance().run();
+	}
+</SCRIPT>
+</head>
+<body style="margin:1;padding:1;" onload="javascript:loadMenu();">
+<div id="menu"></div>
+<div id="ProductSearch" class="tabcontentHide">
+    <object id="ProductSearch_obj" width="100%" height="100%">
+        <html>
+		    <head>
+		        <meta http-equiv="Content-Type" content="application/xhtml+xml; charset=UTF-8" />
+		        <link type="text/css" rel="stylesheet" href="http://piccolo.ls.fi.upm.es/amazonScreens/style/screen.css" />
+				<style type="text/css">
+					#bodyDiv{
+						max-width: 550px;
+					}
+					#searchArea {
+						border: 1px solid #F8A704;
+						-moz-border-radius:13px 13px;
+						background:#FFF8E8 url(http://piccolo.ls.fi.upm.es/amazonScreens/style/bg_td2.jpg) repeat-x;
+						border:1px solid #F8A704;
+						height:50px;
+						margin:5px auto 0px;
+						padding:0px;
+						text-align:center;
+						width:98%;
+					}
+					#contents{
+						padding:12px;
+					}
+					#send{
+						margin-left: 15px;
+					}
+					#amazonImage{
+						position:absolute;
+						right:2px;
+						top:3px;
+					}
+					.title{
+						padding: 2px;
+						color:#AAAAAA;
+						font-weight: bold;
+						font-family:Arial,Helvetica,sans-serif;	
+						white-space:nowrap;
+						overflow: hidden;
+					}
+				</style>
+				
+		        <script language="JavaScript">
+
+		        function Search(){};
+
+////////////////amazonSearchForm1
+/**{
+	uri:"http://TODO/form#amazonSearch",
+	id:"amazonSearchForm1",
+	actions: [{action:"init", preconditions:[], uses:[]}],
+	postconditions: [{id:"filter", name:"http://TODO/amazon#filter", positive:true}],
+	triggers:[]
+}**/
+	        	Search.prototype.init = function (){
+
+					//List of possible searches
+					var searchIndices = ["All","Apparel","Automotive","Baby","Beauty","Blended",
+										 "Books","Classical", "DigitalMusic","DVD","Electronics",
+										 "GourmetFood","HealthPersonalCare","HomeGarden","Industrial",
+										 "Jewelry","KindleStore","Kitchen","Magazines","Merchants",
+										 "Miscellaneous","MP3Downloads","Music","MusicalInstruments",
+										 "MusicTracks","OfficeProducts","OutdoorLiving","PCHardware",
+										 "PetSupplies","Photo","SilverMerchants","Software","SportingGoods",
+										 "Tools","Toys","UnboxVideo","VHS","Video","VideoGames","Watches",
+										 "Wireless","WirelessAccessories"];
+
+					$("send").observe("click", search.send);
+					$("send").observe("mouseover",function(event){
+							var e = Event.element(event);
+							e.setStyle({cursor:"pointer"});
+						});
+
+					//Populate the product type select element
+					search.populateOptions(searchIndices);
+				}
+				
+				Search.prototype.populateOptions = function (_list){
+					var templateString = "<option value ='#{element}'>#{caption}</option>";
+					var template = new Template(templateString);
+					var optionHTML = "";
+					$A(_list).each (function (element){
+						optionHTML += template.evaluate({"element":element,"caption":search.separate(element)});
+					});
+					$("productType").update(optionHTML);
+				}
+
+				//This function returns a human readable element, 
+				//separating words by white-spaces
+				Search.prototype.separate = function (element){
+					//Workaround for special cases
+					//TODO: Create a generic solution, maybe another regexp?
+					if (element=="DVD" || element=="VHS" || element=="MP3Downloads" || element=="PCHardware"){
+						if (element=="MP3Downloads"){
+							return "MP3 Downloads";
+						}
+						if (element=="PCHardware"){
+							return "PC Hardware";
+						}
+						return element;
+					}else{
+						var result = element.replace(/([A-Z])/g, " $1");
+						//Remove first white-space when necessary
+						result = (result[0]==" "?result.substring(1,result.length):result);
+						return result;
+					}
+				}
+				
+				Search.prototype.send = function (){
+					if ($F("searchText").length==0){ //Empty keywords are forbidden
+						alert ("You must introduce at least one keyword");
+						return;
+					}
+					var filter = {id: "filter", data: {productType: $F("productType"), searchText: $F("searchText")}};
+					ScreenEngineFactory.getInstance("ProductSearch").manageData("newFilter", [filter],[], "amazonSearchForm1");
+				}
+
+				//////////////Generated code
+				Search.prototype.restart = function (){
+					ScreenEngineFactory.getInstance("ProductSearch").restart();
+				}
+
+				var search = new Search();
+
+				var searchrules = [
+									{trigger:{id:"_onload"}, condition: null, actions: [search.init]}
+								  ];
+
+				var searchposts = [
+									{id: "filter", origin: "amazonSearchForm1", name:"http://TODO/amazon#filter"}
+								  ];
+
+				var searchdictionary = [];
+				
+				ScreenEngineFactory.getInstance("ProductSearch").setEngine(ScreenflowEngineFactory.getInstance(), searchrules, searchposts, searchdictionary);
+
+				ScreenflowEngineFactory.getInstance().addScreenLoader("ProductSearch", search.restart);
+
+		        </script>
+		    </head>
+		    <body>
+		        <div id="bodyDiv">
+		        	<span id="amazonImage"><img src="http://piccolo.ls.fi.upm.es/amazonScreens/images/amazon.png" /></span>
+		        	<h1 id="title">Product Search</h1>
+					<div id="searchArea">
+						<div id="contents">
+							<span class="title">Keywords: </span> <input type="text" id="searchText" />
+							<select id="productType">			
+							</select>
+							<input type="button" id="send" value="Search" />
+						</div>
+					</div>       
+		        </div>
+		    </body>
+		</html>
+    </object>
+</div>
+
+<div id="ProductList" class="tabcontentHide">
+    <object id="ProductList_obj" width="100%" height="100%">
+        <html>
+			<head>
+				<meta http-equiv="Content-Type"
+				    content="application/xhtml+xml; charset=UTF-8" />
+				<link type="text/css" rel="stylesheet"
+				    href="http://piccolo.ls.fi.upm.es/amazonScreens/style/table.css" />
+				<link type="text/css" rel="stylesheet"
+				    href="http://piccolo.ls.fi.upm.es/amazonScreens/style/screen.css" />
+				<style type="text/css">
+					#pages {
+					    color: #FEBF43;
+					    font-weight: bold;
+					    padding: 10px;
+					}
+					
+					#previousButton,#nextButton {
+					    visibility: hidden;
+					}
+					
+					#loadingImg {
+					    margin: auto;
+					    padding-top: 10px;
+					}
+					
+					#amazonImage {
+					    position: absolute;
+					    right: 0px;
+					    top: 3px;
+					}
+				</style>
+				
+				<script language="JavaScript">
+				
+				    function List(){};
+
+/**{
+	uri:"http://TODO/form#amazonList",
+	id:"amazonListForm1",
+	actions: [	{action:"init", preconditions:[], uses:[]},
+	            {action:"showTable", preconditions:[{id:"list", name:"http://TODO/amazon#list", positive:true}, {id:"filter", name:"http://TODO/amazon#filter", positive:true}], uses:[]}],
+	postconditions: [	{id:"item", name:"http://TODO/amazon#item", positive:true},
+	                 	{id:"filter", name:"http://TODO/amazon#filter", positive:true}],
+	triggers:[]
+}**/
+				    List.prototype.init = function (){
+				        $("nextButton").observe("click", list.nextPage);
+				        $("previousButton").observe("click", list.previousPage);
+				        $$('input[type="button"]').each(function(element){
+				            element.observe("mouseover",function(event){
+					            var e = Event.element(event);
+				                e.setStyle({cursor:"pointer"});
+				            });		
+				        });
+				
+				        var tableBody = $("listBody");
+				        tableBody.update("");
+				        list.showProgress();
+				    }
+
+				    List.prototype.productDetail = function (nodeElement,_ASIN){
+				        list.clearSelected ();
+				        //select the element
+				        nodeElement.parentNode.parentNode.setStyle({background: "#FFF8E8"});
+				        var item = {id: 'item', data:{ASIN: _ASIN, title: nodeElement.parentNode.parentNode.firstChild.firstChild.nodeValue}};
+				        ScreenEngineFactory.getInstance("ProductList").manageData(null, [item], [], "amazonListForm1");
+				    }
+				    
+				    List.prototype.clearSelected = function (){
+				        $$("tbody tr").each(function (element){
+				            element.setStyle({background: "transparent url(http://piccolo.ls.fi.upm.es/amazonScreens/style/bg_td1.jpg) repeat-x top"});
+				        });
+				    }
+
+				    List.prototype.showProgress = function (){
+				        $("loadingImg").show();
+				    }
+				    
+				    List.prototype.showTable = function (l){
+				    	$("loadingImg").hide();
+				        var templateString = '<tr><td>#{title}</td><td>#{price}</td><td>#{pGroup}</td>';
+				        templateString += '<td style="border-right:none;"><input type="button" onclick="list.productDetail(this,\'#{ASIN}\');"';
+				        templateString += ' onmouseover="this.setStyle({cursor:\'pointer\'});" value="Select"/></td></tr>';
+				        var rowTemplate = new Template(templateString);
+				        var tableBody = $("listBody");
+				        tableBody.update("");
+				        for (var i = 0; i < l.data.productList.length; i++) { //print the appropriate elements
+				            if (l.data.productList[i]) { //only if the product table is fetched
+				                tableBody.innerHTML += rowTemplate.evaluate(l.data.productList[i]);
+				            }
+				        }
+				        //Update Interface
+				        if (l.data.currentPage < (l.data.totalPages - 1)) {
+				            $("nextButton").setStyle({visibility: "visible"});
+				        } else {
+				            $("nextButton").setStyle({visibility: "hidden"});
+				        }
+				        if (l.data.currentPage > 1) {
+				            $("previousButton").setStyle({visibility: "visible"});
+				        } else {
+				            $("previousButton").setStyle({visibility: "hidden"});
+				        }
+
+				        $("CP").value = l.data.currentPage;
+				        $("TP").value = l.data.totalPages;
+				        $("ST").value = l.data.searchText;
+				        $("PT").value = l.data.productType;
+				        if(l.data.totalPages>0){
+					        $("curPage").innerHTML = l.data.currentPage;
+					        $("totalPages").update(l.data.totalPages);
+				        } else {
+				        	$("curPage").innerHTML = "-";
+					        $("totalPages").update("-");
+					    }
+				    }
+				    
+				    List.prototype.nextPage = function (){
+				    	var tableBody = $("listBody");
+				        tableBody.update("");
+				        list.showProgress();
+				        var filter = {id: "filter", data: {productType: $F("PT"), searchText: $F("ST"), currentPage:(parseInt($F("CP"))+1) }};
+				        ScreenEngineFactory.getInstance("ProductList").manageData("newFilter", [filter], [], "amazonListForm1");
+				    }
+				    
+				    List.prototype.previousPage = function (){
+				    	var tableBody = $("listBody");
+				        tableBody.update("");
+				        list.showProgress();
+				        var filter = {id: "filter", data: {productType: $F("PT"), searchText: $F("ST"), currentPage:(parseInt($F("CP"))-1) }};
+				    	ScreenEngineFactory.getInstance("ProductList").manageData("newFilter", [filter], [], "amazonListForm1");
+				    }
+	
+				    List.prototype.showMessage = function (message){
+				    	$("loadingImg").hide();
+						alert(message.data.message);
+					}
+
+////////////////AmazonSearchService
+/**{
+	uri:"http://TODO/service#AmazonSearchService",
+	id:"AmazonSearchService1",
+	actions: [{action:"search", preconditions:[{id:"filter", name:"http://TODO/amazon#filter", positive:true}], uses:[{id:"user", name:"http://TODO/amazon#user"}]}],
+	postconditions: [{id:"list", name:"http://TODO/amazon#list", positive:true}],
+	triggers:["productList"]
+}**/
+				    List.prototype.search = function (filter, user){
+				    	//Add the ItemSearch parameters
+				        var productType = filter.data.productType;
+				        if (!productType) {
+				            productType = 'All'
+				        }
+				        if (!filter.data.currentPage) {
+				        	filter.data.currentPage = 1;
+				        }
+				        var parameters = "";
+				        parameters += "&SearchIndex=" + productType;
+				        parameters += "&Keywords=" + encodeURIComponent(filter.data.searchText);
+				        //Add the page number (if is set)
+				        parameters += "&ItemPage=" + (filter.data.currentPage);
+				        //Base URL of the REST Service
+				        var url = "http://webservices.amazon.com/onca/xml?Service=AWSECommerceService";
+				        //Add the AccessKeyId (get from the user fact)
+				        if (user) {
+				            url += "&AWSAccessKeyId=" + user.data.KeyId;
+				        } else {// if the KB doesn't contain a user key Id, add one by default
+				            url += "&AWSAccessKeyId=15TNKDQJGH6BD0Z4KY02";
+				        }
+				        //Add the operation Type
+				        url +="&Operation=ItemSearch";
+				        //Add the parameters
+				        url += parameters;
+				        //Add the responseGroup
+				        url +="&ResponseGroup=Medium";
+				        //Add the current version of the API
+				        url += "&Version=2008-06-26";
+				        //Invoke the service
+				        FastAPI.getXML(url, this, list.addToList);
+				    }
+				    
+				    List.prototype.addToList = function (transport){
+				    	var l = {id: 'list', data: {productList: new Array(), currentPage: 1, totalResults: 0, totalPages: 0}};
+				    	var xml = transport;
+				        //Check if the service returned an error
+				        if (xml.getElementsByTagName("IsValid")[0].childNodes[0].nodeValue == "False") {
+				            var message = {id: 'message', data:{message: xml.getElementsByTagName("Message")[0].childNodes[0].nodeValue}};
+				            ScreenEngineFactory.getInstance("ProductList").manageData("message", [message],[], "AmazonSearchService1");
+				        } else {
+				            //Correct response, create the result List
+				            var _list = xml.getElementsByTagName("Items")[0].getElementsByTagName("Item");
+				            //Fill the table, 1 row per item
+				            $A(_list).each(function(item){
+				                if (item.getElementsByTagName("Title").length > 0) {
+				                    var title = item.getElementsByTagName("Title")[0].firstChild.nodeValue;
+				                } else {
+				                    var title = "&nbsp;";
+				                }
+				                if (item.getElementsByTagName("FormattedPrice").length > 0) {
+				                    var price = item.getElementsByTagName("FormattedPrice")[0].firstChild.nodeValue;
+				                } else {
+				                    var price = "&nbsp;";
+				                }
+				                if (item.getElementsByTagName("ProductGroup").length > 0) {
+				                    var pGroup = item.getElementsByTagName("ProductGroup")[0].firstChild.nodeValue;
+				                } else {
+				                    var pGroup = "&nbsp;";
+				                }
+				                if (item.getElementsByTagName("ASIN").length > 0) {
+				                    var ASIN = item.getElementsByTagName("ASIN")[0].firstChild.nodeValue;
+				                }
+				                var row = {
+				                    title: title,
+				                    price: price,
+				                    pGroup: pGroup,
+				                    ASIN: ASIN
+				                };
+				                l.data.productList.push(row);
+				            });
+				            
+			                l.data.totalPages = parseInt(xml.getElementsByTagName("TotalPages")[0].firstChild.nodeValue);
+			                l.data.totalResults = parseInt(xml.getElementsByTagName("TotalResults")[0].firstChild.nodeValue);
+			                if (l.data.totalPages < 0) {
+			                	l.data.totalPages = 0;
+			                }
+				            l.data.currentPage = parseInt(xml.getElementsByTagName("ItemPage")[0].childNodes[0].nodeValue);
+				            l.data.searchText = xml.getElementsByTagName("Keywords")[0].childNodes[0].nodeValue;
+				            l.data.productType = xml.getElementsByTagName("SearchIndex")[0].childNodes[0].nodeValue;
+				            ScreenEngineFactory.getInstance("ProductList").manageData("itemList", [l], [], "AmazonSearchService1");
+				        }
+				    }
+				    
+				    List.prototype.onError = function (transport){
+				    //alert(transport.responseText);
+				    }
+
+//////////////Generated code
+				    List.prototype.restart = function (){
+						ScreenEngineFactory.getInstance("ProductList").restart();
+					}
+
+//////////////Piping
+				    List.prototype.piping1 = function (){
+				    	var filter = ScreenEngineFactory.getInstance("ProductList").searchFact("filter", null);
+				    	var user = ScreenEngineFactory.getInstance("ProductList").searchFact("user", null);
+				    	list.search(filter, user);
+					}
+				    List.prototype.piping2 = function (){
+				    	var filter = ScreenEngineFactory.getInstance("ProductList").searchFact("filter", "amazonListForm1");
+				    	var user = ScreenEngineFactory.getInstance("ProductList").searchFact("user", null);
+				    	list.search(filter, user);
+					}
+				    List.prototype.piping3 = function (){
+				    	var l = ScreenEngineFactory.getInstance("ProductList").searchFact("list", "AmazonSearchService1");
+				    	list.showTable(l);
+					}
+				    List.prototype.piping4 = function (){
+				    	var message = ScreenEngineFactory.getInstance("ProductList").searchFact('message', "AmazonSearchService1");
+				    	list.showMessage(message);
+					}
+
+				    var list = new List(); 
+	
+					var listrules = [
+										{trigger: {id: "_onload"}, condition: null, actions: [list.init]},
+										{trigger: {id: "_onload"}, condition: [{id:"filter", positive:true}], actions: [list.piping1]},
+										{trigger: {id: "newFilter", origin:"amazonListForm1"}, condition: [{id:"filter", origin:"amazonListForm1", positive:true}], actions: [list.piping2]},
+										{trigger: {id: "itemList", origin:"AmazonSearchService1"}, condition: [{id:"list", origin: "AmazonSearchService1", positive:true}], actions: [list.piping3]},
+										{trigger: {id: "message", origin:"AmazonSearchService1"}, condition: [{id:"message", origin: "AmazonSearchService1", positive:true}], actions: [list.piping4]}
+									];
+					
+					var listposts = [
+										{id:"item", origin:"amazonListForm1", name: "http://TODO/amazon#item"}
+									];
+
+					var listdictionary = [
+											{origin:null, factId:"filter", name:"http://TODO/amazon#filter"},
+											{origin:"amazonListForm1", factId:"filter", name:"http://TODO/amazon#filter"},
+											{origin:"AmazonSearchService1", factId:"list", name:"http://TODO/amazon#list"}, 
+											{origin:"AmazonSearchService1", factId:"message", name:"http://TODO/amazon#message"}
+									];
+					
+					ScreenEngineFactory.getInstance("ProductList").setEngine(ScreenflowEngineFactory.getInstance(), listrules, listposts, listdictionary);
+	
+					ScreenflowEngineFactory.getInstance().addScreenLoader("ProductList", list.restart);
+				</script>
+			</head>
+			
+			<body>
+				<div id="bodyDiv">
+					<input type="hidden" id="CP" />
+					<input type="hidden" id="TP" />
+					<input type="hidden" id="ST" />
+					<input type="hidden" id="PT" />
+				    <span id="amazonImage"><img src="http://piccolo.ls.fi.upm.es/amazonScreens/images/amazon.png" /></span>
+					<h1 id="title">Item list</h1>
+					<div id="listDiv">
+						<table>
+						    <thead>
+						        <tr>
+						            <th style="width: 60%; -moz-border-radius: 13px 0px 0px 0px;">Title</th>
+						            <th style="width: 10%">Price</th>
+						            <th style="width: 20%">Product Group</th>
+						            <th style="width: 10%; -moz-border-radius: 0px 13px 0px 0px;">&nbsp;</th>
+						        </tr>
+						    </thead>
+						    <tbody id="listBody">
+						        <tr><td>&nbsp;</td></tr>
+						        <tr><td>&nbsp;</td></tr>
+						        <tr><td>&nbsp;</td></tr>
+						        <tr><td>&nbsp;</td></tr>
+						    </tbody>
+						</table>
+						<img id="loadingImg" src="http://piccolo.ls.fi.upm.es/amazonScreens/images/ajaxLoader.gif" />
+						<div id="buttonContainerDiv">
+							
+						    <input type="button" id="previousButton" class="button" value="<" />
+						    <span id="pages"> Page <span id="curPage">-</span>/<span id="totalPages">-</span></span>
+						    <input type="button" id="nextButton" class="button" value=">" />
+						</div>
+					</div>
+				</div>
+			</body>
+		</html>
+	</object>
+</div>
+
+<div id="ProductDetails" class="tabcontentHide">
+    <object id="ProductDetails_obj" width="100%" height="100%">
+        <html>
+		    <head>
+		        <meta http-equiv="Content-Type" content="application/xhtml+xml; charset=UTF-8" />
+		        <link type="text/css" rel="stylesheet" href="http://piccolo.ls.fi.upm.es/amazonScreens/style/screen.css" />
+				<style type="text/css">
+					#productImage{
+						height: 170px;
+						-moz-border-radius: 13px 13px;
+						background: #FFF8E8 url(http://piccolo.ls.fi.upm.es/amazonScreens/style/bg_td2.jpg) repeat-x;
+						border:1px solid #F8A704;
+						margin:0px auto 13px;
+						text-align:center;
+						width:88%;
+						padding-bottom:5px;
+						padding-top:10px;
+					}
+					#leftColumn{
+						position: relative;
+						float:left;
+						height: 100%;
+						width: 35%;
+					}
+					#rightColumn{
+						position: relative;
+						float:right;
+						height: 268px;
+						width: 60%;
+						-moz-border-radius:13px 13px;
+						background:#FFF8E8 url(http://piccolo.ls.fi.upm.es/amazonScreens/style/bg_td2.jpg) repeat-x;
+						border:1px solid #F8A704;
+						padding-top:5px;
+						padding-right:0px;
+						padding-left:5px;
+						padding-bottom: 5px;
+						position:relative;
+					}
+					#infoArea{
+						text-align: left;
+					}
+					#titleInfo{
+						float:left;
+						margin: 5px;
+						width:35%;
+						overflow: hidden;
+					}
+					#valueInfo{
+						float:left;
+						margin: 5px 15px 5px 5px;
+						width: 50%;
+					}
+					#moreInfo{
+						float:left;
+						margin-left: 5px;
+					}
+					.title{
+						padding: 2px;
+						color:#AAAAAA;
+						font-weight: bold;
+						font-family:Arial,Helvetica,sans-serif;	
+						white-space:nowrap;
+						overflow: hidden;
+					}
+					.info{
+						padding: 2px;
+						color:#888888;
+						font-family:Arial,Helvetica,sans-serif;
+						font-weight: bold;
+						text-align: justify;
+						white-space: nowrap;
+						overflow: hidden;
+					}
+					#quantity {
+						margin: 5px;
+						color:#777777;
+						font-weight: bold;
+						font-family:Arial,Helvetica,sans-serif;
+					}
+					#cart {
+						border: 1px solid #F8A704;
+						-moz-border-radius:13px 13px;
+						background:#FFF8E8 url(http://piccolo.ls.fi.upm.es/amazonScreens/bg_td2.jpg) repeat-x;
+						border:1px solid #F8A704;
+						height:78px;
+						margin:5px auto 0px;
+						padding:0px;
+						text-align:center;
+						width:88%;
+					}
+					#moreInfoText {
+						color:#888888;
+						font-family:Arial,Helvetica,sans-serif;
+						font-size:13px;
+						height:133px;
+						margin:0;
+						overflow:auto;
+						padding:2px 15px 2px 2px;
+						text-align:left;
+						width:300px;
+						max-width:300px;
+					}
+					.detailsElement {
+						color:#888888;
+						font-weight:bold;
+					}
+					#bodyDivDetails {
+						max-width:550px;
+						text-align:center;
+						margin: 8px auto 20px auto;
+						height:270px;
+					}
+					#amazonImage{
+						position:absolute;
+						right:0px;
+						top:3px;
+					}
+				</style>
+		        <script language="JavaScript">
+		        
+		        	function Product(){};
+
+		        	
+
+////////////////////amazonProductForm1
+/**{
+	uri:"http://TODO/form#amazonProduct",
+	id:"amazonProductForm1",
+	actions: [{action:"init", preconditions:[], uses: []},
+	            {action:"showProductInfo", preconditions:[{id:"product", name:"http://TODO/amazon#product", positive:true}], uses:[]}],
+	postconditions: [],
+	triggers:["addToCart"]
+}**/
+
+					Product.prototype.init = function (){
+						$("addToCart").observe("click", product.addToCart);
+					}
+
+		        	Product.prototype.showProductInfo = function (_product){
+						$("quantitySelect").value=1;
+						if (_product.data.title) {
+							//Reset styles
+							$("productTitle").setStyle ({"fontSize":"20px"});
+							$("moreInfoText").setStyle({"height": "133px"});
+							$("productTitle").update(_product.data.title);
+							if ($("productTitle").clientHeight > 28) {//Big title
+								//Big title, adapt styles
+								$("productTitle").setStyle ({"fontSize":"16px"});
+								if ($("productTitle").clientHeight > 23) {//More than one line
+									if ($("productTitle").clientHeight > 46) {//More than two lines
+										if ($("productTitle").clientHeight > 69) {//More than three lines
+											$("productTitle").setStyle ({"fontSize":"13px"});
+											if ($("productTitle").clientHeight > 49) {//Still more than three lines
+												$("moreInfoText").setStyle({"height": "90px"});
+											} else {
+												$("moreInfoText").setStyle({"height": "110px"});
+											}
+										} 
+										else{//Three lines
+											$("moreInfoText").setStyle({"height": "110px"});
+											$("productTitle").setStyle ({"fontSize":"14px"});	
+										}
+									} else {//Two lines
+										$("moreInfoText").setStyle({"height": "115px"});
+									}	
+								}
+							}
+							
+						}
+						if (_product.data.price) {
+							$("price").update(_product.data.price);
+						} else {
+							$("price").update("");
+						}
+						if (_product.data.pGroup) {
+							$("pGroup").update(_product.data.pGroup);
+						} else {
+							$("pGroup").update("");
+						}
+						if (_product.data.url) {
+							var a = new Element('a',{href:_product.data.url,target:"_blank"}).update ("Amazon");
+							$("url").update (a);
+						} else {
+							$("url").update ("");
+						}
+						if (_product.data.image) {
+							var img = new Element ('img',{src: _product.data.image});
+							$("productImage").update(img);
+						} else {
+							var img = new Element ('img',{src: "http://piccolo.ls.fi.upm.es/amazonScreens/images/amazon.jpg"});
+							$("productImage").update(img);	
+						}
+						this.showAdvancedDetails(_product);				 
+					}
+					
+					Product.prototype.showAdvancedDetails = function (_product){
+						var element = _product.data.item;
+						var pGroup = _product.data.pGroup;
+
+						var itemAttributes = element.getElementsByTagName("ItemAttributes")[0];
+						var attributesHTML = "<ul>";
+						//List of elements to be shown
+						var elementList = [];
+						switch (pGroup){
+							case "eBooks":
+							case "Book":
+								//Print all book authors
+								attributesHTML += product.elementDetail("Author",itemAttributes,"Author(s)");
+								//Print the remainder features
+								elementList = [{nodeElement:"PublicationDate",caption:"Publication Date"},
+											   "ISBN",
+											   "Format",
+											   {nodeElement:"Label", caption:"Publisher"},
+											   {nodeElement:"NumberOfPages", caption:"Pages"}];	
+							    attributesHTML += product.productDetailsList(elementList,itemAttributes);	
+								break;
+							case "Theatrical Release":
+							case "Video":
+							case "DVD":
+								//Print all actors
+								attributesHTML += product.elementDetail("Actor",itemAttributes,"Cast");
+								//Print all directors
+								attributesHTML += product.elementDetail("Director",itemAttributes);
+								elementList = 	["Genre",
+												{nodeElement:"RunningTime",caption: "Run Time"},
+												{nodeElement:"AudienceRating", caption:"Audience Rating"},
+												"Label",
+												"Binding",
+												"Region",
+												{nodeElement:"AspectRatio", caption:"Aspect Ratio"},
+												{nodeElement:"OriginalReleaseDate", caption:"Release Date"}
+												];
+								attributesHTML += product.productDetailsList(elementList,itemAttributes);
+								attributesHTML += product.twoElements ("DVDLayers","DVDSides",itemAttributes,"DVD Layers / Sides");
+								//Print technical details
+								attributesHTML += product.elementDetail("Format",itemAttributes);
+								break;
+							case "Digital Music Track":
+							case "Music":
+								elementList = 	["Artist",
+												"Genre",
+												"Label",
+												"Binding",
+												"Format",
+												{nodeElement:"NumberOfDiscs", caption:"Number of Discs"},
+												{nodeElement:"ReleaseDate", caption:"Release Date"},
+												{nodeElement:"OriginalReleaseDate", caption:"Original Release Date"}
+												];
+								attributesHTML += product.productDetailsList(elementList,itemAttributes);
+								break;
+							case "Photography":
+								//Print details 
+								elementList = ["Brand","Model"];
+								attributesHTML += product.productDetailsList(elementList,itemAttributes);	
+								//Print all camera features
+								attributesHTML += product.elementDetail("Feature",itemAttributes,"Features",".");
+								break;
+							case "Personal Computer":
+								elementList = 	["Model",
+												"Label",
+												"Binding"];
+								attributesHTML += product.productDetailsList(elementList,itemAttributes);
+								attributesHTML += product.twoElements ("CPUType","CPUSpeed",itemAttributes,"CPU", " ");
+								elementList = 	[{nodeElement:"DisplaySize", caption:"Display Size"},
+												{nodeElement:"HardDiskSize", caption:"Hard Disk Size"},
+												{nodeElement:"DataLinkProtocol", caption:"Data Link Protocol"},
+												{nodeElement:"FloppyDiskDriveDescription", caption:"Floppy Disk Drive"}];
+								attributesHTML += product.productDetailsList(elementList,itemAttributes);
+								attributesHTML += product.twoElements ("SystemMemorySize","SystemMemoryType",itemAttributes,"Memory", " ");								
+								elementList = 	[{nodeElement:"HardwarePlatform", caption:"Hardware Platform"},
+												{nodeElement:"OperatingSystem", caption:"Operating System"},
+												{nodeElement:"ReleaseDate",caption:"Release Date"},
+												"Warranty",
+												{nodeElement:"LegalDisclaimer",caption:"Legal Disclaimer"}
+												];	
+								attributesHTML += product.productDetailsList(elementList,itemAttributes);
+								//Print technical details
+								attributesHTML += product.elementDetail("Feature",itemAttributes, "Features",".");
+								//Print special features
+								attributesHTML += product.specialElementDetail("SpecialFeatures",itemAttributes,"|","Special Features",".");
+								break;
+							case "CE":
+							case "Video Games":						
+							case "Software":
+							case "Wireless":
+							case "Wireless Phone Accessory":
+								elementList = 	["Model",
+												"Color",
+												"Label",
+												"Binding",
+												{nodeElement:"DisplaySize", caption:"Display Size"},
+												{nodeElement:"ESRBAgeRating", caption:"Age Rating"},
+												{nodeElement:"HardwarePlatform", caption:"Hardware Platform"},
+												{nodeElement:"OperatingSystem", caption:"Operating System"},
+												{nodeElement:"ReleaseDate",caption:"Release Date"},
+												{nodeElement:"LegalDisclaimer",caption:"Legal Disclaimer"}
+												];
+								attributesHTML += product.productDetailsList(elementList,itemAttributes);
+								//Print technical details
+								attributesHTML += product.elementDetail("Feature",itemAttributes, "Features",".");
+								//Print special features (only CE)
+								attributesHTML += product.specialElementDetail("SpecialFeatures",itemAttributes,"|","Special Features",".");
+								break;
+							default:
+								elementList = 	["Model",
+												"Color",
+												"Label",
+												"Binding",
+												{nodeElement:"ReleaseDate",caption:"Release Date"}
+												];
+								attributesHTML += product.productDetailsList(elementList,itemAttributes);
+								attributesHTML += product.elementDetail("Feature",itemAttributes, "Features",".");
+								break;				
+						}
+						attributesHTML += "</ul>";
+						if (attributesHTML.length>9) {//There is something to show
+							$("moreInfoText").update(attributesHTML);
+							$("moreInfoText").setStyle({"borderTop":"1px dotted #AAAAAA"});
+							$("moreInfoTitle").update("Product Details");
+						} 
+							
+					}
+					
+					//This function returns a html with pre-formatted details list
+					//Each element of attributesList can be an object with two elements (nodeElement and caption)
+					//or simply a string representing both of them
+					Product.prototype.productDetailsList = function (attributesList,attributesNode){
+						var result = "";
+						$A(attributesList).each(function(attribute){
+								var element = attributesNode.getElementsByTagName ((attribute.nodeElement?attribute.nodeElement:attribute));						
+								if (element.length > 0) {
+									result += "<li>" + (attribute.caption?attribute.caption:attribute) + ": ";
+									result += "<span class='detailsElement'>";
+									result += element[0].firstChild.nodeValue;
+									if (element[0].getAttribute("Units") && element[0].getAttribute("Units")!= "unknown-units") {
+										result += " " + element[0].getAttribute("Units");
+									}
+									result += "</span></li>";
+								}
+						});
+						return result;
+					}
+					
+					//This function produces a single li with a list of elements (authors, features...)
+					//caption parameter is optional
+					//separationCharacter parameter is optional
+					Product.prototype.elementDetail = function (element,attributesNode,caption,separationCharacter){
+							var list = attributesNode.getElementsByTagName(element);
+							var result = "";
+							if (list.length > 0) {
+								result += "<li>" + (caption?caption:element)  + ": <span class='detailsElement'>";
+								$A(list).each (function (e){
+									result += e.firstChild.nodeValue + (separationCharacter?separationCharacter + " ":", ");
+								});
+								//Remove last ", "
+								result = result.substring(0,result.length-2);
+								result += "</span></li>";							
+							}
+							return result;			
+					}
+					
+					//This function produces a single li with a list of features. The original line has 
+					//extrange separators
+					//caption parameter is optional
+					//separationCharacter parameter is optional
+					Product.prototype.specialElementDetail = function (element,attributesNode,beforeSeparationCharacter,caption,separationCharacter){
+							var element = attributesNode.getElementsByTagName(element);
+							var result = "";
+							if (element.length > 0) {
+								result += "<li>" + (caption?caption:element)  + ": <span class='detailsElement'>";
+								var list = element[0].firstChild.nodeValue.split(beforeSeparationCharacter);
+								$A(list).each (function (e){
+									result += e + (separationCharacter?separationCharacter + " ":", ");
+								});
+								//Remove last ", "
+								result = result.substring(0,result.length-2);
+								result += "</span></li>";							
+							}
+							return result;			
+					}
+					
+					//This function produces a single li two elements separated by "/"
+					//caption parameter is optional
+					//separationCharacter is optional
+					Product.prototype.twoElements = function (element1,element2,attributesNode, caption, separationCharacter){
+							var _element1 = attributesNode.getElementsByTagName(element1);
+							var _element2 = attributesNode.getElementsByTagName(element2);
+							var result = "";
+							//At least one correct element
+							if (_element1.length > 0 || _element2.length > 0) {
+								result += "<li>" + (caption?caption:(element1 + " / " + element2))  + ": <span class='detailsElement'>";
+								result += (_element1[0]?_element1[0].firstChild.nodeValue:"-");
+								if (_element1[0].getAttribute("Units") && _element1[0].getAttribute("Units")!= "unknown-units") {
+									result += " " + _element1[0].getAttribute("Units");
+								}
+								result += (separationCharacter?separationCharacter:" / ");
+								result += (_element2[0]?_element2[0].firstChild.nodeValue:"-");
+								if (_element2[0].getAttribute("Units") && _element2[0].getAttribute("Units")!= "unknown-units") {
+									result += " " + _element2[0].getAttribute("Units");
+								}
+								result += "</span></li>";							
+							}
+							return result;
+					}
+
+					Product.prototype.showMessage = function (message){
+						alert(message.data.message);
+					}
+
+					Product.prototype.addToCart = function (){
+						ScreenEngineFactory.getInstance("ProductDetails").manageData("addToCart", [], [], "amazonProductForm1");	
+					}
+
+////////////////AmazonItemLookupService
+/**{
+	uri:"http://TODO/service#AmazonItemLookupService",
+	id:"AmazonItemLookupService1",
+	actions: [{action:"searchProduct", preconditions:[{id:"item", name:"http://TODO/amazon#item", positive:true}], uses:[]}],
+	postconditions: [{id:"product", name:"http://TODO/amazon#product", positive:true}],
+	triggers:["newProduct"]
+}**/	
+		        	Product.prototype.searchProduct = function (item, user){
+						//Base URL of the REST Service
+						var url = "http://webservices.amazon.com/onca/xml?Service=AWSECommerceService";
+						//Add the AccessKeyId (get from the user fact)
+						if (user) {
+							url += "&AWSAccessKeyId=" + user.data.KeyId;
+						} else {// if the KB doesn't contain a user key Id, add one by default
+							url += "&AWSAccessKeyId=15TNKDQJGH6BD0Z4KY02";
+						}
+						//Add the operation Type
+						url +="&Operation=ItemLookup";
+						//Add the responseGroup
+						url +="&ResponseGroup=Medium";
+						//Add the current version of the API
+						url += "&Version=2008-06-26";
+						//Add item ID
+						url += "&ItemId=" + item.data.ASIN;
+						
+						//Invoke the service
+                    	FastAPI.getXML(url, this, product.fetchProductInfo);
+					}
+
+					Product.prototype.fetchProductInfo = function (transport){
+						var xml = transport;
+						var item = xml.getElementsByTagName("Item")[0];
+						if (item.getElementsByTagName("Title").length > 0) {
+							var title = item.getElementsByTagName("Title")[0].firstChild.nodeValue;
+						}
+						if (item.getElementsByTagName("FormattedPrice").length > 0) {
+		                    var price = item.getElementsByTagName("FormattedPrice")[0].firstChild.nodeValue;
+						}
+						if (item.getElementsByTagName("ProductGroup").length > 0) {
+		                    var pGroup = item.getElementsByTagName("ProductGroup")[0].firstChild.nodeValue;
+						}
+			            if (item.getElementsByTagName("DetailPageURL").length > 0) {
+		                    var url = item.getElementsByTagName("DetailPageURL")[0].firstChild.nodeValue;
+			            }
+			            if (item.getElementsByTagName("MediumImage").length > 0) {
+		                    var image = item.getElementsByTagName("MediumImage")[0].getElementsByTagName("URL")[0].firstChild.nodeValue;
+			            }
+			            var _product = {
+							id: "product",
+							data:{title: title,
+								price: price,
+								item: item,
+								pGroup: pGroup,
+								url: url,
+								image: image}
+						};
+
+						ScreenEngineFactory.getInstance("ProductDetails").manageData("newProduct", [_product], [], "AmazonItemLookupService1");	
+					}
+								
+					Product.prototype.onError = function (transport){
+		                //alert(transport.responseText);
+		            }
+
+////////////////AmazonAddItemToCartService1
+/**{
+	uri:"http://TODO/service#AmazonAddItemToCartService",
+	id:"AmazonAddItemToCartService1",
+	actions: [{action:"add", preconditions:[{id:"item", name:"http://TODO/amazon#item", positive:true}]: uses:[{id:"user", name:"http://TODO/amazon#user"}, {id:"cart", name:"http://TODO/amazon#shoppingCart"}]}],
+	postconditions: [{id:"cart", name:"http://TODO/amazon#shoppingCart", positive:true},
+	                 {id:"message", name:"http://TODO/amazon#message", positive:true}],
+	triggers:["message"]
+}**/
+		            Product.prototype.add = function (item, cart, user){
+						if (cart) {//If the cart is already created, it will have an ID in the User Fact
+							var url = "http://webservices.amazon.com/onca/xml?Service=AWSECommerceService";
+							//Add the AccessKeyId (get from the user fact)
+							if (user) {
+								url += "&AWSAccessKeyId=" + user.data.KeyId;
+							} else {// if the KB doesn't contain a user key Id, add one by default
+								url += "&AWSAccessKeyId=15TNKDQJGH6BD0Z4KY02";
+							}
+							//Add the operation Type
+							url +="&Operation=CartGet";
+							//Add the current version of the API
+							url += "&Version=2008-06-26";
+							//Add item ID
+							url += "&CartId=" + cart.data.id;
+							url += "&HMAC=" + cart.data.HMAC;
+							
+							//Invoke the service
+	                    	FastAPI.getXML(url, this, function(transport){product.isProductOnCart(transport, item, cart, user);}.bind(product));
+						} else { //Cart doesn't exist: Create a new cart with the product
+							var url = "http://webservices.amazon.com/onca/xml?Service=AWSECommerceService";
+							//Add the AccessKeyId (get from the user fact)
+							if (user) {
+								url += "&AWSAccessKeyId=" + user.data.KeyId;
+							} else {// if the KB doesn't contain a user key Id, add one by default
+								url += "&AWSAccessKeyId=15TNKDQJGH6BD0Z4KY02";
+							}
+							//Add the operation Type
+							url +="&Operation=CartCreate";
+							//Add the current version of the API
+							url += "&Version=2008-06-26";
+							//Add item ID
+							url += "&Item.1.ASIN=" + item.data.ASIN;
+							url += "&Item.1.Quantity=" + $F("quantitySelect");
+							
+							//Invoke the service
+	                    	FastAPI.getXML(url, this, function(transport){product.cartCreated(transport, item);}.bind(product));
+						}
+					}
+					
+					Product.prototype.cartCreated = function (transport, item){
+						var xml = transport;
+
+						var message = {id: 'message', data:{message: ""}};
+						
+						//The product is added to the cart,
+						//tell it to the user	
+						if (xml.getElementsByTagName("IsValid")[0].firstChild.nodeValue == "True") {
+							//Check if the product is eligible for shopping
+							if ((xml.getElementsByTagName("Error").length > 0) && 
+								xml.getElementsByTagName("Error")[0].firstChild.firstChild.nodeValue == "AWS.ECommerceService.ItemNotEligibleForCart") {
+								//The product is not elegible
+								message.data.message = "The product is not eligible to be added to the cartt";
+								ScreenEngineFactory.getInstance("ProductDetails").manageData("message", [message], [], "AmazonAddItemToCartService1");
+								return;
+							}
+							//Add the Cart ID to the KB
+							var cart = {id: 'cart',
+										data:{id: xml.getElementsByTagName("CartId")[0].firstChild.nodeValue,
+										HMAC: xml.getElementsByTagName("URLEncodedHMAC")[0].firstChild.nodeValue}};
+							message.data.message = "Product added to the shopping Cart";
+							ScreenEngineFactory.getInstance("ProductDetails").manageData("message", [cart, message], [], "AmazonAddItemToCartService1");
+						} else {
+							message.data.message = "Error adding the product to the cart";
+							ScreenEngineFactory.getInstance("ProductDetails").manageData("message", [message], [], "AmazonAddItemToCartService1");
+						}
+					}
+					
+					Product.prototype.isProductOnCart = function (transport, item, cart, user){
+						var xml = transport;
+						//products node
+						if (xml.getElementsByTagName ("CartItems").length>0) { //There are products on the cart
+								var products = xml.getElementsByTagName ("CartItems")[0];
+								//Product list (ASINs) added to the cart
+								var asins = $A(products.getElementsByTagName ("ASIN"));
+								//Check if the product is already added to the cart
+								var found = false;
+								//product Node
+								var _product; 
+								asins.each (function(asin){
+									if (asin.firstChild.nodeValue == item.ASIN) {
+										found = true; //The product is in the list
+										_product = asin.parentNode; //product = CartItem
+									}
+								});
+						} else {//If there aren't elements, the product will not be on the list
+							found = false;
+						}
+						if (found) { 
+							//If the product is already added to the cart,
+							//increase the number of items of that product (CartModify)			
+							//Get the item quantity
+							var prevQuantity = _product.getElementsByTagName("Quantity")[0].firstChild.nodeValue;
+							//Add the new quantity to the previously stored
+							var quantity = parseInt($F("quantitySelect")) + parseInt (prevQuantity);
+							
+							//Get the product Id within the cart
+							var productId = _product.getElementsByTagName("CartItemId")[0].firstChild.nodeValue;	
+		
+							//Create the call
+							var url = "http://webservices.amazon.com/onca/xml?Service=AWSECommerceService";
+							//Add the AccessKeyId (get from the user fact)
+							if (user) {
+								url += "&AWSAccessKeyId=" + user.data.KeyId;
+							} else {// if the KB doesn't contain a user key Id, add one by default
+								url += "&AWSAccessKeyId=15TNKDQJGH6BD0Z4KY02";
+							}
+							//Add the operation Type
+							url +="&Operation=CartModify";
+							//Add the current version of the API
+							url += "&Version=2008-06-26";
+							//Add item ID
+							url += "&CartId=" + cart.data.id;
+							url += "&HMAC=" + cart.data.HMAC;
+							url += "&Item.1.CartItemId=" + productId;
+							url += "&Item.1.Quantity=" + quantity;
+							
+							//Invoke the service
+	                    	FastAPI.getXML(url, this, product.productAdded);
+						} else {
+		                    //Create the call
+							var url = "http://webservices.amazon.com/onca/xml?Service=AWSECommerceService";
+							//Add the AccessKeyId (get from the user fact)
+							if (user) {
+								url += "&AWSAccessKeyId=" + user.data.KeyId;
+							} else {// if the KB doesn't contain a user key Id, add one by default
+								url += "&AWSAccessKeyId=15TNKDQJGH6BD0Z4KY02";
+							}
+							//Add the operation Type
+							url +="&Operation=CartAdd";
+							//Add the current version of the API
+							url += "&Version=2008-06-26";
+							//Add item ID
+							url += "&CartId=" + cart.data.id;
+							url += "&HMAC=" + cart.data.HMAC;
+							url += "&Item.1.ASIN=" + item.data.ASIN;
+							url += "&Item.1.Quantity=" + $F("quantitySelect");
+							
+							//Invoke the service
+	                    	FastAPI.getXML(url, this, product.productAdded);
+						}
+					}
+
+					Product.prototype.productAdded = function (transport){
+						var xml = transport;
+						var message = {id: 'message', data:{message: ""}};
+						//Check if the product is eligible for shopping
+						if ((xml.getElementsByTagName("Error").length > 0) && 
+							xml.getElementsByTagName("Error")[0].firstChild.firstChild.nodeValue == "AWS.ECommerceService.ItemNotEligibleForCart") {
+							//The product is not elegible
+							message.data.message = "The product is not eligible to be added to the cart";
+						} else {
+							//If the product is added to the cart,
+							//tell it to the user	
+							if (xml.getElementsByTagName("IsValid")[0].firstChild.nodeValue == "True") {
+								message.data.message = "Product added to the shopping Cart";
+							} else { 
+								message.data.message = "Error adding the product to the cart";
+							}
+						}
+						ScreenEngineFactory.getInstance("ProductDetails").manageData("message", [message], [], "AmazonAddItemToCartService1");
+					}
+
+//////////////Generated code
+					Product.prototype.restart = function (){
+						ScreenEngineFactory.getInstance("ProductDetails").restart();
+					}
+
+//////////////Piping
+				    Product.prototype.piping1 = function (){
+				    	var item = ScreenEngineFactory.getInstance("ProductDetails").searchFact('item', null);
+				    	var user = ScreenEngineFactory.getInstance("ProductDetails").searchFact('user', null);
+				    	product.searchProduct(item, user);
+					}
+
+				    Product.prototype.piping2 = function (){
+				    	var p = ScreenEngineFactory.getInstance("ProductDetails").searchFact('product', "AmazonItemLookupService1");
+				    	product.showProductInfo(p);
+					}
+
+				    Product.prototype.piping3 = function (){
+				    	var item = ScreenEngineFactory.getInstance("ProductDetails").searchFact('item', null);
+				    	var cart = ScreenEngineFactory.getInstance("ProductDetails").searchFact('cart', null);
+				    	var user = ScreenEngineFactory.getInstance("ProductDetails").searchFact('user', null);
+				    	product.add(item, cart, user);
+					}
+
+				    Product.prototype.piping4 = function (){
+				    	var message = ScreenEngineFactory.getInstance("ProductDetails").searchFact('message', "AmazonItemLookupService1");
+				    	product.showMessage(message);
+					}
+
+				    Product.prototype.piping5 = function (){
+				    	var message = ScreenEngineFactory.getInstance("ProductDetails").searchFact('message', "AmazonAddItemToCartService1");
+				    	product.showMessage(message);
+					}
+					
+					
+					var product = new Product();
+
+					var productrules = [
+											{trigger: {id: "_onload"}, condition: [], actions: [product.init]},
+											{trigger: {id: "_onload"}, condition: [{id:"item", positive:true}], actions: [product.piping1]},
+											{trigger: {id: "newProduct", origin:"AmazonItemLookupService1"}, condition: [{id:"product", origin: "AmazonItemLookupService1", positive:true}], actions: [product.piping2]},
+											{trigger: {id: "addToCart", origin:"amazonProductForm1"}, condition: [{id:"item", positive:true}], actions: [product.piping3]},
+											{trigger: {id: "message", origin:"AmazonItemLookupService1"}, condition: [{id:"message", origin:"AmazonItemLookupService1", positive:true}], actions: [product.piping4]},
+											{trigger: {id: "message", origin:"AmazonAddItemToCartService1"}, condition: [{id:"message", origin:"AmazonAddItemToCartService1", positive:true}], actions: [product.piping5]}
+										];
+					
+					var productposts = [
+											{id:"cart", origin:"AmazonAddItemToCartService1", name: "http://TODO/amazon#shoppingCart"}
+										];
+					  
+					var productdictionary = [
+											{origin:null, factId:"item", name:"http://TODO/amazon#item"},
+											{origin:null, factId:"user", name:"http://TODO/amazon#user"},
+											{origin:null, factId:"cart", name:"http://TODO/amazon#shoppingCart"},
+											{origin:"AmazonItemLookupService1", factId:"product", name:"http://TODO/amazon#product"},
+											{origin:"AmazonItemLookupService1", factId:"message", name:"http://TODO/amazon#message"}, 
+											{origin:"AmazonAddItemToCartService1", factId:"message", name:"http://TODO/amazon#message"}
+									];
+					
+					ScreenEngineFactory.getInstance("ProductDetails").setEngine(ScreenflowEngineFactory.getInstance(), productrules, productposts, productdictionary);
+
+					ScreenflowEngineFactory.getInstance().addScreenLoader("ProductDetails", product.restart);
+		        </script>
+		    </head>
+		    <body>
+		        <div id="bodyDivDetails">
+		        	<div id="leftColumn">
+				     	<div id="productImage"></div>
+						<div id="cart">
+							<div id="quantity">Quantity:  	<select id="quantitySelect">
+										  	<option value ="1">1</option>
+										  	<option value ="2">2</option>
+										  	<option value ="3">3</option>
+										  	<option value ="4">4</option>
+										  	<option value ="5">5</option>	
+										 	<option value ="6">6</option>
+										  	<option value ="7">7</option>	
+										  	<option value ="8">8</option>		
+											<option value ="9">9</option>	
+										  	<option value ="10">10</option>						
+											</select>
+							</div>
+							<input border="0" height="27" width="160" type="image" id="addToCart" alt="Add to Shopping Cart" src="http://piccolo.ls.fi.upm.es/amazonScreens/images/addToCart.gif"/>
+						</div>       	
+					</div>
+					<div id="rightColumn">
+						<div id="productTitle" style="font-size: 20px; padding: 2px; color:#F8A704; font-weight: bold; font-style: italic; font-family:Arial,Helvetica,sans-serif; overflow: hidden;"></div>
+						<div id="infoArea">
+							<span id="titleInfo">
+								<div class="title">Product Type: </div>
+								<div class="title">Price: </div>
+								<div class="title">Product Site: </div>
+								<div class="title" id="titleInfo1"></div>
+							</span>
+							<span id="valueInfo">
+								<div id="pGroup" class="info"></div>
+								<div id="price" class="info"></div>
+								<div id="url" class="info"></div>
+								<div id="info1" class="info"></div>
+							</span>
+							<div id="moreInfo">
+								<div class="title" id="moreInfoTitle"></div>
+								<div id="moreInfoText">
+								</div>
+							</div>
+						</div>
+					</div>
+		        </div>
+		    </body>
+		</html>
+   </object>
+</div>
+
+<div id="ShoppingCart" class="tabcontentHide">
+   <object id="ShoppingCart_obj" width="100%" height="100%">
+       <html>
+		    <head>
+		        <meta http-equiv="Content-Type" content="application/xhtml+xml; charset=UTF-8" />
+		        <link type="text/css" rel="stylesheet" href="http://piccolo.ls.fi.upm.es/amazonScreens/style/table.css" />
+		        <link type="text/css" rel="stylesheet" href="http://piccolo.ls.fi.upm.es/amazonScreens/style/screen.css" />
+				<style type="text/css">
+					#loadingImgCart{
+						margin:auto;	
+					}
+					#info{
+						margin:auto;
+						font-family:Arial,Helvetica,sans-serif;
+						font-style:italic;
+						padding-top: 10px;
+						color: #AAA;
+					}
+					.productTitle{
+						font-weight:bold;
+						font-style:normal;
+					}
+					#buttonContainerDivCart{
+						margin-top: 5px;
+						display:none;
+					}
+					#amazonImage{
+						position:absolute;
+						right:0px;
+						top:3px;
+					}
+				</style>
+		        <script language="JavaScript">
+		        		
+		        	function ShoppingCart(){ };
+
+////////////////////amazonShoppingCartForm1
+/**{
+	uri:"http://TODO/form#amazonShoppingCart",
+	id:"amazonShoppingCartForm1",
+	actions: [{action:"init", preconditions:[]},
+	            {action:"showTable", preconditions:[{id:"list", name:"http://TODO/amazon#productList", positive:true}]}],
+	postconditions: [{id:"updateCart", name:"http://TODO/amazon#updateCart", positive:true},
+	                 {id:"purchase", name:"http://TODO/amazon#purchase", positive:true},
+	                 {id:"item", name:"http://TODO/amazon#item", positive:true}],
+	triggers:["purchase", "clearCart", "updateCart", "newItem"]
+}**/	
+		            ShoppingCart.prototype.init = function (){
+		                $("clearButton").observe("click", shoppingCart.clearCart);
+		                $("checkoutButton").observe("click", shoppingCart.checkout);
+						$("updateButton").observe("click", shoppingCart.updateCart);
+						$$('input[type="button"]').each(function(element){
+							element.observe("mouseover",function(event){
+								var e = Event.element(event);
+								e.setStyle({cursor:"pointer"});
+							});
+						
+						});
+						var tableBody = $("listBodyCart");
+						tableBody.update("");
+						if (!$("loadingImgCart")) {
+							$("info").update('<img id="loadingImgCart" src="http://piccolo.ls.fi.upm.es/amazonScreens/images/ajaxLoader.gif" />');
+						}
+						$("loadingImgCart").show();
+						$("buttonContainerDivCart").hide();
+		            }
+		
+	            	ShoppingCart.prototype.clearCart = function (){
+		            	ScreenEngineFactory.getInstance("ShoppingCart").manageData("clearCart", [],[], "amazonShoppingCartForm1");	
+					}
+
+	            	ShoppingCart.prototype.showProgress = function (){
+		                $("loadingImgCart").show();
+		            }
+	
+		            ShoppingCart.prototype.showTable = function (l){
+		            	
+		                if ($("loadingImgCart")) {
+		                	$("loadingImgCart").hide();
+						}
+						var tableBody = $("listBodyCart");
+						tableBody.update("");
+						if (l.data.productList.length == 0) {//Empty shopping cart
+							$("info").update("Your Shopping Cart is empty");
+							$("buttonContainerDivCart").hide();
+							return;
+						} else {
+							$("info").update("");
+						}
+						$("buttonContainerDivCart").setStyle({display:"inline"});
+		                var templateString = '<tr><td><a onclick="shoppingCart.productDetail(\'#{ASIN}\',\'#{title}\');">#{title}</a></td>';
+						templateString += '<td>#{price}</td>';
+						templateString += '<td><input type="hidden" id="id"';
+						templateString += 'value="#{id}"/><input type="text" maxlength="3" size="2" id="itemQuantity"';
+						templateString += 'value="#{quantity}"/></td></tr>';
+		                var rowTemplate = new Template(templateString);
+		
+		                for (var i = 0; i < l.data.productList.length; i++) {
+		                    if (l.data.productList[i]) { //only if the product table is fetched
+		                        tableBody.innerHTML += rowTemplate.evaluate(l.data.productList[i]);
+		                    }
+		                }
+		
+						//Last row, including subtotal
+						var lastRow = "<tr><th style='text-align:right'>Subtotal</th><th>";
+						lastRow += l.data.subTotal;
+						lastRow += "</th><th>";
+						lastRow += l.data.itemTotal;
+						lastRow += "</th></tr>";
+						lastRow += '<input type="hidden" id="purchaseURL" value="'+l.data.purchaseURL+'"/>';
+						tableBody.innerHTML += lastRow;
+		            }
+		            
+		            ShoppingCart.prototype.showMessage = function (message){
+						alert(message.data.message);
+					}
+
+		            ShoppingCart.prototype.checkout = function (){
+						var purchase = {id:'purchase', data:{url: $F("purchaseURL")}};
+						ScreenEngineFactory.getInstance("ShoppingCart").manageData("purchase", [purchase], [], "amazonShoppingCartForm1");
+					}
+		            
+		            //Change the current Item Fact
+					ShoppingCart.prototype.productDetail = function (_ASIN,_title){
+						var item = {id: 'item', data:{ASIN: _ASIN, title: _title}};
+						ScreenEngineFactory.getInstance("ShoppingCart").manageData("newItem", [item], [], "amazonShoppingCartForm1");
+					}
+					
+					ShoppingCart.prototype.updateCart = function (){
+						var updateCart = {id: "updateCart", data:{list: new Array()}};
+						var ids = $("id");
+						var quantities = $("itemQuantity");
+						if(!ids.length){
+						  ids = [ids];
+						  quantities = [quantities];
+						}
+						for (var i=0; i < ids.length; i++){
+							updateCart.data.list.push({id: $F(ids[i]), quantity: $F(quantities[i])});
+						}
+		            	ScreenEngineFactory.getInstance("ShoppingCart").manageData("updateCart", [updateCart], [], "amazonShoppingCartForm1");		
+					}
+					
+////////////////AmazonSearchCartService1
+/**{
+	uri:"http://TODO/service#AmazonSearchCartService",
+	id:"AmazonSearchCartService1",
+	actions: [{action:"fetch", preconditions:[{id:"cart", name:"http://TODO/amazon#shoppingCart", positive:true}], uses:[{id:"user", name:"http://TODO/amazon#shoppingCart"}]}],
+	postconditions: [{id:"cartList", name:"http://TODO/amazon#cartList", positive:false},
+	                 {id:"message", name:"http://TODO/amazon#message", positive:false}],
+	triggers:[]
+}**/
+					ShoppingCart.prototype.fetch = function (cart, user){
+		                //Get the facts to invoke the service
+		                //TODO add error handling
+		                //Invoke the service CartGet to retrieve the product list
+		                var url = "http://webservices.amazon.com/onca/xml?Service=AWSECommerceService";
+						//Add the AccessKeyId (get from the user fact)
+						if (user) {
+							url += "&AWSAccessKeyId=" + user.data.KeyId;
+						} else {// if the KB doesn't contain a user key Id, add one by default
+							url += "&AWSAccessKeyId=15TNKDQJGH6BD0Z4KY02";
+						}
+						//Add the operation Type
+						url +="&Operation=CartGet";
+						//Add the current version of the API
+						url += "&Version=2008-06-26";
+						//Add item ID
+						url += "&CartId=" + cart.data.id;
+						url += "&HMAC=" + cart.data.HMAC;
+						
+						//Create the call
+		                FastAPI.getXML(url, this, shoppingCart.addToList);
+		            }
+		            
+		            ShoppingCart.prototype.addToList = function (transport){
+		            	var l = {id: "list", data:{productList: new Array(), subTotal: 0, itemTotal: 0, purchaseURL: null}};
+		                var xml = transport;
+		                //Check if the service returned an error
+		                if (xml.getElementsByTagName("IsValid")[0].childNodes[0].nodeValue == "False") {
+		                	var message = {id: "message", data:{message: xml.getElementsByTagName("Message")[0].childNodes[0].nodeValue}};
+		                	ScreenEngineFactory.getInstance("ShoppingCart").manageData(null, [message], [], "SearchCartService");
+		                } else { //Correct response, create the result List
+		                	if (xml.getElementsByTagName("CartItems").length > 0) { //There are products in the cart
+								var list = xml.getElementsByTagName("CartItems")[0].getElementsByTagName("CartItem");
+								//Fill the table, 1 row per item
+								$A(list).each(function(item){
+									if (item.getElementsByTagName("Title").length > 0) {
+										var title = item.getElementsByTagName("Title")[0].firstChild.nodeValue;
+									}
+									if (item.getElementsByTagName("ASIN").length > 0) {
+										var ASIN = item.getElementsByTagName("ASIN")[0].firstChild.nodeValue;
+									}
+									if (item.getElementsByTagName("CartItemId").length > 0) {
+										var ID = item.getElementsByTagName("CartItemId")[0].firstChild.nodeValue;
+									}
+									if (item.getElementsByTagName("Price").length > 0) {
+										var price = item.getElementsByTagName("Price")[0].getElementsByTagName("FormattedPrice")[0].firstChild.nodeValue;
+									}
+									if (item.getElementsByTagName("Quantity").length > 0) {
+										var quantity = item.getElementsByTagName("Quantity")[0].firstChild.nodeValue;
+									}
+									var row = {
+										title: title,
+										price: price,
+										ASIN: ASIN,
+										id: ID,
+										quantity: quantity
+									};
+									l.data.itemTotal += parseInt (quantity);
+									l.data.productList.push(row);
+								});
+							}
+							if (xml.getElementsByTagName("SubTotal").length>0) {
+								l.data.subTotal = xml.getElementsByTagName("SubTotal")[0].getElementsByTagName("FormattedPrice")[0].firstChild.nodeValue;
+							} else {
+								l.data.subTotal = "$0.0";
+							}
+							if (xml.getElementsByTagName("PurchaseURL").length>0) {
+								l.data.purchaseURL = xml.getElementsByTagName("PurchaseURL")[0].firstChild.nodeValue;
+							}
+		                    ScreenEngineFactory.getInstance("ShoppingCart").manageData("list", [l], [], "AmazonSearchCartService1");
+		                }
+		            }
+		            
+		            ShoppingCart.prototype.onError = function (transport){
+		                //alert(transport.responseText);
+		            }
+		            
+////////////////AmazonClearCartService1
+/**{
+	uri:"http://TODO/service#AmazonClearCartService",
+	id:"AmazonClearCartService1",
+	actions: [{action:"clearService", preconditions:[{id:"cart", name:"http://TODO/amazon#shoppingCart", positive:true}]}],
+	postconditions: [{id:"purchase", name:"http://TODO/amazon#purchase", positive:false}],
+	triggers:["clearedCart"]
+}**/
+		            ShoppingCart.prototype.clearService = function (cart, user){
+						//Ask the user to confirm the operation
+						if (confirm("Are you sure you want to empty your Shopping Cart?")) {
+							//Create the call
+							var url = "http://webservices.amazon.com/onca/xml?Service=AWSECommerceService";
+							//Add the AccessKeyId (get from the user fact)
+							if (user) {
+								url += "&AWSAccessKeyId=" + user.data.KeyId;
+							} else {// if the KB doesn't contain a user key Id, add one by default
+								url += "&AWSAccessKeyId=15TNKDQJGH6BD0Z4KY02";
+							}
+							//Add the operation Type
+							url +="&Operation=CartClear";
+							//Add the current version of the API
+							url += "&Version=2008-06-26";
+							//Add item ID
+							url += "&CartId=" + cart.data.id;
+							url += "&HMAC=" + cart.data.HMAC;
+							
+							//Invoke the service
+		                   	FastAPI.getXML(url, this, shoppingCart.clear);
+						}	
+					}
+		
+		            ShoppingCart.prototype.clear = function (){
+		            	ScreenEngineFactory.getInstance("ShoppingCart").manageData("cartCleared", [],["purchase"], "AmazonClearCartService1");	
+					}
+					
+////////////////AmazonUpdateCartService1
+/**{
+	uri:"http://TODO/service#AmazonUpdateCartService",
+	id:"AmazonUpdateCartService1",
+	actions: [{action:"updateService", preconditions:[{id:"cart", name:"http://TODO/amazon#shoppingCart", positive:true},
+	                                                  {id:"update", name:"http://TODO/amazon#updateCart", positive:true}],
+	                                   uses:[id:"user", name:"http://TODO/amazon#user"]}],
+	postconditions: [{id:"purchase", name:"http://TODO/amazon#purchase", positive:false}],
+	triggers:["clearedCart"]
+}**/
+					ShoppingCart.prototype.updateService = function (cart, update, user){
+						//Create the call
+						var url = "http://webservices.amazon.com/onca/xml?Service=AWSECommerceService";
+						//Add the AccessKeyId (get from the user fact)
+						if (user) {
+							url += "&AWSAccessKeyId=" + user.data.KeyId;
+						} else {// if the KB doesn't contain a user key Id, add one by default
+							url += "&AWSAccessKeyId=15TNKDQJGH6BD0Z4KY02";
+						}
+						//Add the operation Type
+						url +="&Operation=CartModify";
+						//Add the current version of the API
+						url += "&Version=2008-06-26";
+						//Add item ID
+						url += "&CartId=" + cart.data.id;
+						url += "&HMAC=" + cart.data.HMAC;
+						//Build the parameter list
+						for (var i=0; i < update.data.list.length; i++){
+							url += "&Item." + (i+1) + ".CartItemId=" + update.data.list[i]["id"];
+							url += "&Item." + (i+1) + ".Quantity=" + update.data.list[i]["quantity"];
+						}
+						//Create the call
+	                   	FastAPI.getXML(url, this, shoppingCart.update);
+					}
+		
+					ShoppingCart.prototype.update = function (){
+		            	ScreenEngineFactory.getInstance("ShoppingCart").manageData("cartUpdated", [],["purchase"], "AmazonUpdateCartService1");
+					}
+
+//////////////Generated code
+		            ShoppingCart.prototype.restart = function (){
+						ScreenEngineFactory.getInstance("ShoppingCart").restart();
+					}
+
+//////////////Piping
+					ShoppingCart.prototype.piping1 = function (){
+						var cart = ScreenEngineFactory.getInstance("ShoppingCart").searchFact('cart', null);
+						var user = ScreenEngineFactory.getInstance("ShoppingCart").searchFact('user', null);
+						shoppingCart.fetch(cart, user);
+					}
+
+					ShoppingCart.prototype.piping2 = function (){
+						var list = ScreenEngineFactory.getInstance("ShoppingCart").searchFact('list', "AmazonSearchCartService1");
+						shoppingCart.showTable(list);
+					}
+
+					ShoppingCart.prototype.piping3 = function (){
+						var cart = ScreenEngineFactory.getInstance("ShoppingCart").searchFact('cart', null);
+						var user = ScreenEngineFactory.getInstance("ShoppingCart").searchFact('user', null);
+						shoppingCart.clearService(cart, user);
+					}
+
+					ShoppingCart.prototype.piping4 = function (){
+						var cart = ScreenEngineFactory.getInstance("ShoppingCart").searchFact('cart', null);
+						var update = ScreenEngineFactory.getInstance("ShoppingCart").searchFact('updateCart', "amazonShoppingCartForm1");
+						var user = ScreenEngineFactory.getInstance("ShoppingCart").searchFact('user', null);
+						shoppingCart.updateService(cart, update, user);
+					}
+
+					ShoppingCart.prototype.piping5 = function (){
+						var message = ScreenEngineFactory.getInstance("ShoppingCart").searchFact('message', "AmazonSearchCartService1");
+						shoppingCart.showMessage(message);
+					}
+
+					ShoppingCart.prototype.piping6 = function (){
+						var message = ScreenEngineFactory.getInstance("ShoppingCart").searchFact('message', "AmazonClearCartService1");
+						shoppingCart.showMessage(message);
+					}
+
+					ShoppingCart.prototype.piping7 = function (){
+						var message = ScreenEngineFactory.getInstance("ShoppingCart").searchFact('message', "AmazonUpdateCartService1");
+						shoppingCart.showMessage(message);
+					}
+
+		            var shoppingCart = new ShoppingCart();
+		
+		            var shoppingCartrules = [
+												{trigger: {id:"_onload"}, condition: null, actions: [shoppingCart.init]},
+												{trigger: {id:"_onload"}, condition: [{id:"cart", positive:true}], actions: [shoppingCart.piping1]},
+												{trigger: {id:"cartCleared", origin:"AmazonClearCartService1"}, condition: [{id:"cart", positive:true}], actions: [shoppingCart.piping1]},
+												{trigger: {id:"cartUpdated", origin:"AmazonUpdateCartService1"}, condition: [{id:"cart", positive:true}], actions: [shoppingCart.piping1]},
+												{trigger: {id:"list", origin:"AmazonSearchCartService1"}, condition: [{id:"list", origin:"AmazonSearchCartService1", positive:true}], actions: [shoppingCart.piping2]},
+												{trigger: {id:"clearCart", origin:"amazonShoppingCartForm1"}, condition: [{id:"cart", positive:true}], actions: [shoppingCart.piping3]},
+												{trigger: {id:"updateCart", origin:"amazonShoppingCartForm1"}, condition: [{id:"cart", positive:true}, {id:"updateCart", origin: "amazonShoppingCartForm1", positive:true}], actions: [shoppingCart.piping4]},
+												{trigger: {id:"message", origin:"AmazonSearchCartService1"}, condition: [{id:"message", origin:"AmazonSearchCartService1",  positive:true}], actions: [shoppingCart.piping5]},
+												{trigger: {id:"message", origin:"AmazonClearCartService1"}, condition: [{id:"message", origin:"AmazonClearCartService1",  positive:true}], actions: [shoppingCart.piping6]},
+												{trigger: {id:"message", origin:"AmazonUpdateCartService1"}, condition: [{id:"message", origin:"AmazonUpdateCartService1",  positive:true}], actions: [shoppingCart.piping7]}
+											];
+					
+					var shoppingCartposts = [
+												{id:"purchase", name: "http://TODO/amazon#purchase", origin: "AmazonClearCartService1"},
+												{id:"purchase", name: "http://TODO/amazon#purchase", origin: "AmazonUpdateCartService1"},
+												{id:"purchase", name: "http://TODO/amazon#purchase", origin: "amazonShoppingCartForm1"},
+												{id: "item", name: "http://TODO/amazon#item", origin: "amazonShoppingCartForm1"}
+											];
+
+					var shoppingCartdictionary = [
+												{factId:"cart", name:"http://TODO/amazon#shoppingCart"},
+												{factId:"user", name:"http://TODO/amazon#user"},
+												{origin:"AmazonItemLookupService1", factId:"product", name:"http://TODO/amazon#product"},
+												{origin:"AmazonItemLookupService1", factId:"message", name:"http://TODO/amazon#message"}, 
+												{origin:"AmazonAddItemToCartService1", factId:"message", name:"http://TODO/amazon#message"}
+										];
+									
+					ScreenEngineFactory.getInstance("ShoppingCart").setEngine(ScreenflowEngineFactory.getInstance(), shoppingCartrules, shoppingCartposts, shoppingCartdictionary);
+		
+					ScreenflowEngineFactory.getInstance().addScreenLoader("ShoppingCart", shoppingCart.restart);
+							
+		        </script>
+		    </head>
+		    <body>
+		        <div id="bodyDiv">
+		        	<span id="amazonImage"><img src="http://piccolo.ls.fi.upm.es/amazonScreens/images/amazon.png" /></span>
+		            <h1 id="title">Shopping Cart</h1>
+		            <div id="listDivCart">
+		                <table>
+		                    <thead>
+		                        <tr>
+		                            <th style="width:70%;-moz-border-radius: 13px 0px 0px 0px;">Shopping Cart Items</th>
+		                            <th style="width:10%">Price</th>
+		                            <th style="width:10%;-moz-border-radius: 0px 13px 0px 0px;">Quantity</th>
+		                        </tr>
+		                    </thead>
+		                    <tbody id="listBodyCart">
+		                    	<tr><td>&nbsp;</td></tr>
+								<tr><td>&nbsp;</td></tr>
+								<tr><td>&nbsp;</td></tr>
+								<tr><td>&nbsp;</td></tr>
+		                    </tbody>
+		                </table>
+		               <div id="info"><img id="loadingImgCart" src="http://piccolo.ls.fi.upm.es/amazonScreens/images/ajaxLoader.gif" /></div>		
+		               <div id="buttonContainerDivCart">
+		                    <input type="button" id="clearButton" class="button" value="Clear Cart"/>
+							<input type="button" id="updateButton" class="button" value="Update Cart"/>
+							<input type="button" id="checkoutButton" class="button" value="Proceed to Checkout"/>
+		               </div>
+		            </div>
+		        </div>
+		    </body>
+		</html>
+   </object>
+</div>
+
+<div id="Order" class="tabcontentHide">
+    <object id="Order_obj" width="100%" height="100%">
+        <html>
+		    <head>
+		        <script language="JavaScript">
+		        	function Order(){};
+
+////////////////////amazonOrderForm1
+/**{
+	uri:"http://TODO/form#amazonOrder",
+	id:"amazonOrderForm1",
+	actions: [{action:"init", preconditions:[{id:"purchase", name:"http://TODO/amazon#purchase", positive:true}], uses:[]}],
+	postconditions: [],
+	triggers:[]
+}**/
+		        	Order.prototype.init = function (purchase){
+		        		var obj = new Element ('object',{type: "text/html", data: purchase.data.url, standby: "Loading...", width: "100%",  height: "100%"});
+						$("bodyDivOrder").update(obj);
+					}
+
+////////////////////Generated Code
+		        	Order.prototype.restart = function (){
+						ScreenEngineFactory.getInstance("Order").restart();
+					}
+
+		        	Order.prototype.piping1 = function (){
+		        		var purchase = ScreenEngineFactory.getInstance("Order").searchFact("purchase", null);
+						order.init(purchase);
+					}
+					
+					var order = new Order();
+
+					var orderrules = [
+										{trigger: {id:"_onload"}, condition: [{id:"purchase", positive:true}], actions: [order.piping1]}
+									];
+					
+					var orderposts = [];
+
+					var orderdictionary = [
+											{factId:"purchase", name:"http://TODO/amazon#purchase"}
+											];
+					
+					ScreenEngineFactory.getInstance("Order").setEngine(ScreenflowEngineFactory.getInstance(), orderrules, orderposts, orderdictionary);
+
+					ScreenflowEngineFactory.getInstance().addScreenLoader("Order", order.restart);
+		        </script>
+		    </head>
+		    <body>
+		        <div id="bodyDivOrder">
+		        </div>
+		    </body>
+		</html>
+   </object>
+</div>
+
+<div id="SuggestionList" class="tabcontentHide">
+    <object id="SuggestionList_obj" width="100%" height="100%">
+        <html>
+			<head>
+		        <meta http-equiv="Content-Type" content="application/xhtml+xml; charset=UTF-8">
+				<link type="text/css" rel="stylesheet" href="http://piccolo.ls.fi.upm.es/amazonScreens/style/table.css" />
+		        <link type="text/css" rel="stylesheet" href="http://piccolo.ls.fi.upm.es/amazonScreens/style/screen.css" />
+				<style type="text/css">
+					#pagesSuggestion{
+						color:#FEBF43;
+						font-weight: bold;
+						padding: 10px;
+					}
+					#previousButtonSuggestion, #nextButtonSuggestion {
+						visibility:hidden;
+					}
+					#loadingImgSuggestion{
+						margin:auto;
+						padding-top: 10px;
+					}
+					#like{
+						padding: 5px;
+						color: #777777;
+					}
+					.productTitle{
+						font-weight:bold;
+						font-style:normal;
+					}
+					#amazonImage{
+						position:absolute;
+						right:0px;
+						top:3px;
+					}
+				</style>
+		        <script language="JavaScript">
+		        
+		        	function SuggestionList(){
+						this.list;
+			        };
+
+//////////////amazonSuggestionListForm1
+/**{
+	uri:"http://TODO/form#amazonSuggestionList",
+	id:"amazonSuggestionListForm1",
+	actions: [{action:"init", preconditions:[]},
+	          {action:"showTable", preconditions:[{id:"list", name:"http://TODO/amazon#suggestionList", positive:true}]}],
+	postconditions: [{id:"item", name:"http://TODO/amazon#item", positive:true}],
+	triggers:["item"]
+}**/
+		            SuggestionList.prototype.init = function (item){
+		                $("nextButtonSuggestion").observe("click", suggestionList.nextPage);
+		                $("previousButtonSuggestion").observe("click", suggestionList.previousPage);
+						$$('input[type="button"]').each(function(element){
+							element.observe("mouseover",function(event){
+								var e = Event.element(event);
+								e.setStyle({cursor:"pointer"});
+							});
+						
+						});
+						$$(".productTitle").each(function(element){
+							element.update(item.data.title);
+						});
+						var tableBody = $("listBodySuggestion");
+		                tableBody.update("");
+			            suggestionList.showProgress();
+		            }
+		            
+		            SuggestionList.prototype.showTable = function (l){
+		            	suggestionList.list = l;
+		            	var tableBody = $("listBodySuggestion");
+		                tableBody.update("");
+		                
+		            	if ($("loadingImgSuggestion")) {
+		                	$("loadingImgSuggestion").hide();
+		                }
+		                var templateString = '<tr><td>#{title}</td><td>#{price}</td><td>#{pGroup}</td>';
+		                templateString += '<td style="border-right:none;"><input type="button" onclick="suggestionList.productDetail(this,\'#{ASIN}\');"';
+						templateString += ' onmouseover="this.setStyle({cursor:\'pointer\'});" value="Select"/></td></tr>';
+		                var rowTemplate = new Template(templateString);
+		                
+		                var tableBody = $("listBodySuggestion");
+		                for (var i = 5 * l.data.currentPage; i < 5 * (l.data.currentPage + 1); i++) { //print the appropriate elements
+		                    if (l.data.productList[i]) { //only if the product table is fetched
+		                        tableBody.innerHTML += rowTemplate.evaluate(l.data.productList[i]);
+		                    }
+		                }
+		                //Update Interface
+		                if (l.data.currentPage < 1 && (5*(l.data.currentPage + 1)< l.data.productList.length)) {
+		                    $("nextButtonSuggestion").setStyle({
+		                        visibility: "visible"
+		                    });
+		                }
+		                else {
+		                    $("nextButtonSuggestion").setStyle({
+		                        visibility: "hidden"
+		                    });
+		                }
+		                if (l.data.currentPage > 0) {
+		                    $("previousButtonSuggestion").setStyle({
+		                        visibility: "visible"
+		                    });
+		                } else {
+		                    $("previousButtonSuggestion").setStyle({
+		                        visibility: "hidden"
+		                    });
+		                }
+		                //update the current page in the interface
+		                if (l.data.productList.length>0) {
+		                	$("curPageSuggestion").update(l.data.currentPage+1);
+		                	$("totalPagesSuggestion").update(Math.ceil(l.data.productList.length/5));
+		                } else {
+		                	$("curPageSuggestion").update("-");
+		                	$("totalPagesSuggestion").update("-");
+		                }
+		            }
+
+		            SuggestionList.prototype.nextPage = function (){
+		            	var tableBody = $("listBodySuggestion");
+		                tableBody.update("");
+		                suggestionList.showProgress();
+		                suggestionList.list.data.currentPage++;
+		            	suggestionList.showTable(suggestionList.list);
+		            }
+		            
+		            SuggestionList.prototype.previousPage = function (){
+		            	var tableBody = $("listBodySuggestion");
+		                tableBody.update("");
+			            suggestionList.showProgress();
+		                suggestionList.list.data.currentPage--;
+		            	suggestionList.showTable(suggestionList.list);
+		            }
+		
+		            SuggestionList.prototype.showMessage = function (message){
+						alert(message.data.message);
+					}
+
+		            SuggestionList.prototype.productDetail = function (nodeElement,_ASIN){
+						list.clearSelected ();
+						//select the element
+						nodeElement.parentNode.parentNode.setStyle({background: "#FFF8E8"});
+						var item = {id: 'item', data:{ASIN: _ASIN, title: nodeElement.parentNode.parentNode.firstChild.firstChild.nodeValue}};
+						ScreenEngineFactory.getInstance("SuggestionList").manageData("item", [item], [], "amazonSuggestionListForm1");
+					}
+					
+					SuggestionList.prototype.clearSelected = function (){
+						$$("tbody tr").each(function (element){
+							element.setStyle ({background: "transparent url(http://piccolo.ls.fi.upm.es/amazonScreens/style/bg_td1.jpg) repeat-x top"});
+						});
+					}
+
+					SuggestionList.prototype.showProgress = function (){
+		                $("loadingImgSuggestion").show();
+		            }
+
+////////////////SuggestionListService1
+/**{
+	uri:"http://TODO/service#SuggestionListService",
+	id:"SuggestionListService1",
+	actions: [{action:"fetch", preconditions:[{id:"item", name:"http://TODO/amazon#item", positive:true}], uses:[{id:"user", name:"http://TODO/amazon#user"}]}],
+	postconditions: [{id:"list", name:"http://TODO/amazon#suggestionList", positive:false},
+	                 {id:"message", name:"http://TODO/amazon#message", positive:false}],
+	triggers:["list"]
+}**/
+		            SuggestionList.prototype.fetch = function (item, user){
+		            	//Add the ItemSearch parameters
+		                var parameters = "";
+						parameters += "&ItemId=" + item.data.ASIN;
+		                
+		                //Base URL of the REST Service
+						var url = "http://webservices.amazon.com/onca/xml?Service=AWSECommerceService";
+						//Add the AccessKeyId (get from the user fact)
+						if (user) {
+							url += "&AWSAccessKeyId=" + user.data.KeyId;
+						} else {// if the KB doesn't contain a user key Id, add one by default
+							url += "&AWSAccessKeyId=15TNKDQJGH6BD0Z4KY02";
+						}
+						//Add the operation Type
+						url +="&Operation=SimilarityLookup";
+						//Add the parameters
+						url += parameters;
+						//Add the responseGroup
+						url +="&ResponseGroup=Medium";
+						//Add the current version of the API
+						url += "&Version=2008-06-26";
+		
+						//Invoke the service
+		                FastAPI.getXML(url, this, suggestionList.addToList);
+		            }
+		            
+		            SuggestionList.prototype.addToList = function (transport){
+		            	var suggestionList = {id: 'list', data:{productList: new Array(), currentPage: 0}};
+		                var xml = transport;
+		                //Check if the service returned an error
+		                if (xml.getElementsByTagName("IsValid")[0].childNodes[0].nodeValue == "False") {
+		                	var message = {name: "message", data:{message: xml.getElementsByTagName("Message")[0].childNodes[0].nodeValue}};
+		                	ScreenEngineFactory.getInstance("SuggestionList").manageData([message],[]);
+		                }
+		                else { //Correct response, create the result List
+		                    var suggestionlist = xml.getElementsByTagName("Items")[0].getElementsByTagName("Item");
+		                    //Fill the table, 1 row per item
+		                    for(var i=0; i < suggestionlist.length;i++){
+			                    var item = suggestionlist[i];
+		                        if (item.getElementsByTagName("Title").length > 0) {
+		                            var title = item.getElementsByTagName("Title")[0].firstChild.nodeValue;
+		                        } else {
+								    var title = "&nbsp;";
+		                        }
+					            if (item.getElementsByTagName("FormattedPrice").length > 0) {
+					                var price = item.getElementsByTagName("FormattedPrice")[0].firstChild.nodeValue;
+					            } else {
+								    var price = "&nbsp;";
+					            }
+					            if (item.getElementsByTagName("ProductGroup").length > 0) {
+					                var pGroup = item.getElementsByTagName("ProductGroup")[0].firstChild.nodeValue;
+					            } else {
+								    var pGroup = "&nbsp;";
+					            }
+		                        if (item.getElementsByTagName("ASIN").length > 0) { 
+		                            var ASIN = item.getElementsByTagName("ASIN")[0].firstChild.nodeValue;
+		                        }
+		                        var row = {
+		                            title: title,
+		                            price: price,
+		                            pGroup: pGroup,
+		                            ASIN: ASIN
+		                        };
+		                        suggestionList.data.productList.push(row);
+		                    }
+		                    ScreenEngineFactory.getInstance("SuggestionList").manageData("suggestionList", [suggestionList], [], "SuggestionListService1");
+		                }
+		            }
+					
+					SuggestionList.prototype.onError = function (transport){
+		                //alert(transport.responseText);
+		            }   
+		            
+//////////////Generated code
+		            SuggestionList.prototype.restart = function (){
+						ScreenEngineFactory.getInstance("SuggestionList").restart();
+					}
+					
+//////////////Piping
+
+					SuggestionList.prototype.piping0 = function (){
+						var item = ScreenEngineFactory.getInstance("SuggestionList").searchFact('item', null);
+						suggestionList.init(item);
+					}
+					
+					SuggestionList.prototype.piping1 = function (){
+						var item = ScreenEngineFactory.getInstance("SuggestionList").searchFact('item', null);
+						var user = ScreenEngineFactory.getInstance("SuggestionList").searchFact('user', null);
+						suggestionList.fetch(item, user);
+					}
+
+					
+					SuggestionList.prototype.piping2 = function (){
+						var list = ScreenEngineFactory.getInstance("SuggestionList").searchFact('list', "SuggestionListService1");
+						suggestionList.showTable(list);
+					}
+
+					SuggestionList.prototype.piping3 = function (){
+						var message = ScreenEngineFactory.getInstance("SuggestionList").searchFact('message', "SuggestionListService1");
+						suggestionList.showMessage(message);
+					}
+					
+		            var suggestionList = new SuggestionList();
+		
+					var suggestionListrules =[
+												{trigger: {id: "_onload"}, condition: [{id:"item", origin: null, positive:true}], actions: [suggestionList.piping0]},
+												{trigger: {id: "_onload"}, condition: [{id:"item", origin: null, positive:true}], actions: [suggestionList.piping1]},
+												{trigger: {id: "suggestionList", origin: "SuggestionListService1"}, condition: [{id:"list", origin:"SuggestionListService1", positive:true}], actions: [suggestionList.piping2]},
+												{trigger: {id: "message", origin: "SuggestionListService1"}, condition: [{id:"message", origin:"SuggestionListService1", positive:true}], actions: [suggestionList.piping3]}
+											];
+					
+					var suggestionListposts = [
+												{id:"item", name:"http://TODO/amazon#item", origin: "amazonSuggestionListForm1"}
+												];
+
+					var suggestionListdictionary = [
+													{factId:"user", name:"http://TODO/amazon#user"},
+													{factId:"item", name:"http://TODO/amazon#item"},
+													{origin:"SuggestionListService1", factId:"list", name:"http://TODO/amazon#list"},
+													{origin:"SuggestionListService1", factId:"message", name:"http://TODO/amazon#message"}
+											];
+					
+					ScreenEngineFactory.getInstance("SuggestionList").setEngine(ScreenflowEngineFactory.getInstance(), suggestionListrules, suggestionListposts, suggestionListdictionary);
+		
+					ScreenflowEngineFactory.getInstance().addScreenLoader("SuggestionList", suggestionList.restart);
+					
+		        </script>
+		    </head>
+		    <body>
+		        <div id="bodyDiv">
+		        	<span id="amazonImage"><img src="http://piccolo.ls.fi.upm.es/amazonScreens/images/amazon.png" /></span>
+		            <h1 id="title">Related products to</h1>
+					<h1 id="title"><span class="productTitle"></span></h1>
+					<div id="like">Customers who bought <span class="productTitle"></span>, also bought ...</div>
+		            <div id="listDiv">
+		                <table>
+		                    <thead>
+		                        <tr>
+		                            <th style="width: 60%; -moz-border-radius-topleft: 13px; -moz-border-radius-topright: 0px; -moz-border-radius-bottomright: 0px; -moz-border-radius-bottomleft: 0px;">Title</th>
+		                            <th style="width: 10%;">Price</th>
+		                            <th style="width: 20%;">Product Group</th>
+		                            <th style="width: 10%; -moz-border-radius-topleft: 0px; -moz-border-radius-topright: 13px; -moz-border-radius-bottomright: 0px; -moz-border-radius-bottomleft: 0px;">&nbsp;</th>
+		                        </tr>
+		                    </thead>
+		                    <tbody id="listBodySuggestion">
+	                            <tr><td>&nbsp;</td></tr>
+	                            <tr><td>&nbsp;</td></tr>
+	                            <tr><td>&nbsp;</td></tr>
+	                            <tr><td>&nbsp;</td></tr>
+	                            <tr><td>&nbsp;</td></tr>
+				    		</tbody>
+		                </table>
+		                <img style="display: none;" id="loadingImgSuggestion" src="http://piccolo.ls.fi.upm.es/amazonScreens/images/ajaxLoader.gif">
+		                <div id="buttonContainerDiv">
+		                    <input style="visibility: hidden;" id="previousButtonSuggestion" class="button" value="&lt;" type="button">
+							<span id="pagesSuggestion">
+							Page <span id="curPageSuggestion">-</span>/<span id="totalPagesSuggestion">-</span>
+							</span><input style="visibility: visible;" id="nextButtonSuggestion" class="button" value="&gt;" type="button">
+		                </div>
+		            </div>
+		        </div>
+		    </body>
+		</html>
+   </object>
+</div>
+
+
+<div id="PriceComparative" class="tabcontentHide">
+    <object id="PriceComparative_obj" width="100%" height="100%">
+        <html>
+			<head>
+		        <meta http-equiv="Content-Type" content="application/xhtml+xml; charset=UTF-8">
+				<link type="text/css" rel="stylesheet" href="http://piccolo.ls.fi.upm.es/amazonScreens/style/table.css" />
+		        <link type="text/css" rel="stylesheet" href="http://piccolo.ls.fi.upm.es/amazonScreens/style/screen.css" />
+				<style type="text/css">
+					#pagesComparative{
+						color:#FEBF43;
+						font-weight: bold;
+						padding: 10px;
+					}
+					#previousButtonComparative, #nextButtonComparative {
+						visibility:hidden;
+					}
+					#loadingImgComparative{
+						margin:auto;
+						padding-top: 10px;
+					}
+					#like{
+						padding: 5px;
+						color: #777777;
+					}
+					.productTitle{
+						font-weight:bold;
+						font-style:normal;
+					}
+					#listDiv tbody td {
+						text-align: justify;
+					}
+					.tiny{
+						font-size:10px;
+					}
+					#amazonImage{
+						position:absolute;
+						right:0px;
+						top:3px;
+					}
+				</style>
+		        <script language="JavaScript">
+		        
+		        	function PriceComparative(){
+						this.list = null;
+						this.item = null;
+			        };
+
+////////////////amazonSearchForm1
+/**{
+	uri:"http://TODO/form#amazonPriceComparative",
+	id:"PriceComparativeForm1",
+	actions: [	{action:"init", preconditions:[{id:"item", name:"http://TODO/amazon#filter", positive:true}], uses:[]},
+	            {action:"showTable", preconditions:[{id:"list", name:"http://TODO/amazon#list", positive:true}], uses:[]},
+	            {action:"showMessage", preconditions:[{id:"message", name:"http://TODO/amazon#message", positive:true}], uses:[]}],
+	postconditions: [	{id:"item", name:"http://TODO/amazon#item", positive:true}],
+	triggers:["offer"]
+}**/
+		            PriceComparative.prototype.init = function (item){
+		                $("nextButtonComparative").observe("click", priceComparative.nextPage);
+		                $("previousButtonComparative").observe("click", priceComparative.previousPage);
+						$$('input[type="button"]').each(function(element){
+							element.observe("mouseover",function(event){
+								var e = Event.element(event);
+								e.setStyle({cursor:"pointer"});
+							});
+						
+						});
+						var tableBody = $("listBodyComparative");
+		                tableBody.update("");
+		                $$(".productTitle").each(function(element){
+							element.update(item.data.title);
+						});
+			            priceComparative.showProgress();
+		            }
+
+		            PriceComparative.prototype.showProgress = function (){
+		                $("loadingImgComparative").show();
+		            }
+		            
+		            PriceComparative.prototype.showTable = function (l){
+		            	priceComparative.list = l;
+						
+		            	if ($("loadingImgComparative")) {
+		                	$("loadingImgComparative").hide();
+		                }
+		
+		                var tableBody = $("listBodyComparative");
+		                tableBody.update("");
+		                
+		                var templateString = '<tr><td><span class="info">#{price}</span> <br /><span class="tiny">You save #{amountSaved} (#{percentageSaved}%)</span></td>';
+						templateString += '<td>#{condition} #{conditionNote} </td>'; 
+					    templateString += '<td><a target="_blank" href="http://www.amazon.com/gp/help/seller/at-a-glance.html?seller=#{sellerId}">';
+						templateString += '#{sellerName}</a><br /><span class="info">Rating:</span> #{averageRating} of #{totalFeedback} user reviews';
+						templateString += '<br /><span class="info">Availability:</span> #{availability}</td>';
+						templateString += '<td><input width="112" type="image" height="21" border="0" align="absmiddle"';
+						templateString += 'alt="Add to cart" src="http://piccolo.ls.fi.upm.es/amazonScreens/images/addToCart-small.gif"';
+						templateString += 'onclick="priceComparative.add(\'#{offerId}\'); /></td></tr>';
+		                var rowTemplate = new Template(templateString);
+		                
+		                var tableBody = $("listBodyComparative");
+		                for (var i = 5 * l.data.currentPage; i < 5 * (l.data.currentPage + 1); i++) { //print the appropriate elements
+		                    if (l.data.productList[i]) { //only if the product table is fetched
+		                        tableBody.innerHTML += rowTemplate.evaluate(l.data.productList[i]);
+		                    }
+		                }
+		                //Update Interface
+		                if (l.data.currentPage < 1 && (5*(l.data.currentPage + 1)< l.data.productList.length)) {
+		                    $("nextButtonComparative").setStyle({
+		                        visibility: "visible"
+		                    });
+		                } else {
+		                    $("nextButtonComparative").setStyle({
+		                        visibility: "hidden"
+		                    });
+		                }
+		                if (l.data.currentPage > 0) {
+		                    $("previousButtonComparative").setStyle({
+		                        visibility: "visible"
+		                    });
+		                } else {
+		                    $("previousButtonComparative").setStyle({
+		                        visibility: "hidden"
+		                    });
+		                }
+		
+		                if(l.data.productList.length>0) {
+		                	$("curPageComparative").update(l.data.currentPage+1);
+		                	$("totalPagesComparative").update(Math.ceil(l.data.productList.length/5));
+		                } else {
+		                	$("curPageComparative").update("-");
+		                	$("totalPagesComparative").update("-");
+		                }
+		            }
+		            
+		            PriceComparative.prototype.nextPage = function (){
+		            	var tableBody = $("listBodyComparative");
+		                tableBody.update("");
+			            priceComparative.showProgress();
+		            	priceComparative.list.data.currentPage++;
+		            	priceComparative.showTable(priceComparative.list);
+		            }
+		            
+		           PriceComparative.prototype.previousPage = function (){
+						var tableBody = $("listBodyComparative");
+						tableBody.update("");
+			            priceComparative.showProgress();
+			            priceComparative.list.data.currentPage--;
+		            	priceComparative.showTable(priceComparative.list);
+		            }
+		
+		            PriceComparative.prototype.showMessage = function (message){
+						alert(message.data.message);
+					}
+
+		            PriceComparative.prototype.add = function (offerId){
+		            	var offer = {id: 'offer',
+		            			data:{offerId: offerId}};
+						ScreenEngineFactory.getInstance("PriceComparative").manageData("offer", [offer],[], "PriceComparativeForm1");
+					}
+
+////////////////PriceComparativeService
+/**{
+	uri:"http://TODO/service#PriceComparativeService",
+	id:"PriceComparativeService1",
+	actions: [{action:"fetch", preconditions:[{id:"item", name:"http://TODO/amazon#item", positive:true}], uses:[{id:"user", name:"http://TODO/amazon#user"}]}],
+	postconditions: [{id:"pricecomparativelist", name:"http://TODO/amazon#pricecomparativelist", positive:true}],
+	triggers:["productList"]
+}**/
+		            PriceComparative.prototype.fetch = function (item, user){
+		            	//Get the facts to invoke the service
+		                //Add the ItemSearch parameters
+		                var parameters = "";
+						parameters += "&ItemId=" + item.data.ASIN;
+						parameters += "&MerchantId=All&Condition=All";
+		                
+		                //Base URL of the REST Service
+						var url = "http://webservices.amazon.com/onca/xml?Service=AWSECommerceService";
+						//Add the AccessKeyId (get from the user fact)
+						if (user) {
+							url += "&AWSAccessKeyId=" + user.data.KeyId;
+						} else {// if the KB doesn't contain a user key Id, add one by default
+							url += "&AWSAccessKeyId=15TNKDQJGH6BD0Z4KY02";
+						}
+						//Add the operation Type
+						url +="&Operation=ItemLookup";
+						//Add the parameters
+						url += parameters;
+						//Add the responseGroup
+						url +="&ResponseGroup=OfferFull";
+						//Add the current version of the API
+						url += "&Version=2008-06-26";
+		
+						//Invoke the service
+		                FastAPI.getXML(url, this, priceComparative.addToList);
+		            }
+		            
+		            PriceComparative.prototype.addToList = function (transport){
+		            	var l = {id: 'list', data:{productList: new Array(), currentPage: 0}};
+		                var xml = transport;
+		                //Check if the service returned an error
+		                if (xml.getElementsByTagName("IsValid")[0].childNodes[0].nodeValue == "False") {
+		                	var message = {name: "message", data:{message: xml.getElementsByTagName("Message")[0].childNodes[0].nodeValue}};
+		                	ScreenEngineFactory.getInstance("PriceComparative").manageData([message],[]);
+		                } else { //Correct response, create the result List
+		                    var comparativelist = xml.getElementsByTagName("Offers")[0].getElementsByTagName("Offer");
+		                    //Fill the table, 1 row per item
+		                    for(var i=0; i < comparativelist.length; i++){
+			                    var offer = comparativelist[i];
+		                        if (offer.getElementsByTagName("Name").length > 0) { 
+		                            var sellerName = offer.getElementsByTagName("Name")[0].firstChild.nodeValue;
+		                        } else {
+									if (offer.getElementsByTagName("Nickname").length > 0) {
+								    	var sellerName = offer.getElementsByTagName("Nickname")[0].firstChild.nodeValue;
+									} else {
+										var sellerName = "&nbsp;";
+									}
+		                        }
+			                    if (offer.getElementsByTagName("SellerId").length > 0) {
+		                            var sellerId = offer.getElementsByTagName("SellerId")[0].firstChild.nodeValue;
+		                        } else {
+								    var sellerId = "none";
+		                        }
+			                    if (offer.getElementsByTagName("AverageFeedbackRating").length > 0) { 
+		                            var averageRating = offer.getElementsByTagName("AverageFeedbackRating")[0].firstChild.nodeValue;
+			                    } else {
+								    var averageRating = "&nbsp;";
+			                    }
+			                    if (offer.getElementsByTagName("TotalFeedback").length > 0) { 
+		                            var totalFeedback = offer.getElementsByTagName("TotalFeedback")[0].firstChild.nodeValue;
+			                    } else {
+								    var totalFeedback = "&nbsp;";
+			                    }
+			                    if (offer.getElementsByTagName("Condition").length > 0) {
+									var condition = offer.getElementsByTagName("Condition")[0].firstChild.nodeValue;             
+			                    } else {
+								    var condition = "&nbsp;";
+			                    }
+			                    if (offer.getElementsByTagName("ConditionNote").length > 0) {
+									var conditionNote = "(" + offer.getElementsByTagName("ConditionNote")[0].firstChild.nodeValue + ")";             
+			                    } else {
+								    var conditionNote = "&nbsp;";
+			                    }
+			                    if (offer.getElementsByTagName("OfferListingId").length > 0) {
+									var offerId = offer.getElementsByTagName("OfferListingId")[0].firstChild.nodeValue;             
+			                    } else {
+								    var offerId = "";
+			                    }
+			                    if (offer.getElementsByTagName("Price").length > 0) {
+									var price = offer.getElementsByTagName("Price")[0].getElementsByTagName("FormattedPrice")[0].firstChild.nodeValue;             
+			                    } else {
+								    var price = "";
+			                    }
+			                    if (offer.getElementsByTagName("AmountSaved").length > 0) {
+									var amountSaved = offer.getElementsByTagName("AmountSaved")[0].getElementsByTagName("FormattedPrice")[0].firstChild.nodeValue;             
+			                    } else {
+								    var amountSaved = "";
+			                    }
+			                    if (offer.getElementsByTagName("PercentageSaved").length > 0) {
+									var percentageSaved = offer.getElementsByTagName("PercentageSaved")[0].firstChild.nodeValue;             
+			                    } else {
+								    var percentageSaved = "&nbsp;";
+			                    }
+		                        if (offer.getElementsByTagName("Availability").length > 0) {
+									var availability = offer.getElementsByTagName("Availability")[0].firstChild.nodeValue;
+		                        } else {
+								    var availability = "&nbsp;";
+		                        }
+		                        var row = {
+		                            sellerName: sellerName,
+		                            sellerId: sellerId,
+		                            location: location,
+		                            averageRating: averageRating,
+									totalFeedback: totalFeedback,
+									condition: condition,
+									conditionNote: conditionNote,
+									offerId: offerId,
+									price: price,
+									amountSaved: amountSaved,
+									percentageSaved: percentageSaved,
+									availability: availability
+		                        };
+		                        l.data.productList.push(row);
+						    }
+		                    ScreenEngineFactory.getInstance("PriceComparative").manageData("productList", [l], [], "PriceComparativeService1");
+		                }
+		            }
+
+////////////////AmazonAddOfferToCartService1
+/**{
+	uri:"http://TODO/service#AmazonAddOfferToCartService",
+	id:"AmazonAddOfferToCartService1",
+	actions: [{action:"add", preconditions:[{id:"item", name:"http://TODO/amazon#item", positive:true}]: uses:[{id:"user", name:"http://TODO/amazon#user"}, {id:"cart", name:"http://TODO/amazon#shoppingCart"}]}],
+	postconditions: [{id:"cart", name:"http://TODO/amazon#shoppingCart", positive:true},
+	                 {id:"message", name:"http://TODO/amazon#message", positive:true}],
+	triggers:["message"]
+}**/			
+					PriceComparative.prototype.addToCart = function (offer, cart, user){
+						if (cart) {//If the cart is already created, it will have an ID in the User Fact
+							var url = "http://webservices.amazon.com/onca/xml?Service=AWSECommerceService";
+							//Add the AccessKeyId (get from the user fact)
+							if (user) {
+								url += "&AWSAccessKeyId=" + user.data.KeyId;
+							} else { // if the KB doesn't contain a user key Id, add one by default
+								url += "&AWSAccessKeyId=15TNKDQJGH6BD0Z4KY02";
+							}
+							//Add the operation Type
+							url +="&Operation=CartAdd";
+							//Add the current version of the API
+							url += "&Version=2008-06-26";
+							//Add item ID
+							url += "&CartId=" + cart.data.id;
+							url += "&HMAC=" + cart.data.HMAC;
+							url += "&Item.1.OfferListingId=" + offer.data.offerId;
+							url += "&Item.1.Quantity=" + 1;
+							
+							//Invoke the service
+		                	FastAPI.getXML(url, this, priceComparative.productAdded);
+						} else { //Cart doesn't exist: Create a new cart with the product
+							var url = "http://webservices.amazon.com/onca/xml?Service=AWSECommerceService";
+							//Add the AccessKeyId (get from the user fact)
+							if (user) {
+								url += "&AWSAccessKeyId=" + user.data.KeyId;
+							} else {// if the KB doesn't contain a user key Id, add one by default
+								url += "&AWSAccessKeyId=15TNKDQJGH6BD0Z4KY02";
+							}
+							//Add the operation Type
+							url +="&Operation=CartCreate";
+							//Add the current version of the API
+							url += "&Version=2008-06-26";
+							//Add item ID
+							url += "&Item.1.OfferListingId=" + offer.data.offerId;
+							url += "&Item.1.Quantity=" + 1;
+							
+							//Invoke the service
+		                	FastAPI.getXML(url, this, priceComparative.cartCreated);
+						}
+					}
+					
+					PriceComparative.prototype.cartCreated = function (transport){
+						var xml = transport;
+						//The product is added to the cart,
+						//tell it to the user
+						if (xml.getElementsByTagName("IsValid")[0].firstChild.nodeValue == "True") {
+							//Check if the product is eligible for shopping
+							if ((xml.getElementsByTagName("Error").length > 0) && 
+								xml.getElementsByTagName("Error")[0].firstChild.firstChild.nodeValue == "AWS.ECommerceService.ItemNotEligibleForCart"){
+								//The product is not elegible
+								var message = {id: "message", data:{message: "The product is not eligible to be added to the cart"}};
+		                		ScreenEngineFactory.getInstance("PriceComparative").manageData("message", [message], [], "AmazonAddOfferToCartService1");
+								return;
+							}
+							//Add the Cart ID to the KB
+							var message = {id: "message", data:{message: "Product added to the shopping Cart"}};
+							var cart = {id: 'cart',
+										data:{id: xml.getElementsByTagName("CartId")[0].firstChild.nodeValue,
+										HMAC: xml.getElementsByTagName("URLEncodedHMAC")[0].firstChild.nodeValue}};
+							ScreenEngineFactory.getInstance("PriceComparative").manageData("message", [cart, message], [], "AmazonAddOfferToCartService1");
+						} else {
+							var message = {name: "message", data:{message: "Error adding the product to the cart"}};
+		                	ScreenEngineFactory.getInstance("PriceComparative").manageData("message", [message], [], "AmazonAddOfferToCartService1");
+					    }
+					}
+					
+					PriceComparative.prototype.productAdded = function (transport){
+						var xml = transport;
+						var message = {name: "message", data:{message: ""}};
+		            	
+						//Check if the product is eligible for shopping
+						if ((xml.getElementsByTagName("Error").length > 0) && 
+							xml.getElementsByTagName("Error")[0].firstChild.firstChild.nodeValue == "AWS.ECommerceService.ItemNotEligibleForCart"){
+							//The product is not elegible
+							message.message = "The product is not eligible to be added to the cart";
+							return;
+						} else {
+							//If the product is added to the cart,
+							//tell it to the user
+							if (xml.getElementsByTagName("IsValid")[0].firstChild.nodeValue == "True") {
+								message.data.message = "Product added to the shopping Cart";
+							} else {
+								message.data.message = "Error adding the product to the cart";
+							}
+						}
+						ScreenEngineFactory.getInstance("PriceComparative").manageData("message", [message], [], "AmazonAddOfferToCartService1");
+					}
+					
+					PriceComparative.prototype.onError = function (transport){
+		                //alert(transport.responseText);
+		            }
+
+//////////////Generated Code
+		            PriceComparative.prototype.restart = function (){
+						ScreenEngineFactory.getInstance("PriceComparative").restart();
+					}
+
+//////////////Piping
+					PriceComparative.prototype.piping0 = function (){
+						var item = ScreenEngineFactory.getInstance("PriceComparative").searchFact('item', null);
+						priceComparative.init(item);
+					}
+					
+					PriceComparative.prototype.piping1 = function (){
+						var item = ScreenEngineFactory.getInstance("PriceComparative").searchFact('item', null);
+						var user = ScreenEngineFactory.getInstance("PriceComparative").searchFact('user', null);
+						priceComparative.fetch(item, user);
+					}
+
+					PriceComparative.prototype.piping2 = function (){
+						var list = ScreenEngineFactory.getInstance("PriceComparative").searchFact('list', "PriceComparativeService1");
+						priceComparative.showTable(list);
+					}
+
+					PriceComparative.prototype.piping3 = function (){
+						var cart = ScreenEngineFactory.getInstance("PriceComparative").searchFact('cart', null);
+						var user = ScreenEngineFactory.getInstance("PriceComparative").searchFact('user', null);
+						var offer = ScreenEngineFactory.getInstance("PriceComparative").searchFact('offer', "PriceComparativeForm1");
+						priceComparative.addToCart(offer, cart, user);
+					}
+
+					PriceComparative.prototype.piping5 = function (){
+						var message = ScreenEngineFactory.getInstance("PriceComparative").searchFact('message', "PriceComparativeService1");
+						priceComparative.showMessage(message);
+					}
+
+					PriceComparative.prototype.piping5 = function (){
+						var message = ScreenEngineFactory.getInstance("PriceComparative").searchFact('message', "AmazonAddItemToCartService1");
+						priceComparative.showMessage(message);
+					}
+					
+		            var priceComparative = new PriceComparative();
+		
+		            var priceComparativerules = [
+												{trigger: {id:"_onload"}, condition: null, actions: [priceComparative.piping0]},
+												{trigger: {id:"_onload"}, condition: [{id:"item", positive:true}], actions: [priceComparative.piping1]},
+												{trigger: {id:"productList", origin:"PriceComparativeService1"}, condition: [{id:"list", origin:"PriceComparativeService1", positive:true}], actions: [priceComparative.piping2]},
+												{trigger: {id:"offer", origin:"PriceComparativeForm1"}, condition: [{id:"offer", positive:true, origin:"PriceComparativeForm1"}], actions: [priceComparative.piping3]},
+												{trigger: {id:"message", origin:"PriceComparativeService1"}, condition: [{id:"message", origin:"PriceComparativeService1",  positive:true}], actions: [priceComparative.piping4]},
+												{trigger: {id:"message", origin:"AmazonAddItemToCartService1"}, condition: [{id:"message", origin:"AmazonAddOfferToCartService1",  positive:true}], actions: [priceComparative.piping5]}
+											];
+					
+					var priceComparativeposts = [
+												{id:"cart", name: "http://TODO/amazon#shoppingCart", origin: "AmazonAddOfferToCartService1"}
+											];
+
+					var priceComparativedictionary = [
+												{factId:"cart", name:"http://TODO/amazon#shoppingCart"},
+												{factId:"user", name:"http://TODO/amazon#user"},
+												{factId:"item", name:"http://TODO/amazon#item"},
+												{origin:"PriceComparativeForm1", factId:"offer", name:"http://TODO/amazon#offer"},
+												{origin:"PriceComparativeService", factId:"list", name:"http://TODO/amazon#list"},
+												{origin:"PriceComparativeService1", factId:"message", name:"http://TODO/amazon#message"}, 
+												{origin:"AmazonAddOfferToCartService1", factId:"message", name:"http://TODO/amazon#message"}
+										];
+					
+					ScreenEngineFactory.getInstance("PriceComparative").setEngine(ScreenflowEngineFactory.getInstance(), priceComparativerules, priceComparativeposts, priceComparativedictionary);
+		
+					ScreenflowEngineFactory.getInstance().addScreenLoader("PriceComparative", priceComparative.restart);
+					
+		        </script>
+			</head>
+			<body>
+		        <div id="bodyDiv">
+		        	<span id="amazonImage"><img src="http://piccolo.ls.fi.upm.es/amazonScreens/images/amazon.png" /></span>
+		            <h1 id="title">Price Comparative</h1>
+					<div id="like">Offers for <span class="productTitle"></span></div>
+		            <div id="listDiv">
+		                <table>
+		                    <thead>
+		                        <tr>
+		                            <th style="width: 20%; -moz-border-radius-topleft: 13px; -moz-border-radius-topright: 0px; -moz-border-radius-bottomright: 0px; -moz-border-radius-bottomleft: 0px;">Price</th>
+		                            <th style="width: 30%;">Condition</th>
+		                            <th style="width: 40%;">Seller Information</th>
+		                            <th style="width: 10%; -moz-border-radius-topleft: 0px; -moz-border-radius-topright: 13px; -moz-border-radius-bottomright: 0px; -moz-border-radius-bottomleft: 0px;">Ready to Buy?</th>
+		                        </tr>
+		                    </thead>
+		                    <tbody id="listBodyComparative">
+	                            <tr><td>&nbsp;</td></tr>
+	                            <tr><td>&nbsp;</td></tr>
+	                            <tr><td>&nbsp;</td></tr>
+	                            <tr><td>&nbsp;</td></tr>
+	                            <tr><td>&nbsp;</td></tr>
+				    		</tbody>
+		                </table>
+		                <img style="display: none;" id="loadingImgComparative" src="http://piccolo.ls.fi.upm.es/amazonScreens/images/ajaxLoader.gif">
+		                <div id="buttonContainerDiv">
+		                    <input style="visibility: hidden;" id="previousButtonComparative" class="button" value="&lt;" type="button">
+							<span id="pagesComparative">
+							Page <span id="curPageComparative">-</span>/<span id="totalPagesComparative">-</span>
+							</span><input style="visibility: visible;" id="nextButtonComparative" class="button" value="&gt;" type="button">
+		                </div>
+		            </div>
+		        </div>
+		    </body>
+		</html>
+    </object>
+</div>
+
+<div id="eBayList" class="tabcontentHide">
+	<object id="eBayList_obj" width="100%" height="100%">
+		<html>
+			<head>
+		        <meta http-equiv="Content-Type" content="application/xhtml+xml; charset=UTF-8">
+				<link type="text/css" rel="stylesheet" href="http://piccolo.ls.fi.upm.es/amazonScreens/style/table.css" />
+		        <link type="text/css" rel="stylesheet" href="http://piccolo.ls.fi.upm.es/amazonScreens/style/screen.css" />
+				<style type="text/css">
+					#pagesEBayList{
+						color:#FEBF43;
+						font-weight: bold;
+						padding: 10px;
+					}
+					#previousButtonEBayList, #nextButtonEBayList {
+						visibility:hidden;
+					}
+					#loadingImgEBayList{
+						margin:auto;
+						padding-top: 10px;
+					}
+					#like{
+						padding: 5px;
+						color: #777777;
+					}
+					.productTitle{
+						font-weight:bold;
+						font-style:normal;
+					}
+					#eBayImage{
+						position:absolute;
+						right:0px;
+						top:3px;
+					}
+				</style>
+		        <script language="JavaScript">
+		        
+		        	function EBayList(){};
+
+////////////////////eBayListForm1
+/**{
+	uri:"http://TODO/form#eBayList",
+	id:"eBayListForm1",
+	actions: [	{action:"init", preconditions:[], uses:[]},
+	            {action:"showTable", preconditions:[{id:"list", name:"http://TODO/ebay#list", positive:true}], uses:[]}],
+	postconditions: [	{id:"item", name:"http://TODO/ebay#item", positive:true},
+	                 	{id:"filterEbay", name:"http://TODO/ebay#filter", positive:true}],
+	triggers:["ebayItem", "nextPage", "previousPage"]
+}**/
+		            EBayList.prototype.init = function (){
+		            	$("nextButtonEbayList").observe("click", eBayList.nextPage);
+		                $("previousButtonEbayList").observe("click", eBayList.previousPage);
+		                $$('input[type="button"]').each(function(element){
+							element.observe("mouseover",function(event){
+								var e = Event.element(event);
+								e.setStyle({cursor:"pointer"});
+							});
+						
+						});
+						var tableBody = $("listBodyEBayList");
+		                tableBody.update("");
+		                eBayList.showProgress();
+		            }
+
+		            EBayList.prototype.showProgress = function (){
+		                $("loadingImgEBayList").show();
+		            }
+		            
+		            EBayList.prototype.showTable = function (l){
+		            	if ($("loadingImgEBayList")) {
+		                	$("loadingImgEBayList").hide();
+		                }
+		                var templateString = '<tr>';
+		                templateString += '<td><img src="#{image}"/></td>';
+		                templateString += '<td>#{title}</td><td>#{category}</td><td>#{currentPrice}</td><td>#{shippingServiceCost}</td>';
+		                templateString += '<td style="border-right:none;"><input type="button" onclick="eBayList.productDetail(this,\'#{itemID}\',\'#{title}\');"';
+						templateString += ' onmouseover="this.setStyle({cursor:\'pointer\'});" value="Select"/></td></tr>';
+		                var rowTemplate = new Template(templateString);
+		                
+		                var tableBody = $("listBodyEBayList");
+		                for (var i = 0; i < l.data.productList.length; i++) { //print the appropriate elements
+		                    if (l.data.productList[i]) { //only if the product table is fetched
+		                        tableBody.innerHTML += rowTemplate.evaluate(l.data.productList[i]);
+		                    }
+		                }
+		
+		              //Update Interface
+				        if (l.data.currentPage < l.data.totalPages) {
+				            $("nextButtonEbayList").setStyle({visibility: "visible"});
+				        } else {
+				            $("nextButtonEbayList").setStyle({visibility: "hidden"});
+				        }
+				        if (l.data.currentPage > 1) {
+				            $("previousButtonEbayList").setStyle({visibility: "visible"});
+				        } else {
+				            $("previousButtonEbayList").setStyle({visibility: "hidden"});
+				        }
+		
+				        if (l.data.totalPages>0) {
+				        	$("curPageEBayList").update(l.data.currentPage);
+				        	$("totalPagesEBayList").update(l.data.totalPages);
+				        } else {
+				        	$("curPageEBayList").update("-");
+				        	$("totalPagesEBayList").update("-");
+					    }
+
+				        $("CPebayList").value = l.data.currentPage;
+				        $("MEebayList").value = l.data.maxEntries;
+				        $("KebayList").value = l.data.keywords;
+		            }
+
+		            EBayList.prototype.productDetail = function (nodeElement, itemID, title){
+						eBayList.clearSelected ();
+						//select the element
+						nodeElement.parentNode.parentNode.setStyle({background: "#FFF8E8"});
+						var ebayItem = {id: 'ebayItem', data:{itemID: itemID, title: title}};
+						ScreenEngineFactory.getInstance("eBay List").manageData("ebayItem", [ebayItem], [], "eBayListForm1");
+					}
+					
+					EBayList.prototype.clearSelected = function (){
+						$$("tbody tr").each(function (element){
+							element.setStyle ({background: "transparent url(http://piccolo.ls.fi.upm.es/amazonScreens/style/bg_td1.jpg) repeat-x top"});
+						});
+					}
+
+					EBayList.prototype.nextPage = function (){
+				    	var tableBody = $("listBodyEBayList");
+				        tableBody.update("");
+				        eBayList.showProgress();
+				        var filter = {id: 'filterEbay', data:{keywords: $F("KebayList"), maxEntries: $F("MEebayList"), currentPage: parseInt($F("CPebayList")) + 1}};
+				        ScreenEngineFactory.getInstance("eBay List").manageData("newFilter", [filter], [], "eBayListForm1");
+				    }
+				    
+					EBayList.prototype.previousPage = function (){
+				    	var tableBody = $("listBodyEBayList");
+				        tableBody.update("");
+				        eBayList.showProgress();
+				        var filter = {id: 'filterEbay', data:{keywords: $F("KebayList"), maxEntries: $F("MEebayList"), currentPage: parseInt($F("CPebayList")) - 1}};
+				    	ScreenEngineFactory.getInstance("eBay List").manageData("newFilter", [filter], [], "eBayListForm1");
+				    }
+
+////////////////ebaySearchService1
+/**{
+	uri:"http://TODO/service#ebaySearchService",
+	id:"ebaySearchService1",
+	actions: [{action:"fetch", preconditions:[{id:"filter", name:"http://TODO/ebay#filter", positive:true}], uses:[]}],
+	postconditions: [{id:"list", name:"http://TODO/ebay#list", positive:true}],
+	triggers:["productList"]
+}**/
+		            EBayList.prototype.fetch = function (filter){
+		            	//URL of the Service
+						var url = "http://open.api.ebay.com/shopping?";
+						url += "&callname=FindItemsAdvanced";
+						url += "&ItemSort=BestMatch";
+						url += "&version=515";
+						url += "&responseencoding=XML";
+						url += "&appid=eBayAPID-73f4-45f2-b9a3-c8f6388b38d8";
+						url += "&callback=true";
+						url += "&MaxEntries=" + filter.data.maxEntries;
+						url += "&PageNumber=" + filter.data.currentPage;
+						url += "&QueryKeywords=" + escape(filter.data.keywords.replace(/ /g,"+"));
+		
+						//Invoke the service
+		                FastAPI.getXML(url, this, function (transport){eBayList.addToList(transport, filter)});
+		            }
+		            
+		            EBayList.prototype.addToList = function (transport, filter){
+		            	var eBayList = {id: 'list', data:{productList: new Array()}};
+		            	var xml = transport;
+		                var items = xml.getElementsByTagName("Item");
+		                //Fill the table, 1 row per item
+		                $A(items).each(function(item){
+		                     if (item.getElementsByTagName("ItemID").length > 0) {
+		                     	var itemID = item.getElementsByTagName("ItemID")[0].firstChild.nodeValue;
+		                     } else {
+		    					var itemID = "&nbsp;";
+		                     }
+		                     if (item.getElementsByTagName("Title").length > 0) {
+		                     	var title = item.getElementsByTagName("Title")[0].firstChild.nodeValue;
+		    				 } else {
+		    					var title = "&nbsp;";
+		    				 }
+		    				 if (item.getElementsByTagName("PrimaryCategoryName").length > 0) {
+		                     	var category = item.getElementsByTagName("PrimaryCategoryName")[0].firstChild.nodeValue;
+		    				 } else {
+		    					var category = "&nbsp;";
+		    				 }
+		    				 if (item.getElementsByTagName("ConvertedCurrentPrice").length > 0) {
+		                     	var currentPrice = '$' + item.getElementsByTagName("ConvertedCurrentPrice")[0].firstChild.nodeValue;
+		    				 } else {
+		    					var currentPrice = "&nbsp;";
+		    				 }
+		    				 if (item.getElementsByTagName("ShippingServiceCost").length > 0) {
+		                     	var shippingServiceCost = '$' + item.getElementsByTagName("ShippingServiceCost")[0].firstChild.nodeValue;
+		    				 } else {
+		    					var shippingServiceCost = "&nbsp;";
+		    				 }
+		    				 if (item.getElementsByTagName("GalleryURL").length > 0) {
+		                         var image = item.getElementsByTagName("GalleryURL")[0].firstChild.nodeValue;
+		    				 } else {
+		                     	var image = "";
+		    				 }
+		    				 var row = {
+		                     	 itemID: itemID,
+		                         title:  title.replace(/\x27/g,"`"),
+		                         category: category,
+		                         currentPrice: currentPrice,
+		                         shippingServiceCost: shippingServiceCost,
+		                         image: image
+		                     };
+		                     eBayList.data.productList.push(row);
+		                 });
+		                 if (xml.getElementsByTagName("TotalPages").length > 0) {
+		                    eBayList.data.totalPages = xml.getElementsByTagName("TotalPages")[0].firstChild.nodeValue;
+		                 } else {
+							eBayList.data.totalPages = 0;
+		                 }
+		                 if (xml.getElementsByTagName("PageNumber").length > 0) {
+		                     eBayList.data.currentPage = xml.getElementsByTagName("PageNumber")[0].firstChild.nodeValue;
+		                 } else {
+		 					eBayList.data.currentPage = 0;
+		                 }
+		                 eBayList.data.keywords = filter.data.keywords;
+		                 eBayList.data.maxEntries = filter.data.maxEntries;
+		                 ScreenEngineFactory.getInstance("eBay List").manageData("productList", [eBayList], [], "ebaySearchService1");
+		            }
+					
+					EBayList.prototype.onError = function (transport){
+		                //alert(transport.responseText);
+		            }
+
+////////////////amazonEbayFilter1
+/**{
+	uri:"http://TODO/operator#amazonEbayFilter",
+	id:"amazonEbayFilter1",
+	actions: [{action:"filter", preconditions:[{id:"item", name:"http://TODO/amazon#item", positive:true}], uses:[]}],
+	postconditions: [{id:"filterEbay", name:"http://TODO/ebay#filter", positive:true}],
+	triggers:["filterEbay"]
+}**/
+		            EBayList.prototype.createFilter = function (item){
+						var filter = {id: 'filterEbay', data:{keywords: item.data.title, maxEntries: 5, currentPage: 1}};
+		                ScreenEngineFactory.getInstance("eBay List").manageData("filterEbay", [filter], [], "amazonEbayFilter1");
+		            }
+		            
+/////////////Generated Code		
+		            EBayList.prototype.restart = function (){
+						ScreenEngineFactory.getInstance("eBay List").restart();
+					}
+
+/////////////Piping
+					EBayList.prototype.piping1 = function (){
+				    	var filter = ScreenEngineFactory.getInstance("eBay List").searchFact("item", null);
+				    	eBayList.createFilter(filter);
+					}
+					
+					EBayList.prototype.piping2 = function (){
+						var filter = ScreenEngineFactory.getInstance("eBay List").searchFact("filterEbay", "amazonEbayFilter1");
+				    	eBayList.fetch(filter);
+					}
+
+					EBayList.prototype.piping3 = function (){
+				    	var l = ScreenEngineFactory.getInstance("eBay List").searchFact("list", "ebaySearchService1");
+				    	eBayList.showTable(l);
+					}
+
+					EBayList.prototype.piping4 = function (){
+						var filter = ScreenEngineFactory.getInstance("eBay List").searchFact("filterEbay", "eBayListForm1");
+				    	eBayList.fetch(filter);
+					}
+
+				    var eBayList = new EBayList();
+	
+					var eBayListrules = [
+										{trigger: {id: "_onload"}, condition: null, actions: [eBayList.init]},
+										{trigger: {id: "_onload"}, condition: [{id:"item", positive:true}], actions: [eBayList.piping1]},
+										{trigger: {id: "filterEbay", origin:"amazonEbayFilter1"}, condition: [{id:"filterEbay", origin:"amazonEbayFilter1", positive:true}], actions: [eBayList.piping2]},
+										{trigger: {id: "productList", origin:"ebaySearchService1"}, condition: [{id:"list", origin: "ebaySearchService1", positive:true}], actions: [eBayList.piping3]},
+										{trigger: {id: "newFilter", origin:"eBayListForm1"}, condition: [{id:"filterEbay", origin:"eBayListForm1", positive:true}], actions: [eBayList.piping4]},
+									];
+					
+					var eBayListposts = [
+										{id:"ebayItem", origin:"eBayListForm1", name: "http://TODO/ebay#item"}
+									];
+
+					var eBayListdictionary = [
+											{origin:null, factId:"item", name:"http://TODO/amazon#item"},
+											{origin:"amazonEbayFilter1", factId:"filterEbay", name:"http://TODO/ebay#filter"},
+											{origin:"eBayListForm1", factId:"filterEbay", name:"http://TODO/ebay#filter"},
+											{origin:"ebaySearchService1", factId:"list", name:"http://TODO/ebay#list"}
+									];					
+		            
+					
+					ScreenEngineFactory.getInstance("eBay List").setEngine(ScreenflowEngineFactory.getInstance(), eBayListrules, eBayListposts, eBayListdictionary);
+		
+					ScreenflowEngineFactory.getInstance().addScreenLoader("eBay List", eBayList.restart);
+					
+		        </script>
+		    </head>
+		    <body>
+		        <div id="bodyDiv">
+		        	<input type="hidden" id="CPebayList" />
+		        	<input type="hidden" id="MEebayList" />
+		        	<input type="hidden" id="KebayList" />
+		        	<span id="eBayImage"><img src="http://piccolo.ls.fi.upm.es/amazonScreens/images/logo-ebay.gif" /></span>
+				    <h1 id="title">eBay Item list</h1>
+				    <div id="listDiv">
+		                <table>
+		                    <thead>
+		                        <tr>
+		                        	<th style="width: 10%; -moz-border-radius-topleft: 13px; -moz-border-radius-topright: 0px; -moz-border-radius-bottomright: 0px; -moz-border-radius-bottomleft: 0px;">&nbsp;</th>
+		                            <th style="width: 60%;" nowrap="nowrap">Title</th>
+		                            <th style="width: 10%;" nowrap="nowrap">Category</th>
+		                            <th style="width: 10%;" nowrap="nowrap">Current Price</th>
+		                            <th style="width: 20%;" nowrap="nowrap">Shipping Cost</th>
+		                            <th style="width: 10%; -moz-border-radius-topleft: 0px; -moz-border-radius-topright: 13px; -moz-border-radius-bottomright: 0px; -moz-border-radius-bottomleft: 0px;">&nbsp;</th>
+		                        </tr>
+		                    </thead>
+		                    <tbody id="listBodyEBayList">
+	                            <tr><td>&nbsp;</td></tr>
+	                            <tr><td>&nbsp;</td></tr>
+	                            <tr><td>&nbsp;</td></tr>
+	                            <tr><td>&nbsp;</td></tr>
+	                            <tr><td>&nbsp;</td></tr>
+	                            <tr><td>&nbsp;</td></tr>
+				    		</tbody>
+		                </table>
+		                <img style="display: none;" id="loadingImgEBayList" src="http://piccolo.ls.fi.upm.es/amazonScreens/images/ajaxLoader.gif">
+		                <div id="buttonContainerDiv">
+		                    <input style="visibility: hidden;" id="previousButtonEbayList" class="button" value="&lt;" type="button">
+							<span id="pagesEBayList">
+							Page <span id="curPageEBayList">-</span>/<span id="totalPagesEBayList">-</span>
+							</span><input style="visibility: visible;" id="nextButtonEbayList" class="button" value="&gt;" type="button">
+		                </div>
+		            </div>
+		        </div>
+	    	</body>
+	   	</html>
+	</object>
+</div>
+</body>
+</html>
