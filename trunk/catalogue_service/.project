@@ -3,7 +3,6 @@
 	<name>CatalogueService</name>
 	<comment></comment>
 	<projects>
-		<project>Catalogue</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>
