@@ -66,6 +66,9 @@
   	<copy todir="${build.home}/WEB-INF/lib">
       <fileset dir="${web.home}/WEB-INF/lib"/>
     </copy>
+  	<copy todir="${build.home}/WEB-INF">
+      <fileset dir="${web.home}/WEB-INF"/>
+    </copy>
   </target>
   
   <target name="dist" depends="compile, javadoc" description="Create binary distribution">
