@@ -5,7 +5,7 @@ function Utils()
     // *********************************
 }
 
-// TODO: include comments
+// TODO: update this class to the class standard format
 
 Utils.getIsoDateNow = function(/**Date*/ dateObject) {
     var dateString = dateObject.toJSON();

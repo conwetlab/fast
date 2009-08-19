@@ -64,6 +64,7 @@ var GVSSingleton = function() {
                 addScreen: this._addScreen.bind(this)
             };
             this._documentController = new DocumentController();
+            //FIXME: This shouldn't be here
             Element.observe(document, "keypress",UIUtils.onKeyPressCanvas);
         },
 

@@ -8,7 +8,7 @@ var DeploymentDocument = Class.create(AbstractDocument,
      * @extends AbstractDocument
      */
     initialize: function($super) {
-        $super("Deployment");
+        $super("Deployment", []);
         this._documentType=Constants.DocumentType.DEPLOYMENT;
     },
 

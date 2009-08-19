@@ -5,7 +5,8 @@ function UIUtils()
     // *********************************
 }
 
-// TODO: include comments
+//FIXME: This class must dissapear
+//       or adapted to the class conventions
 
 UIUtils.onKeyPressCanvas = function(e){
     if (e.keyCode == Event.KEY_DELETE) {

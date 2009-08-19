@@ -5,29 +5,34 @@ var PaletteController = Class.create(
      * Manages a set of palettes.
      * @constructs
      */
-    initialize: function(/** String */ docId) {
+    initialize: function(/** AbstractDocument */ parent) {
         /**
          * List of available palettes
          * @type {Hash}
          * @private
          */
         this._palettes = {};
+        
+         /**
+         * Document which contains the palette
+         * @type AbstractDocument
+         * @private
+         */       
+        this._parent = parent;
+        
         this._containerNode = null;
         
         var uidGenerator = UIDGeneratorSingleton.getInstance();
         this._paletteId = uidGenerator.generate("palette");
-
-        // TODO: create all the palettes
-        var screenPalette = new Palette(Constants.BuildingBlock.SCREEN, docId);
-        var connectorPalette = new Palette(Constants.BuildingBlock.CONNECTOR, docId);
-        var domainConceptPalette = new Palette(Constants.BuildingBlock.DOMAIN_CONCEPT, docId);
-        this._palettes[Constants.BuildingBlock.SCREEN] = screenPalette;
-        this._palettes[Constants.BuildingBlock.CONNECTOR] = connectorPalette;
-        this._palettes[Constants.BuildingBlock.DOMAIN_CONCEPT] = domainConceptPalette;
         
-        this.getNode().addChild(screenPalette.getNode());
-        this.getNode().addChild(connectorPalette.getNode());
-        this.getNode().addChild(domainConceptPalette.getNode());
+        var mine = this;
+        
+        //Create all the document necessary palettes
+        this._parent.getValidBuildingBlocks().each (function(buildingBlock){
+           var palette = new Palette (buildingBlock, mine._parent); 
+           mine._palettes[buildingBlock] = palette;
+           mine.getNode().addChild(palette.getNode());
+        });
     },
 
     // **************** PUBLIC METHODS **************** //

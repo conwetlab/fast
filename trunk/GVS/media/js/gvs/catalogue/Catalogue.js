@@ -50,8 +50,7 @@ var CatalogueSingleton = function(){
         
         getFacts: function(){
             var onSuccess = function(response){
-                var responseJSON = response.responseText;
-                var factMetadata = eval('(' + responseJSON + ')');
+                var factMetadata = response.responseText.evalJSON();
                 FactFactorySingleton.getInstance().setFacts(factMetadata);
             }
             var onError = function(response, e){
@@ -64,8 +63,7 @@ var CatalogueSingleton = function(){
         
         getDomainConcepts: function(){
             var onDConceptsSuccess = function(response){
-                var responseJSON = response.responseText;
-                var domainConceptMetadata = eval('(' + responseJSON + ')');
+                var domainConceptMetadata = response.responseText.evalJSON();
                 this.getBuildingBlockFactory(Constants.BuildingBlock.DOMAIN_CONCEPT).updateBuildingBlockDescriptions(domainConceptMetadata.domainConcepts);
                 var paletteController = GVSSingleton.getInstance().getDocumentController().getCurrentDocument().getPaletteController();
                 var domainConceptPalette = paletteController.getPalette(Constants.BuildingBlock.DOMAIN_CONCEPT);

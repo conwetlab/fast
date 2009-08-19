@@ -7,7 +7,8 @@ var ScreenflowDocument = Class.create(AbstractDocument,
      * @extends AbstractDocument
      */
     initialize: function($super, /** String */ title) {
-        $super(title);
+        $super(title, [Constants.BuildingBlock.SCREEN, Constants.BuildingBlock.CONNECTOR, 
+               Constants.BuildingBlock.DOMAIN_CONCEPT]);
        
         /** 
          * Variable
@@ -37,7 +38,6 @@ var ScreenflowDocument = Class.create(AbstractDocument,
          */
         this._factsPane = null;
         
-        this._validBuildingBlocks = [Constants.BuildingBlock.SCREEN, Constants.BuildingBlock.CONNECTOR, Constants.BuildingBlock.DOMAIN_CONCEPT];
         this._documentType= Constants.DocumentType.SCREENFLOW;
         
         /*Screenflow Definition*/
@@ -46,9 +46,9 @@ var ScreenflowDocument = Class.create(AbstractDocument,
         this._connectors = [];
         this._domainConcepts = [];
         this._selectedElement = null;
+        
         this._populate();
         
-
     },
 
 
@@ -68,14 +68,6 @@ var ScreenflowDocument = Class.create(AbstractDocument,
         this.getBuildingBlockDescription().setDescription("en-GB", $F(form.info));
         this.getBuildingBlockDescription().setCreator($F(form.author));
     },
-    
-    /**
-     * Returns the Gadget Deployment Dialog
-     * @type {FormDialog}
-     */
-    /*getDeployGadgetDialog: function (){
-        return this._DeployGadgetDialog;
-    },*/
 
     /**
      * Returns the list of screens for the screenflow document
@@ -329,10 +321,8 @@ var ScreenflowDocument = Class.create(AbstractDocument,
     updatePropertiesPane: function( /** BuildingBlockId */ buildingBlockId, /** String */ buildingBlockType) {
         var buildingBlockInstance = this.getBuildingBlockInstance(buildingBlockId);
         var buildingBlockDescription = buildingBlockInstance.getBuildingBlockDescription();
-        //this.emptyPropertiesPane();
         switch(buildingBlockType){
             case Constants.BuildingBlock.SCREEN:
-                //$(this.getDetailsTitle('detailsTitle')).update('Properties of screen: ' + buildingBlockDescription.label['en-gb']);
                 var propertiesHash = new Hash();
                 propertiesHash.set('title',buildingBlockDescription.label['en-gb']);
                 propertiesHash.set('id',buildingBlockDescription.uri);
@@ -343,14 +333,10 @@ var ScreenflowDocument = Class.create(AbstractDocument,
 
             case Constants.BuildingBlock.CONNECTOR:
                 var propertiesHash = buildingBlockInstance.getProperties().clone();
-                //$(this.getDetailsTitle('detailsTitle')).update('Properties of connector: ' + propertiesHash.get('type'));
-                
-                //propertiesHash.set('type',buildingBlockDescription.type);
                 this._propertiesPane.selectElement(propertiesHash,"connector",propertiesHash.get('type'));
                 break;
 
             case Constants.BuildingBlock.DOMAIN_CONCEPT:
-                //$(this.getDetailsTitle('detailsTitle')).update('Properties of domain concept: ' + buildingBlockDescription.name);
                 var propertiesHash = new Hash();
                 propertiesHash.set('name',buildingBlockDescription.name);
                 propertiesHash.set('description',buildingBlockDescription.description);
@@ -482,6 +468,7 @@ var ScreenflowDocument = Class.create(AbstractDocument,
      * @override
      */
     updateToolbar: function () {
+           //TODO: this should be managed by a ToolbarManager
            $("header_button").show();
            //TODO: Enable or disable the button checking 
            //reachability and not the number of screens

@@ -8,7 +8,7 @@ var PreviewDocument = Class.create(AbstractDocument,
      * @extends AbstractDocument
      */
     initialize: function($super, /** String */ title) {
-        $super("Preview: " + title);
+        $super("Preview: " + title, []);
         this._documentType=Constants.DocumentType.PREVIEW;
     },
 

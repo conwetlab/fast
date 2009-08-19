@@ -6,7 +6,7 @@ var Palette = Class.create( /** @lends Palette.prototype */ {
      * @param {String} buildingBlockType  Identifier of the class or building block (e.g.: screen) 
      * @constructs
      */
-    initialize: function(/** String */ buildingBlockType, /** String */ docId) {
+    initialize: function(/** String */ buildingBlockType, /** AbstractDocument */ parent) {
         /**
          * Node id of the accordion pane.
          * @type String
@@ -16,7 +16,7 @@ var Palette = Class.create( /** @lends Palette.prototype */ {
 
         this._buildingBlockType = buildingBlockType;
         
-        this._docId = docId;
+        this._parent = parent;
         
         /**
          * Collection of components the palette offers.
@@ -48,7 +48,7 @@ var Palette = Class.create( /** @lends Palette.prototype */ {
         switch(this._buildingBlockType){
             case Constants.BuildingBlock.SCREEN:
                 //find Screens and check
-                var currentDocument = GVSSingleton.getInstance().getDocumentController().getCurrentDocument();
+                var currentDocument = this._parent;
                 var canvas = currentDocument.getCanvas();
                 var domainContext = {
                     "tags":currentDocument.getBuildingBlockDescription().getDomainContexts(),
@@ -87,7 +87,7 @@ var Palette = Class.create( /** @lends Palette.prototype */ {
     _createComponents: function(buildingBlockFactory) {
         var descs = buildingBlockFactory.getBuildingBlockDescriptions();
         var components = [];
-        var docId = this._docId;
+        var docId = this._parent.getTabId();
         $A(descs).each(
             function(desc) {
                 components.push(desc.createPaletteComponent(docId));

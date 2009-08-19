@@ -5,15 +5,15 @@ var AbstractDocument = Class.create( /** @lends AbstractDocument.prototype */ {
      * @abstract
      * @constructs
      */ 
-    initialize: function(/** String */ title) {
+    initialize: function(/** String */ title, /** {String[]} */ validBuildingBlocks) {
         var uidGenerator = UIDGeneratorSingleton.getInstance();
 
         /**
          * Accepted building blocks
-         * @type {String[]}
+         * @type Array
          * @private
          */
-        this._validBuildingBlocks = [];
+        this._validBuildingBlocks = $A(validBuildingBlocks);
         
         /**
          * Tab title
@@ -54,7 +54,8 @@ var AbstractDocument = Class.create( /** @lends AbstractDocument.prototype */ {
         this._tab = new dijit.layout.ContentPane({
             title: this._title,
             id: this._tabId,
-            closable: true
+            closable: true,
+            onClose: this._closeDocument.bind(this)
         }, null);
         
         /**
@@ -69,7 +70,7 @@ var AbstractDocument = Class.create( /** @lends AbstractDocument.prototype */ {
          * @type PaletteController
          * @private
          */ 
-        this._paletteController = new PaletteController(this.getTabId());
+        this._paletteController = new PaletteController(this);
         
         this._tab.setContent(this._tabContent);
     },
@@ -159,10 +160,26 @@ var AbstractDocument = Class.create( /** @lends AbstractDocument.prototype */ {
      */
     updateToolbar: function () {
           throw "Abstract Method invocation: AbstractDocument::updateToolbar";
-    }
+    },
 
+    /**
+     * Close document event handler.
+     * @private
+     */
+    _closeDocument: function() {
+        if (confirm("Are you sure you want to close the current document?" + 
+            " Unsaved changes will be lost")){
+            var gvs = GVSSingleton.getInstance();
+            gvs.getDocumentController().closeDocument(this._tabId);
+            return true;      
+        }
+        else {
+            return false;
+        }
+    },
 
     // **************** PRIVATE METHODS **************** //
+    
 });
 
 // vim:ts=4:sw=4:et:

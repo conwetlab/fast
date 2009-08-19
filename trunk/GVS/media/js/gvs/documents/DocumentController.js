@@ -38,10 +38,10 @@ var DocumentController = Class.create(
         dojo.connect(dijit.byId("documentContainer"), "selectChild", function(tab){
             DocumentController.prototype._selectDocument.apply(mine, arguments);
         });
-        //Arming onClose callback
+        /*//Arming onClose callback
         dojo.connect(dijit.byId("documentContainer"), "closeChild", function(tab){
             DocumentController.prototype._closeDocument.apply(mine, arguments);
-        });
+        });*/
         
         // FIXME: Work around for tab rendering bug when there is only one tab.
         this.addDocument(welcome);
@@ -217,25 +217,13 @@ var DocumentController = Class.create(
                 break;
         }
     },
-
-    // **************** PRIVATE METHODS **************** //
-
     /**
-     * Close document event handler.
-     * @private
+     * this function closes a document by its Id
+     * @param String id
      */
-    _closeDocument: function(/** {String|DOMNode} */ tab) {
-        var id;
-
-        if (tab.id) { // it is tab widget
-            id = tab.id;
-        } else { //it is a string id
-            id = tab;
-        }
-
+    closeDocument: function (id){
         delete this._documents[id];
-
-        if (dijit.byId("documentContainer").getChildren().length === 0){
+        if ($H(this._documents).keys().length == 0){
             //Show the welcome Document
             var welcome = new WelcomeDocument();
             this.addDocument(welcome);
@@ -245,6 +233,8 @@ var DocumentController = Class.create(
             dijit.byId("documentContainer").layout();
         }
     },
+
+    // **************** PRIVATE METHODS **************** //
     
 
     /**
