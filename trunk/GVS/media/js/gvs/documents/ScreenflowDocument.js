@@ -191,6 +191,8 @@ var ScreenflowDocument = Class.create(AbstractDocument,
         var elements = currentDocument.getPaletteElements();
         CatalogueSingleton.getInstance().check(canvas, domainContext, elements, 'reachability');
         this.updateToolbar();
+        this.setSelectedElement();
+        this._propertiesPane.clearElement();
     },
 
     /**
@@ -216,6 +218,8 @@ var ScreenflowDocument = Class.create(AbstractDocument,
         };
         var elements = currentDocument.getPaletteElements();
         CatalogueSingleton.getInstance().check(canvas, domainContext, elements, 'reachability');
+        this.setSelectedElement();
+        this._propertiesPane.clearElement();
     },
 
     /**
@@ -242,6 +246,8 @@ var ScreenflowDocument = Class.create(AbstractDocument,
         };
         var elements = currentDocument.getPaletteElements();
         CatalogueSingleton.getInstance().check(canvas, domainContext, elements, 'reachability');
+        this.setSelectedElement();
+        this._propertiesPane.clearElement();
     },
 
     /**
@@ -551,7 +557,25 @@ var ScreenflowDocument = Class.create(AbstractDocument,
             splitter:true
             });
         return inspectorArea;
-    }
+    },
+    
+    /**
+     * Close document event handler.
+     * @overrides
+     * @private
+     */
+    _closeDocument: function() {
+        if (confirm("Are you sure you want to close the current Screenflow?" + 
+            " Unsaved changes will be lost")){
+            var gvs = GVSSingleton.getInstance();
+            gvs.getDocumentController().closeDocument(this._tabId);
+            return true;      
+        }
+        else {
+            return false;
+        }
+    },
+
 });
 
 // vim:ts=4:sw=4:et:

@@ -38,14 +38,8 @@ var DocumentController = Class.create(
         dojo.connect(dijit.byId("documentContainer"), "selectChild", function(tab){
             DocumentController.prototype._selectDocument.apply(mine, arguments);
         });
-        /*//Arming onClose callback
-        dojo.connect(dijit.byId("documentContainer"), "closeChild", function(tab){
-            DocumentController.prototype._closeDocument.apply(mine, arguments);
-        });*/
         
-        // FIXME: Work around for tab rendering bug when there is only one tab.
         this.addDocument(welcome);
-        dijit.byId("documentContainer").layout();
     },
 
     // **************** PUBLIC METHODS **************** //
@@ -222,15 +216,17 @@ var DocumentController = Class.create(
      * @param String id
      */
     closeDocument: function (id){
+        
+        //Go to the previous tab and not to the
+        //initial tab
+        dijit.byId("documentContainer").back();
+         
         delete this._documents[id];
+        
         if ($H(this._documents).keys().length == 0){
             //Show the welcome Document
             var welcome = new WelcomeDocument();
             this.addDocument(welcome);
-
-            // FIXME: Work around for tab rendering bug when there is
-            //        only one tab.
-            dijit.byId("documentContainer").layout();
         }
     },
 

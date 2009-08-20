@@ -19,9 +19,8 @@ var ScreenFactory = Class.create(BuildingBlockFactory,
 
     updateBuildingBlockDescriptions: function (screenDescriptions) {
 
-        var screen_metadata = screenDescriptions;
-        for (var i=0; i<screen_metadata.length ; i++) {
-            this._buildingBlockDescriptions.push(new ScreenDescription (screen_metadata[i]));
+        for (var i=0; i< screenDescriptions.length ; i++) {
+            this._buildingBlockDescriptions.push(new ScreenDescription (screenDescriptions[i]));
         }
     },
 

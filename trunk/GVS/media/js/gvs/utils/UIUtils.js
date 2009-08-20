@@ -26,8 +26,6 @@ UIUtils.onKeyPressCanvas = function(e){
                         if (confirm("You are about to remove " + title + " from canvas. Are you sure?")) { //delete if ok
                             currentDocument.deleteScreen(selectedElement.id);
                             selectedElement.parentNode.removeChild(selectedElement);
-                            currentDocument.emptyPropertiesPane();
-                            currentDocument.setSelectedElement();
                         }
                         break;
                     case Constants.BuildingBlock.DOMAIN_CONCEPT:
@@ -36,8 +34,6 @@ UIUtils.onKeyPressCanvas = function(e){
                         if (confirm("You are about to remove " + title + " from canvas. Are you sure?")) { //delete if ok
                             currentDocument.deleteDomainConcept(selectedElement.id);
                             selectedElement.parentNode.removeChild(selectedElement);
-                            currentDocument.emptyPropertiesPane();
-                            currentDocument.setSelectedElement();
                         }
                         break;
                     case Constants.BuildingBlock.CONNECTOR:
@@ -46,8 +42,6 @@ UIUtils.onKeyPressCanvas = function(e){
                         if (confirm("You are about to remove " + title + " from canvas. Are you sure?")) { //delete if ok
                             currentDocument.deleteConnector(selectedElement.id);
                             selectedElement.parentNode.removeChild(selectedElement);
-                            currentDocument.emptyPropertiesPane();
-                            currentDocument.setSelectedElement();
                         }
                         break;
                     default:

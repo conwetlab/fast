@@ -159,7 +159,7 @@ var AbstractDocument = Class.create( /** @lends AbstractDocument.prototype */ {
      * @abstract
      */
     updateToolbar: function () {
-          throw "Abstract Method invocation: AbstractDocument::updateToolbar";
+        throw "Abstract Method invocation: AbstractDocument::updateToolbar";
     },
 
     /**
@@ -167,15 +167,9 @@ var AbstractDocument = Class.create( /** @lends AbstractDocument.prototype */ {
      * @private
      */
     _closeDocument: function() {
-        if (confirm("Are you sure you want to close the current document?" + 
-            " Unsaved changes will be lost")){
-            var gvs = GVSSingleton.getInstance();
-            gvs.getDocumentController().closeDocument(this._tabId);
-            return true;      
-        }
-        else {
-            return false;
-        }
+        var gvs = GVSSingleton.getInstance();
+        gvs.getDocumentController().closeDocument(this._tabId);
+        return true;
     },
 
     // **************** PRIVATE METHODS **************** //
