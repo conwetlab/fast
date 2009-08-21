@@ -37,78 +37,24 @@ from xml.dom.minidom import getDOMImplementation
 from django.db import models
 from django.core.serializers.json import DateTimeAwareJSONEncoder
 from django.utils import simplejson
-
-def jsonEncode(data, ensure_ascii=False):
-    """
-    The main issues with django's default json serializer is that properties that
-    had been added to a object dynamically are being ignored (and it also has 
-    problems with some models).
-    """
-
-    def _any(data):
-        ret = None
-        if type(data) is types.ListType:
-            ret = _list(data)
-        elif type(data) is types.DictType:
-            ret = _dict(data)
-        elif isinstance(data, Decimal):
-            # json.dumps() cant handle Decimal
-            ret = str(data)
-        elif isinstance(data, models.query.QuerySet):
-            # Actually its the same as a list ...
-            ret = _list(data)
-        elif isinstance(data, models.Model):
-            ret = _model(data)
-        else:
-            ret = data
-        return ret
-    
-    def _model(data):
-        ret = {}
-        # If we only have a model, we only want to encode the fields.
-        for f in data._meta.fields:
-            ret[f.attname] = _any(getattr(data, f.attname))
-        # And additionally encode arbitrary properties that had been added.
-        fields = dir(data.__class__) + ret.keys()
-        add_ons = [k for k in dir(data) if k not in fields]
-        for k in add_ons:
-            ret[k] = _any(getattr(data, k))
-        return ret
-    
-    def _list(data):
-        ret = []
-        for v in data:
-            ret.append(_any(v))
-        return ret
-    
-    def _dict(data):
-        ret = {}
-        for k,v in data.items():
-            ret[k] = _any(v)
-        return ret
-    
-    ret = _any(data)
-    
-    return simplejson.dumps(ret, cls=DateTimeAwareJSONEncoder, ensure_ascii=ensure_ascii)
-
 def cleanUrl(data):
     if data.endswith('/'):
         data = data[:-1]
     return data
 
-def json_encode(data, ensure_ascii=False):
+def json_encode(data, ensure_ascii=False, fields=None):
     """
     The main issues with django's default json serializer is that properties that
     had been added to a object dynamically are being ignored (and it also has 
     problems with some models).
     """
 
-    def _any(data):
+    def _any(data, fields = None):
         ret = None
         if type(data) is types.ListType:
             ret = _list(data)
         elif type(data) is types.DictType:
-            ret = _dict(data)
+            ret = _dict(data, fields)
         elif isinstance(data, Decimal):
             # json.dumps() cant handle Decimal
             ret = str(data)
@@ -116,21 +62,23 @@ def json_encode(data, ensure_ascii=False):
             # Actually its the same as a list ...
             ret = _list(data)
         elif isinstance(data, models.Model):
-            ret = _model(data)
+            ret = _model(data, fields)
         else:
             ret = data
         return ret
     
-    def _model(data):
+    def _model(data, fields):
         ret = {}
         # If we only have a model, we only want to encode the fields.
         for f in data._meta.fields:
-            ret[f.attname] = _any(getattr(data, f.attname))
+            if(_validateField(f.attname, fields)):
+                ret[f.attname] = _any(getattr(data, f.attname), _getFields(f.attname, fields))
         # And additionally encode arbitrary properties that had been added.
-        #fields = dir(data.__class__) + ret.keys()
-        #add_ons = [k for k in dir(data) if k not in fields]
-        #for k in add_ons:
-        #    ret[k] = _any(getattr(data, k))
+        f = dir(data.__class__) + ret.keys()
+        add_ons = [k for k in dir(data) if k not in f]
+        for k in add_ons:
+            if(_validateField(k, fields)):
+                ret[k] = _any(getattr(data, k), _getFields(k, fields))
         return ret
     
     def _list(data):
@@ -139,13 +87,26 @@ def json_encode(data, ensure_ascii=False):
             ret.append(_any(v))
         return ret
     
-    def _dict(data):
+    def _dict(data, fields):
         ret = {}
         for k,v in data.items():
-            ret[k] = _any(v)
+            if(_validateField(k, fields)):
+                ret[k] = _any(v, _getFields(k, fields))
         return ret
     
-    ret = _any(data)
+    def _validateField(field, fields):
+        if fields == None:
+            return True
+        return fields.has_key(field)
+    
+    def _getFields(field_name, fields):
+        if fields == None:
+            return None
+        elif fields.has_key(field_name):
+            return fields[field_name]
+        return None
+    
+    ret = _any(data, fields)
     
     return simplejson.dumps(ret, cls=DateTimeAwareJSONEncoder, ensure_ascii=ensure_ascii)
 

@@ -4,10 +4,9 @@ from django.conf import settings
 from django.http import HttpResponse
 
 from python_rest_client.restful_lib import Connection
-from commons.utils import jsonEncode, cleanUrl
+from commons.utils import cleanUrl
 
 def catalogueProxy(request, operation):
-    print "CATALOGUEPROXY"
     # Get the base url to the Catalogue
     if hasattr(settings,'CATALOGUE_URL'):
         urlBase=settings.CATALOGUE_URL
@@ -34,61 +33,52 @@ def catalogueProxy(request, operation):
         return response
 
 def findandcheck(request):
-    print "FINDANDCHECK"
     if hasattr(settings,'CATALOGUE_URL'):
         baseUrl = cleanUrl(settings.CATALOGUE_URL)
         conn = Connection(baseUrl)
         # Obtain the json from the request
         body = request.raw_post_data
-        #body = jsonEncode(body)
         result = conn.request_post("/findcheck",body=body, headers={'Accept':'text/json'})
         response = HttpResponse(result['body'], mimetype='application/json; charset=UTF-8')
         return response
 
 def find(request):
-    print "FIND"
     if hasattr(settings,'CATALOGUE_URL'):
         baseUrl = cleanUrl(settings.CATALOGUE_URL)
         conn = Connection(baseUrl)
         # Obtain the json from the request
         body = request.raw_post_data
-        #body = jsonEncode(body)
+
         result = conn.request_post("/find",body=body, headers={'Accept':'text/json'})
         response = HttpResponse(result['body'], mimetype='application/json; charset=UTF-8')
         return response
 
 def getmetadata(request):
-    print "GETMETADATA"
     if hasattr(settings,'CATALOGUE_URL'):
         baseUrl = cleanUrl(settings.CATALOGUE_URL)
         conn = Connection(baseUrl)
         # Obtain the json from the request
         body = request.raw_post_data
-        #body = jsonEncode(body)
         result = conn.request_post("/getmetadata",body=body, headers={'Accept':'text/json'})
         response = HttpResponse(result['body'], mimetype='application/json; charset=UTF-8')
         return response
 
 def check(request):
-    print "CHECK"
     if hasattr(settings,'CATALOGUE_URL'):
         baseUrl = cleanUrl(settings.CATALOGUE_URL)
         conn = Connection(baseUrl)
         # Obtain the json from the request
         body = request.raw_post_data
-        #body = jsonEncode(body)
         result = conn.request_post("/check",body=body, headers={'Accept':'text/json'})
         response = HttpResponse(result['body'], mimetype='application/json; charset=UTF-8')
         return response
 
 def createscreen(request):
-    print "CREATESCREEN"
     if hasattr(settings,'CATALOGUE_URL'):
         baseUrl = cleanUrl(settings.CATALOGUE_URL)
         conn = Connection(baseUrl)
         # Obtain the json from the request
         body = request.raw_post_data
-        #body = jsonEncode(body)
         result = conn.request_post("/screens",body=body, headers={'Accept':'text/json'})
         response = HttpResponse(result['body'], mimetype='application/json; charset=UTF-8')
         return response

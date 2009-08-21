@@ -49,6 +49,48 @@ var PreferencesSingleton = function() {
                 var dialogDiv = new Element("div", {
                     "id" : "preferencesDialogDiv"
                 });
+                var divFirstName = new Element("div", {
+                    "class" : "line"
+                });
+                var labelFirstName = new Element("label").update("First Name:");
+                divFirstName.insert(labelFirstName);
+                var inputFirstName = new Element("input", {
+                    type : "text",
+                    id : "PrefFirstName",
+                    name : "first_name",
+                    value : "",
+                    "class" : "input_PrefDialog" 
+                });
+                divFirstName.insert(inputFirstName);
+                dialogDiv.insert(divFirstName);
+                var divLastName = new Element("div", {
+                    "class" : "line"
+                });
+                var labelLastName = new Element("label").update("Last Name:");
+                divLastName.insert(labelLastName);
+                var inputLastName = new Element("input", {
+                    type : "text",
+                    id : "PrefLastName",
+                    name : "last_name",
+                    value : "",
+                    "class" : "input_PrefDialog" 
+                });
+                divLastName.insert(inputLastName);
+                dialogDiv.insert(divLastName);
+                var divEmail = new Element("div", {
+                    "class" : "line"
+                });
+                var labelEmail = new Element("label").update("Email:");
+                divEmail.insert(labelEmail);
+                var inputEmail = new Element("input", {
+                    type : "text",
+                    id : "PrefEmail",
+                    name : "email",
+                    value : "",
+                    "class" : "input_PrefDialog" 
+                });
+                divEmail.insert(inputEmail);
+                dialogDiv.insert(divEmail);
                 var divEzWebURL = new Element("div", {
                     "class" : "line"
                 });
@@ -133,7 +175,10 @@ var PreferencesSingleton = function() {
 			var prefDialog = this.createDialog();
 			
 			var form = $("PreferencesForm");
-			form["ezweb_url"].value = response.ezweb_url;
+			form["first_name"].value = (response.user.first_name)? response.user.first_name : "";
+			form["last_name"].value = (response.user.last_name)? response.user.last_name : "";
+			form["email"].value = (response.user.email)? response.user.email : "";
+			form["ezweb_url"].value = (response.profile.ezweb_url)? response.profile.ezweb_url : "";
         	
         	prefDialog.show();
         },
