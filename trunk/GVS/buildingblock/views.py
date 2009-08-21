@@ -61,16 +61,17 @@ class BuildingBlockCollection(resource.Resource):
             
             bb.save()
             
-            if data.has_key('domainContext'):
-                tags = data.get('domainContext').get('tags')
-                updateTags(user, bb, tags)
+            tags = data.get('domainContext').get('tags')
+            updateTags(user, bb, tags)
+            data['domainContext']['user'] = user.username
                 
             if data.has_key('code'):
                 c = BuildingBlockCode(buildingBlock=bb, code=data.get('code'))
                 c.save()
                 
             data['id'] = bb.pk
-            data['type'] = bbtype   
+            data['type'] = bbtype
+
             bb.data = json_encode(data)
             bb.save()
             
@@ -105,11 +106,7 @@ class BuildingBlockEntry(resource.Resource):
             
             bb.data = received_json    
             bb.save()
-            
-            UserTag.objects.filter(user=user, buildingBlock=bb).delete()
-            if data.has_key('domainContext'):
-                tags = data.get('domainContext').get('tags')
-                updateTags(user, bb, tags)
+
             return HttpResponse(json_encode(bb.data), mimetype='application/json; charset=UTF-8')
         except Exception, e:
             return HttpResponseServerError(json_encode({"message":unicode(e)}), mimetype='application/json; charset=UTF-8')   
@@ -169,6 +166,18 @@ class TagCollection(resource.Resource):
             
             tags = simplejson.loads(received_json)
             updateTags(user, bb, tags)
+            
+            data = simplejson.loads(bb.data)
+            allTags = UserTag.objects.filter(buildingBlock=bb)
+            bbTags = []
+            for t in allTags:
+                bbTags.append(t.tag.name);
+            data['domainContext']['tags'] = bbTags
+            bb.data = json_encode(data)
+            bb.save()
+            
+            #TODO: update Catalogue Data
+            #if data.has_key('catalogue_uri')
             
             ok = json_encode({"message":"OK"})
             return HttpResponse(ok, mimetype='application/json; charset=UTF-8')

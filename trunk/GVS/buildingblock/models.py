@@ -27,7 +27,7 @@ class BuildingBlock(models.Model):
     popularity = models.DecimalField(null=True, max_digits=3, decimal_places=2)
     
     class Meta:
-        unique_together = ('name', 'version')
+        unique_together = ('name', 'type', 'version')
         
     def __unicode__(self):
         return u'%s %s: %s' % (self.type, self.pk, self.name)
