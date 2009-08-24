@@ -88,12 +88,12 @@ var DragHandler = Class.create(
          var draggableElement = this._draggedObject.getHandlerNode();
         
         var parentNode = draggableElement.parentNode;
-        var x = this._draggedObject.getHandlerNode().offsetTop;
-        var y = this._draggedObject.getHandlerNode().offsetLeft;
+        var x = this._draggedObject.getHandlerNode().offsetLeft;
+        var y = this._draggedObject.getHandlerNode().offsetTop;
         this._initialArea = {
             'node': parentNode,
-            'top': x,
-            'left': y
+            'top': y,
+            'left': x
         };
 
         // disable context menu and text selection
