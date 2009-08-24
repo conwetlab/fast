@@ -23,6 +23,8 @@
         </script>
         <script type="text/javascript" src="{{ MEDIA_URL }}js/lib/dojo/dojo/dojo.js"></script>
         
+        <script type="text/javascript" src="{{ MEDIA_URL }}js/lib/utils/json2.js"></script>
+        
         <script type="text/javascript" src="{{ MEDIA_URL }}js/lib/prototype/prototype.js"></script>
         
         <script type="text/javascript" src="{{ MEDIA_URL }}js/lib/utils/getAbsolutePosition.js"></script>
@@ -43,8 +45,8 @@
             _URIConstants.prototype.catalogueGetFacts = "catalogue/getFacts";
             _URIConstants.prototype.catalogueFlow = "{{CATALOGUE_FLOW}}";
             _URIConstants.prototype.catalogueCreateScreen = "catalogue/createscreen";
-            _URIConstants.prototype.catalogueGetDomainConcepts = "catalogue/getdomainconcepts"
-            _URIConstants.prototype.userPreferences = "user/preferences"
+            _URIConstants.prototype.catalogueGetDomainConcepts = "catalogue/getdomainconcepts";
+            _URIConstants.prototype.userPreferences = "user/preferences";
             
             _URIConstants.prototype.logoFast = "{{ MEDIA_URL }}images/gui/fastLogo.png";
 
@@ -79,6 +81,8 @@
             src="{{ MEDIA_URL }}js/gvs/catalogue/DomainConceptFactory.js"></script>
         <script type="text/javascript" 
             src="{{ MEDIA_URL }}js/gvs/catalogue/ScreenflowDescription.js"></script>
+        <script type="text/javascript" 
+            src="{{ MEDIA_URL }}js/gvs/catalogue/InferenceEngine.js"></script>
         
         <!-- Property viewers -->
         <script type="text/javascript" 
@@ -190,6 +194,7 @@
             dojo.require("dijit.form.TextBox");
             dojo.require("dijit.form.ValidationTextBox");
             dojo.require("dijit.form.Button");
+            dojo.require("dijit.form.Form");
             dojo.require("dijit.InlineEditBox");
             dojo.require("dijit.Tooltip");
             

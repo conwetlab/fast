@@ -24,6 +24,13 @@ var Palette = Class.create( /** @lends Palette.prototype */ {
          * @private @member
          */
         this._components = [];
+        
+        /**
+         * Domain of the current palette
+         * @type Array
+         * @private @member
+         */
+        this._domainContext = [];
 
         /**
          * Accordion pane node.
@@ -43,7 +50,33 @@ var Palette = Class.create( /** @lends Palette.prototype */ {
     getNode: function() {
         return this._node;
     },
-
+    
+    /**
+     * This function populates the current palette
+     * with the building blocks associated to a given
+     * domain context
+     */
+    populateBuildingBlocks: function (/** Array */ domainContext){
+        
+        this._domainContext = domainContext;
+        
+        switch(this._buildingBlockType){
+            case Constants.BuildingBlock.SCREEN:
+                //find Screens and check
+                this._parent.getInferenceEngine().retrieveScreens(domainContext);
+                break;
+            case Constants.BuildingBlock.DOMAIN_CONCEPT:
+                //FIXME: Handle domain concepts
+                break;
+            case Constants.BuildingBlock.CONNECTOR:
+                this.paintComponents();
+                break;
+        }
+    },
+    
+    /**
+     * TODO: describe this. maybe this method will dissapear
+     */
     updateComponents: function() {
         switch(this._buildingBlockType){
             case Constants.BuildingBlock.SCREEN:
@@ -51,7 +84,7 @@ var Palette = Class.create( /** @lends Palette.prototype */ {
                 var currentDocument = this._parent;
                 var canvas = currentDocument.getCanvas();
                 var domainContext = {
-                    "tags":currentDocument.getBuildingBlockDescription().getDomainContexts(),
+                    "tags":currentDocument.getBuildingBlockDescription().getDomainContext(),
                     "user":null
                 };
                 var elements = currentDocument.getPaletteElements();
@@ -85,12 +118,11 @@ var Palette = Class.create( /** @lends Palette.prototype */ {
      * @private
      */
     _createComponents: function(buildingBlockFactory) {
-        var descs = buildingBlockFactory.getBuildingBlockDescriptions();
+        var descs = buildingBlockFactory.getBuildingBlockDescriptions(this._domainContext);
         var components = [];
-        var docId = this._parent.getTabId();
         $A(descs).each(
             function(desc) {
-                components.push(desc.createPaletteComponent(docId));
+                components.push(desc.createPaletteComponent());
             }
         );
         return components;

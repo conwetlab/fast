@@ -7,8 +7,8 @@ var ScreenComponent = Class.create(PaletteComponent,
      * @constructs
      * @extends PaletteComponent
      */
-    initialize: function($super, screenBuildingBlockDescription, /** String */ docId) {
-        $super(screenBuildingBlockDescription, docId);
+    initialize: function($super, screenBuildingBlockDescription) {
+        $super(screenBuildingBlockDescription);
     },
 
     /**

@@ -6,9 +6,11 @@ var ScreenflowDocument = Class.create(AbstractDocument,
      * @constructs
      * @extends AbstractDocument
      */
-    initialize: function($super, /** String */ title) {
+    initialize: function($super, /** String */ title, /** String */ domainContext) {
         $super(title, [Constants.BuildingBlock.SCREEN, Constants.BuildingBlock.CONNECTOR, 
                Constants.BuildingBlock.DOMAIN_CONCEPT]);
+               
+        this._documentType= Constants.DocumentType.SCREENFLOW;
        
         /** 
          * Variable
@@ -24,38 +26,65 @@ var ScreenflowDocument = Class.create(AbstractDocument,
          */
         this._prePostPane = null;
         
-        /**
-         * Dialog to create a new document
-         * @type FormDialog
-         * @private
-         */
-        this._deployGadgetDialog = new DeployGadgetDialog(this);
-        
-        /** 
+         /** 
          * Variable
          * @type FactsPane
          * @private @member
          */
         this._factsPane = null;
         
-        this._documentType= Constants.DocumentType.SCREENFLOW;
+        /**
+         * Dialog to create a new document
+         * @type FormDialog
+         * @private @member
+         */
+        this._deployGadgetDialog = new DeployGadgetDialog(this);
+
+        /**
+         * Palette Controller
+         * @type PaletteController
+         * @private @member
+         */ 
+        this._paletteController = new PaletteController(this);
+        
+         /**
+         * InferenceEngine
+         * @type InferenceEngine
+         * @private @member
+         */ 
+        this._inferenceEngine = new InferenceEngine(this);
+        
         
         /*Screenflow Definition*/
         this._buildingBlockDescription = new ScreenflowDescription();
+        
+        
         this._screens = [];
         this._connectors = [];
         this._domainConcepts = [];
         this._selectedElement = null;
         
-        this._populate();
+        this._buildingBlockDescription.setDomainContext(domainContext);
         
+        this._populate();     
+ 
     },
 
 
     // **************** PUBLIC METHODS **************** //
+    
+    /**
+     * This function populates the building blocks in the palettes
+     */
+    populateBuildingBlocks: function (){
+        //Do the magic:
+        //Fill palette data
+        //calculate reachability
+        this._paletteController.populateBuildingBlocks(this._buildingBlockDescription.getDomainContext());       
+    },
     /**
      * Returns the BuildingBlock Description for the screenflow document
-     * @type {ScreenflowDescription}
+     * @type ScreenflowDescription
      */
     getBuildingBlockDescription: function () {
         return this._buildingBlockDescription;
@@ -68,10 +97,18 @@ var ScreenflowDocument = Class.create(AbstractDocument,
         this.getBuildingBlockDescription().setDescription("en-GB", $F(form.info));
         this.getBuildingBlockDescription().setCreator($F(form.author));
     },
+    
+    /**
+     * Returns the document inference engine
+     * @type InferenceEngine
+     */
+    getInferenceEngine: function () {
+        return this._inferenceEngine;
+    },
 
     /**
      * Returns the list of screens for the screenflow document
-     * @type {ScreenInstance[]}
+     * @type ScreenInstance[]
      */
     getScreens: function () {
         return this._screens;
@@ -79,7 +116,7 @@ var ScreenflowDocument = Class.create(AbstractDocument,
     
     /**
      * Returns the list of connectors for the screenflow document
-     * @type {ConnectorInstance[]}
+     * @type ConnectorInstance[]
      */
     getConnectors: function () {
         return this._connectors;
@@ -87,7 +124,7 @@ var ScreenflowDocument = Class.create(AbstractDocument,
 
     /**
      * Returns the list of domain concepts for the screenflow document
-     * @type {DomainConceptInstance[]}
+     * @type DomainConceptInstance[]
      */
     getDomainConcepts: function () {
         return this._domainConcepts;
@@ -96,7 +133,7 @@ var ScreenflowDocument = Class.create(AbstractDocument,
     /**
      * Returns an array with the building block description and the Building block type
      * for the building block view id passed as a parameter of the screenflow document
-     * @type {[BuildingBlockDescription, String]}
+     * @type [BuildingBlockDescription, String]
      */
     getBuildingBlockInstance: function (buildingBlockViewId) {
         for (var i=0; i<this._screens.length; i++) {
@@ -127,8 +164,10 @@ var ScreenflowDocument = Class.create(AbstractDocument,
         if(screen!=null) {
             this._screens.push(screen);
             var screenDescUri = $H(screen.getBuildingBlockDescription()).get('uri');
-            this.getBuildingBlockDescription().addScreen(screen.getId(), screenDescUri, screen.getPosition());
-            this.updateToolbar();
+            this._buildingBlockDescription.addScreen(screen.getId(), screenDescUri, screen.getPosition());
+            
+            this._updateReachability();           
+            this.updateToolbar();         
         }
     },
     
@@ -145,7 +184,7 @@ var ScreenflowDocument = Class.create(AbstractDocument,
         }
     },
     
-    //TODO
+    //TODO: Call the catalogue
     updateConnector: function (connector) {
         /*
         if(connector!=null) {
@@ -160,6 +199,7 @@ var ScreenflowDocument = Class.create(AbstractDocument,
      *      Domain Concept to be added to the
      *      Screenflow document.
      */
+    //TODO: call the catalogue
     addDomainConcept: function (domainConcept) {
         if(domainConcept!=null) {
             this._domainConcepts.push(domainConcept);
@@ -182,14 +222,8 @@ var ScreenflowDocument = Class.create(AbstractDocument,
             }
         }
         this._screens = this._screens.compact();
-        var currentDocument = GVSSingleton.getInstance().getDocumentController().getCurrentDocument();
-        var canvas = currentDocument.getCanvas();
-        var domainContext = {
-            "tags":currentDocument.getBuildingBlockDescription().getDomainContexts(),
-            "user":null
-        };
-        var elements = currentDocument.getPaletteElements();
-        CatalogueSingleton.getInstance().check(canvas, domainContext, elements, 'reachability');
+        
+        this._updateReachability();
         this.updateToolbar();
         this.setSelectedElement();
         this._propertiesPane.clearElement();
@@ -210,14 +244,8 @@ var ScreenflowDocument = Class.create(AbstractDocument,
             }
         }
         this._connectors = this._connectors.compact();
-        var currentDocument = GVSSingleton.getInstance().getDocumentController().getCurrentDocument();
-        var canvas = currentDocument.getCanvas();
-        var domainContext = {
-            "tags":currentDocument.getBuildingBlockDescription().getDomainContexts(),
-            "user":null
-        };
-        var elements = currentDocument.getPaletteElements();
-        CatalogueSingleton.getInstance().check(canvas, domainContext, elements, 'reachability');
+        
+        this._updateReachability();
         this.setSelectedElement();
         this._propertiesPane.clearElement();
     },
@@ -238,14 +266,7 @@ var ScreenflowDocument = Class.create(AbstractDocument,
             }
         }
         this._domainConcepts = this._domainConcepts.compact();
-        var currentDocument = GVSSingleton.getInstance().getDocumentController().getCurrentDocument();
-        var canvas = currentDocument.getCanvas();
-        var domainContext = {
-            "tags":currentDocument.getBuildingBlockDescription().getDomainContexts(),
-            "user":null
-        };
-        var elements = currentDocument.getPaletteElements();
-        CatalogueSingleton.getInstance().check(canvas, domainContext, elements, 'reachability');
+        this._updateReachability();
         this.setSelectedElement();
         this._propertiesPane.clearElement();
     },
@@ -466,7 +487,8 @@ var ScreenflowDocument = Class.create(AbstractDocument,
             return 'canvas';
         } else {
             var elementClass = $w(element.className);
-            elementClass = elementClass.without("unknown").without("satisfeable").without("unsatisfeable").without("selected").without("view");
+            elementClass = elementClass.without("unknown").without("satisfeable").
+                            without("unsatisfeable").without("selected").without("view");
             return ((elementClass.size() >= 1) ? elementClass[0] : 'unknown');
         }
     },
@@ -575,6 +597,22 @@ var ScreenflowDocument = Class.create(AbstractDocument,
             return false;
         }
     },
+    /**
+     * This function updates the reachability in all
+     * Elements: canvas and palettes
+     */
+    _updateReachability: function () {
+        var canvas = this.getCanvas();
+        var domainContext = this.getBuildingBlockDescription().getDomainContext();
+        
+        var palette = this.getPaletteElements();
+        
+        if (URIs.catalogueFlow =='check'){
+            this._inferenceEngine.check(canvas, domainContext, palette, 'reachability');
+        } else {
+            this._inferenceEngine.findAndCheck(canvas, domainContext, palette, 'reachability');
+        }
+    }
 
 });
 

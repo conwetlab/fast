@@ -60,7 +60,7 @@ var ScreenflowDescription = Class.create(BuildingBlockDescription,
      *      Screenflow document.
      */
     deleteScreen: function(/** String */ id) {
-        this['screens'].unset(id);
+        this.screens.unset(id);
     },
 
     /**
@@ -126,7 +126,7 @@ var ScreenflowDescription = Class.create(BuildingBlockDescription,
      * @param domainContexts
      *      Strings containing the domain contexts
      */      
-    setDomainContexts: function (domainContexts) {
+    setDomainContext: function (domainContexts) {
         var domainContext = "";
         var domainContextsArray = domainContexts.split(",");
         for(var i = 0; i < domainContextsArray.length ; i++) {
@@ -151,7 +151,7 @@ var ScreenflowDescription = Class.create(BuildingBlockDescription,
      * Returns the Screenflow Domain Contexts
      * @type {[]}
      */
-    getDomainContexts: function () {
+    getDomainContext: function () {
         return this['domainContext'];
     },
     

@@ -65,12 +65,6 @@ var AbstractDocument = Class.create( /** @lends AbstractDocument.prototype */ {
          */       
         this._documentType=null;
         
-        /**
-         * Palette Controller
-         * @type PaletteController
-         * @private
-         */ 
-        this._paletteController = new PaletteController(this);
         
         this._tab.setContent(this._tabContent);
     },

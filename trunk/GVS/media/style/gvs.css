@@ -309,10 +309,8 @@ h4{
     .connectorImage{
         position:inherit;
         top: 10px;
-        -moz-border-radius-bottomleft:13px;
-		-moz-border-radius-bottomright:13px;
-		-moz-border-radius-topleft:13px;
-		-moz-border-radius-topright:13px;
+		-moz-border-radius: 13px 13px;
+        -webkit-border-radius: 13px 13px;
 		border:1px solid grey;
 		height:20px;
 		padding-top:5px;

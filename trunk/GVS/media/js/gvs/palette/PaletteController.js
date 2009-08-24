@@ -11,7 +11,7 @@ var PaletteController = Class.create(
          * @type {Hash}
          * @private
          */
-        this._palettes = {};
+        this._palettes = new Hash();
         
          /**
          * Document which contains the palette
@@ -30,12 +30,22 @@ var PaletteController = Class.create(
         //Create all the document necessary palettes
         this._parent.getValidBuildingBlocks().each (function(buildingBlock){
            var palette = new Palette (buildingBlock, mine._parent); 
-           mine._palettes[buildingBlock] = palette;
+           mine._palettes.set(buildingBlock, palette);
            mine.getNode().addChild(palette.getNode());
         });
     },
 
     // **************** PUBLIC METHODS **************** //
+    /**
+     * This function retrieve remote information 
+     * from the catalogue based on a given domain context
+     * 
+     */
+    populateBuildingBlocks: function (/** Array */ domainContext){
+        this._palettes.each (function (pair){
+            pair.value.populateBuildingBlocks(domainContext);
+        });
+    },
 
     /**
      * Updates each palette
@@ -56,7 +66,7 @@ var PaletteController = Class.create(
     },
 
     getPalette: function (/** String */ type) {
-        return this._palettes[type];
+        return this._palettes.get(type);
     },
     
     getNode: function() {

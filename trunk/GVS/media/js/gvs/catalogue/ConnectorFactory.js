@@ -20,46 +20,6 @@ var ConnectorFactory = Class.create(BuildingBlockFactory,
                 type: 'Out'
             })
             ];
-        /*
-        this._buildingBlockDescriptions = [
-            new ConnectorDescription ({
-                name: 'Slot',
-                image: connectorsPath + 'greenCircle.png',
-                fact: '',
-                fact_attribute:'',
-                variable_name:'',
-                label:'',
-                friendcode:''
-            }),
-            new ConnectorDescription ({
-                name: 'Event',
-                image: connectorsPath + 'greenCircle.png',
-                fact: '',
-                fact_attribute:'',
-                variable_name:'',
-                label:'',
-                friendcode:''
-            }),
-            new ConnectorDescription ({
-                name: 'User Preferences',
-                image: connectorsPath + 'greenCircle.png',
-                fact: '',
-                fact_attribute:'',
-                variable_name:'',
-                label:'',
-                friendcode:''
-            }),
-            new ConnectorDescription ({
-                name: 'Context Information',
-                image: connectorsPath + 'greenCircle.png',
-                fact: '',
-                fact_attribute:'',
-                variable_name:'',
-                label:'',
-                friendcode:''
-            })
-        ];
-        */
     },
 
     // **************** PUBLIC METHODS **************** //
@@ -68,6 +28,13 @@ var ConnectorFactory = Class.create(BuildingBlockFactory,
     },
 
     getBuildingBlocks: function (/** Array*/ buildingBlockIds) {
+    },
+    
+    /**
+     * @overrides
+     */
+    getBuildingBlockDescriptions: function (){
+        return this._buildingBlockDescriptions;
     }
 
 });

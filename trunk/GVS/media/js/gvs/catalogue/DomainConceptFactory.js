@@ -32,6 +32,11 @@ var DomainConceptFactory = Class.create(BuildingBlockFactory,
     },
 
     getBuildingBlocks: function (/** Array*/ buildingBlockIds) {
+    },
+    
+    //TODO: Remove This
+    getBuildingBlockDescriptions: function (){
+        return this._buildingBlockDescriptions;
     }
 });
 

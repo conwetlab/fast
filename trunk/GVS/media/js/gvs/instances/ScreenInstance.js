@@ -36,17 +36,6 @@ var ScreenInstance = Class.create(ComponentInstance,
             var currentDocument = GVSSingleton.getInstance().getDocumentController().getCurrentDocument();
             currentDocument.addScreen(this);
             currentDocument.onClickCanvas(this.getHandlerNode());
-            var canvas = currentDocument.getCanvas();
-            var domainContext = {
-                "tags":currentDocument.getBuildingBlockDescription().getDomainContexts(),
-                "user":null
-            };
-            var elements = currentDocument.getPaletteElements();
-            if (URIs.catalogueFlow =='check'){
-                CatalogueSingleton.getInstance().check(canvas, domainContext, elements, 'reachability');
-            } else {
-                CatalogueSingleton.getInstance().findAndCheck(canvas, domainContext, elements, 'reachability');
-            }
         }
     }
 

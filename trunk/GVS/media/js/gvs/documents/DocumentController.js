@@ -62,19 +62,28 @@ var DocumentController = Class.create(
             }).update("Please fulfill the required information in order to" +
             " create a new screenflow.");
             dialogDiv.insert(divSFInfo);
+            
+            var SCForm = new dijit.form.Form({
+                "id" : "newScreenflow",
+                method : "post"
+            });
 
-            var form = new Element("form");
+            var form = SCForm.domNode;
 
             var divSFName = new Element("div", {
                 "class": "line"
             });
             var labelSFName = new Element("label").update("Screenflow Name:");
             divSFName.insert(labelSFName);
-            var inputSFName = new Element("input", {
-                type: "text",
-                name: 'SFName',
-                value: "New Screenflow",
-                "class": "input_SFDialog"
+            
+            var inputSFName = new Element("input",{
+                    type: "text",
+                    name : "SFName",
+                    "class": "input_SFDialog",
+                    value : "New Screenflow"
+                    /*regExp: "[A-Za-z0-9-_]+",
+                    trim : "true",
+                    invalidMessage : "Screenflow name cannot be blank"*/
             });
             divSFName.insert(inputSFName);
             form.insert(divSFName);
@@ -87,7 +96,6 @@ var DocumentController = Class.create(
             var inputSFDomainContext = new Element("input", {
                 type: "text",
                 name: "SFDomainContext",
-                value: "",
                 "class": "input_SFDialog"
             });
             divSFDomainContext.insert(inputSFDomainContext);
@@ -139,13 +147,12 @@ var DocumentController = Class.create(
      * Creates a new screenflow document
      */
     createSFDocument: function(name, domainContext){
-        var screenflow = new ScreenflowDocument(name);
-        if(name && name != "") {
-            screenflow.getBuildingBlockDescription().setDomainContexts(domainContext);
-        }
+        var screenflow = new ScreenflowDocument(name,domainContext);
+        /*if(name && name != "") {
+            screenflow.getBuildingBlockDescription().setDomainContext(domainContext);
+        }*/
         this.addDocument(screenflow);
-        screenflow.getPaletteController().updatePalettes();
-        return screenflow;
+        screenflow.populateBuildingBlocks();
     },
 
     /**

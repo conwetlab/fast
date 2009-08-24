@@ -16,8 +16,8 @@ var ConnectorDescription = Class.create(BuildingBlockDescription,
      * Creates a new connector component
      * @override
      */
-    createPaletteComponent: function (/** String */ docId) {
-        return new ConnectorComponent(this, docId);
+    createPaletteComponent: function () {
+        return new ConnectorComponent(this);
     },
 
     /**

@@ -208,7 +208,6 @@ var DragHandler = Class.create(
         }
         // If the dropzone is not valid...
         else {
-            //TODO: FIX THIS!!!
             var node = $(this._dropZone);
             // If we are moving an element from one zone to another...
             if (this._initialArea.node != node){

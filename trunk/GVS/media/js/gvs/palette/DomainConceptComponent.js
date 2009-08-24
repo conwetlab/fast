@@ -7,7 +7,7 @@ var DomainConceptComponent = Class.create(PaletteComponent,
      * @constructs
      * @extends PaletteComponent
      */
-    initialize: function($super, domainConceptBuildingBlockDescription, /** String */ docId) {
+    initialize: function($super, domainConceptBuildingBlockDescription) {
         $super(domainConceptBuildingBlockDescription, docId);
     },
 

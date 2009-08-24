@@ -22,11 +22,12 @@ var BuildingBlockFactory = Class.create(
         this._buildingBlockName = null;
 
         /**
-         * BuildingBlock descriptions
-         * @type {BuildingBlockDescription[]}
-         * @private
+         * Hash table (organized by URI)
+         * containing all the BB descriptions
+         * @type Hash
+         * @private @member
          */
-        this._buildingBlockDescriptions = [];
+        this._buildingBlockDescriptions = new Hash();
     },
 
 
@@ -52,11 +53,29 @@ var BuildingBlockFactory = Class.create(
 
 
     /**
-     * Gets all the building block descriptions.
+     * Gets all the building block descriptions for an array 
+     * of domainContexts
      * @type {BuildingBlockDescription[]}
      */
-    getBuildingBlockDescriptions: function (){
-        return this._buildingBlockDescriptions;
+    getBuildingBlockDescriptions: function (/** Array */ domainContexts){
+        if (domainContexts && domainContexts.size()>0){
+            var buildingBlockResult = new Array();
+            
+            this._buildingBlockDescriptions.values().each(function (buildingBlock){
+                $A(domainContexts).each(function(domainContext){
+                    //If the building block is from any of the domain contexts
+                    //Add it to the results
+                    if ($A(buildingBlock.domainContext.tags).indexOf(domainContext)!= -1){
+                        buildingBlockResult.push(buildingBlock);
+                    }
+                });
+            });
+            //Remove duplicates
+            return buildingBlockResult.uniq();
+        }
+        else { //all the BB description
+            return this._buildingBlockDescriptions.values();
+        }
     },
 
     updateBuildingBlockDescriptions: function (buildingBlockDescriptions) {

@@ -7,8 +7,8 @@ var ConnectorComponent = Class.create(PaletteComponent,
      * @constructs
      * @extends PaletteComponent
      */
-    initialize: function($super, connectorBuildingBlockDescription, /** String */ docId) {
-        $super(connectorBuildingBlockDescription, docId);
+    initialize: function($super, connectorBuildingBlockDescription) {
+        $super(connectorBuildingBlockDescription);
     },
 
 

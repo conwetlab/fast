@@ -30,7 +30,7 @@ var DomainConceptInstance = Class.create(ComponentInstance,
             var currentDocument = GVSSingleton.getInstance().getDocumentController().getCurrentDocument();
             var canvas = currentDocument.getCanvas();
             var domainContext = {
-                "tags":currentDocument.getBuildingBlockDescription().getDomainContexts(),
+                "tags":currentDocument.getBuildingBlockDescription().getDomainContext(),
                 "user":null
             };
             var elements = currentDocument.getPaletteElements();
