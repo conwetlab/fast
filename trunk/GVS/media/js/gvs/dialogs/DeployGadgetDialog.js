@@ -1,16 +1,13 @@
-var DeployGadgetDialog = Class.create( /** @lends DeployGadgetDialog.prototype */ {
+var DeployGadgetDialog = Class.create(AbstractDialog /** @lends DeployGadgetDialog.prototype */, {
     /**
-     * TODO: describe this class
+     * This class handles the dialog
+     * to deploy a gadget
      * @constructs
+     * @extends AbstractDialog
      */ 
-    initialize: function(parent /** ScreenflowDocument */) {
-        /** 
-         * Variable
-         * @type FormDialog
-         * @private @member
-         */
-        this._form = null;
-         
+    initialize: function($super, parent /** ScreenflowDocument */) {
+        
+        $super();
          /** 
          * Variable
          * @type ScreenflowDocument
@@ -25,28 +22,11 @@ var DeployGadgetDialog = Class.create( /** @lends DeployGadgetDialog.prototype *
     
     /**
      * show
+     * @overrides
      */
-    show: function () {
-        if (this._form == null){
-            this._initDialogInterface();
-        }
-        
-        this._form.show();
+    show: function ($super) {
+        $super();
         this._form.getForm().name.setValue(this._parent.getTitle());
-    },
-    
-    /**
-     * hide
-     */
-    hide: function () {
-        this._form.hide();
-    },
-    /**
-     * getForm
-     * @type DOMNode
-     */
-    getForm: function () {
-        return this._form.getForm();
     },
 
     // **************** PRIVATE METHODS **************** //
@@ -56,6 +36,7 @@ var DeployGadgetDialog = Class.create( /** @lends DeployGadgetDialog.prototype *
      * initDialogInterface
      * This function creates the dom structure and
      * @private
+     * @overrides
      */
     _initDialogInterface: function (){
         this._form = new FormDialog({

@@ -191,10 +191,6 @@ h4{
 /******************
  * palette	  *
  ******************/
-#palette {
-    width: 210px;
-    background: #e3e3e3 url("../images/gui/palette/background.png") repeat-x;
-}
 
 .paletteSeparator {
     clear: both;
@@ -203,13 +199,16 @@ h4{
 .paletteElement {
     width:100%;
 }
+.paletteContent {
+    margin:5px;
+}
 
 /******************
  * palette components *
  ******************/
 .view {
     padding: 0px;
-    margin: 5px;
+    margin: 0px 5px 5px 0px;
     text-align:center;
     font-weight: bold;
     float: left;

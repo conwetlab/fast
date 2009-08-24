@@ -37,20 +37,9 @@ var ConnectorInstance = Class.create(ComponentInstance,
     onDragFinish: function(finishState) {
         // FIXME: remove this
         if(finishState) {
-            GVSSingleton.getInstance().getDocumentController().getCurrentDocument().addConnector(this);
-            GVSSingleton.getInstance().getDocumentController().getCurrentDocument().onClickCanvas(this.getHandlerNode());
             var currentDocument = GVSSingleton.getInstance().getDocumentController().getCurrentDocument();
-            var canvas = currentDocument.getCanvas();
-            var domainContext = {
-                "tags":currentDocument.getBuildingBlockDescription().getDomainContext(),
-                "user":null
-            };
-            var elements = currentDocument.getPaletteElements();
-            if (URIs.catalogueFlow =='check'){
-                CatalogueSingleton.getInstance().check(canvas, domainContext, elements, 'reachability');
-            } else {
-                CatalogueSingleton.getInstance().findAndCheck(canvas, domainContext, elements, 'reachability');
-            }
+            currentDocument.addConnector(this);
+            currentDocument.onClickCanvas(this.getHandlerNode());
         }
     },
     

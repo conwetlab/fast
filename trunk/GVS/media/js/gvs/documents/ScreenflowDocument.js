@@ -180,6 +180,7 @@ var ScreenflowDocument = Class.create(AbstractDocument,
     addConnector: function (connector) {
         if(connector!=null) {
             this._connectors.push(connector);
+            this._updateReachability();      
             this.getBuildingBlockDescription().addConnector(connector.getId(), connector, connector.getPosition());
         }
     },
@@ -203,6 +204,7 @@ var ScreenflowDocument = Class.create(AbstractDocument,
     addDomainConcept: function (domainConcept) {
         if(domainConcept!=null) {
             this._domainConcepts.push(domainConcept);
+            this._updateReachability();      
             //TODO: add the domain concept somehow inside the screenflowdescription
         }
     },

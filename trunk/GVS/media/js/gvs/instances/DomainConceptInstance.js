@@ -25,20 +25,9 @@ var DomainConceptInstance = Class.create(ComponentInstance,
     onDragFinish: function(finishState) {
         // FIXME: remove this
         if(finishState) {
-            GVSSingleton.getInstance().getDocumentController().getCurrentDocument().addDomainConcept(this);
-            GVSSingleton.getInstance().getDocumentController().getCurrentDocument().onClickCanvas(this.getHandlerNode());
             var currentDocument = GVSSingleton.getInstance().getDocumentController().getCurrentDocument();
-            var canvas = currentDocument.getCanvas();
-            var domainContext = {
-                "tags":currentDocument.getBuildingBlockDescription().getDomainContext(),
-                "user":null
-            };
-            var elements = currentDocument.getPaletteElements();
-            if (URIs.catalogueFlow =='check'){
-                CatalogueSingleton.getInstance().check(canvas, domainContext, elements, 'reachability');
-            } else {
-                CatalogueSingleton.getInstance().findAndCheck(canvas, domainContext, elements, 'reachability');
-            }
+            currentDocument.addDomainConcept(this);
+            currentDocument.onClickCanvas(this.getHandlerNode());
         }
     }
 
