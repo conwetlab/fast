@@ -42,90 +42,89 @@ var PreferencesSingleton = function() {
                     "title" : "User Preferences",
                     "style" : "display:none;"
                 });
-                var form = new Element('form', {
+                var form = new dijit.form.Form({
                     "id" : "PreferencesForm",
                     method : "post"
                 });
+                dialog.attr("content", form);
                 var dialogDiv = new Element("div", {
                     "id" : "preferencesDialogDiv"
                 });
+                form.domNode.appendChild(dialogDiv);
                 var divFirstName = new Element("div", {
                     "class" : "line"
                 });
                 var labelFirstName = new Element("label").update("First Name:");
-                divFirstName.insert(labelFirstName);
-                var inputFirstName = new Element("input", {
-                    type : "text",
+                divFirstName.appendChild(labelFirstName);
+                var inputFirstName = new dijit.form.TextBox({
                     id : "PrefFirstName",
                     name : "first_name",
                     value : "",
-                    "class" : "input_PrefDialog" 
+                    trim : "true"
                 });
-                divFirstName.insert(inputFirstName);
-                dialogDiv.insert(divFirstName);
+                divFirstName.appendChild(inputFirstName.domNode);
+                dialogDiv.appendChild(divFirstName);
                 var divLastName = new Element("div", {
                     "class" : "line"
                 });
                 var labelLastName = new Element("label").update("Last Name:");
-                divLastName.insert(labelLastName);
-                var inputLastName = new Element("input", {
-                    type : "text",
+                divLastName.appendChild(labelLastName);
+                var inputLastName = new dijit.form.TextBox({
                     id : "PrefLastName",
                     name : "last_name",
                     value : "",
-                    "class" : "input_PrefDialog" 
+                    trim : "true"
                 });
-                divLastName.insert(inputLastName);
-                dialogDiv.insert(divLastName);
+                divLastName.appendChild(inputLastName.domNode);
+                dialogDiv.appendChild(divLastName);
                 var divEmail = new Element("div", {
                     "class" : "line"
                 });
                 var labelEmail = new Element("label").update("Email:");
-                divEmail.insert(labelEmail);
-                var inputEmail = new Element("input", {
-                    type : "text",
+                divEmail.appendChild(labelEmail);
+                var inputEmail = new dijit.form.ValidationTextBox({
                     id : "PrefEmail",
                     name : "email",
                     value : "",
-                    "class" : "input_PrefDialog" 
+                    regExp: "[a-zA-Z0-9._%-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}",
+                    trim : "true",
+                    invalidMessage : "Invalid email address"
                 });
-                divEmail.insert(inputEmail);
-                dialogDiv.insert(divEmail);
+                divEmail.appendChild(inputEmail.domNode);
+                dialogDiv.appendChild(divEmail);
                 var divEzWebURL = new Element("div", {
                     "class" : "line"
                 });
                 var labelEzWebURL = new Element("label").update("EzWeb URL:");
-                divEzWebURL.insert(labelEzWebURL);
-                var inputEzWebURL = new Element("input", {
-                    type : "text",
+                divEzWebURL.appendChild(labelEzWebURL);
+                var inputEzWebURL = new dijit.form.ValidationTextBox({
                     id : "PrefEzWebURL",
                     name : "ezweb_url",
                     value : "",
-                    "class" : "input_PrefDialog" 
+                    regExp: "([hH][tT][tT][pP][sS]?)://[A-Za-z0-9-_]+(\.[A-Za-z0-9-_]+)*(:\d+)?(/[a-zA-Z0-9\.\?=/#%&\+-]*)*",
+                    trim : "true",
+                    invalidMessage : "Invalid URL"
                 });
-                divEzWebURL.insert(inputEzWebURL);
-                dialogDiv.insert(divEzWebURL);
+                divEzWebURL.appendChild(inputEzWebURL.domNode);
+                dialogDiv.appendChild(divEzWebURL);
                 
                 var divButtons = new Element("div", {
                     "id" : "PrefButtons"
                 });
+                dialogDiv.appendChild(divButtons);
                 var acceptButton = new dijit.form.Button({
                     "id" : "acceptPrefButton",
                     "label" : "Accept",
                     onClick : this.save.bind(this)
                 });
-                divButtons.insert(acceptButton.domNode);
+                divButtons.appendChild(acceptButton.domNode);
                 var cancelButton = new dijit.form.Button({
                     id : "cancelPrefButton",
                     label : "Cancel",
                     onClick : this.hideDialog.bind(this)
                 });
                 divButtons.appendChild(cancelButton.domNode);
-                dialogDiv.insert(divButtons);
-                form.insert(dialogDiv);
-                dialog.setContent(form);
                 return dialog;
-                
             } else {
                 return dijit.byId("preferencesDialog");
             }
@@ -152,8 +151,11 @@ var PreferencesSingleton = function() {
          * Hides the user preferences dialog
          */
         save : function() {
-        	var form = $("PreferencesForm");
-            var formToSend = form.serialize(true);
+        	var form = dijit.byId("PreferencesForm");
+        	if(!form.validate()){
+        		return;
+        	}
+            var formToSend = form.domNode.serialize(true);
             var preferences = {preferences :Object.toJSON(formToSend)};
             
             var persistenceEngine = PersistenceEngineFactory.getInstance();
@@ -174,11 +176,10 @@ var PreferencesSingleton = function() {
 			
 			var prefDialog = this.createDialog();
 			
-			var form = $("PreferencesForm");
-			form["first_name"].value = (response.user.first_name)? response.user.first_name : "";
-			form["last_name"].value = (response.user.last_name)? response.user.last_name : "";
-			form["email"].value = (response.user.email)? response.user.email : "";
-			form["ezweb_url"].value = (response.profile.ezweb_url)? response.profile.ezweb_url : "";
+			dijit.byId("PrefFirstName").setValue((response.user.first_name)? response.user.first_name : "");
+			dijit.byId("PrefLastName").setValue((response.user.last_name)? response.user.last_name : "");
+			dijit.byId("PrefEmail").setValue((response.user.email)? response.user.email : "");
+			dijit.byId("PrefEzWebURL").setValue((response.profile.ezweb_url)? response.profile.ezweb_url : "");
         	
         	prefDialog.show();
         },

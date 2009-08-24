@@ -186,7 +186,9 @@
 
             // We load Dojo's code relating to the needed components
             // ... typical Components
+            dojo.require("dijit.form.Form");
             dojo.require("dijit.form.TextBox");
+            dojo.require("dijit.form.ValidationTextBox");
             dojo.require("dijit.form.Button");
             dojo.require("dijit.InlineEditBox");
             dojo.require("dijit.Tooltip");
@@ -199,7 +201,7 @@
             dojo.require("dijit.layout.BorderContainer");
             dojo.require("dijit.Toolbar");
             dojo.require("dijit.Dialog");
-            dojo.require("dojo.parser"); 
+            dojo.require("dojo.parser");
 
             // Arming the GVS initialization method
             dojo.addOnLoad(function() {
