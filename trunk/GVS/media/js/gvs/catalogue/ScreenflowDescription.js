@@ -337,7 +337,7 @@ var ScreenflowDescription = Class.create(BuildingBlockDescription,
             
             //TODO create Logmanagerfactory
             //LogManagerFactory.getInstance().log(msg);
-            alert (msg);
+            alert(msg);
         }
 
         var datajson = this.toJSON();

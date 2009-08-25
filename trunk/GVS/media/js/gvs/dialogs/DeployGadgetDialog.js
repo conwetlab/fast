@@ -7,7 +7,7 @@ var DeployGadgetDialog = Class.create(AbstractDialog /** @lends DeployGadgetDial
      */ 
     initialize: function($super, parent /** ScreenflowDocument */) {
         
-        $super();
+        $super("Deploy Gadget");
          /** 
          * Variable
          * @type ScreenflowDocument
@@ -39,22 +39,13 @@ var DeployGadgetDialog = Class.create(AbstractDialog /** @lends DeployGadgetDial
      * @overrides
      */
     _initDialogInterface: function (){
-        this._form = new FormDialog({
-                "title": "Deploy Gadget",
-                "style": "display:none;"
-        });
  
-        var dialogDiv = new Element("div");
-        var title = new Element("h2").update("Fulfill Gadget Information");
-        dialogDiv.appendChild(title);
+        this._form.setHeader("Fulfill Gadget Information", 
+                             "Please fulfill the required information in order to" +
+                             " deploy a gadget.");
+                             
+        var dialogDiv = this._form.getContentNode();
         
-        var divWizardInfo = new Element('div');
-        var divInfo = new Element("div", {
-            "class": "line"
-        }).update("Please fulfill the required information in order to" +
-        " deploy a gadget.");
-        
-        divWizardInfo.insert(divInfo);
 
         var form = new Element('form', {
             method: "post"
@@ -170,31 +161,18 @@ var DeployGadgetDialog = Class.create(AbstractDialog /** @lends DeployGadgetDial
             name: "events"
         });
         form.insert(inputDeployEvents);
-        
-        divWizardInfo.insert(form);
-        dialogDiv.appendChild(divWizardInfo);
-        
-        var divWizardButtons = new Element("div");
-        var mine = this;
-        var sendButton = new dijit.form.Button({
-            'label': 'Send',
-            onClick: function(){
-                mine._parent.updateBuildingBlockDescription();
-                mine._parent.deployGadget();
-                mine.hide();
-            }
-        });
-        divWizardButtons.insert(sendButton.domNode);
-        var cancelButton = new dijit.form.Button({
-            'label': 'Cancel',
-            onClick: function(){
-                mine.hide();
-            }
-        });
-        divWizardButtons.appendChild(cancelButton.domNode);
-        dialogDiv.appendChild(divWizardButtons);
-        this._form.getDialog().setContent(dialogDiv);
-    }  
+     
+        dialogDiv.insert(form);
+    },
+    /**
+     * Overriding onOk handler
+     * @overrides
+     */
+    _onOk: function($super){
+        $super();
+        this._parent.updateBuildingBlockDescription();
+        this._parent.deployGadget();
+    }
 });
 
 // vim:ts=4:sw=4:et:

@@ -589,16 +589,24 @@ var ScreenflowDocument = Class.create(AbstractDocument,
      * @private
      */
     _closeDocument: function() {
-        if (confirm("Are you sure you want to close the current Screenflow?" + 
-            " Unsaved changes will be lost")){
+        confirm("Are you sure you want to close the current Screenflow?" + 
+            " Unsaved changes will be lost", this._confirmCallback.bind(this));
+        return false;
+    },
+    
+    /**
+     * This function is called when the user has confirmed the closing
+     * @param boolean
+     *     The parameter represents if the user has accepted the closing (true)
+     *     or not (false)
+     */
+    _confirmCallback: function (close){
+        if (close){
             var gvs = GVSSingleton.getInstance();
             gvs.getDocumentController().closeDocument(this._tabId);
-            return true;      
-        }
-        else {
-            return false;
         }
     },
+    
     /**
      * This function updates the reachability in all
      * Elements: canvas and palettes

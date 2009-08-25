@@ -20,12 +20,6 @@ var DocumentController = Class.create(
          */
         this._currentDocument = null;
         
-        /**
-         * Dialog to create a new document
-         * @type FastDialog
-         * @private
-         */
-        this._newSFDocDialog = null;
             
         // The welcome document is the initial document
         var welcome = new WelcomeDocument();
@@ -43,114 +37,13 @@ var DocumentController = Class.create(
     },
 
     // **************** PUBLIC METHODS **************** //
-    
-    /**
-     * Shows a dialog to create a new screenflow document
-     */
-    showNewSFDocDialog: function(){
-        if (this._newSFDocDialog == null) {
-            this._newSFDocDialog = new FormDialog({
-                "title": "New Screenflow",
-                "style": "display:none;"
-            });
-            var dialogDiv = new Element("div");
-            var h2 = new Element("h2").update("Fulfill Screenflow Information");
-            dialogDiv.appendChild(h2);
-            
-            var divSFInfo = new Element("div", {
-                "class": "line"
-            }).update("Please fulfill the required information in order to" +
-            " create a new screenflow.");
-            dialogDiv.insert(divSFInfo);
-            
-            var SCForm = new dijit.form.Form({
-                "id" : "newScreenflow",
-                method : "post"
-            });
 
-            var form = SCForm.domNode;
-
-            var divSFName = new Element("div", {
-                "class": "line"
-            });
-            var labelSFName = new Element("label").update("Screenflow Name:");
-            divSFName.insert(labelSFName);
-            
-            var inputSFName = new Element("input",{
-                    type: "text",
-                    name : "SFName",
-                    "class": "input_SFDialog",
-                    value : "New Screenflow"
-                    /*regExp: "[A-Za-z0-9-_]+",
-                    trim : "true",
-                    invalidMessage : "Screenflow name cannot be blank"*/
-            });
-            divSFName.insert(inputSFName);
-            form.insert(divSFName);
-            
-            var divSFDomainContext = new Element("div", {
-                "class": "line"
-            });
-            var labelSFDomainContext = new Element("label").update("Domain Context:");
-            divSFDomainContext.insert(labelSFDomainContext);
-            var inputSFDomainContext = new Element("input", {
-                type: "text",
-                name: "SFDomainContext",
-                "class": "input_SFDialog"
-            });
-            divSFDomainContext.insert(inputSFDomainContext);
-            form.insert(divSFDomainContext);
-            
-            dialogDiv.insert(form);
-            
-            var divSFButtons = new Element("div");
-            var mine = this;
-            var acceptSFButton = new dijit.form.Button({
-                "label": "Accept",
-                onClick: function(){
-                    var name = $F(mine._newSFDocDialog.getForm().SFName);
-                    if (name && name != "") {
-                        var domainContext = $F(mine._newSFDocDialog.getForm().SFDomainContext);
-                        DocumentController.prototype.createSFDocument.apply(mine, [name, domainContext]);
-                        DocumentController.prototype.hideNewSFDocDialog.apply(mine, arguments);
-                    }
-                    else {
-                        alert("A Screenflow name must be provided");
-                    }
-                }
-            });
-            divSFButtons.insert(acceptSFButton.domNode);
-            var cancelSFButton = new dijit.form.Button({
-                label: "Cancel",
-                onClick: function(){
-                    DocumentController.prototype.hideNewSFDocDialog.apply(mine, arguments);
-                }
-            });
-            divSFButtons.appendChild(cancelSFButton.domNode);
-            dialogDiv.insert(divSFButtons);
-            this._newSFDocDialog.getDialog().setContent(dialogDiv);
-        } else {
-            this._newSFDocDialog.getForm().SFName.setValue("New Screenflow");
-            this._newSFDocDialog.getForm().SFDomainContext.setValue("");
-        }
-        this._newSFDocDialog.show();
-    },
-
-    /**
-     * Hides the dialog to create a new screenflow document
-     */
-    hideNewSFDocDialog: function(){
-        this._newSFDocDialog.hide();
-    },
     
     /**
      * Creates a new screenflow document
      */
-    createSFDocument: function(name, domainContext){
+    createScreenflow: function(name, domainContext){
         var screenflow = new ScreenflowDocument(name,domainContext);
-        /*if(name && name != "") {
-            screenflow.getBuildingBlockDescription().setDomainContext(domainContext);
-        }*/
         this.addDocument(screenflow);
         screenflow.populateBuildingBlocks();
     },
@@ -223,10 +116,14 @@ var DocumentController = Class.create(
      * @param String id
      */
     closeDocument: function (id){
-        
+
         //Go to the previous tab and not to the
         //initial tab
         dijit.byId("documentContainer").back();
+        
+        //Remove the tab
+        dijit.byId("documentContainer").removeChild(dijit.byId(id));
+        dijit.byId(id).destroyRecursive(true);
          
         delete this._documents[id];
         

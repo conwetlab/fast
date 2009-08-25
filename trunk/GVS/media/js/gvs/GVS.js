@@ -44,6 +44,18 @@ var GVSSingleton = function() {
              * @private @member
              */
             this._user = null;
+
+            
+            /** 
+             * Hash containing the different dialogs used in the welcome document
+             * @type Hash
+             * @private @member
+             */            
+            this._dialogs = new Hash ();
+            
+            //TODO: create constants for this
+            this._dialogs.set ("addScreen", new AddScreenDialog());
+            this._dialogs.set ("newScreenflow", new NewScreenflowDialog());
         },
         
 
@@ -115,7 +127,8 @@ var GVSSingleton = function() {
          * @private
          */
         _newScreenflow: function (){
-            this.getDocumentController().showNewSFDocDialog();
+            this._dialogs.get("newScreenflow").show();
+            //this.getDocumentController().showNewSFDocDialog();
         },
         
         /** 
@@ -124,7 +137,7 @@ var GVSSingleton = function() {
          * @private
          */
         _addScreen: function (){
-            CatalogueSingleton.getInstance().showAddScDialog();
+            this._dialogs.get("addScreen").show();
         }
         
     });

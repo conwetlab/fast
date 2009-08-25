@@ -28,13 +28,6 @@ var CatalogueSingleton = function(){
                 'connector': new ConnectorFactory(),
                 'domainConcept': new DomainConceptFactory()
             };
-            
-            /**
-             * Dialog to add a new screen
-             * @type FormDialog
-             * @private
-             */
-            this._addScDialog = null;
         },
         
         // **************** PUBLIC METHODS **************** //
@@ -79,8 +72,8 @@ var CatalogueSingleton = function(){
         
         createScreen: function(/**String*/screenJson){
             var createScreenOnSuccess = function(response){
-                var responseJSON = response.responseText;
-                var screen = eval('(' + responseJSON + ')');
+
+                var screen = JSON.parse(response.responseText);
                 //FIXME the catalogue should response with an http error
                 if (screen.uri == undefined || screen.uri == null) {
                     console.log("createScreenOnError");
@@ -99,15 +92,8 @@ var CatalogueSingleton = function(){
             
             var persistenceEngine = PersistenceEngineFactory.getInstance();
             persistenceEngine.sendPost(URIs.catalogueCreateScreen, null, screenJson, this, createScreenOnSuccess, createScreenOnError);
-        },
-        
-        showAddScDialog: function(){
-            if (this._addScDialog == null) {
-                this._addScDialog = new AddScreenDialog();
-            }
-            this._addScDialog.show();
         }
-        
+              
         // **************** PRIVATE METHODS **************** //
     });
     

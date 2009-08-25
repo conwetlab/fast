@@ -439,6 +439,27 @@ h4{
     background: url("../images/facts/15x15/red.png") no-repeat center center;
 }
 
+/*************
+ *  Dialogs  *
+ *************/
+
+label{
+    float:left;
+    margin-top:3px;
+    width:130px;
+}
+.dialogButtonZone {
+    text-align: center;
+    margin-top: 5px;
+}
+
+.dialogButtonZone span { /* Buttons */
+   margin: 0px 2px; 
+}
+
+.dialogContent {
+    padding: 5px;
+}
 
 /******************
  * this is sparta *
@@ -527,11 +548,6 @@ h4{
 }
 .line{
     margin-bottom:10px;
-}
-label{
-    float:left;
-    margin-top:3px;
-    width:100%;
 }
 
 .input_GadgetInfo, .input_SFDialog, .input_AddScreenCatalog{
