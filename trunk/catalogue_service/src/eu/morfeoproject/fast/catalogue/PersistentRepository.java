@@ -31,83 +31,16 @@ public class PersistentRepository {
 	
 	final Logger logger = LoggerFactory.getLogger(PersistentRepository.class);
 	
-	static File storageDir = null;
-	static String defaultStorageDir = "repository";
-//	static final String defaultIndexes = "spoc, posc";
 	static final String defaultIndexes = "spoc, posc, sopc, psoc, ospc, opsc";
 	static final int defaultInferencer = TripleStore.FORWARD_CHAINING_RDFS_INFERENCER;
 	
-//	private Repository repository;
-//    
-//	// Protected constructor is sufficient to suppress unauthorised calls to the 
-//	// constructor
-//	protected PersistentRepository() {
-//		String indexes = null;
-//		try {
-//			Properties properties = new Properties();
-////			// TODO: fix the problem with the repository.properties path
-//			properties.load(new FileReader("repository.properties"));
-////			storageDir = new File(properties.getProperty("storageDir"));
-//			indexes = properties.getProperty("indexes");
-//		} catch (FileNotFoundException e) {
-//			logger.warn("repository.properties file not found.");
-//		} catch (IOException e) {
-//			logger.warn("problem found reading repository.properties file.");
-//		} finally {
-//			if (storageDir == null) {
-//				logger.warn("repository storage directory set to default ("+defaultStorageDir+").");
-//				storageDir = new File(defaultStorageDir);
-//			}
-//			if (indexes == null) {
-//				logger.warn("repository indexes set to default ("+defaultIndexes+").");
-//				indexes = defaultIndexes;
-//			}
-//		}
-//
-//		// persistent store
-//		NotifyingSail sail = new NativeStore(storageDir, indexes);
-//		logger.info("created repository [dir="+storageDir.getAbsolutePath()+", indexes="+indexes+"]");
-//		
-//		// support inference
-////		if (defaultInferencer == TripleStore.FORWARD_CHAINING_RDFS_INFERENCER) {
-////			sail = new ForwardChainingRDFSInferencer(sail);
-////			logger.info("Forward Chaining RDFS Inferencer enabled");
-////		}
-//		sail = new SimpleRDFSInferencer(sail);
-//		logger.info("SimpleRDFSInferencer enabled");
-//		
-//		repository = new SailRepository(sail);
-//		try {
-//			repository.initialize();
-//		} catch (RepositoryException e) {
-//			throw new RuntimeException(e);
-//		}
-//	}
-//
-//	/**
-//	 * SingletonHolder is loaded on the first execution of Singleton.getInstance() 
-//	 * or the first access to SingletonHolder.INSTANCE, not before.
-//	 */
-//	private static class RepositoryHolder {
-//		private final static PersistentRepository INSTANCE = new PersistentRepository();
-//	}
-//
-//	public static PersistentRepository getInstance() {
-//		return RepositoryHolder.INSTANCE;
-//	}
-//
-//	public Repository getGroundingRepository() {
-//		return this.repository;
-//	}
-	
-	
-	
 	private static Map<String, Repository> repositories = new HashMap<String, Repository>();
 	
-	public static Repository getRepository(File dir) {
+	public static Repository getRepository(File dir, String indexes) {
+		if (indexes == null) indexes = defaultIndexes;
 		Repository repository = repositories.get(dir.getAbsolutePath());
 		if (repository == null) {
-			NotifyingSail sail = new NativeStore(dir, defaultIndexes);
+			NotifyingSail sail = new NativeStore(dir, indexes);
 			repository = new SailRepository(sail);
 			try {
 				repository.initialize();
@@ -118,5 +51,9 @@ public class PersistentRepository {
 		}
 		return repository;
 	}
-
+	
+	public static Repository getRepository(File dir) {
+		return PersistentRepository.getRepository(dir, defaultIndexes);
+	}
+	
 }

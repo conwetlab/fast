@@ -75,10 +75,18 @@ public class Catalogue {
 ////		dumpStatements();
 //	}
 	
+	public Catalogue(File dir, String indexes) {
+		create(dir, indexes);
+	}
+	
 	public Catalogue(File dir) {
-		System.out.println(dir.getAbsolutePath());
+		create(dir, null);
+	}
+	
+	private void create(File dir, String indexes) {
+		logger.info("Catalogue loaded at "+dir.getAbsolutePath()+" ["+indexes+"]");
 		// creates a new triple store
-		tripleStore = new TripleStore(dir);
+		tripleStore = new TripleStore(dir, indexes);
     	tripleStore.open();
     	
 //    	tripleStore.clear();

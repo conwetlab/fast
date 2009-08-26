@@ -84,10 +84,8 @@ public class TripleStore {
 //		defaultModel = getPersistentModelSet().getModel(FCO.NS_FCO);
 //	}
 	
-	public TripleStore(File dir) {
-//		PersistentRepository.storageDir = dir;
-//		Repository repository = PersistentRepository.getInstance().getGroundingRepository();
-		Repository repository = PersistentRepository.getRepository(dir);
+	public TripleStore(File dir, String indexes) {
+		Repository repository = PersistentRepository.getRepository(dir, indexes);
 		persistentModelSet = new RepositoryModelSet(repository);
 
 		createdURIs = new ArrayList<URI>();

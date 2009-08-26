@@ -9,23 +9,24 @@ import eu.morfeoproject.fast.catalogue.Catalogue;
 
 public class CatalogueAccessPoint {
 
-	private static final String defaultStorageDir = "C:\\fast\\repository";
+	private static final String defaultStorageDir = "C:\\fast\\catalogue\\repository";
 	
 	private static Catalogue catalogue;
 	
 	public static Catalogue getCatalogue() throws IOException {
 		if (catalogue == null) {
-			System.out.println(CatalogueAccessPoint.class.getClassLoader().toString());
-			InputStream inStream = CatalogueAccessPoint.class.getClassLoader().getResourceAsStream("META-INF/repository.properties"); 
+			InputStream inStream = CatalogueAccessPoint.class.getClassLoader().getResourceAsStream("repository.properties"); 
 			String storageDir = null;
+			String indexes = null;
 			if (inStream == null) {
-				throw new IOException("Configuration file repository.properties not found in META-INF directory.");
+				throw new IOException("Configuration file repository.properties not found.");
 			} else {
 				Properties properties = new Properties();
 				properties.load(inStream);
 				storageDir = properties.getProperty("storageDir", defaultStorageDir);
+				indexes = properties.getProperty("indexes");
 			}
-			catalogue = new Catalogue(new File(storageDir));
+			catalogue = new Catalogue(new File(storageDir), indexes);
 		}
 		return catalogue;
 	}
