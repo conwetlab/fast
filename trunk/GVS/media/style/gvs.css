@@ -476,10 +476,20 @@ label{
 
 .dialogContent {
     padding: 5px;
+    min-width: 400px;
 }
 
 .line{
     margin-bottom:10px;
+}
+
+.line input, .line div.dijitTextBox /*Dijit inputs*/{
+    width: 250px;
+}
+
+.systemDialog{
+    text-align:center;
+    min-width: 250px;
 }
 
 /******************

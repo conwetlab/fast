@@ -25,17 +25,30 @@ var ConfirmSingleton = function() {
          * @constructs
          */
         initialize: function() {
+            
+            /**
+             * Callback function to be called
+             * @type Function
+             * @private @member
+             */
+            this._callback = null;
+            
+            var mine = this;
+            
             this._dialog = new FormDialog({
                'title': 'Warning',
-               'style': 'display:none', 
+               'style': 'display:none'
             }); 
-            
-            //Callback function to be called
-            this._callback = null;
+            this._dialog.getContentNode().addClassName("systemDialog"); 
             
             this._dialog.addButton ('Ok', this.onOk.bind(this));
             this._dialog.addButton ('Cancel', this.onCancel.bind(this));
-           
+            
+            var mine = this;
+            dojo.connect(this._dialog.getDialog(),"hide",function (){
+                mine._callback(false);
+            });
+                       
         },
         /**
          * This function shows a message
@@ -56,6 +69,7 @@ var ConfirmSingleton = function() {
             this._dialog.hide();
             this._callback(false);
             this._callback = null;
+            
         }
         
     });

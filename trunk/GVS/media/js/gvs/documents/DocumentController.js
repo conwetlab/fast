@@ -25,7 +25,7 @@ var DocumentController = Class.create(
         var welcome = new WelcomeDocument();
 
         // FIXME: Work around for updating the Fact Factory
-        FactFactorySingleton.getInstance().updateFacts();
+        //FactFactorySingleton.getInstance().updateFacts();
         
         //Arming onFocus callback
         var mine = this;
@@ -34,6 +34,7 @@ var DocumentController = Class.create(
         });
         
         this.addDocument(welcome);
+        
     },
 
     // **************** PUBLIC METHODS **************** //

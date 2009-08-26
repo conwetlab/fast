@@ -18,9 +18,9 @@ var AddScreenDialog = Class.create(AbstractDialog /** @lends AddScreenDialog.pro
      */
     _initDialogInterface: function (){
         
-       this._form.setHeader("Fulfill Screen Information", 
-                            "Please fulfill the required information in order to" +
-                            " add a new screen to the catalogue.");
+        this._form.setHeader("Fulfill Screen Information", 
+                             "Please fulfill the required information in order to" +
+                             " add a new screen to the catalogue.");
                              
         var dialogDiv = this._form.getContentNode();
         
@@ -38,7 +38,6 @@ var AddScreenDialog = Class.create(AbstractDialog /** @lends AddScreenDialog.pro
         divScLabel.insert(labelScLabel);
         var inputScLabel = new Element("input", {
             type: "text",
-            "class": "input_AddScreenCatalog",
             Name: "label",
             value: "Label of the screen..."
         });
@@ -52,7 +51,6 @@ var AddScreenDialog = Class.create(AbstractDialog /** @lends AddScreenDialog.pro
         divScDesc.insert(labelScDesc);
         var inputScDesc = new Element("input", {
             type: "text",
-            "class": "input_AddScreenCatalog",
             name: "description",
             value: "Short description of the screen..."
         });
@@ -66,7 +64,6 @@ var AddScreenDialog = Class.create(AbstractDialog /** @lends AddScreenDialog.pro
         divScCreator.insert(labelScCreator);
         var inputScCreator = new Element("input", {
             type: "text",
-            "class": "input_AddScreenCatalog",
             name: "creator",
             value: "creator URL..."
         });
@@ -80,7 +77,6 @@ var AddScreenDialog = Class.create(AbstractDialog /** @lends AddScreenDialog.pro
         divScRights.insert(labelScRights);
         var inputScRights = new Element("input", {
             type: "text",
-            "class": "input_AddScreenCatalog",
             name: "rights",
             value: "rights URL..."
         });
@@ -94,7 +90,6 @@ var AddScreenDialog = Class.create(AbstractDialog /** @lends AddScreenDialog.pro
         divScVersion.insert(labelScVersion);
         var inputScVersion = new Element("input", {
             type: "text",
-            "class": "input_AddScreenCatalog",
             name: "version",
             value: "1.0"
         });
@@ -103,7 +98,6 @@ var AddScreenDialog = Class.create(AbstractDialog /** @lends AddScreenDialog.pro
         
         var inputScCreationDate = new Element("input", {
             type: "hidden",
-            "class": "input_AddScreenCatalog",
             name: "creationDate",
             value: ""
         });
@@ -116,7 +110,6 @@ var AddScreenDialog = Class.create(AbstractDialog /** @lends AddScreenDialog.pro
         divScIcon.insert(labelScIcon);
         var inputScIcon = new Element("input", {
             type: "text",
-            "class": "input_AddScreenCatalog",
             name: "icon",
             value: "icon URL..."
         });
@@ -130,7 +123,6 @@ var AddScreenDialog = Class.create(AbstractDialog /** @lends AddScreenDialog.pro
         divScScshot.insert(labelScScshot);
         var inputScScshot = new Element("input", {
             type: "text",
-             "class": "input_AddScreenCatalog",
             name: "screenshot",
             value: "screenshot URL..."
         });
@@ -144,7 +136,6 @@ var AddScreenDialog = Class.create(AbstractDialog /** @lends AddScreenDialog.pro
         divScDomainContext.insert(labelScDomainContext);
         var inputScDomainContext = new Element("input", {
             type: "text",
-            "class": "input_AddScreenCatalog",
             name: "domainContext",
             value: "Write domain context as tags separated by ','..."
         });
@@ -158,7 +149,6 @@ var AddScreenDialog = Class.create(AbstractDialog /** @lends AddScreenDialog.pro
         divScHomepage.insert(labelScHomepage);
         var inputScHomepage = new Element("input", {
             type: "text",
-            "class": "input_AddScreenCatalog",
             name: "homepage",
             value: "homepage URL..."
         });
@@ -172,7 +162,6 @@ var AddScreenDialog = Class.create(AbstractDialog /** @lends AddScreenDialog.pro
         divScPrecs.insert(labelScPrecs);
         var inputScPrecs = new Element("input", {
             type: "text",
-            "class": "input_AddScreenCatalog",
             name: "preconditions",
             value: "If any, write preconditions separated by ','..."
         });
@@ -186,7 +175,6 @@ var AddScreenDialog = Class.create(AbstractDialog /** @lends AddScreenDialog.pro
         divScPosts.insert(labelScPosts);
         var inputScPosts = new Element("input", {
             type: "text",
-            "class": "input_AddScreenCatalog",
             name: "postconditions",
             value: "If any, write postconditions separated by ','..."
         });
@@ -200,7 +188,6 @@ var AddScreenDialog = Class.create(AbstractDialog /** @lends AddScreenDialog.pro
         divScCode.insert(labelScCode);
         var inputScCode = new Element("input", {
             type: "text",
-            "class": "input_AddScreenCatalog",
             name: "code",
             value: "Screencode URL..."
         });
@@ -209,7 +196,9 @@ var AddScreenDialog = Class.create(AbstractDialog /** @lends AddScreenDialog.pro
         
         dialogDiv.insert(form);
         
-        var labelExplanation = new Element("label").update("(*): Required Field");
+        var labelExplanation = new Element("label",{
+            'style': 'width: 100%'
+        }).update("(*): Required Field");
         dialogDiv.insert(labelExplanation);
         
     },

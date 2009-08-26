@@ -27,8 +27,9 @@ var AlertSingleton = function() {
         initialize: function() {
             this._dialog = new FormDialog({
                'title': 'Warning',
-               'style': 'display:none', 
-            }); 
+               'style': 'display:none'
+            });
+            this._dialog.getContentNode().addClassName("systemDialog"); 
             
             this._dialog.addButton ('Ok', this.hide.bind(this));
         },

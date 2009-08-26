@@ -27,7 +27,7 @@ var FormDialog = Class.create( /** @lends FormDialog.prototype */ {
         containerDiv.insert (this._headerNode);
         containerDiv.insert (this._contentNode);
         containerDiv.insert (this._buttonNode);
-        this._dialog.setContent (containerDiv);
+        this._dialog.attr ("content", containerDiv);
     },
 
     

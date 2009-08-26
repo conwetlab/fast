@@ -55,15 +55,20 @@
             if(document.getElementById) {
                 window.alert = function(msg) {
                     AlertSingleton.getInstance().show(msg);
-                    console.error(msg);
+                    console.log(msg);
                 }
                 //Note that confirm is not blocking anymore
                 //so a callback function is needed
+                var browserConfirm = window.confirm;             
                 window.confirm = function(msg,callback) {
-                    ConfirmSingleton.getInstance().show(msg,callback);
+                    if (callback){
+                        ConfirmSingleton.getInstance().show(msg,callback);
+                    }
+                    else{ //In case you don't use the modified version
+                        browserConfirm(msg);
+                    }
                 }
             }
-
         </script>
 
         <!-- GVS Code -->
@@ -173,7 +178,7 @@
         <script type="text/javascript" 
             src="{{ MEDIA_URL }}js/gvs/dialogs/AbstractDialog.js"></script>    
         <script type="text/javascript" 
-            src="{{ MEDIA_URL }}js/gvs/dialogs/Preferences.js"></script>            
+            src="{{ MEDIA_URL }}js/gvs/dialogs/PreferencesDialog.js"></script>            
         <script type="text/javascript"
             src="{{ MEDIA_URL }}js/gvs/dialogs/DeployGadgetDialog.js"></script>
         <script type="text/javascript"
@@ -184,6 +189,10 @@
             src="{{ MEDIA_URL }}js/gvs/dialogs/Alert.js"></script>
         <script type="text/javascript"
             src="{{ MEDIA_URL }}js/gvs/dialogs/Confirm.js"></script>
+            
+        <!-- Toolbar -->
+        <script type="text/javascript"
+            src="{{ MEDIA_URL }}js/gvs/toolbar/Toolbar.js"></script>        
         
          <!-- User account -->
         <script type="text/javascript" 
@@ -198,7 +207,9 @@
             src="{{ MEDIA_URL }}js/gvs/utils/UIUtils.js"></script>
         <script type="text/javascript"
             src="{{ MEDIA_URL }}js/gvs/utils/Utils.js"></script>
-        
+        <script type="text/javascript"
+            src="{{ MEDIA_URL }}js/gvs/utils/Logger.js"></script>
+                
         <!-- Constants -->
         <script type="text/javascript"
             src="{{ MEDIA_URL }}js/gvs/commons/Constants.js"></script>
@@ -234,19 +245,12 @@
             // Arming the GVS initialization method
             dojo.addOnLoad(function() {
                 GVSSingleton.getInstance().init();
-                var prefs = PreferencesSingleton.getInstance();
-                {% if not is_anonymous %}
-                GVSSingleton.getInstance().setUser("{{ user.username }}", "{{ user.first_name}} " + 
-                                        "{{ user.last_name }}", "{{ user.email }}");
-                {% endif %}
                 //Adding the events
-                //TODO: Review this. Sentence to long
                 dojo.connect(dojo.byId("showDeployGadgetDialog"),"onclick", 
                             GVSSingleton.getInstance().getDocumentController().
                              showDeployCurrentDocDialog.bind(GVSSingleton.getInstance().
                              getDocumentController()));
                 $("header_button").hide();
-                dojo.connect(dojo.byId("toolbar.preferences"),"onclick", prefs.showDialog.bind(prefs));
             });
 
         /* ]]> */
@@ -270,10 +274,11 @@
                 <div id="header_button"><button id="showDeployGadgetDialog" dojoType="dijit.form.Button" label="Create Gadget!"></button></div>
                 <!-- Menu area -->
                 <div id="menu" dojoType="dijit.Toolbar">
-                    <div dojoType="dijit.form.Button" id="toolbar.preferences" iconClass="dijitToolbarIcon dijitToolbarIconPreferences" showLabel="false">Preferences</div>
+                    <!-- FIXME: There is an issue when loading buttons programatically  -->
+                    <div dojoType="dijit.ToolbarSeparator"></div>
                 </div>
             </div>  
-            
+
             <!-- Workspace area -->
                 
             <!-- CENTER part: Document area -->

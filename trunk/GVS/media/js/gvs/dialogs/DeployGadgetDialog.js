@@ -61,8 +61,7 @@ var DeployGadgetDialog = Class.create(AbstractDialog /** @lends DeployGadgetDial
         var inputGadgetName = new Element("input", {
             type: "text",
             name: "name",
-            value: this._parent.getTitle(),
-            "class": "input_GadgetInfo"
+            value: this._parent.getTitle()
         });
         divGadgetName.insert(inputGadgetName);
         form.insert(divGadgetName);
@@ -75,8 +74,7 @@ var DeployGadgetDialog = Class.create(AbstractDialog /** @lends DeployGadgetDial
         var inputVendor = new Element("input", {
             type: "text",
             name: "vendor",
-            value: "Morfeo",
-            "class": "input_GadgetInfo"
+            value: "Morfeo"
         });
         divVendor.insert(inputVendor);
         form.insert(divVendor);
@@ -89,8 +87,7 @@ var DeployGadgetDialog = Class.create(AbstractDialog /** @lends DeployGadgetDial
         var inputVersion = new Element("input", {
             type: "text",
             name: "version",
-            value: "1.0",
-            "class": "input_GadgetInfo"
+            value: "1.0"
         });
         divVersion.insert(inputVersion);
         form.insert(divVersion);
@@ -103,8 +100,7 @@ var DeployGadgetDialog = Class.create(AbstractDialog /** @lends DeployGadgetDial
         var inputGadgetDescription = new Element("input", {
             type: "text",
             name: "info",
-            value: "Write your description here...",
-            "class": "input_GadgetInfo"
+            value: "Write your description here..."
         });
         divGadgetDescription.insert(inputGadgetDescription);
         form.insert(divGadgetDescription);
@@ -123,8 +119,7 @@ var DeployGadgetDialog = Class.create(AbstractDialog /** @lends DeployGadgetDial
         var inputAuthorName = new Element("input", {
             type: "text",
             name: "author",
-            value: user.getRealName(),
-            "class": "input_GadgetInfo"
+            value: user.getRealName()
         });
         divAuthorName.insert(inputAuthorName);
         form.insert(divAuthorName);
@@ -137,8 +132,7 @@ var DeployGadgetDialog = Class.create(AbstractDialog /** @lends DeployGadgetDial
         var inputEmail = new Element("input", {
             type: "text",
             name: "email",
-            value: user.getEmail(),
-            "class": "input_GadgetInfo"
+            value: user.getEmail()
         });
         divEmail.insert(inputEmail);
         form.insert(divEmail);

@@ -55,11 +55,7 @@ var NewScreenflowDialog = Class.create(AbstractDialog /** @lends NewScreenflowDi
         var inputSFName = new Element("input",{
                 type: "text",
                 name : "SFName",
-                "class": "input_SFDialog",
                 value : "New Screenflow"
-                /*regExp: "[A-Za-z0-9-_]+",
-                trim : "true",
-                invalidMessage : "Screenflow name cannot be blank"*/
         });
         divSFName.insert(inputSFName);
         form.insert(divSFName);
@@ -71,8 +67,7 @@ var NewScreenflowDialog = Class.create(AbstractDialog /** @lends NewScreenflowDi
         divSFDomainContext.insert(labelSFDomainContext);
         var inputSFDomainContext = new Element("input", {
             type: "text",
-            name: "SFDomainContext",
-            "class": "input_SFDialog"
+            name: "SFDomainContext"
         });
         divSFDomainContext.insert(inputSFDomainContext);
         form.insert(divSFDomainContext);
