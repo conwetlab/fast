@@ -2,7 +2,9 @@ package eu.morfeoproject.fast.server;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.PrintWriter;
+import java.util.Properties;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -46,6 +48,13 @@ public class ScreenServlet extends GenericServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		InputStream inStream = this.getClass().getClassLoader().getResourceAsStream("META-INF/repository.properties"); 
+		if (inStream == null) throw new IOException("Configuration file repository.properties not found in META-INF directory.");
+		Properties properties = new Properties();
+		properties.load(inStream);
+		System.out.println(properties.getProperty("storageDir"));
+
+		
 		PrintWriter writer = response.getWriter();
 		String format = request.getHeader("accept") != null ? request.getHeader("accept") : MediaType.APPLICATION_JSON;
 		String[] chunks = request.getRequestURI().split("/");

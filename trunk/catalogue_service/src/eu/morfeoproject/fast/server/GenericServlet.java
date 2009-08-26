@@ -63,7 +63,7 @@ public abstract class GenericServlet extends HttpServlet {
 	}
 
 	@SuppressWarnings("unchecked")
-	protected Screen parseScreen(JSONObject jsonScreen, URI id) throws JSONException {
+	protected Screen parseScreen(JSONObject jsonScreen, URI id) throws JSONException, IOException {
 		Screen screen = FastModelFactory.createScreen();
 		if (id != null)
 			screen.setUri(id);
@@ -121,7 +121,7 @@ public abstract class GenericServlet extends HttpServlet {
 		return screen;
 	}
 	
-	protected Slot parseSlot(JSONObject jsonSlot, URI id) throws JSONException {
+	protected Slot parseSlot(JSONObject jsonSlot, URI id) throws JSONException, IOException {
 		Slot slot = FastModelFactory.createSlot();
 		if (id != null)
 			slot.setUri(id);
@@ -131,7 +131,7 @@ public abstract class GenericServlet extends HttpServlet {
 		return slot;
 	}
 	
-	protected Event parseEvent(JSONObject jsonEvent, URI id) throws JSONException {
+	protected Event parseEvent(JSONObject jsonEvent, URI id) throws JSONException, IOException {
 		Event event = FastModelFactory.createEvent();
 		if (id != null)
 			event.setUri(id);
@@ -151,9 +151,10 @@ public abstract class GenericServlet extends HttpServlet {
 	 * @param conditionsArray
 	 * @return
 	 * @throws JSONException
+	 * @throws IOException 
 	 */
 	@SuppressWarnings("unchecked")
-	protected List<Condition> parseConditions(JSONArray conditionsArray) throws JSONException {
+	protected List<Condition> parseConditions(JSONArray conditionsArray) throws JSONException, IOException {
 		ArrayList<Condition> conditions = new ArrayList<Condition>();
 		HashMap<String, BlankNode> blankNodes = new HashMap<String, BlankNode>();
 		for (int i = 0; i < conditionsArray.length(); i++) {
