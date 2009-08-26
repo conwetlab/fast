@@ -654,9 +654,7 @@ public class Catalogue {
     	}
     	
     	ArrayList<Condition> unCon = getUnsatisfiedPreconditions(resources, plugin, subsume);
-    	if (unCon.size() == 0) {
-    		return results;
-    	} else {
+    	if (unCon.size() > 0) {
         	queryString = queryString.concat("{");
 			for (Condition con : unCon) {
 				if (logger.isDebugEnabled())
