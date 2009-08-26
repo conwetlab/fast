@@ -1,7 +1,7 @@
-<form name="Deploy" method="get" method="post" target="_blank">
+<form name="Deploy" method="get" target="_blank">
 <input type="hidden" name="template_uri" /></form>
 <h1 id="detailsTitle">Deployment Information</h1>
-<div id="properties">
+<div class="tableContainer">
 <table>
     <tbody>
         <tr class="tableHeader">
@@ -11,23 +11,23 @@
         </tr>
         <tr>
             <td class="mashup">EzWeb</td>
-            <td>{{ ezwebGadgetURL }}</td>
+            <td><a href="{{ ezwebGadgetURL }}">{{ ezwebGadgetURL }}</a></td>
             <td>
-                <button id="b1" onclick="Utils.ezWebDeploy('{{ ezwebURL }}/interfaces/gadget', '{{ ezwebGadgetURL }}');">Deploy it!</button>
+                <button id="b1" dojoType="dijit.form.Button" onclick="Utils.ezWebDeploy('{{ ezwebURL }}/interfaces/gadget', '{{ ezwebGadgetURL }}');" label="Deploy it">Deploy it</button>
             </td>
         </tr>
         <tr>
             <td class="mashup">iGoogle</td>
-            <td>{{ igoogleGadgetURL }}</td>
+            <td><a href="{{ igoogleGadgetURL }}">{{ igoogleGadgetURL }}</a></td>
             <td>
-                <button id="b2" onclick="Utils.igoogleDeploy('{{ igoogleGadgetURL }}');">Deploy it!</button>
+                <button id="b2" dojoType="dijit.form.Button" onclick="Utils.igoogleDeploy('{{ igoogleGadgetURL }}');" label="Deploy it"></button>
             </td>
         </tr>
         <tr>
             <td class="mashup">Netvibes</td>
             <td>Deployment information not available</td>
             <td>
-                <button id="b3" onclick="alert('Deployment service not available');">Deploy it!</button>
+                <button id="b3" dojoType="dijit.form.Button" onclick="alert('Deployment service not available');" label="Deploy it"></button>
             </td>
         </tr>
     </tbody>

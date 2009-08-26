@@ -52,7 +52,7 @@ var AbstractDialog = Class.create( /** @lends AbstractDialog.prototype */ {
     hide: function () {
         //FIXME: This shouldn't be here
         //Arming the event again
-        Element.stopObserving(document, 'keypress', UIUtils.onKeyPressCanvas);
+        Element.observe(document, 'keypress', UIUtils.onKeyPressCanvas);
         this._form.hide();
         
         //If there is a reset method, call it

@@ -24,5 +24,5 @@ Utils.ezWebDeploy = function(/**String*/ ezWebUri,/**String*/ templateUri) {
 }
 
 Utils.igoogleDeploy = function(/**String*/ uri) {
-    alert("iGoogle Deployment service being developed ( " + uri + " )");
+    alert("iGoogle Deployment service being developed (<a href='" + uri + "'>" + uri +"</a>)");
 } 

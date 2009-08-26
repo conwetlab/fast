@@ -55,6 +55,7 @@
             if(document.getElementById) {
                 window.alert = function(msg) {
                     AlertSingleton.getInstance().show(msg);
+                    console.error(msg);
                 }
                 //Note that confirm is not blocking anymore
                 //so a callback function is needed

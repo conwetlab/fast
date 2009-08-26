@@ -188,6 +188,10 @@ h4{
     border: 1px solid grey;
 }
 
+.deployment .tableContainer {
+    margin-top: 10px;
+}
+
 /******************
  * palette	  *
  ******************/
@@ -300,6 +304,19 @@ h4{
         top: 18px;
         bottom: 0px;
         border-left: 1px dashed #aaa;
+    }
+    
+    .screen.satisfeable.selected {
+        background-color: #DDF7DD;
+    }
+
+    .screen.selected .screenTitle {
+        font-weight: bold;
+    }
+
+
+    .screen.unsatisfeable.selected {
+        background-color: #F5D9D9;
     }
 
     /**********************
@@ -461,13 +478,15 @@ label{
     padding: 5px;
 }
 
+.line{
+    margin-bottom:10px;
+}
+
 /******************
  * this is sparta *
  ******************/
 
-#left {
-    width:0px;
-}
+/*
 .flow {
     width: 50px;
 }
@@ -493,26 +512,6 @@ label{
     border-right: 1px solid #808080;
 
 }
-.inspectorSem {
-}
-#properties, #prepostContainer, #inspector {
-    overflow:auto;
-}
-
-
-
-.screen.satisfeable.selected {
-    background-color: #DDF7DD;
-}
-
-.screen.selected .screenTitle {
-    font-weight: bold;
-}
-
-
-.screen.unsatisfeable.selected {
-    background-color: #F5D9D9;
-}
 
 .left {
     width: 50%;
@@ -527,10 +526,6 @@ label{
     border-bottom: 1px solid #808080;
 }
 
-#tab2 {
-    padding:0px;
-    display:none;
-}
 #showDialog{
     font-size:18px;
     margin-right:20px;
@@ -546,9 +541,7 @@ label{
     width:450px;
     text-align:justify;
 }
-.line{
-    margin-bottom:10px;
-}
+
 
 .input_GadgetInfo, .input_SFDialog, .input_AddScreenCatalog{
     width:26em;
@@ -584,4 +577,4 @@ label{
     color:red;
     opacity:0;
     margin-left: 10px;
-}
+}*/
