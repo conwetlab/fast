@@ -28,12 +28,18 @@ var DomainConceptInstance = Class.create(ComponentInstance,
         if(finishState) {
             var currentDocument = GVSSingleton.getInstance().getDocumentController().getCurrentDocument();
             currentDocument.addDomainConcept(this);
-            currentDocument.onClickCanvas(this.getHandlerNode());
         }
-    }
+    },
 
     // **************** PRIVATE METHODS **************** //
-
+     /**
+     * This function is called when the attached view is dbl-clicked
+     * @private
+     * @override
+     */
+    _onDoubleClick: function (/** Event */ event){
+        //this.showPropertiesDialog();
+    }
 });
 
 // vim:ts=4:sw=4:et:

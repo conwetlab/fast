@@ -40,7 +40,6 @@ var ConnectorInstance = Class.create(ComponentInstance,
         if(finishState) {
             var currentDocument = GVSSingleton.getInstance().getDocumentController().getCurrentDocument();
             currentDocument.addConnector(this);
-            currentDocument.onClickCanvas(this.getHandlerNode());
         }
     },
     
@@ -400,9 +399,7 @@ var ConnectorInstance = Class.create(ComponentInstance,
      * @override
      */
     _onDoubleClick: function (/** Event */ event){
-       var currentDocument = GVSSingleton.getInstance().getDocumentController().getCurrentDocument();
-       //TODO: finish this
-       alert("double click");
+        this.showPropertiesDialog();
     }
 });
 
