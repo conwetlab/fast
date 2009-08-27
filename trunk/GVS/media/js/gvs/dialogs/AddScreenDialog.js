@@ -1,6 +1,6 @@
 var AddScreenDialog = Class.create(AbstractDialog /** @lends AddScreenDialog.prototype */, {
     /**
-     * TODO: describe this class
+     * This class handles the dialog to add a new screen
      * @constructs
      */ 
     initialize: function($super) {
@@ -206,6 +206,7 @@ var AddScreenDialog = Class.create(AbstractDialog /** @lends AddScreenDialog.pro
     /**
      * Overriding onOk handler
      * @overrides
+     * @private
      */
     _onOk: function($super){
         $super();

@@ -52,6 +52,13 @@ var BuildingBlockView = Class.create( /** @lends BuildingBlockView.prototype */ 
      * Removes the DOM Elements and frees building blocks
      */
     destroy: function () {
+    },
+    
+    /**
+     * Adds a listener
+     */
+    addListener: function (/** Function */ handler, /** String */ event){
+        Element.observe(this._node, event, handler);
     }
 });
 

@@ -1,0 +1,113 @@
+<html><head><meta http-equiv="content-type" content="text/html; charset=utf-8"> <style>
+	.KEYW {color: #933;}
+	.COMM {color: #bbb; font-style: italic;}
+	.NUMB {color: #393;}
+	.STRN {color: #393;}
+	.REGX {color: #339;}
+	.line {border-right: 1px dotted #666; color: #666; font-style: normal;}
+	</style></head><body><pre><span class='line'>  1</span> <span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">AbstractDialog</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">Class.create</span><span class="PUNC">(</span><span class="WHIT"> </span><span class="COMM">/** @lends AbstractDialog.prototype */</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>  2</span>     </span><span class="COMM">/**
+<span class='line'>  3</span>      * This class handles dialogs
+<span class='line'>  4</span>      * @abstract
+<span class='line'>  5</span>      * @constructs
+<span class='line'>  6</span>      */</span><span class="WHIT"> 
+<span class='line'>  7</span>     </span><span class="NAME">initialize</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="COMM">/** String */</span><span class="WHIT"> </span><span class="NAME">title</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>  8</span>         </span><span class="COMM">/** 
+<span class='line'>  9</span>          * Variable
+<span class='line'> 10</span>          * @type FormDialog
+<span class='line'> 11</span>          * @private @member
+<span class='line'> 12</span>          */</span><span class="WHIT">
+<span class='line'> 13</span>         </span><span class="NAME">this._form</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">FormDialog</span><span class="PUNC">(</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 14</span>             </span><span class="STRN">'title'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">title</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 15</span>             </span><span class="STRN">'style'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">'display:none;'</span><span class="WHIT">
+<span class='line'> 16</span>         </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 17</span>         
+<span class='line'> 18</span>         </span><span class="COMM">/**
+<span class='line'> 19</span>          * Determines if the dialog has been initialized
+<span class='line'> 20</span>          * @type Boolean
+<span class='line'> 21</span>          * @private @member
+<span class='line'> 22</span>          */</span><span class="WHIT">
+<span class='line'> 23</span>         </span><span class="NAME">this._initialized</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">false</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 24</span>         
+<span class='line'> 25</span>         </span><span class="COMM">//Initializing buttons</span><span class="WHIT">
+<span class='line'> 26</span>         </span><span class="NAME">this._form.addButton</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="STRN">'Ok'</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">this._onOk.bind</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 27</span>         </span><span class="NAME">this._form.addButton</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="STRN">'Cancel'</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">this._onCancel.bind</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 28</span>     </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 29</span>     
+<span class='line'> 30</span> 
+<span class='line'> 31</span>     </span><span class="COMM">// **************** PUBLIC METHODS **************** //</span><span class="WHIT">
+<span class='line'> 32</span> 
+<span class='line'> 33</span>     
+<span class='line'> 34</span>     </span><span class="COMM">/**
+<span class='line'> 35</span>      * show
+<span class='line'> 36</span>      */</span><span class="WHIT">
+<span class='line'> 37</span>     </span><span class="NAME">show</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 38</span>         </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="PUNC">!</span><span class="NAME">this._initialized</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 39</span>             </span><span class="NAME">this._initialized</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">true</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 40</span>             </span><span class="NAME">this._initDialogInterface</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 41</span>         </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'> 42</span>         </span><span class="COMM">//FIXME: This shouldn't be here</span><span class="WHIT">
+<span class='line'> 43</span>         </span><span class="COMM">//Removing the keypress event handling to avoid deleting elements</span><span class="WHIT">
+<span class='line'> 44</span>         </span><span class="COMM">//of the canvas when being in a dialog</span><span class="WHIT">
+<span class='line'> 45</span>         </span><span class="NAME">Element.stopObserving</span><span class="PUNC">(</span><span class="NAME">document</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">'keypress'</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">UIUtils.onKeyPressCanvas</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 46</span>         </span><span class="NAME">this._form.show</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 47</span>     </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 48</span>     
+<span class='line'> 49</span>     </span><span class="COMM">/**
+<span class='line'> 50</span>      * hide
+<span class='line'> 51</span>      */</span><span class="WHIT">
+<span class='line'> 52</span>     </span><span class="NAME">hide</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 53</span>         </span><span class="COMM">//FIXME: This shouldn't be here</span><span class="WHIT">
+<span class='line'> 54</span>         </span><span class="COMM">//Arming the event again</span><span class="WHIT">
+<span class='line'> 55</span>         </span><span class="NAME">Element.observe</span><span class="PUNC">(</span><span class="NAME">document</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">'keypress'</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">UIUtils.onKeyPressCanvas</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 56</span>         </span><span class="NAME">this._form.hide</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 57</span>         
+<span class='line'> 58</span>         </span><span class="COMM">//If there is a reset method, call it</span><span class="WHIT">
+<span class='line'> 59</span>         </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">this._reset</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 60</span>             </span><span class="NAME">this._reset</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 61</span>         </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'> 62</span>     </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 63</span>     </span><span class="COMM">/**
+<span class='line'> 64</span>      * getForm
+<span class='line'> 65</span>      * @type DOMNode
+<span class='line'> 66</span>      *
+<span class='line'> 67</span>      */</span><span class="WHIT">
+<span class='line'> 68</span>     </span><span class="NAME">getForm</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 69</span>         </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">this._form.getForm</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 70</span>     </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 71</span> 
+<span class='line'> 72</span>     </span><span class="COMM">// **************** PRIVATE METHODS **************** //</span><span class="WHIT">
+<span class='line'> 73</span> 
+<span class='line'> 74</span> 
+<span class='line'> 75</span>     </span><span class="COMM">/** 
+<span class='line'> 76</span>      * initDialogInterface
+<span class='line'> 77</span>      * This function creates the dom structure
+<span class='line'> 78</span>      * @private
+<span class='line'> 79</span>      * @abstract
+<span class='line'> 80</span>      */</span><span class="WHIT">
+<span class='line'> 81</span>     </span><span class="NAME">_initDialogInterface</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 82</span>         </span><span class="KEYW">throw</span><span class="WHIT"> </span><span class="STRN">"Abstract method invocation AbstractDialog :: _initDialogInterface"</span><span class="WHIT">
+<span class='line'> 83</span>     </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 84</span>     
+<span class='line'> 85</span>     </span><span class="COMM">/** 
+<span class='line'> 86</span>      * onOK
+<span class='line'> 87</span>      * This function is called when ok button is pressed (if any)
+<span class='line'> 88</span>      * @private
+<span class='line'> 89</span>      * @abstract
+<span class='line'> 90</span>      */</span><span class="WHIT">
+<span class='line'> 91</span>     </span><span class="NAME">_onOk</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 92</span>         </span><span class="NAME">this.hide</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 93</span>     </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 94</span>     
+<span class='line'> 95</span>     </span><span class="COMM">/** 
+<span class='line'> 96</span>      * onCancel
+<span class='line'> 97</span>      * This function is called when ok button is pressed (if any)
+<span class='line'> 98</span>      * @private
+<span class='line'> 99</span>      */</span><span class="WHIT">
+<span class='line'>100</span>     </span><span class="NAME">_onCancel</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>101</span>         </span><span class="NAME">this.hide</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>102</span>     </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>103</span> </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>104</span> 
+<span class='line'>105</span> </span><span class="COMM">// vim:ts=4:sw=4:et:</span><span class="WHIT">
+<span class='line'>106</span> </span></pre></body></html>

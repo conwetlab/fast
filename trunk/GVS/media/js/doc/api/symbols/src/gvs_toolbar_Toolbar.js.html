@@ -1,0 +1,42 @@
+<html><head><meta http-equiv="content-type" content="text/html; charset=utf-8"> <style>
+	.KEYW {color: #933;}
+	.COMM {color: #bbb; font-style: italic;}
+	.NUMB {color: #393;}
+	.STRN {color: #393;}
+	.REGX {color: #339;}
+	.line {border-right: 1px dotted #666; color: #666; font-style: normal;}
+	</style></head><body><pre><span class='line'>  1</span> <span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">Toolbar</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">Class.create</span><span class="PUNC">(</span><span class="WHIT"> </span><span class="COMM">/** @lends Toolbar.prototype */</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>  2</span>     </span><span class="COMM">/**
+<span class='line'>  3</span>      * TODO: describe this class
+<span class='line'>  4</span>      * @constructs
+<span class='line'>  5</span>      */</span><span class="WHIT"> 
+<span class='line'>  6</span>     </span><span class="NAME">initialize</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>  7</span>         </span><span class="COMM">/** 
+<span class='line'>  8</span>          * Variable
+<span class='line'>  9</span>          * @type dijit.dialog.Toolbar
+<span class='line'> 10</span>          * @private @member
+<span class='line'> 11</span>          */</span><span class="WHIT">
+<span class='line'> 12</span>         </span><span class="NAME">this._toolbar</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">dijit.byId</span><span class="PUNC">(</span><span class="STRN">"menu"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 13</span>     </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 14</span>     
+<span class='line'> 15</span>     </span><span class="COMM">/**
+<span class='line'> 16</span>      * This functions adds a button 
+<span class='line'> 17</span>      */</span><span class="WHIT">
+<span class='line'> 18</span>     </span><span class="NAME">addButton</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="COMM">/** Hash */</span><span class="WHIT"> </span><span class="NAME">buttonData</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="COMM">/** Function */</span><span class="WHIT"> </span><span class="NAME">handler</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 19</span>         
+<span class='line'> 20</span>         </span><span class="NAME">buttonData.onClick</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">handler</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 21</span>         </span><span class="NAME">buttonData.showLabel</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">false</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 22</span>         </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">button</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">dijit.form.Button</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">buttonData</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 23</span>         
+<span class='line'> 24</span>         </span><span class="NAME">this._toolbar.addChild</span><span class="PUNC">(</span><span class="NAME">button</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 25</span>     </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 26</span>     </span><span class="COMM">/**
+<span class='line'> 27</span>      * Todo
+<span class='line'> 28</span>      */</span><span class="WHIT">
+<span class='line'> 29</span>     </span><span class="NAME">removeButton</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="WHIT"> </span><span class="COMM">/***/</span><span class="WHIT"> </span><span class="NAME">button</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 30</span>         
+<span class='line'> 31</span>     </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'> 32</span> </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 33</span> 
+<span class='line'> 34</span> </span><span class="COMM">// vim:ts=4:sw=4:et:</span><span class="WHIT">
+<span class='line'> 35</span> </span></pre></body></html>

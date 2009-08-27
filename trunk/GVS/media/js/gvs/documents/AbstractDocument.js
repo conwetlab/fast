@@ -147,12 +147,16 @@ var AbstractDocument = Class.create( /** @lends AbstractDocument.prototype */ {
     select: function() {
         dijit.byId("documentContainer").selectChild(this._tabId);
     },
+    
+    // **************** PRIVATE METHODS **************** //
+    
     /**
      * Updates the set of buttons to be shown, depending on the
      * document type
      * @abstract
+     * @private
      */
-    updateToolbar: function () {
+    _updateToolbar: function () {
         throw "Abstract Method invocation: AbstractDocument::updateToolbar";
     },
 
@@ -164,10 +168,7 @@ var AbstractDocument = Class.create( /** @lends AbstractDocument.prototype */ {
         var gvs = GVSSingleton.getInstance();
         gvs.getDocumentController().closeDocument(this._tabId);
         return true;
-    },
-
-    // **************** PRIVATE METHODS **************** //
-    
+    }
 });
 
 // vim:ts=4:sw=4:et:

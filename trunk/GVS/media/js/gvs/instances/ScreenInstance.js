@@ -30,17 +30,24 @@ var ScreenInstance = Class.create(ComponentInstance,
      *      been added to the new zone.
      * @override
      */
-    onDragFinish: function(finishState) {
+    onDragFinish: function($super, finishState) {
+        $super(finishState);
         // FIXME: remove this
         if(finishState) {
             var currentDocument = GVSSingleton.getInstance().getDocumentController().getCurrentDocument();
-            currentDocument.addScreen(this);
-            currentDocument.onClickCanvas(this.getHandlerNode());
+            currentDocument.addScreen(this);           
         }
-    }
+    },
 
     // **************** PRIVATE METHODS **************** //
-
+    /**
+     * This function is called when the attached view is dbl-clicked
+     * @private
+     * @override
+     */
+    _onDoubleClick: function (/** Event */ event){
+        GVSSingleton.getInstance().getDocumentController().createPreviewDocument(this.getBuildingBlockDescription());
+    }
 });
 
 // vim:ts=4:sw=4:et:

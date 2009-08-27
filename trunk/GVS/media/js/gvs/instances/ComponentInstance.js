@@ -149,10 +149,47 @@ var ComponentInstance = Class.create(DragSource,
     destroy: function() {
         this._view.destroy();
         this._view = null;
-    }
+    },
+    
+    /**
+     * Drop event handler for the DragSource
+     * @param finishState
+     *      True if a new Instance has
+     *      been added to the new zone.
+     * @override
+     */
+    onDragFinish: function(finishState){
+        if (finishState){ //only if its new element
+            this._view.addListener (function(event){
+                event.stop();
+                this._onClick(event);
+            }.bind(this),'click');
+            this._view.addListener (function(event){
+                event.stop();
+                this._onDoubleClick(event);
+            }.bind(this),'dblclick');
+        }
+    },
 
     // **************** PRIVATE METHODS **************** //
-
+    /**
+     * This function is called when the attached view is clicked
+     * must be overriden by descendants
+     * @private
+     */
+    _onClick: function (/** Event */ event){
+        var currentDocument = GVSSingleton.getInstance().getDocumentController().getCurrentDocument();
+        currentDocument.setSelectedElement(this);
+    },
+    /**
+     * This function is called when the attached view is dbl-clicked
+     * must be overriden by descendants
+     * @private
+     */
+    _onDoubleClick: function (/** Event */ event){
+        var currentDocument = GVSSingleton.getInstance().getDocumentController().getCurrentDocument();
+        currentDocument.setSelectedElement(this);
+    }
 });
 
 // vim:ts=4:sw=4:et:

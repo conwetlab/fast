@@ -54,15 +54,26 @@ var ScreenflowDocument = Class.create(AbstractDocument,
          */ 
         this._inferenceEngine = new InferenceEngine(this);
         
+        /**
+         * This property represents the selected element
+         * @type BuildingBlockInstance
+         * @private @member
+         */
+        this._selectedElement = null;
+              
+        // Screenflow Definition
         
-        /*Screenflow Definition*/
+         /**
+         * The screenflow description
+         * @type ScreenflowDescription
+         * @private @member
+         */       
         this._buildingBlockDescription = new ScreenflowDescription();
-        
-        
+
         this._screens = [];
         this._connectors = [];
         this._domainConcepts = [];
-        this._selectedElement = null;
+
         
         this._buildingBlockDescription.setDomainContext(domainContext);
         
@@ -135,7 +146,7 @@ var ScreenflowDocument = Class.create(AbstractDocument,
      * for the building block view id passed as a parameter of the screenflow document
      * @type [BuildingBlockDescription, String]
      */
-    getBuildingBlockInstance: function (buildingBlockViewId) {
+    /*getBuildingBlockInstance: function (buildingBlockViewId) {
         for (var i=0; i<this._screens.length; i++) {
             if (this._screens[i].getView().getId()==buildingBlockViewId) {
                 return this._screens[i];
@@ -152,7 +163,7 @@ var ScreenflowDocument = Class.create(AbstractDocument,
             }
         }
         return null;
-    },
+    },*/
 
     /**
      * Adds a new screen.
@@ -162,12 +173,14 @@ var ScreenflowDocument = Class.create(AbstractDocument,
      */
     addScreen: function (screen) {
         if(screen!=null) {
+            
             this._screens.push(screen);
             var screenDescUri = $H(screen.getBuildingBlockDescription()).get('uri');
             this._buildingBlockDescription.addScreen(screen.getId(), screenDescUri, screen.getPosition());
             
             this._updateReachability();           
-            this.updateToolbar();         
+            this.updateToolbar();
+            this.setSelectedElement(screen);       
         }
     },
     
@@ -228,7 +241,7 @@ var ScreenflowDocument = Class.create(AbstractDocument,
         this._updateReachability();
         this.updateToolbar();
         this.setSelectedElement();
-        this._propertiesPane.clearElement();
+
     },
 
     /**
@@ -249,7 +262,6 @@ var ScreenflowDocument = Class.create(AbstractDocument,
         
         this._updateReachability();
         this.setSelectedElement();
-        this._propertiesPane.clearElement();
     },
 
     /**
@@ -270,12 +282,11 @@ var ScreenflowDocument = Class.create(AbstractDocument,
         this._domainConcepts = this._domainConcepts.compact();
         this._updateReachability();
         this.setSelectedElement();
-        this._propertiesPane.clearElement();
     },
 
     /**
      * Returns the selected element for the screenflow document
-     * @type {String[]}
+     * @type ComponentInstance
      */
     getSelectedElement: function () {
         return this._selectedElement;
@@ -283,20 +294,21 @@ var ScreenflowDocument = Class.create(AbstractDocument,
 
     /**
      * Select a screen in the screenflow document
-     * @param screen view
-     *      Screen to be selected for the
+     * @param ComponentInstance
+     *      Element to be selected for the
      *      Screenflow document.
      */
     setSelectedElement: function (element) {
-        if (this.getSelectedElement() != null) {
-            this.getSelectedElement().removeClassName("selected");
+        if (this._selectedElement != null) {
+            this._selectedElement.getView().getNode().removeClassName("selected");
         }
         if (element != undefined) {
             this._selectedElement = element;
-            this.getSelectedElement().addClassName("selected");
+             this._selectedElement.getView().getNode().addClassName("selected");
         } else {
             this._selectedElement = null;
         }
+        this._updatePropertiesPane();
     },
 
     /**
@@ -345,40 +357,7 @@ var ScreenflowDocument = Class.create(AbstractDocument,
      */
     getDetailsTitle: function ( /** String */ detail ) {
         return this._detailsTitle[detail];
-    },
-    
-    updatePropertiesPane: function( /** BuildingBlockId */ buildingBlockId, /** String */ buildingBlockType) {
-        var buildingBlockInstance = this.getBuildingBlockInstance(buildingBlockId);
-        var buildingBlockDescription = buildingBlockInstance.getBuildingBlockDescription();
-        switch(buildingBlockType){
-            case Constants.BuildingBlock.SCREEN:
-                var propertiesHash = new Hash();
-                propertiesHash.set('title',buildingBlockDescription.label['en-gb']);
-                propertiesHash.set('id',buildingBlockDescription.uri);
-                propertiesHash.set('desc',buildingBlockDescription.description['en-gb']);
-                propertiesHash.set('tags',buildingBlockDescription.domainContext.tags);
-                this._propertiesPane.selectElement(propertiesHash,"screen",buildingBlockDescription.label['en-gb']);
-                break;
-
-            case Constants.BuildingBlock.CONNECTOR:
-                var propertiesHash = buildingBlockInstance.getProperties().clone();
-                this._propertiesPane.selectElement(propertiesHash,"connector",propertiesHash.get('type'));
-                break;
-
-            case Constants.BuildingBlock.DOMAIN_CONCEPT:
-                var propertiesHash = new Hash();
-                propertiesHash.set('name',buildingBlockDescription.name);
-                propertiesHash.set('description',buildingBlockDescription.description);
-                propertiesHash.set('semantics',buildingBlockDescription.semantics);
-                this._propertiesPane.selectElement(propertiesHash,"domain concept", buildingBlockDescription.name);
-                break;
-
-            default:
-                console.debug("properties pane called without buildingBlocktype", buildingBlockType);
-                break;
-        }
-    },
-
+    },   
 
     updateReachability: function(/** map id->value*/screenList){
         var screens = this.getScreens();
@@ -406,94 +385,6 @@ var ScreenflowDocument = Class.create(AbstractDocument,
         this._deployGadgetDialog.hide();
     },
     
-    onClickCanvas: function( /**Element*/ element){
-        var clickedElement = this.getBuildingBlockElement(element);
-        var buildingBlockType = this.getBuildingBlockType(clickedElement);
-        switch (buildingBlockType) {
-            case Constants.BuildingBlock.SCREEN:
-                console.log("screen clicked");
-                this.setSelectedElement(clickedElement);
-                this.updatePropertiesPane(clickedElement.id, Constants.BuildingBlock.SCREEN);
-                break;
-            case Constants.BuildingBlock.DOMAIN_CONCEPT:
-                console.log("domain concept clicked");
-                this.setSelectedElement(clickedElement);
-                this.updatePropertiesPane(clickedElement.id, Constants.BuildingBlock.DOMAIN_CONCEPT);
-                break;
-            case Constants.BuildingBlock.CONNECTOR:
-                console.log("connector clicked");
-                this.setSelectedElement(clickedElement);
-                this.updatePropertiesPane(clickedElement.id, Constants.BuildingBlock.CONNECTOR);
-                break;
-            case 'canvas':
-                console.log("canvas clicked");
-                this.setSelectedElement();
-                this._propertiesPane.clearElement();
-                break;
-            case "unknown":
-            default:
-                console.log("unknown clicked");
-                this.setSelectedElement();
-                this._propertiesPane.clearElement();
-                break;
-        }
-    },
-
-    onDblClickCanvas: function( /**Element*/ element){
-        var clickedElement = this.getBuildingBlockElement(element);
-        var buildingBlockType = this.getBuildingBlockType(clickedElement);
-        switch (buildingBlockType) {
-            case Constants.BuildingBlock.SCREEN:
-                console.log("screen dbl-clicked");
-                var screenDescription = this.getBuildingBlockInstance(clickedElement.id).getBuildingBlockDescription();
-                var screenflowDoc = GVSSingleton.getInstance().getDocumentController().createPreviewDocument(screenDescription);
-                break;
-            case Constants.BuildingBlock.DOMAIN_CONCEPT:
-                console.log("domain concept dbl-clicked");
-                break;
-            case Constants.BuildingBlock.CONNECTOR:
-                console.log("connector dbl-clicked");
-                this.getBuildingBlockInstance(clickedElement.id).showPropertiesDialog();
-                break;
-            case "canvas":
-                console.log("canvas dbl-clicked");
-                break;
-            case "unknown":
-            default:
-                console.log("unknown dbl-clicked");
-                break;
-        }
-    },
-
-    /**
-     * Gets the building block div in the canvas
-     * @param {Element} element
-     */
-    getBuildingBlockElement: function(element){
-        if (element.hasClassName('canvas') && element.hasClassName('document')) {
-            return element;
-        } else {
-            while (element.up(0) != undefined) {
-                if (element.up(0).hasClassName('canvas') && element.up(0).hasClassName('document')) {
-                    return element;
-                } else {
-                    element = element.up(0);
-                }
-            }
-        }
-        return null;
-    },
-
-    getBuildingBlockType: function(element){
-        if (element.hasClassName('canvas') && element.hasClassName('document')) {
-            return 'canvas';
-        } else {
-            var elementClass = $w(element.className);
-            elementClass = elementClass.without("unknown").without("satisfeable").
-                            without("unsatisfeable").without("selected").without("view");
-            return ((elementClass.size() >= 1) ? elementClass[0] : 'unknown');
-        }
-    },
     /**
      * @override
      */
@@ -536,11 +427,11 @@ var ScreenflowDocument = Class.create(AbstractDocument,
             "id": this._tabContentId,
             "class": "document screenflow canvas"
         });
-        documentContent.observe('click', function(event){
-            this.onClickCanvas(event.element());
+        documentContent.observe('click', function(){
+            this._onClick();
         }.bind(this));
         documentContent.observe('dblclick', function(event){
-            this.onDblClickCanvas(event.element());
+            this._onClick();
         }.bind(this));
         var documentPaneId = uidGenerator.generate("documentPane");
         var documentPane = new dijit.layout.ContentPane({
@@ -568,7 +459,11 @@ var ScreenflowDocument = Class.create(AbstractDocument,
 
         this._tab.setContent(mainBorderContainer.domNode);
     },
-    
+    /**
+     * This function creates
+     * the inspector area
+     * @private
+     */
     _createInspectorArea: function(){
         var uidGenerator = UIDGeneratorSingleton.getInstance();
         var inspectorAreaId = uidGenerator.generate("inspectorArea");
@@ -596,6 +491,7 @@ var ScreenflowDocument = Class.create(AbstractDocument,
     
     /**
      * This function is called when the user has confirmed the closing
+     * @private
      * @param boolean
      *     The parameter represents if the user has accepted the closing (true)
      *     or not (false)
@@ -610,6 +506,7 @@ var ScreenflowDocument = Class.create(AbstractDocument,
     /**
      * This function updates the reachability in all
      * Elements: canvas and palettes
+     * @private
      */
     _updateReachability: function () {
         var canvas = this.getCanvas();
@@ -622,6 +519,27 @@ var ScreenflowDocument = Class.create(AbstractDocument,
         } else {
             this._inferenceEngine.findAndCheck(canvas, domainContext, palette, 'reachability');
         }
+    },
+    /**
+     * This function updates the properties table
+     * depending on the selected element
+     * @private
+     */
+    _updatePropertiesPane: function() {
+        if (!this._selectedElement) {
+            this._propertiesPane.clearElement();
+        }
+        else {
+            this._propertiesPane.selectElement(this._selectedElement);
+        }
+    },
+    
+    /**
+     * onClick handler
+     * @private
+     */
+    _onClick: function() {
+        this.setSelectedElement();
     }
 
 });

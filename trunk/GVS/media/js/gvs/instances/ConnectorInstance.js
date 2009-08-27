@@ -34,7 +34,8 @@ var ConnectorInstance = Class.create(ComponentInstance,
      *      been added to the new zone.
      * @override
      */
-    onDragFinish: function(finishState) {
+    onDragFinish: function($super, finishState) {
+        $super(finishState);
         // FIXME: remove this
         if(finishState) {
             var currentDocument = GVSSingleton.getInstance().getDocumentController().getCurrentDocument();
@@ -390,9 +391,19 @@ var ConnectorInstance = Class.create(ComponentInstance,
                 break;
             default:
         }
-    }
+    },
     
     // **************** PRIVATE METHODS **************** //
+    /**
+     * This function is called when the attached view is dbl-clicked
+     * @private
+     * @override
+     */
+    _onDoubleClick: function (/** Event */ event){
+       var currentDocument = GVSSingleton.getInstance().getDocumentController().getCurrentDocument();
+       //TODO: finish this
+       alert("double click");
+    }
 });
 
 // vim:ts=4:sw=4:et:

@@ -246,6 +246,7 @@
             dojo.addOnLoad(function() {
                 GVSSingleton.getInstance().init();
                 //Adding the events
+                //TODO: Remove this from here
                 dojo.connect(dojo.byId("showDeployGadgetDialog"),"onclick", 
                             GVSSingleton.getInstance().getDocumentController().
                              showDeployCurrentDocDialog.bind(GVSSingleton.getInstance().

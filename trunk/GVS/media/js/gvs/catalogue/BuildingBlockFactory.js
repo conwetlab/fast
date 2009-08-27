@@ -1,5 +1,5 @@
 var BuildingBlockFactory = Class.create(
-    /** @lends ResouceFactory.prototype */ {
+    /** @lends BuildingBlockFactory.prototype */ {
 
     /**
      * Abstract building block factory

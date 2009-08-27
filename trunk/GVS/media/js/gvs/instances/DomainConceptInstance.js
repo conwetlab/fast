@@ -22,7 +22,8 @@ var DomainConceptInstance = Class.create(ComponentInstance,
      *      been added to the new zone.
      * @override
      */
-    onDragFinish: function(finishState) {
+    onDragFinish: function($super,finishState) {
+        $super(finishState);
         // FIXME: remove this
         if(finishState) {
             var currentDocument = GVSSingleton.getInstance().getDocumentController().getCurrentDocument();

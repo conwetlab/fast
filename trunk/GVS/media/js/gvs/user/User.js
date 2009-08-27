@@ -1,6 +1,7 @@
 var User = Class.create( /** @lends User.prototype */ {
     /**
-     * TODO: describe this class
+     * This class handles the user account and properties
+     * It is used directly by the GVS
      * @constructs
      */ 
     initialize: function() {
@@ -106,10 +107,12 @@ var User = Class.create( /** @lends User.prototype */ {
     
     /**
      *  This function gets the user from the server
+     *  @private
      */
     _getUser: function (){
         /**
          * onSuccess handler
+         * @private
          */
         var onSuccess = function (/** XmlHttpRequest */ response){
             var remoteUser = JSON.parse(response.responseText);
@@ -122,6 +125,7 @@ var User = Class.create( /** @lends User.prototype */ {
         }
         /**
          * onError handler
+         * @private
          */
         var onError = function (/** XmlHttpRequest */ response, /** Exception */ e){         
             Logger.serverError (response, e);
@@ -132,17 +136,20 @@ var User = Class.create( /** @lends User.prototype */ {
     },
     /**
      *  This function updates the user to the server
+     *  @private
      */
     _updateUser: function (){
         
         /**
          * onSuccess handler
+         * @private
          */
         var onSuccess = function (/** XmlHttpRequest */ response){
         }
         
         /**
          * onError handler
+         * @private
          */
         var onError = function (/** XmlHttpRequest */ response){
             Logger.serverError (response, e);
