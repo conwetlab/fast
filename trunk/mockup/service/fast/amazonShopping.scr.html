@@ -113,10 +113,10 @@
 					//Create the call
 					var url = "http://webservices.amazon.com/onca/xml?Service=AWSECommerceService";
 					//Add the AccessKeyId (get from the user fact)
-					if (user)
+				/*	if (user)
 						url += "&AWSAccessKeyId=" + user.KeyId;
 					else // if the KB doesn't contain a user key Id, add one by default
-						url += "&AWSAccessKeyId=15TNKDQJGH6BD0Z4KY02";
+						url += "&AWSAccessKeyId=15TNKDQJGH6BD0Z4KY02";*/
 					//Add the operation Type
 					url +="&Operation=CartClear";
 					//Add the current version of the API
@@ -125,6 +125,9 @@
 					url += "&CartId=" + cart.id;
 					url += "&HMAC=" + cart.HMAC;
 					
+					var encoder = new URLAmazonEncoder();
+					url = encoder.encode(url);
+	
 					//Invoke the service
                    	EzWebAPI.send_get(url, this, shoppingCart.fetch, shoppingCart.onError);
 				}	
@@ -142,10 +145,10 @@
 					//Create the call
 					var url = "http://webservices.amazon.com/onca/xml?Service=AWSECommerceService";
 					//Add the AccessKeyId (get from the user fact)
-					if (user)
+/*					if (user)
 						url += "&AWSAccessKeyId=" + user.KeyId;
 					else // if the KB doesn't contain a user key Id, add one by default
-						url += "&AWSAccessKeyId=15TNKDQJGH6BD0Z4KY02";
+						url += "&AWSAccessKeyId=15TNKDQJGH6BD0Z4KY02";*/
 					//Add the operation Type
 					url +="&Operation=CartModify";
 					//Add the current version of the API
@@ -158,6 +161,9 @@
 						url += "&Item." + (i+1) + ".CartItemId=" + shoppingCart.productList[i]["id"];
 						url += "&Item." + (i+1) + ".Quantity=" + $F(shoppingCart.productList[i]["id"]);
 					}
+						var encoder = new URLAmazonEncoder();
+						url = encoder.encode(url);
+	
 					//Create the call
                    	EzWebAPI.send_get(url, this, shoppingCart.fetch, shoppingCart.onError);
 				}
@@ -185,10 +191,10 @@
                 //Invoke the service CartGet to retrieve the product list
                 var url = "http://webservices.amazon.com/onca/xml?Service=AWSECommerceService";
 				//Add the AccessKeyId (get from the user fact)
-				if (user)
+				/*if (user)
 					url += "&AWSAccessKeyId=" + user.KeyId;
 				else // if the KB doesn't contain a user key Id, add one by default
-					url += "&AWSAccessKeyId=15TNKDQJGH6BD0Z4KY02";
+					url += "&AWSAccessKeyId=15TNKDQJGH6BD0Z4KY02";*/
 				//Add the operation Type
 				url +="&Operation=CartGet";
 				//Add the current version of the API
@@ -198,6 +204,9 @@
 				url += "&HMAC=" + cart.HMAC;
 				
 				//Create the call
+						var encoder = new URLAmazonEncoder();
+						url = encoder.encode(url);
+	
                 EzWebAPI.send_get(url, this, shoppingCart.addToList, shoppingCart.onError);
             }
             

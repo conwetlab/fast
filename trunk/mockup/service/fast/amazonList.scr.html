@@ -122,10 +122,10 @@
 	                    //Base URL of the REST Service
 						var url = "http://webservices.amazon.com/onca/xml?Service=AWSECommerceService";
 						//Add the AccessKeyId (get from the user fact)
-						if (user)
+						/*if (user)
 							url += "&AWSAccessKeyId=" + user.KeyId;
 						else // if the KB doesn't contain a user key Id, add one by default
-							url += "&AWSAccessKeyId=15TNKDQJGH6BD0Z4KY02";
+							url += "&AWSAccessKeyId=15TNKDQJGH6BD0Z4KY02";*/
 						//Add the operation Type
 						url +="&Operation=ItemSearch";
 						//Add the parameters
@@ -134,9 +134,11 @@
 						url +="&ResponseGroup=Medium";
 						//Add the current version of the API
 						url += "&Version=2008-06-26";
+						var encoder = new URLAmazonEncoder();
+						encodedUrl = encoder.encode(url);
 
 						//Invoke the service
-	                    EzWebAPI.send_get(url, this, list.addToList, list.onError);
+	                    EzWebAPI.send_get(encodedUrl, this, list.addToList, list.onError);
 		            }
 		            
 		            List.prototype.addToList = function (transport){

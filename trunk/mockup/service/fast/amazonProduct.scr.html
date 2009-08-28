@@ -163,10 +163,10 @@
 						//Base URL of the REST Service
 						var url = "http://webservices.amazon.com/onca/xml?Service=AWSECommerceService";
 						//Add the AccessKeyId (get from the user fact)
-						if (user)
+				/*		if (user)
 							url += "&AWSAccessKeyId=" + user.KeyId;
 						else // if the KB doesn't contain a user key Id, add one by default
-							url += "&AWSAccessKeyId=15TNKDQJGH6BD0Z4KY02";
+							url += "&AWSAccessKeyId=15TNKDQJGH6BD0Z4KY02";*/
 						//Add the operation Type
 						url +="&Operation=ItemLookup";
 						//Add the responseGroup
@@ -176,6 +176,10 @@
 						//Add item ID
 						url += "&ItemId=" + item.ASIN;
 						
+	
+						var encoder = new URLAmazonEncoder();
+						url = encoder.encode(url);
+	
 						//Invoke the service
                     	EzWebAPI.send_get(url, this, product.fetchProductInfo, product.onError);
 					}
@@ -482,10 +486,10 @@
 						if (cart){//If the cart is already created, it will have an ID in the User Fact
 							var url = "http://webservices.amazon.com/onca/xml?Service=AWSECommerceService";
 							//Add the AccessKeyId (get from the user fact)
-							if (user)
+					/*		if (user)
 								url += "&AWSAccessKeyId=" + user.KeyId;
 							else // if the KB doesn't contain a user key Id, add one by default
-								url += "&AWSAccessKeyId=15TNKDQJGH6BD0Z4KY02";
+								url += "&AWSAccessKeyId=15TNKDQJGH6BD0Z4KY02";*/
 							//Add the operation Type
 							url +="&Operation=CartGet";
 							//Add the current version of the API
@@ -494,16 +498,19 @@
 							url += "&CartId=" + cart.id;
 							url += "&HMAC=" + cart.HMAC;
 							
+					 		var encoder = new URLAmazonEncoder();
+							url = encoder.encode(url);
+	
 							//Invoke the service
 	                    	EzWebAPI.send_get(url, this, product.isProductOnCart, product.onError);
 						}
 						else { //Cart doesn't exist: Create a new cart with the product
 							var url = "http://webservices.amazon.com/onca/xml?Service=AWSECommerceService";
 							//Add the AccessKeyId (get from the user fact)
-							if (user)
+							/*if (user)
 								url += "&AWSAccessKeyId=" + user.KeyId;
 							else // if the KB doesn't contain a user key Id, add one by default
-								url += "&AWSAccessKeyId=15TNKDQJGH6BD0Z4KY02";
+								url += "&AWSAccessKeyId=15TNKDQJGH6BD0Z4KY02";*/
 							//Add the operation Type
 							url +="&Operation=CartCreate";
 							//Add the current version of the API
@@ -511,6 +518,10 @@
 							//Add item ID
 							url += "&Item.1.ASIN=" + item.ASIN;
 							url += "&Item.1.Quantity=" + $F("quantitySelect");
+
+							var encoder = new URLAmazonEncoder();
+							url = encoder.encode(url);
+	
 							
 							//Invoke the service
 	                    	EzWebAPI.send_get(url, this, product.cartCreated, product.onError);
@@ -599,10 +610,10 @@
 							//Create the call
 							var url = "http://webservices.amazon.com/onca/xml?Service=AWSECommerceService";
 							//Add the AccessKeyId (get from the user fact)
-							if (user)
+							/*if (user)
 								url += "&AWSAccessKeyId=" + user.KeyId;
 							else // if the KB doesn't contain a user key Id, add one by default
-								url += "&AWSAccessKeyId=15TNKDQJGH6BD0Z4KY02";
+								url += "&AWSAccessKeyId=15TNKDQJGH6BD0Z4KY02";*/
 							//Add the operation Type
 							url +="&Operation=CartModify";
 							//Add the current version of the API
@@ -613,6 +624,9 @@
 							url += "&Item.1.CartItemId=" + productId;
 							url += "&Item.1.Quantity=" + quantity;
 							
+							var encoder = new URLAmazonEncoder();
+							url = encoder.encode(url);
+	
 							//Invoke the service
 	                    	EzWebAPI.send_get(url, this, product.productAdded, product.onError);
 						}
@@ -620,10 +634,10 @@
 		                    //Create the call
 							var url = "http://webservices.amazon.com/onca/xml?Service=AWSECommerceService";
 							//Add the AccessKeyId (get from the user fact)
-							if (user)
+					/*		if (user)
 								url += "&AWSAccessKeyId=" + user.KeyId;
 							else // if the KB doesn't contain a user key Id, add one by default
-								url += "&AWSAccessKeyId=15TNKDQJGH6BD0Z4KY02";
+								url += "&AWSAccessKeyId=15TNKDQJGH6BD0Z4KY02";*/
 							//Add the operation Type
 							url +="&Operation=CartAdd";
 							//Add the current version of the API
@@ -635,6 +649,9 @@
 							url += "&Item.1.Quantity=" + $F("quantitySelect");
 							
 							//Invoke the service
+						var encoder = new URLAmazonEncoder();
+						url = encoder.encode(url);
+	
 	                    	EzWebAPI.send_get(url, this, product.productAdded, product.onError);
 						}
 					}

@@ -104,7 +104,9 @@ class view:
                       
             list = screens.split(',')
             
-            base_uri = web.ctx.homedomain + '/static'
+            #base_uri = web.ctx.homedomain + '/static'
+            #FIXME
+            base_uri = 'http://piccolo.ls.fi.upm.es/fastservice/static'
             url_path = base_uri + '/'+gadget_name
             html_uri = base_uri + '/'+gadget_name+'/' + gadget_name + '.html'
             template_uri = base_uri + '/'+gadget_name+'/' + gadget_name + '.xml'
@@ -121,11 +123,10 @@ class view:
             
             un = unzip.unzip()
             un.extract(base + '/gadget_base.zip', gadget_path)
-            
             web.ctx.headers = [('Content-Type', 'text/html')]
-            
-            print getDeploymentHTML(base, template_uri)
-            
+            web.ctx.output =  getDeploymentHTML(base, template_uri)
+
+            return 
         except Exception, e:
             web.ctx.status = "500 Internal Server Error"
             web.ctx.headers = [('Content-Type', 'text/plain')]
