@@ -70,7 +70,8 @@ var PersistenceEngineFactory = function () {
         }
 
         PersitenceEngine.prototype.sendUpdate = function (url, params, body, context, successHandler, errorHandler, requestHeaders){
-            new Ajax.Request(url, {
+        	//FIXME: If body -> it sends post
+        	new Ajax.Request(url, {
                 method: 'put',
                 parameters: params,
                 postBody: body,
