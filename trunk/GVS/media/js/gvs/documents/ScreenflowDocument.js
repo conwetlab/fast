@@ -167,7 +167,7 @@ var ScreenflowDocument = Class.create(AbstractDocument,
 
     /**
      * Adds a new screen.
-     * @param screen
+     * @param ScreenInstance
      *      Screen to be added to the
      *      Screenflow document.
      */
@@ -224,64 +224,68 @@ var ScreenflowDocument = Class.create(AbstractDocument,
 
     /**
      * Delete a screen.
-     * @param ScreenView.id
+     * @param ScreenInstance
      *      Screen to be deleted from the
      *      Screenflow document.
      */
-    deleteScreen: function(screenViewId) {
-        for (var i=0; i<this._screens.length; i++) {
-            if (this._screens[i].getView().getId()==screenViewId) {
-                this._buildingBlockDescription.deleteScreen(this._screens[i].getId());
-                this._screens[i] = null;
-                break;
-            }
-        }
-        this._screens = this._screens.compact();
-        
-        this._updateReachability();
-        this.updateToolbar();
-        this.setSelectedElement();
+    deleteScreen: function(screen) {
+        var i = $A(this._screens).indexOf(screen);
+        if (i != -1){
+            this._buildingBlockDescription.deleteScreen(this._screens[i].getId());
+            this._screens[i] = null;
 
+            var node = screen.getView().getNode();
+            node.parentNode.removeChild(node);
+            
+            this._screens = this._screens.compact();
+            this._updateReachability();
+            this.updateToolbar();
+            this.setSelectedElement();
+        }
     },
 
     /**
      * Delete a connector.
-     * @param ConnectorView.id
+     * @param ConnectorInstance
      *      Connector to be deleted from the
      *      Screenflow document.
      */
-    deleteConnector: function(connectorViewId) {
-        for (var i=0; i<this._connectors.length; i++) {
-            if (this._connectors[i].getView().getId()==connectorViewId) {
-                this._buildingBlockDescription.deleteConnector(this._connectors[i].getId());
-                this._connectors[i] = null;
-                break;
-            }
+    deleteConnector: function(connector) {
+        var i = $A(this._connectors).indexOf(connector);
+        if (i != -1){
+            this._buildingBlockDescription.deleteConnector(this._connectors[i].getId());
+            this._connectors[i] = null;
+
+            var node = connector.getView().getNode();
+            node.parentNode.removeChild(node);
+            
+            this._connectors = this._connectors.compact();
+            this._updateReachability();
+            this.updateToolbar();
+            this.setSelectedElement();
         }
-        this._connectors = this._connectors.compact();
-        
-        this._updateReachability();
-        this.setSelectedElement();
     },
 
     /**
      * Delete a domain concept.
-     * @param DomainConceptView.id
+     * @param DomainConcept
      *      Domain Concept to be deleted from the
      *      Screenflow document.
      */
-    deleteDomainConcept: function(domainConceptViewId) {
-        for (var i=0; i<this._domainConcepts.length; i++) {
-            if (this._domainConcepts[i].getView().getId()==domainConceptViewId) {
-                //TODO: fix this
-                //this._buildingBlockDescription.deleteDomainConcept(this._domainConcepts[i].getId());
-                this._domainConcepts[i] = null;
-                break;
-            }
+    deleteDomainConcept: function(domainConcept) {
+       var i = $A(this._domainConcepts).indexOf(domainConcept);
+        if (i != -1){
+            //this._buildingBlockDescription.deleteDomainConcept(this._domainConcepts[i].getId());
+            this._domainConcepts[i] = null;
+
+            var node = domainConcept.getView().getNode();
+            node.parentNode.removeChild(node);
+            
+            this._domainConcepts = this._domainConcepts.compact();
+            this._updateReachability();
+            this.updateToolbar();
+            this.setSelectedElement();
         }
-        this._domainConcepts = this._domainConcepts.compact();
-        this._updateReachability();
-        this.setSelectedElement();
     },
 
     /**

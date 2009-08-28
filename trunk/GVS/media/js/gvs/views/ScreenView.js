@@ -33,9 +33,19 @@ var ScreenView = Class.create( BuildingBlockView,
         var factFactory = FactFactorySingleton.getInstance();
         var preArea = new Element("div", {"class": "preArea"});
         var preIcons = [];
-        $A(screenBuildingBlockDescription.preconditions).each(
+
+        if (screenBuildingBlockDescription.preconditions.length > 1){ //More than one set of preconditions
+            console.log("OR precondition support not implemented yet");
+        }
+        else {
+            var preconditions = screenBuildingBlockDescription.preconditions[0];
+        }
+    
+        
+        $A(preconditions).each(
                 function(pre) {
-                    var preFact = factFactory.getFactIcon(pre, "medium");
+                    var uri = pre.pattern;
+                    var preFact = factFactory.getFactIcon(uri, "medium");
                     preIcons.push(preFact);
                     preArea.appendChild(preFact.getNode());
                 }
@@ -44,11 +54,28 @@ var ScreenView = Class.create( BuildingBlockView,
 
         var postArea = new Element("div", {"class": "postArea"});
         var postIcons = [];
-        $A(screenBuildingBlockDescription.postconditions).each(
+
+        //Backward compatibility with the previous catalogue
+        if (screenBuildingBlockDescription.postconditions[0] instanceof Array){//new catalogue
+            if (screenBuildingBlockDescription.postconditions.length > 1){ //More than one set of preconditions
+                console.log("OR postcondition support not implemented yet");
+            }
+            else {
+                var postconditions = screenBuildingBlockDescription.postconditions[0];
+            }
+        }
+        else {//old catalogue
+            var postconditions = screenBuildingBlockDescription.postconditions;
+        }        
+        
+        $A(postconditions).each(
                 function(post) {
-                    var postFact = factFactory.getFactIcon(post, "medium");
-                    postIcons.push(postFact);
-                    postArea.appendChild(postFact.getNode());
+                    if (post) {
+                        var uri = post.pattern;
+                        var postFact = factFactory.getFactIcon(uri, "medium");
+                        postIcons.push(postFact);
+                        postArea.appendChild(postFact.getNode());
+                    }
                 }
         );
         this._postIcons = postIcons;

@@ -14,17 +14,17 @@ UIUtils.onKeyPressCanvas = function(e){
     
         var currentDocument = GVSSingleton.getInstance().getDocumentController().getCurrentDocument();
         
-        if (currentDocument.getDocumentType() == Constants.DocumentType.SCREENFLOW) {
+        if (currentDocument.getSelectedElement){
         
             var selectedElement = currentDocument.getSelectedElement();
             
             if (selectedElement != null) { //Delete an element from the canvas
-                instance = currentDocument.getBuildingBlockInstance(selectedElement.id);
-                if (instance.getBuildingBlockDescription().label){
-                    var label = instance.getBuildingBlockDescription().label['en-gb'];
+                
+                if (selectedElement.getBuildingBlockDescription().label){
+                    var label = selectedElement.getBuildingBlockDescription().label['en-gb'];
                 }
                 else {//FIXME: workaround for connectors
-                    var label = instance.getBuildingBlockDescription().name;
+                    var label = selectedElement.getBuildingBlockDescription().name;
                 }
                 title = (label) ? ('the element "' + label + '"') : "the selected element";
                 confirm("You are about to remove " + title + " from canvas. Are you sure?", 
@@ -41,21 +41,17 @@ UIUtils.deleteHandler = function (/** Boolean */ remove){
         var selectedElement = currentDocument.getSelectedElement();
         
         if (selectedElement != null) {
-            instance = currentDocument.getBuildingBlockInstance(selectedElement.id);
-            type = instance.getBuildingBlockType();
+            type = selectedElement.getBuildingBlockType();
 
             switch (type) {
                 case Constants.BuildingBlock.SCREEN:
-                    currentDocument.deleteScreen(selectedElement.id);
-                    selectedElement.parentNode.removeChild(selectedElement);                          
+                    currentDocument.deleteScreen(selectedElement);                       
                     break;
                 case Constants.BuildingBlock.DOMAIN_CONCEPT:
-                    currentDocument.deleteDomainConcept(selectedElement.id);
-                    selectedElement.parentNode.removeChild(selectedElement);
+                    currentDocument.deleteDomainConcept(selectedElement);
                     break;
                 case Constants.BuildingBlock.CONNECTOR:      
-                    currentDocument.deleteConnector(selectedElement.id);
-                    selectedElement.parentNode.removeChild(selectedElement);
+                    currentDocument.deleteConnector(selectedElement);
                     break;
                 default:
                     alert("Element cannot be deleted");
