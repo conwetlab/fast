@@ -75,10 +75,10 @@
 					//Create the call
 					var url = "http://webservices.amazon.com/onca/xml?Service=AWSECommerceService";
 					//Add the AccessKeyId (get from the user fact)
-					if (user)
+					/*if (user)
 						url += "&AWSAccessKeyId=" + user.data.KeyId;
 					else // if the KB doesn't contain a user key Id, add one by default
-						url += "&AWSAccessKeyId=15TNKDQJGH6BD0Z4KY02";
+						url += "&AWSAccessKeyId=15TNKDQJGH6BD0Z4KY02";*/
 					//Add the operation Type
 					url +="&Operation=CartClear";
 					//Add the current version of the API
@@ -87,6 +87,9 @@
 					url += "&CartId=" + cart.data.id;
 					url += "&HMAC=" + cart.data.HMAC;
 					
+						var encoder = new URLAmazonEncoder();
+						url = encoder.encode(url);
+	
 					//Invoke the service
            	        new FastAPI.Request(url,{
                         'method':       'get',
@@ -110,10 +113,10 @@
 					//Create the call
 					var url = "http://webservices.amazon.com/onca/xml?Service=AWSECommerceService";
 					//Add the AccessKeyId (get from the user fact)
-					if (user)
+					/*if (user)
 						url += "&AWSAccessKeyId=" + user.data.KeyId;
 					else // if the KB doesn't contain a user key Id, add one by default
-						url += "&AWSAccessKeyId=15TNKDQJGH6BD0Z4KY02";
+						url += "&AWSAccessKeyId=15TNKDQJGH6BD0Z4KY02";*/
 					//Add the operation Type
 					url +="&Operation=CartModify";
 					//Add the current version of the API
@@ -126,6 +129,10 @@
 						url += "&Item." + (i+1) + ".CartItemId=" + shoppingCart.productList[i]["id"];
 						url += "&Item." + (i+1) + ".Quantity=" + $F(shoppingCart.productList[i]["id"]);
 					}
+
+						var encoder = new URLAmazonEncoder();
+						url = encoder.encode(url);
+	
 					//Create the call
                     new FastAPI.Request(url,{
                         'method':       'get',
@@ -159,10 +166,10 @@
                 //Invoke the service CartGet to retrieve the product list
                 var url = "http://webservices.amazon.com/onca/xml?Service=AWSECommerceService";
 				//Add the AccessKeyId (get from the user fact)
-				if (user)
+				/*if (user)
 					url += "&AWSAccessKeyId=" + user.data.KeyId;
 				else // if the KB doesn't contain a user key Id, add one by default
-					url += "&AWSAccessKeyId=15TNKDQJGH6BD0Z4KY02";
+					url += "&AWSAccessKeyId=15TNKDQJGH6BD0Z4KY02";*/
 				//Add the operation Type
 				url +="&Operation=CartGet";
 				//Add the current version of the API
@@ -171,6 +178,9 @@
 				url += "&CartId=" + cart.data.id;
 				url += "&HMAC=" + cart.data.HMAC;
 				
+						var encoder = new URLAmazonEncoder();
+						url = encoder.encode(url);
+	
 				//Create the call
                 new FastAPI.Request(url,{
                     'method':       'get',
