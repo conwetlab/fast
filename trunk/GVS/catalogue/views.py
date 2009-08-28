@@ -19,7 +19,8 @@ class CatalogueProxy(Resource):
         operation = "/%s" % operation
         baseUrl = cleanUrl(settings.CATALOGUE_URL)
         conn = Connection(baseUrl)
-        result = conn.request_post(operation, headers={'Accept':'text/json'})
+        body = request.raw_post_data
+        result = conn.request_post(operation, body=body, headers={'Accept':'text/json'})
         response = HttpResponse(result['body'], mimetype='application/json; charset=UTF-8')
         return response
     def update(self, request, operation):
@@ -34,7 +35,6 @@ class CatalogueProxy(Resource):
         operation = "/%s" % operation
         baseUrl = cleanUrl(settings.CATALOGUE_URL)
         conn = Connection(baseUrl)
-        body = request.raw_post_data
-        result = conn.request_delete(operation, body=body, headers={'Accept':'text/json'})
+        result = conn.request_delete(operation, headers={'Accept':'text/json'})
         response = HttpResponse(result['body'], mimetype='application/json; charset=UTF-8')
         return response
