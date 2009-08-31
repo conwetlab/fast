@@ -89,7 +89,7 @@ public class Catalogue {
 		tripleStore = new TripleStore(dir, indexes);
     	tripleStore.open();
     	
-//    	tripleStore.clear();
+    	tripleStore.clear();
     	
 		// check if the catalogue is correct
 		if (!check()) {
@@ -831,13 +831,13 @@ public class Catalogue {
 					m.addAll(c.getPattern().iterator());
 				models.add(m); 
 			} else if (r instanceof Screen) {
+				Model m = RDF2Go.getModelFactory().createModel();
+				m.open();
 				for (List<Condition> postcondition : ((Screen) r).getPostconditions()) {
-					Model m = RDF2Go.getModelFactory().createModel();
-					m.open();
 					for (Condition c : postcondition)
 						m.addAll(c.getPattern().iterator());
-					models.add(m);
 				}
+				models.add(m);
 			}
 		} else {
 			Resource r = resources.iterator().next();
@@ -852,14 +852,14 @@ public class Catalogue {
 					m.addModel(model);
 					models.add(m);
 				} else if (r instanceof Screen) {
+					Model m = RDF2Go.getModelFactory().createModel();
+					m.open();
 					for (List<Condition> postcondition : ((Screen) r).getPostconditions()) {
-						Model m = RDF2Go.getModelFactory().createModel();
-						m.open();
 						for (Condition c : postcondition)
-							m.addAll(c.getPattern().iterator());
-						m.addModel(model);
-						models.add(m);
+							m.addAll(c.getPattern().iterator());						
 					}
+					m.addModel(model);
+					models.add(m);
 				}
 			}
 		}
