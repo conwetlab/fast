@@ -36,68 +36,20 @@ var PreferencesDialog = Class.create(AbstractDialog /** @lends PreferencesDialog
         this._form.setHeader("User preferences");
         
         var user = GVSSingleton.getInstance().getUser();
-                             
-        var container = this._form.getContentNode();
-                   
-        var form = new dijit.form.Form({
-            "id" : "PreferencesForm",
-            method : "post"
-        });
-        var dialogDiv = new Element("div", {
-                                "id" : "preferencesDialogDiv"
-                            });
-        form.domNode.appendChild(dialogDiv);
-
-        var divFirstName = new Element("div", {
-                                "class" : "line"
-                            });
-        var labelFirstName = new Element("label").update("First Name:");
-        divFirstName.appendChild(labelFirstName);
-        var inputFirstName = new dijit.form.TextBox({
-            name : "firstName",
-            value : user.getFirstName()
-        });
-        divFirstName.appendChild(inputFirstName.domNode);
-        dialogDiv.appendChild(divFirstName);
-        var divLastName = new Element("div", {
-            "class" : "line"
-        });
-        var labelLastName = new Element("label").update("Last Name:");
-        divLastName.appendChild(labelLastName);
-        var inputLastName = new dijit.form.TextBox({
-            name : "lastName",
-            value : user.getLastName()
-        });
-        divLastName.appendChild(inputLastName.domNode);
-        dialogDiv.appendChild(divLastName);
-        var divEmail = new Element("div", {
-            "class" : "line"
-        });
-        var labelEmail = new Element("label").update("Email:");
-        divEmail.appendChild(labelEmail);
-        var inputEmail = new dijit.form.ValidationTextBox({
-            name : "email",
-            value : user.getEmail(),
-            regExp: "[a-zA-Z0-9._%-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}",
-            invalidMessage : "Invalid email address"
-        });
-        divEmail.appendChild(inputEmail.domNode);
-        dialogDiv.appendChild(divEmail);
-        var divEzWebURL = new Element("div", {
-            "class" : "line"
-        });
-        var labelEzWebURL = new Element("label").update("EzWeb URL:");
-        divEzWebURL.appendChild(labelEzWebURL);
-        var inputEzWebURL = new dijit.form.ValidationTextBox({
-            name : "ezWebURL",
-            value : user.getEzWebURL(),
-            regExp: "([hH][tT][tT][pP][sS]?)://[A-Za-z0-9-_]+(\.[A-Za-z0-9-_]+)*(:\d+)?(/[a-zA-Z0-9\.\?=/#%&\+-]*)*",
-            invalidMessage : "Invalid URL"
-        });
-        divEzWebURL.appendChild(inputEzWebURL.domNode);
-        dialogDiv.appendChild(divEzWebURL);        
-
-        container.insert (form.domNode);
+             
+        var formData = [
+            {'type':'input', 'label': 'First Name:','name': 'firstName', 'value': user.getFirstName()},
+            {'type':'input', 'label': 'Last Name:','name': 'lastName', 'value': user.getLastName()},
+            {'type':'validation', 'label': 'Email:','name': 'email', 'value': user.getEmail(), 
+                    'regExp': '[a-zA-Z0-9._%-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}', 
+                    'message': 'Invalid email address'},
+            {'type':'validation', 'label': 'EzWeb URL:','name': 'ezWebURL', 
+                    'value': user.getEzWebURL(), 
+                    'regExp': '([hH][tT][tT][pP][sS]?)://[A-Za-z0-9-_]+(\.[A-Za-z0-9-_]+)*(:\d+)?(/[a-zA-Z0-9\.\?=/#%&\+-]*)*', 
+                    'message': 'Invalid URL'}
+        ];
+        
+        this._form.setContent(formData, {'id' : 'PreferencesForm', 'method' : 'post'});
 
     },
     /**
@@ -126,6 +78,8 @@ var PreferencesDialog = Class.create(AbstractDialog /** @lends PreferencesDialog
         this._form.getForm().lastName.value = user.getLastName();
         this._form.getForm().email.value = user.getEmail();
         this._form.getForm().ezWebURL.value = user.getEzWebURL();
+        var form = dijit.byId("PreferencesForm");
+        form.validate();
     }
 });
 

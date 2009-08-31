@@ -321,23 +321,7 @@ var ScreenflowDescription = Class.create(BuildingBlockDescription,
         }
 
         function onError(transport, e) {
-            //TODO: develop onError function
-            var msg;
-            if (e) {
-                msg = "JavaScript exception on file #{errorFile} (line: #{errorLine}): #{errorDesc}".interpolate(
-                                  {errorFile: e.fileName, errorLine: e.lineNumber, errorDesc: e});
-            } else if (transport.responseXML) {
-                msg = transport.responseXML.documentElement.textContent;
-            } else if (transport.responseText){
-                msg = transport.responseText;
-            } else {
-                msg = "HTTP Error " + transport.status + " - " + transport.statusText;
-            }
-            msg = "Error creating a gadget: #{errorMsg}.".interpolate({errorMsg: msg});
-            
-            //TODO create Logmanagerfactory
-            //LogManagerFactory.getInstance().log(msg);
-            alert(msg);
+            Logger.serverError(transport,e);
         }
 
         var datajson = this.toJSON();

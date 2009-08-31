@@ -86,8 +86,14 @@ var ScreenView = Class.create( BuildingBlockView,
         if (screenBuildingBlockDescription.icon){
             var imageContainer = new Element ('div',
                     {'class': 'screenImage' });
-            var image = new Element ('img',
-                    {'class': 'img', 'src': screenBuildingBlockDescription.icon});
+            var image = new Element ('img',{
+                    'class': 'img', 
+                    'src': screenBuildingBlockDescription.icon
+                    //If we want an onerror image...
+                    /*'onError': 'if (this.src != URIs.screenImageNotFound){'+
+                                'this.src = URIs.screenImageNotFound;'+
+                            '}'*/
+                    });
             imageContainer.appendChild (image); 
         }
 

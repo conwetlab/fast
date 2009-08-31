@@ -27,7 +27,7 @@ var FormDialog = Class.create( /** @lends FormDialog.prototype */ {
         containerDiv.insert (this._headerNode);
         containerDiv.insert (this._contentNode);
         containerDiv.insert (this._buttonNode);
-        this._dialog.attr ("content", containerDiv);
+        this._dialog.attr ('content', containerDiv);
     },
 
     
@@ -60,8 +60,8 @@ var FormDialog = Class.create( /** @lends FormDialog.prototype */ {
      * @public
      */
     getForm: function() {
-        if (this._dialog.domNode.getElementsByTagName("form")){
-            return this._dialog.domNode.getElementsByTagName("form")[0];
+        if (this._dialog.domNode.getElementsByTagName('form')){
+            return this._dialog.domNode.getElementsByTagName('form')[0];
         }
         else {
             return null;
@@ -74,6 +74,76 @@ var FormDialog = Class.create( /** @lends FormDialog.prototype */ {
         
     hide: function() {
         return this._dialog.hide();
+    },
+    /**
+     * This function set the form content based on a array-like
+     * structure, containing the different elements of the form,
+     * and, optionally, form parameters
+     */
+    setContent: function (/** Array */ data, /** Hash */ formParams){
+        if (formParams){
+            var form = new dijit.form.Form(formParams);
+        }
+        else {
+            var form = new dijit.form.Form ({
+                'method': 'post'
+            });
+        }
+
+        $A(data).each (function(line){
+            switch (line.type) {
+                case 'title':
+                    var title = new Element ('h3').update(line.value);
+                    form.domNode.appendChild(title);
+                    break;
+                case 'input':
+                    var div = new Element('div', {
+                                    'class' : 'line'
+                                });
+                    var label = new Element ('label').update(line.label);
+                    div.appendChild(label);
+                    var input = new dijit.form.TextBox({
+                                    'name' : line.name,
+                                    'value': line.value   
+                                });
+                    div.appendChild(input.domNode);
+                    form.domNode.appendChild(div);
+                    break;
+                case 'freeText':
+                    var div = new Element('div', {
+                                    'class': 'line'
+                                }).update(line.value);
+                    form.domNode.appendChild(div);
+                    break;
+                case 'hidden':
+                    var hidden = new Element('input',{
+                                    'type': 'hidden',
+                                    'name': line.name,
+                                    'value': line.value
+                                });
+                    form.domNode.appendChild(hidden);
+                    break;
+                case 'validation':
+                    var div = new Element('div', {
+                                    'class' : 'line'
+                                });
+                    var label = new Element ('label').update(line.label);
+                    div.appendChild(label);
+                    var input = new dijit.form.ValidationTextBox({
+                                    'name' : line.name,
+                                    'value': line.value,
+                                    'regExp': line.regExp,
+                                    'invalidMessage': line.message
+                                });
+                    div.appendChild(input.domNode);
+                    form.domNode.appendChild(div);
+                    break;                
+                case 'comboBox': //TODO
+                    break;
+                //TODO: Implement more when necessary
+            } 
+        });
+        this._contentNode.appendChild(form.domNode);
     },
     
     /**

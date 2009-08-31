@@ -36,44 +36,14 @@ var NewScreenflowDialog = Class.create(AbstractDialog /** @lends NewScreenflowDi
         this._form.setHeader("Fulfill Gadget Information", 
                              "Please fulfill the required information in order to" +
                              " create a new screenflow.");
-                             
-        var dialogDiv = this._form.getContentNode();
-                   
-        var SCForm = new dijit.form.Form({
-            "id" : "newScreenflow",
-            method : "post"
-        });
 
-        var form = SCForm.domNode;
-
-        var divSFName = new Element("div", {
-            "class": "line"
-        });
-        var labelSFName = new Element("label").update("Screenflow Name:");
-        divSFName.insert(labelSFName);
+        var formData = [
+            {'type':'input', 'label': 'Screenflow Name:','name': 'SFName', 'value': 'New Screenflow'},
+            {'type':'input', 'label': 'Domain Context:','name': 'SFDomainContext', 'value': ''}
+        ];
         
-        var inputSFName = new Element("input",{
-                type: "text",
-                name : "SFName",
-                value : "New Screenflow"
-        });
-        divSFName.insert(inputSFName);
-        form.insert(divSFName);
+        this._form.setContent(formData);               
         
-        var divSFDomainContext = new Element("div", {
-            "class": "line"
-        });
-        var labelSFDomainContext = new Element("label").update("Domain Context:");
-        divSFDomainContext.insert(labelSFDomainContext);
-        var inputSFDomainContext = new Element("input", {
-            type: "text",
-            name: "SFDomainContext"
-        });
-        divSFDomainContext.insert(inputSFDomainContext);
-        form.insert(divSFDomainContext);
-        
-        dialogDiv.insert(form);
-
     },
     /**
      * Overriding onOk handler
