@@ -40,132 +40,48 @@ var DeployGadgetDialog = Class.create(AbstractDialog /** @lends DeployGadgetDial
      */
     _initDialogInterface: function (){
  
+        var user = GVSSingleton.getInstance().getUser();
+ 
         this._form.setHeader("Fulfill Gadget Information", 
                              "Please fulfill the required information in order to" +
                              " deploy a gadget.");
                              
-        var dialogDiv = this._form.getContentNode();
+        var formData = [
+            {'type':'title', 'value': 'Gadget information'},
+            {'type':'input', 'label': 'Gadget Name:','name': 'name', 'value': this._parent.getTitle()},
+            {'type':'input', 'label': 'Vendor:','name': 'vendor', 'value': 'Morfeo'},
+            {'type':'input', 'label': 'Version:','name': 'version', 'value': '1.0'},
+            {'type':'input', 'label': 'Gadget Description:','name': 'info', 'value': 'Write your description here...'},
+            {'type':'title', 'value': 'Author information'},
+            {'type':'input', 'label': 'Author Name:','name': 'author', 'value': user.getRealName()},
+            {'type':'input', 'label': 'E-Mail:','name': 'email', 'value': user.getEmail()},
+            {'type':'hidden', 'name': 'screens'},
+            {'type':'hidden', 'name': 'slots'},
+            {'type':'hidden', 'name': 'events'},
+        ];
         
-
-        var form = new Element('form', {
-            method: "post"
-        });
-        var hGadgetInformation = new Element('h3').update("Gadget information");
-        form.insert(hGadgetInformation);
-        
-        var divGadgetName = new Element("div", {
-            "class": "line"
-        });
-        var labelGadgetName = new Element("label").update("Gadget Name:");
-        divGadgetName.insert(labelGadgetName);
-        var inputGadgetName = new Element("input", {
-            type: "text",
-            name: "name",
-            value: this._parent.getTitle()
-        });
-        divGadgetName.insert(inputGadgetName);
-        form.insert(divGadgetName);
-        
-        var divVendor = new Element("div", {
-            "class": "line"
-        });
-        var labelVendor = new Element("label").update("Vendor:");
-        divVendor.insert(labelVendor);
-        var inputVendor = new Element("input", {
-            type: "text",
-            name: "vendor",
-            value: "Morfeo"
-        });
-        divVendor.insert(inputVendor);
-        form.insert(divVendor);
-        
-        var divVersion = new Element("div", {
-            "class": "line"
-        });
-        var labelVersion = new Element("label").update("Version:");
-        divVersion.insert(labelVersion);
-        var inputVersion = new Element("input", {
-            type: "text",
-            name: "version",
-            value: "1.0"
-        });
-        divVersion.insert(inputVersion);
-        form.insert(divVersion);
-        
-        var divGadgetDescription = new Element("div", {
-            "class": "line"
-        });
-        var labelGadgetDescription = new Element("label").update("Gadget Description:");
-        divGadgetDescription.insert(labelGadgetDescription);
-        var inputGadgetDescription = new Element("input", {
-            type: "text",
-            name: "info",
-            value: "Write your description here..."
-        });
-        divGadgetDescription.insert(inputGadgetDescription);
-        form.insert(divGadgetDescription);
-        
-        
-        var user = GVSSingleton.getInstance().getUser();
-        
-        var hAuthorInformation = new Element('h3').update("Author information");
-        form.insert(hAuthorInformation);
-        
-        var divAuthorName = new Element("div", {
-            "class": "line"
-        });
-        var labelAuthorName = new Element("label").update("Author Name:");
-        divAuthorName.insert(labelAuthorName);
-        var inputAuthorName = new Element("input", {
-            type: "text",
-            name: "author",
-            value: user.getRealName()
-        });
-        divAuthorName.insert(inputAuthorName);
-        form.insert(divAuthorName);
-        
-        var divEmail = new Element("div", {
-            "class": "line"
-        });
-        var labelEmail = new Element("label").update("E-Mail:");
-        divEmail.insert(labelEmail);
-        var inputEmail = new Element("input", {
-            type: "text",
-            name: "email",
-            value: user.getEmail()
-        });
-        divEmail.insert(inputEmail);
-        form.insert(divEmail);
-        
-        var inputDeployScreens = new Element("input", {
-            type: "hidden",
-            name: "screens",
-            "class": "input_GadgetInfo"
-        });
-        form.insert(inputDeployScreens);
-        
-        var inputDeploySlots = new Element("input", {
-            type: "hidden",
-            name: "slots"
-        });
-        form.insert(inputDeploySlots);
-        
-        var inputDeployEvents = new Element("input", {
-            type: "hidden",
-            name: "events"
-        });
-        form.insert(inputDeployEvents);
-     
-        dialogDiv.insert(form);
+        this._form.setContent(formData); 
     },
     /**
      * Overriding onOk handler
+     * @private
      * @overrides
      */
     _onOk: function($super){
-        $super();
         this._parent.updateBuildingBlockDescription();
         this._parent.deployGadget();
+        $super();
+    },
+    /**
+     * Reset form
+     * @private @overrides
+     */
+    _reset: function(){
+        var user = GVSSingleton.getInstance().getUser();
+        
+        this._form.getForm().name.value = this._parent.getTitle();
+        this._form.getForm().author.value = user.getRealName();
+        this._form.getForm().email.value = user.getEmail();
     }
 });
 

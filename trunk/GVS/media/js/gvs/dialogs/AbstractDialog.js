@@ -43,6 +43,10 @@ var AbstractDialog = Class.create( /** @lends AbstractDialog.prototype */ {
         //Removing the keypress event handling to avoid deleting elements
         //of the canvas when being in a dialog
         Element.stopObserving(document, 'keypress', UIUtils.onKeyPressCanvas);
+        //If there is a reset method, call it
+        if (this._reset){
+            this._reset();
+        }
         this._form.show();
     },
     
@@ -54,11 +58,6 @@ var AbstractDialog = Class.create( /** @lends AbstractDialog.prototype */ {
         //Arming the event again
         Element.observe(document, 'keypress', UIUtils.onKeyPressCanvas);
         this._form.hide();
-        
-        //If there is a reset method, call it
-        if (this._reset){
-            this._reset();
-        }
     },
     /**
      * getForm
