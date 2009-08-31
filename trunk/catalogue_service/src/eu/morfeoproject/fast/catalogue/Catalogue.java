@@ -89,7 +89,7 @@ public class Catalogue {
 		tripleStore = new TripleStore(dir, indexes);
     	tripleStore.open();
     	
-    	tripleStore.clear();
+//    	tripleStore.clear();
     	
 		// check if the catalogue is correct
 		if (!check()) {
