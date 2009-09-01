@@ -643,7 +643,7 @@ public class Catalogue {
     		if (r instanceof Screen)
     			queryString = queryString.concat("FILTER (?screen != " + r.getUri().toSPARQL() + ") . ");
 
-    	if (domainContext.size() > 0) {
+    	if (domainContext != null && domainContext.size() > 0) {
         	queryString = queryString.concat("{");
         	for (String tag : domainContext)
 	    		queryString = queryString.concat(" { ?screen "+FGO.hasTag.toSPARQL()+" ?tag . FILTER regex(?tag, \""+tag+"\", \"i\")} UNION");
