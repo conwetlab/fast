@@ -1,5 +1,7 @@
 from django.db import models
+from django.conf import settings
 from django.contrib.auth.models import User
+from commons.utils import cleanUrl
 
 VOTES = (
     (u'0', 0),
@@ -31,15 +33,27 @@ class BuildingBlock(models.Model):
         
     def __unicode__(self):
         return u'%s %s: %s' % (self.type, self.pk, self.name)
+    
+    def get_catalogue_url(self):
+        if self.type == "screenflow":
+            return cleanUrl(settings.CATALOGUE_URL) + "/screenflows"
+        elif self.type == "screen":
+            return cleanUrl(settings.CATALOGUE_URL) + "/screens"
+        elif self.type == "form":
+           return cleanUrl(settings.CATALOGUE_URL)  + "/forms"
+        elif self.type == "operator":
+            return cleanUrl(settings.CATALOGUE_URL) + "/operators"
+        elif self.type == "resource":
+            return cleanUrl(settings.CATALOGUE_URL)  + "/resources"
+        else:
+            return cleanUrl(settings.CATALOGUE_URL)
  
 class Screenflow(BuildingBlock):
     ezWebStoreURL = models.URLField(null=True)
     def __unicode__(self):
         return u'Screenflow %s: %s' % (self.pk, self.name)
-    
 
 class Screen(BuildingBlock):
-
     def __unicode__(self):
         return u'Screen %s: %s' % (self.pk, self.name)
 

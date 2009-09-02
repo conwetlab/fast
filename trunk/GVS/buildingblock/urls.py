@@ -12,4 +12,6 @@ urlpatterns = patterns('buildingblock.views',
         VoteCollection(permitted_methods=('GET', 'POST',))),
     (r'^(?P<buildingblock_id>\d+)/tag[/]?$',
         TagCollection(permitted_methods=('GET', 'POST',))),
+    (r'^(?P<buildingblock_id>\d+)/publication[/]?$',
+        Publication(permitted_methods=('POST', 'DELETE',))),
 )

@@ -4,11 +4,16 @@ from django.db import transaction
 from django.core import serializers
 from django.http import HttpResponse, HttpResponseServerError, Http404, HttpResponseBadRequest
 from django.utils import simplejson
+from django.utils.translation import ugettext as _
 from django.shortcuts import get_list_or_404, get_object_or_404
+from urllib2 import HTTPError
+from urllib import quote_plus
 from commons import resource
-from commons.utils import json_encode
-from commons.httpUtils import PUT_parameter
+from commons.utils import json_encode, cleanUrl
+from commons.httpUtils import PUT_parameter, validate_url, download_http_content
+from python_rest_client.restful_lib import Connection, isValidResponse
 from buildingblock.models import BuildingBlock, Screenflow, Screen, Form, Operator, Resource, BuildingBlockCode, UserVote, UserTag, Tag
+from django.contrib.auth.models import User
 
 class BuildingBlockCollection(resource.Resource):
     def read(self, request, bbtype):
@@ -65,10 +70,6 @@ class BuildingBlockCollection(resource.Resource):
             updateTags(user, bb, tags)
             data['domainContext']['user'] = user.username
                 
-            if data.has_key('code'):
-                c = BuildingBlockCode(buildingBlock=bb, code=data.get('code'))
-                c.save()
-                
             data['id'] = bb.pk
             data['type'] = bbtype
 
@@ -77,6 +78,7 @@ class BuildingBlockCollection(resource.Resource):
             
             return HttpResponse(json_encode(bb.data), mimetype='application/json; charset=UTF-8')
         except Exception, e:
+            transaction.rollback()
             return HttpResponseServerError(json_encode({"message":unicode(e)}), mimetype='application/json; charset=UTF-8')   
 
 
@@ -99,16 +101,12 @@ class BuildingBlockEntry(resource.Resource):
             data = simplejson.loads(received_json)
             bb = BuildingBlock.objects.get(id=buildingblock_id)
             
-            if data.has_key('code'):
-                c = BuildingBlockCode.objects.get_or_create(buildingBlock=bb)[0]
-                c.code = data.get('code')
-                c.save()
-            
             bb.data = received_json    
             bb.save()
 
             return HttpResponse(json_encode(bb.data), mimetype='application/json; charset=UTF-8')
         except Exception, e:
+            transaction.rollback()
             return HttpResponseServerError(json_encode({"message":unicode(e)}), mimetype='application/json; charset=UTF-8')   
 
     @transaction.commit_on_success
@@ -120,6 +118,7 @@ class BuildingBlockEntry(resource.Resource):
             ok = json_encode({"message":"OK"})
             return HttpResponse(ok, mimetype='application/json; charset=UTF-8')
         except Exception, e:
+            transaction.rollback()
             return HttpResponseServerError(json_encode({"message":unicode(e)}), mimetype='application/json; charset=UTF-8')
         
 class TagCollection(resource.Resource):
@@ -176,12 +175,10 @@ class TagCollection(resource.Resource):
             bb.data = json_encode(data)
             bb.save()
             
-            #TODO: update Catalogue Data
-            #if data.has_key('catalogue_uri')
-            
             ok = json_encode({"message":"OK"})
             return HttpResponse(ok, mimetype='application/json; charset=UTF-8')
         except Exception, e:
+            transaction.rollback()
             return HttpResponseServerError(json_encode({"message":unicode(e)}), mimetype='application/json; charset=UTF-8')
         
 class VoteCollection(resource.Resource):
@@ -209,6 +206,7 @@ class VoteCollection(resource.Resource):
             
             return HttpResponse(json_encode(vote), mimetype='application/json; charset=UTF-8')
         except Exception, e:
+            transaction.rollback()
             return HttpResponseServerError(json_encode({"message":unicode(e)}), mimetype='application/json; charset=UTF-8')
         
     @transaction.commit_on_success
@@ -227,8 +225,88 @@ class VoteCollection(resource.Resource):
             ok = json_encode({"message":"OK"})
             return HttpResponse(ok, mimetype='application/json; charset=UTF-8')
         except Exception, e:
+            transaction.rollback()
+            return HttpResponseServerError(json_encode({"message":unicode(e)}), mimetype='application/json; charset=UTF-8')
+
+class Publication(resource.Resource):
+    @transaction.commit_on_success
+    def create(self, request, buildingblock_id):
+        user = get_user_authentication(request)
+        
+        try:
+            bb = BuildingBlock.objects.get(id=buildingblock_id)
+            
+            data = simplejson.loads(bb.data)
+                            
+            updateCode(bb, data)
+            
+            if data.has_key("uri"):
+                conn = Connection(cleanUrl(bb.get_catalogue_url()))
+                result = conn.request_put("/" + quote_plus(data.get("uri")), body=bb.data, headers={'Accept':'text/json'})
+                if isValidResponse(result):
+                    response = HttpResponse(result['body'], mimetype='application/json; charset=UTF-8')
+                else:
+                    raise Exception(result['body'])
+            else:
+                conn = Connection(cleanUrl(bb.get_catalogue_url()))
+                body = bb.data
+                result = conn.request_post("", body=body, headers={'Accept':'text/json'})
+                if isValidResponse(result):
+                    response = HttpResponse(result['body'], mimetype='application/json; charset=UTF-8')
+                    bb.data = response.content
+                    bb.save()
+                else:
+                    raise Exception(result['body'])
+                
+            return response
+        except HTTPError, e:
+            transaction.rollback()
+            return HttpResponseServerError(json_encode({"message":_("Unable to access code: %s") % unicode(e)}), mimetype='application/json; charset=UTF-8')
+        except Exception, e:
+            transaction.rollback()
             return HttpResponseServerError(json_encode({"message":unicode(e)}), mimetype='application/json; charset=UTF-8')
         
+    @transaction.commit_on_success
+    def delete(self, request, buildingblock_id):
+        try:
+            user = get_user_authentication(request)
+            
+            bb = BuildingBlock.objects.get(id=buildingblock_id)
+            
+            data = simplejson.loads(bb.data)
+            
+            if data.has_key("uri"):
+                conn = Connection(cleanUrl(bb.get_catalogue_url()))
+                data = simplejson.loads(bb.data)
+                result = conn.request_delete("/" + quote_plus(data.get("uri")), headers={'Accept':'text/json'})
+                if isValidResponse(result):
+                    response = HttpResponse(result['body'], mimetype='application/json; charset=UTF-8')
+                    del data["uri"]
+                    bb.data = json_encode(data)
+                    bb.save()
+                else:
+                    raise Exception(result['body'])
+                            
+            ok = json_encode({"message":"OK"})
+            return HttpResponse(ok, mimetype='application/json; charset=UTF-8')
+        except Exception, e:
+            transaction.rollback()
+            return HttpResponseServerError(json_encode({"message":unicode(e)}), mimetype='application/json; charset=UTF-8')
+                
+        
+def updateCode(buildingblock, data): 
+    if data.has_key('code'):
+        c = BuildingBlockCode.objects.get_or_create(buildingBlock=buildingblock)[0]
+        code = data.get('code')
+        if (validate_url(code)):
+            code = download_http_content(code)
+        c.code = code
+        c.save()
+    elif data.has_key('definition'):
+        #TODO: Generate code
+        definition = data.get('definition')
+
+
 def updatePopularity(buildingblock):
     sum = 0
     count = 0
@@ -242,7 +320,7 @@ def updatePopularity(buildingblock):
     buildingblock.popularity = "%1.2f" % (sum / count)
     buildingblock.save()
 
-        
+
 def updateTags(user, buildingblock, tags): 
     for tag in tags:
         t = Tag.objects.get_or_create(name=tag)[0]

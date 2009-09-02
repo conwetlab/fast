@@ -31,12 +31,20 @@
 #
 
 from urlparse import urlparse
-
 from urllib import urlcleanup, urlencode
 import urllib2
+import re
 from django.utils import simplejson
 
 from django.conf import settings
+
+URL_RE = re.compile(
+         r'^https?://' # http:// or https://
+         r'(?:(?:[A-Z0-9]+(?:-*[A-Z0-9]+)*\.)+[A-Z]{2,6}|' #domain...
+         r'localhost|' #localhost...
+         r'\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})' # ...or ip
+         r'(?::\d+)?' # optional port
+         r'(?:/?|/\S+)$', re.IGNORECASE)
 
 def download_http_content (uri, params=None):
     urlcleanup()
@@ -63,6 +71,12 @@ def download_http_content (uri, params=None):
         return opener.open(uri,data=urlencode(params)).read()
     else:
         return opener.open(uri).read()
+    
+def validate_url (url):
+    result = URL_RE.match(url)
+    if result == None:
+        return False
+    return True
 
 def PUT_parameter (request, parameter_name):    
     # Checking GET and POST space!

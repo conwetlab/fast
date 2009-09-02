@@ -126,4 +126,14 @@ class Connection:
         
         resp, content = self.h.request(u"%s://%s%s" % (self.scheme, self.host, u'/'.join(request_path)), method.upper(), body=body, headers=headers )
         
-        return {u'headers':resp, u'body':content.decode('UTF-8')}
+        return {u'headers':resp, u'body':content}
+    
+def isValidResponse (response):
+    headers = response.get('headers')
+        
+    status = headers.get('status', headers.get('Status'))
+    
+    if status in ['200', 200, '204', 204]:
+        return True
+    else:
+        return False
