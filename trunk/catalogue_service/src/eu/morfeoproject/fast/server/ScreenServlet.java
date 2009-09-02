@@ -2,9 +2,8 @@ package eu.morfeoproject.fast.server;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.PrintWriter;
-import java.util.Properties;
+import java.util.Iterator;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -145,7 +144,12 @@ public class ScreenServlet extends GenericServlet {
 					screenModel.close();
 				} else {
 					response.setContentType(MediaType.APPLICATION_JSON);
-					writer.print(screen.toJSON().toString(2));
+					JSONObject newScreen = screen.toJSON();						
+					for (Iterator it = newScreen.keys(); it.hasNext(); ) {
+						String key = it.next().toString();
+						json.put(key, newScreen.get(key));
+					}
+					writer.print(json.toString(2));
 				}
 				response.setStatus(HttpServletResponse.SC_OK);
 			} catch (DuplicatedScreenException e) {
@@ -207,7 +211,12 @@ public class ScreenServlet extends GenericServlet {
 					screenModel.close();
 				} else {
 					response.setContentType(MediaType.APPLICATION_JSON);
-					writer.print(screen.toJSON().toString(2));
+					JSONObject newScreen = screen.toJSON();						
+					for (Iterator it = newScreen.keys(); it.hasNext(); ) {
+						String key = it.next().toString();
+						json.put(key, newScreen.get(key));
+					}
+					writer.print(json.toString(2));
 				}
 				response.setStatus(HttpServletResponse.SC_OK);
 			} catch (JSONException e) {
