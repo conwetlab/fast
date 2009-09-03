@@ -50,7 +50,7 @@
             EBayList.prototype.fetch = function (){
             
             	//Get the facts to invoke the service
-                var item = ScreenflowEngineFactory.getInstance().getFact('?Item http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#Item');
+                var item = ScreenflowEngineFactory.getInstance().getFact('http://aws.amazon.com/AWSECommerceService#Item');
                 
                 //URL of the Service
 				var url = "http://open.api.ebay.com/shopping?";
@@ -122,7 +122,7 @@
 				eBayList.clearSelected ();
 				//select the element
 				nodeElement.parentNode.parentNode.setStyle({background: "#FFF8E8"});
-				var ebayItem = {name: 'http://TODO/ebay#item', data:{itemID: itemID, title: title}};
+				var ebayItem = {uri: 'http://developer.ebay.com/DevZone/shopping/docs/CallRef/FindItemsAdvanced.html#Request', data:{itemID: itemID, title: title}};
 				ScreenflowEngineFactory.getInstance().manageFacts([ebayItem],[]);
 			}
 			
@@ -161,7 +161,7 @@
             }
             
             var eBayList = new EBayList();
-			ScreenflowEngineFactory.getInstance().addScreenLoader("eBayList", eBayList.init);
+			ScreenflowEngineFactory.getInstance().addScreenLoader("EbayListComparative", eBayList.init);
 			
         </script></head><body>
         <div id="bodyDiv">

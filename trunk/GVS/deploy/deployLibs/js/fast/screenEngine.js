@@ -100,7 +100,7 @@ var ScreenEngineFactory = function () {
 				if(p){
 					var f = Object.clone(fact);
 					f.origin = this.id;
-					f.name = p.name;
+					f.uri = p.uri;
 					this.screenflowEngine.manageFacts([f],[]);
 				}
 			}
@@ -118,7 +118,7 @@ var ScreenEngineFactory = function () {
 				//Post
 				var p = this.posts.get(key);
 				if(p){
-					this.screenflowEngine.manageFacts([],[p.name]);
+					this.screenflowEngine.manageFacts([],[p.uri]);
 				}
 			}
 		}
@@ -126,7 +126,7 @@ var ScreenEngineFactory = function () {
 		ScreenEngine.prototype.searchFact = function (precondition){
 			var f = precondition.value; 
 			if(!f){
-				var f = this.screenflowEngine.getFact(precondition.name);
+				var f = this.screenflowEngine.getFact(precondition.uri);
 				if(f){
 					f = Object.clone(f);
 					f.origin = null;
@@ -234,7 +234,7 @@ var ScreenEngineFactory = function () {
 			}
 			//uses
 			for(var i=0; i < action.uses.length; i++){
-				params.push(this.screenflowEngine.getFact(action.uses[i].name));
+				params.push(this.screenflowEngine.getFact(action.uses[i].uri));
 			}
 			
 			action.funct.apply(this.scope, params);

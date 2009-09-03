@@ -69,7 +69,7 @@
             ShoppingCart.prototype.clearCart = function (){
 				//Ask the user to confirm the operation
 				if (confirm("Are you sure you want to empty your Shopping Cart?")) {
-					var cart = ScreenflowEngineFactory.getInstance().getFact('?Cart http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#ShoppingCart');
+					var cart = ScreenflowEngineFactory.getInstance().getFact('http://aws.amazon.com/AWSECommerceService#ShoppingCart');
 					var user = ScreenflowEngineFactory.getInstance().getFact('user');
 					
 					//Create the call
@@ -102,13 +102,13 @@
 			}
 			
 			ShoppingCart.prototype.checkout = function (){
-				var purchase = {name:'?Purchase http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#PurchaseURL', data:{url: shoppingCart.purchaseURL}};
+				var purchase = {uri:'http://aws.amazon.com/AWSECommerceService#PurchaseURL', data:{url: shoppingCart.purchaseURL}};
 				ScreenflowEngineFactory.getInstance().manageFacts([purchase],[]);
 			}
 			
 			ShoppingCart.prototype.update = function (){
 				if (shoppingCart.productList.length > 0) { //Only if there is something to update
-					var cart = ScreenflowEngineFactory.getInstance().getFact('?Cart http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#ShoppingCart');
+					var cart = ScreenflowEngineFactory.getInstance().getFact('http://aws.amazon.com/AWSECommerceService#ShoppingCart');
 					var user = ScreenflowEngineFactory.getInstance().getFact('user');
 					//Create the call
 					var url = "http://webservices.amazon.com/onca/xml?Service=AWSECommerceService";
@@ -146,7 +146,7 @@
 			
 			//Change the current Item Fact
 			ShoppingCart.prototype.productDetail = function (_ASIN,_title){
-				var item = ScreenflowEngineFactory.getInstance().getFact('?Item http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#Item');
+				var item = ScreenflowEngineFactory.getInstance().getFact('http://aws.amazon.com/AWSECommerceService#Item');
 				item.data.ASIN = _ASIN;
 				item.data.title = _title;
 				ScreenflowEngineFactory.getInstance().manageFacts([item],['product']);
@@ -160,7 +160,7 @@
 				
                 //Get the facts to invoke the service
                 //TODO add error handling
-                var cart = ScreenflowEngineFactory.getInstance().getFact('?Cart http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#ShoppingCart');
+                var cart = ScreenflowEngineFactory.getInstance().getFact('http://aws.amazon.com/AWSECommerceService#ShoppingCart');
                 var user = ScreenflowEngineFactory.getInstance().getFact('user');
 				
                 //Invoke the service CartGet to retrieve the product list

@@ -32,32 +32,32 @@ var ScreenflowEngineFactory = function () {
 			this.menu = menu;
 			for (var i=0; i < screens.length; i++) {
 				this.screens.set(screens[i].id, screens[i]);
+				this.addRule(screens[i]);
 			}
 			for (var i=0; i < events.length; i++) {
-				var variables = this.events.get(events[i].fact_name);
+				var variables = this.events.get(events[i].fact_uri);
 				if(!variables) {
 					variables = new Array();
-					this.events.set(events[i].fact_name, variables);
+					this.events.set(events[i].fact_uri, variables);
 				}
 				variables.push(events[i]);
 			}
-			this.screens.each(function(pair){this.addRule(pair.value);}.bind(this));
 		}
 		
 		// **********************
 		// Knowledge Base methods
 		// **********************
-		ScreenflowEngine.prototype.transformFact = function(factName, attributeName, value){
+		ScreenflowEngine.prototype.transformFact = function(factURI, attributeName, value){
 			if(attributeName!=''){
-				var fact = this.getFact(factName);
+				var fact = this.getFact(factURI);
 				if(!fact){
-					fact = {name: factName, data: {}};
+					fact = {uri: factURI, data: {}};
 				}
 				fact.data[attributeName] = value;
 				return fact;
 			} else {
 				var fact = eval('('+value+')');
-				if (fact.name == factName){
+				if (fact.uri == factURI){
 					return fact;
 				} else {
 					return null;
@@ -85,13 +85,13 @@ var ScreenflowEngineFactory = function () {
 		
 		ScreenflowEngine.prototype.addFact = function (fact){
 			if(fact){
-				this.facts.set(fact.name, fact);
+				this.facts.set(fact.uri, fact);
 				this.throwEvents(fact);
 			}
 		}
 		
 		ScreenflowEngine.prototype.throwEvents = function (fact){
-			var variables = this.events.get(fact.name);
+			var variables = this.events.get(fact.uri);
 			for(var i=0; variables != null && i < variables.length; i++){
 				var v = variables[i];
 				if(v.fact_attr == ''){
@@ -102,13 +102,13 @@ var ScreenflowEngineFactory = function () {
 			}
 		}
 		
-		ScreenflowEngine.prototype.getFact = function (name){
-			return this.facts.get(name);
+		ScreenflowEngine.prototype.getFact = function (uri){
+			return this.facts.get(uri);
 		}
 		
-		ScreenflowEngine.prototype.deleteFact = function (name){
-			if(name){
-				this.facts.unset(name);
+		ScreenflowEngine.prototype.deleteFact = function (uri){
+			if(uri){
+				this.facts.unset(uri);
 			}
 		}
 		
@@ -141,19 +141,27 @@ var ScreenflowEngineFactory = function () {
 		
 		ScreenflowEngine.prototype.evaluateCondition = function (rule){
 			var conditions = rule.condition;
-			if(!conditions){
+			if(!conditions || conditions.length==0){
 				return true;
 			}
 			for(var i = 0; i < conditions.length ; i++){
-				if (!this.evaluateExpression(conditions[i])){
-					return false;
-				}	
+				var ret = true;
+				for(var j = 0; j < conditions[i].length ; j++){
+					if (!this.evaluateExpression(conditions[i][j])){
+						ret = false;
+						break;
+					}
+				}
+				if(ret){
+					return ret;
+				}
 			}
-			return true;
+			return false;
 		}
 		
 		ScreenflowEngine.prototype.evaluateExpression = function (expression){
-			var fact = this.facts.get(expression.name);
+			var fact_uri = expression.pattern.split(" ")[2]
+			var fact = this.facts.get(fact_uri);
 			var evaluation = true;
 			if(!fact){
 				evaluation =  false;	

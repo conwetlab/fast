@@ -96,7 +96,7 @@
 					alert ("You must introduce at least one keyword");
 					return;
 				}
-				var filter = {name: '?Filter http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#SearchCriteria', data:{productType: $F("productType"), searchText: $F("searchText")}};
+				var filter = {uri: 'http://aws.amazon.com/AWSECommerceService#SearchCriteria', data:{productType: $F("productType"), searchText: $F("searchText")}};
 				ScreenflowEngineFactory.getInstance().manageFacts([filter],[]);
 			}
 			

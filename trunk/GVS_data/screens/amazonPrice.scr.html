@@ -57,7 +57,7 @@
 					});
 				
 				});
-				var item = ScreenflowEngineFactory.getInstance().getFact('?Item http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#Item');
+				var item = ScreenflowEngineFactory.getInstance().getFact('http://aws.amazon.com/AWSECommerceService#Item');
 				$$(".productTitle").each(function(element){
 					element.update(item.data.title);
 				});
@@ -73,7 +73,7 @@
             PriceComparative.prototype.fetch = function (){
             
             	//Get the facts to invoke the service
-                var item = ScreenflowEngineFactory.getInstance().getFact('?Item http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#Item');
+                var item = ScreenflowEngineFactory.getInstance().getFact('http://aws.amazon.com/AWSECommerceService#Item');
                 var user = ScreenflowEngineFactory.getInstance().getFact('user');
                 //Add the ItemSearch parameters
                 var parameters = "";
@@ -192,7 +192,7 @@
             }
             
 			PriceComparative.prototype.addToCart = function (offerId){
-				var cart = ScreenflowEngineFactory.getInstance().getFact('?Cart http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#ShoppingCart');
+				var cart = ScreenflowEngineFactory.getInstance().getFact('http://aws.amazon.com/AWSECommerceService#ShoppingCart');
 				var user = ScreenflowEngineFactory.getInstance().getFact('user');
 				if (cart){//If the cart is already created, it will have an ID in the User Fact
 					var url = "http://webservices.amazon.com/onca/xml?Service=AWSECommerceService";
@@ -267,7 +267,7 @@
 						return;
 					}
 					//Add the Cart ID to the KB
-					var cart = {name: '?Cart http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#ShoppingCart',
+					var cart = {uri: 'http://aws.amazon.com/AWSECommerceService#ShoppingCart',
 								data:{id: xml.getElementsByTagName("CartId")[0].firstChild.nodeValue,
 									HMAC: xml.getElementsByTagName("URLEncodedHMAC")[0].firstChild.nodeValue}};
 					ScreenflowEngineFactory.getInstance().manageFacts([cart],[]);
@@ -367,7 +367,7 @@
             }
             
             var priceComparative = new PriceComparative();
-			ScreenflowEngineFactory.getInstance().addScreenLoader("PriceComparative", priceComparative.init);
+			ScreenflowEngineFactory.getInstance().addScreenLoader("P.Comparative", priceComparative.init);
 			
         </script>
 	</head>

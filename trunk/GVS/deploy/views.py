@@ -14,22 +14,17 @@ from python_rest_client.restful_lib import Connection
 from user.models import UserProfile
 
 def deployGadget(request):
-    #print "gadget creation request"
     try:
         user = get_user_authentication(request)
         profile =  UserProfile.objects.get(user=user)
         
-        #If folder "static" does not exist, create it
         staticPath=path.join(settings.BASEDIR,'static')
         if (not path.isdir(staticPath)):
             mkdir(staticPath)
-        
-        #Getting the gadget parameters
+
         if request.POST.has_key('gadget'):
-            #print "reading screenflow json"
             json = simplejson.loads(request.POST['gadget'])
         else:
-            #print "Gadget parameter expected in screenflow json"
             raise Exception ('Gadget parameter expected in screenflow json')
         if (json.has_key('label')):
             label = json['label']
@@ -72,9 +67,6 @@ def deployGadget(request):
                 connectors=definition['connectors']
             else:
                 connectors=[]
-        else:
-            definition['screens']=[]
-            definition['connectors']=[]
         if (json.has_key('preconditions')):
             prec = json['preconditions']
         else:
@@ -83,7 +75,6 @@ def deployGadget(request):
             post = json['postconditions']
         else:
             post = []
-        #print "parameters correctly obtained from json"
 
         gadgetName = (vendor + '-' + label['en-GB'] + '-' + version).replace(' ', '_')
         gadgetPath = path.join(staticPath,gadgetName)
@@ -91,26 +82,20 @@ def deployGadget(request):
         if (not path.isdir(gadgetPath)):
             mkdir(gadgetPath)
         else:
-            #print "Gadget already exists"
             raise Exception ('Gadget already exists')
         
         base_uri = request.build_absolute_uri('/static')
-        #TODO: create uri with python api
         gadgetUri = base_uri + '/' + gadgetName
         ezwebUri = createEzwebGadget(gadgetName, gadgetUri, gadgetPath, label, vendor, version, description, creator, email, screens, prec, post)
-        igoogleUri = createIgoogleGadget(gadgetName, gadgetUri, gadgetPath, label, vendor, version, description, creator, email, screens, prec, post)
         
-        gadgetContext = Context({'ezwebURL': profile.ezweb_url, 'ezwebGadgetURL': ezwebUri,'igoogleGadgetURL': igoogleUri})
+        gadgetContext = Context({'ezwebURL': profile.ezweb_url, 'ezwebGadgetURL': ezwebUri})
         return render_to_response('deploy.html', gadgetContext);
 
     except Exception, e:
-        #print e.message
         response = HttpResponseServerError(e.message)
         return response
     
-#FIXME!!!: This method is not over
 def deployEzwebGadget(request):
-    # Get the base url to the Catalogue
     if hasattr(settings,'EZWEB_URL'):
         baseUrl = settings.EZWEB_URL
         conn = Connection(baseUrl)

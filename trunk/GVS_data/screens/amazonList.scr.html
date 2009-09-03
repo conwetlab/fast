@@ -25,6 +25,8 @@
     top: 3px;
 }
 </style>
+<script language="JavaScript" src="http://piccolo.ls.fi.upm.es/amazonURL/signAmazonURLs.js"></script>
+<script language="JavaScript" src="http://piccolo.ls.fi.upm.es/amazonURL/jssha2/sha2.js"></script>
 <script language="JavaScript">
     function List(){
         //Last page fetched from Amazon Service	
@@ -66,7 +68,7 @@
     }
     List.prototype.search = function (){
         //Get the facts to invoke the service
-        var filter = ScreenflowEngineFactory.getInstance().getFact('?Filter http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#SearchCriteria');
+        var filter = ScreenflowEngineFactory.getInstance().getFact('http://aws.amazon.com/AWSECommerceService#SearchCriteria');
         var user = ScreenflowEngineFactory.getInstance().getFact('user');
         //Add the ItemSearch parameters
         var productType = filter.data.productType;
@@ -161,7 +163,7 @@
         list.clearSelected ();
         //select the element
         nodeElement.parentNode.parentNode.setStyle({background: "#FFF8E8"});
-        var item = {name: '?Item http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#Item', data:{ASIN: _ASIN, title: nodeElement.parentNode.parentNode.firstChild.firstChild.nodeValue}};
+        var item = {uri: 'http://aws.amazon.com/AWSECommerceService#Item', data:{ASIN: _ASIN, title: nodeElement.parentNode.parentNode.firstChild.firstChild.nodeValue}};
         ScreenflowEngineFactory.getInstance().manageFacts([item],[]);
     }
     List.prototype.clearSelected = function (){
