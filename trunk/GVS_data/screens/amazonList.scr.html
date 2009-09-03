@@ -81,10 +81,10 @@
         //Base URL of the REST Service
         var url = "http://webservices.amazon.com/onca/xml?Service=AWSECommerceService";
         //Add the AccessKeyId (get from the user fact)
-        if (user)
+        /*if (user)
             url += "&AWSAccessKeyId=" + user.data.KeyId;
         else // if the KB doesn't contain a user key Id, add one by default
-            url += "&AWSAccessKeyId=15TNKDQJGH6BD0Z4KY02";
+            url += "&AWSAccessKeyId=15TNKDQJGH6BD0Z4KY02";*/
         //Add the operation Type
         url +="&Operation=ItemSearch";
         //Add the parameters
@@ -93,8 +93,12 @@
         url +="&ResponseGroup=Medium";
         //Add the current version of the API
         url += "&Version=2008-06-26";
+
+        var encoder = new URLAmazonEncoder();
+        encodedUrl = encoder.encode(url);
+ 
         //Invoke the service
-        new FastAPI.Request(url,{
+        new FastAPI.Request(encodedUrl,{
             'method':       'get',
             'content':      'xml',
             'context':      this,
