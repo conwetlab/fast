@@ -27,6 +27,7 @@ import eu.morfeoproject.fast.model.Condition;
 import eu.morfeoproject.fast.model.Event;
 import eu.morfeoproject.fast.model.FastModelFactory;
 import eu.morfeoproject.fast.model.Screen;
+import eu.morfeoproject.fast.model.ScreenFlow;
 import eu.morfeoproject.fast.model.Slot;
 import eu.morfeoproject.fast.util.FormatterUtil;
 
@@ -60,6 +61,53 @@ public abstract class GenericServlet extends HttpServlet {
 	 */
 	protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		response.setStatus(HttpServletResponse.SC_METHOD_NOT_ALLOWED);
+	}
+
+	@SuppressWarnings("unchecked")
+	protected ScreenFlow parseScreenFlow(JSONObject jsonScreenFlow, URI id) throws JSONException, IOException {
+		ScreenFlow screenFlow = FastModelFactory.createScreenFlow();
+		if (id != null)
+			screenFlow.setUri(id);
+		if (jsonScreenFlow.get("label") != null) {
+			JSONObject jsonLabels = jsonScreenFlow.getJSONObject("label");
+			Iterator<String> labels = jsonLabels.keys();
+			for ( ; labels.hasNext(); ) {
+				String key = labels.next();
+				screenFlow.getLabels().put(key, jsonLabels.getString(key));
+			}
+		}
+		if (jsonScreenFlow.get("description") != null) {
+			JSONObject jsonDescriptions = jsonScreenFlow.getJSONObject("description");
+			Iterator<String> descriptions = jsonDescriptions.keys();
+			for ( ; descriptions.hasNext(); ) {
+				String key = descriptions.next();
+				screenFlow.getDescriptions().put(key, jsonDescriptions.getString(key));
+			}
+		}
+		if (jsonScreenFlow.get("creator") != null)
+			screenFlow.setCreator(new URIImpl(jsonScreenFlow.getString("creator")));
+		if (jsonScreenFlow.get("rights") != null)
+			screenFlow.setRights(new URIImpl(jsonScreenFlow.getString("rights")));
+		if (jsonScreenFlow.get("version") != null)
+			screenFlow.setVersion(jsonScreenFlow.getString("version"));
+		if (jsonScreenFlow.get("creationDate") != null)
+			screenFlow.setCreationDate(FormatterUtil.parseDateISO8601(jsonScreenFlow.getString("creationDate")));
+		if (jsonScreenFlow.get("icon") != null)
+			screenFlow.setIcon(new URIImpl(jsonScreenFlow.getString("icon")));
+		if (jsonScreenFlow.get("screenshot") != null)
+			screenFlow.setScreenshot(new URIImpl(jsonScreenFlow.getString("screenshot")));
+		JSONObject domainContext = jsonScreenFlow.getJSONObject("domainContext");
+		JSONArray tags = domainContext.getJSONArray("tags");
+		for (int i = 0; i < tags.length(); i++)
+			screenFlow.getDomainContext().getTags().add(tags.getString(i));
+		URI user = new URIImpl(domainContext.getString("user"));
+		screenFlow.getDomainContext().setUser(user);
+		if (jsonScreenFlow.get("homepage") != null)
+			screenFlow.setHomepage(new URIImpl(jsonScreenFlow.getString("homepage")));
+		JSONArray resources = jsonScreenFlow.getJSONArray("contains");
+		for (int i = 0; i < resources.length(); i++)
+			screenFlow.getResources().add(new URIImpl(resources.getString(i)));
+		return screenFlow;
 	}
 
 	@SuppressWarnings("unchecked")

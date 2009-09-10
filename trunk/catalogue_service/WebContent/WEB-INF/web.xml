@@ -9,6 +9,12 @@
 	</servlet>
 	<servlet>
 		<description></description>
+		<display-name>ScreenflowServlet</display-name>
+		<servlet-name>ScreenflowServlet</servlet-name>
+		<servlet-class>eu.morfeoproject.fast.server.ScreenflowServlet</servlet-class>
+	</servlet>
+	<servlet>
+		<description></description>
 		<display-name>ConceptServlet</display-name>
 		<servlet-name>ConceptServlet</servlet-name>
 		<servlet-class>eu.morfeoproject.fast.server.ConceptServlet</servlet-class>
@@ -74,6 +80,10 @@
 	<servlet-mapping>
 		<servlet-name>ScreenServlet</servlet-name>
 		<url-pattern>/screens/*</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>ScreenflowServlet</servlet-name>
+		<url-pattern>/screenflows/*</url-pattern>
 	</servlet-mapping>
 	<servlet-mapping>
 		<servlet-name>ConceptServlet</servlet-name>

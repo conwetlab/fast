@@ -9,11 +9,16 @@ import java.util.Map;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.ontoware.rdf2go.RDF2Go;
 import org.ontoware.rdf2go.model.Model;
-import org.ontoware.rdf2go.model.Statement;
 import org.ontoware.rdf2go.model.node.URI;
+import org.ontoware.rdf2go.vocabulary.RDF;
+import org.ontoware.rdf2go.vocabulary.RDFS;
 
 import eu.morfeoproject.fast.util.FormatterUtil;
+import eu.morfeoproject.fast.vocabulary.DC;
+import eu.morfeoproject.fast.vocabulary.FGO;
+import eu.morfeoproject.fast.vocabulary.FOAF;
 
 public class ScreenFlow implements Resource {
 	
@@ -26,11 +31,9 @@ public class ScreenFlow implements Resource {
     private Date creationDate;
     private URI icon;
     private URI screenshot;
-    private URI homepage; 
-	private List<URI> domainContext;
-	private List<Condition> preconditions;
-	private List<Condition> postconditions;
-	private List<Screen> screens;
+    private URI homepage;
+	private DomainContext domainContext;
+	private List<URI> resources;
 	
 	protected ScreenFlow(URI uri) {
 		this.uri = uri;
@@ -119,48 +122,33 @@ public class ScreenFlow implements Resource {
 		this.homepage = homepage;
 	}
 
-	public List<URI> getDomainContext() {
+	public DomainContext getDomainContext() {
 		if (domainContext == null)
-			domainContext = new ArrayList<URI>();
+			domainContext = new DomainContext();
 		return domainContext;
 	}
 
-	public void setDomainContext(List<URI> domainContext) {
+	public void setDomainContext(DomainContext domainContext) {
 		this.domainContext = domainContext;
 	}
 
-	public List<Condition> getPreconditions() {
-		if (preconditions == null)
-			preconditions = new ArrayList<Condition>();
-		return preconditions;
+	public List<URI> getResources() {
+		if (resources == null)
+			resources = new ArrayList<URI>();
+		return resources;
 	}
 
-	public void setPreconditions(List<Condition> preconditions) {
-		this.preconditions = preconditions;
-	}
-
-	public List<Condition> getPostconditions() {
-		if (postconditions == null)
-			postconditions = new ArrayList<Condition>();
-		return postconditions;
-	}
-
-	public void setPostconditions(List<Condition> postconditions) {
-		this.postconditions = postconditions;
+	public void setResources(List<URI> resources) {
+		this.resources = resources;
 	}
 	
-	public List<Screen> getScreens() {
-		if (screens == null)
-			screens = new ArrayList<Screen>();
-		return screens;
+	public boolean equals(Screen o) {
+		return ((Screen)o).getUri().equals(this.uri);
 	}
-
-	public void setScreens(List<Screen> screens) {
-		this.screens = screens;
-	}
-
+	
+	@Override
 	public String toString() {
-		return getUri().toString();
+		return uri.toString();
 	}
 
 	public JSONObject toJSON() {
@@ -210,45 +198,61 @@ public class ScreenFlow implements Resource {
 				json.put("screenshot", JSONObject.NULL);
 			else
 				json.put("screenshot", getScreenshot().toString());
-			JSONArray domainContext = new JSONArray();
-			for (URI domain : getDomainContext())
-				domainContext.put(domain.toString());
-			json.put("domainContext", domainContext);
+			if (getDomainContext() == null)
+				json.put("domainContext", JSONObject.NULL);
+			else
+				json.put("domainContext", getDomainContext().toJSON());
 			if (getHomepage() == null)
 				json.put("homepage", JSONObject.NULL);
 			else
 				json.put("homepage", getHomepage().toString());
-			JSONArray preconditions = new JSONArray();
-			for (Condition con : getPreconditions()) {
-				StringBuffer sb = new StringBuffer();
-				for (Statement st : con.getPattern())
-					sb.append(st.getSubject() + " " + st.getPredicate() + " " + st.getObject() + " . ");
-				preconditions.put(sb.toString());
-			}				
-			json.put("preconditions", preconditions);
-			JSONArray postconditions = new JSONArray();
-			for (Condition con : getPostconditions()) {
-				StringBuffer sb = new StringBuffer();
-				for (Statement st : con.getPattern())
-					sb.append(st.getSubject() + " " + st.getPredicate() + " " + st.getObject() + " . ");
-				postconditions.put(sb.toString());
-			}				
-			json.put("postconditions", postconditions);
-			JSONArray screens = new JSONArray();
-			for (Screen s : getScreens()) {
-				screens.put(s.getUri());
+			JSONArray resources = new JSONArray();
+			for (URI r : getResources()) {
+				resources.put(r);
 			}
-			json.put("screens", screens);
+			json.put("contains", resources);
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return json;
 	}
-
-	public Model createModel() {
-		// TODO Auto-generated method stub
-		return null;
-	}
 	
+	public Model createModel() {
+		Model model = RDF2Go.getModelFactory().createModel();
+		model.open();
+		model.setNamespace("dc", DC.NS_DC.toString());
+		model.setNamespace("FGO", FGO.NS_FGO.toString());
+		
+		URI sfUri = this.getUri();
+		if (sfUri != null)
+			model.addStatement(sfUri, RDF.type, FGO.ScreenFlow);
+		for (String key : this.getLabels().keySet())
+			model.addStatement(sfUri, RDFS.label, model.createLanguageTagLiteral(this.getLabels().get(key), key));
+		for (String key : this.getDescriptions().keySet())
+			model.addStatement(sfUri, DC.description, model.createLanguageTagLiteral(this.getDescriptions().get(key), key));
+		if (this.getCreator() != null)
+			model.addStatement(sfUri, DC.creator, this.getCreator());
+		if (this.getRights() != null)
+			model.addStatement(sfUri, DC.rights, this.getRights());
+		if (this.getVersion() != null)
+			model.addStatement(sfUri, FGO.hasVersion, this.getVersion());
+		if (this.getCreationDate() != null)
+			model.addStatement(sfUri, DC.date, FormatterUtil.formatDateISO8601(this.getCreationDate()));
+		if (this.getIcon() != null)
+			model.addStatement(sfUri, FGO.hasIcon, this.getIcon());
+		if (this.getScreenshot() != null)
+			model.addStatement(sfUri, FGO.hasScreenshot, this.getScreenshot());
+		for (String tag : this.getDomainContext().getTags())
+			model.addStatement(sfUri, FGO.hasTag, tag);
+		if (this.getHomepage() != null)
+			model.addStatement(sfUri, FOAF.homepage, this.getHomepage());
+		if (this.getVersion() != null)
+			model.addStatement(sfUri, FGO.hasVersion, this.getVersion());
+		for (URI r : this.getResources())
+			model.addStatement(sfUri, FGO.contains, r);
+		
+		return model;
+	}
+
 }

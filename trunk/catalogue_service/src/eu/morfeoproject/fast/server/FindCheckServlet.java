@@ -118,7 +118,7 @@ public class FindCheckServlet extends HttpServlet {
 						boolean satisfied = false;
 						for (List<Condition> conList : s.getPreconditions()) { /* OR */
 							JSONArray conArray = new JSONArray();
-							satisfied = CatalogueAccessPoint.getCatalogue().isListSatisfied2(reachables, conList, true, true, s.getUri());
+							satisfied = CatalogueAccessPoint.getCatalogue().isListSatisfied(reachables, conList, true, true, s.getUri());
 							reachability = reachability & satisfied;
 							for (Condition c : conList) {
 								JSONObject jsonPre = c.toJSON();
@@ -136,7 +136,7 @@ public class FindCheckServlet extends HttpServlet {
 					} else if (r instanceof Event) {
 						Event e = (Event)r;
 						jsonResource.put("uri", e.getUri());
-						boolean satisfied = CatalogueAccessPoint.getCatalogue().isListSatisfied2(reachables, e.getConditions(), true, true, e.getUri());
+						boolean satisfied = CatalogueAccessPoint.getCatalogue().isListSatisfied(reachables, e.getConditions(), true, true, e.getUri());
 						JSONArray conArray = new JSONArray();
 						for (Condition c : e.getConditions()) {
 							JSONObject jsonCon = c.toJSON();
@@ -162,7 +162,7 @@ public class FindCheckServlet extends HttpServlet {
 						boolean satisfied = false;
 						for (List<Condition> conList : s.getPreconditions()) { /* OR */
 							JSONArray conArray = new JSONArray();
-							satisfied = CatalogueAccessPoint.getCatalogue().isListSatisfied2(reachables, conList, true, true, s.getUri());
+							satisfied = CatalogueAccessPoint.getCatalogue().isListSatisfied(reachables, conList, true, true, s.getUri());
 							reachability = reachability & satisfied;
 							for (Condition c : conList) {
 								JSONObject jsonPre = c.toJSON();
