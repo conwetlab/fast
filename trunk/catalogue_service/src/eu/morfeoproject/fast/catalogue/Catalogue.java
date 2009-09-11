@@ -29,6 +29,8 @@ import org.slf4j.LoggerFactory;
 
 import eu.morfeoproject.fast.catalogue.ontologies.DefaultOntologies;
 import eu.morfeoproject.fast.catalogue.ontologies.DefaultOntologies.PublicOntology;
+import eu.morfeoproject.fast.catalogue.planner.Plan;
+import eu.morfeoproject.fast.catalogue.planner.Planner;
 import eu.morfeoproject.fast.model.Condition;
 import eu.morfeoproject.fast.model.Event;
 import eu.morfeoproject.fast.model.FastModelFactory;
@@ -37,7 +39,7 @@ import eu.morfeoproject.fast.model.Screen;
 import eu.morfeoproject.fast.model.ScreenFlow;
 import eu.morfeoproject.fast.model.Slot;
 import eu.morfeoproject.fast.model.SlotOrEvent;
-import eu.morfeoproject.fast.util.FormatterUtil;
+import eu.morfeoproject.fast.util.DateFormatter;
 import eu.morfeoproject.fast.vocabulary.DC;
 import eu.morfeoproject.fast.vocabulary.FGO;
 import eu.morfeoproject.fast.vocabulary.FOAF;
@@ -57,6 +59,7 @@ public class Catalogue {
 	public static final int INTERSECTION = 4;
 
 	private TripleStore tripleStore;
+	private Planner planner;
 	
 	
 	public Catalogue(File dir, String indexes) {
@@ -81,11 +84,17 @@ public class Catalogue {
 			// recover the catalogue
 			restore();
 		}
+		
+		// creates a planner
+		planner = new Planner(this);
 	}
 	
 	// TODO remove this method
 	public TripleStore getTripleStore() {
 		return tripleStore;
+	}
+	public Planner getPlanner() {
+		return planner;
 	}
 	
     /**
@@ -128,7 +137,7 @@ public class Catalogue {
         return !result;
     }
     
-    // TODO: tiene sentido??
+    // TODO: does this method make sense??
     // check if user is there.
     /**
      * Check if the PIMO is not created yet and {@link #createNewPimo()} needs to be called.
@@ -213,7 +222,7 @@ public class Catalogue {
 		if (sf.getVersion() != null)
 			tripleStore.addStatement(sfUri, FGO.hasVersion, sf.getVersion());
 		if (sf.getCreationDate() != null)
-			tripleStore.addStatement(sfUri, DC.date, FormatterUtil.formatDateISO8601(sf.getCreationDate()));
+			tripleStore.addStatement(sfUri, DC.date, DateFormatter.formatDateISO8601(sf.getCreationDate()));
 		if (sf.getIcon() != null)
 			tripleStore.addStatement(sfUri, FGO.hasIcon, sf.getIcon());
 		if (sf.getScreenshot() != null)
@@ -277,6 +286,8 @@ public class Catalogue {
 		}
 		// persists the screen
 		saveScreen(screen);
+		// create plans for the screen
+		planner.add(screen);
 	}
 	
 	/**
@@ -287,7 +298,8 @@ public class Catalogue {
 	 * @throws OntologyInvalidException 
 	 * @throws RepositoryException 
 	 */
-	private void saveScreen(Screen screen) throws OntologyReadonlyException, NotFoundException, RepositoryException, OntologyInvalidException {
+	private void saveScreen(Screen screen)
+	throws OntologyReadonlyException, NotFoundException, RepositoryException, OntologyInvalidException {
 		URI screenUri = screen.getUri();
 		for (String key : screen.getLabels().keySet())
 			tripleStore.addStatement(screenUri, RDFS.label, tripleStore.createLanguageTagLiteral(screen.getLabels().get(key), key));
@@ -300,7 +312,7 @@ public class Catalogue {
 		if (screen.getVersion() != null)
 			tripleStore.addStatement(screenUri, FGO.hasVersion, screen.getVersion());
 		if (screen.getCreationDate() != null)
-			tripleStore.addStatement(screenUri, DC.date, FormatterUtil.formatDateISO8601(screen.getCreationDate()));
+			tripleStore.addStatement(screenUri, DC.date, DateFormatter.formatDateISO8601(screen.getCreationDate()));
 		if (screen.getIcon() != null)
 			tripleStore.addStatement(screenUri, FGO.hasIcon, screen.getIcon());
 		if (screen.getScreenshot() != null)
@@ -354,8 +366,13 @@ public class Catalogue {
 		logger.info("Screen "+screen.getUri()+" added.");
 	}
 	
-	public void updateScreen(Screen screen) throws NotFoundException, OntologyReadonlyException, RepositoryException, OntologyInvalidException  {
+	public void updateScreen(Screen screen)
+	throws NotFoundException, OntologyReadonlyException, RepositoryException, OntologyInvalidException  {
 		logger.info("Updating screen "+screen.getUri()+"...");
+		Screen oldScreen = getScreen(screen.getUri());
+		// calculate new plans if necessary
+		planner.update(screen, oldScreen);
+		// remove old screen from the catalogue
 		removeScreen(screen.getUri());
 		// do not call addScreen because it does not need to create a new URI for the screen
 		saveScreen(screen);
@@ -391,6 +408,8 @@ public class Catalogue {
 		postconditions.close();
 		// remove the screen itself
 		tripleStore.removeResource(screenUri);
+		// remove the screen from the planner
+		planner.remove(screenUri);
 		logger.info("Screen "+screenUri+" removed.");
 	}
 
@@ -575,40 +594,44 @@ public class Catalogue {
      * @throws ClassCastException
      * @throws ModelRuntimeException
      */
-    public Set<URI> find(
+    private Set<URI> find(
     		Set<Resource> resources,
     		boolean plugin,
     		boolean subsume,
     		int offset,
     		int limit,
-    		Set<String> domainContext) throws ClassCastException, ModelRuntimeException {
+    		Set<String> domainContext,
+    		URI predicate) throws ClassCastException, ModelRuntimeException {
     	HashSet<URI> results = new HashSet<URI>();
+    	ArrayList<Condition> unCon = getUnsatisfiedPreconditions(resources, plugin, subsume);
 
     	String queryString = 
-    		"SELECT DISTINCT ?screen \n" +
+    		"SELECT DISTINCT ?resource \n" +
     		"WHERE {\n" +
-    		"?screen "+RDF.type.toSPARQL()+" "+FGO.Screen.toSPARQL()+" . ";
+    		"{ ?resource "+RDF.type.toSPARQL()+" "+FGO.Screen.toSPARQL()+" . ";
+    	
+    	/////*** LOOK FOR SCREENS ***/////
     	for (Resource r : resources)
     		if (r instanceof Screen)
-    			queryString = queryString.concat("FILTER (?screen != "+r.getUri().toSPARQL()+") . ");
+    			queryString = queryString.concat("FILTER (?resource != "+r.getUri().toSPARQL()+") . ");
 
     	if (domainContext != null && domainContext.size() > 0) {
         	queryString = queryString.concat("{");
-        	for (String tag : domainContext)
-	    		queryString = queryString.concat(" { ?screen "+FGO.hasTag.toSPARQL()+" ?tag . FILTER regex(?tag, \""+tag+"\", \"i\")} UNION");
+        	for (String tag : domainContext) {
+	    		queryString = queryString.concat(" { ?resource "+FGO.hasTag.toSPARQL()+" ?tag . FILTER regex(?tag, \""+tag+"\", \"i\")} UNION");
+        	}
         	// remove last 'UNION'
 	    	if (queryString.endsWith("UNION"))
 				queryString = queryString.substring(0, queryString.length() - 5);
 			queryString = queryString.concat("} . ");
     	}
     	
-    	ArrayList<Condition> unCon = getUnsatisfiedPreconditions(resources, plugin, subsume);
     	if (unCon.size() > 0) {
         	queryString = queryString.concat("{");
 			for (Condition con : unCon) {
 				if (logger.isDebugEnabled())
 					logger.debug("[UNSATISFIED] "+con.toString());
-				queryString = queryString.concat("{ ?screen "+FGO.hasPostCondition.toSPARQL()+" ?b . ");
+				queryString = queryString.concat("{ ?resource "+predicate.toSPARQL()+" ?b . ");
 				queryString = queryString.concat(" ?b ?li ?c . "); // :_bag rdf:li_1 :_condition
 				queryString = queryString.concat(" ?c "+FGO.hasPattern.toSPARQL()+" ?p . ");
     			queryString = queryString.concat("GRAPH ?p {");
@@ -624,23 +647,95 @@ public class Catalogue {
 				queryString = queryString.substring(0, queryString.length() - 5);
 			queryString = queryString.concat("}");
     	}
-		queryString = queryString.concat("\n}");
+		queryString = queryString.concat("\n} UNION ");
+		
+		/////*** LOOK FOR SLOTS ***/////
+		queryString = queryString.concat("{ ?resource "+RDF.type.toSPARQL()+" "+FGO.Slot.toSPARQL()+" . ");
+		
+		for (Resource r : resources)
+			if (r instanceof Slot)
+				queryString = queryString.concat("FILTER (?resource != "+r.getUri().toSPARQL()+") . ");
+
+		if (domainContext != null && domainContext.size() > 0) {
+	    	queryString = queryString.concat("{");
+	    	for (String tag : domainContext) {
+	    		queryString = queryString.concat(" { ?resource "+FGO.hasTag.toSPARQL()+" ?tag . FILTER regex(?tag, \""+tag+"\", \"i\")} UNION");
+	    	}
+	    	// remove last 'UNION'
+	    	if (queryString.endsWith("UNION"))
+				queryString = queryString.substring(0, queryString.length() - 5);
+			queryString = queryString.concat("} . ");
+		}
+		if (unCon.size() > 0) {
+        	queryString = queryString.concat("{");
+			for (Condition con : unCon) {
+				queryString = queryString.concat("{ ?resource "+FGO.hasCondition.toSPARQL()+" ?b . ");
+				queryString = queryString.concat(" ?b ?li ?c . "); // :_bag rdf:li_1 :_condition
+				queryString = queryString.concat(" ?c "+FGO.hasPattern.toSPARQL()+" ?p . ");
+    			queryString = queryString.concat("GRAPH ?p {");
+        		for (Statement st : con.getPattern()) {
+        			String s = (st.getSubject() instanceof BlankNode) ? st.getSubject().toString() : st.getSubject().toSPARQL();
+        			String o = (st.getObject() instanceof BlankNode) ? st.getObject().toString() : st.getObject().toSPARQL();
+        			queryString = queryString.concat(s+" "+st.getPredicate().toSPARQL()+" "+o+" . ");
+        		}
+        		queryString = queryString.concat("} } UNION");
+        	}
+        	// remove last 'UNION'
+	    	if (queryString.endsWith("UNION"))
+				queryString = queryString.substring(0, queryString.length() - 5);
+			queryString = queryString.concat("}");
+    	}
+		queryString = queryString.concat("\n} }");
+		
+		
 		if (limit > 0)
 			queryString = queryString.concat("\nLIMIT "+limit);
 		queryString = queryString.concat("\nOFFSET "+offset);
 		// replace ':_' by '?' to make the query
 		queryString = replaceBlankNodes(queryString);
+		
 		if (logger.isDebugEnabled())
 			logger.debug("Executing SPARQL query:\n"+queryString+"\n-----");
 
     	QueryResultTable qrt = tripleStore.sparqlSelect(queryString);
     	ClosableIterator<QueryRow> itResults = qrt.iterator();
     	while (itResults.hasNext()) {
-    		results.add(itResults.next().getValue("screen").asURI());
+    		results.add(itResults.next().getValue("resource").asURI());
     	}
     	itResults.close();
 
     	return results;
+    }
+
+    public Set<URI> findBackwards(
+    		Set<Resource> resources,
+    		boolean plugin,
+    		boolean subsume,
+    		int offset,
+    		int limit,
+    		Set<String> domainContext) throws ClassCastException, ModelRuntimeException {
+    	return find(resources, plugin, subsume, offset, limit, domainContext, FGO.hasPostCondition);
+    }
+    
+    public Set<URI> findForwards(
+    		Set<Resource> resources,
+    		boolean plugin,
+    		boolean subsume,
+    		int offset,
+    		int limit,
+    		Set<String> domainContext) throws ClassCastException, ModelRuntimeException {
+    	Set<Resource> tmpResources = new HashSet<Resource>();
+    	for (Resource r : resources) {
+    		if (r instanceof Screen) {
+    			Screen s = FastModelFactory.createScreen();
+    			s.setUri(r.getUri());
+    			s.setPreconditions(((Screen) r).getPostconditions());
+    			tmpResources.add(s);
+    		} else {
+    			tmpResources.add(r);
+    		}
+    	}
+    	return find(tmpResources, plugin, subsume, offset, limit, domainContext, FGO.hasPreCondition);
     }
 
     public Set<Resource> findRecursive(
@@ -675,12 +770,6 @@ public class Catalogue {
      */
 	protected ArrayList<Condition> getUnsatisfiedPreconditions(Set<Resource> resources, boolean plugin, boolean subsume) {
 		ArrayList<Condition> unsatisfied = new ArrayList<Condition>();
-//		for (Screen s : screens)
-//			for (List<Condition> conList : s.getPreconditions())
-//				for (Condition c : conList)
-//					if (!c.getScope().equalsIgnoreCase("execution")
-//					&& !isSatisfied(screens, c, plugin, subsume, s.getUri()))
-//						unsatisfied.add(c);
 		for (Resource r : resources) {
 			if (r instanceof Screen) {
 				Screen s = (Screen)r;
@@ -1054,7 +1143,7 @@ public class Catalogue {
 			} else if (predicate.equals(FGO.hasVersion)) {
 				sf.setVersion(object.toString());
 			} else if (predicate.equals(DC.date)) {
-				sf.setCreationDate(FormatterUtil.parseDateISO8601(object.toString()));
+				sf.setCreationDate(DateFormatter.parseDateISO8601(object.toString()));
 			} else if (predicate.equals(FGO.hasIcon)) {
 				sf.setIcon(object.asURI());
 			} else if (predicate.equals(FGO.hasScreenshot)) {
@@ -1098,7 +1187,7 @@ public class Catalogue {
 			} else if (predicate.equals(FGO.hasVersion)) {
 				screen.setVersion(object.toString());
 			} else if (predicate.equals(DC.date)) {
-				screen.setCreationDate(FormatterUtil.parseDateISO8601(object.toString()));
+				screen.setCreationDate(DateFormatter.parseDateISO8601(object.toString()));
 			} else if (predicate.equals(FGO.hasIcon)) {
 				screen.setIcon(object.asURI());
 			} else if (predicate.equals(FGO.hasScreenshot)) {
@@ -1247,7 +1336,9 @@ public class Catalogue {
 	}
 	
 	
-	
+	public List<Plan> searchPlans(URI uri, Set<Resource> resources) {
+		return planner.searchPlans(uri, resources);
+	}
 	
 	
 	

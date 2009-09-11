@@ -303,13 +303,7 @@ public class TripleStore {
      */
     public boolean containsOntology(URI ontologyUri) {
     	// TODO: check if this is really an ontology and not just a graph
-//    	try {
-        	// TODO: I'm not sure if I need to do this try-catch
-    		// this access to RepositoryModelSet, but in Nepomuk they access to ModelSetWrapper
-    		return getPersistentModelSet().containsModel(ontologyUri);
-//    	} catch (NullPointerException e) {
-//    		return false;
-//    	}
+   		return getPersistentModelSet().containsModel(ontologyUri);
     }
     
     public boolean removeModel(URI uriModel) {
@@ -365,27 +359,6 @@ public class TripleStore {
         return results;
     }
     
-    @Deprecated
-    public void add(File file, URI baseUri, Syntax syntax) {
-		Model model = RDF2Go.getModelFactory().createModel(baseUri);
-		model.open();
-		try {
-			model.readFrom(new FileReader(file), syntax);
-			getPersistentModelSet().addModel(model);
-		} catch (ModelRuntimeException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} finally {
-			model.close();
-		}
-	}
-
 	/**
 	 * @return an open RDF2Go model as a view on a certain set of quads in the
 	 *         ContextModel
@@ -448,18 +421,13 @@ public class TripleStore {
 //
 //	}
 
+	// TODO remove it
 	public void dump() {
 		getPersistentModelSet().dump();
 	}
 
 	public void clear() {
 		getPersistentModelSet().removeAll();
-//		try {
-//			repository.getConnection().clearNamespaces();
-//		} catch (RepositoryException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
 	}
 
 	/**
@@ -562,21 +530,9 @@ public class TripleStore {
         return contains;
     }
 
-    public boolean isResource(URI resource) {
-    	// TODO: ESTO NO FUNCIONA BIEN
-//    	List<URI> subClasses = subClassesOf(RDFS.Class);
-//    	boolean contains = false;
-//    	for (URI subClass : subClasses)
-//    		contains = contains || getPersistentModelSet().containsStatements(
-//    			Variable.ANY,
-//    			resource,
-//    			RDF.type,
-//    			subClass);
-    	return true;
-    }
     /**
-     * check if the passed URI is defined as instance of the passed class, 
-     * either in the WorkModel or in the main storage.
+     * check if the passed URI is defined as instance of the passed class
+     * in the main storage.
      * @param resource the resource in question
      * 
      * @param clazz the uri to check.
@@ -591,7 +547,6 @@ public class TripleStore {
             clazz);
         if (!contains)
         	contains = getPersistentModelSet().containsStatements(Variable.ANY, resource, RDF.type, clazz);
-//        	contains = getWorkingModel().contains(resource, RDF.type, clazz);
         return contains;
     }    
     
