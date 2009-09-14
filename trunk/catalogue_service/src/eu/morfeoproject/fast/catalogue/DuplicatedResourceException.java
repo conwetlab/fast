@@ -1,27 +1,20 @@
-/**
- * 
- */
 package eu.morfeoproject.fast.catalogue;
 
-/**
- * @author Ismael Rivera
- *
- */
-public class NotFoundException extends Exception {
-
+public class DuplicatedResourceException extends Exception {
+	
 	private static final long serialVersionUID = 1L;
 
 	/**
 	 * 
 	 */
-	public NotFoundException() {
+	public DuplicatedResourceException() {
 		// TODO Auto-generated constructor stub
 	}
 
 	/**
 	 * @param message
 	 */
-	public NotFoundException(String message) {
+	public DuplicatedResourceException(String message) {
 		super(message);
 		// TODO Auto-generated constructor stub
 	}
@@ -29,7 +22,7 @@ public class NotFoundException extends Exception {
 	/**
 	 * @param cause
 	 */
-	public NotFoundException(Throwable cause) {
+	public DuplicatedResourceException(Throwable cause) {
 		super(cause);
 		// TODO Auto-generated constructor stub
 	}
@@ -38,9 +31,9 @@ public class NotFoundException extends Exception {
 	 * @param message
 	 * @param cause
 	 */
-	public NotFoundException(String message, Throwable cause) {
+	public DuplicatedResourceException(String message, Throwable cause) {
 		super(message, cause);
 		// TODO Auto-generated constructor stub
 	}
-
+	
 }

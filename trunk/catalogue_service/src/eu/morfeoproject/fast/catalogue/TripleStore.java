@@ -540,14 +540,7 @@ public class TripleStore {
      */
     public boolean isResource(URI resource, URI clazz) {
     	if (resource == null) return false;
-        boolean contains = getPersistentModelSet().containsStatements(
-            Variable.ANY,
-            resource,
-            RDF.type,
-            clazz);
-        if (!contains)
-        	contains = getPersistentModelSet().containsStatements(Variable.ANY, resource, RDF.type, clazz);
-        return contains;
+        return getPersistentModelSet().containsStatements(Variable.ANY, resource, RDF.type, clazz);
     }    
     
     ///// NO SE SI ESTOS METODOS DEBERIAN EXISTIR

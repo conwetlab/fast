@@ -1,59 +1,58 @@
 package eu.morfeoproject.fast.catalogue.planner;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 import org.ontoware.rdf2go.model.node.URI;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import eu.morfeoproject.fast.catalogue.Catalogue;
+import eu.morfeoproject.fast.model.Condition;
+import eu.morfeoproject.fast.model.Event;
+import eu.morfeoproject.fast.model.FastModelFactory;
 import eu.morfeoproject.fast.model.Resource;
 import eu.morfeoproject.fast.model.Screen;
-import eu.morfeoproject.fast.server.CatalogueAccessPoint;
+import eu.morfeoproject.fast.model.Slot;
 
 public class Planner {
 	
-	private DBMS dbms;
+	final Logger logger = LoggerFactory.getLogger(Planner.class);
+
+	private PlannerStore plannerStore;
 	private Catalogue catalogue;
 	
-	private Planner() {
-		dbms = new DBMS();
-		try {
-			catalogue = CatalogueAccessPoint.getCatalogue();
-			run();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+	public Planner(Catalogue catalogue) {
+		this.plannerStore = new PlannerStore();
+		this.catalogue = catalogue;
+		run();
 	}
 	
-	/**
-	 * SingletonHolder is loaded on the first execution of Singleton.getInstance() 
-	 * or the first access to SingletonHolder.INSTANCE, not before.
+	/*
+	 * creates all the plans
+	 * TODO this should be stored permanently
 	 */
-	private static class PlannerHolder { 
-		private static final Planner INSTANCE = new Planner();
-	}
-
-	public static Planner getInstance() {
-		return PlannerHolder.INSTANCE;
-	}
-   
 	private void run() {
 		for (Screen screen : catalogue.listScreens()) {
 			if (screen.getPreconditions().size() > 0) {
 				HashSet<Resource> resources = new HashSet<Resource>();
 				resources.add(screen);
 				HashSet<URI> results = new HashSet<URI>();
-				results.addAll(catalogue.find(resources, true, true, 0, -1, null));
+				results.addAll(catalogue.findBackwards(resources, true, true, 0, -1, null));
 				for (URI result : results)
-					dbms.add(result, screen.getUri());
+					plannerStore.add(result, screen.getUri());
 			}
 		}
 	}
 	
+	/**
+	 * Creates a list of plans which 
+	 * @param uri
+	 * @param resources
+	 * @return
+	 */
 	public List<Plan> searchPlans(URI uri, Set<Resource> resources) {
 		List<URI> uriList = new ArrayList<URI>();
 		for (Resource resource : resources)
@@ -106,9 +105,9 @@ public class Planner {
 		return count;
 	}
 	
-	public List<Plan> searchPlans(URI uri) {
+	private List<Plan> searchPlans(URI uri) {
 		ArrayList<Plan> plans = new ArrayList<Plan>();
-		List<URI> toList = dbms.getTo(uri);
+		List<URI> toList = plannerStore.getTo(uri);
 		for (URI u : toList) {
 			Plan p = new Plan();
 			p.getUriList().add(0, u);
@@ -118,7 +117,7 @@ public class Planner {
 	}
 	
 	private void searchPlans(Plan plan, List<Plan> plans) {
-		List<URI> toList = dbms.getTo(plan.getUriList().get(0));
+		List<URI> toList = plannerStore.getTo(plan.getUriList().get(0));
 		if (toList.isEmpty()) { // it's leaf
 			plans.add(plan);
 		} else {
@@ -128,6 +127,104 @@ public class Planner {
 				searchPlans(p, plans);
 			}
 		}
+	}
+	
+	public void add(Resource resource) {
+		calculateForwards(resource);
+		if (resource instanceof Screen)
+			calculateBackwards(resource);
+	}
+	
+	public void update(Resource newResource, Resource oldResource) {
+		if (newResource instanceof Screen && oldResource instanceof Screen) {
+			if (!equalConditions(((Screen) newResource).getPreconditions(), ((Screen) oldResource).getPreconditions())) {
+				plannerStore.removeTo(newResource.getUri());
+				calculateBackwards(newResource);
+			}
+			if (!equalConditions(((Screen) newResource).getPostconditions(), ((Screen) oldResource).getPostconditions())) {
+				plannerStore.removeFrom(newResource.getUri());
+				calculateForwards(newResource);
+			}
+		} else if (newResource instanceof Slot && oldResource instanceof Slot) {
+			if (!equalListCondition(((Slot) newResource).getConditions(), ((Slot) oldResource).getConditions())) {
+				plannerStore.removeFrom(newResource.getUri());
+				calculateForwards(newResource);
+			}
+		} else {
+			logger.error(newResource.getUri()+" and "+oldResource+" are not the same type of resource.");
+		}
+	}
+	
+	public void remove(URI screenUri) {
+		plannerStore.removeFrom(screenUri);
+		plannerStore.removeTo(screenUri);
+	}
+	
+	private void calculateForwards(Resource resource) {
+		HashSet<Resource> resources = new HashSet<Resource>();
+		if (resource instanceof Screen) {
+			if (((Screen) resource).getPostconditions().size() > 0)
+				resources.add(resource);
+		} else if (resource instanceof Slot) {
+			if (((Slot) resource).getConditions().size() > 0) {
+				Event event = FastModelFactory.createEvent();
+				// need to create an Event for the FIND operation, Slots don't
+				// have unsatisfied preconditions
+				event.setUri(resource.getUri());
+				event.setConditions(((Slot) resource).getConditions());
+				resources.add(event);
+			}
+		}
+		if (resources.size() > 0) {
+			HashSet<URI> results = new HashSet<URI>();
+			results.addAll(catalogue.findForwards(resources, true, true, 0, -1, null));
+			for (URI result : results)
+				plannerStore.add(resource.getUri(), result);
+		}
+	}
+	
+	private void calculateBackwards(Resource resource) {
+		HashSet<Resource> resources = new HashSet<Resource>();
+		if (resource instanceof Screen) {
+			if (((Screen) resource).getPreconditions().size() > 0)
+				resources.add(resource);
+		} else if (resource instanceof Slot) {
+			if (((Slot) resource).getConditions().size() > 0)
+				resources.add(resource);
+		}
+		if (resources.size() > 0) {
+			HashSet<URI> results = new HashSet<URI>();
+			results.addAll(catalogue.findBackwards(resources, true, true, 0, -1, null));
+			for (URI result : results)
+				plannerStore.add(result, resource.getUri());
+		}
+	}
+	
+	private boolean equalConditions(List<List<Condition>> cA, List<List<Condition>> cB) {
+		if (cA.size() != cB.size()) {
+			return false;
+		} else {
+			for (int idx = 0; idx < cA.size(); idx++) {
+				if (cA.get(idx).size() != cB.get(idx).size()) {
+					return false;
+				} else {
+					if (!equalListCondition(cA.get(idx), cB.get(idx)))
+						return false;
+				}
+			}
+			return true;
+		}
+	}
+
+	private boolean equalListCondition(List<Condition> lcA, List<Condition> lcB) {
+		for (int cIdx = 0; cIdx < lcA.size(); cIdx++)
+			if (!lcA.get(cIdx).equals(lcB.get(cIdx)))
+				return false;
+		return true;
+	}
+	
+	public void dump() {
+		plannerStore.dump();
 	}
 	
 }

@@ -9,6 +9,8 @@ package eu.morfeoproject.fast.catalogue;
  */
 public class RepositoryConfigurationException extends Exception {
 
+	private static final long serialVersionUID = 1L;
+
 	/**
 	 * 
 	 */

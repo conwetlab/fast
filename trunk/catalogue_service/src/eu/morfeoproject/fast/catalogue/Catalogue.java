@@ -194,13 +194,13 @@ public class Catalogue {
 	}
 	
 	// FIXME finish this method
-	public void addScreenFlow(ScreenFlow sf) throws DuplicatedScreenFlowException,
+	public void addScreenFlow(ScreenFlow sf) throws DuplicatedResourceException,
 	OntologyInvalidException, OntologyReadonlyException, NotFoundException {
 		URI sfUri = null;
 		if (sf.getUri() != null) {
 			sfUri = sf.getUri();
 			if (containsScreenFlow(sf))
-				throw new DuplicatedScreenFlowException();
+				throw new DuplicatedResourceException(sf.getUri()+" already exists.");
 		} else {
 			sfUri = tripleStore.createResource(FGO.ScreenFlow);
 			sf.setUri(sfUri);
@@ -267,19 +267,19 @@ public class Catalogue {
 	/**
 	 * Creates a new Screen into the catalogue
 	 * @param screen
-	 * @throws DuplicatedScreenException
+	 * @throws DuplicatedResourceException
 	 * @throws OntologyInvalidException
 	 * @throws OntologyReadonlyException
 	 * @throws NotFoundException
 	 * @throws RepositoryException 
 	 */
 	public void addScreen(Screen screen)
-	throws DuplicatedScreenException, OntologyInvalidException, OntologyReadonlyException, NotFoundException, RepositoryException {
+	throws DuplicatedResourceException, OntologyInvalidException, OntologyReadonlyException, NotFoundException, RepositoryException {
 		URI screenUri = null;
 		if (screen.getUri() != null) {
 			screenUri = screen.getUri();
 			if (containsScreen(screen))
-				throw new DuplicatedScreenException();
+				throw new DuplicatedResourceException(screenUri+" already exists.");
 		} else {
 			screenUri = tripleStore.createResource(FGO.Screen);
 			screen.setUri(screenUri);
@@ -370,12 +370,12 @@ public class Catalogue {
 	throws NotFoundException, OntologyReadonlyException, RepositoryException, OntologyInvalidException  {
 		logger.info("Updating screen "+screen.getUri()+"...");
 		Screen oldScreen = getScreen(screen.getUri());
-		// calculate new plans if necessary
-		planner.update(screen, oldScreen);
 		// remove old screen from the catalogue
 		removeScreen(screen.getUri());
 		// do not call addScreen because it does not need to create a new URI for the screen
 		saveScreen(screen);
+		// calculate new plans if necessary
+		planner.update(screen, oldScreen);
 		logger.info("Screen "+screen.getUri()+" updated.");
 	}
 	
@@ -414,12 +414,12 @@ public class Catalogue {
 	}
 
 	
-	public void addSlotOrEvent(SlotOrEvent se) throws DuplicatedScreenException, OntologyInvalidException {
+	public void addSlotOrEvent(SlotOrEvent se) throws DuplicatedResourceException, OntologyInvalidException {
 		URI seUri = null;
 		if (se.getUri() != null) {
 			seUri = se.getUri();
 			if (containsSlotOrEvent(se))
-				throw new DuplicatedScreenException();
+				throw new DuplicatedResourceException(seUri+" already exists.");
 		} else {
 			if (se instanceof Slot)
 				seUri = tripleStore.createResource(FGO.Slot);
@@ -427,8 +427,11 @@ public class Catalogue {
 				seUri = tripleStore.createResource(FGO.Event);
 			se.setUri(seUri);
 		}
-		// persists the slot
+		// persists the slot/event
 		saveSlotOrEvent(se);
+		// create plans for the slot
+		if (se instanceof Slot)
+			planner.add(se);
 	}
 	
 	public void saveSlotOrEvent(SlotOrEvent se) {
@@ -453,15 +456,17 @@ public class Catalogue {
 	
 	public void updateSlotOrEvent(SlotOrEvent se) throws NotFoundException, OntologyReadonlyException, RepositoryException, OntologyInvalidException  {
 		logger.info("Updating slot "+se.getUri()+"...");
+		SlotOrEvent oldSe = getSlotOrEvent(se.getUri());
 		removeSlotOrEvent(se.getUri());
 		// do not call addSlot because it does not need to create a new URI for the screen
 		saveSlotOrEvent(se);
+		// calculate new plans if necessary
+		planner.update(se, oldSe);
 		logger.info(se.getUri()+" updated.");
 	}
 	
 	public void removeSlotOrEvent(URI seUri) throws NotFoundException {
 		logger.info("removing "+seUri);
-		printStatements();
 		if (!containsSlotOrEvent(seUri))
 			throw new NotFoundException();
 		// remove all conditions
@@ -486,10 +491,11 @@ public class Catalogue {
 			tripleStore.removeResource(bagNode);
 		}
 		conditionBagIt.close();
-		// remove the slot itself
+		// remove the slot/event itself
 		tripleStore.removeResource(seUri);
+		// remove the slot from the planner
+		planner.remove(seUri);
 		logger.info(seUri+" removed.");
-		printStatements();
 	}
 	
 	public boolean containsResource(URI uri) {
@@ -515,7 +521,7 @@ public class Catalogue {
 	}
 
 	public boolean containsSlotOrEvent(URI seUri) {
-		return tripleStore.isResource(seUri, FGO.Event) || tripleStore.isResource(seUri, FGO.Event);
+		return tripleStore.isResource(seUri, FGO.Slot) || tripleStore.isResource(seUri, FGO.Event);
 	}
 	
 	public boolean containsSlotOrEvent(SlotOrEvent se) {
@@ -1247,10 +1253,19 @@ public class Catalogue {
 		return event;
 	}
 
+	public SlotOrEvent getSlotOrEvent(URI uri) {
+		if (isType(uri, FGO.Slot))
+			return getSlot(uri);
+		else if (isType(uri, FGO.Event))
+			return getEvent(uri);
+		else
+			return null;
+	}
+	
 	private SlotOrEvent getSlotOrEvent(URI uri, SlotOrEvent se) {
-		// find all the info related to a slot
+		// find all the info related to a slot or an event
 		ClosableIterator<Statement> it = tripleStore.findStatements(uri, Variable.ANY, Variable.ANY);
-		if (!it.hasNext()) // the slot does not exist
+		if (!it.hasNext()) // the slot/event does not exist
 			return null;
 		se.setUri(uri);
 		for ( ; it.hasNext(); ) {
