@@ -26,56 +26,46 @@
 		<servlet-class>eu.morfeoproject.fast.server.SlotServlet</servlet-class>
 	</servlet>
 	<servlet>
-		<description>
-		</description>
+		<description></description>
 		<display-name>EventServlet</display-name>
 		<servlet-name>EventServlet</servlet-name>
 		<servlet-class>eu.morfeoproject.fast.server.EventServlet</servlet-class>
 	</servlet>
 	<servlet>
-		<description>
-		</description>
-		<display-name>
-		FindServlet</display-name>
+		<description></description>
+		<display-name>FindServlet</display-name>
 		<servlet-name>FindServlet</servlet-name>
-		<servlet-class>
-		eu.morfeoproject.fast.server.FindServlet</servlet-class>
+		<servlet-class>eu.morfeoproject.fast.server.FindServlet</servlet-class>
 	</servlet>
 	<servlet>
-		<description>
-		</description>
-		<display-name>
-		CheckServlet</display-name>
+		<description></description>
+		<display-name>CheckServlet</display-name>
 		<servlet-name>CheckServlet</servlet-name>
-		<servlet-class>
-		eu.morfeoproject.fast.server.CheckServlet</servlet-class>
+		<servlet-class>eu.morfeoproject.fast.server.CheckServlet</servlet-class>
 	</servlet>
 	<servlet>
-		<description>
-		</description>
-		<display-name>
-		FindCheckServlet</display-name>
+		<description></description>
+		<display-name>FindCheckServlet</display-name>
 		<servlet-name>FindCheckServlet</servlet-name>
-		<servlet-class>
-		eu.morfeoproject.fast.server.FindCheckServlet</servlet-class>
+		<servlet-class>eu.morfeoproject.fast.server.FindCheckServlet</servlet-class>
 	</servlet>
 	<servlet>
-		<description>
-		</description>
-		<display-name>
-		MetadataServlet</display-name>
+		<description></description>
+		<display-name>MetadataServlet</display-name>
 		<servlet-name>MetadataServlet</servlet-name>
-		<servlet-class>
-		eu.morfeoproject.fast.server.MetadataServlet</servlet-class>
+		<servlet-class>eu.morfeoproject.fast.server.MetadataServlet</servlet-class>
 	</servlet>
 	<servlet>
-		<description>
-		</description>
-		<display-name>
-		PlannerServlet</display-name>
+		<description></description>
+		<display-name>OntologyServlet</display-name>
+		<servlet-name>OntologyServlet</servlet-name>
+		<servlet-class>eu.morfeoproject.fast.server.OntologyServlet</servlet-class>
+	</servlet>
+	<servlet>
+		<description></description>
+		<display-name>PlannerServlet</display-name>
 		<servlet-name>PlannerServlet</servlet-name>
-		<servlet-class>
-		eu.morfeoproject.fast.server.PlannerServlet</servlet-class>
+		<servlet-class>eu.morfeoproject.fast.server.PlannerServlet</servlet-class>
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>ScreenServlet</servlet-name>
@@ -116,6 +106,10 @@
 	<servlet-mapping>
 		<servlet-name>MetadataServlet</servlet-name>
 		<url-pattern>/getmetadata</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>OntologyServlet</servlet-name>
+		<url-pattern>/ontologies</url-pattern>
 	</servlet-mapping>
 	<servlet-mapping>
 		<servlet-name>PlannerServlet</servlet-name>
