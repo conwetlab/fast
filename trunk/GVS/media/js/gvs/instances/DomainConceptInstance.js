@@ -6,33 +6,24 @@ var DomainConceptInstance = Class.create(ComponentInstance,
      * @constructs
      * @extends ComponentInstance
      */
-    initialize: function($super, /**BuildingBlockDescription*/ domainConceptDescription) {
-        $super(domainConceptDescription);
-        var uidGenerator = UIDGeneratorSingleton.getInstance();
-        this._id = uidGenerator.generate("domainConceptInstance");
-        this._buildingBlockType = Constants.BuildingBlock.DOMAIN_CONCEPT;
+    initialize: function($super, /**BuildingBlockDescription*/ domainConceptDescription, 
+            /** DropZone */ dropZone, /** InferenceEngine */ inferenceEngine) {
+        $super(domainConceptDescription, dropZone, inferenceEngine);
     },
 
     // **************** PUBLIC METHODS **************** //
 
+    // **************** PRIVATE METHODS **************** //
     /**
-     * Drop event handler for the DragSource
-     * @param finishState
-     *      True if a new ScreenInstance has
-     *      been added to the new zone.
+     * Creates a new View instance for the component
+     * @type BuildingBlockView
      * @override
      */
-    onDragFinish: function($super,finishState) {
-        $super(finishState);
-        // FIXME: remove this
-        if(finishState) {
-            var currentDocument = GVSSingleton.getInstance().getDocumentController().getCurrentDocument();
-            currentDocument.addDomainConcept(this);
-        }
+    _createView: function () {
+        return new DomainConceptView(this._buildingBlockDescription);
     },
-
-    // **************** PRIVATE METHODS **************** //
-     /**
+    
+    /**
      * This function is called when the attached view is dbl-clicked
      * @private
      * @override

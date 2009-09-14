@@ -12,12 +12,6 @@ var BuildingBlockView = Class.create( /** @lends BuildingBlockView.prototype */ 
          */
         this._node = null;
 
-        /**
-         * DOM node identifier
-         * @type String
-         * @private
-         */
-        this._id = null;
     },
 
     // **************** PUBLIC METHODS **************** //
@@ -31,21 +25,22 @@ var BuildingBlockView = Class.create( /** @lends BuildingBlockView.prototype */ 
         return this._node;
     },
 
-    /**
-     * getId
-     * @type String
-     */
-    getId: function () {
-        return this._id;
-    },
 
     /**
      * Colorize the component depending on the reachability
      * @public
      */
-    colorize: function( /** Boolean */ satisfeable) {
+    setReachability: function( /** Hash */ reachabilityData) {
         throw 'Abstract Method invocation. ' + 
             'BuildingBlockView :: colorize';
+    },
+    
+    setSelected: function(/** Boolean */ selected) {
+        if (selected) {
+            this._node.addClassName('selected');
+        } else {
+            this._node.removeClassName('selected');
+        }    
     },
 
     /**
@@ -55,9 +50,9 @@ var BuildingBlockView = Class.create( /** @lends BuildingBlockView.prototype */ 
     },
     
     /**
-     * Adds a listener
+     * Adds an event listener
      */
-    addListener: function (/** Function */ handler, /** String */ event){
+    addEventListener: function (/** Function */ handler, /** String */ event){
         Element.observe(this._node, event, handler);
     }
 });

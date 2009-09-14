@@ -11,22 +11,18 @@ var DomainConceptDescription = Class.create(BuildingBlockDescription,
         $super(properties);
 
     },
-
-
+    
     /**
-     * Creates a new screen component
      * @override
      */
-    createPaletteComponent: function () {
-        return new DomainConceptComponent(this);
-    },
+    getInfo: function() {
+        var info = new Hash();
+        info.set('name', this.name);
+        info.set('description', this.description);
+        info.set('semantics', this.semantics);
 
-    /**
-     * Creates a new screen view
-     * @override
-     */    
-    createView: function () {
-        return new DomainConceptView(this);
+        return info;
+
     }
 });
 

@@ -1,37 +1,40 @@
-var ScreenflowDocument = Class.create(AbstractDocument,
+var ScreenflowDocument = Class.create(PaletteDocument,
     /** @lends ScreenflowDocument.prototype */ {
 
     /**
      * Screenflow document.
      * @constructs
-     * @extends AbstractDocument
+     * @extends PaletteDocument
      */
-    initialize: function($super, /** String */ title, /** String */ domainContext) {
-        $super(title, [Constants.BuildingBlock.SCREEN, Constants.BuildingBlock.CONNECTOR, 
-               Constants.BuildingBlock.DOMAIN_CONCEPT]);
+    initialize: function($super, /** String */ title, /** Array */ domainContext) {
+        
+        
+        
+        this._inspectorArea = this._createInspectorArea(); 
                
-        this._documentType= Constants.DocumentType.SCREENFLOW;
-       
         /** 
          * Variable
          * @type PropertiesPane
          * @private @member
          */
-        this._propertiesPane = null;
+        this._propertiesPane = new PropertiesPane(this._inspectorArea);
         
         /** 
          * Variable
          * @type PrePostPane
          * @private @member
          */
-        this._prePostPane = null;
+        this._prePostPane = new PrePostPane(this._inspectorArea);
         
          /** 
          * Variable
          * @type FactsPane
          * @private @member
          */
-        this._factsPane = null;
+        this._factsPane = new InspectorPane(this._inspectorArea);
+        
+        $super(title, [Constants.BuildingBlock.SCREEN, Constants.BuildingBlock.DOMAIN_CONCEPT], 
+        domainContext);
         
         /**
          * Dialog to create a new document
@@ -39,20 +42,6 @@ var ScreenflowDocument = Class.create(AbstractDocument,
          * @private @member
          */
         this._deployGadgetDialog = new DeployGadgetDialog(this);
-
-        /**
-         * Palette Controller
-         * @type PaletteController
-         * @private @member
-         */ 
-        this._paletteController = new PaletteController(this);
-        
-         /**
-         * InferenceEngine
-         * @type InferenceEngine
-         * @private @member
-         */ 
-        this._inferenceEngine = new InferenceEngine(this);
         
         /**
          * This property represents the selected element
@@ -68,220 +57,108 @@ var ScreenflowDocument = Class.create(AbstractDocument,
          * @type ScreenflowDescription
          * @private @member
          */       
-        this._buildingBlockDescription = new ScreenflowDescription();
+        this._description = new ScreenflowDescription();
 
-        this._screens = [];
-        this._connectors = [];
-        this._domainConcepts = [];
+        /**
+         * Screen and domain concept instances on the
+         * canvas by uri
+         * @private
+         * @type Hash 
+         */
+        this._canvasInstances = new Hash();
 
-        
-        this._buildingBlockDescription.setDomainContext(domainContext);
-        
-        this._populate();     
- 
+        // Start retrieving data
+        this._inferenceEngine.findCheck(
+                this._getCanvas(),
+                /* palette elements */ [],
+                this._domainContext,
+                'reachability',
+                this._findCheckCallback.bind(this)
+        );
+        this._paletteController.startRetrievingData();     
     },
 
 
     // **************** PUBLIC METHODS **************** //
     
     /**
-     * This function populates the building blocks in the palettes
-     */
-    populateBuildingBlocks: function (){
-        //Do the magic:
-        //Fill palette data
-        //calculate reachability
-        this._paletteController.populateBuildingBlocks(this._buildingBlockDescription.getDomainContext());       
-    },
-    /**
      * Returns the BuildingBlock Description for the screenflow document
      * @type ScreenflowDescription
      */
     getBuildingBlockDescription: function () {
-        return this._buildingBlockDescription;
+        return this._description;
     },
     
+    // FIXME: this method stinks
     updateBuildingBlockDescription: function () {
         var form = this._deployGadgetDialog.getForm();
-        this.getBuildingBlockDescription().setLabel("en-GB", $F(form.name));
-        this.getBuildingBlockDescription().setVersion($F(form.version));
-        this.getBuildingBlockDescription().setDescription("en-GB", $F(form.info));
-        this.getBuildingBlockDescription().setCreator($F(form.author));
+        this._description.label = {"en-GB": $F(form.name)};
+        this._description.version = $F(form.version);
+        this._description.description = {"en-GB": $F(form.info)};
+        this._description.creator = $F(form.author);
     },
+
+    
     
     /**
-     * Returns the document inference engine
-     * @type InferenceEngine
+     * Implementing DropZone interface.
+     * @override
      */
-    getInferenceEngine: function () {
-        return this._inferenceEngine;
-    },
+    drop: function(/** ComponentInstance */ droppedElement) {
+        // Reject repeated elements (except domain concepts)
+        if (this._canvasInstances.get(droppedElement.getUri()) &&
+            (droppedElement.constructor != DomainConceptInstance)) {
+            return false;
+        }
+        
+        this._canvasInstances.set(droppedElement.getUri(), droppedElement);
+        
+        switch (droppedElement.constructor) {
+            case ScreenInstance:
+                this._description.addScreen(droppedElement.getUri(), droppedElement);
+                break;
+                
+            case DomainConceptInstance:
+                // TODO
+                break;
+                
+            default:
+                alert("Don't know how accept that kind of element. ScreenflowDocument::drop");    
+        }            
 
-    /**
-     * Returns the list of screens for the screenflow document
-     * @type ScreenInstance[]
-     */
-    getScreens: function () {
-        return this._screens;
-    },
-    
-    /**
-     * Returns the list of connectors for the screenflow document
-     * @type ConnectorInstance[]
-     */
-    getConnectors: function () {
-        return this._connectors;
-    },
-
-    /**
-     * Returns the list of domain concepts for the screenflow document
-     * @type DomainConceptInstance[]
-     */
-    getDomainConcepts: function () {
-        return this._domainConcepts;
-    },
-
-    /**
-     * Returns an array with the building block description and the Building block type
-     * for the building block view id passed as a parameter of the screenflow document
-     * @type [BuildingBlockDescription, String]
-     */
-    /*getBuildingBlockInstance: function (buildingBlockViewId) {
-        for (var i=0; i<this._screens.length; i++) {
-            if (this._screens[i].getView().getId()==buildingBlockViewId) {
-                return this._screens[i];
-            }
-        }
-        for (var i=0; i<this._connectors.length; i++) {
-            if (this._connectors[i].getView().getId()==buildingBlockViewId) {
-                return this._connectors[i];
-            }
-        }
-        for (var i=0; i<this._domainConcepts.length; i++) {
-            if (this._domainConcepts[i].getView().getId()==buildingBlockViewId) {
-                return this._domainConcepts[i];
-            }
-        }
-        return null;
-    },*/
-
-    /**
-     * Adds a new screen.
-     * @param ScreenInstance
-     *      Screen to be added to the
-     *      Screenflow document.
-     */
-    addScreen: function (screen) {
-        if(screen!=null) {
-            
-            this._screens.push(screen);
-            var screenDescUri = $H(screen.getBuildingBlockDescription()).get('uri');
-            this._buildingBlockDescription.addScreen(screen.getId(), screenDescUri, screen.getPosition());
-            
-            this._updateReachability();           
-            this.updateToolbar();
-            this.setSelectedElement(screen);       
-        }
-    },
-    
-    /**
-     * Adds a new connector.
-     * @param connector
-     *      Connector to be added to the
-     *      Screenflow document.
-     */
-    addConnector: function (connector) {
-        if(connector!=null) {
-            this._connectors.push(connector);
-            this._updateReachability();      
-            this.getBuildingBlockDescription().addConnector(connector.getId(), connector, connector.getPosition());
-        }
-    },
-    
-    //TODO: Call the catalogue
-    updateConnector: function (connector) {
-        /*
-        if(connector!=null) {
-            this.getBuildingBlockDescription().updateConnector(connector.getId(), connector, connector.getPosition());
-        }
-        */
-    },
-
-    /**
-     * Adds a new domain concept.
-     * @param domainConcept
-     *      Domain Concept to be added to the
-     *      Screenflow document.
-     */
-    //TODO: call the catalogue
-    addDomainConcept: function (domainConcept) {
-        if(domainConcept!=null) {
-            this._domainConcepts.push(domainConcept);
-            this._updateReachability();      
-            //TODO: add the domain concept somehow inside the screenflowdescription
-        }
+        this._updateReachability();
+        this.updateToolbar();
+        this.setSelectedElement(droppedElement);
+        return true; // Accept element
     },
 
     /**
      * Delete a screen.
-     * @param ScreenInstance
-     *      Screen to be deleted from the
+     * @param ComponentInstance
+     *      Instance to be deleted from the
      *      Screenflow document.
      */
-    deleteScreen: function(screen) {
-        var i = $A(this._screens).indexOf(screen);
-        if (i != -1){
-            this._buildingBlockDescription.deleteScreen(this._screens[i].getId());
-            this._screens[i] = null;
-
-            var node = screen.getView().getNode();
+    deleteInstance: function(instance) {
+        if (this._canvasInstances.get(instance.getUri())) {
+            
+            var node = instance.getView().getNode();
             node.parentNode.removeChild(node);
             
-            this._screens = this._screens.compact();
-            this._updateReachability();
-            this.updateToolbar();
-            this.setSelectedElement();
-        }
-    },
-
-    /**
-     * Delete a connector.
-     * @param ConnectorInstance
-     *      Connector to be deleted from the
-     *      Screenflow document.
-     */
-    deleteConnector: function(connector) {
-        var i = $A(this._connectors).indexOf(connector);
-        if (i != -1){
-            this._buildingBlockDescription.deleteConnector(this._connectors[i].getId());
-            this._connectors[i] = null;
-
-            var node = connector.getView().getNode();
-            node.parentNode.removeChild(node);
+            this._canvasInstances.unset(instance.getUri());
             
-            this._connectors = this._connectors.compact();
-            this._updateReachability();
-            this.updateToolbar();
-            this.setSelectedElement();
-        }
-    },
+            switch(instance.constructor) {
+                case ScreenInstance:
+                    this._description.deleteScreen(instance.getUri());
+                    break;
+                    
+                case DomainConceptInstance:
+                    alert("Not yet implemented. ScreenflowDocument::deleteInstance");
+                    break;
+                    
+                default:
+                    throw "Illegal state. ScreenflowDocument::deleteInstance";
+            }
 
-    /**
-     * Delete a domain concept.
-     * @param DomainConcept
-     *      Domain Concept to be deleted from the
-     *      Screenflow document.
-     */
-    deleteDomainConcept: function(domainConcept) {
-       var i = $A(this._domainConcepts).indexOf(domainConcept);
-        if (i != -1){
-            //this._buildingBlockDescription.deleteDomainConcept(this._domainConcepts[i].getId());
-            this._domainConcepts[i] = null;
-
-            var node = domainConcept.getView().getNode();
-            node.parentNode.removeChild(node);
-            
-            this._domainConcepts = this._domainConcepts.compact();
             this._updateReachability();
             this.updateToolbar();
             this.setSelectedElement();
@@ -304,14 +181,16 @@ var ScreenflowDocument = Class.create(AbstractDocument,
      */
     setSelectedElement: function (element) {
         if (this._selectedElement != null) {
-            this._selectedElement.getView().getNode().removeClassName("selected");
+            this._selectedElement.getView().setSelected(false);
         }
+        
         if (element != undefined) {
             this._selectedElement = element;
-             this._selectedElement.getView().getNode().addClassName("selected");
+            this._selectedElement.getView().setSelected(true);
         } else {
             this._selectedElement = null;
         }
+        
         this._updatePropertiesPane();
     },
 
@@ -320,65 +199,8 @@ var ScreenflowDocument = Class.create(AbstractDocument,
      * @public
      */
     deployGadget: function () {
+        // FIXME: move the method here
         this.getBuildingBlockDescription().deployGadget();
-    },
-
-    /**
-     * Gets the elements of the canvas
-     * @type String[]
-     * @public
-     */
-    getCanvas: function () {
-        var canvas = [];
-        var screen_uris = [];
-        $H(this._buildingBlockDescription.getScreens()).each(function(pair){
-            screen_uris.push(pair.value.screen);
-        });
-        screen_uris = screen_uris.uniq();
-        screen_uris.each(function(uri){
-            canvas.push({'uri': uri});
-        });
-        return canvas;
-    },
-
-    /**
-     * Gets the elements of the palette
-     * @type String[]
-     * @public
-     */
-    getPaletteElements: function () {
-        var elements = [];
-        (this._paletteController.getPalette(Constants.BuildingBlock.SCREEN).getComponents()).each(function(component){
-            elements.push({'uri':component.getBuildingBlockDescription().uri});
-        });
-        return elements;
-    },
-    
-    /**
-     * Gets a detail from the detailPane
-     * @type String
-     * @public
-     */
-    getDetailsTitle: function ( /** String */ detail ) {
-        return this._detailsTitle[detail];
-    },   
-
-    updateReachability: function(/** map id->value*/screenList){
-        var screens = this.getScreens();
-        for (var i = 0; i < screens.length; i++) {
-            for (var j = 0; j < screenList.length; j++) {
-                if (screens[i].getBuildingBlockDescription().uri == screenList[j].uri) {
-                    if (screenList[j].reachability == true) {
-                        screens[i].getBuildingBlockDescription().satisfeable = true;
-                        break;
-                    }
-                    else {
-                        screens[i].getBuildingBlockDescription().satisfeable = false;
-                    }
-                }
-            }
-            screens[i].colorize();
-        }
     },
     
     showDeployGadgetDialog: function(){
@@ -397,7 +219,7 @@ var ScreenflowDocument = Class.create(AbstractDocument,
            $("header_button").show();
            //TODO: Enable or disable the button checking 
            //reachability and not the number of screens
-           if (this.getScreens().length > 0){
+           if (this._canvasInstances.keys().size() > 0){
                dijit.byId("showDeployGadgetDialog").attr("disabled",false);
            }
            else{
@@ -406,63 +228,70 @@ var ScreenflowDocument = Class.create(AbstractDocument,
     },
 
     // **************** PRIVATE METHODS **************** //
+
     /**
-     * Constructs the document content.
+     * Gets the elements of the canvas
+     * @type String[]
      * @private
      */
-    _populate: function(){
-        var uidGenerator = UIDGeneratorSingleton.getInstance();
-        var borderContainerId = uidGenerator.generate("borderContainer");
-        var mainBorderContainer = new dijit.layout.BorderContainer({
-            id:borderContainerId,
-            design:"sidebar",
-            liveSplitters:"false",
-            splitter:"true"
-        });
+    _getCanvas: function () {
+        var canvas = [];
         
-        var rightBorderContainer = new dijit.layout.BorderContainer({
-            id:borderContainerId + "Child",
+        this._canvasInstances.keys().each(function(uri) {
+            canvas.push({
+                'uri': uri
+            });
+        });
+        return canvas;
+    },   
+    
+    /**
+     * Callback to be called when the findCheck operation
+     * finishes
+     * @private
+     */
+    _findCheckCallback: function(/** Array */ uris) {
+        // Update screen palette        
+        var screenPalette = this._paletteController.getPalette(Constants.BuildingBlock.SCREEN);
+        var screenSet = screenPalette.getBuildingBlockSet();      
+        screenSet.addURIs(uris);
+    },
+
+    /**
+     * This function creates the area containing the canvas
+     * and the inspectors
+     * @override
+     */
+    _renderCenterContainer: function() {
+        
+        var centerContainer = new dijit.layout.BorderContainer({
             design:"headline",
             liveSplitters:"false",
             region:"center"
         });
+        
+        this._tabContent.addClassName("screenflow").
+                        addClassName("canvas");
+                        
+        this._tabContent.observe('click', function(){
+            this._onClick();
+        }.bind(this));
+        this._tabContent.observe('dblclick', function(event){
+            this._onClick();
+        }.bind(this));
 
-        var documentContent = new Element("div", {
-            "id": this._tabContentId,
-            "class": "document screenflow canvas"
-        });
-        documentContent.observe('click', function(){
-            this._onClick();
-        }.bind(this));
-        documentContent.observe('dblclick', function(event){
-            this._onClick();
-        }.bind(this));
-        var documentPaneId = uidGenerator.generate("documentPane");
         var documentPane = new dijit.layout.ContentPane({
-            id:documentPaneId,
             region:"center"
         });
-        documentPane.setContent(documentContent);
+        documentPane.setContent(this._tabContent);
         
-        var inspectorArea = this._createInspectorArea();   
-
-        /* Properties pane*/
-        this._propertiesPane = new PropertiesPane (inspectorArea);
-
-        /* Pre/Post pane*/
-        this._prePostPane = new PrePostPane(inspectorArea);
-
-        /* Facts pane*/
-        this._factsPane = new InspectorPane(inspectorArea);
-
-
-        rightBorderContainer.addChild(documentPane);
-        rightBorderContainer.addChild(inspectorArea);
-        mainBorderContainer.addChild(this.getPaletteController().getNode());
-        mainBorderContainer.addChild(rightBorderContainer);
-
-        this._tab.setContent(mainBorderContainer.domNode);
+        centerContainer.addChild(documentPane);
+        centerContainer.addChild(this._inspectorArea);
+        
+        return centerContainer;
     },
+    
+    
     /**
      * This function creates
      * the inspector area
@@ -513,15 +342,13 @@ var ScreenflowDocument = Class.create(AbstractDocument,
      * @private
      */
     _updateReachability: function () {
-        var canvas = this.getCanvas();
-        var domainContext = this.getBuildingBlockDescription().getDomainContext();
+        var canvas = this._getCanvas();
+        var palette = this._paletteController.getComponentUris();
         
-        var palette = this.getPaletteElements();
-        
-        if (URIs.catalogueFlow =='check'){
-            this._inferenceEngine.check(canvas, domainContext, palette, 'reachability');
+        if (URIs.catalogueFlow =='check') {
+            this._inferenceEngine.check(canvas, palette, this._domainContext, 'reachability');
         } else {
-            this._inferenceEngine.findAndCheck(canvas, domainContext, palette, 'reachability');
+            this._inferenceEngine.findAndCheck(canvas, palette,  this._domainContext, 'reachability');
         }
     },
     /**
@@ -532,8 +359,7 @@ var ScreenflowDocument = Class.create(AbstractDocument,
     _updatePropertiesPane: function() {
         if (!this._selectedElement) {
             this._propertiesPane.clearElement();
-        }
-        else {
+        } else {
             this._propertiesPane.selectElement(this._selectedElement);
         }
     },
@@ -545,7 +371,6 @@ var ScreenflowDocument = Class.create(AbstractDocument,
     _onClick: function() {
         this.setSelectedElement();
     }
-
 });
 
 // vim:ts=4:sw=4:et:

@@ -21,95 +21,146 @@ var FactFactorySingleton = function() {
         /** @lends FactFactorySingleton-FactFactory.prototype */ {
 
         /**
-         * This class is used to retrieve facts.
+         * This class is used to create facts representations.
          * @constructs
          */
         initialize: function() {
             /**
              * Cached facts.
-             * TODO: get the facts from the catalogue.
              * @type Hash
              * @private @member
              */
             this._cachedFacts = new Hash();
             
-            // This is the old hardcoded structure, kept because of the temporary nature of the solution
-            /*
-            this._cachedFacts = {
-                    "http://TODO/amazon#filter": new Fact("http://TODO/amazon#filter", "F", "Filter Search Criteria"),
-                    "http://TODO/amazon#item":   new Fact("http://TODO/amazon#item",   "I", "Amazon item fact. Normally, its identifier will be an ASIN number"),
-                    "http://TODO/amazon#shoppingCart": new Fact("http://TODO/amazon#shoppingCart", "C", "Amazon shopping cart fact. It represents a non-purchased shopping cart at Amazon"),
-                    "http://TODO/amazon#purchase": new Fact("http://TODO/amazon#purchase", "P", "Amazon purchase fact. It represents the URL that allows to purchase the Shopping Cart"),
-                    "http://TODO/ebay#item":     new Fact("http://TODO/ebay#item", "EI", "eBay Item. It represents an Item selled by eBay")
-            };
-            */
+            /**
+             * This array stores the shortcuts
+             * being used in the execution 
+             */
+            this._cachedShortcuts = new Array();
         },
         
         // **************** PUBLIC METHODS **************** //
-        
-        /**
-         * Gets a fact identified by uri.
-         * @type BuildingBlockDescription
-         * @public
-         */
-        getFact: function (/** String */ uri) {
-            // If the fact does not exist in the cached ones, then a default one is created.
-            if(this._cachedFacts.get(uri)==null){
-                this.updateFactFromUri(uri);
-                if(this._cachedFacts.get(uri)==null){
-                    this._cachedFacts.set(uri, new Fact(uri, "DF", "Default Fact"));
-                }
-            }
-            return this._cachedFacts.get(uri);
-        },
-
-        /**
-         * Updates the facts from a JSON file.
-         * @public
-         */
-        updateFacts: function () {
-            CatalogueSingleton.getInstance().getFacts();
-        },
-        
-        /**
-         * Updates the facts from the fact uri.
-         * @public
-         */
-        updateFactFromUri: function (/**String*/ stringUri) {
-            if(stringUri.startsWith('?')){
-                factUri = stringUri.split(' ');
-                var shortcut = factUri[0].split('?')[1].truncate(2, '');
-                
-                var uri = factUri[2];
-                var desc = factUri[2];
-                this._cachedFacts.set(stringUri,new Fact(stringUri, shortcut, desc));
-            }
-        },
-        
-        /**
-         * Sets a fact identified by uri.
-         * @params String: Facts in JSON
-         * @public
-         */
-        setFacts: function(factMetadata) {
-            var fact_metadata = factMetadata.fact_metadata;
-            for (var i=0; i<fact_metadata.length ; i++) {
-                this._cachedFacts.set(fact_metadata[i].uri,new Fact(fact_metadata[i].uri, fact_metadata[i].shortcut, fact_metadata[i].description));
-            }
-        },
 
         /**
          * Gets the root node of a icon for a give fact identified by uri.
-         * @param String uri   Fact Building Block identifier
          * @param String size  Icon size ("small"|"medium"|"big")
          * @type FactIcon
          */
-        getFactIcon: function (/** String */ uri, /** String */ size) {
-            var fact = this.getFact(uri);
+        getFactIcon: function (/** Object */ factData, size) {
+            var fact = this._getFact(factData);
             return new FactIcon(fact, size);
-        }
+        },
+        
+        /**
+         * Gets the fact uri
+         * @type String
+         */
+        getFactUri: function (/** Object */ factData) {
+            var uri;
+            if (factData.uri) {
+                uri = factData.uri;
+            } else if (factData.pattern) {
+                uri = this._extractURI(factData.pattern);
+            }
+            else { //We don't know the uri
+                uri = "http://unknown.uri#?";
+            }
+            return uri;
+        },
 
-        // **************** PUBLIC METHODS **************** //
+        // **************** PRIVATE METHODS **************** //
+        
+        /**
+         * Gets a fact
+         * @type Fact
+         * @private
+         */
+        _getFact: function (/** Object */ factData) {
+            
+            var uri = this.getFactUri(factData);
+            
+            //The fact didn't exist, create a new one
+            if(this._cachedFacts.get(uri)==null){
+                    this._cachedFacts.set(uri, new Fact(uri, 
+                        this._extractShortcut(uri), this._extractDescription(factData)));
+            }
+            return this._cachedFacts.get(uri);
+        },
+        
+        /**
+         * This function extracts a uri from a rdf pattern like
+         * ?E http://www.w3.org/1999/02/22-rdf-syntax-ns#type uri
+         * @type String
+         * @private
+         */
+        _extractURI: function(/** String */ triplePattern) {
+            var pieces = triplePattern.split(" ");
+            return pieces[2];
+        },
+        
+        /**
+         * This function returns a shortcut coming from the URI
+         * TODO: Add more criteria to determine the shortcut
+         * @type String
+         * @private
+         */
+        _extractShortcut: function(/** String */ uri) {
+            var pieces = uri.split("#");
+            var identifier = "";
+            if (pieces.length > 1){
+                identifier = pieces[1];               
+            } else { //The uri has not identifier, try the last part of the url
+                pieces = uri.split("/");
+                identifier = pieces[pieces.length - 1];
+            }
+
+            
+            //Let's try with capital letters...
+            var letters = identifier.match(/[A-Z]/g);
+            if (letters.length > 1) { //More than one capital letter
+                //try only with 2 letters
+                //Put the second letter in lower case
+                //letters[1]= letters[1].toLowerCase();
+                shortcut = letters.slice(0, 2).join("");
+                
+                if (this._cachedShortcuts.indexOf(shortcut) == -1) {
+                    this._cachedShortcuts.push(shortcut);
+                    return shortcut;
+                }
+            }
+    
+            //Let's try with the first two letters
+            identifier[1]= identifier[1].toLowerCase();
+            var shortcut = identifier.slice(0,2);
+            if (this._cachedShortcuts.indexOf(shortcut) == -1){
+                this._cachedShortcuts.push(shortcut);
+                return shortcut;
+                
+            }
+            //If none of the above have worked out, show the first letter
+            //Despite they have been used before
+            shortcut = identifier.slice(0, 1);
+            return shortcut;
+        },
+        
+        /**
+         * This function extract the description from fact or concept metadata
+         * @private
+         * @type String
+         */
+        _extractDescription: function(/** Object */ factData) {
+            if(factData.label && factData.label['en-gb']) {
+                return factData.label['en-gb'];
+            }
+            var comment = factData["http://www.w3.org/2000/01/rdf-schema#comment"];
+            if(comment) {
+                return comment.replace("@en","");
+            }
+            var label = factData["http://www.w3.org/2000/01/rdf-schema#label"];
+            if(label) {
+                return label.replace("@en","");
+            }
+        }
     });
     
 

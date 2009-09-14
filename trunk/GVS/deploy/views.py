@@ -63,6 +63,7 @@ def deployGadget(request):
                     screen['allCode']=data
             else:
                 screens=[]
+            #Connectors are deprecated
             if (definition.has_key('connectors')):
                 connectors=definition['connectors']
             else:

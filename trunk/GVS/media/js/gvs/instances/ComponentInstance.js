@@ -7,7 +7,8 @@ var ComponentInstance = Class.create(DragSource,
      * @constructs
      * @extends DragSource
      */ 
-    initialize: function($super, /**BuildingBlockDescription*/ buildingBlockDescription) {
+    initialize: function($super, /**BuildingBlockDescription*/ buildingBlockDescription, 
+            /** DropZone */ dropZone, /** InferenceEngine */ inferenceEngine) {
         $super();
 
         /**
@@ -15,22 +16,8 @@ var ComponentInstance = Class.create(DragSource,
          * @type DragHandler
          * @private
          */
-        this._dragHandler = new DragHandler(this, GVSSingleton.getInstance().getDocumentController().getCurrentDocument().getContentId());
-
-        /**
-         * DOM node identifier
-         * @type String
-         * @private
-         */
-        this._id = null;
-
-        /**
-         * BuildingBlock description graphical representation
-         * @type BuildingBlockView
-         * @private
-         */
-        this._view = buildingBlockDescription.createView();
-
+        this._dragHandler = new DragHandler(this, dropZone);
+        
         /** 
          * BuildingBlock description this class is instance of
          * @type BuildingBlockDescription
@@ -38,16 +25,22 @@ var ComponentInstance = Class.create(DragSource,
          */
         this._buildingBlockDescription = buildingBlockDescription;
         
+
         /**
-         * Building block type this class represents
-         * @type String
+         * BuildingBlock description graphical representation
+         * @type BuildingBlockView
          * @private
          */
-        this._buildingBlockType = 'unknown';
+        this._view = this._createView();
+        inferenceEngine.addReachabilityListener(this._buildingBlockDescription.uri, this._view);
     },
     
 
     // **************** PUBLIC METHODS **************** //
+    getUri: function() {
+        return this._buildingBlockDescription.uri;    
+    },
+    
     /**
      * Returns the handler that manages the drag-n-drop operation.
      * @type DOMNode
@@ -82,14 +75,6 @@ var ComponentInstance = Class.create(DragSource,
      */
     getView: function() {
         return this._view;
-    },
-
-    /**
-     * getId
-     * @type String
-     */
-    getId: function () {
-        return this._id;
     },
 
     /**
@@ -153,18 +138,18 @@ var ComponentInstance = Class.create(DragSource,
     
     /**
      * Drop event handler for the DragSource
-     * @param finishState
+     * @param changingZone
      *      True if a new Instance has
      *      been added to the new zone.
      * @override
      */
-    onDragFinish: function(finishState){
-        if (finishState){ //only if its new element
-            this._view.addListener (function(event){
+    onDragFinish: function(changingZone){
+        if (changingZone){
+            this._view.addEventListener (function(event){
                 event.stop();
                 this._onClick(event);
             }.bind(this),'click');
-            this._view.addListener (function(event){
+            this._view.addEventListener (function(event){
                 event.stop();
                 this._onDoubleClick(event);
             }.bind(this),'dblclick');
@@ -172,6 +157,16 @@ var ComponentInstance = Class.create(DragSource,
     },
 
     // **************** PRIVATE METHODS **************** //
+    
+    /**
+     * Creates a new View instance for the component
+     * @type BuildingBlockView
+     * @abstract
+     */
+    _createView: function () {
+        throw "Abstract Method invocation: ComponentInstance::_createView"
+    },
+    
     /**
      * This function is called when the attached view is clicked
      * must be overriden by descendants

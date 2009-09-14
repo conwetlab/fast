@@ -42,7 +42,7 @@ var WelcomeDocument = Class.create(AbstractDocument,
      * @private
      */
     _populate: function(){
-        var content = this.getContent();
+        var content = this.getNode();
 
         content.addClassName("welcome");
 

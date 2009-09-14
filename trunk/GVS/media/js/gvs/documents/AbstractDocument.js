@@ -5,15 +5,8 @@ var AbstractDocument = Class.create( /** @lends AbstractDocument.prototype */ {
      * @abstract
      * @constructs
      */ 
-    initialize: function(/** String */ title, /** {String[]} */ validBuildingBlocks) {
+    initialize: function(/** String */ title) {
         var uidGenerator = UIDGeneratorSingleton.getInstance();
-
-        /**
-         * Accepted building blocks
-         * @type Array
-         * @private
-         */
-        this._validBuildingBlocks = $A(validBuildingBlocks);
         
         /**
          * Tab title
@@ -28,13 +21,7 @@ var AbstractDocument = Class.create( /** @lends AbstractDocument.prototype */ {
          * @private
          */
         this._tabId = uidGenerator.generate("tab");
-        
-        /**
-         * Tab content id
-         * @type String
-         * @private
-         */
-        this._tabContentId = uidGenerator.generate("tabContent");
+       
         
         /**
          * Initial tab content (empty by default)
@@ -42,7 +29,6 @@ var AbstractDocument = Class.create( /** @lends AbstractDocument.prototype */ {
          * @private
          */
         this._tabContent = new Element("div", {
-            "id":    this._tabContentId,
             "class": "document"
         });        
         
@@ -71,24 +57,6 @@ var AbstractDocument = Class.create( /** @lends AbstractDocument.prototype */ {
     
 
     // **************** PUBLIC METHODS **************** //
-    
-
-    /**
-     * Returns the list of valid building blocks for the document type
-     * @type {String[]}
-     */
-    getValidBuildingBlocks: function () {
-        return this._validBuildingBlocks;
-    },
-
-    /**
-     * Gets the palette controller
-     * @type PaletteController
-     * @public
-     */
-    getPaletteController: function () {
-        return this._paletteController;
-    },
 
     /**
      * Gets the tab id.
@@ -120,18 +88,10 @@ var AbstractDocument = Class.create( /** @lends AbstractDocument.prototype */ {
      * Gets the content node.
      * @type DOMNode
      */
-    getContent: function () {
+    getNode: function () {
         return this._tabContent;
     },
     
-    
-    /**
-     * Gets the content id.
-     * @type String
-     */
-    getContentId: function () {
-        return this._tabContentId;
-    },
     
     /**
      * Gets the document type.

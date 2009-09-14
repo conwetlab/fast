@@ -1,46 +1,67 @@
-var Palette = Class.create( /** @lends Palette.prototype */ {
+var Palette = Class.create(SetListener, /** @lends Palette.prototype */ {
 
     /**
      * Represents a palette of droppable components of a given type.
      *
-     * @param {String} buildingBlockType  Identifier of the class or building block (e.g.: screen) 
      * @constructs
+     * @extends SetListener
      */
-    initialize: function(/** String */ buildingBlockType, /** AbstractDocument */ parent) {
+    initialize: function(/** BuildingBlockSet */ set, /** DropZone */ dropZone,
+            /** InferenceEngine */ inferenceEngine) {
         /**
-         * Node id of the accordion pane.
-         * @type String
+         * @private @member
+         * @type InferenceEngine
+         */
+        this._inferenceEngine = inferenceEngine;
+
+        /**
+         * Building block set
+         * @type BuildingBlockSet
          * @private @member
          */
-        this._id = buildingBlockType + "Palette";
-
-        this._buildingBlockType = buildingBlockType;
+        this._set = set;
         
-        this._parent = parent;
+        /**
+         * Zone to drop components
+         * @type DropZone
+         * @private @member
+         */
+        this._dropZone = dropZone;
         
         /**
          * Collection of components the palette offers.
-         * @type PaletteComponent
+         * @type Hash   Hash of URI to PaletteComponent
          * @private @member
          */
-        this._components = [];
-        
-        /**
-         * Domain of the current palette
-         * @type Array
-         * @private @member
-         */
-        this._domainContext = [];
+        this._components = new Hash();
 
         /**
          * Accordion pane node.
          * @type DOMNode
          * @private @member
          */
-        this._node = this._renderContent(); 
+        this._node = null;
+        
+        /**
+         * Palette content
+         * @type DOMNode
+         * @private @member
+         */
+        this._contentNode = null;
+        
+        this._renderUI(); 
+        this._set.setListener(this);
     },
 
     // **************** PUBLIC METHODS **************** //
+    
+    /**
+     * Starts data retrieval
+     * @public
+     */
+    startRetrievingData: function() {
+        this._set.startRetrievingData();
+    },
 
     /**
      * Gets the node of the accordion pane
@@ -52,111 +73,92 @@ var Palette = Class.create( /** @lends Palette.prototype */ {
     },
     
     /**
-     * This function populates the current palette
-     * with the building blocks associated to a given
-     * domain context
+     * This function will be called whenever
+     * the set of building blocks changes
+     * @overrides
      */
-    populateBuildingBlocks: function (/** Array */ domainContext){
-        
-        this._domainContext = domainContext;
-        
-        switch(this._buildingBlockType){
-            case Constants.BuildingBlock.SCREEN:
-                //find Screens and check
-                this._parent.getInferenceEngine().retrieveScreens(domainContext);
-                break;
-            case Constants.BuildingBlock.DOMAIN_CONCEPT:
-                //FIXME: Handle domain concepts
-                break;
-            case Constants.BuildingBlock.CONNECTOR:
-                this.paintComponents();
-                break;
-        }
+    setChanged: function () {
+        this._updateComponents();
+    },
+
+    getBuildingBlockSet: function() {
+        return this._set;
     },
     
     /**
-     * TODO: describe this. maybe this method will dissapear
+     * All uris of all the components
      */
-    updateComponents: function() {
-        switch(this._buildingBlockType){
-            case Constants.BuildingBlock.SCREEN:
-                //find Screens and check
-                var currentDocument = this._parent;
-                var canvas = currentDocument.getCanvas();
-                var domainContext = {
-                    "tags":currentDocument.getBuildingBlockDescription().getDomainContext(),
-                    "user":null
-                };
-                var elements = currentDocument.getPaletteElements();
-                CatalogueSingleton.getInstance().findAndCheck(canvas, domainContext, elements, 'reachability');
-                break;
-            case Constants.BuildingBlock.DOMAIN_CONCEPT:
-                CatalogueSingleton.getInstance().getDomainConcepts();
-                break;
-            case Constants.BuildingBlock.CONNECTOR:
-                this.paintComponents();
-                break;
-        }
+    getComponentUris: function() {
+        var uris = [];
+        this._set.getBuildingBlocks().each(function(buildingBlock) {
+            uris.push({
+                uri: buildingBlock.uri
+            });
+        });
+        return uris;
     },
-
-    paintComponents: function () {
-        this._components = this._createComponents(CatalogueSingleton.getInstance().getBuildingBlockFactory(this._buildingBlockType));
-        var content = this._renderComponents();
-        this._node.setContent(content);
-    },
-
-    getComponents: function() {
-        return this._components;
-    },
-
+    
     // **************** PRIVATE METHODS **************** //
-
-
-    /**
-     * Creates the palette components from building blocks by querying a building block factory.
-     * @type {BuildingBlockDescription[]}
-     * @private
-     */
-    _createComponents: function(buildingBlockFactory) {
-        var descs = buildingBlockFactory.getBuildingBlockDescriptions(this._domainContext);
-        var components = [];
-        $A(descs).each(
-            function(desc) {
-                components.push(desc.createPaletteComponent());
-            }
-        );
-        return components;
-    },
 
     /**
      * Creates the GUI stuff that shows the content: components and separators.
      * @type DOMNode
      * @private
      */
-    _renderContent: function() {
-        var uidGenerator = UIDGeneratorSingleton.getInstance();
-        var paneId = uidGenerator.generate(this._id);
-        
-        var pane = new dijit.layout.AccordionPane({
-            'id':paneId,
-            'title':CatalogueSingleton.getInstance().getBuildingBlockFactory(this._buildingBlockType).getBuildingBlockName(),
+    _renderUI: function() {
+       
+        this._node = new dijit.layout.AccordionPane({
+            'title':this._set.getBuildingBlockName(),
             'class':'paletteElement'
         });
-        return pane;
+        
+        this._contentNode = new Element('div', {
+            'class': 'paletteContent'
+        });
+        
+        this._node.setContent(this._contentNode);
     },
 
-    _renderComponents: function() {
-        var uidGenerator = UIDGeneratorSingleton.getInstance();
-        var contentId = uidGenerator.generate(this._id+ "Content");
-        var content   = new Element("div", {"class": "paletteContent", "id" : contentId});
-        var separator = new Element("div", {"class": "paletteSeparator"});
-        $A(this._components).each(
-                function(component) {
-                    content.appendChild(component.getNode());
-                    content.appendChild(separator.cloneNode(false));
+    /**
+     * Updates the palette components from building blocks by querying its building block factory.
+     * @private
+     */
+    _updateComponents: function() {
+        var descs = this._set.getBuildingBlocks();
+  
+        $A(descs).each(
+            function(desc) {
+                if (!this._components.get(desc.uri)) {
+                    this._addComponentFor(desc);
                 }
+            }.bind(this)
         );
-        return content;
+    },
+
+    
+    /**
+     * Adds a new component to the palette
+     */
+    _addComponentFor: function(/** BuildingBlockDescription */ desc) {
+        var component = null;
+        
+        switch(this._set.getBuildingBlockType()) {
+            case Constants.BuildingBlock.SCREEN:
+                component = new ScreenComponent(desc, this._dropZone, this._inferenceEngine);
+                break;
+                
+            case Constants.BuildingBlock.DOMAIN_CONCEPT:
+                component = new DomainConceptComponent(desc, this._dropZone, this._inferenceEngine);
+                break;
+                
+            default:
+                throw "Unsupported building block type";
+        }
+        this._components.set(desc.uri, component);
+
+        var separator = new Element("div", {"class": "paletteSeparator"});   
+        this._contentNode.appendChild(component.getNode());
+        this._contentNode.appendChild(separator);
     }
 });
 

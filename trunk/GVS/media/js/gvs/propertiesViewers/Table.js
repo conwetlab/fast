@@ -107,7 +107,7 @@ var Table = Class.create( /** @lends Table.prototype */ {
     /**
      * Updates the data in the table
      */      
-    insertDataValues: function (/** Array */ data)  {
+    insertDataValues: function (/** Hash */ data)  {
         
         var mine = this;
         

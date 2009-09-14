@@ -6,43 +6,17 @@ var DomainConceptView = Class.create( BuildingBlockView,
      * @constructs
      * @extends BuildingBlockView
      */ 
-    initialize: function($super,/** BuildingBlockDescription */ domainConceptBuildingBlockDescription) {
+    initialize: function($super, /** DomainConceptDescription */ description) {
         $super();
-
-        var uidGenerator = UIDGeneratorSingleton.getInstance();
-        this._id = uidGenerator.generate("domainConceptView");
-
-        var container = new Element('div', {'class': 'domainConceptImage'}).update(domainConceptBuildingBlockDescription.shortcut);
+        
+        var factFactory = FactFactorySingleton.getInstance();
+        var factIcon = factFactory.getFactIcon(description, "big");
         
         this._node = new Element("div", {
-            "id":     this._id,
             "class": "view domainConcept unknown"
         });
-        this._node.appendChild(container);
+        this._node.appendChild(factIcon.getNode());
 
-        /*
-        var uidGenerator = UIDGeneratorSingleton.getInstance();
-        this._id = uidGenerator.generate("domainConceptView");
-
-        var title = new Element("div", {"class":"domainConceptTitle unknown"});
-        title.update(domainConceptBuildingBlockDescription.name);
-
-        if (domainConceptBuildingBlockDescription.image){
-            var imageContainer = new Element ('div',
-                    {'class': 'domainConceptImage' });
-            var image = new Element ('img',
-                    {'class': 'img', 'src': domainConceptBuildingBlockDescription.image});
-            imageContainer.appendChild (image);
-        }
-        
-        this._node = new Element("div", {
-            "id":     this._id,
-            "class": "view domainConcept unknown"
-        });
-        this._node.appendChild(title);
-        if (domainConceptBuildingBlockDescription.image){
-            this._node.appendChild(imageContainer);
-        }*/
     },
 
     // **************** PUBLIC METHODS **************** //

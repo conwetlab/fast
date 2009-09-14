@@ -51,11 +51,17 @@ var NewScreenflowDialog = Class.create(AbstractDialog /** @lends NewScreenflowDi
      */
     _onOk: function($super){
         var name = $F(this._form.getForm().SFName);
-        if (name && name != "") {
-            var domainContext = $F(this._form.getForm().SFDomainContext);
-            documentController = GVSSingleton.getInstance().getDocumentController();
-            documentController.createScreenflow (name, domainContext);
-            $super();
+        if (!name.match(/^\s*$/)) { //Not empty name
+            var domainContext;
+            if ($F(this._form.getForm().SFDomainContext).match(/^\s*$/)){
+                domainContext = [];
+            } else {
+                domainContext = $F(this._form.getForm().SFDomainContext).split(/[\s,]+/);   
+            }
+                       
+            documentController = GVSSingleton.getInstance().getDocumentController();           
+            documentController.createScreenflow (name, $A(domainContext));
+            this.hide();
         }
         else {
             alert("A Screenflow name must be provided");

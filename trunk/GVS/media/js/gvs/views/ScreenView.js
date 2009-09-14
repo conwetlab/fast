@@ -6,89 +6,81 @@ var ScreenView = Class.create( BuildingBlockView,
      * @constructs
      * @extends BuildingBlockView
      */ 
-    initialize: function($super,/** BuildingBlockDescription */ screenBuildingBlockDescription) {
+    initialize: function($super,/** ScreenDescription */ description) {
 
         $super();
 
-        var uidGenerator = UIDGeneratorSingleton.getInstance();
-        this._id = uidGenerator.generate("screenView");
-
         /**
          * Precondition Icons
-         * @type {FactIcon[]}
+         * @type Array
          * @private
          */
-        this._preIcons;
+        this._preIcons = new Array();
 
         /**
          * Postcondition Icons
          * @type {FactIcon[]}
          * @private
          */
-        this._postIcons;
+        this._postIcons = new Array();
+        
+        /**
+         * Tooltip
+         * @type dijit.Tooltip
+         * @private
+         */
+        this._tooltip = null;
 
-        var title = new Element("div", {"class":"screenTitle unknown"});
-        title.update(screenBuildingBlockDescription.label['en-gb']);
+        var titleNode = new Element("div", {"class":"screenTitle unknown"});
+        titleNode.update(description.label['en-gb']);
 
         var factFactory = FactFactorySingleton.getInstance();
         var preArea = new Element("div", {"class": "preArea"});
-        var preIcons = [];
 
-        if (screenBuildingBlockDescription.preconditions.length > 1){ //More than one set of preconditions
+        if (description.preconditions.length > 1){ //More than one set of preconditions
             console.log("OR precondition support not implemented yet");
         }
         else {
-            var preconditions = screenBuildingBlockDescription.preconditions[0];
+            var preconditions = description.preconditions[0];
         }
     
         
         $A(preconditions).each(
                 function(pre) {
-                    var uri = pre.pattern;
-                    var preFact = factFactory.getFactIcon(uri, "medium");
-                    preIcons.push(preFact);
+                    var preFact = factFactory.getFactIcon(pre, "medium");
+                    this._preIcons.push(preFact);
                     preArea.appendChild(preFact.getNode());
-                }
+                }.bind(this)
         );
-        this._preIcons = preIcons;
-
+        
         var postArea = new Element("div", {"class": "postArea"});
-        var postIcons = [];
 
-        //Backward compatibility with the previous catalogue
-        if (screenBuildingBlockDescription.postconditions[0] instanceof Array){//new catalogue
-            if (screenBuildingBlockDescription.postconditions.length > 1){ //More than one set of preconditions
-                console.log("OR postcondition support not implemented yet");
-            }
-            else {
-                var postconditions = screenBuildingBlockDescription.postconditions[0];
-            }
+        if (description.postconditions.length > 1){ //More than one set of preconditions
+            console.log("OR postcondition support not implemented yet");
         }
-        else {//old catalogue
-            var postconditions = screenBuildingBlockDescription.postconditions;
-        }        
+        else {
+            var postconditions = description.postconditions[0];
+        }      
         
         $A(postconditions).each(
                 function(post) {
                     if (post) {
-                        var uri = post.pattern;
-                        var postFact = factFactory.getFactIcon(uri, "medium");
-                        postIcons.push(postFact);
+                        var postFact = factFactory.getFactIcon(post, "medium");
+                        this._postIcons.push(postFact);
                         postArea.appendChild(postFact.getNode());
                     }
-                }
+                }.bind(this)
         );
-        this._postIcons = postIcons;
 
         var prePostSeparator = new Element("div",
                 {"class": "prePostSeparator"});
 
-        if (screenBuildingBlockDescription.icon){
+        if (description.icon){
             var imageContainer = new Element ('div',
                     {'class': 'screenImage' });
             var image = new Element ('img',{
                     'class': 'img', 
-                    'src': screenBuildingBlockDescription.icon
+                    'src': description.icon
                     //If we want an onerror image...
                     /*'onError': 'if (this.src != URIs.screenImageNotFound){'+
                                 'this.src = URIs.screenImageNotFound;'+
@@ -98,53 +90,57 @@ var ScreenView = Class.create( BuildingBlockView,
         }
 
         this._node = new Element("div", {
-            "id":     this._id,
             "class": "view screen unknown"
         });
-        this._node.appendChild(title);
+        this._node.appendChild(titleNode);
         this._node.appendChild(preArea);
         this._node.appendChild(prePostSeparator);
-        if (screenBuildingBlockDescription.icon){
+        if (description.icon){
             this._node.appendChild(imageContainer);
         }
         this._node.appendChild(postArea);
+        
+        this._createTooltip(description);
     },
-
+    
     // **************** PUBLIC METHODS **************** //
     
-    colorize: function( /** Boolean */ satisfeable) {
-        var globalColor = (satisfeable) ? "green" : "#B90000";
-        // border
-        this.getNode().style.borderColor = globalColor;
+    /**
+     * Colorize the component depending on the reachability
+     * @public @override
+     */
+    setReachability: function( /** Hash */ reachabilityData) {
         
-        //screen
-        this.getNode().removeClassName(satisfeable ? 'unsatisfeable' : 'satisfeable');
-        this.getNode().addClassName(satisfeable ? 'satisfeable' : 'unsatisfeable');
+        var satisfeable = reachabilityData.reachability;
         
-        //descendants
-        this.getNode().descendants().each(function(node){
-            //title
-            if (node.hasClassName('screenTitle')) {
-                node.style.backgroundColor = globalColor;
-            }
-            //posts
-            if (node.hasClassName('postArea')) {
-                node.descendants().each(function(fact){
-                    if (fact.hasClassName('fact')) {
-                        fact.removeClassName(satisfeable ? 'unsatisfeable' : 'satisfeable');
-                        fact.addClassName(satisfeable ? 'satisfeable' : 'unsatisfeable');
-                    }
-                });
-            }
-            //pres
-            if (node.hasClassName('preArea')) {
-                node.descendants().each(function(fact){
-                    if (fact.hasClassName('fact')) {
-                        fact.removeClassName(satisfeable ? 'unsatisfeable' : 'satisfeable');
-                        fact.addClassName(satisfeable ? 'satisfeable' : 'unsatisfeable');
-                    }
-                });
-            }
+        // screen
+        UIUtils.setSatisfeabilityClass(this.getNode(), satisfeable);
+       
+        // posts
+        this._postIcons.each(function(postIcon) {
+            UIUtils.setSatisfeabilityClass(postIcon.getNode(), satisfeable);  
+        });
+        
+        // pres
+        var preconditionList = reachabilityData.preconditions;  
+        if (preconditionList.length > 1) {
+            //More than one set of preconditions is NOT YET SUPPORTED
+            console.log("OR precondition support not implemented yet");
+            return;
+        } else {
+            var preconditionData = preconditionList[0];
+        }
+        
+        //Setting precondition reachability
+        var factFactory = FactFactorySingleton.getInstance();
+        var preReachability = new Hash();
+        $A(preconditionData).each(function(precondition) {
+            preReachability.set(factFactory.getFactUri(precondition), precondition.satisfied);    
+        });
+      
+        this._preIcons.each(function(preIcon) {
+            var factUri = preIcon.getFact().getUri();
+            UIUtils.setSatisfeabilityClass(preIcon.getNode(), preReachability.get(factUri));
         });
     },
     
@@ -157,8 +153,38 @@ var ScreenView = Class.create( BuildingBlockView,
         this._preIcons = null;
         this._postIcons = null;
         this._node = null;
+    },
+    
+    // **************** PRIVATE METHODS **************** //
+    /**
+     * This function creates the tooltip for the view
+     * @private
+     */
+    _createTooltip: function (/** ScreenDescription */ description) {
+        /*var content = new Element('div');
+        
+        var title = new Element('h3').update(description.label['en-gb']);
+        content.appendChild(title);
+        
+        var description = new Element('div').update(description.description['en-gb']);
+        content.appendChild(description);
+        
+        var factFactory = FactFactorySingleton.getInstance();
+        
+        if (description.preconditions.length > 1){ //More than one set of preconditions
+            console.log("OR precondition support not implemented yet");
+        }
+        else {
+            var preconditions = description.preconditions[0];
+        }
+        if (preconditions.length > 0){
+            var preTitle = new Element('h4').update('Preconditions');
+            content.appendChild(preTitle);
+            $A(preconditions).each(function(pre){
+                //TODO
+            });
+        }*/
     }
-
 });
 
 // vim:ts=4:sw=4:et:

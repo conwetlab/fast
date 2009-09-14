@@ -22,22 +22,12 @@ var FactIcon = Class.create( /** @lends FactIcon.prototype */ {
          */
         this._size = size;
 
-        var uidGenerator = UIDGeneratorSingleton.getInstance();
-
-        /**
-         * Fact icon unique identifier
-         * @type String
-         * @private
-         */
-        this._id = uidGenerator.generate("facticon");
-
         /**
          * Fact icon root node 
          * @type DOMNode
          * @private
          */
         this._node = new Element ("div", {
-                "id": this._id,
                 "class": this._size + "_fact unknown fact"}
             ).update(this._fact.getShortcut());
     },
@@ -53,18 +43,15 @@ var FactIcon = Class.create( /** @lends FactIcon.prototype */ {
      */
     getNode: function () {
         return this._node;
-    },
-    
-    
-    /**
-     * Gets the fact icon unique identifier.
-     * @type String
+    }, 
+     /**
+     * Gets the fact object
+     * @type Fact
      * @public
      */
-    getId: function() {
-        return this._id;
+    getFact: function () {
+        return this._fact;
     }
-
 
     // **************** PRIVATE METHODS **************** //
 });

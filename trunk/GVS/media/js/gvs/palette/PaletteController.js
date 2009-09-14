@@ -5,74 +5,23 @@ var PaletteController = Class.create(
      * Manages a set of palettes.
      * @constructs
      */
-    initialize: function(/** AbstractDocument */ parent) {
+    initialize: function(/** Array */ buildingBlockSets,
+            /** DropZone */ dropZone, /** InferenceEngine */ inferenceEngine) {
+        
+        
         /**
          * List of available palettes
          * @type {Hash}
-         * @private
+         * @private @member
          */
         this._palettes = new Hash();
         
-         /**
-         * Document which contains the palette
-         * @type AbstractDocument
-         * @private
-         */       
-        this._parent = parent;
-        
-        this._containerNode = null;
-        
-        var uidGenerator = UIDGeneratorSingleton.getInstance();
-        this._paletteId = uidGenerator.generate("palette");
-        
-        var mine = this;
-        
-        //Create all the document necessary palettes
-        this._parent.getValidBuildingBlocks().each (function(buildingBlock){
-           var palette = new Palette (buildingBlock, mine._parent); 
-           mine._palettes.set(buildingBlock, palette);
-           mine.getNode().addChild(palette.getNode());
-        });
-    },
-
-    // **************** PUBLIC METHODS **************** //
-    /**
-     * This function retrieve remote information 
-     * from the catalogue based on a given domain context
-     * 
-     */
-    populateBuildingBlocks: function (/** Array */ domainContext){
-        this._palettes.each (function (pair){
-            pair.value.populateBuildingBlocks(domainContext);
-        });
-    },
-
-    /**
-     * Updates each palette
-     */
-    updatePalettes: function () {
-        $H(this._palettes).each (function (pair){
-            pair.value.updateComponents();
-        });
-    },
-    
-    /**
-     * Paints each palette from each factory
-     */
-    paintPalettes: function () {
-        $H(this._palettes).each (function (pair){
-            pair.value.paintComponents();
-        });
-    },
-
-    getPalette: function (/** String */ type) {
-        return this._palettes.get(type);
-    },
-    
-    getNode: function() {
-        if(this._containerNode == null){
-            var palettePane = new dijit.layout.AccordionContainer({
-                "id":this._paletteId,
+        /**
+         * AccordionContainer which contains the different palettes
+         * @type AccordionContainer
+         * @private @member
+         */
+        this._node = new dijit.layout.AccordionContainer({
                 "class":"palettePane",
                 "region":"left",
                 "minSize":"170",
@@ -81,31 +30,43 @@ var PaletteController = Class.create(
                 "livesplitters":"false",
                 "style":"width:220px;"
                 });
-            this._containerNode = palettePane;
-        }
-        return this._containerNode;
+         
+        //Create all the document necessary palettes
+        $A(buildingBlockSets).each (function(set) {
+           var palette = new Palette (set, dropZone, inferenceEngine); 
+           this._palettes.set(set.getBuildingBlockType(), palette);
+           this._node.addChild(palette.getNode());
+        }.bind(this));
+    },
+
+    // **************** PUBLIC METHODS **************** //
+    getPalette: function (/** String */ type) {
+        return this._palettes.get(type);
+    },
+    
+    getNode: function() {
+        return this._node;
     },
     
     /**
-     * Updates the reachability of each palette component
+     * Starts the data retrieval from the catalogue.
      */
-    updateReachability: function(/** map id->value*/screenList){
-        //TODO: Currently, only the screen palette is updated...
-        var screens = this.getPalette(Constants.BuildingBlock.SCREEN).getComponents();
-        for (var i = 0; i < screens.length; i++) {
-            for (var j = 0; j < screenList.length; j++) {
-                if (screens[i].getBuildingBlockDescription().uri == screenList[j].uri) {
-                    if (screenList[j].reachability == true) {
-                        screens[i].getBuildingBlockDescription().satisfeable = true;
-                        break;
-                    }
-                    else {
-                        screens[i].getBuildingBlockDescription().satisfeable = false;
-                    }
-                }
-            }
-            screens[i].colorize();
-        }
+    startRetrievingData: function() {
+        this._palettes.each(function(pair) {
+            pair.value.startRetrievingData(); 
+        });
+    },
+    
+    /**
+     * All uris of all the components (of all the palettes)
+     */
+    getComponentUris: function() {
+        var uris = [];
+        /*this._palettes.each(function(pair) {
+            uris = uris.concat(pair.value.getComponentUris());
+        });*/
+        uris = this._palettes.get("screen").getComponentUris();
+        return uris;
     }
 
     // **************** PRIVATE METHODS **************** //

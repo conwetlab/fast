@@ -25,7 +25,6 @@ var CatalogueSingleton = function(){
              */
             this._factories = {
                 'screen': new ScreenFactory(),
-                'connector': new ConnectorFactory(),
                 'domainConcept': new DomainConceptFactory()
             };
         },

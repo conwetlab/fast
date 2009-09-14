@@ -8,40 +8,25 @@ var BuildingBlockDescription = Class.create(
      */
     initialize: function(/** Hash */ properties) {
         // copying all the properties
-        var mine = this;
         $H(properties).each(
             function (pair){
-                mine[pair.key] = pair.value;
-            }
+                this[pair.key] = pair.value;
+            }.bind(this)
         );
     },
 
 
     // **************** PUBLIC METHODS **************** //
-
-
-    /**
-     * Creates and returns a palette component based on the building block.
-     * This method must be overriden on child classes.
-     *
-     * @type PaletteComponent
-     * @public @abstract
-     */
-    createPaletteComponent: function () {
-        throw 'Abstract Method invocation. ' + 
-            'BuildingBlockDescription :: createPaletteComponent';
-    },
     
     /**
-     * Creates and returns a view based on the building block.
-     * This method must be overriden on child classes.
-     *
-     * @type BuildingBlockView
-     * @public @abstract
+     * This function returns an array of lines representing the
+     * key information of the building block, in order to be shown in
+     * a table
+     * @type Hash
      */
-    createView: function () {
+    getInfo: function () {
         throw 'Abstract Method invocation. ' +
-            'BuildingBlockDescription :: createView';
+            'BuildingBlockDescription :: getInfo';    
     }
 
 

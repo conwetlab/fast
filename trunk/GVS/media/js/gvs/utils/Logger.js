@@ -24,5 +24,5 @@ Logger.serverError = function(/*XmlHttpRequest*/ transport, /** Exception */ e){
         }
     }
     console.log(msg);
-    alert(msg);
+    //alert(msg);
 }

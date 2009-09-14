@@ -6,14 +6,22 @@ var PaletteComponent = Class.create(DragSource,
      * @constructs
      * @extends DragSource
      */ 
-    initialize: function($super,/** BuildingBlockDescription */ buildingBlockDescription) {
+    initialize: function($super,/** BuildingBlockDescription */ buildingBlockDescription, 
+            /** DropZone */ dropZone, /** InferenceEngine */ inferenceEngine) {
         $super();
         /**
          * Handles the drag'n'drop stuff
          * @type DragHandler
          * @private
          */
-        this._dragHandler = new DragHandler(this, GVSSingleton.getInstance().getDocumentController().getCurrentDocument().getContentId());
+        this._dragHandler = new DragHandler(this, dropZone);
+        
+        /**
+         * Component and instance Drop zone 
+         * @type DOMNode
+         * @private
+         */
+        this._dropZone = dropZone;
 
         /**
          * BuildingBlock in which this component is based.
@@ -21,13 +29,20 @@ var PaletteComponent = Class.create(DragSource,
          * @private
          */
         this._buildingBlockDescription = buildingBlockDescription;
+        
+        /** 
+         * @type InferenceEngine 
+         * @private @member
+         */ 
+        this._inferenceEngine = inferenceEngine;
 
         /**
          * Screen component view
          * @type ScreenView
          * @private
          */
-        this._view = this._buildingBlockDescription.createView();
+        this._view = this._createView();
+        this._inferenceEngine.addReachabilityListener(this._buildingBlockDescription.uri, this._view);
         
         /**
          * Node of the component.
@@ -90,14 +105,6 @@ var PaletteComponent = Class.create(DragSource,
         return this._view;
     },
 
-    /**
-     * Colorize the component depending on the reachability
-     * @public
-     */
-    colorize: function() {
-        throw 'Abstract Method invocation. ' + 
-            'PaletteComponent :: colorize';
-    },
     
     // **************** PRIVATE METHODS **************** //
     /**
@@ -123,6 +130,16 @@ var PaletteComponent = Class.create(DragSource,
     _getTitle: function () {
         throw "Abstract Method invocation: PaletteComponent::_getTitle"
     },
+    
+    /**
+     * Creates a new View instance for the component
+     * @type BuildingBlockView
+     * @abstract
+     */
+    _createView: function () {
+        throw "Abstract Method invocation: PaletteComponent::_createView"
+    },
+    
 
     /**
      * Creates a new component to be dragged.
@@ -139,9 +156,9 @@ var PaletteComponent = Class.create(DragSource,
      * @private
      */
     _getContentOffsetTop: function() {
-        //TODO: we suspect something is missing from the calculation
         
-        return getElementAbsolutePos(this.getView().getNode()).y;
+        return this.getView().getNode().cumulativeOffset().top -
+                this.getView().getNode().cumulativeScrollOffset().top;
     },
 
     /**
@@ -151,9 +168,9 @@ var PaletteComponent = Class.create(DragSource,
      * @private
      */
     _getContentOffsetLeft: function() {
-        //TODO: we suspect something is missing from the calculation
 
-       return getElementAbsolutePos(this.getView().getNode()).x;
+       return this.getView().getNode().cumulativeOffset().left -
+                this.getView().getNode().cumulativeScrollOffset().left;
     }
 
 });

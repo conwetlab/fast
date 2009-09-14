@@ -25,9 +25,7 @@
         
         <script type="text/javascript" src="{{ MEDIA_URL }}js/lib/utils/json2.js"></script>
         
-        <script type="text/javascript" src="{{ MEDIA_URL }}js/lib/prototype/prototype.js"></script>
-        
-        <script type="text/javascript" src="{{ MEDIA_URL }}js/lib/utils/getAbsolutePosition.js"></script>
+        <script type="text/javascript" src="{{ MEDIA_URL }}js/lib/prototype/prototype.js"></script>     
 
         <!-- graceful degradation of firebugs console obj --> 
         <script type="text/javascript" src="http://www.getfirebug.com/firebug/firebugx.js"></script>
@@ -39,13 +37,13 @@
 			_URIConstants.prototype.deployEzwebGadget = "/deploy/ezweb";
             _URIConstants.prototype.catalogueScreens = "catalogue/screens";
             _URIConstants.prototype.catalogueFind = "catalogue/find";
-            _URIConstants.prototype.catalogueFindAndCheck = "catalogue/findandcheck";
+            _URIConstants.prototype.catalogueFindAndCheck = "catalogue/findcheck";
             _URIConstants.prototype.catalogueCheck = "catalogue/check";
             _URIConstants.prototype.catalogueGetMetadata = "catalogue/getmetadata";
-            _URIConstants.prototype.catalogueGetFacts = "catalogue/getFacts";
             _URIConstants.prototype.catalogueFlow = "{{CATALOGUE_FLOW}}";
             _URIConstants.prototype.catalogueCreateScreen = "catalogue/screens";
-            _URIConstants.prototype.catalogueGetDomainConcepts = "catalogue/concepts";
+            _URIConstants.prototype.catalogueAllConcepts = "catalogue/concepts";
+            _URIConstants.prototype.catalogueTagConcepts = "catalogue/tags/<tags>/concepts";
             _URIConstants.prototype.userPreferences = "user/preferences";
             
             _URIConstants.prototype.logoFast = "{{ MEDIA_URL }}images/gui/fastLogo.png";
@@ -85,24 +83,30 @@
         <script type="text/javascript"
             src="{{ MEDIA_URL }}js/gvs/catalogue/BuildingBlockDescription.js"></script>
         <script type="text/javascript"
-            src="{{ MEDIA_URL }}js/gvs/catalogue/BuildingBlockFactory.js"></script>
-        <script type="text/javascript"
             src="{{ MEDIA_URL }}js/gvs/catalogue/ScreenDescription.js"></script>
         <script type="text/javascript"
-            src="{{ MEDIA_URL }}js/gvs/catalogue/ScreenFactory.js"></script>
-        <script type="text/javascript"
-            src="{{ MEDIA_URL }}js/gvs/catalogue/ConnectorDescription.js"></script>
-        <script type="text/javascript"
-            src="{{ MEDIA_URL }}js/gvs/catalogue/ConnectorFactory.js"></script>
-        <script type="text/javascript"
             src="{{ MEDIA_URL }}js/gvs/catalogue/DomainConceptDescription.js"></script>
-        <script type="text/javascript"
-            src="{{ MEDIA_URL }}js/gvs/catalogue/DomainConceptFactory.js"></script>
         <script type="text/javascript" 
             src="{{ MEDIA_URL }}js/gvs/catalogue/ScreenflowDescription.js"></script>
         <script type="text/javascript" 
             src="{{ MEDIA_URL }}js/gvs/catalogue/InferenceEngine.js"></script>
-        
+
+        <script type="text/javascript"
+            src="{{ MEDIA_URL }}js/gvs/catalogue/factories/BuildingBlockFactory.js"></script>
+        <script type="text/javascript"
+            src="{{ MEDIA_URL }}js/gvs/catalogue/factories/ScreenFactory.js"></script>
+        <script type="text/javascript"
+            src="{{ MEDIA_URL }}js/gvs/catalogue/factories/DomainConceptFactory.js"></script>
+
+        <script type="text/javascript"
+            src="{{ MEDIA_URL }}js/gvs/catalogue/sets/BuildingBlockSet.js"></script>
+        <script type="text/javascript"
+            src="{{ MEDIA_URL }}js/gvs/catalogue/sets/ScreenSet.js"></script>
+        <script type="text/javascript"
+            src="{{ MEDIA_URL }}js/gvs/catalogue/sets/DomainConceptSet.js"></script>
+        <script type="text/javascript"
+            src="{{ MEDIA_URL }}js/gvs/catalogue/sets/SetListener.js"></script>
+
         <!-- Property viewers -->
         <script type="text/javascript" 
             src="{{ MEDIA_URL }}js/gvs/propertiesViewers/Table.js"></script>
@@ -116,6 +120,8 @@
         <!-- Document classes -->
         <script type="text/javascript"
             src="{{ MEDIA_URL }}js/gvs/documents/AbstractDocument.js"></script>
+        <script type="text/javascript"
+            src="{{ MEDIA_URL }}js/gvs/documents/PaletteDocument.js"></script>
         <script type="text/javascript"
             src="{{ MEDIA_URL }}js/gvs/documents/WelcomeDocument.js"></script>
         <script type="text/javascript"
@@ -141,8 +147,6 @@
         <script type="text/javascript"
             src="{{ MEDIA_URL }}js/gvs/instances/ScreenInstance.js"></script>
         <script type="text/javascript"
-            src="{{ MEDIA_URL }}js/gvs/instances/ConnectorInstance.js"></script>
-        <script type="text/javascript"
             src="{{ MEDIA_URL }}js/gvs/instances/DomainConceptInstance.js"></script>
 
         <!-- Palette classes -->
@@ -155,8 +159,6 @@
         <script type="text/javascript" 
             src="{{ MEDIA_URL }}js/gvs/palette/ScreenComponent.js"></script>
         <script type="text/javascript" 
-            src="{{ MEDIA_URL }}js/gvs/palette/ConnectorComponent.js"></script>
-        <script type="text/javascript" 
             src="{{ MEDIA_URL }}js/gvs/palette/DomainConceptComponent.js"></script>
 
         <!-- Building Block view classes -->
@@ -164,8 +166,6 @@
             src="{{ MEDIA_URL }}js/gvs/views/BuildingBlockView.js"></script>
         <script type="text/javascript" 
             src="{{ MEDIA_URL }}js/gvs/views/ScreenView.js"></script>
-        <script type="text/javascript" 
-            src="{{ MEDIA_URL }}js/gvs/views/ConnectorView.js"></script>
         <script type="text/javascript" 
             src="{{ MEDIA_URL }}js/gvs/views/DomainConceptView.js"></script>
 

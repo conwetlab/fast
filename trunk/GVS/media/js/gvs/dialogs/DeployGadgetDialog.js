@@ -34,7 +34,7 @@ var DeployGadgetDialog = Class.create(AbstractDialog /** @lends DeployGadgetDial
 
     /** 
      * initDialogInterface
-     * This function creates the dom structure and
+     * This function creates the dom structure
      * @private
      * @overrides
      */

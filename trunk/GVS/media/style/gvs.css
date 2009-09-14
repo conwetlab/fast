@@ -239,9 +239,6 @@ h4{
         position: relative;
         -moz-border-radius: 7px 7px;
         -webkit-border-radius: 7px 7px;
-    }
-
-    .screen.unknown {
         border: 1px solid #808080;
     }
 
@@ -262,6 +259,7 @@ h4{
         -moz-border-radius:3px 3px 0 0;
         -webkit-border-top-left-radius:3px; 
         -webkit-border-top-right-radius:3px;
+        background-color: #808080;
     }
 
     .screenImage{
@@ -269,15 +267,12 @@ h4{
         position:relative;
         top: 10px;
     }
-    .screenTitle.unknown {
-        background-color: #808080;
-    }
 
-    .screenTitle.satisfeable {
+    .satisfeable .screenTitle {
         background-color: green;
     }
 
-    .screenTitle.unsatisfeable {
+    .unsatisfeable .screenTitle {
         background-color: #B90000;
     }
 
@@ -320,7 +315,8 @@ h4{
     }
 
     /**********************
-    * connector component *
+    * connector component
+    * TODO: delete?       *
     ***********************/
     .connectorImage{
         position:inherit;
@@ -357,27 +353,6 @@ h4{
         color:yellow;
     }
 
-    /***************************
-    * domain concept component *
-    ****************************/
-    .domainConceptImage{
-        position:inherit;
-        top: 10px;
-        -moz-border-radius-bottomleft:13px;
-        -moz-border-radius-bottomright:13px;
-        -moz-border-radius-topleft:13px;
-        -moz-border-radius-topright:13px;
-        border:1px solid grey;
-        height:20px;
-        padding-top:5px;
-        width:25px;
-        background-color:grey;
-        color:white;
-    }
-
-    .domainConcept.selected .domainConceptImage{
-        color:yellow;
-    }
 
 /*********************
  * properties tables *	 
@@ -417,7 +392,8 @@ h4{
     margin-left: 1px;
     font-weight: bold;
     font-size: 10px;
-    color: white; 
+    color: white;
+    background: url("../images/facts/15x15/grey.png") no-repeat center center;
 } 
 .medium_fact{
     width: 22px;
@@ -427,28 +403,32 @@ h4{
     margin-left: 3px;
     font-weight: bold;
     color: white; 
-}
-.big_fact.unknown {
-    background: url("../images/facts/XxX/grey.png") no-repeat center center;
-}
-.big_fact.satisfeable {
-    background: url("../images/facts/XxX/green.png") no-repeat center center;
-}
-.big_fact.unsatisfeable {
-    background: url("../images/facts/XxX/red.png") no-repeat center center;
-}
-.medium_fact.unknown {
     background: url("../images/facts/20x20/grey.png") no-repeat center center;
 }
+.big_fact{
+    width: 27px;
+    height: 25px;
+    line-height: 25px;
+    text-align: center;
+    margin-left: 3px;
+    font-weight: bold;
+    color: white; 
+    background: url("../images/facts/25x25/grey.png") no-repeat center center;
+}
+.big_fact.satisfeable {
+    background: url("../images/facts/25x25/green.png") no-repeat center center;
+}
+.big_fact.unsatisfeable {
+    background: url("../images/facts/25x25/red.png") no-repeat center center;
+}
+
 .medium_fact.satisfeable {
     background: url("../images/facts/20x20/green.png") no-repeat center center;
 }
 .medium_fact.unsatisfeable {
     background: url("../images/facts/20x20/red.png") no-repeat center center;
 }
-.small_fact.unknown {
-    background: url("../images/facts/15x15/grey.png") no-repeat center center;
-}
+
 .small_fact.satisfeable {
     background: url("../images/facts/15x15/green.png") no-repeat center center;
 }

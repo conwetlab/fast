@@ -7,16 +7,8 @@ var ScreenComponent = Class.create(PaletteComponent,
      * @constructs
      * @extends PaletteComponent
      */
-    initialize: function($super, screenBuildingBlockDescription) {
-        $super(screenBuildingBlockDescription);
-    },
-
-    /**
-     * Colorize the component depending on the reachability
-     * @public
-     */
-    colorize: function(){
-        this.getView().colorize(this.getBuildingBlockDescription().satisfeable);
+    initialize: function($super, description, dropZone, inferenceEngine) {
+        $super(description, dropZone, inferenceEngine);
     },
 
     // **************** PUBLIC METHODS **************** //
@@ -24,14 +16,22 @@ var ScreenComponent = Class.create(PaletteComponent,
 
     // **************** PRIVATE METHODS **************** //
     
-
+    /**
+     * Creates a new View instance for the component
+     * @type BuildingBlockView
+     * @override
+     */
+    _createView: function () {
+        return new ScreenView(this._buildingBlockDescription);
+    },
+    
     /**
      * Creates a new screen to be dragged.
      * @type ScreenInstance
      * @override
      */
     _createInstance: function () {
-        return new ScreenInstance(this._buildingBlockDescription);
+        return new ScreenInstance(this._buildingBlockDescription, this._dropZone, this._inferenceEngine);
     },
     
     /**

@@ -9,24 +9,18 @@ var ScreenDescription = Class.create(BuildingBlockDescription,
      */
     initialize: function($super, /** Hash */ properties) {
         $super(properties);
-
     },
-
-
+    
     /**
-     * Creates a new screen component
      * @override
      */
-    createPaletteComponent: function () {
-        return new ScreenComponent(this);
-    },
+    getInfo: function() {
+        var info = new Hash();
+        info.set('Title', this.label['en-gb']);
+        info.set('Desc.', this.description['en-gb']);
+        info.set('Concepts', this.domainContext.tags);
+        return info;
 
-    /**
-     * Creates a new screen view
-     * @override
-     */
-    createView: function () {
-        return new ScreenView(this);
     }
 });
 

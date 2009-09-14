@@ -4,122 +4,153 @@ var InferenceEngine = Class.create( /** @lends InferenceEngine.prototype */ {
      * It communicates with the serverside catalogue to retrieve this information
      * @constructs
      */ 
-    initialize: function(/** ScreenflowDocument */parent) {
+    initialize: function() {
         
         /**
-         * Parent document
-         * @type ScreenflowDocument
+         * This stores the reachability data
+         * @type Hash
          * @private @member
          */
-        this._parent = parent;
+        this._reachabilityData = new Hash();
+        
+        /**
+         * Listeners list hashed by resource URI
+         * @type Hash
+         * @private @member
+         */
+        this._listeners = new Hash();
     },
     
 
     // **************** PUBLIC METHODS **************** //
 
+    
     /**
-     * 
-     * This function fills the initial palette based on a domain context
-     * 
+     * This function calls findAndCheck in the catalogue and calls a
+     * callback upon completion.
      */
-    retrieveScreens: function (/** Array */ domainContext) {
-        this.findAndCheck ([],domainContext,[],"reachability");
+    findCheck: function (/**Array*/ canvas, /** Array*/ elements,
+                         /** Array */ domainContext, 
+                         /** String*/ criteria,
+                         /** Function */ callback) {
+        
+        var body = this._constructBody(canvas, elements, domainContext, criteria);
+        var persistenceEngine = PersistenceEngineFactory.getInstance();
+        var context = {
+            'callback': callback,
+            'mine': this
+        };
+        persistenceEngine.sendPost(URIs.catalogueFindAndCheck, null, body,
+                context, this._findCheckOnSuccess, this._onError);
     },
     
     /**
-     * findAndCheck
-     * This function calls findAndCheck in the catalogue
-     */
-    findAndCheck: function (/**Array*/ canvas, /** Array */ domainContext, 
-                            /** Array*/ elements,/** String*/ criteria) {
-        
-        /** 
-         * onSuccess callback
-         */
-        var findAndCheckOnSuccess = function(/**XMLHttpRequest*/ transport){
-            
-            var result = JSON.parse(transport.responseText);
-            
-            var paletteElements = result.elements;         
-            var canvasElements = result.canvas;          
-            
-            // There are elements in the canvas
-            // Update the screenflow
-            if (canvasElements != null && canvasElements != []){
-                this._parent.updateReachability(canvasElements);
-            }
-            
-            var screenFactory = CatalogueSingleton.getInstance().getBuildingBlockFactory (Constants.BuildingBlock.SCREEN);
-            screenFactory.updateElements (domainContext,paletteElements,updateElementsCallback);
-        }
-        /**
-         * Error handler
-         */
-        var findAndCheckOnError = function(transport, e){
-            console.log ("Error retrieving catalogue information");
-        }
-        /**
-         * This function is called when the metadata is stored in the BBFactory
-         */
-        var mine = this;
-        var updateElementsCallback = function (/** Array */ screens) {
-            //Paint the palette and updateReachability
-            var paletteController = mine._parent.getPaletteController();
-            paletteController.paintPalettes();
-            paletteController.updateReachability(screens);
-        }
-        
-        //construct the data to be sent
-        var domain = {
-            'tags': domainContext,
-            'user':null /* TODO: add user here */
-        };
-        var body = {
-            'canvas': canvas,
-            'domainContext': domain,
-            'elements': elements,
-            'criterion': criteria
-        };
-        body = Object.toJSON(body);
-
-        var persistenceEngine = PersistenceEngineFactory.getInstance();
-        persistenceEngine.sendPost(URIs.catalogueFindAndCheck, null, body, this, findAndCheckOnSuccess, findAndCheckOnError);
-    },
-    /**
      * This function calls the check operation in the catalogue
      */
-    check: function (/**Array*/ canvas, /** Array */ domainContext, 
-                    /** Array*/ elements,/** String*/ criteria) {
+    check: function (/**Array*/ canvas, /** Array*/ elements,
+                    /** Array */ domainContext, 
+                    /** String*/ criteria) {
+        var body = this._constructBody(canvas, elements, domainContext, criteria);
+        var persistenceEngine = PersistenceEngineFactory.getInstance();
+        persistenceEngine.sendPost(URIs.catalogueCheck, null, body, this, 
+                                    this._checkOnSuccess, this._onError);                   
+    },
+    
+    /**
+     * Register an object for interest on the reachability of a URI-identified
+     * resources. The listener object must implement these methods:
+     *    
+     *    void setReachability(Hash reachabilityData);
+     *    
+     * Reachability data vary for different resource types:
+     *   * Screens: TODO
+     *   * ...
+     */
+    addReachabilityListener: function(/** String */ uri, /** Object */ listener) {
+        this._getListenerList(uri).push(listener);
         
-        /**
-         * onSuccess callbcak
-         */
-        var checkOnSuccess = function(response){
-                var screenList = JSON.parse(response.responseText);
-                this._parent.getPaletteController().updateReachability(screenList.elements);
-                this._parent.updateReachability(screenList.canvas);
-            }
-            
-        var checkOnError = function(transport, e){
-            console.log ("Error performing check operation");
+        if (this._reachabilityData.get(uri)) {
+            listener.setReachability(this._reachabilityData.get(uri));
         }
-        //construct the data to be sent
+    },
+    
+    // **************** PRIVATE METHODS **************** //
+    /** 
+     * onSuccess callback
+     */
+    _findCheckOnSuccess: function(/**XMLHttpRequest*/ transport){
+        var result = JSON.parse(transport.responseText);
+        var paletteElements = result.elements;
+        
+        this.mine._updateReachability(paletteElements);
+        
+        // Notifying about new uris
+        var screenURIs = new Array();
+        $A(paletteElements).each(function(element) {
+           screenURIs.push(element.uri); 
+        }); 
+
+        this.callback(screenURIs);        
+    },
+
+    /**
+     * onSuccess callback
+     * @private
+     */
+    _checkOnSuccess: function(transport){
+        var result = JSON.parse(transport.responseText);
+        var paletteElements = result.elements;
+        this._updateReachability(paletteElements);
+    },
+    
+    /**
+     * Error handler
+     * @private
+     */
+    _onError: function(transport, e){
+        Logger.serverError(transport,e);
+    },
+    /**
+     * Returns a list of listeners of an uri
+     * @private
+     */
+    _getListenerList: function (/** String */ uri) {
+        var list = this._listeners.get(uri);
+        if (!list) {
+            list = new Array();
+            this._listeners.set(uri, list);
+        }
+        return list;
+    },
+    
+    _updateReachability: function(/** Array */ elements) {
+        elements.each(function(element) {
+            this._reachabilityData.set(element.uri, element);
+            this._notifyReachability(element.uri);
+        }.bind(this));  
+    },
+    
+    _notifyReachability: function(/** String */ uri) {
+        this._getListenerList(uri).each(function(listener) {
+            listener.setReachability(this._reachabilityData.get(uri));
+        }.bind(this));        
+    },
+    
+    _constructBody: function(/**Array*/ canvas, /** Array*/ elements,
+                    /** Array */ domainContext, 
+                    /** String*/ criteria) {
         var domain = {
             'tags': domainContext,
             'user':null /* TODO: add user here */
-        }
+        };
         var body = {
             'canvas': canvas,
-            'domainContext': domain,
             'elements': elements,
+            'domainContext': domain,
             'criterion': criteria
         };
-        body = Object.toJSON(body);
-        var persistenceEngine = PersistenceEngineFactory.getInstance();
-        persistenceEngine.sendPost(URIs.catalogueCheck, null, body, this, checkOnSuccess, checkOnError);                   
+        return Object.toJSON(body);
     }
-    // **************** PRIVATE METHODS **************** //
-
 });
 
 // vim:ts=4:sw=4:et:

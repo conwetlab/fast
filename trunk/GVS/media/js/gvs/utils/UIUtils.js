@@ -20,11 +20,9 @@ UIUtils.onKeyPressCanvas = function(e){
             
             if (selectedElement != null) { //Delete an element from the canvas
                 
+                var label = null;
                 if (selectedElement.getBuildingBlockDescription().label){
-                    var label = selectedElement.getBuildingBlockDescription().label['en-gb'];
-                }
-                else {//FIXME: workaround for connectors
-                    var label = selectedElement.getBuildingBlockDescription().name;
+                    label = selectedElement.getBuildingBlockDescription().label['en-gb'];
                 }
                 title = (label) ? ('the element "' + label + '"') : "the selected element";
                 confirm("You are about to remove " + title + " from canvas. Are you sure?", 
@@ -50,14 +48,21 @@ UIUtils.deleteHandler = function (/** Boolean */ remove){
                 case Constants.BuildingBlock.DOMAIN_CONCEPT:
                     currentDocument.deleteDomainConcept(selectedElement);
                     break;
-                case Constants.BuildingBlock.CONNECTOR:      
-                    currentDocument.deleteConnector(selectedElement);
-                    break;
                 default:
                     alert("Element cannot be deleted");
                     break;
             }
         }
+    }
+}
+
+UIUtils.setSatisfeabilityClass = function (/** DOMNode */ node, /** Boolean */ satisfeable) {
+    if (satisfeable === null || satisfeable === undefined) { //Unknown satisfeability
+        node.removeClassName('satisfeable');
+        node.removeClassName('unsatisfeable');
+    } else {
+        node.removeClassName(satisfeable ? 'unsatisfeable' : 'satisfeable');
+        node.addClassName(satisfeable ? 'satisfeable' : 'unsatisfeable');
     }
 }
 

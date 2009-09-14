@@ -6,11 +6,9 @@ var ScreenInstance = Class.create(ComponentInstance,
      * @constructs
      * @extends ComponentInstance
      */
-    initialize: function($super, /**BuildingBlockDescription*/ buildingBlockDescription) {
-        $super(buildingBlockDescription);
-        var uidGenerator = UIDGeneratorSingleton.getInstance();
-        this._id = uidGenerator.generate("screenInstance");
-        this._buildingBlockType = Constants.BuildingBlock.SCREEN;
+    initialize: function($super, /**BuildingBlockDescription*/ buildingBlockDescription, 
+            /** DropZone */ dropZone, /** InferenceEngine */ inferenceEngine) {
+        $super(buildingBlockDescription, dropZone, inferenceEngine);
     },
 
     // **************** PUBLIC METHODS **************** //
@@ -23,23 +21,17 @@ var ScreenInstance = Class.create(ComponentInstance,
         this.getView().colorize(this.getBuildingBlockDescription().satisfeable);
     },
 
-    /**
-     * Drop event handler for the DragSource
-     * @param finishState
-     *      True if a new ScreenInstance has
-     *      been added to the new zone.
-     * @override
-     */
-    onDragFinish: function($super, finishState) {
-        $super(finishState);
-        // FIXME: remove this
-        if(finishState) {
-            var currentDocument = GVSSingleton.getInstance().getDocumentController().getCurrentDocument();
-            currentDocument.addScreen(this);           
-        }
-    },
 
     // **************** PRIVATE METHODS **************** //
+    /**
+     * Creates a new View instance for the component
+     * @type BuildingBlockView
+     * @override
+     */
+    _createView: function () {
+        return new ScreenView(this._buildingBlockDescription);
+    },
+
     /**
      * This function is called when the attached view is dbl-clicked
      * @private
