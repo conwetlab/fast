@@ -1,6 +1,7 @@
 package eu.morfeoproject.fast.catalogue;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
@@ -39,6 +40,7 @@ import eu.morfeoproject.fast.model.Screen;
 import eu.morfeoproject.fast.model.ScreenFlow;
 import eu.morfeoproject.fast.model.Slot;
 import eu.morfeoproject.fast.model.SlotOrEvent;
+import eu.morfeoproject.fast.server.CatalogueAccessPoint;
 import eu.morfeoproject.fast.util.DateFormatter;
 import eu.morfeoproject.fast.vocabulary.DC;
 import eu.morfeoproject.fast.vocabulary.FGO;
@@ -165,27 +167,18 @@ public class Catalogue {
 		tripleStore.close();
 	}
 	
-	/**
-	 * add the passed ontology to the main repository. The passed RDF model must only contain one ontology
-	 * at a time. The ontology should have declared imports statements for other ontologies it 
-	 * needs, these will be automatically compared to the list of ontologies, if a prerequisite
-	 * misses, an  OntologyImportsNotSatisfiedException will be thrown.
-	 * Before importing, the ontology will tested by merging it with its imports and 
-	 * checked using the PIMO-Checker. If it does not pass this test, an OntologyInvalidException
-	 * is thrown.
-	 * @param ontologyUri URI identifying the ontology in the passed rdf model
-	 * @param ontology a model with the ontology to add
-	 * @param metadataUri URI identifying the ontologymetadata in the passed metadata model
-	 * @param metadata a model with the ontology metadata to add
-	 * @throws Exception if the database breaks
-	 * @throws OntologyInvalidException if the ontology is not valid according to PimoChecker
-	 * @throws OntologyImportsNotSatisfiedException if imports are missing
-	 */
-	public boolean addPublicOntology(URI uri, String filename, String downloadUri) {
-		PublicOntology ont = new PublicOntology(uri, filename, downloadUri, Syntax.RdfXml);
+	public boolean addPublicOntology(URI uri, String downloadUri, Syntax syntax) {
+		PublicOntology ont = new PublicOntology(uri, downloadUri, syntax);
 		try {
             logger.info("adding ontology '"+ont.getUri()+"'");
-            tripleStore.addOntology(ont.getUri(), ont.getAsRDFXML(), Syntax.RdfXml);
+            if (syntax.equals(Syntax.RdfXml))
+            	tripleStore.addOntology(ont.getUri(), ont.getAsRDFXML(), syntax);
+            else if (syntax.equals(Syntax.Turtle))
+            	tripleStore.addOntology(ont.getUri(), ont.getAsTurtle(), syntax);
+            else {
+                logger.error("Cannot add ontology '"+ont.getUri()+"': Syntax '"+syntax+"' not allowed.");
+            	return false;
+            }
             return true;
         } catch (OntologyInvalidException e) {
             logger.error("Cannot add ontology '"+ont.getUri()+"': "+e, e);
@@ -193,7 +186,6 @@ public class Catalogue {
         }
 	}
 	
-	// FIXME finish this method
 	public void addScreenFlow(ScreenFlow sf) throws DuplicatedResourceException,
 	OntologyInvalidException, OntologyReadonlyException, NotFoundException {
 		URI sfUri = null;
@@ -1086,8 +1078,23 @@ public class Catalogue {
 		queryString = queryString.concat("}");
 		QueryResultTable qrt = tripleStore.sparqlSelect(queryString);
     	ClosableIterator<QueryRow> itResults = qrt.iterator();
-    	while (itResults.hasNext())
-    		results.add(itResults.next().getValue("concept").asURI());
+    	while (itResults.hasNext()) {
+    		QueryRow qr = itResults.next();
+    		Node node = qr.getValue("concept");
+    		System.out.println(node);
+    		if (node instanceof BlankNode) {
+    			try {
+					ClosableIterator<Statement> ci = CatalogueAccessPoint.getCatalogue().getTripleStore().findStatements(node.asBlankNode(), Variable.ANY, Variable.ANY);
+					while (ci.hasNext())
+						System.out.println(ci.next());
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+    		}
+    		else {
+    			results.add(qr.getValue("concept").asURI());
+    		}
+    	}
     	itResults.close();
     	return results;
 	}

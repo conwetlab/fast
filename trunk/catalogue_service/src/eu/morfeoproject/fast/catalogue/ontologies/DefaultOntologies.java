@@ -25,44 +25,39 @@ public class DefaultOntologies {
     private static ArrayList<Ontology> defaults = new ArrayList<Ontology>();
     
     public static Ontology RDF = 
-    	new Ontology(new URIImpl("http://www.w3.org/1999/02/22-rdf-syntax-ns#"), "rdf.rdf", Syntax.RdfXml);
+    	new DefaultOntology(new URIImpl("http://www.w3.org/1999/02/22-rdf-syntax-ns#"), "rdf.rdf", Syntax.RdfXml);
     public static Ontology RDFS = 
-        new Ontology(new URIImpl("http://www.w3.org/2000/01/rdf-schema#"), "rdfs.rdf", Syntax.RdfXml);
-//    public static Ontology FCO =
-//    	new Ontology(new URIImpl("http://www.morfeoproject.eu/fast/fco#"), "fco.rdf");
+        new DefaultOntology(new URIImpl("http://www.w3.org/2000/01/rdf-schema#"), "rdfs.rdf", Syntax.RdfXml);
     public static Ontology FGO =
-//    	new Ontology(new URIImpl("http://purl.oclc.org/fast/ontology/gadget#"), "fco20090224.rdf", Syntax.RdfXml);
-    	new Ontology(new URIImpl("http://purl.oclc.org/fast/ontology/gadget#"), "fgo20090713.ttl", Syntax.Turtle);
+//    	new DefaultOntology(new URIImpl("http://purl.oclc.org/fast/ontology/gadget#"), "fco20090224.rdf", Syntax.RdfXml);
+    	new DefaultOntology(new URIImpl("http://purl.oclc.org/fast/ontology/gadget#"), "fgo20090713.ttl", Syntax.Turtle);
     public static Ontology FOAF =
-    	new Ontology(new URIImpl("http://xmlns.com/foaf/0.1/"), "foaf.rdf", Syntax.RdfXml);
+    	new DefaultOntology(new URIImpl("http://xmlns.com/foaf/0.1/"), "foaf.rdf", Syntax.RdfXml);
     public static Ontology SIOC =
-    	new Ontology(new URIImpl("http://rdfs.org/sioc/ns#"), "sioc.owl", Syntax.RdfXml);
-    
+    	new DefaultOntology(new URIImpl("http://rdfs.org/sioc/ns#"), "sioc.owl", Syntax.RdfXml);
+
+    /**-- The DBPedia ontology (no datasets included) --**/
+//  public static Ontology DBPEDIA =
+//	new Ontology(new URIImpl("http://dbpedia.org/ontology/#"), "dbpedia.owl", Syntax.RdfXml);
+//    public static PublicOntology DBPEDIA = 
+//    	new PublicOntology(new URIImpl("http://dbpedia.org/ontology/#"),
+//    			"http://downloads.dbpedia.org/3.2/en/dbpedia-ontology.owl",
+//    			Syntax.RdfXml);
+
+    /**-- Ontologies for test purposes --**/
     public static Ontology AMAZON_MOCKUP =
-    	new Ontology(new URIImpl("http://aws.amazon.com/AWSECommerceService#"), "amazon-mockup.rdf", Syntax.RdfXml);
+    	new DefaultOntology(new URIImpl("http://aws.amazon.com/AWSECommerceService#"), "amazon-mockup.rdf", Syntax.RdfXml);
     public static Ontology DEMO =
-    	new Ontology(new URIImpl("http://www.morfeoproject.eu/fast/demo#"), "demo.rdf", Syntax.RdfXml);
+    	new DefaultOntology(new URIImpl("http://www.morfeoproject.eu/fast/demo#"), "demo.rdf", Syntax.RdfXml);
     
-//    public static Ontology BRESLIN =
-//    	new Ontology(new URIImpl("http://www.johnbreslin.com/foaf/foaf.rdf#"), "breslin-foaf.rdf");
-//    public static Ontology ANDREAS =
-//    	new Ontology(new URIImpl("http://www.deri.ie/about/team/member/Andreas_Harth"), "andreas-foaf.rdf");
     
-//    public static Ontology DBPEDIA = // TODO not supported yet!
-//    	new Ontology(new URIImpl("http://dbpedia.org/ontology/#"), "dbpedia.owl");
-    
-//    public static Ontology PIMO = 
-//    	new Ontology ("http://www.semanticdesktop.org/ontologies/2007/11/01/pimo#",
-//    	"pimo.rdfs");
-//    public static PublicOntology N2PM = 
-//    	new PublicOntology ("http://www.semanticdesktop.org/ontologies/2007/11/01/nietopimomapping#",
-//    	"nietopimomapping.rdf","http://www.semanticdesktop.org/ontologies/2007/11/01/nietopimomapping.rdf");
-//    public static Ontology NOP = 
-//    	new Ontology ("http://ontologies.opendfki.de/repos/ontologies/userobs/nop#",
-//    	"nop.rdfs");
-//    public static Ontology WCON = 
-//    	new Ontology ("http://ontologies.opendfki.de/repos/ontologies/wcon/workcontext#",
-//    	"wcon.rdfs");
+
+    public static class DefaultOntology extends Ontology {
+    	public DefaultOntology(URI uri, String filename, Syntax syntax) {
+    		super(uri, filename, syntax);
+    		defaults.add(this);
+    	}
+    }
     
     /**
      * defining an ontology
@@ -82,7 +77,6 @@ public class DefaultOntologies {
             this.uri = uri;
             this.filename = filename;
             this.syntax = syntax;
-            defaults.add(this);
         }
 
         public URI getUri() {
@@ -122,8 +116,8 @@ public class DefaultOntologies {
     public static class PublicOntology extends Ontology {
     	private String downloadUri;
     	
-		public PublicOntology(URI uri, String filename, String downloadUri, Syntax syntax) {
-			super(uri, filename, syntax);
+		public PublicOntology(URI uri, String downloadUri, Syntax syntax) {
+			super(uri, null, syntax);
 			this.downloadUri = downloadUri;
 		}
 		
@@ -137,7 +131,6 @@ public class DefaultOntologies {
 				result = con.getInputStream();
 			} catch (Exception e) {
 				logger.warn("Cannot load "+this+": "+e.getMessage(), e);
-//				return super.getAsInputStream();
 			}
             return result;
         }

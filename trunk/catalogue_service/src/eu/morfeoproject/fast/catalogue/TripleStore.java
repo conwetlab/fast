@@ -1,8 +1,6 @@
 package eu.morfeoproject.fast.catalogue;
 
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -43,8 +41,7 @@ import org.openrdf.repository.RepositoryException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import eu.morfeoproject.fast.services.rdfrepository.RDFRepository;
-import eu.morfeoproject.fast.services.rdfrepository.RepositoryStorageException;
+import eu.morfeoproject.fast.vocabulary.DC;
 import eu.morfeoproject.fast.vocabulary.FGO;
 
 // TODO: The triple store must guarantee safe operations to the rdf repository
@@ -195,13 +192,11 @@ public class TripleStore {
      * @param syntax RDF syntax of the passed stream
      * @param formatMimetype the rdf mimetype serialization format of the string, 
      * see {@link RDFRepository} for an explanation. 
-     * @throws RepositoryStorageException if the database breaks
      * @throws OntologyInvalidException if the ontology is not valid according to PimoChecker
-     * @throws OntologyImportsNotSatisfiedException if imports are missing
      */
     public void addOntology(URI ontologyUri, InputStream ontology, Syntax syntax) throws OntologyInvalidException {
        	if (containsOntology(ontologyUri))
-       		throw new OntologyInvalidException("The ontology "+ontologyUri+" already exists.");
+       		logger.info("The ontology "+ontologyUri+" already exists?");
        	
        	// creates a model for the ontology
       	Model ont = RDF2Go.getModelFactory().createModel();
@@ -210,7 +205,6 @@ public class TripleStore {
       		// read the ontology from the inputstream
             ont.readFrom(ontology, syntax);
             // add the ontology to the persistent modelset
-//            Model ontModel = getPersistentModelSet().getModel(ontologyUri);
             getPersistentModelSet().addModel(ont, ontologyUri);
             Map<String, String> namespaces = ont.getNamespaces();
             for (String key : namespaces.keySet()) {
@@ -220,8 +214,6 @@ public class TripleStore {
 	            	logger.info("added namespace "+key+"="+value);
             	}
             }
-//           	ontModel.addAll(ont.iterator());
-//           	ontModel.close();
         } catch (IOException e) {
             throw new OntologyInvalidException(e.getLocalizedMessage(), e);
         } finally{
@@ -243,9 +235,7 @@ public class TripleStore {
      * @throws RepositoryStorageException if the updating in the repository does not work
      */
     public void updateOntology(URI ontologyUri, InputStream ontology, Syntax syntax)
-        throws NotFoundException, OntologyInvalidException, 
-        OntologyImportsNotSatisfiedException,
-        RepositoryStorageException{
+    throws NotFoundException, OntologyInvalidException, OntologyImportsNotSatisfiedException, RepositoryStorageException {
         // TODO: implement differently to avoid a dangling ontology.
         // removing and adding again does not work, if others depend on this ont
         removeOntology(ontologyUri);
@@ -833,22 +823,11 @@ public class TripleStore {
 	 * @throws NotFoundException when the resource was not found or cannot be
      * connected to an ontology in which it is defined
      */
-    private void setLabel(URI resource, String label, Model inModel) throws OntologyReadonlyException, NotFoundException {
-//        assertWriteableResource(resource, "change label");
-        // is there a personal identifier?
-//        Model m = getMagicModel();
-//        String personalidentifier = RDFTool.getSingleValueString(m, resource, NAO.personalIdentifier);
-//        if (personalidentifier != null)
-//        	try {
-//        		// there is a personal identifier, change it
-//        		setPersonalIdentifier(resource, label);
-//        	} catch (NameNotUniqueException x) {
-//        		// well, then remove the old one
-//                getPersistentModelSet().removeStatements(Variable.ANY, resource, NAO.personalIdentifier, Variable.ANY);
-//        	}
-//    	inModel.removeStatements(resource, DC.title, Variable.ANY);
+    private void setLabel(URI resource, String label, Model inModel)
+    throws OntologyReadonlyException, NotFoundException {
+    	inModel.removeStatements(resource, DC.title, Variable.ANY);
     	inModel.removeStatements(resource, RDFS.label, Variable.ANY);
-//    	inModel.addStatement(resource, DC.title, label);
+    	inModel.addStatement(resource, DC.title, label);
     	inModel.addStatement(resource, RDFS.label, label);
     }
     
@@ -860,9 +839,7 @@ public class TripleStore {
      */
     protected void assertClass(URI clazz) throws OntologyInvalidException {
         if (!isClass(clazz))
-            throw new OntologyInvalidException("Class "
-                + clazz
-                + " is not an RDFS-class");
+            throw new OntologyInvalidException("Class "+clazz+" is not an RDFS-class");
     }
     
     /**
@@ -962,7 +939,7 @@ public class TripleStore {
             createdURIs.add(uri);
             
         } catch (ModelRuntimeException e) {
-//            throw new PimoError("Programming error: " + x, x);
+        	logger.error("Programming error: "+e);
         }
         return uri;
     }
@@ -1003,14 +980,6 @@ public class TripleStore {
 		inModel.removeStatements(property, RDFS.range, Variable.ANY);
 		inModel.addStatement(property, RDFS.domain, domain);
 		inModel.addStatement(property, RDFS.range, range);
-		// inverse?
-//		URI inverse = (URI) RDFTool.getSingleValue(inModel, property, NRL.inverseProperty);
-//		if (inverse != null) {
-//			inModel.removeStatements(inverse, RDFS.domain, Variable.ANY);
-//			inModel.removeStatements(inverse, RDFS.range, Variable.ANY);
-//			inModel.addStatement(inverse, RDFS.domain, range);
-//			inModel.addStatement(inverse, RDFS.range, domain);
-//		}
 	}
 	
 	public boolean sparqlAsk(String query) {
