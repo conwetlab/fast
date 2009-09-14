@@ -21,7 +21,6 @@ import org.slf4j.LoggerFactory;
 
 import eu.morfeoproject.fast.catalogue.NotFoundException;
 import eu.morfeoproject.fast.catalogue.planner.Plan;
-import eu.morfeoproject.fast.catalogue.planner.Planner;
 import eu.morfeoproject.fast.model.Resource;
 
 /**
@@ -39,6 +38,10 @@ public class PlannerServlet extends GenericServlet {
         super();
     }
 
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		CatalogueAccessPoint.getCatalogue().getPlanner().dump();
+	}
+	
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
@@ -72,7 +75,7 @@ public class PlannerServlet extends GenericServlet {
 			}
 			
 			// calculate the plans for a certain goal
-			List<Plan> plans = Planner.getInstance().searchPlans(goal, canvas);
+			List<Plan> plans = CatalogueAccessPoint.getCatalogue().searchPlans(goal, canvas);
 			
 			// write the results in the output
 			JSONArray output = new JSONArray();

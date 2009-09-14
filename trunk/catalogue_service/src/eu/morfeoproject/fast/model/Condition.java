@@ -11,10 +11,6 @@ import org.ontoware.rdf2go.RDF2Go;
 import org.ontoware.rdf2go.model.Model;
 import org.ontoware.rdf2go.model.Statement;
 import org.ontoware.rdf2go.model.node.BlankNode;
-import org.ontoware.rdf2go.vocabulary.RDFS;
-
-import eu.morfeoproject.fast.vocabulary.DC;
-import eu.morfeoproject.fast.vocabulary.FGO;
 
 public class Condition {
 	
@@ -41,7 +37,6 @@ public class Condition {
 		this.pattern = pattern;
 	}
 	
-	
 	public String getScope() {
 		return scope;
 	}
@@ -60,6 +55,29 @@ public class Condition {
 		this.labels = labels;
 	}
 	
+	@Override
+	public boolean equals(Object o) {
+		Condition condition = (Condition)o;
+		if (this.getPattern().size() == condition.getPattern().size()) {
+			Model condModel = RDF2Go.getModelFactory().createModel();
+			condModel.open();
+			condModel.addAll(this.getPattern().iterator());
+			
+			// create the ASK sparql query for a condition
+	    	String queryStr = "ASK {";
+	    	for (Statement st : condition.getPattern()) {
+				String su = (st.getSubject() instanceof BlankNode) ? st.getSubject().toString() : st.getSubject().toSPARQL();
+				String ob = (st.getObject() instanceof BlankNode) ? st.getObject().toString() : st.getObject().toSPARQL();
+				queryStr = queryStr.concat(su+" "+st.getPredicate().toSPARQL()+" "+ob+" . ");
+	    	}
+	    	queryStr = queryStr.concat("}");
+
+	    	return condModel.sparqlAsk(queryStr);
+		}
+		return false;
+	}
+	
+	@Override
 	public String toString() {
 		return patternString;
 	}

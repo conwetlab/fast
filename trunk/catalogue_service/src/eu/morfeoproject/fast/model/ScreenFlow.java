@@ -15,7 +15,7 @@ import org.ontoware.rdf2go.model.node.URI;
 import org.ontoware.rdf2go.vocabulary.RDF;
 import org.ontoware.rdf2go.vocabulary.RDFS;
 
-import eu.morfeoproject.fast.util.FormatterUtil;
+import eu.morfeoproject.fast.util.DateFormatter;
 import eu.morfeoproject.fast.vocabulary.DC;
 import eu.morfeoproject.fast.vocabulary.FGO;
 import eu.morfeoproject.fast.vocabulary.FOAF;
@@ -189,7 +189,7 @@ public class ScreenFlow implements Resource {
 			if (getCreationDate() == null)
 				json.put("creationDate", JSONObject.NULL);
 			else
-				json.put("creationDate", FormatterUtil.formatDateISO8601(getCreationDate()));
+				json.put("creationDate", DateFormatter.formatDateISO8601(getCreationDate()));
 			if (getIcon() == null)
 				json.put("icon", JSONObject.NULL);
 			else
@@ -238,7 +238,7 @@ public class ScreenFlow implements Resource {
 		if (this.getVersion() != null)
 			model.addStatement(sfUri, FGO.hasVersion, this.getVersion());
 		if (this.getCreationDate() != null)
-			model.addStatement(sfUri, DC.date, FormatterUtil.formatDateISO8601(this.getCreationDate()));
+			model.addStatement(sfUri, DC.date, DateFormatter.formatDateISO8601(this.getCreationDate()));
 		if (this.getIcon() != null)
 			model.addStatement(sfUri, FGO.hasIcon, this.getIcon());
 		if (this.getScreenshot() != null)

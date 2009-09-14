@@ -13,9 +13,9 @@ import org.slf4j.LoggerFactory;
  * into a Date and vice versa.
  * @author irivera
  */
-public class FormatterUtil {
+public class DateFormatter {
 	
-	final static Logger logger = LoggerFactory.getLogger(FormatterUtil.class);
+	final static Logger logger = LoggerFactory.getLogger(DateFormatter.class);
 	
 	public  static SimpleDateFormat ISO8601FORMAT = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ");
 	

@@ -29,7 +29,7 @@ import eu.morfeoproject.fast.model.FastModelFactory;
 import eu.morfeoproject.fast.model.Screen;
 import eu.morfeoproject.fast.model.ScreenFlow;
 import eu.morfeoproject.fast.model.Slot;
-import eu.morfeoproject.fast.util.FormatterUtil;
+import eu.morfeoproject.fast.util.DateFormatter;
 
 public abstract class GenericServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
@@ -91,7 +91,7 @@ public abstract class GenericServlet extends HttpServlet {
 		if (jsonScreenFlow.get("version") != null)
 			screenFlow.setVersion(jsonScreenFlow.getString("version"));
 		if (jsonScreenFlow.get("creationDate") != null)
-			screenFlow.setCreationDate(FormatterUtil.parseDateISO8601(jsonScreenFlow.getString("creationDate")));
+			screenFlow.setCreationDate(DateFormatter.parseDateISO8601(jsonScreenFlow.getString("creationDate")));
 		if (jsonScreenFlow.get("icon") != null)
 			screenFlow.setIcon(new URIImpl(jsonScreenFlow.getString("icon")));
 		if (jsonScreenFlow.get("screenshot") != null)
@@ -138,7 +138,7 @@ public abstract class GenericServlet extends HttpServlet {
 		if (jsonScreen.get("version") != null)
 			screen.setVersion(jsonScreen.getString("version"));
 		if (jsonScreen.get("creationDate") != null)
-			screen.setCreationDate(FormatterUtil.parseDateISO8601(jsonScreen.getString("creationDate")));
+			screen.setCreationDate(DateFormatter.parseDateISO8601(jsonScreen.getString("creationDate")));
 		if (jsonScreen.get("icon") != null)
 			screen.setIcon(new URIImpl(jsonScreen.getString("icon")));
 		if (jsonScreen.get("screenshot") != null)

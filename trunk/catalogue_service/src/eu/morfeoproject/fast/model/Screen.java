@@ -16,7 +16,7 @@ import org.ontoware.rdf2go.model.node.URI;
 import org.ontoware.rdf2go.vocabulary.RDF;
 import org.ontoware.rdf2go.vocabulary.RDFS;
 
-import eu.morfeoproject.fast.util.FormatterUtil;
+import eu.morfeoproject.fast.util.DateFormatter;
 import eu.morfeoproject.fast.vocabulary.DC;
 import eu.morfeoproject.fast.vocabulary.FGO;
 import eu.morfeoproject.fast.vocabulary.FOAF;
@@ -164,15 +164,28 @@ public class Screen implements Resource {
 		this.postconditions = postconditions;
 	}
 	
-	public boolean equals(Screen o) {
-		return ((Screen)o).getUri().equals(this.uri);
+	/**
+	 * Compare if two screens have the same URI
+	 * @param s the screen to compare with
+	 * @return true if their URIs are the same
+	 */
+	public boolean equals(Screen s) {
+		return s.getUri().equals(this.uri);
 	}
 	
+	/**
+	 * Returns the URI of the screen
+	 * @return string representation of the URI
+	 */
 	@Override
 	public String toString() {
 		return uri.toString();
 	}
 
+	/**
+	 * Transforms a Screen to a JSON object (key: value)
+	 * @return a JSON object containing all info about the screen
+	 */
 	public JSONObject toJSON() {
 		JSONObject json = new JSONObject();
 		try {
@@ -211,7 +224,7 @@ public class Screen implements Resource {
 			if (getCreationDate() == null)
 				json.put("creationDate", JSONObject.NULL);
 			else
-				json.put("creationDate", FormatterUtil.formatDateISO8601(getCreationDate()));
+				json.put("creationDate", DateFormatter.formatDateISO8601(getCreationDate()));
 			if (getIcon() == null)
 				json.put("icon", JSONObject.NULL);
 			else
@@ -275,7 +288,7 @@ public class Screen implements Resource {
 		if (this.getVersion() != null)
 			model.addStatement(screenUri, FGO.hasVersion, this.getVersion());
 		if (this.getCreationDate() != null)
-			model.addStatement(screenUri, DC.date, FormatterUtil.formatDateISO8601(this.getCreationDate()));
+			model.addStatement(screenUri, DC.date, DateFormatter.formatDateISO8601(this.getCreationDate()));
 		if (this.getIcon() != null)
 			model.addStatement(screenUri, FGO.hasIcon, this.getIcon());
 		if (this.getScreenshot() != null)

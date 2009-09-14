@@ -89,7 +89,7 @@ public class FindServlet extends GenericServlet {
 			}
 
 			// make the call to the catalogue
-			Set<URI> results = CatalogueAccessPoint.getCatalogue().find(canvas, true, true, 0, 100000, tags);
+			Set<URI> results = CatalogueAccessPoint.getCatalogue().findBackwards(canvas, true, true, 0, 100000, tags);
 
 			// write the results in the output
 			JSONArray output = new JSONArray();

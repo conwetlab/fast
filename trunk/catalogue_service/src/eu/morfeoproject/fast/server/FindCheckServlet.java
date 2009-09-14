@@ -99,7 +99,7 @@ public class FindCheckServlet extends HttpServlet {
 			HashSet<Resource> all = new HashSet<Resource>();
 			all.addAll(canvas);
 			all.addAll(elements);
-			Set<URI> results = CatalogueAccessPoint.getCatalogue().find(all, true, true, 0, 100000, tags);
+			Set<URI> results = CatalogueAccessPoint.getCatalogue().findBackwards(all, true, true, 0, 100000, tags);
 			// add results of 'find' to the list of elements
 			for (URI uri : results)
 				elements.add(CatalogueAccessPoint.getCatalogue().getResource(uri));
