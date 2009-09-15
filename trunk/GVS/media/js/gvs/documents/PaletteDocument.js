@@ -23,7 +23,7 @@ var PaletteDocument = Class.create(AbstractDocument, /** @lends PaletteDocument.
          * @type dijit.layout.BorderContainer
          * @private @member
          */
-        this._mainBorderContainer;
+        this._mainBorderContainer = null;
         
         var buildingBlockSets = new Array();
         

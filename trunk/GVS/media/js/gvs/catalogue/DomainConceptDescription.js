@@ -9,7 +9,6 @@ var DomainConceptDescription = Class.create(BuildingBlockDescription,
      */
     initialize: function($super, /** Hash */ properties) {
         $super(properties);
-
     },
     
     /**
@@ -22,7 +21,6 @@ var DomainConceptDescription = Class.create(BuildingBlockDescription,
         info.set('semantics', this.semantics);
 
         return info;
-
     }
 });
 

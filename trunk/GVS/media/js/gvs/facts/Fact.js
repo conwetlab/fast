@@ -5,7 +5,7 @@ var Fact = Class.create(
      * Describes an individual fact.
      * @constructs
      */
-    initialize: function(
+    initialize: function (
         /** String */ uri,
         /** String */ shortcut,
         /** String */ description
