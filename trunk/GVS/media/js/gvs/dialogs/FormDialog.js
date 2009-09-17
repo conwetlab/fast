@@ -96,6 +96,7 @@ var FormDialog = Class.create( /** @lends FormDialog.prototype */ {
                     var title = new Element ('h3').update(line.value);
                     form.domNode.appendChild(title);
                     break;
+                    
                 case 'input':
                     var div = new Element('div', {
                                     'class' : 'line'
@@ -109,12 +110,14 @@ var FormDialog = Class.create( /** @lends FormDialog.prototype */ {
                     div.appendChild(input.domNode);
                     form.domNode.appendChild(div);
                     break;
+                    
                 case 'freeText':
                     var div = new Element('div', {
                                     'class': 'line'
                                 }).update(line.value);
                     form.domNode.appendChild(div);
                     break;
+                    
                 case 'hidden':
                     var hidden = new Element('input',{
                                     'type': 'hidden',
@@ -123,6 +126,7 @@ var FormDialog = Class.create( /** @lends FormDialog.prototype */ {
                                 });
                     form.domNode.appendChild(hidden);
                     break;
+                    
                 case 'validation':
                     var div = new Element('div', {
                                     'class' : 'line'
@@ -137,10 +141,35 @@ var FormDialog = Class.create( /** @lends FormDialog.prototype */ {
                                 });
                     div.appendChild(input.domNode);
                     form.domNode.appendChild(div);
-                    break;                
-                case 'comboBox': //TODO
+                    break;   
+                                 
+                case 'comboBox':
+                    var div = new Element('div', {'class': 'line'});
+                    var label = new Element('label').update(line.label);
+                    div.appendChild(label);
+                    var comboBox = new Element('select', {
+                        'name': line.name
+                    });
+                    div.appendChild(comboBox);
+                    
+                    $A(line.options).each(function(option) {
+                        var optionNode = new Element('option', {
+                             'value': option.value
+                        }).update(option.label);
+                        
+                        if (option.value == line.value) {
+                            optionNode.selected = "selected";
+                        }
+                        
+                        comboBox.appendChild(optionNode);
+                    });
+                    form.domNode.appendChild(div);
                     break;
+    
                 //TODO: Implement more when necessary
+                    
+                default:
+                    throw "Unimplemented form field type";
             } 
         });
         this._contentNode.appendChild(form.domNode);

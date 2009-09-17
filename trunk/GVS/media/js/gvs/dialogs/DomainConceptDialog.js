@@ -5,9 +5,17 @@ var DomainConceptDialog = Class.create(AbstractDialog /** @lends DomainConceptDi
      * @constructs
      * @extends AbstractDialog
      */ 
-    initialize: function($super) {
-        
+    initialize: function($super,
+            /** Function */ onChangeCallback, /** String */ label) {
         $super("Domain concept");
+        
+        /**
+         * @type String
+         * @private @member
+         */
+        this._label = label;
+
+        this._onChangeCallback = onChangeCallback;
     },
     
     
@@ -33,13 +41,60 @@ var DomainConceptDialog = Class.create(AbstractDialog /** @lends DomainConceptDi
      */
     _initDialogInterface: function (){
  
-        this._form.setHeader("Check connector details", 
+        this._form.setHeader("Check domain concept details", 
                              "Please fulfill the required information in order to" +
                              " set up the connector.");
 
         var formData = [
-            /*{'type':'input', 'label': 'Screenflow Name:','name': 'SFName', 'value': 'New Screenflow'},
-            {'type':'input', 'label': 'Domain Context:','name': 'SFDomainContext', 'value': ''}*/
+            {
+                'type':'comboBox',
+                'label': 'Type:',
+                'name': 'type',
+                'value': '0',
+                'options': [{
+                    'value': 'undefined',
+                    'label': 'Choose a type...'
+                }, {
+                    'value': 'pre',
+                    'label': 'Precondition'
+                }, {
+                    'value': 'post',
+                    'label': 'Postcondition'
+                }],
+                'onChange': this._onTypeChange.bind(this) 
+            },
+            {
+                'type': 'input',
+                'label': 'Label:',
+                'name': 'label',
+                'value': this._label 
+            },
+            {
+                'type': 'title',
+                'value': 'EzWeb properties'
+            },
+            {
+                'type': 'comboBox',
+                'label': 'Binding',
+                'name': 'binding',
+                'value': '0',
+                'options': [{
+                    'value': 'undefined',
+                    'label': 'Choose a binding...'
+                }]
+            },
+            {
+                'type': 'input',
+                'label': 'Variable name',
+                'name': 'varname',
+                'value': ''
+            },
+            {
+                'type': 'input',
+                'label': 'Friendcode',
+                'name': 'friendcode',
+                'value': ''
+            }
         ];
         
         this._form.setContent(formData);               
@@ -56,7 +111,11 @@ var DomainConceptDialog = Class.create(AbstractDialog /** @lends DomainConceptDi
     /**
      * Reset method to leave the form as initially
      */
-    _reset: function (){
+    _reset: function() {
+    },
+    
+    _onTypeChange: function() {
+        alert("implement it!")
     }
 });
 

@@ -28,11 +28,11 @@ Object.extend(Utils, {
      * Copy the properties of an object into another. 
      */
     addProperties: function(/** Object */ to, /** Object */ properties) {
-            $H(properties.clone()).each(
-                function (pair){
-                    to[pair.key] = pair.value;
-                }
-            );
+        if (properties) {
+            $H(properties).clone().each(function(pair) {
+                to[pair.key] = pair.value;
+            });
+        }
     },
     
     setSatisfeabilityClass: function (/** DOMNode */ node, /** Boolean */ satisfeable) {
