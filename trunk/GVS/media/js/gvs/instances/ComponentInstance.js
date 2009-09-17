@@ -24,7 +24,6 @@ var ComponentInstance = Class.create(DragSource,
          * @private @member
          */
         this._buildingBlockDescription = buildingBlockDescription;
-        
 
         /**
          * BuildingBlock description graphical representation
@@ -110,6 +109,7 @@ var ComponentInstance = Class.create(DragSource,
         this.getHandlerNode().style.top = position.top + "px";
     },
 
+
     /**
      * Returns the building block description
      * @public
@@ -117,6 +117,7 @@ var ComponentInstance = Class.create(DragSource,
     getBuildingBlockDescription: function() {
         return this._buildingBlockDescription;
     },
+
 
     /**
      * Returns the building block type of this class

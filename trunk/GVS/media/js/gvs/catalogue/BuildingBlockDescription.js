@@ -7,12 +7,7 @@ var BuildingBlockDescription = Class.create(
      * @constructs
      */
     initialize: function(/** Hash */ properties) {
-        // copying all the properties
-        $H(properties).each(
-            function (pair){
-                this[pair.key] = pair.value;
-            }.bind(this)
-        );
+        Utils.addProperties(this, properties);
     },
 
 
@@ -27,8 +22,11 @@ var BuildingBlockDescription = Class.create(
     getInfo: function () {
         throw 'Abstract Method invocation. ' +
             'BuildingBlockDescription :: getInfo';    
-    }
+    },
 
+    addProperties: function(properties) {
+        Utils.addProperties(this, properties);
+    }
 
     // **************** PRIVATE METHODS **************** //
 });

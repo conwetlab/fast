@@ -5,7 +5,7 @@ function Logger()
     // *********************************
 }
 
-//FIXME: This class must dissapear
+//FIXME: This class must reinvent itself
 //       or adapted to the class conventions
 
 Logger.serverError = function(/*XmlHttpRequest*/ transport, /** Exception */ e){

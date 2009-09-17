@@ -5,22 +5,13 @@ var NewScreenflowDialog = Class.create(AbstractDialog /** @lends NewScreenflowDi
      * @constructs
      * @extends AbstractDialog
      */ 
-    initialize: function($super) {
-        
+    initialize: function($super) {  
         $super("New Screenflow");
     },
     
     
     // **************** PUBLIC METHODS **************** //
 
-    
-    /**
-     * show
-     * @overrides
-     */
-    show: function ($super) {
-        $super();
-    },
 
     // **************** PRIVATE METHODS **************** //
 
@@ -34,8 +25,8 @@ var NewScreenflowDialog = Class.create(AbstractDialog /** @lends NewScreenflowDi
     _initDialogInterface: function (){
  
         this._form.setHeader("Fulfill Gadget Information", 
-                             "Please fulfill the required information in order to" +
-                             " create a new screenflow.");
+                             "Please fulfill the required information in order to " +
+                             "create a new screenflow.");
 
         var formData = [
             {'type':'input', 'label': 'Screenflow Name:','name': 'SFName', 'value': 'New Screenflow'},
@@ -62,8 +53,7 @@ var NewScreenflowDialog = Class.create(AbstractDialog /** @lends NewScreenflowDi
             documentController = GVSSingleton.getInstance().getDocumentController();           
             documentController.createScreenflow (name, $A(domainContext));
             this.hide();
-        }
-        else {
+        } else {
             alert("A Screenflow name must be provided");
         }
     },

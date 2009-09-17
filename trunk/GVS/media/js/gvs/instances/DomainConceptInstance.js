@@ -9,6 +9,12 @@ var DomainConceptInstance = Class.create(ComponentInstance,
     initialize: function($super, /**BuildingBlockDescription*/ domainConceptDescription, 
             /** DropZone */ dropZone, /** InferenceEngine */ inferenceEngine) {
         $super(domainConceptDescription, dropZone, inferenceEngine);
+        
+        /**
+         * @type DomainConceptDialog
+         * @private @member
+         */
+        this._dialog = new DomainConceptDialog(this._onChange.bind(this));
     },
 
     // **************** PUBLIC METHODS **************** //
@@ -37,7 +43,28 @@ var DomainConceptInstance = Class.create(ComponentInstance,
      * @override
      */
     _onDoubleClick: function (/** Event */ event){
-        //this.showPropertiesDialog();
+        this._dialog.show();
+    },
+    
+    /**
+     * This function is called when the dialog is saved
+     * @private
+     */
+    _onChange: function (/** Hash */ data) {
+        /*
+         * {
+         *  'type': 'pre'|'post',
+         *  'label':
+         *  'ezweb': {
+         *      'varname': '...',
+         *      'friendcode': '...',
+         *      'binding': 'slot'|'userpref'|...
+         *   }  
+         * }
+         */
+        this._buildingBlockDescription.setProperties(data);
+        
+        // TODO: notify
     }
 });
 

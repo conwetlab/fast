@@ -1,28 +1,48 @@
-function Utils()
-{
-    // *********************************
-    //           STATIC CLASS
-    // *********************************
-}
+var Utils = Class.create();
 
-// TODO: update this class to the class standard format
+// **************** STATIC METHODS **************** //
 
-Utils.getIsoDateNow = function(/**Date*/ dateObject) {
-    var dateString = dateObject.toJSON();
-    dateString = dateString.replace(/"/,'');
-    if(dateString.endsWith('Z"')){
-        dateString=dateString.truncate(-2,'');
-        dateString=dateString+'+0000';
+Object.extend(Utils, {
+    
+    getIsoDateNow: function(/**Date*/ dateObject) {
+        var dateString = dateObject.toJSON();
+        dateString = dateString.replace(/"/,'');
+        if(dateString.endsWith('Z"')){
+            dateString=dateString.truncate(-2,'');
+            dateString=dateString+'+0000';
+        }
+        return dateString;
+    },
+    
+    ezWebDeploy: function(/**String*/ ezWebUri,/**String*/ templateUri) {
+       document.Deploy.action = ezWebUri;
+       document.Deploy.template_uri.value = templateUri;
+       document.Deploy.submit();
+    },
+    
+    igoogleDeploy: function(/**String*/ uri) {
+        alert("iGoogle Deployment service being developed (<a href='" + uri + "'>" + uri +"</a>)");
+    },
+    
+    /**
+     * Copy the properties of an object into another. 
+     */
+    addProperties: function(/** Object */ to, /** Object */ properties) {
+            $H(properties.clone()).each(
+                function (pair){
+                    to[pair.key] = pair.value;
+                }
+            );
+    },
+    
+    setSatisfeabilityClass: function (/** DOMNode */ node, /** Boolean */ satisfeable) {
+        if (satisfeable === null || satisfeable === undefined) {
+            //Unknown satisfeability
+            node.removeClassName('satisfeable');
+            node.removeClassName('unsatisfeable');
+        } else {
+            node.removeClassName(satisfeable ? 'unsatisfeable' : 'satisfeable');
+            node.addClassName(satisfeable ? 'satisfeable' : 'unsatisfeable');
+        }
     }
-    return dateString;
-}
-
-Utils.ezWebDeploy = function(/**String*/ ezWebUri,/**String*/ templateUri) {
-   document.Deploy.action = ezWebUri;
-   document.Deploy.template_uri.value = templateUri;
-   document.Deploy.submit();
-}
-
-Utils.igoogleDeploy = function(/**String*/ uri) {
-    alert("iGoogle Deployment service being developed (<a href='" + uri + "'>" + uri +"</a>)");
-} 
+}); 

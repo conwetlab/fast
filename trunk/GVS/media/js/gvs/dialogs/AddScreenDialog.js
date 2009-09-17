@@ -23,7 +23,7 @@ var AddScreenDialog = Class.create(AbstractDialog /** @lends AddScreenDialog.pro
                              " add a new screen to the catalogue.");
                              
         var formData = [
-            {'type':'title','value': 'Screen information'},
+            {'type':'title', 'value': 'Screen information'},
             {'type':'input', 'label': 'Label:','name': 'label', 'value': 'Label of the screen...'},
             {'type':'input', 'label': 'Description:','name': 'description', 'value': 'Short description of the screen...'},
             {'type':'input', 'label': 'Creator URL (*):','name': 'creator', 'value': 'Creator URL...'}, //TODO: validation

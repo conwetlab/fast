@@ -7,7 +7,7 @@ var DomainConceptDialog = Class.create(AbstractDialog /** @lends DomainConceptDi
      */ 
     initialize: function($super) {
         
-        $super("Connector properties");
+        $super("Domain concept");
     },
     
     

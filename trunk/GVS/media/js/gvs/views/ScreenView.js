@@ -114,11 +114,11 @@ var ScreenView = Class.create( BuildingBlockView,
         var satisfeable = reachabilityData.reachability;
         
         // screen
-        UIUtils.setSatisfeabilityClass(this.getNode(), satisfeable);
+        Utils.setSatisfeabilityClass(this.getNode(), satisfeable);
        
         // posts
         this._postIcons.each(function(postIcon) {
-            UIUtils.setSatisfeabilityClass(postIcon.getNode(), satisfeable);  
+            Utils.setSatisfeabilityClass(postIcon.getNode(), satisfeable);  
         });
         
         // pres
@@ -140,7 +140,7 @@ var ScreenView = Class.create( BuildingBlockView,
       
         this._preIcons.each(function(preIcon) {
             var factUri = preIcon.getFact().getUri();
-            UIUtils.setSatisfeabilityClass(preIcon.getNode(), preReachability.get(factUri));
+            Utils.setSatisfeabilityClass(preIcon.getNode(), preReachability.get(factUri));
         });
     },
     
