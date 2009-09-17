@@ -17,7 +17,7 @@ var ScreenDescription = Class.create(BuildingBlockDescription,
     getInfo: function() {
         var info = new Hash();
         info.set('Title', this.label['en-gb']);
-        info.set('Desc.', this.description['en-gb']);
+        info.set('Description', this.description['en-gb']);
         info.set('Concepts', this.domainContext.tags);
         return info;
 

@@ -10,7 +10,6 @@ var WelcomeDocument = Class.create(AbstractDocument,
     initialize: function($super) {
         $super("Welcome!",[]);
         this._populate ();
-        this._documentType=Constants.DocumentType.WELCOME;
     },
 
 

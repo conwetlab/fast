@@ -32,7 +32,7 @@ var BuildingBlockView = Class.create( /** @lends BuildingBlockView.prototype */ 
      */
     setReachability: function( /** Hash */ reachabilityData) {
         throw 'Abstract Method invocation. ' + 
-            'BuildingBlockView :: colorize';
+            'BuildingBlockView :: setReachability';
     },
     
     setSelected: function(/** Boolean */ selected) {

@@ -39,14 +39,9 @@ var AbstractDialog = Class.create( /** @lends AbstractDialog.prototype */ {
             this._initialized = true;
             this._initDialogInterface();
         }
-        //FIXME: This shouldn't be here
-        //Removing the keypress event handling to avoid deleting elements
-        //of the canvas when being in a dialog
-        Element.stopObserving(document, 'keypress', UIUtils.onKeyPressCanvas);
-        //If there is a reset method, call it
-        if (this._reset){
-            this._reset();
-        }
+        GVSSingleton.getInstance().setEnabled(false);
+        
+        this._reset();
         this._form.show();
     },
     
@@ -54,11 +49,10 @@ var AbstractDialog = Class.create( /** @lends AbstractDialog.prototype */ {
      * hide
      */
     hide: function () {
-        //FIXME: This shouldn't be here
-        //Arming the event again
-        Element.observe(document, 'keypress', UIUtils.onKeyPressCanvas);
+        GVSSingleton.getInstance().setEnabled(true);
         this._form.hide();
     },
+    
     /**
      * getForm
      * @type DOMNode
@@ -70,6 +64,13 @@ var AbstractDialog = Class.create( /** @lends AbstractDialog.prototype */ {
 
     // **************** PRIVATE METHODS **************** //
 
+    /**
+     * This method is called for reseting the dialog fields.
+     * Overload when necessary.
+     */
+    _reset: function() {
+        // Do nothing
+    },
 
     /** 
      * initDialogInterface

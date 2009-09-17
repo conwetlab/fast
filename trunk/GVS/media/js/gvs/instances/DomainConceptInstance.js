@@ -13,6 +13,14 @@ var DomainConceptInstance = Class.create(ComponentInstance,
 
     // **************** PUBLIC METHODS **************** //
 
+    /**
+     * Somehow something the user can comprehend
+     * @override
+     */
+    getTitle: function() {
+        return null;    // TODO: get something better
+    },
+
     // **************** PRIVATE METHODS **************** //
     /**
      * Creates a new View instance for the component

@@ -14,11 +14,11 @@ var ScreenInstance = Class.create(ComponentInstance,
     // **************** PUBLIC METHODS **************** //
 
     /**
-     * Colorize the component depending on the reachability
-     * @public
+     * Somehow something the user can comprehend
+     * @override
      */
-    colorize: function(){
-        this.getView().colorize(this.getBuildingBlockDescription().satisfeable);
+    getTitle: function() {
+        return this._buildingBlockDescription.label['en-gb'];    
     },
 
 

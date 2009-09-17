@@ -37,6 +37,14 @@ var ComponentInstance = Class.create(DragSource,
     
 
     // **************** PUBLIC METHODS **************** //
+    /**
+     * Somehow something the user can comprehend
+     * @abstract
+     */
+    getTitle: function() {
+        throw "Abstract method invokation. ComponentInstance::getTitle";    
+    },
+    
     getUri: function() {
         return this._buildingBlockDescription.uri;    
     },
@@ -118,14 +126,6 @@ var ComponentInstance = Class.create(DragSource,
         return this._buildingBlockType;
     },
 
-    /**
-     * Colorize the component depending on the reachability
-     * @public
-     */
-    colorize: function() {
-        throw 'Abstract Method invocation. ' + 
-            'PaletteComponent :: colorize';
-    },
 
     /**
      * Destroys the view

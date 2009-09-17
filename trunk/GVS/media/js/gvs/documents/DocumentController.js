@@ -11,7 +11,7 @@ var DocumentController = Class.create(
          * @type Hash
          * @private
          */
-        this._documents = {};
+        this._documents = new Hash();
 
         /**
          * Currently selected document
@@ -20,25 +20,27 @@ var DocumentController = Class.create(
          */
         this._currentDocument = null;
         
-            
+        // Arming onFocus callback
+        dojo.connect(dijit.byId("documentContainer"), "selectChild", function(tab){
+            DocumentController.prototype._selectDocument.apply(this, arguments);
+        }.bind(this));
+        
         // The welcome document is the initial document
         var welcome = new WelcomeDocument();
-
-        // FIXME: Work around for updating the Fact Factory
-        //FactFactorySingleton.getInstance().updateFacts();
-        
-        //Arming onFocus callback
-        var mine = this;
-        dojo.connect(dijit.byId("documentContainer"), "selectChild", function(tab){
-            DocumentController.prototype._selectDocument.apply(mine, arguments);
-        });
-        
         this.addDocument(welcome);
         
+        this.setEnabled(true);
     },
 
     // **************** PUBLIC METHODS **************** //
 
+    setEnabled: function(/** Boolean */ enabled) {
+        if (enabled) {
+            document.observe('keypress', this._onKeyPressed.bind(this));
+        } else {
+            document.stopObserving('keypress', this._onKeyPressed.bind(this));
+        }        
+    },
     
     /**
      * Creates a new screenflow document
@@ -70,13 +72,15 @@ var DocumentController = Class.create(
      * Adds a new document.
      */
     addDocument: function(document){
-        this._documents[document.getTabId()] = document;
+        this._documents.set(document.getTabId(), document);
         dijit.byId("documentContainer").addChild(document.getTab());
         dijit.byId("documentContainer").selectChild(document.getTabId());
-        $$(".tabLabel").each(function(canvas){canvas.observe("focus",function(e){
-           var element = Event.element(e);
-           element.blur();
-        })});
+        $$(".tabLabel").each(function(canvas) {
+            canvas.observe("focus",function(e) {
+                var element = Event.element(e);
+                element.blur();
+            })
+        });
     },
 
     /**
@@ -85,7 +89,7 @@ var DocumentController = Class.create(
      * @type AbstractDocument
      */
     getDocument: function(docId) {
-        return this._documents[docId];
+        return this._documents.get(docId);
     },
 
     /**
@@ -100,16 +104,7 @@ var DocumentController = Class.create(
      * Shows the deployment dialog of the currently focused document.
      */
     showDeployCurrentDocDialog: function(){
-        switch(this._currentDocument.getDocumentType()) {
-            case Constants.DocumentType.WELCOME:
-                break;
-            case Constants.DocumentType.SCREENFLOW:
-                this.getCurrentDocument().showDeployGadgetDialog();
-                break;
-            // TODO: there can be something similar for other documents...?
-            default:
-                break;
-        }
+        this.getCurrentDocument().showDeployGadgetDialog();
     },
     /**
      * this function closes a document by its Id
@@ -125,7 +120,7 @@ var DocumentController = Class.create(
         dijit.byId("documentContainer").removeChild(dijit.byId(id));
         dijit.byId(id).destroyRecursive(true);
          
-        delete this._documents[id];
+        this._documents.unset(id);
         
         if ($H(this._documents).keys().length == 0){
             //Show the welcome Document
@@ -149,9 +144,16 @@ var DocumentController = Class.create(
         } else { //it is a string id
             id = tab;
         }
-        this._currentDocument = this._documents[id];
+        this._currentDocument = this._documents.get(id);
         //Update the set of buttons
         this._currentDocument.updateToolbar();
+    },
+    
+    /**
+     * Function that passes the key events to the current document
+     */
+    _onKeyPressed: function (/** Event */ e) {
+        this._currentDocument.onKeyPressed(e);    
     }
 });
 

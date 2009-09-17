@@ -44,13 +44,6 @@ var AbstractDocument = Class.create( /** @lends AbstractDocument.prototype */ {
             onClose: this._closeDocument.bind(this)
         }, null);
         
-        /**
-         * Document Type
-         * @type String
-         * @private
-         */       
-        this._documentType=null;
-        
         
         this._tab.setContent(this._tabContent);
     },
@@ -62,7 +55,7 @@ var AbstractDocument = Class.create( /** @lends AbstractDocument.prototype */ {
      * Gets the tab id.
      * @type String
      */
-    getTabId: function () {
+    getTabId: function() {
         return this._tabId;
     },
     
@@ -80,7 +73,7 @@ var AbstractDocument = Class.create( /** @lends AbstractDocument.prototype */ {
      * Gets the title.
      * @type String
      */
-    getTitle: function () {
+    getTitle: function() {
         return this._title;
     },
 
@@ -88,20 +81,19 @@ var AbstractDocument = Class.create( /** @lends AbstractDocument.prototype */ {
      * Gets the content node.
      * @type DOMNode
      */
-    getNode: function () {
+    getNode: function() {
         return this._tabContent;
     },
     
-    
     /**
-     * Gets the document type.
-     * @type String
+     * Method called on keypress. Might be overloaded
      */
-    getDocumentType: function () {
-        return this._documentType;
+    onKeyPressed: function(/** Event */ e) {
+        // Do nothing
     },
 
     /**
+     * FIXME: this is responsibility of document controller
      * Select this tab.
      */
     select: function() {

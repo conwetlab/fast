@@ -86,9 +86,6 @@ var GVSSingleton = function() {
             this._documentController = new DocumentController();
             
             this._initToolbar();
-            
-            //FIXME: This shouldn't be here
-            Element.observe(document, "keypress",UIUtils.onKeyPressCanvas);
         },
 
         /**
@@ -120,6 +117,10 @@ var GVSSingleton = function() {
          */
         getUser: function () {
             return this._user;
+        },
+        
+        setEnabled: function (/** Boolean */ enabled) {
+            this._documentController.setEnabled(enabled);
         },
         
         // **************** PRIVATE METHODS **************** //

@@ -42,13 +42,7 @@ var ScreenflowDocument = Class.create(PaletteDocument,
          * @private @member
          */
         this._deployGadgetDialog = new DeployGadgetDialog(this);
-        
-        /**
-         * This property represents the selected element
-         * @type BuildingBlockInstance
-         * @private @member
-         */
-        this._selectedElement = null;
+       
               
         // Screenflow Definition
         
@@ -126,51 +120,10 @@ var ScreenflowDocument = Class.create(PaletteDocument,
                 alert("Don't know how accept that kind of element. ScreenflowDocument::drop");    
         }            
 
-        this._updateReachability();
+        this._refreshReachability();
         this.updateToolbar();
         this.setSelectedElement(droppedElement);
         return true; // Accept element
-    },
-
-    /**
-     * Delete a screen.
-     * @param ComponentInstance
-     *      Instance to be deleted from the
-     *      Screenflow document.
-     */
-    deleteInstance: function(instance) {
-        if (this._canvasInstances.get(instance.getUri())) {
-            
-            var node = instance.getView().getNode();
-            node.parentNode.removeChild(node);
-            
-            this._canvasInstances.unset(instance.getUri());
-            
-            switch(instance.constructor) {
-                case ScreenInstance:
-                    this._description.deleteScreen(instance.getUri());
-                    break;
-                    
-                case DomainConceptInstance:
-                    alert("Not yet implemented. ScreenflowDocument::deleteInstance");
-                    break;
-                    
-                default:
-                    throw "Illegal state. ScreenflowDocument::deleteInstance";
-            }
-
-            this._updateReachability();
-            this.updateToolbar();
-            this.setSelectedElement();
-        }
-    },
-
-    /**
-     * Returns the selected element for the screenflow document
-     * @type ComponentInstance
-     */
-    getSelectedElement: function () {
-        return this._selectedElement;
     },
 
     /**
@@ -178,18 +131,10 @@ var ScreenflowDocument = Class.create(PaletteDocument,
      * @param ComponentInstance
      *      Element to be selected for the
      *      Screenflow document.
+     * @override
      */
-    setSelectedElement: function (element) {
-        if (this._selectedElement != null) {
-            this._selectedElement.getView().setSelected(false);
-        }
-        
-        if (element != undefined) {
-            this._selectedElement = element;
-            this._selectedElement.getView().setSelected(true);
-        } else {
-            this._selectedElement = null;
-        }
+    setSelectedElement: function ($super, element) {
+        $super(element);
         
         this._updatePropertiesPane();
     },
@@ -228,6 +173,40 @@ var ScreenflowDocument = Class.create(PaletteDocument,
     },
 
     // **************** PRIVATE METHODS **************** //
+
+    /**
+     * Delete a screen.
+     * @param ComponentInstance
+     *      Instance to be deleted from the
+     *      Screenflow document.
+     * @override
+     */
+    _deleteInstance: function(instance) {
+        if (this._canvasInstances.get(instance.getUri())) {
+            
+            var node = instance.getView().getNode();
+            node.parentNode.removeChild(node);
+            
+            this._canvasInstances.unset(instance.getUri());
+            
+            switch(instance.constructor) {
+                case ScreenInstance:
+                    this._description.removeScreen(instance.getUri());
+                    break;
+                    
+                case DomainConceptInstance:
+                    alert("Not yet implemented. ScreenflowDocument::deleteInstance");
+                    break;
+                    
+                default:
+                    throw "Illegal state. ScreenflowDocument::deleteInstance";
+            }
+
+            this._refreshReachability();
+            this.updateToolbar();
+            this.setSelectedElement();
+        }
+    },
 
     /**
      * Gets the elements of the canvas
@@ -341,7 +320,7 @@ var ScreenflowDocument = Class.create(PaletteDocument,
      * Elements: canvas and palettes
      * @private
      */
-    _updateReachability: function () {
+    _refreshReachability: function () {
         var canvas = this._getCanvas();
         var palette = this._paletteController.getComponentUris();
         
