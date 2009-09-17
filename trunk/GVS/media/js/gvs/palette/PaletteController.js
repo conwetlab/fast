@@ -61,12 +61,7 @@ var PaletteController = Class.create(
      * All uris of all the components (of all the palettes)
      */
     getComponentUris: function() {
-        var uris = [];
-        /*this._palettes.each(function(pair) {
-            uris = uris.concat(pair.value.getComponentUris());
-        });*/
-        uris = this._palettes.get("screen").getComponentUris();
-        return uris;
+        return this._palettes.get(Constants.BuildingBlock.SCREEN).getComponentUris();
     }
 
     // **************** PRIVATE METHODS **************** //

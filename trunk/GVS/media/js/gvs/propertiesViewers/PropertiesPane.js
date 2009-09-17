@@ -31,13 +31,13 @@ var PropertiesPane = Class.create( /** @lends PropertiesPane.prototype */ {
 
         var title = "";
 
-        if (buildingBlockDescription.label['en-gb']) {
+        if (buildingBlockDescription.label && buildingBlockDescription.label['en-gb']) {
             title = buildingBlockDescription.label['en-gb'];
         } else if (buildingBlockDescription.name) {
             title = buildingBlockDescription.name;
         }
         this._propertiesTable.insertDataValues(buildingBlockDescription.getInfo());
-        this._propertiesTable.setTitle('Properties of: '  + title);
+        this._propertiesTable.setTitle((title ? 'Properties of: '  + title : 'Properties'));
     },
 
     /**
