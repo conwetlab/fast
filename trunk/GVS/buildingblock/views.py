@@ -13,7 +13,6 @@ from commons.utils import json_encode, cleanUrl
 from commons.httpUtils import PUT_parameter, validate_url, download_http_content
 from python_rest_client.restful_lib import Connection, isValidResponse
 from buildingblock.models import BuildingBlock, Screenflow, Screen, Form, Operator, Resource, BuildingBlockCode, UserVote, UserTag, Tag
-from django.contrib.auth.models import User
 
 class BuildingBlockCollection(resource.Resource):
     def read(self, request, bbtype):
@@ -240,21 +239,23 @@ class Publication(resource.Resource):
                             
             updateCode(bb, data)
             
-            if data.has_key("uri"):
-                conn = Connection(cleanUrl(bb.get_catalogue_url()))
-                result = conn.request_put("/" + quote_plus(data.get("uri")), body=bb.data, headers={'Accept':'text/json'})
-                if isValidResponse(result):
-                    response = HttpResponse(result['body'], mimetype='application/json; charset=UTF-8')
-                else:
-                    raise Exception(result['body'])
-            else:
+            if (bb.uri == None) or (bb.uri == ""):
                 conn = Connection(cleanUrl(bb.get_catalogue_url()))
                 body = bb.data
                 result = conn.request_post("", body=body, headers={'Accept':'text/json'})
                 if isValidResponse(result):
                     response = HttpResponse(result['body'], mimetype='application/json; charset=UTF-8')
                     bb.data = response.content
+                    obj = simplejson.loads(response.content)
+                    bb.uri = obj["uri"]
                     bb.save()
+                else:
+                    raise Exception(result['body'])
+            else:
+                conn = Connection(cleanUrl(bb.get_catalogue_url()))
+                result = conn.request_put("/" + quote_plus(bb.uri), body=bb.data, headers={'Accept':'text/json'})
+                if isValidResponse(result):
+                    response = HttpResponse(result['body'], mimetype='application/json; charset=UTF-8')
                 else:
                     raise Exception(result['body'])
                 
@@ -275,14 +276,15 @@ class Publication(resource.Resource):
             
             data = simplejson.loads(bb.data)
             
-            if data.has_key("uri"):
+            if (bb.uri != None) and (bb.uri != ""):
                 conn = Connection(cleanUrl(bb.get_catalogue_url()))
                 data = simplejson.loads(bb.data)
-                result = conn.request_delete("/" + quote_plus(data.get("uri")), headers={'Accept':'text/json'})
+                result = conn.request_delete("/" + quote_plus(bb.uri), headers={'Accept':'text/json'})
                 if isValidResponse(result):
                     response = HttpResponse(result['body'], mimetype='application/json; charset=UTF-8')
                     del data["uri"]
                     bb.data = json_encode(data)
+                    bb.uri = None
                     bb.save()
                 else:
                     raise Exception(result['body'])

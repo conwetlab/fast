@@ -27,6 +27,7 @@ class BuildingBlock(models.Model):
     version = models.CharField(max_length=150)
     data = models.TextField()
     popularity = models.DecimalField(null=True, max_digits=3, decimal_places=2)
+    uri = models.URLField(null=True, db_index=True)
     
     class Meta:
         unique_together = ('name', 'type', 'version')
