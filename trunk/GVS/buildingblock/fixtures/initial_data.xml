@@ -1,0 +1,2909 @@
+<?xml version="1.0" encoding="utf-8"?>
+<django-objects version="1.0">
+    <object pk="2" model="buildingblock.buildingblock">
+        <field type="CharField" name="type">screen</field>
+        <field to="auth.user" name="author" rel="ManyToOneRel">1</field>
+        <field type="CharField" name="name">Product List</field>
+        <field type="CharField" name="version">1.0</field>
+        <field type="TextField" name="data">{
+  "code": "http://localhost:8010/screens/amazonList.scr.html",
+  "creationDate": null,
+  "creator": "http://www.ismaelrivera.es/",
+  "description": {"en-gb": "This screen shows the results of a given search in Amazon. It allows users to choose a product to see its details."},
+  "domainContext": {
+    "tags": [
+      "amazon",
+      "list"
+    ],
+    "user": "admin"
+  },
+  "homepage": "http://www.deri.ie/amazonList",
+  "icon": "http://localhost:8010/images/catalogue/amazonList.png",
+  "id": 2,
+  "label": {"en-gb": "Product List"},
+  "name": "Product List",
+  "postconditions": [[{
+    "label": {"en-gb": "An item"},
+    "pattern": "?I http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#Item",
+    "scope": "both"
+  }]],
+  "preconditions": [[{
+    "label": {"en-gb": "A search criteria"},
+    "pattern": "?F http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#SearchCriteria",
+    "scope": "both"
+  }]],
+  "rights": "http://creativecommons.org/",
+  "screenshot": "http://www.deri.ie/amazonList-screenshot.jpg",
+  "type": "screen",
+  "uri": "http://purl.oclc.org/fast/ontology/gadget#Screen1253535284680",
+  "version": "1.0"
+}</field>
+        <field type="DecimalField" name="popularity"><None></None></field>
+        <field type="CharField" name="uri">http://purl.oclc.org/fast/ontology/gadget#Screen1253535284680</field>
+    </object>
+    <object pk="4" model="buildingblock.buildingblock">
+        <field type="CharField" name="type">screen</field>
+        <field to="auth.user" name="author" rel="ManyToOneRel">1</field>
+        <field type="CharField" name="name">Shopping Cart</field>
+        <field type="CharField" name="version">1.0</field>
+        <field type="TextField" name="data">{
+  "code": "http://localhost:8010/screens/amazonShopping.scr.html",
+  "creationDate": null,
+  "creator": "http://www.ismaelrivera.es/",
+  "description": {"en-gb": "This screen shows the list of products added to the user shopping cart. It allows users to update product quantity and clear the cart."},
+  "domainContext": {
+    "tags": [
+      "amazon",
+      "search"
+    ],
+    "user": "admin"
+  },
+  "homepage": "http://www.deri.ie/amazonShopping",
+  "icon": "http://localhost:8010/images/catalogue/amazonShopping.png",
+  "id": 4,
+  "label": {"en-gb": "Shopping Cart"},
+  "name": "Shopping Cart",
+  "postconditions": [[{
+    "label": {"en-gb": "Purchase URL"},
+    "pattern": "?P http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#PurchaseURL",
+    "scope": "both"
+  }]],
+  "preconditions": [[{
+    "label": {"en-gb": "A shopping cart"},
+    "pattern": "?C http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#ShoppingCart",
+    "scope": "both"
+  }]],
+  "rights": "http://creativecommons.org/",
+  "screenshot": "http://www.deri.ie/amazonShopping-screenshot.jpg",
+  "type": "screen",
+  "uri": "http://purl.oclc.org/fast/ontology/gadget#Screen1253535293758",
+  "version": "1.0"
+}</field>
+        <field type="DecimalField" name="popularity"><None></None></field>
+        <field type="CharField" name="uri">http://purl.oclc.org/fast/ontology/gadget#Screen1253535293758</field>
+    </object>
+    <object pk="5" model="buildingblock.buildingblock">
+        <field type="CharField" name="type">screen</field>
+        <field to="auth.user" name="author" rel="ManyToOneRel">1</field>
+        <field type="CharField" name="name">Order</field>
+        <field type="CharField" name="version">1.0</field>
+        <field type="TextField" name="data">{
+  "code": "http://localhost:8010/screens/amazonOrder.scr.html",
+  "creationDate": null,
+  "creator": "http://www.ismaelrivera.es/",
+  "description": {"en-gb": "This screen shows the list of products added to the user shopping cart. It allows users to update product quantity and clear the cart."},
+  "domainContext": {
+    "tags": [
+      "amazon",
+      "purchase",
+      "order"
+    ],
+    "user": "admin"
+  },
+  "homepage": "http://www.deri.ie/amazonOrder",
+  "icon": "http://localhost:8010/images/catalogue/amazonOrder.png",
+  "id": 5,
+  "label": {"en-gb": "Order"},
+  "name": "Order",
+  "postconditions": [],
+  "preconditions": [[{
+    "label": {"en-gb": "Purchase URL"},
+    "pattern": "?P http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#PurchaseURL",
+    "scope": "both"
+  }]],
+  "rights": "http://creativecommons.org/",
+  "screenshot": "http://www.deri.ie/amazonOrder-screenshot.jpg",
+  "type": "screen",
+  "uri": "http://purl.oclc.org/fast/ontology/gadget#Screen1253535297914",
+  "version": "1.0"
+}</field>
+        <field type="DecimalField" name="popularity"><None></None></field>
+        <field type="CharField" name="uri">http://purl.oclc.org/fast/ontology/gadget#Screen1253535297914</field>
+    </object>
+    <object pk="6" model="buildingblock.buildingblock">
+        <field type="CharField" name="type">screen</field>
+        <field to="auth.user" name="author" rel="ManyToOneRel">1</field>
+        <field type="CharField" name="name">Suggestion List</field>
+        <field type="CharField" name="version">1.0</field>
+        <field type="TextField" name="data">{
+  "code": "http://localhost:8010/screens/amazonSuggestion.scr.html",
+  "creationDate": null,
+  "creator": "http://www.ismaelrivera.es/",
+  "description": {"en-gb": "This screen shows the list of products related to a given one. It allows users select a new product from this list."},
+  "domainContext": {
+    "tags": [
+      "amazon",
+      "list",
+      "suggestion"
+    ],
+    "user": "admin"
+  },
+  "homepage": "http://www.deri.ie/amazonSuggestion",
+  "icon": "http://localhost:8010/images/catalogue/amazonSuggestion.png",
+  "id": 6,
+  "label": {"en-gb": "Suggestion List"},
+  "name": "Suggestion List",
+  "postconditions": [[{
+    "label": {"en-gb": "An item"},
+    "pattern": "?I http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#Item",
+    "scope": "both"
+  }]],
+  "preconditions": [[{
+    "label": {"en-gb": "An item"},
+    "pattern": "?I http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#Item",
+    "scope": "both"
+  }]],
+  "rights": "http://creativecommons.org/",
+  "screenshot": "http://www.deri.ie/amazonSuggestion-screenshot.jpg",
+  "type": "screen",
+  "uri": "http://purl.oclc.org/fast/ontology/gadget#Screen1253535302148",
+  "version": "1.0"
+}</field>
+        <field type="DecimalField" name="popularity"><None></None></field>
+        <field type="CharField" name="uri">http://purl.oclc.org/fast/ontology/gadget#Screen1253535302148</field>
+    </object>
+    <object pk="1" model="buildingblock.buildingblock">
+        <field type="CharField" name="type">screen</field>
+        <field to="auth.user" name="author" rel="ManyToOneRel">1</field>
+        <field type="CharField" name="name">Product Search</field>
+        <field type="CharField" name="version">1.0</field>
+        <field type="TextField" name="data">{
+  "code": "http://localhost:8010/screens/amazonSearch.scr.html",
+  "creationDate": null,
+  "creator": "http://www.ismaelrivera.es/",
+  "description": {"en-gb": "This screen allows users to look for a product in Amazon, providing a keyword search interface. It produces a search criteria or filter fact."},
+  "domainContext": {
+    "tags": [
+      "amazon",
+      "search"
+    ],
+    "user": "admin"
+  },
+  "homepage": "http://www.deri.ie/amazonSearch",
+  "icon": "http://localhost:8010/images/catalogue/amazonSearch.png",
+  "id": 1,
+  "label": {"en-gb": "Product Search"},
+  "name": "Product Search",
+  "postconditions": [[{
+    "label": {"en-gb": "A search criteria"},
+    "pattern": "?F http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#SearchCriteria",
+    "scope": "both"
+  }]],
+  "preconditions": [],
+  "rights": "http://creativecommons.org/",
+  "screenshot": "http://www.deri.ie/amazonSearch-screenshot.jpg",
+  "type": "screen",
+  "uri": "http://purl.oclc.org/fast/ontology/gadget#Screen1253535267477",
+  "version": "1.0"
+}</field>
+        <field type="DecimalField" name="popularity"><None></None></field>
+        <field type="CharField" name="uri">http://purl.oclc.org/fast/ontology/gadget#Screen1253535267477</field>
+    </object>
+    <object pk="3" model="buildingblock.buildingblock">
+        <field type="CharField" name="type">screen</field>
+        <field to="auth.user" name="author" rel="ManyToOneRel">1</field>
+        <field type="CharField" name="name">Product Details</field>
+        <field type="CharField" name="version">1.0</field>
+        <field type="TextField" name="data">{
+  "code": "http://localhost:8010/screens/amazonProduct.scr.html",
+  "creationDate": null,
+  "creator": "http://www.ismaelrivera.es/",
+  "description": {"en-gb": "This screen shows the details for a given product sold by Amazon. It allows users to add it to their shopping carts."},
+  "domainContext": {
+    "tags": [
+      "amazon",
+      "details",
+      "shoppingCart"
+    ],
+    "user": "admin"
+  },
+  "homepage": "http://www.deri.ie/amazonProduct",
+  "icon": "http://localhost:8010/images/catalogue/amazonProduct.png",
+  "id": 3,
+  "label": {"en-gb": "Product Details"},
+  "name": "Product Details",
+  "postconditions": [[{
+    "label": {"en-gb": "A shopping cart"},
+    "pattern": "?C http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#ShoppingCart",
+    "scope": "both"
+  }]],
+  "preconditions": [[{
+    "label": {"en-gb": "An item"},
+    "pattern": "?I http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#Item",
+    "scope": "both"
+  }]],
+  "rights": "http://creativecommons.org/",
+  "screenshot": "http://www.deri.ie/amazonProduct-screenshot.jpg",
+  "type": "screen",
+  "uri": "http://purl.oclc.org/fast/ontology/gadget#Screen1253535289414",
+  "version": "1.0"
+}</field>
+        <field type="DecimalField" name="popularity"><None></None></field>
+        <field type="CharField" name="uri">http://purl.oclc.org/fast/ontology/gadget#Screen1253535289414</field>
+    </object>
+    <object pk="7" model="buildingblock.buildingblock">
+        <field type="CharField" name="type">screen</field>
+        <field to="auth.user" name="author" rel="ManyToOneRel">1</field>
+        <field type="CharField" name="name">Price Comparative</field>
+        <field type="CharField" name="version">1.0</field>
+        <field type="TextField" name="data">{
+  "code": "http://localhost:8010/screens/amazonPrice.scr.html",
+  "creationDate": null,
+  "creator": "http://www.ismaelrivera.es/",
+  "description": {"en-gb": "This screen shows a price comparative for a given product."},
+  "domainContext": {
+    "tags": [
+      "amazon",
+      "list",
+      "price comparative"
+    ],
+    "user": "admin"
+  },
+  "homepage": "http://www.deri.ie/amazonShopping",
+  "icon": "http://localhost:8010/images/catalogue/amazonPrice.png",
+  "id": 7,
+  "label": {"en-gb": "P. Comparative"},
+  "name": "Price Comparative",
+  "postconditions": [[{
+    "label": {"en-gb": "A shopping cart"},
+    "pattern": "?C http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#ShoppingCart",
+    "scope": "both"
+  }]],
+  "preconditions": [[{
+    "label": {"en-gb": "An item"},
+    "pattern": "?I http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#Item",
+    "scope": "both"
+  }]],
+  "rights": "http://creativecommons.org/",
+  "screenshot": "http://www.deri.ie/amazonShopping-screenshot.jpg",
+  "type": "screen",
+  "uri": "http://purl.oclc.org/fast/ontology/gadget#Screen1253535306429",
+  "version": "1.0"
+}</field>
+        <field type="DecimalField" name="popularity"><None></None></field>
+        <field type="CharField" name="uri">http://purl.oclc.org/fast/ontology/gadget#Screen1253535306429</field>
+    </object>
+    <object pk="8" model="buildingblock.buildingblock">
+        <field type="CharField" name="type">screen</field>
+        <field to="auth.user" name="author" rel="ManyToOneRel">1</field>
+        <field type="CharField" name="name">Ebay List Comparative</field>
+        <field type="CharField" name="version">1.0</field>
+        <field type="TextField" name="data">{
+  "code": "http://localhost:8010/screens/eBayList.scr.html",
+  "creationDate": null,
+  "creator": "http://www.ismaelrivera.es/",
+  "description": {"en-gb": "This screen shows a ebay price comparative for a given amazon product."},
+  "domainContext": {
+    "tags": [
+      "amazon",
+      "list",
+      "price comparative",
+      "ebay"
+    ],
+    "user": "admin"
+  },
+  "homepage": "http://www.deri.ie/ebayShopping",
+  "icon": "http://localhost:8010/images/catalogue/eBayList.png",
+  "id": 8,
+  "label": {"en-gb": "Ebay List Comparative"},
+  "name": "Ebay List Comparative",
+  "postconditions": [[{
+    "label": {"en-gb": "An eBay item"},
+    "pattern": "?EI http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://developer.ebay.com/DevZone/shopping/docs/CallRef/FindItemsAdvanced.html#Request",
+    "scope": "both"
+  }]],
+  "preconditions": [[{
+    "label": {"en-gb": "An Amazon item"},
+    "pattern": "?I http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#Item",
+    "scope": "both"
+  }]],
+  "rights": "http://creativecommons.org/",
+  "screenshot": "http://www.deri.ie/amazonShopping-screenshot.jpg",
+  "type": "screen",
+  "uri": "http://purl.oclc.org/fast/ontology/gadget#Screen1253535316647",
+  "version": "1.0"
+}</field>
+        <field type="DecimalField" name="popularity"><None></None></field>
+        <field type="CharField" name="uri">http://purl.oclc.org/fast/ontology/gadget#Screen1253535316647</field>
+    </object>
+    <object pk="2" model="buildingblock.screen">
+    </object>
+    <object pk="4" model="buildingblock.screen">
+    </object>
+    <object pk="5" model="buildingblock.screen">
+    </object>
+    <object pk="6" model="buildingblock.screen">
+    </object>
+    <object pk="1" model="buildingblock.screen">
+    </object>
+    <object pk="3" model="buildingblock.screen">
+    </object>
+    <object pk="7" model="buildingblock.screen">
+    </object>
+    <object pk="8" model="buildingblock.screen">
+    </object>
+    <object pk="1" model="buildingblock.buildingblockcode">
+        <field to="buildingblock.buildingblock" name="buildingBlock" rel="ManyToOneRel">1</field>
+        <field type="TextField" name="code">&lt;html&gt;
+    &lt;head&gt;
+        &lt;meta http-equiv="Content-Type" content="application/xhtml+xml; charset=UTF-8" /&gt;
+        &lt;link type="text/css" rel="stylesheet" href="http://piccolo.ls.fi.upm.es/amazonScreens/style/screen.css" /&gt;
+		&lt;style type="text/css"&gt;
+			#bodyDiv{
+				max-width: 550px;
+			}
+			#searchArea {
+				border: 1px solid #F8A704;
+				-moz-border-radius:13px 13px;
+				background:#FFF8E8 url(http://piccolo.ls.fi.upm.es/amazonScreens/style/bg_td2.jpg) repeat-x;
+				border:1px solid #F8A704;
+				height:50px;
+				margin:5px auto 0px;
+				padding:0px;
+				text-align:center;
+				width:98%;
+			}
+			#contents{
+				padding:12px;
+			}
+			#send{
+				margin-left: 15px;
+			}
+			#amazonImage{
+				position:absolute;
+				right:2px;
+				top:3px;
+			}
+			.title{
+				padding: 2px;
+				color:#AAAAAA;
+				font-weight: bold;
+				font-family:Arial,Helvetica,sans-serif;	
+				white-space:nowrap;
+				overflow: hidden;
+			}
+
+		&lt;/style&gt;
+        &lt;script language="JavaScript"&gt;
+        	function Search(){};
+        	
+        	Search.prototype.init = function (){
+				//List of possible searches
+				var searchIndices = ["All","Apparel","Automotive","Baby","Beauty","Blended",
+									 "Books","Classical", "DigitalMusic","DVD","Electronics",
+									 "GourmetFood","HealthPersonalCare","HomeGarden","Industrial",
+									 "Jewelry","KindleStore","Kitchen","Magazines","Merchants",
+									 "Miscellaneous","MP3Downloads","Music","MusicalInstruments",
+									 "MusicTracks","OfficeProducts","OutdoorLiving","PCHardware",
+									 "PetSupplies","Photo","SilverMerchants","Software","SportingGoods",
+									 "Tools","Toys","UnboxVideo","VHS","Video","VideoGames","Watches",
+									 "Wireless","WirelessAccessories"];
+				$("send").observe("click", search.send);
+				$("send").observe("mouseover",function(event){
+						var e = Event.element(event);
+						e.setStyle({cursor:"pointer"});
+					});
+				//Populate the product type select element
+				search.populateOptions(searchIndices);
+			}
+			
+			Search.prototype.populateOptions = function (_list){
+				var templateString = "&lt;option value ='#{element}'&gt;#{caption}&lt;/option&gt;";
+				var template = new Template(templateString);
+				var optionHTML = "";
+				$A(_list).each (function (element){
+					optionHTML += template.evaluate({"element":element,"caption":search.separate(element)});
+				});
+				$("productType").update(optionHTML);
+			}
+			
+			//This function returns a human readable element, 
+			//separating words by white-spaces
+			Search.prototype.separate = function (element){
+				//Workaround for special cases
+				//TODO: Create a generic solution, maybe another regexp?
+				if (element=="DVD" || element=="VHS" || element=="MP3Downloads" || element=="PCHardware"){
+					if (element=="MP3Downloads")
+						return "MP3 Downloads";
+					if (element=="PCHardware")
+						return "PC Hardware";
+					return element;
+				}
+				else{
+					var result = element.replace(/([A-Z])/g, " $1");
+					//Remove first white-space when necessary
+					result = (result[0]==" "?result.substring(1,result.length):result);
+					return result;
+				}
+			}
+			
+			Search.prototype.send = function (){
+				if ($F("searchText").length==0){ //Empty keywords are forbidden
+					alert ("You must introduce at least one keyword");
+					return;
+				}
+				var filter = {uri: 'http://aws.amazon.com/AWSECommerceService#SearchCriteria', data:{productType: $F("productType"), searchText: $F("searchText")}};
+				ScreenflowEngineFactory.getInstance().manageFacts([filter],[]);
+			}
+			
+			var search = new Search();
+			ScreenflowEngineFactory.getInstance().addScreenLoader("ProductSearch", search.init);
+        &lt;/script&gt;
+    &lt;/head&gt;
+    &lt;body&gt;
+        &lt;div id="bodyDiv"&gt;
+        	&lt;span id="amazonImage"&gt;&lt;img src="http://piccolo.ls.fi.upm.es/amazonScreens/images/amazon.png" /&gt;&lt;/span&gt;
+        	&lt;h1 id="title"&gt;Product Search&lt;/h1&gt;
+			&lt;div id="searchArea"&gt;
+				&lt;div id="contents"&gt;
+					&lt;span class="title"&gt;Keywords: &lt;/span&gt; &lt;input type="text" id="searchText" /&gt;
+					&lt;select id="productType"&gt;			
+					&lt;/select&gt;
+					&lt;input type="button" id="send" value="Search" /&gt;
+				&lt;/div&gt;
+			&lt;/div&gt;       
+        &lt;/div&gt;
+    &lt;/body&gt;
+&lt;/html&gt;
+</field>
+    </object>
+    <object pk="2" model="buildingblock.buildingblockcode">
+        <field to="buildingblock.buildingblock" name="buildingBlock" rel="ManyToOneRel">2</field>
+        <field type="TextField" name="code">&lt;html&gt;
+&lt;head&gt;
+&lt;meta http-equiv="Content-Type"
+    content="application/xhtml+xml; charset=UTF-8" /&gt;
+&lt;link type="text/css" rel="stylesheet"
+    href="http://piccolo.ls.fi.upm.es/amazonScreens/style/table.css" /&gt;
+&lt;link type="text/css" rel="stylesheet"
+    href="http://piccolo.ls.fi.upm.es/amazonScreens/style/screen.css" /&gt;
+&lt;style type="text/css"&gt;
+#pages {
+    color: #FEBF43;
+    font-weight: bold;
+    padding: 10px;
+}
+#previousButton,#nextButton {
+    visibility: hidden;
+}
+#loadingImg {
+    margin: auto;
+    padding-top: 10px;
+}
+#amazonImage {
+    position: absolute;
+    right: 0px;
+    top: 3px;
+}
+&lt;/style&gt;
+&lt;script language="JavaScript" src="http://piccolo.ls.fi.upm.es/amazonURL/signAmazonURLs.js"&gt;&lt;/script&gt;
+&lt;script language="JavaScript" src="http://piccolo.ls.fi.upm.es/amazonURL/jssha2/sha2.js"&gt;&lt;/script&gt;
+&lt;script language="JavaScript"&gt;
+    function List(){
+        //Last page fetched from Amazon Service	
+        this.lastPageFetched = 0;
+        //Next set of products to print in the table (0-9)
+        this.currentPage = 0;
+        //Product list fetched from the Service
+        this.productList = new Array();
+        //Are we waiting for data?
+        this.waiting = true;
+        //Total number of pages
+        this.numPages = 1;
+    };
+    List.prototype.init = function (){
+        $("nextButton").observe("click", list.nextPage);
+        $("previousButton").observe("click", list.previousPage);
+        $$('input[type="button"]').each(function(element){
+            element.observe("mouseover",function(event){
+                var e = Event.element(event);
+                e.setStyle({cursor:"pointer"});
+            });		
+        });
+        var tableBody = $("listBody");
+        tableBody.update("");
+        list.lastPageFetched = 0;
+        list.currentPage = 0;
+        list.numPages = 1;
+        list.productList = new Array();
+        list.waiting = true;
+        list.showProgress();
+        list.fetch();
+    }
+    List.prototype.fetch = function (){
+        if (list.lastPageFetched &lt; ((list.numPages)/2)) { //Only for the 5 pages provided by the service
+            list.search();
+        }else{
+            list.showTable();
+        }
+    }
+    List.prototype.search = function (){
+        //Get the facts to invoke the service
+        var filter = ScreenflowEngineFactory.getInstance().getFact('http://aws.amazon.com/AWSECommerceService#SearchCriteria');
+        var user = ScreenflowEngineFactory.getInstance().getFact('user');
+        //Add the ItemSearch parameters
+        var productType = filter.data.productType;
+        if(!productType){
+            productType = 'All'
+        }
+        var parameters = "";
+        parameters += "&amp;SearchIndex=" + productType;
+        parameters += "&amp;Keywords=" + encodeURIComponent(filter.data.searchText);
+        //Add the page number (if is set)
+        parameters += "&amp;ItemPage=" + (list.lastPageFetched + 1);
+        //Base URL of the REST Service
+        var url = "http://webservices.amazon.com/onca/xml?Service=AWSECommerceService";
+        //Add the AccessKeyId (get from the user fact)
+        /*if (user)
+            url += "&amp;AWSAccessKeyId=" + user.data.KeyId;
+        else // if the KB doesn't contain a user key Id, add one by default
+            url += "&amp;AWSAccessKeyId=15TNKDQJGH6BD0Z4KY02";*/
+        //Add the operation Type
+        url +="&amp;Operation=ItemSearch";
+        //Add the parameters
+        url += parameters;
+        //Add the responseGroup
+        url +="&amp;ResponseGroup=Medium";
+        //Add the current version of the API
+        url += "&amp;Version=2008-06-26";
+
+        var encoder = new URLAmazonEncoder();
+        encodedUrl = encoder.encode(url);
+ 
+        //Invoke the service
+        new FastAPI.Request(encodedUrl,{
+            'method':       'get',
+            'content':      'xml',
+            'context':      this,
+            'onSuccess':    list.addToList
+        });
+        //FastAPI.getXML(url, this, list.addToList);
+    }
+    List.prototype.addToList = function (transport){
+        var xml = transport;
+        //Check if the service returned an error
+        if (xml.getElementsByTagName("IsValid")[0].childNodes[0].nodeValue == "False") {
+            //alert(xml.getElementsByTagName("Message")[0].childNodes[0].nodeValue);
+        } else {
+            //Correct response, create the result List
+            var _list = xml.getElementsByTagName("Items")[0].getElementsByTagName("Item");
+            //Fill the table, 1 row per item
+            $A(_list).each(function(item){
+                if (item.getElementsByTagName("Title").length &gt; 0)
+                    var title = item.getElementsByTagName("Title")[0].firstChild.nodeValue;
+                else
+                    var title = "&amp;nbsp;";
+                if (item.getElementsByTagName("FormattedPrice").length &gt; 0)
+                    var price = item.getElementsByTagName("FormattedPrice")[0].firstChild.nodeValue;
+                else
+                    var price = "&amp;nbsp;";
+                if (item.getElementsByTagName("ProductGroup").length &gt; 0)
+                    var pGroup = item.getElementsByTagName("ProductGroup")[0].firstChild.nodeValue;
+                else
+                    var pGroup = "&amp;nbsp;";
+                if (item.getElementsByTagName("ASIN").length &gt; 0)
+                    var ASIN = item.getElementsByTagName("ASIN")[0].firstChild.nodeValue;
+                var row = {
+                    title: title,
+                    price: price,
+                    pGroup: pGroup,
+                    ASIN: ASIN
+                };
+                list.productList.push(row);
+            });
+            if (xml.getElementsByTagName("TotalPages").length &gt; 0){
+                var totalPages = parseInt(xml.getElementsByTagName("TotalPages")[0].firstChild.nodeValue);
+                var totalResults = parseInt(xml.getElementsByTagName("TotalResults")[0].firstChild.nodeValue);
+                //Recalculate the last page
+                if (totalPages &gt; 0)
+                    list.numPages = totalPages*2 - 1 + ((totalResults % 10) &gt; 5 ? 1:0);
+                else
+                    list.numPages = 0;
+                if (list.numPages &gt; 10)
+                    list.numPages = 10;
+            }
+            $("totalPages").update(list.numPages);
+            list.lastPageFetched++;
+            if (list.waiting) {
+                list.waiting = false;
+                list.showTable();
+            }
+        }
+    }
+    List.prototype.productDetail = function (nodeElement,_ASIN){
+        list.clearSelected ();
+        //select the element
+        nodeElement.parentNode.parentNode.setStyle({background: "#FFF8E8"});
+        var item = {uri: 'http://aws.amazon.com/AWSECommerceService#Item', data:{ASIN: _ASIN, title: nodeElement.parentNode.parentNode.firstChild.firstChild.nodeValue}};
+        ScreenflowEngineFactory.getInstance().manageFacts([item],[]);
+    }
+    List.prototype.clearSelected = function (){
+        $$("tbody tr").each(function (element){
+            element.setStyle({background: "transparent url(http://piccolo.ls.fi.upm.es/amazonScreens/style/bg_td1.jpg) repeat-x top"});
+        });
+    }
+    List.prototype.onError = function (transport){
+    //alert(transport.responseText);
+    }
+    List.prototype.showProgress = function (){
+        list.waiting = true;
+        $("loadingImg").show();
+    }
+    List.prototype.showTable = function (){
+        $("loadingImg").hide();
+        //$("listBody").setStyle({visibility:"visible"});
+        var templateString = '&lt;tr&gt;&lt;td&gt;#{title}&lt;/td&gt;&lt;td&gt;#{price}&lt;/td&gt;&lt;td&gt;#{pGroup}&lt;/td&gt;';
+        templateString += '&lt;td style="border-right:none;"&gt;&lt;input type="button" onclick="list.productDetail(this,\'#{ASIN}\');"';
+        templateString += ' onmouseover="this.setStyle({cursor:\'pointer\'});" value="Select"/&gt;&lt;/td&gt;&lt;/tr&gt;';
+        var rowTemplate = new Template(templateString);
+        var tableBody = $("listBody");
+        for (var i = 5 * list.currentPage; i &lt; 5 * (list.currentPage + 1); i++) { //print the appropriate elements
+            if (list.productList[i]) { //only if the product table is fetched
+                tableBody.innerHTML += rowTemplate.evaluate(list.productList[i]);
+            }
+        }
+        list.updateCurrentPage();
+        //Update Interface
+        if (list.currentPage &lt; (list.numPages - 1)) {
+            $("nextButton").setStyle({visibility: "visible"});
+        } else {
+            $("nextButton").setStyle({visibility: "hidden"});
+        }
+        if (list.currentPage &gt; 0) {
+            $("previousButton").setStyle({visibility: "visible"});
+        } else {
+            $("previousButton").setStyle({visibility: "hidden"});
+        }
+    }
+    List.prototype.nextPage = function (){
+        //Clear the table
+        var tableBody = $("listBody");
+        tableBody.update("");
+        list.currentPage++;
+        if (list.productList.length &gt;= (list.currentPage + 1) * 5) {
+            list.showTable();
+            // Lookahead
+            if ((list.currentPage + 1) * 5 &gt;= list.productList.length) {
+                list.fetch();
+            }
+        } else {
+            list.showProgress();
+            list.fetch();
+        }
+        list.updateCurrentPage();
+    }
+    List.prototype.previousPage = function (){
+        //Clear the table
+        var tableBody = $("listBody");
+        tableBody.update("");
+        list.currentPage--;
+        list.showTable();
+        list.updateCurrentPage();
+    }
+    //update the current page in the interface
+    List.prototype.updateCurrentPage = function (){
+        (list.currentPage&lt;9 &amp;&amp; list.numPages &gt; 9)?$("curPage").update("0"):$("curPage").update("");
+        if (list.numPages &gt; 0)
+            $("curPage").innerHTML +=list.currentPage+1;
+        else
+            $("curPage").innerHTML += "0";
+    }
+    var list = new List();
+    ScreenflowEngineFactory.getInstance().addScreenLoader("ProductList", list.init);
+&lt;/script&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;div id="bodyDiv"&gt;
+    &lt;span id="amazonImage"&gt;
+        &lt;img src="http://piccolo.ls.fi.upm.es/amazonScreens/images/amazon.png" /&gt;
+    &lt;/span&gt;
+&lt;h1 id="title"&gt;Item list&lt;/h1&gt;
+&lt;div id="listDiv"&gt;
+&lt;table&gt;
+    &lt;thead&gt;
+        &lt;tr&gt;
+            &lt;th style="width: 60%; -moz-border-radius: 13px 0px 0px 0px;"&gt;Title&lt;/th&gt;
+            &lt;th style="width: 10%"&gt;Price&lt;/th&gt;
+            &lt;th style="width: 20%"&gt;Product Group&lt;/th&gt;
+            &lt;th style="width: 10%; -moz-border-radius: 0px 13px 0px 0px;"&gt;&amp;nbsp;&lt;/th&gt;
+        &lt;/tr&gt;
+    &lt;/thead&gt;
+    &lt;tbody id="listBody"&gt;
+        &lt;tr&gt;
+            &lt;td&gt;&amp;nbsp;&lt;/td&gt;
+        &lt;/tr&gt;
+        &lt;tr&gt;
+            &lt;td&gt;&amp;nbsp;&lt;/td&gt;
+        &lt;/tr&gt;
+        &lt;tr&gt;
+            &lt;td&gt;&amp;nbsp;&lt;/td&gt;
+        &lt;/tr&gt;
+        &lt;tr&gt;
+            &lt;td&gt;&amp;nbsp;&lt;/td&gt;
+        &lt;/tr&gt;
+    &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;img id="loadingImg"
+    src="http://piccolo.ls.fi.upm.es/amazonScreens/images/ajaxLoader.gif" /&gt;
+&lt;div id="buttonContainerDiv"&gt;
+    &lt;input type="button" id="previousButton" class="button" value="&lt;" /&gt;
+    &lt;span id="pages"&gt; Page &lt;span id="curPage"&gt;-&lt;/span&gt;/&lt;span id="totalPages"&gt;-&lt;/span&gt;&lt;/span&gt;
+    &lt;input type="button" id="nextButton" class="button" value="&gt;" /&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</field>
+    </object>
+    <object pk="3" model="buildingblock.buildingblockcode">
+        <field to="buildingblock.buildingblock" name="buildingBlock" rel="ManyToOneRel">3</field>
+        <field type="TextField" name="code">&lt;html&gt;
+		    &lt;head&gt;
+		        &lt;meta http-equiv="Content-Type" content="application/xhtml+xml; charset=UTF-8" /&gt;
+		        &lt;link type="text/css" rel="stylesheet" href="http://piccolo.ls.fi.upm.es/amazonScreens/style/screen.css" /&gt;
+				&lt;style type="text/css"&gt;
+					#productImage{
+						height: 170px;
+						-moz-border-radius: 13px 13px;
+						background: #FFF8E8 url(http://piccolo.ls.fi.upm.es/amazonScreens/style/bg_td2.jpg) repeat-x;
+						border:1px solid #F8A704;
+						margin:0px auto 13px;
+						text-align:center;
+						width:88%;
+						padding-bottom:5px;
+						padding-top:10px;
+					}
+					#leftColumn{
+						position: relative;
+						float:left;
+						height: 100%;
+						width: 35%;
+					}
+					#rightColumn{
+						position: relative;
+						float:right;
+						height: 268px;
+						width: 60%;
+						-moz-border-radius:13px 13px;
+						background:#FFF8E8 url(http://piccolo.ls.fi.upm.es/amazonScreens/style/bg_td2.jpg) repeat-x;
+						border:1px solid #F8A704;
+						padding-top:5px;
+						padding-right:0px;
+						padding-left:5px;
+						padding-bottom: 5px;
+						position:relative;
+					}
+					#infoArea{
+						text-align: left;
+					}
+					#titleInfo{
+						float:left;
+						margin: 5px;
+						width:35%;
+						overflow: hidden;
+					}
+					#valueInfo{
+						float:left;
+						margin: 5px 15px 5px 5px;
+						width: 50%;
+					}
+					#moreInfo{
+						float:left;
+						margin-left: 5px;
+					}
+					.title{
+						padding: 2px;
+						color:#AAAAAA;
+						font-weight: bold;
+						font-family:Arial,Helvetica,sans-serif;	
+						white-space:nowrap;
+						overflow: hidden;
+					}
+					.info{
+						padding: 2px;
+						color:#888888;
+						font-family:Arial,Helvetica,sans-serif;
+						font-weight: bold;
+						text-align: justify;
+						white-space: nowrap;
+						overflow: hidden;
+					}
+					#quantity {
+						margin: 5px;
+						color:#777777;
+						font-weight: bold;
+						font-family:Arial,Helvetica,sans-serif;
+					}
+					#cart {
+						border: 1px solid #F8A704;
+						-moz-border-radius:13px 13px;
+						background:#FFF8E8 url(http://piccolo.ls.fi.upm.es/amazonScreens/bg_td2.jpg) repeat-x;
+						border:1px solid #F8A704;
+						height:78px;
+						margin:5px auto 0px;
+						padding:0px;
+						text-align:center;
+						width:88%;
+					}
+					#moreInfoText {
+						color:#888888;
+						font-family:Arial,Helvetica,sans-serif;
+						font-size:13px;
+						height:133px;
+						margin:0;
+						overflow:auto;
+						padding:2px 15px 2px 2px;
+						text-align:left;
+						width:300px;
+						max-width:300px;
+					}
+					.detailsElement {
+						color:#888888;
+						font-weight:bold;
+					}
+					#bodyDivDetails {
+						max-width:550px;
+						text-align:center;
+						margin: 8px auto 20px auto;
+						height:270px;
+					}
+					#amazonImage{
+						position:absolute;
+						right:0px;
+						top:3px;
+					}
+				&lt;/style&gt;
+				&lt;script language="JavaScript" src="http://piccolo.ls.fi.upm.es/amazonURL/signAmazonURLs.js"&gt;&lt;/script&gt;
+				&lt;script language="JavaScript" src="http://piccolo.ls.fi.upm.es/amazonURL/jssha2/sha2.js"&gt;&lt;/script&gt;
+		        &lt;script language="JavaScript"&gt;
+		        
+		        	function Product(){};
+		        	
+		        	Product.prototype.init = function (){
+						var user = ScreenflowEngineFactory.getInstance().getFact('user');
+						var item = ScreenflowEngineFactory.getInstance().getFact('http://aws.amazon.com/AWSECommerceService#Item');
+						$("addToCart").observe("click", product.addToCart);
+						//Base URL of the REST Service
+						var url = "http://webservices.amazon.com/onca/xml?Service=AWSECommerceService";
+						//Add the AccessKeyId (get from the user fact)
+						/*if (user)
+							url += "&amp;AWSAccessKeyId=" + user.data.KeyId;
+						else // if the KB doesn't contain a user key Id, add one by default
+							url += "&amp;AWSAccessKeyId=15TNKDQJGH6BD0Z4KY02";*/
+						//Add the operation Type
+						url +="&amp;Operation=ItemLookup";
+						//Add the responseGroup
+						url +="&amp;ResponseGroup=Medium";
+						//Add the current version of the API
+						url += "&amp;Version=2008-06-26";
+						//Add item ID
+						url += "&amp;ItemId=" + item.data.ASIN;
+						
+						var encoder = new URLAmazonEncoder();
+						url = encoder.encode(url);
+	
+						//Invoke the service
+		                new FastAPI.Request(url,{
+		                    'method':       'get',
+		                    'content':      'xml',
+		                    'context':      this,
+		                    'onSuccess':    product.fetchProductInfo
+		                });
+                        //FastAPI.getXML(url, this, product.fetchProductInfo);
+					}
+					
+					Product.prototype.fetchProductInfo = function (transport){
+						var xml = transport;
+						var item = xml.getElementsByTagName("Item")[0];
+						if (item.getElementsByTagName("Title").length &gt; 0)
+							var title = item.getElementsByTagName("Title")[0].firstChild.nodeValue;
+						 if (item.getElementsByTagName("FormattedPrice").length &gt; 0) 
+		                    var price = item.getElementsByTagName("FormattedPrice")[0].firstChild.nodeValue;
+		                if (item.getElementsByTagName("ProductGroup").length &gt; 0) 
+		                    var pGroup = item.getElementsByTagName("ProductGroup")[0].firstChild.nodeValue;
+		                if (item.getElementsByTagName("DetailPageURL").length &gt; 0) 
+		                    var url = item.getElementsByTagName("DetailPageURL")[0].firstChild.nodeValue;
+		                if (item.getElementsByTagName("MediumImage").length &gt; 0) 
+		                    var image = item.getElementsByTagName("MediumImage")[0].getElementsByTagName("URL")[0].firstChild.nodeValue;
+						var _product = {
+							title: title,
+							price: price,
+							pGroup: pGroup,
+							url: url,
+							image: image
+						};
+						product.showProductInfo (_product);
+						product.showAdvancedDetails (item,pGroup);
+						
+						$("quantitySelect").value=1;
+					}
+					
+					Product.prototype.showProductInfo = function (_product){
+						if (_product.title){
+							//Reset styles
+							$("productTitle").setStyle ({"fontSize":"20px"});
+							$("moreInfoText").setStyle({"height": "133px"});
+							$("productTitle").update(_product.title);
+							if ($("productTitle").clientHeight &gt; 28){//Big title
+								//Big title, adapt styles
+								$("productTitle").setStyle ({"fontSize":"16px"});
+								if ($("productTitle").clientHeight &gt; 23) {//More than one line
+									if ($("productTitle").clientHeight &gt; 46){//More than two lines
+										if ($("productTitle").clientHeight &gt; 69){//More than three lines
+											$("productTitle").setStyle ({"fontSize":"13px"});
+											if ($("productTitle").clientHeight &gt; 49) //Still more than three lines
+												$("moreInfoText").setStyle({"height": "90px"});
+											else
+												$("moreInfoText").setStyle({"height": "110px"});
+										} 
+										else{//Three lines
+											$("moreInfoText").setStyle({"height": "110px"});
+											$("productTitle").setStyle ({"fontSize":"14px"});	
+										}
+									}
+									else //Two lines
+										$("moreInfoText").setStyle({"height": "115px"});	
+								}
+								/*else //One line, 16px title
+		 							$("moreInfoText").setStyle({
+										"height": "125px"
+									});*/
+							}
+							
+						}
+						if (_product.price){
+							$("price").update(_product.price);
+						} else {
+							$("price").update("");
+						}
+						if (_product.pGroup){
+							$("pGroup").update(_product.pGroup);
+						} else {
+							$("pGroup").update("");
+						}
+						if (_product.url){
+							var a = new Element('a',{href:_product.url,target:"_blank"}).update ("Amazon");
+							$("url").update (a);
+						} else {
+							$("url").update ("");
+						}
+						if (_product.image){
+							var img = new Element ('img',{src: _product.image});
+							$("productImage").update(img);
+						} else {
+							var img = new Element ('img',{src: "http://piccolo.ls.fi.upm.es/amazonScreens/images/amazon.jpg"});
+							$("productImage").update(img);	
+						}
+										
+					}
+					
+					Product.prototype.showAdvancedDetails = function (element,pGroup){
+						/*List of possible product groups (with * groups already considered)
+						 * Apparel,Baby Product,Beauty,*Book,*CE,*DVD,*eBooks,Furniture,Gourmet,Health and Beauty,
+						 * Home,Home Improvement,Kitchen,Lawn &amp; Patio,Magazine,*Music,Musical Instruments,
+						 * Office Product,*Personal Computer,Pet Products,*Photography,Single Detail Page Misc,
+						 * *Software,Sports,*Theatrical Release,Toy,*Video,*Video Games,Watch,*Wireless,*Wireless Phone Accessory
+						 */
+						var itemAttributes = element.getElementsByTagName("ItemAttributes")[0];
+						var attributesHTML = "&lt;ul&gt;";
+						//List of elements to be shown
+						var elementList = [];
+						switch (pGroup){
+							case "eBooks":
+							case "Book":
+								//Print all book authors
+								attributesHTML += product.elementDetail("Author",itemAttributes,"Author(s)");
+								//Print the remainder features
+								elementList = [{nodeElement:"PublicationDate",caption:"Publication Date"},
+											   "ISBN",
+											   "Format",
+											   {nodeElement:"Label", caption:"Publisher"},
+											   {nodeElement:"NumberOfPages", caption:"Pages"}];	
+							    attributesHTML += product.productDetailsList(elementList,itemAttributes);	
+								break;
+							case "Theatrical Release":
+							case "Video":
+							case "DVD":
+								//Print all actors
+								attributesHTML += product.elementDetail("Actor",itemAttributes,"Cast");
+								//Print all directors
+								attributesHTML += product.elementDetail("Director",itemAttributes);
+								elementList = 	["Genre",
+												{nodeElement:"RunningTime",caption: "Run Time"},
+												{nodeElement:"AudienceRating", caption:"Audience Rating"},
+												"Label",
+												"Binding",
+												"Region",
+												{nodeElement:"AspectRatio", caption:"Aspect Ratio"},
+												{nodeElement:"OriginalReleaseDate", caption:"Release Date"}
+												];
+								attributesHTML += product.productDetailsList(elementList,itemAttributes);
+								attributesHTML += product.twoElements ("DVDLayers","DVDSides",itemAttributes,"DVD Layers / Sides");
+								//Print technical details
+								attributesHTML += product.elementDetail("Format",itemAttributes);
+								break;
+							case "Digital Music Track":
+							case "Music":
+								elementList = 	["Artist",
+												"Genre",
+												"Label",
+												"Binding",
+												"Format",
+												{nodeElement:"NumberOfDiscs", caption:"Number of Discs"},
+												{nodeElement:"ReleaseDate", caption:"Release Date"},
+												{nodeElement:"OriginalReleaseDate", caption:"Original Release Date"}
+												];
+								attributesHTML += product.productDetailsList(elementList,itemAttributes);
+								break;
+							case "Photography":
+								//Print details 
+								elementList = ["Brand","Model"];
+								attributesHTML += product.productDetailsList(elementList,itemAttributes);	
+								//Print all camera features
+								attributesHTML += product.elementDetail("Feature",itemAttributes,"Features",".");
+								break;
+							case "Personal Computer":
+								elementList = 	["Model",
+												"Label",
+												"Binding"];
+								attributesHTML += product.productDetailsList(elementList,itemAttributes);
+								attributesHTML += product.twoElements ("CPUType","CPUSpeed",itemAttributes,"CPU", " ");
+								elementList = 	[{nodeElement:"DisplaySize", caption:"Display Size"},
+												{nodeElement:"HardDiskSize", caption:"Hard Disk Size"},
+												{nodeElement:"DataLinkProtocol", caption:"Data Link Protocol"},
+												{nodeElement:"FloppyDiskDriveDescription", caption:"Floppy Disk Drive"}];
+								attributesHTML += product.productDetailsList(elementList,itemAttributes);
+								attributesHTML += product.twoElements ("SystemMemorySize","SystemMemoryType",itemAttributes,"Memory", " ");								
+								elementList = 	[{nodeElement:"HardwarePlatform", caption:"Hardware Platform"},
+												{nodeElement:"OperatingSystem", caption:"Operating System"},
+												{nodeElement:"ReleaseDate",caption:"Release Date"},
+												"Warranty",
+												{nodeElement:"LegalDisclaimer",caption:"Legal Disclaimer"}
+												];	
+								attributesHTML += product.productDetailsList(elementList,itemAttributes);
+								//Print technical details
+								attributesHTML += product.elementDetail("Feature",itemAttributes, "Features",".");
+								//Print special features
+								attributesHTML += product.specialElementDetail("SpecialFeatures",itemAttributes,"|","Special Features",".");
+								break;
+							case "CE":
+							case "Video Games":						
+							case "Software":
+							case "Wireless":
+							case "Wireless Phone Accessory":
+								elementList = 	["Model",
+												"Color",
+												"Label",
+												"Binding",
+												{nodeElement:"DisplaySize", caption:"Display Size"},
+												{nodeElement:"ESRBAgeRating", caption:"Age Rating"},
+												{nodeElement:"HardwarePlatform", caption:"Hardware Platform"},
+												{nodeElement:"OperatingSystem", caption:"Operating System"},
+												{nodeElement:"ReleaseDate",caption:"Release Date"},
+												{nodeElement:"LegalDisclaimer",caption:"Legal Disclaimer"}
+												];
+								attributesHTML += product.productDetailsList(elementList,itemAttributes);
+								//Print technical details
+								attributesHTML += product.elementDetail("Feature",itemAttributes, "Features",".");
+								//Print special features (only CE)
+								attributesHTML += product.specialElementDetail("SpecialFeatures",itemAttributes,"|","Special Features",".");
+								break;
+							default:
+								elementList = 	["Model",
+												"Color",
+												"Label",
+												"Binding",
+												{nodeElement:"ReleaseDate",caption:"Release Date"}
+												];
+								attributesHTML += product.productDetailsList(elementList,itemAttributes);
+								attributesHTML += product.elementDetail("Feature",itemAttributes, "Features",".");
+								break;				
+						}
+						attributesHTML += "&lt;/ul&gt;";
+						if (attributesHTML.length&gt;9){//There is something to show
+							$("moreInfoText").update(attributesHTML);
+							$("moreInfoText").setStyle({"borderTop":"1px dotted #AAAAAA"});
+							$("moreInfoTitle").update("Product Details");
+						} 
+							
+					}
+					//This function returns a html with pre-formatted details list
+					//Each element of attributesList can be an object with two elements (nodeElement and caption)
+					//or simply a string representing both of them
+					Product.prototype.productDetailsList = function (attributesList,attributesNode){
+						var result = "";
+						$A(attributesList).each(function(attribute){
+								var element = attributesNode.getElementsByTagName ((attribute.nodeElement?attribute.nodeElement:attribute));						
+								if (element.length &gt; 0) {
+									result += "&lt;li&gt;" + (attribute.caption?attribute.caption:attribute) + ": ";
+									result += "&lt;span class='detailsElement'&gt;";
+									result += element[0].firstChild.nodeValue;
+									if (element[0].getAttribute("Units") &amp;&amp; element[0].getAttribute("Units")!= "unknown-units")
+										result += " " + element[0].getAttribute("Units");
+									result += "&lt;/span&gt;&lt;/li&gt;";
+								}
+						});
+						return result;
+					}
+					//This function produces a single li with a list of elements (authors, features...)
+					//caption parameter is optional
+					//separationCharacter parameter is optional
+					Product.prototype.elementDetail = function (element,attributesNode,caption,separationCharacter){
+							var list = attributesNode.getElementsByTagName(element);
+							var result = "";
+							if (list.length &gt; 0){
+								result += "&lt;li&gt;" + (caption?caption:element)  + ": &lt;span class='detailsElement'&gt;";
+								$A(list).each (function (e){
+									result += e.firstChild.nodeValue + (separationCharacter?separationCharacter + " ":", ");
+								});
+								//Remove last ", "
+								result = result.substring(0,result.length-2);
+								result += "&lt;/span&gt;&lt;/li&gt;";							
+							}
+							return result;			
+					}
+					//This function produces a single li with a list of features. The original line has 
+					//extrange separators
+					//caption parameter is optional
+					//separationCharacter parameter is optional
+					Product.prototype.specialElementDetail = function (element,attributesNode,beforeSeparationCharacter,caption,separationCharacter){
+							var element = attributesNode.getElementsByTagName(element);
+							var result = "";
+							if (element.length &gt; 0){
+								result += "&lt;li&gt;" + (caption?caption:element)  + ": &lt;span class='detailsElement'&gt;";
+								var list = element[0].firstChild.nodeValue.split(beforeSeparationCharacter);
+								$A(list).each (function (e){
+									result += e + (separationCharacter?separationCharacter + " ":", ");
+								});
+								//Remove last ", "
+								result = result.substring(0,result.length-2);
+								result += "&lt;/span&gt;&lt;/li&gt;";							
+							}
+							return result;			
+					}
+					//This function produces a single li two elements separated by "/"
+					//caption parameter is optional
+					//separationCharacter is optional
+					Product.prototype.twoElements = function (element1,element2,attributesNode, caption, separationCharacter){
+							var _element1 = attributesNode.getElementsByTagName(element1);
+							var _element2 = attributesNode.getElementsByTagName(element2);
+							var result = "";
+							//At least one correct element
+							if (_element1.length &gt; 0 || _element2.length &gt; 0){
+								result += "&lt;li&gt;" + (caption?caption:(element1 + " / " + element2))  + ": &lt;span class='detailsElement'&gt;";
+								result += (_element1[0]?_element1[0].firstChild.nodeValue:"-");
+								if (_element1[0].getAttribute("Units") &amp;&amp; _element1[0].getAttribute("Units")!= "unknown-units")
+										result += " " + _element1[0].getAttribute("Units");
+								result += (separationCharacter?separationCharacter:" / ");
+								result += (_element2[0]?_element2[0].firstChild.nodeValue:"-");
+								if (_element2[0].getAttribute("Units") &amp;&amp; _element2[0].getAttribute("Units")!= "unknown-units")
+										result += " " + _element2[0].getAttribute("Units");
+								result += "&lt;/span&gt;&lt;/li&gt;";							
+							}
+							return result;
+					}
+					
+					Product.prototype.onError = function (transport){
+		                //alert(transport.responseText);
+		            }
+		            
+		            Product.prototype.addToCart = function (){
+						var item = ScreenflowEngineFactory.getInstance().getFact('http://aws.amazon.com/AWSECommerceService#Item');
+						var cart = ScreenflowEngineFactory.getInstance().getFact('http://aws.amazon.com/AWSECommerceService#ShoppingCart');
+						var user = ScreenflowEngineFactory.getInstance().getFact('user');
+						if (cart){//If the cart is already created, it will have an ID in the User Fact
+							var url = "http://webservices.amazon.com/onca/xml?Service=AWSECommerceService";
+							//Add the AccessKeyId (get from the user fact)
+							/*if (user)
+								url += "&amp;AWSAccessKeyId=" + user.data.KeyId;
+							else // if the KB doesn't contain a user key Id, add one by default
+								url += "&amp;AWSAccessKeyId=15TNKDQJGH6BD0Z4KY02";*/
+							//Add the operation Type
+							url +="&amp;Operation=CartGet";
+							//Add the current version of the API
+							url += "&amp;Version=2008-06-26";
+							//Add item ID
+							url += "&amp;CartId=" + cart.data.id;
+							url += "&amp;HMAC=" + cart.data.HMAC;
+							
+						var encoder = new URLAmazonEncoder();
+						url = encoder.encode(url);
+	
+							//Invoke the service
+	                        new FastAPI.Request(url,{
+	                            'method':       'get',
+	                            'content':      'xml',
+	                            'context':      this,
+	                            'onSuccess':    product.isProductOnCart
+	                        });
+	                    	//FastAPI.getXML(url, this, product.isProductOnCart);
+						}
+						else { //Cart doesn't exist: Create a new cart with the product
+							var url = "http://webservices.amazon.com/onca/xml?Service=AWSECommerceService";
+							//Add the AccessKeyId (get from the user fact)
+							/*if (user)
+								url += "&amp;AWSAccessKeyId=" + user.data.KeyId;
+							else // if the KB doesn't contain a user key Id, add one by default
+								url += "&amp;AWSAccessKeyId=15TNKDQJGH6BD0Z4KY02";*/
+							//Add the operation Type
+							url +="&amp;Operation=CartCreate";
+							//Add the current version of the API
+							url += "&amp;Version=2008-06-26";
+							//Add item ID
+							url += "&amp;Item.1.ASIN=" + item.data.ASIN;
+							url += "&amp;Item.1.Quantity=" + $F("quantitySelect");
+							
+						var encoder = new URLAmazonEncoder();
+						url = encoder.encode(url);
+	
+							//Invoke the service
+	                    	new FastAPI.Request(url,{
+                                'method':       'get',
+                                'content':      'xml',
+                                'context':      this,
+                                'onSuccess':    product.cartCreated
+                            });
+                            //FastAPI.getXML(url, this, product.cartCreated);
+						}
+					}
+					
+					Product.prototype.cartCreated = function (transport){
+						var xml = transport;
+						
+						//The product is added to the cart,
+						//tell it to the user	
+						if (xml.getElementsByTagName("IsValid")[0].firstChild.nodeValue == "True"){
+							
+							//Check if the product is eligible for shopping
+							if ((xml.getElementsByTagName("Error").length &gt; 0) &amp;&amp; 
+								xml.getElementsByTagName("Error")[0].firstChild.firstChild.nodeValue == "AWS.ECommerceService.ItemNotEligibleForCart"){
+								//The product is not elegible
+								alert ("The product is not eligible to be added to the cart");
+								return;
+							}
+							//Add the Cart ID to the KB
+							var cart = {uri: 'http://aws.amazon.com/AWSECommerceService#ShoppingCart',
+										data:{id: xml.getElementsByTagName("CartId")[0].firstChild.nodeValue,
+											HMAC: xml.getElementsByTagName("URLEncodedHMAC")[0].firstChild.nodeValue}};
+							ScreenflowEngineFactory.getInstance().manageFacts([cart],[]);
+							alert ("Product added to the shopping Cart");
+						}		
+						else 
+							alert ("Error adding the product to the cart");
+					}
+					
+					Product.prototype.productAdded = function (transport){
+						var xml = transport;
+						//Check if the product is eligible for shopping
+						if ((xml.getElementsByTagName("Error").length &gt; 0) &amp;&amp; 
+							xml.getElementsByTagName("Error")[0].firstChild.firstChild.nodeValue == "AWS.ECommerceService.ItemNotEligibleForCart"){
+							//The product is not elegible
+							alert ("The product is not eligible to be added to the cart");
+							return;
+						}
+						//If the product is added to the cart,
+						//tell it to the user	
+						if (xml.getElementsByTagName("IsValid")[0].firstChild.nodeValue == "True")
+							alert ("Product added to the shopping Cart");
+						else 
+							alert ("Error adding the product to the cart");
+					}		
+					
+					Product.prototype.isProductOnCart = function (transport){
+						
+						var xml = transport;
+						var item = ScreenflowEngineFactory.getInstance().getFact('http://aws.amazon.com/AWSECommerceService#Item');
+						var cart = ScreenflowEngineFactory.getInstance().getFact('http://aws.amazon.com/AWSECommerceService#ShoppingCart');
+						var user = ScreenflowEngineFactory.getInstance().getFact('user');
+						//products node
+						if (xml.getElementsByTagName ("CartItems").length&gt;0){ //There are products on the cart
+								var products = xml.getElementsByTagName ("CartItems")[0];
+								//Product list (ASINs) added to the cart
+								var asins = $A(products.getElementsByTagName ("ASIN"));
+								//Check if the product is already added to the cart
+								var found = false;
+								//product Node
+								var _product; 
+								asins.each (function(asin){
+									if (asin.firstChild.nodeValue == item.data.ASIN)
+									{
+										found = true; //The product is in the list
+										_product = asin.parentNode; //product = CartItem
+									}
+								});
+						}
+						else {//If there aren't elements, the product will not be on the list
+							found = false;
+						}
+						if (found) { 
+							//If the product is already added to the cart,
+							//increase the number of items of that product (CartModify)			
+							//Get the item quantity
+							var prevQuantity = _product.getElementsByTagName("Quantity")[0].firstChild.nodeValue;
+							//Add the new quantity to the previously stored
+							var quantity = parseInt($F("quantitySelect")) + parseInt (prevQuantity);
+							
+							//Get the product Id within the cart
+							var productId = _product.getElementsByTagName("CartItemId")[0].firstChild.nodeValue;	
+		
+							//Create the call
+							var url = "http://webservices.amazon.com/onca/xml?Service=AWSECommerceService";
+							//Add the AccessKeyId (get from the user fact)
+							/*if (user)
+								url += "&amp;AWSAccessKeyId=" + user.data.KeyId;
+							else // if the KB doesn't contain a user key Id, add one by default
+								url += "&amp;AWSAccessKeyId=15TNKDQJGH6BD0Z4KY02";*/
+							//Add the operation Type
+							url +="&amp;Operation=CartModify";
+							//Add the current version of the API
+							url += "&amp;Version=2008-06-26";
+							//Add item ID
+							url += "&amp;CartId=" + cart.data.id;
+							url += "&amp;HMAC=" + cart.data.HMAC;
+							url += "&amp;Item.1.CartItemId=" + productId;
+							url += "&amp;Item.1.Quantity=" + quantity;
+							
+						var encoder = new URLAmazonEncoder();
+						url = encoder.encode(url);
+	
+							//Invoke the service
+                            new FastAPI.Request(url,{
+                                'method':       'get',
+                                'content':      'xml',
+                                'context':      this,
+                                'onSuccess':    product.productAdded
+                            });
+	                    	//FastAPI.getXML(url, this, product.productAdded);
+						}
+						else {
+		                    //Create the call
+							var url = "http://webservices.amazon.com/onca/xml?Service=AWSECommerceService";
+							//Add the AccessKeyId (get from the user fact)
+							/*if (user)
+								url += "&amp;AWSAccessKeyId=" + user.data.KeyId;
+							else // if the KB doesn't contain a user key Id, add one by default
+								url += "&amp;AWSAccessKeyId=15TNKDQJGH6BD0Z4KY02";*/
+							//Add the operation Type
+							url +="&amp;Operation=CartAdd";
+							//Add the current version of the API
+							url += "&amp;Version=2008-06-26";
+							//Add item ID
+							url += "&amp;CartId=" + cart.data.id;
+							url += "&amp;HMAC=" + cart.data.HMAC;
+							url += "&amp;Item.1.ASIN=" + item.data.ASIN;
+							url += "&amp;Item.1.Quantity=" + $F("quantitySelect");
+							
+						var encoder = new URLAmazonEncoder();
+						url = encoder.encode(url);
+	
+							//Invoke the service
+                            new FastAPI.Request(url,{
+                                'method':       'get',
+                                'content':      'xml',
+                                'context':      this,
+                                'onSuccess':    product.productAdded
+                            });
+	                    	//FastAPI.getXML(url, this, product.productAdded);
+						}
+					}
+					
+					var product = new Product();
+					ScreenflowEngineFactory.getInstance().addScreenLoader("ProductDetails", product.init);
+		        &lt;/script&gt;
+		    &lt;/head&gt;
+		    &lt;body&gt;
+		        &lt;div id="bodyDivDetails"&gt;
+		        	&lt;div id="leftColumn"&gt;
+				     	&lt;div id="productImage"&gt;
+						&lt;/div&gt;
+						&lt;div id="cart"&gt;
+							&lt;div id="quantity"&gt;Quantity:  	&lt;select id="quantitySelect"&gt;
+										  	&lt;option value ="1"&gt;1&lt;/option&gt;
+										  	&lt;option value ="2"&gt;2&lt;/option&gt;
+										  	&lt;option value ="3"&gt;3&lt;/option&gt;
+										  	&lt;option value ="4"&gt;4&lt;/option&gt;
+										  	&lt;option value ="5"&gt;5&lt;/option&gt;	
+										 	&lt;option value ="6"&gt;6&lt;/option&gt;
+										  	&lt;option value ="7"&gt;7&lt;/option&gt;	
+										  	&lt;option value ="8"&gt;8&lt;/option&gt;		
+											&lt;option value ="9"&gt;9&lt;/option&gt;	
+										  	&lt;option value ="10"&gt;10&lt;/option&gt;						
+											&lt;/select&gt;
+							&lt;/div&gt;
+							&lt;input border="0" height="27" width="160" type="image" id="addToCart" alt="Add to Shopping Cart" src="http://piccolo.ls.fi.upm.es/amazonScreens/images/addToCart.gif"/&gt;
+						&lt;/div&gt;       	
+					&lt;/div&gt;
+					&lt;div id="rightColumn"&gt;
+						&lt;div id="productTitle" style="font-size: 20px; padding: 2px; color:#F8A704; font-weight: bold; font-style: italic; font-family:Arial,Helvetica,sans-serif; overflow: hidden;"&gt;&lt;/div&gt;
+						&lt;div id="infoArea"&gt;
+							&lt;span id="titleInfo"&gt;
+								&lt;div class="title"&gt;Product Type: &lt;/div&gt;
+								&lt;div class="title"&gt;Price: &lt;/div&gt;
+								&lt;div class="title"&gt;Product Site: &lt;/div&gt;
+								&lt;div class="title" id="titleInfo1"&gt;&lt;/div&gt;
+							&lt;/span&gt;
+							&lt;span id="valueInfo"&gt;
+								&lt;div id="pGroup" class="info"&gt;&lt;/div&gt;
+								&lt;div id="price" class="info"&gt;&lt;/div&gt;
+								&lt;div id="url" class="info"&gt;&lt;/div&gt;
+								&lt;div id="info1" class="info"&gt;&lt;/div&gt;
+							&lt;/span&gt;
+							&lt;div id="moreInfo"&gt;
+								&lt;div class="title" id="moreInfoTitle"&gt;&lt;/div&gt;
+								&lt;div id="moreInfoText"&gt;
+								&lt;/div&gt;
+							&lt;/div&gt;
+						&lt;/div&gt;
+					&lt;/div&gt;
+		        &lt;/div&gt;
+		    &lt;/body&gt;
+&lt;/html&gt;
+</field>
+    </object>
+    <object pk="4" model="buildingblock.buildingblockcode">
+        <field to="buildingblock.buildingblock" name="buildingBlock" rel="ManyToOneRel">4</field>
+        <field type="TextField" name="code">&lt;html&gt;
+    &lt;head&gt;
+        &lt;meta http-equiv="Content-Type" content="application/xhtml+xml; charset=UTF-8" /&gt;
+        &lt;link type="text/css" rel="stylesheet" href="http://piccolo.ls.fi.upm.es/amazonScreens/style/table.css" /&gt;
+        &lt;link type="text/css" rel="stylesheet" href="http://piccolo.ls.fi.upm.es/amazonScreens/style/screen.css" /&gt;
+		&lt;style type="text/css"&gt;
+			#loadingImgCart{
+				margin:auto;	
+			}
+			#info{
+				margin:auto;
+				font-family:Arial,Helvetica,sans-serif;
+				font-style:italic;
+				padding-top: 10px;
+				color: #AAA;
+			}
+			.productTitle{
+				font-weight:bold;
+				font-style:normal;
+			}
+			#buttonContainerDivCart{
+				margin-top: 5px;
+				display:none;
+			}
+			#amazonImage{
+				position:absolute;
+				right:0px;
+				top:3px;
+			}
+		&lt;/style&gt;
+		&lt;script language="JavaScript" src="http://piccolo.ls.fi.upm.es/amazonURL/signAmazonURLs.js"&gt;&lt;/script&gt;
+		&lt;script language="JavaScript" src="http://piccolo.ls.fi.upm.es/amazonURL/jssha2/sha2.js"&gt;&lt;/script&gt;
+        &lt;script language="JavaScript"&gt;
+        		
+        	function ShoppingCart(){
+		    	//Product list fetched from the Service
+		        this.productList = new Array();
+				//Subtotal
+				this.subTotal="";
+				// number of items in the cart
+				this.itemTotal = 0;
+				//Purchase URL
+				this.purchaseURL = "";
+            	//Are we waiting for data?
+            	this.waiting = true;
+		    };
+            
+            ShoppingCart.prototype.init = function (){
+                $("clearButton").observe("click", shoppingCart.clearCart);
+                $("checkoutButton").observe("click", shoppingCart.checkout);
+				$("updateButton").observe("click", shoppingCart.update);
+				$$('input[type="button"]').each(function(element){
+					element.observe("mouseover",function(event){
+						var e = Event.element(event);
+						e.setStyle({cursor:"pointer"});
+					});
+				
+				});
+				var tableBody = $("listBodyCart");
+				tableBody.update("");
+				if(!$("loadingImgCart")){
+					$("info").update('&lt;img id="loadingImgCart" src="http://piccolo.ls.fi.upm.es/amazonScreens/images/ajaxLoader.gif" /&gt;');
+
+				}
+				$("loadingImgCart").show();
+				$("buttonContainerDivCart").hide();
+				shoppingCart.waiting = true;
+                shoppingCart.fetch();
+            }
+            
+            ShoppingCart.prototype.clearCart = function (){
+				//Ask the user to confirm the operation
+				if (confirm("Are you sure you want to empty your Shopping Cart?")) {
+					var cart = ScreenflowEngineFactory.getInstance().getFact('http://aws.amazon.com/AWSECommerceService#ShoppingCart');
+					var user = ScreenflowEngineFactory.getInstance().getFact('user');
+					
+					//Create the call
+					var url = "http://webservices.amazon.com/onca/xml?Service=AWSECommerceService";
+					//Add the AccessKeyId (get from the user fact)
+					/*if (user)
+						url += "&amp;AWSAccessKeyId=" + user.data.KeyId;
+					else // if the KB doesn't contain a user key Id, add one by default
+						url += "&amp;AWSAccessKeyId=15TNKDQJGH6BD0Z4KY02";*/
+					//Add the operation Type
+					url +="&amp;Operation=CartClear";
+					//Add the current version of the API
+					url += "&amp;Version=2008-06-26";
+					//Add item ID
+					url += "&amp;CartId=" + cart.data.id;
+					url += "&amp;HMAC=" + cart.data.HMAC;
+					
+						var encoder = new URLAmazonEncoder();
+						url = encoder.encode(url);
+	
+					//Invoke the service
+           	        new FastAPI.Request(url,{
+                        'method':       'get',
+                        'content':      'xml',
+                        'context':      this,
+                        'onSuccess':    shoppingCart.fetch
+                    });
+                   	//FastAPI.getXML(url, this, shoppingCart.fetch);
+				}	
+			}
+			
+			ShoppingCart.prototype.checkout = function (){
+				var purchase = {uri:'http://aws.amazon.com/AWSECommerceService#PurchaseURL', data:{url: shoppingCart.purchaseURL}};
+				ScreenflowEngineFactory.getInstance().manageFacts([purchase],[]);
+			}
+			
+			ShoppingCart.prototype.update = function (){
+				if (shoppingCart.productList.length &gt; 0) { //Only if there is something to update
+					var cart = ScreenflowEngineFactory.getInstance().getFact('http://aws.amazon.com/AWSECommerceService#ShoppingCart');
+					var user = ScreenflowEngineFactory.getInstance().getFact('user');
+					//Create the call
+					var url = "http://webservices.amazon.com/onca/xml?Service=AWSECommerceService";
+					//Add the AccessKeyId (get from the user fact)
+					/*if (user)
+						url += "&amp;AWSAccessKeyId=" + user.data.KeyId;
+					else // if the KB doesn't contain a user key Id, add one by default
+						url += "&amp;AWSAccessKeyId=15TNKDQJGH6BD0Z4KY02";*/
+					//Add the operation Type
+					url +="&amp;Operation=CartModify";
+					//Add the current version of the API
+					url += "&amp;Version=2008-06-26";
+					//Add item ID
+					url += "&amp;CartId=" + cart.data.id;
+					url += "&amp;HMAC=" + cart.data.HMAC;
+					//Build the parameter list
+					for (var i=0; i &lt; shoppingCart.productList.length; i++){
+						url += "&amp;Item." + (i+1) + ".CartItemId=" + shoppingCart.productList[i]["id"];
+						url += "&amp;Item." + (i+1) + ".Quantity=" + $F(shoppingCart.productList[i]["id"]);
+					}
+
+						var encoder = new URLAmazonEncoder();
+						url = encoder.encode(url);
+	
+					//Create the call
+                    new FastAPI.Request(url,{
+                        'method':       'get',
+                        'content':      'xml',
+                        'context':      this,
+                        'onSuccess':    shoppingCart.fetch
+                    });
+                   	//FastAPI.getXML(url, this, shoppingCart.fetch);
+				}
+			}
+			
+			//Change the current Item Fact
+			ShoppingCart.prototype.productDetail = function (_ASIN,_title){
+				var item = ScreenflowEngineFactory.getInstance().getFact('http://aws.amazon.com/AWSECommerceService#Item');
+				item.data.ASIN = _ASIN;
+				item.data.title = _title;
+				ScreenflowEngineFactory.getInstance().manageFacts([item],['product']);
+			}
+			
+			ShoppingCart.prototype.fetch = function (){
+				//empty current data
+				shoppingCart.productList = new Array();
+				shoppingCart.subTotal = 0;
+				shoppingCart.itemTotal = 0;  
+				
+                //Get the facts to invoke the service
+                //TODO add error handling
+                var cart = ScreenflowEngineFactory.getInstance().getFact('http://aws.amazon.com/AWSECommerceService#ShoppingCart');
+                var user = ScreenflowEngineFactory.getInstance().getFact('user');
+				
+                //Invoke the service CartGet to retrieve the product list
+                var url = "http://webservices.amazon.com/onca/xml?Service=AWSECommerceService";
+				//Add the AccessKeyId (get from the user fact)
+				/*if (user)
+					url += "&amp;AWSAccessKeyId=" + user.data.KeyId;
+				else // if the KB doesn't contain a user key Id, add one by default
+					url += "&amp;AWSAccessKeyId=15TNKDQJGH6BD0Z4KY02";*/
+				//Add the operation Type
+				url +="&amp;Operation=CartGet";
+				//Add the current version of the API
+				url += "&amp;Version=2008-06-26";
+				//Add item ID
+				url += "&amp;CartId=" + cart.data.id;
+				url += "&amp;HMAC=" + cart.data.HMAC;
+				
+						var encoder = new URLAmazonEncoder();
+						url = encoder.encode(url);
+	
+				//Create the call
+                new FastAPI.Request(url,{
+                    'method':       'get',
+                    'content':      'xml',
+                    'context':      this,
+                    'onSuccess':    shoppingCart.addToList
+                });
+                //FastAPI.getXML(url, this, shoppingCart.addToList);
+            }
+            
+            ShoppingCart.prototype.addToList = function (transport){
+                var xml = transport;
+                //Check if the service returned an error
+                if (xml.getElementsByTagName("IsValid")[0].childNodes[0].nodeValue == "False") {
+                    alert(xml.getElementsByTagName("Message")[0].childNodes[0].nodeValue);
+                }
+                else { //Correct response, create the result List
+                	if (xml.getElementsByTagName("CartItems").length &gt; 0) { //There are products in the cart
+						var list = xml.getElementsByTagName("CartItems")[0].getElementsByTagName("CartItem");
+						//Fill the table, 1 row per item
+						$A(list).each(function(item){
+							if (item.getElementsByTagName("Title").length &gt; 0) 
+								var title = item.getElementsByTagName("Title")[0].firstChild.nodeValue;
+							if (item.getElementsByTagName("ASIN").length &gt; 0) 
+								var ASIN = item.getElementsByTagName("ASIN")[0].firstChild.nodeValue;
+							if (item.getElementsByTagName("CartItemId").length &gt; 0) 
+								var ID = item.getElementsByTagName("CartItemId")[0].firstChild.nodeValue;
+							if (item.getElementsByTagName("Price").length &gt; 0) 
+								var price = item.getElementsByTagName("Price")[0].getElementsByTagName("FormattedPrice")[0].firstChild.nodeValue;
+							if (item.getElementsByTagName("Quantity").length &gt; 0) 
+								var quantity = item.getElementsByTagName("Quantity")[0].firstChild.nodeValue;
+							var row = {
+								title: title,
+								price: price,
+								ASIN: ASIN,
+								id: ID,
+								quantity: quantity
+							};
+							shoppingCart.itemTotal += parseInt (quantity);
+							shoppingCart.productList.push(row);
+						});
+					}
+					if (xml.getElementsByTagName("SubTotal").length&gt;0)
+						shoppingCart.subTotal = xml.getElementsByTagName("SubTotal")[0].getElementsByTagName("FormattedPrice")[0].firstChild.nodeValue;
+					else
+						shoppingCart.subTotal = "$0.0";
+					if (xml.getElementsByTagName("PurchaseURL").length&gt;0)
+						shoppingCart.purchaseURL = xml.getElementsByTagName("PurchaseURL")[0].firstChild.nodeValue;
+                    if (shoppingCart.waiting) {
+                        shoppingCart.waiting = false;
+                    }
+					shoppingCart.showTable();
+                }
+            }
+            
+            ShoppingCart.prototype.onError = function (transport){
+                //alert(transport.responseText);
+            }
+            
+            ShoppingCart.prototype.showProgress = function (){
+                shoppingCart.waiting = true;
+                $("loadingImgCart").show();
+            }
+            
+            ShoppingCart.prototype.showTable = function (){
+                if($("loadingImgCart")){
+                	$("loadingImgCart").hide();
+				}
+				var tableBody = $("listBodyCart");
+				tableBody.update("");
+				if (shoppingCart.productList.length == 0) {//Empty shopping cart
+					$("info").update("Your Shopping Cart is empty");
+					$("buttonContainerDivCart").hide();
+					ScreenflowEngineFactory.getInstance().manageFacts([],['?Purchase http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#PurchaseURL']);	
+					return;
+				}else{
+					$("info").update("");
+				}
+				$("buttonContainerDivCart").setStyle({display:"inline"});
+                var templateString = '&lt;tr&gt;&lt;td&gt;&lt;a onclick="shoppingCart.productDetail(\'#{ASIN}\',\'#{title}\');"&gt;#{title}&lt;/a&gt;&lt;/td&gt;';
+				templateString += '&lt;td&gt;#{price}&lt;/td&gt;';
+				templateString += '&lt;td&gt;&lt;input type="text" maxlength="3" size="2" id="#{id}"';
+				templateString += 'value="#{quantity}"/&gt;&lt;/td&gt;&lt;/tr&gt;';
+                var rowTemplate = new Template(templateString);
+                
+                
+                for (var i = 0; i &lt; shoppingCart.productList.length; i++) {
+                    if (shoppingCart.productList[i]) { //only if the product table is fetched
+                        tableBody.innerHTML += rowTemplate.evaluate(shoppingCart.productList[i]);
+                    }
+                }
+				//Last row, including subtotal
+				var lastRow = "&lt;tr&gt;&lt;th style='text-align:right'&gt;Subtotal&lt;/th&gt;&lt;th&gt;";
+				lastRow += shoppingCart.subTotal;
+				lastRow += "&lt;/th&gt;&lt;th&gt;";
+				lastRow += shoppingCart.itemTotal;
+				lastRow += "&lt;/th&gt;&lt;/tr&gt;";
+				tableBody.innerHTML += lastRow;
+            }
+            
+            var shoppingCart = new ShoppingCart();
+			ScreenflowEngineFactory.getInstance().addScreenLoader("ShoppingCart", shoppingCart.init);
+					
+        &lt;/script&gt;
+    &lt;/head&gt;
+    &lt;body&gt;
+        &lt;div id="bodyDiv"&gt;
+        	&lt;span id="amazonImage"&gt;&lt;img src="http://piccolo.ls.fi.upm.es/amazonScreens/images/amazon.png" /&gt;&lt;/span&gt;
+            &lt;h1 id="title"&gt;Shopping Cart&lt;/h1&gt;
+            &lt;div id="listDivCart"&gt;
+                &lt;table&gt;
+                    &lt;thead&gt;
+                        &lt;tr&gt;
+                            &lt;th style="width:70%;-moz-border-radius: 13px 0px 0px 0px;"&gt;
+                                Shopping Cart Items
+                            &lt;/th&gt;
+                            &lt;th style="width:10%"&gt;
+                                Price
+                            &lt;/th&gt;
+                            &lt;th style="width:10%;-moz-border-radius: 0px 13px 0px 0px;"&gt;
+                                Quantity
+                            &lt;/th&gt;
+                        &lt;/tr&gt;
+                    &lt;/thead&gt;
+                    &lt;tbody id="listBodyCart"&gt;
+                    	&lt;tr&gt;
+							&lt;td&gt;&amp;nbsp;&lt;/td&gt;
+					    &lt;/tr&gt;
+						&lt;tr&gt;
+							&lt;td&gt;&amp;nbsp;&lt;/td&gt;
+					    &lt;/tr&gt;
+						&lt;tr&gt;
+							&lt;td&gt;&amp;nbsp;&lt;/td&gt;
+					    &lt;/tr&gt;
+						&lt;tr&gt;
+							&lt;td&gt;&amp;nbsp;&lt;/td&gt;
+					    &lt;/tr&gt;
+                    &lt;/tbody&gt;
+                &lt;/table&gt;
+               &lt;div id="info"&gt;&lt;img id="loadingImgCart" src="http://piccolo.ls.fi.upm.es/amazonScreens/images/ajaxLoader.gif" /&gt;&lt;/div&gt;		
+                &lt;div id="buttonContainerDivCart"&gt;
+                    &lt;input type="button" id="clearButton" class="button" value="Clear Cart"/&gt;
+					&lt;input type="button" id="updateButton" class="button" value="Update Cart"/&gt;
+					&lt;input type="button" id="checkoutButton" class="button" value="Proceed to Checkout"/&gt;
+                &lt;/div&gt;
+				
+            &lt;/div&gt;
+        &lt;/div&gt;
+    &lt;/body&gt;
+&lt;/html&gt;
+</field>
+    </object>
+    <object pk="5" model="buildingblock.buildingblockcode">
+        <field to="buildingblock.buildingblock" name="buildingBlock" rel="ManyToOneRel">5</field>
+        <field type="TextField" name="code">&lt;html&gt;
+		    &lt;head&gt;
+		        &lt;script language="JavaScript"&gt;
+		        	function Order(){};
+		        	
+		        	Order.prototype.init = function (){
+		        		var purchase = ScreenflowEngineFactory.getInstance().getFact('http://aws.amazon.com/AWSECommerceService#PurchaseURL');
+						var obj = new Element ('object',{type: "text/html", data: purchase.data.url, standby: "Loading...", width: "100%",  height: "100%"});
+						$("bodyDivOrder").update(obj);
+					}
+					
+					var order = new Order();
+					ScreenflowEngineFactory.getInstance().addScreenLoader("Order", order.init);
+		        &lt;/script&gt;
+		    &lt;/head&gt;
+		    &lt;body&gt;
+		        &lt;div id="bodyDivOrder"&gt;
+		        &lt;/div&gt;
+		    &lt;/body&gt;
+&lt;/html&gt;</field>
+    </object>
+    <object pk="6" model="buildingblock.buildingblockcode">
+        <field to="buildingblock.buildingblock" name="buildingBlock" rel="ManyToOneRel">6</field>
+        <field type="TextField" name="code">&lt;html&gt;
+	&lt;head&gt;
+        &lt;meta http-equiv="Content-Type" content="application/xhtml+xml; charset=UTF-8"&gt;
+		&lt;link type="text/css" rel="stylesheet" href="http://piccolo.ls.fi.upm.es/amazonScreens/style/table.css" /&gt;
+        &lt;link type="text/css" rel="stylesheet" href="http://piccolo.ls.fi.upm.es/amazonScreens/style/screen.css" /&gt;
+		&lt;style type="text/css"&gt;
+			#pagesSuggestion{
+				color:#FEBF43;
+				font-weight: bold;
+				padding: 10px;
+			}
+			#previousButtonSuggestion, #nextButtonSuggestion {
+				visibility:hidden;
+			}
+			#loadingImgSuggestion{
+				margin:auto;
+				padding-top: 10px;
+			}
+			#like{
+				padding: 5px;
+				color: #777777;
+			}
+			.productTitle{
+				font-weight:bold;
+				font-style:normal;
+			}
+			#amazonImage{
+				position:absolute;
+				right:0px;
+				top:3px;
+			}
+		&lt;/style&gt;
+		&lt;script language="JavaScript" src="http://piccolo.ls.fi.upm.es/amazonURL/signAmazonURLs.js"&gt;&lt;/script&gt;
+		&lt;script language="JavaScript" src="http://piccolo.ls.fi.upm.es/amazonURL/jssha2/sha2.js"&gt;&lt;/script&gt;
+        &lt;script language="JavaScript"&gt;
+        
+        	function SuggestionList(){
+	            //Next set of products to print in the table (0-9)
+	            this.currentPage = 0;
+	            //Product list fetched from the Service
+	            this.productList = new Array();
+	            //Are we waiting for data?
+	            this.waiting = true;
+            };
+            
+            SuggestionList.prototype.init = function (){
+                $("nextButtonSuggestion").observe("click", suggestionList.nextPage);
+                $("previousButtonSuggestion").observe("click", suggestionList.previousPage);
+				$$('input[type="button"]').each(function(element){
+					element.observe("mouseover",function(event){
+						var e = Event.element(event);
+						e.setStyle({cursor:"pointer"});
+					});
+				
+				});
+				var item = ScreenflowEngineFactory.getInstance().getFact('http://aws.amazon.com/AWSECommerceService#Item');
+				$$(".productTitle").each(function(element){
+					element.update(item.data.title);
+				});
+				var tableBody = $("listBodySuggestion");
+                tableBody.update("");
+                suggestionList.currentPage = 0;
+	            suggestionList.productList = new Array();
+	            suggestionList.waiting = true;
+	            suggestionList.showProgress();
+                suggestionList.fetch();
+            }
+            
+            SuggestionList.prototype.fetch = function (){
+            
+            	//Get the facts to invoke the service
+                var item = ScreenflowEngineFactory.getInstance().getFact('http://aws.amazon.com/AWSECommerceService#Item');
+                var user = ScreenflowEngineFactory.getInstance().getFact('user');
+                //Add the ItemSearch parameters
+                var parameters = "";
+				parameters += "&amp;ItemId=" + item.data.ASIN;
+                
+                //Base URL of the REST Service
+				var url = "http://webservices.amazon.com/onca/xml?Service=AWSECommerceService";
+				//Add the AccessKeyId (get from the user fact)
+				/*if (user)
+					url += "&amp;AWSAccessKeyId=" + user.data.KeyId;
+				else // if the KB doesn't contain a user key Id, add one by default
+					url += "&amp;AWSAccessKeyId=15TNKDQJGH6BD0Z4KY02";*/
+				//Add the operation Type
+				url +="&amp;Operation=SimilarityLookup";
+				//Add the parameters
+				url += parameters;
+				//Add the responseGroup
+				url +="&amp;ResponseGroup=Medium";
+				//Add the current version of the API
+				url += "&amp;Version=2008-06-26";
+
+						var encoder = new URLAmazonEncoder();
+						url = encoder.encode(url);
+	
+				//Invoke the service
+                new FastAPI.Request(url,{
+                    'method':       'get',
+                    'content':      'xml',
+                    'context':      this,
+                    'onSuccess':    suggestionList.addToList
+                });
+                //FastAPI.getXML(url, this, suggestionList.addToList);
+            }
+            
+            SuggestionList.prototype.addToList = function (transport){
+                var xml = transport;
+                //Check if the service returned an error
+                if (xml.getElementsByTagName("IsValid")[0].childNodes[0].nodeValue == "False") {
+                    alert(xml.getElementsByTagName("Message")[0].childNodes[0].nodeValue);
+                }
+                else { //Correct response, create the result List
+                    var suggestionlist = xml.getElementsByTagName("Items")[0].getElementsByTagName("Item");
+                    //Fill the table, 1 row per item
+                    $A(suggestionlist).each(function(item){
+                        if (item.getElementsByTagName("Title").length &gt; 0) 
+                            var title = item.getElementsByTagName("Title")[0].firstChild.nodeValue;
+			else
+			    var title = "&amp;nbsp;";
+                        if (item.getElementsByTagName("FormattedPrice").length &gt; 0) 
+                            var price = item.getElementsByTagName("FormattedPrice")[0].firstChild.nodeValue;
+			else
+			    var price = "&amp;nbsp;";
+                        if (item.getElementsByTagName("ProductGroup").length &gt; 0) 
+                            var pGroup = item.getElementsByTagName("ProductGroup")[0].firstChild.nodeValue;
+			else
+			    var pGroup = "&amp;nbsp;";
+                        if (item.getElementsByTagName("ASIN").length &gt; 0) 
+                            var ASIN = item.getElementsByTagName("ASIN")[0].firstChild.nodeValue;
+                        var row = {
+                            title: title,
+                            price: price,
+                            pGroup: pGroup,
+                            ASIN: ASIN
+                        };
+                        suggestionList.productList.push(row);
+                    });
+                    if (suggestionList.waiting) {
+                        suggestionList.waiting = false;
+                        suggestionList.showTable();
+                    }
+                }
+            }
+            
+            
+            SuggestionList.prototype.productDetail = function (nodeElement,_ASIN){
+				list.clearSelected ();
+				//select the element
+				nodeElement.parentNode.parentNode.setStyle({background: "#FFF8E8"});
+				var item = {uri: 'http://aws.amazon.com/AWSECommerceService#Item', data:{ASIN: _ASIN, title: nodeElement.parentNode.parentNode.firstChild.firstChild.nodeValue}};
+				ScreenflowEngineFactory.getInstance().manageFacts([item],['product']);
+			}
+			
+			SuggestionList.prototype.clearSelected = function (){
+				$$("tbody tr").each(function (element){
+					element.setStyle ({background: "transparent url(http://piccolo.ls.fi.upm.es/amazonScreens/style/bg_td1.jpg) repeat-x top"});
+				});
+			}
+			
+			SuggestionList.prototype.onError = function (transport){
+                //alert(transport.responseText);
+            }
+            
+            SuggestionList.prototype.showProgress = function (){
+                suggestionList.waiting = true;
+                $("loadingImgSuggestion").show();
+            }
+            
+            SuggestionList.prototype.showTable = function (){
+            	if($("loadingImgSuggestion")){
+                	$("loadingImgSuggestion").hide();
+                }
+                var templateString = '&lt;tr&gt;&lt;td&gt;#{title}&lt;/td&gt;&lt;td&gt;#{price}&lt;/td&gt;&lt;td&gt;#{pGroup}&lt;/td&gt;';
+                templateString += '&lt;td style="border-right:none;"&gt;&lt;input type="button" onclick="suggestionList.productDetail(this,\'#{ASIN}\');"';
+				templateString += ' onmouseover="this.setStyle({cursor:\'pointer\'});" value="Select"/&gt;&lt;/td&gt;&lt;/tr&gt;';
+                var rowTemplate = new Template(templateString);
+                
+                var tableBody = $("listBodySuggestion");
+                for (var i = 5 * suggestionList.currentPage; i &lt; 5 * (suggestionList.currentPage + 1); i++) { //print the appropriate elements
+                    if (suggestionList.productList[i]) { //only if the product table is fetched
+                        tableBody.innerHTML += rowTemplate.evaluate(suggestionList.productList[i]);
+                    }
+                }
+                //Update Interface
+                if (suggestionList.currentPage &lt; 1) {
+                    $("nextButtonSuggestion").setStyle({
+                        visibility: "visible"
+                    });
+                }
+                else {
+                    $("nextButtonSuggestion").setStyle({
+                        visibility: "hidden"
+                    });
+                }
+                if (suggestionList.currentPage &gt; 0) {
+                    $("previousButtonSuggestion").setStyle({
+                        visibility: "visible"
+                    });
+                }
+                else {
+                    $("previousButtonSuggestion").setStyle({
+                        visibility: "hidden"
+                    });
+                }
+            }
+            
+            SuggestionList.prototype.nextPage = function (){
+                //Clear the table
+                var tableBody = $("listBodySuggestion");
+                tableBody.update("");
+                suggestionList.currentPage++;
+                suggestionList.showTable();
+				//update the current page in the interface
+				 $("curPageSuggestion").update(suggestionList.currentPage+1);
+            }
+            
+            SuggestionList.prototype.previousPage = function (){
+                //Clear the table
+                var tableBody = $("listBodySuggestion");
+                tableBody.update("");
+                suggestionList.currentPage--;
+                suggestionList.showTable();
+				//update the current page in the interface;
+				$("curPageSuggestion").update(suggestionList.currentPage+1);
+            }
+            
+            var suggestionList = new SuggestionList();
+			ScreenflowEngineFactory.getInstance().addScreenLoader("SuggestionList", suggestionList.init);
+			
+        &lt;/script&gt;&lt;/head&gt;&lt;body&gt;
+        &lt;div id="bodyDiv"&gt;
+        	&lt;span id="amazonImage"&gt;&lt;img src="http://piccolo.ls.fi.upm.es/amazonScreens/images/amazon.png" /&gt;&lt;/span&gt;
+            &lt;h1 id="title"&gt;Related products to&lt;/h1&gt;
+			&lt;h1 id="title"&gt;&lt;span class="productTitle"&gt;&lt;/span&gt;&lt;/h1&gt;
+			&lt;div id="like"&gt;Customers who bought &lt;span class="productTitle"&gt;&lt;/span&gt;, also bought ...&lt;/div&gt;
+            &lt;div id="listDiv"&gt;
+                &lt;table&gt;
+                    &lt;thead&gt;
+                        &lt;tr&gt;
+                            &lt;th style="width: 60%; -moz-border-radius-topleft: 13px; -moz-border-radius-topright: 0px; -moz-border-radius-bottomright: 0px; -moz-border-radius-bottomleft: 0px;"&gt;
+                                Title
+                            &lt;/th&gt;
+                            &lt;th style="width: 10%;"&gt;
+                                Price
+                            &lt;/th&gt;
+                            &lt;th style="width: 20%;"&gt;
+                                Product Group
+                            &lt;/th&gt;
+                            &lt;th style="width: 10%; -moz-border-radius-topleft: 0px; -moz-border-radius-topright: 13px; -moz-border-radius-bottomright: 0px; -moz-border-radius-bottomleft: 0px;"&gt;
+                                &amp;nbsp;
+                            &lt;/th&gt;
+                        &lt;/tr&gt;
+                    &lt;/thead&gt;
+                    &lt;tbody id="listBodySuggestion"&gt;
+	                            &lt;tr&gt;
+					&lt;td&gt;&amp;nbsp;&lt;/td&gt;
+				    &lt;/tr&gt;
+	                            &lt;tr&gt;
+					&lt;td&gt;&amp;nbsp;&lt;/td&gt;
+				    &lt;/tr&gt;
+	                            &lt;tr&gt;
+					&lt;td&gt;&amp;nbsp;&lt;/td&gt;
+				    &lt;/tr&gt;
+	                            &lt;tr&gt;
+					&lt;td&gt;&amp;nbsp;&lt;/td&gt;
+				    &lt;/tr&gt;
+	                            &lt;tr&gt;
+					&lt;td&gt;&amp;nbsp;&lt;/td&gt;
+				    &lt;/tr&gt;
+		    &lt;/tbody&gt;
+                &lt;/table&gt;
+                &lt;img style="display: none;" id="loadingImgSuggestion" src="http://piccolo.ls.fi.upm.es/amazonScreens/images/ajaxLoader.gif"&gt;
+                &lt;div id="buttonContainerDiv"&gt;
+                    &lt;input style="visibility: hidden;" id="previousButtonSuggestion" class="button" value="&amp;lt;" type="button"&gt;
+					&lt;span id="pagesSuggestion"&gt;
+					Page &lt;span id="curPageSuggestion"&gt;1&lt;/span&gt;/2
+					&lt;/span&gt;&lt;input style="visibility: visible;" id="nextButtonSuggestion" class="button" value="&amp;gt;" type="button"&gt;
+                &lt;/div&gt;
+				
+            &lt;/div&gt;
+        &lt;/div&gt;
+    &lt;/body&gt;
+&lt;/html&gt;
+</field>
+    </object>
+    <object pk="7" model="buildingblock.buildingblockcode">
+        <field to="buildingblock.buildingblock" name="buildingBlock" rel="ManyToOneRel">7</field>
+        <field type="TextField" name="code">&lt;html&gt;
+	&lt;head&gt;
+        &lt;meta http-equiv="Content-Type" content="application/xhtml+xml; charset=UTF-8"&gt;
+		&lt;link type="text/css" rel="stylesheet" href="http://piccolo.ls.fi.upm.es/amazonScreens/style/table.css" /&gt;
+        &lt;link type="text/css" rel="stylesheet" href="http://piccolo.ls.fi.upm.es/amazonScreens/style/screen.css" /&gt;
+		&lt;style type="text/css"&gt;
+			#pagesComparative{
+				color:#FEBF43;
+				font-weight: bold;
+				padding: 10px;
+			}
+			#previousButtonComparative, #nextButtonComparative {
+				visibility:hidden;
+			}
+			#loadingImgComparative{
+				margin:auto;
+				padding-top: 10px;
+			}
+			#like{
+				padding: 5px;
+				color: #777777;
+			}
+			.productTitle{
+				font-weight:bold;
+				font-style:normal;
+			}
+			#listDiv tbody td {
+				text-align: justify;
+			}
+			.tiny{
+				font-size:10px;
+			}
+			#amazonImage{
+				position:absolute;
+				right:0px;
+				top:3px;
+			}
+		&lt;/style&gt;
+		&lt;script language="JavaScript" src="http://piccolo.ls.fi.upm.es/amazonURL/signAmazonURLs.js"&gt;&lt;/script&gt;
+		&lt;script language="JavaScript" src="http://piccolo.ls.fi.upm.es/amazonURL/jssha2/sha2.js"&gt;&lt;/script&gt;
+        &lt;script language="JavaScript"&gt;
+        
+        	function PriceComparative(){
+	            //Next set of products to print in the table
+	            this.currentPage = 0;
+	            //Product list fetched from the Service
+	            this.productList = new Array();
+	            //Are we waiting for data?
+	            this.waiting = true;
+            };
+            
+            PriceComparative.prototype.init = function (){
+                $("nextButtonComparative").observe("click", priceComparative.nextPage);
+                $("previousButtonComparative").observe("click", priceComparative.previousPage);
+				$$('input[type="button"]').each(function(element){
+					element.observe("mouseover",function(event){
+						var e = Event.element(event);
+						e.setStyle({cursor:"pointer"});
+					});
+				
+				});
+				var item = ScreenflowEngineFactory.getInstance().getFact('http://aws.amazon.com/AWSECommerceService#Item');
+				$$(".productTitle").each(function(element){
+					element.update(item.data.title);
+				});
+				var tableBody = $("listBodyComparative");
+                tableBody.update("");
+                priceComparative.currentPage = 0;
+	            priceComparative.productList = new Array();
+	            priceComparative.waiting = true;
+	            priceComparative.showProgress();
+                priceComparative.fetch();
+            }
+            
+            PriceComparative.prototype.fetch = function (){
+            
+            	//Get the facts to invoke the service
+                var item = ScreenflowEngineFactory.getInstance().getFact('http://aws.amazon.com/AWSECommerceService#Item');
+                var user = ScreenflowEngineFactory.getInstance().getFact('user');
+                //Add the ItemSearch parameters
+                var parameters = "";
+				parameters += "&amp;ItemId=" + item.data.ASIN;
+				parameters += "&amp;MerchantId=All&amp;Condition=All";
+                
+                //Base URL of the REST Service
+				var url = "http://webservices.amazon.com/onca/xml?Service=AWSECommerceService";
+				//Add the AccessKeyId (get from the user fact)
+				/*if (user)
+					url += "&amp;AWSAccessKeyId=" + user.data.KeyId;
+				else // if the KB doesn't contain a user key Id, add one by default
+					url += "&amp;AWSAccessKeyId=15TNKDQJGH6BD0Z4KY02";*/
+				//Add the operation Type
+				url +="&amp;Operation=ItemLookup";
+				//Add the parameters
+				url += parameters;
+				//Add the responseGroup
+				url +="&amp;ResponseGroup=OfferFull";
+				//Add the current version of the API
+				url += "&amp;Version=2008-06-26";
+                               
+	
+			var encoder = new URLAmazonEncoder();
+			url = encoder.encode(url);
+	
+
+				//Invoke the service
+		        new FastAPI.Request(url,{
+		            'method':       'get',
+		            'content':      'xml',
+		            'context':      this,
+		            'onSuccess':    priceComparative.addToList
+		        });
+                //FastAPI.getXML(url, this, priceComparative.addToList);
+            }
+            
+            PriceComparative.prototype.addToList = function (transport){
+                var xml = transport;
+                //Check if the service returned an error
+                if (xml.getElementsByTagName("IsValid")[0].childNodes[0].nodeValue == "False") {
+                    alert(xml.getElementsByTagName("Message")[0].childNodes[0].nodeValue);
+                }
+                else { //Correct response, create the result List
+                    var comparativelist = xml.getElementsByTagName("Offers")[0].getElementsByTagName("Offer");
+                    //Fill the table, 1 row per item
+                    $A(comparativelist).each(function(offer){
+                        if (offer.getElementsByTagName("Name").length &gt; 0) 
+                            var sellerName = offer.getElementsByTagName("Name")[0].firstChild.nodeValue;
+						else
+							if  (offer.getElementsByTagName("Nickname").length &gt; 0)
+						    	var sellerName = offer.getElementsByTagName("Nickname")[0].firstChild.nodeValue;
+							else
+								var sellerName = "&amp;nbsp;";
+                        if (offer.getElementsByTagName("SellerId").length &gt; 0) 
+                            var sellerId = offer.getElementsByTagName("SellerId")[0].firstChild.nodeValue;
+						else
+						    var sellerId = "none";
+                        if (offer.getElementsByTagName("AverageFeedbackRating").length &gt; 0) 
+                            var averageRating = offer.getElementsByTagName("AverageFeedbackRating")[0].firstChild.nodeValue;
+						else
+						    var averageRating = "&amp;nbsp;";
+                        if (offer.getElementsByTagName("TotalFeedback").length &gt; 0) 
+                            var totalFeedback = offer.getElementsByTagName("TotalFeedback")[0].firstChild.nodeValue;
+						else
+						    var totalFeedback = "&amp;nbsp;";
+                        if (offer.getElementsByTagName("Condition").length &gt; 0)
+							var condition = offer.getElementsByTagName("Condition")[0].firstChild.nodeValue;             
+						else
+						    var condition = "&amp;nbsp;";
+                        if (offer.getElementsByTagName("ConditionNote").length &gt; 0)
+							var conditionNote = "(" + offer.getElementsByTagName("ConditionNote")[0].firstChild.nodeValue + ")";             
+						else
+						    var conditionNote = "&amp;nbsp;";
+                        if (offer.getElementsByTagName("OfferListingId").length &gt; 0)
+							var offerId = offer.getElementsByTagName("OfferListingId")[0].firstChild.nodeValue;             
+						else
+						    var offerId = "";
+                        if (offer.getElementsByTagName("Price").length &gt; 0)
+							var price = offer.getElementsByTagName("Price")[0].getElementsByTagName("FormattedPrice")[0].firstChild.nodeValue;             
+						else
+						    var price = "";
+                        if (offer.getElementsByTagName("AmountSaved").length &gt; 0)
+							var amountSaved = offer.getElementsByTagName("AmountSaved")[0].getElementsByTagName("FormattedPrice")[0].firstChild.nodeValue;             
+						else
+						    var amountSaved = "";
+                        if (offer.getElementsByTagName("PercentageSaved").length &gt; 0)
+							var percentageSaved = offer.getElementsByTagName("PercentageSaved")[0].firstChild.nodeValue;             
+						else
+						    var percentageSaved = "&amp;nbsp;";
+                        if (offer.getElementsByTagName("Availability").length &gt; 0)
+							var availability = offer.getElementsByTagName("Availability")[0].firstChild.nodeValue;             
+						else
+						    var availability = "&amp;nbsp;";
+                        var row = {
+                            sellerName: sellerName,
+                            sellerId: sellerId,
+                            location: location,
+                            averageRating: averageRating,
+							totalFeedback: totalFeedback,
+							condition: condition,
+							conditionNote: conditionNote,
+							offerId: offerId,
+							price: price,
+							amountSaved: amountSaved,
+							percentageSaved: percentageSaved,
+							availability: availability
+                        };
+                        priceComparative.productList.push(row);
+				    });
+                    if (priceComparative.waiting) {
+                        priceComparative.waiting = false;
+                        priceComparative.showTable();
+                    }
+                }
+            }
+            
+			PriceComparative.prototype.addToCart = function (offerId){
+				var cart = ScreenflowEngineFactory.getInstance().getFact('http://aws.amazon.com/AWSECommerceService#ShoppingCart');
+				var user = ScreenflowEngineFactory.getInstance().getFact('user');
+				if (cart){//If the cart is already created, it will have an ID in the User Fact
+					var url = "http://webservices.amazon.com/onca/xml?Service=AWSECommerceService";
+					//Add the AccessKeyId (get from the user fact)
+					/*if (user)
+						url += "&amp;AWSAccessKeyId=" + user.data.KeyId;
+					else // if the KB doesn't contain a user key Id, add one by default
+						url += "&amp;AWSAccessKeyId=15TNKDQJGH6BD0Z4KY02";*/
+					//Add the operation Type
+					url +="&amp;Operation=CartAdd";
+					//Add the current version of the API
+					url += "&amp;Version=2008-06-26";
+					//Add item ID
+					url += "&amp;CartId=" + cart.data.id;
+					url += "&amp;HMAC=" + cart.data.HMAC;
+					url += "&amp;Item.1.OfferListingId=" + offerId;
+					url += "&amp;Item.1.Quantity=" + 1;
+					
+						var encoder = new URLAmazonEncoder();
+						url = encoder.encode(url);
+	
+					//Invoke the service
+					new FastAPI.Request(url,{
+	                    'method':       'get',
+	                    'content':      'xml',
+	                    'context':      this,
+	                    'onSuccess':    priceComparative.productAdded
+	                });
+                	//FastAPI.getXML(url, this, priceComparative.productAdded);
+				}
+				else { //Cart doesn't exist: Create a new cart with the product
+					var url = "http://webservices.amazon.com/onca/xml?Service=AWSECommerceService";
+					//Add the AccessKeyId (get from the user fact)
+				/*	if (user)
+						url += "&amp;AWSAccessKeyId=" + user.data.KeyId;
+					else // if the KB doesn't contain a user key Id, add one by default
+						url += "&amp;AWSAccessKeyId=15TNKDQJGH6BD0Z4KY02";*/
+					//Add the operation Type
+					url +="&amp;Operation=CartCreate";
+					//Add the current version of the API
+					url += "&amp;Version=2008-06-26";
+					//Add item ID
+					url += "&amp;Item.1.OfferListingId=" + offerId;
+					url += "&amp;Item.1.Quantity=" + 1;
+					
+						var encoder = new URLAmazonEncoder();
+						url = encoder.encode(url);
+	
+					//Invoke the service
+	                new FastAPI.Request(url,{
+	                    'method':       'get',
+	                    'content':      'xml',
+	                    'context':      this,
+	                    'onSuccess':    priceComparative.cartCreated
+	                });
+                	//FastAPI.getXML(url, this, priceComparative.cartCreated);
+				}
+			}
+			
+			PriceComparative.prototype.cartCreated = function (transport){
+				var xml = transport;
+				
+				//The product is added to the cart,
+				//tell it to the user
+				if (xml.getElementsByTagName("IsValid")[0].firstChild.nodeValue == "True"){
+					
+					//Check if the product is eligible for shopping
+					if ((xml.getElementsByTagName("Error").length &gt; 0) &amp;&amp; 
+						xml.getElementsByTagName("Error")[0].firstChild.firstChild.nodeValue == "AWS.ECommerceService.ItemNotEligibleForCart"){
+						//The product is not elegible
+						alert ("The product is not eligible to be added to the cart");
+						return;
+					}
+					//Add the Cart ID to the KB
+					var cart = {uri: 'http://aws.amazon.com/AWSECommerceService#ShoppingCart',
+								data:{id: xml.getElementsByTagName("CartId")[0].firstChild.nodeValue,
+									HMAC: xml.getElementsByTagName("URLEncodedHMAC")[0].firstChild.nodeValue}};
+					ScreenflowEngineFactory.getInstance().manageFacts([cart],[]);
+					alert ("Product added to the shopping Cart");
+				}
+				else {
+					alert ("Error adding the product to the cart");
+			    }
+			}
+			
+			PriceComparative.prototype.productAdded = function (transport){
+				var xml = transport;
+				//Check if the product is eligible for shopping
+				if ((xml.getElementsByTagName("Error").length &gt; 0) &amp;&amp; 
+					xml.getElementsByTagName("Error")[0].firstChild.firstChild.nodeValue == "AWS.ECommerceService.ItemNotEligibleForCart"){
+					//The product is not elegible
+					alert ("The product is not eligible to be added to the cart");
+					return;
+				}
+				//If the product is added to the cart,
+				//tell it to the user
+				if (xml.getElementsByTagName("IsValid")[0].firstChild.nodeValue == "True")
+					alert ("Product added to the shopping Cart");
+				else
+					alert ("Error adding the product to the cart");
+			}
+			PriceComparative.prototype.onError = function (transport){
+                //alert(transport.responseText);
+            }
+            
+            PriceComparative.prototype.showProgress = function (){
+                priceComparative.waiting = true;
+                $("loadingImgComparative").show();
+            }
+            
+            PriceComparative.prototype.showTable = function (){
+            	if($("loadingImgComparative")){
+                	$("loadingImgComparative").hide();
+                }
+                var templateString = '&lt;tr&gt;&lt;td&gt;&lt;span class="info"&gt;#{price}&lt;/span&gt; &lt;br /&gt;&lt;span class="tiny"&gt;You save #{amountSaved} (#{percentageSaved}%)&lt;/span&gt;&lt;/td&gt;';
+				templateString += '&lt;td&gt;#{condition} #{conditionNote} &lt;/td&gt;'; 
+			    templateString += '&lt;td&gt;&lt;a target="_blank" href="http://www.amazon.com/gp/help/seller/at-a-glance.html?seller=#{sellerId}"&gt;';
+				templateString += '#{sellerName}&lt;/a&gt;&lt;br /&gt;&lt;span class="info"&gt;Rating:&lt;/span&gt; #{averageRating} of #{totalFeedback} user reviews';
+				templateString += '&lt;br /&gt;&lt;span class="info"&gt;Availability:&lt;/span&gt; #{availability}&lt;/td&gt;';
+				templateString += '&lt;td&gt;&lt;input width="112" type="image" height="21" border="0" align="absmiddle"';
+				templateString += 'alt="Add to cart" src="http://piccolo.ls.fi.upm.es/amazonScreens/images/addToCart-small.gif"';
+				templateString += 'onclick="priceComparative.addToCart(\'#{offerId}\'); /&gt;&lt;/td&gt;&lt;/tr&gt;';
+                var rowTemplate = new Template(templateString);
+                
+                var tableBody = $("listBodyComparative");
+                for (var i = 5 * priceComparative.currentPage; i &lt; 5 * (priceComparative.currentPage + 1); i++) { //print the appropriate elements
+                    if (priceComparative.productList[i]) { //only if the product table is fetched
+                        tableBody.innerHTML += rowTemplate.evaluate(priceComparative.productList[i]);
+                    }
+                }
+                //Update Interface
+                if (priceComparative.currentPage &lt; 1) {
+                    $("nextButtonComparative").setStyle({
+                        visibility: "visible"
+                    });
+                }
+                else {
+                    $("nextButtonComparative").setStyle({
+                        visibility: "hidden"
+                    });
+                }
+                if (priceComparative.currentPage &gt; 0) {
+                    $("previousButtonComparative").setStyle({
+                        visibility: "visible"
+                    });
+                }
+                else {
+                    $("previousButtonComparative").setStyle({
+                        visibility: "hidden"
+                    });
+                }
+            }
+            
+            PriceComparative.prototype.nextPage = function (){
+                //Clear the table
+                var tableBody = $("listBodyComparative");
+                tableBody.update("");
+                priceComparative.currentPage++;
+                priceComparative.showTable();
+				//update the current page in the interface
+				 $("curPageComparative").update(priceComparative.currentPage+1);
+            }
+            
+           PriceComparative.prototype.previousPage = function (){
+                //Clear the table
+                var tableBody = $("listBodyComparative");
+                tableBody.update("");
+                priceComparative.currentPage--;
+                priceComparative.showTable();
+				//update the current page in the interface;
+				$("curPageComparative").update(priceComparative.currentPage+1);
+            }
+            
+            var priceComparative = new PriceComparative();
+			ScreenflowEngineFactory.getInstance().addScreenLoader("P.Comparative", priceComparative.init);
+			
+        &lt;/script&gt;
+	&lt;/head&gt;
+	&lt;body&gt;
+        &lt;div id="bodyDiv"&gt;
+        	&lt;span id="amazonImage"&gt;&lt;img src="http://piccolo.ls.fi.upm.es/amazonScreens/images/amazon.png" /&gt;&lt;/span&gt;
+            &lt;h1 id="title"&gt;Price Comparative&lt;/h1&gt;
+			&lt;div id="like"&gt;Offers for &lt;span class="productTitle"&gt;&lt;/span&gt;&lt;/div&gt;
+            &lt;div id="listDiv"&gt;
+                &lt;table&gt;
+                    &lt;thead&gt;
+                        &lt;tr&gt;
+                            &lt;th style="width: 20%; -moz-border-radius-topleft: 13px; -moz-border-radius-topright: 0px; -moz-border-radius-bottomright: 0px; -moz-border-radius-bottomleft: 0px;"&gt;
+                                Price
+                            &lt;/th&gt;
+                            &lt;th style="width: 20%;"&gt;
+                                Condition
+                            &lt;/th&gt;
+                            &lt;th style="width: 40%;"&gt;
+                                Seller Information
+                            &lt;/th&gt;
+                            &lt;th style="width: 20%; -moz-border-radius-topleft: 0px; -moz-border-radius-topright: 13px; -moz-border-radius-bottomright: 0px; -moz-border-radius-bottomleft: 0px;"&gt;
+                                Ready to Buy?
+                            &lt;/th&gt;
+                        &lt;/tr&gt;
+                    &lt;/thead&gt;
+                    &lt;tbody id="listBodyComparative"&gt;
+	                            &lt;tr&gt;
+					&lt;td&gt;&amp;nbsp;&lt;/td&gt;
+				    &lt;/tr&gt;
+	                            &lt;tr&gt;
+					&lt;td&gt;&amp;nbsp;&lt;/td&gt;
+				    &lt;/tr&gt;
+	                            &lt;tr&gt;
+					&lt;td&gt;&amp;nbsp;&lt;/td&gt;
+				    &lt;/tr&gt;
+	                            &lt;tr&gt;
+					&lt;td&gt;&amp;nbsp;&lt;/td&gt;
+				    &lt;/tr&gt;
+	                            &lt;tr&gt;
+					&lt;td&gt;&amp;nbsp;&lt;/td&gt;
+				    &lt;/tr&gt;
+		    &lt;/tbody&gt;
+                &lt;/table&gt;
+                &lt;img style="display: none;" id="loadingImgComparative" src="http://piccolo.ls.fi.upm.es/amazonScreens/images/ajaxLoader.gif"&gt;
+                &lt;div id="buttonContainerDiv"&gt;
+                    &lt;input style="visibility: hidden;" id="previousButtonComparative" class="button" value="&amp;lt;" type="button"&gt;
+					&lt;span id="pagesComparative"&gt;
+					Page &lt;span id="curPageComparative"&gt;1&lt;/span&gt;/2
+					&lt;/span&gt;&lt;input style="visibility: visible;" id="nextButtonComparative" class="button" value="&amp;gt;" type="button"&gt;
+                &lt;/div&gt;
+				
+            &lt;/div&gt;
+        &lt;/div&gt;
+    &lt;/body&gt;
+&lt;/html&gt;
+</field>
+    </object>
+    <object pk="8" model="buildingblock.buildingblockcode">
+        <field to="buildingblock.buildingblock" name="buildingBlock" rel="ManyToOneRel">8</field>
+        <field type="TextField" name="code">&lt;html&gt;
+	&lt;head&gt;
+        &lt;meta http-equiv="Content-Type" content="application/xhtml+xml; charset=UTF-8"&gt;
+		&lt;link type="text/css" rel="stylesheet" href="http://piccolo.ls.fi.upm.es/amazonScreens/style/table.css" /&gt;
+        &lt;link type="text/css" rel="stylesheet" href="http://piccolo.ls.fi.upm.es/amazonScreens/style/screen.css" /&gt;
+		&lt;style type="text/css"&gt;
+			#loadingImgEBayList{
+				margin:auto;
+				padding-top: 10px;
+			}
+			#like{
+				padding: 5px;
+				color: #777777;
+			}
+			.productTitle{
+				font-weight:bold;
+				font-style:normal;
+			}
+			#eBayImage{
+				position:absolute;
+				right:0px;
+				top:3px;
+			}
+		&lt;/style&gt;
+        &lt;script language="JavaScript"&gt;
+        
+        	function EBayList(){
+	            //Product list fetched from the Service
+	            this.productList = new Array();
+	            //Are we waiting for data?
+	            this.waiting = true;
+            };
+            
+            EBayList.prototype.init = function (){
+                $$('input[type="button"]').each(function(element){
+					element.observe("mouseover",function(event){
+						var e = Event.element(event);
+						e.setStyle({cursor:"pointer"});
+					});
+				
+				});
+				var tableBody = $("listBodyEBayList");
+                tableBody.update("");
+	            eBayList.productList = new Array();
+	            eBayList.waiting = true;
+	            eBayList.showProgress();
+                eBayList.fetch();
+            }
+            
+            EBayList.prototype.fetch = function (){
+            
+            	//Get the facts to invoke the service
+                var item = ScreenflowEngineFactory.getInstance().getFact('http://aws.amazon.com/AWSECommerceService#Item');
+                
+                //URL of the Service
+				var url = "http://open.api.ebay.com/shopping?";
+				url += "&amp;callname=FindItems";
+				url += "&amp;ItemSort=BestMatch";
+				url += "&amp;version=515";
+				url += "&amp;responseencoding=XML";
+				url += "&amp;appid=eBayAPID-73f4-45f2-b9a3-c8f6388b38d8";
+				url += "&amp;callback=true";
+				url += "&amp;QueryKeywords=" +  encodeURIComponent(item.data.title);
+
+				//Invoke the service
+                new FastAPI.Request(url,{
+                    'method':       'get',
+                    'content':      'xml',
+                    'context':      this,
+                    'onSuccess':    eBayList.addToList
+                });
+                //FastAPI.getXML(url, this, eBayList.addToList);
+            }
+            
+            EBayList.prototype.addToList = function (transport){
+            	var xml = transport;
+                var items = xml.getElementsByTagName("Item");
+                //Fill the table, 1 row per item
+                $A(items).each(function(item){
+                     if (item.getElementsByTagName("ItemID").length &gt; 0) 
+                         var itemID = item.getElementsByTagName("ItemID")[0].firstChild.nodeValue;
+					 else
+    					var itemID = "&amp;nbsp;";
+    				 if (item.getElementsByTagName("Title").length &gt; 0) 
+                         var title = item.getElementsByTagName("Title")[0].firstChild.nodeValue;
+					 else
+    					var title = "&amp;nbsp;";
+    				 if (item.getElementsByTagName("PrimaryCategoryName").length &gt; 0) 
+                         var category = item.getElementsByTagName("PrimaryCategoryName")[0].firstChild.nodeValue;
+					 else
+    					var category = "&amp;nbsp;";
+    				 if (item.getElementsByTagName("ConvertedCurrentPrice").length &gt; 0) 
+                         var currentPrice = '$' + item.getElementsByTagName("ConvertedCurrentPrice")[0].firstChild.nodeValue;
+					 else
+    					var currentPrice = "&amp;nbsp;";
+    				 if (item.getElementsByTagName("ShippingServiceCost").length &gt; 0) 
+                         var shippingServiceCost = '$' + item.getElementsByTagName("ShippingServiceCost")[0].firstChild.nodeValue;
+					 else
+    					var shippingServiceCost = "&amp;nbsp;";
+    				 if (item.getElementsByTagName("GalleryURL").length &gt; 0) 
+                         var image = item.getElementsByTagName("GalleryURL")[0].firstChild.nodeValue;
+                     else
+                     	var image = "";
+                     var row = {
+                     	 itemID: itemID,
+                         title:  title.replace(/\x27/g,"`"),
+                         category: category,
+                         currentPrice: currentPrice,
+                         shippingServiceCost: shippingServiceCost,
+                         image: image
+                     };
+                     eBayList.productList.push(row);
+                 });
+                 if (eBayList.waiting) {
+                     eBayList.waiting = false;
+                     eBayList.showTable();
+                 }
+            }
+            
+            
+            EBayList.prototype.productDetail = function (nodeElement, itemID, title){
+				eBayList.clearSelected ();
+				//select the element
+				nodeElement.parentNode.parentNode.setStyle({background: "#FFF8E8"});
+				var ebayItem = {uri: 'http://developer.ebay.com/DevZone/shopping/docs/CallRef/FindItemsAdvanced.html#Request', data:{itemID: itemID, title: title}};
+				ScreenflowEngineFactory.getInstance().manageFacts([ebayItem],[]);
+			}
+			
+			EBayList.prototype.clearSelected = function (){
+				$$("tbody tr").each(function (element){
+					element.setStyle ({background: "transparent url(http://piccolo.ls.fi.upm.es/amazonScreens/style/bg_td1.jpg) repeat-x top"});
+				});
+			}
+			
+			EBayList.prototype.onError = function (transport){
+                //alert(transport.responseText);
+            }
+            
+            EBayList.prototype.showProgress = function (){
+                eBayList.waiting = true;
+                $("loadingImgEBayList").show();
+            }
+            
+            EBayList.prototype.showTable = function (){
+            	if($("loadingImgEBayList")){
+                	$("loadingImgEBayList").hide();
+                }
+                var templateString = '&lt;tr&gt;';
+                templateString += '&lt;td&gt;&lt;img src="#{image}"/&gt;&lt;/td&gt;';
+                templateString += '&lt;td&gt;#{title}&lt;/td&gt;&lt;td&gt;#{category}&lt;/td&gt;&lt;td&gt;#{currentPrice}&lt;/td&gt;&lt;td&gt;#{shippingServiceCost}&lt;/td&gt;';
+                templateString += '&lt;td style="border-right:none;"&gt;&lt;input type="button" onclick="eBayList.productDetail(this,\'#{itemID}\',\'#{title}\');"';
+				templateString += ' onmouseover="this.setStyle({cursor:\'pointer\'});" value="Select"/&gt;&lt;/td&gt;&lt;/tr&gt;';
+                var rowTemplate = new Template(templateString);
+                
+                var tableBody = $("listBodyEBayList");
+                for (var i = 0; i &lt; eBayList.productList.length; i++) { //print the appropriate elements
+                    if (eBayList.productList[i]) { //only if the product table is fetched
+                        tableBody.innerHTML += rowTemplate.evaluate(eBayList.productList[i]);
+                    }
+                }
+            }
+            
+            var eBayList = new EBayList();
+			ScreenflowEngineFactory.getInstance().addScreenLoader("EbayListComparative", eBayList.init);
+			
+        &lt;/script&gt;&lt;/head&gt;&lt;body&gt;
+        &lt;div id="bodyDiv"&gt;
+        	&lt;span id="eBayImage"&gt;&lt;img src="http://piccolo.ls.fi.upm.es/amazonScreens/images/logo-ebay.gif" /&gt;&lt;/span&gt;
+		    &lt;h1 id="title"&gt;eBay Item list&lt;/h1&gt;
+		    &lt;div id="listDiv"&gt;
+                &lt;table&gt;
+                    &lt;thead&gt;
+                        &lt;tr&gt;
+                        	&lt;th style="width: 10%; -moz-border-radius-topleft: 13px; -moz-border-radius-topright: 0px; -moz-border-radius-bottomright: 0px; -moz-border-radius-bottomleft: 0px;"&gt;
+                                &amp;nbsp;
+                            &lt;/th&gt;
+                            &lt;th style="width: 60%;" nowrap="nowrap"&gt;
+                                Title
+                            &lt;/th&gt;
+                            &lt;th style="width: 10%;" nowrap="nowrap"&gt;
+                                Category
+                            &lt;/th&gt;
+                            &lt;th style="width: 10%;" nowrap="nowrap"&gt;
+                                Current Price
+                            &lt;/th&gt;
+                            &lt;th style="width: 20%;" nowrap="nowrap"&gt;
+                                Shipping Service Cost
+                            &lt;/th&gt;
+                            &lt;th style="width: 10%; -moz-border-radius-topleft: 0px; -moz-border-radius-topright: 13px; -moz-border-radius-bottomright: 0px; -moz-border-radius-bottomleft: 0px;"&gt;
+                                &amp;nbsp;
+                            &lt;/th&gt;
+                        &lt;/tr&gt;
+                    &lt;/thead&gt;
+                    &lt;tbody id="listBodyEBayList"&gt;
+	                            &lt;tr&gt;
+					&lt;td&gt;&amp;nbsp;&lt;/td&gt;
+				    &lt;/tr&gt;
+	                            &lt;tr&gt;
+					&lt;td&gt;&amp;nbsp;&lt;/td&gt;
+				    &lt;/tr&gt;
+	                            &lt;tr&gt;
+					&lt;td&gt;&amp;nbsp;&lt;/td&gt;
+				    &lt;/tr&gt;
+	                            &lt;tr&gt;
+					&lt;td&gt;&amp;nbsp;&lt;/td&gt;
+				    &lt;/tr&gt;
+	                            &lt;tr&gt;
+					&lt;td&gt;&amp;nbsp;&lt;/td&gt;
+				    &lt;/tr&gt;
+	                            &lt;tr&gt;
+					&lt;td&gt;&amp;nbsp;&lt;/td&gt;
+				    &lt;/tr&gt;
+		    &lt;/tbody&gt;
+                &lt;/table&gt;
+                &lt;img style="display: none;" id="loadingImgEBayList" src="http://piccolo.ls.fi.upm.es/amazonScreens/images/ajaxLoader.gif"&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+    &lt;/body&gt;
+&lt;/html&gt;
+</field>
+    </object>
+    <object pk="1" model="buildingblock.tag">
+        <field type="CharField" name="name">amazon</field>
+    </object>
+    <object pk="2" model="buildingblock.tag">
+        <field type="CharField" name="name">search</field>
+    </object>
+    <object pk="3" model="buildingblock.tag">
+        <field type="CharField" name="name">list</field>
+    </object>
+    <object pk="4" model="buildingblock.tag">
+        <field type="CharField" name="name">details</field>
+    </object>
+    <object pk="5" model="buildingblock.tag">
+        <field type="CharField" name="name">shoppingCart</field>
+    </object>
+    <object pk="6" model="buildingblock.tag">
+        <field type="CharField" name="name">purchase</field>
+    </object>
+    <object pk="7" model="buildingblock.tag">
+        <field type="CharField" name="name">order</field>
+    </object>
+    <object pk="8" model="buildingblock.tag">
+        <field type="CharField" name="name">suggestion</field>
+    </object>
+    <object pk="9" model="buildingblock.tag">
+        <field type="CharField" name="name">price comparative</field>
+    </object>
+    <object pk="10" model="buildingblock.tag">
+        <field type="CharField" name="name">ebay</field>
+    </object>
+    <object pk="1" model="buildingblock.usertag">
+        <field to="buildingblock.tag" name="tag" rel="ManyToOneRel">1</field>
+        <field to="auth.user" name="user" rel="ManyToOneRel">1</field>
+        <field to="buildingblock.buildingblock" name="buildingBlock" rel="ManyToOneRel">1</field>
+    </object>
+    <object pk="2" model="buildingblock.usertag">
+        <field to="buildingblock.tag" name="tag" rel="ManyToOneRel">2</field>
+        <field to="auth.user" name="user" rel="ManyToOneRel">1</field>
+        <field to="buildingblock.buildingblock" name="buildingBlock" rel="ManyToOneRel">1</field>
+    </object>
+    <object pk="3" model="buildingblock.usertag">
+        <field to="buildingblock.tag" name="tag" rel="ManyToOneRel">1</field>
+        <field to="auth.user" name="user" rel="ManyToOneRel">1</field>
+        <field to="buildingblock.buildingblock" name="buildingBlock" rel="ManyToOneRel">2</field>
+    </object>
+    <object pk="4" model="buildingblock.usertag">
+        <field to="buildingblock.tag" name="tag" rel="ManyToOneRel">3</field>
+        <field to="auth.user" name="user" rel="ManyToOneRel">1</field>
+        <field to="buildingblock.buildingblock" name="buildingBlock" rel="ManyToOneRel">2</field>
+    </object>
+    <object pk="5" model="buildingblock.usertag">
+        <field to="buildingblock.tag" name="tag" rel="ManyToOneRel">1</field>
+        <field to="auth.user" name="user" rel="ManyToOneRel">1</field>
+        <field to="buildingblock.buildingblock" name="buildingBlock" rel="ManyToOneRel">3</field>
+    </object>
+    <object pk="6" model="buildingblock.usertag">
+        <field to="buildingblock.tag" name="tag" rel="ManyToOneRel">4</field>
+        <field to="auth.user" name="user" rel="ManyToOneRel">1</field>
+        <field to="buildingblock.buildingblock" name="buildingBlock" rel="ManyToOneRel">3</field>
+    </object>
+    <object pk="7" model="buildingblock.usertag">
+        <field to="buildingblock.tag" name="tag" rel="ManyToOneRel">5</field>
+        <field to="auth.user" name="user" rel="ManyToOneRel">1</field>
+        <field to="buildingblock.buildingblock" name="buildingBlock" rel="ManyToOneRel">3</field>
+    </object>
+    <object pk="8" model="buildingblock.usertag">
+        <field to="buildingblock.tag" name="tag" rel="ManyToOneRel">1</field>
+        <field to="auth.user" name="user" rel="ManyToOneRel">1</field>
+        <field to="buildingblock.buildingblock" name="buildingBlock" rel="ManyToOneRel">4</field>
+    </object>
+    <object pk="9" model="buildingblock.usertag">
+        <field to="buildingblock.tag" name="tag" rel="ManyToOneRel">2</field>
+        <field to="auth.user" name="user" rel="ManyToOneRel">1</field>
+        <field to="buildingblock.buildingblock" name="buildingBlock" rel="ManyToOneRel">4</field>
+    </object>
+    <object pk="10" model="buildingblock.usertag">
+        <field to="buildingblock.tag" name="tag" rel="ManyToOneRel">1</field>
+        <field to="auth.user" name="user" rel="ManyToOneRel">1</field>
+        <field to="buildingblock.buildingblock" name="buildingBlock" rel="ManyToOneRel">5</field>
+    </object>
+    <object pk="11" model="buildingblock.usertag">
+        <field to="buildingblock.tag" name="tag" rel="ManyToOneRel">6</field>
+        <field to="auth.user" name="user" rel="ManyToOneRel">1</field>
+        <field to="buildingblock.buildingblock" name="buildingBlock" rel="ManyToOneRel">5</field>
+    </object>
+    <object pk="12" model="buildingblock.usertag">
+        <field to="buildingblock.tag" name="tag" rel="ManyToOneRel">7</field>
+        <field to="auth.user" name="user" rel="ManyToOneRel">1</field>
+        <field to="buildingblock.buildingblock" name="buildingBlock" rel="ManyToOneRel">5</field>
+    </object>
+    <object pk="13" model="buildingblock.usertag">
+        <field to="buildingblock.tag" name="tag" rel="ManyToOneRel">1</field>
+        <field to="auth.user" name="user" rel="ManyToOneRel">1</field>
+        <field to="buildingblock.buildingblock" name="buildingBlock" rel="ManyToOneRel">6</field>
+    </object>
+    <object pk="14" model="buildingblock.usertag">
+        <field to="buildingblock.tag" name="tag" rel="ManyToOneRel">3</field>
+        <field to="auth.user" name="user" rel="ManyToOneRel">1</field>
+        <field to="buildingblock.buildingblock" name="buildingBlock" rel="ManyToOneRel">6</field>
+    </object>
+    <object pk="15" model="buildingblock.usertag">
+        <field to="buildingblock.tag" name="tag" rel="ManyToOneRel">8</field>
+        <field to="auth.user" name="user" rel="ManyToOneRel">1</field>
+        <field to="buildingblock.buildingblock" name="buildingBlock" rel="ManyToOneRel">6</field>
+    </object>
+    <object pk="16" model="buildingblock.usertag">
+        <field to="buildingblock.tag" name="tag" rel="ManyToOneRel">1</field>
+        <field to="auth.user" name="user" rel="ManyToOneRel">1</field>
+        <field to="buildingblock.buildingblock" name="buildingBlock" rel="ManyToOneRel">7</field>
+    </object>
+    <object pk="17" model="buildingblock.usertag">
+        <field to="buildingblock.tag" name="tag" rel="ManyToOneRel">3</field>
+        <field to="auth.user" name="user" rel="ManyToOneRel">1</field>
+        <field to="buildingblock.buildingblock" name="buildingBlock" rel="ManyToOneRel">7</field>
+    </object>
+    <object pk="18" model="buildingblock.usertag">
+        <field to="buildingblock.tag" name="tag" rel="ManyToOneRel">9</field>
+        <field to="auth.user" name="user" rel="ManyToOneRel">1</field>
+        <field to="buildingblock.buildingblock" name="buildingBlock" rel="ManyToOneRel">7</field>
+    </object>
+    <object pk="19" model="buildingblock.usertag">
+        <field to="buildingblock.tag" name="tag" rel="ManyToOneRel">1</field>
+        <field to="auth.user" name="user" rel="ManyToOneRel">1</field>
+        <field to="buildingblock.buildingblock" name="buildingBlock" rel="ManyToOneRel">8</field>
+    </object>
+    <object pk="20" model="buildingblock.usertag">
+        <field to="buildingblock.tag" name="tag" rel="ManyToOneRel">3</field>
+        <field to="auth.user" name="user" rel="ManyToOneRel">1</field>
+        <field to="buildingblock.buildingblock" name="buildingBlock" rel="ManyToOneRel">8</field>
+    </object>
+    <object pk="21" model="buildingblock.usertag">
+        <field to="buildingblock.tag" name="tag" rel="ManyToOneRel">9</field>
+        <field to="auth.user" name="user" rel="ManyToOneRel">1</field>
+        <field to="buildingblock.buildingblock" name="buildingBlock" rel="ManyToOneRel">8</field>
+    </object>
+    <object pk="22" model="buildingblock.usertag">
+        <field to="buildingblock.tag" name="tag" rel="ManyToOneRel">10</field>
+        <field to="auth.user" name="user" rel="ManyToOneRel">1</field>
+        <field to="buildingblock.buildingblock" name="buildingBlock" rel="ManyToOneRel">8</field>
+    </object>
+</django-objects>

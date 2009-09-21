@@ -1,17 +1,248 @@
-{list_uris: [
-{uri: 'http://localhost:8010/screens/amazonSearch.scr.html',
-value: 'true' },
-{uri: 'http://localhost:8010/screens/amazonList.scr.html',
-value: 'false' },
-{uri: 'http://localhost:8010/screens/amazonProduct.scr.html',
-value: 'false' },
-{uri: 'http://localhost:8010/screens/amazonShopping.scr.html',
-value: 'false' },
-{uri: 'http://localhost:8010/screens/amazonOrder.scr.html',
-value: 'false' },
-{uri: 'http://localhost:8010/screens/amazonSuggestion.scr.html',
-value: 'false' },
-{uri: 'http://localhost:8010/screens/amazonPrice.scr.html',
-value: 'false' }
-]}
-
+[
+  {
+    "name": "Product Search",
+    "code": "http://localhost:8010/screens/amazonSearch.scr.html",
+    "creationDate": "2009-02-11T14:59:52+0100",
+    "creator": "http://www.ismaelrivera.es/",
+    "description": {"en-gb": "This screen allows users to look for a product in Amazon, providing a keyword search interface. It produces a search criteria or filter fact."},
+    "domainContext": {
+      "tags": [
+        "amazon",
+        "search"
+      ],
+      "user": "admin"
+    },
+    "homepage": "http://www.deri.ie/amazonSearch",
+    "icon": "http://localhost:8010/images/catalogue/amazonSearch.png",
+    "label": {"en-gb": "Product Search"},
+    "postconditions": [[{
+      "label": {"en-gb": "A search criteria"},
+      "pattern": "?F http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#SearchCriteria",
+      "scope": "both"
+    }]],
+    "preconditions": [],
+    "rights": "http://creativecommons.org/",
+    "screenshot": "http://www.deri.ie/amazonSearch-screenshot.jpg",
+    "uri": "http://purl.oclc.org/fast/ontology/gadget#Screen1251883315865",
+    "version": "1.0"
+  },
+  {
+    "name": "Product List",
+    "code": "http://localhost:8010/screens/amazonList.scr.html",
+    "creationDate": "2009-02-11T14:59:52+0100",
+    "creator": "http://www.ismaelrivera.es/",
+    "description": {"en-gb": "This screen shows the results of a given search in Amazon. It allows users to choose a product to see its details."},
+    "domainContext": {
+      "tags": [
+        "amazon",
+        "list"
+      ],
+      "user": "admin"
+    },
+    "homepage": "http://www.deri.ie/amazonList",
+    "icon": "http://localhost:8010/images/catalogue/amazonList.png",
+    "label": {"en-gb": "Product List"},
+    "postconditions": [[{
+      "label": {"en-gb": "An item"},
+      "pattern": "?I http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#Item",
+      "scope": "both"
+    }]],
+    "preconditions": [[{
+      "label": {"en-gb": "A search criteria"},
+      "pattern": "?F http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#SearchCriteria",
+      "scope": "both"
+    }]],
+    "rights": "http://creativecommons.org/",
+    "screenshot": "http://www.deri.ie/amazonList-screenshot.jpg",
+    "uri": "http://purl.oclc.org/fast/ontology/gadget#Screen1251883333505",
+    "version": "1.0"
+  },
+  {
+    "name": "Product Details",
+    "code": "http://localhost:8010/screens/amazonProduct.scr.html",
+    "creationDate": "2009-02-11T14:59:52+0100",
+    "creator": "http://www.ismaelrivera.es/",
+    "description": {"en-gb": "This screen shows the details for a given product sold by Amazon. It allows users to add it to their shopping carts."},
+    "domainContext": {
+      "tags": [
+        "amazon",
+        "details",
+        "shoppingCart"
+      ],
+      "user": "admin"
+    },
+    "homepage": "http://www.deri.ie/amazonProduct",
+    "icon": "http://localhost:8010/images/catalogue/amazonProduct.png",
+    "label": {"en-gb": "Product Details"},
+    "postconditions": [[{
+      "label": {"en-gb": "A shopping cart"},
+      "pattern": "?C http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#ShoppingCart",
+      "scope": "both"
+    }]],
+    "preconditions": [[{
+      "label": {"en-gb": "An item"},
+      "pattern": "?I http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#Item",
+      "scope": "both"
+    }]],
+    "rights": "http://creativecommons.org/",
+    "screenshot": "http://www.deri.ie/amazonProduct-screenshot.jpg",
+    "uri": "http://purl.oclc.org/fast/ontology/gadget#Screen1251883343786",
+    "version": "1.0"
+  },
+  {
+    "name": "Shopping Cart",
+    "code": "http://localhost:8010/screens/amazonShopping.scr.html",
+    "creationDate": "2009-02-11T14:59:52+0100",
+    "creator": "http://www.ismaelrivera.es/",
+    "description": {"en-gb": "This screen shows the list of products added to the user shopping cart. It allows users to update product quantity and clear the cart."},
+    "domainContext": {
+      "tags": [
+        "amazon",
+        "search"
+      ],
+      "user": "admin"
+    },
+    "homepage": "http://www.deri.ie/amazonShopping",
+    "icon": "http://localhost:8010/images/catalogue/amazonShopping.png",
+    "label": {"en-gb": "Shopping Cart"},
+    "postconditions": [[{
+      "label": {"en-gb": "Purchase URL"},
+      "pattern": "?P http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#PurchaseURL",
+      "scope": "both"
+    }]],
+    "preconditions": [[{
+      "label": {"en-gb": "A shopping cart"},
+      "pattern": "?C http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#ShoppingCart",
+      "scope": "both"
+    }]],
+    "rights": "http://creativecommons.org/",
+    "screenshot": "http://www.deri.ie/amazonShopping-screenshot.jpg",
+    "uri": "http://purl.oclc.org/fast/ontology/gadget#Screen1251883353411",
+    "version": "1.0"
+  },
+  {
+    "name": "Order",
+    "code": "http://localhost:8010/screens/amazonOrder.scr.html",
+    "creationDate": "2009-02-11T14:59:52+0100",
+    "creator": "http://www.ismaelrivera.es/",
+    "description": {"en-gb": "This screen shows the list of products added to the user shopping cart. It allows users to update product quantity and clear the cart."},
+    "domainContext": {
+      "tags": [
+        "amazon",
+        "purchase",
+        "order"
+      ],
+      "user": "admin"
+    },
+    "homepage": "http://www.deri.ie/amazonOrder",
+    "icon": "http://localhost:8010/images/catalogue/amazonOrder.png",
+    "label": {"en-gb": "Order"},
+    "postconditions": [],
+    "preconditions": [[{
+      "label": {"en-gb": "Purchase URL"},
+      "pattern": "?P http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#PurchaseURL",
+      "scope": "both"
+    }]],
+    "rights": "http://creativecommons.org/",
+    "screenshot": "http://www.deri.ie/amazonOrder-screenshot.jpg",
+    "uri": "http://purl.oclc.org/fast/ontology/gadget#Screen1251883362051",
+    "version": "1.0"
+  },
+  {
+    "name": "Suggestion List",
+    "code": "http://localhost:8010/screens/amazonSuggestion.scr.html",
+    "creationDate": "2009-02-11T14:59:52+0100",
+    "creator": "http://www.ismaelrivera.es/",
+    "description": {"en-gb": "This screen shows the list of products related to a given one. It allows users select a new product from this list."},
+    "domainContext": {
+      "tags": [
+        "amazon",
+        "list",
+        "suggestion"
+      ],
+      "user": "admin"
+    },
+    "homepage": "http://www.deri.ie/amazonSuggestion",
+    "icon": "http://localhost:8010/images/catalogue/amazonSuggestion.png",
+    "label": {"en-gb": "Suggestion List"},
+    "postconditions": [[{
+      "label": {"en-gb": "An item"},
+      "pattern": "?I http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#Item",
+      "scope": "both"
+    }]],
+    "preconditions": [[{
+      "label": {"en-gb": "An item"},
+      "pattern": "?I http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#Item",
+      "scope": "both"
+    }]],
+    "rights": "http://creativecommons.org/",
+    "screenshot": "http://www.deri.ie/amazonSuggestion-screenshot.jpg",
+    "uri": "http://purl.oclc.org/fast/ontology/gadget#Screen1251883370863",
+    "version": "1.0"
+  },
+  {
+    "name": "Price Comparative",
+    "code": "http://localhost:8010/screens/amazonPrice.scr.html",
+    "creationDate": "2009-02-11T14:59:52+0100",
+    "creator": "http://www.ismaelrivera.es/",
+    "description": {"en-gb": "This screen shows a price comparative for a given product."},
+    "domainContext": {
+      "tags": [
+        "amazon",
+        "list",
+        "price comparative"
+      ],
+      "user": "admin"
+    },
+    "homepage": "http://www.deri.ie/amazonShopping",
+    "icon": "http://localhost:8010/images/catalogue/amazonPrice.png",
+    "label": {"en-gb": "P. Comparative"},
+    "postconditions": [[{
+      "label": {"en-gb": "A shopping cart"},
+      "pattern": "?C http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#ShoppingCart",
+      "scope": "both"
+    }]],
+    "preconditions": [[{
+      "label": {"en-gb": "An item"},
+      "pattern": "?I http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#Item",
+      "scope": "both"
+    }]],
+    "rights": "http://creativecommons.org/",
+    "screenshot": "http://www.deri.ie/amazonShopping-screenshot.jpg",
+    "uri": "http://purl.oclc.org/fast/ontology/gadget#Screen1251883380394",
+    "version": "1.0"
+  },
+  {
+    "name": "Ebay List Comparative",
+    "code": "http://localhost:8010/screens/eBayList.scr.html",
+    "creationDate": "2009-02-11T14:59:52+0100",
+    "creator": "http://www.ismaelrivera.es/",
+    "description": {"en-gb": "This screen shows a ebay price comparative for a given amazon product."},
+    "domainContext": {
+      "tags": [
+        "amazon",
+        "list",
+        "price comparative",
+        "ebay"
+      ],
+      "user": "admin"
+    },
+    "homepage": "http://www.deri.ie/ebayShopping",
+    "icon": "http://localhost:8010/images/catalogue/eBayList.png",
+    "label": {"en-gb": "Ebay List Comparative"},
+    "postconditions": [[{
+      "label": {"en-gb": "An eBay item"},
+      "pattern": "?EI http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://developer.ebay.com/DevZone/shopping/docs/CallRef/FindItemsAdvanced.html#Request",
+      "scope": "both"
+    }]],
+    "preconditions": [[{
+      "label": {"en-gb": "An Amazon item"},
+      "pattern": "?I http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#Item",
+      "scope": "both"
+    }]],
+    "rights": "http://creativecommons.org/",
+    "screenshot": "http://www.deri.ie/amazonShopping-screenshot.jpg",
+    "uri": "http://purl.oclc.org/fast/ontology/gadget#Screen1251883391206",
+    "version": "1.0"
+  }
+]
