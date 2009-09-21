@@ -65,7 +65,9 @@ dijit.focus(this._firstFocusItem);
 this._fadeOut=dojo.fadeOut({node:_5,duration:this.duration,onEnd:function(){
 _5.style.visibility="hidden";
 _5.style.top="-9999px";
+if (--dijit._underlay.dialogs == 0) {//Multiple dialogs hack. Remove when dojo >= 1.4
 dijit._underlay.hide();
+}
 }});
 },uninitialize:function(){
 var _9=false;
@@ -171,6 +173,7 @@ this._size();
 this._position();
 this._fadeIn.play();
 this._savedFocus=dijit.getFocus(this);
+dijit._underlay.dialogs++; //Multiple dialogs hack. Remove when dojo >= 1.4
 },hide:function(){
 if(!this._alreadyInitialized){
 return;

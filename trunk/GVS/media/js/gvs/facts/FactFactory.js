@@ -43,7 +43,7 @@ var FactFactorySingleton = function() {
 
         /**
          * Gets the root node of a icon for a give fact identified by uri.
-         * @param String size  Icon size ("small"|"medium"|"big")
+         * @param String size  Icon size ("inline"|"embedded"|"standalone")
          * @type FactIcon
          */
         getFactIcon: function (/** Object */ factData, size) {

@@ -62,18 +62,17 @@ var FormDialog = Class.create( /** @lends FormDialog.prototype */ {
     getForm: function() {
         if (this._dialog.domNode.getElementsByTagName('form')){
             return this._dialog.domNode.getElementsByTagName('form')[0];
-        }
-        else {
+        } else {
             return null;
         }
     },
     
     show: function() {
-        return this._dialog.show();
+        this._dialog.show();
     },
         
     hide: function() {
-        return this._dialog.hide();
+        this._dialog.hide();
     },
     /**
      * This function set the form content based on a array-like
@@ -91,66 +90,52 @@ var FormDialog = Class.create( /** @lends FormDialog.prototype */ {
         }
 
         $A(data).each (function(line){
+            var lineNode;
+            var inputNode;
+            
             switch (line.type) {
                 case 'title':
-                    var title = new Element ('h3').update(line.value);
-                    form.domNode.appendChild(title);
+                    lineNode = new Element ('h3').update(line.value);
                     break;
                     
                 case 'input':
-                    var div = new Element('div', {
-                                    'class' : 'line'
-                                });
-                    var label = new Element ('label').update(line.label);
-                    div.appendChild(label);
                     var input = new dijit.form.TextBox({
                                     'name' : line.name,
                                     'value': line.value   
                                 });
-                    div.appendChild(input.domNode);
-                    form.domNode.appendChild(div);
+                    inputNode = input.domNode;
+                    lineNode = this._createLine(line.label, inputNode);
                     break;
-                    
-                case 'freeText':
-                    var div = new Element('div', {
-                                    'class': 'line'
-                                }).update(line.value);
-                    form.domNode.appendChild(div);
-                    break;
-                    
-                case 'hidden':
-                    var hidden = new Element('input',{
-                                    'type': 'hidden',
-                                    'name': line.name,
-                                    'value': line.value
-                                });
-                    form.domNode.appendChild(hidden);
-                    break;
-                    
-                case 'validation':
-                    var div = new Element('div', {
-                                    'class' : 'line'
-                                });
-                    var label = new Element ('label').update(line.label);
-                    div.appendChild(label);
+
+                case 'validation':                
                     var input = new dijit.form.ValidationTextBox({
                                     'name' : line.name,
                                     'value': line.value,
                                     'regExp': line.regExp,
                                     'invalidMessage': line.message
                                 });
-                    div.appendChild(input.domNode);
-                    form.domNode.appendChild(div);
+                    inputNode = input.domNode;
+                    lineNode = this._createLine(line.label, inputNode);
                     break;   
+                    
+                case 'freeText': // FIXME: crappy name
+                    lineNode = new Element('div', {
+                                    'class': 'line'
+                                }).update(line.value);
+                    break;
+                    
+                case 'hidden':
+                    lineNode = new Element('input',{
+                                    'type': 'hidden',
+                                    'name': line.name,
+                                    'value': line.value
+                                });
+                    break;                    
                                  
                 case 'comboBox':
-                    var div = new Element('div', {'class': 'line'});
-                    var label = new Element('label').update(line.label);
-                    div.appendChild(label);
-                    var comboBox = new Element('select', {
+                    inputNode = new Element('select', {
                         'name': line.name
                     });
-                    div.appendChild(comboBox);
                     
                     $A(line.options).each(function(option) {
                         var optionNode = new Element('option', {
@@ -161,17 +146,21 @@ var FormDialog = Class.create( /** @lends FormDialog.prototype */ {
                             optionNode.selected = "selected";
                         }
                         
-                        comboBox.appendChild(optionNode);
+                        inputNode.appendChild(optionNode);
                     });
-                    form.domNode.appendChild(div);
+                    
+                    lineNode = this._createLine(line.label, inputNode);
                     break;
     
                 //TODO: Implement more when necessary
                     
                 default:
                     throw "Unimplemented form field type";
-            } 
-        });
+            }
+
+            form.domNode.appendChild(lineNode);
+            this._armEvents(inputNode, line.events);
+        }.bind(this));
         this._contentNode.appendChild(form.domNode);
     },
     
@@ -203,9 +192,30 @@ var FormDialog = Class.create( /** @lends FormDialog.prototype */ {
             }).update(subtitle);
             this._contentNode.insert(subtitleNode);
         }
-    }
+    },
     
     // **************** PRIVATE METHODS **************** //
+    /**
+     * Construct a form line provided the label text and the input node.
+     * @type DOMNode
+     * @private
+     */
+    _createLine: function(/** String */ label, /** DOMNode */ inputNode) {
+        var lineNode = new Element('div', {
+                        'class' : 'line'
+                    });
+        var labelNode = new Element ('label').update(label);
+        lineNode.appendChild(labelNode);
+        lineNode.appendChild(inputNode);
+        
+        return lineNode;
+    },
+    
+    _armEvents: function(/** DOMNode */ input, /** Hash */ events) {
+        $H(events).each(function(pair) {
+            Element.observe(input, pair.key, pair.value);
+        });
+    }
 });
 
 // vim:ts=4:sw=4:et:

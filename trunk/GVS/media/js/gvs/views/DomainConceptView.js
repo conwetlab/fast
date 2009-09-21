@@ -10,10 +10,10 @@ var DomainConceptView = Class.create( BuildingBlockView,
         $super();
         
         var factFactory = FactFactorySingleton.getInstance();
-        var factIcon = factFactory.getFactIcon(description, "big");
+        var factIcon = factFactory.getFactIcon(description, "standalone");
         
         this._node = new Element("div", {
-            "class": "view domainConcept unknown"
+            "class": "view domainConcept"
         });
         this._node.appendChild(factIcon.getNode());
 

@@ -14,7 +14,7 @@ var FactIcon = Class.create( /** @lends FactIcon.prototype */ {
          */
         this._fact = fact;
 
-        // TODO: assert size in {small, medium, big}
+        // TODO: assert size in {inline, embedded, standalone}
         /**
          * Icon size
          * @type String
@@ -28,7 +28,7 @@ var FactIcon = Class.create( /** @lends FactIcon.prototype */ {
          * @private
          */
         this._node = new Element ("div", {
-                "class": this._size + "_fact unknown fact"}
+                "class": this._size + "_fact fact"}
             ).update(this._fact.getShortcut());
     },
 

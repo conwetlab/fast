@@ -14,7 +14,7 @@ var DomainConceptInstance = Class.create(ComponentInstance,
          * @type DomainConceptDialog
          * @private @member
          */
-        this._dialog = new DomainConceptDialog(this._onChange.bind(this));
+        this._dialog = new DomainConceptDialog(this._onChange.bind(this), this.getTitle());
     },
 
     // **************** PUBLIC METHODS **************** //
@@ -24,7 +24,7 @@ var DomainConceptInstance = Class.create(ComponentInstance,
      * @override
      */
     getTitle: function() {
-        return null;    // TODO: get something better
+        return this._buildingBlockDescription.title; 
     },
 
     // **************** PRIVATE METHODS **************** //
@@ -51,18 +51,7 @@ var DomainConceptInstance = Class.create(ComponentInstance,
      * @private
      */
     _onChange: function (/** Hash */ data) {
-        /*
-         * {
-         *  'type': 'pre'|'post',
-         *  'label':
-         *  'ezweb': {
-         *      'varname': '...',
-         *      'friendcode': '...',
-         *      'binding': 'slot'|'userpref'|...
-         *   }  
-         * }
-         */
-        this._buildingBlockDescription.setProperties(data);
+        this._buildingBlockDescription.addProperties(data);
         
         // TODO: notify
     }

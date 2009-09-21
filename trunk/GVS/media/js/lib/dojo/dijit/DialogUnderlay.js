@@ -15,6 +15,7 @@ dojo.attr(this.node,"id",id+"_underlay");
 },_setClassAttr:function(_2){
 this.node.className="dijitDialogUnderlay "+_2;
 },postCreate:function(){
+this.dialogs = 0; //Multiple dialogs hack. Remove when dojo >= 1.4
 dojo.body().appendChild(this.domNode);
 this.bgIframe=new dijit.BackgroundIframe(this.domNode);
 },layout:function(){

@@ -314,46 +314,6 @@ h4{
         background-color: #F5D9D9;
     }
 
-    /**********************
-    * connector component
-    * TODO: delete?       *
-    ***********************/
-    .connectorImage{
-        position:inherit;
-        top: 10px;
-		-moz-border-radius: 13px 13px;
-        -webkit-border-radius: 13px 13px;
-		border:1px solid grey;
-		height:20px;
-		padding-top:5px;
-		width:25px;
-    }
-    .connectorIn{
-        background-color:green;
-        color:white;
-    }
-    .connectorOut{
-        background-color:blue;
-        color:white;
-    }
-    .connectorNone{
-        background-color:grey;
-        color:white;
-    }
-    .connectorDefault{
-        background-color:black;
-        color:white;
-    }
-
-    .connector.selected .connectorIn{
-        color:yellow;
-    }
-    
-    .connector.selected .connectorOut{
-        color:yellow;
-    }
-
-
 /*********************
  * properties tables *	 
  *********************/
@@ -384,7 +344,7 @@ h4{
 /******************
  * facts		  *
  ******************/
-.small_fact {
+.inline_fact {
     width: 17px;
     height: 15px;
     line-height: 15px;
@@ -394,8 +354,14 @@ h4{
     font-size: 10px;
     color: white;
     background: url("../images/facts/15x15/grey.png") no-repeat center center;
-} 
-.medium_fact{
+}
+.inline_fact.satisfeable {
+    background: url("../images/facts/15x15/green.png") no-repeat center center;
+}
+.inline_fact.unsatisfeable {
+    background: url("../images/facts/15x15/red.png") no-repeat center center;
+}
+.embedded_fact{
     width: 22px;
     height: 20px;
     line-height: 20px;
@@ -405,36 +371,43 @@ h4{
     color: white; 
     background: url("../images/facts/20x20/grey.png") no-repeat center center;
 }
-.big_fact{
+.embedded_fact.satisfeable {
+    background: url("../images/facts/20x20/green.png") no-repeat center center;
+}
+.embedded_fact.unsatisfeable {
+    background: url("../images/facts/20x20/red.png") no-repeat center center;
+}
+.standalone_fact{
     width: 27px;
     height: 25px;
     line-height: 25px;
     text-align: center;
     margin-left: 3px;
     font-weight: bold;
-    color: white; 
+    color: #808080; 
     background: url("../images/facts/25x25/grey.png") no-repeat center center;
 }
-.big_fact.satisfeable {
+.standalone_fact.satisfeable {
     background: url("../images/facts/25x25/green.png") no-repeat center center;
+    color: #068106; 
 }
-.big_fact.unsatisfeable {
+.standalone_fact.unsatisfeable {
     background: url("../images/facts/25x25/red.png") no-repeat center center;
+    color: #B90000; 
+}
+.selected .standalone_fact {
+    background: url("../images/facts/25x25/grey_selected.png") no-repeat center center;
+    color: #EAEAEA; 
+}
+.selected .standalone_fact.satisfeable {
+    background: url("../images/facts/25x25/green_selected.png") no-repeat center center;
+    color: #ddf7dd; 
+}
+.selected .standalone_fact.unsatisfeable {
+    background: url("../images/facts/25x25/red_selected.png") no-repeat center center;
+    color: #f5d9d9; 
 }
 
-.medium_fact.satisfeable {
-    background: url("../images/facts/20x20/green.png") no-repeat center center;
-}
-.medium_fact.unsatisfeable {
-    background: url("../images/facts/20x20/red.png") no-repeat center center;
-}
-
-.small_fact.satisfeable {
-    background: url("../images/facts/15x15/green.png") no-repeat center center;
-}
-.small_fact.unsatisfeable {
-    background: url("../images/facts/15x15/red.png") no-repeat center center;
-}
 
 /*************
  *  Dialogs  *
@@ -472,9 +445,6 @@ label{
     min-width: 250px;
 }
 
-/******************
- * this is sparta *
- ******************/
 
 /*
 .flow {

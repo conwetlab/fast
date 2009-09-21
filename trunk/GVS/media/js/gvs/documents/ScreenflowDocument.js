@@ -110,6 +110,7 @@ var ScreenflowDocument = Class.create(PaletteDocument,
         switch (droppedElement.constructor) {
             case ScreenInstance:
                 this._description.addScreen(droppedElement.getUri(), droppedElement);
+                this._refreshReachability();
                 break;
                 
             case DomainConceptInstance:
@@ -117,10 +118,10 @@ var ScreenflowDocument = Class.create(PaletteDocument,
                 break;
                 
             default:
-                alert("Don't know how accept that kind of element. ScreenflowDocument::drop");    
+                alert("Don't know how to accept that kind of element. ScreenflowDocument::drop");    
         }            
 
-        this._refreshReachability();
+       
         this.updateToolbar();
         this.setSelectedElement(droppedElement);
         return true; // Accept element
@@ -201,10 +202,11 @@ var ScreenflowDocument = Class.create(PaletteDocument,
                 default:
                     throw "Illegal state. ScreenflowDocument::deleteInstance";
             }
-
+            
             this._refreshReachability();
             this.updateToolbar();
             this.setSelectedElement();
+            instance.destroy();
         }
     },
 

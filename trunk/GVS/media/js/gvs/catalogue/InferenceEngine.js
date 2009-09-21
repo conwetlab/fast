@@ -73,6 +73,18 @@ var InferenceEngine = Class.create( /** @lends InferenceEngine.prototype */ {
             listener.setReachability(this._reachabilityData.get(uri));
         }
     },
+    /**
+     * De-register an object from the reachability listeners
+     */
+    removeReachabilityListener: function (/** String  */uri, /** Object */ listener) {
+        var index = this._getListenerList(uri).indexOf(listener);
+        
+        if (index >= 0) {
+            //Remove the element
+            this._listeners.get(uri)[index] = null;
+            this._listeners.set(uri,this._listeners.get(uri).compact());
+        }
+    },
     
     // **************** PRIVATE METHODS **************** //
     /** 

@@ -31,7 +31,13 @@ var ComponentInstance = Class.create(DragSource,
          * @private
          */
         this._view = this._createView();
-        inferenceEngine.addReachabilityListener(this._buildingBlockDescription.uri, this._view);
+        /**
+         * Inference engine to receive reachability updates
+         * @type InferenceEngine
+         * @private
+         */
+        this._inferenceEngine = inferenceEngine;
+        this._inferenceEngine.addReachabilityListener(this._buildingBlockDescription.uri, this._view);
     },
     
 
@@ -133,6 +139,7 @@ var ComponentInstance = Class.create(DragSource,
      * @public
      */
     destroy: function() {
+        this._inferenceEngine.removeReachabilityListener(this._buildingBlockDescription.uri, this._view);
         this._view.destroy();
         this._view = null;
     },

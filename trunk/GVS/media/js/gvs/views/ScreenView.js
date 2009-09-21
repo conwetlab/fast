@@ -31,7 +31,7 @@ var ScreenView = Class.create( BuildingBlockView,
          */
         this._tooltip = null;
 
-        var titleNode = new Element("div", {"class":"screenTitle unknown"});
+        var titleNode = new Element("div", {"class":"screenTitle"});
         titleNode.update(description.label['en-gb']);
 
         var factFactory = FactFactorySingleton.getInstance();
@@ -47,7 +47,7 @@ var ScreenView = Class.create( BuildingBlockView,
         
         $A(preconditions).each(
                 function(pre) {
-                    var preFact = factFactory.getFactIcon(pre, "medium");
+                    var preFact = factFactory.getFactIcon(pre, "embedded");
                     this._preIcons.push(preFact);
                     preArea.appendChild(preFact.getNode());
                 }.bind(this)
@@ -65,7 +65,7 @@ var ScreenView = Class.create( BuildingBlockView,
         $A(postconditions).each(
                 function(post) {
                     if (post) {
-                        var postFact = factFactory.getFactIcon(post, "medium");
+                        var postFact = factFactory.getFactIcon(post, "embedded");
                         this._postIcons.push(postFact);
                         postArea.appendChild(postFact.getNode());
                     }
@@ -90,7 +90,7 @@ var ScreenView = Class.create( BuildingBlockView,
         }
 
         this._node = new Element("div", {
-            "class": "view screen unknown"
+            "class": "view screen"
         });
         this._node.appendChild(titleNode);
         this._node.appendChild(preArea);

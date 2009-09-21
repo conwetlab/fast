@@ -16,9 +16,10 @@ var DomainConceptDescription = Class.create(BuildingBlockDescription,
      */
     getInfo: function() {
         var info = new Hash();
-        info.set('name', this.name);
-        info.set('description', this.description);
-        info.set('semantics', this.semantics);
+        
+        info.set('Label', this.label);
+        info.set('Type', this.type);
+        info.set('EzWeb Binding', this.binding);
 
         return info;
     }

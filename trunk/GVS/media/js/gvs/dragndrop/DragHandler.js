@@ -50,7 +50,7 @@ var DragHandler = Class.create(
         this._x;
         this._y;
 
-        // Wrappers to the even handlers
+        // Wrappers to the event handlers
         this._bindedStartDrag = this._startDrag.bind(this);
         this._bindedUpdate = this._update.bind(this);
         this._bindedEndDrag = this._endDrag.bind(this);
@@ -141,10 +141,12 @@ var DragHandler = Class.create(
     _update: function (e) {
         e = e || window.event; // needed for IE
 
-        var xDelta = this._xStart - parseInt(e.screenX);
-        var yDelta = this._yStart - parseInt(e.screenY);
-        this._xStart = parseInt(e.screenX);
-        this._yStart = parseInt(e.screenY);
+        var screenX = parseInt(e.screenX);
+        var screenY = parseInt(e.screenY)
+        var xDelta = this._xStart - screenX;
+        var yDelta = this._yStart - screenY;
+        this._xStart = screenX;
+        this._yStart = screenY;
         this._y = this._y - yDelta;
         this._x = this._x - xDelta;
 

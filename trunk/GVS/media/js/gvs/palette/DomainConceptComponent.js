@@ -36,16 +36,27 @@ var DomainConceptComponent = Class.create(PaletteComponent,
     },
     
     /**
-     * Gets the title of the palette component
+     * @type String
+     * @override
+     */
+    _getTitle: function () {
+        if (!this._buildingBlockDescription.title) {
+            this._updateTitle();
+        }
+        return this._buildingBlockDescription.title;
+    },
+    
+    /**
+     * Creates the title of the palette component
      * @type String
      * @private
      */
-    _getTitle: function() {
+    _updateTitle: function() {
         
         if (this._buildingBlockDescription['http://www.w3.org/2000/01/rdf-schema#label']) {
-            var title = this._buildingBlockDescription['http://www.w3.org/2000/01/rdf-schema#label'];
-            //FIXME: 
-            return title.replace("@en","");           
+            this._buildingBlockDescription.title = 
+                        this._buildingBlockDescription['http://www.w3.org/2000/01/rdf-schema#label'].
+                        replace("@en","");      
 
         } else { //Extract the title from the uri
             var uri;
@@ -54,7 +65,7 @@ var DomainConceptComponent = Class.create(PaletteComponent,
             } else {
                 uri = this._extractURI(this._buildingBlockDescription['pattern']);
             }
-            return this._createTitle(uri);
+            this._buildingBlockDescription.title = this._createTitle(uri);
         }
     },
     /**
