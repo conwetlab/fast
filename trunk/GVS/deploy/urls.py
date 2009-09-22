@@ -1,6 +1,7 @@
 from django.conf.urls.defaults import patterns
+from deploy.views import *
 
 urlpatterns = patterns('deploy.views',
-    (r'^$', 'deployGadget'),
-    (r'^igoogle', 'deployIgoogleGadget')
+    (r'^$',
+        GadgetDeployment(permitted_methods=('POST', ))),
 )

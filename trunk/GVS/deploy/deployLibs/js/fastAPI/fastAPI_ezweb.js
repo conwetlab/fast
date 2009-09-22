@@ -12,8 +12,10 @@ FastAPI.IO = Class.create(FastBaseAPI.IO,{
 
     /**
      * Creates a Slot Variable for EzWeb.
+     * @param variable
+     *      represents the name of the variable
      * @param handler
-     *      represents the handler for a slot variable when its value is set
+     *      represents the handler for a variable when its value is set
      */
     createInVariable: function (variable, handler) {
         return EzWebAPI.createRGadgetVariable(variable, handler);
@@ -21,6 +23,8 @@ FastAPI.IO = Class.create(FastBaseAPI.IO,{
 
     /**
      * Creates an Event Variable for EzWeb.
+     * @param variable
+     *      represents the name of the variable
      */
     createOutVariable: function (variable) {
         return EzWebAPI.createRWGadgetVariable(variable);
