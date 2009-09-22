@@ -1,7 +1,6 @@
 package eu.morfeoproject.fast.catalogue;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
@@ -40,7 +39,6 @@ import eu.morfeoproject.fast.model.Screen;
 import eu.morfeoproject.fast.model.ScreenFlow;
 import eu.morfeoproject.fast.model.Slot;
 import eu.morfeoproject.fast.model.SlotOrEvent;
-import eu.morfeoproject.fast.server.CatalogueAccessPoint;
 import eu.morfeoproject.fast.util.DateFormatter;
 import eu.morfeoproject.fast.vocabulary.DC;
 import eu.morfeoproject.fast.vocabulary.FGO;
@@ -64,6 +62,10 @@ public class Catalogue {
 	private Planner planner;
 	
 	
+	public Catalogue(String sesameServer, String repositoryID) {
+		create(sesameServer, repositoryID);
+	}
+	
 	public Catalogue(File dir, String indexes) {
 		create(dir, indexes);
 	}
@@ -73,12 +75,31 @@ public class Catalogue {
 	}
 	
 	/**
-	 * Returns a opened connection to the catalogue
+	 * Returns a opened connection to a local catalogue
 	 */
 	private void create(File dir, String indexes) {
 		logger.info("Catalogue loaded at "+dir.getAbsolutePath()+" ["+indexes+"]");
 		// creates a new triple store
 		tripleStore = new TripleStore(dir, indexes);
+    	tripleStore.open();
+
+    	// check if the catalogue is correct
+		if (!check()) {
+			// recover the catalogue
+			restore();
+		}
+		
+		// creates a planner
+		planner = new Planner(this);
+	}
+	
+	/**
+	 * Returns a opened connection to a local catalogue
+	 */
+	private void create(String sesameServer, String repositoryID) {
+		logger.info("Catalogue loaded at "+sesameServer+", ID="+repositoryID);
+		// creates a new triple store
+		tripleStore = new TripleStore(sesameServer, repositoryID);
     	tripleStore.open();
 
     	// check if the catalogue is correct
@@ -132,6 +153,7 @@ public class Catalogue {
     	boolean result = false;
         // are the default ontologies here?
         for (DefaultOntologies.Ontology ont : DefaultOntologies.getDefaults()) {
+        	logger.info("checking ontology '"+ont.getUri()+"'...");
             boolean misses = (!tripleStore.containsOntology(ont.getUri()));
             logger.info("default ontology '"+ont.getUri()+"' is in the store: "+!misses);
             result = result || misses;
@@ -183,7 +205,7 @@ public class Catalogue {
         } catch (OntologyInvalidException e) {
             logger.error("Cannot add ontology '"+ont.getUri()+"': "+e, e);
             return false;
-        }
+		}
 	}
 	
 	public void addScreenFlow(ScreenFlow sf) throws DuplicatedResourceException,
@@ -1081,21 +1103,23 @@ public class Catalogue {
     	while (itResults.hasNext()) {
     		QueryRow qr = itResults.next();
     		Node node = qr.getValue("concept");
-    		System.out.println(node);
+    		
     		if (node instanceof BlankNode) {
-    			try {
-					ClosableIterator<Statement> ci = CatalogueAccessPoint.getCatalogue().getTripleStore().findStatements(node.asBlankNode(), Variable.ANY, Variable.ANY);
-					while (ci.hasNext())
-						System.out.println(ci.next());
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-    		}
-    		else {
+//        		System.out.println(node+" is a blank node.");
+//    			try {
+//					ClosableIterator<Statement> ci = getTripleStore().findStatements(node.asBlankNode(), Variable.ANY, Variable.ANY);
+//					while (ci.hasNext())
+//						System.out.println(ci.next());
+//					ci.close();
+//				} catch (Exception e) {
+//					e.printStackTrace();
+//				}
+    		} else {
     			results.add(qr.getValue("concept").asURI());
     		}
     	}
     	itResults.close();
+    	
     	return results;
 	}
 
@@ -1423,4 +1447,5 @@ public class Catalogue {
     public ClosableIterator<Statement> screensIterator() {
     	return tripleStore.findStatements(Variable.ANY, RDF.type, FGO.Screen);
     }
+    
 }

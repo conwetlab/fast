@@ -6,11 +6,9 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import org.ontoware.aifbcommons.collection.ClosableIterable;
 import org.ontoware.aifbcommons.collection.ClosableIterator;
-import org.ontoware.rdf2go.RDF2Go;
 import org.ontoware.rdf2go.exception.ModelRuntimeException;
 import org.ontoware.rdf2go.model.Model;
 import org.ontoware.rdf2go.model.ModelSet;
@@ -35,9 +33,13 @@ import org.ontoware.rdf2go.util.RDFTool;
 import org.ontoware.rdf2go.vocabulary.OWL;
 import org.ontoware.rdf2go.vocabulary.RDF;
 import org.ontoware.rdf2go.vocabulary.RDFS;
+import org.openrdf.model.ValueFactory;
 import org.openrdf.rdf2go.RepositoryModelSet;
 import org.openrdf.repository.Repository;
+import org.openrdf.repository.RepositoryConnection;
 import org.openrdf.repository.RepositoryException;
+import org.openrdf.rio.RDFFormat;
+import org.openrdf.rio.RDFParseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -71,20 +73,29 @@ public class TripleStore {
 	
 	private List<URI> createdURIs;
 	
-//	public TripleStore() {
-//		Repository repository = PersistentRepository.getInstance().getGroundingRepository();
-//		persistentModelSet = new RepositoryModelSet(repository);
-//		createdURIs = new ArrayList<URI>();
-//		
-//		// TODO: Now create the screen under the ScreenOnt namespace, but this has to be
-//		//       created in the user's namespace
-//		defaultModel = getPersistentModelSet().getModel(FCO.NS_FCO);
-//	}
+	private Repository repository;
+	
+	public TripleStore(String sesameServer, String repositoryID) {
+		try {
+			repository = PersistentRepository.getHTTPRepository(sesameServer, repositoryID);
+			initStore(repository);
+		} catch (Exception e) {
+			logger.error("The triple store cannot be initialized.", e);
+		}
+	}
 	
 	public TripleStore(File dir, String indexes) {
-		Repository repository = PersistentRepository.getRepository(dir, indexes);
+		try {
+			repository = PersistentRepository.getLocalRepository(dir, indexes);
+			initStore(repository);
+		} catch (RepositoryException e) {
+			logger.error("The triple store cannot be initialized.", e);
+		}
+	}
+	
+	private void initStore(Repository repository) {
 		persistentModelSet = new RepositoryModelSet(repository);
-
+		
 		createdURIs = new ArrayList<URI>();
 		
 		// TODO: Now create the screen under the ScreenOnt namespace, but this has to be
@@ -193,32 +204,48 @@ public class TripleStore {
      * @param formatMimetype the rdf mimetype serialization format of the string, 
      * see {@link RDFRepository} for an explanation. 
      * @throws OntologyInvalidException if the ontology is not valid according to PimoChecker
+	 * @throws RepositoryException 
+	 * @throws IOException 
+	 * @throws RDFParseException 
      */
-    public void addOntology(URI ontologyUri, InputStream ontology, Syntax syntax) throws OntologyInvalidException {
-       	if (containsOntology(ontologyUri))
-       		logger.info("The ontology "+ontologyUri+" already exists?");
-       	
-       	// creates a model for the ontology
-      	Model ont = RDF2Go.getModelFactory().createModel();
-      	ont.open();
-      	try {
-      		// read the ontology from the inputstream
-            ont.readFrom(ontology, syntax);
-            // add the ontology to the persistent modelset
-            getPersistentModelSet().addModel(ont, ontologyUri);
-            Map<String, String> namespaces = ont.getNamespaces();
-            for (String key : namespaces.keySet()) {
-            	if (!getPersistentModelSet().getNamespaces().containsKey(key)) {
-	            	String value = namespaces.get(key);
-	            	getPersistentModelSet().setNamespace(key, value);
-	            	logger.info("added namespace "+key+"="+value);
-            	}
-            }
-        } catch (IOException e) {
-            throw new OntologyInvalidException(e.getLocalizedMessage(), e);
-        } finally{
-        	ont.close();
-        }
+    public void addOntology(URI ontologyUri, InputStream ontology, Syntax syntax) {
+    	if (containsOntology(ontologyUri)) {
+    		logger.info("The ontology "+ontologyUri+" already exists.");
+    	} else {
+			try {
+				RepositoryConnection connection = repository.getConnection();
+				ValueFactory factory = repository.getValueFactory();
+				RDFFormat format = RDFFormat.RDFXML; // RDF/XML by default
+				if (syntax.equals(Syntax.Ntriples)) format = RDFFormat.NTRIPLES;
+				else if (syntax.equals(Syntax.RdfXml)) format = RDFFormat.RDFXML;
+				else if (syntax.equals(Syntax.Trig)) format = RDFFormat.TRIG;
+				else if (syntax.equals(Syntax.Trix)) format = RDFFormat.TRIX;
+				else if (syntax.equals(Syntax.Turtle)) format = RDFFormat.TURTLE;
+		    	// add the ontology to the repository
+				connection.add(ontology, ontologyUri.toString(), format, factory.createURI(ontologyUri.toString()));
+			} catch (Exception e) {
+	            logger.error("Cannot add ontology '"+ontologyUri+"': "+e, e);
+			}
+    	}
+    	
+// 		Ismael: this doesn't work properly when working with the HTTP sesame server
+//    	it always launch a Exception when querying the triple store. it may be a bug
+//		in the RDF2Go library?
+//		Solution: above using directly Sesame connection to the repository
+		
+//	 	// creates a model for the ontology
+//  	Model ont = RDF2Go.getModelFactory().createModel(ontologyUri);
+//  	ont.open();
+//  	try {
+//  		// read the ontology from the inputstream
+//        ont.readFrom(ontology, syntax);
+//        // add the ontology to the persistent modelset
+//        getPersistentModelSet().addModel(ont);
+//    } catch (IOException e) {
+//        throw new OntologyInvalidException(e.getLocalizedMessage(), e);
+//    } finally{
+//    	ont.close();
+//    }		
     }
 	
 	/**
@@ -233,14 +260,16 @@ public class TripleStore {
      * @throws OntologyInvalidException if the ontology is not valid according to PimoChecker
      * @throws OntologyImportsNotSatisfiedException if imports are missing
      * @throws RepositoryStorageException if the updating in the repository does not work
+	 * @throws IOException 
+	 * @throws RDFParseException 
+	 * @throws RepositoryException 
      */
     public void updateOntology(URI ontologyUri, InputStream ontology, Syntax syntax)
-    throws NotFoundException, OntologyInvalidException, OntologyImportsNotSatisfiedException, RepositoryStorageException {
+    throws NotFoundException, OntologyInvalidException, OntologyImportsNotSatisfiedException, RepositoryStorageException, RepositoryException, RDFParseException, IOException {
         // TODO: implement differently to avoid a dangling ontology.
         // removing and adding again does not work, if others depend on this ont
         removeOntology(ontologyUri);
         addOntology(ontologyUri, ontology, syntax);
-        
     }
     
     /**
@@ -294,6 +323,8 @@ public class TripleStore {
     public boolean containsOntology(URI ontologyUri) {
     	// TODO: check if this is really an ontology and not just a graph
    		return getPersistentModelSet().containsModel(ontologyUri);
+//   		return false;
+//    	return true;
     }
     
     public boolean removeModel(URI uriModel) {
@@ -1005,4 +1036,16 @@ public class TripleStore {
 			e.printStackTrace();
 		}
 	}
+	
+	
+	
+	
+	
+	
+	
+	
+    public long size() {
+    	ClosableIterator<Statement> it = findStatements(FGO.NS_FGO, Variable.ANY, RDF.type, Variable.ANY);
+    	return getPersistentModelSet().size();
+    }
 }

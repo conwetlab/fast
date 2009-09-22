@@ -4,8 +4,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.ontoware.rdf2go.model.node.URI;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import eu.morfeoproject.fast.server.FindServlet;
 
 public class PlannerStore {
+
+	final Logger logger = LoggerFactory.getLogger(PlannerStore.class);
 
 	private class Entry {
 		private URI from;

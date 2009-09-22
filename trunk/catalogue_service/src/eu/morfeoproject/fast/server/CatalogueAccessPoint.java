@@ -5,9 +5,14 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import eu.morfeoproject.fast.catalogue.Catalogue;
 
 public class CatalogueAccessPoint {
+
+	final static Logger logger = LoggerFactory.getLogger(CatalogueAccessPoint.class);
 
 	private static final String defaultStorageDir = "C:\\fast\\catalogue\\repository";
 	
@@ -18,6 +23,8 @@ public class CatalogueAccessPoint {
 			InputStream inStream = CatalogueAccessPoint.class.getClassLoader().getResourceAsStream("repository.properties"); 
 			String storageDir = null;
 			String indexes = null;
+			String sesameServer = null;
+			String repositoryID = null;
 			if (inStream == null) {
 				throw new IOException("Configuration file repository.properties not found.");
 			} else {
@@ -25,8 +32,16 @@ public class CatalogueAccessPoint {
 				properties.load(inStream);
 				storageDir = properties.getProperty("storageDir", defaultStorageDir);
 				indexes = properties.getProperty("indexes");
+				sesameServer = properties.getProperty("sesameServer");
+				repositoryID = properties.getProperty("repositoryID");
 			}
-			catalogue = new Catalogue(new File(storageDir), indexes);
+			if (sesameServer != null && repositoryID != null) {
+				catalogue = new Catalogue(sesameServer, repositoryID);
+			} else if (storageDir != null) {
+				catalogue = new Catalogue(new File(storageDir), indexes);
+			} else {
+				throw new IOException("Configuration file repository.properties is incorrect.");
+			}
 		}
 		return catalogue;
 	}

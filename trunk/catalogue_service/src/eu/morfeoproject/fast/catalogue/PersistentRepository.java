@@ -1,11 +1,12 @@
 package eu.morfeoproject.fast.catalogue;
 
 import java.io.File;
-import java.util.HashMap;
-import java.util.Map;
 
 import org.openrdf.repository.Repository;
 import org.openrdf.repository.RepositoryException;
+import org.openrdf.repository.config.RepositoryConfigException;
+import org.openrdf.repository.manager.RemoteRepositoryManager;
+import org.openrdf.repository.manager.RepositoryManager;
 import org.openrdf.repository.sail.SailRepository;
 import org.openrdf.sail.NotifyingSail;
 import org.openrdf.sail.nativerdf.NativeStore;
@@ -14,16 +15,6 @@ import org.slf4j.LoggerFactory;
 
 
 /**
- * This class implements Singleton solution of Bill Pugh
- * This is the recommended method. It is known as the initialisation on demand 
- * holder idiom and is as lazy as possible. Moreover, it works in all known 
- * versions of Java. This solution is the most portable across different Java 
- * compilers and virtual machines.
- * 
- * The inner class is referenced no earlier (and therefore loaded no earlier 
- * by the class loader) than the moment that getInstance() is called. Thus, this 
- * solution is thread-safe without requiring special language constructs (i.e. 
- * volatile and/or synchronised).
  * 	
  * @author Ismael Rivera
  */
@@ -34,26 +25,26 @@ public class PersistentRepository {
 	static final String defaultIndexes = "spoc, posc, sopc, psoc, ospc, opsc";
 	static final int defaultInferencer = TripleStore.FORWARD_CHAINING_RDFS_INFERENCER;
 	
-	private static Map<String, Repository> repositories = new HashMap<String, Repository>();
-	
-	public static Repository getRepository(File dir, String indexes) {
-		if (indexes == null) indexes = defaultIndexes;
-		Repository repository = repositories.get(dir.getAbsolutePath());
-		if (repository == null) {
-			NotifyingSail sail = new NativeStore(dir, indexes);
-			repository = new SailRepository(sail);
-			try {
-				repository.initialize();
-			} catch (RepositoryException e) {
-				throw new RuntimeException(e);
-			}
-			repositories.put(dir.getAbsolutePath(), repository);
-		}
+	public static Repository getHTTPRepository(String sesameServer, String repositoryID) throws RepositoryException, RepositoryConfigException {
+		RepositoryManager manager = RemoteRepositoryManager.getInstance(sesameServer);
+		Repository repository = null;
+		repository = manager.getRepository(repositoryID);
+		repository.initialize();
 		return repository;
 	}
 	
-	public static Repository getRepository(File dir) {
-		return PersistentRepository.getRepository(dir, defaultIndexes);
+	public static Repository getLocalRepository(File dir, String indexes) throws RepositoryException {
+		//RepositoryManager manager = new LocalRepositoryManager(dir);
+		//manager.getRepository(arg0);
+		if (indexes == null) indexes = defaultIndexes;
+		NotifyingSail sail = new NativeStore(dir, indexes);
+		Repository repository = new SailRepository(sail);
+		repository.initialize();
+		return repository;
+	}
+	
+	public static Repository getLocalRepository(File dir) throws RepositoryException {
+		return PersistentRepository.getLocalRepository(dir, defaultIndexes);
 	}
 	
 }
