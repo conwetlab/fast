@@ -8,6 +8,7 @@ var FormDialog = Class.create( /** @lends FormDialog.prototype */ {
      *     * buttonsNode: containing the different buttons: handled by this class
      * @constructs
      * @param Hash params
+     * @abstract
      */
     initialize: function(properties) {
         this._dialog = new dijit.Dialog(properties);
@@ -28,6 +29,8 @@ var FormDialog = Class.create( /** @lends FormDialog.prototype */ {
         containerDiv.insert (this._contentNode);
         containerDiv.insert (this._buttonNode);
         this._dialog.attr ('content', containerDiv);
+        
+        this._initialized = false;
     },
 
     
@@ -68,6 +71,10 @@ var FormDialog = Class.create( /** @lends FormDialog.prototype */ {
     },
     
     show: function() {
+        if (!this._initialized) {
+            this._initDialogInterface();
+            this._initialized = true;
+        }
         this._dialog.show();
     },
         
@@ -79,89 +86,101 @@ var FormDialog = Class.create( /** @lends FormDialog.prototype */ {
      * structure, containing the different elements of the form,
      * and, optionally, form parameters
      */
-    setContent: function (/** Array */ data, /** Hash */ formParams){
-        if (formParams){
-            var form = new dijit.form.Form(formParams);
-        }
-        else {
-            var form = new dijit.form.Form ({
-                'method': 'post'
-            });
-        }
-
-        $A(data).each (function(line){
-            var lineNode;
-            var inputNode;
-            
-            switch (line.type) {
-                case 'title':
-                    lineNode = new Element ('h3').update(line.value);
-                    break;
-                    
-                case 'input':
-                    var input = new dijit.form.TextBox({
-                                    'name' : line.name,
-                                    'value': line.value   
-                                });
-                    inputNode = input.domNode;
-                    lineNode = this._createLine(line.label, inputNode);
-                    break;
-
-                case 'validation':                
-                    var input = new dijit.form.ValidationTextBox({
-                                    'name' : line.name,
-                                    'value': line.value,
-                                    'regExp': line.regExp,
-                                    'invalidMessage': line.message
-                                });
-                    inputNode = input.domNode;
-                    lineNode = this._createLine(line.label, inputNode);
-                    break;   
-                    
-                case 'freeText': // FIXME: crappy name
-                    lineNode = new Element('div', {
-                                    'class': 'line'
-                                }).update(line.value);
-                    break;
-                    
-                case 'hidden':
-                    lineNode = new Element('input',{
-                                    'type': 'hidden',
-                                    'name': line.name,
-                                    'value': line.value
-                                });
-                    break;                    
-                                 
-                case 'comboBox':
-                    inputNode = new Element('select', {
-                        'name': line.name
-                    });
-                    
-                    $A(line.options).each(function(option) {
-                        var optionNode = new Element('option', {
-                             'value': option.value
-                        }).update(option.label);
-                        
-                        if (option.value == line.value) {
-                            optionNode.selected = "selected";
-                        }
-                        
-                        inputNode.appendChild(optionNode);
-                    });
-                    
-                    lineNode = this._createLine(line.label, inputNode);
-                    break;
-    
-                //TODO: Implement more when necessary
-                    
-                default:
-                    throw "Unimplemented form field type";
+    setContent: function (/** Array | DOMNode */ data, /** Hash */ formParams){
+        if (data instanceof Array) {
+            // Form
+            if (formParams){
+                var content = new dijit.form.Form(formParams);
+            } else {
+                var content = new dijit.form.Form ({
+                    'method': 'post'
+                });
             }
+            
+            // Instantiate form elements
+            $A(data).each (function(line){
+                var lineNode;
+                var inputNode;
+                
+                switch (line.type) {
+                    case 'title':
+                        lineNode = new Element ('h3').update(line.value);
+                        break;
+                        
+                    case 'input':
+                        var input = new dijit.form.TextBox({
+                                        'name' : line.name,
+                                        'value': line.value   
+                                    });
+                        inputNode = input.domNode;
+                        lineNode = this._createLine(line.label, inputNode);
+                        break;
+    
+                    case 'validation':                
+                        var input = new dijit.form.ValidationTextBox({
+                                        'name' : line.name,
+                                        'value': line.value,
+                                        'regExp': line.regExp,
+                                        'invalidMessage': line.message
+                                    });
+                        inputNode = input.domNode;
+                        lineNode = this._createLine(line.label, inputNode);
+                        break;   
+                        
+                    case 'freeText': // FIXME: crappy name
+                        lineNode = new Element('div', {
+                                        'class': 'line'
+                                    }).update(line.value);
+                        break;
+                        
+                    case 'hidden':
+                        lineNode = new Element('input',{
+                                        'type': 'hidden',
+                                        'name': line.name,
+                                        'value': line.value
+                                    });
+                        break;                    
+                                     
+                    case 'comboBox':
+                        inputNode = new Element('select', {
+                            'name': line.name
+                        });
+                        
+                        $A(line.options).each(function(option) {
+                            var optionNode = new Element('option', {
+                                 'value': option.value
+                            }).update(option.label);
+                            
+                            if (option.value == line.value) {
+                                optionNode.selected = "selected";
+                            }
+                            
+                            inputNode.appendChild(optionNode);
+                        });
+                        
+                        lineNode = this._createLine(line.label, inputNode);
+                        break;
+        
+                    //TODO: Implement more when necessary
+                        
+                    default:
+                        throw "Unimplemented form field type";
+                }
+                      
+                content.domNode.appendChild(lineNode);   
+                
+                this._armEvents(inputNode, line.events);
+            }.bind(this));
+            
+            this._contentNode.update(content.domNode);  
+                        
+        } else {
+            // Data is a DOMNode
+            this._contentNode.update(data);
+        }        
 
-            form.domNode.appendChild(lineNode);
-            this._armEvents(inputNode, line.events);
-        }.bind(this));
-        this._contentNode.appendChild(form.domNode);
+        //Just in case
+        dojo.parser.parse(this._contentNode);
     },
     
     /**
@@ -184,17 +203,27 @@ var FormDialog = Class.create( /** @lends FormDialog.prototype */ {
     setHeader: function (/** String */ title, /** String */ subtitle){
         
         var titleNode = new Element("h2").update(title);
-        this._contentNode.insert(titleNode);
+        this._headerNode.insert(titleNode);
         
         if (subtitle && subtitle != ""){
             var subtitleNode = new Element("div", {
                 "class": "line"
             }).update(subtitle);
-            this._contentNode.insert(subtitleNode);
+            this._headerNode.insert(subtitleNode);
         }
     },
     
     // **************** PRIVATE METHODS **************** //
+    /** 
+     * initDialogInterface
+     * This function creates the dom structure
+     * @private
+     * @abstract
+     */
+    _initDialogInterface: function(){
+        throw "Abstract method invocation FormDialog :: _initDialogInterface"
+    },
+    
     /**
      * Construct a form line provided the label text and the input node.
      * @type DOMNode

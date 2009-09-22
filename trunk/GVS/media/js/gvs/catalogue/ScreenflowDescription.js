@@ -22,10 +22,10 @@ var ScreenflowDescription = Class.create(BuildingBlockDescription,
      *      Screen to be added to the
      *      Screenflow document.
      */
-    addScreen: function (/** String */ uri, /**Object*/ position) {
+    addScreen: function (/** String */ uri, /** Object */ position) {
         this.screens.set(uri,{
-            "screen": uri,
-            "position":position
+            "screen":   uri,
+            "position": position
         });
     },
 
@@ -38,57 +38,16 @@ var ScreenflowDescription = Class.create(BuildingBlockDescription,
     removeScreen: function(/** String */ id) {
         this.screens.unset(id);
     },
-
+    
     /**
-     * Returns the screenflowDescription coded in JSON
-     * @type {String}
-     */    
-    // TO BE REFACTORIZED TO SEVERAL METHODS
-    /*
-    toJSON: function () {
-        // TODO: Include all the fields
-        var data = new Object();
-        //data.uri = this.getUri();
-        data.label = this.getLabel();
-        data.description = this.getDescription();
-        data.creator = this.getCreator();
-        data.version = this.getVersion();
-        data.preconditions = this.getPreconditions();
-        data.postconditions = this.getPostconditions();
-        data.definition = new Object();
-        data.definition.screens = this.getScreenDescriptions();
-        return Object.toJSON(data);
-    },
-    */
-   
-    /**
-     * Creates a gadget deployment from the ScreenflowDescription
-     * @public
-     * FIXME: FF. Move to another place
+     * @type Array
      */
-    deployGadget: function () {
-        console.log("gadget deployment");
-        var screensdesc = this.getScreenDescriptions();
-        var screenList = '';
-        for(i=0;i<screensdesc.length;i++){
-            console.log(screensdesc[i].label['en-gb']);
-            screenList += screensdesc[i].label['en-gb'] + ",";
-        }
-
-        function onSuccess(transport) {
-            GVSSingleton.getInstance().getDocumentController().createDeploymentDocument(transport.responseText);
-        }
-
-        function onError(transport, e) {
-            Logger.serverError(transport,e);
-        }
-
-        var datajson = this.toJSON();
-        var result = {gadget: datajson};
-        console.log(result);
-        console.log(datajson);
-        var persistenceEngine = PersistenceEngineFactory.getInstance();
-        persistenceEngine.sendPost(URIs.deploy, result,null, this, onSuccess, onError);
+    getScreenUris: function() {
+        var uris = [];
+        this.screens.each(function (pair) {
+            uris.push(pair.key);
+        });
+        return uris;
     }
 });
 

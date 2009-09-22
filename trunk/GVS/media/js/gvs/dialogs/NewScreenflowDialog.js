@@ -1,9 +1,9 @@
-var NewScreenflowDialog = Class.create(AbstractDialog /** @lends NewScreenflowDialog.prototype */, {
+var NewScreenflowDialog = Class.create(ConfirmDialog /** @lends NewScreenflowDialog.prototype */, {
     /**
      * This class handles the dialog
      * to create a new screenflow
      * @constructs
-     * @extends AbstractDialog
+     * @extends ConfirmDialog
      */ 
     initialize: function($super) {  
         $super("New Screenflow");
@@ -24,7 +24,7 @@ var NewScreenflowDialog = Class.create(AbstractDialog /** @lends NewScreenflowDi
      */
     _initDialogInterface: function (){
  
-        this._form.setHeader("Fulfill Gadget Information", 
+        this.setHeader("Fulfill Gadget Information", 
                              "Please fulfill the required information in order to " +
                              "create a new screenflow.");
 
@@ -33,7 +33,7 @@ var NewScreenflowDialog = Class.create(AbstractDialog /** @lends NewScreenflowDi
             {'type':'input', 'label': 'Domain Context:','name': 'SFDomainContext', 'value': ''}
         ];
         
-        this._form.setContent(formData);               
+        this.setContent(formData);               
         
     },
     /**
@@ -41,13 +41,13 @@ var NewScreenflowDialog = Class.create(AbstractDialog /** @lends NewScreenflowDi
      * @overrides
      */
     _onOk: function($super){
-        var name = $F(this._form.getForm().SFName);
+        var name = $F(this.getForm().SFName);
         if (!name.match(/^\s*$/)) { //Not empty name
             var domainContext;
-            if ($F(this._form.getForm().SFDomainContext).match(/^\s*$/)){
+            if ($F(this.getForm().SFDomainContext).match(/^\s*$/)){
                 domainContext = [];
             } else {
-                domainContext = $F(this._form.getForm().SFDomainContext).split(/[\s,]+/);   
+                domainContext = $F(this.getForm().SFDomainContext).split(/[\s,]+/);   
             }
                        
             documentController = GVSSingleton.getInstance().getDocumentController();           
@@ -62,8 +62,8 @@ var NewScreenflowDialog = Class.create(AbstractDialog /** @lends NewScreenflowDi
      * Reset method to leave the form as initially
      */
     _reset: function (){
-        this._form.getForm().SFName.value = "New Screenflow";
-        this._form.getForm().SFDomainContext.value = "";
+        this.getForm().SFName.value = "New Screenflow";
+        this.getForm().SFDomainContext.value = "";
     }
 });
 

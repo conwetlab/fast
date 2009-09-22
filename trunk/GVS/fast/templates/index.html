@@ -33,7 +33,7 @@
         <!-- URI constants -->
         <script type="text/javascript" language="javascript">
             _URIConstants = function(){}
-            _URIConstants.prototype.deploy = "/deploy/";
+            _URIConstants.prototype.store = "/deploy/";
 			_URIConstants.prototype.deployEzwebGadget = "/deploy/ezweb";
             _URIConstants.prototype.catalogueScreens = "catalogue/screens";
             _URIConstants.prototype.catalogueFind = "catalogue/find";
@@ -177,13 +177,15 @@
         <script type="text/javascript"
             src="{{ MEDIA_URL }}js/gvs/dialogs/FormDialog.js"></script>
         <script type="text/javascript" 
-            src="{{ MEDIA_URL }}js/gvs/dialogs/AbstractDialog.js"></script>    
+            src="{{ MEDIA_URL }}js/gvs/dialogs/ConfirmDialog.js"></script>    
         <script type="text/javascript" 
             src="{{ MEDIA_URL }}js/gvs/dialogs/DomainConceptDialog.js"></script>            
         <script type="text/javascript" 
             src="{{ MEDIA_URL }}js/gvs/dialogs/PreferencesDialog.js"></script>            
         <script type="text/javascript"
             src="{{ MEDIA_URL }}js/gvs/dialogs/DeployGadgetDialog.js"></script>
+        <script type="text/javascript"
+            src="{{ MEDIA_URL }}js/gvs/dialogs/StoreGadgetDialog.js"></script>
         <script type="text/javascript"
             src="{{ MEDIA_URL }}js/gvs/dialogs/AddScreenDialog.js"></script>
         <script type="text/javascript"
@@ -193,11 +195,15 @@
         <script type="text/javascript"
             src="{{ MEDIA_URL }}js/gvs/dialogs/Confirm.js"></script>
             
+        <!-- Deploy -->
+        <script type="text/javascript"
+            src="{{ MEDIA_URL }}js/gvs/deploy/Deployer.js"></script>        
+
         <!-- Toolbar -->
         <script type="text/javascript"
             src="{{ MEDIA_URL }}js/gvs/toolbar/Toolbar.js"></script>        
         
-         <!-- User account -->
+        <!-- User account -->
         <script type="text/javascript" 
             src="{{ MEDIA_URL }}js/gvs/user/User.js"></script>
 
@@ -247,7 +253,7 @@
             dojo.addOnLoad(function() {
                 GVSSingleton.getInstance().init();
                 //Adding the events
-                //TODO: Remove this from here
+                //FIXME: Remove this from here (Toolbar)
                 dojo.connect(dojo.byId("showDeployGadgetDialog"),"onclick", 
                             GVSSingleton.getInstance().getDocumentController().
                              showDeployCurrentDocDialog.bind(GVSSingleton.getInstance().

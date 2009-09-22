@@ -37,11 +37,10 @@ var ScreenflowDocument = Class.create(PaletteDocument,
         domainContext);
         
         /**
-         * Dialog to create a new document
-         * @type FormDialog
+         * @type Deployer
          * @private @member
          */
-        this._deployGadgetDialog = new DeployGadgetDialog(this);
+        this._deployer = new Deployer();
        
               
         // Screenflow Definition
@@ -51,7 +50,7 @@ var ScreenflowDocument = Class.create(PaletteDocument,
          * @type ScreenflowDescription
          * @private @member
          */       
-        this._description = new ScreenflowDescription();
+        this._description = new ScreenflowDescription({'label': {'en-gb': title}});
 
         /**
          * Screen and domain concept instances on the
@@ -139,24 +138,7 @@ var ScreenflowDocument = Class.create(PaletteDocument,
         
         this._updatePropertiesPane();
     },
-
-    /**
-     * Creates a gadget deployment for the screenflow
-     * @public
-     */
-    deployGadget: function () {
-        // FIXME: move the method here
-        this.getBuildingBlockDescription().deployGadget();
-    },
-    
-    showDeployGadgetDialog: function(){
-        this._deployGadgetDialog.show();
-    },
-    
-    hideDeployGadgetDialog: function(){
-        this._deployGadgetDialog.hide();
-    },
-    
+       
     /**
      * @override
      */
@@ -174,6 +156,7 @@ var ScreenflowDocument = Class.create(PaletteDocument,
     },
 
     // **************** PRIVATE METHODS **************** //
+    
 
     /**
      * Delete a screen.
@@ -351,6 +334,14 @@ var ScreenflowDocument = Class.create(PaletteDocument,
      */
     _onClick: function() {
         this.setSelectedElement();
+    },
+    
+    /**
+     * Creates a gadget deployment for the screenflow
+     * @private
+     */
+    _deployGadget: function () {
+        this._deployer.deployGadget(this._description);
     }
 });
 

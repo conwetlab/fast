@@ -17,34 +17,31 @@ var AlertSingleton = function() {
     var _instance = null;
     
 
-    var Alert = Class.create(
+    var Alert = Class.create(FormDialog,
         /** @lends AlertSingleton-Alert.prototype */ {
 
         /** 
          * Alert dialog
          * @constructs
+         * @extends FormDialog
          */
-        initialize: function() {
-            this._dialog = new FormDialog({
+        initialize: function($super) {
+            $super({
                'title': 'Warning',
                'style': 'display:none'
             });
-            this._dialog.getContentNode().addClassName("systemDialog"); 
+            this.getContentNode().addClassName("systemDialog"); 
             
-            this._dialog.addButton ('Ok', this.hide.bind(this));
+            this.addButton ('Ok', this.hide.bind(this));
         },
         /**
          * This function shows a message
          */
-        show: function  (/** String */ message){
+        show: function  ($super, /** String */ message){
             this._dialog.getContentNode().update(message);
-            this._dialog.show();
-        },
-        
-        hide: function (){
-            this._dialog.hide();
-        }
-        
+            
+            $super();
+        }        
     });
 
     return new function(){

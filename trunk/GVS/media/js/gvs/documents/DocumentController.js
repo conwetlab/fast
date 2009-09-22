@@ -104,7 +104,8 @@ var DocumentController = Class.create(
      * Shows the deployment dialog of the currently focused document.
      */
     showDeployCurrentDocDialog: function(){
-        this.getCurrentDocument().showDeployGadgetDialog();
+        //FIXME: to be called from other place (Toolbar)
+        this.getCurrentDocument()._deployGadget();
     },
     /**
      * this function closes a document by its Id

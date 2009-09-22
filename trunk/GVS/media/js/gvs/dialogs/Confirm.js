@@ -17,14 +17,16 @@ var ConfirmSingleton = function() {
     var _instance = null;
     
 
-    var Confirm = Class.create(
+    var Confirm = Class.create(ConfirmDialog,
         /** @lends ConfirmSingleton-Confirm.prototype */ {
 
         /** 
          * Confirm dialog
          * @constructs
+         * @extends ConfirmDialog
          */
-        initialize: function() {
+        initialize: function($super) {
+            $super('Warning');
             
             /**
              * Callback function to be called
@@ -33,45 +35,37 @@ var ConfirmSingleton = function() {
              */
             this._callback = null;
             
-            var mine = this;
+            this.getContentNode().addClassName("systemDialog"); 
             
-            this._dialog = new FormDialog({
-               'title': 'Warning',
-               'style': 'display:none'
-            }); 
-            this._dialog.getContentNode().addClassName("systemDialog"); 
-            
-            this._dialog.addButton ('Ok', this.onOk.bind(this));
-            this._dialog.addButton ('Cancel', this.onCancel.bind(this));
-            
-            var mine = this;
-            dojo.connect(this._dialog.getDialog(),"hide",function (){
-                mine._callback(false);
-            });
-                       
+            dojo.connect(this.getDialog(), "hide", function (){
+                this._callback(false);
+            }.bind(this));               
         },
+        
         /**
          * This function shows a message
          */
-        show: function  (/** String */ message, /**Function*/ callback){
-            this._dialog.getContentNode().update(message);
-            this._dialog.show();
+        show: function  ($super, /** String */ message, /**Function*/ callback){
+            this.getContentNode().update(message);
+            $super();
             this._callback = callback;
         },
-        
-        onOk: function (){
-            this._dialog.hide();
+        // *********************** PRIVATE METHODS ******************//
+        _onOk: function ($super) {
+            $super();
             this._callback(true);
             this._callback = null;
-
         },
-        onCancel: function (){
-            this._dialog.hide();
-            this._callback(false);
-            this._callback = null;
-            
-        }
         
+        _onCancel: function ($super){
+            $super();
+            this._callback(false);
+            this._callback = null;    
+        },
+        
+        _initDialogInterface: function () {
+            // Do Nothing
+        }
     });
 
     return new function(){

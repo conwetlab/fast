@@ -1,9 +1,9 @@
-var DomainConceptDialog = Class.create(AbstractDialog /** @lends DomainConceptDialog.prototype */, {
+var DomainConceptDialog = Class.create(ConfirmDialog /** @lends DomainConceptDialog.prototype */, {
     /**
      * This class handles the dialog
      * to update the domain concept properties
      * @constructs
-     * @extends AbstractDialog
+     * @extends ConfirmDialog
      */ 
     initialize: function($super,
             /** Function */ onChangeCallback, /** String */ label) {
@@ -32,7 +32,7 @@ var DomainConceptDialog = Class.create(AbstractDialog /** @lends DomainConceptDi
      */
     _initDialogInterface: function (){
  
-        this._form.setHeader("Check domain concept details", 
+        this.setHeader("Check domain concept details", 
                              "Please fulfill the required information in order to" +
                              " set up the Domain Concept");
 
@@ -90,7 +90,7 @@ var DomainConceptDialog = Class.create(AbstractDialog /** @lends DomainConceptDi
             }
         ];
         
-        this._form.setContent(formData);               
+        this.setContent(formData);               
         
     },
     /**
@@ -98,7 +98,7 @@ var DomainConceptDialog = Class.create(AbstractDialog /** @lends DomainConceptDi
      * @overrides
      */
     _onOk: function($super){
-        this._onChangeCallback(this._form.getForm().serialize({'hash':true}));
+        this._onChangeCallback(this.getForm().serialize({'hash':true}));
         $super();
     },
     
@@ -110,7 +110,7 @@ var DomainConceptDialog = Class.create(AbstractDialog /** @lends DomainConceptDi
     
     _onTypeChange: function() {
         var bindings = new Array();
-        switch ($F(this._form.getForm().type)) {
+        switch ($F(this.getForm().type)) {
             case 'pre':
                 bindings.push({'value':'slot','label':'Slot'});
                 bindings.push({'value':'pref','label':'User Preference'});
@@ -124,7 +124,7 @@ var DomainConceptDialog = Class.create(AbstractDialog /** @lends DomainConceptDi
                 bindings.push({'value': 'undefined','label': 'Choose type first...'});
                 break;
         } 
-        var bindingNode = $(this._form.getForm().binding);
+        var bindingNode = $(this.getForm().binding);
         bindingNode.update("");
         bindings.each(function(binding) {
            var optionNode = new Element('option', {

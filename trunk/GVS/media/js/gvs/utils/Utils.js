@@ -15,9 +15,10 @@ Object.extend(Utils, {
     },
     
     ezWebDeploy: function(/**String*/ ezWebUri,/**String*/ templateUri) {
-       document.Deploy.action = ezWebUri;
-       document.Deploy.template_uri.value = templateUri;
-       document.Deploy.submit();
+        var button = dijit.byId("ezwebButton");
+        button.attr("label", "Done!");
+        button.attr("disabled", true);
+        window.open(ezWebUri + "?template_uri=" + templateUri);
     },
     
     igoogleDeploy: function(/**String*/ uri) {

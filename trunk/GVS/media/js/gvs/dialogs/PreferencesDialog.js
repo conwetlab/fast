@@ -1,9 +1,9 @@
-var PreferencesDialog = Class.create(AbstractDialog /** @lends PreferencesDialog.prototype */, {
+var PreferencesDialog = Class.create(ConfirmDialog /** @lends PreferencesDialog.prototype */, {
     /**
      * This class handles the dialog
      * that shows the user preferences
      * @constructs
-     * @extends AbstractDialog
+     * @extends ConfirmDialog
      */ 
     initialize: function($super) {
         
@@ -13,14 +13,6 @@ var PreferencesDialog = Class.create(AbstractDialog /** @lends PreferencesDialog
     
     // **************** PUBLIC METHODS **************** //
 
-    
-    /**
-     * show
-     * @overrides
-     */
-    show: function ($super) {
-        $super();
-    },
 
     // **************** PRIVATE METHODS **************** //
 
@@ -31,9 +23,9 @@ var PreferencesDialog = Class.create(AbstractDialog /** @lends PreferencesDialog
      * @private
      * @overrides
      */
-    _initDialogInterface: function (){
+    _initDialogInterface: function () {
  
-        this._form.setHeader("User preferences");
+        this.setHeader("User preferences");
         
         var user = GVSSingleton.getInstance().getUser();
              
@@ -49,7 +41,7 @@ var PreferencesDialog = Class.create(AbstractDialog /** @lends PreferencesDialog
                     'message': 'Invalid URL'}
         ];
         
-        this._form.setContent(formData, {'id' : 'PreferencesForm', 'method' : 'post'});
+        this.setContent(formData, {'id' : 'PreferencesForm', 'method' : 'post'});
 
     },
     /**
@@ -64,7 +56,7 @@ var PreferencesDialog = Class.create(AbstractDialog /** @lends PreferencesDialog
         }
         else {
             var user = GVSSingleton.getInstance().getUser();
-            user.update(this._form.getForm().serialize(true));
+            user.update(this.getForm().serialize(true));
             $super();
         }
     },
@@ -74,10 +66,10 @@ var PreferencesDialog = Class.create(AbstractDialog /** @lends PreferencesDialog
      */
     _reset: function (){
         var user = GVSSingleton.getInstance().getUser();
-        this._form.getForm().firstName.value = user.getFirstName();
-        this._form.getForm().lastName.value = user.getLastName();
-        this._form.getForm().email.value = user.getEmail();
-        this._form.getForm().ezWebURL.value = user.getEzWebURL();
+        this.getForm().firstName.value = user.getFirstName();
+        this.getForm().lastName.value = user.getLastName();
+        this.getForm().email.value = user.getEmail();
+        this.getForm().ezWebURL.value = user.getEzWebURL();
         var form = dijit.byId("PreferencesForm");
         form.validate();
     }
