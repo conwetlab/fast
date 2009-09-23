@@ -8,9 +8,10 @@ var ScreenflowDescription = Class.create(BuildingBlockDescription,
      * @extends BuildingBlockDescription
      */
     initialize: function($super, /** Hash */ properties) {
-        this.screens = new Hash();
-        this.description = new Hash();
-        this.label = new Hash();
+        this.definition = new Object();
+        this.definition.screens = new Array();
+        this.description = new Object();
+        this.label = new Object();
         this.domainContext = new Array();
         
         $super(properties);
@@ -23,8 +24,8 @@ var ScreenflowDescription = Class.create(BuildingBlockDescription,
      *      Screenflow document.
      */
     addScreen: function (/** String */ uri, /** Object */ position) {
-        this.screens.set(uri,{
-            "screen":   uri,
+        this.definition.screens.push({
+            "uri":   uri,
             "position": position
         });
     },
@@ -35,14 +36,20 @@ var ScreenflowDescription = Class.create(BuildingBlockDescription,
      *      Screen to be deleted from the
      *      Screenflow document.
      */
-    removeScreen: function(/** String */ id) {
-        this.screens.unset(id);
+    removeScreen: function(/** String */ id) { 
+        for (var i=0; i < this.definition.screens.length; i++) {
+            if (this.definition.screens[i].uri == id) {
+                this.definition.screens.splice(i,1);
+                break;
+            }
+        }
     },
     
+    //************************ PRIVATE METHODS *******************//
     /**
      * @type Array
      */
-    getScreenUris: function() {
+    _getScreenUris: function() {
         var uris = [];
         this.screens.each(function (pair) {
             uris.push(pair.key);

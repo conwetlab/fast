@@ -34,7 +34,6 @@
         <script type="text/javascript" language="javascript">
             _URIConstants = function(){}
             _URIConstants.prototype.store = "/deploy/";
-			_URIConstants.prototype.deployEzwebGadget = "/deploy/ezweb";
             _URIConstants.prototype.catalogueScreens = "catalogue/screens";
             _URIConstants.prototype.catalogueFind = "catalogue/find";
             _URIConstants.prototype.catalogueFindAndCheck = "catalogue/findcheck";
@@ -44,6 +43,8 @@
             _URIConstants.prototype.catalogueCreateScreen = "catalogue/screens";
             _URIConstants.prototype.catalogueAllConcepts = "catalogue/concepts";
             _URIConstants.prototype.catalogueTagConcepts = "catalogue/tags/<tags>/concepts";
+            _URIConstants.prototype.buildingblock = "buildingblock";
+            _URIConstants.prototype.screenflow = "buildingblock/screenflow";
             _URIConstants.prototype.userPreferences = "user/preferences";
             
             _URIConstants.prototype.logoFast = "{{ MEDIA_URL }}images/gui/fastLogo.png";
@@ -281,9 +282,9 @@
 				</div>
                 <div id="header_button"><button id="showDeployGadgetDialog" dojoType="dijit.form.Button" label="Create Gadget!"></button></div>
                 <!-- Menu area -->
-                <div id="menu" dojoType="dijit.Toolbar">
+                <div id="toolbar" dojoType="dijit.Toolbar">
                     <!-- FIXME: There is an issue when loading buttons programatically  -->
-                    <div dojoType="dijit.ToolbarSeparator"></div>
+                    <div id="firstSeparator" dojoType="dijit.ToolbarSeparator"></div>
                 </div>
             </div>  
 

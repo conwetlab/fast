@@ -91,14 +91,8 @@ var AbstractDocument = Class.create( /** @lends AbstractDocument.prototype */ {
     onKeyPressed: function(/** Event */ e) {
         // Do nothing
     },
-
-    /**
-     * FIXME: this is responsibility of document controller
-     * Select this tab.
-     */
-    select: function() {
-        dijit.byId("documentContainer").selectChild(this._tabId);
-    },
+    
+    
     
     // **************** PRIVATE METHODS **************** //
     

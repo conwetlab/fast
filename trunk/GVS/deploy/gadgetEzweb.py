@@ -17,12 +17,12 @@ def createEzwebGadget(gadgetName, gadgetUri, gadgetPath, label, vendor, version,
     #print htmlUri
     #print templateUri 
     
-    ezWebTemplate = getEzWebTemplate(htmlUri, label['en-GB'], vendor, version, description['en-GB'], creator, email, prec, post)
+    ezWebTemplate = getEzWebTemplate(htmlUri, label['en-gb'], vendor, version, description['en-gb'], creator, email, prec, post)
     templateFile = open(path.join(gadgetPath, gadgetName + '.xml'), 'w')
     templateFile.write(smart_str(ezWebTemplate,'utf-8'))
     templateFile.close()
     
-    ezWebHTML = getEzWebHTML(gadgetUri, label['en-GB'], screens, prec, post)
+    ezWebHTML = getEzWebHTML(gadgetUri, label['en-gb'], screens, prec, post)
     htmlFile = open(path.join(gadgetPath, gadgetName + '.html'), 'w')
     htmlFile.write(smart_str(ezWebHTML,'utf-8'))
     htmlFile.close()

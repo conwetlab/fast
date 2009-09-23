@@ -32,16 +32,16 @@ var PreferencesDialog = Class.create(ConfirmDialog /** @lends PreferencesDialog.
         var formData = [
             {'type':'input', 'label': 'First Name:','name': 'firstName', 'value': user.getFirstName()},
             {'type':'input', 'label': 'Last Name:','name': 'lastName', 'value': user.getLastName()},
-            {'type':'validation', 'label': 'Email:','name': 'email', 'value': user.getEmail(), 
+            {'type':'input', 'label': 'Email:','name': 'email', 'value': user.getEmail(), 
                     'regExp': '[a-zA-Z0-9._%-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}', 
                     'message': 'Invalid email address'},
-            {'type':'validation', 'label': 'EzWeb URL:','name': 'ezWebURL', 
+            {'type':'input', 'label': 'EzWeb URL:','name': 'ezWebURL', 
                     'value': user.getEzWebURL(), 
                     'regExp': '([hH][tT][tT][pP][sS]?)://[A-Za-z0-9-_]+(\.[A-Za-z0-9-_]+)*(:\d+)?(/[a-zA-Z0-9\.\?=/#%&\+-]*)*', 
                     'message': 'Invalid URL'}
         ];
         
-        this.setContent(formData, {'id' : 'PreferencesForm', 'method' : 'post'});
+        this.setContent(formData);
 
     },
     /**
@@ -49,9 +49,8 @@ var PreferencesDialog = Class.create(ConfirmDialog /** @lends PreferencesDialog.
      * @overrides
      */
     _onOk: function($super){
-        var form = dijit.byId("PreferencesForm");
         
-        if (!form.validate()) {
+        if (!this.getFormWidget().validate()) {
             return;
         }
         else {

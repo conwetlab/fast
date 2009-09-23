@@ -29,8 +29,28 @@ var NewScreenflowDialog = Class.create(ConfirmDialog /** @lends NewScreenflowDia
                              "create a new screenflow.");
 
         var formData = [
-            {'type':'input', 'label': 'Screenflow Name:','name': 'SFName', 'value': 'New Screenflow'},
-            {'type':'input', 'label': 'Domain Context:','name': 'SFDomainContext', 'value': ''}
+            {
+                'type':'input', 
+                'label': 'Screenflow Name:',
+                'name': 'name', 
+                'value': 'New Screenflow',
+                'regExp': '.*\\w.*',
+                'message': 'Screenflow name is mandatory'
+            },
+            {
+                'type':'input', 
+                'label': 'Domain Context:',
+                'name': 'domaincontext',
+                'value': ''
+            },
+            {
+                'type':'input', 
+                'label': 'Version:', 
+                'name': 'version', 
+                'value': '0.1',
+                'regExp': '.*\\S.*',
+                'message': 'Version is mandatory'
+            }
         ];
         
         this.setContent(formData);               
@@ -41,29 +61,25 @@ var NewScreenflowDialog = Class.create(ConfirmDialog /** @lends NewScreenflowDia
      * @overrides
      */
     _onOk: function($super){
-        var name = $F(this.getForm().SFName);
-        if (!name.match(/^\s*$/)) { //Not empty name
-            var domainContext;
-            if ($F(this.getForm().SFDomainContext).match(/^\s*$/)){
-                domainContext = [];
-            } else {
-                domainContext = $F(this.getForm().SFDomainContext).split(/[\s,]+/);   
-            }
-                       
-            documentController = GVSSingleton.getInstance().getDocumentController();           
-            documentController.createScreenflow (name, $A(domainContext));
+        if (this.getFormWidget().validate()) {
+            var name = $F(this.getForm().name);
+            var domainContext = $F(this.getForm().domaincontext).split(/[\s,]+/);
+            var version = $F(this.getForm().version);
+            
+            documentController = GVSSingleton.getInstance().getDocumentController();
+            documentController.createScreenflow(name, $A(domainContext), version);
+            
             this.hide();
-        } else {
-            alert("A Screenflow name must be provided");
-        }
+        }       
     },
     
     /**
      * Reset method to leave the form as initially
      */
     _reset: function (){
-        this.getForm().SFName.value = "New Screenflow";
-        this.getForm().SFDomainContext.value = "";
+        this.getForm().name.value = "New Screenflow";
+        this.getForm().domaincontext.value = "";
+        this.getForm().version.value = "0.1";
     }
 });
 

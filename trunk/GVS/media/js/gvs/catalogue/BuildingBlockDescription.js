@@ -23,9 +23,29 @@ var BuildingBlockDescription = Class.create(
         throw 'Abstract Method invocation. ' +
             'BuildingBlockDescription :: getInfo';    
     },
-
+    
+    /**
+     * Adds properties to the ScreenflowDescription
+     */
     addProperties: function(properties) {
         Utils.addProperties(this, properties);
+    },
+    
+    /**
+     * This function translate the stored properties into 
+     * a JSON-like string
+     * @type String
+     */
+    toJSON: function() {
+        var result = {};
+        $H(this).each(function(pair) {
+            if (!(pair.value instanceof Function)) {
+                result[pair.key] = pair.value;                    
+            }
+        });
+        
+        return Object.toJSON(result);
+        
     }
 
     // **************** PRIVATE METHODS **************** //

@@ -32,7 +32,7 @@ class GadgetDeployment(resource.Resource):
             if (json.has_key('label')):
                 label = json['label']
             else:
-                label = {"en-GB": "FAST Gadget"}    
+                label = {"en-gb": "FAST Gadget"}    
             if (json.has_key('vendor')):
                 vendor = json['vendor']
             else:
@@ -44,7 +44,7 @@ class GadgetDeployment(resource.Resource):
             if (json.has_key('description')):
                 description = json['description']
             else:
-                description = {"en-GB": "Write the description here..."}
+                description = {"en-gb": "Write the description here..."}
             if (json.has_key('email')):
                 email = json['email']
             else:
@@ -57,8 +57,8 @@ class GadgetDeployment(resource.Resource):
             screens = []
             prec = []
             post = []
-            if (json.has_key('screenflow')):
-                scrf = get_object_or_404(Screenflow, id=json['screenflow'])
+            if (request.POST.has_key('screenflow')):
+                scrf = get_object_or_404(Screenflow, id=request.POST['screenflow'])
                 screenflow = simplejson.loads(scrf.data)
                 definition = screenflow['definition']
                 if (definition.has_key('screens')):
@@ -75,7 +75,7 @@ class GadgetDeployment(resource.Resource):
                 if (definition.has_key('postconditions')):
                     post = definition['postconditions']
     
-            gadgetName = (vendor + '-' + label['en-GB'] + '-' + version).replace(' ', '_')
+            gadgetName = (vendor + '-' + label['en-gb'] + '-' + version).replace(' ', '_')
             gadgetPath = path.join(staticPath,gadgetName)
     
             if (not path.isdir(gadgetPath)):

@@ -8,7 +8,7 @@ var Deployer = Class.create( /** @lends Deployer.prototype */ {
          * @type StoreGadgetDialog
          * @private @member
          */
-        this._storeGadgetDialog = new StoreGadgetDialog(this._onStoreGadgetCallback.bind(this));
+        this._storeGadgetDialog = new StoreGadgetDialog(this._onStoreGadgetDialogCallback.bind(this));
         
         /** 
          * @type DeployGadgetDialog
@@ -37,22 +37,29 @@ var Deployer = Class.create( /** @lends Deployer.prototype */ {
 
     // **************** PRIVATE METHODS **************** //
 
-    _onStoreGadgetCallback: function(/** Object */ data) {       
-        // TODO: save screenflow / flush state
-        // TODO: publish screenflow
+    _onStoreGadgetDialogCallback: function(/** Object */ data) {       
+        // save screenflow
+        // TODO: to be managed by the PM
+       
+        Utils.addProperties(this._description, data);
+        this._description.label['en-gb'] = data.name;
+        this._description.description['en-gb'] = data.desc;
         
-        this._storeGadget(data);        
+        var saveParams = {'buildingblock': this._description.toJSON()};
+        
+        PersistenceEngineFactory.getInstance().sendPost(URIs.screenflow, saveParams, null, 
+                this, this._onSaveCallback, this._onError);
     },
     
-    _storeGadget: function(/** Object */ data) {
-        var label = {
-            'en-GB': data.label
-        };
-        var storeParams = data;
-        storeParams.label = label;
+    _onSaveCallback: function(/** XMLHttpRequest */ transport) {
+        var json = JSON.parse(transport.responseText);
+        this._description.id = json.id;
+        this._description.uri = URIs.buildingblock + '/' + json.id;
         
-        storeParams.definition = new Object();
-        storeParams.definition.screens = this._description.getScreenUris();
+        this._storeGadget();  
+    },
+    
+    _storeGadget: function() {
         
         // TODO: precondition list
         //storeParams.preconditions = ;
@@ -60,9 +67,11 @@ var Deployer = Class.create( /** @lends Deployer.prototype */ {
         // TODO: postcondition list
         //storeParams.postconditions = ;
         
-        // Just in case
+        
+        
         storeParams = {
-            'gadget': Object.toJSON(storeParams)
+            'gadget': this._description.toJSON(),
+            'screenflow': this._description.id
         };        
         
         var persistenceEngine = PersistenceEngineFactory.getInstance();

@@ -144,16 +144,17 @@ var GVSSingleton = function() {
         },
         
         /**
+         * FIXME: cleanup this code
          * Init the different buttons in the toolbar
          */
         _initToolbar: function (){          
             
             var preferences = this._dialogs.get("preferences");
             
-            this._toolbar.addButton({
+            /*this._toolbar.addButton({
                 'id': 'toolbar.preferences',
                 'iconClass': 'dijitToolbarIcon dijitToolbarIconPreferences'
-            }, this._dialogs.get("preferences").show.bind(preferences));
+            }, this._dialogs.get("preferences").show.bind(preferences));*/
         }
     });
     

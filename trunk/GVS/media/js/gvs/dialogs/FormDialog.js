@@ -23,7 +23,11 @@ var FormDialog = Class.create( /** @lends FormDialog.prototype */ {
         this._buttonNode = new Element ('div',{
             'class': 'dialogButtonZone' 
         });
+        this._formWidget = null;
+        
+        
         var containerDiv = new Element ('div');
+        
         
         containerDiv.insert (this._headerNode);
         containerDiv.insert (this._contentNode);
@@ -63,11 +67,11 @@ var FormDialog = Class.create( /** @lends FormDialog.prototype */ {
      * @public
      */
     getForm: function() {
-        if (this._dialog.domNode.getElementsByTagName('form')){
-            return this._dialog.domNode.getElementsByTagName('form')[0];
-        } else {
-            return null;
-        }
+        return this._formWidget.domNode;
+    },
+    
+    getFormWidget: function() {
+        return this._formWidget;
     },
     
     show: function() {
@@ -90,9 +94,9 @@ var FormDialog = Class.create( /** @lends FormDialog.prototype */ {
         if (data instanceof Array) {
             // Form
             if (formParams){
-                var content = new dijit.form.Form(formParams);
+                this._formWidget = new dijit.form.Form(formParams);
             } else {
-                var content = new dijit.form.Form ({
+                this._formWidget = new dijit.form.Form ({
                     'method': 'post'
                 });
             }
@@ -108,25 +112,24 @@ var FormDialog = Class.create( /** @lends FormDialog.prototype */ {
                         break;
                         
                     case 'input':
-                        var input = new dijit.form.TextBox({
-                                        'name' : line.name,
-                                        'value': line.value   
-                                    });
+                        if (line.regExp) {
+                            var input = new dijit.form.ValidationTextBox({
+                                            'name' : line.name,
+                                            'value': line.value,
+                                            'regExp': line.regExp,
+                                            'required': true,
+                                            'invalidMessage': line.message
+                                        });
+                        } else {
+                            var input = new dijit.form.TextBox({
+                                            'name' : line.name,
+                                            'value': line.value   
+                                        });
+                        }             
                         inputNode = input.domNode;
                         lineNode = this._createLine(line.label, inputNode);
                         break;
     
-                    case 'validation':                
-                        var input = new dijit.form.ValidationTextBox({
-                                        'name' : line.name,
-                                        'value': line.value,
-                                        'regExp': line.regExp,
-                                        'invalidMessage': line.message
-                                    });
-                        inputNode = input.domNode;
-                        lineNode = this._createLine(line.label, inputNode);
-                        break;   
-                        
                     case 'freeText': // FIXME: crappy name
                         lineNode = new Element('div', {
                                         'class': 'line'
@@ -167,12 +170,12 @@ var FormDialog = Class.create( /** @lends FormDialog.prototype */ {
                         throw "Unimplemented form field type";
                 }
                       
-                content.domNode.appendChild(lineNode);   
+                this._formWidget.domNode.appendChild(lineNode);   
                 
                 this._armEvents(inputNode, line.events);
             }.bind(this));
             
-            this._contentNode.update(content.domNode);  
+            this._contentNode.update(this._formWidget.domNode);  
                         
         } else {
             // Data is a DOMNode

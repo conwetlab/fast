@@ -26,7 +26,7 @@ var StoreGadgetDialog = Class.create(ConfirmDialog /** @lends StoreGadgetDialog.
      */
     show: function ($super, /** String */ title) {
         $super();
-        this.getForm().label.setValue(title);
+        this.getForm().name.setValue(title);
     },
 
     // **************** PRIVATE METHODS **************** //
@@ -48,10 +48,10 @@ var StoreGadgetDialog = Class.create(ConfirmDialog /** @lends StoreGadgetDialog.
                              
         var formData = [
             {'type':'title', 'value': 'Gadget information'},
-            {'type':'input', 'label': 'Gadget Name:','name': 'label', 'value': ''},
+            {'type':'input', 'label': 'Gadget Name:','name': 'name', 'value': ''},
             {'type':'input', 'label': 'Vendor:','name': 'vendor', 'value': 'Morfeo'},
             {'type':'input', 'label': 'Version:','name': 'version', 'value': '1.0'},
-            {'type':'input', 'label': 'Gadget Description:','name': 'description', 'value': 'Write your description here...'},
+            {'type':'input', 'label': 'Gadget Description:','name': 'desc', 'value': 'Write your description here...'},
             {'type':'title', 'value': 'Author information'},
             {'type':'input', 'label': 'Author Name:','name': 'creator', 'value': user.getRealName()},
             {'type':'input', 'label': 'E-Mail:','name': 'email', 'value': user.getEmail()}

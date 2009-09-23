@@ -6,10 +6,7 @@ var ScreenflowDocument = Class.create(PaletteDocument,
      * @constructs
      * @extends PaletteDocument
      */
-    initialize: function($super, /** String */ title, /** Array */ domainContext) {
-        
-        
-        
+    initialize: function($super, /** String */ title, /** Array */ domainContext, /** String */ version) {
         this._inspectorArea = this._createInspectorArea(); 
                
         /** 
@@ -50,7 +47,14 @@ var ScreenflowDocument = Class.create(PaletteDocument,
          * @type ScreenflowDescription
          * @private @member
          */       
-        this._description = new ScreenflowDescription({'label': {'en-gb': title}});
+        this._description = new ScreenflowDescription({
+            'label': {'en-gb': title},
+            'name': title,
+            'version': version,
+            'domainContext': {
+                'tags': domainContext
+            }
+        });
 
         /**
          * Screen and domain concept instances on the
@@ -81,18 +85,7 @@ var ScreenflowDocument = Class.create(PaletteDocument,
     getBuildingBlockDescription: function () {
         return this._description;
     },
-    
-    // FIXME: this method stinks
-    updateBuildingBlockDescription: function () {
-        var form = this._deployGadgetDialog.getForm();
-        this._description.label = {"en-GB": $F(form.name)};
-        this._description.version = $F(form.version);
-        this._description.description = {"en-GB": $F(form.info)};
-        this._description.creator = $F(form.author);
-    },
 
-    
-    
     /**
      * Implementing DropZone interface.
      * @override
@@ -108,7 +101,7 @@ var ScreenflowDocument = Class.create(PaletteDocument,
         
         switch (droppedElement.constructor) {
             case ScreenInstance:
-                this._description.addScreen(droppedElement.getUri(), droppedElement);
+                this._description.addScreen(droppedElement.getUri(), droppedElement.getPosition());
                 this._refreshReachability();
                 break;
                 

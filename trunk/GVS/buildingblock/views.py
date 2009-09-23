@@ -75,7 +75,7 @@ class BuildingBlockCollection(resource.Resource):
             bb.data = json_encode(data)
             bb.save()
             
-            return HttpResponse(json_encode(bb.data), mimetype='application/json; charset=UTF-8')
+            return HttpResponse(bb.data, mimetype='application/json; charset=UTF-8')
         except Exception, e:
             transaction.rollback()
             return HttpResponseServerError(json_encode({"message":unicode(e)}), mimetype='application/json; charset=UTF-8')   

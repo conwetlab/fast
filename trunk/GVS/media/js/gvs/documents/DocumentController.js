@@ -45,8 +45,8 @@ var DocumentController = Class.create(
     /**
      * Creates a new screenflow document
      */
-    createScreenflow: function(name, domainContext){
-        var screenflow = new ScreenflowDocument(name,domainContext);
+    createScreenflow: function(name, domainContext, version){
+        var screenflow = new ScreenflowDocument(name, domainContext, version);
         this.addDocument(screenflow);
     },
 
