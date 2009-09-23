@@ -20,6 +20,13 @@ var DocumentController = Class.create(
          */
         this._currentDocument = null;
         
+        /**
+         * Toolbar handler object
+         * @type Toolbar
+         * @private @member
+         */
+        this._toolbar = new Toolbar();
+        
         // Arming onFocus callback
         dojo.connect(dijit.byId("documentContainer"), "selectChild", function(tab){
             DocumentController.prototype._selectDocument.apply(this, arguments);
@@ -111,7 +118,7 @@ var DocumentController = Class.create(
      * this function closes a document by its Id
      * @param String id
      */
-    closeDocument: function (id){
+    closeDocument: function(id) {
 
         //Go to the previous tab and not to the
         //initial tab
@@ -128,6 +135,10 @@ var DocumentController = Class.create(
             var welcome = new WelcomeDocument();
             this.addDocument(welcome);
         }
+    },
+    
+    getToolbar: function() {
+        return this._toolbar;
     },
 
     // **************** PRIVATE METHODS **************** //
@@ -146,8 +157,8 @@ var DocumentController = Class.create(
             id = tab;
         }
         this._currentDocument = this._documents.get(id);
-        //Update the set of buttons
-        this._currentDocument.updateToolbar();
+        
+        this._toolbar.setModel(1, this._currentDocument);
     },
     
     /**

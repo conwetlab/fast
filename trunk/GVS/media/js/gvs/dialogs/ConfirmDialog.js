@@ -55,7 +55,9 @@ var ConfirmDialog = Class.create(FormDialog, /** @lends ConfirmDialog.prototype 
      * Overload when necessary.
      */
     _reset: function() {
-        // Do nothing
+        if (this.getFormWidget()) {
+            this.getFormWidget().validate();
+        }
     },
     
     /** 

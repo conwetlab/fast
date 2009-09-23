@@ -69,6 +69,7 @@ var CatalogueSingleton = function(){
             persistenceEngine.sendGet(URIs.catalogueGetDomainConcepts, this, onDConceptsSuccess, onDConceptsError);
         },
         
+        // TODO: redesign
         createScreen: function(/**String*/screenJson){
             var createScreenOnSuccess = function(response){
 

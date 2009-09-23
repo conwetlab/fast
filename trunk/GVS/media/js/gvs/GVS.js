@@ -17,14 +17,17 @@ var GVSSingleton = function() {
     var _instance = null;
     
 
-    var GVS = Class.create(
+    var GVS = Class.create(ToolbarModel,
         /** @lends GVSSingleton-GVS.prototype */ {
 
         /** 
          * GVS is the system facade.
          * @constructs
+         * @extends ToolbarModel
          */
-        initialize: function() {
+        initialize: function($super) {
+            $super();
+            
             /** 
              * @type DocumentController
              * @private @member
@@ -45,14 +48,6 @@ var GVSSingleton = function() {
              */
             this._user = new User ();
             
-            /**
-             * Toolbar handler object
-             * @type Toolbar
-             * @private @member
-             */
-            this._toolbar = new Toolbar();
-
-            
             /** 
              * Hash containing the different dialogs used in the welcome document
              * @type Hash
@@ -64,6 +59,16 @@ var GVSSingleton = function() {
             this._dialogs.set ("addScreen", new AddScreenDialog());
             this._dialogs.set ("newScreenflow", new NewScreenflowDialog());
             this._dialogs.set ("preferences", new PreferencesDialog());
+            
+            /**
+             * Toolbar buttons
+             */
+            var preferencesDialog = this._dialogs.get("preferences");
+            this._addToolbarElement('preferences', new ToolbarButton(
+                'User Preferences',
+                'preferences',
+                preferencesDialog.show.bind(preferencesDialog)
+            ));
         },
         
 
@@ -84,8 +89,7 @@ var GVSSingleton = function() {
                 addScreen: this._addScreen.bind(this)
             };
             this._documentController = new DocumentController();
-            
-            this._initToolbar();
+            this._documentController.getToolbar().setModel(0, this);
         },
 
         /**
@@ -141,20 +145,6 @@ var GVSSingleton = function() {
          */
         _addScreen: function (){
             this._dialogs.get("addScreen").show();
-        },
-        
-        /**
-         * FIXME: cleanup this code
-         * Init the different buttons in the toolbar
-         */
-        _initToolbar: function (){          
-            
-            var preferences = this._dialogs.get("preferences");
-            
-            /*this._toolbar.addButton({
-                'id': 'toolbar.preferences',
-                'iconClass': 'dijitToolbarIcon dijitToolbarIconPreferences'
-            }, this._dialogs.get("preferences").show.bind(preferences));*/
         }
     });
     

@@ -1,11 +1,14 @@
-var AbstractDocument = Class.create( /** @lends AbstractDocument.prototype */ {
+var AbstractDocument = Class.create(ToolbarModel, /** @lends AbstractDocument.prototype */ {
     /**
      * Represents a document and its tab. Subclasses must provide the 
      * inner content.
+     * @extends ToolbarModel
      * @abstract
      * @constructs
      */ 
-    initialize: function(/** String */ title) {
+    initialize: function($super, /** String */ title) {
+        $super();
+        
         var uidGenerator = UIDGeneratorSingleton.getInstance();
         
         /**
@@ -92,19 +95,10 @@ var AbstractDocument = Class.create( /** @lends AbstractDocument.prototype */ {
         // Do nothing
     },
     
+
     
     
     // **************** PRIVATE METHODS **************** //
-    
-    /**
-     * Updates the set of buttons to be shown, depending on the
-     * document type
-     * @abstract
-     * @private
-     */
-    _updateToolbar: function () {
-        throw "Abstract Method invocation: AbstractDocument::updateToolbar";
-    },
 
     /**
      * Close document event handler.

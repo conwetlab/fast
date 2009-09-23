@@ -72,11 +72,12 @@ var StoreGadgetDialog = Class.create(ConfirmDialog /** @lends StoreGadgetDialog.
      * Reset form
      * @private @overrides
      */
-    _reset: function(){
+    _reset: function($super){
         var user = GVSSingleton.getInstance().getUser();
         
         this.getForm().creator.value = user.getRealName();
         this.getForm().email.value = user.getEmail();
+        $super();
     }
 });
 

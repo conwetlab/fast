@@ -63,14 +63,13 @@ var PreferencesDialog = Class.create(ConfirmDialog /** @lends PreferencesDialog.
     /**
      * Reset method to leave the form as initially
      */
-    _reset: function (){
+    _reset: function ($super){
         var user = GVSSingleton.getInstance().getUser();
         this.getForm().firstName.value = user.getFirstName();
         this.getForm().lastName.value = user.getLastName();
         this.getForm().email.value = user.getEmail();
         this.getForm().ezWebURL.value = user.getEzWebURL();
-        var form = dijit.byId("PreferencesForm");
-        form.validate();
+        $super();
     }
 });
 

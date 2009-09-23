@@ -42,12 +42,6 @@ var DeploymentDocument = Class.create(AbstractDocument,
         
         this._tab.setContent (this._tabContent);
         
-    },
-    /**
-     * @override
-     */
-    updateToolbar: function () {
-           $("header_button").hide();
     }
 });
 

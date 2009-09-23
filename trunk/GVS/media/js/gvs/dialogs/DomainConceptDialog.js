@@ -102,12 +102,6 @@ var DomainConceptDialog = Class.create(ConfirmDialog /** @lends DomainConceptDia
         $super();
     },
     
-    /**
-     * Reset method to leave the form as initially
-     */
-    _reset: function() {
-    },
-    
     _onTypeChange: function() {
         var bindings = new Array();
         switch ($F(this.getForm().type)) {

@@ -29,9 +29,9 @@ h4{
 }
 
 /******************
- * #preferences   *
+ * toolbar        *
  ******************/
- .dijitToolbarIcon
+ .toolbarIcon
 /* All of the selectors for the icons go here */
 {
         background-image: url('../images/gui/toolbar/toolbar_24x24.png'); /* mega-image */
@@ -40,10 +40,12 @@ h4{
         height: 24px;
         text-align: center;
 }
-.dijitToolbarIconPreferences { background-position: 0px; }
+.preferencesIcon { background-position: 0px; }
+.deployIcon { background-position: -24px; }
+
 
 /******************
- * #login   *
+ * login          *
  ******************/
 .form-row {
 	width: 300px;

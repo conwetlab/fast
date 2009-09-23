@@ -76,10 +76,11 @@ var NewScreenflowDialog = Class.create(ConfirmDialog /** @lends NewScreenflowDia
     /**
      * Reset method to leave the form as initially
      */
-    _reset: function (){
+    _reset: function ($super) {
         this.getForm().name.value = "New Screenflow";
         this.getForm().domaincontext.value = "";
         this.getForm().version.value = "0.1";
+        $super();
     }
 });
 

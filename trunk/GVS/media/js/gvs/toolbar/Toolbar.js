@@ -1,6 +1,7 @@
 var Toolbar = Class.create( /** @lends Toolbar.prototype */ {
     /**
      * The toolbar itself
+     * 
      * @constructs
      */ 
     initialize: function() {
@@ -27,20 +28,31 @@ var Toolbar = Class.create( /** @lends Toolbar.prototype */ {
          */
         this._sections = new Array();
         this._sections[0] = new Array();
-        this._sections[0][0] = dijit.byId("firstSeparator").domNode;
+        this._sections[0][0] = dijit.byId("firstSeparator");
     },
     
+    /**
+     * Sets the model for the toolbar section on the given position.
+     * ToolbarModel must provide objects implementing the following interface:
+     * 
+     *   interface ToolbarElement
+     *      Widget getWidget()  // dojo widget
+     */
     setModel: function(/** Number */position, /** ToolbarModel */ model) {
         this._removeModel(position);
         
         if (model) {
-            this._models[position] = model;
+            var toolbarElements = model.getToolbarElements();
             
-            this._initSection(position);
-            
-            model.getToolbarElements().each(function (element) {
-                this._sections[position].push(element.getWidget());
-            });            
+            if (toolbarElements.size() > 0) {
+                this._models[position] = model;
+                
+                this._initSection(position);
+                
+                toolbarElements.each(function (element) {
+                    this._sections[position].push(element.getWidget());
+                }.bind(this));
+            }
         }
         
         this._refreshToolbar();
@@ -49,8 +61,10 @@ var Toolbar = Class.create( /** @lends Toolbar.prototype */ {
     // ************************ PRIVATE METHODS ************************* //
     
     _removeModel: function(/** Number */ position) {
-        this._models[position] = null;
-        this._sections[position].clear();
+        if (this._models[position]) {
+            this._models[position] = null;
+            this._sections[position].clear();
+        }
     },
     
     _initSection: function(/** Number */ position) {
@@ -63,7 +77,9 @@ var Toolbar = Class.create( /** @lends Toolbar.prototype */ {
     },
     
     _refreshToolbar: function() {
-        this._toolbar.destroyDescendants(true);
+        this._toolbar.getDescendants().each(function(descendant) {
+            this._toolbar.removeChild(descendant);
+        }.bind(this));
         
         this._sections.each(function (section) {
             section.each(function (element) {

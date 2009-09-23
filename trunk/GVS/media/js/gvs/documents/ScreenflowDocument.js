@@ -55,6 +55,13 @@ var ScreenflowDocument = Class.create(PaletteDocument,
                 'tags': domainContext
             }
         });
+        
+        this._addToolbarElement('deploy', new ToolbarButton(
+                'Store & Deploy Gadget',
+                'deploy',
+                this._deployGadget.bind(this),
+                false // disabled by default
+        ));   
 
         /**
          * Screen and domain concept instances on the
@@ -72,7 +79,7 @@ var ScreenflowDocument = Class.create(PaletteDocument,
                 'reachability',
                 this._findCheckCallback.bind(this)
         );
-        this._paletteController.startRetrievingData();     
+        this._paletteController.startRetrievingData();   
     },
 
 
@@ -113,8 +120,6 @@ var ScreenflowDocument = Class.create(PaletteDocument,
                 alert("Don't know how to accept that kind of element. ScreenflowDocument::drop");    
         }            
 
-       
-        this.updateToolbar();
         this.setSelectedElement(droppedElement);
         return true; // Accept element
     },
@@ -130,22 +135,6 @@ var ScreenflowDocument = Class.create(PaletteDocument,
         $super(element);
         
         this._updatePropertiesPane();
-    },
-       
-    /**
-     * @override
-     */
-    updateToolbar: function () {
-           //TODO: this should be managed by a ToolbarManager
-           $("header_button").show();
-           //TODO: Enable or disable the button checking 
-           //reachability and not the number of screens
-           if (this._canvasInstances.keys().size() > 0){
-               dijit.byId("showDeployGadgetDialog").attr("disabled",false);
-           }
-           else{
-               dijit.byId("showDeployGadgetDialog").attr("disabled",true);               
-           }
     },
 
     // **************** PRIVATE METHODS **************** //
@@ -180,7 +169,6 @@ var ScreenflowDocument = Class.create(PaletteDocument,
             }
             
             this._refreshReachability();
-            this.updateToolbar();
             this.setSelectedElement();
             instance.destroy();
         }
@@ -307,6 +295,10 @@ var ScreenflowDocument = Class.create(PaletteDocument,
         } else {
             this._inferenceEngine.findAndCheck(canvas, palette,  this._domainContext, 'reachability');
         }
+        
+        // FIXME: we must learn about document reachability from the inference 
+        //        engine. By the moment, one screen == deployable screenflow ;)
+        this._toolbarElements.get('deploy').setEnabled(canvas.size() > 0);
     },
     /**
      * This function updates the properties table

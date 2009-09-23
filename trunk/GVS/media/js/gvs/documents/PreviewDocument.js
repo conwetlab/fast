@@ -42,12 +42,6 @@ var PreviewDocument = Class.create(AbstractDocument,
                 " not available');this.src='"+URIs.logoFast+"';"
         })
         content.appendChild(imageDiv);
-    },
-    /**
-     * @override
-     */
-    updateToolbar: function () {
-           $("header_button").hide();
     }
     
     // **************** PRIVATE METHODS **************** //

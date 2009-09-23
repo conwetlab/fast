@@ -38,9 +38,12 @@ var AlertSingleton = function() {
          * This function shows a message
          */
         show: function  ($super, /** String */ message){
-            this._dialog.getContentNode().update(message);
+            this.getContentNode().update(message);
             
             $super();
+        },
+        _initDialogInterface: function() {
+            // Do nothing
         }        
     });
 
