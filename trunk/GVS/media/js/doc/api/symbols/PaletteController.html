@@ -193,8 +193,6 @@ ul.inheritsList
 	
 	<li><i><a href="../symbols/_global_.html">_global_</a></i></li>
 	
-	<li><a href="../symbols/AbstractDialog.html">AbstractDialog</a></li>
-	
 	<li><a href="../symbols/AbstractDocument.html">AbstractDocument</a></li>
 	
 	<li><a href="../symbols/AddScreenDialog.html">AddScreenDialog</a></li>
@@ -211,6 +209,8 @@ ul.inheritsList
 	
 	<li><a href="../symbols/BuildingBlockFactory.html">BuildingBlockFactory</a></li>
 	
+	<li><a href="../symbols/BuildingBlockSet.html">BuildingBlockSet</a></li>
+	
 	<li><a href="../symbols/BuildingBlockView.html">BuildingBlockView</a></li>
 	
 	<li><a href="../symbols/CatalogueSingleton.html">CatalogueSingleton</a></li>
@@ -219,23 +219,15 @@ ul.inheritsList
 	
 	<li><a href="../symbols/ComponentInstance.html">ComponentInstance</a></li>
 	
+	<li><a href="../symbols/ConfirmDialog.html">ConfirmDialog</a></li>
+	
 	<li><a href="../symbols/ConfirmSingleton.html">ConfirmSingleton</a></li>
 	
 	<li><a href="../symbols/ConfirmSingleton-Confirm.html">ConfirmSingleton-Confirm</a></li>
 	
-	<li><a href="../symbols/ConnectorComponent.html">ConnectorComponent</a></li>
-	
-	<li><a href="../symbols/ConnectorDescription.html">ConnectorDescription</a></li>
-	
-	<li><a href="../symbols/ConnectorFactory.html">ConnectorFactory</a></li>
-	
-	<li><a href="../symbols/ConnectorInstance.html">ConnectorInstance</a></li>
-	
-	<li><a href="../symbols/ConnectorView.html">ConnectorView</a></li>
+	<li><a href="../symbols/Deployer.html">Deployer</a></li>
 	
 	<li><a href="../symbols/DeployGadgetDialog.html">DeployGadgetDialog</a></li>
-	
-	<li><a href="../symbols/DeploymentDocument.html">DeploymentDocument</a></li>
 	
 	<li><a href="../symbols/DocumentController.html">DocumentController</a></li>
 	
@@ -243,9 +235,13 @@ ul.inheritsList
 	
 	<li><a href="../symbols/DomainConceptDescription.html">DomainConceptDescription</a></li>
 	
+	<li><a href="../symbols/DomainConceptDialog.html">DomainConceptDialog</a></li>
+	
 	<li><a href="../symbols/DomainConceptFactory.html">DomainConceptFactory</a></li>
 	
 	<li><a href="../symbols/DomainConceptInstance.html">DomainConceptInstance</a></li>
+	
+	<li><a href="../symbols/DomainConceptSet.html">DomainConceptSet</a></li>
 	
 	<li><a href="../symbols/DomainConceptView.html">DomainConceptView</a></li>
 	
@@ -279,11 +275,9 @@ ul.inheritsList
 	
 	<li><a href="../symbols/PaletteController.html">PaletteController</a></li>
 	
+	<li><a href="../symbols/PaletteDocument.html">PaletteDocument</a></li>
+	
 	<li><a href="../symbols/PreferencesDialog.html">PreferencesDialog</a></li>
-	
-	<li><a href="../symbols/PreferencesSingleton.html">PreferencesSingleton</a></li>
-	
-	<li><a href="../symbols/PreferencesSingleton-Preferences.html">PreferencesSingleton-Preferences</a></li>
 	
 	<li><a href="../symbols/PrePostPane.html">PrePostPane</a></li>
 	
@@ -303,11 +297,21 @@ ul.inheritsList
 	
 	<li><a href="../symbols/ScreenInstance.html">ScreenInstance</a></li>
 	
+	<li><a href="../symbols/ScreenSet.html">ScreenSet</a></li>
+	
 	<li><a href="../symbols/ScreenView.html">ScreenView</a></li>
+	
+	<li><a href="../symbols/SetListener.html">SetListener</a></li>
+	
+	<li><a href="../symbols/StoreGadgetDialog.html">StoreGadgetDialog</a></li>
 	
 	<li><a href="../symbols/Table.html">Table</a></li>
 	
 	<li><a href="../symbols/Toolbar.html">Toolbar</a></li>
+	
+	<li><a href="../symbols/ToolbarButton.html">ToolbarButton</a></li>
+	
+	<li><a href="../symbols/ToolbarModel.html">ToolbarModel</a></li>
 	
 	<li><a href="../symbols/UIDGeneratorSingleton.html">UIDGeneratorSingleton</a></li>
 	
@@ -355,7 +359,7 @@ ul.inheritsList
 						<td class="attributes">&nbsp;</td>
 						<td class="nameDescription" >
 							<div class="fixedFont">
-								<b><a href="../symbols/PaletteController.html#constructor">PaletteController</a></b>(parent)
+								<b><a href="../symbols/PaletteController.html#constructor">PaletteController</a></b>(buildingBlockSets, dropZone, inferenceEngine)
 							</div>
 							<div class="description">Manages a set of palettes.</div>
 						</td>
@@ -384,36 +388,18 @@ ul.inheritsList
 						<tr>
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/PaletteController.html#paintPalettes">paintPalettes</a></b>()
+								<div class="fixedFont"><b><a href="../symbols/PaletteController.html#getComponentUris">getComponentUris</a></b>()
 								</div>
-								<div class="description">Paints each palette from each factory</div>
+								<div class="description">All uris of all the components (of all the palettes)</div>
 							</td>
 						</tr>
 					
 						<tr>
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/PaletteController.html#populateBuildingBlocks">populateBuildingBlocks</a></b>(domainContext)
+								<div class="fixedFont"><b><a href="../symbols/PaletteController.html#startRetrievingData">startRetrievingData</a></b>()
 								</div>
-								<div class="description">This function retrieve remote information from the catalogue based on a given domain context</div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="attributes">&nbsp;</td>
-							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/PaletteController.html#updatePalettes">updatePalettes</a></b>()
-								</div>
-								<div class="description">Updates each palette</div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="attributes">&nbsp;</td>
-							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/PaletteController.html#updateReachability">updateReachability</a></b>(screenList)
-								</div>
-								<div class="description">Updates the reachability of each palette component</div>
+								<div class="description">Starts the data retrieval from the catalogue.</div>
 							</td>
 						</tr>
 					
@@ -432,7 +418,7 @@ ul.inheritsList
 				</div>
 				
 				<div class="fixedFont">
-						<b>PaletteController</b>(parent)
+						<b>PaletteController</b>(buildingBlockSets, dropZone, inferenceEngine)
 				</div>
 				
 				<div class="description">
@@ -448,7 +434,19 @@ ul.inheritsList
 						<dt class="heading">Parameters:</dt>
 						
 							<dt>
-								<span class="light fixedFont">{<a href="../symbols/AbstractDocument.html#constructor">AbstractDocument</a>}</span>  <b>parent</b>
+								<span class="light fixedFont">{Array}</span>  <b>buildingBlockSets</b>
+								
+							</dt>
+								<dd></dd>
+						
+							<dt>
+								<span class="light fixedFont">{DropZone}</span>  <b>dropZone</b>
+								
+							</dt>
+								<dd></dd>
+						
+							<dt>
+								<span class="light fixedFont">{<a href="../symbols/InferenceEngine.html#constructor">InferenceEngine</a>}</span>  <b>inferenceEngine</b>
 								
 							</dt>
 								<dd></dd>
@@ -474,15 +472,15 @@ ul.inheritsList
 					Method Detail
 				</div>
 				
-					<a name="paintPalettes"> </a>
+					<a name="getComponentUris"> </a>
 					<div class="fixedFont">
 					
 					
-					<b>paintPalettes</b>()
+					<b>getComponentUris</b>()
 					
 					</div>
 					<div class="description">
-						Paints each palette from each factory
+						All uris of all the components (of all the palettes)
 						
 						
 					</div>
@@ -499,93 +497,21 @@ ul.inheritsList
 
 					<hr />
 				
-					<a name="populateBuildingBlocks"> </a>
+					<a name="startRetrievingData"> </a>
 					<div class="fixedFont">
 					
 					
-					<b>populateBuildingBlocks</b>(domainContext)
+					<b>startRetrievingData</b>()
 					
 					</div>
 					<div class="description">
-						This function retrieve remote information from the catalogue based on a given domain context
+						Starts the data retrieval from the catalogue.
 						
 						
 					</div>
 					
 					
 					
-						
-							<dl class="detailList">
-							<dt class="heading">Parameters:</dt>
-							
-								<dt>
-									<span class="light fixedFont">{Array}</span> <b>domainContext</b>
-									
-								</dt>
-								<dd></dd>
-							
-							</dl>
-						
-						
-						
-						
-						
-						
-						
-
-					<hr />
-				
-					<a name="updatePalettes"> </a>
-					<div class="fixedFont">
-					
-					
-					<b>updatePalettes</b>()
-					
-					</div>
-					<div class="description">
-						Updates each palette
-						
-						
-					</div>
-					
-					
-					
-						
-						
-						
-						
-						
-						
-						
-
-					<hr />
-				
-					<a name="updateReachability"> </a>
-					<div class="fixedFont">
-					
-					
-					<b>updateReachability</b>(screenList)
-					
-					</div>
-					<div class="description">
-						Updates the reachability of each palette component
-						
-						
-					</div>
-					
-					
-					
-						
-							<dl class="detailList">
-							<dt class="heading">Parameters:</dt>
-							
-								<dt>
-									<span class="light fixedFont">{map id->value}</span> <b>screenList</b>
-									
-								</dt>
-								<dd></dd>
-							
-							</dl>
 						
 						
 						
@@ -604,7 +530,7 @@ ul.inheritsList
 <!-- ============================== footer ================================= -->
 		<div class="fineprint" style="clear:both">
 			
-			Documentation generated by <a href="http://www.jsdoctoolkit.org/" target="_blank">JsDoc Toolkit</a> 2.0.2 on Thu Aug 27 2009 11:08:31 GMT+0200 (CEST)
+			Documentation generated by <a href="http://www.jsdoctoolkit.org/" target="_blank">JsDoc Toolkit</a> 2.0.2 on Thu Sep 24 2009 10:38:34 GMT+0200 (CEST)
 		</div>
 	</body>
 </html>

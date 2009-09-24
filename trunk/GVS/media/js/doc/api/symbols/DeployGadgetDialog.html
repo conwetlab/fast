@@ -193,8 +193,6 @@ ul.inheritsList
 	
 	<li><i><a href="../symbols/_global_.html">_global_</a></i></li>
 	
-	<li><a href="../symbols/AbstractDialog.html">AbstractDialog</a></li>
-	
 	<li><a href="../symbols/AbstractDocument.html">AbstractDocument</a></li>
 	
 	<li><a href="../symbols/AddScreenDialog.html">AddScreenDialog</a></li>
@@ -211,6 +209,8 @@ ul.inheritsList
 	
 	<li><a href="../symbols/BuildingBlockFactory.html">BuildingBlockFactory</a></li>
 	
+	<li><a href="../symbols/BuildingBlockSet.html">BuildingBlockSet</a></li>
+	
 	<li><a href="../symbols/BuildingBlockView.html">BuildingBlockView</a></li>
 	
 	<li><a href="../symbols/CatalogueSingleton.html">CatalogueSingleton</a></li>
@@ -219,23 +219,15 @@ ul.inheritsList
 	
 	<li><a href="../symbols/ComponentInstance.html">ComponentInstance</a></li>
 	
+	<li><a href="../symbols/ConfirmDialog.html">ConfirmDialog</a></li>
+	
 	<li><a href="../symbols/ConfirmSingleton.html">ConfirmSingleton</a></li>
 	
 	<li><a href="../symbols/ConfirmSingleton-Confirm.html">ConfirmSingleton-Confirm</a></li>
 	
-	<li><a href="../symbols/ConnectorComponent.html">ConnectorComponent</a></li>
-	
-	<li><a href="../symbols/ConnectorDescription.html">ConnectorDescription</a></li>
-	
-	<li><a href="../symbols/ConnectorFactory.html">ConnectorFactory</a></li>
-	
-	<li><a href="../symbols/ConnectorInstance.html">ConnectorInstance</a></li>
-	
-	<li><a href="../symbols/ConnectorView.html">ConnectorView</a></li>
+	<li><a href="../symbols/Deployer.html">Deployer</a></li>
 	
 	<li><a href="../symbols/DeployGadgetDialog.html">DeployGadgetDialog</a></li>
-	
-	<li><a href="../symbols/DeploymentDocument.html">DeploymentDocument</a></li>
 	
 	<li><a href="../symbols/DocumentController.html">DocumentController</a></li>
 	
@@ -243,9 +235,13 @@ ul.inheritsList
 	
 	<li><a href="../symbols/DomainConceptDescription.html">DomainConceptDescription</a></li>
 	
+	<li><a href="../symbols/DomainConceptDialog.html">DomainConceptDialog</a></li>
+	
 	<li><a href="../symbols/DomainConceptFactory.html">DomainConceptFactory</a></li>
 	
 	<li><a href="../symbols/DomainConceptInstance.html">DomainConceptInstance</a></li>
+	
+	<li><a href="../symbols/DomainConceptSet.html">DomainConceptSet</a></li>
 	
 	<li><a href="../symbols/DomainConceptView.html">DomainConceptView</a></li>
 	
@@ -279,11 +275,9 @@ ul.inheritsList
 	
 	<li><a href="../symbols/PaletteController.html">PaletteController</a></li>
 	
+	<li><a href="../symbols/PaletteDocument.html">PaletteDocument</a></li>
+	
 	<li><a href="../symbols/PreferencesDialog.html">PreferencesDialog</a></li>
-	
-	<li><a href="../symbols/PreferencesSingleton.html">PreferencesSingleton</a></li>
-	
-	<li><a href="../symbols/PreferencesSingleton-Preferences.html">PreferencesSingleton-Preferences</a></li>
 	
 	<li><a href="../symbols/PrePostPane.html">PrePostPane</a></li>
 	
@@ -303,11 +297,21 @@ ul.inheritsList
 	
 	<li><a href="../symbols/ScreenInstance.html">ScreenInstance</a></li>
 	
+	<li><a href="../symbols/ScreenSet.html">ScreenSet</a></li>
+	
 	<li><a href="../symbols/ScreenView.html">ScreenView</a></li>
+	
+	<li><a href="../symbols/SetListener.html">SetListener</a></li>
+	
+	<li><a href="../symbols/StoreGadgetDialog.html">StoreGadgetDialog</a></li>
 	
 	<li><a href="../symbols/Table.html">Table</a></li>
 	
 	<li><a href="../symbols/Toolbar.html">Toolbar</a></li>
+	
+	<li><a href="../symbols/ToolbarButton.html">ToolbarButton</a></li>
+	
+	<li><a href="../symbols/ToolbarModel.html">ToolbarModel</a></li>
 	
 	<li><a href="../symbols/UIDGeneratorSingleton.html">UIDGeneratorSingleton</a></li>
 	
@@ -332,7 +336,7 @@ ul.inheritsList
 <!-- ============================== class summary ========================== -->			
 			<p class="description">
 				<br />Extends
-					<a href="../symbols/AbstractDialog.html#constructor">AbstractDialog</a>.<br />
+					<a href="../symbols/ConfirmDialog.html#constructor">ConfirmDialog</a>.<br />
 				
 			
 				
@@ -357,7 +361,7 @@ ul.inheritsList
 						<td class="attributes">&nbsp;</td>
 						<td class="nameDescription" >
 							<div class="fixedFont">
-								<b><a href="../symbols/DeployGadgetDialog.html#constructor">DeployGadgetDialog</a></b>($super, parent)
+								<b><a href="../symbols/DeployGadgetDialog.html#constructor">DeployGadgetDialog</a></b>($super)
 							</div>
 							<div class="description">This class handles the dialog
 to deploy a gadget</div>
@@ -387,16 +391,7 @@ to deploy a gadget</div>
 						<tr>
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/DeployGadgetDialog.html#_onOk">_onOk</a></b>($super)
-								</div>
-								<div class="description">Overriding onOk handler</div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="attributes">&nbsp;</td>
-							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/DeployGadgetDialog.html#show">show</a></b>($super)
+								<div class="fixedFont"><b><a href="../symbols/DeployGadgetDialog.html#show">show</a></b>($super, content)
 								</div>
 								<div class="description">show</div>
 							</td>
@@ -408,7 +403,7 @@ to deploy a gadget</div>
 				
 				
 				<dl class="inheritsList">
-				<dt>Methods borrowed from class <a href="../symbols/AbstractDialog.html#constructor">AbstractDialog</a>: </dt><dd><a href="../symbols/AbstractDialog.html#getForm">getForm</a>, <a href="../symbols/AbstractDialog.html#hide">hide</a></dd>
+				<dt>Methods borrowed from class <a href="../symbols/FormDialog.html#constructor">FormDialog</a>: </dt><dd><a href="../symbols/FormDialog.html#getContentNode">getContentNode</a>, <a href="../symbols/FormDialog.html#getNode">getNode</a></dd>
 				</dl>
 				
 			
@@ -421,7 +416,7 @@ to deploy a gadget</div>
 				</div>
 				
 				<div class="fixedFont">
-						<b>DeployGadgetDialog</b>($super, parent)
+						<b>DeployGadgetDialog</b>($super)
 				</div>
 				
 				<div class="description">
@@ -439,12 +434,6 @@ to deploy a gadget
 						
 							<dt>
 								 <b>$super</b>
-								
-							</dt>
-								<dd></dd>
-						
-							<dt>
-								 <b>parent</b>
 								
 							</dt>
 								<dd></dd>
@@ -470,47 +459,11 @@ to deploy a gadget
 					Method Detail
 				</div>
 				
-					<a name="_onOk"> </a>
-					<div class="fixedFont">
-					
-					
-					<b>_onOk</b>($super)
-					
-					</div>
-					<div class="description">
-						Overriding onOk handler
-						
-						
-					</div>
-					
-					
-					
-						
-							<dl class="detailList">
-							<dt class="heading">Parameters:</dt>
-							
-								<dt>
-									<b>$super</b>
-									
-								</dt>
-								<dd></dd>
-							
-							</dl>
-						
-						
-						
-						
-						
-						
-						
-
-					<hr />
-				
 					<a name="show"> </a>
 					<div class="fixedFont">
 					
 					
-					<b>show</b>($super)
+					<b>show</b>($super, content)
 					
 					</div>
 					<div class="description">
@@ -527,6 +480,12 @@ to deploy a gadget
 							
 								<dt>
 									<b>$super</b>
+									
+								</dt>
+								<dd></dd>
+							
+								<dt>
+									<span class="light fixedFont">{DOMNode}</span> <b>content</b>
 									
 								</dt>
 								<dd></dd>
@@ -550,7 +509,7 @@ to deploy a gadget
 <!-- ============================== footer ================================= -->
 		<div class="fineprint" style="clear:both">
 			
-			Documentation generated by <a href="http://www.jsdoctoolkit.org/" target="_blank">JsDoc Toolkit</a> 2.0.2 on Thu Aug 27 2009 11:08:31 GMT+0200 (CEST)
+			Documentation generated by <a href="http://www.jsdoctoolkit.org/" target="_blank">JsDoc Toolkit</a> 2.0.2 on Thu Sep 24 2009 10:38:33 GMT+0200 (CEST)
 		</div>
 	</body>
 </html>

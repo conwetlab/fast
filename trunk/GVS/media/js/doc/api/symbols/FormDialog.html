@@ -193,8 +193,6 @@ ul.inheritsList
 	
 	<li><i><a href="../symbols/_global_.html">_global_</a></i></li>
 	
-	<li><a href="../symbols/AbstractDialog.html">AbstractDialog</a></li>
-	
 	<li><a href="../symbols/AbstractDocument.html">AbstractDocument</a></li>
 	
 	<li><a href="../symbols/AddScreenDialog.html">AddScreenDialog</a></li>
@@ -211,6 +209,8 @@ ul.inheritsList
 	
 	<li><a href="../symbols/BuildingBlockFactory.html">BuildingBlockFactory</a></li>
 	
+	<li><a href="../symbols/BuildingBlockSet.html">BuildingBlockSet</a></li>
+	
 	<li><a href="../symbols/BuildingBlockView.html">BuildingBlockView</a></li>
 	
 	<li><a href="../symbols/CatalogueSingleton.html">CatalogueSingleton</a></li>
@@ -219,23 +219,15 @@ ul.inheritsList
 	
 	<li><a href="../symbols/ComponentInstance.html">ComponentInstance</a></li>
 	
+	<li><a href="../symbols/ConfirmDialog.html">ConfirmDialog</a></li>
+	
 	<li><a href="../symbols/ConfirmSingleton.html">ConfirmSingleton</a></li>
 	
 	<li><a href="../symbols/ConfirmSingleton-Confirm.html">ConfirmSingleton-Confirm</a></li>
 	
-	<li><a href="../symbols/ConnectorComponent.html">ConnectorComponent</a></li>
-	
-	<li><a href="../symbols/ConnectorDescription.html">ConnectorDescription</a></li>
-	
-	<li><a href="../symbols/ConnectorFactory.html">ConnectorFactory</a></li>
-	
-	<li><a href="../symbols/ConnectorInstance.html">ConnectorInstance</a></li>
-	
-	<li><a href="../symbols/ConnectorView.html">ConnectorView</a></li>
+	<li><a href="../symbols/Deployer.html">Deployer</a></li>
 	
 	<li><a href="../symbols/DeployGadgetDialog.html">DeployGadgetDialog</a></li>
-	
-	<li><a href="../symbols/DeploymentDocument.html">DeploymentDocument</a></li>
 	
 	<li><a href="../symbols/DocumentController.html">DocumentController</a></li>
 	
@@ -243,9 +235,13 @@ ul.inheritsList
 	
 	<li><a href="../symbols/DomainConceptDescription.html">DomainConceptDescription</a></li>
 	
+	<li><a href="../symbols/DomainConceptDialog.html">DomainConceptDialog</a></li>
+	
 	<li><a href="../symbols/DomainConceptFactory.html">DomainConceptFactory</a></li>
 	
 	<li><a href="../symbols/DomainConceptInstance.html">DomainConceptInstance</a></li>
+	
+	<li><a href="../symbols/DomainConceptSet.html">DomainConceptSet</a></li>
 	
 	<li><a href="../symbols/DomainConceptView.html">DomainConceptView</a></li>
 	
@@ -279,11 +275,9 @@ ul.inheritsList
 	
 	<li><a href="../symbols/PaletteController.html">PaletteController</a></li>
 	
+	<li><a href="../symbols/PaletteDocument.html">PaletteDocument</a></li>
+	
 	<li><a href="../symbols/PreferencesDialog.html">PreferencesDialog</a></li>
-	
-	<li><a href="../symbols/PreferencesSingleton.html">PreferencesSingleton</a></li>
-	
-	<li><a href="../symbols/PreferencesSingleton-Preferences.html">PreferencesSingleton-Preferences</a></li>
 	
 	<li><a href="../symbols/PrePostPane.html">PrePostPane</a></li>
 	
@@ -303,11 +297,21 @@ ul.inheritsList
 	
 	<li><a href="../symbols/ScreenInstance.html">ScreenInstance</a></li>
 	
+	<li><a href="../symbols/ScreenSet.html">ScreenSet</a></li>
+	
 	<li><a href="../symbols/ScreenView.html">ScreenView</a></li>
+	
+	<li><a href="../symbols/SetListener.html">SetListener</a></li>
+	
+	<li><a href="../symbols/StoreGadgetDialog.html">StoreGadgetDialog</a></li>
 	
 	<li><a href="../symbols/Table.html">Table</a></li>
 	
 	<li><a href="../symbols/Toolbar.html">Toolbar</a></li>
+	
+	<li><a href="../symbols/ToolbarButton.html">ToolbarButton</a></li>
+	
+	<li><a href="../symbols/ToolbarModel.html">ToolbarModel</a></li>
 	
 	<li><a href="../symbols/UIDGeneratorSingleton.html">UIDGeneratorSingleton</a></li>
 	
@@ -384,27 +388,9 @@ ul.inheritsList
 						<tr>
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/FormDialog.html#addButton">addButton</a></b>(label, handler)
-								</div>
-								<div class="description">This function adds a button with an onclick handler</div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="attributes">&nbsp;</td>
-							<td class="nameDescription">
 								<div class="fixedFont"><b><a href="../symbols/FormDialog.html#getContentNode">getContentNode</a></b>()
 								</div>
 								<div class="description">Gets the content node.</div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="attributes">&nbsp;</td>
-							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/FormDialog.html#getForm">getForm</a></b>()
-								</div>
-								<div class="description">Gets the form node.</div>
 							</td>
 						</tr>
 					
@@ -420,9 +406,9 @@ ul.inheritsList
 						<tr>
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/FormDialog.html#setHeader">setHeader</a></b>(title, subtitle)
+								<div class="fixedFont"><b><a href="../symbols/FormDialog.html#show">show</a></b>()
 								</div>
-								<div class="description">This function sets the header and a subtitle if passed</div>
+								<div class="description">Shows the dialog</div>
 							</td>
 						</tr>
 					
@@ -483,48 +469,6 @@ ul.inheritsList
 					Method Detail
 				</div>
 				
-					<a name="addButton"> </a>
-					<div class="fixedFont">
-					
-					
-					<b>addButton</b>(label, handler)
-					
-					</div>
-					<div class="description">
-						This function adds a button with an onclick handler
-						
-						
-					</div>
-					
-					
-					
-						
-							<dl class="detailList">
-							<dt class="heading">Parameters:</dt>
-							
-								<dt>
-									<span class="light fixedFont">{String}</span> <b>label</b>
-									
-								</dt>
-								<dd></dd>
-							
-								<dt>
-									<span class="light fixedFont">{Function}</span> <b>handler</b>
-									
-								</dt>
-								<dd></dd>
-							
-							</dl>
-						
-						
-						
-						
-						
-						
-						
-
-					<hr />
-				
 					<a name="getContentNode"> </a>
 					<div class="fixedFont">
 					
@@ -534,31 +478,6 @@ ul.inheritsList
 					</div>
 					<div class="description">
 						Gets the content node.
-						
-						
-					</div>
-					
-					
-					
-						
-						
-						
-						
-						
-						
-						
-
-					<hr />
-				
-					<a name="getForm"> </a>
-					<div class="fixedFont">
-					
-					<span class="light">{DOMNode}</span>
-					<b>getForm</b>()
-					
-					</div>
-					<div class="description">
-						Gets the form node.
 						
 						
 					</div>
@@ -600,38 +519,21 @@ ul.inheritsList
 
 					<hr />
 				
-					<a name="setHeader"> </a>
+					<a name="show"> </a>
 					<div class="fixedFont">
 					
 					
-					<b>setHeader</b>(title, subtitle)
+					<b>show</b>()
 					
 					</div>
 					<div class="description">
-						This function sets the header and a subtitle if passed
+						Shows the dialog
 						
 						
 					</div>
 					
 					
 					
-						
-							<dl class="detailList">
-							<dt class="heading">Parameters:</dt>
-							
-								<dt>
-									<span class="light fixedFont">{String}</span> <b>title</b>
-									
-								</dt>
-								<dd></dd>
-							
-								<dt>
-									<span class="light fixedFont">{String}</span> <b>subtitle</b>
-									
-								</dt>
-								<dd></dd>
-							
-							</dl>
 						
 						
 						
@@ -650,7 +552,7 @@ ul.inheritsList
 <!-- ============================== footer ================================= -->
 		<div class="fineprint" style="clear:both">
 			
-			Documentation generated by <a href="http://www.jsdoctoolkit.org/" target="_blank">JsDoc Toolkit</a> 2.0.2 on Thu Aug 27 2009 11:08:31 GMT+0200 (CEST)
+			Documentation generated by <a href="http://www.jsdoctoolkit.org/" target="_blank">JsDoc Toolkit</a> 2.0.2 on Thu Sep 24 2009 10:38:33 GMT+0200 (CEST)
 		</div>
 	</body>
 </html>

@@ -51,18 +51,28 @@ var ConfirmSingleton = function() {
             this._callback = callback;
         },
         // *********************** PRIVATE METHODS ******************//
+        /**
+         * @override
+         * @private
+         */
         _onOk: function ($super) {
             $super();
             this._callback(true);
             this._callback = null;
         },
-        
+        /**
+         * @override
+         * @private
+         */        
         _onCancel: function ($super){
             $super();
             this._callback(false);
             this._callback = null;    
         },
-        
+        /**
+         * @override
+         * @private
+         */
         _initDialogInterface: function () {
             // Do Nothing
         }

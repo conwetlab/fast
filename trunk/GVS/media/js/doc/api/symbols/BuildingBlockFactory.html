@@ -193,8 +193,6 @@ ul.inheritsList
 	
 	<li><i><a href="../symbols/_global_.html">_global_</a></i></li>
 	
-	<li><a href="../symbols/AbstractDialog.html">AbstractDialog</a></li>
-	
 	<li><a href="../symbols/AbstractDocument.html">AbstractDocument</a></li>
 	
 	<li><a href="../symbols/AddScreenDialog.html">AddScreenDialog</a></li>
@@ -211,6 +209,8 @@ ul.inheritsList
 	
 	<li><a href="../symbols/BuildingBlockFactory.html">BuildingBlockFactory</a></li>
 	
+	<li><a href="../symbols/BuildingBlockSet.html">BuildingBlockSet</a></li>
+	
 	<li><a href="../symbols/BuildingBlockView.html">BuildingBlockView</a></li>
 	
 	<li><a href="../symbols/CatalogueSingleton.html">CatalogueSingleton</a></li>
@@ -219,23 +219,15 @@ ul.inheritsList
 	
 	<li><a href="../symbols/ComponentInstance.html">ComponentInstance</a></li>
 	
+	<li><a href="../symbols/ConfirmDialog.html">ConfirmDialog</a></li>
+	
 	<li><a href="../symbols/ConfirmSingleton.html">ConfirmSingleton</a></li>
 	
 	<li><a href="../symbols/ConfirmSingleton-Confirm.html">ConfirmSingleton-Confirm</a></li>
 	
-	<li><a href="../symbols/ConnectorComponent.html">ConnectorComponent</a></li>
-	
-	<li><a href="../symbols/ConnectorDescription.html">ConnectorDescription</a></li>
-	
-	<li><a href="../symbols/ConnectorFactory.html">ConnectorFactory</a></li>
-	
-	<li><a href="../symbols/ConnectorInstance.html">ConnectorInstance</a></li>
-	
-	<li><a href="../symbols/ConnectorView.html">ConnectorView</a></li>
+	<li><a href="../symbols/Deployer.html">Deployer</a></li>
 	
 	<li><a href="../symbols/DeployGadgetDialog.html">DeployGadgetDialog</a></li>
-	
-	<li><a href="../symbols/DeploymentDocument.html">DeploymentDocument</a></li>
 	
 	<li><a href="../symbols/DocumentController.html">DocumentController</a></li>
 	
@@ -243,9 +235,13 @@ ul.inheritsList
 	
 	<li><a href="../symbols/DomainConceptDescription.html">DomainConceptDescription</a></li>
 	
+	<li><a href="../symbols/DomainConceptDialog.html">DomainConceptDialog</a></li>
+	
 	<li><a href="../symbols/DomainConceptFactory.html">DomainConceptFactory</a></li>
 	
 	<li><a href="../symbols/DomainConceptInstance.html">DomainConceptInstance</a></li>
+	
+	<li><a href="../symbols/DomainConceptSet.html">DomainConceptSet</a></li>
 	
 	<li><a href="../symbols/DomainConceptView.html">DomainConceptView</a></li>
 	
@@ -279,11 +275,9 @@ ul.inheritsList
 	
 	<li><a href="../symbols/PaletteController.html">PaletteController</a></li>
 	
+	<li><a href="../symbols/PaletteDocument.html">PaletteDocument</a></li>
+	
 	<li><a href="../symbols/PreferencesDialog.html">PreferencesDialog</a></li>
-	
-	<li><a href="../symbols/PreferencesSingleton.html">PreferencesSingleton</a></li>
-	
-	<li><a href="../symbols/PreferencesSingleton-Preferences.html">PreferencesSingleton-Preferences</a></li>
 	
 	<li><a href="../symbols/PrePostPane.html">PrePostPane</a></li>
 	
@@ -303,11 +297,21 @@ ul.inheritsList
 	
 	<li><a href="../symbols/ScreenInstance.html">ScreenInstance</a></li>
 	
+	<li><a href="../symbols/ScreenSet.html">ScreenSet</a></li>
+	
 	<li><a href="../symbols/ScreenView.html">ScreenView</a></li>
+	
+	<li><a href="../symbols/SetListener.html">SetListener</a></li>
+	
+	<li><a href="../symbols/StoreGadgetDialog.html">StoreGadgetDialog</a></li>
 	
 	<li><a href="../symbols/Table.html">Table</a></li>
 	
 	<li><a href="../symbols/Toolbar.html">Toolbar</a></li>
+	
+	<li><a href="../symbols/ToolbarButton.html">ToolbarButton</a></li>
+	
+	<li><a href="../symbols/ToolbarModel.html">ToolbarModel</a></li>
 	
 	<li><a href="../symbols/UIDGeneratorSingleton.html">UIDGeneratorSingleton</a></li>
 	
@@ -336,7 +340,7 @@ ul.inheritsList
 				
 				
 				
-					<br /><i>Defined in: </i> <a href="../symbols/src/gvs_catalogue_BuildingBlockFactory.js.html">BuildingBlockFactory.js</a>.
+					<br /><i>Defined in: </i> <a href="../symbols/src/gvs_catalogue_factories_BuildingBlockFactory.js.html">BuildingBlockFactory.js</a>.
 				
 			</p>
 
@@ -384,18 +388,18 @@ ul.inheritsList
 						<tr>
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/BuildingBlockFactory.html#getBuildingBlockDescriptions">getBuildingBlockDescriptions</a></b>(domainContexts)
+								<div class="fixedFont"><b><a href="../symbols/BuildingBlockFactory.html#getBuildingBlockName">getBuildingBlockName</a></b>()
 								</div>
-								<div class="description">Gets all the building block descriptions for an array of domainContexts</div>
+								<div class="description">Gets the human-readable name of the building block type.</div>
 							</td>
 						</tr>
 					
 						<tr>
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/BuildingBlockFactory.html#getBuildingBlockName">getBuildingBlockName</a></b>()
+								<div class="fixedFont"><b><a href="../symbols/BuildingBlockFactory.html#getBuildingBlocks">getBuildingBlocks</a></b>()
 								</div>
-								<div class="description">Gets the human-readable name of the building block type.</div>
+								<div class="description">Gets building block descriptions by URI</div>
 							</td>
 						</tr>
 					
@@ -454,32 +458,21 @@ ul.inheritsList
 					Method Detail
 				</div>
 				
-					<a name="getBuildingBlockDescriptions"> </a>
+					<a name="getBuildingBlockName"> </a>
 					<div class="fixedFont">
 					
-					
-					<b>getBuildingBlockDescriptions</b>(domainContexts)
+					<span class="light">{String}</span>
+					<b>getBuildingBlockName</b>()
 					
 					</div>
 					<div class="description">
-						Gets all the building block descriptions for an array of domainContexts
+						Gets the human-readable name of the building block type.
 						
 						
 					</div>
 					
 					
 					
-						
-							<dl class="detailList">
-							<dt class="heading">Parameters:</dt>
-							
-								<dt>
-									<span class="light fixedFont">{Array}</span> <b>domainContexts</b>
-									
-								</dt>
-								<dd></dd>
-							
-							</dl>
 						
 						
 						
@@ -490,15 +483,15 @@ ul.inheritsList
 
 					<hr />
 				
-					<a name="getBuildingBlockName"> </a>
+					<a name="getBuildingBlocks"> </a>
 					<div class="fixedFont">
 					
-					<span class="light">{String}</span>
-					<b>getBuildingBlockName</b>()
+					
+					<b>getBuildingBlocks</b>()
 					
 					</div>
 					<div class="description">
-						Gets the human-readable name of the building block type.
+						Gets building block descriptions by URI
 						
 						
 					</div>
@@ -548,7 +541,7 @@ ul.inheritsList
 <!-- ============================== footer ================================= -->
 		<div class="fineprint" style="clear:both">
 			
-			Documentation generated by <a href="http://www.jsdoctoolkit.org/" target="_blank">JsDoc Toolkit</a> 2.0.2 on Thu Aug 27 2009 11:08:30 GMT+0200 (CEST)
+			Documentation generated by <a href="http://www.jsdoctoolkit.org/" target="_blank">JsDoc Toolkit</a> 2.0.2 on Thu Sep 24 2009 10:38:33 GMT+0200 (CEST)
 		</div>
 	</body>
 </html>

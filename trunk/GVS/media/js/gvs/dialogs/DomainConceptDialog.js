@@ -32,7 +32,7 @@ var DomainConceptDialog = Class.create(ConfirmDialog /** @lends DomainConceptDia
      */
     _initDialogInterface: function (){
  
-        this.setHeader("Check domain concept details", 
+        this._setHeader("Check domain concept details", 
                              "Please fulfill the required information in order to" +
                              " set up the Domain Concept");
 
@@ -90,21 +90,26 @@ var DomainConceptDialog = Class.create(ConfirmDialog /** @lends DomainConceptDia
             }
         ];
         
-        this.setContent(formData);               
+        this._setContent(formData);               
         
     },
     /**
      * Overriding onOk handler
-     * @overrides
+     * @override
+     * @private
      */
     _onOk: function($super){
-        this._onChangeCallback(this.getForm().serialize({'hash':true}));
+        this._onChangeCallback(this._getForm().serialize({'hash':true}));
         $super();
     },
-    
+ 
+    /**
+     * Function called when the type of domain concept changes
+     * @private
+     */    
     _onTypeChange: function() {
         var bindings = new Array();
-        switch ($F(this.getForm().type)) {
+        switch ($F(this._getForm().type)) {
             case 'pre':
                 bindings.push({'value':'slot','label':'Slot'});
                 bindings.push({'value':'pref','label':'User Preference'});
@@ -118,7 +123,7 @@ var DomainConceptDialog = Class.create(ConfirmDialog /** @lends DomainConceptDia
                 bindings.push({'value': 'undefined','label': 'Choose type first...'});
                 break;
         } 
-        var bindingNode = $(this.getForm().binding);
+        var bindingNode = $(this._getForm().binding);
         bindingNode.update("");
         bindings.each(function(binding) {
            var optionNode = new Element('option', {

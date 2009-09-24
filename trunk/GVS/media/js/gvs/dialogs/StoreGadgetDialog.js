@@ -22,11 +22,11 @@ var StoreGadgetDialog = Class.create(ConfirmDialog /** @lends StoreGadgetDialog.
     
     /**
      * show
-     * @overrides
+     * @override
      */
     show: function ($super, /** String */ title) {
         $super();
-        this.getForm().name.setValue(title);
+        this._getForm().name.setValue(title);
     },
 
     // **************** PRIVATE METHODS **************** //
@@ -36,13 +36,13 @@ var StoreGadgetDialog = Class.create(ConfirmDialog /** @lends StoreGadgetDialog.
      * initDialogInterface
      * This function creates the dom structure
      * @private
-     * @overrides
+     * @override
      */
     _initDialogInterface: function (){
  
         var user = GVSSingleton.getInstance().getUser();
  
-        this.setHeader("Fulfill Gadget Information", 
+        this._setHeader("Fulfill Gadget Information", 
                              "Please fulfill the required information in order to" +
                              " deploy a gadget.");
                              
@@ -55,28 +55,28 @@ var StoreGadgetDialog = Class.create(ConfirmDialog /** @lends StoreGadgetDialog.
             {'type':'title', 'value': 'Author information'},
             {'type':'input', 'label': 'Author Name:','name': 'creator', 'value': user.getRealName()},
             {'type':'input', 'label': 'E-Mail:','name': 'email', 'value': user.getEmail()}
-        ];   
-        //FIXME: private method?     
-        this.setContent(formData); 
+        ];     
+        this._setContent(formData); 
     },
     /**
      * Overriding onOk handler
      * @private
-     * @overrides
+     * @override
      */
     _onOk: function($super){
         $super();
-        this._onDeployCallback(this.getForm().serialize({'hash':true}));
+        this._onDeployCallback(this._getForm().serialize({'hash':true}));
     },
     /**
      * Reset form
-     * @private @overrides
+     * @private 
+     * @override
      */
     _reset: function($super){
         var user = GVSSingleton.getInstance().getUser();
         
-        this.getForm().creator.value = user.getRealName();
-        this.getForm().email.value = user.getEmail();
+        this._getForm().creator.value = user.getRealName();
+        this._getForm().email.value = user.getEmail();
         $super();
     }
 });

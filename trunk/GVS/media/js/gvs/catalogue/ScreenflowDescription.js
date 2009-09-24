@@ -3,7 +3,6 @@ var ScreenflowDescription = Class.create(BuildingBlockDescription,
 
     /**
      * Screenflow building block description.
-     * TODO: replace with the object the remote catalogue will send
      * @constructs
      * @extends BuildingBlockDescription
      */

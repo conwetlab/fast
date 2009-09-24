@@ -193,8 +193,6 @@ ul.inheritsList
 	
 	<li><i><a href="../symbols/_global_.html">_global_</a></i></li>
 	
-	<li><a href="../symbols/AbstractDialog.html">AbstractDialog</a></li>
-	
 	<li><a href="../symbols/AbstractDocument.html">AbstractDocument</a></li>
 	
 	<li><a href="../symbols/AddScreenDialog.html">AddScreenDialog</a></li>
@@ -211,6 +209,8 @@ ul.inheritsList
 	
 	<li><a href="../symbols/BuildingBlockFactory.html">BuildingBlockFactory</a></li>
 	
+	<li><a href="../symbols/BuildingBlockSet.html">BuildingBlockSet</a></li>
+	
 	<li><a href="../symbols/BuildingBlockView.html">BuildingBlockView</a></li>
 	
 	<li><a href="../symbols/CatalogueSingleton.html">CatalogueSingleton</a></li>
@@ -219,23 +219,15 @@ ul.inheritsList
 	
 	<li><a href="../symbols/ComponentInstance.html">ComponentInstance</a></li>
 	
+	<li><a href="../symbols/ConfirmDialog.html">ConfirmDialog</a></li>
+	
 	<li><a href="../symbols/ConfirmSingleton.html">ConfirmSingleton</a></li>
 	
 	<li><a href="../symbols/ConfirmSingleton-Confirm.html">ConfirmSingleton-Confirm</a></li>
 	
-	<li><a href="../symbols/ConnectorComponent.html">ConnectorComponent</a></li>
-	
-	<li><a href="../symbols/ConnectorDescription.html">ConnectorDescription</a></li>
-	
-	<li><a href="../symbols/ConnectorFactory.html">ConnectorFactory</a></li>
-	
-	<li><a href="../symbols/ConnectorInstance.html">ConnectorInstance</a></li>
-	
-	<li><a href="../symbols/ConnectorView.html">ConnectorView</a></li>
+	<li><a href="../symbols/Deployer.html">Deployer</a></li>
 	
 	<li><a href="../symbols/DeployGadgetDialog.html">DeployGadgetDialog</a></li>
-	
-	<li><a href="../symbols/DeploymentDocument.html">DeploymentDocument</a></li>
 	
 	<li><a href="../symbols/DocumentController.html">DocumentController</a></li>
 	
@@ -243,9 +235,13 @@ ul.inheritsList
 	
 	<li><a href="../symbols/DomainConceptDescription.html">DomainConceptDescription</a></li>
 	
+	<li><a href="../symbols/DomainConceptDialog.html">DomainConceptDialog</a></li>
+	
 	<li><a href="../symbols/DomainConceptFactory.html">DomainConceptFactory</a></li>
 	
 	<li><a href="../symbols/DomainConceptInstance.html">DomainConceptInstance</a></li>
+	
+	<li><a href="../symbols/DomainConceptSet.html">DomainConceptSet</a></li>
 	
 	<li><a href="../symbols/DomainConceptView.html">DomainConceptView</a></li>
 	
@@ -279,11 +275,9 @@ ul.inheritsList
 	
 	<li><a href="../symbols/PaletteController.html">PaletteController</a></li>
 	
+	<li><a href="../symbols/PaletteDocument.html">PaletteDocument</a></li>
+	
 	<li><a href="../symbols/PreferencesDialog.html">PreferencesDialog</a></li>
-	
-	<li><a href="../symbols/PreferencesSingleton.html">PreferencesSingleton</a></li>
-	
-	<li><a href="../symbols/PreferencesSingleton-Preferences.html">PreferencesSingleton-Preferences</a></li>
 	
 	<li><a href="../symbols/PrePostPane.html">PrePostPane</a></li>
 	
@@ -303,11 +297,21 @@ ul.inheritsList
 	
 	<li><a href="../symbols/ScreenInstance.html">ScreenInstance</a></li>
 	
+	<li><a href="../symbols/ScreenSet.html">ScreenSet</a></li>
+	
 	<li><a href="../symbols/ScreenView.html">ScreenView</a></li>
+	
+	<li><a href="../symbols/SetListener.html">SetListener</a></li>
+	
+	<li><a href="../symbols/StoreGadgetDialog.html">StoreGadgetDialog</a></li>
 	
 	<li><a href="../symbols/Table.html">Table</a></li>
 	
 	<li><a href="../symbols/Toolbar.html">Toolbar</a></li>
+	
+	<li><a href="../symbols/ToolbarButton.html">ToolbarButton</a></li>
+	
+	<li><a href="../symbols/ToolbarModel.html">ToolbarModel</a></li>
 	
 	<li><a href="../symbols/UIDGeneratorSingleton.html">UIDGeneratorSingleton</a></li>
 	
@@ -384,9 +388,9 @@ ul.inheritsList
 						<tr>
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/BuildingBlockView.html#colorize">colorize</a></b>(satisfeable)
+								<div class="fixedFont"><b><a href="../symbols/BuildingBlockView.html#addEventListener">addEventListener</a></b>(handler, event)
 								</div>
-								<div class="description">Colorize the component depending on the reachability</div>
+								<div class="description">Adds an event listener</div>
 							</td>
 						</tr>
 					
@@ -402,18 +406,18 @@ ul.inheritsList
 						<tr>
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/BuildingBlockView.html#getId">getId</a></b>()
+								<div class="fixedFont"><b><a href="../symbols/BuildingBlockView.html#getNode">getNode</a></b>()
 								</div>
-								<div class="description">getId</div>
+								<div class="description">getNode</div>
 							</td>
 						</tr>
 					
 						<tr>
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/BuildingBlockView.html#getNode">getNode</a></b>()
+								<div class="fixedFont"><b><a href="../symbols/BuildingBlockView.html#setReachability">setReachability</a></b>(reachabilityData)
 								</div>
-								<div class="description">getNode</div>
+								<div class="description">Colorize the component depending on the reachability</div>
 							</td>
 						</tr>
 					
@@ -463,15 +467,15 @@ ul.inheritsList
 					Method Detail
 				</div>
 				
-					<a name="colorize"> </a>
+					<a name="addEventListener"> </a>
 					<div class="fixedFont">
 					
 					
-					<b>colorize</b>(satisfeable)
+					<b>addEventListener</b>(handler, event)
 					
 					</div>
 					<div class="description">
-						Colorize the component depending on the reachability
+						Adds an event listener
 						
 						
 					</div>
@@ -483,7 +487,13 @@ ul.inheritsList
 							<dt class="heading">Parameters:</dt>
 							
 								<dt>
-									<span class="light fixedFont">{Boolean}</span> <b>satisfeable</b>
+									<span class="light fixedFont">{Function}</span> <b>handler</b>
+									
+								</dt>
+								<dd></dd>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>event</b>
 									
 								</dt>
 								<dd></dd>
@@ -524,31 +534,6 @@ ul.inheritsList
 
 					<hr />
 				
-					<a name="getId"> </a>
-					<div class="fixedFont">
-					
-					<span class="light">{String}</span>
-					<b>getId</b>()
-					
-					</div>
-					<div class="description">
-						getId
-						
-						
-					</div>
-					
-					
-					
-						
-						
-						
-						
-						
-						
-						
-
-					<hr />
-				
 					<a name="getNode"> </a>
 					<div class="fixedFont">
 					
@@ -572,6 +557,42 @@ ul.inheritsList
 						
 						
 
+					<hr />
+				
+					<a name="setReachability"> </a>
+					<div class="fixedFont">
+					
+					
+					<b>setReachability</b>(reachabilityData)
+					
+					</div>
+					<div class="description">
+						Colorize the component depending on the reachability
+						
+						
+					</div>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{Hash}</span> <b>reachabilityData</b>
+									
+								</dt>
+								<dd></dd>
+							
+							</dl>
+						
+						
+						
+						
+						
+						
+						
+
 					
 				
 			
@@ -582,7 +603,7 @@ ul.inheritsList
 <!-- ============================== footer ================================= -->
 		<div class="fineprint" style="clear:both">
 			
-			Documentation generated by <a href="http://www.jsdoctoolkit.org/" target="_blank">JsDoc Toolkit</a> 2.0.2 on Thu Aug 27 2009 11:08:30 GMT+0200 (CEST)
+			Documentation generated by <a href="http://www.jsdoctoolkit.org/" target="_blank">JsDoc Toolkit</a> 2.0.2 on Thu Sep 24 2009 10:38:33 GMT+0200 (CEST)
 		</div>
 	</body>
 </html>

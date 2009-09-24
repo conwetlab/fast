@@ -193,8 +193,6 @@ ul.inheritsList
 	
 	<li><i><a href="../symbols/_global_.html">_global_</a></i></li>
 	
-	<li><a href="../symbols/AbstractDialog.html">AbstractDialog</a></li>
-	
 	<li><a href="../symbols/AbstractDocument.html">AbstractDocument</a></li>
 	
 	<li><a href="../symbols/AddScreenDialog.html">AddScreenDialog</a></li>
@@ -211,6 +209,8 @@ ul.inheritsList
 	
 	<li><a href="../symbols/BuildingBlockFactory.html">BuildingBlockFactory</a></li>
 	
+	<li><a href="../symbols/BuildingBlockSet.html">BuildingBlockSet</a></li>
+	
 	<li><a href="../symbols/BuildingBlockView.html">BuildingBlockView</a></li>
 	
 	<li><a href="../symbols/CatalogueSingleton.html">CatalogueSingleton</a></li>
@@ -219,23 +219,15 @@ ul.inheritsList
 	
 	<li><a href="../symbols/ComponentInstance.html">ComponentInstance</a></li>
 	
+	<li><a href="../symbols/ConfirmDialog.html">ConfirmDialog</a></li>
+	
 	<li><a href="../symbols/ConfirmSingleton.html">ConfirmSingleton</a></li>
 	
 	<li><a href="../symbols/ConfirmSingleton-Confirm.html">ConfirmSingleton-Confirm</a></li>
 	
-	<li><a href="../symbols/ConnectorComponent.html">ConnectorComponent</a></li>
-	
-	<li><a href="../symbols/ConnectorDescription.html">ConnectorDescription</a></li>
-	
-	<li><a href="../symbols/ConnectorFactory.html">ConnectorFactory</a></li>
-	
-	<li><a href="../symbols/ConnectorInstance.html">ConnectorInstance</a></li>
-	
-	<li><a href="../symbols/ConnectorView.html">ConnectorView</a></li>
+	<li><a href="../symbols/Deployer.html">Deployer</a></li>
 	
 	<li><a href="../symbols/DeployGadgetDialog.html">DeployGadgetDialog</a></li>
-	
-	<li><a href="../symbols/DeploymentDocument.html">DeploymentDocument</a></li>
 	
 	<li><a href="../symbols/DocumentController.html">DocumentController</a></li>
 	
@@ -243,9 +235,13 @@ ul.inheritsList
 	
 	<li><a href="../symbols/DomainConceptDescription.html">DomainConceptDescription</a></li>
 	
+	<li><a href="../symbols/DomainConceptDialog.html">DomainConceptDialog</a></li>
+	
 	<li><a href="../symbols/DomainConceptFactory.html">DomainConceptFactory</a></li>
 	
 	<li><a href="../symbols/DomainConceptInstance.html">DomainConceptInstance</a></li>
+	
+	<li><a href="../symbols/DomainConceptSet.html">DomainConceptSet</a></li>
 	
 	<li><a href="../symbols/DomainConceptView.html">DomainConceptView</a></li>
 	
@@ -279,11 +275,9 @@ ul.inheritsList
 	
 	<li><a href="../symbols/PaletteController.html">PaletteController</a></li>
 	
+	<li><a href="../symbols/PaletteDocument.html">PaletteDocument</a></li>
+	
 	<li><a href="../symbols/PreferencesDialog.html">PreferencesDialog</a></li>
-	
-	<li><a href="../symbols/PreferencesSingleton.html">PreferencesSingleton</a></li>
-	
-	<li><a href="../symbols/PreferencesSingleton-Preferences.html">PreferencesSingleton-Preferences</a></li>
 	
 	<li><a href="../symbols/PrePostPane.html">PrePostPane</a></li>
 	
@@ -303,11 +297,21 @@ ul.inheritsList
 	
 	<li><a href="../symbols/ScreenInstance.html">ScreenInstance</a></li>
 	
+	<li><a href="../symbols/ScreenSet.html">ScreenSet</a></li>
+	
 	<li><a href="../symbols/ScreenView.html">ScreenView</a></li>
+	
+	<li><a href="../symbols/SetListener.html">SetListener</a></li>
+	
+	<li><a href="../symbols/StoreGadgetDialog.html">StoreGadgetDialog</a></li>
 	
 	<li><a href="../symbols/Table.html">Table</a></li>
 	
 	<li><a href="../symbols/Toolbar.html">Toolbar</a></li>
+	
+	<li><a href="../symbols/ToolbarButton.html">ToolbarButton</a></li>
+	
+	<li><a href="../symbols/ToolbarModel.html">ToolbarModel</a></li>
 	
 	<li><a href="../symbols/UIDGeneratorSingleton.html">UIDGeneratorSingleton</a></li>
 	
@@ -331,6 +335,8 @@ ul.inheritsList
 
 <!-- ============================== class summary ========================== -->			
 			<p class="description">
+				<br />Extends
+					<a href="../symbols/ToolbarModel.html#constructor">ToolbarModel</a>.<br />
 				
 			
 				
@@ -355,7 +361,7 @@ ul.inheritsList
 						<td class="attributes">&nbsp;</td>
 						<td class="nameDescription" >
 							<div class="fixedFont">
-								<b><a href="../symbols/AbstractDocument.html#constructor">AbstractDocument</a></b>(title, validBuildingBlocks)
+								<b><a href="../symbols/AbstractDocument.html#constructor">AbstractDocument</a></b>($super, title)
 							</div>
 							<div class="description">Represents a document and its tab.</div>
 						</td>
@@ -384,36 +390,9 @@ ul.inheritsList
 						<tr>
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/AbstractDocument.html#getContent">getContent</a></b>()
+								<div class="fixedFont"><b><a href="../symbols/AbstractDocument.html#getNode">getNode</a></b>()
 								</div>
 								<div class="description">Gets the content node.</div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="attributes">&nbsp;</td>
-							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/AbstractDocument.html#getContentId">getContentId</a></b>()
-								</div>
-								<div class="description">Gets the content id.</div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="attributes">&nbsp;</td>
-							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/AbstractDocument.html#getDocumentType">getDocumentType</a></b>()
-								</div>
-								<div class="description">Gets the document type.</div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="attributes">&nbsp;</td>
-							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/AbstractDocument.html#getPaletteController">getPaletteController</a></b>()
-								</div>
-								<div class="description">Gets the palette controller</div>
 							</td>
 						</tr>
 					
@@ -447,18 +426,9 @@ ul.inheritsList
 						<tr>
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/AbstractDocument.html#getValidBuildingBlocks">getValidBuildingBlocks</a></b>()
+								<div class="fixedFont"><b><a href="../symbols/AbstractDocument.html#onKeyPressed">onKeyPressed</a></b>(e)
 								</div>
-								<div class="description">Returns the list of valid building blocks for the document type</div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="attributes">&nbsp;</td>
-							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/AbstractDocument.html#select">select</a></b>()
-								</div>
-								<div class="description">Select this tab.</div>
+								<div class="description">Method called on keypress.</div>
 							</td>
 						</tr>
 					
@@ -466,6 +436,10 @@ ul.inheritsList
 				</table>
 				
 				
+				
+				<dl class="inheritsList">
+				<dt>Methods borrowed from class <a href="../symbols/ToolbarModel.html#constructor">ToolbarModel</a>: </dt><dd><a href="../symbols/ToolbarModel.html#getToolbarElements">getToolbarElements</a></dd>
+				</dl>
 				
 			
 
@@ -477,7 +451,7 @@ ul.inheritsList
 				</div>
 				
 				<div class="fixedFont">
-						<b>AbstractDocument</b>(title, validBuildingBlocks)
+						<b>AbstractDocument</b>($super, title)
 				</div>
 				
 				<div class="description">
@@ -493,13 +467,13 @@ ul.inheritsList
 						<dt class="heading">Parameters:</dt>
 						
 							<dt>
-								<span class="light fixedFont">{String}</span>  <b>title</b>
+								 <b>$super</b>
 								
 							</dt>
 								<dd></dd>
 						
 							<dt>
-								<span class="light fixedFont">{{String[]}}</span>  <b>validBuildingBlocks</b>
+								<span class="light fixedFont">{String}</span>  <b>title</b>
 								
 							</dt>
 								<dd></dd>
@@ -525,90 +499,15 @@ ul.inheritsList
 					Method Detail
 				</div>
 				
-					<a name="getContent"> </a>
+					<a name="getNode"> </a>
 					<div class="fixedFont">
 					
 					<span class="light">{DOMNode}</span>
-					<b>getContent</b>()
+					<b>getNode</b>()
 					
 					</div>
 					<div class="description">
 						Gets the content node.
-						
-						
-					</div>
-					
-					
-					
-						
-						
-						
-						
-						
-						
-						
-
-					<hr />
-				
-					<a name="getContentId"> </a>
-					<div class="fixedFont">
-					
-					<span class="light">{String}</span>
-					<b>getContentId</b>()
-					
-					</div>
-					<div class="description">
-						Gets the content id.
-						
-						
-					</div>
-					
-					
-					
-						
-						
-						
-						
-						
-						
-						
-
-					<hr />
-				
-					<a name="getDocumentType"> </a>
-					<div class="fixedFont">
-					
-					<span class="light">{String}</span>
-					<b>getDocumentType</b>()
-					
-					</div>
-					<div class="description">
-						Gets the document type.
-						
-						
-					</div>
-					
-					
-					
-						
-						
-						
-						
-						
-						
-						
-
-					<hr />
-				
-					<a name="getPaletteController"> </a>
-					<div class="fixedFont">
-					
-					<span class="light">{<a href="../symbols/PaletteController.html#constructor">PaletteController</a>}</span>
-					<b>getPaletteController</b>()
-					
-					</div>
-					<div class="description">
-						Gets the palette controller
 						
 						
 					</div>
@@ -700,15 +599,15 @@ ul.inheritsList
 
 					<hr />
 				
-					<a name="getValidBuildingBlocks"> </a>
+					<a name="onKeyPressed"> </a>
 					<div class="fixedFont">
 					
 					
-					<b>getValidBuildingBlocks</b>()
+					<b>onKeyPressed</b>(e)
 					
 					</div>
 					<div class="description">
-						Returns the list of valid building blocks for the document type
+						Method called on keypress. Might be overloaded
 						
 						
 					</div>
@@ -716,30 +615,16 @@ ul.inheritsList
 					
 					
 						
-						
-						
-						
-						
-						
-						
-
-					<hr />
-				
-					<a name="select"> </a>
-					<div class="fixedFont">
-					
-					
-					<b>select</b>()
-					
-					</div>
-					<div class="description">
-						Select this tab.
-						
-						
-					</div>
-					
-					
-					
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{Event}</span> <b>e</b>
+									
+								</dt>
+								<dd></dd>
+							
+							</dl>
 						
 						
 						
@@ -758,7 +643,7 @@ ul.inheritsList
 <!-- ============================== footer ================================= -->
 		<div class="fineprint" style="clear:both">
 			
-			Documentation generated by <a href="http://www.jsdoctoolkit.org/" target="_blank">JsDoc Toolkit</a> 2.0.2 on Thu Aug 27 2009 11:08:30 GMT+0200 (CEST)
+			Documentation generated by <a href="http://www.jsdoctoolkit.org/" target="_blank">JsDoc Toolkit</a> 2.0.2 on Thu Sep 24 2009 10:38:32 GMT+0200 (CEST)
 		</div>
 	</body>
 </html>

@@ -14,31 +14,31 @@
 <span class='line'>  7</span>      * @constructs
 <span class='line'>  8</span>      * @extends PaletteComponent
 <span class='line'>  9</span>      */</span><span class="WHIT">
-<span class='line'> 10</span> </span><span class="WHIT">    </span><span class="NAME">initialize</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">$super</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">screenBuildingBlockDescription</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'> 11</span> </span><span class="WHIT">        </span><span class="NAME">$super</span><span class="PUNC">(</span><span class="NAME">screenBuildingBlockDescription</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 10</span> </span><span class="WHIT">    </span><span class="NAME">initialize</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">$super</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">description</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">dropZone</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">inferenceEngine</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 11</span> </span><span class="WHIT">        </span><span class="NAME">$super</span><span class="PUNC">(</span><span class="NAME">description</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">dropZone</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">inferenceEngine</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'> 12</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
 <span class='line'> 13</span> 
-<span class='line'> 14</span> </span><span class="WHIT">    </span><span class="COMM">/**
-<span class='line'> 15</span>      * Colorize the component depending on the reachability
-<span class='line'> 16</span>      * @public
-<span class='line'> 17</span>      */</span><span class="WHIT">
-<span class='line'> 18</span> </span><span class="WHIT">    </span><span class="NAME">colorize</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'> 19</span> </span><span class="WHIT">        </span><span class="NAME">this.getView</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">colorize</span><span class="PUNC">(</span><span class="NAME">this.getBuildingBlockDescription</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">satisfeable</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'> 20</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'> 21</span> 
-<span class='line'> 22</span> </span><span class="WHIT">    </span><span class="COMM">// **************** PUBLIC METHODS **************** //</span><span class="WHIT">
-<span class='line'> 23</span> 
-<span class='line'> 24</span> 
-<span class='line'> 25</span> </span><span class="WHIT">    </span><span class="COMM">// **************** PRIVATE METHODS **************** //</span><span class="WHIT">
-<span class='line'> 26</span> </span><span class="WHIT">    </span><span class="WHIT">
-<span class='line'> 27</span> 
+<span class='line'> 14</span> </span><span class="WHIT">    </span><span class="COMM">// **************** PUBLIC METHODS **************** //</span><span class="WHIT">
+<span class='line'> 15</span> 
+<span class='line'> 16</span> 
+<span class='line'> 17</span> </span><span class="WHIT">    </span><span class="COMM">// **************** PRIVATE METHODS **************** //</span><span class="WHIT">
+<span class='line'> 18</span> </span><span class="WHIT">    </span><span class="WHIT">
+<span class='line'> 19</span> </span><span class="WHIT">    </span><span class="COMM">/**
+<span class='line'> 20</span>      * Creates a new View instance for the component
+<span class='line'> 21</span>      * @type BuildingBlockView
+<span class='line'> 22</span>      * @override
+<span class='line'> 23</span>      */</span><span class="WHIT">
+<span class='line'> 24</span> </span><span class="WHIT">    </span><span class="NAME">_createView</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 25</span> </span><span class="WHIT">        </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">ScreenView</span><span class="PUNC">(</span><span class="NAME">this._buildingBlockDescription</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 26</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 27</span> </span><span class="WHIT">    </span><span class="WHIT">
 <span class='line'> 28</span> </span><span class="WHIT">    </span><span class="COMM">/**
 <span class='line'> 29</span>      * Creates a new screen to be dragged.
 <span class='line'> 30</span>      * @type ScreenInstance
 <span class='line'> 31</span>      * @override
 <span class='line'> 32</span>      */</span><span class="WHIT">
 <span class='line'> 33</span> </span><span class="WHIT">    </span><span class="NAME">_createInstance</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'> 34</span> </span><span class="WHIT">        </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">ScreenInstance</span><span class="PUNC">(</span><span class="NAME">this._buildingBlockDescription</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 34</span> </span><span class="WHIT">        </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">ScreenInstance</span><span class="PUNC">(</span><span class="NAME">this._buildingBlockDescription</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">this._dropZone</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">this._inferenceEngine</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'> 35</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
 <span class='line'> 36</span> </span><span class="WHIT">    </span><span class="WHIT">
 <span class='line'> 37</span> </span><span class="WHIT">    </span><span class="COMM">/**

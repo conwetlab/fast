@@ -193,8 +193,6 @@ ul.inheritsList
 	
 	<li><i><a href="../symbols/_global_.html">_global_</a></i></li>
 	
-	<li><a href="../symbols/AbstractDialog.html">AbstractDialog</a></li>
-	
 	<li><a href="../symbols/AbstractDocument.html">AbstractDocument</a></li>
 	
 	<li><a href="../symbols/AddScreenDialog.html">AddScreenDialog</a></li>
@@ -211,6 +209,8 @@ ul.inheritsList
 	
 	<li><a href="../symbols/BuildingBlockFactory.html">BuildingBlockFactory</a></li>
 	
+	<li><a href="../symbols/BuildingBlockSet.html">BuildingBlockSet</a></li>
+	
 	<li><a href="../symbols/BuildingBlockView.html">BuildingBlockView</a></li>
 	
 	<li><a href="../symbols/CatalogueSingleton.html">CatalogueSingleton</a></li>
@@ -219,23 +219,15 @@ ul.inheritsList
 	
 	<li><a href="../symbols/ComponentInstance.html">ComponentInstance</a></li>
 	
+	<li><a href="../symbols/ConfirmDialog.html">ConfirmDialog</a></li>
+	
 	<li><a href="../symbols/ConfirmSingleton.html">ConfirmSingleton</a></li>
 	
 	<li><a href="../symbols/ConfirmSingleton-Confirm.html">ConfirmSingleton-Confirm</a></li>
 	
-	<li><a href="../symbols/ConnectorComponent.html">ConnectorComponent</a></li>
-	
-	<li><a href="../symbols/ConnectorDescription.html">ConnectorDescription</a></li>
-	
-	<li><a href="../symbols/ConnectorFactory.html">ConnectorFactory</a></li>
-	
-	<li><a href="../symbols/ConnectorInstance.html">ConnectorInstance</a></li>
-	
-	<li><a href="../symbols/ConnectorView.html">ConnectorView</a></li>
+	<li><a href="../symbols/Deployer.html">Deployer</a></li>
 	
 	<li><a href="../symbols/DeployGadgetDialog.html">DeployGadgetDialog</a></li>
-	
-	<li><a href="../symbols/DeploymentDocument.html">DeploymentDocument</a></li>
 	
 	<li><a href="../symbols/DocumentController.html">DocumentController</a></li>
 	
@@ -243,9 +235,13 @@ ul.inheritsList
 	
 	<li><a href="../symbols/DomainConceptDescription.html">DomainConceptDescription</a></li>
 	
+	<li><a href="../symbols/DomainConceptDialog.html">DomainConceptDialog</a></li>
+	
 	<li><a href="../symbols/DomainConceptFactory.html">DomainConceptFactory</a></li>
 	
 	<li><a href="../symbols/DomainConceptInstance.html">DomainConceptInstance</a></li>
+	
+	<li><a href="../symbols/DomainConceptSet.html">DomainConceptSet</a></li>
 	
 	<li><a href="../symbols/DomainConceptView.html">DomainConceptView</a></li>
 	
@@ -279,11 +275,9 @@ ul.inheritsList
 	
 	<li><a href="../symbols/PaletteController.html">PaletteController</a></li>
 	
+	<li><a href="../symbols/PaletteDocument.html">PaletteDocument</a></li>
+	
 	<li><a href="../symbols/PreferencesDialog.html">PreferencesDialog</a></li>
-	
-	<li><a href="../symbols/PreferencesSingleton.html">PreferencesSingleton</a></li>
-	
-	<li><a href="../symbols/PreferencesSingleton-Preferences.html">PreferencesSingleton-Preferences</a></li>
 	
 	<li><a href="../symbols/PrePostPane.html">PrePostPane</a></li>
 	
@@ -303,11 +297,21 @@ ul.inheritsList
 	
 	<li><a href="../symbols/ScreenInstance.html">ScreenInstance</a></li>
 	
+	<li><a href="../symbols/ScreenSet.html">ScreenSet</a></li>
+	
 	<li><a href="../symbols/ScreenView.html">ScreenView</a></li>
+	
+	<li><a href="../symbols/SetListener.html">SetListener</a></li>
+	
+	<li><a href="../symbols/StoreGadgetDialog.html">StoreGadgetDialog</a></li>
 	
 	<li><a href="../symbols/Table.html">Table</a></li>
 	
 	<li><a href="../symbols/Toolbar.html">Toolbar</a></li>
+	
+	<li><a href="../symbols/ToolbarButton.html">ToolbarButton</a></li>
+	
+	<li><a href="../symbols/ToolbarModel.html">ToolbarModel</a></li>
 	
 	<li><a href="../symbols/UIDGeneratorSingleton.html">UIDGeneratorSingleton</a></li>
 	
@@ -357,7 +361,7 @@ ul.inheritsList
 							<div class="fixedFont">
 								<b><a href="../symbols/FactFactorySingleton-FactFactory.html#constructor">FactFactorySingleton-FactFactory</a></b>()
 							</div>
-							<div class="description">This class is used to retrieve facts.</div>
+							<div class="description">This class is used to create facts representations.</div>
 						</td>
 					</tr>
 				</tbody>
@@ -365,6 +369,34 @@ ul.inheritsList
 			
 
 <!-- ============================== properties summary ===================== -->
+			
+				
+				
+				<table class="summaryTable" cellspacing="0" summary="A summary of the fields documented in the class FactFactorySingleton-FactFactory.">
+					<caption>Field Summary</caption>
+					<thead>
+						<tr>
+							<th scope="col">Field Attributes</th>
+							<th scope="col">Field Name and Description</th>
+						</tr>
+					</thead>
+					<tbody>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">
+								<b><a href="../symbols/FactFactorySingleton-FactFactory.html#_cachedShortcuts">_cachedShortcuts</a></b>
+								</div>
+								<div class="description">This array stores the shortcutsbeing used in the execution</div>
+							</td>
+						</tr>
+					
+					</tbody>
+				</table>
+				
+				
+				
 			
 
 <!-- ============================== methods summary ======================== -->
@@ -384,16 +416,7 @@ ul.inheritsList
 						<tr>
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/FactFactorySingleton-FactFactory.html#getFact">getFact</a></b>(uri)
-								</div>
-								<div class="description">Gets a fact identified by uri.</div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="attributes">&nbsp;</td>
-							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/FactFactorySingleton-FactFactory.html#getFactIcon">getFactIcon</a></b>(String, String)
+								<div class="fixedFont"><b><a href="../symbols/FactFactorySingleton-FactFactory.html#getFactIcon">getFactIcon</a></b>(String, size)
 								</div>
 								<div class="description">Gets the root node of a icon for a give fact identified by uri.</div>
 							</td>
@@ -402,27 +425,9 @@ ul.inheritsList
 						<tr>
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/FactFactorySingleton-FactFactory.html#setFacts">setFacts</a></b>(factMetadata)
+								<div class="fixedFont"><b><a href="../symbols/FactFactorySingleton-FactFactory.html#getFactUri">getFactUri</a></b>(factData)
 								</div>
-								<div class="description">Sets a fact identified by uri.</div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="attributes">&nbsp;</td>
-							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/FactFactorySingleton-FactFactory.html#updateFactFromUri">updateFactFromUri</a></b>(stringUri)
-								</div>
-								<div class="description">Updates the facts from the fact uri.</div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="attributes">&nbsp;</td>
-							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/FactFactorySingleton-FactFactory.html#updateFacts">updateFacts</a></b>()
-								</div>
-								<div class="description">Updates the facts from a JSON file.</div>
+								<div class="description">Gets the fact uri</div>
 							</td>
 						</tr>
 					
@@ -445,7 +450,7 @@ ul.inheritsList
 				</div>
 				
 				<div class="description">
-					This class is used to retrieve facts.
+					This class is used to create facts representations.
 					
 				</div>
 				
@@ -465,6 +470,33 @@ ul.inheritsList
 
 <!-- ============================== field details ========================== -->		
 			
+				<div class="sectionTitle">
+					Field Detail
+				</div>
+				
+					<a name="_cachedShortcuts"> </a>
+					<div class="fixedFont">
+					
+					
+					<b>_cachedShortcuts</b>
+					
+					</div>
+					<div class="description">
+						This array stores the shortcutsbeing used in the execution
+						
+						
+					</div>
+					
+					
+
+						
+						
+						
+						
+
+					
+				
+			
 
 <!-- ============================== method details ========================= -->		
 			
@@ -472,47 +504,11 @@ ul.inheritsList
 					Method Detail
 				</div>
 				
-					<a name="getFact"> </a>
-					<div class="fixedFont">
-					
-					<span class="light">{<a href="../symbols/BuildingBlockDescription.html#constructor">BuildingBlockDescription</a>}</span>
-					<b>getFact</b>(uri)
-					
-					</div>
-					<div class="description">
-						Gets a fact identified by uri.
-						
-						
-					</div>
-					
-					
-					
-						
-							<dl class="detailList">
-							<dt class="heading">Parameters:</dt>
-							
-								<dt>
-									<span class="light fixedFont">{String}</span> <b>uri</b>
-									
-								</dt>
-								<dd></dd>
-							
-							</dl>
-						
-						
-						
-						
-						
-						
-						
-
-					<hr />
-				
 					<a name="getFactIcon"> </a>
 					<div class="fixedFont">
 					
 					<span class="light">{<a href="../symbols/FactIcon.html#constructor">FactIcon</a>}</span>
-					<b>getFactIcon</b>(String, String)
+					<b>getFactIcon</b>(String, size)
 					
 					</div>
 					<div class="description">
@@ -528,49 +524,13 @@ ul.inheritsList
 							<dt class="heading">Parameters:</dt>
 							
 								<dt>
-									<span class="light fixedFont">{String}</span> <b>String</b>
+									<span class="light fixedFont">{Object}</span> <b>String</b>
 									
 								</dt>
-								<dd>uri   Fact Building Block identifier</dd>
+								<dd>size  Icon size ("inline"|"embedded"|"standalone")</dd>
 							
 								<dt>
-									<span class="light fixedFont">{String}</span> <b>String</b>
-									
-								</dt>
-								<dd>size  Icon size ("small"|"medium"|"big")</dd>
-							
-							</dl>
-						
-						
-						
-						
-						
-						
-						
-
-					<hr />
-				
-					<a name="setFacts"> </a>
-					<div class="fixedFont">
-					
-					
-					<b>setFacts</b>(factMetadata)
-					
-					</div>
-					<div class="description">
-						Sets a fact identified by uri.
-						
-						
-					</div>
-					
-					
-					
-						
-							<dl class="detailList">
-							<dt class="heading">Parameters:</dt>
-							
-								<dt>
-									<b>factMetadata</b>
+									<b>size</b>
 									
 								</dt>
 								<dd></dd>
@@ -586,15 +546,15 @@ ul.inheritsList
 
 					<hr />
 				
-					<a name="updateFactFromUri"> </a>
+					<a name="getFactUri"> </a>
 					<div class="fixedFont">
 					
-					
-					<b>updateFactFromUri</b>(stringUri)
+					<span class="light">{String}</span>
+					<b>getFactUri</b>(factData)
 					
 					</div>
 					<div class="description">
-						Updates the facts from the fact uri.
+						Gets the fact uri
 						
 						
 					</div>
@@ -606,37 +566,12 @@ ul.inheritsList
 							<dt class="heading">Parameters:</dt>
 							
 								<dt>
-									<span class="light fixedFont">{String}</span> <b>stringUri</b>
+									<span class="light fixedFont">{Object}</span> <b>factData</b>
 									
 								</dt>
 								<dd></dd>
 							
 							</dl>
-						
-						
-						
-						
-						
-						
-						
-
-					<hr />
-				
-					<a name="updateFacts"> </a>
-					<div class="fixedFont">
-					
-					
-					<b>updateFacts</b>()
-					
-					</div>
-					<div class="description">
-						Updates the facts from a JSON file.
-						
-						
-					</div>
-					
-					
-					
 						
 						
 						
@@ -655,7 +590,7 @@ ul.inheritsList
 <!-- ============================== footer ================================= -->
 		<div class="fineprint" style="clear:both">
 			
-			Documentation generated by <a href="http://www.jsdoctoolkit.org/" target="_blank">JsDoc Toolkit</a> 2.0.2 on Thu Aug 27 2009 11:08:31 GMT+0200 (CEST)
+			Documentation generated by <a href="http://www.jsdoctoolkit.org/" target="_blank">JsDoc Toolkit</a> 2.0.2 on Thu Sep 24 2009 10:38:33 GMT+0200 (CEST)
 		</div>
 	</body>
 </html>

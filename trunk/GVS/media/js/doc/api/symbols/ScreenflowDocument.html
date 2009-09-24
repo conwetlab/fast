@@ -193,8 +193,6 @@ ul.inheritsList
 	
 	<li><i><a href="../symbols/_global_.html">_global_</a></i></li>
 	
-	<li><a href="../symbols/AbstractDialog.html">AbstractDialog</a></li>
-	
 	<li><a href="../symbols/AbstractDocument.html">AbstractDocument</a></li>
 	
 	<li><a href="../symbols/AddScreenDialog.html">AddScreenDialog</a></li>
@@ -211,6 +209,8 @@ ul.inheritsList
 	
 	<li><a href="../symbols/BuildingBlockFactory.html">BuildingBlockFactory</a></li>
 	
+	<li><a href="../symbols/BuildingBlockSet.html">BuildingBlockSet</a></li>
+	
 	<li><a href="../symbols/BuildingBlockView.html">BuildingBlockView</a></li>
 	
 	<li><a href="../symbols/CatalogueSingleton.html">CatalogueSingleton</a></li>
@@ -219,23 +219,15 @@ ul.inheritsList
 	
 	<li><a href="../symbols/ComponentInstance.html">ComponentInstance</a></li>
 	
+	<li><a href="../symbols/ConfirmDialog.html">ConfirmDialog</a></li>
+	
 	<li><a href="../symbols/ConfirmSingleton.html">ConfirmSingleton</a></li>
 	
 	<li><a href="../symbols/ConfirmSingleton-Confirm.html">ConfirmSingleton-Confirm</a></li>
 	
-	<li><a href="../symbols/ConnectorComponent.html">ConnectorComponent</a></li>
-	
-	<li><a href="../symbols/ConnectorDescription.html">ConnectorDescription</a></li>
-	
-	<li><a href="../symbols/ConnectorFactory.html">ConnectorFactory</a></li>
-	
-	<li><a href="../symbols/ConnectorInstance.html">ConnectorInstance</a></li>
-	
-	<li><a href="../symbols/ConnectorView.html">ConnectorView</a></li>
+	<li><a href="../symbols/Deployer.html">Deployer</a></li>
 	
 	<li><a href="../symbols/DeployGadgetDialog.html">DeployGadgetDialog</a></li>
-	
-	<li><a href="../symbols/DeploymentDocument.html">DeploymentDocument</a></li>
 	
 	<li><a href="../symbols/DocumentController.html">DocumentController</a></li>
 	
@@ -243,9 +235,13 @@ ul.inheritsList
 	
 	<li><a href="../symbols/DomainConceptDescription.html">DomainConceptDescription</a></li>
 	
+	<li><a href="../symbols/DomainConceptDialog.html">DomainConceptDialog</a></li>
+	
 	<li><a href="../symbols/DomainConceptFactory.html">DomainConceptFactory</a></li>
 	
 	<li><a href="../symbols/DomainConceptInstance.html">DomainConceptInstance</a></li>
+	
+	<li><a href="../symbols/DomainConceptSet.html">DomainConceptSet</a></li>
 	
 	<li><a href="../symbols/DomainConceptView.html">DomainConceptView</a></li>
 	
@@ -279,11 +275,9 @@ ul.inheritsList
 	
 	<li><a href="../symbols/PaletteController.html">PaletteController</a></li>
 	
+	<li><a href="../symbols/PaletteDocument.html">PaletteDocument</a></li>
+	
 	<li><a href="../symbols/PreferencesDialog.html">PreferencesDialog</a></li>
-	
-	<li><a href="../symbols/PreferencesSingleton.html">PreferencesSingleton</a></li>
-	
-	<li><a href="../symbols/PreferencesSingleton-Preferences.html">PreferencesSingleton-Preferences</a></li>
 	
 	<li><a href="../symbols/PrePostPane.html">PrePostPane</a></li>
 	
@@ -303,11 +297,21 @@ ul.inheritsList
 	
 	<li><a href="../symbols/ScreenInstance.html">ScreenInstance</a></li>
 	
+	<li><a href="../symbols/ScreenSet.html">ScreenSet</a></li>
+	
 	<li><a href="../symbols/ScreenView.html">ScreenView</a></li>
+	
+	<li><a href="../symbols/SetListener.html">SetListener</a></li>
+	
+	<li><a href="../symbols/StoreGadgetDialog.html">StoreGadgetDialog</a></li>
 	
 	<li><a href="../symbols/Table.html">Table</a></li>
 	
 	<li><a href="../symbols/Toolbar.html">Toolbar</a></li>
+	
+	<li><a href="../symbols/ToolbarButton.html">ToolbarButton</a></li>
+	
+	<li><a href="../symbols/ToolbarModel.html">ToolbarModel</a></li>
 	
 	<li><a href="../symbols/UIDGeneratorSingleton.html">UIDGeneratorSingleton</a></li>
 	
@@ -332,7 +336,7 @@ ul.inheritsList
 <!-- ============================== class summary ========================== -->			
 			<p class="description">
 				<br />Extends
-					<a href="../symbols/AbstractDocument.html#constructor">AbstractDocument</a>.<br />
+					<a href="../symbols/PaletteDocument.html#constructor">PaletteDocument</a>.<br />
 				
 			
 				
@@ -357,7 +361,7 @@ ul.inheritsList
 						<td class="attributes">&nbsp;</td>
 						<td class="nameDescription" >
 							<div class="fixedFont">
-								<b><a href="../symbols/ScreenflowDocument.html#constructor">ScreenflowDocument</a></b>($super, title, domainContext)
+								<b><a href="../symbols/ScreenflowDocument.html#constructor">ScreenflowDocument</a></b>($super, title, domainContext, version)
 							</div>
 							<div class="description">Screenflow document.</div>
 						</td>
@@ -367,6 +371,15 @@ ul.inheritsList
 			
 
 <!-- ============================== properties summary ===================== -->
+			
+				
+				
+				
+				
+				<dl class="inheritsList">
+				<dt>Fields borrowed from class <a href="../symbols/PaletteDocument.html#constructor">PaletteDocument</a>: </dt><dd><a href="../symbols/PaletteDocument.html#_domainContext">_domainContext</a></dd>
+				</dl>
+				
 			
 
 <!-- ============================== methods summary ======================== -->
@@ -386,52 +399,7 @@ ul.inheritsList
 						<tr>
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/ScreenflowDocument.html#addConnector">addConnector</a></b>(connector)
-								</div>
-								<div class="description">Adds a new connector.</div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="attributes">&nbsp;</td>
-							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/ScreenflowDocument.html#addDomainConcept">addDomainConcept</a></b>(domainConcept)
-								</div>
-								<div class="description">Adds a new domain concept.</div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="attributes">&nbsp;</td>
-							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/ScreenflowDocument.html#addScreen">addScreen</a></b>(screen)
-								</div>
-								<div class="description">Adds a new screen.</div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="attributes">&nbsp;</td>
-							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/ScreenflowDocument.html#deleteConnector">deleteConnector</a></b>()
-								</div>
-								<div class="description">Delete a connector.</div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="attributes">&nbsp;</td>
-							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/ScreenflowDocument.html#deleteDomainConcept">deleteDomainConcept</a></b>()
-								</div>
-								<div class="description">Delete a domain concept.</div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="attributes">&nbsp;</td>
-							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/ScreenflowDocument.html#deleteScreen">deleteScreen</a></b>()
+								<div class="fixedFont"><b><a href="../symbols/ScreenflowDocument.html#_deleteInstance">_deleteInstance</a></b>(ComponentInstance)
 								</div>
 								<div class="description">Delete a screen.</div>
 							</td>
@@ -440,9 +408,18 @@ ul.inheritsList
 						<tr>
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/ScreenflowDocument.html#deployGadget">deployGadget</a></b>()
+								<div class="fixedFont"><b><a href="../symbols/ScreenflowDocument.html#_renderCenterContainer">_renderCenterContainer</a></b>()
 								</div>
-								<div class="description">Creates a gadget deployment for the screenflow</div>
+								<div class="description">This function creates the area containing the canvasand the inspectors</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/ScreenflowDocument.html#drop">drop</a></b>(droppedElement)
+								</div>
+								<div class="description">Implementing DropZone interface.</div>
 							</td>
 						</tr>
 					
@@ -458,106 +435,7 @@ ul.inheritsList
 						<tr>
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/ScreenflowDocument.html#getBuildingBlockElement">getBuildingBlockElement</a></b>(element)
-								</div>
-								<div class="description">Gets the building block div in the canvas</div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="attributes">&nbsp;</td>
-							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/ScreenflowDocument.html#getBuildingBlockInstance">getBuildingBlockInstance</a></b>(buildingBlockViewId)
-								</div>
-								<div class="description">Returns an array with the building block description and the Building block typefor the building block view id passed as a parameter of the screenflow document</div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="attributes">&nbsp;</td>
-							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/ScreenflowDocument.html#getCanvas">getCanvas</a></b>()
-								</div>
-								<div class="description">Gets the elements of the canvas</div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="attributes">&nbsp;</td>
-							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/ScreenflowDocument.html#getConnectors">getConnectors</a></b>()
-								</div>
-								<div class="description">Returns the list of connectors for the screenflow document</div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="attributes">&nbsp;</td>
-							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/ScreenflowDocument.html#getDetailsTitle">getDetailsTitle</a></b>(detail)
-								</div>
-								<div class="description">Gets a detail from the detailPane</div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="attributes">&nbsp;</td>
-							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/ScreenflowDocument.html#getDomainConcepts">getDomainConcepts</a></b>()
-								</div>
-								<div class="description">Returns the list of domain concepts for the screenflow document</div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="attributes">&nbsp;</td>
-							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/ScreenflowDocument.html#getInferenceEngine">getInferenceEngine</a></b>()
-								</div>
-								<div class="description">Returns the document inference engine</div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="attributes">&nbsp;</td>
-							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/ScreenflowDocument.html#getPaletteElements">getPaletteElements</a></b>()
-								</div>
-								<div class="description">Gets the elements of the palette</div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="attributes">&nbsp;</td>
-							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/ScreenflowDocument.html#getScreens">getScreens</a></b>()
-								</div>
-								<div class="description">Returns the list of screens for the screenflow document</div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="attributes">&nbsp;</td>
-							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/ScreenflowDocument.html#getSelectedElement">getSelectedElement</a></b>()
-								</div>
-								<div class="description">Returns the selected element for the screenflow document</div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="attributes">&nbsp;</td>
-							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/ScreenflowDocument.html#populateBuildingBlocks">populateBuildingBlocks</a></b>()
-								</div>
-								<div class="description">This function populates the building blocks in the palettes</div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="attributes">&nbsp;</td>
-							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/ScreenflowDocument.html#setSelectedElement">setSelectedElement</a></b>(screen)
+								<div class="fixedFont"><b><a href="../symbols/ScreenflowDocument.html#setSelectedElement">setSelectedElement</a></b>(ComponentInstance, element)
 								</div>
 								<div class="description">Select a screen in the screenflow document</div>
 							</td>
@@ -569,7 +447,7 @@ ul.inheritsList
 				
 				
 				<dl class="inheritsList">
-				<dt>Methods borrowed from class <a href="../symbols/AbstractDocument.html#constructor">AbstractDocument</a>: </dt><dd><a href="../symbols/AbstractDocument.html#getContent">getContent</a>, <a href="../symbols/AbstractDocument.html#getContentId">getContentId</a>, <a href="../symbols/AbstractDocument.html#getDocumentType">getDocumentType</a>, <a href="../symbols/AbstractDocument.html#getPaletteController">getPaletteController</a>, <a href="../symbols/AbstractDocument.html#getTab">getTab</a>, <a href="../symbols/AbstractDocument.html#getTabId">getTabId</a>, <a href="../symbols/AbstractDocument.html#getTitle">getTitle</a>, <a href="../symbols/AbstractDocument.html#getValidBuildingBlocks">getValidBuildingBlocks</a>, <a href="../symbols/AbstractDocument.html#select">select</a></dd>
+				<dt>Methods borrowed from class <a href="../symbols/PaletteDocument.html#constructor">PaletteDocument</a>: </dt><dd><a href="../symbols/PaletteDocument.html#_renderPaletteArea">_renderPaletteArea</a>, <a href="../symbols/PaletteDocument.html#getSelectedElement">getSelectedElement</a>, <a href="../symbols/PaletteDocument.html#onKeyPressed">onKeyPressed</a></dd><dt>Methods borrowed from class <a href="../symbols/AbstractDocument.html#constructor">AbstractDocument</a>: </dt><dd><a href="../symbols/AbstractDocument.html#getNode">getNode</a>, <a href="../symbols/AbstractDocument.html#getTab">getTab</a>, <a href="../symbols/AbstractDocument.html#getTabId">getTabId</a>, <a href="../symbols/AbstractDocument.html#getTitle">getTitle</a></dd><dt>Methods borrowed from class <a href="../symbols/ToolbarModel.html#constructor">ToolbarModel</a>: </dt><dd><a href="../symbols/ToolbarModel.html#getToolbarElements">getToolbarElements</a></dd>
 				</dl>
 				
 			
@@ -582,7 +460,7 @@ ul.inheritsList
 				</div>
 				
 				<div class="fixedFont">
-						<b>ScreenflowDocument</b>($super, title, domainContext)
+						<b>ScreenflowDocument</b>($super, title, domainContext, version)
 				</div>
 				
 				<div class="description">
@@ -610,7 +488,13 @@ ul.inheritsList
 								<dd></dd>
 						
 							<dt>
-								<span class="light fixedFont">{String}</span>  <b>domainContext</b>
+								<span class="light fixedFont">{Array}</span>  <b>domainContext</b>
+								
+							</dt>
+								<dd></dd>
+						
+							<dt>
+								<span class="light fixedFont">{String}</span>  <b>version</b>
 								
 							</dt>
 								<dd></dd>
@@ -636,191 +520,11 @@ ul.inheritsList
 					Method Detail
 				</div>
 				
-					<a name="addConnector"> </a>
+					<a name="_deleteInstance"> </a>
 					<div class="fixedFont">
 					
 					
-					<b>addConnector</b>(connector)
-					
-					</div>
-					<div class="description">
-						Adds a new connector.
-						
-						
-					</div>
-					
-					
-					
-						
-							<dl class="detailList">
-							<dt class="heading">Parameters:</dt>
-							
-								<dt>
-									<b>connector</b>
-									
-								</dt>
-								<dd>Connector to be added to the     Screenflow document.</dd>
-							
-							</dl>
-						
-						
-						
-						
-						
-						
-						
-
-					<hr />
-				
-					<a name="addDomainConcept"> </a>
-					<div class="fixedFont">
-					
-					
-					<b>addDomainConcept</b>(domainConcept)
-					
-					</div>
-					<div class="description">
-						Adds a new domain concept.
-						
-						
-					</div>
-					
-					
-					
-						
-							<dl class="detailList">
-							<dt class="heading">Parameters:</dt>
-							
-								<dt>
-									<b>domainConcept</b>
-									
-								</dt>
-								<dd>Domain Concept to be added to the     Screenflow document.</dd>
-							
-							</dl>
-						
-						
-						
-						
-						
-						
-						
-
-					<hr />
-				
-					<a name="addScreen"> </a>
-					<div class="fixedFont">
-					
-					
-					<b>addScreen</b>(screen)
-					
-					</div>
-					<div class="description">
-						Adds a new screen.
-						
-						
-					</div>
-					
-					
-					
-						
-							<dl class="detailList">
-							<dt class="heading">Parameters:</dt>
-							
-								<dt>
-									<b>screen</b>
-									
-								</dt>
-								<dd>Screen to be added to the     Screenflow document.</dd>
-							
-							</dl>
-						
-						
-						
-						
-						
-						
-						
-
-					<hr />
-				
-					<a name="deleteConnector"> </a>
-					<div class="fixedFont">
-					
-					
-					<b>deleteConnector</b>()
-					
-					</div>
-					<div class="description">
-						Delete a connector.
-						
-						
-					</div>
-					
-					
-					
-						
-							<dl class="detailList">
-							<dt class="heading">Parameters:</dt>
-							
-								<dt>
-									<b>ConnectorView.id</b>
-									
-								</dt>
-								<dd>Connector to be deleted from the     Screenflow document.</dd>
-							
-							</dl>
-						
-						
-						
-						
-						
-						
-						
-
-					<hr />
-				
-					<a name="deleteDomainConcept"> </a>
-					<div class="fixedFont">
-					
-					
-					<b>deleteDomainConcept</b>()
-					
-					</div>
-					<div class="description">
-						Delete a domain concept.
-						
-						
-					</div>
-					
-					
-					
-						
-							<dl class="detailList">
-							<dt class="heading">Parameters:</dt>
-							
-								<dt>
-									<b>DomainConceptView.id</b>
-									
-								</dt>
-								<dd>Domain Concept to be deleted from the     Screenflow document.</dd>
-							
-							</dl>
-						
-						
-						
-						
-						
-						
-						
-
-					<hr />
-				
-					<a name="deleteScreen"> </a>
-					<div class="fixedFont">
-					
-					
-					<b>deleteScreen</b>()
+					<b>_deleteInstance</b>(ComponentInstance)
 					
 					</div>
 					<div class="description">
@@ -836,10 +540,10 @@ ul.inheritsList
 							<dt class="heading">Parameters:</dt>
 							
 								<dt>
-									<b>ScreenView.id</b>
+									<b>ComponentInstance</b>
 									
 								</dt>
-								<dd>Screen to be deleted from the     Screenflow document.</dd>
+								<dd>Instance to be deleted from the     Screenflow document.</dd>
 							
 							</dl>
 						
@@ -852,21 +556,57 @@ ul.inheritsList
 
 					<hr />
 				
-					<a name="deployGadget"> </a>
+					<a name="_renderCenterContainer"> </a>
 					<div class="fixedFont">
 					
 					
-					<b>deployGadget</b>()
+					<b>_renderCenterContainer</b>()
 					
 					</div>
 					<div class="description">
-						Creates a gadget deployment for the screenflow
+						This function creates the area containing the canvasand the inspectors
 						
 						
 					</div>
 					
 					
 					
+						
+						
+						
+						
+						
+						
+						
+
+					<hr />
+				
+					<a name="drop"> </a>
+					<div class="fixedFont">
+					
+					
+					<b>drop</b>(droppedElement)
+					
+					</div>
+					<div class="description">
+						Implementing DropZone interface.
+						
+						
+					</div>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{<a href="../symbols/ComponentInstance.html#constructor">ComponentInstance</a>}</span> <b>droppedElement</b>
+									
+								</dt>
+								<dd></dd>
+							
+							</dl>
 						
 						
 						
@@ -902,319 +642,11 @@ ul.inheritsList
 
 					<hr />
 				
-					<a name="getBuildingBlockElement"> </a>
-					<div class="fixedFont">
-					
-					
-					<b>getBuildingBlockElement</b>(element)
-					
-					</div>
-					<div class="description">
-						Gets the building block div in the canvas
-						
-						
-					</div>
-					
-					
-					
-						
-							<dl class="detailList">
-							<dt class="heading">Parameters:</dt>
-							
-								<dt>
-									<span class="light fixedFont">{Element}</span> <b>element</b>
-									
-								</dt>
-								<dd></dd>
-							
-							</dl>
-						
-						
-						
-						
-						
-						
-						
-
-					<hr />
-				
-					<a name="getBuildingBlockInstance"> </a>
-					<div class="fixedFont">
-					
-					<span class="light">{[<a href="../symbols/BuildingBlockDescription.html#constructor">BuildingBlockDescription</a>, String]}</span>
-					<b>getBuildingBlockInstance</b>(buildingBlockViewId)
-					
-					</div>
-					<div class="description">
-						Returns an array with the building block description and the Building block typefor the building block view id passed as a parameter of the screenflow document
-						
-						
-					</div>
-					
-					
-					
-						
-							<dl class="detailList">
-							<dt class="heading">Parameters:</dt>
-							
-								<dt>
-									<b>buildingBlockViewId</b>
-									
-								</dt>
-								<dd></dd>
-							
-							</dl>
-						
-						
-						
-						
-						
-						
-						
-
-					<hr />
-				
-					<a name="getCanvas"> </a>
-					<div class="fixedFont">
-					
-					<span class="light">{String[]}</span>
-					<b>getCanvas</b>()
-					
-					</div>
-					<div class="description">
-						Gets the elements of the canvas
-						
-						
-					</div>
-					
-					
-					
-						
-						
-						
-						
-						
-						
-						
-
-					<hr />
-				
-					<a name="getConnectors"> </a>
-					<div class="fixedFont">
-					
-					<span class="light">{<a href="../symbols/ConnectorInstance.html#constructor">ConnectorInstance</a>[]}</span>
-					<b>getConnectors</b>()
-					
-					</div>
-					<div class="description">
-						Returns the list of connectors for the screenflow document
-						
-						
-					</div>
-					
-					
-					
-						
-						
-						
-						
-						
-						
-						
-
-					<hr />
-				
-					<a name="getDetailsTitle"> </a>
-					<div class="fixedFont">
-					
-					<span class="light">{String}</span>
-					<b>getDetailsTitle</b>(detail)
-					
-					</div>
-					<div class="description">
-						Gets a detail from the detailPane
-						
-						
-					</div>
-					
-					
-					
-						
-							<dl class="detailList">
-							<dt class="heading">Parameters:</dt>
-							
-								<dt>
-									<span class="light fixedFont">{String}</span> <b>detail</b>
-									
-								</dt>
-								<dd></dd>
-							
-							</dl>
-						
-						
-						
-						
-						
-						
-						
-
-					<hr />
-				
-					<a name="getDomainConcepts"> </a>
-					<div class="fixedFont">
-					
-					<span class="light">{<a href="../symbols/DomainConceptInstance.html#constructor">DomainConceptInstance</a>[]}</span>
-					<b>getDomainConcepts</b>()
-					
-					</div>
-					<div class="description">
-						Returns the list of domain concepts for the screenflow document
-						
-						
-					</div>
-					
-					
-					
-						
-						
-						
-						
-						
-						
-						
-
-					<hr />
-				
-					<a name="getInferenceEngine"> </a>
-					<div class="fixedFont">
-					
-					<span class="light">{<a href="../symbols/InferenceEngine.html#constructor">InferenceEngine</a>}</span>
-					<b>getInferenceEngine</b>()
-					
-					</div>
-					<div class="description">
-						Returns the document inference engine
-						
-						
-					</div>
-					
-					
-					
-						
-						
-						
-						
-						
-						
-						
-
-					<hr />
-				
-					<a name="getPaletteElements"> </a>
-					<div class="fixedFont">
-					
-					<span class="light">{String[]}</span>
-					<b>getPaletteElements</b>()
-					
-					</div>
-					<div class="description">
-						Gets the elements of the palette
-						
-						
-					</div>
-					
-					
-					
-						
-						
-						
-						
-						
-						
-						
-
-					<hr />
-				
-					<a name="getScreens"> </a>
-					<div class="fixedFont">
-					
-					<span class="light">{<a href="../symbols/ScreenInstance.html#constructor">ScreenInstance</a>[]}</span>
-					<b>getScreens</b>()
-					
-					</div>
-					<div class="description">
-						Returns the list of screens for the screenflow document
-						
-						
-					</div>
-					
-					
-					
-						
-						
-						
-						
-						
-						
-						
-
-					<hr />
-				
-					<a name="getSelectedElement"> </a>
-					<div class="fixedFont">
-					
-					
-					<b>getSelectedElement</b>()
-					
-					</div>
-					<div class="description">
-						Returns the selected element for the screenflow document
-						
-						
-					</div>
-					
-					
-					
-						
-						
-						
-						
-						
-						
-						
-
-					<hr />
-				
-					<a name="populateBuildingBlocks"> </a>
-					<div class="fixedFont">
-					
-					
-					<b>populateBuildingBlocks</b>()
-					
-					</div>
-					<div class="description">
-						This function populates the building blocks in the palettes
-						
-						
-					</div>
-					
-					
-					
-						
-						
-						
-						
-						
-						
-						
-
-					<hr />
-				
 					<a name="setSelectedElement"> </a>
 					<div class="fixedFont">
 					
 					
-					<b>setSelectedElement</b>(screen)
+					<b>setSelectedElement</b>(ComponentInstance, element)
 					
 					</div>
 					<div class="description">
@@ -1230,10 +662,16 @@ ul.inheritsList
 							<dt class="heading">Parameters:</dt>
 							
 								<dt>
-									<b>screen</b>
+									<b>ComponentInstance</b>
 									
 								</dt>
-								<dd>view     Screen to be selected for the     Screenflow document.</dd>
+								<dd>Element to be selected for the     Screenflow document.</dd>
+							
+								<dt>
+									<b>element</b>
+									
+								</dt>
+								<dd></dd>
 							
 							</dl>
 						
@@ -1254,7 +692,7 @@ ul.inheritsList
 <!-- ============================== footer ================================= -->
 		<div class="fineprint" style="clear:both">
 			
-			Documentation generated by <a href="http://www.jsdoctoolkit.org/" target="_blank">JsDoc Toolkit</a> 2.0.2 on Thu Aug 27 2009 11:08:32 GMT+0200 (CEST)
+			Documentation generated by <a href="http://www.jsdoctoolkit.org/" target="_blank">JsDoc Toolkit</a> 2.0.2 on Thu Sep 24 2009 10:38:34 GMT+0200 (CEST)
 		</div>
 	</body>
 </html>

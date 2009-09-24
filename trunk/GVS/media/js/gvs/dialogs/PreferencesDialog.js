@@ -21,11 +21,11 @@ var PreferencesDialog = Class.create(ConfirmDialog /** @lends PreferencesDialog.
      * initDialogInterface
      * This function creates the dom structure and
      * @private
-     * @overrides
+     * @override
      */
     _initDialogInterface: function () {
  
-        this.setHeader("User preferences");
+        this._setHeader("User preferences");
         
         var user = GVSSingleton.getInstance().getUser();
              
@@ -41,34 +41,37 @@ var PreferencesDialog = Class.create(ConfirmDialog /** @lends PreferencesDialog.
                     'message': 'Invalid URL'}
         ];
         
-        this.setContent(formData);
+        this._setContent(formData);
 
     },
     /**
      * Overriding onOk handler
-     * @overrides
+     * @override
+     * @private
      */
     _onOk: function($super){
         
-        if (!this.getFormWidget().validate()) {
+        if (!this._getFormWidget().validate()) {
             return;
         }
         else {
             var user = GVSSingleton.getInstance().getUser();
-            user.update(this.getForm().serialize(true));
+            user.update(this._getForm().serialize(true));
             $super();
         }
     },
     
     /**
      * Reset method to leave the form as initially
+     * @override
+     * @private
      */
     _reset: function ($super){
         var user = GVSSingleton.getInstance().getUser();
-        this.getForm().firstName.value = user.getFirstName();
-        this.getForm().lastName.value = user.getLastName();
-        this.getForm().email.value = user.getEmail();
-        this.getForm().ezWebURL.value = user.getEzWebURL();
+        this._getForm().firstName.value = user.getFirstName();
+        this._getForm().lastName.value = user.getLastName();
+        this._getForm().email.value = user.getEmail();
+        this._getForm().ezWebURL.value = user.getEzWebURL();
         $super();
     }
 });

@@ -38,59 +38,93 @@ var FormDialog = Class.create( /** @lends FormDialog.prototype */ {
     },
 
     
-    // **************** PUBLIC METHODS **************** //
-
-    getDialog: function() {
-        return this._dialog;
-    },
-    
-    /**
-     * Gets the root node.
-     * @type DOMNode
-     * @public
-     */
-    getNode: function () {
-        return this._dialog.domNode;
-    },
+    // **************** PUBLIC METHODS **************** //  
 
     /**
-     * Gets the content node.
-     * @type DOMNode
+     * Shows the dialog
      * @public
      */
-    getContentNode: function () {
-        return this._contentNode;
-    },    
-    /**
-     * Gets the form node.
-     * @type DOMNode
-     * @public
-     */
-    getForm: function() {
-        return this._formWidget.domNode;
-    },
-    
-    getFormWidget: function() {
-        return this._formWidget;
-    },
-    
     show: function() {
         if (!this._initialized) {
             this._initDialogInterface();
             this._initialized = true;
         }
+        GVSSingleton.getInstance().setEnabled(false);
+        this._reset();
         this._dialog.show();
     },
-        
-    hide: function() {
+    
+    // **************** PRIVATE METHODS **************** //
+    /** 
+     * initDialogInterface
+     * This function creates the dom structure
+     * @private
+     * @abstract
+     */
+    _initDialogInterface: function(){
+        throw "Abstract method invocation FormDialog :: _initDialogInterface"
+    },
+    
+    _hide: function() {
+        GVSSingleton.getInstance().setEnabled(true);
         this._dialog.hide();
     },
+        
+    /**
+     * Gets the form node.
+     * @type DOMNode
+     * @private
+     */
+    _getForm: function() {
+        return this._formWidget.domNode;
+    },
+    /**
+     * Gets the form Widget
+     * @type dijit.form.Form
+     * @private
+     */
+    _getFormWidget: function() {
+        return this._formWidget;
+    },
+
+    /**
+     * This function adds a button with an onclick handler
+     * @private
+     */
+    _addButton: function (/** String */ label, /** Function */ handler){
+        
+        var button = new dijit.form.Button({
+            'label': label,
+            onClick: handler
+        });
+        
+        this._buttonNode.insert (button.domNode);
+    },
+    
+    /**
+     * This function sets the header and a subtitle if passed
+     * @private
+     */
+    _setHeader: function (/** String */ title, /** String */ subtitle){
+        
+        var titleNode = new Element("h2").update(title);
+        this._headerNode.insert(titleNode);
+        
+        if (subtitle && subtitle != ""){
+            var subtitleNode = new Element("div", {
+                "class": "line"
+            }).update(subtitle);
+            this._headerNode.insert(subtitleNode);
+        }
+    },
+
     /**
      * This function set the form content based on a array-like
      * structure, containing the different elements of the form,
      * and, optionally, form parameters
+     * @private
      */
-    setContent: function (/** Array | DOMNode */ data, /** Hash */ formParams){
+    _setContent: function (/** Array | DOMNode */ data, /** Hash */ formParams){
         if (data instanceof Array) {
             // Form
             if (formParams){
@@ -184,48 +218,8 @@ var FormDialog = Class.create( /** @lends FormDialog.prototype */ {
 
         //Just in case
         dojo.parser.parse(this._contentNode);
-    },
+    },    
     
-    /**
-     * This function adds a button with an onclick handler
-     * 
-     */
-    addButton: function (/** String */ label, /** Function */ handler){
-        
-        var button = new dijit.form.Button({
-            'label': label,
-            onClick: handler
-        });
-        
-        this._buttonNode.insert (button.domNode);
-    },
-    
-    /**
-     * This function sets the header and a subtitle if passed
-     */
-    setHeader: function (/** String */ title, /** String */ subtitle){
-        
-        var titleNode = new Element("h2").update(title);
-        this._headerNode.insert(titleNode);
-        
-        if (subtitle && subtitle != ""){
-            var subtitleNode = new Element("div", {
-                "class": "line"
-            }).update(subtitle);
-            this._headerNode.insert(subtitleNode);
-        }
-    },
-    
-    // **************** PRIVATE METHODS **************** //
-    /** 
-     * initDialogInterface
-     * This function creates the dom structure
-     * @private
-     * @abstract
-     */
-    _initDialogInterface: function(){
-        throw "Abstract method invocation FormDialog :: _initDialogInterface"
-    },
     
     /**
      * Construct a form line provided the label text and the input node.
@@ -243,11 +237,28 @@ var FormDialog = Class.create( /** @lends FormDialog.prototype */ {
         return lineNode;
     },
     
+    
+    /**
+     * Attach the event handlers to the input DOM node
+     * @private
+     */
     _armEvents: function(/** DOMNode */ input, /** Hash */ events) {
         $H(events).each(function(pair) {
             Element.observe(input, pair.key, pair.value);
         });
-    }
+    },
+
+    /**
+     * This method is called for reseting the dialog fields.
+     * Overload when necessary.
+     * @private
+     */
+    _reset: function() {
+        if (this._getFormWidget()) {
+            this._getFormWidget().validate();
+        }
+    }  
+     
 });
 
 // vim:ts=4:sw=4:et:

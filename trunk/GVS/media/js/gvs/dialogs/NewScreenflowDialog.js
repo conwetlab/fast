@@ -20,11 +20,11 @@ var NewScreenflowDialog = Class.create(ConfirmDialog /** @lends NewScreenflowDia
      * initDialogInterface
      * This function creates the dom structure and
      * @private
-     * @overrides
+     * @override
      */
     _initDialogInterface: function (){
  
-        this.setHeader("Fulfill Gadget Information", 
+        this._setHeader("Fulfill Gadget Information", 
                              "Please fulfill the required information in order to " +
                              "create a new screenflow.");
 
@@ -53,33 +53,35 @@ var NewScreenflowDialog = Class.create(ConfirmDialog /** @lends NewScreenflowDia
             }
         ];
         
-        this.setContent(formData);               
+        this._setContent(formData);               
         
     },
     /**
      * Overriding onOk handler
-     * @overrides
+     * @override
+     * @private
      */
     _onOk: function($super){
-        if (this.getFormWidget().validate()) {
-            var name = $F(this.getForm().name);
-            var domainContext = $F(this.getForm().domaincontext).split(/[\s,]+/);
-            var version = $F(this.getForm().version);
+        if (this._getFormWidget().validate()) {
+            var name = $F(this._getForm().name);
+            var domainContext = $F(this._getForm().domaincontext).split(/[\s,]+/);
+            var version = $F(this._getForm().version);
             
             documentController = GVSSingleton.getInstance().getDocumentController();
             documentController.createScreenflow(name, $A(domainContext), version);
             
-            this.hide();
+            this._hide();
         }       
     },
     
     /**
      * Reset method to leave the form as initially
+     * @private
      */
     _reset: function ($super) {
-        this.getForm().name.value = "New Screenflow";
-        this.getForm().domaincontext.value = "";
-        this.getForm().version.value = "0.1";
+        this._getForm().name.value = "New Screenflow";
+        this._getForm().domaincontext.value = "";
+        this._getForm().version.value = "0.1";
         $super();
     }
 });

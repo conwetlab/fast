@@ -193,8 +193,6 @@ ul.inheritsList
 	
 	<li><i><a href="../symbols/_global_.html">_global_</a></i></li>
 	
-	<li><a href="../symbols/AbstractDialog.html">AbstractDialog</a></li>
-	
 	<li><a href="../symbols/AbstractDocument.html">AbstractDocument</a></li>
 	
 	<li><a href="../symbols/AddScreenDialog.html">AddScreenDialog</a></li>
@@ -211,6 +209,8 @@ ul.inheritsList
 	
 	<li><a href="../symbols/BuildingBlockFactory.html">BuildingBlockFactory</a></li>
 	
+	<li><a href="../symbols/BuildingBlockSet.html">BuildingBlockSet</a></li>
+	
 	<li><a href="../symbols/BuildingBlockView.html">BuildingBlockView</a></li>
 	
 	<li><a href="../symbols/CatalogueSingleton.html">CatalogueSingleton</a></li>
@@ -219,23 +219,15 @@ ul.inheritsList
 	
 	<li><a href="../symbols/ComponentInstance.html">ComponentInstance</a></li>
 	
+	<li><a href="../symbols/ConfirmDialog.html">ConfirmDialog</a></li>
+	
 	<li><a href="../symbols/ConfirmSingleton.html">ConfirmSingleton</a></li>
 	
 	<li><a href="../symbols/ConfirmSingleton-Confirm.html">ConfirmSingleton-Confirm</a></li>
 	
-	<li><a href="../symbols/ConnectorComponent.html">ConnectorComponent</a></li>
-	
-	<li><a href="../symbols/ConnectorDescription.html">ConnectorDescription</a></li>
-	
-	<li><a href="../symbols/ConnectorFactory.html">ConnectorFactory</a></li>
-	
-	<li><a href="../symbols/ConnectorInstance.html">ConnectorInstance</a></li>
-	
-	<li><a href="../symbols/ConnectorView.html">ConnectorView</a></li>
+	<li><a href="../symbols/Deployer.html">Deployer</a></li>
 	
 	<li><a href="../symbols/DeployGadgetDialog.html">DeployGadgetDialog</a></li>
-	
-	<li><a href="../symbols/DeploymentDocument.html">DeploymentDocument</a></li>
 	
 	<li><a href="../symbols/DocumentController.html">DocumentController</a></li>
 	
@@ -243,9 +235,13 @@ ul.inheritsList
 	
 	<li><a href="../symbols/DomainConceptDescription.html">DomainConceptDescription</a></li>
 	
+	<li><a href="../symbols/DomainConceptDialog.html">DomainConceptDialog</a></li>
+	
 	<li><a href="../symbols/DomainConceptFactory.html">DomainConceptFactory</a></li>
 	
 	<li><a href="../symbols/DomainConceptInstance.html">DomainConceptInstance</a></li>
+	
+	<li><a href="../symbols/DomainConceptSet.html">DomainConceptSet</a></li>
 	
 	<li><a href="../symbols/DomainConceptView.html">DomainConceptView</a></li>
 	
@@ -279,11 +275,9 @@ ul.inheritsList
 	
 	<li><a href="../symbols/PaletteController.html">PaletteController</a></li>
 	
+	<li><a href="../symbols/PaletteDocument.html">PaletteDocument</a></li>
+	
 	<li><a href="../symbols/PreferencesDialog.html">PreferencesDialog</a></li>
-	
-	<li><a href="../symbols/PreferencesSingleton.html">PreferencesSingleton</a></li>
-	
-	<li><a href="../symbols/PreferencesSingleton-Preferences.html">PreferencesSingleton-Preferences</a></li>
 	
 	<li><a href="../symbols/PrePostPane.html">PrePostPane</a></li>
 	
@@ -303,11 +297,21 @@ ul.inheritsList
 	
 	<li><a href="../symbols/ScreenInstance.html">ScreenInstance</a></li>
 	
+	<li><a href="../symbols/ScreenSet.html">ScreenSet</a></li>
+	
 	<li><a href="../symbols/ScreenView.html">ScreenView</a></li>
+	
+	<li><a href="../symbols/SetListener.html">SetListener</a></li>
+	
+	<li><a href="../symbols/StoreGadgetDialog.html">StoreGadgetDialog</a></li>
 	
 	<li><a href="../symbols/Table.html">Table</a></li>
 	
 	<li><a href="../symbols/Toolbar.html">Toolbar</a></li>
+	
+	<li><a href="../symbols/ToolbarButton.html">ToolbarButton</a></li>
+	
+	<li><a href="../symbols/ToolbarModel.html">ToolbarModel</a></li>
 	
 	<li><a href="../symbols/UIDGeneratorSingleton.html">UIDGeneratorSingleton</a></li>
 	
@@ -386,25 +390,16 @@ ul.inheritsList
 						<tr>
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/ScreenflowDescription.html#addConnector">addConnector</a></b>(Connector, connector, position)
+								<div class="fixedFont"><b><a href="../symbols/ScreenflowDescription.html#_getScreenUris">_getScreenUris</a></b>()
 								</div>
-								<div class="description">Adds a new connector.</div>
+								<div class="description"></div>
 							</td>
 						</tr>
 					
 						<tr>
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/ScreenflowDescription.html#addDomainContext">addDomainContext</a></b>(domainContext)
-								</div>
-								<div class="description">Adds a new Domain Context.</div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="attributes">&nbsp;</td>
-							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/ScreenflowDescription.html#addScreen">addScreen</a></b>(ScreenDescription, screen_uri, position)
+								<div class="fixedFont"><b><a href="../symbols/ScreenflowDescription.html#addScreen">addScreen</a></b>(ScreenDescription, position)
 								</div>
 								<div class="description">Adds a new screen.</div>
 							</td>
@@ -413,216 +408,9 @@ ul.inheritsList
 						<tr>
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/ScreenflowDescription.html#createPaletteComponent">createPaletteComponent</a></b>()
-								</div>
-								<div class="description">Creates a new screenflow component</div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="attributes">&nbsp;</td>
-							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/ScreenflowDescription.html#createView">createView</a></b>()
-								</div>
-								<div class="description">Creates a new screenflow view</div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="attributes">&nbsp;</td>
-							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/ScreenflowDescription.html#deleteConnector">deleteConnector</a></b>(Precondition)
-								</div>
-								<div class="description">Delete a precondition.</div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="attributes">&nbsp;</td>
-							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/ScreenflowDescription.html#deleteScreen">deleteScreen</a></b>(ScreenDescription)
+								<div class="fixedFont"><b><a href="../symbols/ScreenflowDescription.html#removeScreen">removeScreen</a></b>(ScreenDescription)
 								</div>
 								<div class="description">Delete a screen.</div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="attributes">&nbsp;</td>
-							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/ScreenflowDescription.html#deployGadget">deployGadget</a></b>()
-								</div>
-								<div class="description">Creates a gadget deployment from the ScreenflowDescription</div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="attributes">&nbsp;</td>
-							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/ScreenflowDescription.html#getConnectors">getConnectors</a></b>()
-								</div>
-								<div class="description">Returns the connectors of the screenflowdescription</div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="attributes">&nbsp;</td>
-							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/ScreenflowDescription.html#getCreator">getCreator</a></b>()
-								</div>
-								<div class="description">Returns the Screenflow Creator.</div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="attributes">&nbsp;</td>
-							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/ScreenflowDescription.html#getDescription">getDescription</a></b>()
-								</div>
-								<div class="description">Returns the screenflow description.</div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="attributes">&nbsp;</td>
-							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/ScreenflowDescription.html#getDomainContext">getDomainContext</a></b>()
-								</div>
-								<div class="description">Returns the Screenflow Domain Contexts</div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="attributes">&nbsp;</td>
-							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/ScreenflowDescription.html#getLabel">getLabel</a></b>()
-								</div>
-								<div class="description">Returns the Screenflow Label.</div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="attributes">&nbsp;</td>
-							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/ScreenflowDescription.html#getPostconditions">getPostconditions</a></b>()
-								</div>
-								<div class="description">Returns the postconditions of the screenflowdescription</div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="attributes">&nbsp;</td>
-							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/ScreenflowDescription.html#getPreconditions">getPreconditions</a></b>()
-								</div>
-								<div class="description">Returns the preconditions of the screenflowdescription</div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="attributes">&nbsp;</td>
-							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/ScreenflowDescription.html#getScreenDescriptions">getScreenDescriptions</a></b>()
-								</div>
-								<div class="description">Returns the screens of the screenflowdescription</div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="attributes">&nbsp;</td>
-							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/ScreenflowDescription.html#getScreens">getScreens</a></b>()
-								</div>
-								<div class="description">Returns the screens of the screenflowdescription</div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="attributes">&nbsp;</td>
-							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/ScreenflowDescription.html#getUri">getUri</a></b>()
-								</div>
-								<div class="description">Returns the screenflow URI.</div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="attributes">&nbsp;</td>
-							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/ScreenflowDescription.html#getVersion">getVersion</a></b>()
-								</div>
-								<div class="description">Returns the Screenflow Version.</div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="attributes">&nbsp;</td>
-							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/ScreenflowDescription.html#setCreator">setCreator</a></b>(Creator)
-								</div>
-								<div class="description">Set the Screenflow Creator.</div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="attributes">&nbsp;</td>
-							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/ScreenflowDescription.html#setDescription">setDescription</a></b>(Tag, Value)
-								</div>
-								<div class="description">Adds a new Description.</div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="attributes">&nbsp;</td>
-							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/ScreenflowDescription.html#setDomainContext">setDomainContext</a></b>(domainContexts)
-								</div>
-								<div class="description">Sets all the Domain Context.</div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="attributes">&nbsp;</td>
-							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/ScreenflowDescription.html#setLabel">setLabel</a></b>(Tag, Value)
-								</div>
-								<div class="description">Adds a new Label.</div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="attributes">&nbsp;</td>
-							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/ScreenflowDescription.html#setUri">setUri</a></b>(uri)
-								</div>
-								<div class="description">Sets the screenflow URI.</div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="attributes">&nbsp;</td>
-							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/ScreenflowDescription.html#setVersion">setVersion</a></b>(Version)
-								</div>
-								<div class="description">Set the Screenflow Version.</div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="attributes">&nbsp;</td>
-							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/ScreenflowDescription.html#toJSON">toJSON</a></b>()
-								</div>
-								<div class="description">Returns the screenflowDescription coded in JSON</div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="attributes">&nbsp;</td>
-							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/ScreenflowDescription.html#updateConnector">updateConnector</a></b>(Precondition, connector, position)
-								</div>
-								<div class="description">Updates a connector.</div>
 							</td>
 						</tr>
 					
@@ -632,7 +420,7 @@ ul.inheritsList
 				
 				
 				<dl class="inheritsList">
-				
+				<dt>Methods borrowed from class <a href="../symbols/BuildingBlockDescription.html#constructor">BuildingBlockDescription</a>: </dt><dd><a href="../symbols/BuildingBlockDescription.html#addProperties">addProperties</a>, <a href="../symbols/BuildingBlockDescription.html#getInfo">getInfo</a>, <a href="../symbols/BuildingBlockDescription.html#toJSON">toJSON</a></dd>
 				</dl>
 				
 			
@@ -649,7 +437,7 @@ ul.inheritsList
 				</div>
 				
 				<div class="description">
-					Screenflow building block description.TODO: replace with the object the remote catalogue will send
+					Screenflow building block description.
 					
 				</div>
 				
@@ -693,80 +481,21 @@ ul.inheritsList
 					Method Detail
 				</div>
 				
-					<a name="addConnector"> </a>
+					<a name="_getScreenUris"> </a>
 					<div class="fixedFont">
 					
-					
-					<b>addConnector</b>(Connector, connector, position)
+					<span class="light">{Array}</span>
+					<b>_getScreenUris</b>()
 					
 					</div>
 					<div class="description">
-						Adds a new connector.
+						
 						
 						
 					</div>
 					
 					
 					
-						
-							<dl class="detailList">
-							<dt class="heading">Parameters:</dt>
-							
-								<dt>
-									<b>Connector</b>
-									
-								</dt>
-								<dd>Connector to be added to the     Screenflow description.</dd>
-							
-								<dt>
-									<b>connector</b>
-									
-								</dt>
-								<dd></dd>
-							
-								<dt>
-									<b>position</b>
-									
-								</dt>
-								<dd></dd>
-							
-							</dl>
-						
-						
-						
-						
-						
-						
-						
-
-					<hr />
-				
-					<a name="addDomainContext"> </a>
-					<div class="fixedFont">
-					
-					
-					<b>addDomainContext</b>(domainContext)
-					
-					</div>
-					<div class="description">
-						Adds a new Domain Context.
-						
-						
-					</div>
-					
-					
-					
-						
-							<dl class="detailList">
-							<dt class="heading">Parameters:</dt>
-							
-								<dt>
-									<b>domainContext</b>
-									
-								</dt>
-								<dd></dd>
-							
-							</dl>
 						
 						
 						
@@ -781,7 +510,7 @@ ul.inheritsList
 					<div class="fixedFont">
 					
 					
-					<b>addScreen</b>(ScreenDescription, screen_uri, position)
+					<b>addScreen</b>(ScreenDescription, position)
 					
 					</div>
 					<div class="description">
@@ -803,12 +532,6 @@ ul.inheritsList
 								<dd>Screen to be added to the     Screenflow document.</dd>
 							
 								<dt>
-									<span class="light fixedFont">{String}</span> <b>screen_uri</b>
-									
-								</dt>
-								<dd></dd>
-							
-								<dt>
 									<span class="light fixedFont">{Object}</span> <b>position</b>
 									
 								</dt>
@@ -825,97 +548,11 @@ ul.inheritsList
 
 					<hr />
 				
-					<a name="createPaletteComponent"> </a>
+					<a name="removeScreen"> </a>
 					<div class="fixedFont">
 					
 					
-					<b>createPaletteComponent</b>()
-					
-					</div>
-					<div class="description">
-						Creates a new screenflow component
-						
-						
-					</div>
-					
-					
-					
-						
-						
-						
-						
-						
-						
-						
-
-					<hr />
-				
-					<a name="createView"> </a>
-					<div class="fixedFont">
-					
-					
-					<b>createView</b>()
-					
-					</div>
-					<div class="description">
-						Creates a new screenflow view
-						
-						
-					</div>
-					
-					
-					
-						
-						
-						
-						
-						
-						
-						
-
-					<hr />
-				
-					<a name="deleteConnector"> </a>
-					<div class="fixedFont">
-					
-					
-					<b>deleteConnector</b>(Precondition)
-					
-					</div>
-					<div class="description">
-						Delete a precondition.
-						
-						
-					</div>
-					
-					
-					
-						
-							<dl class="detailList">
-							<dt class="heading">Parameters:</dt>
-							
-								<dt>
-									<b>Precondition</b>
-									
-								</dt>
-								<dd>Id     Precondition to be deleted from the     Screenflow description.</dd>
-							
-							</dl>
-						
-						
-						
-						
-						
-						
-						
-
-					<hr />
-				
-					<a name="deleteScreen"> </a>
-					<div class="fixedFont">
-					
-					
-					<b>deleteScreen</b>(ScreenDescription)
+					<b>removeScreen</b>(ScreenDescription)
 					
 					</div>
 					<div class="description">
@@ -945,607 +582,6 @@ ul.inheritsList
 						
 						
 
-					<hr />
-				
-					<a name="deployGadget"> </a>
-					<div class="fixedFont">
-					
-					
-					<b>deployGadget</b>()
-					
-					</div>
-					<div class="description">
-						Creates a gadget deployment from the ScreenflowDescription
-						
-						
-					</div>
-					
-					
-					
-						
-						
-						
-						
-						
-						
-						
-
-					<hr />
-				
-					<a name="getConnectors"> </a>
-					<div class="fixedFont">
-					
-					
-					<b>getConnectors</b>()
-					
-					</div>
-					<div class="description">
-						Returns the connectors of the screenflowdescription
-						
-						
-					</div>
-					
-					
-					
-						
-						
-						
-						
-						
-						
-						
-
-					<hr />
-				
-					<a name="getCreator"> </a>
-					<div class="fixedFont">
-					
-					
-					<b>getCreator</b>()
-					
-					</div>
-					<div class="description">
-						Returns the Screenflow Creator.
-						
-						
-					</div>
-					
-					
-					
-						
-						
-						
-						
-						
-						
-						
-
-					<hr />
-				
-					<a name="getDescription"> </a>
-					<div class="fixedFont">
-					
-					
-					<b>getDescription</b>()
-					
-					</div>
-					<div class="description">
-						Returns the screenflow description.
-						
-						
-					</div>
-					
-					
-					
-						
-						
-						
-						
-						
-						
-						
-
-					<hr />
-				
-					<a name="getDomainContext"> </a>
-					<div class="fixedFont">
-					
-					
-					<b>getDomainContext</b>()
-					
-					</div>
-					<div class="description">
-						Returns the Screenflow Domain Contexts
-						
-						
-					</div>
-					
-					
-					
-						
-						
-						
-						
-						
-						
-						
-
-					<hr />
-				
-					<a name="getLabel"> </a>
-					<div class="fixedFont">
-					
-					
-					<b>getLabel</b>()
-					
-					</div>
-					<div class="description">
-						Returns the Screenflow Label.
-						
-						
-					</div>
-					
-					
-					
-						
-						
-						
-						
-						
-						
-						
-
-					<hr />
-				
-					<a name="getPostconditions"> </a>
-					<div class="fixedFont">
-					
-					
-					<b>getPostconditions</b>()
-					
-					</div>
-					<div class="description">
-						Returns the postconditions of the screenflowdescription
-						
-						
-					</div>
-					
-					
-					
-						
-						
-						
-						
-						
-						
-						
-
-					<hr />
-				
-					<a name="getPreconditions"> </a>
-					<div class="fixedFont">
-					
-					
-					<b>getPreconditions</b>()
-					
-					</div>
-					<div class="description">
-						Returns the preconditions of the screenflowdescription
-						
-						
-					</div>
-					
-					
-					
-						
-						
-						
-						
-						
-						
-						
-
-					<hr />
-				
-					<a name="getScreenDescriptions"> </a>
-					<div class="fixedFont">
-					
-					
-					<b>getScreenDescriptions</b>()
-					
-					</div>
-					<div class="description">
-						Returns the screens of the screenflowdescription
-						
-						
-					</div>
-					
-					
-					
-						
-						
-						
-						
-						
-						
-						
-
-					<hr />
-				
-					<a name="getScreens"> </a>
-					<div class="fixedFont">
-					
-					
-					<b>getScreens</b>()
-					
-					</div>
-					<div class="description">
-						Returns the screens of the screenflowdescription
-						
-						
-					</div>
-					
-					
-					
-						
-						
-						
-						
-						
-						
-						
-
-					<hr />
-				
-					<a name="getUri"> </a>
-					<div class="fixedFont">
-					
-					
-					<b>getUri</b>()
-					
-					</div>
-					<div class="description">
-						Returns the screenflow URI.
-						
-						
-					</div>
-					
-					
-					
-						
-						
-						
-						
-						
-						
-						
-
-					<hr />
-				
-					<a name="getVersion"> </a>
-					<div class="fixedFont">
-					
-					
-					<b>getVersion</b>()
-					
-					</div>
-					<div class="description">
-						Returns the Screenflow Version.
-						
-						
-					</div>
-					
-					
-					
-						
-						
-						
-						
-						
-						
-						
-
-					<hr />
-				
-					<a name="setCreator"> </a>
-					<div class="fixedFont">
-					
-					
-					<b>setCreator</b>(Creator)
-					
-					</div>
-					<div class="description">
-						Set the Screenflow Creator.
-						
-						
-					</div>
-					
-					
-					
-						
-							<dl class="detailList">
-							<dt class="heading">Parameters:</dt>
-							
-								<dt>
-									<b>Creator</b>
-									
-								</dt>
-								<dd></dd>
-							
-							</dl>
-						
-						
-						
-						
-						
-						
-						
-
-					<hr />
-				
-					<a name="setDescription"> </a>
-					<div class="fixedFont">
-					
-					
-					<b>setDescription</b>(Tag, Value)
-					
-					</div>
-					<div class="description">
-						Adds a new Description.
-						
-						
-					</div>
-					
-					
-					
-						
-							<dl class="detailList">
-							<dt class="heading">Parameters:</dt>
-							
-								<dt>
-									<b>Tag</b>
-									
-								</dt>
-								<dd></dd>
-							
-								<dt>
-									<b>Value</b>
-									
-								</dt>
-								<dd></dd>
-							
-							</dl>
-						
-						
-						
-						
-						
-						
-						
-
-					<hr />
-				
-					<a name="setDomainContext"> </a>
-					<div class="fixedFont">
-					
-					
-					<b>setDomainContext</b>(domainContexts)
-					
-					</div>
-					<div class="description">
-						Sets all the Domain Context.
-						
-						
-					</div>
-					
-					
-					
-						
-							<dl class="detailList">
-							<dt class="heading">Parameters:</dt>
-							
-								<dt>
-									<b>domainContexts</b>
-									
-								</dt>
-								<dd>Strings containing the domain contexts</dd>
-							
-							</dl>
-						
-						
-						
-						
-						
-						
-						
-
-					<hr />
-				
-					<a name="setLabel"> </a>
-					<div class="fixedFont">
-					
-					
-					<b>setLabel</b>(Tag, Value)
-					
-					</div>
-					<div class="description">
-						Adds a new Label.
-						
-						
-					</div>
-					
-					
-					
-						
-							<dl class="detailList">
-							<dt class="heading">Parameters:</dt>
-							
-								<dt>
-									<b>Tag</b>
-									
-								</dt>
-								<dd>Tag to be labeled</dd>
-							
-								<dt>
-									<b>Value</b>
-									
-								</dt>
-								<dd>Value</dd>
-							
-							</dl>
-						
-						
-						
-						
-						
-						
-						
-
-					<hr />
-				
-					<a name="setUri"> </a>
-					<div class="fixedFont">
-					
-					
-					<b>setUri</b>(uri)
-					
-					</div>
-					<div class="description">
-						Sets the screenflow URI.
-						
-						
-					</div>
-					
-					
-					
-						
-							<dl class="detailList">
-							<dt class="heading">Parameters:</dt>
-							
-								<dt>
-									<b>uri</b>
-									
-								</dt>
-								<dd></dd>
-							
-							</dl>
-						
-						
-						
-						
-						
-						
-						
-
-					<hr />
-				
-					<a name="setVersion"> </a>
-					<div class="fixedFont">
-					
-					
-					<b>setVersion</b>(Version)
-					
-					</div>
-					<div class="description">
-						Set the Screenflow Version.
-						
-						
-					</div>
-					
-					
-					
-						
-							<dl class="detailList">
-							<dt class="heading">Parameters:</dt>
-							
-								<dt>
-									<b>Version</b>
-									
-								</dt>
-								<dd></dd>
-							
-							</dl>
-						
-						
-						
-						
-						
-						
-						
-
-					<hr />
-				
-					<a name="toJSON"> </a>
-					<div class="fixedFont">
-					
-					
-					<b>toJSON</b>()
-					
-					</div>
-					<div class="description">
-						Returns the screenflowDescription coded in JSON
-						
-						
-					</div>
-					
-					
-					
-						
-						
-						
-						
-						
-						
-						
-
-					<hr />
-				
-					<a name="updateConnector"> </a>
-					<div class="fixedFont">
-					
-					
-					<b>updateConnector</b>(Precondition, connector, position)
-					
-					</div>
-					<div class="description">
-						Updates a connector.
-						
-						
-					</div>
-					
-					
-					
-						
-							<dl class="detailList">
-							<dt class="heading">Parameters:</dt>
-							
-								<dt>
-									<b>Precondition</b>
-									
-								</dt>
-								<dd>Precondition to be added to the     Screenflow description.</dd>
-							
-								<dt>
-									<b>connector</b>
-									
-								</dt>
-								<dd></dd>
-							
-								<dt>
-									<b>position</b>
-									
-								</dt>
-								<dd></dd>
-							
-							</dl>
-						
-						
-						
-						
-						
-						
-						
-
 					
 				
 			
@@ -1556,7 +592,7 @@ ul.inheritsList
 <!-- ============================== footer ================================= -->
 		<div class="fineprint" style="clear:both">
 			
-			Documentation generated by <a href="http://www.jsdoctoolkit.org/" target="_blank">JsDoc Toolkit</a> 2.0.2 on Thu Aug 27 2009 11:08:32 GMT+0200 (CEST)
+			Documentation generated by <a href="http://www.jsdoctoolkit.org/" target="_blank">JsDoc Toolkit</a> 2.0.2 on Thu Sep 24 2009 10:38:34 GMT+0200 (CEST)
 		</div>
 	</body>
 </html>

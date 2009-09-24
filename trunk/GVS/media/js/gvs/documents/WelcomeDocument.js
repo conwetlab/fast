@@ -8,23 +8,13 @@ var WelcomeDocument = Class.create(AbstractDocument,
      * @extends AbstractDocument
      */
     initialize: function($super) {
-        $super("Welcome!",[]);
+        $super("Welcome!");
         this._populate ();
     },
 
 
 
     // **************** PUBLIC METHODS **************** //
-
-
-    /**
-     * Checks if it is possible to drop a kind of building block within the
-     * document area.
-     * @type Boolean
-     */
-    isAccepted: function (/** String **/ buildingBlockType) {
-        return false;
-    },
 
     // **************** PRIVATE METHODS **************** //
 

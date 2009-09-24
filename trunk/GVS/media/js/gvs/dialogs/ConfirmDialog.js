@@ -16,13 +16,13 @@ var ConfirmDialog = Class.create(FormDialog, /** @lends ConfirmDialog.prototype 
         //Initializing buttons
         switch(buttons) {
             case 'ok':
-                this.addButton ('Ok',     this._onOk.bind(this));
+                this._addButton ('Ok',     this._onOk.bind(this));
                 break;
             
             case 'ok_cancel':
             default:
-                this.addButton ('Ok',     this._onOk.bind(this));
-                this.addButton ('Cancel', this._onCancel.bind(this));
+                this._addButton ('Ok',     this._onOk.bind(this));
+                this._addButton ('Cancel', this._onCancel.bind(this));
                 break;
         }
     },
@@ -31,43 +31,16 @@ var ConfirmDialog = Class.create(FormDialog, /** @lends ConfirmDialog.prototype 
     // **************** PUBLIC METHODS **************** //
 
     
-    /**
-     * show
-     */
-    show: function ($super) {
-        $super();
-        GVSSingleton.getInstance().setEnabled(false);
-        this._reset();
-    },
-    
-    /**
-     * hide
-     */
-    hide: function ($super) {
-        GVSSingleton.getInstance().setEnabled(true);
-        $super();
-    },
     
     // **************** PRIVATE METHODS **************** //
-
-    /**
-     * This method is called for reseting the dialog fields.
-     * Overload when necessary.
-     */
-    _reset: function() {
-        if (this.getFormWidget()) {
-            this.getFormWidget().validate();
-        }
-    },
     
     /** 
      * onOK
      * This function is called when ok button is pressed (if any)
      * @private
-     * @abstract
      */
     _onOk: function(){
-        this.hide();
+        this._hide();
     },
     
     /** 
@@ -76,7 +49,7 @@ var ConfirmDialog = Class.create(FormDialog, /** @lends ConfirmDialog.prototype 
      * @private
      */
     _onCancel: function(){
-        this.hide();
+        this._hide();
     }
 });
 

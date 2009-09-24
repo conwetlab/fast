@@ -1,6 +1,7 @@
 var AddScreenDialog = Class.create(ConfirmDialog /** @lends AddScreenDialog.prototype */, {
     /**
      * This class handles the dialog to add a new screen
+     * TODO: redesign
      * @constructs
      * @extends ConfirmDialog
      */ 
@@ -19,7 +20,7 @@ var AddScreenDialog = Class.create(ConfirmDialog /** @lends AddScreenDialog.prot
      */
     _initDialogInterface: function (){
         
-        this.setHeader("Fulfill Screen Information", 
+        this._setHeader("Fulfill Screen Information", 
                              "Please fulfill the required information in order to" +
                              " add a new screen to the catalogue.");
                              
@@ -41,7 +42,7 @@ var AddScreenDialog = Class.create(ConfirmDialog /** @lends AddScreenDialog.prot
             {'type':'freeText', 'value': '(*): Required Field'}
         ];
         
-        this.setContent(formData);
+        this._setContent(formData);
         
     },
 
@@ -53,7 +54,7 @@ var AddScreenDialog = Class.create(ConfirmDialog /** @lends AddScreenDialog.prot
     _onOk: function($super){
         $super();
         var creationDate = new Date();
-        var form = this.getForm(); 
+        var form = this._getForm(); 
         
         
         form.creationDate.setValue(Utils.getIsoDateNow(creationDate));

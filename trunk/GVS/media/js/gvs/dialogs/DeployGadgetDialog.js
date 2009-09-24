@@ -3,7 +3,7 @@ var DeployGadgetDialog = Class.create(ConfirmDialog /** @lends DeployGadgetDialo
      * This class handles the dialog
      * to deploy a gadget
      * @constructs
-     * @extends AbstractDialog
+     * @extends ConfirmDialog
      */ 
     initialize: function($super) {
         $super("Deploy Gadget", "ok");        
@@ -15,15 +15,11 @@ var DeployGadgetDialog = Class.create(ConfirmDialog /** @lends DeployGadgetDialo
     
     /**
      * show
-     * @overrides
+     * @override
      */
     show: function ($super, /** DOMNode */ content) {
         $super();
-        this.setContent(content);
-        //Adding the hiding of the dialog
-        /*$(content).getElementsBySelector('.deploymentButton').each(function(button) {
-            button.observe('click',this.hide.bind(this));    
-        }.bind(this));*/
+        this._setContent(content);
     },
 
     // **************** PRIVATE METHODS **************** //
@@ -33,7 +29,7 @@ var DeployGadgetDialog = Class.create(ConfirmDialog /** @lends DeployGadgetDialo
      * initDialogInterface
      * This function creates the dom structure
      * @private
-     * @overrides
+     * @override
      */
     _initDialogInterface: function () {
     }

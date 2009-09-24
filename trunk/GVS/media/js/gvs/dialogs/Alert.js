@@ -32,7 +32,7 @@ var AlertSingleton = function() {
             });
             this.getContentNode().addClassName("systemDialog"); 
             
-            this.addButton ('Ok', this.hide.bind(this));
+            this._addButton ('Ok', this._hide.bind(this));
         },
         /**
          * This function shows a message
@@ -42,6 +42,10 @@ var AlertSingleton = function() {
             
             $super();
         },
+        /**
+         * @override
+         * @private
+         */
         _initDialogInterface: function() {
             // Do nothing
         }        
