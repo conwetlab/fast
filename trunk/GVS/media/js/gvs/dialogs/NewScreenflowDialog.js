@@ -34,8 +34,8 @@ var NewScreenflowDialog = Class.create(ConfirmDialog /** @lends NewScreenflowDia
                 'label': 'Screenflow Name:',
                 'name': 'name', 
                 'value': 'New Screenflow',
-                'regExp': '.*\\w.*',
-                'message': 'Screenflow name is mandatory'
+                'message': 'Screenflow cannot be blank',
+                'required': true
             },
             {
                 'type':'input', 
@@ -48,8 +48,8 @@ var NewScreenflowDialog = Class.create(ConfirmDialog /** @lends NewScreenflowDia
                 'label': 'Version:', 
                 'name': 'version', 
                 'value': '0.1',
-                'regExp': '.*\\S.*',
-                'message': 'Version is mandatory'
+                'message': 'Version cannot be blank',
+                'required': true
             }
         ];
         

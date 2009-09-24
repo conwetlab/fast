@@ -146,18 +146,18 @@ var FormDialog = Class.create( /** @lends FormDialog.prototype */ {
                         break;
                         
                     case 'input':
-                        if (line.regExp) {
+                        if (line.regExp || line.required) {
                             var input = new dijit.form.ValidationTextBox({
                                             'name' : line.name,
                                             'value': line.value,
-                                            'regExp': line.regExp,
-                                            'required': true,
-                                            'invalidMessage': line.message
+                                            'regExp': (line.regExp) ? line.regExp : '.*',
+                                            'required': (line.required) ? line.required : false,
+                                            'invalidMessage': (line.message) ? line.message : 'This field cannot be blank'
                                         });
                         } else {
                             var input = new dijit.form.TextBox({
                                             'name' : line.name,
-                                            'value': line.value   
+                                            'value': line.value
                                         });
                         }             
                         inputNode = input.domNode;
