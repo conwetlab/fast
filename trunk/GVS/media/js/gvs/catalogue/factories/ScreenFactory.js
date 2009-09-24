@@ -70,7 +70,7 @@ var ScreenFactory = Class.create(BuildingBlockFactory,
                     'mine': this,
                     'callback': callback
                 },
-                this._onSuccess, this._onError);
+                this._onSuccess, Utils.onAJAXError);
         } else {
             callback();
         }       
@@ -78,9 +78,7 @@ var ScreenFactory = Class.create(BuildingBlockFactory,
     
     // **************** PRIVATE METHODS **************** //
     
-    _onError: function(transport, e){
-        Logger.serverError(transport, e);
-    },
+ 
            
     /**
      * Callback function

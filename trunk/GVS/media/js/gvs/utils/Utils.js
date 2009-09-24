@@ -59,4 +59,9 @@ Object.extend(Utils, {
             return "";
         }      
     },
+       
+       
+    onAJAXError: function(transport, e){
+        Logger.serverError(transport, e);
+    }
 }); 

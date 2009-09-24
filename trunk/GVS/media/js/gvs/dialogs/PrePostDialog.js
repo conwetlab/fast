@@ -1,13 +1,13 @@
-var DomainConceptDialog = Class.create(ConfirmDialog /** @lends DomainConceptDialog.prototype */, {
+var PrePostDialog = Class.create(ConfirmDialog /** @lends PrePostDialog.prototype */, {
     /**
      * This class handles the dialog
-     * to update the domain concept properties
+     * to update the *-condition properties
      * @constructs
      * @extends ConfirmDialog
      */ 
     initialize: function($super,
             /** Function */ onChangeCallback, /** String */ label) {
-        $super("Domain concept");
+        $super("Pre/Post Condition");
         
         /**
          * @type String

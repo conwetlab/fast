@@ -37,7 +37,10 @@ var ComponentInstance = Class.create(DragSource,
          * @private
          */
         this._inferenceEngine = inferenceEngine;
-        this._inferenceEngine.addReachabilityListener(this._buildingBlockDescription.uri, this._view);
+        
+        if (this.getUri()) {
+            this._inferenceEngine.addReachabilityListener(this.getUri(), this._view);           
+        }
     },
     
 

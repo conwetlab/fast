@@ -44,6 +44,10 @@ var ScreenflowDescription = Class.create(BuildingBlockDescription,
         }
     },
     
+    //  TODO: add/removePrePost()
+    addPrePost: function() {},
+    removePrePost: function() {},
+    
     //************************ PRIVATE METHODS *******************//
     /**
      * @type Array

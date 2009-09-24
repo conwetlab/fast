@@ -28,6 +28,14 @@ var DomainConceptView = Class.create( BuildingBlockView,
     destroy: function () {
         // Let the garbage collector to do its job
         this._node = null;
+    },
+    
+    
+    /**
+     * @override
+     */
+    setReachability: function (/** Object */ reachabilityData) {
+        Utils.setSatisfeabilityClass(this._node, reachabilityData.reachability);
     }
 
 });

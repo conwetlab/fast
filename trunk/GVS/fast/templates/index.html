@@ -35,7 +35,8 @@
         <!-- URI constants -->
         <script type="text/javascript" language="javascript">
             _URIConstants = function(){}
-            _URIConstants.prototype.store = "/deploy/";
+            _URIConstants.prototype.store = "deploy";
+            _URIConstants.prototype.catalogue = "catalogue";
             _URIConstants.prototype.catalogueScreens = "catalogue/screens";
             _URIConstants.prototype.catalogueFind = "catalogue/find";
             _URIConstants.prototype.catalogueFindAndCheck = "catalogue/findcheck";
@@ -140,7 +141,7 @@
         <script type="text/javascript"
             src="{{ MEDIA_URL }}js/gvs/instances/ScreenInstance.js"></script>
         <script type="text/javascript"
-            src="{{ MEDIA_URL }}js/gvs/instances/DomainConceptInstance.js"></script>
+            src="{{ MEDIA_URL }}js/gvs/instances/PrePostInstance.js"></script>
 
         <!-- Palette classes -->
         <script type="text/javascript" 
@@ -172,7 +173,7 @@
         <script type="text/javascript" 
             src="{{ MEDIA_URL }}js/gvs/dialogs/ConfirmDialog.js"></script>    
         <script type="text/javascript" 
-            src="{{ MEDIA_URL }}js/gvs/dialogs/DomainConceptDialog.js"></script>            
+            src="{{ MEDIA_URL }}js/gvs/dialogs/PrePostDialog.js"></script>            
         <script type="text/javascript" 
             src="{{ MEDIA_URL }}js/gvs/dialogs/PreferencesDialog.js"></script>            
         <script type="text/javascript"

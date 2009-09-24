@@ -371,10 +371,10 @@ h4{
     color: white; 
     background: url("../images/facts/20x20/grey.png") no-repeat center center;
 }
-.embedded_fact.satisfeable {
+.satisfeable .embedded_fact {
     background: url("../images/facts/20x20/green.png") no-repeat center center;
 }
-.embedded_fact.unsatisfeable {
+.unsatisfeable .embedded_fact {
     background: url("../images/facts/20x20/red.png") no-repeat center center;
 }
 .standalone_fact{
@@ -387,11 +387,11 @@ h4{
     color: #808080; 
     background: url("../images/facts/25x25/grey.png") no-repeat center center;
 }
-.standalone_fact.satisfeable {
+.satisfeable .standalone_fact {
     background: url("../images/facts/25x25/green.png") no-repeat center center;
     color: #068106; 
 }
-.standalone_fact.unsatisfeable {
+.unsatisfeable .standalone_fact {
     background: url("../images/facts/25x25/red.png") no-repeat center center;
     color: #B90000; 
 }
@@ -399,11 +399,11 @@ h4{
     background: url("../images/facts/25x25/grey_selected.png") no-repeat center center;
     color: #EAEAEA; 
 }
-.selected .standalone_fact.satisfeable {
+.satisfeable.selected .standalone_fact {
     background: url("../images/facts/25x25/green_selected.png") no-repeat center center;
     color: #ddf7dd; 
 }
-.selected .standalone_fact.unsatisfeable {
+.unsatisfeable.selected .standalone_fact {
     background: url("../images/facts/25x25/red_selected.png") no-repeat center center;
     color: #f5d9d9; 
 }

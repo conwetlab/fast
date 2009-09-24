@@ -103,17 +103,16 @@ var ScreenflowDocument = Class.create(PaletteDocument,
             (droppedElement.constructor != DomainConceptInstance)) {
             return false;
         }
-        
-        this._canvasInstances.set(droppedElement.getUri(), droppedElement);
-        
+      
         switch (droppedElement.constructor) {
             case ScreenInstance:
+                this._canvasInstances.set(droppedElement.getUri(), droppedElement);
                 this._description.addScreen(droppedElement.getUri(), droppedElement.getPosition());
                 this._refreshReachability();
                 break;
                 
-            case DomainConceptInstance:
-                // TODO
+            case PrePostInstance:
+                droppedElement.setChangeHandler(this._onPrePostChange.bind(this));
                 break;
                 
             default:
@@ -327,6 +326,18 @@ var ScreenflowDocument = Class.create(PaletteDocument,
      */
     _deployGadget: function () {
         this._deployer.deployGadget(this._description);
+    },
+    
+    _onPrePostChange: function(/** String */ previousUri, /** PrePostInstance */ instance) {
+        if (previousUri) {
+            this._canvasInstances.unset(previousUri);
+            this._description.removePrePost(previousUri);
+        }
+        
+        this._canvasInstances.set(instance.getUri(), instance);
+        this._description.addPrePost(instance);
+        
+        this._refreshReachability();
     }
 });
 

@@ -111,8 +111,9 @@ var InferenceEngine = Class.create( /** @lends InferenceEngine.prototype */ {
      */
     _checkOnSuccess: function(transport){
         var result = JSON.parse(transport.responseText);
-        var paletteElements = result.elements;
-        this._updateReachability(paletteElements);
+        var elements = result.elements.concat(result.canvas).uniq();
+        
+        this._updateReachability(elements);
     },
     
     /**
