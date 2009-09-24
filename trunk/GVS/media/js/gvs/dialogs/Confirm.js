@@ -35,9 +35,9 @@ var ConfirmSingleton = function() {
              */
             this._callback = null;
             
-            this.getContentNode().addClassName("systemDialog"); 
+            this._contentNode.addClassName("systemDialog"); 
             
-            dojo.connect(this.getDialog(), "hide", function (){
+            dojo.connect(this._dialog, "hide", function (){
                 this._callback(false);
             }.bind(this));               
         },
@@ -46,7 +46,7 @@ var ConfirmSingleton = function() {
          * This function shows a message
          */
         show: function  ($super, /** String */ message, /**Function*/ callback){
-            this.getContentNode().update(message);
+            this._contentNode.update(message);
             $super();
             this._callback = callback;
         },
@@ -91,5 +91,20 @@ var ConfirmSingleton = function() {
         }
     }
 }();
+
+// Browser confirm dialog override
+if (document.getElementById) {
+    //Note that confirm is not blocking anymore
+    //so a callback function is needed
+    var browserConfirm = window.confirm;             
+    window.confirm = function(msg,callback) {
+        if (callback) {
+            ConfirmSingleton.getInstance().show(msg,callback);
+        } else{ //In case you don't use the modified version
+            browserConfirm(msg);
+        }
+    }    
+}
+
 
 // vim:ts=4:sw=4:et:

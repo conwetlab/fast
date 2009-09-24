@@ -63,26 +63,12 @@ var DomainConceptComponent = Class.create(PaletteComponent,
             if (this._buildingBlockDescription['uri']) {
                 uri = this._buildingBlockDescription['uri'];
             } else {
-                uri = this._extractURI(this._buildingBlockDescription['pattern']);
+                uri = Utils.extractURIfromPattern(this._buildingBlockDescription['pattern']);
             }
             this._buildingBlockDescription.title = this._createTitle(uri);
         }
     },
-    /**
-     * This function extracts an uri from a rdf pattern
-     * TODO: this is the same function as FactFactory one. Extract to a common library
-     * @private
-     * @type String
-     */
-    _extractURI: function(/** String */ triplePattern) {
-        if (triplePattern) {
-            var pieces = triplePattern.split(" ");
-            return pieces[2];
-        }
-        else {
-            return "";
-        }      
-    },
+
     
     /**
      * This function creates a title from the uri identifier
@@ -113,13 +99,11 @@ var DomainConceptComponent = Class.create(PaletteComponent,
      * @type String
      */
     _sanitizeTitle: function (/** String */ title) {
-        //FIXME
+        //FIXME: I18NString
         var result = title.replace("@en","");
         //separate identifier from its forming words
         var words = result.match(/[A-Z][a-z0-9]+|\s+[a-z][a-z0-9]*/g);
         if (words) {
-            //TODO: compatibility with IE 
-            //https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Objects/Array/map#Compatibility
             words.map(function(e) {
                 return e.strip();
             });

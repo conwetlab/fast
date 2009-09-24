@@ -45,5 +45,18 @@ Object.extend(Utils, {
             node.removeClassName(satisfeable ? 'unsatisfeable' : 'satisfeable');
             node.addClassName(satisfeable ? 'satisfeable' : 'unsatisfeable');
         }
-    }
+    },
+    
+    /**
+     * This function extracts an uri from a rdf pattern
+     * @type String
+     */
+    extractURIfromPattern: function(/** String */ pattern) {
+        if (pattern) {
+            var pieces = pattern.split(" ");
+            return pieces[2];
+        } else {
+            return "";
+        }      
+    },
 }); 

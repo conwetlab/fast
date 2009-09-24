@@ -60,7 +60,7 @@ var FactFactorySingleton = function() {
             if (factData.uri) {
                 uri = factData.uri;
             } else if (factData.pattern) {
-                uri = this._extractURI(factData.pattern);
+                uri = Utils.extractURIfromPattern(factData.pattern);
             }
             else { //We don't know the uri
                 uri = "http://unknown.uri#?";
@@ -86,17 +86,7 @@ var FactFactorySingleton = function() {
             }
             return this._cachedFacts.get(uri);
         },
-        
-        /**
-         * This function extracts a uri from a rdf pattern like
-         * ?E http://www.w3.org/1999/02/22-rdf-syntax-ns#type uri
-         * @type String
-         * @private
-         */
-        _extractURI: function(/** String */ triplePattern) {
-            var pieces = triplePattern.split(" ");
-            return pieces[2];
-        },
+
         
         /**
          * This function returns a shortcut coming from the URI

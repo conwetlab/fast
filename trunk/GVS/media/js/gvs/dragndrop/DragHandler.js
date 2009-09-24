@@ -127,7 +127,7 @@ var DragHandler = Class.create(
                         this._bindedUpdate, true);
             }
         }
-        /* FIXME: no magic numbers*/
+        // Warning: magic number
         draggableElement.style.zIndex = '200'; 
         
         return false;

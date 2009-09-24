@@ -153,7 +153,7 @@ var InferenceEngine = Class.create( /** @lends InferenceEngine.prototype */ {
                     /** String*/ criteria) {
         var domain = {
             'tags': domainContext,
-            'user':null /* TODO: add user here */
+            'user': null /* TODO: add user here */
         };
         var body = {
             'canvas': canvas,

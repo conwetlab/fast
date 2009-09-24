@@ -55,7 +55,6 @@ var GVSSingleton = function() {
              */            
             this._dialogs = new Hash ();
             
-            //TODO: create constants for this
             this._dialogs.set ("addScreen", new AddScreenDialog());
             this._dialogs.set ("newScreenflow", new NewScreenflowDialog());
             this._dialogs.set ("preferences", new PreferencesDialog());

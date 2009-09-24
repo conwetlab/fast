@@ -21,6 +21,8 @@
             };
         /* ]]> */
         </script>
+        <script type="text/javascript" src="{{ MEDIA_URL }}js/lib/utils/iefixes.js"></script>
+        
         <script type="text/javascript" src="{{ MEDIA_URL }}js/lib/dojo/dojo/dojo.js"></script>
         
         <script type="text/javascript" src="{{ MEDIA_URL }}js/lib/utils/json2.js"></script>
@@ -51,24 +53,6 @@
             _URIConstants.prototype.screenImageNotFound = "{{ MEDIA_URL }}images/gui/imageNotFound.png";
 
             var URIs = new _URIConstants();
-            //Hack to overwrite the default alert and confirm functions
-            if(document.getElementById) {
-                window.alert = function(msg) {
-                    AlertSingleton.getInstance().show(msg);
-                    console.log(msg);
-                }
-                //Note that confirm is not blocking anymore
-                //so a callback function is needed
-                var browserConfirm = window.confirm;             
-                window.confirm = function(msg,callback) {
-                    if (callback){
-                        ConfirmSingleton.getInstance().show(msg,callback);
-                    }
-                    else{ //In case you don't use the modified version
-                        browserConfirm(msg);
-                    }
-                }
-            }
         </script>
 
         <!-- GVS Code -->
@@ -257,13 +241,6 @@
             // Arming the GVS initialization method
             dojo.addOnLoad(function() {
                 GVSSingleton.getInstance().init();
-                //Adding the events
-                //FIXME: Remove this from here (Toolbar)
-                dojo.connect(dojo.byId("showDeployGadgetDialog"),"onclick", 
-                            GVSSingleton.getInstance().getDocumentController().
-                             showDeployCurrentDocDialog.bind(GVSSingleton.getInstance().
-                             getDocumentController()));
-                $("header_button").hide();
             });
 
         /* ]]> */
@@ -284,7 +261,7 @@
 						  {% else %} {% trans "Welcome" %}, {{ user.username }} | <a href="/logout">{% trans "Exit" %}</a></span>
 						  {% endif %}
 				</div>
-                <div id="header_button"><button id="showDeployGadgetDialog" dojoType="dijit.form.Button" label="Create Gadget!"></button></div>
+                
                 <!-- Menu area -->
                 <div id="toolbar" dojoType="dijit.Toolbar">
                     <!-- FIXME: There is an issue when loading buttons programatically  -->

@@ -39,7 +39,7 @@ var AddScreenDialog = Class.create(ConfirmDialog /** @lends AddScreenDialog.prot
             {'type':'input', 'label': 'Postconditions:','name': 'postconditions', 'value': 'If any, write postconditions separated by ","...'},   
             {'type':'input', 'label': 'Screen code URL (*):','name': 'code', 'value': 'Screencode URL...'},   
             {'type':'hidden', 'name': 'creationDate', 'value': ''},   
-            {'type':'freeText', 'value': '(*): Required Field'}
+            {'type':'label', 'value': '(*): Required Field'}
         ];
         
         this._setContent(formData);

@@ -30,7 +30,7 @@ var AlertSingleton = function() {
                'title': 'Warning',
                'style': 'display:none'
             });
-            this.getContentNode().addClassName("systemDialog"); 
+            this._contentNode.addClassName("systemDialog"); 
             
             this._addButton ('Ok', this._hide.bind(this));
         },
@@ -38,7 +38,7 @@ var AlertSingleton = function() {
          * This function shows a message
          */
         show: function  ($super, /** String */ message){
-            this.getContentNode().update(message);
+            this._contentNode.update(message);
             
             $super();
         },
@@ -64,5 +64,14 @@ var AlertSingleton = function() {
         }
     }
 }();
+
+// Browser alert dialog override
+if (document.getElementById) {
+    window.alert = function(msg) {
+        AlertSingleton.getInstance().show(msg);
+        console.log(msg);
+    }   
+}
+
 
 // vim:ts=4:sw=4:et:

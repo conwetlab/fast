@@ -4,7 +4,7 @@ var FactIcon = Class.create( /** @lends FactIcon.prototype */ {
      * Graphical representation of a fact.
      * @constructs
      * @param Fact fact   
-     * @param String size  Icon size ("small"|"medium"|"big")
+     * @param String size  Icon size ("inline"|"embedded"|"standalone")
      */
     initialize: function(fact, size) {
         /**
@@ -14,7 +14,6 @@ var FactIcon = Class.create( /** @lends FactIcon.prototype */ {
          */
         this._fact = fact;
 
-        // TODO: assert size in {inline, embedded, standalone}
         /**
          * Icon size
          * @type String

@@ -164,7 +164,7 @@ var FormDialog = Class.create( /** @lends FormDialog.prototype */ {
                         lineNode = this._createLine(line.label, inputNode);
                         break;
     
-                    case 'freeText': // FIXME: crappy name
+                    case 'label':
                         lineNode = new Element('div', {
                                         'class': 'line'
                                     }).update(line.value);
@@ -197,8 +197,6 @@ var FormDialog = Class.create( /** @lends FormDialog.prototype */ {
                         
                         lineNode = this._createLine(line.label, inputNode);
                         break;
-        
-                    //TODO: Implement more when necessary
                         
                     default:
                         throw "Unimplemented form field type";
