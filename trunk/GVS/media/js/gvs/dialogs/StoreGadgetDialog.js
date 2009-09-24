@@ -48,9 +48,9 @@ var StoreGadgetDialog = Class.create(ConfirmDialog /** @lends StoreGadgetDialog.
                              
         var formData = [
             {'type':'title', 'value': 'Gadget information'},
-            {'type':'input', 'label': 'Gadget Name:','name': 'name', 'value': ''},
-            {'type':'input', 'label': 'Vendor:','name': 'vendor', 'value': 'Morfeo'},
-            {'type':'input', 'label': 'Version:','name': 'version', 'value': '1.0'},
+            {'type':'input', 'label': 'Gadget Name:','name': 'name', 'value': '', 'required': true},
+            {'type':'input', 'label': 'Vendor:','name': 'vendor', 'value': 'Morfeo', 'required': true},
+            {'type':'input', 'label': 'Version:','name': 'version', 'value': '1.0', 'required': true},
             {'type':'input', 'label': 'Gadget Description:','name': 'desc', 'value': 'Write your description here...'},
             {'type':'title', 'value': 'Author information'},
             {'type':'input', 'label': 'Author Name:','name': 'creator', 'value': user.getRealName()},
@@ -64,8 +64,10 @@ var StoreGadgetDialog = Class.create(ConfirmDialog /** @lends StoreGadgetDialog.
      * @override
      */
     _onOk: function($super){
-        $super();
-        this._onDeployCallback(this._getForm().serialize({'hash':true}));
+    	if (this._getFormWidget().validate()) {
+    		$super();
+    		this._onDeployCallback(this._getForm().serialize({'hash':true}));
+    	}
     },
     /**
      * Reset form

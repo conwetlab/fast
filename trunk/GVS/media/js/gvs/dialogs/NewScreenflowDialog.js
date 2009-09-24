@@ -39,17 +39,17 @@ var NewScreenflowDialog = Class.create(ConfirmDialog /** @lends NewScreenflowDia
             },
             {
                 'type':'input', 
-                'label': 'Domain Context:',
-                'name': 'domaincontext',
-                'value': ''
-            },
-            {
-                'type':'input', 
                 'label': 'Version:', 
                 'name': 'version', 
                 'value': '0.1',
                 'message': 'Version cannot be blank',
                 'required': true
+            },
+            {
+                'type':'input', 
+                'label': 'Domain Context:',
+                'name': 'domaincontext',
+                'value': ''
             }
         ];
         
