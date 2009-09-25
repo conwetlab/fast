@@ -48,9 +48,10 @@ var FormDialog = Class.create( /** @lends FormDialog.prototype */ {
         if (!this._initialized) {
             this._initDialogInterface();
             this._initialized = true;
+        } else {
+            this._reset();
         }
         GVSSingleton.getInstance().setEnabled(false);
-        this._reset();
         this._dialog.show();
     },
     

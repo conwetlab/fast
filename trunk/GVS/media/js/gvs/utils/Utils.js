@@ -14,8 +14,7 @@ Object.extend(Utils, {
         return dateString;
     },
     
-    ezWebDeploy: function(/**String*/ ezWebUri,/**String*/ templateUri) {
-        var button = dijit.byId("ezwebButton");
+    ezWebDeploy: function(/** dijit.form.Button */ button, /**String*/ ezWebUri,/**String*/ templateUri) {
         button.attr("label", "Done!");
         button.attr("disabled", true);
         window.open(ezWebUri + "?template_uri=" + templateUri);

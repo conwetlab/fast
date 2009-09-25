@@ -9,6 +9,8 @@ var ScreenflowDescription = Class.create(BuildingBlockDescription,
     initialize: function($super, /** Hash */ properties) {
         this.definition = new Object();
         this.definition.screens = new Array();
+        this.definition.preconditions = new Array();
+        this.definition.postconditions = new Array();
         this.description = new Object();
         this.label = new Object();
         this.domainContext = new Array();
@@ -43,10 +45,40 @@ var ScreenflowDescription = Class.create(BuildingBlockDescription,
             }
         }
     },
-    
-    //  TODO: add/removePrePost()
-    addPrePost: function() {},
-    removePrePost: function() {},
+    /**
+     * Adds a new *-condition to the screenflow description
+     */
+    addPrePost: function(/** PrePostInstance */ instance) {
+        switch(instance.getType()) {
+            case 'pre':
+                this.definition.preconditions.push(instance.getProperties());
+                break;
+            case 'post':
+                this.definition.postconditions.push(instance.getProperties());
+                break;
+            default:
+                //Do nothing
+        }  
+    },
+    removePrePost: function(/** String */ id) {
+        var found = false;
+        for (var i=0; i < this.definition.preconditions.length; i++) {
+            if (this.definition.preconditions[i].uri == id) {
+                this.definition.preconditions.splice(i,1);
+                found = true;
+                break;
+            }
+        }
+        if (!found) {
+            for (var i=0; i < this.definition.preconditions.length; i++) {
+                if (this.definition.preconditions[i].uri == id) {
+                    this.definition.preconditions.splice(i,1);
+                    found = true;
+                    break;
+                }
+            }            
+        }       
+    },
     
     //************************ PRIVATE METHODS *******************//
     /**

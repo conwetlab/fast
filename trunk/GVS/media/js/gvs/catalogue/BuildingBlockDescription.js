@@ -14,17 +14,6 @@ var BuildingBlockDescription = Class.create(
     // **************** PUBLIC METHODS **************** //
     
     /**
-     * This function returns an array of lines representing the
-     * key information of the building block, in order to be shown in
-     * a table
-     * @type Hash
-     */
-    getInfo: function () {
-        throw 'Abstract Method invocation. ' +
-            'BuildingBlockDescription :: getInfo';    
-    },
-    
-    /**
      * Adds properties to the ScreenflowDescription
      */
     addProperties: function(properties) {

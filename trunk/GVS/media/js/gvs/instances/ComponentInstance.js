@@ -84,7 +84,7 @@ var ComponentInstance = Class.create(DragSource,
         return this;
     },
 
-        /**
+     /**
      * Returns the root node
      * @type DOMNode
      * @public
@@ -165,6 +165,17 @@ var ComponentInstance = Class.create(DragSource,
                 this._onDoubleClick(event);
             }.bind(this),'dblclick');
         }
+    },
+
+    /**
+     * This function returns an array of lines representing the
+     * key information of the building block, in order to be shown in
+     * a table
+     * @type Hash
+     */
+    getInfo: function () {
+        throw 'Abstract Method invocation. ' +
+            'ComponentInstance :: getInfo';    
     },
 
     // **************** PRIVATE METHODS **************** //

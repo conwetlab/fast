@@ -53,14 +53,16 @@ var PrePostDialog = Class.create(ConfirmDialog /** @lends PrePostDialog.prototyp
                     'label': 'Postcondition'
                 }],
                 'events': {
-                    'change': this._onTypeChange.bind(this)                    
+                    'change': this._onTypeChange.bind(this),
+                    'click':  this._removeUndefinedStatus.bind(this)               
                 }
             },
             {
                 'type': 'input',
                 'label': 'Label:',
                 'name': 'label',
-                'value': this._label 
+                'value': this._label,
+                'required': true
             },
             {
                 'type': 'title',
@@ -80,13 +82,15 @@ var PrePostDialog = Class.create(ConfirmDialog /** @lends PrePostDialog.prototyp
                 'type': 'input',
                 'label': 'Variable name:',
                 'name': 'varname',
-                'value': ''
+                'value': this._label.replace(" ",""),
+                'required': true
             },
             {
                 'type': 'input',
                 'label': 'Friendcode:',
                 'name': 'friendcode',
-                'value': ''
+                'value': this._label.replace(" ",""),
+                'required': true
             }
         ];
         
@@ -108,6 +112,7 @@ var PrePostDialog = Class.create(ConfirmDialog /** @lends PrePostDialog.prototyp
      * @private
      */    
     _onTypeChange: function() {
+        
         var bindings = new Array();
         switch ($F(this._getForm().type)) {
             case 'pre':
@@ -118,11 +123,9 @@ var PrePostDialog = Class.create(ConfirmDialog /** @lends PrePostDialog.prototyp
             case 'post':
                 bindings.push({'value':'event','label':'Event'});
                 break;
-            default:
-                //Undefined
-                bindings.push({'value': 'undefined','label': 'Choose type first...'});
+            default: 
                 break;
-        } 
+        }
         var bindingNode = $(this._getForm().binding);
         bindingNode.update("");
         bindings.each(function(binding) {
@@ -130,7 +133,27 @@ var PrePostDialog = Class.create(ConfirmDialog /** @lends PrePostDialog.prototyp
                              'value': binding.value
                         }).update(binding.label);
            bindingNode.appendChild(optionNode);                      
-        });
+        });                    
+    },
+    /**
+     * This function removes the undefined status
+     * from the type combobox
+     * @private
+     */
+    _removeUndefinedStatus: function() {
+        //Removing the initial status
+        if ($F(this._getForm().type) == 'undefined') {
+            var typeCombobox = $(this._getForm().type);
+            typeCombobox.update("");
+            typeNode = new Element('option', {
+                             'value': 'pre'
+                        }).update("Precondition");
+            typeCombobox.appendChild(typeNode);
+            typeNode = new Element('option', {
+                             'value': 'post'
+                        }).update("Postcondition");
+            typeCombobox.appendChild(typeNode);                
+        }
     }
 });
 

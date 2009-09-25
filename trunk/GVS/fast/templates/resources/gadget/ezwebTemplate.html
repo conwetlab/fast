@@ -39,7 +39,7 @@
 
     var events = [
 {% for event in gadgetEvents %}
-    {variable: _io.createOutVariable("{{ event.variableName }}"), fact_name: "{{ event.semantics }}", fact_attr: "{{ event.factAttr }}"}{% if not forloop.last %},{% endif %}
+    {variable: _io.createOutVariable("{{ event.variableName }}"), fact_uri: "{{ event.semantics }}", fact_attr: "{{ event.factAttr }}"}{% if not forloop.last %},{% endif %}
 {% endfor %}
 		];
 

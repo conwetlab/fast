@@ -25,18 +25,10 @@ var PropertiesPane = Class.create( /** @lends PropertiesPane.prototype */ {
      */
     selectElement: function (/** ComponentInstance */instance) {
         this.clearElement();
-        
-        var buildingBlockDescription = instance.getBuildingBlockDescription();
-        
 
-        var title = "";
-
-        if (buildingBlockDescription.label && buildingBlockDescription.label['en-gb']) {
-            title = buildingBlockDescription.label['en-gb'];
-        } else if (buildingBlockDescription.name) {
-            title = buildingBlockDescription.name;
-        }
-        this._propertiesTable.insertDataValues(buildingBlockDescription.getInfo());
+        var title = instance.getInfo().get('Title');
+       
+        this._propertiesTable.insertDataValues(instance.getInfo());
         this._propertiesTable.setTitle((title ? 'Properties of: '  + title : 'Properties'));
     },
 

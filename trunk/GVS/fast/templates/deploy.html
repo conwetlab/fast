@@ -9,23 +9,23 @@
         </tr>
         <tr>
             <td class="mashup">EzWeb</td>
-            <td><a href="{{ ezwebGadgetURL }}">{{ ezwebGadgetURL }}</a></td>
+            <td><a href="{{ ezwebGadgetURL }}" target="_blank">Show template</a></td>
             <td>
-                <button id="ezwebButton" dojoType="dijit.form.Button" onclick="Utils.ezWebDeploy('{{ ezwebURL }}/interfaces/gadget', '{{ ezwebGadgetURL }}');" label="Deploy it">Deploy it</button>
+                <button dojoType="dijit.form.Button" onclick="Utils.ezWebDeploy(this, '{{ ezwebURL }}/interfaces/gadget', '{{ ezwebGadgetURL }}');" label="Deploy it">Deploy it</button>
             </td>
         </tr>
         <tr>
             <td class="mashup">iGoogle</td>
             <td>Deployment information not available</td>
             <td>
-                <button id="igoogleButton" dojoType="dijit.form.Button" onclick="alert('Deployment service not available');" label="Deploy it">Deploy it</button>
+                <button disabled="true" dojoType="dijit.form.Button" onclick="alert('Deployment service not available');" label="Deploy it">Deploy it</button>
             </td>
         </tr>
         <tr>
             <td class="mashup">Beemway</td>
             <td>Deployment information not available</td>
             <td>
-                <button id="beemwayButton" dojoType="dijit.form.Button" onclick="alert('Deployment service not available');" label="Deploy it">Deploy it</button>
+                <button disabled="true" dojoType="dijit.form.Button" onclick="alert('Deployment service not available');" label="Deploy it">Deploy it</button>
             </td>
         </tr>
     </tbody>

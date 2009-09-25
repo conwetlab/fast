@@ -49,6 +49,12 @@ var PrePostInstance = Class.create(ComponentInstance,
          * @type Function
          */
         this._changeHandler = null;
+        /**
+         * Type pre/post
+         * @private @member
+         * @type String
+         */
+        this._type = null;
     },
 
     // **************** PUBLIC METHODS **************** //
@@ -61,6 +67,15 @@ var PrePostInstance = Class.create(ComponentInstance,
         return this._label; 
     },
     
+    getType: function() {
+        return this._type;
+    },
+    
+    /**
+     * Transform the instance into JSON-like
+     * string
+     * @type String
+     */
     toJSON: function() {
         var json = {
             'conditions': [{
@@ -72,6 +87,22 @@ var PrePostInstance = Class.create(ComponentInstance,
         return Object.toJSON(json);
     },
     
+    /**
+     * Returns an object with the relevant
+     * information to the screenflow description
+     * @type Object
+     */
+    getProperties: function() {
+        var result = {
+            'semantics': this._buildingBlockDescription.uri,
+            'label': this._label,
+            'friendcode': this._platformProperties.get('ezweb').get('friendcode'),
+            'variableName': this._platformProperties.get('ezweb').get('varname'),
+            'binding': this._platformProperties.get('ezweb').get('binding'),
+            'uri': this._uri
+        };
+        return result;
+    },
     
     /**
      * @override
@@ -87,6 +118,17 @@ var PrePostInstance = Class.create(ComponentInstance,
      */
     setChangeHandler: function(/** Function */ handler) {
         this._changeHandler = handler;        
+    },
+    
+    /**
+     * @overrides
+     */
+    getInfo: function() {
+        var info = new Hash();
+        info.set('Title', this._label);
+        info.set('Type', this._type);
+        info.set('EzWeb Binding', this._platformProperties.get('ezweb').get('binding'));
+        return info;
     },
 
     // **************** PRIVATE METHODS **************** //

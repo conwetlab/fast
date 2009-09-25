@@ -20,7 +20,16 @@ var ScreenInstance = Class.create(ComponentInstance,
     getTitle: function() {
         return this._buildingBlockDescription.label['en-gb'];    
     },
-
+    /**
+     * @override
+     */
+    getInfo: function() {
+        var info = new Hash();
+        info.set('Title', this._buildingBlockDescription.label['en-gb']);
+        info.set('Description', this._buildingBlockDescription.description['en-gb']);
+        info.set('Concepts', this._buildingBlockDescription.domainContext.tags);
+        return info;
+    },
 
     // **************** PRIVATE METHODS **************** //
     /**

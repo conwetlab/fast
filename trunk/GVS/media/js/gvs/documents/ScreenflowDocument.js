@@ -159,8 +159,8 @@ var ScreenflowDocument = Class.create(PaletteDocument,
                     this._description.removeScreen(instance.getUri());
                     break;
                     
-                case DomainConceptInstance:
-                    alert("Not yet implemented. ScreenflowDocument::deleteInstance");
+                case PrePostInstance:
+                    this._description.removePrePost(instance.getUri());
                     break;
                     
                 default:
