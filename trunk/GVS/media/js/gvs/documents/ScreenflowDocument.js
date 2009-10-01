@@ -147,30 +147,28 @@ var ScreenflowDocument = Class.create(PaletteDocument,
      * @override
      */
     _deleteInstance: function(instance) {
-        if (this._canvasInstances.get(instance.getUri())) {
             
-            var node = instance.getView().getNode();
-            node.parentNode.removeChild(node);
-            
-            this._canvasInstances.unset(instance.getUri());
-            
-            switch(instance.constructor) {
-                case ScreenInstance:
-                    this._description.removeScreen(instance.getUri());
-                    break;
-                    
-                case PrePostInstance:
-                    this._description.removePrePost(instance.getUri());
-                    break;
-                    
-                default:
-                    throw "Illegal state. ScreenflowDocument::deleteInstance";
-            }
-            
-            this._refreshReachability();
-            this.setSelectedElement();
-            instance.destroy();
+        var node = instance.getView().getNode();
+        node.parentNode.removeChild(node);
+        
+        this._canvasInstances.unset(instance.getUri());
+        
+        switch(instance.constructor) {
+            case ScreenInstance:
+                this._description.removeScreen(instance.getUri());
+                break;
+                
+            case PrePostInstance:
+                this._description.removePrePost(instance.getUri());
+                break;
+                
+            default:
+                throw "Illegal state. ScreenflowDocument::deleteInstance";
         }
+        
+        this._refreshReachability();
+        this.setSelectedElement();
+        instance.destroy();
     },
 
     /**

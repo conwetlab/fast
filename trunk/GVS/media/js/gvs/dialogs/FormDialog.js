@@ -24,10 +24,8 @@ var FormDialog = Class.create( /** @lends FormDialog.prototype */ {
             'class': 'dialogButtonZone' 
         });
         this._formWidget = null;
-        
-        
-        var containerDiv = new Element ('div');
-        
+               
+        var containerDiv = new Element ('div');      
         
         containerDiv.insert (this._headerNode);
         containerDiv.insert (this._contentNode);
