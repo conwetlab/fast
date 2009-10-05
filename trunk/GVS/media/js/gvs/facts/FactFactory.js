@@ -107,7 +107,7 @@ var FactFactorySingleton = function() {
             
             //Let's try with capital letters...
             var letters = identifier.match(/[A-Z]/g);
-            if (letters.length > 1) { //More than one capital letter
+            if (letters && letters.length > 1) { //More than one capital letter
                 //try only with 2 letters
                 //Put the second letter in lower case
                 //letters[1]= letters[1].toLowerCase();

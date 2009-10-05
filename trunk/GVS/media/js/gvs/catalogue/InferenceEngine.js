@@ -86,6 +86,41 @@ var InferenceEngine = Class.create( /** @lends InferenceEngine.prototype */ {
         }
     },
     
+    /**
+     * Returns a boolean determining if a building block is reachable
+     * by its uri
+     * @type Boolean
+     */
+     isReachable: function (/** String */ uri) {
+         var reachabilityData = this._reachabilityData.get(uri);
+         if (reachabilityData) {
+            return reachabilityData.reachability;
+         }
+     },
+     
+     /**
+     * Returns the reachability information about
+     * the preconditions of a given screen
+     * @type Hash
+     */
+    getPreconditionReachability: function(/** String */ uri) {
+        var reachabilityData = this._reachabilityData.get(uri);
+        if (reachabilityData.preconditions && reachabilityData.preconditions.length > 1) {
+            //More than one set of preconditions
+            console.log("OR precondition support not implemented yet");
+            return null;
+        }
+        else {
+            var preconditions = reachabilityData.preconditions[0];        
+            var result = new Hash();
+            $A(preconditions).each(function(pre) {
+                var uri = Utils.extractURIfromPattern(pre.pattern);
+                result.set(uri, pre.satisfied);    
+            });
+            return result;
+        }
+    },
+    
     // **************** PRIVATE METHODS **************** //
     /** 
      * onSuccess callback
@@ -135,7 +170,11 @@ var InferenceEngine = Class.create( /** @lends InferenceEngine.prototype */ {
         }
         return list;
     },
-    
+    /**
+     * Updates and notifies the reachability 
+     * of a list of elements
+     * @private
+     */
     _updateReachability: function(/** Array */ elements) {
         elements.each(function(element) {
             this._reachabilityData.set(element.uri, element);
@@ -143,12 +182,23 @@ var InferenceEngine = Class.create( /** @lends InferenceEngine.prototype */ {
         }.bind(this));  
     },
     
+    /**
+     * Notifies the reachability information to all the relevant
+     * listeners
+     * @private 
+     */
     _notifyReachability: function(/** String */ uri) {
         this._getListenerList(uri).each(function(listener) {
             listener.setReachability(this._reachabilityData.get(uri));
         }.bind(this));        
     },
     
+    /**
+     * Creates a body to be sent in an AJAX call to the 
+     * catalogue
+     * @private
+     * @type String
+     */
     _constructBody: function(/**Array*/ canvas, /** Array*/ elements,
                     /** Array */ domainContext, 
                     /** String*/ criteria) {
@@ -163,7 +213,7 @@ var InferenceEngine = Class.create( /** @lends InferenceEngine.prototype */ {
             'criterion': criteria
         };
         return Object.toJSON(body);
-    }
+    }   
 });
 
 // vim:ts=4:sw=4:et:

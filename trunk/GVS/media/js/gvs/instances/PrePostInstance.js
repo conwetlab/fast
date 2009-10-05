@@ -22,7 +22,7 @@ var PrePostInstance = Class.create(ComponentInstance,
          * @type String
          * @private @member
          */
-        this._pattern = "?x  http://www.w3.org/1999/02/22-rdf-syntax-ns#type " + 
+        this._pattern = "?x http://www.w3.org/1999/02/22-rdf-syntax-ns#type " + 
             this._buildingBlockDescription.uri;
         /**
          * @type String
@@ -61,12 +61,32 @@ var PrePostInstance = Class.create(ComponentInstance,
 
     /**
      * Somehow something the user can comprehend
+     * Implementing TableModel interface
      * @override
      */
     getTitle: function() {
         return this._label; 
     },
     
+    /**
+     * This function returns the relevant info
+     * to the properties table
+     * Implementing TableModel interface
+     * @overrides
+     */
+    getInfo: function() {
+        var info = new Hash();
+        info.set('Title', this._label);
+        info.set('Type', this._type);
+        info.set('EzWeb Binding', this._platformProperties.get('ezweb').get('binding'));
+        info.set('Friendcode', this._platformProperties.get('ezweb').get('friendcode'));
+        info.set('Variable Name', this._platformProperties.get('ezweb').get('varname'));
+        return info;
+    },
+    
+    /**
+     * Returning the type in {pre|post}
+     */
     getType: function() {
         return this._type;
     },
@@ -78,11 +98,7 @@ var PrePostInstance = Class.create(ComponentInstance,
      */
     toJSON: function() {
         var json = {
-            'conditions': [{
-                'label': {'en-gb': this._label},
-                'pattern': this._pattern,
-                'scope': 'design time'
-            }]
+            'conditions': [this._getFactData()]
         }
         return Object.toJSON(json);
     },
@@ -121,25 +137,24 @@ var PrePostInstance = Class.create(ComponentInstance,
     },
     
     /**
-     * This function returns the relevant info
-     * to the properties table
-     * @overrides
-     */
-    getInfo: function() {
-        var info = new Hash();
-        info.set('Title', this._label);
-        info.set('Type', this._type);
-        info.set('EzWeb Binding', this._platformProperties.get('ezweb').get('binding'));
-        info.set('Friendcode', this._platformProperties.get('ezweb').get('friendcode'));
-        info.set('Variable Name', this._platformProperties.get('ezweb').get('varname'));
-        return info;
-    },
-    /**
      * This function shows the dialog to change
      * the instance properties
      */
     showPreviewDialog: function () {
         this._dialog.show();        
+    },
+    
+    /**
+     * Returns a list the 
+     * information about the instance
+     * ready to be set in the FactPane
+     * @type Array
+     */
+    getConditionTable: function(/** Boolean */ reachable) {
+        var factFactory = FactFactorySingleton.getInstance();
+        var fact = factFactory.getFactIcon(this._getFactData(), "embedded").getNode();
+        Utils.setSatisfeabilityClass(fact, reachable);
+        return [fact, this._label, this._buildingBlockDescription.uri]; 
     },
 
     // **************** PRIVATE METHODS **************** //
@@ -198,6 +213,18 @@ var PrePostInstance = Class.create(ComponentInstance,
         
         // Notify change
         this._changeHandler(previousUri, this);
+    },
+    /**
+     * Returns an object representing
+     * the fact
+     * @type Object
+     */
+    _getFactData: function() {
+        return {
+                'label': {'en-gb': this._label},
+                'pattern': this._pattern,
+                'scope': 'design time'
+            };
     }
 });
 

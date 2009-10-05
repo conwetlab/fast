@@ -9,26 +9,19 @@ var ScreenflowDocument = Class.create(PaletteDocument,
     initialize: function($super, /** String */ title, /** Array */ domainContext, /** String */ version) {
         this._inspectorArea = this._createInspectorArea(); 
                
-        /** 
-         * Variable
+        /**
          * @type PropertiesPane
          * @private @member
          */
         this._propertiesPane = new PropertiesPane(this._inspectorArea);
         
         /** 
-         * Variable
-         * @type PrePostPane
+         * Table representing the different facts of the screenflow
+         * @type FactPane
          * @private @member
          */
-        this._prePostPane = new PrePostPane(this._inspectorArea);
+        this._factPane = new FactPane(this._inspectorArea);
         
-         /** 
-         * Variable
-         * @type FactsPane
-         * @private @member
-         */
-        this._factsPane = new InspectorPane(this._inspectorArea);
         
         $super(title, [Constants.BuildingBlock.SCREEN, Constants.BuildingBlock.DOMAIN_CONCEPT], 
         domainContext);
@@ -55,32 +48,11 @@ var ScreenflowDocument = Class.create(PaletteDocument,
                 'tags': domainContext
             }
         });
-        
-        this._addToolbarElement('save', new ToolbarButton(
-                'Save the current screenflow',
-                'save',
-                this._saveScreenflow.bind(this),
-                false // disabled by default
-        ));
-        this._addToolbarElement('previewElement', new ToolbarButton(
-                'Preview selected element',
-                'preview',
-                this._previewSelectedElement.bind(this),
-                false // disabled by default
-        ));
-        this._addToolbarElement('deleteElement', new ToolbarButton(
-                'Delete selected element',
-                'delete',
-                this._startDeletingSelectedElement.bind(this),
-                false // disabled by default
-        ));
-        this._addToolbarElement('deploy', new ToolbarButton(
-                'Store & Deploy Gadget',
-                'deploy',
-                this._deployGadget.bind(this),
-                false // disabled by default
-        ));
+        //Screenflow properties
+        this._propertiesPane.fillTable(this._description);
 
+        this._configureToolbar();
+        
         /**
          * Screen and domain concept instances on the
          * canvas by uri
@@ -217,6 +189,33 @@ var ScreenflowDocument = Class.create(PaletteDocument,
         var screenSet = screenPalette.getBuildingBlockSet();      
         screenSet.addURIs(uris);
     },
+    
+    _configureToolbar: function() {
+        this._addToolbarElement('save', new ToolbarButton(
+                'Save the current screenflow',
+                'save',
+                this._saveScreenflow.bind(this),
+                false // disabled by default
+        ));
+        this._addToolbarElement('previewElement', new ToolbarButton(
+                'Preview selected element',
+                'preview',
+                this._previewSelectedElement.bind(this),
+                false // disabled by default
+        ));
+        this._addToolbarElement('deleteElement', new ToolbarButton(
+                'Delete selected element',
+                'delete',
+                this._startDeletingSelectedElement.bind(this),
+                false // disabled by default
+        ));
+        this._addToolbarElement('deploy', new ToolbarButton(
+                'Store & Deploy Gadget',
+                'deploy',
+                this._deployGadget.bind(this),
+                false // disabled by default
+        ));    
+    },
 
     /**
      * This function creates the area containing the canvas
@@ -259,10 +258,8 @@ var ScreenflowDocument = Class.create(PaletteDocument,
      * @private
      */
     _createInspectorArea: function(){
-        var uidGenerator = UIDGeneratorSingleton.getInstance();
-        var inspectorAreaId = uidGenerator.generate("inspectorArea");
+     
         var inspectorArea = new dijit.layout.BorderContainer({
-            id:inspectorAreaId,
             region:"bottom",
             design:"horizontal",
             style:"height: 180px;",
@@ -328,24 +325,75 @@ var ScreenflowDocument = Class.create(PaletteDocument,
      * @private
      */
     _updatePanes: function() {
-        
+        var facts = this._getAllFacts();
         if (!this._selectedElement) {
-            this._propertiesPane.clearElement();
-            this._prePostPane.clearElement();
+            this._propertiesPane.fillTable(this._description);          
+            this._factPane.fillTable([], [], facts);
         } else {
-            this._propertiesPane.selectElement(this._selectedElement);
+            this._propertiesPane.fillTable(this._selectedElement);
            
             if (this._selectedElement.constructor == ScreenInstance) {
-                this._prePostPane.selectElement(
-                    this._selectedElement.getBuildingBlockDescription()
-                );               
+                var preReachability = this._inferenceEngine.getPreconditionReachability(
+                            this._selectedElement.getUri());
+                var preconditions = this._selectedElement.getPreconditionTable(preReachability);
+                
+                var postReachability = this._inferenceEngine.isReachable(
+                            this._selectedElement.getUri());
+                var postconditions = this._selectedElement.getPostconditionTable(postReachability);
+                
+                this._factPane.fillTable(preconditions,postconditions,[]);           
             } else {
-                //TODO: See what to do here
-                this._prePostPane.clearElement();    
+                //PrePostInstance
+                if (this._selectedElement.getType()) {
+                    //Pre or post condition
+                    var factInfo = [this._selectedElement.getConditionTable(
+                        this._inferenceEngine.isReachable(this._selectedElement.getUri())
+                    )];
+                    this._factPane.fillTable([], [], factInfo);
+                }
             }    
         }
     },
     
+    /**
+     * This function returns the data array containing all the
+     * facts belonging to the screenflow
+     * @type Array
+     */
+    _getAllFacts: function() {
+        var resultHash = new Hash();
+        this._canvasInstances.each(function(pair){
+            var instance = pair.value;
+            if (instance.constructor == ScreenInstance) {
+                var preReachability = this._inferenceEngine.getPreconditionReachability(
+                            instance.getUri());
+                var preconditions = instance.getPreconditionTable(preReachability);               
+                preconditions.each(function(pre) {
+                    if (!resultHash.get(pre[2]/*The uri of the pre*/)) {
+                        resultHash.set(pre[2], pre);
+                    }
+                });
+                
+                var postReachability = this._inferenceEngine.isReachable(
+                            instance.getUri());
+                var postconditions = instance.getPostconditionTable(postReachability);               
+                postconditions.each(function(post) {
+                    if (!resultHash.get(post[2]/*The uri of the post*/)) {
+                        resultHash.set(post[2], post);
+                    }
+                });
+            } else {
+                //PrePostInstance
+                var factInfo = instance.getConditionTable(
+                    this._inferenceEngine.isReachable(instance.getUri())
+                );
+                if (!resultHash.get(factInfo[2]/*The uri of the pre/post*/)) {
+                    resultHash.set(factInfo[2], factInfo);
+                }
+            }
+        }.bind(this));
+        return resultHash.values();
+    },
     
     /**
      * onClick handler
@@ -378,7 +426,7 @@ var ScreenflowDocument = Class.create(PaletteDocument,
         
         this._refreshReachability();
         
-        this.setSelectedElement(instance);
+        this.setSelectedElement();
     },
     
     

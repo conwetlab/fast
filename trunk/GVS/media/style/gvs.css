@@ -381,6 +381,12 @@ h4{
 .unsatisfeable .embedded_fact {
     background: url("../images/facts/20x20/red.png") no-repeat center center;
 }
+.embedded_fact.satisfeable  {
+    background: url("../images/facts/20x20/green.png") no-repeat center center;
+}
+.embedded_fact.unsatisfeable {
+    background: url("../images/facts/20x20/red.png") no-repeat center center;
+}
 .standalone_fact{
     width: 27px;
     height: 25px;

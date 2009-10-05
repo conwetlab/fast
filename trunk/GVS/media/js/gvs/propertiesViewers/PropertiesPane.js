@@ -9,7 +9,7 @@ var PropertiesPane = Class.create( /** @lends PropertiesPane.prototype */ {
          * @type Table
          * @private @member
          */
-        this._propertiesTable = new Table (parentNode, 'Properties', 'left');
+        this._propertiesTable = new Table(parentNode, 'Properties', 'left');
         
         this._propertiesTable.insertFieldTitles(['Property','Value']);
         
@@ -22,25 +22,31 @@ var PropertiesPane = Class.create( /** @lends PropertiesPane.prototype */ {
     /**
      * This function updates the table with data coming from
      * the currently selected element
+     * @param element
+     *          Something implementing TableModel interface
+     *              * String getTitle()
+     *              * Array getInfo()
      */
-    selectElement: function (/** ComponentInstance */instance) {
-        this.clearElement();
+    fillTable: function (/** Object */ element) {
+        this._clearElement();
 
-        var title = instance.getInfo().get('Title');
+        var title = element.getTitle();
        
-        this._propertiesTable.insertDataValues(instance.getInfo());
-        this._propertiesTable.setTitle((title ? 'Properties of: '  + title : 'Properties'));
+        this._propertiesTable.insertDataValues(element.getInfo());
+        this._propertiesTable.setTitle((title ? 'Properties of '  + title : 'Properties'));
     },
 
+    // **************** PRIVATE METHODS **************** //
+    
     /**
-     * This function empties the table 
+     * This function empties the table
+     * @private
      */
-    clearElement: function (){
+    _clearElement: function (){
         this._propertiesTable.emptyTable();
         this._propertiesTable.setTitle('Properties');
         this._propertiesTable.insertFieldTitles(['Property','Value']);
     }
-    // **************** PRIVATE METHODS **************** //
 
     
 });

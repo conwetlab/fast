@@ -5,7 +5,8 @@ var Table = Class.create( /** @lends Table.prototype */ {
      * @abstract
      * @constructs
      */ 
-    initialize: function(/** DOMNode */ parentNode, /** String */ baseTitle, /** String */ region) {
+    initialize: function(/** DOMNode */ parentNode, /** String */ baseTitle, 
+            /** String */ region, /** String (optional) */ minSize) {
         /** 
          * Parent node
          * @type DOMNode
@@ -42,8 +43,9 @@ var Table = Class.create( /** @lends Table.prototype */ {
             'region': region,
             'splitter': true
         });
-        
-
+        if (minSize) {
+            container.attr('minSize', minSize);
+        } 
         
         container.domNode.insert(this._titleNode);
         container.domNode.insert(this._tableNode);
@@ -105,9 +107,10 @@ var Table = Class.create( /** @lends Table.prototype */ {
             //TODO: What happen with the classes, maybe another method?
             line.each (function(field){
                var td = new Element ('td');
-               var div = new Element ('div', {
-                   'title': field
-               }).update(field);
+               var div = new Element ('div').update(field);
+               if (typeof field === "string") {
+                   div.setAttribute('title', field);
+               }
                td.insert(div)
                tr.insert(td);
             });

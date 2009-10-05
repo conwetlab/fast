@@ -47,12 +47,30 @@ var ComponentInstance = Class.create(DragSource,
     // **************** PUBLIC METHODS **************** //
     /**
      * Somehow something the user can comprehend
+     * Implementing TableModel interface
      * @abstract
+     * @type String
      */
     getTitle: function() {
         throw "Abstract method invokation. ComponentInstance::getTitle";    
     },
-    
+
+    /**
+     * This function returns an array of lines representing the
+     * key information of the building block, in order to be shown in
+     * a table
+     * Implementing TableModel interface
+     * @type Hash
+     */
+    getInfo: function() {
+        throw 'Abstract Method invocation. ' +
+            'ComponentInstance :: getInfo';    
+    },
+
+    /**
+     * Returns the uri of the instance
+     * @type
+     */
     getUri: function() {
         return this._buildingBlockDescription.uri;    
     },
@@ -165,17 +183,6 @@ var ComponentInstance = Class.create(DragSource,
                 this._onDoubleClick(event);
             }.bind(this),'dblclick');
         }
-    },
-
-    /**
-     * This function returns an array of lines representing the
-     * key information of the building block, in order to be shown in
-     * a table
-     * @type Hash
-     */
-    getInfo: function () {
-        throw 'Abstract Method invocation. ' +
-            'ComponentInstance :: getInfo';    
     },
 
     // **************** PRIVATE METHODS **************** //

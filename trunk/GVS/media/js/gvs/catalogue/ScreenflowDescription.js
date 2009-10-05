@@ -60,6 +60,9 @@ var ScreenflowDescription = Class.create(BuildingBlockDescription,
                 //Do nothing
         }  
     },
+    /**
+     * Removing a *-condition
+     */
     removePrePost: function(/** String */ id) {
         var found = false;
         for (var i=0; i < this.definition.preconditions.length; i++) {
@@ -79,6 +82,28 @@ var ScreenflowDescription = Class.create(BuildingBlockDescription,
             }            
         }       
     },
+    
+    /**
+     * Implementing the TableModel interface
+     * @type String
+     */
+    getTitle: function() {
+        return this.label['en-gb'];    
+    },
+    
+    /**
+     * Implementing the TableModel interface
+     * @type Array
+     */
+    getInfo: function() {
+        var info = new Hash();
+        info.set('Title', this.getTitle());
+        info.set('Tags', this.domainContext.tags.join(", "));
+        info.set('Version', this.version);
+        return info;
+    },
+    
+    
     
     //************************ PRIVATE METHODS *******************//
     /**
