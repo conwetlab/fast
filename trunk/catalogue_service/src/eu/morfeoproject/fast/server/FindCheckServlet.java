@@ -132,7 +132,7 @@ public class FindCheckServlet extends HttpServlet {
 						jsonResource.put("preconditions", preArray);
 					} else if (r instanceof Slot) {
 						jsonResource.put("uri", r.getUri());
-						jsonResource.put("reachability", reachability);
+						jsonResource.put("reachability", true);
 					} else if (r instanceof Event) {
 						Event e = (Event)r;
 						jsonResource.put("uri", e.getUri());
