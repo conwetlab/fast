@@ -3,6 +3,7 @@ package eu.morfeoproject.fast.server;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.Set;
 
 import javax.servlet.ServletException;
@@ -250,12 +251,23 @@ public class ConceptServlet extends GenericServlet {
 	 * @return an array of tags
 	 */
 	private String [] splitTags(String tagsStr) {
-		String[] tags = null;
+		String [] tags = null;
 		if (tagsStr == null)
 			return new String[0];
-		else if (tagsStr.contains("+"))
-			tags = tagsStr.split("+");
-		else {
+		else if (tagsStr.contains("+")) {
+			//tags = tagsStr.split("+"); throw an exception!!
+			ArrayList<String> tmp = new ArrayList<String>();
+			int from = 0;
+			int to = tagsStr.indexOf("+");
+			while (to != -1) {
+				tmp.add(tagsStr.substring(from, to));
+				from = to + 1;
+				to = tagsStr.indexOf("+", from);
+			}
+			tmp.add(tagsStr.substring(from, tagsStr.length()));
+			tags = new String[tmp.size()];
+			tags = tmp.toArray(tags);
+		} else {
 			tags = new String[1];
 			tags[0] = tagsStr;
 		}

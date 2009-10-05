@@ -177,7 +177,6 @@ public class Catalogue {
 //	    } catch (ModelRuntimeException e) {
 //	        throw new PimoError("Unable to check if user is defined in pimo: "+e,e);
 //	    }
-    	
     	return true;
     }
 
