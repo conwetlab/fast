@@ -56,12 +56,30 @@ var ScreenflowDocument = Class.create(PaletteDocument,
             }
         });
         
+        this._addToolbarElement('save', new ToolbarButton(
+                'Save the current screenflow',
+                'save',
+                this._saveScreenflow.bind(this),
+                false // disabled by default
+        ));
+        this._addToolbarElement('previewElement', new ToolbarButton(
+                'Preview selected element',
+                'preview',
+                this._previewSelectedElement.bind(this),
+                false // disabled by default
+        ));
+        this._addToolbarElement('deleteElement', new ToolbarButton(
+                'Delete selected element',
+                'delete',
+                this._startDeletingSelectedElement.bind(this),
+                false // disabled by default
+        ));
         this._addToolbarElement('deploy', new ToolbarButton(
                 'Store & Deploy Gadget',
                 'deploy',
                 this._deployGadget.bind(this),
                 false // disabled by default
-        ));   
+        ));
 
         /**
          * Screen and domain concept instances on the
@@ -100,7 +118,7 @@ var ScreenflowDocument = Class.create(PaletteDocument,
     drop: function(/** ComponentInstance */ droppedElement) {
         // Reject repeated elements (except domain concepts)
         if (this._canvasInstances.get(droppedElement.getUri()) &&
-            (droppedElement.constructor != DomainConceptInstance)) {
+            (droppedElement.constructor != PrePostInstance)) {
             return false;
         }
       
@@ -132,8 +150,9 @@ var ScreenflowDocument = Class.create(PaletteDocument,
      */
     setSelectedElement: function ($super, element) {
         $super(element);
-        
-        this._updatePropertiesPane();
+        this._toolbarElements.get('deleteElement').setEnabled(element!=null);
+        this._toolbarElements.get('previewElement').setEnabled(element!=null);
+        this._updatePanes();
     },
 
     // **************** PRIVATE METHODS **************** //
@@ -253,6 +272,7 @@ var ScreenflowDocument = Class.create(PaletteDocument,
         return inspectorArea;
     },
     
+    
     /**
      * Close document event handler.
      * @overrides
@@ -263,6 +283,7 @@ var ScreenflowDocument = Class.create(PaletteDocument,
             " Unsaved changes will be lost", this._confirmCallback.bind(this));
         return false;
     },
+    
     
     /**
      * This function is called when the user has confirmed the closing
@@ -277,6 +298,7 @@ var ScreenflowDocument = Class.create(PaletteDocument,
             gvs.getDocumentController().closeDocument(this._tabId);
         }
     },
+    
     
     /**
      * This function updates the reachability in all
@@ -296,19 +318,34 @@ var ScreenflowDocument = Class.create(PaletteDocument,
         // FIXME: we must learn about document reachability from the inference 
         //        engine. By the moment, one screen == deployable screenflow ;)
         this._toolbarElements.get('deploy').setEnabled(canvas.size() > 0);
+        this._toolbarElements.get('save').setEnabled(canvas.size() > 0);
     },
+    
+    
     /**
-     * This function updates the properties table
-     * depending on the selected element
+     * This function updates the properties table and 
+     * the pre/post pane depending on the selected element
      * @private
      */
-    _updatePropertiesPane: function() {
+    _updatePanes: function() {
+        
         if (!this._selectedElement) {
             this._propertiesPane.clearElement();
+            this._prePostPane.clearElement();
         } else {
             this._propertiesPane.selectElement(this._selectedElement);
+           
+            if (this._selectedElement.constructor == ScreenInstance) {
+                this._prePostPane.selectElement(
+                    this._selectedElement.getBuildingBlockDescription()
+                );               
+            } else {
+                //TODO: See what to do here
+                this._prePostPane.clearElement();    
+            }    
         }
     },
+    
     
     /**
      * onClick handler
@@ -318,6 +355,7 @@ var ScreenflowDocument = Class.create(PaletteDocument,
         this.setSelectedElement();
     },
     
+    
     /**
      * Creates a gadget deployment for the screenflow
      * @private
@@ -326,6 +364,9 @@ var ScreenflowDocument = Class.create(PaletteDocument,
         this._deployer.deployGadget(this._description);
     },
     
+    /**
+     * @private
+     */
     _onPrePostChange: function(/** String */ previousUri, /** PrePostInstance */ instance) {
         if (previousUri) {
             this._canvasInstances.unset(previousUri);
@@ -336,6 +377,28 @@ var ScreenflowDocument = Class.create(PaletteDocument,
         this._description.addPrePost(instance);
         
         this._refreshReachability();
+        
+        this.setSelectedElement(instance);
+    },
+    
+    
+    /**
+     * Previews the selected element
+     * depending on the type of the
+     * selected element
+     * @private
+     */
+    _previewSelectedElement: function() {
+        this._selectedElement.showPreviewDialog();
+    },
+      
+    
+    /**
+     * Starts the process of saving the screenflow
+     * @private
+     */
+    _saveScreenflow: function() {
+        //TODO: Do it!
     }
 });
 

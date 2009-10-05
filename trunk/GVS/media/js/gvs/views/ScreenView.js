@@ -1,4 +1,4 @@
-var ScreenView = Class.create( BuildingBlockView,
+var ScreenView = Class.create(BuildingBlockView,
     /** @lends ScreenView.prototype */ {
 
     /**

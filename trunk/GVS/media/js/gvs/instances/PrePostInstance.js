@@ -121,6 +121,8 @@ var PrePostInstance = Class.create(ComponentInstance,
     },
     
     /**
+     * This function returns the relevant info
+     * to the properties table
      * @overrides
      */
     getInfo: function() {
@@ -128,7 +130,16 @@ var PrePostInstance = Class.create(ComponentInstance,
         info.set('Title', this._label);
         info.set('Type', this._type);
         info.set('EzWeb Binding', this._platformProperties.get('ezweb').get('binding'));
+        info.set('Friendcode', this._platformProperties.get('ezweb').get('friendcode'));
+        info.set('Variable Name', this._platformProperties.get('ezweb').get('varname'));
         return info;
+    },
+    /**
+     * This function shows the dialog to change
+     * the instance properties
+     */
+    showPreviewDialog: function () {
+        this._dialog.show();        
     },
 
     // **************** PRIVATE METHODS **************** //

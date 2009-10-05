@@ -57,23 +57,6 @@ var DocumentController = Class.create(
         this.addDocument(screenflow);
     },
 
-    /**
-     * Creates a new deployment document
-     */
-    createDeploymentDocument: function(deploymentContent){
-        var deployment = new DeploymentDocument();
-        this.addDocument(deployment);
-        deployment.populate(deploymentContent);
-    },
-    
-    /**
-     * Creates a preview document
-     */
-    createPreviewDocument: function(buildingBlockDesc){
-        var preview = new PreviewDocument(buildingBlockDesc.label['en-gb']);
-        this.addDocument(preview);
-        preview.populate(buildingBlockDesc);
-    },
 
     /**
      * Adds a new document.

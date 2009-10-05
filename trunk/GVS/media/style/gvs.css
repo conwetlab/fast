@@ -40,8 +40,11 @@ h4{
         height: 24px;
         text-align: center;
 }
-.preferencesIcon { background-position: 0px; }
-.deployIcon { background-position: -24px; }
+.preferencesIcon {  background-position:   0px; }
+.deployIcon      {  background-position: -24px; }
+.deleteIcon      {  background-position: -48px; }
+.previewIcon     {  background-position: -72px; }
+.saveIcon        {  background-position: -96px; }
 
 
 /******************
@@ -333,10 +336,11 @@ h4{
 }
 
 .properties_table td div {
-    overflow: auto;
+    overflow: hidden;
+    margin: 0px auto;
 }
 
-.tableHeader td{
+.tableHeader td {
     background-color: #BED7F0;
     border-top: 1px solid #808080;
     font-weight:bold;
@@ -413,7 +417,7 @@ h4{
  *  Dialogs  *
  *************/
 
-label{
+label {
     float:left;
     margin-top:3px;
     width:130px;
@@ -432,7 +436,7 @@ label{
     min-width: 400px;
 }
 
-.line{
+.line {
     margin-bottom:10px;
 }
 
@@ -440,9 +444,20 @@ label{
     width: 250px;
 }
 
-.systemDialog{
+.systemDialog {
     text-align:center;
     min-width: 250px;
+}
+
+.preview {
+    margin: 0px auto;
+    text-align: center;    
+}
+.preview .error {
+    margin: 10px;
+    font-size: 14pt;
+    font-weight: bold;
+    color: red;
 }
 
 

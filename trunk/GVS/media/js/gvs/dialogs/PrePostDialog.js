@@ -152,7 +152,8 @@ var PrePostDialog = Class.create(ConfirmDialog /** @lends PrePostDialog.prototyp
             typeNode = new Element('option', {
                              'value': 'post'
                         }).update("Postcondition");
-            typeCombobox.appendChild(typeNode);                
+            typeCombobox.appendChild(typeNode);
+            this._onTypeChange();
         }
     }
 });

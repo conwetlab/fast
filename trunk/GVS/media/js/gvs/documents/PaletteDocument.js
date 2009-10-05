@@ -116,28 +116,36 @@ var PaletteDocument = Class.create(AbstractDocument, /** @lends PaletteDocument.
         
         switch(e.keyCode) {
             case Event.KEY_DELETE:
-                if (this._selectedElement != null) { //Delete an element from the canvas
-                    var title = null;
-                    if (this._selectedElement.getTitle()){
-                        title = 'the element "' + this._selectedElement.getTitle() + '"';
-                    } else {
-                        title = "the selected element";
-                    }
-                    
-                    confirm("You are about to remove " + title + " from canvas. Are you sure?", 
-                            function(/** Boolean */ confirmed) {
-                                if (confirmed) {
-                                    this._deleteSelectedElement();
-                                }
-                            }.bind(this)
-                    );
-                }
-                break; 
+                this._startDeletingSelectedElement();
+                break;  
         }
         
     },
 
     // **************** PRIVATE METHODS **************** //
+    
+    /**
+     * This function init the process of deleting the element
+     */
+    _startDeletingSelectedElement: function () {
+        if (this._selectedElement != null) { //Delete an element from the canvas
+            var title = null;
+            if (this._selectedElement.getTitle()){
+                title = 'the element "' + this._selectedElement.getTitle() + '"';
+            } else {
+                title = "the selected element";
+            }
+            
+            confirm("You are about to remove " + title + " from canvas. Are you sure?", 
+                    function(/** Boolean */ confirmed) {
+                        if (confirmed) {
+                            this._deleteSelectedElement();
+                        }
+                    }.bind(this)
+            );
+        }       
+    },
+    
     /**
      * This function creates the area containing the canvas
      * and the inspectors

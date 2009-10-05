@@ -1,25 +1,18 @@
-var DeployGadgetDialog = Class.create(ConfirmDialog /** @lends DeployGadgetDialog.prototype */, {
+var PreviewDialog = Class.create(ConfirmDialog /** @lends PreviewDialog.prototype */, {
     /**
      * This class handles the dialog
-     * to deploy a gadget
+     * to preview a component
      * @constructs
      * @extends ConfirmDialog
      */ 
-    initialize: function($super) {
-        $super("Deploy Gadget", "ok");        
+    initialize: function($super, /** String */ title, /** DOMNode */ content) {
+        $super("Preview of " + title, "ok");
+        this._setContent(content);
     },
+    
     
     // **************** PUBLIC METHODS **************** //
 
-    
-    /**
-     * show
-     * @override
-     */
-    show: function ($super, /** DOMNode */ content) {
-        $super();
-        this._setContent(content);
-    },
 
     // **************** PRIVATE METHODS **************** //
 

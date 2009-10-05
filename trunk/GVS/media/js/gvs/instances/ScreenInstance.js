@@ -9,6 +9,12 @@ var ScreenInstance = Class.create(ComponentInstance,
     initialize: function($super, /**BuildingBlockDescription*/ buildingBlockDescription, 
             /** DropZone */ dropZone, /** InferenceEngine */ inferenceEngine) {
         $super(buildingBlockDescription, dropZone, inferenceEngine);
+        
+        /**
+         * @type PreviewDialog
+         * @private @member
+         */
+        this._dialog = new PreviewDialog(this.getTitle(), this._buildingBlockDescription.getPreview());
     },
 
     // **************** PUBLIC METHODS **************** //
@@ -27,8 +33,16 @@ var ScreenInstance = Class.create(ComponentInstance,
         var info = new Hash();
         info.set('Title', this._buildingBlockDescription.label['en-gb']);
         info.set('Description', this._buildingBlockDescription.description['en-gb']);
-        info.set('Concepts', this._buildingBlockDescription.domainContext.tags);
+        info.set('Tags', this._buildingBlockDescription.domainContext.tags.join(", "));
         return info;
+    },
+    
+    /**
+     * This function shows the dialog to change
+     * the instance properties
+     */
+    showPreviewDialog: function () {
+        this._dialog.show();        
     },
 
     // **************** PRIVATE METHODS **************** //
@@ -47,7 +61,7 @@ var ScreenInstance = Class.create(ComponentInstance,
      * @override
      */
     _onDoubleClick: function (/** Event */ event){
-        GVSSingleton.getInstance().getDocumentController().createPreviewDocument(this.getBuildingBlockDescription());
+        this._dialog.show(); 
     }
 });
 

@@ -7,55 +7,45 @@ var Table = Class.create( /** @lends Table.prototype */ {
      */ 
     initialize: function(/** DOMNode */ parentNode, /** String */ baseTitle, /** String */ region) {
         /** 
-         * Variable
+         * Parent node
          * @type DOMNode
          * @private @member
          */
         this._parentNode = parentNode;
         
         /** 
-         * Variable
+         * Title of the table
          * @type String
          * @private @member
          */
         this._title = baseTitle;
         
-        var uidGenerator = UIDGeneratorSingleton.getInstance();
-         /** 
-         * Variable
-         * @type String
-         * @private @member
+        /**
+         * Node of the title
+         * @type DOMNode
+         * @private @member 
          */
-        this._id = uidGenerator.generate("propTable");
-        
-                 /** 
-         * Variable
-         * @type String
-         * @private @member
-         */
-        this._titleId = uidGenerator.generate("propTitle");
+        this._titleNode = new Element ('div',{
+            'class': 'dijitAccordionTitle'
+        }).update(this._title);
         
         /** 
-         * Variable
-         * @type DOM
+         * Node of the table
+         * @type DOMNode
          * @private @member
          */      
         this._tableNode = new Element ('table',{
-            'id': this._id,
             'class': 'properties_table'
         });
         
         var container= new dijit.layout.ContentPane({
-            'id': uidGenerator.generate("propPane"),
             'region': region,
             'splitter': true
         });
-        var divTitle = new Element ('div',{
-            'id': this._titleId,
-            'class': 'dijitAccordionTitle'
-        }).update(this._title);
         
-        container.domNode.insert(divTitle);
+
+        
+        container.domNode.insert(this._titleNode);
         container.domNode.insert(this._tableNode);
         this._parentNode.addChild(container);
     },
@@ -68,7 +58,7 @@ var Table = Class.create( /** @lends Table.prototype */ {
      */
     setTitle: function (/** String */ title) {
         this._title = title;
-        $(this._titleId).update(title);
+        this._titleNode.update(title);
     },
 
     /**
@@ -109,20 +99,20 @@ var Table = Class.create( /** @lends Table.prototype */ {
      */      
     insertDataValues: function (/** Hash */ data)  {
         
-        var mine = this;
-        
         data.each (function(line){
             var tr = new Element('tr');
             
             //TODO: What happen with the classes, maybe another method?
             line.each (function(field){
                var td = new Element ('td');
-               var div = new Element ('div').update(field);
+               var div = new Element ('div', {
+                   'title': field
+               }).update(field);
                td.insert(div)
                tr.insert(td);
             });
-            mine._tableNode.insert(tr);
-        });
+            this._tableNode.insert(tr);
+        }.bind(this));
     },
 
     /**
