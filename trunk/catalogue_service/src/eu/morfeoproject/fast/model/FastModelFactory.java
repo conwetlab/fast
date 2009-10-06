@@ -14,12 +14,12 @@ public class FastModelFactory {
 		return new Screen(null);
 	}
 	
-	public static Slot createSlot() {
-		return new Slot(null);
+	public static Precondition createPrecondition() {
+		return new Precondition(null);
 	}
 	
-	public static Event createEvent() {
-		return new Event(null);
+	public static Postcondition createPostcondition() {
+		return new Postcondition(null);
 	}
 	
 	public static Condition createCondition() {

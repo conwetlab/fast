@@ -16,12 +16,12 @@ import org.ontoware.rdf2go.vocabulary.RDFS;
 import eu.morfeoproject.fast.vocabulary.DC;
 import eu.morfeoproject.fast.vocabulary.FGO;
 
-public abstract class SlotOrEvent implements Resource {
+public abstract class PreOrPost implements Resource {
 	
 	private URI uri;
 	private List<Condition> conditions;
 
-	public SlotOrEvent(URI uri) {
+	public PreOrPost(URI uri) {
 		this.uri = uri;
 	}
 	

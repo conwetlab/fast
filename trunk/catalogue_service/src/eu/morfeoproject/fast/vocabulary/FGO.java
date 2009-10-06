@@ -4,7 +4,7 @@ import org.ontoware.rdf2go.model.node.URI;
 import org.ontoware.rdf2go.model.node.impl.URIImpl;
 
 /**
- * Vocabulary File. Created by org.ontoware.rdf2go.util.VocabularyWriter on Wed Jul 15 11:07:14 BST 2009
+ * Vocabulary File. Created by org.ontoware.rdf2go.util.VocabularyWriter on Tue Oct 06 12:36:31 BST 2009
  * input file: src/eu/morfeoproject/fast/catalogue/ontologies/fgo.rdf
  * namespace: http://purl.oclc.org/fast/ontology/gadget#
  */
@@ -51,6 +51,13 @@ public interface FGO {
     public static final URI Resource = new URIImpl("http://purl.oclc.org/fast/ontology/gadget#Resource", false);
 
     /**
+     * Label: Postcondition@en 
+     * Comment: A postcondition is a result condition within a screenflow. It can be seen
+    as an output of the screenflow.@en 
+     */
+    public static final URI Postcondition = new URIImpl("http://purl.oclc.org/fast/ontology/gadget#Postcondition", false);
+
+    /**
      * Label: Form Element@en 
      * Comment: Form elements are UI elements in a particular screen.@en 
      */
@@ -85,13 +92,6 @@ public interface FGO {
     public static final URI ScreenFlowStart = new URIImpl("http://purl.oclc.org/fast/ontology/gadget#ScreenFlowStart", false);
 
     /**
-     * Label: Slot@en 
-     * Comment: A slot is a satisfied condition within a screenflow. It can be seen
-    as an input of the screenflow.@en 
-     */
-    public static final URI Slot = new URIImpl("http://purl.oclc.org/fast/ontology/gadget#Slot", false);
-
-    /**
      */
     public static final URI User = new URIImpl("http://rdfs.org/sioc/ns#User", false);
 
@@ -100,11 +100,11 @@ public interface FGO {
     public static final URI RightsStatement = new URIImpl("http://purl.org/dc/terms/RightsStatement", false);
 
     /**
-     * Label: Event@en 
-     * Comment: A event is a result condition within a screenflow. It can be seen
-    as an output of the screenflow.@en 
+     * Label: Precondition@en 
+     * Comment: A precondition is a satisfied condition within a screenflow. It can be seen
+    as an input of the screenflow.@en 
      */
-    public static final URI Event = new URIImpl("http://purl.oclc.org/fast/ontology/gadget#Event", false);
+    public static final URI Precondition = new URIImpl("http://purl.oclc.org/fast/ontology/gadget#Precondition", false);
 
     /**
      * Label: With-condition@en 
@@ -286,8 +286,8 @@ public interface FGO {
 
     /**
      * Label: has condition@en 
-     * Comment: This property links a slot or event to a certain condition.@en 
-     * Comment: http://purl.oclc.org/fast/ontology/gadget#Slot http://purl.oclc.org/fast/ontology/gadget#Event 
+     * Comment: This property links a precondition or postcondition to a certain condition.@en 
+     * Comment: http://purl.oclc.org/fast/ontology/gadget#Precondition http://purl.oclc.org/fast/ontology/gadget#Postcondition 
      * Range: http://www.w3.org/1999/02/22-rdf-syntax-ns#Bag http://purl.oclc.org/fast/ontology/gadget#Condition 
      */
     public static final URI hasCondition = new URIImpl("http://purl.oclc.org/fast/ontology/gadget#hasCondition", false);

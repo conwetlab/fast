@@ -32,13 +32,13 @@ import eu.morfeoproject.fast.catalogue.ontologies.DefaultOntologies.PublicOntolo
 import eu.morfeoproject.fast.catalogue.planner.Plan;
 import eu.morfeoproject.fast.catalogue.planner.Planner;
 import eu.morfeoproject.fast.model.Condition;
-import eu.morfeoproject.fast.model.Event;
 import eu.morfeoproject.fast.model.FastModelFactory;
+import eu.morfeoproject.fast.model.Postcondition;
+import eu.morfeoproject.fast.model.PreOrPost;
+import eu.morfeoproject.fast.model.Precondition;
 import eu.morfeoproject.fast.model.Resource;
 import eu.morfeoproject.fast.model.Screen;
 import eu.morfeoproject.fast.model.ScreenFlow;
-import eu.morfeoproject.fast.model.Slot;
-import eu.morfeoproject.fast.model.SlotOrEvent;
 import eu.morfeoproject.fast.util.DateFormatter;
 import eu.morfeoproject.fast.vocabulary.DC;
 import eu.morfeoproject.fast.vocabulary.FGO;
@@ -427,27 +427,27 @@ public class Catalogue {
 	}
 
 	
-	public void addSlotOrEvent(SlotOrEvent se) throws DuplicatedResourceException, OntologyInvalidException {
+	public void addPreOrPost(PreOrPost se) throws DuplicatedResourceException, OntologyInvalidException {
 		URI seUri = null;
 		if (se.getUri() != null) {
 			seUri = se.getUri();
-			if (containsSlotOrEvent(se))
+			if (containsPreOrPost(se))
 				throw new DuplicatedResourceException(seUri+" already exists.");
 		} else {
-			if (se instanceof Slot)
-				seUri = tripleStore.createResource(FGO.Slot);
-			else if (se instanceof Event)
-				seUri = tripleStore.createResource(FGO.Event);
+			if (se instanceof Precondition)
+				seUri = tripleStore.createResource(FGO.Precondition);
+			else if (se instanceof Postcondition)
+				seUri = tripleStore.createResource(FGO.Postcondition);
 			se.setUri(seUri);
 		}
-		// persists the slot/event
-		saveSlotOrEvent(se);
-		// create plans for the slot
-		if (se instanceof Slot)
+		// persists the pre/postcondition
+		savePreOrPost(se);
+		// create plans for the precondition
+		if (se instanceof Precondition)
 			planner.add(se);
 	}
 	
-	public void saveSlotOrEvent(SlotOrEvent se) {
+	public void savePreOrPost(PreOrPost se) {
 		BlankNode bag = tripleStore.createBlankNode();
 		tripleStore.addStatement(bag, RDF.type, RDF.Bag);
 		tripleStore.addStatement(se.getUri(), FGO.hasCondition, bag);
@@ -467,20 +467,20 @@ public class Catalogue {
 		}
 	}
 	
-	public void updateSlotOrEvent(SlotOrEvent se) throws NotFoundException, OntologyReadonlyException, RepositoryException, OntologyInvalidException  {
-		logger.info("Updating slot "+se.getUri()+"...");
-		SlotOrEvent oldSe = getSlotOrEvent(se.getUri());
-		removeSlotOrEvent(se.getUri());
-		// do not call addSlot because it does not need to create a new URI for the screen
-		saveSlotOrEvent(se);
+	public void updatePreOrPost(PreOrPost se) throws NotFoundException, OntologyReadonlyException, RepositoryException, OntologyInvalidException  {
+		logger.info("Updating pre/postcondition "+se.getUri()+"...");
+		PreOrPost oldSe = getPreOrPost(se.getUri());
+		removePreOrPost(se.getUri());
+		// do not call addPrecondition because it does not need to create a new URI for the screen
+		savePreOrPost(se);
 		// calculate new plans if necessary
 		planner.update(se, oldSe);
 		logger.info(se.getUri()+" updated.");
 	}
 	
-	public void removeSlotOrEvent(URI seUri) throws NotFoundException {
+	public void removePreOrPost(URI seUri) throws NotFoundException {
 		logger.info("removing "+seUri);
-		if (!containsSlotOrEvent(seUri))
+		if (!containsPreOrPost(seUri))
 			throw new NotFoundException();
 		// remove all conditions
 		ClosableIterator<Statement> conditionBagIt = tripleStore.findStatements(seUri, FGO.hasCondition, Variable.ANY);
@@ -504,9 +504,9 @@ public class Catalogue {
 			tripleStore.removeResource(bagNode);
 		}
 		conditionBagIt.close();
-		// remove the slot/event itself
+		// remove the pre/postcondition itself
 		tripleStore.removeResource(seUri);
-		// remove the slot from the planner
+		// remove the precondition from the planner
 		planner.remove(seUri);
 		logger.info(seUri+" removed.");
 	}
@@ -514,7 +514,7 @@ public class Catalogue {
 	public boolean containsResource(URI uri) {
 		return containsScreenFlow(uri)
 			|| containsScreen(uri)
-			|| containsSlotOrEvent(uri);
+			|| containsPreOrPost(uri);
 	}
 	
 	public boolean containsScreenFlow(URI sfUri) {
@@ -533,12 +533,12 @@ public class Catalogue {
 		return containsScreen(screen.getUri());
 	}
 
-	public boolean containsSlotOrEvent(URI seUri) {
-		return tripleStore.isResource(seUri, FGO.Slot) || tripleStore.isResource(seUri, FGO.Event);
+	public boolean containsPreOrPost(URI seUri) {
+		return tripleStore.isResource(seUri, FGO.Precondition) || tripleStore.isResource(seUri, FGO.Postcondition);
 	}
 	
-	public boolean containsSlotOrEvent(SlotOrEvent se) {
-		return containsSlotOrEvent(se.getUri());
+	public boolean containsPreOrPost(PreOrPost se) {
+		return containsPreOrPost(se.getUri());
 	}
 	
 	/*
@@ -669,10 +669,10 @@ public class Catalogue {
 		queryString = queryString.concat("\n} UNION ");
 		
 		/////*** LOOK FOR SLOTS ***/////
-		queryString = queryString.concat("{ ?resource "+RDF.type.toSPARQL()+" "+FGO.Slot.toSPARQL()+" . ");
+		queryString = queryString.concat("{ ?resource "+RDF.type.toSPARQL()+" "+FGO.Precondition.toSPARQL()+" . ");
 		
 		for (Resource r : resources)
-			if (r instanceof Slot)
+			if (r instanceof Precondition)
 				queryString = queryString.concat("FILTER (?resource != "+r.getUri().toSPARQL()+") . ");
 
 		if (domainContext != null && domainContext.size() > 0) {
@@ -780,8 +780,8 @@ public class Catalogue {
     
     /**
      * Retrieves all the unsatisfied preconditions of a set of screens. It also
-     * checks whether a 'event' is satisfied.
-     * NOTE: 'slots' are always satisfied
+     * checks whether a 'postcondition' is satisfied.
+     * NOTE: 'preconditions' are always satisfied
      * @param screens The set of screens where the preconditions are obtained
      * @param plugin ignored at this version
      * @param subsume ignored at this version
@@ -796,8 +796,8 @@ public class Catalogue {
 					if (!isListSatisfied(resources, conList, plugin, subsume, s.getUri()))
 						for (Condition c : conList)
 							unsatisfied.add(c);
-			} else if (r instanceof Event) {
-				Event e = (Event)r;
+			} else if (r instanceof Postcondition) {
+				Postcondition e = (Postcondition)r;
 				List<Condition> conList = e.getConditions();
 				if (!isListSatisfied(resources, conList, plugin, subsume, e.getUri()))
 					for (Condition c : conList)
@@ -833,12 +833,12 @@ public class Catalogue {
 		
 		// copy the set of screens except the screen to be excluded
 		for (Resource r : resources)
-			if (r instanceof Slot)
+			if (r instanceof Precondition)
 				tmpResources.add(r);
 			else if (r instanceof Screen && !r.getUri().equals(screenExcluded))
 				tmpResources.add((Screen)r);
 		
-		//TODO include also the Slots in the creation of models
+		//TODO include also the Preconditions in the creation of models
 		Set<Model> models = createModels(tmpResources, plugin, subsume);
 		boolean satisfied = false;
 		
@@ -867,10 +867,10 @@ public class Catalogue {
 			return models;
 		} else if (resources.size() == 1) {
 			Resource r = resources.iterator().next();
-			if (r instanceof Slot) {
+			if (r instanceof Precondition) {
 				Model m = RDF2Go.getModelFactory().createModel();
 				m.open();
-				for (Condition c : ((Slot) r).getConditions())
+				for (Condition c : ((Precondition) r).getConditions())
 					m.addAll(c.getPattern().iterator());
 				models.add(m); 
 			} else if (r instanceof Screen) {
@@ -887,10 +887,10 @@ public class Catalogue {
 			resources.remove(r);
 			Set<Model> result = createModels(resources, plugin, subsume);
 			for (Model model : result) {
-				if (r instanceof Slot) {
+				if (r instanceof Precondition) {
 					Model m = RDF2Go.getModelFactory().createModel();
 					m.open();
-					for (Condition c : ((Slot) r).getConditions())
+					for (Condition c : ((Precondition) r).getConditions())
 						m.addAll(c.getPattern().iterator());
 					m.addModel(model);
 					models.add(m);
@@ -1003,7 +1003,7 @@ public class Catalogue {
     	HashSet<Resource> results = new HashSet<Resource>();
     	HashSet<Resource> toCheck = new HashSet<Resource>();
     	for (Resource r : resources) {
-    		if (r instanceof Slot) {
+    		if (r instanceof Precondition) {
     			results.add(r);
     		} else if (r instanceof Screen) {
     			Screen s = (Screen)r;
@@ -1063,20 +1063,20 @@ public class Catalogue {
 		return results;
 	}
 	
-	public Collection<Slot> listSlots() {
-		ArrayList<Slot> results = new ArrayList<Slot>();
-		ClosableIterator<Statement> it = tripleStore.findStatements(Variable.ANY, RDF.type, FGO.Slot);
+	public Collection<Precondition> listPreconditions() {
+		ArrayList<Precondition> results = new ArrayList<Precondition>();
+		ClosableIterator<Statement> it = tripleStore.findStatements(Variable.ANY, RDF.type, FGO.Precondition);
 		while (it.hasNext())
-			results.add(getSlot(it.next().getSubject().asURI()));
+			results.add(getPrecondition(it.next().getSubject().asURI()));
 		it.close();
 		return results;
 	}
 	
-	public Collection<Event> listEvents() {
-		ArrayList<Event> results = new ArrayList<Event>();
-		ClosableIterator<Statement> it = tripleStore.findStatements(Variable.ANY, RDF.type, FGO.Event);
+	public Collection<Postcondition> listPostconditions() {
+		ArrayList<Postcondition> results = new ArrayList<Postcondition>();
+		ClosableIterator<Statement> it = tripleStore.findStatements(Variable.ANY, RDF.type, FGO.Postcondition);
 		while (it.hasNext())
-			results.add(getEvent(it.next().getSubject().asURI()));
+			results.add(getPostcondition(it.next().getSubject().asURI()));
 		it.close();
 		return results;
 	}
@@ -1131,10 +1131,10 @@ public class Catalogue {
     		return getScreenFlow(uri);
     	} else if (isType(uri, FGO.Screen)) {
     		return getScreen(uri);
-    	} else if (isType(uri, FGO.Slot)) {
-    		return getSlot(uri);
-    	} else if (isType(uri, FGO.Event)) {
-    		return getEvent(uri);
+    	} else if (isType(uri, FGO.Precondition)) {
+    		return getPrecondition(uri);
+    	} else if (isType(uri, FGO.Postcondition)) {
+    		return getPostcondition(uri);
     	}
     	return null;
     }
@@ -1271,31 +1271,31 @@ public class Catalogue {
 		return screen;
 	}
 
-	public Slot getSlot(URI uri) {
-		Slot slot = FastModelFactory.createSlot();
-		slot = (Slot)getSlotOrEvent(uri, slot);
-		return slot;
+	public Precondition getPrecondition(URI uri) {
+		Precondition pre = FastModelFactory.createPrecondition();
+		pre = (Precondition)getPreOrPost(uri, pre);
+		return pre;
 	}
 
-	public Event getEvent(URI uri) {
-		Event event = FastModelFactory.createEvent();
-		event = (Event)getSlotOrEvent(uri, event);
-		return event;
+	public Postcondition getPostcondition(URI uri) {
+		Postcondition post = FastModelFactory.createPostcondition();
+		post = (Postcondition)getPreOrPost(uri, post);
+		return post;
 	}
 
-	public SlotOrEvent getSlotOrEvent(URI uri) {
-		if (isType(uri, FGO.Slot))
-			return getSlot(uri);
-		else if (isType(uri, FGO.Event))
-			return getEvent(uri);
+	public PreOrPost getPreOrPost(URI uri) {
+		if (isType(uri, FGO.Precondition))
+			return getPrecondition(uri);
+		else if (isType(uri, FGO.Postcondition))
+			return getPostcondition(uri);
 		else
 			return null;
 	}
 	
-	private SlotOrEvent getSlotOrEvent(URI uri, SlotOrEvent se) {
-		// find all the info related to a slot or an event
+	private PreOrPost getPreOrPost(URI uri, PreOrPost se) {
+		// find all the info related to a pre/postcondition
 		ClosableIterator<Statement> it = tripleStore.findStatements(uri, Variable.ANY, Variable.ANY);
-		if (!it.hasNext()) // the slot/event does not exist
+		if (!it.hasNext()) // the pre/postcondition does not exist
 			return null;
 		se.setUri(uri);
 		for ( ; it.hasNext(); ) {

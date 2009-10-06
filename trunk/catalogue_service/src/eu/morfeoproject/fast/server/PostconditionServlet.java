@@ -20,21 +20,21 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import eu.morfeoproject.fast.catalogue.NotFoundException;
-import eu.morfeoproject.fast.model.Event;
+import eu.morfeoproject.fast.model.Postcondition;
 import eu.morfeoproject.fast.util.URLUTF8Encoder;
 
 /**
- * Servlet implementation class EventServlet
+ * Servlet implementation class PostconditionServlet
  */
-public class EventServlet extends GenericServlet {
+public class PostconditionServlet extends GenericServlet {
 	private static final long serialVersionUID = 1L;
 
-	static Logger logger = LoggerFactory.getLogger(EventServlet.class);
+	static Logger logger = LoggerFactory.getLogger(PostconditionServlet.class);
     
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public EventServlet() {
+    public PostconditionServlet() {
         super();
     }
 
@@ -46,23 +46,23 @@ public class EventServlet extends GenericServlet {
 		String format = request.getHeader("accept") != null ? request.getHeader("accept") : MediaType.APPLICATION_JSON;
 		String[] chunks = request.getRequestURI().split("/");
 		String id = chunks[chunks.length-1];
-		if (id.equalsIgnoreCase("events")) id = null;
+		if (id.equalsIgnoreCase("postconditions")) id = null;
 		
 		if (id == null) {
 			// List the members of the collection
-			logger.info("Retrieving all events");
+			logger.info("Retrieving all postconditions");
 			try {
 				if (format.equals(MediaType.APPLICATION_RDF_XML)) {
 					response.setContentType(MediaType.APPLICATION_RDF_XML);
 					Model model = RDF2Go.getModelFactory().createModel();
 					try {
 						model.open();
-						for (Event ev : CatalogueAccessPoint.getCatalogue().listEvents()) {
-							Model eventModel = ev.createModel();
-							for (String ns : eventModel.getNamespaces().keySet())
-								model.setNamespace(ns, eventModel.getNamespace(ns));
-							model.addModel(eventModel);
-							eventModel.close();
+						for (Postcondition ev : CatalogueAccessPoint.getCatalogue().listPostconditions()) {
+							Model postModel = ev.createModel();
+							for (String ns : postModel.getNamespaces().keySet())
+								model.setNamespace(ns, postModel.getNamespace(ns));
+							model.addModel(postModel);
+							postModel.close();
 						}
 						model.writeTo(writer, Syntax.RdfXml);
 					} catch (Exception e) {
@@ -72,10 +72,10 @@ public class EventServlet extends GenericServlet {
 					}
 				} else { //if (format.equals(MediaType.APPLICATION_JSON)) {
 					response.setContentType(MediaType.APPLICATION_JSON);
-					JSONArray events = new JSONArray();
-					for (Event ev : CatalogueAccessPoint.getCatalogue().listEvents())
-						events.put(ev.toJSON());
-					writer.print(events.toString(2));
+					JSONArray posts = new JSONArray();
+					for (Postcondition ev : CatalogueAccessPoint.getCatalogue().listPostconditions())
+						posts.put(ev.toJSON());
+					writer.print(posts.toString(2));
 				}
 				response.setStatus(HttpServletResponse.SC_OK);
 			} catch (JSONException e) {
@@ -86,7 +86,7 @@ public class EventServlet extends GenericServlet {
 			// Retrieve the addressed member of the collection
 			id = URLUTF8Encoder.decode(id);
 			logger.info("Retrieving screen "+id);
-			Event ev = CatalogueAccessPoint.getCatalogue().getEvent(new URIImpl(id));
+			Postcondition ev = CatalogueAccessPoint.getCatalogue().getPostcondition(new URIImpl(id));
 			if (ev == null) {
 				response.setStatus(HttpServletResponse.SC_NOT_FOUND, "The resource "+id+" has not been found.");
 			} else {
@@ -96,9 +96,9 @@ public class EventServlet extends GenericServlet {
 						writer.print(ev.toJSON().toString(2));
 					} else if (format.equals(MediaType.APPLICATION_RDF_XML)) {
 						response.setContentType(MediaType.APPLICATION_RDF_XML);
-						Model eventModel = ev.createModel();
-						eventModel.writeTo(writer, Syntax.RdfXml);
-						eventModel.close();
+						Model postModel = ev.createModel();
+						postModel.writeTo(writer, Syntax.RdfXml);
+						postModel.close();
 					}				
 					response.setStatus(HttpServletResponse.SC_OK);
 				} catch (JSONException e) {
@@ -129,17 +129,17 @@ public class EventServlet extends GenericServlet {
 		// the collection and it is returned.
 		try {
 			JSONObject json = new JSONObject(body);
-			Event event = parseEvent(json, null);
+			Postcondition post = parsePostcondition(json, null);
 			try {
-				CatalogueAccessPoint.getCatalogue().addSlotOrEvent(event);
+				CatalogueAccessPoint.getCatalogue().addPreOrPost(post);
 				if (format.equals(MediaType.APPLICATION_RDF_XML)) {
 					response.setContentType(MediaType.APPLICATION_RDF_XML);
-					Model eventModel = event.createModel();
-					eventModel.writeTo(writer, Syntax.RdfXml);
-					eventModel.close();
+					Model postModel = post.createModel();
+					postModel.writeTo(writer, Syntax.RdfXml);
+					postModel.close();
 				} else {
 					response.setContentType(MediaType.APPLICATION_JSON);
-					writer.print(event.toJSON().toString(2));
+					writer.print(post.toJSON().toString(2));
 				}
 				response.setStatus(HttpServletResponse.SC_OK);
 			} catch (Exception e) {
@@ -177,17 +177,17 @@ public class EventServlet extends GenericServlet {
 			id = URLUTF8Encoder.decode(id);
 			try {
 				JSONObject json = new JSONObject(body);
-				Event event = parseEvent(json, null);
+				Postcondition post = parsePostcondition(json, null);
 				try {
-					CatalogueAccessPoint.getCatalogue().updateSlotOrEvent(event);
+					CatalogueAccessPoint.getCatalogue().updatePreOrPost(post);
 					if (format.equals(MediaType.APPLICATION_RDF_XML)) {
 						response.setContentType(MediaType.APPLICATION_RDF_XML);
-						Model eventModel = event.createModel();
-						eventModel.writeTo(writer, Syntax.RdfXml);
-						eventModel.close();
+						Model postModel = post.createModel();
+						postModel.writeTo(writer, Syntax.RdfXml);
+						postModel.close();
 					} else {
 						response.setContentType(MediaType.APPLICATION_JSON);
-						writer.print(event.toJSON().toString(2));
+						writer.print(post.toJSON().toString(2));
 					}
 					response.setStatus(HttpServletResponse.SC_OK);
 				} catch (Exception e) {
@@ -215,7 +215,7 @@ public class EventServlet extends GenericServlet {
 			// Delete the addressed member of the collection.
 			id = URLUTF8Encoder.decode(id);
 			try {
-				CatalogueAccessPoint.getCatalogue().removeSlotOrEvent(new URIImpl(id));
+				CatalogueAccessPoint.getCatalogue().removePreOrPost(new URIImpl(id));
 				response.setStatus(HttpServletResponse.SC_OK);
 			} catch (NotFoundException e) {
 				response.setStatus(HttpServletResponse.SC_NOT_FOUND, "The resource "+id+" has not been found.");

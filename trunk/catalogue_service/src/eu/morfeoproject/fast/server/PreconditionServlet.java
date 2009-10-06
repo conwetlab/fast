@@ -20,21 +20,21 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import eu.morfeoproject.fast.catalogue.NotFoundException;
-import eu.morfeoproject.fast.model.Slot;
+import eu.morfeoproject.fast.model.Precondition;
 import eu.morfeoproject.fast.util.URLUTF8Encoder;
 
 /**
- * Servlet implementation class SlotServlet
+ * Servlet implementation class PreconditionServlet
  */
-public class SlotServlet extends GenericServlet {
+public class PreconditionServlet extends GenericServlet {
 	private static final long serialVersionUID = 1L;
 
-	static Logger logger = LoggerFactory.getLogger(SlotServlet.class);
+	static Logger logger = LoggerFactory.getLogger(PreconditionServlet.class);
     
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public SlotServlet() {
+    public PreconditionServlet() {
         super();
     }
 
@@ -46,23 +46,23 @@ public class SlotServlet extends GenericServlet {
 		String format = request.getHeader("accept") != null ? request.getHeader("accept") : MediaType.APPLICATION_JSON;
 		String[] chunks = request.getRequestURI().split("/");
 		String id = chunks[chunks.length-1];
-		if (id.equalsIgnoreCase("slots")) id = null;
+		if (id.equalsIgnoreCase("preconditions")) id = null;
 		
 		if (id == null) {
 			// List the members of the collection
-			logger.info("Retrieving all slots");
+			logger.info("Retrieving all preconditions");
 			try {
 				if (format.equals(MediaType.APPLICATION_RDF_XML)) {
 					response.setContentType(MediaType.APPLICATION_RDF_XML);
 					Model model = RDF2Go.getModelFactory().createModel();
 					try {
 						model.open();
-						for (Slot s : CatalogueAccessPoint.getCatalogue().listSlots()) {
-							Model slotModel = s.createModel();
-							for (String ns : slotModel.getNamespaces().keySet())
-								model.setNamespace(ns, slotModel.getNamespace(ns));
-							model.addModel(slotModel);
-							slotModel.close();
+						for (Precondition s : CatalogueAccessPoint.getCatalogue().listPreconditions()) {
+							Model preModel = s.createModel();
+							for (String ns : preModel.getNamespaces().keySet())
+								model.setNamespace(ns, preModel.getNamespace(ns));
+							model.addModel(preModel);
+							preModel.close();
 						}
 						model.writeTo(writer, Syntax.RdfXml);
 					} catch (Exception e) {
@@ -72,10 +72,10 @@ public class SlotServlet extends GenericServlet {
 					}
 				} else { //if (format.equals(MediaType.APPLICATION_JSON)) {
 					response.setContentType(MediaType.APPLICATION_JSON);
-					JSONArray slots = new JSONArray();
-					for (Slot s : CatalogueAccessPoint.getCatalogue().listSlots())
-						slots.put(s.toJSON());
-					writer.print(slots.toString(2));
+					JSONArray pres = new JSONArray();
+					for (Precondition s : CatalogueAccessPoint.getCatalogue().listPreconditions())
+						pres.put(s.toJSON());
+					writer.print(pres.toString(2));
 				}
 				response.setStatus(HttpServletResponse.SC_OK);
 			} catch (JSONException e) {
@@ -86,7 +86,7 @@ public class SlotServlet extends GenericServlet {
 			// Retrieve the addressed member of the collection
 			id = URLUTF8Encoder.decode(id);
 			logger.info("Retrieving screen "+id);
-			Slot s = CatalogueAccessPoint.getCatalogue().getSlot(new URIImpl(id));
+			Precondition s = CatalogueAccessPoint.getCatalogue().getPrecondition(new URIImpl(id));
 			if (s == null) {
 				response.setStatus(HttpServletResponse.SC_NOT_FOUND, "The resource "+id+" has not been found.");
 			} else {
@@ -96,9 +96,9 @@ public class SlotServlet extends GenericServlet {
 						writer.print(s.toJSON().toString(2));
 					} else if (format.equals(MediaType.APPLICATION_RDF_XML)) {
 						response.setContentType(MediaType.APPLICATION_RDF_XML);
-						Model slotModel = s.createModel();
-						slotModel.writeTo(writer, Syntax.RdfXml);
-						slotModel.close();
+						Model preModel = s.createModel();
+						preModel.writeTo(writer, Syntax.RdfXml);
+						preModel.close();
 					}				
 					response.setStatus(HttpServletResponse.SC_OK);
 				} catch (JSONException e) {
@@ -129,17 +129,17 @@ public class SlotServlet extends GenericServlet {
 		// the collection and it is returned.
 		try {
 			JSONObject json = new JSONObject(body);
-			Slot slot = parseSlot(json, null);
+			Precondition pre = parsePrecondition(json, null);
 			try {
-				CatalogueAccessPoint.getCatalogue().addSlotOrEvent(slot);
+				CatalogueAccessPoint.getCatalogue().addPreOrPost(pre);
 				if (format.equals(MediaType.APPLICATION_RDF_XML)) {
 					response.setContentType(MediaType.APPLICATION_RDF_XML);
-					Model slotModel = slot.createModel();
-					slotModel.writeTo(writer, Syntax.RdfXml);
-					slotModel.close();
+					Model preModel = pre.createModel();
+					preModel.writeTo(writer, Syntax.RdfXml);
+					preModel.close();
 				} else {
 					response.setContentType(MediaType.APPLICATION_JSON);
-					writer.print(slot.toJSON().toString(2));
+					writer.print(pre.toJSON().toString(2));
 				}
 				response.setStatus(HttpServletResponse.SC_OK);
 			} catch (Exception e) {
@@ -177,17 +177,17 @@ public class SlotServlet extends GenericServlet {
 			id = URLUTF8Encoder.decode(id);
 			try {
 				JSONObject json = new JSONObject(body);
-				Slot slot = parseSlot(json, null);
+				Precondition pre = parsePrecondition(json, null);
 				try {
-					CatalogueAccessPoint.getCatalogue().updateSlotOrEvent(slot);
+					CatalogueAccessPoint.getCatalogue().updatePreOrPost(pre);
 					if (format.equals(MediaType.APPLICATION_RDF_XML)) {
 						response.setContentType(MediaType.APPLICATION_RDF_XML);
-						Model slotModel = slot.createModel();
-						slotModel.writeTo(writer, Syntax.RdfXml);
-						slotModel.close();
+						Model preModel = pre.createModel();
+						preModel.writeTo(writer, Syntax.RdfXml);
+						preModel.close();
 					} else {
 						response.setContentType(MediaType.APPLICATION_JSON);
-						writer.print(slot.toJSON().toString(2));
+						writer.print(pre.toJSON().toString(2));
 					}
 					response.setStatus(HttpServletResponse.SC_OK);
 				} catch (Exception e) {
@@ -215,7 +215,7 @@ public class SlotServlet extends GenericServlet {
 			// Delete the addressed member of the collection.
 			id = URLUTF8Encoder.decode(id);
 			try {
-				CatalogueAccessPoint.getCatalogue().removeSlotOrEvent(new URIImpl(id));
+				CatalogueAccessPoint.getCatalogue().removePreOrPost(new URIImpl(id));
 				response.setStatus(HttpServletResponse.SC_OK);
 			} catch (NotFoundException e) {
 				response.setStatus(HttpServletResponse.SC_NOT_FOUND, "The resource "+id+" has not been found.");

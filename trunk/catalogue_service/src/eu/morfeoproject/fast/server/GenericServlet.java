@@ -24,11 +24,11 @@ import org.ontoware.rdf2go.model.node.impl.URIImpl;
 import org.ontoware.rdf2go.vocabulary.RDF;
 
 import eu.morfeoproject.fast.model.Condition;
-import eu.morfeoproject.fast.model.Event;
+import eu.morfeoproject.fast.model.Postcondition;
 import eu.morfeoproject.fast.model.FastModelFactory;
 import eu.morfeoproject.fast.model.Screen;
 import eu.morfeoproject.fast.model.ScreenFlow;
-import eu.morfeoproject.fast.model.Slot;
+import eu.morfeoproject.fast.model.Precondition;
 import eu.morfeoproject.fast.util.DateFormatter;
 
 public abstract class GenericServlet extends HttpServlet {
@@ -169,24 +169,24 @@ public abstract class GenericServlet extends HttpServlet {
 		return screen;
 	}
 	
-	protected Slot parseSlot(JSONObject jsonSlot, URI id) throws JSONException, IOException {
-		Slot slot = FastModelFactory.createSlot();
+	protected Precondition parsePrecondition(JSONObject jsonSlot, URI id) throws JSONException, IOException {
+		Precondition pre = FastModelFactory.createPrecondition();
 		if (id != null)
-			slot.setUri(id);
+			pre.setUri(id);
 		// conditions
 		JSONArray conditionsArray = jsonSlot.getJSONArray("conditions");
-		slot.setConditions(parseConditions(conditionsArray));
-		return slot;
+		pre.setConditions(parseConditions(conditionsArray));
+		return pre;
 	}
 	
-	protected Event parseEvent(JSONObject jsonEvent, URI id) throws JSONException, IOException {
-		Event event = FastModelFactory.createEvent();
+	protected Postcondition parsePostcondition(JSONObject jsonEvent, URI id) throws JSONException, IOException {
+		Postcondition post = FastModelFactory.createPostcondition();
 		if (id != null)
-			event.setUri(id);
+			post.setUri(id);
 		// conditions
 		JSONArray conditionsArray = jsonEvent.getJSONArray("conditions");
-		event.setConditions(parseConditions(conditionsArray));
-		return event;
+		post.setConditions(parseConditions(conditionsArray));
+		return post;
 	}
 	
 	/**

@@ -22,10 +22,10 @@ import org.slf4j.LoggerFactory;
 
 import eu.morfeoproject.fast.catalogue.NotFoundException;
 import eu.morfeoproject.fast.model.Condition;
-import eu.morfeoproject.fast.model.Event;
+import eu.morfeoproject.fast.model.Postcondition;
 import eu.morfeoproject.fast.model.Resource;
 import eu.morfeoproject.fast.model.Screen;
-import eu.morfeoproject.fast.model.Slot;
+import eu.morfeoproject.fast.model.Precondition;
 
 /**
  * Servlet implementation class CheckServlet
@@ -123,11 +123,11 @@ public class CheckServlet extends HttpServlet {
 						jsonResource.put("reachability", reachability);
 						logger.info("["+(reachability ? "REACHABLE" : "NO REACHABLE")+"] "+s.getUri());
 						jsonResource.put("preconditions", preArray);
-					} else if (r instanceof Slot) {
+					} else if (r instanceof Precondition) {
 						jsonResource.put("uri", r.getUri());
 						jsonResource.put("reachability", true);
-					} else if (r instanceof Event) {
-						Event e = (Event)r;
+					} else if (r instanceof Postcondition) {
+						Postcondition e = (Postcondition)r;
 						jsonResource.put("uri", e.getUri());
 						boolean satisfied = CatalogueAccessPoint.getCatalogue().isListSatisfied(reachables, e.getConditions(), true, true, e.getUri());
 						JSONArray conArray = new JSONArray();
@@ -167,10 +167,10 @@ public class CheckServlet extends HttpServlet {
 						jsonResource.put("reachability", reachability);
 						logger.info("["+(reachability ? "REACHABLE" : "NO REACHABLE")+"] "+s.getUri());
 						jsonResource.put("preconditions", preArray);
-					} else if (r instanceof Slot) {
+					} else if (r instanceof Precondition) {
 						jsonResource.put("uri", r.getUri());
 						jsonResource.put("reachability", reachability);
-					}else if (r instanceof Event) {
+					}else if (r instanceof Postcondition) {
 						//TODO complete it
 					}
 					elementsOut.put(jsonResource);

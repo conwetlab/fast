@@ -2,9 +2,9 @@ package eu.morfeoproject.fast.model;
 
 import org.ontoware.rdf2go.model.node.URI;
 
-public class Event extends SlotOrEvent {
+public class Postcondition extends PreOrPost {
 
-	public Event(URI uri) {
+	public Postcondition(URI uri) {
 		super(uri);
 	}
 }

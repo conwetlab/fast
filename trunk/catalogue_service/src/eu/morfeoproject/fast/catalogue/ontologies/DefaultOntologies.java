@@ -31,7 +31,7 @@ public class DefaultOntologies {
     public static Ontology DC = 
         new Ontology(new URIImpl("http://purl.org/dc/elements/1.1/"), "dc.rdf", Syntax.RdfXml, true);
     public static Ontology FGO =
-    	new Ontology(new URIImpl("http://purl.oclc.org/fast/ontology/gadget#"), "fgo20090713.ttl", Syntax.Turtle, true);
+    	new Ontology(new URIImpl("http://purl.oclc.org/fast/ontology/gadget#"), "fgo20091006.ttl", Syntax.Turtle, true);
     public static Ontology FOAF =
     	new Ontology(new URIImpl("http://xmlns.com/foaf/0.1/"), "foaf.rdf", Syntax.RdfXml, true);
     public static Ontology SIOC =
@@ -40,8 +40,7 @@ public class DefaultOntologies {
     /**-- The DBPedia ontology (no datasets included) --**/
     public static PublicOntology DBPEDIA = 
     	new PublicOntology(new URIImpl("http://dbpedia.org/ontology/#"),
-//    			"http://downloads.dbpedia.org/3.2/en/dbpedia-ontology.owl",
-    			"http://localhost:8880/ontologies/dbpedia-ontology.owl",
+    			"http://downloads.dbpedia.org/3.2/en/dbpedia-ontology.owl",
     			Syntax.RdfXml,
     			true);
 
@@ -52,8 +51,7 @@ public class DefaultOntologies {
     	new Ontology(new URIImpl("http://www.morfeoproject.eu/fast/demo#"), "demo.rdf", Syntax.RdfXml, true);
     public static PublicOntology GR =
     	new PublicOntology(new URIImpl("http://purl.org/goodrelations/v1#"),
-//    			"http://www.heppnetz.de/ontologies/goodrelations/v1.owl",
-    			"http://localhost:8880/ontologies/v1.owl",
+    			"http://www.heppnetz.de/ontologies/goodrelations/v1.owl",
     			Syntax.RdfXml,
     			true);
     

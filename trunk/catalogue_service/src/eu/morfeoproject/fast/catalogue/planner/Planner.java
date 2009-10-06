@@ -11,11 +11,11 @@ import org.slf4j.LoggerFactory;
 
 import eu.morfeoproject.fast.catalogue.Catalogue;
 import eu.morfeoproject.fast.model.Condition;
-import eu.morfeoproject.fast.model.Event;
 import eu.morfeoproject.fast.model.FastModelFactory;
+import eu.morfeoproject.fast.model.Postcondition;
+import eu.morfeoproject.fast.model.Precondition;
 import eu.morfeoproject.fast.model.Resource;
 import eu.morfeoproject.fast.model.Screen;
-import eu.morfeoproject.fast.model.Slot;
 
 public class Planner {
 	
@@ -145,8 +145,8 @@ public class Planner {
 				plannerStore.removeFrom(newResource.getUri());
 				calculateForwards(newResource);
 			}
-		} else if (newResource instanceof Slot && oldResource instanceof Slot) {
-			if (!equalListCondition(((Slot) newResource).getConditions(), ((Slot) oldResource).getConditions())) {
+		} else if (newResource instanceof Precondition && oldResource instanceof Precondition) {
+			if (!equalListCondition(((Precondition) newResource).getConditions(), ((Precondition) oldResource).getConditions())) {
 				plannerStore.removeFrom(newResource.getUri());
 				calculateForwards(newResource);
 			}
@@ -165,14 +165,14 @@ public class Planner {
 		if (resource instanceof Screen) {
 			if (((Screen) resource).getPostconditions().size() > 0)
 				resources.add(resource);
-		} else if (resource instanceof Slot) {
-			if (((Slot) resource).getConditions().size() > 0) {
-				Event event = FastModelFactory.createEvent();
+		} else if (resource instanceof Precondition) {
+			if (((Precondition) resource).getConditions().size() > 0) {
+				Postcondition post = FastModelFactory.createPostcondition();
 				// need to create an Event for the FIND operation, Slots don't
 				// have unsatisfied preconditions
-				event.setUri(resource.getUri());
-				event.setConditions(((Slot) resource).getConditions());
-				resources.add(event);
+				post.setUri(resource.getUri());
+				post.setConditions(((Precondition) resource).getConditions());
+				resources.add(post);
 			}
 		}
 		if (resources.size() > 0) {
@@ -188,8 +188,8 @@ public class Planner {
 		if (resource instanceof Screen) {
 			if (((Screen) resource).getPreconditions().size() > 0)
 				resources.add(resource);
-		} else if (resource instanceof Slot) {
-			if (((Slot) resource).getConditions().size() > 0)
+		} else if (resource instanceof Precondition) {
+			if (((Precondition) resource).getConditions().size() > 0)
 				resources.add(resource);
 		}
 		if (resources.size() > 0) {
