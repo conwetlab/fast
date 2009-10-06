@@ -21,15 +21,15 @@
 	</servlet>
 	<servlet>
 		<description></description>
-		<display-name>SlotServlet</display-name>
-		<servlet-name>SlotServlet</servlet-name>
-		<servlet-class>eu.morfeoproject.fast.server.SlotServlet</servlet-class>
+		<display-name>PreconditionServlet</display-name>
+		<servlet-name>PreconditionServlet</servlet-name>
+		<servlet-class>eu.morfeoproject.fast.server.PreconditionServlet</servlet-class>
 	</servlet>
 	<servlet>
 		<description></description>
-		<display-name>EventServlet</display-name>
-		<servlet-name>EventServlet</servlet-name>
-		<servlet-class>eu.morfeoproject.fast.server.EventServlet</servlet-class>
+		<display-name>PostconditionServlet</display-name>
+		<servlet-name>PostconditionServlet</servlet-name>
+		<servlet-class>eu.morfeoproject.fast.server.PostconditionServlet</servlet-class>
 	</servlet>
 	<servlet>
 		<description></description>
@@ -80,12 +80,12 @@
 		<url-pattern>/concepts/*</url-pattern>
 	</servlet-mapping>
 	<servlet-mapping>
-		<servlet-name>SlotServlet</servlet-name>
-		<url-pattern>/slots/*</url-pattern>
+		<servlet-name>PreconditionServlet</servlet-name>
+		<url-pattern>/preconditions/*</url-pattern>
 	</servlet-mapping>
 	<servlet-mapping>
-		<servlet-name>EventServlet</servlet-name>
-		<url-pattern>/events/*</url-pattern>
+		<servlet-name>PostconditionServlet</servlet-name>
+		<url-pattern>/postconditions/*</url-pattern>
 	</servlet-mapping>
 	<servlet-mapping>
 		<servlet-name>ConceptServlet</servlet-name>
