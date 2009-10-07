@@ -28,7 +28,7 @@ var ScreenDescription = Class.create(BuildingBlockDescription,
         var image = new Element ('img', {
             'src': this.screenshot, 
             'onerror': "this.parentNode.childNodes[0].update('Image not available');" +
-                "this.src='"+URIs.logoFast+"';"
+                "this.src='"+ URIs.logoFast + "';"
         });
         node.appendChild(image);
         return node;

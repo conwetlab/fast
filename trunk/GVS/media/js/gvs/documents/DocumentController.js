@@ -21,26 +21,41 @@ var DocumentController = Class.create(
         this._currentDocument = null;
         
         /**
+         * Welcome Document, if any
+         * @type WelcomeDocument
+         * @private 
+         */
+        this._welcomeDocument = null;
+        
+        /**
          * Toolbar handler object
          * @type Toolbar
          * @private @member
          */
         this._toolbar = new Toolbar();
         
+        /**
+         * The document container element
+         * @type diji.layout.TabContainer
+         */
+        this._documentContainer = dijit.byId("documentContainer");
+        
         // Arming onFocus callback
-        dojo.connect(dijit.byId("documentContainer"), "selectChild", function(tab){
+        dojo.connect(this._documentContainer, "selectChild", function(tab){
             DocumentController.prototype._selectDocument.apply(this, arguments);
         }.bind(this));
         
         // The welcome document is the initial document
-        var welcome = new WelcomeDocument();
-        this.addDocument(welcome);
+        this.showWelcomeDocument();
         
         this.setEnabled(true);
     },
 
     // **************** PUBLIC METHODS **************** //
-
+    
+    /**
+     * Enables or disables the GVS itself (for modal dialogs)
+     */
     setEnabled: function(/** Boolean */ enabled) {
         if (enabled) {
             document.observe('keypress', this._onKeyPressed.bind(this));
@@ -56,15 +71,27 @@ var DocumentController = Class.create(
         var screenflow = new ScreenflowDocument(name, domainContext, version);
         this.addDocument(screenflow);
     },
-
+    
+    /**
+     * Shows the welcome document
+     */
+    showWelcomeDocument: function() {
+        if (this._welcomeDocument) {
+            this._documentContainer.selectChild(this._welcomeDocument.getTabId());
+            this._selectDocument(this._welcomeDocument.getTabId());
+        } else {
+            this._welcomeDocument = new WelcomeDocument();
+            this.addDocument(this._welcomeDocument);  
+        }  
+    },
 
     /**
      * Adds a new document.
      */
     addDocument: function(document){
         this._documents.set(document.getTabId(), document);
-        dijit.byId("documentContainer").addChild(document.getTab());
-        dijit.byId("documentContainer").selectChild(document.getTabId());
+        this._documentContainer.addChild(document.getTab());
+        this._documentContainer.selectChild(document.getTabId());
         $$(".tabLabel").each(function(canvas) {
             canvas.observe("focus",function(e) {
                 var element = Event.element(e);
@@ -97,26 +124,37 @@ var DocumentController = Class.create(
      */
     closeDocument: function(id) {
 
-        //Go to the previous tab and not to the
-        //initial tab
-        dijit.byId("documentContainer").back();
+        // Go to the previous tab and not to the
+        // initial tab
+        this._documentContainer.back();
         
-        //Remove the tab
-        dijit.byId("documentContainer").removeChild(dijit.byId(id));
+        // Remove the reference to the welcome document, if
+        // the document being closed is it
+        if (this._welcomeDocument.getTabId() == id) {
+            this._welcomeDocument = null;
+        }
+        
+        // Remove the tab
+        this._documentContainer.removeChild(dijit.byId(id));
         dijit.byId(id).destroyRecursive(true);
          
         this._documents.unset(id);
         
+        
         if ($H(this._documents).keys().length == 0){
-            //Show the welcome Document
-            var welcome = new WelcomeDocument();
-            this.addDocument(welcome);
+             //Show the welcome Document
+             this.showWelcomeDocument();
         }
     },
     
+    /**
+     * Returns the toolbar object
+     * @type Toolbar
+     */
     getToolbar: function() {
         return this._toolbar;
     },
+    
 
     // **************** PRIVATE METHODS **************** //
     

@@ -29,6 +29,63 @@ h4{
 }
 
 /******************
+ * #header area   *
+ ******************/
+#header {
+    padding:0px;
+}
+#menu {
+    padding: 2px;
+}
+
+#header_button {
+    float:right;
+    margin-right:10px;
+}
+
+#greeting {
+    float:right;
+    margin:5px 10px;
+    font-size: 12px;
+    text-align: right;
+}
+#greeting div {
+    padding-top: 5px;
+}
+
+/******************
+ * login          *
+ ******************/
+.form-row {
+    width: 300px;
+    margin: auto;
+    text-align: center;
+    padding: 10px;
+}
+
+.form-row input[type="submit"]{
+    padding: 3px;
+    background-color:#D9E9F9;
+    border: 1px solid #B1BADF;
+    color: #000000;
+    margin-top: 5px;
+}
+
+.form-row table {
+    text-align: left;
+}
+
+#content-main .registration {
+    text-align:center;
+}
+
+#content-main .message {
+    color:red;
+    text-align:center;
+}
+
+
+/******************
  * toolbar        *
  ******************/
  .toolbarIcon
@@ -40,69 +97,26 @@ h4{
         height: 24px;
         text-align: center;
 }
-.preferencesIcon {  background-position:   0px; }
-.deployIcon      {  background-position: -24px; }
-.deleteIcon      {  background-position: -48px; }
-.previewIcon     {  background-position: -72px; }
-.saveIcon        {  background-position: -96px; }
+.preferencesIcon {  background-position:    0px; }
+.deployIcon      {  background-position:  -24px; }
+.deleteIcon      {  background-position:  -48px; }
+.previewIcon     {  background-position:  -72px; }
+.saveIcon        {  background-position:  -96px; }
+.homeIcon        {  background-position: -120px; }
+.fileIcon        {  background-position: -144px; }
 
 
-/******************
- * login          *
- ******************/
-.form-row {
-	width: 300px;
-	margin: auto;
-	text-align: center;
-	padding: 10px;
-}
-
-.form-row input[type="submit"]{
-	padding: 3px;
-	background-color:#D9E9F9;
-	border: 1px solid #B1BADF;
-	color: #000000;
-	margin-top: 5px;
-}
-
-.form-row table {
-	text-align: left;
-}
-
-#content-main .registration {
-	text-align:center;
-}
-
-#content-main .message {
-	color:red;
-	text-align:center;
-}
-
-/******************
- * #header area   *
- ******************/
-#header {
-    padding-top:5px;
-}
-#header img {
-    vertical-align: middle;	
-}
-#menu {
-    padding: 2px;
-}
-
-#header_button{
-    float:right;
-    margin-right:10px;
-}
-
-#greeting{
-    float:right;
-}
-
-#showDeployGadgetDialog{
-	font-size:18px;
-	visibility:visible;
+/********************
+ * MenuElements *
+ ********************/
+.menuIcon
+/* All of the selectors for the icons go here */
+{
+        background-image: url('../images/gui/toolbar/menu_16x16.png'); /* mega-image */
+        background-repeat: no-repeat;
+        width: 16px;
+        height: 16px;
+        text-align: center;
 }
 
 /******************
@@ -123,8 +137,10 @@ h4{
     text-align:center;
 }
 .documentTitle {
-    font-size:22px;
-    margin:5px;
+    font-size: 30px;
+    margin: 5px;
+    color: #243C5F;
+    font-weight: bold;
 }
 
 /******************
@@ -132,11 +148,18 @@ h4{
  ******************/
 .welcome #intro {
     margin: 10px;
+    font-size: 16px;
+    
+}
+.welcome {
+    padding-top: 20px;
+    background: transparent url("../images/gui/document/welcomeBackground.png") repeat;
+
+    
 }
 .welcome button {
     width: 200px;
 }
-
 /******************
  * screenflow doc *
  ******************/
@@ -465,97 +488,3 @@ label {
     font-weight: bold;
     color: red;
 }
-
-
-/*
-.flow {
-    width: 50px;
-}
-.operator,.service,.concept,.form {
-    border:1px solid #808080;
-    width: 100px;
-    height: 80px;
-}
-
-.properties {
-    font-weight: bold;
-    color: #243C5F;
-    overflow:visible;
-}
-.inspectorIcon {
-    border-right: 1px solid #808080;
-    width: 24px;
-}
-.inspectorName {
-    border-right: 1px solid #808080;
-}
-.inspectorDesc {
-    border-right: 1px solid #808080;
-
-}
-
-.left {
-    width: 50%;
-    font-weight: bold;
-    border-left: 1px solid #808080;
-    border-bottom: 1px solid #808080;
-}
-.right {
-    width: 50%;
-    border-left: 1px solid #808080;
-    border-right: 1px solid #808080;
-    border-bottom: 1px solid #808080;
-}
-
-#showDialog{
-    font-size:18px;
-    margin-right:20px;
-    margin-top:5px;
-    position:absolute;
-    right:0px;
-    top:0px;
-    visibility:hidden;
-}
-
-#wizardInfo{
-    margin:5px;
-    width:450px;
-    text-align:justify;
-}
-
-
-.input_GadgetInfo, .input_SFDialog, .input_AddScreenCatalog{
-    width:26em;
-}
-
-#newSFDocDialogDiv{
-    margin:5px;
-    width:450px;
-    text-align:justify;
-}
-#SFButtons{
-    text-align:center;
-}
-
-#addScDialogDiv{
-    margin:5px;
-    width:450px;
-    text-align:justify;
-}
-#ScButtons{
-    text-align:center;
-}
-
-#wizardButtons{
-    text-align:center;
-}
-
-.soria .dijitTooltipContainer {
-    width: 250px;
-}
-
-.errorDialogDiv{
-    color:red;
-    opacity:0;
-    margin-left: 10px;
-}*/

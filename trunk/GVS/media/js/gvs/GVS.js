@@ -59,15 +59,7 @@ var GVSSingleton = function() {
             this._dialogs.set ("newScreenflow", new NewScreenflowDialog());
             this._dialogs.set ("preferences", new PreferencesDialog());
             
-            /**
-             * Toolbar buttons
-             */
-            var preferencesDialog = this._dialogs.get("preferences");
-            this._addToolbarElement('preferences', new ToolbarButton(
-                'User Preferences',
-                'preferences',
-                preferencesDialog.show.bind(preferencesDialog)
-            ));
+            
         },
         
 
@@ -81,13 +73,27 @@ var GVSSingleton = function() {
          */
         init: function () {
             this._actions = {
-                openScreenflow: function (){
-                    alert("open");
-                },
+                openScreenflow: this._openScreenflow.bind(this),
                 newScreenflow: this._newScreenflow.bind(this),
                 addScreen: this._addScreen.bind(this)
             };
             this._documentController = new DocumentController();
+            
+            /**
+             * Toolbar buttons
+             */
+            this._addToolbarElement('home', new ToolbarButton(
+                'Home',
+                'home',
+                this._documentController.showWelcomeDocument.bind(this._documentController)
+            ));
+            
+            var preferencesDialog = this._dialogs.get("preferences");
+            this._addToolbarElement('preferences', new ToolbarButton(
+                'User Preferences',
+                'preferences',
+                preferencesDialog.show.bind(preferencesDialog)
+            ));
             this._documentController.getToolbar().setModel(0, this);
         },
 
@@ -142,8 +148,15 @@ var GVSSingleton = function() {
          *
          * @private
          */
-        _addScreen: function (){
+        _addScreen: function(){
             this._dialogs.get("addScreen").show();
+        },
+        /**
+         * Open a screenflow
+         * @private
+         */
+        _openScreenflow: function() {
+            alert("open");
         }
     });
     

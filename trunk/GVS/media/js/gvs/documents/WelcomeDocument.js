@@ -28,6 +28,10 @@ var WelcomeDocument = Class.create(AbstractDocument,
 
         content.addClassName("welcome");
 
+        var logo = new Element('img', {
+            'src': URIs.logoFast
+        });
+        content.appendChild(logo);
         var documentTitle = new Element ("div", {"class": "documentTitle"}).
             update("Welcome to the Gadget Visual Storyboard!");
         content.appendChild(documentTitle);
