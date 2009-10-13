@@ -28,7 +28,6 @@ var Toolbar = Class.create( /** @lends Toolbar.prototype */ {
          */
         this._sections = new Array();
         this._sections[0] = new Array();
-        this._sections[0][0] = dijit.byId("firstSeparator");
     },
     
     /**
@@ -71,7 +70,7 @@ var Toolbar = Class.create( /** @lends Toolbar.prototype */ {
         if (!this._sections[position]) {
             this._sections[position] = new Array();
         }
-        if (!this._sections[position][0]) {
+        if (position != 0 && !this._sections[position][0]) {
             this._sections[position][0] = new dijit.ToolbarSeparator();
         }
     },

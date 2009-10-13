@@ -35,7 +35,10 @@ h4{
     padding:0px;
 }
 #menu {
-    padding: 2px;
+    padding: 0px;
+    background-color: #E0EAFB;
+    border-top: 3px solid rgb(103, 167, 227);
+    margin-top: 3px;
 }
 
 #header_button {
@@ -49,7 +52,7 @@ h4{
     font-size: 12px;
     text-align: right;
 }
-#greeting div {
+.fastLogo {
     padding-top: 5px;
 }
 
@@ -88,6 +91,10 @@ h4{
 /******************
  * toolbar        *
  ******************/
+/* Modifying toolbar interface */
+.soria .dijitToolbar {
+    background-image: url('../images/gui/toolbar/toolbar_bg.png');    
+}
  .toolbarIcon
 /* All of the selectors for the icons go here */
 {
@@ -107,8 +114,9 @@ h4{
 
 
 /********************
- * MenuElements *
+ * Menu             *
  ********************/
+
 .menuIcon
 /* All of the selectors for the icons go here */
 {

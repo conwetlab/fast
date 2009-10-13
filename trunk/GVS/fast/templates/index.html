@@ -247,7 +247,8 @@
             dojo.addOnLoad(function() {
                 GVSSingleton.getInstance().init();
                 // FIXME: there is a problem rendering the different
-                // sections if the greeting is there
+                // sections programatically. Repaint for better
+                // performance
                 dijit.byId("main").layout();
             });
 
@@ -261,14 +262,13 @@
             
             <!-- Header -->
             <div id="header" dojoType="dijit.layout.ContentPane" region="top">
-                <div id="greeting">
-                        <img src="{{ MEDIA_URL }}images/gui/fastLogo_small.png" alt="FAST Logo"/> 
+                <img src="{{ MEDIA_URL }}images/gui/fastLogo_small.png" class="fastLogo" alt="FAST Logo"/>
+                <div id="greeting"> 
                         <div>
-                          {% if is_anonymous %}{% trans "anonymous" %}</span> | <a href="/accounts/login/?next=/">{% trans "Sign in" %}</a>
+                          {% if is_anonymous %}{% trans "anonymous" %}</div> | <a href="/accounts/login/?next=/">{% trans "Sign in" %}</a>
                           {% else %} {% trans "Welcome" %}, {{ user.username }} | <a href="/logout">{% trans "Exit" %}</a></div>
                           {% endif %}
                 </div>
-                
                 <!-- Menu area -->
                 <div id="menu" dojoType="dijit.MenuBar">
                     <div dojoType="dijit.PopupMenuBarItem">
@@ -287,8 +287,6 @@
                     
                 </div>
                 <div id="toolbar" dojoType="dijit.Toolbar">
-                    <!-- FIXME: There is an issue when loading buttons programatically  -->
-                    <div id="firstSeparator" dojoType="dijit.ToolbarSeparator"></div>
                 </div>
             </div>
             
