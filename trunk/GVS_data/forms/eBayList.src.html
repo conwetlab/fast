@@ -31,42 +31,34 @@
 			}
 		</style>
         <script language="JavaScript">
-/**{
-	uri:"http://TODO/form#eBayList",
-	id:"eBayListForm1",
-	actions: [	{action:"init", preconditions:[], uses:[]},
-	            {action:"showTable", preconditions:[{id:"list", name:"http://TODO/ebay#list", positive:true}], uses:[]}],
-	postconditions: [	{id:"item", name:"http://TODO/ebay#item", positive:true},
-	                 	{id:"filterEbay", name:"http://TODO/ebay#filter", positive:true}],
-	triggers:["ebayItem", "nextPage", "previousPage"]
-}**/
-				{{element.name}}.prototype.init = function (){
-	            	$("nextButtonEbayList").observe("click", {{element.instance}}.nextPage);
-	                $("previousButtonEbayList").observe("click", {{element.instance}}.previousPage);
+        var {{buildingblockId}} = Class.create(BuildingBlock,{
+				init: function (){
+	            	$("nextButtonEbayList").onclick = this.nextPage.bind(this);
+	                $("previousButtonEbayList").onclick = this.previousPage.bind(this);
 	                $$('input[type="button"]').each(function(element){
-						element.observe("mouseover",function(event){
+						element.onmouseover = function(event){
 							var e = Event.element(event);
 							e.setStyle({cursor:"pointer"});
-						});
+						};
 					
 					});
 					var tableBody = $("listBodyEBayList");
 	                tableBody.update("");
-	                {{element.instance}}.showProgress();
-	            }
+	                this.showProgress();
+	            },
 	
-				{{element.name}}.prototype.showProgress = function (){
+				showProgress: function (){
 	                $("loadingImgEBayList").show();
-	            }
+	            },
 	            
-				{{element.name}}.prototype.showTable = function (l){
+				showTable: function (l){
 	            	if ($("loadingImgEBayList")) {
 	                	$("loadingImgEBayList").hide();
 	                }
 	                var templateString = '<tr>';
 	                templateString += '<td><img src="#{image}"/></td>';
 	                templateString += '<td>#{title}</td><td>#{category}</td><td>#{currentPrice}</td><td>#{shippingServiceCost}</td>';
-	                templateString += '<td style="border-right:none;"><input type="button" onclick="{{element.instance}}.productDetail(this,\'#{itemID}\',\'#{title}\');"';
+	                templateString += '<td style="border-right:none;"><input type="button" onclick="ScreenEngineFactory.getInstance(\'{{screenId}}\').getBuildingBlock(\'{{buildingblockInstance}}\').productDetail(this,\'#{itemID}\',\'#{title}\');"';
 					templateString += ' onmouseover="this.setStyle({cursor:\'pointer\'});" value="Select"/></td></tr>';
 	                var rowTemplate = new Template(templateString);
 	                
@@ -78,7 +70,7 @@
 	                }
 	
 	              //Update Interface
-			        if (l.data.currentPage < l.data.totalPages) {
+			        if (parseInt(l.data.currentPage) < parseInt(l.data.totalPages)) {
 			            $("nextButtonEbayList").setStyle({visibility: "visible"});
 			        } else {
 			            $("nextButtonEbayList").setStyle({visibility: "hidden"});
@@ -100,37 +92,38 @@
 			        $("CPebayList").value = l.data.currentPage;
 			        $("MEebayList").value = l.data.maxEntries;
 			        $("KebayList").value = l.data.keywords;
-	            }
+	            },
 	
-				{{element.name}}.prototype.productDetail = function (nodeElement, itemID, title){
-					{{element.instance}}.clearSelected ();
+				productDetail: function (nodeElement, itemID, title){
+					this.clearSelected ();
 					//select the element
 					nodeElement.parentNode.parentNode.setStyle({background: "#FFF8E8"});
 					var ebayItem = {id: 'ebayItem', data:{itemID: itemID, title: title}};
-					{{element.instance}}.manageData(["ebayItem"], [ebayItem], []);
-				}
+					this.manageData(["ebayItem"], [ebayItem], []);
+				},
 				
-				{{element.name}}.prototype.clearSelected = function (){
+				clearSelected: function (){
 					$$("tbody tr").each(function (element){
 						element.setStyle ({background: "transparent url(http://piccolo.ls.fi.upm.es/amazonScreens/style/bg_td1.jpg) repeat-x top"});
 					});
-				}
+				},
 	
-				{{element.name}}.prototype.nextPage = function (){
+				nextPage: function (){
 			    	var tableBody = $("listBodyEBayList");
 			        tableBody.update("");
-			        {{element.instance}}.showProgress();
+			        this.showProgress();
 			        var filter = {id: 'filterEbay', data:{keywords: $F("KebayList"), maxEntries: $F("MEebayList"), currentPage: parseInt($F("CPebayList")) + 1}};
-			        {{element.instance}}.manageData(["newFilter"], [filter], []);
-			    }
+			        this.manageData(["newFilter"], [filter], []);
+			    },
 			    
-				{{element.name}}.prototype.previousPage = function (){
+				previousPage: function (){
 			    	var tableBody = $("listBodyEBayList");
 			        tableBody.update("");
-			        {{element.instance}}.showProgress();
+			        this.showProgress();
 			        var filter = {id: 'filterEbay', data:{keywords: $F("KebayList"), maxEntries: $F("MEebayList"), currentPage: parseInt($F("CPebayList")) - 1}};
-			        {{element.instance}}.manageData(["newFilter"], [filter], []);
-			    }	            
+			        this.manageData(["newFilter"], [filter], []);
+			    }
+        }); 
 		</script>
     </head>
     <body>

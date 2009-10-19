@@ -30,106 +30,101 @@
 		</style>
 		
 		<script language="JavaScript">
-/**{
-	uri:"http://TODO/form#amazonList",
-	id:"amazonListForm1",
-	actions: [	{action:"init", preconditions:[], uses:[]},
-	            {action:"showTable", preconditions:[{id:"list", name:"http://TODO/amazon#list", positive:true}, {id:"filter", name:"http://TODO/amazon#filter", positive:true}], uses:[]}],
-	postconditions: [	{id:"item", name:"http://TODO/amazon#item", positive:true},
-	                 	{id:"filter", name:"http://TODO/amazon#filter", positive:true}],
-	triggers:[]
-}**/
-			{{element.name}}.prototype.init = function (){
-		        $("nextButton").observe("click", {{element.instance}}.nextPage);
-		        $("previousButton").observe("click", {{element.instance}}.previousPage);
-		        $$('input[type="button"]').each(function(element){
-		            element.observe("mouseover",function(event){
-			            var e = Event.element(event);
-		                e.setStyle({cursor:"pointer"});
-		            });		
-		        });
-		
-		        var tableBody = $("listBody");
-		        tableBody.update("");
-		        {{element.instance}}.showProgress();
-		    }
 
-			{{element.name}}.prototype.productDetail = function (nodeElement,_ASIN){
-				{{element.instance}}.clearSelected ();
-		        //select the element
-		        nodeElement.parentNode.parentNode.setStyle({background: "#FFF8E8"});
-		        var item = {id: 'item', data:{ASIN: _ASIN, title: nodeElement.parentNode.parentNode.firstChild.firstChild.nodeValue}};
-		        {{element.instance}}.manageData(null, [item], []);
-		    }
-		    
-		    {{element.name}}.prototype.clearSelected = function (){
-		        $$("tbody tr").each(function (element){
-		            element.setStyle({background: "transparent url(http://piccolo.ls.fi.upm.es/amazonScreens/style/bg_td1.jpg) repeat-x top"});
-		        });
-		    }
+			var {{buildingblockId}} = Class.create(BuildingBlock,{
 
-		    {{element.name}}.prototype.showProgress = function (){
-		        $("loadingImg").show();
-		    }
-		    
-		    {{element.name}}.prototype.showTable = function (l){
-		    	$("loadingImg").hide();
-		        var templateString = '<tr><td>#{title}</td><td>#{price}</td><td>#{pGroup}</td>';
-		        templateString += '<td style="border-right:none;"><input type="button" onclick="{{element.instance}}.productDetail(this,\'#{ASIN}\');"';
-		        templateString += ' onmouseover="this.setStyle({cursor:\'pointer\'});" value="Select"/></td></tr>';
-		        var rowTemplate = new Template(templateString);
-		        var tableBody = $("listBody");
-		        tableBody.update("");
-		        for (var i = 0; i < l.data.productList.length; i++) { //print the appropriate elements
-		            if (l.data.productList[i]) { //only if the product table is fetched
-		                tableBody.innerHTML += rowTemplate.evaluate(l.data.productList[i]);
-		            }
-		        }
-		        //Update Interface
-		        if (l.data.currentPage < (l.data.totalPages - 1)) {
-		            $("nextButton").setStyle({visibility: "visible"});
-		        } else {
-		            $("nextButton").setStyle({visibility: "hidden"});
-		        }
-		        if (l.data.currentPage > 1) {
-		            $("previousButton").setStyle({visibility: "visible"});
-		        } else {
-		            $("previousButton").setStyle({visibility: "hidden"});
-		        }
-
-		        $("CP").value = l.data.currentPage;
-		        $("TP").value = l.data.totalPages;
-		        $("ST").value = l.data.searchText;
-		        $("PT").value = l.data.productType;
-		        if(l.data.totalPages>0){
-			        $("curPage").innerHTML = l.data.currentPage;
-			        $("totalPages").update(l.data.totalPages);
-		        } else {
-		        	$("curPage").innerHTML = "-";
-			        $("totalPages").update("-");
-			    }
-		    }
-		    
-		    {{element.name}}.prototype.nextPage = function (){
-		    	var tableBody = $("listBody");
-		        tableBody.update("");
-		        {{element.instance}}.showProgress();
-		        var filter = {id: "filter", data: {productType: $F("PT"), searchText: $F("ST"), currentPage:(parseInt($F("CP"))+1) }};
-		        {{element.instance}}.manageData(["newFilter"], [filter], []);
-		    }
-		    
-		    {{element.name}}.prototype.previousPage = function (){
-		    	var tableBody = $("listBody");
-		        tableBody.update("");
-		        {{element.instance}}.showProgress();
-		        var filter = {id: "filter", data: {productType: $F("PT"), searchText: $F("ST"), currentPage:(parseInt($F("CP"))-1) }};
-		        {{element.instance}}.manageData(["newFilter"], [filter], []);
-		    }
-
-		    {{element.name}}.prototype.showMessage = function (message){
-		    	$("loadingImg").hide();
-				alert(message.data.message);
-			}
+				init: function (){
+					$("nextButton").onclick = this.nextPage.bind(this);
+			        $("previousButton").onclick = this.previousPage.bind(this);
+			        $$('input[type="button"]').each(function(element){
+			            element.onmouseover = function(event){
+				            var e = Event.element(event);
+			                e.setStyle({cursor:"pointer"});
+			            };		
+			        });
+			
+			        var tableBody = $("listBody");
+			        tableBody.update("");
+			        this.showProgress();
+			    },
+	
+				productDetail: function (nodeElement,_ASIN){
+					this.clearSelected ();
+			        //select the element
+			        nodeElement.parentNode.parentNode.setStyle({background: "#FFF8E8"});
+			        var item = {id: 'item', data:{ASIN: _ASIN, title: nodeElement.parentNode.parentNode.firstChild.firstChild.nodeValue}};
+			        this.manageData(null, [item], []);
+			    },
+			    
+			    clearSelected: function (){
+			        $$("tbody tr").each(function (element){
+			            element.setStyle({background: "transparent url(http://piccolo.ls.fi.upm.es/amazonScreens/style/bg_td1.jpg) repeat-x top"});
+			        });
+			    },
+	
+			    showProgress: function (){
+			        $("loadingImg").show();
+			    },
+			    
+			    showTable: function (l){
+			    	$("loadingImg").hide();
+			    	var templateString = '<tr><td>#{title}</td><td>#{price}</td><td>#{pGroup}</td>';
+			        templateString += '<td style="border-right:none;"><input type="button" onclick="ScreenEngineFactory.getInstance(\'{{screenId}}\').getBuildingBlock(\'{{buildingblockInstance}}\').productDetail(this,\'#{ASIN}\');"';
+			        templateString += ' onmouseover="this.setStyle({cursor:\'pointer\'});" value="Select"/></td></tr>';
+			        var rowTemplate = new Template(templateString);
+			        var tableBody = $("listBody");
+			        tableBody.update("");
+			        for (var i = 0; i < l.data.productList.length; i++) { //print the appropriate elements
+			            if (l.data.productList[i]) { //only if the product table is fetched
+			                tableBody.innerHTML += rowTemplate.evaluate(l.data.productList[i]);
+			            }
+			        }
+			        //Update Interface
+			        if (l.data.currentPage < l.data.totalPages - 1) {
+			            $("nextButton").setStyle({visibility: "visible"});
+			        } else {
+			            $("nextButton").setStyle({visibility: "hidden"});
+			        }
+			        if (l.data.currentPage > 1) {
+			            $("previousButton").setStyle({visibility: "visible"});
+			        } else {
+			            $("previousButton").setStyle({visibility: "hidden"});
+			        }
+	
+			        $("CP").value = l.data.currentPage;
+			        $("TP").value = l.data.totalPages;
+			        $("ST").value = l.data.searchText;
+			        $("PT").value = l.data.productType;
+			        if(l.data.totalPages>0){
+				        $("curPage").innerHTML = l.data.currentPage;
+				        $("totalPages").update(l.data.totalPages);
+			        } else {
+			        	$("curPage").innerHTML = "-";
+				        $("totalPages").update("-");
+				    }
+			    },
+			    
+			    nextPage: function (){
+			    	var tableBody = $("listBody");
+			        tableBody.update("");
+			        this.showProgress();
+			        var filter = {id: "filter", data: {productType: $F("PT"), searchText: $F("ST"), currentPage:(parseInt($F("CP"))+1) }};
+			        this.manageData(["newFilter"], [filter], []);
+			    },
+			    
+			    previousPage: function (){
+			    	var tableBody = $("listBody");
+			        tableBody.update("");
+			        this.showProgress();
+			        var filter = {id: "filter", data: {productType: $F("PT"), searchText: $F("ST"), currentPage:(parseInt($F("CP"))-1) }};
+			        this.manageData(["newFilter"], [filter], []);
+			    },
+	
+			    showMessage: function (message){
+			    	$("loadingImg").hide();
+					alert(message.data.message);
+				}
+			});
 		</script>
 	</head>
 	

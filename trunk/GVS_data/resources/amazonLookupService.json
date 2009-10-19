@@ -1,4 +1,5 @@
 {
+    "name": "Amazon Lookup Service",
     "code": "http://localhost:8010/resources/amazonLookupService.src.js",
     "creationDate": "2009-04-20T17:00:00+0100",
     "creator": "http://www.fabio.es/",
@@ -8,7 +9,7 @@
         "amazon",
         "product"
       ],
-      "user": null
+      "user": "admin"
     },
     "homepage": "http://www.deri.ie/amazonLookupService",
     "icon": "http://localhost:8010/images/catalogue/amazonLookupService.png",
@@ -16,7 +17,15 @@
     "rights": "http://creativecommons.org/",
     "screenshot": "http://www.deri.ie/amazonLookupService.jpg",
     "version": "1.0",
-    "actions": [{"action":"searchProduct", "preconditions":[{"id":"item", "name":"?Item http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#Item", "positive":true}], "uses":[{"id":"user", "name":"?User http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#User"}]}],
-	"postconditions": [{id:"product", "name":"?Item http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#Item", "positive":true}],
+    "libs":[
+    	{"language": "JavaScript", "src": "http://piccolo.ls.fi.upm.es/amazonURL/signAmazonURLs.js"},
+    	{"language": "JavaScript", "src": "http://piccolo.ls.fi.upm.es/amazonURL/jssha2/sha2.js"}
+    	],
+    "actions": [{"name":"searchProduct", 
+  				"preconditions":[{"id": "item", 
+  								"label": {"en-gb": "An Amazon item"},
+  								"pattern": "?Item http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#Item"}],
+  				 "uses":[]}],
+	"postconditions": [{"id":"product", "pattern":"?Item http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#Item", "positive":"true"}],
 	"triggers":["newProduct"]
 }

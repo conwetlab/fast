@@ -1,4 +1,5 @@
 {
+    "name": "Amazon Price Comparative Service",
     "code": "http://localhost:8010/resources/amazonPriceComparativeService.src.js",
     "creationDate": "2009-04-20T17:00:00+0100",
     "creator": "http://www.fabio.es/",
@@ -9,7 +10,7 @@
         "price",
         "comparative"
       ],
-      "user": null
+      "user": "admin"
     },
     "homepage": "http://www.deri.ie/amazonPriceComparativeService",
     "icon": "http://localhost:8010/images/catalogue/amazonPriceComparativeService.png",
@@ -17,7 +18,11 @@
     "rights": "http://creativecommons.org/",
     "screenshot": "http://www.deri.ie/amazonPriceComparativeService.jpg",
     "version": "1.0",
-    "actions": [{"action":"fetch", "preconditions":[{"id":"item", "name":"?Item http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#Item", "positive":true}], "uses":[{"id":"user", "name":"?User http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#User"}]}],
-	"postconditions": [{"id":"pricecomparativelist", "name":"?OList http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#OfferList", "positive":true}],
+    "libs":[
+    	{"language": "JavaScript", "src": "http://piccolo.ls.fi.upm.es/amazonURL/signAmazonURLs.js"},
+    	{"language": "JavaScript", "src": "http://piccolo.ls.fi.upm.es/amazonURL/jssha2/sha2.js"}
+    	],
+    "actions": [{"name":"fetch", "preconditions":[{"id":"item", "pattern":"?Item http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#Item", "positive":"true"}], "uses":[]}],
+	"postconditions": [{"id":"list", "pattern":"?OList http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#OfferList", "positive":"true"}],
 	"triggers":["productList"]
 }

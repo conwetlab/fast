@@ -14,4 +14,6 @@ urlpatterns = patterns('buildingblock.views',
         TagCollection(permitted_methods=('GET', 'POST',))),
     (r'^(?P<buildingblock_id>\d+)/publication[/]?$',
         Publication(permitted_methods=('POST', 'DELETE',))),
+    (r'^(?P<buildingblock_id>\d+)/code[/]?$',
+        Code(permitted_methods=('GET',))),
 )

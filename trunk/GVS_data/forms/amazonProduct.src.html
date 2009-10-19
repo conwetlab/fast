@@ -115,20 +115,12 @@
 			}
 		</style>
         <script language="JavaScript">
-/**{
-	uri:"http://TODO/form#amazonProduct",
-	id:"amazonProductForm1",
-	actions: [{action:"init", preconditions:[], uses: []},
-	            {action:"showProductInfo", preconditions:[{id:"product", name:"http://TODO/amazon#product", positive:true}], uses:[]}],
-	postconditions: [],
-	triggers:["addToCart"]
-}**/
+        	var {{buildingblockId}} = Class.create(BuildingBlock,{
+					init: function (){
+		        		$("addToCart").onclick = this.addToCart.bind(this);
+					},
 
-					{{element.name}}.prototype.init = function (){
-						$("addToCart").observe("click", {{element.instance}}.addToCart);
-					}
-
-					{{element.name}}.prototype.showProductInfo = function (_product){
+					showProductInfo: function (_product){
 						$("quantitySelect").value=1;
 						if (_product.data.title) {
 							//Reset styles
@@ -182,10 +174,10 @@
 							var img = new Element ('img',{src: "http://piccolo.ls.fi.upm.es/amazonScreens/images/amazon.jpg"});
 							$("productImage").update(img);	
 						}
-						{{element.instance}}.showAdvancedDetails(_product);				 
-					}
+						this.showAdvancedDetails(_product);				 
+					},
 					
-					{{element.name}}.prototype.showAdvancedDetails = function (_product){
+					showAdvancedDetails: function (_product){
 						var element = _product.data.item;
 						var pGroup = _product.data.pGroup;
 
@@ -197,22 +189,22 @@
 							case "eBooks":
 							case "Book":
 								//Print all book authors
-								attributesHTML += {{element.instance}}.elementDetail("Author",itemAttributes,"Author(s)");
+								attributesHTML += this.elementDetail("Author",itemAttributes,"Author(s)");
 								//Print the remainder features
 								elementList = [{nodeElement:"PublicationDate",caption:"Publication Date"},
 											   "ISBN",
 											   "Format",
 											   {nodeElement:"Label", caption:"Publisher"},
 											   {nodeElement:"NumberOfPages", caption:"Pages"}];	
-							    attributesHTML += {{element.instance}}.productDetailsList(elementList,itemAttributes);	
+							    attributesHTML += this.productDetailsList(elementList,itemAttributes);	
 								break;
 							case "Theatrical Release":
 							case "Video":
 							case "DVD":
 								//Print all actors
-								attributesHTML += {{element.instance}}.elementDetail("Actor",itemAttributes,"Cast");
+								attributesHTML += this.elementDetail("Actor",itemAttributes,"Cast");
 								//Print all directors
-								attributesHTML += {{element.instance}}.elementDetail("Director",itemAttributes);
+								attributesHTML += this.elementDetail("Director",itemAttributes);
 								elementList = 	["Genre",
 												{nodeElement:"RunningTime",caption: "Run Time"},
 												{nodeElement:"AudienceRating", caption:"Audience Rating"},
@@ -222,10 +214,10 @@
 												{nodeElement:"AspectRatio", caption:"Aspect Ratio"},
 												{nodeElement:"OriginalReleaseDate", caption:"Release Date"}
 												];
-								attributesHTML += {{element.instance}}.productDetailsList(elementList,itemAttributes);
-								attributesHTML += {{element.instance}}.twoElements ("DVDLayers","DVDSides",itemAttributes,"DVD Layers / Sides");
+								attributesHTML += this.productDetailsList(elementList,itemAttributes);
+								attributesHTML += this.twoElements ("DVDLayers","DVDSides",itemAttributes,"DVD Layers / Sides");
 								//Print technical details
-								attributesHTML += {{element.instance}}.elementDetail("Format",itemAttributes);
+								attributesHTML += this.elementDetail("Format",itemAttributes);
 								break;
 							case "Digital Music Track":
 							case "Music":
@@ -238,38 +230,38 @@
 												{nodeElement:"ReleaseDate", caption:"Release Date"},
 												{nodeElement:"OriginalReleaseDate", caption:"Original Release Date"}
 												];
-								attributesHTML += {{element.instance}}.productDetailsList(elementList,itemAttributes);
+								attributesHTML += this.productDetailsList(elementList,itemAttributes);
 								break;
 							case "Photography":
 								//Print details 
 								elementList = ["Brand","Model"];
-								attributesHTML += {{element.instance}}.productDetailsList(elementList,itemAttributes);	
+								attributesHTML += this.productDetailsList(elementList,itemAttributes);	
 								//Print all camera features
-								attributesHTML += {{element.instance}}.elementDetail("Feature",itemAttributes,"Features",".");
+								attributesHTML += this.elementDetail("Feature",itemAttributes,"Features",".");
 								break;
 							case "Personal Computer":
 								elementList = 	["Model",
 												"Label",
 												"Binding"];
-								attributesHTML += {{element.instance}}.productDetailsList(elementList,itemAttributes);
-								attributesHTML += {{element.instance}}.twoElements ("CPUType","CPUSpeed",itemAttributes,"CPU", " ");
+								attributesHTML += this.productDetailsList(elementList,itemAttributes);
+								attributesHTML += this.twoElements ("CPUType","CPUSpeed",itemAttributes,"CPU", " ");
 								elementList = 	[{nodeElement:"DisplaySize", caption:"Display Size"},
 												{nodeElement:"HardDiskSize", caption:"Hard Disk Size"},
 												{nodeElement:"DataLinkProtocol", caption:"Data Link Protocol"},
 												{nodeElement:"FloppyDiskDriveDescription", caption:"Floppy Disk Drive"}];
-								attributesHTML += {{element.instance}}.productDetailsList(elementList,itemAttributes);
-								attributesHTML += {{element.instance}}.twoElements ("SystemMemorySize","SystemMemoryType",itemAttributes,"Memory", " ");								
+								attributesHTML += this.productDetailsList(elementList,itemAttributes);
+								attributesHTML += this.twoElements ("SystemMemorySize","SystemMemoryType",itemAttributes,"Memory", " ");								
 								elementList = 	[{nodeElement:"HardwarePlatform", caption:"Hardware Platform"},
 												{nodeElement:"OperatingSystem", caption:"Operating System"},
 												{nodeElement:"ReleaseDate",caption:"Release Date"},
 												"Warranty",
 												{nodeElement:"LegalDisclaimer",caption:"Legal Disclaimer"}
 												];	
-								attributesHTML += {{element.instance}}.productDetailsList(elementList,itemAttributes);
+								attributesHTML += this.productDetailsList(elementList,itemAttributes);
 								//Print technical details
-								attributesHTML += {{element.instance}}.elementDetail("Feature",itemAttributes, "Features",".");
+								attributesHTML += this.elementDetail("Feature",itemAttributes, "Features",".");
 								//Print special features
-								attributesHTML += {{element.instance}}.specialElementDetail("SpecialFeatures",itemAttributes,"|","Special Features",".");
+								attributesHTML += this.specialElementDetail("SpecialFeatures",itemAttributes,"|","Special Features",".");
 								break;
 							case "CE":
 							case "Video Games":						
@@ -287,11 +279,11 @@
 												{nodeElement:"ReleaseDate",caption:"Release Date"},
 												{nodeElement:"LegalDisclaimer",caption:"Legal Disclaimer"}
 												];
-								attributesHTML += {{element.instance}}.productDetailsList(elementList,itemAttributes);
+								attributesHTML += this.productDetailsList(elementList,itemAttributes);
 								//Print technical details
-								attributesHTML += {{element.instance}}.elementDetail("Feature",itemAttributes, "Features",".");
+								attributesHTML += this.elementDetail("Feature",itemAttributes, "Features",".");
 								//Print special features (only CE)
-								attributesHTML += {{element.instance}}.specialElementDetail("SpecialFeatures",itemAttributes,"|","Special Features",".");
+								attributesHTML += this.specialElementDetail("SpecialFeatures",itemAttributes,"|","Special Features",".");
 								break;
 							default:
 								elementList = 	["Model",
@@ -300,8 +292,8 @@
 												"Binding",
 												{nodeElement:"ReleaseDate",caption:"Release Date"}
 												];
-								attributesHTML += {{element.instance}}.productDetailsList(elementList,itemAttributes);
-								attributesHTML += {{element.instance}}.elementDetail("Feature",itemAttributes, "Features",".");
+								attributesHTML += this.productDetailsList(elementList,itemAttributes);
+								attributesHTML += this.elementDetail("Feature",itemAttributes, "Features",".");
 								break;				
 						}
 						attributesHTML += "</ul>";
@@ -311,12 +303,12 @@
 							$("moreInfoTitle").update("Product Details");
 						} 
 							
-					}
+					},
 					
 					//This function returns a html with pre-formatted details list
 					//Each element of attributesList can be an object with two elements (nodeElement and caption)
 					//or simply a string representing both of them
-					{{element.name}}.prototype.productDetailsList = function (attributesList,attributesNode){
+					productDetailsList: function (attributesList,attributesNode){
 						var result = "";
 						$A(attributesList).each(function(attribute){
 								var element = attributesNode.getElementsByTagName ((attribute.nodeElement?attribute.nodeElement:attribute));						
@@ -331,12 +323,12 @@
 								}
 						});
 						return result;
-					}
+					},
 					
 					//This function produces a single li with a list of elements (authors, features...)
 					//caption parameter is optional
 					//separationCharacter parameter is optional
-					{{element.name}}.prototype.elementDetail = function (element,attributesNode,caption,separationCharacter){
+					elementDetail: function (element,attributesNode,caption,separationCharacter){
 							var list = attributesNode.getElementsByTagName(element);
 							var result = "";
 							if (list.length > 0) {
@@ -349,13 +341,13 @@
 								result += "</span></li>";							
 							}
 							return result;			
-					}
+					},
 					
 					//This function produces a single li with a list of features. The original line has 
 					//extrange separators
 					//caption parameter is optional
 					//separationCharacter parameter is optional
-					{{element.name}}.prototype.specialElementDetail = function (element,attributesNode,beforeSeparationCharacter,caption,separationCharacter){
+					specialElementDetail: function (element,attributesNode,beforeSeparationCharacter,caption,separationCharacter){
 							var element = attributesNode.getElementsByTagName(element);
 							var result = "";
 							if (element.length > 0) {
@@ -369,12 +361,12 @@
 								result += "</span></li>";							
 							}
 							return result;			
-					}
+					},
 					
 					//This function produces a single li two elements separated by "/"
 					//caption parameter is optional
 					//separationCharacter is optional
-					{{element.name}}.prototype.twoElements = function (element1,element2,attributesNode, caption, separationCharacter){
+					twoElements: function (element1,element2,attributesNode, caption, separationCharacter){
 							var _element1 = attributesNode.getElementsByTagName(element1);
 							var _element2 = attributesNode.getElementsByTagName(element2);
 							var result = "";
@@ -393,16 +385,17 @@
 								result += "</span></li>";							
 							}
 							return result;
-					}
+					},
 
-					{{element.name}}.prototype.showMessage = function (message){
+					showMessage: function (message){
 						alert(message.data.message);
-					}
+					},
 
-					{{element.name}}.prototype.addToCart = function (){
-						ScreenEngineFactory.getInstance("ProductDetails").manageData(["addToCart"], [], [], "amazonProductForm1");	
+					addToCart: function (){
+						this.manageData(["addToCart"], [], []);	
 					}
-		        </script>
+        	});
+		</script>
     </head>
     <body>
         <div id="bodyDivDetails">

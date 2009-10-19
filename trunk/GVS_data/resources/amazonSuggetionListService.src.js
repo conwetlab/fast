@@ -1,24 +1,10 @@
-/**{
-	uri:"http://TODO/service#SuggestionListService",
-	id:"SuggestionListService1",
-	actions: [{action:"fetch", preconditions:[{id:"item", name:"http://TODO/amazon#item", positive:true}], uses:[{id:"user", name:"http://TODO/amazon#user"}]}],
-	postconditions: [{id:"list", name:"http://TODO/amazon#suggestionList", positive:false},
-	                 {id:"message", name:"http://TODO/amazon#message", positive:false}],
-	triggers:["list"]
-}**/
-{{element.name}}.prototype.fetch = function (item, user){
+fetch: function (item){
 	//Add the ItemSearch parameters
     var parameters = "";
 	parameters += "&ItemId=" + item.data.ASIN;
     
     //Base URL of the REST Service
 	var url = "http://webservices.amazon.com/onca/xml?Service=AWSECommerceService";
-	//Add the AccessKeyId (get from the user fact)
-	if (user) {
-		url += "&AWSAccessKeyId=" + user.data.KeyId;
-	} else {// if the KB doesn't contain a user key Id, add one by default
-		url += "&AWSAccessKeyId=15TNKDQJGH6BD0Z4KY02";
-	}
 	//Add the operation Type
 	url +="&Operation=SimilarityLookup";
 	//Add the parameters
@@ -27,23 +13,26 @@
 	url +="&ResponseGroup=Medium";
 	//Add the current version of the API
 	url += "&Version=2008-06-26";
+	
+	var encoder = new URLAmazonEncoder();
+	url = encoder.encode(url);
 
 	//Invoke the service
     new FastAPI.Request(url,{
         'method':       'get',
         'content':      'xml',
-        'context':      this,
-        'onSuccess':    {{element.instance}}.addToList
+        'context':      this.context,
+        'onSuccess':    this.addToList.bind(this)
     });
-}
+},
 
-{{element.name}}.prototype.addToList = function (transport){
+addToList: function (transport){
 	var suggestionList = {id: 'list', data:{productList: new Array(), currentPage: 0}};
     var xml = transport;
     //Check if the service returned an error
     if (xml.getElementsByTagName("IsValid")[0].childNodes[0].nodeValue == "False") {
     	var message = {name: "message", data:{message: xml.getElementsByTagName("Message")[0].childNodes[0].nodeValue}};
-    	{{element.instance}}.manageData(["message"], [message], []);
+    	this.manageData(["message"], [message], []);
     }
     else { //Correct response, create the result List
         var suggestionlist = xml.getElementsByTagName("Items")[0].getElementsByTagName("Item");
@@ -76,8 +65,8 @@
             };
             suggestionList.data.productList.push(row);
         }
-        {{element.instance}}.manageData(["suggestionList"], [suggestionList], []);
+        this.manageData(["suggestionList"], [suggestionList], []);
     }
-}
+},
 
-{{element.name}}.prototype.onError = function (transport){}
+onError: function (transport){}

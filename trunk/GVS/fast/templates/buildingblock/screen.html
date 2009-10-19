@@ -1,0 +1,83 @@
+
+{% for element in buildingblocks %}
+	{% ifnotequal element.type 'form' %}
+<script language="JavaScript">
+	{{element.code|safe}}
+</script>
+	{% endifnotequal %}
+	{% ifequal element.type 'form' %}
+{{element.code|safe}}
+	{% endifequal %}
+	{% for lib in element.libs %}
+<script language="{{lib.language}}" src="{{lib.src}}"></script>	
+	{% endfor %}
+{% endfor %}
+<script type="text/javascript">
+
+{% for element in buildingblocks %}
+	new BB{{element.id}}("{{id}}", "{{element.name}}");
+{% endfor %}
+
+	var _piping{{id}} = [
+{% for element in buildingblocks %}
+		{
+    		name:"{{element.name}}",
+    		scope: ScreenEngineFactory.getInstance("{{id}}").getBuildingBlock("{{element.name}}"),
+	        actions:[
+	{% for action in element.actions %}
+			 {
+		         name: "{{action.name}}",
+		         funct: ScreenEngineFactory.getInstance("{{id}}").getBuildingBlock("{{element.name}}").{{action.name}},
+		         preconditions:[
+		{% for pre in action.preconditions %}
+						{
+						    id:"{{pre.id}}",
+						    uri:"{{pre.uri}}",
+						    positive:{{pre.positive}},
+						    origins:[
+			{% for origin in pre.origins %}
+						        {
+						            origin:"{{origin.origin}}",
+						            id:"{{origin.id}}",
+						            uri:"{{origin.uri}}"
+						        }{% if not forloop.last %},{% endif %}
+			{% endfor %}
+						    ]
+						}{% if not forloop.last %},{% endif %}
+		{% endfor %}
+			       		        ],
+		         uses:[
+		{% for use in action.uses %}
+						{
+						    id:"{{use.id}}",
+						    uri:"{{use.uri}}"
+						}{% if not forloop.last %},{% endif %}
+		{% endfor %}
+				         ],
+		         triggers: [
+		{% for trigger in action.triggers %}
+		             {
+		                 id:"{{trigger.id}}",
+		                 origin:"{{trigger.origin}}"
+		             }{% if not forloop.last %},{% endif %}
+		{% endfor %}
+		         ]
+		     }{% if not forloop.last %},{% endif %}
+	{% endfor %}
+		   ]
+		}{% if not forloop.last %},{% endif %}
+{% endfor %}
+	];				                 	
+	
+	var _posts{{id}} = [
+{% for or in posts %}
+	{% for and in or %}
+				{id:"{{and.id}}", origin:"{{and.origin}}", pattern: "{{and.pattern}}"}{% if not forloop.last %},{% endif %}	
+	{% endfor %}
+{% endfor %}
+		];
+	
+	ScreenEngineFactory.getInstance("{{id}}").setEngine(ScreenflowEngineFactory.getInstance(), _piping{{id}}, _posts{{id}});
+
+	ScreenflowEngineFactory.getInstance().addScreenLoader("{{id}}", ScreenEngineFactory.getInstance("{{id}}").restart.bind(ScreenEngineFactory.getInstance("{{id}}")));
+</script>

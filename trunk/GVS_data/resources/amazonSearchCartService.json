@@ -1,4 +1,5 @@
 {
+    "name": "Search Amazon Cart Service",
     "code": "http://localhost:8010/resources/amazonSearchCartService.src.js",
     "creationDate": "2009-04-20T17:00:00+0100",
     "creator": "http://www.fabio.es/",
@@ -9,7 +10,7 @@
         "shopping",
         "cart"
       ],
-      "user": null
+      "user": "admin"
     },
     "homepage": "http://www.deri.ie/amazonSearchCartService",
     "icon": "http://localhost:8010/images/catalogue/amazonSearchCartService.png",
@@ -17,8 +18,12 @@
     "rights": "http://creativecommons.org/",
     "screenshot": "http://www.deri.ie/amazonSearchCartService.jpg",
     "version": "1.0",
-    "actions": [{"action":"fetch", "preconditions":[{"id":"cart", "name":"?Cart http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#ShoppingCart", "positive":true}], "uses":[{"id":"user", "name":"?User http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#User"}]}],
-	"postconditions": [{"id":"cartList", "name":"?PList http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#ProductList", "positive":false},
-	                 {"id":"message", "name":"?Message http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#Message", "positive":false}],
+    "libs":[
+    	{"language": "JavaScript", "src": "http://piccolo.ls.fi.upm.es/amazonURL/signAmazonURLs.js"},
+    	{"language": "JavaScript", "src": "http://piccolo.ls.fi.upm.es/amazonURL/jssha2/sha2.js"}
+    	],
+    "actions": [{"name":"fetch", "preconditions":[{"id":"cart", "pattern":"?Cart http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#ShoppingCart", "positive":"true"}], "uses":[]}],
+	"postconditions": [{"id":"list", "pattern":"?PList http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#ProductList", "positive":false},
+	                 {"id":"message", "pattern":"?Message http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#Message", "positive":false}],
 	"triggers":[]
 }

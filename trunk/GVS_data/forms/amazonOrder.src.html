@@ -1,17 +1,12 @@
 <html>
     <head>
         <script language="JavaScript">
-/**{
-	uri:"http://TODO/form#amazonOrder",
-	id:"amazonOrderForm1",
-	actions: [{action:"init", preconditions:[{id:"purchase", name:"http://TODO/amazon#purchase", positive:true}], uses:[]}],
-	postconditions: [],
-	triggers:[]
-}**/
-			{{element.name}}.prototype.init = function (purchase){
+        var {{buildingblockId}} = Class.create(BuildingBlock,{
+        	init: function (purchase){
         		var obj = new Element ('object',{type: "text/html", data: purchase.data.url, standby: "Loading...", width: "100%",  height: "100%"});
 				$("bodyDivOrder").update(obj);
 			}
+        });
         </script>
     </head>
     <body>

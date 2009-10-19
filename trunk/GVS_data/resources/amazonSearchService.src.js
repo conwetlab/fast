@@ -1,11 +1,4 @@
-/**{
-	uri:"http://TODO/service#AmazonSearchService",
-	id:"AmazonSearchService1",
-	actions: [{action:"search", preconditions:[{id:"filter", name:"http://TODO/amazon#filter", positive:true}], uses:[{id:"user", name:"http://TODO/amazon#user"}]}],
-	postconditions: [{id:"list", name:"http://TODO/amazon#list", positive:true}],
-	triggers:["productList"]
-}**/
-{{element.name}}.prototype.search = function (filter, user){
+search: function (filter){
 	//Add the ItemSearch parameters
     var productType = filter.data.productType;
     if (!productType) {
@@ -21,12 +14,6 @@
     parameters += "&ItemPage=" + (filter.data.currentPage);
     //Base URL of the REST Service
     var url = "http://webservices.amazon.com/onca/xml?Service=AWSECommerceService";
-    //Add the AccessKeyId (get from the user fact)
-    if (user) {
-        url += "&AWSAccessKeyId=" + user.data.KeyId;
-    } else {// if the KB doesn't contain a user key Id, add one by default
-        url += "&AWSAccessKeyId=15TNKDQJGH6BD0Z4KY02";
-    }
     //Add the operation Type
     url +="&Operation=ItemSearch";
     //Add the parameters
@@ -35,22 +22,26 @@
     url +="&ResponseGroup=Medium";
     //Add the current version of the API
     url += "&Version=2008-06-26";
+    
+    var encoder = new URLAmazonEncoder();
+    encodedUrl = encoder.encode(url);
+    
     //Invoke the service
-    new FastAPI.Request(url,{
+    new FastAPI.Request(encodedUrl,{
         'method':       'get',
         'content':      'xml',
-        'context':      this,
-        'onSuccess':    {{element.instance}}.addToList
+        'context':      this.context,
+        'onSuccess':    this.addToList.bind(this)
     });
-}
+},
 
-{{element.name}}.prototype.addToList = function (transport){
+addToList: function (transport){
 	var l = {id: 'list', data: {productList: new Array(), currentPage: 1, totalResults: 0, totalPages: 0}};
 	var xml = transport;
     //Check if the service returned an error
     if (xml.getElementsByTagName("IsValid")[0].childNodes[0].nodeValue == "False") {
         var message = {id: 'message', data:{message: xml.getElementsByTagName("Message")[0].childNodes[0].nodeValue}};
-        {{element.instance}}.manageData(["message"], [message],[]);
+        this.manageData(["message"], [message],[]);
     } else {
         //Correct response, create the result List
         var _list = xml.getElementsByTagName("Items")[0].getElementsByTagName("Item");
@@ -91,8 +82,8 @@
         l.data.currentPage = parseInt(xml.getElementsByTagName("ItemPage")[0].childNodes[0].nodeValue);
         l.data.searchText = xml.getElementsByTagName("Keywords")[0].childNodes[0].nodeValue;
         l.data.productType = xml.getElementsByTagName("SearchIndex")[0].childNodes[0].nodeValue;
-        {{element.instance}}.manageData(["itemList"], [l], []);
+        this.manageData(["itemList"], [l], []);
     }
-}
+},
 
-{{element.name}}.prototype.onError = function (transport){}
+onError: function (transport){}

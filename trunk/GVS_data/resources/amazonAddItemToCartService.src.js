@@ -1,20 +1,6 @@
-/**{
-	uri:"http://TODO/service#AmazonAddItemToCartService",
-	id:"AmazonAddItemToCartService1",
-	actions: [{action:"add", preconditions:[{id:"item", name:"http://TODO/amazon#item", positive:true}]: uses:[{id:"user", name:"http://TODO/amazon#user"}, {id:"cart", name:"http://TODO/amazon#shoppingCart"}]}],
-	postconditions: [{id:"cart", name:"http://TODO/amazon#shoppingCart", positive:true},
-	                 {id:"message", name:"http://TODO/amazon#message", positive:true}],
-	triggers:["message"]
-}**/
-{{element.name}}.prototype.add = function (item, cart, user){
+add: function (item, cart){
 	if (cart) {//If the cart is already created, it will have an ID in the User Fact
 		var url = "http://webservices.amazon.com/onca/xml?Service=AWSECommerceService";
-		//Add the AccessKeyId (get from the user fact)
-		if (user) {
-			url += "&AWSAccessKeyId=" + user.data.KeyId;
-		} else {// if the KB doesn't contain a user key Id, add one by default
-			url += "&AWSAccessKeyId=15TNKDQJGH6BD0Z4KY02";
-		}
 		//Add the operation Type
 		url +="&Operation=CartGet";
 		//Add the current version of the API
@@ -23,21 +9,18 @@
 		url += "&CartId=" + cart.data.id;
 		url += "&HMAC=" + cart.data.HMAC;
 		
+		var encoder = new URLAmazonEncoder();
+		url = encoder.encode(url);
+		
 		//Invoke the service
     	new FastAPI.Request(url,{
             'method':       'get',
             'content':      'xml',
-            'context':      this,
-            'onSuccess':    function(transport){{{element.instance}}.isProductOnCart(transport, item, cart, user);}.bind(product)
+            'context':      this.context,
+            'onSuccess':    function(transport){this.isProductOnCart(transport, item, cart);}.bind(this)
         });
 	} else { //Cart doesn't exist: Create a new cart with the product
 		var url = "http://webservices.amazon.com/onca/xml?Service=AWSECommerceService";
-		//Add the AccessKeyId (get from the user fact)
-		if (user) {
-			url += "&AWSAccessKeyId=" + user.data.KeyId;
-		} else {// if the KB doesn't contain a user key Id, add one by default
-			url += "&AWSAccessKeyId=15TNKDQJGH6BD0Z4KY02";
-		}
 		//Add the operation Type
 		url +="&Operation=CartCreate";
 		//Add the current version of the API
@@ -46,17 +29,20 @@
 		url += "&Item.1.ASIN=" + item.data.ASIN;
 		url += "&Item.1.Quantity=" + $F("quantitySelect");
 		
+		var encoder = new URLAmazonEncoder();
+		url = encoder.encode(url);
+		
 		//Invoke the service
     	new FastAPI.Request(url,{
             'method':       'get',
             'content':      'xml',
-            'context':      this,
-            'onSuccess':    function(transport){{{element.instance}}.cartCreated(transport, item);}.bind(product)
+            'context':      this.context,
+            'onSuccess':    function(transport){this.cartCreated(transport, item);}.bind(this)
         });
 	}
-}
+},
 
-{{element.name}}.prototype.cartCreated = function (transport, item){
+cartCreated: function (transport, item){
 	var xml = transport;
 
 	var message = {id: 'message', data:{message: ""}};
@@ -69,7 +55,7 @@
 			xml.getElementsByTagName("Error")[0].firstChild.firstChild.nodeValue == "AWS.ECommerceService.ItemNotEligibleForCart") {
 			//The product is not elegible
 			message.data.message = "The product is not eligible to be added to the cartt";
-			{{element.instance}}.manageData(["message"], [message], []);
+			this.manageData(["message"], [message], []);
 			return;
 		}
 		//Add the Cart ID to the KB
@@ -77,14 +63,14 @@
 					data:{id: xml.getElementsByTagName("CartId")[0].firstChild.nodeValue,
 					HMAC: xml.getElementsByTagName("URLEncodedHMAC")[0].firstChild.nodeValue}};
 		message.data.message = "Product added to the shopping Cart";
-		{{element.instance}}.manageData(["message"], [cart, message], []);
+		this.manageData(["message"], [cart, message], []);
 	} else {
 		message.data.message = "Error adding the product to the cart";
-		{{element.instance}}.manageData(["message"], [message], []);
+		this.manageData(["message"], [message], []);
 	}
-}
+},
 
-{{element.name}}.prototype.isProductOnCart = function (transport, item, cart, user){
+isProductOnCart: function (transport, item, cart){
 	var xml = transport;
 	//products node
 	if (xml.getElementsByTagName ("CartItems").length>0) { //There are products on the cart
@@ -117,12 +103,6 @@
 
 		//Create the call
 		var url = "http://webservices.amazon.com/onca/xml?Service=AWSECommerceService";
-		//Add the AccessKeyId (get from the user fact)
-		if (user) {
-			url += "&AWSAccessKeyId=" + user.data.KeyId;
-		} else {// if the KB doesn't contain a user key Id, add one by default
-			url += "&AWSAccessKeyId=15TNKDQJGH6BD0Z4KY02";
-		}
 		//Add the operation Type
 		url +="&Operation=CartModify";
 		//Add the current version of the API
@@ -133,22 +113,19 @@
 		url += "&Item.1.CartItemId=" + productId;
 		url += "&Item.1.Quantity=" + quantity;
 		
+		var encoder = new URLAmazonEncoder();
+		url = encoder.encode(url);
+		
 		//Invoke the service
     	new FastAPI.Request(url,{
             'method':       'get',
             'content':      'xml',
-            'context':      this,
-            'onSuccess':    {{element.instance}}.productAdded
+            'context':      this.context,
+            'onSuccess':    this.productAdded.bind(this)
         });
 	} else {
         //Create the call
 		var url = "http://webservices.amazon.com/onca/xml?Service=AWSECommerceService";
-		//Add the AccessKeyId (get from the user fact)
-		if (user) {
-			url += "&AWSAccessKeyId=" + user.data.KeyId;
-		} else {// if the KB doesn't contain a user key Id, add one by default
-			url += "&AWSAccessKeyId=15TNKDQJGH6BD0Z4KY02";
-		}
 		//Add the operation Type
 		url +="&Operation=CartAdd";
 		//Add the current version of the API
@@ -159,17 +136,20 @@
 		url += "&Item.1.ASIN=" + item.data.ASIN;
 		url += "&Item.1.Quantity=" + $F("quantitySelect");
 		
+		var encoder = new URLAmazonEncoder();
+		url = encoder.encode(url);
+		
 		//Invoke the service
     	new FastAPI.Request(url,{
             'method':       'get',
             'content':      'xml',
-            'context':      this,
-            'onSuccess':    {{element.instance}}.productAdded
+            'context':      this.context,
+            'onSuccess':    this.productAdded.bind(this)
         });
 	}
-}
+},
 
-{{element.name}}.prototype.productAdded = function (transport){
+productAdded: function (transport){
 	var xml = transport;
 	var message = {id: 'message', data:{message: ""}};
 	//Check if the product is eligible for shopping
@@ -186,7 +166,7 @@
 			message.data.message = "Error adding the product to the cart";
 		}
 	}
-	{{element.instance}}.manageData(["message"], [message], []);
-}
+	this.manageData(["message"], [message], []);
+},
 
-{{element.name}}.prototype.onError = function (transport){}
+onError: function (transport){}

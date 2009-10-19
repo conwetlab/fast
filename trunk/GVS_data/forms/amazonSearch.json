@@ -1,5 +1,6 @@
 {
-    "code": "http://localhost:8010/forms/amazonSearch.scr.html",
+    "name": "Amazon Search Form",
+    "code": "http://localhost:8010/forms/amazonSearch.src.html",
     "creationDate": "2009-04-20T17:00:00+0100",
     "creator": "http://www.fabio.es/",
     "description": {"en-gb": "This screen allows users to look for a product in Amazon, providing a keyword search interface. It produces a search criteria or filter fact."},
@@ -8,7 +9,7 @@
         "amazon",
         "search"
       ],
-      "user": null
+      "user": "admin"
     },
     "homepage": "http://www.deri.ie/amazonSearch",
     "icon": "http://localhost:8010/images/catalogue/amazonSearch.png",
@@ -16,7 +17,7 @@
     "rights": "http://creativecommons.org/",
     "screenshot": "http://www.deri.ie/amazonSearch-screenshot.jpg",
     "version": "1.0",
-    "actions": [{"action":"init", "preconditions":[], "uses":[]}],
-	"postconditions": [{"id":"filter", "name":"?Filter http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#SearchCriteria", "positive":true}],
+    "actions": [{"name":"init", "preconditions":[], "uses":[]}],
+	"postconditions": [{"id":"filter", "pattern":"?Filter http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#SearchCriteria", "positive":"true"}],
 	"triggers":[]
 }

@@ -31,23 +31,17 @@
 			}
 		</style>
         <script language="JavaScript">
-/**{
-	uri:"http://TODO/form#amazonSuggestionList",
-	id:"amazonSuggestionListForm1",
-	actions: [{action:"init", preconditions:[]},
-	          {action:"showTable", preconditions:[{id:"list", name:"http://TODO/amazon#suggestionList", positive:true},
-	           {action:"showMessage", preconditions:[{id:"message", name:"http://TODO/amazon#message", positive:true}]}],
-	postconditions: [{id:"item", name:"http://TODO/amazon#item", positive:true}],
-	triggers:["item"]
-}**/
-			{{element.name}}.prototype.init = function (item){
-                $("nextButtonSuggestion").observe("click", {{element.instance}}.nextPage);
-                $("previousButtonSuggestion").observe("click", {{element.instance}}.previousPage);
+
+        var {{buildingblockId}} = Class.create(BuildingBlock,{
+        	
+			init: function (item){
+                $("nextButtonSuggestion").onclick = this.nextPage.bind(this);
+                $("previousButtonSuggestion").onclick = this.previousPage.bind(this);
 				$$('input[type="button"]').each(function(element){
-					element.observe("mouseover",function(event){
+					element.onmouseover = function(event){
 						var e = Event.element(event);
 						e.setStyle({cursor:"pointer"});
-					});
+					};
 				
 				});
 				$$(".productTitle").each(function(element){
@@ -55,11 +49,11 @@
 				});
 				var tableBody = $("listBodySuggestion");
                 tableBody.update("");
-	            {{element.instance}}.showProgress();
-            }
+	            this.showProgress();
+            },
             
-			{{element.name}}.prototype.showTable = function (l){
-            	{{element.instance}}.list = l;
+			showTable: function (l){
+            	this.list = l;
             	var tableBody = $("listBodySuggestion");
                 tableBody.update("");
                 
@@ -67,7 +61,7 @@
                 	$("loadingImgSuggestion").hide();
                 }
                 var templateString = '<tr><td>#{title}</td><td>#{price}</td><td>#{pGroup}</td>';
-                templateString += '<td style="border-right:none;"><input type="button" onclick="{{element.instance}}.productDetail(this,\'#{ASIN}\');"';
+                templateString += '<td style="border-right:none;"><input type="button" onclick="ScreenEngineFactory.getInstance(\'{{screenId}}\').getBuildingBlock(\'{{buildingblockInstance}}\').productDetail(this,\'#{ASIN}\');"';
 				templateString += ' onmouseover="this.setStyle({cursor:\'pointer\'});" value="Select"/></td></tr>';
                 var rowTemplate = new Template(templateString);
                 
@@ -105,45 +99,47 @@
                 	$("curPageSuggestion").update("-");
                 	$("totalPagesSuggestion").update("-");
                 }
-            }
+            },
 
-			{{element.name}}.prototype.nextPage = function (){
+			nextPage: function (){
             	var tableBody = $("listBodySuggestion");
                 tableBody.update("");
-                {{element.instance}}.showProgress();
-                {{element.instance}}.list.data.currentPage++;
-            	{{element.instance}}.showTable({{element.instance}}.list);
-            }
+                this.showProgress();
+                this.list.data.currentPage++;
+            	this.showTable(this.list);
+            },
             
-			{{element.name}}.prototype.previousPage = function (){
+			previousPage: function (){
             	var tableBody = $("listBodySuggestion");
                 tableBody.update("");
-	            {{element.instance}}.showProgress();
-                {{element.instance}}.list.data.currentPage--;
-            	{{element.instance}}.showTable({{element.instance}}.list);
-            }
+	            this.showProgress();
+                this.list.data.currentPage--;
+            	this.showTable(this.list);
+            },
 
-			{{element.name}}.prototype.showMessage = function (message){
+			showMessage: function (message){
 				alert(message.data.message);
-			}
-
-			{{element.name}}.prototype.productDetail = function (nodeElement,_ASIN){
-				list.clearSelected ();
+			},
+			
+			productDetail: function (nodeElement,_ASIN){
+				this.clearSelected ();
 				//select the element
 				nodeElement.parentNode.parentNode.setStyle({background: "#FFF8E8"});
 				var item = {id: 'item', data:{ASIN: _ASIN, title: nodeElement.parentNode.parentNode.firstChild.firstChild.nodeValue}};
-				ScreenEngineFactory.getInstance("SuggestionList").manageData(["item"], [item], [], "amazonSuggestionListForm1");
-			}
+				this.manageData(["item"], [item], []);
+			},
 			
-			{{element.name}}.prototype.clearSelected = function (){
+			clearSelected: function (){
 				$$("tbody tr").each(function (element){
 					element.setStyle ({background: "transparent url(http://piccolo.ls.fi.upm.es/amazonScreens/style/bg_td1.jpg) repeat-x top"});
 				});
-			}
+			},
 
-			{{element.name}}.prototype.showProgress = function (){
+			showProgress: function (){
                 $("loadingImgSuggestion").show();
             }
+
+        });
 		</script>
     </head>
     <body>

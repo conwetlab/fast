@@ -1,11 +1,4 @@
-/**{
-	uri:"http://TODO/service#ebaySearchService",
-	id:"ebaySearchService1",
-	actions: [{action:"fetch", preconditions:[{id:"filter", name:"http://TODO/ebay#filter", positive:true}], uses:[]}],
-	postconditions: [{id:"list", name:"http://TODO/ebay#list", positive:true}],
-	triggers:["productList"]
-}**/
-{{element.name}}.prototype.fetch = function (filter){
+fetch: function (filter){
 	//URL of the Service
 	var url = "http://open.api.ebay.com/shopping?";
 	url += "&callname=FindItemsAdvanced";
@@ -19,16 +12,15 @@
 	url += "&QueryKeywords=" + escape(filter.data.keywords.replace(/ /g,"+"));
 
 	//Invoke the service
-    FastAPI.getXML(url, this, );
     new FastAPI.Request(url,{
         'method':       'get',
         'content':      'xml',
-        'context':      this,
-        'onSuccess':    function (transport){{{element.instance}}.addToList(transport, filter)}
+        'context':      this.context,
+        'onSuccess':    function (transport){this.addToList(transport, filter)}.bind(this)
     });
-}
+},
 
-{{element.name}}.prototype.addToList = function (transport, filter){
+addToList: function (transport, filter){
 	var eBayList = {id: 'list', data:{productList: new Array()}};
 	var xml = transport;
     var items = xml.getElementsByTagName("Item");
@@ -86,7 +78,7 @@
      }
      eBayList.data.keywords = filter.data.keywords;
      eBayList.data.maxEntries = filter.data.maxEntries;
-     {{element.instance}}.manageData(["productList"], [eBayList], []);
-}
+     this.manageData(["productList"], [eBayList], []);
+},
 
-{{element.name}}.prototype.onError = function (transport){}
+onError: function (transport){}

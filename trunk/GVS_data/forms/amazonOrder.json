@@ -1,5 +1,6 @@
 {
-    "code": "http://localhost:8010/forms/amazonOrder.scr.html",
+    "name": "Amazon Order Form",
+    "code": "http://localhost:8010/forms/amazonOrder.src.html",
     "creationDate": "2009-04-20T17:00:00+0100",
     "creator": "http://www.fabio.es/",
     "description": {"en-gb": "This form allows users to purchase their shopping cart. It shows an Amazon interface to fulfill the required data to purchase the shopping cart"},
@@ -9,7 +10,7 @@
         "order",
         "purchase"
       ],
-      "user": null
+      "user": "admin"
     },
     "homepage": "http://www.deri.ie/amazonOrder",
     "icon": "http://localhost:8010/images/catalogue/amazonOrder.png",
@@ -17,7 +18,7 @@
     "rights": "http://creativecommons.org/",
     "screenshot": "http://www.deri.ie/amazonOrder-screenshot.jpg",
     "version": "1.0",
-    "actions": [{"action":"init", "preconditions":[{"id":"purchase", "name":"?Purchase http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#PurchaseURL", "positive":true}], "uses":[]}],
+    "actions": [{"name":"init", "preconditions":[{"id":"purchase", "pattern":"?Purchase http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#PurchaseURL", "positive":"true"}], "uses":[]}],
 	"postconditions": [],
 	"triggers":[]
 }

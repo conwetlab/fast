@@ -39,75 +39,75 @@
 		</style>
 		
         <script language="JavaScript">
-/**{
-	uri:"http://TODO/form#amazonSearch",
-	id:"amazonSearchForm1",
-	actions: [{action:"init", preconditions:[], uses:[]}],
-	postconditions: [{id:"filter", name:"http://TODO/amazon#filter", positive:true}],
-	triggers:[]
-}**/
-			{{element.name}}.prototype.init = function (){
+			var {{buildingblockId}} = Class.create(BuildingBlock,{
+			    /** @constructs */
+			    initialize: function($super, screenId, buildingBlockId, context){
+					$super(screenId, buildingBlockId, context);
+			    },
+			    
+			    init: function (){
+			    	//List of possible searches
+					var searchIndices = ["All","Apparel","Automotive","Baby","Beauty","Blended",
+										 "Books","Classical", "DigitalMusic","DVD","Electronics",
+										 "GourmetFood","HealthPersonalCare","HomeGarden","Industrial",
+										 "Jewelry","KindleStore","Kitchen","Magazines","Merchants",
+										 "Miscellaneous","MP3Downloads","Music","MusicalInstruments",
+										 "MusicTracks","OfficeProducts","OutdoorLiving","PCHardware",
+										 "PetSupplies","Photo","SilverMerchants","Software","SportingGoods",
+										 "Tools","Toys","UnboxVideo","VHS","Video","VideoGames","Watches",
+										 "Wireless","WirelessAccessories"];
 
-				//List of possible searches
-				var searchIndices = ["All","Apparel","Automotive","Baby","Beauty","Blended",
-									 "Books","Classical", "DigitalMusic","DVD","Electronics",
-									 "GourmetFood","HealthPersonalCare","HomeGarden","Industrial",
-									 "Jewelry","KindleStore","Kitchen","Magazines","Merchants",
-									 "Miscellaneous","MP3Downloads","Music","MusicalInstruments",
-									 "MusicTracks","OfficeProducts","OutdoorLiving","PCHardware",
-									 "PetSupplies","Photo","SilverMerchants","Software","SportingGoods",
-									 "Tools","Toys","UnboxVideo","VHS","Video","VideoGames","Watches",
-									 "Wireless","WirelessAccessories"];
+					$("send").onclick = this.send.bind(this);
+					$("send").onmouseover = function(event){
+							var e = Event.element(event);
+							e.setStyle({cursor:"pointer"});
+						};
 
-				$("send").observe("click", {{element.instance}}.send);
-				$("send").observe("mouseover",function(event){
-						var e = Event.element(event);
-						e.setStyle({cursor:"pointer"});
-					});
-
-				//Populate the product type select element
-				{{element.instance}}.populateOptions(searchIndices);
-			}
-			
-			{{element.name}}.prototype.populateOptions = function (_list){
-				var templateString = "<option value ='#{element}'>#{caption}</option>";
-				var template = new Template(templateString);
-				var optionHTML = "";
-				$A(_list).each (function (element){
-					optionHTML += template.evaluate({"element":element,"caption":{{element.instance}}.separate(element)});
-				});
-				$("productType").update(optionHTML);
-			}
-
-			//This function returns a human readable element, 
-			//separating words by white-spaces
-			{{element.name}}.prototype.separate = function (element){
-				//Workaround for special cases
-				//TODO: Create a generic solution, maybe another regexp?
-				if (element=="DVD" || element=="VHS" || element=="MP3Downloads" || element=="PCHardware"){
-					if (element=="MP3Downloads"){
-						return "MP3 Downloads";
+					//Populate the product type select element
+					this.populateOptions(searchIndices);
+				},
+				
+				populateOptions: function (_list){
+					var templateString = "<option value ='#{element}'>#{caption}</option>";
+					var template = new Template(templateString);
+					var optionHTML = "";
+					for(var i=0; i < _list.length; i++){
+						optionHTML += template.evaluate({"element":_list[i],"caption":_list[i]});
 					}
-					if (element=="PCHardware"){
-						return "PC Hardware";
+					$("productType").update(optionHTML);
+				},
+
+				//This function returns a human readable element, 
+				//separating words by white-spaces
+				separate: function (element){
+					//Workaround for special cases
+					//TODO: Create a generic solution, maybe another regexp?
+					if (element=="DVD" || element=="VHS" || element=="MP3Downloads" || element=="PCHardware"){
+						if (element=="MP3Downloads"){
+							return "MP3 Downloads";
+						}
+						if (element=="PCHardware"){
+							return "PC Hardware";
+						}
+						return element;
+					}else{
+						var result = element.replace(/([A-Z])/g, " $1");
+						//Remove first white-space when necessary
+						result = (result[0]==" "?result.substring(1,result.length):result);
+						return result;
 					}
-					return element;
-				}else{
-					var result = element.replace(/([A-Z])/g, " $1");
-					//Remove first white-space when necessary
-					result = (result[0]==" "?result.substring(1,result.length):result);
-					return result;
+				},
+				
+				send: function (){
+					if ($F("searchText").length==0){ //Empty keywords are forbidden
+						alert ("You must introduce at least one keyword");
+						return;
+					}
+					var filter = {id: "filter", data: {productType: $F("productType"), searchText: $F("searchText")}};
+					this.manageData(["newFilter"], [filter],[]);
 				}
-			}
-			
-			{{element.name}}.prototype.send = function (){
-				if ($F("searchText").length==0){ //Empty keywords are forbidden
-					alert ("You must introduce at least one keyword");
-					return;
-				}
-				var filter = {id: "filter", data: {productType: $F("productType"), searchText: $F("searchText")}};
-				ScreenEngineFactory.getInstance("ProductSearch").manageData(["newFilter"], [filter],[], "amazonSearchForm1");
-			}
+			    
+			});
    		</script>
     </head>
     <body>

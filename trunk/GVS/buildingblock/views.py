@@ -6,10 +6,11 @@ from django.http import HttpResponse, HttpResponseServerError, Http404, HttpResp
 from django.utils import simplejson
 from django.utils.translation import ugettext as _
 from django.shortcuts import get_list_or_404, get_object_or_404
+from django.template import Template, Context, loader
 from urllib2 import HTTPError
 from urllib import quote_plus
 from commons import resource
-from commons.utils import json_encode, cleanUrl
+from commons.utils import json_encode, cleanUrl, multipleReplace
 from commons.httpUtils import PUT_parameter, validate_url, download_http_content
 from python_rest_client.restful_lib import Connection, isValidResponse
 from buildingblock.models import BuildingBlock, Screenflow, Screen, Form, Operator, Resource, BuildingBlockCode, UserVote, UserTag, Tag
@@ -120,6 +121,13 @@ class BuildingBlockEntry(resource.Resource):
             transaction.rollback()
             return HttpResponseServerError(json_encode({"message":unicode(e)}), mimetype='application/json; charset=UTF-8')
         
+class Code(resource.Resource):
+    def read(self, request, buildingblock_id):
+        user = get_user_authentication(request)
+        
+        bbc = get_object_or_404(BuildingBlockCode, buildingBlock=buildingblock_id)
+        return HttpResponse(bbc.code, mimetype='application/json; charset=UTF-8')
+    
 class TagCollection(resource.Resource):
     def read(self, request, buildingblock_id):
         user = get_user_authentication(request)
@@ -297,16 +305,35 @@ class Publication(resource.Resource):
                 
         
 def updateCode(buildingblock, data): 
+    c = BuildingBlockCode.objects.get_or_create(buildingBlock=buildingblock)[0]
+    code = None
     if data.has_key('code'):
-        c = BuildingBlockCode.objects.get_or_create(buildingBlock=buildingblock)[0]
         code = data.get('code')
         if (validate_url(code)):
             code = download_http_content(code)
-        c.code = code
-        c.save()
-    elif data.has_key('definition'):
-        #TODO: Generate code
+        if buildingblock.type == 'resource' or buildingblock.type == 'operator':
+            context = Context({'name': "BB" + str(buildingblock.id), 'code': code})
+            t = loader.get_template('buildingblock/code.js')
+            code =  t.render(context)
+    elif data.has_key('definition') and buildingblock.type == 'screen':
         definition = data.get('definition')
+        for bbdefinition in definition:
+            bb = get_object_or_404(BuildingBlock, id=bbdefinition.get('id'))
+            bbdata = simplejson.loads(bb.data)
+            bbdefinition['type'] = bb.type
+            bbdefinition['libs'] = bbdata.get('libs')
+            bbc = get_object_or_404(BuildingBlockCode, buildingBlock=bb)
+            if bb.type == 'form':
+                context = Context({'buildingblockId': 'BB' + str(bb.id), 'screenId': str(buildingblock.id), 'buildingblockInstance': bbdefinition.get('name')})
+                t = Template(bbc.code)
+                bbdefinition['code'] = t.render(context)
+            else:
+                bbdefinition['code'] = bbc.code
+        context = Context({'id': buildingblock.id, 'name': buildingblock.name, 'buildingblocks': definition, 'posts': data.get('postconditions')})
+        t = loader.get_template('buildingblock/screen.html')
+        code =  t.render(context)
+    c.code = code
+    c.save()
 
 
 def updatePopularity(buildingblock):

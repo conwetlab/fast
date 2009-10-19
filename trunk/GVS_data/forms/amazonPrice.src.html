@@ -37,39 +37,32 @@
 			}
 		</style>
         <script language="JavaScript">
-/**{
-	uri:"http://TODO/form#amazonPriceComparative",
-	id:"PriceComparativeForm1",
-	actions: [	{action:"init", preconditions:[{id:"item", name:"http://TODO/amazon#item", positive:true}], uses:[]},
-	            {action:"showTable", preconditions:[{id:"list", name:"http://TODO/amazon#list", positive:true}], uses:[]},
-	            {action:"showMessage", preconditions:[{id:"message", name:"http://TODO/amazon#message", positive:true}], uses:[]}],
-	postconditions: [	{id:"item", name:"http://TODO/amazon#item", positive:true}],
-	triggers:["offer"]
-}**/
-			{{element.name}}.prototype.init = function (item){
-                $("nextButtonComparative").observe("click", {{element.instance}}.nextPage);
-                $("previousButtonComparative").observe("click", {{element.instance}}.previousPage);
+
+        var {{buildingblockId}} = Class.create(BuildingBlock,{
+
+			init: function (item){
+	        	$("nextButtonComparative").onclick = this.nextPage.bind(this);
+	            $("previousButtonComparative").onclick = this.previousPage.bind(this);
 				$$('input[type="button"]').each(function(element){
-					element.observe("mouseover",function(event){
+					element.onmouseover =  function(event){
 						var e = Event.element(event);
 						e.setStyle({cursor:"pointer"});
-					});
-				
+					};
 				});
 				var tableBody = $("listBodyComparative");
-                tableBody.update("");
-                $$(".productTitle").each(function(element){
+	            tableBody.update("");
+	            $$(".productTitle").each(function(element){
 					element.update(item.data.title);
 				});
-	            {{element.instance}}.showProgress();
-            }
+	            this.showProgress();
+            },
 
-			{{element.name}}.prototype.showProgress = function (){
+			showProgress: function (){
                 $("loadingImgComparative").show();
-            }
+            },
             
-			{{element.name}}.prototype.showTable = function (l){
-            	{{element.instance}}.list = l;
+			showTable: function (l){
+            	this.list = l;
 				
             	if ($("loadingImgComparative")) {
                 	$("loadingImgComparative").hide();
@@ -85,7 +78,7 @@
 				templateString += '<br /><span class="info">Availability:</span> #{availability}</td>';
 				templateString += '<td><input width="112" type="image" height="21" border="0" align="absmiddle"';
 				templateString += 'alt="Add to cart" src="http://piccolo.ls.fi.upm.es/amazonScreens/images/addToCart-small.gif"';
-				templateString += 'onclick="{{element.instance}}.add(\'#{offerId}\'); /></td></tr>';
+				templateString += 'onclick="ScreenEngineFactory.getInstance(\'{{screenId}}\').getBuildingBlock(\'{{buildingblockInstance}}\').add(\'#{offerId}\'); /></td></tr>';
                 var rowTemplate = new Template(templateString);
                 
                 var tableBody = $("listBodyComparative");
@@ -121,33 +114,34 @@
                 	$("curPageComparative").update("-");
                 	$("totalPagesComparative").update("-");
                 }
-            }
+            },
             
-			{{element.name}}.prototype.nextPage = function (){
+			nextPage: function (){
             	var tableBody = $("listBodyComparative");
                 tableBody.update("");
-	            {{element.instance}}.showProgress();
-            	{{element.instance}}.list.data.currentPage++;
-            	{{element.instance}}.showTable({{element.instance}}.list);
-            }
+	            this.showProgress();
+            	this.list.data.currentPage++;
+            	this.showTable(this.list);
+            },
             
-			{{element.name}}.prototype.previousPage = function (){
+			previousPage: function (){
 				var tableBody = $("listBodyComparative");
 				tableBody.update("");
-	            {{element.instance}}.showProgress();
-	            {{element.instance}}.list.data.currentPage--;
-            	{{element.instance}}.showTable({{element.instance}}.list);
-            }
+	            this.showProgress();
+	            this.list.data.currentPage--;
+            	this.showTable(this.list);
+            },
 
-			{{element.name}}.prototype.showMessage = function (message){
+			showMessage: function (message){
 				alert(message.data.message);
-			}
+			},
 
-			{{element.name}}.prototype.add = function (offerId){
+			add: function (offerId){
             	var offer = {id: 'offer',
             			data:{offerId: offerId}};
-				ScreenEngineFactory.getInstance("PriceComparative").manageData(["offer"], [offer],[], "PriceComparativeForm1");
+				this.manageData(["offer"], [offer],[]);
 			}
+        });
 		</script>
 	</head>
 	<body>

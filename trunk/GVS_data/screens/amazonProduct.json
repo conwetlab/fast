@@ -1,0 +1,138 @@
+{	
+	"name": "Compound Amazon Product Screen",
+    "creationDate": "2009-04-20T17:00:00+0100",
+    "creator": "http://www.fabio.es/",
+    "description": {"en-gb": "This screen shows the the details of a product in Amazon"},
+    "domainContext": {
+      "tags": [
+        "amazon",
+        "details",
+        "product"
+      ],
+      "user": "admin"
+    },
+    "homepage": "http://www.deri.ie/amazonProduct",
+    "icon": "http://localhost:8010/images/catalogue/amazonProduct.png",
+    "label": {"en-gb": "Product Details"},
+    "rights": "http://creativecommons.org/",
+    "screenshot": "http://www.deri.ie/amazonProduct-screenshot.jpg",
+    "version": "1.0",
+    "definition":[
+                   {
+                      "name": "amazonProductForm1",
+                      "id": "23",
+                      "actions":[
+                          {
+                              "name": "init",
+                              "preconditions":[],
+                              "uses":[],
+                              "triggers": [{"id": "_onload"} ]
+                          },
+                          {
+                              "name": "showProductInfo",
+                              "preconditions":[
+                                  {
+                                      "id":"product",
+                                      "uri":"http://aws.amazon.com/AWSECommerceService#Item",
+                                      "positive":"true",
+                                      "origins":[
+                                          {
+                                              "origin":"AmazonItemLookupService1",
+                                              "id":"product",
+                                              "uri":"http://aws.amazon.com/AWSECommerceService#Item"
+                                          }
+                                      ]
+                                  }
+                              ],
+                              "uses":[],
+                              "triggers": []
+                          },
+                          {
+                              "name": "showMessage",
+                              "preconditions":[
+                                  {
+                                      "id":"message",
+                                      "uri":"http://aws.amazon.com/AWSECommerceService#Message",
+                                      "positive":"true",
+                                      "origins":[
+                                          {
+                                              "origin":"AmazonItemLookupService1",
+                                              "id":"message",
+                                              "uri":"http://aws.amazon.com/AWSECommerceService#Message"
+                                          },
+                                          {
+                                              "origin":"AmazonAddItemToCartService1",
+                                              "id":"message",
+                                              "uri":"http://aws.amazon.com/AWSECommerceService#Message"
+                                          }
+                                      ]
+                                  }
+                              ],
+                              "uses":[],
+                              "triggers": []
+                          }
+                      ]
+                  },
+                  {
+                      "name":"AmazonItemLookupService1",
+                      "id":"12",
+                      "actions":[
+                          {
+                              "name":"searchProduct",
+                              "preconditions":[
+                                  {
+                                      "id":"item",
+                                      "uri":"http://aws.amazon.com/AWSECommerceService#Item",
+                                      "positive":"true",
+                                      "origins":[
+                                          
+                                      ]
+                                  }
+                              ],
+                              "uses":[
+
+                              ],
+                              "triggers": [{"id":"_onload"}]
+                          }
+                      ]
+                  },
+                  {
+                      "name":"AmazonAddItemToCartService1",
+                      "id":"9",
+                      "actions":[
+                          {
+                              "name":"add",
+                              "preconditions":[
+                                  {
+                                      "id":"item",
+                                      "uri":"http://aws.amazon.com/AWSECommerceService#Item",
+                                      "positive":"true",
+                                      "origins":[
+                                          
+                                      ]
+                                  }
+                              ],
+                              "uses":[
+									{
+                                        "id":"cart",
+                                        "uri":"http://aws.amazon.com/AWSECommerceService#ShoppingCart"
+                                    }
+                              ],
+                              "triggers": [{"id":"addToCart", "origin":"amazonProductForm1"}]
+                          }
+                      ]
+                  }
+            ],
+    "preconditions": [[{
+      "label": {"en-gb": "An item"},
+      "pattern": "?Item http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#Item",
+      "scope": "both"
+    }]],
+    "postconditions": [[{
+      "id": "cart",
+	  "origin": "AmazonAddItemToCartService1",
+      "label": {"en-gb": "An shopping cart"},
+      "pattern": "?Cart http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#ShoppingCart",
+      "scope": "both"
+    }]]
+}

@@ -1,26 +1,19 @@
 var ScreenEngineFactory = function () {
 
-	// *******************
-	// SINGLETON INSTANCES
-	// *******************
 	var instances = new Hash();
 
-	function ScreenEngine (id) {
-		
-		this.id = id;
-		
-		this.piping = new Array();
-		
-		this.posts = new Hash(); // new Hash() [{name:..., origin:...}, ...]
-		
-		this.factIndexedActions = new Hash();
-		
-		this.triggerIndexedActions = new Hash();
+	var ScreenEngine = Class.create({
 
-		// **************
-		// PUBLIC METHODS 
-		// **************
-		ScreenEngine.prototype.setEngine = function (screenflowEngine, piping, posts, scope) {
+		initialize: function(id) {
+			this.id = id;
+			this.piping = new Array();
+			this.posts = new Hash();
+			this.factIndexedActions = new Hash();
+			this.triggerIndexedActions = new Hash();
+			this.buildingBlocks = new Hash();
+		},
+
+		setEngine: function (screenflowEngine, piping, posts) {
 			this.screenflowEngine = screenflowEngine;
 			if(piping){
 				this.piping = piping;
@@ -29,13 +22,14 @@ var ScreenEngineFactory = function () {
 					var actions = buildingBlock.actions;
 					for(var j=0; actions!= null && j<actions.length;j++){
 						var action = actions[j];
+						action.scope = buildingBlock.scope;
 						var preconditions = action.preconditions;
 						for(var k=0; preconditions!= null && k<preconditions.length; k++){
 							var precondition = preconditions[k];
 							var origins = precondition.origins;
 							for(var h=0; origins!= null && h<origins.length; h++){
 								var origin = origins[h];
-								var factKey = _getKey(origin.id, origin.origin);
+								var factKey = this._getKey(origin.id, origin.origin);
 								var factActions = this.factIndexedActions.get(factKey);
 								if (!factActions){
 									factActions = new Array();
@@ -48,7 +42,7 @@ var ScreenEngineFactory = function () {
 						var triggers = action.triggers;
 						for(var k=0; triggers!= null && k<triggers.length; k++){
 							var trigger = triggers[k];
-							var triggerKey = _getKey(trigger.id, trigger.origin);
+							var triggerKey = this._getKey(trigger.id, trigger.origin);
 							var triggerActions = this.triggerIndexedActions.get(triggerKey);
 							if (!triggerActions){
 								triggerActions = new Array();
@@ -62,34 +56,42 @@ var ScreenEngineFactory = function () {
 			if(posts){
 				for (var i=0; i<posts.length; i++){
 					var post = posts[i];
-					this.posts.set(_getKey(post.id, post.origin), post);
+					this.posts.set(this._getKey(post.id, post.origin), post);
 				}
 			}
-		}
+		},
 		
-		ScreenEngine.prototype.manageData = function (triggers, addedFacts, deletedFacts, origin){
+		addBuildingBlock: function (buildingBlockId, obj) {
+			this.buildingBlocks.set(buildingBlockId, obj);
+		},
+		
+		getBuildingBlock: function (buildingBlockId) {
+			return this.buildingBlocks.get(buildingBlockId);
+		},
+		
+		manageData: function (triggers, addedFacts, deletedFacts, origin){
 			var modFacts = new Hash();
 			for (var i=0; addedFacts!= null && i<addedFacts.length; i++){
 				this.addFact(addedFacts[i], origin);
-				modFacts.set(_getKey(addedFacts[i].id, origin), addedFacts[i]);
+				modFacts.set(this._getKey(addedFacts[i].id, origin), addedFacts[i]);
 			}
 			for (var i=0; deletedFacts!= null &&  i<deletedFacts.length; i++){
 				this.deleteFact(deletedFacts[i], origin);
-				modFacts.set(_getKey(deletedFacts[i].id, origin), deletedFacts[i]);
+				modFacts.set(this._getKey(deletedFacts[i].id, origin), deletedFacts[i]);
 			}
 			var sentTriggers = new Hash();
 			for (var i=0; triggers!= null &&  i<triggers.length; i++){
 				var trigger = {id: triggers[i], origin: origin};
-				sentTriggers.set(_getKey(trigger.id, trigger.origin), triggers[i]);
+				sentTriggers.set(this._getKey(trigger.id, trigger.origin), triggers[i]);
 			}
 			this.run(sentTriggers, modFacts, origin);
-		}
+		},
 		
-		ScreenEngine.prototype.addFact = function (fact, origin){
+		addFact: function (fact, origin){
 			if(fact){
 				//Piping
 				fact.origin = origin;
-				var key = _getKey(fact.id, origin)
+				var key = this._getKey(fact.id, origin)
 				var piping = this.factIndexedActions.get(key);
 				for (var i=0; piping!= null && i<piping.length; i++){
 					var pipe = piping[i];
@@ -100,16 +102,16 @@ var ScreenEngineFactory = function () {
 				if(p){
 					var f = Object.clone(fact);
 					f.origin = this.id;
-					f.uri = p.uri;
+					f.uri = p.pattern.split(" ")[2];
 					this.screenflowEngine.manageFacts([f],[]);
 				}
 			}
-		}
+		},
 		
-		ScreenEngine.prototype.deleteFact = function (id, origin){
+		deleteFact: function (id, origin){
 			if(id){
 				//Piping
-				var key = _getKey(id, origin)
+				var key = this._getKey(id, origin)
 				var piping = this.factIndexedActions.get(key);
 				for (var i=0; piping!= null && i<piping.length; i++){
 					var pipe = piping[i];
@@ -118,12 +120,13 @@ var ScreenEngineFactory = function () {
 				//Post
 				var p = this.posts.get(key);
 				if(p){
+					p.uri = p.pattern.split(" ")[2];
 					this.screenflowEngine.manageFacts([],[p.uri]);
 				}
 			}
-		}
+		},
 		
-		ScreenEngine.prototype.searchFact = function (precondition){
+		searchFact: function (precondition){
 			var f = precondition.value; 
 			if(!f){
 				var f = this.screenflowEngine.getFact(precondition.uri);
@@ -134,13 +137,10 @@ var ScreenEngineFactory = function () {
 				}
 			}
 			return f;
-		}
+		},
 		
-		// ************************
-		// Engine methods
-		// ************************
 		
-		ScreenEngine.prototype.restart = function (){
+		restart: function (){
 			for (var i=0; i<this.piping.length; i++){
 				var buildingBlock = this.piping[i];
 				var actions = buildingBlock.actions;
@@ -154,9 +154,9 @@ var ScreenEngineFactory = function () {
 				}
 			}
 			this.manageData(["_onload"], null, null, null);
-		}
+		},
 		
-		ScreenEngine.prototype.run = function (triggers, modFacts, origin){
+		run: function (triggers, modFacts, origin){
 			var candidateActions = this.getCandidateActions(triggers, modFacts, origin);
 			var firedActions = this.getFiredActions(candidateActions);
 			if (firedActions){
@@ -164,9 +164,9 @@ var ScreenEngineFactory = function () {
 					this.execute(firedActions[i]);
 				}
 			}
-		}
+		},
 		
-		ScreenEngine.prototype.getCandidateActions = function (triggers, modFacts){
+		getCandidateActions: function (triggers, modFacts){
 			var candidateActions = new Array();
 			var factKeys = modFacts.keys();
 			for(var i = 0; i < factKeys.length ; i++){
@@ -183,9 +183,9 @@ var ScreenEngineFactory = function () {
 				}
 			}
 			return candidateActions.uniq();
-		}
+		},
 		
-		ScreenEngine.prototype.getFiredActions = function (actions){
+		getFiredActions: function (actions){
 			var firedActions = new Array();
 			for(var i = 0; i < actions.length; i++){
 				var action = actions[i].action;
@@ -194,9 +194,9 @@ var ScreenEngineFactory = function () {
 				}
 			}
 			return firedActions;
-		}
+		},
 		
-		ScreenEngine.prototype.evaluatePrecondition = function (preconditions){
+		evaluatePrecondition: function (preconditions){
 			if(!preconditions){
 				return true;
 			}
@@ -207,9 +207,9 @@ var ScreenEngineFactory = function () {
 				}	
 			}
 			return true;
-		}
+		},
 		
-		ScreenEngine.prototype.evaluateExpression = function (precondition){
+		evaluateExpression: function (precondition){
 			var fact = this.searchFact(precondition);
 			var evaluation = true;
 			if(!fact){
@@ -220,9 +220,9 @@ var ScreenEngineFactory = function () {
 				positive = false;
 			}
 			return (positive == evaluation);
-		}
+		},
 		
-		ScreenEngine.prototype.execute = function (action){
+		execute: function (action){
 			var params = new Array ();
 			
 			//pres
@@ -237,20 +237,16 @@ var ScreenEngineFactory = function () {
 				params.push(this.screenflowEngine.getFact(action.uses[i].uri));
 			}
 			
-			action.funct.apply(this.scope, params);
-		}
+			action.funct.apply(action.scope, params);
+		},
 		
-		var _getKey = function(id, origin){
+		_getKey: function(id, origin){
 			id = id? id: "";
 			origin = origin? origin: "";
 			return ([id, origin]).join("-");
 	    }
+	});
 
-	}
-	
-	// **********************
-	// SINGLETON GET INSTANCE
-	// **********************
 	return new function(id) {
     	this.getInstance = function(id) {
     		var instance = instances.get(id);

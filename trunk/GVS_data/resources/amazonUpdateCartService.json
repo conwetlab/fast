@@ -1,4 +1,5 @@
 {
+    "name": "Update Amazon Cart Service",
     "code": "http://localhost:8010/resources/amazonUpdateCartService.src.js",
     "creationDate": "2009-04-20T17:00:00+0100",
     "creator": "http://www.fabio.es/",
@@ -17,9 +18,13 @@
     "rights": "http://creativecommons.org/",
     "screenshot": "http://www.deri.ie/amazonUpdateCartService.jpg",
     "version": "1.0",
-    "actions": [{"action":"updateService", "preconditions":[{"id":"cart", "name":"?Cart http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#ShoppingCart", "positive":true},
-	                                                  {"id":"update", "name":"?UCart http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#UpdatingCart", "positive":true}],
-	                                   "uses":[{"id":"user", "name":"?User http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#User"}]}],
-	"postconditions": [{"id":"purchase", "name":"?Purchase http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#PurchaseURL", "positive":false}],
+    "libs":[
+    	{"language": "JavaScript", "src": "http://piccolo.ls.fi.upm.es/amazonURL/signAmazonURLs.js"},
+    	{"language": "JavaScript", "src": "http://piccolo.ls.fi.upm.es/amazonURL/jssha2/sha2.js"}
+    	],
+    "actions": [{"name":"updateService", "preconditions":[{"id":"cart", "pattern":"?Cart http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#ShoppingCart", "positive":"true"},
+	                                                  {"id":"update", "pattern":"?UCart http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#UpdatingCart", "positive":"true"}],
+	                                   "uses":[]}],
+	"postconditions": [{"id":"purchase", "pattern":"?Purchase http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#PurchaseURL", "positive":false}],
 	"triggers":["updatedCart"]
 }

@@ -1,19 +1,6 @@
-/**{
-	uri:"http://TODO/service#AmazonItemLookupService",
-	id:"AmazonItemLookupService1",
-	actions: [{action:"searchProduct", preconditions:[{id:"item", name:"http://TODO/amazon#item", positive:true}], uses:[]}],
-	postconditions: [{id:"product", name:"http://TODO/amazon#product", positive:true}],
-	triggers:["newProduct"]
-}**/	
-{{element.name}}.prototype.searchProduct = function (item, user){
+searchProduct: function (item){
 	//Base URL of the REST Service
 	var url = "http://webservices.amazon.com/onca/xml?Service=AWSECommerceService";
-	//Add the AccessKeyId (get from the user fact)
-	if (user) {
-		url += "&AWSAccessKeyId=" + user.data.KeyId;
-	} else {// if the KB doesn't contain a user key Id, add one by default
-		url += "&AWSAccessKeyId=15TNKDQJGH6BD0Z4KY02";
-	}
 	//Add the operation Type
 	url +="&Operation=ItemLookup";
 	//Add the responseGroup
@@ -22,16 +9,20 @@
 	url += "&Version=2008-06-26";
 	//Add item ID
 	url += "&ItemId=" + item.data.ASIN;
+	
+	var encoder = new URLAmazonEncoder();
+	url = encoder.encode(url);
+
 	//Invoke the service
 	new FastAPI.Request(url,{
         'method':       'get',
         'content':      'xml',
-        'context':      this,
-        'onSuccess':    {{element.instance}}.fetchProductInfo
+        'context':      this.context,
+        'onSuccess':    this.fetchProductInfo.bind(this)
     });
-}
+},
 
-{{element.name}}.prototype.fetchProductInfo = function (transport){
+fetchProductInfo: function (transport){
 	var xml = transport;
 	var item = xml.getElementsByTagName("Item")[0];
 	if (item.getElementsByTagName("Title").length > 0) {
@@ -59,7 +50,7 @@
 			image: image}
 	};
 
-    {{element.instance}}.manageData(["newProduct"], [_product], []);	
-}
+    this.manageData(["newProduct"], [_product], []);	
+},
 
-{{element.name}}.prototype.onError = function (transport){}
+onError: function (transport){}

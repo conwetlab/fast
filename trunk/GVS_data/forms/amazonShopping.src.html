@@ -29,25 +29,16 @@
 			}
 		</style>
         <script language="JavaScript">
-/**{
-	uri:"http://TODO/form#amazonShoppingCart",
-	id:"amazonShoppingCartForm1",
-	actions: [{action:"init", preconditions:[]},
-	            {action:"showTable", preconditions:[{id:"list", name:"http://TODO/amazon#productList", positive:true}]}],
-	postconditions: [{id:"updateCart", name:"http://TODO/amazon#updateCart", positive:true},
-	                 {id:"purchase", name:"http://TODO/amazon#purchase", positive:true},
-	                 {id:"item", name:"http://TODO/amazon#item", positive:true}],
-	triggers:["purchase", "clearCart", "updateCart", "newItem"]
-}**/	
-			{{element.name}}.prototype.init = function (){
-                $("clearButton").observe("click", {{element.instance}}.clearCart);
-                $("checkoutButton").observe("click", {{element.instance}}.checkout);
-				$("updateButton").observe("click", {{element.instance}}.updateCart);
+        var {{buildingblockId}} = Class.create(BuildingBlock,{	
+			init: function (){
+                $("clearButton").onclick = this.clearCart.bind(this);
+                $("checkoutButton").onclick = this.checkout.bind(this);
+				$("updateButton").onclick = this.updateCart.bind(this);
 				$$('input[type="button"]').each(function(element){
-					element.observe("mouseover",function(event){
+					element.onmouseover  = function(event){
 						var e = Event.element(event);
 						e.setStyle({cursor:"pointer"});
-					});
+					};
 				
 				});
 				var tableBody = $("listBodyCart");
@@ -57,17 +48,17 @@
 				}
 				$("loadingImgCart").show();
 				$("buttonContainerDivCart").hide();
-            }
+            },
 
-			{{element.name}}.prototype.clearCart = function (){
-            	ScreenEngineFactory.getInstance("ShoppingCart").manageData(["clearCart"], [],[], "amazonShoppingCartForm1");	
-			}
+			clearCart: function (){
+            	this.manageData(["clearCart"], [],[]);	
+			},
 
-			{{element.name}}.prototype.showProgress = function (){
+			showProgress: function (){
                 $("loadingImgCart").show();
-            }
+            },
 
-			{{element.name}}.prototype.showTable = function (l){
+			showTable: function (l){
             	
                 if ($("loadingImgCart")) {
                 	$("loadingImgCart").hide();
@@ -82,7 +73,7 @@
 					$("info").update("");
 				}
 				$("buttonContainerDivCart").setStyle({display:"inline"});
-                var templateString = '<tr><td><a onclick="{{element.instance}}.productDetail(\'#{ASIN}\',\'#{title}\');">#{title}</a></td>';
+                var templateString = '<tr><td><a onclick="ScreenEngineFactory.getInstance(\'{{screenId}}\').getBuildingBlock(\'{{buildingblockInstance}}\').productDetail(\'#{ASIN}\',\'#{title}\');">#{title}</a></td>';
 				templateString += '<td>#{price}</td>';
 				templateString += '<td><input type="hidden" id="id"';
 				templateString += 'value="#{id}"/><input type="text" maxlength="3" size="2" id="itemQuantity"';
@@ -103,24 +94,24 @@
 				lastRow += "</th></tr>";
 				lastRow += '<input type="hidden" id="purchaseURL" value="'+l.data.purchaseURL+'"/>';
 				tableBody.innerHTML += lastRow;
-            }
+            },
             
-			{{element.name}}.prototype.showMessage = function (message){
+			showMessage: function (message){
 				alert(message.data.message);
-			}
+			},
 
-			{{element.name}}.prototype.checkout = function (){
+			checkout: function (){
 				var purchase = {id:'purchase', data:{url: $F("purchaseURL")}};
-				ScreenEngineFactory.getInstance("ShoppingCart").manageData(["purchase"], [purchase], [], "amazonShoppingCartForm1");
-			}
+				this.manageData(["purchase"], [purchase], []);
+			},
             
             //Change the current Item Fact
-			{{element.name}}.prototype.productDetail = function (_ASIN,_title){
+			productDetail: function (_ASIN,_title){
 				var item = {id: 'item', data:{ASIN: _ASIN, title: _title}};
-				ScreenEngineFactory.getInstance("ShoppingCart").manageData(["newItem"], [item], [], "amazonShoppingCartForm1");
-			}
+				this.manageData(["newItem"], [item], []);
+			},
 			
-			{{element.name}}.prototype.updateCart = function (){
+			updateCart: function (){
 				var cartUpdate = {id: "cartUpdate", data:{list: new Array()}};
 				var ids = $("id");
 				var quantities = $("itemQuantity");
@@ -131,8 +122,9 @@
 				for (var i=0; i < ids.length; i++){
 					cartUpdate.data.list.push({id: $F(ids[i]), quantity: $F(quantities[i])});
 				}
-            	ScreenEngineFactory.getInstance("ShoppingCart").manageData(["cartUpdate"], [cartUpdate], [], "amazonShoppingCartForm1");		
+            	this.manageData(["cartUpdate"], [cartUpdate], []);		
 			}
+        });
         </script>
     </head>
     <body>

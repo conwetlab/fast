@@ -1,50 +1,40 @@
-/**{
-	uri:"http://TODO/service#PriceComparativeService",
-	id:"PriceComparativeService1",
-	actions: [{action:"fetch", preconditions:[{id:"item", name:"http://TODO/amazon#item", positive:true}], uses:[{id:"user", name:"http://TODO/amazon#user"}]}],
-	postconditions: [{id:"pricecomparativelist", name:"http://TODO/amazon#pricecomparativelist", positive:true}],
-	triggers:["productList"]
-}**/
-{{element.name}}.prototype.fetch = function (item, user){
+fetch: function (item){
 	//Get the facts to invoke the service
     //Add the ItemSearch parameters
     var parameters = "";
 	parameters += "&ItemId=" + item.data.ASIN;
 	parameters += "&MerchantId=All&Condition=All";
     
-    //Base URL of the REST Service
+	//Base URL of the REST Service
 	var url = "http://webservices.amazon.com/onca/xml?Service=AWSECommerceService";
-	//Add the AccessKeyId (get from the user fact)
-	if (user) {
-		url += "&AWSAccessKeyId=" + user.data.KeyId;
-	} else {// if the KB doesn't contain a user key Id, add one by default
-		url += "&AWSAccessKeyId=15TNKDQJGH6BD0Z4KY02";
-	}
 	//Add the operation Type
-	url +="&Operation=ItemLookup";
+	var url +="&Operation=ItemLookup";
 	//Add the parameters
 	url += parameters;
 	//Add the responseGroup
 	url +="&ResponseGroup=OfferFull";
 	//Add the current version of the API
 	url += "&Version=2008-06-26";
+	
+	var encoder = new URLAmazonEncoder();
+	url = encoder.encode(url);
 
 	//Invoke the service
     new FastAPI.Request(url,{
         'method':       'get',
         'content':      'xml',
-        'context':      this,
-        'onSuccess':    {{element.instance}}.addToList
+        'context':      this.context,
+        'onSuccess':    this.addToList.bind(this)
     });
-}
+},
 
-{{element.name}}.prototype.addToList = function (transport){
+addToList: function (transport){
 	var l = {id: 'list', data:{productList: new Array(), currentPage: 0}};
     var xml = transport;
     //Check if the service returned an error
     if (xml.getElementsByTagName("IsValid")[0].childNodes[0].nodeValue == "False") {
     	var message = {name: "message", data:{message: xml.getElementsByTagName("Message")[0].childNodes[0].nodeValue}};
-    	{{element.instance}}.manageData(["message"], [message], []);
+    	this.manageData(["message"], [message], []);
     } else { //Correct response, create the result List
         var comparativelist = xml.getElementsByTagName("Offers")[0].getElementsByTagName("Offer");
         //Fill the table, 1 row per item
@@ -125,8 +115,8 @@
             };
             l.data.productList.push(row);
 	    }
-        {{element.instance}}.manageData(["productList"], [l], []);
+        this.manageData(["productList"], [l], []);
     }
-}
+},
 
-{{element.name}}.prototype.onError = function (transport){}
+onError: function (transport){}

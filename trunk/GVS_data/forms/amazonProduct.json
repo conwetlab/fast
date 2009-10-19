@@ -1,15 +1,16 @@
 {
-    "code": "http://localhost:8010/forms/amazonProduct.scr.html",
+    "name": "Amazon Product Form",
+    "code": "http://localhost:8010/forms/amazonProduct.src.html",
     "creationDate": "2009-04-20T17:00:00+0100",
     "creator": "http://www.fabio.es/",
-    "description": {"en-gb": "This screen shows the results of a given search in Amazon. It allows users to choose a product to see its details"},
+    "description": {"en-gb": "This screen shows the the details of a product in Amazon"},
     "domainContext": {
       "tags": [
         "amazon",
         "details",
-        "shoppingCart"
+        "product"
       ],
-      "user": null
+      "user": "admin"
     },
     "homepage": "http://www.deri.ie/amazonProduct",
     "icon": "http://localhost:8010/images/catalogue/amazonProduct.png",
@@ -17,8 +18,8 @@
     "rights": "http://creativecommons.org/",
     "screenshot": "http://www.deri.ie/amazonProduct-screenshot.jpg",
     "version": "1.0",
-    "actions": [{"action":"init", "preconditions":[], "uses": []},
-	            {"action":"showProductInfo", "preconditions":[{"id":"product", "name":"?Item http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#Item", "positive":true}], "uses":[]}],
+    "actions": [{"name":"init", "preconditions":[], "uses": []},
+	            {"name":"showProductInfo", "preconditions":[{"id":"product", "pattern":"?Item http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#Item", "positive":"true"}], "uses":[]}],
 	"postconditions": [],
 	"triggers":["addToCart"]
 }
