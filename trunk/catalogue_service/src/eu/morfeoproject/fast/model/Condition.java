@@ -57,6 +57,8 @@ public class Condition {
 	
 	@Override
 	public boolean equals(Object o) {
+		if (o == null)
+			return false;
 		Condition condition = (Condition)o;
 		if (this.getPattern().size() == condition.getPattern().size()) {
 			Model condModel = RDF2Go.getModelFactory().createModel();

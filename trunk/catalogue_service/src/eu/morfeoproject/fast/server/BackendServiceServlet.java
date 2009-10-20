@@ -1,0 +1,250 @@
+package eu.morfeoproject.fast.server;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.Iterator;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.ontoware.rdf2go.RDF2Go;
+import org.ontoware.rdf2go.model.Model;
+import org.ontoware.rdf2go.model.Syntax;
+import org.ontoware.rdf2go.model.node.impl.URIImpl;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import eu.morfeoproject.fast.catalogue.DuplicatedResourceException;
+import eu.morfeoproject.fast.catalogue.InvalidResourceTypeException;
+import eu.morfeoproject.fast.catalogue.NotFoundException;
+import eu.morfeoproject.fast.catalogue.OntologyInvalidException;
+import eu.morfeoproject.fast.model.BackendService;
+import eu.morfeoproject.fast.util.URLUTF8Encoder;
+
+/**
+ * Servlet implementation class BackendServiceServlet
+ */
+public class BackendServiceServlet extends GenericServlet {
+	private static final long serialVersionUID = 1L;
+
+	static Logger logger = LoggerFactory.getLogger(BackendServiceServlet.class);
+    
+    /**
+     * @see HttpServlet#HttpServlet()
+     */
+    public BackendServiceServlet() {
+        super();
+    }
+
+	/**
+	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
+	 */
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		PrintWriter writer = response.getWriter();
+		String format = request.getHeader("accept") != null ? request.getHeader("accept") : MediaType.APPLICATION_JSON;
+		String[] chunks = request.getRequestURI().split("/");
+		String id = chunks[chunks.length-1];
+		if (id.equalsIgnoreCase("services")) id = null;
+		
+		if (id == null) {
+			// List the members of the collection
+			logger.info("Retrieving all services");
+			try {
+				if (format.equals(MediaType.APPLICATION_RDF_XML)) {
+					response.setContentType(MediaType.APPLICATION_RDF_XML);
+					Model model = RDF2Go.getModelFactory().createModel();
+					try {
+						model.open();
+						for (BackendService b : CatalogueAccessPoint.getCatalogue().listBackendServices()) {
+							Model bsModel = b.createModel();
+							for (String ns : bsModel.getNamespaces().keySet())
+								model.setNamespace(ns, bsModel.getNamespace(ns));
+							model.addModel(bsModel);
+							bsModel.close();
+						}
+						model.writeTo(writer, Syntax.RdfXml);
+					} catch (Exception e) {
+						e.printStackTrace();
+					} finally {
+						model.close();
+					}
+				} else { //if (format.equals(MediaType.APPLICATION_JSON)) {
+					response.setContentType(MediaType.APPLICATION_JSON);
+					JSONArray services = new JSONArray();
+					for (BackendService b : CatalogueAccessPoint.getCatalogue().listBackendServices())
+						services.put(b.toJSON());
+					writer.print(services.toString(2));
+				}
+				response.setStatus(HttpServletResponse.SC_OK);
+			} catch (JSONException e) {
+				e.printStackTrace();
+				response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+			}
+		} else {
+			// Retrieve the addressed member of the collection
+			id = URLUTF8Encoder.decode(id);
+			logger.info("Retrieving backend service "+id);
+			BackendService b = CatalogueAccessPoint.getCatalogue().getBackendService(new URIImpl(id));
+			if (b == null) {
+				response.setStatus(HttpServletResponse.SC_NOT_FOUND, "The resource "+id+" has not been found.");
+			} else {
+				try {
+					if (format.equals(MediaType.APPLICATION_JSON)) {
+						response.setContentType(MediaType.APPLICATION_JSON);
+						writer.print(b.toJSON().toString(2));
+					} else if (format.equals(MediaType.APPLICATION_RDF_XML)) {
+						response.setContentType(MediaType.APPLICATION_RDF_XML);
+						Model bsModel = b.createModel();
+						bsModel.writeTo(writer, Syntax.RdfXml);
+						bsModel.close();
+					}				
+					response.setStatus(HttpServletResponse.SC_OK);
+				} catch (JSONException e) {
+					e.printStackTrace();
+					response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+				}
+			}
+		}
+		writer.close();
+	}
+
+	/**
+	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+	 */
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		BufferedReader reader = request.getReader();
+		PrintWriter writer = response.getWriter();
+		String format = request.getHeader("accept") != null ? request.getHeader("accept") : MediaType.APPLICATION_JSON;
+		StringBuffer buffer = new StringBuffer();
+		String line = reader.readLine();
+		while (line != null) {
+			buffer.append(line);
+			line = reader.readLine();
+		}
+		String body = buffer.toString();
+
+		// Create a new entry in the collection where the ID is assigned automatically by 
+		// the collection and it is returned.
+		try {
+			JSONObject json = new JSONObject(body);
+			BackendService service = parseBackendService(json, null);
+			try {
+				CatalogueAccessPoint.getCatalogue().addBackendService(service);
+				if (format.equals(MediaType.APPLICATION_RDF_XML)) {
+					response.setContentType(MediaType.APPLICATION_RDF_XML);
+					Model bsModel = service.createModel();
+					bsModel.writeTo(writer, Syntax.RdfXml);
+					bsModel.close();
+				} else {
+					response.setContentType(MediaType.APPLICATION_JSON);
+					JSONObject newBs = service.toJSON();						
+					for (Iterator it = newBs.keys(); it.hasNext(); ) {
+						String key = it.next().toString();
+						json.put(key, newBs.get(key));
+					}
+					writer.print(json.toString(2));
+				}
+				response.setStatus(HttpServletResponse.SC_OK);
+			} catch (DuplicatedResourceException e) {
+				e.printStackTrace();
+				response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+			} catch (OntologyInvalidException e) {
+				e.printStackTrace();
+				response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+			} catch (InvalidResourceTypeException e) {
+				e.printStackTrace();
+				response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+			}
+		} catch (JSONException e) {
+			e.printStackTrace();
+			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+		} catch (IOException e) {
+			e.printStackTrace();
+			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+		}	
+	}
+
+	/**
+	 * @see HttpServlet#doPut(HttpServletRequest, HttpServletResponse)
+	 */
+	protected void doPut(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		BufferedReader reader = request.getReader();
+		PrintWriter writer = response.getWriter();
+		String format = request.getHeader("accept") != null ? request.getHeader("accept") : MediaType.APPLICATION_JSON;
+		String[] chunks = request.getRequestURI().split("/");
+		String id = chunks[chunks.length-1];
+		if (id.equalsIgnoreCase("services")) id = null;
+		StringBuffer buffer = new StringBuffer();
+		String line = reader.readLine();
+		while (line != null) {
+			buffer.append(line);
+			line = reader.readLine();
+		}
+		String body = buffer.toString();
+		
+		if (id == null) {
+			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+		} else {
+			// Update the addressed member of the collection or create it with a defined ID.
+			id = URLUTF8Encoder.decode(id);
+			try {
+				JSONObject json = new JSONObject(body);
+				BackendService backendService = parseBackendService(json, new URIImpl(id));
+				CatalogueAccessPoint.getCatalogue().updateBackendService(backendService);
+				if (format.equals(MediaType.APPLICATION_RDF_XML)) {
+					response.setContentType(MediaType.APPLICATION_RDF_XML);
+					Model backendServiceModel = backendService.createModel();
+					backendServiceModel.writeTo(writer, Syntax.RdfXml);
+					backendServiceModel.close();
+				} else {
+					response.setContentType(MediaType.APPLICATION_JSON);
+					JSONObject newBs = backendService.toJSON();						
+					for (Iterator it = newBs.keys(); it.hasNext(); ) {
+						String key = it.next().toString();
+						json.put(key, newBs.get(key));
+					}
+					writer.print(json.toString(2));
+				}
+				response.setStatus(HttpServletResponse.SC_OK);
+			} catch (JSONException e) {
+				e.printStackTrace();
+				response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+			} catch (IOException e) {
+				e.printStackTrace();
+				response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+			} catch (NotFoundException e) {
+				e.printStackTrace();
+				response.setStatus(HttpServletResponse.SC_NOT_FOUND, "The resource "+id+" has not been found.");
+			}
+		}
+	}
+
+	/**
+	 * @see HttpServlet#doDelete(HttpServletRequest, HttpServletResponse)
+	 */
+	protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		String[] chunks = request.getRequestURI().split("/");
+		String id = chunks[chunks.length-1];
+		if (id.equalsIgnoreCase("services")) id = null;
+		
+		if (id == null) {
+			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+		} else {
+			// Delete the addressed member of the collection.
+			id = URLUTF8Encoder.decode(id);
+			try {
+				CatalogueAccessPoint.getCatalogue().removeBackendService(new URIImpl(id));
+				response.setStatus(HttpServletResponse.SC_OK);
+			} catch (NotFoundException e) {
+				response.setStatus(HttpServletResponse.SC_NOT_FOUND, "The resource "+id+" has not been found.");
+			}
+		}
+	}
+
+}

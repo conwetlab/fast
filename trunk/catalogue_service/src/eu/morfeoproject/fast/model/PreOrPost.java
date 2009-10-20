@@ -16,23 +16,14 @@ import org.ontoware.rdf2go.vocabulary.RDFS;
 import eu.morfeoproject.fast.vocabulary.DC;
 import eu.morfeoproject.fast.vocabulary.FGO;
 
-public abstract class PreOrPost implements Resource {
+public abstract class PreOrPost extends Resource {
 	
-	private URI uri;
 	private List<Condition> conditions;
 
 	public PreOrPost(URI uri) {
-		this.uri = uri;
+		setUri(uri);
 	}
 	
-	public URI getUri() {
-		return uri;
-	}
-
-	public void setUri(URI uri) {
-		this.uri = uri;
-	}
-
 	public List<Condition> getConditions() {
 		if (conditions == null)
 			conditions = new ArrayList<Condition>();
@@ -51,7 +42,7 @@ public abstract class PreOrPost implements Resource {
 		
 		BlankNode bag = model.createBlankNode();
 		model.addStatement(bag, RDF.type, RDF.Bag);
-		model.addStatement(this.uri, FGO.hasCondition, bag);
+		model.addStatement(getUri(), FGO.hasCondition, bag);
 		int i = 1;
 		for (Condition con : conditions) {
 			BlankNode c = model.createBlankNode();

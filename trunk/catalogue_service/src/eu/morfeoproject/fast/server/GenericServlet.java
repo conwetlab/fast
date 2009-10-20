@@ -23,12 +23,18 @@ import org.ontoware.rdf2go.model.node.URI;
 import org.ontoware.rdf2go.model.node.impl.URIImpl;
 import org.ontoware.rdf2go.vocabulary.RDF;
 
+import eu.morfeoproject.fast.model.Action;
+import eu.morfeoproject.fast.model.BackendService;
 import eu.morfeoproject.fast.model.Condition;
-import eu.morfeoproject.fast.model.Postcondition;
 import eu.morfeoproject.fast.model.FastModelFactory;
-import eu.morfeoproject.fast.model.Screen;
-import eu.morfeoproject.fast.model.ScreenFlow;
+import eu.morfeoproject.fast.model.FormElement;
+import eu.morfeoproject.fast.model.Library;
+import eu.morfeoproject.fast.model.Operator;
+import eu.morfeoproject.fast.model.Postcondition;
 import eu.morfeoproject.fast.model.Precondition;
+import eu.morfeoproject.fast.model.Screen;
+import eu.morfeoproject.fast.model.ScreenComponent;
+import eu.morfeoproject.fast.model.ScreenFlow;
 import eu.morfeoproject.fast.util.DateFormatter;
 
 public abstract class GenericServlet extends HttpServlet {
@@ -189,6 +195,125 @@ public abstract class GenericServlet extends HttpServlet {
 		return post;
 	}
 	
+	protected FormElement parseFormElement(JSONObject jsonFe, URI id) throws JSONException, IOException {
+		FormElement fe = FastModelFactory.createFormElement();
+		parseScreenComponent(fe, jsonFe, id);
+		return fe;
+	}
+
+	protected Operator parseOperator(JSONObject jsonOp, URI id) throws JSONException, IOException {
+		Operator op = FastModelFactory.createOperator();
+		parseScreenComponent(op, jsonOp, id);
+		return op;
+	}
+
+	protected BackendService parseBackendService(JSONObject jsonBs, URI id) throws JSONException, IOException {
+		BackendService bs = FastModelFactory.createBackendService();
+		parseScreenComponent(bs, jsonBs, id);
+		return bs;
+	}
+	
+	protected Action parseAction(JSONObject jsonAction) throws JSONException, IOException {
+		Action action = new Action();
+		
+		// name
+		if (jsonAction.get("name") != null)
+			action.setName(jsonAction.getString("name"));
+		// preconditions
+		JSONArray preArray = jsonAction.getJSONArray("preconditions");
+		ArrayList<List<Condition>> preconditions = new ArrayList<List<Condition>>();
+		for (int i = 0; i < preArray.length(); i++)
+			preconditions.add(parseConditions(preArray.getJSONArray(i)));
+		action.setPreconditions(preconditions);
+		// uses
+		if (jsonAction.get("uses") != null) {
+			JSONArray usesArray = jsonAction.getJSONArray("uses");
+			for (int i = 0; i < usesArray.length(); i++)
+				action.getUses().add(usesArray.getString(i));
+		}
+
+		return action;
+	}
+	
+	protected Library parseLibrary(JSONObject jsonLibrary) throws JSONException, IOException {
+		Library library = new Library();
+		
+		// name
+		if (jsonLibrary.get("language") != null)
+			library.setLanguage(jsonLibrary.getString("language"));
+		// source
+		if (jsonLibrary.get("source") != null && !jsonLibrary.getString("source").equalsIgnoreCase("null"))
+			library.setSource(new URIImpl(jsonLibrary.getString("source")));
+
+		return library;
+	}
+	
+	@SuppressWarnings("unchecked")
+	protected ScreenComponent parseScreenComponent(ScreenComponent sc, JSONObject jsonSc, URI id) throws JSONException, IOException {
+		if (id != null)
+			sc.setUri(id);
+		if (jsonSc.get("label") != null) {
+			JSONObject jsonLabels = jsonSc.getJSONObject("label");
+			Iterator<String> labels = jsonLabels.keys();
+			for ( ; labels.hasNext(); ) {
+				String key = labels.next();
+				sc.getLabels().put(key, jsonLabels.getString(key));
+			}
+		}
+		if (jsonSc.get("description") != null) {
+			JSONObject jsonDescriptions = jsonSc.getJSONObject("description");
+			Iterator<String> descriptions = jsonDescriptions.keys();
+			for ( ; descriptions.hasNext(); ) {
+				String key = descriptions.next();
+				sc.getDescriptions().put(key, jsonDescriptions.getString(key));
+			}
+		}
+		if (jsonSc.get("creator") != null)
+			sc.setCreator(new URIImpl(jsonSc.getString("creator")));
+		if (jsonSc.get("rights") != null)
+			sc.setRights(new URIImpl(jsonSc.getString("rights")));
+		if (jsonSc.get("version") != null)
+			sc.setVersion(jsonSc.getString("version"));
+		if (jsonSc.get("creationDate") != null)
+			sc.setCreationDate(DateFormatter.parseDateISO8601(jsonSc.getString("creationDate")));
+		if (jsonSc.get("icon") != null)
+			sc.setIcon(new URIImpl(jsonSc.getString("icon")));
+		if (jsonSc.get("screenshot") != null)
+			sc.setScreenshot(new URIImpl(jsonSc.getString("screenshot")));
+		JSONObject domainContext = jsonSc.getJSONObject("domainContext");
+		JSONArray tags = domainContext.getJSONArray("tags");
+		for (int i = 0; i < tags.length(); i++)
+			sc.getDomainContext().getTags().add(tags.getString(i));
+		URI user = new URIImpl(domainContext.getString("user"));
+		sc.getDomainContext().setUser(user);
+		if (jsonSc.get("homepage") != null)
+			sc.setHomepage(new URIImpl(jsonSc.getString("homepage")));
+		// actions
+		JSONArray actionsArray = jsonSc.getJSONArray("actions");
+		for (int i = 0; i < actionsArray.length(); i++)
+			sc.getActions().add(parseAction(actionsArray.getJSONObject(i)));
+		// postconditions
+		JSONArray postArray = jsonSc.getJSONArray("postconditions");
+		ArrayList<List<Condition>> postconditions = new ArrayList<List<Condition>>();
+		for (int i = 0; i < postArray.length(); i++)
+			postconditions.add(parseConditions(postArray.getJSONArray(i)));
+		sc.setPostconditions(postconditions);
+		// code
+		if (jsonSc.get("code") != null && !jsonSc.getString("code").equalsIgnoreCase("null"))
+			sc.setCode(new URIImpl(jsonSc.getString("code")));
+		// libraries
+		JSONArray librariesArray = jsonSc.getJSONArray("libraries");
+		for (int i = 0; i < librariesArray.length(); i++)
+			sc.getLibraries().add(parseLibrary(librariesArray.getJSONObject(i)));
+		// triggers
+		if (jsonSc.get("triggers") != null) {
+			JSONArray triggersArray = jsonSc.getJSONArray("triggers");
+			for (int i = 0; i < triggersArray.length(); i++)
+				sc.getTriggers().add(triggersArray.getString(i));
+		}
+		return sc;
+	}
+
 	/**
 	 * Every statement of the conditions has to follow this rules:
 	 * <ul>

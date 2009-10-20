@@ -14,6 +14,18 @@ public class FastModelFactory {
 		return new Screen(null);
 	}
 	
+	public static FormElement createFormElement() {
+		return new FormElement(null);
+	}
+	
+	public static Operator createOperator() {
+		return new Operator(null);
+	}
+	
+	public static BackendService createBackendService() {
+		return new BackendService(null);
+	}
+
 	public static Precondition createPrecondition() {
 		return new Precondition(null);
 	}

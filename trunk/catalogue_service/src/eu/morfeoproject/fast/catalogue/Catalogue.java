@@ -31,14 +31,21 @@ import eu.morfeoproject.fast.catalogue.ontologies.DefaultOntologies;
 import eu.morfeoproject.fast.catalogue.ontologies.DefaultOntologies.PublicOntology;
 import eu.morfeoproject.fast.catalogue.planner.Plan;
 import eu.morfeoproject.fast.catalogue.planner.Planner;
+import eu.morfeoproject.fast.model.Action;
+import eu.morfeoproject.fast.model.BackendService;
 import eu.morfeoproject.fast.model.Condition;
 import eu.morfeoproject.fast.model.FastModelFactory;
+import eu.morfeoproject.fast.model.FormElement;
+import eu.morfeoproject.fast.model.Library;
+import eu.morfeoproject.fast.model.Operator;
 import eu.morfeoproject.fast.model.Postcondition;
 import eu.morfeoproject.fast.model.PreOrPost;
 import eu.morfeoproject.fast.model.Precondition;
 import eu.morfeoproject.fast.model.Resource;
 import eu.morfeoproject.fast.model.Screen;
+import eu.morfeoproject.fast.model.ScreenComponent;
 import eu.morfeoproject.fast.model.ScreenFlow;
+import eu.morfeoproject.fast.model.WithConditions;
 import eu.morfeoproject.fast.util.DateFormatter;
 import eu.morfeoproject.fast.vocabulary.DC;
 import eu.morfeoproject.fast.vocabulary.FGO;
@@ -207,314 +214,15 @@ public class Catalogue {
 		}
 	}
 	
-	public void addScreenFlow(ScreenFlow sf) throws DuplicatedResourceException,
-	OntologyInvalidException, OntologyReadonlyException, NotFoundException {
-		URI sfUri = null;
-		if (sf.getUri() != null) {
-			sfUri = sf.getUri();
-			if (containsScreenFlow(sf))
-				throw new DuplicatedResourceException(sf.getUri()+" already exists.");
-		} else {
-			sfUri = tripleStore.createResource(FGO.ScreenFlow);
-			sf.setUri(sfUri);
-		}
-		// persists the screen
-		saveScreenFlow(sf);
-	}
-	
-	private void saveScreenFlow(ScreenFlow sf) throws OntologyReadonlyException, NotFoundException {
-		URI sfUri = sf.getUri();
-		for (String key : sf.getLabels().keySet())
-			tripleStore.addStatement(sfUri, RDFS.label, tripleStore.createLanguageTagLiteral(sf.getLabels().get(key), key));
-		for (String key : sf.getDescriptions().keySet())
-			tripleStore.addStatement(sfUri, DC.description, tripleStore.createLanguageTagLiteral(sf.getDescriptions().get(key), key));
-		if (sf.getCreator() != null)
-			tripleStore.addStatement(sfUri, DC.creator, sf.getCreator());
-		if (sf.getRights() != null)
-			tripleStore.addStatement(sfUri, DC.rights, sf.getRights());
-		if (sf.getVersion() != null)
-			tripleStore.addStatement(sfUri, FGO.hasVersion, sf.getVersion());
-		if (sf.getCreationDate() != null)
-			tripleStore.addStatement(sfUri, DC.date, DateFormatter.formatDateISO8601(sf.getCreationDate()));
-		if (sf.getIcon() != null)
-			tripleStore.addStatement(sfUri, FGO.hasIcon, sf.getIcon());
-		if (sf.getScreenshot() != null)
-			tripleStore.addStatement(sfUri, FGO.hasScreenshot, sf.getScreenshot());
-		for (String tag : sf.getDomainContext().getTags())
-			tripleStore.addStatement(sfUri, FGO.hasTag, tag);
-		if (sf.getHomepage() != null)
-			tripleStore.addStatement(sfUri, FOAF.homepage, sf.getHomepage());
-		if (sf.getVersion() != null)
-			tripleStore.addStatement(sfUri, FGO.hasVersion, sf.getVersion());
-		for (URI rUri : sf.getResources()) {
-			if (containsResource(rUri))
-				tripleStore.addStatement(sfUri, FGO.contains, rUri);
-			else
-				logger.error("Resource "+rUri+" does not exist and cannot be added to the ScreenFlow.");
-		}
-		logger.info("ScreenFlow "+sf.getUri()+" added.");
-	}
-	
-	public void updateScreenFlow(ScreenFlow screenFlow) throws NotFoundException, OntologyReadonlyException  {
-		logger.info("Updating screenflow "+screenFlow.getUri()+"...");
-		removeScreenFlow(screenFlow.getUri());
-		// do not call addScreenFlow because it does not need to create a new URI for the screenflow
-		saveScreenFlow(screenFlow);
-		logger.info("Screenflow "+screenFlow.getUri()+" updated.");
-	}
-	
-	/**
-	 * Delete a screen flow from the catalogue
-	 * NOTE: Do NOT delete the screens which is composed by.
-	 * @param sfUri the URI of the screen flow to be deleted
-	 * @throws NotFoundException
-	 */
-	public void removeScreenFlow(URI sfUri) throws NotFoundException {
-		if (!containsScreenFlow(sfUri))
-			throw new NotFoundException();
-		// remove the screen itself
-		tripleStore.removeResource(sfUri);
-		logger.info("Screenflow "+sfUri+" removed.");
-	}
-	
-	/**
-	 * Creates a new Screen into the catalogue
-	 * @param screen
-	 * @throws DuplicatedResourceException
-	 * @throws OntologyInvalidException
-	 * @throws OntologyReadonlyException
-	 * @throws NotFoundException
-	 * @throws RepositoryException 
-	 */
-	public void addScreen(Screen screen)
-	throws DuplicatedResourceException, OntologyInvalidException, OntologyReadonlyException, NotFoundException, RepositoryException {
-		URI screenUri = null;
-		if (screen.getUri() != null) {
-			screenUri = screen.getUri();
-			if (containsScreen(screen))
-				throw new DuplicatedResourceException(screenUri+" already exists.");
-		} else {
-			screenUri = tripleStore.createResource(FGO.Screen);
-			screen.setUri(screenUri);
-		}
-		// persists the screen
-		saveScreen(screen);
-		// create plans for the screen
-		planner.add(screen);
-	}
-	
-	/**
-	 * Do not check if the screen already exists, and assumes the screen has a well-formed unique URI
-	 * To be invoked by addScreen and updateScreen methods
-	 * @throws NotFoundException 
-	 * @throws OntologyReadonlyException 
-	 * @throws OntologyInvalidException 
-	 * @throws RepositoryException 
-	 */
-	private void saveScreen(Screen screen)
-	throws OntologyReadonlyException, NotFoundException, RepositoryException, OntologyInvalidException {
-		URI screenUri = screen.getUri();
-		for (String key : screen.getLabels().keySet())
-			tripleStore.addStatement(screenUri, RDFS.label, tripleStore.createLanguageTagLiteral(screen.getLabels().get(key), key));
-		for (String key : screen.getDescriptions().keySet())
-			tripleStore.addStatement(screenUri, DC.description, tripleStore.createLanguageTagLiteral(screen.getDescriptions().get(key), key));
-		if (screen.getCreator() != null)
-			tripleStore.addStatement(screenUri, DC.creator, screen.getCreator());
-		if (screen.getRights() != null)
-			tripleStore.addStatement(screenUri, DC.rights, screen.getRights());
-		if (screen.getVersion() != null)
-			tripleStore.addStatement(screenUri, FGO.hasVersion, screen.getVersion());
-		if (screen.getCreationDate() != null)
-			tripleStore.addStatement(screenUri, DC.date, DateFormatter.formatDateISO8601(screen.getCreationDate()));
-		if (screen.getIcon() != null)
-			tripleStore.addStatement(screenUri, FGO.hasIcon, screen.getIcon());
-		if (screen.getScreenshot() != null)
-			tripleStore.addStatement(screenUri, FGO.hasScreenshot, screen.getScreenshot());
-		for (String tag : screen.getDomainContext().getTags())
-			tripleStore.addStatement(screenUri, FGO.hasTag, tag);
-		if (screen.getHomepage() != null)
-			tripleStore.addStatement(screenUri, FOAF.homepage, screen.getHomepage());
-		if (screen.getVersion() != null)
-			tripleStore.addStatement(screenUri, FGO.hasVersion, screen.getVersion());
-		for (List<Condition> conList : screen.getPreconditions()) {
-			BlankNode bag = tripleStore.createBlankNode();
-			tripleStore.addStatement(bag, RDF.type, RDF.Bag);
-			tripleStore.addStatement(screenUri, FGO.hasPreCondition, bag);
-			int i = 1;
-			for (Condition con : conList) {
-				BlankNode c = tripleStore.createBlankNode();
-				tripleStore.addStatement(bag, RDF.li(i++), c);
-				tripleStore.addStatement(c, FGO.hasPatternString, con.getPatternString());
-				URI p = tripleStore.getCleanUniqueURI(FGO.NS_FGO, "pattern", false);
-				tripleStore.addStatement(c, FGO.hasPattern, p);
-				for (Statement st : con.getPattern()) {
-					tripleStore.addStatement(p, st.getSubject(), st.getPredicate(), st.getObject());
-				}
-				tripleStore.addStatement(c, FGO.hasScope, con.getScope());
-				for (String key : con.getLabels().keySet())
-					tripleStore.addStatement(c, RDFS.label, tripleStore.createLanguageTagLiteral(con.getLabels().get(key), key));
-			}
-		}
-		for (List<Condition> conList : screen.getPostconditions()) {
-			BlankNode bag = tripleStore.createBlankNode();
-			tripleStore.addStatement(bag, RDF.type, RDF.Bag);
-			tripleStore.addStatement(screenUri, FGO.hasPostCondition, bag);
-			int i = 1;
-			for (Condition con : conList) {
-				BlankNode c = tripleStore.createBlankNode();
-				tripleStore.addStatement(bag, RDF.li(i++), c);
-				tripleStore.addStatement(c, FGO.hasPatternString, con.getPatternString());
-				URI p = tripleStore.getCleanUniqueURI(FGO.NS_FGO, "pattern", false);
-				tripleStore.addStatement(c, FGO.hasPattern, p);
-				for (Statement st : con.getPattern()) {
-					tripleStore.addStatement(p, st.getSubject(), st.getPredicate(), st.getObject());
-				}
-				tripleStore.addStatement(c, FGO.hasScope, con.getScope());
-				for (String key : con.getLabels().keySet())
-					tripleStore.addStatement(c, RDFS.label, tripleStore.createLanguageTagLiteral(con.getLabels().get(key), key));
-			}
-		}
-		if (screen.getCode() != null)
-			tripleStore.addStatement(screenUri, FGO.hasCode, screen.getCode());
-		logger.info("Screen "+screen.getUri()+" added.");
-	}
-	
-	public void updateScreen(Screen screen)
-	throws NotFoundException, OntologyReadonlyException, RepositoryException, OntologyInvalidException  {
-		logger.info("Updating screen "+screen.getUri()+"...");
-		Screen oldScreen = getScreen(screen.getUri());
-		// remove old screen from the catalogue
-		removeScreen(screen.getUri());
-		// do not call addScreen because it does not need to create a new URI for the screen
-		saveScreen(screen);
-		// calculate new plans if necessary
-		planner.update(screen, oldScreen);
-		logger.info("Screen "+screen.getUri()+" updated.");
-	}
-	
-	public void removeScreen(URI screenUri) throws NotFoundException {
-		if (!containsScreen(screenUri))
-			throw new NotFoundException();
-		// remove all preconditions
-		ClosableIterator<Statement> preconditions = tripleStore.findStatements(screenUri, FGO.hasPreCondition, Variable.ANY);
-		for ( ; preconditions.hasNext(); ) {
-			BlankNode cNode = preconditions.next().getObject().asBlankNode();
-			ClosableIterator<Statement> patterns = tripleStore.findStatements(cNode, FGO.hasPattern, Variable.ANY);
-			for ( ; patterns.hasNext(); ) {
-				tripleStore.removeModel(patterns.next().getObject().asURI());
-			}
-			patterns.close();
-			tripleStore.removeResource(cNode);
-		}
-		preconditions.close();
-		// remove all postconditions
-		ClosableIterator<Statement> postconditions = tripleStore.findStatements(screenUri, FGO.hasPostCondition, Variable.ANY);
-		for ( ; postconditions.hasNext(); ) {
-			BlankNode cNode = postconditions.next().getObject().asBlankNode();
-			ClosableIterator<Statement> patterns = tripleStore.findStatements(cNode, FGO.hasPattern, Variable.ANY);
-			for ( ; patterns.hasNext(); ) {
-				tripleStore.removeModel(patterns.next().getObject().asURI());
-			}
-			patterns.close();
-			tripleStore.removeResource(cNode);
-		}
-		postconditions.close();
-		// remove the screen itself
-		tripleStore.removeResource(screenUri);
-		// remove the screen from the planner
-		planner.remove(screenUri);
-		logger.info("Screen "+screenUri+" removed.");
-	}
-
-	
-	public void addPreOrPost(PreOrPost se) throws DuplicatedResourceException, OntologyInvalidException {
-		URI seUri = null;
-		if (se.getUri() != null) {
-			seUri = se.getUri();
-			if (containsPreOrPost(se))
-				throw new DuplicatedResourceException(seUri+" already exists.");
-		} else {
-			if (se instanceof Precondition)
-				seUri = tripleStore.createResource(FGO.Precondition);
-			else if (se instanceof Postcondition)
-				seUri = tripleStore.createResource(FGO.Postcondition);
-			se.setUri(seUri);
-		}
-		// persists the pre/postcondition
-		savePreOrPost(se);
-		// create plans for the precondition
-		if (se instanceof Precondition)
-			planner.add(se);
-	}
-	
-	public void savePreOrPost(PreOrPost se) {
-		BlankNode bag = tripleStore.createBlankNode();
-		tripleStore.addStatement(bag, RDF.type, RDF.Bag);
-		tripleStore.addStatement(se.getUri(), FGO.hasCondition, bag);
-		int i = 1;
-		for (Condition con : se.getConditions()) {
-			BlankNode c = tripleStore.createBlankNode();
-			tripleStore.addStatement(bag, RDF.li(i++), c);
-			tripleStore.addStatement(c, FGO.hasPatternString, con.getPatternString());
-			URI p = tripleStore.getCleanUniqueURI(FGO.NS_FGO, "pattern", false);
-			tripleStore.addStatement(c, FGO.hasPattern, p);
-			for (Statement st : con.getPattern()) {
-				tripleStore.addStatement(p, st.getSubject(), st.getPredicate(), st.getObject());
-			}
-			tripleStore.addStatement(c, FGO.hasScope, con.getScope());
-			for (String key : con.getLabels().keySet())
-				tripleStore.addStatement(c, RDFS.label, tripleStore.createLanguageTagLiteral(con.getLabels().get(key), key));
-		}
-	}
-	
-	public void updatePreOrPost(PreOrPost se) throws NotFoundException, OntologyReadonlyException, RepositoryException, OntologyInvalidException  {
-		logger.info("Updating pre/postcondition "+se.getUri()+"...");
-		PreOrPost oldSe = getPreOrPost(se.getUri());
-		removePreOrPost(se.getUri());
-		// do not call addPrecondition because it does not need to create a new URI for the screen
-		savePreOrPost(se);
-		// calculate new plans if necessary
-		planner.update(se, oldSe);
-		logger.info(se.getUri()+" updated.");
-	}
-	
-	public void removePreOrPost(URI seUri) throws NotFoundException {
-		logger.info("removing "+seUri);
-		if (!containsPreOrPost(seUri))
-			throw new NotFoundException();
-		// remove all conditions
-		ClosableIterator<Statement> conditionBagIt = tripleStore.findStatements(seUri, FGO.hasCondition, Variable.ANY);
-		for ( ; conditionBagIt.hasNext(); ) {
-			BlankNode bagNode = conditionBagIt.next().getObject().asBlankNode();
-			ClosableIterator<Statement> conditionIt = tripleStore.findStatements(bagNode, Variable.ANY, Variable.ANY);
-			for ( ; conditionIt.hasNext(); ) {
-				Node object = conditionIt.next().getObject();
-				// only need to look for triples like: bNode rdf:li bNode
-				if (object instanceof BlankNode) {
-					BlankNode cNode = object.asBlankNode();
-					ClosableIterator<Statement> patterns = tripleStore.findStatements(cNode, FGO.hasPattern, Variable.ANY);
-					for ( ; patterns.hasNext(); ) {
-						tripleStore.removeModel(patterns.next().getObject().asURI());
-					}
-					patterns.close();
-					tripleStore.removeResource(cNode);
-				}
-			}
-			conditionIt.close();
-			tripleStore.removeResource(bagNode);
-		}
-		conditionBagIt.close();
-		// remove the pre/postcondition itself
-		tripleStore.removeResource(seUri);
-		// remove the precondition from the planner
-		planner.remove(seUri);
-		logger.info(seUri+" removed.");
-	}
-	
 	public boolean containsResource(URI uri) {
 		return containsScreenFlow(uri)
 			|| containsScreen(uri)
-			|| containsPreOrPost(uri);
+			|| containsPreOrPost(uri)
+			|| containsScreenComponent(uri);
+	}
+	
+	public boolean containsResource(Resource resource) {
+		return containsResource(resource.getUri());
 	}
 	
 	public boolean containsScreenFlow(URI sfUri) {
@@ -541,6 +249,40 @@ public class Catalogue {
 		return containsPreOrPost(se.getUri());
 	}
 	
+	public boolean containsScreenComponent(URI uri) {
+		return containsFormElement(uri)
+			|| containsOperator(uri)
+			|| containsBackendService(uri);
+	}
+	
+	public boolean containsScreenComponent(ScreenComponent sc) {
+		return containsScreenComponent(sc.getUri());
+	}
+	
+	public boolean containsFormElement(URI feUri) {
+		return tripleStore.isResource(feUri, FGO.FormElement);
+	}
+	
+	public boolean containsFormElement(FormElement fe) {
+		return containsFormElement(fe.getUri());
+	}
+
+	public boolean containsOperator(URI opUri) {
+		return tripleStore.isResource(opUri, FGO.Operator);
+	}
+	
+	public boolean containsOperator(Operator op) {
+		return containsOperator(op.getUri());
+	}
+
+	public boolean containsBackendService(URI bsUri) {
+		return tripleStore.isResource(bsUri, FGO.BackendService);
+	}
+	
+	public boolean containsBackendService(BackendService bs) {
+		return containsBackendService(bs.getUri());
+	}
+
 	/*
 	 * Only for debug purpose
 	 */
@@ -1045,6 +787,512 @@ public class Catalogue {
     	return results;
 	}
 	
+	public void addScreenFlow(ScreenFlow sf) throws DuplicatedResourceException,
+	OntologyInvalidException, OntologyReadonlyException, NotFoundException {
+		URI sfUri = null;
+		if (sf.getUri() != null) {
+			sfUri = sf.getUri();
+			if (containsScreenFlow(sf))
+				throw new DuplicatedResourceException(sf.getUri()+" already exists.");
+		} else {
+			sfUri = tripleStore.createResource(FGO.ScreenFlow);
+			sf.setUri(sfUri);
+		}
+		// persists the screen
+		saveScreenFlow(sf);
+	}
+	
+	private void saveScreenFlow(ScreenFlow sf) throws OntologyReadonlyException, NotFoundException {
+		URI sfUri = sf.getUri();
+		for (String key : sf.getLabels().keySet())
+			tripleStore.addStatement(sfUri, RDFS.label, tripleStore.createLanguageTagLiteral(sf.getLabels().get(key), key));
+		for (String key : sf.getDescriptions().keySet())
+			tripleStore.addStatement(sfUri, DC.description, tripleStore.createLanguageTagLiteral(sf.getDescriptions().get(key), key));
+		if (sf.getCreator() != null)
+			tripleStore.addStatement(sfUri, DC.creator, sf.getCreator());
+		if (sf.getRights() != null)
+			tripleStore.addStatement(sfUri, DC.rights, sf.getRights());
+		if (sf.getVersion() != null)
+			tripleStore.addStatement(sfUri, FGO.hasVersion, sf.getVersion());
+		if (sf.getCreationDate() != null)
+			tripleStore.addStatement(sfUri, DC.date, DateFormatter.formatDateISO8601(sf.getCreationDate()));
+		if (sf.getIcon() != null)
+			tripleStore.addStatement(sfUri, FGO.hasIcon, sf.getIcon());
+		if (sf.getScreenshot() != null)
+			tripleStore.addStatement(sfUri, FGO.hasScreenshot, sf.getScreenshot());
+		for (String tag : sf.getDomainContext().getTags())
+			tripleStore.addStatement(sfUri, FGO.hasTag, tag);
+		if (sf.getHomepage() != null)
+			tripleStore.addStatement(sfUri, FOAF.homepage, sf.getHomepage());
+		if (sf.getVersion() != null)
+			tripleStore.addStatement(sfUri, FGO.hasVersion, sf.getVersion());
+		for (URI rUri : sf.getResources()) {
+			if (containsResource(rUri))
+				tripleStore.addStatement(sfUri, FGO.contains, rUri);
+			else
+				logger.error("Resource "+rUri+" does not exist and cannot be added to the ScreenFlow.");
+		}
+		logger.info("ScreenFlow "+sf.getUri()+" added.");
+	}
+	
+	public void updateScreenFlow(ScreenFlow screenFlow) throws NotFoundException, OntologyReadonlyException  {
+		logger.info("Updating screenflow "+screenFlow.getUri()+"...");
+		removeScreenFlow(screenFlow.getUri());
+		// do not call addScreenFlow because it does not need to create a new URI for the screenflow
+		saveScreenFlow(screenFlow);
+		logger.info("Screenflow "+screenFlow.getUri()+" updated.");
+	}
+	
+	/**
+	 * Delete a screen flow from the catalogue
+	 * NOTE: Do NOT delete the screens which is composed by.
+	 * @param sfUri the URI of the screen flow to be deleted
+	 * @throws NotFoundException
+	 */
+	public void removeScreenFlow(URI sfUri) throws NotFoundException {
+		if (!containsScreenFlow(sfUri))
+			throw new NotFoundException();
+		// remove the screen itself
+		tripleStore.removeResource(sfUri);
+		logger.info("Screenflow "+sfUri+" removed.");
+	}
+	
+	/**
+	 * Creates a new Screen into the catalogue
+	 * @param screen
+	 * @throws DuplicatedResourceException
+	 * @throws OntologyInvalidException
+	 * @throws OntologyReadonlyException
+	 * @throws NotFoundException
+	 * @throws RepositoryException 
+	 */
+	public void addScreen(Screen screen)
+	throws DuplicatedResourceException, OntologyInvalidException, OntologyReadonlyException, NotFoundException, RepositoryException {
+		URI screenUri = null;
+		if (screen.getUri() != null) {
+			screenUri = screen.getUri();
+			if (containsScreen(screen))
+				throw new DuplicatedResourceException(screenUri+" already exists.");
+		} else {
+			screenUri = tripleStore.createResource(FGO.Screen);
+			screen.setUri(screenUri);
+		}
+		// persists the screen
+		saveScreen(screen);
+		// create plans for the screen
+		planner.add(screen);
+	}
+	
+	/**
+	 * Do not check if the screen already exists, and assumes the screen has a well-formed unique URI
+	 * To be invoked by addScreen and updateScreen methods
+	 * @throws NotFoundException 
+	 * @throws OntologyReadonlyException 
+	 * @throws OntologyInvalidException 
+	 * @throws RepositoryException 
+	 */
+	private void saveScreen(Screen screen)
+	throws OntologyReadonlyException, NotFoundException, RepositoryException, OntologyInvalidException {
+		URI screenUri = screen.getUri();
+		for (String key : screen.getLabels().keySet())
+			tripleStore.addStatement(screenUri, RDFS.label, tripleStore.createLanguageTagLiteral(screen.getLabels().get(key), key));
+		for (String key : screen.getDescriptions().keySet())
+			tripleStore.addStatement(screenUri, DC.description, tripleStore.createLanguageTagLiteral(screen.getDescriptions().get(key), key));
+		if (screen.getCreator() != null)
+			tripleStore.addStatement(screenUri, DC.creator, screen.getCreator());
+		if (screen.getRights() != null)
+			tripleStore.addStatement(screenUri, DC.rights, screen.getRights());
+		if (screen.getVersion() != null)
+			tripleStore.addStatement(screenUri, FGO.hasVersion, screen.getVersion());
+		if (screen.getCreationDate() != null)
+			tripleStore.addStatement(screenUri, DC.date, DateFormatter.formatDateISO8601(screen.getCreationDate()));
+		if (screen.getIcon() != null)
+			tripleStore.addStatement(screenUri, FGO.hasIcon, screen.getIcon());
+		if (screen.getScreenshot() != null)
+			tripleStore.addStatement(screenUri, FGO.hasScreenshot, screen.getScreenshot());
+		for (String tag : screen.getDomainContext().getTags())
+			tripleStore.addStatement(screenUri, FGO.hasTag, tag);
+		if (screen.getHomepage() != null)
+			tripleStore.addStatement(screenUri, FOAF.homepage, screen.getHomepage());
+		if (screen.getVersion() != null)
+			tripleStore.addStatement(screenUri, FGO.hasVersion, screen.getVersion());
+		for (List<Condition> conList : screen.getPreconditions()) {
+			BlankNode bag = tripleStore.createBlankNode();
+			tripleStore.addStatement(bag, RDF.type, RDF.Bag);
+			tripleStore.addStatement(screenUri, FGO.hasPreCondition, bag);
+			int i = 1;
+			for (Condition con : conList) {
+				BlankNode c = tripleStore.createBlankNode();
+				tripleStore.addStatement(bag, RDF.li(i++), c);
+				tripleStore.addStatement(c, FGO.hasPatternString, con.getPatternString());
+				URI p = tripleStore.getCleanUniqueURI(FGO.NS_FGO, "pattern", false);
+				tripleStore.addStatement(c, FGO.hasPattern, p);
+				for (Statement st : con.getPattern()) {
+					tripleStore.addStatement(p, st.getSubject(), st.getPredicate(), st.getObject());
+				}
+				tripleStore.addStatement(c, FGO.hasScope, con.getScope());
+				for (String key : con.getLabels().keySet())
+					tripleStore.addStatement(c, RDFS.label, tripleStore.createLanguageTagLiteral(con.getLabels().get(key), key));
+			}
+		}
+		for (List<Condition> conList : screen.getPostconditions()) {
+			BlankNode bag = tripleStore.createBlankNode();
+			tripleStore.addStatement(bag, RDF.type, RDF.Bag);
+			tripleStore.addStatement(screenUri, FGO.hasPostCondition, bag);
+			int i = 1;
+			for (Condition con : conList) {
+				BlankNode c = tripleStore.createBlankNode();
+				tripleStore.addStatement(bag, RDF.li(i++), c);
+				tripleStore.addStatement(c, FGO.hasPatternString, con.getPatternString());
+				URI p = tripleStore.getCleanUniqueURI(FGO.NS_FGO, "pattern", false);
+				tripleStore.addStatement(c, FGO.hasPattern, p);
+				for (Statement st : con.getPattern()) {
+					tripleStore.addStatement(p, st.getSubject(), st.getPredicate(), st.getObject());
+				}
+				tripleStore.addStatement(c, FGO.hasScope, con.getScope());
+				for (String key : con.getLabels().keySet())
+					tripleStore.addStatement(c, RDFS.label, tripleStore.createLanguageTagLiteral(con.getLabels().get(key), key));
+			}
+		}
+		if (screen.getCode() != null)
+			tripleStore.addStatement(screenUri, FGO.hasCode, screen.getCode());
+		logger.info("Screen "+screen.getUri()+" added.");
+	}
+	
+	public void updateScreen(Screen screen)
+	throws NotFoundException, OntologyReadonlyException, RepositoryException, OntologyInvalidException  {
+		logger.info("Updating screen "+screen.getUri()+"...");
+		Screen oldScreen = getScreen(screen.getUri());
+		// remove old screen from the catalogue
+		removeScreen(screen.getUri());
+		// do not call addScreen because it does not need to create a new URI for the screen
+		saveScreen(screen);
+		// calculate new plans if necessary
+		planner.update(screen, oldScreen);
+		logger.info("Screen "+screen.getUri()+" updated.");
+	}
+	
+	public void removeScreen(URI screenUri) throws NotFoundException {
+		if (!containsScreen(screenUri))
+			throw new NotFoundException();
+		// remove all preconditions
+		ClosableIterator<Statement> preconditions = tripleStore.findStatements(screenUri, FGO.hasPreCondition, Variable.ANY);
+		for ( ; preconditions.hasNext(); ) {
+			BlankNode cNode = preconditions.next().getObject().asBlankNode();
+			ClosableIterator<Statement> patterns = tripleStore.findStatements(cNode, FGO.hasPattern, Variable.ANY);
+			for ( ; patterns.hasNext(); ) {
+				tripleStore.removeModel(patterns.next().getObject().asURI());
+			}
+			patterns.close();
+			tripleStore.removeResource(cNode);
+		}
+		preconditions.close();
+		// remove all postconditions
+		ClosableIterator<Statement> postconditions = tripleStore.findStatements(screenUri, FGO.hasPostCondition, Variable.ANY);
+		for ( ; postconditions.hasNext(); ) {
+			BlankNode cNode = postconditions.next().getObject().asBlankNode();
+			ClosableIterator<Statement> patterns = tripleStore.findStatements(cNode, FGO.hasPattern, Variable.ANY);
+			for ( ; patterns.hasNext(); ) {
+				tripleStore.removeModel(patterns.next().getObject().asURI());
+			}
+			patterns.close();
+			tripleStore.removeResource(cNode);
+		}
+		postconditions.close();
+		// remove the screen itself
+		tripleStore.removeResource(screenUri);
+		// remove the screen from the planner
+		planner.remove(screenUri);
+		logger.info("Screen "+screenUri+" removed.");
+	}
+
+	
+	public void addPreOrPost(PreOrPost se) throws DuplicatedResourceException, OntologyInvalidException {
+		URI seUri = null;
+		if (se.getUri() != null) {
+			seUri = se.getUri();
+			if (containsPreOrPost(se))
+				throw new DuplicatedResourceException(seUri+" already exists.");
+		} else {
+			if (se instanceof Precondition)
+				seUri = tripleStore.createResource(FGO.Precondition);
+			else if (se instanceof Postcondition)
+				seUri = tripleStore.createResource(FGO.Postcondition);
+			se.setUri(seUri);
+		}
+		// persists the pre/postcondition
+		savePreOrPost(se);
+		// create plans for the precondition
+		if (se instanceof Precondition)
+			planner.add(se);
+	}
+	
+	public void savePreOrPost(PreOrPost se) {
+		BlankNode bag = tripleStore.createBlankNode();
+		tripleStore.addStatement(bag, RDF.type, RDF.Bag);
+		tripleStore.addStatement(se.getUri(), FGO.hasCondition, bag);
+		int i = 1;
+		for (Condition con : se.getConditions()) {
+			BlankNode c = tripleStore.createBlankNode();
+			tripleStore.addStatement(bag, RDF.li(i++), c);
+			tripleStore.addStatement(c, FGO.hasPatternString, con.getPatternString());
+			URI p = tripleStore.getCleanUniqueURI(FGO.NS_FGO, "pattern", false);
+			tripleStore.addStatement(c, FGO.hasPattern, p);
+			for (Statement st : con.getPattern()) {
+				tripleStore.addStatement(p, st.getSubject(), st.getPredicate(), st.getObject());
+			}
+			tripleStore.addStatement(c, FGO.hasScope, con.getScope());
+			for (String key : con.getLabels().keySet())
+				tripleStore.addStatement(c, RDFS.label, tripleStore.createLanguageTagLiteral(con.getLabels().get(key), key));
+		}
+	}
+	
+	public void updatePreOrPost(PreOrPost se) throws NotFoundException, OntologyReadonlyException, RepositoryException, OntologyInvalidException  {
+		logger.info("Updating pre/postcondition "+se.getUri()+"...");
+		PreOrPost oldSe = getPreOrPost(se.getUri());
+		removePreOrPost(se.getUri());
+		// do not call addPrecondition because it does not need to create a new URI for the screen
+		savePreOrPost(se);
+		// calculate new plans if necessary
+		planner.update(se, oldSe);
+		logger.info(se.getUri()+" updated.");
+	}
+	
+	public void removePreOrPost(URI seUri) throws NotFoundException {
+		logger.info("removing "+seUri);
+		if (!containsPreOrPost(seUri))
+			throw new NotFoundException();
+		// remove all conditions
+		ClosableIterator<Statement> conditionBagIt = tripleStore.findStatements(seUri, FGO.hasCondition, Variable.ANY);
+		for ( ; conditionBagIt.hasNext(); ) {
+			BlankNode bagNode = conditionBagIt.next().getObject().asBlankNode();
+			ClosableIterator<Statement> conditionIt = tripleStore.findStatements(bagNode, Variable.ANY, Variable.ANY);
+			for ( ; conditionIt.hasNext(); ) {
+				Node object = conditionIt.next().getObject();
+				// only need to look for triples like: bNode rdf:li bNode
+				if (object instanceof BlankNode) {
+					BlankNode cNode = object.asBlankNode();
+					ClosableIterator<Statement> patterns = tripleStore.findStatements(cNode, FGO.hasPattern, Variable.ANY);
+					for ( ; patterns.hasNext(); ) {
+						tripleStore.removeModel(patterns.next().getObject().asURI());
+					}
+					patterns.close();
+					tripleStore.removeResource(cNode);
+				}
+			}
+			conditionIt.close();
+			tripleStore.removeResource(bagNode);
+		}
+		conditionBagIt.close();
+		// remove the pre/postcondition itself
+		tripleStore.removeResource(seUri);
+		// remove the precondition from the planner
+		planner.remove(seUri);
+		logger.info(seUri+" removed.");
+	}
+
+	private void addScreenComponent(URI type, ScreenComponent sc)
+	throws DuplicatedResourceException, OntologyInvalidException, InvalidResourceTypeException {
+		if (!type.equals(FGO.FormElement) && !type.equals(FGO.Operator) && !type.equals(FGO.BackendService))
+			throw new InvalidResourceTypeException(type+" is not a ScreenComponent.");
+		
+		URI scUri = null;
+		if (sc.getUri() != null) {
+			scUri = sc.getUri();
+			if (containsScreenComponent(sc))
+				throw new DuplicatedResourceException(scUri+" already exists.");
+		} else {
+			scUri = tripleStore.createResource(type);
+			sc.setUri(scUri);
+		}
+		// persists the screen
+		saveScreenComponent(sc);
+	}
+	
+	private void saveScreenComponent(ScreenComponent sc) {
+		URI scUri = sc.getUri();
+		for (String key : sc.getLabels().keySet())
+			tripleStore.addStatement(scUri, RDFS.label, tripleStore.createLanguageTagLiteral(sc.getLabels().get(key), key));
+		for (String key : sc.getDescriptions().keySet())
+			tripleStore.addStatement(scUri, DC.description, tripleStore.createLanguageTagLiteral(sc.getDescriptions().get(key), key));
+		if (sc.getCreator() != null)
+			tripleStore.addStatement(scUri, DC.creator, sc.getCreator());
+		if (sc.getRights() != null)
+			tripleStore.addStatement(scUri, DC.rights, sc.getRights());
+		if (sc.getVersion() != null)
+			tripleStore.addStatement(scUri, FGO.hasVersion, sc.getVersion());
+		if (sc.getCreationDate() != null)
+			tripleStore.addStatement(scUri, DC.date, DateFormatter.formatDateISO8601(sc.getCreationDate()));
+		if (sc.getIcon() != null)
+			tripleStore.addStatement(scUri, FGO.hasIcon, sc.getIcon());
+		if (sc.getScreenshot() != null)
+			tripleStore.addStatement(scUri, FGO.hasScreenshot, sc.getScreenshot());
+		for (String tag : sc.getDomainContext().getTags())
+			tripleStore.addStatement(scUri, FGO.hasTag, tag);
+		if (sc.getHomepage() != null)
+			tripleStore.addStatement(scUri, FOAF.homepage, sc.getHomepage());
+		if (sc.getVersion() != null)
+			tripleStore.addStatement(scUri, FGO.hasVersion, sc.getVersion());
+		// actions
+		for (Action action : sc.getActions()) {
+			BlankNode aNode = tripleStore.createBlankNode();
+			tripleStore.addStatement(scUri, FGO.hasAction, aNode);
+			tripleStore.addStatement(aNode, RDFS.label, tripleStore.createPlainLiteral(action.getName()));
+			// preconditions
+			for (List<Condition> conList : action.getPreconditions()) {
+				BlankNode bag = tripleStore.createBlankNode();
+				tripleStore.addStatement(bag, RDF.type, RDF.Bag);
+				tripleStore.addStatement(aNode, FGO.hasPreCondition, bag);
+				int i = 1;
+				for (Condition con : conList) {
+					BlankNode c = tripleStore.createBlankNode();
+					tripleStore.addStatement(bag, RDF.li(i++), c);
+					tripleStore.addStatement(c, FGO.hasPatternString, con.getPatternString());
+					URI p = tripleStore.getCleanUniqueURI(FGO.NS_FGO, "pattern", false);
+					tripleStore.addStatement(c, FGO.hasPattern, p);
+					for (Statement st : con.getPattern()) {
+						tripleStore.addStatement(p, st.getSubject(), st.getPredicate(), st.getObject());
+					}
+					tripleStore.addStatement(c, FGO.hasScope, con.getScope());
+					for (String key : con.getLabels().keySet())
+						tripleStore.addStatement(c, RDFS.label, tripleStore.createLanguageTagLiteral(con.getLabels().get(key), key));
+				}
+			}
+			// uses
+			for (String use : action.getUses())
+				tripleStore.addStatement(aNode, FGO.hasUse, tripleStore.createPlainLiteral(use));
+		}
+		// postconditions
+		for (List<Condition> conList : sc.getPostconditions()) {
+			BlankNode bag = tripleStore.createBlankNode();
+			tripleStore.addStatement(bag, RDF.type, RDF.Bag);
+			tripleStore.addStatement(scUri, FGO.hasPostCondition, bag);
+			int i = 1;
+			for (Condition con : conList) {
+				BlankNode c = tripleStore.createBlankNode();
+				tripleStore.addStatement(bag, RDF.li(i++), c);
+				tripleStore.addStatement(c, FGO.hasPatternString, con.getPatternString());
+				URI p = tripleStore.getCleanUniqueURI(FGO.NS_FGO, "pattern", false);
+				tripleStore.addStatement(c, FGO.hasPattern, p);
+				for (Statement st : con.getPattern()) {
+					tripleStore.addStatement(p, st.getSubject(), st.getPredicate(), st.getObject());
+				}
+				tripleStore.addStatement(c, FGO.hasScope, con.getScope());
+				for (String key : con.getLabels().keySet())
+					tripleStore.addStatement(c, RDFS.label, tripleStore.createLanguageTagLiteral(con.getLabels().get(key), key));
+			}
+		}
+		// code
+		if (sc.getCode() != null)
+			tripleStore.addStatement(scUri, FGO.hasCode, sc.getCode());
+		// libraries
+		for (Library library : sc.getLibraries()) {
+			BlankNode libNode = tripleStore.createBlankNode();
+			tripleStore.addStatement(scUri, FGO.hasLibrary, libNode);
+			tripleStore.addStatement(libNode, FGO.hasLanguage, tripleStore.createPlainLiteral(library.getLanguage()));
+			tripleStore.addStatement(libNode, FGO.hasSource, library.getSource());
+		}
+		// triggers
+		for (String trigger : sc.getTriggers())
+			tripleStore.addStatement(scUri, FGO.hasTrigger, tripleStore.createPlainLiteral(trigger));
+		
+		logger.info("ScreenComponent "+sc.getUri()+" added.");
+	}
+	
+	private void updateScreenComponent(ScreenComponent sc) throws NotFoundException {
+		logger.info("Updating screen component "+sc.getUri()+"...");
+		// remove old screen component from the catalogue
+		removeScreenComponent(sc.getUri());
+		// do not call addScreen because it does not need to create a new URI for the screen
+		saveScreenComponent(sc);
+		logger.info("Screen component "+sc.getUri()+" updated.");
+	}
+	
+	private void removeScreenComponent(URI scUri) throws NotFoundException {
+		if (!containsScreen(scUri))
+			throw new NotFoundException();
+		// remove all actions
+		ClosableIterator<Statement> actions = tripleStore.findStatements(scUri, FGO.hasAction, Variable.ANY);
+		for ( ; actions.hasNext(); ) {
+			BlankNode aNode = actions.next().getObject().asBlankNode();
+			ClosableIterator<Statement> preconditions = tripleStore.findStatements(aNode, FGO.hasPreCondition, Variable.ANY);
+			for ( ; preconditions.hasNext(); ) {
+				BlankNode cNode = preconditions.next().getObject().asBlankNode();
+				ClosableIterator<Statement> patterns = tripleStore.findStatements(cNode, FGO.hasPattern, Variable.ANY);
+				for ( ; patterns.hasNext(); ) {
+					tripleStore.removeModel(patterns.next().getObject().asURI());
+				}
+				patterns.close();
+				tripleStore.removeResource(cNode);
+			}
+			preconditions.close();
+			tripleStore.removeResource(aNode);
+		}
+		actions.close();
+		// remove all postconditions
+		ClosableIterator<Statement> postconditions = tripleStore.findStatements(scUri, FGO.hasPostCondition, Variable.ANY);
+		for ( ; postconditions.hasNext(); ) {
+			BlankNode cNode = postconditions.next().getObject().asBlankNode();
+			ClosableIterator<Statement> patterns = tripleStore.findStatements(cNode, FGO.hasPattern, Variable.ANY);
+			for ( ; patterns.hasNext(); ) {
+				tripleStore.removeModel(patterns.next().getObject().asURI());
+			}
+			patterns.close();
+			tripleStore.removeResource(cNode);
+		}
+		postconditions.close();
+		// remove all libraries
+		ClosableIterator<Statement> libIt = tripleStore.findStatements(scUri, FGO.hasLibrary, Variable.ANY);
+		for ( ; libIt.hasNext(); ) {
+			BlankNode libNode = libIt.next().getObject().asBlankNode();
+			tripleStore.removeResource(libNode);
+		}
+		libIt.close();
+		
+		// remove the screen component itself
+		tripleStore.removeResource(scUri);
+		logger.info("Screen component "+scUri+" removed.");
+	}
+	
+	public void addFormElement(FormElement fe)
+	throws DuplicatedResourceException, OntologyInvalidException, InvalidResourceTypeException {
+		addScreenComponent(FGO.FormElement, fe);
+	}
+	
+	public void updateFormElement(FormElement fe) throws NotFoundException {
+		updateScreenComponent(fe);
+	}
+	
+	public void removeFormElement(URI feUri) throws NotFoundException {
+		removeScreenComponent(feUri);
+	}
+	
+	public void addOperator(Operator op)
+	throws DuplicatedResourceException, OntologyInvalidException, InvalidResourceTypeException {
+		addScreenComponent(FGO.Operator, op);
+	}
+	
+	public void updateOperator(Operator op) throws NotFoundException {
+		updateScreenComponent(op);
+	}
+	
+	public void removeOperator(URI opUri) throws NotFoundException {
+		removeScreenComponent(opUri);
+	}
+
+	public void addBackendService(BackendService bs)
+	throws DuplicatedResourceException, OntologyInvalidException, InvalidResourceTypeException {
+		addScreenComponent(FGO.BackendService, bs);
+	}
+	
+	public void updateBackendService(BackendService bs) throws NotFoundException {
+		updateScreenComponent(bs);
+	}
+	
+	public void removeBackendService(URI bsUri) throws NotFoundException {
+		removeScreenComponent(bsUri);
+	}
+
 	public Collection<ScreenFlow> listScreenFlows() {
 		ArrayList<ScreenFlow> results = new ArrayList<ScreenFlow>();
 		ClosableIterator<Statement> it = tripleStore.findStatements(Variable.ANY, RDF.type, FGO.ScreenFlow);
@@ -1063,6 +1311,33 @@ public class Catalogue {
 		return results;
 	}
 	
+	public Collection<FormElement> listFormElements() {
+		ArrayList<FormElement> results = new ArrayList<FormElement>();
+		ClosableIterator<Statement> it = tripleStore.findStatements(Variable.ANY, RDF.type, FGO.FormElement);
+		while (it.hasNext())
+			results.add(getFormElement(it.next().getSubject().asURI()));
+		it.close();
+		return results;
+	}
+
+	public Collection<Operator> listOperators() {
+		ArrayList<Operator> results = new ArrayList<Operator>();
+		ClosableIterator<Statement> it = tripleStore.findStatements(Variable.ANY, RDF.type, FGO.Operator);
+		while (it.hasNext())
+			results.add(getOperator(it.next().getSubject().asURI()));
+		it.close();
+		return results;
+	}
+
+	public Collection<BackendService> listBackendServices() {
+		ArrayList<BackendService> results = new ArrayList<BackendService>();
+		ClosableIterator<Statement> it = tripleStore.findStatements(Variable.ANY, RDF.type, FGO.BackendService);
+		while (it.hasNext())
+			results.add(getBackendService(it.next().getSubject().asURI()));
+		it.close();
+		return results;
+	}
+
 	public Collection<Precondition> listPreconditions() {
 		ArrayList<Precondition> results = new ArrayList<Precondition>();
 		ClosableIterator<Statement> it = tripleStore.findStatements(Variable.ANY, RDF.type, FGO.Precondition);
@@ -1104,15 +1379,7 @@ public class Catalogue {
     		Node node = qr.getValue("concept");
     		
     		if (node instanceof BlankNode) {
-//        		System.out.println(node+" is a blank node.");
-//    			try {
-//					ClosableIterator<Statement> ci = getTripleStore().findStatements(node.asBlankNode(), Variable.ANY, Variable.ANY);
-//					while (ci.hasNext())
-//						System.out.println(ci.next());
-//					ci.close();
-//				} catch (Exception e) {
-//					e.printStackTrace();
-//				}
+    			// problems adding some ontologies, eg: DBPedia
     		} else {
     			results.add(qr.getValue("concept").asURI());
     		}
@@ -1151,135 +1418,175 @@ public class Catalogue {
 		return false;
     }
     
-    
-	public ScreenFlow getScreenFlow(URI uri) {
-		ScreenFlow sf = FastModelFactory.createScreenFlow();
+	private Resource retrieveResource(URI type, URI uri) {
+		Resource resource;
 		
-		// find all the info related to a screenflow
-		ClosableIterator<Statement> sfTriples = tripleStore.findStatements(uri, Variable.ANY, Variable.ANY);
-		if (!sfTriples.hasNext()) // the screen does not exist
+		// create the resource of the given type
+		if (type.equals(FGO.ScreenFlow))
+			resource = FastModelFactory.createScreenFlow();
+		else if (type.equals(FGO.Screen))
+			resource = FastModelFactory.createScreen();
+		else if (type.equals(FGO.FormElement))
+			resource = FastModelFactory.createFormElement();
+		else if (type.equals(FGO.Operator))
+			resource = FastModelFactory.createOperator();
+		else if (type.equals(FGO.BackendService))
+			resource = FastModelFactory.createBackendService();
+		else
+			return null; //TODO throw exception type of resource not supported
+		
+		// fill the information about the resource
+		resource.setUri(uri);
+		ClosableIterator<Statement> cIt = tripleStore.findStatements(uri, Variable.ANY, Variable.ANY);
+		if (!cIt.hasNext()) // the resource does not exist
 			return null;
-		sf.setUri(uri);
-		for ( ; sfTriples.hasNext(); ) {
-			Statement st = sfTriples.next();
+		for ( ; cIt.hasNext(); ) {
+			Statement st = cIt.next();
 			URI predicate = st.getPredicate();
 			Node object = st.getObject();
 			if (predicate.equals(RDFS.label)) {
 				if (object instanceof LanguageTagLiteral) {
 					LanguageTagLiteral label = object.asLanguageTagLiteral();
-					sf.getLabels().put(label.getLanguageTag(), label.getValue());
+					resource.getLabels().put(label.getLanguageTag(), label.getValue());
 				}
 			} else if (predicate.equals(DC.description)) {
 				LanguageTagLiteral description = object.asLanguageTagLiteral();
-				sf.getDescriptions().put(description.getLanguageTag(), description.getValue());
+				resource.getDescriptions().put(description.getLanguageTag(), description.getValue());
 			} else if (predicate.equals(DC.creator)) {
-				sf.setCreator(object.asURI());
+				resource.setCreator(object.asURI());
 			} else if (predicate.equals(DC.rights)) {
-				sf.setRights(object.asURI());
+				resource.setRights(object.asURI());
 			} else if (predicate.equals(FGO.hasVersion)) {
-				sf.setVersion(object.toString());
+				resource.setVersion(object.toString());
 			} else if (predicate.equals(DC.date)) {
-				sf.setCreationDate(DateFormatter.parseDateISO8601(object.toString()));
+				resource.setCreationDate(DateFormatter.parseDateISO8601(object.toString()));
 			} else if (predicate.equals(FGO.hasIcon)) {
-				sf.setIcon(object.asURI());
+				resource.setIcon(object.asURI());
 			} else if (predicate.equals(FGO.hasScreenshot)) {
-				sf.setScreenshot(object.asURI());
+				resource.setScreenshot(object.asURI());
 			} else if (predicate.equals(FGO.hasTag)) {
-				sf.getDomainContext().getTags().add(object.asLiteral().toString());
+				resource.getDomainContext().getTags().add(object.asLiteral().toString());
 			} else if (predicate.equals(FOAF.homepage)) {
-				sf.setHomepage(object.asURI());
-			} else if (predicate.equals(FGO.contains)) {
-				sf.getResources().add(object.asURI());
+				resource.setHomepage(object.asURI());
 			}
 		}
-		sfTriples.close();
+		cIt.close();
+		
+		return resource;
+	}
+	
+	private WithConditions retrieveWithConditions(URI type, URI uri) throws InvalidResourceTypeException {
+		if (!type.equals(FGO.ScreenFlow) && !type.equals(FGO.Screen))
+			throw new InvalidResourceTypeException("Only ScreenFlow and Screen types are allowed.");
+		
+		// create the resource of the given type
+		WithConditions withConditions = (WithConditions) retrieveResource(type, uri);
+		if (withConditions != null) {
+			// fill the conditions of the resource
+			ClosableIterator<Statement> cIt = tripleStore.findStatements(uri, Variable.ANY, Variable.ANY);
+			for ( ; cIt.hasNext(); ) {
+				Statement st = cIt.next();
+				URI predicate = st.getPredicate();
+				Node object = st.getObject();
+				if (predicate.equals(FGO.hasPreCondition)) {
+					ArrayList<Condition> conList = new ArrayList<Condition>();
+					int i = 1;
+					boolean stop = false;
+					while (!stop) {
+						ClosableIterator<Statement> conBag = tripleStore.findStatements(object.asBlankNode(), RDF.li(i++), Variable.ANY);
+						if (!conBag.hasNext()) {
+							stop = true;
+						} else {
+							while (conBag.hasNext())
+								conList.add(getCondition(conBag.next().getObject().asBlankNode()));
+						}
+						conBag.close();
+					}
+					withConditions.getPreconditions().add(conList);
+				} else if (predicate.equals(FGO.hasPostCondition)) {
+					ArrayList<Condition> conList = new ArrayList<Condition>();
+					int i = 1;
+					boolean stop = false;
+					while (!stop) {
+						ClosableIterator<Statement> conBag = tripleStore.findStatements(object.asBlankNode(), RDF.li(i++), Variable.ANY);
+						if (!conBag.hasNext()) {
+							stop = true;
+						} else {
+							while (conBag.hasNext())
+								conList.add(getCondition(conBag.next().getObject().asBlankNode()));
+						}
+						conBag.close();
+					}
+					withConditions.getPostconditions().add(conList);
+				}
+			}
+			cIt.close();
+		}
+		
+		return withConditions;
+	}
+	
+	public ScreenFlow getScreenFlow(URI uri) {
+		ScreenFlow sf = null;
+		
+		try {
+			sf = (ScreenFlow) retrieveWithConditions(FGO.ScreenFlow, uri);
+			if (sf != null) {
+				// find all the info related to a screenflow
+				ClosableIterator<Statement> sfTriples = tripleStore.findStatements(uri, Variable.ANY, Variable.ANY);
+				for ( ; sfTriples.hasNext(); ) {
+					Statement st = sfTriples.next();
+					URI predicate = st.getPredicate();
+					Node object = st.getObject();
+				    if (predicate.equals(FGO.contains)) {
+				    	sf.getResources().add(object.asURI());
+				    }
+				}
+				sfTriples.close();
+			}
+		} catch (InvalidResourceTypeException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 		return sf;
 	}
-
+	
 	public Screen getScreen(URI uri) {
-		Screen screen = FastModelFactory.createScreen();
-		// find all the info related to a screen
-		ClosableIterator<Statement> screenTriples = tripleStore.findStatements(uri, Variable.ANY, Variable.ANY);
-		if (!screenTriples.hasNext()) // the screen does not exist
-			return null;
-		screen.setUri(uri);
-		for ( ; screenTriples.hasNext(); ) {
-			Statement st = screenTriples.next();
-			URI predicate = st.getPredicate();
-			Node object = st.getObject();
-			if (predicate.equals(RDFS.label)) {
-				if (object instanceof LanguageTagLiteral) {
-					LanguageTagLiteral label = object.asLanguageTagLiteral();
-					screen.getLabels().put(label.getLanguageTag(), label.getValue());
-				}
-			} else if (predicate.equals(DC.description)) {
-				LanguageTagLiteral description = object.asLanguageTagLiteral();
-				screen.getDescriptions().put(description.getLanguageTag(), description.getValue());
-			} else if (predicate.equals(DC.creator)) {
-				screen.setCreator(object.asURI());
-			} else if (predicate.equals(DC.rights)) {
-				screen.setRights(object.asURI());
-			} else if (predicate.equals(FGO.hasVersion)) {
-				screen.setVersion(object.toString());
-			} else if (predicate.equals(DC.date)) {
-				screen.setCreationDate(DateFormatter.parseDateISO8601(object.toString()));
-			} else if (predicate.equals(FGO.hasIcon)) {
-				screen.setIcon(object.asURI());
-			} else if (predicate.equals(FGO.hasScreenshot)) {
-				screen.setScreenshot(object.asURI());
-			} else if (predicate.equals(FGO.hasTag)) {
-				screen.getDomainContext().getTags().add(object.asLiteral().toString());
-			} else if (predicate.equals(FOAF.homepage)) {
-				screen.setHomepage(object.asURI());
-			} else if (predicate.equals(FGO.hasPreCondition)) {
-				ArrayList<Condition> conList = new ArrayList<Condition>();
-				int i = 1;
-				boolean stop = false;
-				while (!stop) {
-					ClosableIterator<Statement> conBag = tripleStore.findStatements(object.asBlankNode(), RDF.li(i++), Variable.ANY);
-					if (!conBag.hasNext()) {
-						stop = true;
-					} else {
-						while (conBag.hasNext())
-							conList.add(getCondition(conBag.next().getObject().asBlankNode()));
-					}
-					conBag.close();
-				}
-				screen.getPreconditions().add(conList);
-			} else if (predicate.equals(FGO.hasPostCondition)) {
-				ArrayList<Condition> conList = new ArrayList<Condition>();
-				int i = 1;
-				boolean stop = false;
-				while (!stop) {
-					ClosableIterator<Statement> conBag = tripleStore.findStatements(object.asBlankNode(), RDF.li(i++), Variable.ANY);
-					if (!conBag.hasNext()) {
-						stop = true;
-					} else {
-						while (conBag.hasNext())
-							conList.add(getCondition(conBag.next().getObject().asBlankNode()));
-					}
-					conBag.close();
-				}
-				screen.getPostconditions().add(conList);
-			} else if (predicate.equals(FGO.hasCode)) {
-				screen.setCode(object.asURI());
-			}
-		}
-		screenTriples.close();
+		Screen screen = null;
 		
+		try {
+			screen = (Screen) retrieveWithConditions(FGO.Screen, uri);
+			if (screen != null) {
+				// find all the info related to a screen
+				ClosableIterator<Statement> screenTriples = tripleStore.findStatements(uri, Variable.ANY, Variable.ANY);
+				for ( ; screenTriples.hasNext(); ) {
+					Statement st = screenTriples.next();
+					URI predicate = st.getPredicate();
+					Node object = st.getObject();
+					if (predicate.equals(FGO.hasCode)) {
+						screen.setCode(object.asURI());
+					}
+				}
+				screenTriples.close();
+			}
+		} catch (InvalidResourceTypeException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
 		return screen;
 	}
 
 	public Precondition getPrecondition(URI uri) {
 		Precondition pre = FastModelFactory.createPrecondition();
-		pre = (Precondition)getPreOrPost(uri, pre);
+		pre = (Precondition) getPreOrPost(uri, pre);
 		return pre;
 	}
 
 	public Postcondition getPostcondition(URI uri) {
 		Postcondition post = FastModelFactory.createPostcondition();
-		post = (Postcondition)getPreOrPost(uri, post);
+		post = (Postcondition) getPreOrPost(uri, post);
 		return post;
 	}
 
@@ -1323,6 +1630,123 @@ public class Catalogue {
 		return se;
 	}
 	
+	private ScreenComponent retrieveScreenComponent(URI type, URI uri) throws InvalidResourceTypeException {
+		if (!type.equals(FGO.FormElement) && !type.equals(FGO.Operator) && !type.equals(FGO.BackendService))
+			throw new InvalidResourceTypeException(type+" is not a ScreenComponent.");
+		
+		ScreenComponent screenComponent = (ScreenComponent) retrieveResource(type, uri);
+		if (screenComponent != null) {
+			// find all the info related to a form element
+			ClosableIterator<Statement> cIt = tripleStore.findStatements(uri, Variable.ANY, Variable.ANY);
+			for ( ; cIt.hasNext(); ) {
+				Statement st = cIt.next();
+				URI predicate = st.getPredicate();
+				Node object = st.getObject();
+				if (predicate.equals(FGO.hasAction)) {
+					Action action = new Action();
+					ClosableIterator<Statement> actionIt = tripleStore.findStatements(object.asBlankNode(), Variable.ANY, Variable.ANY);
+					for ( ; actionIt.hasNext(); ) {
+						Statement s = actionIt.next();
+						URI p = s.getPredicate();
+						Node o = s.getObject();
+						if (p.equals(RDFS.label)) {
+							action.setName(o.asLiteral().toString());
+						} else if (p.equals(FGO.hasPreCondition)) {
+							ArrayList<Condition> conList = new ArrayList<Condition>();
+							int i = 1;
+							boolean stop = false;
+							while (!stop) {
+								ClosableIterator<Statement> conBag = tripleStore.findStatements(o.asBlankNode(), RDF.li(i++), Variable.ANY);
+								if (!conBag.hasNext()) {
+									stop = true;
+								} else {
+									while (conBag.hasNext())
+										conList.add(getCondition(conBag.next().getObject().asBlankNode()));
+								}
+								conBag.close();
+							}
+							action.getPreconditions().add(conList);
+						} else if (p.equals(FGO.hasUse)) {
+							action.getUses().add(o.toString());
+						}
+					}
+					actionIt.close();
+					screenComponent.getActions().add(action);
+				} else if (predicate.equals(FGO.hasPostCondition)) {
+					ArrayList<Condition> conList = new ArrayList<Condition>();
+					int i = 1;
+					boolean stop = false;
+					while (!stop) {
+						ClosableIterator<Statement> conBag = tripleStore.findStatements(object.asBlankNode(), RDF.li(i++), Variable.ANY);
+						if (!conBag.hasNext()) {
+							stop = true;
+						} else {
+							while (conBag.hasNext())
+								conList.add(getCondition(conBag.next().getObject().asBlankNode()));
+						}
+						conBag.close();
+					}
+					screenComponent.getPostconditions().add(conList);
+				} else if (predicate.equals(FGO.hasCode)) {
+					screenComponent.setCode(object.asURI());
+				} else if (predicate.equals(FGO.hasTrigger)) {
+					screenComponent.getTriggers().add(object.toString());
+				} else if (predicate.equals(FGO.hasLibrary)) {
+					Library library = new Library();
+					ClosableIterator<Statement> libIt = tripleStore.findStatements(object.asBlankNode(), Variable.ANY, Variable.ANY);
+					for ( ; libIt.hasNext(); ) {
+						Statement s = libIt.next();
+						URI p = s.getPredicate();
+						Node o = s.getObject();
+						if (p.equals(FGO.hasLanguage)) {
+							library.setLanguage(o.asLiteral().toString());
+						} else if (p.equals(FGO.hasSource)) {
+							library.setSource(o.asURI());
+						}
+					}
+					libIt.close();
+					screenComponent.getLibraries().add(library);
+				}
+			}
+			cIt.close();
+		}
+		
+		return screenComponent;
+	}
+
+	public FormElement getFormElement(URI uri) {
+		FormElement formElement = null;
+		try {
+			formElement = (FormElement) retrieveScreenComponent(FGO.FormElement, uri);
+		} catch (InvalidResourceTypeException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return formElement;
+	}
+	
+	public Operator getOperator(URI uri) {
+		Operator operator = null;
+		try {
+			operator = (Operator) retrieveScreenComponent(FGO.Operator, uri);
+		} catch (InvalidResourceTypeException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return operator;
+	}
+
+	public BackendService getBackendService(URI uri) {
+		BackendService backendService = null;
+		try {
+			backendService = (BackendService) retrieveScreenComponent(FGO.BackendService, uri);
+		} catch (InvalidResourceTypeException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return backendService;
+	}
+
 	/*
 	 * Each condition will have only one pattern at most
 	 */
