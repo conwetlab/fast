@@ -3,15 +3,33 @@
 	<display-name>CatalogueService</display-name>
 	<servlet>
 		<description></description>
+		<display-name>ScreenflowServlet</display-name>
+		<servlet-name>ScreenflowServlet</servlet-name>
+		<servlet-class>eu.morfeoproject.fast.server.ScreenflowServlet</servlet-class>
+	</servlet>
+	<servlet>
+		<description></description>
 		<display-name>ScreenServlet</display-name>
 		<servlet-name>ScreenServlet</servlet-name>
 		<servlet-class>eu.morfeoproject.fast.server.ScreenServlet</servlet-class>
 	</servlet>
 	<servlet>
 		<description></description>
-		<display-name>ScreenflowServlet</display-name>
-		<servlet-name>ScreenflowServlet</servlet-name>
-		<servlet-class>eu.morfeoproject.fast.server.ScreenflowServlet</servlet-class>
+		<display-name>FormElementServlet</display-name>
+		<servlet-name>FormElementServlet</servlet-name>
+		<servlet-class>eu.morfeoproject.fast.server.FormElementServlet</servlet-class>
+	</servlet>
+	<servlet>
+		<description></description>
+		<display-name>OperatorServlet</display-name>
+		<servlet-name>OperatorServlet</servlet-name>
+		<servlet-class>eu.morfeoproject.fast.server.OperatorServlet</servlet-class>
+	</servlet>
+	<servlet>
+		<description></description>
+		<display-name>BackendServiceServlet</display-name>
+		<servlet-name>BackendServiceServlet</servlet-name>
+		<servlet-class>eu.morfeoproject.fast.server.BackendServiceServlet</servlet-class>
 	</servlet>
 	<servlet>
 		<description></description>
@@ -68,12 +86,24 @@
 		<servlet-class>eu.morfeoproject.fast.server.PlannerServlet</servlet-class>
 	</servlet>
 	<servlet-mapping>
+		<servlet-name>ScreenflowServlet</servlet-name>
+		<url-pattern>/screenflows/*</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
 		<servlet-name>ScreenServlet</servlet-name>
 		<url-pattern>/screens/*</url-pattern>
 	</servlet-mapping>
 	<servlet-mapping>
-		<servlet-name>ScreenflowServlet</servlet-name>
-		<url-pattern>/screenflows/*</url-pattern>
+		<servlet-name>FormElementServlet</servlet-name>
+		<url-pattern>/forms/*</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>OperatorServlet</servlet-name>
+		<url-pattern>/operators/*</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>BackendServiceServlet</servlet-name>
+		<url-pattern>/services/*</url-pattern>
 	</servlet-mapping>
 	<servlet-mapping>
 		<servlet-name>ConceptServlet</servlet-name>
