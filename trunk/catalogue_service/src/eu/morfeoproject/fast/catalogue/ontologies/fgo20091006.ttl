@@ -2,7 +2,7 @@
 # 
 # developed as part of the EU FAST Project (FP7-ICT-2007-1-216048)
 # 
-# editor: Knud Hinnerk MÃ¶ller, DERI, National Unversity of Ireland, Galway
+# editor: Knud Hinnerk Möller, DERI, National Unversity of Ireland, Galway
 #
 # this turtle file is the original document, from which all other versions
 # (html, rdf/xml) are created
@@ -66,13 +66,6 @@ rdfs:subClassOf fgo:Resource ;
 rdfs:label "Screen"@en ;
 rdfs:comment "An individual screen."@en .
 
-fgo:BackendService a owl:Class ;
-rdfs:subClassOf fgo:Resource ;
-rdfs:label "Backend Service"@en ;
-rdfs:comment """A Web service which provides data and/or functionality to a screen. 
-    A backend service will often be external to FAST, and will probably have to be 
-    wrapped by the screen."""@en .
-
 fgo:FlowControlElement a owl:Class ;
 rdfs:subClassOf fgo:Resource ;
 rdfs:label "Flow Control Element"@en ;
@@ -94,17 +87,29 @@ rdfs:subClassOf fgo:FlowControlElement ;
 rdfs:label "Connector"@en ;
 rdfs:comment "An explicit connection between two screens."@en .
 
-fgo:Operator a owl:Class ;
+fgo:ScreenComponent a owl:Class ;
 rdfs:subClassOf fgo:Resource ;
+rdfs:label "Screen Component"@en ;
+rdfs:comment "A screen component is any resource which is part of a particular screen."@en .
+
+fgo:Operator a owl:Class ;
+rdfs:subClassOf fgo:ScreenComponent ;
 rdfs:label "Operator"@en ;
 rdfs:comment """Any kind of component that is used to connect backend services to 
     form elements. Examples are simple pipes, aggregators or various kinds of 
     filters."""@en .
 
 fgo:FormElement a owl:Class ;
-rdfs:subClassOf fgo:Resource ;
+rdfs:subClassOf fgo:ScreenComponent ;
 rdfs:label "Form Element"@en ;
 rdfs:comment "Form elements are UI elements in a particular screen."@en .
+
+fgo:BackendService a owl:Class ;
+rdfs:subClassOf fgo:ScreenComponent ;
+rdfs:label "Backend Service"@en ;
+rdfs:comment """A Web service which provides data and/or functionality to a screen. 
+    A backend service will often be external to FAST, and will probably have to be 
+    wrapped by the screen."""@en .
 
 fgo:Condition a owl:Class ;
 rdfs:subClassOf fgo:Resource ;
@@ -122,13 +127,40 @@ rdfs:label "Fact"@en ;
 rdfs:comment """A fact is the atomic formal representation of a part of a condition.
 	Therefore, several facts compose a condition."""@en .
 
-fgo:WithConditions a owl:Class ;
+fgo:WithPreConditions a owl:Class ;
 rdfs:subClassOf fgo:Resource ;
-owl:unionOf (fgo:Screen fgo:ScreenFlow) ;
-rdfs:label "With-condition"@en ;
-rdfs:comment """Those kinds of resource which can have pre- or post-conditions 
+owl:unionOf (fgo:ScreenFlow fgo:Screen fgo:Action) ;
+rdfs:label "With-precondition"@en ;
+rdfs:comment """Those kinds of resource which can have pre-conditions 
     (i.e., screens and screen flows)."""@en .
 
+fgo:WithPostConditions a owl:Class ;
+rdfs:subClassOf fgo:Resource ;
+owl:unionOf (fgo:ScreenFlow fgo:Screen fgo:ScreenComponent) ;
+rdfs:label "With-precondition"@en ;
+rdfs:comment """Those kinds of resource which can have pre-conditions 
+    (i.e., screens and screen flows)."""@en .
+
+fgo:WithConditions a owl:Class ;
+rdfs:subClassOf fgo:Resource ;
+owl:unionOf (fgo:WithPreConditions fgo:WithPostConditions) ;
+rdfs:label "With-condition"@en ;
+rdfs:comment """Those kinds of resource which can have both pre- or post-conditions."""@en .
+
+fgo:Action a owl:Class ;
+rdfs:label "Action"@en ;
+rdfs:comment """An action represents a specific routine which will be performed when a certain
+	condition is fulfilled within a certain screen component (i.e., the action 'showTable' will
+	be performed when data from a service is received)."""@en .
+
+fgo:Library a owl:Class ;
+rdfs:label "Action"@en ;
+rdfs:comment """An action represents a specific routine which will be performed when a certain
+	condition is fulfilled within a certain screen component (i.e., the action 'showTable' will
+	be performed when data from a service is received)."""@en .
+
+# these are the Slot and Event concepts, they should disappear and be the pre and postconditions
+# of a ScreenFlow
 fgo:Precondition a owl:Class ;
 rdfs:subClassOf fgo:Resource ;
 rdfs:label "Precondition"@en ;
@@ -152,18 +184,18 @@ rdfs:range fgo:Resource .
 
 fgo:hasPreCondition a owl:ObjectProperty ;
 rdfs:label "has pre-condition"@en ;
-rdfs:comment """This property links a screen or screenflow to its pre-condition, i.e., 
+rdfs:comment """This property links certain type of resources to its pre-condition, i.e., 
     the facts that need to be fulfilled in order for this screen or screenflow to be 
     reachable."""@en ;
-rdfs:domain fgo:WithConditions ;
+rdfs:domain fgo:WithPreConditions ;
 rdfs:range fgo:Condition, rdf:Bag .
 
 fgo:hasPostCondition a owl:ObjectProperty ;
 rdfs:label "has post-condition"@en ;
-rdfs:comment """This property links a screen or screenflow to its post-condition, 
+rdfs:comment """This property links certain type of resources to its post-condition, 
     i.e., the facts that are produced once the screen or screenflow has been 
     executed."""@en ;
-rdfs:domain fgo:WithConditions ;
+rdfs:domain fgo:WithPostConditions ;
 rdfs:range fgo:Condition, rdf:Bag .
 
 fgo:hasPattern a owl:ObjectProperty ;
@@ -226,6 +258,43 @@ rdfs:label "has condition"@en ;
 rdfs:comment """This property links a precondition or postcondition to a certain condition."""@en ;
 rdfs:domain fgo:Precondition, fgo:Postcondition ;
 rdfs:range fgo:Condition, rdf:Bag .
+
+fgo:hasAction a owl:ObjectProperty ;
+rdfs:label "has action"@en ;
+rdfs:comment """This property indicates which actions are asociated and can be perfomed within a screen component."""@en ;
+rdfs:domain fgo:ScreenComponent ;
+rdfs:range fgo:Action .
+
+fgo:hasTrigger a owl:DatatypeProperty ;
+rdfs:label "has trigger string"@en ;
+rdfs:comment """This property ..."""@en ;
+rdfs:domain fgo:ScreenComponent ;
+rdfs:range xsd:string .
+
+fgo:hasUse a owl:DatatypeProperty ;
+rdfs:label "has use string"@en ;
+rdfs:comment """This property ..."""@en ;
+rdfs:domain fgo:Action ;
+rdfs:range xsd:string .
+
+fgo:hasLibrary a owl:ObjectProperty ;
+rdfs:label "has library"@en ;
+rdfs:comment """This property indicates which libraries are used by a screen component."""@en ;
+rdfs:domain fgo:ScreenComponent ;
+rdfs:range fgo:Library .
+
+fgo:hasLanguage a owl:DatatypeProperty ;
+rdfs:label "has language string"@en ;
+rdfs:comment """This property is the language the library is written in."""@en ;
+rdfs:domain fgo:Library ;
+rdfs:range xsd:string .
+
+fgo:hasSource a owl:ObjectProperty ;
+rdfs:label "has source"@en ;
+rdfs:comment """URL of the source code of a particular library."""@en ;
+rdfs:domain fgo:Library ;
+rdfs:range foaf:Document .
+
 
 # terms used from other ontologies
 
