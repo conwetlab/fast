@@ -29,6 +29,8 @@
         
         <script type="text/javascript" src="{{ MEDIA_URL }}js/lib/utils/json2.js"></script>
         
+        <script type="text/javascript" src="{{ MEDIA_URL }}js/lib/utils/shortcut.js"></script>
+        
         <script type="text/javascript" src="{{ MEDIA_URL }}js/lib/prototype/prototype.js"></script>     
 
         <!-- graceful degradation of firebugs console obj --> 
@@ -112,7 +114,17 @@
             src="{{ MEDIA_URL }}js/gvs/toolbar/ToolbarButton.js"></script>
         <script type="text/javascript"
             src="{{ MEDIA_URL }}js/gvs/toolbar/ToolbarDropDown.js"></script>
-                                                        
+
+        <!-- Toolbar -->
+        <script type="text/javascript"
+            src="{{ MEDIA_URL }}js/gvs/menu/Menu.js"></script>
+        <script type="text/javascript"
+            src="{{ MEDIA_URL }}js/gvs/menu/MenuElement.js"></script>
+        <script type="text/javascript"
+            src="{{ MEDIA_URL }}js/gvs/menu/MenuAction.js"></script>
+        <script type="text/javascript"
+            src="{{ MEDIA_URL }}js/gvs/menu/SubMenu.js"></script>
+
         <!-- Document classes -->
         <script type="text/javascript"
             src="{{ MEDIA_URL }}js/gvs/documents/AbstractDocument.js"></script>
@@ -206,6 +218,8 @@
             src="{{ MEDIA_URL }}js/gvs/utils/Utils.js"></script>
         <script type="text/javascript"
             src="{{ MEDIA_URL }}js/gvs/utils/Logger.js"></script>
+        <script type="text/javascript"
+            src="{{ MEDIA_URL }}js/gvs/utils/KeyPressRegistry.js"></script>
                 
         <!-- Constants -->
         <script type="text/javascript"
@@ -226,10 +240,12 @@
             dojo.require("dijit.form.ValidationTextBox");
             dojo.require("dijit.form.Button");
             dojo.require("dijit.Tooltip");
-            dojo.require("dijit.Menu");
             dojo.require("dijit.MenuBar");
+            dojo.require("dijit.MenuBarItem");
             dojo.require("dijit.PopupMenuBarItem");
+            dojo.require("dijit.Menu");
             dojo.require("dijit.MenuItem");
+            dojo.require("dijit.PopupMenuItem");
             dojo.require("dijit.Toolbar");
             dojo.require("dijit.ToolbarSeparator");
             
@@ -271,7 +287,7 @@
                 </div>
                 <!-- Menu area -->
                 <div id="menu" dojoType="dijit.MenuBar">
-                    <div dojoType="dijit.PopupMenuBarItem">
+                    <!--<div dojoType="dijit.PopupMenuBarItem">
                         <span>File...</span>
                         <div dojoType="dijit.Menu">
                             <span dojoType="dijit.MenuItem">New</span>   
@@ -280,11 +296,15 @@
                     <div dojoType="dijit.PopupMenuBarItem">
                         <span>Help</span>
                         <div dojoType="dijit.Menu">
-                            <span dojoType="dijit.MenuItem">Help</span>   
+                            <div dojoType="dijit.PopupMenuItem">
+                            <span>Help</span>
+                            <div dojoType="dijit.Menu">
+                            <div dojoType="dijit.MenuItem">Item</div>
+                            </div>
+                            </div>   
                             <span dojoType="dijit.MenuItem" onClick="alert('About FAST!')">About FAST...</span>
                         </div>
-                    </div>
-                    
+                    </div>-->
                 </div>
                 <div id="toolbar" dojoType="dijit.Toolbar">
                 </div>

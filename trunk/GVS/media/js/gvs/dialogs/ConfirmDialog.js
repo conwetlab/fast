@@ -40,7 +40,7 @@ var ConfirmDialog = Class.create(FormDialog, /** @lends ConfirmDialog.prototype 
      * @private
      */
     _onOk: function(){
-        this._hide();
+        this._dialog.hide();
     },
     
     /** 
@@ -49,7 +49,7 @@ var ConfirmDialog = Class.create(FormDialog, /** @lends ConfirmDialog.prototype 
      * @private
      */
     _onCancel: function(){
-        this._hide();
+        this._dialog.hide();
     }
 });
 

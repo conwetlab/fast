@@ -28,11 +28,25 @@ var DocumentController = Class.create(
         this._welcomeDocument = null;
         
         /**
+         * The keypress registry
+         * @type KeyPressRegistry
+         * @private
+         */
+        this._registry = new KeyPressRegistry();
+        
+        /**
          * Toolbar handler object
          * @type Toolbar
          * @private @member
          */
         this._toolbar = new Toolbar();
+        
+        /**
+         * Menu handler
+         * @type Menu
+         * @private
+         */
+        this._menu = new Menu(this._registry);
         
         /**
          * The document container element
@@ -48,21 +62,12 @@ var DocumentController = Class.create(
         // The welcome document is the initial document
         this.showWelcomeDocument();
         
-        this.setEnabled(true);
+        this._registry.addHandler('delete', this._onDelPressed.bind(this));
+
     },
 
     // **************** PUBLIC METHODS **************** //
     
-    /**
-     * Enables or disables the GVS itself (for modal dialogs)
-     */
-    setEnabled: function(/** Boolean */ enabled) {
-        if (enabled) {
-            document.observe('keypress', this._onKeyPressed.bind(this));
-        } else {
-            document.stopObserving('keypress', this._onKeyPressed.bind(this));
-        }        
-    },
     
     /**
      * Creates a new screenflow document
@@ -91,13 +96,17 @@ var DocumentController = Class.create(
     addDocument: function(document){
         this._documents.set(document.getTabId(), document);
         this._documentContainer.addChild(document.getTab());
-        this._documentContainer.selectChild(document.getTabId());
+
         $$(".tabLabel").each(function(canvas) {
             canvas.observe("focus",function(e) {
                 var element = Event.element(e);
                 element.blur();
             })
         });
+        
+        if (this._documents.keys().size() > 1) {
+            this._documentContainer.selectChild(document.getTabId());    
+        }     
     },
 
     /**
@@ -130,7 +139,7 @@ var DocumentController = Class.create(
         
         // Remove the reference to the welcome document, if
         // the document being closed is it
-        if (this._welcomeDocument.getTabId() == id) {
+        if (this._welcomeDocument && this._welcomeDocument.getTabId() == id) {
             this._welcomeDocument = null;
         }
         
@@ -155,7 +164,21 @@ var DocumentController = Class.create(
         return this._toolbar;
     },
     
-
+    
+    /**
+     * Returns the menu object
+     * @type Menu
+     */
+    getMenu: function() {
+        return this._menu;
+    },
+    /**
+     * 
+     * @type KeyPressRegistry
+     */
+    getKeyPressRegistry: function() {
+        return this._registry;    
+    },
     // **************** PRIVATE METHODS **************** //
     
 
@@ -174,13 +197,14 @@ var DocumentController = Class.create(
         this._currentDocument = this._documents.get(id);
         
         this._toolbar.setModel(1, this._currentDocument);
+        this._menu.setModel('document', this._currentDocument);
     },
     
     /**
-     * Function that passes the key events to the current document
+     * Function that passes the key 'del' stroke to the current document
      */
-    _onKeyPressed: function (/** Event */ e) {
-        this._currentDocument.onKeyPressed(e);    
+    _onDelPressed: function () {
+        this._currentDocument.onDelPressed();    
     }
 });
 

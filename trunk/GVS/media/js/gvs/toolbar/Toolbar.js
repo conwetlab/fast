@@ -1,8 +1,9 @@
-var Toolbar = Class.create( /** @lends Toolbar.prototype */ {
+var Toolbar = Class.create( /** @class @lends Toolbar.prototype */ {
     /**
      * The toolbar itself
      * 
      * @constructs
+     * @constructor
      */ 
     initialize: function() {
         /** 
@@ -36,6 +37,7 @@ var Toolbar = Class.create( /** @lends Toolbar.prototype */ {
      * 
      *   interface ToolbarElement
      *      Widget getWidget()  // dojo widget
+     * @
      */
     setModel: function(/** Number */position, /** ToolbarModel */ model) {
         this._removeModel(position);
@@ -59,6 +61,10 @@ var Toolbar = Class.create( /** @lends Toolbar.prototype */ {
     
     // ************************ PRIVATE METHODS ************************* //
     
+    /**
+     * Removes the model from the given position
+     * @private
+     */
     _removeModel: function(/** Number */ position) {
         if (this._models[position]) {
             this._models[position] = null;
@@ -66,6 +72,10 @@ var Toolbar = Class.create( /** @lends Toolbar.prototype */ {
         }
     },
     
+    /**
+     * Initializes a section
+     * @private
+     */
     _initSection: function(/** Number */ position) {
         if (!this._sections[position]) {
             this._sections[position] = new Array();
@@ -75,6 +85,11 @@ var Toolbar = Class.create( /** @lends Toolbar.prototype */ {
         }
     },
     
+    /**
+     * Refresh the toolbar interface
+     * Called when something happens (a model has been added or removed)
+     * @private
+     */
     _refreshToolbar: function() {
         this._toolbar.getDescendants().each(function(descendant) {
             this._toolbar.removeChild(descendant);

@@ -70,7 +70,7 @@ var NewScreenflowDialog = Class.create(ConfirmDialog /** @lends NewScreenflowDia
             documentController = GVSSingleton.getInstance().getDocumentController();
             documentController.createScreenflow(name, $A(domainContext), version);
             
-            this._hide();
+            $super();
         }       
     },
     

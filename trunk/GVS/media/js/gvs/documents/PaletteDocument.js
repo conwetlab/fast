@@ -110,16 +110,10 @@ var PaletteDocument = Class.create(AbstractDocument, /** @lends PaletteDocument.
     },
     
     /**
-     * Keypress event handler
+     * 'del' press event handler
      */
-    onKeyPressed: function(/** Event */ e) {    
-        
-        switch(e.keyCode) {
-            case Event.KEY_DELETE:
-                this._startDeletingSelectedElement();
-                break;  
-        }
-        
+    onDelPressed: function() {         
+        this._startDeletingSelectedElement();
     },
 
     // **************** PRIVATE METHODS **************** //

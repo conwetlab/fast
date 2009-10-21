@@ -89,14 +89,19 @@ var AbstractDocument = Class.create(ToolbarModel, /** @lends AbstractDocument.pr
     },
     
     /**
-     * Method called on keypress. Might be overloaded
+     * Method called on del. Might be overloaded
      */
-    onKeyPressed: function(/** Event */ e) {
+    onDelPressed: function() {
         // Do nothing
     },
     
-
-    
+    /**
+     * Implementing menu model interface
+     * @type Object
+     */
+    getMenuElements: function() {
+        return {};    
+    },
     
     // **************** PRIVATE METHODS **************** //
 

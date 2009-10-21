@@ -32,7 +32,9 @@ var AlertSingleton = function() {
             });
             this._contentNode.addClassName("systemDialog"); 
             
-            this._addButton ('Ok', this._hide.bind(this));
+            this._addButton ('Ok', function(){
+                this._dialog.hide();   
+            }.bind(this));
         },
         /**
          * This function shows a message

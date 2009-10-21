@@ -127,6 +127,15 @@ var ScreenflowDocument = Class.create(PaletteDocument,
         this._updatePanes();
     },
 
+    /**
+     * Implementing MenuModel interface
+     * @override
+     * @type Object
+     */
+    getMenuElements: function() {        
+        return {};
+    },
+
     // **************** PRIVATE METHODS **************** //
     
 

@@ -36,10 +36,6 @@ var ConfirmSingleton = function() {
             this._callback = null;
             
             this._contentNode.addClassName("systemDialog"); 
-            
-            dojo.connect(this._dialog, "hide", function (){
-                this._callback(false);
-            }.bind(this));               
         },
         
         /**
@@ -56,18 +52,18 @@ var ConfirmSingleton = function() {
          * @private
          */
         _onOk: function ($super) {
-            $super();
             this._callback(true);
             this._callback = null;
+            $super();
         },
         /**
          * @override
          * @private
          */        
         _onCancel: function ($super){
-            $super();
             this._callback(false);
-            this._callback = null;    
+            this._callback = null;
+            $super();
         },
         /**
          * @override
@@ -75,6 +71,17 @@ var ConfirmSingleton = function() {
          */
         _initDialogInterface: function () {
             // Do Nothing
+        },
+        /**
+         * @private
+         * @override
+         */
+        _hide: function($super) {
+            $super();
+            if (this._callback) {
+                this._callback(false);
+                this._callback = null;
+            }        
         }
     });
 

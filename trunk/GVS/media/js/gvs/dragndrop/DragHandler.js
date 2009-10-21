@@ -81,7 +81,7 @@ var DragHandler = Class.create(
 
         // Only attend to left button events
         // (or right button for left-handed persons)
-        if (!BrowserUtilsSingleton.getInstance().isLeftButton(e.button))
+        if (!BrowserUtils.isLeftButton(e.button))
             return false;
         
         // An object is retrieved to be dragged
@@ -169,7 +169,7 @@ var DragHandler = Class.create(
 
         // Only attend to left button events
         // (or right button for left-handed persons)
-        if (!BrowserUtilsSingleton.getInstance().isLeftButton(e.button))
+        if (!BrowserUtils.isLeftButton(e.button))
             return false;
 
         Event.stopObserving (document, "mouseup",   this._bindedEndDrag, true);

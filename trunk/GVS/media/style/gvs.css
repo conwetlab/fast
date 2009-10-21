@@ -95,6 +95,11 @@ h4{
 .soria .dijitToolbar {
     background-image: url('../images/gui/toolbar/toolbar_bg.png');    
 }
+
+.dijitMenuItem.dijitMenuItemSelected, .dijitMenuItemLabel.dijitMenuItem.dijitMenuItemHover  {
+    background-color: #6189C4;
+    color: white; 
+}
  .toolbarIcon
 /* All of the selectors for the icons go here */
 {
@@ -117,15 +122,16 @@ h4{
  * Menu             *
  ********************/
 
-.menuIcon
+.dijitMenuItemIcon.menuIcon
 /* All of the selectors for the icons go here */
 {
-        background-image: url('../images/gui/toolbar/menu_16x16.png'); /* mega-image */
+        background-image: url('../images/gui/menu/menu_16x16.png'); /* mega-image */
         background-repeat: no-repeat;
         width: 16px;
         height: 16px;
         text-align: center;
 }
+.aboutIcon { background-position:    -16px;}
 
 /******************
  * workspace	  *

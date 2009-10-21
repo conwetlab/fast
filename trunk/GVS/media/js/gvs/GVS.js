@@ -46,19 +46,18 @@ var GVSSingleton = function() {
              * @type User
              * @private @member
              */
-            this._user = new User ();
+            this._user = new User();
             
             /** 
              * Hash containing the different dialogs used in the welcome document
              * @type Hash
              * @private @member
              */            
-            this._dialogs = new Hash ();
+            this._dialogs = new Hash();
             
             this._dialogs.set ("addScreen", new AddScreenDialog());
             this._dialogs.set ("newScreenflow", new NewScreenflowDialog());
-            this._dialogs.set ("preferences", new PreferencesDialog());
-            
+            this._dialogs.set ("preferences", new PreferencesDialog());      
             
         },
         
@@ -94,7 +93,10 @@ var GVSSingleton = function() {
                 'preferences',
                 preferencesDialog.show.bind(preferencesDialog)
             ));
+            
             this._documentController.getToolbar().setModel(0, this);
+            
+            this._documentController.getMenu().setModel('GVS', this);
         },
 
         /**
@@ -128,8 +130,20 @@ var GVSSingleton = function() {
             return this._user;
         },
         
+        /**
+         * Sets the platform itself enabled or disabled
+         * (for modal dialogs)
+         */
         setEnabled: function (/** Boolean */ enabled) {
-            this._documentController.setEnabled(enabled);
+           this._documentController.getKeyPressRegistry().setEnabled(enabled);
+        },
+        
+        /**
+         * Implementing MenuModel interface
+         * @type Object
+         */
+        getMenuElements: function() {        
+            return {};
         },
         
         // **************** PRIVATE METHODS **************** //

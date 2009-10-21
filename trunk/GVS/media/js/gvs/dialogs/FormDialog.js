@@ -33,6 +33,8 @@ var FormDialog = Class.create( /** @lends FormDialog.prototype */ {
         this._dialog.attr ('content', containerDiv);
         
         this._initialized = false;
+        dojo.connect(this._dialog,"hide", this._hide.bind(this));
+        
     },
 
     
@@ -66,7 +68,6 @@ var FormDialog = Class.create( /** @lends FormDialog.prototype */ {
     
     _hide: function() {
         GVSSingleton.getInstance().setEnabled(true);
-        this._dialog.hide();
     },
         
     /**
