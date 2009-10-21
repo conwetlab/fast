@@ -77,7 +77,7 @@
 <span class='line'> 70</span> </span><span class="WHIT">                    </span><span class="STRN">'mine'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">this</span><span class="PUNC">,</span><span class="WHIT">
 <span class='line'> 71</span> </span><span class="WHIT">                    </span><span class="STRN">'callback'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">callback</span><span class="WHIT">
 <span class='line'> 72</span> </span><span class="WHIT">                </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'> 73</span> </span><span class="WHIT">                </span><span class="NAME">this._onSuccess</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">this._onError</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 73</span> </span><span class="WHIT">                </span><span class="NAME">this._onSuccess</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">Utils.onAJAXError</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'> 74</span> </span><span class="WHIT">        </span><span class="PUNC">}</span><span class="WHIT"> </span><span class="KEYW">else</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
 <span class='line'> 75</span> </span><span class="WHIT">            </span><span class="NAME">callback</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'> 76</span> </span><span class="WHIT">        </span><span class="PUNC">}</span><span class="WHIT">       </span><span class="WHIT">
@@ -85,33 +85,31 @@
 <span class='line'> 78</span> </span><span class="WHIT">    </span><span class="WHIT">
 <span class='line'> 79</span> </span><span class="WHIT">    </span><span class="COMM">// **************** PRIVATE METHODS **************** //</span><span class="WHIT">
 <span class='line'> 80</span> </span><span class="WHIT">    </span><span class="WHIT">
-<span class='line'> 81</span> </span><span class="WHIT">    </span><span class="NAME">_onError</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">transport</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">e</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'> 82</span> </span><span class="WHIT">        </span><span class="NAME">Logger.serverError</span><span class="PUNC">(</span><span class="NAME">transport</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">e</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'> 83</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'> 84</span> </span><span class="WHIT">           </span><span class="WHIT">
-<span class='line'> 85</span> </span><span class="WHIT">    </span><span class="COMM">/**
-<span class='line'> 86</span>      * Callback function
-<span class='line'> 87</span>      */</span><span class="WHIT">
-<span class='line'> 88</span> </span><span class="WHIT">    </span><span class="NAME">_onSuccess</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="COMM">/**XMLHttpRequest*/</span><span class="WHIT"> </span><span class="NAME">transport</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'> 89</span> </span><span class="WHIT">        </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">metadata</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">transport.responseText.evalJSON</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'> 90</span> </span><span class="WHIT">        </span><span class="COMM">//update the Screen Factory</span><span class="WHIT">
-<span class='line'> 91</span> </span><span class="WHIT">        </span><span class="NAME">this.mine._updateBuildingBlockDescriptions</span><span class="PUNC">(</span><span class="NAME">metadata.screens</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'> 92</span> </span><span class="WHIT">        </span><span class="COMM">//call the callback function passed as argument</span><span class="WHIT">
-<span class='line'> 93</span> </span><span class="WHIT">        </span><span class="NAME">this.callback</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'> 94</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'> 95</span> </span><span class="WHIT">    </span><span class="WHIT">
-<span class='line'> 96</span> </span><span class="WHIT">    </span><span class="COMM">/**
-<span class='line'> 97</span>      * This function creates the different screen Descriptions
-<span class='line'> 98</span>      * @private
-<span class='line'> 99</span>      */</span><span class="WHIT">
-<span class='line'>100</span> </span><span class="WHIT">    </span><span class="NAME">_updateBuildingBlockDescriptions</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="COMM">/** Array */</span><span class="WHIT"> </span><span class="NAME">screenDescriptions</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>101</span> 
-<span class='line'>102</span> </span><span class="WHIT">        </span><span class="KEYW">for</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">i</span><span class="PUNC">=</span><span class="NUMB">0</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="NAME">i</span><span class="PUNC">&lt;</span><span class="WHIT"> </span><span class="NAME">screenDescriptions.length</span><span class="WHIT"> </span><span class="PUNC">;</span><span class="WHIT"> </span><span class="NAME">i</span><span class="PUNC">++</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>103</span> </span><span class="WHIT">            </span><span class="NAME">this._buildingBlockDescriptions.set</span><span class="PUNC">(</span><span class="NAME">screenDescriptions</span><span class="PUNC">[</span><span class="NAME">i</span><span class="PUNC">]</span><span class="PUNC">.</span><span class="NAME">uri</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>104</span> </span><span class="WHIT">                                        </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">ScreenDescription</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">screenDescriptions</span><span class="PUNC">[</span><span class="NAME">i</span><span class="PUNC">]</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>105</span> </span><span class="WHIT">        </span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>106</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>107</span> </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>108</span> 
-<span class='line'>109</span> </span><span class="COMM">// vim:ts=4:sw=4:et: </span><span class="WHIT">
-<span class='line'>110</span> </span></pre></body></html>
+<span class='line'> 81</span> </span><span class="WHIT"> </span><span class="WHIT">
+<span class='line'> 82</span> </span><span class="WHIT">           </span><span class="WHIT">
+<span class='line'> 83</span> </span><span class="WHIT">    </span><span class="COMM">/**
+<span class='line'> 84</span>      * Callback function
+<span class='line'> 85</span>      */</span><span class="WHIT">
+<span class='line'> 86</span> </span><span class="WHIT">    </span><span class="NAME">_onSuccess</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="COMM">/**XMLHttpRequest*/</span><span class="WHIT"> </span><span class="NAME">transport</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 87</span> </span><span class="WHIT">        </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">metadata</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">transport.responseText.evalJSON</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 88</span> </span><span class="WHIT">        </span><span class="COMM">//update the Screen Factory</span><span class="WHIT">
+<span class='line'> 89</span> </span><span class="WHIT">        </span><span class="NAME">this.mine._updateBuildingBlockDescriptions</span><span class="PUNC">(</span><span class="NAME">metadata.screens</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 90</span> </span><span class="WHIT">        </span><span class="COMM">//call the callback function passed as argument</span><span class="WHIT">
+<span class='line'> 91</span> </span><span class="WHIT">        </span><span class="NAME">this.callback</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 92</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 93</span> </span><span class="WHIT">    </span><span class="WHIT">
+<span class='line'> 94</span> </span><span class="WHIT">    </span><span class="COMM">/**
+<span class='line'> 95</span>      * This function creates the different screen Descriptions
+<span class='line'> 96</span>      * @private
+<span class='line'> 97</span>      */</span><span class="WHIT">
+<span class='line'> 98</span> </span><span class="WHIT">    </span><span class="NAME">_updateBuildingBlockDescriptions</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="COMM">/** Array */</span><span class="WHIT"> </span><span class="NAME">screenDescriptions</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 99</span> 
+<span class='line'>100</span> </span><span class="WHIT">        </span><span class="KEYW">for</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">i</span><span class="PUNC">=</span><span class="NUMB">0</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="NAME">i</span><span class="PUNC">&lt;</span><span class="WHIT"> </span><span class="NAME">screenDescriptions.length</span><span class="WHIT"> </span><span class="PUNC">;</span><span class="WHIT"> </span><span class="NAME">i</span><span class="PUNC">++</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>101</span> </span><span class="WHIT">            </span><span class="NAME">this._buildingBlockDescriptions.set</span><span class="PUNC">(</span><span class="NAME">screenDescriptions</span><span class="PUNC">[</span><span class="NAME">i</span><span class="PUNC">]</span><span class="PUNC">.</span><span class="NAME">uri</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>102</span> </span><span class="WHIT">                                        </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">ScreenDescription</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">screenDescriptions</span><span class="PUNC">[</span><span class="NAME">i</span><span class="PUNC">]</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>103</span> </span><span class="WHIT">        </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>104</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>105</span> </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>106</span> 
+<span class='line'>107</span> </span><span class="COMM">// vim:ts=4:sw=4:et: </span><span class="WHIT">
+<span class='line'>108</span> </span></pre></body></html>

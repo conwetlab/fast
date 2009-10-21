@@ -117,86 +117,88 @@
 <span class='line'>110</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
 <span class='line'>111</span> </span><span class="WHIT">    </span><span class="WHIT">
 <span class='line'>112</span> </span><span class="WHIT">    </span><span class="COMM">/**
-<span class='line'>113</span>      * Keypress event handler
+<span class='line'>113</span>      * 'del' press event handler
 <span class='line'>114</span>      */</span><span class="WHIT">
-<span class='line'>115</span> </span><span class="WHIT">    </span><span class="NAME">onKeyPressed</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="COMM">/** Event */</span><span class="WHIT"> </span><span class="NAME">e</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">    </span><span class="WHIT">
-<span class='line'>116</span> </span><span class="WHIT">        </span><span class="WHIT">
-<span class='line'>117</span> </span><span class="WHIT">        </span><span class="KEYW">switch</span><span class="PUNC">(</span><span class="NAME">e.keyCode</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>118</span> </span><span class="WHIT">            </span><span class="KEYW">case</span><span class="WHIT"> </span><span class="NAME">Event.KEY_DELETE</span><span class="PUNC">:</span><span class="WHIT">
-<span class='line'>119</span> </span><span class="WHIT">                </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">this._selectedElement</span><span class="WHIT"> </span><span class="PUNC">!=</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT"> </span><span class="COMM">//Delete an element from the canvas</span><span class="WHIT">
-<span class='line'>120</span> </span><span class="WHIT">                    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">title</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>121</span> </span><span class="WHIT">                    </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">this._selectedElement.getTitle</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>122</span> </span><span class="WHIT">                        </span><span class="NAME">title</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">'the element "'</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">this._selectedElement.getTitle</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="STRN">'"'</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>123</span> </span><span class="WHIT">                    </span><span class="PUNC">}</span><span class="WHIT"> </span><span class="KEYW">else</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>124</span> </span><span class="WHIT">                        </span><span class="NAME">title</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">"the selected element"</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>125</span> </span><span class="WHIT">                    </span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>126</span> </span><span class="WHIT">                    </span><span class="WHIT">
-<span class='line'>127</span> </span><span class="WHIT">                    </span><span class="NAME">confirm</span><span class="PUNC">(</span><span class="STRN">"You are about to remove "</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">title</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="STRN">" from canvas. Are you sure?"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="WHIT">
-<span class='line'>128</span> </span><span class="WHIT">                            </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="COMM">/** Boolean */</span><span class="WHIT"> </span><span class="NAME">confirmed</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>129</span> </span><span class="WHIT">                                </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">confirmed</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>130</span> </span><span class="WHIT">                                    </span><span class="NAME">this._deleteSelectedElement</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>131</span> </span><span class="WHIT">                                </span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>132</span> </span><span class="WHIT">                            </span><span class="PUNC">}</span><span class="PUNC">.</span><span class="NAME">bind</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">)</span><span class="WHIT">
-<span class='line'>133</span> </span><span class="WHIT">                    </span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>134</span> </span><span class="WHIT">                </span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>135</span> </span><span class="WHIT">                </span><span class="KEYW">break</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="WHIT">
-<span class='line'>136</span> </span><span class="WHIT">        </span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>137</span> </span><span class="WHIT">        </span><span class="WHIT">
-<span class='line'>138</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>139</span> 
-<span class='line'>140</span> </span><span class="WHIT">    </span><span class="COMM">// **************** PRIVATE METHODS **************** //</span><span class="WHIT">
-<span class='line'>141</span> </span><span class="WHIT">    </span><span class="COMM">/**
-<span class='line'>142</span>      * This function creates the area containing the canvas
-<span class='line'>143</span>      * and the inspectors
-<span class='line'>144</span>      * @abstract
-<span class='line'>145</span>      * @private
-<span class='line'>146</span>      */</span><span class="WHIT">
-<span class='line'>147</span> </span><span class="WHIT">    </span><span class="NAME">_renderCenterContainer</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>148</span> </span><span class="WHIT">        </span><span class="KEYW">throw</span><span class="WHIT"> </span><span class="STRN">"Abstract method invocation. PaletteDocument::_renderCenterContainer"</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>149</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>150</span> 
-<span class='line'>151</span> </span><span class="WHIT">    </span><span class="COMM">/**
-<span class='line'>152</span>      * Delete a screen.
-<span class='line'>153</span>      * @param ComponentInstance
-<span class='line'>154</span>      *      Instance to be deleted from the
-<span class='line'>155</span>      *      Screenflow document.
-<span class='line'>156</span>      * @abstract
-<span class='line'>157</span>      * @private
-<span class='line'>158</span>      */</span><span class="WHIT">
-<span class='line'>159</span> </span><span class="WHIT">    </span><span class="NAME">_deleteInstance</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">instance</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>160</span> </span><span class="WHIT">        </span><span class="KEYW">throw</span><span class="WHIT"> </span><span class="STRN">"Abstract method invocation. PaletteDocument::_deleteInstance"</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>161</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>162</span> </span><span class="WHIT">    </span><span class="WHIT">
-<span class='line'>163</span> </span><span class="WHIT">    </span><span class="COMM">/**
-<span class='line'>164</span>      * Constructs the document content.
-<span class='line'>165</span>      * @private
-<span class='line'>166</span>      */</span><span class="WHIT">
-<span class='line'>167</span> </span><span class="WHIT">    </span><span class="NAME">_renderMainUI</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>168</span> 
-<span class='line'>169</span> </span><span class="WHIT">        </span><span class="NAME">this._mainBorderContainer</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">dijit.layout.BorderContainer</span><span class="PUNC">(</span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>170</span> </span><span class="WHIT">            </span><span class="NAME">design</span><span class="PUNC">:</span><span class="STRN">"sidebar"</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>171</span> </span><span class="WHIT">            </span><span class="NAME">liveSplitters</span><span class="PUNC">:</span><span class="STRN">"false"</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>172</span> </span><span class="WHIT">            </span><span class="NAME">splitter</span><span class="PUNC">:</span><span class="STRN">"true"</span><span class="WHIT">
-<span class='line'>173</span> </span><span class="WHIT">        </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>174</span> </span><span class="WHIT">       </span><span class="WHIT">
-<span class='line'>175</span> </span><span class="WHIT">        </span><span class="NAME">this._mainBorderContainer.addChild</span><span class="PUNC">(</span><span class="NAME">this._renderCenterContainer</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>176</span> 
-<span class='line'>177</span> </span><span class="WHIT">        </span><span class="NAME">this._tab.setContent</span><span class="PUNC">(</span><span class="NAME">this._mainBorderContainer.domNode</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>178</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>179</span> </span><span class="WHIT">    </span><span class="COMM">/**
-<span class='line'>180</span>      * Renders the palette area
-<span class='line'>181</span>      */</span><span class="WHIT">
-<span class='line'>182</span> </span><span class="WHIT">    </span><span class="NAME">_renderPaletteArea</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>183</span> </span><span class="WHIT">        </span><span class="NAME">this._mainBorderContainer.addChild</span><span class="PUNC">(</span><span class="NAME">this._paletteController.getNode</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>184</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>185</span> 
-<span class='line'>186</span> </span><span class="WHIT">    </span><span class="NAME">_deleteSelectedElement</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>187</span> </span><span class="WHIT">        </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">this._selectedElement</span><span class="WHIT"> </span><span class="PUNC">!=</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>188</span> </span><span class="WHIT">            </span><span class="NAME">this._deleteInstance</span><span class="PUNC">(</span><span class="NAME">this._selectedElement</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>189</span> </span><span class="WHIT">            </span><span class="NAME">this.setSelectedElement</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>190</span> </span><span class="WHIT">        </span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>191</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="WHIT">    </span><span class="WHIT">
-<span class='line'>192</span> </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>193</span> 
-<span class='line'>194</span> </span><span class="COMM">// vim:ts=4:sw=4:et:</span><span class="WHIT">
-<span class='line'>195</span> </span></pre></body></html>
+<span class='line'>115</span> </span><span class="WHIT">    </span><span class="NAME">onDelPressed</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">         </span><span class="WHIT">
+<span class='line'>116</span> </span><span class="WHIT">        </span><span class="NAME">this._startDeletingSelectedElement</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>117</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>118</span> 
+<span class='line'>119</span> </span><span class="WHIT">    </span><span class="COMM">// **************** PRIVATE METHODS **************** //</span><span class="WHIT">
+<span class='line'>120</span> </span><span class="WHIT">    </span><span class="WHIT">
+<span class='line'>121</span> </span><span class="WHIT">    </span><span class="COMM">/**
+<span class='line'>122</span>      * This function init the process of deleting the element
+<span class='line'>123</span>      */</span><span class="WHIT">
+<span class='line'>124</span> </span><span class="WHIT">    </span><span class="NAME">_startDeletingSelectedElement</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>125</span> </span><span class="WHIT">        </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">this._selectedElement</span><span class="WHIT"> </span><span class="PUNC">!=</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT"> </span><span class="COMM">//Delete an element from the canvas</span><span class="WHIT">
+<span class='line'>126</span> </span><span class="WHIT">            </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">title</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>127</span> </span><span class="WHIT">            </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">this._selectedElement.getTitle</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>128</span> </span><span class="WHIT">                </span><span class="NAME">title</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">'the element "'</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">this._selectedElement.getTitle</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="STRN">'"'</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>129</span> </span><span class="WHIT">            </span><span class="PUNC">}</span><span class="WHIT"> </span><span class="KEYW">else</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>130</span> </span><span class="WHIT">                </span><span class="NAME">title</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">"the selected element"</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>131</span> </span><span class="WHIT">            </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>132</span> </span><span class="WHIT">            </span><span class="WHIT">
+<span class='line'>133</span> </span><span class="WHIT">            </span><span class="NAME">confirm</span><span class="PUNC">(</span><span class="STRN">"You are about to remove "</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">title</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="STRN">" from canvas. Are you sure?"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="WHIT">
+<span class='line'>134</span> </span><span class="WHIT">                    </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="COMM">/** Boolean */</span><span class="WHIT"> </span><span class="NAME">confirmed</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>135</span> </span><span class="WHIT">                        </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">confirmed</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>136</span> </span><span class="WHIT">                            </span><span class="NAME">this._deleteSelectedElement</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>137</span> </span><span class="WHIT">                        </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>138</span> </span><span class="WHIT">                    </span><span class="PUNC">}</span><span class="PUNC">.</span><span class="NAME">bind</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">)</span><span class="WHIT">
+<span class='line'>139</span> </span><span class="WHIT">            </span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>140</span> </span><span class="WHIT">        </span><span class="PUNC">}</span><span class="WHIT">       </span><span class="WHIT">
+<span class='line'>141</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>142</span> </span><span class="WHIT">    </span><span class="WHIT">
+<span class='line'>143</span> </span><span class="WHIT">    </span><span class="COMM">/**
+<span class='line'>144</span>      * This function creates the area containing the canvas
+<span class='line'>145</span>      * and the inspectors
+<span class='line'>146</span>      * @abstract
+<span class='line'>147</span>      * @private
+<span class='line'>148</span>      */</span><span class="WHIT">
+<span class='line'>149</span> </span><span class="WHIT">    </span><span class="NAME">_renderCenterContainer</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>150</span> </span><span class="WHIT">        </span><span class="KEYW">throw</span><span class="WHIT"> </span><span class="STRN">"Abstract method invocation. PaletteDocument::_renderCenterContainer"</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>151</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>152</span> 
+<span class='line'>153</span> </span><span class="WHIT">    </span><span class="COMM">/**
+<span class='line'>154</span>      * Delete a screen.
+<span class='line'>155</span>      * @param ComponentInstance
+<span class='line'>156</span>      *      Instance to be deleted from the
+<span class='line'>157</span>      *      Screenflow document.
+<span class='line'>158</span>      * @abstract
+<span class='line'>159</span>      * @private
+<span class='line'>160</span>      */</span><span class="WHIT">
+<span class='line'>161</span> </span><span class="WHIT">    </span><span class="NAME">_deleteInstance</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">instance</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>162</span> </span><span class="WHIT">        </span><span class="KEYW">throw</span><span class="WHIT"> </span><span class="STRN">"Abstract method invocation. PaletteDocument::_deleteInstance"</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>163</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>164</span> </span><span class="WHIT">    </span><span class="WHIT">
+<span class='line'>165</span> </span><span class="WHIT">    </span><span class="COMM">/**
+<span class='line'>166</span>      * Constructs the document content.
+<span class='line'>167</span>      * @private
+<span class='line'>168</span>      */</span><span class="WHIT">
+<span class='line'>169</span> </span><span class="WHIT">    </span><span class="NAME">_renderMainUI</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>170</span> 
+<span class='line'>171</span> </span><span class="WHIT">        </span><span class="NAME">this._mainBorderContainer</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">dijit.layout.BorderContainer</span><span class="PUNC">(</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>172</span> </span><span class="WHIT">            </span><span class="NAME">design</span><span class="PUNC">:</span><span class="STRN">"sidebar"</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>173</span> </span><span class="WHIT">            </span><span class="NAME">liveSplitters</span><span class="PUNC">:</span><span class="STRN">"false"</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>174</span> </span><span class="WHIT">            </span><span class="NAME">splitter</span><span class="PUNC">:</span><span class="STRN">"true"</span><span class="WHIT">
+<span class='line'>175</span> </span><span class="WHIT">        </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>176</span> </span><span class="WHIT">       </span><span class="WHIT">
+<span class='line'>177</span> </span><span class="WHIT">        </span><span class="NAME">this._mainBorderContainer.addChild</span><span class="PUNC">(</span><span class="NAME">this._renderCenterContainer</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>178</span> 
+<span class='line'>179</span> </span><span class="WHIT">        </span><span class="NAME">this._tab.setContent</span><span class="PUNC">(</span><span class="NAME">this._mainBorderContainer.domNode</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>180</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>181</span> </span><span class="WHIT">    </span><span class="COMM">/**
+<span class='line'>182</span>      * Renders the palette area
+<span class='line'>183</span>      */</span><span class="WHIT">
+<span class='line'>184</span> </span><span class="WHIT">    </span><span class="NAME">_renderPaletteArea</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>185</span> </span><span class="WHIT">        </span><span class="NAME">this._mainBorderContainer.addChild</span><span class="PUNC">(</span><span class="NAME">this._paletteController.getNode</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>186</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>187</span> 
+<span class='line'>188</span> </span><span class="WHIT">    </span><span class="NAME">_deleteSelectedElement</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>189</span> </span><span class="WHIT">        </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">this._selectedElement</span><span class="WHIT"> </span><span class="PUNC">!=</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>190</span> </span><span class="WHIT">            </span><span class="NAME">this._deleteInstance</span><span class="PUNC">(</span><span class="NAME">this._selectedElement</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>191</span> </span><span class="WHIT">            </span><span class="NAME">this.setSelectedElement</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>192</span> </span><span class="WHIT">        </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>193</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="WHIT">    </span><span class="WHIT">
+<span class='line'>194</span> </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>195</span> 
+<span class='line'>196</span> </span><span class="COMM">// vim:ts=4:sw=4:et:</span><span class="WHIT">
+<span class='line'>197</span> </span></pre></body></html>

@@ -201,10 +201,6 @@ ul.inheritsList
 	
 	<li><a href="../symbols/AlertSingleton-Alert.html">AlertSingleton-Alert</a></li>
 	
-	<li><a href="../symbols/BrowserUtilsSingleton.html">BrowserUtilsSingleton</a></li>
-	
-	<li><a href="../symbols/BrowserUtilsSingleton-BrowserUtils.html">BrowserUtilsSingleton-BrowserUtils</a></li>
-	
 	<li><a href="../symbols/BuildingBlockDescription.html">BuildingBlockDescription</a></li>
 	
 	<li><a href="../symbols/BuildingBlockFactory.html">BuildingBlockFactory</a></li>
@@ -235,11 +231,7 @@ ul.inheritsList
 	
 	<li><a href="../symbols/DomainConceptDescription.html">DomainConceptDescription</a></li>
 	
-	<li><a href="../symbols/DomainConceptDialog.html">DomainConceptDialog</a></li>
-	
 	<li><a href="../symbols/DomainConceptFactory.html">DomainConceptFactory</a></li>
-	
-	<li><a href="../symbols/DomainConceptInstance.html">DomainConceptInstance</a></li>
 	
 	<li><a href="../symbols/DomainConceptSet.html">DomainConceptSet</a></li>
 	
@@ -257,6 +249,8 @@ ul.inheritsList
 	
 	<li><a href="../symbols/FactIcon.html">FactIcon</a></li>
 	
+	<li><a href="../symbols/FactPane.html">FactPane</a></li>
+	
 	<li><a href="../symbols/FormDialog.html">FormDialog</a></li>
 	
 	<li><a href="../symbols/GVSSingleton.html">GVSSingleton</a></li>
@@ -265,7 +259,13 @@ ul.inheritsList
 	
 	<li><a href="../symbols/InferenceEngine.html">InferenceEngine</a></li>
 	
-	<li><a href="../symbols/InspectorPane.html">InspectorPane</a></li>
+	<li><a href="../symbols/KeyPressRegistry.html">KeyPressRegistry</a></li>
+	
+	<li><a href="../symbols/Menu.html">Menu</a></li>
+	
+	<li><a href="../symbols/MenuAction.html">MenuAction</a></li>
+	
+	<li><a href="../symbols/MenuElement.html">MenuElement</a></li>
 	
 	<li><a href="../symbols/NewScreenflowDialog.html">NewScreenflowDialog</a></li>
 	
@@ -279,9 +279,11 @@ ul.inheritsList
 	
 	<li><a href="../symbols/PreferencesDialog.html">PreferencesDialog</a></li>
 	
-	<li><a href="../symbols/PrePostPane.html">PrePostPane</a></li>
+	<li><a href="../symbols/PrePostDialog.html">PrePostDialog</a></li>
 	
-	<li><a href="../symbols/PreviewDocument.html">PreviewDocument</a></li>
+	<li><a href="../symbols/PrePostInstance.html">PrePostInstance</a></li>
+	
+	<li><a href="../symbols/PreviewDialog.html">PreviewDialog</a></li>
 	
 	<li><a href="../symbols/PropertiesPane.html">PropertiesPane</a></li>
 	
@@ -305,11 +307,13 @@ ul.inheritsList
 	
 	<li><a href="../symbols/StoreGadgetDialog.html">StoreGadgetDialog</a></li>
 	
+	<li><a href="../symbols/SubMenu.html">SubMenu</a></li>
+	
 	<li><a href="../symbols/Table.html">Table</a></li>
 	
-	<li><a href="../symbols/Toolbar.html">Toolbar</a></li>
-	
 	<li><a href="../symbols/ToolbarButton.html">ToolbarButton</a></li>
+	
+	<li><a href="../symbols/ToolbarDropDown.html">ToolbarDropDown</a></li>
 	
 	<li><a href="../symbols/ToolbarModel.html">ToolbarModel</a></li>
 	
@@ -371,6 +375,44 @@ It communicates with the serverside catalogue to retrieve this information</div>
 
 <!-- ============================== properties summary ===================== -->
 			
+				
+				
+				<table class="summaryTable" cellspacing="0" summary="A summary of the fields documented in the class InferenceEngine.">
+					<caption>Field Summary</caption>
+					<thead>
+						<tr>
+							<th scope="col">Field Attributes</th>
+							<th scope="col">Field Name and Description</th>
+						</tr>
+					</thead>
+					<tbody>
+					
+						<tr>
+							<td class="attributes">&lt;private&gt; &nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">
+								<b><a href="../symbols/InferenceEngine.html#_listeners">_listeners</a></b>
+								</div>
+								<div class="description">Listeners list hashed by resource URI</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;private&gt; &nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">
+								<b><a href="../symbols/InferenceEngine.html#_reachabilityData">_reachabilityData</a></b>
+								</div>
+								<div class="description">This stores the reachability data</div>
+							</td>
+						</tr>
+					
+					</tbody>
+				</table>
+				
+				
+				
+			
 
 <!-- ============================== methods summary ======================== -->
 			
@@ -387,11 +429,68 @@ It communicates with the serverside catalogue to retrieve this information</div>
 					<tbody>
 					
 						<tr>
+							<td class="attributes">&lt;private&gt; &nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/InferenceEngine.html#_checkOnSuccess">_checkOnSuccess</a></b>(transport)
+								</div>
+								<div class="description">onSuccess callback</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;private&gt; &nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/InferenceEngine.html#_constructBody">_constructBody</a></b>(canvas, elements, domainContext, criteria)
+								</div>
+								<div class="description">Creates a body to be sent in an AJAX call to the 
+catalogue</div>
+							</td>
+						</tr>
+					
+						<tr>
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
 								<div class="fixedFont"><b><a href="../symbols/InferenceEngine.html#_findCheckOnSuccess">_findCheckOnSuccess</a></b>(transport)
 								</div>
 								<div class="description">onSuccess callback</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;private&gt; &nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/InferenceEngine.html#_getListenerList">_getListenerList</a></b>(uri)
+								</div>
+								<div class="description">Returns a list of listeners of an uri</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;private&gt; &nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/InferenceEngine.html#_notifyReachability">_notifyReachability</a></b>(uri)
+								</div>
+								<div class="description">Notifies the reachability information to all the relevant
+listeners</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;private&gt; &nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/InferenceEngine.html#_onError">_onError</a></b>(transport, e)
+								</div>
+								<div class="description">Error handler</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;private&gt; &nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/InferenceEngine.html#_updateReachability">_updateReachability</a></b>(elements)
+								</div>
+								<div class="description">Updates and notifies the reachability 
+of a list of elements</div>
 							</td>
 						</tr>
 					
@@ -421,6 +520,26 @@ resources.</div>
 								</div>
 								<div class="description">This function calls findAndCheck in the catalogue and calls a
 callback upon completion.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/InferenceEngine.html#getPreconditionReachability">getPreconditionReachability</a></b>(uri)
+								</div>
+								<div class="description">Returns the reachability information about
+the preconditions of a given screen</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/InferenceEngine.html#isReachable">isReachable</a></b>(uri)
+								</div>
+								<div class="description">Returns a boolean determining if a building block is reachable
+by its uri</div>
 							</td>
 						</tr>
 					
@@ -473,12 +592,152 @@ It communicates with the serverside catalogue to retrieve this information
 
 <!-- ============================== field details ========================== -->		
 			
+				<div class="sectionTitle">
+					Field Detail
+				</div>
+				
+					<a name="_listeners"> </a>
+					<div class="fixedFont">&lt;private&gt; 
+					
+					<span class="light">{Hash}</span>
+					<b>_listeners</b>
+					
+					</div>
+					<div class="description">
+						Listeners list hashed by resource URI
+						
+						
+					</div>
+					
+					
+
+						
+						
+						
+						
+
+					<hr />
+				
+					<a name="_reachabilityData"> </a>
+					<div class="fixedFont">&lt;private&gt; 
+					
+					<span class="light">{Hash}</span>
+					<b>_reachabilityData</b>
+					
+					</div>
+					<div class="description">
+						This stores the reachability data
+						
+						
+					</div>
+					
+					
+
+						
+						
+						
+						
+
+					
+				
+			
 
 <!-- ============================== method details ========================= -->		
 			
 				<div class="sectionTitle">
 					Method Detail
 				</div>
+				
+					<a name="_checkOnSuccess"> </a>
+					<div class="fixedFont">&lt;private&gt; 
+					
+					
+					<b>_checkOnSuccess</b>(transport)
+					
+					</div>
+					<div class="description">
+						onSuccess callback
+						
+						
+					</div>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<b>transport</b>
+									
+								</dt>
+								<dd></dd>
+							
+							</dl>
+						
+						
+						
+						
+						
+						
+						
+
+					<hr />
+				
+					<a name="_constructBody"> </a>
+					<div class="fixedFont">&lt;private&gt; 
+					
+					<span class="light">{String}</span>
+					<b>_constructBody</b>(canvas, elements, domainContext, criteria)
+					
+					</div>
+					<div class="description">
+						Creates a body to be sent in an AJAX call to the 
+catalogue
+						
+						
+					</div>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{Array}</span> <b>canvas</b>
+									
+								</dt>
+								<dd></dd>
+							
+								<dt>
+									<span class="light fixedFont">{Array}</span> <b>elements</b>
+									
+								</dt>
+								<dd></dd>
+							
+								<dt>
+									<span class="light fixedFont">{Array}</span> <b>domainContext</b>
+									
+								</dt>
+								<dd></dd>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>criteria</b>
+									
+								</dt>
+								<dd></dd>
+							
+							</dl>
+						
+						
+						
+						
+						
+						
+						
+
+					<hr />
 				
 					<a name="_findCheckOnSuccess"> </a>
 					<div class="fixedFont">
@@ -501,6 +760,158 @@ It communicates with the serverside catalogue to retrieve this information
 							
 								<dt>
 									<span class="light fixedFont">{XMLHttpRequest}</span> <b>transport</b>
+									
+								</dt>
+								<dd></dd>
+							
+							</dl>
+						
+						
+						
+						
+						
+						
+						
+
+					<hr />
+				
+					<a name="_getListenerList"> </a>
+					<div class="fixedFont">&lt;private&gt; 
+					
+					
+					<b>_getListenerList</b>(uri)
+					
+					</div>
+					<div class="description">
+						Returns a list of listeners of an uri
+						
+						
+					</div>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>uri</b>
+									
+								</dt>
+								<dd></dd>
+							
+							</dl>
+						
+						
+						
+						
+						
+						
+						
+
+					<hr />
+				
+					<a name="_notifyReachability"> </a>
+					<div class="fixedFont">&lt;private&gt; 
+					
+					
+					<b>_notifyReachability</b>(uri)
+					
+					</div>
+					<div class="description">
+						Notifies the reachability information to all the relevant
+listeners
+						
+						
+					</div>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>uri</b>
+									
+								</dt>
+								<dd></dd>
+							
+							</dl>
+						
+						
+						
+						
+						
+						
+						
+
+					<hr />
+				
+					<a name="_onError"> </a>
+					<div class="fixedFont">&lt;private&gt; 
+					
+					
+					<b>_onError</b>(transport, e)
+					
+					</div>
+					<div class="description">
+						Error handler
+						
+						
+					</div>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<b>transport</b>
+									
+								</dt>
+								<dd></dd>
+							
+								<dt>
+									<b>e</b>
+									
+								</dt>
+								<dd></dd>
+							
+							</dl>
+						
+						
+						
+						
+						
+						
+						
+
+					<hr />
+				
+					<a name="_updateReachability"> </a>
+					<div class="fixedFont">&lt;private&gt; 
+					
+					
+					<b>_updateReachability</b>(elements)
+					
+					</div>
+					<div class="description">
+						Updates and notifies the reachability 
+of a list of elements
+						
+						
+					</div>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{Array}</span> <b>elements</b>
 									
 								</dt>
 								<dd></dd>
@@ -680,6 +1091,80 @@ callback upon completion.
 
 					<hr />
 				
+					<a name="getPreconditionReachability"> </a>
+					<div class="fixedFont">
+					
+					<span class="light">{Hash}</span>
+					<b>getPreconditionReachability</b>(uri)
+					
+					</div>
+					<div class="description">
+						Returns the reachability information about
+the preconditions of a given screen
+						
+						
+					</div>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>uri</b>
+									
+								</dt>
+								<dd></dd>
+							
+							</dl>
+						
+						
+						
+						
+						
+						
+						
+
+					<hr />
+				
+					<a name="isReachable"> </a>
+					<div class="fixedFont">
+					
+					<span class="light">{Boolean}</span>
+					<b>isReachable</b>(uri)
+					
+					</div>
+					<div class="description">
+						Returns a boolean determining if a building block is reachable
+by its uri
+						
+						
+					</div>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>uri</b>
+									
+								</dt>
+								<dd></dd>
+							
+							</dl>
+						
+						
+						
+						
+						
+						
+						
+
+					<hr />
+				
 					<a name="removeReachabilityListener"> </a>
 					<div class="fixedFont">
 					
@@ -730,7 +1215,7 @@ callback upon completion.
 <!-- ============================== footer ================================= -->
 		<div class="fineprint" style="clear:both">
 			
-			Documentation generated by <a href="http://www.jsdoctoolkit.org/" target="_blank">JsDoc Toolkit</a> 2.0.2 on Thu Sep 24 2009 10:38:34 GMT+0200 (CEST)
+			Documentation generated by <a href="http://www.jsdoctoolkit.org/" target="_blank">JsDoc Toolkit</a> 2.0.2 on Wed Oct 21 2009 18:17:02 GMT+0200 (CEST)
 		</div>
 	</body>
 </html>

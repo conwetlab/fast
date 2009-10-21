@@ -201,10 +201,6 @@ ul.inheritsList
 	
 	<li><a href="../symbols/AlertSingleton-Alert.html">AlertSingleton-Alert</a></li>
 	
-	<li><a href="../symbols/BrowserUtilsSingleton.html">BrowserUtilsSingleton</a></li>
-	
-	<li><a href="../symbols/BrowserUtilsSingleton-BrowserUtils.html">BrowserUtilsSingleton-BrowserUtils</a></li>
-	
 	<li><a href="../symbols/BuildingBlockDescription.html">BuildingBlockDescription</a></li>
 	
 	<li><a href="../symbols/BuildingBlockFactory.html">BuildingBlockFactory</a></li>
@@ -235,11 +231,7 @@ ul.inheritsList
 	
 	<li><a href="../symbols/DomainConceptDescription.html">DomainConceptDescription</a></li>
 	
-	<li><a href="../symbols/DomainConceptDialog.html">DomainConceptDialog</a></li>
-	
 	<li><a href="../symbols/DomainConceptFactory.html">DomainConceptFactory</a></li>
-	
-	<li><a href="../symbols/DomainConceptInstance.html">DomainConceptInstance</a></li>
 	
 	<li><a href="../symbols/DomainConceptSet.html">DomainConceptSet</a></li>
 	
@@ -257,6 +249,8 @@ ul.inheritsList
 	
 	<li><a href="../symbols/FactIcon.html">FactIcon</a></li>
 	
+	<li><a href="../symbols/FactPane.html">FactPane</a></li>
+	
 	<li><a href="../symbols/FormDialog.html">FormDialog</a></li>
 	
 	<li><a href="../symbols/GVSSingleton.html">GVSSingleton</a></li>
@@ -265,7 +259,13 @@ ul.inheritsList
 	
 	<li><a href="../symbols/InferenceEngine.html">InferenceEngine</a></li>
 	
-	<li><a href="../symbols/InspectorPane.html">InspectorPane</a></li>
+	<li><a href="../symbols/KeyPressRegistry.html">KeyPressRegistry</a></li>
+	
+	<li><a href="../symbols/Menu.html">Menu</a></li>
+	
+	<li><a href="../symbols/MenuAction.html">MenuAction</a></li>
+	
+	<li><a href="../symbols/MenuElement.html">MenuElement</a></li>
 	
 	<li><a href="../symbols/NewScreenflowDialog.html">NewScreenflowDialog</a></li>
 	
@@ -279,9 +279,11 @@ ul.inheritsList
 	
 	<li><a href="../symbols/PreferencesDialog.html">PreferencesDialog</a></li>
 	
-	<li><a href="../symbols/PrePostPane.html">PrePostPane</a></li>
+	<li><a href="../symbols/PrePostDialog.html">PrePostDialog</a></li>
 	
-	<li><a href="../symbols/PreviewDocument.html">PreviewDocument</a></li>
+	<li><a href="../symbols/PrePostInstance.html">PrePostInstance</a></li>
+	
+	<li><a href="../symbols/PreviewDialog.html">PreviewDialog</a></li>
 	
 	<li><a href="../symbols/PropertiesPane.html">PropertiesPane</a></li>
 	
@@ -305,11 +307,13 @@ ul.inheritsList
 	
 	<li><a href="../symbols/StoreGadgetDialog.html">StoreGadgetDialog</a></li>
 	
+	<li><a href="../symbols/SubMenu.html">SubMenu</a></li>
+	
 	<li><a href="../symbols/Table.html">Table</a></li>
 	
-	<li><a href="../symbols/Toolbar.html">Toolbar</a></li>
-	
 	<li><a href="../symbols/ToolbarButton.html">ToolbarButton</a></li>
+	
+	<li><a href="../symbols/ToolbarDropDown.html">ToolbarDropDown</a></li>
 	
 	<li><a href="../symbols/ToolbarModel.html">ToolbarModel</a></li>
 	
@@ -394,13 +398,53 @@ ul.inheritsList
 							</td>
 						</tr>
 					
+						<tr>
+							<td class="attributes">&lt;private&gt; &nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">
+								<b><a href="../symbols/PaletteDocument.html#_inferenceEngine">_inferenceEngine</a></b>
+								</div>
+								<div class="description">InferenceEngine</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;private&gt; &nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">
+								<b><a href="../symbols/PaletteDocument.html#_mainBorderContainer">_mainBorderContainer</a></b>
+								</div>
+								<div class="description">Main border container</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;private&gt; &nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">
+								<b><a href="../symbols/PaletteDocument.html#_paletteController">_paletteController</a></b>
+								</div>
+								<div class="description">Palette Controller</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;private&gt; &nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">
+								<b><a href="../symbols/PaletteDocument.html#_selectedElement">_selectedElement</a></b>
+								</div>
+								<div class="description">This property represents the selected element</div>
+							</td>
+						</tr>
+					
 					</tbody>
 				</table>
 				
 				
 				
 				<dl class="inheritsList">
-				
+				<dt>Fields borrowed from class <a href="../symbols/AbstractDocument.html#constructor">AbstractDocument</a>: </dt><dd><a href="../symbols/AbstractDocument.html#_tab">_tab</a>, <a href="../symbols/AbstractDocument.html#_tabContent">_tabContent</a>, <a href="../symbols/AbstractDocument.html#_tabId">_tabId</a>, <a href="../symbols/AbstractDocument.html#_title">_title</a></dd><dt>Fields borrowed from class <a href="../symbols/ToolbarModel.html#constructor">ToolbarModel</a>: </dt><dd><a href="../symbols/ToolbarModel.html#_toolbarElementOrder">_toolbarElementOrder</a>, <a href="../symbols/ToolbarModel.html#_toolbarElements">_toolbarElements</a></dd>
 				</dl>
 				
 			
@@ -420,11 +464,56 @@ ul.inheritsList
 					<tbody>
 					
 						<tr>
+							<td class="attributes">&lt;private&gt; &nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/PaletteDocument.html#_deleteInstance">_deleteInstance</a></b>(ComponentInstance)
+								</div>
+								<div class="description">Delete a screen.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/PaletteDocument.html#_deleteSelectedElement">_deleteSelectedElement</a></b>()
+								</div>
+								<div class="description"></div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;private&gt; &nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/PaletteDocument.html#_renderCenterContainer">_renderCenterContainer</a></b>()
+								</div>
+								<div class="description">This function creates the area containing the canvasand the inspectors</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;private&gt; &nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/PaletteDocument.html#_renderMainUI">_renderMainUI</a></b>()
+								</div>
+								<div class="description">Constructs the document content.</div>
+							</td>
+						</tr>
+					
+						<tr>
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
 								<div class="fixedFont"><b><a href="../symbols/PaletteDocument.html#_renderPaletteArea">_renderPaletteArea</a></b>()
 								</div>
 								<div class="description">Renders the palette area</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/PaletteDocument.html#_startDeletingSelectedElement">_startDeletingSelectedElement</a></b>()
+								</div>
+								<div class="description">This function init the process of deleting the element</div>
 							</td>
 						</tr>
 					
@@ -449,9 +538,9 @@ ul.inheritsList
 						<tr>
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/PaletteDocument.html#onKeyPressed">onKeyPressed</a></b>(e)
+								<div class="fixedFont"><b><a href="../symbols/PaletteDocument.html#onDelPressed">onDelPressed</a></b>()
 								</div>
-								<div class="description">Keypress event handler</div>
+								<div class="description">'del' press event handler</div>
 							</td>
 						</tr>
 					
@@ -470,7 +559,7 @@ ul.inheritsList
 				
 				
 				<dl class="inheritsList">
-				<dt>Methods borrowed from class <a href="../symbols/AbstractDocument.html#constructor">AbstractDocument</a>: </dt><dd><a href="../symbols/AbstractDocument.html#getNode">getNode</a>, <a href="../symbols/AbstractDocument.html#getTab">getTab</a>, <a href="../symbols/AbstractDocument.html#getTabId">getTabId</a>, <a href="../symbols/AbstractDocument.html#getTitle">getTitle</a></dd><dt>Methods borrowed from class <a href="../symbols/ToolbarModel.html#constructor">ToolbarModel</a>: </dt><dd><a href="../symbols/ToolbarModel.html#getToolbarElements">getToolbarElements</a></dd>
+				<dt>Methods borrowed from class <a href="../symbols/AbstractDocument.html#constructor">AbstractDocument</a>: </dt><dd><a href="../symbols/AbstractDocument.html#_closeDocument">_closeDocument</a>, <a href="../symbols/AbstractDocument.html#getMenuElements">getMenuElements</a>, <a href="../symbols/AbstractDocument.html#getNode">getNode</a>, <a href="../symbols/AbstractDocument.html#getTab">getTab</a>, <a href="../symbols/AbstractDocument.html#getTabId">getTabId</a>, <a href="../symbols/AbstractDocument.html#getTitle">getTitle</a></dd><dt>Methods borrowed from class <a href="../symbols/ToolbarModel.html#constructor">ToolbarModel</a>: </dt><dd><a href="../symbols/ToolbarModel.html#_addToolbarElement">_addToolbarElement</a>, <a href="../symbols/ToolbarModel.html#getToolbarElements">getToolbarElements</a></dd>
 				</dl>
 				
 			
@@ -560,6 +649,94 @@ ul.inheritsList
 						
 						
 
+					<hr />
+				
+					<a name="_inferenceEngine"> </a>
+					<div class="fixedFont">&lt;private&gt; 
+					
+					<span class="light">{<a href="../symbols/InferenceEngine.html#constructor">InferenceEngine</a>}</span>
+					<b>_inferenceEngine</b>
+					
+					</div>
+					<div class="description">
+						InferenceEngine
+						
+						
+					</div>
+					
+					
+
+						
+						
+						
+						
+
+					<hr />
+				
+					<a name="_mainBorderContainer"> </a>
+					<div class="fixedFont">&lt;private&gt; 
+					
+					<span class="light">{dijit.layout.BorderContainer}</span>
+					<b>_mainBorderContainer</b>
+					
+					</div>
+					<div class="description">
+						Main border container
+						
+						
+					</div>
+					
+					
+
+						
+						
+						
+						
+
+					<hr />
+				
+					<a name="_paletteController"> </a>
+					<div class="fixedFont">&lt;private&gt; 
+					
+					<span class="light">{<a href="../symbols/PaletteController.html#constructor">PaletteController</a>}</span>
+					<b>_paletteController</b>
+					
+					</div>
+					<div class="description">
+						Palette Controller
+						
+						
+					</div>
+					
+					
+
+						
+						
+						
+						
+
+					<hr />
+				
+					<a name="_selectedElement"> </a>
+					<div class="fixedFont">&lt;private&gt; 
+					
+					<span class="light">{BuildingBlockInstance}</span>
+					<b>_selectedElement</b>
+					
+					</div>
+					<div class="description">
+						This property represents the selected element
+						
+						
+					</div>
+					
+					
+
+						
+						
+						
+						
+
 					
 				
 			
@@ -570,6 +747,117 @@ ul.inheritsList
 					Method Detail
 				</div>
 				
+					<a name="_deleteInstance"> </a>
+					<div class="fixedFont">&lt;private&gt; 
+					
+					
+					<b>_deleteInstance</b>(ComponentInstance)
+					
+					</div>
+					<div class="description">
+						Delete a screen.
+						
+						
+					</div>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<b>ComponentInstance</b>
+									
+								</dt>
+								<dd>Instance to be deleted from the     Screenflow document.</dd>
+							
+							</dl>
+						
+						
+						
+						
+						
+						
+						
+
+					<hr />
+				
+					<a name="_deleteSelectedElement"> </a>
+					<div class="fixedFont">
+					
+					
+					<b>_deleteSelectedElement</b>()
+					
+					</div>
+					<div class="description">
+						
+						
+						
+					</div>
+					
+					
+					
+						
+						
+						
+						
+						
+						
+						
+
+					<hr />
+				
+					<a name="_renderCenterContainer"> </a>
+					<div class="fixedFont">&lt;private&gt; 
+					
+					
+					<b>_renderCenterContainer</b>()
+					
+					</div>
+					<div class="description">
+						This function creates the area containing the canvasand the inspectors
+						
+						
+					</div>
+					
+					
+					
+						
+						
+						
+						
+						
+						
+						
+
+					<hr />
+				
+					<a name="_renderMainUI"> </a>
+					<div class="fixedFont">&lt;private&gt; 
+					
+					
+					<b>_renderMainUI</b>()
+					
+					</div>
+					<div class="description">
+						Constructs the document content.
+						
+						
+					</div>
+					
+					
+					
+						
+						
+						
+						
+						
+						
+						
+
+					<hr />
+				
 					<a name="_renderPaletteArea"> </a>
 					<div class="fixedFont">
 					
@@ -579,6 +867,31 @@ ul.inheritsList
 					</div>
 					<div class="description">
 						Renders the palette area
+						
+						
+					</div>
+					
+					
+					
+						
+						
+						
+						
+						
+						
+						
+
+					<hr />
+				
+					<a name="_startDeletingSelectedElement"> </a>
+					<div class="fixedFont">
+					
+					
+					<b>_startDeletingSelectedElement</b>()
+					
+					</div>
+					<div class="description">
+						This function init the process of deleting the element
 						
 						
 					</div>
@@ -656,32 +969,21 @@ ul.inheritsList
 
 					<hr />
 				
-					<a name="onKeyPressed"> </a>
+					<a name="onDelPressed"> </a>
 					<div class="fixedFont">
 					
 					
-					<b>onKeyPressed</b>(e)
+					<b>onDelPressed</b>()
 					
 					</div>
 					<div class="description">
-						Keypress event handler
+						'del' press event handler
 						
 						
 					</div>
 					
 					
 					
-						
-							<dl class="detailList">
-							<dt class="heading">Parameters:</dt>
-							
-								<dt>
-									<span class="light fixedFont">{Event}</span> <b>e</b>
-									
-								</dt>
-								<dd></dd>
-							
-							</dl>
 						
 						
 						
@@ -736,7 +1038,7 @@ ul.inheritsList
 <!-- ============================== footer ================================= -->
 		<div class="fineprint" style="clear:both">
 			
-			Documentation generated by <a href="http://www.jsdoctoolkit.org/" target="_blank">JsDoc Toolkit</a> 2.0.2 on Thu Sep 24 2009 10:38:34 GMT+0200 (CEST)
+			Documentation generated by <a href="http://www.jsdoctoolkit.org/" target="_blank">JsDoc Toolkit</a> 2.0.2 on Wed Oct 21 2009 18:17:03 GMT+0200 (CEST)
 		</div>
 	</body>
 </html>

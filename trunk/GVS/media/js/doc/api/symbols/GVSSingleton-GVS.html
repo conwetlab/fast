@@ -201,10 +201,6 @@ ul.inheritsList
 	
 	<li><a href="../symbols/AlertSingleton-Alert.html">AlertSingleton-Alert</a></li>
 	
-	<li><a href="../symbols/BrowserUtilsSingleton.html">BrowserUtilsSingleton</a></li>
-	
-	<li><a href="../symbols/BrowserUtilsSingleton-BrowserUtils.html">BrowserUtilsSingleton-BrowserUtils</a></li>
-	
 	<li><a href="../symbols/BuildingBlockDescription.html">BuildingBlockDescription</a></li>
 	
 	<li><a href="../symbols/BuildingBlockFactory.html">BuildingBlockFactory</a></li>
@@ -235,11 +231,7 @@ ul.inheritsList
 	
 	<li><a href="../symbols/DomainConceptDescription.html">DomainConceptDescription</a></li>
 	
-	<li><a href="../symbols/DomainConceptDialog.html">DomainConceptDialog</a></li>
-	
 	<li><a href="../symbols/DomainConceptFactory.html">DomainConceptFactory</a></li>
-	
-	<li><a href="../symbols/DomainConceptInstance.html">DomainConceptInstance</a></li>
 	
 	<li><a href="../symbols/DomainConceptSet.html">DomainConceptSet</a></li>
 	
@@ -257,6 +249,8 @@ ul.inheritsList
 	
 	<li><a href="../symbols/FactIcon.html">FactIcon</a></li>
 	
+	<li><a href="../symbols/FactPane.html">FactPane</a></li>
+	
 	<li><a href="../symbols/FormDialog.html">FormDialog</a></li>
 	
 	<li><a href="../symbols/GVSSingleton.html">GVSSingleton</a></li>
@@ -265,7 +259,13 @@ ul.inheritsList
 	
 	<li><a href="../symbols/InferenceEngine.html">InferenceEngine</a></li>
 	
-	<li><a href="../symbols/InspectorPane.html">InspectorPane</a></li>
+	<li><a href="../symbols/KeyPressRegistry.html">KeyPressRegistry</a></li>
+	
+	<li><a href="../symbols/Menu.html">Menu</a></li>
+	
+	<li><a href="../symbols/MenuAction.html">MenuAction</a></li>
+	
+	<li><a href="../symbols/MenuElement.html">MenuElement</a></li>
 	
 	<li><a href="../symbols/NewScreenflowDialog.html">NewScreenflowDialog</a></li>
 	
@@ -279,9 +279,11 @@ ul.inheritsList
 	
 	<li><a href="../symbols/PreferencesDialog.html">PreferencesDialog</a></li>
 	
-	<li><a href="../symbols/PrePostPane.html">PrePostPane</a></li>
+	<li><a href="../symbols/PrePostDialog.html">PrePostDialog</a></li>
 	
-	<li><a href="../symbols/PreviewDocument.html">PreviewDocument</a></li>
+	<li><a href="../symbols/PrePostInstance.html">PrePostInstance</a></li>
+	
+	<li><a href="../symbols/PreviewDialog.html">PreviewDialog</a></li>
 	
 	<li><a href="../symbols/PropertiesPane.html">PropertiesPane</a></li>
 	
@@ -305,11 +307,13 @@ ul.inheritsList
 	
 	<li><a href="../symbols/StoreGadgetDialog.html">StoreGadgetDialog</a></li>
 	
+	<li><a href="../symbols/SubMenu.html">SubMenu</a></li>
+	
 	<li><a href="../symbols/Table.html">Table</a></li>
 	
-	<li><a href="../symbols/Toolbar.html">Toolbar</a></li>
-	
 	<li><a href="../symbols/ToolbarButton.html">ToolbarButton</a></li>
+	
+	<li><a href="../symbols/ToolbarDropDown.html">ToolbarDropDown</a></li>
 	
 	<li><a href="../symbols/ToolbarModel.html">ToolbarModel</a></li>
 	
@@ -385,12 +389,42 @@ ul.inheritsList
 					<tbody>
 					
 						<tr>
-							<td class="attributes">&lt;inner&gt; &nbsp;</td>
+							<td class="attributes">&lt;private&gt; &nbsp;</td>
 							<td class="nameDescription">
 								<div class="fixedFont">
-								<b><a href="../symbols/GVSSingleton-GVS.html#-preferencesDialog">preferencesDialog</a></b>
+								<b><a href="../symbols/GVSSingleton-GVS.html#_actions">_actions</a></b>
 								</div>
-								<div class="description">Toolbar buttons</div>
+								<div class="description">Hash keeping the action implementations.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;private&gt; &nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">
+								<b><a href="../symbols/GVSSingleton-GVS.html#_dialogs">_dialogs</a></b>
+								</div>
+								<div class="description">Hash containing the different dialogs used in the welcome document</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;private&gt; &nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">
+								<b><a href="../symbols/GVSSingleton-GVS.html#_documentController">_documentController</a></b>
+								</div>
+								<div class="description"></div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;private&gt; &nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">
+								<b><a href="../symbols/GVSSingleton-GVS.html#_user">_user</a></b>
+								</div>
+								<div class="description">User data object</div>
 							</td>
 						</tr>
 					
@@ -400,7 +434,7 @@ ul.inheritsList
 				
 				
 				<dl class="inheritsList">
-				
+				<dt>Fields borrowed from class <a href="../symbols/ToolbarModel.html#constructor">ToolbarModel</a>: </dt><dd><a href="../symbols/ToolbarModel.html#_toolbarElementOrder">_toolbarElementOrder</a>, <a href="../symbols/ToolbarModel.html#_toolbarElements">_toolbarElements</a></dd>
 				</dl>
 				
 			
@@ -418,6 +452,33 @@ ul.inheritsList
 						</tr>
 					</thead>
 					<tbody>
+					
+						<tr>
+							<td class="attributes">&lt;private&gt; &nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/GVSSingleton-GVS.html#_addScreen">_addScreen</a></b>()
+								</div>
+								<div class="description">High-level action for adding a new screen to the catalogue.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;private&gt; &nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/GVSSingleton-GVS.html#_newScreenflow">_newScreenflow</a></b>()
+								</div>
+								<div class="description">High-level action for creating a new screenflow.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;private&gt; &nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/GVSSingleton-GVS.html#_openScreenflow">_openScreenflow</a></b>()
+								</div>
+								<div class="description">Open a screenflow</div>
+							</td>
+						</tr>
 					
 						<tr>
 							<td class="attributes">&nbsp;</td>
@@ -440,6 +501,15 @@ ul.inheritsList
 						<tr>
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/GVSSingleton-GVS.html#getMenuElements">getMenuElements</a></b>()
+								</div>
+								<div class="description">Implementing MenuModel interface</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
 								<div class="fixedFont"><b><a href="../symbols/GVSSingleton-GVS.html#getUser">getUser</a></b>()
 								</div>
 								<div class="description">Gets the user account object</div>
@@ -455,13 +525,22 @@ ul.inheritsList
 							</td>
 						</tr>
 					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/GVSSingleton-GVS.html#setEnabled">setEnabled</a></b>(enabled)
+								</div>
+								<div class="description">Sets the platform itself enabled or disabled(for modal dialogs)</div>
+							</td>
+						</tr>
+					
 					</tbody>
 				</table>
 				
 				
 				
 				<dl class="inheritsList">
-				<dt>Methods borrowed from class <a href="../symbols/ToolbarModel.html#constructor">ToolbarModel</a>: </dt><dd><a href="../symbols/ToolbarModel.html#getToolbarElements">getToolbarElements</a></dd>
+				<dt>Methods borrowed from class <a href="../symbols/ToolbarModel.html#constructor">ToolbarModel</a>: </dt><dd><a href="../symbols/ToolbarModel.html#_addToolbarElement">_addToolbarElement</a>, <a href="../symbols/ToolbarModel.html#getToolbarElements">getToolbarElements</a></dd>
 				</dl>
 				
 			
@@ -513,15 +592,81 @@ ul.inheritsList
 					Field Detail
 				</div>
 				
-					<a name="-preferencesDialog"> </a>
-					<div class="fixedFont">&lt;inner&gt; 
+					<a name="_actions"> </a>
+					<div class="fixedFont">&lt;private&gt; 
 					
-					
-					<b>preferencesDialog</b>
+					<span class="light">{Hash}</span>
+					<b>_actions</b>
 					
 					</div>
 					<div class="description">
-						Toolbar buttons
+						Hash keeping the action implementations.
+						
+						
+					</div>
+					
+					
+
+						
+						
+						
+						
+
+					<hr />
+				
+					<a name="_dialogs"> </a>
+					<div class="fixedFont">&lt;private&gt; 
+					
+					<span class="light">{Hash}</span>
+					<b>_dialogs</b>
+					
+					</div>
+					<div class="description">
+						Hash containing the different dialogs used in the welcome document
+						
+						
+					</div>
+					
+					
+
+						
+						
+						
+						
+
+					<hr />
+				
+					<a name="_documentController"> </a>
+					<div class="fixedFont">&lt;private&gt; 
+					
+					<span class="light">{<a href="../symbols/DocumentController.html#constructor">DocumentController</a>}</span>
+					<b>_documentController</b>
+					
+					</div>
+					<div class="description">
+						
+						
+						
+					</div>
+					
+					
+
+						
+						
+						
+						
+
+					<hr />
+				
+					<a name="_user"> </a>
+					<div class="fixedFont">&lt;private&gt; 
+					
+					<span class="light">{<a href="../symbols/User.html#constructor">User</a>}</span>
+					<b>_user</b>
+					
+					</div>
+					<div class="description">
+						User data object
 						
 						
 					</div>
@@ -542,6 +687,81 @@ ul.inheritsList
 				<div class="sectionTitle">
 					Method Detail
 				</div>
+				
+					<a name="_addScreen"> </a>
+					<div class="fixedFont">&lt;private&gt; 
+					
+					
+					<b>_addScreen</b>()
+					
+					</div>
+					<div class="description">
+						High-level action for adding a new screen to the catalogue.
+						
+						
+					</div>
+					
+					
+					
+						
+						
+						
+						
+						
+						
+						
+
+					<hr />
+				
+					<a name="_newScreenflow"> </a>
+					<div class="fixedFont">&lt;private&gt; 
+					
+					
+					<b>_newScreenflow</b>()
+					
+					</div>
+					<div class="description">
+						High-level action for creating a new screenflow.
+						
+						
+					</div>
+					
+					
+					
+						
+						
+						
+						
+						
+						
+						
+
+					<hr />
+				
+					<a name="_openScreenflow"> </a>
+					<div class="fixedFont">&lt;private&gt; 
+					
+					
+					<b>_openScreenflow</b>()
+					
+					</div>
+					<div class="description">
+						Open a screenflow
+						
+						
+					</div>
+					
+					
+					
+						
+						
+						
+						
+						
+						
+						
+
+					<hr />
 				
 					<a name="action"> </a>
 					<div class="fixedFont">
@@ -588,6 +808,31 @@ ul.inheritsList
 					</div>
 					<div class="description">
 						Gets the document controller
+						
+						
+					</div>
+					
+					
+					
+						
+						
+						
+						
+						
+						
+						
+
+					<hr />
+				
+					<a name="getMenuElements"> </a>
+					<div class="fixedFont">
+					
+					<span class="light">{Object}</span>
+					<b>getMenuElements</b>()
+					
+					</div>
+					<div class="description">
+						Implementing MenuModel interface
 						
 						
 					</div>
@@ -652,6 +897,42 @@ ul.inheritsList
 						
 						
 
+					<hr />
+				
+					<a name="setEnabled"> </a>
+					<div class="fixedFont">
+					
+					
+					<b>setEnabled</b>(enabled)
+					
+					</div>
+					<div class="description">
+						Sets the platform itself enabled or disabled(for modal dialogs)
+						
+						
+					</div>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{Boolean}</span> <b>enabled</b>
+									
+								</dt>
+								<dd></dd>
+							
+							</dl>
+						
+						
+						
+						
+						
+						
+						
+
 					
 				
 			
@@ -662,7 +943,7 @@ ul.inheritsList
 <!-- ============================== footer ================================= -->
 		<div class="fineprint" style="clear:both">
 			
-			Documentation generated by <a href="http://www.jsdoctoolkit.org/" target="_blank">JsDoc Toolkit</a> 2.0.2 on Thu Sep 24 2009 10:38:33 GMT+0200 (CEST)
+			Documentation generated by <a href="http://www.jsdoctoolkit.org/" target="_blank">JsDoc Toolkit</a> 2.0.2 on Wed Oct 21 2009 18:17:02 GMT+0200 (CEST)
 		</div>
 	</body>
 </html>

@@ -201,10 +201,6 @@ ul.inheritsList
 	
 	<li><a href="../symbols/AlertSingleton-Alert.html">AlertSingleton-Alert</a></li>
 	
-	<li><a href="../symbols/BrowserUtilsSingleton.html">BrowserUtilsSingleton</a></li>
-	
-	<li><a href="../symbols/BrowserUtilsSingleton-BrowserUtils.html">BrowserUtilsSingleton-BrowserUtils</a></li>
-	
 	<li><a href="../symbols/BuildingBlockDescription.html">BuildingBlockDescription</a></li>
 	
 	<li><a href="../symbols/BuildingBlockFactory.html">BuildingBlockFactory</a></li>
@@ -235,11 +231,7 @@ ul.inheritsList
 	
 	<li><a href="../symbols/DomainConceptDescription.html">DomainConceptDescription</a></li>
 	
-	<li><a href="../symbols/DomainConceptDialog.html">DomainConceptDialog</a></li>
-	
 	<li><a href="../symbols/DomainConceptFactory.html">DomainConceptFactory</a></li>
-	
-	<li><a href="../symbols/DomainConceptInstance.html">DomainConceptInstance</a></li>
 	
 	<li><a href="../symbols/DomainConceptSet.html">DomainConceptSet</a></li>
 	
@@ -257,6 +249,8 @@ ul.inheritsList
 	
 	<li><a href="../symbols/FactIcon.html">FactIcon</a></li>
 	
+	<li><a href="../symbols/FactPane.html">FactPane</a></li>
+	
 	<li><a href="../symbols/FormDialog.html">FormDialog</a></li>
 	
 	<li><a href="../symbols/GVSSingleton.html">GVSSingleton</a></li>
@@ -265,7 +259,7 @@ ul.inheritsList
 	
 	<li><a href="../symbols/InferenceEngine.html">InferenceEngine</a></li>
 	
-	<li><a href="../symbols/InspectorPane.html">InspectorPane</a></li>
+	<li><a href="../symbols/Menu.html">Menu</a></li>
 	
 	<li><a href="../symbols/NewScreenflowDialog.html">NewScreenflowDialog</a></li>
 	
@@ -279,9 +273,11 @@ ul.inheritsList
 	
 	<li><a href="../symbols/PreferencesDialog.html">PreferencesDialog</a></li>
 	
-	<li><a href="../symbols/PrePostPane.html">PrePostPane</a></li>
+	<li><a href="../symbols/PrePostDialog.html">PrePostDialog</a></li>
 	
-	<li><a href="../symbols/PreviewDocument.html">PreviewDocument</a></li>
+	<li><a href="../symbols/PrePostInstance.html">PrePostInstance</a></li>
+	
+	<li><a href="../symbols/PreviewDialog.html">PreviewDialog</a></li>
 	
 	<li><a href="../symbols/PropertiesPane.html">PropertiesPane</a></li>
 	
@@ -310,6 +306,8 @@ ul.inheritsList
 	<li><a href="../symbols/Toolbar.html">Toolbar</a></li>
 	
 	<li><a href="../symbols/ToolbarButton.html">ToolbarButton</a></li>
+	
+	<li><a href="../symbols/ToolbarDropDown.html">ToolbarDropDown</a></li>
 	
 	<li><a href="../symbols/ToolbarModel.html">ToolbarModel</a></li>
 	
@@ -370,6 +368,54 @@ ul.inheritsList
 
 <!-- ============================== properties summary ===================== -->
 			
+				
+				
+				<table class="summaryTable" cellspacing="0" summary="A summary of the fields documented in the class Toolbar.">
+					<caption>Field Summary</caption>
+					<thead>
+						<tr>
+							<th scope="col">Field Attributes</th>
+							<th scope="col">Field Name and Description</th>
+						</tr>
+					</thead>
+					<tbody>
+					
+						<tr>
+							<td class="attributes">&lt;private&gt; &nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">
+								<b><a href="../symbols/Toolbar.html#_models">_models</a></b>
+								</div>
+								<div class="description">List of toolbar models</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;private&gt; &nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">
+								<b><a href="../symbols/Toolbar.html#_sections">_sections</a></b>
+								</div>
+								<div class="description">List of section elements.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;private&gt; &nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">
+								<b><a href="../symbols/Toolbar.html#_toolbar">_toolbar</a></b>
+								</div>
+								<div class="description"></div>
+							</td>
+						</tr>
+					
+					</tbody>
+				</table>
+				
+				
+				
+			
 
 <!-- ============================== methods summary ======================== -->
 			
@@ -384,6 +430,34 @@ ul.inheritsList
 						</tr>
 					</thead>
 					<tbody>
+					
+						<tr>
+							<td class="attributes">&lt;private&gt; &nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/Toolbar.html#_initSection">_initSection</a></b>(position)
+								</div>
+								<div class="description">Initializes a section</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;private&gt; &nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/Toolbar.html#_refreshToolbar">_refreshToolbar</a></b>()
+								</div>
+								<div class="description">Refresh the toolbar interface
+Called when something happens (a model has been added or removed)</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;private&gt; &nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/Toolbar.html#_removeModel">_removeModel</a></b>(position)
+								</div>
+								<div class="description">Removes the model from the given position</div>
+							</td>
+						</tr>
 					
 						<tr>
 							<td class="attributes">&nbsp;</td>
@@ -433,12 +507,183 @@ ul.inheritsList
 
 <!-- ============================== field details ========================== -->		
 			
+				<div class="sectionTitle">
+					Field Detail
+				</div>
+				
+					<a name="_models"> </a>
+					<div class="fixedFont">&lt;private&gt; 
+					
+					<span class="light">{Array}</span>
+					<b>_models</b>
+					
+					</div>
+					<div class="description">
+						List of toolbar models
+						
+						
+					</div>
+					
+					
+
+						
+						
+						
+						
+
+					<hr />
+				
+					<a name="_sections"> </a>
+					<div class="fixedFont">&lt;private&gt; 
+					
+					<span class="light">{Array}</span>
+					<b>_sections</b>
+					
+					</div>
+					<div class="description">
+						List of section elements.
+Each section have another array with the Widget of the buttons plus a 
+separator on the first position (index 0).
+						
+						
+					</div>
+					
+					
+
+						
+						
+						
+						
+
+					<hr />
+				
+					<a name="_toolbar"> </a>
+					<div class="fixedFont">&lt;private&gt; 
+					
+					<span class="light">{dijit.dialog.Toolbar}</span>
+					<b>_toolbar</b>
+					
+					</div>
+					<div class="description">
+						
+						
+						
+					</div>
+					
+					
+
+						
+						
+						
+						
+
+					
+				
+			
 
 <!-- ============================== method details ========================= -->		
 			
 				<div class="sectionTitle">
 					Method Detail
 				</div>
+				
+					<a name="_initSection"> </a>
+					<div class="fixedFont">&lt;private&gt; 
+					
+					
+					<b>_initSection</b>(position)
+					
+					</div>
+					<div class="description">
+						Initializes a section
+						
+						
+					</div>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{Number}</span> <b>position</b>
+									
+								</dt>
+								<dd></dd>
+							
+							</dl>
+						
+						
+						
+						
+						
+						
+						
+
+					<hr />
+				
+					<a name="_refreshToolbar"> </a>
+					<div class="fixedFont">&lt;private&gt; 
+					
+					
+					<b>_refreshToolbar</b>()
+					
+					</div>
+					<div class="description">
+						Refresh the toolbar interface
+Called when something happens (a model has been added or removed)
+						
+						
+					</div>
+					
+					
+					
+						
+						
+						
+						
+						
+						
+						
+
+					<hr />
+				
+					<a name="_removeModel"> </a>
+					<div class="fixedFont">&lt;private&gt; 
+					
+					
+					<b>_removeModel</b>(position)
+					
+					</div>
+					<div class="description">
+						Removes the model from the given position
+						
+						
+					</div>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{Number}</span> <b>position</b>
+									
+								</dt>
+								<dd></dd>
+							
+							</dl>
+						
+						
+						
+						
+						
+						
+						
+
+					<hr />
 				
 					<a name="setModel"> </a>
 					<div class="fixedFont">
@@ -494,7 +739,7 @@ ToolbarModel must provide objects implementing the following interface:
 <!-- ============================== footer ================================= -->
 		<div class="fineprint" style="clear:both">
 			
-			Documentation generated by <a href="http://www.jsdoctoolkit.org/" target="_blank">JsDoc Toolkit</a> 2.0.2 on Thu Sep 24 2009 10:38:34 GMT+0200 (CEST)
+			Documentation generated by <a href="http://www.jsdoctoolkit.org/" target="_blank">JsDoc Toolkit</a> 2.0.2 on Wed Oct 14 2009 09:15:45 GMT+0200 (CEST)
 		</div>
 	</body>
 </html>

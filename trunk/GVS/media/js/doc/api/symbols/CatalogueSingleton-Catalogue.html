@@ -201,10 +201,6 @@ ul.inheritsList
 	
 	<li><a href="../symbols/AlertSingleton-Alert.html">AlertSingleton-Alert</a></li>
 	
-	<li><a href="../symbols/BrowserUtilsSingleton.html">BrowserUtilsSingleton</a></li>
-	
-	<li><a href="../symbols/BrowserUtilsSingleton-BrowserUtils.html">BrowserUtilsSingleton-BrowserUtils</a></li>
-	
 	<li><a href="../symbols/BuildingBlockDescription.html">BuildingBlockDescription</a></li>
 	
 	<li><a href="../symbols/BuildingBlockFactory.html">BuildingBlockFactory</a></li>
@@ -235,11 +231,7 @@ ul.inheritsList
 	
 	<li><a href="../symbols/DomainConceptDescription.html">DomainConceptDescription</a></li>
 	
-	<li><a href="../symbols/DomainConceptDialog.html">DomainConceptDialog</a></li>
-	
 	<li><a href="../symbols/DomainConceptFactory.html">DomainConceptFactory</a></li>
-	
-	<li><a href="../symbols/DomainConceptInstance.html">DomainConceptInstance</a></li>
 	
 	<li><a href="../symbols/DomainConceptSet.html">DomainConceptSet</a></li>
 	
@@ -257,6 +249,8 @@ ul.inheritsList
 	
 	<li><a href="../symbols/FactIcon.html">FactIcon</a></li>
 	
+	<li><a href="../symbols/FactPane.html">FactPane</a></li>
+	
 	<li><a href="../symbols/FormDialog.html">FormDialog</a></li>
 	
 	<li><a href="../symbols/GVSSingleton.html">GVSSingleton</a></li>
@@ -265,7 +259,13 @@ ul.inheritsList
 	
 	<li><a href="../symbols/InferenceEngine.html">InferenceEngine</a></li>
 	
-	<li><a href="../symbols/InspectorPane.html">InspectorPane</a></li>
+	<li><a href="../symbols/KeyPressRegistry.html">KeyPressRegistry</a></li>
+	
+	<li><a href="../symbols/Menu.html">Menu</a></li>
+	
+	<li><a href="../symbols/MenuAction.html">MenuAction</a></li>
+	
+	<li><a href="../symbols/MenuElement.html">MenuElement</a></li>
 	
 	<li><a href="../symbols/NewScreenflowDialog.html">NewScreenflowDialog</a></li>
 	
@@ -279,9 +279,11 @@ ul.inheritsList
 	
 	<li><a href="../symbols/PreferencesDialog.html">PreferencesDialog</a></li>
 	
-	<li><a href="../symbols/PrePostPane.html">PrePostPane</a></li>
+	<li><a href="../symbols/PrePostDialog.html">PrePostDialog</a></li>
 	
-	<li><a href="../symbols/PreviewDocument.html">PreviewDocument</a></li>
+	<li><a href="../symbols/PrePostInstance.html">PrePostInstance</a></li>
+	
+	<li><a href="../symbols/PreviewDialog.html">PreviewDialog</a></li>
 	
 	<li><a href="../symbols/PropertiesPane.html">PropertiesPane</a></li>
 	
@@ -305,11 +307,13 @@ ul.inheritsList
 	
 	<li><a href="../symbols/StoreGadgetDialog.html">StoreGadgetDialog</a></li>
 	
+	<li><a href="../symbols/SubMenu.html">SubMenu</a></li>
+	
 	<li><a href="../symbols/Table.html">Table</a></li>
 	
-	<li><a href="../symbols/Toolbar.html">Toolbar</a></li>
-	
 	<li><a href="../symbols/ToolbarButton.html">ToolbarButton</a></li>
+	
+	<li><a href="../symbols/ToolbarDropDown.html">ToolbarDropDown</a></li>
 	
 	<li><a href="../symbols/ToolbarModel.html">ToolbarModel</a></li>
 	
@@ -370,6 +374,34 @@ ul.inheritsList
 
 <!-- ============================== properties summary ===================== -->
 			
+				
+				
+				<table class="summaryTable" cellspacing="0" summary="A summary of the fields documented in the class CatalogueSingleton-Catalogue.">
+					<caption>Field Summary</caption>
+					<thead>
+						<tr>
+							<th scope="col">Field Attributes</th>
+							<th scope="col">Field Name and Description</th>
+						</tr>
+					</thead>
+					<tbody>
+					
+						<tr>
+							<td class="attributes">&lt;private&gt; &nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">
+								<b><a href="../symbols/CatalogueSingleton-Catalogue.html#_factories">_factories</a></b>
+								</div>
+								<div class="description">BuildingBlock factories</div>
+							</td>
+						</tr>
+					
+					</tbody>
+				</table>
+				
+				
+				
+			
 
 <!-- ============================== methods summary ======================== -->
 			
@@ -388,9 +420,36 @@ ul.inheritsList
 						<tr>
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/CatalogueSingleton-Catalogue.html#createScreen">createScreen</a></b>(screenJson)
+								</div>
+								<div class="description"></div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
 								<div class="fixedFont"><b><a href="../symbols/CatalogueSingleton-Catalogue.html#getBuildingBlockFactory">getBuildingBlockFactory</a></b>(buildingBlockType)
 								</div>
 								<div class="description">Gets a building block factory for a given type of building blocks</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/CatalogueSingleton-Catalogue.html#getDomainConcepts">getDomainConcepts</a></b>()
+								</div>
+								<div class="description"></div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/CatalogueSingleton-Catalogue.html#getFacts">getFacts</a></b>()
+								</div>
+								<div class="description"></div>
 							</td>
 						</tr>
 					
@@ -433,12 +492,75 @@ ul.inheritsList
 
 <!-- ============================== field details ========================== -->		
 			
+				<div class="sectionTitle">
+					Field Detail
+				</div>
+				
+					<a name="_factories"> </a>
+					<div class="fixedFont">&lt;private&gt; 
+					
+					<span class="light">{Hash}</span>
+					<b>_factories</b>
+					
+					</div>
+					<div class="description">
+						BuildingBlock factories
+						
+						
+					</div>
+					
+					
+
+						
+						
+						
+						
+
+					
+				
+			
 
 <!-- ============================== method details ========================= -->		
 			
 				<div class="sectionTitle">
 					Method Detail
 				</div>
+				
+					<a name="createScreen"> </a>
+					<div class="fixedFont">
+					
+					
+					<b>createScreen</b>(screenJson)
+					
+					</div>
+					<div class="description">
+						
+						
+						
+					</div>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>screenJson</b>
+									
+								</dt>
+								<dd></dd>
+							
+							</dl>
+						
+						
+						
+						
+						
+						
+						
+
+					<hr />
 				
 					<a name="getBuildingBlockFactory"> </a>
 					<div class="fixedFont">
@@ -474,6 +596,56 @@ ul.inheritsList
 						
 						
 
+					<hr />
+				
+					<a name="getDomainConcepts"> </a>
+					<div class="fixedFont">
+					
+					
+					<b>getDomainConcepts</b>()
+					
+					</div>
+					<div class="description">
+						
+						
+						
+					</div>
+					
+					
+					
+						
+						
+						
+						
+						
+						
+						
+
+					<hr />
+				
+					<a name="getFacts"> </a>
+					<div class="fixedFont">
+					
+					
+					<b>getFacts</b>()
+					
+					</div>
+					<div class="description">
+						
+						
+						
+					</div>
+					
+					
+					
+						
+						
+						
+						
+						
+						
+						
+
 					
 				
 			
@@ -484,7 +656,7 @@ ul.inheritsList
 <!-- ============================== footer ================================= -->
 		<div class="fineprint" style="clear:both">
 			
-			Documentation generated by <a href="http://www.jsdoctoolkit.org/" target="_blank">JsDoc Toolkit</a> 2.0.2 on Thu Sep 24 2009 10:38:33 GMT+0200 (CEST)
+			Documentation generated by <a href="http://www.jsdoctoolkit.org/" target="_blank">JsDoc Toolkit</a> 2.0.2 on Wed Oct 21 2009 18:17:01 GMT+0200 (CEST)
 		</div>
 	</body>
 </html>

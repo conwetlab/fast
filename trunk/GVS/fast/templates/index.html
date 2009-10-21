@@ -5,12 +5,9 @@
     <head>
         <title>FAST: Gadget Visual Storyboard</title>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-        <style type="text/css">
-        /*<![CDATA[*/
-            @import "{{ MEDIA_URL }}js/lib/dojo/dijit/themes/soria/soria.css";
-            @import "{{ MEDIA_URL }}js/lib/dojo/dojo/resources/dojo.css";
-        /*]]>*/
-        </style>
+        
+        <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}js/lib/dojo/dijit/themes/soria/soria.css" />
+        <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}js/lib/dojo/dojo/resources/dojo.css" />
         <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}style/gvs.css" />
         
         <link rel="shortcut icon" type="image/x-icon" href="{{ MEDIA_URL }}images/gui/favicon.ico" />
@@ -34,30 +31,29 @@
         <script type="text/javascript" src="{{ MEDIA_URL }}js/lib/prototype/prototype.js"></script>     
 
         <!-- graceful degradation of firebugs console obj --> 
-        <script type="text/javascript" src="http://www.getfirebug.com/firebug/firebugx.js"></script>
+        <script type="text/javascript" src="{{ MEDIA_URL }}js/lib/utils/firebugx.js"></script>
 
         <!-- URI constants -->
         <script type="text/javascript" language="javascript">
-            _URIConstants = function(){}
-            _URIConstants.prototype.store = "deploy/";
-            _URIConstants.prototype.catalogue = "catalogue";
-            _URIConstants.prototype.catalogueScreens = "catalogue/screens";
-            _URIConstants.prototype.catalogueFind = "catalogue/find";
-            _URIConstants.prototype.catalogueFindAndCheck = "catalogue/findcheck";
-            _URIConstants.prototype.catalogueCheck = "catalogue/check";
-            _URIConstants.prototype.catalogueGetMetadata = "catalogue/getmetadata";
-            _URIConstants.prototype.catalogueFlow = "{{CATALOGUE_FLOW}}";
-            _URIConstants.prototype.catalogueCreateScreen = "catalogue/screens";
-            _URIConstants.prototype.catalogueAllConcepts = "catalogue/concepts";
-            _URIConstants.prototype.catalogueTagConcepts = "catalogue/tags/<tags>/concepts";
-            _URIConstants.prototype.buildingblock = "buildingblock";
-            _URIConstants.prototype.screenflow = "buildingblock/screenflow";
-            _URIConstants.prototype.userPreferences = "user/preferences";
             
-            _URIConstants.prototype.logoFast = "{{ MEDIA_URL }}images/gui/fastLogo.png";
-            _URIConstants.prototype.screenImageNotFound = "{{ MEDIA_URL }}images/gui/imageNotFound.png";
+            URIs = new Object();
+            URIs.store = "deploy/";
+            URIs.catalogue = "catalogue";
+            URIs.catalogueScreens = "catalogue/screens";
+            URIs.catalogueFind = "catalogue/find";
+            URIs.catalogueFindAndCheck = "catalogue/findcheck";
+            URIs.catalogueCheck = "catalogue/check";
+            URIs.catalogueGetMetadata = "catalogue/getmetadata";
+            URIs.catalogueFlow = "{{CATALOGUE_FLOW}}";
+            URIs.catalogueCreateScreen = "catalogue/screens";
+            URIs.catalogueAllConcepts = "catalogue/concepts";
+            URIs.catalogueTagConcepts = "catalogue/tags/<tags>/concepts";
+            URIs.buildingblock = "buildingblock";
+            URIs.screenflow = "buildingblock/screenflow";
+            URIs.userPreferences = "user/preferences";
+            URIs.logoFast = "{{ MEDIA_URL }}images/gui/fastLogo.png";
+            URIs.screenImageNotFound = "{{ MEDIA_URL }}images/gui/imageNotFound.png";
 
-            var URIs = new _URIConstants();
         </script>
 
         <!-- GVS Code -->
@@ -274,37 +270,22 @@
 
     <body class="soria">
         <!-- Setting the layout of the page. --> 
-        <div id="main" dojoType="dijit.layout.BorderContainer" liveSplitters="false" design="headline" splitter="false" gutter="false">
+        <div id="main" dojoType="dijit.layout.BorderContainer" 
+                        liveSplitters="true" design="headline" splitter="true" gutter="true">
             
             <!-- Header -->
             <div id="header" dojoType="dijit.layout.ContentPane" region="top">
                 <img src="{{ MEDIA_URL }}images/gui/fastLogo_small.png" class="fastLogo" alt="FAST Logo"/>
                 <div id="greeting"> 
                         <div>
-                          {% if is_anonymous %}{% trans "anonymous" %}</div> | <a href="/accounts/login/?next=/">{% trans "Sign in" %}</a>
-                          {% else %} {% trans "Welcome" %}, {{ user.username }} | <a href="/logout">{% trans "Exit" %}</a></div>
+                          {% if is_anonymous %}{% trans "anonymous" %}
+                          </div> | <a href="/accounts/login/?next=/">{% trans "Sign in" %}</a>
+                          {% else %} {% trans "Welcome" %}, {{ user.username }} | 
+                          <a href="/logout">{% trans "Exit" %}</a></div>
                           {% endif %}
                 </div>
                 <!-- Menu area -->
                 <div id="menu" dojoType="dijit.MenuBar">
-                    <!--<div dojoType="dijit.PopupMenuBarItem">
-                        <span>File...</span>
-                        <div dojoType="dijit.Menu">
-                            <span dojoType="dijit.MenuItem">New</span>   
-                        </div>
-                    </div>
-                    <div dojoType="dijit.PopupMenuBarItem">
-                        <span>Help</span>
-                        <div dojoType="dijit.Menu">
-                            <div dojoType="dijit.PopupMenuItem">
-                            <span>Help</span>
-                            <div dojoType="dijit.Menu">
-                            <div dojoType="dijit.MenuItem">Item</div>
-                            </div>
-                            </div>   
-                            <span dojoType="dijit.MenuItem" onClick="alert('About FAST!')">About FAST...</span>
-                        </div>
-                    </div>-->
                 </div>
                 <div id="toolbar" dojoType="dijit.Toolbar">
                 </div>

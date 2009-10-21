@@ -17,18 +17,30 @@
 <span class='line'> 10</span> </span><span class="WHIT">        </span><span class="NAME">$super</span><span class="PUNC">(</span><span class="NAME">properties</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'> 11</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
 <span class='line'> 12</span> </span><span class="WHIT">    </span><span class="WHIT">
-<span class='line'> 13</span> </span><span class="WHIT">    </span><span class="COMM">/**
-<span class='line'> 14</span>      * @override
-<span class='line'> 15</span>      */</span><span class="WHIT">
-<span class='line'> 16</span> </span><span class="WHIT">    </span><span class="NAME">getInfo</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'> 17</span> </span><span class="WHIT">        </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">info</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">Hash</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'> 18</span> </span><span class="WHIT">        </span><span class="NAME">info.set</span><span class="PUNC">(</span><span class="STRN">'Title'</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">this.label</span><span class="PUNC">[</span><span class="STRN">'en-gb'</span><span class="PUNC">]</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'> 19</span> </span><span class="WHIT">        </span><span class="NAME">info.set</span><span class="PUNC">(</span><span class="STRN">'Description'</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">this.description</span><span class="PUNC">[</span><span class="STRN">'en-gb'</span><span class="PUNC">]</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'> 20</span> </span><span class="WHIT">        </span><span class="NAME">info.set</span><span class="PUNC">(</span><span class="STRN">'Concepts'</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">this.domainContext.tags</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'> 21</span> </span><span class="WHIT">        </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">info</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'> 22</span> 
-<span class='line'> 23</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'> 24</span> </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'> 25</span> 
-<span class='line'> 26</span> </span><span class="COMM">// vim:ts=4:sw=4:et: </span><span class="WHIT">
-<span class='line'> 27</span> </span></pre></body></html>
+<span class='line'> 13</span> </span><span class="WHIT">    </span><span class="COMM">// ****************** PUBLIC METHODS ******************* //</span><span class="WHIT">
+<span class='line'> 14</span> </span><span class="WHIT">    </span><span class="WHIT">
+<span class='line'> 15</span> </span><span class="WHIT">    </span><span class="COMM">/**
+<span class='line'> 16</span>      * This method creates a DOM Node with the preview
+<span class='line'> 17</span>      * of the Screen
+<span class='line'> 18</span>      * @type DOMNode
+<span class='line'> 19</span>      */</span><span class="WHIT">
+<span class='line'> 20</span> </span><span class="WHIT">    </span><span class="NAME">getPreview</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 21</span> </span><span class="WHIT">        </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">node</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">Element</span><span class="PUNC">(</span><span class="STRN">'div'</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 22</span> </span><span class="WHIT">            </span><span class="STRN">'class'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">'preview'</span><span class="WHIT">
+<span class='line'> 23</span> </span><span class="WHIT">        </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 24</span> </span><span class="WHIT">        </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">errorField</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">Element</span><span class="PUNC">(</span><span class="STRN">'div'</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 25</span> </span><span class="WHIT">            </span><span class="STRN">'class'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">'error'</span><span class="WHIT">
+<span class='line'> 26</span> </span><span class="WHIT">        </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 27</span> </span><span class="WHIT">        </span><span class="NAME">node.appendChild</span><span class="PUNC">(</span><span class="NAME">errorField</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 28</span> </span><span class="WHIT">        </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">image</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">Element</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="STRN">'img'</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 29</span> </span><span class="WHIT">            </span><span class="STRN">'src'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">this.screenshot</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="WHIT">
+<span class='line'> 30</span> </span><span class="WHIT">            </span><span class="STRN">'onerror'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">"this.parentNode.childNodes[0].update('Image not available');"</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT">
+<span class='line'> 31</span> </span><span class="WHIT">                </span><span class="STRN">"this.src='"</span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">URIs.logoFast</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="STRN">"';"</span><span class="WHIT">
+<span class='line'> 32</span> </span><span class="WHIT">        </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 33</span> </span><span class="WHIT">        </span><span class="NAME">node.appendChild</span><span class="PUNC">(</span><span class="NAME">image</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 34</span> </span><span class="WHIT">        </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">node</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 35</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'> 36</span> </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 37</span> 
+<span class='line'> 38</span> </span><span class="COMM">// vim:ts=4:sw=4:et: </span><span class="WHIT">
+<span class='line'> 39</span> </span></pre></body></html>

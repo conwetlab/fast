@@ -201,10 +201,6 @@ ul.inheritsList
 	
 	<li><a href="../symbols/AlertSingleton-Alert.html">AlertSingleton-Alert</a></li>
 	
-	<li><a href="../symbols/BrowserUtilsSingleton.html">BrowserUtilsSingleton</a></li>
-	
-	<li><a href="../symbols/BrowserUtilsSingleton-BrowserUtils.html">BrowserUtilsSingleton-BrowserUtils</a></li>
-	
 	<li><a href="../symbols/BuildingBlockDescription.html">BuildingBlockDescription</a></li>
 	
 	<li><a href="../symbols/BuildingBlockFactory.html">BuildingBlockFactory</a></li>
@@ -235,11 +231,7 @@ ul.inheritsList
 	
 	<li><a href="../symbols/DomainConceptDescription.html">DomainConceptDescription</a></li>
 	
-	<li><a href="../symbols/DomainConceptDialog.html">DomainConceptDialog</a></li>
-	
 	<li><a href="../symbols/DomainConceptFactory.html">DomainConceptFactory</a></li>
-	
-	<li><a href="../symbols/DomainConceptInstance.html">DomainConceptInstance</a></li>
 	
 	<li><a href="../symbols/DomainConceptSet.html">DomainConceptSet</a></li>
 	
@@ -257,6 +249,8 @@ ul.inheritsList
 	
 	<li><a href="../symbols/FactIcon.html">FactIcon</a></li>
 	
+	<li><a href="../symbols/FactPane.html">FactPane</a></li>
+	
 	<li><a href="../symbols/FormDialog.html">FormDialog</a></li>
 	
 	<li><a href="../symbols/GVSSingleton.html">GVSSingleton</a></li>
@@ -265,7 +259,13 @@ ul.inheritsList
 	
 	<li><a href="../symbols/InferenceEngine.html">InferenceEngine</a></li>
 	
-	<li><a href="../symbols/InspectorPane.html">InspectorPane</a></li>
+	<li><a href="../symbols/KeyPressRegistry.html">KeyPressRegistry</a></li>
+	
+	<li><a href="../symbols/Menu.html">Menu</a></li>
+	
+	<li><a href="../symbols/MenuAction.html">MenuAction</a></li>
+	
+	<li><a href="../symbols/MenuElement.html">MenuElement</a></li>
 	
 	<li><a href="../symbols/NewScreenflowDialog.html">NewScreenflowDialog</a></li>
 	
@@ -279,9 +279,11 @@ ul.inheritsList
 	
 	<li><a href="../symbols/PreferencesDialog.html">PreferencesDialog</a></li>
 	
-	<li><a href="../symbols/PrePostPane.html">PrePostPane</a></li>
+	<li><a href="../symbols/PrePostDialog.html">PrePostDialog</a></li>
 	
-	<li><a href="../symbols/PreviewDocument.html">PreviewDocument</a></li>
+	<li><a href="../symbols/PrePostInstance.html">PrePostInstance</a></li>
+	
+	<li><a href="../symbols/PreviewDialog.html">PreviewDialog</a></li>
 	
 	<li><a href="../symbols/PropertiesPane.html">PropertiesPane</a></li>
 	
@@ -305,11 +307,13 @@ ul.inheritsList
 	
 	<li><a href="../symbols/StoreGadgetDialog.html">StoreGadgetDialog</a></li>
 	
+	<li><a href="../symbols/SubMenu.html">SubMenu</a></li>
+	
 	<li><a href="../symbols/Table.html">Table</a></li>
 	
-	<li><a href="../symbols/Toolbar.html">Toolbar</a></li>
-	
 	<li><a href="../symbols/ToolbarButton.html">ToolbarButton</a></li>
+	
+	<li><a href="../symbols/ToolbarDropDown.html">ToolbarDropDown</a></li>
 	
 	<li><a href="../symbols/ToolbarModel.html">ToolbarModel</a></li>
 	
@@ -372,6 +376,68 @@ ul.inheritsList
 
 <!-- ============================== properties summary ===================== -->
 			
+				
+				
+				<table class="summaryTable" cellspacing="0" summary="A summary of the fields documented in the class ComponentInstance.">
+					<caption>Field Summary</caption>
+					<thead>
+						<tr>
+							<th scope="col">Field Attributes</th>
+							<th scope="col">Field Name and Description</th>
+						</tr>
+					</thead>
+					<tbody>
+					
+						<tr>
+							<td class="attributes">&lt;private&gt; &nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">
+								<b><a href="../symbols/ComponentInstance.html#_buildingBlockDescription">_buildingBlockDescription</a></b>
+								</div>
+								<div class="description">BuildingBlock description this class is instance of</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;private&gt; &nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">
+								<b><a href="../symbols/ComponentInstance.html#_dragHandler">_dragHandler</a></b>
+								</div>
+								<div class="description">Handles the drag'n'drop stuff</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;private&gt; &nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">
+								<b><a href="../symbols/ComponentInstance.html#_inferenceEngine">_inferenceEngine</a></b>
+								</div>
+								<div class="description">Inference engine to receive reachability updates</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;private&gt; &nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">
+								<b><a href="../symbols/ComponentInstance.html#_view">_view</a></b>
+								</div>
+								<div class="description">BuildingBlock description graphical representation</div>
+							</td>
+						</tr>
+					
+					</tbody>
+				</table>
+				
+				
+				
+				<dl class="inheritsList">
+				
+				</dl>
+				
+			
 
 <!-- ============================== methods summary ======================== -->
 			
@@ -393,6 +459,24 @@ ul.inheritsList
 								<div class="fixedFont"><b><a href="../symbols/ComponentInstance.html#_createView">_createView</a></b>()
 								</div>
 								<div class="description">Creates a new View instance for the component</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;private&gt; &nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/ComponentInstance.html#_onClick">_onClick</a></b>(event)
+								</div>
+								<div class="description">This function is called when the attached view is clickedmust be overriden by descendants</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;private&gt; &nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/ComponentInstance.html#_onDoubleClick">_onDoubleClick</a></b>(event)
+								</div>
+								<div class="description">This function is called when the attached view is dbl-clickedmust be overriden by descendants</div>
 							</td>
 						</tr>
 					
@@ -453,6 +537,15 @@ ul.inheritsList
 						<tr>
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/ComponentInstance.html#getInfo">getInfo</a></b>()
+								</div>
+								<div class="description">This function returns an array of lines representing thekey information of the building block, in order to be shown ina tableImplementing TableModel interface</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
 								<div class="fixedFont"><b><a href="../symbols/ComponentInstance.html#getPosition">getPosition</a></b>()
 								</div>
 								<div class="description">Gets the component position</div>
@@ -464,7 +557,16 @@ ul.inheritsList
 							<td class="nameDescription">
 								<div class="fixedFont"><b><a href="../symbols/ComponentInstance.html#getTitle">getTitle</a></b>()
 								</div>
-								<div class="description">Somehow something the user can comprehend</div>
+								<div class="description">Somehow something the user can comprehendImplementing TableModel interface</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/ComponentInstance.html#getUri">getUri</a></b>()
+								</div>
+								<div class="description">Returns the uri of the instance</div>
 							</td>
 						</tr>
 					
@@ -567,6 +669,99 @@ ul.inheritsList
 
 <!-- ============================== field details ========================== -->		
 			
+				<div class="sectionTitle">
+					Field Detail
+				</div>
+				
+					<a name="_buildingBlockDescription"> </a>
+					<div class="fixedFont">&lt;private&gt; 
+					
+					<span class="light">{<a href="../symbols/BuildingBlockDescription.html#constructor">BuildingBlockDescription</a>}</span>
+					<b>_buildingBlockDescription</b>
+					
+					</div>
+					<div class="description">
+						BuildingBlock description this class is instance of
+						
+						
+					</div>
+					
+					
+
+						
+						
+						
+						
+
+					<hr />
+				
+					<a name="_dragHandler"> </a>
+					<div class="fixedFont">&lt;private&gt; 
+					
+					<span class="light">{<a href="../symbols/DragHandler.html#constructor">DragHandler</a>}</span>
+					<b>_dragHandler</b>
+					
+					</div>
+					<div class="description">
+						Handles the drag'n'drop stuff
+						
+						
+					</div>
+					
+					
+
+						
+						
+						
+						
+
+					<hr />
+				
+					<a name="_inferenceEngine"> </a>
+					<div class="fixedFont">&lt;private&gt; 
+					
+					<span class="light">{<a href="../symbols/InferenceEngine.html#constructor">InferenceEngine</a>}</span>
+					<b>_inferenceEngine</b>
+					
+					</div>
+					<div class="description">
+						Inference engine to receive reachability updates
+						
+						
+					</div>
+					
+					
+
+						
+						
+						
+						
+
+					<hr />
+				
+					<a name="_view"> </a>
+					<div class="fixedFont">&lt;private&gt; 
+					
+					<span class="light">{<a href="../symbols/BuildingBlockView.html#constructor">BuildingBlockView</a>}</span>
+					<b>_view</b>
+					
+					</div>
+					<div class="description">
+						BuildingBlock description graphical representation
+						
+						
+					</div>
+					
+					
+
+						
+						
+						
+						
+
+					
+				
+			
 
 <!-- ============================== method details ========================= -->		
 			
@@ -589,6 +784,78 @@ ul.inheritsList
 					
 					
 					
+						
+						
+						
+						
+						
+						
+						
+
+					<hr />
+				
+					<a name="_onClick"> </a>
+					<div class="fixedFont">&lt;private&gt; 
+					
+					
+					<b>_onClick</b>(event)
+					
+					</div>
+					<div class="description">
+						This function is called when the attached view is clickedmust be overriden by descendants
+						
+						
+					</div>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{Event}</span> <b>event</b>
+									
+								</dt>
+								<dd></dd>
+							
+							</dl>
+						
+						
+						
+						
+						
+						
+						
+
+					<hr />
+				
+					<a name="_onDoubleClick"> </a>
+					<div class="fixedFont">&lt;private&gt; 
+					
+					
+					<b>_onDoubleClick</b>(event)
+					
+					</div>
+					<div class="description">
+						This function is called when the attached view is dbl-clickedmust be overriden by descendants
+						
+						
+					</div>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{Event}</span> <b>event</b>
+									
+								</dt>
+								<dd></dd>
+							
+							</dl>
 						
 						
 						
@@ -749,6 +1016,31 @@ ul.inheritsList
 
 					<hr />
 				
+					<a name="getInfo"> </a>
+					<div class="fixedFont">
+					
+					<span class="light">{Hash}</span>
+					<b>getInfo</b>()
+					
+					</div>
+					<div class="description">
+						This function returns an array of lines representing thekey information of the building block, in order to be shown ina tableImplementing TableModel interface
+						
+						
+					</div>
+					
+					
+					
+						
+						
+						
+						
+						
+						
+						
+
+					<hr />
+				
 					<a name="getPosition"> </a>
 					<div class="fixedFont">
 					
@@ -777,12 +1069,37 @@ ul.inheritsList
 					<a name="getTitle"> </a>
 					<div class="fixedFont">
 					
-					
+					<span class="light">{String}</span>
 					<b>getTitle</b>()
 					
 					</div>
 					<div class="description">
-						Somehow something the user can comprehend
+						Somehow something the user can comprehendImplementing TableModel interface
+						
+						
+					</div>
+					
+					
+					
+						
+						
+						
+						
+						
+						
+						
+
+					<hr />
+				
+					<a name="getUri"> </a>
+					<div class="fixedFont">
+					
+					
+					<b>getUri</b>()
+					
+					</div>
+					<div class="description">
+						Returns the uri of the instance
 						
 						
 					</div>
@@ -904,7 +1221,7 @@ ul.inheritsList
 <!-- ============================== footer ================================= -->
 		<div class="fineprint" style="clear:both">
 			
-			Documentation generated by <a href="http://www.jsdoctoolkit.org/" target="_blank">JsDoc Toolkit</a> 2.0.2 on Thu Sep 24 2009 10:38:33 GMT+0200 (CEST)
+			Documentation generated by <a href="http://www.jsdoctoolkit.org/" target="_blank">JsDoc Toolkit</a> 2.0.2 on Wed Oct 21 2009 18:17:01 GMT+0200 (CEST)
 		</div>
 	</body>
 </html>

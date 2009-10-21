@@ -201,10 +201,6 @@ ul.inheritsList
 	
 	<li><a href="../symbols/AlertSingleton-Alert.html">AlertSingleton-Alert</a></li>
 	
-	<li><a href="../symbols/BrowserUtilsSingleton.html">BrowserUtilsSingleton</a></li>
-	
-	<li><a href="../symbols/BrowserUtilsSingleton-BrowserUtils.html">BrowserUtilsSingleton-BrowserUtils</a></li>
-	
 	<li><a href="../symbols/BuildingBlockDescription.html">BuildingBlockDescription</a></li>
 	
 	<li><a href="../symbols/BuildingBlockFactory.html">BuildingBlockFactory</a></li>
@@ -235,11 +231,7 @@ ul.inheritsList
 	
 	<li><a href="../symbols/DomainConceptDescription.html">DomainConceptDescription</a></li>
 	
-	<li><a href="../symbols/DomainConceptDialog.html">DomainConceptDialog</a></li>
-	
 	<li><a href="../symbols/DomainConceptFactory.html">DomainConceptFactory</a></li>
-	
-	<li><a href="../symbols/DomainConceptInstance.html">DomainConceptInstance</a></li>
 	
 	<li><a href="../symbols/DomainConceptSet.html">DomainConceptSet</a></li>
 	
@@ -257,6 +249,8 @@ ul.inheritsList
 	
 	<li><a href="../symbols/FactIcon.html">FactIcon</a></li>
 	
+	<li><a href="../symbols/FactPane.html">FactPane</a></li>
+	
 	<li><a href="../symbols/FormDialog.html">FormDialog</a></li>
 	
 	<li><a href="../symbols/GVSSingleton.html">GVSSingleton</a></li>
@@ -265,7 +259,13 @@ ul.inheritsList
 	
 	<li><a href="../symbols/InferenceEngine.html">InferenceEngine</a></li>
 	
-	<li><a href="../symbols/InspectorPane.html">InspectorPane</a></li>
+	<li><a href="../symbols/KeyPressRegistry.html">KeyPressRegistry</a></li>
+	
+	<li><a href="../symbols/Menu.html">Menu</a></li>
+	
+	<li><a href="../symbols/MenuAction.html">MenuAction</a></li>
+	
+	<li><a href="../symbols/MenuElement.html">MenuElement</a></li>
 	
 	<li><a href="../symbols/NewScreenflowDialog.html">NewScreenflowDialog</a></li>
 	
@@ -279,9 +279,11 @@ ul.inheritsList
 	
 	<li><a href="../symbols/PreferencesDialog.html">PreferencesDialog</a></li>
 	
-	<li><a href="../symbols/PrePostPane.html">PrePostPane</a></li>
+	<li><a href="../symbols/PrePostDialog.html">PrePostDialog</a></li>
 	
-	<li><a href="../symbols/PreviewDocument.html">PreviewDocument</a></li>
+	<li><a href="../symbols/PrePostInstance.html">PrePostInstance</a></li>
+	
+	<li><a href="../symbols/PreviewDialog.html">PreviewDialog</a></li>
 	
 	<li><a href="../symbols/PropertiesPane.html">PropertiesPane</a></li>
 	
@@ -305,11 +307,13 @@ ul.inheritsList
 	
 	<li><a href="../symbols/StoreGadgetDialog.html">StoreGadgetDialog</a></li>
 	
+	<li><a href="../symbols/SubMenu.html">SubMenu</a></li>
+	
 	<li><a href="../symbols/Table.html">Table</a></li>
 	
-	<li><a href="../symbols/Toolbar.html">Toolbar</a></li>
-	
 	<li><a href="../symbols/ToolbarButton.html">ToolbarButton</a></li>
+	
+	<li><a href="../symbols/ToolbarDropDown.html">ToolbarDropDown</a></li>
 	
 	<li><a href="../symbols/ToolbarModel.html">ToolbarModel</a></li>
 	
@@ -372,6 +376,15 @@ ul.inheritsList
 
 <!-- ============================== properties summary ===================== -->
 			
+				
+				
+				
+				
+				<dl class="inheritsList">
+				<dt>Fields borrowed from class <a href="../symbols/PaletteComponent.html#constructor">PaletteComponent</a>: </dt><dd><a href="../symbols/PaletteComponent.html#_buildingBlockDescription">_buildingBlockDescription</a>, <a href="../symbols/PaletteComponent.html#_dragHandler">_dragHandler</a>, <a href="../symbols/PaletteComponent.html#_dropZone">_dropZone</a>, <a href="../symbols/PaletteComponent.html#_inferenceEngine">_inferenceEngine</a>, <a href="../symbols/PaletteComponent.html#_node">_node</a>, <a href="../symbols/PaletteComponent.html#_view">_view</a></dd>
+				</dl>
+				
+			
 
 <!-- ============================== methods summary ======================== -->
 			
@@ -397,6 +410,15 @@ ul.inheritsList
 						</tr>
 					
 						<tr>
+							<td class="attributes">&lt;private&gt; &nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/DomainConceptComponent.html#_createTitle">_createTitle</a></b>(uri)
+								</div>
+								<div class="description">This function creates a title from the uri identifier</div>
+							</td>
+						</tr>
+					
+						<tr>
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
 								<div class="fixedFont"><b><a href="../symbols/DomainConceptComponent.html#_createView">_createView</a></b>()
@@ -414,13 +436,31 @@ ul.inheritsList
 							</td>
 						</tr>
 					
+						<tr>
+							<td class="attributes">&lt;private&gt; &nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/DomainConceptComponent.html#_sanitizeTitle">_sanitizeTitle</a></b>(title)
+								</div>
+								<div class="description">This function returns a human-readable title from anidentifier</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;private&gt; &nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/DomainConceptComponent.html#_updateTitle">_updateTitle</a></b>()
+								</div>
+								<div class="description">Creates the title of the palette component</div>
+							</td>
+						</tr>
+					
 					</tbody>
 				</table>
 				
 				
 				
 				<dl class="inheritsList">
-				<dt>Methods borrowed from class <a href="../symbols/PaletteComponent.html#constructor">PaletteComponent</a>: </dt><dd><a href="../symbols/PaletteComponent.html#getDraggableObject">getDraggableObject</a>, <a href="../symbols/PaletteComponent.html#getHandlerNode">getHandlerNode</a>, <a href="../symbols/PaletteComponent.html#getNode">getNode</a>, <a href="../symbols/PaletteComponent.html#getView">getView</a></dd><dt>Methods borrowed from class <a href="../symbols/DragSource.html#constructor">DragSource</a>: </dt><dd><a href="../symbols/DragSource.html#isValidPosition">isValidPosition</a>, <a href="../symbols/DragSource.html#onFinish">onFinish</a>, <a href="../symbols/DragSource.html#onStart">onStart</a>, <a href="../symbols/DragSource.html#onUpdate">onUpdate</a></dd>
+				<dt>Methods borrowed from class <a href="../symbols/PaletteComponent.html#constructor">PaletteComponent</a>: </dt><dd><a href="../symbols/PaletteComponent.html#_createSlot">_createSlot</a>, <a href="../symbols/PaletteComponent.html#_getContentOffsetLeft">_getContentOffsetLeft</a>, <a href="../symbols/PaletteComponent.html#_getContentOffsetTop">_getContentOffsetTop</a>, <a href="../symbols/PaletteComponent.html#getBuildingBlockDescription">getBuildingBlockDescription</a>, <a href="../symbols/PaletteComponent.html#getDraggableObject">getDraggableObject</a>, <a href="../symbols/PaletteComponent.html#getHandlerNode">getHandlerNode</a>, <a href="../symbols/PaletteComponent.html#getNode">getNode</a>, <a href="../symbols/PaletteComponent.html#getView">getView</a></dd><dt>Methods borrowed from class <a href="../symbols/DragSource.html#constructor">DragSource</a>: </dt><dd><a href="../symbols/DragSource.html#isValidPosition">isValidPosition</a>, <a href="../symbols/DragSource.html#onFinish">onFinish</a>, <a href="../symbols/DragSource.html#onStart">onStart</a>, <a href="../symbols/DragSource.html#onUpdate">onUpdate</a></dd>
 				</dl>
 				
 			
@@ -496,7 +536,7 @@ ul.inheritsList
 					<a name="_createInstance"> </a>
 					<div class="fixedFont">
 					
-					<span class="light">{<a href="../symbols/DomainConceptInstance.html#constructor">DomainConceptInstance</a>}</span>
+					<span class="light">{DomainConceptInstance}</span>
 					<b>_createInstance</b>()
 					
 					</div>
@@ -508,6 +548,42 @@ ul.inheritsList
 					
 					
 					
+						
+						
+						
+						
+						
+						
+						
+
+					<hr />
+				
+					<a name="_createTitle"> </a>
+					<div class="fixedFont">&lt;private&gt; 
+					
+					<span class="light">{String}</span>
+					<b>_createTitle</b>(uri)
+					
+					</div>
+					<div class="description">
+						This function creates a title from the uri identifier
+						
+						
+					</div>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>uri</b>
+									
+								</dt>
+								<dd></dd>
+							
+							</dl>
 						
 						
 						
@@ -566,6 +642,67 @@ ul.inheritsList
 						
 						
 
+					<hr />
+				
+					<a name="_sanitizeTitle"> </a>
+					<div class="fixedFont">&lt;private&gt; 
+					
+					<span class="light">{String}</span>
+					<b>_sanitizeTitle</b>(title)
+					
+					</div>
+					<div class="description">
+						This function returns a human-readable title from anidentifier
+						
+						
+					</div>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>title</b>
+									
+								</dt>
+								<dd></dd>
+							
+							</dl>
+						
+						
+						
+						
+						
+						
+						
+
+					<hr />
+				
+					<a name="_updateTitle"> </a>
+					<div class="fixedFont">&lt;private&gt; 
+					
+					<span class="light">{String}</span>
+					<b>_updateTitle</b>()
+					
+					</div>
+					<div class="description">
+						Creates the title of the palette component
+						
+						
+					</div>
+					
+					
+					
+						
+						
+						
+						
+						
+						
+						
+
 					
 				
 			
@@ -576,7 +713,7 @@ ul.inheritsList
 <!-- ============================== footer ================================= -->
 		<div class="fineprint" style="clear:both">
 			
-			Documentation generated by <a href="http://www.jsdoctoolkit.org/" target="_blank">JsDoc Toolkit</a> 2.0.2 on Thu Sep 24 2009 10:38:33 GMT+0200 (CEST)
+			Documentation generated by <a href="http://www.jsdoctoolkit.org/" target="_blank">JsDoc Toolkit</a> 2.0.2 on Wed Oct 21 2009 18:17:02 GMT+0200 (CEST)
 		</div>
 	</body>
 </html>

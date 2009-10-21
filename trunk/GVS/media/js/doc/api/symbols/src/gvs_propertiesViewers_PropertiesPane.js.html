@@ -16,7 +16,7 @@
 <span class='line'>  9</span>          * @type Table
 <span class='line'> 10</span>          * @private @member
 <span class='line'> 11</span>          */</span><span class="WHIT">
-<span class='line'> 12</span> </span><span class="WHIT">        </span><span class="NAME">this._propertiesTable</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">Table</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">parentNode</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">'Properties'</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">'left'</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 12</span> </span><span class="WHIT">        </span><span class="NAME">this._propertiesTable</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">Table</span><span class="PUNC">(</span><span class="NAME">parentNode</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">'Properties'</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">'left'</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'> 13</span> </span><span class="WHIT">        </span><span class="WHIT">
 <span class='line'> 14</span> </span><span class="WHIT">        </span><span class="NAME">this._propertiesTable.insertFieldTitles</span><span class="PUNC">(</span><span class="PUNC">[</span><span class="STRN">'Property'</span><span class="PUNC">,</span><span class="STRN">'Value'</span><span class="PUNC">]</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'> 15</span> </span><span class="WHIT">        </span><span class="WHIT">
@@ -29,36 +29,34 @@
 <span class='line'> 22</span> </span><span class="WHIT">    </span><span class="COMM">/**
 <span class='line'> 23</span>      * This function updates the table with data coming from
 <span class='line'> 24</span>      * the currently selected element
-<span class='line'> 25</span>      */</span><span class="WHIT">
-<span class='line'> 26</span> </span><span class="WHIT">    </span><span class="NAME">selectElement</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="COMM">/** ComponentInstance */</span><span class="NAME">instance</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'> 27</span> </span><span class="WHIT">        </span><span class="NAME">this.clearElement</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'> 28</span> </span><span class="WHIT">        </span><span class="WHIT">
-<span class='line'> 29</span> </span><span class="WHIT">        </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">buildingBlockDescription</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">instance.getBuildingBlockDescription</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'> 30</span> </span><span class="WHIT">        </span><span class="WHIT">
-<span class='line'> 31</span> 
-<span class='line'> 32</span> </span><span class="WHIT">        </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">title</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">""</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'> 33</span> 
-<span class='line'> 34</span> </span><span class="WHIT">        </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">buildingBlockDescription.label</span><span class="WHIT"> </span><span class="PUNC">&&</span><span class="WHIT"> </span><span class="NAME">buildingBlockDescription.label</span><span class="PUNC">[</span><span class="STRN">'en-gb'</span><span class="PUNC">]</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'> 35</span> </span><span class="WHIT">            </span><span class="NAME">title</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">buildingBlockDescription.label</span><span class="PUNC">[</span><span class="STRN">'en-gb'</span><span class="PUNC">]</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'> 36</span> </span><span class="WHIT">        </span><span class="PUNC">}</span><span class="WHIT"> </span><span class="KEYW">else</span><span class="WHIT"> </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">buildingBlockDescription.name</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'> 37</span> </span><span class="WHIT">            </span><span class="NAME">title</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">buildingBlockDescription.name</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'> 38</span> </span><span class="WHIT">        </span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'> 39</span> </span><span class="WHIT">        </span><span class="NAME">this._propertiesTable.insertDataValues</span><span class="PUNC">(</span><span class="NAME">buildingBlockDescription.getInfo</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'> 40</span> </span><span class="WHIT">        </span><span class="NAME">this._propertiesTable.setTitle</span><span class="PUNC">(</span><span class="PUNC">(</span><span class="NAME">title</span><span class="WHIT"> </span><span class="PUNC">?</span><span class="WHIT"> </span><span class="STRN">'Properties of: '</span><span class="WHIT">  </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">title</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">'Properties'</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'> 41</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'> 42</span> 
-<span class='line'> 43</span> </span><span class="WHIT">    </span><span class="COMM">/**
-<span class='line'> 44</span>      * This function empties the table 
-<span class='line'> 45</span>      */</span><span class="WHIT">
-<span class='line'> 46</span> </span><span class="WHIT">    </span><span class="NAME">clearElement</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'> 47</span> </span><span class="WHIT">        </span><span class="NAME">this._propertiesTable.emptyTable</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'> 48</span> </span><span class="WHIT">        </span><span class="NAME">this._propertiesTable.setTitle</span><span class="PUNC">(</span><span class="STRN">'Properties'</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'> 49</span> </span><span class="WHIT">        </span><span class="NAME">this._propertiesTable.insertFieldTitles</span><span class="PUNC">(</span><span class="PUNC">[</span><span class="STRN">'Property'</span><span class="PUNC">,</span><span class="STRN">'Value'</span><span class="PUNC">]</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'> 50</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'> 51</span> </span><span class="WHIT">    </span><span class="COMM">// **************** PRIVATE METHODS **************** //</span><span class="WHIT">
-<span class='line'> 52</span> 
-<span class='line'> 53</span> </span><span class="WHIT">    </span><span class="WHIT">
-<span class='line'> 54</span> </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'> 55</span> 
-<span class='line'> 56</span> </span><span class="COMM">// vim:ts=4:sw=4:et:</span><span class="WHIT">
-<span class='line'> 57</span> </span></pre></body></html>
+<span class='line'> 25</span>      * @param element
+<span class='line'> 26</span>      *          Something implementing TableModel interface
+<span class='line'> 27</span>      *              * String getTitle()
+<span class='line'> 28</span>      *              * Array getInfo()
+<span class='line'> 29</span>      */</span><span class="WHIT">
+<span class='line'> 30</span> </span><span class="WHIT">    </span><span class="NAME">fillTable</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="COMM">/** Object */</span><span class="WHIT"> </span><span class="NAME">element</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 31</span> </span><span class="WHIT">        </span><span class="NAME">this._clearElement</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 32</span> 
+<span class='line'> 33</span> </span><span class="WHIT">        </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">title</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">element.getTitle</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 34</span> </span><span class="WHIT">       </span><span class="WHIT">
+<span class='line'> 35</span> </span><span class="WHIT">        </span><span class="NAME">this._propertiesTable.insertDataValues</span><span class="PUNC">(</span><span class="NAME">element.getInfo</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 36</span> </span><span class="WHIT">        </span><span class="NAME">this._propertiesTable.setTitle</span><span class="PUNC">(</span><span class="PUNC">(</span><span class="NAME">title</span><span class="WHIT"> </span><span class="PUNC">?</span><span class="WHIT"> </span><span class="STRN">'Properties of '</span><span class="WHIT">  </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">title</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">'Properties'</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 37</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 38</span> 
+<span class='line'> 39</span> </span><span class="WHIT">    </span><span class="COMM">// **************** PRIVATE METHODS **************** //</span><span class="WHIT">
+<span class='line'> 40</span> </span><span class="WHIT">    </span><span class="WHIT">
+<span class='line'> 41</span> </span><span class="WHIT">    </span><span class="COMM">/**
+<span class='line'> 42</span>      * This function empties the table
+<span class='line'> 43</span>      * @private
+<span class='line'> 44</span>      */</span><span class="WHIT">
+<span class='line'> 45</span> </span><span class="WHIT">    </span><span class="NAME">_clearElement</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 46</span> </span><span class="WHIT">        </span><span class="NAME">this._propertiesTable.emptyTable</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 47</span> </span><span class="WHIT">        </span><span class="NAME">this._propertiesTable.setTitle</span><span class="PUNC">(</span><span class="STRN">'Properties'</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 48</span> </span><span class="WHIT">        </span><span class="NAME">this._propertiesTable.insertFieldTitles</span><span class="PUNC">(</span><span class="PUNC">[</span><span class="STRN">'Property'</span><span class="PUNC">,</span><span class="STRN">'Value'</span><span class="PUNC">]</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 49</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'> 50</span> 
+<span class='line'> 51</span> </span><span class="WHIT">    </span><span class="WHIT">
+<span class='line'> 52</span> </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 53</span> 
+<span class='line'> 54</span> </span><span class="COMM">// vim:ts=4:sw=4:et:</span><span class="WHIT">
+<span class='line'> 55</span> </span></pre></body></html>

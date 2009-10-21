@@ -88,7 +88,7 @@
 <span class='line'> 81</span> 
 <span class='line'> 82</span> </span><span class="WHIT">        </span><span class="COMM">// Only attend to left button events</span><span class="WHIT">
 <span class='line'> 83</span> </span><span class="WHIT">        </span><span class="COMM">// (or right button for left-handed persons)</span><span class="WHIT">
-<span class='line'> 84</span> </span><span class="WHIT">        </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="PUNC">!</span><span class="NAME">BrowserUtilsSingleton.getInstance</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">isLeftButton</span><span class="PUNC">(</span><span class="NAME">e.button</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="WHIT">
+<span class='line'> 84</span> </span><span class="WHIT">        </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="PUNC">!</span><span class="NAME">BrowserUtils.isLeftButton</span><span class="PUNC">(</span><span class="NAME">e.button</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="WHIT">
 <span class='line'> 85</span> </span><span class="WHIT">            </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">false</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'> 86</span> </span><span class="WHIT">        </span><span class="WHIT">
 <span class='line'> 87</span> </span><span class="WHIT">        </span><span class="COMM">// An object is retrieved to be dragged</span><span class="WHIT">
@@ -134,7 +134,7 @@
 <span class='line'>127</span> </span><span class="WHIT">                        </span><span class="NAME">this._bindedUpdate</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">true</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'>128</span> </span><span class="WHIT">            </span><span class="PUNC">}</span><span class="WHIT">
 <span class='line'>129</span> </span><span class="WHIT">        </span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>130</span> </span><span class="WHIT">        </span><span class="COMM">/* FIXME: no magic numbers*/</span><span class="WHIT">
+<span class='line'>130</span> </span><span class="WHIT">        </span><span class="COMM">// Warning: magic number</span><span class="WHIT">
 <span class='line'>131</span> </span><span class="WHIT">        </span><span class="NAME">draggableElement.style.zIndex</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">'200'</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="WHIT">
 <span class='line'>132</span> </span><span class="WHIT">        </span><span class="WHIT">
 <span class='line'>133</span> </span><span class="WHIT">        </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">false</span><span class="PUNC">;</span><span class="WHIT">
@@ -176,7 +176,7 @@
 <span class='line'>169</span> 
 <span class='line'>170</span> </span><span class="WHIT">        </span><span class="COMM">// Only attend to left button events</span><span class="WHIT">
 <span class='line'>171</span> </span><span class="WHIT">        </span><span class="COMM">// (or right button for left-handed persons)</span><span class="WHIT">
-<span class='line'>172</span> </span><span class="WHIT">        </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="PUNC">!</span><span class="NAME">BrowserUtilsSingleton.getInstance</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">isLeftButton</span><span class="PUNC">(</span><span class="NAME">e.button</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="WHIT">
+<span class='line'>172</span> </span><span class="WHIT">        </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="PUNC">!</span><span class="NAME">BrowserUtils.isLeftButton</span><span class="PUNC">(</span><span class="NAME">e.button</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="WHIT">
 <span class='line'>173</span> </span><span class="WHIT">            </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">false</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'>174</span> 
 <span class='line'>175</span> </span><span class="WHIT">        </span><span class="NAME">Event.stopObserving</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">document</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">"mouseup"</span><span class="PUNC">,</span><span class="WHIT">   </span><span class="NAME">this._bindedEndDrag</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">true</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">

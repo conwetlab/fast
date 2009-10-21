@@ -49,6 +49,8 @@ var Menu = Class.create( /** @lends Menu.prototype */ {
     },
     
     // ************************ PRIVATE METHODS ************************* //
+    
+    
     /**
      * Merge all different model objects in order to create
      * a single menu
@@ -72,6 +74,12 @@ var Menu = Class.create( /** @lends Menu.prototype */ {
         return result;
     },
     
+    
+    /**
+     * Merge all menu subelements from two elements
+     * @private
+     * @type Hash
+     */    
     _mergeMenuElements: function(/** Hash */ left, /** Hash */ right) {
         var result = new Hash();
         // All the keys without duplicates
@@ -90,6 +98,13 @@ var Menu = Class.create( /** @lends Menu.prototype */ {
         return result;
     },
 
+
+    /**
+     * Returns an element with Union of the attributes
+     * of the two passed as parameters
+     * @private
+     * @type Hash
+     */
     _mergeMenuElement: function(/** Hash */ left, /** Hash */ right) {
         var result = new Hash();
                
@@ -117,7 +132,8 @@ var Menu = Class.create( /** @lends Menu.prototype */ {
         }.bind(this));
         return result;
     },
-    
+
+
     /**
      * Creates the menu widget structure from a menu configuration object
      * @private
