@@ -1,12 +1,13 @@
-var DeployGadgetDialog = Class.create(ConfirmDialog /** @lends DeployGadgetDialog.prototype */, {
+var ExternalContentDialog = Class.create(ConfirmDialog /** @lends ExternalContentDialog.prototype */, {
     /**
-     * This class handles the dialog
-     * to deploy a gadget
+     * This class handles a dialog
+     * whose content is an external content,
+     * normally coming from an AJAX call
      * @constructs
      * @extends ConfirmDialog
      */ 
-    initialize: function($super) {
-        $super("Deploy Gadget", "ok");        
+    initialize: function($super, title) {
+        $super(title, "ok");        
     },
     
     // **************** PUBLIC METHODS **************** //
@@ -31,6 +32,7 @@ var DeployGadgetDialog = Class.create(ConfirmDialog /** @lends DeployGadgetDialo
      * @override
      */
     _initDialogInterface: function () {
+        //Do nothing
     }
 });
 

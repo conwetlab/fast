@@ -48,16 +48,17 @@ var MenuElement = Class.create( /** @lends MenuElement.prototype */ {
      * Register key handlers
      * @abstract
      */
-    registerKeyHandlers: function(/** KeyPressRegistry */ registry) {
-        throw "Abstract method invocation. MenuElement::registerKeyHandlers";
+    register: function(/** KeyPressRegistry */ registry) {
+        throw "Abstract method invocation. MenuElement::register";
     },
     
     /**
-     * Unregister key handlers
+     * Unregister key handlers and destroy the 
+     * widgets when necessary
      * @abstract
      */
-    unregisterKeyHandlers: function(/** KeyPressRegistry */ registry) {
-        throw "Abstract method invocation. MenuElement::unregisterKeyHandlers";
+    unregister: function(/** KeyPressRegistry */ registry) {
+        throw "Abstract method invocation. MenuElement::unregister";
     }
 });
 // *************** CONSTANTS **************//

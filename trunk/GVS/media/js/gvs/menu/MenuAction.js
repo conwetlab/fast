@@ -76,7 +76,7 @@ var MenuAction = Class.create(MenuElement, /** @lends MenuAction.prototype */ {
      * Register key handlers
      * @override
      */
-    registerKeyHandlers: function(/** KeyPressRegistry */ registry) {
+    register: function(/** KeyPressRegistry */ registry) {
         if (this._shortcut) {
             registry.addHandler(this._shortcut, this._keyPressHandler.bind(this));
         }    
@@ -86,7 +86,7 @@ var MenuAction = Class.create(MenuElement, /** @lends MenuAction.prototype */ {
      * Unregister key handlers
      * @override
      */
-    unregisterKeyHandlers: function(/** KeyPressRegistry */ registry) {
+    unregister: function(/** KeyPressRegistry */ registry) {
         if (this._shortcut) {
             registry.removeHandler(this._shortcut);
         }

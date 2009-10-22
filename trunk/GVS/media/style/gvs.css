@@ -502,3 +502,9 @@ label {
     font-weight: bold;
     color: red;
 }
+/***************
+ * About       *
+ ***************/
+#about {
+    text-align: center;
+}

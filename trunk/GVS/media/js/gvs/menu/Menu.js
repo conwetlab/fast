@@ -141,8 +141,7 @@ var Menu = Class.create( /** @lends Menu.prototype */ {
     _createMenu: function(/** Array */ menuConfiguration) {
         //Unregistering the old menu elements
         this._menuElements.each(function(element) {
-            element.unregisterKeyHandlers(this._registry);
-            element.getWidget().destroyRecursive();
+            element.unregister(this._registry);
         }.bind(this));
         this._menuElements.clear();
         menuConfiguration.each(function(menuElement) {
@@ -157,7 +156,7 @@ var Menu = Class.create( /** @lends Menu.prototype */ {
             }
             this._menuElements.push(element);  
             this._menu.addChild(element.getWidget());
-            element.registerKeyHandlers(this._registry);
+            element.register(this._registry);
         }.bind(this));
     }
 });

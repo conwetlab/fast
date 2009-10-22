@@ -11,10 +11,10 @@ var Deployer = Class.create( /** @lends Deployer.prototype */ {
         this._storeGadgetDialog = new StoreGadgetDialog(this._onStoreGadgetDialogCallback.bind(this));
         
         /** 
-         * @type DeployGadgetDialog
+         * @type ExternalContentDialog
          * @private @member
          */
-        this._deployGadgetDialog = new DeployGadgetDialog();       
+        this._deployGadgetDialog = new ExternalContentDialog("Deploy gadget");       
         
         /**
          * @type ScreenflowDescription
@@ -59,15 +59,7 @@ var Deployer = Class.create( /** @lends Deployer.prototype */ {
         this._storeGadget();  
     },
     
-    _storeGadget: function() {
-        
-        // TODO: precondition list
-        //storeParams.preconditions = ;
-        
-        // TODO: postcondition list
-        //storeParams.postconditions = ;
-        
-        
+    _storeGadget: function() { 
         
         storeParams = {
             'gadget': this._description.toJSON(),

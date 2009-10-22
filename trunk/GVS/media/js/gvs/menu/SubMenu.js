@@ -53,24 +53,25 @@ var SubMenu = Class.create(MenuElement, /** @lends SubMenu.prototype */ {
      * Register key handlers
      * @override
      */
-    registerKeyHandlers: function(/** KeyPressRegistry */ registry) {
+    register: function(/** KeyPressRegistry */ registry) {
         this._groups.each(function(group) {
             group.each(function(child){
-                child.registerKeyHandlers(registry);    
+                child.register(registry);    
             });   
         });
     },
     
     /**
-     * Unregister key handlers
+     * Unregister key handlers and destroy the widget
      * @override
      */
-    unregisterKeyHandlers: function(/** KeyPressRegistry */ registry) {
+    unregister: function(/** KeyPressRegistry */ registry) {
         this._groups.each(function(group) {
             group.each(function(child){
-                child.unregisterKeyHandlers(registry);    
+                child.unregister(registry);    
             });   
-        });         
+        });
+        this._widget.destroy(false);      
     },
     
     // ***************** PRIVATE METHODS *************** //
