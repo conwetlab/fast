@@ -22,7 +22,7 @@
     	{"language": "JavaScript", "src": "http://piccolo.ls.fi.upm.es/amazonURL/signAmazonURLs.js"},
     	{"language": "JavaScript", "src": "http://piccolo.ls.fi.upm.es/amazonURL/jssha2/sha2.js"}
     	],
-    "actions": [{"name":"add", "preconditions":[{"id":"item", "pattern":"?Item http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#Item", "positive":"true"}], "uses":[{"id":"cart", "name":"?Cart http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#ShoppingCart"}]}],
+    "actions": [{"name":"add", "preconditions":[{"id":"item", "pattern":"?Item http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#Item", "positive":"true"}], "uses":[{"id":"cart", "uri":"http://aws.amazon.com/AWSECommerceService#ShoppingCart"}]}],
 	"postconditions": [{"id":"cart", "pattern":"?Cart http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#ShoppingCart", "positive":"true"},
 	                 {"id":"message", "pattern":"?Message http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#Message", "positive":"true"}],
 	"triggers":["message"]
