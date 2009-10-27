@@ -157,8 +157,7 @@ var GVSSingleton = function(){
         },
         
         /** 
-         * High-level action for adding a new screen to the catalogue.
-         *
+         * High-level action for adding a new screen to the catalogue
          * @private
          */
         _addScreen: function(){
@@ -189,7 +188,7 @@ var GVSSingleton = function(){
          */
         _showAboutDialog: function() {
             persistenceEngine = PersistenceEngineFactory.getInstance();
-            persistenceEngine.sendGet(URIs.about, this, this._onSuccessAbout, this._onError);
+            persistenceEngine.sendGet(URIs.about, this, this._onSuccessAbout, Utils.onAJAXError);
         },
         /**
          * OnSuccess handler
@@ -198,10 +197,7 @@ var GVSSingleton = function(){
             var dialog = new ExternalContentDialog("About GVS");
             dialog.show(transport.responseText);  
         },
-        
-        _onError: function(/** XMLHttpRequest */ transport, /** Exception */ e) {
-            Logger.serverError(transport, e);
-        },
+
         
         /**
          * Creates the menu structure for the GVS
@@ -211,7 +207,7 @@ var GVSSingleton = function(){
             this._menuConfig = {
                 'file': {
                     'type': 'SubMenu',
-                    'label': 'File...',
+                    'label': 'File',
                     'weight': 1,
                     'children': {
                         'newScreenflow': {

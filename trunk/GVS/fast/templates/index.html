@@ -28,7 +28,8 @@
         
         <script type="text/javascript" src="{{ MEDIA_URL }}js/lib/utils/shortcut.js"></script>
         
-        <script type="text/javascript" src="{{ MEDIA_URL }}js/lib/prototype/prototype.js"></script>     
+        <script type="text/javascript" src="{{ MEDIA_URL }}js/lib/prototype/prototype.js"></script>
+        <script type="text/javascript" src="{{ MEDIA_URL }}js/lib/prototype/prototype.improvements.js"></script>  
 
         <!-- graceful degradation of firebugs console obj --> 
         <script type="text/javascript" src="{{ MEDIA_URL }}js/lib/utils/firebugx.js"></script>
@@ -264,6 +265,17 @@
                 // performance
                 dijit.byId("main").layout();
             });
+            window.onbeforeunload = function(evt) {
+                // TODO: call the server and save whatever necessary
+                /* var message = 'Are you sure you want to leave?';
+                if (typeof evt == 'undefined') {
+                    evt = window.event;
+                }
+                if (evt) {
+                    evt.returnValue = message;
+                }
+                return message;*/
+            }
 
         /* ]]> */
         </script>

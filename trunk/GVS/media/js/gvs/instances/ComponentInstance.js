@@ -131,7 +131,7 @@ var ComponentInstance = Class.create(DragSource,
      * @params Object
      * @public
      */
-    setPosition: function( /**Object*/ position) {
+    setPosition: function(/** Object */ position) {
         this.getHandlerNode().style.left = position.left + "px";
         this.getHandlerNode().style.top = position.top + "px";
     },

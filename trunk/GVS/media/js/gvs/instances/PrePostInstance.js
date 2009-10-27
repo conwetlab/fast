@@ -156,6 +156,24 @@ var PrePostInstance = Class.create(ComponentInstance,
         Utils.setSatisfeabilityClass(fact, reachable);
         return [fact, this._label, this._buildingBlockDescription.uri]; 
     },
+    
+    /**
+     * Destroy the instance
+     * @override
+     */
+    destroy: function($super, /** Boolean */ removeFromServer) {
+        $super();
+        if (this._uri && removeFromServer) {
+            var catalogueResource = URIs.catalogue + 
+                ((this._type == 'pre') ? '/slots/' : '/events/');
+            var persistenceEngine = PersistenceEngineFactory.getInstance();
+            // The proxy removes a URI encoding, so it is necessary to do it
+            // twice
+            persistenceEngine.sendDelete(catalogueResource + encodeURIComponent(encodeURIComponent(this._uri)),
+                this, 
+                this._onDeleteSuccess, Utils.onAJAXError);            
+        }
+    },
 
     // **************** PRIVATE METHODS **************** //
     /**
@@ -213,7 +231,18 @@ var PrePostInstance = Class.create(ComponentInstance,
         
         // Notify change
         this._changeHandler(previousUri, this);
+        this._onClick();
     },
+    
+    /**
+     * onDeleteSucces
+     * @private
+     */
+    _onDeleteSuccess: function(/** XMLHttpRequest */ transport){
+        console.log('deleted');
+    },
+    
+    
     /**
      * Returns an object representing
      * the fact

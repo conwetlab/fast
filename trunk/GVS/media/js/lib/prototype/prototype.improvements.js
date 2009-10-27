@@ -4,17 +4,6 @@
  * Various additions to the prototype.js
  */
 
-Object.extend(Event, {
-	KEY_SHIFT:    16,
-	KEY_CONTROL:  17,
-	KEY_CAPSLOCK: 20,
-	KEY_SPACE: 32,
-	keyPressed: function(event)
-	{
-		return Browser.isMSIE() ? window.event.keyCode : event.which;
-	}
-});
-
 Browser = {
 	
 	/**
@@ -64,16 +53,6 @@ Object.genGUID = function()
 		output += chars.charAt(rnd);
 	}
 	return output;
-}
-
-Hash.prototype.clone = function() {
-  var newHash = new Hash();
-    
-  this.each(function (pair) {
-    newHash[pair.key] = pair.value;
-  });
-
-  return newHash;
 }
 
 //    Hack for right HTTP verbs

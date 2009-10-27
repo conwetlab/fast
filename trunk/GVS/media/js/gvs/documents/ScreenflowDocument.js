@@ -140,7 +140,7 @@ var ScreenflowDocument = Class.create(PaletteDocument,
     
 
     /**
-     * Delete a screen.
+     * Delete an instance.
      * @param ComponentInstance
      *      Instance to be deleted from the
      *      Screenflow document.
@@ -160,6 +160,7 @@ var ScreenflowDocument = Class.create(PaletteDocument,
                 
             case PrePostInstance:
                 this._description.removePrePost(instance.getUri());
+                
                 break;
                 
             default:
@@ -302,6 +303,11 @@ var ScreenflowDocument = Class.create(PaletteDocument,
         if (close){
             var gvs = GVSSingleton.getInstance();
             gvs.getDocumentController().closeDocument(this._tabId);
+            // Be careful when removing instances
+            // from server if the document is saved
+            this._canvasInstances.each(function(pair) {
+                pair.value.destroy(true);    
+            }.bind(this));
         }
     },
     
