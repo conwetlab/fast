@@ -6,7 +6,7 @@ from django.contrib.auth.models import User
 from django.http import HttpResponseServerError, HttpResponseRedirect
 from django import forms
 from django.utils.translation import ugettext as _
-import datetime, random, sha
+import datetime, random, hashlib
 from django.core.mail import EmailMessage
 from django.conf import settings
 from django.db import transaction
@@ -63,8 +63,8 @@ def signup(request):
                 if settings.REGISTRATION_CONFIRMATION:
                     user.is_active = False
                     
-                    salt = sha.new(str(random.random())).hexdigest()[:5]
-                    activation_key = sha.new(salt+user.username).hexdigest()
+                    salt = hashlib.sha224(str(random.random())).hexdigest()[:5]
+                    activation_key = hashlib.sha224(salt+user.username).hexdigest()
                     key_expires = datetime.datetime.today() + datetime.timedelta(settings.ACCOUNT_ACTIVATION_DAYS)                                                                                                                         
                     new_profile.activation_key=activation_key
                     new_profile.key_expires=key_expires

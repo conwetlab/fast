@@ -5,6 +5,8 @@ var PaletteDocument = Class.create(AbstractDocument, /** @lends PaletteDocument.
      * @abstract
      * @extends AbstractDocument
      * @constructs
+     * @param validBuildingBlocks
+     *      Containing the different valid building blocks and their respective drop Zones
      */ 
     initialize: function($super,
             /** String */ title, 
@@ -25,11 +27,11 @@ var PaletteDocument = Class.create(AbstractDocument, /** @lends PaletteDocument.
          */
         this._mainBorderContainer = null;
         
-        var buildingBlockSets = new Array();
+        var buildingBlocks = new Array();
         
-        $A(validBuildingBlocks).each(function(blockType) {
+        $A(validBuildingBlocks).each(function(validBuildingBlock) {
             var buildingBlockSet;
-            switch (blockType) {
+            switch (validBuildingBlock.type) {
                 case Constants.BuildingBlock.SCREEN:
                     buildingBlockSet = new ScreenSet(this._domainContext);
                     break;
@@ -42,8 +44,12 @@ var PaletteDocument = Class.create(AbstractDocument, /** @lends PaletteDocument.
                     throw "Unexpected type of building block: " + blockType +
                             ". PaletteDocument::initialize";
             }
+
+            var buildingBlock = new Object();
+            buildingBlock.set = buildingBlockSet;
+            buildingBlock.dropZone = validBuildingBlock.dropZone;           
             
-            buildingBlockSets.push(buildingBlockSet);
+            buildingBlocks.push(buildingBlock);
         }.bind(this));
         
         this._renderMainUI();
@@ -67,8 +73,7 @@ var PaletteDocument = Class.create(AbstractDocument, /** @lends PaletteDocument.
          * @type PaletteController
          * @private @member
          */ 
-        this._paletteController = new PaletteController(buildingBlockSets,
-                /* (DropZone) */this, this._inferenceEngine);
+        this._paletteController = new PaletteController(buildingBlocks, this._inferenceEngine);
         
         this._renderPaletteArea();
         

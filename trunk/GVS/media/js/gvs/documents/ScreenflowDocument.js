@@ -23,7 +23,13 @@ var ScreenflowDocument = Class.create(PaletteDocument,
         this._factPane = new FactPane(this._inspectorArea);
         
         
-        $super(title, [Constants.BuildingBlock.SCREEN, Constants.BuildingBlock.DOMAIN_CONCEPT], 
+        $super(title, [{
+            'type': Constants.BuildingBlock.SCREEN,
+            'dropZone': this
+        }, {
+            'type': Constants.BuildingBlock.DOMAIN_CONCEPT,
+            'dropZone': this
+        }], 
         domainContext);
         
         /**
