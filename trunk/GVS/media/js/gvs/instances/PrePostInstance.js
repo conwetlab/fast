@@ -165,7 +165,7 @@ var PrePostInstance = Class.create(ComponentInstance,
         $super();
         if (this._uri && removeFromServer) {
             var catalogueResource = URIs.catalogue + 
-                ((this._type == 'pre') ? '/slots/' : '/events/');
+                ((this._type == 'pre') ? URIs.pre : URIs.post);
             var persistenceEngine = PersistenceEngineFactory.getInstance();
             // The proxy removes a URI encoding, so it is necessary to do it
             // twice
@@ -207,7 +207,7 @@ var PrePostInstance = Class.create(ComponentInstance,
         this._platformProperties.get('ezweb').set('friendcode', data.friendcode);
         
         var catalogueResource = URIs.catalogue + 
-                ((this._type == 'pre') ? '/slots' : '/events');
+                ((this._type == 'pre') ? URIs.pre : URIs.post);
                 
         var persistenceEngine = PersistenceEngineFactory.getInstance();
         persistenceEngine.sendPost(catalogueResource,
