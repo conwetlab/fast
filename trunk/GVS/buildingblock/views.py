@@ -311,7 +311,11 @@ def updateCode(buildingblock, data):
         code = data.get('code')
         if (validate_url(code)):
             code = download_http_content(code)
-        if buildingblock.type == 'resource' or buildingblock.type == 'operator':
+        if buildingblock.type == 'screen':
+            context = Context({'screenId': str(buildingblock.id)})
+            t = Template(code)
+            code =  t.render(context)
+        elif buildingblock.type == 'resource' or buildingblock.type == 'operator':
             context = Context({'name': "BB" + str(buildingblock.id), 'code': code})
             t = loader.get_template('buildingblock/code.js')
             code =  t.render(context)

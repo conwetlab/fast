@@ -294,7 +294,7 @@
         <field type="BooleanField" name="is_staff">True</field>
         <field type="BooleanField" name="is_active">True</field>
         <field type="BooleanField" name="is_superuser">True</field>
-        <field type="DateTimeField" name="last_login">2009-09-21 15:10:04</field>
+        <field type="DateTimeField" name="last_login">2009-10-30 10:02:58</field>
         <field type="DateTimeField" name="date_joined">2009-09-21 14:11:49</field>
         <field to="auth.group" name="groups" rel="ManyToManyRel"></field>
         <field to="auth.permission" name="user_permissions" rel="ManyToManyRel"></field>
@@ -303,6 +303,6 @@
         <field to="auth.user" name="user" rel="OneToOneRel">1</field>
         <field type="CharField" name="activation_key"><None></None></field>
         <field type="DateTimeField" name="key_expires"><None></None></field>
-        <field type="CharField" name="ezweb_url"><None></None></field>
+        <field type="CharField" name="ezweb_url">http://fabio.hi.inet:8000</field>
     </object>
 </django-objects>
