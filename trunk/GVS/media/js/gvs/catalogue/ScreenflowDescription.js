@@ -73,9 +73,9 @@ var ScreenflowDescription = Class.create(BuildingBlockDescription,
             }
         }
         if (!found) {
-            for (var i=0; i < this.definition.preconditions.length; i++) {
-                if (this.definition.preconditions[i].uri == id) {
-                    this.definition.preconditions.splice(i,1);
+            for (var i=0; i < this.definition.postconditions.length; i++) {
+                if (this.definition.postconditions[i].uri == id) {
+                    this.definition.postconditions.splice(i,1);
                     found = true;
                     break;
                 }

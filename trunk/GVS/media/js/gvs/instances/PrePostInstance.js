@@ -164,14 +164,7 @@ var PrePostInstance = Class.create(ComponentInstance,
     destroy: function($super, /** Boolean */ removeFromServer) {
         $super();
         if (this._uri && removeFromServer) {
-            var catalogueResource = URIs.catalogue + 
-                ((this._type == 'pre') ? URIs.pre : URIs.post);
-            var persistenceEngine = PersistenceEngineFactory.getInstance();
-            // The proxy removes a URI encoding, so it is necessary to do it
-            // twice
-            persistenceEngine.sendDelete(catalogueResource + encodeURIComponent(encodeURIComponent(this._uri)),
-                this, 
-                this._onDeleteSuccess, Utils.onAJAXError);            
+            this._removeFromServer(this._uri, this._type);
         }
     },
 
@@ -199,20 +192,26 @@ var PrePostInstance = Class.create(ComponentInstance,
      * @private
      */
     _onChange: function (/** Object */ data) {
-        
-        this._type = data.type;
         this._label = data.label;
         this._platformProperties.get('ezweb').set('binding', data.binding);
         this._platformProperties.get('ezweb').set('varname', data.varname);
         this._platformProperties.get('ezweb').set('friendcode', data.friendcode);
         
-        var catalogueResource = URIs.catalogue + 
-                ((this._type == 'pre') ? URIs.pre : URIs.post);
-                
-        var persistenceEngine = PersistenceEngineFactory.getInstance();
-        persistenceEngine.sendPost(catalogueResource,
-            null, this.toJSON(), this, 
-            this._onPostSuccess, Utils.onAJAXError);
+        if (this._type != data.type) {
+            if (this._uri) {
+                this._removeFromServer(this._uri, this._type);    
+            }
+            this._type = data.type;
+            
+            // Calling the server to add the pre/post
+            var catalogueResource = (this._type == 'pre') ? URIs.pre : URIs.post;
+            var persistenceEngine = PersistenceEngineFactory.getInstance();
+            persistenceEngine.sendPost(catalogueResource,
+                            null, this.toJSON(), this, 
+                            this._onPostSuccess, Utils.onAJAXError); 
+        } else {
+            this._onClick();
+        }
     },
     /**
      * onSuccess callback
@@ -227,11 +226,11 @@ var PrePostInstance = Class.create(ComponentInstance,
         if (previousUri) {
             this._inferenceEngine.removeReachabilityListener(previousUri, this._view);
         }
+        
         this._inferenceEngine.addReachabilityListener(this._uri, this._view);
         
         // Notify change
         this._changeHandler(previousUri, this);
-        this._onClick();
     },
     
     /**
@@ -254,6 +253,20 @@ var PrePostInstance = Class.create(ComponentInstance,
                 'pattern': this._pattern,
                 'scope': 'design time'
             };
+    },
+    
+    /**
+     * This function removes a pre/post from the server
+     * @private
+     */
+    _removeFromServer: function(/** String */ uri, /** String */ type) {
+        var catalogueResource = (type == 'pre') ? URIs.pre : URIs.post;
+        var persistenceEngine = PersistenceEngineFactory.getInstance();
+        // The proxy removes a URI encoding, so it is necessary to do it
+        // twice
+        persistenceEngine.sendDelete(catalogueResource + encodeURIComponent(encodeURIComponent(uri)),
+            this, 
+            this._onDeleteSuccess, Utils.onAJAXError);
     }
 });
 

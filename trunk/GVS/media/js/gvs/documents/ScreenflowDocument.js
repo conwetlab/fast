@@ -175,7 +175,7 @@ var ScreenflowDocument = Class.create(PaletteDocument,
         
         this._refreshReachability();
         this.setSelectedElement();
-        instance.destroy();
+        instance.destroy(true);
     },
 
     /**
@@ -439,7 +439,7 @@ var ScreenflowDocument = Class.create(PaletteDocument,
     _onPrePostChange: function(/** String */ previousUri, /** PrePostInstance */ instance) {
         if (previousUri) {
             this._canvasInstances.unset(previousUri);
-            this._description.removePrePost(previousUri);
+            this._description.removePrePost(previousUri);            
         }
         
         this._canvasInstances.set(instance.getUri(), instance);
@@ -447,7 +447,7 @@ var ScreenflowDocument = Class.create(PaletteDocument,
         
         this._refreshReachability();
         
-        this.setSelectedElement();
+        this.setSelectedElement(instance);
     },
     
     
