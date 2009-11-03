@@ -70,7 +70,7 @@ var KeyPressRegistry = Class.create( /** @lends KeyPressRegistry.prototype */ {
      */
     _executeHandler: function(/** Event */ e, /** String */ key) {
         if (this._enabled && this._handlers.get(key)) {
-            this._handlers.get(key)();
+            this._handlers.get(key)(key);
         } 
     }
 });

@@ -24,10 +24,10 @@ var ScreenflowDocument = Class.create(PaletteDocument,
         
         
         $super(title, [{
-            'type': Constants.BuildingBlock.SCREEN,
+            'constructor': ScreenSet,
             'dropZone': this
         }, {
-            'type': Constants.BuildingBlock.DOMAIN_CONCEPT,
+            'constructor': DomainConceptSet,
             'dropZone': this
         }], 
         domainContext);
@@ -434,6 +434,7 @@ var ScreenflowDocument = Class.create(PaletteDocument,
     },
     
     /**
+     * Runs when a *-condition changes
      * @private
      */
     _onPrePostChange: function(/** String */ previousUri, /** PrePostInstance */ instance) {
@@ -448,17 +449,6 @@ var ScreenflowDocument = Class.create(PaletteDocument,
         this._refreshReachability();
         
         this.setSelectedElement(instance);
-    },
-    
-    
-    /**
-     * Previews the selected element
-     * depending on the type of the
-     * selected element
-     * @private
-     */
-    _previewSelectedElement: function() {
-        this._selectedElement.showPreviewDialog();
     },
       
     

@@ -91,10 +91,11 @@ var AbstractDocument = Class.create(ToolbarModel, /** @lends AbstractDocument.pr
     /**
      * Method called on del. Might be overloaded
      */
-    onDelPressed: function() {
+    onKeyPressed: function(/** String */ key) {
         // Do nothing
     },
-    
+
+        
     /**
      * Implementing menu model interface
      * @type Object

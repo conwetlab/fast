@@ -62,7 +62,8 @@ var DocumentController = Class.create(
         // The welcome document is the initial document
         this.showWelcomeDocument();
         
-        this._registry.addHandler('delete', this._onDelPressed.bind(this));
+        this._registry.addHandler('delete', this._onKeyPressed.bind(this)); 
+        this._registry.addHandler('space' , this._onKeyPressed.bind(this));
 
     },
 
@@ -200,11 +201,13 @@ var DocumentController = Class.create(
         this._menu.setModel('document', this._currentDocument);
     },
     
+    
     /**
-     * Function that passes the key 'del' stroke to the current document
+     * OnKeyPressed listener
+     * @private
      */
-    _onDelPressed: function () {
-        this._currentDocument.onDelPressed();    
+    _onKeyPressed: function(/** String */ key) {
+        this._currentDocument.onKeyPressed(key);
     }
 });
 

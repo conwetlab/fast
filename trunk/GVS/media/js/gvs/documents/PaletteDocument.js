@@ -30,20 +30,8 @@ var PaletteDocument = Class.create(AbstractDocument, /** @lends PaletteDocument.
         var buildingBlocks = new Array();
         
         $A(validBuildingBlocks).each(function(validBuildingBlock) {
-            var buildingBlockSet;
-            switch (validBuildingBlock.type) {
-                case Constants.BuildingBlock.SCREEN:
-                    buildingBlockSet = new ScreenSet(this._domainContext);
-                    break;
-                    
-                case Constants.BuildingBlock.DOMAIN_CONCEPT:
-                    buildingBlockSet = new DomainConceptSet(this._domainContext);
-                    break;
-
-                default:
-                    throw "Unexpected type of building block: " + blockType +
-                            ". PaletteDocument::initialize";
-            }
+            var constructor = validBuildingBlock.constructor;
+            var buildingBlockSet = new constructor(this._domainContext);
 
             var buildingBlock = new Object();
             buildingBlock.set = buildingBlockSet;
@@ -115,12 +103,23 @@ var PaletteDocument = Class.create(AbstractDocument, /** @lends PaletteDocument.
     },
     
     /**
-     * 'del' press event handler
+     * Key press event handler
+     * @override
      */
-    onDelPressed: function() {         
-        this._startDeletingSelectedElement();
+    onKeyPressed: function(/** String */ key) {
+        switch(key) {
+            case 'delete':
+                this._startDeletingSelectedElement();
+                break;
+            case 'space':
+                this._previewSelectedElement();
+                break;
+            default:
+                // Ignore
+                break;
+        }
     },
-
+    
     // **************** PRIVATE METHODS **************** //
     
     /**
@@ -185,17 +184,33 @@ var PaletteDocument = Class.create(AbstractDocument, /** @lends PaletteDocument.
     },
     /**
      * Renders the palette area
+     * @private
      */
     _renderPaletteArea: function() {
         this._mainBorderContainer.addChild(this._paletteController.getNode());
     },
-
+    /**
+     * deletes the selected element
+     * @private
+     */
     _deleteSelectedElement: function() {
-        if (this._selectedElement != null) {
+        if (this._selectedElement) {
             this._deleteInstance(this._selectedElement);
             this.setSelectedElement();
         }
-    }    
+    },
+    
+    /**
+     * Previews the selected element
+     * depending on the type of the
+     * selected element
+     * @private
+     */
+    _previewSelectedElement: function() {
+        if (this._selectedElement) {
+            this._selectedElement.showPreviewDialog();
+        }
+    },
 });
 
 // vim:ts=4:sw=4:et:
