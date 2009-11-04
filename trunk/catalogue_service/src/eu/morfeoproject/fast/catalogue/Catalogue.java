@@ -408,44 +408,44 @@ public class Catalogue {
 				queryString = queryString.substring(0, queryString.length() - 5);
 			queryString = queryString.concat("}");
     	}
-		queryString = queryString.concat("\n} UNION ");
-		
-		/////*** LOOK FOR SLOTS ***/////
-		queryString = queryString.concat("{ ?resource "+RDF.type.toSPARQL()+" "+FGO.Precondition.toSPARQL()+" . ");
-		
-		for (Resource r : resources)
-			if (r instanceof Precondition)
-				queryString = queryString.concat("FILTER (?resource != "+r.getUri().toSPARQL()+") . ");
-
-		if (domainContext != null && domainContext.size() > 0) {
-	    	queryString = queryString.concat("{");
-	    	for (String tag : domainContext) {
-	    		queryString = queryString.concat(" { ?resource "+FGO.hasTag.toSPARQL()+" ?tag . FILTER regex(?tag, \""+tag+"\", \"i\")} UNION");
-	    	}
-	    	// remove last 'UNION'
-	    	if (queryString.endsWith("UNION"))
-				queryString = queryString.substring(0, queryString.length() - 5);
-			queryString = queryString.concat("} . ");
-		}
-		if (unCon.size() > 0) {
-        	queryString = queryString.concat("{");
-			for (Condition con : unCon) {
-				queryString = queryString.concat("{ ?resource "+FGO.hasCondition.toSPARQL()+" ?b . ");
-				queryString = queryString.concat(" ?b ?li ?c . "); // :_bag rdf:li_1 :_condition
-				queryString = queryString.concat(" ?c "+FGO.hasPattern.toSPARQL()+" ?p . ");
-    			queryString = queryString.concat("GRAPH ?p {");
-        		for (Statement st : con.getPattern()) {
-        			String s = (st.getSubject() instanceof BlankNode) ? st.getSubject().toString() : st.getSubject().toSPARQL();
-        			String o = (st.getObject() instanceof BlankNode) ? st.getObject().toString() : st.getObject().toSPARQL();
-        			queryString = queryString.concat(s+" "+st.getPredicate().toSPARQL()+" "+o+" . ");
-        		}
-        		queryString = queryString.concat("} } UNION");
-        	}
-        	// remove last 'UNION'
-	    	if (queryString.endsWith("UNION"))
-				queryString = queryString.substring(0, queryString.length() - 5);
-			queryString = queryString.concat("}");
-    	}
+//		queryString = queryString.concat("\n} UNION ");
+//		
+//		/////*** LOOK FOR SLOTS ***/////
+//		queryString = queryString.concat("{ ?resource "+RDF.type.toSPARQL()+" "+FGO.Precondition.toSPARQL()+" . ");
+//		
+//		for (Resource r : resources)
+//			if (r instanceof Precondition)
+//				queryString = queryString.concat("FILTER (?resource != "+r.getUri().toSPARQL()+") . ");
+//
+//		if (domainContext != null && domainContext.size() > 0) {
+//	    	queryString = queryString.concat("{");
+//	    	for (String tag : domainContext) {
+//	    		queryString = queryString.concat(" { ?resource "+FGO.hasTag.toSPARQL()+" ?tag . FILTER regex(?tag, \""+tag+"\", \"i\")} UNION");
+//	    	}
+//	    	// remove last 'UNION'
+//	    	if (queryString.endsWith("UNION"))
+//				queryString = queryString.substring(0, queryString.length() - 5);
+//			queryString = queryString.concat("} . ");
+//		}
+//		if (unCon.size() > 0) {
+//        	queryString = queryString.concat("{");
+//			for (Condition con : unCon) {
+//				queryString = queryString.concat("{ ?resource "+FGO.hasCondition.toSPARQL()+" ?b . ");
+//				queryString = queryString.concat(" ?b ?li ?c . "); // :_bag rdf:li_1 :_condition
+//				queryString = queryString.concat(" ?c "+FGO.hasPattern.toSPARQL()+" ?p . ");
+//    			queryString = queryString.concat("GRAPH ?p {");
+//        		for (Statement st : con.getPattern()) {
+//        			String s = (st.getSubject() instanceof BlankNode) ? st.getSubject().toString() : st.getSubject().toSPARQL();
+//        			String o = (st.getObject() instanceof BlankNode) ? st.getObject().toString() : st.getObject().toSPARQL();
+//        			queryString = queryString.concat(s+" "+st.getPredicate().toSPARQL()+" "+o+" . ");
+//        		}
+//        		queryString = queryString.concat("} } UNION");
+//        	}
+//        	// remove last 'UNION'
+//	    	if (queryString.endsWith("UNION"))
+//				queryString = queryString.substring(0, queryString.length() - 5);
+//			queryString = queryString.concat("}");
+//    	}
 		queryString = queryString.concat("\n} }");
 		
 		
