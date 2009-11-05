@@ -261,19 +261,22 @@ rdfs:range fgo:Condition, rdf:Bag .
 
 fgo:hasAction a owl:ObjectProperty ;
 rdfs:label "has action"@en ;
-rdfs:comment """This property indicates which actions are asociated and can be perfomed within a screen component."""@en ;
+rdfs:comment """This property indicates which actions are asociated and can be perfomed within 
+	a screen component."""@en ;
 rdfs:domain fgo:ScreenComponent ;
 rdfs:range fgo:Action .
 
 fgo:hasTrigger a owl:DatatypeProperty ;
 rdfs:label "has trigger string"@en ;
-rdfs:comment """This property ..."""@en ;
+rdfs:comment """This property represents the events fired within a building block. e.g. a 
+	button to clear the shopping cart will fired a "clear cart" trigger."""@en ;
 rdfs:domain fgo:ScreenComponent ;
 rdfs:range xsd:string .
 
 fgo:hasUse a owl:DatatypeProperty ;
 rdfs:label "has use string"@en ;
-rdfs:comment """This property ..."""@en ;
+rdfs:comment """This property indicates concepts used within a building block, without being a 
+	pre/postcondition."""@en ;
 rdfs:domain fgo:Action ;
 rdfs:range xsd:string .
 
@@ -294,6 +297,24 @@ rdfs:label "has source"@en ;
 rdfs:comment """URL of the source code of a particular library."""@en ;
 rdfs:domain fgo:Library ;
 rdfs:range foaf:Document .
+
+fgo:hasId a owl:DatatypeProperty ;
+rdfs:label "has id"@en ;
+rdfs:comment """The internal ID of the resource within the container resource."""@en ;
+rdfs:domain fgo:Resource ;
+rdfs:range xsd:string .
+
+fgo:hasName a owl:DatatypeProperty ;
+rdfs:label "has name"@en ;
+rdfs:comment """The name the user gives to the resource."""@en ;
+rdfs:domain fgo:Resource ;
+rdfs:range xsd:string .
+
+fgo:hasType a owl:DatatypeProperty ;
+rdfs:label "has type"@en ;
+rdfs:comment """The type of the resource."""@en ;
+rdfs:domain fgo:Resource ;
+rdfs:range xsd:string .
 
 
 # terms used from other ontologies

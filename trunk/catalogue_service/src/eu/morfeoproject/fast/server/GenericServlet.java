@@ -32,6 +32,7 @@ import eu.morfeoproject.fast.model.Library;
 import eu.morfeoproject.fast.model.Operator;
 import eu.morfeoproject.fast.model.Postcondition;
 import eu.morfeoproject.fast.model.Precondition;
+import eu.morfeoproject.fast.model.Resource;
 import eu.morfeoproject.fast.model.Screen;
 import eu.morfeoproject.fast.model.ScreenComponent;
 import eu.morfeoproject.fast.model.ScreenFlow;
@@ -70,93 +71,77 @@ public abstract class GenericServlet extends HttpServlet {
 	}
 
 	@SuppressWarnings("unchecked")
-	protected ScreenFlow parseScreenFlow(JSONObject jsonScreenFlow, URI id) throws JSONException, IOException {
-		ScreenFlow screenFlow = FastModelFactory.createScreenFlow();
-		if (id != null)
-			screenFlow.setUri(id);
-		if (jsonScreenFlow.get("label") != null) {
-			JSONObject jsonLabels = jsonScreenFlow.getJSONObject("label");
+	protected void parseResource(Resource resource, JSONObject jsonResource, URI uri) throws JSONException {
+		if (uri != null)
+			resource.setUri(uri);
+		if (jsonResource.get("label") != null) {
+			JSONObject jsonLabels = jsonResource.getJSONObject("label");
 			Iterator<String> labels = jsonLabels.keys();
 			for ( ; labels.hasNext(); ) {
 				String key = labels.next();
-				screenFlow.getLabels().put(key, jsonLabels.getString(key));
+				resource.getLabels().put(key, jsonLabels.getString(key));
 			}
 		}
-		if (jsonScreenFlow.get("description") != null) {
-			JSONObject jsonDescriptions = jsonScreenFlow.getJSONObject("description");
+		if (jsonResource.get("description") != null) {
+			JSONObject jsonDescriptions = jsonResource.getJSONObject("description");
 			Iterator<String> descriptions = jsonDescriptions.keys();
 			for ( ; descriptions.hasNext(); ) {
 				String key = descriptions.next();
-				screenFlow.getDescriptions().put(key, jsonDescriptions.getString(key));
+				resource.getDescriptions().put(key, jsonDescriptions.getString(key));
 			}
 		}
-		if (jsonScreenFlow.get("creator") != null)
-			screenFlow.setCreator(new URIImpl(jsonScreenFlow.getString("creator")));
-		if (jsonScreenFlow.get("rights") != null)
-			screenFlow.setRights(new URIImpl(jsonScreenFlow.getString("rights")));
-		if (jsonScreenFlow.get("version") != null)
-			screenFlow.setVersion(jsonScreenFlow.getString("version"));
-		if (jsonScreenFlow.get("creationDate") != null)
-			screenFlow.setCreationDate(DateFormatter.parseDateISO8601(jsonScreenFlow.getString("creationDate")));
-		if (jsonScreenFlow.get("icon") != null)
-			screenFlow.setIcon(new URIImpl(jsonScreenFlow.getString("icon")));
-		if (jsonScreenFlow.get("screenshot") != null)
-			screenFlow.setScreenshot(new URIImpl(jsonScreenFlow.getString("screenshot")));
+		if (jsonResource.get("creator") != null)
+			resource.setCreator(new URIImpl(jsonResource.getString("creator")));
+		if (jsonResource.get("rights") != null)
+			resource.setRights(new URIImpl(jsonResource.getString("rights")));
+		if (jsonResource.get("version") != null)
+			resource.setVersion(jsonResource.getString("version"));
+		if (jsonResource.get("creationDate") != null)
+			resource.setCreationDate(DateFormatter.parseDateISO8601(jsonResource.getString("creationDate")));
+		if (jsonResource.get("icon") != null)
+			resource.setIcon(new URIImpl(jsonResource.getString("icon")));
+		if (jsonResource.get("screenshot") != null)
+			resource.setScreenshot(new URIImpl(jsonResource.getString("screenshot")));
+		if (jsonResource.get("homepage") != null)
+			resource.setHomepage(new URIImpl(jsonResource.getString("homepage")));
+		if (jsonResource.get("id") != null)
+			resource.setId(jsonResource.getString("id"));
+		if (jsonResource.get("name") != null)
+			resource.setName(jsonResource.getString("name"));
+		if (jsonResource.get("type") != null)
+			resource.setType(jsonResource.getString("type"));
+	}
+	
+	protected ScreenFlow parseScreenFlow(JSONObject jsonScreenFlow, URI uri) throws JSONException, IOException {
+		ScreenFlow screenFlow = FastModelFactory.createScreenFlow();
+
+		// fill common properties of the resource
+		parseResource(screenFlow, jsonScreenFlow, uri);
+
 		JSONObject domainContext = jsonScreenFlow.getJSONObject("domainContext");
 		JSONArray tags = domainContext.getJSONArray("tags");
 		for (int i = 0; i < tags.length(); i++)
 			screenFlow.getDomainContext().getTags().add(tags.getString(i));
 		URI user = new URIImpl(domainContext.getString("user"));
 		screenFlow.getDomainContext().setUser(user);
-		if (jsonScreenFlow.get("homepage") != null)
-			screenFlow.setHomepage(new URIImpl(jsonScreenFlow.getString("homepage")));
 		JSONArray resources = jsonScreenFlow.getJSONArray("contains");
 		for (int i = 0; i < resources.length(); i++)
 			screenFlow.getResources().add(new URIImpl(resources.getString(i)));
 		return screenFlow;
 	}
 
-	@SuppressWarnings("unchecked")
-	protected Screen parseScreen(JSONObject jsonScreen, URI id) throws JSONException, IOException {
+	protected Screen parseScreen(JSONObject jsonScreen, URI uri) throws JSONException, IOException {
 		Screen screen = FastModelFactory.createScreen();
-		if (id != null)
-			screen.setUri(id);
-		if (jsonScreen.get("label") != null) {
-			JSONObject jsonLabels = jsonScreen.getJSONObject("label");
-			Iterator<String> labels = jsonLabels.keys();
-			for ( ; labels.hasNext(); ) {
-				String key = labels.next();
-				screen.getLabels().put(key, jsonLabels.getString(key));
-			}
-		}
-		if (jsonScreen.get("description") != null) {
-			JSONObject jsonDescriptions = jsonScreen.getJSONObject("description");
-			Iterator<String> descriptions = jsonDescriptions.keys();
-			for ( ; descriptions.hasNext(); ) {
-				String key = descriptions.next();
-				screen.getDescriptions().put(key, jsonDescriptions.getString(key));
-			}
-		}
-		if (jsonScreen.get("creator") != null)
-			screen.setCreator(new URIImpl(jsonScreen.getString("creator")));
-		if (jsonScreen.get("rights") != null)
-			screen.setRights(new URIImpl(jsonScreen.getString("rights")));
-		if (jsonScreen.get("version") != null)
-			screen.setVersion(jsonScreen.getString("version"));
-		if (jsonScreen.get("creationDate") != null)
-			screen.setCreationDate(DateFormatter.parseDateISO8601(jsonScreen.getString("creationDate")));
-		if (jsonScreen.get("icon") != null)
-			screen.setIcon(new URIImpl(jsonScreen.getString("icon")));
-		if (jsonScreen.get("screenshot") != null)
-			screen.setScreenshot(new URIImpl(jsonScreen.getString("screenshot")));
+
+		// fill common properties of the resource
+		parseResource(screen, jsonScreen, uri);
+
 		JSONObject domainContext = jsonScreen.getJSONObject("domainContext");
 		JSONArray tags = domainContext.getJSONArray("tags");
 		for (int i = 0; i < tags.length(); i++)
 			screen.getDomainContext().getTags().add(tags.getString(i));
 		URI user = new URIImpl(domainContext.getString("user"));
 		screen.getDomainContext().setUser(user);
-		if (jsonScreen.get("homepage") != null)
-			screen.setHomepage(new URIImpl(jsonScreen.getString("homepage")));
 		// preconditions
 		JSONArray preArray = jsonScreen.getJSONArray("preconditions");
 		ArrayList<List<Condition>> preconditions = new ArrayList<List<Condition>>();
@@ -175,41 +160,41 @@ public abstract class GenericServlet extends HttpServlet {
 		return screen;
 	}
 	
-	protected Precondition parsePrecondition(JSONObject jsonSlot, URI id) throws JSONException, IOException {
+	protected Precondition parsePrecondition(JSONObject jsonSlot, URI uri) throws JSONException, IOException {
 		Precondition pre = FastModelFactory.createPrecondition();
-		if (id != null)
-			pre.setUri(id);
+		if (uri != null)
+			pre.setUri(uri);
 		// conditions
 		JSONArray conditionsArray = jsonSlot.getJSONArray("conditions");
 		pre.setConditions(parseConditions(conditionsArray));
 		return pre;
 	}
 	
-	protected Postcondition parsePostcondition(JSONObject jsonEvent, URI id) throws JSONException, IOException {
+	protected Postcondition parsePostcondition(JSONObject jsonEvent, URI uri) throws JSONException, IOException {
 		Postcondition post = FastModelFactory.createPostcondition();
-		if (id != null)
-			post.setUri(id);
+		if (uri != null)
+			post.setUri(uri);
 		// conditions
 		JSONArray conditionsArray = jsonEvent.getJSONArray("conditions");
 		post.setConditions(parseConditions(conditionsArray));
 		return post;
 	}
 	
-	protected FormElement parseFormElement(JSONObject jsonFe, URI id) throws JSONException, IOException {
+	protected FormElement parseFormElement(JSONObject jsonFe, URI uri) throws JSONException, IOException {
 		FormElement fe = FastModelFactory.createFormElement();
-		parseScreenComponent(fe, jsonFe, id);
+		parseScreenComponent(fe, jsonFe, uri);
 		return fe;
 	}
 
-	protected Operator parseOperator(JSONObject jsonOp, URI id) throws JSONException, IOException {
+	protected Operator parseOperator(JSONObject jsonOp, URI uri) throws JSONException, IOException {
 		Operator op = FastModelFactory.createOperator();
-		parseScreenComponent(op, jsonOp, id);
+		parseScreenComponent(op, jsonOp, uri);
 		return op;
 	}
 
-	protected BackendService parseBackendService(JSONObject jsonBs, URI id) throws JSONException, IOException {
+	protected BackendService parseBackendService(JSONObject jsonBs, URI uri) throws JSONException, IOException {
 		BackendService bs = FastModelFactory.createBackendService();
-		parseScreenComponent(bs, jsonBs, id);
+		parseScreenComponent(bs, jsonBs, uri);
 		return bs;
 	}
 	
@@ -248,46 +233,16 @@ public abstract class GenericServlet extends HttpServlet {
 		return library;
 	}
 	
-	@SuppressWarnings("unchecked")
-	protected ScreenComponent parseScreenComponent(ScreenComponent sc, JSONObject jsonSc, URI id) throws JSONException, IOException {
-		if (id != null)
-			sc.setUri(id);
-		if (jsonSc.get("label") != null) {
-			JSONObject jsonLabels = jsonSc.getJSONObject("label");
-			Iterator<String> labels = jsonLabels.keys();
-			for ( ; labels.hasNext(); ) {
-				String key = labels.next();
-				sc.getLabels().put(key, jsonLabels.getString(key));
-			}
-		}
-		if (jsonSc.get("description") != null) {
-			JSONObject jsonDescriptions = jsonSc.getJSONObject("description");
-			Iterator<String> descriptions = jsonDescriptions.keys();
-			for ( ; descriptions.hasNext(); ) {
-				String key = descriptions.next();
-				sc.getDescriptions().put(key, jsonDescriptions.getString(key));
-			}
-		}
-		if (jsonSc.get("creator") != null)
-			sc.setCreator(new URIImpl(jsonSc.getString("creator")));
-		if (jsonSc.get("rights") != null)
-			sc.setRights(new URIImpl(jsonSc.getString("rights")));
-		if (jsonSc.get("version") != null)
-			sc.setVersion(jsonSc.getString("version"));
-		if (jsonSc.get("creationDate") != null)
-			sc.setCreationDate(DateFormatter.parseDateISO8601(jsonSc.getString("creationDate")));
-		if (jsonSc.get("icon") != null)
-			sc.setIcon(new URIImpl(jsonSc.getString("icon")));
-		if (jsonSc.get("screenshot") != null)
-			sc.setScreenshot(new URIImpl(jsonSc.getString("screenshot")));
+	protected void parseScreenComponent(ScreenComponent sc, JSONObject jsonSc, URI uri) throws JSONException, IOException {
+		// fill common properties of the resource
+		parseResource(sc, jsonSc, uri);
+		
 		JSONObject domainContext = jsonSc.getJSONObject("domainContext");
 		JSONArray tags = domainContext.getJSONArray("tags");
 		for (int i = 0; i < tags.length(); i++)
 			sc.getDomainContext().getTags().add(tags.getString(i));
 		URI user = new URIImpl(domainContext.getString("user"));
 		sc.getDomainContext().setUser(user);
-		if (jsonSc.get("homepage") != null)
-			sc.setHomepage(new URIImpl(jsonSc.getString("homepage")));
 		// actions
 		JSONArray actionsArray = jsonSc.getJSONArray("actions");
 		for (int i = 0; i < actionsArray.length(); i++)
@@ -311,7 +266,6 @@ public abstract class GenericServlet extends HttpServlet {
 			for (int i = 0; i < triggersArray.length(); i++)
 				sc.getTriggers().add(triggersArray.getString(i));
 		}
-		return sc;
 	}
 
 	/**
@@ -333,6 +287,8 @@ public abstract class GenericServlet extends HttpServlet {
 		for (int i = 0; i < conditionsArray.length(); i++) {
 			JSONObject cJson = conditionsArray.getJSONObject(i);
 			Condition c = FastModelFactory.createCondition();
+			c.setId(cJson.getString("id"));
+			c.setName(cJson.getString("name"));
 			String scope = cJson.getString("scope");
 			c.setScope(scope);
 			if (cJson.get("label") != null) {

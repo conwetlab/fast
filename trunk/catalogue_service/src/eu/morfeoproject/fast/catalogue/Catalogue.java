@@ -803,29 +803,10 @@ public class Catalogue {
 	}
 	
 	private void saveScreenFlow(ScreenFlow sf) throws OntologyReadonlyException, NotFoundException {
+		// save the common properties of the resource
+		saveResource(sf);
+
 		URI sfUri = sf.getUri();
-		for (String key : sf.getLabels().keySet())
-			tripleStore.addStatement(sfUri, RDFS.label, tripleStore.createLanguageTagLiteral(sf.getLabels().get(key), key));
-		for (String key : sf.getDescriptions().keySet())
-			tripleStore.addStatement(sfUri, DC.description, tripleStore.createLanguageTagLiteral(sf.getDescriptions().get(key), key));
-		if (sf.getCreator() != null)
-			tripleStore.addStatement(sfUri, DC.creator, sf.getCreator());
-		if (sf.getRights() != null)
-			tripleStore.addStatement(sfUri, DC.rights, sf.getRights());
-		if (sf.getVersion() != null)
-			tripleStore.addStatement(sfUri, FGO.hasVersion, sf.getVersion());
-		if (sf.getCreationDate() != null)
-			tripleStore.addStatement(sfUri, DC.date, DateFormatter.formatDateISO8601(sf.getCreationDate()));
-		if (sf.getIcon() != null)
-			tripleStore.addStatement(sfUri, FGO.hasIcon, sf.getIcon());
-		if (sf.getScreenshot() != null)
-			tripleStore.addStatement(sfUri, FGO.hasScreenshot, sf.getScreenshot());
-		for (String tag : sf.getDomainContext().getTags())
-			tripleStore.addStatement(sfUri, FGO.hasTag, tag);
-		if (sf.getHomepage() != null)
-			tripleStore.addStatement(sfUri, FOAF.homepage, sf.getHomepage());
-		if (sf.getVersion() != null)
-			tripleStore.addStatement(sfUri, FGO.hasVersion, sf.getVersion());
 		for (URI rUri : sf.getResources()) {
 			if (containsResource(rUri))
 				tripleStore.addStatement(sfUri, FGO.contains, rUri);
@@ -893,46 +874,18 @@ public class Catalogue {
 	 */
 	private void saveScreen(Screen screen)
 	throws OntologyReadonlyException, NotFoundException, RepositoryException, OntologyInvalidException {
+		// save the common properties of the resource
+		saveResource(screen);
+
 		URI screenUri = screen.getUri();
-		for (String key : screen.getLabels().keySet())
-			tripleStore.addStatement(screenUri, RDFS.label, tripleStore.createLanguageTagLiteral(screen.getLabels().get(key), key));
-		for (String key : screen.getDescriptions().keySet())
-			tripleStore.addStatement(screenUri, DC.description, tripleStore.createLanguageTagLiteral(screen.getDescriptions().get(key), key));
-		if (screen.getCreator() != null)
-			tripleStore.addStatement(screenUri, DC.creator, screen.getCreator());
-		if (screen.getRights() != null)
-			tripleStore.addStatement(screenUri, DC.rights, screen.getRights());
-		if (screen.getVersion() != null)
-			tripleStore.addStatement(screenUri, FGO.hasVersion, screen.getVersion());
-		if (screen.getCreationDate() != null)
-			tripleStore.addStatement(screenUri, DC.date, DateFormatter.formatDateISO8601(screen.getCreationDate()));
-		if (screen.getIcon() != null)
-			tripleStore.addStatement(screenUri, FGO.hasIcon, screen.getIcon());
-		if (screen.getScreenshot() != null)
-			tripleStore.addStatement(screenUri, FGO.hasScreenshot, screen.getScreenshot());
-		for (String tag : screen.getDomainContext().getTags())
-			tripleStore.addStatement(screenUri, FGO.hasTag, tag);
-		if (screen.getHomepage() != null)
-			tripleStore.addStatement(screenUri, FOAF.homepage, screen.getHomepage());
-		if (screen.getVersion() != null)
-			tripleStore.addStatement(screenUri, FGO.hasVersion, screen.getVersion());
 		for (List<Condition> conList : screen.getPreconditions()) {
 			BlankNode bag = tripleStore.createBlankNode();
 			tripleStore.addStatement(bag, RDF.type, RDF.Bag);
 			tripleStore.addStatement(screenUri, FGO.hasPreCondition, bag);
 			int i = 1;
 			for (Condition con : conList) {
-				BlankNode c = tripleStore.createBlankNode();
+				BlankNode c = saveCondition(con);
 				tripleStore.addStatement(bag, RDF.li(i++), c);
-				tripleStore.addStatement(c, FGO.hasPatternString, con.getPatternString());
-				URI p = tripleStore.getCleanUniqueURI(FGO.NS_FGO, "pattern", false);
-				tripleStore.addStatement(c, FGO.hasPattern, p);
-				for (Statement st : con.getPattern()) {
-					tripleStore.addStatement(p, st.getSubject(), st.getPredicate(), st.getObject());
-				}
-				tripleStore.addStatement(c, FGO.hasScope, con.getScope());
-				for (String key : con.getLabels().keySet())
-					tripleStore.addStatement(c, RDFS.label, tripleStore.createLanguageTagLiteral(con.getLabels().get(key), key));
 			}
 		}
 		for (List<Condition> conList : screen.getPostconditions()) {
@@ -941,17 +894,8 @@ public class Catalogue {
 			tripleStore.addStatement(screenUri, FGO.hasPostCondition, bag);
 			int i = 1;
 			for (Condition con : conList) {
-				BlankNode c = tripleStore.createBlankNode();
+				BlankNode c = saveCondition(con);
 				tripleStore.addStatement(bag, RDF.li(i++), c);
-				tripleStore.addStatement(c, FGO.hasPatternString, con.getPatternString());
-				URI p = tripleStore.getCleanUniqueURI(FGO.NS_FGO, "pattern", false);
-				tripleStore.addStatement(c, FGO.hasPattern, p);
-				for (Statement st : con.getPattern()) {
-					tripleStore.addStatement(p, st.getSubject(), st.getPredicate(), st.getObject());
-				}
-				tripleStore.addStatement(c, FGO.hasScope, con.getScope());
-				for (String key : con.getLabels().keySet())
-					tripleStore.addStatement(c, RDFS.label, tripleStore.createLanguageTagLiteral(con.getLabels().get(key), key));
 			}
 		}
 		if (screen.getCode() != null)
@@ -1005,7 +949,6 @@ public class Catalogue {
 		planner.remove(screenUri);
 		logger.info("Screen "+screenUri+" removed.");
 	}
-
 	
 	public void addPreOrPost(PreOrPost se) throws DuplicatedResourceException, OntologyInvalidException {
 		URI seUri = null;
@@ -1033,17 +976,8 @@ public class Catalogue {
 		tripleStore.addStatement(se.getUri(), FGO.hasCondition, bag);
 		int i = 1;
 		for (Condition con : se.getConditions()) {
-			BlankNode c = tripleStore.createBlankNode();
+			BlankNode c = saveCondition(con);
 			tripleStore.addStatement(bag, RDF.li(i++), c);
-			tripleStore.addStatement(c, FGO.hasPatternString, con.getPatternString());
-			URI p = tripleStore.getCleanUniqueURI(FGO.NS_FGO, "pattern", false);
-			tripleStore.addStatement(c, FGO.hasPattern, p);
-			for (Statement st : con.getPattern()) {
-				tripleStore.addStatement(p, st.getSubject(), st.getPredicate(), st.getObject());
-			}
-			tripleStore.addStatement(c, FGO.hasScope, con.getScope());
-			for (String key : con.getLabels().keySet())
-				tripleStore.addStatement(c, RDFS.label, tripleStore.createLanguageTagLiteral(con.getLabels().get(key), key));
 		}
 	}
 	
@@ -1105,34 +1039,65 @@ public class Catalogue {
 			scUri = tripleStore.createResource(type);
 			sc.setUri(scUri);
 		}
-		// persists the screen
+		// persists the screen component
 		saveScreenComponent(sc);
 	}
 	
+	private void saveResource(Resource resource) {
+		URI rUri = resource.getUri();
+		for (String key : resource.getLabels().keySet())
+			tripleStore.addStatement(rUri, RDFS.label, tripleStore.createLanguageTagLiteral(resource.getLabels().get(key), key));
+		for (String key : resource.getDescriptions().keySet())
+			tripleStore.addStatement(rUri, DC.description, tripleStore.createLanguageTagLiteral(resource.getDescriptions().get(key), key));
+		if (resource.getCreator() != null)
+			tripleStore.addStatement(rUri, DC.creator, resource.getCreator());
+		if (resource.getRights() != null)
+			tripleStore.addStatement(rUri, DC.rights, resource.getRights());
+		if (resource.getVersion() != null)
+			tripleStore.addStatement(rUri, FGO.hasVersion, resource.getVersion());
+		if (resource.getCreationDate() != null)
+			tripleStore.addStatement(rUri, DC.date, DateFormatter.formatDateISO8601(resource.getCreationDate()));
+		if (resource.getIcon() != null)
+			tripleStore.addStatement(rUri, FGO.hasIcon, resource.getIcon());
+		if (resource.getScreenshot() != null)
+			tripleStore.addStatement(rUri, FGO.hasScreenshot, resource.getScreenshot());
+		for (String tag : resource.getDomainContext().getTags())
+			tripleStore.addStatement(rUri, FGO.hasTag, tag);
+		if (resource.getHomepage() != null)
+			tripleStore.addStatement(rUri, FOAF.homepage, resource.getHomepage());
+		if (resource.getVersion() != null)
+			tripleStore.addStatement(rUri, FGO.hasVersion, resource.getVersion());
+		if (resource.getId() != null)
+			tripleStore.addStatement(rUri, FGO.hasId, resource.getId());
+		if (resource.getName() != null)
+			tripleStore.addStatement(rUri, FGO.hasName, resource.getName());
+		if (resource.getType() != null)
+			tripleStore.addStatement(rUri, FGO.hasType, resource.getType());
+	}
+
+	private BlankNode saveCondition(Condition con) {
+		BlankNode c = tripleStore.createBlankNode();
+		tripleStore.addStatement(c, FGO.hasPatternString, con.getPatternString());
+		URI p = tripleStore.getCleanUniqueURI(FGO.NS_FGO, "pattern", false);
+		tripleStore.addStatement(c, FGO.hasPattern, p);
+		for (Statement st : con.getPattern()) {
+			tripleStore.addStatement(p, st.getSubject(), st.getPredicate(), st.getObject());
+		}
+		tripleStore.addStatement(c, FGO.hasScope, con.getScope());
+		for (String key : con.getLabels().keySet())
+			tripleStore.addStatement(c, RDFS.label, tripleStore.createLanguageTagLiteral(con.getLabels().get(key), key));
+		if (con.getId() != null)
+			tripleStore.addStatement(c, FGO.hasId, con.getId());
+		if (con.getName() != null)
+			tripleStore.addStatement(c, FGO.hasName, con.getName());
+		return c;
+	}
+	
 	private void saveScreenComponent(ScreenComponent sc) {
+		// save the common properties of the resource
+		saveResource(sc);
+		
 		URI scUri = sc.getUri();
-		for (String key : sc.getLabels().keySet())
-			tripleStore.addStatement(scUri, RDFS.label, tripleStore.createLanguageTagLiteral(sc.getLabels().get(key), key));
-		for (String key : sc.getDescriptions().keySet())
-			tripleStore.addStatement(scUri, DC.description, tripleStore.createLanguageTagLiteral(sc.getDescriptions().get(key), key));
-		if (sc.getCreator() != null)
-			tripleStore.addStatement(scUri, DC.creator, sc.getCreator());
-		if (sc.getRights() != null)
-			tripleStore.addStatement(scUri, DC.rights, sc.getRights());
-		if (sc.getVersion() != null)
-			tripleStore.addStatement(scUri, FGO.hasVersion, sc.getVersion());
-		if (sc.getCreationDate() != null)
-			tripleStore.addStatement(scUri, DC.date, DateFormatter.formatDateISO8601(sc.getCreationDate()));
-		if (sc.getIcon() != null)
-			tripleStore.addStatement(scUri, FGO.hasIcon, sc.getIcon());
-		if (sc.getScreenshot() != null)
-			tripleStore.addStatement(scUri, FGO.hasScreenshot, sc.getScreenshot());
-		for (String tag : sc.getDomainContext().getTags())
-			tripleStore.addStatement(scUri, FGO.hasTag, tag);
-		if (sc.getHomepage() != null)
-			tripleStore.addStatement(scUri, FOAF.homepage, sc.getHomepage());
-		if (sc.getVersion() != null)
-			tripleStore.addStatement(scUri, FGO.hasVersion, sc.getVersion());
 		// actions
 		for (Action action : sc.getActions()) {
 			BlankNode aNode = tripleStore.createBlankNode();
@@ -1145,17 +1110,8 @@ public class Catalogue {
 				tripleStore.addStatement(aNode, FGO.hasPreCondition, bag);
 				int i = 1;
 				for (Condition con : conList) {
-					BlankNode c = tripleStore.createBlankNode();
+					BlankNode c = saveCondition(con);
 					tripleStore.addStatement(bag, RDF.li(i++), c);
-					tripleStore.addStatement(c, FGO.hasPatternString, con.getPatternString());
-					URI p = tripleStore.getCleanUniqueURI(FGO.NS_FGO, "pattern", false);
-					tripleStore.addStatement(c, FGO.hasPattern, p);
-					for (Statement st : con.getPattern()) {
-						tripleStore.addStatement(p, st.getSubject(), st.getPredicate(), st.getObject());
-					}
-					tripleStore.addStatement(c, FGO.hasScope, con.getScope());
-					for (String key : con.getLabels().keySet())
-						tripleStore.addStatement(c, RDFS.label, tripleStore.createLanguageTagLiteral(con.getLabels().get(key), key));
 				}
 			}
 			// uses
@@ -1169,17 +1125,8 @@ public class Catalogue {
 			tripleStore.addStatement(scUri, FGO.hasPostCondition, bag);
 			int i = 1;
 			for (Condition con : conList) {
-				BlankNode c = tripleStore.createBlankNode();
+				BlankNode c = saveCondition(con);
 				tripleStore.addStatement(bag, RDF.li(i++), c);
-				tripleStore.addStatement(c, FGO.hasPatternString, con.getPatternString());
-				URI p = tripleStore.getCleanUniqueURI(FGO.NS_FGO, "pattern", false);
-				tripleStore.addStatement(c, FGO.hasPattern, p);
-				for (Statement st : con.getPattern()) {
-					tripleStore.addStatement(p, st.getSubject(), st.getPredicate(), st.getObject());
-				}
-				tripleStore.addStatement(c, FGO.hasScope, con.getScope());
-				for (String key : con.getLabels().keySet())
-					tripleStore.addStatement(c, RDFS.label, tripleStore.createLanguageTagLiteral(con.getLabels().get(key), key));
 			}
 		}
 		// code
@@ -1468,6 +1415,12 @@ public class Catalogue {
 				resource.getDomainContext().getTags().add(object.asLiteral().toString());
 			} else if (predicate.equals(FOAF.homepage)) {
 				resource.setHomepage(object.asURI());
+			} else if (predicate.equals(FGO.hasId)) {
+				resource.setId(object.toString());
+			} else if (predicate.equals(FGO.hasName)) {
+				resource.setName(object.toString());
+			} else if (predicate.equals(FGO.hasType)) {
+				resource.setType(object.toString());
 			}
 		}
 		cIt.close();
@@ -1772,6 +1725,10 @@ public class Catalogue {
 				for ( ; it.hasNext(); )
 					c.getPattern().add(it.next());
 				it.close();
+			} else if (predicate.equals(FGO.hasId)) {
+				c.setId(object.toString());
+			} else if (predicate.equals(FGO.hasName)) {
+				c.setName(object.toString());
 			}
 		}
 		cIt.close();

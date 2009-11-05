@@ -29,6 +29,9 @@ public abstract class Resource {
     private URI screenshot;
     private URI homepage;
     private DomainContext domainContext;
+    private String id;
+    private String name;
+    private String type;
     
     
     public URI getUri() {
@@ -125,6 +128,30 @@ public abstract class Resource {
 		this.domainContext = domainContext;
 	}
 
+	public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
+	}
+
 	/**
 	 * Compare if two resources have the same URI
 	 * @param r the resource to compare with
@@ -202,6 +229,18 @@ public abstract class Resource {
 				json.put("homepage", JSONObject.NULL);
 			else
 				json.put("homepage", getHomepage().toString());
+			if (getId() == null)
+				json.put("id", JSONObject.NULL);
+			else
+				json.put("id", getId());
+			if (getName() == null)
+				json.put("name", JSONObject.NULL);
+			else
+				json.put("name", getName());
+			if (getType() == null)
+				json.put("type", JSONObject.NULL);
+			else
+				json.put("type", getType());
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -236,8 +275,12 @@ public abstract class Resource {
 			model.addStatement(resourceUri, FGO.hasTag, tag);
 		if (this.getHomepage() != null)
 			model.addStatement(resourceUri, FOAF.homepage, this.getHomepage());
-		if (this.getVersion() != null)
-			model.addStatement(resourceUri, FGO.hasVersion, this.getVersion());
+		if (this.getId() != null)
+			model.addStatement(resourceUri, FGO.hasId, this.getId());
+		if (this.getName() != null)
+			model.addStatement(resourceUri, FGO.hasName, this.getName());
+		if (this.getType() != null)
+			model.addStatement(resourceUri, FGO.hasType, this.getType());
 		
 		return model;
 	}

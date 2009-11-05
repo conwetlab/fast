@@ -4,7 +4,7 @@ import org.ontoware.rdf2go.model.node.URI;
 import org.ontoware.rdf2go.model.node.impl.URIImpl;
 
 /**
- * Vocabulary File. Created by org.ontoware.rdf2go.util.VocabularyWriter on Tue Oct 20 14:08:29 BST 2009
+ * Vocabulary File. Created by org.ontoware.rdf2go.util.VocabularyWriter on Wed Nov 04 14:16:54 GMT 2009
  * input file: src/eu/morfeoproject/fast/catalogue/ontologies/fgo.rdf
  * namespace: http://purl.oclc.org/fast/ontology/gadget#
  */
@@ -181,7 +181,8 @@ public interface FGO {
 
     /**
      * Label: has use string@en 
-     * Comment: This property ...@en 
+     * Comment: This property indicates concepts used within a building block, without being a 
+	pre/postcondition.@en 
      * Comment: http://purl.oclc.org/fast/ontology/gadget#Action 
      * Range: http://www.w3.org/2001/XMLSchema#string 
      */
@@ -201,7 +202,8 @@ public interface FGO {
 
     /**
      * Label: has trigger string@en 
-     * Comment: This property ...@en 
+     * Comment: This property represents the events fired within a building block. e.g. a 
+	button to clear the shopping cart will fired a "clear cart" trigger.@en 
      * Comment: http://purl.oclc.org/fast/ontology/gadget#ScreenComponent 
      * Range: http://www.w3.org/2001/XMLSchema#string 
      */
@@ -214,6 +216,14 @@ public interface FGO {
      * Range: http://www.w3.org/2001/XMLSchema#string 
      */
     public static final URI hasVersion = new URIImpl("http://purl.oclc.org/fast/ontology/gadget#hasVersion", false);
+
+    /**
+     * Label: has id@en 
+     * Comment: The internal ID of the resource within the container resource.@en 
+     * Comment: http://purl.oclc.org/fast/ontology/gadget#Resource 
+     * Range: http://www.w3.org/2001/XMLSchema#string 
+     */
+    public static final URI hasId = new URIImpl("http://purl.oclc.org/fast/ontology/gadget#hasId", false);
 
     /**
      * Label: has language string@en 
@@ -236,20 +246,24 @@ public interface FGO {
     public static final URI title = new URIImpl("http://purl.org/dc/terms/title", false);
 
     /**
+     * Label: has type@en 
+     * Comment: The type of the resource.@en 
+     * Comment: http://purl.oclc.org/fast/ontology/gadget#Resource 
+     * Range: http://www.w3.org/2001/XMLSchema#string 
+     */
+    public static final URI hasType = new URIImpl("http://purl.oclc.org/fast/ontology/gadget#hasType", false);
+
+    /**
      */
     public static final URI mbox_sha1sum = new URIImpl("http://xmlns.com/foaf/0.1/mbox_sha1sum", false);
 
     /**
+     * Label: has name@en 
+     * Comment: The name the user gives to the resource.@en 
+     * Comment: http://purl.oclc.org/fast/ontology/gadget#Resource 
+     * Range: http://www.w3.org/2001/XMLSchema#string 
      */
-    public static final URI revision = new URIImpl("http://usefulinc.com/ns/doap#revision", false);
-
-    /**
-     */
-    public static final URI modified = new URIImpl("http://purl.org/dc/terms/modified", false);
-
-    /**
-     */
-    public static final URI description = new URIImpl("http://purl.org/dc/terms/description", false);
+    public static final URI hasName = new URIImpl("http://purl.oclc.org/fast/ontology/gadget#hasName", false);
 
     /**
      * Label: is positive@en 
@@ -260,6 +274,18 @@ public interface FGO {
      * Range: http://www.w3.org/2001/XMLSchema#boolean 
      */
     public static final URI hasScope = new URIImpl("http://purl.oclc.org/fast/ontology/gadget#hasScope", false);
+
+    /**
+     */
+    public static final URI description = new URIImpl("http://purl.org/dc/terms/description", false);
+
+    /**
+     */
+    public static final URI modified = new URIImpl("http://purl.org/dc/terms/modified", false);
+
+    /**
+     */
+    public static final URI revision = new URIImpl("http://usefulinc.com/ns/doap#revision", false);
 
     /**
      */
@@ -377,7 +403,8 @@ public interface FGO {
 
     /**
      * Label: has action@en 
-     * Comment: This property indicates which actions are asociated and can be perfomed within a screen component.@en 
+     * Comment: This property indicates which actions are asociated and can be perfomed within 
+	a screen component.@en 
      * Comment: http://purl.oclc.org/fast/ontology/gadget#ScreenComponent 
      * Range: http://purl.oclc.org/fast/ontology/gadget#Action 
      */

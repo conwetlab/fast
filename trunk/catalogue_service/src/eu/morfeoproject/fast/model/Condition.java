@@ -18,6 +18,8 @@ public class Condition {
 	private List<Statement> pattern;
 	private String scope;
 	private Map<String, String> labels;
+	private String id;
+	private String name;
 	
 	public String getPatternString() {
 		return patternString;
@@ -55,6 +57,22 @@ public class Condition {
 		this.labels = labels;
 	}
 	
+	public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
 	@Override
 	public boolean equals(Object o) {
 		if (o == null)
@@ -103,6 +121,14 @@ public class Condition {
 					jsonLabels.put(key, getLabels().get(key));
 				json.put("label", jsonLabels);
 			}
+			if (getId() == null)
+				json.put("id", JSONObject.NULL);
+			else
+				json.put("id", getId());
+			if (getName() == null)
+				json.put("name", JSONObject.NULL);
+			else
+				json.put("name", getName());
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
