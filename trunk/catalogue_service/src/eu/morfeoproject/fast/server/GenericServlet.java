@@ -288,7 +288,6 @@ public abstract class GenericServlet extends HttpServlet {
 			JSONObject cJson = conditionsArray.getJSONObject(i);
 			Condition c = FastModelFactory.createCondition();
 			c.setId(cJson.getString("id"));
-			c.setName(cJson.getString("name"));
 			String scope = cJson.getString("scope");
 			c.setScope(scope);
 			if (cJson.get("label") != null) {

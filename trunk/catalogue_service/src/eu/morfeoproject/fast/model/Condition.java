@@ -19,7 +19,6 @@ public class Condition {
 	private String scope;
 	private Map<String, String> labels;
 	private String id;
-	private String name;
 	
 	public String getPatternString() {
 		return patternString;
@@ -63,14 +62,6 @@ public class Condition {
 
 	public void setId(String id) {
 		this.id = id;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
 	}
 
 	@Override
@@ -125,10 +116,6 @@ public class Condition {
 				json.put("id", JSONObject.NULL);
 			else
 				json.put("id", getId());
-			if (getName() == null)
-				json.put("name", JSONObject.NULL);
-			else
-				json.put("name", getName());
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

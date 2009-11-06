@@ -80,7 +80,7 @@ public abstract class ScreenComponent extends Resource {
 			model.addStatement(resourceUri, FGO.hasCode, this.getCode());
 
 		// actions
-		for (Action action : this.actions) {
+		for (Action action : getActions()) {
 			BlankNode actionNode = model.createBlankNode();
 			model.addStatement(resourceUri, FGO.hasAction, actionNode);
 			model.addStatement(actionNode, RDFS.label, action.getName());
@@ -102,7 +102,7 @@ public abstract class ScreenComponent extends Resource {
 		}
 		
 		// libraries
-		for (Library library : this.libraries) {
+		for (Library library : getLibraries()) {
 			BlankNode libNode = model.createBlankNode();
 			model.addStatement(resourceUri, FGO.hasLibrary, libNode);
 			model.addStatement(libNode, FGO.hasLanguage, model.createPlainLiteral(library.getLanguage()));
@@ -110,7 +110,7 @@ public abstract class ScreenComponent extends Resource {
 		}
 		
 		// postconditions
-		for (List<Condition> conList : this.getPostconditions()) {
+		for (List<Condition> conList : getPostconditions()) {
 			BlankNode bag = model.createBlankNode();
 			model.addStatement(bag, RDF.type, RDF.Bag);
 			model.addStatement(resourceUri, FGO.hasPostCondition, bag);
@@ -125,7 +125,7 @@ public abstract class ScreenComponent extends Resource {
 			}
 		}
 		// triggers
-		for (String trigger : triggers)
+		for (String trigger : getTriggers())
 			model.addStatement(resourceUri, FGO.hasTrigger, model.createPlainLiteral(trigger));
 		
 		return model;
@@ -142,12 +142,12 @@ public abstract class ScreenComponent extends Resource {
 				json.put("code", getCode().toString());
 			// actions
 			JSONArray actionsArray = new JSONArray();
-			for (Action action : actions)
+			for (Action action : getActions())
 				actionsArray.put(action.toJSON());
 			json.put("actions", actionsArray);
 			// libraries
 			JSONArray librariesArray = new JSONArray();
-			for (Library library : libraries)
+			for (Library library : getLibraries())
 				librariesArray.put(library.toJSON());
 			json.put("libraries", librariesArray);
 			// postconditions
@@ -161,7 +161,7 @@ public abstract class ScreenComponent extends Resource {
 			json.put("postconditions", postArray);
 			// triggers
 			JSONArray triggersArray = new JSONArray();
-			for (String trigger : triggers)
+			for (String trigger : getTriggers())
 				triggersArray.put(trigger);
 			json.put("triggers", triggersArray);
 		} catch (JSONException e) {

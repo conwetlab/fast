@@ -1088,8 +1088,6 @@ public class Catalogue {
 			tripleStore.addStatement(c, RDFS.label, tripleStore.createLanguageTagLiteral(con.getLabels().get(key), key));
 		if (con.getId() != null)
 			tripleStore.addStatement(c, FGO.hasId, con.getId());
-		if (con.getName() != null)
-			tripleStore.addStatement(c, FGO.hasName, con.getName());
 		return c;
 	}
 	
@@ -1727,8 +1725,6 @@ public class Catalogue {
 				it.close();
 			} else if (predicate.equals(FGO.hasId)) {
 				c.setId(object.toString());
-			} else if (predicate.equals(FGO.hasName)) {
-				c.setName(object.toString());
 			}
 		}
 		cIt.close();

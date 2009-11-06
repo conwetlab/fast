@@ -59,7 +59,7 @@ public class Action {
 			json.put("preconditions", preArray);
 			// uses
 			JSONArray usesArray = new JSONArray();
-			for (String use : uses)
+			for (String use : getUses())
 				usesArray.put(use);
 			json.put("uses", usesArray);
 		} catch (JSONException e) {
