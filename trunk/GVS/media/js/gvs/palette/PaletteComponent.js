@@ -7,21 +7,21 @@ var PaletteComponent = Class.create(DragSource,
      * @extends DragSource
      */ 
     initialize: function($super,/** BuildingBlockDescription */ buildingBlockDescription, 
-            /** DropZone */ dropZone, /** InferenceEngine */ inferenceEngine) {
+            /** DropZone */ dropZones, /** InferenceEngine */ inferenceEngine) {
         $super();
         /**
          * Handles the drag'n'drop stuff
          * @type DragHandler
          * @private
          */
-        this._dragHandler = new DragHandler(this, dropZone);
+        this._dragHandler = new DragHandler(this, dropZones);
         
         /**
          * Component and instance Drop zone 
          * @type DOMNode
          * @private
          */
-        this._dropZone = dropZone;
+        this._dropZones = dropZones;
 
         /**
          * BuildingBlock in which this component is based.

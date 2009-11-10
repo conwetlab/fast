@@ -64,7 +64,7 @@ var NewScreenflowDialog = Class.create(ConfirmDialog /** @lends NewScreenflowDia
     _onOk: function($super){
         if (this._getFormWidget().validate()) {
             var name = $F(this._getForm().name);
-            var domainContext = $F(this._getForm().domaincontext).split(/[\s,]+/);
+            var domainContext = $F(this._getForm().domaincontext).split(/[\s,]+/).without("");
             var version = $F(this._getForm().version);
             
             documentController = GVSSingleton.getInstance().getDocumentController();

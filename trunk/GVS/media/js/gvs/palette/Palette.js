@@ -6,7 +6,7 @@ var Palette = Class.create(SetListener, /** @lends Palette.prototype */ {
      * @constructs
      * @extends SetListener
      */
-    initialize: function(/** BuildingBlockSet */ set, /** DropZone */ dropZone,
+    initialize: function(/** BuildingBlockSet */ set, /** Array */ dropZones,
             /** InferenceEngine */ inferenceEngine) {
         /**
          * @private @member
@@ -22,11 +22,11 @@ var Palette = Class.create(SetListener, /** @lends Palette.prototype */ {
         this._set = set;
         
         /**
-         * Zone to drop components
-         * @type DropZone
+         * Zones to drop components
+         * @type Array
          * @private @member
          */
-        this._dropZone = dropZone;
+        this._dropZones = dropZones;
         
         /**
          * Collection of components the palette offers.
@@ -144,11 +144,11 @@ var Palette = Class.create(SetListener, /** @lends Palette.prototype */ {
         
         switch(this._set.getBuildingBlockType()) {
             case Constants.BuildingBlock.SCREEN:
-                component = new ScreenComponent(desc, this._dropZone, this._inferenceEngine);
+                component = new ScreenComponent(desc, this._dropZones, this._inferenceEngine);
                 break;
                 
             case Constants.BuildingBlock.DOMAIN_CONCEPT:
-                component = new DomainConceptComponent(desc, this._dropZone, this._inferenceEngine);
+                component = new DomainConceptComponent(desc, this._dropZones, this._inferenceEngine);
                 break;
                 
             default:

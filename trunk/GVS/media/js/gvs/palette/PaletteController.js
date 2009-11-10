@@ -9,7 +9,8 @@ var PaletteController = Class.create(
      *      Each objects contains the set for the building block
      *      and its associated drop zone
      */
-    initialize: function(/** Array */ buildingBlocks, /** InferenceEngine */ inferenceEngine) {
+    initialize: function(/** Array */ buildingBlockSets, /** Array */ dropZones,
+        /** InferenceEngine */ inferenceEngine) {
         
         
         /**
@@ -35,10 +36,16 @@ var PaletteController = Class.create(
                 });
          
         //Create all the document necessary palettes
-        $A(buildingBlocks).each (function(buildingBlock) {
-           var palette = new Palette (buildingBlock.set, buildingBlock.dropZone, inferenceEngine); 
-           this._palettes.set(buildingBlock.set.getBuildingBlockType(), palette);
-           this._node.addChild(palette.getNode());
+        $A(buildingBlockSets).each (function(set) {
+            var validDropZones = new Array();
+            dropZones.each(function(dropZone) {
+                if (dropZone.accepts().include(set.constructor)) {
+                    validDropZones.push(dropZone);
+                }    
+            });
+            var palette = new Palette (set, validDropZones, inferenceEngine); 
+            this._palettes.set(set.getBuildingBlockType(), palette);
+            this._node.addChild(palette.getNode());
         }.bind(this));
     },
 

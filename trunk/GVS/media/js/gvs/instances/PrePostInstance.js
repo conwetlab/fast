@@ -7,8 +7,8 @@ var PrePostInstance = Class.create(ComponentInstance,
      * @extends ComponentInstance
      */
     initialize: function($super, /** DomainConceptDescription */ domainConceptDescription, 
-            /** DropZone */ dropZone, /** InferenceEngine */ inferenceEngine) {
-        $super(domainConceptDescription, dropZone, inferenceEngine);
+            /** Array */ dropZones, /** InferenceEngine */ inferenceEngine) {
+        $super(domainConceptDescription, dropZones, inferenceEngine);
         
         /**
          * Uri of the pre or post in the catalogue
@@ -251,7 +251,8 @@ var PrePostInstance = Class.create(ComponentInstance,
         return {
                 'label': {'en-gb': this._label},
                 'pattern': this._pattern,
-                'scope': 'design time'
+                'scope': 'design time',
+                'id': this._buildingBlockDescription.uri
             };
     },
     

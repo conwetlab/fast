@@ -10,7 +10,8 @@ var PaletteDocument = Class.create(AbstractDocument, /** @lends PaletteDocument.
      */ 
     initialize: function($super,
             /** String */ title, 
-            /** Array */ validBuildingBlocks,
+            /** Array */ buildingBlockSets,
+            /** Array */ dropZones,
             /** Array */ domainContext) {
         $super(title);
         
@@ -26,19 +27,6 @@ var PaletteDocument = Class.create(AbstractDocument, /** @lends PaletteDocument.
          * @private @member
          */
         this._mainBorderContainer = null;
-        
-        var buildingBlocks = new Array();
-        
-        $A(validBuildingBlocks).each(function(validBuildingBlock) {
-            var constructor = validBuildingBlock.constructor;
-            var buildingBlockSet = new constructor(this._domainContext);
-
-            var buildingBlock = new Object();
-            buildingBlock.set = buildingBlockSet;
-            buildingBlock.dropZone = validBuildingBlock.dropZone;           
-            
-            buildingBlocks.push(buildingBlock);
-        }.bind(this));
         
         this._renderMainUI();
         
@@ -61,7 +49,7 @@ var PaletteDocument = Class.create(AbstractDocument, /** @lends PaletteDocument.
          * @type PaletteController
          * @private @member
          */ 
-        this._paletteController = new PaletteController(buildingBlocks, this._inferenceEngine);
+        this._paletteController = new PaletteController(buildingBlockSets, dropZones, this._inferenceEngine);
         
         this._renderPaletteArea();
         
@@ -92,14 +80,6 @@ var PaletteDocument = Class.create(AbstractDocument, /** @lends PaletteDocument.
         } else {
             this._selectedElement = null;
         }
-    },
-        
-    /**
-     * Implementing DropZone interface.
-     * To be overriden.
-     */
-    drop: function(/** Object */ droppedElement) {
-        throw "Abstract method invation. PaletteDocument::drop";
     },
     
     /**

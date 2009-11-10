@@ -25,7 +25,10 @@ var CatalogueSingleton = function(){
              */
             this._factories = {
                 'screen': new ScreenFactory(),
-                'domainConcept': new DomainConceptFactory()
+                'domainConcept': new DomainConceptFactory(), 
+                'form': new FormFactory(),
+                'resource': new ResourceFactory(),
+                'operator': new OperatorFactory()
             };
         },
         

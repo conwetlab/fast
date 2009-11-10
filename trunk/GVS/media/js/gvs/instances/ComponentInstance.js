@@ -8,7 +8,7 @@ var ComponentInstance = Class.create(DragSource,
      * @extends DragSource
      */ 
     initialize: function($super, /**BuildingBlockDescription*/ buildingBlockDescription, 
-            /** DropZone */ dropZone, /** InferenceEngine */ inferenceEngine) {
+            /** Array */ dropZones, /** InferenceEngine */ inferenceEngine) {
         $super();
 
         /**
@@ -16,7 +16,7 @@ var ComponentInstance = Class.create(DragSource,
          * @type DragHandler
          * @private
          */
-        this._dragHandler = new DragHandler(this, dropZone);
+        this._dragHandler = new DragHandler(this, dropZones);
         
         /** 
          * BuildingBlock description this class is instance of

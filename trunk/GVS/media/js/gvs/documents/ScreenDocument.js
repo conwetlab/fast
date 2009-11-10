@@ -1,8 +1,8 @@
-var ScreenflowDocument = Class.create(PaletteDocument,
-    /** @lends ScreenflowDocument.prototype */ {
+var ScreenDocument = Class.create(PaletteDocument,
+    /** @lends ScreenDocument.prototype */ {
 
     /**
-     * Screenflow document.
+     * Screen document.
      * @constructs
      * @extends PaletteDocument
      */
@@ -22,26 +22,38 @@ var ScreenflowDocument = Class.create(PaletteDocument,
          */
         this._factPane = new FactPane(this._inspectorArea);
         
-        var screenSet = new ScreenSet(domainContext);
+        // Palette sets
+        var formSet = new FormSet(domainContext);
+        var operatorSet = new OperatorSet(domainContext);
+        var resourceSet = new ResourceSet(domainContext);
         var domainConceptSet = new DomainConceptSet(domainContext);
         
-        $super(title, [screenSet, domainConceptSet], [this] ,domainContext);
+        // Dropping areas
+        var formArea = new Area('form', $A([FormSet]), this._drop.bind(this));
+        var operatorArea = new Area('operator', $A([OperatorSet]), this._drop.bind(this));
+        var resourceArea = new Area('resource', $A([ResourceSet]), this._drop.bind(this));
+        var preArea = new Area('pre', $A([DomainConceptSet]), this._drop.bind(this));
+        var postArea = new Area('post', $A([DomainConceptSet]), this._drop.bind(this));
         
-        /**
-         * @type Deployer
-         * @private @member
-         */
-        this._deployer = new Deployer();
-       
+        var areas = $A([formArea, operatorArea, resourceArea, preArea, postArea]);
+        
+        $super(title, $A[formSet, operatorSet, resourceSet, domainConceptSet],
+                areas,
+                domainContext);
+        
+        // Adding the dropping areas to the document
+        areas.each(function(area) {
+            this._tabContent.appendChild(area.getNode());     
+        }.bind(this));
               
-        // Screenflow Definition
+        // Screen Definition
         
          /**
          * The screenflow description
-         * @type ScreenflowDescription
+         * @type ScreenDescription
          * @private @member
          */       
-        this._description = new ScreenflowDescription({
+        this._description = new ScreenDescription({
             'label': {'en-gb': title},
             'name': title,
             'version': version,
@@ -49,13 +61,13 @@ var ScreenflowDocument = Class.create(PaletteDocument,
                 'tags': domainContext
             }
         });
-        //Screenflow properties
-        this._propertiesPane.fillTable(this._description);
+        //Screen properties
+        //this._propertiesPane.fillTable(this._description);
 
         this._configureToolbar();
         
         /**
-         * Screen and domain concept instances on the
+         * Resource instances on the
          * canvas by uri
          * @private
          * @type Hash 
@@ -63,14 +75,14 @@ var ScreenflowDocument = Class.create(PaletteDocument,
         this._canvasInstances = new Hash();
 
         // Start retrieving data
-        this._inferenceEngine.findCheck(
+        /*this._inferenceEngine.findCheck(
                 this._getCanvas(),
-                /* palette elements */ [],
+                [],
                 this._domainContext,
                 'reachability',
                 this._findCheckCallback.bind(this)
-        );
-        this._paletteController.startRetrievingData();   
+        );*/
+        //this._paletteController.startRetrievingData();   
     },
 
 
@@ -78,55 +90,17 @@ var ScreenflowDocument = Class.create(PaletteDocument,
     
     /**
      * Returns the BuildingBlock Description for the screenflow document
-     * @type ScreenflowDescription
+     * @type ScreenDescription
      */
     getBuildingBlockDescription: function () {
         return this._description;
     },
 
     /**
-     * Implementing DropZone interface
-     * @type Boolean
-     */
-    drop: function(/** ComponentInstance */ droppedElement) {
-        // Reject repeated elements (except domain concepts)
-        if (this._canvasInstances.get(droppedElement.getUri()) &&
-            (droppedElement.constructor != PrePostInstance)) {
-            return false;
-        }
-      
-        switch (droppedElement.constructor) {
-            case ScreenInstance:
-                this._canvasInstances.set(droppedElement.getUri(), droppedElement);
-                this._description.addScreen(droppedElement.getUri(), droppedElement.getPosition());
-                this._refreshReachability();
-                break;
-                
-            case PrePostInstance:
-                droppedElement.setChangeHandler(this._onPrePostChange.bind(this));
-                break;
-                
-            default:
-                throw "Don't know how to accept that kind of element. ScreenflowDocument::drop";    
-        }            
-
-        this.setSelectedElement(droppedElement);
-        return true; // Accept element
-    },
-    
-    /**
-     * Implementing DropZone interface
-     * @type Array
-     */
-    accepts: function(){
-        return $A([ScreenSet, DomainConceptSet]);
-    },
-
-    /**
      * Select a screen in the screenflow document
      * @param ComponentInstance
      *      Element to be selected for the
-     *      Screenflow document.
+     *      Screen document.
      * @override
      */
     setSelectedElement: function ($super, element) {
@@ -149,10 +123,42 @@ var ScreenflowDocument = Class.create(PaletteDocument,
     
 
     /**
+     * An element has been dropped into an area inside the canvas
+     * @private
+     * @type Boolean
+     */
+    _drop: function(/** ComponentInstance */ droppedElement) {
+        // Reject repeated elements (except domain concepts)
+        if (this._canvasInstances.get(droppedElement.getUri()) &&
+            (droppedElement.constructor != PrePostInstance || droppedElement.constructor != OperatorInstance)) {
+            return false;
+        }
+      
+        switch (droppedElement.constructor) {
+            /*case ScreenInstance:
+                this._canvasInstances.set(droppedElement.getUri(), droppedElement);
+                this._description.addScreen(droppedElement.getUri(), droppedElement.getPosition());
+                this._refreshReachability();
+                break;
+                
+            case PrePostInstance:
+                droppedElement.setChangeHandler(this._onPrePostChange.bind(this));
+                break;
+                
+            default:
+                alert("Don't know how to accept that kind of element. ScreenDocument::drop");*/    
+        }            
+
+        this.setSelectedElement(droppedElement);
+        return true; // Accept element
+    },
+    
+    
+    /**
      * Delete an instance.
      * @param ComponentInstance
      *      Instance to be deleted from the
-     *      Screenflow document.
+     *      Screen document.
      * @override
      */
     _deleteInstance: function(instance) {
@@ -173,12 +179,12 @@ var ScreenflowDocument = Class.create(PaletteDocument,
                 break;
                 
             default:
-                throw "Illegal state. ScreenflowDocument::deleteInstance";
+                throw "Illegal state. ScreenDocument::deleteInstance";
         }
         
         this._refreshReachability();
         this.setSelectedElement();
-        instance.destroy(true);
+        instance.destroy();
     },
 
     /**
@@ -213,7 +219,7 @@ var ScreenflowDocument = Class.create(PaletteDocument,
         this._addToolbarElement('save', new ToolbarButton(
                 'Save the current screenflow',
                 'save',
-                this._saveScreenflow.bind(this),
+                this._saveScreen.bind(this),
                 false // disabled by default
         ));
         this._addToolbarElement('previewElement', new ToolbarButton(
@@ -249,7 +255,7 @@ var ScreenflowDocument = Class.create(PaletteDocument,
             region:"center"
         });
         
-        this._tabContent.addClassName("screenflow").
+        this._tabContent.addClassName("screenDoc").
                         addClassName("canvas");
                         
         this._tabContent.observe('click', function(){
@@ -295,7 +301,7 @@ var ScreenflowDocument = Class.create(PaletteDocument,
      * @private
      */
     _closeDocument: function() {
-        confirm("Are you sure you want to close the current Screenflow?" + 
+        confirm("Are you sure you want to close the current Screen?" + 
             " Unsaved changes will be lost", this._confirmCallback.bind(this));
         return false;
     },
@@ -437,13 +443,12 @@ var ScreenflowDocument = Class.create(PaletteDocument,
     },
     
     /**
-     * Runs when a *-condition changes
      * @private
      */
     _onPrePostChange: function(/** String */ previousUri, /** PrePostInstance */ instance) {
         if (previousUri) {
             this._canvasInstances.unset(previousUri);
-            this._description.removePrePost(previousUri);            
+            this._description.removePrePost(previousUri);
         }
         
         this._canvasInstances.set(instance.getUri(), instance);
@@ -451,7 +456,18 @@ var ScreenflowDocument = Class.create(PaletteDocument,
         
         this._refreshReachability();
         
-        this.setSelectedElement(instance);
+        this.setSelectedElement();
+    },
+    
+    
+    /**
+     * Previews the selected element
+     * depending on the type of the
+     * selected element
+     * @private
+     */
+    _previewSelectedElement: function() {
+        this._selectedElement.showPreviewDialog();
     },
       
     
@@ -459,7 +475,7 @@ var ScreenflowDocument = Class.create(PaletteDocument,
      * Starts the process of saving the screenflow
      * @private
      */
-    _saveScreenflow: function() {
+    _saveScreen: function() {
         //TODO: Do it!
     }
 });

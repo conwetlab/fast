@@ -7,8 +7,8 @@ var DomainConceptComponent = Class.create(PaletteComponent,
      * @constructs
      * @extends PaletteComponent
      */
-    initialize: function($super, description, dropZone, inferenceEngine) {
-        $super(description, dropZone, inferenceEngine);
+    initialize: function($super, description, dropZones, inferenceEngine) {
+        $super(description, dropZones, inferenceEngine);
     },
 
 
@@ -32,7 +32,7 @@ var DomainConceptComponent = Class.create(PaletteComponent,
      * @override
      */
     _createInstance: function () {     
-        return new PrePostInstance(this._buildingBlockDescription, this._dropZone, this._inferenceEngine);
+        return new PrePostInstance(this._buildingBlockDescription, this._dropZones, this._inferenceEngine);
     },
     
     /**

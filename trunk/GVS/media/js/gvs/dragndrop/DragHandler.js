@@ -11,9 +11,10 @@ var DragHandler = Class.create(
      *      which the dragSource can be dropped. It must implement
      *       * DOMNode getNode()
      *       * void drop(Object element)
+     *       * Array accepts()
      * @constructs
      */
-    initialize: function (/** DragSource */ dragSource, /** Object */ dropZone) {
+    initialize: function (/** DragSource */ dragSource, /** Array */ dropZones) {
 
         /**
          * A function returning objects to be dragged.
@@ -30,11 +31,11 @@ var DragHandler = Class.create(
         this._draggedObject = null;
 
         /**
-         * Zone to drop the dragged object
-         * @type Object
+         * Valid Zones to drop the dragged object
+         * @type Array
          * @private
          */
-        this._dropZone = dropZone;
+        this._dropZones = dropZones;
 
         /**
          * Hash table with the initial area (container, 
@@ -187,14 +188,14 @@ var DragHandler = Class.create(
 
         var draggableElement = this._draggedObject.getHandlerNode();
         draggableElement.style.zIndex = "";
-        
-
 
         //Remove element transparency        
         this._updateNodeStatus(true);
         
-        var node = this._dropZone.getNode();
-        var changingZone = (this._initialArea.node != node);
+        var zone = this._dropZones.detect(function(zone){
+            return this._initialArea.node == zone.getNode(); 
+        }.bind(this));
+        var changingZone = (zone == undefined);
         
         this._dragSource.onFinish(changingZone, this._draggedObject);
         if(this._draggedObject != null){
@@ -202,11 +203,12 @@ var DragHandler = Class.create(
         }
         
         if (changingZone) {
-            if (this._isValidPosition() && this._dropZone.drop(this._draggedObject)) {
+            var dropZone = this._inWhichDropZone();
+            if (dropZone && dropZone.drop(this._draggedObject)) {
                 // Valid position and the droppable has been accepted
                 this._initialArea.node.removeChild(draggableElement);
-                node.appendChild(draggableElement);
-                var dropZonePosition = this._getDropZonePosition();
+                dropZone.getNode().appendChild(draggableElement);
+                var dropZonePosition = this._getPosition(dropZone.getNode());
                 draggableElement.setStyle({
                     'left': parseInt(draggableElement.offsetLeft - dropZonePosition.left) + "px",
                     'top': parseInt(draggableElement.offsetTop - dropZonePosition.top) + "px"
@@ -249,39 +251,74 @@ var DragHandler = Class.create(
     
      /**
      * This function calculates whether the element
-     * is over the valid drop zone or not, and 
+     * is over a valid drop zone or not, and 
      * check the DropZone Restrictions
      * @private
      * @type Boolean
      */
     _isValidPosition: function(){
         var result = true;
-        var node = this._dropZone.getNode();
-        var draggableElement = this._draggedObject.getHandlerNode();
-        // If we are moving an element from one zone to another...
-        if (this._initialArea.node != node) {
-            //Check if we are over the dropZone
-            var dropZonePosition = this._getDropZonePosition();
+        for (var i = 0; i < this._dropZones.length; i++) {
+            var zone = this._dropZones[i];
+            var node = zone.getNode();
+            var draggableElement = this._draggedObject.getHandlerNode();
+            // If we are moving an element from one zone to another...
+            if (this._initialArea.node != node) {
+                //Check if we are over a dropZone
+                var dropZonePosition = this._getPosition(node);
+                result = result && (draggableElement.offsetLeft >= dropZonePosition.left);
+                result = result && (draggableElement.offsetTop >= dropZonePosition.top);
+                result = result && (draggableElement.offsetLeft <= 
+                        (dropZonePosition.left + node.offsetWidth));
+                result = result && (draggableElement.offsetTop <= 
+                        (dropZonePosition.top + node.offsetHeight));
+            }
+            else {
+                //It is already inside a drop zone, so the
+                //Position is relative to this zone
+                result = result && (draggableElement.offsetLeft >= 0);
+                result = result && (draggableElement.offsetTop >= 0);
+                result = result && (draggableElement.offsetLeft <= node.offsetWidth);
+                result = result && (draggableElement.offsetTop <= node.offsetWidth);
+            }
+            
+            result = result && this._dragSource.isValidPosition(this._x,this._y);    
+            if (result) {
+                break;
+            }        
+        }
+        
+        return result;
+    },
+
+    /**
+     * This function calculates the exact dropZone the element
+     * is 
+     * @private
+     * @type DropZone
+     */
+    _inWhichDropZone: function(){
+        var result = true;
+        var resultZone = null;
+        for (var i=0; i < this._dropZones.length; i++) {
+            var zone = this._dropZones[i];
+            var node = zone.getNode();
+            var draggableElement = this._draggedObject.getHandlerNode();
+            var dropZonePosition = this._getPosition(node);
             result = result && (draggableElement.offsetLeft >= dropZonePosition.left);
             result = result && (draggableElement.offsetTop >= dropZonePosition.top);
             result = result && (draggableElement.offsetLeft <= 
                     (dropZonePosition.left + node.offsetWidth));
             result = result && (draggableElement.offsetTop <= 
                     (dropZonePosition.top + node.offsetHeight));
-        }
-        else {
-            //It is already inside the drop zone, so the
-            //Position is relative to this zone
-            result = result && (draggableElement.offsetLeft >= 0);
-            result = result && (draggableElement.offsetTop >= 0);
-            result = result && (draggableElement.offsetLeft <= node.offsetWidth);
-            result = result && (draggableElement.offsetTop <= node.offsetWidth);
-        }
-        
-        result = result && this._dragSource.isValidPosition(this._x,this._y);
-        return result;
-    },
- 
+
+            if (result) {
+                resultZone = zone; 
+                break;
+            } 
+        }       
+        return resultZone;
+    }, 
      
      /**
      * This function updates node interface,
@@ -305,8 +342,7 @@ var DragHandler = Class.create(
      * @private
      * @type Object
      */
-    _getDropZonePosition: function (){
-        var node = this._dropZone.getNode();
+    _getPosition: function (node){
         var left = 0;
         var top  = 0;
     
