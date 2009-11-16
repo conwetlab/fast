@@ -18,8 +18,11 @@
             var djConfig = {
                 isDebug:false, parseOnLoad:true
             };
+
+            
         /* ]]> */
         </script>
+        <![if !IE]>
         <script type="text/javascript" src="{{ MEDIA_URL }}js/lib/utils/iefixes.js"></script>
         
         <script type="text/javascript" src="{{ MEDIA_URL }}js/lib/dojo/dojo/dojo.js"></script>
@@ -297,9 +300,11 @@
 
         /* ]]> */
         </script>
+        <![endif]>
     </head>
 
     <body class="soria">
+        <![if !IE]>
         <!-- Setting the layout of the page. --> 
         <div id="main" dojoType="dijit.layout.BorderContainer" 
                         liveSplitters="true" design="headline" splitter="true" gutter="true">
@@ -327,6 +332,20 @@
             </div> 
             <!-- end of Document area -->
         </div>
+        <![endif]>
+        <!--[if IE]>
+            <center>
+            <p style="font-size: 24px;color:#243C5F;font-weight:bold">
+                Your browser is still not suppported, please download the latest version
+            of Mozilla Firefox 
+            </p>
+            <a href="http://getfirefox.com/" title="Get Firefox - The Browser, Reloaded.">
+            <img src="{{ MEDIA_URL }}images/gui/getfirefox.png" 
+                border="0" alt="Get Firefox" 
+                style="margin:20px auto 0; display: block;" />
+            </a>
+            </center>
+        <![endif]-->
     </body>
 </html>
 <!-- vim: set ts=4 sw=4 et:  -->
