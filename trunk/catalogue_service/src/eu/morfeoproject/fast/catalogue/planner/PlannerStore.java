@@ -7,8 +7,6 @@ import org.ontoware.rdf2go.model.node.URI;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import eu.morfeoproject.fast.server.FindServlet;
-
 public class PlannerStore {
 
 	final Logger logger = LoggerFactory.getLogger(PlannerStore.class);
@@ -95,14 +93,4 @@ public class PlannerStore {
 		return list;
 	}
 	
-	
-	
-	
-	
-	public void dump() {
-		System.out.println("Dumping planner...");
-		for (Entry entry : data)
-			System.out.println(entry.getFrom()+" => "+entry.getTo());
-		System.out.println("..................");
-	}
 }

@@ -3,6 +3,7 @@ package eu.morfeoproject.fast.server;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
@@ -37,10 +38,6 @@ public class PlannerServlet extends GenericServlet {
     public PlannerServlet() {
         super();
     }
-
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		CatalogueAccessPoint.getCatalogue().getPlanner().dump();
-	}
 	
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
@@ -64,6 +61,7 @@ public class PlannerServlet extends GenericServlet {
 			//	parse the goal
 			URI goal = new URIImpl(input.getString("goal"));
 			// parse the canvas
+			ArrayList<URI> canvasUris = new ArrayList<URI>();
 			HashSet<Resource> canvas = new HashSet<Resource>();
 			JSONArray jsonCanvas = input.getJSONArray("canvas");
 			for (int i = 0; i < jsonCanvas.length(); i++) {
@@ -71,7 +69,8 @@ public class PlannerServlet extends GenericServlet {
 				Resource r = CatalogueAccessPoint.getCatalogue().getResource(uri);
 				if (r == null) 
 					throw new NotFoundException("Resource "+uri+" does not exist.");
-				canvas.add(r); 
+				canvas.add(r);
+				canvasUris.add(uri);
 			}
 			
 			// calculate the plans for a certain goal
@@ -81,7 +80,7 @@ public class PlannerServlet extends GenericServlet {
 			JSONArray output = new JSONArray();
 			for (Plan plan : plans) {
 				JSONArray jsonPlan = new JSONArray();
-				for (URI uri : plan.getUriList())
+				for (URI uri : plan.getUriList(canvasUris))
 					jsonPlan.put(uri);
 				output.put(jsonPlan);
 			}

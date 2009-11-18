@@ -223,8 +223,4 @@ public class Planner {
 		return true;
 	}
 	
-	public void dump() {
-		plannerStore.dump();
-	}
-	
 }
