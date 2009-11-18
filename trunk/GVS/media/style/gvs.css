@@ -115,7 +115,7 @@ h4{
 .previewIcon     {  background-position:  -72px; }
 .saveIcon        {  background-position:  -96px; }
 .homeIcon        {  background-position: -120px; }
-.fileIcon        {  background-position: -144px; }
+.plannerIcon     {  background-position: -144px; }
 
 
 /********************
@@ -131,7 +131,7 @@ h4{
         height: 16px;
         text-align: center;
 }
-.aboutIcon { background-position:    -16px;}
+.aboutMenuIcon { background-position:    -16px;}
 
 /******************
  * workspace	  *
@@ -180,6 +180,67 @@ h4{
 
 .document.screenflow, .document.screenDoc {
     background: transparent url("../images/gui/document/grid.png") repeat;
+}
+
+/******************
+ * plans          *
+ ******************/
+.panel {
+    background: white;
+    position:relative;
+    width:100%;
+}
+.panel > div {
+    border: 1px solid #808080;
+    position: absolute;
+    top: 0px;
+    bottom: 0px;
+    right: 0px;
+    left: 0px;
+    padding: 2px;
+}
+.panel .text {
+    text-align: justify;
+    margin:0px auto;
+    padding: 5px;
+}
+.panel .button {
+    position: absolute;
+    bottom: 0px;
+    right: 0px;
+    height: 15px;
+    width: 15px;
+    background: transparent url("../js/lib/dojo/dijit/themes/soria/images/spriteRoundedIconsSmall.png") no-repeat scroll -60px top;
+}
+
+.panel .button:hover {
+    cursor:pointer;
+}
+.panel .planZone {
+    margin: 3px;
+    border: 1px solid #959595;
+    height: 130px;
+    overflow: auto;
+    width: 98%;
+    
+}
+
+.plan {
+    border: 1px dashed #959595;
+    margin: 5px;
+    padding: 3px;
+    -moz-border-radius: 13px 13px;
+    -webkit-border-radius: 13px 13px;
+    overflow: hidden;
+    background-color: #EAEAEA;
+    cursor: move;
+}
+
+.plan .screen.view {
+    float: left;
+    clear: none;
+    margin: 3px;
+    background-color: transparent;
 }
 
 /******************

@@ -16,7 +16,8 @@
         /* <![CDATA[ */
            //Dojo Configuration parameters
             var djConfig = {
-                isDebug:false, parseOnLoad:true
+                isDebug:false, 
+                parseOnLoad:true
             };
 
             
@@ -52,6 +53,7 @@
             URIs.catalogueCreateScreen = "catalogue/screens";
             URIs.catalogueAllConcepts = "catalogue/concepts";
             URIs.catalogueTagConcepts = "catalogue/tags/<tags>/concepts";
+            URIs.cataloguePlanner = "catalogue/planner";
             URIs.buildingblock = "buildingblock";
             URIs.screenflow = "buildingblock/screenflow";
             URIs.userPreferences = "user/preferences";
@@ -219,6 +221,18 @@
             src="{{ MEDIA_URL }}js/gvs/dialogs/Alert.js"></script>
         <script type="text/javascript"
             src="{{ MEDIA_URL }}js/gvs/dialogs/Confirm.js"></script>
+
+        <!-- Plans -->
+        <script type="text/javascript"
+            src="{{ MEDIA_URL }}js/gvs/plans/PlanPanel.js"></script>
+        <script type="text/javascript"
+            src="{{ MEDIA_URL }}js/gvs/plans/PlanSet.js"></script>
+        <script type="text/javascript"
+            src="{{ MEDIA_URL }}js/gvs/plans/PlanComponent.js"></script>
+        <script type="text/javascript"
+            src="{{ MEDIA_URL }}js/gvs/plans/PlanView.js"></script>
+        <script type="text/javascript"
+            src="{{ MEDIA_URL }}js/gvs/plans/PlanInstance.js"></script>
             
         <!-- Deploy -->
         <script type="text/javascript"
@@ -253,7 +267,7 @@
         /* <![CDATA[ */
 
             // We load Dojo's code relating to the needed components
-            // ... typical Components
+            // ... typical UI Components
             dojo.require("dijit.form.Form");
             dojo.require("dijit.form.TextBox");
             dojo.require("dijit.form.ValidationTextBox");
@@ -274,8 +288,11 @@
             dojo.require("dijit.layout.TabContainer");
             dojo.require("dijit.layout.BorderContainer");
             dojo.require("dijit.Dialog");
+
+            // ... other functions
+            dojo.require("dojox.fx");
             
-            
+            // ... the parser
             dojo.require("dojo.parser");
 
             // Arming the GVS initialization method
@@ -286,17 +303,25 @@
                 // performance
                 dijit.byId("main").layout();
             });
+            
             window.onbeforeunload = function(evt) {
                 // TODO: call the server and save whatever necessary
-                /* var message = 'Are you sure you want to leave?';
-                if (typeof evt == 'undefined') {
-                    evt = window.event;
+                var saved = true;
+                if (!saved) {
+                    var message = 'Are you sure you want to leave?';
+                    if (typeof evt == 'undefined') {
+                        evt = window.event;
+                    }
+                    if (evt) {
+                        evt.returnValue = message;
+                    }
+                    return message;
                 }
-                if (evt) {
-                    evt.returnValue = message;
-                }
-                return message;*/
             }
+            
+            window.onunload = function() {
+                //Do something
+            }           
 
         /* ]]> */
         </script>

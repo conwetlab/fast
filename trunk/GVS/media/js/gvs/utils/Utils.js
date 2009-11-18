@@ -59,8 +59,31 @@ Object.extend(Utils, {
         }      
     },
        
-       
+    /**
+     * Logs an AJAX error
+     */ 
     onAJAXError: function(transport, e){
         Logger.serverError(transport, e);
+    },
+    
+    /**
+    * This function returns the position of an object
+    * @private
+    * @type Object
+    */
+    getPosition: function (/** DOMNode */ node){
+        var left = 0;
+        var top  = 0;
+    
+        while (node.offsetParent){
+            left += node.offsetLeft;
+            top  += node.offsetTop;
+            node  = node.offsetParent;
+        }
+    
+        left += node.offsetLeft;
+        top  += node.offsetTop;
+    
+        return {'left':left, 'top':top};
     }
 }); 

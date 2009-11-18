@@ -49,10 +49,15 @@ var InferenceEngine = Class.create( /** @lends InferenceEngine.prototype */ {
      */
     check: function (/**Array*/ canvas, /** Array*/ elements,
                     /** Array */ domainContext, 
-                    /** String*/ criteria) {
+                    /** String*/ criteria, 
+                    /** Function */ callback) {
         var body = this._constructBody(canvas, elements, domainContext, criteria);
         var persistenceEngine = PersistenceEngineFactory.getInstance();
-        persistenceEngine.sendPost(URIs.catalogueCheck, null, body, this, 
+        var context = {
+            'callback': callback,
+            'mine': this
+        };
+        persistenceEngine.sendPost(URIs.catalogueCheck, null, body, context, 
                                     this._checkOnSuccess, this._onError);                   
     },
     
@@ -98,7 +103,7 @@ var InferenceEngine = Class.create( /** @lends InferenceEngine.prototype */ {
          }
      },
      
-     /**
+    /**
      * Returns the reachability information about
      * the preconditions of a given screen
      * @type Hash
@@ -119,6 +124,21 @@ var InferenceEngine = Class.create( /** @lends InferenceEngine.prototype */ {
             });
             return result;
         }
+    },
+    
+    /**
+     * This function calls the catalogue to create a plan for a given screen
+     */
+    getPlans: function(/** Array */ canvas, /** String */ screenUri, 
+                        /** Function */ handler) {
+        var body = {
+            "goal": screenUri,
+            "canvas": canvas
+        };
+        var bodyJSON = Object.toJSON(body);
+        var persistenceEngine = PersistenceEngineFactory.getInstance();
+        persistenceEngine.sendPost(URIs.cataloguePlanner, null, bodyJSON, {'handler': handler}, 
+                                    this._planOnSuccess, this._onError);
     },
     
     // **************** PRIVATE METHODS **************** //
@@ -148,7 +168,17 @@ var InferenceEngine = Class.create( /** @lends InferenceEngine.prototype */ {
         var result = JSON.parse(transport.responseText);
         var elements = result.elements.concat(result.canvas).uniq();
         
-        this._updateReachability(elements);
+        this.mine._updateReachability(elements);       
+        this.callback();
+    },
+    
+    /**
+     * plan onSuccess
+     * @private
+     */
+    _planOnSuccess: function(transport) {
+        var result = JSON.parse(transport.responseText);
+        this.handler(result); 
     },
     
     /**

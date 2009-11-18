@@ -231,6 +231,7 @@ var PrePostInstance = Class.create(ComponentInstance,
         
         // Notify change
         this._changeHandler(previousUri, this);
+        
     },
     
     /**
@@ -252,7 +253,8 @@ var PrePostInstance = Class.create(ComponentInstance,
                 'label': {'en-gb': this._label},
                 'pattern': this._pattern,
                 'scope': 'design time',
-                'id': this._buildingBlockDescription.uri
+                'id': this._buildingBlockDescription.uri,
+                'name': this._label
             };
     },
     

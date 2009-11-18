@@ -53,7 +53,7 @@ var MenuAction = Class.create(MenuElement, /** @lends MenuAction.prototype */ {
         this.setEnabled(data.enabled !== undefined ? data.enabled : true);  
         
         if (data.iconName) {
-            this._widget.attr('iconClass', 'dijitMenuItemIcon menuIcon ' + data.iconName + 'Icon');
+            this._widget.attr('iconClass', 'dijitMenuItemIcon menuIcon ' + data.iconName + 'MenuIcon');
         }
     },
     

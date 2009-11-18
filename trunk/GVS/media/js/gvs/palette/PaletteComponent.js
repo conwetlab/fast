@@ -7,7 +7,7 @@ var PaletteComponent = Class.create(DragSource,
      * @extends DragSource
      */ 
     initialize: function($super,/** BuildingBlockDescription */ buildingBlockDescription, 
-            /** DropZone */ dropZones, /** InferenceEngine */ inferenceEngine) {
+            /** Array */ dropZones, /** InferenceEngine */ inferenceEngine) {
         $super();
         /**
          * Handles the drag'n'drop stuff
@@ -18,7 +18,7 @@ var PaletteComponent = Class.create(DragSource,
         
         /**
          * Component and instance Drop zone 
-         * @type DOMNode
+         * @type Array
          * @private
          */
         this._dropZones = dropZones;
@@ -37,8 +37,8 @@ var PaletteComponent = Class.create(DragSource,
         this._inferenceEngine = inferenceEngine;
 
         /**
-         * Screen component view
-         * @type ScreenView
+         * BuildingBlock view
+         * @type BuildingBlockView
          * @private
          */
         this._view = this._createView();

@@ -165,6 +165,7 @@ var ComponentInstance = Class.create(DragSource,
         this._view = null;
     },
     
+    
     /**
      * Drop event handler for the DragSource
      * @param changingZone
@@ -172,7 +173,7 @@ var ComponentInstance = Class.create(DragSource,
      *      been added to the new zone.
      * @override
      */
-    onDragFinish: function(changingZone){
+    onFinish: function(changingZone){
         if (changingZone){
             this._view.addEventListener (function(event){
                 event.stop();
