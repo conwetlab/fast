@@ -189,6 +189,7 @@ h4{
     background: white;
     position:relative;
     width:100%;
+    z-index:100;
 }
 .panel > div {
     border: 1px solid #808080;
@@ -219,24 +220,24 @@ h4{
 .panel .planZone {
     margin: 3px;
     border: 1px solid #959595;
-    height: 130px;
+    height: 125px;
     overflow: auto;
-    width: 98%;
+    width: 97%;
+    padding: 5px;
     
 }
 
-.plan {
+.plan.view {
     border: 1px dashed #959595;
-    margin: 5px;
-    padding: 3px;
-    -moz-border-radius: 13px 13px;
-    -webkit-border-radius: 13px 13px;
+    margin: 3px;
+    -moz-border-radius: 7px 7px;
+    -webkit-border-radius: 7px 7px;
     overflow: hidden;
     background-color: #EAEAEA;
     cursor: move;
 }
 
-.plan .screen.view {
+.plan.view .screen.view {
     float: left;
     clear: none;
     margin: 3px;

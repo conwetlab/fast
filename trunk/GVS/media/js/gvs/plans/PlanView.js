@@ -19,8 +19,8 @@ var PlanView = Class.create(BuildingBlockView,
             nScreens++;
         }.bind(this));
         // width = (size of each screen)* (number of screens)
-        // + (margin+padding)*(number of screens) + borders
-        var width = 100*nScreens + 8*nScreens + 2;
+        // + (margin+padding)*(number of screens)
+        var width = 102*nScreens + 6*nScreens;
         var widthText = width + 'px';
         this._node.setStyle({'width': widthText});
     },

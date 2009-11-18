@@ -542,8 +542,8 @@ var ScreenflowDocument = Class.create(PaletteDocument,
      */
     _addPlan: function(/** PlanInstance */ plan){
         var screenPosition =({
-            'left': plan.getView().getNode().offsetLeft + 5, //with padding
-            'top': plan.getView().getNode().offsetTop + 5
+            'left': plan.getView().getNode().offsetLeft + 3, //with margin
+            'top': plan.getView().getNode().offsetTop + 3
         });
         
         plan.getPlanElements().each(function(screenDescription) {
@@ -567,7 +567,7 @@ var ScreenflowDocument = Class.create(PaletteDocument,
                     'position': 'absolute'
                 });
                 //Incrementing the screen position for the next screen
-                screenPosition.left += 107; // Screen size=100 + padding=5 + border=2
+                screenPosition.left += 108; // Screen size=100 + margin=6 + border=2
             }  
         }.bind(this));
     },
