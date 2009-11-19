@@ -16,9 +16,14 @@ public class Condition {
 	
 	private String patternString;
 	private List<Statement> pattern;
-	private String scope;
+	private boolean positive;
 	private Map<String, String> labels;
 	private String id;
+	
+	public Condition() {
+		super();
+		this.positive = true; // by default a Condition will be positive
+	}
 	
 	public String getPatternString() {
 		return patternString;
@@ -38,12 +43,12 @@ public class Condition {
 		this.pattern = pattern;
 	}
 	
-	public String getScope() {
-		return scope;
+	public boolean isPositive() {
+		return positive;
 	}
 
-	public void setScope(String scope) {
-		this.scope = scope;
+	public void setPositive(boolean positive) {
+		this.positive = positive;
 	}
 
 	public Map<String, String> getLabels() {
@@ -100,10 +105,7 @@ public class Condition {
 				json.put("pattern", JSONObject.NULL);
 			else
 				json.put("pattern", getPatternString());
-			if (getScope() == null)
-				json.put("scope", JSONObject.NULL);
-			else
-				json.put("scope", getScope());
+			json.put("positive", isPositive());
 			if (getLabels() == null || getLabels().isEmpty())
 				json.put("label", JSONObject.NULL);
 			else {

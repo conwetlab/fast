@@ -24,17 +24,17 @@ import eu.morfeoproject.fast.catalogue.NotFoundException;
 import eu.morfeoproject.fast.model.Resource;
 
 /**
- * Servlet implementation class FindServlet
+ * Servlet implementation class ScreenFindServlet
  */
-public class FindServlet extends GenericServlet {
+public class ScreenFindServlet extends GenericServlet {
 	private static final long serialVersionUID = 1L;
     
-	final Logger logger = LoggerFactory.getLogger(FindServlet.class);
+	final Logger logger = LoggerFactory.getLogger(ScreenFindServlet.class);
 
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public FindServlet() {
+    public ScreenFindServlet() {
         super();
     }
 
@@ -89,7 +89,7 @@ public class FindServlet extends GenericServlet {
 			}
 
 			// make the call to the catalogue
-			Set<URI> results = CatalogueAccessPoint.getCatalogue().findBackwards(canvas, true, true, 0, 100000, tags);
+			Set<URI> results = CatalogueAccessPoint.getCatalogue().findBackwards(canvas, true, true, 0, -1, tags);
 
 			// write the results in the output
 			JSONArray output = new JSONArray();

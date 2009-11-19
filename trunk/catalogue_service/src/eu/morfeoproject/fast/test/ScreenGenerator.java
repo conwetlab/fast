@@ -79,7 +79,7 @@ public class ScreenGenerator {
 		pattern.add(stmt);
 		c.setPattern(pattern);
 		c.setPatternString(bn.toString()+" "+RDF.type.toString()+" "+uri);
-		c.setScope("both");
+		c.setPositive(true);
 		return c;
 	}
 	

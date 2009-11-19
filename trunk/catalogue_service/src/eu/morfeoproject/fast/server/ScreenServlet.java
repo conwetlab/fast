@@ -168,6 +168,9 @@ public class ScreenServlet extends GenericServlet {
 				e.printStackTrace();
 				response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			}
+		} catch (ParseScreenException e) {
+			e.printStackTrace();
+			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 		} catch (JSONException e) {
 			e.printStackTrace();
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
@@ -219,6 +222,9 @@ public class ScreenServlet extends GenericServlet {
 					writer.print(json.toString(2));
 				}
 				response.setStatus(HttpServletResponse.SC_OK);
+			} catch (ParseScreenException e) {
+				e.printStackTrace();
+				response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			} catch (JSONException e) {
 				e.printStackTrace();
 				response.setStatus(HttpServletResponse.SC_BAD_REQUEST);

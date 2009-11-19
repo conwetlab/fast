@@ -30,12 +30,15 @@ import eu.morfeoproject.fast.model.FastModelFactory;
 import eu.morfeoproject.fast.model.FormElement;
 import eu.morfeoproject.fast.model.Library;
 import eu.morfeoproject.fast.model.Operator;
+import eu.morfeoproject.fast.model.Pipe;
 import eu.morfeoproject.fast.model.Postcondition;
 import eu.morfeoproject.fast.model.Precondition;
 import eu.morfeoproject.fast.model.Resource;
 import eu.morfeoproject.fast.model.Screen;
 import eu.morfeoproject.fast.model.ScreenComponent;
+import eu.morfeoproject.fast.model.ScreenDefinition;
 import eu.morfeoproject.fast.model.ScreenFlow;
+import eu.morfeoproject.fast.model.Trigger;
 import eu.morfeoproject.fast.util.DateFormatter;
 
 public abstract class GenericServlet extends HttpServlet {
@@ -90,26 +93,16 @@ public abstract class GenericServlet extends HttpServlet {
 				resource.getDescriptions().put(key, jsonDescriptions.getString(key));
 			}
 		}
-		if (jsonResource.get("creator") != null)
-			resource.setCreator(new URIImpl(jsonResource.getString("creator")));
-		if (jsonResource.get("rights") != null)
-			resource.setRights(new URIImpl(jsonResource.getString("rights")));
-		if (jsonResource.get("version") != null)
-			resource.setVersion(jsonResource.getString("version"));
-		if (jsonResource.get("creationDate") != null)
-			resource.setCreationDate(DateFormatter.parseDateISO8601(jsonResource.getString("creationDate")));
-		if (jsonResource.get("icon") != null)
-			resource.setIcon(new URIImpl(jsonResource.getString("icon")));
-		if (jsonResource.get("screenshot") != null)
-			resource.setScreenshot(new URIImpl(jsonResource.getString("screenshot")));
-		if (jsonResource.get("homepage") != null)
-			resource.setHomepage(new URIImpl(jsonResource.getString("homepage")));
-		if (jsonResource.get("id") != null)
-			resource.setId(jsonResource.getString("id"));
-		if (jsonResource.get("name") != null)
-			resource.setName(jsonResource.getString("name"));
-		if (jsonResource.get("type") != null)
-			resource.setType(jsonResource.getString("type"));
+		resource.setCreator(new URIImpl(jsonResource.getString("creator")));
+		resource.setRights(new URIImpl(jsonResource.getString("rights")));
+		resource.setVersion(jsonResource.getString("version"));
+		resource.setCreationDate(DateFormatter.parseDateISO8601(jsonResource.getString("creationDate")));
+		resource.setIcon(new URIImpl(jsonResource.getString("icon")));
+		resource.setScreenshot(new URIImpl(jsonResource.getString("screenshot")));
+		resource.setHomepage(new URIImpl(jsonResource.getString("homepage")));
+		resource.setId(jsonResource.getString("id"));
+		resource.setName(jsonResource.getString("name"));
+		resource.setType(jsonResource.getString("type"));
 	}
 	
 	protected ScreenFlow parseScreenFlow(JSONObject jsonScreenFlow, URI uri) throws JSONException, IOException {
@@ -130,7 +123,7 @@ public abstract class GenericServlet extends HttpServlet {
 		return screenFlow;
 	}
 
-	protected Screen parseScreen(JSONObject jsonScreen, URI uri) throws JSONException, IOException {
+	protected Screen parseScreen(JSONObject jsonScreen, URI uri) throws JSONException, IOException, ParseScreenException {
 		Screen screen = FastModelFactory.createScreen();
 
 		// fill common properties of the resource
@@ -155,9 +148,57 @@ public abstract class GenericServlet extends HttpServlet {
 			postconditions.add(parseConditions(postArray.getJSONArray(i)));
 		screen.setPostconditions(postconditions);
 		// code
-		if (jsonScreen.get("code") != null && !jsonScreen.getString("code").equalsIgnoreCase("null"))
+		if (jsonScreen.has("code") && jsonScreen.has("definition")) {
+			throw new ParseScreenException("Either 'code' or 'definition' must be specified, but not both.");
+		} else if (jsonScreen.has("code")) {
+			if (jsonScreen.getString("code").equalsIgnoreCase("null"))
+				throw new ParseScreenException("'code' cannot be null.");
 			screen.setCode(new URIImpl(jsonScreen.getString("code")));
+		} else if (jsonScreen.has("definition")) {
+			ScreenDefinition sDef = parseScreenDefinition(jsonScreen.getJSONObject("definition"));
+			screen.setDefinition(sDef);
+		} else {
+			throw new ParseScreenException("Either 'code' or 'definition' must be specified.");
+		}
 		return screen;
+	}
+	
+	protected ScreenDefinition parseScreenDefinition(JSONObject jsonDef) throws JSONException {
+		ScreenDefinition definition = new ScreenDefinition();
+		// building blocks
+		JSONArray bbArray = jsonDef.getJSONArray("buildingblocks");
+		for (int i = 0; i < bbArray.length(); i++) {
+			JSONObject bb = bbArray.getJSONObject(i);
+			definition.getBuildingBlocks().put(bb.getString("id"), new URIImpl(bb.getString("uri")));
+		}
+		// pipes
+		JSONArray pipeArray = jsonDef.getJSONArray("pipes");
+		for (int i = 0; i < pipeArray.length(); i++) {
+			JSONObject jsonPipe = pipeArray.getJSONObject(i);
+			JSONObject pipeFrom = jsonPipe.getJSONObject("from");
+			JSONObject pipeTo = jsonPipe.getJSONObject("to");
+			Pipe pipe = FastModelFactory.createPipe();
+			pipe.setIdBBFrom(pipeFrom.getString("buildingblock"));
+			pipe.setIdConditionFrom(pipeFrom.getString("condition"));
+			pipe.setIdBBTo(pipeTo.getString("buildingblock"));
+			pipe.setIdConditionTo(pipeTo.getString("condition"));
+			pipe.setIdActionTo(pipeTo.getString("action"));
+			definition.getPipes().add(pipe);
+		}
+		// triggers
+		JSONArray triggerArray = jsonDef.getJSONArray("triggers");
+		for (int i = 0; i < triggerArray.length(); i++) {
+			JSONObject jsonPipe = triggerArray.getJSONObject(i);
+			JSONObject pipeFrom = jsonPipe.getJSONObject("from");
+			JSONObject pipeTo = jsonPipe.getJSONObject("to");
+			Trigger trigger = new Trigger();
+			trigger.setIdBBFrom(pipeFrom.getString("buildingblock"));
+			trigger.setNameFrom(pipeFrom.getString("name"));
+			trigger.setIdBBTo(pipeTo.getString("buildingblock"));
+			trigger.setIdActionTo(pipeTo.getString("action"));
+			definition.getTriggers().add(trigger);
+		}
+		return definition;
 	}
 	
 	protected Precondition parsePrecondition(JSONObject jsonSlot, URI uri) throws JSONException, IOException {
@@ -206,10 +247,7 @@ public abstract class GenericServlet extends HttpServlet {
 			action.setName(jsonAction.getString("name"));
 		// preconditions
 		JSONArray preArray = jsonAction.getJSONArray("preconditions");
-		ArrayList<List<Condition>> preconditions = new ArrayList<List<Condition>>();
-		for (int i = 0; i < preArray.length(); i++)
-			preconditions.add(parseConditions(preArray.getJSONArray(i)));
-		action.setPreconditions(preconditions);
+		action.setPreconditions(parseConditions(preArray));
 		// uses
 		if (jsonAction.get("uses") != null) {
 			JSONArray usesArray = jsonAction.getJSONArray("uses");
@@ -288,8 +326,8 @@ public abstract class GenericServlet extends HttpServlet {
 			JSONObject cJson = conditionsArray.getJSONObject(i);
 			Condition c = FastModelFactory.createCondition();
 			c.setId(cJson.getString("id"));
-			String scope = cJson.getString("scope");
-			c.setScope(scope);
+			boolean positive = cJson.has("positive") ? cJson.getBoolean("positive") : true;
+			c.setPositive(positive);
 			if (cJson.get("label") != null) {
 				JSONObject jsonLabels = cJson.getJSONObject("label");
 				Iterator<String> labels = jsonLabels.keys();
@@ -300,9 +338,8 @@ public abstract class GenericServlet extends HttpServlet {
 			}
 			String patternString = cJson.getString("pattern");
 			c.setPatternString(patternString);
-			// only create the triples for the pattern in case of the scope
-			// is 'design time' or 'both'
-			if (scope.equalsIgnoreCase("design time") || scope.equalsIgnoreCase("both")) {
+			// only create the triples for the pattern in case of the condition is positive
+			if (positive) {
 				ArrayList<Statement> stmts = new ArrayList<Statement>();
 				StringTokenizer tokens = new StringTokenizer(patternString);//, " . ");
 				for ( ; tokens.hasMoreTokens(); ) {
@@ -336,6 +373,24 @@ public abstract class GenericServlet extends HttpServlet {
 			conditions.add(c);
 		}
 		return conditions;
+	}
+	
+
+	protected List<Pipe> parsePipes(JSONArray pipesArray) throws JSONException, IOException {
+		ArrayList<Pipe> pipes = new ArrayList<Pipe>();
+		for (int i = 0; i < pipesArray.length(); i++) {
+			JSONObject pJson = pipesArray.getJSONObject(i);
+			Pipe p = FastModelFactory.createPipe();
+			JSONObject fromJson = pJson.getJSONObject("from");
+			p.setIdBBFrom(fromJson.getString("buildingblock"));
+			p.setIdConditionFrom(fromJson.getString("condition"));
+			JSONObject toJson = pJson.getJSONObject("to");
+			p.setIdBBTo(toJson.getString("buildingblock"));
+			p.setIdConditionTo(toJson.getString("condition"));
+			p.setIdActionTo(toJson.getString("action"));
+			pipes.add(p);
+		}
+		return pipes;
 	}
 	
 	/**

@@ -28,17 +28,17 @@ import eu.morfeoproject.fast.model.Screen;
 import eu.morfeoproject.fast.model.Precondition;
 
 /**
- * Servlet implementation class CheckServlet
+ * Servlet implementation class ScreenFindCheckServlet
  */
-public class FindCheckServlet extends HttpServlet {
+public class ScreenFindCheckServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
-	final Logger logger = LoggerFactory.getLogger(CheckServlet.class);
+	final Logger logger = LoggerFactory.getLogger(ScreenCheckServlet.class);
 	
 	/**
      * @see HttpServlet#HttpServlet()
      */
-    public FindCheckServlet() {
+    public ScreenFindCheckServlet() {
         super();
     }
 
@@ -46,7 +46,7 @@ public class FindCheckServlet extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		logger.info("Entering CHECK operation...");
+		logger.info("Entering FIND&CHECK operation...");
 		BufferedReader reader = request.getReader();
 		PrintWriter writer = response.getWriter();
 		String format = request.getHeader("accept") != null ? request.getHeader("accept") : MediaType.APPLICATION_JSON;
@@ -99,7 +99,7 @@ public class FindCheckServlet extends HttpServlet {
 			HashSet<Resource> all = new HashSet<Resource>();
 			all.addAll(canvas);
 			all.addAll(elements);
-			Set<URI> results = CatalogueAccessPoint.getCatalogue().findBackwards(all, true, true, 0, 100000, tags);
+			Set<URI> results = CatalogueAccessPoint.getCatalogue().findBackwards(all, true, true, 0, -1, tags);
 			// add results of 'find' to the list of elements
 			for (URI uri : results)
 				elements.add(CatalogueAccessPoint.getCatalogue().getResource(uri));
@@ -118,7 +118,7 @@ public class FindCheckServlet extends HttpServlet {
 						boolean satisfied = false;
 						for (List<Condition> conList : s.getPreconditions()) { /* OR */
 							JSONArray conArray = new JSONArray();
-							satisfied = CatalogueAccessPoint.getCatalogue().isListSatisfied(reachables, conList, true, true, s.getUri());
+							satisfied = CatalogueAccessPoint.getCatalogue().isConditionSatisfied(reachables, conList, true, true, s.getUri());
 							reachability = reachability & satisfied;
 							for (Condition c : conList) {
 								JSONObject jsonPre = c.toJSON();
@@ -136,7 +136,7 @@ public class FindCheckServlet extends HttpServlet {
 					} else if (r instanceof Postcondition) {
 						Postcondition e = (Postcondition)r;
 						jsonResource.put("uri", e.getUri());
-						boolean satisfied = CatalogueAccessPoint.getCatalogue().isListSatisfied(reachables, e.getConditions(), true, true, e.getUri());
+						boolean satisfied = CatalogueAccessPoint.getCatalogue().isConditionSatisfied(reachables, e.getConditions(), true, true, e.getUri());
 						JSONArray conArray = new JSONArray();
 						for (Condition c : e.getConditions()) {
 							JSONObject jsonCon = c.toJSON();
@@ -162,7 +162,7 @@ public class FindCheckServlet extends HttpServlet {
 						boolean satisfied = false;
 						for (List<Condition> conList : s.getPreconditions()) { /* OR */
 							JSONArray conArray = new JSONArray();
-							satisfied = CatalogueAccessPoint.getCatalogue().isListSatisfied(reachables, conList, true, true, s.getUri());
+							satisfied = CatalogueAccessPoint.getCatalogue().isConditionSatisfied(reachables, conList, true, true, s.getUri());
 							reachability = reachability & satisfied;
 							for (Condition c : conList) {
 								JSONObject jsonPre = c.toJSON();
@@ -195,7 +195,7 @@ public class FindCheckServlet extends HttpServlet {
 		} catch (NotFoundException e) {
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
 		}
-		logger.info("...Exiting CHECK operation");
+		logger.info("...Exiting FIND&CHECK operation");
 	}
 	
 }

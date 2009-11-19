@@ -159,8 +159,6 @@ rdfs:comment """An action represents a specific routine which will be performed 
 	condition is fulfilled within a certain screen component (i.e., the action 'showTable' will
 	be performed when data from a service is received)."""@en .
 
-# these are the Slot and Event concepts, they should disappear and be the pre and postconditions
-# of a ScreenFlow
 fgo:Precondition a owl:Class ;
 rdfs:subClassOf fgo:Resource ;
 rdfs:label "Precondition"@en ;
@@ -173,14 +171,49 @@ rdfs:label "Postcondition"@en ;
 rdfs:comment """A postcondition is a result condition within a screenflow. It can be seen
     as an output of the screenflow."""@en .
 
+fgo:Definition a owl:Class ;
+rdfs:label "Resource definition"@en ;
+rdfs:comment """Structural and behaviour definition of a resource."""@en .
+
+fgo:ResourceReference a owl:Class ;
+rdfs:label "Resource reference"@en ;
+rdfs:comment """It's a reference to a certain resource. Needs a 'id' for internal
+	identification for the resource which is referencing it, and the 'uri' of the
+	resource."""@en .
+
+fgo:ScreenDefinition a owl:Class ;
+rdfs:subClassOf fgo:Definition;
+rdfs:label "Screen definition"@en ;
+rdfs:comment """Behaviour definition of a screen. This will contain which form, operators and 
+	backend services the screen is composed, and how they are connected."""@en .
+
+fgo:Pipe a owl:Class ;
+rdfs:subClassOf fgo:Resource ;
+rdfs:label "pipe or connector"@en ;
+rdfs:comment """Define a pipe or connector between two resources. The connection is made
+	specifying the conditions which will be connected."""@en .
+
+fgo:Trigger a owl:Class ;
+rdfs:subClassOf fgo:Resource ;
+rdfs:label "trigger"@en ;
+rdfs:comment """Define a..."""@en .
+
+### future definition of other resources ###
+fgo:FormDefinition a owl:Class .
+fgo:OperatorDefinition a owl:Class .
+fgo:BackendServiceDefinition a owl:Class .
+
+
 # Properties
 
 fgo:contains a owl:ObjectProperty ;
 rdfs:label "contains"@en ;
 rdfs:comment """Many kinds of components in FAST can contain other components: 
-    screenflows contain screens, screens contain forms or form elements, etc."""@en ;
-rdfs:domain fgo:Resource ;
-rdfs:range fgo:Resource .
+    screenflows contain screens, screens contain forms or form elements, etc.
+    It points to a resource reference to give a unique 'id' to each component
+    within the resource."""@en ;
+rdfs:domain fgo:Resource, fgo:Definition ;
+rdfs:range fgo:ResourceReference .
 
 fgo:hasPreCondition a owl:ObjectProperty ;
 rdfs:label "has pre-condition"@en ;
@@ -301,7 +334,7 @@ rdfs:range foaf:Document .
 fgo:hasId a owl:DatatypeProperty ;
 rdfs:label "has id"@en ;
 rdfs:comment """The internal ID of the resource within the container resource."""@en ;
-rdfs:domain fgo:Resource ;
+rdfs:domain fgo:Resource, fgo:ResourceReference ;
 rdfs:range xsd:string .
 
 fgo:hasName a owl:DatatypeProperty ;
@@ -316,6 +349,54 @@ rdfs:comment """The type of the resource."""@en ;
 rdfs:domain fgo:Resource ;
 rdfs:range xsd:string .
 
+fgo:hasUri a owl:ObjectProperty ;
+rdfs:label "has uri"@en ;
+rdfs:comment """URI of a particular resource pointing from a reference within
+	another resource."""@en ;
+rdfs:domain fgo:ResourceReference ;
+rdfs:range foaf:Document .
+
+fgo:hasDefinition a owl:ObjectProperty ;
+rdfs:label "has definition"@en ;
+rdfs:comment """The structure and behaviour of a resource."""@en ;
+rdfs:domain fgo:Resource ;
+rdfs:range fgo:Definition .
+
+fgo:hasIdBBFrom a owl:DatatypeProperty ;
+rdfs:label "has id building block from"@en ;
+rdfs:comment """building block id of the 'from' point of the pipe or trigger."""@en ;
+rdfs:domain fgo:Pipe, fgo:Trigger ;
+rdfs:range xsd:string .
+
+fgo:hasIdConditionFrom a owl:DatatypeProperty ;
+rdfs:label "has id condition from"@en ;
+rdfs:comment """condition id of the 'from' point of the pipe."""@en ;
+rdfs:domain fgo:Pipe ;
+rdfs:range xsd:string .
+
+fgo:hasIdBBTo a owl:DatatypeProperty ;
+rdfs:label "has id building block to"@en ;
+rdfs:comment """building block id of the 'to' point of the pipe or trigger."""@en ;
+rdfs:domain fgo:Pipe, fgo:Trigger ;
+rdfs:range xsd:string .
+
+fgo:hasIdConditionTo a owl:DatatypeProperty ;
+rdfs:label "has id condition to"@en ;
+rdfs:comment """condition id of the 'to' point of the pipe."""@en ;
+rdfs:domain fgo:Pipe ;
+rdfs:range xsd:string .
+
+fgo:hasIdActionTo a owl:DatatypeProperty ;
+rdfs:label "has id action to"@en ;
+rdfs:comment """action id of the 'to' point of the pipe or trigger."""@en ;
+rdfs:domain fgo:Pipe, fgo:Trigger ;
+rdfs:range xsd:string .
+
+fgo:hasNameFrom a owl:DatatypeProperty ;
+rdfs:label "has name from"@en ;
+rdfs:comment """name of the trigger."""@en ;
+rdfs:domain fgo:Trigger ;
+rdfs:range xsd:string .
 
 # terms used from other ontologies
 

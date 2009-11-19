@@ -11,6 +11,7 @@ import org.ontoware.rdf2go.model.node.BlankNode;
 import org.ontoware.rdf2go.model.node.URI;
 import org.ontoware.rdf2go.vocabulary.RDF;
 import org.ontoware.rdf2go.vocabulary.RDFS;
+import org.ontoware.rdf2go.vocabulary.XSD;
 
 import eu.morfeoproject.fast.vocabulary.FGO;
 
@@ -85,19 +86,13 @@ public abstract class ScreenComponent extends Resource {
 			model.addStatement(resourceUri, FGO.hasAction, actionNode);
 			model.addStatement(actionNode, RDFS.label, action.getName());
 			// preconditions
-			for (List<Condition> conList : action.getPreconditions()) {
-				BlankNode bag = model.createBlankNode();
-				model.addStatement(bag, RDF.type, RDF.Bag);
-				model.addStatement(actionNode, FGO.hasPreCondition, bag);
-				int i = 1;
-				for (Condition con : conList) {
-					BlankNode c = model.createBlankNode();
-					model.addStatement(bag, RDF.li(i++), c);
-					model.addStatement(c, FGO.hasPatternString, model.createPlainLiteral(con.getPatternString()));
-					model.addStatement(c, FGO.hasScope, model.createPlainLiteral(con.getScope()));
-					for (String key : con.getLabels().keySet())
-						model.addStatement(c, RDFS.label, model.createLanguageTagLiteral(con.getLabels().get(key), key));
-				}
+			for (Condition con : action.getPreconditions()) {
+				BlankNode c = model.createBlankNode();
+				model.addStatement(actionNode, FGO.hasPreCondition, c);
+				model.addStatement(c, FGO.hasPatternString, model.createPlainLiteral(con.getPatternString()));
+				model.addStatement(c, FGO.isPositive, model.createDatatypeLiteral(new Boolean(con.isPositive()).toString(), XSD._boolean));
+				for (String key : con.getLabels().keySet())
+					model.addStatement(c, RDFS.label, model.createLanguageTagLiteral(con.getLabels().get(key), key));
 			}
 		}
 		
@@ -119,7 +114,7 @@ public abstract class ScreenComponent extends Resource {
 				BlankNode c = model.createBlankNode();
 				model.addStatement(bag, RDF.li(i++), c);
 				model.addStatement(c, FGO.hasPatternString, con.getPatternString());
-				model.addStatement(c, FGO.hasScope, con.getScope());
+				model.addStatement(c, FGO.isPositive, model.createDatatypeLiteral(new Boolean(con.isPositive()).toString(), XSD._boolean));
 				for (String key : con.getLabels().keySet())
 					model.addStatement(c, RDFS.label, model.createLanguageTagLiteral(con.getLabels().get(key), key));
 			}

@@ -10,7 +10,7 @@ import org.json.JSONObject;
 public class Action {
 
 	private String name;
-	private List<List<Condition>> preconditions;
+	private List<Condition> preconditions;
 	private List<String> uses;
 
 	public String getName() {
@@ -21,13 +21,13 @@ public class Action {
 		this.name = name;
 	}
 
-	public List<List<Condition>> getPreconditions() {
+	public List<Condition> getPreconditions() {
 		if (preconditions == null)
-			preconditions = new ArrayList<List<Condition>>();
+			preconditions = new ArrayList<Condition>();
 		return preconditions;
 	}
 
-	public void setPreconditions(List<List<Condition>> preconditions) {
+	public void setPreconditions(List<Condition> preconditions) {
 		this.preconditions = preconditions;
 	}
 
@@ -50,12 +50,8 @@ public class Action {
 			else
 				json.put("name", getName());
 			JSONArray preArray = new JSONArray();
-			for (List<Condition> conditionList : getPreconditions()) {
-				JSONArray conditionArray = new JSONArray();
-				for (Condition con : conditionList)
-					conditionArray.put(con.toJSON());
-				preArray.put(conditionArray);
-			}
+			for (Condition condition : getPreconditions())
+				preArray.put(condition.toJSON());
 			json.put("preconditions", preArray);
 			// uses
 			JSONArray usesArray = new JSONArray();

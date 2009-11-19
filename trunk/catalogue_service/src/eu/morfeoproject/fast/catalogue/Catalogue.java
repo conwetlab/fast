@@ -23,6 +23,7 @@ import org.ontoware.rdf2go.model.node.Variable;
 import org.ontoware.rdf2go.vocabulary.OWL;
 import org.ontoware.rdf2go.vocabulary.RDF;
 import org.ontoware.rdf2go.vocabulary.RDFS;
+import org.ontoware.rdf2go.vocabulary.XSD;
 import org.openrdf.repository.RepositoryException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -38,13 +39,16 @@ import eu.morfeoproject.fast.model.FastModelFactory;
 import eu.morfeoproject.fast.model.FormElement;
 import eu.morfeoproject.fast.model.Library;
 import eu.morfeoproject.fast.model.Operator;
+import eu.morfeoproject.fast.model.Pipe;
 import eu.morfeoproject.fast.model.Postcondition;
 import eu.morfeoproject.fast.model.PreOrPost;
 import eu.morfeoproject.fast.model.Precondition;
 import eu.morfeoproject.fast.model.Resource;
 import eu.morfeoproject.fast.model.Screen;
 import eu.morfeoproject.fast.model.ScreenComponent;
+import eu.morfeoproject.fast.model.ScreenDefinition;
 import eu.morfeoproject.fast.model.ScreenFlow;
+import eu.morfeoproject.fast.model.Trigger;
 import eu.morfeoproject.fast.model.WithConditions;
 import eu.morfeoproject.fast.util.DateFormatter;
 import eu.morfeoproject.fast.vocabulary.DC;
@@ -89,6 +93,7 @@ public class Catalogue {
 		// creates a new triple store
 		tripleStore = new TripleStore(dir, indexes);
     	tripleStore.open();
+//    	printStatements();
 
     	// check if the catalogue is correct
 		if (!check()) {
@@ -336,6 +341,94 @@ public class Catalogue {
     	return listStatements;
     }
 
+    public Set<URI> findScreenComponents(
+    		Screen container,
+    		Set<ScreenComponent> components,
+    		int offset,
+    		int limit,
+    		Set<String> domainContext) throws ClassCastException, ModelRuntimeException {
+    	HashSet<URI> results = new HashSet<URI>();
+    	results.addAll(findScreenComponents(container, components, offset, limit, domainContext, FGO.FormElement));
+    	results.addAll(findScreenComponents(container, components, offset, limit, domainContext, FGO.Operator));
+    	results.addAll(findScreenComponents(container, components, offset, limit, domainContext, FGO.BackendService));
+    	return results;
+    }
+    
+    public Set<URI> findScreenComponents(
+    		Screen container,
+    		Set<ScreenComponent> components,
+    		int offset,
+    		int limit,
+    		Set<String> domainContext,
+    		URI typeResource) throws ClassCastException, ModelRuntimeException {
+    	HashSet<URI> results = new HashSet<URI>();
+    	ArrayList<Condition> conList = new ArrayList<Condition>();
+    	for (ScreenComponent comp : components) {
+    		for (List<Condition> cList : comp.getPostconditions())
+    			conList.addAll(cList);
+    	}
+
+    	String queryString = 
+    		"SELECT DISTINCT ?resource \n" +
+    		"WHERE {\n" +
+    		"{ ?resource "+RDF.type.toSPARQL()+" "+typeResource.toSPARQL()+" . "; //TODO only this or should I specify Form, Operator and so on?
+    	
+    	// doesn't include the resources where the postconditions were taken from
+    	for (ScreenComponent comp : components)
+   			queryString = queryString.concat("FILTER (?resource != "+comp.getUri().toSPARQL()+") . ");
+
+    	// tags from the domain context
+    	if (domainContext != null && domainContext.size() > 0) {
+        	queryString = queryString.concat("{");
+        	for (String tag : domainContext) {
+	    		queryString = queryString.concat(" { ?resource "+FGO.hasTag.toSPARQL()+" ?tag . FILTER regex(?tag, \""+tag+"\", \"i\") } UNION");
+        	}
+        	// remove last 'UNION'
+	    	if (queryString.endsWith("UNION"))
+				queryString = queryString.substring(0, queryString.length() - 5);
+			queryString = queryString.concat("} . ");
+    	}
+    	
+    	// search for components which preconditions (from actions) are satisfied 
+    	// by any of the postconditions extracted above
+    	if (conList.size() > 0) {
+        	queryString = queryString.concat("{");
+			for (Condition con : conList) {
+				queryString = queryString.concat("{ ?resource "+FGO.hasAction.toSPARQL()+" ?a . ");
+				queryString = queryString.concat(" ?a "+FGO.hasPreCondition.toSPARQL()+" ?c . ");
+				queryString = queryString.concat(" ?c "+FGO.hasPattern.toSPARQL()+" ?p . ");
+    			queryString = queryString.concat("GRAPH ?p {");
+        		for (Statement st : con.getPattern()) {
+        			String s = (st.getSubject() instanceof BlankNode) ? st.getSubject().toString() : st.getSubject().toSPARQL();
+        			String o = (st.getObject() instanceof BlankNode) ? st.getObject().toString() : st.getObject().toSPARQL();
+        			queryString = queryString.concat(s+" "+st.getPredicate().toSPARQL()+" "+o+" . ");
+        		}
+        		queryString = queryString.concat("} } UNION");
+        	}
+        	// remove last 'UNION'
+	    	if (queryString.endsWith("UNION"))
+				queryString = queryString.substring(0, queryString.length() - 5);
+			queryString = queryString.concat("}");
+    	}
+		queryString = queryString.concat("\n} }");
+		
+		
+		if (limit > 0)
+			queryString = queryString.concat("\nLIMIT "+limit);
+		queryString = queryString.concat("\nOFFSET "+offset);
+		// replace ':_' by '?' to make the query
+		queryString = replaceBlankNodes(queryString);
+
+    	QueryResultTable qrt = tripleStore.sparqlSelect(queryString);
+    	ClosableIterator<QueryRow> itResults = qrt.iterator();
+    	while (itResults.hasNext()) {
+    		results.add(itResults.next().getValue("resource").asURI());
+    	}
+    	itResults.close();
+
+    	return results;
+    }
+
     /**
      * Search for screens inside the catalogue which satisfy the unsatisfied preconditions of a set of screens
      * and also takes into account the domain context composed by a list of tags.
@@ -355,7 +448,7 @@ public class Catalogue {
      * @throws ClassCastException
      * @throws ModelRuntimeException
      */
-    private Set<URI> find(
+    private Set<URI> findScreens(
     		Set<Resource> resources,
     		boolean plugin,
     		boolean subsume,
@@ -475,7 +568,7 @@ public class Catalogue {
     		int offset,
     		int limit,
     		Set<String> domainContext) throws ClassCastException, ModelRuntimeException {
-    	return find(resources, plugin, subsume, offset, limit, domainContext, FGO.hasPostCondition);
+    	return findScreens(resources, plugin, subsume, offset, limit, domainContext, FGO.hasPostCondition);
     }
     
     public Set<URI> findForwards(
@@ -496,7 +589,7 @@ public class Catalogue {
     			tmpResources.add(r);
     		}
     	}
-    	return find(tmpResources, plugin, subsume, offset, limit, domainContext, FGO.hasPreCondition);
+    	return findScreens(tmpResources, plugin, subsume, offset, limit, domainContext, FGO.hasPreCondition);
     }
 
     public Set<Resource> findRecursive(
@@ -535,15 +628,19 @@ public class Catalogue {
 			if (r instanceof Screen) {
 				Screen s = (Screen)r;
 				for (List<Condition> conList : s.getPreconditions())
-					if (!isListSatisfied(resources, conList, plugin, subsume, s.getUri()))
-						for (Condition c : conList)
-							unsatisfied.add(c);
+					if (!isConditionSatisfied(resources, conList, plugin, subsume, s.getUri()))
+						for (Condition c : conList) {
+							if (c.isPositive())
+								unsatisfied.add(c);
+						}
 			} else if (r instanceof Postcondition) {
 				Postcondition e = (Postcondition)r;
 				List<Condition> conList = e.getConditions();
-				if (!isListSatisfied(resources, conList, plugin, subsume, e.getUri()))
-					for (Condition c : conList)
-						unsatisfied.add(c);
+				if (!isConditionSatisfied(resources, conList, plugin, subsume, e.getUri()))
+					for (Condition c : conList) {
+						if (c.isPositive())
+							unsatisfied.add(c);
+					}
 			}
 		}
 		return unsatisfied;
@@ -562,16 +659,12 @@ public class Catalogue {
 	 * @return true if the condition is satisfied
 	 */
 	/* Check if all the conditions in a list are satisfied by a set of screens */
-	public boolean isListSatisfied(Set<Resource> resources, List<Condition> precondition, boolean plugin, boolean subsume, URI screenExcluded) {
+	public boolean isConditionSatisfied(Set<Resource> resources, List<Condition> precondition, boolean plugin, boolean subsume, URI screenExcluded) {
 		Set<Resource> tmpResources = new HashSet<Resource>();
 		
 		// if no conditions are provided, then returns true
 		if (precondition.isEmpty())
 			return true;
-		
-		// if there are no resources to check with, the conditions cannot be satisfied
-		if (resources.isEmpty())
-			return false;
 		
 		// copy the set of screens except the screen to be excluded
 		for (Resource r : resources)
@@ -587,14 +680,19 @@ public class Catalogue {
 		// create the ASK sparql query for a precondition
     	String queryStr = "ASK {";
     	for (Condition condition : precondition) {
-	    	for (Statement st : condition.getPattern()) {
-				String su = (st.getSubject() instanceof BlankNode) ? st.getSubject().toString() : st.getSubject().toSPARQL();
-				String ob = (st.getObject() instanceof BlankNode) ? st.getObject().toString() : st.getObject().toSPARQL();
-				queryStr = queryStr.concat(su+" "+st.getPredicate().toSPARQL()+" "+ob+" . ");
-	    	}
+    		if (condition.isPositive()) {
+		    	for (Statement st : condition.getPattern()) {
+					String su = (st.getSubject() instanceof BlankNode) ? st.getSubject().toString() : st.getSubject().toSPARQL();
+					String ob = (st.getObject() instanceof BlankNode) ? st.getObject().toString() : st.getObject().toSPARQL();
+					queryStr = queryStr.concat(su+" "+st.getPredicate().toSPARQL()+" "+ob+" . ");
+		    	}
+    		}
     	}
     	queryStr = queryStr.concat("}");
-  	
+
+    	// empty query = is satisfied
+    	if (queryStr.equals("ASK {}")) return true;
+    	
 		for (Model m : models) {
 			satisfied = m.sparqlAsk(queryStr);
 			if (satisfied) break;
@@ -649,6 +747,25 @@ public class Catalogue {
 			}
 		}
 		return models;
+	}
+	
+	/**
+	 * Returns true if there is a pipe connecting this condition to any other screen component
+	 * @param sc
+	 * @param action
+	 * @param precondition
+	 * @param pipes
+	 * @return
+	 */
+	public boolean isConditionConnected(ScreenComponent sc, Action action, Condition precondition, List<Pipe> pipes) {
+		for (Pipe pipe : pipes) {
+			if (pipe.getIdBBTo().equals(sc.getUri())
+					&& pipe.getIdActionTo().equals(action.getName())
+					&& pipe.getIdConditionTo().equals(precondition.getId())) {
+				return true;
+			}
+		}
+		return false;
 	}
 	
 	/**
@@ -769,7 +886,7 @@ public class Catalogue {
 	    		boolean reachable = false;
 	    		// check whether a set of preconditions is fulfilled => makes the screen reachable
 	    		for (List<Condition> conList : s.getPreconditions()) { /* OR */
-	    			reachable = isListSatisfied(reachables, conList, true, true, s.getUri());
+	    			reachable = isConditionSatisfied(reachables, conList, true, true, s.getUri());
 	    			if (reachable)
 	    				break;
 	    		}
@@ -878,6 +995,7 @@ public class Catalogue {
 		saveResource(screen);
 
 		URI screenUri = screen.getUri();
+		// save preconditions
 		for (List<Condition> conList : screen.getPreconditions()) {
 			BlankNode bag = tripleStore.createBlankNode();
 			tripleStore.addStatement(bag, RDF.type, RDF.Bag);
@@ -888,6 +1006,7 @@ public class Catalogue {
 				tripleStore.addStatement(bag, RDF.li(i++), c);
 			}
 		}
+		// save postconditions
 		for (List<Condition> conList : screen.getPostconditions()) {
 			BlankNode bag = tripleStore.createBlankNode();
 			tripleStore.addStatement(bag, RDF.type, RDF.Bag);
@@ -898,8 +1017,40 @@ public class Catalogue {
 				tripleStore.addStatement(bag, RDF.li(i++), c);
 			}
 		}
-		if (screen.getCode() != null)
+		// save either 'code' or 'definition'
+		if (screen.getCode() != null) {
 			tripleStore.addStatement(screenUri, FGO.hasCode, screen.getCode());
+		} else if (screen.getDefinition() != null) {
+			ScreenDefinition def = screen.getDefinition();
+			BlankNode bnDef = tripleStore.createBlankNode();
+			tripleStore.addStatement(screenUri, FGO.hasDefinition, bnDef);
+			// building blocks
+			for (String id : def.getBuildingBlocks().keySet()) {
+				BlankNode bnBB = tripleStore.createBlankNode();
+				tripleStore.addStatement(bnDef, FGO.contains, bnBB);
+				tripleStore.addStatement(bnBB, FGO.hasId, id);
+				tripleStore.addStatement(bnBB, FGO.hasUri, def.getBuildingBlocks().get(id));
+			}
+			// pipes
+			for (Pipe pipe : def.getPipes()) {
+				BlankNode bnPipe = tripleStore.createBlankNode();
+				tripleStore.addStatement(bnDef, FGO.contains, bnPipe);
+				tripleStore.addStatement(bnPipe, FGO.hasIdBBFrom, pipe.getIdBBFrom());
+				tripleStore.addStatement(bnPipe, FGO.hasIdConditionFrom, pipe.getIdConditionFrom());
+				tripleStore.addStatement(bnPipe, FGO.hasIdBBTo, pipe.getIdBBTo());
+				tripleStore.addStatement(bnPipe, FGO.hasIdConditionTo, pipe.getIdConditionTo());
+				tripleStore.addStatement(bnPipe, FGO.hasIdActionTo, pipe.getIdActionTo());
+			}
+			// triggers
+			for (Trigger trigger : def.getTriggers()) {
+				BlankNode bnTrigger = tripleStore.createBlankNode();
+				tripleStore.addStatement(bnDef, FGO.hasTrigger, bnTrigger);
+				tripleStore.addStatement(bnTrigger, FGO.hasIdBBFrom, trigger.getIdBBFrom());
+				tripleStore.addStatement(bnTrigger, FGO.hasNameFrom, trigger.getNameFrom());
+				tripleStore.addStatement(bnTrigger, FGO.hasIdBBTo, trigger.getIdBBTo());
+				tripleStore.addStatement(bnTrigger, FGO.hasIdActionTo, trigger.getIdActionTo());
+			}
+		}
 		logger.info("Screen "+screen.getUri()+" added.");
 	}
 	
@@ -1083,7 +1234,7 @@ public class Catalogue {
 		for (Statement st : con.getPattern()) {
 			tripleStore.addStatement(p, st.getSubject(), st.getPredicate(), st.getObject());
 		}
-		tripleStore.addStatement(c, FGO.hasScope, con.getScope());
+		tripleStore.addStatement(c, FGO.isPositive, tripleStore.createDatatypeLiteral(new Boolean(con.isPositive()).toString(), XSD._boolean));
 		for (String key : con.getLabels().keySet())
 			tripleStore.addStatement(c, RDFS.label, tripleStore.createLanguageTagLiteral(con.getLabels().get(key), key));
 		if (con.getId() != null)
@@ -1102,15 +1253,9 @@ public class Catalogue {
 			tripleStore.addStatement(scUri, FGO.hasAction, aNode);
 			tripleStore.addStatement(aNode, RDFS.label, tripleStore.createPlainLiteral(action.getName()));
 			// preconditions
-			for (List<Condition> conList : action.getPreconditions()) {
-				BlankNode bag = tripleStore.createBlankNode();
-				tripleStore.addStatement(bag, RDF.type, RDF.Bag);
-				tripleStore.addStatement(aNode, FGO.hasPreCondition, bag);
-				int i = 1;
-				for (Condition con : conList) {
-					BlankNode c = saveCondition(con);
-					tripleStore.addStatement(bag, RDF.li(i++), c);
-				}
+			for (Condition con : action.getPreconditions()) {
+				BlankNode c = saveCondition(con);
+				tripleStore.addStatement(aNode, FGO.hasPreCondition, c);
 			}
 			// uses
 			for (String use : action.getUses())
@@ -1347,6 +1492,12 @@ public class Catalogue {
     		return getPrecondition(uri);
     	} else if (isType(uri, FGO.Postcondition)) {
     		return getPostcondition(uri);
+    	} else if (isType(uri, FGO.FormElement)) {
+    		return getFormElement(uri);
+    	} else if (isType(uri, FGO.Operator)) {
+    		return getOperator(uri);
+    	} else if (isType(uri, FGO.BackendService)) {
+    		return getBackendService(uri);
     	}
     	return null;
     }
@@ -1510,16 +1661,63 @@ public class Catalogue {
 			screen = (Screen) retrieveWithConditions(FGO.Screen, uri);
 			if (screen != null) {
 				// find all the info related to a screen
-				ClosableIterator<Statement> screenTriples = tripleStore.findStatements(uri, Variable.ANY, Variable.ANY);
-				for ( ; screenTriples.hasNext(); ) {
-					Statement st = screenTriples.next();
+				ClosableIterator<Statement> screenIt = tripleStore.findStatements(uri, Variable.ANY, Variable.ANY);
+				for ( ; screenIt.hasNext(); ) {
+					Statement st = screenIt.next();
 					URI predicate = st.getPredicate();
 					Node object = st.getObject();
 					if (predicate.equals(FGO.hasCode)) {
 						screen.setCode(object.asURI());
+					} else if (predicate.equals(FGO.hasDefinition)) {
+						ScreenDefinition def = new ScreenDefinition();
+						ClosableIterator<Statement> defIt = tripleStore.findStatements(object.asBlankNode(), Variable.ANY, Variable.ANY);
+						for ( ; defIt.hasNext(); ) {
+							Statement defSt = defIt.next();
+							URI defPredicate = defSt.getPredicate();
+							Node defObject = defSt.getObject();
+							if (defPredicate.equals(FGO.contains)) {
+								String idBB = null;
+								URI uriBB = null;
+								String idBBFrom = null, idConditionFrom = null, idBBTo = null, idConditionTo = null, idActionTo = null;
+								ClosableIterator<Statement> bbIt = tripleStore.findStatements(defObject.asBlankNode(), Variable.ANY, Variable.ANY);
+								for ( ; bbIt.hasNext(); ) {
+									Statement bbSt = bbIt.next();
+									URI bbPredicate = bbSt.getPredicate();
+									Node bbObject = bbSt.getObject();
+									if (bbPredicate.equals(FGO.hasId)) {
+										idBB = bbObject.asLiteral().getValue();
+									} else if (bbPredicate.equals(FGO.hasUri)) {
+										uriBB = bbObject.asURI();
+									} else if (bbPredicate.equals(FGO.hasIdBBFrom)) {
+										idBBFrom = bbObject.asLiteral().getValue();
+									} else if (bbPredicate.equals(FGO.hasIdConditionFrom)) {
+										idConditionFrom = bbObject.asLiteral().getValue();
+									} else if (bbPredicate.equals(FGO.hasIdBBTo)) {
+										idBBTo = bbObject.asLiteral().getValue();
+									} else if (bbPredicate.equals(FGO.hasIdConditionTo)) {
+										idConditionTo = bbObject.asLiteral().getValue();
+									} else if (bbPredicate.equals(FGO.hasIdActionTo)) {
+										idActionTo = bbObject.asLiteral().getValue();
+									}
+								}
+								if (idBB != null && uriBB != null) {
+									def.getBuildingBlocks().put(idBB, uriBB);
+								} else if (idBBFrom != null && idConditionFrom != null && idBBTo != null && idConditionTo != null && idActionTo != null) {
+									Pipe pipe = FastModelFactory.createPipe();
+									pipe.setIdBBFrom(idBBFrom);
+									pipe.setIdConditionFrom(idConditionFrom);
+									pipe.setIdBBTo(idBBTo);
+									pipe.setIdConditionTo(idConditionTo);
+									pipe.setIdActionTo(idActionTo);
+									def.getPipes().add(pipe);
+								}
+								bbIt.close();
+							}
+						}
+						defIt.close();
 					}
 				}
-				screenTriples.close();
+				screenIt.close();
 			}
 		} catch (InvalidResourceTypeException e) {
 			// TODO Auto-generated catch block
@@ -1603,20 +1801,7 @@ public class Catalogue {
 						if (p.equals(RDFS.label)) {
 							action.setName(o.asLiteral().toString());
 						} else if (p.equals(FGO.hasPreCondition)) {
-							ArrayList<Condition> conList = new ArrayList<Condition>();
-							int i = 1;
-							boolean stop = false;
-							while (!stop) {
-								ClosableIterator<Statement> conBag = tripleStore.findStatements(o.asBlankNode(), RDF.li(i++), Variable.ANY);
-								if (!conBag.hasNext()) {
-									stop = true;
-								} else {
-									while (conBag.hasNext())
-										conList.add(getCondition(conBag.next().getObject().asBlankNode()));
-								}
-								conBag.close();
-							}
-							action.getPreconditions().add(conList);
+							action.getPreconditions().add(getCondition(o.asBlankNode()));
 						} else if (p.equals(FGO.hasUse)) {
 							action.getUses().add(o.toString());
 						}
@@ -1713,8 +1898,8 @@ public class Catalogue {
 					LanguageTagLiteral label = object.asLanguageTagLiteral();
 					c.getLabels().put(label.getLanguageTag(), label.getValue());
 				}
-			} else if (predicate.equals(FGO.hasScope)) {
-				c.setScope(object.toString());
+			} else if (predicate.equals(FGO.isPositive)) {
+				c.setPositive(Boolean.parseBoolean(object.asDatatypeLiteral().getValue()));
 			} else if (predicate.equals(FGO.hasPatternString)) {
 				c.setPatternString(object.toString());
 			} else if (predicate.equals(FGO.hasPattern)) {

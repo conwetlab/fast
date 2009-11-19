@@ -4,7 +4,7 @@ import org.ontoware.rdf2go.model.node.URI;
 import org.ontoware.rdf2go.model.node.impl.URIImpl;
 
 /**
- * Vocabulary File. Created by org.ontoware.rdf2go.util.VocabularyWriter on Wed Nov 04 14:16:54 GMT 2009
+ * Vocabulary File. Created by org.ontoware.rdf2go.util.VocabularyWriter on Wed Nov 18 14:40:17 GMT 2009
  * input file: src/eu/morfeoproject/fast/catalogue/ontologies/fgo.rdf
  * namespace: http://purl.oclc.org/fast/ontology/gadget#
  */
@@ -24,6 +24,10 @@ public interface FGO {
     public static final URI Person = new URIImpl("http://xmlns.com/foaf/0.1/Person", false);
 
     /**
+     */
+    public static final URI BackendServiceDefinition = new URIImpl("http://purl.oclc.org/fast/ontology/gadget#BackendServiceDefinition", false);
+
+    /**
      * Label: Connector@en 
      * Comment: An explicit connection between two screens.@en 
      */
@@ -37,11 +41,19 @@ public interface FGO {
     public static final URI Fact = new URIImpl("http://purl.oclc.org/fast/ontology/gadget#Fact", false);
 
     /**
+     */
+    public static final URI OperatorDefinition = new URIImpl("http://purl.oclc.org/fast/ontology/gadget#OperatorDefinition", false);
+
+    /**
      * Label: Flow Control Element@en 
      * Comment: Any kind of component which can restrict the default flow of screens 
     in a gadget.@en 
      */
     public static final URI FlowControlElement = new URIImpl("http://purl.oclc.org/fast/ontology/gadget#FlowControlElement", false);
+
+    /**
+     */
+    public static final URI FormDefinition = new URIImpl("http://purl.oclc.org/fast/ontology/gadget#FormDefinition", false);
 
     /**
      * Label: Action@en 
@@ -59,11 +71,10 @@ public interface FGO {
     public static final URI Resource = new URIImpl("http://purl.oclc.org/fast/ontology/gadget#Resource", false);
 
     /**
-     * Label: Postcondition@en 
-     * Comment: A postcondition is a result condition within a screenflow. It can be seen
-    as an output of the screenflow.@en 
+     * Label: Form Element@en 
+     * Comment: Form elements are UI elements in a particular screen.@en 
      */
-    public static final URI Postcondition = new URIImpl("http://purl.oclc.org/fast/ontology/gadget#Postcondition", false);
+    public static final URI FormElement = new URIImpl("http://purl.oclc.org/fast/ontology/gadget#FormElement", false);
 
     /**
      * Label: Action@en 
@@ -74,10 +85,11 @@ public interface FGO {
     public static final URI Library = new URIImpl("http://purl.oclc.org/fast/ontology/gadget#Library", false);
 
     /**
-     * Label: Form Element@en 
-     * Comment: Form elements are UI elements in a particular screen.@en 
+     * Label: Postcondition@en 
+     * Comment: A postcondition is a result condition within a screenflow. It can be seen
+    as an output of the screenflow.@en 
      */
-    public static final URI FormElement = new URIImpl("http://purl.oclc.org/fast/ontology/gadget#FormElement", false);
+    public static final URI Postcondition = new URIImpl("http://purl.oclc.org/fast/ontology/gadget#Postcondition", false);
 
     /**
      * Label: Screen Flow@en 
@@ -92,14 +104,41 @@ public interface FGO {
     public static final URI ScreenFlowEnd = new URIImpl("http://purl.oclc.org/fast/ontology/gadget#ScreenFlowEnd", false);
 
     /**
+     * Label: trigger@en 
+     * Comment: Define a...@en 
+     */
+    public static final URI Trigger = new URIImpl("http://purl.oclc.org/fast/ontology/gadget#Trigger", false);
+
+    /**
      * Label: Screen@en 
      * Comment: An individual screen.@en 
      */
     public static final URI Screen = new URIImpl("http://purl.oclc.org/fast/ontology/gadget#Screen", false);
 
     /**
+     * Label: pipe or connector@en 
+     * Comment: Define a pipe or connector between two resources. The connection is made
+	specifying the conditions which will be connected.@en 
+     */
+    public static final URI Pipe = new URIImpl("http://purl.oclc.org/fast/ontology/gadget#Pipe", false);
+
+    /**
      */
     public static final URI OnlineAccount = new URIImpl("http://xmlns.com/foaf/0.1/OnlineAccount", false);
+
+    /**
+     * Label: Resource reference@en 
+     * Comment: It's a reference to a certain resource. Needs a 'id' for internal
+	identification for the resource which is referencing it, and the 'uri' of the
+	resource.@en 
+     */
+    public static final URI ResourceReference = new URIImpl("http://purl.oclc.org/fast/ontology/gadget#ResourceReference", false);
+
+    /**
+     * Label: Screen Flow Start@en 
+     * Comment: The entry point to a wigdet; the first screen.@en 
+     */
+    public static final URI ScreenFlowStart = new URIImpl("http://purl.oclc.org/fast/ontology/gadget#ScreenFlowStart", false);
 
     /**
      * Label: With-precondition@en 
@@ -107,12 +146,6 @@ public interface FGO {
     (i.e., screens and screen flows).@en 
      */
     public static final URI WithPostConditions = new URIImpl("http://purl.oclc.org/fast/ontology/gadget#WithPostConditions", false);
-
-    /**
-     * Label: Screen Flow Start@en 
-     * Comment: The entry point to a wigdet; the first screen.@en 
-     */
-    public static final URI ScreenFlowStart = new URIImpl("http://purl.oclc.org/fast/ontology/gadget#ScreenFlowStart", false);
 
     /**
      */
@@ -143,10 +176,23 @@ public interface FGO {
     public static final URI WithPreConditions = new URIImpl("http://purl.oclc.org/fast/ontology/gadget#WithPreConditions", false);
 
     /**
+     * Label: Screen definition@en 
+     * Comment: Behaviour definition of a screen. This will contain which form, operators and 
+	backend services the screen is composed, and how they are connected.@en 
+     */
+    public static final URI ScreenDefinition = new URIImpl("http://purl.oclc.org/fast/ontology/gadget#ScreenDefinition", false);
+
+    /**
      * Label: Screen Component@en 
      * Comment: A screen component is any resource which is part of a particular screen.@en 
      */
     public static final URI ScreenComponent = new URIImpl("http://purl.oclc.org/fast/ontology/gadget#ScreenComponent", false);
+
+    /**
+     * Label: Resource definition@en 
+     * Comment: Structural and behaviour definition of a resource.@en 
+     */
+    public static final URI Definition = new URIImpl("http://purl.oclc.org/fast/ontology/gadget#Definition", false);
 
     /**
      */
@@ -193,6 +239,14 @@ public interface FGO {
     public static final URI name = new URIImpl("http://xmlns.com/foaf/0.1/name", false);
 
     /**
+     * Label: has id condition to@en 
+     * Comment: condition id of the 'to' point of the pipe.@en 
+     * Comment: http://purl.oclc.org/fast/ontology/gadget#Pipe 
+     * Range: http://www.w3.org/2001/XMLSchema#string 
+     */
+    public static final URI hasIdConditionTo = new URIImpl("http://purl.oclc.org/fast/ontology/gadget#hasIdConditionTo", false);
+
+    /**
      * Label: has pattern string@en 
      * Comment: This property is the textual representation of a condition.@en 
      * Comment: http://purl.oclc.org/fast/ontology/gadget#Fact 
@@ -218,9 +272,27 @@ public interface FGO {
     public static final URI hasVersion = new URIImpl("http://purl.oclc.org/fast/ontology/gadget#hasVersion", false);
 
     /**
+     * Label: is positive@en 
+     * Comment: Facts can be set to a specific scope: design time, execution time,
+	or both of them. This will define when they have to be taken into account by the
+	inference engine or reasoner.@en 
+     * Comment: http://purl.oclc.org/fast/ontology/gadget#Fact 
+     * Range: http://www.w3.org/2001/XMLSchema#boolean 
+     */
+    public static final URI isPositive = new URIImpl("http://purl.oclc.org/fast/ontology/gadget#isPositive", false);
+
+    /**
+     * Label: has id building block to@en 
+     * Comment: building block id of the 'to' point of the pipe or trigger.@en 
+     * Comment: http://purl.oclc.org/fast/ontology/gadget#Trigger http://purl.oclc.org/fast/ontology/gadget#Pipe 
+     * Range: http://www.w3.org/2001/XMLSchema#string 
+     */
+    public static final URI hasIdBBTo = new URIImpl("http://purl.oclc.org/fast/ontology/gadget#hasIdBBTo", false);
+
+    /**
      * Label: has id@en 
      * Comment: The internal ID of the resource within the container resource.@en 
-     * Comment: http://purl.oclc.org/fast/ontology/gadget#Resource 
+     * Comment: http://purl.oclc.org/fast/ontology/gadget#ResourceReference http://purl.oclc.org/fast/ontology/gadget#Resource 
      * Range: http://www.w3.org/2001/XMLSchema#string 
      */
     public static final URI hasId = new URIImpl("http://purl.oclc.org/fast/ontology/gadget#hasId", false);
@@ -232,6 +304,14 @@ public interface FGO {
      * Range: http://www.w3.org/2001/XMLSchema#string 
      */
     public static final URI hasLanguage = new URIImpl("http://purl.oclc.org/fast/ontology/gadget#hasLanguage", false);
+
+    /**
+     * Label: has id condition from@en 
+     * Comment: condition id of the 'from' point of the pipe.@en 
+     * Comment: http://purl.oclc.org/fast/ontology/gadget#Pipe 
+     * Range: http://www.w3.org/2001/XMLSchema#string 
+     */
+    public static final URI hasIdConditionFrom = new URIImpl("http://purl.oclc.org/fast/ontology/gadget#hasIdConditionFrom", false);
 
     /**
      * Label: has tag@en 
@@ -266,14 +346,8 @@ public interface FGO {
     public static final URI hasName = new URIImpl("http://purl.oclc.org/fast/ontology/gadget#hasName", false);
 
     /**
-     * Label: is positive@en 
-     * Comment: Facts can be set to a specific scope: design time, execution time,
-	or both of them. This will define when they have to be taken into account by the
-	inference engine or reasoner.@en 
-     * Comment: http://purl.oclc.org/fast/ontology/gadget#Fact 
-     * Range: http://www.w3.org/2001/XMLSchema#boolean 
      */
-    public static final URI hasScope = new URIImpl("http://purl.oclc.org/fast/ontology/gadget#hasScope", false);
+    public static final URI modified = new URIImpl("http://purl.org/dc/terms/modified", false);
 
     /**
      */
@@ -281,22 +355,44 @@ public interface FGO {
 
     /**
      */
-    public static final URI modified = new URIImpl("http://purl.org/dc/terms/modified", false);
+    public static final URI revision = new URIImpl("http://usefulinc.com/ns/doap#revision", false);
 
     /**
+     * Label: has id action to@en 
+     * Comment: action id of the 'to' point of the pipe or trigger.@en 
+     * Comment: http://purl.oclc.org/fast/ontology/gadget#Trigger http://purl.oclc.org/fast/ontology/gadget#Pipe 
+     * Range: http://www.w3.org/2001/XMLSchema#string 
      */
-    public static final URI revision = new URIImpl("http://usefulinc.com/ns/doap#revision", false);
+    public static final URI hasIdActionTo = new URIImpl("http://purl.oclc.org/fast/ontology/gadget#hasIdActionTo", false);
 
     /**
      */
     public static final URI created = new URIImpl("http://purl.org/dc/terms/created", false);
 
     /**
+     * Label: has name from@en 
+     * Comment: name of the trigger.@en 
+     * Comment: http://purl.oclc.org/fast/ontology/gadget#Trigger 
+     * Range: http://www.w3.org/2001/XMLSchema#string 
+     */
+    public static final URI hasNameFrom = new URIImpl("http://purl.oclc.org/fast/ontology/gadget#hasNameFrom", false);
+
+    /**
+     * Label: has id building block from@en 
+     * Comment: building block id of the 'from' point of the pipe or trigger.@en 
+     * Comment: http://purl.oclc.org/fast/ontology/gadget#Trigger http://purl.oclc.org/fast/ontology/gadget#Pipe 
+     * Range: http://www.w3.org/2001/XMLSchema#string 
+     */
+    public static final URI hasIdBBFrom = new URIImpl("http://purl.oclc.org/fast/ontology/gadget#hasIdBBFrom", false);
+
+    /**
      * Label: contains@en 
      * Comment: Many kinds of components in FAST can contain other components: 
-    screenflows contain screens, screens contain forms or form elements, etc.@en 
-     * Comment: http://purl.oclc.org/fast/ontology/gadget#Resource 
-     * Range: http://purl.oclc.org/fast/ontology/gadget#Resource 
+    screenflows contain screens, screens contain forms or form elements, etc.
+    It points to a resource reference to give a unique 'id' to each component
+    within the resource.@en 
+     * Comment: http://purl.oclc.org/fast/ontology/gadget#Resource http://purl.oclc.org/fast/ontology/gadget#Definition 
+     * Range: http://purl.oclc.org/fast/ontology/gadget#ResourceReference 
      */
     public static final URI contains = new URIImpl("http://purl.oclc.org/fast/ontology/gadget#contains", false);
 
@@ -317,6 +413,14 @@ public interface FGO {
      * Range: http://xmlns.com/foaf/0.1/Document 
      */
     public static final URI hasSource = new URIImpl("http://purl.oclc.org/fast/ontology/gadget#hasSource", false);
+
+    /**
+     * Label: has definition@en 
+     * Comment: The structure and behaviour of a resource.@en 
+     * Comment: http://purl.oclc.org/fast/ontology/gadget#Resource 
+     * Range: http://purl.oclc.org/fast/ontology/gadget#Definition 
+     */
+    public static final URI hasDefinition = new URIImpl("http://purl.oclc.org/fast/ontology/gadget#hasDefinition", false);
 
     /**
      */
@@ -352,6 +456,15 @@ public interface FGO {
     Maybe a bit redundant, but why not.@en 
      */
     public static final URI integratesTerm = new URIImpl("http://purl.oclc.org/fast/ontology/gadget#integratesTerm", false);
+
+    /**
+     * Label: has uri@en 
+     * Comment: URI of a particular resource pointing from a reference within
+	another resource.@en 
+     * Comment: http://purl.oclc.org/fast/ontology/gadget#ResourceReference 
+     * Range: http://xmlns.com/foaf/0.1/Document 
+     */
+    public static final URI hasUri = new URIImpl("http://purl.oclc.org/fast/ontology/gadget#hasUri", false);
 
     /**
      * Label: has pre-condition@en 

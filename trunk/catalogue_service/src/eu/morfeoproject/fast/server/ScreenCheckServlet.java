@@ -28,17 +28,17 @@ import eu.morfeoproject.fast.model.Screen;
 import eu.morfeoproject.fast.model.Precondition;
 
 /**
- * Servlet implementation class CheckServlet
+ * Servlet implementation class ScreenCheckServlet
  */
-public class CheckServlet extends HttpServlet {
+public class ScreenCheckServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
-	final Logger logger = LoggerFactory.getLogger(CheckServlet.class);
+	final Logger logger = LoggerFactory.getLogger(ScreenCheckServlet.class);
 	
 	/**
      * @see HttpServlet#HttpServlet()
      */
-    public CheckServlet() {
+    public ScreenCheckServlet() {
         super();
     }
 
@@ -111,7 +111,7 @@ public class CheckServlet extends HttpServlet {
 						boolean satisfied = false;
 						for (List<Condition> conList : s.getPreconditions()) { /* OR */
 							JSONArray conArray = new JSONArray();
-							satisfied = CatalogueAccessPoint.getCatalogue().isListSatisfied(reachables, conList, true, true, s.getUri());
+							satisfied = CatalogueAccessPoint.getCatalogue().isConditionSatisfied(reachables, conList, true, true, s.getUri());
 							reachability = reachability & satisfied;
 							for (Condition c : conList) {
 								JSONObject jsonPre = c.toJSON();
@@ -129,7 +129,7 @@ public class CheckServlet extends HttpServlet {
 					} else if (r instanceof Postcondition) {
 						Postcondition e = (Postcondition)r;
 						jsonResource.put("uri", e.getUri());
-						boolean satisfied = CatalogueAccessPoint.getCatalogue().isListSatisfied(reachables, e.getConditions(), true, true, e.getUri());
+						boolean satisfied = CatalogueAccessPoint.getCatalogue().isConditionSatisfied(reachables, e.getConditions(), true, true, e.getUri());
 						JSONArray conArray = new JSONArray();
 						for (Condition c : e.getConditions()) {
 							JSONObject jsonCon = c.toJSON();
@@ -155,7 +155,7 @@ public class CheckServlet extends HttpServlet {
 						boolean satisfied = false;
 						for (List<Condition> conList : s.getPreconditions()) { /* OR */
 							JSONArray conArray = new JSONArray();
-							satisfied = CatalogueAccessPoint.getCatalogue().isListSatisfied(reachables, conList, true, true, s.getUri());
+							satisfied = CatalogueAccessPoint.getCatalogue().isConditionSatisfied(reachables, conList, true, true, s.getUri());
 							reachability = reachability & satisfied;
 							for (Condition c : conList) {
 								JSONObject jsonPre = c.toJSON();

@@ -43,5 +43,10 @@ public class FastModelFactory {
 		for (Statement st : pattern)
 			condition.getPattern().add(st);
 		return condition;
-	}	
+	}
+	
+	public static Pipe createPipe() {
+		return new Pipe();
+	}
+	
 }

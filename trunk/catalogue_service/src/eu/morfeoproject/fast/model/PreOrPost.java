@@ -12,6 +12,7 @@ import org.ontoware.rdf2go.model.node.BlankNode;
 import org.ontoware.rdf2go.model.node.URI;
 import org.ontoware.rdf2go.vocabulary.RDF;
 import org.ontoware.rdf2go.vocabulary.RDFS;
+import org.ontoware.rdf2go.vocabulary.XSD;
 
 import eu.morfeoproject.fast.vocabulary.DC;
 import eu.morfeoproject.fast.vocabulary.FGO;
@@ -48,7 +49,7 @@ public abstract class PreOrPost extends Resource {
 			BlankNode c = model.createBlankNode();
 			model.addStatement(bag, RDF.li(i++), c);
 			model.addStatement(c, FGO.hasPatternString, con.getPatternString());
-			model.addStatement(c, FGO.hasScope, con.getScope());
+			model.addStatement(c, FGO.isPositive, model.createDatatypeLiteral(new Boolean(con.isPositive()).toString(), XSD._boolean));
 			for (String key : con.getLabels().keySet())
 				model.addStatement(c, RDFS.label, model.createLanguageTagLiteral(con.getLabels().get(key), key));
 		}

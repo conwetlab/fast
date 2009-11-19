@@ -51,21 +51,27 @@
 	</servlet>
 	<servlet>
 		<description></description>
-		<display-name>FindServlet</display-name>
-		<servlet-name>FindServlet</servlet-name>
-		<servlet-class>eu.morfeoproject.fast.server.FindServlet</servlet-class>
+		<display-name>ScreenFindServlet</display-name>
+		<servlet-name>ScreenFindServlet</servlet-name>
+		<servlet-class>eu.morfeoproject.fast.server.ScreenFindServlet</servlet-class>
 	</servlet>
 	<servlet>
 		<description></description>
-		<display-name>CheckServlet</display-name>
-		<servlet-name>CheckServlet</servlet-name>
-		<servlet-class>eu.morfeoproject.fast.server.CheckServlet</servlet-class>
+		<display-name>ScreenCheckServlet</display-name>
+		<servlet-name>ScreenCheckServlet</servlet-name>
+		<servlet-class>eu.morfeoproject.fast.server.ScreenCheckServlet</servlet-class>
 	</servlet>
 	<servlet>
 		<description></description>
-		<display-name>FindCheckServlet</display-name>
-		<servlet-name>FindCheckServlet</servlet-name>
-		<servlet-class>eu.morfeoproject.fast.server.FindCheckServlet</servlet-class>
+		<display-name>ScreenFindCheckServlet</display-name>
+		<servlet-name>ScreenFindCheckServlet</servlet-name>
+		<servlet-class>eu.morfeoproject.fast.server.ScreenFindCheckServlet</servlet-class>
+	</servlet>
+	<servlet>
+		<description></description>
+		<display-name>ScreenComponentFindCheckServlet</display-name>
+		<servlet-name>ScreenComponentFindCheckServlet</servlet-name>
+		<servlet-class>eu.morfeoproject.fast.server.ScreenComponentFindCheckServlet</servlet-class>
 	</servlet>
 	<servlet>
 		<description></description>
@@ -122,16 +128,20 @@
 		<url-pattern>/tags/*</url-pattern>
 	</servlet-mapping>
 	<servlet-mapping>
-		<servlet-name>FindServlet</servlet-name>
-		<url-pattern>/find</url-pattern>
+		<servlet-name>ScreenFindServlet</servlet-name>
+		<url-pattern>/screen/find</url-pattern>
 	</servlet-mapping>
 	<servlet-mapping>
-		<servlet-name>CheckServlet</servlet-name>
-		<url-pattern>/check</url-pattern>
+		<servlet-name>ScreenCheckServlet</servlet-name>
+		<url-pattern>/screen/check</url-pattern>
 	</servlet-mapping>
 	<servlet-mapping>
-		<servlet-name>FindCheckServlet</servlet-name>
-		<url-pattern>/findcheck</url-pattern>
+		<servlet-name>ScreenFindCheckServlet</servlet-name>
+		<url-pattern>/screens/findcheck</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>ScreenComponentFindCheckServlet</servlet-name>
+		<url-pattern>/components/findcheck</url-pattern>
 	</servlet-mapping>
 	<servlet-mapping>
 		<servlet-name>MetadataServlet</servlet-name>
