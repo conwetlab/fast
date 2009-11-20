@@ -17,6 +17,9 @@ urlpatterns = patterns('',
 
     # Deploy
     (r'^deploy/', include('deploy.urls')),
+    
+    # Storage
+    (r'^storage/', include('storage.urls')),
 
     # Catalogue
     (r'^catalogue/', include('catalogue.urls')),

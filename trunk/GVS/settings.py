@@ -95,6 +95,7 @@ INSTALLED_APPS = (
     'django.contrib.sites',
     'django.contrib.admin',
     'fast',
+    'storage',
     'deploy',
     'user',
     'buildingblock',
@@ -126,6 +127,12 @@ NOT_PROXY_FOR = ['localhost', '127.0.0.1']
 
 # Url to the server that holds the semantic catalogue
 CATALOGUE_URL = 'http://localhost:8082/'
+
+# Url to the server that holds the storage service (empty if local storage in GVS)
+STORAGE_URL = None
+
+# Format of the gadget sent to storage service ('URL' or 'base64string')
+STORAGE_FORMAT = 'base64string'
 
 # Url to the server that holds the GVS Data
 GVS_DATA_URL = 'http://localhost:8010/'

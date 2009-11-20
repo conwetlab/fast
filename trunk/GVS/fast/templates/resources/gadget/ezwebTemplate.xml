@@ -27,7 +27,7 @@
 {% endfor %}
     </Platform.Wiring>
     <Platform.Link>
-        <XHTML href="{{ gadgetUri }}" />
+        <XHTML href="{{ gadgetUri }}/ezweb.html" />
     </Platform.Link>
     <Platform.Rendering width="10" height="38" />
 </Template>

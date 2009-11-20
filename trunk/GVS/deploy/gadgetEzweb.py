@@ -12,18 +12,15 @@ def createEzwebGadget(gadgetName, gadgetUri, gadgetPath, label, vendor, version,
     gadgetPath = path.join(gadgetPath, mashup)
     mkdir(gadgetPath)
 
-    htmlUri = gadgetUri + '/' + gadgetName + '.html'
-    templateUri = gadgetUri + '/' + gadgetName + '.xml'
-    #print htmlUri
-    #print templateUri 
+    templateUri = gadgetUri + '/ezweb.xml'
     
-    ezWebTemplate = getEzWebTemplate(htmlUri, label['en-gb'], vendor, version, description['en-gb'], creator, email, prec, post)
-    templateFile = open(path.join(gadgetPath, gadgetName + '.xml'), 'w')
+    ezWebTemplate = getEzWebTemplate(gadgetUri, label['en-gb'], vendor, version, description['en-gb'], creator, email, prec, post)
+    templateFile = open(path.join(gadgetPath, 'ezweb.xml'), 'w')
     templateFile.write(smart_str(ezWebTemplate,'utf-8'))
     templateFile.close()
     
     ezWebHTML = getEzWebHTML(gadgetUri, label['en-gb'], screens, prec, post)
-    htmlFile = open(path.join(gadgetPath, gadgetName + '.html'), 'w')
+    htmlFile = open(path.join(gadgetPath, 'ezweb.html'), 'w')
     htmlFile.write(smart_str(ezWebHTML,'utf-8'))
     htmlFile.close()
 

@@ -15,6 +15,10 @@
 
     You should have received a copy of the GNU General Public License
     along with python-fedoracommons.  If not, see <http://www.gnu.org/licenses/>.
+    
+    Change Log:
+    
+    2009-11-19 (Fabio Garcia): Empty resource does not append a forward slash at the end of the URI 
 """
 
 __license__ = 'GPL http://www.gnu.org/licenses/gpl.txt'
@@ -108,23 +112,26 @@ class Connection:
                 headers['Content-Type']='text/xml'
             headers['Content-Length'] = str(len(body))        
         else: 
-            headers['Content-Type']='text/xml'
-            
-        if args:
-            path += u"?" + urllib.urlencode(args)
+            headers['Content-Type']='text/xml' 
             
         request_path = []
-        if self.path != "/":
+        if self.path != '/':
             if self.path.endswith('/'):
                 request_path.append(self.path[:-1])
             else:
                 request_path.append(self.path)
-            if path.startswith('/'):
-                request_path.append(path[1:])
-            else:
-                request_path.append(path)
+            if path:
+                if path.startswith('/'):
+                    request_path.append(path[1:])
+                elif path != '':
+                    request_path.append(path)
+                    
+        path = u'/'.join(request_path)
         
-        resp, content = self.h.request(u"%s://%s%s" % (self.scheme, self.host, u'/'.join(request_path)), method.upper(), body=body, headers=headers )
+        if args:
+            path += u'?' + urllib.urlencode(args)
+        
+        resp, content = self.h.request(u"%s://%s%s" % (self.scheme, self.host, path), method.upper(), body=body, headers=headers )
         
         return {u'headers':resp, u'body':content}
     
