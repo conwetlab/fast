@@ -15,7 +15,6 @@
 <body>
 
 <!-- HEADER -->
-<![if !IE]>
 <div id="header">
   <img id="logo" src="{{ MEDIA_URL }}images/gui/fastLogo.png" alt="FAST Logo">
   <h1>Gadget Visual Storyboard</h1>
@@ -24,12 +23,11 @@
 <div id="content-main">
 	{% block content %}}{% endblock %}
 </div>
-<![endif]>
 
 <!--[if IE]>
     <center>
     <p style="font-size: 24px;color:#243C5F;font-weight:bold">
-        Your browser is still not suppported, please download the latest version
+        Your browser is still not supported, please download the latest version
     of Mozilla Firefox 
     </p>
     <a href="http://getfirefox.com/" title="Get Firefox - The Browser, Reloaded.">
@@ -38,6 +36,9 @@
         style="margin:20px auto 0; display: block;" />
     </a>
     </center>
+    <script type="text/javascript">
+        document.getElementById("content-main").innerHTML = "";   
+    </script>
 <![endif]-->
 </body>
 

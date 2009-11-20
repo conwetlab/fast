@@ -23,7 +23,7 @@
             
         /* ]]> */
         </script>
-        <![if !IE]>
+        
         <script type="text/javascript" src="{{ MEDIA_URL }}js/lib/utils/iefixes.js"></script>
         
         <script type="text/javascript" src="{{ MEDIA_URL }}js/lib/dojo/dojo/dojo.js"></script>
@@ -38,16 +38,20 @@
         <!-- graceful degradation of firebugs console obj --> 
         <script type="text/javascript" src="{{ MEDIA_URL }}js/lib/utils/firebugx.js"></script>
 
+        <script type="text/javascript" src="{{ MEDIA_URL }}js/gvs/utils/BrowserChecker.js"></script>
+        
         <!-- URI constants -->
         <script type="text/javascript" language="javascript">
             
-            URIs = new Object();
+            var browser = new BrowserChecker();
+            
+            var URIs = new Object();
             URIs.store = "deploy/";
             URIs.catalogue = "catalogue";
             URIs.catalogueScreens = "catalogue/screens";
-            URIs.catalogueFind = "catalogue/find";
-            URIs.catalogueFindAndCheck = "catalogue/findcheck";
-            URIs.catalogueCheck = "catalogue/check";
+            URIs.catalogueFind = "catalogue/screen/find";
+            URIs.catalogueFindAndCheck = "catalogue/screens/findcheck";
+            URIs.catalogueCheck = "catalogue/screen/check";
             URIs.catalogueGetMetadata = "catalogue/getmetadata";
             URIs.catalogueFlow = "{{CATALOGUE_FLOW}}";
             URIs.catalogueCreateScreen = "catalogue/screens";
@@ -265,71 +269,87 @@
         <!-- We tell Dojo to load the needed modules -->
         <script type="text/javascript">
         /* <![CDATA[ */
-
-            // We load Dojo's code relating to the needed components
-            // ... typical UI Components
-            dojo.require("dijit.form.Form");
-            dojo.require("dijit.form.TextBox");
-            dojo.require("dijit.form.ValidationTextBox");
-            dojo.require("dijit.form.Button");
-            dojo.require("dijit.Tooltip");
-            dojo.require("dijit.MenuBar");
-            dojo.require("dijit.MenuBarItem");
-            dojo.require("dijit.PopupMenuBarItem");
-            dojo.require("dijit.Menu");
-            dojo.require("dijit.MenuItem");
-            dojo.require("dijit.PopupMenuItem");
-            dojo.require("dijit.Toolbar");
-            dojo.require("dijit.ToolbarSeparator");
-            
-            // ... layouts used in page
-            dojo.require("dijit.layout.AccordionContainer");
-            dojo.require("dijit.layout.ContentPane");
-            dojo.require("dijit.layout.TabContainer");
-            dojo.require("dijit.layout.BorderContainer");
-            dojo.require("dijit.Dialog");
-
-            // ... other functions
-            dojo.require("dojox.fx");
-            
-            // ... the parser
-            dojo.require("dojo.parser");
-
-            // Arming the GVS initialization method
-            dojo.addOnLoad(function() {
-                GVSSingleton.getInstance().init();
-                // FIXME: there is a problem rendering the different
-                // sections programatically. Repaint for better
-                // performance
-                dijit.byId("main").layout();
-            });
-            
-            window.onbeforeunload = function(evt) {
-                // TODO: call the server and save whatever necessary
-                var saved = true;
-                if (!saved) {
-                    var message = 'Are you sure you want to leave?';
-                    if (typeof evt == 'undefined') {
-                        evt = window.event;
+            if (!browser.isIE()) {
+                // We load Dojo's code relating to the needed components
+                // ... typical UI Components
+                dojo.require("dijit.form.Form");
+                dojo.require("dijit.form.TextBox");
+                dojo.require("dijit.form.ValidationTextBox");
+                dojo.require("dijit.form.Button");
+                dojo.require("dijit.Tooltip");
+                dojo.require("dijit.MenuBar");
+                dojo.require("dijit.MenuBarItem");
+                dojo.require("dijit.PopupMenuBarItem");
+                dojo.require("dijit.Menu");
+                dojo.require("dijit.MenuItem");
+                dojo.require("dijit.PopupMenuItem");
+                dojo.require("dijit.Toolbar");
+                dojo.require("dijit.ToolbarSeparator");
+                
+                // ... layouts used in page
+                dojo.require("dijit.layout.AccordionContainer");
+                dojo.require("dijit.layout.ContentPane");
+                dojo.require("dijit.layout.TabContainer");
+                dojo.require("dijit.layout.BorderContainer");
+                dojo.require("dijit.Dialog");
+    
+                // ... other functions
+                dojo.require("dojox.fx");
+                
+                // ... the parser
+                dojo.require("dojo.parser");
+    
+                // Arming the GVS initialization method
+                dojo.addOnLoad(function() {
+                    GVSSingleton.getInstance().init();
+                    // FIXME: there is a problem rendering the different
+                    // sections programatically. Repaint for better
+                    // performance
+                    dijit.byId("main").layout();
+                });
+                
+                window.onbeforeunload = function(evt) {
+                    // TODO: call the server and save whatever necessary
+                    var saved = true;
+                    if (!saved) {
+                        var message = 'Are you sure you want to leave?';
+                        if (typeof evt == 'undefined') {
+                            evt = window.event;
+                        }
+                        if (evt) {
+                            evt.returnValue = message;
+                        }
+                        return message;
                     }
-                    if (evt) {
-                        evt.returnValue = message;
-                    }
-                    return message;
+                }
+                
+                window.onunload = function() {
+                    //Do something
+                }               
+            } else {
+                //IE
+                window.onload = function() {
+                    document.getElementById("main").innerHTML = "";
                 }
             }
-            
-            window.onunload = function() {
-                //Do something
-            }           
-
         /* ]]> */
         </script>
-        <![endif]>
     </head>
 
     <body class="soria">
-        <![if !IE]>
+        <!--[if IE]>
+            <center>
+            <p style="font-size: 24px;color:#243C5F;font-weight:bold">
+                Your browser is still not supported, please download the latest version
+            of Mozilla Firefox 
+            </p>
+            <a href="http://getfirefox.com/" title="Get Firefox - The Browser, Reloaded.">
+            <img src="{{ MEDIA_URL }}images/gui/getfirefox.png" 
+                border="0" alt="Get Firefox" 
+                style="margin:20px auto 0; display: block;" />
+            </a>
+            </center>
+        <![endif]-->
         <!-- Setting the layout of the page. --> 
         <div id="main" dojoType="dijit.layout.BorderContainer" 
                         liveSplitters="true" design="headline" splitter="true" gutter="true">
@@ -357,20 +377,7 @@
             </div> 
             <!-- end of Document area -->
         </div>
-        <![endif]>
-        <!--[if IE]>
-            <center>
-            <p style="font-size: 24px;color:#243C5F;font-weight:bold">
-                Your browser is still not suppported, please download the latest version
-            of Mozilla Firefox 
-            </p>
-            <a href="http://getfirefox.com/" title="Get Firefox - The Browser, Reloaded.">
-            <img src="{{ MEDIA_URL }}images/gui/getfirefox.png" 
-                border="0" alt="Get Firefox" 
-                style="margin:20px auto 0; display: block;" />
-            </a>
-            </center>
-        <![endif]-->
+        
     </body>
 </html>
 <!-- vim: set ts=4 sw=4 et:  -->

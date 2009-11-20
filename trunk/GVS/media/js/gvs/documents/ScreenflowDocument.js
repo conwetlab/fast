@@ -528,7 +528,7 @@ var ScreenflowDocument = Class.create(PaletteDocument,
      * @private
      */
     _onSuccessGetPlans: function(/** Array */ plans) { 
-        if (plans.length > 0) {
+        if (plans.length > 0 && plans[0].length > 0) {
             this._planPanel.showPlans(plans);    
         } else {
             alert("Sorry, but there is not any available plan for the selected screen");

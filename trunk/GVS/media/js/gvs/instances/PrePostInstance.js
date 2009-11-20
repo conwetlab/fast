@@ -252,7 +252,7 @@ var PrePostInstance = Class.create(ComponentInstance,
         return {
                 'label': {'en-gb': this._label},
                 'pattern': this._pattern,
-                'scope': 'design time',
+                'positive': true,
                 'id': this._buildingBlockDescription.uri,
                 'name': this._label
             };
