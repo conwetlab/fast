@@ -306,12 +306,12 @@ rdfs:comment """This property represents the events fired within a building bloc
 rdfs:domain fgo:ScreenComponent ;
 rdfs:range xsd:string .
 
-fgo:hasUse a owl:DatatypeProperty ;
+fgo:hasUse a owl:ObjectProperty ;
 rdfs:label "has use string"@en ;
 rdfs:comment """This property indicates concepts used within a building block, without being a 
 	pre/postcondition."""@en ;
 rdfs:domain fgo:Action ;
-rdfs:range xsd:string .
+rdfs:range fgo:ResourceReference .
 
 fgo:hasLibrary a owl:ObjectProperty ;
 rdfs:label "has library"@en ;

@@ -1,17 +1,20 @@
 package eu.morfeoproject.fast.model;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.ontoware.rdf2go.model.node.URI;
 
 public class Action {
 
 	private String name;
 	private List<Condition> preconditions;
-	private List<String> uses;
+	private Map<String, URI> uses;
 
 	public String getName() {
 		return name;
@@ -32,13 +35,13 @@ public class Action {
 	}
 
 	
-	public List<String> getUses() {
+	public Map<String, URI> getUses() {
 		if (uses == null)
-			uses = new ArrayList<String>();
+			uses = new HashMap<String, URI>();
 		return uses;
 	}
 
-	public void setUses(List<String> uses) {
+	public void setUses(Map<String, URI> uses) {
 		this.uses = uses;
 	}
 
@@ -55,8 +58,12 @@ public class Action {
 			json.put("preconditions", preArray);
 			// uses
 			JSONArray usesArray = new JSONArray();
-			for (String use : getUses())
-				usesArray.put(use);
+			for (String key : getUses().keySet()) {
+				JSONObject jsonUse = new JSONObject();
+				jsonUse.put("id", key);
+				jsonUse.put("uri", getUses().get(key));
+				usesArray.put(jsonUse);
+			}
 			json.put("uses", usesArray);
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block

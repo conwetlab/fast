@@ -4,7 +4,7 @@ import org.ontoware.rdf2go.model.node.URI;
 import org.ontoware.rdf2go.model.node.impl.URIImpl;
 
 /**
- * Vocabulary File. Created by org.ontoware.rdf2go.util.VocabularyWriter on Wed Nov 18 14:40:17 GMT 2009
+ * Vocabulary File. Created by org.ontoware.rdf2go.util.VocabularyWriter on Mon Nov 23 14:45:07 GMT 2009
  * input file: src/eu/morfeoproject/fast/catalogue/ontologies/fgo.rdf
  * namespace: http://purl.oclc.org/fast/ontology/gadget#
  */
@@ -224,15 +224,6 @@ public interface FGO {
     /**
      */
     public static final URI accountName = new URIImpl("http://xmlns.com/foaf/0.1/accountName", false);
-
-    /**
-     * Label: has use string@en 
-     * Comment: This property indicates concepts used within a building block, without being a 
-	pre/postcondition.@en 
-     * Comment: http://purl.oclc.org/fast/ontology/gadget#Action 
-     * Range: http://www.w3.org/2001/XMLSchema#string 
-     */
-    public static final URI hasUse = new URIImpl("http://purl.oclc.org/fast/ontology/gadget#hasUse", false);
 
     /**
      */
@@ -513,6 +504,15 @@ public interface FGO {
     /**
      */
     public static final URI subject = new URIImpl("http://purl.org/dc/terms/subject", false);
+
+    /**
+     * Label: has use string@en 
+     * Comment: This property indicates concepts used within a building block, without being a 
+	pre/postcondition.@en 
+     * Comment: http://purl.oclc.org/fast/ontology/gadget#Action 
+     * Range: http://purl.oclc.org/fast/ontology/gadget#ResourceReference 
+     */
+    public static final URI hasUse = new URIImpl("http://purl.oclc.org/fast/ontology/gadget#hasUse", false);
 
     /**
      * Label: has action@en 

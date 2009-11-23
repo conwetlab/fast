@@ -1028,6 +1028,7 @@ public class Catalogue {
 			for (String id : def.getBuildingBlocks().keySet()) {
 				BlankNode bnBB = tripleStore.createBlankNode();
 				tripleStore.addStatement(bnDef, FGO.contains, bnBB);
+				tripleStore.addStatement(bnBB, RDF.type, FGO.ResourceReference);
 				tripleStore.addStatement(bnBB, FGO.hasId, id);
 				tripleStore.addStatement(bnBB, FGO.hasUri, def.getBuildingBlocks().get(id));
 			}
@@ -1258,8 +1259,13 @@ public class Catalogue {
 				tripleStore.addStatement(aNode, FGO.hasPreCondition, c);
 			}
 			// uses
-			for (String use : action.getUses())
-				tripleStore.addStatement(aNode, FGO.hasUse, tripleStore.createPlainLiteral(use));
+			for (String id : action.getUses().keySet()) {
+				BlankNode bnUse = tripleStore.createBlankNode();
+				tripleStore.addStatement(aNode, FGO.hasUse, bnUse);
+				tripleStore.addStatement(bnUse, RDF.type, FGO.ResourceReference);
+				tripleStore.addStatement(bnUse, FGO.hasId, id);
+				tripleStore.addStatement(bnUse, FGO.hasUri, action.getUses().get(id));
+			}
 		}
 		// postconditions
 		for (List<Condition> conList : sc.getPostconditions()) {
@@ -1803,7 +1809,21 @@ public class Catalogue {
 						} else if (p.equals(FGO.hasPreCondition)) {
 							action.getPreconditions().add(getCondition(o.asBlankNode()));
 						} else if (p.equals(FGO.hasUse)) {
-							action.getUses().add(o.toString());
+							ClosableIterator<Statement> useIt = tripleStore.findStatements(object.asBlankNode(), Variable.ANY, Variable.ANY);
+							String idUse = null;
+							URI uriUse = null;
+							for ( ; actionIt.hasNext(); ) {
+								Statement sUse = useIt.next();
+								URI pUse = sUse.getPredicate();
+								Node oUse = sUse.getObject();
+								if (pUse.equals(FGO.hasId)) {
+									idUse = oUse.asLiteral().toString();
+								} else if (pUse.equals(FGO.hasUri)) {
+									uriUse = oUse.asURI();
+								}
+							}
+							action.getUses().put(idUse, uriUse);
+							useIt.close();
 						}
 					}
 					actionIt.close();

@@ -251,8 +251,10 @@ public abstract class GenericServlet extends HttpServlet {
 		// uses
 		if (jsonAction.get("uses") != null) {
 			JSONArray usesArray = jsonAction.getJSONArray("uses");
-			for (int i = 0; i < usesArray.length(); i++)
-				action.getUses().add(usesArray.getString(i));
+			for (int i = 0; i < usesArray.length(); i++) {
+				JSONObject useObject = usesArray.getJSONObject(i);
+				action.getUses().put(useObject.getString("id"), new URIImpl(useObject.getString("uri")));
+			}
 		}
 
 		return action;
