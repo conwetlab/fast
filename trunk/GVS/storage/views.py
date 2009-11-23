@@ -7,7 +7,6 @@ from gadgetEzweb import getEzWebTemplate, getEzWebHTML
 from commons import resource, unzip
 from commons.utils import json_encode
 from commons.authentication import get_user_authentication
-from urlparse import urljoin
 from os import path, mkdir
 import zipfile, shutil, tempfile, binascii
 from python_rest_client.restful_lib import Connection, isValidResponse
@@ -130,7 +129,7 @@ class GadgetStorage(resource.Resource):
         gadgetData['gadgetResource'] = None
         if isLocalStorage():
             base_uri = request.build_absolute_uri('/static')     
-            gadgetData['gadgetUri'] =  urljoin(base_uri, gadgetName)
+            gadgetData['gadgetUri'] =  '/'.join([base_uri, gadgetName])
         else:
             conn = Connection(settings.STORAGE_URL)
             body = {'GadgetName': gadgetData['name'],'Owner': gadgetData['vendor'],'Version': gadgetData['version']}
@@ -177,8 +176,8 @@ class GadgetStorage(resource.Resource):
         shutil.rmtree(directory_name)
         zipFile.close()
         
-        gadgetData['gadgetRelativePath'] = gadgetPath
-        gadgetData['gadgetPath'] = gadgetRelativePath
+        gadgetData['gadgetRelativePath'] = gadgetRelativePath
+        gadgetData['gadgetPath'] = gadgetPath
         gadgetData['gadgetZipFileName'] = gadgetZipFileName
     
     
@@ -193,7 +192,7 @@ class GadgetStorage(resource.Resource):
                 data = binascii.b2a_base64(data)
                 format = settings.STORAGE_FORMAT
             else:
-                data = urljoin(gadgetData['gadgetUri'], STORAGE_GADGET_ZIP_NAME)
+                data = '/'.join([gadgetData['gadgetUri'], STORAGE_GADGET_ZIP_NAME])
                 format = 'URL'
             body = {"Data":data,"DataType":format}
             result = conn.request_post(resource='', body=json_encode(body) , headers={'Accept':'application/json', 'Content-Type': 'application/json'})
