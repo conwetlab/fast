@@ -147,7 +147,10 @@ var InferenceEngine = Class.create( /** @lends InferenceEngine.prototype */ {
      */
     _findCheckOnSuccess: function(/**XMLHttpRequest*/ transport){
         var result = JSON.parse(transport.responseText);
-        var paletteElements = result.elements;
+        if (result.elements) {
+            var paletteElements = result.elements;
+        }
+        
         
         this.mine._updateReachability(paletteElements);
         

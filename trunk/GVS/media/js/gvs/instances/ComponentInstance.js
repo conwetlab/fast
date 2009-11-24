@@ -38,13 +38,23 @@ var ComponentInstance = Class.create(DragSource,
          */
         this._inferenceEngine = inferenceEngine;
         
+        /**
+         * Event listener
+         * @type Object
+         * @private
+         */
+        this._listener = null;
+        
         if (this.getUri()) {
             this._inferenceEngine.addReachabilityListener(this.getUri(), this._view);           
         }
+        
+        
     },
     
 
     // **************** PUBLIC METHODS **************** //
+    
     /**
      * Somehow something the user can comprehend
      * Implementing TableModel interface
@@ -52,7 +62,7 @@ var ComponentInstance = Class.create(DragSource,
      * @type String
      */
     getTitle: function() {
-        throw "Abstract method invokation. ComponentInstance::getTitle";    
+        throw "Abstract method invocation. ComponentInstance::getTitle";    
     },
 
     /**
@@ -65,6 +75,14 @@ var ComponentInstance = Class.create(DragSource,
     getInfo: function() {
         throw 'Abstract Method invocation. ' +
             'ComponentInstance :: getInfo';    
+    },
+
+
+    /**
+     * Adds event listener
+     */
+    setEventListener: function(/** Object */ listener) {
+        this._listener = listener;    
     },
 
     /**
@@ -203,8 +221,9 @@ var ComponentInstance = Class.create(DragSource,
      * @private
      */
     _onClick: function (/** Event */ event){
-        var currentDocument = GVSSingleton.getInstance().getDocumentController().getCurrentDocument();
-        currentDocument.setSelectedElement(this);
+        if (this._listener) {
+            this._listener.elementClicked(this, event);
+        }
     },
     /**
      * This function is called when the attached view is dbl-clicked
@@ -212,8 +231,9 @@ var ComponentInstance = Class.create(DragSource,
      * @private
      */
     _onDoubleClick: function (/** Event */ event){
-        var currentDocument = GVSSingleton.getInstance().getDocumentController().getCurrentDocument();
-        currentDocument.setSelectedElement(this);
+        if (this._listener) {
+            this._listener.elementDblClicked(this, event);
+        }
     }
 });
 

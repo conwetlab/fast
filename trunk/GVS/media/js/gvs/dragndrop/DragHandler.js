@@ -91,13 +91,8 @@ var DragHandler = Class.create(
         var draggableElement = this._draggedObject.getHandlerNode();
         
         var parentNode = draggableElement.parentNode;
-        var x = draggableElement.offsetLeft;
-        var y = draggableElement.offsetTop;
-        this._initialArea = {
-            'node': parentNode,
-            'top': y,
-            'left': x
-        };
+        
+        this._initialArea = parentNode;
 
         // disable context menu and text selection
         document.oncontextmenu = function() { return false; }; 
@@ -148,10 +143,13 @@ var DragHandler = Class.create(
         var yDelta = this._yStart - screenY;
         this._xStart = screenX;
         this._yStart = screenY;
-        this._y = this._y - yDelta;
-        this._x = this._x - xDelta;
-
+    
+        
         var draggableElement = this._draggedObject.getHandlerNode();
+        // FIXME: Fix d&d when scrolling
+        this._y = this._y - yDelta - ((yDelta > 0) ? Math.min(10, draggableElement.parentNode.scrollTop) : 0);
+        this._x = this._x - xDelta - ((xDelta > 0) ? Math.min(10, draggableElement.parentNode.scrollLeft) : 0);
+
         draggableElement.style.top = this._y + 'px';
         draggableElement.style.left = this._x + 'px';
         
@@ -193,7 +191,7 @@ var DragHandler = Class.create(
         this._updateNodeStatus(true);
         
         var zone = this._dropZones.detect(function(zone){
-            return this._initialArea.node == zone.getNode(); 
+            return this._initialArea == zone.getNode(); 
         }.bind(this));
         var changingZone = (zone == undefined);
         
@@ -204,34 +202,26 @@ var DragHandler = Class.create(
         
         if (changingZone) {
             var dropZone = this._inWhichDropZone();
-            var result = null;
+            var accepted;
             if (dropZone) {
-                 result = dropZone.drop(this._draggedObject);    
-            }          
-            if (result && result.accepted) {
-                // Valid position and the droppable has been accepted
-                this._initialArea.node.removeChild(draggableElement);
-                
-                if (!result.handledByDropZone) {
-                    //The element must be added to the dropZone DOM Node
-                    dropZone.getNode().appendChild(draggableElement);      
-                    var dropZonePosition = Utils.getPosition(dropZone.getNode());
-                    draggableElement.setStyle({
-                        'left': parseInt(draggableElement.offsetLeft - dropZonePosition.left) + "px",
-                        'top': parseInt(draggableElement.offsetTop - dropZonePosition.top) + "px"
-                    });
-                }
+                var dropZonePosition = Utils.getPosition(dropZone.getNode());
+                var dropPosition = {
+                    'left': draggableElement.offsetLeft - dropZonePosition.left,
+                    'top': draggableElement.offsetTop - dropZonePosition.top
+                };
+                this._initialArea.removeChild(draggableElement);
+                accepted = dropZone.drop(this._draggedObject, dropPosition);                  
             } else {
-                // Destroy the element (we suppose it is a copy and 
-                // it is invalid)
-                this._initialArea.node.removeChild(draggableElement);
+                this._initialArea.removeChild(draggableElement);
+                accepted = false;
+            }
+              
+            if (!accepted) {
+                // Destroy the element (it is a copy or it is invalid)
                 this._draggedObject.destroy();
             } 
         } else { // Same zone
             if (!this._isValidPosition()) {
-                // Another posibility would be to put the element in its initial position
-                // left = this._initialArea.left
-                // top = this._initialArea.top
                 var left = (draggableElement.offsetLeft >= 0) ? draggableElement.offsetLeft : 1;
                 var top = (draggableElement.offsetTop >= 0) ? draggableElement.offsetTop : 1;
                 
@@ -265,13 +255,14 @@ var DragHandler = Class.create(
      * @type Boolean
      */
     _isValidPosition: function(){
-        var result = true;
+        var result;
         for (var i = 0; i < this._dropZones.length; i++) {
+            result = true;
             var zone = this._dropZones[i];
             var node = zone.getNode();
             var draggableElement = this._draggedObject.getHandlerNode();
             // If we are moving an element from one zone to another...
-            if (this._initialArea.node != node) {
+            if (this._initialArea != node) {
                 //Check if we are over a dropZone
                 var dropZonePosition = Utils.getPosition(node);
                 result = result && (draggableElement.offsetLeft >= dropZonePosition.left);
@@ -290,10 +281,10 @@ var DragHandler = Class.create(
                 result = result && (draggableElement.offsetTop <= node.offsetWidth);
             }
             
-            result = result && this._dragSource.isValidPosition(this._x,this._y);    
+            result = result && this._dragSource.isValidPosition(this._x,this._y);
             if (result) {
                 break;
-            }        
+            } 
         }
         
         return result;
@@ -306,9 +297,10 @@ var DragHandler = Class.create(
      * @type DropZone
      */
     _inWhichDropZone: function(){
-        var result = true;
+        var result;
         var resultZone = null;
         for (var i=0; i < this._dropZones.length; i++) {
+            result = true;
             var zone = this._dropZones[i];
             var node = zone.getNode();
             var draggableElement = this._draggedObject.getHandlerNode();

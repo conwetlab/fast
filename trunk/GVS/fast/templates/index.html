@@ -64,8 +64,8 @@
             URIs.logoFast = "{{ MEDIA_URL }}images/gui/fastLogo.png";
             URIs.screenImageNotFound = "{{ MEDIA_URL }}images/gui/imageNotFound.png";
             URIs.about = "{{ MEDIA_URL }}resources/about.html";
-            URIs.pre = "catalogue/preconditions";
-            URIs.post = "catalogue/postconditions";
+            URIs.pre = "catalogue/preconditions/";
+            URIs.post = "catalogue/postconditions/";
 
         </script>
 
@@ -75,6 +75,8 @@
             src="{{ MEDIA_URL }}js/gvs/dragndrop/DragHandler.js"></script>
         <script type="text/javascript" 
             src="{{ MEDIA_URL }}js/gvs/dragndrop/DragSource.js"></script>
+        <script type="text/javascript"
+            src="{{ MEDIA_URL }}js/gvs/dragndrop/Area.js"></script>
         
         <!-- Catalogue Classes -->
         <script type="text/javascript"
@@ -106,15 +108,7 @@
         <script type="text/javascript"
             src="{{ MEDIA_URL }}js/gvs/catalogue/sets/BuildingBlockSet.js"></script>
         <script type="text/javascript"
-            src="{{ MEDIA_URL }}js/gvs/catalogue/sets/ScreenSet.js"></script>
-        <script type="text/javascript"
-            src="{{ MEDIA_URL }}js/gvs/catalogue/sets/DomainConceptSet.js"></script>
-        <script type="text/javascript"
-            src="{{ MEDIA_URL }}js/gvs/catalogue/sets/FormSet.js"></script>
-        <script type="text/javascript"
-            src="{{ MEDIA_URL }}js/gvs/catalogue/sets/OperatorSet.js"></script>
-        <script type="text/javascript"
-            src="{{ MEDIA_URL }}js/gvs/catalogue/sets/ResourceSet.js"></script>            
+            src="{{ MEDIA_URL }}js/gvs/catalogue/sets/DomainConceptSet.js"></script>          
         <script type="text/javascript"
             src="{{ MEDIA_URL }}js/gvs/catalogue/sets/SetListener.js"></script>
 
@@ -159,8 +153,7 @@
             src="{{ MEDIA_URL }}js/gvs/documents/ScreenflowDocument.js"></script>
         <script type="text/javascript"
             src="{{ MEDIA_URL }}js/gvs/documents/ScreenDocument.js"></script>
-        <script type="text/javascript"
-            src="{{ MEDIA_URL }}js/gvs/documents/Area.js"></script>
+
         
         <!-- Fact classes -->
         <script type="text/javascript" 

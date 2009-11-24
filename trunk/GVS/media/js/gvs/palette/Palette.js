@@ -54,14 +54,6 @@ var Palette = Class.create(SetListener, /** @lends Palette.prototype */ {
     },
 
     // **************** PUBLIC METHODS **************** //
-    
-    /**
-     * Starts data retrieval
-     * @public
-     */
-    startRetrievingData: function() {
-        this._set.startRetrievingData();
-    },
 
     /**
      * Gets the node of the accordion pane

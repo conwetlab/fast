@@ -22,10 +22,12 @@ var ScreenflowDocument = Class.create(PaletteDocument,
          */
         this._factPane = new FactPane(this._inspectorArea);
         
+        var catalogue = CatalogueSingleton.getInstance();
         
-        
-        var screenSet = new ScreenSet(domainContext);
-        var domainConceptSet = new DomainConceptSet(domainContext);
+        var screenSet = new BuildingBlockSet(domainContext, catalogue.
+                            getBuildingBlockFactory(Constants.BuildingBlock.SCREEN));
+        var domainConceptSet = new DomainConceptSet(domainContext, catalogue.
+                            getBuildingBlockFactory(Constants.BuildingBlock.DOMAIN_CONCEPT));
         
         /**
          * Panel that will contain the plans
@@ -82,7 +84,7 @@ var ScreenflowDocument = Class.create(PaletteDocument,
                 'reachability',
                 this._findCheckCallback.bind(this)
         );
-        this._paletteController.startRetrievingData();   
+        domainConceptSet.startRetrievingData();   
     },
 
 
@@ -105,44 +107,42 @@ var ScreenflowDocument = Class.create(PaletteDocument,
      *                                   will be defined by the dropzone and
      *                                   not by the draghandler
      */
-    drop: function(/** ComponentInstance */ droppedElement) {
+    drop: function(/** ComponentInstance */ droppedElement, /** Object */ position) {
         
-        var result = {
-            accepted: false,
-            handledByDropZone: false
-        }
         // Reject repeated elements (except domain concepts)
         if (this._canvasInstances.get(droppedElement.getUri()) &&
             (droppedElement.constructor != PrePostInstance)) {
-            return result;
+            return false;
         }
-      
+        
+
         switch (droppedElement.constructor) {
             case ScreenInstance:
+                this._addNodeToCanvas(droppedElement, position);               
                 this._canvasInstances.set(droppedElement.getUri(), droppedElement);
                 this._description.addScreen(droppedElement.getUri(), droppedElement.getPosition());
                 this._refreshReachability();
-                this.setSelectedElement(droppedElement);
+                this._setSelectedElement(droppedElement);
                 break;
                 
             case PrePostInstance:
+                this._addNodeToCanvas(droppedElement, position);
                 droppedElement.setChangeHandler(this._onPrePostChange.bind(this));
-                this.setSelectedElement(droppedElement);
+                this._setSelectedElement(droppedElement);
                 break;
             
             case PlanInstance:
                 this._planPanel.hide();
-                this._addPlan(droppedElement);
-                result.handledByDropZone = true;   
+                this._addPlan(droppedElement, position);
                 this._refreshReachability();           
-                this.setSelectedElement();
+                this._setSelectedElement();
                 break;
                 
             default:
                 throw "Don't know how to accept that kind of element. ScreenflowDocument::drop";    
         }
-        result.accepted = true;          
-        return result;
+    
+        return true;
     },
     
     /**
@@ -150,22 +150,10 @@ var ScreenflowDocument = Class.create(PaletteDocument,
      * @type Array
      */
     accepts: function(){
-        return $A([ScreenSet, DomainConceptSet]);
+        return $A([Constants.BuildingBlock.SCREEN, Constants.BuildingBlock.DOMAIN_CONCEPT]);
     },
 
-    /**
-     * Select a screen in the screenflow document
-     * @param ComponentInstance
-     *      Element to be selected for the
-     *      Screenflow document.
-     * @override
-     */
-    setSelectedElement: function ($super, element) {
-        $super(element);
-        this._updateToolbar(element);
-        this._updatePanes();
-    },
-
+    
     /**
      * Implementing MenuModel interface
      * @override
@@ -177,7 +165,22 @@ var ScreenflowDocument = Class.create(PaletteDocument,
 
     // **************** PRIVATE METHODS **************** //
     
-
+    
+    /**
+     * Select a screen in the screenflow document
+     * @param ComponentInstance
+     *      Element to be selected for the
+     *      Screenflow document.
+     * @private
+     * @override
+     */
+    _setSelectedElement: function ($super, element) {
+        $super(element);
+        this._updateToolbar(element);
+        this._updatePanes();
+    },
+    
+    
     /**
      * Delete an instance.
      * @param ComponentInstance
@@ -207,7 +210,7 @@ var ScreenflowDocument = Class.create(PaletteDocument,
         }
         
         this._refreshReachability();
-        this.setSelectedElement();
+        this._setSelectedElement();
         instance.destroy(true);
     },
 
@@ -478,7 +481,7 @@ var ScreenflowDocument = Class.create(PaletteDocument,
      * @private
      */
     _onClick: function() {
-        this.setSelectedElement();
+        this._setSelectedElement();
     },
     
     
@@ -505,7 +508,7 @@ var ScreenflowDocument = Class.create(PaletteDocument,
         
         this._refreshReachability();
         
-        this.setSelectedElement(instance);
+        this._setSelectedElement(instance);
     },
     
     /**
@@ -536,15 +539,30 @@ var ScreenflowDocument = Class.create(PaletteDocument,
     },
     
     /**
+     * Adds the instance node to the canvas
+     * @private
+     */
+    _addNodeToCanvas: function(/** ComponentInstance */ instance, /** Object */ position) {
+        var node = instance.getView().getNode();
+        this.getNode().appendChild(node);
+        node.setStyle({
+            'left': position.left + "px",
+            'top': position.top + "px", 
+            'position': 'absolute'
+        });
+        instance.setEventListener(this);
+    },
+    
+    /**
      * This function adds all the (new) screens of the plan
      * to the screenflow
      * @private
      */
-    _addPlan: function(/** PlanInstance */ plan){
-        var screenPosition =({
-            'left': plan.getView().getNode().offsetLeft + 3, //with margin
-            'top': plan.getView().getNode().offsetTop + 3
-        });
+    _addPlan: function(/** PlanInstance */ plan, /** Object */ position){
+        var screenPosition = {
+            'left': position.left + 3, //with margin
+            'top': position.top + 3
+        };
         
         plan.getPlanElements().each(function(screenDescription) {
             if (!this._canvasInstances.get(screenDescription.uri)) {
@@ -557,15 +575,7 @@ var ScreenflowDocument = Class.create(PaletteDocument,
                 screen.getDragHandler().initializeDragnDropHandlers();
                 screen.onFinish(true);
                 
-                var screenNode = screen.getView().getNode();
-                
-                this.getNode().appendChild(screenNode);
-                var canvasPosition = Utils.getPosition(this.getNode());
-                screenNode.setStyle({
-                    'left': parseInt(screenPosition.left - canvasPosition.left) + "px",
-                    'top': parseInt(screenPosition.top - canvasPosition.top) + "px",
-                    'position': 'absolute'
-                });
+                this._addNodeToCanvas(screen, screenPosition);
                 //Incrementing the screen position for the next screen
                 screenPosition.left += 108; // Screen size=100 + margin=6 + border=2
             }  

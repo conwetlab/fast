@@ -14,7 +14,7 @@ var ScreenInstance = Class.create(ComponentInstance,
          * @type PreviewDialog
          * @private @member
          */
-        this._dialog = new PreviewDialog(this.getTitle(), this._buildingBlockDescription.getPreview());
+        this._dialog = null;
     },
 
     // **************** PUBLIC METHODS **************** //
@@ -42,6 +42,9 @@ var ScreenInstance = Class.create(ComponentInstance,
      * the instance properties
      */
     showPreviewDialog: function () {
+        if (!this._dialog) {
+            this._dialog = new PreviewDialog(this.getTitle(), this._buildingBlockDescription.getPreview());
+        }
         this._dialog.show();        
     },
     
@@ -81,7 +84,7 @@ var ScreenInstance = Class.create(ComponentInstance,
      * @override
      */
     _onDoubleClick: function (/** Event */ event){
-        this._dialog.show(); 
+        this.showPreviewDialog(); 
     },
     
     /**

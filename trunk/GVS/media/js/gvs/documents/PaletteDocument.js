@@ -63,23 +63,19 @@ var PaletteDocument = Class.create(AbstractDocument, /** @lends PaletteDocument.
         return this._selectedElement;
     },
 
+    
     /**
-     * Select a screen in the screenflow document
-     * @param ComponentInstance
-     *      Element to be selected for the
-     *      Screenflow document.
+     * Implementing event listener
      */
-    setSelectedElement: function (element) {
-        if (this._selectedElement != null) {
-            this._selectedElement.getView().setSelected(false);
-        }
-        
-        if (element != undefined) {
-            this._selectedElement = element;
-            this._selectedElement.getView().setSelected(true);
-        } else {
-            this._selectedElement = null;
-        }
+    elementClicked: function(/** ComponentInstance */ element, /** Event */ e) {
+        this._setSelectedElement(element);    
+    },
+    
+    /**
+     * Implementing event listener
+     */
+    elementDblClicked: function(/** ComponentInstance */ element, /** Event */ e) {
+        this._setSelectedElement(element);    
     },
     
     /**
@@ -101,6 +97,26 @@ var PaletteDocument = Class.create(AbstractDocument, /** @lends PaletteDocument.
     },
     
     // **************** PRIVATE METHODS **************** //
+    
+    /**
+     * Select a screen in the screenflow document
+     * @param ComponentInstance
+     *      Element to be selected for the
+     *      Screenflow document.
+     * @private
+     */
+    _setSelectedElement: function (element) {
+        if (this._selectedElement != null) {
+            this._selectedElement.getView().setSelected(false);
+        }
+        
+        if (element != undefined) {
+            this._selectedElement = element;
+            this._selectedElement.getView().setSelected(true);
+        } else {
+            this._selectedElement = null;
+        }
+    },
     
     /**
      * This function init the process of deleting the element
@@ -176,7 +192,7 @@ var PaletteDocument = Class.create(AbstractDocument, /** @lends PaletteDocument.
     _deleteSelectedElement: function() {
         if (this._selectedElement) {
             this._deleteInstance(this._selectedElement);
-            this.setSelectedElement();
+            this._setSelectedElement();
         }
     },
     

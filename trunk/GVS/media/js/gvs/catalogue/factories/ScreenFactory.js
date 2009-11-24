@@ -42,7 +42,7 @@ var ScreenFactory = Class.create(BuildingBlockFactory,
                 result.push(this._buildingBlockDescriptions.get(uri));
             } else {
                 throw "Ooops. Something went wrong. " + 
-                    "BuildingBlockFactory::getBuildingBlockDescriptions";
+                    "BuildingBlockFactory::getBuildingBlocks";
             }        
         }.bind(this));
         return result;

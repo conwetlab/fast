@@ -22,22 +22,33 @@ var ScreenDocument = Class.create(PaletteDocument,
          */
         this._factPane = new FactPane(this._inspectorArea);
         
+        var catalogue = CatalogueSingleton.getInstance();
+        
+        var screenSet = new BuildingBlockSet(domainContext, catalogue.
+                            getBuildingBlockFactory(Constants.BuildingBlock.SCREEN));
+        var domainConceptSet = new DomainConceptSet(domainContext, catalogue.
+                            getBuildingBlockFactory(Constants.BuildingBlock.DOMAIN_CONCEPT));
+        
         // Palette sets
-        var formSet = new FormSet(domainContext);
-        var operatorSet = new OperatorSet(domainContext);
-        var resourceSet = new ResourceSet(domainContext);
-        var domainConceptSet = new DomainConceptSet(domainContext);
+        var formSet = new BuildingBlockSet(domainContext, catalogue.
+                            getBuildingBlockFactory(Constants.BuildingBlock.FORM));
+        var operatorSet = new BuildingBlockSet(domainContext, catalogue.
+                                getBuildingBlockFactory(Constants.BuildingBlock.OPERATOR));
+        var resourceSet = new BuildingBlockSet(domainContext, catalogue.
+                                getBuildingBlockFactory(Constants.BuildingBlock.RESOURCE));
+        var domainConceptSet = new DomainConceptSet(domainContext, catalogue.
+                                getBuildingBlockFactory(Constants.BuildingBlock.DOMAIN_CONCEPT));
         
         // Dropping areas
-        var formArea = new Area('form', $A([FormSet]), this._drop.bind(this));
-        var operatorArea = new Area('operator', $A([OperatorSet]), this._drop.bind(this));
-        var resourceArea = new Area('resource', $A([ResourceSet]), this._drop.bind(this));
-        var preArea = new Area('pre', $A([DomainConceptSet]), this._drop.bind(this));
-        var postArea = new Area('post', $A([DomainConceptSet]), this._drop.bind(this));
+        var formArea = new Area('form', $A([Constants.BuildingBlock.FORM]), this._drop.bind(this));
+        var operatorArea = new Area('operator', $A([Constants.BuildingBlock.OPERATOR]), this._drop.bind(this));
+        var resourceArea = new Area('resource', $A([Constants.BuildingBlock.RESOURCE]), this._drop.bind(this));
+        var preArea = new Area('pre', $A([Constants.BuildingBlock.DOMAIN_CONCEPT]), this._drop.bind(this));
+        var postArea = new Area('post', $A([Constants.BuildingBlock.DOMAIN_CONCEPT]), this._drop.bind(this));
         
         var areas = $A([formArea, operatorArea, resourceArea, preArea, postArea]);
         
-        $super(title, $A[formSet, operatorSet, resourceSet, domainConceptSet],
+        $super(title, $A([formSet, operatorSet, resourceSet, domainConceptSet]),
                 areas,
                 domainContext);
         
@@ -67,8 +78,7 @@ var ScreenDocument = Class.create(PaletteDocument,
         this._configureToolbar();
         
         /**
-         * Resource instances on the
-         * canvas by uri
+         * Resource instances on the canvas by uri
          * @private
          * @type Hash 
          */
@@ -82,7 +92,7 @@ var ScreenDocument = Class.create(PaletteDocument,
                 'reachability',
                 this._findCheckCallback.bind(this)
         );*/
-        //this._paletteController.startRetrievingData();   
+        domainConceptSet.startRetrievingData();
     },
 
 
@@ -127,14 +137,16 @@ var ScreenDocument = Class.create(PaletteDocument,
      * @private
      * @type Boolean
      */
-    _drop: function(/** ComponentInstance */ droppedElement) {
-        // Reject repeated elements (except domain concepts)
+    _drop: function(/** Area */ area, /** ComponentInstance */ droppedElement) {
+        // Reject repeated elements (except domain concepts or operators)
+
         if (this._canvasInstances.get(droppedElement.getUri()) &&
             (droppedElement.constructor != PrePostInstance || droppedElement.constructor != OperatorInstance)) {
             return false;
         }
       
         switch (droppedElement.constructor) {
+            // TODO add instance Node to the canvas
             /*case ScreenInstance:
                 this._canvasInstances.set(droppedElement.getUri(), droppedElement);
                 this._description.addScreen(droppedElement.getUri(), droppedElement.getPosition());
@@ -150,7 +162,7 @@ var ScreenDocument = Class.create(PaletteDocument,
         }            
 
         this.setSelectedElement(droppedElement);
-        return true; // Accept element
+        return true; 
     },
     
     

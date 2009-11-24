@@ -1,0 +1,142 @@
+{% extends "tests/base.html" %}
+{% block classpath %}
+        <script type="text/javascript" 
+            src="{{ MEDIA_URL }}js/gvs/dragndrop/DragHandler.js"></script>
+        <script type="text/javascript" 
+            src="{{ MEDIA_URL }}js/gvs/dragndrop/DragSource.js"></script>
+        <script type="text/javascript"
+            src="{{ MEDIA_URL }}js/gvs/dragndrop/Area.js"></script>
+        
+        <script type="text/javascript"
+            src="{{ MEDIA_URL }}js/gvs/catalogue/BuildingBlockDescription.js"></script>
+        <script type="text/javascript"
+            src="{{ MEDIA_URL }}js/gvs/catalogue/ScreenDescription.js"></script>
+        <script type="text/javascript"
+            src="{{ MEDIA_URL }}js/gvs/catalogue/DomainConceptDescription.js"></script>
+            
+        <script type="text/javascript" 
+            src="{{ MEDIA_URL }}js/gvs/palette/PaletteComponent.js"></script>
+        <script type="text/javascript" 
+            src="{{ MEDIA_URL }}js/gvs/palette/ScreenComponent.js"></script>
+        <script type="text/javascript" 
+            src="{{ MEDIA_URL }}js/gvs/palette/DomainConceptComponent.js"></script>
+            
+        <!-- Building Block view classes -->
+        <script type="text/javascript" 
+            src="{{ MEDIA_URL }}js/gvs/views/BuildingBlockView.js"></script>
+        <script type="text/javascript" 
+            src="{{ MEDIA_URL }}js/gvs/views/ScreenView.js"></script>
+        <script type="text/javascript" 
+            src="{{ MEDIA_URL }}js/gvs/views/DomainConceptView.js"></script>
+            
+        <!-- Fact classes -->
+        <script type="text/javascript" 
+            src="{{ MEDIA_URL }}js/gvs/facts/Fact.js"></script>
+        <script type="text/javascript" 
+            src="{{ MEDIA_URL }}js/gvs/facts/FactFactory.js"></script>  
+        <script type="text/javascript" 
+            src="{{ MEDIA_URL }}js/gvs/facts/FactIcon.js"></script>
+            
+        <!-- Component instance classes -->
+        <script type="text/javascript"
+            src="{{ MEDIA_URL }}js/gvs/instances/ComponentInstance.js"></script>
+        <script type="text/javascript"
+            src="{{ MEDIA_URL }}js/gvs/instances/ScreenInstance.js"></script>
+        <script type="text/javascript"
+            src="{{ MEDIA_URL }}js/gvs/instances/PrePostInstance.js"></script>
+        <script type="text/javascript">
+            var DumbInferenceEngine = Class.create({
+                addReachabilityListener: function(){},
+                removeReachabilityListener: function(){}
+            });
+            
+            function drop(area, instance) {
+                var node = instance.getView().getNode();
+                area.getNode().appendChild(node);      
+                var canvasPosition = Utils.getPosition(area.getNode());
+                node.setStyle({
+                    'left': parseInt(node.offsetLeft - canvasPosition.left) + "px",
+                    'top': parseInt(node.offsetTop - canvasPosition.top) + "px"
+                });
+                return true;
+                   
+            }
+        </script>
+{% endblock %}
+
+{% block onload %}
+        
+        
+        // Dropping areas
+        var formArea = new Area('form', $A([Constants.BuildingBlock.FORM]), drop);
+        var operatorArea = new Area('operator', $A([Constants.BuildingBlock.OPERATOR]), drop);
+        var resourceArea = new Area('resource', $A([Constants.BuildingBlock.RESOURCE]), drop);
+        var preArea = new Area('pre', $A([Constants.BuildingBlock.DOMAIN_CONCEPT]), drop);
+        var postArea = new Area('post', $A([Constants.BuildingBlock.DOMAIN_CONCEPT]), drop);
+        
+        var areas = $A([formArea, operatorArea, resourceArea, preArea, postArea]);
+        
+        // Adding the dropping areas to the document
+        areas.each(function(area) {
+            $("canvas").appendChild(area.getNode());
+        }.bind(this));
+        
+        var inferenceEngine = new DumbInferenceEngine();
+        
+        var scrDescription = new ScreenDescription({
+            "code": "http://localhost:8010/screens/amazonOrder.scr.html",
+            "creationDate": null,
+            "creator": "http://www.ismaelrivera.es/",
+            "description": {"en-gb": "This screen shows the list of products added to the user shopping cart. It allows users to update product quantity and clear the cart."},
+            "domainContext": {
+              "tags": [
+                "amazon",
+                "purchase",
+                "order"
+              ],
+              "user": null
+            },
+            "homepage": "http://www.deri.ie/amazonOrder",
+            "icon": "http://localhost:8010/images/catalogue/amazonOrder.png",
+            "id": null,
+            "label": {"en-gb": "Order"},
+            "name": null,
+            "postconditions": [],
+            "preconditions": [[{
+              "id": null,
+              "label": {"en-gb": "Purchase URL"},
+              "pattern": "?P http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#PurchaseURL",
+              "positive": true
+            }]],
+            "rights": "http://creativecommons.org/",
+            "screenshot": "http://www.deri.ie/amazonOrder-screenshot.jpg",
+            "type": null,
+            "uri": "http://purl.oclc.org/fast/ontology/gadget#Screen1256892977481",
+            "version": "1.0"
+        });
+        var scr1 = new ScreenComponent(scrDescription, [], inferenceEngine);
+        $("instances").appendChild(scr1.getNode());
+        
+        var dcDescription = new DomainConceptDescription({
+            "http://purl.oclc.org/fast/ontology/gadget#hasTag": [
+              "amazon",
+              "search"
+            ],
+            "http://www.w3.org/2000/01/rdf-schema#label": "Search criteria",
+            "uri": "http://aws.amazon.com/AWSECommerceService#SearchCriteria"
+          });
+        var domainConcept = new DomainConceptComponent(dcDescription, [preArea, postArea], inferenceEngine);
+        $("instances").appendChild(domainConcept.getNode());
+        
+        
+{% endblock %}
+
+{% block test_body %}
+<h1>Test Drag'n'Drop</h1>
+<h2>Dragables</h2>
+<div id="instances" class="paletteContent" style="overflow:hidden"></div>
+<h2>Drop zones</h2>
+<div style="position: relative; height: 500px; width:80%; margin: auto;">
+    <div id="canvas" class="document screendoc canvas"></div>
+</div>
+{% endblock %}

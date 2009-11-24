@@ -39,7 +39,7 @@ var PaletteController = Class.create(
         $A(buildingBlockSets).each (function(set) {
             var validDropZones = new Array();
             dropZones.each(function(dropZone) {
-                if (dropZone.accepts().include(set.constructor)) {
+                if (dropZone.accepts().include(set.getBuildingBlockType())) {
                     validDropZones.push(dropZone);
                 }    
             });
@@ -56,15 +56,6 @@ var PaletteController = Class.create(
     
     getNode: function() {
         return this._node;
-    },
-    
-    /**
-     * Starts the data retrieval from the catalogue.
-     */
-    startRetrievingData: function() {
-        this._palettes.each(function(pair) {
-            pair.value.startRetrievingData(); 
-        });
     },
     
     /**

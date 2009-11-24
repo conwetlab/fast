@@ -106,4 +106,5 @@ def confirm(request, activation_key):
     user_account.save()
     return HttpResponseRedirect('/accounts/login/?next=/')
 
-
+def test(request, test_name):
+    return render_to_response('tests/%s.html' % test_name, {'title':test_name}, context_instance=RequestContext(request))

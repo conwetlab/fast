@@ -1,0 +1,90 @@
+{% load i18n %}
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"> 
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+    <head>
+        <title>FAST Tests: {{ title }}</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        
+        <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}js/lib/dojo/dijit/themes/soria/soria.css" />
+        <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}js/lib/dojo/dojo/resources/dojo.css" />
+        <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}style/gvs.css" />
+        
+
+        <script type="text/javascript">
+        /* <![CDATA[ */
+           //Dojo Configuration parameters
+            var djConfig = {
+                isDebug:true, 
+                parseOnLoad:true
+            };
+            
+        /* ]]> */
+        </script>
+        
+        <script type="text/javascript" src="{{ MEDIA_URL }}js/lib/utils/iefixes.js"></script>
+        
+        <script type="text/javascript" src="{{ MEDIA_URL }}js/lib/dojo/dojo/dojo.js"></script>
+        
+        <script type="text/javascript" src="{{ MEDIA_URL }}js/lib/utils/json2.js"></script>
+        
+        <script type="text/javascript" src="{{ MEDIA_URL }}js/lib/utils/shortcut.js"></script>
+        
+        <script type="text/javascript" src="{{ MEDIA_URL }}js/lib/prototype/prototype.js"></script>
+        <script type="text/javascript" src="{{ MEDIA_URL }}js/lib/prototype/prototype.improvements.js"></script>  
+        
+        
+        <!-- Miscelaneous utilities -->
+        <script type="text/javascript" 
+            src="{{ MEDIA_URL }}js/gvs/utils/UIDGenerator.js"></script>
+        <script type="text/javascript"
+            src="{{ MEDIA_URL }}js/gvs/utils/BrowserUtils.js"></script>
+        <script type="text/javascript"
+            src="{{ MEDIA_URL }}js/gvs/utils/Utils.js"></script>
+        <script type="text/javascript"
+            src="{{ MEDIA_URL }}js/gvs/utils/Logger.js"></script>
+        
+        <!-- Constants -->
+        <script type="text/javascript"
+            src="{{ MEDIA_URL }}js/gvs/commons/Constants.js"></script>
+        
+        <!-- URI constants -->
+        <script type="text/javascript" language="javascript">
+            
+            var URIs = new Object();
+            URIs.store = "deploy/";
+            URIs.catalogue = "catalogue";
+            URIs.catalogueScreens = "catalogue/screens";
+            URIs.catalogueFind = "catalogue/screen/find";
+            URIs.catalogueFindAndCheck = "catalogue/screens/findcheck";
+            URIs.catalogueCheck = "catalogue/screen/check";
+            URIs.catalogueGetMetadata = "catalogue/getmetadata";
+            URIs.catalogueFlow = "{{CATALOGUE_FLOW}}";
+            URIs.catalogueCreateScreen = "catalogue/screens";
+            URIs.catalogueAllConcepts = "catalogue/concepts";
+            URIs.catalogueTagConcepts = "catalogue/tags/<tags>/concepts";
+            URIs.cataloguePlanner = "catalogue/planner";
+            URIs.buildingblock = "buildingblock";
+            URIs.screenflow = "buildingblock/screenflow";
+            URIs.userPreferences = "user/preferences";
+            URIs.logoFast = "{{ MEDIA_URL }}images/gui/fastLogo.png";
+            URIs.screenImageNotFound = "{{ MEDIA_URL }}images/gui/imageNotFound.png";
+            URIs.about = "{{ MEDIA_URL }}resources/about.html";
+            URIs.pre = "catalogue/preconditions/";
+            URIs.post = "catalogue/postconditions/";
+        </script>
+        
+        
+        {% block classpath %}{% endblock %}
+        <script type="text/javascript">
+            // OnLoad
+            dojo.addOnLoad(function() {
+                {% block onload %}{% endblock %}
+            });
+        </script>
+    </head>
+    <body>
+            {% block test_body %}{% endblock %}
+    </body>
+</html>
+<!-- vim: set ts=4 sw=4 et:  -->

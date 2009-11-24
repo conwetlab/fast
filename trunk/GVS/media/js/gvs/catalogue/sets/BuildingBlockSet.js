@@ -4,7 +4,7 @@ var BuildingBlockSet = Class.create( /** @lends BuildingBlockSet.prototype */ {
      * This list will be updated.
      * @constructs
      */ 
-    initialize: function(/** Array */ context) {
+    initialize: function(/** Array */ context, /** BuildingBlockFactory */ factory) {
         /** 
          * Associated context
          * @type Array
@@ -17,7 +17,7 @@ var BuildingBlockSet = Class.create( /** @lends BuildingBlockSet.prototype */ {
          * @type BuildingBlockFactory
          * @private @member
          */
-        this._factory = null;
+        this._factory = factory;
         
         
         /** 
@@ -26,25 +26,25 @@ var BuildingBlockSet = Class.create( /** @lends BuildingBlockSet.prototype */ {
          * @private @member
          */
         this._listener = null;
+        
+        /** 
+         * List of BuildingBlock URIs
+         * @type Array
+         * @private @member
+         */
+        this._uris = new Array();
     },
     
 
     // **************** PUBLIC METHODS **************** //
     
     /**
-     * Starts data retrieval. Override when necessary
-     * @public
-     */
-    startRetrievingData: function() {
-    },   
-    
-    /**
      * Returns all the building block descriptions from the set
      * @type Array
-     * @abstract
+     * @override
      */
     getBuildingBlocks: function () {
-        throw "Abstract method invocation. BuildingBlockSet::getBuildingBlocks";
+        return this._factory.getBuildingBlocks(this._uris);
     },
 
     /**
@@ -65,8 +65,25 @@ var BuildingBlockSet = Class.create( /** @lends BuildingBlockSet.prototype */ {
         
     setListener: function (/** SetListener */ listener) {
         this._listener = listener;
-    }
+    },
     
+     /**
+     * Add new building blocks to the set by uri
+     */
+    addURIs: function (/** Array */ uris) {
+        this._requestedUris = uris;
+        this._factory.cacheBuildingBlocks(uris, this._cachedElements.bind(this));
+    },
+    
+    /**
+     * This is the callback called when returning from the 
+     * building block factory
+     * @private
+     */
+    _cachedElements: function () {
+        this._uris = this._uris.concat(this._requestedUris).uniq();
+        this._listener.setChanged();
+    }
 });
 
 // vim:ts=4:sw=4:et:

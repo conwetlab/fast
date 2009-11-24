@@ -5,23 +5,23 @@ var DomainConceptSet = Class.create(BuildingBlockSet, /** @lends DomainConceptSe
      * @constructs
      * @extends BuildingBlockSet
      */ 
-    initialize: function($super, /** Array */ context) {
-        $super(context);
+    initialize: function($super, /** Array */ context, /** DomainConceptFactory */ factory) {
+        $super(context, factory);
         
         /**
          * Domain concepts
+         * @type Array
+         * @private
          */
         this._domainConcepts = new Array();
         
-        this._factory = CatalogueSingleton.getInstance().
-            getBuildingBlockFactory(Constants.BuildingBlock.DOMAIN_CONCEPT);
     },
     
 
     // **************** PUBLIC METHODS **************** //
 
     /**
-     * @override
+     * Starts the data retrieval of the domain concepts
      */
     startRetrievingData: function() {
         this._factory.getBuildingBlocks(this._context, this._onSuccess.bind(this));
@@ -31,6 +31,7 @@ var DomainConceptSet = Class.create(BuildingBlockSet, /** @lends DomainConceptSe
     /**
      * Returns all the building block descriptions from the set
      * @type Array
+     * @override
      */
     getBuildingBlocks: function () {
         return this._domainConcepts;
@@ -38,6 +39,9 @@ var DomainConceptSet = Class.create(BuildingBlockSet, /** @lends DomainConceptSe
     
     // **************** PRIVATE METHODS **************** //
     
+    /**
+     * @private
+     */
     _onSuccess: function(/** Array */ domainConcepts) {
         this._domainConcepts = domainConcepts;
         this._listener.setChanged();

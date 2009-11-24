@@ -82,7 +82,7 @@ var PaletteComponent = Class.create(DragSource,
     getDraggableObject: function() {
         var instance = this._createInstance();
         var node = instance.getHandlerNode();
-        dijit.byId("main").domNode.appendChild(node);
+        document.body.appendChild(node);
         node.setStyle({
             'top': this._getContentOffsetTop() + 'px',
             'left':  this._getContentOffsetLeft() + 'px',

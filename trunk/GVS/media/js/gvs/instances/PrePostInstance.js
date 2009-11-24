@@ -34,7 +34,7 @@ var PrePostInstance = Class.create(ComponentInstance,
          * @type DomainConceptDialog
          * @private @member
          */
-        this._dialog = new PrePostDialog(this._onChange.bind(this), this.getTitle());
+        this._dialog = null;
         
         /**
          * This stores the platform-dependent properties
@@ -141,6 +141,9 @@ var PrePostInstance = Class.create(ComponentInstance,
      * the instance properties
      */
     showPreviewDialog: function () {
+        if (!this._dialog) {
+            this._dialog = new PrePostDialog(this._onChange.bind(this), this.getTitle())
+        }
         this._dialog.show();        
     },
     
@@ -184,7 +187,7 @@ var PrePostInstance = Class.create(ComponentInstance,
      * @override
      */
     _onDoubleClick: function (/** Event */ event){
-        this._dialog.show();
+        this.showPreviewDialog();
     },
     
     /**

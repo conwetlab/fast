@@ -2,6 +2,7 @@ var Area = Class.create( /** @lends Area.prototype */ {
     /**
      * This class represents an area to drop elements of some kind
      * It implements the DropZone interface
+     * @param Function onDropHandler(DropZone zone, ComponentInstance droppedInstance)
      * @constructs
      */ 
     initialize: function(/** String */ areaClass, /** Array */ acceptedElements, /** Function */ onDropHandler) {
@@ -49,7 +50,7 @@ var Area = Class.create( /** @lends Area.prototype */ {
      * @type DOMNode
      */
     drop: function(/** ComponentInstance */ element) {
-        return this._onDropHandler(element);    
+        return this._onDropHandler(this, element);    
     },
 
    

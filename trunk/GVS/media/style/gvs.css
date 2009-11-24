@@ -257,6 +257,7 @@ h4{
 .dropArea {
     position:absolute;
     border: 2px dotted #AAA;
+    overflow: auto;
 }
 .dropArea.form {
     height: 20%;
@@ -372,6 +373,9 @@ h4{
     opacity:0.4;
     -moz-opacity:0.4;
     filter:alpha(opacity=40);
+}
+.slot {
+    overflow: hidden;
 }
 
 .slotTitle {

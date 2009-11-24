@@ -33,45 +33,58 @@ var BrowserChecker = Class.create({ /** @lends BrowserChecker.prototype */
          * @private
          * @type Array
          */
-        this._browserList = [
-            ["MSIE",    "Microsoft Internet Explorer"],
-            ["Opera",   "Opera"],
-            ["Chrome",  "Chrome"],
-            ["Safari",  "Safari"],
-            ["Firefox", "Firefox"]
-        ];
+        this._browserList = {'MSIE': {
+                                'name': "Microsoft Internet Explorer",
+                                'isThis': false            
+                            },
+                            'Opera': {
+                                'name': 'Opera',
+                                'isThis': false
+                            },
+                            'Chrome': {
+                                'name': 'Chrome',
+                                'isThis': false
+                            },
+                            'Safari': {
+                                'name': 'Safari',
+                                'isThis': false
+                            },
+                            'Firefox': {
+                                'name': 'Firefox',
+                                'isThis': false
+                            }
+        
+        };
             
-        var nameOffset, verOffset;            
+        var pattern;
+        var match;
+                    
         var ok = false;
         
-        for (var i = 0; i < this._browserList.length; i++) {
-            if ((verOffset = navigator.userAgent.indexOf(this._browserList[i][0]))!=-1) {
-                this._browserName = this._browserList[i][1];
-                this._fullVersion = navigator.userAgent.substring(verOffset + this._browserList[i][0].length + 1);
+        $H(this._browserList).each(function(pair) {
+            pattern = ".*" + pair.key + "[/|\\s]+((\\w+)(\\.\\w+)*).*";
+            if (!ok && (match = navigator.userAgent.match(pattern)) != null) {
+                this._browserName =  pair.value.name;
+                this._fullVersion =  match[1];
+                this._shortVersion = match[2];
+                this._browserList[pair.key].isThis = true;
                 ok = true;
-                break;
+            }    
+        }.bind(this));
+        
+        pattern = ".*\\s+(\\w+)[/|\\s]+((\\w+)(\\.\\w+)*)";
+        
+        if (!ok && ((match = navigator.userAgent.match(pattern)) != null)) {
+            this._fullVersion  = match[2];
+            this._shortVersion = match[3];
+            if (this._browserList[match[1]]) {
+                this._browserName  = this._browserList[match[1]].name;
+                this._browserList[match[1]].isThis = true;
             }
-        }
-        
-        if (!ok && ((nameOffset = navigator.userAgent.lastIndexOf(' ')+1) < (verOffset = navigator.userAgent.lastIndexOf('/')))) {
-            this._browserName = navigator.userAgent.substring(nameOffset,verOffset);
-            this._fullVersion = navigator.userAgent.substring(verOffset+1);
-            if (this._browserName.toLowerCase() == this._browserName.toUpperCase()) {
-                this._browserName = navigator.appName;
+            else {
+                this._browserName = match[1];
             }
-        }
-        
-        var ix;
-        
-        if ((ix = this._fullVersion.indexOf(";"))!=-1)
-            this._fullVersion = this._fullVersion.substring(0,ix);
-        if ((ix = this._fullVersion.indexOf(" "))!=-1)
-            this._fullVersion = this._fullVersion.substring(0,ix);
-        
-        this._shortVersion = parseInt(''+this._fullVersion,10);
-        if (isNaN(this._shortVersion)) {
-            this._fullVersion  = ''+parseFloat(navigator.appVersion); 
-            this._shortVersion = parseInt(navigator.appVersion,10);
+            ok = true;
         }
     },
     
@@ -88,23 +101,23 @@ var BrowserChecker = Class.create({ /** @lends BrowserChecker.prototype */
     },
 
     isIE: function() {
-        return this._browserName == this._browserList[0][1];
+        return this._browserList['MSIE'].isThis;
     },
     
     isOpera: function() {
-        return this._browserName == this._browserList[1][1];
+        return this._browserList['Opera'].isThis;
     },
         
     isChrome: function() {
-        return this._browserName == this._browserList[2][1];
+        return this._browserList['Chrome'].isThis;
     },
         
     isSafari: function() {
-        return this._browserName == this._browserList[3][1];
+        return this._browserList['Safari'].isThis;
     },
     
     isFirefox: function() {
-        return this._browserName == this._browserList[4][1];
+        return this._browserList['Firefox'].isThis;
     }
     
 });

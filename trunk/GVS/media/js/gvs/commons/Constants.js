@@ -12,6 +12,6 @@ var Constants = {
         'domainConcept': 'Domain Concepts',
         'form': 'Forms',
         'operator': 'Operators',
-        'resource': 'Resources & Services'
+        'resource': 'Services & Resources'
     }
 };
