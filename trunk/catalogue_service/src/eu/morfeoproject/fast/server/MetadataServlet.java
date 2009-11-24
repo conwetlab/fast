@@ -72,7 +72,7 @@ public class MetadataServlet extends HttpServlet {
 			response.setStatus(HttpServletResponse.SC_OK);
 		} catch (JSONException e) {
 			e.printStackTrace();
-			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+			response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
 		}
 		logger.debug("...Exiting GETMETADATA operation");
 	}

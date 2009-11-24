@@ -85,7 +85,7 @@ public class ScreenServlet extends GenericServlet {
 				response.setStatus(HttpServletResponse.SC_OK);
 			} catch (JSONException e) {
 				e.printStackTrace();
-				response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+				response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
 			}
 		} else {
 			// Retrieve the addressed member of the collection
@@ -93,7 +93,7 @@ public class ScreenServlet extends GenericServlet {
 			logger.info("Retrieving screen "+id);
 			Screen s = CatalogueAccessPoint.getCatalogue().getScreen(new URIImpl(id));
 			if (s == null) {
-				response.setStatus(HttpServletResponse.SC_NOT_FOUND, "The resource "+id+" has not been found.");
+				response.sendError(HttpServletResponse.SC_NOT_FOUND, "The resource "+id+" has not been found.");
 			} else {
 				try {
 					if (format.equals(MediaType.APPLICATION_JSON)) {
@@ -108,7 +108,7 @@ public class ScreenServlet extends GenericServlet {
 					response.setStatus(HttpServletResponse.SC_OK);
 				} catch (JSONException e) {
 					e.printStackTrace();
-					response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+					response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
 				}
 			}
 		}
@@ -154,29 +154,29 @@ public class ScreenServlet extends GenericServlet {
 				response.setStatus(HttpServletResponse.SC_OK);
 			} catch (DuplicatedResourceException e) {
 				e.printStackTrace();
-				response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+				response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
 			} catch (OntologyInvalidException e) {
 				e.printStackTrace();
-				response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+				response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
 			} catch (OntologyReadonlyException e) {
 				e.printStackTrace();
-				response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+				response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
 			} catch (RepositoryException e) {
 				e.printStackTrace();
-				response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+				response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
 			} catch (NotFoundException e) {
 				e.printStackTrace();
-				response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+				response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
 			}
 		} catch (ParseScreenException e) {
 			e.printStackTrace();
-			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+			response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
 		} catch (JSONException e) {
 			e.printStackTrace();
-			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+			response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
 		} catch (IOException e) {
 			e.printStackTrace();
-			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+			response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
 		}	
 	}
 
@@ -224,25 +224,25 @@ public class ScreenServlet extends GenericServlet {
 				response.setStatus(HttpServletResponse.SC_OK);
 			} catch (ParseScreenException e) {
 				e.printStackTrace();
-				response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+				response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
 			} catch (JSONException e) {
 				e.printStackTrace();
-				response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+				response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
 			} catch (IOException e) {
 				e.printStackTrace();
-				response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+				response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
 			} catch (RepositoryException e) {
 				e.printStackTrace();
-				response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+				response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
 			} catch (NotFoundException e) {
 				e.printStackTrace();
-				response.setStatus(HttpServletResponse.SC_NOT_FOUND, "The resource "+id+" has not been found.");
+				response.sendError(HttpServletResponse.SC_NOT_FOUND, "The resource "+id+" has not been found.");
 			} catch (OntologyReadonlyException e) {
 				e.printStackTrace();
-				response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+				response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
 			} catch (OntologyInvalidException e) {
 				e.printStackTrace();
-				response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+				response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
 			}
 		}
 	}
@@ -256,7 +256,7 @@ public class ScreenServlet extends GenericServlet {
 		if (id.equalsIgnoreCase("screens")) id = null;
 		
 		if (id == null) {
-			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+			response.sendError(HttpServletResponse.SC_BAD_REQUEST, "An ID must be specified.");
 		} else {
 			// Delete the addressed member of the collection.
 			id = URLUTF8Encoder.decode(id);
@@ -264,7 +264,7 @@ public class ScreenServlet extends GenericServlet {
 				CatalogueAccessPoint.getCatalogue().removeScreen(new URIImpl(id));
 				response.setStatus(HttpServletResponse.SC_OK);
 			} catch (NotFoundException e) {
-				response.setStatus(HttpServletResponse.SC_NOT_FOUND, "The resource "+id+" has not been found.");
+				response.sendError(HttpServletResponse.SC_NOT_FOUND, "The resource "+id+" has not been found.");
 			}
 		}
 	}

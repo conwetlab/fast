@@ -101,11 +101,11 @@ public class ScreenFindServlet extends GenericServlet {
 			response.setContentType(MediaType.APPLICATION_JSON);
 			response.setStatus(HttpServletResponse.SC_OK);
 		} catch (JSONException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
-			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+			response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
 		} catch (NotFoundException e) {
-			response.setStatus(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
+			e.printStackTrace();
+			response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
 		}
 		logger.info("...Exiting FIND operation");
 	}

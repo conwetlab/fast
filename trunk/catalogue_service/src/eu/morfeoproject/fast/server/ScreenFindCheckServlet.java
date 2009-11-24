@@ -187,13 +187,14 @@ public class ScreenFindCheckServlet extends HttpServlet {
 				response.setContentType(MediaType.APPLICATION_JSON);
 				response.setStatus(HttpServletResponse.SC_OK);
 			} else {
-				response.setStatus(HttpServletResponse.SC_BAD_REQUEST, "Critetion not allowed.");
+				response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Critetion not allowed.");
 			}
 		} catch (JSONException e) {
 			e.printStackTrace();
-			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+			response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
 		} catch (NotFoundException e) {
-			response.setStatus(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
+			e.printStackTrace();
+			response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
 		}
 		logger.info("...Exiting FIND&CHECK operation");
 	}

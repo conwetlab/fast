@@ -88,7 +88,7 @@ public class ConceptServlet extends GenericServlet {
 				response.setStatus(HttpServletResponse.SC_OK);
 			} catch (JSONException e) {
 				e.printStackTrace();
-				response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+				response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
 			}
 		} else {
 			id = URLUTF8Encoder.decode(id);
@@ -96,7 +96,7 @@ public class ConceptServlet extends GenericServlet {
 			logger.info("Retrieving concept "+id);
 			Set<Statement> concept = CatalogueAccessPoint.getCatalogue().getConcept(new URIImpl(id));
 			if (concept == null || concept.size() == 0) {
-				response.setStatus(HttpServletResponse.SC_NOT_FOUND, "The resource "+id+" has not been found.");
+				response.sendError(HttpServletResponse.SC_NOT_FOUND, "The resource "+id+" has not been found.");
 			} else {
 				try {
 					if (format.equals(MediaType.APPLICATION_JSON)) {
@@ -113,7 +113,7 @@ public class ConceptServlet extends GenericServlet {
 					response.setStatus(HttpServletResponse.SC_OK);
 				} catch (JSONException e) {
 					e.printStackTrace();
-					response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+					response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
 				}
 			}
 		}
@@ -167,9 +167,8 @@ public class ConceptServlet extends GenericServlet {
 				e.printStackTrace();
 			}
 		} else {
-			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+			response.sendError(HttpServletResponse.SC_BAD_REQUEST, "An ID must be specified.");
 		}
-		CatalogueAccessPoint.getCatalogue().printStatements();
 	}
 
 	/**
@@ -221,9 +220,8 @@ public class ConceptServlet extends GenericServlet {
 				e.printStackTrace();
 			}
 		} else {
-			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+			response.sendError(HttpServletResponse.SC_BAD_REQUEST, "An ID must be specified.");
 		}
-		CatalogueAccessPoint.getCatalogue().printStatements();
 	}
 
 	/**
@@ -239,7 +237,7 @@ public class ConceptServlet extends GenericServlet {
 				CatalogueAccessPoint.getCatalogue().removeConcept(new URIImpl(id));
 				response.setStatus(HttpServletResponse.SC_OK);
 			} catch (NotFoundException e) {
-				response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+				response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
 			}
 		}
 	}
@@ -255,7 +253,7 @@ public class ConceptServlet extends GenericServlet {
 		if (tagsStr == null)
 			return new String[0];
 		else if (tagsStr.contains("+")) {
-			//tags = tagsStr.split("+"); throw an exception!!
+			//tags = tagsStr.split("+"); throws an exception!!
 			ArrayList<String> tmp = new ArrayList<String>();
 			int from = 0;
 			int to = tagsStr.indexOf("+");

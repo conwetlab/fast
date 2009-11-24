@@ -60,9 +60,10 @@ public class OntologyServlet extends GenericServlet {
 			if (CatalogueAccessPoint.getCatalogue().addPublicOntology(uri, downloadUri, syntax))
 				response.setStatus(HttpServletResponse.SC_OK);
 			else
-				response.setStatus(HttpServletResponse.SC_BAD_REQUEST, "Ontology '"+uri+"' cannot be added.");
+				response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Ontology '"+uri+"' cannot be added.");
 		} catch (JSONException e) {
 			logger.error("Error while parsing JSON: "+e, e);
+			response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
 		}
 	}
 

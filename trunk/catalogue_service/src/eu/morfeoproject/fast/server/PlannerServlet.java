@@ -91,7 +91,8 @@ public class PlannerServlet extends GenericServlet {
 			e.printStackTrace();
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 		} catch (NotFoundException e) {
-			response.setStatus(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
+			e.printStackTrace();
+			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 		}
 		logger.info("...Exiting PLANNER operation");
 	}

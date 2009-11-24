@@ -15,7 +15,6 @@ public class ParseScreenException extends Exception {
 	 * 
 	 */
 	public ParseScreenException() {
-		// TODO Auto-generated constructor stub
 	}
 
 	/**
@@ -23,7 +22,6 @@ public class ParseScreenException extends Exception {
 	 */
 	public ParseScreenException(String message) {
 		super(message);
-		// TODO Auto-generated constructor stub
 	}
 
 	/**
@@ -31,7 +29,6 @@ public class ParseScreenException extends Exception {
 	 */
 	public ParseScreenException(Throwable cause) {
 		super(cause);
-		// TODO Auto-generated constructor stub
 	}
 
 	/**
@@ -40,7 +37,6 @@ public class ParseScreenException extends Exception {
 	 */
 	public ParseScreenException(String message, Throwable cause) {
 		super(message, cause);
-		// TODO Auto-generated constructor stub
 	}
 
 }

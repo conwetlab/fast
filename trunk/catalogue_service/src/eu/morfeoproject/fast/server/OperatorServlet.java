@@ -92,7 +92,7 @@ public class OperatorServlet extends GenericServlet {
 			logger.info("Retrieving operator "+id);
 			Operator o = CatalogueAccessPoint.getCatalogue().getOperator(new URIImpl(id));
 			if (o == null) {
-				response.setStatus(HttpServletResponse.SC_NOT_FOUND, "The resource "+id+" has not been found.");
+				response.sendError(HttpServletResponse.SC_NOT_FOUND, "The resource "+id+" has not been found.");
 			} else {
 				try {
 					if (format.equals(MediaType.APPLICATION_JSON)) {
@@ -107,7 +107,7 @@ public class OperatorServlet extends GenericServlet {
 					response.setStatus(HttpServletResponse.SC_OK);
 				} catch (JSONException e) {
 					e.printStackTrace();
-					response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+					response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
 				}
 			}
 		}
@@ -153,20 +153,20 @@ public class OperatorServlet extends GenericServlet {
 				response.setStatus(HttpServletResponse.SC_OK);
 			} catch (DuplicatedResourceException e) {
 				e.printStackTrace();
-				response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+				response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
 			} catch (OntologyInvalidException e) {
 				e.printStackTrace();
-				response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+				response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
 			} catch (InvalidResourceTypeException e) {
 				e.printStackTrace();
-				response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+				response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
 			}
 		} catch (JSONException e) {
 			e.printStackTrace();
-			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+			response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
 		} catch (IOException e) {
 			e.printStackTrace();
-			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+			response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
 		}	
 	}
 
@@ -214,13 +214,13 @@ public class OperatorServlet extends GenericServlet {
 				response.setStatus(HttpServletResponse.SC_OK);
 			} catch (JSONException e) {
 				e.printStackTrace();
-				response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+				response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
 			} catch (IOException e) {
 				e.printStackTrace();
-				response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+				response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
 			} catch (NotFoundException e) {
 				e.printStackTrace();
-				response.setStatus(HttpServletResponse.SC_NOT_FOUND, "The resource "+id+" has not been found.");
+				response.sendError(HttpServletResponse.SC_NOT_FOUND, "The resource "+id+" has not been found.");
 			}
 		}
 	}
@@ -234,7 +234,7 @@ public class OperatorServlet extends GenericServlet {
 		if (id.equalsIgnoreCase("operators")) id = null;
 		
 		if (id == null) {
-			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+			response.sendError(HttpServletResponse.SC_BAD_REQUEST, "An ID must be specified.");
 		} else {
 			// Delete the addressed member of the collection.
 			id = URLUTF8Encoder.decode(id);
@@ -242,7 +242,7 @@ public class OperatorServlet extends GenericServlet {
 				CatalogueAccessPoint.getCatalogue().removeOperator(new URIImpl(id));
 				response.setStatus(HttpServletResponse.SC_OK);
 			} catch (NotFoundException e) {
-				response.setStatus(HttpServletResponse.SC_NOT_FOUND, "The resource "+id+" has not been found.");
+				response.sendError(HttpServletResponse.SC_NOT_FOUND, "The resource "+id+" has not been found.");
 			}
 		}
 	}
