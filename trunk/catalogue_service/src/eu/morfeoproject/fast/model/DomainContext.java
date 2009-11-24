@@ -30,21 +30,16 @@ public class DomainContext {
 		this.user = user;
 	}
 	
-	public JSONObject toJSON() {
+	public JSONObject toJSON() throws JSONException {
 		JSONObject json = new JSONObject();
-		try {
-			JSONArray tags = new JSONArray();
-			for (String tag : getTags())
-				tags.put(tag);
-			json.put("tags", tags);
-			if (getUser() == null)
-				json.put("user", JSONObject.NULL);
-			else
-				json.put("user", getUser().toString());
-		} catch (JSONException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		JSONArray tags = new JSONArray();
+		for (String tag : getTags())
+			tags.put(tag);
+		json.put("tags", tags);
+		if (getUser() == null)
+			json.put("user", JSONObject.NULL);
+		else
+			json.put("user", getUser().toString());
 		return json;
 	}
 }

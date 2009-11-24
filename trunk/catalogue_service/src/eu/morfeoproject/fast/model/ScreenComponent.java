@@ -127,42 +127,39 @@ public abstract class ScreenComponent extends Resource {
 	}
 
 	@Override
-	public JSONObject toJSON() {
+	public JSONObject toJSON() throws JSONException {
 		JSONObject json = super.toJSON();
-		try {
-			// code
-			if (getCode() == null)
-				json.put("code", JSONObject.NULL);
-			else
-				json.put("code", getCode().toString());
-			// actions
-			JSONArray actionsArray = new JSONArray();
-			for (Action action : getActions())
-				actionsArray.put(action.toJSON());
-			json.put("actions", actionsArray);
-			// libraries
-			JSONArray librariesArray = new JSONArray();
-			for (Library library : getLibraries())
-				librariesArray.put(library.toJSON());
-			json.put("libraries", librariesArray);
-			// postconditions
-			JSONArray postArray = new JSONArray();
-			for (List<Condition> conditionList : getPostconditions()) {
-				JSONArray conditionArray = new JSONArray();
-				for (Condition con : conditionList)
-					conditionArray.put(con.toJSON());
-				postArray.put(conditionArray);
-			}
-			json.put("postconditions", postArray);
-			// triggers
-			JSONArray triggersArray = new JSONArray();
-			for (String trigger : getTriggers())
-				triggersArray.put(trigger);
-			json.put("triggers", triggersArray);
-		} catch (JSONException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+
+		// code
+		if (getCode() == null)
+			json.put("code", JSONObject.NULL);
+		else
+			json.put("code", getCode().toString());
+		// actions
+		JSONArray actionsArray = new JSONArray();
+		for (Action action : getActions())
+			actionsArray.put(action.toJSON());
+		json.put("actions", actionsArray);
+		// libraries
+		JSONArray librariesArray = new JSONArray();
+		for (Library library : getLibraries())
+			librariesArray.put(library.toJSON());
+		json.put("libraries", librariesArray);
+		// postconditions
+		JSONArray postArray = new JSONArray();
+		for (List<Condition> conditionList : getPostconditions()) {
+			JSONArray conditionArray = new JSONArray();
+			for (Condition con : conditionList)
+				conditionArray.put(con.toJSON());
+			postArray.put(conditionArray);
 		}
+		json.put("postconditions", postArray);
+		// triggers
+		JSONArray triggersArray = new JSONArray();
+		for (String trigger : getTriggers())
+			triggersArray.put(trigger);
+		json.put("triggers", triggersArray);
+
 		return json;
 	}
 

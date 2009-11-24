@@ -98,27 +98,23 @@ public class Condition {
 		return patternString;
 	}
 	
-	public JSONObject toJSON() {
+	public JSONObject toJSON() throws JSONException {
 		JSONObject json = new JSONObject();
-		try {
-			if (getPatternString() == null)
-				json.put("pattern", JSONObject.NULL);
-			else
-				json.put("pattern", getPatternString());
-			json.put("positive", isPositive());
-			if (getLabels() == null || getLabels().isEmpty())
-				json.put("label", JSONObject.NULL);
-			else {
-				JSONObject jsonLabels = new JSONObject();
-				for (String key : getLabels().keySet())
-					jsonLabels.put(key, getLabels().get(key));
-				json.put("label", jsonLabels);
-			}
-			if (getId() != null) // optional
-				json.put("id", getId());
-		} catch (JSONException e) {
-			e.printStackTrace();
+		if (getPatternString() == null)
+			json.put("pattern", JSONObject.NULL);
+		else
+			json.put("pattern", getPatternString());
+		json.put("positive", isPositive());
+		if (getLabels() == null || getLabels().isEmpty())
+			json.put("label", JSONObject.NULL);
+		else {
+			JSONObject jsonLabels = new JSONObject();
+			for (String key : getLabels().keySet())
+				jsonLabels.put(key, getLabels().get(key));
+			json.put("label", jsonLabels);
 		}
+		if (getId() != null) // optional
+			json.put("id", getId());
 		return json;
 	}
 	

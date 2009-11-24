@@ -45,30 +45,25 @@ public class Action {
 		this.uses = uses;
 	}
 
-	public JSONObject toJSON() {
+	public JSONObject toJSON() throws JSONException {
 		JSONObject json = new JSONObject();
-		try {
-			if (getName() == null)
-				json.put("name", JSONObject.NULL);
-			else
-				json.put("name", getName());
-			JSONArray preArray = new JSONArray();
-			for (Condition condition : getPreconditions())
-				preArray.put(condition.toJSON());
-			json.put("preconditions", preArray);
-			// uses
-			JSONArray usesArray = new JSONArray();
-			for (String key : getUses().keySet()) {
-				JSONObject jsonUse = new JSONObject();
-				jsonUse.put("id", key);
-				jsonUse.put("uri", getUses().get(key));
-				usesArray.put(jsonUse);
-			}
-			json.put("uses", usesArray);
-		} catch (JSONException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		if (getName() == null)
+			json.put("name", JSONObject.NULL);
+		else
+			json.put("name", getName());
+		JSONArray preArray = new JSONArray();
+		for (Condition condition : getPreconditions())
+			preArray.put(condition.toJSON());
+		json.put("preconditions", preArray);
+		// uses
+		JSONArray usesArray = new JSONArray();
+		for (String key : getUses().keySet()) {
+			JSONObject jsonUse = new JSONObject();
+			jsonUse.put("id", key);
+			jsonUse.put("uri", getUses().get(key));
+			usesArray.put(jsonUse);
 		}
+		json.put("uses", usesArray);
 		return json;
 	}
 

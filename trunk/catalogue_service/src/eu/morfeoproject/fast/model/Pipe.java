@@ -51,22 +51,17 @@ public class Pipe {
 		this.idActionTo = idActionTo;
 	}
 
-	public JSONObject toJSON() {
+	public JSONObject toJSON() throws JSONException {
 		JSONObject json = new JSONObject();
 		JSONObject jsonFrom = new JSONObject();
 		JSONObject jsonTo = new JSONObject();
-		try {
-			jsonFrom.put("buildingblock", idBBFrom);
-			jsonFrom.put("condition", idConditionFrom);
-			jsonTo.put("buildingblock", idBBTo);
-			jsonTo.put("condition", idConditionTo);
-			jsonTo.put("action", idActionTo);
-			json.put("from", jsonFrom);
-			json.put("to", jsonTo);
-		} catch (JSONException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		jsonFrom.put("buildingblock", idBBFrom);
+		jsonFrom.put("condition", idConditionFrom);
+		jsonTo.put("buildingblock", idBBTo);
+		jsonTo.put("condition", idConditionTo);
+		jsonTo.put("action", idActionTo);
+		json.put("from", jsonFrom);
+		json.put("to", jsonTo);
 		return json;
 	}
 

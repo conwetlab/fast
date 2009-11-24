@@ -38,19 +38,15 @@ public class Screen extends WithConditions {
 	/**
 	 * Transforms a Screen to a JSON object (key: value)
 	 * @return a JSON object containing all info about the screen
+	 * @throws JSONException 
 	 */
 	@Override
-	public JSONObject toJSON() {
+	public JSONObject toJSON() throws JSONException {
 		JSONObject json = super.toJSON();
-		try {
-			if (getCode() != null) {
-				json.put("code", getCode().toString());
-			} else if (getDefinition() != null) {
-				json.put("definition", getDefinition().toJSON());
-			}
-		} catch (JSONException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		if (getCode() != null) {
+			json.put("code", getCode().toString());
+		} else if (getDefinition() != null) {
+			json.put("definition", getDefinition().toJSON());
 		}
 		return json;
 	}

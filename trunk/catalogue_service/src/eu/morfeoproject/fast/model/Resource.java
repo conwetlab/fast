@@ -174,77 +174,74 @@ public abstract class Resource {
 	 * Transforms a Resource to a JSON object (key: value)
 	 * @return a JSON object containing all info about the resource
 	 */
-	public JSONObject toJSON() {
+	public JSONObject toJSON() throws JSONException {
 		JSONObject json = new JSONObject();
-		try {
-			if (getUri() == null)
-				json.put("uri", JSONObject.NULL);
-			else
-				json.put("uri", getUri().toString());
-			if (getLabels() == null || getLabels().isEmpty())
-				json.put("label", JSONObject.NULL);
-			else {
-				JSONObject jsonLabels = new JSONObject();
-				for (String key : getLabels().keySet())
-					jsonLabels.put(key, getLabels().get(key));
-				json.put("label", jsonLabels);
-			}
-			if (getDescriptions() == null || getDescriptions().isEmpty())
-				json.put("description", JSONObject.NULL);
-			else {
-				JSONObject jsonDescriptions = new JSONObject();
-				for (String key : getDescriptions().keySet())
-					jsonDescriptions.put(key, getDescriptions().get(key));
-				json.put("description", jsonDescriptions);
-			}
-			if (getCreator() == null)
-				json.put("creator", JSONObject.NULL);
-			else
-				json.put("creator", getCreator().toString());
-			if (getRights() == null)
-				json.put("rights", JSONObject.NULL);
-			else
-				json.put("rights", getRights().toString());
-			if (getVersion() == null)
-				json.put("version", JSONObject.NULL);
-			else
-				json.put("version", getVersion());
-			if (getCreationDate() == null)
-				json.put("creationDate", JSONObject.NULL);
-			else
-				json.put("creationDate", DateFormatter.formatDateISO8601(getCreationDate()));
-			if (getIcon() == null)
-				json.put("icon", JSONObject.NULL);
-			else
-				json.put("icon", getIcon().toString());
-			if (getScreenshot() == null)
-				json.put("screenshot", JSONObject.NULL);
-			else
-				json.put("screenshot", getScreenshot().toString());
-			if (getDomainContext() == null)
-				json.put("domainContext", JSONObject.NULL);
-			else
-				json.put("domainContext", getDomainContext().toJSON());
-			if (getHomepage() == null)
-				json.put("homepage", JSONObject.NULL);
-			else
-				json.put("homepage", getHomepage().toString());
-			if (getId() == null)
-				json.put("id", JSONObject.NULL);
-			else
-				json.put("id", getId());
-			if (getName() == null)
-				json.put("name", JSONObject.NULL);
-			else
-				json.put("name", getName());
-			if (getType() == null)
-				json.put("type", JSONObject.NULL);
-			else
-				json.put("type", getType());
-		} catch (JSONException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+
+		if (getUri() == null)
+			json.put("uri", JSONObject.NULL);
+		else
+			json.put("uri", getUri().toString());
+		if (getLabels() == null || getLabels().isEmpty())
+			json.put("label", JSONObject.NULL);
+		else {
+			JSONObject jsonLabels = new JSONObject();
+			for (String key : getLabels().keySet())
+				jsonLabels.put(key, getLabels().get(key));
+			json.put("label", jsonLabels);
 		}
+		if (getDescriptions() == null || getDescriptions().isEmpty())
+			json.put("description", JSONObject.NULL);
+		else {
+			JSONObject jsonDescriptions = new JSONObject();
+			for (String key : getDescriptions().keySet())
+				jsonDescriptions.put(key, getDescriptions().get(key));
+			json.put("description", jsonDescriptions);
+		}
+		if (getCreator() == null)
+			json.put("creator", JSONObject.NULL);
+		else
+			json.put("creator", getCreator().toString());
+		if (getRights() == null)
+			json.put("rights", JSONObject.NULL);
+		else
+			json.put("rights", getRights().toString());
+		if (getVersion() == null)
+			json.put("version", JSONObject.NULL);
+		else
+			json.put("version", getVersion());
+		if (getCreationDate() == null)
+			json.put("creationDate", JSONObject.NULL);
+		else
+			json.put("creationDate", DateFormatter.formatDateISO8601(getCreationDate()));
+		if (getIcon() == null)
+			json.put("icon", JSONObject.NULL);
+		else
+			json.put("icon", getIcon().toString());
+		if (getScreenshot() == null)
+			json.put("screenshot", JSONObject.NULL);
+		else
+			json.put("screenshot", getScreenshot().toString());
+		if (getDomainContext() == null)
+			json.put("domainContext", JSONObject.NULL);
+		else
+			json.put("domainContext", getDomainContext().toJSON());
+		if (getHomepage() == null)
+			json.put("homepage", JSONObject.NULL);
+		else
+			json.put("homepage", getHomepage().toString());
+		if (getId() == null)
+			json.put("id", JSONObject.NULL);
+		else
+			json.put("id", getId());
+		if (getName() == null)
+			json.put("name", JSONObject.NULL);
+		else
+			json.put("name", getName());
+		if (getType() == null)
+			json.put("type", JSONObject.NULL);
+		else
+			json.put("type", getType());
+
 		return json;
 	}
 	

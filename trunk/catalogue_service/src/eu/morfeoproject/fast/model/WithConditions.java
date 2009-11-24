@@ -41,29 +41,27 @@ public class WithConditions extends Resource {
 	}
 	
 	@Override
-	public JSONObject toJSON() {
+	public JSONObject toJSON() throws JSONException {
 		JSONObject json = super.toJSON();
-		try {
-			JSONArray preconditions = new JSONArray();
-			for (List<Condition> conditionList : getPreconditions()) {
-				JSONArray conditionArray = new JSONArray();
-				for (Condition con : conditionList)
-					conditionArray.put(con.toJSON());
-				preconditions.put(conditionArray);
-			}
-			json.put("preconditions", preconditions);
-			JSONArray postconditions = new JSONArray();
-			for (List<Condition> conditionList : getPostconditions()) {
-				JSONArray conditionArray = new JSONArray();
-				for (Condition con : conditionList)
-					conditionArray.put(con.toJSON());
-				postconditions.put(conditionArray);
-			}
-			json.put("postconditions", postconditions);
-		} catch (JSONException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+
+		JSONArray preconditions = new JSONArray();
+		for (List<Condition> conditionList : getPreconditions()) {
+			JSONArray conditionArray = new JSONArray();
+			for (Condition con : conditionList)
+				conditionArray.put(con.toJSON());
+			preconditions.put(conditionArray);
 		}
+		json.put("preconditions", preconditions);
+	
+		JSONArray postconditions = new JSONArray();
+		for (List<Condition> conditionList : getPostconditions()) {
+			JSONArray conditionArray = new JSONArray();
+			for (Condition con : conditionList)
+				conditionArray.put(con.toJSON());
+			postconditions.put(conditionArray);
+		}
+		json.put("postconditions", postconditions);
+
 		return json;
 	}
 	

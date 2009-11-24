@@ -25,21 +25,16 @@ public class Library {
 		this.source = source;
 	}
 
-	public JSONObject toJSON() {
+	public JSONObject toJSON() throws JSONException {
 		JSONObject json = new JSONObject();
-		try {
-			if (getLanguage() == null)
-				json.put("language", JSONObject.NULL);
-			else
-				json.put("language", getLanguage());
-			if (getSource() == null)
-				json.put("source", JSONObject.NULL);
-			else
-				json.put("source", getSource().toString());
-		} catch (JSONException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		if (getLanguage() == null)
+			json.put("language", JSONObject.NULL);
+		else
+			json.put("language", getLanguage());
+		if (getSource() == null)
+			json.put("source", JSONObject.NULL);
+		else
+			json.put("source", getSource().toString());
 		return json;
 	}
 

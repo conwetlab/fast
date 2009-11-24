@@ -57,21 +57,16 @@ public abstract class PreOrPost extends Resource {
 		return model;
 	}
 	
-	public JSONObject toJSON() {
+	public JSONObject toJSON() throws JSONException {
 		JSONObject json = new JSONObject();
-		try {
-			if (getUri() == null)
-				json.put("uri", JSONObject.NULL);
-			else
-				json.put("uri", getUri().toString());
-			JSONArray conditions = new JSONArray();
-			for (Condition con : getConditions())
-				conditions.put(con.toJSON());
-			json.put("conditions", conditions);
-		} catch (JSONException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		if (getUri() == null)
+			json.put("uri", JSONObject.NULL);
+		else
+			json.put("uri", getUri().toString());
+		JSONArray conditions = new JSONArray();
+		for (Condition con : getConditions())
+			conditions.put(con.toJSON());
+		json.put("conditions", conditions);
 		return json;
 	}
 

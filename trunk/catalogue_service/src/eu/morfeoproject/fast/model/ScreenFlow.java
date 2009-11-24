@@ -30,18 +30,13 @@ public class ScreenFlow extends WithConditions {
 		this.resources = resources;
 	}
 	
-	public JSONObject toJSON() {
+	public JSONObject toJSON() throws JSONException {
 		JSONObject json = super.toJSON();
-		try {
-			JSONArray resources = new JSONArray();
-			for (URI r : getResources()) {
-				resources.put(r);
-			}
-			json.put("contains", resources);
-		} catch (JSONException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		JSONArray resources = new JSONArray();
+		for (URI r : getResources()) {
+			resources.put(r);
 		}
+		json.put("contains", resources);
 		return json;
 	}
 	
