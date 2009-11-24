@@ -93,6 +93,7 @@ public class Catalogue {
 		// creates a new triple store
 		tripleStore = new TripleStore(dir, indexes);
     	tripleStore.open();
+//    	tripleStore.clear();
 //    	printStatements();
 
     	// check if the catalogue is correct
@@ -503,7 +504,7 @@ public class Catalogue {
     	}
 //		queryString = queryString.concat("\n} UNION ");
 //		
-//		/////*** LOOK FOR SLOTS ***/////
+//		/////*** LOOK FOR PRECONDITIONS (SLOTS) ***/////
 //		queryString = queryString.concat("{ ?resource "+RDF.type.toSPARQL()+" "+FGO.Precondition.toSPARQL()+" . ");
 //		
 //		for (Resource r : resources)
@@ -1118,8 +1119,8 @@ public class Catalogue {
 		// persists the pre/postcondition
 		savePreOrPost(se);
 		// create plans for the precondition
-		if (se instanceof Precondition)
-			planner.add(se);
+//		if (se instanceof Precondition)
+//			planner.add(se);
 	}
 	
 	public void savePreOrPost(PreOrPost se) {
@@ -1140,7 +1141,7 @@ public class Catalogue {
 		// do not call addPrecondition because it does not need to create a new URI for the screen
 		savePreOrPost(se);
 		// calculate new plans if necessary
-		planner.update(se, oldSe);
+//		planner.update(se, oldSe);
 		logger.info(se.getUri()+" updated.");
 	}
 	

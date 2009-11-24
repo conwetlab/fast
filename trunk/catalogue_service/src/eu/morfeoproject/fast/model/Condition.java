@@ -114,12 +114,9 @@ public class Condition {
 					jsonLabels.put(key, getLabels().get(key));
 				json.put("label", jsonLabels);
 			}
-			if (getId() == null)
-				json.put("id", JSONObject.NULL);
-			else
+			if (getId() != null) // optional
 				json.put("id", getId());
 		} catch (JSONException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return json;
