@@ -147,13 +147,14 @@ var DragHandler = Class.create(
         
         var draggableElement = this._draggedObject.getHandlerNode();
         // FIXME: Fix d&d when scrolling
-        this._y = this._y - yDelta - ((yDelta > 0) ? Math.min(10, draggableElement.parentNode.scrollTop) : 0);
-        this._x = this._x - xDelta - ((xDelta > 0) ? Math.min(10, draggableElement.parentNode.scrollLeft) : 0);
+        this._y = this._y - yDelta /*- ((yDelta > 0) ? Math.min(10, draggableElement.parentNode.scrollTop) : 0)*/;
+        this._x = this._x - xDelta /*- ((xDelta > 0) ? Math.min(10, draggableElement.parentNode.scrollLeft) : 0)*/;
 
         draggableElement.style.top = this._y + 'px';
         draggableElement.style.left = this._x + 'px';
         
-        this._updateNodeStatus(this._isValidPosition());
+        var isValid = this._isValidPosition()
+        this._updateNodeStatus(isValid);
         
         this._dragSource.onUpdate(this._x, this._y);
     },
@@ -278,7 +279,7 @@ var DragHandler = Class.create(
                 result = result && (draggableElement.offsetLeft >= 0);
                 result = result && (draggableElement.offsetTop >= 0);
                 result = result && (draggableElement.offsetLeft <= node.offsetWidth);
-                result = result && (draggableElement.offsetTop <= node.offsetWidth);
+                result = result && (draggableElement.offsetTop <= node.offsetHeight);
             }
             
             result = result && this._dragSource.isValidPosition(this._x,this._y);

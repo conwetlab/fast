@@ -58,6 +58,8 @@
                     'left': parseInt(node.offsetLeft - canvasPosition.left) + "px",
                     'top': parseInt(node.offsetTop - canvasPosition.top) + "px"
                 });
+                console.log("DroppedElement: " + instance.getTitle());
+                console.log("In area: " + area.getNode().className);
                 return true;
                    
             }
@@ -69,7 +71,7 @@
         
         // Dropping areas
         var formArea = new Area('form', $A([Constants.BuildingBlock.FORM]), drop);
-        var operatorArea = new Area('operator', $A([Constants.BuildingBlock.OPERATOR]), drop);
+        var operatorArea = new Area('operator', $A([Constants.BuildingBlock.SCREEN]), drop);
         var resourceArea = new Area('resource', $A([Constants.BuildingBlock.RESOURCE]), drop);
         var preArea = new Area('pre', $A([Constants.BuildingBlock.DOMAIN_CONCEPT]), drop);
         var postArea = new Area('post', $A([Constants.BuildingBlock.DOMAIN_CONCEPT]), drop);
@@ -114,7 +116,7 @@
             "uri": "http://purl.oclc.org/fast/ontology/gadget#Screen1256892977481",
             "version": "1.0"
         });
-        var scr1 = new ScreenComponent(scrDescription, [], inferenceEngine);
+        var scr1 = new ScreenComponent(scrDescription, [operatorArea], inferenceEngine);
         $("instances").appendChild(scr1.getNode());
         
         var dcDescription = new DomainConceptDescription({
