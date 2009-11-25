@@ -1306,7 +1306,7 @@ public class Catalogue {
 	}
 	
 	private void removeScreenComponent(URI scUri) throws NotFoundException {
-		if (!containsScreen(scUri))
+		if (!containsScreenComponent(scUri))
 			throw new NotFoundException();
 		// remove all actions
 		ClosableIterator<Statement> actions = tripleStore.findStatements(scUri, FGO.hasAction, Variable.ANY);
