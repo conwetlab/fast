@@ -31,7 +31,7 @@ var ScreenView = Class.create(BuildingBlockView,
          */
         this._tooltip = null;
 
-        var titleNode = new Element("div", {"class":"screenTitle"});
+        var titleNode = new Element("div", {"class":"title"});
         titleNode.update(description.label['en-gb']);
 
         var factFactory = FactFactorySingleton.getInstance();
@@ -77,7 +77,7 @@ var ScreenView = Class.create(BuildingBlockView,
 
         if (description.icon){
             var imageContainer = new Element ('div',
-                    {'class': 'screenImage' });
+                    {'class': 'image' });
             var image = new Element ('img',{
                     'class': 'img', 
                     'src': description.icon

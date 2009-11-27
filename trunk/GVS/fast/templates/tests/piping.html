@@ -7,27 +7,29 @@
         <script type="text/javascript"
             src="{{ MEDIA_URL }}js/gvs/dragndrop/Area.js"></script>
         
+        <!-- Descriptions -->   
         <script type="text/javascript"
             src="{{ MEDIA_URL }}js/gvs/catalogue/BuildingBlockDescription.js"></script>
         <script type="text/javascript"
-            src="{{ MEDIA_URL }}js/gvs/catalogue/ScreenDescription.js"></script>
-        <script type="text/javascript"
             src="{{ MEDIA_URL }}js/gvs/catalogue/DomainConceptDescription.js"></script>
-            
+        <script type="text/javascript"
+            src="{{ MEDIA_URL }}js/gvs/catalogue/ResourceDescription.js"></script>
+        
+        <!-- Palette component classes -->    
         <script type="text/javascript" 
             src="{{ MEDIA_URL }}js/gvs/palette/PaletteComponent.js"></script>
         <script type="text/javascript" 
-            src="{{ MEDIA_URL }}js/gvs/palette/ScreenComponent.js"></script>
-        <script type="text/javascript" 
             src="{{ MEDIA_URL }}js/gvs/palette/DomainConceptComponent.js"></script>
+        <script type="text/javascript"
+            src="{{ MEDIA_URL }}js/gvs/palette/ResourceComponent.js"></script>
             
         <!-- Building Block view classes -->
         <script type="text/javascript" 
             src="{{ MEDIA_URL }}js/gvs/views/BuildingBlockView.js"></script>
         <script type="text/javascript" 
-            src="{{ MEDIA_URL }}js/gvs/views/ScreenView.js"></script>
-        <script type="text/javascript" 
             src="{{ MEDIA_URL }}js/gvs/views/DomainConceptView.js"></script>
+        <script type="text/javascript"
+            src="{{ MEDIA_URL }}js/gvs/views/ResourceView.js"></script>
         <script type="text/javascript"
             src="{{ MEDIA_URL }}js/gvs/views/Terminal.js"></script>
             
@@ -43,9 +45,9 @@
         <script type="text/javascript"
             src="{{ MEDIA_URL }}js/gvs/instances/ComponentInstance.js"></script>
         <script type="text/javascript"
-            src="{{ MEDIA_URL }}js/gvs/instances/ScreenInstance.js"></script>
-        <script type="text/javascript"
             src="{{ MEDIA_URL }}js/gvs/instances/PrePostInstance.js"></script>
+        <script type="text/javascript"
+            src="{{ MEDIA_URL }}js/gvs/instances/ResourceInstance.js"></script>
 
         <script type="text/javascript">
             var DumbInferenceEngine = Class.create({
@@ -63,19 +65,26 @@
                 });
                 if (area.getNode().className.include("pre")) {
                     instance.setType("pre");
-                    instance.createTerminal(pipeAdded);
+                    instance.createTerminal(pipeHandler);
                 } else if (area.getNode().className.include("post")) {
                     instance.setType("post");
                     instance.createTerminal();
+                }
+                if (instance.constructor == ResourceInstance) {
+                    instance.createTerminals(pipeHandler);
                 }
                 instance.enableDragNDrop(area,[area]);
                 return true;              
             }
             
-            function pipeAdded (event, params) {
+            function pipeHandler (event, params, added) {
                 var wire = params[0];
                 if (wire.terminal1.parentEl && wire.terminal2.parentEl) {
-                    console.log ('Wire Added')
+                    if (added) {
+                        console.log ('Pipe Added');
+                    } else {
+                        console.log ('Pipe Removed');
+                    }
                     console.log ('  Source:' + wire.terminal1.getResourceId());
                     console.log ('       +:' + wire.terminal1.getConditionId());
                     console.log ('  Destination:' + wire.terminal2.getResourceId());
@@ -88,11 +97,14 @@
 {% block onload %}
         
         
-        // Dropping areas      
+        /// Dropping areas
+        var formArea = new Area('form', $A([Constants.BuildingBlock.FORM]), drop);
+        var operatorArea = new Area('operator', $A([Constants.BuildingBlock.OPERATOR]), drop);
+        var resourceArea = new Area('resource', $A([Constants.BuildingBlock.RESOURCE]), drop);
         var preArea = new Area('pre', $A([Constants.BuildingBlock.DOMAIN_CONCEPT]), drop);
         var postArea = new Area('post', $A([Constants.BuildingBlock.DOMAIN_CONCEPT]), drop);
         
-        var areas = $A([preArea, postArea]);
+        var areas = $A([formArea, operatorArea, resourceArea, preArea, postArea]);
         
         // Adding the dropping areas to the document
         areas.each(function(area) {
@@ -101,7 +113,7 @@
         
         var inferenceEngine = new DumbInferenceEngine();
         
-        
+        // Domain Concept
         var dcDescription = new DomainConceptDescription({
             "http://purl.oclc.org/fast/ontology/gadget#hasTag": [
               "amazon",
@@ -109,11 +121,53 @@
             ],
             "http://www.w3.org/2000/01/rdf-schema#label": "Search criteria",
             "uri": "http://aws.amazon.com/AWSECommerceService#SearchCriteria",
-            "id": "someId"
+            "id": "SearchCriteria#1"
           });
         var domainConcept = new DomainConceptComponent(dcDescription, [preArea, postArea], inferenceEngine);
         $("instances").appendChild(domainConcept.getNode());
         
+        
+        // Resource
+        var rDescription = new ResourceDescription({
+             
+              "description": {"en-gb": "This is a description of the building block"},
+              "domainContext": {
+                "tags": [
+                  "ebay",
+                  "amazon",
+                ],
+                "user": null
+              },
+              "icon": "someuri",
+              "id": "Service1",
+              "label": {"en-gb": "Service 1"},
+              "name": "Amazon Item to Ebay Filter",
+              "rights": "http://creativecommons.org/",
+              "screenshot": "http://www.deri.ie/eBayList-screenshot.jpg",
+              "type": "resource", // screenflow, screen, form, operator y resource
+              "uri": "http://purl.oclc.org/fast/ontology/gadget#xxx1257870443525",
+              "version": "1.0",
+              "actions": [{
+                    "name": "filter",
+                    "preconditions": [{
+                      "id": "item",
+                      "label": {"en-gb": "Ebay List"},
+                      "pattern": "?Item http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#Item",
+                      "positive": true
+                    }],
+                    "uses": []
+                  }],
+                  "libraries": [],
+                  "postconditions": [{
+                    "id": "filterEbay",
+                    "label": {"en-gb": "Ebay List"},
+                    "pattern": "?eFilter http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://developer.ebay.com/DevZone/shopping/docs/CallRef/FindItemsAdvanced.html#Request",
+                    "positive": true
+                  }],
+                  "triggers": ["itemAmazon"]
+        });
+        var resource = new ResourceComponent(rDescription, [resourceArea], inferenceEngine);
+        $("instances").appendChild(resource.getNode());
         
 {% endblock %}
 
@@ -122,7 +176,7 @@
 <h2>Dragables</h2>
 <div id="instances" class="paletteContent" style="overflow:hidden"></div>
 <h2>Drop zones</h2>
-<div style="height: 300px; width:80%;position:relative; overflow: auto">
+<div style="height: 500px; width:80%;position:relative; overflow: auto">
     <div id="canvas" class="document screendoc canvas" ></div>
 </div>
 {% endblock %}

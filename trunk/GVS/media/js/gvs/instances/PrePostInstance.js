@@ -193,18 +193,25 @@ var PrePostInstance = Class.create(ComponentInstance,
                 'top': 2, 
                 'left': 15
             };
+            options.ddConfig = { // A precondition in screen design is an output (data to be consumed inside the screen)
+                'type': 'output',
+                'allowedTypes': ['input']
+            }
         } else {
             options.direction = [-1,0];
             options.offsetPosition = {
                 'top': 2, 
                 'left': -10
-            };   
+            };
+            options.ddConfig = { // Viceversa
+                'type': 'input',
+                'allowedTypes': ['output']
+            }   
         }
         
-        var areaNode = this._view.getNode().parentNode;
-        this._terminal = new Terminal(this._view.getNode(), areaNode, options, "screen", this._buildingBlockDescription.id); 
+        this._terminal = new Terminal(this._view.getNode(), options, "screen", this._buildingBlockDescription.id); 
         if (this._type == 'pre') {
-            this._terminal.eventAddWire.subscribe(handler);
+            this._terminal.addWireHandler(handler);
         }
     },
     

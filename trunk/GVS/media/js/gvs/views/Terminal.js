@@ -10,7 +10,7 @@
  * @constructs
  * @extends WireIt.Terminal
  */
-var Terminal = function(/** DOMNode */ conditionNode, /** DOMNode */ areaNode, /** Object */ options, 
+var Terminal = function(/** DOMNode */ conditionNode, /** Object */ options, 
                                  /** String */ resourceId, /** String */ conditionId) {
     
     /**
@@ -18,12 +18,6 @@ var Terminal = function(/** DOMNode */ conditionNode, /** DOMNode */ areaNode, /
      * @type DOMNode
      */
     this._conditionNode = conditionNode;
-    
-    /**
-     * @private
-     * @type DOMNode
-     */
-    this._areaNode = areaNode;
     
     /**
      * @private
@@ -86,6 +80,8 @@ Object.extend(Terminal.prototype, /** @lends Terminal.prototype */ {
      */
     destroy: function() {
         document.body.removeChild(this._terminalNode);
+        this.removeAllWires();
+        this.remove();
     },
     
     /**
@@ -96,6 +92,17 @@ Object.extend(Terminal.prototype, /** @lends Terminal.prototype */ {
         this.redrawAllWires();        
     },
     
+    /**
+     * Adds a handler for the conection or deconection of wires
+     */
+    addWireHandler: function(/** Function */ handler) {
+        var context = {
+            'handler': handler
+        }
+        this.eventAddWire.subscribe(this._wireAddHandler.bind(context));
+        this.eventRemoveWire.subscribe(this._wireRemoveHandler.bind(context));    
+    },
+    
      // **************** PRIVATE METHODS **************** //
      /**
       * @private
@@ -103,9 +110,21 @@ Object.extend(Terminal.prototype, /** @lends Terminal.prototype */ {
     _recalculatePosition: function() {
         var position = Utils.getPosition(this._conditionNode);
         var style = {
-            'top': position.top - this._areaNode.scrollTop + 'px',
-            'left':  position.left - this._areaNode.scrollLeft + 'px'
+            'top': position.top + 'px',
+            'left':  position.left + 'px'
         }     
         this._terminalNode.setStyle(style);
+    },
+    /**
+     * @private
+     */
+    _wireAddHandler: function(/** Event */ event, /** Array */ params) {
+        this.handler(event, params, true);    
+    },
+    /**
+     * @private
+     */
+    _wireRemoveHandler: function(/** Event */ event, /** Array */ params) {
+        this.handler(event, params, false);    
     }
 });
