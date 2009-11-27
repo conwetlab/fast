@@ -3,6 +3,7 @@ package eu.morfeoproject.fast.catalogue;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -1076,26 +1077,37 @@ public class Catalogue {
 		ClosableIterator<Statement> preconditions = tripleStore.findStatements(screenUri, FGO.hasPreCondition, Variable.ANY);
 		for ( ; preconditions.hasNext(); ) {
 			BlankNode cNode = preconditions.next().getObject().asBlankNode();
-			ClosableIterator<Statement> patterns = tripleStore.findStatements(cNode, FGO.hasPattern, Variable.ANY);
-			for ( ; patterns.hasNext(); ) {
-				tripleStore.removeModel(patterns.next().getObject().asURI());
-			}
-			patterns.close();
-			tripleStore.removeResource(cNode);
+			removeCondition(cNode);
 		}
 		preconditions.close();
 		// remove all postconditions
 		ClosableIterator<Statement> postconditions = tripleStore.findStatements(screenUri, FGO.hasPostCondition, Variable.ANY);
 		for ( ; postconditions.hasNext(); ) {
 			BlankNode cNode = postconditions.next().getObject().asBlankNode();
-			ClosableIterator<Statement> patterns = tripleStore.findStatements(cNode, FGO.hasPattern, Variable.ANY);
-			for ( ; patterns.hasNext(); ) {
-				tripleStore.removeModel(patterns.next().getObject().asURI());
-			}
-			patterns.close();
-			tripleStore.removeResource(cNode);
+			removeCondition(cNode);
 		}
 		postconditions.close();
+		// remove definition
+		ClosableIterator<Statement> defIt = tripleStore.findStatements(screenUri, FGO.hasDefinition, Variable.ANY);
+		for ( ; defIt.hasNext(); ) {
+			BlankNode defNode = defIt.next().getObject().asBlankNode();
+			// remove references to components
+			ClosableIterator<Statement> comIt = tripleStore.findStatements(defNode, FGO.contains, Variable.ANY);
+			for ( ; comIt.hasNext(); ) {
+				BlankNode bNode = comIt.next().getObject().asBlankNode();
+				tripleStore.removeResource(bNode);
+			}
+			comIt.close();
+			// remove triggers
+			ClosableIterator<Statement> triIt = tripleStore.findStatements(defNode, FGO.hasTrigger, Variable.ANY);
+			for ( ; triIt.hasNext(); ) {
+				BlankNode bNode = triIt.next().getObject().asBlankNode();
+				tripleStore.removeResource(bNode);
+			}
+			triIt.close();
+			tripleStore.removeResource(defNode);
+		}
+		defIt.close();
 		// remove the screen itself
 		tripleStore.removeResource(screenUri);
 		// remove the screen from the planner
@@ -1153,22 +1165,7 @@ public class Catalogue {
 		ClosableIterator<Statement> conditionBagIt = tripleStore.findStatements(seUri, FGO.hasCondition, Variable.ANY);
 		for ( ; conditionBagIt.hasNext(); ) {
 			BlankNode bagNode = conditionBagIt.next().getObject().asBlankNode();
-			ClosableIterator<Statement> conditionIt = tripleStore.findStatements(bagNode, Variable.ANY, Variable.ANY);
-			for ( ; conditionIt.hasNext(); ) {
-				Node object = conditionIt.next().getObject();
-				// only need to look for triples like: bNode rdf:li bNode
-				if (object instanceof BlankNode) {
-					BlankNode cNode = object.asBlankNode();
-					ClosableIterator<Statement> patterns = tripleStore.findStatements(cNode, FGO.hasPattern, Variable.ANY);
-					for ( ; patterns.hasNext(); ) {
-						tripleStore.removeModel(patterns.next().getObject().asURI());
-					}
-					patterns.close();
-					tripleStore.removeResource(cNode);
-				}
-			}
-			conditionIt.close();
-			tripleStore.removeResource(bagNode);
+			removeCondition(bagNode);
 		}
 		conditionBagIt.close();
 		// remove the pre/postcondition itself
@@ -1210,6 +1207,8 @@ public class Catalogue {
 			tripleStore.addStatement(rUri, FGO.hasVersion, resource.getVersion());
 		if (resource.getCreationDate() != null)
 			tripleStore.addStatement(rUri, DC.date, DateFormatter.formatDateISO8601(resource.getCreationDate()));
+		else // no date provided, save the current date
+			tripleStore.addStatement(rUri, DC.date, DateFormatter.formatDateISO8601(new Date()));
 		if (resource.getIcon() != null)
 			tripleStore.addStatement(rUri, FGO.hasIcon, resource.getIcon());
 		if (resource.getScreenshot() != null)
@@ -1228,20 +1227,39 @@ public class Catalogue {
 			tripleStore.addStatement(rUri, FGO.hasType, resource.getType());
 	}
 
-	private BlankNode saveCondition(Condition con) {
+	private BlankNode saveCondition(Condition condition) {
 		BlankNode c = tripleStore.createBlankNode();
-		tripleStore.addStatement(c, FGO.hasPatternString, con.getPatternString());
+		tripleStore.addStatement(c, FGO.hasPatternString, condition.getPatternString());
 		URI p = tripleStore.getCleanUniqueURI(FGO.NS_FGO, "pattern", false);
 		tripleStore.addStatement(c, FGO.hasPattern, p);
-		for (Statement st : con.getPattern()) {
+		for (Statement st : condition.getPattern()) {
 			tripleStore.addStatement(p, st.getSubject(), st.getPredicate(), st.getObject());
 		}
-		tripleStore.addStatement(c, FGO.isPositive, tripleStore.createDatatypeLiteral(new Boolean(con.isPositive()).toString(), XSD._boolean));
-		for (String key : con.getLabels().keySet())
-			tripleStore.addStatement(c, RDFS.label, tripleStore.createLanguageTagLiteral(con.getLabels().get(key), key));
-		if (con.getId() != null)
-			tripleStore.addStatement(c, FGO.hasId, con.getId());
+		tripleStore.addStatement(c, FGO.isPositive, tripleStore.createDatatypeLiteral(new Boolean(condition.isPositive()).toString(), XSD._boolean));
+		for (String key : condition.getLabels().keySet())
+			tripleStore.addStatement(c, RDFS.label, tripleStore.createLanguageTagLiteral(condition.getLabels().get(key), key));
+		if (condition.getId() != null)
+			tripleStore.addStatement(c, FGO.hasId, condition.getId());
 		return c;
+	}	
+	
+	private void removeCondition(BlankNode conditionNode) throws NotFoundException {
+		ClosableIterator<Statement> conditionIt = tripleStore.findStatements(conditionNode, Variable.ANY, Variable.ANY);
+		for ( ; conditionIt.hasNext(); ) {
+			Node object = conditionIt.next().getObject();
+			// only need to look for triples like: bNode rdf:li bNode
+			if (object instanceof BlankNode) {
+				BlankNode cNode = object.asBlankNode();
+				ClosableIterator<Statement> patterns = tripleStore.findStatements(cNode, FGO.hasPattern, Variable.ANY);
+				for ( ; patterns.hasNext(); ) {
+					tripleStore.removeModel(patterns.next().getObject().asURI());
+				}
+				patterns.close();
+				tripleStore.removeResource(cNode);
+			}
+		}
+		conditionIt.close();
+		tripleStore.removeResource(conditionNode);
 	}
 	
 	private void saveScreenComponent(ScreenComponent sc) {
@@ -1309,12 +1327,13 @@ public class Catalogue {
 		if (!containsScreenComponent(scUri))
 			throw new NotFoundException();
 		// remove all actions
-		ClosableIterator<Statement> actions = tripleStore.findStatements(scUri, FGO.hasAction, Variable.ANY);
-		for ( ; actions.hasNext(); ) {
-			BlankNode aNode = actions.next().getObject().asBlankNode();
-			ClosableIterator<Statement> preconditions = tripleStore.findStatements(aNode, FGO.hasPreCondition, Variable.ANY);
-			for ( ; preconditions.hasNext(); ) {
-				BlankNode cNode = preconditions.next().getObject().asBlankNode();
+		ClosableIterator<Statement> actionsIt = tripleStore.findStatements(scUri, FGO.hasAction, Variable.ANY);
+		for ( ; actionsIt.hasNext(); ) {
+			BlankNode aNode = actionsIt.next().getObject().asBlankNode();
+			// remove preconditions
+			ClosableIterator<Statement> preIt = tripleStore.findStatements(aNode, FGO.hasPreCondition, Variable.ANY);
+			for ( ; preIt.hasNext(); ) {
+				BlankNode cNode = preIt.next().getObject().asBlankNode();
 				ClosableIterator<Statement> patterns = tripleStore.findStatements(cNode, FGO.hasPattern, Variable.ANY);
 				for ( ; patterns.hasNext(); ) {
 					tripleStore.removeModel(patterns.next().getObject().asURI());
@@ -1322,20 +1341,21 @@ public class Catalogue {
 				patterns.close();
 				tripleStore.removeResource(cNode);
 			}
-			preconditions.close();
+			preIt.close();
+			// remove uses
+			ClosableIterator<Statement> usesIt = tripleStore.findStatements(aNode, FGO.hasUse, Variable.ANY);
+			for ( ; usesIt.hasNext(); )
+				tripleStore.removeResource(usesIt.next().getObject().asBlankNode());
+			usesIt.close();
+			// remove action itself
 			tripleStore.removeResource(aNode);
 		}
-		actions.close();
+		actionsIt.close();
 		// remove all postconditions
 		ClosableIterator<Statement> postconditions = tripleStore.findStatements(scUri, FGO.hasPostCondition, Variable.ANY);
 		for ( ; postconditions.hasNext(); ) {
 			BlankNode cNode = postconditions.next().getObject().asBlankNode();
-			ClosableIterator<Statement> patterns = tripleStore.findStatements(cNode, FGO.hasPattern, Variable.ANY);
-			for ( ; patterns.hasNext(); ) {
-				tripleStore.removeModel(patterns.next().getObject().asURI());
-			}
-			patterns.close();
-			tripleStore.removeResource(cNode);
+			removeCondition(cNode);
 		}
 		postconditions.close();
 		// remove all libraries
@@ -1722,6 +1742,7 @@ public class Catalogue {
 							}
 						}
 						defIt.close();
+						screen.setDefinition(def);
 					}
 				}
 				screenIt.close();
