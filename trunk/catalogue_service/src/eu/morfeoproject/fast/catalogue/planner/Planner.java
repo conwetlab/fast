@@ -45,7 +45,6 @@ public class Planner {
 					plannerStore.add(result, screen.getUri());
 			}
 		}
-		plannerStore.dump();
 	}
 	
 	/**
