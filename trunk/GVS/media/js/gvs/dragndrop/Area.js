@@ -14,12 +14,6 @@ var Area = Class.create( /** @lends Area.prototype */ {
          */
         this._acceptedElements = acceptedElements;
         
-        /**
-         * List of scroll listeners
-         * @type Array
-         * @private
-         */
-        this._scrollListeners = new Array();
         
         /**
          * Function to be called whenever an element
@@ -39,7 +33,6 @@ var Area = Class.create( /** @lends Area.prototype */ {
             'class': 'dropArea ' + areaClass
         });
         
-        this._node.observe('scroll', this._onscroll.bind(this));
     },
     
 
@@ -81,29 +74,8 @@ var Area = Class.create( /** @lends Area.prototype */ {
         //TODO: Think about Layouts    
     },
    
-    /**
-     * Add scroll listener
-     */
-    addScrollListener: function(/** ComponentInstance */ listener) {
-        this._scrollListeners.push(listener);
-    },
-    
-    /**
-     * Add scroll listener
-     */
-    removeScrollListener: function(/** ComponentInstance */ listener) {
-        this._scrollListeners = this._listeners.without(listener);
-    },
+   
     // **************** PRIVATE METHODS **************** //
-    /**
-     * On scroll handler
-     * @private
-     */
-    _onscroll: function() {
-        this._scrollListeners.each(function(listener) {
-            listener.scroll();   
-        });  
-    }
 
     
     

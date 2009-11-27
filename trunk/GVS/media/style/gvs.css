@@ -148,6 +148,7 @@ h4{
     right: 0px;
     bottom: 0px;
     text-align:center;
+    overflow: hidden;
 }
 .documentTitle {
     font-size: 30px;
@@ -263,6 +264,7 @@ h4{
 .dropArea {
     position:absolute;
     border: 2px dotted #AAA;
+    overflow: hidden;
 }
 .dropArea.form {
     height: 20%;

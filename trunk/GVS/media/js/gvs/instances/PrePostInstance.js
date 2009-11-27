@@ -63,12 +63,6 @@ var PrePostInstance = Class.create(ComponentInstance,
          */
         this._terminal = null;
         
-        /**
-         * Area in which it has been dropped
-         * @type Area
-         * @private
-         */
-        this._area = null;
     },
 
     // **************** PUBLIC METHODS **************** //
@@ -182,13 +176,6 @@ var PrePostInstance = Class.create(ComponentInstance,
     },
     
     /**
-     * Sets the area 
-     */
-    setArea: function(/** Area */ area) {
-        area.addScrollListener(this);
-    },
-    
-    /**
      * Creates the terminal
      */
     createTerminal: function(/** (Optional) Function */ handler) {
@@ -203,13 +190,13 @@ var PrePostInstance = Class.create(ComponentInstance,
             options.alwaysSrc = true;
             options.direction = [1,0];
             options.offsetPosition = {
-                'top': 0, 
-                'left': 10
+                'top': 2, 
+                'left': 15
             };
         } else {
             options.direction = [-1,0];
             options.offsetPosition = {
-                'top': 0, 
+                'top': 2, 
                 'left': -10
             };   
         }
@@ -232,9 +219,6 @@ var PrePostInstance = Class.create(ComponentInstance,
         }
         if (this._terminal) {
             this._terminal.destroy();
-        } 
-        if (this._area) {
-            this._area.removeScrollListener();
         }
     },
     
@@ -254,12 +238,6 @@ var PrePostInstance = Class.create(ComponentInstance,
         $super(changingZone);
         this.onUpdate();
     }, 
-    /**
-     * @override
-     */
-    scroll: function () {
-        this.onUpdate();
-    },
     /**
 
     // **************** PRIVATE METHODS **************** //

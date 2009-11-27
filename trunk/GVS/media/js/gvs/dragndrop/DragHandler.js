@@ -114,13 +114,7 @@ var DragHandler = Class.create(
             this._initialDropZonePosition = Geometry.getNodeRectangle(initialDropZoneNode);
         }
 
-        // disable context menu and text selection
-        document.oncontextmenu = function() { return false; }; 
-        document.onmousedown = function() { return false; };
-        document.onselectstart =  function() { return false; };
-
-        Event.stopObserving (draggableNode, 'mousedown',
-                this._boundedStartDrag, true);
+        this._toggleEventHandlers(true);
 
         this._draggedObject.onStart();
         
@@ -129,20 +123,10 @@ var DragHandler = Class.create(
         this._mouseYStart = parseInt(e.screenY);
         this._y = draggableNode.offsetTop;
         this._x = draggableNode.offsetLeft;
-        /*draggableNode.style.top  = this._y + 'px';
-        draggableNode.style.left = this._x + 'px';*/
-        Event.observe (document, 'mouseup',   this._boundedEndDrag, true);
-        Event.observe (document, 'mousemove', this._boundedUpdate, true);
+        
 
-        /*var objects = document.getElementsByTagName('object');
-        for (var i = 0; i < objects.length; i++) {
-            if (objects[i].contentDocument) {
-                Event.observe(objects[i].contentDocument, 'mouseup' ,
-                        this._boundedEndDrag, true);
-                Event.observe(objects[i].contentDocument, 'mousemove', 
-                        this._boundedUpdate, true);
-            }
-        }*/
+
+        
         // Warning: magic number
         draggableNode.style.zIndex = '200'; 
         
@@ -178,19 +162,8 @@ var DragHandler = Class.create(
         // (or right button for left-handed persons)
         if (!BrowserUtils.isLeftButton(e.button))
             return false;
-
-        Event.stopObserving (document, "mouseup",   this._boundedEndDrag, true);
-        Event.stopObserving (document, "mousemove", this._boundedUpdate,  true);
-
-        /*var objects = document.getElementsByTagName("object");
-        for (var i = 0; i < objects.length; i++) {
-            if (objects[i].contentDocument) {
-                Event.stopObserving(objects[i].contentDocument, "mouseup",
-                        this._boundedEndDrag, true);
-                Event.stopObserving(objects[i].contentDocument, "mousemove",
-                        this._boundedUpdate,  true);
-            }
-        }*/
+    
+        this._toggleEventHandlers(false);
 
         var draggableNode = this._draggedObject.getHandlerNode();
         draggableNode.style.zIndex = "";
@@ -198,10 +171,11 @@ var DragHandler = Class.create(
         //Remove element transparency        
         this._updateNodeStatus(true);
         
+        var accepted;
+        
         // When changing zone, try to get the draggable accepted by the dropZone
         if (this._isChangingZone()) {
-            var dropZone = this._inWhichDropZone();
-            var accepted;
+            var dropZone = this._inWhichDropZone();          
             if (dropZone) {
                 var dropZonePosition = Utils.getPosition(dropZone.getNode());
                 var dropPosition = {
@@ -219,20 +193,43 @@ var DragHandler = Class.create(
                 // Destroy the element (it is an invalid copy)
                 this._draggedObject.destroy();
             } 
+        } else {
+            accepted = true;
         }
-    
-        // Reenable context menu and text selection
-        document.onmousedown = null;
-        document.oncontextmenu = null;
-        document.onselectstart = null;        
-        Event.observe (this._dragSource.getHandlerNode(), "mousedown",
-                this._boundedStartDrag, true);
-        
 
-        this._draggedObject.onFinish(this._isChangingZone());
+        if (accepted) {
+            this._draggedObject.onFinish(this._isChangingZone());    
+        }        
         this._draggedObject = null;
 
         return false;
+    },
+    
+    /**
+     * Enable and disable the different event handlers
+     * @private
+     */
+    _toggleEventHandlers: function (/** Boolean */ startDrag) {
+        if (startDrag) {
+            // disable context menu and text selection
+            document.oncontextmenu = function() { return false; }; 
+            document.onmousedown = function() { return false; };
+            document.onselectstart =  function() { return false; };
+    
+            Event.stopObserving (this._draggedObject.getHandlerNode(), 'mousedown',
+                    this._boundedStartDrag, true);
+            Event.observe (document, 'mouseup',   this._boundedEndDrag, true);
+            Event.observe (document, 'mousemove', this._boundedUpdate, true);               
+        } else {
+            // Reenable context menu and text selection
+            document.onmousedown = null;
+            document.oncontextmenu = null;
+            document.onselectstart = null;        
+            Event.observe (this._dragSource.getHandlerNode(), "mousedown",
+                    this._boundedStartDrag, true);
+            Event.stopObserving (document, "mouseup",   this._boundedEndDrag, true);
+            Event.stopObserving (document, "mousemove", this._boundedUpdate,  true);    
+        }
     },
     
     /**
