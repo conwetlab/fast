@@ -45,6 +45,7 @@ public class Planner {
 					plannerStore.add(result, screen.getUri());
 			}
 		}
+		plannerStore.dump();
 	}
 	
 	/**
@@ -118,6 +119,7 @@ public class Planner {
 	
 	private void searchPlans(Plan plan, List<Plan> plans) {
 		List<URI> toList = plannerStore.getTo(plan.getUriList().get(0));
+		toList = diff(toList, plan.getUriList()); // avoid loops
 		if (toList.isEmpty()) { // it's leaf
 			plans.add(plan);
 		} else {
@@ -221,6 +223,15 @@ public class Planner {
 			if (!lcA.get(cIdx).equals(lcB.get(cIdx)))
 				return false;
 		return true;
+	}
+	
+	private List<URI> diff(List<URI> listA, List<URI> listB) {
+		ArrayList<URI> result = new ArrayList<URI>();
+		for (URI uri : listA) {
+			if (!listB.contains(uri))
+				result.add(uri);
+		}
+		return result;
 	}
 	
 }

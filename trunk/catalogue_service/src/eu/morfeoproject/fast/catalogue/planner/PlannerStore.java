@@ -93,4 +93,9 @@ public class PlannerStore {
 		return list;
 	}
 	
+	public void dump() {
+		for (Entry entry : data)
+			System.out.println(entry.getFrom()+" => "+entry.getTo());
+	}
+	
 }
