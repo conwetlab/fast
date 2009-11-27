@@ -86,7 +86,6 @@ var PlanComponent = Class.create(DragSource,
             'left':  this._getContentOffsetLeft() + 'px',
             'position': 'absolute'
         });
-        instance.getDragHandler().initializeDragnDropHandlers();
         return instance;
     },
 
