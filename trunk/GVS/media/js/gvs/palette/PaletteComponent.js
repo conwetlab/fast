@@ -9,12 +9,6 @@ var PaletteComponent = Class.create(DragSource,
     initialize: function($super,/** BuildingBlockDescription */ buildingBlockDescription, 
             /** Array */ dropZones, /** InferenceEngine */ inferenceEngine) {
         $super();
-        /**
-         * Handles the drag'n'drop stuff
-         * @type DragHandler
-         * @private
-         */
-        this._dragHandler = new DragHandler(this, dropZones);
         
         /**
          * Component and instance Drop zone 
@@ -88,7 +82,6 @@ var PaletteComponent = Class.create(DragSource,
             'left':  this._getContentOffsetLeft() + 'px',
             'position': 'absolute'
         });
-        instance.getDragHandler().initializeDragnDropHandlers();
         return instance;
     },
 
@@ -117,7 +110,7 @@ var PaletteComponent = Class.create(DragSource,
         node.appendChild(this._view.getNode());
         var titleNode = new Element("div", {"class": "slotTitle"}).update(this._getTitle());
         node.appendChild(titleNode);
-        this._dragHandler.initializeDragnDropHandlers();
+        this.enableDragNDrop(null, this._dropZones);
 
         return node;
     },

@@ -7,8 +7,8 @@ var ScreenInstance = Class.create(ComponentInstance,
      * @extends ComponentInstance
      */
     initialize: function($super, /**BuildingBlockDescription*/ buildingBlockDescription, 
-            /** Array */ dropZones, /** InferenceEngine */ inferenceEngine) {
-        $super(buildingBlockDescription, dropZones, inferenceEngine);
+             /** InferenceEngine */ inferenceEngine) {
+        $super(buildingBlockDescription, inferenceEngine);
         
         /**
          * @type PreviewDialog

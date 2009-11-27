@@ -1,0 +1,78 @@
+{% extends "tests/base.html" %}
+{% block classpath %}
+{% endblock %}
+
+{% block onload %}
+
+        result = Geometry.updateAxis({'min': -300, 'max': 10}, 3, 0);
+        expectedResult = { 'delta': 3, 'offLimit': 0 }
+        if (result.delta != expectedResult.delta || result.offLimit != expectedResult.offLimit) {
+            console.log('Normal');
+            console.log(result);
+        }
+        
+        result = Geometry.updateAxis({'min': -300, 'max': 10}, 10, 0);
+        expectedResult = { 'delta': 10, 'offLimit': 0 }
+        if (result.delta != expectedResult.delta || result.offLimit != expectedResult.offLimit) {
+            console.log('Just to the right limit');
+            console.log(result);
+        }
+
+        result = Geometry.updateAxis({'min': -300, 'max': 10}, 11, 0);
+        expectedResult = { 'delta': 10, 'offLimit': 1 }
+        if (result.delta != expectedResult.delta || result.offLimit != expectedResult.offLimit) {
+            console.log('One pixel past the right limit');
+            console.log(result);
+        }
+
+        result = Geometry.updateAxis({'min': -310, 'max': 0}, 5, 10);
+        expectedResult = { 'delta': 0, 'offLimit': 15 }
+        if (result.delta != expectedResult.delta || result.offLimit != expectedResult.offLimit) {
+            console.log('Off limits and going further away');
+            console.log(result);
+        }
+        
+        result = Geometry.updateAxis({'min': -320, 'max': 0}, -5, 20);
+        expectedResult = { 'delta': 0, 'offLimit': 15 }
+        if (result.delta != expectedResult.delta || result.offLimit != expectedResult.offLimit) {
+            console.log('Recovering (a bit) from off limits');
+            console.log(result);
+        }
+        
+        result = Geometry.updateAxis({'min': -303, 'max': 0}, -5, 3);
+        expectedResult = { 'delta': -2, 'offLimit': 0 }
+        if (result.delta != expectedResult.delta || result.offLimit != expectedResult.offLimit) {
+            console.log('Recovering from off limits and moving a bit');
+            console.log(result);
+        }
+        
+        result = Geometry.updateAxis({'min': -10, 'max': 300}, -3, 0);
+        expectedResult = { 'delta': -3, 'offLimit': 0 }
+        if (result.delta != expectedResult.delta || result.offLimit != expectedResult.offLimit) {
+            console.log('Left: Normal');
+            console.log(result);
+        }
+        
+        result = Geometry.updateAxis({'min': 0, 'max': 300}, 20, -15);
+        expectedResult = { 'delta': 5, 'offLimit': 0 }
+        if (result.delta != expectedResult.delta || result.offLimit != expectedResult.offLimit) {
+            console.log('Left: Normal');
+            console.log(result);
+        }
+        
+        result = Geometry.dragRanges({'left': 0, 'top': 0, 'bottom': 200, 'right': 400}, 
+                {'left': 20, 'top': 10, 'bottom': 90, 'right': 280});
+        expectedResult = { 'x': {'min': -20, 'max': 120},
+                           'y': {'min': -10, 'max': 110} };
+        if (Object.toJSON(result) != Object.toJSON(expectedResult)) {
+            console.log('Ranges');
+            console.log(result);
+        }
+        
+        
+{% endblock %}
+
+{% block test_body %}
+<h1>Test Geometry</h1>
+<p> look at the logs </p>
+{% endblock %}

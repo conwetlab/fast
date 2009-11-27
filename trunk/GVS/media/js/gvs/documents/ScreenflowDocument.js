@@ -118,7 +118,7 @@ var ScreenflowDocument = Class.create(PaletteDocument,
 
         switch (droppedElement.constructor) {
             case ScreenInstance:
-                this._addNodeToCanvas(droppedElement, position);               
+                this._addInstanceToCanvas(droppedElement, position);               
                 this._canvasInstances.set(droppedElement.getUri(), droppedElement);
                 this._description.addScreen(droppedElement.getUri(), droppedElement.getPosition());
                 this._refreshReachability();
@@ -126,7 +126,7 @@ var ScreenflowDocument = Class.create(PaletteDocument,
                 break;
                 
             case PrePostInstance:
-                this._addNodeToCanvas(droppedElement, position);
+                this._addInstanceToCanvas(droppedElement, position);
                 droppedElement.setChangeHandler(this._onPrePostChange.bind(this));
                 this._setSelectedElement(droppedElement);
                 break;
@@ -542,7 +542,7 @@ var ScreenflowDocument = Class.create(PaletteDocument,
      * Adds the instance node to the canvas
      * @private
      */
-    _addNodeToCanvas: function(/** ComponentInstance */ instance, /** Object */ position) {
+    _addInstanceToCanvas: function(/** ComponentInstance */ instance, /** Object */ position) {
         var node = instance.getView().getNode();
         this.getNode().appendChild(node);
         node.setStyle({
@@ -551,6 +551,7 @@ var ScreenflowDocument = Class.create(PaletteDocument,
             'position': 'absolute'
         });
         instance.setEventListener(this);
+        instance.enableDragNDrop(this, [this]);
     },
     
     /**
@@ -566,16 +567,14 @@ var ScreenflowDocument = Class.create(PaletteDocument,
         
         plan.getPlanElements().each(function(screenDescription) {
             if (!this._canvasInstances.get(screenDescription.uri)) {
-                var screen = new ScreenInstance(screenDescription, 
-                                                [this], 
-                                                this._inferenceEngine);
+                var screen = new ScreenInstance(screenDescription,
+                        this._inferenceEngine);
                 
                 this._canvasInstances.set(screen.getUri(), screen);
                 this._description.addScreen(screen.getUri(), screen.getPosition());
-                screen.getDragHandler().initializeDragnDropHandlers();
                 screen.onFinish(true);
                 
-                this._addNodeToCanvas(screen, screenPosition);
+                this._addInstanceToCanvas(screen, screenPosition);
                 //Incrementing the screen position for the next screen
                 screenPosition.left += 108; // Screen size=100 + margin=6 + border=2
             }  

@@ -65,6 +65,7 @@ var GVSSingleton = function(){
             
             this._dialogs.set("addScreen", new AddScreenDialog());
             this._dialogs.set("newScreenflow", new NewScreenflowDialog());
+            //this._dialogs.set("newScreen", new ScreenDialog());
             this._dialogs.set("preferences", new PreferencesDialog());
             
         },

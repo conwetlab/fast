@@ -147,7 +147,6 @@ h4{
     left: 0px;
     right: 0px;
     bottom: 0px;
-    overflow: auto;
     text-align:center;
 }
 .documentTitle {
@@ -155,6 +154,13 @@ h4{
     margin: 5px;
     color: #243C5F;
     font-weight: bold;
+}
+.canvas .view {
+    margin: 0px;
+}
+
+.domainConcept .fact {
+    margin: 0px;
 }
 
 /******************
@@ -257,7 +263,6 @@ h4{
 .dropArea {
     position:absolute;
     border: 2px dotted #AAA;
-    overflow: auto;
 }
 .dropArea.form {
     height: 20%;
@@ -291,6 +296,9 @@ h4{
     width: 10%;
 }
 
+.WireIt-Terminal {
+    background: none !important;
+}
 
 /******************
  * deployment     *

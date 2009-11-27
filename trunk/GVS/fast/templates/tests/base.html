@@ -10,6 +10,12 @@
         <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}js/lib/dojo/dojo/resources/dojo.css" />
         <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}style/gvs.css" />
         
+        <!-- WireIt -->
+        <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}js/lib/wireit/lib/yui/fonts/fonts-min.css" /> 
+        <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}js/lib/wireit/lib/yui/reset/reset-min.css" />
+        <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}js/lib/wireit/css/WireIt.css" />
+        
+        
 
         <script type="text/javascript">
         /* <![CDATA[ */
@@ -32,7 +38,18 @@
         
         <script type="text/javascript" src="{{ MEDIA_URL }}js/lib/prototype/prototype.js"></script>
         <script type="text/javascript" src="{{ MEDIA_URL }}js/lib/prototype/prototype.improvements.js"></script>  
+
+        <!-- Excanvas -->
+        <!--[if IE]><script type="text/javascript" src="./WireIt-0.5.0/lib/excanvas.js"></script><![endif]-->
         
+        <!-- WireIt -->
+        <script type="text/javascript" src="{{ MEDIA_URL }}js/lib/wireit/lib/yui/utilities/utilities.js"></script>
+        <script type="text/javascript" src="{{ MEDIA_URL }}js/lib/wireit/js/WireIt.js"></script>
+        <script type="text/javascript" src="{{ MEDIA_URL }}js/lib/wireit/js/Layer.js"></script>
+        <script type="text/javascript" src="{{ MEDIA_URL }}js/lib/wireit/js/Container.js"></script>      
+        <script type="text/javascript" src="{{ MEDIA_URL }}js/lib/wireit/js/CanvasElement.js"></script>
+        <script type="text/javascript" src="{{ MEDIA_URL }}js/lib/wireit/js/Wire.js"></script>
+        <script type="text/javascript" src="{{ MEDIA_URL }}js/lib/wireit/js/Terminal.js"></script>      
         
         <!-- Miscelaneous utilities -->
         <script type="text/javascript" 
@@ -43,6 +60,8 @@
             src="{{ MEDIA_URL }}js/gvs/utils/Utils.js"></script>
         <script type="text/javascript"
             src="{{ MEDIA_URL }}js/gvs/utils/Logger.js"></script>
+        <script type="text/javascript" 
+            src="{{ MEDIA_URL }}js/gvs/utils/Geometry.js"></script>
         
         <!-- Constants -->
         <script type="text/javascript"

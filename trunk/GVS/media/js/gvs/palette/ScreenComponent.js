@@ -19,6 +19,7 @@ var ScreenComponent = Class.create(PaletteComponent,
     /**
      * Creates a new View instance for the component
      * @type BuildingBlockView
+     * @private
      * @override
      */
     _createView: function () {
@@ -28,10 +29,11 @@ var ScreenComponent = Class.create(PaletteComponent,
     /**
      * Creates a new screen to be dragged.
      * @type ScreenInstance
+     * @private
      * @override
      */
     _createInstance: function () {
-        return new ScreenInstance(this._buildingBlockDescription, this._dropZones, this._inferenceEngine);
+        return new ScreenInstance(this._buildingBlockDescription, this._inferenceEngine);
     },
     
     /**

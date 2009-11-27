@@ -7,8 +7,8 @@ var PrePostInstance = Class.create(ComponentInstance,
      * @extends ComponentInstance
      */
     initialize: function($super, /** DomainConceptDescription */ domainConceptDescription, 
-            /** Array */ dropZones, /** InferenceEngine */ inferenceEngine) {
-        $super(domainConceptDescription, dropZones, inferenceEngine);
+            /** InferenceEngine */ inferenceEngine) {
+        $super(domainConceptDescription, inferenceEngine);
         
         /**
          * Uri of the pre or post in the catalogue
@@ -55,6 +55,20 @@ var PrePostInstance = Class.create(ComponentInstance,
          * @type String
          */
         this._type = null;
+        
+        /**
+         * Terminal for screen design
+         * @type Terminal
+         * @private 
+         */
+        this._terminal = null;
+        
+        /**
+         * Area in which it has been dropped
+         * @type Area
+         * @private
+         */
+        this._area = null;
     },
 
     // **************** PUBLIC METHODS **************** //
@@ -128,6 +142,13 @@ var PrePostInstance = Class.create(ComponentInstance,
     },
     
     /**
+     * Set the type in pre | post
+     */
+    setType: function(/** String */ type) {
+        this._type = type;    
+    },
+    
+    /**
      * Due to the slopy catalogue implementation, uri changes can
      * be notified via handler.
      * @public
@@ -161,6 +182,46 @@ var PrePostInstance = Class.create(ComponentInstance,
     },
     
     /**
+     * Sets the area 
+     */
+    setArea: function(/** Area */ area) {
+        area.addScrollListener(this);
+    },
+    
+    /**
+     * Creates the terminal
+     */
+    createTerminal: function(/** (Optional) Function */ handler) {
+        var options = {
+            'direction':[],
+            'offsetPosition': {},
+            'wireConfig': {
+                'drawingMethod': 'arrows'
+            }
+        };
+        if (this._type == 'pre') {
+            options.alwaysSrc = true;
+            options.direction = [1,0];
+            options.offsetPosition = {
+                'top': 0, 
+                'left': 10
+            };
+        } else {
+            options.direction = [-1,0];
+            options.offsetPosition = {
+                'top': 0, 
+                'left': -10
+            };   
+        }
+        
+        var areaNode = this._view.getNode().parentNode;
+        this._terminal = new Terminal(this._view.getNode(), areaNode, options, "screen", this._buildingBlockDescription.id); 
+        if (this._type == 'pre') {
+            this._terminal.eventAddWire.subscribe(handler);
+        }
+    },
+    
+    /**
      * Destroy the instance
      * @override
      */
@@ -169,7 +230,37 @@ var PrePostInstance = Class.create(ComponentInstance,
         if (this._uri && removeFromServer) {
             this._removeFromServer(this._uri, this._type);
         }
+        if (this._terminal) {
+            this._terminal.destroy();
+        } 
+        if (this._area) {
+            this._area.removeScrollListener();
+        }
     },
+    
+    /**
+     * On position update
+     * @override
+     */
+    onUpdate: function(/** Number */ x, /** Number */ y) {
+        if (this._terminal) {
+            this._terminal.updatePosition();
+        }
+    },
+    /**
+     * @override
+     */
+    onFinish: function($super, changingZone) {
+        $super(changingZone);
+        this.onUpdate();
+    }, 
+    /**
+     * @override
+     */
+    scroll: function () {
+        this.onUpdate();
+    },
+    /**
 
     // **************** PRIVATE METHODS **************** //
     /**

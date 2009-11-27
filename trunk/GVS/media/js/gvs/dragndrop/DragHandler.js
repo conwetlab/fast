@@ -14,10 +14,10 @@ var DragHandler = Class.create(
      *       * Array accepts()
      * @constructs
      */
-    initialize: function (/** DragSource */ dragSource, /** Array */ dropZones) {
+    initialize: function (/** DragSource */ dragSource) {
 
         /**
-         * A function returning objects to be dragged.
+         * An object returning objects to be dragged.
          * @type DragSource
          * @private
          */
@@ -29,44 +29,48 @@ var DragHandler = Class.create(
          * @private
          */
         this._draggedObject = null;
+        
+        /**
+         * Zone from which the dragsource is dragged.
+         * It can be null.
+         * @type DropZone
+         * @private
+         */        
+        this._initialDropZone = null;
 
         /**
-         * Valid Zones to drop the dragged object
+         * Valid Zones to drop the dragged object, plus their position
          * @type Array
          * @private
          */
-        this._dropZones = dropZones;
-
-        /**
-         * Hash table with the initial area (container, 
-         * x-position and y-position of the draggedObject)
-         * @type Hash
-         * @private
-         */        
-        this._initialArea = null;
-
-        // Aux data for position calculation
-        this._xStart = 0;
-        this._yStart = 0;
-        this._x;
-        this._y;
+        this._dropZonesInfo = new Array();
+        
 
         // Wrappers to the event handlers
-        this._bindedStartDrag = this._startDrag.bind(this);
-        this._bindedUpdate = this._update.bind(this);
-        this._bindedEndDrag = this._endDrag.bind(this);
+        this._boundedStartDrag = this._startDrag.bind(this);
+        this._boundedUpdate = this._update.bind(this);
+        this._boundedEndDrag = this._endDrag.bind(this);
     },
     
 
     /**
-     * Initializes the drag'n'drop handlers.
-     * @public
+     * Initializes the drag'n'drop handlers and sets the drop zones
      */
-    initializeDragnDropHandlers: function () {
+    enableDragNDrop: function (/** DropZone */ currentZone, /** Array */ validDropZones) {
 
+        this._initialDropZone = currentZone;
+        this._initialDropZonePosition = null;
+        
+        validDropZones.each(function(dropZone) {
+            this._dropZonesInfo.push({
+                'dropZone': dropZone,
+                'position': null
+            }); 
+        }.bind(this));
+        
         // add mousedown event listener
         Event.observe (this._dragSource.getHandlerNode(), "mousedown",
-                this._bindedStartDrag , true);
+                this._boundedStartDrag , true);
     },
 
 
@@ -79,52 +83,68 @@ var DragHandler = Class.create(
      */
     _startDrag: function(e) {   
         e = e || window.event; // needed for IE
+        
+        // Aux data for position calculation
+        this._mouseXStart = 0;
+        this._mouseYStart = 0;
+        this._x;
+        this._y;
+        this._offLimitX = 0;
+        this._offLimitY = 0;
 
         // Only attend to left button events
         // (or right button for left-handed persons)
-        if (!BrowserUtils.isLeftButton(e.button))
-            return false;
+        if (!BrowserUtils.isLeftButton(e.button)) {
+            return false;    
+        }
         
         // An object is retrieved to be dragged
-        this._draggedObject = this._dragSource.getDraggableObject();
+        this._draggedObject = this._dragSource.getDraggableObject();        
+        var draggableNode = this._draggedObject.getHandlerNode();
         
-        var draggableElement = this._draggedObject.getHandlerNode();
+        this._initialArea = draggableNode.parentNode;
         
-        var parentNode = draggableElement.parentNode;
-        
-        this._initialArea = parentNode;
+        // Set the dropZones areas in coordinates
+        this._dropZonesInfo.each (function(dropZoneInfo) {
+            var dropZoneNode = dropZoneInfo.dropZone.getNode();
+            dropZoneInfo.position = Geometry.getNodeRectangle(dropZoneNode);
+        }.bind(this));
+        if (this._initialDropZone) {
+            var initialDropZoneNode = this._initialDropZone.getNode();
+            this._initialDropZonePosition = Geometry.getNodeRectangle(initialDropZoneNode);
+        }
 
         // disable context menu and text selection
         document.oncontextmenu = function() { return false; }; 
         document.onmousedown = function() { return false; };
         document.onselectstart =  function() { return false; };
 
-        Event.stopObserving (this._dragSource.getHandlerNode(), 'mousedown',
-                this._bindedStartDrag, true);
+        Event.stopObserving (draggableNode, 'mousedown',
+                this._boundedStartDrag, true);
 
-        this._dragSource.onStart();
+        this._draggedObject.onStart();
         
        
-        this._xStart = parseInt(e.screenX);
-        this._yStart = parseInt(e.screenY);
-        this._y = draggableElement.offsetTop;
-        this._x = draggableElement.offsetLeft;
-        draggableElement.style.top  = this._y + 'px';
-        draggableElement.style.left = this._x + 'px';
-        Event.observe (document, 'mouseup',   this._bindedEndDrag, true);
-        Event.observe (document, 'mousemove', this._bindedUpdate, true);
+        this._mouseXStart = parseInt(e.screenX);
+        this._mouseYStart = parseInt(e.screenY);
+        this._y = draggableNode.offsetTop;
+        this._x = draggableNode.offsetLeft;
+        /*draggableNode.style.top  = this._y + 'px';
+        draggableNode.style.left = this._x + 'px';*/
+        Event.observe (document, 'mouseup',   this._boundedEndDrag, true);
+        Event.observe (document, 'mousemove', this._boundedUpdate, true);
 
-        var objects = document.getElementsByTagName('object');
+        /*var objects = document.getElementsByTagName('object');
         for (var i = 0; i < objects.length; i++) {
             if (objects[i].contentDocument) {
                 Event.observe(objects[i].contentDocument, 'mouseup' ,
-                        this._bindedEndDrag, true);
+                        this._boundedEndDrag, true);
                 Event.observe(objects[i].contentDocument, 'mousemove', 
-                        this._bindedUpdate, true);
+                        this._boundedUpdate, true);
             }
-        }
+        }*/
         // Warning: magic number
-        draggableElement.style.zIndex = '200'; 
+        draggableNode.style.zIndex = '200'; 
         
         return false;
     },
@@ -136,27 +156,14 @@ var DragHandler = Class.create(
      */
     _update: function (e) {
         e = e || window.event; // needed for IE
+        
+        var mouseX = parseInt(e.screenX);
+        var mouseY = parseInt(e.screenY);            
+        
+        this._updateNodePosition(mouseX, mouseY);
+        this._updateNodeStatus(this._isValidPosition());
 
-        var screenX = parseInt(e.screenX);
-        var screenY = parseInt(e.screenY)
-        var xDelta = this._xStart - screenX;
-        var yDelta = this._yStart - screenY;
-        this._xStart = screenX;
-        this._yStart = screenY;
-    
-        
-        var draggableElement = this._draggedObject.getHandlerNode();
-        // FIXME: Fix d&d when scrolling
-        this._y = this._y - yDelta /*- ((yDelta > 0) ? Math.min(10, draggableElement.parentNode.scrollTop) : 0)*/;
-        this._x = this._x - xDelta /*- ((xDelta > 0) ? Math.min(10, draggableElement.parentNode.scrollLeft) : 0)*/;
-
-        draggableElement.style.top = this._y + 'px';
-        draggableElement.style.left = this._x + 'px';
-        
-        var isValid = this._isValidPosition()
-        this._updateNodeStatus(isValid);
-        
-        this._dragSource.onUpdate(this._x, this._y);
+        this._draggedObject.onUpdate(this._x, this._y);
     },
     
 
@@ -172,81 +179,72 @@ var DragHandler = Class.create(
         if (!BrowserUtils.isLeftButton(e.button))
             return false;
 
-        Event.stopObserving (document, "mouseup",   this._bindedEndDrag, true);
-        Event.stopObserving (document, "mousemove", this._bindedUpdate,  true);
+        Event.stopObserving (document, "mouseup",   this._boundedEndDrag, true);
+        Event.stopObserving (document, "mousemove", this._boundedUpdate,  true);
 
-        var objects = document.getElementsByTagName("object");
+        /*var objects = document.getElementsByTagName("object");
         for (var i = 0; i < objects.length; i++) {
             if (objects[i].contentDocument) {
                 Event.stopObserving(objects[i].contentDocument, "mouseup",
-                        this._bindedEndDrag, true);
+                        this._boundedEndDrag, true);
                 Event.stopObserving(objects[i].contentDocument, "mousemove",
-                        this._bindedUpdate,  true);
+                        this._boundedUpdate,  true);
             }
-        }
+        }*/
 
-        var draggableElement = this._draggedObject.getHandlerNode();
-        draggableElement.style.zIndex = "";
+        var draggableNode = this._draggedObject.getHandlerNode();
+        draggableNode.style.zIndex = "";
 
         //Remove element transparency        
         this._updateNodeStatus(true);
         
-        var zone = this._dropZones.detect(function(zone){
-            return this._initialArea == zone.getNode(); 
-        }.bind(this));
-        var changingZone = (zone == undefined);
-        
-        this._dragSource.onFinish(changingZone);
-        if(this._draggedObject != null){
-            this._draggedObject.onFinish(changingZone);
-        }
-        
-        if (changingZone) {
+        // When changing zone, try to get the draggable accepted by the dropZone
+        if (this._isChangingZone()) {
             var dropZone = this._inWhichDropZone();
             var accepted;
             if (dropZone) {
                 var dropZonePosition = Utils.getPosition(dropZone.getNode());
                 var dropPosition = {
-                    'left': draggableElement.offsetLeft - dropZonePosition.left,
-                    'top': draggableElement.offsetTop - dropZonePosition.top
+                    'left': draggableNode.offsetLeft - dropZonePosition.left,
+                    'top': draggableNode.offsetTop - dropZonePosition.top
                 };
-                this._initialArea.removeChild(draggableElement);
+                this._initialArea.removeChild(draggableNode);
                 accepted = dropZone.drop(this._draggedObject, dropPosition);                  
             } else {
-                this._initialArea.removeChild(draggableElement);
+                this._initialArea.removeChild(draggableNode);
                 accepted = false;
             }
               
             if (!accepted) {
-                // Destroy the element (it is a copy or it is invalid)
+                // Destroy the element (it is an invalid copy)
                 this._draggedObject.destroy();
-            } 
-        } else { // Same zone
-            if (!this._isValidPosition()) {
-                var left = (draggableElement.offsetLeft >= 0) ? draggableElement.offsetLeft : 1;
-                var top = (draggableElement.offsetTop >= 0) ? draggableElement.offsetTop : 1;
-                
-                // Put the element in a correct position
-                draggableElement.setStyle({
-                    'left': left + "px",
-                    'top': top + "px"
-                });
             } 
         }
     
         // Reenable context menu and text selection
         document.onmousedown = null;
         document.oncontextmenu = null;
-        document.onselectstart = null;
-        
+        document.onselectstart = null;        
         Event.observe (this._dragSource.getHandlerNode(), "mousedown",
-                this._bindedStartDrag, true);
-       
+                this._boundedStartDrag, true);
+        
 
+        this._draggedObject.onFinish(this._isChangingZone());
         this._draggedObject = null;
+
         return false;
     },
-  
+    
+    /**
+     * This function detects if the node is going to change from one zone to 
+     * another
+     * @private
+     * @type Boolean
+     */
+    _isChangingZone: function() {
+       return (this._initialDropZone == null);
+    },
+    
     
      /**
      * This function calculates whether the element
@@ -256,70 +254,74 @@ var DragHandler = Class.create(
      * @type Boolean
      */
     _isValidPosition: function(){
-        var result;
-        for (var i = 0; i < this._dropZones.length; i++) {
-            result = true;
-            var zone = this._dropZones[i];
-            var node = zone.getNode();
-            var draggableElement = this._draggedObject.getHandlerNode();
-            // If we are moving an element from one zone to another...
-            if (this._initialArea != node) {
-                //Check if we are over a dropZone
-                var dropZonePosition = Utils.getPosition(node);
-                result = result && (draggableElement.offsetLeft >= dropZonePosition.left);
-                result = result && (draggableElement.offsetTop >= dropZonePosition.top);
-                result = result && (draggableElement.offsetLeft <= 
-                        (dropZonePosition.left + node.offsetWidth));
-                result = result && (draggableElement.offsetTop <= 
-                        (dropZonePosition.top + node.offsetHeight));
-            }
-            else {
-                //It is already inside a drop zone, so the
-                //Position is relative to this zone
-                result = result && (draggableElement.offsetLeft >= 0);
-                result = result && (draggableElement.offsetTop >= 0);
-                result = result && (draggableElement.offsetLeft <= node.offsetWidth);
-                result = result && (draggableElement.offsetTop <= node.offsetHeight);
-            }
-            
-            result = result && this._dragSource.isValidPosition(this._x,this._y);
-            if (result) {
-                break;
-            } 
+        if (this._isChangingZone()) {
+            return (this._inWhichDropZone() != null);
+        } else {
+            return true;   
         }
-        
-        return result;
     },
-
-    /**
+    
+     /**
      * This function calculates the exact dropZone the element
      * is 
      * @private
      * @type DropZone
      */
     _inWhichDropZone: function(){
-        var result;
-        var resultZone = null;
-        for (var i=0; i < this._dropZones.length; i++) {
-            result = true;
-            var zone = this._dropZones[i];
-            var node = zone.getNode();
-            var draggableElement = this._draggedObject.getHandlerNode();
-            var dropZonePosition = Utils.getPosition(node);
-            result = result && (draggableElement.offsetLeft >= dropZonePosition.left);
-            result = result && (draggableElement.offsetTop >= dropZonePosition.top);
-            result = result && (draggableElement.offsetLeft <= 
-                    (dropZonePosition.left + node.offsetWidth));
-            result = result && (draggableElement.offsetTop <= 
-                    (dropZonePosition.top + node.offsetHeight));
-
-            if (result) {
-                resultZone = zone; 
-                break;
+        for (var i=0; i < this._dropZonesInfo.length; i++) { 
+            if (Geometry.contains(this._dropZonesInfo[i].position, 
+                        this._getDraggableNodeRectangle())) {
+                return this._dropZonesInfo[i].dropZone;
             } 
         }       
-        return resultZone;
+        return null;
     }, 
+    /**
+     * @private
+     * @type Object
+     */
+    _getDraggableNodeRectangle: function () {
+        var draggableNode = this._draggedObject.getHandlerNode();
+        return {
+            'top': draggableNode.offsetTop,
+            'left': draggableNode.offsetLeft,
+            'bottom': draggableNode.offsetTop + draggableNode.clientHeight,
+            'right': draggableNode.offsetLeft + draggableNode.clientWidth
+        }; 
+    },
+    
+    /**
+     * This function updates the position of a node
+     * regarding the absolute position of the mouse
+     * @private
+     */
+    _updateNodePosition: function(/** Number */ x, /** Number */ y) {
+        var xDelta = x - this._mouseXStart;
+        var yDelta = y - this._mouseYStart;
+        this._mouseXStart = x;
+        this._mouseYStart = y;
+        
+        var node = this._draggedObject.getHandlerNode();
+        if (!this._isChangingZone()) {
+            var ranges = Geometry.dragRanges(this._initialDropZonePosition,
+                    this._getDraggableNodeRectangle());
+            
+            var effectiveUpdateX = Geometry.updateAxis(ranges.x, xDelta, this._offLimitX);
+            xDelta = effectiveUpdateX.delta;
+            this._offLimitX = effectiveUpdateX.offLimit;  
+
+            var effectiveUpdateY = Geometry.updateAxis(ranges.y, yDelta, this._offLimitY);
+            yDelta = effectiveUpdateY.delta;
+            this._offLimitY = effectiveUpdateY.offLimit;
+        }
+        
+        this._y = this._y + yDelta;
+        this._x = this._x + xDelta;
+
+        node.style.top = this._y + 'px';
+        node.style.left = this._x + 'px';
+    },
+
      
      /**
      * This function updates node interface,

@@ -8,15 +8,8 @@ var ComponentInstance = Class.create(DragSource,
      * @extends DragSource
      */ 
     initialize: function($super, /**BuildingBlockDescription*/ buildingBlockDescription, 
-            /** Array */ dropZones, /** InferenceEngine */ inferenceEngine) {
+             /** InferenceEngine */ inferenceEngine) {
         $super();
-
-        /**
-         * Handles the drag'n'drop stuff
-         * @type DragHandler
-         * @private
-         */
-        this._dragHandler = new DragHandler(this, dropZones);
         
         /** 
          * BuildingBlock description this class is instance of
@@ -91,15 +84,6 @@ var ComponentInstance = Class.create(DragSource,
      */
     getUri: function() {
         return this._buildingBlockDescription.uri;    
-    },
-    
-    /**
-     * Returns the handler that manages the drag-n-drop operation.
-     * @type DOMNode
-     * @override
-     */
-    getDragHandler: function() {
-        return this._dragHandler;
     },
 
     /**
@@ -202,6 +186,22 @@ var ComponentInstance = Class.create(DragSource,
                 this._onDoubleClick(event);
             }.bind(this),'dblclick');
         }
+    },
+    
+    /**
+     * Sets the area in which the instance has been dropped
+     */
+    setArea: function (/** Area */ area) {
+        //Do nothing
+    },
+    
+    /**
+     * Called when the scroll has been moved
+     * Implementing Scroll Listener interface
+     * 
+     */
+    scroll: function () {
+        //Do nothing
     },
 
     // **************** PRIVATE METHODS **************** //

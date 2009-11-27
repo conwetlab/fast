@@ -1,0 +1,128 @@
+{% extends "tests/base.html" %}
+{% block classpath %}
+        <script type="text/javascript" 
+            src="{{ MEDIA_URL }}js/gvs/dragndrop/DragHandler.js"></script>
+        <script type="text/javascript" 
+            src="{{ MEDIA_URL }}js/gvs/dragndrop/DragSource.js"></script>
+        <script type="text/javascript"
+            src="{{ MEDIA_URL }}js/gvs/dragndrop/Area.js"></script>
+        
+        <script type="text/javascript"
+            src="{{ MEDIA_URL }}js/gvs/catalogue/BuildingBlockDescription.js"></script>
+        <script type="text/javascript"
+            src="{{ MEDIA_URL }}js/gvs/catalogue/ScreenDescription.js"></script>
+        <script type="text/javascript"
+            src="{{ MEDIA_URL }}js/gvs/catalogue/DomainConceptDescription.js"></script>
+            
+        <script type="text/javascript" 
+            src="{{ MEDIA_URL }}js/gvs/palette/PaletteComponent.js"></script>
+        <script type="text/javascript" 
+            src="{{ MEDIA_URL }}js/gvs/palette/ScreenComponent.js"></script>
+        <script type="text/javascript" 
+            src="{{ MEDIA_URL }}js/gvs/palette/DomainConceptComponent.js"></script>
+            
+        <!-- Building Block view classes -->
+        <script type="text/javascript" 
+            src="{{ MEDIA_URL }}js/gvs/views/BuildingBlockView.js"></script>
+        <script type="text/javascript" 
+            src="{{ MEDIA_URL }}js/gvs/views/ScreenView.js"></script>
+        <script type="text/javascript" 
+            src="{{ MEDIA_URL }}js/gvs/views/DomainConceptView.js"></script>
+        <script type="text/javascript"
+            src="{{ MEDIA_URL }}js/gvs/views/Terminal.js"></script>
+            
+        <!-- Fact classes -->
+        <script type="text/javascript" 
+            src="{{ MEDIA_URL }}js/gvs/facts/Fact.js"></script>
+        <script type="text/javascript" 
+            src="{{ MEDIA_URL }}js/gvs/facts/FactFactory.js"></script>  
+        <script type="text/javascript" 
+            src="{{ MEDIA_URL }}js/gvs/facts/FactIcon.js"></script>
+            
+        <!-- Component instance classes -->
+        <script type="text/javascript"
+            src="{{ MEDIA_URL }}js/gvs/instances/ComponentInstance.js"></script>
+        <script type="text/javascript"
+            src="{{ MEDIA_URL }}js/gvs/instances/ScreenInstance.js"></script>
+        <script type="text/javascript"
+            src="{{ MEDIA_URL }}js/gvs/instances/PrePostInstance.js"></script>
+
+        <script type="text/javascript">
+            var DumbInferenceEngine = Class.create({
+                addReachabilityListener: function(){},
+                removeReachabilityListener: function(){}
+            });
+            
+            function drop(area, instance) {
+                var node = instance.getView().getNode();
+                area.getNode().appendChild(node);      
+                var canvasPosition = Utils.getPosition(area.getNode());
+                node.setStyle({
+                    'left': parseInt(node.offsetLeft - canvasPosition.left) + "px",
+                    'top': parseInt(node.offsetTop - canvasPosition.top) + "px"
+                });
+                if (area.getNode().className.include("pre")) {
+                    instance.setType("pre");
+                    instance.createTerminal(pipeAdded);
+                } else if (area.getNode().className.include("post")) {
+                    instance.setType("post");
+                    instance.createTerminal();
+                }
+                instance.enableDragNDrop(area,[area]);
+                return true;              
+            }
+            
+            function pipeAdded (event, params) {
+                var wire = params[0];
+                if (wire.terminal1.parentEl && wire.terminal2.parentEl) {
+                    console.log ('Wire Added')
+                    console.log ('  Source:' + wire.terminal1.getResourceId());
+                    console.log ('       +:' + wire.terminal1.getConditionId());
+                    console.log ('  Destination:' + wire.terminal2.getResourceId());
+                    console.log ('            +:' + wire.terminal2.getConditionId());
+                }
+            }
+        </script>
+{% endblock %}
+
+{% block onload %}
+        
+        
+        // Dropping areas      
+        var preArea = new Area('pre', $A([Constants.BuildingBlock.DOMAIN_CONCEPT]), drop);
+        var postArea = new Area('post', $A([Constants.BuildingBlock.DOMAIN_CONCEPT]), drop);
+        
+        var areas = $A([preArea, postArea]);
+        
+        // Adding the dropping areas to the document
+        areas.each(function(area) {
+            $("canvas").appendChild(area.getNode());
+        }.bind(this));
+        
+        var inferenceEngine = new DumbInferenceEngine();
+        
+        
+        var dcDescription = new DomainConceptDescription({
+            "http://purl.oclc.org/fast/ontology/gadget#hasTag": [
+              "amazon",
+              "search"
+            ],
+            "http://www.w3.org/2000/01/rdf-schema#label": "Search criteria",
+            "uri": "http://aws.amazon.com/AWSECommerceService#SearchCriteria",
+            "id": "someId"
+          });
+        var domainConcept = new DomainConceptComponent(dcDescription, [preArea, postArea], inferenceEngine);
+        $("instances").appendChild(domainConcept.getNode());
+        
+        
+{% endblock %}
+
+{% block test_body %}
+<h1>Test Drag'n'Drop</h1>
+<h2>Dragables</h2>
+<div id="instances" class="paletteContent" style="overflow:hidden"></div>
+<h2>Drop zones</h2>
+<div style="height: 300px; width:80%;position:relative; overflow: auto">
+    <div id="canvas" class="document screendoc canvas" ></div>
+</div>
+{% endblock %}

@@ -6,11 +6,18 @@
         <title>FAST: Gadget Visual Storyboard</title>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
         
+        <link rel="shortcut icon" type="image/x-icon" href="{{ MEDIA_URL }}images/gui/favicon.ico" />
+        
+        <!-- CSS -->
         <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}js/lib/dojo/dijit/themes/soria/soria.css" />
         <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}js/lib/dojo/dojo/resources/dojo.css" />
         <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}style/gvs.css" />
         
-        <link rel="shortcut icon" type="image/x-icon" href="{{ MEDIA_URL }}images/gui/favicon.ico" />
+        <!-- WireIt -->
+        <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}js/lib/wireit/lib/yui/fonts/fonts-min.css" /> 
+        <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}js/lib/wireit/lib/yui/reset/reset-min.css" />
+        <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}js/lib/wireit/css/WireIt.css" />      
+        
 
         <script type="text/javascript">
         /* <![CDATA[ */
@@ -24,21 +31,36 @@
         /* ]]> */
         </script>
         
+        <!-- General utilities -->
         <script type="text/javascript" src="{{ MEDIA_URL }}js/lib/utils/iefixes.js"></script>
+        <script type="text/javascript" src="{{ MEDIA_URL }}js/lib/utils/json2.js"></script>    
+        <script type="text/javascript" src="{{ MEDIA_URL }}js/lib/utils/shortcut.js"></script>
+               
+
+        <!-- Excanvas -->
+        <!--[if IE]><script type="text/javascript" src="./WireIt-0.5.0/lib/excanvas.js"></script><![endif]-->
         
+        <!-- WireIt -->
+        <script type="text/javascript" src="{{ MEDIA_URL }}js/lib/wireit/lib/yui/utilities/utilities.js"></script>
+        <script type="text/javascript" src="{{ MEDIA_URL }}js/lib/wireit/js/WireIt.js"></script>
+        <script type="text/javascript" src="{{ MEDIA_URL }}js/lib/wireit/js/Layer.js"></script>
+        <script type="text/javascript" src="{{ MEDIA_URL }}js/lib/wireit/js/Container.js"></script>      
+        <script type="text/javascript" src="{{ MEDIA_URL }}js/lib/wireit/js/CanvasElement.js"></script>
+        <script type="text/javascript" src="{{ MEDIA_URL }}js/lib/wireit/js/Wire.js"></script>
+        <script type="text/javascript" src="{{ MEDIA_URL }}js/lib/wireit/js/Terminal.js"></script>
+        
+        <!-- Dojo -->
         <script type="text/javascript" src="{{ MEDIA_URL }}js/lib/dojo/dojo/dojo.js"></script>
         
-        <script type="text/javascript" src="{{ MEDIA_URL }}js/lib/utils/json2.js"></script>
-        
-        <script type="text/javascript" src="{{ MEDIA_URL }}js/lib/utils/shortcut.js"></script>
-        
+        <!-- Prototype -->
         <script type="text/javascript" src="{{ MEDIA_URL }}js/lib/prototype/prototype.js"></script>
         <script type="text/javascript" src="{{ MEDIA_URL }}js/lib/prototype/prototype.improvements.js"></script>  
-
-        <!-- graceful degradation of firebugs console obj --> 
-        <script type="text/javascript" src="{{ MEDIA_URL }}js/lib/utils/firebugx.js"></script>
-
-        <script type="text/javascript" src="{{ MEDIA_URL }}js/gvs/utils/BrowserChecker.js"></script>
+        
+        <!-- Browser checker -->
+        <script type="text/javascript" src="{{ MEDIA_URL }}js/gvs/utils/BrowserChecker.js"></script> 
+    
+        <!-- Graceful degradation of firebug console --> 
+        <script type="text/javascript" src="{{ MEDIA_URL }}js/lib/utils/firebugx.js"></script>      
         
         <!-- URI constants -->
         <script type="text/javascript" language="javascript">
@@ -92,6 +114,7 @@
         <script type="text/javascript" 
             src="{{ MEDIA_URL }}js/gvs/catalogue/InferenceEngine.js"></script>
 
+        <!-- Factories -->
         <script type="text/javascript"
             src="{{ MEDIA_URL }}js/gvs/catalogue/factories/BuildingBlockFactory.js"></script>
         <script type="text/javascript"
@@ -105,6 +128,7 @@
         <script type="text/javascript"
             src="{{ MEDIA_URL }}js/gvs/catalogue/factories/ResourceFactory.js"></script>     
 
+        <!-- Sets -->
         <script type="text/javascript"
             src="{{ MEDIA_URL }}js/gvs/catalogue/sets/BuildingBlockSet.js"></script>
         <script type="text/javascript"
@@ -130,7 +154,7 @@
         <script type="text/javascript"
             src="{{ MEDIA_URL }}js/gvs/toolbar/ToolbarDropDown.js"></script>
 
-        <!-- Toolbar -->
+        <!-- Menu -->
         <script type="text/javascript"
             src="{{ MEDIA_URL }}js/gvs/menu/Menu.js"></script>
         <script type="text/javascript"
@@ -140,7 +164,7 @@
         <script type="text/javascript"
             src="{{ MEDIA_URL }}js/gvs/menu/SubMenu.js"></script>
 
-        <!-- Document classes -->
+        <!-- Documents -->
         <script type="text/javascript"
             src="{{ MEDIA_URL }}js/gvs/documents/AbstractDocument.js"></script>
         <script type="text/javascript"
@@ -155,7 +179,7 @@
             src="{{ MEDIA_URL }}js/gvs/documents/ScreenDocument.js"></script>
 
         
-        <!-- Fact classes -->
+        <!-- Facts -->
         <script type="text/javascript" 
             src="{{ MEDIA_URL }}js/gvs/facts/Fact.js"></script>
         <script type="text/javascript" 
@@ -163,7 +187,7 @@
         <script type="text/javascript" 
             src="{{ MEDIA_URL }}js/gvs/facts/FactIcon.js"></script>
 
-        <!-- Component instance classes -->
+        <!-- Component instances -->
         <script type="text/javascript"
             src="{{ MEDIA_URL }}js/gvs/instances/ComponentInstance.js"></script>
         <script type="text/javascript"
@@ -171,7 +195,7 @@
         <script type="text/javascript"
             src="{{ MEDIA_URL }}js/gvs/instances/PrePostInstance.js"></script>
 
-        <!-- Palette classes -->
+        <!-- Palette -->
         <script type="text/javascript" 
             src="{{ MEDIA_URL }}js/gvs/palette/Palette.js"></script>
         <script type="text/javascript" 
@@ -183,7 +207,7 @@
         <script type="text/javascript" 
             src="{{ MEDIA_URL }}js/gvs/palette/DomainConceptComponent.js"></script>
 
-        <!-- Building Block view classes -->
+        <!-- Building Block Views -->
         <script type="text/javascript" 
             src="{{ MEDIA_URL }}js/gvs/views/BuildingBlockView.js"></script>
         <script type="text/javascript" 
@@ -191,7 +215,7 @@
         <script type="text/javascript" 
             src="{{ MEDIA_URL }}js/gvs/views/DomainConceptView.js"></script>
 
-        <!-- Persistence Engine class -->
+        <!-- Persistence Engine -->
         <script type="text/javascript" 
             src="{{ MEDIA_URL }}js/gvs/persistenceEngine/PersistenceEngine.js"></script>
 
@@ -250,6 +274,8 @@
             src="{{ MEDIA_URL }}js/gvs/utils/Logger.js"></script>
         <script type="text/javascript"
             src="{{ MEDIA_URL }}js/gvs/utils/KeyPressRegistry.js"></script>
+        <script type="text/javascript" 
+            src="{{ MEDIA_URL }}js/gvs/utils/Geometry.js"></script>
                 
         <!-- Constants -->
         <script type="text/javascript"
@@ -301,6 +327,7 @@
                     dijit.byId("main").layout();
                 });
                 
+                // Handling navigator close
                 window.onbeforeunload = function(evt) {
                     // TODO: call the server and save whatever necessary
                     var saved = true;
@@ -317,10 +344,10 @@
                 }
                 
                 window.onunload = function() {
-                    //Do something
+                    // Do something
                 }               
             } else {
-                //IE
+                // IE
                 window.onload = function() {
                     document.getElementById("main").innerHTML = "";
                 }
@@ -345,8 +372,7 @@
         <![endif]-->
         <!-- Setting the layout of the page. --> 
         <div id="main" dojoType="dijit.layout.BorderContainer" 
-                        liveSplitters="true" design="headline" splitter="true" gutter="true">
-            
+                        liveSplitters="true" design="headline" splitter="true" gutter="true">           
             <!-- Header -->
             <div id="header" dojoType="dijit.layout.ContentPane" region="top">
                 <img src="{{ MEDIA_URL }}images/gui/fastLogo_small.png" class="fastLogo" alt="FAST Logo"/>
@@ -369,8 +395,7 @@
             <div dojoType="dijit.layout.TabContainer" id="documentContainer" region="center">
             </div> 
             <!-- end of Document area -->
-        </div>
-        
+        </div>       
     </body>
 </html>
 <!-- vim: set ts=4 sw=4 et:  -->

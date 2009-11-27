@@ -9,12 +9,6 @@ var PlanComponent = Class.create(DragSource,
     initialize: function($super,/** Array */ plan, /** DropZone */ dropZone, 
                         /** InferenceEngine */ inferenceEngine) {
         $super();
-        /**
-         * Handles the drag'n'drop stuff
-         * @type DragHandler
-         * @private
-         */
-        this._dragHandler = new DragHandler(this, [dropZone]);
         
         /**
          * Component and instance Drop zone 
@@ -53,7 +47,7 @@ var PlanComponent = Class.create(DragSource,
         this._node = this._view.getNode();
         
         
-        this._dragHandler.initializeDragnDropHandlers();
+        this.enableDragNDrop(null, [this._dropZone]);
     },
 
     // **************** PUBLIC METHODS **************** //
@@ -84,7 +78,7 @@ var PlanComponent = Class.create(DragSource,
      * @override
      */
     getDraggableObject: function() {
-        var instance = new PlanInstance (this._plan, [this._dropZone], this._inferenceEngine);
+        var instance = new PlanInstance (this._plan, this._inferenceEngine);
         var node = instance.getHandlerNode();
         dijit.byId("main").domNode.appendChild(node);
         node.setStyle({

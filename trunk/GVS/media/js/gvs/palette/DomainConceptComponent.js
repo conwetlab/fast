@@ -32,7 +32,7 @@ var DomainConceptComponent = Class.create(PaletteComponent,
      * @override
      */
     _createInstance: function () {     
-        return new PrePostInstance(this._buildingBlockDescription, this._dropZones, this._inferenceEngine);
+        return new PrePostInstance(this._buildingBlockDescription, this._inferenceEngine);
     },
     
     /**
