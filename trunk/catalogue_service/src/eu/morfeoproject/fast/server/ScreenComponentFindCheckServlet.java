@@ -224,10 +224,10 @@ public class ScreenComponentFindCheckServlet extends GenericServlet {
 				response.setStatus(HttpServletResponse.SC_OK);
 		} catch (JSONException e) {
 			e.printStackTrace();
-			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+			response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
 		} catch (NotFoundException e) {
 			e.printStackTrace();
-			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+			response.sendError(HttpServletResponse.SC_NOT_FOUND, e.getMessage());
 		}
 		logger.info("...Exiting FIND&CHECK operation");
 	}

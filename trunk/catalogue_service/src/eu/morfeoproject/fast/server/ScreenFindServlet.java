@@ -105,7 +105,7 @@ public class ScreenFindServlet extends GenericServlet {
 			response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
 		} catch (NotFoundException e) {
 			e.printStackTrace();
-			response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
+			response.sendError(HttpServletResponse.SC_NOT_FOUND, e.getMessage());
 		}
 		logger.info("...Exiting FIND operation");
 	}
