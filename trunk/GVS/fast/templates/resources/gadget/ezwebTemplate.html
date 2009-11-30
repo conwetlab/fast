@@ -23,7 +23,7 @@
         {# TODO: negative facts #}
         pre: [{% for pre in screen.preconditions %}
         			[{% for ands in pre %}
-						{pattern:'{{ ands.pattern }}', positive:true}{% if not forloop.last %}, {% endif %}
+						{pattern:'{{ ands.pattern }}', positive:{{ands.positive|lower}}}{% if not forloop.last %}, {% endif %}
 	  				{% endfor %}]{% if not forloop.last %},{% endif %}
         	  {% endfor %}]}{% if not forloop.last %},{% endif %}
 {% endfor %}

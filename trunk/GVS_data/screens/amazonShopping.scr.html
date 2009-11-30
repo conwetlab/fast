@@ -96,10 +96,9 @@
            	        new FastAPI.Request(url,{
                         'method':       'get',
                         'content':      'xml',
-                        'context':      this,
+                        'context':      shoppingCart,
                         'onSuccess':    shoppingCart.fetch
                     });
-                   	//FastAPI.getXML(url, this, shoppingCart.fetch);
 				}	
 			}
 			
@@ -139,10 +138,9 @@
                     new FastAPI.Request(url,{
                         'method':       'get',
                         'content':      'xml',
-                        'context':      this,
+                        'context':      shoppingCart,
                         'onSuccess':    shoppingCart.fetch
                     });
-                   	//FastAPI.getXML(url, this, shoppingCart.fetch);
 				}
 			}
 			
@@ -187,10 +185,9 @@
                 new FastAPI.Request(url,{
                     'method':       'get',
                     'content':      'xml',
-                    'context':      this,
+                    'context':      shoppingCart,
                     'onSuccess':    shoppingCart.addToList
                 });
-                //FastAPI.getXML(url, this, shoppingCart.addToList);
             }
             
             ShoppingCart.prototype.addToList = function (transport){

@@ -45,7 +45,7 @@ class BuildingBlock(models.Model):
         elif self.type == "operator":
             return cleanUrl(settings.CATALOGUE_URL) + "/operators"
         elif self.type == "resource":
-            return cleanUrl(settings.CATALOGUE_URL)  + "/resources"
+            return cleanUrl(settings.CATALOGUE_URL)  + "/services"
         else:
             return cleanUrl(settings.CATALOGUE_URL)
  

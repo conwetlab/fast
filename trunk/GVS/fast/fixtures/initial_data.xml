@@ -75,11 +75,6 @@
         <field to="contenttypes.contenttype" name="content_type" rel="ManyToOneRel">3</field>
         <field type="CharField" name="codename">delete_user</field>
     </object>
-    <object pk="28" model="auth.permission">
-        <field type="CharField" name="name">Can add building block</field>
-        <field to="contenttypes.contenttype" name="content_type" rel="ManyToOneRel">10</field>
-        <field type="CharField" name="codename">add_buildingblock</field>
-    </object>
     <object pk="46" model="auth.permission">
         <field type="CharField" name="name">Can add building block code</field>
         <field to="contenttypes.contenttype" name="content_type" rel="ManyToOneRel">16</field>
@@ -125,10 +120,10 @@
         <field to="contenttypes.contenttype" name="content_type" rel="ManyToOneRel">19</field>
         <field type="CharField" name="codename">add_uservote</field>
     </object>
-    <object pk="29" model="auth.permission">
-        <field type="CharField" name="name">Can change building block</field>
-        <field to="contenttypes.contenttype" name="content_type" rel="ManyToOneRel">10</field>
-        <field type="CharField" name="codename">change_buildingblock</field>
+    <object pk="58" model="auth.permission">
+        <field type="CharField" name="name">Can add user vote</field>
+        <field to="contenttypes.contenttype" name="content_type" rel="ManyToOneRel">20</field>
+        <field type="CharField" name="codename">add_uservote</field>
     </object>
     <object pk="47" model="auth.permission">
         <field type="CharField" name="name">Can change building block code</field>
@@ -170,15 +165,15 @@
         <field to="contenttypes.contenttype" name="content_type" rel="ManyToOneRel">18</field>
         <field type="CharField" name="codename">change_usertag</field>
     </object>
+    <object pk="59" model="auth.permission">
+        <field type="CharField" name="name">Can change user vote</field>
+        <field to="contenttypes.contenttype" name="content_type" rel="ManyToOneRel">20</field>
+        <field type="CharField" name="codename">change_uservote</field>
+    </object>
     <object pk="56" model="auth.permission">
         <field type="CharField" name="name">Can change user vote</field>
         <field to="contenttypes.contenttype" name="content_type" rel="ManyToOneRel">19</field>
         <field type="CharField" name="codename">change_uservote</field>
-    </object>
-    <object pk="30" model="auth.permission">
-        <field type="CharField" name="name">Can delete building block</field>
-        <field to="contenttypes.contenttype" name="content_type" rel="ManyToOneRel">10</field>
-        <field type="CharField" name="codename">delete_buildingblock</field>
     </object>
     <object pk="48" model="auth.permission">
         <field type="CharField" name="name">Can delete building block code</field>
@@ -223,6 +218,11 @@
     <object pk="57" model="auth.permission">
         <field type="CharField" name="name">Can delete user vote</field>
         <field to="contenttypes.contenttype" name="content_type" rel="ManyToOneRel">19</field>
+        <field type="CharField" name="codename">delete_uservote</field>
+    </object>
+    <object pk="60" model="auth.permission">
+        <field type="CharField" name="name">Can delete user vote</field>
+        <field to="contenttypes.contenttype" name="content_type" rel="ManyToOneRel">20</field>
         <field type="CharField" name="codename">delete_uservote</field>
     </object>
     <object pk="13" model="auth.permission">
@@ -285,6 +285,21 @@
         <field to="contenttypes.contenttype" name="content_type" rel="ManyToOneRel">9</field>
         <field type="CharField" name="codename">delete_userprofile</field>
     </object>
+    <object pk="28" model="auth.permission">
+        <field type="CharField" name="name">Can add building block</field>
+        <field to="contenttypes.contenttype" name="content_type" rel="ManyToOneRel">10</field>
+        <field type="CharField" name="codename">add_buildingblock</field>
+    </object>
+    <object pk="29" model="auth.permission">
+        <field type="CharField" name="name">Can change building block</field>
+        <field to="contenttypes.contenttype" name="content_type" rel="ManyToOneRel">10</field>
+        <field type="CharField" name="codename">change_buildingblock</field>
+    </object>
+    <object pk="30" model="auth.permission">
+        <field type="CharField" name="name">Can delete building block</field>
+        <field to="contenttypes.contenttype" name="content_type" rel="ManyToOneRel">10</field>
+        <field type="CharField" name="codename">delete_buildingblock</field>
+    </object>
     <object pk="1" model="auth.user">
         <field type="CharField" name="username">admin</field>
         <field type="CharField" name="first_name"></field>
@@ -294,7 +309,7 @@
         <field type="BooleanField" name="is_staff">True</field>
         <field type="BooleanField" name="is_active">True</field>
         <field type="BooleanField" name="is_superuser">True</field>
-        <field type="DateTimeField" name="last_login">2009-10-30 10:02:58</field>
+        <field type="DateTimeField" name="last_login">2009-11-27 08:56:05</field>
         <field type="DateTimeField" name="date_joined">2009-09-21 14:11:49</field>
         <field to="auth.group" name="groups" rel="ManyToManyRel"></field>
         <field to="auth.permission" name="user_permissions" rel="ManyToManyRel"></field>
@@ -303,6 +318,6 @@
         <field to="auth.user" name="user" rel="OneToOneRel">1</field>
         <field type="CharField" name="activation_key"><None></None></field>
         <field type="DateTimeField" name="key_expires"><None></None></field>
-        <field type="CharField" name="ezweb_url">http://fabio.hi.inet:8000</field>
+        <field type="CharField" name="ezweb_url">http://demo.ezweb.morfeo-project.com</field>
     </object>
 </django-objects>

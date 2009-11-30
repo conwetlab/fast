@@ -19,7 +19,7 @@ clearService: function (cart){
        	new FastAPI.Request(url,{
             'method':       'get',
             'content':      'xml',
-            'context':      this.context,
+            'context':      this,
             'onSuccess':    this.clear.bind(this)
         });
 	}	

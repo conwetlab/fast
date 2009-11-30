@@ -1,32 +1,68 @@
 {
-  "name": "Amazon Search Service",
-  "code": "http://localhost:8010/resources/amazonSearchService.src.js",
-  "creationDate": null,
-  "creator": "http://www.fabio.es/",
-  "description": {"en-gb": "This service provides information about products in Amazon Catalogue"},
-  "domainContext": {
-    "tags": [
-      "amazon",
-      "list"
+    "name":"Amazon Search Service",
+    "code":"http://localhost:8010/resources/amazonSearchService.src.js",
+    "creationDate":null,
+    "creator":"http://www.fabio.es/",
+    "description":{
+        "en-gb":"This service provides information about products in Amazon Catalogue"
+    },
+    "domainContext":{
+        "tags":[
+            "amazon",
+            "list"
+        ],
+        "user":"admin"
+    },
+    "homepage":"hhttp://www.deri.ie/amazonSearchService",
+    "icon":"http://localhost:8010/images/catalogue/amazonSearchService.png",
+    "label":{
+        "en-gb":"Amazon Search"
+    },
+    "rights":"http://creativecommons.org/",
+    "screenshot":"http://www.deri.ie/amazonList-screenshot.jpg",
+    "type":"resource",
+    "version":"1.0",
+    "libraries":[
+        {
+            "language":"JavaScript",
+            "source":"http://piccolo.ls.fi.upm.es/amazonURL/signAmazonURLs.js"
+        },
+        {
+            "language":"JavaScript",
+            "source":"http://piccolo.ls.fi.upm.es/amazonURL/jssha2/sha2.js"
+        }
     ],
-    "user": "admin"
-  },
-  "homepage": "hhttp://www.deri.ie/amazonSearchService",
-  "icon": "http://localhost:8010/images/catalogue/amazonSearchService.png",
-  "label": {"en-gb": "Amazon Search"},  
-  "rights": "http://creativecommons.org/",
-  "screenshot": "http://www.deri.ie/amazonList-screenshot.jpg",
-  "type": "resource",
-  "version": "1.0",
-  "libs":[
-    	{"language": "JavaScript", "src": "http://piccolo.ls.fi.upm.es/amazonURL/signAmazonURLs.js"},
-    	{"language": "JavaScript", "src": "http://piccolo.ls.fi.upm.es/amazonURL/jssha2/sha2.js"}
-    	],
-  "actions": [{"name":"search", 
-  				"preconditions":[{"id": "filter", 
-  								"label": {"en-gb": "A search criteria"},
-  								"pattern": "?F http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#SearchCriteria"}],
-  				 "uses":[]}],
-  "postconditions": [{"id":"list", "label": {"en-gb": "An Amazon Item List"}, "pattern":"?PList http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#ProductList", "positive":"true"}],
-  "triggers":["productList"]
+    "actions":[
+        {
+            "name":"search",
+            "preconditions":[
+                {
+                    "id":"filter",
+                    "label":{
+                        "en-gb":"A search criteria"
+                    },
+                    "pattern":"?F http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#SearchCriteria",
+                    "positive":"true"
+                }
+            ],
+            "uses":[
+                
+            ]
+        }
+    ],
+    "postconditions":[
+        [
+            {
+                "id":"list",
+                "label":{
+                    "en-gb":"An Amazon Item List"
+                },
+                "pattern":"?PList http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#ProductList",
+                "positive":"true"
+            }
+        ]
+    ],
+    "triggers":[
+        "productList"
+    ]
 }

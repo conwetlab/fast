@@ -1,0 +1,49 @@
+{
+    "name":"Amazon Suggestion Screen",
+    "creationDate":"2009-04-20T17:00:00+0100",
+    "creator":"http://www.fabio.es/",
+    "description":{
+        "en-gb":"This screen shows the list of products related to a given one. It allows users select a new product from this list."
+    },
+    "domainContext":{
+        "tags":[
+            "scratch",
+            "amazon",
+            "list",
+            "suggestion"
+        ],
+        "user":"admin"
+    },
+    "homepage":"http://www.deri.ie/amazonSuggestion",
+    "icon":"http://localhost:8010/images/catalogue/amazonSuggestion.png",
+    "label":{
+        "en-gb":"Suggestion List"
+    },
+    "rights":"http://creativecommons.org/",
+    "screenshot":"http://localhost:8010/images/screenshots/amazonSuggestion.png",
+    "version":"1.0",
+    "code":"http://localhost:8010/screens/amazonSuggestion.scr.html",
+    "preconditions":[
+        [
+            {
+                "label":{
+                    "en-gb":"An item"
+                },
+                "pattern":"?Item http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#Item",
+                "positive":"true"
+            }
+        ]
+    ],
+    "postconditions":[
+        [
+            {
+                "id":"item",
+                "label":{
+                    "en-gb":"An item"
+                },
+                "pattern":"?Item http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#Item",
+                "positive":"true"
+            }
+        ]
+    ]
+}

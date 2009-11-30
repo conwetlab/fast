@@ -1,28 +1,68 @@
 {
-    "name": "Amazon Price Comparative Service",
-    "code": "http://localhost:8010/resources/amazonPriceComparativeService.src.js",
-    "creationDate": "2009-04-20T17:00:00+0100",
-    "creator": "http://www.fabio.es/",
-    "description": {"en-gb": "This service provides a price comparative related to an Amazon product"},
-    "domainContext": {
-      "tags": [
-        "amazon",
-        "price",
-        "comparative"
-      ],
-      "user": "admin"
+    "name":"Amazon Price Comparative Service",
+    "code":"http://localhost:8010/resources/amazonPriceComparativeService.src.js",
+    "creationDate":"2009-04-20T17:00:00+0100",
+    "creator":"http://www.fabio.es/",
+    "description":{
+        "en-gb":"This service provides a price comparative related to an Amazon product"
     },
-    "homepage": "http://www.deri.ie/amazonPriceComparativeService",
-    "icon": "http://localhost:8010/images/catalogue/amazonPriceComparativeService.png",
-    "label": {"en-gb": "Amazon Price Comparative"},
-    "rights": "http://creativecommons.org/",
-    "screenshot": "http://www.deri.ie/amazonPriceComparativeService.jpg",
-    "version": "1.0",
-    "libs":[
-    	{"language": "JavaScript", "src": "http://piccolo.ls.fi.upm.es/amazonURL/signAmazonURLs.js"},
-    	{"language": "JavaScript", "src": "http://piccolo.ls.fi.upm.es/amazonURL/jssha2/sha2.js"}
-    	],
-    "actions": [{"name":"fetch", "preconditions":[{"id":"item", "pattern":"?Item http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#Item", "positive":"true"}], "uses":[]}],
-	"postconditions": [{"id":"list", "pattern":"?OList http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#OfferList", "positive":"true"}],
-	"triggers":["productList"]
+    "domainContext":{
+        "tags":[
+            "amazon",
+            "price",
+            "comparative"
+        ],
+        "user":"admin"
+    },
+    "homepage":"http://www.deri.ie/amazonPriceComparativeService",
+    "icon":"http://localhost:8010/images/catalogue/amazonPriceComparativeService.png",
+    "label":{
+        "en-gb":"Amazon Price Comparative"
+    },
+    "rights":"http://creativecommons.org/",
+    "screenshot":"http://www.deri.ie/amazonPriceComparativeService.jpg",
+    "version":"1.0",
+    "libraries":[
+        {
+            "language":"JavaScript",
+            "source":"http://piccolo.ls.fi.upm.es/amazonURL/signAmazonURLs.js"
+        },
+        {
+            "language":"JavaScript",
+            "source":"http://piccolo.ls.fi.upm.es/amazonURL/jssha2/sha2.js"
+        }
+    ],
+    "actions":[
+        {
+            "name":"fetch",
+            "preconditions":[
+                {
+                    "id":"item",
+                    "label":{
+                        "en-gb":"An item"
+                    },
+                    "pattern":"?Item http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#Item",
+                    "positive":"true"
+                }
+            ],
+            "uses":[
+                
+            ]
+        }
+    ],
+    "postconditions":[
+        [
+            {
+                "id":"list",
+                "label":{
+                    "en-gb":"A product list"
+                },
+                "pattern":"?OList http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#OfferList",
+                "positive":"true"
+            }
+        ]
+    ],
+    "triggers":[
+        "productList"
+    ]
 }

@@ -17,7 +17,7 @@ searchProduct: function (item){
 	new FastAPI.Request(url,{
         'method':       'get',
         'content':      'xml',
-        'context':      this.context,
+        'context':      this,
         'onSuccess':    this.fetchProductInfo.bind(this)
     });
 },

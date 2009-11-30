@@ -40,6 +40,7 @@ class BuildingBlockCollection(resource.Resource):
         except Exception, e:
             return HttpResponseServerError(json_encode({"message":unicode(e)}), mimetype='application/json; charset=UTF-8')   
     
+    
     @transaction.commit_on_success
     def create(self, request, bbtype):
         user = get_user_authentication(request)
@@ -82,12 +83,14 @@ class BuildingBlockCollection(resource.Resource):
             return HttpResponseServerError(json_encode({"message":unicode(e)}), mimetype='application/json; charset=UTF-8')   
 
 
+
 class BuildingBlockEntry(resource.Resource):
     def read(self, request, buildingblock_id):
         user = get_user_authentication(request)
         
         bb = get_object_or_404(BuildingBlock, id=buildingblock_id)
         return HttpResponse(bb.data, mimetype='application/json; charset=UTF-8')
+    
     
     @transaction.commit_on_success
     def update(self, request, buildingblock_id):
@@ -109,17 +112,25 @@ class BuildingBlockEntry(resource.Resource):
             transaction.rollback()
             return HttpResponseServerError(json_encode({"message":unicode(e)}), mimetype='application/json; charset=UTF-8')   
 
+
     @transaction.commit_on_success
     def delete(self, request, buildingblock_id):
         try:
             user = get_user_authentication(request)
             
-            BuildingBlock.objects.get(id=buildingblock_id).delete()
+            bb = BuildingBlock.objects.get(id=buildingblock_id)
+            
+            unshareBuildingBlock(bb)
+            
+            bb.delete()
+            
             ok = json_encode({"message":"OK"})
             return HttpResponse(ok, mimetype='application/json; charset=UTF-8')
         except Exception, e:
             transaction.rollback()
             return HttpResponseServerError(json_encode({"message":unicode(e)}), mimetype='application/json; charset=UTF-8')
+        
+        
         
 class Code(resource.Resource):
     def read(self, request, buildingblock_id):
@@ -127,6 +138,8 @@ class Code(resource.Resource):
         
         bbc = get_object_or_404(BuildingBlockCode, buildingBlock=buildingblock_id)
         return HttpResponse(bbc.code, mimetype='application/json; charset=UTF-8')
+    
+    
     
 class TagCollection(resource.Resource):
     def read(self, request, buildingblock_id):
@@ -153,6 +166,7 @@ class TagCollection(resource.Resource):
             return HttpResponse(json_encode(tags), mimetype='application/json; charset=UTF-8')
         except Exception, e:
             return HttpResponseServerError(json_encode({"message":unicode(e)}), mimetype='application/json; charset=UTF-8')
+       
         
     @transaction.commit_on_success
     def create(self, request, buildingblock_id):
@@ -188,6 +202,7 @@ class TagCollection(resource.Resource):
             transaction.rollback()
             return HttpResponseServerError(json_encode({"message":unicode(e)}), mimetype='application/json; charset=UTF-8')
         
+        
 class VoteCollection(resource.Resource):
     def read(self, request, buildingblock_id):
         user = get_user_authentication(request)
@@ -216,6 +231,7 @@ class VoteCollection(resource.Resource):
             transaction.rollback()
             return HttpResponseServerError(json_encode({"message":unicode(e)}), mimetype='application/json; charset=UTF-8')
         
+        
     @transaction.commit_on_success
     def create(self, request, buildingblock_id):
         user = get_user_authentication(request)
@@ -228,14 +244,29 @@ class VoteCollection(resource.Resource):
             uv = UserVote.objects.get_or_create(user=user, buildingBlock=bb)[0]
             uv.value = request.POST.get('vote')
             uv.save()
-            updatePopularity(bb)
+            self.__updatePopularity(bb)
             ok = json_encode({"message":"OK"})
             return HttpResponse(ok, mimetype='application/json; charset=UTF-8')
         except Exception, e:
             transaction.rollback()
             return HttpResponseServerError(json_encode({"message":unicode(e)}), mimetype='application/json; charset=UTF-8')
+        
+    def __updatePopularity(self, buildingblock):
+        sum = 0
+        count = 0
+        try:
+            votes = UserVote.objects.filter(buildingBlock=buildingblock)
+            for v in votes:
+                sum += v.value
+                count += 1
+        except Exception:
+            pass
+        buildingblock.popularity = "%1.2f" % (sum / count)
+        buildingblock.save()
 
-class Publication(resource.Resource):
+
+
+class Sharing(resource.Resource):
     @transaction.commit_on_success
     def create(self, request, buildingblock_id):
         user = get_user_authentication(request)
@@ -245,7 +276,7 @@ class Publication(resource.Resource):
             
             data = simplejson.loads(bb.data)
                             
-            updateCode(bb, data)
+            self.__updateCode(bb, data)
             
             if (bb.uri == None) or (bb.uri == ""):
                 conn = Connection(cleanUrl(bb.get_catalogue_url()))
@@ -275,6 +306,7 @@ class Publication(resource.Resource):
             transaction.rollback()
             return HttpResponseServerError(json_encode({"message":unicode(e)}), mimetype='application/json; charset=UTF-8')
         
+        
     @transaction.commit_on_success
     def delete(self, request, buildingblock_id):
         try:
@@ -282,77 +314,66 @@ class Publication(resource.Resource):
             
             bb = BuildingBlock.objects.get(id=buildingblock_id)
             
-            data = simplejson.loads(bb.data)
+            unshareBuildingBlock(bb)
             
-            if (bb.uri != None) and (bb.uri != ""):
-                conn = Connection(cleanUrl(bb.get_catalogue_url()))
-                data = simplejson.loads(bb.data)
-                result = conn.request_delete("/" + quote_plus(bb.uri), headers={'Accept':'text/json'})
-                if isValidResponse(result):
-                    response = HttpResponse(result['body'], mimetype='application/json; charset=UTF-8')
-                    del data["uri"]
-                    bb.data = json_encode(data)
-                    bb.uri = None
-                    bb.save()
-                else:
-                    raise Exception(result['body'])
+            data = simplejson.loads(bb.data)
+            data = simplejson.loads(bb.data)
+            del data["uri"]
+            bb.data = json_encode(data)
+            bb.uri = None
+            bb.save()
                             
             ok = json_encode({"message":"OK"})
             return HttpResponse(ok, mimetype='application/json; charset=UTF-8')
         except Exception, e:
             transaction.rollback()
-            return HttpResponseServerError(json_encode({"message":unicode(e)}), mimetype='application/json; charset=UTF-8')
-                
+            return HttpResponseServerError(json_encode({"message":unicode(e)}), mimetype='application/json; charset=UTF-8')            
         
-def updateCode(buildingblock, data): 
-    c = BuildingBlockCode.objects.get_or_create(buildingBlock=buildingblock)[0]
-    code = None
-    if data.has_key('code'):
-        code = data.get('code')
-        if (validate_url(code)):
-            code = download_http_content(code)
-        if buildingblock.type == 'screen':
-            context = Context({'screenId': str(buildingblock.id)})
-            t = Template(code)
+        
+    def __updateCode(self, buildingblock, data): 
+        c = BuildingBlockCode.objects.get_or_create(buildingBlock=buildingblock)[0]
+        code = None
+        if data.has_key('code'):
+            code = data.get('code')
+            if (validate_url(code)):
+                code = download_http_content(code)
+            if buildingblock.type == 'screen':
+                context = Context({'screenId': str(buildingblock.id)})
+                t = Template(code)
+                code =  t.render(context)
+            elif buildingblock.type == 'resource' or buildingblock.type == 'operator':
+                context = Context({'name': "BB" + str(buildingblock.id), 'code': code})
+                t = loader.get_template('buildingblock/code.js')
+                code =  t.render(context)
+        elif data.has_key('definition') and buildingblock.type == 'screen':
+            definition = data.get('definition')
+            for bbdefinition in definition['buildingblocks']:
+                bb = get_object_or_404(BuildingBlock, uri=bbdefinition.get('uri'))
+                bbdata = simplejson.loads(bb.data)
+                bbdefinition['buildingblockId'] = bb.id
+                bbdefinition['type'] = bb.type
+                bbdefinition['libraries'] = bbdata.get('libraries')
+                bbdefinition['actions'] = bbdata.get('actions')
+                bbc = get_object_or_404(BuildingBlockCode, buildingBlock=bb)
+                if bb.type == 'form':
+                    context = Context({'buildingblockId': 'BB' + str(bb.id), 'screenId': str(buildingblock.id), 'buildingblockInstance': bbdefinition['id']})
+                    t = Template(bbc.code)
+                    bbdefinition['code'] = t.render(context)
+                else:
+                    bbdefinition['code'] = bbc.code
+            context = Context({'id': buildingblock.id, 'name': buildingblock.name, 'definition': definition, 'posts': data.get('postconditions')})
+            t = loader.get_template('buildingblock/screen.html')
             code =  t.render(context)
-        elif buildingblock.type == 'resource' or buildingblock.type == 'operator':
-            context = Context({'name': "BB" + str(buildingblock.id), 'code': code})
-            t = loader.get_template('buildingblock/code.js')
-            code =  t.render(context)
-    elif data.has_key('definition') and buildingblock.type == 'screen':
-        definition = data.get('definition')
-        for bbdefinition in definition:
-            bb = get_object_or_404(BuildingBlock, id=bbdefinition.get('id'))
-            bbdata = simplejson.loads(bb.data)
-            bbdefinition['type'] = bb.type
-            bbdefinition['libs'] = bbdata.get('libs')
-            bbc = get_object_or_404(BuildingBlockCode, buildingBlock=bb)
-            if bb.type == 'form':
-                context = Context({'buildingblockId': 'BB' + str(bb.id), 'screenId': str(buildingblock.id), 'buildingblockInstance': bbdefinition.get('name')})
-                t = Template(bbc.code)
-                bbdefinition['code'] = t.render(context)
-            else:
-                bbdefinition['code'] = bbc.code
-        context = Context({'id': buildingblock.id, 'name': buildingblock.name, 'buildingblocks': definition, 'posts': data.get('postconditions')})
-        t = loader.get_template('buildingblock/screen.html')
-        code =  t.render(context)
-    c.code = code
-    c.save()
+        c.code = code
+        c.save()
 
-
-def updatePopularity(buildingblock):
-    sum = 0
-    count = 0
-    try:
-        votes = UserVote.objects.filter(buildingBlock=buildingblock)
-        for v in votes:
-            sum += v.value
-            count += 1
-    except Exception:
-        pass
-    buildingblock.popularity = "%1.2f" % (sum / count)
-    buildingblock.save()
-
+def unshareBuildingBlock(buildingblock):
+    if (buildingblock.uri != None) and (buildingblock.uri != ""):
+        conn = Connection(cleanUrl(buildingblock.get_catalogue_url()))
+        result = conn.request_delete("/" + quote_plus(buildingblock.uri), headers={'Accept':'text/json'})
+        if not isValidResponse(result):
+            raise Exception(result['body'])
+    
 
 def updateTags(user, buildingblock, tags): 
     for tag in tags:

@@ -1,0 +1,49 @@
+{
+    "name":"Amazon List Screen",
+    "creationDate":"2009-02-11T14:59:52+0100",
+    "creator":"http://www.ismaelrivera.es/",
+    "description":{
+        "en-gb":"This screen shows the results of a given search in Amazon. It allows users to choose a product to see its details."
+    },
+    "domainContext":{
+        "tags":[
+            "scratch",
+            "amazon",
+            "list"
+        ],
+        "user":"admin"
+    },
+    "homepage":"http://www.deri.ie/amazonList",
+    "icon":"http://localhost:8010/images/catalogue/amazonList.png",
+    "label":{
+        "en-gb":"Product List"
+    },
+    "rights":"http://creativecommons.org/",
+    "screenshot":"http://localhost:8010/images/screenshots/amazonProductList.png",
+    "version":"1.0",
+    "code":"http://localhost:8010/screens/amazonList.scr.html",
+    "preconditions":[
+        [
+            {
+                "label":{
+                    "en-gb":"A search criteria"
+                },
+                "pattern":"?F http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#SearchCriteria",
+                "positive":"true"
+            }
+        ]
+    ],
+    "postconditions":[
+        [
+            {
+                "id":"item",
+                "origin":"amazonListForm1",
+                "label":{
+                    "en-gb":"An item"
+                },
+                "pattern":"?I http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#Item",
+                "positive":"true"
+            }
+        ]
+    ]
+}

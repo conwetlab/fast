@@ -66,10 +66,9 @@
                 new FastAPI.Request(url,{
                     'method':       'get',
                     'content':      'xml',
-                    'context':      this,
+                    'context':      eBayList,
                     'onSuccess':    eBayList.addToList
                 });
-                //FastAPI.getXML(url, this, eBayList.addToList);
             }
             
             EBayList.prototype.addToList = function (transport){

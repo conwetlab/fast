@@ -1,27 +1,94 @@
 {
-    "name": "Amazon Price Comparative Form",
-    "code": "http://localhost:8010/forms/amazonPrice.src.html",
-    "creationDate": "2009-04-20T17:00:00+0100",
-    "creator": "http://www.fabio.es/",
-    "description": {"en-gb": "This screen shows a price comparative for a given product."},
-    "domainContext": {
-      "tags": [
-        "amazon",
-        "list",
-        "suggestion",
-        "price comparative"
-      ],
-      "user": null
+    "name":"Amazon Price Comparative Form",
+    "code":"http://localhost:8010/forms/amazonPrice.src.html",
+    "creationDate":"2009-04-20T17:00:00+0100",
+    "creator":"http://www.fabio.es/",
+    "description":{
+        "en-gb":"This screen shows a price comparative for a given product."
     },
-    "homepage": "http://www.deri.ie/amazonPrice",
-    "icon": "http://localhost:8010/images/catalogue/amazonPrice.png",
-    "label": {"en-gb": "Price Comparative"},
-    "rights": "http://creativecommons.org/",
-    "screenshot": "http://www.deri.ie/amazonPrice-screenshot.jpg",
-    "version": "1.0",
-    "actions": [	{"name":"init", "preconditions":[{"id":"item", "pattern":"?Item http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#Item", "positive":"true"}], "uses":[]},
-	            {"name":"showTable", "preconditions":[{"id":"list", "pattern":"?OList http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#OfferList", "positive":"true"}], "uses":[]},
-	            {"name":"showMessage", "preconditions":[{"id":"message", "pattern":"?Message http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#Message", "positive":"true"}], "uses":[]}],
-	"postconditions": [{"id":"item", "pattern":"?Item http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#Item", "positive":"true"}],
-	"triggers":["offer"]
+    "domainContext":{
+        "tags":[
+            "amazon",
+            "list",
+            "suggestion",
+            "price comparative"
+        ],
+        "user":null
+    },
+    "homepage":"http://www.deri.ie/amazonPrice",
+    "icon":"http://localhost:8010/images/catalogue/amazonPrice.png",
+    "label":{
+        "en-gb":"Price Comparative"
+    },
+    "rights":"http://creativecommons.org/",
+    "screenshot":"http://www.deri.ie/amazonPrice-screenshot.jpg",
+    "version":"1.0",
+    "libraries":[
+        
+    ],
+    "actions":[
+        {
+            "name":"init",
+            "preconditions":[
+                {
+                    "id":"item",
+                    "label":{
+                        "en-gb":"An item"
+                    },
+                    "pattern":"?Item http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#Item",
+                    "positive":"true"
+                }
+            ],
+            "uses":[
+                
+            ]
+        },
+        {
+            "name":"showTable",
+            "preconditions":[
+                {
+                    "id":"list",
+                    "label":{
+                        "en-gb":"An offer list"
+                    },
+                    "pattern":"?OList http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#OfferList",
+                    "positive":"true"
+                }
+            ],
+            "uses":[
+                
+            ]
+        },
+        {
+            "name":"showMessage",
+            "preconditions":[
+                {
+                    "id":"message",
+                    "label":{
+                        "en-gb":"A message"
+                    },
+                    "pattern":"?Message http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#Message",
+                    "positive":"true"
+                }
+            ],
+            "uses":[
+                
+            ]
+        }
+    ],
+    "postconditions":[
+        [
+            {
+                "id":"offer",
+                "label":{
+                    "en-gb":"An offer"
+                },
+                "pattern":"?Offer http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#Offer",
+                "positive":"true"
+            }
+        ]
+    ],
+    "triggers":[
+        "offer"
+    ]
 }

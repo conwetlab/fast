@@ -1,26 +1,93 @@
 {
-    "name": "Amazon Suggestion Form",
-    "code": "http://localhost:8010/forms/amazonSuggestion.src.html",
-    "creationDate": "2009-04-20T17:00:00+0100",
-    "creator": "http://www.fabio.es/",
-    "description": {"en-gb": "This screen shows the list of products related to a given one. It allows users select a new product from this list."},
-    "domainContext": {
-      "tags": [
-        "amazon",
-        "list",
-        "suggestion"
-      ],
-      "user": "admin"
+    "name":"Amazon Suggestion Form",
+    "code":"http://localhost:8010/forms/amazonSuggestion.src.html",
+    "creationDate":"2009-04-20T17:00:00+0100",
+    "creator":"http://www.fabio.es/",
+    "description":{
+        "en-gb":"This screen shows the list of products related to a given one. It allows users select a new product from this list."
     },
-    "homepage": "http://www.deri.ie/amazonSuggestion",
-    "icon": "http://localhost:8010/images/catalogue/amazonSuggestion.png",
-    "label": {"en-gb": "Suggestion List"},
-    "rights": "http://creativecommons.org/",
-    "screenshot": "http://www.deri.ie/amazonSuggestion-screenshot.jpg",
-    "version": "1.0",
-    "actions": [{"name":"init", "preconditions":[]},
-	          {"name":"showTable", "preconditions":[{"id":"list", "pattern":"?PList http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#ProductList", "positive":"true"}]},
-	           {"name":"showMessage", "preconditions":[{"id":"message", "pattern":"?Message http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#Message", "positive":"true"}]}],
-	"postconditions": [{"id":"item", "pattern":"?Item http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#Item", "positive":"true"}],
-	"triggers":["item"]
+    "domainContext":{
+        "tags":[
+            "amazon",
+            "list",
+            "suggestion"
+        ],
+        "user":"admin"
+    },
+    "homepage":"http://www.deri.ie/amazonSuggestion",
+    "icon":"http://localhost:8010/images/catalogue/amazonSuggestion.png",
+    "label":{
+        "en-gb":"Suggestion List"
+    },
+    "rights":"http://creativecommons.org/",
+    "screenshot":"http://www.deri.ie/amazonSuggestion-screenshot.jpg",
+    "version":"1.0",
+    "libraries":[
+        
+    ],
+    "actions":[
+        {
+            "name":"init",
+            "preconditions":[
+				{
+                    "id":"item",
+                    "label":{
+                        "en-gb":"An item"
+                    },
+                    "pattern":"?Item http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#Item",
+                    "positive":"true"
+                }
+            ],
+            "uses":[
+                
+            ]
+        },
+        {
+            "name":"showTable",
+            "preconditions":[
+                {
+                    "id":"list",
+                    "label":{
+                        "en-gb":"A product list"
+                    },
+                    "pattern":"?PList http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#ProductList",
+                    "positive":"true"
+                }
+            ],
+            "uses":[
+                
+            ]
+        },
+        {
+            "name":"showMessage",
+            "preconditions":[
+                {
+                    "id":"message",
+                    "label":{
+                        "en-gb":"A message"
+                    },
+                    "pattern":"?Message http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#Message",
+                    "positive":"true"
+                }
+            ],
+            "uses":[
+                
+            ]
+        }
+    ],
+    "postconditions":[
+        [
+            {
+                "id":"item",
+                "label":{
+                    "en-gb":"An item"
+                },
+                "pattern":"?Item http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#Item",
+                "positive":"true"
+            }
+        ]
+    ],
+    "triggers":[
+        "item"
+    ]
 }

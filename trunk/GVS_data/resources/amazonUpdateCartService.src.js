@@ -21,7 +21,7 @@ updateService: function (cart, update){
    	new FastAPI.Request(url,{
         'method':       'get',
         'content':      'xml',
-        'context':      this.context,
+        'context':      this,
         'onSuccess':    this.update.bind(this)
     });
 },

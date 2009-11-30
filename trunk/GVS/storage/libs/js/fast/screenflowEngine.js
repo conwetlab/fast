@@ -151,9 +151,9 @@ var ScreenflowEngineFactory = function () {
 			if(!fact){
 				evaluation =  false;	
 			}
-			var positive = expression.positive;
-			if (!positive){ //it could be null
-				positive = false;
+			var positive = true;
+			if (!expression.positive){ //it could be null
+				positive = expression.positive;
 			}
 			return (positive == evaluation);
 		},

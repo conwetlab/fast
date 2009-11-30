@@ -98,10 +98,9 @@
                 new FastAPI.Request(url,{
                     'method':       'get',
                     'content':      'xml',
-                    'context':      this,
+                    'context':      suggestionList,
                     'onSuccess':    suggestionList.addToList
                 });
-                //FastAPI.getXML(url, this, suggestionList.addToList);
             }
             
             SuggestionList.prototype.addToList = function (transport){

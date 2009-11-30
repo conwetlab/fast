@@ -6,57 +6,65 @@ var ScreenEngineFactory = function () {
 
 		initialize: function(id) {
 			this.id = id;
-			this.piping = new Array();
+			this.buildingblocks = new Array();
 			this.posts = new Hash();
-			this.factIndexedActions = new Hash();
+			this.indexedActions = new Hash();
+			this.pipingIndexedActions = new Hash();
 			this.triggerIndexedActions = new Hash();
 			this.buildingBlocks = new Hash();
 		},
 
-		setEngine: function (screenflowEngine, piping, posts) {
+		setEngine: function (screenflowEngine, buildingblocks, piping, triggers, posts) {
 			this.screenflowEngine = screenflowEngine;
-			if(piping){
-				this.piping = piping;
-				for (var i=0; piping!= null && i<piping.length; i++){
-					var buildingBlock = piping[i];
+			if(buildingblocks){
+				this.buildingblocks = buildingblocks;
+				for (var i=0; buildingblocks!= null && i<buildingblocks.length; i++){
+					var buildingBlock = buildingblocks[i];
 					var actions = buildingBlock.actions;
 					for(var j=0; actions!= null && j<actions.length;j++){
 						var action = actions[j];
 						action.scope = buildingBlock.scope;
+						action.indexedPres = new Hash();
 						var preconditions = action.preconditions;
 						for(var k=0; preconditions!= null && k<preconditions.length; k++){
 							var precondition = preconditions[k];
-							var origins = precondition.origins;
-							for(var h=0; origins!= null && h<origins.length; h++){
-								var origin = origins[h];
-								var factKey = this._getKey(origin.id, origin.origin);
-								var factActions = this.factIndexedActions.get(factKey);
-								if (!factActions){
-									factActions = new Array();
-									this.factIndexedActions.set(factKey, factActions);
-								}
-								factActions.push({action: action, pre: precondition, origin: origin});
-							}
+							action.indexedPres.set(precondition.id , precondition);
 						}
-						
-						var triggers = action.triggers;
-						for(var k=0; triggers!= null && k<triggers.length; k++){
-							var trigger = triggers[k];
-							var triggerKey = this._getKey(trigger.id, trigger.origin);
-							var triggerActions = this.triggerIndexedActions.get(triggerKey);
-							if (!triggerActions){
-								triggerActions = new Array();
-								this.triggerIndexedActions.set(triggerKey, triggerActions);
-							}
-							triggerActions.push({action: action, trigger: trigger});
-						}
+						var actionKey = this._getKey([action.name, buildingBlock.name]);
+						this.indexedActions.set(actionKey, action);
 					}
 				}
+			}
+			for(var i=0; piping!= null && i<piping.length; i++){
+				var pipe = piping[i];
+				var pipingKey = this._getKey([pipe.from.condition, pipe.from.buildingblock]);
+				var pipingActions = this.pipingIndexedActions.get(pipingKey);
+				if (!pipingActions){
+					pipingActions = new Array();
+					this.pipingIndexedActions.set(pipingKey, pipingActions);
+				}
+				var action = this.indexedActions.get(this._getKey([pipe.to.action, pipe.to.buildingblock]));
+				var pre = null;
+				if (action){
+					pre = action.indexedPres.get(pipe.to.condition);
+				}
+				pipingActions.push({action: action, pre: pre, piping: pipe});
+			}
+			for(var i=0; triggers!= null && i<triggers.length; i++){
+				var trigger = triggers[i];
+				var triggerKey = this._getKey([trigger.from.name, trigger.from.buildingblock]);
+				var triggerActions = this.triggerIndexedActions.get(triggerKey);
+				if (!triggerActions){
+					triggerActions = new Array();
+					this.triggerIndexedActions.set(triggerKey, triggerActions);
+				}
+				var action = this.indexedActions.get(this._getKey([trigger.to.action, trigger.to.buildingblock]));
+				triggerActions.push({action: action});
 			}
 			if(posts){
 				for (var i=0; i<posts.length; i++){
 					var post = posts[i];
-					this.posts.set(this._getKey(post.id, post.origin), post);
+					this.posts.set(post.id, post);
 				}
 			}
 		},
@@ -73,16 +81,16 @@ var ScreenEngineFactory = function () {
 			var modFacts = new Hash();
 			for (var i=0; addedFacts!= null && i<addedFacts.length; i++){
 				this.addFact(addedFacts[i], origin);
-				modFacts.set(this._getKey(addedFacts[i].id, origin), addedFacts[i]);
+				modFacts.set(this._getKey([addedFacts[i].id, origin]), addedFacts[i]);
 			}
 			for (var i=0; deletedFacts!= null &&  i<deletedFacts.length; i++){
 				this.deleteFact(deletedFacts[i], origin);
-				modFacts.set(this._getKey(deletedFacts[i].id, origin), deletedFacts[i]);
+				modFacts.set(this._getKey([deletedFacts[i].id, origin]), deletedFacts[i]);
 			}
 			var sentTriggers = new Hash();
 			for (var i=0; triggers!= null &&  i<triggers.length; i++){
 				var trigger = {id: triggers[i], origin: origin};
-				sentTriggers.set(this._getKey(trigger.id, trigger.origin), triggers[i]);
+				sentTriggers.set(this._getKey([trigger.id, trigger.origin]), triggers[i]);
 			}
 			this.run(sentTriggers, modFacts, origin);
 		},
@@ -91,19 +99,21 @@ var ScreenEngineFactory = function () {
 			if(fact){
 				//Piping
 				fact.origin = origin;
-				var key = this._getKey(fact.id, origin)
-				var piping = this.factIndexedActions.get(key);
+				var key = this._getKey([fact.id, origin])
+				var piping = this.pipingIndexedActions.get(key);
 				for (var i=0; piping!= null && i<piping.length; i++){
 					var pipe = piping[i];
-					pipe.pre.value = fact;
-				}
-				//Post
-				var p = this.posts.get(key);
-				if(p){
-					var f = Object.clone(fact);
-					f.origin = this.id;
-					f.uri = p.pattern.split(" ")[2];
-					this.screenflowEngine.manageFacts([f],[]);
+					if(pipe.piping.to.buildingblock && pipe.piping.to.buildingblock != ''){ //Pipe to Building Block
+						pipe.pre.value = fact;
+					} else { //Post
+						var p = this.posts.get(pipe.piping.to.condition);
+						if(p){
+							var f = Object.clone(fact);
+							f.origin = this.id;
+							f.uri = p.pattern.split(" ")[2];
+							this.screenflowEngine.manageFacts([f],[]);
+						}
+					}
 				}
 			}
 		},
@@ -111,17 +121,19 @@ var ScreenEngineFactory = function () {
 		deleteFact: function (id, origin){
 			if(id){
 				//Piping
-				var key = this._getKey(id, origin)
-				var piping = this.factIndexedActions.get(key);
+				var key = this._getKey([id, origin])
+				var piping = this.pipingIndexedActions.get(key);
 				for (var i=0; piping!= null && i<piping.length; i++){
 					var pipe = piping[i];
-					pipe.pre.value = null;
-				}
-				//Post
-				var p = this.posts.get(key);
-				if(p){
-					p.uri = p.pattern.split(" ")[2];
-					this.screenflowEngine.manageFacts([],[p.uri]);
+					if(pipe.piping.to.buildingblock && pipe.piping.to.buildingblock != ''){ //Pipe to Building Block
+						pipe.pre.value = null;
+					} else { //Post
+						var p = this.posts.get(pipe.piping.to.condition);
+						if(p){
+							p.uri = p.pattern.split(" ")[2];
+							this.screenflowEngine.manageFacts([],[p.uri]);
+						}
+					}
 				}
 			}
 		},
@@ -129,7 +141,8 @@ var ScreenEngineFactory = function () {
 		searchFact: function (precondition){
 			var f = precondition.value; 
 			if(!f){
-				var f = this.screenflowEngine.getFact(precondition.uri);
+				var uri = precondition.pattern.split(" ")[2];
+				var f = this.screenflowEngine.getFact(uri);
 				if(f){
 					f = Object.clone(f);
 					f.origin = null;
@@ -141,8 +154,8 @@ var ScreenEngineFactory = function () {
 		
 		
 		restart: function (){
-			for (var i=0; i<this.piping.length; i++){
-				var buildingBlock = this.piping[i];
+			for (var i=0; i<this.buildingblocks.length; i++){
+				var buildingBlock = this.buildingblocks[i];
 				var actions = buildingBlock.actions;
 				for(var j=0; actions!= null && j<actions.length;j++){
 					var action = actions[j];
@@ -170,9 +183,11 @@ var ScreenEngineFactory = function () {
 			var candidateActions = new Array();
 			var factKeys = modFacts.keys();
 			for(var i = 0; i < factKeys.length ; i++){
-				var factActions = this.factIndexedActions.get(factKeys[i]);
-				if(factActions){
-					candidateActions = candidateActions.concat(factActions);
+				var factActions = this.pipingIndexedActions.get(factKeys[i]);
+				for(var j=0; factActions && j < factActions.length; j++){
+					if(factActions[j].action){ //Without post piping
+						candidateActions.push(factActions[j]); 
+					}
 				}
 			}
 			var triggerKeys = triggers.keys();
@@ -229,7 +244,7 @@ var ScreenEngineFactory = function () {
 			for(var i=0; i < action.preconditions.length; i++){
 				var pre = action.preconditions[i];
 				if(pre.positive) {
-					params.push(action.preconditions[i].value); //Mediation, if necessary
+					params.push(action.preconditions[i].value);
 				}
 			}
 			//uses
@@ -240,10 +255,12 @@ var ScreenEngineFactory = function () {
 			action.funct.apply(action.scope, params);
 		},
 		
-		_getKey: function(id, origin){
-			id = id? id: "";
-			origin = origin? origin: "";
-			return ([id, origin]).join("-");
+		_getKey: function(keys){
+			var ks = new Array();
+			for(var i=0; i < keys.length; i++){
+				ks.push(keys[i]? keys[i]: "");
+			}
+			return ks.join("-");
 	    }
 	});
 

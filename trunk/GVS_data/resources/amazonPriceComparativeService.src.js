@@ -8,7 +8,7 @@ fetch: function (item){
 	//Base URL of the REST Service
 	var url = "http://webservices.amazon.com/onca/xml?Service=AWSECommerceService";
 	//Add the operation Type
-	var url +="&Operation=ItemLookup";
+	url +="&Operation=ItemLookup";
 	//Add the parameters
 	url += parameters;
 	//Add the responseGroup
@@ -23,7 +23,7 @@ fetch: function (item){
     new FastAPI.Request(url,{
         'method':       'get',
         'content':      'xml',
-        'context':      this.context,
+        'context':      this,
         'onSuccess':    this.addToList.bind(this)
     });
 },
@@ -33,7 +33,7 @@ addToList: function (transport){
     var xml = transport;
     //Check if the service returned an error
     if (xml.getElementsByTagName("IsValid")[0].childNodes[0].nodeValue == "False") {
-    	var message = {name: "message", data:{message: xml.getElementsByTagName("Message")[0].childNodes[0].nodeValue}};
+    	var message = {id: "message", data:{message: xml.getElementsByTagName("Message")[0].childNodes[0].nodeValue}};
     	this.manageData(["message"], [message], []);
     } else { //Correct response, create the result List
         var comparativelist = xml.getElementsByTagName("Offers")[0].getElementsByTagName("Offer");

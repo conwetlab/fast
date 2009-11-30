@@ -1,48 +1,62 @@
-{	
-	"name": "Compound Amazon Order Screen",
-    "creationDate": "2009-04-20T17:00:00+0100",
-    "creator": "http://www.fabio.es/",
-    "description": {"en-gb": "This form allows users to purchase their shopping cart. It shows an Amazon interface to fulfill the required data to purchase the shopping cart"},
-    "domainContext": {
-      "tags": [
-        "amazon",
-        "order",
-        "purchase"
-      ],
-      "user": "admin"
+{
+    "name":"Compound Amazon Order Screen",
+    "creationDate":"2009-04-20T17:00:00+0100",
+    "creator":"http://www.fabio.es/",
+    "description":{
+        "en-gb":"This form allows users to purchase their shopping cart. It shows an Amazon interface to fulfill the required data to purchase the shopping cart"
     },
-    "homepage": "http://www.deri.ie/amazonOrder",
-    "icon": "http://localhost:8010/images/catalogue/amazonOrder.png",
-    "label": {"en-gb": "Order"},
-    "rights": "http://creativecommons.org/",
-    "screenshot": "http://www.deri.ie/amazonOrder-screenshot.jpg",
-    "version": "1.0",
-    "definition":[
-                   {
-                      "name": "amazonOrderForm1",
-                      "id": "21",
-                      "actions":[
-                          {
-                              "name": "init",
-                              "preconditions":[
-                              	{
-                                      "id":"purchase",
-                                      "uri":"http://aws.amazon.com/AWSECommerceService#PurchaseURL",
-                                      "positive":"true",
-                                      "origins":[
-                                      ]
-                                  }
-                              ],
-                              "uses":[],
-                              "triggers": [{"id": "_onload"} ]
-                          }
-                      ]
-                  }
-            ],
-    "preconditions": [[{
-      "label": {"en-gb": "A Amazon Purchase URL"},
-      "pattern": "?P http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#PurchaseURL",
-      "scope": "both"
-    }]],
-    "postconditions": []
+    "domainContext":{
+        "tags":[
+            "compound",
+            "amazon",
+            "order",
+            "purchase"
+        ],
+        "user":"admin"
+    },
+    "homepage":"http://www.deri.ie/amazonOrder",
+    "icon":"http://localhost:8010/images/catalogue/amazonOrder.png",
+    "label":{
+        "en-gb":"Order Compound"
+    },
+    "rights":"http://creativecommons.org/",
+    "screenshot":"http://localhost:8010/images/screenshots/amazonOrder.png",
+    "version":"1.0",
+    "definition":{
+        "buildingblocks":[
+            {
+                "id":"amazonOrderForm1",
+                "uri":"http://purl.oclc.org/fast/ontology/gadget#FormElement1259253465502"
+            }
+        ],
+        "pipes":[
+            
+        ],
+        "triggers":[
+            {
+                "from":{
+                    "buildingblock":"",
+                    "name":"_onload"
+                },
+                "to":{
+                    "buildingblock":"amazonOrderForm1",
+                    "action":"init"
+                }
+            }
+        ]
+    },
+    "preconditions":[
+        [
+            {
+                "label":{
+                    "en-gb":"A Amazon Purchase URL"
+                },
+                "pattern":"?P http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#PurchaseURL",
+                "positive":"true"
+            }
+        ]
+    ],
+    "postconditions":[
+        
+    ]
 }

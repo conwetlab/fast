@@ -1,26 +1,88 @@
 {
-    "name": "Amazon Shopping Form",
-    "code": "http://localhost:8010/forms/amazonShopping.src.html",
-    "creationDate": "2009-04-20T17:00:00+0100",
-    "creator": "http://www.fabio.es/",
-    "description": {"en-gb": "This screen shows the list of products added to the user shopping cart. It allows users to update product quantity and clear the cart."},
-    "domainContext": {
-      "tags": [
-        "amazon",
-        "cart"
-      ],
-      "user": "admin"
+    "name":"Amazon Shopping Form",
+    "code":"http://localhost:8010/forms/amazonShopping.src.html",
+    "creationDate":"2009-04-20T17:00:00+0100",
+    "creator":"http://www.fabio.es/",
+    "description":{
+        "en-gb":"This screen shows the list of products added to the user shopping cart. It allows users to update product quantity and clear the cart."
     },
-    "homepage": "http://www.deri.ie/amazonShopping",
-    "icon": "http://localhost:8010/images/catalogue/amazonShopping.png",
-    "label": {"en-gb": "Shopping Cart"},
-    "rights": "http://creativecommons.org/",
-    "screenshot": "http://www.deri.ie/amazonList-screenshot.jpg",
-    "version": "1.0",
-    "actions": [{"name":"init", "preconditions":[]},
-	            {"name":"showTable", "preconditions":[{"id":"list", "pattern":"?PList http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#ProductList", "positive":"true"}]}],
-	"postconditions": [{"id":"updateCart", "pattern":"?UCart http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#UpdatingCart", "positive":"true"},
-	                 {"id":"purchase", "pattern":"?Purchase http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#PurchaseURL", "positive":"true"},
-	                 {"id":"item", "pattern":"?Item http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#Item", "positive":"true"}],
-	"triggers":["purchase", "clearCart", "updateCart", "newItem"]
+    "domainContext":{
+        "tags":[
+            "amazon",
+            "cart"
+        ],
+        "user":"admin"
+    },
+    "homepage":"http://www.deri.ie/amazonShopping",
+    "icon":"http://localhost:8010/images/catalogue/amazonShopping.png",
+    "label":{
+        "en-gb":"Shopping Cart"
+    },
+    "rights":"http://creativecommons.org/",
+    "screenshot":"http://www.deri.ie/amazonList-screenshot.jpg",
+    "version":"1.0",
+    "libraries":[
+        
+    ],
+    "actions":[
+        {
+            "name":"init",
+            "preconditions":[
+                
+            ],
+            "uses":[
+                
+            ]
+        },
+        {
+            "name":"showTable",
+            "preconditions":[
+                {
+                    "id":"list",
+                    "label":{
+                        "en-gb":"A product list"
+                    },
+                    "pattern":"?PList http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#ProductList",
+                    "positive":"true"
+                }
+            ],
+            "uses":[
+                
+            ]
+        }
+    ],
+    "postconditions":[
+        [
+            {
+                "id":"updateCart",
+                "label":{
+                    "en-gb":"A shopping cart update"
+                },
+                "pattern":"?UCart http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#UpdatingCart",
+                "positive":"true"
+            },
+            {
+                "id":"purchase",
+                "label":{
+                    "en-gb":"A purchase"
+                },
+                "pattern":"?Purchase http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#PurchaseURL",
+                "positive":"true"
+            },
+            {
+                "id":"item",
+                "label":{
+                    "en-gb":"An item"
+                },
+                "pattern":"?Item http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#Item",
+                "positive":"true"
+            }
+        ]
+    ],
+    "triggers":[
+        "purchase",
+        "clearCart",
+        "updateCart",
+        "newItem"
+    ]
 }

@@ -1,109 +1,128 @@
-{	
-	"name": "Compound Amazon List Screen",
-    "creationDate": "2009-02-11T14:59:52+0100",
-    "creator": "http://www.ismaelrivera.es/",
-    "description": {"en-gb": "This screen shows the results of a given search in Amazon. It allows users to choose a product to see its details."},
-    "domainContext": {
-      "tags": [
-        "amazon",
-        "list"
-      ],
-      "user": "admin"
+{
+    "name":"Compound Amazon List Screen",
+    "creationDate":"2009-02-11T14:59:52+0100",
+    "creator":"http://www.ismaelrivera.es/",
+    "description":{
+        "en-gb":"This screen shows the results of a given search in Amazon. It allows users to choose a product to see its details."
     },
-    "homepage": "http://www.deri.ie/amazonList",
-    "icon": "http://localhost:8010/images/catalogue/amazonList.png",
-    "label": {"en-gb": "Product List"},
-    "rights": "http://creativecommons.org/",
-    "screenshot": "http://www.deri.ie/amazonList-screenshot.jpg",
-    "version": "1.0",
-    "definition":[
-                   {
-                      "name": "amazonListForm1",
-                      "id": "20",
-                      "actions":[
-                          {
-                              "name": "init",
-                              "preconditions":[],
-                              "uses":[],
-                              "triggers": [{"id": "_onload"} ]
-                          },
-                          {
-                              "name": "showTable",
-                              "preconditions":[
-                                  {
-                                      "id":"list",
-                                      "uri":"http://aws.amazon.com/AWSECommerceService#ProductList",
-                                      "positive":"true",
-                                      "origins":[
-                                          {
-                                              "origin":"AmazonSearchService1",
-                                              "id":"list",
-                                              "uri":"http://aws.amazon.com/AWSECommerceService#ProductList"
-                                          }
-                                      ]
-                                  }
-                              ],
-                              "uses":[],
-                              "triggers": []
-                          },
-                          {
-                              "name": "showMessage",
-                              "preconditions":[
-                                  {
-                                      "id":"message",
-                                      "uri":"http://aws.amazon.com/AWSECommerceService#Message",
-                                      "positive":"true",
-                                      "origins":[
-                                          {
-                                              "origin":"AmazonSearchService1",
-                                              "id":"message",
-                                              "uri":"http://aws.amazon.com/AWSECommerceService#Message"
-                                          }
-                                      ]
-                                  }
-                              ],
-                              "uses":[],
-                              "triggers": []
-                          }
-                      ]
-                  },
-                  {
-                      "name":"AmazonSearchService1",
-                      "id":"15",
-                      "actions":[
-                          {
-                              "name":"search",
-                              "preconditions":[
-                                  {
-                                      "id":"filter",
-                                      "uri":"http://aws.amazon.com/AWSECommerceService#SearchCriteria",
-                                      "positive":"true",
-                                      "origins":[
-                                          {
-                                              "origin":"amazonListForm1",
-                                              "id":"filter",
-                                              "uri":"http://aws.amazon.com/AWSECommerceService#SearchCriteria"
-                                          }
-                                      ]
-                                  }
-                              ],
-                              "uses":[
-                              ],
-                              "triggers": [{"id":"_onload"}]
-                          }
-                      ]
-                  }
-            ],
-    "preconditions": [[{
-      "label": {"en-gb": "A search criteria"},
-      "pattern": "?F http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#SearchCriteria",
-      "scope": "both"
-    }]],
-    "postconditions": [[{
-      "id": "item",
-	  "origin": "amazonListForm1",
-      "label": {"en-gb": "An item"},
-      "pattern": "?I http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#Item",
-      "scope": "both"
-    }]]
+    "domainContext":{
+        "tags":[
+            "compound",
+            "amazon",
+            "list"
+        ],
+        "user":"admin"
+    },
+    "homepage":"http://www.deri.ie/amazonList",
+    "icon":"http://localhost:8010/images/catalogue/amazonList.png",
+    "label":{
+        "en-gb":"Product List Compound"
+    },
+    "rights":"http://creativecommons.org/",
+    "screenshot":"http://localhost:8010/images/screenshots/amazonProductList.png",
+    "version":"1.0",
+    "definition":{
+        "buildingblocks":[
+            {
+                "id":"amazonListForm1",
+                "uri":"http://purl.oclc.org/fast/ontology/gadget#FormElement1259253452048"
+            },
+            {
+                "id":"AmazonSearchService1",
+                "uri":"http://purl.oclc.org/fast/ontology/gadget#BackendService1259254307948"
+            }
+        ],
+        "pipes":[
+            {
+                "from":{
+                    "buildingblock":"AmazonSearchService1",
+                    "condition":"list"
+                },
+                "to":{
+                    "buildingblock":"amazonListForm1",
+                    "condition":"list",
+                    "action":"showTable"
+                }
+            },
+            {
+                "from":{
+                    "buildingblock":"AmazonSearchService1",
+                    "condition":"message"
+                },
+                "to":{
+                    "buildingblock":"amazonListForm1",
+                    "condition":"message",
+                    "action":"showMessage"
+                }
+            },
+            {
+                "from":{
+                    "buildingblock":"amazonListForm1",
+                    "condition":"filter"
+                },
+                "to":{
+                    "buildingblock":"AmazonSearchService1",
+                    "condition":"filter",
+                    "action":"search"
+                }
+            },
+            {
+                "from":{
+                    "buildingblock":"amazonListForm1",
+                    "condition":"item"
+                },
+                "to":{
+                    "buildingblock":"",
+                    "action":"",
+                    "condition":"item"
+                }
+            }
+        ],
+        "triggers":[
+            {
+                "from":{
+                    "buildingblock":"",
+                    "name":"_onload"
+                },
+                "to":{
+                    "buildingblock":"amazonListForm1",
+                    "action":"init"
+                }
+            },
+            {
+                "from":{
+                    "buildingblock":"",
+                    "name":"_onload"
+                },
+                "to":{
+                    "buildingblock":"AmazonSearchService1",
+                    "action":"search"
+                }
+            }
+        ]
+    },
+    "preconditions":[
+        [
+            {
+                "label":{
+                    "en-gb":"A search criteria"
+                },
+                "pattern":"?F http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#SearchCriteria",
+                "positive":"true"
+            }
+        ]
+    ],
+    "postconditions":[
+        [
+            {
+                "id":"item",
+                "origin":"amazonListForm1",
+                "label":{
+                    "en-gb":"An item"
+                },
+                "pattern":"?I http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#Item",
+                "positive":"true"
+            }
+        ]
+    ]
 }

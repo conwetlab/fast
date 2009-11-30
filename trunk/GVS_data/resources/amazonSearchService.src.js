@@ -30,7 +30,7 @@ search: function (filter){
     new FastAPI.Request(encodedUrl,{
         'method':       'get',
         'content':      'xml',
-        'context':      this.context,
+        'context':      this,
         'onSuccess':    this.addToList.bind(this)
     });
 },

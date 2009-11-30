@@ -103,10 +103,9 @@
         new FastAPI.Request(encodedUrl,{
             'method':       'get',
             'content':      'xml',
-            'context':      this,
+            'context':      list,
             'onSuccess':    list.addToList
         });
-        //FastAPI.getXML(url, this, list.addToList);
     }
     List.prototype.addToList = function (transport){
         var xml = transport;

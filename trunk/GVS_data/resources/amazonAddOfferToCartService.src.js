@@ -18,7 +18,7 @@ addToCart: function (offer, cart){
     	new FastAPI.Request(url,{
             'method':       'get',
             'content':      'xml',
-            'context':      this.context,
+            'context':      this,
             'onSuccess':    this.productAdded.bind(this)
         });
 	} else { //Cart doesn't exist: Create a new cart with the product
@@ -38,7 +38,7 @@ addToCart: function (offer, cart){
     	new FastAPI.Request(url,{
             'method':       'get',
             'content':      'xml',
-            'context':      this.context,
+            'context':      this,
             'onSuccess':    this.cartCreated.bind(this)
         });
 	}
@@ -64,21 +64,20 @@ cartCreated: function (transport){
 					HMAC: xml.getElementsByTagName("URLEncodedHMAC")[0].firstChild.nodeValue}};
 		this.manageData(["message"], [cart, message], []);
 	} else {
-		var message = {name: "message", data:{message: "Error adding the product to the cart"}};
+		var message = {id: "message", data:{message: "Error adding the product to the cart"}};
 		this.manageData(["message"], [message], []);
     }
 },
 
 productAdded: function (transport){
 	var xml = transport;
-	var message = {name: "message", data:{message: ""}};
+	var message = {id: "message", data:{message: ""}};
 	
 	//Check if the product is eligible for shopping
 	if ((xml.getElementsByTagName("Error").length > 0) && 
 		xml.getElementsByTagName("Error")[0].firstChild.firstChild.nodeValue == "AWS.ECommerceService.ItemNotEligibleForCart"){
 		//The product is not elegible
-		message.message = "The product is not eligible to be added to the cart";
-		return;
+		message.data.message = "The product is not eligible to be added to the cart";
 	} else {
 		//If the product is added to the cart,
 		//tell it to the user

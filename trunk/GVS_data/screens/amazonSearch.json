@@ -1,39 +1,72 @@
 {
-    "name": "Compound Amazon Search Screen",
-    "creationDate": "2009-04-20T17:00:00+0100",
-    "creator": "http://www.fabio.es/",
-    "description": {"en-gb": "This screen allows users to look for a product in Amazon, providing a keyword search interface. It produces a search criteria or filter fact."},
-    "domainContext": {
-      "tags": [
-        "amazon",
-        "search"
-      ],
-      "user": "admin"
+    "name":"Compound Amazon Search Screen",
+    "creationDate":"2009-04-20T17:00:00+0100",
+    "creator":"http://www.fabio.es/",
+    "description":{
+        "en-gb":"This screen allows users to look for a product in Amazon, providing a keyword search interface. It produces a search criteria or filter fact."
     },
-    "homepage": "http://www.deri.ie/amazonSearch",
-    "icon": "http://localhost:8010/images/catalogue/amazonSearch.png",
-    "label": {"en-gb": "Product Search"},
-    "rights": "http://creativecommons.org/",
-    "screenshot": "http://www.deri.ie/amazonSearch-screenshot.jpg",
-    "version": "1.0",
-    "definition":[{
-                        "name":"amazonSearchForm1",
-                        "id":"24",
-                        "actions":[
-                            {
-                                "name":"init",
-                                "preconditions":[],
-                                "uses":[],
-                                "triggers":[{"id": "_onload"}]
-                            }
-                        ]
-                    }],
-    "preconditions": [],
-	"postconditions": [[{
-	  "id": "filter",
-	  "origin": "amazonSearchForm1",
-      "label": {"en-gb": "A search criteria"},
-      "pattern": "?F http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#SearchCriteria",
-      "scope": "both"
-    }]]
+    "domainContext":{
+        "tags":[
+            "compound",
+            "amazon",
+            "search"
+        ],
+        "user":"admin"
+    },
+    "homepage":"http://www.deri.ie/amazonSearch",
+    "icon":"http://localhost:8010/images/catalogue/amazonSearch.png",
+    "label":{
+        "en-gb":"Product Search Compound"
+    },
+    "rights":"http://creativecommons.org/",
+    "screenshot":"http://localhost:8010/images/screenshots/amazonSearch.png",
+    "version":"1.0",
+    "definition":{
+        "buildingblocks":[
+            {
+                "id":"amazonSearchForm1",
+                "uri":"http://purl.oclc.org/fast/ontology/gadget#FormElement1259253692044"
+            }
+        ],
+        "pipes":[
+            {
+                "from":{
+                    "buildingblock":"amazonSearchForm1",
+                    "condition":"filter"
+                },
+                "to":{
+                    "buildingblock":"",
+                    "action":"",
+                    "condition":"filter"
+                }
+            }
+        ],
+        "triggers":[
+            {
+                "from":{
+                    "buildingblock":"",
+                    "name":"_onload"
+                },
+                "to":{
+                    "buildingblock":"amazonSearchForm1",
+                    "action":"init"
+                }
+            }
+        ]
+    },
+    "preconditions":[
+        
+    ],
+    "postconditions":[
+        [
+            {
+                "id":"filter",
+                "label":{
+                    "en-gb":"A search criteria"
+                },
+                "pattern":"?F http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#SearchCriteria",
+                "positive":"true"
+            }
+        ]
+    ]
 }

@@ -1,28 +1,68 @@
 {
-    "name": "Clear Amazon Cart Service",
-    "code": "http://localhost:8010/resources/amazonClearCartService.src.js",
-    "creationDate": "2009-04-20T17:00:00+0100",
-    "creator": "http://www.fabio.es/",
-    "description": {"en-gb": "This service clears an Amazon shopping cart"},
-    "domainContext": {
-      "tags": [
-        "amazon",
-        "shopping",
-        "cart"
-      ],
-      "user": "admin"
+    "name":"Clear Amazon Cart Service",
+    "code":"http://localhost:8010/resources/amazonClearCartService.src.js",
+    "creationDate":"2009-04-20T17:00:00+0100",
+    "creator":"http://www.fabio.es/",
+    "description":{
+        "en-gb":"This service clears an Amazon shopping cart"
     },
-    "homepage": "http://www.deri.ie/amazonClearCartService",
-    "icon": "http://localhost:8010/images/catalogue/amazonClearCartService.png",
-    "label": {"en-gb": "Clear Amazon Shopping Cart"},
-    "rights": "http://creativecommons.org/",
-    "screenshot": "http://www.deri.ie/amazonClearCartService.jpg",
-    "version": "1.0",
-    "libs":[
-    	{"language": "JavaScript", "src": "http://piccolo.ls.fi.upm.es/amazonURL/signAmazonURLs.js"},
-    	{"language": "JavaScript", "src": "http://piccolo.ls.fi.upm.es/amazonURL/jssha2/sha2.js"}
-    	],
-    "actions": [{"name":"clearService", "preconditions":[{"id":"cart", "pattern":"?Cart http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#ShoppingCart", "positive":"true"}],"uses":[]}],
-	"postconditions": [{"id":"purchase", "pattern":"?Purchase http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#PurchaseURL", "positive":false}],
-	"triggers":["clearedCart"]
+    "domainContext":{
+        "tags":[
+            "amazon",
+            "shopping",
+            "cart"
+        ],
+        "user":"admin"
+    },
+    "homepage":"http://www.deri.ie/amazonClearCartService",
+    "icon":"http://localhost:8010/images/catalogue/amazonClearCartService.png",
+    "label":{
+        "en-gb":"Clear Amazon Shopping Cart"
+    },
+    "rights":"http://creativecommons.org/",
+    "screenshot":"http://www.deri.ie/amazonClearCartService.jpg",
+    "version":"1.0",
+    "libraries":[
+        {
+            "language":"JavaScript",
+            "source":"http://piccolo.ls.fi.upm.es/amazonURL/signAmazonURLs.js"
+        },
+        {
+            "language":"JavaScript",
+            "source":"http://piccolo.ls.fi.upm.es/amazonURL/jssha2/sha2.js"
+        }
+    ],
+    "actions":[
+        {
+            "name":"clearService",
+            "preconditions":[
+                {
+                    "id":"cart",
+                    "label":{
+                        "en-gb":"A shopping cart"
+                    },
+                    "pattern":"?Cart http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#ShoppingCart",
+                    "positive":"true"
+                }
+            ],
+            "uses":[
+                
+            ]
+        }
+    ],
+    "postconditions":[
+        [
+            {
+                "id":"purchase",
+                "label":{
+                    "en-gb":"A purchase"
+                },
+                "pattern":"?Purchase http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#PurchaseURL",
+                "positive":"false"
+            }
+        ]
+    ],
+    "triggers":[
+        "clearedCart"
+    ]
 }

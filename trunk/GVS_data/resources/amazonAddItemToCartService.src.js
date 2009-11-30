@@ -16,7 +16,7 @@ add: function (item, cart){
     	new FastAPI.Request(url,{
             'method':       'get',
             'content':      'xml',
-            'context':      this.context,
+            'context':      this,
             'onSuccess':    function(transport){this.isProductOnCart(transport, item, cart);}.bind(this)
         });
 	} else { //Cart doesn't exist: Create a new cart with the product
@@ -36,7 +36,7 @@ add: function (item, cart){
     	new FastAPI.Request(url,{
             'method':       'get',
             'content':      'xml',
-            'context':      this.context,
+            'context':      this,
             'onSuccess':    function(transport){this.cartCreated(transport, item);}.bind(this)
         });
 	}
@@ -120,7 +120,7 @@ isProductOnCart: function (transport, item, cart){
     	new FastAPI.Request(url,{
             'method':       'get',
             'content':      'xml',
-            'context':      this.context,
+            'context':      this,
             'onSuccess':    this.productAdded.bind(this)
         });
 	} else {
@@ -143,7 +143,7 @@ isProductOnCart: function (transport, item, cart){
     	new FastAPI.Request(url,{
             'method':       'get',
             'content':      'xml',
-            'context':      this.context,
+            'context':      this,
             'onSuccess':    this.productAdded.bind(this)
         });
 	}

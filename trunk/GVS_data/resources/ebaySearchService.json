@@ -1,23 +1,58 @@
 {
-    "name": "Ebay Search Service",
-    "code": "http://localhost:8010/resources/ebaySearchService.src.js",
-    "creationDate": "2009-04-20T17:00:00+0100",
-    "creator": "http://www.fabio.es/",
-    "description": {"en-gb": "This service provides information about products in eBay Catalogue"},
-    "domainContext": {
-      "tags": [
-        "ebay",
-        "list"
-      ],
-      "user": "admin"
+    "name":"Ebay Search Service",
+    "code":"http://localhost:8010/resources/ebaySearchService.src.js",
+    "creationDate":"2009-04-20T17:00:00+0100",
+    "creator":"http://www.fabio.es/",
+    "description":{
+        "en-gb":"This service provides information about products in eBay Catalogue"
     },
-    "homepage": "http://www.deri.ie/ebaySearchService",
-    "icon": "http://localhost:8010/images/catalogue/ebaySearchService.png",
-    "label": {"en-gb": "eBay Search"},
-    "rights": "http://creativecommons.org/",
-    "screenshot": "http://www.deri.ie/ebaySearchService.jpg",
-    "version": "1.0",
-    "actions": [{"name":"fetch", "preconditions":[{"id":"filter", "pattern":"?eFilter http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://developer.ebay.com/DevZone/shopping/docs/CallRef/FindItemsAdvanced.html#Request", "positive":"true"}], "uses":[]}],
-	"postconditions": [{"id":"list", "pattern":"?eList http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://developer.ebay.com/DevZone/shopping/docs/CallRef/FindItemsAdvanced.html#Response", "positive":"true"}],
-	"triggers":["productList"]
+    "domainContext":{
+        "tags":[
+            "ebay",
+            "list"
+        ],
+        "user":"admin"
+    },
+    "homepage":"http://www.deri.ie/ebaySearchService",
+    "icon":"http://localhost:8010/images/catalogue/ebaySearchService.png",
+    "label":{
+        "en-gb":"eBay Search"
+    },
+    "rights":"http://creativecommons.org/",
+    "screenshot":"http://www.deri.ie/ebaySearchService.jpg",
+    "version":"1.0",
+    "libraries":[],
+    "actions":[
+        {
+            "name":"fetch",
+            "preconditions":[
+                {
+                    "id":"filter",
+                    "label":{
+                        "en-gb":"A filter"
+                    },
+                    "pattern":"?eFilter http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://developer.ebay.com/DevZone/shopping/docs/CallRef/FindItemsAdvanced.html#Request",
+                    "positive":"true"
+                }
+            ],
+            "uses":[
+                
+            ]
+        }
+    ],
+    "postconditions":[
+        [
+            {
+                "id":"list",
+                "label":{
+                    "en-gb":"A product list"
+                },
+                "pattern":"?eList http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://developer.ebay.com/DevZone/shopping/docs/CallRef/FindItemsAdvanced.html#Response",
+                "positive":"true"
+            }
+        ]
+    ],
+    "triggers":[
+        "productList"
+    ]
 }

@@ -15,7 +15,7 @@ fetch: function (filter){
     new FastAPI.Request(url,{
         'method':       'get',
         'content':      'xml',
-        'context':      this.context,
+        'context':      this,
         'onSuccess':    function (transport){this.addToList(transport, filter)}.bind(this)
     });
 },

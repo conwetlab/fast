@@ -1,145 +1,144 @@
-{	
-	"name": "Compound Amazon Price Comparative Screen",
-    "creationDate": "2009-04-20T17:00:00+0100",
-    "creator": "http://www.fabio.es/",
-    "description": {"en-gb": "This screen shows a price comparative for a given product."},
-    "domainContext": {
-      "tags": [
-        "amazon",
-        "list",
-        "suggestion",
-        "price comparative"
-      ],
-      "user": null
+{
+    "name":"Compound Amazon Price Comparative Screen",
+    "creationDate":"2009-04-20T17:00:00+0100",
+    "creator":"http://www.fabio.es/",
+    "description":{
+        "en-gb":"This screen shows a price comparative for a given product."
     },
-    "homepage": "http://www.deri.ie/amazonPrice",
-    "icon": "http://localhost:8010/images/catalogue/amazonPrice.png",
-    "label": {"en-gb": "Price Comparative"},
-    "rights": "http://creativecommons.org/",
-    "screenshot": "http://www.deri.ie/amazonPrice-screenshot.jpg",
-    "version": "1.0",
-    "definition":[
-                   {
-                      "name": "PriceComparativeForm1",
-                      "id": "22",
-                      "actions":[
-                          {
-                              "name": "init",
-                              "preconditions":[
-                              	{
-                                      "id":"item",
-                                      "uri":"http://aws.amazon.com/AWSECommerceService#Item",
-                                      "positive":"true",
-                                      "origins":[]
-                                 }],
-                              "uses":[],
-                              "triggers": [{"id": "_onload"} ]
-                          },
-                          {
-                              "name": "showTable",
-                              "preconditions":[
-                                  {
-                                      "id":"list",
-                                      "uri":"http://aws.amazon.com/AWSECommerceService#OfferList",
-                                      "positive":"true",
-                                      "origins":[
-                                          {
-                                              "origin":"PriceComparativeService1",
-                                              "id":"list",
-                                              "uri":"http://aws.amazon.com/AWSECommerceService#OfferList"
-                                          }
-                                      ]
-                                  }
-                              ],
-                              "uses":[],
-                              "triggers": []
-                          },
-                          {
-                              "name": "showMessage",
-                              "preconditions":[
-                                  {
-                                      "id":"message",
-                                      "uri":"http://aws.amazon.com/AWSECommerceService#Message",
-                                      "positive":"true",
-                                      "origins":[
-                                          {
-                                              "origin":"PriceComparativeService1",
-                                              "id":"message",
-                                              "uri":"http://aws.amazon.com/AWSECommerceService#Message"
-                                          },
-	                                      {
-	                                         "origin":"AmazonAddOfferToCartService1",
-	                                         "id":"message",
-	                                         "name":"http://aws.amazon.com/AWSECommerceService#Message"
-	                                      }
-                                      ]
-                                  }
-                              ],
-                              "uses":[],
-                              "triggers": []
-                          }
-                      ]
-                  },
-                  {
-                      "name":"PriceComparativeService1",
-                      "id":"13",
-                      "actions":[
-                          {
-                              "name":"fetch",
-                              "preconditions":[
-                                  {
-                                      "id":"item",
-                                      "uri":"http://aws.amazon.com/AWSECommerceService#Item",
-                                      "positive":"true",
-                                      "origins":[]
-                                  }
-                              ],
-                              "uses":[],
-                              "triggers": [{"id":"_onload"}]
-                          }
-                      ]
-                  },
-                  {
-                      "name":"AmazonAddOfferToCartService1",
-                      "id":"10",
-                      "actions":[
-                          {
-                              "name":"addToCart",
-                              "preconditions":[
-                                  {
-                                      "id":"offer",
-                                      "uri":"http://aws.amazon.com/AWSECommerceService#Offer",
-                                      "positive":"true",
-                                      "origins":[
-                                      	{
-										    "origin":"PriceComparativeForm1",
-										    "id":"offer",
-										    "uri":"http://aws.amazon.com/AWSECommerceService#Offer"
-										}
-                                      ]
-                                  }
-                              ],
-                              "uses":[
-                              	 {
-                                     "id":"cart",
-                                     "name":"http://aws.amazon.com/AWSECommerceService#ShoppingCart"
-                                 }
-		                              ],
-                              "triggers": []
-                          }
-                      ]
-                  }
-            ],
-    "preconditions": [[{
-      "label": {"en-gb": "An item"},
-      "pattern": "?Item http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#Item",
-      "scope": "both"
-    }]],
-    "postconditions": [[{
-      "id": "cart",
-	  "origin": "AmazonAddOfferToCartService1",
-      "label": {"en-gb": "An shopping cart"},
-      "pattern": "?Cart http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#ShoppingCart",
-      "scope": "both"
-    }]]
+    "domainContext":{
+        "tags":[
+            "compound",
+            "amazon",
+            "list",
+            "suggestion",
+            "price comparative"
+        ],
+        "user":"admin"
+    },
+    "homepage":"http://www.deri.ie/amazonPrice",
+    "icon":"http://localhost:8010/images/catalogue/amazonPrice.png",
+    "label":{
+        "en-gb":"Price Comparative Compound"
+    },
+    "rights":"http://creativecommons.org/",
+    "screenshot":"http://localhost:8010/images/screenshots/amazonPriceComparative.png",
+    "version":"1.0",
+    "definition":{
+        "buildingblocks":[
+            {
+                "id":"PriceComparativeForm1",
+                "uri":"http://purl.oclc.org/fast/ontology/gadget#FormElement1259253572039"
+            },
+            {
+                "id":"PriceComparativeService1",
+                "uri":"http://purl.oclc.org/fast/ontology/gadget#BackendService1259254187946"
+            },
+            {
+                "id":"AmazonAddOfferToCartService1",
+                "uri":"http://purl.oclc.org/fast/ontology/gadget#BackendService1259254005724"
+            }
+        ],
+        "pipes":[
+            {
+                "from":{
+                    "buildingblock":"PriceComparativeService1",
+                    "condition":"list"
+                },
+                "to":{
+                    "buildingblock":"PriceComparativeForm1",
+                    "condition":"list",
+                    "action":"showTable"
+                }
+            },
+            {
+                "from":{
+                    "buildingblock":"PriceComparativeService1",
+                    "condition":"message"
+                },
+                "to":{
+                    "buildingblock":"PriceComparativeForm1",
+                    "condition":"message",
+                    "action":"showMessage"
+                }
+            },
+            {
+                "from":{
+                    "buildingblock":"AmazonAddOfferToCartService1",
+                    "condition":"message"
+                },
+                "to":{
+                    "buildingblock":"PriceComparativeForm1",
+                    "condition":"message",
+                    "action":"showMessage"
+                }
+            },
+            {
+                "from":{
+                    "buildingblock":"PriceComparativeForm1",
+                    "condition":"offer"
+                },
+                "to":{
+                    "buildingblock":"AmazonAddOfferToCartService1",
+                    "condition":"offer",
+                    "action":"addToCart"
+                }
+            },
+            {
+                "from":{
+                    "buildingblock":"AmazonAddOfferToCartService1",
+                    "condition":"cart"
+                },
+                "to":{
+                    "buildingblock":"",
+                    "action":"",
+                    "condition":"cart"
+                }
+            }
+        ],
+        "triggers":[
+            {
+                "from":{
+                    "buildingblock":"",
+                    "name":"_onload"
+                },
+                "to":{
+                    "buildingblock":"PriceComparativeForm1",
+                    "action":"init"
+                }
+            },
+            {
+                "from":{
+                    "buildingblock":"",
+                    "name":"_onload"
+                },
+                "to":{
+                    "buildingblock":"PriceComparativeService1",
+                    "action":"fetch"
+                }
+            }
+        ]
+    },
+    "preconditions":[
+        [
+            {
+                "label":{
+                    "en-gb":"An item"
+                },
+                "pattern":"?Item http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#Item",
+                "positive":"true"
+            }
+        ]
+    ],
+    "postconditions":[
+        [
+            {
+                "id":"cart",
+                "label":{
+                    "en-gb":"An shopping cart"
+                },
+                "pattern":"?Cart http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#ShoppingCart",
+                "positive":"true"
+            }
+        ]
+    ]
 }

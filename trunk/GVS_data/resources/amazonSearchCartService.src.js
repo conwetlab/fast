@@ -18,7 +18,7 @@ fetch: function (cart){
     new FastAPI.Request(url,{
         'method':       'get',
         'content':      'xml',
-        'context':      this.context,
+        'context':      this,
         'onSuccess':    this.addToList.bind(this)
     });
 },

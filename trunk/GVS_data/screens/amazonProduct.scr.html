@@ -147,10 +147,9 @@
 		                new FastAPI.Request(url,{
 		                    'method':       'get',
 		                    'content':      'xml',
-		                    'context':      this,
+		                    'context':      product,
 		                    'onSuccess':    product.fetchProductInfo
 		                });
-                        //FastAPI.getXML(url, this, product.fetchProductInfo);
 					}
 					
 					Product.prototype.fetchProductInfo = function (transport){
@@ -474,10 +473,9 @@
 	                        new FastAPI.Request(url,{
 	                            'method':       'get',
 	                            'content':      'xml',
-	                            'context':      this,
+	                            'context':      product,
 	                            'onSuccess':    product.isProductOnCart
 	                        });
-	                    	//FastAPI.getXML(url, this, product.isProductOnCart);
 						}
 						else { //Cart doesn't exist: Create a new cart with the product
 							var url = "http://webservices.amazon.com/onca/xml?Service=AWSECommerceService";
@@ -501,10 +499,9 @@
 	                    	new FastAPI.Request(url,{
                                 'method':       'get',
                                 'content':      'xml',
-                                'context':      this,
+                                'context':      product,
                                 'onSuccess':    product.cartCreated
                             });
-                            //FastAPI.getXML(url, this, product.cartCreated);
 						}
 					}
 					
@@ -611,10 +608,9 @@
                             new FastAPI.Request(url,{
                                 'method':       'get',
                                 'content':      'xml',
-                                'context':      this,
+                                'context':      product,
                                 'onSuccess':    product.productAdded
                             });
-	                    	//FastAPI.getXML(url, this, product.productAdded);
 						}
 						else {
 		                    //Create the call
@@ -641,10 +637,9 @@
                             new FastAPI.Request(url,{
                                 'method':       'get',
                                 'content':      'xml',
-                                'context':      this,
+                                'context':      product,
                                 'onSuccess':    product.productAdded
                             });
-	                    	//FastAPI.getXML(url, this, product.productAdded);
 						}
 					}
 					
