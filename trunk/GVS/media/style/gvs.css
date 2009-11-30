@@ -110,7 +110,7 @@ h4{
         text-align: center;
 }
 .preferencesIcon {  background-position:    0px; }
-.deployIcon      {  background-position:  -24px; }
+.buildIcon       {  background-position:  -24px; }
 .deleteIcon      {  background-position:  -48px; }
 .previewIcon     {  background-position:  -72px; }
 .saveIcon        {  background-position:  -96px; }

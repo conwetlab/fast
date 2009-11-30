@@ -42,10 +42,10 @@ var ScreenflowDocument = Class.create(PaletteDocument,
         this._planPanel.setInferenceEngine(this._inferenceEngine);
         
         /**
-         * @type Deployer
+         * @type Builder
          * @private @member
          */
-        this._deployer = new Deployer();
+        this._builder = new Builder();
        
               
         // Screenflow Definition
@@ -267,10 +267,10 @@ var ScreenflowDocument = Class.create(PaletteDocument,
                 this._startDeletingSelectedElement.bind(this),
                 false // disabled by default
         ));
-        this._addToolbarElement('deploy', new ToolbarButton(
-                'Store & Deploy Gadget',
-                'deploy',
-                this._deployGadget.bind(this),
+        this._addToolbarElement('build', new ToolbarButton(
+                'Build Gadget',
+                'build',
+                this._buildGadget.bind(this),
                 false // disabled by default
         ));
     },
@@ -385,7 +385,7 @@ var ScreenflowDocument = Class.create(PaletteDocument,
         
         // FIXME: we must learn about document reachability from the inference 
         //        engine. By the moment, one screen == deployable screenflow ;)
-        this._toolbarElements.get('deploy').setEnabled(canvas.size() > 0);
+        this._toolbarElements.get('build').setEnabled(canvas.size() > 0);
         this._toolbarElements.get('save').setEnabled(canvas.size() > 0);
     },
     
@@ -486,11 +486,11 @@ var ScreenflowDocument = Class.create(PaletteDocument,
     
     
     /**
-     * Creates a gadget deployment for the screenflow
+     * Build a gadget for the screenflow
      * @private
      */
-    _deployGadget: function () {
-        this._deployer.deployGadget(this._description);
+    _buildGadget: function () {
+        this._builder.buildGadget(this._description);
     },
     
     /**

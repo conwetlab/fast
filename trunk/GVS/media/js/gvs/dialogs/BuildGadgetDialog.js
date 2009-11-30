@@ -1,4 +1,4 @@
-var StoreGadgetDialog = Class.create(ConfirmDialog /** @lends StoreGadgetDialog.prototype */, {
+var BuildGadgetDialog = Class.create(ConfirmDialog /** @lends BuildGadgetDialog.prototype */, {
     /**
      * This class handles the dialog
      * to store a gadget
@@ -7,7 +7,7 @@ var StoreGadgetDialog = Class.create(ConfirmDialog /** @lends StoreGadgetDialog.
      */ 
     initialize: function($super, /** Function */ onDeployCallback) {
         
-        $super("Store Gadget");
+        $super("Build Gadget");
         
         /**
          * @type Function

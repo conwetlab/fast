@@ -41,8 +41,8 @@ var PlanSet = Class.create(BuildingBlockSet, /** @lends PlanSet.prototype */ {
      * Add new building blocks to the set by uri
      */
     setPlans: function (/** Array */ plans) {
-        this._plans = plans;
-        var uris = plans.flatten().uniq();
+        this._plans = plans.splice(0,10); //Just in case
+        var uris = this._plans.flatten().uniq();
         this._factory.cacheBuildingBlocks(uris, this._cachedElements.bind(this));
     },
 

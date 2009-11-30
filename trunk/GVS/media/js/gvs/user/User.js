@@ -100,6 +100,8 @@ var User = Class.create( /** @lends User.prototype */ {
         this._email = userData.email;
         this._ezWebURL = userData.ezWebURL;
         
+        URIs.ezweb = this._ezWebURL;
+        
         //Send it to the server
         this._updateUser();
     },
@@ -122,6 +124,8 @@ var User = Class.create( /** @lends User.prototype */ {
             this._lastName = remoteUser.user.last_name;
             this._email = remoteUser.user.email;
             this._ezWebURL = remoteUser.profile.ezweb_url;
+            
+            URIs.ezweb = this._ezWebURL;
         }
         /**
          * onError handler

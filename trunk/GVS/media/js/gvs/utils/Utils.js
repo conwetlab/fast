@@ -14,10 +14,12 @@ Object.extend(Utils, {
         return dateString;
     },
     
-    ezWebDeploy: function(/** dijit.form.Button */ button, /**String*/ ezWebUri,/**String*/ templateUri) {
+    ezWebDeploy: function(/** domNode */ buttonNode, /**String*/ templateUrl) {
+        var button = dijit.byId(buttonNode.id);
         button.attr("label", "Done!");
         button.attr("disabled", true);
-        window.open(ezWebUri + "?template_uri=" + templateUri);
+        window.open(URIs.ezweb + "interfaces/gadget?template_uri=" + templateUrl);
+        console.log(URIs.ezweb + "interfaces/gadget?template_uri=" + templateUrl);
     },
     
     igoogleDeploy: function(/**String*/ uri) {

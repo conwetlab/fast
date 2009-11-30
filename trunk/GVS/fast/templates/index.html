@@ -68,7 +68,7 @@
             var browser = new BrowserChecker();
             
             var URIs = new Object();
-            URIs.store = "deploy/";
+            URIs.store = "storage/";
             URIs.catalogue = "catalogue";
             URIs.catalogueScreens = "catalogue/screens";
             URIs.catalogueFind = "catalogue/screen/find";
@@ -88,6 +88,7 @@
             URIs.about = "{{ MEDIA_URL }}resources/about.html";
             URIs.pre = "catalogue/preconditions/";
             URIs.post = "catalogue/postconditions/";
+            URIs.ezweb = "{{EZWEB_URL}}";
 
         </script>
 
@@ -241,7 +242,9 @@
         <script type="text/javascript"
             src="{{ MEDIA_URL }}js/gvs/dialogs/ExternalContentDialog.js"></script>
         <script type="text/javascript"
-            src="{{ MEDIA_URL }}js/gvs/dialogs/StoreGadgetDialog.js"></script>
+            src="{{ MEDIA_URL }}js/gvs/dialogs/BuildGadgetDialog.js"></script>
+        <script type="text/javascript"
+            src="{{ MEDIA_URL }}js/gvs/dialogs/PublishGadgetDialog.js"></script>
         <script type="text/javascript"
             src="{{ MEDIA_URL }}js/gvs/dialogs/AddScreenDialog.js"></script>
         <script type="text/javascript"
@@ -265,9 +268,9 @@
         <script type="text/javascript"
             src="{{ MEDIA_URL }}js/gvs/plans/PlanInstance.js"></script>
             
-        <!-- Deploy -->
+        <!-- Build -->
         <script type="text/javascript"
-            src="{{ MEDIA_URL }}js/gvs/deploy/Deployer.js"></script>        
+            src="{{ MEDIA_URL }}js/gvs/build/Builder.js"></script>        
         
         <!-- User account -->
         <script type="text/javascript" 

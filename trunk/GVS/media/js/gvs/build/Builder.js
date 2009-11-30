@@ -1,6 +1,7 @@
-var Deployer = Class.create( /** @lends Deployer.prototype */ {
+var Builder = Class.create( /** @lends Builder.prototype */ {
     /**
-     * On charge of deploying screenflows to the mashup platform.
+     * On charge of building screenflows and showing the possibility to
+     * Deploy the gadget into the mashup platrom 
      * @constructs
      */ 
     initialize: function() {
@@ -8,13 +9,13 @@ var Deployer = Class.create( /** @lends Deployer.prototype */ {
          * @type StoreGadgetDialog
          * @private @member
          */
-        this._storeGadgetDialog = new StoreGadgetDialog(this._onStoreGadgetDialogCallback.bind(this));
+        this._buildGadgetDialog = new BuildGadgetDialog(this._onBuildGadgetDialogCallback.bind(this));
         
         /** 
-         * @type ExternalContentDialog
+         * @type PublishGadgetDialog
          * @private @member
          */
-        this._deployGadgetDialog = new ExternalContentDialog("Deploy gadget");       
+        this._publishGadgetDialog = new PublishGadgetDialog();       
         
         /**
          * @type ScreenflowDescription
@@ -30,14 +31,14 @@ var Deployer = Class.create( /** @lends Deployer.prototype */ {
      * Creates a gadget deployment from the ScreenflowDescription
      * @public
      */
-    deployGadget: function (/** ScreenflowDescription */ description) {
+    buildGadget: function (/** ScreenflowDescription */ description) {
         this._description = description;
-        this._storeGadgetDialog.show(description.label['en-gb']);
+        this._buildGadgetDialog.show(description.label['en-gb']);
     }, 
 
     // **************** PRIVATE METHODS **************** //
 
-    _onStoreGadgetDialogCallback: function(/** Object */ data) {       
+    _onBuildGadgetDialogCallback: function(/** Object */ data) {       
         // save screenflow
         // TODO: to be managed by the PM
        
@@ -56,10 +57,10 @@ var Deployer = Class.create( /** @lends Deployer.prototype */ {
         this._description.id = json.id;
         this._description.uri = URIs.buildingblock + '/' + json.id;
         
-        this._storeGadget();  
+        this._buildGadget();  
     },
     
-    _storeGadget: function() { 
+    _buildGadget: function() { 
         
         storeParams = {
             'gadget': this._description.toJSON(),
@@ -68,11 +69,13 @@ var Deployer = Class.create( /** @lends Deployer.prototype */ {
         
         var persistenceEngine = PersistenceEngineFactory.getInstance();
         persistenceEngine.sendPost(URIs.store, storeParams, null, 
-                this, this._onStoreSuccess, this._onError);
+                this, this._onBuildSuccess, this._onError);
     },
     
-    _onStoreSuccess: function(/** XMLHttpRequest */ transport) {
-        this._deployGadgetDialog.show(new Element('div').update(transport.responseText));
+    _onBuildSuccess: function(/** XMLHttpRequest */ transport) {
+        var result = JSON.parse(transport.responseText);
+        var gadgetBaseUrl = result.gadgetURL;
+        this._publishGadgetDialog.show(gadgetBaseUrl);
     },
     
     _onError: function(/** XMLHttpRequest */ transport, /** Exception */ e) {
