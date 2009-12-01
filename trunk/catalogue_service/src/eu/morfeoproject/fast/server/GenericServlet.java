@@ -385,12 +385,13 @@ public abstract class GenericServlet extends HttpServlet {
 			JSONObject pJson = pipesArray.getJSONObject(i);
 			Pipe p = FastModelFactory.createPipe();
 			JSONObject fromJson = pJson.getJSONObject("from");
-			p.setIdBBFrom(fromJson.getString("buildingblock"));
+			p.setIdBBFrom(fromJson.getString("buildingblock").equals("null") ? null : fromJson.getString("buildingblock"));
 			p.setIdConditionFrom(fromJson.getString("condition"));
 			JSONObject toJson = pJson.getJSONObject("to");
-			p.setIdBBTo(toJson.getString("buildingblock"));
+			p.setIdBBTo(toJson.getString("buildingblock").equals("null") ? null : toJson.getString("buildingblock"));
 			p.setIdConditionTo(toJson.getString("condition"));
-			p.setIdActionTo(toJson.getString("action"));
+			String action = toJson.has("action") ? (toJson.getString("action").equals("null") ? null : toJson.getString("action")) : null;
+			p.setIdActionTo(action);
 			pipes.add(p);
 		}
 		return pipes;
