@@ -752,22 +752,40 @@ public class Catalogue {
 	}
 	
 	/**
-	 * Returns true if there is a pipe connecting this condition to any other screen component
+	 * Returns the pipe which connects any other screen component to a precondition within this 
+	 * component, null in case there is no pipe connecting it
 	 * @param sc
 	 * @param action
 	 * @param precondition
 	 * @param pipes
 	 * @return
 	 */
-	public boolean isConditionConnected(ScreenComponent sc, Action action, Condition precondition, List<Pipe> pipes) {
+	public Pipe getPipeToComponent(ScreenComponent sc, Action action, Condition precondition, List<Pipe> pipes) {
 		for (Pipe pipe : pipes) {
-			if (pipe.getIdBBTo().equals(sc.getUri())
+			if (pipe.getIdBBTo() != null && pipe.getIdBBTo().equals(sc.getUri().toString())
 					&& pipe.getIdActionTo().equals(action.getName())
 					&& pipe.getIdConditionTo().equals(precondition.getId())) {
-				return true;
+				return pipe;
 			}
 		}
-		return false;
+		return null;
+	}
+	
+	/**
+	 * Returns the pipe which connects a (screen) postcondition to any other screen component, null in
+	 * case there is no pipe connecting it
+	 * @param precondition
+	 * @param pipes
+	 * @return
+	 */
+	public Pipe getPipeToPostcondition(Condition postcondition, List<Pipe> pipes) {
+		for (Pipe pipe : pipes) {
+			if (pipe.getIdBBTo() == null
+					&& pipe.getIdConditionTo().equals(postcondition.getId())) {
+				return pipe;
+			}
+		}
+		return null;
 	}
 	
 	/**
@@ -1530,15 +1548,24 @@ public class Catalogue {
     }
     
     public boolean isType(URI uri, URI type) {
+    	URI t = getType(uri);
+    	if (t != null && t.equals(type))
+    		return true;
+    	return false;
+    }
+    
+    /**
+     * Returns the first type found for an URI
+     * @param uri
+     * @return
+     */
+    public URI getType(URI uri) {
 		ClosableIterator<Statement> it = tripleStore.findStatements(uri, RDF.type, Variable.ANY);
-		for ( ; it.hasNext(); ) {
-			if (it.next().getObject().asURI().equals(type)) {
-				it.close();
-				return true;
-			}
-		}
+		URI type = null;
+		if (it.hasNext())
+			type = it.next().getObject().asURI();
 		it.close();
-		return false;
+		return type;
     }
     
 	private Resource retrieveResource(URI type, URI uri) {
@@ -1892,6 +1919,18 @@ public class Catalogue {
 		return screenComponent;
 	}
 
+	public ScreenComponent getScreenComponent(URI uri) {
+		URI type = getType(uri);
+		if (type == null) return null;
+		if (type.equals(FGO.FormElement))
+			return getFormElement(uri);
+		else if (type.equals(FGO.Operator))
+			return getOperator(uri);
+		else if (type.equals(FGO.BackendService))
+			return getBackendService(uri);
+		return null;
+	}
+	
 	public FormElement getFormElement(URI uri) {
 		FormElement formElement = null;
 		try {
@@ -1988,8 +2027,6 @@ public class Catalogue {
 	public List<Plan> searchPlans(URI uri, Set<Resource> resources) {
 		return planner.searchPlans(uri, resources);
 	}
-	
-	
 	
 	
 	
