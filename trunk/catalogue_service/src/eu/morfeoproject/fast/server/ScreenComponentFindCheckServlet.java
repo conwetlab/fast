@@ -15,6 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.ontoware.rdf2go.RDF2Go;
 import org.ontoware.rdf2go.model.node.URI;
 import org.ontoware.rdf2go.model.node.impl.URIImpl;
 import org.slf4j.Logger;
@@ -128,100 +129,59 @@ public class ScreenComponentFindCheckServlet extends GenericServlet {
 			all.addAll(operators);
 			all.addAll(backendServices);
 			
+			// create the output
+			JSONObject output = new JSONObject();
+			
 			// add results of 'find' to the list of forms
 			Set<URI> formResults = CatalogueAccessPoint.getCatalogue().findScreenComponents(null, all, 0, -1, tags, FGO.FormElement);
 			for (URI uri : formResults)
-				forms.add((ScreenComponent) CatalogueAccessPoint.getCatalogue().getResource(uri));
+				forms.add(CatalogueAccessPoint.getCatalogue().getScreenComponent(uri));
 			// add results of 'find' to the list of operators
 			Set<URI> opResults = CatalogueAccessPoint.getCatalogue().findScreenComponents(null, all, 0, -1, tags, FGO.Operator);
 			for (URI uri : opResults)
-				operators.add((ScreenComponent) CatalogueAccessPoint.getCatalogue().getResource(uri));
+				operators.add(CatalogueAccessPoint.getCatalogue().getScreenComponent(uri));			
 			// add results of 'find' to the list of backend services
 			Set<URI> bsResults = CatalogueAccessPoint.getCatalogue().findScreenComponents(null, all, 0, -1, tags, FGO.BackendService);
 			for (URI uri : bsResults)
-				backendServices.add((ScreenComponent) CatalogueAccessPoint.getCatalogue().getResource(uri));
+				backendServices.add(CatalogueAccessPoint.getCatalogue().getScreenComponent(uri));
 			
-			
-			// create the output
-			JSONObject output = new JSONObject();
+			// check if the pipes are well defined
+			JSONArray jsonPipes = new JSONArray();
+			for (Pipe pipe : pipes) {
+				JSONObject jsonPipe = pipe.toJSON();
+				jsonPipe.put("satisfied", isPipeSatisfied(pipe, preconditions, postconditions));
+				jsonPipes.put(jsonPipe);
+			}
+			output.put("pipes", jsonPipes);
+
 			JSONArray canvasOut = new JSONArray();
-			boolean reachability = true;
-			for (ScreenComponent sc : canvas) {
-				JSONObject jsonSc = new JSONObject();
-				jsonSc.put("uri", sc.getUri());
-				JSONArray actionArray = new JSONArray();
-				reachability = true;
-				for (Action action : sc.getActions()) {
-					JSONArray conArray = new JSONArray();
-					boolean satisfied = false;
-					for (Condition con : action.getPreconditions()) {
-						satisfied = CatalogueAccessPoint.getCatalogue().isConditionConnected(sc, action, con, pipes);
-						JSONObject jsonCon = con.toJSON();
-						jsonCon.put("satisfied", satisfied);
-						conArray.put(jsonCon);
-					}
-					JSONObject actObject = action.toJSON();
-					actObject.put("preconditions", conArray);
-					actionArray.put(actObject);
-				}
-				jsonSc.put("actions", actionArray);
+			for (ScreenComponent sc : canvas)
+				canvasOut.put(processComponent(sc, preconditions, postconditions, pipes));
+			output.put("canvas", canvasOut);
 
-				canvasOut.put(jsonSc);
+			JSONArray formsOut = new JSONArray();
+			for (ScreenComponent sc : forms)
+				formsOut.put(sc.getUri());
+			output.put("forms", formsOut);
 
-//				boolean satisfied = false;
-//				for (List<Condition> conList : sc.getPreconditions()) { /* OR */
-//					JSONArray conArray = new JSONArray();
-//					satisfied = CatalogueAccessPoint.getCatalogue().isConditionSatisfied(reachables, conList, true, true, s.getUri());
-//					reachability = reachability & satisfied;
-//					for (Condition c : conList) {
-//						JSONObject jsonPre = c.toJSON();
-//						jsonPre.put("satisfied", satisfied);
-//						conArray.put(jsonPre);
-//					}
-//					preArray.put(conArray);
-				}
-//				jsonResource.put("reachability", reachability);
-//				logger.info("["+(reachability ? "REACHABLE" : "NO REACHABLE")+"] "+s.getUri());
-//				jsonResource.put("preconditions", preArray);
-//				canvasOut.put(jsonResource);
-					
-//				output.put("canvas", canvasOut);
-//				JSONArray elementsOut = new JSONArray();
-//				for (Resource r : elements) { //TODO finish it
-//					JSONObject jsonResource = new JSONObject();
-//					reachability = true;
-//					if (r instanceof Screen) {
-//						Screen s = (Screen)r;
-//						jsonResource.put("uri", s.getUri());
-//						JSONArray preArray = new JSONArray();
-//						reachability = true;
-//						boolean satisfied = false;
-//						for (List<Condition> conList : s.getPreconditions()) { /* OR */
-//							JSONArray conArray = new JSONArray();
-//							satisfied = CatalogueAccessPoint.getCatalogue().isConditionSatisfied(reachables, conList, true, true, s.getUri());
-//							reachability = reachability & satisfied;
-//							for (Condition c : conList) {
-//								JSONObject jsonPre = c.toJSON();
-//								jsonPre.put("satisfied", satisfied);
-//								conArray.put(jsonPre);
-//							}
-//							preArray.put(conArray);
-//						}
-//						jsonResource.put("reachability", reachability);
-//						logger.info("["+(reachability ? "REACHABLE" : "NO REACHABLE")+"] "+s.getUri());
-//						jsonResource.put("preconditions", preArray);
-//					} else if (r instanceof Precondition) {
-//						jsonResource.put("uri", r.getUri());
-//						jsonResource.put("reachability", reachability);
-//					}else if (r instanceof Postcondition) {
-//						//TODO complete it
-//					}
-//					elementsOut.put(jsonResource);
-//				}
-//				output.put("elements", elementsOut);
-//				writer.print(output.toString(2));
-				response.setContentType(MediaType.APPLICATION_JSON);
-				response.setStatus(HttpServletResponse.SC_OK);
+			JSONArray operatorsOut = new JSONArray();
+			for (ScreenComponent sc : operators)
+				operatorsOut.put(sc.getUri());
+			output.put("operators", operatorsOut);
+
+			JSONArray servicesOut = new JSONArray();
+			for (ScreenComponent sc : backendServices)
+				servicesOut.put(sc.getUri());
+			output.put("backendservices", servicesOut);
+
+			JSONArray postOut = new JSONArray();
+			for (Condition con : postconditions)
+				postOut.put(processCondition(con, preconditions, postconditions, pipes));
+			output.put("postconditions", postOut);
+		
+			writer.print(output.toString(2));
+			response.setContentType(MediaType.APPLICATION_JSON);
+			response.setStatus(HttpServletResponse.SC_OK);
 		} catch (JSONException e) {
 			e.printStackTrace();
 			response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
@@ -230,6 +190,86 @@ public class ScreenComponentFindCheckServlet extends GenericServlet {
 			response.sendError(HttpServletResponse.SC_NOT_FOUND, e.getMessage());
 		}
 		logger.info("...Exiting FIND&CHECK operation");
+	}
+	
+	private Condition getConditionById(List<Condition> conditions, String id) {
+		for (Condition condition : conditions)
+			if (condition.getId() != null && condition.getId().equals(id))
+				return condition;
+		return null;
+	}
+
+	private Condition getPreconditionById(ScreenComponent sc, String id) {
+		for (Action action : sc.getActions())
+			for (Condition condition : action.getPreconditions())
+				if (condition.getId() != null && condition.getId().equals(id))
+					return condition;
+		return null;
+	}
+	
+	private Condition getPostconditionById(ScreenComponent sc, String id) {
+		for (List<Condition> conList : sc.getPostconditions())
+			for (Condition condition : conList)
+				if (condition.getId() != null && condition.getId().equals(id))
+					return condition;
+		return null;
+	}
+	
+	private boolean isPipeSatisfied(Pipe pipe, List<Condition> preconditions, List<Condition> postconditions) throws IOException {
+		boolean satisfied = false;
+		Condition conFrom, conTo;
+		if (pipe.getIdBBFrom() == null) {
+			conFrom = getConditionById(preconditions, pipe.getIdConditionFrom());
+		} else {
+			ScreenComponent sc = CatalogueAccessPoint.getCatalogue().getScreenComponent(new URIImpl(pipe.getIdBBFrom()));
+			conFrom = getPostconditionById(sc, pipe.getIdConditionFrom());
+		}
+		if (pipe.getIdBBTo() == null) {
+			conTo = getConditionById(postconditions, pipe.getIdConditionTo());
+		} else {
+			ScreenComponent sc = CatalogueAccessPoint.getCatalogue().getScreenComponent(new URIImpl(pipe.getIdBBTo()));
+			conTo = getPreconditionById(sc, pipe.getIdConditionFrom());
+		}
+		if (conFrom != null && conTo != null) {
+			//TODO change this checking if both patterns are indeed compatible, not just comparing the strings
+			if (conFrom.getPatternString().equals(conTo.getPatternString()))
+				satisfied = true;
+		}
+		return satisfied;
+	}
+	
+	private JSONObject processCondition(Condition condition, List<Condition> preconditions, List<Condition> postconditions, List<Pipe> pipes) throws JSONException, IOException {
+		JSONObject jsonCon = new JSONObject();
+		Pipe pipe = CatalogueAccessPoint.getCatalogue().getPipeToPostcondition(condition, pipes);
+		boolean satisfied = pipe == null ? false : isPipeSatisfied(pipe, preconditions, postconditions);
+		jsonCon.put("id", condition.getId());
+		jsonCon.put("satisfied", satisfied);
+		return jsonCon;
+	}
+	
+	private JSONObject processComponent(ScreenComponent sc, List<Condition> preconditions, List<Condition> postconditions, List<Pipe> pipes) throws JSONException, IOException {
+		JSONObject jsonSc = new JSONObject();
+		jsonSc.put("uri", sc.getUri());
+		JSONArray actionArray = new JSONArray();
+		boolean reachability = true;
+		for (Action action : sc.getActions()) {
+			JSONArray conArray = new JSONArray();
+			boolean satisfied = false;
+			for (Condition con : action.getPreconditions()) {
+				Pipe pipe = CatalogueAccessPoint.getCatalogue().getPipeToComponent(sc, action, con, pipes);
+				satisfied = pipe == null ? false : isPipeSatisfied(pipe, preconditions, postconditions);
+				reachability = reachability & satisfied;
+				JSONObject jsonCon = con.toJSON();
+				jsonCon.put("satisfied", satisfied);
+				conArray.put(jsonCon);
+			}
+			JSONObject actObject = action.toJSON();
+			actObject.put("preconditions", conArray);
+			actionArray.put(actObject);
+		}
+		jsonSc.put("reachability", reachability);
+		jsonSc.put("actions", actionArray);
+		return jsonSc;
 	}
 	
 }
