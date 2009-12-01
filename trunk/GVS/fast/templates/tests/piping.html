@@ -74,6 +74,7 @@
                     instance.createTerminals(pipeHandler);
                 }
                 instance.enableDragNDrop(area,[area]);
+                instance.getView().addGhost();
                 return true;              
             }
             
@@ -90,6 +91,24 @@
                     console.log ('  Destination:' + wire.terminal2.getResourceId());
                     console.log ('            +:' + wire.terminal2.getConditionId());
                 }
+            }
+            
+            var pipesVisible = true;
+            
+            function togglePipes(buttonNode) {
+                var style;
+                if (pipesVisible) {
+                    pipesVisible = false;
+                    buttonNode.innerHTML = "Show Pipes";
+                    style = {"display": "none"}
+                } else {
+                    pipesVisible = true;
+                    buttonNode.innerHTML = "Hide Pipes";
+                    style = {"display": "block"}
+                }
+                $$(".WireIt-Terminal, .WireIt-Wire").each(function(element){
+                    element.setStyle(style);
+                });
             }
         </script>
 {% endblock %}
@@ -172,10 +191,11 @@
 {% endblock %}
 
 {% block test_body %}
-<h1>Test Drag'n'Drop</h1>
+<h1>Test Piping</h1>
 <h2>Dragables</h2>
 <div id="instances" class="paletteContent" style="overflow:hidden"></div>
 <h2>Drop zones</h2>
+<button onclick="togglePipes(this);"> Hide Pipes </button>
 <div style="height: 500px; width:80%;position:relative; overflow: auto">
     <div id="canvas" class="document screendoc canvas" ></div>
 </div>

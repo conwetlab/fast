@@ -54,6 +54,13 @@ var BuildingBlockView = Class.create( /** @lends BuildingBlockView.prototype */ 
      */
     addEventListener: function (/** Function */ handler, /** String */ event){
         Element.observe(this._node, event, handler);
+    },
+    
+    addGhost: function() {
+        var ghost = new Element('div', {
+            'class': 'ghost ghostLayer'
+        });
+        this._node.appendChild(ghost);
     }
 });
 

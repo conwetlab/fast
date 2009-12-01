@@ -69,7 +69,19 @@ Object.extend(Geometry, {
             (element.bottom <= container.bottom);  
     },
     
-    getNodeRectangle: function(/** DOMNode */ node) {
+    getRectangle: function(/** DOMNode */ node) {
+        
+        var position = Utils.getPosition(node);
+        return {
+            'top': position.top,
+            'left': position.left,
+            'bottom': position.top + node.offsetHeight,
+            'right': position.left + node.offsetWidth
+        }
+    },
+    
+    getClientRectangle: function(/** DOMNode */ node) {
+        
         var position = Utils.getPosition(node);
         return {
             'top': position.top,

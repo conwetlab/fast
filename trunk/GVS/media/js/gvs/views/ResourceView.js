@@ -77,6 +77,8 @@ var ResourceView = Class.create(BuildingBlockView,
         var titleNode = new Element("div", {"class":"title"});
         titleNode.update(description.label['en-gb']);
         this._node.appendChild(titleNode);
+        
+        
     },
     
     // **************** PUBLIC METHODS **************** //
@@ -87,43 +89,14 @@ var ResourceView = Class.create(BuildingBlockView,
     getConditionNode: function(/** String */ id) {
         return this._preIcons.get(id) ? this._preIcons.get(id).getNode() : this._postIcons.get(id).getNode();
     },
+    
     /**
      * Colorize the component depending on the reachability
      * @public @override
      */
     setReachability: function( /** Hash */ reachabilityData) {
         
-        var satisfeable = reachabilityData.reachability;
-        
-        // screen
-        Utils.setSatisfeabilityClass(this.getNode(), satisfeable);
-       
-        // posts
-        this._postIcons.each(function(postIcon) {
-            Utils.setSatisfeabilityClass(postIcon.getNode(), satisfeable);  
-        });
-        
-        // pres
-        var preconditionList = reachabilityData.preconditions;  
-        if (preconditionList.length > 1) {
-            //More than one set of preconditions is NOT YET SUPPORTED
-            console.log("OR precondition support not implemented yet");
-            return;
-        } else {
-            var preconditionData = preconditionList[0];
-        }
-        
-        //Setting precondition reachability
-        var factFactory = FactFactorySingleton.getInstance();
-        var preReachability = new Hash();
-        $A(preconditionData).each(function(precondition) {
-            preReachability.set(factFactory.getFactUri(precondition), precondition.satisfied);    
-        });
-      
-        this._preIcons.each(function(preIcon) {
-            var factUri = preIcon.getFact().getUri();
-            Utils.setSatisfeabilityClass(preIcon.getNode(), preReachability.get(factUri));
-        });
+        // TODO
     },
     
     /**

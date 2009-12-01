@@ -1,4 +1,19 @@
 /******************
+ * layers         *
+ ******************/
+
+.dragLayer { z-index: 9; }
+.ghostLayer { z-index: 16; }
+
+/* WireIt */
+canvas.WireIt-Wire  { z-index: 10; }
+canvas.WireIt-Wire-editing { z-index: 20; }
+div.WireIt-Wire-scissors { z-index: 17; }
+div.WireIt-Terminal { z-index: 16; }
+div.WireIt-Container { z-index: 15; }
+div.WireIt-Container-focused { z-index: 16; }
+
+/******************
  * #main area     *
  ******************/
 html, body,#main { 
@@ -196,7 +211,6 @@ h4{
     background: white;
     position:relative;
     width:100%;
-    z-index:100;
 }
 .panel > div {
     border: 1px solid #808080;
@@ -385,6 +399,16 @@ h4{
     -moz-opacity:0.4;
     filter:alpha(opacity=40);
 }
+.ghost {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    cursor: move;
+}
+
+
 .slot {
     overflow: hidden;
 }
@@ -392,6 +416,8 @@ h4{
 .slotTitle {
     padding-top: 1ex;
 }
+
+
 
 .prePostSeparator {
         position: absolute;
@@ -493,6 +519,7 @@ h4{
     padding:0;
     position:relative;
     width:125px;    
+    background-color: white;
 }
 .resource .title {
     background-color:#808080;

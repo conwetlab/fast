@@ -107,11 +107,11 @@ var DragHandler = Class.create(
         // Set the dropZones areas in coordinates
         this._dropZonesInfo.each (function(dropZoneInfo) {
             var dropZoneNode = dropZoneInfo.dropZone.getNode();
-            dropZoneInfo.position = Geometry.getNodeRectangle(dropZoneNode);
+            dropZoneInfo.position = Geometry.getClientRectangle(dropZoneNode);
         }.bind(this));
         if (this._initialDropZone) {
             var initialDropZoneNode = this._initialDropZone.getNode();
-            this._initialDropZonePosition = Geometry.getNodeRectangle(initialDropZoneNode);
+            this._initialDropZonePosition = Geometry.getClientRectangle(initialDropZoneNode);
         }
 
         this._toggleEventHandlers(true);
@@ -123,12 +123,8 @@ var DragHandler = Class.create(
         this._mouseYStart = parseInt(e.screenY);
         this._y = draggableNode.offsetTop;
         this._x = draggableNode.offsetLeft;
-        
-
-
-        
-        // Warning: magic number
-        draggableNode.style.zIndex = '200'; 
+                  
+        draggableNode.addClassName("dragLayer");
         
         return false;
     },
@@ -166,7 +162,7 @@ var DragHandler = Class.create(
         this._toggleEventHandlers(false);
 
         var draggableNode = this._draggedObject.getHandlerNode();
-        draggableNode.style.zIndex = "";
+        draggableNode.removeClassName("dragLayer");
 
         //Remove element transparency        
         this._updateNodeStatus(true);
@@ -282,8 +278,8 @@ var DragHandler = Class.create(
         return {
             'top': draggableNode.offsetTop,
             'left': draggableNode.offsetLeft,
-            'bottom': draggableNode.offsetTop + draggableNode.clientHeight,
-            'right': draggableNode.offsetLeft + draggableNode.clientWidth
+            'bottom': draggableNode.offsetTop + draggableNode.offsetHeight,
+            'right': draggableNode.offsetLeft + draggableNode.offsetWidth
         }; 
     },
     
@@ -302,6 +298,11 @@ var DragHandler = Class.create(
         if (!this._isChangingZone()) {
             var ranges = Geometry.dragRanges(this._initialDropZonePosition,
                     this._getDraggableNodeRectangle());
+            
+            // TODO: remove this
+            if (ranges.x.min < 0) {
+                console.log(Object.toJSON(ranges.x));    
+            }
             
             var effectiveUpdateX = Geometry.updateAxis(ranges.x, xDelta, this._offLimitX);
             xDelta = effectiveUpdateX.delta;
