@@ -55,11 +55,11 @@ public class Pipe {
 		JSONObject json = new JSONObject();
 		JSONObject jsonFrom = new JSONObject();
 		JSONObject jsonTo = new JSONObject();
-		jsonFrom.put("buildingblock", idBBFrom);
-		jsonFrom.put("condition", idConditionFrom);
-		jsonTo.put("buildingblock", idBBTo);
-		jsonTo.put("condition", idConditionTo);
-		jsonTo.put("action", idActionTo);
+		jsonFrom.put("buildingblock", idBBFrom == null ? JSONObject.NULL : idBBFrom);
+		jsonFrom.put("condition", idConditionFrom == null ? JSONObject.NULL : idConditionFrom);
+		jsonTo.put("buildingblock", idBBTo == null ? JSONObject.NULL : idBBTo);
+		jsonTo.put("condition", idConditionTo == null ? JSONObject.NULL : idConditionTo);
+		jsonTo.put("action", idActionTo == null ? JSONObject.NULL : idActionTo);
 		json.put("from", jsonFrom);
 		json.put("to", jsonTo);
 		return json;
