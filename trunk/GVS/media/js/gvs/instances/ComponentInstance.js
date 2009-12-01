@@ -189,19 +189,12 @@ var ComponentInstance = Class.create(DragSource,
     },
     
     /**
-     * Sets the area in which the instance has been dropped
-     */
-    setArea: function (/** Area */ area) {
-        //Do nothing
-    },
-    
-    /**
      * Called when the scroll has been moved
      * Implementing Scroll Listener interface
      * 
      */
-    scroll: function () {
-        //Do nothing
+    onScroll: function () {
+        this.onUpdate();
     },
 
     // **************** PRIVATE METHODS **************** //

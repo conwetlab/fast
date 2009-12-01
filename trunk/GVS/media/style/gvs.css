@@ -4,6 +4,7 @@
 
 .dragLayer { z-index: 9; }
 .ghostLayer { z-index: 16; }
+.inspectorLayer { z-index: 21; }
 
 /* WireIt */
 canvas.WireIt-Wire  { z-index: 10; }
@@ -19,7 +20,7 @@ div.WireIt-Container-focused { z-index: 16; }
 html, body,#main { 
     height: 100%; 
     width: 100%; 
-    overflow: auto;
+    overflow: hidden;
     padding: 0; 
     border: 0; 
 }

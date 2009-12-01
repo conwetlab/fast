@@ -299,11 +299,6 @@ var DragHandler = Class.create(
             var ranges = Geometry.dragRanges(this._initialDropZonePosition,
                     this._getDraggableNodeRectangle());
             
-            // TODO: remove this
-            if (ranges.x.min < 0) {
-                console.log(Object.toJSON(ranges.x));    
-            }
-            
             var effectiveUpdateX = Geometry.updateAxis(ranges.x, xDelta, this._offLimitX);
             xDelta = effectiveUpdateX.delta;
             this._offLimitX = effectiveUpdateX.offLimit;  

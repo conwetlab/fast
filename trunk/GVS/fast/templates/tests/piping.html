@@ -1,5 +1,10 @@
 {% extends "tests/base.html" %}
 {% block classpath %}
+        <style>
+            #canvas {
+                height: 120%;
+            }
+        </style>
         <script type="text/javascript" 
             src="{{ MEDIA_URL }}js/gvs/dragndrop/DragHandler.js"></script>
         <script type="text/javascript" 
@@ -55,6 +60,8 @@
                 removeReachabilityListener: function(){}
             });
             
+            var instances = new Array();
+            
             function drop(area, instance) {
                 var node = instance.getView().getNode();
                 area.getNode().appendChild(node);      
@@ -75,6 +82,7 @@
                 }
                 instance.enableDragNDrop(area,[area]);
                 instance.getView().addGhost();
+                instances.push(instance);
                 return true;              
             }
             
@@ -110,6 +118,12 @@
                     element.setStyle(style);
                 });
             }
+            
+            function onScroll() {
+                instances.each(function(instance) {
+                    instance.onScroll();    
+                });
+            }
         </script>
 {% endblock %}
 
@@ -129,6 +143,8 @@
         areas.each(function(area) {
             $("canvas").appendChild(area.getNode());
         }.bind(this));
+        
+        $("padre").observe("scroll", onScroll);
         
         var inferenceEngine = new DumbInferenceEngine();
         
@@ -196,7 +212,10 @@
 <div id="instances" class="paletteContent" style="overflow:hidden"></div>
 <h2>Drop zones</h2>
 <button onclick="togglePipes(this);"> Hide Pipes </button>
-<div style="height: 500px; width:80%;position:relative; overflow: auto">
+<div id="padre" style="height: 500px; width:80%;position:relative; overflow: auto">
     <div id="canvas" class="document screendoc canvas" ></div>
+</div>
+<div id="footer" style="position: relative; width:100%; height:300px; background-color: white; border:1px solid black; " class="inspectorLayer">
+ Class inspectorLayer and relative positioning
 </div>
 {% endblock %}

@@ -54,9 +54,6 @@ var Area = Class.create( /** @lends Area.prototype */ {
     drop: function(/** ComponentInstance */ element) {
         
         var accepted =  this._onDropHandler(this, element);
-        if (accepted) {
-            element.setArea(this);     
-        }
         return accepted;
     },
 

@@ -245,7 +245,6 @@ var PrePostInstance = Class.create(ComponentInstance,
         $super(changingZone);
         this.onUpdate();
     }, 
-    /**
 
     // **************** PRIVATE METHODS **************** //
     /**

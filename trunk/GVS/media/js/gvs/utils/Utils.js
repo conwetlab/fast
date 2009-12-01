@@ -78,8 +78,8 @@ Object.extend(Utils, {
         var top  = 0;
     
         while (node.offsetParent){
-            left += node.offsetLeft;
-            top  += node.offsetTop;
+            left += node.offsetLeft - node.scrollLeft;
+            top  += node.offsetTop - node.scrollTop;
             node  = node.offsetParent;
         }
     
