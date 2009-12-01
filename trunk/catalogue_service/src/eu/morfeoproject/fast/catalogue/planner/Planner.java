@@ -67,27 +67,32 @@ public class Planner {
 		
 		for (int idx = 0; idx < planList.size(); idx++) {
 			Plan plan = planList.get(idx);
+			
 			if (newList.isEmpty()) {
 				newList.add(plan);
 			} else {
 				boolean added = false;
 				for (int i = 0; i < newList.size(); i++) {
-					if (count[i] < count[idx]) {
-						newList.add(i, plan);
-						added = true;
-						break;
-					} else if ((count[i] == count[idx])
-							&& (plan.getUriList().size() < planList.get(i).getUriList().size())) {
+					if (newList.get(i).getUriList(uriList).size() > plan.getUriList(uriList).size()) {
 						newList.add(i, plan);
 						added = true;
 						break;
 					}
+//					if (count[i] < count[idx]) {
+//						newList.add(i, plan);
+//						added = true;
+//						break;
+//					} else if ((count[i] == count[idx])
+//							&& (plan.getUriList().size() < planList.get(i).getUriList().size())) {
+//						newList.add(i, plan);
+//						added = true;
+//						break;
+//					}
 				}
 				if (!added)
 					newList.add(plan);
 			}
 		}
-			
 		return newList;
 	}
 	

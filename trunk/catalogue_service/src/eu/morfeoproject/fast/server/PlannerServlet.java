@@ -72,9 +72,21 @@ public class PlannerServlet extends GenericServlet {
 				canvas.add(r);
 				canvasUris.add(uri);
 			}
+			// parse 'page' and 'per_page' for pagination
+			int page = input.has("page") ? input.getInt("page") : 0;
+			int perPage = input.has("per_page") ? input.getInt("per_page") : 0;
 			
 			// calculate the plans for a certain goal
 			List<Plan> plans = CatalogueAccessPoint.getCatalogue().searchPlans(goal, canvas);
+			logger.info("Found "+plans.size()+" plans for "+goal);
+			
+			// pagination
+			if (page < 1) page = 1; // if no page, show page 1
+			if (perPage > 0) {
+				int fromIndex = (page - 1) * perPage;
+				int toIndex = Math.min(page * perPage, plans.size());
+				plans = plans.subList(fromIndex, toIndex);
+			}
 			
 			// write the results in the output
 			JSONArray output = new JSONArray();

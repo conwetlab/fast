@@ -1,6 +1,8 @@
 package eu.morfeoproject.fast.catalogue.planner;
 
 import java.util.ArrayList;
+import java.util.List;
+
 import org.ontoware.rdf2go.model.node.URI;
 
 public class Plan {
@@ -11,7 +13,7 @@ public class Plan {
 		return uriList;
 	}
 	
-	public ArrayList<URI> getUriList(ArrayList<URI> toExclude) {
+	public ArrayList<URI> getUriList(List<URI> toExclude) {
 		ArrayList<URI> newList = new ArrayList<URI>();
 		for (URI uri : uriList)
 			if (!toExclude.contains(uri))
