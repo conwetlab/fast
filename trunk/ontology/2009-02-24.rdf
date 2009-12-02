@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rdf:RDF xmlns:dcterms="http://purl.org/dc/terms/" xmlns:doap="http://usefulinc.com/ns/doap#" xmlns:fast="http://purl.oclc.org/fast/ontology/gadget#" xmlns:foaf="http://xmlns.com/foaf/0.1/" xmlns:owl="http://www.w3.org/2002/07/owl#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#" xmlns:sioc="http://rdfs.org/sioc/ns#" xmlns:xsd="http://www.w3.org/2001/XMLSchema#">
+  <owl:Ontology rdf:about="http://purl.oclc.org/fast/ontology/gadget">
+    <rdfs:label xml:lang="en">The FAST Gagdet Ontology v0.1</rdfs:label>
+    <rdfs:comment xml:lang="en">This ontology defines terms for modelling semantic, interoperable 
+        gadgets or widgets. It has been developed as part of the EU project 'FAST' 
+		(FAST AND ADVANCED STORYBOARD TOOLS), FP7-ICT-2007-1-216048.</rdfs:comment>
+    <dcterms:created xml:lang="en">2009-02-09</dcterms:created>
+    <dcterms:modified xml:lang="en">$Date: 2009-02-24 11:30:14 +0000 (Tue, 24 Feb 2009) $</dcterms:modified>
+    <dcterms:creator rdf:resource="http://kantenwerk.org/metadata/foaf.rdf#me"/>
+    <dcterms:contributor rdf:resource="http://purl.oclc.org/fast/ontology/gadget#Ismael"/>
+    <dcterms:contributor rdf:resource="http://purl.oclc.org/fast/ontology/gadget#fast_members"/>
+    <foaf:maker rdf:resource="http://kantenwerk.org/metadata/foaf.rdf#me"/>
+    <doap:revision>$Revision: 165 $</doap:revision>
+    <fast:integratesTerm rdf:resource="http://rdfs.org/sioc/ns#User"/>
+    <fast:integratesTerm rdf:resource="http://xmlns.com/foaf/0.1/Person"/>
+    <fast:integratesTerm rdf:resource="http://xmlns.com/foaf/0.1/Image"/>
+    <fast:integratesTerm rdf:resource="http://xmlns.com/foaf/0.1/OnlineAccount"/>
+    <fast:integratesTerm rdf:resource="http://xmlns.com/foaf/0.1/holdsAccount"/>
+    <fast:integratesTerm rdf:resource="http://xmlns.com/foaf/0.1/depiction"/>
+    <fast:integratesTerm rdf:resource="http://xmlns.com/foaf/0.1/name"/>
+    <fast:integratesTerm rdf:resource="http://xmlns.com/foaf/0.1/mbox"/>
+    <fast:integratesTerm rdf:resource="http://xmlns.com/foaf/0.1/mbox_sha1sum"/>
+    <fast:integratesTerm rdf:resource="http://xmlns.com/foaf/0.1/interest"/>
+    <fast:integratesTerm rdf:resource="http://xmlns.com/foaf/0.1/accountName"/>
+    <fast:integratesTerm rdf:resource="http://purl.org/dc/terms/title"/>
+    <fast:integratesTerm rdf:resource="http://purl.org/dc/terms/creator"/>
+    <fast:integratesTerm rdf:resource="http://purl.org/dc/terms/description"/>
+    <fast:integratesTerm rdf:resource="http://purl.org/dc/terms/created"/>
+    <fast:integratesTerm rdf:resource="http://purl.org/dc/terms/subject"/>
+    <fast:integratesTerm rdf:resource="http://purl.org/dc/terms/rights"/>
+    <fast:integratesTerm rdf:resource="http://purl.org/dc/terms/RightsStatement"/>
+    <fast:integratesTerm rdf:resource="http://purl.org/dc/terms/rightsHolder"/>
+    <fast:integratesTerm rdf:resource="http://usefulinc.com/ns/doap#revision"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Thing"/>
+  </owl:Ontology>
+  <foaf:Person rdf:about="http://kantenwerk.org/metadata/foaf.rdf#me">
+    <foaf:name xml:lang="en">Knud Möller</foaf:name>
+    <foaf:homepage rdf:resource="http://kantenwerk.org"/>
+    <rdfs:seeAlso rdf:resource="http://kantenwerk.org/metadata/foaf.rdf"/>
+  </foaf:Person>
+  <foaf:Organization rdf:about="http://data.semanticweb.org/organization/deri-nui-galway">
+    <foaf:name xml:lang="en">DERI</foaf:name>
+    <foaf:homepage rdf:resource="http://www.deri.ie"/>
+    <foaf:member rdf:resource="http://kantenwerk.org/metadata/foaf.rdf#me"/>
+    <foaf:member rdf:resource="http://purl.oclc.org/fast/ontology/gadget#Ismael"/>
+  </foaf:Organization>
+  <foaf:Group rdf:about="http://purl.oclc.org/fast/ontology/gadget#fast_members">
+    <foaf:name xml:lang="en">Members of the FAST project</foaf:name>
+  </foaf:Group>
+  <foaf:Person rdf:about="http://purl.oclc.org/fast/ontology/gadget#Ismael">
+    <foaf:name xml:lang="en">Ismael Rivera</foaf:name>
+    <foaf:homepage rdf:resource="http://www.deri.ie/about/team/member/ismael_rivera/"/>
+    <rdfs:seeAlso rdf:resource="http://www.deri.ie/fileadmin/scripts/foaf.php?id=356"/>
+  </foaf:Person>
+  <owl:Class rdf:about="http://purl.oclc.org/fast/ontology/gadget#Resource">
+    <rdfs:label xml:lang="en">Resource</rdfs:label>
+    <rdfs:comment xml:lang="en">Anything that is part of a gadget (or the gadget itself). Tentatively 
+    anything that can be 'touched' and moved around in the FAST IDE.</rdfs:comment>
+  </owl:Class>
+  <owl:Class rdf:about="http://purl.oclc.org/fast/ontology/gadget#Screen_Flow">
+    <rdfs:subClassOf rdf:resource="http://purl.oclc.org/fast/ontology/gadget#Resource"/>
+    <rdfs:label xml:lang="en">Screen Flow</rdfs:label>
+    <rdfs:comment xml:lang="en">The complete gadget, a set of screens.</rdfs:comment>
+  </owl:Class>
+  <owl:Class rdf:about="http://purl.oclc.org/fast/ontology/gadget#Screen">
+    <rdfs:subClassOf rdf:resource="http://purl.oclc.org/fast/ontology/gadget#Resource"/>
+    <rdfs:label xml:lang="en">Screen</rdfs:label>
+    <rdfs:comment xml:lang="en">An individual screen.</rdfs:comment>
+  </owl:Class>
+  <owl:Class rdf:about="http://purl.oclc.org/fast/ontology/gadget#Backend_Service">
+    <rdfs:subClassOf rdf:resource="http://purl.oclc.org/fast/ontology/gadget#Resource"/>
+    <rdfs:label xml:lang="en">Backend Service</rdfs:label>
+    <rdfs:comment xml:lang="en">A Web service which provides data and/or functionality to a screen. 
+    A backend service will often be external to FAST, and will probably have to be 
+    wrapped by the screen.</rdfs:comment>
+  </owl:Class>
+  <owl:Class rdf:about="http://purl.oclc.org/fast/ontology/gadget#Flow_Control_Element">
+    <rdfs:subClassOf rdf:resource="http://purl.oclc.org/fast/ontology/gadget#Resource"/>
+    <rdfs:label xml:lang="en">Flow Control Element</rdfs:label>
+    <rdfs:comment xml:lang="en">Any kind of component which can restrict the default flow of screens 
+    in a gadget.</rdfs:comment>
+  </owl:Class>
+  <owl:Class rdf:about="http://purl.oclc.org/fast/ontology/gadget#Screen_Flow_Start">
+    <rdfs:subClassOf rdf:resource="http://purl.oclc.org/fast/ontology/gadget#Flow_Control_Element"/>
+    <rdfs:label xml:lang="en">Screen Flow Start</rdfs:label>
+    <rdfs:comment xml:lang="en">The entry point to a wigdet; the first screen.</rdfs:comment>
+  </owl:Class>
+  <owl:Class rdf:about="http://purl.oclc.org/fast/ontology/gadget#Screen_Flow_End">
+    <rdfs:subClassOf rdf:resource="http://purl.oclc.org/fast/ontology/gadget#Flow_Control_Element"/>
+    <rdfs:label xml:lang="en">Screen Flow End</rdfs:label>
+    <rdfs:comment xml:lang="en">A screen that ends the workflow of the gadget.</rdfs:comment>
+  </owl:Class>
+  <owl:Class rdf:about="http://purl.oclc.org/fast/ontology/gadget#Connector">
+    <rdfs:subClassOf rdf:resource="http://purl.oclc.org/fast/ontology/gadget#Flow_Control_Element"/>
+    <rdfs:label xml:lang="en">Connector</rdfs:label>
+    <rdfs:comment xml:lang="en">An explicit connection between two screens.</rdfs:comment>
+  </owl:Class>
+  <owl:Class rdf:about="http://purl.oclc.org/fast/ontology/gadget#Operator">
+    <rdfs:subClassOf rdf:resource="http://purl.oclc.org/fast/ontology/gadget#Resource"/>
+    <rdfs:label xml:lang="en">Operator</rdfs:label>
+    <rdfs:comment xml:lang="en">Any kind of component that is used to connect backend services to 
+    form elements. Examples are simple pipes, aggregators or various kinds of 
+    filters.</rdfs:comment>
+  </owl:Class>
+  <owl:Class rdf:about="http://purl.oclc.org/fast/ontology/gadget#Form_Element">
+    <rdfs:subClassOf rdf:resource="http://purl.oclc.org/fast/ontology/gadget#Resource"/>
+    <rdfs:label xml:lang="en">Form Element</rdfs:label>
+    <rdfs:comment xml:lang="en">Form elements are UI elements in a particular screen.</rdfs:comment>
+  </owl:Class>
+  <owl:Class rdf:about="http://purl.oclc.org/fast/ontology/gadget#Condition">
+    <rdfs:subClassOf rdf:resource="http://purl.oclc.org/fast/ontology/gadget#Resource"/>
+    <rdfs:label xml:lang="en">Condition</rdfs:label>
+    <rdfs:comment xml:lang="en">The pre- or post-condition of either a screen or a screenflow. In 
+    the latter case, each target platform will use these conditions in its own way, 
+    or may also ignore them. E.g., in EzWeb pre- and post-conditions correspond to 
+    the concepts of slot and event.</rdfs:comment>
+  </owl:Class>
+  <owl:Class rdf:about="http://purl.oclc.org/fast/ontology/gadget#WithConditions">
+    <rdfs:subClassOf rdf:resource="http://purl.oclc.org/fast/ontology/gadget#Resource"/>
+    <owl:unionOf>
+      <rdf:Description>
+        <rdf:first rdf:resource="http://purl.oclc.org/fast/ontology/gadget#Screen"/>
+        <rdf:rest>
+          <rdf:Description>
+            <rdf:first rdf:resource="http://purl.oclc.org/fast/ontology/gadget#Screen_Flow"/>
+            <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+          </rdf:Description>
+        </rdf:rest>
+      </rdf:Description>
+    </owl:unionOf>
+    <rdfs:label xml:lang="en">With-condition</rdfs:label>
+    <rdfs:comment xml:lang="en">Those kinds of resource which can have pre- or post-conditions 
+    (i.e., screens and screen flows).</rdfs:comment>
+  </owl:Class>
+  <owl:ObjectProperty rdf:about="http://purl.oclc.org/fast/ontology/gadget#contains">
+    <rdfs:label xml:lang="en">contains</rdfs:label>
+    <rdfs:comment xml:lang="en">Many kinds of components in FAST can contain other components: 
+    screenflows contain screens, screens contain forms or form elements, etc.</rdfs:comment>
+    <rdfs:domain rdf:resource="http://purl.oclc.org/fast/ontology/gadget#Resource"/>
+    <rdfs:range rdf:resource="http://purl.oclc.org/fast/ontology/gadget#Resource"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="http://purl.oclc.org/fast/ontology/gadget#hasPreCondition">
+    <rdfs:label xml:lang="en">has pre-condition</rdfs:label>
+    <rdfs:comment xml:lang="en">This property links a screen or screenflow to its pre-condition, i.e., 
+    the facts that need to be fulfilled in order for this screen or screenflow to be 
+    reachable.</rdfs:comment>
+    <rdfs:domain rdf:resource="http://purl.oclc.org/fast/ontology/gadget#WithConditions"/>
+    <rdfs:range rdf:resource="http://purl.oclc.org/fast/ontology/gadget#Condition"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="http://purl.oclc.org/fast/ontology/gadget#hasPostCondition">
+    <rdfs:label xml:lang="en">has post-condition</rdfs:label>
+    <rdfs:comment xml:lang="en">This property links a screen or screenflow to its post-condition, 
+    i.e., the facts that are produced once the screen or screenflow has been 
+    executed.</rdfs:comment>
+    <rdfs:domain rdf:resource="http://purl.oclc.org/fast/ontology/gadget#WithConditions"/>
+    <rdfs:range rdf:resource="http://purl.oclc.org/fast/ontology/gadget#Condition"/>
+  </owl:ObjectProperty>
+  <owl:DatatypeProperty rdf:about="http://purl.oclc.org/fast/ontology/gadget#hasPattern">
+    <rdfs:label xml:lang="en">has pattern</rdfs:label>
+    <rdfs:comment xml:lang="en">This property links a screen or screenflow to its pre-condition, 
+    i.e., the facts that need to be fulfilled in order for this screen or screenflow 
+    to be reachable.</rdfs:comment>
+    <rdfs:domain rdf:resource="http://purl.oclc.org/fast/ontology/gadget#Condition"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:about="http://purl.oclc.org/fast/ontology/gadget#isPositive">
+    <rdfs:label xml:lang="en">is positive</rdfs:label>
+    <rdfs:comment xml:lang="en">Conditions can be positive or negative, depending on whether they 
+    must be fulfilled or must not be fulfilled (in the case of pre-conditions), or 
+    whether their facts will be added to the canvas or removed (in the case of 
+    post-conditions).</rdfs:comment>
+    <rdfs:domain rdf:resource="http://purl.oclc.org/fast/ontology/gadget#Condition"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
+  </owl:DatatypeProperty>
+  <owl:ObjectProperty rdf:about="http://purl.oclc.org/fast/ontology/gadget#hasIcon">
+    <rdfs:label xml:lang="en">has icon</rdfs:label>
+    <rdfs:comment xml:lang="en">A small graphical representation of any FAST component or sub-component.</rdfs:comment>
+    <rdfs:subPropertyOf rdf:resource="http://xmlns.com/foaf/0.1/depiction"/>
+    <rdfs:domain rdf:resource="http://purl.oclc.org/fast/ontology/gadget#Resource"/>
+    <rdfs:range rdf:resource="http://xmlns.com/foaf/0.1/Image"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="http://purl.oclc.org/fast/ontology/gadget#hasScreenshot">
+    <rdfs:label xml:lang="en">has screenshot</rdfs:label>
+    <rdfs:comment xml:lang="en">An image which shows a particular screen or screenflow in action, to 
+    aid users in deciding which screen or screenflow to choose out of many.</rdfs:comment>
+    <rdfs:subPropertyOf rdf:resource="http://xmlns.com/foaf/0.1/depiction"/>
+    <rdfs:domain rdf:resource="http://purl.oclc.org/fast/ontology/gadget#Resource"/>
+    <rdfs:range rdf:resource="http://xmlns.com/foaf/0.1/Image"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="http://purl.oclc.org/fast/ontology/gadget#integratesTerm">
+    <rdfs:label xml:lang="en">integratesTerm</rdfs:label>
+    <rdfs:comment xml:lang="en">A way to explicitly say that an ontology uses terms from another namespace. 
+    Maybe a bit redundant, but why not.</rdfs:comment>
+  </owl:ObjectProperty>
+  <owl:Class rdf:about="http://xmlns.com/foaf/0.1/Person"/>
+  <owl:Class rdf:about="http://xmlns.com/foaf/0.1/Organization"/>
+  <owl:Class rdf:about="http://xmlns.com/foaf/0.1/Image"/>
+  <owl:Class rdf:about="http://xmlns.com/foaf/0.1/OnlineAccount"/>
+  <owl:Class rdf:about="http://rdfs.org/sioc/ns#User"/>
+  <owl:Class rdf:about="http://purl.org/dc/terms/RightsStatement"/>
+  <owl:DatatypeProperty rdf:about="http://purl.org/dc/terms/modified"/>
+  <owl:DatatypeProperty rdf:about="http://purl.org/dc/terms/created"/>
+  <owl:ObjectProperty rdf:about="http://purl.org/dc/terms/creator"/>
+  <owl:DatatypeProperty rdf:about="http://purl.org/dc/terms/title"/>
+  <owl:DatatypeProperty rdf:about="http://purl.org/dc/terms/description"/>
+  <owl:ObjectProperty rdf:about="http://purl.org/dc/terms/subject"/>
+  <owl:ObjectProperty rdf:about="http://purl.org/dc/terms/rights"/>
+  <owl:ObjectProperty rdf:about="http://purl.org/dc/terms/rightsHolder"/>
+  <owl:DatatypeProperty rdf:about="http://xmlns.com/foaf/0.1/name"/>
+  <owl:DatatypeProperty rdf:about="http://xmlns.com/foaf/0.1/accountName"/>
+  <owl:ObjectProperty rdf:about="http://xmlns.com/foaf/0.1/holdsAccount"/>
+  <owl:ObjectProperty rdf:about="http://xmlns.com/foaf/0.1/depiction"/>
+  <owl:ObjectProperty rdf:about="http://xmlns.com/foaf/0.1/mbox"/>
+  <owl:DatatypeProperty rdf:about="http://xmlns.com/foaf/0.1/mbox_sha1sum"/>
+  <owl:ObjectProperty rdf:about="http://xmlns.com/foaf/0.1/interest"/>
+  <owl:ObjectProperty rdf:about="http://xmlns.com/foaf/0.1/member"/>
+  <owl:DatatypeProperty rdf:about="http://usefulinc.com/ns/doap#revision"/>
+</rdf:RDF>
