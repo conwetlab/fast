@@ -1,0 +1,445 @@
+# FAST Gadget Ontology
+# 
+# developed as part of the EU FAST Project (FP7-ICT-2007-1-216048)
+# 
+# editor: Knud Hinnerk Möller, DERI, National Unversity of Ireland, Galway
+#
+# this turtle file is the original document, from which all other versions
+# (html, rdf/xml) are created
+
+@prefix fgo: <http://purl.oclc.org/fast/ontology/gadget#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>  .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix doap: <http://usefulinc.com/ns/doap#> .
+@prefix sioc: <http://rdfs.org/sioc/ns#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+  
+<http://purl.oclc.org/fast/ontology/gadget> a owl:Ontology ;
+    rdfs:label "The FAST Gagdet Ontology v0.1"@en ;
+    rdfs:comment """This ontology defines terms for modelling semantic, interoperable 
+        gadgets or widgets. It has been developed as part of the EU project 'FAST' 
+		(FAST AND ADVANCED STORYBOARD TOOLS), FP7-ICT-2007-1-216048."""@en ;
+    dcterms:created "2009-02-09"@en ;
+    dcterms:modified "$Date: 2009-02-25 00:07:52 +0000 (Wed, 25 Feb 2009) $"@en ;
+    dcterms:creator <http://kantenwerk.org/metadata/foaf.rdf#me> ;
+    dcterms:contributor fgo:Ismael ;
+    dcterms:contributor fgo:fast_members ;
+    foaf:maker <http://kantenwerk.org/metadata/foaf.rdf#me> ;
+    doap:revision "$Revision: 170 $" .
+    
+<http://kantenwerk.org/metadata/foaf.rdf#me> a foaf:Person ;
+    foaf:name "Knud MÃ¶ller"@en ;
+	foaf:homepage <http://kantenwerk.org> ;
+    rdfs:seeAlso <http://kantenwerk.org/metadata/foaf.rdf> .
+
+<http://data.semanticweb.org/organization/deri-nui-galway> a foaf:Organization;
+	foaf:name "DERI"@en ;
+	foaf:homepage <http://www.deri.ie> ;
+	foaf:member <http://kantenwerk.org/metadata/foaf.rdf#me> ;
+	foaf:member fgo:Ismael .
+	
+fgo:fast_members a foaf:Group ;
+	foaf:name "Members of the FAST project"@en .
+
+fgo:Ismael a foaf:Person ;
+	foaf:name "Ismael Rivera"@en ;
+	foaf:homepage <http://www.deri.ie/about/team/member/ismael_rivera/> ;
+	rdfs:seeAlso <http://www.deri.ie/fileadmin/scripts/foaf.php?id=356> .
+
+# Classes
+
+fgo:Resource a owl:Class ;
+rdfs:label "Resource"@en ;
+rdfs:comment """Anything that is part of a gadget (or the gadget itself). Tentatively 
+    anything that can be 'touched' and moved around in the FAST IDE."""@en .
+
+fgo:ScreenFlow a owl:Class ;
+rdfs:subClassOf fgo:Resource ;
+rdfs:label "Screen Flow"@en ;
+rdfs:comment "The complete gadget, a set of screens."@en .
+
+fgo:Screen a owl:Class ;
+rdfs:subClassOf fgo:Resource ;
+rdfs:label "Screen"@en ;
+rdfs:comment "An individual screen."@en .
+
+fgo:FlowControlElement a owl:Class ;
+rdfs:subClassOf fgo:Resource ;
+rdfs:label "Flow Control Element"@en ;
+rdfs:comment """Any kind of component which can restrict the default flow of screens 
+    in a gadget."""@en .
+
+fgo:ScreenFlowStart a owl:Class ;
+rdfs:subClassOf fgo:FlowControlElement ;
+rdfs:label "Screen Flow Start"@en ;
+rdfs:comment "The entry point to a wigdet; the first screen."@en .
+
+fgo:ScreenFlowEnd a owl:Class ;
+rdfs:subClassOf fgo:FlowControlElement ;
+rdfs:label "Screen Flow End"@en ;
+rdfs:comment "A screen that ends the workflow of the gadget."@en .
+
+fgo:Connector a owl:Class ;
+rdfs:subClassOf fgo:FlowControlElement ;
+rdfs:label "Connector"@en ;
+rdfs:comment "An explicit connection between two screens."@en .
+
+fgo:ScreenComponent a owl:Class ;
+rdfs:subClassOf fgo:Resource ;
+rdfs:label "Screen Component"@en ;
+rdfs:comment "A screen component is any resource which is part of a particular screen."@en .
+
+fgo:Operator a owl:Class ;
+rdfs:subClassOf fgo:ScreenComponent ;
+rdfs:label "Operator"@en ;
+rdfs:comment """Any kind of component that is used to connect backend services to 
+    form elements. Examples are simple pipes, aggregators or various kinds of 
+    filters."""@en .
+
+fgo:FormElement a owl:Class ;
+rdfs:subClassOf fgo:ScreenComponent ;
+rdfs:label "Form Element"@en ;
+rdfs:comment "Form elements are UI elements in a particular screen."@en .
+
+fgo:BackendService a owl:Class ;
+rdfs:subClassOf fgo:ScreenComponent ;
+rdfs:label "Backend Service"@en ;
+rdfs:comment """A Web service which provides data and/or functionality to a screen. 
+    A backend service will often be external to FAST, and will probably have to be 
+    wrapped by the screen."""@en .
+
+fgo:Condition a owl:Class ;
+rdfs:subClassOf fgo:Resource ;
+rdfs:label "Condition"@en ;
+rdfs:comment """The pre- or post-condition of either a screen or a screenflow. In 
+    the latter case, each target platform will use these conditions in its own way, 
+    or may also ignore them. E.g., in EzWeb pre- and post-conditions correspond to 
+    the concepts of slot and event.
+	A condition can be seen as a RDF bag of facts, where every fact has to be true
+	for the condition be true as well."""@en .
+
+fgo:Fact a owl:Class ;
+rdfs:subClassOf fgo:Resource ;
+rdfs:label "Fact"@en ;
+rdfs:comment """A fact is the atomic formal representation of a part of a condition.
+	Therefore, several facts compose a condition."""@en .
+
+fgo:WithPreConditions a owl:Class ;
+rdfs:subClassOf fgo:Resource ;
+owl:unionOf (fgo:ScreenFlow fgo:Screen fgo:Action) ;
+rdfs:label "With-precondition"@en ;
+rdfs:comment """Those kinds of resource which can have pre-conditions 
+    (i.e., screens and screen flows)."""@en .
+
+fgo:WithPostConditions a owl:Class ;
+rdfs:subClassOf fgo:Resource ;
+owl:unionOf (fgo:ScreenFlow fgo:Screen fgo:ScreenComponent) ;
+rdfs:label "With-precondition"@en ;
+rdfs:comment """Those kinds of resource which can have pre-conditions 
+    (i.e., screens and screen flows)."""@en .
+
+fgo:WithConditions a owl:Class ;
+rdfs:subClassOf fgo:Resource ;
+owl:unionOf (fgo:WithPreConditions fgo:WithPostConditions) ;
+rdfs:label "With-condition"@en ;
+rdfs:comment """Those kinds of resource which can have both pre- or post-conditions."""@en .
+
+fgo:Action a owl:Class ;
+rdfs:label "Action"@en ;
+rdfs:comment """An action represents a specific routine which will be performed when a certain
+	condition is fulfilled within a certain screen component (i.e., the action 'showTable' will
+	be performed when data from a service is received)."""@en .
+
+fgo:Library a owl:Class ;
+rdfs:label "Action"@en ;
+rdfs:comment """An action represents a specific routine which will be performed when a certain
+	condition is fulfilled within a certain screen component (i.e., the action 'showTable' will
+	be performed when data from a service is received)."""@en .
+
+fgo:Precondition a owl:Class ;
+rdfs:subClassOf fgo:Resource ;
+rdfs:label "Precondition"@en ;
+rdfs:comment """A precondition is a satisfied condition within a screenflow. It can be seen
+    as an input of the screenflow."""@en .
+
+fgo:Postcondition a owl:Class ;
+rdfs:subClassOf fgo:Resource ;
+rdfs:label "Postcondition"@en ;
+rdfs:comment """A postcondition is a result condition within a screenflow. It can be seen
+    as an output of the screenflow."""@en .
+
+fgo:Definition a owl:Class ;
+rdfs:label "Resource definition"@en ;
+rdfs:comment """Structural and behaviour definition of a resource."""@en .
+
+fgo:ResourceReference a owl:Class ;
+rdfs:label "Resource reference"@en ;
+rdfs:comment """It's a reference to a certain resource. Needs a 'id' for internal
+	identification for the resource which is referencing it, and the 'uri' of the
+	resource."""@en .
+
+fgo:ScreenDefinition a owl:Class ;
+rdfs:subClassOf fgo:Definition;
+rdfs:label "Screen definition"@en ;
+rdfs:comment """Behaviour definition of a screen. This will contain which form, operators and 
+	backend services the screen is composed, and how they are connected."""@en .
+
+fgo:Pipe a owl:Class ;
+rdfs:subClassOf fgo:Resource ;
+rdfs:label "pipe or connector"@en ;
+rdfs:comment """Define a pipe or connector between two resources. The connection is made
+	specifying the conditions which will be connected."""@en .
+
+fgo:Trigger a owl:Class ;
+rdfs:subClassOf fgo:Resource ;
+rdfs:label "trigger"@en ;
+rdfs:comment """Define a..."""@en .
+
+### future definition of other resources ###
+fgo:FormDefinition a owl:Class .
+fgo:OperatorDefinition a owl:Class .
+fgo:BackendServiceDefinition a owl:Class .
+
+
+# Properties
+
+fgo:contains a owl:ObjectProperty ;
+rdfs:label "contains"@en ;
+rdfs:comment """Many kinds of components in FAST can contain other components: 
+    screenflows contain screens, screens contain forms or form elements, etc.
+    It points to a resource reference to give a unique 'id' to each component
+    within the resource."""@en ;
+rdfs:domain fgo:Resource, fgo:Definition ;
+rdfs:range fgo:ResourceReference .
+
+fgo:hasPreCondition a owl:ObjectProperty ;
+rdfs:label "has pre-condition"@en ;
+rdfs:comment """This property links certain type of resources to its pre-condition, i.e., 
+    the facts that need to be fulfilled in order for this screen or screenflow to be 
+    reachable."""@en ;
+rdfs:domain fgo:WithPreConditions ;
+rdfs:range fgo:Condition, rdf:Bag .
+
+fgo:hasPostCondition a owl:ObjectProperty ;
+rdfs:label "has post-condition"@en ;
+rdfs:comment """This property links certain type of resources to its post-condition, 
+    i.e., the facts that are produced once the screen or screenflow has been 
+    executed."""@en ;
+rdfs:domain fgo:WithPostConditions ;
+rdfs:range fgo:Condition, rdf:Bag .
+
+fgo:hasPattern a owl:ObjectProperty ;
+rdfs:label "has pattern"@en ;
+rdfs:comment """This property links a screen or screenflow to its pre-condition, 
+    i.e., the facts that need to be fulfilled in order for this screen or screenflow 
+    to be reachable."""@en ;
+rdfs:domain fgo:Fact ;
+rdfs:range rdfs:Resource .
+
+fgo:hasPatternString a owl:DatatypeProperty ;
+rdfs:label "has pattern string"@en ;
+rdfs:comment """This property is the textual representation of a condition."""@en ;
+rdfs:domain fgo:Fact ;
+rdfs:range xsd:string .
+
+fgo:isPositive a owl:DatatypeProperty ;
+rdfs:label "is positive"@en ;
+rdfs:comment """Facts can be set to a specific scope: design time, execution time,
+	or both of them. This will define when they have to be taken into account by the
+	inference engine or reasoner."""@en ;
+rdfs:domain fgo:Fact ;
+rdfs:range xsd:boolean .
+
+fgo:hasIcon a owl:ObjectProperty ;
+rdfs:label "has icon"@en ;
+rdfs:comment "A small graphical representation of any FAST component or sub-component."@en ;
+rdfs:subPropertyOf foaf:depiction ;
+rdfs:domain fgo:Resource ;
+rdfs:range foaf:Image .
+
+fgo:hasScreenshot a owl:ObjectProperty ;
+rdfs:label "has screenshot"@en ;
+rdfs:comment """An image which shows a particular screen or screenflow in action, to 
+    aid users in deciding which screen or screenflow to choose out of many."""@en ;
+rdfs:subPropertyOf foaf:depiction ;
+rdfs:domain fgo:Resource ;
+rdfs:range foaf:Image .
+
+fgo:hasTag a owl:DatatypeProperty ;
+rdfs:label "has tag"@en ;
+rdfs:comment """A tag is used to annotate keywords of a particular resource."""@en ;
+rdfs:domain fgo:Resource ;
+rdfs:range xsd:string .
+
+fgo:hasVersion a owl:DatatypeProperty ;
+rdfs:label "has version"@en ;
+rdfs:comment """The version of a particular screen or screenflow, such as 1.0, 0.2beta, etc."""@en ;
+rdfs:domain fgo:Resource ;
+rdfs:range xsd:string .
+
+fgo:hasCode a owl:ObjectProperty ;
+rdfs:label "has code"@en ;
+rdfs:comment """URL of the executable code of a particular screen."""@en ;
+rdfs:domain fgo:Screen ;
+rdfs:range foaf:Document .
+
+fgo:hasCondition a owl:ObjectProperty ;
+rdfs:label "has condition"@en ;
+rdfs:comment """This property links a precondition or postcondition to a certain condition."""@en ;
+rdfs:domain fgo:Precondition, fgo:Postcondition ;
+rdfs:range fgo:Condition, rdf:Bag .
+
+fgo:hasAction a owl:ObjectProperty ;
+rdfs:label "has action"@en ;
+rdfs:comment """This property indicates which actions are asociated and can be perfomed within 
+	a screen component."""@en ;
+rdfs:domain fgo:ScreenComponent ;
+rdfs:range fgo:Action .
+
+fgo:hasTrigger a owl:DatatypeProperty ;
+rdfs:label "has trigger string"@en ;
+rdfs:comment """This property represents the events fired within a building block. e.g. a 
+	button to clear the shopping cart will fired a "clear cart" trigger."""@en ;
+rdfs:domain fgo:ScreenComponent ;
+rdfs:range xsd:string .
+
+fgo:hasUse a owl:ObjectProperty ;
+rdfs:label "has use string"@en ;
+rdfs:comment """This property indicates concepts used within a building block, without being a 
+	pre/postcondition."""@en ;
+rdfs:domain fgo:Action ;
+rdfs:range fgo:ResourceReference .
+
+fgo:hasLibrary a owl:ObjectProperty ;
+rdfs:label "has library"@en ;
+rdfs:comment """This property indicates which libraries are used by a screen component."""@en ;
+rdfs:domain fgo:ScreenComponent ;
+rdfs:range fgo:Library .
+
+fgo:hasLanguage a owl:DatatypeProperty ;
+rdfs:label "has language string"@en ;
+rdfs:comment """This property is the language the library is written in."""@en ;
+rdfs:domain fgo:Library ;
+rdfs:range xsd:string .
+
+fgo:hasSource a owl:ObjectProperty ;
+rdfs:label "has source"@en ;
+rdfs:comment """URL of the source code of a particular library."""@en ;
+rdfs:domain fgo:Library ;
+rdfs:range foaf:Document .
+
+fgo:hasId a owl:DatatypeProperty ;
+rdfs:label "has id"@en ;
+rdfs:comment """The internal ID of the resource within the container resource."""@en ;
+rdfs:domain fgo:Resource, fgo:ResourceReference ;
+rdfs:range xsd:string .
+
+fgo:hasName a owl:DatatypeProperty ;
+rdfs:label "has name"@en ;
+rdfs:comment """The name the user gives to the resource."""@en ;
+rdfs:domain fgo:Resource ;
+rdfs:range xsd:string .
+
+fgo:hasType a owl:DatatypeProperty ;
+rdfs:label "has type"@en ;
+rdfs:comment """The type of the resource."""@en ;
+rdfs:domain fgo:Resource ;
+rdfs:range xsd:string .
+
+fgo:hasUri a owl:ObjectProperty ;
+rdfs:label "has uri"@en ;
+rdfs:comment """URI of a particular resource pointing from a reference within
+	another resource."""@en ;
+rdfs:domain fgo:ResourceReference ;
+rdfs:range foaf:Document .
+
+fgo:hasDefinition a owl:ObjectProperty ;
+rdfs:label "has definition"@en ;
+rdfs:comment """The structure and behaviour of a resource."""@en ;
+rdfs:domain fgo:Resource ;
+rdfs:range fgo:Definition .
+
+fgo:hasIdBBFrom a owl:DatatypeProperty ;
+rdfs:label "has id building block from"@en ;
+rdfs:comment """building block id of the 'from' point of the pipe or trigger."""@en ;
+rdfs:domain fgo:Pipe, fgo:Trigger ;
+rdfs:range xsd:string .
+
+fgo:hasIdConditionFrom a owl:DatatypeProperty ;
+rdfs:label "has id condition from"@en ;
+rdfs:comment """condition id of the 'from' point of the pipe."""@en ;
+rdfs:domain fgo:Pipe ;
+rdfs:range xsd:string .
+
+fgo:hasIdBBTo a owl:DatatypeProperty ;
+rdfs:label "has id building block to"@en ;
+rdfs:comment """building block id of the 'to' point of the pipe or trigger."""@en ;
+rdfs:domain fgo:Pipe, fgo:Trigger ;
+rdfs:range xsd:string .
+
+fgo:hasIdConditionTo a owl:DatatypeProperty ;
+rdfs:label "has id condition to"@en ;
+rdfs:comment """condition id of the 'to' point of the pipe."""@en ;
+rdfs:domain fgo:Pipe ;
+rdfs:range xsd:string .
+
+fgo:hasIdActionTo a owl:DatatypeProperty ;
+rdfs:label "has id action to"@en ;
+rdfs:comment """action id of the 'to' point of the pipe or trigger."""@en ;
+rdfs:domain fgo:Pipe, fgo:Trigger ;
+rdfs:range xsd:string .
+
+fgo:hasNameFrom a owl:DatatypeProperty ;
+rdfs:label "has name from"@en ;
+rdfs:comment """name of the trigger."""@en ;
+rdfs:domain fgo:Trigger ;
+rdfs:range xsd:string .
+
+# terms used from other ontologies
+
+fgo:integratesTerm a owl:ObjectProperty ;
+rdfs:label "integratesTerm"@en ;
+rdfs:comment """A way to explicitly say that an ontology uses terms from another namespace. 
+    Maybe a bit redundant, but why not."""@en .
+
+<http://purl.oclc.org/fast/ontology/gadget> fgo:integratesTerm  
+    sioc:User, foaf:Person,foaf:Image, foaf:OnlineAccount, foaf:holdsAccount,
+    foaf:depiction, foaf:name, foaf:mbox, foaf:mbox_sha1sum, foaf:interest, foaf:accountName,
+    dcterms:title, dcterms:creator, dcterms:description, dcterms:created, dcterms:subject, 
+    dcterms:rights, dcterms:RightsStatement, dcterms:rightsHolder,
+    doap:revision .
+        
+# statements to ensure that the ontology stays in DL
+# according to Pellet reasoner: http://www.mindswap.org/cgi-bin/2003/pellet
+
+foaf:Person a owl:Class .
+foaf:Organization a owl:Class .
+foaf:Image a owl:Class .
+foaf:OnlineAccount a owl:Class .
+sioc:User a owl:Class .
+dcterms:RightsStatement a owl:Class .
+
+dcterms:modified a owl:DatatypeProperty .
+dcterms:created a owl:DatatypeProperty .
+dcterms:creator a owl:ObjectProperty .
+dcterms:title a owl:DatatypeProperty .
+dcterms:description a owl:DatatypeProperty .
+dcterms:subject a owl:ObjectProperty .
+dcterms:rights a owl:ObjectProperty .
+dcterms:rightsHolder a owl:ObjectProperty .
+
+foaf:name a owl:DatatypeProperty .
+foaf:accountName a owl:DatatypeProperty .
+foaf:holdsAccount a owl:ObjectProperty .
+foaf:depiction a owl:ObjectProperty .
+foaf:mbox a owl:ObjectProperty .
+foaf:mbox_sha1sum a owl:DatatypeProperty .
+foaf:interest a owl:ObjectProperty .
+foaf:member a owl:ObjectProperty .
+
+doap:revision a owl:DatatypeProperty .
+
+<http://purl.oclc.org/fast/ontology/gadget> a owl:Thing.
