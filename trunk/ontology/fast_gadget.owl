@@ -27,7 +27,7 @@
     doap:revision "$Revision$" .
     
 <http://kantenwerk.org/metadata/foaf.rdf#me> a foaf:Person ;
-    foaf:name "Knud Möller"@en ;
+    foaf:name "Knud Möller"@de ;
 	foaf:homepage <http://kantenwerk.org> ;
     rdfs:seeAlso <http://kantenwerk.org/metadata/foaf.rdf> .
 
