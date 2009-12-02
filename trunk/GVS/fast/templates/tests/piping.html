@@ -1,10 +1,5 @@
 {% extends "tests/base.html" %}
 {% block classpath %}
-        <style>
-            #canvas {
-                height: 120%;
-            }
-        </style>
         <script type="text/javascript" 
             src="{{ MEDIA_URL }}js/gvs/dragndrop/DragHandler.js"></script>
         <script type="text/javascript" 
@@ -17,8 +12,6 @@
             src="{{ MEDIA_URL }}js/gvs/catalogue/BuildingBlockDescription.js"></script>
         <script type="text/javascript"
             src="{{ MEDIA_URL }}js/gvs/catalogue/DomainConceptDescription.js"></script>
-        <script type="text/javascript"
-            src="{{ MEDIA_URL }}js/gvs/catalogue/ResourceDescription.js"></script>
         
         <!-- Palette component classes -->    
         <script type="text/javascript" 
@@ -27,6 +20,8 @@
             src="{{ MEDIA_URL }}js/gvs/palette/DomainConceptComponent.js"></script>
         <script type="text/javascript"
             src="{{ MEDIA_URL }}js/gvs/palette/ResourceComponent.js"></script>
+        <script type="text/javascript"
+            src="{{ MEDIA_URL }}js/gvs/palette/OperatorComponent.js"></script>
             
         <!-- Building Block view classes -->
         <script type="text/javascript" 
@@ -35,6 +30,8 @@
             src="{{ MEDIA_URL }}js/gvs/views/DomainConceptView.js"></script>
         <script type="text/javascript"
             src="{{ MEDIA_URL }}js/gvs/views/ResourceView.js"></script>
+        <script type="text/javascript"
+            src="{{ MEDIA_URL }}js/gvs/views/OperatorView.js"></script>
         <script type="text/javascript"
             src="{{ MEDIA_URL }}js/gvs/views/Terminal.js"></script>
             
@@ -53,14 +50,22 @@
             src="{{ MEDIA_URL }}js/gvs/instances/PrePostInstance.js"></script>
         <script type="text/javascript"
             src="{{ MEDIA_URL }}js/gvs/instances/ResourceInstance.js"></script>
+        <script type="text/javascript"
+            src="{{ MEDIA_URL }}js/gvs/instances/OperatorInstance.js"></script>
 
         <script type="text/javascript">
             var DumbInferenceEngine = Class.create({
                 addReachabilityListener: function(){},
                 removeReachabilityListener: function(){}
             });
+            function onScroll() {
+                instances.each(function(instance) {
+                    instance.onScroll();    
+                });
+            }
             
             var instances = new Array();
+            var uidGenerator = UIDGeneratorSingleton.getInstance();
             
             function drop(area, instance) {
                 var node = instance.getView().getNode();
@@ -70,6 +75,7 @@
                     'left': parseInt(node.offsetLeft - canvasPosition.left) + "px",
                     'top': parseInt(node.offsetTop - canvasPosition.top) + "px"
                 });
+                instance.getBuildingBlockDescription().id =  uidGenerator.generate(instance.getTitle());
                 if (area.getNode().className.include("pre")) {
                     instance.setType("pre");
                     instance.createTerminal(pipeHandler);
@@ -77,11 +83,12 @@
                     instance.setType("post");
                     instance.createTerminal();
                 }
-                if (instance.constructor == ResourceInstance) {
+                if (instance.constructor == ResourceInstance || instance.constructor == OperatorInstance) {
                     instance.createTerminals(pipeHandler);
                 }
                 instance.enableDragNDrop(area,[area]);
                 instance.getView().addGhost();
+                
                 instances.push(instance);
                 return true;              
             }
@@ -100,8 +107,21 @@
                     console.log ('            +:' + wire.terminal2.getConditionId());
                 }
             }
+            var scroll = false;
+            function toggleScroll(buttonNode) {
+                if (scroll) {
+                    scroll = false;
+                    $("canvas").setStyle({'height': '100%'});
+                    buttonNode.innerHTML = "Show Scroll";
+                } else {
+                    scroll = true;
+                    $("canvas").setStyle({'height': '120%'});
+                    buttonNode.innerHTML = "Hide Scroll";
+                }
+                onScroll();
+            }
             
-            var pipesVisible = true;
+            /*var pipesVisible = true;
             
             function togglePipes(buttonNode) {
                 var style;
@@ -117,13 +137,9 @@
                 $$(".WireIt-Terminal, .WireIt-Wire").each(function(element){
                     element.setStyle(style);
                 });
-            }
+            }*/
             
-            function onScroll() {
-                instances.each(function(instance) {
-                    instance.onScroll();    
-                });
-            }
+            
         </script>
 {% endblock %}
 
@@ -155,54 +171,155 @@
               "search"
             ],
             "http://www.w3.org/2000/01/rdf-schema#label": "Search criteria",
-            "uri": "http://aws.amazon.com/AWSECommerceService#SearchCriteria",
-            "id": "SearchCriteria#1"
+            "uri": "http://aws.amazon.com/AWSECommerceService#SearchCriteria"
           });
         var domainConcept = new DomainConceptComponent(dcDescription, [preArea, postArea], inferenceEngine);
         $("instances").appendChild(domainConcept.getNode());
         
         
         // Resource
-        var rDescription = new ResourceDescription({
-             
-              "description": {"en-gb": "This is a description of the building block"},
-              "domainContext": {
-                "tags": [
-                  "ebay",
-                  "amazon",
-                ],
-                "user": null
-              },
-              "icon": "someuri",
-              "id": "Service1",
-              "label": {"en-gb": "Service 1"},
-              "name": "Amazon Item to Ebay Filter",
-              "rights": "http://creativecommons.org/",
-              "screenshot": "http://www.deri.ie/eBayList-screenshot.jpg",
-              "type": "resource", // screenflow, screen, form, operator y resource
-              "uri": "http://purl.oclc.org/fast/ontology/gadget#xxx1257870443525",
-              "version": "1.0",
-              "actions": [{
-                    "name": "filter",
-                    "preconditions": [{
-                      "id": "item",
-                      "label": {"en-gb": "Ebay List"},
-                      "pattern": "?Item http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#Item",
-                      "positive": true
-                    }],
-                    "uses": []
-                  }],
-                  "libraries": [],
-                  "postconditions": [{
-                    "id": "filterEbay",
-                    "label": {"en-gb": "Ebay List"},
-                    "pattern": "?eFilter http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://developer.ebay.com/DevZone/shopping/docs/CallRef/FindItemsAdvanced.html#Request",
-                    "positive": true
-                  }],
-                  "triggers": ["itemAmazon"]
+        var rDescription = new BuildingBlockDescription(
+         {      
+            "name":"Amazon Lookup Service",
+            "code":"http://localhost:8010/resources/amazonLookupService.src.js",
+            "creationDate":"2009-04-20T17:00:00+0100",                          
+            "creator":"http://www.fabio.es/",                                   
+            "description":{                                                     
+                "en-gb":"This service search information about an Amazon product"
+            },                                                                   
+            "domainContext":{                                                    
+                "tags":[                                                         
+                    "amazon",                                                    
+                    "product"                                                    
+                ],                                                               
+                "user":"admin"                                                   
+            },                                                                   
+            "homepage":"http://www.deri.ie/amazonLookupService",                 
+            "icon":"http://localhost:8010/images/catalogue/amazonLookupService.png",
+            "label":{
+                "en-gb":"Amazon Lookup Service"
+            },
+            "rights":"http://creativecommons.org/",
+            "screenshot":"http://www.deri.ie/amazonLookupService.jpg",
+            "version":"1.0",
+            "libraries":[
+                {
+                    "language":"JavaScript",
+                    "source":"http://piccolo.ls.fi.upm.es/amazonURL/signAmazonURLs.js"
+                },
+                {
+                    "language":"JavaScript",
+                    "source":"http://piccolo.ls.fi.upm.es/amazonURL/jssha2/sha2.js"
+                }
+            ],
+            "actions":[
+                {
+                    "name":"searchProduct",
+                    "preconditions":[
+                        {
+                            "id":"item",
+                            "label":{
+                                "en-gb":"An Amazon item"
+                            },
+                            "pattern":"?Item http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#Item"
+                        }
+                    ],
+                    "uses":[
+        
+                    ]
+                }
+            ],
+            "postconditions":
+                [[
+                    {
+                        "id":"product",
+                        "label":{
+                            "en-gb":"An item"
+                        },
+                        "pattern":"?Item http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#Item",
+                        "positive":"true"
+                    },
+                    {
+                        "id":"message",
+                        "label":{
+                            "en-gb":"A message"
+                        },
+                        "pattern":"?Message http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#Message"
+                    }
+                ]],
+            "triggers":[
+                "newProduct"
+            ]                  
         });
         var resource = new ResourceComponent(rDescription, [resourceArea], inferenceEngine);
         $("instances").appendChild(resource.getNode());
+        
+        var oDescription = new BuildingBlockDescription(
+        {                                                                                            
+            "name":"Amazon Item to Ebay Filter",                                                     
+            "code":"http://localhost:8010/operators/amazonEbayFilter.src.js",                        
+            "creationDate":"2009-04-20T18:00:00+0200",                                               
+            "creator":"http://www.fabio.es/",
+            "description":{
+                "en-gb":"This operator generates an eBay filter from a Amazon item"
+            },
+            "domainContext":{
+                "tags":[
+                    "ebay",
+                    "amazon",
+                    "filter"
+                ],
+                "user":"admin"
+            },
+            "homepage":"http://www.deri.ie/eBayList",
+            "icon":"http://localhost:8010/images/catalogue/eBayList.png",
+            "label":{
+                "en-gb":"Ebay List"
+            },
+            "rights":"http://creativecommons.org/",
+            "screenshot":"http://www.deri.ie/eBayList-screenshot.jpg",
+            "version":"1.0",
+            "libraries":[
+        
+            ],
+            "actions":[
+                {
+                    "name":"createFilter",
+                    "preconditions":[
+                        {
+                            "id":"item",
+                            "label":{
+                                "en-gb":"An item"
+                            },
+                            "pattern":"?Item http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#Item",
+                            "positive":"true"
+                        }
+                    ],
+                    "uses":[
+        
+                    ]
+                }
+            ],
+            "postconditions":[
+                [
+                    {
+                        "id":"filterEbay",
+                        "label":{
+                            "en-gb":"An eBay filter"
+                        },
+                        "pattern":"?eFilter http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://developer.ebay.com/DevZone/shopping/docs/CallRef/FindItemsAdvanced.html#Request",
+                        "positive":"true"
+                   }
+                       
+                ]
+            ],
+            "triggers":[
+                "filterEbay"
+            ]
+        }
+        );
+        var operator = new OperatorComponent(oDescription, [operatorArea], inferenceEngine);
+        $("instances").appendChild(operator.getNode());
         
 {% endblock %}
 
@@ -211,7 +328,8 @@
 <h2>Dragables</h2>
 <div id="instances" class="paletteContent" style="overflow:hidden"></div>
 <h2>Drop zones</h2>
-<button onclick="togglePipes(this);"> Hide Pipes </button>
+<!-- <button onclick="togglePipes(this);"> Hide Pipes </button> -->
+<button onclick="toggleScroll(this);"> Show Scroll </button> 
 <div id="padre" style="height: 500px; width:80%;position:relative; overflow: auto">
     <div id="canvas" class="document screendoc canvas" ></div>
 </div>

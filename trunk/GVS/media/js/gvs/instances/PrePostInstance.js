@@ -201,7 +201,7 @@ var PrePostInstance = Class.create(ComponentInstance,
             options.direction = [-1,0];
             options.offsetPosition = {
                 'top': 2, 
-                'left': -10
+                'left': -8
             };
             options.ddConfig = { // Viceversa
                 'type': 'input',

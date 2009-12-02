@@ -27,7 +27,8 @@ var FactIcon = Class.create( /** @lends FactIcon.prototype */ {
          * @private
          */
         this._node = new Element ("div", {
-                "class": this._size + "_fact fact"}
+                "class": this._size + "_fact fact",
+                'title': this._fact.getDescription()}
             ).update(this._fact.getShortcut());
     },
 

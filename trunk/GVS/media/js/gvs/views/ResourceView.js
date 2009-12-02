@@ -37,17 +37,23 @@ var ResourceView = Class.create(BuildingBlockView,
         // and separation between actions 
         actions.each(function(action) {
             action.preconditions.each(function(pre) {
-                var factNode = factFactory.getFactIcon(pre, "embedded");                 
-                this._preIcons.set(pre.id, factNode);
-                preArea.appendChild(factNode.getNode());
+                var fact = factFactory.getFactIcon(pre, "embedded");                 
+                this._preIcons.set(pre.id, fact);
+                preArea.appendChild(fact.getNode());
             }.bind(this));
             
         }.bind(this));
         
-        description.postconditions.each(function(post) {
-                var factNode = factFactory.getFactIcon(post, "embedded");                 
-                this._postIcons.set(post.id, factNode);
-                postArea.appendChild(factNode.getNode());
+        if (description.postconditions && description.postconditions[0] instanceof Array) {
+            var posts =  description.postconditions[0];
+        } else {
+            var posts = description.postconditions;
+        }
+        
+        posts.each(function(post) {
+                var fact = factFactory.getFactIcon(post, "embedded");                 
+                this._postIcons.set(post.id, fact);
+                postArea.appendChild(fact.getNode());
             }.bind(this));
 
         var prePostSeparator = new Element("div",
@@ -63,7 +69,8 @@ var ResourceView = Class.create(BuildingBlockView,
         }*/
 
         this._node = new Element("div", {
-            "class": "view resource"
+            "class": "view resource",
+            "title": description.name
         });
         
         this._node.appendChild(preArea);
@@ -77,7 +84,6 @@ var ResourceView = Class.create(BuildingBlockView,
         var titleNode = new Element("div", {"class":"title"});
         titleNode.update(description.label['en-gb']);
         this._node.appendChild(titleNode);
-        
         
     },
     

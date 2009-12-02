@@ -394,6 +394,7 @@ h4{
     float: left;
     clear: both;
     cursor: move;
+    position: relative;
 }
 .view.disabled {
     opacity:0.4;
@@ -421,92 +422,92 @@ h4{
 
 
 .prePostSeparator {
-        position: absolute;
-        right: 50%;
-        left: 50%;
-        border-left: 1px dashed #aaa;
-    }
-    /*******************
-    * screen component *
-    *******************/
-    .screen{
-        width: 100px;
-        height: 80px;
-        background-color:white;
-        position: relative;
-        -moz-border-radius: 7px 7px;
-        -webkit-border-radius: 7px 7px;
-        border: 1px solid #808080;
-    }
+    position: absolute;
+      
+}
+/*******************
+* screen component *
+*******************/
+.view.screen{
+    width: 100px;
+    height: 80px;
+    background-color:white;
+    -moz-border-radius: 7px 7px;
+    -webkit-border-radius: 7px 7px;
+    border: 1px solid #808080;
+}
 
-    .screen.satisfeable {
-        border: 1px solid green;
-    }
+.screen.satisfeable {
+    border: 1px solid green;
+}
 
-    .screen.unsatisfeable {
-        border: 1px solid #B90000;
-    }
+.screen.unsatisfeable {
+    border: 1px solid #B90000;
+}
 
-    .screen .title {
-        height:15px;
-        width:100%;
-        padding-top:3px;
-        color:white;
-        font-weight:normal;
-        -moz-border-radius:3px 3px 0 0;
-        -webkit-border-top-left-radius:3px; 
-        -webkit-border-top-right-radius:3px;
-        background-color: #808080;
-    }
+.screen .title {
+    height:15px;
+    width:100%;
+    padding-top:3px;
+    color:white;
+    font-weight:normal;
+    -moz-border-radius:3px 3px 0 0;
+    -webkit-border-top-left-radius:3px; 
+    -webkit-border-top-right-radius:3px;
+    background-color: #808080;
+}
 
-    .screen .image{
-        height:65%;
-        position:relative;
-        top: 10px;
-    }
+.screen .image{
+    height:65%;
+    position:relative;
+    top: 10px;
+}
 
-    .screen.satisfeable .title {
-        background-color: green;
-    }
+.screen.satisfeable .title {
+    background-color: green;
+}
 
-    .screen.unsatisfeable .title {
-        background-color: #B90000;
-    }
+.screen.unsatisfeable .title {
+    background-color: #B90000;
+}
 
-    .screen .preArea, .screen .postArea {
-        position:absolute;
-        top:18px;
-        bottom: 0;
-        margin:0;
-    }
-    .screen .preArea {
-        left: 0;
-        right: 50%;
-    }
+.screen .preArea, .screen .postArea {
+    position:absolute;
+    top:18px;
+    bottom: 0;
+    margin:0;
+}
+.screen .preArea {
+    left: 0;
+    right: 50%;
+}
 
-    .screen .postArea {
-        left: 70%;
-        right: 0;
-    }
-
-    
-    .screen .prePostSeparator {
-        top: 18px;
-        bottom: 0px;    
-    }
-    
-    .screen.satisfeable.selected {
-        background-color: #DDF7DD;
-    }
-
-    .screen.selected .title {
-        font-weight: bold;
-    }
+.screen .postArea {
+    left: 70%;
+    right: 0;
+}
 
 
-    .screen.unsatisfeable.selected {
-        background-color: #F5D9D9;
-    }
+.screen .prePostSeparator {
+    top: 18px;
+    bottom: 0px;
+    right: 50%;
+    left: 50%;
+    border-left: 1px dashed #aaa;    
+}
+
+.screen.satisfeable.selected {
+    background-color: #DDF7DD;
+}
+
+.screen.selected .title {
+    font-weight: bold;
+}
+
+
+.screen.unsatisfeable.selected {
+    background-color: #F5D9D9;
+}
 
 /******************
  * resource       *
@@ -518,7 +519,6 @@ h4{
     height:62px;
     margin:5px;
     padding:0;
-    position:relative;
     width:125px;    
     background-color: white;
 }
@@ -538,6 +538,9 @@ h4{
 .resource .prePostSeparator {
     top: 0px;
     bottom: 24px;
+    right: 50%;
+    left: 50%;
+    border-left: 1px dashed #aaa;
 } 
 
 .resource .preArea, .resource .postArea {
@@ -551,9 +554,30 @@ h4{
     float: right;
 }
 .resource .fact {
-    padding: 5px;
+    margin: 5px;
     text-align: center;
     float: left;
+}
+
+/*********************
+ * operator          * 
+ *********************/
+.view.operator {
+    background: white url("../images/resources/operator.png") no-repeat scroll center center;
+    height: 80px;
+    width: 100px;
+}
+
+.operator .title {
+    background-color: white;
+    margin: 35px auto;
+    line-height: 10px;
+    padding: 0px;
+    width: 60px;
+    color: #808080;
+}
+.operator .fact {
+    position: absolute;
 }
 /*********************
  * properties tables *	 

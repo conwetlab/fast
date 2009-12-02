@@ -23,7 +23,10 @@ var Terminal = function(/** DOMNode */ conditionNode, /** Object */ options,
      * @private
      * @type DOMNode
      */
-    this._terminalNode = new Element('div');
+    this._terminalNode = new Element('div',
+    {
+        'class': this._conditionNode.title
+    });
     
     var style = {
         'position':'absolute',
@@ -34,8 +37,18 @@ var Terminal = function(/** DOMNode */ conditionNode, /** Object */ options,
     this._terminalNode.setStyle(style);  
     this._recalculatePosition();
     document.body.appendChild(this._terminalNode); 
+   
+    var wireConfig = {
+            'width': 2,
+            'borderwidth': 2,
+            'color': '#EAEAEA',
+            'bordercolor': '#808080'
+    }
+    extendedOptions = {};
+    extendedOptions = Object.extend(extendedOptions, options);
+    extendedOptions.wireConfig = Object.extend(wireConfig, options.wireConfig);
          
-    WireIt.Terminal.call(this, this._terminalNode, options);
+    WireIt.Terminal.call(this, this._terminalNode, extendedOptions);
     
     /**
      * This is the id of the resource (operator, service, form)

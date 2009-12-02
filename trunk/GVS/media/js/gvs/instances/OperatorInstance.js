@@ -1,5 +1,5 @@
-var ResourceInstance = Class.create(ComponentInstance,
-    /** @lends ResourceInstance.prototype */ {
+var OperatorInstance = Class.create(ComponentInstance,
+    /** @lends OperatorInstance.prototype */ {
 
     /**
      * Pre or Post instance.
@@ -8,7 +8,8 @@ var ResourceInstance = Class.create(ComponentInstance,
      */
     initialize: function($super, /** BuildingBlockDescription */ description, 
             /** InferenceEngine */ inferenceEngine) {
-        $super(description, inferenceEngine);  
+        $super(description, inferenceEngine);
+              
         
         /**
          * Terminals for screen design
@@ -60,7 +61,7 @@ var ResourceInstance = Class.create(ComponentInstance,
      * @override
      */
     getUri: function() {
-        return this._buildingBlockDescription.uri    
+        return this._buildingBlockDescription.uri;    
     },
     
     /**
@@ -69,20 +70,20 @@ var ResourceInstance = Class.create(ComponentInstance,
     createTerminals: function(/** (Optional) Function */ handler) {
         var options = {
             'direction':[0,1],
-            'offsetPosition': {
-                'top': -6,
-                'left': 4
-            },
             'wireConfig': {
                 'drawingMethod': 'arrows'
             }
         };
         this._buildingBlockDescription.actions.each(function(action) {
             action.preconditions.each(function(pre) { 
-                  options.ddConfig = {
-                     'type': 'input',
-                     'allowedTypes': ['output']
-                  }       
+                options.ddConfig = {
+                    'type': 'input',
+                    'allowedTypes': ['output']
+                }
+                options.offsetPosition =  {
+                    'top': 6,
+                    'left': 0
+                }     
                 var node = this._view.getConditionNode(pre.id);
                 var terminal = new Terminal(node, options, this._buildingBlockDescription.id, pre.id); 
                 this._terminals.push(terminal);                
@@ -101,6 +102,10 @@ var ResourceInstance = Class.create(ComponentInstance,
                 options.ddConfig = {
                      'type': 'output',
                      'allowedTypes': ['input']
+                }
+                options.offsetPosition = {
+                    'top': -10,
+                    'left': 2
                 }
                 var node = this._view.getConditionNode(post.id);
                 var terminal = new Terminal(node, options, this._buildingBlockDescription.id, post.id);
@@ -167,7 +172,7 @@ var ResourceInstance = Class.create(ComponentInstance,
      * @override
      */
     _createView: function () {
-        return new ResourceView(this._buildingBlockDescription);
+        return new OperatorView(this._buildingBlockDescription);
     }
     
 });
