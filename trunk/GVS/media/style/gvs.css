@@ -282,19 +282,19 @@ h4{
     overflow: hidden;
 }
 .dropArea.form {
-    height: 20%;
+    height: 43%;
     top: 0px;
     left: 10%;
     right: 10%;
 }
 .dropArea.operator {
-    top: 20%;
-    bottom: 25%;
+    top: 43%;
+    bottom: 30%;
     left: 10%;
     right: 10%;
 }
 .dropArea.resource {
-    height: 25%;
+    height: 30%;
     bottom: 0px;
     left: 10%;
     right: 10%;
@@ -563,7 +563,7 @@ h4{
  * operator          * 
  *********************/
 .view.operator {
-    background: white url("../images/resources/operator.png") no-repeat scroll center center;
+    background: transparent url("../images/resources/operator.png") no-repeat scroll center center;
     height: 80px;
     width: 100px;
 }
@@ -575,9 +575,67 @@ h4{
     padding: 0px;
     width: 60px;
     color: #808080;
+    text-align: center;
 }
 .operator .fact {
     position: absolute;
+}
+/*********************
+ * form              * 
+ *********************/
+.view.form {
+    border: 2px dotted #808080;
+    -moz-border-radius: 10px;
+    -webkit-border-radius: 10px;
+    background-color: white;
+}
+
+.form .title {
+    padding: 5px;
+    color: #808080;
+    margin: 0px auto;
+    width: 100%;
+    text-align: center;
+    font-size: 18px;
+}
+.form .actions {
+    position: absolute;
+    bottom: 0px;
+    left: 0px;
+    height: 65px;
+}
+
+.form .action {
+    float: left;
+    border: 1px solid #808080;
+    margin: 2px;
+    padding: 2px;
+    min-width: 100px;
+    -moz-border-radius: 10px;
+}
+.form .postTriggerContainer {
+    position: absolute;
+    bottom: 0px;
+    right: 0px;
+    height: 65px;
+}
+.form .triggerArea {
+    height: 22px;
+}
+
+.form .actions .title, .form .postTriggerContainer .title  {
+    color: black;
+    font-size: 12px;
+    padding: 0px;
+    text-align: center;
+}
+.form .image {
+    width: 350px;
+    margin-bottom: 60px;
+}
+.form .fact, .form .trigger {
+    margin: 2px 5px;
+    float: left;
 }
 /*********************
  * properties tables *	 

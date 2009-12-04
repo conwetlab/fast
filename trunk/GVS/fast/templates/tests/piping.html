@@ -1,5 +1,11 @@
 {% extends "tests/base.html" %}
 {% block classpath %}
+        <style>
+            .slot {
+                width: 400px;
+                float: left;
+            }
+        </style>
         <script type="text/javascript" 
             src="{{ MEDIA_URL }}js/gvs/dragndrop/DragHandler.js"></script>
         <script type="text/javascript" 
@@ -22,6 +28,8 @@
             src="{{ MEDIA_URL }}js/gvs/palette/ResourceComponent.js"></script>
         <script type="text/javascript"
             src="{{ MEDIA_URL }}js/gvs/palette/OperatorComponent.js"></script>
+        <script type="text/javascript"
+            src="{{ MEDIA_URL }}js/gvs/palette/FormComponent.js"></script>
             
         <!-- Building Block view classes -->
         <script type="text/javascript" 
@@ -32,6 +40,12 @@
             src="{{ MEDIA_URL }}js/gvs/views/ResourceView.js"></script>
         <script type="text/javascript"
             src="{{ MEDIA_URL }}js/gvs/views/OperatorView.js"></script>
+        <script type="text/javascript"
+            src="{{ MEDIA_URL }}js/gvs/views/FormView.js"></script>
+        <script type="text/javascript"
+            src="{{ MEDIA_URL }}js/gvs/views/ActionView.js"></script>        
+        <script type="text/javascript"
+            src="{{ MEDIA_URL }}js/gvs/views/TriggerView.js"></script>
         <script type="text/javascript"
             src="{{ MEDIA_URL }}js/gvs/views/Terminal.js"></script>
             
@@ -52,6 +66,8 @@
             src="{{ MEDIA_URL }}js/gvs/instances/ResourceInstance.js"></script>
         <script type="text/javascript"
             src="{{ MEDIA_URL }}js/gvs/instances/OperatorInstance.js"></script>
+        <script type="text/javascript"
+            src="{{ MEDIA_URL }}js/gvs/instances/FormInstance.js"></script>
 
         <script type="text/javascript">
             var DumbInferenceEngine = Class.create({
@@ -66,8 +82,17 @@
             
             var instances = new Array();
             var uidGenerator = UIDGeneratorSingleton.getInstance();
+            var formInstance = false;
             
             function drop(area, instance) {
+                if (instance.constructor == FormInstance) {
+                    if (formInstance) {
+                        return false;    
+                    } else {
+                        formInstance = true;
+                    }
+                    
+                }
                 var node = instance.getView().getNode();
                 area.getNode().appendChild(node);      
                 var canvasPosition = Utils.getPosition(area.getNode());
@@ -76,16 +101,19 @@
                     'top': parseInt(node.offsetTop - canvasPosition.top) + "px"
                 });
                 instance.getBuildingBlockDescription().id =  uidGenerator.generate(instance.getTitle());
-                if (area.getNode().className.include("pre")) {
-                    instance.setType("pre");
-                    instance.createTerminal(pipeHandler);
-                } else if (area.getNode().className.include("post")) {
-                    instance.setType("post");
-                    instance.createTerminal();
-                }
-                if (instance.constructor == ResourceInstance || instance.constructor == OperatorInstance) {
+                
+                if (instance.constructor != PrePostInstance) {
                     instance.createTerminals(pipeHandler);
+                } else {
+                    if (area.getNode().className.include("pre")) {
+                        instance.setType("pre");
+                        instance.createTerminal(pipeHandler);
+                    } else if (area.getNode().className.include("post")) {
+                        instance.setType("post");
+                        instance.createTerminal();
+                    }
                 }
+                
                 instance.enableDragNDrop(area,[area]);
                 instance.getView().addGhost();
                 
@@ -320,6 +348,98 @@
         );
         var operator = new OperatorComponent(oDescription, [operatorArea], inferenceEngine);
         $("instances").appendChild(operator.getNode());
+        
+        
+        var fDescription = new BuildingBlockDescription({                                                                                          
+            "name":"Amazon Shopping Form",                                                         
+            "code":"http://localhost:8010/forms/amazonShopping.src.html",                          
+            "creationDate":"2009-04-20T17:00:00+0100",                                             
+            "creator":"http://www.fabio.es/",                                                      
+            "description":{                                                                        
+                "en-gb":"This screen shows the list of products added to the user shopping cart. It allows users to update product quantity and clear the cart."                                  
+            },                                                                                       
+            "domainContext":{                                                                        
+                "tags":[                                                                             
+                    "amazon",                                                                        
+                    "cart"                                                                           
+                ],                                                                                   
+                "user":"admin"                                                                       
+            },                                                                                       
+            "homepage":"http://www.deri.ie/amazonShopping",                                          
+            "icon":"http://localhost:8010/images/catalogue/amazonShopping.png",                      
+            "label":{                                                                                
+                "en-gb":"Shopping Cart"                                                              
+            },                                                                                       
+            "rights":"http://creativecommons.org/",                                                  
+            "screenshot":"http://localhost:8010/images/screenshots/amazonShoppingCart.png",                             
+            "version":"1.0",                                                                         
+            "libraries":[                                                                            
+                                                                                                     
+            ],                                                                                       
+            "actions":[                                                                              
+                {                                                                                    
+                    "name":"init",                                                                   
+                    "preconditions":[                                                                
+                                                                                                     
+                    ],                                                                               
+                    "uses":[                                                                         
+        
+                    ]
+                },
+                {
+                    "name":"showTable",
+                    "preconditions":[
+                        {
+                            "id":"list",
+                            "label":{
+                                "en-gb":"A product list"
+                            },
+                            "pattern":"?PList http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#ProductList",
+                            "positive":"true"
+                        }
+                    ],
+                    "uses":[
+        
+                    ]
+                }
+            ],
+            "postconditions":[
+                [
+                    {
+                        "id":"updateCart",
+                        "label":{
+                            "en-gb":"A shopping cart update"
+                        },
+                        "pattern":"?UCart http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#UpdatingCart",
+                        "positive":"true"
+                    },
+                    {
+                        "id":"purchase",
+                        "label":{
+                            "en-gb":"A purchase"
+                        },
+                        "pattern":"?Purchase http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#PurchaseURL",
+                        "positive":"true"
+                    },
+                    {
+                        "id":"item",
+                        "label":{
+                            "en-gb":"An item"
+                        },
+                        "pattern":"?Item http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#Item",
+                        "positive":"true"
+                    }
+                ]
+            ],
+            "triggers":[
+                "purchase",
+                "clearCart",
+                "updateCart",
+                "newItem"
+            ]
+        });
+        var form = new FormComponent(fDescription, [formArea], inferenceEngine);
+        $("instances").appendChild(form.getNode());
         
 {% endblock %}
 

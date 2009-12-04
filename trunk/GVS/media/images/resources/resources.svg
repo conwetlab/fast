@@ -50,8 +50,8 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="1.979899"
-     inkscape:cx="70.81695"
-     inkscape:cy="632.51252"
+     inkscape:cx="230.21452"
+     inkscape:cy="633.92521"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -78,14 +78,14 @@
      inkscape:groupmode="layer"
      id="layer1">
     <rect
-       style="fill:none;stroke:#b90000;stroke-width:2.06421804000000009;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
+       style="fill:#ffffff;stroke:#808080;stroke-width:2.06421804000000009;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;fill-opacity:1"
        id="rect3592"
        width="79.371597"
        height="77.76815"
        x="-208.32047"
        y="386.24225"
        transform="matrix(0.82490499,-0.5652714,0.81491401,0.57958188,0,0)"
-       inkscape:export-filename="/home/jlopez/Escritorio/operator.unreachable.png"
+       inkscape:export-filename="/home/jlopez/Escritorio/operator.png"
        inkscape:export-xdpi="68.523315"
        inkscape:export-ydpi="68.523315" />
     <path
