@@ -3,6 +3,7 @@ package eu.morfeoproject.fast.server;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -15,7 +16,6 @@ import javax.servlet.http.HttpServletResponse;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.ontoware.rdf2go.RDF2Go;
 import org.ontoware.rdf2go.model.node.URI;
 import org.ontoware.rdf2go.model.node.impl.URIImpl;
 import org.slf4j.Logger;
@@ -120,28 +120,37 @@ public class ScreenComponentFindCheckServlet extends GenericServlet {
 			// parses the pipes
 			List<Pipe> pipes = parsePipes(input.getJSONArray("pipes"));
 			// parses the selected item
-			URI selectedItem = new URIImpl(input.getString("selectedItem"));
+			ScreenComponent selectedItem = CatalogueAccessPoint.getCatalogue().getScreenComponent(new URIImpl(input.getString("selectedItem")));
 			
 			// do the real work
+			//-----------------------------
 			HashSet<ScreenComponent> all = new HashSet<ScreenComponent>();
 			all.addAll(canvas);
 			all.addAll(forms);
 			all.addAll(operators);
 			all.addAll(backendServices);
 			
+			// preconditions of the screen and all postconditions of all components
+			// are used to find new components
+			ArrayList<Condition> conList = new ArrayList<Condition>();
+	    	conList.addAll(preconditions);
+			for (ScreenComponent comp : all)
+	    		for (List<Condition> cList : comp.getPostconditions())
+	    			conList.addAll(cList);
+	    	
 			// create the output
 			JSONObject output = new JSONObject();
 			
 			// add results of 'find' to the list of forms
-			Set<URI> formResults = CatalogueAccessPoint.getCatalogue().findScreenComponents(null, all, 0, -1, tags, FGO.FormElement);
+			Set<URI> formResults = CatalogueAccessPoint.getCatalogue().findScreenComponents(null, conList, all, 0, -1, tags, FGO.FormElement);
 			for (URI uri : formResults)
 				forms.add(CatalogueAccessPoint.getCatalogue().getScreenComponent(uri));
 			// add results of 'find' to the list of operators
-			Set<URI> opResults = CatalogueAccessPoint.getCatalogue().findScreenComponents(null, all, 0, -1, tags, FGO.Operator);
+			Set<URI> opResults = CatalogueAccessPoint.getCatalogue().findScreenComponents(null, conList, all, 0, -1, tags, FGO.Operator);
 			for (URI uri : opResults)
 				operators.add(CatalogueAccessPoint.getCatalogue().getScreenComponent(uri));			
 			// add results of 'find' to the list of backend services
-			Set<URI> bsResults = CatalogueAccessPoint.getCatalogue().findScreenComponents(null, all, 0, -1, tags, FGO.BackendService);
+			Set<URI> bsResults = CatalogueAccessPoint.getCatalogue().findScreenComponents(null, conList, all, 0, -1, tags, FGO.BackendService);
 			for (URI uri : bsResults)
 				backendServices.add(CatalogueAccessPoint.getCatalogue().getScreenComponent(uri));
 			
@@ -156,7 +165,7 @@ public class ScreenComponentFindCheckServlet extends GenericServlet {
 
 			JSONArray canvasOut = new JSONArray();
 			for (ScreenComponent sc : canvas)
-				canvasOut.put(processComponent(sc, preconditions, postconditions, pipes));
+				canvasOut.put(processComponent(canvas, sc, preconditions, postconditions, pipes));
 			output.put("canvas", canvasOut);
 
 			JSONArray formsOut = new JSONArray();
@@ -176,9 +185,17 @@ public class ScreenComponentFindCheckServlet extends GenericServlet {
 
 			JSONArray postOut = new JSONArray();
 			for (Condition con : postconditions)
-				postOut.put(processCondition(con, preconditions, postconditions, pipes));
+				postOut.put(processCondition(canvas, con, preconditions, postconditions, pipes));
 			output.put("postconditions", postOut);
 		
+			if (selectedItem != null) {
+				JSONArray connectionsOut = new JSONArray();
+				List<Pipe> connections = generatePipes(canvas, preconditions, postconditions, selectedItem, pipes);
+				for (Pipe pipe : connections)
+					connectionsOut.put(pipe.toJSON());
+				output.put("connections", connectionsOut);
+			}
+			
 			writer.print(output.toString(2));
 			response.setContentType(MediaType.APPLICATION_JSON);
 			response.setStatus(HttpServletResponse.SC_OK);
@@ -230,15 +247,11 @@ public class ScreenComponentFindCheckServlet extends GenericServlet {
 			ScreenComponent sc = CatalogueAccessPoint.getCatalogue().getScreenComponent(new URIImpl(pipe.getIdBBTo()));
 			conTo = getPreconditionById(sc, pipe.getIdConditionFrom());
 		}
-		if (conFrom != null && conTo != null) {
-			//TODO change this checking if both patterns are indeed compatible, not just comparing the strings
-			if (conFrom.getPatternString().equals(conTo.getPatternString()))
-				satisfied = true;
-		}
+		satisfied = isConditionCompatible(conFrom, conTo);
 		return satisfied;
 	}
 	
-	private JSONObject processCondition(Condition condition, List<Condition> preconditions, List<Condition> postconditions, List<Pipe> pipes) throws JSONException, IOException {
+	private JSONObject processCondition(Set<ScreenComponent> canvas, Condition condition, List<Condition> preconditions, List<Condition> postconditions, List<Pipe> pipes) throws JSONException, IOException {
 		JSONObject jsonCon = new JSONObject();
 		Pipe pipe = CatalogueAccessPoint.getCatalogue().getPipeToPostcondition(condition, pipes);
 		boolean satisfied = pipe == null ? false : isPipeSatisfied(pipe, preconditions, postconditions);
@@ -247,29 +260,123 @@ public class ScreenComponentFindCheckServlet extends GenericServlet {
 		return jsonCon;
 	}
 	
-	private JSONObject processComponent(ScreenComponent sc, List<Condition> preconditions, List<Condition> postconditions, List<Pipe> pipes) throws JSONException, IOException {
+	private JSONObject processComponent(Set<ScreenComponent> canvas, ScreenComponent sc, List<Condition> preconditions, List<Condition> postconditions, List<Pipe> pipes) throws JSONException, IOException {
 		JSONObject jsonSc = new JSONObject();
 		jsonSc.put("uri", sc.getUri());
 		JSONArray actionArray = new JSONArray();
-		boolean reachability = true;
+		boolean reachability = sc.getActions().isEmpty() ? true : false;
 		for (Action action : sc.getActions()) {
 			JSONArray conArray = new JSONArray();
-			boolean satisfied = false;
+			boolean actionSatisfied = action.getPreconditions().isEmpty() ? true : false;
 			for (Condition con : action.getPreconditions()) {
 				Pipe pipe = CatalogueAccessPoint.getCatalogue().getPipeToComponent(sc, action, con, pipes);
-				satisfied = pipe == null ? false : isPipeSatisfied(pipe, preconditions, postconditions);
-				reachability = reachability & satisfied;
+				boolean conSatisfied = pipe == null ? false : isPipeSatisfied(pipe, preconditions, postconditions);
+				actionSatisfied = actionSatisfied || conSatisfied;
 				JSONObject jsonCon = con.toJSON();
-				jsonCon.put("satisfied", satisfied);
+				jsonCon.put("satisfied", conSatisfied);
 				conArray.put(jsonCon);
 			}
+			reachability = reachability || actionSatisfied;
 			JSONObject actObject = action.toJSON();
 			actObject.put("preconditions", conArray);
+			actObject.put("satisfied", actionSatisfied);
 			actionArray.put(actObject);
 		}
 		jsonSc.put("reachability", reachability);
 		jsonSc.put("actions", actionArray);
 		return jsonSc;
+	}
+	
+	private boolean isConditionCompatible(Condition conA, Condition conB) {
+		if (conA != null && conB != null) {
+			//TODO change this checking if both patterns are indeed compatible, not just comparing the strings
+			if (conA.getPatternString().equals(conB.getPatternString()))
+				return true;
+		}
+		return false;
+	}
+	
+	private List<Pipe> generatePipes(
+			Set<ScreenComponent> canvas,
+			List<Condition> preconditions,
+			List<Condition> postconditions,
+			ScreenComponent selectedItem,
+			List<Pipe> pipes) {
+		ArrayList<Pipe> pipeList = new ArrayList<Pipe>();
+		
+		// look for pipes from <somewhere> to the preconditions of the selected item
+		for (Action action : selectedItem.getActions()) {
+			for (Condition pre : action.getPreconditions()) {
+				for (Condition con : preconditions) {
+					if (isConditionCompatible(con, pre)) {
+						Pipe pipe = new Pipe();
+						pipe.setIdBBFrom(null);
+						pipe.setIdConditionFrom(pre.getId());
+						pipe.setIdBBTo(selectedItem.getUri().toString());
+						pipe.setIdActionTo(action.getName());
+						pipe.setIdConditionTo(con.getId());
+						if (!pipes.contains(pipe))
+							pipeList.add(pipe);
+					}
+				}
+				for (ScreenComponent sc : canvas) {
+					if (sc.equals(selectedItem))
+						break; // discard selected item
+					for (List<Condition> conList : sc.getPostconditions()) {
+						for (Condition con : conList) {
+							if (isConditionCompatible(con, pre)) {
+								Pipe pipe = new Pipe();
+								pipe.setIdBBFrom(sc.getUri().toString());
+								pipe.setIdConditionFrom(con.getId());
+								pipe.setIdBBTo(selectedItem.getUri().toString());
+								pipe.setIdActionTo(action.getName());
+								pipe.setIdConditionTo(pre.getId());
+								if (!pipes.contains(pipe))
+									pipeList.add(pipe);
+							}
+						}
+					}
+				}
+			}
+		}
+		
+		// look for pipes from the postconditions the selected item to <somewhere>
+		for (List<Condition> conList : selectedItem.getPostconditions()) {
+			for (Condition con : conList) {
+				for (Condition post : postconditions) {
+					if (isConditionCompatible(con, post)) {
+						Pipe pipe = new Pipe();
+						pipe.setIdBBFrom(selectedItem.getUri().toString());
+						pipe.setIdConditionFrom(con.getId());
+						pipe.setIdBBTo(null);
+						pipe.setIdActionTo(null);
+						pipe.setIdConditionTo(post.getId());
+						if (!pipes.contains(pipe))
+							pipeList.add(pipe);
+					}
+				}
+				for (ScreenComponent sc : canvas) {
+					if (sc.equals(selectedItem))
+						break; // discard selected item
+					for (Action action : sc.getActions()) {
+						for (Condition pre : action.getPreconditions()) {
+							if (isConditionCompatible(con, pre)) {
+								Pipe pipe = new Pipe();
+								pipe.setIdBBFrom(selectedItem.getUri().toString());
+								pipe.setIdConditionFrom(con.getId());
+								pipe.setIdBBTo(sc.getUri().toString());
+								pipe.setIdActionTo(action.getName());
+								pipe.setIdConditionTo(pre.getId());
+								if (!pipes.contains(pipe))
+									pipeList.add(pipe);
+							}
+						}
+					}
+				}
+			}
+		}
+		
+		return pipeList;
 	}
 	
 }
