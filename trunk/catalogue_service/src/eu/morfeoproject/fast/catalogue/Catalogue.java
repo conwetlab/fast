@@ -345,38 +345,35 @@ public class Catalogue {
 
     public Set<URI> findScreenComponents(
     		Screen container,
-    		Set<ScreenComponent> components,
+    		List<Condition> conditions,
+    		Set<ScreenComponent> toExclude,
     		int offset,
     		int limit,
     		Set<String> domainContext) throws ClassCastException, ModelRuntimeException {
     	HashSet<URI> results = new HashSet<URI>();
-    	results.addAll(findScreenComponents(container, components, offset, limit, domainContext, FGO.FormElement));
-    	results.addAll(findScreenComponents(container, components, offset, limit, domainContext, FGO.Operator));
-    	results.addAll(findScreenComponents(container, components, offset, limit, domainContext, FGO.BackendService));
+    	results.addAll(findScreenComponents(container, conditions, toExclude, offset, limit, domainContext, FGO.FormElement));
+    	results.addAll(findScreenComponents(container, conditions, toExclude, offset, limit, domainContext, FGO.Operator));
+    	results.addAll(findScreenComponents(container, conditions, toExclude, offset, limit, domainContext, FGO.BackendService));
     	return results;
     }
     
     public Set<URI> findScreenComponents(
     		Screen container,
-    		Set<ScreenComponent> components,
+    		List<Condition> conditions,
+    		Set<ScreenComponent> toExclude,
     		int offset,
     		int limit,
     		Set<String> domainContext,
     		URI typeResource) throws ClassCastException, ModelRuntimeException {
     	HashSet<URI> results = new HashSet<URI>();
-    	ArrayList<Condition> conList = new ArrayList<Condition>();
-    	for (ScreenComponent comp : components) {
-    		for (List<Condition> cList : comp.getPostconditions())
-    			conList.addAll(cList);
-    	}
 
     	String queryString = 
     		"SELECT DISTINCT ?resource \n" +
     		"WHERE {\n" +
-    		"{ ?resource "+RDF.type.toSPARQL()+" "+typeResource.toSPARQL()+" . "; //TODO only this or should I specify Form, Operator and so on?
+    		"{ ?resource "+RDF.type.toSPARQL()+" "+typeResource.toSPARQL()+" . ";
     	
     	// doesn't include the resources where the postconditions were taken from
-    	for (ScreenComponent comp : components)
+    	for (ScreenComponent comp : toExclude)
    			queryString = queryString.concat("FILTER (?resource != "+comp.getUri().toSPARQL()+") . ");
 
     	// tags from the domain context
@@ -392,10 +389,10 @@ public class Catalogue {
     	}
     	
     	// search for components which preconditions (from actions) are satisfied 
-    	// by any of the postconditions extracted above
-    	if (conList.size() > 0) {
+    	// by any of the conditions given
+    	if (conditions.size() > 0) {
         	queryString = queryString.concat("{");
-			for (Condition con : conList) {
+			for (Condition con : conditions) {
 				queryString = queryString.concat("{ ?resource "+FGO.hasAction.toSPARQL()+" ?a . ");
 				queryString = queryString.concat(" ?a "+FGO.hasPreCondition.toSPARQL()+" ?c . ");
 				queryString = queryString.concat(" ?c "+FGO.hasPattern.toSPARQL()+" ?p . ");
