@@ -129,11 +129,11 @@
 	</servlet-mapping>
 	<servlet-mapping>
 		<servlet-name>ScreenFindServlet</servlet-name>
-		<url-pattern>/screen/find</url-pattern>
+		<url-pattern>/screens/find</url-pattern>
 	</servlet-mapping>
 	<servlet-mapping>
 		<servlet-name>ScreenCheckServlet</servlet-name>
-		<url-pattern>/screen/check</url-pattern>
+		<url-pattern>/screens/check</url-pattern>
 	</servlet-mapping>
 	<servlet-mapping>
 		<servlet-name>ScreenFindCheckServlet</servlet-name>
