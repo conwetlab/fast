@@ -120,7 +120,9 @@ public class ScreenComponentFindCheckServlet extends GenericServlet {
 			// parses the pipes
 			List<Pipe> pipes = parsePipes(input.getJSONArray("pipes"));
 			// parses the selected item
-			ScreenComponent selectedItem = CatalogueAccessPoint.getCatalogue().getScreenComponent(new URIImpl(input.getString("selectedItem")));
+			ScreenComponent selectedItem = null;
+			if (input.has("selectedItem"))
+				selectedItem = CatalogueAccessPoint.getCatalogue().getScreenComponent(new URIImpl(input.getString("selectedItem")));
 			
 			// do the real work
 			//-----------------------------
