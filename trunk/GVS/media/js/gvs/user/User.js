@@ -98,7 +98,12 @@ var User = Class.create( /** @lends User.prototype */ {
         this._firstName = userData.firstName;
         this._lastName = userData.lastName;
         this._email = userData.email;
+       
         this._ezWebURL = userData.ezWebURL;
+        
+        if (this._ezWebURL[this._ezWebURL.length-1] != '/') {
+            this._ezWebURL += '/';
+        } 
         
         URIs.ezweb = this._ezWebURL;
         
@@ -124,6 +129,10 @@ var User = Class.create( /** @lends User.prototype */ {
             this._lastName = remoteUser.user.last_name;
             this._email = remoteUser.user.email;
             this._ezWebURL = remoteUser.profile.ezweb_url;
+            
+            if (this._ezWebURL[this._ezWebURL.length-1] != '/') {
+                this._ezWebURL += '/';
+            }
             
             URIs.ezweb = this._ezWebURL;
         }
