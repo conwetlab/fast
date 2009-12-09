@@ -13,7 +13,14 @@ var PublishGadgetDialog = Class.create(ConfirmDialog /** @lends PublishGadgetDia
          * @private
          * @type String
          */
-        this._gadgetBaseUrl = null;     
+        this._gadgetBaseUrl = null;    
+        
+        /**
+         * Hash containing the references to all the buttons
+         * @type Hash
+         * @private
+         */
+        this._buttons = new Hash(); 
     },
     
     // **************** PUBLIC METHODS **************** //
@@ -23,9 +30,11 @@ var PublishGadgetDialog = Class.create(ConfirmDialog /** @lends PublishGadgetDia
      * show
      * @override
      */
-    show: function ($super, /** String */ gadgetBaseUrl) {
-        $super(); 
-        this._gadgetBaseUrl = gadgetBaseUrl;      
+    show: function ($super, /** String */ gadgetBaseUrl) {    
+        $super();
+        this._buttons.get('ezweb').attr("label", "Publish it!");
+        this._buttons.get('ezweb').attr("disabled", false);
+        this._gadgetBaseUrl = gadgetBaseUrl;
     },
 
     // **************** PRIVATE METHODS **************** //
@@ -63,20 +72,20 @@ var PublishGadgetDialog = Class.create(ConfirmDialog /** @lends PublishGadgetDia
         contents.appendChild(table);
         dom.appendChild(contents);
         
-        var ezwebButton = new dijit.form.Button({
+        this._buttons.set('ezweb', new dijit.form.Button({
             'label': 'Publish it!',
             'onClick': function(e) {
                         this._publishGadget(e.element(), 'ezweb');
                     }.bind(this)
-        });
+        }));
 
-        var igoogleButton = new dijit.form.Button({
+        this._buttons.set('igoogle', new dijit.form.Button({
             'label': 'Publish it!',
             'onClick': function(e) {
                         this._publishGadget(e.element(), 'igoogle');
                     }.bind(this),
             'disabled': true
-        });
+        }));
                                 
         
         var tableData = [
@@ -95,7 +104,7 @@ var PublishGadgetDialog = Class.create(ConfirmDialog /** @lends PublishGadgetDia
                 'node': 'EzWeb'    
              },{
                 'className': '',
-                'node': ezwebButton.domNode
+                'node': this._buttons.get('ezweb').domNode
              }]
             },
              {'className': '',
@@ -104,7 +113,7 @@ var PublishGadgetDialog = Class.create(ConfirmDialog /** @lends PublishGadgetDia
                 'node': 'iGoogle'    
              },{
                 'className': '',
-                'node': igoogleButton.domNode
+                'node': this._buttons.get('igoogle').domNode
              }]
             }
         ];

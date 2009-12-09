@@ -379,7 +379,7 @@ var ScreenflowDocument = Class.create(PaletteDocument,
             this._inferenceEngine.check(canvas, palette, this._domainContext, 
                                         'reachability', this._updatePanes.bind(this));
         } else {
-            this._inferenceEngine.findAndCheck(canvas, palette,  this._domainContext, 
+            this._inferenceEngine.findCheck(canvas, palette,  this._domainContext, 
                                         'reachability', this._updatePanes.bind(this));
         }
         
