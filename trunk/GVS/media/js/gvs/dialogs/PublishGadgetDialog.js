@@ -30,11 +30,12 @@ var PublishGadgetDialog = Class.create(ConfirmDialog /** @lends PublishGadgetDia
      * show
      * @override
      */
-    show: function ($super, /** String */ gadgetBaseUrl) {    
+    show: function ($super, /** String */ gadgetBaseUrl) {
+        this._gadgetBaseUrl = gadgetBaseUrl;  
         $super();
         this._buttons.get('ezweb').attr("label", "Publish it!");
         this._buttons.get('ezweb').attr("disabled", false);
-        this._gadgetBaseUrl = gadgetBaseUrl;
+        
     },
 
     // **************** PRIVATE METHODS **************** //
@@ -101,7 +102,7 @@ var PublishGadgetDialog = Class.create(ConfirmDialog /** @lends PublishGadgetDia
             {'className': '',
              'fields': [{
                 'className': 'mashup',
-                'node': 'EzWeb'    
+                'node': 'EzWeb ' + '[<a href="' + this._gadgetBaseUrl + "/ezweb.xml" + '" target="blank">Template</a>]'
              },{
                 'className': '',
                 'node': this._buttons.get('ezweb').domNode
@@ -110,7 +111,7 @@ var PublishGadgetDialog = Class.create(ConfirmDialog /** @lends PublishGadgetDia
              {'className': '',
              'fields': [{
                 'className': 'mashup',
-                'node': 'iGoogle'    
+                'node': 'iGoogle (Not available)'    
              },{
                 'className': '',
                 'node': this._buttons.get('igoogle').domNode
