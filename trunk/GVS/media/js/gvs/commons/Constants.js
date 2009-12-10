@@ -15,3 +15,8 @@ var Constants = {
         'resource': 'Services & Resources'
     }
 };
+Constants.CatalogueRelationships =  {
+    "backendservices": Constants.BuildingBlock.RESOURCE,
+    "forms": Constants.BuildingBlock.FORM,
+    "operators": Constants.BuildingBlock.OPERATOR
+};

@@ -23,7 +23,7 @@ var FormComponent = Class.create(PaletteComponent,
      * @override
      */
     _createView: function () {
-        return new FormView(this._buildingBlockDescription);
+        return new FormSnapshotView(this._buildingBlockDescription);
     },
     
     /**

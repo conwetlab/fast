@@ -92,7 +92,7 @@ Object.extend(Terminal.prototype, /** @lends Terminal.prototype */ {
      * Destroy the terminal
      */
     destroy: function() {
-        this._terminalNode.parentNodedocument.body.removeChild(this._terminalNode);
+        this._terminalNode.parentNode.removeChild(this._terminalNode);
         this.removeAllWires();
         this.remove();
     },

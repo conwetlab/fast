@@ -50,7 +50,7 @@ var ScreenDocument = Class.create(PaletteDocument,
         
         $super(title, $A([formSet, operatorSet, resourceSet, domainConceptSet]),
                 areas,
-                domainContext);
+                domainContext,  new ScreenInferenceEngine());
         
         // Adding the dropping areas to the document
         areas.each(function(area) {
@@ -83,15 +83,25 @@ var ScreenDocument = Class.create(PaletteDocument,
          * @type Hash 
          */
         this._canvasInstances = new Hash();
+        
+        var paletteStatus = {
+            "forms": [],
+            "operators": [],
+            "backendservices": [],
+            "preconditions": [],
+            "postconditions":[],
+            "pipes":[]
+        };
+
 
         // Start retrieving data
-        /*this._inferenceEngine.findCheck(
+        this._inferenceEngine.findCheck(
                 this._getCanvas(),
-                [],
+                paletteStatus,
                 this._domainContext,
                 'reachability',
                 this._findCheckCallback.bind(this)
-        );*/
+        );
         domainConceptSet.startRetrievingData();
     },
 
@@ -106,19 +116,7 @@ var ScreenDocument = Class.create(PaletteDocument,
         return this._description;
     },
 
-    /**
-     * Select a screen in the screenflow document
-     * @param ComponentInstance
-     *      Element to be selected for the
-     *      Screen document.
-     * @override
-     */
-    setSelectedElement: function ($super, element) {
-        $super(element);
-        this._toolbarElements.get('deleteElement').setEnabled(element!=null);
-        this._toolbarElements.get('previewElement').setEnabled(element!=null);
-        this._updatePanes();
-    },
+    
 
     /**
      * Implementing MenuModel interface
@@ -137,34 +135,49 @@ var ScreenDocument = Class.create(PaletteDocument,
      * @private
      * @type Boolean
      */
-    _drop: function(/** Area */ area, /** ComponentInstance */ droppedElement) {
+    _drop: function(/** Area */ area, /** ComponentInstance */ instance) {
         // Reject repeated elements (except domain concepts or operators)
-
-        if (this._canvasInstances.get(droppedElement.getUri()) &&
-            (droppedElement.constructor != PrePostInstance || droppedElement.constructor != OperatorInstance)) {
-            return false;
-        }
-      
-        switch (droppedElement.constructor) {
-            // TODO add instance Node to the canvas
-            /*case ScreenInstance:
-                this._canvasInstances.set(droppedElement.getUri(), droppedElement);
-                this._description.addScreen(droppedElement.getUri(), droppedElement.getPosition());
-                this._refreshReachability();
-                break;
+                if (instance.constructor != PrePostInstance && 
+                        this._canvasInstances.get(instance.getUri())) {
+                    return false;
+                }
+                var node = instance.getView().getNode();
+                area.getNode().appendChild(node);      
+                var canvasPosition = Utils.getPosition(area.getNode());
+                node.setStyle({
+                    'left': parseInt(node.offsetLeft - canvasPosition.left) + "px",
+                    'top': parseInt(node.offsetTop - canvasPosition.top) + "px"
+                });
+                var uidGenerator = UIDGeneratorSingleton.getInstance();
+                instance.getBuildingBlockDescription().id =  uidGenerator.generate(instance.getTitle());
                 
-            case PrePostInstance:
-                droppedElement.setChangeHandler(this._onPrePostChange.bind(this));
-                break;
+                if (instance.constructor != PrePostInstance) {
+                    instance.createTerminals(this._onPipeHandler.bind(this));
+                } else {
+                    if (area.getNode().className.include("pre")) {
+                        instance.setType("pre");
+                        instance.createTerminal(this._onPipeHandler.bind(this));
+                    } else if (area.getNode().className.include("post")) {
+                        instance.setType("post");
+                        instance.createTerminal();
+                    }
+                }
                 
-            default:
-                alert("Don't know how to accept that kind of element. ScreenDocument::drop");*/    
-        }            
-
-        this.setSelectedElement(droppedElement);
+                instance.enableDragNDrop(area,[area]);
+                instance.getView().addGhost();
+                
+                this._canvasInstances.set(instance.getUri(), instance);
+                this._setSelectedElement(instance);
+                return true;
         return true; 
     },
     
+    /**
+     * @private
+     */
+    _onPipeHandler: function(/** Event */ event, /** Array */ params, /** Boolean */ addedPipe) {
+        
+    },
     
     /**
      * Delete an instance.
@@ -195,10 +208,26 @@ var ScreenDocument = Class.create(PaletteDocument,
         }
         
         this._refreshReachability();
-        this.setSelectedElement();
+        this._setSelectedElement();
         instance.destroy();
     },
 
+
+    /**
+     * Select a screen in the screenflow document
+     * @param ComponentInstance
+     *      Element to be selected for the
+     *      Screen document.
+     * @private
+     * @override
+     */
+    _setSelectedElement: function ($super, element) {
+        $super(element);
+        /*this._toolbarElements.get('deleteElement').setEnabled(element!=null);
+        this._toolbarElements.get('previewElement').setEnabled(element!=null);
+        this._updatePanes();*/
+    },
+    
     /**
      * Gets the elements of the canvas
      * @type String[]
@@ -220,11 +249,14 @@ var ScreenDocument = Class.create(PaletteDocument,
      * finishes
      * @private
      */
-    _findCheckCallback: function(/** Array */ uris) {
-        // Update screen palette        
-        var screenPalette = this._paletteController.getPalette(Constants.BuildingBlock.SCREEN);
-        var screenSet = screenPalette.getBuildingBlockSet();      
-        screenSet.addURIs(uris);
+    _findCheckCallback: function(/** Object */ componentUris) {
+        $H(componentUris).each(function(pair) {
+            var palette = this._paletteController.getPalette(Constants.CatalogueRelationships[pair.key]);
+            if (palette) {
+                var set = palette.getBuildingBlockSet();
+                set.addURIs(pair.value);
+            } 
+        }.bind(this));
     },
     
     _configureToolbar: function() {
@@ -346,6 +378,7 @@ var ScreenDocument = Class.create(PaletteDocument,
      */
     _refreshReachability: function () {
         var canvas = this._getCanvas();
+        // TODO: Be careful, do it with more of these palettes
         var palette = this._paletteController.getComponentUris();
         
         if (URIs.catalogueFlow =='check') {
@@ -442,7 +475,7 @@ var ScreenDocument = Class.create(PaletteDocument,
      * @private
      */
     _onClick: function() {
-        this.setSelectedElement();
+        this._setSelectedElement();
     },
     
     
@@ -468,7 +501,7 @@ var ScreenDocument = Class.create(PaletteDocument,
         
         this._refreshReachability();
         
-        this.setSelectedElement();
+        this._setSelectedElement();
     },
     
     

@@ -36,7 +36,7 @@ var ScreenflowDocument = Class.create(PaletteDocument,
          */
         this._planPanel = new PlanPanel();
         
-        $super(title, [screenSet, domainConceptSet], [this] ,domainContext);
+        $super(title, [screenSet, domainConceptSet], [this], domainContext, new ScreenflowInferenceEngine());
         
         this._planPanel.setDropZone(this);
         this._planPanel.setInferenceEngine(this._inferenceEngine);
@@ -373,7 +373,7 @@ var ScreenflowDocument = Class.create(PaletteDocument,
      */
     _refreshReachability: function () {
         var canvas = this._getCanvas();
-        var palette = this._paletteController.getComponentUris();
+        var palette = this._paletteController.getComponentUris(Constants.BuildingBlock.SCREEN);
         
         if (URIs.catalogueFlow =='check') {
             this._inferenceEngine.check(canvas, palette, this._domainContext, 

@@ -2,15 +2,24 @@ var FormFactory = Class.create(BuildingBlockFactory,
     /** @lends FormFactory.prototype */ {
 
     /**
-     * Factory of form building blocks.
+     * Factory of Form building blocks.
      * @constructs
      * @extends BuildingBlockFactory
      */
     initialize: function($super) {
-        $super();
+        $super();        
+ 
+         /**
+         * Hash table (organized by URI)
+         * containing all the BB descriptions
+         * @type Hash
+         * @private @member
+         */
+        this._buildingBlockDescriptions = new Hash();
         
     },
 
+    // **************** PUBLIC METHODS **************** //
     /**
      * Gets the type of building block this factory mades.
      * @type String
@@ -19,46 +28,80 @@ var FormFactory = Class.create(BuildingBlockFactory,
     getBuildingBlockType: function (){
         return Constants.BuildingBlock.FORM;
     },
-
-    // **************** PUBLIC METHODS **************** //
+    
+    
     /**
+     * Gets building block descriptions by URI
+     * @type {BuildingBlockDescription[]}
      * @override
      */
-    getBuildingBlocks: function(/** Array */ domainContext, /** Function */ callback){
-        var url = this._createUrl(domainContext);
-        var persistenceEngine = PersistenceEngineFactory.getInstance();
-        persistenceEngine.sendGet(url,
+    getBuildingBlocks: function (/** Array */ uris) {
+        var result = new Array();
+        $A(uris).each(function(uri){
+            if(this._buildingBlockDescriptions.get(uri)) {
+                result.push(this._buildingBlockDescriptions.get(uri));
+            } else {
+                throw "Ooops. Something went wrong. " + 
+                    "BuildingBlockFactory::getBuildingBlocks";
+            }        
+        }.bind(this));
+        return result;
+    },
+    
+    /**
+     * This function retrieves the pending elements from the serverside
+     * catalogue
+     */
+    cacheBuildingBlocks: function (/** Array */ uris, /** Function */ callback){ 
+        //URIs not already retrieved
+        var pendingURIs = new Array();
+        $A(uris).each (function (uri){
+            if (!this._buildingBlockDescriptions.get(uri)){
+                pendingURIs.push (uri);  
+            } 
+        }.bind(this));
+        
+        if (pendingURIs.size() > 0) {
+            var postData = Object.toJSON(pendingURIs);
+            var persistenceEngine = PersistenceEngineFactory.getInstance();
+            persistenceEngine.sendPost(URIs.catalogueGetMetadata,
+                null, postData,
                 {
+                    'mine': this,
                     'callback': callback
                 },
-                this._onSuccess, this._onError);
-    },
-   
-    // **************** PUBLIC METHODS **************** //
-    
-    _createUrl: function(/** Array */ domainContext){
-        if (domainContext.size() > 0) {
-            var tags = domainContext.join('+');
-            return URIs.catalogueTagConcepts.replace('<tags>', tags);
+                this._onSuccess, Utils.onAJAXError);
         } else {
-            return URIs.catalogueAllConcepts;
-        }
+            callback();
+        }       
     },
     
-    _onSuccess: function (/** XMLHttpRequest */ transport) {
+    // **************** PRIVATE METHODS **************** //
+    
+ 
+           
+    /**
+     * Callback function
+     */
+    _onSuccess: function(/**XMLHttpRequest*/ transport) {
         var metadata = transport.responseText.evalJSON();
-        var result = new Array();
-        
-        $A(metadata).each(function(formProperties) {
-            result.push(new FormDescription(formProperties));
-        });
-        this.callback(result);
+        //update the Form Factory
+        this.mine._updateBuildingBlockDescriptions(metadata.forms);
+        //call the callback function passed as argument
+        this.callback();
     },
     
-    _onError: function (/**XMLHttpRequest*/ transport, /** Exception */ e) {
-        Logger.serverError(transport, e);
+    /**
+     * This function creates the different Form Descriptions
+     * @private
+     */
+    _updateBuildingBlockDescriptions: function (/** Array */ formDescriptions) {
+
+        for (var i=0; i< formDescriptions.length ; i++) {
+            this._buildingBlockDescriptions.set(formDescriptions[i].uri,
+                                        new BuildingBlockDescription (formDescriptions[i]));
+        }
     }
-    
 });
 
 // vim:ts=4:sw=4:et: 

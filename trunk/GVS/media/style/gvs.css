@@ -183,6 +183,14 @@ h4{
 /******************
  * welcome doc	  *
  ******************/
+
+.welcome div {
+    font-size: 14px;
+    font-weight: bold;
+}
+.welcome .documentTitle {
+    font-size: 30px;
+}
 .welcome #intro {
     margin: 10px;
     font-size: 16px;
@@ -191,11 +199,12 @@ h4{
 .welcome {
     padding-top: 20px;
     background: transparent url("../images/gui/document/welcomeBackground.png") repeat;
-
     
 }
 .welcome button {
     width: 200px;
+    font-weight: normal;
+    font-size: 12px;
 }
 /******************
  * screenflow doc *
@@ -278,7 +287,7 @@ h4{
 
 .dropArea {
     position:absolute;
-    border: 2px dotted #AAA;
+    
     overflow: hidden;
 }
 .dropArea.form {
@@ -286,24 +295,28 @@ h4{
     top: 0px;
     left: 10%;
     right: 10%;
+    border-bottom: 2px dotted #AAA;
 }
 .dropArea.operator {
     top: 43%;
     bottom: 30%;
     left: 10%;
     right: 10%;
+   
 }
 .dropArea.resource {
     height: 30%;
     bottom: 0px;
     left: 10%;
     right: 10%;
+    border-top: 2px dotted #AAA;
 }
 .dropArea.pre {
     top: 0px;
     bottom: 0px;
     left: 0px;
     width: 10%;
+    border-right: 2px dotted #AAA;
 }
 
 .dropArea.post {
@@ -311,6 +324,7 @@ h4{
     bottom: 0px;
     right: 0px;
     width: 10%;
+    border-left: 2px dotted #AAA;
 }
 
 .WireIt-Terminal {
@@ -636,6 +650,18 @@ h4{
 .form .fact, .form .trigger {
     margin: 2px 5px;
     float: left;
+}
+
+/*********************
+ * form snapshot     *
+ *********************/
+.view.form.snapshot {
+    border: 2px solid #808080;
+    padding: 5px;
+}
+.form.snapshot .image {
+    margin: 0px;
+    width: auto;
 }
 /*********************
  * properties tables *	 

@@ -18,7 +18,7 @@ ADMINS = (
 
 MANAGERS = ADMINS
 
-DATABASE_ENGINE = 'postgresql_psycopg2'           # 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
+DATABASE_ENGINE = 'mysql'           # 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
 DATABASE_NAME = 'fast'             # Or path to database file if using sqlite3.
 DATABASE_USER = 'fast'             # Not used with sqlite3.
 DATABASE_PASSWORD = 'fast'         # Not used with sqlite3.
@@ -126,7 +126,7 @@ AUTH_PROFILE_MODULE = 'user.UserProfile'
 NOT_PROXY_FOR = ['localhost', '127.0.0.1']
 
 # Url to the server that holds the semantic catalogue
-CATALOGUE_URL = 'http://localhost:8082/'
+CATALOGUE_URL = 'http://localhost:8080/catalogue/'
 
 # Url to the server that holds the storage service (empty if local storage in GVS)
 STORAGE_URL = None
@@ -138,7 +138,7 @@ STORAGE_FORMAT = 'base64string'
 GVS_DATA_URL = 'http://localhost:8010/'
 
 # Url to the ezweb platform where the gadgets will be deployed
-EZWEB_URL = 'http://localhost:8001/'
+EZWEB_URL = 'http://venus.ls.fi.upm.es/'
 
 # Flow of operations against the catalogue in order to refresh the screens
 CATALOGUE_FLOW = 'check'

@@ -65,7 +65,7 @@ var GVSSingleton = function(){
             
             this._dialogs.set("addScreen", new AddScreenDialog());
             this._dialogs.set("newScreenflow", new NewScreenflowDialog());
-            //this._dialogs.set("newScreen", new ScreenDialog());
+            this._dialogs.set("newScreen", new NewScreenDialog());
             this._dialogs.set("preferences", new PreferencesDialog());
             
         },
@@ -81,9 +81,11 @@ var GVSSingleton = function(){
          */
         init: function(){
             this._actions = {
-                openScreenflow: this._openScreenflow.bind(this),
+                // openScreenflow: this._openScreenflow.bind(this),
                 newScreenflow: this._newScreenflow.bind(this),
-                addScreen: this._addScreen.bind(this)
+                addScreen: this._addScreen.bind(this),
+                newScreen: this._newScreen.bind(this)
+                // openScreen: this._openScreen.bind(this)
             };
             this._documentController = new DocumentController();
             
@@ -108,7 +110,7 @@ var GVSSingleton = function(){
                 this._actions[actionName]();
             }
             else {
-                throw "Unexpected exception: GVS::action";
+                alert("This function is being implemented. Stay tuned");
             }
         },
         
@@ -158,6 +160,15 @@ var GVSSingleton = function(){
         },
         
         /** 
+         * High-level action for creating a new screen.
+         *
+         * @private
+         */
+        _newScreen: function(){
+            this._dialogs.get("newScreen").show();
+        },
+        
+        /** 
          * High-level action for adding a new screen to the catalogue
          * @private
          */
@@ -169,7 +180,7 @@ var GVSSingleton = function(){
          * @private
          */
         _openScreenflow: function(){
-            alert("open");
+           // TODO
         },
         
         /**
@@ -216,7 +227,9 @@ var GVSSingleton = function(){
                             'action': new MenuAction({
                                 'label': 'New Screenflow',
                                 'weight': 1,
-                                'handler': this._newScreenflow.bind(this),
+                                'handler': function() {
+                                    this.action("newScreenflow")
+                                },
                                 'shortcut': 'Shift+N'
                             }),
                             'group': 0
@@ -226,8 +239,8 @@ var GVSSingleton = function(){
                             'action': new MenuAction({
                                 'label': 'Open Screenflow',
                                 'weight': 2,
-                                'handler':  function(){
-                                    alert('Not yet implemented');
+                                'handler': function() {
+                                    this.action("openScreenflow")
                                 },
                                 'shortcut': 'Shift+O'
                             }),
@@ -238,8 +251,8 @@ var GVSSingleton = function(){
                             'action': new MenuAction({
                                 'label': 'New Screen',
                                 'weight': 10,
-                                'handler':  function(){
-                                    alert('Not yet implemented');
+                                'handler': function(){
+                                    this.action("newScreen")
                                 },
                                 'shortcut': 'Alt+N'
                             }),

@@ -61,8 +61,8 @@ var PaletteController = Class.create(
     /**
      * All uris of all the components (of all the palettes)
      */
-    getComponentUris: function() {
-        return this._palettes.get(Constants.BuildingBlock.SCREEN).getComponentUris();
+    getComponentUris: function(/** String */ palette) {
+        return this._palettes.get(palette).getComponentUris();
     }
 
     // **************** PRIVATE METHODS **************** //

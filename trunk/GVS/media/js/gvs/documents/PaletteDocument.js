@@ -12,7 +12,7 @@ var PaletteDocument = Class.create(AbstractDocument, /** @lends PaletteDocument.
             /** String */ title, 
             /** Array */ buildingBlockSets,
             /** Array */ dropZones,
-            /** Array */ domainContext) {
+            /** Array */ domainContext, /** InferenceEngine */ inferenceEngine) {
         $super(title);
         
         /**
@@ -34,8 +34,9 @@ var PaletteDocument = Class.create(AbstractDocument, /** @lends PaletteDocument.
          * InferenceEngine
          * @type InferenceEngine
          * @private @member
+         * @abstract
          */ 
-        this._inferenceEngine = new InferenceEngine();
+        this._inferenceEngine = inferenceEngine;
         
          /**
          * This property represents the selected element

@@ -142,6 +142,18 @@ var Palette = Class.create(SetListener, /** @lends Palette.prototype */ {
             case Constants.BuildingBlock.DOMAIN_CONCEPT:
                 component = new DomainConceptComponent(desc, this._dropZones, this._inferenceEngine);
                 break;
+            
+            case Constants.BuildingBlock.FORM:
+                component = new FormComponent(desc, this._dropZones, this._inferenceEngine);
+                break;
+            
+            case Constants.BuildingBlock.RESOURCE:
+                component = new ResourceComponent(desc, this._dropZones, this._inferenceEngine);
+                break;
+
+            case Constants.BuildingBlock.OPERATOR:
+                component = new OperatorComponent(desc, this._dropZones, this._inferenceEngine);
+                break;
                 
             default:
                 throw "Unsupported building block type";

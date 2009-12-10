@@ -1,11 +1,11 @@
 var InferenceEngine = Class.create( /** @lends InferenceEngine.prototype */ {
     /**
-     * This class handles the reachability and recommendation of building blocks
-     * It communicates with the serverside catalogue to retrieve this information
+     * This abstract class represents an inference engine as a proxy for the
+     * catalogue, handling the reachability and recommendation of building blocks
      * @constructs
+     * @abstract
      */ 
     initialize: function() {
-        
         /**
          * This stores the reachability data
          * @type Hash
@@ -19,11 +19,10 @@ var InferenceEngine = Class.create( /** @lends InferenceEngine.prototype */ {
          * @private @member
          */
         this._listeners = new Hash();
-    },
+    }, 
     
 
     // **************** PUBLIC METHODS **************** //
-
     
     /**
      * This function calls findAndCheck in the catalogue and calls a
@@ -40,7 +39,7 @@ var InferenceEngine = Class.create( /** @lends InferenceEngine.prototype */ {
             'callback': callback,
             'mine': this
         };
-        persistenceEngine.sendPost(URIs.catalogueFindAndCheck, null, body,
+        persistenceEngine.sendPost(this._getUri("findCheck"), null, body,
                 context, this._findCheckOnSuccess, this._onError);
     },
     
@@ -57,10 +56,10 @@ var InferenceEngine = Class.create( /** @lends InferenceEngine.prototype */ {
             'callback': callback,
             'mine': this
         };
-        persistenceEngine.sendPost(URIs.catalogueCheck, null, body, context, 
+        persistenceEngine.sendPost(this._getUri("check"), null, body, context, 
                                     this._checkOnSuccess, this._onError);                   
     },
-    
+
     /**
      * Register an object for interest on the reachability of a URI-identified
      * resources. The listener object must implement these methods:
@@ -78,6 +77,7 @@ var InferenceEngine = Class.create( /** @lends InferenceEngine.prototype */ {
             listener.setReachability(this._reachabilityData.get(uri));
         }
     },
+    
     /**
      * De-register an object from the reachability listeners
      */
@@ -102,86 +102,47 @@ var InferenceEngine = Class.create( /** @lends InferenceEngine.prototype */ {
             return reachabilityData.reachability;
          }
      },
-     
-    /**
-     * Returns the reachability information about
-     * the preconditions of a given screen
-     * @type Hash
-     */
-    getPreconditionReachability: function(/** String */ uri) {
-        var reachabilityData = this._reachabilityData.get(uri);
-        if (reachabilityData.preconditions && reachabilityData.preconditions.length > 1) {
-            //More than one set of preconditions
-            console.log("OR precondition support not implemented yet");
-            return null;
-        }
-        else {
-            var preconditions = reachabilityData.preconditions[0];        
-            var result = new Hash();
-            $A(preconditions).each(function(pre) {
-                var uri = Utils.extractURIfromPattern(pre.pattern);
-                result.set(uri, pre.satisfied);    
-            });
-            return result;
-        }
-    },
-    
-    /**
-     * This function calls the catalogue to create a plan for a given screen
-     */
-    getPlans: function(/** Array */ canvas, /** String */ screenUri, 
-                        /** Function */ handler) {
-        var body = {
-            "goal": screenUri,
-            "canvas": canvas
-        };
-        var bodyJSON = Object.toJSON(body);
-        var persistenceEngine = PersistenceEngineFactory.getInstance();
-        persistenceEngine.sendPost(URIs.cataloguePlanner, null, bodyJSON, {'handler': handler}, 
-                                    this._planOnSuccess, this._onError);
-    },
     
     // **************** PRIVATE METHODS **************** //
-    /** 
-     * onSuccess callback
-     */
-    _findCheckOnSuccess: function(/**XMLHttpRequest*/ transport){
-        var result = JSON.parse(transport.responseText);
-        if (result.elements) {
-            var paletteElements = result.elements;
-        }
-        
-        
-        this.mine._updateReachability(paletteElements);
-        
-        // Notifying about new uris
-        var screenURIs = new Array();
-        $A(paletteElements).each(function(element) {
-           screenURIs.push(element.uri); 
-        }); 
-
-        this.callback(screenURIs);        
-    },
-
+    
     /**
-     * onSuccess callback
-     * @private
+     * Creates a body to be sent in an AJAX call to the 
+     * catalogue
+     * @private @abstract
+     * @type String
      */
-    _checkOnSuccess: function(transport){
-        var result = JSON.parse(transport.responseText);
-        var elements = result.elements.concat(result.canvas).uniq();
-        
-        this.mine._updateReachability(elements);       
-        this.callback();
+    _constructBody: function(/**Array*/ canvas, /** Object */ elements,
+                    /** Array */ domainContext, 
+                    /** String*/ criteria) {
+        throw "Abstract Method invocation: InferenceEngine::_constructBody";     
     },
     
     /**
-     * plan onSuccess
-     * @private
+     * Gets the uri to be called
+     * @private @abstract
+     * @type String
      */
-    _planOnSuccess: function(transport) {
-        var result = JSON.parse(transport.responseText);
-        this.handler(result); 
+    _getUri: function (/** String */ operation) {
+        throw "Abstract Method invocation: InferenceEngine::_getUri";       
+    },
+    
+    
+    /** 
+     * onSuccess callback
+     * @private
+     * @abstract
+     */
+    _findCheckOnSuccess: function(/**XMLHttpRequest*/ transport){
+        throw "Abstract method invocation: InferenceEngine::_findCheckOnSuccess";
+    },
+
+    /**
+     * onSuccess callback
+     * @private
+     * @abstract
+     */
+    _checkOnSuccess: function(transport){
+        throw "Abstract method invocation: InferenceEngine::_CheckOnSuccess";
     },
     
     /**
@@ -191,6 +152,7 @@ var InferenceEngine = Class.create( /** @lends InferenceEngine.prototype */ {
     _onError: function(transport, e){
         Logger.serverError(transport,e);
     },
+    
     /**
      * Returns a list of listeners of an uri
      * @private
@@ -225,28 +187,6 @@ var InferenceEngine = Class.create( /** @lends InferenceEngine.prototype */ {
             listener.setReachability(this._reachabilityData.get(uri));
         }.bind(this));        
     },
-    
-    /**
-     * Creates a body to be sent in an AJAX call to the 
-     * catalogue
-     * @private
-     * @type String
-     */
-    _constructBody: function(/**Array*/ canvas, /** Array*/ elements,
-                    /** Array */ domainContext, 
-                    /** String*/ criteria) {
-        var domain = {
-            'tags': domainContext,
-            'user': null /* TODO: add user here */
-        };
-        var body = {
-            'canvas': canvas,
-            'elements': elements,
-            'domainContext': domain,
-            'criterion': criteria
-        };
-        return Object.toJSON(body);
-    }   
 });
 
 // vim:ts=4:sw=4:et:

@@ -100,10 +100,14 @@ var FormView = Class.create(BuildingBlockView,
         triggerPostContainer.appendChild(postArea);
         
         this._node.appendChild(triggerPostContainer);
+        
+        // FIXME: Try to fix the form repository
+        var imageUrl = description.screenshot.replace("http://www.deri.ie/", "http://localhost:8010/images/screenshots/");
+        imageUrl = imageUrl.replace("-screenshot.jpg", ".png");
 
         var image = new Element ('img',{
                 'class': 'image', 
-                'src': description.screenshot
+                'src': imageUrl
         });
         this._node.appendChild(image);      
         
