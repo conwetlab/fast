@@ -34,7 +34,6 @@ FastBaseAPI.Request = Class.create({
             asynchronous:   true,
             contentType:    'application/x-www-form-urlencoded',
             encoding:       'UTF-8',
-            parameters:     '',
             content:        '',
             onSuccess:      Prototype.emptyFunction,
             onFailure:      Prototype.emptyFunction

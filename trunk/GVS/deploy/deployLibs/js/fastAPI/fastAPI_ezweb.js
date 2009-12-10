@@ -59,44 +59,26 @@ FastAPI.Request = Class.create(FastBaseAPI.Request,{
      */
     request: function() {
         var params = this.options;
-        switch(params.method){
-            //HTTP GET
-            case 'get':
-                EzWebAPI.send_get(this.url, params.context, onSuccess, onFailure, params.requestHeaders);
-                break;
-            //HTTP DELETE
-            case 'delete':
-                EzWebAPI.send_delete(this.url, params.context, onSuccess, onFailure, params.requestHeaders);
-                break;
-            //HTTP PUT
-            case 'put':
-                EzWebAPI.send_put(this.url, params.parameters, params.context, onSuccess, onFailure, params.requestHeaders);
-                break;
-            //HTTP POST
-            case 'post':
-            default:
-                EzWebAPI.send_post(this.url, params.parameters, params.context, onSuccess, onFailure, params.requestHeaders);
-                break;
-        }
+        
+        var _onSuccess = params.onSuccess;
+        
+        params.onSuccess = onSuccess;
+        
+        EzWebAPI.send(this.url, params.context, params);
 
         // This function handles a success in the asynchronous call
         function onSuccess(transport) {
             switch(params.content){
                 case 'xml':
-                    (params.onSuccess || Prototype.emptyFunction)(transport.responseXML);
+                    (_onSuccess || Prototype.emptyFunction)(transport.responseXML);
                     break;
                 case 'text':
-                    (params.onSuccess || Prototype.emptyFunction)(transport.responseText);
+                    (_onSuccess || Prototype.emptyFunction)(transport.responseText);
                     break;
                 default:
-                	(params.onSuccess || Prototype.emptyFunction)(transport);
+                	(_onSuccess || Prototype.emptyFunction)(transport);
                 	break;
             }
-        }
-
-        // This function handles an error in the asynchronous call
-        function onFailure(transport) {
-            (params.onFailure || Prototype.emptyFunction)(transport);
         }
     }
 });
