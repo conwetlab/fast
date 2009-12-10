@@ -53,19 +53,36 @@ public class MetadataServlet extends HttpServlet {
 			JSONArray input = new JSONArray(body);
 			JSONArray arrayScreenflows = new JSONArray();
 			JSONArray arrayScreens = new JSONArray();
+			JSONArray arrayForms = new JSONArray();
+			JSONArray arrayOperators = new JSONArray();
+			JSONArray arrayBackendServices = new JSONArray();
+			
 			for (int i = 0; i < input.length(); i++) {
 				URI uri = new URIImpl(input.getString(i));
 				if (CatalogueAccessPoint.getCatalogue().containsScreenFlow(uri))
 					arrayScreenflows.put(CatalogueAccessPoint.getCatalogue().getScreenFlow(uri).toJSON());
 				else if (CatalogueAccessPoint.getCatalogue().containsScreen(uri))
 					arrayScreens.put(CatalogueAccessPoint.getCatalogue().getScreen(uri).toJSON());
+				else if (CatalogueAccessPoint.getCatalogue().containsFormElement(uri))
+					arrayForms.put(CatalogueAccessPoint.getCatalogue().getFormElement(uri).toJSON());
+				else if (CatalogueAccessPoint.getCatalogue().containsOperator(uri))
+					arrayOperators.put(CatalogueAccessPoint.getCatalogue().getOperator(uri).toJSON());
+				else if (CatalogueAccessPoint.getCatalogue().containsBackendService(uri))
+					arrayBackendServices.put(CatalogueAccessPoint.getCatalogue().getBackendService(uri).toJSON());
 			}
+			
 			// create the JSON output
 			JSONObject output = new JSONObject();
 			if (arrayScreenflows.length() > 0)
 				output.put("screenflows", arrayScreenflows);
 			if (arrayScreens.length() > 0)
 				output.put("screens", arrayScreens);
+			if (arrayForms.length() > 0)
+				output.put("forms", arrayForms);
+			if (arrayOperators.length() > 0)
+				output.put("operators", arrayOperators);
+			if (arrayBackendServices.length() > 0)
+				output.put("backendservices", arrayBackendServices);
 			
 			writer.print(output.toString(2));
 			response.setContentType(MediaType.APPLICATION_JSON);
