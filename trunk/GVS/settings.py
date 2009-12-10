@@ -13,12 +13,12 @@ BASEDIR = path.dirname(path.abspath(__file__))
 APPEND_SLASH = False
 
 ADMINS = (
-    # ('Your Name', 'your_email@domain.com'),
+    # ('Your Name', 'your_email@domain.com')
 )
 
 MANAGERS = ADMINS
 
-DATABASE_ENGINE = 'mysql'           # 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
+DATABASE_ENGINE = 'postgresql_psycopg2'           # 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
 DATABASE_NAME = 'fast'             # Or path to database file if using sqlite3.
 DATABASE_USER = 'fast'             # Not used with sqlite3.
 DATABASE_PASSWORD = 'fast'         # Not used with sqlite3.
@@ -72,9 +72,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'django.core.context_processors.debug',
     'django.core.context_processors.i18n',
     'django.core.context_processors.media',
-    'processors.context_processors.catalogue_url',
-    'processors.context_processors.gvs_data_url',
-    'processors.context_processors.catalogue_flow')
+)
 
 MIDDLEWARE_CLASSES = (
     'django.middleware.common.CommonMiddleware',
@@ -138,7 +136,7 @@ STORAGE_FORMAT = 'base64string'
 GVS_DATA_URL = 'http://localhost:8010/'
 
 # Url to the ezweb platform where the gadgets will be deployed
-EZWEB_URL = 'http://venus.ls.fi.upm.es/'
+EZWEB_URL = 'http://localhost:9000/'
 
 # Flow of operations against the catalogue in order to refresh the screens
 CATALOGUE_FLOW = 'check'
