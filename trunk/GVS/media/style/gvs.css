@@ -4,7 +4,11 @@
 
 .dragLayer { z-index: 9; }
 .ghostLayer { z-index: 16; }
-.inspectorLayer { z-index: 21; }
+.inspectorLayer { z-index: 21 !important; }
+.dijitSplitter { z-index: 21 !important; }
+.dijitBorderContainerPane, .dijitBorderContainerNoGutterPane, .dijitTabPaneWrapper  {
+    z-index:auto !important;
+}
 
 /* WireIt */
 canvas.WireIt-Wire  { z-index: 10; }
@@ -291,21 +295,22 @@ h4{
     overflow: hidden;
 }
 .dropArea.form {
-    height: 43%;
+    height: 47%;
     top: 0px;
     left: 10%;
     right: 10%;
     border-bottom: 2px dotted #AAA;
+    /*background: transparent url("../images/gui/document/formsBackground.png") center center no-repeat;*/
 }
 .dropArea.operator {
-    top: 43%;
-    bottom: 30%;
+    top: 47%;
+    bottom: 28%;
     left: 10%;
     right: 10%;
    
 }
 .dropArea.resource {
-    height: 30%;
+    height: 28%;
     bottom: 0px;
     left: 10%;
     right: 10%;
@@ -602,6 +607,8 @@ h4{
     -moz-border-radius: 10px;
     -webkit-border-radius: 10px;
     background-color: white;
+    min-width: 500px;
+    min-height: 100px;
 }
 
 .form .title {
@@ -644,7 +651,8 @@ h4{
     text-align: center;
 }
 .form .image {
-    width: 350px;
+    max-height: 120px;
+    margin: auto;
     margin-bottom: 60px;
 }
 .form .fact, .form .trigger {
@@ -658,10 +666,14 @@ h4{
 .view.form.snapshot {
     border: 2px solid #808080;
     padding: 5px;
+    min-width: 0px;
+    min-height: 0px;
+
 }
 .form.snapshot .image {
     margin: 0px;
     width: auto;
+
 }
 /*********************
  * properties tables *	 

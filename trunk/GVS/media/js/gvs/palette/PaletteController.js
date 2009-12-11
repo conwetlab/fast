@@ -32,7 +32,7 @@ var PaletteController = Class.create(
                 "maxSize":"300",
                 "splitter":"true",
                 "livesplitters":"false",
-                "style":"width:220px;"
+                "style":"width:260px;"
                 });
          
         //Create all the document necessary palettes

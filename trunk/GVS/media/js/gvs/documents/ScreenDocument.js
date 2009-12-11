@@ -23,12 +23,7 @@ var ScreenDocument = Class.create(PaletteDocument,
         this._factPane = new FactPane(this._inspectorArea);
         
         var catalogue = CatalogueSingleton.getInstance();
-        
-        var screenSet = new BuildingBlockSet(domainContext, catalogue.
-                            getBuildingBlockFactory(Constants.BuildingBlock.SCREEN));
-        var domainConceptSet = new DomainConceptSet(domainContext, catalogue.
-                            getBuildingBlockFactory(Constants.BuildingBlock.DOMAIN_CONCEPT));
-        
+
         // Palette sets
         var formSet = new BuildingBlockSet(domainContext, catalogue.
                             getBuildingBlockFactory(Constants.BuildingBlock.FORM));
@@ -56,6 +51,13 @@ var ScreenDocument = Class.create(PaletteDocument,
         areas.each(function(area) {
             this._tabContent.appendChild(area.getNode());     
         }.bind(this));
+
+        /**
+         * Form instance of the screen, if any
+         * @type FormInstance
+         * @private
+         */
+        this._formInstance = null;
               
         // Screen Definition
         
@@ -137,39 +139,46 @@ var ScreenDocument = Class.create(PaletteDocument,
      */
     _drop: function(/** Area */ area, /** ComponentInstance */ instance) {
         // Reject repeated elements (except domain concepts or operators)
-                if (instance.constructor != PrePostInstance && 
-                        this._canvasInstances.get(instance.getUri())) {
-                    return false;
-                }
-                var node = instance.getView().getNode();
-                area.getNode().appendChild(node);      
-                var canvasPosition = Utils.getPosition(area.getNode());
-                node.setStyle({
-                    'left': parseInt(node.offsetLeft - canvasPosition.left) + "px",
-                    'top': parseInt(node.offsetTop - canvasPosition.top) + "px"
-                });
-                var uidGenerator = UIDGeneratorSingleton.getInstance();
-                instance.getBuildingBlockDescription().id =  uidGenerator.generate(instance.getTitle());
-                
-                if (instance.constructor != PrePostInstance) {
-                    instance.createTerminals(this._onPipeHandler.bind(this));
-                } else {
-                    if (area.getNode().className.include("pre")) {
-                        instance.setType("pre");
-                        instance.createTerminal(this._onPipeHandler.bind(this));
-                    } else if (area.getNode().className.include("post")) {
-                        instance.setType("post");
-                        instance.createTerminal();
-                    }
-                }
-                
-                instance.enableDragNDrop(area,[area]);
-                instance.getView().addGhost();
-                
-                this._canvasInstances.set(instance.getUri(), instance);
-                this._setSelectedElement(instance);
-                return true;
-        return true; 
+        if (instance.constructor != PrePostInstance && instance.constructor != PrePostInstance  &&
+                this._canvasInstances.get(instance.getUri())) {
+            return false;
+        }
+        if (instance.constructor == FormInstance) {
+            if (this._formInstance) {
+                return false;
+            } else {
+                this._formInstance = instance;
+            }
+        }
+
+        var node = instance.getView().getNode();
+        area.getNode().appendChild(node);
+        var canvasPosition = Utils.getPosition(area.getNode());
+        node.setStyle({
+            'left': parseInt(node.offsetLeft - canvasPosition.left) + "px",
+            'top': parseInt(node.offsetTop - canvasPosition.top) + "px"
+        });
+        var uidGenerator = UIDGeneratorSingleton.getInstance();
+        instance.getBuildingBlockDescription().id =  uidGenerator.generate(instance.getTitle());
+
+        if (instance.constructor != PrePostInstance) {
+            instance.createTerminals(this._onPipeHandler.bind(this));
+        } else {
+            if (area.getNode().className.include("pre")) {
+                instance.setType("pre");
+                instance.createTerminal(this._onPipeHandler.bind(this));
+            } else if (area.getNode().className.include("post")) {
+                instance.setType("post");
+                instance.createTerminal();
+            }
+        }
+
+        instance.enableDragNDrop(area,[area]);
+        instance.getView().addGhost();
+
+        this._canvasInstances.set(instance.getUri(), instance);
+        this._setSelectedElement(instance);
+        return true;
     },
     
     /**
@@ -181,12 +190,12 @@ var ScreenDocument = Class.create(PaletteDocument,
     
     /**
      * Delete an instance.
-     * @param ComponentInstance
+     * @param instance ComponentInstance
      *      Instance to be deleted from the
      *      Screen document.
      * @override
      */
-    _deleteInstance: function(instance) {
+    _deleteInstance: function(/** ComponentInstance */ instance) {
             
         var node = instance.getView().getNode();
         node.parentNode.removeChild(node);
@@ -202,12 +211,14 @@ var ScreenDocument = Class.create(PaletteDocument,
                 this._description.removePrePost(instance.getUri());
                 
                 break;
-                
+            case FormInstance:
+                this._formInstance = null;
+
             default:
-                throw "Illegal state. ScreenDocument::deleteInstance";
+                console.log("Instance type not handled");
         }
         
-        this._refreshReachability();
+        //this._refreshReachability();
         this._setSelectedElement();
         instance.destroy();
     },
@@ -215,7 +226,7 @@ var ScreenDocument = Class.create(PaletteDocument,
 
     /**
      * Select a screen in the screenflow document
-     * @param ComponentInstance
+     * @param element ComponentInstance
      *      Element to be selected for the
      *      Screen document.
      * @private
@@ -316,10 +327,24 @@ var ScreenDocument = Class.create(PaletteDocument,
         
         centerContainer.addChild(documentPane);
         centerContainer.addChild(this._inspectorArea);
-        
+
+        var leftSplitter = centerContainer.getSplitter("left");
+        dojo.connect(leftSplitter,'onmousemove', this._repaint.bind(this));
+
+        var bottomSplitter = centerContainer.getSplitter("bottom");
+        dojo.connect(bottomSplitter,'onmousemove', this._repaint.bind(this));
+
         return centerContainer;
     },
-    
+    /**
+     * This function repaints the terminals in the document
+     * @private
+     */
+    _repaint: function() {
+        this._canvasInstances.each(function(pair){
+            pair.value.onUpdate();
+        });
+    },
     
     /**
      * This function creates
@@ -329,12 +354,15 @@ var ScreenDocument = Class.create(PaletteDocument,
     _createInspectorArea: function(){
      
         var inspectorArea = new dijit.layout.BorderContainer({
-            region:"bottom",
-            design:"horizontal",
-            style:"height: 180px;",
-            persist:"false",
-            splitter:true
+            "region":"bottom",
+            "design":"horizontal",
+            "style":"height: 180px; z-index:21 !important;",
+            "minSize":"100",
+            "maxSize":"220",
+            "persist":false,
+            "splitter":true
             });
+
         return inspectorArea;
     },
     
@@ -354,7 +382,7 @@ var ScreenDocument = Class.create(PaletteDocument,
     /**
      * This function is called when the user has confirmed the closing
      * @private
-     * @param boolean
+     * @param close Boolean
      *     The parameter represents if the user has accepted the closing (true)
      *     or not (false)
      */

@@ -38,11 +38,11 @@ var FormView = Class.create(BuildingBlockView,
             "title": description.name
         });
         
-        /*var title = new Element("div", {
+        var title = new Element("div", {
             "class": "title"
         }).update(description.label['en-gb']);
         
-        this._node.appendChild(title);*/
+        this._node.appendChild(title);
         
         var actionsNode = new Element("div", {
             "class": "actions"
@@ -79,11 +79,11 @@ var FormView = Class.create(BuildingBlockView,
         }.bind(this));*/
         triggerPostContainer.appendChild(triggerArea);
         
-        
+        var posts;
         if (description.postconditions && description.postconditions[0] instanceof Array) {
-            var posts =  description.postconditions[0];
+            posts =  description.postconditions[0];
         } else {
-            var posts = description.postconditions;
+            posts = description.postconditions;
         }
         
         var postArea = new Element("div", {
@@ -107,7 +107,8 @@ var FormView = Class.create(BuildingBlockView,
 
         var image = new Element ('img',{
                 'class': 'image', 
-                'src': imageUrl
+                'src': imageUrl,
+                'onerror': 'this.src = "/fast/images/gui/imageNotFound.png"; '
         });
         this._node.appendChild(image);      
         
