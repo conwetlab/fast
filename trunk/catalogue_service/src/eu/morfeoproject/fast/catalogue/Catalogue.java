@@ -95,13 +95,13 @@ public class Catalogue {
 		tripleStore = new TripleStore(dir, indexes);
     	tripleStore.open();
 //    	tripleStore.clear();
-//    	printStatements();
 
     	// check if the catalogue is correct
 		if (!check()) {
 			// recover the catalogue
 			restore();
 		}
+//    	printStatements();
 		
 		// creates a planner
 		planner = new Planner(this);
@@ -950,12 +950,14 @@ public class Catalogue {
 		logger.info("ScreenFlow "+sf.getUri()+" added.");
 	}
 	
-	public void updateScreenFlow(ScreenFlow screenFlow) throws NotFoundException, OntologyReadonlyException  {
-		logger.info("Updating screenflow "+screenFlow.getUri()+"...");
-		removeScreenFlow(screenFlow.getUri());
+	public void updateScreenFlow(ScreenFlow screenflow) throws NotFoundException, OntologyReadonlyException  {
+		logger.info("Updating screenflow "+screenflow.getUri()+"...");
+		removeScreenFlow(screenflow.getUri());
+		// specify that it's a screenflow
+		tripleStore.addStatement(screenflow.getUri(), RDF.type, FGO.ScreenFlow);
 		// do not call addScreenFlow because it does not need to create a new URI for the screenflow
-		saveScreenFlow(screenFlow);
-		logger.info("Screenflow "+screenFlow.getUri()+" updated.");
+		saveScreenFlow(screenflow);
+		logger.info("Screenflow "+screenflow.getUri()+" updated.");
 	}
 	
 	/**
@@ -1080,6 +1082,8 @@ public class Catalogue {
 		removeScreen(screen.getUri());
 		// do not call addScreen because it does not need to create a new URI for the screen
 		saveScreen(screen);
+		// specify that it's a screen
+		tripleStore.addStatement(screen.getUri(), RDF.type, FGO.Screen);
 		// calculate new plans if necessary
 		planner.update(screen, oldScreen);
 		logger.info("Screen "+screen.getUri()+" updated.");
@@ -1165,6 +1169,11 @@ public class Catalogue {
 		logger.info("Updating pre/postcondition "+se.getUri()+"...");
 		PreOrPost oldSe = getPreOrPost(se.getUri());
 		removePreOrPost(se.getUri());
+		// specify that it's a pre/postcondition
+		if (se instanceof Precondition)
+			tripleStore.addStatement(se.getUri(), RDF.type, FGO.Precondition);
+		else if (se instanceof Postcondition)
+			tripleStore.addStatement(se.getUri(), RDF.type, FGO.Postcondition);
 		// do not call addPrecondition because it does not need to create a new URI for the screen
 		savePreOrPost(se);
 		// calculate new plans if necessary
@@ -1333,6 +1342,13 @@ public class Catalogue {
 		logger.info("Updating screen component "+sc.getUri()+"...");
 		// remove old screen component from the catalogue
 		removeScreenComponent(sc.getUri());
+		// specify the type of screen component
+		if (sc instanceof FormElement)
+			tripleStore.addStatement(sc.getUri(), RDF.type, FGO.FormElement);
+		else if (sc instanceof Operator)
+			tripleStore.addStatement(sc.getUri(), RDF.type, FGO.Operator);
+		else if (sc instanceof BackendService)
+			tripleStore.addStatement(sc.getUri(), RDF.type, FGO.BackendService);
 		// do not call addScreen because it does not need to create a new URI for the screen
 		saveScreenComponent(sc);
 		logger.info("Screen component "+sc.getUri()+" updated.");
