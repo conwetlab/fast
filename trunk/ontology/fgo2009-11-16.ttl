@@ -2,10 +2,14 @@
 # 
 # developed as part of the EU FAST Project (FP7-ICT-2007-1-216048)
 # 
-# editor: Knud Hinnerk Möller, DERI, National Unversity of Ireland, Galway
+# editor: Knud Hinnerk MÃ¶ller, DERI, National Unversity of Ireland, Galway
+# contributor: Ismael Rivera, DERI, National Unversity of Ireland, Galway
 #
 # this turtle file is the original document, from which all other versions
 # (html, rdf/xml) are created
+#
+# $Id: 2009-12-02.ttl 365 2009-12-02 17:49:12Z knud $
+
 
 @prefix fgo: <http://purl.oclc.org/fast/ontology/gadget#> .
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>  .
