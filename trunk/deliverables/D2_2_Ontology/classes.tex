@@ -1,0 +1,113 @@
+\subsubsection{Class: \texttt{fast:Resource}}
+\label{subs:Resource}
+\begin{tabular}{| >{\columncolor{fast@lightgrey}}p{2.5cm}|p{12cm}|}
+\hline
+\textcolor{white}{\textbf{label}} & Resource \\ \hline
+\textcolor{white}{\textbf{description}} & Anything that is part of a gadget (or the gadget itself). Tentatively 
+    anything that can be `touched' and moved around in the FAST IDE. \\ \hline
+\textcolor{white}{\textbf{super\_class\_of}} & \htmlref{\texttt{fast:Screen\_Flow}}{subs:ScreenFlow}, \htmlref{\texttt{fast:Screen}}{subs:Screen}, \htmlref{\texttt{fast:Backend\_Service}}{subs:BackendService}, \htmlref{\texttt{fast:Flow\_Control\_Element}}{subs:FlowControlElement}, \htmlref{\texttt{fast:Operator}}{subs:Operator}, \htmlref{\texttt{fast:Form\_Element}}{subs:FormElement}, \htmlref{\texttt{fast:Condition}}{subs:Condition}, \htmlref{\texttt{fast:WithConditions}}{subs:WithConditions} \\ \hline
+\textcolor{white}{\textbf{in\_domain\_of}} & \htmlref{\texttt{fast:contains}}{subs:contains}, \htmlref{\texttt{fast:hasIcon}}{subs:hasIcon}, \htmlref{\texttt{fast:hasScreenshot}}{subs:hasScreenshot} \\ \hline
+\textcolor{white}{\textbf{in\_range\_of}} & \htmlref{\texttt{fast:contains}}{subs:contains} \\ \hline
+\end{tabular}
+\subsubsection{Class: \texttt{fast:Screen\_Flow}}
+\label{subs:ScreenFlow}
+\begin{tabular}{| >{\columncolor{fast@lightgrey}}p{2.5cm}|p{12cm}|}
+\hline
+\textcolor{white}{\textbf{label}} & Screen Flow \\ \hline
+\textcolor{white}{\textbf{description}} & The complete gadget, a set of screens. \\ \hline
+\textcolor{white}{\textbf{sub\_class\_of}} & \htmlref{\texttt{fast:Resource}}{subs:Resource} \\ \hline
+\end{tabular}
+\subsubsection{Class: \texttt{fast:Screen}}
+\label{subs:Screen}
+\begin{tabular}{| >{\columncolor{fast@lightgrey}}p{2.5cm}|p{12cm}|}
+\hline
+\textcolor{white}{\textbf{label}} & Screen \\ \hline
+\textcolor{white}{\textbf{description}} & An individual screen. \\ \hline
+\textcolor{white}{\textbf{sub\_class\_of}} & \htmlref{\texttt{fast:Resource}}{subs:Resource} \\ \hline
+\end{tabular}
+\subsubsection{Class: \texttt{fast:Backend\_Service}}
+\label{subs:BackendService}
+\begin{tabular}{| >{\columncolor{fast@lightgrey}}p{2.5cm}|p{12cm}|}
+\hline
+\textcolor{white}{\textbf{label}} & Backend Service \\ \hline
+\textcolor{white}{\textbf{description}} & A Web service which provides data and/or functionality to a screen. 
+    A backend service will often be external to FAST, and will probably have to be 
+    wrapped by the screen. \\ \hline
+\textcolor{white}{\textbf{sub\_class\_of}} & \htmlref{\texttt{fast:Resource}}{subs:Resource} \\ \hline
+\end{tabular}
+\subsubsection{Class: \texttt{fast:Flow\_Control\_Element}}
+\label{subs:FlowControlElement}
+\begin{tabular}{| >{\columncolor{fast@lightgrey}}p{2.5cm}|p{12cm}|}
+\hline
+\textcolor{white}{\textbf{label}} & Flow Control Element \\ \hline
+\textcolor{white}{\textbf{description}} & Any kind of component which can restrict the default flow of screens 
+    in a gadget. \\ \hline
+\textcolor{white}{\textbf{super\_class\_of}} & \htmlref{\texttt{fast:Screen\_Flow\_Start}}{subs:ScreenFlowStart}, \htmlref{\texttt{fast:Screen\_Flow\_End}}{subs:ScreenFlowEnd}, \htmlref{\texttt{fast:Connector}}{subs:Connector} \\ \hline
+\textcolor{white}{\textbf{sub\_class\_of}} & \htmlref{\texttt{fast:Resource}}{subs:Resource} \\ \hline
+\end{tabular}
+\subsubsection{Class: \texttt{fast:Screen\_Flow\_Start}}
+\label{subs:ScreenFlowStart}
+\begin{tabular}{| >{\columncolor{fast@lightgrey}}p{2.5cm}|p{12cm}|}
+\hline
+\textcolor{white}{\textbf{label}} & Screen Flow Start \\ \hline
+\textcolor{white}{\textbf{description}} & The entry point to a wigdet; the first screen. \\ \hline
+\textcolor{white}{\textbf{sub\_class\_of}} & \htmlref{\texttt{fast:Flow\_Control\_Element}}{subs:FlowControlElement} \\ \hline
+\end{tabular}
+\subsubsection{Class: \texttt{fast:Screen\_Flow\_End}}
+\label{subs:ScreenFlowEnd}
+\begin{tabular}{| >{\columncolor{fast@lightgrey}}p{2.5cm}|p{12cm}|}
+\hline
+\textcolor{white}{\textbf{label}} & Screen Flow End \\ \hline
+\textcolor{white}{\textbf{description}} & A screen that ends the workflow of the gadget. \\ \hline
+\textcolor{white}{\textbf{sub\_class\_of}} & \htmlref{\texttt{fast:Flow\_Control\_Element}}{subs:FlowControlElement} \\ \hline
+\end{tabular}
+\subsubsection{Class: \texttt{fast:Connector}}
+\label{subs:Connector}
+\begin{tabular}{| >{\columncolor{fast@lightgrey}}p{2.5cm}|p{12cm}|}
+\hline
+\textcolor{white}{\textbf{label}} & Connector \\ \hline
+\textcolor{white}{\textbf{description}} & An explicit connection between two screens. \\ \hline
+\textcolor{white}{\textbf{sub\_class\_of}} & \htmlref{\texttt{fast:Flow\_Control\_Element}}{subs:FlowControlElement} \\ \hline
+\end{tabular}
+\subsubsection{Class: \texttt{fast:Operator}}
+\label{subs:Operator}
+\begin{tabular}{| >{\columncolor{fast@lightgrey}}p{2.5cm}|p{12cm}|}
+\hline
+\textcolor{white}{\textbf{label}} & Operator \\ \hline
+\textcolor{white}{\textbf{description}} & Any kind of component that is used to connect backend services to 
+    form elements. Examples are simple pipes, aggregators or various kinds of 
+    filters. \\ \hline
+\textcolor{white}{\textbf{sub\_class\_of}} & \htmlref{\texttt{fast:Resource}}{subs:Resource} \\ \hline
+\end{tabular}
+\subsubsection{Class: \texttt{fast:Form\_Element}}
+\label{subs:FormElement}
+\begin{tabular}{| >{\columncolor{fast@lightgrey}}p{2.5cm}|p{12cm}|}
+\hline
+\textcolor{white}{\textbf{label}} & Form Element \\ \hline
+\textcolor{white}{\textbf{description}} & Form elements are UI elements in a particular screen. \\ \hline
+\textcolor{white}{\textbf{sub\_class\_of}} & \htmlref{\texttt{fast:Resource}}{subs:Resource} \\ \hline
+\end{tabular}
+\subsubsection{Class: \texttt{fast:Condition}}
+\label{subs:Condition}
+\begin{tabular}{| >{\columncolor{fast@lightgrey}}p{2.5cm}|p{12cm}|}
+\hline
+\textcolor{white}{\textbf{label}} & Condition \\ \hline
+\textcolor{white}{\textbf{description}} & The pre- or post-condition of either a screen or a screenflow. In 
+    the latter case, each target platform will use these conditions in its own way, 
+    or may also ignore them. E.g., in EzWeb pre- and post-conditions correspond to 
+    the concepts of slot and event. \\ \hline
+\textcolor{white}{\textbf{sub\_class\_of}} & \htmlref{\texttt{fast:Resource}}{subs:Resource} \\ \hline
+\textcolor{white}{\textbf{in\_domain\_of}} & \htmlref{\texttt{fast:hasPattern}}{subs:hasPattern}, \htmlref{\texttt{fast:isPositive}}{subs:isPositive} \\ \hline
+\textcolor{white}{\textbf{in\_range\_of}} & \htmlref{\texttt{fast:hasPreCondition}}{subs:hasPreCondition}, \htmlref{\texttt{fast:hasPostCondition}}{subs:hasPostCondition} \\ \hline
+\end{tabular}
+\subsubsection{Class: \texttt{fast:WithConditions}}
+\label{subs:WithConditions}
+\begin{tabular}{| >{\columncolor{fast@lightgrey}}p{2.5cm}|p{12cm}|}
+\hline
+\textcolor{white}{\textbf{label}} & With-condition \\ \hline
+\textcolor{white}{\textbf{description}} & Those kinds of resource which can have pre- or post-conditions 
+    (i.e., screens and screen flows). \\ \hline
+\textcolor{white}{\textbf{sub\_class\_of}} & \htmlref{\texttt{fast:Resource}}{subs:Resource} \\ \hline
+\textcolor{white}{\textbf{in\_domain\_of}} & \htmlref{\texttt{fast:hasPreCondition}}{subs:hasPreCondition}, \htmlref{\texttt{fast:hasPostCondition}}{subs:hasPostCondition} \\ \hline
+\textcolor{white}{\textbf{unionOf}} & \htmlref{\texttt{fast:Screen}}{subs:Screen}, \htmlref{\texttt{fast:Screen\_Flow}}{subs:ScreenFlow} \\ \hline
+\end{tabular}

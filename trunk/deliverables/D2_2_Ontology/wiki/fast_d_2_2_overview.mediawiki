@@ -1,0 +1,59 @@
+Part of [[WP2: Definition of conceptual Model]] 
+
+== DOW statement ==
+
+The objective of this task is the definition and specification of the conceptual model and ontology that will 
+be used for the semantic characterization of the complex gadgets developed using the methodology and 
+support tools developed by the FAST project.
+
+== Partner Contacts ==
+
+* SAP
+* Telefónica I+D [[User:Evdlt|Eduardo]]
+* '''NUIG [[User:Knud|Knud Möller]]'''
+* UniKas
+* Cyntelix 
+* UPM
+
+== Time schedule for Deliverable ==
+
+30.01.2009 - Deadline for individual partner contributions
+
+09.02.2009 - Distribution of full draft to the partners
+
+16.02.2009 - Deadline for Comments on Draft
+
+Conversion --> LaTeX --> PDF
+
+23.02.2009 - Distribution of final draft to the partners (PDF version)
+
+27.02.2009 - Delivery to the EU
+
+== Table of Contents ==
+
+# INTRODUCTION
+## The '''Methontology''' Methodology for Ontology Development
+## General Design Decisions
+# RELATED WORK
+## The W3C ''Widgets 1.0 Family of Specifications''
+## Widget APIs
+### Netvibes Universal Widget API (UWA)
+### others...
+## Semantic Web Services
+# WIDGET DOMAIN ANALYSIS
+# THE FAST WIDGET ONTOLOGY
+## Classes
+## Properties
+## Extension towards Specific Domains
+## Example Usage
+# CONCLUSIONS
+# APPENDIX A - ONTOLOGY CODE
+# REFERENCES
+
+== Document D2.2 ==
+
+[[D2.2_document| D2.2 working draft]]
+
+== Space for general discussion on D2.2 ==
+
+see the [[Talk:D2.2 Ontology and conceptual model for the semantic characterization of complex gadgets (R)|discussion page]].

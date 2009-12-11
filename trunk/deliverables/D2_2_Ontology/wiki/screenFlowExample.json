@@ -1,0 +1,36 @@
+screenflow = {
+    uri: "screenflowURI",
+    label: {"en-GB":"Screenflow A", "es-ES": "Flujo", ...},  // rdfs o dc:label
+    description: {"...":"..."},           // dc:description
+    creator: "URI",                       // dc:creator
+    rights: "URI",                        // dc:rights
+    version: "...",
+    creationDate: "ISO date",             // dc:date
+    domainContext: ["tag1", "tag2",...],  // for the moment
+    homepage: "URL",                      // foaf:homepage
+
+    preconditions:[
+               {
+                  expression: "?address a iso:address",
+                  label: {"en-GB": "An address" }
+               }
+            ],
+    postconditions:[
+               {
+                  expression: "?address a iso:address",
+                  label: {"en-GB": "An address" }
+               }
+            ],
+
+    definition: {
+        screens: ["screenURI1", ..., "screenURIn"],
+        connectors: [    {type:"start", end: "screenURI1"},
+                 {type:"connector", begin:"screenURI1", end: "screenURIn"},
+            {    type:"restrictionConnector",
+                begin: "screenURIn",
+                end: "screenURIn",
+                behaviour: {}
+            }
+        ]
+   }
+}

@@ -1,0 +1,90 @@
+\subsubsection{Property: \texttt{fast:contains}}
+\label{subs:contains}
+\begin{tabular}{| >{\columncolor{fast@lightgrey}}p{2.5cm}|p{12cm}|}
+\hline
+\textcolor{white}{\textbf{label}} & contains \\ \hline
+\textcolor{white}{\textbf{description}} & Many kinds of components in FAST can contain other components: 
+    screenflows contain screens, screens contain forms or form elements, etc. \\ \hline
+\textcolor{white}{\textbf{type}} & \texttt{owl:ObjectProperty} \\ \hline
+\textcolor{white}{\textbf{domain}} & \htmlref{\texttt{fast:Resource}}{subs:Resource} \\ \hline
+\textcolor{white}{\textbf{range}} & \htmlref{\texttt{fast:Resource}}{subs:Resource} \\ \hline
+\end{tabular}
+\subsubsection{Property: \texttt{fast:hasPreCondition}}
+\label{subs:hasPreCondition}
+\begin{tabular}{| >{\columncolor{fast@lightgrey}}p{2.5cm}|p{12cm}|}
+\hline
+\textcolor{white}{\textbf{label}} & has pre-condition \\ \hline
+\textcolor{white}{\textbf{description}} & This property links a screen or screenflow to its pre-condition, i.e., 
+    the facts that need to be fulfilled in order for this screen or screenflow to be 
+    reachable. \\ \hline
+\textcolor{white}{\textbf{type}} & \texttt{owl:ObjectProperty} \\ \hline
+\textcolor{white}{\textbf{domain}} & \htmlref{\texttt{fast:WithConditions}}{subs:WithConditions} \\ \hline
+\textcolor{white}{\textbf{range}} & \htmlref{\texttt{fast:Condition}}{subs:Condition} \\ \hline
+\end{tabular}
+\subsubsection{Property: \texttt{fast:hasPostCondition}}
+\label{subs:hasPostCondition}
+\begin{tabular}{| >{\columncolor{fast@lightgrey}}p{2.5cm}|p{12cm}|}
+\hline
+\textcolor{white}{\textbf{label}} & has post-condition \\ \hline
+\textcolor{white}{\textbf{description}} & This property links a screen or screenflow to its post-condition, 
+    i.e., the facts that are produced once the screen or screenflow has been 
+    executed. \\ \hline
+\textcolor{white}{\textbf{type}} & \texttt{owl:ObjectProperty} \\ \hline
+\textcolor{white}{\textbf{domain}} & \htmlref{\texttt{fast:WithConditions}}{subs:WithConditions} \\ \hline
+\textcolor{white}{\textbf{range}} & \htmlref{\texttt{fast:Condition}}{subs:Condition} \\ \hline
+\end{tabular}
+\subsubsection{Property: \texttt{fast:hasIcon}}
+\label{subs:hasIcon}
+\begin{tabular}{| >{\columncolor{fast@lightgrey}}p{2.5cm}|p{12cm}|}
+\hline
+\textcolor{white}{\textbf{label}} & has icon \\ \hline
+\textcolor{white}{\textbf{description}} & A small graphical representation of any FAST component or sub-component. \\ \hline
+\textcolor{white}{\textbf{type}} & \texttt{owl:ObjectProperty} \\ \hline
+\textcolor{white}{\textbf{domain}} & \htmlref{\texttt{fast:Resource}}{subs:Resource} \\ \hline
+\textcolor{white}{\textbf{range}} & \texttt{foaf:Image} \\ \hline
+\end{tabular}
+\subsubsection{Property: \texttt{fast:hasScreenshot}}
+\label{subs:hasScreenshot}
+\begin{tabular}{| >{\columncolor{fast@lightgrey}}p{2.5cm}|p{12cm}|}
+\hline
+\textcolor{white}{\textbf{label}} & has screenshot \\ \hline
+\textcolor{white}{\textbf{description}} & An image which shows a particular screen or screenflow in action, to 
+    aid users in deciding which screen or screenflow to choose out of many. \\ \hline
+\textcolor{white}{\textbf{type}} & \texttt{owl:ObjectProperty} \\ \hline
+\textcolor{white}{\textbf{domain}} & \htmlref{\texttt{fast:Resource}}{subs:Resource} \\ \hline
+\textcolor{white}{\textbf{range}} & \texttt{foaf:Image} \\ \hline
+\end{tabular}
+\subsubsection{Property: \texttt{fast:integratesTerm}}
+\label{subs:integratesTerm}
+\begin{tabular}{| >{\columncolor{fast@lightgrey}}p{2.5cm}|p{12cm}|}
+\hline
+\textcolor{white}{\textbf{label}} & integratesTerm \\ \hline
+\textcolor{white}{\textbf{description}} & A way to explicitly say that an ontology uses terms from another namespace. 
+    Maybe a bit redundant, but why not. \\ \hline
+\textcolor{white}{\textbf{type}} & \texttt{owl:ObjectProperty} \\ \hline
+\end{tabular}
+\subsubsection{Property: \texttt{fast:hasPattern}}
+\label{subs:hasPattern}
+\begin{tabular}{| >{\columncolor{fast@lightgrey}}p{2.5cm}|p{12cm}|}
+\hline
+\textcolor{white}{\textbf{label}} & has pattern \\ \hline
+\textcolor{white}{\textbf{description}} & This property links a screen or screenflow to its pre-condition, 
+    i.e., the facts that need to be fulfilled in order for this screen or screenflow 
+    to be reachable. \\ \hline
+\textcolor{white}{\textbf{type}} & \texttt{owl:DatatypeProperty} \\ \hline
+\textcolor{white}{\textbf{domain}} & \htmlref{\texttt{fast:Condition}}{subs:Condition} \\ \hline
+\textcolor{white}{\textbf{range}} & \texttt{xsd:string} \\ \hline
+\end{tabular}
+\subsubsection{Property: \texttt{fast:isPositive}}
+\label{subs:isPositive}
+\begin{tabular}{| >{\columncolor{fast@lightgrey}}p{2.5cm}|p{12cm}|}
+\hline
+\textcolor{white}{\textbf{label}} & is positive \\ \hline
+\textcolor{white}{\textbf{description}} & Conditions can be positive or negative, depending on whether they 
+    must be fulfilled or must not be fulfilled (in the case of pre-conditions), or 
+    whether their facts will be added to the canvas or removed (in the case of 
+    post-conditions). \\ \hline
+\textcolor{white}{\textbf{type}} & \texttt{owl:DatatypeProperty} \\ \hline
+\textcolor{white}{\textbf{domain}} & \htmlref{\texttt{fast:Condition}}{subs:Condition} \\ \hline
+\textcolor{white}{\textbf{range}} & \texttt{xsd:boolean} \\ \hline
+\end{tabular}

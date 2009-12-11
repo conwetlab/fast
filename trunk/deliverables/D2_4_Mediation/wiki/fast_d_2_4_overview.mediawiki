@@ -1,0 +1,41 @@
+Part of [[WP2: Definition of conceptual Model]] 
+
+== DOW statement ==
+
+The objective of this task is to analyse the mechanisms and solutions proposed to date for the translation 
+amongst different ontologies for the proper understanding of the different parties involved.
+
+== Partner Contacts ==
+
+
+SAP <br/>
+Telefónica I+D <br/>
+NUIG [[User:Aoszkar|Oszkar Ambrus]]<br/>
+UniKas<br/>
+Cyntelix  <br/>
+UPM <br/>
+
+== Time schedule for Deliverable ==
+
+30.01.2009 - Deadline for individual partner contributions
+
+09.02.2009 - Distribution of full draft to the partners
+
+16.02.2009 - Deadline for Comments on Draft
+
+23.02.2009 - Distribution of final draft to the partners
+
+27.02.2009 - Delivery to the EU
+
+== Table of Contents ==
+
+
+1 INTRODUCTION <br/>
+
+5 CONCLUSIONS <br/>
+
+6 REFERENCES <br/>
+
+== Document D2.4 ==
+
+== Space for general discussion on D2.4 ==

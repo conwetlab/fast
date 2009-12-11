@@ -1,0 +1,69 @@
+screen = {
+    "uri": "screenURI",
+    label: {"en-GB":"Screen A", "es-ES": "Pantalla EI", ...},  // rdfs o dc:label
+    description: {"...":"..."},           // dc:description
+    creator: "URI",                       // dc:creator
+    rights: "URI",                        // dc:rights
+    version: "...",
+    creationDate: "ISO date",             // dc:date
+    icon: "URL",
+    screenshot: "URL",                    // A picture of the screen while running
+    domainContext: ["tag1", "tag2",...],  // for the moment
+    homepage: "URL",                      // foaf:homepage
+
+ 
+    preconditions: [
+              [
+                   {
+                       expression: "?address a iso:address . ?address ns:hasCity <http://.../London>",
+                       positive: "true",  // true: design time & runtime, false: runtime
+                       label: {"en-GB": "An address in London" }
+                   }
+                   , /* AND */
+                   {
+                       expression: "?person a foaf:person",
+                       positive: "true",
+                       label: {"en-GB": "A person"},
+                   }
+              ]
+              ,/* OR */
+              [
+                 /* other possible inputs */
+              ]
+    ],
+
+    postconditions: [
+             [
+                   {
+                       expression: "?sc a amazon:shopping_cart",
+                       positive: "false",
+                       label: {"en-GB": "Remove shopping cart"}
+                   }
+             ]
+             , /* OR */
+             [
+                   {
+                       expression: "?order a amazon:order",
+                       positive: "true",
+                       label: {"en-GB": "An order"},
+                   }
+                   , /* AND */
+                   {
+                       expression: "?....",
+                       positive: "false",
+                       label: ...
+                   }
+             ]
+    ],
+
+    ////////////
+    // EITHER definition OR code
+    definition: { // TO BE DEFINED IN WP4
+        form: "formURI",
+        services: [...],
+        pipes: [...]
+    },
+    // OR
+    code: URL
+    ////////////
+}
