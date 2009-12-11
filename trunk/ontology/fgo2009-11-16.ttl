@@ -8,7 +8,7 @@
 # this turtle file is the original document, from which all other versions
 # (html, rdf/xml) are created
 #
-# $Id: 2009-12-02.ttl 365 2009-12-02 17:49:12Z knud $
+# $Id$
 
 
 @prefix fgo: <http://purl.oclc.org/fast/ontology/gadget#> .
@@ -27,12 +27,12 @@
         gadgets or widgets. It has been developed as part of the EU project 'FAST' 
 		(FAST AND ADVANCED STORYBOARD TOOLS), FP7-ICT-2007-1-216048."""@en ;
     dcterms:created "2009-02-09"@en ;
-    dcterms:modified "$Date: 2009-02-25 00:07:52 +0000 (Wed, 25 Feb 2009) $"@en ;
+    dcterms:modified "$Date$"@en ;
     dcterms:creator <http://kantenwerk.org/metadata/foaf.rdf#me> ;
     dcterms:contributor fgo:Ismael ;
     dcterms:contributor fgo:fast_members ;
     foaf:maker <http://kantenwerk.org/metadata/foaf.rdf#me> ;
-    doap:revision "$Revision: 170 $" .
+    doap:revision "$Revision$" .
     
 <http://kantenwerk.org/metadata/foaf.rdf#me> a foaf:Person ;
     foaf:name "Knud Möller"@en ;
