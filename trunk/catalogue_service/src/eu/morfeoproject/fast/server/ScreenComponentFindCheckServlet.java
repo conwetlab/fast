@@ -123,6 +123,8 @@ public class ScreenComponentFindCheckServlet extends GenericServlet {
 			ScreenComponent selectedItem = null;
 			if (input.has("selectedItem"))
 				selectedItem = CatalogueAccessPoint.getCatalogue().getScreenComponent(new URIImpl(input.getString("selectedItem")));
+			// flag to search or not for new components
+			boolean search = input.has("search") ? input.getBoolean("search") : false;
 			
 			// do the real work
 			//-----------------------------
@@ -144,17 +146,19 @@ public class ScreenComponentFindCheckServlet extends GenericServlet {
 			JSONObject output = new JSONObject();
 			
 			// add results of 'find' to the list of forms
-			Set<URI> formResults = CatalogueAccessPoint.getCatalogue().findScreenComponents(null, conList, all, 0, -1, tags, FGO.FormElement);
-			for (URI uri : formResults)
-				forms.add(CatalogueAccessPoint.getCatalogue().getScreenComponent(uri));
-			// add results of 'find' to the list of operators
-			Set<URI> opResults = CatalogueAccessPoint.getCatalogue().findScreenComponents(null, conList, all, 0, -1, tags, FGO.Operator);
-			for (URI uri : opResults)
-				operators.add(CatalogueAccessPoint.getCatalogue().getScreenComponent(uri));			
-			// add results of 'find' to the list of backend services
-			Set<URI> bsResults = CatalogueAccessPoint.getCatalogue().findScreenComponents(null, conList, all, 0, -1, tags, FGO.BackendService);
-			for (URI uri : bsResults)
-				backendServices.add(CatalogueAccessPoint.getCatalogue().getScreenComponent(uri));
+			if (search) {
+				Set<URI> formResults = CatalogueAccessPoint.getCatalogue().findScreenComponents(null, conList, all, 0, -1, tags, FGO.FormElement);
+				for (URI uri : formResults)
+					forms.add(CatalogueAccessPoint.getCatalogue().getScreenComponent(uri));
+				// add results of 'find' to the list of operators
+				Set<URI> opResults = CatalogueAccessPoint.getCatalogue().findScreenComponents(null, conList, all, 0, -1, tags, FGO.Operator);
+				for (URI uri : opResults)
+					operators.add(CatalogueAccessPoint.getCatalogue().getScreenComponent(uri));			
+				// add results of 'find' to the list of backend services
+				Set<URI> bsResults = CatalogueAccessPoint.getCatalogue().findScreenComponents(null, conList, all, 0, -1, tags, FGO.BackendService);
+				for (URI uri : bsResults)
+					backendServices.add(CatalogueAccessPoint.getCatalogue().getScreenComponent(uri));
+			}
 			
 			// check if the pipes are well defined
 			JSONArray jsonPipes = new JSONArray();
@@ -170,27 +174,29 @@ public class ScreenComponentFindCheckServlet extends GenericServlet {
 				canvasOut.put(processComponent(canvas, sc, preconditions, postconditions, pipes));
 			output.put("canvas", canvasOut);
 
-			JSONArray formsOut = new JSONArray();
-			for (ScreenComponent sc : forms)
-				formsOut.put(sc.getUri());
-			output.put("forms", formsOut);
-
-			JSONArray operatorsOut = new JSONArray();
-			for (ScreenComponent sc : operators)
-				operatorsOut.put(sc.getUri());
-			output.put("operators", operatorsOut);
-
-			JSONArray servicesOut = new JSONArray();
-			for (ScreenComponent sc : backendServices)
-				servicesOut.put(sc.getUri());
-			output.put("backendservices", servicesOut);
-
+			if (search) {
+				JSONArray formsOut = new JSONArray();
+				for (ScreenComponent sc : forms)
+					formsOut.put(sc.getUri());
+				output.put("forms", formsOut);
+	
+				JSONArray operatorsOut = new JSONArray();
+				for (ScreenComponent sc : operators)
+					operatorsOut.put(sc.getUri());
+				output.put("operators", operatorsOut);
+	
+				JSONArray servicesOut = new JSONArray();
+				for (ScreenComponent sc : backendServices)
+					servicesOut.put(sc.getUri());
+				output.put("backendservices", servicesOut);
+			}
+			
 			JSONArray postOut = new JSONArray();
 			for (Condition con : postconditions)
 				postOut.put(processCondition(canvas, con, preconditions, postconditions, pipes));
 			output.put("postconditions", postOut);
 		
-			if (selectedItem != null) {
+			if (search && selectedItem != null) {
 				JSONArray connectionsOut = new JSONArray();
 				List<Pipe> connections = generatePipes(canvas, preconditions, postconditions, selectedItem, pipes);
 				for (Pipe pipe : connections)
@@ -322,19 +328,21 @@ public class ScreenComponentFindCheckServlet extends GenericServlet {
 					}
 				}
 				for (ScreenComponent sc : canvas) {
-					if (sc.equals(selectedItem))
-						break; // discard selected item
-					for (List<Condition> conList : sc.getPostconditions()) {
-						for (Condition con : conList) {
-							if (isConditionCompatible(con, pre)) {
-								Pipe pipe = new Pipe();
-								pipe.setIdBBFrom(sc.getUri().toString());
-								pipe.setIdConditionFrom(con.getId());
-								pipe.setIdBBTo(selectedItem.getUri().toString());
-								pipe.setIdActionTo(action.getName());
-								pipe.setIdConditionTo(pre.getId());
-								if (!pipes.contains(pipe))
-									pipeList.add(pipe);
+					if (sc.equals(selectedItem)) {
+						// discard selected item
+					} else {
+						for (List<Condition> conList : sc.getPostconditions()) {
+							for (Condition con : conList) {
+								if (isConditionCompatible(con, pre)) {
+									Pipe pipe = new Pipe();
+									pipe.setIdBBFrom(sc.getUri().toString());
+									pipe.setIdConditionFrom(con.getId());
+									pipe.setIdBBTo(selectedItem.getUri().toString());
+									pipe.setIdActionTo(action.getName());
+									pipe.setIdConditionTo(pre.getId());
+									if (!pipes.contains(pipe))
+										pipeList.add(pipe);
+								}
 							}
 						}
 					}
