@@ -1,4 +1,4 @@
 #triple indexes meta-data, DO NOT EDIT!
-#Thu Nov 26 16:41:57 CET 2009
+#Mon Dec 14 09:12:24 CET 2009
 version=10
-triple-indexes=spoc, posc
+triple-indexes=spoc, posc, sopc, psoc, ospc, opsc
