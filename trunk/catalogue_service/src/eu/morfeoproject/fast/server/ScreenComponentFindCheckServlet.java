@@ -124,7 +124,7 @@ public class ScreenComponentFindCheckServlet extends GenericServlet {
 			if (input.has("selectedItem"))
 				selectedItem = CatalogueAccessPoint.getCatalogue().getScreenComponent(new URIImpl(input.getString("selectedItem")));
 			// flag to search or not for new components
-			boolean search = input.has("search") ? input.getBoolean("search") : false;
+			boolean search = input.has("search") ? input.getBoolean("search") : true;
 			
 			// do the real work
 			//-----------------------------
