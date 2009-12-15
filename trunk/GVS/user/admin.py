@@ -1,4 +1,8 @@
 from django.contrib import admin
 from user.models import UserProfile
 
-admin.site.register(UserProfile)
+class AdminUserProfile (admin.ModelAdmin):
+    list_display   = ('id', 'user',)
+    ordering       = ('id',)
+    
+admin.site.register(UserProfile, AdminUserProfile)
