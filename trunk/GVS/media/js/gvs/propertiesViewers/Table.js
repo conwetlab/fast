@@ -38,10 +38,12 @@ var Table = Class.create( /** @lends Table.prototype */ {
         this._tableNode = new Element ('table',{
             'class': 'properties_table'
         });
-        
+
+        var style = (region == "left") ? 'width: 50%': 'width: auto'
         var container= new dijit.layout.ContentPane({
             'region': region,
-            'splitter': true
+            'splitter': true,
+            'style': style
         });
         if (minSize) {
             container.attr('minSize', minSize);

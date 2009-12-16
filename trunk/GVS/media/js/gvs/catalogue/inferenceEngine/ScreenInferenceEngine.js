@@ -24,7 +24,7 @@ var ScreenInferenceEngine = Class.create( /** @lends ScreenInferenceEngine.proto
      */
     _constructBody: function(/**Array*/ canvas, /** Object */ elements,
                     /** Array */ domainContext, 
-                    /** String*/ criteria) {
+                    /** String*/ criteria, /** String(Optional) */ method) {
         var domain = {
             'tags': domainContext,
             'user': null /* TODO: add user here */
@@ -34,6 +34,9 @@ var ScreenInferenceEngine = Class.create( /** @lends ScreenInferenceEngine.proto
             'domainContext': domain,
             'criterion': criteria
         };
+        if (method && method == "check") {
+            body.search = false;
+        }
         body = Object.extend(body, elements);
         return Object.toJSON(body);
     },
@@ -44,16 +47,7 @@ var ScreenInferenceEngine = Class.create( /** @lends ScreenInferenceEngine.proto
      * @overrides
      */ 
     _getUri:function (/** String */ operation) {
-        switch(operation) {
-            case "findCheck":
-                return URIs.catalogueScreenFindCheck;
-                break;
-            case "check":
-                return URIs.catalogueScreenCheck;
-                break;
-            default:
-                return ""; 
-        }
+        return URIs.catalogueScreenFindCheck;
     },
     
     /** 
@@ -61,12 +55,13 @@ var ScreenInferenceEngine = Class.create( /** @lends ScreenInferenceEngine.proto
      * @private
      * @overrides
      */
-    _findCheckOnSuccess: function(/**XMLHttpRequest*/ transport){
+    _findCheckOnSuccess: function(/** XMLHttpRequest */ transport){
         var result = JSON.parse(transport.responseText);
         
-        // TODO
-        // this.mine._updateReachability(result);
-        
+        if (result.canvas && result.canvas.length > 0) {
+            // There is some reachability information
+              this.mine._updateReachability(result.canvas);
+        }
         
         this.callback(result);        
     },
@@ -78,10 +73,9 @@ var ScreenInferenceEngine = Class.create( /** @lends ScreenInferenceEngine.proto
      */
     _checkOnSuccess: function(transport){
         var result = JSON.parse(transport.responseText);
-        var elements = result.elements.concat(result.canvas).uniq();
         
-        this.mine._updateReachability(elements);       
-        this.callback();
+        this.mine._updateReachability(result.canvas);
+        this.callback(result);
     }
 });
 

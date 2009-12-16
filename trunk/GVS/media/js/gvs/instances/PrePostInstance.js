@@ -7,7 +7,7 @@ var PrePostInstance = Class.create(ComponentInstance,
      * @extends ComponentInstance
      */
     initialize: function($super, /** DomainConceptDescription */ domainConceptDescription, 
-            /** InferenceEngine */ inferenceEngine) {
+            /** InferenceEngine */ inferenceEngine, /** Boolean (optional) */ isConfigurable) {
         $super(domainConceptDescription, inferenceEngine);
         
         /**
@@ -62,7 +62,17 @@ var PrePostInstance = Class.create(ComponentInstance,
          * @private 
          */
         this._terminal = null;
-        
+
+        /**
+         * It states if the instance
+         * can be configured by the user
+         * @type Boolean
+         * @private
+         */
+        this._isConfigurable = true;
+        if (isConfigurable !== undefined) {
+            this._isConfigurable = isConfigurable;
+        }
     },
 
     // **************** PUBLIC METHODS **************** //
@@ -106,9 +116,24 @@ var PrePostInstance = Class.create(ComponentInstance,
      */
     toJSON: function() {
         var json = {
-            'conditions': [this._getFactData()]
+            'conditions': [this.getFactData()]
         }
         return Object.toJSON(json);
+    },
+
+    /**
+     * Returns an object representing
+     * the fact
+     * @type Object
+     */
+    getFactData: function() {
+        return {
+                'label': {'en-gb': this._label},
+                'pattern': this._pattern,
+                'positive': true,
+                'id': this.getId(),
+                'name': this._label
+            };
     },
     
     /**
@@ -139,7 +164,7 @@ var PrePostInstance = Class.create(ComponentInstance,
      * Set the type in pre | post
      */
     setType: function(/** String */ type) {
-        this._type = type;    
+        this._type = type;
     },
     
     /**
@@ -156,10 +181,13 @@ var PrePostInstance = Class.create(ComponentInstance,
      * the instance properties
      */
     showPreviewDialog: function () {
-        if (!this._dialog) {
-            this._dialog = new PrePostDialog(this._onChange.bind(this), this.getTitle())
+        if (this._isConfigurable) {
+            if (!this._dialog) {
+                this._dialog = new PrePostDialog(this._onChange.bind(this),
+                                                    this.getTitle());
+            }
+            this._dialog.show();
         }
-        this._dialog.show();        
     },
     
     /**
@@ -211,7 +239,7 @@ var PrePostInstance = Class.create(ComponentInstance,
         
         this._terminal = new Terminal(this._view.getNode(), options, "screen", this._buildingBlockDescription.id); 
         if (this._type == 'pre') {
-            this._terminal.addWireHandler(handler);
+            this._terminal.onWireHandler(handler);
         }
     },
     
@@ -261,7 +289,7 @@ var PrePostInstance = Class.create(ComponentInstance,
      * @private
      * @override
      */
-    _onDoubleClick: function (/** Event */ event){
+    _onDoubleClick: function (/** Event */ event) {
         this.showPreviewDialog();
     },
     
@@ -271,9 +299,11 @@ var PrePostInstance = Class.create(ComponentInstance,
      */
     _onChange: function (/** Object */ data) {
         this._label = data.label;
-        this._platformProperties.get('ezweb').set('binding', data.binding);
-        this._platformProperties.get('ezweb').set('varname', data.varname);
-        this._platformProperties.get('ezweb').set('friendcode', data.friendcode);
+        if (data.binding) {
+            this._platformProperties.get('ezweb').set('binding', data.binding);
+            this._platformProperties.get('ezweb').set('varname', data.varname);
+            this._platformProperties.get('ezweb').set('friendcode', data.friendcode);
+        }
         
         if (this._type != data.type) {
             if (this._uri) {
@@ -320,21 +350,6 @@ var PrePostInstance = Class.create(ComponentInstance,
         console.log('deleted');
     },
     
-    
-    /**
-     * Returns an object representing
-     * the fact
-     * @type Object
-     */
-    _getFactData: function() {
-        return {
-                'label': {'en-gb': this._label},
-                'pattern': this._pattern,
-                'positive': true,
-                'id': this._buildingBlockDescription.uri,
-                'name': this._label
-            };
-    },
     
     /**
      * This function removes a pre/post from the server

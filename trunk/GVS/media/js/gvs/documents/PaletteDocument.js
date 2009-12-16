@@ -207,7 +207,7 @@ var PaletteDocument = Class.create(AbstractDocument, /** @lends PaletteDocument.
         if (this._selectedElement) {
             this._selectedElement.showPreviewDialog();
         }
-    },
+    }
 });
 
 // vim:ts=4:sw=4:et:

@@ -43,11 +43,12 @@ var ResourceView = Class.create(BuildingBlockView,
             }.bind(this));
             
         }.bind(this));
-        
+
+        var posts;
         if (description.postconditions && description.postconditions[0] instanceof Array) {
-            var posts =  description.postconditions[0];
+            posts =  description.postconditions[0];
         } else {
-            var posts = description.postconditions;
+            posts = description.postconditions;
         }
         
         posts.each(function(post) {
@@ -93,7 +94,8 @@ var ResourceView = Class.create(BuildingBlockView,
      * the identification passed as parameter
      */
     getConditionNode: function(/** String */ id) {
-        return this._preIcons.get(id) ? this._preIcons.get(id).getNode() : this._postIcons.get(id).getNode();
+        return this._preIcons.get(id) ? this._preIcons.get(id).getNode() :
+                this._postIcons.get(id).getNode();
     },
     
     /**
@@ -101,8 +103,8 @@ var ResourceView = Class.create(BuildingBlockView,
      * @public @override
      */
     setReachability: function( /** Hash */ reachabilityData) {
-        
-        // TODO
+        this._setViewReachability(reachabilityData, this._preIcons,
+                               this._postIcons.values(), this._node);
     },
     
     /**

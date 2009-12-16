@@ -9,6 +9,7 @@ var ScreenComponent = Class.create(PaletteComponent,
      */
     initialize: function($super, description, dropZones, inferenceEngine) {
         $super(description, dropZones, inferenceEngine);
+        this._inferenceEngine.addReachabilityListener(this._buildingBlockDescription.uri, this._view);
     },
 
     // **************** PUBLIC METHODS **************** //

@@ -51,9 +51,9 @@ var Area = Class.create( /** @lends Area.prototype */ {
      * Implementing DropZone Interface: drop
      * @type DOMNode
      */
-    drop: function(/** ComponentInstance */ element) {
+    drop: function(/** ComponentInstance */ element, /** Object */ position) {
         
-        var accepted =  this._onDropHandler(this, element);
+        var accepted =  this._onDropHandler(this, element, position);
         return accepted;
     },
 
@@ -69,7 +69,7 @@ var Area = Class.create( /** @lends Area.prototype */ {
     
     setLayout: function() {
         //TODO: Think about Layouts    
-    },
+    }
    
    
     // **************** PRIVATE METHODS **************** //

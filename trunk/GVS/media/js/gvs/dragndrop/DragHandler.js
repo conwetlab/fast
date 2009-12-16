@@ -5,13 +5,7 @@ var DragHandler = Class.create(
      * Enables an object to be dragged.
      * 
      * @param dragSource
-     *      An object implementing DragSource.
-     * @param dropZone
-     *      This object represents the valid area in 
-     *      which the dragSource can be dropped. It must implement
-     *       * DOMNode getNode()
-     *       * void drop(Object element)
-     *       * Array accepts()
+     *      An object implementing DragSource
      * @constructs
      */
     initialize: function (/** DragSource */ dragSource) {
@@ -87,8 +81,8 @@ var DragHandler = Class.create(
         // Aux data for position calculation
         this._mouseXStart = 0;
         this._mouseYStart = 0;
-        this._x;
-        this._y;
+        this._x = 0;
+        this._y = 0;
         this._offLimitX = 0;
         this._offLimitY = 0;
 
@@ -111,7 +105,7 @@ var DragHandler = Class.create(
         }.bind(this));
         if (this._initialDropZone) {
             var initialDropZoneNode = this._initialDropZone.getNode();
-            this._initialDropZonePosition = Geometry.getClientRectangle(initialDropZoneNode);
+            this._initialDropZonePosition = Geometry.getRectangle(initialDropZoneNode);
         }
 
         this._toggleEventHandlers(true);
@@ -124,7 +118,11 @@ var DragHandler = Class.create(
         this._y = draggableNode.offsetTop;
         this._x = draggableNode.offsetLeft;
                   
-        draggableNode.addClassName("dragLayer");
+        if (this._isChangingZone()) {
+            draggableNode.addClassName("dragOnChangeLayer");
+        } else {
+            draggableNode.addClassName("dragLayer");
+        }
         
         return false;
     },
@@ -144,6 +142,8 @@ var DragHandler = Class.create(
         this._updateNodeStatus(this._isValidPosition());
 
         this._draggedObject.onUpdate(this._x, this._y);
+
+        var draggableNode = this._draggedObject.getHandlerNode();
     },
     
 
@@ -163,6 +163,7 @@ var DragHandler = Class.create(
 
         var draggableNode = this._draggedObject.getHandlerNode();
         draggableNode.removeClassName("dragLayer");
+        draggableNode.removeClassName("dragOnChangeLayer");
 
         //Remove element transparency        
         this._updateNodeStatus(true);
@@ -329,7 +330,7 @@ var DragHandler = Class.create(
         else {
             this._draggedObject.getHandlerNode().addClassName('disabled');
         }
-    },
+    }
  
     
    

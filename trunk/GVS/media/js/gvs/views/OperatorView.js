@@ -198,8 +198,8 @@ var OperatorView = Class.create(BuildingBlockView,
      * @public @override
      */
     setReachability: function( /** Hash */ reachabilityData) {
-        
-        // TODO
+        this._setViewReachability(reachabilityData, this._preIcons,
+                                this._postIcons.values(), this._node);
     },
     
     /**

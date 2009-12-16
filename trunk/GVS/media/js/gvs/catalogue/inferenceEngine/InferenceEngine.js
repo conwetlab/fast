@@ -46,11 +46,11 @@ var InferenceEngine = Class.create( /** @lends InferenceEngine.prototype */ {
     /**
      * This function calls the check operation in the catalogue
      */
-    check: function (/**Array*/ canvas, /** Array*/ elements,
+    check: function (/**Array*/ canvas, /** Object */ elements,
                     /** Array */ domainContext, 
                     /** String*/ criteria, 
                     /** Function */ callback) {
-        var body = this._constructBody(canvas, elements, domainContext, criteria);
+        var body = this._constructBody(canvas, elements, domainContext, criteria, "check");
         var persistenceEngine = PersistenceEngineFactory.getInstance();
         var context = {
             'callback': callback,
@@ -100,6 +100,8 @@ var InferenceEngine = Class.create( /** @lends InferenceEngine.prototype */ {
          var reachabilityData = this._reachabilityData.get(uri);
          if (reachabilityData) {
             return reachabilityData.reachability;
+         } else {
+            return null;
          }
      },
     
@@ -186,7 +188,7 @@ var InferenceEngine = Class.create( /** @lends InferenceEngine.prototype */ {
         this._getListenerList(uri).each(function(listener) {
             listener.setReachability(this._reachabilityData.get(uri));
         }.bind(this));        
-    },
+    }
 });
 
 // vim:ts=4:sw=4:et:

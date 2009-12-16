@@ -3,6 +3,7 @@
  ******************/
 
 .dragLayer { z-index: 9; }
+.dragOnChangeLayer {z-index: 22; }
 .ghostLayer { z-index: 16; }
 .inspectorLayer { z-index: 21 !important; }
 .dijitSplitter { z-index: 21 !important; }
@@ -295,7 +296,7 @@ h4{
     overflow: hidden;
 }
 .dropArea.form {
-    height: 47%;
+    height: 50%;
     top: 0px;
     left: 10%;
     right: 10%;
@@ -303,14 +304,14 @@ h4{
     /*background: transparent url("../images/gui/document/formsBackground.png") center center no-repeat;*/
 }
 .dropArea.operator {
-    top: 47%;
-    bottom: 28%;
+    top: 50%;
+    bottom: 20%;
     left: 10%;
     right: 10%;
    
 }
 .dropArea.resource {
-    height: 28%;
+    height: 20%;
     bottom: 0px;
     left: 10%;
     right: 10%;
@@ -541,10 +542,14 @@ h4{
     width:125px;    
     background-color: white;
 }
+.view.resource.unsatisfeable {
+    border:2px solid #B90000;
+}
 .resource .title {
-    background-color:#808080;
+    background-color:#EAEAEA;
+    border-top:2px solid #808080;
     bottom:0;
-    color:white;
+    color:#808080;
     height:24px;
     left:0;
     line-height:20px;
@@ -553,6 +558,11 @@ h4{
     position:absolute;
     right:0;
     text-align: center;  
+}
+.resource.unsatisfeable .title {
+     border-top: 2px solid #B90000;
+     background-color: #F5D9D9;
+     color: #B90000;
 }
 .resource .prePostSeparator {
     top: 0px;
@@ -578,13 +588,47 @@ h4{
     float: left;
 }
 
+.resource.selected .title {
+    color: white;
+    background-color: #F5D9D9;
+    border-top: 0px;
+}
+.resource.selected.unsatisfeable .title {
+    background-color: #B90000;
+}
+
 /*********************
  * operator          * 
  *********************/
 .view.operator {
-    background: transparent url("../images/resources/operator.png") no-repeat scroll center center;
+    background: transparent url("../images/resources/operator.png")
+                no-repeat scroll center center;
     height: 80px;
     width: 100px;
+}
+.view.operator.unsatisfeable {
+    background: transparent url("../images/resources/operator.unreachable.png")
+                no-repeat scroll center center;
+}
+
+.view.operator.satisfeable {
+    background: transparent url("../images/resources/operator.reachable.png")
+                no-repeat scroll center center;
+}
+
+.view.operator.selected {
+    background: transparent url("../images/resources/operator.selected.png")
+                no-repeat scroll center center;
+}
+
+.view.operator.unsatisfeable.selected {
+    background: transparent url("../images/resources/operator.unreachable.selected.png")
+                no-repeat scroll center center;
+}
+
+.view.operator.satisfeable.selected {
+    background: transparent url("../images/resources/operator.reachable.selected.png")
+                no-repeat scroll center center;
 }
 
 .operator .title {
@@ -596,6 +640,25 @@ h4{
     color: #808080;
     text-align: center;
 }
+.operator.unsatisfeable .title {
+    color: #B90000;
+}
+
+.operator.satisfeable .title {
+    color: #008000;
+}
+.operator.selected .title {
+    background-color: #EAEAEA;
+}
+
+.operator.selected.unsatisfeable .title {
+    background-color: #F5D9D9;
+}
+
+.operator.selected.satisfeable .title {
+    background-color: #DDF7DD;
+}
+
 .operator .fact {
     position: absolute;
 }
@@ -610,6 +673,25 @@ h4{
     min-width: 500px;
     min-height: 100px;
 }
+.view.form.selected {
+    background-color: #EAEAEA;
+}
+
+.view.form.unsatisfeable {
+    border: 2px dotted #B90000;
+}
+
+.view.form.unsatisfeable.selected {
+    background-color: #F5D9D9;
+}
+
+.view.form.satisfeable {
+    border: 2px dotted #008000;
+}
+
+.view.form.satisfeable.selected{
+    background-color: #DDF7DD;
+}
 
 .form .title {
     padding: 5px;
@@ -619,11 +701,18 @@ h4{
     text-align: center;
     font-size: 18px;
 }
+.form.unsatisfeable .title {
+    color: #B90000;
+}
+.form.satisfeable .title {
+    color: #008000;
+}
 .form .actions {
     position: absolute;
     bottom: 0px;
     left: 0px;
     height: 65px;
+    
 }
 
 .form .action {
@@ -633,6 +722,15 @@ h4{
     padding: 2px;
     min-width: 100px;
     -moz-border-radius: 10px;
+    background-color: white;
+}
+.form .action.unsatisfeable {
+    border: 1px solid #B90000;
+    background-color
+}
+
+.form .action.satisfeable {
+    border: 1px solid #008000;
 }
 .form .postTriggerContainer {
     position: absolute;
@@ -651,7 +749,7 @@ h4{
     text-align: center;
 }
 .form .image {
-    max-height: 120px;
+    max-height: 140px;
     margin: auto;
     margin-bottom: 60px;
 }

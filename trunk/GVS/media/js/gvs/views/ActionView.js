@@ -57,12 +57,23 @@ var ActionView = Class.create(
     getConditionNode: function(/** String */ id) {
         return this._preIcons.get(id).getNode();
     },
-    
+
+    /**
+     * Destroys the action node
+     */
     destroy: function () {
         // Let the garbage collector to do its job
         this._preIcons = null;
-        this._postIcons = null;
         this._node = null;
+    },
+
+    setReachability: function(/** Object */ actionData) {
+        var satisfeable = actionData.satisfied;
+        Utils.setSatisfeabilityClass(this._node, satisfeable);
+        actionData.preconditions.each(function(preData){
+            Utils.setSatisfeabilityClass(this._preIcons.get(preData.id).getNode(),
+                                        preData.satisfied);
+        }.bind(this));
     }
     
     // **************** PRIVATE METHODS **************** //

@@ -137,7 +137,7 @@ var ScreenDocument = Class.create(PaletteDocument,
      * @private
      * @type Boolean
      */
-    _drop: function(/** Area */ area, /** ComponentInstance */ instance) {
+    _drop: function(/** Area */ area, /** ComponentInstance */ instance, /** Object */ position) {
         // Reject repeated elements (except domain concepts or operators)
         if (instance.constructor != PrePostInstance && instance.constructor != PrePostInstance  &&
                 this._canvasInstances.get(instance.getUri())) {
@@ -153,31 +153,35 @@ var ScreenDocument = Class.create(PaletteDocument,
 
         var node = instance.getView().getNode();
         area.getNode().appendChild(node);
-        var canvasPosition = Utils.getPosition(area.getNode());
         node.setStyle({
-            'left': parseInt(node.offsetLeft - canvasPosition.left) + "px",
-            'top': parseInt(node.offsetTop - canvasPosition.top) + "px"
+            'left': position.left + "px",
+            'top': position.top + "px"
         });
         var uidGenerator = UIDGeneratorSingleton.getInstance();
-        instance.getBuildingBlockDescription().id =  uidGenerator.generate(instance.getTitle());
-
+        instance.setId(uidGenerator.generate(instance.getTitle()));
+        
         if (instance.constructor != PrePostInstance) {
             instance.createTerminals(this._onPipeHandler.bind(this));
+            this._canvasInstances.set(instance.getUri(), instance);
+            this._description.addBuildingBlock(instance);
         } else {
             if (area.getNode().className.include("pre")) {
                 instance.setType("pre");
                 instance.createTerminal(this._onPipeHandler.bind(this));
+                this._description.addPre(instance);
+                instance.getView().setReachability({"satisfied": true});
             } else if (area.getNode().className.include("post")) {
                 instance.setType("post");
                 instance.createTerminal();
+                this._description.addPost(instance);
             }
         }
-
+        instance.setEventListener(this);
         instance.enableDragNDrop(area,[area]);
         instance.getView().addGhost();
-
-        this._canvasInstances.set(instance.getUri(), instance);
+        this._refreshReachability();
         this._setSelectedElement(instance);
+
         return true;
     },
     
@@ -234,9 +238,8 @@ var ScreenDocument = Class.create(PaletteDocument,
      */
     _setSelectedElement: function ($super, element) {
         $super(element);
-        /*this._toolbarElements.get('deleteElement').setEnabled(element!=null);
-        this._toolbarElements.get('previewElement').setEnabled(element!=null);
-        this._updatePanes();*/
+        this._toolbarElements.get('deleteElement').setEnabled(element!=null);
+        //this._updatePanes();
     },
     
     /**
@@ -272,15 +275,9 @@ var ScreenDocument = Class.create(PaletteDocument,
     
     _configureToolbar: function() {
         this._addToolbarElement('save', new ToolbarButton(
-                'Save the current screenflow',
+                'Save the current screen',
                 'save',
                 this._saveScreen.bind(this),
-                false // disabled by default
-        ));
-        this._addToolbarElement('previewElement', new ToolbarButton(
-                'Preview selected element',
-                'preview',
-                this._previewSelectedElement.bind(this),
                 false // disabled by default
         ));
         this._addToolbarElement('deleteElement', new ToolbarButton(
@@ -289,12 +286,6 @@ var ScreenDocument = Class.create(PaletteDocument,
                 this._startDeletingSelectedElement.bind(this),
                 false // disabled by default
         ));
-        this._addToolbarElement('deploy', new ToolbarButton(
-                'Store & Deploy Gadget',
-                'deploy',
-                this._deployGadget.bind(this),
-                false // disabled by default
-        ));    
     },
 
     /**
@@ -336,6 +327,8 @@ var ScreenDocument = Class.create(PaletteDocument,
 
         return centerContainer;
     },
+
+    
     /**
      * This function repaints the terminals in the document
      * @private
@@ -406,19 +399,42 @@ var ScreenDocument = Class.create(PaletteDocument,
      */
     _refreshReachability: function () {
         var canvas = this._getCanvas();
-        // TODO: Be careful, do it with more of these palettes
-        var palette = this._paletteController.getComponentUris();
+        var body = {
+            'forms': this._paletteController.getComponentUris(Constants.BuildingBlock.FORM),
+            'operators': this._paletteController.getComponentUris(Constants.BuildingBlock.OPERATOR),
+            'backendservices': this._paletteController.getComponentUris(Constants.BuildingBlock.RESOURCE),
+            'pipes': this._description.getPipes(),
+            'preconditions': this._description.getPreconditions(),
+            'postconditions': this._description.getPostconditions()
+        }
+        if (this._selectedElement && this._selectedElement.getUri()) {
+            body.selectedItem = this._selectedElement.getUri();
+        }
         
         if (URIs.catalogueFlow =='check') {
-            this._inferenceEngine.check(canvas, palette, this._domainContext, 'reachability');
+            this._inferenceEngine.check(canvas, body, this._domainContext, 'reachability',
+                                        this._onUpdateReachability.bind(this));
         } else {
-            this._inferenceEngine.findAndCheck(canvas, palette,  this._domainContext, 'reachability');
+            this._inferenceEngine.findCheck(canvas, body,  this._domainContext,
+                                    'reachability', this._onUpdateReachability.bind(this));
         }
         
         // FIXME: we must learn about document reachability from the inference 
         //        engine. By the moment, one screen == deployable screenflow ;)
-        this._toolbarElements.get('deploy').setEnabled(canvas.size() > 0);
+        //this._toolbarElements.get('deploy').setEnabled(canvas.size() > 0);
         this._toolbarElements.get('save').setEnabled(canvas.size() > 0);
+    },
+
+    /**
+     * @private
+     */
+    _onUpdateReachability: function(reachabilityData) {
+        if (reachabilityData.postconditions) {
+            reachabilityData.postconditions.each(function(post) {
+                this._description.getPost(post.id).getView().setReachability(post);
+            }.bind(this));
+        }
+        this._updatePanes();
     },
     
     
@@ -428,7 +444,8 @@ var ScreenDocument = Class.create(PaletteDocument,
      * @private
      */
     _updatePanes: function() {
-        var facts = this._getAllFacts();
+        // TODO
+        /*var facts = this._getAllFacts();
         if (!this._selectedElement) {
             this._propertiesPane.fillTable(this._description);          
             this._factPane.fillTable([], [], facts);
@@ -455,7 +472,7 @@ var ScreenDocument = Class.create(PaletteDocument,
                     this._factPane.fillTable([], [], factInfo);
                 }
             }    
-        }
+        }*/
     },
     
     /**
@@ -513,25 +530,7 @@ var ScreenDocument = Class.create(PaletteDocument,
      */
     _deployGadget: function () {
         this._deployer.deployGadget(this._description);
-    },
-    
-    /**
-     * @private
-     */
-    _onPrePostChange: function(/** String */ previousUri, /** PrePostInstance */ instance) {
-        if (previousUri) {
-            this._canvasInstances.unset(previousUri);
-            this._description.removePrePost(previousUri);
-        }
-        
-        this._canvasInstances.set(instance.getUri(), instance);
-        this._description.addPrePost(instance);
-        
-        this._refreshReachability();
-        
-        this._setSelectedElement();
-    },
-    
+    },    
     
     /**
      * Previews the selected element

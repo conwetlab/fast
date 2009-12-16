@@ -101,9 +101,7 @@ var FormView = Class.create(BuildingBlockView,
         
         this._node.appendChild(triggerPostContainer);
         
-        // FIXME: Try to fix the form repository
-        var imageUrl = description.screenshot.replace("http://www.deri.ie/", "http://localhost:8010/images/screenshots/");
-        imageUrl = imageUrl.replace("-screenshot.jpg", ".png");
+        var imageUrl = description.screenshot;
 
         var image = new Element ('img',{
                 'class': 'image', 
@@ -134,8 +132,15 @@ var FormView = Class.create(BuildingBlockView,
      * @public @override
      */
     setReachability: function( /** Hash */ reachabilityData) {
-        
-        // TODO
+        var satisfeable = reachabilityData.reachability;
+        Utils.setSatisfeabilityClass(this._node, satisfeable);
+        reachabilityData.actions.each(function(actionData) {
+            this._actions.get(actionData.name).setReachability(actionData);
+        }.bind(this));
+
+        this._postIcons.values().each(function(post) {
+            Utils.setSatisfeabilityClass(post.getNode(), satisfeable);
+        });
     },
     
     /**

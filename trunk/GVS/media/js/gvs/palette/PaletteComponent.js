@@ -36,7 +36,6 @@ var PaletteComponent = Class.create(DragSource,
          * @private
          */
         this._view = this._createView();
-        this._inferenceEngine.addReachabilityListener(this._buildingBlockDescription.uri, this._view);
         
         /**
          * Node of the component.

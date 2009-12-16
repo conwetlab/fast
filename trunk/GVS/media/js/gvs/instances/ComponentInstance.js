@@ -19,6 +19,13 @@ var ComponentInstance = Class.create(DragSource,
         this._buildingBlockDescription = buildingBlockDescription;
 
         /**
+         * Identification of the instance inside its container
+         * @type String
+         * @private
+         */
+        this._id = "";
+
+        /**
          * BuildingBlock description graphical representation
          * @type BuildingBlockView
          * @private
@@ -156,6 +163,21 @@ var ComponentInstance = Class.create(DragSource,
         return this._buildingBlockType;
     },
 
+    
+    /**
+     * Gets the id
+     */
+    getId: function() {
+        return this._id;
+    },
+
+
+    /**
+     * Sets the id
+     */
+    setId: function(id) {
+        this._id = id;
+    },
 
     /**
      * Destroys the view

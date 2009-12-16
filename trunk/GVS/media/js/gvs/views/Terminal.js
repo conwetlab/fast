@@ -108,7 +108,7 @@ Object.extend(Terminal.prototype, /** @lends Terminal.prototype */ {
     /**
      * Adds a handler for the conection or deconection of wires
      */
-    addWireHandler: function(/** Function */ handler) {
+    onWireHandler: function(/** Function */ handler) {
         var context = {
             'handler': handler
         }

@@ -109,7 +109,7 @@ var FormInstance = Class.create(ComponentInstance,
                 }
                 var node = this._view.getConditionNode(post.id);
                 var terminal = new Terminal(node, options, this._buildingBlockDescription.id, post.id);
-                terminal.addWireHandler(handler);
+                terminal.onWireHandler(handler);
                 this._terminals.push(terminal);
             }.bind(this)); 
     },

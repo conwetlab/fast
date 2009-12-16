@@ -41,6 +41,41 @@
        inkscape:vp_y="0 : 1000 : 0"
        inkscape:vp_x="0 : 0.5 : 1"
        sodipodi:type="inkscape:persp3d" />
+    <inkscape:perspective
+       id="perspective3596"
+       inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
+       inkscape:vp_z="1 : 0.5 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_x="0 : 0.5 : 1"
+       sodipodi:type="inkscape:persp3d" />
+    <inkscape:perspective
+       id="perspective3621"
+       inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
+       inkscape:vp_z="1 : 0.5 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_x="0 : 0.5 : 1"
+       sodipodi:type="inkscape:persp3d" />
+    <inkscape:perspective
+       id="perspective3646"
+       inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
+       inkscape:vp_z="1 : 0.5 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_x="0 : 0.5 : 1"
+       sodipodi:type="inkscape:persp3d" />
+    <inkscape:perspective
+       id="perspective3685"
+       inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
+       inkscape:vp_z="1 : 0.5 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_x="0 : 0.5 : 1"
+       sodipodi:type="inkscape:persp3d" />
+    <inkscape:perspective
+       id="perspective3718"
+       inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
+       inkscape:vp_z="1 : 0.5 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_x="0 : 0.5 : 1"
+       sodipodi:type="inkscape:persp3d" />
   </defs>
   <sodipodi:namedview
      id="base"
@@ -50,16 +85,16 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="1.979899"
-     inkscape:cx="230.21452"
-     inkscape:cy="633.92521"
+     inkscape:cx="135.76526"
+     inkscape:cy="911.50934"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
      inkscape:snap-bbox="true"
      inkscape:window-width="1489"
      inkscape:window-height="912"
-     inkscape:window-x="360"
-     inkscape:window-y="149"
+     inkscape:window-x="374"
+     inkscape:window-y="112"
      inkscape:window-maximized="0" />
   <metadata
      id="metadata7">
@@ -77,25 +112,152 @@
      inkscape:label="Capa 1"
      inkscape:groupmode="layer"
      id="layer1">
-    <rect
-       style="fill:#ffffff;stroke:#808080;stroke-width:2.06421804000000009;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;fill-opacity:1"
-       id="rect3592"
-       width="79.371597"
-       height="77.76815"
-       x="-208.32047"
-       y="386.24225"
-       transform="matrix(0.82490499,-0.5652714,0.81491401,0.57958188,0,0)"
-       inkscape:export-filename="/home/jlopez/Escritorio/operator.png"
-       inkscape:export-xdpi="68.523315"
-       inkscape:export-ydpi="68.523315" />
-    <path
-       style="fill:none;stroke:#808080;stroke-width:1.61112129999999998;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:6.44448521999999979, 1.61112129999999998;stroke-dashoffset:0"
-       d="m 36.870569,587.69201 c 128.794451,0 128.794451,0 128.794451,0"
-       id="path3602"
-       mask="none"
-       transform="matrix(0.98624198,0,0,1,108.08163,-245.97214)"
-       inkscape:export-filename="/home/jlopez/Escritorio/operator.png"
-       inkscape:export-xdpi="68.523315"
-       inkscape:export-ydpi="68.523315" />
+    <g
+       id="g3706">
+      <rect
+         inkscape:export-ydpi="68.523315"
+         inkscape:export-xdpi="68.523315"
+         inkscape:export-filename="/home/jlopez/Escritorio/operator.png"
+         transform="matrix(0.82490499,-0.5652714,0.81491401,0.57958188,0,0)"
+         y="56.759708"
+         x="-37.736401"
+         height="77.76815"
+         width="79.371597"
+         id="rect3592"
+         style="fill:#ffffff;fill-opacity:1;stroke:#808080;stroke-width:2.06421804;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none" />
+      <path
+         inkscape:export-ydpi="68.523315"
+         inkscape:export-xdpi="68.523315"
+         inkscape:export-filename="/home/jlopez/Escritorio/operator.png"
+         mask="none"
+         id="path3602"
+         d="m 16.660637,54.331469 c 127.022493,0 127.022493,0 127.022493,0"
+         style="fill:none;stroke:#808080;stroke-width:1.60000002;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:6.4, 1.6;stroke-dashoffset:0" />
+    </g>
+    <g
+       id="g3739"
+       inkscape:export-filename="/home/jlopez/Documentos/workspace/GVS/media/images/resources/operator.unreachable.selected.png"
+       inkscape:export-xdpi="68"
+       inkscape:export-ydpi="68">
+      <rect
+         inkscape:export-ydpi="68.523315"
+         inkscape:export-xdpi="68.523315"
+         inkscape:export-filename="/home/jlopez/Escritorio/operator.png"
+         transform="matrix(0.82490499,-0.5652714,0.81491401,0.57958188,0,0)"
+         y="236.43254"
+         x="-23.282053"
+         height="77.76815"
+         width="79.371597"
+         id="rect3592-2"
+         style="fill:#f5d9d9;fill-opacity:1;stroke:#b90000;stroke-width:2.06421804000000009;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none" />
+      <path
+         inkscape:export-ydpi="68.523315"
+         inkscape:export-xdpi="68.523315"
+         inkscape:export-filename="/home/jlopez/Escritorio/operator.png"
+         mask="none"
+         id="path3602-5"
+         d="m 175.00204,150.29597 c 127.0225,0 127.0225,0 127.0225,0"
+         style="fill:none;stroke:#b90000;stroke-width:1.60000002;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:6.4, 1.6;stroke-dashoffset:0" />
+    </g>
+    <g
+       id="g3663"
+       transform="translate(-37.88072,-78.791898)"
+       inkscape:export-filename="/home/jlopez/Documentos/workspace/GVS/media/images/resources/operator.reachable.png"
+       inkscape:export-xdpi="68"
+       inkscape:export-ydpi="68">
+      <rect
+         inkscape:export-ydpi="68.523315"
+         inkscape:export-xdpi="68.523315"
+         inkscape:export-filename="/home/jlopez/Escritorio/operator.png"
+         transform="matrix(0.82490499,-0.5652714,0.81491401,0.57958188,0,0)"
+         y="317.56271"
+         x="-252.82689"
+         height="77.76815"
+         width="79.371597"
+         id="rect3592-4"
+         style="fill:#ffffff;fill-opacity:1;stroke:#008000;stroke-width:2.06421804;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none" />
+      <path
+         inkscape:export-ydpi="68.523315"
+         inkscape:export-xdpi="68.523315"
+         inkscape:export-filename="/home/jlopez/Escritorio/operator.png"
+         mask="none"
+         id="path3602-7"
+         d="m 51.763419,327.07267 c 127.022501,0 127.022501,0 127.022501,0"
+         style="fill:none;stroke:#008000;stroke-width:1.60000002;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:6.4, 1.6;stroke-dashoffset:0" />
+    </g>
+    <g
+       id="g3667"
+       transform="translate(-39.901025,-131.31984)"
+       inkscape:export-filename="/home/jlopez/Documentos/workspace/GVS/media/images/resources/operator.reachable.selected.png"
+       inkscape:export-xdpi="68"
+       inkscape:export-ydpi="68">
+      <rect
+         inkscape:export-ydpi="68.523315"
+         inkscape:export-xdpi="68.523315"
+         inkscape:export-filename="/home/jlopez/Escritorio/operator.png"
+         transform="matrix(0.82490499,-0.5652714,0.81491401,0.57958188,0,0)"
+         y="458.79956"
+         x="-198.25908"
+         height="77.76815"
+         width="79.371597"
+         id="rect3592-4-4"
+         style="fill:#ddf7dd;fill-opacity:1;stroke:#008000;stroke-width:2.06421804;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none" />
+      <path
+         inkscape:export-ydpi="68.523315"
+         inkscape:export-xdpi="68.523315"
+         inkscape:export-filename="/home/jlopez/Escritorio/operator.png"
+         mask="none"
+         id="path3602-7-4"
+         d="m 211.87258,378.08537 c 127.0225,0 127.0225,0 127.0225,0"
+         style="fill:none;stroke:#008000;stroke-width:1.60000002;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:6.4, 1.6;stroke-dashoffset:0" />
+    </g>
+    <g
+       id="g3702"
+       transform="translate(18.687822,-87.378195)">
+      <rect
+         inkscape:export-ydpi="68.523315"
+         inkscape:export-xdpi="68.523315"
+         inkscape:export-filename="/home/jlopez/Escritorio/operator.png"
+         transform="matrix(0.82490499,-0.5652714,0.81491401,0.57958188,0,0)"
+         y="211.37152"
+         x="-24.852749"
+         height="77.76815"
+         width="79.371597"
+         id="rect3592-3"
+         style="fill:#eaeaea;fill-opacity:1;stroke:#808080;stroke-width:2.06421804;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none" />
+      <path
+         inkscape:export-ydpi="68.523315"
+         inkscape:export-xdpi="68.523315"
+         inkscape:export-filename="/home/jlopez/Escritorio/operator.png"
+         mask="none"
+         id="path3602-0"
+         d="m 153.28375,136.65891 c 127.0225,0 127.0225,0 127.0225,0"
+         style="fill:none;stroke:#808080;stroke-width:1.60000002;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:6.4, 1.6;stroke-dashoffset:0" />
+    </g>
+    <g
+       id="g3735"
+       inkscape:export-filename="/home/jlopez/Documentos/workspace/GVS/media/images/resources/operator.unreachable.png"
+       inkscape:export-xdpi="68"
+       inkscape:export-ydpi="68">
+      <rect
+         inkscape:export-ydpi="68.523315"
+         inkscape:export-xdpi="68.523315"
+         inkscape:export-filename="/home/jlopez/Escritorio/operator.png"
+         transform="matrix(0.82490499,-0.5652714,0.81491401,0.57958188,0,0)"
+         y="140.46588"
+         x="-122.57176"
+         height="77.76815"
+         width="79.371597"
+         id="rect3592-2-7"
+         style="fill:#ffffff;fill-opacity:1;stroke:#b90000;stroke-width:2.06421804;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none" />
+      <path
+         inkscape:export-ydpi="68.523315"
+         inkscape:export-xdpi="68.523315"
+         inkscape:export-filename="/home/jlopez/Escritorio/operator.png"
+         mask="none"
+         id="path3602-5-8"
+         d="m 14.892875,150.80105 c 127.022505,0 127.022505,0 127.022505,0"
+         style="fill:none;stroke:#b90000;stroke-width:1.60000002;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:6.4, 1.6;stroke-dashoffset:0" />
+    </g>
   </g>
 </svg>

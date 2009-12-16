@@ -159,7 +159,10 @@ var FormDialog = Class.create( /** @lends FormDialog.prototype */ {
                                             'name' : line.name,
                                             'value': line.value
                                         });
-                        }             
+                        }
+                        if (input.disabled) {
+                            input.attr('disabled', input.disabled);
+                        }
                         inputNode = input.domNode;
                         lineNode = this._createLine(line.label, inputNode);
                         break;
