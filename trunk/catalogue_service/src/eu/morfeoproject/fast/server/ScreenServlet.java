@@ -89,21 +89,21 @@ public class ScreenServlet extends GenericServlet {
 			}
 		} else {
 			// Retrieve the addressed member of the collection
-			id = URLUTF8Encoder.decode(id);
-			logger.info("Retrieving screen "+id);
-			Screen s = CatalogueAccessPoint.getCatalogue().getScreen(new URIImpl(id));
+			String uri = request.getRequestURL().toString();
+			logger.info("Retrieving screen "+uri);
+			Screen s = CatalogueAccessPoint.getCatalogue().getScreen(new URIImpl(uri));
 			if (s == null) {
-				response.sendError(HttpServletResponse.SC_NOT_FOUND, "The resource "+id+" has not been found.");
+				response.sendError(HttpServletResponse.SC_NOT_FOUND, "The resource "+uri+" has not been found.");
 			} else {
 				try {
-					if (format.equals(MediaType.APPLICATION_JSON)) {
-						response.setContentType(MediaType.APPLICATION_JSON);
-						writer.print(s.toJSON().toString(2));
-					} else if (format.equals(MediaType.APPLICATION_RDF_XML)) {
+					if (format.equals(MediaType.APPLICATION_RDF_XML)) {
 						response.setContentType(MediaType.APPLICATION_RDF_XML);
 						Model screenModel = s.createModel();
 						screenModel.writeTo(writer, Syntax.RdfXml);
 						screenModel.close();
+					} else {
+						response.setContentType(MediaType.APPLICATION_JSON);
+						writer.print(s.toJSON().toString(2));
 					}				
 					response.setStatus(HttpServletResponse.SC_OK);
 				} catch (JSONException e) {
@@ -202,10 +202,10 @@ public class ScreenServlet extends GenericServlet {
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 		} else {
 			// Update the addressed member of the collection or create it with a defined ID.
-			id = URLUTF8Encoder.decode(id);
+			String uri = request.getRequestURL().toString();
 			try {
 				JSONObject json = new JSONObject(body);
-				Screen screen = parseScreen(json, new URIImpl(id));
+				Screen screen = parseScreen(json, new URIImpl(uri));
 				CatalogueAccessPoint.getCatalogue().updateScreen(screen);
 				if (format.equals(MediaType.APPLICATION_RDF_XML)) {
 					response.setContentType(MediaType.APPLICATION_RDF_XML);
@@ -236,7 +236,7 @@ public class ScreenServlet extends GenericServlet {
 				response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
 			} catch (NotFoundException e) {
 				e.printStackTrace();
-				response.sendError(HttpServletResponse.SC_NOT_FOUND, "The resource "+id+" has not been found.");
+				response.sendError(HttpServletResponse.SC_NOT_FOUND, "The resource "+uri+" has not been found.");
 			} catch (OntologyReadonlyException e) {
 				e.printStackTrace();
 				response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
@@ -259,12 +259,12 @@ public class ScreenServlet extends GenericServlet {
 			response.sendError(HttpServletResponse.SC_BAD_REQUEST, "An ID must be specified.");
 		} else {
 			// Delete the addressed member of the collection.
-			id = URLUTF8Encoder.decode(id);
+			String uri = request.getRequestURL().toString();
 			try {
-				CatalogueAccessPoint.getCatalogue().removeScreen(new URIImpl(id));
+				CatalogueAccessPoint.getCatalogue().removeScreen(new URIImpl(uri));
 				response.setStatus(HttpServletResponse.SC_OK);
 			} catch (NotFoundException e) {
-				response.sendError(HttpServletResponse.SC_NOT_FOUND, "The resource "+id+" has not been found.");
+				response.sendError(HttpServletResponse.SC_NOT_FOUND, "The resource "+uri+" has not been found.");
 			}
 		}
 	}

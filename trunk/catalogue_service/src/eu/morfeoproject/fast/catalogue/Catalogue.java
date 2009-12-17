@@ -34,7 +34,10 @@ import eu.morfeoproject.fast.catalogue.ontologies.DefaultOntologies.PublicOntolo
 import eu.morfeoproject.fast.catalogue.planner.Plan;
 import eu.morfeoproject.fast.catalogue.planner.Planner;
 import eu.morfeoproject.fast.model.Action;
+import eu.morfeoproject.fast.model.AuthorCTag;
+import eu.morfeoproject.fast.model.AutoCTag;
 import eu.morfeoproject.fast.model.BackendService;
+import eu.morfeoproject.fast.model.CTag;
 import eu.morfeoproject.fast.model.Condition;
 import eu.morfeoproject.fast.model.FastModelFactory;
 import eu.morfeoproject.fast.model.FormElement;
@@ -44,6 +47,7 @@ import eu.morfeoproject.fast.model.Pipe;
 import eu.morfeoproject.fast.model.Postcondition;
 import eu.morfeoproject.fast.model.PreOrPost;
 import eu.morfeoproject.fast.model.Precondition;
+import eu.morfeoproject.fast.model.ReaderCTag;
 import eu.morfeoproject.fast.model.Resource;
 import eu.morfeoproject.fast.model.Screen;
 import eu.morfeoproject.fast.model.ScreenComponent;
@@ -52,6 +56,7 @@ import eu.morfeoproject.fast.model.ScreenFlow;
 import eu.morfeoproject.fast.model.Trigger;
 import eu.morfeoproject.fast.model.WithConditions;
 import eu.morfeoproject.fast.util.DateFormatter;
+import eu.morfeoproject.fast.vocabulary.CTAG;
 import eu.morfeoproject.fast.vocabulary.DC;
 import eu.morfeoproject.fast.vocabulary.FGO;
 import eu.morfeoproject.fast.vocabulary.FOAF;
@@ -72,58 +77,70 @@ public class Catalogue {
 
 	private TripleStore tripleStore;
 	private Planner planner;
+	private URI serverURL;
 	
-	
-	public Catalogue(String sesameServer, String repositoryID) {
-		create(sesameServer, repositoryID);
+	public Catalogue(URI serverURL, String sesameServer, String repositoryID) {
+		this.serverURL = serverURL;
+		create(serverURL, sesameServer, repositoryID);
 	}
 	
-	public Catalogue(File dir, String indexes) {
-		create(dir, indexes);
+	public Catalogue(URI serverURL, File dir, String indexes) {
+		this.serverURL = serverURL;
+		create(serverURL, dir, indexes);
 	}
 	
-	public Catalogue(File dir) {
-		create(dir, null);
+	public Catalogue(URI serverURL, File dir) {
+		this.serverURL = serverURL;
+		create(serverURL, dir, null);
 	}
 	
 	/**
 	 * Returns a opened connection to a local catalogue
 	 */
-	private void create(File dir, String indexes) {
+	private void create(URI serverURL, File dir, String indexes) {
 		logger.info("Catalogue loaded at "+dir.getAbsolutePath()+" ["+indexes+"]");
-		// creates a new triple store
-		tripleStore = new TripleStore(dir, indexes);
-    	tripleStore.open();
-//    	tripleStore.clear();
-
-    	// check if the catalogue is correct
-		if (!check()) {
-			// recover the catalogue
-			restore();
+		if (serverURL == null) {
+			logger.error("Server URL must hold a valid URL");
+		} else {
+			// creates a new triple store
+			tripleStore = new TripleStore(dir, indexes);
+	    	tripleStore.open();
+	    	tripleStore.clear();
+	
+	    	// check if the catalogue is correct
+			if (!check()) {
+				// recover the catalogue
+				restore();
+			}
+//	    	printStatements();
+//			dump();
+			
+			// creates a planner
+			planner = new Planner(this);
 		}
-//    	printStatements();
-		
-		// creates a planner
-		planner = new Planner(this);
 	}
 	
 	/**
 	 * Returns a opened connection to a local catalogue
 	 */
-	private void create(String sesameServer, String repositoryID) {
+	private void create(URI serverURL, String sesameServer, String repositoryID) {
 		logger.info("Catalogue loaded at "+sesameServer+", ID="+repositoryID);
-		// creates a new triple store
-		tripleStore = new TripleStore(sesameServer, repositoryID);
-    	tripleStore.open();
-
-    	// check if the catalogue is correct
-		if (!check()) {
-			// recover the catalogue
-			restore();
+		if (serverURL == null) {
+			logger.error("Server URL must hold a valid URL");
+		} else {
+			// creates a new triple store
+			tripleStore = new TripleStore(sesameServer, repositoryID);
+	    	tripleStore.open();
+	
+	    	// check if the catalogue is correct
+			if (!check()) {
+				// recover the catalogue
+				restore();
+			}
+			
+			// creates a planner
+			planner = new Planner(this);
 		}
-		
-		// creates a planner
-		planner = new Planner(this);
 	}
 	
 	// TODO remove this method
@@ -921,6 +938,29 @@ public class Catalogue {
     	return results;
 	}
 	
+	private URI createResource(URI ofClass) {
+		try {
+			if (ofClass.equals(FGO.ScreenFlow)) {
+				return tripleStore.createResource(serverURL, "screenflows", ofClass);
+			} else if (ofClass.equals(FGO.Screen)) {
+				return tripleStore.createResource(serverURL, "screens", ofClass);
+			} else if (ofClass.equals(FGO.FormElement)) {
+				return tripleStore.createResource(serverURL, "forms", ofClass);
+			} else if (ofClass.equals(FGO.Operator)) {
+				return tripleStore.createResource(serverURL, "operators", ofClass);
+			} else if (ofClass.equals(FGO.BackendService)) {
+				return tripleStore.createResource(serverURL, "services", ofClass);
+			} else if (ofClass.equals(FGO.Screen)) {
+				return tripleStore.createResource(serverURL, "preconditions", ofClass);
+			} else if (ofClass.equals(FGO.Screen)) {
+				return tripleStore.createResource(serverURL, "postconditions", ofClass);
+			}
+		} catch (OntologyInvalidException e) {
+			logger.error("Resource "+ofClass+" failed to be created", e);
+		}
+		return null;
+	}
+	
 	public void addScreenFlow(ScreenFlow sf) throws DuplicatedResourceException,
 	OntologyInvalidException, OntologyReadonlyException, NotFoundException {
 		URI sfUri = null;
@@ -929,7 +969,7 @@ public class Catalogue {
 			if (containsScreenFlow(sf))
 				throw new DuplicatedResourceException(sf.getUri()+" already exists.");
 		} else {
-			sfUri = tripleStore.createResource(FGO.ScreenFlow);
+			sfUri = createResource(FGO.ScreenFlow);
 			sf.setUri(sfUri);
 		}
 		// persists the screen
@@ -991,7 +1031,7 @@ public class Catalogue {
 			if (containsScreen(screen))
 				throw new DuplicatedResourceException(screenUri+" already exists.");
 		} else {
-			screenUri = tripleStore.createResource(FGO.Screen);
+			screenUri = createResource(FGO.Screen);
 			screen.setUri(screenUri);
 		}
 		// persists the screen
@@ -1055,6 +1095,7 @@ public class Catalogue {
 			for (Pipe pipe : def.getPipes()) {
 				BlankNode bnPipe = tripleStore.createBlankNode();
 				tripleStore.addStatement(bnDef, FGO.contains, bnPipe);
+				tripleStore.addStatement(bnPipe, RDF.type, FGO.Pipe);
 				tripleStore.addStatement(bnPipe, FGO.hasIdBBFrom, pipe.getIdBBFrom());
 				tripleStore.addStatement(bnPipe, FGO.hasIdConditionFrom, pipe.getIdConditionFrom());
 				tripleStore.addStatement(bnPipe, FGO.hasIdBBTo, pipe.getIdBBTo());
@@ -1065,6 +1106,7 @@ public class Catalogue {
 			for (Trigger trigger : def.getTriggers()) {
 				BlankNode bnTrigger = tripleStore.createBlankNode();
 				tripleStore.addStatement(bnDef, FGO.hasTrigger, bnTrigger);
+				tripleStore.addStatement(bnTrigger, RDF.type, FGO.Trigger);
 				tripleStore.addStatement(bnTrigger, FGO.hasIdBBFrom, trigger.getIdBBFrom());
 				tripleStore.addStatement(bnTrigger, FGO.hasNameFrom, trigger.getNameFrom());
 				tripleStore.addStatement(bnTrigger, FGO.hasIdBBTo, trigger.getIdBBTo());
@@ -1142,9 +1184,9 @@ public class Catalogue {
 				throw new DuplicatedResourceException(seUri+" already exists.");
 		} else {
 			if (se instanceof Precondition)
-				seUri = tripleStore.createResource(FGO.Precondition);
+				seUri = createResource(FGO.Precondition);
 			else if (se instanceof Postcondition)
-				seUri = tripleStore.createResource(FGO.Postcondition);
+				seUri = createResource(FGO.Postcondition);
 			se.setUri(seUri);
 		}
 		// persists the pre/postcondition
@@ -1165,7 +1207,7 @@ public class Catalogue {
 		}
 	}
 	
-	public void updatePreOrPost(PreOrPost se) throws NotFoundException, OntologyReadonlyException, RepositoryException, OntologyInvalidException  {
+	public void updatePreOrPost(PreOrPost se) throws NotFoundException {
 		logger.info("Updating pre/postcondition "+se.getUri()+"...");
 		PreOrPost oldSe = getPreOrPost(se.getUri());
 		removePreOrPost(se.getUri());
@@ -1210,7 +1252,7 @@ public class Catalogue {
 			if (containsScreenComponent(sc))
 				throw new DuplicatedResourceException(scUri+" already exists.");
 		} else {
-			scUri = tripleStore.createResource(type);
+			scUri = createResource(type);
 			sc.setUri(scUri);
 		}
 		// persists the screen component
@@ -1230,15 +1272,36 @@ public class Catalogue {
 		if (resource.getVersion() != null)
 			tripleStore.addStatement(rUri, FGO.hasVersion, resource.getVersion());
 		if (resource.getCreationDate() != null)
-			tripleStore.addStatement(rUri, DC.date, DateFormatter.formatDateISO8601(resource.getCreationDate()));
-		else // no date provided, save the current date
-			tripleStore.addStatement(rUri, DC.date, DateFormatter.formatDateISO8601(new Date()));
+			tripleStore.addStatement(rUri, DC.date, resource.getCreationDate());
+		else { // no date provided, save the current date
+			Date currentDate = new Date();
+			resource.setCreationDate(currentDate);
+			tripleStore.addStatement(rUri, DC.date, currentDate);
+		}
 		if (resource.getIcon() != null)
 			tripleStore.addStatement(rUri, FGO.hasIcon, resource.getIcon());
 		if (resource.getScreenshot() != null)
 			tripleStore.addStatement(rUri, FGO.hasScreenshot, resource.getScreenshot());
-		for (String tag : resource.getDomainContext().getTags())
-			tripleStore.addStatement(rUri, FGO.hasTag, tag);
+		for (CTag tag : resource.getTags()) {
+			BlankNode bnTag = tripleStore.createBlankNode();
+			tripleStore.addStatement(rUri, CTAG.tagged, bnTag);
+			
+			if (tag instanceof AuthorCTag)
+				tripleStore.addStatement(bnTag, RDF.type, CTAG.AuthorTag);
+			else if (tag instanceof ReaderCTag)
+				tripleStore.addStatement(bnTag, RDF.type, CTAG.ReaderTag);
+			else if (tag instanceof AutoCTag)
+				tripleStore.addStatement(bnTag, RDF.type, CTAG.AutoTag);
+			else
+				tripleStore.addStatement(bnTag, RDF.type, CTAG.Tag);
+			
+			if (tag.getMeans() != null)
+				tripleStore.addStatement(bnTag, CTAG.means, tag.getMeans());
+			for (String lang : tag.getLabels().keySet())
+				tripleStore.addStatement(bnTag, CTAG.label, tripleStore.createLanguageTagLiteral(tag.getLabels().get(lang), lang));
+			if (tag.getTaggingDate() != null)
+				tripleStore.addStatement(bnTag, CTAG.taggingDate, tripleStore.createDatatypeLiteral(DateFormatter.formatDateISO8601(tag.getTaggingDate()), XSD._date));
+		}
 		if (resource.getHomepage() != null)
 			tripleStore.addStatement(rUri, FOAF.homepage, resource.getHomepage());
 		if (resource.getVersion() != null)
@@ -1247,8 +1310,6 @@ public class Catalogue {
 			tripleStore.addStatement(rUri, FGO.hasId, resource.getId());
 		if (resource.getName() != null)
 			tripleStore.addStatement(rUri, FGO.hasName, resource.getName());
-		if (resource.getType() != null)
-			tripleStore.addStatement(rUri, FGO.hasType, resource.getType());
 	}
 
 	private BlankNode saveCondition(Condition condition) {
@@ -1259,7 +1320,7 @@ public class Catalogue {
 		for (Statement st : condition.getPattern()) {
 			tripleStore.addStatement(p, st.getSubject(), st.getPredicate(), st.getObject());
 		}
-		tripleStore.addStatement(c, FGO.isPositive, tripleStore.createDatatypeLiteral(new Boolean(condition.isPositive()).toString(), XSD._boolean));
+		tripleStore.addStatement(c, FGO.isPositive, condition.isPositive());
 		for (String key : condition.getLabels().keySet())
 			tripleStore.addStatement(c, RDFS.label, tripleStore.createLanguageTagLiteral(condition.getLabels().get(key), key));
 		if (condition.getId() != null)
@@ -1582,7 +1643,7 @@ public class Catalogue {
     }
     
 	private Resource retrieveResource(URI type, URI uri) {
-		Resource resource;
+		Resource resource = null;
 		
 		// create the resource of the given type
 		if (type.equals(FGO.ScreenFlow))
@@ -1620,23 +1681,39 @@ public class Catalogue {
 			} else if (predicate.equals(DC.rights)) {
 				resource.setRights(object.asURI());
 			} else if (predicate.equals(FGO.hasVersion)) {
-				resource.setVersion(object.toString());
+				resource.setVersion(object.asDatatypeLiteral().getValue());
 			} else if (predicate.equals(DC.date)) {
-				resource.setCreationDate(DateFormatter.parseDateISO8601(object.toString()));
+				resource.setCreationDate(DateFormatter.parseDateISO8601(object.asDatatypeLiteral().getValue()));
 			} else if (predicate.equals(FGO.hasIcon)) {
 				resource.setIcon(object.asURI());
 			} else if (predicate.equals(FGO.hasScreenshot)) {
 				resource.setScreenshot(object.asURI());
-			} else if (predicate.equals(FGO.hasTag)) {
-				resource.getDomainContext().getTags().add(object.asLiteral().toString());
+			} else if (predicate.equals(CTAG.tagged)) {
+				CTag tag = new CTag();
+				BlankNode bnTag = object.asBlankNode();
+				ClosableIterator<Statement> tagIt = tripleStore.findStatements(bnTag, Variable.ANY, Variable.ANY);
+				for ( ; tagIt.hasNext(); ) {
+					Statement tagSt = tagIt.next();
+					URI tagPredicate = tagSt.getPredicate();
+					Node tagObject = tagSt.getObject();
+					if (tagPredicate.equals(CTAG.means)) {
+						tag.setMeans(tagObject.asURI());
+					} else if (tagPredicate.equals(CTAG.label)) {
+						if (tagObject instanceof LanguageTagLiteral) {
+							LanguageTagLiteral label = tagObject.asLanguageTagLiteral();
+							tag.getLabels().put(label.getLanguageTag(), label.getValue());
+						}
+					} else if (tagPredicate.equals(CTAG.taggingDate)) {
+						tag.setTaggingDate(DateFormatter.parseDateISO8601(tagObject.asDatatypeLiteral().getValue()));
+					} 
+				}
+				resource.getTags().add(tag);
 			} else if (predicate.equals(FOAF.homepage)) {
 				resource.setHomepage(object.asURI());
 			} else if (predicate.equals(FGO.hasId)) {
-				resource.setId(object.toString());
+				resource.setId(object.asDatatypeLiteral().getValue());
 			} else if (predicate.equals(FGO.hasName)) {
-				resource.setName(object.toString());
-			} else if (predicate.equals(FGO.hasType)) {
-				resource.setType(object.toString());
+				resource.setName(object.asDatatypeLiteral().getValue());
 			}
 		}
 		cIt.close();
@@ -1995,7 +2072,7 @@ public class Catalogue {
 			} else if (predicate.equals(FGO.isPositive)) {
 				c.setPositive(Boolean.parseBoolean(object.asDatatypeLiteral().getValue()));
 			} else if (predicate.equals(FGO.hasPatternString)) {
-				c.setPatternString(object.toString());
+				c.setPatternString(object.asDatatypeLiteral().getValue());
 			} else if (predicate.equals(FGO.hasPattern)) {
 				URI pattern = st.getObject().asURI();
 				ClosableIterator<Statement> it = tripleStore.findStatements(pattern, Variable.ANY, Variable.ANY, Variable.ANY);
@@ -2003,7 +2080,7 @@ public class Catalogue {
 					c.getPattern().add(it.next());
 				it.close();
 			} else if (predicate.equals(FGO.hasId)) {
-				c.setId(object.toString());
+				c.setId(object.asDatatypeLiteral().getValue());
 			}
 		}
 		cIt.close();

@@ -88,21 +88,21 @@ public class FormElementServlet extends GenericServlet {
 			}
 		} else {
 			// Retrieve the addressed member of the collection
-			id = URLUTF8Encoder.decode(id);
-			logger.info("Retrieving formElement "+id);
-			FormElement f = CatalogueAccessPoint.getCatalogue().getFormElement(new URIImpl(id));
+			String uri = request.getRequestURL().toString();
+			logger.info("Retrieving formElement "+uri);
+			FormElement f = CatalogueAccessPoint.getCatalogue().getFormElement(new URIImpl(uri));
 			if (f == null) {
-				response.sendError(HttpServletResponse.SC_NOT_FOUND, "The resource "+id+" has not been found.");
+				response.sendError(HttpServletResponse.SC_NOT_FOUND, "The resource "+uri+" has not been found.");
 			} else {
 				try {
-					if (format.equals(MediaType.APPLICATION_JSON)) {
-						response.setContentType(MediaType.APPLICATION_JSON);
-						writer.print(f.toJSON().toString(2));
-					} else if (format.equals(MediaType.APPLICATION_RDF_XML)) {
+					if (format.equals(MediaType.APPLICATION_RDF_XML)) {
 						response.setContentType(MediaType.APPLICATION_RDF_XML);
 						Model feModel = f.createModel();
 						feModel.writeTo(writer, Syntax.RdfXml);
 						feModel.close();
+					} else {
+						response.setContentType(MediaType.APPLICATION_JSON);
+						writer.print(f.toJSON().toString(2));
 					}				
 					response.setStatus(HttpServletResponse.SC_OK);
 				} catch (JSONException e) {
@@ -192,10 +192,10 @@ public class FormElementServlet extends GenericServlet {
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 		} else {
 			// Update the addressed member of the collection or create it with a defined ID.
-			id = URLUTF8Encoder.decode(id);
+			String uri = request.getRequestURL().toString();
 			try {
 				JSONObject json = new JSONObject(body);
-				FormElement formElement = parseFormElement(json, new URIImpl(id));
+				FormElement formElement = parseFormElement(json, new URIImpl(uri));
 				CatalogueAccessPoint.getCatalogue().updateFormElement(formElement);
 				if (format.equals(MediaType.APPLICATION_RDF_XML)) {
 					response.setContentType(MediaType.APPLICATION_RDF_XML);
@@ -220,7 +220,7 @@ public class FormElementServlet extends GenericServlet {
 				response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
 			} catch (NotFoundException e) {
 				e.printStackTrace();
-				response.sendError(HttpServletResponse.SC_NOT_FOUND, "The resource "+id+" has not been found.");
+				response.sendError(HttpServletResponse.SC_NOT_FOUND, "The resource "+uri+" has not been found.");
 			}
 		}
 	}
@@ -237,12 +237,12 @@ public class FormElementServlet extends GenericServlet {
 			response.sendError(HttpServletResponse.SC_BAD_REQUEST, "An ID must be specified.");
 		} else {
 			// Delete the addressed member of the collection.
-			id = URLUTF8Encoder.decode(id);
+			String uri = request.getRequestURL().toString();
 			try {
-				CatalogueAccessPoint.getCatalogue().removeFormElement(new URIImpl(id));
+				CatalogueAccessPoint.getCatalogue().removeFormElement(new URIImpl(uri));
 				response.setStatus(HttpServletResponse.SC_OK);
 			} catch (NotFoundException e) {
-				response.sendError(HttpServletResponse.SC_NOT_FOUND, "The resource "+id+" has not been found.");
+				response.sendError(HttpServletResponse.SC_NOT_FOUND, "The resource "+uri+" has not been found.");
 			}
 		}
 	}

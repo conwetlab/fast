@@ -4,7 +4,7 @@ import org.ontoware.rdf2go.model.node.URI;
 import org.ontoware.rdf2go.model.node.impl.URIImpl;
 
 /**
- * Vocabulary File. Created by org.ontoware.rdf2go.util.VocabularyWriter on Mon Nov 23 14:45:07 GMT 2009
+ * Vocabulary File. Created by org.ontoware.rdf2go.util.VocabularyWriter on Wed Dec 16 16:01:15 GMT 2009
  * input file: src/eu/morfeoproject/fast/catalogue/ontologies/fgo.rdf
  * namespace: http://purl.oclc.org/fast/ontology/gadget#
  */

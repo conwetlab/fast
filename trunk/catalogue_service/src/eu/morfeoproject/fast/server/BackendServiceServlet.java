@@ -88,21 +88,21 @@ public class BackendServiceServlet extends GenericServlet {
 			}
 		} else {
 			// Retrieve the addressed member of the collection
-			id = URLUTF8Encoder.decode(id);
-			logger.info("Retrieving backend service "+id);
-			BackendService b = CatalogueAccessPoint.getCatalogue().getBackendService(new URIImpl(id));
+			String uri = request.getRequestURL().toString();
+			logger.info("Retrieving backend service "+uri);
+			BackendService b = CatalogueAccessPoint.getCatalogue().getBackendService(new URIImpl(uri));
 			if (b == null) {
-				response.sendError(HttpServletResponse.SC_NOT_FOUND, "The resource "+id+" has not been found.");
+				response.sendError(HttpServletResponse.SC_NOT_FOUND, "The resource "+uri+" has not been found.");
 			} else {
 				try {
-					if (format.equals(MediaType.APPLICATION_JSON)) {
-						response.setContentType(MediaType.APPLICATION_JSON);
-						writer.print(b.toJSON().toString(2));
-					} else if (format.equals(MediaType.APPLICATION_RDF_XML)) {
+					if (format.equals(MediaType.APPLICATION_RDF_XML)) {
 						response.setContentType(MediaType.APPLICATION_RDF_XML);
 						Model bsModel = b.createModel();
 						bsModel.writeTo(writer, Syntax.RdfXml);
 						bsModel.close();
+					} else {
+						response.setContentType(MediaType.APPLICATION_JSON);
+						writer.print(b.toJSON().toString(2));
 					}				
 					response.setStatus(HttpServletResponse.SC_OK);
 				} catch (JSONException e) {
@@ -192,10 +192,10 @@ public class BackendServiceServlet extends GenericServlet {
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 		} else {
 			// Update the addressed member of the collection or create it with a defined ID.
-			id = URLUTF8Encoder.decode(id);
+			String uri = request.getRequestURL().toString();
 			try {
 				JSONObject json = new JSONObject(body);
-				BackendService backendService = parseBackendService(json, new URIImpl(id));
+				BackendService backendService = parseBackendService(json, new URIImpl(uri));
 				CatalogueAccessPoint.getCatalogue().updateBackendService(backendService);
 				if (format.equals(MediaType.APPLICATION_RDF_XML)) {
 					response.setContentType(MediaType.APPLICATION_RDF_XML);
@@ -220,7 +220,7 @@ public class BackendServiceServlet extends GenericServlet {
 				response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
 			} catch (NotFoundException e) {
 				e.printStackTrace();
-				response.sendError(HttpServletResponse.SC_NOT_FOUND, "The resource "+id+" has not been found.");
+				response.sendError(HttpServletResponse.SC_NOT_FOUND, "The resource "+uri+" has not been found.");
 			}
 		}
 	}
@@ -237,12 +237,12 @@ public class BackendServiceServlet extends GenericServlet {
 			response.sendError(HttpServletResponse.SC_BAD_REQUEST, "An ID must be specified.");
 		} else {
 			// Delete the addressed member of the collection.
-			id = URLUTF8Encoder.decode(id);
+			String uri = request.getRequestURL().toString();
 			try {
-				CatalogueAccessPoint.getCatalogue().removeBackendService(new URIImpl(id));
+				CatalogueAccessPoint.getCatalogue().removeBackendService(new URIImpl(uri));
 				response.setStatus(HttpServletResponse.SC_OK);
 			} catch (NotFoundException e) {
-				response.sendError(HttpServletResponse.SC_NOT_FOUND, "The resource "+id+" has not been found.");
+				response.sendError(HttpServletResponse.SC_NOT_FOUND, "The resource "+uri+" has not been found.");
 			}
 		}
 	}

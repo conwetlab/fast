@@ -1,17 +1,24 @@
 package eu.morfeoproject.fast.model;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.ontoware.rdf2go.RDF2Go;
 import org.ontoware.rdf2go.model.Model;
+import org.ontoware.rdf2go.model.node.BlankNode;
 import org.ontoware.rdf2go.model.node.URI;
+import org.ontoware.rdf2go.vocabulary.RDF;
 import org.ontoware.rdf2go.vocabulary.RDFS;
+import org.ontoware.rdf2go.vocabulary.XSD;
 
 import eu.morfeoproject.fast.util.DateFormatter;
+import eu.morfeoproject.fast.vocabulary.CTAG;
 import eu.morfeoproject.fast.vocabulary.DC;
 import eu.morfeoproject.fast.vocabulary.FGO;
 import eu.morfeoproject.fast.vocabulary.FOAF;
@@ -28,11 +35,9 @@ public abstract class Resource {
     private URI icon;
     private URI screenshot;
     private URI homepage;
-    private DomainContext domainContext;
+    private List<CTag> tags;
     private String id;
     private String name;
-    private String type;
-    
     
     public URI getUri() {
 		return uri;
@@ -118,14 +123,14 @@ public abstract class Resource {
 		this.homepage = homepage;
 	}
 
-	public DomainContext getDomainContext() {
-		if (domainContext == null)
-			domainContext = new DomainContext();
-		return domainContext;
+	public List<CTag> getTags() {
+		if (tags == null)
+			tags = new ArrayList<CTag>();
+		return tags;
 	}
 
-	public void setDomainContext(DomainContext domainContext) {
-		this.domainContext = domainContext;
+	public void setTags(List<CTag> tags) {
+		this.tags = tags;
 	}
 
 	public String getId() {
@@ -142,14 +147,6 @@ public abstract class Resource {
 
 	public void setName(String name) {
 		this.name = name;
-	}
-
-	public String getType() {
-		return type;
-	}
-
-	public void setType(String type) {
-		this.type = type;
 	}
 
 	/**
@@ -181,7 +178,7 @@ public abstract class Resource {
 			json.put("uri", JSONObject.NULL);
 		else
 			json.put("uri", getUri().toString());
-		if (getLabels() == null || getLabels().isEmpty())
+		if (getLabels() == null)
 			json.put("label", JSONObject.NULL);
 		else {
 			JSONObject jsonLabels = new JSONObject();
@@ -189,7 +186,7 @@ public abstract class Resource {
 				jsonLabels.put(key, getLabels().get(key));
 			json.put("label", jsonLabels);
 		}
-		if (getDescriptions() == null || getDescriptions().isEmpty())
+		if (getDescriptions() == null)
 			json.put("description", JSONObject.NULL);
 		else {
 			JSONObject jsonDescriptions = new JSONObject();
@@ -221,10 +218,14 @@ public abstract class Resource {
 			json.put("screenshot", JSONObject.NULL);
 		else
 			json.put("screenshot", getScreenshot().toString());
-		if (getDomainContext() == null)
-			json.put("domainContext", JSONObject.NULL);
-		else
-			json.put("domainContext", getDomainContext().toJSON());
+		if (getTags() == null)
+			json.put("tags", JSONObject.NULL);
+		else {
+			JSONArray jsonTags = new JSONArray();
+			for (CTag tag : getTags())
+				jsonTags.put(tag.toJSON());
+			json.put("tags", jsonTags);
+		}
 		if (getHomepage() == null)
 			json.put("homepage", JSONObject.NULL);
 		else
@@ -237,10 +238,22 @@ public abstract class Resource {
 			json.put("name", JSONObject.NULL);
 		else
 			json.put("name", getName());
-		if (getType() == null)
-			json.put("type", JSONObject.NULL);
-		else
-			json.put("type", getType());
+		
+		// for convenience, the type of the resource is specified in the JSON description
+		if (this instanceof ScreenFlow)
+			json.put("type", "screenflow");
+		else if (this instanceof Screen)
+			json.put("type", "screen");
+		else if (this instanceof FormElement)
+			json.put("type", "form");
+		else if (this instanceof Operator)
+			json.put("type", "operator");
+		else if (this instanceof BackendService)
+			json.put("type", "service");
+		else if (this instanceof Precondition)
+			json.put("type", "precondition");
+		else if (this instanceof Postcondition)
+			json.put("type", "postcondition");
 
 		return json;
 	}
@@ -249,7 +262,7 @@ public abstract class Resource {
 		Model model = RDF2Go.getModelFactory().createModel();
 		model.open();
 		model.setNamespace("dc", DC.NS_DC.toString());
-		model.setNamespace("FGO", FGO.NS_FGO.toString());
+		model.setNamespace("fgo", FGO.NS_FGO.toString());
 		
 		URI resourceUri = this.getUri();
 		for (String key : this.getLabels().keySet())
@@ -268,16 +281,23 @@ public abstract class Resource {
 			model.addStatement(resourceUri, FGO.hasIcon, this.getIcon());
 		if (this.getScreenshot() != null)
 			model.addStatement(resourceUri, FGO.hasScreenshot, this.getScreenshot());
-		for (String tag : this.getDomainContext().getTags())
-			model.addStatement(resourceUri, FGO.hasTag, tag);
+		for (CTag tag : this.getTags()) {
+			BlankNode bnTag = model.createBlankNode();
+			model.addStatement(resourceUri, CTAG.tagged, bnTag);
+			model.addStatement(bnTag, RDF.type, CTAG.Tag);
+			if (tag.getMeans() != null)
+				model.addStatement(bnTag, CTAG.means, tag.getMeans());
+			for (String lang : tag.getLabels().keySet())
+				model.addStatement(bnTag, RDFS.label, model.createLanguageTagLiteral(lang, tag.getLabels().get(lang)));
+			if (tag.getTaggingDate() != null)
+				model.addStatement(bnTag, CTAG.taggingDate, model.createDatatypeLiteral(tag.getTaggingDate().toString(), XSD._date));
+		}
 		if (this.getHomepage() != null)
 			model.addStatement(resourceUri, FOAF.homepage, this.getHomepage());
 		if (this.getId() != null)
 			model.addStatement(resourceUri, FGO.hasId, this.getId());
 		if (this.getName() != null)
 			model.addStatement(resourceUri, FGO.hasName, this.getName());
-		if (this.getType() != null)
-			model.addStatement(resourceUri, FGO.hasType, this.getType());
 		
 		return model;
 	}

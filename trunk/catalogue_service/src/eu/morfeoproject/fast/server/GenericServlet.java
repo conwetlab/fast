@@ -25,6 +25,7 @@ import org.ontoware.rdf2go.vocabulary.RDF;
 
 import eu.morfeoproject.fast.model.Action;
 import eu.morfeoproject.fast.model.BackendService;
+import eu.morfeoproject.fast.model.CTag;
 import eu.morfeoproject.fast.model.Condition;
 import eu.morfeoproject.fast.model.FastModelFactory;
 import eu.morfeoproject.fast.model.FormElement;
@@ -77,7 +78,7 @@ public abstract class GenericServlet extends HttpServlet {
 	protected void parseResource(Resource resource, JSONObject jsonResource, URI uri) throws JSONException {
 		if (uri != null)
 			resource.setUri(uri);
-		if (jsonResource.get("label") != null) {
+		if (jsonResource.has("label")) {
 			JSONObject jsonLabels = jsonResource.getJSONObject("label");
 			Iterator<String> labels = jsonLabels.keys();
 			for ( ; labels.hasNext(); ) {
@@ -85,7 +86,7 @@ public abstract class GenericServlet extends HttpServlet {
 				resource.getLabels().put(key, jsonLabels.getString(key));
 			}
 		}
-		if (jsonResource.get("description") != null) {
+		if (jsonResource.has("description")) {
 			JSONObject jsonDescriptions = jsonResource.getJSONObject("description");
 			Iterator<String> descriptions = jsonDescriptions.keys();
 			for ( ; descriptions.hasNext(); ) {
@@ -96,13 +97,34 @@ public abstract class GenericServlet extends HttpServlet {
 		resource.setCreator(new URIImpl(jsonResource.getString("creator")));
 		resource.setRights(new URIImpl(jsonResource.getString("rights")));
 		resource.setVersion(jsonResource.getString("version"));
-		resource.setCreationDate(DateFormatter.parseDateISO8601(jsonResource.getString("creationDate")));
+		if (jsonResource.has("creationDate"))
+			resource.setCreationDate(DateFormatter.parseDateISO8601(jsonResource.getString("creationDate")));
 		resource.setIcon(new URIImpl(jsonResource.getString("icon")));
 		resource.setScreenshot(new URIImpl(jsonResource.getString("screenshot")));
 		resource.setHomepage(new URIImpl(jsonResource.getString("homepage")));
 		resource.setId(jsonResource.getString("id"));
 		resource.setName(jsonResource.getString("name"));
-		resource.setType(jsonResource.getString("type"));
+		// parse the tags
+		JSONArray aTag = jsonResource.getJSONArray("tags");
+		ArrayList<CTag> tags = new ArrayList<CTag>(aTag.length());
+		for (int i = 0; i < aTag.length(); i++) {
+			CTag tag = new CTag();
+			JSONObject oTag = aTag.getJSONObject(i);
+			if (oTag.has("means"))
+				tag.setMeans(new URIImpl(oTag.getString("means")));
+			if (oTag.has("label")){
+				JSONObject jsonLabels = oTag.getJSONObject("label");
+				Iterator<String> labels = jsonLabels.keys();
+				for ( ; labels.hasNext(); ) {
+					String key = labels.next();
+					tag.getLabels().put(key, jsonLabels.getString(key));
+				}
+			}
+			if (oTag.has("taggingDate"))
+				tag.setTaggingDate(DateFormatter.parseDateISO8601(jsonResource.getString("creationDate")));
+			tags.add(tag);
+		}
+		resource.setTags(tags);
 	}
 	
 	protected ScreenFlow parseScreenFlow(JSONObject jsonScreenFlow, URI uri) throws JSONException, IOException {
@@ -111,12 +133,6 @@ public abstract class GenericServlet extends HttpServlet {
 		// fill common properties of the resource
 		parseResource(screenFlow, jsonScreenFlow, uri);
 
-		JSONObject domainContext = jsonScreenFlow.getJSONObject("domainContext");
-		JSONArray tags = domainContext.getJSONArray("tags");
-		for (int i = 0; i < tags.length(); i++)
-			screenFlow.getDomainContext().getTags().add(tags.getString(i));
-		URI user = new URIImpl(domainContext.getString("user"));
-		screenFlow.getDomainContext().setUser(user);
 		JSONArray resources = jsonScreenFlow.getJSONArray("contains");
 		for (int i = 0; i < resources.length(); i++)
 			screenFlow.getResources().add(new URIImpl(resources.getString(i)));
@@ -129,12 +145,6 @@ public abstract class GenericServlet extends HttpServlet {
 		// fill common properties of the resource
 		parseResource(screen, jsonScreen, uri);
 
-		JSONObject domainContext = jsonScreen.getJSONObject("domainContext");
-		JSONArray tags = domainContext.getJSONArray("tags");
-		for (int i = 0; i < tags.length(); i++)
-			screen.getDomainContext().getTags().add(tags.getString(i));
-		URI user = new URIImpl(domainContext.getString("user"));
-		screen.getDomainContext().setUser(user);
 		// preconditions
 		JSONArray preArray = jsonScreen.getJSONArray("preconditions");
 		ArrayList<List<Condition>> preconditions = new ArrayList<List<Condition>>();
@@ -277,12 +287,6 @@ public abstract class GenericServlet extends HttpServlet {
 		// fill common properties of the resource
 		parseResource(sc, jsonSc, uri);
 		
-		JSONObject domainContext = jsonSc.getJSONObject("domainContext");
-		JSONArray tags = domainContext.getJSONArray("tags");
-		for (int i = 0; i < tags.length(); i++)
-			sc.getDomainContext().getTags().add(tags.getString(i));
-		URI user = new URIImpl(domainContext.getString("user"));
-		sc.getDomainContext().setUser(user);
 		// actions
 		JSONArray actionsArray = jsonSc.getJSONArray("actions");
 		for (int i = 0; i < actionsArray.length(); i++)

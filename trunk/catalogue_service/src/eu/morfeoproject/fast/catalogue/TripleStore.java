@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.ontoware.aifbcommons.collection.ClosableIterable;
@@ -33,6 +34,7 @@ import org.ontoware.rdf2go.util.RDFTool;
 import org.ontoware.rdf2go.vocabulary.OWL;
 import org.ontoware.rdf2go.vocabulary.RDF;
 import org.ontoware.rdf2go.vocabulary.RDFS;
+import org.ontoware.rdf2go.vocabulary.XSD;
 import org.openrdf.model.ValueFactory;
 import org.openrdf.rdf2go.RepositoryModelSet;
 import org.openrdf.repository.Repository;
@@ -43,6 +45,7 @@ import org.openrdf.rio.RDFParseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import eu.morfeoproject.fast.util.DateFormatter;
 import eu.morfeoproject.fast.vocabulary.DC;
 import eu.morfeoproject.fast.vocabulary.FGO;
 
@@ -564,20 +567,27 @@ public class TripleStore {
         return getPersistentModelSet().containsStatements(Variable.ANY, resource, RDF.type, clazz);
     }    
     
-    ///// NO SE SI ESTOS METODOS DEBERIAN EXISTIR
     public void addStatement(Statement statement) {
-    	getDefaultModel().addStatement(statement);
+    	getPersistentModelSet().addStatement(statement);
     }
     public void addStatement(Resource subject, URI predicate, Node object) {
-    	getDefaultModel().addStatement(subject, predicate, object);
+    	getPersistentModelSet().addStatement(null, subject, predicate, object);
     }
     public void addStatement(Resource subject, URI predicate, String object) {
-    	getDefaultModel().addStatement(subject, predicate, object);
+    	getPersistentModelSet().addStatement(null, subject, predicate, createDatatypeLiteral(object, XSD._string));
+    }
+    public void addStatement(Resource subject, URI predicate, boolean object) {
+    	getPersistentModelSet().addStatement(null, subject, predicate, createDatatypeLiteral(new Boolean(object).toString(), XSD._boolean));
+    }
+    public void addStatement(Resource subject, URI predicate, int object) {
+    	getPersistentModelSet().addStatement(null, subject, predicate, createDatatypeLiteral(new Integer(object).toString(), XSD._int));
+    }
+    public void addStatement(Resource subject, URI predicate, Date object) {
+    	getPersistentModelSet().addStatement(null, subject, predicate, createDatatypeLiteral(DateFormatter.formatDateISO8601(object), XSD._dateTime));
     }
     public void addStatement(URI context, Resource subject, URI predicate, Node object) {
     	getPersistentModelSet().addStatement(context, subject, predicate, object);
     }
-    /////
     
     public List<URI> getSubClasses(URI clazz) {
        	List<URI> results = new ArrayList<URI>();
@@ -722,6 +732,12 @@ public class TripleStore {
     	return uriClass;
     }
     
+    public URI createResource(URI namespace, String path, URI ofClass)
+    throws OntologyInvalidException {
+    	URI resourceUri = createUniqueUri(new URIImpl(namespace.toString()+"/"+path+"/"));
+        return createResource(resourceUri, ofClass);
+    }
+    
     /**
      * Create a new resource, an instance of a rdfs:Class New resources are
      * always created in the workModel, which is a new context.
@@ -732,7 +748,7 @@ public class TripleStore {
      * @throws OntologyInvalidException if the passed uri is not defined as
      *         class in the pimo.
      */
-    public URI createResource(URI ofClass) throws OntologyInvalidException {
+    private URI createResource(URI ofClass) throws OntologyInvalidException {
     	return createResource(ofClass, getDefaultModel());
     }
     
@@ -743,9 +759,9 @@ public class TripleStore {
      * @return
      * @throws OntologyInvalidException
      */
-    public URI createResource(URI uri, URI ofClass) throws OntologyInvalidException {
-    	return createResource(uri, RDFTool.getLabel(ofClass), ofClass, getDefaultModel());
-    }
+//    private URI createResource(URI uri, URI ofClass) throws OntologyInvalidException {
+//    	return createResource(uri, RDFTool.getLabel(ofClass), ofClass, getDefaultModel());
+//    }
     
     /**
      * Create a new resource, an instance of a rdfs:Class New resources are
@@ -762,22 +778,6 @@ public class TripleStore {
     	return createResource(name, ofClass, inModel);
     }
 
-    public URI createResource(URI uri, String name, URI ofClass, Model inModel)
-    throws OntologyInvalidException {
-	    assertClass(ofClass);
-	    
-	    if (uri == null)
-	    	uri = createUniqueUriWithName(inModel.getContextURI(), name);
-	    
-	    inModel.addStatement(uri, RDF.type, ofClass);
-//	    inModel.addStatement(uri, RDFS.label, name);
-//    inModel.addStatement(result, NAO.prefLabel, name);
-//    inModel.addStatement(result, NAO.created, 
-//        new DatatypeLiteralImpl(RDFTool.dateTime2String(new Date()), XSD._dateTime));
-//    inModel.addStatement(result, PIMO.isDefinedBy, getPimoUri());
-	    return uri;
-    }
-    
     /**
      * Create a new resource
      * 
@@ -790,7 +790,21 @@ public class TripleStore {
     private URI createResource(String name, URI ofClass, Model inModel)
     throws OntologyInvalidException {
         URI resourceUri = createUniqueUriWithName(inModel.getContextURI(), name);
-        return createResource(resourceUri, name, ofClass, inModel);
+        return createResource(resourceUri, ofClass, inModel);
+    }
+    
+    private URI createResource(URI uri, URI ofClass, Model inModel)
+    throws OntologyInvalidException {
+	    assertClass(ofClass);
+	    inModel.addStatement(uri, RDF.type, ofClass);
+	    return uri;
+    }
+    
+    private URI createResource(URI uri, URI ofClass)
+    throws OntologyInvalidException {
+    	assertClass(ofClass);
+    	getPersistentModelSet().addStatement(null, uri, RDF.type, ofClass);
+    	return uri;
     }
     
     public void removeResource(Resource resource) throws NotFoundException {
@@ -888,6 +902,10 @@ public class TripleStore {
     	return createURI(namespace.toString()+name);
     }
     
+    public URI createUniqueUri(URI namespace) {
+    	return getCleanUniqueURI(namespace, null, false);
+    }
+
     public URI createUniqueUriWithName(URI namespace, String name) {
     	return getCleanUniqueURI(namespace, name, false);
     }
@@ -939,7 +957,7 @@ public class TripleStore {
         URI namespace,
         String name,
         boolean nullifexists) {
-        String cleanName = toCleanName(name);
+        String cleanName = name == null ? "" : toCleanName(name);
         
         long millis = System.currentTimeMillis();
         URI uri = new URIImpl(namespace + cleanName + millis);

@@ -19,7 +19,10 @@ import org.ontoware.rdf2go.model.node.impl.URIImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import eu.morfeoproject.fast.catalogue.DuplicatedResourceException;
+import eu.morfeoproject.fast.catalogue.InvalidResourceTypeException;
 import eu.morfeoproject.fast.catalogue.NotFoundException;
+import eu.morfeoproject.fast.catalogue.OntologyInvalidException;
 import eu.morfeoproject.fast.model.Postcondition;
 import eu.morfeoproject.fast.util.URLUTF8Encoder;
 
@@ -84,21 +87,21 @@ public class PostconditionServlet extends GenericServlet {
 			}
 		} else {
 			// Retrieve the addressed member of the collection
-			id = URLUTF8Encoder.decode(id);
-			logger.info("Retrieving screen "+id);
-			Postcondition ev = CatalogueAccessPoint.getCatalogue().getPostcondition(new URIImpl(id));
+			String uri = request.getRequestURL().toString();
+			logger.info("Retrieving screen "+uri);
+			Postcondition ev = CatalogueAccessPoint.getCatalogue().getPostcondition(new URIImpl(uri));
 			if (ev == null) {
-				response.sendError(HttpServletResponse.SC_NOT_FOUND, "The resource "+id+" has not been found.");
+				response.sendError(HttpServletResponse.SC_NOT_FOUND, "The resource "+uri+" has not been found.");
 			} else {
 				try {
-					if (format.equals(MediaType.APPLICATION_JSON)) {
-						response.setContentType(MediaType.APPLICATION_JSON);
-						writer.print(ev.toJSON().toString(2));
-					} else if (format.equals(MediaType.APPLICATION_RDF_XML)) {
+					if (format.equals(MediaType.APPLICATION_RDF_XML)) {
 						response.setContentType(MediaType.APPLICATION_RDF_XML);
 						Model postModel = ev.createModel();
 						postModel.writeTo(writer, Syntax.RdfXml);
 						postModel.close();
+					} else {
+						response.setContentType(MediaType.APPLICATION_JSON);
+						writer.print(ev.toJSON().toString(2));
 					}				
 					response.setStatus(HttpServletResponse.SC_OK);
 				} catch (JSONException e) {
@@ -142,11 +145,17 @@ public class PostconditionServlet extends GenericServlet {
 					writer.print(post.toJSON().toString(2));
 				}
 				response.setStatus(HttpServletResponse.SC_OK);
-			} catch (Exception e) {
+			} catch (DuplicatedResourceException e) {
+				e.printStackTrace();
+				response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
+			} catch (OntologyInvalidException e) {
 				e.printStackTrace();
 				response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
 			}
 		} catch (JSONException e) {
+			e.printStackTrace();
+			response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
+		} catch (IOException e) {
 			e.printStackTrace();
 			response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
 		}	
@@ -174,29 +183,30 @@ public class PostconditionServlet extends GenericServlet {
 			response.sendError(HttpServletResponse.SC_BAD_REQUEST, "An ID must be specified.");
 		} else {
 			// Update the addressed member of the collection or create it with a defined ID.
-			id = URLUTF8Encoder.decode(id);
+			String uri = request.getRequestURL().toString();
 			try {
 				JSONObject json = new JSONObject(body);
-				Postcondition post = parsePostcondition(json, null);
-				try {
-					CatalogueAccessPoint.getCatalogue().updatePreOrPost(post);
-					if (format.equals(MediaType.APPLICATION_RDF_XML)) {
-						response.setContentType(MediaType.APPLICATION_RDF_XML);
-						Model postModel = post.createModel();
-						postModel.writeTo(writer, Syntax.RdfXml);
-						postModel.close();
-					} else {
-						response.setContentType(MediaType.APPLICATION_JSON);
-						writer.print(post.toJSON().toString(2));
-					}
-					response.setStatus(HttpServletResponse.SC_OK);
-				} catch (Exception e) {
-					e.printStackTrace();
-					response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
+				Postcondition post = parsePostcondition(json, new URIImpl(uri));
+				CatalogueAccessPoint.getCatalogue().updatePreOrPost(post);
+				if (format.equals(MediaType.APPLICATION_RDF_XML)) {
+					response.setContentType(MediaType.APPLICATION_RDF_XML);
+					Model postModel = post.createModel();
+					postModel.writeTo(writer, Syntax.RdfXml);
+					postModel.close();
+				} else {
+					response.setContentType(MediaType.APPLICATION_JSON);
+					writer.print(post.toJSON().toString(2));
 				}
+				response.setStatus(HttpServletResponse.SC_OK);
 			} catch (JSONException e) {
 				e.printStackTrace();
 				response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
+			} catch (IOException e) {
+				e.printStackTrace();
+				response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
+			} catch (NotFoundException e) {
+				e.printStackTrace();
+				response.sendError(HttpServletResponse.SC_NOT_FOUND, "The resource "+uri+" has not been found.");
 			}
 		}
 	}
@@ -213,12 +223,12 @@ public class PostconditionServlet extends GenericServlet {
 			response.sendError(HttpServletResponse.SC_BAD_REQUEST, "An ID must be specified.");
 		} else {
 			// Delete the addressed member of the collection.
-			id = URLUTF8Encoder.decode(id);
+			String uri = request.getRequestURL().toString();
 			try {
-				CatalogueAccessPoint.getCatalogue().removePreOrPost(new URIImpl(id));
+				CatalogueAccessPoint.getCatalogue().removePreOrPost(new URIImpl(uri));
 				response.setStatus(HttpServletResponse.SC_OK);
 			} catch (NotFoundException e) {
-				response.sendError(HttpServletResponse.SC_NOT_FOUND, "The resource "+id+" has not been found.");
+				response.sendError(HttpServletResponse.SC_NOT_FOUND, "The resource "+uri+" has not been found.");
 			}
 		}
 	}

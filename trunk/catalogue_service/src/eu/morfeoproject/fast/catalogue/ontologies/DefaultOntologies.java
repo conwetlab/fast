@@ -24,6 +24,11 @@ public class DefaultOntologies {
 
     private static ArrayList<Ontology> defaults = new ArrayList<Ontology>();
     
+    /** 
+     * These ontologies have a class within the project representing their vocabularies, 
+     * in the package eu.morfeoproject.fast.vocabulary
+     * Every time a change is made, the vocabulary has to be rewritten using the VocabularyWriter utility.
+     */
     public static Ontology RDF = 
     	new Ontology(new URIImpl("http://www.w3.org/1999/02/22-rdf-syntax-ns#"), "rdf.rdf", Syntax.RdfXml, true);
     public static Ontology RDFS = 
@@ -36,6 +41,8 @@ public class DefaultOntologies {
     	new Ontology(new URIImpl("http://xmlns.com/foaf/0.1/"), "foaf.rdf", Syntax.RdfXml, true);
     public static Ontology SIOC =
     	new Ontology(new URIImpl("http://rdfs.org/sioc/ns#"), "sioc.owl", Syntax.RdfXml, true);
+    public static Ontology CTAG = /** Common Tag vocabulary to enhance tags and their meaning **/
+    	new Ontology(new URIImpl("http://commontag.org/ns#"), "ctag.owl", Syntax.RdfXml, true);
 
     /**-- The DBPedia ontology (no datasets included) --**/
     public static PublicOntology DBPEDIA = 

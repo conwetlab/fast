@@ -18,7 +18,6 @@ import org.ontoware.rdf2go.vocabulary.RDFS;
 
 import eu.morfeoproject.fast.catalogue.Catalogue;
 import eu.morfeoproject.fast.model.Condition;
-import eu.morfeoproject.fast.model.DomainContext;
 import eu.morfeoproject.fast.model.FastModelFactory;
 import eu.morfeoproject.fast.model.Screen;
 
@@ -35,7 +34,7 @@ public class ScreenGenerator {
 	private List<URI> siocClasses;
 	
 	public ScreenGenerator() {
-		catalogue = new Catalogue(new File("C:\\Program Files\\eclipse\\prueba2"));
+		catalogue = new Catalogue(new URIImpl("http://localhost:8080/catalogue"), new File("C:\\Program Files\\eclipse\\prueba2"));
 		
 		// extracts all concepts from the Amazon Ontology
 		amazonClasses = new ArrayList<URI>();
@@ -101,20 +100,20 @@ public class ScreenGenerator {
 		descriptions.put("en", "This is an example of a screen description.");
 		descriptions.put("es", "Esto es un ejemplo de una descripcion de una ventana.");
 		s.setDescriptions(descriptions);
-		DomainContext context = new DomainContext();
-		ArrayList<String> tags = new ArrayList<String>();
-		// specify the ontology to use for the conditions
+//		DomainContext context = new DomainContext();
+//		ArrayList<String> tags = new ArrayList<String>();
+//		// specify the ontology to use for the conditions
 		List<URI> classes;
 		if ((Math.random() * 2) % 2 == 0) {
 			classes = amazonClasses;
-			tags.add("amazon");
+//			tags.add("amazon");
 		} else {
 			classes = siocClasses;
-			tags.add("sioc");
+//			tags.add("sioc");
 		}
-		// set domain context
-		context.setTags(tags);
-		s.setDomainContext(context);
+//		// set domain context
+//		context.setTags(tags);
+//		s.setDomainContext(context);
 		// preconditions
 		s.setPreconditions(createConditions(classes));
 		// postconditions

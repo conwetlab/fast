@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
+import org.ontoware.rdf2go.model.node.impl.URIImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -25,6 +26,7 @@ public class CatalogueAccessPoint {
 			String indexes = null;
 			String sesameServer = null;
 			String repositoryID = null;
+			String serverURL = null;
 			if (inStream == null) {
 				throw new IOException("Configuration file repository.properties not found.");
 			} else {
@@ -34,11 +36,12 @@ public class CatalogueAccessPoint {
 				indexes = properties.getProperty("indexes");
 				sesameServer = properties.getProperty("sesameServer");
 				repositoryID = properties.getProperty("repositoryID");
+				serverURL = properties.getProperty("serverURL");
 			}
-			if (sesameServer != null && repositoryID != null) {
-				catalogue = new Catalogue(sesameServer, repositoryID);
+			if (sesameServer != null && repositoryID != null && serverURL != null) {
+				catalogue = new Catalogue(new URIImpl(serverURL), sesameServer, repositoryID);
 			} else if (storageDir != null) {
-				catalogue = new Catalogue(new File(storageDir), indexes);
+				catalogue = new Catalogue(new URIImpl(serverURL), new File(storageDir), indexes);
 			} else {
 				throw new IOException("Configuration file repository.properties is incorrect.");
 			}
