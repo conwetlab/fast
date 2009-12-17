@@ -85,16 +85,18 @@ var FormInstance = Class.create(ComponentInstance,
                     'left': 2
                 }     
                 var node = this._view.getConditionNode(pre.id, action.name);
-                var terminal = new Terminal(node, options, this._buildingBlockDescription.id, pre.id); 
+                var terminal = new Terminal(node, options, this.getUri(), 
+                                            this.getId(), pre.id, action.name);
                 this._terminals.push(terminal);                
             }.bind(this));   
         }.bind(this));
-        
+
+        var posts;
         if (this._buildingBlockDescription.postconditions && 
                 this._buildingBlockDescription.postconditions[0] instanceof Array) {
-            var posts = this._buildingBlockDescription.postconditions[0];
+            posts = this._buildingBlockDescription.postconditions[0];
         } else {
-            var posts = this._buildingBlockDescription.postconditions;
+            posts = this._buildingBlockDescription.postconditions;
         }
         
         posts.each(function(post) {
@@ -108,7 +110,8 @@ var FormInstance = Class.create(ComponentInstance,
                     'left': 2
                 }
                 var node = this._view.getConditionNode(post.id);
-                var terminal = new Terminal(node, options, this._buildingBlockDescription.id, post.id);
+                var terminal = new Terminal(node, options, this.getUri(),
+                                            this.getId(), post.id);
                 terminal.onWireHandler(handler);
                 this._terminals.push(terminal);
             }.bind(this)); 

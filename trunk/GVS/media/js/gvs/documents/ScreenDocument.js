@@ -139,7 +139,7 @@ var ScreenDocument = Class.create(PaletteDocument,
      */
     _drop: function(/** Area */ area, /** ComponentInstance */ instance, /** Object */ position) {
         // Reject repeated elements (except domain concepts or operators)
-        if (instance.constructor != PrePostInstance && instance.constructor != PrePostInstance  &&
+        if (instance.constructor != OperatorInstance  &&
                 this._canvasInstances.get(instance.getUri())) {
             return false;
         }
@@ -164,7 +164,9 @@ var ScreenDocument = Class.create(PaletteDocument,
             instance.createTerminals(this._onPipeHandler.bind(this));
             this._canvasInstances.set(instance.getUri(), instance);
             this._description.addBuildingBlock(instance);
+            this._setSelectedElement(instance);
         } else {
+            instance.setChangeHandler(this._onPrePostAdded.bind(this));
             if (area.getNode().className.include("pre")) {
                 instance.setType("pre");
                 instance.createTerminal(this._onPipeHandler.bind(this));
@@ -179,17 +181,41 @@ var ScreenDocument = Class.create(PaletteDocument,
         instance.setEventListener(this);
         instance.enableDragNDrop(area,[area]);
         instance.getView().addGhost();
-        this._refreshReachability();
-        this._setSelectedElement(instance);
+        
+        
 
         return true;
     },
     
     /**
+     * Launched whenever a pipe is added or removed from
      * @private
      */
     _onPipeHandler: function(/** Event */ event, /** Array */ params, /** Boolean */ addedPipe) {
-        
+        var wire = params[0];
+        if (wire.terminal1.parentEl && wire.terminal2.parentEl) {
+            var source = wire.terminal1;
+            var destination = wire.terminal2;
+
+            if (addedPipe) {
+                this._description.addPipe(source, destination, wire);
+            } else {
+                this._description.removePipe(source, destination);
+            }
+            
+            this._refreshReachability();
+        }
+    },
+
+    /**
+     * Runs when a *-condition is created in the server
+     * @private
+     */
+    _onPrePostAdded: function(/** String */ previousUri, /** PrePostInstance */ instance) {
+        if (previousUri) {
+            // TODO: Think if this is possible
+        }
+        this._setSelectedElement(instance);
     },
     
     /**
@@ -207,22 +233,15 @@ var ScreenDocument = Class.create(PaletteDocument,
         this._canvasInstances.unset(instance.getUri());
         
         switch(instance.constructor) {
-            case ScreenInstance:
-                this._description.removeScreen(instance.getUri());
-                break;
-                
-            case PrePostInstance:
-                this._description.removePrePost(instance.getUri());
-                
-                break;
             case FormInstance:
                 this._formInstance = null;
 
             default:
-                console.log("Instance type not handled");
+                this._description.remove(instance);
+                console.log("Instance type not being handled");
         }
         
-        //this._refreshReachability();
+        this._refreshReachability();
         this._setSelectedElement();
         instance.destroy();
     },
@@ -239,6 +258,7 @@ var ScreenDocument = Class.create(PaletteDocument,
     _setSelectedElement: function ($super, element) {
         $super(element);
         this._toolbarElements.get('deleteElement').setEnabled(element!=null);
+        this._refreshReachability();
         //this._updatePanes();
     },
     
@@ -433,6 +453,27 @@ var ScreenDocument = Class.create(PaletteDocument,
             reachabilityData.postconditions.each(function(post) {
                 this._description.getPost(post.id).getView().setReachability(post);
             }.bind(this));
+        }
+        if (reachabilityData.pipes) {
+            reachabilityData.pipes.each(function(pipe) {
+                var pipeWire = this._description.getPipeWire(pipe.from, pipe.to);
+                var options = pipeWire.options;
+                if (pipe.satisfied) {
+                    options = Object.extend(options, {
+                        'color': '#DDF7DD',
+                        'bordercolor': '#008000'
+                    });
+                } else {
+                    options = Object.extend(options, {
+                        'color': '#F5D9D9',
+                        'bordercolor': '#B90000'
+                    });
+                }
+                pipeWire.setOptions(options);
+            }.bind(this));
+        }
+        if (reachabilityData.connections) {
+            // TODO
         }
         this._updatePanes();
     },

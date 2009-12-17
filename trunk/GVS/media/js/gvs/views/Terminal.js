@@ -11,7 +11,8 @@
  * @extends WireIt.Terminal
  */
 var Terminal = function(/** DOMNode */ conditionNode, /** Object */ options, 
-                                 /** String */ resourceId, /** String */ conditionId) {
+                        /** String */ resourceUri, /** String */ resourceId,
+                        /** String */ conditionId, /** String(optional) */ action) {
     
     /**
      * @private
@@ -49,7 +50,15 @@ var Terminal = function(/** DOMNode */ conditionNode, /** Object */ options,
     extendedOptions.wireConfig = Object.extend(wireConfig, options.wireConfig);
          
     WireIt.Terminal.call(this, this._terminalNode, extendedOptions);
-    
+
+
+    /**
+     * The uri of the resource
+     * @private
+     * @type String
+     */
+    this._resourceUri = resourceUri;
+
     /**
      * This is the id of the resource (operator, service, form)
      * that contains the terminal
@@ -61,8 +70,17 @@ var Terminal = function(/** DOMNode */ conditionNode, /** Object */ options,
     /**
      * This is the id of the condition inside the
      * resource that contains the terminal
+     * @private
+     * @type String
      */
     this._conditionId = conditionId;
+
+    /**
+     * This is the action
+     * @private
+     * @type String
+     */
+    this._action = action ? action: "";
 } 
 
 // Inheriting all methods
@@ -72,20 +90,37 @@ Object.extend(Terminal.prototype, /** @lends Terminal.prototype */ {
 
     
     // **************** PUBLIC METHODS **************** //
+
+    /**
+     * Returns the resourceUri
+     * @type String
+     */
+    getBuildingblockUri: function() {
+        return this._resourceUri;
+    },
     
     /**
      * Returns the resourceId
      * @type String
      */
-    getResourceId: function() {
+    getBuildingblockId: function() {
         return this._resourceId;
     },
+
     /**
      * Returns the conditionId
      * @type String
      */
     getConditionId: function() {
         return this._conditionId;
+    },
+
+    /**
+     * Returns the action
+     * @type String
+     */
+    getActionId: function() {
+        return this._action;
     },
     
     /**

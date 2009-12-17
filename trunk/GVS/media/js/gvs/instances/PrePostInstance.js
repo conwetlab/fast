@@ -164,7 +164,12 @@ var PrePostInstance = Class.create(ComponentInstance,
      * Set the type in pre | post
      */
     setType: function(/** String */ type) {
-        this._type = type;
+        // this._type = type;
+        var data = {
+           'label': this._label,
+           'type': type
+        }
+        this._onChange(data);
     },
     
     /**
@@ -237,7 +242,8 @@ var PrePostInstance = Class.create(ComponentInstance,
             }   
         }
         
-        this._terminal = new Terminal(this._view.getNode(), options, "screen", this._buildingBlockDescription.id); 
+        this._terminal = new Terminal(this._view.getNode(), options, null , null,
+                                        this.getId());
         if (this._type == 'pre') {
             this._terminal.onWireHandler(handler);
         }
