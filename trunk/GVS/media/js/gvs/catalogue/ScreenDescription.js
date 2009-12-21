@@ -68,45 +68,22 @@ var ScreenDescription = Class.create(BuildingBlockDescription,
         this._buildingblocks.set(instance.getId(),instance);
     },
 
-    addPipe: function(/** Terminal */ source, /** Terminal */ destination,
-                        /** WireIt.Wire */ wire) {
-        var pipe = {
-            'from': source,
-            'to': destination,
-            'wire': wire
-        };
-        if (!this._pipes.get(this._getPipeId(source,destination))) {
-            this._pipes.set(this._getPipeId(source,destination), pipe);
+    addPipe: function(pipe) {
+        if (this._pipes.get(pipe.getId())) {
+            // TODO: is this situation possible?
+            this._pipes.unset(pipe.getId());
+            pipe.destroy();
         } else {
-            source.removeWire(wire);
-            destination.removeWire(wire);
+            this._pipes.set(pipe.getId(), pipe);
         }
-        
     },
 
     getPipes: function() {
         var pipes = new Array();
         this._pipes.values().each(function(pipe) {
-            pipes.push({
-                'from': {
-                    'buildingblock': pipe.from.getBuildingblockUri(),
-                    'condition': pipe.from.getConditionId()
-                },
-                'to': {
-                    'buildingblock': pipe.to.getBuildingblockUri(),
-                    'action': pipe.to.getActionId(),
-                    'condition': pipe.to.getConditionId()
-                }
-            });
+            pipes.push(pipe.getJSONforCheck());
         });
         return pipes;
-    },
-
-    getPipeWire: function(/** Object */source, /** Object */ destination) {
-        var sourceTerminal = this._buildFakeTerminal(source);
-        var destinationTerminal = this._buildFakeTerminal(destination);
-        return this._pipes.get(this._getPipeId(sourceTerminal, destinationTerminal)).
-                                wire;
     },
 
 
@@ -145,8 +122,8 @@ var ScreenDescription = Class.create(BuildingBlockDescription,
         }
     },
 
-    removePipe: function (/** Terminal */ source, /** Terminal */ destination) {
-        this._pipes.unset(this._getPipeId(source, destination));
+    removePipe: function (/** Pipe */ pipe) {
+        this._pipes.unset(pipe.getId());
     },
 
     // ******************** PRIVATE METHODS ************** //
@@ -174,53 +151,10 @@ var ScreenDescription = Class.create(BuildingBlockDescription,
     _getScreenPipes: function() {
         var pipes;
         this._pipes.values().each(function(pipe) {
-            pipes.push({
-                'from': {
-                    'buildingblock': pipe.from.getBuildingblockId(),
-                    'condition': pipe.from.getConditionId()
-                },
-                'to': {
-                    'buildingblock': pipe.to.getBuildingblockId(),
-                    'action': pipe.to.getActionId(),
-                    'condition': pipe.to.getConditionId()
-                }
-            });
+            pipes.push(pipe.getJSONForScreen());
         });
         return pipes;
-    },
-
-    /**
-     * Gets a pipe unique id from its endpoints
-     * @private
-     * @type String
-     */
-    _getPipeId: function(source, destination) {
-        return source.getBuildingblockUri() + source.getConditionId() +
-            destination.getBuildingblockUri() + destination.getActionId() +
-            destination.getConditionId();
-    },
-
-    /**
-     * Creates an anonymous class to simulate a terminal
-     * @private
-     * @type Terminal
-     */
-    _buildFakeTerminal: function(/** Object */terminalData) {
-        var object = new Object();
-        object.terminalData = terminalData;
-        object.getBuildingblockUri = function() {
-            return this.terminalData.buildingblock;
-        }
-        object.getConditionId = function() {
-            return this.terminalData.condition;
-        }
-        object.getActionId = function() {
-            return this.terminalData.action;
-        }
-        return object;
     }
-
-
 
 });
 

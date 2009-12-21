@@ -58,6 +58,13 @@ var ScreenDocument = Class.create(PaletteDocument,
          * @private
          */
         this._formInstance = null;
+
+        /**
+         * Pipe Factory
+         * @type PipeFactory
+         * @private
+         */
+        this._pipeFactory = new PipeFactory();
               
         // Screen Definition
         
@@ -129,6 +136,20 @@ var ScreenDocument = Class.create(PaletteDocument,
         return {};
     },
 
+    /**
+     * @override
+     */
+    show: function() {
+        this._pipeFactory.showPipes();
+    },
+
+    /**
+     * @override
+     */
+    hide: function() {
+        this._pipeFactory.hidePipes();
+    },
+
     // **************** PRIVATE METHODS **************** //
     
 
@@ -194,16 +215,16 @@ var ScreenDocument = Class.create(PaletteDocument,
     _onPipeHandler: function(/** Event */ event, /** Array */ params, /** Boolean */ addedPipe) {
         var wire = params[0];
         if (wire.terminal1.parentEl && wire.terminal2.parentEl) {
-            var source = wire.terminal1;
-            var destination = wire.terminal2;
-
-            if (addedPipe) {
-                this._description.addPipe(source, destination, wire);
-            } else {
-                this._description.removePipe(source, destination);
+            var pipe = this._pipeFactory.getPipe(wire);
+            if (pipe) {
+                if (addedPipe) {
+                    this._description.addPipe(pipe);
+                } else {
+                    this._pipeFactory.removePipe(pipe);
+                    this._description.removePipe(pipe);
+                }
+                this._refreshReachability();
             }
-            
-            this._refreshReachability();
         }
     },
 
@@ -455,21 +476,9 @@ var ScreenDocument = Class.create(PaletteDocument,
             }.bind(this));
         }
         if (reachabilityData.pipes) {
-            reachabilityData.pipes.each(function(pipe) {
-                var pipeWire = this._description.getPipeWire(pipe.from, pipe.to);
-                var options = pipeWire.options;
-                if (pipe.satisfied) {
-                    options = Object.extend(options, {
-                        'color': '#DDF7DD',
-                        'bordercolor': '#008000'
-                    });
-                } else {
-                    options = Object.extend(options, {
-                        'color': '#F5D9D9',
-                        'bordercolor': '#B90000'
-                    });
-                }
-                pipeWire.setOptions(options);
+            reachabilityData.pipes.each(function(pipeData) {
+                var pipe = this._pipeFactory.getPipeFromJSON(pipeData);
+                pipe.setReachability(pipe.satisfied);
             }.bind(this));
         }
         if (reachabilityData.connections) {

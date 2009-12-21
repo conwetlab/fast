@@ -26,7 +26,7 @@ var Terminal = function(/** DOMNode */ conditionNode, /** Object */ options,
      */
     this._terminalNode = new Element('div',
     {
-        'class': this._conditionNode.title
+        'title': this._conditionNode.title
     });
     
     var style = {
@@ -141,7 +141,7 @@ Object.extend(Terminal.prototype, /** @lends Terminal.prototype */ {
     },
     
     /**
-     * Adds a handler for the conection or deconection of wires
+     * Adds a handler listening for the connection or deconnection of wires
      */
     onWireHandler: function(/** Function */ handler) {
         var context = {
@@ -149,6 +149,16 @@ Object.extend(Terminal.prototype, /** @lends Terminal.prototype */ {
         }
         this.eventAddWire.subscribe(this._wireAddHandler.bind(context));
         this.eventRemoveWire.subscribe(this._wireRemoveHandler.bind(context));    
+    },
+
+    /**
+     * Sets the visibility of the terminal
+     */
+    setVisible: function(/** Boolean */ visible) {
+        var style = {
+            'visibility': visible ? 'visible': 'hidden'
+        };
+        this.el.setStyle(style);
     },
     
      // **************** PRIVATE METHODS **************** //

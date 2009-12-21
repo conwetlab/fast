@@ -203,7 +203,11 @@ var DocumentController = Class.create(
         } else { //it is a string id
             id = tab;
         }
+        if (this._currentDocument) {
+            this._currentDocument.hide();
+        }
         this._currentDocument = this._documents.get(id);
+        this._currentDocument.show();
         
         this._toolbar.setModel(1, this._currentDocument);
         this._menu.setModel('document', this._currentDocument);

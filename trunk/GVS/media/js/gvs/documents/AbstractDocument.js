@@ -103,6 +103,14 @@ var AbstractDocument = Class.create(ToolbarModel, /** @lends AbstractDocument.pr
     getMenuElements: function() {
         return {};    
     },
+
+    show: function() {
+
+    },
+
+    hide: function() {
+
+    },
     
     // **************** PRIVATE METHODS **************** //
 
