@@ -199,7 +199,7 @@ var GVSSingleton = function(){
          * @private
          */
         _showAboutDialog: function() {
-            persistenceEngine = PersistenceEngineFactory.getInstance();
+            var persistenceEngine = PersistenceEngineFactory.getInstance();
             persistenceEngine.sendGet(URIs.about, this, this._onSuccessAbout, Utils.onAJAXError);
         },
         /**
@@ -229,7 +229,7 @@ var GVSSingleton = function(){
                                 'weight': 1,
                                 'handler': function() {
                                     this.action("newScreenflow")
-                                },
+                                }.bind(this),
                                 'shortcut': 'Shift+N'
                             }),
                             'group': 0
@@ -241,20 +241,8 @@ var GVSSingleton = function(){
                                 'weight': 2,
                                 'handler': function() {
                                     this.action("openScreenflow")
-                                },
+                                }.bind(this),
                                 'shortcut': 'Shift+O'
-                            }),
-                            'group': 0
-                        },
-                        'newScreen': {
-                            'type': 'Action',
-                            'action': new MenuAction({
-                                'label': 'New Screen',
-                                'weight': 10,
-                                'handler': function(){
-                                    this.action("newScreen")
-                                },
-                                'shortcut': 'Alt+N'
                             }),
                             'group': 0
                         }
@@ -307,6 +295,21 @@ var GVSSingleton = function(){
                     
                 }
             };
+            if (!GlobalOptions.isPublicDemo) {
+                // Include the new screen feature
+                this._menuConfig.file.children.newScreen = {
+                    'type': 'Action',
+                    'action': new MenuAction({
+                        'label': 'New Screen',
+                        'weight': 10,
+                        'handler': function(){
+                            this.action("newScreen")
+                        }.bind(this),
+                        'shortcut': 'Alt+N'
+                    }),
+                    'group': 0
+                };
+            }
         }
     });
     

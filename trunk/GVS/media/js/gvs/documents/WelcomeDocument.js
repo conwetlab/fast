@@ -48,6 +48,7 @@ var WelcomeDocument = Class.create(AbstractDocument,
             label: "Open Existing Screenflow...",
             onClick: function() { gvs.action("openScreenflow"); }}
         );
+
         var newScreenButton = new dijit.form.Button({
             label: "Create a Screen from Scratch",
             onClick: function() { gvs.action("newScreen"); }}
@@ -66,10 +67,12 @@ var WelcomeDocument = Class.create(AbstractDocument,
         buttonsContainer.appendChild(newScreenflowButton.domNode);
         buttonsContainer.appendChild(new Element("br"));
         buttonsContainer.appendChild(openScreenflowButton.domNode);
-         buttonsContainer.appendChild(new Element("div").update("Screens"));
-        buttonsContainer.appendChild(newScreenButton.domNode);
-        buttonsContainer.appendChild(new Element("br"));
-        buttonsContainer.appendChild(openScreenButton.domNode);
+        if (!GlobalOptions.isPublicDemo) {
+            buttonsContainer.appendChild(new Element("div").update("Screens"));
+            buttonsContainer.appendChild(newScreenButton.domNode);
+            buttonsContainer.appendChild(new Element("br"));
+            buttonsContainer.appendChild(openScreenButton.domNode);
+        }
         buttonsContainer.appendChild(new Element("br"));
         buttonsContainer.appendChild(addScreenButton.domNode);
         content.appendChild(buttonsContainer);
