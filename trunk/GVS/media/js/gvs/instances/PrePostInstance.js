@@ -169,6 +169,7 @@ var PrePostInstance = Class.create(ComponentInstance,
            'label': this._label,
            'type': type
         }
+        this._isConfigurable = false;
         this._onChange(data);
     },
     
