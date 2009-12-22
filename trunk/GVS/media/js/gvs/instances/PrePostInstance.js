@@ -369,7 +369,23 @@ var PrePostInstance = Class.create(ComponentInstance,
         persistenceEngine.sendDelete(catalogueResource + encodeURIComponent(encodeURIComponent(uri)),
             this, 
             this._onDeleteSuccess, Utils.onAJAXError);
+    },
+
+    /**
+     * Returns an object representing
+     * the fact
+     * @type Object
+     */
+    _getFactData: function() {
+        return {
+                'label': {'en-gb': this._label},
+                'pattern': this._pattern,
+                'positive': true,
+                'id': this._buildingBlockDescription.uri,
+                'name': this._label
+            };
     }
+
 });
 
 // vim:ts=4:sw=4:et:

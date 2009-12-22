@@ -160,7 +160,17 @@ var ResourceInstance = Class.create(ComponentInstance,
             });
         }*/
        this.onUpdate();
-    }, 
+    },
+
+    /**
+     * This function returns a list with all the
+     * preconditions of the instance,
+     * ready to be set in the FactPane
+     * @type Array
+     */
+    getPreconditionTable: function(/** Hash */ reachability) {
+        return this._getConditionList("actions", reachability);
+    },
     /**
 
     // **************** PRIVATE METHODS **************** //

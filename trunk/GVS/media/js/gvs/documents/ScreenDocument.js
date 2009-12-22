@@ -494,15 +494,15 @@ var ScreenDocument = Class.create(PaletteDocument,
      * @private
      */
     _updatePanes: function() {
-        // TODO
-        /*var facts = this._getAllFacts();
+
         if (!this._selectedElement) {
-            this._propertiesPane.fillTable(this._description);          
+            var facts = this._getAllFacts();
+            //this._propertiesPane.fillTable(this._description);
             this._factPane.fillTable([], [], facts);
         } else {
-            this._propertiesPane.fillTable(this._selectedElement);
+            //this._propertiesPane.fillTable(this._selectedElement);
            
-            if (this._selectedElement.constructor == ScreenInstance) {
+            if (this._selectedElement.constructor != PrePostInstance) {
                 var preReachability = this._inferenceEngine.getPreconditionReachability(
                             this._selectedElement.getUri());
                 var preconditions = this._selectedElement.getPreconditionTable(preReachability);
@@ -522,7 +522,7 @@ var ScreenDocument = Class.create(PaletteDocument,
                     this._factPane.fillTable([], [], factInfo);
                 }
             }    
-        }*/
+        }
     },
     
     /**
@@ -534,7 +534,7 @@ var ScreenDocument = Class.create(PaletteDocument,
         var resultHash = new Hash();
         this._canvasInstances.each(function(pair){
             var instance = pair.value;
-            if (instance.constructor == ScreenInstance) {
+            if (instance.constructor != PrePostInstance) {
                 var preReachability = this._inferenceEngine.getPreconditionReachability(
                             instance.getUri());
                 var preconditions = instance.getPreconditionTable(preReachability);               

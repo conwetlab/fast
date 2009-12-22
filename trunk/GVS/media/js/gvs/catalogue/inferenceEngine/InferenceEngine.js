@@ -90,7 +90,44 @@ var InferenceEngine = Class.create( /** @lends InferenceEngine.prototype */ {
             this._listeners.set(uri,this._listeners.get(uri).compact());
         }
     },
-    
+
+    /**
+     * Returns the reachability information about
+     * the preconditions of a given screen
+     * @type Hash
+     */
+    getPreconditionReachability: function(/** String */ uri) {
+        var reachabilityData = this._reachabilityData.get(uri);
+        var result = new Hash();
+        if (reachabilityData.preconditions) {
+            if (reachabilityData.preconditions.length > 1) {
+            //More than one set of preconditions
+            console.log("OR precondition support not implemented yet");
+            return null;
+            }
+            else {
+                var preconditions = reachabilityData.preconditions[0];
+                $A(preconditions).each(function(pre) {
+                    var uri = Utils.extractURIfromPattern(pre.pattern);
+                    result.set(uri, pre.satisfied);
+                });
+            }
+        } else {
+            if (reachabilityData.actions) {
+                $A(reachabilityData.actions).each(function(action) {
+                    $A(action.preconditions).each(function(pre) {
+                        var uri = Utils.extractURIfromPattern(pre.pattern);
+                        result.set(uri,pre.satisfied);
+                    });
+                });
+            } else {
+                console.log("unknown reachability data format");
+                return null;
+            }
+        }
+        return result;
+    },
+
     /**
      * Returns a boolean determining if a building block is reachable
      * by its uri

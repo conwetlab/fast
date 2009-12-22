@@ -12,29 +12,6 @@ var ScreenflowInferenceEngine = Class.create(InferenceEngine /** @lends Screenfl
 
     // **************** PUBLIC METHODS **************** //
     
-     
-    /**
-     * Returns the reachability information about
-     * the preconditions of a given screen
-     * @type Hash
-     */
-    getPreconditionReachability: function(/** String */ uri) {
-        var reachabilityData = this._reachabilityData.get(uri);
-        if (reachabilityData.preconditions && reachabilityData.preconditions.length > 1) {
-            //More than one set of preconditions
-            console.log("OR precondition support not implemented yet");
-            return null;
-        }
-        else {
-            var preconditions = reachabilityData.preconditions[0];        
-            var result = new Hash();
-            $A(preconditions).each(function(pre) {
-                var uri = Utils.extractURIfromPattern(pre.pattern);
-                result.set(uri, pre.satisfied);    
-            });
-            return result;
-        }
-    },
     
     /**
      * This function calls the catalogue to create a plan for a given screen
