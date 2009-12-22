@@ -29,19 +29,7 @@ var FormInstance = Class.create(ComponentInstance,
      */
     getTitle: function() {
         return this._buildingBlockDescription.label['en-gb']; 
-    },
-    
-    /**
-     * This function returns the relevant info
-     * to the properties table
-     * Implementing TableModel interface
-     * @overrides
-     */
-    getInfo: function() {
-        var info = new Hash();
-        return info;
-    },
-    
+    },   
     
     /**
      * Transform the instance into JSON-like
@@ -54,8 +42,6 @@ var FormInstance = Class.create(ComponentInstance,
         }
         return Object.toJSON(json);
     },
-    
-    
     
     /**
      * @override

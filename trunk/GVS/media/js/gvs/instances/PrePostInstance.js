@@ -94,11 +94,15 @@ var PrePostInstance = Class.create(ComponentInstance,
      */
     getInfo: function() {
         var info = new Hash();
-        info.set('Title', this._label);
+        info.set('Title', this._label);  
+        info.set('Uri', this._buildingBlockDescription.uri);
         info.set('Type', this._type);
-        info.set('EzWeb Binding', this._platformProperties.get('ezweb').get('binding'));
-        info.set('Friendcode', this._platformProperties.get('ezweb').get('friendcode'));
-        info.set('Variable Name', this._platformProperties.get('ezweb').get('varname'));
+        if (this._platformProperties.get('ezweb').get('binding')) {
+            info.set('EzWeb Binding', this._platformProperties.get('ezweb').get('binding'));
+            info.set('Friendcode', this._platformProperties.get('ezweb').get('friendcode'));
+            info.set('Variable Name', this._platformProperties.get('ezweb').get('varname'));
+        }
+        
         return info;
     },
     
@@ -202,10 +206,17 @@ var PrePostInstance = Class.create(ComponentInstance,
      * ready to be set in the FactPane
      * @type Array
      */
-    getConditionTable: function(/** Boolean */ reachable) {
+    getConditionTable: function(/** Boolean */ reachabilityInfo) {
         var factFactory = FactFactorySingleton.getInstance();
         var fact = factFactory.getFactIcon(this._getFactData(), "embedded").getNode();
+        var reachable;
+        if (reachabilityInfo !== undefined) {
+            reachable = reachabilityInfo;
+        } else {
+            reachable = this._view.getNode().hasClassName("satisfeable");
+        }
         Utils.setSatisfeabilityClass(fact, reachable);
+        
         return [fact, this._label, this._buildingBlockDescription.uri]; 
     },
     

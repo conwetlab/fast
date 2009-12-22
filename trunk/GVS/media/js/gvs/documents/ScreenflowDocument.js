@@ -63,8 +63,6 @@ var ScreenflowDocument = Class.create(PaletteDocument,
                 'tags': domainContext
             }
         });
-        //Screenflow properties
-        this._propertiesPane.fillTable(this._description);
 
         this._configureToolbar();
         
@@ -84,7 +82,9 @@ var ScreenflowDocument = Class.create(PaletteDocument,
                 'reachability',
                 this._findCheckCallback.bind(this)
         );
-        domainConceptSet.startRetrievingData();   
+        domainConceptSet.startRetrievingData();
+
+        this._setSelectedElement();
     },
 
 

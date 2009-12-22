@@ -27,7 +27,7 @@ var Table = Class.create( /** @lends Table.prototype */ {
          * @private @member 
          */
         this._titleNode = new Element ('div',{
-            'class': 'dijitAccordionTitle'
+            'class': 'dijitAccordionTitle '
         }).update(this._title);
         
         /** 
@@ -36,14 +36,15 @@ var Table = Class.create( /** @lends Table.prototype */ {
          * @private @member
          */      
         this._tableNode = new Element ('table',{
-            'class': 'properties_table'
+            'class': 'propertiesTable'
         });
 
-        var style = (region == "left") ? 'width: 50%': 'width: auto'
+        var style = (region == "left") ? 'width: 50%': 'width: auto';
         var container= new dijit.layout.ContentPane({
             'region': region,
             'splitter': true,
-            'style': style
+            'style': style,
+            'class': 'tableArea'
         });
         if (minSize) {
             container.attr('minSize', minSize);

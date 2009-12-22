@@ -73,8 +73,11 @@ var ComponentInstance = Class.create(DragSource,
      * @type Hash
      */
     getInfo: function() {
-        throw 'Abstract Method invocation. ' +
-            'ComponentInstance :: getInfo';    
+        var info = new Hash();
+        info.set('Title', this.getTitle());
+        info.set('Description', this._buildingBlockDescription.description['en-gb']);
+        info.set('Tags', this._buildingBlockDescription.domainContext.tags.join(", "));
+        return info;
     },
 
 

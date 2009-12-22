@@ -726,7 +726,6 @@ h4{
 }
 .form .action.unsatisfeable {
     border: 1px solid #B90000;
-    background-color
 }
 
 .form .action.satisfeable {
@@ -776,13 +775,16 @@ h4{
 /*********************
  * properties tables *	 
  *********************/
-.properties_table {
+.tableArea .dijitAccordionTitle {
+    cursor: auto;
+}
+.propertiesTable {
     width: 100%;
     border-collapse: separate;
     border-spacing: 0px;
     border-left: 1px solid #808080;
 }
-.properties_table td {
+.propertiesTable td {
     border-bottom: 1px solid #808080;
     padding: 3px;
     text-align: center;
@@ -791,7 +793,7 @@ h4{
     max-width:80px;
 }
 
-.properties_table td div {
+.propertiesTable td div {
     overflow: hidden;
     margin: 0px auto;
 }

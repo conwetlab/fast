@@ -19,6 +19,10 @@ var ScreenDescription = Class.create(BuildingBlockDescription,
     
     // ****************** PUBLIC METHODS ******************* //
 
+    /**
+     * to JSON object function
+     * @type Object
+     */
     toJSON: function() {
         var result = {
             "preconditions": this.getPreconditions(),
@@ -56,19 +60,43 @@ var ScreenDescription = Class.create(BuildingBlockDescription,
         return node;
     },
 
+    /**
+     * Implementing the TableModel interface
+     * @type Array
+     */
+    getInfo: function() {
+        var info = new Hash();
+        info.set('Title', this.label['en-gb']);
+        info.set('Tags', this.domainContext.tags.join(", "));
+        info.set('Version', this.version);
+        return info;
+    },
+
+    /**
+     * Adds a pre instance to the description
+     */
     addPre: function(/** PrePostInstance */ pre) {
         this._preconditions.set(pre.getId(),pre);
     },
 
+    /**
+     * Adds a post instance
+     */
     addPost: function(/** PrePostInstance */ post) {
         this._postconditions.set(post.getId(),post);
     },
 
+    /**
+     * Adds a building block (other than pre/post) to the description
+     */
     addBuildingBlock: function (/** ComponentInstance */ instance) {
         this._buildingblocks.set(instance.getId(),instance);
     },
 
-    addPipe: function(pipe) {
+    /**
+     * Adds a pipe
+     */
+    addPipe: function(/** Pipe */ pipe) {
         if (this._pipes.get(pipe.getId())) {
             // TODO: is this situation possible?
             this._pipes.unset(pipe.getId());
@@ -78,6 +106,10 @@ var ScreenDescription = Class.create(BuildingBlockDescription,
         }
     },
 
+    /**
+     * Get all the pipes of the screen
+     * @type Array
+     */
     getPipes: function() {
         var pipes = new Array();
         this._pipes.values().each(function(pipe) {
@@ -86,7 +118,10 @@ var ScreenDescription = Class.create(BuildingBlockDescription,
         return pipes;
     },
 
-
+    /**
+     * Get a list of preconditions in form of a JSON Object
+     * @type Array
+     */
     getPreconditions: function() {
         var list = new Array();
         this._preconditions.values().each(function(pre) {
@@ -95,6 +130,10 @@ var ScreenDescription = Class.create(BuildingBlockDescription,
         return list;
     },
 
+    /**
+     * Get a list of postconditions in form of a JSON Object
+     * @type Array
+     */
     getPostconditions: function() {
         var list = new Array();
         this._postconditions.values().each(function(post) {
@@ -103,10 +142,25 @@ var ScreenDescription = Class.create(BuildingBlockDescription,
         return list;
     },
 
+    /**
+     * Get a list of pre and post condition instances 
+     * @type Array
+     */
+    getConditionInstances: function() {
+        return this._preconditions.values().concat(this._postconditions.values());
+    },
+
+    /**
+     * Get a post by its string identifier
+     * @type PrePostInstance
+     */
     getPost: function(/** String */ id) {
         return this._postconditions.get(id);
     },  
 
+    /**
+     * Removes an instance from the screen description
+     */
     remove: function(/** ComponentInstance */ instance) {
         switch (instance.constructor) {
             case PrePostInstance:
@@ -122,6 +176,9 @@ var ScreenDescription = Class.create(BuildingBlockDescription,
         }
     },
 
+    /**
+     * Removes a pipe from the screen
+     */
     removePipe: function (/** Pipe */ pipe) {
         this._pipes.unset(pipe.getId());
     },

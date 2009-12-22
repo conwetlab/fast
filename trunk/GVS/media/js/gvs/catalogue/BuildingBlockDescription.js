@@ -35,6 +35,14 @@ var BuildingBlockDescription = Class.create(
         
         return Object.toJSON(result);
         
+    },
+
+    /**
+     * Implementing the TableModel interface
+     * @type String
+     */
+    getTitle: function() {
+        return this.label ? this.label['en-gb'] : this.name;
     }
 
     // **************** PRIVATE METHODS **************** //

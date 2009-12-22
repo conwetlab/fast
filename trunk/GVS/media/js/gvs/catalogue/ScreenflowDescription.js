@@ -83,13 +83,6 @@ var ScreenflowDescription = Class.create(BuildingBlockDescription,
         }       
     },
     
-    /**
-     * Implementing the TableModel interface
-     * @type String
-     */
-    getTitle: function() {
-        return this.label['en-gb'];    
-    },
     
     /**
      * Implementing the TableModel interface

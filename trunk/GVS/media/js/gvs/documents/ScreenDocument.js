@@ -112,6 +112,7 @@ var ScreenDocument = Class.create(PaletteDocument,
                 this._findCheckCallback.bind(this)
         );
         domainConceptSet.startRetrievingData();
+        this._setSelectedElement();
     },
 
 
@@ -279,8 +280,11 @@ var ScreenDocument = Class.create(PaletteDocument,
     _setSelectedElement: function ($super, element) {
         $super(element);
         this._toolbarElements.get('deleteElement').setEnabled(element!=null);
-        this._refreshReachability();
-        //this._updatePanes();
+        if (element) {
+            this._refreshReachability();
+        } else {
+            this._updatePanes();
+        }
     },
     
     /**
@@ -496,11 +500,11 @@ var ScreenDocument = Class.create(PaletteDocument,
     _updatePanes: function() {
 
         if (!this._selectedElement) {
-            var facts = this._getAllFacts();
-            //this._propertiesPane.fillTable(this._description);
+            this._propertiesPane.fillTable(this._description);
+            var facts = this._getAllFacts();     
             this._factPane.fillTable([], [], facts);
         } else {
-            //this._propertiesPane.fillTable(this._selectedElement);
+            this._propertiesPane.fillTable(this._selectedElement);
            
             if (this._selectedElement.constructor != PrePostInstance) {
                 var preReachability = this._inferenceEngine.getPreconditionReachability(
@@ -516,9 +520,7 @@ var ScreenDocument = Class.create(PaletteDocument,
                 //PrePostInstance
                 if (this._selectedElement.getType()) {
                     //Pre or post condition
-                    var factInfo = [this._selectedElement.getConditionTable(
-                        this._inferenceEngine.isReachable(this._selectedElement.getUri())
-                    )];
+                    var factInfo = [this._selectedElement.getConditionTable()];
                     this._factPane.fillTable([], [], factInfo);
                 }
             }    
@@ -532,8 +534,9 @@ var ScreenDocument = Class.create(PaletteDocument,
      */
     _getAllFacts: function() {
         var resultHash = new Hash();
-        this._canvasInstances.each(function(pair){
-            var instance = pair.value;
+        var instanceList = this._canvasInstances.values().
+                                concat(this._description.getConditionInstances());
+        instanceList.each(function(instance){
             if (instance.constructor != PrePostInstance) {
                 var preReachability = this._inferenceEngine.getPreconditionReachability(
                             instance.getUri());
@@ -554,9 +557,7 @@ var ScreenDocument = Class.create(PaletteDocument,
                 });
             } else {
                 //PrePostInstance
-                var factInfo = instance.getConditionTable(
-                    this._inferenceEngine.isReachable(instance.getUri())
-                );
+                var factInfo = instance.getConditionTable();
                 if (!resultHash.get(factInfo[2]/*The uri of the pre/post*/)) {
                     resultHash.set(factInfo[2], factInfo);
                 }
