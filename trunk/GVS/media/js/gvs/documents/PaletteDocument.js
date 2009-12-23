@@ -8,7 +8,7 @@ var PaletteDocument = Class.create(AbstractDocument, /** @lends PaletteDocument.
      * @param validBuildingBlocks
      *      Containing the different valid building blocks and their respective drop Zones
      */ 
-    initialize: function($super,
+    initialize: function ($super,
             /** String */ title, 
             /** Array */ buildingBlockSets,
             /** Array */ dropZones,
@@ -101,7 +101,7 @@ var PaletteDocument = Class.create(AbstractDocument, /** @lends PaletteDocument.
     
     /**
      * Select a screen in the screenflow document
-     * @param ComponentInstance
+     * @param element ComponentInstance
      *      Element to be selected for the
      *      Screenflow document.
      * @private
@@ -153,7 +153,7 @@ var PaletteDocument = Class.create(AbstractDocument, /** @lends PaletteDocument.
 
     /**
      * Delete a screen.
-     * @param ComponentInstance
+     * @param instance ComponentInstance
      *      Instance to be deleted from the
      *      Screenflow document.
      * @abstract

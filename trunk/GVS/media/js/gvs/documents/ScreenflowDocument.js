@@ -327,6 +327,8 @@ var ScreenflowDocument = Class.create(PaletteDocument,
             region:"bottom",
             design:"horizontal",
             style:"height: 180px;",
+            minSize:"100",
+            maxSize:"220",
             persist:"false",
             splitter:true
             });
