@@ -22,22 +22,43 @@ var Pipe = Class.create(
         this._id = id;
     },
 
+    /**
+     * Returns the WireIt wire object
+     * @type WireIt.Wire
+     */
     getWire: function() {
         return this._wire;
     },
 
+    /**
+     * Returns the pipe id
+     * @type String
+     */
     getId: function() {
         return this._id;
     },
 
+    /**
+     * Returns the source terminal of the pipe
+     * @type Terminal
+     */
     getSource: function() {
         return this._wire.terminal1;
     },
 
+
+    /**
+     * Returns the destination terminal of the pipe
+     * @type Terminal
+     */
     getDestination: function() {
         return this._wire.terminal2;
     },
 
+    /**
+     * Gets the JSON object representing the pipe for screen definition
+     * @type Object
+     */
     getJSONforScreen: function() {
         return {'from': {
                     'buildingblock': this.getSource().getBuildingblockId(),
@@ -51,6 +72,10 @@ var Pipe = Class.create(
             };
     },
 
+    /**
+     * Gets the JSON object representing the pipe for catalogue check
+     * @type Object
+     */
     getJSONforCheck: function() {
         return {
                 'from': {
@@ -65,6 +90,9 @@ var Pipe = Class.create(
             };
     },
 
+    /**
+     * Sets the reachability coloring information of the pipe
+     */
     setReachability: function(/** Boolean */ satisfied) {
         var options = this._wire.options;
         if (satisfied) {
@@ -81,16 +109,29 @@ var Pipe = Class.create(
         this._wire.setOptions(options);
     },
 
+    /**
+     * Is the pipe semantically correct
+     * @type Boolean
+     */
     isValid: function() {
         // TODO: check if there are more conditions
         return this.getSource().getBuildingblockId() != this.getDestination().getBuildingblockId();
     },
 
+
+    /**
+     * Destroys the wire
+     */
     destroy: function() {
         this.getSource().removeWire(this._wire);
         this.getDestination().removeWire(this._wire);
     },
 
+
+    /**
+     * Sets the pipe visible or hidden. To be called whenever a document
+     * is selected or deselected
+     */
     setVisible: function(/** Boolean */ visible) {
         if (visible) {
             this.getSource().updatePosition();

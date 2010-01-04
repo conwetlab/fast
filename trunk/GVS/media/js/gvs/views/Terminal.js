@@ -45,7 +45,7 @@ var Terminal = function(/** DOMNode */ conditionNode, /** Object */ options,
             'color': '#EAEAEA',
             'bordercolor': '#808080'
     }
-    extendedOptions = {};
+    var extendedOptions = {};
     extendedOptions = Object.extend(extendedOptions, options);
     extendedOptions.wireConfig = Object.extend(wireConfig, options.wireConfig);
          
@@ -162,7 +162,10 @@ Object.extend(Terminal.prototype, /** @lends Terminal.prototype */ {
     },
     
      // **************** PRIVATE METHODS **************** //
+
+
      /**
+      * Recalculates the position of the terminal
       * @private
       */
     _recalculatePosition: function() {
@@ -173,13 +176,19 @@ Object.extend(Terminal.prototype, /** @lends Terminal.prototype */ {
         }     
         this._terminalNode.setStyle(style);
     },
+
+
     /**
+     * Handler called whenever a new wire is added to the terminal
      * @private
      */
     _wireAddHandler: function(/** Event */ event, /** Array */ params) {
         this.handler(event, params, true);    
     },
+
+
     /**
+     * Handler called whenever a wire is removed from the terminal
      * @private
      */
     _wireRemoveHandler: function(/** Event */ event, /** Array */ params) {
