@@ -42,9 +42,27 @@ var PipeFactory = Class.create(
 
     /**
      * Returns a pipe instance from its JSON data
+     * @type Pipe
      */
     getPipeFromJSON: function(/** Object */ data) {
         return this._pipes.get(this._getPipeIdFromJSON(data));
+    },
+
+    /**
+     * Returns the list of pipes in which an instance is involved
+     * (as the source or the destination)
+     * @type Array
+     */
+    getPipes: function(/** ComponentInstance */ instance) {
+        var result = new Array();
+        this._pipes.values().each(function(pipe) {
+            var found = pipe.getSource().getBuildingblockId() == instance.getId();
+            found = found || pipe.getDestination().getBuildingblockId() == instance.getId();
+            if (found) {
+                result.push(pipe);
+            }
+        });
+        return result;
     },
 
     /**

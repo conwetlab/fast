@@ -161,7 +161,7 @@ var ScreenDescription = Class.create(BuildingBlockDescription,
     /**
      * Removes an instance from the screen description
      */
-    remove: function(/** ComponentInstance */ instance) {
+    remove: function(/** Object */ instance) {
         switch (instance.constructor) {
             case PrePostInstance:
                 if (this._preconditions.get(instance.getId())) {
@@ -170,17 +170,12 @@ var ScreenDescription = Class.create(BuildingBlockDescription,
                     this._postconditions.unset(instance.getId());
                 }
                 break;
-
+            case Pipe:
+                this._pipes.unset(instance.getId());
+                break;
             default:
                 this._buildingblocks.unset(instance.getId());
         }
-    },
-
-    /**
-     * Removes a pipe from the screen
-     */
-    removePipe: function (/** Pipe */ pipe) {
-        this._pipes.unset(pipe.getId());
     },
 
     // ******************** PRIVATE METHODS ************** //

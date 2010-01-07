@@ -222,7 +222,7 @@ var ScreenDocument = Class.create(PaletteDocument,
                     this._description.addPipe(pipe);
                 } else {
                     this._pipeFactory.removePipe(pipe);
-                    this._description.removePipe(pipe);
+                    this._description.remove(pipe);
                 }
                 this._refreshReachability();
             }
@@ -254,14 +254,15 @@ var ScreenDocument = Class.create(PaletteDocument,
         
         this._canvasInstances.unset(instance.getUri());
         
-        switch(instance.constructor) {
-            case FormInstance:
+        if (instance.constructor == FormInstance) {
                 this._formInstance = null;
-
-            default:
-                this._description.remove(instance);
-                console.log("Instance type not being handled");
         }
+        this._description.remove(instance);
+
+        this._pipeFactory.getPipes(instance).each(function(pipe){
+            this._pipeFactory.removePipe(pipe);
+            this._description.remove(pipe);
+        }.bind(this));
         
         this._refreshReachability();
         this._setSelectedElement();
@@ -505,6 +506,9 @@ var ScreenDocument = Class.create(PaletteDocument,
             this._factPane.fillTable([], [], facts);
         } else {
             this._propertiesPane.fillTable(this._selectedElement);
+
+            // TODO: add trigger mappings...
+            this._propertiesPane.addSection(['Action', 'Mapping'], new Hash());
            
             if (this._selectedElement.constructor != PrePostInstance) {
                 var preReachability = this._inferenceEngine.getPreconditionReachability(

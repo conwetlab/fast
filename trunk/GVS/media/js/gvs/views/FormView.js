@@ -72,11 +72,6 @@ var FormView = Class.create(BuildingBlockView,
         var triggerArea = new Element("div", {
             "class": "triggerArea"
         });
-        /*description.triggers.each (function(trigger) {
-            var triggerView = new TriggerView(trigger);
-            this._triggerIcons.set(trigger, triggerView);
-            triggerArea.appendChild(triggerView.getNode());    
-        }.bind(this));*/
         triggerPostContainer.appendChild(triggerArea);
         
         var posts;

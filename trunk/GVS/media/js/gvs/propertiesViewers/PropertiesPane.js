@@ -26,6 +26,7 @@ var PropertiesPane = Class.create( /** @lends PropertiesPane.prototype */ {
      *          Something implementing TableModel interface
      *              * String getTitle()
      *              * Array getInfo()
+     *              * Array getTriggerMapping(): Optional method
      */
     fillTable: function (/** Object */ element) {
         this._clearElement();
@@ -34,6 +35,15 @@ var PropertiesPane = Class.create( /** @lends PropertiesPane.prototype */ {
        
         this._propertiesTable.insertDataValues(element.getInfo());
         this._propertiesTable.setTitle((title ? 'Properties of '  + title : 'Properties'));
+    },
+
+    /**
+     * This function add a new section to the table, without removing the actual
+     * data. A section is a title row, and values
+     */
+    addSection: function (/** Array */ title, /** Hash */ values) {
+        this._propertiesTable.insertFieldTitles(title);
+        this._propertiesTable.insertDataValues(values);
     },
 
     // **************** PRIVATE METHODS **************** //
