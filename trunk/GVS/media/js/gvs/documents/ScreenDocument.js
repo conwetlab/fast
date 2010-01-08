@@ -606,17 +606,18 @@ var ScreenDocument = Class.create(PaletteDocument,
      * @type DOMNode
      */
     _buildTriggerList: function(/** String */ actionName, /** Array */ triggerList) {     
-        var result = "";
+        
+        var result = new Element('div');
+        var content = "";
         if (triggerList) {
             triggerList.each(function(trigger){
-                result += trigger.getTriggerName() + ",";
+                content += trigger.getTriggerName() + ",";
             });
-            result = result.slice(0, -1);
-        } else {
-            result += "...";
+            content = content.slice(0, -1);
         }
+        result.update(content);
         var triggerDialog = new TriggerDialog(this._selectedElement, actionName, triggerList,
-                                            this._canvasInstances, this._onTriggerChange.bind(this));
+                                            this._canvasInstances.values(), this._onTriggerChange.bind(this));
         result.appendChild(triggerDialog.getButtonNode());
         return result;
      },

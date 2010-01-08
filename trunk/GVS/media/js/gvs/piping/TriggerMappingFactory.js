@@ -85,17 +85,15 @@ var TriggerMappingFactory = Class.create(
      */
     _getTriggerFromPipe: function(/** Pipe */ pipe) {
         if (pipe.getSource().getInstance().getBuildingBlockDescription().triggers.length == 1) {
-            var triggerData = {
-                'from': {
-                    'buildingblock': pipe.getSource().getBuildingBlockId(),
-                    'name': pipe.getSource().getInstance().getBuildingBlockDescription().triggers[0]
-                },
-                'to': {
-                    'buildingblock': pipe.getDestination().getBuildingBlockId(),
+            var from = {
+                'instance': pipe.getSource().getInstance(),
+                'name':  pipe.getSource().getInstance().getBuildingBlockDescription().triggers[0]
+            };
+            var to = {
+                    'instance': pipe.getDestination().getInstance(),
                     'action': pipe.getDestination().getActionId()
-                }
-            }
-            return new Trigger(triggerData);
+            };
+            return new Trigger(from, to);
         } else {
             return null;
         }

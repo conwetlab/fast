@@ -924,6 +924,23 @@ label {
     font-weight: bold;
     color: red;
 }
+
+.triggerDialog h2 {
+    text-align: center;
+}
+.triggerDialog select {
+    height: 150px;
+    margin: 2px 5px;
+    overflow: auto;
+    width: 225px;
+    display: block;
+    float: left;
+}
+.triggerDialog .addRemoveZone {
+    float: left;
+    padding: 50px 2px;
+    width: 30px;
+}
 /***************
  * About       *
  ***************/

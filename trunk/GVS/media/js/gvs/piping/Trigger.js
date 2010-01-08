@@ -5,19 +5,28 @@ var Trigger = Class.create(
      * Triggers representation
      * @constructs
      */ 
-    initialize: function (/** Object */ representation) {
+    initialize: function (/** Object */ from, /** Object */ to) {
 
         /**
-         * Trigger representation
+         * Trigger source
          * @private
          * @type Object
          */
-        this._representation = representation;
+        this._from = from;
+
+        /**
+         * Trigger destination
+         * @prvate
+         * @type Object
+         */
+        this._to = to;
 
         /**
          * Trigger id
+         * @private
+         * @type String
          */
-        this._id = this._createId(representation);
+        this._id = this._createId(from, to);
     },
 
     /**
@@ -29,26 +38,39 @@ var Trigger = Class.create(
     },
 
     getDestinationId: function() {
-        return this._representation.to.buildingblock;
+        return this._to.instance.getId();
     },
 
     getDestinationAction: function() {
-        return this._representation.to.action;
+        return this._to.action;
     },
 
     getTriggerName: function() {
-        return this._representation.from.name;
+        return this._from.name;
     },
 
     getSourceId: function() {
-        return this._representation.from.buildingblock;
+        return this._from.instance.getId();
+    },
+
+    getSourceInstance: function() {
+        return this._from.instance;
     },
 
     /**
      * Returns the JSON object representing the Trigger
      */
     toJSON: function() {
-        return this._representation;
+        return {
+            'from': {
+                'buildingblock': this.getSourceId(),
+                'name': this.getTriggerName()
+            },
+            'to': {
+                'buildingblock': this.getDestinationId(),
+                'action': this.getDestinationAction()
+            }
+        };
     },
     
     // **************** PRIVATE METHODS **************** //
@@ -58,9 +80,9 @@ var Trigger = Class.create(
      * @private
      * @type String
      */
-    _createId: function (/** Object */ representation) {
-        return representation.from.buildingblock + representation.from.name +
-            representation.to.buildingblock + representation.to.action;
+    _createId: function (/** Object */ from, /** Object */ to) {
+        return from.instance.getId() + from.name +
+            to.instance.getId() + to.action;
     }
 
 });
