@@ -65,6 +65,13 @@ var ScreenDocument = Class.create(PaletteDocument,
          * @private
          */
         this._pipeFactory = new PipeFactory();
+
+        /**
+         * Trigger mapping factory
+         * @type TriggerMappingFactory
+         * @private
+         */
+        this._triggerMappingFactory = new TriggerMappingFactory();
               
         // Screen Definition
         
@@ -203,9 +210,6 @@ var ScreenDocument = Class.create(PaletteDocument,
         instance.setEventListener(this);
         instance.enableDragNDrop(area,[area]);
         instance.getView().addGhost();
-        
-        
-
         return true;
     },
     
@@ -218,11 +222,20 @@ var ScreenDocument = Class.create(PaletteDocument,
         if (wire.terminal1.parentEl && wire.terminal2.parentEl) {
             var pipe = this._pipeFactory.getPipe(wire);
             if (pipe) {
+                var trigger;
                 if (addedPipe) {
                     this._description.addPipe(pipe);
+                    trigger = this._triggerMappingFactory.createTrigger(pipe);
+                    if (trigger) {
+                        this._description.addTrigger(trigger);
+                    }
                 } else {
                     this._pipeFactory.removePipe(pipe);
                     this._description.remove(pipe);
+                    trigger = this._triggerMappingFactory.removeTrigger(pipe);
+                    if (trigger) {
+                        this._description.remove(trigger);
+                    }
                 }
                 this._refreshReachability();
             }
@@ -507,8 +520,8 @@ var ScreenDocument = Class.create(PaletteDocument,
         } else {
             this._propertiesPane.fillTable(this._selectedElement);
 
-            // TODO: add trigger mappings...
-            this._propertiesPane.addSection(['Action', 'Mapping'], new Hash());
+            var instanceActions = this._getInstanceActions();
+            this._propertiesPane.addSection(['Action', 'Mapping'], instanceActions);
            
             if (this._selectedElement.constructor != PrePostInstance) {
                 var preReachability = this._inferenceEngine.getPreconditionReachability(
@@ -569,6 +582,59 @@ var ScreenDocument = Class.create(PaletteDocument,
         }.bind(this));
         return resultHash.values();
     },
+
+    /**
+     * This function returns a hash containing all the actions of the
+     * selected element and its triggers, if any
+     * @private
+     * @type Hash
+     */
+    _getInstanceActions: function() {
+        var triggers = this._triggerMappingFactory.getTriggerList(this._selectedElement);
+        var result = new Hash();
+        var actions = this._selectedElement.getBuildingBlockDescription().actions;
+        actions.each(function(action) {
+            result.set(action.name, this._buildTriggerList(action.name, triggers.get(action.name)));
+        }.bind(this));
+        return result;
+    },
+
+    /**
+     * This function builds a HTML chunk with the list of triggers of an action and
+     * the button to change the trigger mappings
+     * @private
+     * @type DOMNode
+     */
+    _buildTriggerList: function(/** String */ actionName, /** Array */ triggerList) {     
+        var result = "";
+        if (triggerList) {
+            triggerList.each(function(trigger){
+                result += trigger.getTriggerName() + ",";
+            });
+            result = result.slice(0, -1);
+        } else {
+            result += "...";
+        }
+        var triggerDialog = new TriggerDialog(this._selectedElement, actionName, triggerList,
+                                            this._canvasInstances, this._onTriggerChange.bind(this));
+        result.appendChild(triggerDialog.getButtonNode());
+        return result;
+     },
+
+     /**
+      * Called whenever a trigger dialog finishes its job
+      * @private
+      */
+     _onTriggerChange: function(/** Array */ triggersAdded, /** Array */ triggersRemoved) {
+        triggersAdded.each(function(trigger) {
+            this._triggerMappingFactory.createTrigger(trigger);
+        }.bind(this));
+
+        triggersRemoved.each(function(trigger){
+            this._triggerMappingFactory.removeTrigger(trigger);
+        }.bind(this));
+        this._updatePanes();
+     },
     
     /**
      * onClick handler

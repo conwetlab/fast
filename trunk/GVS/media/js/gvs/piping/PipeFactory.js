@@ -56,8 +56,8 @@ var PipeFactory = Class.create(
     getPipes: function(/** ComponentInstance */ instance) {
         var result = new Array();
         this._pipes.values().each(function(pipe) {
-            var found = pipe.getSource().getBuildingblockId() == instance.getId();
-            found = found || pipe.getDestination().getBuildingblockId() == instance.getId();
+            var found = pipe.getSource().getBuildingBlockId() == instance.getId();
+            found = found || pipe.getDestination().getBuildingBlockId() == instance.getId();
             if (found) {
                 result.push(pipe);
             }
@@ -91,8 +91,8 @@ var PipeFactory = Class.create(
      * @type String
      */
     _getPipeId: function(/** Terminal */ source, /** Terminal */ destination) {
-        return source.getBuildingblockUri() + source.getConditionId() +
-            destination.getBuildingblockUri() + destination.getActionId() +
+        return source.getBuildingBlockUri() + source.getConditionId() +
+            destination.getBuildingBlockUri() + destination.getActionId() +
             destination.getConditionId();
     },
 

@@ -254,7 +254,7 @@ var PrePostInstance = Class.create(ComponentInstance,
             }   
         }
         
-        this._terminal = new Terminal(this._view.getNode(), options, null , null,
+        this._terminal = new Terminal(this._view.getNode(), options, this,
                                         this.getId());
         if (this._type == 'pre') {
             this._terminal.onWireHandler(handler);

@@ -12,7 +12,7 @@ var ScreenDescription = Class.create(BuildingBlockDescription,
         // Components of the screen when built inside FAST
         this._preconditions = new Hash();
         this._postconditions = new Hash();
-        this._buildingblocks = new Hash();
+        this._buildingBlocks = new Hash();
         this._pipes = new Hash();
         this._triggers = new Hash();
     },
@@ -30,7 +30,7 @@ var ScreenDescription = Class.create(BuildingBlockDescription,
             "definition": {
                 "buildingblocks": this._getScreenBuildingBlocks(),
                 "pipes": this._getScreenPipes(),
-                "triggers": this.getTriggers()
+                "triggers": this._getTriggers()
             }
         };
         // TODO: add basic attributes
@@ -90,7 +90,7 @@ var ScreenDescription = Class.create(BuildingBlockDescription,
      * Adds a building block (other than pre/post) to the description
      */
     addBuildingBlock: function (/** ComponentInstance */ instance) {
-        this._buildingblocks.set(instance.getId(),instance);
+        this._buildingBlocks.set(instance.getId(),instance);
     },
 
     /**
@@ -103,6 +103,15 @@ var ScreenDescription = Class.create(BuildingBlockDescription,
             pipe.destroy();
         } else {
             this._pipes.set(pipe.getId(), pipe);
+        }
+    },
+
+    addTrigger: function(/** Trigger */ trigger) {
+        if (this._triggers.get(trigger.getId())) {
+            // TODO: is this situation possible?
+            this._triggers.unset(trigger.getId());
+        } else {
+            this._triggers.set(trigger.getId(), trigger);
         }
     },
 
@@ -173,8 +182,11 @@ var ScreenDescription = Class.create(BuildingBlockDescription,
             case Pipe:
                 this._pipes.unset(instance.getId());
                 break;
+            case Trigger:
+                this._triggers.unset(instance.getId());
+                break;
             default:
-                this._buildingblocks.unset(instance.getId());
+                this._buildingBlocks.unset(instance.getId());
         }
     },
 
@@ -185,14 +197,15 @@ var ScreenDescription = Class.create(BuildingBlockDescription,
      * @private
      * @type Array
      */
-     _getScreenBuildingblocks: function() {
-        var buildingblocks = new Array();
-        this._buildingblocks.values().each(function(block) {
-            buildingblocks.push({
+     _getScreenBuildingBlocks: function() {
+        var buildingBlocks = new Array();
+        this._buildingBlocks.values().each(function(block) {
+            buildingBlocks.push({
                 'id': block.getId(),
                 'uri': block.getUri()
             });
         });
+        return buildingBlocks;
     },
 
     /**
@@ -201,11 +214,24 @@ var ScreenDescription = Class.create(BuildingBlockDescription,
      * @type Array
      */
     _getScreenPipes: function() {
-        var pipes;
+        var pipes = new Array();
         this._pipes.values().each(function(pipe) {
             pipes.push(pipe.getJSONForScreen());
         });
         return pipes;
+    },
+
+    /**
+     * Get the trigger list for screen composition
+     * @private
+     * @type Array
+     */
+    _getTriggers: function() {
+        var triggers = new Array();
+        this._triggers.values().each(function(trigger) {
+            triggers.push(trigger.toJSON());
+        });
+        return triggers;
     }
 
 });

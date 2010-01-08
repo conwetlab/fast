@@ -11,7 +11,7 @@
  * @extends WireIt.Terminal
  */
 var Terminal = function(/** DOMNode */ conditionNode, /** Object */ options, 
-                        /** String */ resourceUri, /** String */ resourceId,
+                        /** ComponentInstance */ instance,
                         /** String */ conditionId, /** String(optional) */ action) {
     
     /**
@@ -51,21 +51,12 @@ var Terminal = function(/** DOMNode */ conditionNode, /** Object */ options,
          
     WireIt.Terminal.call(this, this._terminalNode, extendedOptions);
 
-
     /**
-     * The uri of the resource
+     * Instance in where the terminal is
+     * @type ComponentInstance
      * @private
-     * @type String
      */
-    this._resourceUri = resourceUri;
-
-    /**
-     * This is the id of the resource (operator, service, form)
-     * that contains the terminal
-     * @private
-     * @type String
-     */
-    this._resourceId = resourceId;
+    this._instance = instance;
     
     /**
      * This is the id of the condition inside the
@@ -95,16 +86,16 @@ Object.extend(Terminal.prototype, /** @lends Terminal.prototype */ {
      * Returns the resourceUri
      * @type String
      */
-    getBuildingblockUri: function() {
-        return this._resourceUri;
+    getBuildingBlockUri: function() {
+        return this._instance.getUri();
     },
     
     /**
      * Returns the resourceId
      * @type String
      */
-    getBuildingblockId: function() {
-        return this._resourceId;
+    getBuildingBlockId: function() {
+        return this._instance.getId();
     },
 
     /**
@@ -121,6 +112,14 @@ Object.extend(Terminal.prototype, /** @lends Terminal.prototype */ {
      */
     getActionId: function() {
         return this._action;
+    },
+
+    /**
+     * Returns the instance
+     * @type ComponentInstance
+     */
+    getInstance: function() {
+        return this._instance;
     },
     
     /**

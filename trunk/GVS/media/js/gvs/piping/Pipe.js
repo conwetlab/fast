@@ -61,11 +61,11 @@ var Pipe = Class.create(
      */
     getJSONforScreen: function() {
         return {'from': {
-                    'buildingblock': this.getSource().getBuildingblockId(),
+                    'buildingblock': this.getSource().getBuildingBlockId(),
                     'condition': this.getSource().getConditionId()
                 },
                 'to': {
-                    'buildingblock': this.getDestination().getBuildingblockId(),
+                    'buildingblock': this.getDestination().getBuildingBlockId(),
                     'action': this.getDestination().getActionId(),
                     'condition': this.getDestination().getConditionId()
                 }
@@ -79,11 +79,11 @@ var Pipe = Class.create(
     getJSONforCheck: function() {
         return {
                 'from': {
-                    'buildingblock': this.getSource().getBuildingblockUri(),
+                    'buildingblock': this.getSource().getBuildingBlockUri(),
                     'condition': this.getSource().getConditionId()
                 },
                 'to': {
-                    'buildingblock': this.getDestination().getBuildingblockUri(),
+                    'buildingblock': this.getDestination().getBuildingBlockUri(),
                     'action': this.getDestination().getActionId(),
                     'condition': this.getDestination().getConditionId()
                 }
@@ -115,7 +115,7 @@ var Pipe = Class.create(
      */
     isValid: function() {
         // TODO: check if there are more conditions
-        return this.getSource().getBuildingblockId() != this.getDestination().getBuildingblockId();
+        return this.getSource().getBuildingBlockId() != this.getDestination().getBuildingBlockId();
     },
 
 

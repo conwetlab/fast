@@ -71,8 +71,7 @@ var FormInstance = Class.create(ComponentInstance,
                     'left': 2
                 }     
                 var node = this._view.getConditionNode(pre.id, action.name);
-                var terminal = new Terminal(node, options, this.getUri(), 
-                                            this.getId(), pre.id, action.name);
+                var terminal = new Terminal(node, options, this, pre.id, action.name);
                 this._terminals.push(terminal);                
             }.bind(this));   
         }.bind(this));
@@ -96,8 +95,7 @@ var FormInstance = Class.create(ComponentInstance,
                     'left': 2
                 }
                 var node = this._view.getConditionNode(post.id);
-                var terminal = new Terminal(node, options, this.getUri(),
-                                            this.getId(), post.id);
+                var terminal = new Terminal(node, options, this, post.id);
                 terminal.onWireHandler(handler);
                 this._terminals.push(terminal);
             }.bind(this)); 
