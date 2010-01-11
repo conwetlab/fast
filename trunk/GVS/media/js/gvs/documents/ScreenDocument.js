@@ -222,20 +222,11 @@ var ScreenDocument = Class.create(PaletteDocument,
         if (wire.terminal1.parentEl && wire.terminal2.parentEl) {
             var pipe = this._pipeFactory.getPipe(wire);
             if (pipe) {
-                var trigger;
                 if (addedPipe) {
                     this._description.addPipe(pipe);
-                    trigger = this._triggerMappingFactory.createTrigger(pipe);
-                    if (trigger) {
-                        this._description.addTrigger(trigger);
-                    }
                 } else {
                     this._pipeFactory.removePipe(pipe);
                     this._description.remove(pipe);
-                    trigger = this._triggerMappingFactory.removeTrigger(pipe);
-                    if (trigger) {
-                        this._description.remove(trigger);
-                    }
                 }
                 this._refreshReachability();
             }
@@ -521,7 +512,7 @@ var ScreenDocument = Class.create(PaletteDocument,
             this._propertiesPane.fillTable(this._selectedElement);
 
             var instanceActions = this._getInstanceActions();
-            this._propertiesPane.addSection(['Action', 'Mapping'], instanceActions);
+            this._propertiesPane.addSection(['Action', 'Triggers'], instanceActions);
            
             if (this._selectedElement.constructor != PrePostInstance) {
                 var preReachability = this._inferenceEngine.getPreconditionReachability(
@@ -614,6 +605,10 @@ var ScreenDocument = Class.create(PaletteDocument,
                 content += trigger.getTriggerName() + ",";
             });
             content = content.slice(0, -1);
+        } else {
+            content = new Element('span', {
+                'class': 'triggerInfo'
+            }).update("No triggers for this action");
         }
         result.update(content);
         var triggerDialog = new TriggerDialog(this._selectedElement, actionName, triggerList,

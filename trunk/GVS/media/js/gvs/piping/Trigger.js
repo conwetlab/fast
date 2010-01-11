@@ -87,4 +87,8 @@ var Trigger = Class.create(
 
 });
 
+// Class attributes
+Trigger.SCREEN_ID = "screen";
+Trigger.SCREEN_ONLOAD = "_onload";
+
 // vim:ts=4:sw=4:et:

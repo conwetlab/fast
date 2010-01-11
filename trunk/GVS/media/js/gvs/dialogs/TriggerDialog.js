@@ -83,7 +83,9 @@ var TriggerDialog = Class.create(ConfirmDialog /** @lends TriggerDialog.prototyp
      * @type DOMNode
      */
     getButtonNode: function() {
-        return this._button.domNode;
+        return new Element('div', {
+            'class': 'triggerButton'
+        }).update(this._button.domNode);
     },
 
     // **************** PRIVATE METHODS **************** //
@@ -96,6 +98,8 @@ var TriggerDialog = Class.create(ConfirmDialog /** @lends TriggerDialog.prototyp
      * @override
      */
     _initDialogInterface: function () {
+
+
         var content = new Element('div', {
             'class': 'triggerDialog'
         });
@@ -106,12 +110,16 @@ var TriggerDialog = Class.create(ConfirmDialog /** @lends TriggerDialog.prototyp
         this._selectedTriggerListNode = new Element('select', {
            'multiple': 'multiple'
         });
+        var onLoadFound = false;
         if (this._initialTriggerList) {
              this._initialTriggerList.each(function(trigger) {
                 var option = new Element('option', {
                     'value': trigger.getSourceId() + trigger.getTriggerName()
                 }).update(trigger.getSourceInstance().getTitle() + ": " + trigger.getTriggerName());
                 this._selectedTriggerListNode.appendChild(option);
+                if (trigger.getSourceId() == Trigger.SCREEN_ID) {
+                    onLoadFound = true;
+                }
             }.bind(this));
         }
        
@@ -143,15 +151,28 @@ var TriggerDialog = Class.create(ConfirmDialog /** @lends TriggerDialog.prototyp
         this._unselectedTriggerListNode = new Element('select', {
            'multiple': 'multiple'
         });
-
-        this._canvasInstances.each(function(instance){
-            instance.getBuildingBlockDescription().triggers.each(function(trigger){
+        if (!onLoadFound) {
             var option = new Element('option', {
-                'value': instance.getId() + trigger
-            }).update(instance.getTitle() + ": " + trigger);
+                'value': Trigger.SCREEN_ID + Trigger.SCREEN_ONLOAD
+            }).update("Screen: onLoad");
             this._unselectedTriggerListNode.appendChild(option);
+        }
+        this._canvasInstances.each(function(instance){
+            instance.getBuildingBlockDescription().triggers.each(function(trigger) {
+                var triggerFound = false;
+                if (this._initialTriggerList) {
+                        triggerFound = this._initialTriggerList.detect(function(element) {
+                        return (instance.getId() + trigger) == (element.getSourceId() +
+                                                                element.getTriggerName());
+                    });
+                }
+                if (!triggerFound) {
+                    var option = new Element('option', {
+                        'value': instance.getId() + trigger
+                    }).update(instance.getTitle() + ": " + trigger);
+                    this._unselectedTriggerListNode.appendChild(option);
+                }
             }.bind(this));
-
         }.bind(this));
 
         content.appendChild(this._unselectedTriggerListNode);

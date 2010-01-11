@@ -20,19 +20,8 @@ var TriggerMappingFactory = Class.create(
      * Creates a new trigger mapping coming from a created pipe.
      * @type Trigger
      */
-    createTrigger: function (/** Pipe | Object */ element) {
-        var trigger;
-        if (element.constructor == Pipe) {
-            trigger = this._getTriggerFromPipe(element);
-        } else {
-            // TODO
-        }
-        if (trigger) {
-            this._triggers.set(trigger.getId(), trigger);
-            return trigger;
-        } else {
-            return null;
-        }
+    createTrigger: function (/** Object */ element) {
+        
     },
 
     /**
@@ -40,20 +29,9 @@ var TriggerMappingFactory = Class.create(
      * parameter
      * @type Trigger
      */
-    removeTrigger: function(/** Pipe | Trigger */ element) {
-        var trigger;
-        if (element.constructor == Pipe) {
-            trigger = this._getTriggerFromPipe(element);
-        } else {
-            trigger = element;
-        }
-        if (trigger) {
-            this._triggers.unset(trigger.getId());
-            return trigger;
-        } else {
-            return null;
-        }
-        
+    removeTrigger: function(/** Pipe | Trigger */ trigger) {
+        this._triggers.unset(trigger.getId());
+        return trigger;
     },
 
     /**
@@ -74,28 +52,7 @@ var TriggerMappingFactory = Class.create(
            }
         });
         return result;
-    },
+    }
     
     // **************** PRIVATE METHODS **************** //
-    /**
-     * This function returns a trigger object built automatically from a Pipe,
-     * if it is possible (the source only have one trigger element)
-     * @private
-     * @type Trigger
-     */
-    _getTriggerFromPipe: function(/** Pipe */ pipe) {
-        if (pipe.getSource().getInstance().getBuildingBlockDescription().triggers.length == 1) {
-            var from = {
-                'instance': pipe.getSource().getInstance(),
-                'name':  pipe.getSource().getInstance().getBuildingBlockDescription().triggers[0]
-            };
-            var to = {
-                    'instance': pipe.getDestination().getInstance(),
-                    'action': pipe.getDestination().getActionId()
-            };
-            return new Trigger(from, to);
-        } else {
-            return null;
-        }
-    }
 });

@@ -925,13 +925,30 @@ label {
     color: red;
 }
 
+.triggerInfo {
+    font-style: italic;
+    line-height: 25px;
+}
+
+.triggerButton {
+    float:right;
+}
+.triggerButton .dijitButtonNode {
+    padding: 0px;
+}
+
+.triggerDialog {
+    overflow: hidden;
+}
+
 .triggerDialog h2 {
     text-align: center;
 }
 .triggerDialog select {
     height: 150px;
     margin: 2px 5px;
-    overflow: auto;
+    overflow-x:scroll;
+    overflow: -moz-scrollbars-horizontal;
     width: 225px;
     display: block;
     float: left;
@@ -940,6 +957,12 @@ label {
     float: left;
     padding: 50px 2px;
     width: 30px;
+}
+.addRemoveZone .dijitButtonNode {
+    width: 22px;
+}
+.addRemoveZone .dijitButton {
+    margin: 2px 0;
 }
 /***************
  * About       *
