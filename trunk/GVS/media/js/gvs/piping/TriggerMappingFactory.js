@@ -21,7 +21,9 @@ var TriggerMappingFactory = Class.create(
      * @type Trigger
      */
     createTrigger: function (/** Object */ element) {
-        
+        var trigger = this._createFromJSON(element);
+        this._triggers.set(trigger.getId(), trigger);
+        return trigger;
     },
 
     /**
@@ -29,7 +31,8 @@ var TriggerMappingFactory = Class.create(
      * parameter
      * @type Trigger
      */
-    removeTrigger: function(/** Pipe | Trigger */ trigger) {
+    removeTrigger: function(/** Object */ element) {
+        var trigger = this._createFromJSON(element);
         this._triggers.unset(trigger.getId());
         return trigger;
     },
@@ -52,7 +55,14 @@ var TriggerMappingFactory = Class.create(
            }
         });
         return result;
-    }
+    },
     
     // **************** PRIVATE METHODS **************** //
+
+    /**
+     * @private
+     */
+    _createFromJSON: function(element) {
+        return new Trigger(element.from, element.to);
+    }
 });

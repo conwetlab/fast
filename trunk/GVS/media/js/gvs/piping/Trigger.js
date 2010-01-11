@@ -50,7 +50,13 @@ var Trigger = Class.create(
     },
 
     getSourceId: function() {
-        return this._from.instance.getId();
+      var id;
+        if (this._from.instance == Trigger.SCREEN_ID) {
+            id = this._from.instance;
+        } else {
+            id = this._from.instance.getId();
+        }
+        return id;
     },
 
     getSourceInstance: function() {
@@ -81,8 +87,14 @@ var Trigger = Class.create(
      * @type String
      */
     _createId: function (/** Object */ from, /** Object */ to) {
-        return from.instance.getId() + from.name +
-            to.instance.getId() + to.action;
+        var id;
+        if (from.instance == Trigger.SCREEN_ID) {
+            id = from.instance + from.name + to.instance.getId() + to.action;
+        } else {
+            id = from.instance.getId() + from.name +
+                to.instance.getId() + to.action;
+        }
+        return id;
     }
 
 });

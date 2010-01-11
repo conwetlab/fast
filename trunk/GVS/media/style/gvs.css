@@ -925,6 +925,10 @@ label {
     color: red;
 }
 
+/*******************
+ * Trigger Dialog  *
+ *******************/
+
 .triggerInfo {
     font-style: italic;
     line-height: 25px;
@@ -957,6 +961,15 @@ label {
     float: left;
     padding: 50px 2px;
     width: 30px;
+}
+.triggerDialog .subtitle {
+    overflow: hidden;
+    width: 78%;
+    margin: 5px auto;
+}
+.triggerDialog .subtitle div {
+    font-weight: bold;
+    font-size: 14px;
 }
 .addRemoveZone .dijitButtonNode {
     width: 22px;

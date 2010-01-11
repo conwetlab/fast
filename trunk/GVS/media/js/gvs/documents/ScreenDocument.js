@@ -611,7 +611,7 @@ var ScreenDocument = Class.create(PaletteDocument,
             }).update("No triggers for this action");
         }
         result.update(content);
-        var triggerDialog = new TriggerDialog(this._selectedElement, actionName, triggerList,
+        var triggerDialog = new TriggerDialog(actionName, triggerList,
                                             this._canvasInstances.values(), this._onTriggerChange.bind(this));
         result.appendChild(triggerDialog.getButtonNode());
         return result;
@@ -621,17 +621,64 @@ var ScreenDocument = Class.create(PaletteDocument,
       * Called whenever a trigger dialog finishes its job
       * @private
       */
-     _onTriggerChange: function(/** Array */ triggersAdded, /** Array */ triggersRemoved) {
-        triggersAdded.each(function(trigger) {
-            this._triggerMappingFactory.createTrigger(trigger);
+     _onTriggerChange: function(/** String*/ action, /** Array */ triggersAdded, /** Array */ triggersRemoved) {
+        triggersAdded.each(function(triggerInfo) {
+            var triggerSplittedInfo = triggerInfo.split("#");
+            var instance;
+            if (triggerSplittedInfo[0] == Trigger.SCREEN_ID) {
+                instance = triggerSplittedInfo[0];
+            } else {
+                instance = this._findInstance(triggerSplittedInfo[0]);
+            }
+            var triggerData = {
+                'from': {
+                    'instance': instance,
+                    'name': triggerSplittedInfo[1]
+                },
+                'to': {
+                    'instance': this._selectedElement,
+                    'action': action
+                }
+            }
+            var trigger = this._triggerMappingFactory.createTrigger(triggerData);
+            this._description.addTrigger(trigger);
         }.bind(this));
 
-        triggersRemoved.each(function(trigger){
-            this._triggerMappingFactory.removeTrigger(trigger);
+        triggersRemoved.each(function(triggerInfo) {
+            var triggerSplittedInfo = triggerInfo.split("#");
+            var instance;
+            if (triggerSplittedInfo[0] == Trigger.SCREEN_ID) {
+                instance = triggerSplittedInfo[0];
+            } else {
+                instance = this._findInstance(triggerSplittedInfo[0]);
+            }
+            var triggerData = {
+                'from': {
+                    'instance': instance,
+                    'name': triggerSplittedInfo[1]
+                },
+                'to': {
+                    'instance': this._selectedElement,
+                    'action': action
+                }
+            }
+            var trigger = this._triggerMappingFactory.removeTrigger(triggerData);
+            this._description.remove(trigger);
         }.bind(this));
         this._updatePanes();
      },
-    
+
+     /**
+      * Finds an instance inside the canvas, by its id
+      * @private
+      * @type ComponentInstance
+      */
+     _findInstance: function(/** String */ instanceId) {
+        return this._canvasInstances.values().detect(function(element) {
+                    return element.getId() == instanceId
+         });
+     },
+
     /**
      * onClick handler
      * @private

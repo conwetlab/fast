@@ -5,18 +5,11 @@ var TriggerDialog = Class.create(ConfirmDialog /** @lends TriggerDialog.prototyp
      * @constructs
      * @extends ConfirmDialog
      */ 
-    initialize: function($super, /** ComponentInstance */ element,
+    initialize: function($super,
                         /** String */ actionName, /** Array */ initialTriggerList,
                         /** Array */  canvasInstances, /** Function */ onChangeCallback) {
         
         $super("Assign triggers to " + actionName);
-
-        /**
-         * Element whose action the dialog is going to configure
-         * @type ComponentInstance
-         * @private
-         */
-        this._element = element;
 
         /**
          * Action name
@@ -73,6 +66,11 @@ var TriggerDialog = Class.create(ConfirmDialog /** @lends TriggerDialog.prototyp
          * @private
          */
         this._selectedTriggerListNode = null;
+
+
+        this._addTriggerButton = null;
+
+        this._removeTriggerButton = null;
     },
     
     // **************** PUBLIC METHODS **************** //
@@ -107,15 +105,39 @@ var TriggerDialog = Class.create(ConfirmDialog /** @lends TriggerDialog.prototyp
                                             this._actionName);
         content.appendChild(title);
 
+        var subtitleZone = new Element('div', {
+            'class': 'subtitle'
+        });
+
+        var selectedNode = new Element('div', {
+            'style': 'float:left'
+        }).update("Selected triggers");
+        subtitleZone.appendChild(selectedNode);
+
+        var unselectedNode = new Element('div', {
+            'style': 'float:right'
+        }).update("Unselected triggers");
+        subtitleZone.appendChild(unselectedNode);
+
+        content.appendChild(subtitleZone);
+
         this._selectedTriggerListNode = new Element('select', {
            'multiple': 'multiple'
         });
+        this._selectedTriggerListNode.observe('change', this._onListChange.bind(this));
         var onLoadFound = false;
         if (this._initialTriggerList) {
              this._initialTriggerList.each(function(trigger) {
+                var title;
+                if (trigger.getSourceInstance() == Trigger.SCREEN_ID) {
+                    title = "Screen";
+                } else {
+                    title = trigger.getSourceInstance().getTitle();
+                }
+
                 var option = new Element('option', {
-                    'value': trigger.getSourceId() + trigger.getTriggerName()
-                }).update(trigger.getSourceInstance().getTitle() + ": " + trigger.getTriggerName());
+                    'value': trigger.getSourceId() + "#" + trigger.getTriggerName()
+                }).update(title + ": " + trigger.getTriggerName());
                 this._selectedTriggerListNode.appendChild(option);
                 if (trigger.getSourceId() == Trigger.SCREEN_ID) {
                     onLoadFound = true;
@@ -125,35 +147,37 @@ var TriggerDialog = Class.create(ConfirmDialog /** @lends TriggerDialog.prototyp
        
         content.appendChild(this._selectedTriggerListNode);
 
-        var addRemoveButton = new Element('div', {
+        var addRemoveZone = new Element('div', {
             'class': 'addRemoveZone'
         });
-        var addTrigger = new dijit.form.Button({
+        this._addTriggerButton = new dijit.form.Button({
             'iconClass': 'plusIcon',
             'showLabel': true,
             'label': '+',
             'style': 'width:25px',
             'onClick': this._onAddTrigger.bind(this)
         });
-        addRemoveButton.appendChild(addTrigger.domNode);
+        addRemoveZone.appendChild(this._addTriggerButton.domNode);
 
-        var removeTrigger = new dijit.form.Button({
+        this._removeTriggerButton = new dijit.form.Button({
             'iconClass': 'minusIcon',
             'showLabel': true,
             'label': '-',
             'style': 'width:25px',
             'onClick': this._onRemoveTrigger.bind(this)
         });
-        addRemoveButton.appendChild(removeTrigger.domNode);
+        addRemoveZone.appendChild(this._removeTriggerButton.domNode);
 
-        content.appendChild(addRemoveButton);
+        content.appendChild(addRemoveZone);
 
         this._unselectedTriggerListNode = new Element('select', {
            'multiple': 'multiple'
         });
+        this._unselectedTriggerListNode.observe('change', this._onListChange.bind(this));
+
         if (!onLoadFound) {
             var option = new Element('option', {
-                'value': Trigger.SCREEN_ID + Trigger.SCREEN_ONLOAD
+                'value': Trigger.SCREEN_ID + "#" + Trigger.SCREEN_ONLOAD
             }).update("Screen: onLoad");
             this._unselectedTriggerListNode.appendChild(option);
         }
@@ -168,7 +192,7 @@ var TriggerDialog = Class.create(ConfirmDialog /** @lends TriggerDialog.prototyp
                 }
                 if (!triggerFound) {
                     var option = new Element('option', {
-                        'value': instance.getId() + trigger
+                        'value': instance.getId() + "#" + trigger
                     }).update(instance.getTitle() + ": " + trigger);
                     this._unselectedTriggerListNode.appendChild(option);
                 }
@@ -178,15 +202,36 @@ var TriggerDialog = Class.create(ConfirmDialog /** @lends TriggerDialog.prototyp
         content.appendChild(this._unselectedTriggerListNode);
         
         this._setContent(content);
+
+        this._onListChange();
     },
 
+    /**
+     * Called when the add trigger button is clicked
+     * @private
+     */
     _onAddTrigger: function() {
-        alert("added");
+        var selectionList = this._getSelectionItems(this._unselectedTriggerListNode);
+        selectionList.each(function(option) {
+            option.parentNode.removeChild(option);
+            this._selectedTriggerListNode.appendChild(option);
+        }.bind(this));
+        this._onListChange();
     },
 
+    /**
+     * Called when the remove trigger button is clicked
+     */
     _onRemoveTrigger: function() {
-        alert("removed");
+       var selectionList = this._getSelectionItems(this._selectedTriggerListNode);
+        selectionList.each(function(option) {
+            option.parentNode.removeChild(option);
+            this._unselectedTriggerListNode.appendChild(option);
+        }.bind(this));
+        this._onListChange();
     },
+
+
     /**
      * Overriding onOk handler
      * @private
@@ -194,8 +239,84 @@ var TriggerDialog = Class.create(ConfirmDialog /** @lends TriggerDialog.prototyp
      */
     _onOk: function($super){
     	$super();
-        // TODO: build what is added and removed
-        this._onChangeCallback(triggersAdded, triggersRemoved);
+        var triggersAdded = new Array();
+        $A(this._selectedTriggerListNode.options).each(function(option) {
+            if (this._initialTriggerList) {
+                var triggerFound = this._initialTriggerList.detect(function(element) {
+                    return (option.value) == (element.getSourceId() + '#' +
+                                                            element.getTriggerName());
+                });
+                if (!triggerFound) {
+                    triggersAdded.push(option.value);
+                }
+            } else {
+                triggersAdded.push(option.value);
+            }
+        }.bind(this));
+        var triggersRemoved = new Array();
+        $A(this._unselectedTriggerListNode.options).each(function(option) {
+            if (this._initialTriggerList) {
+                var triggerFound = this._initialTriggerList.detect(function(element) {
+                    return (option.value) == (element.getSourceId() + '#' +
+                                                            element.getTriggerName());
+                });
+                if (triggerFound) {
+                    triggersRemoved.push(option.value);
+                }
+            }
+        }.bind(this));
+        this._onChangeCallback(this._actionName, triggersAdded, triggersRemoved);
+    },
+
+    /**
+     * Called whenever a list is changed
+     * @private
+     */
+    _onListChange: function(/** Event */ event) {
+        var clickedList = null;
+        if (event) {
+            clickedList = event.element();
+        }
+        if (this._unselectedTriggerListNode == clickedList) {
+            this._unselectAll(this._selectedTriggerListNode);
+        }
+        if (this._selectedTriggerListNode == clickedList) {
+            this._unselectAll(this._unselectedTriggerListNode);
+        }
+        if (this._selectedTriggerListNode.selectedIndex == -1) {
+            this._removeTriggerButton.attr("disabled", true);
+        } else {
+            this._removeTriggerButton.attr("disabled", false);
+        }
+        if (this._unselectedTriggerListNode.selectedIndex == -1) {
+            this._addTriggerButton.attr("disabled", true);
+        } else {
+            this._addTriggerButton.attr("disabled", false);
+        }
+    },
+
+    /**
+     * Returns the list of selected elements from a selectionList
+     * @type Array
+     * @private
+     */
+    _getSelectionItems: function(/** DOMNode */ selectNode) {
+        var selectionList = new Array();
+        while (selectNode.selectedIndex != -1) {
+            selectionList.push(selectNode.
+                    options[selectNode.selectedIndex]);
+            selectNode.options[selectNode.selectedIndex].selected = false;
+        }
+        return selectionList;
+    },
+
+    /**
+     * Unselect all the elements from a list
+     */
+    _unselectAll: function(/** DOMNode */ selectNode) {
+        while (selectNode.selectedIndex != -1) {
+            selectNode.options[selectNode.selectedIndex].selected = false;
+        }
     }
 });
 
