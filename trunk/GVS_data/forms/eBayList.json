@@ -1,6 +1,6 @@
 {
     "name":"Ebay List Form",
-    "code":"http://localhost:8010/forms/eBayList.src.html",
+    "code":"http://demo.fast.morfeo-project.org/gvsdata/forms/eBayList.src.html",
     "creationDate":"2009-04-20T18:00:00+0200",
     "creator":"http://www.fabio.es/",
     "description":{
@@ -14,12 +14,12 @@
         "user":"admin"
     },
     "homepage":"http://www.deri.ie/eBayList",
-    "icon":"http://localhost:8010/images/catalogue/eBayList.png",
+    "icon":"http://demo.fast.morfeo-project.org/gvsdata/images/catalogue/eBayList.png",
     "label":{
         "en-gb":"Ebay List"
     },
     "rights":"http://creativecommons.org/",
-    "screenshot":"http://www.deri.ie/eBayList-screenshot.jpg",
+    "screenshot":"http://demo.fast.morfeo-project.org/gvsdata/images/screenshots/ebayComparative.png",
     "version":"1.0",
     "libraries":[
         

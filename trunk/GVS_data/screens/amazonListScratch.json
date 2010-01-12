@@ -14,14 +14,14 @@
         "user":"admin"
     },
     "homepage":"http://www.deri.ie/amazonList",
-    "icon":"http://localhost:8010/images/catalogue/amazonList.png",
+    "icon":"http://demo.fast.morfeo-project.org/gvsdata/images/catalogue/amazonList.png",
     "label":{
         "en-gb":"Product List"
     },
     "rights":"http://creativecommons.org/",
     "screenshot":"http://localhost:8010/images/screenshots/amazonProductList.png",
     "version":"1.0",
-    "code":"http://localhost:8010/screens/amazonList.scr.html",
+    "code":"http://demo.fast.morfeo-project.org/gvsdata/screens/amazonList.scr.html",
     "preconditions":[
         [
             {

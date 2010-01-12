@@ -16,12 +16,12 @@
         "user":"admin"
     },
     "homepage":"http://www.deri.ie/amazonPrice",
-    "icon":"http://localhost:8010/images/catalogue/amazonPrice.png",
+    "icon":"http://demo.fast.morfeo-project.org/gvsdata/images/catalogue/amazonPrice.png",
     "label":{
         "en-gb":"Price Comparative Compound"
     },
     "rights":"http://creativecommons.org/",
-    "screenshot":"http://localhost:8010/images/screenshots/amazonPriceComparative.png",
+    "screenshot":"http://demo.fast.morfeo-project.org/gvsdata/images/screenshots/amazonPriceComparative.png",
     "version":"1.0",
     "definition":{
         "buildingblocks":[

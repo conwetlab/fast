@@ -14,12 +14,12 @@
         "user":"admin"
     },
     "homepage":"http://www.deri.ie/eBayList",
-    "icon":"http://localhost:8010/images/catalogue/eBayList.png",
+    "icon":"http://demo.fast.morfeo-project.org/gvsdata/images/catalogue/eBayList.png",
     "label":{
         "en-gb":"Ebay List Compound"
     },
     "rights":"http://creativecommons.org/",
-    "screenshot":"http://localhost:8010/images/screenshots/ebayComparative.png",
+    "screenshot":"http://demo.fast.morfeo-project.org/gvsdata/images/screenshots/ebayComparative.png",
     "version":"1.0",
     "definition":{
         "buildingblocks":[

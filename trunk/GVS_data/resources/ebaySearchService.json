@@ -1,6 +1,6 @@
 {
     "name":"Ebay Search Service",
-    "code":"http://localhost:8010/resources/ebaySearchService.src.js",
+    "code":"http://demo.fast.morfeo-project.org/gvsdata/resources/ebaySearchService.src.js",
     "creationDate":"2009-04-20T17:00:00+0100",
     "creator":"http://www.fabio.es/",
     "description":{
@@ -14,7 +14,7 @@
         "user":"admin"
     },
     "homepage":"http://www.deri.ie/ebaySearchService",
-    "icon":"http://localhost:8010/images/catalogue/ebaySearchService.png",
+    "icon":"http://demo.fast.morfeo-project.org/gvsdata/images/catalogue/ebaySearchService.png",
     "label":{
         "en-gb":"eBay Search"
     },

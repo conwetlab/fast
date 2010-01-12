@@ -1,6 +1,6 @@
 {
     "name":"Amazon Product Form",
-    "code":"http://localhost:8010/forms/amazonProduct.src.html",
+    "code":"http://demo.fast.morfeo-project.org/gvsdata/forms/amazonProduct.src.html",
     "creationDate":"2009-04-20T17:00:00+0100",
     "creator":"http://www.fabio.es/",
     "description":{
@@ -15,12 +15,12 @@
         "user":"admin"
     },
     "homepage":"http://www.deri.ie/amazonProduct",
-    "icon":"http://localhost:8010/images/catalogue/amazonProduct.png",
+    "icon":"http://demo.fast.morfeo-project.org/gvsdata/images/catalogue/amazonProduct.png",
     "label":{
         "en-gb":"Product Details"
     },
     "rights":"http://creativecommons.org/",
-    "screenshot":"http://www.deri.ie/amazonProduct-screenshot.jpg",
+    "screenshot":"http://demo.fast.morfeo-project.org/gvsdata/images/screenshots/amazonProductDetail.png",
     "version":"1.0",
     "libraries":[
         

@@ -14,14 +14,14 @@
         "user":"admin"
     },
     "homepage":"http://www.deri.ie/amazonSearch",
-    "icon":"http://localhost:8010/images/catalogue/amazonSearch.png",
+    "icon":"http://demo.fast.morfeo-project.org/gvsdata/images/catalogue/amazonSearch.png",
     "label":{
         "en-gb":"Product Search"
     },
     "rights":"http://creativecommons.org/",
-    "screenshot":"http://localhost:8010/images/screenshots/amazonSearch.png",
+    "screenshot":"http://demo.fast.morfeo-project.org/gvsdata/images/screenshots/amazonSearch.png",
     "version":"1.0",
-    "code":"http://localhost:8010/screens/amazonSearch.scr.html",
+    "code":"http://demo.fast.morfeo-project.org/gvsdata/screens/amazonSearch.scr.html",
     "preconditions":[
         
     ],

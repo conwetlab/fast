@@ -15,14 +15,14 @@
         "user":"admin"
     },
     "homepage":"http://www.deri.ie/amazonSuggestion",
-    "icon":"http://localhost:8010/images/catalogue/amazonSuggestion.png",
+    "icon":"http://demo.fast.morfeo-project.org/gvsdata/images/catalogue/amazonSuggestion.png",
     "label":{
         "en-gb":"Suggestion List"
     },
     "rights":"http://creativecommons.org/",
-    "screenshot":"http://localhost:8010/images/screenshots/amazonSuggestion.png",
+    "screenshot":"http://demo.fast.morfeo-project.org/gvsdata/images/screenshots/amazonSuggestion.png",
     "version":"1.0",
-    "code":"http://localhost:8010/screens/amazonSuggestion.scr.html",
+    "code":"http://demo.fast.morfeo-project.org/gvsdata/screens/amazonSuggestion.scr.html",
     "preconditions":[
         [
             {

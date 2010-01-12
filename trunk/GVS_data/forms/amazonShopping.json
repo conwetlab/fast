@@ -1,6 +1,6 @@
 {
     "name":"Amazon Shopping Form",
-    "code":"http://localhost:8010/forms/amazonShopping.src.html",
+    "code":"http://demo.fast.morfeo-project.org/gvsdata/forms/amazonShopping.src.html",
     "creationDate":"2009-04-20T17:00:00+0100",
     "creator":"http://www.fabio.es/",
     "description":{
@@ -14,12 +14,12 @@
         "user":"admin"
     },
     "homepage":"http://www.deri.ie/amazonShopping",
-    "icon":"http://localhost:8010/images/catalogue/amazonShopping.png",
+    "icon":"http://demo.fast.morfeo-project.org/gvsdata/images/catalogue/amazonShopping.png",
     "label":{
         "en-gb":"Shopping Cart"
     },
     "rights":"http://creativecommons.org/",
-    "screenshot":"http://www.deri.ie/amazonList-screenshot.jpg",
+    "screenshot":"http://demo.fast.morfeo-project.org/gvsdata/images/screenshots/amazonShoppingCart.png",
     "version":"1.0",
     "libraries":[
         

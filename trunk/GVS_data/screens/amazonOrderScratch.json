@@ -15,14 +15,14 @@
         "user":"admin"
     },
     "homepage":"http://www.deri.ie/amazonOrder",
-    "icon":"http://localhost:8010/images/catalogue/amazonOrder.png",
+    "icon":"http://demo.fast.morfeo-project.org/gvsdata/images/catalogue/amazonOrder.png",
     "label":{
         "en-gb":"Order"
     },
     "rights":"http://creativecommons.org/",
-    "screenshot":"http://localhost:8010/images/screenshots/amazonOrder.png",
+    "screenshot":"http://demo.fast.morfeo-project.org/gvsdata/images/screenshots/amazonOrder.png",
     "version":"1.0",
-    "code":"http://localhost:8010/screens/amazonOrder.scr.html",
+    "code":"http://demo.fast.morfeo-project.org/gvsdata/screens/amazonOrder.scr.html",
     "preconditions":[
         [
             {

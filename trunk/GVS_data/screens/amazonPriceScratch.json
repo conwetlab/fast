@@ -16,14 +16,14 @@
         "user":"admin"
     },
     "homepage":"http://www.deri.ie/amazonPrice",
-    "icon":"http://localhost:8010/images/catalogue/amazonPrice.png",
+    "icon":"http://demo.fast.morfeo-project.org/gvsdata/images/catalogue/amazonPrice.png",
     "label":{
         "en-gb":"Price Comparative"
     },
     "rights":"http://creativecommons.org/",
-    "screenshot":"http://localhost:8010/images/screenshots/amazonPriceComparative.png",
+    "screenshot":"http://demo.fast.morfeo-project.org/gvsdata/images/screenshots/amazonPriceComparative.png",
     "version":"1.0",
-    "code":"http://localhost:8010/screens/amazonPrice.scr.html",
+    "code":"http://demo.fast.morfeo-project.org/gvsdata/screens/amazonPrice.scr.html",
     "preconditions":[
         [
             {

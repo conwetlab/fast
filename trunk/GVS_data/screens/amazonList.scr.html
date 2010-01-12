@@ -3,9 +3,9 @@
 <meta http-equiv="Content-Type"
     content="application/xhtml+xml; charset=UTF-8" />
 <link type="text/css" rel="stylesheet"
-    href="http://piccolo.ls.fi.upm.es/amazonScreens/style/table.css" />
+    href="http://demo.fast.morfeo-project.org/gvsdata/amazonScreens/style/table.css" />
 <link type="text/css" rel="stylesheet"
-    href="http://piccolo.ls.fi.upm.es/amazonScreens/style/screen.css" />
+    href="http://demo.fast.morfeo-project.org/gvsdata/amazonScreens/style/screen.css" />
 <style type="text/css">
 #pages {
     color: #FEBF43;
@@ -25,8 +25,8 @@
     top: 3px;
 }
 </style>
-<script language="JavaScript" src="http://piccolo.ls.fi.upm.es/amazonURL/signAmazonURLs.js"></script>
-<script language="JavaScript" src="http://piccolo.ls.fi.upm.es/amazonURL/jssha2/sha2.js"></script>
+<script language="JavaScript" src="http://demo.fast.morfeo-project.org/gvsdata/amazonURL/signAmazonURLs.js"></script>
+<script language="JavaScript" src="http://demo.fast.morfeo-project.org/gvsdata/amazonURL/jssha2/sha2.js"></script>
 <script language="JavaScript">
     function List(){
         //Last page fetched from Amazon Service	
@@ -167,7 +167,7 @@
     }
     List.prototype.clearSelected = function (){
         $$("tbody tr").each(function (element){
-            element.setStyle({background: "transparent url(http://piccolo.ls.fi.upm.es/amazonScreens/style/bg_td1.jpg) repeat-x top"});
+            element.setStyle({background: "transparent url(http://demo.fast.morfeo-project.org/gvsdata/amazonScreens/style/bg_td1.jpg) repeat-x top"});
         });
     }
     List.prototype.onError = function (transport){
@@ -243,7 +243,7 @@
 <body>
 <div id="bodyDiv">
     <span id="amazonImage">
-        <img src="http://piccolo.ls.fi.upm.es/amazonScreens/images/amazon.png" />
+        <img src="http://demo.fast.morfeo-project.org/gvsdata/amazonScreens/images/amazon.png" />
     </span>
 <h1 id="title">Item list</h1>
 <div id="listDiv">
@@ -272,7 +272,7 @@
     </tbody>
 </table>
 <img id="loadingImg"
-    src="http://piccolo.ls.fi.upm.es/amazonScreens/images/ajaxLoader.gif" />
+    src="http://demo.fast.morfeo-project.org/gvsdata/amazonScreens/images/ajaxLoader.gif" />
 <div id="buttonContainerDiv">
     <input type="button" id="previousButton" class="button" value="<" />
     <span id="pages"> Page <span id="curPage">-</span>/<span id="totalPages">-</span></span>

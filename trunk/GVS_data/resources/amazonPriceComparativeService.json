@@ -1,6 +1,6 @@
 {
     "name":"Amazon Price Comparative Service",
-    "code":"http://localhost:8010/resources/amazonPriceComparativeService.src.js",
+    "code":"http://demo.fast.morfeo-project.org/gvsdata/resources/amazonPriceComparativeService.src.js",
     "creationDate":"2009-04-20T17:00:00+0100",
     "creator":"http://www.fabio.es/",
     "description":{
@@ -15,7 +15,7 @@
         "user":"admin"
     },
     "homepage":"http://www.deri.ie/amazonPriceComparativeService",
-    "icon":"http://localhost:8010/images/catalogue/amazonPriceComparativeService.png",
+    "icon":"http://demo.fast.morfeo-project.org/gvsdata/images/catalogue/amazonPriceComparativeService.png",
     "label":{
         "en-gb":"Amazon Price Comparative"
     },
@@ -25,11 +25,11 @@
     "libraries":[
         {
             "language":"JavaScript",
-            "source":"http://piccolo.ls.fi.upm.es/amazonURL/signAmazonURLs.js"
+            "source":"http://demo.fast.morfeo-project.org/gvsdata/amazonURL/signAmazonURLs.js"
         },
         {
             "language":"JavaScript",
-            "source":"http://piccolo.ls.fi.upm.es/amazonURL/jssha2/sha2.js"
+            "source":"http://demo.fast.morfeo-project.org/gvsdata/amazonURL/jssha2/sha2.js"
         }
     ],
     "actions":[

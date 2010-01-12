@@ -1,8 +1,8 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="application/xhtml+xml; charset=UTF-8" />
-        <link type="text/css" rel="stylesheet" href="http://piccolo.ls.fi.upm.es/amazonScreens/style/table.css" />
-        <link type="text/css" rel="stylesheet" href="http://piccolo.ls.fi.upm.es/amazonScreens/style/screen.css" />
+        <link type="text/css" rel="stylesheet" href="http://demo.fast.morfeo-project.org/gvsdata/amazonScreens/style/table.css" />
+        <link type="text/css" rel="stylesheet" href="http://demo.fast.morfeo-project.org/gvsdata/amazonScreens/style/screen.css" />
 		<style type="text/css">
 			#loadingImgCart{
 				margin:auto;	
@@ -28,8 +28,8 @@
 				top:3px;
 			}
 		</style>
-		<script language="JavaScript" src="http://piccolo.ls.fi.upm.es/amazonURL/signAmazonURLs.js"></script>
-		<script language="JavaScript" src="http://piccolo.ls.fi.upm.es/amazonURL/jssha2/sha2.js"></script>
+		<script language="JavaScript" src="http://demo.fast.morfeo-project.org/gvsdata/amazonURL/signAmazonURLs.js"></script>
+		<script language="JavaScript" src="http://demo.fast.morfeo-project.org/gvsdata/amazonURL/jssha2/sha2.js"></script>
         <script language="JavaScript">
         		
         	function ShoppingCart(){
@@ -59,7 +59,7 @@
 				var tableBody = $("listBodyCart");
 				tableBody.update("");
 				if(!$("loadingImgCart")){
-					$("info").update('<img id="loadingImgCart" src="http://piccolo.ls.fi.upm.es/amazonScreens/images/ajaxLoader.gif" />');
+					$("info").update('<img id="loadingImgCart" src="http://demo.fast.morfeo-project.org/gvsdata/amazonScreens/images/ajaxLoader.gif" />');
 
 				}
 				$("loadingImgCart").show();
@@ -97,9 +97,14 @@
                         'method':       'get',
                         'content':      'xml',
                         'context':      shoppingCart,
-                        'onSuccess':    shoppingCart.fetch
+                        'onSuccess':    shoppingCart.clear_ok
                     });
 				}	
+			}
+
+            ShoppingCart.prototype.clear_ok = function (){
+				ScreenflowEngineFactory.getInstance().manageFacts([],['http://aws.amazon.com/AWSECommerceService#PurchaseURL']);
+				shoppingCart.fetch();
 			}
 			
 			ShoppingCart.prototype.checkout = function (){
@@ -139,9 +144,14 @@
                         'method':       'get',
                         'content':      'xml',
                         'context':      shoppingCart,
-                        'onSuccess':    shoppingCart.fetch
+                        'onSuccess':    shoppingCart.update_ok
                     });
 				}
+			}
+
+			ShoppingCart.prototype.update_ok = function (){
+				ScreenflowEngineFactory.getInstance().manageFacts([],['http://aws.amazon.com/AWSECommerceService#PurchaseURL']);
+				shoppingCart.fetch();
 			}
 			
 			//Change the current Item Fact
@@ -287,7 +297,7 @@
     </head>
     <body>
         <div id="bodyDiv">
-        	<span id="amazonImage"><img src="http://piccolo.ls.fi.upm.es/amazonScreens/images/amazon.png" /></span>
+        	<span id="amazonImage"><img src="http://demo.fast.morfeo-project.org/gvsdata/amazonScreens/images/amazon.png" /></span>
             <h1 id="title">Shopping Cart</h1>
             <div id="listDivCart">
                 <table>
@@ -319,7 +329,7 @@
 					    </tr>
                     </tbody>
                 </table>
-               <div id="info"><img id="loadingImgCart" src="http://piccolo.ls.fi.upm.es/amazonScreens/images/ajaxLoader.gif" /></div>		
+               <div id="info"><img id="loadingImgCart" src="http://demo.fast.morfeo-project.org/gvsdata/amazonScreens/images/ajaxLoader.gif" /></div>		
                 <div id="buttonContainerDivCart">
                     <input type="button" id="clearButton" class="button" value="Clear Cart"/>
 					<input type="button" id="updateButton" class="button" value="Update Cart"/>

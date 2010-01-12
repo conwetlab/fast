@@ -309,7 +309,7 @@
         <field type="BooleanField" name="is_staff">True</field>
         <field type="BooleanField" name="is_active">True</field>
         <field type="BooleanField" name="is_superuser">True</field>
-        <field type="DateTimeField" name="last_login">2009-11-27 08:56:05</field>
+        <field type="DateTimeField" name="last_login">2010-01-12 17:21:15</field>
         <field type="DateTimeField" name="date_joined">2009-09-21 14:11:49</field>
         <field to="auth.group" name="groups" rel="ManyToManyRel"></field>
         <field to="auth.permission" name="user_permissions" rel="ManyToManyRel"></field>

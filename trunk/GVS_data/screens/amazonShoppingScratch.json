@@ -14,14 +14,14 @@
         "user":"admin"
     },
     "homepage":"http://www.deri.ie/amazonShopping",
-    "icon":"http://localhost:8010/images/catalogue/amazonShopping.png",
+    "icon":"http://demo.fast.morfeo-project.org/gvsdata/images/catalogue/amazonShopping.png",
     "label":{
         "en-gb":"Shopping Cart"
     },
     "rights":"http://creativecommons.org/",
-    "screenshot":"http://localhost:8010/images/screenshots/amazonShoppingCart.png",
+    "screenshot":"http://demo.fast.morfeo-project.org/gvsdata/images/screenshots/amazonShoppingCart.png",
     "version":"1.0",
-    "code":"http://localhost:8010/screens/amazonShopping.scr.html",
+    "code":"http://demo.fast.morfeo-project.org/gvsdata/screens/amazonShopping.scr.html",
     "preconditions":[
         [
             {

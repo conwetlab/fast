@@ -15,12 +15,12 @@
         "user":"admin"
     },
     "homepage":"http://www.deri.ie/amazonProduct",
-    "icon":"http://localhost:8010/images/catalogue/amazonProduct.png",
+    "icon":"http://demo.fast.morfeo-project.org/gvsdata/images/catalogue/amazonProduct.png",
     "label":{
         "en-gb":"Product Details Compound"
     },
     "rights":"http://creativecommons.org/",
-    "screenshot":"http://localhost:8010/images/screenshots/amazonProductDetail.png",
+    "screenshot":"http://demo.fast.morfeo-project.org/gvsdata/images/screenshots/amazonProductDetail.png",
     "version":"1.0",
     "definition":{
         "buildingblocks":[

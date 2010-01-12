@@ -1,6 +1,6 @@
 {
     "name":"Amazon Order Form",
-    "code":"http://localhost:8010/forms/amazonOrder.src.html",
+    "code":"http://demo.fast.morfeo-project.org/gvsdata/forms/amazonOrder.src.html",
     "creationDate":"2009-04-20T17:00:00+0100",
     "creator":"http://www.fabio.es/",
     "description":{
@@ -15,12 +15,12 @@
         "user":"admin"
     },
     "homepage":"http://www.deri.ie/amazonOrder",
-    "icon":"http://localhost:8010/images/catalogue/amazonOrder.png",
+    "icon":"http://demo.fast.morfeo-project.org/gvsdata/images/catalogue/amazonOrder.png",
     "label":{
         "en-gb":"Order"
     },
     "rights":"http://creativecommons.org/",
-    "screenshot":"http://www.deri.ie/amazonOrder-screenshot.jpg",
+    "screenshot":"http://demo.fast.morfeo-project.org/gvsdata/images/screenshots/amazonOrder.png",
     "version":"1.0",
     "libraries":[
         

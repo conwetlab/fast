@@ -15,12 +15,12 @@
         "user":"admin"
     },
     "homepage":"http://www.deri.ie/amazonSuggestion",
-    "icon":"http://localhost:8010/images/catalogue/amazonSuggestion.png",
+    "icon":"http://demo.fast.morfeo-project.org/gvsdata/images/catalogue/amazonSuggestion.png",
     "label":{
         "en-gb":"Suggestion List Compound"
     },
     "rights":"http://creativecommons.org/",
-    "screenshot":"http://localhost:8010/images/screenshots/amazonSuggestion.png",
+    "screenshot":"http://demo.fast.morfeo-project.org/gvsdata/images/screenshots/amazonSuggestion.png",
     "version":"1.0",
     "definition":{
         "buildingblocks":[

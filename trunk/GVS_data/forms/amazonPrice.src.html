@@ -1,8 +1,8 @@
 <html>
 	<head>
         <meta http-equiv="Content-Type" content="application/xhtml+xml; charset=UTF-8">
-		<link type="text/css" rel="stylesheet" href="http://piccolo.ls.fi.upm.es/amazonScreens/style/table.css" />
-        <link type="text/css" rel="stylesheet" href="http://piccolo.ls.fi.upm.es/amazonScreens/style/screen.css" />
+		<link type="text/css" rel="stylesheet" href="http://demo.fast.morfeo-project.org/gvsdata/amazonScreens/style/table.css" />
+        <link type="text/css" rel="stylesheet" href="http://demo.fast.morfeo-project.org/gvsdata/amazonScreens/style/screen.css" />
 		<style type="text/css">
 			#pagesComparative{
 				color:#FEBF43;
@@ -77,7 +77,7 @@
 				templateString += '#{sellerName}</a><br /><span class="info">Rating:</span> #{averageRating} of #{totalFeedback} user reviews';
 				templateString += '<br /><span class="info">Availability:</span> #{availability}</td>';
 				templateString += '<td><input width="112" type="image" height="21" border="0" align="absmiddle"';
-				templateString += 'alt="Add to cart" src="http://piccolo.ls.fi.upm.es/amazonScreens/images/addToCart-small.gif"';
+				templateString += 'alt="Add to cart" src="http://demo.fast.morfeo-project.org/gvsdata/amazonScreens/images/addToCart-small.gif"';
 				templateString += 'onclick="ScreenEngineFactory.getInstance(\'{{screenId}}\').getBuildingBlock(\'{{buildingblockInstance}}\').add(\'#{offerId}\'); /></td></tr>';
                 var rowTemplate = new Template(templateString);
                 
@@ -146,7 +146,7 @@
 	</head>
 	<body>
         <div id="bodyDiv">
-        	<span id="amazonImage"><img src="http://piccolo.ls.fi.upm.es/amazonScreens/images/amazon.png" /></span>
+        	<span id="amazonImage"><img src="http://demo.fast.morfeo-project.org/gvsdata/amazonScreens/images/amazon.png" /></span>
             <h1 id="title">Price Comparative</h1>
 			<div id="like">Offers for <span class="productTitle"></span></div>
             <div id="listDiv">
@@ -167,7 +167,7 @@
                            <tr><td>&nbsp;</td></tr>
 		    		</tbody>
                 </table>
-                <img style="display: none;" id="loadingImgComparative" src="http://piccolo.ls.fi.upm.es/amazonScreens/images/ajaxLoader.gif">
+                <img style="display: none;" id="loadingImgComparative" src="http://demo.fast.morfeo-project.org/gvsdata/amazonScreens/images/ajaxLoader.gif">
                 <div id="buttonContainerDiv">
                     <input style="visibility: hidden;" id="previousButtonComparative" class="button" value="&lt;" type="button">
 					<span id="pagesComparative">

@@ -1,6 +1,6 @@
 {
     "name":"Amazon Item to Ebay Filter",
-    "code":"http://localhost:8010/operators/amazonEbayFilter.src.js",
+    "code":"http://demo.fast.morfeo-project.org/gvsdata/operators/amazonEbayFilter.src.js",
     "creationDate":"2009-04-20T18:00:00+0200",
     "creator":"http://www.fabio.es/",
     "description":{
@@ -15,7 +15,7 @@
         "user":"admin"
     },
     "homepage":"http://www.deri.ie/eBayList",
-    "icon":"http://localhost:8010/images/catalogue/eBayList.png",
+    "icon":"http://demo.fast.morfeo-project.org/gvsdata/images/catalogue/eBayList.png",
     "label":{
         "en-gb":"Ebay List"
     },

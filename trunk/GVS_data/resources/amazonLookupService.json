@@ -1,6 +1,6 @@
 {
     "name":"Amazon Lookup Service",
-    "code":"http://localhost:8010/resources/amazonLookupService.src.js",
+    "code":"http://demo.fast.morfeo-project.org/gvsdata/resources/amazonLookupService.src.js",
     "creationDate":"2009-04-20T17:00:00+0100",
     "creator":"http://www.fabio.es/",
     "description":{
@@ -14,7 +14,7 @@
         "user":"admin"
     },
     "homepage":"http://www.deri.ie/amazonLookupService",
-    "icon":"http://localhost:8010/images/catalogue/amazonLookupService.png",
+    "icon":"http://demo.fast.morfeo-project.org/gvsdata/images/catalogue/amazonLookupService.png",
     "label":{
         "en-gb":"Amazon Lookup Service"
     },
@@ -24,11 +24,11 @@
     "libraries":[
         {
             "language":"JavaScript",
-            "source":"http://piccolo.ls.fi.upm.es/amazonURL/signAmazonURLs.js"
+            "source":"http://demo.fast.morfeo-project.org/gvsdata/amazonURL/signAmazonURLs.js"
         },
         {
             "language":"JavaScript",
-            "source":"http://piccolo.ls.fi.upm.es/amazonURL/jssha2/sha2.js"
+            "source":"http://demo.fast.morfeo-project.org/gvsdata/amazonURL/jssha2/sha2.js"
         }
     ],
     "actions":[

@@ -14,14 +14,14 @@
         "user":"admin"
     },
     "homepage":"http://www.deri.ie/eBayList",
-    "icon":"http://localhost:8010/images/catalogue/eBayList.png",
+    "icon":"http://demo.fast.morfeo-project.org/gvsdata/images/catalogue/eBayList.png",
     "label":{
         "en-gb":"Ebay List"
     },
     "rights":"http://creativecommons.org/",
-    "screenshot":"http://localhost:8010/images/screenshots/ebayComparative.png",
+    "screenshot":"http://demo.fast.morfeo-project.org/gvsdata/images/screenshots/ebayComparative.png",
     "version":"1.0",
-    "code":"http://localhost:8010/screens/eBayList.scr.html",
+    "code":"http://demo.fast.morfeo-project.org/gvsdata/screens/eBayList.scr.html",
     "preconditions":[
         [
             {
