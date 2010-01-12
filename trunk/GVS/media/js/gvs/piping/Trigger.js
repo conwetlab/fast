@@ -50,13 +50,7 @@ var Trigger = Class.create(
     },
 
     getSourceId: function() {
-      var id;
-        if (this._from.instance == Trigger.SCREEN_ID) {
-            id = this._from.instance;
-        } else {
-            id = this._from.instance.getId();
-        }
-        return id;
+        return this._from.instance.getId();
     },
 
     getSourceInstance: function() {
@@ -65,6 +59,7 @@ var Trigger = Class.create(
 
     /**
      * Returns the JSON object representing the Trigger
+     * @type Object
      */
     toJSON: function() {
         return {
@@ -87,20 +82,11 @@ var Trigger = Class.create(
      * @type String
      */
     _createId: function (/** Object */ from, /** Object */ to) {
-        var id;
-        if (from.instance == Trigger.SCREEN_ID) {
-            id = from.instance + from.name + to.instance.getId() + to.action;
-        } else {
-            id = from.instance.getId() + from.name +
+        return from.instance.getId() + from.name +
                 to.instance.getId() + to.action;
-        }
-        return id;
     }
 
 });
 
-// Class attributes
-Trigger.SCREEN_ID = "screen";
-Trigger.SCREEN_ONLOAD = "_onload";
 
 // vim:ts=4:sw=4:et:

@@ -63,6 +63,12 @@ var TriggerMappingFactory = Class.create(
      * @private
      */
     _createFromJSON: function(element) {
-        return new Trigger(element.from, element.to);
+        var trigger;
+        if (element.from.instance == ScreenTrigger.INSTANCE_NAME) {
+            trigger = new ScreenTrigger(element.to);
+        } else {
+            trigger = new Trigger(element.from, element.to);
+        }
+        return trigger;
     }
 });

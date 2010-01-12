@@ -128,18 +128,11 @@ var TriggerDialog = Class.create(ConfirmDialog /** @lends TriggerDialog.prototyp
         var onLoadFound = false;
         if (this._initialTriggerList) {
              this._initialTriggerList.each(function(trigger) {
-                var title;
-                if (trigger.getSourceInstance() == Trigger.SCREEN_ID) {
-                    title = "Screen";
-                } else {
-                    title = trigger.getSourceInstance().getTitle();
-                }
-
                 var option = new Element('option', {
-                    'value': trigger.getSourceId() + "#" + trigger.getTriggerName()
-                }).update(title + ": " + trigger.getTriggerName());
+                    'value': trigger.getSourceInstance().getId() + "#" + trigger.getTriggerName()
+                }).update(trigger.getSourceInstance().getTitle() + ": " + trigger.getTriggerName());
                 this._selectedTriggerListNode.appendChild(option);
-                if (trigger.getSourceId() == Trigger.SCREEN_ID) {
+                if (trigger.constructor == ScreenTrigger) {
                     onLoadFound = true;
                 }
             }.bind(this));
@@ -177,8 +170,8 @@ var TriggerDialog = Class.create(ConfirmDialog /** @lends TriggerDialog.prototyp
 
         if (!onLoadFound) {
             var option = new Element('option', {
-                'value': Trigger.SCREEN_ID + "#" + Trigger.SCREEN_ONLOAD
-            }).update("Screen: onLoad");
+                'value': ScreenTrigger.INSTANCE_NAME + "#" + ScreenTrigger.ONLOAD
+            }).update(ScreenTrigger.INSTANCE_NAME + ": " + ScreenTrigger.ONLOAD);
             this._unselectedTriggerListNode.appendChild(option);
         }
         this._canvasInstances.each(function(instance){
@@ -246,7 +239,7 @@ var TriggerDialog = Class.create(ConfirmDialog /** @lends TriggerDialog.prototyp
                     return (option.value) == (element.getSourceId() + '#' +
                                                             element.getTriggerName());
                 });
-                if (!triggerFound) {
+                if (triggerFound == null) {
                     triggersAdded.push(option.value);
                 }
             } else {

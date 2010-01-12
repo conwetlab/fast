@@ -95,7 +95,15 @@ Object.extend(Terminal.prototype, /** @lends Terminal.prototype */ {
      * @type String
      */
     getBuildingBlockId: function() {
-        return this._instance.getId();
+        // FIXME: extrange situation for prepost instances,
+        // when building
+        var id;
+        if (this._instance.constructor == PrePostInstance) {
+            id = "";
+        } else {
+            id = this._instance.getId();
+        }
+        return id;
     },
 
     /**

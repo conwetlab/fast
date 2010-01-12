@@ -72,10 +72,14 @@ var ScreenInferenceEngine = Class.create( /** @lends ScreenInferenceEngine.proto
      * @overrides
      */
     _checkOnSuccess: function(transport){
-        var result = JSON.parse(transport.responseText);
-        
-        this.mine._updateReachability(result.canvas);
-        this.callback(result);
+        try {
+             var result = JSON.parse(transport.responseText);
+             this.mine._updateReachability(result.canvas);
+             this.callback(result);
+        }
+        catch (e) {
+
+        }
     }
 });
 

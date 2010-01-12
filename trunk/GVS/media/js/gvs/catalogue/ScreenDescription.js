@@ -25,8 +25,8 @@ var ScreenDescription = Class.create(BuildingBlockDescription,
      */
     toJSON: function() {
         var result = {
-            "preconditions": this.getPreconditions(),
-            "postconditions": this.getPostconditions(),
+            "preconditions": [this.getPreconditions()],
+            "postconditions": [this.getPostconditions()],
             "definition": {
                 "buildingblocks": this._getScreenBuildingBlocks(),
                 "pipes": this._getScreenPipes(),
@@ -216,7 +216,7 @@ var ScreenDescription = Class.create(BuildingBlockDescription,
     _getScreenPipes: function() {
         var pipes = new Array();
         this._pipes.values().each(function(pipe) {
-            pipes.push(pipe.getJSONForScreen());
+            pipes.push(pipe.getJSONforScreen());
         });
         return pipes;
     },

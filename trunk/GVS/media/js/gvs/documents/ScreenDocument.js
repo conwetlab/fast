@@ -510,11 +510,12 @@ var ScreenDocument = Class.create(PaletteDocument,
             this._factPane.fillTable([], [], facts);
         } else {
             this._propertiesPane.fillTable(this._selectedElement);
-
-            var instanceActions = this._getInstanceActions();
-            this._propertiesPane.addSection(['Action', 'Triggers'], instanceActions);
            
             if (this._selectedElement.constructor != PrePostInstance) {
+
+                var instanceActions = this._getInstanceActions();
+                this._propertiesPane.addSection(['Action', 'Triggers'], instanceActions);
+
                 var preReachability = this._inferenceEngine.getPreconditionReachability(
                             this._selectedElement.getUri());
                 var preconditions = this._selectedElement.getPreconditionTable(preReachability);
@@ -601,10 +602,10 @@ var ScreenDocument = Class.create(PaletteDocument,
         var result = new Element('div');
         var content = "";
         if (triggerList) {
-            triggerList.each(function(trigger){
-                content += trigger.getTriggerName() + ",";
+            triggerList.each(function(trigger) {
+                content += trigger.getTriggerName() + ", ";
             });
-            content = content.slice(0, -1);
+            content = content.slice(0, -2);
         } else {
             content = new Element('span', {
                 'class': 'triggerInfo'
@@ -625,7 +626,7 @@ var ScreenDocument = Class.create(PaletteDocument,
         triggersAdded.each(function(triggerInfo) {
             var triggerSplittedInfo = triggerInfo.split("#");
             var instance;
-            if (triggerSplittedInfo[0] == Trigger.SCREEN_ID) {
+            if (triggerSplittedInfo[0] == ScreenTrigger.INSTANCE_NAME) {
                 instance = triggerSplittedInfo[0];
             } else {
                 instance = this._findInstance(triggerSplittedInfo[0]);
@@ -647,7 +648,7 @@ var ScreenDocument = Class.create(PaletteDocument,
         triggersRemoved.each(function(triggerInfo) {
             var triggerSplittedInfo = triggerInfo.split("#");
             var instance;
-            if (triggerSplittedInfo[0] == Trigger.SCREEN_ID) {
+            if (triggerSplittedInfo[0] == ScreenTrigger.INSTANCE_NAME) {
                 instance = triggerSplittedInfo[0];
             } else {
                 instance = this._findInstance(triggerSplittedInfo[0]);

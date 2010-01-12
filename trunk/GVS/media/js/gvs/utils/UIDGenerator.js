@@ -42,15 +42,16 @@ var UIDGeneratorSingleton = function () {
          * @type String
          */
         generate: function (/** String */ element) {
-            var nextId = this._nextIds[element];
+            var sanitized = element.replace(new RegExp('\\s', 'g'), "");
+            var nextId = this._nextIds[sanitized];
             
             if (!nextId){
                 nextId = 1;
             }   
             
-            this._nextIds[element] = nextId + 1;
+            this._nextIds[sanitized] = nextId + 1;
             
-            return element + "_" + nextId;
+            return sanitized + "_" + nextId;
         }
     });
         

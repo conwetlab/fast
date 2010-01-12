@@ -4,3 +4,4 @@
 .pydevproject
 static/*
 media/logs/*
+*.pyc
