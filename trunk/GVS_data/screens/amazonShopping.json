@@ -225,7 +225,6 @@
             },
             {
                 "id":"item",
-                "origin":"amazonShoppingCartForm1",
                 "label":{
                     "en-gb":"An item"
                 },

@@ -116,7 +116,6 @@
         [
             {
                 "id":"item",
-                "origin":"amazonListForm1",
                 "label":{
                     "en-gb":"An item"
                 },
