@@ -106,6 +106,8 @@ class BuildingBlockEntry(resource.Resource):
             
             bb.data = received_json    
             bb.save()
+            
+            updateCatalogueBuildingBlock(bb)
 
             return HttpResponse(json_encode(bb.data), mimetype='application/json; charset=UTF-8')
         except Exception, e:
@@ -196,6 +198,8 @@ class TagCollection(resource.Resource):
             bb.data = json_encode(data)
             bb.save()
             
+            updateCatalogueBuildingBlock(bb)
+            
             ok = json_encode({"message":"OK"})
             return HttpResponse(ok, mimetype='application/json; charset=UTF-8')
         except Exception, e:
@@ -245,6 +249,7 @@ class VoteCollection(resource.Resource):
             uv.value = request.POST.get('vote')
             uv.save()
             self.__updatePopularity(bb)
+            updateCatalogueBuildingBlock(bb)
             ok = json_encode({"message":"OK"})
             return HttpResponse(ok, mimetype='application/json; charset=UTF-8')
         except Exception, e:
@@ -262,6 +267,9 @@ class VoteCollection(resource.Resource):
         except Exception:
             pass
         buildingblock.popularity = "%1.2f" % (sum / count)
+        data = simplejson.loads(buildingblock.data)
+        data['popularity'] = buildingblock.popularity
+        buildingblock.data = json_encode(data)
         buildingblock.save()
 
 
@@ -367,6 +375,15 @@ class Sharing(resource.Resource):
         c.code = code
         c.save()
 
+        
+def updateCatalogueBuildingBlock(buildingblock):
+    if (buildingblock.uri != None) and (buildingblock.uri != ""):
+        conn = Connection(cleanUrl(buildingblock.get_catalogue_url()))
+        result = conn.request_put("/" + quote_plus(buildingblock.uri), body=buildingblock.data, headers={'Accept':'text/json'})
+        if not isValidResponse(result):
+            raise Exception(result['body'])
+
+
 def unshareBuildingBlock(buildingblock):
     if (buildingblock.uri != None) and (buildingblock.uri != ""):
         conn = Connection(cleanUrl(buildingblock.get_catalogue_url()))
@@ -378,5 +395,5 @@ def unshareBuildingBlock(buildingblock):
 def updateTags(user, buildingblock, tags): 
     for tag in tags:
         t = Tag.objects.get_or_create(name=tag)[0]
-        usertag = UserTag (user=user, tag=t, buildingBlock=buildingblock)
+        usertag = UserTag.objects.get_or_create (user=user, tag=t, buildingBlock=buildingblock)[0]
         usertag.save()
