@@ -153,15 +153,6 @@ var ScreenflowDocument = Class.create(PaletteDocument,
         return $A([Constants.BuildingBlock.SCREEN, Constants.BuildingBlock.DOMAIN_CONCEPT]);
     },
 
-    
-    /**
-     * Implementing MenuModel interface
-     * @override
-     * @type Object
-     */
-    getMenuElements: function() {        
-        return {};
-    },
 
     // **************** PRIVATE METHODS **************** //
     
@@ -246,7 +237,7 @@ var ScreenflowDocument = Class.create(PaletteDocument,
         this._addToolbarElement('save', new ToolbarButton(
                 'Save the current screenflow',
                 'save',
-                this._saveScreenflow.bind(this),
+                this._save.bind(this),
                 false // disabled by default
         ));
         this._addToolbarElement('previewElement', new ToolbarButton(
@@ -586,8 +577,9 @@ var ScreenflowDocument = Class.create(PaletteDocument,
     /**
      * Starts the process of saving the screenflow
      * @private
+     * @override
      */
-    _saveScreenflow: function() {
+    _save: function() {
         // TODO: Do it!
     }
 });

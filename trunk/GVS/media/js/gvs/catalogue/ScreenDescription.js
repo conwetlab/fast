@@ -34,7 +34,11 @@ var ScreenDescription = Class.create(BuildingBlockDescription,
             }
         };
         // TODO: add basic attributes
-        result = Object.extend(result,{});
+        result = Object.extend(result,{
+            "name": this.name,
+            "domainContext": this.domainContext,
+            "version": this.version
+        });
         return result;
     },
     

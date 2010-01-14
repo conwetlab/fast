@@ -87,7 +87,15 @@ Object.extend(Terminal.prototype, /** @lends Terminal.prototype */ {
      * @type String
      */
     getBuildingBlockUri: function() {
-        return this._instance.getUri();
+        // FIXME: extrange situation for prepost instances,
+        // when building
+        var uri;
+        if (this._instance.constructor == PrePostInstance) {
+            uri = null;
+        } else {
+            uri = this._instance.getUri();
+        }
+        return uri;
     },
     
     /**

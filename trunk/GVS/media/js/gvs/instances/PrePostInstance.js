@@ -168,13 +168,9 @@ var PrePostInstance = Class.create(ComponentInstance,
      * Set the type in pre | post
      */
     setType: function(/** String */ type) {
-        // this._type = type;
-        var data = {
-           'label': this._label,
-           'type': type
-        }
         this._isConfigurable = false;
-        this._onChange(data);
+        this._type = type;
+        this._onClick();
     },
     
     /**

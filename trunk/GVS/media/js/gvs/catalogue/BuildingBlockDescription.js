@@ -43,6 +43,13 @@ var BuildingBlockDescription = Class.create(
      */
     getTitle: function() {
         return this.label ? this.label['en-gb'] : this.name;
+    },
+
+    /**
+     * Returns the id of the building block
+     */
+    getId: function() {
+        return this.id;
     }
 
     // **************** PRIVATE METHODS **************** //

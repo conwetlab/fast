@@ -96,6 +96,34 @@ var PaletteDocument = Class.create(AbstractDocument, /** @lends PaletteDocument.
                 break;
         }
     },
+
+    /**
+     * @override
+     */
+    getMenuElements: function() {
+        return {
+                'file': {
+                    'type': 'SubMenu',
+                    'label': 'File',
+                    'weight': 1,
+                    'children': {
+                        'save': {
+                            'type': 'Action',
+                            'action': new MenuAction({
+                                'label': 'Save',
+                                'weight': 1,
+                                'handler': function() {
+                                    this._save();
+                                }.bind(this),
+                                'shortcut': 'Alt+S'
+                            }),
+                            'weight': 1,
+                            'group': 1
+                        }
+                    }
+                }
+            };
+    },
     
     // **************** PRIVATE METHODS **************** //
     
@@ -207,6 +235,15 @@ var PaletteDocument = Class.create(AbstractDocument, /** @lends PaletteDocument.
         if (this._selectedElement) {
             this._selectedElement.showPreviewDialog();
         }
+    },
+
+    /**
+     * Saves the current document
+     * @private
+     * @abstract
+     */
+    _save: function() {
+        throw "Abstract method invocation: PaletteDocument::_save";
     }
 });
 

@@ -296,7 +296,7 @@ h4{
     overflow: hidden;
 }
 .dropArea.form {
-    height: 50%;
+    height: 58%;
     top: 0px;
     left: 10%;
     right: 10%;
@@ -304,7 +304,7 @@ h4{
     /*background: transparent url("../images/gui/document/formsBackground.png") center center no-repeat;*/
 }
 .dropArea.operator {
-    top: 50%;
+    top: 58%;
     bottom: 20%;
     left: 10%;
     right: 10%;

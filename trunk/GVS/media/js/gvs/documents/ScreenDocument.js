@@ -120,6 +120,8 @@ var ScreenDocument = Class.create(PaletteDocument,
         );
         domainConceptSet.startRetrievingData();
         this._setSelectedElement();
+
+        this._save();
     },
 
 
@@ -132,17 +134,7 @@ var ScreenDocument = Class.create(PaletteDocument,
     getBuildingBlockDescription: function () {
         return this._description;
     },
-
     
-
-    /**
-     * Implementing MenuModel interface
-     * @override
-     * @type Object
-     */
-    getMenuElements: function() {        
-        return {};
-    },
 
     /**
      * @override
@@ -327,8 +319,8 @@ var ScreenDocument = Class.create(PaletteDocument,
         this._addToolbarElement('save', new ToolbarButton(
                 'Save the current screen',
                 'save',
-                this._saveScreen.bind(this),
-                false // disabled by default
+                this._save.bind(this),
+                true
         ));
         this._addToolbarElement('deleteElement', new ToolbarButton(
                 'Delete selected element',
@@ -468,11 +460,6 @@ var ScreenDocument = Class.create(PaletteDocument,
             this._inferenceEngine.findCheck(canvas, body,  this._domainContext,
                                     'reachability', this._onUpdateReachability.bind(this));
         }
-        
-        // FIXME: we must learn about document reachability from the inference 
-        //        engine. By the moment, one screen == deployable screenflow ;)
-        //this._toolbarElements.get('deploy').setEnabled(canvas.size() > 0);
-        this._toolbarElements.get('save').setEnabled(canvas.size() > 0);
     },
 
     /**
@@ -698,22 +685,42 @@ var ScreenDocument = Class.create(PaletteDocument,
     },    
     
     /**
-     * Previews the selected element
-     * depending on the type of the
-     * selected element
+     * Previews the selected element   
      * @private
      */
     _previewSelectedElement: function() {
         this._selectedElement.showPreviewDialog();
     },
-      
     
     /**
      * Starts the process of saving the screenflow
      * @private
+     * @override
      */
-    _saveScreen: function() {
-        //TODO: Do it!
+    _save: function() {
+        /*var uri = URIs.screen;
+        var persistenceEngine = PersistenceEngineFactory.getInstance();
+        if (this._description.getId() == null) {
+            // Save it for the first time
+            persistenceEngine.sendPost(uri, {"buildingblock": this._description.toJSON()},
+                                        null, this, this._onSaveSuccess, Utils.onAJAXError);
+        } else {
+            uri += "/" + this._description.getId();
+            persistenceEngine.sendPut(uri, {"buildingblock": this._description.toJSON()},
+                                        null, this, this._onSaveSuccess, Utils.onAJAXError);
+        }*/
+        // TODO: Show a saving message
+    },
+
+    /**
+     * On success handler when saving
+     * @private
+     */
+    _onSaveSuccess: function(/** XMLHttpRequest */ transport) {
+        if (this._description.getId() == null) {
+            var data = JSON.parse(transport.responseText);
+            this._description.addProperties({'id': data.id});
+        }
     }
 });
 

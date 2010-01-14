@@ -84,8 +84,9 @@ var GVSSingleton = function(){
                 // openScreenflow: this._openScreenflow.bind(this),
                 newScreenflow: this._newScreenflow.bind(this),
                 addScreen: this._addScreen.bind(this),
-                newScreen: this._newScreen.bind(this)
+                newScreen: this._newScreen.bind(this),
                 // openScreen: this._openScreen.bind(this)
+                showAbout: this._showAboutDialog.bind(this)
             };
             this._documentController = new DocumentController();
             
@@ -222,29 +223,45 @@ var GVSSingleton = function(){
                     'label': 'File',
                     'weight': 1,
                     'children': {
-                        'newScreenflow': {
-                            'type': 'Action',
-                            'action': new MenuAction({
-                                'label': 'New Screenflow',
-                                'weight': 1,
-                                'handler': function() {
-                                    this.action("newScreenflow")
-                                }.bind(this),
-                                'shortcut': 'Shift+N'
-                            }),
-                            'group': 0
+                        'new': {
+                            'type': 'SubMenu',
+                            'label': 'New...',
+                            'weight': 1,
+                            'group': 0,
+                            'children': {
+                                'newScreenflow': {
+                                    'type': 'Action',
+                                    'action': new MenuAction({
+                                        'label': 'Screenflow',
+                                        'weight': 1,
+                                        'handler': function() {
+                                            this.action("newScreenflow");
+                                        }.bind(this),
+                                        'shortcut': 'Shift+N'
+                                    }),
+                                    'group': 0
+                                }
+                            }
                         },
-                        'openScreenflow': {
-                            'type': 'Action',
-                            'action': new MenuAction({
-                                'label': 'Open Screenflow',
-                                'weight': 2,
-                                'handler': function() {
-                                    this.action("openScreenflow")
-                                }.bind(this),
-                                'shortcut': 'Shift+O'
-                            }),
-                            'group': 0
+                        'open': {
+                            'type': 'SubMenu',
+                            'label': 'Open...',
+                            'weight': 2,
+                            'group': 0,
+                            'children': {
+                                'openScreenflow': {
+                                    'type': 'Action',
+                                    'action': new MenuAction({
+                                        'label': 'Screenflow',
+                                        'weight': 2,
+                                        'handler': function() {
+                                            this.action("openScreenflow");
+                                        }.bind(this),
+                                        'shortcut': 'Shift+O'
+                                    }),
+                                    'group': 0
+                                }
+                            }
                         }
                     }
                 },
@@ -258,8 +275,9 @@ var GVSSingleton = function(){
                             'action': new MenuAction({
                                 'label': 'User Preferences',
                                 'weight':1,
-                                'handler': this._dialogs.get("preferences").
-                                                show.bind(this._dialogs.get("preferences"))
+                                'handler': function() {
+                                    this._dialogs.get("preferences").show();
+                                }.bind(this)
                             }),
                             'group': 0
                         }
@@ -287,7 +305,9 @@ var GVSSingleton = function(){
                             'action': new MenuAction({
                                 'label': 'About GVS',
                                 'weight': 2,
-                                'handler': this._showAboutDialog.bind(this)
+                                'handler': function() {
+                                    this.action("showAbout");
+                                }.bind(this)
                             }),
                             'group': 0
                         }
@@ -297,13 +317,25 @@ var GVSSingleton = function(){
             };
             if (!GlobalOptions.isPublicDemo) {
                 // Include the new screen feature
-                this._menuConfig.file.children.newScreen = {
+                this._menuConfig.file.children['new'].children.newScreen = {
                     'type': 'Action',
                     'action': new MenuAction({
-                        'label': 'New Screen',
+                        'label': 'Screen',
                         'weight': 10,
                         'handler': function(){
                             this.action("newScreen")
+                        }.bind(this),
+                        'shortcut': 'Alt+N'
+                    }),
+                    'group': 0
+                };
+                this._menuConfig.file.children['open'].children.openScreen = {
+                    'type': 'Action',
+                    'action': new MenuAction({
+                        'label': 'Screen',
+                        'weight': 10,
+                        'handler': function(){
+                            this.action("openScreen")
                         }.bind(this),
                         'shortcut': 'Alt+N'
                     }),
