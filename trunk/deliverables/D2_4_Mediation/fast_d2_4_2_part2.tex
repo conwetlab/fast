@@ -1,0 +1,1534 @@
+\section{Ontologies}
+\label{sec:ontologies}
+This section provides a brief introduction to the concept of ontologies.
+
+\subsection{Definitions}
+As specified in \cite{gruber2008ontology} {\textquotedblleft}an ontology defines a
+set of representational primitives with which to model a domain of
+knowledge or discourse{\textquotedblright}. These primitives are
+typically classes, attributes and relations among classes or class
+instances (and others, such as function terms, rules, restrictions,
+axioms and events). Their definitions provide information about their
+semantics (meaning) and constraints on their logically consistent
+usage. 
+
+Ontologies are typically specified in languages that allow to abstract
+away from implementation details, and focus on the so-called semantic
+level. This way ontologies provide a representation independent from
+data models and implementation, thus providing a means to enable
+interoperability among disparate systems and specifying interfaces to
+independent, knowledge-based systems. In the technology stack of the
+Semantic Web, ontologies define a separate layer, and have a set of
+languages and tools (both commercial and open-source) to work with
+them. 
+
+We would also mention a widely-known and used classical definition of
+ontologies, presented in \cite{gruber93towards}: {\textquotedblright}[An
+ontology is] an explicit, formal specification of a shared
+conceptualisation{\textquotedblright}. \cite{studer1998knowledge_engineering_principles} explains
+this definition, by elaborating on the four main terms of the
+definition:
+
+\begin{enumerate}
+\item it is a conceptualisation, because it models and categorises
+relevant concepts from the real world, 
+\item it is explicit, because the model explicitly states the types of
+the concepts, the relationships between them and the constraints of
+their use, 
+\item it is formal, because the ontology has to be machine-readable and
+consistent, and 
+\item it is shared, because an ontology is consensual, i.e. accepted by
+a group of people and it is used in a shared environment to allow a
+common conceptualisation of data. 
+\end{enumerate}
+
+\subsection{General Description}
+An ontology is used to define the vocabulary that agents use to exchange
+queries and assertions. If an agent commits to a common ontology, it
+guarantees the consistency (but not completeness) of the queries and
+assertions using the vocabulary defined in the ontology \cite{gruber93towards}.
+An agent supporting the interface defined in an ontology is not
+required to use the terms of the ontology as an internal encoding of
+its knowledge. Nonetheless, the definitions and formal constraints of
+the ontology do restrict what can be meaningfully stated in the
+language defined. 
+
+Two analogies to ontologies are given in \cite{gruber93towards}. Ontologies are
+similar to global type declarations in a conventional software library,
+and ontological commitments are similar to type restrictions over the
+inputs and outputs of program modules. Formal argument restrictions can
+be checked mechanically by compilers, to make sure that calling
+procedures pass legal data to called procedures. Similarly, sentences
+in an exchange between agents can be checked for logical consistency
+using the definitions in the ontologies. Just as the formal argument
+list hides the internal structure of a procedure from its calling
+environment, a common ontology allows one to interact with a
+knowledge-based program without committing to or being aware of its
+internal encoding of knowledge. 
+
+Ontologies are also like conceptual schemata in database systems. Such a
+schema provides a logical description of the data being shared,
+allowing applications to interact with it without having any knowledge
+of internal data structures. So while a conceptual schema defines
+relations and constraints on data, an ontology defines terms with which
+to represent knowledge, and constraints on their relationships.
+\cite{gruber2008ontology} also points out that the requirement of inputs and
+outputs to be logically consistent with the definitions and constraints
+of an ontology is analogous to the requirement that the rows of a
+database table (or insert statements in SQL) must be consistent with
+the integrity constraints imposed on the table, stated separately and
+independently of the internal data formats. 
+
+\cite{gruber2008ontology} enumerates the key applications of ontologies, by saying
+that they {\textquotedblleft}are part of the W3C standards stack for
+the Semantic Web, in which they are used to specify standard conceptual
+vocabularies in which to exchange data among systems, provide services
+for answering queries, publish reusable knowledge bases, and offer
+services to facilitate interoperability across multiple, heterogeneous
+systems and databases.{\textquotedblright} The key role of ontologies
+in database systems is to provide a data modeling layer above specified
+database designs, so that data can be used across independently
+developed systems and services. This made it possible to achieve
+database interoperability, cross database search and web service
+interrogation. 
+
+There are many issues not addressed by common ontologies, related to
+knowledge sharing. One important question is how a group of people can
+reach a consensus on a common ontology. The discussion of ontology
+mediation aims to address this problem by attempting a solution to the
+case of several ontologies conceptualising a similar domain of the real
+world in different ways.
+
+
+\section{The Mediation Problem} %%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\label{sec:mediationproblem}
+Ontologies are employed as explicit descriptions of the information
+source semantics. According to \cite{wache2001ontology_information_integration}, integrating these
+semantics along multiple systems can be done using three main
+approaches. (1) The single ontology approach, using a single ontology
+as a global shared vocabulary. Unfortunately this can not provide
+different views on a domain, and using it for multiple similar
+catalogues is unfeasible due to the vast amount of information needed
+to be captured, and the susceptibility of the conceptualisation to
+change. (2) The multiple ontology approach has each information source
+describing its own ontology. This solves problems related to the single
+ontology approach, but introduces the problem of differences in
+conceptualising the same concepts. Ontology mediation can be used to
+map different parts of the ontologies to each other. (3) The hybrid
+approach uses multiple ontologies, but uses a global ontology to make
+all the ontologies comparable to each other. This is closely related to
+ontology merging, where overlapping entities are merged, and the rest
+is simply composed into one unified ontology, allowing for the
+definition of the concepts of both ontologies. We suggest that the FAST
+Gadget Ontology (as defined in D2.1) could act as a global ontology in
+the context of FAST, although further research needs to be done in this
+direction, since the Gadget Ontology has a slightly different
+epistemological commitment. 
+
+In the context of FAST, the problem is that of reconciling the
+ontologies in the back-end with the ontologies in the front-end, to
+allow for interoperability between the two layers. 
+
+In the following we present a motivating scenario for ontology mediation
+in Section \ref{subsec:mediationproblem_motivatingexample}, and a formal description of the alignment problem and
+process, respectively, in Section \ref{subsec:mediationproblem_problemstatement}. After that we show some examples
+of ontology mediation in Section \ref{subsec:mediationproblem_examples}.
+
+\subsection{Motivating Example}
+\label{subsec:mediationproblem_motivatingexample}
+This section presents a brief example, illustrating a problem that
+presents the need for ontology mediation. 
+
+%\begin{verbatim}
+\lstset{frame=single, basicstyle=\ttfamily, caption=Ontology \texttt{O1}.}
+\lstset{emph={vsmlVariant, namespace, ontology, concept, ofType, instance, nonFunctionalProperties, endNonFunctionalProperties, memberOf, hasValue}}
+\lstset{emphstyle=\textbf\textit\underbar}
+\begin{lstlisting}
+vsmlVariant -"http://www.smo.org/wsml/wsml-syntax/wsml-flight"
+
+namespace { -"http://see.deri.org/adrian/thesis/ontologies/O1#" ,
+       wsml - "http://www.wsmo.org/wsml/wsml-syntax#" ,
+         dc - "http://purl.org/dc/elements/1.1/" }
+
+ontology - "http://see.deri.org/thesis/ontologies/O1"
+    nonFunctionalProperties
+    dc#description hasValue "A simple ontology modeling
+                             the concept of a person"
+    endNonFunctionalProperties
+
+concept person
+    name ofType _string
+    age ofType _integer
+    hasGender ofType gender
+    hasChild ofType person
+    marriedTo ofType person
+
+concept gender
+    value ofType _string
+
+instance male memberOf gender
+    value hasValue "male"
+instance female memberOf gender
+    value hasValue "female"
+\end{lstlisting}
+
+Consider the two ontologies \texttt{O1} and
+\texttt{O2} \cite{mocan2008mediation} presented in Listing 1 and
+Listing 2 respectively, in the Human Readable Syntax of the Web Service
+Modeling Language (WSML) \cite{debruin2005wsml}. Elements from
+ontology \texttt{O1} need to be mapped to the elements
+described in Ontology \texttt{O2}. 
+
+Ontology \texttt{O1} describes the concept
+\texttt{person} as one having five attributes, each of
+them having a type that is either a concept or a value from a given
+data type. The concept gender has two instances defined, that have
+attributes pointing to the corresponding values. 
+
+\lstset{frame=single, caption=Ontology \texttt{O2}.}
+%\lstset{emph={vsmlVariant, namespace, ontology, concept, ofType, instance, nonFunctionalProperties, endNonFunctionalProperties, memberOf, hasValue}}
+%\lstset{emphstyle=\textbf}
+\begin{lstlisting}
+vsmlVariant -"http://www.smo.org/wsml/wsml-syntax/wsml-flight"
+
+namespace { -"http://see.deri.org/adrian/thesis/ontologies/O2#" ,
+       wsml - "http://www.wsmo.org/wsml/wsml-syntax#" ,
+         dc - "http://purl.org/dc/elements/1.1/" }
+
+ontology - "http://see.deri.org/thesis/ontologies/O2"
+    nonFunctionalProperties
+    dc#description hasValue "A simple ontology modeling
+                             the concept of a human"
+    endNonFunctionalProperties
+
+concept human
+    name ofType _string
+    age ofType _integer
+    noOfChildren ofType _integer
+
+concept man subConceptOf human
+
+concept woman subConceptOf human
+
+concept marriage
+    hasParticipant ofType human
+    date ofType _date
+\end{lstlisting}
+
+%\newline
+Ontology \texttt{O2} describes the concept
+\texttt{human} as one having three attributes. The
+concepts \texttt{man} and \texttt{woman} are
+subclasses of the concept \texttt{human}. 
+
+Additionally a fourth concept called \texttt{marriage} is
+defined having two attributes. (For simplicity we do not deal with the
+exceptions of polygamy and same-sex marriage). 
+
+Suppose that a service (or agent) using ontology O1 needs to interact
+with a service accepting and providing data that is semantically
+defined in ontology O2. 
+
+The first step is to identify candidates to be mapped or to have
+taxonomic relationships under an integrated schema \cite{shvaiko2005schema_based}. It is obvious that \texttt{person} and
+\texttt{human} are candidates to be mapped, as well as the
+class \texttt{man} with the class
+\texttt{person} having the attribute
+\texttt{gender} equal to
+{\textquotedblleft}\texttt{male}{\textquotedblright} and
+the class \texttt{woman} with the class
+\texttt{person} having the attribute
+\texttt{gender} equal to
+{\textquotedblleft}\texttt{female}{\textquotedblright}. 
+
+After having identified these correspondences, the next step is to
+generate query expressions and assertions that automatically translate
+data instances of one of these ontologies into the other one, or that
+automatically handle their semantic relations under an integrated
+ontology. 
+
+\subsection{Problem Statement}
+\label{subsec:mediationproblem_problemstatement}
+Given two ontologies \texttt{o} and
+\texttt{o{\textquotesingle}} that need to be mapped to
+each other, according to \cite{shvaiko2005schema_based} we can define a
+mapping element as a 5-tuple \texttt{{\textless}id, e,
+e{\textquotesingle}, n, R{\textgreater}}, where 
+
+\begin{itemize}
+\item \texttt{id} is a unique identifier, identifying the
+mapping element, 
+\item \texttt{e} and
+\texttt{e{\textquotesingle}} entities (classes,
+attributes, relations) of the first and second ontology, respectively, 
+\item \texttt{n} is a confidence measure in some
+mathematical structure holding the correspondence value between e and
+e{\textquotesingle}, 
+\item \texttt{R} is the correspondence relation holding
+between e and e{\textquotesingle} (e.g.,
+\texttt{equivalence (=); more general($\sqsupseteq$); disjointness($\perp$); overlapping($\sqcap$)}.
+\end{itemize}
+
+\begin{figure}
+    \centering
+        \includegraphics[width=72mm, height=45mm]{images/Alignment_process.png}%[bb=0 0 201 126]
+        \caption{The alignment process}
+    \label{fig:Alignment}
+\end{figure}
+
+A mapping is a set of the above defined mapping elements. The alignment
+operation determines the mapping
+(M\texttt{{\textquotesingle}}) for the pair of ontologies
+(\texttt{o} and
+\texttt{o{\textquotesingle}}). There are some parameters
+than can extend the definition of the alignment process, namely: 
+
+\begin{enumerate}
+\item an input mapping, \texttt{M}, which is to be used and
+completed by the process, 
+\item the mapping parameters, \texttt{p} (such as weights
+and thresholds), that configure the alignment process, 
+\item other external resources used by the alignment,
+\texttt{r} (such as dictionaries, thesauri, etc.); See Figure \ref{fig:Alignment}. 
+\end{enumerate}
+For example, suppose that based on some algorithm (using linguistic and
+structural analysis) the confidence measure for the equivalence
+relation between the classes \texttt{person} in
+\texttt{O1} and \texttt{human} in
+\texttt{O2} is 0.62. Suppose that a mapping parameter
+specifies a threshold of 0.55 for this algorithm, that is all pairs of
+entities with a confidence measure higher that 0.55 will be considered
+correct mapping elements. Thus our algorithms would return the
+following mapping element: \texttt{{\textless} id11,
+person, human, 0.62, = {\textgreater}.}Now, another algorithm
+determines the two concepts to mean exactly the same thing, thus it
+either does not compute a confidence measure (returning
+\texttt{n/a}), or it returns the upper limit of the
+confidence measure interval (e.g. 1). Thus the mapping element would
+be: \texttt{{\textless} id11, person, human, n/a, =
+{\textgreater}.} 
+
+It should be noted, that the entities mapped between two ontologies can
+be constructed using patterns, i.e. more than just mapping concepts to
+concepts, and so on. For example, we can map a concept to a concept
+having a certain attribute, like in the case of the concept
+\texttt{person} having the attribute
+\texttt{hasGender} equal to \texttt{female}
+from \texttt{O1} being mapped to the concept
+\texttt{woman} from \texttt{O2}. 
+
+\subsection{Mediation Examples}
+\label{subsec:mediationproblem_examples}
+We present two further examples to better illustrate the use of ontology
+mediation. 
+
+The first example is taken from \cite{giunchiglia2008evaluation}. Based on the
+idea that we view ontologies as graph-like structures, we exemplify
+ontology matching with the help of fragments of two tree-like
+structures, such as Google and Looksmart. Notice that in the general
+case the relation holding between nodes is not specialisation, but
+classification (parent-child relation). 
+
+\begin{figure}[h]
+    \centering
+        \includegraphics[width=101mm, height=67mm]{images/F2GoogleLooksmart.png}%[bb=0 0 254 167]
+        \caption{Fragments of Google and Looksmart directories and some
+correspondences. Double arrowheads denote equivalence, while single
+arrowheads stand for the more general relation. Image taken from
+\cite{giunchiglia2008evaluation}.}
+    \label{fig:GoogleLooksmart}
+\end{figure}
+
+Suppose we want to merge the merge the two structures. Such situations
+can arise, for example when an e-commerce company acquires another one.
+One probable mapping is given in Figure \ref{fig:GoogleLooksmart}. We have found, for example,
+that \texttt{O1:Basketball} is equivalent to
+\texttt{O2:Basketball}, and that
+\texttt{O2:Games} is more general than
+\texttt{O1:Board\_Games.} 
+
+The second example given in \cite{madhavan2001schema_matching} illustrates the
+need to use several techniques in matching two ontologies. Figure \ref{fig:POSchemas}
+shows two purchase order schemas that need to be matched. 
+
+\begin{figure}[h]
+    \centering
+        \includegraphics [width=101mm, height=42mm]{images/F1POSchemas.png}%[bb=0 0 257 105]
+        \caption{Matching purchase order schemas. Image taken from \cite{madhavan2001schema_matching}.}
+    \label{fig:POSchemas}
+\end{figure}
+
+As stated above in Section 3.2 we look for similarity coefficients
+between the two schemas and deduce a mapping from those coefficients.
+Suppose, as a first phase we use linguistic matching, using thesauri to
+help match names, acronyms, synonyms, etc. resulting in a set of
+candidate pairs (such as \texttt{PO} and
+\texttt{PurchaseOrder}, or \texttt{Bill} and
+\texttt{Invoice}) and language similarity coefficients
+(\texttt{lsim}). In the second phase we would perform a
+structural matching of the two schemas. For example,
+\texttt{Line} would be mapped to
+\texttt{ItemNumber}, because their parents and their other
+two children match, \texttt{City} under
+\texttt{POBillTo} will be mapped to
+\texttt{City} under \texttt{InvoiceTo},
+because bill is a synonym to invoice. This process results in
+structural similarity coefficients (\texttt{ssim}). By
+using a weighted similarity, we can compute the final mappings (e.g. by
+using the formula \texttt{wsim=ws*wsim+(1-ws)*lsim}, where
+\texttt{ws} is the interval [0,1]). 
+
+
+\section{Ontology Mismatches}
+\label{sec:ontologymismatches}
+Ontology mismatches are the main obstacles in the combined use of
+independently developed ontologies. We will now give an overview of the
+main type of ontology mismatches as presented in \cite{klein2001combiningOntologies}, which
+is the main source of input to this state-of-the-art report. We will
+classify ontology mismatches into given types and will find their
+relationships. 
+
+Firstly, two levels of mismatches can be distinguished. The first level
+is the \textit{language} or meta-model level. These are differences in
+the primitives that make up the language used to specify the ontology.
+They produce mismatches in the mechanics to define classes, relations,
+attributes and so on. The second level is the \textit{ontology} or
+model level. This is were the actual ontology is located. These are
+differences in the way the domain is modeled. 
+
+In this section we discuss the overlap and mismatches between concepts,
+relations, attributes and instances. We will detail the two levels of
+mismatches and the different types that occur at each level. 
+
+\subsection{Language Level Mismatches}
+\label{subsec:ontologymismatches_languagelevel}
+We define four types of mismatches, although they often coincide. These
+occur when ontologies written in different languages are combined. We
+note that these type of mismatches will be less relevant for FAST
+because we assume that standards for ontology languages are now so well
+established that in practice we will not very often find ontologies
+written in different languages anymore, but we discuss them briefly to
+give a better overview of the meditation problem. 
+
+\subsubsection{Syntax}
+Different languages obviously use different syntax. Therefore the same
+concept can (and will be) often modeled in a completely different way.
+For example, the concept of chairs would be defined in RDF Schema as
+\texttt{{\textless}rdfs:Class
+ID={\textquotedblright}Chair{\textquotedblright}{\textgreater}}, while
+in LOOM it would be \texttt{(defconcept Chair)}. 
+
+This is the simplest possible mismatch, although it often comes coupled
+with other mismatches as well. The simplest form is when a language has
+several syntactical forms. 
+
+The solution is to simply to have a rewrite mechanism that returns the
+corresponding translated form. 
+
+\subsubsection{Logical representation}
+A slightly more complicated mismatch is when a logical notion can not be
+represented in a given language. For example, in certain languages it
+is possible to assert that two classes are disjoint, say using
+\texttt{(disjoint A B),} whereas in other languages it is
+necessary to express this using simpler statements, such as the
+negation of set-inclusion statements, like \texttt{A
+subclass-of (NOT B), B subclass-of (NOT A).} 
+
+The actual problem is not the question if something can be expressed,
+but finding the language constructs to express a logical notion (not a
+concept). 
+
+Solving this mismatch is relatively-easy: it consists in finding
+translation rules to transform one representation into another. 
+
+\subsubsection{Semantics of primitives}
+This difference is a more subtle one, and occurs at the meta-model of
+the language. It sometimes occurs that the semantics of an identical
+name differs from language to language. For example, the expression
+\texttt{A equalsTo B} can have many different
+interpretations. 
+
+Even when two ontologies use the same syntax, the semantics may differ.
+For example, the OIL RDF syntax interprets several
+\texttt{{\textless}rdfs:domain{\textgreater}} statements
+as the intersection of the arguments, whereas RDF Schema interprets
+them as the union of the arguments. 
+
+\subsubsection{Language expressiveness}
+This mismatch, at the meta-model level of the languages, is the one
+having the greatest impact on the attempt to combine and reconcile
+ontologies. 
+
+The difference implies that some languages can express notions that
+others can not. For example, some languages have no constructs to
+express negation, whereas other do. Other typical examples are support
+for sets, lists, etc. 
+
+These type of mismatches have the greatest impact, and are sometimes
+mentioned as the {\textquotedblleft}fundamental
+differences{\textquotedblright} between knowledge models. 
+
+\subsection{Ontology Level Mismatches}
+\label{subsec:ontologymismatches_ontologylevel}
+Mismatches at the model level happen both in the case of having the two
+ontologies written in the same language and syntax and in the case of
+different languages. We can distinguish between several types of
+ontology level mismatches. 
+
+A conceptualisation mismatch is a difference in how the domain is
+modeled (conceptualised), therefore we will have different concepts and
+different relations between them. Explication mismatches are
+differences in the way the concepts are specified. These occur as
+mismatches in definitions, or terms, or the combination of the two.
+Terminological mismatches are naming differences or conflicts. Finally,
+encoding mismatches are differences in the way values are specified,
+for example currencies for prices. 
+
+These kinds of mismatches are likely to occur in the context of FAST and
+are therefore important factors in the implementation of ontology
+mediation in FAST. 
+
+\subsubsection{Conceptualisation Mismatches}
+These are differences in the conceptualisation of the domain, that is
+not only the specification differs in the two ontologies, but the model
+as well. 
+
+Sometimes these mismatches can not be reconciled automatically, and need
+a domain expert. In this case, a good solution would be to use both
+ontologies together. In that case, the overlapping part needs to be
+aligned, and the rest can be merged. 
+
+\paragraph{Scope.}
+
+Two classes that seemingly represent the same concept, but do not have
+the same instances, although some of these are identical. For example
+the concept of {\textquotedblleft}employee{\textquotedblright} can be
+perceived and specified in different ways by different organisations. 
+
+\paragraph{Model coverage and granularity.}
+This mismatch is related to the part of the domain that is covered by
+the ontologies, and the level of detail respectively. For example, an
+ontology could model cars, but no trucks, whereas another would have a
+few categories for trucks, and another third ontology could make very
+detailed distinction between all the types of trucks and their
+properties. 
+
+\subsubsection{Explication Mismatches}
+The first two types of explication mismatches (\textit{paradigm} and
+\textit{concept description}) result from the \textbf{style of
+modeling.} The next two types (\textit{synonym terms} and
+\textit{homonym terms}) can be classified as \textbf{terminological
+mismatches}. Finally, there is one trivial difference, cause by
+\textit{encoding} mismatches. 
+
+\paragraph{Paradigm.}
+Different paradigms can be used to represent different concepts, or
+different top-level ontologies can be used, which all result in this
+kind of mismatch. For example, one could model time based on interval
+logic, while another could use discrete time points. 
+
+\paragraph{Concept Description.}
+These types of mismatches are called modeling conventions. Several
+choices can be made in different modeling questions. One choice, the
+categorisation of concepts can be done based on an attribute, or using
+subclasses. For example, as presented in Section 3.1, the concepts
+{\textquotedblleft}man{\textquotedblright} and
+{\textquotedblleft}woman{\textquotedblright} can be modeled in several
+ways. They could be instances of the concept, and differ only in an
+attribute (e.g. \texttt{gender}), or they can be separate
+subclasses of a top-level class representing
+{\textquotedblleft}humans{\textquotedblright} in general. 
+
+Another choice is the way in which a hierarchy is built - distinction
+between features can be made higher or lower in the hierarchy. For
+example, consider the place where the difference between scientific and
+non-scientific publications is made: a dissertation can be modeled as
+\texttt{dissertation }\texttt{{\textless}
+book {\textless} scientific publication {\textless} publication}, or as
+\texttt{dissertation {\textless} scientific book
+{\textless} book {\textless} publication}, or as a subclass of both
+\texttt{scientific publication} and
+\texttt{book}. 
+
+\paragraph{Synonym Terms.}
+Concepts are represented by different names. For example, the term
+{\textquotedblleft}car{\textquotedblright} from an ontology can be
+represented as {\textquotedblleft}automobile{\textquotedblright} in
+another. 
+
+Although the solution looks simple in using thesauri, in reality much
+human effort is needed to solve these problems, and care must be taken
+not to overlap with scope mismatches (see above). 
+
+\paragraph{Homonym Terms.}
+The meaning of a term is different in another context. For example, the
+term {\textquotedblleft}conductor{\textquotedblright} has one meaning
+in a musical context, and a different meaning in an electric
+engineering domain. 
+
+These differences are much harder to solve than synonyms, and always
+need human contribution. 
+
+\paragraph{Encoding.}
+The values of attributes in ontologies are encoded in different formats.
+For example, date can be encoded in a
+\texttt{{\textquotedblleft}yyyy-mm-dd{\textquotedblright}}
+form, or a
+\texttt{{\textquotedblleft}dd/mm/yyyy{\textquotedblright}},
+distance might be specified in miles or kilometers, money amount can be
+given in different currencies, and so on. 
+
+These kind of mismatches can very easily be solved, by using a wrapper,
+or a single transformation step. 
+
+
+\section{Ontology Mediation Approaches}
+\label{sec:mediationapproaches}
+In this section we give an overview of some of the major approaches to
+ontology mediation, following the structure of Section 2: Approaches in
+Ontology Mediation of \cite{debruin2005wsml}. Firstly, in Section
+\ref{subsec:mediationapproaches_ontologymapping} we present some representative approaches to the specification of
+mappings. Then in Section \ref{subsec:mediationapproaches_ontologyalignment} we overview some of the main approaches
+and algorithms to overcome mismatches and find mappings between
+ontologies, that is we discuss the topic of ontology alignment. Finally
+in Section \ref{subsec:mediationapproaches_ontologymerging} we discuss the process of merging several ontologies.
+Further research is needed to decide on the type of ontology mediation
+to be used in the context of FAST, the algorithms and approaches
+applied, and whether to use alignment or merging. 
+
+\subsection{Ontology Mapping}
+\label{subsec:mediationapproaches_ontologymapping}
+An ontology mapping is a declarative specification of the semantic
+overlap between two ontologies \cite{debruin2005wsml}. It is the
+result of the ontology alignment process (see Figure 3.). This mapping
+is usually expressed as a set of axioms in a certain mapping language. 
+
+There are three main phases of the mapping process: (1) discovering the
+mapping, (2) representing the mapping and (3)
+using/exploiting/executing the mapping. This section is focused on (2),
+that is we survey a number of approaches in representing ontology
+mappings. 
+
+A common tendency in ontology mapping is to create an ontology of
+mappings, which represents the vocabulary for the representation of
+mappings. 
+
+\paragraph{MAFRA.}
+MAFRA \cite{maedche2002mafra}, or MApping FRAmework for distributed
+ontologies supports the interactive, incremental and dynamic process of
+ontology mapping, which transforms instances of a source ontology into
+instances of a target ontology. 
+
+\subparagraph{Framework Components.}
+The framework consists of five main phases (called horizontal
+dimensions) and for components that run along the entire process,
+called vertical components. Within the horizontal dimension, the
+authors identified five modules: 
+
+\begin{itemize}
+\item \textit{Lift \& Normalisation}. Both ontologies must be normalised
+to the uniform representation of RDFS. As a result both ontologies are
+represented in RDF Schema with their instances in RDF. Thus syntactical
+end lexical differences are eliminated and semantic differences become
+more apparent. 
+\item \textit{Similarity.} This module establishes similarities between
+entities using different approaches (\textit{lexical similarity},
+\textit{property similarity} based on properties of concepts,
+\textit{bottom-up similarity} propagating the similarity from lower
+parts of the taxonomy to the upper part and \textit{top-down
+similarity} that assumes special relevance when top level concepts have
+a higher or lower similarity). 
+\item \textit{Semantic Bridging}. Based on the similarities computed in
+the previous phase, correspondences are identified between entities,
+using so-called semantic bridges, which define the actual mapping. 
+\item \textit{Execution}. Transforms instances between the two
+ontologies using the semantic bridges. 
+\item \textit{Post-processing.} Revisiting the mapping for improvements.
+
+\end{itemize}
+The vertical dimension contains modules like evolution (synchronising
+changes between in the ontologies and the bridges), the GUI (extensive
+graphical support must be given for human assistance of the process),
+etc. 
+
+\subparagraph{Semantic Bridges.}
+Semantic bridges are captured in the Semantic Bridging Ontology (SBO).
+Five dimensions have been identified for the semantic bridges, as
+presented in the following: 
+
+\begin{itemize}
+\item \textit{Entity dimension.} Semantic bridges may relate to the
+following entities: (i) concepts modeling object classes from the real
+world, (ii) relations modeling relationships of objects, (iii)
+attributes modeling simple properties and (iv) extensional patterns
+modeling the content of instances. 
+\item \textit{Cardinality dimension.} Defines the number of entities on
+both sides of the semantic bridge (mostly 1:1, 1:n and m:1; m:n is
+rarely encountered, and can be usually decomposed onto m:1:n). 
+\item \textit{Structural dimension.} Reflects on how elementary bridges
+may be combined into more complex bridges. Relations that hold among
+bridges are \textit{specialisation} (reuse a bridge and provide
+additional information), \textit{abstraction} (should only be used as a
+super-class), \textit{composition} (a bridge is composed of other
+bridges) and \textit{alternatives} (mutually exclusive bridges). 
+\item \textit{Constraint dimension.} Permits to control the execution of
+the semantic bridge. Constraints must hold on the source ontology in
+order for the transformation procedures to be applied. 
+\item \textit{Transformation dimension.} Reflects on how instances of
+the source ontology are transformed during the mapping process. 
+\end{itemize}
+The Semantic Bridging Ontology (SBO) contains a specification of all
+semantic bridges, organised in a taxonomy. To actually relate the
+source and the target ontology the mapping process creates an instance
+of the SBO containing semantic bridge instances along with all the
+necessary information to transform instances of entities from the
+source to the target ontology. 
+
+The five semantic bridge dimensions are employed as follows: 
+
+\begin{itemize}
+\item There are three basic entity types: \textit{Concepts},
+\textit{Relations} and \textit{Attributes}. 
+\item The class \textit{SemanticBridge} is the most generic bridge type.
+It defines the relations to the source and target entities. It is
+specialised according to entity type and cardinality of the relation. 
+\item The class \textit{Service} can reference resources that are
+responsible to connect to, or to describe transformations. 
+\item \textit{Rule} is the general class for constraints and
+transformation-relevant information. 
+\item The class \textit{Transformation} uses the \textit{inService}
+relation to link to the transformation procedure. 
+\item The class \textit{Condition} represents the conditions that need
+to be satisfied in order to execute the semantic bridge. 
+\item The Composition primitive can be accomplished using the
+\textit{hasBridge} relation of \textit{SemanticBridge}, without any
+cardinality or type constraint. 
+\item The Alternative primitive is supported by the
+\textit{SemanticBridgeAlt} class. It groups several mutually exclusive
+bridges, of which the first consistent bridge (with satisfied
+conditions) is executed. 
+\end{itemize}
+For an extensive and relevant example please refer to Section 3.3. of
+\cite{maedche2002mafra}.
+
+\paragraph{RDFT.}
+RDFT \cite{omelayenko2002rdft} is a small language (meta-ontology) defined for
+mapping XML DTDs to/and RDF Schemas specially targeted for business
+integration tasks. It is built on top of RDF Schema and it is used to
+map RDF Schemas and concepts like events, messages, vocabularies to
+XML-specific parts of the conceptual models that occur in the
+integration tasks. 
+
+The model is derived from WSDL \cite{christensen2001wsdl} and provides
+an RDF Schema for RDF annotations of WSDL documents, and is extended
+with the temporal ontology PSL. The business integration task in this
+context is seen as a service integration task, where each enterprise is
+represented as a Web service specified in WSDL. WSDL annotations made
+according to the defined meta-ontology allow performing inference over
+WSDL descriptions to validate the links established between the
+enterprises. 
+
+\subparagraph{PSL.}
+To be able reason about the inputs and outputs of the companies being
+integrated, the authors developed a conceptual model of WSDL, which is
+directly derived from the WSDL specification. WSDL defines the
+following basic elements of services, on top of which PSL is built: 
+
+\begin{itemize}
+\item \texttt{Types} that provide links to the XML Schemas
+of the messages exchanged; 
+\item abstract definitions of \texttt{Messages} in
+accordance with \texttt{Types}; 
+\item \texttt{Port} \texttt{Types} that
+specify input and output messages; 
+\item \texttt{Bindings} that specify concrete protocols and
+formats for messages according to \texttt{Types}. 
+\end{itemize}
+These elements can describe services but do not represent any temporal
+knowledge about the messages requiring integration. The Process
+Specification Language or PSL temporal ontology includes classes to
+capture temporal knowledge: 
+
+\begin{itemize}
+\item \texttt{activity} , which is performed during a
+certain time interval; 
+\item \texttt{activity} \texttt{occurrence} ,
+contains the snapshot of an activity at a moment in time; 
+\item \texttt{timepoint} , marks the time interval of the
+activity; 
+\item \texttt{objects} , things that do not possess
+temporal properties, but may participate in certain activities at given
+timepoints. 
+\end{itemize}
+\subparagraph{RDFT.}
+The basic RDFT class is \texttt{Bridge }that connects two
+concepts. It describes common properties of bridges, which enables one
+to specify correspondences between an entity and a set of entities.
+allowing for one-to-many and many-to-one connections. 
+
+The bridges contain the \texttt{Relation} property,
+pointing to one of the subclasses of
+\texttt{BridgeRelation}: 
+
+\begin{itemize}
+\item \texttt{EquivalenceRelation}, stating that the source
+element is equivalent with the target set of elements, or the source
+set of elements is equivalent to the target element respectively,
+depending on the relation cardinality; 
+\item \texttt{VersionRelation}, specifying that the target
+set of elements forms a later version of the source set of elements.
+Unlike equivalence bridges, assumes that both concepts belong to the
+same domain. 
+\end{itemize}
+Several types of bridges are defined in RDFT: 
+
+\begin{itemize}
+\item \texttt{Event2Event} bridges link different events,
+specify temporal event generation conditions, and link the events to
+the messages transmitted with them. They connect instances of the
+meta-class \texttt{mediator:Event}. 
+\item two kinds of \texttt{RDFBridges}:
+\texttt{Class2Class} and
+\texttt{Property2Property} bridges between RDF Schema
+classes and properties. They contain \texttt{rdfs:Class
+}and \texttt{rdfs:Property} instances, respectively. 
+\item four kinds of \texttt{XMLBridges}:
+\texttt{Tag2Class}, \texttt{Tag2Property},
+\texttt{Class2Tag}, \texttt{Class2Property},
+which link XML DTD tags and RDF Schema classes and properties. 
+\end{itemize}
+The bridges are grouped into \texttt{Maps}, which are
+collections of bridges serving a single purpose. The maps are
+identified by their names and form minimal reusable modules of RDFT
+bridges. Each map can include other maps and serves as a container for
+\texttt{Bridges}. Described in this manner, as a set of
+bridges, mappings are said to be \textit{declarative}, while
+\textit{procedural} mappings can be defined as Xpath \cite{clark1999xpath} expressions, transforming instance data. 
+
+Connecting two services with RDFT consists of connecting their events
+(instantiating \texttt{EventMap}) consisting of
+\texttt{Event2Event} bridges. Each of the bridges points
+to a \texttt{DocumentMap} aligning the documents attached
+to the bridges and, in turn, consisting of
+\texttt{RDFBridges}, \texttt{XMLBridges} and
+\texttt{VocabularyMaps}. 
+
+\paragraph{C-OWL.}
+C-OWL \cite{bouquet2004cowl} gives another perspective on ontology
+alignment, extending the widely-known OWL \cite{dean2004owl}
+language. 
+
+\subparagraph{The Vision.}
+In their vision, similar to the one discussed at the beginning of
+Section 3, two types of domain conceptualisations exist: 
+
+\begin{itemize}
+\item \textit{ontologies}, that encode a view common to a set of
+different parties. They make it easy to exchange information, although
+they have the requirement of common consensus and the problem of hard
+maintenance. 
+\item \textit{contexts}, that encode the view of a party, and are local
+conceptualisations, that are not shared. These are easy to maintain,
+and no consensus is required, but need explicit mapping among the
+contexts of different parties to be able to exchange information. 
+\end{itemize}
+In this vision, an ontology is contextualised, i.e. it is a
+\textit{contextual} \textit{ontology}, when its contents are kept local
+(therefore not shared) and can be mapped to the contents of other
+ontologies via explicit mappings, allowing for a controlled form of
+global visibility. This is opposed to the OWL importing mechanism,
+where a set of local models is globalised in a unique shared model, by
+importing complete models and using the imported elements by direct
+reference. 
+
+\subparagraph{Context OWL.}
+Context OWL or C-OWL is a language that extends OWL both syntactically
+and semantically to support the concept of contextual ontologies. 
+
+Therefore a contextual ontology defined in C-OWL is a pair consisting
+of: 
+
+\begin{enumerate}
+\item an OWL ontology, and 
+\item mapping between contexts, namely a set of bridge rules with the
+same target ontology. 
+\end{enumerate}
+A C-OWL mapping therefore is a 4-tuple having the following form: 
+
+\begin{enumerate}
+\item a mapping identifier (URI), 
+\item a source context containing an OWL ontology (URI of the ontology),
+
+\item a target context containing an OWL ontology (URI of the ontology),
+
+\item a set of bridge rules form the local language of the source
+ontology to the local language of the target ontology. Each mapping is
+composed of three elements: 
+
+\begin{enumerate}
+\item a source element (concept, role or individual) of the source
+ontology; 
+\item a target element, which must be of the same type as the source
+element; 
+\item the type of mapping (subsuming($\sqsupseteq$), equivalence(=), disjointness($\perp$) and
+overlapping($\sqcap$)). 
+\end{enumerate}
+\end{enumerate}
+Thus C-OWL has the complete representational power of OWL, augmented
+with appropriate local model semantics for mapping between contexts
+(local ontologies). A nice property of C-OWL is that the two components
+(the OWL ontology and the mapping) are orthogonal, thus one can use the
+ontology or the contextual component in an independent manner. 
+
+The local model semantics defined in C-OWL, as opposed to OWL, considers
+that each context has a local set of models and a local domain of
+interpretation. Thus, it is possible to have contradicting axioms or
+unsatisfiable ontologies in the local models, without having the entire
+context space unsatisfiable. 
+
+\subsection{Ontology Alignment}
+\label{subsec:mediationapproaches_ontologyalignment}
+\subsubsection{The Match Operator}
+Ontology alignment is the process of discovering similarities between
+two source ontologies \cite{debruin2005wsml}. This process can be
+described as the application of the so-called \textit{Match} operator
+described in \cite{rahm01survey}. The result of the matching
+process is a specification of the similarities between the two
+ontologies. The input of the Match operator consists mainly of two
+ontologies and some other inputs (initial mapping that will be
+extended, mapping parameters that configure the process and external
+resources used by the matching process; see Section 3.2). 
+
+The generic implementation of the Match operator should contain a
+uniform internal representation of the schemas to be matched, in order
+to significantly reduce complexity. This, of course, requires a
+semantics-preserving schema importer and exporter, respectively. 
+
+In general it is not possible to fully automate the matching between two
+ontologies, primarily because they often have semantics that affects
+the matching criteria, but is not formally expressed or often even
+documented. Therefore the implementation of Match should determine
+match candidates, which the user can accept, reject, or change.
+Furthermore the user should be able to specify matches for elements for
+which the system was unable to find satisfactory match candidates. 
+
+\subsubsection{The Alignment Process}
+The alignment process proposed in \cite{debruin2005wsml} relieves the user of
+some of the burdens in creating the mappings. The input of the process
+consists of two ontologies which are to be aligned. The output is a set
+of mappings. 
+
+The steps of the alignment are as follows: 
+
+\begin{enumerate}
+\item \textit{Feature engineering}. Selects only parts of an ontology
+definition in order to describe a specific entity. A feature may be as
+simple as a label or it may include super- and sub-concepts, relations
+or extensional descriptions.\newline
+For example, suppose a fragment of an ontology describes the instance
+\texttt{Daimler}. In this case we should consider the
+generic ontology feature called type which has the values
+\texttt{luxury} and \texttt{automobile},
+respectively. 
+\item \textit{Selection of Next Search Steps}. This step chooses the
+next set of candidate pairs. It may choose to compute a restricted
+subset of candidate concept pairs of the two ontologies and ignore the
+others. 
+\item \textit{Similarity Assessment.} Determines the similarity degree
+of candidate pairs. Heuristics are used, that is similarity functions
+such as on strings, object sets, related concepts, and so on.\newline
+For example, one similarity function can check whether the parents of
+the compared two concepts are identical. 
+\item \textit{Similarity Aggregation}. For a candidate pair we can (and
+often do) use several similarity functions. The results of these
+functions need to be aggregated to compute the final similarity measure
+between the two entities. This can be done by either a simple
+averaging, or a complex aggregation function using weighting schemes. 
+\item \textit{Interpretation}. This step uses the aggregated similarity
+values to align entities. It can use thresholds for similarity, perform
+relaxation labelling, or combine structural and similarity
+criteria.\newline
+For example, suppose \texttt{simil(o1:Person,
+o2:Human)=0.62 ${\geq}$ 0.5}, thus it is added to the result as a
+mapping element. 
+\item \textit{Iteration}. Several algorithms perform more than one
+iteration in order to bootstrap the amount of structural knowledge.
+Iteration may stop when no new alignments are proposed, or when a given
+number of mappings have been discovered. Note that certain steps can be
+omitted in later iterations, since we can use previously computed
+values (such as selecting features, computing a given similarity,
+etc.). 
+\end{enumerate}
+The output of the process is a set of correspondences between entities
+of the two ontologies. We cannot expect all correspondences to be
+discovered, therefore the results of the alignment process can be
+considered as the input to a manual refinement process. 
+
+\subsubsection{Classification of Approaches}
+An implementation of Match may use multiple matching algorithms or
+\textit{matchers. }This allows us to select matchers according to the
+application domain or schema types. 
+
+Given that we want two use multiple matchers we distinguish two
+subproblems. First, there is the need to realise individual matchers,
+each of which uses a single matching criterion to find mappings.
+Second, we want to combine different individual matchers, either by
+using multiple matching criteria within an integrated \textit{hybrid}
+\textit{matcher}, or by combining multiple match results provided by
+different match algorithms within a \textit{composite}
+\textit{matcher}. 
+
+For individual matchers, we consider the following mostly-orthogonal
+classification criteria (of which the first one is the most important
+distinctive criterion): 
+
+\begin{itemize}
+\item \textit{instance-based/schema-based} matching: A schema-based
+matcher uses different approaches to determine correspondence between
+ontologies based on concepts and relations \cite{debruin2005wsml}. 
+An instance-based matcher takes instances
+(i.e. instance data) belonging to the different concepts in the
+ontologies and uses these to discover similarities between the concept.
+
+\item \textit{element-level/structure-level} matching: an element-level
+matcher takes individual schema elements, properties of the particular
+concept or relation, and uses these to find similarities, whereas a
+structure level matcher compares the combination of elements, the
+structure (e.g. the concept hierarchy) of the ontologies to find
+similarities. 
+\item \textit{language/constraint}: a matcher can use a linguistic
+approach (e.g. based on names and textual description of schema
+elements) or a constraint-based approach (e.g. based on keys and
+relationships). 
+\item \textit{matching cardinality:} an overall matching result can
+relate one or more elements of an ontology to one or more elements of
+the other, giving four cases: 1:1, 1:n, m:1 and n:m. In addition each
+mapping element can may interrelate one ore more elements of the given
+ontologies. Furthermore, there may be different cardinalities at the
+instance level. 
+\item \textit{auxiliary information}: most matchers rely on external
+information besides the two given ontologies, such as global schemas,
+dictionaries, previous matching decisions and user input. 
+\item \textit{accepted input:} this dimension concerns the type of input
+on which the algorithms operate, classified depending on the
+data/conceptual models they accept. 
+\item \textit{produced output}: this pertains to the way the mapping is
+described, whether it is a one-to-one correspondence or a more general
+one, whether it is a graded answer (98\% or 4/5), or an all-or-nothing
+approach, whether the result focuses only on equivalence between
+entities, or can it give a more expressive result, and so on. 
+\end{itemize}
+
+\paragraph{Schema-based matching.}
+A schema-based matcher \cite{rahm01survey} takes different aspects
+of the concepts and relations in ontologies and uses some similarity
+measure to determine correspondence. The available information includes
+the usual properties of ontology elements, such as name, description,
+data types, relationship types (part-of, is-a, etc.), constraints and
+ontology structures. In the following we discuss some of the main
+aspects of schema-based matching. 
+
+\begin{itemize}
+\item \textit{Granularity of match}. We distinguish two main
+alternatives, element-level and structure-level matching. For each
+element of the fist ontology, an \textit{element-level matcher}
+determines the matching element of the second ontology at the same
+granularity level (usually at the atomic level). For instance, in two
+ontology fragments describing addresses we could find that
+\texttt{{\textquotedblleft}Address.ZIP}{\textquotedblright}
+from one ontology matches
+{\textquotedblleft}\texttt{CustomerAddress.PostalCode{\textquotedblright}}
+from the other one. \textit{Structure level matching}on the other hand
+refers to matching combinations of elements that appear together in a
+structure. This can be a complete, or a partial match. Known
+equivalence patterns can be kept in a library. For example (this
+conforms to a common equivalence pattern), one ontology could have a
+class \texttt{ParttimeEmployee}, which is the subclass of
+\texttt{Employee}, while another could have a class
+\texttt{Employee} having the attribute
+\texttt{IsParttime}. A structure-level matcher should
+identify these as being identical, when the
+\texttt{IsParttime} property equals to true. 
+\end{itemize}
+\begin{itemize}
+\item \textit{Match cardinality}. An element can participate in zero,
+one or many mapping elements of a match result. Moreover, within a
+mapping element, one or more elements from one ontology can match one
+or more elements from the other one. Thus we have the usual
+relationship cardinalities of 1:1, n:1, 1:m and n:m between matching
+elements, both with respect to different mapping elements
+(\textit{global cardinality}) and with respect to an individual mapping
+element (\textit{local cardinality}).\newline
+Most existing matchers map each element of one schema to one element of
+the other schema. This results in local 1:1 mappings and global 1:1 or
+1:n mappings. 
+\end{itemize}
+\begin{itemize}
+\item \textit{Linguistic approaches}. Linguistic matchers use name and
+text (i.e. words or sentences) to find semantically similar elements.
+\textit{Name matching} matches elements with identical or similar names
+(using synonyms, common substrings, user-provided name matching, etc.).
+\textit{Description matching} uses natural language comments of
+ontology elements. For example we can have
+{\textquotedblleft}\texttt{empn //employee
+name}{\textquotedblright} in an ontology matching
+{\textquotedblleft}\texttt{name //name of
+employee}{\textquotedblright} in the other. This can be done by simple
+keyword extraction, or complex natural language processing. 
+\end{itemize}
+\begin{itemize}
+\item \textit{Constraint-based approaches.} These approaches use the
+fact that ontologies often contain constraints on data types and
+ranges, relationships, optionality, uniqueness, cardinalities, etc.
+This information can be used to determine similarities between ontology
+elements. For example, in a candidate pair having the fields
+\texttt{Born} and \texttt{BirthDate}
+respectively, both having the type \texttt{Date}, a
+constraint-based matcher could find these to be similar. 
+\end{itemize}
+\begin{itemize}
+\item \textit{Reusing schema and mapping information}. In addition to
+already mentioned auxiliary information, matchers could well reuse
+common ontology components and previously determined mappings. Some
+mappings occur very often in the same domains, and reusing these
+increases effectiveness. For example, in e-commerce domains
+substructures often repeat with different message formats (like
+address, name, etc.), so we could keep a library of previously found
+results on these, so when we find two elements labelled
+\texttt{ProductOrder} and \texttt{Product} in
+an ontology \texttt{O1}, and \texttt{Porder}
+and \texttt{Article} in an ontology
+\texttt{O2}, the matcher would already know that these
+match (\texttt{ProductOrder} matches
+\texttt{POrder} and \texttt{Product} matches
+\texttt{Article}). 
+\end{itemize}
+
+\paragraph{Instance-based matching.}
+An instance-based matcher \cite{rahm01survey} takes instances
+(i.e. instance data) belonging to the different concepts in the
+ontologies and uses these to discover similarities between the
+concepts. It can be useful when the data is semistructured or
+particularly useful to uncover incorrect interpretations of schema
+information. 
+
+The approaches we discuss for instance-level matching primarily work in
+finding element-level matches, because of the complexity of comparing
+large numbers of combinations of instances. 
+
+Most of the approaches of schema-level matchers can be applied here, but
+some are especially applicable: 
+
+\begin{itemize}
+\item For text elements, a linguistic approach based on information
+retrieval techniques is the preferred approach. For example, if we have
+a field called \texttt{Dept} in an ontology, and two
+fields \texttt{DeptName} and \texttt{EmpName}
+in another, instance information may help to deduce that
+\texttt{DeptName} is the primary match candidate for
+\texttt{Dept}. 
+\item For more structured data, such as numerical or string elements, we
+can apply a constraint-based characterisation, such as numerical value
+ranges or character patterns. For instance, this may help recognising
+phone numbers, postal codes, birth dates, ISBNs, money-related entries
+(e.g. based on currency symbols), etc. 
+\end{itemize}
+The results of instance-based matchers can be used to enhance
+schema-level matchers as a first approach. For instance, a
+constraint-based schema-level matcher can more accurately determine
+data types and ranges for an element using the results of
+instance-based matching. A second approach is to perform instance-level
+matching on its own. Matching elements from the first ontology to the
+second one, and then vice-versa, we can obtain schema-level matches.
+Instance-level matching can also be performed by using auxiliary
+information. This is especially helpful for matching text elements by
+providing match candidates for individual keywords. For example, a
+previous analysis may have revealed that the keyword
+\texttt{{\textquotedblleft}HP{\textquotedblright}}
+frequently occurs for ontology elements
+\texttt{{\textquotedblleft}CompanyName{\textquotedblright}},
+\texttt{{\textquotedblleft}Manufacturer{\textquotedblright}},
+etc. For a new match task, if an \texttt{O2} ontology
+element \texttt{X} frequently contains the term
+\texttt{{\textquotedblleft}HP{\textquotedblright}}, this
+can be used to generate
+\texttt{{\textquotedblleft}CompanyName{\textquotedblright}}
+in \texttt{O1} as a match candidate for
+\texttt{X}, even if
+\texttt{{\textquotedblleft}HP{\textquotedblright}} does
+not often occur in instances of \texttt{O1}. 
+
+\subsubsection{Overview of Approaches}
+In this section we give a brief overview of some of the main approaches
+to ontology alignment. 
+
+\paragraph{Anchor-PROMPT.}
+Anchor-PROMPT \cite{noy2000anchor_prompt} uses a set of heuristics to analyse
+non-local context, as opposed to algorithms like PROMPT \cite{noy2000prompt} 
+(See Section \ref{subsubsec:mediationapproaches_ontologymerging_PROMPT}) and Chimaera, that only analyse local context.
+It doesn{\textquotesingle}t provide a complete solution, but augments
+existing methods. 
+
+The algorithms takes as input two pairs of related terms (anchors) from
+the source ontologies. These anchors are either given by the user, or
+generated automatically with string-based techniques or another matcher
+using linguistic similarity. 
+
+From this set of anchors, the algorithm produces a set of new pairs of
+semantically close terms. To do that, Anchor-PROMPT traverses the paths
+between the anchors in the corresponding ontologies. A path follows the
+links between the classes, defined by the hierarchical relations or by
+slots and their domain and range. Anchor-PROMPT then compares these
+terms along the paths to find similar terms. Terms with a high
+similarity score are presented to the user to improve the set of
+possible suggestions, for example, a merging process in PROMPT. 
+
+For example, suppose we have ontology \texttt{O1} having
+the classes \texttt{A-C-E-H} in a hierarchical chain, and
+\texttt{O2} having the classes
+\texttt{B-D-F-G} in its hierarchy. Then, suppose we
+identify the anchors as \texttt{A-B} and
+\texttt{G-H}. We then traverse each path in parallel,
+incrementing the similarity score of the classes we encounter at each
+step. We repeat the the process for all existing paths between the
+anchor points, cumulatively aggregating the similarity score. 
+
+The central observation behind Anchor-PROMPT is that if two pairs of
+terms are similar and there are paths connecting the terms, the
+elements along those paths are often similar as well. 
+
+\paragraph{GLUE.}
+GLUE \cite{doan2004ontology_matching} applies machine learning techniques to
+semi-automatically create semantic mappings between heterogeneous
+ontologies based on instance data. It regards ontologies as being
+taxonomies of concepts, and focuses on finding 1-to-1 correspondences
+between the concepts of the ontologies: for each concept node in one
+taxonomy, find the most similar concept node from the other taxonomy. 
+
+Instead of committing to a certain similarity definition, it computes
+the \textit{joint probability distribution} of the concepts involved,
+and lets the application use the joint distribution to compute any
+suitable similarity measure. Specifically, for any two concepts
+\texttt{A} and \texttt{B} the joint
+probability distribution consists of \texttt{P(A,B),
+P(A,{\textlnot}B), P({\textlnot}A,{\textlnot}B)}, and
+\texttt{P({\textlnot}A,B),} where a term such as
+\texttt{P(A,{\textlnot}B)}, is the probability that an
+instance in the domain belongs to concept \texttt{A}, but
+not to concept \texttt{B}. 
+
+Computing this joint distribution is based on the sets of instances that
+overlap between the two concepts. A term such as
+\texttt{P(A,B)} can be approximated as the fraction of
+instances that belong to both A and B, that is we need to decide for
+each instance whether it belongs to \texttt{A${\Pi}$B}.
+GLUE addresses this by using the instances of \texttt{A}
+to learn a classifier for \texttt{A}. Then classifies
+instances of \texttt{B} according to that classifier, and
+vice-versa.
+
+\paragraph{Semantic Matching.}
+Semantic Matching \cite{giunchiglia2004semantic_matching} is an implementation of
+the Match operator, that takes two graph-like structures (like database
+schemas or ontologies) and produces a mapping between elements of the
+two graphs that correspond semantically to each other. The authors
+argue that most previous approaches used syntax driven techniques, like
+matching labels(substrings, abbreviations, similar soundex) or
+syntactical structure and calculating a similarity measure, all being
+different variations of syntactic matching, that searches for semantic
+correspondences based on syntactic features. 
+
+Semantic matching has the following main features: 
+
+\begin{itemize}
+\item searching is done by mapping meanings (concepts), not labels. It
+is not sufficient to consider the meaning of labels in the nodes, but
+also the positions the nodes have in the graph. 
+\item semantic similarity relations are used between elements (concepts)
+instead of syntactical similarity relations. In particular, those
+relations are considered, which relate the extensions of the concepts
+under consideration. 
+\end{itemize}
+The semantics of a node is given by the concept attached to that node
+(the concept denoted by the label of the node), by the position of the
+given node in the graph, and the semantics of all the nodes which are
+higher in the hierarchy. 
+
+The possible returned relations between elements are equality,
+overlapping, mismatch, and more general/specific. 
+
+\paragraph{QOM.}
+QOM \cite{ehrig2004qom} was designed to create an efficient matching
+tool for on-the-fly creation of mappings between ontologies. 
+
+Given that the a major ingredient of run-time complexity is the number
+of mapping pairs which have to be compared to actually find the best
+mappings, QOM uses heuristics to lower the number of candidate
+mappings, thus not comparing all entities of the first ontology to all
+entities of the second ontology. It uses the ontological structures to
+classify candidate mappings into promising and less promising pairs,
+using a dynamic programming approach to refine the set of candidate
+mappings in each iteration. 
+
+The similarity measure is computed using a wide range of similarity
+functions, such as string similarity. Several of such similarity
+measures are computed, which are all input to the similarity
+aggregation function, which computes the actual similarity measure. QOM
+then applies a sigmoid function, which emphasises high individual
+similarities and deemphasises low individual similarities. The actual
+correspondences are then extracted using a threshold to the aggregated
+similarity measure. 
+
+The output of one iteration of QOM can be used as part of the input of a
+subsequent iteration in order to refine the result. After a number of
+iterations the actual mapping between the ontologies is obtained. 
+\subsubsection{Alignment Examples}
+This section provides a few examples of the matching
+process{\textquotesingle} results.
+\begin{center}
+\tablecaption{Constraint-based matching example. {\newline}Taken from \cite{rahm01survey}.}
+\label{tab:ConstraintMatching}
+\tablehead{}
+%begin{supertabular}{|r@{\hspace{6.5mm}}|r@{\hspace{5.5mm}}|r|r|}
+\begin{supertabular}{|m{0.4\textwidth}|m{0.4\textwidth}|}
+\hline
+S1 elements &
+S2 elements\\\hline
+Employee
+
+\ \ \ \ EmpNo -- int, primary key
+
+\ \ \ \ EmpName -- varchar (50)
+
+\ \ \ \ DeptNo -- int, references 
+
+\ \ \ \ Salary -- dec (15,2)
+
+Department
+
+\ \ \ \ Birthdate -- date
+
+\ \ \ \ DeptNo -- int, primary key
+
+\ \ \ \ DeptName -- varchar (40) &
+Personnel
+
+\ \ \ \ Pno - int, unique
+
+\ \ \ \ Pname -- string
+
+\ \ \ \ Dept -- string
+
+\ \ \ \ Born -- date\\\hline
+\end{supertabular}
+\end{center}
+The two schemas (corresponding to ontologies) shown in Table \ref{tab:ConstraintMatching} present
+an example of constraint-based schema-level matching \cite{rahm01survey}. Type and key information suggest that
+\texttt{Born} matches \texttt{Birthdate} and
+\texttt{Pno} matches either \texttt{EmpNo} or
+\texttt{DeptNo} (this could be refined using
+instance-based matching, which could reveal that
+\texttt{Pno} matches \texttt{EmpNo}). By
+using a matcher that detects more than just atomic-level similarities,
+we match \texttt{S2.Personnel }to
+\texttt{S1.Employee} joined with
+\texttt{S1.Department.} This can be detected automatically
+by observing that elements of \texttt{S2.Personnel} match
+elements of \texttt{S1.Employee} and
+\texttt{S1.Department} and that
+\texttt{S1.Employee} and
+\texttt{S1.Departmen}t are connected by the foreign key
+\texttt{DepNo}. This allows us to determine the correct
+SQL-like n:m mapping:
+\begin{verbatim}
+    S2.Personnel (Pno, Pname, Dept, born) ~
+    SELECT S1.Employee.EmpNo,
+           S1.Employee.EmpName,
+           S1.Department.DeptName,
+           S1.Employee.Birthdate
+    FROM S1.Employee, S1.Department
+    WHERE (S1.Employee.DeptNo = S1.Department.DeptNo)
+\end{verbatim}
+
+
+Table \ref{tab:CardinMatching} \cite{rahm01survey} illustrates match cardinalities for
+two given schemas S1 and S2. When matching multiple elements, we can
+see that expressions are used to combine them.
+
+\begin{center}
+\tablecaption{Matching cardinalities example. {\newline}Taken from \cite{rahm01survey}.}
+\label{tab:CardinMatching}
+\tablehead{}
+\begin{supertabular}{|p{0.20\textwidth}|p{0.20\textwidth}|p{0.20\textwidth}|p{0.20\textwidth}|}
+\hline
+\textbf{Local match cardinalities} & \textbf{S1 element(s)} & \textbf{S2 element(s)} & \textbf{Matching expression} \\\hline 
+1:1, element level & Price & Amount & Amount = Price \\\hline 
+n:1, element-level & Price, Tax & Cost & Cost ={\newline}Price*(1+Tax/100) \\\hline 
+1:n, element-level & Name & FirstName,\newline
+LastName & FirstName,{\newline}LastName =\newline
+Extract (Name, \ldots) \\\hline 
+n:1 structure-level
+(n:m element-level) & B.Title,\newline
+B.PuNo,\newline
+P.PuNo,\newline
+P.Name & A.Book,
+A.Publisher & A.Book, A.Publisher =\newline
+SELECT B.Title, P.Name\newline
+FROM B, P\newline
+WHERE B.PuNo=P.PuNo
+\\\hline
+\end{supertabular}
+\end{center}
+In the first row, the
+match is 1:1, which is the most simple to determine. Row 2 shows how
+\texttt{Cost} can be matched to a formula based on
+\texttt{Price} and \texttt{Tax}. Row 3
+explains how \texttt{FirstName} and
+\texttt{LastName} are extracted from
+\texttt{Name}. Row 4 uses a SQL expression combining
+attributes from two tables. It corresponds to an n:m relationship at
+the attribute level (four \texttt{S1} attributes
+correspond to two \texttt{S2} attributes) and to an n:1
+relationship at the structure level (two tables from
+\texttt{S1} match one table from
+\texttt{S2}).
+
+The example in Table \ref{tab:MappingPattern} \cite{debruin2005wsml} shows a mapping element from the
+motivating example from Section \ref{subsec:mediationproblem_motivatingexample}. Assume we have two ontologies
+\texttt{O1} and \texttt{O2} which both
+describe humans and their gender. Ontology \texttt{O1}
+describes the concept \texttt{Person} with an attribute
+\texttt{hasGender}, which has the two possible values
+{\textquotedblleft}\texttt{male}{\textquotedblright} and
+{\textquotedblleft}\texttt{female}{\textquotedblright}.
+Ontology \texttt{O2} describes the concept
+\texttt{Human}, and its subclasses
+\texttt{Man} and \texttt{Woman} to
+distinguish the gender.
+
+\begin{center}
+\tablecaption{Class by attribute mapping pattern and example. {\newline}Taken from \cite{debruin2005wsml}.}
+\label{tab:MappingPattern}
+\tablehead{}
+\begin{supertabular}{|m{0.8\linewidth}|}
+\hline
+\textbf{Name}: Class by Attribute Mapping \\\hline
+\textbf{Problem}: The extension of a class in one ontology
+corresponds to the extension of a class in another ontology, provided
+that all individuals in the extension have a particular attribute
+value. \\\hline
+\textbf{Solution:} 
+
+\textit{Solution description}: A mapping is established
+between a class/attribute/attribute value combination in one ontology
+and a class in another ontology. 
+
+\textit{Mapping syntax:} 
+
+\texttt{mapping ::= classMapping(direction A
+B attributeValueCondition(P o))} \\\hline
+\textbf{Example:} 
+
+\texttt{classMapping(Human Female
+attributeValueCondition(hasGender
+}{\textquotedblleft}female{\textquotedblright})) \\\hline
+\end{supertabular}
+\end{center}
+
+Notice that this is a typical case of a
+conceptual mismatch, namely a mismatch in the style of modeling. The
+solution illustrates an elementary mapping pattern. The pattern is
+described in terms of its name,the problem addressed, the solution of
+the problem, both in natural-language description and in terms of the
+actual mapping language, and an example, namely a mapping between a
+class \texttt{Human} from ontology
+\texttt{O1} to the class \texttt{Woman} from
+ontology \texttt{O2}, but only for humans having the
+gender
+{\textquotedblleft}\texttt{female}{\textquotedblright}.
+
+\subsection{Ontology Merging}
+\label{subsec:mediationapproaches_ontologymerging}
+Ontology merging is the creation of a new ontology from one or more
+source ontologies. The new ontology will unify and in general replace
+the original source ontologies. 
+
+We distinguish between two main approaches to ontology merging. In the
+first approach the input of the process is a collection of ontologies
+and the output is a new, merged ontology which captures the original
+ontologies. A prominent example of this is PROMPT \cite{noy2000prompt}. 
+In the second approach the ontologies are not replaced, but
+rather a {\textquotesingle}view{\textquotesingle}, called
+\textit{bridge ontology} is created which imports the original
+ontologies and specifies the correspondences using bridge axioms.
+OntoMerge \cite{dou2002ontology_translation} is an example of this approach, creating a
+bridge ontology that imports the original ontologies and relates the
+overlapping concepts in these ontologies using bridge axioms. We
+describe PROMPT and OntoMerge in more detail below. 
+
+\subsubsection{PROMPT}
+\label{subsubsec:mediationapproaches_ontologymerging_PROMPT}
+PROMPT \cite{noy2000prompt} is an algorithm and interactive tool for
+ontology merging and alignment. It was one of the first ontology
+merging tools, comparing every pair in the two ontologies and looking
+for syntactic similarity between labels. It has been implemented as a
+Proteg\'e-2000 extension. 
+
+The algorithm of PROMPT defines a number of steps for the interactive
+merging process: 
+
+\begin{enumerate}
+\item An initial list of merging candidates is created, based on class
+name similarities. The list is presented to the user as potential
+merging operations. Then the following cycle happens: 
+\item The user chooses the next operation: selects an option suggested
+by the algorithm, or edits the ontology to specify the desired
+operation directly. 
+\item The third step is composed of the following three sub-steps: 
+
+\begin{enumerate}
+\item The system performs the requested action and automatically
+executes additional changes derived from the operation. 
+\item A new list of suggested operations is presented to the user, based
+on the structure of the ontology around the arguments of the last
+operation. 
+\item The system determines the conflicts introduced by the last
+operation and finds possible solutions to them. 
+\end{enumerate}
+\end{enumerate}
+PROMPT defines the following set of ontology-merging operations: merge
+classes, merge slots, merge bindings between a slot and a class,
+perform a deep copy of the class (copy all parents up to the root),
+perform a shallow copy of the class. 
+
+The conflicts that may appear as a result of these operations are: name
+conflicts, dangling references, redundancy in the class hierarchy,
+slot-value restrictions that violate class inheritance. 
+
+The result of the algorithm is a new ontology which replaces the
+original ones. 
+
+\subsubsection{OntoMerge}
+OntoMerge \cite{dou2002ontology_translation} is an online ontology translation system,
+which translates a dataset to a new dataset which captures the same
+information in a different ontology. 
+
+The approach divides the process into two main parts, namely separating
+the syntactic translation from the semantic translation: 
+
+\begin{enumerate}
+\item Converting the datasets into a uniform internal representation (a
+language called Web-PDDL) in order to clear away syntactic differences.
+
+\item Perform the semantic translation from the internal representation
+of a dataset in the source ontology to the internal representation of
+the a dataset in the target ontology. 
+\end{enumerate}
+The result of the process is not an ontology replacing the original ones
+as in PROMPT, but a bridge ontology that imports the source ontologies
+and contains a set of Bridging Axioms, which are translation rules used
+to connect the overlapping parts of the source ontologies. The two
+source ontologies, together with the set of bridging axioms, are then
+treated as a single theory by a theorem prover (optimised for
+operations like dataset translation, ontology extension generation
+based on the extension of a related ontology, and query rewriting). 

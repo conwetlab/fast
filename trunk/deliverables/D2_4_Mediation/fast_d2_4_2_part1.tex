@@ -1,0 +1,409 @@
+
+% \begin{abstract}
+% The FAST environment allows users to graphically compose intelligent, i.e. semantically annotated gadgets from predefined building blocks and deploy them on various mashup platforms, thus enabling the interconnection of different systems and services. Since different parties involved in the creation of gadgets and building blocks conceptualise knowledge in different ontologies, using ontology matching as a means to reconcile differences in the various conceptualisations is a crucial issue.
+% This paper discusses first steps in our effort to integrate ontology matching in an end-user-oriented environment such as FAST, using an e-commerce-related scenario. We evaluate a number of tools and approaches for solving different levels of complexity in ontology matching and 
+% %, which we address in this paper. We present a scenario of interconnecting e-commerce web services within a FAST gadget, the ontologies created to represent those services and the alignment tool and language used to generate and represent the ontology mappings. The testing aims firstly, to find out whether and how state-of-the-art ontology matching makes it possible to mash-up different systems and secondly, to 
+% define the direction of integrating ontology matching into the FAST environment.
+% 
+% \keywords{Ontology Matching, User-oriented, Mashups, E-commerce}
+% \end{abstract}
+
+\section{Overview}
+\subsection{Ontology Matching}
+\label{mediation}
+
+FAST uses ontology matching to conceptualise the underlying resources used by the different components.
+Ontologies embody the fundamental vehicle for conceptualising data on semantic systems; they describe the context and semantic background of data that should be known to all agents using it. An ontology is used to define the vocabulary that agents use to exchange  queries and assertions. If an agent commits to a common ontology, it guarantees the consistency of the queries and assertions using the defined vocabulary \cite{gruber93towards}.
+However, different ontologies are often used in the same scenario. This is also true for FAST, where gadget building blocks can originate from different providers, who might use different ontologies to describe them.  The task of ontology matching is therefore critical in FAST.
+
+Given two ontologies $O$ and $O'$ that need to be mapped to each other, we adopt the definition given in \cite{shvaiko2005schema_based}: an ontology mapping element is a 5-tuple $<id, e, e', n, R>$, where 
+%\begin{inparaenum}[(i)]
+$id$ is a unique identifier, identifying the
+mapping element, 
+$e$ and $e'$ are entities (formulas, terms, classes, individuals) of the first and second ontology, respectively, 
+$n$ is a confidence measure holding the correspondence value between $e$ and
+$e'$, 
+$R$ is the correspondence relation holding between $e$ and $e'$ (e.g., \texttt{equivalence (=)}, \texttt{more general($\sqsupseteq$)} or \texttt{disjointness($\perp$)}).
+%; \texttt{overlapping($\sqcap$)}. 
+%\end{inparaenum}
+The alignment operation determines the mapping $M'$ for a pair of ontologies $O$ and $O'$. The alignment process can be extended by parameters, such as an input mapping, weights and thresholds and other external resources (dictionaries, thesauri, etc.). Different levels of mappings are defined:
+
+A \textit{level 0} mapping~\cite{euzenat2004api} is a set of the above mapping elements, when the entities are discreet (defined by URIs). E.g., consider the ontology $O1$ with a class \texttt{Person}, and another ontology $O2$ with a class \texttt{Human}. For this case a matching algorithm  could return the mapping element $< id_{11}, Person, Human, 0.67, = >$, meaning that the \texttt{Person} class from the first ontology is found to be equivalent to the \texttt{Human} class in the second one with a confidence measure of \texttt{0.67}.
+
+A \textit{level 1} mapping is a slight refinement of level 0, replacing pairs of elements with pairs of sets of elements.
+
+A \textit{level 2} mapping can be more complex and defines correspondences in first order logic. It uses the ontology mapping language described in \cite{scharffe2005language}. It can describe complex correspondences, such as the one detailed in Section \ref{gr} for matching the Amazon and GoodRelations ontologies.
+% :
+% 
+% \begin{equation*} \label{eq}
+% \forall{x,z} grandparent(x,z) \Longrightarrow \exists{y}; parent(x,y) \wedge parent(y,z)
+% \end{equation*}
+ 
+
+\subsection{Ontology Matching in FAST}
+\label{ominfast}
+
+The gadget life cycle in FAST has several phases and roles associated, as detailed in \cite{hoyer-fast}. Here, we list the ones relevant for the ontology matching tasks, in decreasing order of the measure in which knowledge about ontologies is required.
+\begin{inparaenum}[(i)]
+    \item The \textit{ontology engineer} creates the ontologies used to annotate services and data. This role also includes the process of ontology matching, either automated or manually, determining if the alignment is feasible and creating so-called \emph{matching operator} building blocks, which are basic elements of the FAST screen building. We also mention the \textit{resource developer}, (who, in some cases, can be the same person as the one fulfilling the ontology engineer role), who uses these ontologies to annotate the the resources created in FAST.
+    \item Ontology matching is needed by the \textit{screen developer} at the design-time of a screen (a visual building block of a gadget). Screen developers have a dedicated UI component for building screens, in which they can use the matching operators to combine components annotated with different ontologies. No actual matching is performed in this phase, but rather the simple possibility of matching.
+%the FAST user interface determines if two resources can be combined or not (see Figure \ref{fig:screens} for a conceptual example of resources that can not be combined).
+    \item The \emph{gadget developer} combines screens to screen-flows and gadgets, and only uses ontology matching implicitly.
+    \item The \textit{end-user} uses the final deployed gadget, that combines the different services, but is unaware of the underlying resources and ontologies or the matching process. Thus we also need ontology matching at the gadget's run-time, where the mapping will have to be integrated into the actual JavaScript code of the running FAST gadget. %In this paper, we mainly consider the first two cases (i.e. ontology engineering and screen development), but portability of the alignment code to JavaScript must also be kept in mind.
+\end{inparaenum}
+
+\section{Ontology Engineering Phase}
+
+\subsection{Alignment Tool}
+\label{alignmenttool}
+
+An ontology mapping (or alignment) is a declarative specification of the semantic overlap between two ontologies~\cite{debruin2005wsml}. It is the result of the ontology alignment process. This mapping is represented as a set of axioms in a mapping language. The mapping process has three main phases:
+\begin{inparaenum}[(1)]
+    \item discovering the mapping (alignment phase), 
+    \item representing the mapping and 
+    \item exploiting the mapping.
+\end{inparaenum}  
+
+To accomplish this we need a tool to assist the ontology engineer in the ontology mapping process.
+Based on the description given in Sect.~\ref{ominfast} we identify the following requirements for an alignment tool, that we will take as the basis for an ontology matching component in FAST:
+\begin{inparaenum}[(i)]
+\item All three phases of the process need to be accessible.
+\item Matching of OWL and RDFS ontologies should be supported, since we only consider these two languages.
+\item The tool should be as independent as possible, performing the alignment process with little or no user interference. This is an important requirement, since FAST is end-user oriented.
+\item It should have an open source license, allowing its free use and modification, because it needs to be integrated into the free and open FAST platform.
+\item The code should be suitable for porting to other languages (in particular JavaScript), allowing it to be integrated into the FAST environment.
+\item It should be well documented.
+\end{inparaenum}
+
+We have considered three tools, two of which we have already detailed in \cite{ambrus2009mediation}.
+\paragraph{MAFRA} \cite{maedche2002mafra} supports an interactive and incremental process of ontology mapping. It provides an explicit notion of semantic bridges. This representation is serialisable, portable and independent from the mapped languages. The bridges, however, have been designed to be used within the MAFRA system, and the alignment process needs to be done through the provided GUI.
+
+\paragraph{RDFT}
+\cite{omelayenko2002rdft} is a small language originally designed to map between XML and RDF. The results are mappings represented in DAML+OIL, that can be executed in a transformation process. No hints are given to add alignment methods or extending the format and, as a major downside, we have not been able to locate the tool for download and testing.
+
+\paragraph{Alignment API} \cite{euzenat2004api} is the tool best matching the requirements, satisfying all the desired conditions. It also being widely used at the annual ontology matching evaluation campaigns and is under active development. It provides an API and its implementation, is open source (GPLv2 or above) and written in Java, providing an easy way to embed it into other programs. Alignment API can be extended by other representations and matching algorithms, it can be invoked through the command line interface (thus working without user interference) or one of the two available GUI implementations, or it can be exposed as an HTTP server. The tool allows for testing different alignment methods and can generate evaluation results based on a reference alignment. One of the major advantages is that it can generate the mapping result in XSLT, making it possible with the use of a simple tool, or a JavaScript package to transform XML data from one ontology into the other, independently from the alignment system.
+
+\subsection{Scenario Description}
+\label{scenario}
+
+The scenario we want to test in FAST is taken from the e-commerce domain, based on the often-met case where a commercial agent aggregates data from other commercial websites. We consider the situation where a user needs a gadget which combines major e-commerce services, allowing to aggregate item lists from all of them in a combined interface.
+As examples in our scenario. we consider the two most popular online shopping websites, Amazon and eBay\footnote{Based on the Alexa ranking from http://alexa.com/topsites/category/Top/Shopping}, along with BestBuy, which is very close behind the former two. BestBuy is an interesting case, because it exposes its data in RDF using the GoodRelations (GR) ontology~\cite{hepp-goodrelations}, which has recently gained a lot of popularity. It is therefore one of the first major e-commerce sites to provide semantic metadata.
+
+\begin{figure}
+    \centering
+        \includegraphics[width=8cm]{images/screens_diagram.png}%[bb=0 0 201 126]
+        \caption{The scenario: three components retrieving incompatible data}
+    \label{fig:screens}
+\end{figure}
+
+Figure~\ref{fig:screens} illustrates our scenario. There are three retrieval components that wrap the different e-commerce sites and provide data according to three different ontologies: the GR ontology, the Amazon ontology and the eBay ontology. Another component displays GR items for display to the user. Out of the box, only the BestBuy retrieval and the display component can be combined. However, if the gadget designer wants to aggregate data from all three services in the display, there will have to be a mapping present between the Amazon and eBay on the one hand, and the GR ontology on the other.
+
+%, say we have a component that accesses the BestBuy service and retrieves RDF data that uses the GoodRelations ontology. In other words, the output of this component is GoodRelations data. Another component takes this data and displays them in a list, i.e. this component only accepts GoodRelations data for display. Since both components use the same ontology, they can be combined. However, now suppose we have two additional components, which access the Amazon and eBay services and retrieve items from there, which are then represented using the Amazon and eBay ontologies, respecitvely. The user wants to list items from all three sources in the same display component. However, since all three ontologies are incompatible, this is not possible out of the box. What is necessary is a mapping between the Amazon and GoodRelations, as well as eBay and GoodRelations ontologies.
+
+%We have thus a case, where we want to aggregate data using three different ontologies, so aligning them to a common ontology is the only possible solution.
+
+\subsection{Ontologies}
+\label{ontologies}
+We have used three ontologies to annotate underlying resources in FAST, the first of which, namely GoodRelations, is an extensive ontology for e-commerce. The other two, i.e., the Amazon and the eBay ontologies were developed by us as simplified versions of what would be used in the real-life scenarios. Nevertheless, they are sufficient for testing the feasibility of the scenario and the options presented by current ontology alignment methods.
+
+\paragraph{GoodRelations:}
+This ontology is aimed at annotating so-called ``offerings'' on the Web, which can be products or services. The ontology is  available under the Creative Commons Attribution 3.0 license and features support for ranges of units, measurements, currencies,  shipping and payments, common business functions (sell, lease, repair, etc.) and international standards (ISO 4217 or UNSPSC) and codes (e.g., EAN or UPC) in the field.
+
+\begin{center}
+\lstset{captionpos=b, breaklines=true}
+\lstset{frame=single, basicstyle=\scriptsize}
+\lstset{caption=Basic GoodRelations data in N3 notation, label=listing_gr}
+\lstset{language=XML}
+\begin{lstlisting}
+:Offering_8794691     a gr:Offering;
+  gr:hasPriceSpecification 
+      :UnitPriceSpecification_8794691_1;
+  gr:includesObject :TypeAndQuantityNode_8794691_1;
+
+:UnitPriceSpecification_8794691_1     a gr:UnitPriceSpecification;
+  gr:hasCurrency "USD"^^xsd:string;
+  gr:hasCurrencyValue "749.99"^^xsd:float;
+  gr:hasUnitOfMeasurement "C62"^^xsd:string;
+
+:TypeAndQuantityNode_8794691_1     a gr:TypeAndQuantityNode;
+  gr:amountOfThisGood "1.0"^^xsd:float;
+  gr:hasUnitOfMeasurement "C62"^^xsd:string;
+  gr:typeOfGood :ProductOrServicesSomeInstancesPlaceholder_8794691 .
+
+:ProductOrServicesSomeInstancesPlaceholder_8794691 a gr:ProductOrServicesSomeInstancesPlaceholder;
+  gr:hasEAN_UCC-13 "0013803096095"^^xsd:string;
+  gr:hasMakeAndModel :PoSM_8794691;
+  rdfs:comment "With Auto Optimization and [...]"@en;
+
+:PoSM_8794691     a gr:ProductOrServiceModel;
+  gr:hasManufacturer <bbuy:Manufacturer_Canon>;
+  rdfs:label "Canon EOS Digital Rebel [...]"@en;
+  rdfs:comment "With Auto Optimization and [...]"@en;
+\end{lstlisting}
+\end{center}
+
+The ontology (see List.~\ref{listing_gr} for an example of GR data)  is centred on the \texttt{Offering} class,
+which represents an announcement by a \texttt{BusinessEntity} to provide a \texttt{ProductOrService} with a given \texttt{BusinessFunction}. It may be constrained in terms of eligible business partner, countries, quantities, and other properties. It is also described by a given \texttt{PriceSpecification}. The super-class for all classes describing products or service types is \texttt{ProductOrService}. This top-level concept has sub-classes representing actual product instances, product models and dummy product placeholders. A product is described by its title and description, manufacturer, make and model, etc. While GoodRelations offers terminology to allow a much higher expressivity, we will restrict the discussion to those terms relevant for our scenario.
+
+\paragraph{Amazon Ontology:}
+We have created a small Amazon ontology based on the datatypes supported by the web service exposed by Amazon to third-party agents to use its services. It is a simplified version of what would be needed in a real-world application, but it suffices for the scope of this work. The ontology describes \texttt{Items} based on the \texttt{ItemAttributes} description given in the Amazon Product Advertising API documentation\footnote{http://docs.amazonwebservices.com/AWSECommerceService/latest/DG/}.
+
+\begin{center}
+\lstset{captionpos=b, breaklines=true}
+\lstset{frame=single, basicstyle=\scriptsize}
+\lstset{caption=Simplified Amazon ontology data in N3 notation, label=listing_amazon}
+%\caption{Minimal Amazon ontology snippet.}
+\lstset{language=XML}
+%\lstset{emph={vsmlVariant, namespace, ontology, concept, ofType, instance, nonFunctionalProperties, endNonFunctionalProperties, memberOf, hasValue}}
+%\lstset{emphstyle=\textbf\textit\underbar}
+\begin{lstlisting}
+:Item_7590645     a amzn:Item;
+    amzn:hasASIN "B0012YA85A";
+    amzn:hasManufacturer :Manufacturer_Canon;
+    amzn:hasModel "XSI Kit";
+    amzn:hasPrice :Price_7590645_1;
+    amzn:hasProductGroup "Electronics";
+    amzn:hasTitle "Canon Digital Rebel XSi [...]" .
+
+:Manufacturer_Canon     a amzn:Company;
+    amzn:hasLegalName "Canon" .
+
+:Price_7590645_1     a amzn:ListPrice;
+    amzn:hasAmount "575.55";
+    amzn:hasCurrencyCode "GBP" .
+\end{lstlisting}
+\end{center}
+
+The ontology features three classes for describing a product. Example instance data is given in List.~\ref{listing_amazon}.
+\begin{inparaenum}[(1)]
+    \item \texttt{Item} represents an Amazon item, defined by a title, a manufacturer, a product group (DVD, Book, etc.), an international EAN code, an ASIN (unique Amazon id), an author (for books) and a \texttt{ListPrice}. 
+    \item \texttt{Company}, described by a  legal name, is used for representing the manufacturer of an \texttt{Item}.
+    \item \texttt{ListPrice} has two properties: \texttt{hasCurrencyCode}, representing an ISO 4217 currency code (e.g. GBP or EUR), and \texttt{hasAmount} representing the price in the given currency.
+\end{inparaenum}
+
+\paragraph{eBay Ontology:}
+The eBay ontology was created based on the eBay Shopping API \footnote{http://developer.ebay.com/DevZone/shopping/docs/CallRef/index.html} and is supposed to annotate data retrieved through the web service described by the given API. Like the Amazon ontology, it is a simplified case of what would be used in a real-world implementation.
+
+\begin{center}
+\lstset{captionpos=b, breaklines=true}
+\lstset{frame=single, basicstyle=\small}
+\lstset{caption=Simplified eBay ontology data in N3 notation, label=listing_ebay}
+\lstset{language=XML}
+\begin{lstlisting}
+
+:SimpleItem_1320648     a ebay:SimpleItem;
+  ebay:hasItemID "E012Y090912";
+  ebay:hasBidCount :"4";
+  ebay:hasCountry "UK";
+  ebay:hasCurrentPrice :Price_1320648_1;
+  ebay:hasPrimaryCategoryName "Electronics";
+  ebay:hasTitle "Canon Digital Rebel XSi [...]" .
+  ebay:hasDescription "Camera is practically unused. It's like new."
+
+:Price_1320648_1     a ebay:CurrentPrice;
+  ebay:hasAmount "575.55";
+  ebay:hasAmountType "GBP" 
+\end{lstlisting}
+\end{center}
+
+The ontology features three basic classes, (see Listing \ref{listing_ebay} for an example of ebay data)
+\begin{inparaenum}[(1)]
+    \item \texttt{SimpleItem} represents an eBay \texttt{Item}, that is sold by a \texttt{SimpleUser}. It is described by a title, a \texttt{CurrentPrice} (specifying the highest bid, or the selling price of fix-priced items), primary category name, manufacturer, model, EAN code, item ID (a unique eBay ID), bid count, end time of bid, country where the item is located, and a product ID (which supports major international product codes --- this property is from the Finding API).
+    \item The \texttt{CurrentPrice} features a \texttt{hasAmountType} property, specifying the currency code, and a \texttt{hasAmount} property, which is the amount of money for a price per unit.
+    \item \texttt{SimpleUser} contains information about eBay users. Users are described by a user ID, about me URL and the seller's positive feedback score. This class will not be used for capturing information on goods for our scenario, but is an essential component of the eBay system, which was the reason for its inclusion in the ontology.
+\end{inparaenum}
+
+\subsection{Testing and Results}
+\label{testing}
+
+We present the approach an ontology engineer has to take to discover and represent ontology mappings, and a means to exploit them after the they have been discovered and appropriately represented.
+
+There is a major paradigm difference between the GoodRelations ontology and the other two ontologies (see Sect.~\ref{results} for details). After studying the approach of the GR ontology, and examining the matching results between the Amazon and GR ontologies, we have concluded that automated matching between the two is unfeasible using the string-based methods employed using the Alignment API tool in this testing. Therefore, we have have created a manual mapping for this case, and have tested the automated matching on the Amazon--eBay pair, which closely resemble each other in their approach to capturing product details.
+
+\subsubsection{The Matcher}
+The matching tool called Alignment API \cite{euzenat2004api} has been developed to support several kinds of algorithms and methods, and provide an efficient environment for testing alignment systems.
+
+\paragraph{The Algorithm:}
+We have used a simple string distance-based algorithm provided by the tool, which computes the string distance between the names of the entities to find correspondences between them. Four methods have been used for computing the distance:
+\begin{inparaenum}[(1)]
+    \item equality, which tests whether the names are identical, 
+    \item Levenshtein distance (number of character operations needed), 
+    \item SMOA distance (which is a specialised distance for matching ontology identifiers) and
+    \item a Wordnet-based~\cite{fellbaum1998wordnet} distance using the JWNL library with Wordnet.
+\end{inparaenum}
+
+\paragraph{The Alignment Description:} 
+The alignment description is given based on a simple vocabulary, containing a pair of ontologies and a set of correspondences, which express relations holding among entities of the two ontologies.
+
+We used the level 0 mapping representation for representing simple mappings, which map discrete entities of the two ontologies. Thus the representation of the correspondences is given with the five elements described (with the \texttt{id} being optional), as shown in List.~\ref{listing_correspondence}. Level 2 mappings were also used for more complex, manually-created representations, as detailed in Sect.~\ref{results}.
+
+\begin{center}
+\lstset{frame=single, basicstyle=\small}
+\lstset{caption=Level 0 mapping element example, label=listing_correspondence}
+\lstset{captionpos=b}
+\lstset{language=XML}
+%\lstset{emph={vsmlVariant, namespace, ontology, concept, ofType, instance, onFunctionalProperties, endNonFunctionalProperties, memberOf, hasValue}}
+%\lstset{emphstyle=\textbf\textit\underbar}
+\begin{lstlisting}
+[ a :Cell;
+  :entity1 amzn:hasCurrencyCode;
+  :entity2 ebay:hasAmountType;
+  :measure "1.0"^^xsd:float;
+  :relation "=" ]
+\end{lstlisting}
+\end{center}
+
+\paragraph{Using the Tool:}
+The Alignment API tool can be used through a GUI, as a server or from the command-line interface, of which we have chosen the last one. The tool reads two RDF/OWL ontologies, computes the alignment between them, performs some thresholding and displays the results. It can render the output in a number of formats, including HTML and XSLT.
+ 
+An additional feature of the tool is its ability to evaluate results based on a reference alignment, and output the evaluation results in a table, or plot them as \LaTeX{} graphs.
+
+\subsubsection{Testing Procedure}
+We set up the ontologies according to Sect.~\ref{ontologies}. For the Amazon--eBay pair we set up a reference alignment, against which the results are evaluated.
+%For the reason of excluding the Amazon - GoodRelations pair from this procedure please refer to Section \ref{results}.
+
+\begin{center}
+\lstset{frame=single, basicstyle=\small}
+\lstset{caption=Executing the alignment tool on a pair of ontologies, label=listing_cli}
+\lstset{language=bash}
+\lstset{captionpos=b}
+\begin{lstlisting}
+ $ java -jar lib/procalign.jar amazon.owl ebay.owl 
+     -o results/equal.rdf
+\end{lstlisting}
+\end{center}
+ 
+Using the tool's command line interface, we have performed the following steps:
+\begin{itemize}
+\item generate the RDF alignment output for the four methods: (1) equality, (2) Levenshtein distance with a confidence threshold of \texttt{0.33} (meaning that any correspondence having a smaller confidence measure will be excluded), (3) SMOA distance with a threshold of \texttt{0.5} and (4) Wordnet distance using a threshold of \texttt{0.5}.
+\item render the XSLT file for the SMOA distance function;
+\item transform an example dataset using the XSLT transformation rules;
+\item generate the tables and graphs displaying different parameters of the evaluation.
+\end{itemize}
+
+\subsubsection{Results}
+\label{results}
+
+\paragraph{GoodRelations:}
+\label{gr}
+ 
+The GoodRelations ontology employs a unique paradigm, different from the paradigms of Amazon and eBay. In GR everything is centred around an instance of \texttt{Offering} and a graph of other instances attached to it, whereas for Amazon (and similarly for eBay), the main class is \texttt{Item}, which holds all relevant properties. In principle, \texttt{Item} would correspond to \texttt{ProductOrService} in GoodRelations, but the properties of the \texttt{Item} class are reflected as properties of many different classes in GR. 
+
+Though the infeasibility of automating this alignment became obvious, we have represented the alignment in the mapping language supported by the tool, as a level 2 mapping (described in Sect. \ref{mediation}) (the mapping has been created between Amazon and GoodRelations, since the eBay and Amazon ontologies are very similar in approach, and mapping eBay to GoodRelations would be an indentical task). This mapping description can later be used by the run-time JavaScript code. List.~\ref{listing_gr_a} shows an example mapping between two properties of the two ontologies, specifying that the relationship is \texttt{Equivalence} with a certainty degree of \texttt{1.0}. This fragment does not show, but assumes the equivalence correspondence between the classes \texttt{Item} and \texttt{Offering}, which is a trivial level 0 mapping. This mapping specifies the relation
+
+\begin{equation*} \label{eq}
+\begin{split}
+\forall{v,z}; hasEAN(v,z) & \Longrightarrow \exists{x, y}; includesObject(v,x) \wedge \\
+&typeOfGood(x,y) \wedge hasEAN\_UCC\_13(y,z),
+\end{split}
+\end{equation*}
+
+meaning that the \texttt{hasEAN} property of \texttt{v} in the Amazon ontology corresponds to the \texttt{hasEAN\_UCC\_13} property of the \texttt{typeOfGood} of the \texttt{includesObject} of \texttt{v} in GoodRelations. The domains and ranges of the properties are inferred, thus it is deduced, that in \texttt{Amazon v} is of type \texttt{Item} and \texttt{z} is \texttt{int}, and in \texttt{GoodRelations v, x, y} and \texttt{z} are instances of the classes \texttt{Offering}, \texttt{TypeAndQuantityNode}, \texttt{ProductOrService} and \texttt{int}, respectively.
+
+\begin{center}
+\lstset{frame=single, basicstyle=\small}
+\lstset{caption=Fragment of the Amazon--GoodRelations mapping, label=listing_gr_a}
+\lstset{language=bash}
+\lstset{captionpos=b, breaklines=true}
+\begin{lstlisting}
+<Cell rdf:about="MappingRule_01">
+ <entity1><omwg:Property rdf:about="&amzn;hasEAN"/></entity1>
+ <entity2>
+  <omwg:Property>
+    <first><Relation rdf:about="&gr;includesObject"/></first>
+    <next><Relation rdf:about="&gr;typeOfGood"/></next>
+    <next><Property rdf:about="&gr;hasEAN_UCC_13"/></next>
+  </omwg:Property>
+ </entity2>
+ <measure rdf:datatype="&xsd;float">1.0</measure>
+ <relation>Equivalence</relation>
+</Cell>
+\end{lstlisting}
+\end{center}
+
+Using this representation, complex correspondences can be modelled, using first order logic constructs. We will further investigate the possibilities of converting the level 2 mapping to XSLT, so it can automatically be used in the final JavaScript implementation. In case this is not possible, we will represent the mapping elements in SPARQL.
+
+\paragraph{Alignment Results:}
+The results of automatically aligning the Amazon and eBay ontologies were quite favourable. As shown in Tab.~\ref{table_results}, we captured the four main parameters used in information retrieval, as described in \cite{olson2008advanced}. These four parameters are used for evaluating the performance of the alignment methods: 
+\begin{inparaenum}[(1)]
+    \item \textit{Precision}, the fraction of results that are correct --- the higher, the better, 
+    \item \textit{Recall}, the ratio of the correct results to the total number of correct correspondences --- the higher, the better, 
+    \item \emph{Fallout}, the fraction of incorrect results - the lower the better, and 
+    \item \emph{F-measure}, which measures the overall effectiveness of the retrieval by a harmonic mean of precision and recall --- the higher, the better.
+\end{inparaenum}
+
+\begin{center}
+\begin{table}
+\caption{Alignment results: Precision, Recall, Fallout and F-Measure}
+\label{table_results}
+
+\begin{center}
+\begin{tabular}[c]{|llll|llll|llll|} \hline
+\multicolumn{4}{|l|}{Reference} & \multicolumn{4}{|l|}{Equal} & 
+\multicolumn{4}{|l|}{SMOA}\\ \hline
+Prec & Rec & Fall & FMeas & Prec & Rec & Fall & FMeas & Prec & Rec & 
+Fall & FMeas  \\ \hline
+1.00& 1.00& 0.00& 1.00& 1.00& 0.38& 0.00& 0.55& 0.43& 0.75& 0.57& 0.55 \\ \hline
+\end{tabular}
+\end{center}
+
+\begin{center}
+\begin{tabular}{|llll|llll|} \hline
+\multicolumn{4}{|l|}{Levenshtein} & \multicolumn{4}{|l|}{JWNL} \\ \hline
+ Prec & Rec & Fall & FMeas & Prec & Rec & Fall & FMeas \\ \hline
+0.4& 0.75& 0.6& 0.52& 0.67& 0.75& 0.33& 0.71 \\ \hline
+\end{tabular}
+\end{center}
+
+\end{table}
+\end{center}
+
+The first column (Reference) shows the reference alignment, which, naturally, has both perfect precision and recall. We can observe what intuition has predicted, namely that pure string equality (Equal) is far too simple and irrelevant, by only taking identical labels. By using string distances and giving certain thresholds (Levenshtein and SMOA), we can see that the results are much less precise, but have a better recall, since this allows for entities having similar names to be discovered, at the expense of having quite a few incorrect results (lower precision); the thresholds allow for low-scored cases to be eliminated, although this results in the exclusion of some correct correspondences. The last column (JWNL) contains the results of the Wordnet-enabled method, which shows quite an improvement, due to the lexical analysis, which performs a much more relevant comparison of strings, giving a high number of correct results. We can clearly see how it is quite close to the reference alignment, having a correctness of 0.67 and a recall of 0.75. The precision of the JWNL alignment shows only a tiny drop below the recall value, meaning that the number of incorrect correspondences discovered is small, and the main source of error is from the number of correspondences not discovered.
+
+
+% \begin{center}
+% \begin{figure}
+% %% Plot generated by GenPlot of alignapi
+% \begin{center}
+% \begin{tikzpicture}[cap=round, scale=0.75]
+% % Draw grid
+% \draw[step=1cm,very thin,color=gray] (-0.2,-0.2) grid (10.0,9.0);
+% \draw[|-|] (-0,0) -- (10,0);
+% %\draw[dashed,very thin] (0,0) -- (5,8.66) -- (10,0);
+% \draw[dashed,very thin] (10,0) arc (0:60:10cm);
+% \draw[dashed,very thin] (0,0) arc (180:120:10cm);
+% \draw (0,-0.3) node {$precision$};
+% \draw (10,-0.3) node {$recall$};
+% % Plots
+% \draw plot[mark=+,] coordinates {(5.0,8.660254037844386)};
+% \draw (5.01,8.370254037844385) node[anchor=south west] {Reference};
+% \draw plot[mark=+,] coordinates {(9.296875,3.6834922606644636)};
+% \draw (9.306875,3.3934922606644633) node[anchor=south west] {Equal};
+% \draw plot[mark=+,] coordinates {(3.1058673469387754,2.9531229168449795)};
+% \draw (3.115867346938775,2.6631229168449793) node[anchor=south west] {SMOA0.5};
+% \draw plot[mark=+,] coordinates {(2.9875000000000003,2.6598578439458005)};
+% \draw (2.9975,2.3698578439458003) node[anchor=south west] {Levenshtein0.33};
+% \draw plot[mark=+,] coordinates {(4.409722222222222,4.99987943527481)};
+% \draw (4.419722222222222,4.70987943527481) node[anchor=south west] {JWNL};
+% 
+% \end{tikzpicture}
+% \end{center}
+% \caption{Comparison of the four methods, against the reference alignment,\newline
+% showing the distances from 0 precision and 0 recall}
+% \label{fig:figure_alignment}
+% \end{figure}
+% \end{center}
+
+
+We can deduce that the results provided are satisfactory, even though the methods used were simple, string-based ones, and the process was completely automated without any user input.
+This means that through some user assistance or an initial input alignment the tool can achieve 100\% correct results.
+
+\paragraph{XSLT:}
+One of the appealing features of the Alignment API is that it can render the results in XSLT, thus specifying a set of rules which make it possible to transform an  XML file from one format to the other. We have generated such an XML transformation description, and with the simple Linux application \texttt{xsltproc} (run from the command line) we have managed to transform data (limited, of course by the incompleteness of the alignment) from the Amazon ontology into data annotated by the eBay vocabulary. 
+%Please refer to Appendix A for a listing of an example transformation.
+
+\section{Gadget Building Phase}
+Every time ontology matching is performed and an alignment is created between two underlying resources, the corresponding alignment rules are stored and an operator is created in the catalogue. At the gadget building phase, whenever two screens are combined, the catalogue will provide the possible matching operators for the two screens. This way an operator can be placed between two screens that would otherwise be incompatible.
+
+\section{Runtime} 
+Employing alignment rules in the runtime phase of the gadget.
