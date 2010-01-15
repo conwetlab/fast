@@ -369,7 +369,7 @@ class Sharing(resource.Resource):
                     bbdefinition['code'] = t.render(context)
                 else:
                     bbdefinition['code'] = bbc.code
-            context = Context({'id': buildingblock.id, 'name': buildingblock.name, 'definition': definition, 'posts': data.get('postconditions')})
+            context = Context({'id': buildingblock.id, 'name': buildingblock.name, 'definition': definition, 'pres': data.get('preconditions'), 'posts': data.get('postconditions')})
             t = loader.get_template('buildingblock/screen.html')
             code =  t.render(context)
         c.code = code

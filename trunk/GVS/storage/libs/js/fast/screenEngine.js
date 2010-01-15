@@ -8,13 +8,14 @@ var ScreenEngineFactory = function () {
 			this.id = id;
 			this.buildingblocks = new Array();
 			this.posts = new Hash();
+			this.pres = new Hash();
 			this.indexedActions = new Hash();
 			this.pipingIndexedActions = new Hash();
 			this.triggerIndexedActions = new Hash();
 			this.buildingBlocks = new Hash();
 		},
 
-		setEngine: function (screenflowEngine, buildingblocks, piping, triggers, posts) {
+		setEngine: function (screenflowEngine, buildingblocks, piping, triggers, pres, posts) {
 			this.screenflowEngine = screenflowEngine;
 			if(buildingblocks){
 				this.buildingblocks = buildingblocks;
@@ -60,6 +61,12 @@ var ScreenEngineFactory = function () {
 				}
 				var action = this.indexedActions.get(this._getKey([trigger.to.action, trigger.to.buildingblock]));
 				triggerActions.push({action: action});
+			}
+			if(pres){
+				for (var i=0; i<pres.length; i++){
+					var pre = pres[i];
+					this.pres.set(pre.id, pre);
+				}
 			}
 			if(posts){
 				for (var i=0; i<posts.length; i++){
@@ -154,6 +161,7 @@ var ScreenEngineFactory = function () {
 		
 		
 		restart: function (){
+			//Empty action pres
 			for (var i=0; i<this.buildingblocks.length; i++){
 				var buildingBlock = this.buildingblocks[i];
 				var actions = buildingBlock.actions;
@@ -163,6 +171,18 @@ var ScreenEngineFactory = function () {
 					for(var k=0; preconditions!= null && k<preconditions.length; k++){
 						var precondition = preconditions[k];
 						precondition.value = null;
+					}
+				}
+			}
+			//Piping of Screen pres
+			var actionKeys = this.pipingIndexedActions.keys();
+			for (var i=0; i<actionKeys.length; i++){
+				var pipes = this.pipingIndexedActions.get(actionKeys[i]);
+				for (var j=0; j<pipes.length; j++){
+					var pipe = pipes[j];
+					if (!pipe.piping.from.buildingblock || pipe.piping.from.buildingblock=='') {
+						var uri = pipe.pre.pattern.split(" ")[2];
+						pipe.pre.value = this.screenflowEngine.getFact(uri);
 					}
 				}
 			}

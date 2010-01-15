@@ -26,11 +26,21 @@
         "buildingblocks":[
             {
                 "id":"amazonOrderForm1",
-                "uri":"http://purl.oclc.org/fast/ontology/gadget#FormElement1259253465502"
+                "uri":"http://purl.oclc.org/fast/ontology/gadget#FormElement1263313173317"
             }
         ],
         "pipes":[
-            
+        	{
+                "from":{
+                    "buildingblock":"",
+                    "condition":"purchase"
+                },
+                "to":{
+                    "buildingblock":"amazonOrderForm1",
+                    "condition":"purchase",
+                    "action":"init"
+                }
+            }    
         ],
         "triggers":[
             {
@@ -48,6 +58,7 @@
     "preconditions":[
         [
             {
+                "id":"purchase",
                 "label":{
                     "en-gb":"A Amazon Purchase URL"
                 },

@@ -26,18 +26,40 @@
         "buildingblocks":[
             {
                 "id":"amazonProductForm1",
-                "uri":"http://purl.oclc.org/fast/ontology/gadget#FormElement1259253587634"
+                "uri":"http://purl.oclc.org/fast/ontology/gadget#FormElement1263313183724"
             },
             {
                 "id":"AmazonItemLookupService1",
-                "uri":"http://purl.oclc.org/fast/ontology/gadget#BackendService1259254125680"
+                "uri":"http://purl.oclc.org/fast/ontology/gadget#BackendService1263313234944"
             },
             {
                 "id":"AmazonAddItemToCartService1",
-                "uri":"http://purl.oclc.org/fast/ontology/gadget#BackendService1259253997302"
+                "uri":"http://purl.oclc.org/fast/ontology/gadget#BackendService1263313213318"
             }
         ],
         "pipes":[
+            {
+                "from":{
+                    "buildingblock":"",
+                    "condition":"item"
+                },
+                "to":{
+                    "buildingblock":"AmazonItemLookupService1",
+                    "condition":"item",
+                    "action":"searchProduct"
+                }
+            },
+            {
+                "from":{
+                    "buildingblock":"",
+                    "condition":"item"
+                },
+                "to":{
+                    "buildingblock":"AmazonAddItemToCartService1",
+                    "condition":"item",
+                    "action":"add"
+                }
+            },
             {
                 "from":{
                     "buildingblock":"AmazonItemLookupService1",
@@ -119,6 +141,7 @@
     "preconditions":[
         [
             {
+                "id":"item",
                 "label":{
                     "en-gb":"An item"
                 },

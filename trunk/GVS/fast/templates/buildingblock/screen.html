@@ -53,15 +53,21 @@
 {% for pipe in definition.pipes %}
 			{from: {buildingblock: '{{pipe.from.buildingblock}}', condition: '{{pipe.from.condition}}'}, to: {buildingblock: '{{pipe.to.buildingblock}}', action: '{{pipe.to.action}}', condition: '{{pipe.to.condition}}'}}{% if not forloop.last %},{% endif %}
 {% endfor %}
-
-	                 	
 		];
 
 	var _triggers{{id}} = [
 {% for trigger in definition.triggers %}	                   	
 {from: {buildingblock: '{{trigger.from.buildingblock}}', name: '{{trigger.from.name}}'}, to: {buildingblock: '{{trigger.to.buildingblock}}', action: '{{trigger.to.action}}'}}{% if not forloop.last %},{% endif %}
 {% endfor %}	                   	
-		];               	
+		];
+
+	var _pres{{id}} = [
+{% for or in pres %}
+	{% for and in or %}
+				{id:"{{and.id}}", pattern: "{{and.pattern}}"}{% if not forloop.last %},{% endif %}	
+	{% endfor %}
+{% endfor %}
+		];           	
 	
 	var _posts{{id}} = [
 {% for or in posts %}
@@ -71,7 +77,7 @@
 {% endfor %}
 		];
 	
-	ScreenEngineFactory.getInstance("{{id}}").setEngine(ScreenflowEngineFactory.getInstance(), _bb{{id}}, _piping{{id}}, _triggers{{id}}, _posts{{id}});
+	ScreenEngineFactory.getInstance("{{id}}").setEngine(ScreenflowEngineFactory.getInstance(), _bb{{id}}, _piping{{id}}, _triggers{{id}}, _pres{{id}}, _posts{{id}});
 
 	ScreenflowEngineFactory.getInstance().addScreenLoader("{{id}}", ScreenEngineFactory.getInstance("{{id}}").restart.bind(ScreenEngineFactory.getInstance("{{id}}")));
 </script>

@@ -27,18 +27,40 @@
         "buildingblocks":[
             {
                 "id":"PriceComparativeForm1",
-                "uri":"http://purl.oclc.org/fast/ontology/gadget#FormElement1259253572039"
+                "uri":"http://purl.oclc.org/fast/ontology/gadget#FormElement1263313179380"
             },
             {
                 "id":"PriceComparativeService1",
-                "uri":"http://purl.oclc.org/fast/ontology/gadget#BackendService1259254187946"
+                "uri":"http://purl.oclc.org/fast/ontology/gadget#BackendService1263313239881"
             },
             {
                 "id":"AmazonAddOfferToCartService1",
-                "uri":"http://purl.oclc.org/fast/ontology/gadget#BackendService1259254005724"
+                "uri":"http://purl.oclc.org/fast/ontology/gadget#BackendService1263313221850"
             }
         ],
         "pipes":[
+            {
+                "from":{
+                    "buildingblock":"",
+                    "condition":"item"
+                },
+                "to":{
+                    "buildingblock":"PriceComparativeForm1",
+                    "condition":"item",
+                    "action":"init"
+                }
+            },
+            {
+                "from":{
+                    "buildingblock":"",
+                    "condition":"item"
+                },
+                "to":{
+                    "buildingblock":"PriceComparativeService1",
+                    "condition":"item",
+                    "action":"fetch"
+                }
+            },
             {
                 "from":{
                     "buildingblock":"PriceComparativeService1",
@@ -121,6 +143,7 @@
     "preconditions":[
         [
             {
+                "id":"item",
                 "label":{
                     "en-gb":"An item"
                 },

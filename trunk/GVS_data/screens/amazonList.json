@@ -25,14 +25,25 @@
         "buildingblocks":[
             {
                 "id":"amazonListForm1",
-                "uri":"http://purl.oclc.org/fast/ontology/gadget#FormElement1259253452048"
+                "uri":"http://purl.oclc.org/fast/ontology/gadget#FormElement1263313163770"
             },
             {
                 "id":"AmazonSearchService1",
-                "uri":"http://purl.oclc.org/fast/ontology/gadget#BackendService1259254307948"
+                "uri":"http://purl.oclc.org/fast/ontology/gadget#BackendService1263313249397"
             }
         ],
         "pipes":[
+            {
+                "from":{
+                    "buildingblock":"",
+                    "condition":"filter"
+                },
+                "to":{
+                    "buildingblock":"AmazonSearchService1",
+                    "condition":"filter",
+                    "action":"search"
+                }
+            },
             {
                 "from":{
                     "buildingblock":"AmazonSearchService1",
@@ -104,6 +115,7 @@
     "preconditions":[
         [
             {
+                "id":"filter",
                 "label":{
                     "en-gb":"A search criteria"
                 },

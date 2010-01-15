@@ -25,22 +25,55 @@
         "buildingblocks":[
             {
                 "id":"amazonShoppingCartForm1",
-                "uri":"http://purl.oclc.org/fast/ontology/gadget#FormElement1259253707638"
+                "uri":"http://purl.oclc.org/fast/ontology/gadget#FormElement1263313193193"
             },
             {
                 "id":"AmazonClearCartService1",
-                "uri":"http://purl.oclc.org/fast/ontology/gadget#BackendService1259254068007"
+                "uri":"http://purl.oclc.org/fast/ontology/gadget#BackendService1263313229756"
             },
             {
                 "id":"AmazonUpdateCartService1",
-                "uri":"http://purl.oclc.org/fast/ontology/gadget#BackendService1259254431574"
+                "uri":"http://purl.oclc.org/fast/ontology/gadget#BackendService1263313258897"
             },
             {
                 "id":"AmazonSearchCartService1",
-                "uri":"http://purl.oclc.org/fast/ontology/gadget#BackendService1259254248291"
+                "uri":"http://purl.oclc.org/fast/ontology/gadget#BackendService1263313244553"
             }
         ],
         "pipes":[
+            {
+                "from":{
+                    "buildingblock":"",
+                    "condition":"cart"
+                },
+                "to":{
+                    "buildingblock":"AmazonSearchCartService1",
+                    "condition":"cart",
+                    "action":"fetch"
+                }
+            },
+            {
+                "from":{
+                    "buildingblock":"",
+                    "condition":"cart"
+                },
+                "to":{
+                    "buildingblock":"AmazonUpdateCartService1",
+                    "condition":"cart",
+                    "action":"updateService"
+                }
+            },
+            {
+                "from":{
+                    "buildingblock":"",
+                    "condition":"cart"
+                },
+                "to":{
+                    "buildingblock":"AmazonClearCartService1",
+                    "condition":"cart",
+                    "action":"clearService"
+                }
+            },
             {
                 "from":{
                     "buildingblock":"AmazonSearchCartService1",
@@ -197,6 +230,7 @@
     "preconditions":[
         [
             {
+                "id": "cart",
                 "label":{
                     "en-gb":"A Cart"
                 },

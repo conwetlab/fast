@@ -25,18 +25,29 @@
         "buildingblocks":[
             {
                 "id":"eBayListForm1",
-                "uri":"http://purl.oclc.org/fast/ontology/gadget#FormElement1259253828143"
+                "uri":"http://purl.oclc.org/fast/ontology/gadget#FormElement1263313203474"
             },
             {
                 "id":"amazonEbayFilter1",
-                "uri":"http://purl.oclc.org/fast/ontology/gadget#Operator1259253881988"
+                "uri":"http://purl.oclc.org/fast/ontology/gadget#Operator1263313208131"
             },
             {
                 "id":"ebaySearchService1",
-                "uri":"http://purl.oclc.org/fast/ontology/gadget#BackendService1259254549404"
+                "uri":"http://purl.oclc.org/fast/ontology/gadget#BackendService1263313263804"
             }
         ],
         "pipes":[
+            {
+                "from":{
+                    "buildingblock":"",
+                    "condition":"item"
+                },
+                "to":{
+                    "buildingblock":"amazonEbayFilter1",
+                    "condition":"item",
+                    "action":"createFilter"
+                }
+            },
             {
                 "from":{
                     "buildingblock":"ebaySearchService1",
@@ -108,6 +119,7 @@
     "preconditions":[
         [
             {
+                "id":"item",
                 "label":{
                     "en-gb":"An Amazon item"
                 },
