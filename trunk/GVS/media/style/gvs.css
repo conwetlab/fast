@@ -545,6 +545,9 @@ h4{
 .view.resource.unsatisfeable {
     border:2px solid #B90000;
 }
+.view.resource.satisfeable {
+    border:2px solid green;
+}
 .resource .title {
     background-color:#EAEAEA;
     border-top:2px solid #808080;
@@ -563,6 +566,11 @@ h4{
      border-top: 2px solid #B90000;
      background-color: #F5D9D9;
      color: #B90000;
+}
+.resource.satisfeable .title {
+     border-top: 2px solid green;
+     background-color: #DDF7DD;
+     color: green;
 }
 .resource .prePostSeparator {
     top: 0px;
@@ -595,6 +603,10 @@ h4{
 }
 .resource.selected.unsatisfeable .title {
     background-color: #B90000;
+}
+
+.resource.selected.satisfeable .title {
+    background-color: green;
 }
 
 /*********************
