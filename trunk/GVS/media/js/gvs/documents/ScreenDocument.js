@@ -232,6 +232,7 @@ var ScreenDocument = Class.create(PaletteDocument,
         instance.enableDragNDrop(area,[area]);
         instance.getView().addGhost();
         this._hasUnsavedChanges = true;
+        this._toolbarElements.get('save').setEnabled(true);
         return true;
     },
     
@@ -253,6 +254,7 @@ var ScreenDocument = Class.create(PaletteDocument,
                 this._refreshReachability();
             }
             this._hasUnsavedChanges = true;
+            this._toolbarElements.get('save').setEnabled(true);
         }
     },
 
@@ -300,6 +302,7 @@ var ScreenDocument = Class.create(PaletteDocument,
         this._setSelectedElement();
         instance.destroy();
         this._hasUnsavedChanges = true;
+        this._toolbarElements.get('save').setEnabled(true);
     },
 
 
@@ -358,7 +361,7 @@ var ScreenDocument = Class.create(PaletteDocument,
             'Save the current screen',
             'save',
             this._save.bind(this),
-            true
+            false
         ));
         this._addToolbarElement('properties', new ToolbarButton(
             'Edit screen properties',
@@ -709,6 +712,7 @@ var ScreenDocument = Class.create(PaletteDocument,
         }.bind(this));
         this._updatePanes();
         this._hasUnsavedChanges = true;
+        this._toolbarElements.get('save').setEnabled(true);
      },
 
      /**
@@ -772,6 +776,7 @@ var ScreenDocument = Class.create(PaletteDocument,
      */
     _onSaveSuccess: function(/** XMLHttpRequest */ transport) {
         this._hasUnsavedChanges = false;
+        this._toolbarElements.get('save').setEnabled(false);
         if (this._description.getId() == null) {
             var data = JSON.parse(transport.responseText);
             this._description.addProperties({'id': data.id});
@@ -816,7 +821,7 @@ var ScreenDocument = Class.create(PaletteDocument,
      * @private
      */
     _onShareSuccess: function(/** XMLHttpRequest */ transport) {
-        // TODO
+        alert("Screen successfully shared");
     }
 });
 

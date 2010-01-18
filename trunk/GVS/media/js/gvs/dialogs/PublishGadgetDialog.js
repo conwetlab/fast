@@ -31,8 +31,9 @@ var PublishGadgetDialog = Class.create(ConfirmDialog /** @lends PublishGadgetDia
      * @override
      */
     show: function ($super, /** String */ gadgetBaseUrl) {
-        this._gadgetBaseUrl = gadgetBaseUrl;  
-        $super();
+        this._gadgetBaseUrl = gadgetBaseUrl;
+        this._initDialogInterface();
+        $super();  
         this._buttons.get('ezweb').attr("label", "Publish it!");
         this._buttons.get('ezweb').attr("disabled", false);
         
