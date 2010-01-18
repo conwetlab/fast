@@ -32,7 +32,12 @@ var TriggerMappingFactory = Class.create(
      * @type Trigger
      */
     removeTrigger: function(/** Object */ element) {
-        var trigger = this._createFromJSON(element);
+        var trigger;
+        if (element.constructor != Trigger && element.constructor != ScreenTrigger) {
+            trigger = this._createFromJSON(element);
+        } else {
+            trigger = element;
+        }       
         this._triggers.unset(trigger.getId());
         return trigger;
     },
@@ -53,6 +58,20 @@ var TriggerMappingFactory = Class.create(
                array.push(trigger);
                result.set(trigger.getDestinationAction(), array);
            }
+        });
+        return result;
+    },
+
+    /**
+     * Returns a list with triggers related to a given instance
+     */
+    getRelatedTriggers: function(/** ComponentInstance */ instance) {
+        var result = new Array();
+        this._triggers.values().each(function(trigger) {
+            if (trigger.getSourceId() == instance.getId() ||
+                trigger.getDestinationId() == instance.getId()) {
+                    result.push(trigger);
+                }
         });
         return result;
     },

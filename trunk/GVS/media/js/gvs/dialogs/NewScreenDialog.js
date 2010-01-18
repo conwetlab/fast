@@ -47,7 +47,7 @@ var NewScreenDialog = Class.create(ConfirmDialog /** @lends NewScreenDialog.prot
             },
             {
                 'type':'input', 
-                'label': 'Domain Context:',
+                'label': 'Tags:',
                 'name': 'domaincontext',
                 'value': ''
             }

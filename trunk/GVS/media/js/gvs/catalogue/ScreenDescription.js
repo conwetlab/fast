@@ -33,11 +33,20 @@ var ScreenDescription = Class.create(BuildingBlockDescription,
                 "triggers": this._getTriggers()
             }
         };
-        // TODO: add basic attributes
         result = Object.extend(result,{
             "name": this.name,
+            "label": this.label,
             "domainContext": this.domainContext,
-            "version": this.version
+            "version": this.version,
+            "id": this.id,
+            "creator": this.creator,
+            "description": this.description,
+            "rights": this.rights,
+            "creationDate": this.creationDate,
+            "icon": this.icon,
+            "screenshot": this.screenshot,
+            "homepage": this.homepage,
+            "type": "screen"
         });
         return result;
     },
@@ -187,6 +196,7 @@ var ScreenDescription = Class.create(BuildingBlockDescription,
                 this._pipes.unset(instance.getId());
                 break;
             case Trigger:
+            case ScreenTrigger:
                 this._triggers.unset(instance.getId());
                 break;
             default:

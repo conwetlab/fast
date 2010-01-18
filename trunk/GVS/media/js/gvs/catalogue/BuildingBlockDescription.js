@@ -47,9 +47,18 @@ var BuildingBlockDescription = Class.create(
 
     /**
      * Returns the id of the building block
+     * @type String
      */
     getId: function() {
         return this.id;
+    },
+
+    /**
+     * This function returns if the data inside the description is valid
+     * @type Boolean
+     */
+    isValid: function() {
+        return true;
     }
 
     // **************** PRIVATE METHODS **************** //

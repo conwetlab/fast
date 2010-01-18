@@ -74,7 +74,7 @@ var ScreenDocument = Class.create(PaletteDocument,
         this._triggerMappingFactory = new TriggerMappingFactory();
               
         // Screen Definition
-        
+
          /**
          * The screenflow description
          * @type ScreenDescription
@@ -85,18 +85,45 @@ var ScreenDocument = Class.create(PaletteDocument,
             'name': title,
             'version': version,
             'domainContext': {
-                'tags': domainContext
-            }
+                'tags': domainContext,
+                'user': null
+            },
+            "creator": "http://fast.morfeo-project.eu",
+            "description": {"en-gb": "Please fill the description..."},
+            "rights": "http://creativecommons.org/",
+            "creationDate": new Date().toUTCString(),
+            "icon": "http://fast.morfeo-project.eu/icon.png",
+            "screenshot": "http://fast.morfeo-project.eu/screenshot.png",
+            "homepage": "http://fast.morfeo-project.eu/"
         });
-        //Screen properties
-        //this._propertiesPane.fillTable(this._description);
+
+        /**
+         * Screen properties dialog
+         * @type PropertiesDialog
+         * @private
+         */
+        this._propertiesDialog = new PropertiesDialog("Screen", this._description);
 
         this._configureToolbar();
-        
+
+        /**
+         * Has unsaved changes control variable
+         * @type Boolean
+         * @private
+         */
+        this._hasUnsavedChanges = false;
+
+        /**
+         * A sharing operation was started but not finished
+         * @type Boolean
+         * @private
+         */
+        this._sharingPending = false;
+          
         /**
          * Resource instances on the canvas by uri
          * @private
-         * @type Hash 
+         * @type Hash
          */
         this._canvasInstances = new Hash();
         
@@ -169,6 +196,8 @@ var ScreenDocument = Class.create(PaletteDocument,
                 return false;
             } else {
                 this._formInstance = instance;
+                this._description.icon = instance.getBuildingBlockDescription().icon;
+                this._description.screenshot = instance.getBuildingBlockDescription().screenshot;
             }
         }
 
@@ -202,6 +231,7 @@ var ScreenDocument = Class.create(PaletteDocument,
         instance.setEventListener(this);
         instance.enableDragNDrop(area,[area]);
         instance.getView().addGhost();
+        this._hasUnsavedChanges = true;
         return true;
     },
     
@@ -222,6 +252,7 @@ var ScreenDocument = Class.create(PaletteDocument,
                 }
                 this._refreshReachability();
             }
+            this._hasUnsavedChanges = true;
         }
     },
 
@@ -259,10 +290,16 @@ var ScreenDocument = Class.create(PaletteDocument,
             this._pipeFactory.removePipe(pipe);
             this._description.remove(pipe);
         }.bind(this));
+
+        this._triggerMappingFactory.getRelatedTriggers(instance).each(function(trigger) {
+            this._triggerMappingFactory.removeTrigger(trigger);
+            this._description.remove(trigger);
+        }.bind(this));
         
         this._refreshReachability();
         this._setSelectedElement();
         instance.destroy();
+        this._hasUnsavedChanges = true;
     },
 
 
@@ -316,17 +353,30 @@ var ScreenDocument = Class.create(PaletteDocument,
     },
     
     _configureToolbar: function() {
+       
         this._addToolbarElement('save', new ToolbarButton(
-                'Save the current screen',
-                'save',
-                this._save.bind(this),
-                true
+            'Save the current screen',
+            'save',
+            this._save.bind(this),
+            true
+        ));
+        this._addToolbarElement('properties', new ToolbarButton(
+            'Edit screen properties',
+            'properties',
+            this._propertiesDialog.show.bind(this._propertiesDialog),
+            true
         ));
         this._addToolbarElement('deleteElement', new ToolbarButton(
-                'Delete selected element',
-                'delete',
-                this._startDeletingSelectedElement.bind(this),
-                false // disabled by default
+            'Delete selected element',
+            'delete',
+            this._startDeletingSelectedElement.bind(this),
+            false // disabled by default
+        ));
+        this._addToolbarElement('share', new ToolbarButton(
+            'Share the current screen with the community',
+            'share',
+            this._share.bind(this),
+            true
         ));
     },
 
@@ -407,10 +457,14 @@ var ScreenDocument = Class.create(PaletteDocument,
      * @overrides
      * @private
      */
-    _closeDocument: function() {
-        confirm("Are you sure you want to close the current Screen?" + 
-            " Unsaved changes will be lost", this._confirmCallback.bind(this));
-        return false;
+    _closeDocument: function($super) {
+        if (this._hasUnsavedChanges) {
+             confirm("Are you sure you want to close the current Screen?" +
+                " Unsaved changes will be lost", this._confirmCallback.bind(this));
+            return false;
+        } else {
+            return true;
+        }
     },
     
     
@@ -654,6 +708,7 @@ var ScreenDocument = Class.create(PaletteDocument,
             this._description.remove(trigger);
         }.bind(this));
         this._updatePanes();
+        this._hasUnsavedChanges = true;
      },
 
      /**
@@ -698,17 +753,16 @@ var ScreenDocument = Class.create(PaletteDocument,
      * @override
      */
     _save: function() {
-        /*var uri = URIs.screen;
         var persistenceEngine = PersistenceEngineFactory.getInstance();
         if (this._description.getId() == null) {
             // Save it for the first time
-            persistenceEngine.sendPost(uri, {"buildingblock": this._description.toJSON()},
-                                        null, this, this._onSaveSuccess, Utils.onAJAXError);
+            persistenceEngine.sendPost(URIs.screen, null, "buildingblock=" + Object.toJSON(this._description.toJSON()),
+                                       this, this._onSaveSuccess, this._onSaveError);
         } else {
-            uri += "/" + this._description.getId();
-            persistenceEngine.sendPut(uri, {"buildingblock": this._description.toJSON()},
-                                        null, this, this._onSaveSuccess, Utils.onAJAXError);
-        }*/
+            var uri = URIs.buildingblock + this._description.getId();
+            persistenceEngine.sendUpdate(uri, null, "buildingblock=" + Object.toJSON(this._description.toJSON()),
+                                      this, this._onSaveSuccess, this._onSaveError);
+        }
         // TODO: Show a saving message
     },
 
@@ -717,10 +771,52 @@ var ScreenDocument = Class.create(PaletteDocument,
      * @private
      */
     _onSaveSuccess: function(/** XMLHttpRequest */ transport) {
+        this._hasUnsavedChanges = false;
         if (this._description.getId() == null) {
             var data = JSON.parse(transport.responseText);
             this._description.addProperties({'id': data.id});
         }
+        if (this._sharingPending) {
+            this._sharingPending = false;
+            this._share();
+        }
+    },
+
+    /**
+     * On save error: the screen already exists
+     */
+    _onSaveError: function(/** XMLHttpRequest */ transport) {
+        // TODO: think about what to do when a screen cannot be saved
+        // (problems with wrong versions)
+    },
+
+    /**
+     * Publish a screen into the catalogue
+     * @private
+     */
+    _share: function() {
+        if (this._description.isValid()) {
+            if (this._hasUnsavedChanges) {
+                this._sharingPending = true;
+                this._save();
+            } else {
+                var persistenceEngine = PersistenceEngineFactory.getInstance();
+                var uri = URIs.share.replace("<id>", this._description.getId());
+                persistenceEngine.sendPost(uri, null, null,
+                                        this, this._onShareSuccess, Utils.onAJAXError);
+            }
+           
+        } else {
+            this._propertiesDialog.show(this._share.bind(this));
+        }
+    },
+
+    /**
+     * On share success
+     * @private
+     */
+    _onShareSuccess: function(/** XMLHttpRequest */ transport) {
+        // TODO
     }
 });
 
