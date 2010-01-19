@@ -88,22 +88,51 @@ var ScreenDescription = Class.create(BuildingBlockDescription,
     /**
      * Adds a pre instance to the description
      */
-    addPre: function(/** PrePostInstance */ pre) {
-        this._preconditions.set(pre.getId(),pre);
+    addPre: function(/** PrePostInstance */ pre, /** Object */ position) {
+        this._preconditions.set(pre.getId(), {
+            'buildingblock': pre,
+            'position': position
+        });
     },
 
     /**
      * Adds a post instance
      */
-    addPost: function(/** PrePostInstance */ post) {
-        this._postconditions.set(post.getId(),post);
+    addPost: function(/** PrePostInstance */ post, /** Object */ position) {
+        this._postconditions.set(post.getId(),{
+            'buildingblock': post,
+            'position': position
+        });
+    },
+
+    /**
+     * Updates the position of a *-condition
+     */
+    updatePrePost: function(/** PrePostInstance */ prepost, /** Object */ position) {
+        var list;
+        if (prepost.getType() == "pre") {
+            list = this._preconditions;
+        } else {
+            list = this._postconditions;
+        }
+        list.get(prepost.getId()).position = position;
     },
 
     /**
      * Adds a building block (other than pre/post) to the description
      */
-    addBuildingBlock: function (/** ComponentInstance */ instance) {
-        this._buildingBlocks.set(instance.getId(),instance);
+    addBuildingBlock: function (/** ComponentInstance */ instance, /** Object */ position) {
+        this._buildingBlocks.set(instance.getId(),{
+            'buildingblock': instance,
+            'position': position
+        });
+    },
+
+    /**
+     * Updates the position of a building block
+     */
+    updateBuildingBlock: function (/** ComponentInstance */ instance, /** Object */ position) {
+        this._buildingBlocks.get(instance.getId()).position = position;
     },
 
     /**
@@ -147,7 +176,9 @@ var ScreenDescription = Class.create(BuildingBlockDescription,
     getPreconditions: function() {
         var list = new Array();
         this._preconditions.values().each(function(pre) {
-            list.push(pre.getFactData());
+            var element = Object.extend(pre.buildingblock.getFactData(), {'position':
+                pre.position});
+            list.push(element);
         }.bind(this));
         return list;
     },
@@ -159,7 +190,9 @@ var ScreenDescription = Class.create(BuildingBlockDescription,
     getPostconditions: function() {
         var list = new Array();
         this._postconditions.values().each(function(post) {
-            list.push(post.getFactData());
+            var element = Object.extend(post.buildingblock.getFactData(), {'position':
+                post.position});
+            list.push(element);
         }.bind(this));
         return list;
     },
@@ -169,7 +202,14 @@ var ScreenDescription = Class.create(BuildingBlockDescription,
      * @type Array
      */
     getConditionInstances: function() {
-        return this._preconditions.values().concat(this._postconditions.values());
+        var result = new Array();
+        this._preconditions.values().each(function(pre){
+            result.push(pre.buildingblock);
+        });
+        this._postconditions.values().each(function(post){
+            result.push(post.buildingblock);
+        });
+        return result;
     },
 
     /**
@@ -177,7 +217,7 @@ var ScreenDescription = Class.create(BuildingBlockDescription,
      * @type PrePostInstance
      */
     getPost: function(/** String */ id) {
-        return this._postconditions.get(id);
+        return this._postconditions.get(id).buldingblock;
     },  
 
     /**
@@ -215,8 +255,9 @@ var ScreenDescription = Class.create(BuildingBlockDescription,
         var buildingBlocks = new Array();
         this._buildingBlocks.values().each(function(block) {
             buildingBlocks.push({
-                'id': block.getId(),
-                'uri': block.getUri()
+                'id': block.buildingblock.getId(),
+                'uri': block.buildingblock.getUri(),
+                'position': block.position
             });
         });
         return buildingBlocks;

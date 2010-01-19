@@ -177,6 +177,23 @@ var ScreenDocument = Class.create(PaletteDocument,
         this._pipeFactory.hidePipes();
     },
 
+    /**
+     * Implementing event listener
+     * @override
+     */
+    positionUpdated: function(/** ComponentInstance */ element, /** Object */ position) {
+        switch (element.constructor) {
+            case PrePostInstance:
+                this._description.updatePrePost(element, position);
+                break;
+            default:
+                this._description.updateBuildingBlock(element, position);
+                break;
+        }
+        this._hasUnsavedChanges = true;
+        this._toolbarElements.get('save').setEnabled(true);
+    },
+
     // **************** PRIVATE METHODS **************** //
     
 
@@ -213,19 +230,19 @@ var ScreenDocument = Class.create(PaletteDocument,
         if (instance.constructor != PrePostInstance) {
             instance.createTerminals(this._onPipeHandler.bind(this));
             this._canvasInstances.set(instance.getUri(), instance);
-            this._description.addBuildingBlock(instance);
+            this._description.addBuildingBlock(instance, position);
             this._setSelectedElement(instance);
         } else {
             instance.setChangeHandler(this._onPrePostAdded.bind(this));
             if (area.getNode().className.include("pre")) {
                 instance.setType("pre");
                 instance.createTerminal(this._onPipeHandler.bind(this));
-                this._description.addPre(instance);
+                this._description.addPre(instance, position);
                 instance.getView().setReachability({"satisfied": true});
             } else if (area.getNode().className.include("post")) {
                 instance.setType("post");
                 instance.createTerminal();
-                this._description.addPost(instance);
+                this._description.addPost(instance, position);
             }
         }
         instance.setEventListener(this);
@@ -666,7 +683,8 @@ var ScreenDocument = Class.create(PaletteDocument,
       * Called whenever a trigger dialog finishes its job
       * @private
       */
-     _onTriggerChange: function(/** String*/ action, /** Array */ triggersAdded, /** Array */ triggersRemoved) {
+     _onTriggerChange: function(/** String*/ action, /** Array */ triggersAdded,
+                                /** Array */ triggersRemoved) {
         triggersAdded.each(function(triggerInfo) {
             var triggerSplittedInfo = triggerInfo.split("#");
             var instance;
@@ -763,9 +781,7 @@ var ScreenDocument = Class.create(PaletteDocument,
             persistenceEngine.sendPost(URIs.screen, null, "buildingblock=" + Object.toJSON(this._description.toJSON()),
                                        this, this._onSaveSuccess, this._onSaveError);
         } else {
-            Utils.showMessage("Saving screen...", {
-                'hide': true
-            });
+            Utils.showMessage("Saving screen...");
             var uri = URIs.buildingblock + this._description.getId();
             persistenceEngine.sendUpdate(uri, null, "buildingblock=" + Object.toJSON(this._description.toJSON()),
                                       this, this._onSaveSuccess, this._onSaveError);
@@ -783,11 +799,15 @@ var ScreenDocument = Class.create(PaletteDocument,
         if (this._description.getId() == null) {
             var data = JSON.parse(transport.responseText);
             this._description.addProperties({'id': data.id});
+        } else {
+            Utils.showMessage("Saving screen...Saved", {
+                'hide': true
+            });
         }
         if (this._sharingPending) {
             this._sharingPending = false;
             this._share();
-        }
+        }     
     },
 
     /**

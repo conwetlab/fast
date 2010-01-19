@@ -154,6 +154,23 @@ var ScreenflowDocument = Class.create(PaletteDocument,
     },
 
 
+    /**
+     * Implementing event listener
+     * @override
+     */
+    positionUpdated: function(/** ComponentInstance */ element, /** Object */ position) {
+        switch (element.constructor) {
+            case ScreenInstance:
+                this._description.updateScreen(element.getUri(), position);
+                break;
+            case PrePostInstance:
+                this._description.updatePrePost(element, position);
+                break;
+        }
+       
+    },
+
+
     // **************** PRIVATE METHODS **************** //
     
     

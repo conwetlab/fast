@@ -280,13 +280,6 @@ var PrePostInstance = Class.create(ComponentInstance,
             this._terminal.updatePosition();
         }
     },
-    /**
-     * @override
-     */
-    onFinish: function($super, changingZone) {
-        $super(changingZone);
-        this.onUpdate();
-    }, 
 
     // **************** PRIVATE METHODS **************** //
     /**

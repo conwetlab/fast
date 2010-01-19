@@ -132,21 +132,6 @@ var ResourceInstance = Class.create(ComponentInstance,
             });
         }
     },
-    /**
-     * @override
-     */
-    onFinish: function($super, changingZone) {
-        $super(changingZone);
-        /*if (this._terminals) {
-            this._terminals.each(function(terminal){
-                terminal.updatePosition();    
-                terminal.wires.each(function(wire) {
-                    wire.element.setStyle({'display': 'block'});            
-                });
-            });
-        }*/
-       this.onUpdate();
-    },
 
     /**
      * This function returns a list with all the

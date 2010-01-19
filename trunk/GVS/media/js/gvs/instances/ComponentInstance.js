@@ -191,7 +191,13 @@ var ComponentInstance = Class.create(DragSource,
         this._view.destroy();
         this._view = null;
     },
-    
+
+    /**
+     * On position update
+     */
+    onUpdate: function(/** Number */ x, /** Number */ y) {
+
+    },
     
     /**
      * Drop event handler for the DragSource
@@ -200,8 +206,8 @@ var ComponentInstance = Class.create(DragSource,
      *      been added to the new zone.
      * @override
      */
-    onFinish: function(changingZone){
-        if (changingZone){
+    onFinish: function(changingZone, /** Object */ position) {
+        if (changingZone) {
             this._view.addEventListener (function(event){
                 event.stop();
                 this._onClick(event);
@@ -210,7 +216,12 @@ var ComponentInstance = Class.create(DragSource,
                 event.stop();
                 this._onDoubleClick(event);
             }.bind(this),'dblclick');
+        } else {
+            if (this._listener) {
+                this._listener.positionUpdated(this, position);
+            }
         }
+        this.onUpdate();
     },
     
     /**

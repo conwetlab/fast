@@ -32,6 +32,16 @@ var ScreenflowDescription = Class.create(BuildingBlockDescription,
     },
 
     /**
+     * Updates the position of the screen
+     */
+    updateScreen: function (/** String */ uri, /** Object */ position) {
+        var screen = this.definition.screens.detect(function(element){
+            return (element.uri == uri);
+        });
+        screen.position = position;
+    },
+
+    /**
      * Delete a screen.
      * @param ScreenDescription
      *      Screen to be deleted from the
@@ -60,6 +70,27 @@ var ScreenflowDescription = Class.create(BuildingBlockDescription,
                 //Do nothing
         }  
     },
+
+    updatePrePost: function(/** PrePostInstance */ instance, /** Object */ position) {
+        var list;
+        switch(instance.getType()) {
+            case 'pre':
+                list = this.definition.preconditions;
+                break;
+            case 'post':
+                list = this.definition.postconditions;
+                break;
+            default:
+                list = new Array();
+        }
+        var prepost = list.detect(function(element){
+            return (element.uri == instance.getUri());
+        });
+        if (prepost) {
+            prepost.position = position;
+        }
+    },
+
     /**
      * Removing a *-condition
      */

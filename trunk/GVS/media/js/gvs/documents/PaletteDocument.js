@@ -78,6 +78,13 @@ var PaletteDocument = Class.create(AbstractDocument, /** @lends PaletteDocument.
     elementDblClicked: function(/** ComponentInstance */ element, /** Event */ e) {
         this._setSelectedElement(element);    
     },
+
+    /**
+     * Implementing event listener
+     */
+    positionUpdated: function(/** ComponentInstance */ element, /** Object */ position) {
+        // Do nothing
+    },
     
     /**
      * Key press event handler

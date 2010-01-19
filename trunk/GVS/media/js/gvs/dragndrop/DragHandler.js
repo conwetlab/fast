@@ -169,12 +169,12 @@ var DragHandler = Class.create(
         this._updateNodeStatus(true);
         
         var accepted;
-        
+        var dropPosition;
         // When changing zone, try to get the draggable accepted by the dropZone
         if (this._isChangingZone()) {
             var dropZone = this._inWhichDropZone();          
             if (dropZone) {
-                var dropPosition = Geometry.adaptDropPosition(dropZone, draggableNode);
+                dropPosition = Geometry.adaptDropPosition(dropZone, draggableNode);
                 this._initialArea.removeChild(draggableNode);
                 accepted = dropZone.drop(this._draggedObject, dropPosition);
             } else {
@@ -188,10 +188,14 @@ var DragHandler = Class.create(
             } 
         } else {
             accepted = true;
+            dropPosition = {
+                'top': draggableNode.offsetTop,
+                'left': draggableNode.offsetLeft
+            };
         }
 
         if (accepted) {
-            this._draggedObject.onFinish(this._isChangingZone());    
+            this._draggedObject.onFinish(this._isChangingZone(), dropPosition);
         }        
         this._draggedObject = null;
 

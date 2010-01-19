@@ -117,7 +117,7 @@ Object.extend(Geometry, {
     adaptDropPosition: function(/** DropZone */ dropZone, /** Element */ node) {
         var element = this.getRectangle(node);
         var containerElement = dropZone.getNode();
-        var containerBounds = this.getClientRectangle(containerElement, true);
+        var containerBounds = this.getClientRectangle(containerElement);
 
         var width = element.right - element.left;
         var height = element.bottom - element.top;
