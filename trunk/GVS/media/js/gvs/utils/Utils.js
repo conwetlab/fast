@@ -106,7 +106,7 @@ Object.extend(Utils, {
                  dojo.fadeOut({
                     'duration': 2500,
                     'node': $("messages")
-                }).play(1000);
+                }).play(options.error ? 2500 : 1500);
             }
         }
     }

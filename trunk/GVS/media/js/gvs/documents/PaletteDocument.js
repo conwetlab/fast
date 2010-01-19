@@ -53,7 +53,7 @@ var PaletteDocument = Class.create(AbstractDocument, /** @lends PaletteDocument.
         this._paletteController = new PaletteController(buildingBlockSets, dropZones, this._inferenceEngine);
         
         this._renderPaletteArea();
-        
+        Utils.showMessage("Loading building blocks...");
     },
     
     /**

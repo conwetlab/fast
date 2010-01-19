@@ -763,7 +763,9 @@ var ScreenDocument = Class.create(PaletteDocument,
             persistenceEngine.sendPost(URIs.screen, null, "buildingblock=" + Object.toJSON(this._description.toJSON()),
                                        this, this._onSaveSuccess, this._onSaveError);
         } else {
-            Utils.showMessage("Saving...");
+            Utils.showMessage("Saving screen...", {
+                'hide': true
+            });
             var uri = URIs.buildingblock + this._description.getId();
             persistenceEngine.sendUpdate(uri, null, "buildingblock=" + Object.toJSON(this._description.toJSON()),
                                       this, this._onSaveSuccess, this._onSaveError);
@@ -781,10 +783,6 @@ var ScreenDocument = Class.create(PaletteDocument,
         if (this._description.getId() == null) {
             var data = JSON.parse(transport.responseText);
             this._description.addProperties({'id': data.id});
-        } else {
-            Utils.showMessage("Saved", {
-                'hide': true
-            });
         }
         if (this._sharingPending) {
             this._sharingPending = false;
@@ -798,7 +796,8 @@ var ScreenDocument = Class.create(PaletteDocument,
     _onSaveError: function(/** XMLHttpRequest */ transport) {
         // TODO: think about what to do when a screen cannot be saved
         // (problems with wrong versions)
-        Utils.showMessage("Error when saving", {
+        Utils.showMessage("Cannot save screen. A screen with that name already " +
+        "exists", {
             'hide': true,
             'error': true
         });
@@ -830,8 +829,7 @@ var ScreenDocument = Class.create(PaletteDocument,
      * @private
      */
     _onShareSuccess: function(/** XMLHttpRequest */ transport) {
-        Utils.showMessage("Screen successfully shared");
-        Utils.hideMessage();
+        Utils.showMessage("Screen successfully shared", {'hide': true});
     }
 });
 
