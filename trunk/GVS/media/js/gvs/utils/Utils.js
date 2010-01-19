@@ -69,8 +69,7 @@ Object.extend(Utils, {
     },
     
     /**
-    * This function returns the position of an object
-    * @private
+    * This function returns the position of a node
     * @type Object
     */
     getPosition: function (/** DOMNode */ node){
@@ -87,5 +86,28 @@ Object.extend(Utils, {
         top  += node.offsetTop;
     
         return {'left':left, 'top':top};
+    },
+
+    /**
+     * Shows a message on top of the GVS
+     */
+    showMessage: function(/** String */ text, /** Object(optional) */ options) {
+        $("messages").removeClassName("error");
+        $("messages").update(text);
+        
+        var position = Math.floor(($("header").clientWidth / 2) -
+                                    ($("messages").clientWidth / 2));
+        $("messages").setStyle({'opacity': '1', 'left': position + 'px'});
+        if (options) {
+            if (options.error) {
+                $("messages").addClassName("error");
+            }
+            if (options.hide) {
+                 dojo.fadeOut({
+                    'duration': 2500,
+                    'node': $("messages")
+                }).play(1000);
+            }
+        }
     }
 }); 

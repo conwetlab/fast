@@ -76,6 +76,20 @@ h4{
 .fastLogo {
     padding-top: 5px;
 }
+#messages {
+    -moz-border-radius: 4px 4px;
+    -webkit-border-radius: 4px 4px;
+    background-color: #A5F7A5;
+    color :#000000;
+    font-weight: bold;
+    position: absolute;
+    text-align: center;
+    top: 12px;
+    padding: 1px 5px;
+}
+#messages.error {
+    background-color: #F7A6A6;
+}
 
 /******************
  * login          *
