@@ -68,7 +68,14 @@ Object.extend(Geometry, {
             (element.right <= container.right) &&
             (element.bottom <= container.bottom);  
     },
-    
+
+    intersects: function(/** Object */ container, /** Object */ element) {
+        return !((element.bottom < container.top) ||
+            (element.left > container.right) ||
+            (element.top > container.bottom) ||
+            (element.right < container.left));
+    },
+
     getRectangle: function(/** DOMNode */ node) {
         
         var position = Utils.getPosition(node);
@@ -81,11 +88,14 @@ Object.extend(Geometry, {
     },
     
     getClientRectangle: function(/** DOMNode */ node) {
-        
+        var computedStyle = document.defaultView.getComputedStyle(node, null);
+        var topBorder = computedStyle.getPropertyCSSValue('border-top-width').getFloatValue(CSSPrimitiveValue.CSS_PX);
+        var leftBorder = computedStyle.getPropertyCSSValue('border-left-width').getFloatValue(CSSPrimitiveValue.CSS_PX);
+
         var position = Utils.getPosition(node);
         return {
-            'top': position.top,
-            'left': position.left,
+            'top': position.top + topBorder,
+            'left': position.left + leftBorder,
             'bottom': position.top + node.clientHeight,
             'right': position.left + node.clientWidth
         }
@@ -102,5 +112,32 @@ Object.extend(Geometry, {
                 'max': Math.max((container.bottom - container.top) - element.bottom, 0)
             }
         }
+    },
+
+    adaptDropPosition: function(/** DropZone */ dropZone, /** Element */ node) {
+        var element = this.getRectangle(node);
+        var containerElement = dropZone.getNode();
+        var containerBounds = this.getClientRectangle(containerElement, true);
+
+        var width = element.right - element.left;
+        var height = element.bottom - element.top;
+
+        if (element.right > containerBounds.right)
+            element.left = containerBounds.right - width;
+
+        if (element.left < containerBounds.left)
+            element.left = containerBounds.left;
+
+        if (element.bottom > containerBounds.bottom)
+            element.top = containerBounds.bottom - height;
+
+        if (element.top < containerBounds.top)
+            element.top = containerBounds.top;
+
+        return {
+            'left': element.left - containerBounds.left,
+            'top': element.top - containerBounds.top
+        }
+
     }
 }); 

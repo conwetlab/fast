@@ -174,13 +174,9 @@ var DragHandler = Class.create(
         if (this._isChangingZone()) {
             var dropZone = this._inWhichDropZone();          
             if (dropZone) {
-                var dropZonePosition = Utils.getPosition(dropZone.getNode());
-                var dropPosition = {
-                    'left': draggableNode.offsetLeft - dropZonePosition.left,
-                    'top': draggableNode.offsetTop - dropZonePosition.top
-                };
+                var dropPosition = Geometry.adaptDropPosition(dropZone, draggableNode);
                 this._initialArea.removeChild(draggableNode);
-                accepted = dropZone.drop(this._draggedObject, dropPosition);                  
+                accepted = dropZone.drop(this._draggedObject, dropPosition);
             } else {
                 this._initialArea.removeChild(draggableNode);
                 accepted = false;
@@ -263,7 +259,7 @@ var DragHandler = Class.create(
      */
     _inWhichDropZone: function(){
         for (var i=0; i < this._dropZonesInfo.length; i++) { 
-            if (Geometry.contains(this._dropZonesInfo[i].position, 
+            if (Geometry.intersects(this._dropZonesInfo[i].position,
                         this._getDraggableNodeRectangle())) {
                 return this._dropZonesInfo[i].dropZone;
             } 
