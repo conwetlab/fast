@@ -57,17 +57,6 @@
             },
             {
                 "from":{
-                    "buildingblock":"AmazonSearchService1",
-                    "condition":"message"
-                },
-                "to":{
-                    "buildingblock":"amazonListForm1",
-                    "condition":"message",
-                    "action":"showMessage"
-                }
-            },
-            {
-                "from":{
                     "buildingblock":"amazonListForm1",
                     "condition":"filter"
                 },

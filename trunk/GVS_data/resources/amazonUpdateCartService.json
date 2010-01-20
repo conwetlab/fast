@@ -71,6 +71,6 @@
         ]
     ],
     "triggers":[
-        "updatedCart"
+        "cartUpdated"
     ]
 }

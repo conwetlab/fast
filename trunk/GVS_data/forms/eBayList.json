@@ -73,7 +73,6 @@
     ],
     "triggers":[
         "ebayItem",
-        "nextPage",
-        "previousPage"
+        "newFilter"
     ]
 }

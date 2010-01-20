@@ -54,7 +54,7 @@
     "postconditions":[
         [
             {
-                "id":"updateCart",
+                "id":"cartUpdate",
                 "label":{
                     "en-gb":"A shopping cart update"
                 },

@@ -63,6 +63,6 @@
         ]
     ],
     "triggers":[
-        "clearedCart"
+        "cartCleared"
     ]
 }
