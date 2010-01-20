@@ -938,22 +938,22 @@ public class Catalogue {
     	return results;
 	}
 	
-	private URI createResource(URI ofClass) {
+	private URI createResource(URI ofClass, String id) {
 		try {
 			if (ofClass.equals(FGO.ScreenFlow)) {
-				return tripleStore.createResource(serverURL, "screenflows", ofClass);
+				return tripleStore.createResource(serverURL, "screenflows", ofClass, id);
 			} else if (ofClass.equals(FGO.Screen)) {
-				return tripleStore.createResource(serverURL, "screens", ofClass);
+				return tripleStore.createResource(serverURL, "screens", ofClass, id);
 			} else if (ofClass.equals(FGO.FormElement)) {
-				return tripleStore.createResource(serverURL, "forms", ofClass);
+				return tripleStore.createResource(serverURL, "forms", ofClass, id);
 			} else if (ofClass.equals(FGO.Operator)) {
-				return tripleStore.createResource(serverURL, "operators", ofClass);
+				return tripleStore.createResource(serverURL, "operators", ofClass, id);
 			} else if (ofClass.equals(FGO.BackendService)) {
-				return tripleStore.createResource(serverURL, "services", ofClass);
+				return tripleStore.createResource(serverURL, "services", ofClass, id);
 			} else if (ofClass.equals(FGO.Screen)) {
-				return tripleStore.createResource(serverURL, "preconditions", ofClass);
+				return tripleStore.createResource(serverURL, "preconditions", ofClass, id);
 			} else if (ofClass.equals(FGO.Screen)) {
-				return tripleStore.createResource(serverURL, "postconditions", ofClass);
+				return tripleStore.createResource(serverURL, "postconditions", ofClass, id);
 			}
 		} catch (OntologyInvalidException e) {
 			logger.error("Resource "+ofClass+" failed to be created", e);
@@ -969,7 +969,7 @@ public class Catalogue {
 			if (containsScreenFlow(sf))
 				throw new DuplicatedResourceException(sf.getUri()+" already exists.");
 		} else {
-			sfUri = createResource(FGO.ScreenFlow);
+			sfUri = createResource(FGO.ScreenFlow, sf.getId());
 			sf.setUri(sfUri);
 		}
 		// persists the screen
@@ -1031,7 +1031,7 @@ public class Catalogue {
 			if (containsScreen(screen))
 				throw new DuplicatedResourceException(screenUri+" already exists.");
 		} else {
-			screenUri = createResource(FGO.Screen);
+			screenUri = createResource(FGO.Screen, screen.getId());
 			screen.setUri(screenUri);
 		}
 		// persists the screen
@@ -1193,9 +1193,9 @@ public class Catalogue {
 				throw new DuplicatedResourceException(seUri+" already exists.");
 		} else {
 			if (se instanceof Precondition)
-				seUri = createResource(FGO.Precondition);
+				seUri = createResource(FGO.Precondition, se.getId());
 			else if (se instanceof Postcondition)
-				seUri = createResource(FGO.Postcondition);
+				seUri = createResource(FGO.Postcondition, se.getId());
 			se.setUri(seUri);
 		}
 		// persists the pre/postcondition
@@ -1261,7 +1261,7 @@ public class Catalogue {
 			if (containsScreenComponent(sc))
 				throw new DuplicatedResourceException(scUri+" already exists.");
 		} else {
-			scUri = createResource(type);
+			scUri = createResource(type, sc.getId());
 			sc.setUri(scUri);
 		}
 		// persists the screen component
@@ -1315,8 +1315,6 @@ public class Catalogue {
 			tripleStore.addStatement(rUri, FOAF.homepage, resource.getHomepage());
 		if (resource.getVersion() != null)
 			tripleStore.addStatement(rUri, FGO.hasVersion, resource.getVersion());
-		if (resource.getId() != null)
-			tripleStore.addStatement(rUri, FGO.hasId, resource.getId());
 		if (resource.getName() != null)
 			tripleStore.addStatement(rUri, FGO.hasName, resource.getName());
 	}
@@ -1332,8 +1330,6 @@ public class Catalogue {
 		tripleStore.addStatement(c, FGO.isPositive, condition.isPositive());
 		for (String key : condition.getLabels().keySet())
 			tripleStore.addStatement(c, RDFS.label, tripleStore.createLanguageTagLiteral(condition.getLabels().get(key), key));
-		if (condition.getId() != null)
-			tripleStore.addStatement(c, FGO.hasId, condition.getId());
 		return c;
 	}	
 	
@@ -1670,6 +1666,8 @@ public class Catalogue {
 		
 		// fill the information about the resource
 		resource.setUri(uri);
+		String sUri = uri.toString();
+		resource.setId(sUri.substring(sUri.lastIndexOf("/")));
 		ClosableIterator<Statement> cIt = tripleStore.findStatements(uri, Variable.ANY, Variable.ANY);
 		if (!cIt.hasNext()) // the resource does not exist
 			return null;
@@ -1719,8 +1717,6 @@ public class Catalogue {
 				resource.getTags().add(tag);
 			} else if (predicate.equals(FOAF.homepage)) {
 				resource.setHomepage(object.asURI());
-			} else if (predicate.equals(FGO.hasId)) {
-				resource.setId(object.asDatatypeLiteral().getValue());
 			} else if (predicate.equals(FGO.hasName)) {
 				resource.setName(object.asDatatypeLiteral().getValue());
 			}

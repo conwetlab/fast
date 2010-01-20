@@ -732,6 +732,13 @@ public class TripleStore {
     	return uriClass;
     }
     
+    
+    public URI createResource(URI namespace, String path, URI ofClass, String id)
+    throws OntologyInvalidException {
+    	URI resourceUri = new URIImpl(namespace.toString()+"/"+path+"/"+id);
+        return createResource(resourceUri, ofClass);
+    }
+    
     public URI createResource(URI namespace, String path, URI ofClass)
     throws OntologyInvalidException {
     	URI resourceUri = createUniqueUri(new URIImpl(namespace.toString()+"/"+path+"/"));
