@@ -800,7 +800,7 @@ var ScreenDocument = Class.create(PaletteDocument,
             var data = JSON.parse(transport.responseText);
             this._description.addProperties({'id': data.id});
         } else {
-            Utils.showMessage("Saving screen...Saved", {
+            Utils.showMessage("Saving screen...Done", {
                 'hide': true
             });
         }
@@ -812,6 +812,7 @@ var ScreenDocument = Class.create(PaletteDocument,
 
     /**
      * On save error: the screen already exists
+     * @private
      */
     _onSaveError: function(/** XMLHttpRequest */ transport) {
         // TODO: think about what to do when a screen cannot be saved

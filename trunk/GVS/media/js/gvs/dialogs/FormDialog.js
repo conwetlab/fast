@@ -27,9 +27,9 @@ var FormDialog = Class.create( /** @lends FormDialog.prototype */ {
                
         var containerDiv = new Element ('div');      
         
-        containerDiv.insert (this._headerNode);
-        containerDiv.insert (this._contentNode);
-        containerDiv.insert (this._buttonNode);
+        containerDiv.appendChild (this._headerNode);
+        containerDiv.appendChild (this._contentNode);
+        containerDiv.appendChild (this._buttonNode);
         this._dialog.attr ('content', containerDiv);
         
         this._initialized = false;
@@ -97,8 +97,17 @@ var FormDialog = Class.create( /** @lends FormDialog.prototype */ {
             'label': label,
             onClick: handler
         });
+
         
-        this._buttonNode.insert (button.domNode);
+        this._buttonNode.appendChild(button.domNode);
+    },
+
+    /**
+     * Remove all buttons
+     * @private
+     */
+    _removeButtons: function() {
+        this._buttonNode.update("");
     },
     
     /**
@@ -107,14 +116,15 @@ var FormDialog = Class.create( /** @lends FormDialog.prototype */ {
      */
     _setHeader: function (/** String */ title, /** String */ subtitle){
         
+        this._headerNode.update("");
         var titleNode = new Element("h2").update(title);
-        this._headerNode.insert(titleNode);
+        this._headerNode.appendChild(titleNode);
         
         if (subtitle && subtitle != ""){
             var subtitleNode = new Element("div", {
                 "class": "line"
             }).update(subtitle);
-            this._headerNode.insert(subtitleNode);
+            this._headerNode.appendChild(subtitleNode);
         }
     },
 
@@ -217,7 +227,7 @@ var FormDialog = Class.create( /** @lends FormDialog.prototype */ {
             this._contentNode.update(data);
         }        
 
-        //Just in case
+        // Just in case
         dojo.parser.parse(this._contentNode);
     },    
     

@@ -66,6 +66,7 @@ var GVSSingleton = function(){
             this._dialogs.set("addScreen", new AddScreenDialog());
             this._dialogs.set("newScreenflow", new NewScreenflowDialog());
             this._dialogs.set("newScreen", new NewScreenDialog());
+            this._dialogs.set("openScreen", new ManageScreensDialog());
             this._dialogs.set("preferences", new PreferencesDialog());
             
         },
@@ -85,7 +86,7 @@ var GVSSingleton = function(){
                 newScreenflow: this._newScreenflow.bind(this),
                 addScreen: this._addScreen.bind(this),
                 newScreen: this._newScreen.bind(this),
-                // openScreen: this._openScreen.bind(this)
+                openScreen: this._openScreen.bind(this),
                 showAbout: this._showAboutDialog.bind(this)
             };
             this._documentController = new DocumentController();
@@ -177,11 +178,11 @@ var GVSSingleton = function(){
             this._dialogs.get("addScreen").show();
         },
         /**
-         * Open a screenflow
+         * Open a screen
          * @private
          */
-        _openScreenflow: function(){
-           // TODO
+        _openScreen: function(){
+            this._dialogs.get("openScreen").show();
         },
         
         /**

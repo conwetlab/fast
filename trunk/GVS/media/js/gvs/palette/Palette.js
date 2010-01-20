@@ -127,7 +127,7 @@ var Palette = Class.create(SetListener, /** @lends Palette.prototype */ {
         );
         if (this._set.getBuildingBlockType() == Constants.BuildingBlock.SCREEN ||
             this._set.getBuildingBlockType() == Constants.BuildingBlock.FORM) {
-            Utils.showMessage("Loading building blocks...loaded", {'hide': true});
+            Utils.showMessage("Loading building blocks...Done", {'hide': true});
         }
     },
 

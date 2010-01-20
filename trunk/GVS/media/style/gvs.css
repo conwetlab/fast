@@ -925,7 +925,7 @@ label {
 }
 
 .dialogContent {
-    padding: 5px;
+    padding: 5px 0px;
     min-width: 400px;
 }
 
@@ -1005,6 +1005,55 @@ label {
 .addRemoveZone .dijitButton {
     margin: 2px 0;
 }
+
+/******************
+ * Gallery dialog *
+ ******************/
+.gallery {
+    max-height: 300px;
+    overflow: auto;
+}
+.gallery .row {
+    border: 1px solid #AAA;
+    -moz-border-radius: 7px 7px;
+    -webkit-border-radius: 7px 7px;
+    margin: 2px;
+    padding: 5px;
+    overflow: hidden;
+    position: relative;
+}
+.gallery .row.selected {
+    border: 1px solid #808080;
+    background-color: #EAEAEA;
+}
+.gallery .field {
+    padding: 5px;
+}
+.gallery .name {
+    font-weight: bold;
+    color: #243C5F;
+}
+.gallery .icon {
+    float: left;
+    min-width: 50px;
+    min-height: 55px;
+    border: 1px solid #CCC;
+    margin: 5px;
+}
+.gallery .description {
+    margin: 5px;
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 60%;
+    text-align: justify;
+    height: 65px;
+    overflow: auto;
+}
+.gallery .bold {
+    font-weight: bold;
+}
+
 /***************
  * About       *
  ***************/

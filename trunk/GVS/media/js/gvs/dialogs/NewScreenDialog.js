@@ -67,7 +67,7 @@ var NewScreenDialog = Class.create(ConfirmDialog /** @lends NewScreenDialog.prot
             var domainContext = $F(this._getForm().domaincontext).split(/[\s,]+/).without("");
             var version = $F(this._getForm().version);
             
-            documentController = GVSSingleton.getInstance().getDocumentController();
+            var documentController = GVSSingleton.getInstance().getDocumentController();
             documentController.createScreen(name, $A(domainContext), version);
             
             $super();
