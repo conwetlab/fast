@@ -1335,6 +1335,8 @@ public class Catalogue {
 		tripleStore.addStatement(c, FGO.isPositive, condition.isPositive());
 		for (String key : condition.getLabels().keySet())
 			tripleStore.addStatement(c, RDFS.label, tripleStore.createLanguageTagLiteral(condition.getLabels().get(key), key));
+		if (condition.getId() != null)
+			tripleStore.addStatement(c, FGO.hasId, condition.getId());
 		return c;
 	}	
 	
