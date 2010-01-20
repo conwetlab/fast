@@ -105,7 +105,7 @@ public class Catalogue {
 			// creates a new triple store
 			tripleStore = new TripleStore(dir, indexes);
 	    	tripleStore.open();
-	    	tripleStore.clear();
+//	    	tripleStore.clear();
 	
 	    	// check if the catalogue is correct
 			if (!check()) {
@@ -121,7 +121,7 @@ public class Catalogue {
 	}
 	
 	/**
-	 * Returns a opened connection to a local catalogue
+	 * Returns a opened connection to a remote catalogue
 	 */
 	private void create(URI serverURL, String sesameServer, String repositoryID) {
 		logger.info("Catalogue loaded at "+sesameServer+", ID="+repositoryID);
@@ -1096,21 +1096,30 @@ public class Catalogue {
 				BlankNode bnPipe = tripleStore.createBlankNode();
 				tripleStore.addStatement(bnDef, FGO.contains, bnPipe);
 				tripleStore.addStatement(bnPipe, RDF.type, FGO.Pipe);
-				tripleStore.addStatement(bnPipe, FGO.hasIdBBFrom, pipe.getIdBBFrom());
-				tripleStore.addStatement(bnPipe, FGO.hasIdConditionFrom, pipe.getIdConditionFrom());
-				tripleStore.addStatement(bnPipe, FGO.hasIdBBTo, pipe.getIdBBTo());
-				tripleStore.addStatement(bnPipe, FGO.hasIdConditionTo, pipe.getIdConditionTo());
-				tripleStore.addStatement(bnPipe, FGO.hasIdActionTo, pipe.getIdActionTo());
+				if (pipe.getIdBBFrom() != null)
+					tripleStore.addStatement(bnPipe, FGO.hasIdBBFrom, pipe.getIdBBFrom());
+				if (pipe.getIdConditionFrom() != null)
+					tripleStore.addStatement(bnPipe, FGO.hasIdConditionFrom, pipe.getIdConditionFrom());
+				if (pipe.getIdBBTo() != null)
+					tripleStore.addStatement(bnPipe, FGO.hasIdBBTo, pipe.getIdBBTo());
+				if (pipe.getIdConditionTo() != null)
+					tripleStore.addStatement(bnPipe, FGO.hasIdConditionTo, pipe.getIdConditionTo());
+				if (pipe.getIdActionTo() != null)
+					tripleStore.addStatement(bnPipe, FGO.hasIdActionTo, pipe.getIdActionTo());
 			}
 			// triggers
 			for (Trigger trigger : def.getTriggers()) {
 				BlankNode bnTrigger = tripleStore.createBlankNode();
 				tripleStore.addStatement(bnDef, FGO.hasTrigger, bnTrigger);
 				tripleStore.addStatement(bnTrigger, RDF.type, FGO.Trigger);
-				tripleStore.addStatement(bnTrigger, FGO.hasIdBBFrom, trigger.getIdBBFrom());
-				tripleStore.addStatement(bnTrigger, FGO.hasNameFrom, trigger.getNameFrom());
-				tripleStore.addStatement(bnTrigger, FGO.hasIdBBTo, trigger.getIdBBTo());
-				tripleStore.addStatement(bnTrigger, FGO.hasIdActionTo, trigger.getIdActionTo());
+				if (trigger.getIdBBFrom() != null)
+					tripleStore.addStatement(bnTrigger, FGO.hasIdBBFrom, trigger.getIdBBFrom());
+				if (trigger.getNameFrom() != null)
+					tripleStore.addStatement(bnTrigger, FGO.hasNameFrom, trigger.getNameFrom());
+				if (trigger.getIdBBTo() != null)
+					tripleStore.addStatement(bnTrigger, FGO.hasIdBBTo, trigger.getIdBBTo());
+				if (trigger.getIdBBTo() != null)
+					tripleStore.addStatement(bnTrigger, FGO.hasIdActionTo, trigger.getIdActionTo());
 			}
 		}
 		logger.info("Screen "+screen.getUri()+" added.");
