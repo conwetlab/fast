@@ -732,17 +732,24 @@ public class TripleStore {
     	return uriClass;
     }
     
+//    public URI createResource(URI namespace, String path, URI ofClass)
+//    throws OntologyInvalidException {
+//    	URI resourceUri = createUniqueUri(new URIImpl(namespace.toString()+"/"+path+"/"));
+//        return createResource(resourceUri, ofClass);
+//    }
     
-    public URI createResource(URI namespace, String path, URI ofClass, String id)
+    /**
+     * Creates a new resource with a specific URI
+     * @param uri
+     * @param ofClass
+     * @return
+     * @throws OntologyInvalidException
+     */
+    public URI createResource(URI uri, URI ofClass)
     throws OntologyInvalidException {
-    	URI resourceUri = new URIImpl(namespace.toString()+"/"+path+"/"+id);
-        return createResource(resourceUri, ofClass);
-    }
-    
-    public URI createResource(URI namespace, String path, URI ofClass)
-    throws OntologyInvalidException {
-    	URI resourceUri = createUniqueUri(new URIImpl(namespace.toString()+"/"+path+"/"));
-        return createResource(resourceUri, ofClass);
+    	assertClass(ofClass);
+    	getPersistentModelSet().addStatement(null, uri, RDF.type, ofClass);
+    	return uri;
     }
     
     /**
@@ -758,17 +765,6 @@ public class TripleStore {
     private URI createResource(URI ofClass) throws OntologyInvalidException {
     	return createResource(ofClass, getDefaultModel());
     }
-    
-    /**
-     * Creates a new resource with a specific URI
-     * @param uri
-     * @param ofClass
-     * @return
-     * @throws OntologyInvalidException
-     */
-//    private URI createResource(URI uri, URI ofClass) throws OntologyInvalidException {
-//    	return createResource(uri, RDFTool.getLabel(ofClass), ofClass, getDefaultModel());
-//    }
     
     /**
      * Create a new resource, an instance of a rdfs:Class New resources are
@@ -805,13 +801,6 @@ public class TripleStore {
 	    assertClass(ofClass);
 	    inModel.addStatement(uri, RDF.type, ofClass);
 	    return uri;
-    }
-    
-    private URI createResource(URI uri, URI ofClass)
-    throws OntologyInvalidException {
-    	assertClass(ofClass);
-    	getPersistentModelSet().addStatement(null, uri, RDF.type, ofClass);
-    	return uri;
     }
     
     public void removeResource(Resource resource) throws NotFoundException {

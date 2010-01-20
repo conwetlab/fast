@@ -294,8 +294,6 @@ public abstract class Resource {
 		}
 		if (this.getHomepage() != null)
 			model.addStatement(resourceUri, FOAF.homepage, this.getHomepage());
-		if (this.getId() != null)
-			model.addStatement(resourceUri, FGO.hasId, this.getId());
 		if (this.getName() != null)
 			model.addStatement(resourceUri, FGO.hasName, this.getName());
 		

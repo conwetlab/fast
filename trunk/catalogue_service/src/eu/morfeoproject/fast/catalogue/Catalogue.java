@@ -21,6 +21,7 @@ import org.ontoware.rdf2go.model.node.LanguageTagLiteral;
 import org.ontoware.rdf2go.model.node.Node;
 import org.ontoware.rdf2go.model.node.URI;
 import org.ontoware.rdf2go.model.node.Variable;
+import org.ontoware.rdf2go.model.node.impl.URIImpl;
 import org.ontoware.rdf2go.vocabulary.OWL;
 import org.ontoware.rdf2go.vocabulary.RDF;
 import org.ontoware.rdf2go.vocabulary.RDFS;
@@ -105,7 +106,7 @@ public class Catalogue {
 			// creates a new triple store
 			tripleStore = new TripleStore(dir, indexes);
 	    	tripleStore.open();
-//	    	tripleStore.clear();
+	    	tripleStore.clear();
 	
 	    	// check if the catalogue is correct
 			if (!check()) {
@@ -938,25 +939,29 @@ public class Catalogue {
     	return results;
 	}
 	
-	private URI createResource(URI ofClass, String id) {
-		try {
-			if (ofClass.equals(FGO.ScreenFlow)) {
-				return tripleStore.createResource(serverURL, "screenflows", ofClass, id);
-			} else if (ofClass.equals(FGO.Screen)) {
-				return tripleStore.createResource(serverURL, "screens", ofClass, id);
-			} else if (ofClass.equals(FGO.FormElement)) {
-				return tripleStore.createResource(serverURL, "forms", ofClass, id);
-			} else if (ofClass.equals(FGO.Operator)) {
-				return tripleStore.createResource(serverURL, "operators", ofClass, id);
-			} else if (ofClass.equals(FGO.BackendService)) {
-				return tripleStore.createResource(serverURL, "services", ofClass, id);
-			} else if (ofClass.equals(FGO.Screen)) {
-				return tripleStore.createResource(serverURL, "preconditions", ofClass, id);
-			} else if (ofClass.equals(FGO.Screen)) {
-				return tripleStore.createResource(serverURL, "postconditions", ofClass, id);
-			}
-		} catch (OntologyInvalidException e) {
-			logger.error("Resource "+ofClass+" failed to be created", e);
+    public URI createResource(URI namespace, String resource, URI ofClass, String id)
+    throws DuplicatedResourceException, OntologyInvalidException {
+    	URI resourceUri = new URIImpl(namespace.toString()+"/"+resource+"/"+id);
+    	if (!containsResource(resourceUri))
+    		return tripleStore.createResource(resourceUri, ofClass);
+    	else throw new DuplicatedResourceException(resourceUri+" already exists.");
+    }
+    
+    private URI createResource(URI ofClass, String id) throws DuplicatedResourceException, OntologyInvalidException {
+		if (ofClass.equals(FGO.ScreenFlow)) {
+			return createResource(serverURL, "screenflows", ofClass, id);
+		} else if (ofClass.equals(FGO.Screen)) {
+			return createResource(serverURL, "screens", ofClass, id);
+		} else if (ofClass.equals(FGO.FormElement)) {
+			return createResource(serverURL, "forms", ofClass, id);
+		} else if (ofClass.equals(FGO.Operator)) {
+			return createResource(serverURL, "operators", ofClass, id);
+		} else if (ofClass.equals(FGO.BackendService)) {
+			return createResource(serverURL, "services", ofClass, id);
+		} else if (ofClass.equals(FGO.Precondition)) {
+			return createResource(serverURL, "preconditions", ofClass, id);
+		} else if (ofClass.equals(FGO.Postcondition)) {
+			return createResource(serverURL, "postconditions", ofClass, id);
 		}
 		return null;
 	}
