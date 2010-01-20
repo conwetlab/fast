@@ -1961,7 +1961,7 @@ public class Catalogue {
 							ClosableIterator<Statement> useIt = tripleStore.findStatements(object.asBlankNode(), Variable.ANY, Variable.ANY);
 							String idUse = null;
 							URI uriUse = null;
-							for ( ; actionIt.hasNext(); ) {
+							for ( ; useIt.hasNext(); ) {
 								Statement sUse = useIt.next();
 								URI pUse = sUse.getPredicate();
 								Node oUse = sUse.getObject();
