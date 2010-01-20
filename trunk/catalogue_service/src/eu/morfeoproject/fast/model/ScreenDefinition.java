@@ -63,11 +63,11 @@ public class ScreenDefinition {
 			JSONObject jsonPipe = new JSONObject();
 			JSONObject pipeFrom = new JSONObject();
 			JSONObject pipeTo = new JSONObject();
-			pipeFrom.put("buildingblock", pipe.getIdBBFrom());
-			pipeFrom.put("condition", pipe.getIdConditionFrom());
-			pipeTo.put("buildingblock", pipe.getIdBBTo());
-			pipeTo.put("condition", pipe.getIdConditionTo());
-			pipeTo.put("action", pipe.getIdActionTo());
+			pipeFrom.put("buildingblock", pipe.getIdBBFrom() == null ? JSONObject.NULL : pipe.getIdBBFrom());
+			pipeFrom.put("condition", pipe.getIdConditionFrom() == null ? JSONObject.NULL : pipe.getIdConditionFrom());
+			pipeTo.put("buildingblock", pipe.getIdBBTo() == null ? JSONObject.NULL : pipe.getIdBBTo());
+			pipeTo.put("condition", pipe.getIdConditionTo() == null ? JSONObject.NULL : pipe.getIdConditionTo());
+			pipeTo.put("action", pipe.getIdActionTo() == null ? JSONObject.NULL : pipe.getIdActionTo());
 			jsonPipe.put("from", pipeFrom);
 			jsonPipe.put("to", pipeTo);
 			pipeArray.put(jsonPipe);
@@ -79,13 +79,13 @@ public class ScreenDefinition {
 			JSONObject jsonTr = new JSONObject();
 			JSONObject trFrom = new JSONObject();
 			JSONObject trTo = new JSONObject();
-			trFrom.put("buildingblock", trigger.getIdBBFrom());
-			trFrom.put("name", trigger.getNameFrom());
-			trTo.put("buildingblock", trigger.getIdBBTo());
-			trTo.put("action", trigger.getIdActionTo());
+			trFrom.put("buildingblock", trigger.getIdBBFrom() == null ? JSONObject.NULL : trigger.getIdBBFrom());
+			trFrom.put("name", trigger.getNameFrom() == null ? JSONObject.NULL : trigger.getNameFrom());
+			trTo.put("buildingblock", trigger.getIdBBTo() == null ? JSONObject.NULL : trigger.getIdBBTo());
+			trTo.put("action", trigger.getIdActionTo() == null ? JSONObject.NULL : trigger.getIdActionTo());
 			jsonTr.put("from", trFrom);
 			jsonTr.put("to", trTo);
-			pipeArray.put(jsonTr);
+			triggerArray.put(jsonTr);
 		}
 		json.put("triggers", triggerArray);
 

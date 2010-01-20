@@ -188,24 +188,24 @@ public abstract class GenericServlet extends HttpServlet {
 			JSONObject pipeFrom = jsonPipe.getJSONObject("from");
 			JSONObject pipeTo = jsonPipe.getJSONObject("to");
 			Pipe pipe = FastModelFactory.createPipe();
-			pipe.setIdBBFrom(pipeFrom.getString("buildingblock"));
-			pipe.setIdConditionFrom(pipeFrom.getString("condition"));
-			pipe.setIdBBTo(pipeTo.getString("buildingblock"));
-			pipe.setIdConditionTo(pipeTo.getString("condition"));
-			pipe.setIdActionTo(pipeTo.getString("action"));
+			pipe.setIdBBFrom(!pipeFrom.isNull("buildingblock") ? pipeFrom.getString("buildingblock") : null);
+			pipe.setIdConditionFrom(!pipeFrom.isNull("condition") ? pipeFrom.getString("condition") : null);
+			pipe.setIdBBTo(!pipeTo.isNull("buildingblock") ? pipeTo.getString("buildingblock") : null);
+			pipe.setIdConditionTo(!pipeTo.isNull("condition") ? pipeTo.getString("condition") : null);
+			pipe.setIdActionTo(!pipeTo.isNull("action") ? pipeTo.getString("action") : null);
 			definition.getPipes().add(pipe);
 		}
 		// triggers
 		JSONArray triggerArray = jsonDef.getJSONArray("triggers");
 		for (int i = 0; i < triggerArray.length(); i++) {
-			JSONObject jsonPipe = triggerArray.getJSONObject(i);
-			JSONObject pipeFrom = jsonPipe.getJSONObject("from");
-			JSONObject pipeTo = jsonPipe.getJSONObject("to");
+			JSONObject jsonTrigger = triggerArray.getJSONObject(i);
+			JSONObject triggerFrom = jsonTrigger.getJSONObject("from");
+			JSONObject triggerTo = jsonTrigger.getJSONObject("to");
 			Trigger trigger = new Trigger();
-			trigger.setIdBBFrom(pipeFrom.getString("buildingblock"));
-			trigger.setNameFrom(pipeFrom.getString("name"));
-			trigger.setIdBBTo(pipeTo.getString("buildingblock"));
-			trigger.setIdActionTo(pipeTo.getString("action"));
+			trigger.setIdBBFrom(!triggerFrom.isNull("buildingblock") ? triggerFrom.getString("buildingblock") : null);
+			trigger.setNameFrom(!triggerFrom.isNull("name") ? triggerFrom.getString("name") : null);
+			trigger.setIdBBTo(!triggerTo.isNull("buildingblock") ? triggerTo.getString("buildingblock") : null);
+			trigger.setIdActionTo(!triggerTo.isNull("action") ? triggerTo.getString("action") : null);
 			definition.getTriggers().add(trigger);
 		}
 		return definition;
