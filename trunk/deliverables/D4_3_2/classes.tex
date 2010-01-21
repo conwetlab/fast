@@ -1,0 +1,263 @@
+\subsubsection{Class: \texttt{fgo:Resource}}
+\label{subs:Resource}
+\begin{tabular}{| >{\columncolor{fast@lightgrey}}p{2.5cm}|p{12cm}|}
+\hline
+\textcolor{white}{\textbf{label}} & Resource \\ \hline
+\textcolor{white}{\textbf{description}} & Anything that is part of a gadget (or the gadget itself). Tentatively 
+    anything that can be `touched' and moved around in the FAST IDE. \\ \hline
+\textcolor{white}{\textbf{super\_class\_of}} & \htmlref{\texttt{fgo:ScreenFlow}}{subs:ScreenFlow}, \htmlref{\texttt{fgo:Screen}}{subs:Screen}, \htmlref{\texttt{fgo:FlowControlElement}}{subs:FlowControlElement}, \htmlref{\texttt{fgo:ScreenComponent}}{subs:ScreenComponent}, \htmlref{\texttt{fgo:Condition}}{subs:Condition}, \htmlref{\texttt{fgo:Fact}}{subs:Fact}, \htmlref{\texttt{fgo:WithPreConditions}}{subs:WithPreConditions}, \htmlref{\texttt{fgo:WithPostConditions}}{subs:WithPostConditions}, \htmlref{\texttt{fgo:WithConditions}}{subs:WithConditions}, \htmlref{\texttt{fgo:Precondition}}{subs:Precondition}, \htmlref{\texttt{fgo:Postcondition}}{subs:Postcondition}, \htmlref{\texttt{fgo:Pipe}}{subs:Pipe}, \htmlref{\texttt{fgo:Trigger}}{subs:Trigger} \\ \hline
+\textcolor{white}{\textbf{in\_domain\_of}} & \htmlref{\texttt{fgo:contains}}{subs:contains}, \htmlref{\texttt{fgo:hasIcon}}{subs:hasIcon}, \htmlref{\texttt{fgo:hasScreenshot}}{subs:hasScreenshot}, \htmlref{\texttt{fgo:hasTag}}{subs:hasTag}, \htmlref{\texttt{fgo:hasVersion}}{subs:hasVersion}, \htmlref{\texttt{fgo:hasId}}{subs:hasId}, \htmlref{\texttt{fgo:hasName}}{subs:hasName}, \htmlref{\texttt{fgo:hasType}}{subs:hasType}, \htmlref{\texttt{fgo:hasDefinition}}{subs:hasDefinition} \\ \hline
+\end{tabular}
+\subsubsection{Class: \texttt{fgo:ScreenFlow}}
+\label{subs:ScreenFlow}
+\begin{tabular}{| >{\columncolor{fast@lightgrey}}p{2.5cm}|p{12cm}|}
+\hline
+\textcolor{white}{\textbf{label}} & Screen Flow \\ \hline
+\textcolor{white}{\textbf{description}} & The complete gadget, a set of screens. \\ \hline
+\textcolor{white}{\textbf{sub\_class\_of}} & \htmlref{\texttt{fgo:Resource}}{subs:Resource} \\ \hline
+\end{tabular}
+\subsubsection{Class: \texttt{fgo:Screen}}
+\label{subs:Screen}
+\begin{tabular}{| >{\columncolor{fast@lightgrey}}p{2.5cm}|p{12cm}|}
+\hline
+\textcolor{white}{\textbf{label}} & Screen \\ \hline
+\textcolor{white}{\textbf{description}} & An individual screen. \\ \hline
+\textcolor{white}{\textbf{sub\_class\_of}} & \htmlref{\texttt{fgo:Resource}}{subs:Resource} \\ \hline
+\textcolor{white}{\textbf{in\_domain\_of}} & \htmlref{\texttt{fgo:hasCode}}{subs:hasCode} \\ \hline
+\end{tabular}
+\subsubsection{Class: \texttt{fgo:FlowControlElement}}
+\label{subs:FlowControlElement}
+\begin{tabular}{| >{\columncolor{fast@lightgrey}}p{2.5cm}|p{12cm}|}
+\hline
+\textcolor{white}{\textbf{label}} & Flow Control Element \\ \hline
+\textcolor{white}{\textbf{description}} & Any kind of component which can restrict the default flow of screens 
+    in a gadget. \\ \hline
+\textcolor{white}{\textbf{super\_class\_of}} & \htmlref{\texttt{fgo:ScreenFlowStart}}{subs:ScreenFlowStart}, \htmlref{\texttt{fgo:ScreenFlowEnd}}{subs:ScreenFlowEnd}, \htmlref{\texttt{fgo:Connector}}{subs:Connector} \\ \hline
+\textcolor{white}{\textbf{sub\_class\_of}} & \htmlref{\texttt{fgo:Resource}}{subs:Resource} \\ \hline
+\end{tabular}
+\subsubsection{Class: \texttt{fgo:ScreenFlowStart}}
+\label{subs:ScreenFlowStart}
+\begin{tabular}{| >{\columncolor{fast@lightgrey}}p{2.5cm}|p{12cm}|}
+\hline
+\textcolor{white}{\textbf{label}} & Screen Flow Start \\ \hline
+\textcolor{white}{\textbf{description}} & The entry point to a wigdet; the first screen. \\ \hline
+\textcolor{white}{\textbf{sub\_class\_of}} & \htmlref{\texttt{fgo:FlowControlElement}}{subs:FlowControlElement} \\ \hline
+\end{tabular}
+\subsubsection{Class: \texttt{fgo:ScreenFlowEnd}}
+\label{subs:ScreenFlowEnd}
+\begin{tabular}{| >{\columncolor{fast@lightgrey}}p{2.5cm}|p{12cm}|}
+\hline
+\textcolor{white}{\textbf{label}} & Screen Flow End \\ \hline
+\textcolor{white}{\textbf{description}} & A screen that ends the workflow of the gadget. \\ \hline
+\textcolor{white}{\textbf{sub\_class\_of}} & \htmlref{\texttt{fgo:FlowControlElement}}{subs:FlowControlElement} \\ \hline
+\end{tabular}
+\subsubsection{Class: \texttt{fgo:Connector}}
+\label{subs:Connector}
+\begin{tabular}{| >{\columncolor{fast@lightgrey}}p{2.5cm}|p{12cm}|}
+\hline
+\textcolor{white}{\textbf{label}} & Connector \\ \hline
+\textcolor{white}{\textbf{description}} & An explicit connection between two screens. \\ \hline
+\textcolor{white}{\textbf{sub\_class\_of}} & \htmlref{\texttt{fgo:FlowControlElement}}{subs:FlowControlElement} \\ \hline
+\end{tabular}
+\subsubsection{Class: \texttt{fgo:ScreenComponent}}
+\label{subs:ScreenComponent}
+\begin{tabular}{| >{\columncolor{fast@lightgrey}}p{2.5cm}|p{12cm}|}
+\hline
+\textcolor{white}{\textbf{label}} & Screen Component \\ \hline
+\textcolor{white}{\textbf{description}} & A screen component is any resource which is part of a particular screen. \\ \hline
+\textcolor{white}{\textbf{super\_class\_of}} & \htmlref{\texttt{fgo:Operator}}{subs:Operator}, \htmlref{\texttt{fgo:FormElement}}{subs:FormElement}, \htmlref{\texttt{fgo:BackendService}}{subs:BackendService} \\ \hline
+\textcolor{white}{\textbf{sub\_class\_of}} & \htmlref{\texttt{fgo:Resource}}{subs:Resource} \\ \hline
+\textcolor{white}{\textbf{in\_domain\_of}} & \htmlref{\texttt{fgo:hasAction}}{subs:hasAction}, \htmlref{\texttt{fgo:hasTrigger}}{subs:hasTrigger}, \htmlref{\texttt{fgo:hasLibrary}}{subs:hasLibrary} \\ \hline
+\end{tabular}
+\subsubsection{Class: \texttt{fgo:Operator}}
+\label{subs:Operator}
+\begin{tabular}{| >{\columncolor{fast@lightgrey}}p{2.5cm}|p{12cm}|}
+\hline
+\textcolor{white}{\textbf{label}} & Operator \\ \hline
+\textcolor{white}{\textbf{description}} & Any kind of component that is used to connect backend services to 
+    form elements. Examples are simple pipes, aggregators or various kinds of 
+    filters. \\ \hline
+\textcolor{white}{\textbf{sub\_class\_of}} & \htmlref{\texttt{fgo:ScreenComponent}}{subs:ScreenComponent} \\ \hline
+\end{tabular}
+\subsubsection{Class: \texttt{fgo:FormElement}}
+\label{subs:FormElement}
+\begin{tabular}{| >{\columncolor{fast@lightgrey}}p{2.5cm}|p{12cm}|}
+\hline
+\textcolor{white}{\textbf{label}} & Form Element \\ \hline
+\textcolor{white}{\textbf{description}} & Form elements are UI elements in a particular screen. \\ \hline
+\textcolor{white}{\textbf{sub\_class\_of}} & \htmlref{\texttt{fgo:ScreenComponent}}{subs:ScreenComponent} \\ \hline
+\end{tabular}
+\subsubsection{Class: \texttt{fgo:BackendService}}
+\label{subs:BackendService}
+\begin{tabular}{| >{\columncolor{fast@lightgrey}}p{2.5cm}|p{12cm}|}
+\hline
+\textcolor{white}{\textbf{label}} & Backend Service \\ \hline
+\textcolor{white}{\textbf{description}} & A Web service which provides data and/or functionality to a screen. 
+    A backend service will often be external to FAST, and will probably have to be 
+    wrapped by the screen. \\ \hline
+\textcolor{white}{\textbf{sub\_class\_of}} & \htmlref{\texttt{fgo:ScreenComponent}}{subs:ScreenComponent} \\ \hline
+\end{tabular}
+\subsubsection{Class: \texttt{fgo:Condition}}
+\label{subs:Condition}
+\begin{tabular}{| >{\columncolor{fast@lightgrey}}p{2.5cm}|p{12cm}|}
+\hline
+\textcolor{white}{\textbf{label}} & Condition \\ \hline
+\textcolor{white}{\textbf{description}} & The pre- or post-condition of either a screen or a screenflow. In 
+    the latter case, each target platform will use these conditions in its own way, 
+    or may also ignore them. E.g., in EzWeb pre- and post-conditions correspond to 
+    the concepts of slot and event.
+	A condition can be seen as a RDF bag of facts, where every fact has to be true
+	for the condition be true as well. \\ \hline
+\textcolor{white}{\textbf{sub\_class\_of}} & \htmlref{\texttt{fgo:Resource}}{subs:Resource} \\ \hline
+\textcolor{white}{\textbf{in\_range\_of}} & \htmlref{\texttt{fgo:hasPreCondition}}{subs:hasPreCondition}, \htmlref{\texttt{fgo:hasPostCondition}}{subs:hasPostCondition}, \htmlref{\texttt{fgo:hasCondition}}{subs:hasCondition} \\ \hline
+\end{tabular}
+\subsubsection{Class: \texttt{fgo:Fact}}
+\label{subs:Fact}
+\begin{tabular}{| >{\columncolor{fast@lightgrey}}p{2.5cm}|p{12cm}|}
+\hline
+\textcolor{white}{\textbf{label}} & Fact \\ \hline
+\textcolor{white}{\textbf{description}} & A fact is the atomic formal representation of a part of a condition.
+	Therefore, several facts compose a condition. \\ \hline
+\textcolor{white}{\textbf{sub\_class\_of}} & \htmlref{\texttt{fgo:Resource}}{subs:Resource} \\ \hline
+\textcolor{white}{\textbf{in\_domain\_of}} & \htmlref{\texttt{fgo:hasPattern}}{subs:hasPattern}, \htmlref{\texttt{fgo:hasPatternString}}{subs:hasPatternString}, \htmlref{\texttt{fgo:isPositive}}{subs:isPositive} \\ \hline
+\end{tabular}
+\subsubsection{Class: \texttt{fgo:WithPreConditions}}
+\label{subs:WithPreConditions}
+\begin{tabular}{| >{\columncolor{fast@lightgrey}}p{2.5cm}|p{12cm}|}
+\hline
+\textcolor{white}{\textbf{label}} & With-precondition \\ \hline
+\textcolor{white}{\textbf{description}} & Those kinds of resource which can have pre-conditions 
+    (i.e., screens and screen flows). \\ \hline
+\textcolor{white}{\textbf{sub\_class\_of}} & \htmlref{\texttt{fgo:Resource}}{subs:Resource} \\ \hline
+\textcolor{white}{\textbf{in\_domain\_of}} & \htmlref{\texttt{fgo:hasPreCondition}}{subs:hasPreCondition} \\ \hline
+\textcolor{white}{\textbf{unionOf}} & \htmlref{\texttt{fgo:ScreenFlow}}{subs:ScreenFlow}, \htmlref{\texttt{fgo:Screen}}{subs:Screen}, \htmlref{\texttt{fgo:Action}}{subs:Action} \\ \hline
+\end{tabular}
+\subsubsection{Class: \texttt{fgo:WithPostConditions}}
+\label{subs:WithPostConditions}
+\begin{tabular}{| >{\columncolor{fast@lightgrey}}p{2.5cm}|p{12cm}|}
+\hline
+\textcolor{white}{\textbf{label}} & With-precondition \\ \hline
+\textcolor{white}{\textbf{description}} & Those kinds of resource which can have pre-conditions 
+    (i.e., screens and screen flows). \\ \hline
+\textcolor{white}{\textbf{sub\_class\_of}} & \htmlref{\texttt{fgo:Resource}}{subs:Resource} \\ \hline
+\textcolor{white}{\textbf{in\_domain\_of}} & \htmlref{\texttt{fgo:hasPostCondition}}{subs:hasPostCondition} \\ \hline
+\textcolor{white}{\textbf{unionOf}} & \htmlref{\texttt{fgo:ScreenFlow}}{subs:ScreenFlow}, \htmlref{\texttt{fgo:Screen}}{subs:Screen}, \htmlref{\texttt{fgo:ScreenComponent}}{subs:ScreenComponent} \\ \hline
+\end{tabular}
+\subsubsection{Class: \texttt{fgo:WithConditions}}
+\label{subs:WithConditions}
+\begin{tabular}{| >{\columncolor{fast@lightgrey}}p{2.5cm}|p{12cm}|}
+\hline
+\textcolor{white}{\textbf{label}} & With-condition \\ \hline
+\textcolor{white}{\textbf{description}} & Those kinds of resource which can have both pre- or post-conditions. \\ \hline
+\textcolor{white}{\textbf{sub\_class\_of}} & \htmlref{\texttt{fgo:Resource}}{subs:Resource} \\ \hline
+\textcolor{white}{\textbf{unionOf}} & \htmlref{\texttt{fgo:WithPreConditions}}{subs:WithPreConditions}, \htmlref{\texttt{fgo:WithPostConditions}}{subs:WithPostConditions} \\ \hline
+\end{tabular}
+\subsubsection{Class: \texttt{fgo:Action}}
+\label{subs:Action}
+\begin{tabular}{| >{\columncolor{fast@lightgrey}}p{2.5cm}|p{12cm}|}
+\hline
+\textcolor{white}{\textbf{label}} & Action \\ \hline
+\textcolor{white}{\textbf{description}} & An action represents a specific routine which will be performed when a certain
+	condition is fulfilled within a certain screen component (i.e., the action `showTable' will
+	be performed when data from a service is received). \\ \hline
+\textcolor{white}{\textbf{in\_domain\_of}} & \htmlref{\texttt{fgo:hasUse}}{subs:hasUse} \\ \hline
+\textcolor{white}{\textbf{in\_range\_of}} & \htmlref{\texttt{fgo:hasAction}}{subs:hasAction} \\ \hline
+\end{tabular}
+\subsubsection{Class: \texttt{fgo:Library}}
+\label{subs:Library}
+\begin{tabular}{| >{\columncolor{fast@lightgrey}}p{2.5cm}|p{12cm}|}
+\hline
+\textcolor{white}{\textbf{label}} & Action \\ \hline
+\textcolor{white}{\textbf{description}} & An action represents a specific routine which will be performed when a certain
+	condition is fulfilled within a certain screen component (i.e., the action `showTable' will
+	be performed when data from a service is received). \\ \hline
+\textcolor{white}{\textbf{in\_domain\_of}} & \htmlref{\texttt{fgo:hasLanguage}}{subs:hasLanguage}, \htmlref{\texttt{fgo:hasSource}}{subs:hasSource} \\ \hline
+\textcolor{white}{\textbf{in\_range\_of}} & \htmlref{\texttt{fgo:hasLibrary}}{subs:hasLibrary} \\ \hline
+\end{tabular}
+\subsubsection{Class: \texttt{fgo:Precondition}}
+\label{subs:Precondition}
+\begin{tabular}{| >{\columncolor{fast@lightgrey}}p{2.5cm}|p{12cm}|}
+\hline
+\textcolor{white}{\textbf{label}} & Precondition \\ \hline
+\textcolor{white}{\textbf{description}} & A precondition is a satisfied condition within a screenflow. It can be seen
+    as an input of the screenflow. \\ \hline
+\textcolor{white}{\textbf{sub\_class\_of}} & \htmlref{\texttt{fgo:Resource}}{subs:Resource} \\ \hline
+\textcolor{white}{\textbf{in\_domain\_of}} & \htmlref{\texttt{fgo:hasCondition}}{subs:hasCondition} \\ \hline
+\end{tabular}
+\subsubsection{Class: \texttt{fgo:Postcondition}}
+\label{subs:Postcondition}
+\begin{tabular}{| >{\columncolor{fast@lightgrey}}p{2.5cm}|p{12cm}|}
+\hline
+\textcolor{white}{\textbf{label}} & Postcondition \\ \hline
+\textcolor{white}{\textbf{description}} & A postcondition is a result condition within a screenflow. It can be seen
+    as an output of the screenflow. \\ \hline
+\textcolor{white}{\textbf{sub\_class\_of}} & \htmlref{\texttt{fgo:Resource}}{subs:Resource} \\ \hline
+\textcolor{white}{\textbf{in\_domain\_of}} & \htmlref{\texttt{fgo:hasCondition}}{subs:hasCondition} \\ \hline
+\end{tabular}
+\subsubsection{Class: \texttt{fgo:Definition}}
+\label{subs:Definition}
+\begin{tabular}{| >{\columncolor{fast@lightgrey}}p{2.5cm}|p{12cm}|}
+\hline
+\textcolor{white}{\textbf{label}} & Resource definition \\ \hline
+\textcolor{white}{\textbf{description}} & Structural and behaviour definition of a resource. \\ \hline
+\textcolor{white}{\textbf{super\_class\_of}} & \htmlref{\texttt{fgo:ScreenDefinition}}{subs:ScreenDefinition} \\ \hline
+\textcolor{white}{\textbf{in\_domain\_of}} & \htmlref{\texttt{fgo:contains}}{subs:contains} \\ \hline
+\textcolor{white}{\textbf{in\_range\_of}} & \htmlref{\texttt{fgo:hasDefinition}}{subs:hasDefinition} \\ \hline
+\end{tabular}
+\subsubsection{Class: \texttt{fgo:ResourceReference}}
+\label{subs:ResourceReference}
+\begin{tabular}{| >{\columncolor{fast@lightgrey}}p{2.5cm}|p{12cm}|}
+\hline
+\textcolor{white}{\textbf{label}} & Resource reference \\ \hline
+\textcolor{white}{\textbf{description}} & It`s a reference to a certain resource. Needs a 'id' for internal
+	identification for the resource which is referencing it, and the `uri' of the
+	resource. \\ \hline
+\textcolor{white}{\textbf{in\_domain\_of}} & \htmlref{\texttt{fgo:hasId}}{subs:hasId}, \htmlref{\texttt{fgo:hasUri}}{subs:hasUri} \\ \hline
+\textcolor{white}{\textbf{in\_range\_of}} & \htmlref{\texttt{fgo:contains}}{subs:contains}, \htmlref{\texttt{fgo:hasUse}}{subs:hasUse} \\ \hline
+\end{tabular}
+\subsubsection{Class: \texttt{fgo:ScreenDefinition}}
+\label{subs:ScreenDefinition}
+\begin{tabular}{| >{\columncolor{fast@lightgrey}}p{2.5cm}|p{12cm}|}
+\hline
+\textcolor{white}{\textbf{label}} & Screen definition \\ \hline
+\textcolor{white}{\textbf{description}} & Behaviour definition of a screen. This will contain which form, operators and 
+	backend services the screen is composed, and how they are connected. \\ \hline
+\textcolor{white}{\textbf{sub\_class\_of}} & \htmlref{\texttt{fgo:Definition}}{subs:Definition} \\ \hline
+\end{tabular}
+\subsubsection{Class: \texttt{fgo:Pipe}}
+\label{subs:Pipe}
+\begin{tabular}{| >{\columncolor{fast@lightgrey}}p{2.5cm}|p{12cm}|}
+\hline
+\textcolor{white}{\textbf{label}} & pipe or connector \\ \hline
+\textcolor{white}{\textbf{description}} & Define a pipe or connector between two resources. The connection is made
+	specifying the conditions which will be connected. \\ \hline
+\textcolor{white}{\textbf{sub\_class\_of}} & \htmlref{\texttt{fgo:Resource}}{subs:Resource} \\ \hline
+\textcolor{white}{\textbf{in\_domain\_of}} & \htmlref{\texttt{fgo:hasIdBBFrom}}{subs:hasIdBBFrom}, \htmlref{\texttt{fgo:hasIdConditionFrom}}{subs:hasIdConditionFrom}, \htmlref{\texttt{fgo:hasIdBBTo}}{subs:hasIdBBTo}, \htmlref{\texttt{fgo:hasIdConditionTo}}{subs:hasIdConditionTo}, \htmlref{\texttt{fgo:hasIdActionTo}}{subs:hasIdActionTo} \\ \hline
+\end{tabular}
+\subsubsection{Class: \texttt{fgo:Trigger}}
+\label{subs:Trigger}
+\begin{tabular}{| >{\columncolor{fast@lightgrey}}p{2.5cm}|p{12cm}|}
+\hline
+\textcolor{white}{\textbf{label}} & Trigger \\ \hline
+\textcolor{white}{\textbf{description}} & Define a... \\ \hline
+\textcolor{white}{\textbf{sub\_class\_of}} & \htmlref{\texttt{fgo:Resource}}{subs:Resource} \\ \hline
+\textcolor{white}{\textbf{in\_domain\_of}} & \htmlref{\texttt{fgo:hasIdBBFrom}}{subs:hasIdBBFrom}, \htmlref{\texttt{fgo:hasIdBBTo}}{subs:hasIdBBTo}, \htmlref{\texttt{fgo:hasIdActionTo}}{subs:hasIdActionTo}, \htmlref{\texttt{fgo:hasNameFrom}}{subs:hasNameFrom} \\ \hline
+\end{tabular}
+\subsubsection{Class: \texttt{fgo:FormDefinition}}
+\label{subs:FormDefinition}
+\begin{tabular}{| >{\columncolor{fast@lightgrey}}p{2.5cm}|p{12cm}|}
+\hline
+\textcolor{white}{\textbf{label}} & Form Definition \\ \hline
+\end{tabular}
+\subsubsection{Class: \texttt{fgo:OperatorDefinition}}
+\label{subs:OperatorDefinition}
+\begin{tabular}{| >{\columncolor{fast@lightgrey}}p{2.5cm}|p{12cm}|}
+\hline
+\textcolor{white}{\textbf{label}} & Operator Definition \\ \hline
+\end{tabular}
+\subsubsection{Class: \texttt{fgo:BackendServiceDefinition}}
+\label{subs:BackendServiceDefinition}
+\begin{tabular}{| >{\columncolor{fast@lightgrey}}p{2.5cm}|p{12cm}|}
+\hline
+\textcolor{white}{\textbf{label}} & Backend Service Definition \\ \hline
+\end{tabular}
