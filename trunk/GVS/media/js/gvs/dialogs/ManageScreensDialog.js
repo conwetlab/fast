@@ -6,7 +6,7 @@ var ManageScreensDialog = Class.create(GalleryDialog /** @lends ManageScreensDia
      * @extends GalleryDialog
      */ 
     initialize: function($super) {  
-        $super("Screen management");
+        $super("Screen browser");
 
         /**
          * List of screens
@@ -39,7 +39,7 @@ var ManageScreensDialog = Class.create(GalleryDialog /** @lends ManageScreensDia
      */
     _initDialogInterface: function (){
 
-        this._setHeader("Manage your screens",
+        this._setHeader("Browse your screens",
                 "These are the screens you have created. Here you can " +
                 "continue editing them and share your work with the community");
 
