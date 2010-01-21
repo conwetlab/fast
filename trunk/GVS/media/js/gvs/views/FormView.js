@@ -114,9 +114,9 @@ var FormView = Class.create(BuildingBlockView,
      * @type DOMNode
      */
     getConditionNode: function(/** String */ id, 
-                            /** String(Optional) */ action) {
-        if (action) {
-            return this._actions.get(action).getConditionNode(id);
+                            /** String (Optional) */ _action) {
+        if (_action) {
+            return this._actions.get(_action).getConditionNode(id);
         } else {
             return this._postIcons.get(id).getNode();
         }

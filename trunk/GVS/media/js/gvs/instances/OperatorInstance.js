@@ -55,7 +55,7 @@ var OperatorInstance = Class.create(ComponentInstance,
     /**
      * Creates the terminal
      */
-    createTerminals: function(/** (Optional) Function */ handler) {
+    createTerminals: function(/** Function */ handler) {
         var options = {
             'direction':[0,1],
             'wireConfig': {

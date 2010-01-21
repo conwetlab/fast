@@ -219,7 +219,7 @@ var PrePostInstance = Class.create(ComponentInstance,
     /**
      * Creates the terminal
      */
-    createTerminal: function(/** (Optional) Function */ handler) {
+    createTerminal: function(/** Function (Optional) */ _handler) {
         var options = {
             'direction':[],
             'offsetPosition': {},
@@ -253,7 +253,7 @@ var PrePostInstance = Class.create(ComponentInstance,
         this._terminal = new Terminal(this._view.getNode(), options, this,
                                         this.getId());
         if (this._type == 'pre') {
-            this._terminal.onWireHandler(handler);
+            this._terminal.onWireHandler(_handler);
         }
     },
     

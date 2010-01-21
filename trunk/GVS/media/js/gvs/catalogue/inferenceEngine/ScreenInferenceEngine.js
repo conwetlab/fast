@@ -24,7 +24,8 @@ var ScreenInferenceEngine = Class.create( /** @lends ScreenInferenceEngine.proto
      */
     _constructBody: function(/**Array*/ canvas, /** Object */ elements,
                     /** Array */ domainContext, 
-                    /** String*/ criteria, /** String(Optional) */ method) {
+                    /** String*/ criteria, /** String(Optional) */ _method) {
+        var method = Utils.variableOrDefault(_method, "");
         var domain = {
             'tags': domainContext,
             'user': null /* TODO: add user here */
@@ -34,7 +35,7 @@ var ScreenInferenceEngine = Class.create( /** @lends ScreenInferenceEngine.proto
             'domainContext': domain,
             'criterion': criteria
         };
-        if (method && method == "check") {
+        if (method == "check") {
             body.search = false;
         }
         body = Object.extend(body, elements);

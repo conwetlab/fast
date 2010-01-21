@@ -39,10 +39,10 @@ var PropertiesDialog = Class.create(ConfirmDialog /** @lends PropertiesDialog.pr
     /**
      * @override
      */
-    show: function($super, /** Function(Optional) */ handler) {
-        if (handler && handler instanceof Function) {
-            this._handler = handler;
-        }
+    show: function($super, /** Function(Optional) */ _handler) {
+        var handler = Utils.variableOrDefault(_handler, null);
+        
+        this._handler = handler;
         $super();
     },
 
