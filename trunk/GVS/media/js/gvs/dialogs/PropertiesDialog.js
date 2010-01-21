@@ -40,8 +40,7 @@ var PropertiesDialog = Class.create(ConfirmDialog /** @lends PropertiesDialog.pr
      * @override
      */
     show: function($super, /** Function(Optional) */ _handler) {
-        var handler = Utils.variableOrDefault(_handler, null);
-        
+        var handler = Utils.variableOrDefault(_handler, null);      
         this._handler = handler;
         $super();
     },
@@ -121,7 +120,7 @@ var PropertiesDialog = Class.create(ConfirmDialog /** @lends PropertiesDialog.pr
             Object.extend(description, Form.serializeElements(elements, {'hash': true}));
             this._description.addProperties(description);
             $super();
-            if (this._handler) {
+            if (this._handler && this._handler instanceof Function) {
                 this._handler();
                 this._handler = null;
             }
