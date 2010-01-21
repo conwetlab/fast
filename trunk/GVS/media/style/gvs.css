@@ -87,6 +87,11 @@ h4{
     top: 12px;
     padding: 1px 5px;
 }
+
+#messages.hidden {
+    opacity: 0;
+}
+
 #messages.error {
     background-color: #F7A6A6;
 }
@@ -915,6 +920,7 @@ label {
     margin-top:3px;
     width:130px;
 }
+/* All layouts */
 .dialogButtonZone {
     text-align: center;
     margin-top: 5px;
@@ -928,6 +934,10 @@ label {
     padding: 5px 0px;
     min-width: 400px;
 }
+
+/* Right layout */
+/* TODO */
+
 
 .line {
     margin-bottom:10px;
@@ -1012,15 +1022,24 @@ label {
 .gallery {
     max-height: 300px;
     overflow: auto;
+    width: 685px;
+}
+.gallery .info {
+    text-align: center;
+    font-style: italic;
 }
 .gallery .row {
     border: 1px solid #AAA;
     -moz-border-radius: 7px 7px;
     -webkit-border-radius: 7px 7px;
-    margin: 2px;
+    margin: 5px;
     padding: 5px;
-    overflow: hidden;
+    overflow: auto;
     position: relative;
+    width: 320px;
+    height: 80px;
+    float: left;
+    cursor: pointer;
 }
 .gallery .row.selected {
     border: 1px solid #808080;
@@ -1028,6 +1047,7 @@ label {
 }
 .gallery .field {
     padding: 5px;
+    width: 160px;
 }
 .gallery .name {
     font-weight: bold;
@@ -1035,7 +1055,7 @@ label {
 }
 .gallery .icon {
     float: left;
-    min-width: 50px;
+    width: 50px;
     min-height: 55px;
     border: 1px solid #CCC;
     margin: 5px;
@@ -1045,13 +1065,29 @@ label {
     position: absolute;
     right: 0;
     top: 0;
-    width: 60%;
+    width: 45%;
     text-align: justify;
-    height: 65px;
-    overflow: auto;
 }
 .gallery .bold {
     font-weight: bold;
+}
+.gallery .sharing {
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    width: 16px;
+    margin: 0px;
+
+}
+.gallery .sharing .shared {
+    background: transparent url("../images/gui/shared.png") no-repeat center;
+    display: block;
+    width: 16px;
+    height: 16px;
+}
+.gallery .sharing .unshared {
+    display: none;
+    width: 16px;
 }
 
 /***************

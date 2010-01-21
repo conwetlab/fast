@@ -7,10 +7,14 @@ var FormDialog = Class.create( /** @lends FormDialog.prototype */ {
      *     * contentNode: containing all the fields of the form
      *     * buttonsNode: containing the different buttons: handled by this class
      * @constructs
-     * @param Hash params
+     * @param properties Hash
+     * @param _buttonPosition String(Optional) Sets the layout of the dialog,
+     *         stablishing the position of the button zone (top, bottom, left, right)
      * @abstract
      */
-    initialize: function(properties) {
+    initialize: function(properties, _buttonPosition){
+
+        var position = Utils.variableOrDefault(_buttonPosition, FormDialog.POSITION_BOTTOM);
         this._dialog = new dijit.Dialog(properties);
         
         this._headerNode = new Element ('div',{
@@ -21,15 +25,26 @@ var FormDialog = Class.create( /** @lends FormDialog.prototype */ {
             'class': 'dialogContent'
         });
         this._buttonNode = new Element ('div',{
-            'class': 'dialogButtonZone' 
+            'class': 'dialogButtonZone'
         });
         this._formWidget = null;
                
-        var containerDiv = new Element ('div');      
+        var containerDiv = new Element ('div', {
+            'class': position
+        });
         
         containerDiv.appendChild (this._headerNode);
-        containerDiv.appendChild (this._contentNode);
-        containerDiv.appendChild (this._buttonNode);
+        switch (position) {
+            case FormDialog.POSITION_TOP:
+                containerDiv.appendChild (this._buttonNode);
+                containerDiv.appendChild (this._contentNode);
+                break;
+            default:
+                containerDiv.appendChild (this._contentNode);
+                containerDiv.appendChild (this._buttonNode);
+                break;
+        }
+       
         this._dialog.attr ('content', containerDiv);
         
         this._initialized = false;
@@ -91,8 +106,7 @@ var FormDialog = Class.create( /** @lends FormDialog.prototype */ {
      * This function adds a button with an onclick handler
      * @private
      */
-    _addButton: function (/** String */ label, /** Function */ handler){
-        
+    _addButton: function (/** String */ label, /** Function */ handler) {
         var button = new dijit.form.Button({
             'label': label,
             onClick: handler
@@ -271,5 +285,11 @@ var FormDialog = Class.create( /** @lends FormDialog.prototype */ {
     }  
      
 });
+
+// STATIC ATTRIBUTES
+FormDialog.POSITION_LEFT = "left";
+FormDialog.POSITION_RIGHT = "right";
+FormDialog.POSITION_BOTTOM = "bottom";
+FormDialog.POSITION_TOP = "top";
 
 // vim:ts=4:sw=4:et:

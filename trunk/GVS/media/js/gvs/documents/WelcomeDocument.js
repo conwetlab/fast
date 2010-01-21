@@ -54,12 +54,8 @@ var WelcomeDocument = Class.create(AbstractDocument,
             onClick: function() { gvs.action("newScreen"); }}
         );
         var openScreenButton = new dijit.form.Button({
-            label: "Open Existing Screen...",
-            onClick: function() { gvs.action("openScreen"); }}
-        );
-        var addScreenButton = new dijit.form.Button({
-            label: "Add Screen to the catalogue...",
-            onClick: function() { gvs.action("addScreen"); }}
+            label: "Browse Screens...",
+            onClick: function() { gvs.action("browseScreens"); }}
         );
 
         var buttonsContainer = new Element("div");
@@ -73,8 +69,6 @@ var WelcomeDocument = Class.create(AbstractDocument,
             buttonsContainer.appendChild(new Element("br"));
             buttonsContainer.appendChild(openScreenButton.domNode);
         }
-        buttonsContainer.appendChild(new Element("br"));
-        buttonsContainer.appendChild(addScreenButton.domNode);
         content.appendChild(buttonsContainer);
     }
 });

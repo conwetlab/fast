@@ -66,7 +66,7 @@ var GVSSingleton = function(){
             this._dialogs.set("addScreen", new AddScreenDialog());
             this._dialogs.set("newScreenflow", new NewScreenflowDialog());
             this._dialogs.set("newScreen", new NewScreenDialog());
-            this._dialogs.set("openScreen", new ManageScreensDialog());
+            this._dialogs.set("browseScreens", new ManageScreensDialog());
             this._dialogs.set("preferences", new PreferencesDialog());
             
         },
@@ -82,11 +82,11 @@ var GVSSingleton = function(){
          */
         init: function(){
             this._actions = {
-                // openScreenflow: this._openScreenflow.bind(this),
+                // browseScreenflow: this._browseScreenflow.bind(this),
                 newScreenflow: this._newScreenflow.bind(this),
                 addScreen: this._addScreen.bind(this),
                 newScreen: this._newScreen.bind(this),
-                openScreen: this._openScreen.bind(this),
+                browseScreens: this._browseScreens.bind(this),
                 showAbout: this._showAboutDialog.bind(this)
             };
             this._documentController = new DocumentController();
@@ -178,11 +178,11 @@ var GVSSingleton = function(){
             this._dialogs.get("addScreen").show();
         },
         /**
-         * Open a screen
+         * browse screens
          * @private
          */
-        _openScreen: function(){
-            this._dialogs.get("openScreen").show();
+        _browseScreens: function(){
+            this._dialogs.get("browseScreens").show();
         },
         
         /**
@@ -244,19 +244,19 @@ var GVSSingleton = function(){
                                 }
                             }
                         },
-                        'open': {
+                        'browse': {
                             'type': 'SubMenu',
-                            'label': 'Open...',
+                            'label': 'Browse...',
                             'weight': 2,
                             'group': 0,
                             'children': {
-                                'openScreenflow': {
+                                'browseScreenflows': {
                                     'type': 'Action',
                                     'action': new MenuAction({
                                         'label': 'Screenflow',
                                         'weight': 2,
                                         'handler': function() {
-                                            this.action("openScreenflow");
+                                            this.action("browseScreenflows");
                                         }.bind(this),
                                         'shortcut': 'Shift+O'
                                     }),
@@ -330,13 +330,13 @@ var GVSSingleton = function(){
                     }),
                     'group': 0
                 };
-                this._menuConfig.file.children['open'].children.openScreen = {
+                this._menuConfig.file.children['browse'].children.browseScreens = {
                     'type': 'Action',
                     'action': new MenuAction({
-                        'label': 'Screen',
+                        'label': 'Screens',
                         'weight': 10,
                         'handler': function(){
-                            this.action("openScreen")
+                            this.action("browseScreens")
                         }.bind(this),
                         'shortcut': 'Alt+N'
                     }),

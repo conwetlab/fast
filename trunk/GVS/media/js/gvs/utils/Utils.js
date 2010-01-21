@@ -93,6 +93,7 @@ Object.extend(Utils, {
      */
     showMessage: function(/** String */ text, /** Object(optional) */ options) {
         $("messages").removeClassName("error");
+        $("messages").removeClassName("hidden");
         $("messages").update(text);
         
         var position = Math.floor(($("header").clientWidth / 2) -
@@ -109,5 +110,18 @@ Object.extend(Utils, {
                 }).play(options.error ? 2500 : 1500);
             }
         }
+    },
+
+    /**
+     * This function returns the value of a variable, or a default one if it
+     * is undefined
+     * @type Object
+     */
+    variableOrDefault: function(/** Object */ variable, /** Object */ defaultValue){
+        var result = variable;
+        if (result === undefined) {
+            result = defaultValue;
+        }
+        return result;
     }
 }); 

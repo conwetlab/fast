@@ -11,11 +11,13 @@ var GalleryDialog = Class.create(FormDialog, /** @lends GalleryDialog.prototype 
      * @constructs
      */ 
     initialize: function($super, /** String */ title,
-                        /** Object (Optional) */ optionalProperties) {
+                        /** Object (Optional) */ _properties) {
         $super({
             'title': title,
             'style': 'display:none;'
-        });
+        }, FormDialog.POSITION_TOP);
+        
+        var properties = Utils.variableOrDefault(_properties, {});
 
         /**
          * Hash of properties of the gallery
@@ -24,10 +26,7 @@ var GalleryDialog = Class.create(FormDialog, /** @lends GalleryDialog.prototype 
          */
         this._properties = new Hash();
 
-        var properties = optionalProperties;
-        if (properties === undefined) {
-            properties = {};
-        }
+        
         // Assigning the passed parameters, or defaults
         this._properties.set('showTitleRow', (properties.showTitleRow || false));
         this._properties.set('elementsPerPage', (properties.elementsPerPage || 10));
@@ -114,7 +113,9 @@ var GalleryDialog = Class.create(FormDialog, /** @lends GalleryDialog.prototype 
      * Builds the user interface, using the gathered information
      * @private
      */
-    _render: function() {
+    _render: function(/** Boolean(Optional) */ _loadAll) {
+        var loadAll = Utils.variableOrDefault(_loadAll, true);
+        
         var content = new Element('div', {
             'class': 'gallery'
         });
@@ -151,16 +152,24 @@ var GalleryDialog = Class.create(FormDialog, /** @lends GalleryDialog.prototype 
             }.bind(this));
             content.appendChild(rowNode);
         }.bind(this));
-
-        this._removeButtons();
-        this._buttons.each(function(button){
-            this._addButton(button.value, function() {
-                button.handler(this._selectedRow.key);
+        if (loadAll && this._rows.size() > 0) {
+            this._removeButtons();
+            this._buttons.each(function(button){
+                this._addButton(button.value, function() {
+                    button.handler(this._selectedRow.key);
+                }.bind(this));
             }.bind(this));
-        }.bind(this));
-
-        if (!this._properties.get("showTitleRow")) {
+        }      
+        if (!this._properties.get("showTitleRow") && content.firstChild) {
             content.firstChild.addClassName("selected");
+        }
+        if (this._rows.size() == 0) {
+            var info = new Element("div", {
+                'class': 'info'
+            }).update("Uppss....Nothing here");
+            content.appendChild(info);
+            this._removeButtons();
+            this._addButton("Close", this._dialog.hide.bind(this._dialog));
         }
         this._selectedRow = this._rows[0];
         this._setContent(content);
