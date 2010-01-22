@@ -35,11 +35,26 @@ var ScreenDocument = Class.create(PaletteDocument,
                                 getBuildingBlockFactory(Constants.BuildingBlock.DOMAIN_CONCEPT));
         
         // Dropping areas
-        var formArea = new Area('form', $A([Constants.BuildingBlock.FORM]), this._drop.bind(this), {splitter: true, region: 'top', minHeight:300});
-        var operatorArea = new Area('operator', $A([Constants.BuildingBlock.OPERATOR]), this._drop.bind(this), {splitter: true, region: 'center', minHeight:200, minWidth:200});
-        var resourceArea = new Area('resource', $A([Constants.BuildingBlock.RESOURCE]), this._drop.bind(this), {splitter: true, region: 'bottom', minHeight:100});
-        var preArea = new Area('pre', $A([Constants.BuildingBlock.DOMAIN_CONCEPT]), this._drop.bind(this), {splitter: true, region: 'left', minWidth:100});
-        var postArea = new Area('post', $A([Constants.BuildingBlock.DOMAIN_CONCEPT]), this._drop.bind(this), {splitter: true, region: 'right', minWidth:100});
+        var formArea = new Area('form',
+                                $A([Constants.BuildingBlock.FORM]),
+                                this._drop.bind(this),
+                                {splitter: true, region: 'top', minHeight:300});
+        var operatorArea = new Area('operator',
+                                    $A([Constants.BuildingBlock.OPERATOR]),
+                                    this._drop.bind(this),
+                                    {splitter: true, region: 'center', minHeight:200, minWidth:200});
+        var resourceArea = new Area('resource',
+                                    $A([Constants.BuildingBlock.RESOURCE]),
+                                    this._drop.bind(this),
+                                    {splitter: true, region: 'bottom', minHeight:100});
+        var preArea = new Area('pre',
+                                $A([Constants.BuildingBlock.DOMAIN_CONCEPT]),
+                                this._drop.bind(this),
+                                {splitter: true, region: 'left', minWidth:100});
+        var postArea = new Area('post',
+                                $A([Constants.BuildingBlock.DOMAIN_CONCEPT]),
+                                this._drop.bind(this),
+                                {splitter: true, region: 'right', minWidth:100});
 
         var areas = $A([formArea, operatorArea, resourceArea, preArea, postArea]);
         
@@ -462,8 +477,11 @@ var ScreenDocument = Class.create(PaletteDocument,
      * @private
      */
     _repaint: function() {
-        this._canvasInstances.each(function(pair){
-            pair.value.onUpdate();
+        this._canvasInstances.values().each(function(instance){
+            instance.onUpdate();
+        });
+        this._description.getConditionInstances().each(function(instance) {
+            instance.onUpdate();
         });
     },
     
