@@ -135,7 +135,7 @@ public class Catalogue {
 			// creates a new triple store
 			tripleStore = new TripleStore(sesameServer, repositoryID);
 	    	tripleStore.open();
-	    	tripleStore.clear();
+//	    	tripleStore.clear();
 	
 	    	// check if the catalogue is correct
 			if (!check()) {
@@ -144,7 +144,7 @@ public class Catalogue {
 			}
 			
 			// creates a planner
-			//planner = new Planner(this);
+			planner = new Planner(this);
 		}
 	}
 	
