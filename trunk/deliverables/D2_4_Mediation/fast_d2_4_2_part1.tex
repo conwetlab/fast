@@ -63,13 +63,13 @@ The alignment operation determines the mapping $M'$ for a pair of ontologies $O$
 \label{ominfast}
 
 The gadget life cycle in FAST has several phases and roles associated, as detailed in \cite{hoyer-fast}. Here, we list the ones relevant for the ontology matching tasks, in decreasing order of the measure in which knowledge about ontologies is required. Note that several roles can be played by the same actor.
-\begin{inparaenum}[(i)]
-    \item The \textit{ontology engineer} creates the ontologies used to annotate services and data. This role also includes the process of ontology matching, either automated or manually, determining if the alignment is feasible and creating so-called \emph{matching operator} building blocks, which are basic elements of the FAST screen building. The \textit{resource developer} then uses these ontologies to annotate resources created in FAST.
-    \item Ontology matching is needed by the \textit{screen developer} at the design-time of a screen (a visual building block of a gadget). Screen developers have a dedicated UI component for building screens, in which they can use the matching operators to combine components annotated with different ontologies. No actual matching needs to be performed in this phase, but rather the possibility of matching needs to be determined (i.e., \emph{can} two screens A and B be combined?).
+\begin{enumerate}[(i)]
+    \item The \textit{ontology engineer} creates the ontologies used to annotate services and data. This role also includes the process of ontology matching, either automated or manually, determining if the alignment is feasible and creating so-called \emph{matching operator} building blocks, which are basic elements of the FAST screen building. The \textit{resource developer} then uses these ontologies to annotate resources created in FAST, which resources will be used by the \textit{screen developer}, who will also specify the resource type at the pre- and postconditions.
+    \item Ontology matching is needed by the \textit{gadget developer} at the design-time of a screen-flow (gadget). Gadget developers use the GVS (Gadget Visual Storyboard) for building gadgets, in which they can use the matching operators to combine screens having input and output resources annotated with different ontologies. No actual matching needs to be performed in this phase, but rather the possibility of matching needs to be determined (i.e., \emph{can} two screens A and B be combined?).
 %the FAST user interface determines if two resources can be combined or not (see Figure \ref{fig:screens} for a conceptual example of resources that can not be combined).
-    \item The \emph{gadget developer} combines screens to screen-flows and gadgets, and only uses ontology matching implicitly.
+    %\item The \emph{gadget developer} combines screens to screen-flows and gadgets, and only uses ontology matching implicitly.
     \item The \textit{end-user} uses the final deployed gadget at run-time, but is unaware of the underlying resources and ontologies or the matching process. Only at run-time the actual mapping of instance data has to be performed. In this paper, we mainly consider the first two cases (i.e. ontology engineering and screen development).
-\end{inparaenum}
+\end{enumerate}
 
 
 \section{Ontology Engineering Phase}
@@ -415,8 +415,20 @@ gr:typeOfGood a align:Relation .
 
 Using this representation, complex correspondences can be modelled, using first order logic constructs.
 
+\subsection{Service Wrapping Tool}
+\textbf{\textit{Kassel will describe the service wrapping tool they've developed, that creates mapping instances between ontologies. 
+A description of the front-end and the creation of the mapping rules will be given here.}}
+
+\subsection{Creating the Operator}
+
+\textbf{\textit{Kassel will describe the creation of the matching operator in the catalogue and the storage of the mapping rules.}}
+
 \section{Gadget Building Phase}
-Every time ontology matching is performed and an alignment is created between two underlying resources, the corresponding alignment rules are stored and an operator is created in the catalogue. At the gadget building phase, whenever two screens are combined, the catalogue will provide the possible matching operators for the two screens. This way an operator can be placed between two screens that would otherwise be incompatible.
+Every time ontology matching is performed and an alignment is created between two underlying resources, the corresponding alignment rules are stored and an operator is created in the catalogue. 
+
+At the gadget building phase, whenever two screens are combined, the catalogue will provide the possible matching operators for the two screens. This way an operator can be placed between two screens that would otherwise be incompatible, making interoperation between the two possible.
 
 \section{Runtime} 
-Employing alignment rules in the runtime phase of the gadget.
+At runtime, the matching operator's rules are tranformed into JSON data used by the JavaScript gadget. Thus, when data come from the two disparate resources, the gadget will automatically transform data instances of the ontology belonging to the first resource, into instances of the ontology belonging to the second resource.
+
+\textbf{\textit{Kassel will describe the way the mapping rules are transformed into JSON and how they are used within the JavaScript gadget.}}
