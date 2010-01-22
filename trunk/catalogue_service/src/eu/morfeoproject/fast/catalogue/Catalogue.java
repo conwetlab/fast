@@ -108,7 +108,7 @@ public class Catalogue {
 			// creates a new triple store
 			tripleStore = new TripleStore(dir, indexes);
 	    	tripleStore.open();
-	    	tripleStore.clear();
+//	    	tripleStore.clear();
 	
 	    	// check if the catalogue is correct
 			if (!check()) {
@@ -135,6 +135,7 @@ public class Catalogue {
 			// creates a new triple store
 			tripleStore = new TripleStore(sesameServer, repositoryID);
 	    	tripleStore.open();
+	    	tripleStore.clear();
 	
 	    	// check if the catalogue is correct
 			if (!check()) {
@@ -143,7 +144,7 @@ public class Catalogue {
 			}
 			
 			// creates a planner
-			planner = new Planner(this);
+			//planner = new Planner(this);
 		}
 	}
 	
@@ -1291,12 +1292,12 @@ public class Catalogue {
 			tripleStore.addStatement(rUri, DC.rights, resource.getRights());
 		if (resource.getVersion() != null)
 			tripleStore.addStatement(rUri, FGO.hasVersion, resource.getVersion());
-		if (resource.getCreationDate() != null)
-			tripleStore.addStatement(rUri, DC.date, resource.getCreationDate());
-		else { // no date provided, save the current date
+		if (resource.getCreationDate() != null) {
+			tripleStore.addStatement(rUri, DC.date, tripleStore.createDatatypeLiteral(DateFormatter.formatDateISO8601(resource.getCreationDate()), XSD._date));
+		} else { // no date provided, save the current date
 			Date currentDate = new Date();
 			resource.setCreationDate(currentDate);
-			tripleStore.addStatement(rUri, DC.date, currentDate);
+			tripleStore.addStatement(rUri, DC.date, tripleStore.createDatatypeLiteral(DateFormatter.formatDateISO8601(currentDate), XSD._date));
 		}
 		if (resource.getIcon() != null)
 			tripleStore.addStatement(rUri, FGO.hasIcon, resource.getIcon());
@@ -1532,8 +1533,11 @@ public class Catalogue {
 	public Collection<Screen> listScreens() {
 		ArrayList<Screen> results = new ArrayList<Screen>();
 		ClosableIterator<Statement> it = tripleStore.findStatements(Variable.ANY, RDF.type, FGO.Screen);
-		while (it.hasNext())
-			results.add(getScreen(it.next().getSubject().asURI()));
+		while (it.hasNext()) {
+			URI sUri = it.next().getSubject().asURI();
+			System.out.println(sUri);
+			results.add(getScreen(sUri));
+		}
 		it.close();
 		return results;
 	}
