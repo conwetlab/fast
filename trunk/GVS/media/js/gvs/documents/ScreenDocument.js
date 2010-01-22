@@ -6,8 +6,12 @@ var ScreenDocument = Class.create(PaletteDocument,
      * @constructs
      * @extends PaletteDocument
      */
-    initialize: function($super, /** String */ title, /** Array */ domainContext, /** String */ version) {
-        this._inspectorArea = this._createInspectorArea(); 
+    initialize: function($super, /** Object */ properties) {
+        var domainContext = properties.domainContext;
+        var name = properties.name;
+        var version = properties.version;
+
+        this._inspectorArea = this._createInspectorArea();
                
         /**
          * @type PropertiesPane
@@ -58,7 +62,7 @@ var ScreenDocument = Class.create(PaletteDocument,
 
         var areas = $A([formArea, operatorArea, resourceArea, preArea, postArea]);
         
-        $super(title, $A([formSet, operatorSet, resourceSet, domainConceptSet]),
+        $super(name, $A([formSet, operatorSet, resourceSet, domainConceptSet]),
                 areas,
                 domainContext,  new ScreenInferenceEngine());
         
@@ -101,27 +105,38 @@ var ScreenDocument = Class.create(PaletteDocument,
               
         // Screen Definition
 
+        var description;
+        if (properties.id) {
+            // An existing screen
+            description = properties;
+            // Removing the definition, which will be interpreted in other
+            // functions
+            description.definition = null;
+        } else {
+            // A new screen
+            description = {
+                'label': {'en-gb': name},
+                'name': name,
+                'version': version,
+                'domainContext': {
+                    'tags': domainContext,
+                    'user': null
+                },
+                "creator": "http://fast.morfeo-project.eu",
+                "description": {"en-gb": "Please fill the description..."},
+                "rights": "http://creativecommons.org/",
+                "creationDate": new Date().toUTCString(),
+                "icon": "http://fast.morfeo-project.eu/icon.png",
+                "screenshot": "http://fast.morfeo-project.eu/screenshot.png",
+                "homepage": "http://fast.morfeo-project.eu/"
+            };
+        }
          /**
          * The screenflow description
          * @type ScreenDescription
          * @private @member
          */       
-        this._description = new ScreenDescription({
-            'label': {'en-gb': title},
-            'name': title,
-            'version': version,
-            'domainContext': {
-                'tags': domainContext,
-                'user': null
-            },
-            "creator": "http://fast.morfeo-project.eu",
-            "description": {"en-gb": "Please fill the description..."},
-            "rights": "http://creativecommons.org/",
-            "creationDate": new Date().toUTCString(),
-            "icon": "http://fast.morfeo-project.eu/icon.png",
-            "screenshot": "http://fast.morfeo-project.eu/screenshot.png",
-            "homepage": "http://fast.morfeo-project.eu/"
-        });
+        this._description = new ScreenDescription(description);
 
         /**
          * Screen properties dialog
@@ -152,29 +167,33 @@ var ScreenDocument = Class.create(PaletteDocument,
          * @type Hash
          */
         this._canvasInstances = new Hash();
-        
-        var paletteStatus = {
+
+        if (this._description.getId()) {
+
+        } else {
+            var paletteStatus = {
             "forms": [],
             "operators": [],
             "backendservices": [],
             "preconditions": [],
             "postconditions":[],
             "pipes":[]
-        };
+            };
 
 
-        // Start retrieving data
-        this._inferenceEngine.findCheck(
-                this._getCanvas(),
-                paletteStatus,
-                this._domainContext,
-                'reachability',
-                this._findCheckCallback.bind(this)
-        );
-        domainConceptSet.startRetrievingData();
-        this._setSelectedElement();
+            // Start retrieving data
+            this._inferenceEngine.findCheck(
+                    this._getCanvas(),
+                    paletteStatus,
+                    this._domainContext,
+                    'reachability',
+                    this._findCheckCallback.bind(this)
+            );
+            domainConceptSet.startRetrievingData();
+            this._setSelectedElement();
 
-        this._save();
+            this._save();
+        }
     },
 
 

@@ -133,7 +133,7 @@ var ManageScreensDialog = Class.create(GalleryDialog /** @lends ManageScreensDia
      */
     _openScreen: function(/** String */ id) {
         var documentController = GVSSingleton.getInstance().getDocumentController();
-        documentController.openScreen(id);
+        documentController.loadScreen(id);
         this._dialog.hide();
     },
 

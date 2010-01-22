@@ -73,17 +73,30 @@ var DocumentController = Class.create(
     /**
      * Creates a new screenflow document
      */
-    createScreenflow: function(name, domainContext, version){
+    createScreenflow: function(/** String */ name, /** String */ domainContext,
+                               /** String */ version){
         var screenflow = new ScreenflowDocument(name, domainContext, version);
         this.addDocument(screenflow);
     },
     
     /**
-     * Creates a new screenflow document
+     * Creates a new screen document
      */
-    createScreen: function(name, domainContext, version){
-        var screen = new ScreenDocument(name, domainContext, version);
+    createScreen: function(/** String */ name, /** String */ domainContext,
+                            /** String */ version){
+        var screen = new ScreenDocument({
+                'name': name,
+                'domainContext': domainContext,
+                'version': version
+            });
         this.addDocument(screen);
+    },
+
+    /**
+     * Opens an existing screen by its id
+     */
+    loadScreen: function(/** String */ id) {
+        
     },
     
     /**
@@ -138,7 +151,7 @@ var DocumentController = Class.create(
     
     /**
      * this function closes a document by its Id
-     * @param String id
+     * @param id String
      */
     closeDocument: function(id) {
 
