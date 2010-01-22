@@ -1966,7 +1966,7 @@ public class Catalogue {
 						} else if (p.equals(FGO.hasPreCondition)) {
 							action.getPreconditions().add(getCondition(o.asBlankNode()));
 						} else if (p.equals(FGO.hasUse)) {
-							ClosableIterator<Statement> useIt = tripleStore.findStatements(object.asBlankNode(), Variable.ANY, Variable.ANY);
+							ClosableIterator<Statement> useIt = tripleStore.findStatements(o.asBlankNode(), Variable.ANY, Variable.ANY);
 							String idUse = null;
 							URI uriUse = null;
 							for ( ; useIt.hasNext(); ) {
@@ -1974,7 +1974,7 @@ public class Catalogue {
 								URI pUse = sUse.getPredicate();
 								Node oUse = sUse.getObject();
 								if (pUse.equals(FGO.hasId)) {
-									idUse = oUse.asLiteral().toString();
+									idUse = oUse.asDatatypeLiteral().getValue();
 								} else if (pUse.equals(FGO.hasUri)) {
 									uriUse = oUse.asURI();
 								}
