@@ -35,12 +35,12 @@ var ScreenDocument = Class.create(PaletteDocument,
                                 getBuildingBlockFactory(Constants.BuildingBlock.DOMAIN_CONCEPT));
         
         // Dropping areas
-        var formArea = new Area('form', $A([Constants.BuildingBlock.FORM]), this._drop.bind(this));
-        var operatorArea = new Area('operator', $A([Constants.BuildingBlock.OPERATOR]), this._drop.bind(this));
-        var resourceArea = new Area('resource', $A([Constants.BuildingBlock.RESOURCE]), this._drop.bind(this));
-        var preArea = new Area('pre', $A([Constants.BuildingBlock.DOMAIN_CONCEPT]), this._drop.bind(this));
-        var postArea = new Area('post', $A([Constants.BuildingBlock.DOMAIN_CONCEPT]), this._drop.bind(this));
-        
+        var formArea = new Area('form', $A([Constants.BuildingBlock.FORM]), this._drop.bind(this), {splitter: true, region: 'top', minHeight:300});
+        var operatorArea = new Area('operator', $A([Constants.BuildingBlock.OPERATOR]), this._drop.bind(this), {splitter: true, region: 'center', minHeight:200, minWidth:200});
+        var resourceArea = new Area('resource', $A([Constants.BuildingBlock.RESOURCE]), this._drop.bind(this), {splitter: true, region: 'bottom', minHeight:100});
+        var preArea = new Area('pre', $A([Constants.BuildingBlock.DOMAIN_CONCEPT]), this._drop.bind(this), {splitter: true, region: 'left', minWidth:100});
+        var postArea = new Area('post', $A([Constants.BuildingBlock.DOMAIN_CONCEPT]), this._drop.bind(this), {splitter: true, region: 'right', minWidth:100});
+
         var areas = $A([formArea, operatorArea, resourceArea, preArea, postArea]);
         
         $super(title, $A([formSet, operatorSet, resourceSet, domainConceptSet]),
@@ -49,8 +49,19 @@ var ScreenDocument = Class.create(PaletteDocument,
         
         // Adding the dropping areas to the document
         areas.each(function(area) {
-            this._tabContent.appendChild(area.getNode());     
+            var contentPane = area.getWidget();
+            this._screenDesignContainer.addChild(contentPane);
+
+            var contentNode = area.getNode();
+
+            contentNode.observe('click', function() {
+                this._onClick();
+            }.bind(this));
+            contentNode.observe('dblclick', function() {
+                this._onClick();
+            }.bind(this));
         }.bind(this));
+       
 
         /**
          * Form instance of the screen, if any
@@ -412,30 +423,35 @@ var ScreenDocument = Class.create(PaletteDocument,
             liveSplitters:"false",
             region:"center"
         });
-        
-        this._tabContent.addClassName("screenDoc").
-                        addClassName("canvas");
-                        
-        this._tabContent.observe('click', function(){
-            this._onClick();
-        }.bind(this));
-        this._tabContent.observe('dblclick', function(event){
-            this._onClick();
-        }.bind(this));
-
-        var documentPane = new dijit.layout.ContentPane({
-            region:"center"
-        });
-        documentPane.setContent(this._tabContent);
-        
-        centerContainer.addChild(documentPane);
-        centerContainer.addChild(this._inspectorArea);
 
         var leftSplitter = centerContainer.getSplitter("left");
         dojo.connect(leftSplitter,'onmousemove', this._repaint.bind(this));
 
         var bottomSplitter = centerContainer.getSplitter("bottom");
         dojo.connect(bottomSplitter,'onmousemove', this._repaint.bind(this));
+
+        this._screenDesignContainer = new dijit.layout.BorderContainer({
+            region: 'center',
+            design: 'sidebar',
+            splitter: true,
+            gutters: false
+        });
+        this._screenDesignContainer.domNode.addClassName('screenDesign');
+
+        leftSplitter = this._screenDesignContainer.getSplitter("left");
+        dojo.connect(leftSplitter,'onmousemove', this._repaint.bind(this));
+
+        bottomSplitter = this._screenDesignContainer.getSplitter("bottom");
+        dojo.connect(bottomSplitter,'onmousemove', this._repaint.bind(this));
+
+        var rightSplitter = this._screenDesignContainer.getSplitter("right");
+        dojo.connect(rightSplitter,'onmousemove', this._repaint.bind(this));
+
+        var topSplitter = this._screenDesignContainer.getSplitter("top");
+        dojo.connect(topSplitter,'onmousemove', this._repaint.bind(this));
+
+        centerContainer.addChild(this._screenDesignContainer);
+        centerContainer.addChild(this._inspectorArea);
 
         return centerContainer;
     },

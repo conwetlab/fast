@@ -5,8 +5,12 @@ var Area = Class.create( /** @lends Area.prototype */ {
      * @param Function onDropHandler(DropZone zone, ComponentInstance droppedInstance)
      * @constructs
      */ 
-    initialize: function(/** String */ areaClass, /** Array */ acceptedElements, /** Function */ onDropHandler) {
-        
+    initialize: function(/** String */ areaClass, /** Array */ acceptedElements, /** Function */ onDropHandler, /** Object */ _options) {
+        var options = Utils.variableOrDefault(_options, {});
+        options = Object.extend ({
+            style : ""
+        }, options);
+
         /**
          * List of valid elements to be dropped in the area
          * @type Array
@@ -23,7 +27,23 @@ var Area = Class.create( /** @lends Area.prototype */ {
          * @private
          */
         this._onDropHandler = onDropHandler;
-        
+
+        if (options.region != 'center') {
+            if (options['minHeight'] != null) {
+                options.style += "height: " + options['minHeight'] + 'px;';
+            }
+            if (options['minWidth'] != null) {
+                options.style += "width: " + options['minWidth'] + 'px;';
+            }
+        }
+
+        /**
+         * ContentPane of the area
+         * @type dijit.layout.ContentPane
+         * @private
+         */
+        this._contentPane = new dijit.layout.ContentPane(options);
+
         /**
          * DOM Node of the area
          * @type DOMNode
@@ -32,7 +52,7 @@ var Area = Class.create( /** @lends Area.prototype */ {
         this._node = new Element('div', {
             'class': 'dropArea ' + areaClass
         });
-        
+        this._contentPane.setContent(this._node);
     },
     
 
@@ -43,10 +63,17 @@ var Area = Class.create( /** @lends Area.prototype */ {
      * @type DOMNode
      */
     getNode: function() {
-        return this._node;    
+        return this._node;
     },
     
-    
+    /**
+     * Returns the  widget
+     * @type dijit.*
+     */
+    getWidget: function () {
+        return this._contentPane;
+    },
+
     /**
      * Implementing DropZone Interface: drop
      * @type DOMNode
