@@ -45,7 +45,6 @@ import eu.morfeoproject.fast.util.DateFormatter;
 public abstract class GenericServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
-	
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
@@ -75,7 +74,7 @@ public abstract class GenericServlet extends HttpServlet {
 	}
 
 	@SuppressWarnings("unchecked")
-	protected void parseResource(Resource resource, JSONObject jsonResource, URI uri) throws JSONException {
+	protected void parseResource(Resource resource, JSONObject jsonResource, URI uri) throws JSONException, IOException {
 		if (uri != null)
 			resource.setUri(uri);
 		if (jsonResource.has("label")) {
@@ -94,7 +93,7 @@ public abstract class GenericServlet extends HttpServlet {
 				resource.getDescriptions().put(key, jsonDescriptions.getString(key));
 			}
 		}
-		resource.setCreator(new URIImpl(jsonResource.getString("creator")));
+		resource.setCreator(new URIImpl(CatalogueAccessPoint.getCatalogue().getServerURL()+"/users/"+jsonResource.getString("creator")));
 		resource.setRights(new URIImpl(jsonResource.getString("rights")));
 		resource.setVersion(jsonResource.getString("version"));
 		if (jsonResource.has("creationDate"))

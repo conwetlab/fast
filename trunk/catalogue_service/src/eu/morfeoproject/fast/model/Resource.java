@@ -197,7 +197,7 @@ public abstract class Resource {
 		if (getCreator() == null)
 			json.put("creator", JSONObject.NULL);
 		else
-			json.put("creator", getCreator().toString());
+			json.put("creator", extractLogin(getCreator()));
 		if (getRights() == null)
 			json.put("rights", JSONObject.NULL);
 		else
@@ -300,4 +300,8 @@ public abstract class Resource {
 		return model;
 	}
 
+	private String extractLogin(URI creator) {
+		String strCreator = creator.toString();
+		return strCreator.substring(strCreator.lastIndexOf("/") + 1);
+	}
 }

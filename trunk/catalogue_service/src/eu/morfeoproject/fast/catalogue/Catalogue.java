@@ -1,6 +1,8 @@
 package eu.morfeoproject.fast.catalogue;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
@@ -96,7 +98,7 @@ public class Catalogue {
 	}
 	
 	/**
-	 * Returns a opened connection to a local catalogue
+	 * Returns a opened connection to a local repository
 	 */
 	private void create(URI serverURL, File dir, String indexes) {
 		logger.info("Catalogue loaded at "+dir.getAbsolutePath()+" ["+indexes+"]");
@@ -115,6 +117,7 @@ public class Catalogue {
 			}
 //	    	printStatements();
 //			dump();
+//			exportToTrig();
 			
 			// creates a planner
 			planner = new Planner(this);
@@ -122,7 +125,7 @@ public class Catalogue {
 	}
 	
 	/**
-	 * Returns a opened connection to a remote catalogue
+	 * Returns a opened connection to a remote repository
 	 */
 	private void create(URI serverURL, String sesameServer, String repositoryID) {
 		logger.info("Catalogue loaded at "+sesameServer+", ID="+repositoryID);
@@ -144,12 +147,17 @@ public class Catalogue {
 		}
 	}
 	
+	public URI getServerURL() {
+		return serverURL;
+	}
+
+	public Planner getPlanner() {
+		return planner;
+	}
+
 	// TODO remove this method
 	public TripleStore getTripleStore() {
 		return tripleStore;
-	}
-	public Planner getPlanner() {
-		return planner;
 	}
 	
     /**
@@ -398,7 +406,7 @@ public class Catalogue {
     	if (domainContext != null && domainContext.size() > 0) {
         	queryString = queryString.concat("{");
         	for (String tag : domainContext) {
-	    		queryString = queryString.concat(" { ?resource "+FGO.hasTag.toSPARQL()+" ?tag . FILTER regex(?tag, \""+tag+"\", \"i\") } UNION");
+	    		queryString = queryString.concat(" { ?resource "+CTAG.tagged.toSPARQL()+" ?ctag . ?ctag "+CTAG.label.toSPARQL()+" ?tag . FILTER(regex(str(?tag), \""+tag+"\", \"i\")) } UNION");
         	}
         	// remove last 'UNION'
 	    	if (queryString.endsWith("UNION"))
@@ -475,7 +483,7 @@ public class Catalogue {
     		URI predicate) throws ClassCastException, ModelRuntimeException {
     	HashSet<URI> results = new HashSet<URI>();
     	ArrayList<Condition> unCon = getUnsatisfiedPreconditions(resources, plugin, subsume);
-
+    	
     	String queryString = 
     		"SELECT DISTINCT ?resource \n" +
     		"WHERE {\n" +
@@ -489,7 +497,7 @@ public class Catalogue {
     	if (domainContext != null && domainContext.size() > 0) {
         	queryString = queryString.concat("{");
         	for (String tag : domainContext) {
-	    		queryString = queryString.concat(" { ?resource "+FGO.hasTag.toSPARQL()+" ?tag . FILTER regex(?tag, \""+tag+"\", \"i\")} UNION");
+	    		queryString = queryString.concat(" { ?resource "+CTAG.tagged.toSPARQL()+" ?ctag . ?ctag "+CTAG.label.toSPARQL()+" ?tag . FILTER(regex(str(?tag), \""+tag+"\", \"i\")) } UNION");
         	}
         	// remove last 'UNION'
 	    	if (queryString.endsWith("UNION"))
@@ -530,7 +538,7 @@ public class Catalogue {
 //		if (domainContext != null && domainContext.size() > 0) {
 //	    	queryString = queryString.concat("{");
 //	    	for (String tag : domainContext) {
-//	    		queryString = queryString.concat(" { ?resource "+FGO.hasTag.toSPARQL()+" ?tag . FILTER regex(?tag, \""+tag+"\", \"i\")} UNION");
+//	    		queryString = queryString.concat(" { ?resource "+FGO.hasTag.toSPARQL()+" ?tag . FILTER regex(str(?tag), \""+tag+"\", \"i\")} UNION");
 //	    	}
 //	    	// remove last 'UNION'
 //	    	if (queryString.endsWith("UNION"))
@@ -558,15 +566,11 @@ public class Catalogue {
 //    	}
 		queryString = queryString.concat("\n} }");
 		
-		
 		if (limit > 0)
 			queryString = queryString.concat("\nLIMIT "+limit);
 		queryString = queryString.concat("\nOFFSET "+offset);
 		// replace ':_' by '?' to make the query
 		queryString = replaceBlankNodes(queryString);
-		
-		if (logger.isDebugEnabled())
-			logger.debug("Executing SPARQL query:\n"+queryString+"\n-----");
 
     	QueryResultTable qrt = tripleStore.sparqlSelect(queryString);
     	ClosableIterator<QueryRow> itResults = qrt.iterator();
@@ -1279,8 +1283,10 @@ public class Catalogue {
 			tripleStore.addStatement(rUri, RDFS.label, tripleStore.createLanguageTagLiteral(resource.getLabels().get(key), key));
 		for (String key : resource.getDescriptions().keySet())
 			tripleStore.addStatement(rUri, DC.description, tripleStore.createLanguageTagLiteral(resource.getDescriptions().get(key), key));
-		if (resource.getCreator() != null)
+		if (resource.getCreator() != null) {
 			tripleStore.addStatement(rUri, DC.creator, resource.getCreator());
+			tripleStore.addStatement(rUri, FOAF.maker, resource.getCreator());
+		}
 		if (resource.getRights() != null)
 			tripleStore.addStatement(rUri, DC.rights, resource.getRights());
 		if (resource.getVersion() != null)
@@ -1586,7 +1592,7 @@ public class Catalogue {
     	if (tags != null && tags.length > 0) {
         	queryString = queryString.concat("{");
         	for (String tag : tags)
-	    		queryString = queryString.concat(" { ?concept "+FGO.hasTag.toSPARQL()+" ?tag . FILTER regex(?tag, \""+tag+"\", \"i\")} UNION");
+	    		queryString = queryString.concat(" { ?concept "+CTAG.tagged.toSPARQL()+" ?ctag . ?ctag "+CTAG.label.toSPARQL()+" ?tag . FILTER(regex(str(?tag), \""+tag+"\", \"i\")) } UNION");
         	// remove last 'UNION'
 	    	if (queryString.endsWith("UNION"))
 				queryString = queryString.substring(0, queryString.length() - 5);
@@ -1674,7 +1680,7 @@ public class Catalogue {
 		// fill the information about the resource
 		resource.setUri(uri);
 		String sUri = uri.toString();
-		resource.setId(sUri.substring(sUri.lastIndexOf("/")));
+		resource.setId(sUri.substring(sUri.lastIndexOf("/") + 1));
 		ClosableIterator<Statement> cIt = tripleStore.findStatements(uri, Variable.ANY, Variable.ANY);
 		if (!cIt.hasNext()) // the resource does not exist
 			return null;
@@ -2122,7 +2128,12 @@ public class Catalogue {
 	}
 	
 	public void exportToTrig() {
-		tripleStore.export(System.out, Syntax.Trig);
+		try {
+			tripleStore.export(new FileOutputStream("C:\\catalogue.n3"), Syntax.Trig);
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	
