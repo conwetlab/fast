@@ -28,6 +28,8 @@ morestring=[b]",
 % \end{abstract}
 
 \section{Overview}
+\label{sec:overview}
+
 \subsection{Ontology Matching}
 \label{mediation}
 
@@ -73,6 +75,7 @@ The gadget life cycle in FAST has several phases and roles associated, as detail
 
 
 \section{Ontology Engineering Phase}
+\label{sec:ontologyengineering}
 
 \subsection{Alignment Tool}
 \label{alignmenttool}
@@ -424,11 +427,13 @@ A description of the front-end and the creation of the mapping rules will be giv
 \textbf{\textit{Kassel will describe the creation of the matching operator in the catalogue and the storage of the mapping rules.}}
 
 \section{Gadget Building Phase}
+\label{sec:gadgetbuilding}
 Every time ontology matching is performed and an alignment is created between two underlying resources, the corresponding alignment rules are stored and an operator is created in the catalogue. 
 
 At the gadget building phase, whenever two screens are combined, the catalogue will provide the possible matching operators for the two screens. This way an operator can be placed between two screens that would otherwise be incompatible, making interoperation between the two possible.
 
 \section{Runtime} 
+\label{sec:runtime}
 At runtime, the matching operator's rules are tranformed into JSON data used by the JavaScript gadget. Thus, when data come from the two disparate resources, the gadget will automatically transform data instances of the ontology belonging to the first resource, into instances of the ontology belonging to the second resource.
 
 \textbf{\textit{Kassel will describe the way the mapping rules are transformed into JSON and how they are used within the JavaScript gadget.}}
