@@ -98,7 +98,7 @@ var ManageScreensDialog = Class.create(GalleryDialog /** @lends ManageScreensDia
                                 '<span class="bold">Version: </span>' +
                                      screen.version,
                                 '<span class="bold">Tags: </span>' +
-                                    data.domainContext.tags.join(","),
+                                    data.domainContext.tags.join(", "),
                                 '<span class="bold">Description </span><br />'+
                                     data.description['en-gb'],
                                 '<span class=' + (screen.uri ? '"shared"': '"unshared"') +

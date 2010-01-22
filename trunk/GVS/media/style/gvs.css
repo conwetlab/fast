@@ -1020,9 +1020,9 @@ label {
  * Gallery dialog *
  ******************/
 .gallery {
-    max-height: 300px;
+    max-height: 450px;
     overflow: auto;
-    width: 685px;
+    width: 700px;
 }
 .gallery .info {
     text-align: center;
@@ -1037,7 +1037,7 @@ label {
     overflow: auto;
     position: relative;
     width: 320px;
-    height: 80px;
+    height: 120px;
     float: left;
     cursor: pointer;
 }
@@ -1048,6 +1048,12 @@ label {
 .gallery .field {
     padding: 5px;
     width: 160px;
+}
+.gallery .field.version {
+    padding-top: 0px;
+}
+.gallery .field.tags {
+    clear: left;
 }
 .gallery .name {
     font-weight: bold;
