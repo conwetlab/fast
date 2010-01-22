@@ -317,34 +317,6 @@ public class Catalogue {
 		return containsBackendService(bs.getUri());
 	}
 
-	/*
-	 * Only for debug purpose
-	 */
-	public ClosableIterator<Statement> listAllScreens() {
-		return tripleStore.findStatements(Variable.ANY, RDF.type, FGO.Screen);
-	}
-	public ClosableIterator<Statement> listAllStatements() {
-		return tripleStore.findStatements(Variable.ANY, Variable.ANY, Variable.ANY);
-	}
-
-	public void removeAllScreens() {
-		ClosableIterator<Statement> it = listAllScreens();
-		while (it.hasNext()) {
-			Statement st = it.next();
-			try {
-				tripleStore.removeResource(st.getSubject().asURI());
-			} catch (NotFoundException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-		it.close();
-	}
-	
-	public void clear() {
-		tripleStore.clear();
-	}
-	
 	public URI getOrCreateClass(String name)
 	throws OntologyInvalidException, RepositoryException {
 		return tripleStore.getOrCreateClass(name);
@@ -2164,45 +2136,9 @@ public class Catalogue {
     	}
     }
     
-    //TODO remove this method
-//    public void printTags() {
-//    	ClosableIterator<Statement> it = tripleStore.findStatements(Variable.ANY, RDF.type, FGO.Tag);
-//    	for ( ; it.hasNext(); )
-//    		System.out.println(it.next().getSubject().asURI());
-//    }
-    
-//	private List<URI> getSuperClasses(URI clazz) {
-//	return tripleStore.getSuperClasses(clazz);
-//}
-//
-//private List<URI> getSubClasses(URI clazz) {
-//	return tripleStore.getSubClasses(clazz);
-//}
-
-//public URI getType(Model model, Variable concept) {
-//	URI type = null;
-//	ClosableIterator<Statement> it = model.findStatements(concept, RDF.type, Variable.ANY);
-//	if (it.hasNext())
-//		type = it.next().getObject().asURI();
-//	it.close();
-//    return type;
-//}
-	
     // TODO only for debug purposes
     public void dump() {
 		tripleStore.dump();
 	}
-    public void dumpStatements() {
-    	ClosableIterator<Statement> it = listAllStatements();
-    	for ( ; it.hasNext(); ) {
-    		Statement st = it.next();
-    		logger.debug(st.getContext()+" - "+st.getSubject()+" - "+st.getPredicate()+" - "+st.getObject());
-    	}
-    	it.close();
-    }
 	
-    public ClosableIterator<Statement> screensIterator() {
-    	return tripleStore.findStatements(Variable.ANY, RDF.type, FGO.Screen);
-    }
-    
 }
