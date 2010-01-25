@@ -1,0 +1,1244 @@
+\documentclass{fast_latex}
+
+\usepackage{inputenc}
+\usepackage{lastpage}
+\usepackage{setspace}
+\usepackage{graphicx}
+\usepackage[pdfborder={0 0 0}]{hyperref}		% turn on when latex is used (not miktec)
+\usepackage{url} % LEO: urls \url{}
+\usepackage{verbatim} % code and comment
+\usepackage{longtable}
+\usepackage{xspace}   % whitespace after a macro if no punctuation after the macro
+\usepackage{multirow}
+\usepackage{colortbl}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{amssymb}
+\parindent0pt
+
+\newcommand\deliverableNumber{D5.1.2}
+\newcommand\deliverableTitle{User Manual of the FAST Catalogue}
+\newcommand\deliverableTitleShort{Catalogue User Manual}
+\newcommand\workpackageNumber{5}
+\newcommand\workpackageTitle{Semantic catalogue of screen-flow resources and back-end Web Services}
+\newcommand\authorOne{Ismael Rivera, NUIG}
+\newcommand\authorTwo{Author 2}
+\newcommand\authorThree{Author 3}
+\newcommand\authorFour{Author 4}
+\newtheorem{example}{\emph{Example}}
+
+\begin{document}
+% explicit hyphenations
+\hyphenation{RDF-Re-po-si-to-ry}
+\hyphenation{name-space}
+
+%\fontfamily{tahoma}\selectfont
+\def\note#1{\marginpar{\footnotesize#1}} % use this to show the notes in the document
+%\def\note#1{} % use this to hide the notes
+
+
+\newenvironment{definition}{}{}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% TITLE PAGES 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\thispagestyle{empty}
+
+\pagenumbering{roman}
+
+\begin{flushright}
+	\includegraphics[width=3cm]{images/FP7_logo}
+\end{flushright}
+
+\vspace{1cm}
+
+%\begin{minipage}[p]{15cm}
+	\begin{center}
+		\includegraphics{images/FAST_logo}\\
+		\vspace{1cm}
+		{\LARGE{\sffamily \emph{FAST AND ADVANCED STORYBOARD TOOLS}}}\\
+		\vspace{0.5cm}
+		{\LARGE \sffamily \emph{FP7-ICT-2007-1-216048}}\\
+		\vspace{0.5cm}
+		{\LARGE \sffamily \emph{http://fast.morfeo-project.eu}}\\
+		\vspace{4cm}
+		{\LARGE \sffamily \textbf{Deliverable \deliverableNumber}}\\
+		\vspace{0.5cm}
+		{\LARGE \sffamily \textbf{\deliverableTitle}}\\
+		\vspace{2cm}
+		{\large \sffamily \authorOne}\\
+		\vspace{0.5cm}
+		\vfill
+		{\large \sffamily Date: 25/01/2010}\\
+		\vspace{1cm}
+		{\sffamily FAST is partially funded by the E.C. (grant code: FP7-ICT-2007-1-216048).}
+		
+	\end{center}
+%\end{minipage}
+
+
+\clearpage
+%%%%%%%%%%%%%%
+% NEXT PAGES %
+%%%%%%%%%%%%%%
+\pagestyle{scrheadings}
+
+\lohead{\includegraphics[width=4cm]{images/FAST_logo_transparent}}
+%\cohead{\small\textcolor{fast@lightgrey}{\deliverableTitle}}
+\rohead{\small{\today}}
+%\lofoot{\small\textcolor{fast@lightgrey}{Task Force Ontologies}}
+\cofoot{\small{FAST 216048 --- \deliverableTitleShort}}
+\rofoot{\small{\thepage}}
+
+\newpage
+
+\clearpage
+
+\section*{Version History}
+
+\begin{small}
+\begin{tabular}{|l|l|l|p{7.5cm}|}
+\hline
+\rowcolor{fast@lightgrey}\textcolor{white}{\textbf{Rev. No.}} &
+                         \textcolor{white}{\textbf{Date}} &
+                         \textcolor{white}{\textbf{Author (Partner)}} &
+                         \textcolor{white}{\textbf{Change description}}\\ \hline
+1.0 & 25/01/2010 & Ismael Rivera (NUIG) & First version of the deliverable \\ \hline
+\end{tabular}
+\end{small}
+
+\color{black}
+
+\vfill
+%{\bf Explanations of abbreviations on front page}\\
+%\\
+%%Nature \\
+%R: Report \\
+%P: Prototype \\
+%R/P: Report and Prototype \\
+%O: Other \\
+% \\
+%Dissemination level \\
+%PU: Public \\
+%PP: Restricted to other FP6 participants \\
+%RE: Restricted to specified group \\
+%CO: Confidential, only for NEPOMUK partners \\
+
+\newpage
+
+%%%%%%%%%%%%%%%%%%%%%
+% Executive Summary %
+%%%%%%%%%%%%%%%%%%%%%
+
+\clearpage
+
+\section*{Executive Summary}
+\doublespacing
+
+The present deliverable is intented to be the developer's manual of the prototype of the semantic catalogue. That said, whoever developing a component which will interact with the catalogue will find in this document a description of its architecture, the functionality provided together with the API (Application Programming Interface), data interchange formats, code errors and exceptions as well as several examples of usage.
+
+\newpage
+
+%%%%%%%%%%%%%%%%%%%%%
+% Document Summary %
+%%%%%%%%%%%%%%%%%%%%%
+
+\clearpage
+
+\section*{Document Summary}
+% double spacing from here on:
+\singlespacing
+
+\begin{small}
+\begin{tabular}
+	%{| >{\columncolor{fast@lightgrey}}p{3.25cm}|p{6cm}|p{2cm}|p{2cm}|}
+	{| >{\columncolor{fast@lightgrey}}p{3.25cm}|p{6cm}|p{2cm}|p{2cm}|}
+	\hline
+	\textcolor{white}{\textbf{Code}} & {FP7-ICT-2007-1-216048} & {\textbf{Acronym}} & {FAST}\\ \hline
+	\textcolor{white}{\textbf{Full title}} & \multicolumn{3}{l|}{Fast and Advanced Storyboard Tools}\\ \hline
+	\textcolor{white}{\textbf{URL}} & \multicolumn{3}{l|}{\url{http://fast.morfeo-project.eu}}\\ \hline
+	\textcolor{white}{\textbf{Project officer}} & \multicolumn{3}{l|}{Annalisa Bogliolo}\\ \hline
+\end{tabular}
+\end{small}
+
+\vspace{0.5cm}
+
+\begin{small}
+\begin{tabular}
+	{| >{\columncolor{fast@lightgrey}}p{3.25cm}|p{1.25cm}|p{1cm}|p{1cm}|p{6.32cm}|}
+	\hline
+	\textcolor{white}{\textbf{Deliverable}} & {\textbf{Number}} & {\deliverableNumber} & {\textbf{Name}} & {\deliverableTitle}\\ \hline
+	\textcolor{white}{\textbf{Work package}} & {\textbf{Number}} & {\workpackageNumber} & {\textbf{Name}} & {\workpackageTitle}\\ \hline
+\end{tabular}
+\end{small}
+
+\vspace{0.5cm}
+
+\begin{small}
+\begin{tabular}
+	{| >{\columncolor{fast@lightgrey}}p{3.25cm}|p{1.4cm}|p{3.28cm}|p{1.6cm}|p{3.29cm}|}
+	\hline
+	\textcolor{white}{\textbf{Delivery data}} & {\textbf{Due date}} & {27/02/2010} & {\textbf{Submitted}} & {27/02/2010}\\ \hline
+	\textcolor{white}{\textbf{Status}} & \multicolumn{2}{l|}{Status} & \multicolumn{2}{l|}{final}\\ \hline
+	\textcolor{white}{\textbf{Dissemination Level}} & \multicolumn{4}{l|}{Public $\boxtimes$ / Consortium $\square$}\\ \hline
+	\textcolor{white}{\textbf{Short description of contents}} & \multicolumn{4}{p{10.85cm}|}{This deliverable is the technical documentation for the prototype developed as part of the WP5. It describes the catalogue's architecture, data interchange formats, APIs and examples of how to interact with it.}\\ \hline
+	\textcolor{white}{\textbf{Authors}} & \multicolumn{4}{l|}{\authorOne}\\
+%	{} & \multicolumn{4}{l|}{\authorOne}\\ 
+%	{} & \multicolumn{4}{l|}{\authorOne}\\ 
+%	{} & \multicolumn{4}{l|}{\authorOne}\\
+  \hline
+	\textcolor{white}{\textbf{Deliverable Owner}} & \multicolumn{2}{l|}{NUIG} & \textbf{email} & {ismael.rivera@deri.org} \\ \cline{4-5}
+	\textcolor{white}{\textbf{(Partner)}} & \multicolumn{2}{l|}{} & \textbf{phone} & {+353 91 495338} \\ \hline
+	\textcolor{white}{\textbf{Keywords}} & \multicolumn{4}{p{10.85cm}|}{FAST, semantic catalogue, gadget catalogue, RDF store}\\ \hline
+\end{tabular}
+\end{small}
+
+\newpage
+
+%%%%%%%%%%%%%%%%%%%%%
+% TABLE OF CONTENTS %
+%%%%%%%%%%%%%%%%%%%%%
+\doublespacing
+\setcounter{tocdepth}{2}
+\tableofcontents
+\cleardoublepage
+\pagenumbering{arabic}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%
+% BEGINNING OF SECTIONS %
+%%%%%%%%%%%%%%%%%%%%%%%%%
+\rofoot{\small{Page \thepage\ of \pageref{LastPage}}} 
+
+\clearpage
+\section{Introduction} % (fold)
+\label{sec:introduction}
+This section starts establishing the goal and scope of the present document, shows how it is structured and details the relation to others documents and work packages.
+
+\subsection{Goal and Scope} % (fold)
+\label{sub:goal_and_scope}
+
+This is an introductory manual for developers who want to adopt and use the FAST semantic catalogue. It explains the main functionalities implemented so far, an overview of its architecture and a detailed \emph{Application Programming Interface} or API of the complete set of the operations offered through a REST service.
+
+% subsection goal_and_scope (end)
+
+\subsection{Structure of the document} % (fold)
+\label{sub:structure_of_the_document}
+
+The deliverable presents both the external and internal architecture in Section \ref{sec:architecture_overview}, then in Section \ref{sec:restful_catalogue_api} it is detailed the Catalogue API, query formats, interchange formats, error codes and so on.
+
+% subsection goal_and_scope (end)
+
+\subsection{Overall approach for WP5 and relation to other Work Packages and Deliverables} % (fold)
+\label{sub:overall_approach_for_wp5}
+
+The main objective of the Work Package 5, as specified in \cite{DoW}, includes the development of the FAST semantic catalogue, considered the back-end of the FAST platform, which will store and index any kind of resources such as screen-flows, screens, back-end Web services descriptions, locate appropriate gadgets, resources and Web services for users, storing and indexing user profiles, and resolve mediation problems between gadgets, back-end services and the different ontologies stored.
+
+The deliverables stated in \cite{DoW} for this WP are:
+\begin{description}
+	\item[User manual of the FAST Catalogue] This is the user manual of the catalogue. Since the semantic catalogue will not provide a user graphical interface by itself: it relies on the GVS; this document will be oriented to developers, explaining technical aspects of the catalogue, its API and several examples to ease its use.
+	\item[Prototype semantic catalogue for screen-flow gadgets and back-end services] This deliverable is a software prototype of the semantic catalogue for experimentation purposes.
+\end{description}
+
+The semantic catalogue relies strongly on the FAST ontology defined in \cite{moeller2009fast_ontology} since the ontology defines how every element within FAST will be internally stored by the catalogue, and takes into consideration specific requirements detailed in \cite{fast_requirements} where the functionalities of the complete FAST tool are defined.
+
+% subsection overall_approach_for_wp5 (end)
+
+\subsection{Changes from D5.2.1} % (fold)
+\label{sub:changes}
+
+This should be the first version of this deliverable since in M12 the deliverable 5.1 was not scheduled. Nevertheless, last year an extra document was written as an appendix to the FAST Catalogue in order to detail and clarify technical decisions and to have a technical reference manual. Hence, the deliverable D5.2.1 will evolve to become the D5.1.2, so it will be no longer needed by itself.
+
+There are several new sections and major changes which need to be mentioned:
+
+\begin{itemize}
+	\item Section \ref{sec:installation_guide}. Installation Guide describes a set of steps to be followed in order to install and execute the FAST Catalogue. Also some configuration instructions are specified.
+	\item Section \ref{sub:content_negotiation}. Content Negotiation states how the FAST Catalogue has adopted several of the content negotiation principles.
+	\item Section \ref{sec:restful_catalogue_api}. RESTful Catalogue API has been intensively extended and modified in order to  reflect all the new functionality and how every request or response is constructed.
+	\item Several appendixes have been added with the JSON structure of every building block the Catalogue can deal with.
+\end{itemize}
+
+% subsection changes (end)
+
+% section introduction (end)
+
+\clearpage
+\section{Installation Guide} % (fold)
+\label{sec:installation_guide}
+
+This section  provides instructions on how to manually install and configure the FAST Catalogue. The first part of this guide presents some requirements to be considered before the installation, then it gives broad general instructions, and the last part contains a more detailed installation notes for specific configurations.
+
+\subsection{System Requirements} % (fold)
+\label{sub:system_requirements}
+
+In addition to the software itself, a standard FAST Catalogue installation has the following requirements:
+\begin{itemize}
+  \item Java\footnote{http://java.sun.com/} (version 6 or later) is required to run the software.
+  \item A Java Servlet Container that supports Java Servlet API 2.4 and Java Server Pages (JSP) 2.0, or newer. We recommend using a recent, stable version of Apache Tomcat\footnote{http://tomcat.apache.org/}. At the time of writing, this is either version 5.5.x or 6.x.
+\end{itemize}
+
+In addition, there are various optional dependencies which are required if you want to use certain advanced features (see Section \ref{sub:installation_instructions}).
+
+% subsection system_requirements (end)
+
+\subsection{Obtaining the FAST catalogue} % (fold)
+\label{sub:obtaining_the_fast_catalogue}
+
+It is recommended to have a Subversion client installed before you download the code (although you can theoretically download files without Subversion, this would mean tediously downloading each individual file manually). The recommended software is the official Subversion client, available from the Subversion project page\footnote{http://subversion.tigris.org/}. Note that this client uses a command-line interface, which the instructions below use. Alternatively, you can get subversioning software with a graphical user interface such as TortoiseSVN.
+
+To download from the latest release (recommended), enter the following command from the command-line in the directory you wish to download to:
+\begin{verbatim}
+svn checkout https://svn.forge.morfeo-project.org/fast-fp7project/trunk/catalogue_service
+\end{verbatim}
+
+% subsection obtaining_the_fast_catalogue (end)
+
+\subsection{Installation Instructions} % (fold)
+\label{sub:installation_instructions}
+
+Once you have got the source code, first step should be addressed is its compilation. You may manually compile the source yourself, however the FAST Catalogue comes along with a script to facilitate this task. This script has been made using a Java build tool called Ant \footnote{http://ant.apache.org/}. Hence, we recommended to get and install such a tool in order to follow the instructions below.
+
+Now you can compile, package and run the application via:
+\begin{verbatim}
+ant clean
+ant compile
+ant dist
+\end{verbatim}
+
+Or using a task which gather the previous three tasks:
+\begin{verbatim}
+ant main
+\end{verbatim}
+
+After executing with no errors this task, a WAR file should have been created in the /dist directory. A WAR file, which stands for  Web Application Archive, is just a JAR file used to distribute a collection of JavaServer Pages, servlets, Java classes, XML files, tag libraries and static Web pages (HTML and related files) that together constitute a Web application, in this case, the FAST Catalogue.
+
+Then, last step is to deply the WAR file into the servlet container. If the server chosen was Apache Tomcat, the procedure for deploying a Web application is:
+\begin{enumerate}
+	\item Stop Tomcat.
+	\item Delete existing deployment. If you have previously deployed "foo.war" in TOMCAT\_HOME/webapps, then it has been unpacked into webapps/foo/... You must delete this directory and all its contents. On Unix, this can be done with
+rm -r \$TOMCAT\_HOME/webapps/foo
+	\item Copy WAR file to TOMCAT\_HOME/webapps/.
+	\item Start Tomcat.
+\end{enumerate}
+
+Now you have successfully built the FAST catalogue, however we highly recommend you to read Section \ref{sub:configuration} and tune your FAST Catalogue instance.
+
+% subsection installation_instructions (end)
+
+\subsection{Configuration} % (fold)
+\label{sub:configuration}
+
+The following section covers the configuration options you may have to set up before start using the Catalogue. The FAST Catalogue relies on a Sesame repository for the persistent storage. Sesame repositories can be local or remote. Remote does not mean, it has to be installed in a different machine, but in a servlet container such as Apache Tomcat. The advantage of remote repositories is the possibility of accessing it via a SPARQL endpoint. These configuration aspect can be found in the file \emph{repository.properties} in the root directory where the Catalogue has been deployed.
+
+Independently the type of repository, the parameter \emph{serverURL} needs to take the value of the URL where the FAST Catalogue instance has been deployed. If you are testing the application in your machine, it may be something like \url{http://localhost:8080/FASTCatalogue}.
+
+Local repositories just need the parameter \emph{storageDir} pointing at a local directory, which has write permission in order to allow Sesame to create files in that directory or to delete any file in the directory. For instance:
+
+\begin{verbatim}
+storageDir=D:\\FAST\\catalogue\\repository
+\end{verbatim}
+
+Nevertheless, setting up a remote repository requires a few more steps. First the OpenRDF Sesame Server needs to be installed. The installation guide of this server is detailed in the Chapter 5 and 6 of the User Guide for Sesame 2.2 \cite{sesame2.2}. Once the Sesame server is deployed, and a repository has been created, the parameters sesameServer and repositoryID will take the values of the Sesame server URL and the repository identifier. For instance:
+
+\begin{verbatim}
+sesameServer=http://localhost:8880/openrdf-sesame
+repositoryID=c2
+\end{verbatim}
+
+% subsection installation_instructions (end)
+
+\subsection{Hello World!} % (fold)
+\label{sub:hello_world}
+
+It is recommended to check if the FAST Catalogue has been successfully installed. To do that, a simple HTTP request, using a Web browser, can be sent to the URL the Catalogue is deployed, and specifying a type of resource such as Screen. The URL would be similar to \url{http://localhost:8080/FASTCatalogue/screens}. Depending on the variant chosen, the response may be different. For JSON, the response should be \verb|[]|, but in HTML the message \verb|No screens found.| should be shown.
+
+% subsection hello_world (end)
+
+% section installation_guide (end)
+
+
+\clearpage
+\section{Architecture Overview} % (fold)
+\label{sec:architecture_overview}
+
+This section presents a technical overview of the internal catalogue's architecture and which external components will interact with it. Basically three layers can be distinguished: Presentation, Business Logic and Persistence layer (see Figure \ref{fig:architecture}). 
+
+\begin{figure}[htb]
+\label{fig:architecture}
+\begin{center}
+	\includegraphics[width=12cm]{images/catalogue_architecture}
+	\caption{Catalogue's Architecture}
+	\label{fig:CatalogueInternalArchitecture}
+\end{center}
+\end{figure}
+
+The Presentation layer will be the public interface of the catalogue. The main purpose of this layer is to provide its functionality to other components within the Gadget Visual Studio. The service is offered in a REST (REpresentational State Transfer) style, making it easy to consume than other complex APIs. REST is an architectural style, not a toolkit or a standard. Even though, it makes use of standards like HTTP, URI, Resource Representations (XML, HTML, JSON, JPEG, etc.) or MIME types (text/xml, text/html, application/json, image/jpeg, etc.). Another characteristic of the REST style is its stateless assumption. The catalogue adopts this strategy; therefore every request needs a complete set of information in order to prepare the response.
+
+As part of the Presentation layer, a SPARQL endpoint is offered using the SPARQL protocol service as defined in the SPROT \cite{sprot} specification. The SPARQL endpoint is mostly offered to enable other developers to query directly the catalogue knowledge base using SPARQL queries. This feature is supported by the Sesame RESTful HTTP interface for SPARQL Protocol for RDF.
+
+The Business Logic layer contains all the FAST domain-specific processing. It provides functions to interact with all the elements of the domain model specified in \cite{moeller2009fast_ontology}. It processes the input from the Presentation layer, creating specific objects modelling the business logic, and vice versa. In addition it interacts with the Persistence layer in order to persist the model.
+
+The Persistence layer provides an API which allows the Business layer to work with a standard set of objects that read and save their state to the triple store. For this reason, on top of this layer it is used RDF2Go, an abstraction over triple (and quad) stores. The RDF2Go API allows interacting with the semantic representation of the model (triples) in a generic manner, and also brings the flexibility of choosing different triple stores to persist them. The selected implementation for the triple stored is Sesame 2. Moreover, this framework is completely extensible and configurable regarding to storage mechanisms, inferencers, RDF file formats, query result formats and query languages. For the actual catalogue prototype, the storage mechanism used is the native file storage system of Sesame, the inferencer used is a subset of the RDFS entailment rules \cite{rdfsrules} following a forward-chaining policy. 
+
+% section architecture_overview (end)
+
+
+\clearpage
+\section{RESTful Catalogue API} % (fold)
+\label{sec:restful_catalogue_api}
+
+This section provides a high-level overview of the Catalogue API. It describes the calls or operations supported, specific parameters and responses for each operation, supported interchange formats and some examples to facilitate the understanding of the API.
+
+
+\subsection{JSON Interchange Format} % (fold)
+\label{sec:json_interchange_format}
+
+The format supported by the Catalogue API for all the request and responses is JSON\footnote{http://www.json.org/}. JSON is a lightweight data interchange format whose simplicity has resulted in widespread use among web developers, easy to read and write and able to using any programming language because its structures map directly to data structures used in most programming languages.
+
+Every HTTP request and response is encoded using the MIME type \texttt{application/json} and the charset \texttt{UTF-8}.
+
+% subsection json_interchange_format (end)
+
+\subsubsection{Example of a screen}
+\begin{verbatim}
+{
+  "uri": null,
+  "label": {"en-GB": "Screen - DERI"},
+  "description": {"en-GB": "Returns people working in DERI"},
+  "creationDate": "2009-02-07T09:59:52+0000",
+  "creator": "http://www.ismaelrivera.es/",
+    "domainContext": {
+      "tags": [],
+      "user": null
+    },
+  "homepage": "http://www.deri.ie/",
+  "icon": "http://www.deri.ie/icon.jpg",
+  "screenshot": "http://www.deri.ie/screenshot.jpg",
+  "rights": "http://creativecommons.org/",
+  "version": "1.0",
+  "preconditions": [],
+  "postconditions": ["?person rdf:type foaf:Person . 
+                      ?person foaf:workplaceHomepage http://www.deri.ie/"]
+}
+\end{verbatim}
+
+\subsubsection{Internationalisation I18n} % (fold)
+
+In order to offers an adaptable solution to various languages and regions without major engineering changes, internationalisation is considered from an early stage in the catalogue development. Underlying representation technologies used to develop the catalogue (RDF and JSON) allow to implement this feature. This feature is implemented by the addition of a language tag to every 'string' desired. The specification of this language tag is composed by the language code and the country code, following the ISO 639\footnote{http://ftp.ics.uci.edu/pub/ietf/http/related/iso639.txt} for languages and the ISO 3166\footnote{http://userpage.chemie.fu-berlin.de/diverse/doc/ISO\_3166.html} for countries. The following example illustrates how to use it properly in both formats.
+
+\begin{verbatim}
+{
+  "label": {
+    "en-GB": "Simple Example",
+    "es-ES": "Ejemplo Sencillo",
+    "de-DE": "Einfaches Beispiel"
+  },
+  "description": {
+    "en-GB": "This is a simple example of a screen",
+    "es-ES": "Esto es un ejemplo sencillo de pantalla",
+    "de-DE": "Dies ist ein einfaches Beispiel für einen Bildschirm"
+  },
+}
+\end{verbatim}
+
+\begin{verbatim}
+<rdf:Description rdf:about="http://www.morfeoproject.eu/fast/fco#ExampleScreen">
+  <rdf:type rdf:resource="http://www.morfeoproject.eu/fast/fco#Screen"/>
+  <rdfs:label xml:lang="en-GB">Simple Example</rdfs:label>
+  <rdfs:label xml:lang="es-ES">Ejemplo Sencillo</rdfs:label>
+  <rdfs:label xml:lang="de-DE">Einfaches Beispiel</rdfs:label>
+  <description
+    xmlns="http://purl.org/dc/terms/"
+    xml:lang="en-GB">This is a simple example of a screen</description>
+  <description
+    xmlns="http://purl.org/dc/terms/"
+    xml:lang="es-ES">Esto es un ejemplo sencillo de pantalla</description>
+  <description
+    xmlns="http://purl.org/dc/terms/"
+    xml:lang="de-DE">Dies ist ein einfaches Beispiel für einen Bildschirm</description>
+</rdf:Description>
+\end{verbatim}
+
+By now it is allowed using internationalisation for the label and the description of a screen, but more attributes will be benefited by this feature.
+
+\subsection{Content Negotiation} % (fold)
+\label{sub:content_negotiation}
+
+Before any major details about how content negotiation is addressed by the catalogue, a few concepts need to be understood. First of all, say a URI is not a file name. It is common to see a URI as the location for a file, but a URI or Universal Resource Identifier is not a URL: it is not a file name or location, it is an identifier (or a reference) to a resource. Then by dereferencing a URI the actual resource can be retrieved. Let's see a request to retrieve the resource "Screen 123" is sent to the server. The resource is just a piece of information, however the server will answer an HTML document with a text describing the screen or an image representing it. On the Web, these equivalent representations of a resource are called variants, and content negotiation is the mechanism used to determine which of the representations of most appropiate for a given request.
+
+\begin{figure}[htb]
+\label{fig:ContentNegotiation}
+\begin{center}
+	\includegraphics[width=10cm]{images/content_negotiation}
+	\caption{Content Negotiation}
+\end{center}
+\end{figure}
+
+In summary, the basic idea of content negotiation, as stated in the HTTP 1.1 specification \cite{http1.1}, is to serve the best variant for a resource, taking into account what variants are available, what variants the server may prefer to serve, what the client can accept, and with which preferences: in HTTP, this is done by the client which may send, in its request, Accept headers (Accept, Accept-Language and Accept-Encoding), to communicate its capabilities and preferences in Format, Language and Encoding, respectively.
+
+In fact, what the catalogue really does is "format negotiation" since the alternate representationos are just based on the selection of the media type, through the Accept header, but does not consider different languages or encoding types. The formats supported are JSON, RDF+XML and HTML.
+
+Lastly, content negotiation needs to identify which player is going to take the lead on it. There are two kinds of content negotiation which are possible in HTTP: server-driven and agent-driven negotiation. The approach followed by the catalogue is agent-driven negotiation, hence selecting a specific representation for a resource is responsibility of the user agent. If none is specified, by default, the server will choose the JSON representation.
+
+% subsection content_negotiation (end)
+
+\subsection{API Calls} % (fold)
+\label{sub:api_calls}
+
+This section contains detailed descriptions of the interface provided by the catalogue via REST services, detailing request parameters, response elements, any special errors and examples of requests and responses. The URL format is also specified for each operation, where 'catalogueURL' has to be replaced for the real URL the service is installed (e.g. http://demo.fast.morfeo-project.org/catalogue).
+
+\subsubsection{CRUD operations for Screens} % (fold)
+
+A screen is a resource which can be created, retrieved, modified or deleted since the catalogue provides CRUD support for screens. These features are provided following the REST philosophy, using the HTTP methods. Two concepts have to be defined: \emph{collection}, as a set of screens which access URI is http://catalogueURL/screens/ where catalogueURL is the specific URL where the catalogue server is installed, and \emph{member} of the collection, in other words, the screen itself, which access URI is http://catalogueURL/screens/<id> where the <id> has to be replaced by the identifier of a screen. The details of the operations and which HTTP verb has to be used can be found in the Table \ref{tab:crud_screens}.
+
+\begin{table}[htb]
+\caption{CRUD operations for Screens}
+\label{tab:crud_screens}
+\begin{center}
+\begin{tabular}{|p{2.5cm}|p{2.5cm}|p{3.5cm}|p{5cm}|}
+\hline
+\rowcolor{fast@lightgrey}\textcolor{white}{Resource} &
+                         \textcolor{white}{HTTP method} &
+                         \textcolor{white}{HTTP body} &
+                         \textcolor{white}{Description}\\ \hline
+Collection URI & GET & N/A & \textbf{List} the members of the collection.\\ \hline
+Collection URI & PUT & N/A & Not used.\\ \hline
+Collection URI & POST & JSON representation of the screen & \textbf{Create} a new entry in the collection where the URI is assigned automatically by the collection. The URI created is returned by this operation.\\ \hline
+Collection URI & DELETE & N/A & Not used.\\ \hline
+Member URI & GET & N/A & \textbf{Retrieve} the addressed member of the collection.\\ \hline
+Member URI & PUT & JSON representation of the screen & \textbf{Update} the addressed member of the collection or create it with a defined URI.\\ \hline
+Member URI & POST & N/A & Not used. \\ \hline
+Member URI & DELETE & N/A & \textbf{Delete} the addressed member of the collection.\\ \hline
+\end{tabular}
+\end{center}
+\end{table}
+
+Here are shown various examples of request and responses using the catalogue server. To create a new screen, a POST request is send to the catalogue server, including the JSON representation of the screen as the body of the request:
+
+\begin{verbatim}
+{
+  "uri": null,
+  "label": {"en-GB": "Screen - DERI"},
+  "description": {"en-GB": "Returns people working in DERI"},
+  "creationDate": "2009-02-07T09:59:52+0000",
+  "creator": "http://www.ismaelrivera.es/",
+    "domainContext": {
+      "tags": [],
+      "user": null
+    },
+  "homepage": "http://www.deri.ie/",
+  "icon": "http://www.deri.ie/icon.jpg",
+  "screenshot": "http://www.deri.ie/screenshot.jpg",
+  "rights": "http://creativecommons.org/",
+  "version": "1.0",
+  "preconditions": [],
+  "postconditions": ["?person rdf:type foaf:Person . 
+                      ?person foaf:workplaceHomepage http://www.deri.ie/"]
+}
+\end{verbatim}
+
+The URI will be not taken into account since the catalogue will generate a unique URI for each resource created. So, the response for this operation is:
+
+\begin{verbatim}
+{
+  "creationDate": "2009-02-07T09:59:52+0000",
+  "creator": "http://www.ismaelrivera.es/",
+  "description": {"en-GB": "Show information about a person working in DERI"},
+  "domainContext": {
+    "tags": [],
+    "user": "null"
+  },
+  "homepage": "http://www.deri.ie/",
+  "icon": "http://www.deri.ie/icon.jpg",
+  "label": {"en-GB": "Screen - DERI"},
+  "postconditions": [],
+  "preconditions": ["?person rdf:type foaf:Person . 
+                     ?person foaf:workplaceHomepage http://www.deri.ie/"],
+  "rights": "http://creativecommons.org/",
+  "screenshot": "http://www.deri.ie/screenshot.jpg",
+  "uri": "http://www.morfeoproject.eu/fast/fco#Screen1234552194269",
+  "version": "1.0"
+}
+\end{verbatim}
+
+To obtain all the screens stored in the catalogue a HTTP GET request is sent to the Collection URI and the response may be something like this:
+\begin{verbatim}
+[
+  {
+    "creationDate": "2009-02-07T09:59:52+0000",
+    "creator": "http://www.ismaelrivera.es/",
+    "description": {"en-gb": "Returns people working in DERI"},
+    "domainContext": {
+      "tags": [],
+      "user": null
+    },
+    "homepage": "http://www.deri.ie/",
+    "icon": "http://www.deri.ie/icon.jpg",
+    "label": {"en-gb": "Screen - DERI"},
+    "postconditions": ["?person rdf:type foaf:Person . 
+                        ?person foaf:workplaceHomepage http://www.deri.ie/"],
+    "preconditions": [],
+    "rights": "http://creativecommons.org/",
+    "screenshot": "http://www.deri.ie/screenshot.jpg",
+    "uri": "http://www.morfeoproject.eu/fast/fco#Screen1234552164472",
+    "version": "1.0"
+  },
+  {
+    "creationDate": "2009-02-07T09:59:52+0000",
+    "creator": "http://www.ismaelrivera.es/",
+    "description": {"en-gb": "Show information about a person working in DERI"},
+    "domainContext": {
+      "tags": [],
+      "user": null
+    },
+    "homepage": "http://www.deri.ie/",
+    "icon": "http://www.deri.ie/icon.jpg",
+    "label": {"en-gb": "Screen - DERI"},
+    "postconditions": [],
+    "preconditions": ["?person rdf:type foaf:Person . 
+                       ?person foaf:workplaceHomepage http://www.deri.ie/"],
+    "rights": "http://creativecommons.org/",
+    "screenshot": "http://www.deri.ie/screenshot.jpg",
+    "uri": "http://www.morfeoproject.eu/fast/fco#Screen1234552194269",
+    "version": "1.0"
+  },
+  {
+    "creationDate": "2009-02-07T09:59:52+0000",
+    "creator": "http://www.ismaelrivera.es/",
+    "description": {"en-gb": "Show information about a person"},
+    "domainContext": {
+      "tags": [],
+      "user": null
+    },
+    "homepage": "http://www.deri.ie/",
+    "icon": "http://www.deri.ie/icon.jpg",
+    "label": {"en-gb": "Screen - DERI"},
+    "postconditions": [],
+    "preconditions": ["?person rdf:type foaf:Person"],
+    "rights": "http://creativecommons.org/",
+    "screenshot": "http://www.deri.ie/screenshot.jpg",
+    "uri": "http://www.morfeoproject.eu/fast/fco#Screen1234552373865",
+    "version": "1.0"
+  }
+]
+\end{verbatim}
+
+
+\subsubsection{CRUD operations for Screen-Flows} % (fold)
+
+A screenflow is a resource which can be created, retrieved, modified or deleted since the catalogue provides CRUD support for screenflows. These features are provided following the REST philosophy, using the HTTP methods. As in the previous section the concepts \emph{collection} and \emph{member} are used including their URLs. Table \ref{tab:crud_screenflows} details the operations offered for screen-flows.
+
+\begin{table}[htb]
+\caption{CRUD operations for Screen-Flows}
+\label{tab:crud_screenflows}
+\begin{center}
+\begin{tabular}{|p{2.5cm}|p{2.5cm}|p{3.5cm}|p{5cm}|}
+\hline
+\rowcolor{fast@lightgrey}\textcolor{white}{Resource} &
+                         \textcolor{white}{HTTP method} &
+                         \textcolor{white}{HTTP body} &
+                         \textcolor{white}{Description}\\ \hline
+Collection URI & GET & N/A & \textbf{List} the members of the collection.\\ \hline
+Collection URI & PUT & N/A & Not used.\\ \hline
+Collection URI & POST & JSON representation of the screen-flow & \textbf{Create} a new entry in the collection where the URI is assigned automatically by the collection. The URI created is returned by this operation.\\ \hline
+Collection URI & DELETE & N/A & Not used.\\ \hline
+Member URI & GET & N/A & \textbf{Retrieve} the addressed member of the collection.\\ \hline
+Member URI & PUT & JSON representation of the screen-flow & \textbf{Update} the addressed member of the collection or create it with a defined URI.\\ \hline
+Member URI & POST & N/A & Not used. \\ \hline
+Member URI & DELETE & N/A & \textbf{Delete} the addressed member of the collection.\\ \hline
+\end{tabular}
+\end{center}
+\end{table}
+
+The following is an example of the request and response while creating a screen-flow:
+\begin{verbatim}
+{
+  "uri": null,
+  "label": {"en-GB": "My First ScreenFlow"},
+  "description": {"en-GB": "A example of screenflow"},
+  "creationDate": "2009-02-05T13:11:41+0000",
+  "creator": "http://www.ismaelrivera.es/",
+  "domainContext": {
+    "tags": ["people"],
+    "user": null
+  },
+  "homepage": "http://www.screenflow.com/",
+  "icon": "http://www.screenflow.com/icon.jpg",
+  "screenshot": "http://www.screenflow.com/screenshot.jpg",
+  "rights": "http://creativecommons.org/",
+  "version": "1.0",
+  "preconditions": [],
+  "postconditions": [],
+  "screens": [
+    "http://www.morfeoproject.eu/fast/fco#Screen1233750841383",
+    "http://www.morfeoproject.eu/fast/fco#Screen1233750828836",
+    "http://www.morfeoproject.eu/fast/fco#Screen1233750820914"
+  ]
+}
+\end{verbatim}
+
+\begin{verbatim}
+{
+  "creationDate": "2009-02-05T13:11:41+0000",
+  "creator": "http://www.ismaelrivera.es/",
+  "description": {"en-GB": "A example of screenflow"},
+  "domainContext": {
+    "tags": ["people"],
+    "user": null
+  },
+  "homepage": "http://www.screenflow.com/",
+  "icon": "http://www.screenflow.com/icon.jpg",
+  "label": {"en-GB": "My First ScreenFlow"},
+  "postconditions": [],
+  "preconditions": [],
+  "rights": "http://creativecommons.org/",
+  "screens": [
+    "http://www.morfeoproject.eu/fast/fco#Screen1233750841383",
+    "http://www.morfeoproject.eu/fast/fco#Screen1233750828836",
+    "http://www.morfeoproject.eu/fast/fco#Screen1233750820914"
+  ],
+  "screenshot": "http://www.screenflow.com/screenshot.jpg",
+  "uri": "http://www.morfeoproject.eu/fast/fco#ScreenFlow1233752391898",
+  "version": "1.0"
+}
+\end{verbatim}
+
+
+\subsubsection{Find} % (fold)
+
+The find operation search inside the catalogue for any screen which could be somehow related to the gadget the user is creating. It provides a recommended set of screens depending on the domain context, the canvas, etc. The specific URL to access this operation is http://catalogueURL/find using HTTP POST method. From now on, the method 'find' only considers the domain context, being a list of tags and the pre/postconditions of the screens. It will try to satisfy all the unsatisfied preconditions of a given list of screens also known as canvas. The results will be all the screens stored in the catalogue which fulfil some of these preconditions, and are tagged with the tags specified in the domain context. The request parameters are shown in Table \ref{tab:find_request} and the response parameters are shown in Table \ref{tab:find_response}.
+
+\begin{table}[htb]
+\caption{Find Request Parameters}
+\label{tab:find_request}
+\begin{center}
+\begin{tabular}{|p{2cm}|p{9.5cm}|p{2cm}|}
+\hline
+\rowcolor{fast@lightgrey}\textcolor{white}{Name} &
+                         \textcolor{white}{Description} &
+                         \textcolor{white}{Type}\\ \hline
+Canvas & The canvas is composed by a list of screens. Only the URI is needed. & Optional \\ \hline
+Domain Context & The domain context contains a list of tags and a user. & Optional \\ \hline
+Elements & It is a list of resources, previously stored in the catalogue. For example, the list of screens recommended last execution. Only accepts screens. & Optional \\ \hline
+\end{tabular}
+\end{center}
+\end{table}
+
+\begin{table}[htb]
+\caption{Find Response Parameters}
+\label{tab:find_response}
+\begin{center}
+\begin{tabular}{|p{2cm}|p{9.5cm}|p{2cm}|}
+\hline
+\rowcolor{fast@lightgrey}\textcolor{white}{Name} &
+                         \textcolor{white}{Description} &
+                         \textcolor{white}{Type}\\ \hline
+N/A & A list of recommended screens is returned. & Required \\ \hline
+\end{tabular}
+\end{center}
+\end{table}
+
+Following is shown an example of usage of this operation considering a canvas with the screen \texttt{http://www.morfeoproject.eu/fast/fco\#Screen1234552373865}.
+
+\begin{verbatim}
+{
+  canvas: [
+    {
+      uri: "http://www.morfeoproject.eu/fast/fco#Screen1234552373865"
+    }
+  ],
+  domainContext: {
+    tags: [],
+	  user: null
+  },
+  elements: []
+}
+\end{verbatim}
+
+After the execution of the recommendation algorithm, the response given by the catalogue is:
+
+\begin{verbatim}
+[{
+  "creationDate": "2009-02-07T09:59:52+0000",
+  "creator": "http://www.ismaelrivera.es/",
+  "description": {"en-gb": "Returns people working in DERI"},
+  "domainContext": {
+    "tags": [],
+    "user": null
+  },
+  "homepage": "http://www.deri.ie/",
+  "icon": "http://www.deri.ie/icon.jpg",
+  "label": {"en-gb": "Screen - DERI"},
+  "postconditions": ["?person rdf:type foaf:Person . 
+                      ?person foaf:workplaceHomepage http://www.deri.ie/"],
+  "preconditions": [],
+  "rights": "http://creativecommons.org/",
+  "screenshot": "http://www.deri.ie/screenshot.jpg",
+  "uri": "http://www.morfeoproject.eu/fast/fco#Screen1234552164472",
+  "version": "1.0"
+}]
+\end{verbatim}
+
+
+\subsubsection{Check} % (fold)
+
+This operation verifies the state of certain list of screens depending on a specific criterion. The only criterion accepted in this stage of the prototype is 'reachability'. A screen will be reachable if it all its preconditions are satisfied by postconditions of the screens the canvas contain. The specific URL to access this operation is http://catalogueURL/check using HTTP POST method. 
+
+\begin{table}[htb]
+\caption{Check Request Parameters}
+\label{tab:check_request}
+\begin{center}
+\begin{tabular}{|p{2cm}|p{9.5cm}|p{2cm}|}
+\hline
+\rowcolor{fast@lightgrey}\textcolor{white}{Name} &
+                         \textcolor{white}{Description} &
+                         \textcolor{white}{Type}\\ \hline
+Canvas & The canvas is composed by a list of screens. Only the URI is needed. & Optional\\ \hline
+Domain Context & The domain context contains a list of tags and a user. & Optional\\ \hline
+Elements & It is a list of resources, previously stored in the catalogue. For example, the list of screens recommended last execution. Only accepts screens. & Optional\\ \hline
+Criterion & The criterion specifies what it has to be check. The only possible supported now is 'reachability' in order to check if the preconditions of a screen are satisfied. & Required\\ \hline
+\end{tabular}
+\end{center}
+\end{table}
+
+\begin{table}[htb]
+\caption{Check Response Parameters}
+\label{tab:check_response}
+\begin{center}
+\begin{tabular}{|p{2cm}|p{9.5cm}|p{2cm}|}
+\hline
+\rowcolor{fast@lightgrey}\textcolor{white}{Name} &
+                         \textcolor{white}{Description} &
+                         \textcolor{white}{Type}\\ \hline
+Canvas & The canvas indicating which screens satisfy the critetion. More aditional information may be included, for example, a satisfaction attribute for every precondition for reachability. & Optional\\ \hline
+Domain Context & The domain context contains a list of tags and a user. & Optional\\ \hline
+Elements & The elements indicating which satisfy the critetion. More aditional information may be included as in the Canvas. & Optional\\ \hline
+\end{tabular}
+\end{center}
+\end{table}
+
+The scenario for the following example is composed by a screen in the canvas which precondition is a foaf:Person which foaf:workplaceHomepage is http://www.deri.ie/, and a screen in the elements list which precondition is a foaf:Person. The state to check in this case is the reachability and satisfaction of the screens and preconditions.
+
+\begin{verbatim}
+{
+  canvas: [
+    {
+      uri: "http://www.morfeoproject.eu/fast/fco#Screen1234552194269"
+    }
+  ],
+  domainContext: [],
+  elements: [
+    {
+      uri: "http://www.morfeoproject.eu/fast/fco#Screen1234552373865"
+    }  
+  ],
+  criterion: "reachability"
+}
+\end{verbatim}
+
+As you can see in the response, no screen is reachable at the moment, and no precondition is satisfied.
+
+\begin{verbatim}
+{
+  "canvas": [{
+    "preconditions": [{
+      "expression": "?person rdf:type foaf:Person . 
+                     ?person foaf:workplaceHomepage http://www.deri.ie/",
+      "satisfied": false
+    }],
+    "reachability": false,
+    "uri": "http://www.morfeoproject.eu/fast/fco#Screen1234552194269"
+  }],
+  "elements": [{
+    "preconditions": [{
+      "expression": "?person rdf:type foaf:Person",
+      "satisfied": false
+    }],
+    "reachability": false,
+    "uri": "http://www.morfeoproject.eu/fast/fco#Screen1234552373865"
+  }]
+}
+\end{verbatim}
+
+
+\subsubsection{GetMetadata} % (fold)
+
+Although the information about a resource can be obtained by its specific retrieval operation supported by the CRUD interface, sometimes is needed to retrieve information which would imply a request per resource, hence this operation allow to get the metadata of a list of resources in only one request. This prototype supports this operation for screenflows and screens. The specific URL to access this operation is http://catalogueURL/getmetadata using HTTP POST method. Table \ref{tab:getmetadata_request} shows the parameters needed for the invocation and Table \ref{tab:getmetadata_response} details the different parameters may contain a response.
+
+\begin{table}[htb]
+\caption{GetMetadata Request Parameters}
+\label{tab:getmetadata_request}
+\begin{center}
+\begin{tabular}{|p{2cm}|p{9.5cm}|p{2cm}|}
+\hline
+\rowcolor{fast@lightgrey}\textcolor{white}{Name} &
+                         \textcolor{white}{Description} &
+                         \textcolor{white}{Type}\\ \hline
+N/A & A list of URIs. & Required\\ \hline
+\end{tabular}
+\end{center}
+\end{table}
+
+\begin{table}[htb]
+\caption{GetMetadata Response Parameters}
+\label{tab:getmetadata_response}
+\begin{center}
+\begin{tabular}{|p{2cm}|p{9.5cm}|p{2cm}|}
+\hline
+\rowcolor{fast@lightgrey}\textcolor{white}{Name} &
+                         \textcolor{white}{Description} &
+                         \textcolor{white}{Type}\\ \hline
+Screenflows & A set of screenflows with all the metadata associated to them.. & Optional\\ \hline
+Screens & A set of screens with all the metadata associated to them. & Optional\\ \hline
+\end{tabular}
+\end{center}
+\end{table}
+
+The following example send two URIs of screens and a URI of a screen-flow to the GetMetadata operation:
+\begin{verbatim}
+[
+  "http://www.morfeoproject.eu/fast/fco#Screen1234552164472",
+  "http://www.morfeoproject.eu/fast/fco#Screen1234552194269",
+  "http://www.morfeoproject.eu/fast/fco#ScreenFlow1233752391898"
+]
+\end{verbatim}
+
+The response obtained are two lists, one containing all the metadata regarding to the screen-flows and another one with the information about the screens:
+\begin{verbatim}
+{
+  "screenflows": [{
+    "creationDate": "2009-02-05T13:11:41+0000",
+    "creator": "http://www.ismaelrivera.es/",
+    "description": {"en-gb": "A example of screenflow"},
+    "domainContext": {
+      "tags": ["people"],
+      "user": null
+    },
+    "homepage": "http://www.screenflow.com/",
+    "icon": "http://www.screenflow.com/icon.jpg",
+    "label": {"en-gb": "My First ScreenFlow"},
+    "postconditions": [],
+    "preconditions": [],
+    "rights": "http://creativecommons.org/",
+    "screens": [
+      "http://www.morfeoproject.eu/fast/fco#Screen1233750820914",
+      "http://www.morfeoproject.eu/fast/fco#Screen1233750828836",
+      "http://www.morfeoproject.eu/fast/fco#Screen1233750841383"
+    ],
+    "screenshot": "http://www.screenflow.com/screenshot.jpg",
+    "uri": "http://www.morfeoproject.eu/fast/fco#ScreenFlow1233752391898",
+    "version": "1.0"
+  }],
+  "screens": [
+    {
+      "creationDate": "2009-02-07T09:59:52+0000",
+      "creator": "http://www.ismaelrivera.es/",
+      "description": {"en-gb": "Returns people working in DERI"},
+      "domainContext": {
+        "tags": [],
+        "user": null
+      },
+      "homepage": "http://www.deri.ie/",
+      "icon": "http://www.deri.ie/icon.jpg",
+      "label": {"en-gb": "Screen - DERI"},
+      "postconditions": ["?person rdf:type foaf:Person . 
+                          ?person foaf:workplaceHomepage http://www.deri.ie/"],
+      "preconditions": [],
+      "rights": "http://creativecommons.org/",
+      "screenshot": "http://www.deri.ie/screenshot.jpg",
+      "uri": "http://www.morfeoproject.eu/fast/fco#Screen1234552164472",
+      "version": "1.0"
+    },
+    {
+      "creationDate": "2009-02-07T09:59:52+0000",
+      "creator": "http://www.ismaelrivera.es/",
+      "description": {"en-gb": "Show information about a person working in DERI"},
+      "domainContext": {
+        "tags": [],
+        "user": null
+      },
+      "homepage": "http://www.deri.ie/",
+      "icon": "http://www.deri.ie/icon.jpg",
+      "label": {"en-gb": "Screen - DERI"},
+      "postconditions": [],
+      "preconditions": ["?person rdf:type foaf:Person . 
+                         ?person foaf:workplaceHomepage http://www.deri.ie/"],
+      "rights": "http://creativecommons.org/",
+      "screenshot": "http://www.deri.ie/screenshot.jpg",
+      "uri": "http://www.morfeoproject.eu/fast/fco#Screen1234552194269",
+      "version": "1.0"
+    }
+  ]
+}
+\end{verbatim}
+
+\subsubsection{Screen Find \& Check} % (fold)
+
+Request
+\begin{verbatim}
+{
+  "canvas": [
+    { "uri": "http://purl.oclc.org/fast/ontology/gadget#Screen1257860786707" }
+  ],
+  "elements": [
+  ],
+  "domainContext": {
+    "tags": [],
+    "user": null,
+  },
+  "criterion": "reachability"
+}
+\end{verbatim}
+
+Response
+\begin{verbatim}
+{
+  "canvas": [{
+    "preconditions": [[{
+      "id": "sc",
+      "label": {"en-gb": "A search criteria"},
+      "pattern": "?F http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#SearchCriteria",
+      "satisfied": false,
+      "positive": true
+    }]],
+    "reachability": false,
+    "uri": "http://purl.oclc.org/fast/ontology/gadget#Screen1257860786707"
+  }],
+  "elements": [{
+    "preconditions": [],
+    "reachability": true,
+    "uri": "http://purl.oclc.org/fast/ontology/gadget#Screen1257860530032"
+  }]
+}
+\end{verbatim}
+
+% subsection api_calls (end)
+
+\subsection{Planning}
+\label{sub:planning}
+
+URL: <CATALOGUE\_URL>/planner
+Request
+\begin{verbatim}
+{
+  "goal": "http://purl.oclc.org/fast/ontology/gadget#Screen1257860720035",
+  "canvas": []
+}
+\end{verbatim}
+
+\begin{verbatim}
+Response
+[
+  [
+    "http://purl.oclc.org/fast/ontology/gadget#Screen1257866875435",
+    "http://purl.oclc.org/fast/ontology/gadget#Screen1257865645621"
+  ],
+  [
+    "http://purl.oclc.org/fast/ontology/gadget#Screen1257860530032",
+    "http://purl.oclc.org/fast/ontology/gadget#Screen1257860786707",
+    "http://purl.oclc.org/fast/ontology/gadget#Screen1257860772723"
+  ]
+]
+\end{verbatim}
+
+% subsection planning (end)
+
+\subsection{API Error Codes} % (fold)
+There are two types of error codes, client and server.
+\begin{itemize}
+	\item Client error codes are generally caused by the client and might be an invalid domain or an invalid request parameter. These errors are accompanied by a 4xx HTTP response code. For example: ResourceNotFound.
+	\item Server error codes are generally caused by a server-side issue and should be reported. These errors are accompanied by a 5xx HTTP response code. For example: ServerUnavailable.
+\end{itemize}
+
+The following table lists all the error codes.
+
+\begin{table}[htb]
+\caption{API Error Codes}
+\begin{center}
+\begin{tabular}{|p{3.5cm}|p{7cm}|p{3cm}|}
+\hline
+\rowcolor{fast@lightgrey}\textcolor{white}{Error} &
+                         \textcolor{white}{Description} &
+                         \textcolor{white}{HTTP Status Code}\\ \hline
+ResourceNotFound & The resource <resourceURI> has not been found. & 404 Not Found \\ \hline
+AccessFailure & Access to the resource <resourceName> is denied. & 403 Forbidden \\ \hline
+InternalError & Request could not be executed due to an internal service error. & 500 Internal Server Error \\ \hline
+InvalidAction & The action <actionName> is not valid for this web service.  & 404 Bad Request \\ \hline
+InvalidHttpRequest & The HTTP request is invalid. Reason: <reason>. & 400 Bad Request \\ \hline
+InvalidLiteral & Illegal literal in the filter expression. & 400 Bad Request \\ \hline
+InvalidParameterValue & The specified parameter value is not valid. & 400 Bad Request \\ \hline
+InvalidURI & The URI <requestURI> is not valid. & 400 Bad Request \\ \hline
+MissingAction & No action was supplied with this request. & 400 Bad Request \\ \hline
+MissingParameter & The request must contain the specified missing parameter. & 400 Bad Request \\ \hline
+NotYetImplemented & Feature <feature> is not yet available. & 401 Unauthorized \\ \hline
+ServiceUnavailable & The service is currently unavailable. Please try again later. &  \\ \hline
+UnsupportedHttpVerb & The requested HTTP verb is not supported: <verb>. & 400 Bad Request \\ \hline
+URITooLong & The URI exceeded the maximum limit of <maxLength>. & 400 Bad Request \\ \hline
+\end{tabular}
+\end{center}
+\end{table}
+
+
+\clearpage
+\bibliographystyle{apalike}
+\bibliography{fast_d5_1_2}
+
+
+\clearpage
+\doublespacing
+\section*{Appendix A. Lists of Tables and Figures}
+\addcontentsline{toc}{section}{Appendix A. Lists of Tables and Figures}
+
+\listoftables
+
+\listoffigures
+
+
+\clearpage
+\section*{Appendix B. Generic Building Block JSON Structure}
+\addcontentsline{toc}{section}{Appendix B. Generic Building Block JSON Structure}
+
+\begin{verbatim}
+{
+  "code": "http://url.com/.../code.js",
+  "creationDate": "2009-04-20T17:00:00+0100",
+  "creator": "http://www.fabio.es/",
+  "description": {"en-gb": "This is a description of the building block"},
+  "tags": {
+    "tags": [
+      "ebay",
+      "amazon",
+    ],
+    "user": <String> // not defined yet
+  },
+  "homepage": "http://www.homepage.ie/",
+  "icon": "http://url.com/images/icon.png",
+  "id": "Id of the resource",
+  "label": {"en-gb": "Label or title of the building block"},
+  "name": "Amazon Item to Ebay Filter",
+  "rights": "http://creativecommons.org/",
+  "screenshot": "http://www.deri.ie/eBayList-screenshot.jpg",
+  "type": "type of the building block", // screenflow, screen, form, operator y resource
+  "uri": "http://localhost:8080/catalogue/screens/525",
+  "version": "1.0"
+}
+\end{verbatim}
+
+
+\clearpage
+\section*{Appendix C. Screenflow JSON Structure}
+\addcontentsline{toc}{section}{Appendix C. Screenflow JSON Structure}
+
+\begin{verbatim}
+{
+  <GENERIC BUILDING BLOCK JSON>,
+  "contains": [
+    "http://purl.oclc.org/fast/ontology/gadget#Screen1257860772723",
+    "http://purl.oclc.org/fast/ontology/gadget#Screen1257860720035",
+  ],
+}
+\end{verbatim}
+
+
+\clearpage
+\section*{Appendix D. Screen JSON Structure}
+\addcontentsline{toc}{section}{Appendix D. Screen JSON Structure}
+
+\begin{verbatim}
+{
+  <GENERIC BUILDING BLOCK JSON>,
+  "postconditions": [[{
+    "id": "url",
+    "label": {"en-gb": "Purchase URL"},
+    "pattern": "?P
+                http://www.w3.org/1999/02/22-rdf-syntax-ns#type
+                http://aws.amazon.com/AWSECommerceService#PurchaseURL",
+    "positive": true
+  }]],
+  "preconditions": [[{
+    "id": "cart",
+    "label": {"en-gb": "A shopping cart"},
+    "pattern": "?C
+                http://www.w3.org/1999/02/22-rdf-syntax-ns#type
+                http://aws.amazon.com/AWSECommerceService#ShoppingCart",
+    "positive": true
+  }]],
+  "code": "URL of the code",
+  "definition": {
+    "buildingblocks: [
+      { // Form
+        "id": "form1", // unique for the container screen
+        "uri": "http://purl.oclc.org/fast/ontology/gadget#Form670238"
+      },
+      { // Operators
+        "id": "op1",
+        "uri": "http://purl.oclc.org/fast/ontology/gadget#Operator213487"
+      },
+      {  // Backend services
+        "id": "bs1",
+        "uri": "http://purl.oclc.org/fast/ontology/gadget#Backendservice38399"
+      },
+      {...}
+    ]
+    "pipes": [
+      {
+        "from": {
+          "buildingblock": "bs1",
+          "condition": "cA"
+        },
+        "to": {
+          "buildingblock": "op1",
+          "condition": "cA", // can be the same id, unique for the building block
+          "action": "filter"
+        }
+      },
+    "triggers": [
+      {
+        "from": {
+          "buildingblock": "form1",
+          "name": "refresh"
+        },
+        "to": {
+          "buildingblock": "bs1",
+          "action": "list"
+        }
+      }
+    ]
+  }
+}
+\end{verbatim}
+
+
+\clearpage
+\section*{Appendix E. Screen Component JSON Structure}
+\addcontentsline{toc}{section}{Appendix E. Screen Component JSON Structure}
+
+\begin{verbatim}
+{
+  <GENERIC BUILDING BLOCK JSON>,
+  "actions": [{
+    "name": "filter",
+    "preconditions": [[{
+      "id": "item",
+      "label": {"en-gb": "Ebay List"},
+      "pattern": "?Item
+                  http://www.w3.org/1999/02/22-rdf-syntax-ns#type
+                  http://aws.amazon.com/AWSECommerceService#Item",
+      "positive": true
+    }]],
+    "uses": []
+  }],
+  "libraries": [],
+  "postconditions": [[{
+    "id": "filterEbay",
+    "label": {"en-gb": "Ebay List"},
+    "pattern": "?eFilter
+                http://www.w3.org/1999/02/22-rdf-syntax-ns#type
+                http://developer.ebay.com/.../FindItemsAdvanced.html#Request",
+    "positive": true
+  }]],
+  "triggers": ["itemAmazon"]
+}
+\end{verbatim}
+
+\end{document}
