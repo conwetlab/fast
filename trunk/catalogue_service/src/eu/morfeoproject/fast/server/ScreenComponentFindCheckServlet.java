@@ -253,7 +253,7 @@ public class ScreenComponentFindCheckServlet extends GenericServlet {
 			conTo = getConditionById(postconditions, pipe.getIdConditionTo());
 		} else {
 			ScreenComponent sc = CatalogueAccessPoint.getCatalogue().getScreenComponent(new URIImpl(pipe.getIdBBTo()));
-			conTo = getPreconditionById(sc, pipe.getIdConditionFrom());
+			conTo = getPreconditionById(sc, pipe.getIdConditionTo());
 		}
 		satisfied = isConditionCompatible(conFrom, conTo);
 		return satisfied;
