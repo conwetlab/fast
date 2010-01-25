@@ -4,7 +4,7 @@ import org.ontoware.rdf2go.model.node.URI;
 import org.ontoware.rdf2go.model.node.impl.URIImpl;
 
 /**
- * Vocabulary File. Created by org.ontoware.rdf2go.util.VocabularyWriter on Wed Dec 16 16:01:15 GMT 2009
+ * Vocabulary File. Created by org.ontoware.rdf2go.util.VocabularyWriter on Fri Jan 22 13:22:40 GMT 2010
  * input file: src/eu/morfeoproject/fast/catalogue/ontologies/fgo.rdf
  * namespace: http://purl.oclc.org/fast/ontology/gadget#
  */
@@ -456,6 +456,14 @@ public interface FGO {
      * Range: http://xmlns.com/foaf/0.1/Document 
      */
     public static final URI hasUri = new URIImpl("http://purl.oclc.org/fast/ontology/gadget#hasUri", false);
+
+    /**
+     * Label: tag creator@en 
+     * Comment: The creator of the tag.@en 
+     * Comment: http://commontag.org/ns#Tag 
+     * Range: http://xmlns.com/foaf/0.1/Agent 
+     */
+    public static final URI tagCreator = new URIImpl("http://purl.oclc.org/fast/ontology/gadget#tagCreator", false);
 
     /**
      * Label: has pre-condition@en 

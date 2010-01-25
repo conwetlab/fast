@@ -45,22 +45,22 @@ public class DefaultOntologies {
     	new Ontology(new URIImpl("http://commontag.org/ns#"), "ctag.owl", Syntax.RdfXml, true);
 
     /**-- The DBPedia ontology (no datasets included) --**/
-    public static PublicOntology DBPEDIA = 
-    	new PublicOntology(new URIImpl("http://dbpedia.org/ontology/#"),
-    			"http://downloads.dbpedia.org/3.2/en/dbpedia-ontology.owl",
-    			Syntax.RdfXml,
-    			true);
+//    public static PublicOntology DBPEDIA = 
+//    	new PublicOntology(new URIImpl("http://dbpedia.org/ontology/#"),
+//    			"http://downloads.dbpedia.org/3.2/en/dbpedia-ontology.owl",
+//    			Syntax.RdfXml,
+//    			true);
 
     /**-- Ontologies for test purposes --**/
     public static Ontology AMAZON_MOCKUP =
     	new Ontology(new URIImpl("http://aws.amazon.com/AWSECommerceService#"), "amazon-mockup.rdf", Syntax.RdfXml, true);
     public static Ontology DEMO =
     	new Ontology(new URIImpl("http://www.morfeoproject.eu/fast/demo#"), "demo.rdf", Syntax.RdfXml, true);
-    public static PublicOntology GR =
-    	new PublicOntology(new URIImpl("http://purl.org/goodrelations/v1#"),
-    			"http://www.heppnetz.de/ontologies/goodrelations/v1.owl",
-    			Syntax.RdfXml,
-    			true);
+//    public static PublicOntology GR =
+//    	new PublicOntology(new URIImpl("http://purl.org/goodrelations/v1#"),
+//    			"http://www.heppnetz.de/ontologies/goodrelations/v1.owl",
+//    			Syntax.RdfXml,
+//    			true);
     
     
     /**
