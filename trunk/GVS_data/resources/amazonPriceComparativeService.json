@@ -2,18 +2,28 @@
     "name":"Amazon Price Comparative Service",
     "code":"http://demo.fast.morfeo-project.org/gvsdata/resources/amazonPriceComparativeService.src.js",
     "creationDate":"2009-04-20T17:00:00+0100",
-    "creator":"http://www.fabio.es/",
+    "creator":"admin",
     "description":{
         "en-gb":"This service provides a price comparative related to an Amazon product"
     },
-    "domainContext":{
-        "tags":[
-            "amazon",
-            "price",
-            "comparative"
-        ],
-        "user":"admin"
-    },
+    "tags":[
+        {
+            "label":{
+                "en-gb":"amazon"
+            },
+            "means":"http://dbpedia.org/page/Amazon.com"
+        },
+        {
+            "label":{
+                "en-gb":"price"
+            }
+        },
+        {
+            "label":{
+                "en-gb":"comparative"
+            }
+        }
+    ],
     "homepage":"http://www.deri.ie/amazonPriceComparativeService",
     "icon":"http://demo.fast.morfeo-project.org/gvsdata/images/catalogue/amazonPriceComparativeService.png",
     "label":{

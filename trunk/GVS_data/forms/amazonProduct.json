@@ -2,18 +2,28 @@
     "name":"Amazon Product Form",
     "code":"http://demo.fast.morfeo-project.org/gvsdata/forms/amazonProduct.src.html",
     "creationDate":"2009-04-20T17:00:00+0100",
-    "creator":"http://www.fabio.es/",
+    "creator":"admin",
     "description":{
         "en-gb":"This screen shows the the details of a product in Amazon"
     },
-    "domainContext":{
-        "tags":[
-            "amazon",
-            "details",
-            "product"
-        ],
-        "user":"admin"
-    },
+    "tags":[
+        {
+            "label":{
+                "en-gb":"amazon"
+            },
+            "means":"http://dbpedia.org/page/Amazon.com"
+        },
+        {
+            "label":{
+                "en-gb":"product"
+            }
+        },
+        {
+            "label":{
+                "en-gb":"details"
+            }
+        }
+    ],
     "homepage":"http://www.deri.ie/amazonProduct",
     "icon":"http://demo.fast.morfeo-project.org/gvsdata/images/catalogue/amazonProduct.png",
     "label":{

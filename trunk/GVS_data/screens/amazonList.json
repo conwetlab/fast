@@ -1,18 +1,29 @@
 {
     "name":"Compound Amazon List Screen",
     "creationDate":"2009-02-11T14:59:52+0100",
-    "creator":"http://www.ismaelrivera.es/",
+    "creator":"admin",
     "description":{
         "en-gb":"This screen shows the results of a given search in Amazon. It allows users to choose a product to see its details."
     },
-    "domainContext":{
-        "tags":[
-            "compound",
-            "amazon",
-            "list"
-        ],
-        "user":"admin"
-    },
+    "tags":[
+        {
+            "label":{
+                "en-gb":"compound"
+            }
+        },
+        {
+            "label":{
+                "en-gb":"amazon"
+            },
+            "means":"http://dbpedia.org/page/Amazon.com"
+        },
+        {
+            "label":{
+                "en-gb":"list",
+                "es-es":"lista"
+            }
+        }
+    ],
     "homepage":"http://www.deri.ie/amazonList",
     "icon":"http://demo.fast.morfeo-project.org/gvsdata/images/catalogue/amazonList.png",
     "label":{

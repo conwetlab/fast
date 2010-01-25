@@ -1,19 +1,28 @@
 {
     "name":"Amazon Order Screen",
     "creationDate":"2009-04-20T17:00:00+0100",
-    "creator":"http://www.fabio.es/",
+    "creator":"admin",
     "description":{
         "en-gb":"This form allows users to purchase their shopping cart. It shows an Amazon interface to fulfill the required data to purchase the shopping cart"
     },
-    "domainContext":{
-        "tags":[
-            "scratch",
-            "amazon",
-            "order",
-            "purchase"
-        ],
-        "user":"admin"
-    },
+    "tags":[
+        {
+            "label":{
+                "en-gb":"scratch"
+            }
+        },
+        {
+            "label":{
+                "en-gb":"amazon"
+            },
+            "means":"http://dbpedia.org/page/Amazon.com"
+        },
+        {
+            "label":{
+                "en-gb":"order"
+            }
+        }
+    ],
     "homepage":"http://www.deri.ie/amazonOrder",
     "icon":"http://demo.fast.morfeo-project.org/gvsdata/images/catalogue/amazonOrder.png",
     "label":{

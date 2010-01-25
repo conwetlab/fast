@@ -2,19 +2,28 @@
     "name":"Add Offer to Amazon Cart Service",
     "code":"http://demo.fast.morfeo-project.org/gvsdata/resources/amazonAddOfferToCartService.src.js",
     "creationDate":"2009-04-20T17:00:00+0100",
-    "creator":"http://www.fabio.es/",
+    "creator":"admin",
     "description":{
         "en-gb":"This service adds offers to an Amazon shopping cart"
     },
-    "domainContext":{
-        "tags":[
-            "amazon",
-            "shopping",
-            "cart",
-            "offer"
-        ],
-        "user":"admin"
-    },
+    "tags":[
+        {
+            "label":{
+                "en-gb":"amazon"
+            },
+            "means":"http://dbpedia.org/page/Amazon.com"
+        },
+        {
+            "label":{
+                "en-gb":"offer"
+            }
+        },
+        {
+            "label":{
+                "en-gb":"shopping"
+            }
+        }
+    ],
     "homepage":"http://www.deri.ie/amazonAddOfferToCartService",
     "icon":"http://demo.fast.morfeo-project.org/gvsdata/images/catalogue/amazonAddOfferToCartService.png",
     "label":{

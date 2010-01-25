@@ -1,19 +1,33 @@
 {
     "name":"Amazon Suggestion Screen",
     "creationDate":"2009-04-20T17:00:00+0100",
-    "creator":"http://www.fabio.es/",
+    "creator":"admin",
     "description":{
         "en-gb":"This screen shows the list of products related to a given one. It allows users select a new product from this list."
     },
-    "domainContext":{
-        "tags":[
-            "scratch",
-            "amazon",
-            "list",
-            "suggestion"
-        ],
-        "user":"admin"
-    },
+    "tags":[
+        {
+            "label":{
+                "en-gb":"scratch"
+            }
+        },
+        {
+            "label":{
+                "en-gb":"amazon"
+            },
+            "means":"http://dbpedia.org/page/Amazon.com"
+        },
+        {
+            "label":{
+                "en-gb":"suggestion"
+            }
+        },
+        {
+            "label":{
+                "en-gb":"list"
+            }
+        }
+    ],
     "homepage":"http://www.deri.ie/amazonSuggestion",
     "icon":"http://demo.fast.morfeo-project.org/gvsdata/images/catalogue/amazonSuggestion.png",
     "label":{

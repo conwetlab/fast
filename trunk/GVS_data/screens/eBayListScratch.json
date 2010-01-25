@@ -1,18 +1,33 @@
 {
     "name":"Ebay List Screen",
     "creationDate":"2009-04-20T18:00:00+0200",
-    "creator":"http://www.fabio.es/",
+    "creator":"admin",
     "description":{
         "en-gb":"This screen shows the results of a given search in eBay of a related Amazon product. It allows users to choose a product to see its details"
     },
-    "domainContext":{
-        "tags":[
-            "scratch",
-            "ebay",
-            "list"
-        ],
-        "user":"admin"
-    },
+    "tags":[
+        {
+            "label":{
+                "en-gb":"scratch"
+            }
+        },
+        {
+            "label":{
+                "en-gb":"amazon"
+            },
+            "means":"http://dbpedia.org/page/Amazon.com"
+        },
+        {
+            "label":{
+                "en-gb":"ebay"
+            }
+        },
+        {
+            "label":{
+                "en-gb":"list"
+            }
+        }
+    ],
     "homepage":"http://www.deri.ie/eBayList",
     "icon":"http://demo.fast.morfeo-project.org/gvsdata/images/catalogue/eBayList.png",
     "label":{

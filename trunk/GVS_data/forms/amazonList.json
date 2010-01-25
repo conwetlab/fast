@@ -2,17 +2,24 @@
     "name":"Amazon List Form",
     "code":"http://demo.fast.morfeo-project.org/gvsdata/forms/amazonList.src.html",
     "creationDate":"2009-04-20T17:00:00+0100",
-    "creator":"http://www.fabio.es/",
+    "creator":"admin",
     "description":{
         "en-gb":"This form shows the results of a given search in Amazon. It allows users to choose a product to see its details"
     },
-    "domainContext":{
-        "tags":[
-            "amazon",
-            "list"
-        ],
-        "user":"admin"
-    },
+    "tags":[
+        {
+            "label":{
+                "en-gb":"amazon"
+            },
+            "means":"http://dbpedia.org/page/Amazon.com"
+        },
+        {
+            "label":{
+                "en-gb":"list"
+            }
+        }
+    ],
+    "user":"admin",
     "homepage":"http://www.deri.ie/amazonList",
     "icon":"http://demo.fast.morfeo-project.org/gvsdata/images/catalogue/amazonList.png",
     "label":{

@@ -2,17 +2,27 @@
     "name":"Ebay Search Service",
     "code":"http://demo.fast.morfeo-project.org/gvsdata/resources/ebaySearchService.src.js",
     "creationDate":"2009-04-20T17:00:00+0100",
-    "creator":"http://www.fabio.es/",
+    "creator":"admin",
     "description":{
         "en-gb":"This service provides information about products in eBay Catalogue"
     },
-    "domainContext":{
-        "tags":[
-            "ebay",
-            "list"
-        ],
-        "user":"admin"
-    },
+    "tags":[
+        {
+            "label":{
+                "en-gb":"ebay"
+            },
+        },
+        {
+            "label":{
+                "en-gb":"search"
+            }
+        },
+        {
+            "label":{
+                "en-gb":"list"
+            }
+        }
+    ],
     "homepage":"http://www.deri.ie/ebaySearchService",
     "icon":"http://demo.fast.morfeo-project.org/gvsdata/images/catalogue/ebaySearchService.png",
     "label":{
@@ -21,7 +31,9 @@
     "rights":"http://creativecommons.org/",
     "screenshot":"http://www.deri.ie/ebaySearchService.jpg",
     "version":"1.0",
-    "libraries":[],
+    "libraries":[
+        
+    ],
     "actions":[
         {
             "name":"fetch",

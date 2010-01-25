@@ -2,17 +2,28 @@
     "name":"Amazon Search Service",
     "code":"http://demo.fast.morfeo-project.org/gvsdata/resources/amazonSearchService.src.js",
     "creationDate":null,
-    "creator":"http://www.fabio.es/",
+    "creator":"admin",
     "description":{
         "en-gb":"This service provides information about products in Amazon Catalogue"
     },
-    "domainContext":{
-        "tags":[
-            "amazon",
-            "list"
-        ],
-        "user":"admin"
-    },
+    "tags":[
+        {
+            "label":{
+                "en-gb":"amazon"
+            },
+            "means":"http://dbpedia.org/page/Amazon.com"
+        },
+        {
+            "label":{
+                "en-gb":"search"
+            }
+        },
+        {
+            "label":{
+                "en-gb":"list"
+            }
+        }
+    ],
     "homepage":"hhttp://www.deri.ie/amazonSearchService",
     "icon":"http://demo.fast.morfeo-project.org/gvsdata/images/catalogue/amazonSearchService.png",
     "label":{
