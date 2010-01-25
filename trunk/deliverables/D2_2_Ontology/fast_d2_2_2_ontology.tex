@@ -15,9 +15,38 @@
 \usepackage{longtable}
 \usepackage{array}
 \usepackage{amssymb}
+\usepackage{listings}
+
+\lstdefinelanguage{turtle} 
+{morekeywords={@prefix, a}, 
+sensitive=false, 
+morecomment=[l]{\#}, 
+morestring=[b]",
+}
+
+\lstdefinelanguage{sparql} 
+{morekeywords={PREFIX, a, SELECT, CONSTRUCT, WHERE, UNION, OPTIONAL, FILTER, DISTINCT, ORDER, BY, GRAPH}, 
+sensitive=false, 
+morecomment=[l]{\#}, 
+morestring=[b]",
+}
+
+\lstset{
+	captionpos=b, 
+	extendedchars=true,
+	basicstyle=\footnotesize \sffamily, 
+	stringstyle=\bfseries,
+	frame=single,
+	frameround=tttt,
+	showstringspaces=false,
+	breaklines=true,
+	% inputencoding=utf8,
+}
+
+
 \parindent0pt
 
-\newcommand\deliverableNumber{D2.2.1}
+\newcommand\deliverableNumber{D2.2.2}
 \newcommand\deliverableTitle{Ontology and Conceptual Model for the Semantic Characterisation of Complex Gadgets}
 \newcommand\deliverableTitleShort{Ontology and Conceptual Model}
 \newcommand\workpackageNumber{2}
@@ -71,7 +100,7 @@
 		{\large \sffamily \authorTwo}\\
 		\vspace{0.5cm}
 		\vfill
-		{\large \sffamily Date: 27/02/2009}\\
+		{\large \sffamily Date: 27/02/2010}\\
 		\vspace{1cm}
 		{\sffamily FAST is partially funded by the E.C. (grant code: FP7-ICT-2007-1-216048).}
 		
@@ -141,7 +170,8 @@
 							\textcolor{white}{\textbf{Change description}}\\ \hline
 %0.1 & 15.12.2008 & Knud M\"oller (NUIG) & template modelled \\ \hline
 %0.2 & 15.02.2009 & Knud M\"oller (NUIG) & content moved from wiki after internal review \\ \hline
-1.0 & 27.02.2009 & Knud M\"oller (NUIG) & final version ready for external review \\ \hline
+1.0 & 27.02.2009 & Knud M\"oller (NUIG) & final version (D2.2.1) ready for external review \\ \hline
+2.0 & 27.02.2010 & Knud M\"oller (NUIG) & final version (D2.2.2) ready for external review \\ \hline
 \end{tabular}
 \end{small}
 
@@ -212,10 +242,10 @@ This deliverable defines the ontology and conceptual model for the semantic char
 \begin{tabular}
 	{| >{\columncolor{fast@lightgrey}}p{3.25cm}|p{1.4cm}|p{3.28cm}|p{1.6cm}|p{3.29cm}|}
 	\hline
-	\textcolor{white}{\textbf{Delivery data}} & {\textbf{Due date}} & {28/02/2009} & {\textbf{Submitted}} & {27/02/2009}\\ \hline
+	\textcolor{white}{\textbf{Delivery data}} & {\textbf{Due date}} & {28/02/2010} & {\textbf{Submitted}} & {27/02/2010}\\ \hline
 	\textcolor{white}{\textbf{Status}} & \multicolumn{2}{l|}{} & \multicolumn{2}{l|}{final}\\ \hline
 	\textcolor{white}{\textbf{Dissemination Level}} & \multicolumn{4}{l|}{Public $\boxtimes$ / Consortium $\square$}\\ \hline
-	\textcolor{white}{\textbf{Short description of contents}} & \multicolumn{4}{p{10.85cm}|}{D2.2.1 is the first iteration of the FAST Gadget ontology. The ontology provides a formal description of the conceptual model of FAST in general, and of the screen/screenflow architecture in particular. The document comprises a discussion of the ontology development methodology used, a number of intermediate representations which document the development process, and the final product in the form of an OWL ontology.}\\ \hline
+	\textcolor{white}{\textbf{Short description of contents}} & \multicolumn{4}{p{10.85cm}|}{\deliverableNumber{} is the second iteration of the FAST Gadget ontology. The ontology provides a formal description of the conceptual model of FAST in general, and of the screen/screenflow architecture in particular. The document comprises a discussion of the ontology development methodology used, a number of intermediate representations which document the development process, and the final product in the form of an OWL ontology.}\\ \hline
 	\textcolor{white}{\textbf{Authors}} & \multicolumn{4}{l|}{\authorOne, \authorTwo}\\
 %	{} & \multicolumn{4}{l|}{}\\ 
 %	{} & \multicolumn{4}{l|}{}\\ 
@@ -251,7 +281,7 @@ This deliverable defines the ontology and conceptual model for the semantic char
 
 As the corner stone of the theoretical work undertaken in the FAST project, the definition of a conceptual model and ontology for the characterisation of complex gadgets feeds directly into the project's three main development activities: the development environment for complex gadgets (GVS), the development of gadget components and the semantic catalogue which represents the backend of the architecture. For all these different aspects of FAST, the ontology developed and presented in this deliverable provides a structured definition of their common domain of discourse. The ontology formally defines the parts which a complex gadget is made of, how the parts interrelate, what kind of metadata is available for each part, how users of the system are represented, etc.
 
-While following an ontology design methodology which is agnostic to particular data models or implementation languages (see below), we have chosen to represent the final ontology specification using the Resource Description Framework (RDF) and OWL semantics.
+While following an ontology design methodology which is agnostic to particular data models or implementation languages (see Appendix A), we have chosen to represent the final ontology specification using the Resource Description Framework (RDF) and OWL semantics.
 
 In FAST, we have adopted the term \emph{gadget} for the small, Web-based software components which the project focusses on. There are small differences in meaning between this term and the term \emph{widget}, which is also widely used. However, for the purpose of this document, it should be noted that whenever we use the term \emph{gadget}, we also refer to what \emph{widget} at the same time.
 
@@ -260,72 +290,29 @@ In FAST, we have adopted the term \emph{gadget} for the small, Web-based softwar
 \subsection{Structure of the Document} % (fold)
 \label{sub:structure_of_the_document}
 
-This deliverable is structured as follows: as part of the introduction, we will present the methodology we chose to adopt for the development of the FAST gadget ontology, by discussing  each of its proposed stages in detail. Following, we will conclude the introduction by elaborating more on some of the general design decisions we are following. After briefly addressing the topic of related work in Sect.~\ref{sec:related_work} --- which is mainly covered in a different deliverable from this work package, \cite{urmetzer2009fast_state_of_the_art} --- the structure of the remainder of this document follows directly from our adopted methodology: we will perform a domain analysis in Sect.~\ref{sec:domain_analysis}, covering the stages of specification, conceptualisation and integration of existing vocabularies. This is then followed by the implementation step in Sect.~\ref{sec:ontology}, which covers the ontology in its final form (at this moment of the project). Finishing the deliverable, we present our conclusions and outlook on years two and three of the project in Sect.~\ref{sec:conclusions}.
+This deliverable is structured as follows: as part of the introduction, we will present the methodology we chose to adopt for the development of the FAST gadget ontology, by discussing  each of its proposed stages in detail. Following, we will conclude the introduction by elaborating more on some of the general design decisions we are following. After briefly addressing the topic of related work in Sect.~\ref{sec:related_work} --- which is mainly covered in a different deliverable from this work package, \cite{urmetzer2010fast_state_of_the_art} --- the structure of the remainder of this document follows directly from our adopted methodology: we will perform a domain analysis in Sect.~\ref{sec:domain_analysis}, covering the stages of specification, conceptualisation and integration of existing vocabularies. This is then followed by the implementation step in Sect.~\ref{sec:ontology}, which covers the ontology in its final form (at this moment of the project). Finishing the deliverable, we present our conclusions and outlook on years two and three of the project in Sect.~\ref{sec:conclusions}.
 
 % subsection structure_of_the_document (end)
 
-\subsection{\emph{Methontology}: A Methodology for Ontology Development} % (fold)
-\label{sub:methontology_a_methodology_for_ontology_development}
+\subsection{Changes from Previous Version} % (fold)
+\label{sub:changes_from_previous_version}
 
-In order to put the design of the ontology on a stable footing, we chose to adopt a tried and tested design methodology, rather than using a purely ad-hoc approach. We decided to use the \emph{Methontology} methodology, which was first introduced in \cite{gomez_perez1996conceptualise_ontologies} and \cite{fernandez1997methontology}. Methontology provides a good balance of formalisation and streamlining of the design process on the one hand, and a looseness in its requirements on how strictly one needs to follow the individual phases and steps. The authors specifically advocate an ``evolving prototype life cycle'', which allows the ontology to ``grow depending on its needs'' \cite{fernandez1997methontology}.
+The following changes have been made with respect to the previous version of this deliverable, D2.2.1.~\cite{moeller2009fast_ontology}:
 
-Methontology consists of seven different stages, which will be briefly described in the following sections. For a more detailed discussion, we point the reader to the original papers proposing this methodology. The phases are \emph{specification}, \emph{knowledge acquisistion}, \emph{conceptualisation}, \emph{integration}, \emph{implementation}, \emph{evaluation} and \emph{documentation}. It is important to note that the phases do not have to be visited slavishly in the order presented here. Instead, a much more likely scenario is that the ontology designers will visit each phase roughly in this order, but are free to revisit each phase at any time to apply changes.
+\begin{itemize}
+	\item Sect.~\ref{sub:goal_and_scope} has been revised to better define the scope of this deliverable with respect to other deliverables.
+	\item Sect.~1.3 (Methontology) has been moved to the end of the document (Sect.~\ref{sub:methontology_a_methodology_for_ontology_development}), but otherwise did not change.
+	\item The section on design principles (Sect.~\ref{sub:general_design_decisions}) has been extended to reflect research done by the authors within the past year.
+	\item In the integration section (Sect.~\ref{sub:integration}) of the ontology definition, the Common Tag vocabulary has been added. It is briefly introduced, and the integrated terms are specified.
+\end{itemize}
 
-\subsubsection{Specification} % (fold)
-\label{ssub:specification}
-
-The specification phase sets the stage for the rest of the ontology development process. The central activity in this phase is the setting up of an \emph{ontology requirement specification document}, which will act as a guideline for most of the other phases. The level of formality of the specification document is left open and can range from pure natural language, over a set of intermediate representations to using competency questions. Most likely, it will be a mix of those formats. Regardless of the chosen format of the specification document, it must answer questions regarding the \emph{purpose} of the ontology (intended use and users, scenarios, etc.), its \emph{scope} (what are the things that need to be covered), its \emph{level of formality} (e.g. highly informal, semi-formal or rigorously formal \cite{uschold1996ontologies}) and the \emph{sources of knowledge} used when researching the ontology. It should be noted that the scope as defined in the specification document does not need to be complete. Rather, it should provide a good impression of the kind of terms that need to be covered by the ontology.
-
-The \emph{Domain Analysis} section of this deliverable implements an ontology requirement specification document for the FAST gadget ontology (which is not to be confused with the FAST requirements deliverable \cite{villoslada2009fast_requirements}!).
-% subsubsection specification (end)
-
-\subsubsection{Knowledge Acquisition} % (fold)
-\label{ssub:knowledge_acquisition}
-
-Knowledge Acquisition in the context of Methontology is a loose collective term to all activities which are aimed at gathering background knowledge to clearly determine purpose and scope of the ontology. As such, it feeds directly into the specification phase, but can just as well be relevant at later stages of the design and development process. Similarly to evaluation and documentation, knowledge acquisition is a supporting activity, which takes place throughout the whole development process.
-
-Typical ways of knowledge acquisition are referring to handbooks, encyclopaedias or other written material (through formal or informal text analysis), performing interviews with domain experts (structured or non-structured) or evaluating previous conceptualisation work done for the domain in question.
-
-The primary sources used for knowledge acquisition for the the FAST gadget ontology are referred to in Sect.~\ref{sec:related_work}.
-% subsubsection knowledge_acquisition (end)
-
-\subsubsection{Conceptualisation} % (fold)
-\label{ssub:conceptualisation}
-
-The conceptualisation phase stands at the core of the ontology development process. The ontology is still in a language-/format-independent state, but is becoming increasingly formal. Based on the specification document, the ontology designers now create a number of increasingly detailed and fine-grained tables and dictionaries which cover all terms to be included in the ontology (at the current stage - an ontology in the Semantic Web sense is never complete). In the first iteration, a so-called \emph{glossary of terms} (GT) is built, which includes all concepts (or classes), instances and properties (or verbs). The GT does not have to be built from scratch, but can instead be understood as an extension of the scope definition in the specification phase.  In contrast to the specification document, the GT is a living document that should always reflect the latest and most complete list of terms. Once completed (in a first iteration), the terms in the GT will be grouped according to relatedness. For each group, the concepts are arranged in a classification tree. Instances, constants and attributes are grouped in corresponding tables, while properties are captured in verb diagrams. If necessary, tables with formulas and rules are set up at the end of the conceptualisation phase.
-% subsubsection conceptualisation (end)
-
-\subsubsection{Integration} % (fold)
-\label{ssub:integration}
-
-The integration phase offers an opportunity for the ontology designer to ensure that their ontology is well integrated with other, existing ontologies. This can either mean connecting the emerging ontology to upper or meta ontologies (in the case that there are appropriate super classes or properties in those ontologies which can act as connection joints), or the reuse of terms from other ontologies (in the case that other ontologies have already defined classes or properties which fall in the scope of the emerging ontology). A typical example for a meta-ontology is OpenCyc, while the FOAF vocabulary \cite{brickley2004foaf} is a example of an often-reused ontology to describe people. As the output of this phase, an \emph{integration document} is suggested, which gives detailed information about which terms were taken from which external ontology.
-% subsubsection integration (end)
-
-\subsubsection{Implementation} % (fold)
-\label{ssub:implementation}
-
-The implementation phase is what is often (wrongly so) considered to be the main activity in developing an ontology: materialising the various ontology terms in a concrete language, which can be RDFS or OWL for the Semantic Web, or any other formal language in other contexts (even a programming language such as C++). The authors of Methontology do not go into a lot of details regarding the carrying out of this phase, other than that the outcome will be the formalisation of the ontology in the ontology language of choice (the \emph{implementation document}).
-% subsubsection implementation (end)
-
-\subsubsection{Evaluation} % (fold)
-\label{ssub:evaluation}
-
-According to [Fernández et  al., 1997], evaluation ``means to carry out a technical judgment of the ontologies, their software environment and documentation with respect to a frame of reference'' (in this case the requirement specification document). Evaluation can take place at any time during the ontology development process, and comprises activities such as \emph{validation} and \emph{verification}.
-
-For the FAST Gadget Ontology, most of the evaluation process will take place as part of the work carried out in WP6 (Experimentation and Evaluation) in years two and three of the project.
-% subsubsection evaluation (end)
-
-\subsubsection{Documentation} % (fold)
-\label{ssub:documentation}
-
-In Methontology, documentation is an activity which is automatically carried out throughout the development process, in the form of the various documents which form the output of the individual phases. Since this deliverable contains the current versions of all those documents, it is at the same time the ontology itself as well as its documentation.
-% subsubsection documentation (end)
-
-% subsection methontology_a_methodology_for_ontology_development (end)
+% subsection changes_from_previous_version (end)
 
 
-\subsection{General Design Decisions} % (fold)
+\subsection{Usability as a General Design Principles} % (fold)
 \label{sub:general_design_decisions}
+
+Apart from ``hard'' metrics for the evaluation of ontologies, so-called ``soft'' metrics for ontologies are relevant for facilitating better understanding by users and implementers, and therefore ultimately greater uptake.
 
 \subsubsection{Reuse of Existing Ontologies} % (fold)
 \label{ssub:reuse_of_existing_ontologies}
@@ -348,7 +335,7 @@ Apart from reusing existing terms, another basic design principle which helps to
 
 We are not aware of any other project which has already developed or planned to develop an ontology of the gadget domain. However, there is a range of related material from which we take inspiration regarding the description of the gadget domain. This material comes from a number of different sources and directions. It includes work done under the hood of the W3C which may eventually lead to an official specification of various technical aspects of the gadget domain, as well as a number of different gadget APIs. While both are not strictly speaking ontologies, they nevertheless provide a very good insight in how to conceptualise the domain. Additionally, we consider work done in the area of Semantic Web Services, firstly because the gadgets designed in FAST will connect to Semantic and conventional Web services, and secondly because there are a number of similarities between the way SWS are often formalised and the way we envision the interaction of the different components of a gadget in the FAST IDE.
 
-All of these references are discussed in \cite{urmetzer2009fast_state_of_the_art}, and we refer the reader to this deliverable for more detail.
+All of these references are discussed in \cite{urmetzer2010fast_state_of_the_art}, and we refer the reader to this deliverable for more detail.
 % section related_work (end)
 
 \section{Domain Analysis} % (fold)
@@ -379,7 +366,7 @@ In summary, the ontology is supposed to facilitate support for the user in the d
 \textcolor{white}{\textbf{Scope}} & \textbf{Concepts:} \emph{Component}, \emph{Resource}, \emph{Screen}, \emph{Backend Service}, \emph{Flow Control Element}, \emph{Operator}, \emph{Screenflow Start}, \emph{Screenflow End}, \emph{Connector}, \emph{Form Element}, \emph{Pre-condition}, \emph{Post-condition}, \emph{Query}, \emph{Label}, \emph{Icon}, \emph{User}, \emph{User Profile}, \emph{Tag}
 
 \textbf{Properties:} \emph{containsScreen}, \emph{hasLabel}, \emph{hasIcon}, \emph{hasPreCondition}, \emph{hasPostCondition}, \emph{hasTag}, \emph{hasProfile}\\ \hline
-\textcolor{white}{\textbf{Sources of Knowledge}} & FAST Architecture deliverable~\cite{solero2009fast_architecture}, FAST Requirements Specification~\cite{villoslada2009fast_requirements}, FAST State-of-the-art Document~\cite{urmetzer2009fast_state_of_the_art}, EzWeb documentation~\cite{lizcano2008ezweb} \\ \hline
+\textcolor{white}{\textbf{Sources of Knowledge}} & FAST Architecture deliverable~\cite{solero2009fast_architecture}, FAST Requirements Specification~\cite{villoslada2009fast_requirements}, FAST State-of-the-art Document~\cite{urmetzer2010fast_state_of_the_art}, EzWeb documentation~\cite{lizcano2008ezweb} \\ \hline
 \end{longtable}
 \end{small}
 \doublespacing
@@ -431,6 +418,7 @@ In the conceptualisation phase, we first produce a \emph{glossary of terms} whic
 \begin{itemize}
 	\item \texttt{String} - A catch-all class of objects that serves for representing short labels, longer descriptions, dates, patterns, etc. If meant for human consumption, strings can have multiple representations for different languages.
 	\item \texttt{Image} - Images are any kind of graphical object, such as icons, screenshots, etc.
+	\item \texttt{Tag} - A short (usually one word) description of a resource.
 \end{itemize}
 
 \emph{Users}
@@ -551,6 +539,28 @@ Because of the open nature of the RDF model and the open-world assumption usuall
 Looking at the requirements specification document, DC can be integrated into the FAST gadget ontology in many ways. A lot of the metadata needs for screens, screenflows and their components are identical to those of the media resources originally intended by DC. For this reason, many properties such as \texttt{title}, \texttt{creator}, \texttt{rights} or various \texttt{date} properties can be used directly (more details in the integration document). 
 % subsubsection dublin_core (end)
 
+\subsubsection{Common Tag} % (fold)
+\label{ssub:common_tag}
+
+Common Tag\footnote{\url{http://www.commontag.org}, 24/01/2010} is an open format and initiative for conceptual tagging, which is developed and backed by a number of relevant players in the Web community, including Yahoo! and DERI. The basic idea of conceptual tagging is to address the problem of ambiguity in the meaning of tags (e.g., does ``jaguar'' mean the car, the animal or the operating system?) as it occurs in free-text tagging. Rather than relying on methods such as clustering, applied to a whole corpus of tagged resources, conceptual tagging intends to disambiguate a tag right from the moment it is used, by linking it to an unambiguous concept from vocabularies such as DBpedia (representing Wikipedia as linked data) or Freebase. E.g., in order to disambiguate ``cocoa'' as meaning the API, not the drink or plant, it would be represented as a resource (rather than a plain literal) and linked to the DBpedia resource \url{http://dbpedia.org/resource/Cocoa_%28API%29}.
+
+Apart from facilitating the disambiguation of tags, Common Tag also allows to make further assertions about the nature of a tag, such as who applied it or when it was applied. As an example, List.~\ref{list:common_tag} shows how a blog post has been tagged on 20/01/2010 with ``cocoa'', meaning the API, not the drink or plant.
+
+\singlespacing
+\lstset{
+	caption={Common Tag example --- disambiguating the tag ``cocoa''}, 
+	label=list:common_tag,
+	language=turtle
+}
+\begin{figure}[ht]
+	\lstinputlisting{exampleCode/common_tag_example.ttl}
+\end{figure}
+\doublespacing
+
+Within FAST, Common Tag is used to cover the tagging needs as specified in the ontology requirements specification, and in particular in order to define the domain context as specified in the annotation part of the glossary of terms (\texttt{Tag} and \texttt{hasDomainContext}).
+
+% subsubsection common_tag (end)
+
 \subsubsection{Integration Document} % (fold)
 \label{ssub:integration_document}
 %
@@ -570,6 +580,7 @@ This living document specifies how the terms from the glossary of terms are expr
 \texttt{User} & FOAF & \texttt{foaf:Person} & A user in FAST will be modelled using a combination of FOAF and SIOC, so that an instance of \texttt{foaf:Person} will have an account on the FAST platform, represented by an instance of \texttt{sioc:User}, which is a subclass of \texttt{foaf:OnlineAccount}. The relationship is expressed using \texttt{foaf:holdsAccount}. This way of modelling directly follows the suggestions made by~\cite{sioc_related2007}.\\ \hline
 \texttt{User} & SIOC & \texttt{sioc:User} & s.a.\\ \hline
 \texttt{Image} & FOAF & \texttt{foaf:Image} & --- \\ \hline
+\texttt{Tag} & Common Tag & \texttt{ctag:Tag} & Complex or conceptual tags are being used e.g. to model the domain context of resources.	 \\ \hline
 \multicolumn{4}{|c|}{\emph{\textbf{Properties}}} \\ \hline
 \texttt{hasLabel} & DC & \texttt{dcterms:title} & ---  \\ \hline
 \texttt{hasCreator} & DC & \texttt{dcterms:creator} & DC defines the range of \texttt{dcterms:creator} to be \texttt{dcterms:Agent}. By inference, this obviously also holds within FAST. However, we will explicitly only use \texttt{foaf:Person} (also see Fig.~\ref{fig:dcterms_example}). \\ \hline
@@ -580,8 +591,9 @@ This living document specifies how the terms from the glossary of terms are expr
 \texttt{hasImage} & FOAF & \texttt{depiction} & The inverse \texttt{foaf:depicts} could also be used. \\ \hline
 \texttt{hasName} & FOAF & \texttt{name} & Apart from \texttt{foaf:name}, which is used for the full name, more fine-grained properties such as \texttt{foaf:firstName}, \texttt{foaf:surname} or \texttt{foaf:title} and \texttt{foaf:nick} can be used as well. \\ \hline
 \texttt{hasEmail} & FOAF & \texttt{mbox} & While \texttt{foaf:mbox} will be used for the plain e-mail address, \texttt{foaf:mbox\_sha1sum} will be used for an obfuscated version of the address. \\ \hline
-\texttt{hasInterests} & FOAF & \texttt{interest} & --- \\ \hline
-\texttt{hasUserName} & FOAF & \texttt{accountName} & --- \\ \hline
+\texttt{hasInterests} & FOAF & \texttt{foaf:interest} & --- \\ \hline
+\texttt{hasUserName} & FOAF & \texttt{foaf:accountName} & --- \\ \hline
+\texttt{hasDomainContext} & Common Tag & \texttt{ctag:tagged} & The domain context of a resource in FAST can be expressed as a complex tag. Further Common Tag properties can then be applied to make assertions about the tag itself. \\ \hline
 \end{longtable}
 \end{small}
 \doublespacing
@@ -671,6 +683,45 @@ Since SPARQL has no direct support for negation, and since there is a need to al
 \end{center}
 \end{table}
 
+\subsection{Instance Examples} % (fold)
+\label{sub:instance_examples}
+
+\subsubsection{Complete Screen with Opaque Code} % (fold)
+\label{ssub:complete_screen}
+
+\singlespacing
+\lstset{
+	caption={Complete Screen with Opaque Code}, 
+	label=list:screen_01
+}
+% \setlength\parindent{0in}
+% \begin{minipage}[t]{\textwidth}
+\lstinputlisting{exampleCode/01_screenExample.ttl}
+% \end{minipage}
+% \setlength\parindent{0.21in}
+\doublespacing
+
+% subsubsection complete_screen (end)
+
+\subsubsection{Complete Screen with Declarative Definition} % (fold)
+\label{ssub:complete_screen_with_declarative_definition}
+
+\singlespacing
+\lstset{
+	caption={Complete Screen with Declarative Definition}, 
+	label=list:screen_01
+}
+% \setlength\parindent{0in}
+% \begin{minipage}[t]{\textwidth}
+\lstinputlisting{exampleCode/02_screenExample.ttl}
+% \end{minipage}
+% \setlength\parindent{0.21in}
+\doublespacing
+% subsubsection complete_screen_with_declarative_definition (end)
+
+% subsection instance_examples (end)
+
+
 \subsection{Classes} % (fold)
 \label{sub:classes}
 
@@ -723,14 +774,97 @@ A solution for representing pre- and post-conditions of screens and screen flows
 Finally, to contribute to a lasting legacy of the FAST project, the gadget ontology will serve as input to standardisation efforts for the definition of semantic gadgets, which will go beyond the scope of the project itself.
 % section conclusions (end)
 
-\clearpage
-\bibliographystyle{apalike}
-\addcontentsline{toc}{section}{References}
-\bibliography{fast_d2_2_bib}
+% \clearpage
+% \phantomsection
+% \section*{Appendix A (Instance Examples)}
+% \addcontentsline{toc}{section}{Appendix A (Instance Examples)}
+% 
 
 \clearpage
-\section*{Appendix A (Ontology Code)}
-\addcontentsline{toc}{section}{Appendix A (Ontology Code)}
+\phantomsection
+\appendix
+
+\section{Development Methodology}
+% \addcontentsline{toc}{section}{Development Methodology}
+
+\subsection{\emph{Methontology}: A Methodology for Ontology Development} % (fold)
+\label{sub:methontology_a_methodology_for_ontology_development}
+
+In order to put the design of the ontology on a stable footing, we chose to adopt a tried and tested design methodology, rather than using a purely ad-hoc approach. We decided to use the \emph{Methontology} methodology, which was first introduced in \cite{gomez_perez1996conceptualise_ontologies} and \cite{fernandez1997methontology}. Methontology provides a good balance of formalisation and streamlining of the design process on the one hand, and a looseness in its requirements on how strictly one needs to follow the individual phases and steps. The authors specifically advocate an ``evolving prototype life cycle'', which allows the ontology to ``grow depending on its needs'' \cite{fernandez1997methontology}.
+
+Methontology consists of seven different stages, which will be briefly described in the following sections. For a more detailed discussion, we point the reader to the original papers proposing this methodology. The phases are \emph{specification}, \emph{knowledge acquisistion}, \emph{conceptualisation}, \emph{integration}, \emph{implementation}, \emph{evaluation} and \emph{documentation}. It is important to note that the phases do not have to be visited slavishly in the order presented here. Instead, a much more likely scenario is that the ontology designers will visit each phase roughly in this order, but are free to revisit each phase at any time to apply changes.
+
+\subsubsection{Specification} % (fold)
+\label{ssub:specification}
+
+The specification phase sets the stage for the rest of the ontology development process. The central activity in this phase is the setting up of an \emph{ontology requirement specification document}, which will act as a guideline for most of the other phases. The level of formality of the specification document is left open and can range from pure natural language, over a set of intermediate representations to using competency questions. Most likely, it will be a mix of those formats. Regardless of the chosen format of the specification document, it must answer questions regarding the \emph{purpose} of the ontology (intended use and users, scenarios, etc.), its \emph{scope} (what are the things that need to be covered), its \emph{level of formality} (e.g. highly informal, semi-formal or rigorously formal \cite{uschold1996ontologies}) and the \emph{sources of knowledge} used when researching the ontology. It should be noted that the scope as defined in the specification document does not need to be complete. Rather, it should provide a good impression of the kind of terms that need to be covered by the ontology.
+
+The \emph{Domain Analysis} section of this deliverable implements an ontology requirement specification document for the FAST gadget ontology (which is not to be confused with the FAST requirements deliverable \cite{villoslada2009fast_requirements}!).
+% subsubsection specification (end)
+
+\subsubsection{Knowledge Acquisition} % (fold)
+\label{ssub:knowledge_acquisition}
+
+Knowledge Acquisition in the context of Methontology is a loose collective term to all activities which are aimed at gathering background knowledge to clearly determine purpose and scope of the ontology. As such, it feeds directly into the specification phase, but can just as well be relevant at later stages of the design and development process. Similarly to evaluation and documentation, knowledge acquisition is a supporting activity, which takes place throughout the whole development process.
+
+Typical ways of knowledge acquisition are referring to handbooks, encyclopaedias or other written material (through formal or informal text analysis), performing interviews with domain experts (structured or non-structured) or evaluating previous conceptualisation work done for the domain in question.
+
+The primary sources used for knowledge acquisition for the the FAST gadget ontology are referred to in Sect.~\ref{sec:related_work}.
+% subsubsection knowledge_acquisition (end)
+
+\subsubsection{Conceptualisation} % (fold)
+\label{ssub:conceptualisation}
+
+The conceptualisation phase stands at the core of the ontology development process. The ontology is still in a language-/format-independent state, but is becoming increasingly formal. Based on the specification document, the ontology designers now create a number of increasingly detailed and fine-grained tables and dictionaries which cover all terms to be included in the ontology (at the current stage - an ontology in the Semantic Web sense is never complete). In the first iteration, a so-called \emph{glossary of terms} (GT) is built, which includes all concepts (or classes), instances and properties (or verbs). The GT does not have to be built from scratch, but can instead be understood as an extension of the scope definition in the specification phase.  In contrast to the specification document, the GT is a living document that should always reflect the latest and most complete list of terms. Once completed (in a first iteration), the terms in the GT will be grouped according to relatedness. For each group, the concepts are arranged in a classification tree. Instances, constants and attributes are grouped in corresponding tables, while properties are captured in verb diagrams. If necessary, tables with formulas and rules are set up at the end of the conceptualisation phase.
+% subsubsection conceptualisation (end)
+
+\subsubsection{Integration} % (fold)
+\label{ssub:integration}
+
+The integration phase offers an opportunity for the ontology designer to ensure that their ontology is well integrated with other, existing ontologies. This can either mean connecting the emerging ontology to upper or meta ontologies (in the case that there are appropriate super classes or properties in those ontologies which can act as connection joints), or the reuse of terms from other ontologies (in the case that other ontologies have already defined classes or properties which fall in the scope of the emerging ontology). A typical example for a meta-ontology is OpenCyc, while the FOAF vocabulary \cite{brickley2004foaf} is a example of an often-reused ontology to describe people. As the output of this phase, an \emph{integration document} is suggested, which gives detailed information about which terms were taken from which external ontology.
+% subsubsection integration (end)
+
+\subsubsection{Implementation} % (fold)
+\label{ssub:implementation}
+
+The implementation phase is what is often (wrongly so) considered to be the main activity in developing an ontology: materialising the various ontology terms in a concrete language, which can be RDFS or OWL for the Semantic Web, or any other formal language in other contexts (even a programming language such as C++). The authors of Methontology do not go into a lot of details regarding the carrying out of this phase, other than that the outcome will be the formalisation of the ontology in the ontology language of choice (the \emph{implementation document}).
+% subsubsection implementation (end)
+
+\subsubsection{Evaluation} % (fold)
+\label{ssub:evaluation}
+
+According to [Fernández et  al., 1997], evaluation ``means to carry out a technical judgment of the ontologies, their software environment and documentation with respect to a frame of reference'' (in this case the requirement specification document). Evaluation can take place at any time during the ontology development process, and comprises activities such as \emph{validation} and \emph{verification}.
+
+For the FAST Gadget Ontology, most of the evaluation process will take place as part of the work carried out in WP6 (Experimentation and Evaluation) in years two and three of the project.
+% subsubsection evaluation (end)
+
+\subsubsection{Documentation} % (fold)
+\label{ssub:documentation}
+
+In Methontology, documentation is an activity which is automatically carried out throughout the development process, in the form of the various documents which form the output of the individual phases. Since this deliverable contains the current versions of all those documents, it is at the same time the ontology itself as well as its documentation.
+% subsubsection documentation (end)
+
+% subsection methontology_a_methodology_for_ontology_development (end)
+
+
+\clearpage
+\phantomsection
+\section{Ontology Overview}
+% \addcontentsline{toc}{section}{Ontology Overview}
+
+\begin{figure}[h]
+  \begin{center}
+    \includegraphics[width=.82\linewidth]{images/fgo_uml_diagram}
+    \caption{FAST Gadget Ontology Class Hierarchy}
+    \label{fig:ontology_uml}
+  \end{center}
+\end{figure}
+
+
+\clearpage
+\phantomsection
+\section{Ontology Code}
+% \addcontentsline{toc}{section}{Ontology Code}
 
 Below is the complete code of the FAST gadget ontology in Turtle syntax. The latest version of this file can always be accessed at \url{http://purl.oclc.org/fast/ontology/gadget}.
 
@@ -741,12 +875,18 @@ Below is the complete code of the FAST gadget ontology in Turtle syntax. The lat
 
 \clearpage
 \doublespacing
-\section*{Appendix B (Lists of Tables and Figures)}
-\addcontentsline{toc}{section}{Appendix B (Lists of Tables and Figures)}
+\phantomsection
+\section*{Lists of Tables and Figures}
+\addcontentsline{toc}{section}{Lists of Tables and Figures}
 
 \listoftables
-
 \listoffigures
+
+\clearpage
+\phantomsection
+\bibliographystyle{apalike}
+\addcontentsline{toc}{section}{References}
+\bibliography{fast_d2_2_bib}
 
 
 \end{document}

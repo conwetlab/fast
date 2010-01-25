@@ -1,0 +1,68 @@
+@prefix fgo: <http://purl.oclc.org/fast/ontology/gadget#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>  .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix doap: <http://usefulinc.com/ns/doap#> .
+@prefix sioc: <http://rdfs.org/sioc/ns#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix ctag: <http://commontag.org/ns#> .
+
+# the namespace of resources in the catalogue should not be the same as the ontology NS!
+# instead, it should be the URI to get the resource out of the catalogue.
+# obviously, this means the URI of a resource will change when moved from one catalogue instance to
+# another
+
+fgo:Screen1259251966462     a fgo:Screen;
+     fgo:hasCode <http://localhost:8010/screens/amazonList.scr.html>; # the source code of this screen
+     fgo:hasIcon <http://localhost:8010/images/catalogue/amazonList.png>; # an icon to be used in the FAST GVS
+     fgo:hasId "2";  # used internally to deal with some limitations of the python-based runtime
+     fgo:hasName "Amazon List Screen"; # a human-readable name
+
+     fgo:hasPostCondition  [
+         a rdf:Bag;
+		# each pattern can be an arbitrary graph pattern (one or more triple patterns)
+         rdf:_1  [
+             # fgo:hasId "item"; # not used here
+             fgo:hasPattern fgo:pattern1259251966634; # this would be a graph with a triple like below
+             fgo:hasPatternString "?I http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#Item";
+             fgo:isPositive true; # this post-condition will be true after the screen is finished
+             :label "An item"@en-gb ] ];
+     fgo:hasPreCondition  [
+         a rdf:Bag;
+         rdf:_1  [
+             fgo:hasPattern fgo:pattern1259251966587;
+             fgo:hasPatternString "?F http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#SearchCriteria";
+             fgo:isPositive true; # this pre-condition has to hold
+             :label "A search criteria"@en-gb ] ];
+
+     fgo:hasScreenshot <http://localhost:8010/images/screenshots/amazonProductList.png>; # a screenshot of the 
+		# screen in action. Used as a preview for developers
+		
+     fgo:hasTag "amazon", # those could be resources instead of tags, see below
+            "list",
+            "scratch";
+	 
+	 ctag:tagged [
+		a ctag:Tag;
+		ctag:label "amazon";
+		ctag:means <http://dbpedia.org/resource/Amazon.com>
+	 ],
+	 [
+		a ctag:Tag;
+		ctag:label "list"
+	 ],
+	 [
+		a ctag:Tag;
+		ctag:label "scratch"
+	 ];
+	
+     fgo:hasType "screen"; # this is a convenience property... could be done internally, no need to have this explicitly in the data
+     fgo:hasVersion "1.0";
+     <http://purl.org/dc/terms/creator> <http://www.ismaelrivera.es/>;
+     <http://purl.org/dc/terms/description> "This screen shows the results of a given search in Amazon. It allows users to choose a product to see its details."@en-gb;
+     <http://purl.org/dc/terms/rights> <http://creativecommons.org/>;
+     :label "Product List"@en-gb;
+     <http://xmlns.com/foaf/0.1/homepage> <http://www.deri.ie/amazonList> .
+

@@ -1,0 +1,9 @@
+@prefix ctag: <http://commontag.org/ns#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<http://confuseddevelopment.blogspot.com/2006/03/embeddable-frameworks-in-cocoa.html> ctag:tagged _:x .
+
+_:x a ctag:Tag;
+  ctag:label "cocoa";
+  ctag:means <http://dbpedia.org/resource/Cocoa_%28API%29> ;
+  ctag:taggingDate "2010-01-20"^^xsd:dateTime.

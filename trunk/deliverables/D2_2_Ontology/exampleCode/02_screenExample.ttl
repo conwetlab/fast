@@ -1,0 +1,86 @@
+@prefix fgo: <http://purl.oclc.org/fast/ontology/gadget#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>  .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix doap: <http://usefulinc.com/ns/doap#> .
+@prefix sioc: <http://rdfs.org/sioc/ns#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix ctag: <http://commontag.org/ns#> .
+
+# a screen with no code, but a definition
+
+fgo:Screen1259310137675     a fgo:Screen;
+     fgo:hasDefinition  [
+         fgo:contains  [
+             a fgo:ResourceReference;
+             fgo:hasId "amazonListForm1";
+             fgo:hasUri fgo:FormElement1259253452048 ],
+                 [
+             a fgo:ResourceReference;
+             fgo:hasId "AmazonSearchService1";
+             fgo:hasUri fgo:BackendService1259254307948 ],
+                 [
+             fgo:hasIdActionTo "showTable";
+             fgo:hasIdBBFrom "AmazonSearchService1";
+             fgo:hasIdBBTo "amazonListForm1";
+             fgo:hasIdConditionFrom "list";
+             fgo:hasIdConditionTo "list" ],
+                 [
+             fgo:hasIdActionTo "showMessage";
+             fgo:hasIdBBFrom "AmazonSearchService1";
+             fgo:hasIdBBTo "amazonListForm1";
+             fgo:hasIdConditionFrom "message";
+             fgo:hasIdConditionTo "message" ],
+                 [
+             fgo:hasIdActionTo "search";
+             fgo:hasIdBBFrom "amazonListForm1";
+             fgo:hasIdBBTo "AmazonSearchService1";
+             fgo:hasIdConditionFrom "filter";
+             fgo:hasIdConditionTo "filter" ],
+                 [
+             fgo:hasIdActionTo "";
+             fgo:hasIdBBFrom "amazonListForm1";
+             fgo:hasIdBBTo "";
+             fgo:hasIdConditionFrom "item";
+             fgo:hasIdConditionTo "item" ];
+         fgo:hasTrigger  [
+             fgo:hasIdActionTo "init";
+             fgo:hasIdBBFrom "";
+             fgo:hasIdBBTo "amazonListForm1";
+             fgo:hasNameFrom "_onload" ],
+                 [
+             fgo:hasIdActionTo "search";
+             fgo:hasIdBBFrom "";
+             fgo:hasIdBBTo "AmazonSearchService1";
+             fgo:hasNameFrom "_onload" ] ];
+     fgo:hasIcon <http://localhost:8010/images/catalogue/amazonList.png>;
+     fgo:hasId "28";
+     fgo:hasName "Compound Amazon List Screen";
+     fgo:hasPostCondition  [
+         a rdf:Bag;
+         rdf:_1  [
+             fgo:hasId "item";
+             fgo:hasPattern fgo:pattern1259310137831;
+             fgo:hasPatternString "?I http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#Item";
+             fgo:isPositive true;
+             :label "An item"@en-gb ] ];
+     fgo:hasPreCondition  [
+         a rdf:Bag;
+         rdf:_1  [
+             fgo:hasPattern fgo:pattern1259310137784;
+             fgo:hasPatternString "?F http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#SearchCriteria";
+             fgo:isPositive true;
+             :label "A search criteria"@en-gb ] ];
+     fgo:hasScreenshot <http://localhost:8010/images/screenshots/amazonProductList.png>;
+     fgo:hasTag "amazon",
+            "compound",
+            "list";
+     fgo:hasType "screen";
+     fgo:hasVersion "1.0";
+     <http://purl.org/dc/terms/creator> <http://www.ismaelrivera.es/>;
+     <http://purl.org/dc/terms/description> "This screen shows the results of a given search in Amazon. It allows users to choose a product to see its details."@en-gb;
+     <http://purl.org/dc/terms/rights> <http://creativecommons.org/>;
+     :label "Product List Compound"@en-gb;
+     <http://xmlns.com/foaf/0.1/homepage> <http://www.deri.ie/amazonList> .
