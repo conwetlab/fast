@@ -29,11 +29,11 @@ var InferenceEngine = Class.create( /** @lends InferenceEngine.prototype */ {
      * callback upon completion.
      */
     findCheck: function (/**Array*/ canvas, /** Array*/ elements,
-                         /** Array */ domainContext, 
+                         /** Array */ tags,
                          /** String*/ criteria,
                          /** Function */ callback) {
         
-        var body = this._constructBody(canvas, elements, domainContext, criteria);
+        var body = this._constructBody(canvas, elements, tags, criteria);
         var persistenceEngine = PersistenceEngineFactory.getInstance();
         var context = {
             'callback': callback,
@@ -47,10 +47,10 @@ var InferenceEngine = Class.create( /** @lends InferenceEngine.prototype */ {
      * This function calls the check operation in the catalogue
      */
     check: function (/**Array*/ canvas, /** Object */ elements,
-                    /** Array */ domainContext, 
+                    /** Array */ tags,
                     /** String*/ criteria, 
                     /** Function */ callback) {
-        var body = this._constructBody(canvas, elements, domainContext, criteria, "check");
+        var body = this._constructBody(canvas, elements, tags, criteria, "check");
         var persistenceEngine = PersistenceEngineFactory.getInstance();
         var context = {
             'callback': callback,
@@ -189,6 +189,10 @@ var InferenceEngine = Class.create( /** @lends InferenceEngine.prototype */ {
      * @private
      */
     _onError: function(transport, e){
+        Utils.showMessage("Error loading building blocks. Maybe is it not working?", {
+            'error': true,
+            'hide': true
+        });
         Logger.serverError(transport,e);
     },
     

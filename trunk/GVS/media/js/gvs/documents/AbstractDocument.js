@@ -122,6 +122,15 @@ var AbstractDocument = Class.create(ToolbarModel, /** @lends AbstractDocument.pr
         var gvs = GVSSingleton.getInstance();
         gvs.getDocumentController().closeDocument(this._tabId);
         return true;
+    },
+
+    /**
+     * Sets the document title
+     * @private
+     */
+    _setTitle: function(/** String */ title) {
+        this._title = title;
+        this._tab.attr("title", this._title);
     }
 });
 

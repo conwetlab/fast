@@ -30,6 +30,7 @@ var GalleryDialog = Class.create(FormDialog, /** @lends GalleryDialog.prototype 
         // Assigning the passed parameters, or defaults
         this._properties.set('showTitleRow', (properties.showTitleRow || false));
         this._properties.set('elementsPerPage', (properties.elementsPerPage || 10));
+        this._properties.set('onDblClick', (properties.onDblClick || null));
 
         /**
          * Table fields
@@ -147,9 +148,12 @@ var GalleryDialog = Class.create(FormDialog, /** @lends GalleryDialog.prototype 
                 element.addClassName("selected");
                 
                 this._selectedRow = row;
-                // TODO
-                // this._showButtons();
             }.bind(this));
+            if (this._properties.get('onDblClick')) {
+                rowNode.observe('dblclick', function() {
+                    this._properties.get('onDblClick')(row.key);
+                }.bind(this));
+            }
             content.appendChild(rowNode);
         }.bind(this));
         if (loadAll && this._rows.size() > 0) {

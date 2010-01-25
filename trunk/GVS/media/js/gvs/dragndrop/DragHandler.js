@@ -174,7 +174,7 @@ var DragHandler = Class.create(
         if (this._isChangingZone()) {
             var dropZone = this._inWhichDropZone();          
             if (dropZone) {
-                dropPosition = Geometry.adaptDropPosition(dropZone, draggableNode);
+                dropPosition = Geometry.adaptDropPosition(dropZone.getNode(), draggableNode);
                 this._initialArea.removeChild(draggableNode);
                 accepted = dropZone.drop(this._draggedObject, dropPosition);
             } else {

@@ -47,6 +47,15 @@ var ResourceFactory = Class.create(BuildingBlockFactory,
         }.bind(this));
         return result;
     },
+
+    /**
+     * Gets a new instance of the type of the factory
+     * @override
+     * @type ResourceInstance
+     */
+    getInstance: function(/** BuildingBlockDescription */description, /** InferenceEngine */ engine) {
+        return new ResourceInstance(description, engine);
+    },
     
     /**
      * This function retrieves the pending elements from the serverside

@@ -36,9 +36,19 @@ var BuildingBlockFactory = Class.create(
     /**
      * Gets building block descriptions by URI
      * @type {BuildingBlockDescription[]}
+     * @abstract
      */
     getBuildingBlocks: function (/*...*/) {
         throw "Abstract method invocation. BuildingBlockFactory::getBuildingBlockDescriptions";
+    },
+
+    /**
+     * Gets a new instance of the type of the factory
+     * @abstract
+     * @type ComponentInstance
+     */
+    getInstance: function(/** BuildingBlockDescription */description, /** InferenceEngine */ engine) {
+        throw "Abstract method invocation. BuildingBlockFactory::getInstance";
     }
 
 });

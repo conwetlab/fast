@@ -75,6 +75,15 @@ var FormFactory = Class.create(BuildingBlockFactory,
             callback();
         }       
     },
+
+    /**
+     * Gets a new instance of the type of the factory
+     * @override
+     * @type FormInstance
+     */
+    getInstance: function(/** BuildingBlockDescription */description, /** InferenceEngine */ engine) {
+        return new FormInstance(description, engine);
+    },
     
     // **************** PRIVATE METHODS **************** //
     

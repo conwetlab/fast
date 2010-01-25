@@ -12,14 +12,14 @@ var PaletteDocument = Class.create(AbstractDocument, /** @lends PaletteDocument.
             /** String */ title, 
             /** Array */ buildingBlockSets,
             /** Array */ dropZones,
-            /** Array */ domainContext, /** InferenceEngine */ inferenceEngine) {
+            /** Array */ tags, /** InferenceEngine */ inferenceEngine) {
         $super(title);
         
         /**
          * List of tags
          * @type Array
          */
-        this._domainContext = domainContext;
+        this._tags = tags;
         
         /**
          * Main border container

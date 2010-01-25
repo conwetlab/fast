@@ -23,16 +23,16 @@ var ScreenInferenceEngine = Class.create( /** @lends ScreenInferenceEngine.proto
      * @type String
      */
     _constructBody: function(/**Array*/ canvas, /** Object */ elements,
-                    /** Array */ domainContext, 
+                    /** Array */ tags,
                     /** String*/ criteria, /** String(Optional) */ _method) {
         var method = Utils.variableOrDefault(_method, "");
-        var domain = {
-            'tags': domainContext,
+        var domainContext = {
+            'tags': tags,
             'user': null /* TODO: add user here */
         };
         var body = {
             'canvas': canvas,
-            'domainContext': domain,
+            'domainContext': domainContext,
             'criterion': criteria
         };
         if (method == "check") {

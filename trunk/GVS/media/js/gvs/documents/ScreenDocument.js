@@ -7,7 +7,7 @@ var ScreenDocument = Class.create(PaletteDocument,
      * @extends PaletteDocument
      */
     initialize: function($super, /** Object */ properties) {
-        var domainContext = properties.domainContext;
+        var tags = properties.domainContext.tags;
         var name = properties.name;
         var version = properties.version;
 
@@ -29,13 +29,13 @@ var ScreenDocument = Class.create(PaletteDocument,
         var catalogue = CatalogueSingleton.getInstance();
 
         // Palette sets
-        var formSet = new BuildingBlockSet(domainContext, catalogue.
+        var formSet = new BuildingBlockSet(tags, catalogue.
                             getBuildingBlockFactory(Constants.BuildingBlock.FORM));
-        var operatorSet = new BuildingBlockSet(domainContext, catalogue.
+        var operatorSet = new BuildingBlockSet(tags, catalogue.
                                 getBuildingBlockFactory(Constants.BuildingBlock.OPERATOR));
-        var resourceSet = new BuildingBlockSet(domainContext, catalogue.
+        var resourceSet = new BuildingBlockSet(tags, catalogue.
                                 getBuildingBlockFactory(Constants.BuildingBlock.RESOURCE));
-        var domainConceptSet = new DomainConceptSet(domainContext, catalogue.
+        var domainConceptSet = new DomainConceptSet(tags, catalogue.
                                 getBuildingBlockFactory(Constants.BuildingBlock.DOMAIN_CONCEPT));
         
         // Dropping areas
@@ -60,14 +60,25 @@ var ScreenDocument = Class.create(PaletteDocument,
                                 this._drop.bind(this),
                                 {splitter: true, region: 'right', minWidth:100});
 
-        var areas = $A([formArea, operatorArea, resourceArea, preArea, postArea]);
+        /**
+         * Areas of the canvas
+         * @type Hash
+         * @private
+         */
+        this._areas = $H({
+            'form': formArea,
+            'operator': operatorArea,
+            'resource': resourceArea,
+            'pre': preArea,
+            'post': postArea
+        });
         
         $super(name, $A([formSet, operatorSet, resourceSet, domainConceptSet]),
-                areas,
-                domainContext,  new ScreenInferenceEngine());
+                this._areas.values(),
+                tags,  new ScreenInferenceEngine());
         
         // Adding the dropping areas to the document
-        areas.each(function(area) {
+        this._areas.values().each(function(area) {
             var contentPane = area.getWidget();
             this._screenDesignContainer.addChild(contentPane);
 
@@ -108,10 +119,12 @@ var ScreenDocument = Class.create(PaletteDocument,
         var description;
         if (properties.id) {
             // An existing screen
-            description = properties;
+            description = Object.clone(properties);
             // Removing the definition, which will be interpreted in other
             // functions
             description.definition = null;
+            description.precondition = null;
+            description.postconditions = null;
         } else {
             // A new screen
             description = {
@@ -119,8 +132,8 @@ var ScreenDocument = Class.create(PaletteDocument,
                 'name': name,
                 'version': version,
                 'domainContext': {
-                    'tags': domainContext,
-                    'user': null
+                    'user': null,
+                    'tags': this._tags
                 },
                 "creator": "http://fast.morfeo-project.eu",
                 "description": {"en-gb": "Please fill the description..."},
@@ -143,7 +156,8 @@ var ScreenDocument = Class.create(PaletteDocument,
          * @type PropertiesDialog
          * @private
          */
-        this._propertiesDialog = new PropertiesDialog("Screen", this._description);
+        this._propertiesDialog = new PropertiesDialog("Screen", this._description,
+                                                        this._onPropertiesChange.bind(this));
 
         this._configureToolbar();
 
@@ -168,31 +182,37 @@ var ScreenDocument = Class.create(PaletteDocument,
          */
         this._canvasInstances = new Hash();
 
-        if (this._description.getId()) {
+        /**
+         * Screen canvas position cache
+         * @private
+         * @type ScreenCanvasCache
+         */
+        this._canvasCache = null;
 
-        } else {
-            var paletteStatus = {
+        var paletteStatus = {
             "forms": [],
             "operators": [],
             "backendservices": [],
             "preconditions": [],
             "postconditions":[],
             "pipes":[]
-            };
+        };
 
 
-            // Start retrieving data
-            this._inferenceEngine.findCheck(
-                    this._getCanvas(),
-                    paletteStatus,
-                    this._domainContext,
-                    'reachability',
-                    this._findCheckCallback.bind(this)
-            );
-            domainConceptSet.startRetrievingData();
+        // Start retrieving data
+        this._inferenceEngine.findCheck(
+                this._getCanvas(),
+                paletteStatus,
+                this._tags,
+                'reachability',
+                this._findCheckCallback.bind(this)
+        );
+        domainConceptSet.startRetrievingData();
+
+        if (this._description.getId()) {
+            this._canvasCache = new ScreenCanvasCache(properties);
+        } else {
             this._setSelectedElement();
-
-            this._save();
         }
     },
 
@@ -239,6 +259,27 @@ var ScreenDocument = Class.create(PaletteDocument,
         this._toolbarElements.get('save').setEnabled(true);
     },
 
+    /**
+     * Loads the definition of a screen, when the screen is opened
+     */
+    loadInstances: function() {
+
+        var formFactory = CatalogueSingleton.getInstance().
+            getBuildingBlockFactory(Constants.BuildingBlock.FORM);
+        formFactory.cacheBuildingBlocks(this._canvasCache.getFormURI(),
+                    this._onFormLoaded.bind(this));
+
+        var operatorFactory = CatalogueSingleton.getInstance().
+            getBuildingBlockFactory(Constants.BuildingBlock.OPERATOR);
+        operatorFactory.cacheBuildingBlocks(this._canvasCache.getOperatorURIs(),
+                    this._onOperatorsLoaded.bind(this));
+
+        var resourceFactory = CatalogueSingleton.getInstance().
+            getBuildingBlockFactory(Constants.BuildingBlock.RESOURCE);
+        resourceFactory.cacheBuildingBlocks(this._canvasCache.getResourceURIs(),
+                    this._onResourcesLoaded.bind(this));
+    },
+
     // **************** PRIVATE METHODS **************** //
     
 
@@ -247,7 +288,9 @@ var ScreenDocument = Class.create(PaletteDocument,
      * @private
      * @type Boolean
      */
-    _drop: function(/** Area */ area, /** ComponentInstance */ instance, /** Object */ position) {
+    _drop: function(/** Area */ area, /** ComponentInstance */ instance, /** Object */ position, 
+        /** Boolean (Optional) */ _isLoading) {
+        var isLoading = Utils.variableOrDefault(_isLoading, false);
         // Reject repeated elements (except domain concepts or operators)
         if (instance.constructor != OperatorInstance  &&
                 this._canvasInstances.get(instance.getUri())) {
@@ -267,16 +310,23 @@ var ScreenDocument = Class.create(PaletteDocument,
         area.getNode().appendChild(node);
         node.setStyle({
             'left': position.left + "px",
-            'top': position.top + "px"
+            'top': position.top + "px",
+            'position': 'absolute'
         });
         var uidGenerator = UIDGeneratorSingleton.getInstance();
-        instance.setId(uidGenerator.generate(instance.getTitle()));
-        
+        if (!instance.getId()) {
+            instance.setId(uidGenerator.generate(instance.getTitle()));
+        } else {
+            uidGenerator.setStartId(instance.getId());
+        }
+          
         if (instance.constructor != PrePostInstance) {
             instance.createTerminals(this._onPipeHandler.bind(this));
             this._canvasInstances.set(instance.getUri(), instance);
             this._description.addBuildingBlock(instance, position);
-            this._setSelectedElement(instance);
+            if (!isLoading) {
+                this._setSelectedElement(instance);
+            }
         } else {
             instance.setChangeHandler(this._onPrePostAdded.bind(this));
             if (area.getNode().className.include("pre")) {
@@ -566,7 +616,8 @@ var ScreenDocument = Class.create(PaletteDocument,
      * Elements: canvas and palettes
      * @private
      */
-    _refreshReachability: function () {
+    _refreshReachability: function (/** Boolean (Optional) */_isFindCheck) {
+        var isFindCheck = Utils.variableOrDefault(_isFindCheck, false);
         var canvas = this._getCanvas();
         var body = {
             'forms': this._paletteController.getComponentUris(Constants.BuildingBlock.FORM),
@@ -580,12 +631,12 @@ var ScreenDocument = Class.create(PaletteDocument,
             body.selectedItem = this._selectedElement.getUri();
         }
         
-        if (URIs.catalogueFlow =='check') {
-            this._inferenceEngine.check(canvas, body, this._domainContext, 'reachability',
-                                        this._onUpdateReachability.bind(this));
-        } else {
-            this._inferenceEngine.findCheck(canvas, body,  this._domainContext,
+        if (isFindCheck) {
+            this._inferenceEngine.findCheck(canvas, body,  this._tags,
                                     'reachability', this._onUpdateReachability.bind(this));
+        } else {
+            this._inferenceEngine.check(canvas, body, this._tags, 'reachability',
+                                        this._onUpdateReachability.bind(this));
         }
     },
 
@@ -878,6 +929,16 @@ var ScreenDocument = Class.create(PaletteDocument,
     },
 
     /**
+     * Call whenever a properties dialog has been changed
+     */
+    _onPropertiesChange: function() {
+        this._hasUnsavedChanged = true;
+        this._toolbarElements.get('save').setEnabled(true);
+        // Just in case
+        this._setTitle(this._description.name);
+    },
+
+    /**
      * Publish a screen into the catalogue
      * @private
      */
@@ -904,6 +965,88 @@ var ScreenDocument = Class.create(PaletteDocument,
      */
     _onShareSuccess: function(/** XMLHttpRequest */ transport) {
         Utils.showMessage("Screen successfully shared", {'hide': true});
+    },
+
+    /**
+     * On forms loaded
+     * @private
+     */
+    _onFormLoaded: function() {
+        var formFactory = CatalogueSingleton.getInstance().
+            getBuildingBlockFactory(Constants.BuildingBlock.FORM);
+        var forms = formFactory.getBuildingBlocks(this._canvasCache.getFormURI());
+        this._createInstances(formFactory, forms, this._areas.get('form'));
+        this._canvasCache.setLoaded(Constants.BuildingBlock.FORM);     
+        this._loadConnections();
+    },
+
+    /**
+     * On operators loaded
+     * @private
+     */
+    _onOperatorsLoaded: function() {
+        var operatorFactory = CatalogueSingleton.getInstance().
+                    getBuildingBlockFactory(Constants.BuildingBlock.OPERATOR);
+        var operators = operatorFactory.getBuildingBlocks(this._canvasCache.getOperatorURIs());
+        this._createInstances(operatorFactory, operators, this._areas.get('operator'));
+        this._canvasCache.setLoaded(Constants.BuildingBlock.OPERATOR);
+        this._loadConnections();
+    },
+
+    /**
+     * On resources loaded
+     * @private
+     */
+    _onResourcesLoaded: function() {
+        var resourceFactory = CatalogueSingleton.getInstance().
+                getBuildingBlockFactory(Constants.BuildingBlock.RESOURCE);
+        var resources = resourceFactory.getBuildingBlocks(this._canvasCache.getResourceURIs());
+        this._createInstances(resourceFactory, resources, this._areas.get('resource'));
+        this._canvasCache.setLoaded(Constants.BuildingBlock.RESOURCE);
+        this._loadConnections();
+    },
+
+    /**
+     * Creates the instances coming from a list of uris
+     * @private
+     */
+    _createInstances: function(/** BuildingBlockFactory */ factory, /** Array */ buildingBlocks,
+                                /** Area */ area) {
+        buildingBlocks.each(function(buildingBlock) {
+            // More than one buildingblock for a given uri
+            var ids = this._canvasCache.getIds(buildingBlock.uri);
+            ids.each(function(id) {
+                var instance = factory.getInstance(buildingBlock, this._inferenceEngine);
+                instance.setId(id);
+                var position = this._canvasCache.getPosition(id);
+                instance.onFinish(true, position);
+                // TODO: think about the effective position of the element
+                var dropNode = area.getNode();
+                var zonePosition = Geometry.getRectangle(dropNode);
+
+                this._drop(area, instance, position, true);
+
+                var elementNode = instance.getView().getNode();
+                if (!Geometry.contains(zonePosition,
+                                        Geometry.getRectangle(elementNode))) {
+                    var newPosition = Geometry.adaptDropPosition(dropNode,
+                                    elementNode);
+                    instance.setPosition(newPosition);
+                }
+            }.bind(this));
+        }.bind(this));
+    },
+
+    /**
+     * Function that loads the triggers and the pipes of the loaded screens
+     * @private
+     */
+    _loadConnections: function() {
+
+        if (this._canvasCache.areInstancesLoaded()) {
+            // TODO
+            this._refreshReachability();
+        }
     }
 });
 

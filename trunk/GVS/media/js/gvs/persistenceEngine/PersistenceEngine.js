@@ -41,8 +41,8 @@ var PersistenceEngineFactory = function () {
                 method: 'get',
                 parameters: arguments[4],
                 onSuccess: successHandler.bind(context),
-                onFailure: errorHandler.bind(context),
-                onException: errorHandler.bind(context),
+                //onFailure: errorHandler.bind(context),
+                //onException: errorHandler.bind(context),
 				requestHeaders: requestHeaders
             });
         }

@@ -82,11 +82,14 @@ var DocumentController = Class.create(
     /**
      * Creates a new screen document
      */
-    createScreen: function(/** String */ name, /** String */ domainContext,
+    createScreen: function(/** String */ name, /** Array */ tags,
                             /** String */ version){
         var screen = new ScreenDocument({
                 'name': name,
-                'domainContext': domainContext,
+                'domainContext': {
+                    'user': null,
+                    'tags': tags
+                },
                 'version': version
             });
         this.addDocument(screen);
@@ -96,7 +99,9 @@ var DocumentController = Class.create(
      * Opens an existing screen by its id
      */
     loadScreen: function(/** String */ id) {
-        
+        var persistenceEngine = PersistenceEngineFactory.getInstance();
+        var uri = URIs.buildingblock + id;
+        persistenceEngine.sendGet(uri, this, this._onScreenLoadSuccess, this._onLoadError);
     },
     
     /**
@@ -233,6 +238,24 @@ var DocumentController = Class.create(
      */
     _onKeyPressed: function(/** String */ key) {
         this._currentDocument.onKeyPressed(key);
+    },
+
+    /**
+     * On screen load success
+     * @private
+     */
+    _onScreenLoadSuccess: function (/** XMLHttpRequest */ transport) {
+        var screenData = JSON.parse(transport.responseText);
+        var screen = new ScreenDocument(screenData);
+        this.addDocument(screen);
+        screen.loadInstances();
+    },
+
+    _onLoadError: function() {
+        Utils.showMessage("Can not open the selected element", {
+            'error': true,
+            'hide': true
+        });
     }
 });
 

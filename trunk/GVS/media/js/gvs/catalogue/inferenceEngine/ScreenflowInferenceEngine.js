@@ -48,16 +48,16 @@ var ScreenflowInferenceEngine = Class.create(InferenceEngine /** @lends Screenfl
      * @type String
      */
     _constructBody: function(/**Array*/ canvas, /** Array*/ elements,
-                    /** Array */ domainContext, 
+                    /** Array */ tags,
                     /** String*/ criteria) {
-        var domain = {
-            'tags': domainContext,
+        var domainContext = {
+            'tags': tags,
             'user': null /* TODO: add user here */
         };
         var body = {
             'canvas': canvas,
             'elements': elements,
-            'domainContext': domain,
+            'domainContext': domainContext,
             'criterion': criteria
         };
         return Object.toJSON(body);

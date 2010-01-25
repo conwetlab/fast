@@ -23,7 +23,7 @@ var ComponentInstance = Class.create(DragSource,
          * @type String
          * @private
          */
-        this._id = "";
+        this._id = null;
 
         /**
          * BuildingBlock description graphical representation

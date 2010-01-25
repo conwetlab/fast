@@ -75,6 +75,15 @@ var OperatorFactory = Class.create(BuildingBlockFactory,
             callback();
         }       
     },
+
+    /**
+     * Gets a new instance of the type of the factory
+     * @override
+     * @type OperatorInstance
+     */
+    getInstance: function(/** BuildingBlockDescription */description, /** InferenceEngine */ engine) {
+        return new OperatorInstance(description, engine);
+    },
     
     // **************** PRIVATE METHODS **************** //
     

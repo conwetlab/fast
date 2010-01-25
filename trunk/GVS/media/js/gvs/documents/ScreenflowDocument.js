@@ -6,7 +6,7 @@ var ScreenflowDocument = Class.create(PaletteDocument,
      * @constructs
      * @extends PaletteDocument
      */
-    initialize: function($super, /** String */ title, /** Array */ domainContext, /** String */ version) {
+    initialize: function($super, /** String */ title, /** Array */ tags, /** String */ version) {
         this._inspectorArea = this._createInspectorArea(); 
                
         /**
@@ -24,9 +24,9 @@ var ScreenflowDocument = Class.create(PaletteDocument,
         
         var catalogue = CatalogueSingleton.getInstance();
         
-        var screenSet = new BuildingBlockSet(domainContext, catalogue.
+        var screenSet = new BuildingBlockSet(tags, catalogue.
                             getBuildingBlockFactory(Constants.BuildingBlock.SCREEN));
-        var domainConceptSet = new DomainConceptSet(domainContext, catalogue.
+        var domainConceptSet = new DomainConceptSet(tags, catalogue.
                             getBuildingBlockFactory(Constants.BuildingBlock.DOMAIN_CONCEPT));
         
         /**
@@ -36,7 +36,7 @@ var ScreenflowDocument = Class.create(PaletteDocument,
          */
         this._planPanel = new PlanPanel();
         
-        $super(title, [screenSet, domainConceptSet], [this], domainContext, new ScreenflowInferenceEngine());
+        $super(title, [screenSet, domainConceptSet], [this], tags, new ScreenflowInferenceEngine());
         
         this._planPanel.setDropZone(this);
         this._planPanel.setInferenceEngine(this._inferenceEngine);
@@ -60,7 +60,8 @@ var ScreenflowDocument = Class.create(PaletteDocument,
             'name': title,
             'version': version,
             'domainContext': {
-                'tags': domainContext
+                'tags': tags,
+                'user': null
             }
         });
 
@@ -78,7 +79,7 @@ var ScreenflowDocument = Class.create(PaletteDocument,
         this._inferenceEngine.findCheck(
                 this._getCanvas(),
                 /* palette elements */ [],
-                this._domainContext,
+                this._tags,
                 'reachability',
                 this._findCheckCallback.bind(this)
         );
@@ -386,10 +387,10 @@ var ScreenflowDocument = Class.create(PaletteDocument,
         var palette = this._paletteController.getComponentUris(Constants.BuildingBlock.SCREEN);
         
         if (URIs.catalogueFlow =='check') {
-            this._inferenceEngine.check(canvas, palette, this._domainContext, 
+            this._inferenceEngine.check(canvas, palette, this._tags,
                                         'reachability', this._updatePanes.bind(this));
         } else {
-            this._inferenceEngine.findCheck(canvas, palette,  this._domainContext, 
+            this._inferenceEngine.findCheck(canvas, palette,  this._tags,
                                         'reachability', this._updatePanes.bind(this));
         }
         

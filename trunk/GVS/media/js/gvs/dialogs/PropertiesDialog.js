@@ -6,7 +6,8 @@ var PropertiesDialog = Class.create(ConfirmDialog /** @lends PropertiesDialog.pr
      * @extends ConfirmDialog
      */ 
     initialize: function($super, /** String */ type,
-                        /** BuildingBlockDescription */ description) {
+                        /** BuildingBlockDescription */ description,
+                        /** Function */ onChangeHandler) {
         
         /**
          * Title of the dialog
@@ -25,9 +26,16 @@ var PropertiesDialog = Class.create(ConfirmDialog /** @lends PropertiesDialog.pr
         /**
          * Handler to be called when the dialog finishes
          * @private
-         * @type String
+         * @type Function
          */
-        this._handler = null;
+        this._onFinishHandler = null;
+
+        /**
+         * Handler to be called when the dialog finishes with changes
+         * @private
+         * @type Function
+         */
+        this._onChangeHandler = onChangeHandler;
 
         $super(this._title);
         
@@ -41,7 +49,7 @@ var PropertiesDialog = Class.create(ConfirmDialog /** @lends PropertiesDialog.pr
      */
     show: function($super, /** Function(Optional) */ _handler) {
         var handler = Utils.variableOrDefault(_handler, null);      
-        this._handler = handler;
+        this._onFinishHandler = handler;
         $super();
     },
 
@@ -118,11 +126,21 @@ var PropertiesDialog = Class.create(ConfirmDialog /** @lends PropertiesDialog.pr
             var elements = [form.name, form.version, form.creator, form.rights,
                 form.icon, form.screenshot, form.homepage];
             Object.extend(description, Form.serializeElements(elements, {'hash': true}));
+            var changed = false;
+            $H(description).each(function(pair) {
+                if (this._description[pair.key] != pair.value) {
+                    changed = true;
+                }
+            }.bind(this));
+
             this._description.addProperties(description);
             $super();
-            if (this._handler && this._handler instanceof Function) {
-                this._handler();
-                this._handler = null;
+            if (changed) {
+                this._onChangeHandler();
+            }
+            if (this._onFinishHandler && this._onFinishHandler instanceof Function) {
+                this._onFinishHandler();
+                this._onFinishHandler = null;
             }
         }
     },

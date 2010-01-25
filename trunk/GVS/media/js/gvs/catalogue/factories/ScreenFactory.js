@@ -75,6 +75,15 @@ var ScreenFactory = Class.create(BuildingBlockFactory,
             callback();
         }       
     },
+
+    /**
+     * Gets a new instance of the type of the factory
+     * @override
+     * @type ScreenInstance
+     */
+    getInstance: function(/** BuildingBlockDescription */description, /** InferenceEngine */ engine) {
+        return new ScreenInstance(description, engine);
+    },
     
     // **************** PRIVATE METHODS **************** //
     

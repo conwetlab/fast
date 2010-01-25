@@ -6,7 +6,7 @@ var ManageScreensDialog = Class.create(GalleryDialog /** @lends ManageScreensDia
      * @extends GalleryDialog
      */ 
     initialize: function($super) {  
-        $super("Screen browser");
+        $super("Screen browser", {'onDblClick': this._openScreen.bind(this)});
 
         /**
          * List of screens

@@ -114,9 +114,8 @@ Object.extend(Geometry, {
         }
     },
 
-    adaptDropPosition: function(/** DropZone */ dropZone, /** Element */ node) {
+    adaptDropPosition: function(/** Element */ containerElement, /** Element */ node) {
         var element = this.getRectangle(node);
-        var containerElement = dropZone.getNode();
         var containerBounds = this.getClientRectangle(containerElement);
 
         var width = element.right - element.left;
@@ -139,5 +138,41 @@ Object.extend(Geometry, {
             'top': element.top - containerBounds.top
         }
 
+    },
+
+    adaptInitialPosition: function(/** Element */ containerElement, /** Element */ node,
+                                    /** Object */ position) {
+        var containerBounds = {
+            'top': 0,
+            'left': 0,
+            'right': containerElement.clientWidth,
+            'bottom': containerElement.clientHeight
+        }
+        
+        var elementBounds = {
+            'top': position.top,
+            'left': position.left,
+            'right': position.left + node.offsetWidth,
+            'bottom': position.top + node.offsetHeight      
+        }
+
+        var result = {
+            'top': position.top,
+            'left': position.left
+        };
+
+        if (elementBounds.right > containerBounds.right)
+            result.left = containerBounds.right - node.offsetWidth;
+
+        if (elementBounds.left < containerBounds.left)
+            result.left = containerBounds.left;
+
+        if (elementBounds.bottom > containerBounds.bottom)
+            result.top = containerBounds.bottom - node.offsetHeight;
+
+        if (elementBounds.top < containerBounds.top)
+            result.top = containerBounds.top;
+
+        return result;
     }
 }); 
