@@ -1,0 +1,425 @@
+<html>
+	<head>
+        <meta http-equiv="Content-Type" content="application/xhtml+xml; charset=UTF-8">
+		<link type="text/css" rel="stylesheet" href="http://piccolo.ls.fi.upm.es/amazonScreens/style/table.css" />
+        <link type="text/css" rel="stylesheet" href="http://piccolo.ls.fi.upm.es/amazonScreens/style/screen.css" />
+		<style type="text/css">
+			#pagesComparative{
+				color:#FEBF43;
+				font-weight: bold;
+				padding: 10px;
+			}
+			#previousButtonComparative, #nextButtonComparative {
+				visibility:hidden;
+			}
+			#loadingImgComparative{
+				margin:auto;
+				padding-top: 10px;
+			}
+			#like{
+				padding: 5px;
+				color: #777777;
+			}
+			.productTitle{
+				font-weight:bold;
+				font-style:normal;
+			}
+			#listDiv tbody td {
+				text-align: justify;
+			}
+			.tiny{
+				font-size:10px;
+			}
+			#amazonImage{
+				position:absolute;
+				right:0px;
+				top:3px;
+			}
+		</style>
+		<script language="JavaScript" src="http://piccolo.ls.fi.upm.es/amazonURL/signAmazonURLs.js"></script>
+		<script language="JavaScript" src="http://piccolo.ls.fi.upm.es/amazonURL/jssha2/sha2.js"></script>
+        <script language="JavaScript">
+        
+        	function PriceComparative(){
+	            //Next set of products to print in the table
+	            this.currentPage = 0;
+	            //Product list fetched from the Service
+	            this.productList = new Array();
+	            //Are we waiting for data?
+	            this.waiting = true;
+            };
+            
+            PriceComparative.prototype.init = function (){
+                $("nextButtonComparative").observe("click", priceComparative.nextPage);
+                $("previousButtonComparative").observe("click", priceComparative.previousPage);
+				$$('input[type="button"]').each(function(element){
+					element.observe("mouseover",function(event){
+						var e = Event.element(event);
+						e.setStyle({cursor:"pointer"});
+					});
+				
+				});
+				var item = ScreenflowEngineFactory.getInstance().getFact('http://aws.amazon.com/AWSECommerceService#Item');
+				$$(".productTitle").each(function(element){
+					element.update(item.data.title);
+				});
+				var tableBody = $("listBodyComparative");
+                tableBody.update("");
+                priceComparative.currentPage = 0;
+	            priceComparative.productList = new Array();
+	            priceComparative.waiting = true;
+	            priceComparative.showProgress();
+                priceComparative.fetch();
+            }
+            
+            PriceComparative.prototype.fetch = function (){
+            
+            	//Get the facts to invoke the service
+                var item = ScreenflowEngineFactory.getInstance().getFact('http://aws.amazon.com/AWSECommerceService#Item');
+                var user = ScreenflowEngineFactory.getInstance().getFact('user');
+                //Add the ItemSearch parameters
+                var parameters = "";
+				parameters += "&ItemId=" + item.data.ASIN;
+				parameters += "&MerchantId=All&Condition=All";
+                
+                //Base URL of the REST Service
+				var url = "http://webservices.amazon.com/onca/xml?Service=AWSECommerceService";
+				//Add the AccessKeyId (get from the user fact)
+				/*if (user)
+					url += "&AWSAccessKeyId=" + user.data.KeyId;
+				else // if the KB doesn't contain a user key Id, add one by default
+					url += "&AWSAccessKeyId=15TNKDQJGH6BD0Z4KY02";*/
+				//Add the operation Type
+				url +="&Operation=ItemLookup";
+				//Add the parameters
+				url += parameters;
+				//Add the responseGroup
+				url +="&ResponseGroup=OfferFull";
+				//Add the current version of the API
+				url += "&Version=2008-06-26";
+                               
+	
+			var encoder = new URLAmazonEncoder();
+			url = encoder.encode(url);
+	
+
+				//Invoke the service
+		        new FastAPI.Request(url,{
+		            'method':       'get',
+		            'content':      'xml',
+		            'context':      priceComparative,
+		            'onSuccess':    priceComparative.addToList
+		        });
+            }
+            
+            PriceComparative.prototype.addToList = function (transport){
+                var xml = transport;
+                //Check if the service returned an error
+                if (xml.getElementsByTagName("IsValid")[0].childNodes[0].nodeValue == "False") {
+                    alert(xml.getElementsByTagName("Message")[0].childNodes[0].nodeValue);
+                }
+                else { //Correct response, create the result List
+                    var comparativelist = xml.getElementsByTagName("Offers")[0].getElementsByTagName("Offer");
+                    //Fill the table, 1 row per item
+                    $A(comparativelist).each(function(offer){
+                        if (offer.getElementsByTagName("Name").length > 0) 
+                            var sellerName = offer.getElementsByTagName("Name")[0].firstChild.nodeValue;
+						else
+							if  (offer.getElementsByTagName("Nickname").length > 0)
+						    	var sellerName = offer.getElementsByTagName("Nickname")[0].firstChild.nodeValue;
+							else
+								var sellerName = "&nbsp;";
+                        if (offer.getElementsByTagName("SellerId").length > 0) 
+                            var sellerId = offer.getElementsByTagName("SellerId")[0].firstChild.nodeValue;
+						else
+						    var sellerId = "none";
+                        if (offer.getElementsByTagName("AverageFeedbackRating").length > 0) 
+                            var averageRating = offer.getElementsByTagName("AverageFeedbackRating")[0].firstChild.nodeValue;
+						else
+						    var averageRating = "&nbsp;";
+                        if (offer.getElementsByTagName("TotalFeedback").length > 0) 
+                            var totalFeedback = offer.getElementsByTagName("TotalFeedback")[0].firstChild.nodeValue;
+						else
+						    var totalFeedback = "&nbsp;";
+                        if (offer.getElementsByTagName("Condition").length > 0)
+							var condition = offer.getElementsByTagName("Condition")[0].firstChild.nodeValue;             
+						else
+						    var condition = "&nbsp;";
+                        if (offer.getElementsByTagName("ConditionNote").length > 0)
+							var conditionNote = "(" + offer.getElementsByTagName("ConditionNote")[0].firstChild.nodeValue + ")";             
+						else
+						    var conditionNote = "&nbsp;";
+                        if (offer.getElementsByTagName("OfferListingId").length > 0)
+							var offerId = offer.getElementsByTagName("OfferListingId")[0].firstChild.nodeValue;             
+						else
+						    var offerId = "";
+                        if (offer.getElementsByTagName("Price").length > 0)
+							var price = offer.getElementsByTagName("Price")[0].getElementsByTagName("FormattedPrice")[0].firstChild.nodeValue;             
+						else
+						    var price = "";
+                        if (offer.getElementsByTagName("AmountSaved").length > 0)
+							var amountSaved = offer.getElementsByTagName("AmountSaved")[0].getElementsByTagName("FormattedPrice")[0].firstChild.nodeValue;             
+						else
+						    var amountSaved = "";
+                        if (offer.getElementsByTagName("PercentageSaved").length > 0)
+							var percentageSaved = offer.getElementsByTagName("PercentageSaved")[0].firstChild.nodeValue;             
+						else
+						    var percentageSaved = "&nbsp;";
+                        if (offer.getElementsByTagName("Availability").length > 0)
+							var availability = offer.getElementsByTagName("Availability")[0].firstChild.nodeValue;             
+						else
+						    var availability = "&nbsp;";
+                        var row = {
+                            sellerName: sellerName,
+                            sellerId: sellerId,
+                            location: location,
+                            averageRating: averageRating,
+							totalFeedback: totalFeedback,
+							condition: condition,
+							conditionNote: conditionNote,
+							offerId: offerId,
+							price: price,
+							amountSaved: amountSaved,
+							percentageSaved: percentageSaved,
+							availability: availability
+                        };
+                        priceComparative.productList.push(row);
+				    });
+                    if (priceComparative.waiting) {
+                        priceComparative.waiting = false;
+                        priceComparative.showTable();
+                    }
+                }
+            }
+            
+			PriceComparative.prototype.addToCart = function (offerId){
+				var cart = ScreenflowEngineFactory.getInstance().getFact('http://aws.amazon.com/AWSECommerceService#ShoppingCart');
+				var user = ScreenflowEngineFactory.getInstance().getFact('user');
+				if (cart){//If the cart is already created, it will have an ID in the User Fact
+					var url = "http://webservices.amazon.com/onca/xml?Service=AWSECommerceService";
+					//Add the AccessKeyId (get from the user fact)
+					/*if (user)
+						url += "&AWSAccessKeyId=" + user.data.KeyId;
+					else // if the KB doesn't contain a user key Id, add one by default
+						url += "&AWSAccessKeyId=15TNKDQJGH6BD0Z4KY02";*/
+					//Add the operation Type
+					url +="&Operation=CartAdd";
+					//Add the current version of the API
+					url += "&Version=2008-06-26";
+					//Add item ID
+					url += "&CartId=" + cart.data.id;
+					url += "&HMAC=" + cart.data.HMAC;
+					url += "&Item.1.OfferListingId=" + offerId;
+					url += "&Item.1.Quantity=" + 1;
+					
+						var encoder = new URLAmazonEncoder();
+						url = encoder.encode(url);
+	
+					//Invoke the service
+					new FastAPI.Request(url,{
+	                    'method':       'get',
+	                    'content':      'xml',
+	                    'context':      priceComparative,
+	                    'onSuccess':    priceComparative.productAdded
+	                });
+				}
+				else { //Cart doesn't exist: Create a new cart with the product
+					var url = "http://webservices.amazon.com/onca/xml?Service=AWSECommerceService";
+					//Add the AccessKeyId (get from the user fact)
+				/*	if (user)
+						url += "&AWSAccessKeyId=" + user.data.KeyId;
+					else // if the KB doesn't contain a user key Id, add one by default
+						url += "&AWSAccessKeyId=15TNKDQJGH6BD0Z4KY02";*/
+					//Add the operation Type
+					url +="&Operation=CartCreate";
+					//Add the current version of the API
+					url += "&Version=2008-06-26";
+					//Add item ID
+					url += "&Item.1.OfferListingId=" + offerId;
+					url += "&Item.1.Quantity=" + 1;
+					
+						var encoder = new URLAmazonEncoder();
+						url = encoder.encode(url);
+	
+					//Invoke the service
+	                new FastAPI.Request(url,{
+	                    'method':       'get',
+	                    'content':      'xml',
+	                    'context':      priceComparative,
+	                    'onSuccess':    priceComparative.cartCreated
+	                });
+				}
+			}
+			
+			PriceComparative.prototype.cartCreated = function (transport){
+				var xml = transport;
+				
+				//The product is added to the cart,
+				//tell it to the user
+				if (xml.getElementsByTagName("IsValid")[0].firstChild.nodeValue == "True"){
+					
+					//Check if the product is eligible for shopping
+					if ((xml.getElementsByTagName("Error").length > 0) && 
+						xml.getElementsByTagName("Error")[0].firstChild.firstChild.nodeValue == "AWS.ECommerceService.ItemNotEligibleForCart"){
+						//The product is not elegible
+						alert ("The product is not eligible to be added to the cart");
+						return;
+					}
+					//Add the Cart ID to the KB
+					var cart = {uri: 'http://aws.amazon.com/AWSECommerceService#ShoppingCart',
+								data:{id: xml.getElementsByTagName("CartId")[0].firstChild.nodeValue,
+									HMAC: xml.getElementsByTagName("URLEncodedHMAC")[0].firstChild.nodeValue}};
+					ScreenflowEngineFactory.getInstance().manageFacts([cart],[]);
+					alert ("Product added to the shopping Cart");
+				}
+				else {
+					alert ("Error adding the product to the cart");
+			    }
+			}
+			
+			PriceComparative.prototype.productAdded = function (transport){
+				var xml = transport;
+				//Check if the product is eligible for shopping
+				if ((xml.getElementsByTagName("Error").length > 0) && 
+					xml.getElementsByTagName("Error")[0].firstChild.firstChild.nodeValue == "AWS.ECommerceService.ItemNotEligibleForCart"){
+					//The product is not elegible
+					alert ("The product is not eligible to be added to the cart");
+					return;
+				}
+				//If the product is added to the cart,
+				//tell it to the user
+				if (xml.getElementsByTagName("IsValid")[0].firstChild.nodeValue == "True")
+					alert ("Product added to the shopping Cart");
+				else
+					alert ("Error adding the product to the cart");
+			}
+			PriceComparative.prototype.onError = function (transport){
+                //alert(transport.responseText);
+            }
+            
+            PriceComparative.prototype.showProgress = function (){
+                priceComparative.waiting = true;
+                $("loadingImgComparative").show();
+            }
+            
+            PriceComparative.prototype.showTable = function (){
+            	if($("loadingImgComparative")){
+                	$("loadingImgComparative").hide();
+                }
+                var templateString = '<tr><td><span class="info">#{price}</span> <br /><span class="tiny">You save #{amountSaved} (#{percentageSaved}%)</span></td>';
+				templateString += '<td>#{condition} #{conditionNote} </td>'; 
+			    templateString += '<td><a target="_blank" href="http://www.amazon.com/gp/help/seller/at-a-glance.html?seller=#{sellerId}">';
+				templateString += '#{sellerName}</a><br /><span class="info">Rating:</span> #{averageRating} of #{totalFeedback} user reviews';
+				templateString += '<br /><span class="info">Availability:</span> #{availability}</td>';
+				templateString += '<td><input width="112" type="image" height="21" border="0" align="absmiddle"';
+				templateString += 'alt="Add to cart" src="http://piccolo.ls.fi.upm.es/amazonScreens/images/addToCart-small.gif"';
+				templateString += 'onclick="priceComparative.addToCart(\'#{offerId}\'); /></td></tr>';
+                var rowTemplate = new Template(templateString);
+                
+                var tableBody = $("listBodyComparative");
+                for (var i = 5 * priceComparative.currentPage; i < 5 * (priceComparative.currentPage + 1); i++) { //print the appropriate elements
+                    if (priceComparative.productList[i]) { //only if the product table is fetched
+                        tableBody.innerHTML += rowTemplate.evaluate(priceComparative.productList[i]);
+                    }
+                }
+                //Update Interface
+                if (priceComparative.currentPage < 1) {
+                    $("nextButtonComparative").setStyle({
+                        visibility: "visible"
+                    });
+                }
+                else {
+                    $("nextButtonComparative").setStyle({
+                        visibility: "hidden"
+                    });
+                }
+                if (priceComparative.currentPage > 0) {
+                    $("previousButtonComparative").setStyle({
+                        visibility: "visible"
+                    });
+                }
+                else {
+                    $("previousButtonComparative").setStyle({
+                        visibility: "hidden"
+                    });
+                }
+            }
+            
+            PriceComparative.prototype.nextPage = function (){
+                //Clear the table
+                var tableBody = $("listBodyComparative");
+                tableBody.update("");
+                priceComparative.currentPage++;
+                priceComparative.showTable();
+				//update the current page in the interface
+				 $("curPageComparative").update(priceComparative.currentPage+1);
+            }
+            
+           PriceComparative.prototype.previousPage = function (){
+                //Clear the table
+                var tableBody = $("listBodyComparative");
+                tableBody.update("");
+                priceComparative.currentPage--;
+                priceComparative.showTable();
+				//update the current page in the interface;
+				$("curPageComparative").update(priceComparative.currentPage+1);
+            }
+            
+            var priceComparative = new PriceComparative();
+			ScreenflowEngineFactory.getInstance().addScreenLoader("{{screenId}}", priceComparative.init);
+			
+        </script>
+	</head>
+	<body>
+        <div id="bodyDiv">
+        	<span id="amazonImage"><img src="http://piccolo.ls.fi.upm.es/amazonScreens/images/amazon.png" /></span>
+            <h1 id="title">Price Comparative</h1>
+			<div id="like">Offers for <span class="productTitle"></span></div>
+            <div id="listDiv">
+                <table>
+                    <thead>
+                        <tr>
+                            <th style="width: 20%; -moz-border-radius-topleft: 13px; -moz-border-radius-topright: 0px; -moz-border-radius-bottomright: 0px; -moz-border-radius-bottomleft: 0px;">
+                                Price
+                            </th>
+                            <th style="width: 20%;">
+                                Condition
+                            </th>
+                            <th style="width: 40%;">
+                                Seller Information
+                            </th>
+                            <th style="width: 20%; -moz-border-radius-topleft: 0px; -moz-border-radius-topright: 13px; -moz-border-radius-bottomright: 0px; -moz-border-radius-bottomleft: 0px;">
+                                Ready to Buy?
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody id="listBodyComparative">
+	                            <tr>
+					<td>&nbsp;</td>
+				    </tr>
+	                            <tr>
+					<td>&nbsp;</td>
+				    </tr>
+	                            <tr>
+					<td>&nbsp;</td>
+				    </tr>
+	                            <tr>
+					<td>&nbsp;</td>
+				    </tr>
+	                            <tr>
+					<td>&nbsp;</td>
+				    </tr>
+		    </tbody>
+                </table>
+                <img style="display: none;" id="loadingImgComparative" src="http://piccolo.ls.fi.upm.es/amazonScreens/images/ajaxLoader.gif">
+                <div id="buttonContainerDiv">
+                    <input style="visibility: hidden;" id="previousButtonComparative" class="button" value="&lt;" type="button">
+					<span id="pagesComparative">
+					Page <span id="curPageComparative">1</span>/2
+					</span><input style="visibility: visible;" id="nextButtonComparative" class="button" value="&gt;" type="button">
+                </div>
+				
+            </div>
+        </div>
+    </body>
+</html>

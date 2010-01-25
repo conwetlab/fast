@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE module PUBLIC "-//Google Inc.//DTD Google Web Toolkit 1.7.0//EN" "http://google-web-toolkit.googlecode.com/svn/tags/1.7.0/distro-source/core/src/gwt-module.dtd">
+
+<module rename-to='servicescreendesignerwep'>
+
+  <!-- Inherit the core Web Toolkit stuff.                        -->
+  <inherits name='com.google.gwt.xml.XML'/>
+  <inherits name='com.google.gwt.json.JSON'/>
+
+  <inherits name='com.google.gwt.user.theme.standard.Standard'/>
+
+  <inherits name="fujaba.web.runtime.FujabaRuntime"/>
+  <inherits name="fast"/>
+  
+  <!-- Specify the app entry point class.                         -->
+  <entry-point class='fast.servicescreen.client.ServiceScreenDesignerWep'/>
+  
+</module>

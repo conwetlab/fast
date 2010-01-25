@@ -1,0 +1,151 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+
+
+<script>
+
+//Trims all spaces to the right of a specific string
+function seperateBySpace(str)
+{
+	        var s = new String(str);
+	        var res = new String("");
+	        var _split = s.split(" ");
+
+	    	for (i = 0; i < _split.length; i++)
+		    {
+	    		res = res + i + ": " + _split[i] + "   \n";
+	    		
+	            var _split0 = _split[i].split(" ");
+	        }
+            
+	        return res;
+}
+
+
+//Trims all spaces to the right of a specific string
+function noralizeSpaces(str)
+{
+        var s = new String(str);
+
+        //while there are more then one Space in follow, replace with one
+        while (s.indexOf("  ") != -1)
+        {
+        	s = s.replace("  ", " ");
+        }
+    	
+        return s;
+}
+
+
+// Trims all spaces to the left of a specific string
+function LTrim(str)
+{
+        var whitespace = new String(" \t\n\r ");
+        // last space character is not a space, but alt+0160,
+        // another invisible char.
+        var s = new String(str);
+        if (whitespace.indexOf(s.charAt(0)) != -1) {
+            // We have a string with leading blank(s)...
+            var j=0, i = s.length;
+            // Iterate from the far left of string until we
+            // don't have any more whitespace...
+            while (j < i && whitespace.indexOf(s.charAt(j)) != -1)
+                j++;
+            // Get the substring from the first non-whitespace
+            // character to the end of the string...
+            s = s.substring(j, i);
+        }
+        return s;
+}
+
+
+// Trims all spaces to the right of a specific string
+function RTrim(str)
+{
+        // We don't want to trip JUST spaces, but also tabs,
+        // line feeds, etc.  Add anything else you want to
+        // "trim" here in whitespace
+        var whitespace = new String(" \t\n\r ");
+        // last space character is not a space, but alt+0160,
+        // another invisible char.
+        var s = new String(str);
+        if (whitespace.indexOf(s.charAt(s.length-1)) != -1) {
+            // We have a string with trailing blank(s)...
+            var i = s.length - 1;       // Get length of string
+            // Iterate from the far right of string until we
+            // don't have any more whitespace...
+            while (i >= 0 && whitespace.indexOf(s.charAt(i)) != -1)
+                i--;
+            // Get the substring from the front of the string to
+            // where the last non-whitespace character is...
+            s = s.substring(0, i+1);
+        }
+        return s;
+}
+
+                                                                                                                    
+// Trims all spaces to the left and right of a specific string by calling RTim
+// and LTrim
+function Trim(str)
+{
+        return RTrim(LTrim(str));
+}
+
+
+
+</script>
+</head>
+
+<body>
+<form name=f1ex>
+
+//CALL "trimBoth(..)"<BR>
+<input type=text name=t6 value="    A test - trim - string     " size=50>
+<input type=button value="cut both sides spaces"
+	onclick="this.form.t1.value=Trim(this.form.t6.value)"> <BR>
+
+<BR>
+<BR>
+
+//CALL "trimLeft(..)"<BR>
+<input type=text name=t5 value="    A test - trim - string     " size=50>
+<input type=button value="cut left spaces"
+	onclick="this.form.t1.value=LTrim(this.form.t5.value)"> <BR>
+
+<BR>
+<BR>
+
+//CALL "trimRight(..)"<BR>
+<input type=text name=t4 value="    A test - trim - string     " size=50>
+<input type=button value="cut right spaces"
+	onclick="this.form.t1.value=RTrim(this.form.t4.value)"> <BR>
+
+<BR>
+<BR>
+
+//CALL "seperateBySpace(..)"<BR>
+<input type=text name=t3 value=" a string sepperated by spaces !" size=50>
+<input type=button value="seperate by spaces"
+	onclick="this.form.t1.value=seperateBySpace(this.form.t3.value)"> <BR>
+
+<BR>
+<BR>
+
+//CALL "normalizeSpaces(..)"<BR>
+<input type=text name=t2 value="   Here where to       much spaces     !" size=50>
+<input type=button value="normalize Spaces"
+	onclick="this.form.t1.value=noralizeSpaces(this.form.t2.value)"> <BR>
+	
+	
+<BR>
+<BR>
+<BR>
+
+RESULT:	
+<input type=text name=t1 value="press the button above to see result.." size=50>
+
+</form>
+
+</body>
+</html>

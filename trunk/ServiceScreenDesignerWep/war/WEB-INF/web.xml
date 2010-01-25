@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE web-app
+    PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
+    "http://java.sun.com/dtd/web-app_2_3.dtd">
+
+<web-app>
+  
+  <!-- Manages Coobra -->
+  <servlet>
+    <servlet-name>coobraServiceImpl</servlet-name>
+    <servlet-class>fujaba.web.runtime.server.CoobraServiceImpl</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>coobraServiceImpl</servlet-name>
+    <url-pattern>/servicescreendesignerwep/fujaba.web.runtime.CoobraService</url-pattern>
+    <url-pattern>/fujaba.web.runtime.CoobraService</url-pattern>
+  </servlet-mapping>
+  
+  <!-- Manages Requests -->
+  <servlet>
+    <servlet-name>reqService</servlet-name>
+    <servlet-class>fast.servicescreen.server.RequestServiceImpl</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>reqService</servlet-name>
+    <url-pattern>/servicescreendesignerwep/request</url-pattern>
+    <url-pattern>/request</url-pattern>
+  </servlet-mapping>
+  
+  <!-- Default page to serve -->
+  <welcome-file-list>
+    <welcome-file>ServiceScreenDesignerWep.html</welcome-file>
+  </welcome-file-list>
+
+</web-app>

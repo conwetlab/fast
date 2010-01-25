@@ -1,0 +1,252 @@
+<token id="0" startLine="0" endLine="0" offset="0" length="0"
+   comment="Operation: de.uni_kassel.fujaba.codegen.classdiag.ASGElementToken">
+   <element id="hlL_o#1"/>
+   <token id="3" startLine="1" endLine="699" offset="0" length="16139"
+      comment="Operation: de.uni_kassel.fujaba.codegen.classdiag.ASGElementToken" fileName="FASTMappingRule" path="fast">
+      <element id="x9AvV#904"/>
+      <token id="4" startLine="22" endLine="698" offset="410" length="15728"
+         comment="class FASTMappingRule">
+         <element id="x9AvV#804"/>
+         <token id="5" startLine="110" endLine="516" offset="2559" length="9285"
+            comment="assoc FASTMappingRule --- FASTMappingRule">
+            <element id="mTNOk#CB4"/>
+         </token>
+         <token id="6" startLine="516" endLine="541" offset="11844" length="519"
+            comment="attr kind:String">
+            <element id="x9AvV#814"/>
+         </token>
+         <token id="7" startLine="541" endLine="590" offset="12363" length="1106"
+            comment="assoc FASTMappingRule --- FASTMappingRule">
+            <element id="mTNOk#BB4"/>
+         </token>
+         <token id="8" startLine="590" endLine="639" offset="13469" length="1233"
+            comment="assoc FASTMappingRule --- ServiceScreen">
+            <element id="mTNOk#7B4"/>
+         </token>
+         <token id="9" startLine="639" endLine="664" offset="14702" length="629"
+            comment="attr sourceTagname:String">
+            <element id="x9AvV#214"/>
+         </token>
+         <token id="10" startLine="664" endLine="689" offset="15331" length="643"
+            comment="attr targetElemName:String">
+            <element id="x9AvV#614"/>
+         </token>
+         <token id="11" startLine="692" endLine="693" offset="16007" length="33"
+            comment="removeYou for role kids">
+            <element id="mTNOk#CB4"/>
+         </token>
+         <token id="12" startLine="693" endLine="694" offset="16040" length="29"
+            comment="removeYou for role parent">
+            <element id="mTNOk#BB4"/>
+         </token>
+         <token id="13" startLine="694" endLine="695" offset="16069" length="36"
+            comment="removeYou for role serviceScreen">
+            <element id="mTNOk#7B4"/>
+         </token>
+      </token>
+   </token>
+   <token id="14" startLine="1" endLine="142" offset="0" length="3055"
+      comment="Operation: de.uni_kassel.fujaba.codegen.classdiag.ASGElementToken" fileName="FactAttribute" path="fast">
+      <element id="mTNOk#A05"/>
+      <token id="15" startLine="16" endLine="141" offset="307" length="2747"
+         comment="class FactAttribute">
+         <element id="mTNOk#905"/>
+         <token id="16" startLine="60" endLine="85" offset="1260" length="567"
+            comment="attr attrName:String">
+            <element id="mTNOk#815"/>
+         </token>
+         <token id="17" startLine="85" endLine="134" offset="1827" length="1130"
+            comment="assoc FactAttribute --- FactType">
+            <element id="mTNOk#415"/>
+         </token>
+         <token id="18" startLine="137" endLine="138" offset="2990" length="31"
+            comment="removeYou for role factType">
+            <element id="mTNOk#415"/>
+         </token>
+      </token>
+   </token>
+   <token id="19" startLine="1" endLine="309" offset="0" length="7125"
+      comment="Operation: de.uni_kassel.fujaba.codegen.classdiag.ASGElementToken" fileName="FactPort" path="fast">
+      <element id="cURvW#28"/>
+      <token id="20" startLine="16" endLine="308" offset="312" length="6812"
+         comment="class FactPort">
+         <element id="cURvW#18"/>
+         <token id="21" startLine="102" endLine="127" offset="2350" length="610"
+            comment="attr exampleValue:String">
+            <element id="UH5gV#783"/>
+         </token>
+         <token id="22" startLine="127" endLine="152" offset="2960" length="562"
+            comment="attr factType:String">
+            <element id="UH5gV#C83"/>
+         </token>
+         <token id="23" startLine="152" endLine="177" offset="3522" length="512"
+            comment="attr name:String">
+            <element id="cURvW#A8"/>
+         </token>
+         <token id="24" startLine="177" endLine="226" offset="4034" length="1235"
+            comment="assoc FactPort --- ServiceScreen">
+            <element id="cURvW#89"/>
+         </token>
+         <token id="25" startLine="226" endLine="275" offset="5269" length="1216"
+            comment="assoc FactPort --- ServiceScreen">
+            <element id="cURvW#19"/>
+         </token>
+         <token id="26" startLine="275" endLine="300" offset="6485" length="500"
+            comment="attr uri:String">
+            <element id="cURvW#C8"/>
+         </token>
+         <token id="27" startLine="303" endLine="304" offset="7018" length="37"
+            comment="removeYou for role serviceScreen2">
+            <element id="cURvW#89"/>
+         </token>
+         <token id="28" startLine="304" endLine="305" offset="7055" length="36"
+            comment="removeYou for role serviceScreen">
+            <element id="cURvW#19"/>
+         </token>
+      </token>
+   </token>
+   <token id="29" startLine="1" endLine="263" offset="0" length="6115"
+      comment="Operation: de.uni_kassel.fujaba.codegen.classdiag.ASGElementToken" fileName="FactType" path="fast">
+      <element id="mTNOk#CD4"/>
+      <token id="30" startLine="22" endLine="262" offset="410" length="5704"
+         comment="class FactType">
+         <element id="mTNOk#BD4"/>
+         <token id="31" startLine="79" endLine="180" offset="1789" length="2374"
+            comment="assoc FactType --- FactAttribute">
+            <element id="mTNOk#315"/>
+         </token>
+         <token id="32" startLine="180" endLine="229" offset="4163" length="1242"
+            comment="assoc FactType --- ServiceDesigner">
+            <element id="mTNOk#9F4"/>
+         </token>
+         <token id="33" startLine="229" endLine="254" offset="5405" length="562"
+            comment="attr typeName:String">
+            <element id="mTNOk#005"/>
+         </token>
+         <token id="34" startLine="257" endLine="258" offset="6000" length="43"
+            comment="removeYou for role factAttributes">
+            <element id="mTNOk#315"/>
+         </token>
+         <token id="35" startLine="258" endLine="259" offset="6043" length="38"
+            comment="removeYou for role serviceDesigner">
+            <element id="mTNOk#9F4"/>
+         </token>
+      </token>
+   </token>
+   <token id="36" startLine="1" endLine="110" offset="0" length="2503"
+      comment="Operation: de.uni_kassel.fujaba.codegen.classdiag.ASGElementToken" fileName="FastObject" path="fast">
+      <element id="_UlS6#6F1"/>
+      <token id="37" startLine="27" endLine="109" offset="624" length="1878"
+         comment="class FastObject">
+         <element id="_UlS6#5F1"/>
+         <token id="38" startLine="78" endLine="104" offset="1928" length="534"
+            comment="method FastObject () : ">
+            <element id="_UlS6#902"/>
+            <token id="39" startLine="81" endLine="103" offset="1965" length="495"
+               comment="activity diagram">
+               <element id="_UlS6#E02"/>
+               <token id="41" startLine="84" endLine="102" offset="2037" length="411"
+                  comment="story activity successor">
+                  <element id="_UlS6#612"/>
+                  <token id="42" startLine="89" endLine="92" offset="2128" length="70"
+                     comment="create object coobra">
+                     <element id="_UlS6#C12"/>
+                  </token>
+                  <token id="43" startLine="92" endLine="95" offset="2198" length="99"
+                     comment="create link sharedObjects from coobra to this">
+                     <element id="_UlS6#C32"/>
+                  </token>
+               </token>
+               <token id="44" startLine="102" endLine="103" offset="2448" length="12"
+                  comment="stop activity">
+                  <element id="_UlS6#F32"/>
+               </token>
+            </token>
+         </token>
+      </token>
+   </token>
+   <token id="45" startLine="1" endLine="281" offset="0" length="6097"
+      comment="Operation: de.uni_kassel.fujaba.codegen.classdiag.ASGElementToken" fileName="ServiceDesigner" path="fast">
+      <element id="mTNOk#7E4"/>
+      <token id="46" startLine="20" endLine="280" offset="375" length="5721"
+         comment="class ServiceDesigner">
+         <element id="mTNOk#6E4"/>
+         <token id="47" startLine="70" endLine="171" offset="1526" length="2226"
+            comment="assoc ServiceDesigner --- FactType">
+            <element id="mTNOk#8F4"/>
+         </token>
+         <token id="48" startLine="171" endLine="272" offset="3752" length="2204"
+            comment="assoc ServiceDesigner --- ServiceScreen">
+            <element id="mTNOk#0F4"/>
+         </token>
+         <token id="49" startLine="275" endLine="276" offset="5989" length="38"
+            comment="removeYou for role factTypes">
+            <element id="mTNOk#8F4"/>
+         </token>
+         <token id="50" startLine="276" endLine="277" offset="6027" length="36"
+            comment="removeYou for role screens">
+            <element id="mTNOk#0F4"/>
+         </token>
+      </token>
+   </token>
+   <token id="51" startLine="1" endLine="639" offset="0" length="16374"
+      comment="Operation: de.uni_kassel.fujaba.codegen.classdiag.ASGElementToken" fileName="ServiceScreenModel" path="fast">
+      <element id="doQnb#441"/>
+      <token id="52" startLine="24" endLine="638" offset="565" length="15808"
+         comment="class ServiceScreenModel">
+         <element id="doQnb#341"/>
+      </token>
+   </token>
+   <token id="53" startLine="1" endLine="566" offset="0" length="13328"
+      comment="Operation: de.uni_kassel.fujaba.codegen.classdiag.ASGElementToken" fileName="ServiceScreen" path="fast">
+      <element id="cURvW#17"/>
+      <token id="54" startLine="23" endLine="565" offset="434" length="12893"
+         comment="class ServiceScreen">
+         <element id="cURvW#07"/>
+         <token id="55" startLine="128" endLine="229" offset="3118" length="2360"
+            comment="assoc ServiceScreen --- FASTMappingRule">
+            <element id="mTNOk#6B4"/>
+         </token>
+         <token id="56" startLine="229" endLine="254" offset="5478" length="517"
+            comment="attr name:String">
+            <element id="cURvW#A7"/>
+         </token>
+         <token id="57" startLine="254" endLine="355" offset="5995" length="2365"
+            comment="assoc ServiceScreen --- FactPort">
+            <element id="cURvW#79"/>
+         </token>
+         <token id="58" startLine="355" endLine="456" offset="8360" length="2332"
+            comment="assoc ServiceScreen --- FactPort">
+            <element id="cURvW#F8"/>
+         </token>
+         <token id="59" startLine="456" endLine="481" offset="10692" length="651"
+            comment="attr requestTemplate:String">
+            <element id="cURvW#E7"/>
+         </token>
+         <token id="60" startLine="481" endLine="530" offset="11343" length="1249"
+            comment="assoc ServiceScreen --- ServiceDesigner">
+            <element id="mTNOk#1F4"/>
+         </token>
+         <token id="61" startLine="530" endLine="555" offset="12592" length="505"
+            comment="attr uri:String">
+            <element id="cURvW#C7"/>
+         </token>
+         <token id="62" startLine="558" endLine="559" offset="13130" length="41"
+            comment="removeYou for role mappingRules">
+            <element id="mTNOk#6B4"/>
+         </token>
+         <token id="63" startLine="559" endLine="560" offset="13171" length="43"
+            comment="removeYou for role postconditions">
+            <element id="cURvW#79"/>
+         </token>
+         <token id="64" startLine="560" endLine="561" offset="13214" length="42"
+            comment="removeYou for role preconditions">
+            <element id="cURvW#F8"/>
+         </token>
+         <token id="65" startLine="561" endLine="562" offset="13256" length="38"
+            comment="removeYou for role serviceDesigner">
+            <element id="mTNOk#1F4"/>
+         </token>
+      </token>
+   </token>
+</token>

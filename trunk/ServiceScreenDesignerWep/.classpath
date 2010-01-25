@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="src" path="gensrc"/>
+	<classpathentry kind="con" path="com.google.gwt.eclipse.core.GWT_CONTAINER"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="/fujaba.web.runtime/features.jar"/>
+	<classpathentry kind="lib" path="/fujaba.web.runtime/RuntimeTools.jar"/>
+	<classpathentry kind="lib" path="/fujaba.web.runtime/util.jar"/>
+	<classpathentry kind="lib" path="lib/trove-2.1.0a1.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/coobra2.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/commons-logging-1.1.1.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/httpclient-4.0-beta2.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/httpcore-4.0.1.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/httpcore-nio-4.0.1.jar"/>
+	<classpathentry kind="lib" path="lib/fujaba.web.runtime.jar"/>
+	<classpathentry kind="output" path="war/WEB-INF/classes"/>
+</classpath>

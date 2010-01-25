@@ -1,0 +1,14 @@
+c1;;v::fast.ServiceScreen;i:zheb24tiy4oe#1;-;-;
+c3;;i:zheb24tiy4oe#1;name;v::Ebay Wrapper;-;-;-;
+c1;;v::fast.FactPort;i:v02z1aczo91v#1;-;-;
+c3;;i:zheb24tiy4oe#1;preconditions;i:v02z1aczo91v#1;-;-;-;
+c3;;i:v02z1aczo91v#1;serviceScreen;i:zheb24tiy4oe#1;-;-;-;
+c3;;i:v02z1aczo91v#1;name;v::search_key;-;-;-;
+c3;;i:v02z1aczo91v#1;factType;v::String;-;-;-;
+c3;;i:v02z1aczo91v#1;exampleValue;v::Notebook;-;-;-;
+c1;;v::fast.FactPort;i:1p32kzuvtise#1;-;-;
+c3;;i:zheb24tiy4oe#1;postconditions;i:1p32kzuvtise#1;-;-;-;
+c3;;i:1p32kzuvtise#1;serviceScreen2;i:zheb24tiy4oe#1;-;-;-;
+c3;;i:1p32kzuvtise#1;name;v::List;-;-;-;
+c3;;i:zheb24tiy4oe#1;requestTemplate;v::http://open.api.sandbox.ebay.com/shopping?appid=KasselUn-efea-4b93-9505-5dc2ef1ceecd&version=517&callname=FindItems&ItemSort=EndTime&QueryKeywords=<search_key>&responseencoding=XML;-;-;-;
+c3;;i:v02z1aczo91v#1;exampleValue;v::USB;v::Notebook;-;-;
