@@ -50,7 +50,6 @@ class BuildingBlock(models.Model):
             return cleanUrl(settings.CATALOGUE_URL)
  
 class Screenflow(BuildingBlock):
-    ezWebStoreURL = models.URLField(null=True)
     def __unicode__(self):
         return u'Screenflow %s: %s' % (self.pk, self.name)
 

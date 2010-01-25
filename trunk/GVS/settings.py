@@ -10,7 +10,6 @@ TEMPLATE_DEBUG = DEBUG
 APPEND_SLASH=False
 
 BASEDIR = path.dirname(path.abspath(__file__))
-APPEND_SLASH = False
 
 ADMINS = (
     # ('Your Name', 'your_email@domain.com')
@@ -18,8 +17,7 @@ ADMINS = (
 
 MANAGERS = ADMINS
 
-DATABASE_ENGINE = 'mysql'           # 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
-DATABASE_OPTIONS = {"init_command": "SET storage_engine=InnoDB"}
+DATABASE_ENGINE = 'postgresql_psycopg2'           # 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
 DATABASE_NAME = 'fast'             # Or path to database file if using sqlite3.
 DATABASE_USER = 'fast'             # Not used with sqlite3.
 DATABASE_PASSWORD = 'fast'         # Not used with sqlite3.
@@ -95,7 +93,6 @@ INSTALLED_APPS = (
     'django.contrib.admin',
     'fast',
     'storage',
-    'deploy',
     'user',
     'buildingblock',
 )
@@ -106,6 +103,8 @@ AUTHENTICATION_BACKENDS = (
 )
 
 LOGIN_REDIRECT_URL = "/"
+
+FORCE_SCRIPT_NAME=""
 
 SESSION_COOKIE_NAME='fastgvsid'
 SESSION_COOKIE_AGE = 5184000    #2 months
@@ -125,7 +124,7 @@ AUTH_PROFILE_MODULE = 'user.UserProfile'
 NOT_PROXY_FOR = ['localhost', '127.0.0.1']
 
 # Url to the server that holds the semantic catalogue
-CATALOGUE_URL = 'http://localhost:8080/Catalogue-0.1-dev/'
+CATALOGUE_URL = 'http://localhost:8080/FASTCatalogue'
 
 # Url to the server that holds the storage service (empty if local storage in GVS)
 STORAGE_URL = None
@@ -133,11 +132,12 @@ STORAGE_URL = None
 # Format of the gadget sent to storage service ('URL' or 'base64string')
 STORAGE_FORMAT = 'base64string'
 
-# Url to the server that holds the GVS Data
-GVS_DATA_URL = 'http://localhost:8010/'
-
 # Url to the ezweb platform where the gadgets will be deployed
-EZWEB_URL = 'http://venus.ls.fi.upm.es/'
+EZWEB_URL = 'http://localhost:8000/'
+
+#Gadget Default Info
+DEFAULT_GADGET_IMAGE_URI='http://demo.fast.morfeo-project.org/fast/images/FASTLogo.png'
+DEFAULT_GADGET_HOMEPAGE_URI='http://fast.morfeo-project.eu'
 
 # Flow of operations against the catalogue in order to refresh the screens
 CATALOGUE_FLOW = 'check'

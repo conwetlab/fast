@@ -11,6 +11,8 @@ def getEzWebTemplate(gadgetData):
                             'gadgetCreator': gadgetData['creator'],
                             'gadgetMail': gadgetData['email'],
                             'gadgetDescription': gadgetData['description']['en-gb'],
+                            'gadgetImageURI': gadgetData['imageURI'],
+                            'gadgetWikiURI': gadgetData['homepage'],
                             'gadgetSlots': gadgetData['prec'],
                             'gadgetEvents': gadgetData['post']})
     return loader.render_to_string(path.join('resources','gadget','ezwebTemplate.xml'), ezWebContext);

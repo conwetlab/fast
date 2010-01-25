@@ -14,6 +14,7 @@ from storage.models import Storage
 from buildingblock.models import Screen, Screenflow, BuildingBlockCode
 
 STORAGE_DIR = path.join(settings.BASEDIR, 'static')
+GADGET_ZIP_DIR = path.join(settings.BASEDIR, 'storage/libs')
 STORAGE_GADGET_ZIP_NAME = 'gadget.zip'
 
 class GadgetStorage(resource.Resource):
@@ -96,6 +97,14 @@ class GadgetStorage(resource.Resource):
             gadgetData['creator'] = json['creator']
         else:
             gadgetData['creator'] = "Creator"
+        if (json.has_key('imageURI') and json['imageURI']!=''):
+            gadgetData['imageURI'] = json['imageURI']
+        else:
+            gadgetData['imageURI'] = settings.DEFAULT_GADGET_IMAGE_URI
+        if (json.has_key('homepage') and json['homepage']!=''):
+            gadgetData['homepage'] = json['homepage']
+        else:
+            gadgetData['homepage'] = settings.DEFAULT_GADGET_HOMEPAGE_URI
             
         gadgetData['name'] = gadgetData['label']['en-gb']
             
@@ -152,7 +161,7 @@ class GadgetStorage(resource.Resource):
         else:
             raise Exception ('Gadget already exists')      
         
-        origin = path.join(STORAGE_DIR, STORAGE_GADGET_ZIP_NAME)
+        origin = path.join(GADGET_ZIP_DIR, STORAGE_GADGET_ZIP_NAME)
         gadgetZipFileName = path.join(gadgetPath, STORAGE_GADGET_ZIP_NAME)
         shutil.copyfile (origin, gadgetZipFileName)
         

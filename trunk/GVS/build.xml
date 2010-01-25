@@ -1,7 +1,7 @@
 <?xml version="1.0" ?>
 <project name="FAST GVS" default="main" basedir=".">
 	<!-- set global properties for this build -->
-	<property name="gadget_destdir" value="${basedir}/static"/>
+	<property name="gadget_destdir" value="${basedir}/storage/libs"/>
 	<property name="gadget_zip_file_name" value="gadget.zip"/>
     <property name="gadget_zip_path" value="${gadget_destdir}/${gadget_zip_file_name}"/>
     <property name="store_libs_dir" value="${basedir}/storage/libs"/>

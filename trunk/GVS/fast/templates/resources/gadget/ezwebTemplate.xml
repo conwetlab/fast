@@ -8,8 +8,8 @@
         <Author>{{ gadgetCreator }}</Author>
         <Mail>{{ gadgetMail }}</Mail>
         <Description>{{ gadgetDescription }}</Description>
-        <ImageURI>http://demo.ezweb.morfeo-project.org/repository/fast/amazon/amazon.png</ImageURI>
-        <WikiURI>http://ezweb.morfeo-project.org/</WikiURI>
+        <ImageURI>{{ gadgetImageURI }}</ImageURI>
+        <WikiURI>{{ gadgetWikiURI }}</WikiURI>
     </Catalog.ResourceDescription>
 <!-- EzWeb Gadgets Tags -->
     <Platform.Preferences>

@@ -52,9 +52,19 @@ var BuildGadgetDialog = Class.create(ConfirmDialog /** @lends BuildGadgetDialog.
             {'type':'input', 'label': 'Vendor:','name': 'vendor', 'value': 'Morfeo', 'required': true},
             {'type':'input', 'label': 'Version:','name': 'version', 'value': '1.0', 'required': true},
             {'type':'input', 'label': 'Gadget Description:','name': 'desc', 'value': 'Write your description here...'},
+            {'type':'input', 'label': 'Image URL:','name': 'imageURI', 
+                'value': '', 
+                'regExp': FormDialog.URL_VALIDATION, 
+                'message': FormDialog.INVALID_URL_MESSAGE},
+            {'type':'input', 'label': 'Gadget Homepage:','name': 'homepage', 
+                'value': '', 
+                'regExp': FormDialog.URL_VALIDATION, 
+                'message': FormDialog.INVALID_URL_MESSAGE},
             {'type':'title', 'value': 'Author information'},
             {'type':'input', 'label': 'Author Name:','name': 'creator', 'value': user.getRealName()},
-            {'type':'input', 'label': 'E-Mail:','name': 'email', 'value': user.getEmail()}
+            {'type':'input', 'label': 'E-Mail:','name': 'email', 'value': user.getEmail(), 
+                'regExp': FormDialog.EMAIL_VALIDATION, 
+                'message': FormDialog.INVALID_EMAIL_MESSAGE}
         ];     
         this._setContent(formData); 
     },

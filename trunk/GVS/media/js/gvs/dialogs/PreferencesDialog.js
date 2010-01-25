@@ -35,13 +35,13 @@ var PreferencesDialog = Class.create(ConfirmDialog /** @lends PreferencesDialog.
             {'type':'input', 'label': 'Last Name:','name': 'lastName', 
                     'value': user.getLastName()},
             {'type':'input', 'label': 'Email:','name': 'email', 'value': user.getEmail(),
-                    'regExp': '[a-zA-Z0-9._%-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}', 
-                    'message': 'Invalid email address',
+                    'regExp': FormDialog.EMAIL_VALIDATION, 
+                    'message': FormDialog.INVALID_EMAIL_MESSAGE,
                     'required': true},
             {'type':'input', 'label': 'EzWeb URL:','name': 'ezWebURL', 
                     'value': user.getEzWebURL(), 
-                    'regExp': '([hH][tT][tT][pP][sS]?)://[A-Za-z0-9-_]+(\.[A-Za-z0-9-_]+)*(:\d+)?(/[a-zA-Z0-9\.\?=/#%&\+-]*)*', 
-                    'message': 'Invalid URL'}
+                    'regExp': FormDialog.URL_VALIDATION, 
+                    'message': FormDialog.INVALID_URL_MESSAGE}
         ];
         
         this._setContent(formData);

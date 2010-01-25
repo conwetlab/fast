@@ -15,7 +15,6 @@
 	var menu = null;
 	var screens = [
 {# Here the screens involved inside the gadget are defined #}
-{% load fastFilters %}
 {% for screen in gadgetScreens %}
 		{id:"{{screen.id}}",
 		title: "{{ screen.label|cut:" " }}",
