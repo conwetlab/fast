@@ -108,7 +108,7 @@ public class Catalogue {
 			// creates a new triple store
 			tripleStore = new TripleStore(dir, indexes);
 	    	tripleStore.open();
-//	    	tripleStore.clear();
+	    	tripleStore.clear();
 	
 	    	// check if the catalogue is correct
 			if (!check()) {
@@ -2087,7 +2087,9 @@ public class Catalogue {
 		ClosableIterator<Statement> cIt = tripleStore.findStatements(uri, Variable.ANY, Variable.ANY);
 		for ( ; cIt.hasNext(); ) {
 			Statement st = cIt.next();
-			result.add(st);
+			if (st.getPredicate().asURI().equals(RDFS.label) ||
+					st.getPredicate().asURI().equals(RDF.type))
+				result.add(st);
 		}
 		return result;
 	}
