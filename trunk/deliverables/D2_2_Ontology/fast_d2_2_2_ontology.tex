@@ -301,32 +301,13 @@ The following changes have been made with respect to the previous version of thi
 
 \begin{itemize}
 	\item Sect.~\ref{sub:goal_and_scope} has been revised to better define the scope of this deliverable with respect to other deliverables.
-	\item Sect.~1.3 (Methontology) has been moved to the end of the document (Sect.~\ref{sub:methontology_a_methodology_for_ontology_development}), but otherwise did not change.
-	\item The section on design principles (Sect.~\ref{sub:general_design_decisions}) has been extended to reflect research done by the authors within the past year.
+	\item The section on our adopted development methodology (previously Sect.~1.3) has been moved to the end of the document (Sect.~\ref{sub:methontology_a_methodology_for_ontology_development}), but otherwise did not change.
+	\item An evaluation section has been added (Sect.~\ref{sec:evaluation}).
+	\item The section on design principles (previously Sect.~1.4, now Sect.~\ref{sub:general_design_decisions}) has been moved to the general evaluation section and extended to reflect research done by the authors within the past year.
 	\item In the integration section (Sect.~\ref{sub:integration}) of the ontology definition, the Common Tag vocabulary has been added. It is briefly introduced, and the integrated terms are specified.
 \end{itemize}
 
 % subsection changes_from_previous_version (end)
-
-
-\subsection{Usability as a General Design Principles} % (fold)
-\label{sub:general_design_decisions}
-
-Apart from ``hard'' metrics for the evaluation of ontologies, so-called ``soft'' metrics for ontologies are relevant for facilitating better understanding by users and implementers, and therefore ultimately greater uptake.
-
-\subsubsection{Reuse of Existing Ontologies} % (fold)
-\label{ssub:reuse_of_existing_ontologies}
-
-An important aspect to consider when designing any ontology which is aimed to be used not only within a restricted institution or community is to reuse terms from existing ontologies and vocabularies as much as possible. Reuse serves the purpose of lowering the entry barrier for third parties to adopt the ontology --- if they can use familiar concepts and terms, they will be more inclined to try out something new. Equally important is the fact that reuse of terms facilitates data integration, which, after all, is one of the major goals of the Semantic Web at large.
-% subsubsection reuse_of_existing_ontologies (end)
-
-\subsubsection{Modularisation} % (fold)
-\label{ssub:modularisation}
-
-Apart from reusing existing terms, another basic design principle which helps to improve accessibility and understanding of the ontology is modularisation. While all terms will (for the time being) reside in the same namespace, classes and properties will nevertheless be grouped according to the specific sub-task which they belong to. E.g., terms will be grouped into defining \emph{resources}, \emph{pre- and post-conditions}, \emph{general annotation} or \emph{users and user profiles}.
-% subsubsection modularisation (end)
-
-% subsection general_design_decisions (end)
 
 % section introduction (end)
 
@@ -612,58 +593,78 @@ In the following sections we will define the FAST gadget ontology.
 \subsection{Defining Pre- and Post-conditions} % (fold)
 \label{sub:defining_pre_and_post_conditions}
 
-The facts which define the pre- and post-conditions of screens and screenflows in FAST will be modelled as individual RDF triples. In effect, this means that conditions, which are sets of facts, can be modelled as graph patterns using SPARQL notation (see \cite{sparql2008spec}). E.g., a simple pre-condition such as \emph{``There has to be a user''} could be expressed as in example~\ref{ex:simple_precondition}. Literally, this very simple pattern means \emph{``a variable ?user is of type sioc:User''}. In logical terms, it means something along the lines of \emph{``there exists a sioc:User''}. For the pre-condition to be fulfilled, it needs to be executed against the RDF graph in question (most likely the facts on the current canvas).
+The facts which define the pre- and post-conditions of screens and screenflows in FAST will be modelled as individual RDF triples. In effect, this means that conditions, which are sets of facts, can be modelled as graph patterns using SPARQL notation \cite{sparql2008spec}. E.g., a simple pre-condition such as \emph{``There has to be a user''} could be expressed as in List.~\ref{ex:simple_precondition}. Literally, this very simple pattern means \emph{``a variable ?user is of type sioc:User''}. In logical terms, it means something along the lines of \emph{``there exists a sioc:User''}. For the pre-condition to be fulfilled, it needs to be executed against the RDF graph in question (most likely the facts on the current canvas).
 
-\begin{example}
-\begin{verbatim}
+\singlespacing
+\lstset{
+	caption={Simple pre-condition}, 
+	label=ex:simple_precondition,
+	language=sparql
+}
+\begin{figure}[ht]
+\begin{lstlisting}
+	?user a sioc:User .
+\end{lstlisting}
+\end{figure}
+\doublespacing
 
+Post-conditions will be expressed in a similar fashion. At design time, post-condition patterns will have variable in the same way as pre-condition patterns. When a screen is added to the canvas, the pattern needs to be materialised. To do this, each variable will be replaced with a randomly generated URI or blank node. At runtime, variables will be replaced with actual values once the screen for which the post-condition holds has been executed. As an example, consider the post-condition of a login screen. In natural language, it could be \emph{``Once the login process has finished, there will be a user object''}. Using the same notation as before, this could be expressed as shown in List.~\ref{ex:postcondition}, extended with some additional facts (\emph{``There is a user object which has an account name. There is also a person which has a name, and which has the user object as an online account.''}).
 
-?user a sioc:User .
-\end{verbatim}
-\label{ex:simple_precondition}
-\end{example}
-
-Post-conditions will be expressed in a similar fashion. At design time, post-condition patterns will have variable in the same way as pre-condition patterns. When a screen is added to the canvas, the pattern needs to be materialised. To do this, each variable will be replaced with a randomly generated URI or blank node. At runtime, variables will be replaced with actual values once the screen for which the post-condition holds has been executed. As an example, consider the post-condition of a login screen. In natural language, it could be \emph{``Once the login process has finished, there will be a user object''}. Using the same notation as before, this could be expressed as shown in example~\ref{ex:postcondition}, extended with some additional facts (\emph{``There is a user object which has an account name. There is also a person which has a name, and which has the user object as an online account.''}).
-
-\begin{example}
-\begin{verbatim}
-
-?user a sioc:User ;
-      foaf:accountName ?account_name .
-?person a foaf:Person ;
-      foaf:holdsAccount ?user ;
-      foaf:name ?person_name .
-\end{verbatim}
-\label{ex:postcondition}
-\end{example}
+\singlespacing
+\lstset{
+	caption={Simple post-condition}, 
+	label=ex:postcondition,
+	language=sparql
+}
+\begin{figure}[ht]
+\begin{lstlisting}
+	?user a sioc:User ;
+	      foaf:accountName ?account_name .
+	?person a foaf:Person ;
+	      foaf:holdsAccount ?user ;
+	      foaf:name ?person_name .
+\end{lstlisting}
+\end{figure}
+\doublespacing
 
 Once added to the canvas in the GVS (``instantiated at design time''), each variable would be replaced with a blank node identifier, as shown in example~\ref{ex:postcondition_canvas}. The pre-condition in example~\ref{ex:simple_precondition} could now be executed successfully as a SPARQL query against the canvas graph.
 
-\begin{example}
-\begin{verbatim}
-
-_:b0 a sioc:User ;
-      foaf:accountName _:b1 .
-_:b2 a foaf:Person ;
-      foaf:holdsAccount _:b0 ;
-      foaf:name _:b3 .
-\end{verbatim}
-\label{ex:postcondition_canvas}
-\end{example}
+\singlespacing
+\lstset{
+	caption={Post-condition on the FAST GVS canvas}, 
+	label=ex:postcondition_canvas,
+	language=sparql
+}
+\begin{figure}[ht]
+\begin{lstlisting}
+	_:b0 a sioc:User ;
+	      foaf:accountName _:b1 .
+	_:b2 a foaf:Person ;
+	      foaf:holdsAccount _:b0 ;
+	      foaf:name _:b3 .
+\end{lstlisting}
+\end{figure}
+\doublespacing
 
 Finally, during runtime, the post-condition's variables would be replaced with the actual values of the user which completed the login screen (``instantiated during runtime''). E.g., this could result in a graph such as in example~\ref{ex:postcondition_runtime}.
 
-\begin{example}
-\begin{verbatim}
+\singlespacing
+\lstset{
+	caption={Post-condition during runtime}, 
+	label=ex:postcondition_runtime,
+	language=sparql
+}
+\begin{figure}[ht]
+\begin{lstlisting}
+	<http://fast.org/gvs/knud> a sioc:User ;
+	      foaf:accountName "dunk" .
+	<http://kantenwerk.org/metadata/foaf.rdf#me> a foaf:Person ;
+	      foaf:holdsAccount <http://fast.org/gvs/knud> ;
+	      foaf:name "Knud Moeller" .
+\end{lstlisting}
+\end{figure}
+\doublespacing
 
-<http://fast.org/gvs/knud> a sioc:User ;
-      foaf:accountName "dunk" .
-<http://kantenwerk.org/metadata/foaf.rdf#me> a foaf:Person ;
-      foaf:holdsAccount <http://fast.org/gvs/knud> ;
-      foaf:name "Knud Möller" .
-\end{verbatim}
-\label{ex:postcondition_runtime}
-\end{example}
 
 Since graph patterns with variable cannot directly be expressed in RDF (short of using blank nodes, which cannot have labels), the graph patterns are expressed as RDF literals and linked \texttt{fast:Condition} instances using the \texttt{fast:hasPattern} property.
 Each such condition will be linked to a screen or screenflow using either the \texttt{fast:hasPreCondition} or \texttt{fast:hasPostCondition} property.
@@ -759,10 +760,68 @@ At this point in the development of FAST, there are three main entry points at w
 	\item \emph{Pre- and Post-conditions:} In specifying pre- and post-conditions, terminology for an open-ended number of domains is necessary. While a number of classes will be reused quite often, very specific screens will require very specific vocabulary. We cannot, as part of the FAST project, provide vocabulary for all conceivable domains of discourse, and while also here DBpedia identifiers may be an option, often more precise terms will be needed.
 \end{itemize}
 
-It should be added that for any given screenflow, the concrete definition of both domain context and could be derived automatically from any semantic description which the backend services might have. While this might happen directly, without any transformation or mapping, this approach would be impractical in practice. The reason for this is that each backend service can potentially (and very probably) express its semantics in different ontologies or vocabularies, which would render the pre- and post-condition mechanism in FAST useless. Therefore, we assume that a mapping or mediation layer will ensure that the different semantics at the backend service level will be mapped to a common set of terms within the FAST platform. This problem is the topic of deliverable 2.4 in FAST~\cite{ambrus2009fast_mediation}.
+It should be added that for any given screenflow, the concrete definition of both domain context and could be derived automatically from any semantic description which the backend services might have. While this might happen directly, without any transformation or mapping, this approach would be impractical in practice. The reason for this is that each backend service can potentially (and very probably) express its semantics in different ontologies or vocabularies, which would render the pre- and post-condition mechanism in FAST useless. Therefore, we assume that a mapping or mediation layer will ensure that the different semantics at the backend service level will be mapped to a common set of terms within the FAST platform. This problem is the topic of deliverable 2.4 in FAST~\cite{ambrus2010fast_mediation} and has also been discussed in \cite{Ambrus:2009it}.
 % subsection extension_towards_specific_domains (end)
 
 % section the_fast_gadget_ontology (end)
+
+\section{Evaluation} % (fold)
+\label{sec:evaluation}
+
+\subsection{Usability as a General Design Principles} % (fold)
+\label{sub:general_design_decisions}
+
+Apart from ``hard'' metrics for the evaluation of ontologies, so-called ``soft'' factors for ontologies are relevant for facilitating better understanding by users and implementers, and therefore ultimately greater usability and uptake. \cite{moeller2009ontology_soft_skills} define five such soft factors as guidelines for ontology developers:
+
+\singlespacing
+\begin{itemize}
+	\item \textbf{reuse external ontologies} to facilitate integration and compatibility,
+	\item \textbf{avoid over-engineering} and keep the number of ontology terms down to reduce the cognitive load on implementers,
+	\item \textbf{be a good Web citizen} by following the principles of linked data,
+	\item \textbf{be well documented} to make it easy for implementers to understand and use the ontology correctly and
+	\item \textbf{provide tool support} to ease the work-load involved in generating instance data.
+\end{itemize}
+\doublespacing
+
+In the following, we will look at each of those guidelines and discuss in how far the FAST gadget ontology fulfils them.
+
+\subsubsection{Reuse of Existing Ontologies} % (fold)
+\label{ssub:reuse_of_existing_ontologies}
+
+An important aspect to consider when designing any ontology which is aimed to be used not only within a restricted institution or community is to reuse terms from existing ontologies and vocabularies as much as possible. Reuse serves the purpose of lowering the entry barrier for third parties to adopt the ontology --- if they can use familiar concepts and terms, they will be more inclined to try out something new. Equally important is the fact that reuse of terms facilitates data integration, which, after all, is one of the major goals of the Semantic Web at large.
+
+Rather than reinventing the wheel in the various terms that have been defined in its requirement specification, the FAST gadget ontology integrates a number of well-established external ontologies. In particular, FOAF and SIOC are used to model tool users and developers, Dublin Core is applied for its general purpose annotation vocabulary and Common Tag is integrated to allow the modelling of a FAST resource's domain context as complex conceptual tags. Details are given in Sect.~\ref{sub:integration}.
+% subsubsection reuse_of_existing_ontologies (end)
+
+\subsubsection{Avoid of Over-engineering} % (fold)
+\label{ssub:avoid_of_over_engineering}
+
+% subsubsection avoid_of_over_engineering (end)
+
+\subsubsection{Be a good Web Citizen} % (fold)
+\label{ssub:be_a_good_web_citizen}
+
+% subsubsection be_a_good_web_citizen (end)
+
+\subsubsection{Be Well Documented} % (fold)
+\label{ssub:be_well_documented}
+
+% subsubsection be_well_documented (end)
+
+\subsubsection{Provide Tool Support} % (fold)
+\label{ssub:provide_tool_support}
+
+% subsubsection provide_tool_support (end)
+
+\subsubsection{Modularisation} % (fold)
+\label{ssub:modularisation}
+
+Apart from reusing existing terms, another basic design principle which helps to improve accessibility and understanding of the ontology is modularisation. While all terms will (for the time being) reside in the same namespace, classes and properties will nevertheless be grouped according to the specific sub-task which they belong to. E.g., terms will be grouped into defining \emph{resources}, \emph{pre- and post-conditions}, \emph{general annotation} or \emph{users and user profiles}.
+% subsubsection modularisation (end)
+
+% subsection general_design_decisions (end)
+
+% section evaluation (end)
 
 \section{Conclusions and Outlook} % (fold)
 \label{sec:conclusions}
