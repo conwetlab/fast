@@ -295,13 +295,8 @@ public class ScreenComponentFindCheckServlet extends GenericServlet {
 		return jsonSc;
 	}
 	
-	private boolean isConditionCompatible(Condition conA, Condition conB) {
-		if (conA != null && conB != null) {
-			//TODO change this checking if both patterns are indeed compatible, not just comparing the strings
-			if (conA.getPatternString().equals(conB.getPatternString()))
-				return true;
-		}
-		return false;
+	private boolean isConditionCompatible(Condition conA, Condition conB) throws IOException {
+		return CatalogueAccessPoint.getCatalogue().isConditionCompatible(conA, conB);
 	}
 	
 	private List<Pipe> generatePipes(
@@ -309,7 +304,7 @@ public class ScreenComponentFindCheckServlet extends GenericServlet {
 			List<Condition> preconditions,
 			List<Condition> postconditions,
 			ScreenComponent selectedItem,
-			List<Pipe> pipes) {
+			List<Pipe> pipes) throws IOException {
 		ArrayList<Pipe> pipeList = new ArrayList<Pipe>();
 		
 		// look for pipes from <somewhere> to the preconditions of the selected item

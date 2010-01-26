@@ -58,6 +58,7 @@ import eu.morfeoproject.fast.model.ScreenDefinition;
 import eu.morfeoproject.fast.model.ScreenFlow;
 import eu.morfeoproject.fast.model.Trigger;
 import eu.morfeoproject.fast.model.WithConditions;
+import eu.morfeoproject.fast.server.CatalogueAccessPoint;
 import eu.morfeoproject.fast.util.DateFormatter;
 import eu.morfeoproject.fast.vocabulary.CTAG;
 import eu.morfeoproject.fast.vocabulary.DC;
@@ -108,7 +109,7 @@ public class Catalogue {
 			// creates a new triple store
 			tripleStore = new TripleStore(dir, indexes);
 	    	tripleStore.open();
-	    	tripleStore.clear();
+//	    	tripleStore.clear();
 	
 	    	// check if the catalogue is correct
 			if (!check()) {
@@ -741,6 +742,31 @@ public class Catalogue {
 			}
 		}
 		return models;
+	}
+	
+	public boolean isConditionCompatible(Condition conA, Condition conB) {
+		if (conA != null && conB != null) {
+			Model m = RDF2Go.getModelFactory().createModel();
+			m.open();
+			m.addAll(conA.getPattern().iterator());
+
+			// create the ASK SPARQL query for conB
+	    	String queryStr = "ASK {";
+    		if (conB.isPositive()) {
+		    	for (Statement st : conB.getPattern()) {
+					String su = (st.getSubject() instanceof BlankNode) ? st.getSubject().toString() : st.getSubject().toSPARQL();
+					String ob = (st.getObject() instanceof BlankNode) ? st.getObject().toString() : st.getObject().toSPARQL();
+					queryStr = queryStr.concat(su+" "+st.getPredicate().toSPARQL()+" "+ob+" . ");
+		    	}
+	    	}
+	    	queryStr = queryStr.concat("}");
+
+	    	// empty query = is satisfied
+	    	if (queryStr.equals("ASK {}")) return true;
+	    	
+			return m.sparqlAsk(queryStr);
+		}
+		return false;
 	}
 	
 	/**
