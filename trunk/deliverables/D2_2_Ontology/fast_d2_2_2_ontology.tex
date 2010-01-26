@@ -15,6 +15,27 @@
 \usepackage{longtable}
 \usepackage{array}
 \usepackage{amssymb}
+\usepackage{paralist}
+
+% This is useful for switching in-line comments on and off!
+\usepackage{ifthen}
+\newboolean{showcomments}
+\setboolean{showcomments}{true}
+\ifthenelse{\boolean{showcomments}}
+{
+	\definecolor{Red}{rgb}{1,0,0}
+	\newcommand{\note}[1]{\begin{scriptsize}{{\textsf{\textbf{{\textcolor{Red}{[[#1]]}}}}}}\end{scriptsize}}
+	\definecolor{Orange}{rgb}{1,0.5,0}
+	\newcommand{\todo}[1]{\textsf{\textbf{\textcolor{Orange}{[[TODO: #1]]}}}}
+    \definecolor{Green}{rgb}{0,1,0}
+    \newcommand{\commentreply}[1]{\begin{scriptsize}{\textsf{\textbf{\textcolor{Green}{[[#1]]}}}}\end{scriptsize}}
+} {
+	\newcommand{\note}[1]{\textbf{}}
+	\newcommand{\todo}[1]{}
+    \newcommand{\commentreply}[1]{}
+}
+
+
 \usepackage{listings}
 
 \lstdefinelanguage{turtle} 
@@ -305,6 +326,7 @@ The following changes have been made with respect to the previous version of thi
 	\item An evaluation section has been added (Sect.~\ref{sec:evaluation}).
 	\item The section on design principles (previously Sect.~1.4, now Sect.~\ref{sub:general_design_decisions}) has been moved to the general evaluation section and extended to reflect research done by the authors within the past year.
 	\item In the integration section (Sect.~\ref{sub:integration}) of the ontology definition, the Common Tag vocabulary has been added. It is briefly introduced, and the integrated terms are specified.
+	\item The namespace abbreviation for the FAST gadget ontology changed from \texttt{fast} to \texttt{fgo}, in order to distinguish from other FAST ontologies which may be added in the future.
 \end{itemize}
 
 % subsection changes_from_previous_version (end)
@@ -347,7 +369,7 @@ In summary, the ontology is supposed to facilitate support for the user in the d
 \textcolor{white}{\textbf{Scope}} & \textbf{Concepts:} \emph{Component}, \emph{Resource}, \emph{Screen}, \emph{Backend Service}, \emph{Flow Control Element}, \emph{Operator}, \emph{Screenflow Start}, \emph{Screenflow End}, \emph{Connector}, \emph{Form Element}, \emph{Pre-condition}, \emph{Post-condition}, \emph{Query}, \emph{Label}, \emph{Icon}, \emph{User}, \emph{User Profile}, \emph{Tag}
 
 \textbf{Properties:} \emph{containsScreen}, \emph{hasLabel}, \emph{hasIcon}, \emph{hasPreCondition}, \emph{hasPostCondition}, \emph{hasTag}, \emph{hasProfile}\\ \hline
-\textcolor{white}{\textbf{Sources of Knowledge}} & FAST Architecture deliverable~\cite{solero2009fast_architecture}, FAST Requirements Specification~\cite{villoslada2009fast_requirements}, FAST State-of-the-art Document~\cite{urmetzer2010fast_state_of_the_art}, EzWeb documentation~\cite{lizcano2008ezweb} \\ \hline
+\textcolor{white}{\textbf{Sources of Knowledge}} & FAST Architecture deliverable~\cite{solero2009fast_architecture}, FAST Requirements Specification~\cite{villoslada2010fast_requirements}, FAST State-of-the-art Document~\cite{urmetzer2010fast_state_of_the_art}, EzWeb documentation~\cite{lizcano2008ezweb} \\ \hline
 \end{longtable}
 \end{small}
 \doublespacing
@@ -726,7 +748,7 @@ Since SPARQL has no direct support for negation, and since there is a need to al
 \subsection{Classes} % (fold)
 \label{sub:classes}
 
-This section contains a definition of all classes defined in the \texttt{fast} namespace. For classes integrated from other ontologies, see the integration document~\ref{ssub:integration_document}.
+This section contains a definition of all classes defined in the \texttt{fgo} namespace. For classes integrated from other ontologies, see the integration document~\ref{ssub:integration_document}.
 
 \singlespacing
 \begin{small}
@@ -739,7 +761,7 @@ This section contains a definition of all classes defined in the \texttt{fast} n
 \subsection{Properties} % (fold)
 \label{sub:properties}
 
-This section contains a definition of all properties defined in the \texttt{fast} namespace. For properties integrated from other ontologies, see the integration document~\ref{ssub:integration_document}.
+This section contains a definition of all properties defined in the \texttt{fgo} namespace. For properties integrated from other ontologies, see the integration document~\ref{ssub:integration_document}.
 
 \singlespacing
 \begin{small}
@@ -756,6 +778,7 @@ At this point in the development of FAST, there are three main entry points at w
 
 \begin{itemize}
 	\item \emph{Domain Contexts:} By providing a domain context for a screen (or any other FAST resource), it is possible to express what domain this resource is relevant for. Examples for domain contexts are ``medicine'', ``EU projects'', ``catering'', ``human resources'', ``books'', etc. As defined in the Integration Document in Sect.~\ref{ssub:integration_document}, domain contexts are given using the \emph{dcterms:subject} property. One option for finding domain identifiers to be used with this property is the use of DBpedia~\cite{Auer07dbpedia} identifiers such as \url{http://dbpedia.org/resource/Medicine} (DBpedia is a large RDF corpus automatically extracted from the info boxes of Wikipedia entries). This is now a widely used and recommended practice in the Semantic Web community (similar corpora could also be used). As an alternative or supplement to DBpedia identifiers, it is possible to use structured tagging approaches such as MOAT\footnote{\url{http://moat-project.org/}}.
+	\todo{update with reference to common tag!}
 	\item \emph{User Interests:} In the same way as domain contexts, a user's interests can be specified using DBpedia identifiers or structured tagging. Both can then be used in combination to suggest resources to the user.
 	\item \emph{Pre- and Post-conditions:} In specifying pre- and post-conditions, terminology for an open-ended number of domains is necessary. While a number of classes will be reused quite often, very specific screens will require very specific vocabulary. We cannot, as part of the FAST project, provide vocabulary for all conceivable domains of discourse, and while also here DBpedia identifiers may be an option, often more precise terms will be needed.
 \end{itemize}
@@ -768,7 +791,7 @@ It should be added that for any given screenflow, the concrete definition of bot
 \section{Evaluation} % (fold)
 \label{sec:evaluation}
 
-\subsection{Usability as a General Design Principles} % (fold)
+\subsection{Usability as a General Design Principle} % (fold)
 \label{sub:general_design_decisions}
 
 Apart from ``hard'' metrics for the evaluation of ontologies, so-called ``soft'' factors for ontologies are relevant for facilitating better understanding by users and implementers, and therefore ultimately greater usability and uptake. \cite{moeller2009ontology_soft_skills} define five such soft factors as guidelines for ontology developers:
@@ -793,30 +816,50 @@ An important aspect to consider when designing any ontology which is aimed to be
 Rather than reinventing the wheel in the various terms that have been defined in its requirement specification, the FAST gadget ontology integrates a number of well-established external ontologies. In particular, FOAF and SIOC are used to model tool users and developers, Dublin Core is applied for its general purpose annotation vocabulary and Common Tag is integrated to allow the modelling of a FAST resource's domain context as complex conceptual tags. Details are given in Sect.~\ref{sub:integration}.
 % subsubsection reuse_of_existing_ontologies (end)
 
-\subsubsection{Avoid of Over-engineering} % (fold)
+\subsubsection{Avoid Over-engineering} % (fold)
 \label{ssub:avoid_of_over_engineering}
+
+The concrete interpretation of this criterion depends to a large degree on the intended use case and user community of the ontology. For a large-scale undertaking spanning many domains, and where reasoning is in the centre of attention --- CyC e.g. represents this type of ontology  --- a certain amount of complexity is necessary. However, in order to appeal to adopters who are familiar with formal knowledge representation, simplicity can be an important factor. Good examples of such ontologies are FOAF and SIOC, which would arguably not have had such an impact in the wider Web community if they tried to model their respective domains in a much more complex way, making use of the full range of expressivity offered by e.g. the RDFS and OWL ontology languages. Indirect support for this argument is provided by \cite{wang2006owl_survey}, who show that most ontologies found on the Web are on the lower end of the expressivity spectrum, indicating that practitioners either don't need or don't understand the full range of possible expressiveness.
+
+At the moment, the use case for the FAST gadget ontology is the tool-internal representation of gadgets and their components, which means that simplicity for users in the wider community is only of secondary importance. However, the ontology is still kept relatively basic, both in terms of the number of terms (currently 28 classes and 29 properties\todo{Recount!}), and in the complexity of the class definitions themselves, which are mostly restricted to a straightforward class subsumption hierarchy, with the exception of the sparse use of the boolean class expression \texttt{owl:unionOf}.
+
+As another measure to avoid over-engineering, it was ensured that the logical complexity of the ontology falls within the DL fragment\footnote{We use the Pellet reasoner: \url{http://www.mindswap.org/2003/pellet/demo} to measure complexity.} of OWL. While this does not necessarily ensure that an ontology is easy to comprehend by users, it can help to achieve this goal.
 
 % subsubsection avoid_of_over_engineering (end)
 
-\subsubsection{Be a good Web Citizen} % (fold)
+\subsubsection{Be a Good Web Citizen} % (fold)
 \label{ssub:be_a_good_web_citizen}
+
+While ontologies have gained much attention as a key component in the emerging Semantic Web, not all ontologies are meant for use on the Web. However, if ontologies are supposed to be deployed on the Web and used in a Web context, they should also be a good Web citizen, meaning they should follow certain rules and best practices, in particular those defined for the Web of linked data~\cite{bernersLee2006linkedData}. Of those rules, the first two --- all things are identified with a URI and URIs should be HTTP URIs --- are followed by definition if the ontology in question is formalised in RDF. The third one, however --- that information should be served on the Web for each URI --- has often been neglected in the past. Terms in ontologies were identified with URIs which were not dereferencable, i.e., the ontology was defined in a namespace URI, but the ontology document was served at an arbitrary other URI (or even not served anywhere at all). This has two negative effects on adoption:
+\begin{inparaenum}[(i)]
+	\item automatic agents encountering instance data for an ontology cannot request the ontology from its namespace URI to learn the precise formal definitions of the terms used, and
+	\item human users encountering terms from an ontology cannot look up definitions and documentation for them in a Web browser. 
+\end{inparaenum}
+
+The FAST gadget ontology fulfils this criterion by following the best practices recommendations outlined in \cite{berrueta2008publishing_rdf_vocabularies}, thereby ensuring that the ontology is available within a stable namespace and URI and can be accessed both by machine agents to retrieve its formal definition, as well as by human agents, who will retrieve a human-understandable HTML documentation from the same URI. Furthermore, the fourth rule of linked data (links should established between datasets) is covered through the integration of external ontologies, as discussed above in Sec.~\ref{ssub:reuse_of_existing_ontologies}.
 
 % subsubsection be_a_good_web_citizen (end)
 
 \subsubsection{Be Well Documented} % (fold)
 \label{ssub:be_well_documented}
 
+A lack of good documentation for an ontology will make it hard for potential adopters to comprehend and make use of it, whereas on the other hand, good documentation can be the deciding factor in which ontology gains more uptake. On the most basic level, documentation can be provided by the use of annotation properties within the formal definition of the ontology itself (e.g., \texttt{rdfs:comment}). However, in practice this should be extended with human-readable documentation, ideally at the available online at the namespace URI of the ontology itself (see above in Sect.~\ref{ssub:be_a_good_web_citizen}). The human-readable documentation can be as simple as a list of terms and explanations generated from the ontology source, e.g., with a tool such as \emph{VocDoc}\footnote{\url{http://kantenwerk.org/vocdoc/}}, which was developed specifically to generate documentation for the FAST gadget ontology both in an online format and a print format. Much more useful than a simple list of terms, however, are concrete instance examples which illustrate the actual use of the various ontology terms in practice.
+
+Our ontology follows the documentation guideline, both through its online documentation, as well as through this deliverable. Both versions of the documentation provide both a lookup list for terms and their definitions, as well as concrete examples of term usage in instances.
+
 % subsubsection be_well_documented (end)
 
 \subsubsection{Provide Tool Support} % (fold)
 \label{ssub:provide_tool_support}
+
+A further guideline to ease and encourage adoption of an ontology is the provision of tool support to users, which will help them to generate instance data. Examples for such tools can be online forms such as FOAF-a-matic\footnote{\url{http://www.ldodds.com/foaf/foaf-a-matic}} for FOAF or plugins for popular content management systems to generate SIOC data\footnote{\url{http://sioc-project.org/exporters}}. In FAST, instance data for the FAST gadget ontology is never intended to be generated by hand, but rather through the use of the FAST catalogue. Additional tool support is therefore not currently necessary.
 
 % subsubsection provide_tool_support (end)
 
 \subsubsection{Modularisation} % (fold)
 \label{ssub:modularisation}
 
-Apart from reusing existing terms, another basic design principle which helps to improve accessibility and understanding of the ontology is modularisation. While all terms will (for the time being) reside in the same namespace, classes and properties will nevertheless be grouped according to the specific sub-task which they belong to. E.g., terms will be grouped into defining \emph{resources}, \emph{pre- and post-conditions}, \emph{general annotation} or \emph{users and user profiles}.
+Apart from the guidelines proposed by \cite{moeller2009ontology_soft_skills}, another basic design principle which helps to improve accessibility and understanding of the ontology is modularisation. While all terms reside in the same namespace, classes and properties are nevertheless be grouped according to the specific sub-tasks which they belong to. E.g., terms are grouped into defining \emph{resources}, \emph{pre- and post-conditions}, \emph{general annotation} or \emph{users and user profiles}. \todo{Implement this in the online documentation through VocDoc.}
 % subsubsection modularisation (end)
 
 % subsection general_design_decisions (end)
@@ -829,6 +872,8 @@ Apart from reusing existing terms, another basic design principle which helps to
 The current version of deliverable 2.2 provides the foundation for enabling the semantic definition of gadgets within the context of the FAST platform. We have specified what the individual components of a gadget are, and how they interrelate. In developing our ontology, we have followed  well-known methodology for ontology development. During the course of this process, a number of living documents --- the requirements specification document, the glossary of terms, the integration document and finally the implementation document --- were produced. Those documents serve as a tool for development and as documentation at the same time, and will be extended and updated in the coming two years of the project and beyond. The driving force behind these changes will be testing and evaluation of the ontology within the FAST project, and possibly in other contexts as well.
 
 A solution for representing pre- and post-conditions of screens and screen flows --- a central aspect of FAST technology --- has been proposed, which will now have to be implemented and tested both within the FAST catalogue and the FAST GVS.
+
+The FAST gadget ontology has initially been developed using the original OWL ontology language (or OWL 1). Since the start of the project, OWL 2\footnote{\url{http://www.w3.org/TR/owl-overview/}} has been released and is now a W3C recommendation. In order to avoid any potential migration issues, we have so far refrained from adopting OWL 2, but may do so in the future.
 
 Finally, to contribute to a lasting legacy of the FAST project, the gadget ontology will serve as input to standardisation efforts for the definition of semantic gadgets, which will go beyond the scope of the project itself.
 % section conclusions (end)
@@ -858,7 +903,7 @@ Methontology consists of seven different stages, which will be briefly described
 
 The specification phase sets the stage for the rest of the ontology development process. The central activity in this phase is the setting up of an \emph{ontology requirement specification document}, which will act as a guideline for most of the other phases. The level of formality of the specification document is left open and can range from pure natural language, over a set of intermediate representations to using competency questions. Most likely, it will be a mix of those formats. Regardless of the chosen format of the specification document, it must answer questions regarding the \emph{purpose} of the ontology (intended use and users, scenarios, etc.), its \emph{scope} (what are the things that need to be covered), its \emph{level of formality} (e.g. highly informal, semi-formal or rigorously formal \cite{uschold1996ontologies}) and the \emph{sources of knowledge} used when researching the ontology. It should be noted that the scope as defined in the specification document does not need to be complete. Rather, it should provide a good impression of the kind of terms that need to be covered by the ontology.
 
-The \emph{Domain Analysis} section of this deliverable implements an ontology requirement specification document for the FAST gadget ontology (which is not to be confused with the FAST requirements deliverable \cite{villoslada2009fast_requirements}!).
+The \emph{Domain Analysis} section of this deliverable implements an ontology requirement specification document for the FAST gadget ontology (which is not to be confused with the FAST requirements deliverable \cite{villoslada2010fast_requirements}!).
 % subsubsection specification (end)
 
 \subsubsection{Knowledge Acquisition} % (fold)
