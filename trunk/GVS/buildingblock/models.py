@@ -77,7 +77,12 @@ class BuildingBlockCode(models.Model):
         return u'%s:' % (self.buildingBlock, )
     
 class Tag(models.Model):
-    name = models.CharField(max_length=20, unique = True)
+    name = models.CharField(max_length=20)
+    language = models.CharField(max_length=20)
+    means = models.URLField(null=True)
+    
+    class Meta:
+        unique_together = ('name', 'language', 'means')
     
     def __unicode__(self):
         return self.name

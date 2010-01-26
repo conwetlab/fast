@@ -24,7 +24,7 @@
             }
         }
     ],
-    "user":"admin""homepage":"http://www.deri.ie/amazonOrder",
+    "homepage":"http://www.deri.ie/amazonOrder",
     "icon":"http://demo.fast.morfeo-project.org/gvsdata/images/catalogue/amazonOrder.png",
     "label":{
         "en-gb":"Order"

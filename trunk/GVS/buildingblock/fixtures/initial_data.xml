@@ -7,18 +7,9 @@
         <field type="CharField" name="version">1.0</field>
         <field type="TextField" name="data">{
   "code": "http://demo.fast.morfeo-project.org/gvsdata/screens/amazonOrder.scr.html",
-  "creationDate": null,
-  "creator": "http://www.fabio.es/",
+  "creationDate": "2010-01-26T13:37:16+0100",
+  "creator": "admin",
   "description": {"en-gb": "This form allows users to purchase their shopping cart. It shows an Amazon interface to fulfill the required data to purchase the shopping cart"},
-  "domainContext": {
-    "tags": [
-      "scratch",
-      "amazon",
-      "order",
-      "purchase"
-    ],
-    "user": "admin"
-  },
   "homepage": "http://www.deri.ie/amazonOrder",
   "icon": "http://demo.fast.morfeo-project.org/gvsdata/images/catalogue/amazonOrder.png",
   "id": "2",
@@ -32,57 +23,20 @@
   }]],
   "rights": "http://creativecommons.org/",
   "screenshot": "http://demo.fast.morfeo-project.org/gvsdata/images/screenshots/amazonOrder.png",
+  "tags": [
+    {"label": {"en-gb": "scratch"}},
+    {
+      "label": {"en-gb": "amazon"},
+      "means": "http://dbpedia.org/page/Amazon.com"
+    },
+    {"label": {"en-gb": "order"}}
+  ],
   "type": "screen",
-  "uri": "http://purl.oclc.org/fast/ontology/gadget#Screen1263312762903",
+  "uri": "http://localhost:8080/FASTCatalogue/screens/2",
   "version": "1.0"
 }</field>
         <field type="DecimalField" name="popularity"><None></None></field>
-        <field type="CharField" name="uri">http://purl.oclc.org/fast/ontology/gadget#Screen1263312762903</field>
-    </object>
-    <object pk="3" model="buildingblock.buildingblock">
-        <field type="CharField" name="type">screen</field>
-        <field to="auth.user" name="author" rel="ManyToOneRel">1</field>
-        <field type="CharField" name="name">Amazon Price Comparative Screen</field>
-        <field type="CharField" name="version">1.0</field>
-        <field type="TextField" name="data">{
-  "code": "http://demo.fast.morfeo-project.org/gvsdata/screens/amazonPrice.scr.html",
-  "creationDate": null,
-  "creator": "http://www.fabio.es/",
-  "description": {"en-gb": "This screen shows a price comparative for a given product."},
-  "domainContext": {
-    "tags": [
-      "scratch",
-      "amazon",
-      "list",
-      "suggestion",
-      "price comparative"
-    ],
-    "user": "admin"
-  },
-  "homepage": "http://www.deri.ie/amazonPrice",
-  "icon": "http://demo.fast.morfeo-project.org/gvsdata/images/catalogue/amazonPrice.png",
-  "id": "3",
-  "label": {"en-gb": "Price Comparative"},
-  "name": "Amazon Price Comparative Screen",
-  "postconditions": [[{
-    "id": "cart",
-    "label": {"en-gb": "An shopping cart"},
-    "pattern": "?Cart http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#ShoppingCart",
-    "positive": true
-  }]],
-  "preconditions": [[{
-    "label": {"en-gb": "An item"},
-    "pattern": "?Item http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#Item",
-    "positive": true
-  }]],
-  "rights": "http://creativecommons.org/",
-  "screenshot": "http://demo.fast.morfeo-project.org/gvsdata/images/screenshots/amazonPriceComparative.png",
-  "type": "screen",
-  "uri": "http://purl.oclc.org/fast/ontology/gadget#Screen1263312768872",
-  "version": "1.0"
-}</field>
-        <field type="DecimalField" name="popularity"><None></None></field>
-        <field type="CharField" name="uri">http://purl.oclc.org/fast/ontology/gadget#Screen1263312768872</field>
+        <field type="CharField" name="uri">http://localhost:8080/FASTCatalogue/screens/2</field>
     </object>
     <object pk="4" model="buildingblock.buildingblock">
         <field type="CharField" name="type">screen</field>
@@ -91,18 +45,9 @@
         <field type="CharField" name="version">1.0</field>
         <field type="TextField" name="data">{
   "code": "http://demo.fast.morfeo-project.org/gvsdata/screens/amazonProduct.scr.html",
-  "creationDate": null,
-  "creator": "http://www.fabio.es/",
+  "creationDate": "2010-01-26T13:37:27+0100",
+  "creator": "admin",
   "description": {"en-gb": "This screen shows the the details of a product in Amazon"},
-  "domainContext": {
-    "tags": [
-      "scratch",
-      "amazon",
-      "details",
-      "product"
-    ],
-    "user": "admin"
-  },
   "homepage": "http://www.deri.ie/amazonProduct",
   "icon": "http://demo.fast.morfeo-project.org/gvsdata/images/catalogue/amazonProduct.png",
   "id": "4",
@@ -121,12 +66,21 @@
   }]],
   "rights": "http://creativecommons.org/",
   "screenshot": "http://demo.fast.morfeo-project.org/gvsdata/images/screenshots/amazonProductDetail.png",
+  "tags": [
+    {"label": {"en-gb": "scratch"}},
+    {
+      "label": {"en-gb": "amazon"},
+      "means": "http://dbpedia.org/page/Amazon.com"
+    },
+    {"label": {"en-gb": "product"}},
+    {"label": {"en-gb": "details"}}
+  ],
   "type": "screen",
-  "uri": "http://purl.oclc.org/fast/ontology/gadget#Screen1263312773904",
+  "uri": "http://localhost:8080/FASTCatalogue/screens/4",
   "version": "1.0"
 }</field>
         <field type="DecimalField" name="popularity"><None></None></field>
-        <field type="CharField" name="uri">http://purl.oclc.org/fast/ontology/gadget#Screen1263312773904</field>
+        <field type="CharField" name="uri">http://localhost:8080/FASTCatalogue/screens/4</field>
     </object>
     <object pk="1" model="buildingblock.buildingblock">
         <field type="CharField" name="type">screen</field>
@@ -135,17 +89,9 @@
         <field type="CharField" name="version">1.0</field>
         <field type="TextField" name="data">{
   "code": "http://demo.fast.morfeo-project.org/gvsdata/screens/amazonList.scr.html",
-  "creationDate": null,
-  "creator": "http://www.ismaelrivera.es/",
+  "creationDate": "2010-01-26T13:37:09+0100",
+  "creator": "admin",
   "description": {"en-gb": "This screen shows the results of a given search in Amazon. It allows users to choose a product to see its details."},
-  "domainContext": {
-    "tags": [
-      "scratch",
-      "amazon",
-      "list"
-    ],
-    "user": "admin"
-  },
   "homepage": "http://www.deri.ie/amazonList",
   "icon": "http://demo.fast.morfeo-project.org/gvsdata/images/catalogue/amazonList.png",
   "id": "1",
@@ -164,151 +110,133 @@
   }]],
   "rights": "http://creativecommons.org/",
   "screenshot": "http://localhost:8010/images/screenshots/amazonProductList.png",
+  "tags": [
+    {"label": {"en-gb": "scratch"}},
+    {
+      "label": {"en-gb": "amazon"},
+      "means": "http://dbpedia.org/page/Amazon.com"
+    },
+    {"label": {
+      "en-gb": "list",
+      "es-es": "lista"
+    }}
+  ],
   "type": "screen",
-  "uri": "http://purl.oclc.org/fast/ontology/gadget#Screen1263312755372",
+  "uri": "http://localhost:8080/FASTCatalogue/screens/1",
   "version": "1.0"
 }</field>
         <field type="DecimalField" name="popularity"><None></None></field>
-        <field type="CharField" name="uri">http://purl.oclc.org/fast/ontology/gadget#Screen1263312755372</field>
+        <field type="CharField" name="uri">http://localhost:8080/FASTCatalogue/screens/1</field>
     </object>
-    <object pk="8" model="buildingblock.buildingblock">
-        <field type="CharField" name="type">screen</field>
+    <object pk="9" model="buildingblock.buildingblock">
+        <field type="CharField" name="type">form</field>
         <field to="auth.user" name="author" rel="ManyToOneRel">1</field>
-        <field type="CharField" name="name">Ebay List Screen</field>
+        <field type="CharField" name="name">Amazon List Form</field>
         <field type="CharField" name="version">1.0</field>
         <field type="TextField" name="data">{
-  "code": "http://demo.fast.morfeo-project.org/gvsdata/screens/eBayList.scr.html",
-  "creationDate": null,
-  "creator": "http://www.fabio.es/",
-  "description": {"en-gb": "This screen shows the results of a given search in eBay of a related Amazon product. It allows users to choose a product to see its details"},
-  "domainContext": {
-    "tags": [
-      "scratch",
-      "ebay",
-      "list"
-    ],
-    "user": "admin"
-  },
-  "homepage": "http://www.deri.ie/eBayList",
-  "icon": "http://demo.fast.morfeo-project.org/gvsdata/images/catalogue/eBayList.png",
-  "id": "8",
-  "label": {"en-gb": "Ebay List"},
-  "name": "Ebay List Screen",
-  "postconditions": [[{
-    "id": "itemEbay",
-    "label": {"en-gb": "An eBay item"},
-    "pattern": "?eItem http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://developer.ebay.com/DevZone/shopping/docs/CallRef/GetSingleItem.html#Request",
-    "positive": true
-  }]],
-  "preconditions": [[{
-    "label": {"en-gb": "An Amazon item"},
-    "pattern": "?Item http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#Item",
-    "positive": true
-  }]],
-  "rights": "http://creativecommons.org/",
-  "screenshot": "http://demo.fast.morfeo-project.org/gvsdata/images/screenshots/ebayComparative.png",
-  "type": "screen",
-  "uri": "http://purl.oclc.org/fast/ontology/gadget#Screen1263312793560",
-  "version": "1.0"
-}</field>
-        <field type="DecimalField" name="popularity"><None></None></field>
-        <field type="CharField" name="uri">http://purl.oclc.org/fast/ontology/gadget#Screen1263312793560</field>
-    </object>
-    <object pk="5" model="buildingblock.buildingblock">
-        <field type="CharField" name="type">screen</field>
-        <field to="auth.user" name="author" rel="ManyToOneRel">1</field>
-        <field type="CharField" name="name">Amazon Search Screen</field>
-        <field type="CharField" name="version">1.0</field>
-        <field type="TextField" name="data">{
-  "code": "http://demo.fast.morfeo-project.org/gvsdata/screens/amazonSearch.scr.html",
-  "creationDate": null,
-  "creator": "http://www.fabio.es/",
-  "description": {"en-gb": "This screen allows users to look for a product in Amazon, providing a keyword search interface. It produces a search criteria or filter fact."},
-  "domainContext": {
-    "tags": [
-      "scratch",
-      "amazon",
-      "search"
-    ],
-    "user": "admin"
-  },
-  "homepage": "http://www.deri.ie/amazonSearch",
-  "icon": "http://demo.fast.morfeo-project.org/gvsdata/images/catalogue/amazonSearch.png",
-  "id": "5",
-  "label": {"en-gb": "Product Search"},
-  "name": "Amazon Search Screen",
-  "postconditions": [[{
-    "id": "filter",
-    "label": {"en-gb": "A search criteria"},
-    "pattern": "?F http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#SearchCriteria",
-    "positive": true
-  }]],
-  "preconditions": [],
-  "rights": "http://creativecommons.org/",
-  "screenshot": "http://demo.fast.morfeo-project.org/gvsdata/images/screenshots/amazonSearch.png",
-  "type": "screen",
-  "uri": "http://purl.oclc.org/fast/ontology/gadget#Screen1263312778919",
-  "version": "1.0"
-}</field>
-        <field type="DecimalField" name="popularity"><None></None></field>
-        <field type="CharField" name="uri">http://purl.oclc.org/fast/ontology/gadget#Screen1263312778919</field>
-    </object>
-    <object pk="6" model="buildingblock.buildingblock">
-        <field type="CharField" name="type">screen</field>
-        <field to="auth.user" name="author" rel="ManyToOneRel">1</field>
-        <field type="CharField" name="name">Amazon Shopping Cart Screen</field>
-        <field type="CharField" name="version">1.0</field>
-        <field type="TextField" name="data">{
-  "code": "http://demo.fast.morfeo-project.org/gvsdata/screens/amazonShopping.scr.html",
-  "creationDate": null,
-  "creator": "http://www.fabio.es/",
-  "description": {"en-gb": "This screen shows the list of products added to the user shopping cart. It allows users to update product quantity and clear the cart."},
-  "domainContext": {
-    "tags": [
-      "scratch",
-      "amazon",
-      "cart"
-    ],
-    "user": "admin"
-  },
-  "homepage": "http://www.deri.ie/amazonShopping",
-  "icon": "http://demo.fast.morfeo-project.org/gvsdata/images/catalogue/amazonShopping.png",
-  "id": "6",
-  "label": {"en-gb": "Shopping Cart"},
-  "name": "Amazon Shopping Cart Screen",
+  "actions": [
+    {
+      "name": "init",
+      "preconditions": [],
+      "uses": []
+    },
+    {
+      "name": "showTable",
+      "preconditions": [{
+        "id": "list",
+        "label": {"en-gb": "A product list"},
+        "pattern": "?PList http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#ProductList",
+        "positive": true
+      }],
+      "uses": []
+    }
+  ],
+  "code": "http://demo.fast.morfeo-project.org/gvsdata/forms/amazonList.src.html",
+  "creationDate": "2010-01-26T13:37:53+0100",
+  "creator": "admin",
+  "description": {"en-gb": "This form shows the results of a given search in Amazon. It allows users to choose a product to see its details"},
+  "homepage": "http://www.deri.ie/amazonList",
+  "icon": "http://demo.fast.morfeo-project.org/gvsdata/images/catalogue/amazonList.png",
+  "id": "9",
+  "label": {"en-gb": "Product List"},
+  "libraries": [],
+  "name": "Amazon List Form",
   "postconditions": [[
-    {
-      "id": "notpurchase",
-      "label": {"en-gb": "A purchase"},
-      "pattern": "?Purchase http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#PurchaseURL",
-      "positive": false
-    },
-    {
-      "id": "purchase",
-      "label": {"en-gb": "A purchase"},
-      "pattern": "?Purchase http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#PurchaseURL",
-      "positive": true
-    },
     {
       "id": "item",
       "label": {"en-gb": "An item"},
       "pattern": "?Item http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#Item",
       "positive": true
+    },
+    {
+      "id": "filter",
+      "label": {"en-gb": "A filter"},
+      "pattern": "?Filter http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#SearchCriteria",
+      "positive": true
     }
   ]],
-  "preconditions": [[{
-    "label": {"en-gb": "A Cart"},
-    "pattern": "?Cart http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#ShoppingCart",
-    "positive": true
-  }]],
   "rights": "http://creativecommons.org/",
-  "screenshot": "http://demo.fast.morfeo-project.org/gvsdata/images/screenshots/amazonShoppingCart.png",
-  "type": "screen",
-  "uri": "http://purl.oclc.org/fast/ontology/gadget#Screen1263312783701",
+  "screenshot": "http://demo.fast.morfeo-project.org/gvsdata/images/screenshots/amazonProductList.png",
+  "tags": [
+    {
+      "label": {"en-gb": "amazon"},
+      "means": "http://dbpedia.org/page/Amazon.com"
+    },
+    {"label": {"en-gb": "list"}}
+  ],
+  "triggers": [],
+  "type": "form",
+  "uri": "http://localhost:8080/FASTCatalogue/forms/9",
+  "user": "admin",
   "version": "1.0"
 }</field>
         <field type="DecimalField" name="popularity"><None></None></field>
-        <field type="CharField" name="uri">http://purl.oclc.org/fast/ontology/gadget#Screen1263312783701</field>
+        <field type="CharField" name="uri">http://localhost:8080/FASTCatalogue/forms/9</field>
+    </object>
+    <object pk="10" model="buildingblock.buildingblock">
+        <field type="CharField" name="type">form</field>
+        <field to="auth.user" name="author" rel="ManyToOneRel">1</field>
+        <field type="CharField" name="name">Amazon Order Form</field>
+        <field type="CharField" name="version">1.0</field>
+        <field type="TextField" name="data">{
+  "actions": [{
+    "name": "init",
+    "preconditions": [{
+      "id": "purchase",
+      "label": {"en-gb": "A purchase"},
+      "pattern": "?Purchase http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#PurchaseURL",
+      "positive": true
+    }],
+    "uses": []
+  }],
+  "code": "http://demo.fast.morfeo-project.org/gvsdata/forms/amazonOrder.src.html",
+  "creationDate": "2010-01-26T13:38:03+0100",
+  "creator": "admin",
+  "description": {"en-gb": "This form allows users to purchase their shopping cart. It shows an Amazon interface to fulfill the required data to purchase the shopping cart"},
+  "homepage": "http://www.deri.ie/amazonOrder",
+  "icon": "http://demo.fast.morfeo-project.org/gvsdata/images/catalogue/amazonOrder.png",
+  "id": "10",
+  "label": {"en-gb": "Order"},
+  "libraries": [],
+  "name": "Amazon Order Form",
+  "postconditions": [],
+  "rights": "http://creativecommons.org/",
+  "screenshot": "http://demo.fast.morfeo-project.org/gvsdata/images/screenshots/amazonOrder.png",
+  "tags": [
+    {
+      "label": {"en-gb": "amazon"},
+      "means": "http://dbpedia.org/page/Amazon.com"
+    },
+    {"label": {"en-gb": "order"}},
+    {"label": {"en-gb": "purchase"}}
+  ],
+  "triggers": [],
+  "type": "form",
+  "uri": "http://localhost:8080/FASTCatalogue/forms/10",
+  "version": "1.0"
+}</field>
+        <field type="DecimalField" name="popularity"><None></None></field>
+        <field type="CharField" name="uri">http://localhost:8080/FASTCatalogue/forms/10</field>
     </object>
     <object pk="7" model="buildingblock.buildingblock">
         <field type="CharField" name="type">screen</field>
@@ -317,18 +245,9 @@
         <field type="CharField" name="version">1.0</field>
         <field type="TextField" name="data">{
   "code": "http://demo.fast.morfeo-project.org/gvsdata/screens/amazonSuggestion.scr.html",
-  "creationDate": null,
-  "creator": "http://www.fabio.es/",
+  "creationDate": "2010-01-26T13:37:42+0100",
+  "creator": "admin",
   "description": {"en-gb": "This screen shows the list of products related to a given one. It allows users select a new product from this list."},
-  "domainContext": {
-    "tags": [
-      "scratch",
-      "amazon",
-      "list",
-      "suggestion"
-    ],
-    "user": "admin"
-  },
   "homepage": "http://www.deri.ie/amazonSuggestion",
   "icon": "http://demo.fast.morfeo-project.org/gvsdata/images/catalogue/amazonSuggestion.png",
   "id": "7",
@@ -347,74 +266,65 @@
   }]],
   "rights": "http://creativecommons.org/",
   "screenshot": "http://demo.fast.morfeo-project.org/gvsdata/images/screenshots/amazonSuggestion.png",
+  "tags": [
+    {"label": {"en-gb": "scratch"}},
+    {
+      "label": {"en-gb": "amazon"},
+      "means": "http://dbpedia.org/page/Amazon.com"
+    },
+    {"label": {"en-gb": "suggestion"}},
+    {"label": {"en-gb": "list"}}
+  ],
   "type": "screen",
-  "uri": "http://purl.oclc.org/fast/ontology/gadget#Screen1263312788794",
+  "uri": "http://localhost:8080/FASTCatalogue/screens/7",
   "version": "1.0"
 }</field>
         <field type="DecimalField" name="popularity"><None></None></field>
-        <field type="CharField" name="uri">http://purl.oclc.org/fast/ontology/gadget#Screen1263312788794</field>
+        <field type="CharField" name="uri">http://localhost:8080/FASTCatalogue/screens/7</field>
     </object>
-    <object pk="12" model="buildingblock.buildingblock">
+    <object pk="13" model="buildingblock.buildingblock">
         <field type="CharField" name="type">form</field>
         <field to="auth.user" name="author" rel="ManyToOneRel">1</field>
-        <field type="CharField" name="name">Amazon Product Form</field>
+        <field type="CharField" name="name">Amazon Search Form</field>
         <field type="CharField" name="version">1.0</field>
         <field type="TextField" name="data">{
-  "actions": [
-    {
-      "name": "init",
-      "preconditions": [],
-      "uses": []
-    },
-    {
-      "name": "showProductInfo",
-      "preconditions": [{
-        "id": "product",
-        "label": {"en-gb": "An item"},
-        "pattern": "?Item http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#Item",
-        "positive": true
-      }],
-      "uses": []
-    },
-    {
-      "name": "showMessage",
-      "preconditions": [{
-        "id": "message",
-        "label": {"en-gb": "A message"},
-        "pattern": "?Message http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#Message",
-        "positive": true
-      }],
-      "uses": []
-    }
-  ],
-  "code": "http://demo.fast.morfeo-project.org/gvsdata/forms/amazonProduct.src.html",
-  "creationDate": null,
-  "creator": "http://www.fabio.es/",
-  "description": {"en-gb": "This screen shows the the details of a product in Amazon"},
-  "domainContext": {
-    "tags": [
-      "amazon",
-      "details",
-      "product"
-    ],
-    "user": "admin"
-  },
-  "homepage": "http://www.deri.ie/amazonProduct",
-  "icon": "http://demo.fast.morfeo-project.org/gvsdata/images/catalogue/amazonProduct.png",
-  "id": "12",
-  "label": {"en-gb": "Product Details"},
+  "actions": [{
+    "name": "init",
+    "preconditions": [],
+    "uses": []
+  }],
+  "code": "http://demo.fast.morfeo-project.org/gvsdata/forms/amazonSearch.src.html",
+  "creationDate": "2010-01-26T13:38:18+0100",
+  "creator": "admin",
+  "description": {"en-gb": "This screen allows users to look for a product in Amazon, providing a keyword search interface. It produces a search criteria or filter fact."},
+  "homepage": "http://www.deri.ie/amazonSearch",
+  "icon": "http://demo.fast.morfeo-project.org/gvsdata/images/catalogue/amazonSearch.png",
+  "id": "13",
+  "label": {"en-gb": "Product Search"},
   "libraries": [],
-  "name": "Amazon Product Form",
-  "postconditions": [],
+  "name": "Amazon Search Form",
+  "postconditions": [[{
+    "id": "filter",
+    "label": {"en-gb": "A filter"},
+    "pattern": "?Filter http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#SearchCriteria",
+    "positive": true
+  }]],
   "rights": "http://creativecommons.org/",
-  "screenshot": "http://demo.fast.morfeo-project.org/gvsdata/images/screenshots/amazonProductDetail.png",
-  "triggers": ["addToCart"],
+  "screenshot": "http://demo.fast.morfeo-project.org/gvsdata/images/screenshots/amazonSearch.png",
+  "tags": [
+    {
+      "label": {"en-gb": "amazon"},
+      "means": "http://dbpedia.org/page/Amazon.com"
+    },
+    {"label": {"en-gb": "search"}}
+  ],
+  "triggers": ["newFilter"],
   "type": "form",
-  "uri": "http://purl.oclc.org/fast/ontology/gadget#FormElement1263313183724",
+  "uri": "http://localhost:8080/FASTCatalogue/forms/13",
   "version": "1.0"
 }</field>
         <field type="DecimalField" name="popularity"><None></None></field>
-        <field type="CharField" name="uri">http://purl.oclc.org/fast/ontology/gadget#FormElement1263313183724</field>
+        <field type="CharField" name="uri">http://localhost:8080/FASTCatalogue/forms/13</field>
     </object>
     <object pk="14" model="buildingblock.buildingblock">
         <field type="CharField" name="type">form</field>
@@ -440,16 +350,9 @@
     }
   ],
   "code": "http://demo.fast.morfeo-project.org/gvsdata/forms/amazonShopping.src.html",
-  "creationDate": null,
-  "creator": "http://www.fabio.es/",
+  "creationDate": "2010-01-26T13:38:22+0100",
+  "creator": "admin",
   "description": {"en-gb": "This screen shows the list of products added to the user shopping cart. It allows users to update product quantity and clear the cart."},
-  "domainContext": {
-    "tags": [
-      "amazon",
-      "cart"
-    ],
-    "user": "admin"
-  },
   "homepage": "http://www.deri.ie/amazonShopping",
   "icon": "http://demo.fast.morfeo-project.org/gvsdata/images/catalogue/amazonShopping.png",
   "id": "14",
@@ -458,7 +361,7 @@
   "name": "Amazon Shopping Form",
   "postconditions": [[
     {
-      "id": "updateCart",
+      "id": "cartUpdate",
       "label": {"en-gb": "A shopping cart update"},
       "pattern": "?UCart http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#UpdatingCart",
       "positive": true
@@ -478,6 +381,14 @@
   ]],
   "rights": "http://creativecommons.org/",
   "screenshot": "http://demo.fast.morfeo-project.org/gvsdata/images/screenshots/amazonShoppingCart.png",
+  "tags": [
+    {
+      "label": {"en-gb": "amazon"},
+      "means": "http://dbpedia.org/page/Amazon.com"
+    },
+    {"label": {"en-gb": "cart"}},
+    {"label": {"en-gb": "shopping"}}
+  ],
   "triggers": [
     "purchase",
     "clearCart",
@@ -485,11 +396,11 @@
     "newItem"
   ],
   "type": "form",
-  "uri": "http://purl.oclc.org/fast/ontology/gadget#FormElement1263313193193",
+  "uri": "http://localhost:8080/FASTCatalogue/forms/14",
   "version": "1.0"
 }</field>
         <field type="DecimalField" name="popularity"><None></None></field>
-        <field type="CharField" name="uri">http://purl.oclc.org/fast/ontology/gadget#FormElement1263313193193</field>
+        <field type="CharField" name="uri">http://localhost:8080/FASTCatalogue/forms/14</field>
     </object>
     <object pk="11" model="buildingblock.buildingblock">
         <field type="CharField" name="type">form</field>
@@ -530,18 +441,9 @@
     }
   ],
   "code": "http://demo.fast.morfeo-project.org/gvsdata/forms/amazonPrice.src.html",
-  "creationDate": null,
-  "creator": "http://www.fabio.es/",
+  "creationDate": "2010-01-26T13:38:08+0100",
+  "creator": "admin",
   "description": {"en-gb": "This screen shows a price comparative for a given product."},
-  "domainContext": {
-    "tags": [
-      "amazon",
-      "list",
-      "suggestion",
-      "price comparative"
-    ],
-    "user": "admin"
-  },
   "homepage": "http://www.deri.ie/amazonPrice",
   "icon": "http://demo.fast.morfeo-project.org/gvsdata/images/catalogue/amazonPrice.png",
   "id": "11",
@@ -556,13 +458,84 @@
   }]],
   "rights": "http://creativecommons.org/",
   "screenshot": "http://demo.fast.morfeo-project.org/gvsdata/images/screenshots/amazonPriceComparative.png",
+  "tags": [
+    {
+      "label": {"en-gb": "amazon"},
+      "means": "http://dbpedia.org/page/Amazon.com"
+    },
+    {"label": {"en-gb": "price"}},
+    {"label": {"en-gb": "comparative"}},
+    {"label": {"en-gb": "list"}}
+  ],
   "triggers": ["offer"],
   "type": "form",
-  "uri": "http://purl.oclc.org/fast/ontology/gadget#FormElement1263313179380",
+  "uri": "http://localhost:8080/FASTCatalogue/forms/11",
   "version": "1.0"
 }</field>
         <field type="DecimalField" name="popularity"><None></None></field>
-        <field type="CharField" name="uri">http://purl.oclc.org/fast/ontology/gadget#FormElement1263313179380</field>
+        <field type="CharField" name="uri">http://localhost:8080/FASTCatalogue/forms/11</field>
+    </object>
+    <object pk="12" model="buildingblock.buildingblock">
+        <field type="CharField" name="type">form</field>
+        <field to="auth.user" name="author" rel="ManyToOneRel">1</field>
+        <field type="CharField" name="name">Amazon Product Form</field>
+        <field type="CharField" name="version">1.0</field>
+        <field type="TextField" name="data">{
+  "actions": [
+    {
+      "name": "init",
+      "preconditions": [],
+      "uses": []
+    },
+    {
+      "name": "showProductInfo",
+      "preconditions": [{
+        "id": "product",
+        "label": {"en-gb": "An item"},
+        "pattern": "?Item http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#Item",
+        "positive": true
+      }],
+      "uses": []
+    },
+    {
+      "name": "showMessage",
+      "preconditions": [{
+        "id": "message",
+        "label": {"en-gb": "A message"},
+        "pattern": "?Message http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#Message",
+        "positive": true
+      }],
+      "uses": []
+    }
+  ],
+  "code": "http://demo.fast.morfeo-project.org/gvsdata/forms/amazonProduct.src.html",
+  "creationDate": "2010-01-26T13:38:13+0100",
+  "creator": "admin",
+  "description": {"en-gb": "This screen shows the the details of a product in Amazon"},
+  "homepage": "http://www.deri.ie/amazonProduct",
+  "icon": "http://demo.fast.morfeo-project.org/gvsdata/images/catalogue/amazonProduct.png",
+  "id": "12",
+  "label": {"en-gb": "Product Details"},
+  "libraries": [],
+  "name": "Amazon Product Form",
+  "postconditions": [],
+  "rights": "http://creativecommons.org/",
+  "screenshot": "http://demo.fast.morfeo-project.org/gvsdata/images/screenshots/amazonProductDetail.png",
+  "tags": [
+    {
+      "label": {"en-gb": "amazon"},
+      "means": "http://dbpedia.org/page/Amazon.com"
+    },
+    {"label": {"en-gb": "product"}},
+    {"label": {"en-gb": "details"}}
+  ],
+  "triggers": ["addToCart"],
+  "type": "form",
+  "uri": "http://localhost:8080/FASTCatalogue/forms/12",
+  "version": "1.0"
+}</field>
+        <field type="DecimalField" name="popularity"><None></None></field>
+        <field type="CharField" name="uri">http://localhost:8080/FASTCatalogue/forms/12</field>
     </object>
     <object pk="18" model="buildingblock.buildingblock">
         <field type="CharField" name="type">resource</field>
@@ -584,17 +557,9 @@
     }]
   }],
   "code": "http://demo.fast.morfeo-project.org/gvsdata/resources/amazonAddItemToCartService.src.js",
-  "creationDate": null,
-  "creator": "http://www.fabio.es/",
+  "creationDate": "2010-01-26T13:38:45+0100",
+  "creator": "admin",
   "description": {"en-gb": "This service adds items to an Amazon shopping cart"},
-  "domainContext": {
-    "tags": [
-      "amazon",
-      "shopping",
-      "cart"
-    ],
-    "user": "admin"
-  },
   "homepage": "http://www.deri.ie/amazonAddItemToCartService",
   "icon": "http://demo.fast.morfeo-project.org/gvsdata/images/catalogue/amazonAddItemToCartService.png",
   "id": "18",
@@ -626,13 +591,21 @@
   ]],
   "rights": "http://creativecommons.org/",
   "screenshot": "http://www.deri.ie/amazonAddItemToCartService.jpg",
+  "tags": [
+    {
+      "label": {"en-gb": "amazon"},
+      "means": "http://dbpedia.org/page/Amazon.com"
+    },
+    {"label": {"en-gb": "item"}},
+    {"label": {"en-gb": "cart"}}
+  ],
   "triggers": ["message"],
-  "type": "resource",
-  "uri": "http://purl.oclc.org/fast/ontology/gadget#BackendService1263313213318",
+  "type": "service",
+  "uri": "http://localhost:8080/FASTCatalogue/services/18",
   "version": "1.0"
 }</field>
         <field type="DecimalField" name="popularity"><None></None></field>
-        <field type="CharField" name="uri">http://purl.oclc.org/fast/ontology/gadget#BackendService1263313213318</field>
+        <field type="CharField" name="uri">http://localhost:8080/FASTCatalogue/services/18</field>
     </object>
     <object pk="15" model="buildingblock.buildingblock">
         <field type="CharField" name="type">form</field>
@@ -673,17 +646,9 @@
     }
   ],
   "code": "http://demo.fast.morfeo-project.org/gvsdata/forms/amazonSuggestion.src.html",
-  "creationDate": null,
-  "creator": "http://www.fabio.es/",
+  "creationDate": "2010-01-26T13:38:27+0100",
+  "creator": "admin",
   "description": {"en-gb": "This screen shows the list of products related to a given one. It allows users select a new product from this list."},
-  "domainContext": {
-    "tags": [
-      "amazon",
-      "list",
-      "suggestion"
-    ],
-    "user": "admin"
-  },
   "homepage": "http://www.deri.ie/amazonSuggestion",
   "icon": "http://demo.fast.morfeo-project.org/gvsdata/images/catalogue/amazonSuggestion.png",
   "id": "15",
@@ -698,13 +663,21 @@
   }]],
   "rights": "http://creativecommons.org/",
   "screenshot": "http://demo.fast.morfeo-project.org/gvsdata/images/screenshots/amazonSuggestion.png",
+  "tags": [
+    {
+      "label": {"en-gb": "amazon"},
+      "means": "http://dbpedia.org/page/Amazon.com"
+    },
+    {"label": {"en-gb": "suggestion"}},
+    {"label": {"en-gb": "list"}}
+  ],
   "triggers": ["item"],
   "type": "form",
-  "uri": "http://purl.oclc.org/fast/ontology/gadget#FormElement1263313198255",
+  "uri": "http://localhost:8080/FASTCatalogue/forms/15",
   "version": "1.0"
 }</field>
         <field type="DecimalField" name="popularity"><None></None></field>
-        <field type="CharField" name="uri">http://purl.oclc.org/fast/ontology/gadget#FormElement1263313198255</field>
+        <field type="CharField" name="uri">http://localhost:8080/FASTCatalogue/forms/15</field>
     </object>
     <object pk="16" model="buildingblock.buildingblock">
         <field type="CharField" name="type">form</field>
@@ -730,16 +703,9 @@
     }
   ],
   "code": "http://demo.fast.morfeo-project.org/gvsdata/forms/eBayList.src.html",
-  "creationDate": null,
-  "creator": "http://www.fabio.es/",
+  "creationDate": "2010-01-26T13:38:32+0100",
+  "creator": "admin",
   "description": {"en-gb": "This screen shows the results of a given search in eBay of a related Amazon product. It allows users to choose a product to see its details"},
-  "domainContext": {
-    "tags": [
-      "ebay",
-      "list"
-    ],
-    "user": "admin"
-  },
   "homepage": "http://www.deri.ie/eBayList",
   "icon": "http://demo.fast.morfeo-project.org/gvsdata/images/catalogue/eBayList.png",
   "id": "16",
@@ -762,17 +728,24 @@
   ]],
   "rights": "http://creativecommons.org/",
   "screenshot": "http://demo.fast.morfeo-project.org/gvsdata/images/screenshots/ebayComparative.png",
+  "tags": [
+    {
+      "label": {"en-gb": "amazon"},
+      "means": "http://dbpedia.org/page/Amazon.com"
+    },
+    {"label": {"en-gb": "ebay"}},
+    {"label": {"en-gb": "list"}}
+  ],
   "triggers": [
     "ebayItem",
-    "nextPage",
-    "previousPage"
+    "newFilter"
   ],
   "type": "form",
-  "uri": "http://purl.oclc.org/fast/ontology/gadget#FormElement1263313203474",
+  "uri": "http://localhost:8080/FASTCatalogue/forms/16",
   "version": "1.0"
 }</field>
         <field type="DecimalField" name="popularity"><None></None></field>
-        <field type="CharField" name="uri">http://purl.oclc.org/fast/ontology/gadget#FormElement1263313203474</field>
+        <field type="CharField" name="uri">http://localhost:8080/FASTCatalogue/forms/16</field>
     </object>
     <object pk="21" model="buildingblock.buildingblock">
         <field type="CharField" name="type">resource</field>
@@ -791,16 +764,9 @@
     "uses": []
   }],
   "code": "http://demo.fast.morfeo-project.org/gvsdata/resources/amazonLookupService.src.js",
-  "creationDate": null,
-  "creator": "http://www.fabio.es/",
+  "creationDate": "2010-01-26T13:39:04+0100",
+  "creator": "admin",
   "description": {"en-gb": "This service search information about an Amazon product"},
-  "domainContext": {
-    "tags": [
-      "amazon",
-      "product"
-    ],
-    "user": "admin"
-  },
   "homepage": "http://www.deri.ie/amazonLookupService",
   "icon": "http://demo.fast.morfeo-project.org/gvsdata/images/catalogue/amazonLookupService.png",
   "id": "21",
@@ -832,13 +798,79 @@
   ]],
   "rights": "http://creativecommons.org/",
   "screenshot": "http://www.deri.ie/amazonLookupService.jpg",
+  "tags": [
+    {
+      "label": {"en-gb": "amazon"},
+      "means": "http://dbpedia.org/page/Amazon.com"
+    },
+    {"label": {"en-gb": "product"}}
+  ],
   "triggers": ["newProduct"],
-  "type": "resource",
-  "uri": "http://purl.oclc.org/fast/ontology/gadget#BackendService1263313234944",
+  "type": "service",
+  "uri": "http://localhost:8080/FASTCatalogue/services/21",
   "version": "1.0"
 }</field>
         <field type="DecimalField" name="popularity"><None></None></field>
-        <field type="CharField" name="uri">http://purl.oclc.org/fast/ontology/gadget#BackendService1263313234944</field>
+        <field type="CharField" name="uri">http://localhost:8080/FASTCatalogue/services/21</field>
+    </object>
+    <object pk="22" model="buildingblock.buildingblock">
+        <field type="CharField" name="type">resource</field>
+        <field to="auth.user" name="author" rel="ManyToOneRel">1</field>
+        <field type="CharField" name="name">Amazon Price Comparative Service</field>
+        <field type="CharField" name="version">1.0</field>
+        <field type="TextField" name="data">{
+  "actions": [{
+    "name": "fetch",
+    "preconditions": [{
+      "id": "item",
+      "label": {"en-gb": "An item"},
+      "pattern": "?Item http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#Item",
+      "positive": true
+    }],
+    "uses": []
+  }],
+  "code": "http://demo.fast.morfeo-project.org/gvsdata/resources/amazonPriceComparativeService.src.js",
+  "creationDate": "2010-01-26T13:39:09+0100",
+  "creator": "admin",
+  "description": {"en-gb": "This service provides a price comparative related to an Amazon product"},
+  "homepage": "http://www.deri.ie/amazonPriceComparativeService",
+  "icon": "http://demo.fast.morfeo-project.org/gvsdata/images/catalogue/amazonPriceComparativeService.png",
+  "id": "22",
+  "label": {"en-gb": "Amazon Price Comparative"},
+  "libraries": [
+    {
+      "language": "JavaScript",
+      "source": "http://demo.fast.morfeo-project.org/gvsdata/amazonURL/signAmazonURLs.js"
+    },
+    {
+      "language": "JavaScript",
+      "source": "http://demo.fast.morfeo-project.org/gvsdata/amazonURL/jssha2/sha2.js"
+    }
+  ],
+  "name": "Amazon Price Comparative Service",
+  "postconditions": [[{
+    "id": "list",
+    "label": {"en-gb": "A product list"},
+    "pattern": "?OList http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#OfferList",
+    "positive": true
+  }]],
+  "rights": "http://creativecommons.org/",
+  "screenshot": "http://www.deri.ie/amazonPriceComparativeService.jpg",
+  "tags": [
+    {
+      "label": {"en-gb": "amazon"},
+      "means": "http://dbpedia.org/page/Amazon.com"
+    },
+    {"label": {"en-gb": "price"}},
+    {"label": {"en-gb": "comparative"}}
+  ],
+  "triggers": ["productList"],
+  "type": "service",
+  "uri": "http://localhost:8080/FASTCatalogue/services/22",
+  "version": "1.0"
+}</field>
+        <field type="DecimalField" name="popularity"><None></None></field>
+        <field type="CharField" name="uri">http://localhost:8080/FASTCatalogue/services/22</field>
     </object>
     <object pk="19" model="buildingblock.buildingblock">
         <field type="CharField" name="type">resource</field>
@@ -860,18 +892,9 @@
     }]
   }],
   "code": "http://demo.fast.morfeo-project.org/gvsdata/resources/amazonAddOfferToCartService.src.js",
-  "creationDate": null,
-  "creator": "http://www.fabio.es/",
+  "creationDate": "2010-01-26T13:38:50+0100",
+  "creator": "admin",
   "description": {"en-gb": "This service adds offers to an Amazon shopping cart"},
-  "domainContext": {
-    "tags": [
-      "amazon",
-      "shopping",
-      "cart",
-      "offer"
-    ],
-    "user": "admin"
-  },
   "homepage": "http://www.deri.ie/amazonAddOfferToCartService",
   "icon": "http://demo.fast.morfeo-project.org/gvsdata/images/catalogue/amazonAddOfferToCartService.png",
   "id": "19",
@@ -903,13 +926,21 @@
   ]],
   "rights": "http://creativecommons.org/",
   "screenshot": "http://www.deri.ie/amazonAddOfferToCartService.jpg",
+  "tags": [
+    {
+      "label": {"en-gb": "amazon"},
+      "means": "http://dbpedia.org/page/Amazon.com"
+    },
+    {"label": {"en-gb": "offer"}},
+    {"label": {"en-gb": "shopping"}}
+  ],
   "triggers": ["message"],
-  "type": "resource",
-  "uri": "http://purl.oclc.org/fast/ontology/gadget#BackendService1263313221850",
+  "type": "service",
+  "uri": "http://localhost:8080/FASTCatalogue/services/19",
   "version": "1.0"
 }</field>
         <field type="DecimalField" name="popularity"><None></None></field>
-        <field type="CharField" name="uri">http://purl.oclc.org/fast/ontology/gadget#BackendService1263313221850</field>
+        <field type="CharField" name="uri">http://localhost:8080/FASTCatalogue/services/19</field>
     </object>
     <object pk="20" model="buildingblock.buildingblock">
         <field type="CharField" name="type">resource</field>
@@ -928,17 +959,9 @@
     "uses": []
   }],
   "code": "http://demo.fast.morfeo-project.org/gvsdata/resources/amazonClearCartService.src.js",
-  "creationDate": null,
-  "creator": "http://www.fabio.es/",
+  "creationDate": "2010-01-26T13:39:00+0100",
+  "creator": "admin",
   "description": {"en-gb": "This service clears an Amazon shopping cart"},
-  "domainContext": {
-    "tags": [
-      "amazon",
-      "shopping",
-      "cart"
-    ],
-    "user": "admin"
-  },
   "homepage": "http://www.deri.ie/amazonClearCartService",
   "icon": "http://demo.fast.morfeo-project.org/gvsdata/images/catalogue/amazonClearCartService.png",
   "id": "20",
@@ -962,13 +985,22 @@
   }]],
   "rights": "http://creativecommons.org/",
   "screenshot": "http://www.deri.ie/amazonClearCartService.jpg",
-  "triggers": ["clearedCart"],
-  "type": "resource",
-  "uri": "http://purl.oclc.org/fast/ontology/gadget#BackendService1263313229756",
+  "tags": [
+    {
+      "label": {"en-gb": "amazon"},
+      "means": "http://dbpedia.org/page/Amazon.com"
+    },
+    {"label": {"en-gb": "clear"}},
+    {"label": {"en-gb": "cart"}},
+    {"label": {"en-gb": "shopping"}}
+  ],
+  "triggers": ["cartCleared"],
+  "type": "service",
+  "uri": "http://localhost:8080/FASTCatalogue/services/20",
   "version": "1.0"
 }</field>
         <field type="DecimalField" name="popularity"><None></None></field>
-        <field type="CharField" name="uri">http://purl.oclc.org/fast/ontology/gadget#BackendService1263313229756</field>
+        <field type="CharField" name="uri">http://localhost:8080/FASTCatalogue/services/20</field>
     </object>
     <object pk="25" model="buildingblock.buildingblock">
         <field type="CharField" name="type">resource</field>
@@ -987,17 +1019,9 @@
     "uses": []
   }],
   "code": "http://demo.fast.morfeo-project.org/gvsdata/resources/amazonSuggetionListService.src.js",
-  "creationDate": null,
-  "creator": "http://www.fabio.es/",
+  "creationDate": "2010-01-26T13:39:24+0100",
+  "creator": "admin",
   "description": {"en-gb": "This service provides suggestions related to a product in Amazon Catalogue"},
-  "domainContext": {
-    "tags": [
-      "amazon",
-      "list",
-      "suggestion"
-    ],
-    "user": "admin"
-  },
   "homepage": "http://www.deri.ie/amazonSuggetionListService",
   "icon": "http://demo.fast.morfeo-project.org/gvsdata/images/catalogue/amazonSuggetionListService.png",
   "id": "25",
@@ -1018,24 +1042,100 @@
       "id": "list",
       "label": {"en-gb": "A product list"},
       "pattern": "?PList http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#ProductList",
-      "positive": false
+      "positive": true
     },
     {
       "id": "message",
       "label": {"en-gb": "A message"},
       "pattern": "?Item http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#Message",
-      "positive": false
+      "positive": true
     }
   ]],
   "rights": "http://creativecommons.org/",
   "screenshot": "http://www.deri.ie/amazonSuggetionListService.jpg",
+  "tags": [
+    {
+      "label": {"en-gb": "amazon"},
+      "means": "http://dbpedia.org/page/Amazon.com"
+    },
+    {"label": {"en-gb": "suggestion"}},
+    {"label": {"en-gb": "list"}}
+  ],
   "triggers": ["list"],
-  "type": "resource",
-  "uri": "http://purl.oclc.org/fast/ontology/gadget#BackendService1263313254194",
+  "type": "service",
+  "uri": "http://localhost:8080/FASTCatalogue/services/25",
   "version": "1.0"
 }</field>
         <field type="DecimalField" name="popularity"><None></None></field>
-        <field type="CharField" name="uri">http://purl.oclc.org/fast/ontology/gadget#BackendService1263313254194</field>
+        <field type="CharField" name="uri">http://localhost:8080/FASTCatalogue/services/25</field>
+    </object>
+    <object pk="23" model="buildingblock.buildingblock">
+        <field type="CharField" name="type">resource</field>
+        <field to="auth.user" name="author" rel="ManyToOneRel">1</field>
+        <field type="CharField" name="name">Search Amazon Cart Service</field>
+        <field type="CharField" name="version">1.0</field>
+        <field type="TextField" name="data">{
+  "actions": [{
+    "name": "fetch",
+    "preconditions": [{
+      "id": "cart",
+      "label": {"en-gb": "A shopping cart"},
+      "pattern": "?Cart http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#ShoppingCart",
+      "positive": true
+    }],
+    "uses": []
+  }],
+  "code": "http://demo.fast.morfeo-project.org/gvsdata/resources/amazonSearchCartService.src.js",
+  "creationDate": "2010-01-26T13:39:14+0100",
+  "creator": "admin",
+  "description": {"en-gb": "This service provides information about user shopping cart"},
+  "homepage": "http://www.deri.ie/amazonSearchCartService",
+  "icon": "http://demo.fast.morfeo-project.org/gvsdata/images/catalogue/amazonSearchCartService.png",
+  "id": "23",
+  "label": {"en-gb": "Amazon Cart"},
+  "libraries": [
+    {
+      "language": "JavaScript",
+      "source": "http://demo.fast.morfeo-project.org/gvsdata/amazonURL/signAmazonURLs.js"
+    },
+    {
+      "language": "JavaScript",
+      "source": "http://demo.fast.morfeo-project.org/gvsdata/amazonURL/jssha2/sha2.js"
+    }
+  ],
+  "name": "Search Amazon Cart Service",
+  "postconditions": [[
+    {
+      "id": "list",
+      "label": {"en-gb": "A product list"},
+      "pattern": "?PList http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#ProductList",
+      "positive": true
+    },
+    {
+      "id": "message",
+      "label": {"en-gb": "A message"},
+      "pattern": "?Message http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#Message",
+      "positive": true
+    }
+  ]],
+  "rights": "http://creativecommons.org/",
+  "screenshot": "http://www.deri.ie/amazonSearchCartService.jpg",
+  "tags": [
+    {
+      "label": {"en-gb": "amazon"},
+      "means": "http://dbpedia.org/page/Amazon.com"
+    },
+    {"label": {"en-gb": "search"}},
+    {"label": {"en-gb": "list"}},
+    {"label": {"en-gb": "cart"}}
+  ],
+  "triggers": [],
+  "type": "service",
+  "uri": "http://localhost:8080/FASTCatalogue/services/23",
+  "version": "1.0"
+}</field>
+        <field type="DecimalField" name="popularity"><None></None></field>
+        <field type="CharField" name="uri">http://localhost:8080/FASTCatalogue/services/23</field>
     </object>
     <object pk="26" model="buildingblock.buildingblock">
         <field type="CharField" name="type">resource</field>
@@ -1062,17 +1162,9 @@
     "uses": []
   }],
   "code": "http://demo.fast.morfeo-project.org/gvsdata/resources/amazonUpdateCartService.src.js",
-  "creationDate": null,
-  "creator": "http://www.fabio.es/",
+  "creationDate": "2010-01-26T13:39:29+0100",
+  "creator": "admin",
   "description": {"en-gb": "This service updates an Amazon shopping cart"},
-  "domainContext": {
-    "tags": [
-      "amazon",
-      "shopping",
-      "cart"
-    ],
-    "user": "admin"
-  },
   "homepage": "http://www.deri.ie/amazonUpdateCartService",
   "icon": "http://demo.fast.morfeo-project.org/gvsdata/images/catalogue/amazonUpdateCartService.png",
   "id": "26",
@@ -1096,80 +1188,256 @@
   }]],
   "rights": "http://creativecommons.org/",
   "screenshot": "http://www.deri.ie/amazonUpdateCartService.jpg",
-  "triggers": ["updatedCart"],
-  "type": "resource",
-  "uri": "http://purl.oclc.org/fast/ontology/gadget#BackendService1263313258897",
+  "tags": [
+    {
+      "label": {"en-gb": "amazon"},
+      "means": "http://dbpedia.org/page/Amazon.com"
+    },
+    {"label": {"en-gb": "cart"}},
+    {"label": {"en-gb": "shopping"}},
+    {"label": {"en-gb": "update"}}
+  ],
+  "triggers": ["cartUpdated"],
+  "type": "service",
+  "uri": "http://localhost:8080/FASTCatalogue/services/26",
   "version": "1.0"
 }</field>
         <field type="DecimalField" name="popularity"><None></None></field>
-        <field type="CharField" name="uri">http://purl.oclc.org/fast/ontology/gadget#BackendService1263313258897</field>
+        <field type="CharField" name="uri">http://localhost:8080/FASTCatalogue/services/26</field>
     </object>
-    <object pk="23" model="buildingblock.buildingblock">
-        <field type="CharField" name="type">resource</field>
+    <object pk="3" model="buildingblock.buildingblock">
+        <field type="CharField" name="type">screen</field>
         <field to="auth.user" name="author" rel="ManyToOneRel">1</field>
-        <field type="CharField" name="name">Search Amazon Cart Service</field>
+        <field type="CharField" name="name">Amazon Price Comparative Screen</field>
+        <field type="CharField" name="version">1.0</field>
+        <field type="TextField" name="data">{
+  "code": "http://demo.fast.morfeo-project.org/gvsdata/screens/amazonPrice.scr.html",
+  "creationDate": "2010-01-26T13:37:21+0100",
+  "creator": "admin",
+  "description": {"en-gb": "This screen shows a price comparative for a given product."},
+  "homepage": "http://www.deri.ie/amazonPrice",
+  "icon": "http://demo.fast.morfeo-project.org/gvsdata/images/catalogue/amazonPrice.png",
+  "id": "3",
+  "label": {"en-gb": "Price Comparative"},
+  "name": "Amazon Price Comparative Screen",
+  "postconditions": [[{
+    "id": "cart",
+    "label": {"en-gb": "An shopping cart"},
+    "pattern": "?Cart http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#ShoppingCart",
+    "positive": true
+  }]],
+  "preconditions": [[{
+    "label": {"en-gb": "An item"},
+    "pattern": "?Item http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#Item",
+    "positive": true
+  }]],
+  "rights": "http://creativecommons.org/",
+  "screenshot": "http://demo.fast.morfeo-project.org/gvsdata/images/screenshots/amazonPriceComparative.png",
+  "tags": [
+    {"label": {"en-gb": "scratch"}},
+    {
+      "label": {"en-gb": "amazon"},
+      "means": "http://dbpedia.org/page/Amazon.com"
+    },
+    {"label": {"en-gb": "comparative"}},
+    {"label": {"en-gb": "list"}}
+  ],
+  "type": "screen",
+  "uri": "http://localhost:8080/FASTCatalogue/screens/3",
+  "version": "1.0"
+}</field>
+        <field type="DecimalField" name="popularity"><None></None></field>
+        <field type="CharField" name="uri">http://localhost:8080/FASTCatalogue/screens/3</field>
+    </object>
+    <object pk="5" model="buildingblock.buildingblock">
+        <field type="CharField" name="type">screen</field>
+        <field to="auth.user" name="author" rel="ManyToOneRel">1</field>
+        <field type="CharField" name="name">Amazon Search Screen</field>
+        <field type="CharField" name="version">1.0</field>
+        <field type="TextField" name="data">{
+  "code": "http://demo.fast.morfeo-project.org/gvsdata/screens/amazonSearch.scr.html",
+  "creationDate": "2010-01-26T13:37:32+0100",
+  "creator": "admin",
+  "description": {"en-gb": "This screen allows users to look for a product in Amazon, providing a keyword search interface. It produces a search criteria or filter fact."},
+  "homepage": "http://www.deri.ie/amazonSearch",
+  "icon": "http://demo.fast.morfeo-project.org/gvsdata/images/catalogue/amazonSearch.png",
+  "id": "5",
+  "label": {"en-gb": "Product Search"},
+  "name": "Amazon Search Screen",
+  "postconditions": [[{
+    "id": "filter",
+    "label": {"en-gb": "A search criteria"},
+    "pattern": "?F http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#SearchCriteria",
+    "positive": true
+  }]],
+  "preconditions": [],
+  "rights": "http://creativecommons.org/",
+  "screenshot": "http://demo.fast.morfeo-project.org/gvsdata/images/screenshots/amazonSearch.png",
+  "tags": [
+    {"label": {"en-gb": "scratch"}},
+    {
+      "label": {"en-gb": "amazon"},
+      "means": "http://dbpedia.org/page/Amazon.com"
+    },
+    {"label": {"en-gb": "search"}}
+  ],
+  "type": "screen",
+  "uri": "http://localhost:8080/FASTCatalogue/screens/5",
+  "version": "1.0"
+}</field>
+        <field type="DecimalField" name="popularity"><None></None></field>
+        <field type="CharField" name="uri">http://localhost:8080/FASTCatalogue/screens/5</field>
+    </object>
+    <object pk="6" model="buildingblock.buildingblock">
+        <field type="CharField" name="type">screen</field>
+        <field to="auth.user" name="author" rel="ManyToOneRel">1</field>
+        <field type="CharField" name="name">Amazon Shopping Cart Screen</field>
+        <field type="CharField" name="version">1.0</field>
+        <field type="TextField" name="data">{
+  "code": "http://demo.fast.morfeo-project.org/gvsdata/screens/amazonShopping.scr.html",
+  "creationDate": "2010-01-26T13:37:37+0100",
+  "creator": "admin",
+  "description": {"en-gb": "This screen shows the list of products added to the user shopping cart. It allows users to update product quantity and clear the cart."},
+  "homepage": "http://www.deri.ie/amazonShopping",
+  "icon": "http://demo.fast.morfeo-project.org/gvsdata/images/catalogue/amazonShopping.png",
+  "id": "6",
+  "label": {"en-gb": "Shopping Cart"},
+  "name": "Amazon Shopping Cart Screen",
+  "postconditions": [[
+    {
+      "id": "notpurchase",
+      "label": {"en-gb": "A purchase"},
+      "pattern": "?Purchase http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#PurchaseURL",
+      "positive": false
+    },
+    {
+      "id": "purchase",
+      "label": {"en-gb": "A purchase"},
+      "pattern": "?Purchase http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#PurchaseURL",
+      "positive": true
+    },
+    {
+      "id": "item",
+      "label": {"en-gb": "An item"},
+      "pattern": "?Item http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#Item",
+      "positive": true
+    }
+  ]],
+  "preconditions": [[{
+    "label": {"en-gb": "A Cart"},
+    "pattern": "?Cart http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#ShoppingCart",
+    "positive": true
+  }]],
+  "rights": "http://creativecommons.org/",
+  "screenshot": "http://demo.fast.morfeo-project.org/gvsdata/images/screenshots/amazonShoppingCart.png",
+  "tags": [
+    {"label": {"en-gb": "scratch"}},
+    {
+      "label": {"en-gb": "amazon"},
+      "means": "http://dbpedia.org/page/Amazon.com"
+    },
+    {"label": {"en-gb": "cart"}}
+  ],
+  "type": "screen",
+  "uri": "http://localhost:8080/FASTCatalogue/screens/6",
+  "version": "1.0"
+}</field>
+        <field type="DecimalField" name="popularity"><None></None></field>
+        <field type="CharField" name="uri">http://localhost:8080/FASTCatalogue/screens/6</field>
+    </object>
+    <object pk="8" model="buildingblock.buildingblock">
+        <field type="CharField" name="type">screen</field>
+        <field to="auth.user" name="author" rel="ManyToOneRel">1</field>
+        <field type="CharField" name="name">Ebay List Screen</field>
+        <field type="CharField" name="version">1.0</field>
+        <field type="TextField" name="data">{
+  "code": "http://demo.fast.morfeo-project.org/gvsdata/screens/eBayList.scr.html",
+  "creationDate": "2010-01-26T13:37:47+0100",
+  "creator": "admin",
+  "description": {"en-gb": "This screen shows the results of a given search in eBay of a related Amazon product. It allows users to choose a product to see its details"},
+  "homepage": "http://www.deri.ie/eBayList",
+  "icon": "http://demo.fast.morfeo-project.org/gvsdata/images/catalogue/eBayList.png",
+  "id": "8",
+  "label": {"en-gb": "Ebay List"},
+  "name": "Ebay List Screen",
+  "postconditions": [[{
+    "id": "itemEbay",
+    "label": {"en-gb": "An eBay item"},
+    "pattern": "?eItem http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://developer.ebay.com/DevZone/shopping/docs/CallRef/GetSingleItem.html#Request",
+    "positive": true
+  }]],
+  "preconditions": [[{
+    "label": {"en-gb": "An Amazon item"},
+    "pattern": "?Item http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#Item",
+    "positive": true
+  }]],
+  "rights": "http://creativecommons.org/",
+  "screenshot": "http://demo.fast.morfeo-project.org/gvsdata/images/screenshots/ebayComparative.png",
+  "tags": [
+    {"label": {"en-gb": "scratch"}},
+    {
+      "label": {"en-gb": "amazon"},
+      "means": "http://dbpedia.org/page/Amazon.com"
+    },
+    {"label": {"en-gb": "ebay"}},
+    {"label": {"en-gb": "list"}}
+  ],
+  "type": "screen",
+  "uri": "http://localhost:8080/FASTCatalogue/screens/8",
+  "version": "1.0"
+}</field>
+        <field type="DecimalField" name="popularity"><None></None></field>
+        <field type="CharField" name="uri">http://localhost:8080/FASTCatalogue/screens/8</field>
+    </object>
+    <object pk="17" model="buildingblock.buildingblock">
+        <field type="CharField" name="type">operator</field>
+        <field to="auth.user" name="author" rel="ManyToOneRel">1</field>
+        <field type="CharField" name="name">Amazon Item to Ebay Filter</field>
         <field type="CharField" name="version">1.0</field>
         <field type="TextField" name="data">{
   "actions": [{
-    "name": "fetch",
+    "name": "createFilter",
     "preconditions": [{
-      "id": "cart",
-      "label": {"en-gb": "A shopping cart"},
-      "pattern": "?Cart http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#ShoppingCart",
+      "id": "item",
+      "label": {"en-gb": "An item"},
+      "pattern": "?Item http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#Item",
       "positive": true
     }],
     "uses": []
   }],
-  "code": "http://demo.fast.morfeo-project.org/gvsdata/resources/amazonSearchCartService.src.js",
-  "creationDate": null,
-  "creator": "http://www.fabio.es/",
-  "description": {"en-gb": "This service provides information about user shopping cart"},
-  "domainContext": {
-    "tags": [
-      "amazon",
-      "shopping",
-      "cart"
-    ],
-    "user": "admin"
-  },
-  "homepage": "http://www.deri.ie/amazonSearchCartService",
-  "icon": "http://demo.fast.morfeo-project.org/gvsdata/images/catalogue/amazonSearchCartService.png",
-  "id": "23",
-  "label": {"en-gb": "Amazon Cart"},
-  "libraries": [
-    {
-      "language": "JavaScript",
-      "source": "http://demo.fast.morfeo-project.org/gvsdata/amazonURL/signAmazonURLs.js"
-    },
-    {
-      "language": "JavaScript",
-      "source": "http://demo.fast.morfeo-project.org/gvsdata/amazonURL/jssha2/sha2.js"
-    }
-  ],
-  "name": "Search Amazon Cart Service",
-  "postconditions": [[
-    {
-      "id": "list",
-      "label": {"en-gb": "A product list"},
-      "pattern": "?PList http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#ProductList",
-      "positive": false
-    },
-    {
-      "id": "message",
-      "label": {"en-gb": "A message"},
-      "pattern": "?Message http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#Message",
-      "positive": false
-    }
-  ]],
+  "code": "http://demo.fast.morfeo-project.org/gvsdata/operators/amazonEbayFilter.src.js",
+  "creationDate": "2010-01-26T13:38:39+0100",
+  "creator": "admin",
+  "description": {"en-gb": "This operator generates an eBay filter from a Amazon item"},
+  "homepage": "http://www.deri.ie/eBayList",
+  "icon": "http://demo.fast.morfeo-project.org/gvsdata/images/catalogue/eBayList.png",
+  "id": "17",
+  "label": {"en-gb": "Ebay List"},
+  "libraries": [],
+  "name": "Amazon Item to Ebay Filter",
+  "postconditions": [[{
+    "id": "filterEbay",
+    "label": {"en-gb": "An eBay filter"},
+    "pattern": "?eFilter http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://developer.ebay.com/DevZone/shopping/docs/CallRef/FindItemsAdvanced.html#Request",
+    "positive": true
+  }]],
   "rights": "http://creativecommons.org/",
-  "screenshot": "http://www.deri.ie/amazonSearchCartService.jpg",
-  "triggers": [],
-  "type": "resource",
-  "uri": "http://purl.oclc.org/fast/ontology/gadget#BackendService1263313244553",
+  "screenshot": "http://www.deri.ie/eBayList-screenshot.jpg",
+  "tags": [
+    {
+      "label": {"en-gb": "amazon"},
+      "means": "http://dbpedia.org/page/Amazon.com"
+    },
+    {"label": {"en-gb": "ebay"}},
+    {"label": {"en-gb": "filter"}}
+  ],
+  "triggers": ["filterEbay"],
+  "type": "operator",
+  "uri": "http://localhost:8080/FASTCatalogue/operators/17",
   "version": "1.0"
 }</field>
         <field type="DecimalField" name="popularity"><None></None></field>
-        <field type="CharField" name="uri">http://purl.oclc.org/fast/ontology/gadget#BackendService1263313244553</field>
+        <field type="CharField" name="uri">http://localhost:8080/FASTCatalogue/operators/17</field>
     </object>
     <object pk="24" model="buildingblock.buildingblock">
         <field type="CharField" name="type">resource</field>
@@ -1188,16 +1456,9 @@
     "uses": []
   }],
   "code": "http://demo.fast.morfeo-project.org/gvsdata/resources/amazonSearchService.src.js",
-  "creationDate": null,
-  "creator": "http://www.fabio.es/",
+  "creationDate": "2010-01-26T13:39:19+0100",
+  "creator": "admin",
   "description": {"en-gb": "This service provides information about products in Amazon Catalogue"},
-  "domainContext": {
-    "tags": [
-      "amazon",
-      "list"
-    ],
-    "user": "admin"
-  },
   "homepage": "hhttp://www.deri.ie/amazonSearchService",
   "icon": "http://demo.fast.morfeo-project.org/gvsdata/images/catalogue/amazonSearchService.png",
   "id": "24",
@@ -1221,275 +1482,21 @@
   }]],
   "rights": "http://creativecommons.org/",
   "screenshot": "http://www.deri.ie/amazonList-screenshot.jpg",
-  "triggers": ["productList"],
-  "type": "resource",
-  "uri": "http://purl.oclc.org/fast/ontology/gadget#BackendService1263313249397",
-  "version": "1.0"
-}</field>
-        <field type="DecimalField" name="popularity"><None></None></field>
-        <field type="CharField" name="uri">http://purl.oclc.org/fast/ontology/gadget#BackendService1263313249397</field>
-    </object>
-    <object pk="9" model="buildingblock.buildingblock">
-        <field type="CharField" name="type">form</field>
-        <field to="auth.user" name="author" rel="ManyToOneRel">1</field>
-        <field type="CharField" name="name">Amazon List Form</field>
-        <field type="CharField" name="version">1.0</field>
-        <field type="TextField" name="data">{
-  "actions": [
+  "tags": [
     {
-      "name": "init",
-      "preconditions": [],
-      "uses": []
+      "label": {"en-gb": "amazon"},
+      "means": "http://dbpedia.org/page/Amazon.com"
     },
-    {
-      "name": "showTable",
-      "preconditions": [{
-        "id": "list",
-        "label": {"en-gb": "A product list"},
-        "pattern": "?PList http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#ProductList",
-        "positive": true
-      }],
-      "uses": []
-    }
+    {"label": {"en-gb": "search"}},
+    {"label": {"en-gb": "list"}}
   ],
-  "code": "http://demo.fast.morfeo-project.org/gvsdata/forms/amazonList.src.html",
-  "creationDate": null,
-  "creator": "http://www.fabio.es/",
-  "description": {"en-gb": "This form shows the results of a given search in Amazon. It allows users to choose a product to see its details"},
-  "domainContext": {
-    "tags": [
-      "amazon",
-      "list"
-    ],
-    "user": "admin"
-  },
-  "homepage": "http://www.deri.ie/amazonList",
-  "icon": "http://demo.fast.morfeo-project.org/gvsdata/images/catalogue/amazonList.png",
-  "id": "9",
-  "label": {"en-gb": "Product List"},
-  "libraries": [],
-  "name": "Amazon List Form",
-  "postconditions": [[
-    {
-      "id": "item",
-      "label": {"en-gb": "An item"},
-      "pattern": "?Item http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#Item",
-      "positive": true
-    },
-    {
-      "id": "filter",
-      "label": {"en-gb": "A filter"},
-      "pattern": "?Filter http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#SearchCriteria",
-      "positive": true
-    }
-  ]],
-  "rights": "http://creativecommons.org/",
-  "screenshot": "http://demo.fast.morfeo-project.org/gvsdata/images/screenshots/amazonProductList.png",
-  "triggers": [],
-  "type": "form",
-  "uri": "http://purl.oclc.org/fast/ontology/gadget#FormElement1263313163770",
-  "version": "1.0"
-}</field>
-        <field type="DecimalField" name="popularity"><None></None></field>
-        <field type="CharField" name="uri">http://purl.oclc.org/fast/ontology/gadget#FormElement1263313163770</field>
-    </object>
-    <object pk="10" model="buildingblock.buildingblock">
-        <field type="CharField" name="type">form</field>
-        <field to="auth.user" name="author" rel="ManyToOneRel">1</field>
-        <field type="CharField" name="name">Amazon Order Form</field>
-        <field type="CharField" name="version">1.0</field>
-        <field type="TextField" name="data">{
-  "actions": [{
-    "name": "init",
-    "preconditions": [{
-      "id": "purchase",
-      "label": {"en-gb": "A purchase"},
-      "pattern": "?Purchase http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#PurchaseURL",
-      "positive": true
-    }],
-    "uses": []
-  }],
-  "code": "http://demo.fast.morfeo-project.org/gvsdata/forms/amazonOrder.src.html",
-  "creationDate": null,
-  "creator": "http://www.fabio.es/",
-  "description": {"en-gb": "This form allows users to purchase their shopping cart. It shows an Amazon interface to fulfill the required data to purchase the shopping cart"},
-  "domainContext": {
-    "tags": [
-      "amazon",
-      "order",
-      "purchase"
-    ],
-    "user": "admin"
-  },
-  "homepage": "http://www.deri.ie/amazonOrder",
-  "icon": "http://demo.fast.morfeo-project.org/gvsdata/images/catalogue/amazonOrder.png",
-  "id": "10",
-  "label": {"en-gb": "Order"},
-  "libraries": [],
-  "name": "Amazon Order Form",
-  "postconditions": [],
-  "rights": "http://creativecommons.org/",
-  "screenshot": "http://demo.fast.morfeo-project.org/gvsdata/images/screenshots/amazonOrder.png",
-  "triggers": [],
-  "type": "form",
-  "uri": "http://purl.oclc.org/fast/ontology/gadget#FormElement1263313173317",
-  "version": "1.0"
-}</field>
-        <field type="DecimalField" name="popularity"><None></None></field>
-        <field type="CharField" name="uri">http://purl.oclc.org/fast/ontology/gadget#FormElement1263313173317</field>
-    </object>
-    <object pk="13" model="buildingblock.buildingblock">
-        <field type="CharField" name="type">form</field>
-        <field to="auth.user" name="author" rel="ManyToOneRel">1</field>
-        <field type="CharField" name="name">Amazon Search Form</field>
-        <field type="CharField" name="version">1.0</field>
-        <field type="TextField" name="data">{
-  "actions": [{
-    "name": "init",
-    "preconditions": [],
-    "uses": []
-  }],
-  "code": "http://demo.fast.morfeo-project.org/gvsdata/forms/amazonSearch.src.html",
-  "creationDate": null,
-  "creator": "http://www.fabio.es/",
-  "description": {"en-gb": "This screen allows users to look for a product in Amazon, providing a keyword search interface. It produces a search criteria or filter fact."},
-  "domainContext": {
-    "tags": [
-      "amazon",
-      "search"
-    ],
-    "user": "admin"
-  },
-  "homepage": "http://www.deri.ie/amazonSearch",
-  "icon": "http://demo.fast.morfeo-project.org/gvsdata/images/catalogue/amazonSearch.png",
-  "id": "13",
-  "label": {"en-gb": "Product Search"},
-  "libraries": [],
-  "name": "Amazon Search Form",
-  "postconditions": [[{
-    "id": "filter",
-    "label": {"en-gb": "A filter"},
-    "pattern": "?Filter http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#SearchCriteria",
-    "positive": true
-  }]],
-  "rights": "http://creativecommons.org/",
-  "screenshot": "http://demo.fast.morfeo-project.org/gvsdata/images/screenshots/amazonSearch.png",
-  "triggers": [],
-  "type": "form",
-  "uri": "http://purl.oclc.org/fast/ontology/gadget#FormElement1263313188505",
-  "version": "1.0"
-}</field>
-        <field type="DecimalField" name="popularity"><None></None></field>
-        <field type="CharField" name="uri">http://purl.oclc.org/fast/ontology/gadget#FormElement1263313188505</field>
-    </object>
-    <object pk="17" model="buildingblock.buildingblock">
-        <field type="CharField" name="type">operator</field>
-        <field to="auth.user" name="author" rel="ManyToOneRel">1</field>
-        <field type="CharField" name="name">Amazon Item to Ebay Filter</field>
-        <field type="CharField" name="version">1.0</field>
-        <field type="TextField" name="data">{
-  "actions": [{
-    "name": "createFilter",
-    "preconditions": [{
-      "id": "item",
-      "label": {"en-gb": "An item"},
-      "pattern": "?Item http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#Item",
-      "positive": true
-    }],
-    "uses": []
-  }],
-  "code": "http://demo.fast.morfeo-project.org/gvsdata/operators/amazonEbayFilter.src.js",
-  "creationDate": null,
-  "creator": "http://www.fabio.es/",
-  "description": {"en-gb": "This operator generates an eBay filter from a Amazon item"},
-  "domainContext": {
-    "tags": [
-      "ebay",
-      "amazon",
-      "filter"
-    ],
-    "user": "admin"
-  },
-  "homepage": "http://www.deri.ie/eBayList",
-  "icon": "http://demo.fast.morfeo-project.org/gvsdata/images/catalogue/eBayList.png",
-  "id": "17",
-  "label": {"en-gb": "Ebay List"},
-  "libraries": [],
-  "name": "Amazon Item to Ebay Filter",
-  "postconditions": [[{
-    "id": "filterEbay",
-    "label": {"en-gb": "An eBay filter"},
-    "pattern": "?eFilter http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://developer.ebay.com/DevZone/shopping/docs/CallRef/FindItemsAdvanced.html#Request",
-    "positive": true
-  }]],
-  "rights": "http://creativecommons.org/",
-  "screenshot": "http://www.deri.ie/eBayList-screenshot.jpg",
-  "triggers": ["filterEbay"],
-  "type": "operator",
-  "uri": "http://purl.oclc.org/fast/ontology/gadget#Operator1263313208131",
-  "version": "1.0"
-}</field>
-        <field type="DecimalField" name="popularity"><None></None></field>
-        <field type="CharField" name="uri">http://purl.oclc.org/fast/ontology/gadget#Operator1263313208131</field>
-    </object>
-    <object pk="22" model="buildingblock.buildingblock">
-        <field type="CharField" name="type">resource</field>
-        <field to="auth.user" name="author" rel="ManyToOneRel">1</field>
-        <field type="CharField" name="name">Amazon Price Comparative Service</field>
-        <field type="CharField" name="version">1.0</field>
-        <field type="TextField" name="data">{
-  "actions": [{
-    "name": "fetch",
-    "preconditions": [{
-      "id": "item",
-      "label": {"en-gb": "An item"},
-      "pattern": "?Item http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#Item",
-      "positive": true
-    }],
-    "uses": []
-  }],
-  "code": "http://demo.fast.morfeo-project.org/gvsdata/resources/amazonPriceComparativeService.src.js",
-  "creationDate": null,
-  "creator": "http://www.fabio.es/",
-  "description": {"en-gb": "This service provides a price comparative related to an Amazon product"},
-  "domainContext": {
-    "tags": [
-      "amazon",
-      "price",
-      "comparative"
-    ],
-    "user": "admin"
-  },
-  "homepage": "http://www.deri.ie/amazonPriceComparativeService",
-  "icon": "http://demo.fast.morfeo-project.org/gvsdata/images/catalogue/amazonPriceComparativeService.png",
-  "id": "22",
-  "label": {"en-gb": "Amazon Price Comparative"},
-  "libraries": [
-    {
-      "language": "JavaScript",
-      "source": "http://demo.fast.morfeo-project.org/gvsdata/amazonURL/signAmazonURLs.js"
-    },
-    {
-      "language": "JavaScript",
-      "source": "http://demo.fast.morfeo-project.org/gvsdata/amazonURL/jssha2/sha2.js"
-    }
-  ],
-  "name": "Amazon Price Comparative Service",
-  "postconditions": [[{
-    "id": "list",
-    "label": {"en-gb": "A product list"},
-    "pattern": "?OList http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#OfferList",
-    "positive": true
-  }]],
-  "rights": "http://creativecommons.org/",
-  "screenshot": "http://www.deri.ie/amazonPriceComparativeService.jpg",
   "triggers": ["productList"],
-  "type": "resource",
-  "uri": "http://purl.oclc.org/fast/ontology/gadget#BackendService1263313239881",
+  "type": "service",
+  "uri": "http://localhost:8080/FASTCatalogue/services/24",
   "version": "1.0"
 }</field>
         <field type="DecimalField" name="popularity"><None></None></field>
-        <field type="CharField" name="uri">http://purl.oclc.org/fast/ontology/gadget#BackendService1263313239881</field>
+        <field type="CharField" name="uri">http://localhost:8080/FASTCatalogue/services/24</field>
     </object>
     <object pk="27" model="buildingblock.buildingblock">
         <field type="CharField" name="type">resource</field>
@@ -1508,16 +1515,9 @@
     "uses": []
   }],
   "code": "http://demo.fast.morfeo-project.org/gvsdata/resources/ebaySearchService.src.js",
-  "creationDate": null,
-  "creator": "http://www.fabio.es/",
+  "creationDate": "2010-01-26T13:39:34+0100",
+  "creator": "admin",
   "description": {"en-gb": "This service provides information about products in eBay Catalogue"},
-  "domainContext": {
-    "tags": [
-      "ebay",
-      "list"
-    ],
-    "user": "admin"
-  },
   "homepage": "http://www.deri.ie/ebaySearchService",
   "icon": "http://demo.fast.morfeo-project.org/gvsdata/images/catalogue/ebaySearchService.png",
   "id": "27",
@@ -1532,13 +1532,18 @@
   }]],
   "rights": "http://creativecommons.org/",
   "screenshot": "http://www.deri.ie/ebaySearchService.jpg",
+  "tags": [
+    {"label": {"en-gb": "ebay"}},
+    {"label": {"en-gb": "search"}},
+    {"label": {"en-gb": "list"}}
+  ],
   "triggers": ["productList"],
-  "type": "resource",
-  "uri": "http://purl.oclc.org/fast/ontology/gadget#BackendService1263313263804",
+  "type": "service",
+  "uri": "http://localhost:8080/FASTCatalogue/services/27",
   "version": "1.0"
 }</field>
         <field type="DecimalField" name="popularity"><None></None></field>
-        <field type="CharField" name="uri">http://purl.oclc.org/fast/ontology/gadget#BackendService1263313263804</field>
+        <field type="CharField" name="uri">http://localhost:8080/FASTCatalogue/services/27</field>
     </object>
     <object pk="1" model="buildingblock.screen">
     </object>
@@ -3161,352 +3166,348 @@
     </object>
     <object pk="6" model="buildingblock.buildingblockcode">
         <field to="buildingblock.buildingblock" name="buildingBlock" rel="ManyToOneRel">6</field>
-        <field type="TextField" name="code">&lt;html&gt;
-    &lt;head&gt;
-        &lt;meta http-equiv="Content-Type" content="application/xhtml+xml; charset=UTF-8" /&gt;
-        &lt;link type="text/css" rel="stylesheet" href="http://demo.fast.morfeo-project.org/gvsdata/amazonScreens/style/table.css" /&gt;
-        &lt;link type="text/css" rel="stylesheet" href="http://demo.fast.morfeo-project.org/gvsdata/amazonScreens/style/screen.css" /&gt;
-		&lt;style type="text/css"&gt;
-			#loadingImgCart{
-				margin:auto;	
-			}
-			#info{
-				margin:auto;
-				font-family:Arial,Helvetica,sans-serif;
-				font-style:italic;
-				padding-top: 10px;
-				color: #AAA;
-			}
-			.productTitle{
-				font-weight:bold;
-				font-style:normal;
-			}
-			#buttonContainerDivCart{
-				margin-top: 5px;
-				display:none;
-			}
-			#amazonImage{
-				position:absolute;
-				right:0px;
-				top:3px;
-			}
-		&lt;/style&gt;
-		&lt;script language="JavaScript" src="http://demo.fast.morfeo-project.org/gvsdata/amazonURL/signAmazonURLs.js"&gt;&lt;/script&gt;
-		&lt;script language="JavaScript" src="http://demo.fast.morfeo-project.org/gvsdata/amazonURL/jssha2/sha2.js"&gt;&lt;/script&gt;
-        &lt;script language="JavaScript"&gt;
-        		
-        	function ShoppingCart(){
-		    	//Product list fetched from the Service
-		        this.productList = new Array();
-				//Subtotal
-				this.subTotal="";
-				// number of items in the cart
-				this.itemTotal = 0;
-				//Purchase URL
-				this.purchaseURL = "";
-            	//Are we waiting for data?
-            	this.waiting = true;
-		    };
-            
-            ShoppingCart.prototype.init = function (){
-                $("clearButton").observe("click", shoppingCart.clearCart);
-                $("checkoutButton").observe("click", shoppingCart.checkout);
-				$("updateButton").observe("click", shoppingCart.update);
-				$$('input[type="button"]').each(function(element){
-					element.observe("mouseover",function(event){
-						var e = Event.element(event);
-						e.setStyle({cursor:"pointer"});
-					});
-				
-				});
-				var tableBody = $("listBodyCart");
-				tableBody.update("");
-				if(!$("loadingImgCart")){
-					$("info").update('&lt;img id="loadingImgCart" src="http://demo.fast.morfeo-project.org/gvsdata/amazonScreens/images/ajaxLoader.gif" /&gt;');
-
-				}
-				$("loadingImgCart").show();
-				$("buttonContainerDivCart").hide();
-				shoppingCart.waiting = true;
-                shoppingCart.fetch();
-            }
-            
-            ShoppingCart.prototype.clearCart = function (){
-				//Ask the user to confirm the operation
-				if (confirm("Are you sure you want to empty your Shopping Cart?")) {
-					var cart = ScreenflowEngineFactory.getInstance().getFact('http://aws.amazon.com/AWSECommerceService#ShoppingCart');
-					var user = ScreenflowEngineFactory.getInstance().getFact('user');
-					
-					//Create the call
-					var url = "http://webservices.amazon.com/onca/xml?Service=AWSECommerceService";
-					//Add the AccessKeyId (get from the user fact)
-					/*if (user)
-						url += "&amp;AWSAccessKeyId=" + user.data.KeyId;
-					else // if the KB doesn't contain a user key Id, add one by default
-						url += "&amp;AWSAccessKeyId=15TNKDQJGH6BD0Z4KY02";*/
-					//Add the operation Type
-					url +="&amp;Operation=CartClear";
-					//Add the current version of the API
-					url += "&amp;Version=2008-06-26";
-					//Add item ID
-					url += "&amp;CartId=" + cart.data.id;
-					url += "&amp;HMAC=" + cart.data.HMAC;
-					
-						var encoder = new URLAmazonEncoder();
-						url = encoder.encode(url);
-
-	
-					//Invoke the service
-           	        new FastAPI.Request(url,{
-                        'method':       'get',
-                        'content':      'xml',
-                        'context':      shoppingCart,
-                        'onSuccess':    shoppingCart.clear_ok
-                    });
-				}	
-			}
-
-            ShoppingCart.prototype.clear_ok = function (){
-				ScreenflowEngineFactory.getInstance().manageFacts([],['http://aws.amazon.com/AWSECommerceService#PurchaseURL']);
-				shoppingCart.fetch();
-			}
-			
-			ShoppingCart.prototype.checkout = function (){
-				var purchase = {uri:'http://aws.amazon.com/AWSECommerceService#PurchaseURL', data:{url: shoppingCart.purchaseURL}};
-				ScreenflowEngineFactory.getInstance().manageFacts([purchase],[]);
-			}
-			
-			ShoppingCart.prototype.update = function (){
-				if (shoppingCart.productList.length &gt; 0) { //Only if there is something to update
-					var cart = ScreenflowEngineFactory.getInstance().getFact('http://aws.amazon.com/AWSECommerceService#ShoppingCart');
-					var user = ScreenflowEngineFactory.getInstance().getFact('user');
-					//Create the call
-					var url = "http://webservices.amazon.com/onca/xml?Service=AWSECommerceService";
-					//Add the AccessKeyId (get from the user fact)
-					/*if (user)
-						url += "&amp;AWSAccessKeyId=" + user.data.KeyId;
-					else // if the KB doesn't contain a user key Id, add one by default
-						url += "&amp;AWSAccessKeyId=15TNKDQJGH6BD0Z4KY02";*/
-					//Add the operation Type
-					url +="&amp;Operation=CartModify";
-					//Add the current version of the API
-					url += "&amp;Version=2008-06-26";
-					//Add item ID
-					url += "&amp;CartId=" + cart.data.id;
-					url += "&amp;HMAC=" + cart.data.HMAC;
-					//Build the parameter list
-					for (var i=0; i &lt; shoppingCart.productList.length; i++){
-						url += "&amp;Item." + (i+1) + ".CartItemId=" + shoppingCart.productList[i]["id"];
-						url += "&amp;Item." + (i+1) + ".Quantity=" + $F(shoppingCart.productList[i]["id"]);
-					}
-
-						var encoder = new URLAmazonEncoder();
-						url = encoder.encode(url);
-
-	
-					//Create the call
-                    new FastAPI.Request(url,{
-                        'method':       'get',
-                        'content':      'xml',
-                        'context':      shoppingCart,
-                        'onSuccess':    shoppingCart.update_ok
-                    });
-				}
-			}
-
-			ShoppingCart.prototype.update_ok = function (){
-				ScreenflowEngineFactory.getInstance().manageFacts([],['http://aws.amazon.com/AWSECommerceService#PurchaseURL']);
-				shoppingCart.fetch();
-			}
-			
-			//Change the current Item Fact
-			ShoppingCart.prototype.productDetail = function (_ASIN,_title){
-				var item = ScreenflowEngineFactory.getInstance().getFact('http://aws.amazon.com/AWSECommerceService#Item');
-				item.data.ASIN = _ASIN;
-				item.data.title = _title;
-				ScreenflowEngineFactory.getInstance().manageFacts([item],['product']);
-			}
-			
-			ShoppingCart.prototype.fetch = function (){
-				//empty current data
-				shoppingCart.productList = new Array();
-				shoppingCart.subTotal = 0;
-				shoppingCart.itemTotal = 0;  
-				
-                //Get the facts to invoke the service
-                //TODO add error handling
-                var cart = ScreenflowEngineFactory.getInstance().getFact('http://aws.amazon.com/AWSECommerceService#ShoppingCart');
-                var user = ScreenflowEngineFactory.getInstance().getFact('user');
-				
-                //Invoke the service CartGet to retrieve the product list
-                var url = "http://webservices.amazon.com/onca/xml?Service=AWSECommerceService";
-				//Add the AccessKeyId (get from the user fact)
-				/*if (user)
-					url += "&amp;AWSAccessKeyId=" + user.data.KeyId;
-				else // if the KB doesn't contain a user key Id, add one by default
-					url += "&amp;AWSAccessKeyId=15TNKDQJGH6BD0Z4KY02";*/
-				//Add the operation Type
-				url +="&amp;Operation=CartGet";
-				//Add the current version of the API
-				url += "&amp;Version=2008-06-26";
-				//Add item ID
-				url += "&amp;CartId=" + cart.data.id;
-				url += "&amp;HMAC=" + cart.data.HMAC;
-				
-						var encoder = new URLAmazonEncoder();
-						url = encoder.encode(url);
-
-	
-				//Create the call
-                new FastAPI.Request(url,{
-                    'method':       'get',
-                    'content':      'xml',
-                    'context':      shoppingCart,
-                    'onSuccess':    shoppingCart.addToList
-                });
-            }
-            
-            ShoppingCart.prototype.addToList = function (transport){
-                var xml = transport;
-                //Check if the service returned an error
-                if (xml.getElementsByTagName("IsValid")[0].childNodes[0].nodeValue == "False") {
-                    alert(xml.getElementsByTagName("Message")[0].childNodes[0].nodeValue);
-                }
-                else { //Correct response, create the result List
-                	if (xml.getElementsByTagName("CartItems").length &gt; 0) { //There are products in the cart
-						var list = xml.getElementsByTagName("CartItems")[0].getElementsByTagName("CartItem");
-						//Fill the table, 1 row per item
-						$A(list).each(function(item){
-							if (item.getElementsByTagName("Title").length &gt; 0) 
-								var title = item.getElementsByTagName("Title")[0].firstChild.nodeValue;
-							if (item.getElementsByTagName("ASIN").length &gt; 0) 
-								var ASIN = item.getElementsByTagName("ASIN")[0].firstChild.nodeValue;
-							if (item.getElementsByTagName("CartItemId").length &gt; 0) 
-								var ID = item.getElementsByTagName("CartItemId")[0].firstChild.nodeValue;
-							if (item.getElementsByTagName("Price").length &gt; 0) 
-								var price = item.getElementsByTagName("Price")[0].getElementsByTagName("FormattedPrice")[0].firstChild.nodeValue;
-							if (item.getElementsByTagName("Quantity").length &gt; 0) 
-								var quantity = item.getElementsByTagName("Quantity")[0].firstChild.nodeValue;
-							var row = {
-								title: title,
-								price: price,
-								ASIN: ASIN,
-								id: ID,
-								quantity: quantity
-							};
-							shoppingCart.itemTotal += parseInt (quantity);
-							shoppingCart.productList.push(row);
-						});
-					}
-					if (xml.getElementsByTagName("SubTotal").length&gt;0)
-						shoppingCart.subTotal = xml.getElementsByTagName("SubTotal")[0].getElementsByTagName("FormattedPrice")[0].firstChild.nodeValue;
-					else
-						shoppingCart.subTotal = "$0.0";
-					if (xml.getElementsByTagName("PurchaseURL").length&gt;0)
-						shoppingCart.purchaseURL = xml.getElementsByTagName("PurchaseURL")[0].firstChild.nodeValue;
-                    if (shoppingCart.waiting) {
-                        shoppingCart.waiting = false;
-                    }
-					shoppingCart.showTable();
-                }
-            }
-            
-            ShoppingCart.prototype.onError = function (transport){
-                //alert(transport.responseText);
-            }
-            
-            ShoppingCart.prototype.showProgress = function (){
-                shoppingCart.waiting = true;
-                $("loadingImgCart").show();
-            }
-            
-            ShoppingCart.prototype.showTable = function (){
-                if($("loadingImgCart")){
-                	$("loadingImgCart").hide();
-				}
-				var tableBody = $("listBodyCart");
-				tableBody.update("");
-				if (shoppingCart.productList.length == 0) {//Empty shopping cart
-					$("info").update("Your Shopping Cart is empty");
-					$("buttonContainerDivCart").hide();
-					ScreenflowEngineFactory.getInstance().manageFacts([],['?Purchase http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#PurchaseURL']);	
-					return;
-				}else{
-					$("info").update("");
-				}
-				$("buttonContainerDivCart").setStyle({display:"inline"});
-                var templateString = '&lt;tr&gt;&lt;td&gt;&lt;a onclick="shoppingCart.productDetail(\'#{ASIN}\',\'#{title}\');"&gt;#{title}&lt;/a&gt;&lt;/td&gt;';
-				templateString += '&lt;td&gt;#{price}&lt;/td&gt;';
-				templateString += '&lt;td&gt;&lt;input type="text" maxlength="3" size="2" id="#{id}"';
-				templateString += 'value="#{quantity}"/&gt;&lt;/td&gt;&lt;/tr&gt;';
-                var rowTemplate = new Template(templateString);
-                
-                
-                for (var i = 0; i &lt; shoppingCart.productList.length; i++) {
-                    if (shoppingCart.productList[i]) { //only if the product table is fetched
-                        tableBody.innerHTML += rowTemplate.evaluate(shoppingCart.productList[i]);
-                    }
-                }
-				//Last row, including subtotal
-				var lastRow = "&lt;tr&gt;&lt;th style='text-align:right'&gt;Subtotal&lt;/th&gt;&lt;th&gt;";
-				lastRow += shoppingCart.subTotal;
-				lastRow += "&lt;/th&gt;&lt;th&gt;";
-				lastRow += shoppingCart.itemTotal;
-				lastRow += "&lt;/th&gt;&lt;/tr&gt;";
-				tableBody.innerHTML += lastRow;
-            }
-            
-            var shoppingCart = new ShoppingCart();
-			ScreenflowEngineFactory.getInstance().addScreenLoader("6", shoppingCart.init);
-					
-        &lt;/script&gt;
-    &lt;/head&gt;
-    &lt;body&gt;
-        &lt;div id="bodyDiv"&gt;
-        	&lt;span id="amazonImage"&gt;&lt;img src="http://demo.fast.morfeo-project.org/gvsdata/amazonScreens/images/amazon.png" /&gt;&lt;/span&gt;
-            &lt;h1 id="title"&gt;Shopping Cart&lt;/h1&gt;
-            &lt;div id="listDivCart"&gt;
-                &lt;table&gt;
-                    &lt;thead&gt;
-                        &lt;tr&gt;
-                            &lt;th style="width:70%;-moz-border-radius: 13px 0px 0px 0px;"&gt;
-                                Shopping Cart Items
-                            &lt;/th&gt;
-                            &lt;th style="width:10%"&gt;
-                                Price
-                            &lt;/th&gt;
-                            &lt;th style="width:10%;-moz-border-radius: 0px 13px 0px 0px;"&gt;
-                                Quantity
-                            &lt;/th&gt;
-                        &lt;/tr&gt;
-                    &lt;/thead&gt;
-                    &lt;tbody id="listBodyCart"&gt;
-                    	&lt;tr&gt;
-							&lt;td&gt;&amp;nbsp;&lt;/td&gt;
-					    &lt;/tr&gt;
-						&lt;tr&gt;
-							&lt;td&gt;&amp;nbsp;&lt;/td&gt;
-					    &lt;/tr&gt;
-						&lt;tr&gt;
-							&lt;td&gt;&amp;nbsp;&lt;/td&gt;
-					    &lt;/tr&gt;
-						&lt;tr&gt;
-							&lt;td&gt;&amp;nbsp;&lt;/td&gt;
-					    &lt;/tr&gt;
-                    &lt;/tbody&gt;
-                &lt;/table&gt;
-               &lt;div id="info"&gt;&lt;img id="loadingImgCart" src="http://demo.fast.morfeo-project.org/gvsdata/amazonScreens/images/ajaxLoader.gif" /&gt;&lt;/div&gt;		
-                &lt;div id="buttonContainerDivCart"&gt;
-                    &lt;input type="button" id="clearButton" class="button" value="Clear Cart"/&gt;
-					&lt;input type="button" id="updateButton" class="button" value="Update Cart"/&gt;
-					&lt;input type="button" id="checkoutButton" class="button" value="Proceed to Checkout"/&gt;
-                &lt;/div&gt;
-				
-            &lt;/div&gt;
-        &lt;/div&gt;
-    &lt;/body&gt;
-&lt;/html&gt;
-
+        <field type="TextField" name="code">&lt;html&gt;
+    &lt;head&gt;
+        &lt;meta http-equiv="Content-Type" content="application/xhtml+xml; charset=UTF-8" /&gt;
+        &lt;link type="text/css" rel="stylesheet" href="http://demo.fast.morfeo-project.org/gvsdata/amazonScreens/style/table.css" /&gt;
+        &lt;link type="text/css" rel="stylesheet" href="http://demo.fast.morfeo-project.org/gvsdata/amazonScreens/style/screen.css" /&gt;
+		&lt;style type="text/css"&gt;
+			#loadingImgCart{
+				margin:auto;	
+			}
+			#info{
+				margin:auto;
+				font-family:Arial,Helvetica,sans-serif;
+				font-style:italic;
+				padding-top: 10px;
+				color: #AAA;
+			}
+			.productTitle{
+				font-weight:bold;
+				font-style:normal;
+			}
+			#buttonContainerDivCart{
+				margin-top: 5px;
+				display:none;
+			}
+			#amazonImage{
+				position:absolute;
+				right:0px;
+				top:3px;
+			}
+		&lt;/style&gt;
+		&lt;script language="JavaScript" src="http://demo.fast.morfeo-project.org/gvsdata/amazonURL/signAmazonURLs.js"&gt;&lt;/script&gt;
+		&lt;script language="JavaScript" src="http://demo.fast.morfeo-project.org/gvsdata/amazonURL/jssha2/sha2.js"&gt;&lt;/script&gt;
+        &lt;script language="JavaScript"&gt;
+        		
+        	function ShoppingCart(){
+		    	//Product list fetched from the Service
+		        this.productList = new Array();
+				//Subtotal
+				this.subTotal="";
+				// number of items in the cart
+				this.itemTotal = 0;
+				//Purchase URL
+				this.purchaseURL = "";
+            	//Are we waiting for data?
+            	this.waiting = true;
+		    };
+            
+            ShoppingCart.prototype.init = function (){
+                $("clearButton").observe("click", shoppingCart.clearCart);
+                $("checkoutButton").observe("click", shoppingCart.checkout);
+				$("updateButton").observe("click", shoppingCart.update);
+				$$('input[type="button"]').each(function(element){
+					element.observe("mouseover",function(event){
+						var e = Event.element(event);
+						e.setStyle({cursor:"pointer"});
+					});
+				
+				});
+				var tableBody = $("listBodyCart");
+				tableBody.update("");
+				if(!$("loadingImgCart")){
+					$("info").update('&lt;img id="loadingImgCart" src="http://demo.fast.morfeo-project.org/gvsdata/amazonScreens/images/ajaxLoader.gif" /&gt;');
+
+				}
+				$("loadingImgCart").show();
+				$("buttonContainerDivCart").hide();
+				shoppingCart.waiting = true;
+                shoppingCart.fetch();
+            }
+            
+            ShoppingCart.prototype.clearCart = function (){
+				//Ask the user to confirm the operation
+				if (confirm("Are you sure you want to empty your Shopping Cart?")) {
+					var cart = ScreenflowEngineFactory.getInstance().getFact('http://aws.amazon.com/AWSECommerceService#ShoppingCart');
+					var user = ScreenflowEngineFactory.getInstance().getFact('user');
+					
+					//Create the call
+					var url = "http://webservices.amazon.com/onca/xml?Service=AWSECommerceService";
+					//Add the AccessKeyId (get from the user fact)
+					/*if (user)
+						url += "&amp;AWSAccessKeyId=" + user.data.KeyId;
+					else // if the KB doesn't contain a user key Id, add one by default
+						url += "&amp;AWSAccessKeyId=15TNKDQJGH6BD0Z4KY02";*/
+					//Add the operation Type
+					url +="&amp;Operation=CartClear";
+					//Add the current version of the API
+					url += "&amp;Version=2008-06-26";
+					//Add item ID
+					url += "&amp;CartId=" + cart.data.id;
+					url += "&amp;HMAC=" + cart.data.HMAC;
+					
+						var encoder = new URLAmazonEncoder();
+						url = encoder.encode(url);
+	
+					//Invoke the service
+           	        new FastAPI.Request(url,{
+                        'method':       'get',
+                        'content':      'xml',
+                        'context':      shoppingCart,
+                        'onSuccess':    shoppingCart.clear_ok
+                    });
+				}	
+			}
+
+            ShoppingCart.prototype.clear_ok = function (){
+				ScreenflowEngineFactory.getInstance().manageFacts([],['http://aws.amazon.com/AWSECommerceService#PurchaseURL']);
+				shoppingCart.fetch();
+			}
+			
+			ShoppingCart.prototype.checkout = function (){
+				var purchase = {uri:'http://aws.amazon.com/AWSECommerceService#PurchaseURL', data:{url: shoppingCart.purchaseURL}};
+				ScreenflowEngineFactory.getInstance().manageFacts([purchase],[]);
+			}
+			
+			ShoppingCart.prototype.update = function (){
+				if (shoppingCart.productList.length &gt; 0) { //Only if there is something to update
+					var cart = ScreenflowEngineFactory.getInstance().getFact('http://aws.amazon.com/AWSECommerceService#ShoppingCart');
+					var user = ScreenflowEngineFactory.getInstance().getFact('user');
+					//Create the call
+					var url = "http://webservices.amazon.com/onca/xml?Service=AWSECommerceService";
+					//Add the AccessKeyId (get from the user fact)
+					/*if (user)
+						url += "&amp;AWSAccessKeyId=" + user.data.KeyId;
+					else // if the KB doesn't contain a user key Id, add one by default
+						url += "&amp;AWSAccessKeyId=15TNKDQJGH6BD0Z4KY02";*/
+					//Add the operation Type
+					url +="&amp;Operation=CartModify";
+					//Add the current version of the API
+					url += "&amp;Version=2008-06-26";
+					//Add item ID
+					url += "&amp;CartId=" + cart.data.id;
+					url += "&amp;HMAC=" + cart.data.HMAC;
+					//Build the parameter list
+					for (var i=0; i &lt; shoppingCart.productList.length; i++){
+						url += "&amp;Item." + (i+1) + ".CartItemId=" + shoppingCart.productList[i]["id"];
+						url += "&amp;Item." + (i+1) + ".Quantity=" + $F(shoppingCart.productList[i]["id"]);
+					}
+
+						var encoder = new URLAmazonEncoder();
+						url = encoder.encode(url);
+	
+					//Create the call
+                    new FastAPI.Request(url,{
+                        'method':       'get',
+                        'content':      'xml',
+                        'context':      shoppingCart,
+                        'onSuccess':    shoppingCart.update_ok
+                    });
+				}
+			}
+
+			ShoppingCart.prototype.update_ok = function (){
+				ScreenflowEngineFactory.getInstance().manageFacts([],['http://aws.amazon.com/AWSECommerceService#PurchaseURL']);
+				shoppingCart.fetch();
+			}
+			
+			//Change the current Item Fact
+			ShoppingCart.prototype.productDetail = function (_ASIN,_title){
+				var item = ScreenflowEngineFactory.getInstance().getFact('http://aws.amazon.com/AWSECommerceService#Item');
+				item.data.ASIN = _ASIN;
+				item.data.title = _title;
+				ScreenflowEngineFactory.getInstance().manageFacts([item],['product']);
+			}
+			
+			ShoppingCart.prototype.fetch = function (){
+				//empty current data
+				shoppingCart.productList = new Array();
+				shoppingCart.subTotal = 0;
+				shoppingCart.itemTotal = 0;  
+				
+                //Get the facts to invoke the service
+                //TODO add error handling
+                var cart = ScreenflowEngineFactory.getInstance().getFact('http://aws.amazon.com/AWSECommerceService#ShoppingCart');
+                var user = ScreenflowEngineFactory.getInstance().getFact('user');
+				
+                //Invoke the service CartGet to retrieve the product list
+                var url = "http://webservices.amazon.com/onca/xml?Service=AWSECommerceService";
+				//Add the AccessKeyId (get from the user fact)
+				/*if (user)
+					url += "&amp;AWSAccessKeyId=" + user.data.KeyId;
+				else // if the KB doesn't contain a user key Id, add one by default
+					url += "&amp;AWSAccessKeyId=15TNKDQJGH6BD0Z4KY02";*/
+				//Add the operation Type
+				url +="&amp;Operation=CartGet";
+				//Add the current version of the API
+				url += "&amp;Version=2008-06-26";
+				//Add item ID
+				url += "&amp;CartId=" + cart.data.id;
+				url += "&amp;HMAC=" + cart.data.HMAC;
+				
+						var encoder = new URLAmazonEncoder();
+						url = encoder.encode(url);
+	
+				//Create the call
+                new FastAPI.Request(url,{
+                    'method':       'get',
+                    'content':      'xml',
+                    'context':      shoppingCart,
+                    'onSuccess':    shoppingCart.addToList
+                });
+            }
+            
+            ShoppingCart.prototype.addToList = function (transport){
+                var xml = transport;
+                //Check if the service returned an error
+                if (xml.getElementsByTagName("IsValid")[0].childNodes[0].nodeValue == "False") {
+                    alert(xml.getElementsByTagName("Message")[0].childNodes[0].nodeValue);
+                }
+                else { //Correct response, create the result List
+                	if (xml.getElementsByTagName("CartItems").length &gt; 0) { //There are products in the cart
+						var list = xml.getElementsByTagName("CartItems")[0].getElementsByTagName("CartItem");
+						//Fill the table, 1 row per item
+						$A(list).each(function(item){
+							if (item.getElementsByTagName("Title").length &gt; 0) 
+								var title = item.getElementsByTagName("Title")[0].firstChild.nodeValue;
+							if (item.getElementsByTagName("ASIN").length &gt; 0) 
+								var ASIN = item.getElementsByTagName("ASIN")[0].firstChild.nodeValue;
+							if (item.getElementsByTagName("CartItemId").length &gt; 0) 
+								var ID = item.getElementsByTagName("CartItemId")[0].firstChild.nodeValue;
+							if (item.getElementsByTagName("Price").length &gt; 0) 
+								var price = item.getElementsByTagName("Price")[0].getElementsByTagName("FormattedPrice")[0].firstChild.nodeValue;
+							if (item.getElementsByTagName("Quantity").length &gt; 0) 
+								var quantity = item.getElementsByTagName("Quantity")[0].firstChild.nodeValue;
+							var row = {
+								title: title,
+								price: price,
+								ASIN: ASIN,
+								id: ID,
+								quantity: quantity
+							};
+							shoppingCart.itemTotal += parseInt (quantity);
+							shoppingCart.productList.push(row);
+						});
+					}
+					if (xml.getElementsByTagName("SubTotal").length&gt;0)
+						shoppingCart.subTotal = xml.getElementsByTagName("SubTotal")[0].getElementsByTagName("FormattedPrice")[0].firstChild.nodeValue;
+					else
+						shoppingCart.subTotal = "$0.0";
+					if (xml.getElementsByTagName("PurchaseURL").length&gt;0)
+						shoppingCart.purchaseURL = xml.getElementsByTagName("PurchaseURL")[0].firstChild.nodeValue;
+                    if (shoppingCart.waiting) {
+                        shoppingCart.waiting = false;
+                    }
+					shoppingCart.showTable();
+                }
+            }
+            
+            ShoppingCart.prototype.onError = function (transport){
+                //alert(transport.responseText);
+            }
+            
+            ShoppingCart.prototype.showProgress = function (){
+                shoppingCart.waiting = true;
+                $("loadingImgCart").show();
+            }
+            
+            ShoppingCart.prototype.showTable = function (){
+                if($("loadingImgCart")){
+                	$("loadingImgCart").hide();
+				}
+				var tableBody = $("listBodyCart");
+				tableBody.update("");
+				if (shoppingCart.productList.length == 0) {//Empty shopping cart
+					$("info").update("Your Shopping Cart is empty");
+					$("buttonContainerDivCart").hide();
+					ScreenflowEngineFactory.getInstance().manageFacts([],['?Purchase http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#PurchaseURL']);	
+					return;
+				}else{
+					$("info").update("");
+				}
+				$("buttonContainerDivCart").setStyle({display:"inline"});
+                var templateString = '&lt;tr&gt;&lt;td&gt;&lt;a onclick="shoppingCart.productDetail(\'#{ASIN}\',\'#{title}\');"&gt;#{title}&lt;/a&gt;&lt;/td&gt;';
+				templateString += '&lt;td&gt;#{price}&lt;/td&gt;';
+				templateString += '&lt;td&gt;&lt;input type="text" maxlength="3" size="2" id="#{id}"';
+				templateString += 'value="#{quantity}"/&gt;&lt;/td&gt;&lt;/tr&gt;';
+                var rowTemplate = new Template(templateString);
+                
+                
+                for (var i = 0; i &lt; shoppingCart.productList.length; i++) {
+                    if (shoppingCart.productList[i]) { //only if the product table is fetched
+                        tableBody.innerHTML += rowTemplate.evaluate(shoppingCart.productList[i]);
+                    }
+                }
+				//Last row, including subtotal
+				var lastRow = "&lt;tr&gt;&lt;th style='text-align:right'&gt;Subtotal&lt;/th&gt;&lt;th&gt;";
+				lastRow += shoppingCart.subTotal;
+				lastRow += "&lt;/th&gt;&lt;th&gt;";
+				lastRow += shoppingCart.itemTotal;
+				lastRow += "&lt;/th&gt;&lt;/tr&gt;";
+				tableBody.innerHTML += lastRow;
+            }
+            
+            var shoppingCart = new ShoppingCart();
+			ScreenflowEngineFactory.getInstance().addScreenLoader("6", shoppingCart.init);
+					
+        &lt;/script&gt;
+    &lt;/head&gt;
+    &lt;body&gt;
+        &lt;div id="bodyDiv"&gt;
+        	&lt;span id="amazonImage"&gt;&lt;img src="http://demo.fast.morfeo-project.org/gvsdata/amazonScreens/images/amazon.png" /&gt;&lt;/span&gt;
+            &lt;h1 id="title"&gt;Shopping Cart&lt;/h1&gt;
+            &lt;div id="listDivCart"&gt;
+                &lt;table&gt;
+                    &lt;thead&gt;
+                        &lt;tr&gt;
+                            &lt;th style="width:70%;-moz-border-radius: 13px 0px 0px 0px;"&gt;
+                                Shopping Cart Items
+                            &lt;/th&gt;
+                            &lt;th style="width:10%"&gt;
+                                Price
+                            &lt;/th&gt;
+                            &lt;th style="width:10%;-moz-border-radius: 0px 13px 0px 0px;"&gt;
+                                Quantity
+                            &lt;/th&gt;
+                        &lt;/tr&gt;
+                    &lt;/thead&gt;
+                    &lt;tbody id="listBodyCart"&gt;
+                    	&lt;tr&gt;
+							&lt;td&gt;&amp;nbsp;&lt;/td&gt;
+					    &lt;/tr&gt;
+						&lt;tr&gt;
+							&lt;td&gt;&amp;nbsp;&lt;/td&gt;
+					    &lt;/tr&gt;
+						&lt;tr&gt;
+							&lt;td&gt;&amp;nbsp;&lt;/td&gt;
+					    &lt;/tr&gt;
+						&lt;tr&gt;
+							&lt;td&gt;&amp;nbsp;&lt;/td&gt;
+					    &lt;/tr&gt;
+                    &lt;/tbody&gt;
+                &lt;/table&gt;
+               &lt;div id="info"&gt;&lt;img id="loadingImgCart" src="http://demo.fast.morfeo-project.org/gvsdata/amazonScreens/images/ajaxLoader.gif" /&gt;&lt;/div&gt;		
+                &lt;div id="buttonContainerDivCart"&gt;
+                    &lt;input type="button" id="clearButton" class="button" value="Clear Cart"/&gt;
+					&lt;input type="button" id="updateButton" class="button" value="Update Cart"/&gt;
+					&lt;input type="button" id="checkoutButton" class="button" value="Proceed to Checkout"/&gt;
+                &lt;/div&gt;
+				
+            &lt;/div&gt;
+        &lt;/div&gt;
+    &lt;/body&gt;
+&lt;/html&gt;
 </field>
     </object>
     <object pk="7" model="buildingblock.buildingblockcode">
@@ -5092,7 +5093,7 @@
 				for (var i=0; i &lt; ids.length; i++){
 					cartUpdate.data.list.push({id: $F(ids[i]), quantity: $F(quantities[i])});
 				}
-            	this.manageData(["cartUpdate"], [cartUpdate], []);		
+            	this.manageData(["updateCart"], [cartUpdate], []);		
 			}
         });
         &lt;/script&gt;
@@ -6491,54 +6492,103 @@ onError: function (transport){}
     </object>
     <object pk="1" model="buildingblock.tag">
         <field type="CharField" name="name">scratch</field>
+        <field type="CharField" name="language">en-gb</field>
+        <field type="CharField" name="means"><None></None></field>
     </object>
     <object pk="2" model="buildingblock.tag">
         <field type="CharField" name="name">amazon</field>
+        <field type="CharField" name="language">en-gb</field>
+        <field type="CharField" name="means">http://dbpedia.org/page/Amazon.com</field>
     </object>
     <object pk="3" model="buildingblock.tag">
         <field type="CharField" name="name">list</field>
+        <field type="CharField" name="language">en-gb</field>
+        <field type="CharField" name="means"><None></None></field>
     </object>
     <object pk="4" model="buildingblock.tag">
-        <field type="CharField" name="name">order</field>
+        <field type="CharField" name="name">lista</field>
+        <field type="CharField" name="language">es-es</field>
+        <field type="CharField" name="means"><None></None></field>
     </object>
     <object pk="5" model="buildingblock.tag">
-        <field type="CharField" name="name">purchase</field>
+        <field type="CharField" name="name">order</field>
+        <field type="CharField" name="language">en-gb</field>
+        <field type="CharField" name="means"><None></None></field>
     </object>
     <object pk="6" model="buildingblock.tag">
-        <field type="CharField" name="name">suggestion</field>
+        <field type="CharField" name="name">comparative</field>
+        <field type="CharField" name="language">en-gb</field>
+        <field type="CharField" name="means"><None></None></field>
     </object>
     <object pk="7" model="buildingblock.tag">
-        <field type="CharField" name="name">price comparative</field>
+        <field type="CharField" name="name">product</field>
+        <field type="CharField" name="language">en-gb</field>
+        <field type="CharField" name="means"><None></None></field>
     </object>
     <object pk="8" model="buildingblock.tag">
         <field type="CharField" name="name">details</field>
+        <field type="CharField" name="language">en-gb</field>
+        <field type="CharField" name="means"><None></None></field>
     </object>
     <object pk="9" model="buildingblock.tag">
-        <field type="CharField" name="name">product</field>
+        <field type="CharField" name="name">search</field>
+        <field type="CharField" name="language">en-gb</field>
+        <field type="CharField" name="means"><None></None></field>
     </object>
     <object pk="10" model="buildingblock.tag">
-        <field type="CharField" name="name">search</field>
+        <field type="CharField" name="name">cart</field>
+        <field type="CharField" name="language">en-gb</field>
+        <field type="CharField" name="means"><None></None></field>
     </object>
     <object pk="11" model="buildingblock.tag">
-        <field type="CharField" name="name">cart</field>
+        <field type="CharField" name="name">suggestion</field>
+        <field type="CharField" name="language">en-gb</field>
+        <field type="CharField" name="means"><None></None></field>
     </object>
     <object pk="12" model="buildingblock.tag">
         <field type="CharField" name="name">ebay</field>
+        <field type="CharField" name="language">en-gb</field>
+        <field type="CharField" name="means"><None></None></field>
     </object>
     <object pk="13" model="buildingblock.tag">
-        <field type="CharField" name="name">filter</field>
+        <field type="CharField" name="name">purchase</field>
+        <field type="CharField" name="language">en-gb</field>
+        <field type="CharField" name="means"><None></None></field>
     </object>
     <object pk="14" model="buildingblock.tag">
-        <field type="CharField" name="name">shopping</field>
+        <field type="CharField" name="name">price</field>
+        <field type="CharField" name="language">en-gb</field>
+        <field type="CharField" name="means"><None></None></field>
     </object>
     <object pk="15" model="buildingblock.tag">
-        <field type="CharField" name="name">offer</field>
+        <field type="CharField" name="name">shopping</field>
+        <field type="CharField" name="language">en-gb</field>
+        <field type="CharField" name="means"><None></None></field>
     </object>
     <object pk="16" model="buildingblock.tag">
-        <field type="CharField" name="name">price</field>
+        <field type="CharField" name="name">filter</field>
+        <field type="CharField" name="language">en-gb</field>
+        <field type="CharField" name="means"><None></None></field>
     </object>
     <object pk="17" model="buildingblock.tag">
-        <field type="CharField" name="name">comparative</field>
+        <field type="CharField" name="name">item</field>
+        <field type="CharField" name="language">en-gb</field>
+        <field type="CharField" name="means"><None></None></field>
+    </object>
+    <object pk="18" model="buildingblock.tag">
+        <field type="CharField" name="name">offer</field>
+        <field type="CharField" name="language">en-gb</field>
+        <field type="CharField" name="means"><None></None></field>
+    </object>
+    <object pk="19" model="buildingblock.tag">
+        <field type="CharField" name="name">clear</field>
+        <field type="CharField" name="language">en-gb</field>
+        <field type="CharField" name="means"><None></None></field>
+    </object>
+    <object pk="20" model="buildingblock.tag">
+        <field type="CharField" name="name">update</field>
+        <field type="CharField" name="language">en-gb</field>
+        <field type="CharField" name="means"><None></None></field>
     </object>
     <object pk="1" model="buildingblock.usertag">
         <field to="buildingblock.tag" name="tag" rel="ManyToOneRel">1</field>
@@ -6556,17 +6606,17 @@ onError: function (transport){}
         <field to="buildingblock.buildingblock" name="buildingBlock" rel="ManyToOneRel">1</field>
     </object>
     <object pk="4" model="buildingblock.usertag">
+        <field to="buildingblock.tag" name="tag" rel="ManyToOneRel">4</field>
+        <field to="auth.user" name="user" rel="ManyToOneRel">1</field>
+        <field to="buildingblock.buildingblock" name="buildingBlock" rel="ManyToOneRel">1</field>
+    </object>
+    <object pk="5" model="buildingblock.usertag">
         <field to="buildingblock.tag" name="tag" rel="ManyToOneRel">1</field>
         <field to="auth.user" name="user" rel="ManyToOneRel">1</field>
         <field to="buildingblock.buildingblock" name="buildingBlock" rel="ManyToOneRel">2</field>
     </object>
-    <object pk="5" model="buildingblock.usertag">
-        <field to="buildingblock.tag" name="tag" rel="ManyToOneRel">2</field>
-        <field to="auth.user" name="user" rel="ManyToOneRel">1</field>
-        <field to="buildingblock.buildingblock" name="buildingBlock" rel="ManyToOneRel">2</field>
-    </object>
     <object pk="6" model="buildingblock.usertag">
-        <field to="buildingblock.tag" name="tag" rel="ManyToOneRel">4</field>
+        <field to="buildingblock.tag" name="tag" rel="ManyToOneRel">2</field>
         <field to="auth.user" name="user" rel="ManyToOneRel">1</field>
         <field to="buildingblock.buildingblock" name="buildingBlock" rel="ManyToOneRel">2</field>
     </object>
@@ -6586,27 +6636,27 @@ onError: function (transport){}
         <field to="buildingblock.buildingblock" name="buildingBlock" rel="ManyToOneRel">3</field>
     </object>
     <object pk="10" model="buildingblock.usertag">
-        <field to="buildingblock.tag" name="tag" rel="ManyToOneRel">3</field>
-        <field to="auth.user" name="user" rel="ManyToOneRel">1</field>
-        <field to="buildingblock.buildingblock" name="buildingBlock" rel="ManyToOneRel">3</field>
-    </object>
-    <object pk="11" model="buildingblock.usertag">
         <field to="buildingblock.tag" name="tag" rel="ManyToOneRel">6</field>
         <field to="auth.user" name="user" rel="ManyToOneRel">1</field>
         <field to="buildingblock.buildingblock" name="buildingBlock" rel="ManyToOneRel">3</field>
     </object>
-    <object pk="12" model="buildingblock.usertag">
-        <field to="buildingblock.tag" name="tag" rel="ManyToOneRel">7</field>
+    <object pk="11" model="buildingblock.usertag">
+        <field to="buildingblock.tag" name="tag" rel="ManyToOneRel">3</field>
         <field to="auth.user" name="user" rel="ManyToOneRel">1</field>
         <field to="buildingblock.buildingblock" name="buildingBlock" rel="ManyToOneRel">3</field>
     </object>
-    <object pk="13" model="buildingblock.usertag">
+    <object pk="12" model="buildingblock.usertag">
         <field to="buildingblock.tag" name="tag" rel="ManyToOneRel">1</field>
         <field to="auth.user" name="user" rel="ManyToOneRel">1</field>
         <field to="buildingblock.buildingblock" name="buildingBlock" rel="ManyToOneRel">4</field>
     </object>
-    <object pk="14" model="buildingblock.usertag">
+    <object pk="13" model="buildingblock.usertag">
         <field to="buildingblock.tag" name="tag" rel="ManyToOneRel">2</field>
+        <field to="auth.user" name="user" rel="ManyToOneRel">1</field>
+        <field to="buildingblock.buildingblock" name="buildingBlock" rel="ManyToOneRel">4</field>
+    </object>
+    <object pk="14" model="buildingblock.usertag">
+        <field to="buildingblock.tag" name="tag" rel="ManyToOneRel">7</field>
         <field to="auth.user" name="user" rel="ManyToOneRel">1</field>
         <field to="buildingblock.buildingblock" name="buildingBlock" rel="ManyToOneRel">4</field>
     </object>
@@ -6616,47 +6666,47 @@ onError: function (transport){}
         <field to="buildingblock.buildingblock" name="buildingBlock" rel="ManyToOneRel">4</field>
     </object>
     <object pk="16" model="buildingblock.usertag">
-        <field to="buildingblock.tag" name="tag" rel="ManyToOneRel">9</field>
+        <field to="buildingblock.tag" name="tag" rel="ManyToOneRel">1</field>
         <field to="auth.user" name="user" rel="ManyToOneRel">1</field>
-        <field to="buildingblock.buildingblock" name="buildingBlock" rel="ManyToOneRel">4</field>
+        <field to="buildingblock.buildingblock" name="buildingBlock" rel="ManyToOneRel">5</field>
     </object>
     <object pk="17" model="buildingblock.usertag">
-        <field to="buildingblock.tag" name="tag" rel="ManyToOneRel">1</field>
+        <field to="buildingblock.tag" name="tag" rel="ManyToOneRel">2</field>
         <field to="auth.user" name="user" rel="ManyToOneRel">1</field>
         <field to="buildingblock.buildingblock" name="buildingBlock" rel="ManyToOneRel">5</field>
     </object>
     <object pk="18" model="buildingblock.usertag">
-        <field to="buildingblock.tag" name="tag" rel="ManyToOneRel">2</field>
+        <field to="buildingblock.tag" name="tag" rel="ManyToOneRel">9</field>
         <field to="auth.user" name="user" rel="ManyToOneRel">1</field>
         <field to="buildingblock.buildingblock" name="buildingBlock" rel="ManyToOneRel">5</field>
     </object>
     <object pk="19" model="buildingblock.usertag">
-        <field to="buildingblock.tag" name="tag" rel="ManyToOneRel">10</field>
+        <field to="buildingblock.tag" name="tag" rel="ManyToOneRel">1</field>
         <field to="auth.user" name="user" rel="ManyToOneRel">1</field>
-        <field to="buildingblock.buildingblock" name="buildingBlock" rel="ManyToOneRel">5</field>
+        <field to="buildingblock.buildingblock" name="buildingBlock" rel="ManyToOneRel">6</field>
     </object>
     <object pk="20" model="buildingblock.usertag">
-        <field to="buildingblock.tag" name="tag" rel="ManyToOneRel">1</field>
+        <field to="buildingblock.tag" name="tag" rel="ManyToOneRel">2</field>
         <field to="auth.user" name="user" rel="ManyToOneRel">1</field>
         <field to="buildingblock.buildingblock" name="buildingBlock" rel="ManyToOneRel">6</field>
     </object>
     <object pk="21" model="buildingblock.usertag">
-        <field to="buildingblock.tag" name="tag" rel="ManyToOneRel">2</field>
+        <field to="buildingblock.tag" name="tag" rel="ManyToOneRel">10</field>
         <field to="auth.user" name="user" rel="ManyToOneRel">1</field>
         <field to="buildingblock.buildingblock" name="buildingBlock" rel="ManyToOneRel">6</field>
     </object>
     <object pk="22" model="buildingblock.usertag">
-        <field to="buildingblock.tag" name="tag" rel="ManyToOneRel">11</field>
-        <field to="auth.user" name="user" rel="ManyToOneRel">1</field>
-        <field to="buildingblock.buildingblock" name="buildingBlock" rel="ManyToOneRel">6</field>
-    </object>
-    <object pk="23" model="buildingblock.usertag">
         <field to="buildingblock.tag" name="tag" rel="ManyToOneRel">1</field>
         <field to="auth.user" name="user" rel="ManyToOneRel">1</field>
         <field to="buildingblock.buildingblock" name="buildingBlock" rel="ManyToOneRel">7</field>
     </object>
-    <object pk="24" model="buildingblock.usertag">
+    <object pk="23" model="buildingblock.usertag">
         <field to="buildingblock.tag" name="tag" rel="ManyToOneRel">2</field>
+        <field to="auth.user" name="user" rel="ManyToOneRel">1</field>
+        <field to="buildingblock.buildingblock" name="buildingBlock" rel="ManyToOneRel">7</field>
+    </object>
+    <object pk="24" model="buildingblock.usertag">
+        <field to="buildingblock.tag" name="tag" rel="ManyToOneRel">11</field>
         <field to="auth.user" name="user" rel="ManyToOneRel">1</field>
         <field to="buildingblock.buildingblock" name="buildingBlock" rel="ManyToOneRel">7</field>
     </object>
@@ -6666,12 +6716,12 @@ onError: function (transport){}
         <field to="buildingblock.buildingblock" name="buildingBlock" rel="ManyToOneRel">7</field>
     </object>
     <object pk="26" model="buildingblock.usertag">
-        <field to="buildingblock.tag" name="tag" rel="ManyToOneRel">6</field>
+        <field to="buildingblock.tag" name="tag" rel="ManyToOneRel">1</field>
         <field to="auth.user" name="user" rel="ManyToOneRel">1</field>
-        <field to="buildingblock.buildingblock" name="buildingBlock" rel="ManyToOneRel">7</field>
+        <field to="buildingblock.buildingblock" name="buildingBlock" rel="ManyToOneRel">8</field>
     </object>
     <object pk="27" model="buildingblock.usertag">
-        <field to="buildingblock.tag" name="tag" rel="ManyToOneRel">1</field>
+        <field to="buildingblock.tag" name="tag" rel="ManyToOneRel">2</field>
         <field to="auth.user" name="user" rel="ManyToOneRel">1</field>
         <field to="buildingblock.buildingblock" name="buildingBlock" rel="ManyToOneRel">8</field>
     </object>
@@ -6701,12 +6751,12 @@ onError: function (transport){}
         <field to="buildingblock.buildingblock" name="buildingBlock" rel="ManyToOneRel">10</field>
     </object>
     <object pk="33" model="buildingblock.usertag">
-        <field to="buildingblock.tag" name="tag" rel="ManyToOneRel">4</field>
+        <field to="buildingblock.tag" name="tag" rel="ManyToOneRel">5</field>
         <field to="auth.user" name="user" rel="ManyToOneRel">1</field>
         <field to="buildingblock.buildingblock" name="buildingBlock" rel="ManyToOneRel">10</field>
     </object>
     <object pk="34" model="buildingblock.usertag">
-        <field to="buildingblock.tag" name="tag" rel="ManyToOneRel">5</field>
+        <field to="buildingblock.tag" name="tag" rel="ManyToOneRel">13</field>
         <field to="auth.user" name="user" rel="ManyToOneRel">1</field>
         <field to="buildingblock.buildingblock" name="buildingBlock" rel="ManyToOneRel">10</field>
     </object>
@@ -6716,7 +6766,7 @@ onError: function (transport){}
         <field to="buildingblock.buildingblock" name="buildingBlock" rel="ManyToOneRel">11</field>
     </object>
     <object pk="36" model="buildingblock.usertag">
-        <field to="buildingblock.tag" name="tag" rel="ManyToOneRel">3</field>
+        <field to="buildingblock.tag" name="tag" rel="ManyToOneRel">14</field>
         <field to="auth.user" name="user" rel="ManyToOneRel">1</field>
         <field to="buildingblock.buildingblock" name="buildingBlock" rel="ManyToOneRel">11</field>
     </object>
@@ -6726,7 +6776,7 @@ onError: function (transport){}
         <field to="buildingblock.buildingblock" name="buildingBlock" rel="ManyToOneRel">11</field>
     </object>
     <object pk="38" model="buildingblock.usertag">
-        <field to="buildingblock.tag" name="tag" rel="ManyToOneRel">7</field>
+        <field to="buildingblock.tag" name="tag" rel="ManyToOneRel">3</field>
         <field to="auth.user" name="user" rel="ManyToOneRel">1</field>
         <field to="buildingblock.buildingblock" name="buildingBlock" rel="ManyToOneRel">11</field>
     </object>
@@ -6736,12 +6786,12 @@ onError: function (transport){}
         <field to="buildingblock.buildingblock" name="buildingBlock" rel="ManyToOneRel">12</field>
     </object>
     <object pk="40" model="buildingblock.usertag">
-        <field to="buildingblock.tag" name="tag" rel="ManyToOneRel">8</field>
+        <field to="buildingblock.tag" name="tag" rel="ManyToOneRel">7</field>
         <field to="auth.user" name="user" rel="ManyToOneRel">1</field>
         <field to="buildingblock.buildingblock" name="buildingBlock" rel="ManyToOneRel">12</field>
     </object>
     <object pk="41" model="buildingblock.usertag">
-        <field to="buildingblock.tag" name="tag" rel="ManyToOneRel">9</field>
+        <field to="buildingblock.tag" name="tag" rel="ManyToOneRel">8</field>
         <field to="auth.user" name="user" rel="ManyToOneRel">1</field>
         <field to="buildingblock.buildingblock" name="buildingBlock" rel="ManyToOneRel">12</field>
     </object>
@@ -6751,7 +6801,7 @@ onError: function (transport){}
         <field to="buildingblock.buildingblock" name="buildingBlock" rel="ManyToOneRel">13</field>
     </object>
     <object pk="43" model="buildingblock.usertag">
-        <field to="buildingblock.tag" name="tag" rel="ManyToOneRel">10</field>
+        <field to="buildingblock.tag" name="tag" rel="ManyToOneRel">9</field>
         <field to="auth.user" name="user" rel="ManyToOneRel">1</field>
         <field to="buildingblock.buildingblock" name="buildingBlock" rel="ManyToOneRel">13</field>
     </object>
@@ -6761,186 +6811,216 @@ onError: function (transport){}
         <field to="buildingblock.buildingblock" name="buildingBlock" rel="ManyToOneRel">14</field>
     </object>
     <object pk="45" model="buildingblock.usertag">
-        <field to="buildingblock.tag" name="tag" rel="ManyToOneRel">11</field>
+        <field to="buildingblock.tag" name="tag" rel="ManyToOneRel">10</field>
         <field to="auth.user" name="user" rel="ManyToOneRel">1</field>
         <field to="buildingblock.buildingblock" name="buildingBlock" rel="ManyToOneRel">14</field>
     </object>
     <object pk="46" model="buildingblock.usertag">
+        <field to="buildingblock.tag" name="tag" rel="ManyToOneRel">15</field>
+        <field to="auth.user" name="user" rel="ManyToOneRel">1</field>
+        <field to="buildingblock.buildingblock" name="buildingBlock" rel="ManyToOneRel">14</field>
+    </object>
+    <object pk="47" model="buildingblock.usertag">
         <field to="buildingblock.tag" name="tag" rel="ManyToOneRel">2</field>
         <field to="auth.user" name="user" rel="ManyToOneRel">1</field>
         <field to="buildingblock.buildingblock" name="buildingBlock" rel="ManyToOneRel">15</field>
     </object>
-    <object pk="47" model="buildingblock.usertag">
-        <field to="buildingblock.tag" name="tag" rel="ManyToOneRel">3</field>
-        <field to="auth.user" name="user" rel="ManyToOneRel">1</field>
-        <field to="buildingblock.buildingblock" name="buildingBlock" rel="ManyToOneRel">15</field>
-    </object>
     <object pk="48" model="buildingblock.usertag">
-        <field to="buildingblock.tag" name="tag" rel="ManyToOneRel">6</field>
+        <field to="buildingblock.tag" name="tag" rel="ManyToOneRel">11</field>
         <field to="auth.user" name="user" rel="ManyToOneRel">1</field>
         <field to="buildingblock.buildingblock" name="buildingBlock" rel="ManyToOneRel">15</field>
     </object>
     <object pk="49" model="buildingblock.usertag">
-        <field to="buildingblock.tag" name="tag" rel="ManyToOneRel">12</field>
+        <field to="buildingblock.tag" name="tag" rel="ManyToOneRel">3</field>
         <field to="auth.user" name="user" rel="ManyToOneRel">1</field>
-        <field to="buildingblock.buildingblock" name="buildingBlock" rel="ManyToOneRel">16</field>
+        <field to="buildingblock.buildingblock" name="buildingBlock" rel="ManyToOneRel">15</field>
     </object>
     <object pk="50" model="buildingblock.usertag">
-        <field to="buildingblock.tag" name="tag" rel="ManyToOneRel">3</field>
+        <field to="buildingblock.tag" name="tag" rel="ManyToOneRel">2</field>
         <field to="auth.user" name="user" rel="ManyToOneRel">1</field>
         <field to="buildingblock.buildingblock" name="buildingBlock" rel="ManyToOneRel">16</field>
     </object>
     <object pk="51" model="buildingblock.usertag">
         <field to="buildingblock.tag" name="tag" rel="ManyToOneRel">12</field>
         <field to="auth.user" name="user" rel="ManyToOneRel">1</field>
-        <field to="buildingblock.buildingblock" name="buildingBlock" rel="ManyToOneRel">17</field>
+        <field to="buildingblock.buildingblock" name="buildingBlock" rel="ManyToOneRel">16</field>
     </object>
     <object pk="52" model="buildingblock.usertag">
-        <field to="buildingblock.tag" name="tag" rel="ManyToOneRel">2</field>
+        <field to="buildingblock.tag" name="tag" rel="ManyToOneRel">3</field>
         <field to="auth.user" name="user" rel="ManyToOneRel">1</field>
-        <field to="buildingblock.buildingblock" name="buildingBlock" rel="ManyToOneRel">17</field>
+        <field to="buildingblock.buildingblock" name="buildingBlock" rel="ManyToOneRel">16</field>
     </object>
     <object pk="53" model="buildingblock.usertag">
-        <field to="buildingblock.tag" name="tag" rel="ManyToOneRel">13</field>
+        <field to="buildingblock.tag" name="tag" rel="ManyToOneRel">2</field>
         <field to="auth.user" name="user" rel="ManyToOneRel">1</field>
         <field to="buildingblock.buildingblock" name="buildingBlock" rel="ManyToOneRel">17</field>
     </object>
     <object pk="54" model="buildingblock.usertag">
-        <field to="buildingblock.tag" name="tag" rel="ManyToOneRel">2</field>
+        <field to="buildingblock.tag" name="tag" rel="ManyToOneRel">12</field>
         <field to="auth.user" name="user" rel="ManyToOneRel">1</field>
-        <field to="buildingblock.buildingblock" name="buildingBlock" rel="ManyToOneRel">18</field>
+        <field to="buildingblock.buildingblock" name="buildingBlock" rel="ManyToOneRel">17</field>
     </object>
     <object pk="55" model="buildingblock.usertag">
-        <field to="buildingblock.tag" name="tag" rel="ManyToOneRel">14</field>
+        <field to="buildingblock.tag" name="tag" rel="ManyToOneRel">16</field>
         <field to="auth.user" name="user" rel="ManyToOneRel">1</field>
-        <field to="buildingblock.buildingblock" name="buildingBlock" rel="ManyToOneRel">18</field>
+        <field to="buildingblock.buildingblock" name="buildingBlock" rel="ManyToOneRel">17</field>
     </object>
     <object pk="56" model="buildingblock.usertag">
-        <field to="buildingblock.tag" name="tag" rel="ManyToOneRel">11</field>
+        <field to="buildingblock.tag" name="tag" rel="ManyToOneRel">2</field>
         <field to="auth.user" name="user" rel="ManyToOneRel">1</field>
         <field to="buildingblock.buildingblock" name="buildingBlock" rel="ManyToOneRel">18</field>
     </object>
     <object pk="57" model="buildingblock.usertag">
-        <field to="buildingblock.tag" name="tag" rel="ManyToOneRel">2</field>
+        <field to="buildingblock.tag" name="tag" rel="ManyToOneRel">17</field>
         <field to="auth.user" name="user" rel="ManyToOneRel">1</field>
-        <field to="buildingblock.buildingblock" name="buildingBlock" rel="ManyToOneRel">19</field>
+        <field to="buildingblock.buildingblock" name="buildingBlock" rel="ManyToOneRel">18</field>
     </object>
     <object pk="58" model="buildingblock.usertag">
-        <field to="buildingblock.tag" name="tag" rel="ManyToOneRel">14</field>
+        <field to="buildingblock.tag" name="tag" rel="ManyToOneRel">10</field>
         <field to="auth.user" name="user" rel="ManyToOneRel">1</field>
-        <field to="buildingblock.buildingblock" name="buildingBlock" rel="ManyToOneRel">19</field>
+        <field to="buildingblock.buildingblock" name="buildingBlock" rel="ManyToOneRel">18</field>
     </object>
     <object pk="59" model="buildingblock.usertag">
-        <field to="buildingblock.tag" name="tag" rel="ManyToOneRel">11</field>
+        <field to="buildingblock.tag" name="tag" rel="ManyToOneRel">2</field>
         <field to="auth.user" name="user" rel="ManyToOneRel">1</field>
         <field to="buildingblock.buildingblock" name="buildingBlock" rel="ManyToOneRel">19</field>
     </object>
     <object pk="60" model="buildingblock.usertag">
-        <field to="buildingblock.tag" name="tag" rel="ManyToOneRel">15</field>
+        <field to="buildingblock.tag" name="tag" rel="ManyToOneRel">18</field>
         <field to="auth.user" name="user" rel="ManyToOneRel">1</field>
         <field to="buildingblock.buildingblock" name="buildingBlock" rel="ManyToOneRel">19</field>
     </object>
     <object pk="61" model="buildingblock.usertag">
-        <field to="buildingblock.tag" name="tag" rel="ManyToOneRel">2</field>
+        <field to="buildingblock.tag" name="tag" rel="ManyToOneRel">15</field>
         <field to="auth.user" name="user" rel="ManyToOneRel">1</field>
-        <field to="buildingblock.buildingblock" name="buildingBlock" rel="ManyToOneRel">20</field>
+        <field to="buildingblock.buildingblock" name="buildingBlock" rel="ManyToOneRel">19</field>
     </object>
     <object pk="62" model="buildingblock.usertag">
-        <field to="buildingblock.tag" name="tag" rel="ManyToOneRel">14</field>
+        <field to="buildingblock.tag" name="tag" rel="ManyToOneRel">2</field>
         <field to="auth.user" name="user" rel="ManyToOneRel">1</field>
         <field to="buildingblock.buildingblock" name="buildingBlock" rel="ManyToOneRel">20</field>
     </object>
     <object pk="63" model="buildingblock.usertag">
-        <field to="buildingblock.tag" name="tag" rel="ManyToOneRel">11</field>
+        <field to="buildingblock.tag" name="tag" rel="ManyToOneRel">19</field>
         <field to="auth.user" name="user" rel="ManyToOneRel">1</field>
         <field to="buildingblock.buildingblock" name="buildingBlock" rel="ManyToOneRel">20</field>
     </object>
     <object pk="64" model="buildingblock.usertag">
-        <field to="buildingblock.tag" name="tag" rel="ManyToOneRel">2</field>
+        <field to="buildingblock.tag" name="tag" rel="ManyToOneRel">10</field>
         <field to="auth.user" name="user" rel="ManyToOneRel">1</field>
-        <field to="buildingblock.buildingblock" name="buildingBlock" rel="ManyToOneRel">21</field>
+        <field to="buildingblock.buildingblock" name="buildingBlock" rel="ManyToOneRel">20</field>
     </object>
     <object pk="65" model="buildingblock.usertag">
-        <field to="buildingblock.tag" name="tag" rel="ManyToOneRel">9</field>
+        <field to="buildingblock.tag" name="tag" rel="ManyToOneRel">15</field>
         <field to="auth.user" name="user" rel="ManyToOneRel">1</field>
-        <field to="buildingblock.buildingblock" name="buildingBlock" rel="ManyToOneRel">21</field>
+        <field to="buildingblock.buildingblock" name="buildingBlock" rel="ManyToOneRel">20</field>
     </object>
     <object pk="66" model="buildingblock.usertag">
         <field to="buildingblock.tag" name="tag" rel="ManyToOneRel">2</field>
         <field to="auth.user" name="user" rel="ManyToOneRel">1</field>
-        <field to="buildingblock.buildingblock" name="buildingBlock" rel="ManyToOneRel">22</field>
+        <field to="buildingblock.buildingblock" name="buildingBlock" rel="ManyToOneRel">21</field>
     </object>
     <object pk="67" model="buildingblock.usertag">
-        <field to="buildingblock.tag" name="tag" rel="ManyToOneRel">16</field>
+        <field to="buildingblock.tag" name="tag" rel="ManyToOneRel">7</field>
         <field to="auth.user" name="user" rel="ManyToOneRel">1</field>
-        <field to="buildingblock.buildingblock" name="buildingBlock" rel="ManyToOneRel">22</field>
+        <field to="buildingblock.buildingblock" name="buildingBlock" rel="ManyToOneRel">21</field>
     </object>
     <object pk="68" model="buildingblock.usertag">
-        <field to="buildingblock.tag" name="tag" rel="ManyToOneRel">17</field>
+        <field to="buildingblock.tag" name="tag" rel="ManyToOneRel">2</field>
         <field to="auth.user" name="user" rel="ManyToOneRel">1</field>
         <field to="buildingblock.buildingblock" name="buildingBlock" rel="ManyToOneRel">22</field>
     </object>
     <object pk="69" model="buildingblock.usertag">
-        <field to="buildingblock.tag" name="tag" rel="ManyToOneRel">2</field>
-        <field to="auth.user" name="user" rel="ManyToOneRel">1</field>
-        <field to="buildingblock.buildingblock" name="buildingBlock" rel="ManyToOneRel">23</field>
-    </object>
-    <object pk="70" model="buildingblock.usertag">
         <field to="buildingblock.tag" name="tag" rel="ManyToOneRel">14</field>
         <field to="auth.user" name="user" rel="ManyToOneRel">1</field>
-        <field to="buildingblock.buildingblock" name="buildingBlock" rel="ManyToOneRel">23</field>
+        <field to="buildingblock.buildingblock" name="buildingBlock" rel="ManyToOneRel">22</field>
+    </object>
+    <object pk="70" model="buildingblock.usertag">
+        <field to="buildingblock.tag" name="tag" rel="ManyToOneRel">6</field>
+        <field to="auth.user" name="user" rel="ManyToOneRel">1</field>
+        <field to="buildingblock.buildingblock" name="buildingBlock" rel="ManyToOneRel">22</field>
     </object>
     <object pk="71" model="buildingblock.usertag">
-        <field to="buildingblock.tag" name="tag" rel="ManyToOneRel">11</field>
+        <field to="buildingblock.tag" name="tag" rel="ManyToOneRel">2</field>
         <field to="auth.user" name="user" rel="ManyToOneRel">1</field>
         <field to="buildingblock.buildingblock" name="buildingBlock" rel="ManyToOneRel">23</field>
     </object>
     <object pk="72" model="buildingblock.usertag">
-        <field to="buildingblock.tag" name="tag" rel="ManyToOneRel">2</field>
+        <field to="buildingblock.tag" name="tag" rel="ManyToOneRel">9</field>
         <field to="auth.user" name="user" rel="ManyToOneRel">1</field>
-        <field to="buildingblock.buildingblock" name="buildingBlock" rel="ManyToOneRel">24</field>
+        <field to="buildingblock.buildingblock" name="buildingBlock" rel="ManyToOneRel">23</field>
     </object>
     <object pk="73" model="buildingblock.usertag">
         <field to="buildingblock.tag" name="tag" rel="ManyToOneRel">3</field>
         <field to="auth.user" name="user" rel="ManyToOneRel">1</field>
-        <field to="buildingblock.buildingblock" name="buildingBlock" rel="ManyToOneRel">24</field>
+        <field to="buildingblock.buildingblock" name="buildingBlock" rel="ManyToOneRel">23</field>
     </object>
     <object pk="74" model="buildingblock.usertag">
-        <field to="buildingblock.tag" name="tag" rel="ManyToOneRel">2</field>
+        <field to="buildingblock.tag" name="tag" rel="ManyToOneRel">10</field>
         <field to="auth.user" name="user" rel="ManyToOneRel">1</field>
-        <field to="buildingblock.buildingblock" name="buildingBlock" rel="ManyToOneRel">25</field>
+        <field to="buildingblock.buildingblock" name="buildingBlock" rel="ManyToOneRel">23</field>
     </object>
     <object pk="75" model="buildingblock.usertag">
-        <field to="buildingblock.tag" name="tag" rel="ManyToOneRel">3</field>
-        <field to="auth.user" name="user" rel="ManyToOneRel">1</field>
-        <field to="buildingblock.buildingblock" name="buildingBlock" rel="ManyToOneRel">25</field>
-    </object>
-    <object pk="76" model="buildingblock.usertag">
-        <field to="buildingblock.tag" name="tag" rel="ManyToOneRel">6</field>
-        <field to="auth.user" name="user" rel="ManyToOneRel">1</field>
-        <field to="buildingblock.buildingblock" name="buildingBlock" rel="ManyToOneRel">25</field>
-    </object>
-    <object pk="77" model="buildingblock.usertag">
         <field to="buildingblock.tag" name="tag" rel="ManyToOneRel">2</field>
         <field to="auth.user" name="user" rel="ManyToOneRel">1</field>
-        <field to="buildingblock.buildingblock" name="buildingBlock" rel="ManyToOneRel">26</field>
+        <field to="buildingblock.buildingblock" name="buildingBlock" rel="ManyToOneRel">24</field>
+    </object>
+    <object pk="76" model="buildingblock.usertag">
+        <field to="buildingblock.tag" name="tag" rel="ManyToOneRel">9</field>
+        <field to="auth.user" name="user" rel="ManyToOneRel">1</field>
+        <field to="buildingblock.buildingblock" name="buildingBlock" rel="ManyToOneRel">24</field>
+    </object>
+    <object pk="77" model="buildingblock.usertag">
+        <field to="buildingblock.tag" name="tag" rel="ManyToOneRel">3</field>
+        <field to="auth.user" name="user" rel="ManyToOneRel">1</field>
+        <field to="buildingblock.buildingblock" name="buildingBlock" rel="ManyToOneRel">24</field>
     </object>
     <object pk="78" model="buildingblock.usertag">
-        <field to="buildingblock.tag" name="tag" rel="ManyToOneRel">14</field>
+        <field to="buildingblock.tag" name="tag" rel="ManyToOneRel">2</field>
         <field to="auth.user" name="user" rel="ManyToOneRel">1</field>
-        <field to="buildingblock.buildingblock" name="buildingBlock" rel="ManyToOneRel">26</field>
+        <field to="buildingblock.buildingblock" name="buildingBlock" rel="ManyToOneRel">25</field>
     </object>
     <object pk="79" model="buildingblock.usertag">
         <field to="buildingblock.tag" name="tag" rel="ManyToOneRel">11</field>
         <field to="auth.user" name="user" rel="ManyToOneRel">1</field>
-        <field to="buildingblock.buildingblock" name="buildingBlock" rel="ManyToOneRel">26</field>
+        <field to="buildingblock.buildingblock" name="buildingBlock" rel="ManyToOneRel">25</field>
     </object>
     <object pk="80" model="buildingblock.usertag">
+        <field to="buildingblock.tag" name="tag" rel="ManyToOneRel">3</field>
+        <field to="auth.user" name="user" rel="ManyToOneRel">1</field>
+        <field to="buildingblock.buildingblock" name="buildingBlock" rel="ManyToOneRel">25</field>
+    </object>
+    <object pk="81" model="buildingblock.usertag">
+        <field to="buildingblock.tag" name="tag" rel="ManyToOneRel">2</field>
+        <field to="auth.user" name="user" rel="ManyToOneRel">1</field>
+        <field to="buildingblock.buildingblock" name="buildingBlock" rel="ManyToOneRel">26</field>
+    </object>
+    <object pk="82" model="buildingblock.usertag">
+        <field to="buildingblock.tag" name="tag" rel="ManyToOneRel">10</field>
+        <field to="auth.user" name="user" rel="ManyToOneRel">1</field>
+        <field to="buildingblock.buildingblock" name="buildingBlock" rel="ManyToOneRel">26</field>
+    </object>
+    <object pk="83" model="buildingblock.usertag">
+        <field to="buildingblock.tag" name="tag" rel="ManyToOneRel">15</field>
+        <field to="auth.user" name="user" rel="ManyToOneRel">1</field>
+        <field to="buildingblock.buildingblock" name="buildingBlock" rel="ManyToOneRel">26</field>
+    </object>
+    <object pk="84" model="buildingblock.usertag">
+        <field to="buildingblock.tag" name="tag" rel="ManyToOneRel">20</field>
+        <field to="auth.user" name="user" rel="ManyToOneRel">1</field>
+        <field to="buildingblock.buildingblock" name="buildingBlock" rel="ManyToOneRel">26</field>
+    </object>
+    <object pk="85" model="buildingblock.usertag">
         <field to="buildingblock.tag" name="tag" rel="ManyToOneRel">12</field>
         <field to="auth.user" name="user" rel="ManyToOneRel">1</field>
         <field to="buildingblock.buildingblock" name="buildingBlock" rel="ManyToOneRel">27</field>
     </object>
-    <object pk="81" model="buildingblock.usertag">
+    <object pk="86" model="buildingblock.usertag">
+        <field to="buildingblock.tag" name="tag" rel="ManyToOneRel">9</field>
+        <field to="auth.user" name="user" rel="ManyToOneRel">1</field>
+        <field to="buildingblock.buildingblock" name="buildingBlock" rel="ManyToOneRel">27</field>
+    </object>
+    <object pk="87" model="buildingblock.usertag">
         <field to="buildingblock.tag" name="tag" rel="ManyToOneRel">3</field>
         <field to="auth.user" name="user" rel="ManyToOneRel">1</field>
         <field to="buildingblock.buildingblock" name="buildingBlock" rel="ManyToOneRel">27</field>
