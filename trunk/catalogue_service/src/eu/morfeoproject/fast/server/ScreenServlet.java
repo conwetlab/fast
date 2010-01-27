@@ -25,8 +25,8 @@ import eu.morfeoproject.fast.catalogue.DuplicatedResourceException;
 import eu.morfeoproject.fast.catalogue.NotFoundException;
 import eu.morfeoproject.fast.catalogue.OntologyInvalidException;
 import eu.morfeoproject.fast.catalogue.OntologyReadonlyException;
+import eu.morfeoproject.fast.catalogue.ResourceException;
 import eu.morfeoproject.fast.model.Screen;
-import eu.morfeoproject.fast.util.URLUTF8Encoder;
 
 /**
  * Servlet implementation class ScreenServlet
@@ -158,13 +158,7 @@ public class ScreenServlet extends GenericServlet {
 			} catch (OntologyInvalidException e) {
 				e.printStackTrace();
 				response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
-			} catch (OntologyReadonlyException e) {
-				e.printStackTrace();
-				response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
-			} catch (RepositoryException e) {
-				e.printStackTrace();
-				response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
-			} catch (NotFoundException e) {
+			} catch (ResourceException e) {
 				e.printStackTrace();
 				response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
 			}
@@ -241,6 +235,9 @@ public class ScreenServlet extends GenericServlet {
 				e.printStackTrace();
 				response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
 			} catch (OntologyInvalidException e) {
+				e.printStackTrace();
+				response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
+			} catch (ResourceException e) {
 				e.printStackTrace();
 				response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
 			}

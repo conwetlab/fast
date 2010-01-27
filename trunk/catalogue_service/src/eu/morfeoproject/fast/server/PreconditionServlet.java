@@ -22,6 +22,7 @@ import org.slf4j.LoggerFactory;
 import eu.morfeoproject.fast.catalogue.DuplicatedResourceException;
 import eu.morfeoproject.fast.catalogue.NotFoundException;
 import eu.morfeoproject.fast.catalogue.OntologyInvalidException;
+import eu.morfeoproject.fast.catalogue.ResourceException;
 import eu.morfeoproject.fast.model.Precondition;
 
 /**
@@ -148,6 +149,9 @@ public class PreconditionServlet extends GenericServlet {
 			} catch (OntologyInvalidException e) {
 				e.printStackTrace();
 				response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
+			} catch (ResourceException e) {
+				e.printStackTrace();
+				response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
 			}
 		} catch (JSONException e) {
 			e.printStackTrace();
@@ -204,6 +208,9 @@ public class PreconditionServlet extends GenericServlet {
 			} catch (NotFoundException e) {
 				e.printStackTrace();
 				response.sendError(HttpServletResponse.SC_NOT_FOUND, "The resource "+uri+" has not been found.");
+			} catch (ResourceException e) {
+				e.printStackTrace();
+				response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
 			}
 		}
 	}

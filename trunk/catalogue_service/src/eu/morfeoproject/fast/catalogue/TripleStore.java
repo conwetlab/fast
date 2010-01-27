@@ -812,9 +812,7 @@ public class TripleStore {
     	if (getDefaultModel().contains(resource, Variable.ANY, Variable.ANY))
     		getDefaultModel().removeStatements(resource, Variable.ANY, Variable.ANY);
     	else if (getPersistentModelSet().containsStatements(Variable.ANY, resource, Variable.ANY, Variable.ANY)) {
-    		logger.debug("size="+getPersistentModelSet().size());
     		getPersistentModelSet().removeStatements(Variable.ANY, resource, Variable.ANY, Variable.ANY);
-    		logger.debug("size="+getPersistentModelSet().size());
     	}
     }
     

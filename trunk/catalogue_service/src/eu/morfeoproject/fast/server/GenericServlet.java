@@ -96,7 +96,7 @@ public abstract class GenericServlet extends HttpServlet {
 		resource.setCreator(new URIImpl(CatalogueAccessPoint.getCatalogue().getServerURL()+"/users/"+jsonResource.getString("creator")));
 		resource.setRights(new URIImpl(jsonResource.getString("rights")));
 		resource.setVersion(jsonResource.getString("version"));
-		if (jsonResource.has("creationDate"))
+		if (jsonResource.has("creationDate") && !jsonResource.isNull("creationDate") && jsonResource.getString("creationDate") != "")
 			resource.setCreationDate(DateFormatter.parseDateISO8601(jsonResource.getString("creationDate")));
 		resource.setIcon(new URIImpl(jsonResource.getString("icon")));
 		resource.setScreenshot(new URIImpl(jsonResource.getString("screenshot")));
@@ -109,7 +109,7 @@ public abstract class GenericServlet extends HttpServlet {
 		for (int i = 0; i < aTag.length(); i++) {
 			CTag tag = new CTag();
 			JSONObject oTag = aTag.getJSONObject(i);
-			if (oTag.has("means"))
+			if (oTag.has("means") && !oTag.isNull("means") && oTag.getString("means") != "")
 				tag.setMeans(new URIImpl(oTag.getString("means")));
 			if (oTag.has("label")){
 				JSONObject jsonLabels = oTag.getJSONObject("label");
@@ -119,7 +119,7 @@ public abstract class GenericServlet extends HttpServlet {
 					tag.getLabels().put(key, jsonLabels.getString(key));
 				}
 			}
-			if (oTag.has("taggingDate"))
+			if (oTag.has("taggingDate") && !oTag.isNull("taggingDate") && oTag.getString("taggingDate") != "")
 				tag.setTaggingDate(DateFormatter.parseDateISO8601(jsonResource.getString("creationDate")));
 			tags.add(tag);
 		}
@@ -210,22 +210,26 @@ public abstract class GenericServlet extends HttpServlet {
 		return definition;
 	}
 	
-	protected Precondition parsePrecondition(JSONObject jsonSlot, URI uri) throws JSONException, IOException {
+	protected Precondition parsePrecondition(JSONObject jsonPre, URI uri) throws JSONException, IOException {
 		Precondition pre = FastModelFactory.createPrecondition();
 		if (uri != null)
 			pre.setUri(uri);
+		pre.setId(jsonPre.getString("id"));
+		pre.setName(jsonPre.getString("name"));
 		// conditions
-		JSONArray conditionsArray = jsonSlot.getJSONArray("conditions");
+		JSONArray conditionsArray = jsonPre.getJSONArray("conditions");
 		pre.setConditions(parseConditions(conditionsArray));
 		return pre;
 	}
 	
-	protected Postcondition parsePostcondition(JSONObject jsonEvent, URI uri) throws JSONException, IOException {
+	protected Postcondition parsePostcondition(JSONObject jsonPost, URI uri) throws JSONException, IOException {
 		Postcondition post = FastModelFactory.createPostcondition();
 		if (uri != null)
 			post.setUri(uri);
+		post.setId(jsonPost.getString("id"));
+		post.setName(jsonPost.getString("name"));
 		// conditions
-		JSONArray conditionsArray = jsonEvent.getJSONArray("conditions");
+		JSONArray conditionsArray = jsonPost.getJSONArray("conditions");
 		post.setConditions(parseConditions(conditionsArray));
 		return post;
 	}
@@ -249,7 +253,7 @@ public abstract class GenericServlet extends HttpServlet {
 	}
 	
 	protected Action parseAction(JSONObject jsonAction) throws JSONException, IOException {
-		Action action = new Action();
+		Action action = FastModelFactory.createAction();
 		
 		// name
 		if (jsonAction.get("name") != null)
@@ -330,7 +334,7 @@ public abstract class GenericServlet extends HttpServlet {
 		for (int i = 0; i < conditionsArray.length(); i++) {
 			JSONObject cJson = conditionsArray.getJSONObject(i);
 			Condition c = FastModelFactory.createCondition();
-			if (cJson.has("id")) // optional
+			if (cJson.has("id") && !cJson.isNull("id") && cJson.getString("id") != "") // optional
 				c.setId(cJson.getString("id"));
 			boolean positive = cJson.has("positive") ? cJson.getBoolean("positive") : true;
 			c.setPositive(positive);

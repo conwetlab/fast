@@ -49,4 +49,8 @@ public class FastModelFactory {
 		return new Pipe();
 	}
 	
+	public static Action createAction() {
+		return new Action();
+	}
+	
 }

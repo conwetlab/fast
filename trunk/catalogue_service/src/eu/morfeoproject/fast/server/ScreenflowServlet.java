@@ -24,8 +24,8 @@ import eu.morfeoproject.fast.catalogue.DuplicatedResourceException;
 import eu.morfeoproject.fast.catalogue.NotFoundException;
 import eu.morfeoproject.fast.catalogue.OntologyInvalidException;
 import eu.morfeoproject.fast.catalogue.OntologyReadonlyException;
+import eu.morfeoproject.fast.catalogue.ResourceException;
 import eu.morfeoproject.fast.model.ScreenFlow;
-import eu.morfeoproject.fast.util.URLUTF8Encoder;
 
 /**
  * Servlet implementation class ScreenServlet
@@ -163,6 +163,9 @@ public class ScreenflowServlet extends GenericServlet {
 			} catch (NotFoundException e) {
 				e.printStackTrace();
 				response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
+			} catch (ResourceException e) {
+				e.printStackTrace();
+				response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
 			}
 		} catch (JSONException e) {
 			e.printStackTrace();
@@ -225,6 +228,9 @@ public class ScreenflowServlet extends GenericServlet {
 				e.printStackTrace();
 				response.sendError(HttpServletResponse.SC_NOT_FOUND, "The resource "+uri+" has not been found.");
 			} catch (OntologyReadonlyException e) {
+				e.printStackTrace();
+				response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
+			} catch (ResourceException e) {
 				e.printStackTrace();
 				response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
 			}

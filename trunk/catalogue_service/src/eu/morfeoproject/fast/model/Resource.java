@@ -250,10 +250,6 @@ public abstract class Resource {
 			json.put("type", "operator");
 		else if (this instanceof BackendService)
 			json.put("type", "service");
-		else if (this instanceof Precondition)
-			json.put("type", "precondition");
-		else if (this instanceof Postcondition)
-			json.put("type", "postcondition");
 
 		return json;
 	}

@@ -193,7 +193,7 @@ public class ScreenComponentFindCheckServlet extends GenericServlet {
 			
 			JSONArray postOut = new JSONArray();
 			for (Condition con : postconditions)
-				postOut.put(processCondition(canvas, con, preconditions, postconditions, pipes));
+				postOut.put(processPostcondition(canvas, con, preconditions, postconditions, pipes));
 			output.put("postconditions", postOut);
 		
 			if (search && selectedItem != null) {
@@ -259,11 +259,11 @@ public class ScreenComponentFindCheckServlet extends GenericServlet {
 		return satisfied;
 	}
 	
-	private JSONObject processCondition(Set<ScreenComponent> canvas, Condition condition, List<Condition> preconditions, List<Condition> postconditions, List<Pipe> pipes) throws JSONException, IOException {
+	private JSONObject processPostcondition(Set<ScreenComponent> canvas, Condition postcondition, List<Condition> preconditions, List<Condition> postconditions, List<Pipe> pipes) throws JSONException, IOException {
 		JSONObject jsonCon = new JSONObject();
-		Pipe pipe = CatalogueAccessPoint.getCatalogue().getPipeToPostcondition(condition, pipes);
+		Pipe pipe = CatalogueAccessPoint.getCatalogue().getPipeToPostcondition(postcondition, pipes);
 		boolean satisfied = pipe == null ? false : isPipeSatisfied(pipe, preconditions, postconditions);
-		jsonCon.put("id", condition.getId());
+		jsonCon.put("id", postcondition.getId());
 		jsonCon.put("satisfied", satisfied);
 		return jsonCon;
 	}

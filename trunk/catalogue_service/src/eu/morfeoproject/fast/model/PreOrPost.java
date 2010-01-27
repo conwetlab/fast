@@ -63,6 +63,10 @@ public abstract class PreOrPost extends Resource {
 			json.put("uri", JSONObject.NULL);
 		else
 			json.put("uri", getUri().toString());
+		if (getId() == null)
+			json.put("id", JSONObject.NULL);
+		else
+			json.put("id", getId());
 		JSONArray conditions = new JSONArray();
 		for (Condition con : getConditions())
 			conditions.put(con.toJSON());

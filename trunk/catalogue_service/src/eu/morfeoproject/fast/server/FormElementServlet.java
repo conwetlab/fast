@@ -24,8 +24,8 @@ import eu.morfeoproject.fast.catalogue.DuplicatedResourceException;
 import eu.morfeoproject.fast.catalogue.InvalidResourceTypeException;
 import eu.morfeoproject.fast.catalogue.NotFoundException;
 import eu.morfeoproject.fast.catalogue.OntologyInvalidException;
+import eu.morfeoproject.fast.catalogue.ResourceException;
 import eu.morfeoproject.fast.model.FormElement;
-import eu.morfeoproject.fast.util.URLUTF8Encoder;
 
 /**
  * Servlet implementation class FormElementServlet
@@ -160,6 +160,9 @@ public class FormElementServlet extends GenericServlet {
 			} catch (InvalidResourceTypeException e) {
 				e.printStackTrace();
 				response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
+			} catch (ResourceException e) {
+				e.printStackTrace();
+				response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
 			}
 		} catch (JSONException e) {
 			e.printStackTrace();
@@ -221,6 +224,9 @@ public class FormElementServlet extends GenericServlet {
 			} catch (NotFoundException e) {
 				e.printStackTrace();
 				response.sendError(HttpServletResponse.SC_NOT_FOUND, "The resource "+uri+" has not been found.");
+			} catch (ResourceException e) {
+				e.printStackTrace();
+				response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
 			}
 		}
 	}
