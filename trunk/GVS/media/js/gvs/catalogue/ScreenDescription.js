@@ -219,7 +219,7 @@ var ScreenDescription = Class.create(BuildingBlockDescription,
      * @type PrePostInstance
      */
     getPost: function(/** String */ id) {
-        return this._postconditions.get(id).buldingblock;
+        return this._postconditions.get(id).buildingblock;
     },  
 
     /**
