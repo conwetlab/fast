@@ -22,8 +22,14 @@ var PrePostInstance = Class.create(ComponentInstance,
          * @type String
          * @private @member
          */
-        this._pattern = "?x http://www.w3.org/1999/02/22-rdf-syntax-ns#type " + 
+        this._pattern = null;
+
+        if (this._buildingBlockDescription.pattern) {
+            this._pattern = this._buildingBlockDescription.pattern;
+        } else {
+            this._pattern = "?x http://www.w3.org/1999/02/22-rdf-syntax-ns#type " +
             this._buildingBlockDescription.uri;
+        }
         /**
          * @type String
          * @private @member
