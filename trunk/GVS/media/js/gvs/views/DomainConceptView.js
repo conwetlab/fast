@@ -6,7 +6,7 @@ var DomainConceptView = Class.create( BuildingBlockView,
      * @constructs
      * @extends BuildingBlockView
      */ 
-    initialize: function($super, /** DomainConceptDescription */ description) {
+    initialize: function($super, /** BuildingBlockDescription */ description) {
         $super();
         
         var factFactory = FactFactorySingleton.getInstance();

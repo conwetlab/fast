@@ -151,7 +151,7 @@ var InferenceEngine = Class.create( /** @lends InferenceEngine.prototype */ {
      * @type String
      */
     _constructBody: function(/**Array*/ canvas, /** Object */ elements,
-                    /** Array */ domainContext, 
+                    /** Array */ tags,
                     /** String*/ criteria) {
         throw "Abstract Method invocation: InferenceEngine::_constructBody";     
     },

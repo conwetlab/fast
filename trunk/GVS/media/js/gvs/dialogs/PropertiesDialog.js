@@ -74,8 +74,10 @@ var PropertiesDialog = Class.create(ConfirmDialog /** @lends PropertiesDialog.pr
             {'type':'input', 'label': 'Version:','name': 'version',
                     'value': this._description.version,
                     'disabled': true, 'required': true},
-            {'type':'input', 'label': 'Tags:','name': 'domainContext',
-                    'value': this._description.domainContext.tags.join(",")},
+            {'type':'input', 'label': 'Tags:','name': 'tags',
+                    'value': this._description.tags.collect(function(tag) {
+                                    return tag.label['en-gb'];
+                               }).join(", ")},
             {'type': 'title', 'value': 'Sharing information'},
             {'type':'input', 'label': 'Description:','name': 'description',
                     'value': this._description.description['en-gb'],
@@ -112,12 +114,9 @@ var PropertiesDialog = Class.create(ConfirmDialog /** @lends PropertiesDialog.pr
     _onOk: function($super){        
         if (this._getFormWidget().validate()) {
         
-            var tags = $F(this._getForm().domainContext).split(/[\s,]+/).without("");
+            var tags = $F(this._getForm().tags).split(/[\s,]+/).without("");
             var description = {
-                'domainContext': {
-                    'tags': tags,
-                    'user': null
-                },
+                'tags': Utils.getCatalogueTags(tags, null),
                 'description': {
                     'en-gb': $F(this._getForm().description)
                 }

@@ -33,7 +33,7 @@ var AddScreenDialog = Class.create(ConfirmDialog /** @lends AddScreenDialog.prot
             {'type':'input', 'label': 'Version:','name': 'version', 'value': '1.0'}, 
             {'type':'input', 'label': 'Icon URL (*):','name': 'icon', 'value': 'icon URL...'}, 
             {'type':'input', 'label': 'Screenshot URL (*):','name': 'screenshot', 'value': 'Screenshot URL...'}, 
-            {'type':'input', 'label': 'Domain Context:','name': 'domainContext', 'value': 'Write domain context as tags separated by ","...'},  
+            {'type':'input', 'label': 'Domain Context:','name': 'tags', 'value': 'Write domain context as tags separated by ","...'},
             {'type':'input', 'label': 'Homepage (*):','name': 'homepage', 'value': 'Homepage URL...'},  
             {'type':'input', 'label': 'Preconditions:','name': 'preconditions', 'value': 'If any, write preconditions separated by ","...'},  
             {'type':'input', 'label': 'Postconditions:','name': 'postconditions', 'value': 'If any, write postconditions separated by ","...'},   
@@ -66,22 +66,20 @@ var AddScreenDialog = Class.create(ConfirmDialog /** @lends AddScreenDialog.prot
         formToSend.description = {
             "en-GB": form.description.getValue()
         };
-        
-        var domainContextArray = form.domainContext.getValue().split(',');
-        for (var i = 0; i < domainContextArray.length; i++) {
-            var aux = domainContextArray[i].strip();
+
+        // TODO: Review this
+        var tagsArray = form.tags.getValue().split(',');
+        for (var i = 0; i < tagsArray.length; i++) {
+            var aux = tagsArray[i].strip();
             if (aux && aux != "") {
-                domainContextArray[i] = aux;
+                tagsArray[i] = aux;
             }
             else {
-                domainContextArray[i] = null;
+                tagsArray[i] = null;
             }
         }
-        domainContextArray = domainContextArray.compact();
-        formToSend.domainContext = {
-            "tags": domainContextArray,
-            "user": null
-        };
+        tagsArray = tagsArray.compact();
+        formToSend.tags = Utils.getCatalogueTags(tagsArray, null);
         
         var preconditionsArray = form.preconditions.getValue().split(',');
         for (var i = 0; i < preconditionsArray.length; i++) {

@@ -6,7 +6,7 @@ var PrePostInstance = Class.create(ComponentInstance,
      * @constructs
      * @extends ComponentInstance
      */
-    initialize: function($super, /** DomainConceptDescription */ domainConceptDescription, 
+    initialize: function($super, /** BuildingBlockDescription */ domainConceptDescription,
             /** InferenceEngine */ inferenceEngine, /** Boolean (optional) */ isConfigurable) {
         $super(domainConceptDescription, inferenceEngine);
         
@@ -321,6 +321,7 @@ var PrePostInstance = Class.create(ComponentInstance,
             // Calling the server to add the pre/post
             var catalogueResource = (this._type == 'pre') ? URIs.pre : URIs.post;
             var persistenceEngine = PersistenceEngineFactory.getInstance();
+            this._id = new Date().valueOf();
             persistenceEngine.sendPost(catalogueResource,
                             null, this.toJSON(), this, 
                             this._onPostSuccess, Utils.onAJAXError); 
@@ -363,11 +364,8 @@ var PrePostInstance = Class.create(ComponentInstance,
      * @private
      */
     _removeFromServer: function(/** String */ uri, /** String */ type) {
-        var catalogueResource = (type == 'pre') ? URIs.pre : URIs.post;
         var persistenceEngine = PersistenceEngineFactory.getInstance();
-        // The proxy removes a URI encoding, so it is necessary to do it
-        // twice
-        persistenceEngine.sendDelete(catalogueResource + encodeURIComponent(encodeURIComponent(uri)),
+        persistenceEngine.sendDelete(uri,
             this, 
             this._onDeleteSuccess, Utils.onAJAXError);
     },

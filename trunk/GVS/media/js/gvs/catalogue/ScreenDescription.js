@@ -25,8 +25,8 @@ var ScreenDescription = Class.create(BuildingBlockDescription,
      */
     toJSON: function() {
         var result = {
-            "preconditions": [this.getPreconditions()],
-            "postconditions": [this.getPostconditions()],
+            "preconditions": this.getPreconditions().size() > 0 ? [this.getPreconditions()] : [],
+            "postconditions": this.getPostconditions().size() > 0 ? [this.getPostconditions()] : [],
             "definition": {
                 "buildingblocks": this._getScreenBuildingBlocks(),
                 "pipes": this._getScreenPipes(),
@@ -36,7 +36,7 @@ var ScreenDescription = Class.create(BuildingBlockDescription,
         result = Object.extend(result,{
             "name": this.name,
             "label": this.label,
-            "domainContext": this.domainContext,
+            "tags": this.tags,
             "version": this.version,
             "id": this.id,
             "creator": this.creator,
@@ -80,7 +80,9 @@ var ScreenDescription = Class.create(BuildingBlockDescription,
     getInfo: function() {
         var info = new Hash();
         info.set('Title', this.label['en-gb']);
-        info.set('Tags', this.domainContext.tags.join(", "));
+        info.set('Tags', this.tags.collect(function(tag) {
+                return tag.label['en-gb'];
+            }).join(", "));
         info.set('Version', this.version);
         return info;
     },

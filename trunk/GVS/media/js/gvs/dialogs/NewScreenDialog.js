@@ -48,7 +48,7 @@ var NewScreenDialog = Class.create(ConfirmDialog /** @lends NewScreenDialog.prot
             {
                 'type':'input', 
                 'label': 'Tags:',
-                'name': 'domaincontext',
+                'name': 'tags',
                 'value': ''
             }
         ];
@@ -64,11 +64,13 @@ var NewScreenDialog = Class.create(ConfirmDialog /** @lends NewScreenDialog.prot
     _onOk: function($super){
         if (this._getFormWidget().validate()) {
             var name = $F(this._getForm().name);
-            var tags = $F(this._getForm().domaincontext).split(/[\s,]+/).without("");
+            var tags = $F(this._getForm().tags).split(/[\s,]+/).without("");
             var version = $F(this._getForm().version);
             
+            var processedTags = Utils.getCatalogueTags($A(tags), null);
+
             var documentController = GVSSingleton.getInstance().getDocumentController();
-            documentController.createScreen(name, $A(tags), version);
+            documentController.createScreen(name, processedTags, version);
             
             $super();
         }       
@@ -80,7 +82,7 @@ var NewScreenDialog = Class.create(ConfirmDialog /** @lends NewScreenDialog.prot
      */
     _reset: function ($super) {
         this._getForm().name.value = "New Screen";
-        this._getForm().domaincontext.value = "";
+        this._getForm().tags.value = "";
         this._getForm().version.value = "0.1";
         $super();
     }

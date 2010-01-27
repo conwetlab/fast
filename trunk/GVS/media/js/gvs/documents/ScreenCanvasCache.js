@@ -56,7 +56,7 @@ var ScreenCanvasCache = Class.create( /** @lends ScreenCanvasCache.prototype */ 
      */
     getFormURI: function () {
         var form = this._buildingblocks.detect(function(element) {
-            return (element.uri.search(/FormElement/i) != -1);
+            return (element.uri.search(/forms/i) != -1);
         });
         if (form) {
             return [form.uri];
@@ -72,7 +72,7 @@ var ScreenCanvasCache = Class.create( /** @lends ScreenCanvasCache.prototype */ 
      */
     getOperatorURIs: function() {
         var elements = this._buildingblocks.findAll(function(element) {
-            return (element.uri.search(/Operator/i) != -1);
+            return (element.uri.search(/operators/i) != -1);
         });
         var result = new Array();
         elements.each(function(element) {
@@ -89,7 +89,7 @@ var ScreenCanvasCache = Class.create( /** @lends ScreenCanvasCache.prototype */ 
      */
     getResourceURIs: function() {
         var elements = this._buildingblocks.findAll(function(element) {
-            return (element.uri.search(/BackendService/i) != -1);
+            return (element.uri.search(/services/i) != -1);
         });
         var result = new Array();
         elements.each(function(element) {

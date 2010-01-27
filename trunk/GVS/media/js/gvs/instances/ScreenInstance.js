@@ -33,7 +33,9 @@ var ScreenInstance = Class.create(ComponentInstance,
         var info = new Hash();
         info.set('Title', this._buildingBlockDescription.label['en-gb']);
         info.set('Description', this._buildingBlockDescription.description['en-gb']);
-        info.set('Tags', this._buildingBlockDescription.domainContext.tags.join(", "));
+        info.set('Tags', this._buildingBlockDescription.tags.collect(function(tag) {
+                return tag.label['en-gb'];
+            }).join(", "));
         return info;
     },
     

@@ -24,8 +24,8 @@ var DomainConceptFactory = Class.create(BuildingBlockFactory,
     /**
      * @override
      */
-    getBuildingBlocks: function(/** Array */ domainContext, /** Function */ callback){
-        var url = this._createUrl(domainContext);
+    getBuildingBlocks: function(/** Array */ tags, /** Function */ callback){
+        var url = this._createUrl(tags);
         var persistenceEngine = PersistenceEngineFactory.getInstance();
         persistenceEngine.sendGet(url,
                 {
@@ -36,10 +36,12 @@ var DomainConceptFactory = Class.create(BuildingBlockFactory,
    
     // **************** PUBLIC METHODS **************** //
     
-    _createUrl: function(/** Array */ domainContext){
-        if (domainContext.size() > 0) {
-            var tags = domainContext.join('+');
-            return URIs.catalogueTagConcepts.replace('<tags>', tags);
+    _createUrl: function(/** Array */ tags){
+        if (tags.size() > 0) {
+            var processedTags = tags.collect(function(tag) {
+                return tag.label['en-gb'];
+            }).join("+");
+            return URIs.catalogueTagConcepts.replace('<tags>', processedTags);
         } else {
             return URIs.catalogueAllConcepts;
         }
@@ -50,7 +52,7 @@ var DomainConceptFactory = Class.create(BuildingBlockFactory,
         var result = new Array();
         
         $A(metadata).each(function(conceptProperties) {
-            result.push(new DomainConceptDescription(conceptProperties));
+            result.push(new BuildingBlockDescription(conceptProperties));
         });
         this.callback(result);
     },

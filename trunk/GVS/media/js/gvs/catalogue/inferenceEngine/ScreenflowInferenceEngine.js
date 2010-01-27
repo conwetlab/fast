@@ -50,10 +50,16 @@ var ScreenflowInferenceEngine = Class.create(InferenceEngine /** @lends Screenfl
     _constructBody: function(/**Array*/ canvas, /** Array*/ elements,
                     /** Array */ tags,
                     /** String*/ criteria) {
-        var domainContext = {
+
+        /*var domainContext = {
             'tags': tags,
-            'user': null /* TODO: add user here */
-        };
+            'user': GVSSingleton.getInstance().getUser().getUserName()
+        };*/
+
+        var domainContext = {
+            'tags': tags.collect(function(tag){ return tag.label['en-gb']}),
+            'user': GVSSingleton.getInstance().getUser().getUserName()
+        }
         var body = {
             'canvas': canvas,
             'elements': elements,

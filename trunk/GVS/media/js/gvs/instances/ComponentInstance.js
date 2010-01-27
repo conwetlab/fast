@@ -76,7 +76,9 @@ var ComponentInstance = Class.create(DragSource,
         var info = new Hash();
         info.set('Title', this.getTitle());
         info.set('Description', this._buildingBlockDescription.description['en-gb']);
-        info.set('Tags', this._buildingBlockDescription.domainContext.tags.join(", "));
+        info.set('Tags', this._buildingBlockDescription.tags.collect(function(tag) {
+                return tag.label['en-gb'];
+            }).join(", "));
         return info;
     },
 

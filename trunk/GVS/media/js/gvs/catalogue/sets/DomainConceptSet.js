@@ -5,8 +5,8 @@ var DomainConceptSet = Class.create(BuildingBlockSet, /** @lends DomainConceptSe
      * @constructs
      * @extends BuildingBlockSet
      */ 
-    initialize: function($super, /** Array */ context, /** DomainConceptFactory */ factory) {
-        $super(context, factory);
+    initialize: function($super, /** Array */ tags, /** DomainConceptFactory */ factory) {
+        $super(tags, factory);
         
         /**
          * Domain concepts
@@ -24,7 +24,7 @@ var DomainConceptSet = Class.create(BuildingBlockSet, /** @lends DomainConceptSe
      * Starts the data retrieval of the domain concepts
      */
     startRetrievingData: function() {
-        this._factory.getBuildingBlocks(this._context, this._onSuccess.bind(this));
+        this._factory.getBuildingBlocks(this._tags, this._onSuccess.bind(this));
     },
     
     

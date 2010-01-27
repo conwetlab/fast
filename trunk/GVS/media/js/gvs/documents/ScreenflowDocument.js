@@ -59,10 +59,7 @@ var ScreenflowDocument = Class.create(PaletteDocument,
             'label': {'en-gb': title},
             'name': title,
             'version': version,
-            'domainContext': {
-                'tags': tags,
-                'user': null
-            }
+            'tags': tags
         });
 
         this._configureToolbar();
@@ -386,13 +383,9 @@ var ScreenflowDocument = Class.create(PaletteDocument,
         var canvas = this._getCanvas();
         var palette = this._paletteController.getComponentUris(Constants.BuildingBlock.SCREEN);
         
-        if (URIs.catalogueFlow =='check') {
-            this._inferenceEngine.check(canvas, palette, this._tags,
-                                        'reachability', this._updatePanes.bind(this));
-        } else {
-            this._inferenceEngine.findCheck(canvas, palette,  this._tags,
-                                        'reachability', this._updatePanes.bind(this));
-        }
+        
+        this._inferenceEngine.check(canvas, palette, this._tags,
+                                    'reachability', this._updatePanes.bind(this));
         
         // FIXME: we must learn about document reachability from the inference 
         //        engine. By the moment, one screen == deployable screenflow ;)

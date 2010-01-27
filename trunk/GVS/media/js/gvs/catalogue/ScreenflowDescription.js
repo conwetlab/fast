@@ -13,7 +13,7 @@ var ScreenflowDescription = Class.create(BuildingBlockDescription,
         this.definition.postconditions = new Array();
         this.description = new Object();
         this.label = new Object();
-        this.domainContext = new Array();
+        this.tags = new Array();
         
         $super(properties);
     },
@@ -122,7 +122,9 @@ var ScreenflowDescription = Class.create(BuildingBlockDescription,
     getInfo: function() {
         var info = new Hash();
         info.set('Title', this.getTitle());
-        info.set('Tags', this.domainContext.tags.join(", "));
+        info.set('Tags', this.tags.collect(function(tag) {
+                return tag.label['en-gb'];
+            }).join(", "));
         info.set('Version', this.version);
         return info;
     },

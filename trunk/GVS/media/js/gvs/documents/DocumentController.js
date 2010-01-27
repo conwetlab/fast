@@ -73,9 +73,9 @@ var DocumentController = Class.create(
     /**
      * Creates a new screenflow document
      */
-    createScreenflow: function(/** String */ name, /** String */ domainContext,
+    createScreenflow: function(/** String */ name, /** String */ tags,
                                /** String */ version){
-        var screenflow = new ScreenflowDocument(name, domainContext, version);
+        var screenflow = new ScreenflowDocument(name, tags, version);
         this.addDocument(screenflow);
     },
     
@@ -86,10 +86,7 @@ var DocumentController = Class.create(
                             /** String */ version){
         var screen = new ScreenDocument({
                 'name': name,
-                'domainContext': {
-                    'user': null,
-                    'tags': tags
-                },
+                'tags': tags,
                 'version': version
             });
         this.addDocument(screen);

@@ -123,5 +123,22 @@ Object.extend(Utils, {
             result = defaultValue;
         }
         return result;
+    },
+
+    /**
+     * Converts an Array of strings into an array
+     * of objects representing the tag structure of
+     * the catalogue
+     */
+    getCatalogueTags: function(/** Array */ tags, /** String */ user) {
+        var result = new Array();
+        tags.each(function(tag) {
+            result.push({
+                'label': {
+                    'en-gb': tag
+                }
+            });
+        });
+        return result;
     }
 }); 

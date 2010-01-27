@@ -4,13 +4,13 @@ var BuildingBlockSet = Class.create( /** @lends BuildingBlockSet.prototype */ {
      * This list will be updated.
      * @constructs
      */ 
-    initialize: function(/** Array */ context, /** BuildingBlockFactory */ factory) {
+    initialize: function(/** Array */ tags, /** BuildingBlockFactory */ factory) {
         /** 
-         * Associated context
+         * Associated tags
          * @type Array
          * @private @member
          */
-        this._context = context;
+        this._tags = tags;
         
         /** 
          * Building block factory

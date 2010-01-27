@@ -7,7 +7,7 @@ var ScreenDocument = Class.create(PaletteDocument,
      * @extends PaletteDocument
      */
     initialize: function($super, /** Object */ properties) {
-        var tags = properties.domainContext.tags;
+        var tags = properties.tags;
         var name = properties.name;
         var version = properties.version;
 
@@ -131,14 +131,11 @@ var ScreenDocument = Class.create(PaletteDocument,
                 'label': {'en-gb': name},
                 'name': name,
                 'version': version,
-                'domainContext': {
-                    'user': null,
-                    'tags': this._tags
-                },
+                'tags':  this._tags,
                 "creator": "http://fast.morfeo-project.eu",
                 "description": {"en-gb": "Please fill the description..."},
                 "rights": "http://creativecommons.org/",
-                "creationDate": new Date().toUTCString(),
+                "creationDate": null,
                 "icon": "http://fast.morfeo-project.eu/icon.png",
                 "screenshot": "http://fast.morfeo-project.eu/screenshot.png",
                 "homepage": "http://fast.morfeo-project.eu/"
@@ -278,6 +275,8 @@ var ScreenDocument = Class.create(PaletteDocument,
             getBuildingBlockFactory(Constants.BuildingBlock.RESOURCE);
         resourceFactory.cacheBuildingBlocks(this._canvasCache.getResourceURIs(),
                     this._onResourcesLoaded.bind(this));
+
+
     },
 
     // **************** PRIVATE METHODS **************** //
@@ -328,7 +327,7 @@ var ScreenDocument = Class.create(PaletteDocument,
                 this._setSelectedElement(instance);
             }
         } else {
-            instance.setChangeHandler(this._onPrePostAdded.bind(this));
+            //instance.setChangeHandler(this._onPrePostAdded.bind(this));
             if (area.getNode().className.include("pre")) {
                 instance.setType("pre");
                 instance.createTerminal(this._onPipeHandler.bind(this));
@@ -370,16 +369,6 @@ var ScreenDocument = Class.create(PaletteDocument,
         }
     },
 
-    /**
-     * Runs when a *-condition is created in the server
-     * @private
-     */
-    _onPrePostAdded: function(/** String */ previousUri, /** PrePostInstance */ instance) {
-        if (previousUri) {
-            // TODO: Think if this is possible
-        }
-        this._setSelectedElement(instance);
-    },
     
     /**
      * Delete an instance.
