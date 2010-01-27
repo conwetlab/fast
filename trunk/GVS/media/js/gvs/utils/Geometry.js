@@ -145,15 +145,15 @@ Object.extend(Geometry, {
         var containerBounds = {
             'top': 0,
             'left': 0,
-            'right': containerElement.clientWidth,
-            'bottom': containerElement.clientHeight
+            'right': containerElement.offsetWidth,
+            'bottom': containerElement.offsetHeight
         }
         
         var elementBounds = {
             'top': position.top,
             'left': position.left,
-            'right': position.left + node.offsetWidth,
-            'bottom': position.top + node.offsetHeight      
+            'right': position.left + node.clientWidth,
+            'bottom': position.top + node.clientHeight
         }
 
         var result = {

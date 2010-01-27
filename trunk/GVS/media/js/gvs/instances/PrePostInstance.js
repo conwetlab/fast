@@ -7,7 +7,7 @@ var PrePostInstance = Class.create(ComponentInstance,
      * @extends ComponentInstance
      */
     initialize: function($super, /** BuildingBlockDescription */ domainConceptDescription,
-            /** InferenceEngine */ inferenceEngine, /** Boolean (optional) */ isConfigurable) {
+            /** InferenceEngine */ inferenceEngine, /** Boolean (Optional) */ _isConfigurable) {
         $super(domainConceptDescription, inferenceEngine);
         
         /**
@@ -28,7 +28,9 @@ var PrePostInstance = Class.create(ComponentInstance,
          * @type String
          * @private @member
          */
-        this._label = this._buildingBlockDescription.title;
+        this._label = this._buildingBlockDescription.title ?
+                        this._buildingBlockDescription.title :
+                        this._buildingBlockDescription.label['en-gb'];
         
         /**
          * @type DomainConceptDialog
@@ -69,10 +71,7 @@ var PrePostInstance = Class.create(ComponentInstance,
          * @type Boolean
          * @private
          */
-        this._isConfigurable = true;
-        if (isConfigurable !== undefined) {
-            this._isConfigurable = isConfigurable;
-        }
+        this._isConfigurable = Utils.variableOrDefault(_isConfigurable, true);
     },
 
     // **************** PUBLIC METHODS **************** //

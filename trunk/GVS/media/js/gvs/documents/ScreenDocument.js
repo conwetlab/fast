@@ -1009,20 +1009,28 @@ var ScreenDocument = Class.create(PaletteDocument,
                 instance.setId(id);
                 var position = this._canvasCache.getPosition(id);
                 instance.onFinish(true, position);
-                // TODO: think about the effective position of the element
                 var dropNode = area.getNode();
-                var zonePosition = Geometry.getRectangle(dropNode);
-
-                this._drop(area, instance, position, true);
-
-                var elementNode = instance.getView().getNode();
-                if (!Geometry.contains(zonePosition,
-                                        Geometry.getRectangle(elementNode))) {
-                    var newPosition = Geometry.adaptDropPosition(dropNode,
-                                    elementNode);
-                    instance.setPosition(newPosition);
-                }
+                $("main").appendChild(instance.getView().getNode());
+                var effectivePosition = Geometry.adaptInitialPosition(dropNode,
+                                        instance.getView().getNode(), position);
+                $("main").removeChild(instance.getView().getNode());
+                this._drop(area, instance, effectivePosition, true);
             }.bind(this));
+        }.bind(this));
+    },
+
+    _createConditions: function(/** Array */ conditionList, /** DropZone */ area) {
+        conditionList.each(function(condition) {
+            var description = new BuildingBlockDescription(condition);
+            var instance = new PrePostInstance(description, this._inferenceEngine, false);
+            instance.setId(condition.id);
+            instance.onFinish(true, condition.position);
+            var zonePosition = area.getNode();
+            $("main").appendChild(instance.getView().getNode());
+            var effectivePosition = Geometry.adaptInitialPosition(zonePosition,
+                                    instance.getView().getNode(), condition.position);
+            $("main").removeChild(instance.getView().getNode());
+            this._drop(area, instance, effectivePosition, true);
         }.bind(this));
     },
 
@@ -1033,7 +1041,9 @@ var ScreenDocument = Class.create(PaletteDocument,
     _loadConnections: function() {
 
         if (this._canvasCache.areInstancesLoaded()) {
-            // TODO
+            // Load pre and postconditions
+            this._createConditions(this._canvasCache.getPreconditions(), this._areas.get('pre'));
+            this._createConditions(this._canvasCache.getPostconditions(), this._areas.get('post'));
             this._refreshReachability();
         }
     }

@@ -30,14 +30,16 @@ var ScreenCanvasCache = Class.create( /** @lends ScreenCanvasCache.prototype */ 
          * @type Array
          * @private
          */
-        this._preconditions = properties.preconditions;
+        this._preconditions = properties.preconditions[0] ? properties.preconditions[0]:
+                               new Array();
 
         /**
          * Postconditions of the screen
          * @type Array
          * @private
          */
-        this._postconditions = properties.definition.buildingblocks;
+        this._postconditions = properties.postconditions[0] ? properties.postconditions[0]:
+                               new Array();
 
         /**
          * Array of already loaded building block types
@@ -98,6 +100,21 @@ var ScreenCanvasCache = Class.create( /** @lends ScreenCanvasCache.prototype */ 
             }
         });
         return result;
+    },
+
+    /**
+     * Returns the list of preconditions
+     * @type Array
+     */
+    getPreconditions: function() {
+        return this._preconditions;
+    },
+
+    /**
+     * Returns the list of postconditions
+     */
+    getPostconditions: function() {
+        return this._postconditions;
     },
 
     /**
