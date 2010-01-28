@@ -322,7 +322,9 @@ The following changes have been made with respect to the previous version of thi
 
 \begin{itemize}
 	\item Sect.~\ref{sub:goal_and_scope} has been revised to better define the scope of this deliverable with respect to other deliverables.
-	\item The section on our adopted development methodology (previously Sect.~1.3) has been moved to the end of the document (Sect.~\ref{sub:methontology_a_methodology_for_ontology_development}), but otherwise did not change.
+	\item The list of classes and properties has been moved to the appendix section at the back of the document (App.~\ref{sec:ontology_terms}), because it was felt that it would otherwise hinder the flow of the text.
+	\item In response to the M12 review, a UML overview of the ontology in App.~\ref{sec:ontology_overview} now complements the list of terms.
+	\item The section on our adopted development methodology (previously Sect.~1.3) has been moved to the end of the document (App.~\ref{sub:methontology_a_methodology_for_ontology_development}), but otherwise did not change.
 	\item An evaluation section has been added (Sect.~\ref{sec:evaluation}).
 	\item The section on design principles (previously Sect.~1.4, now Sect.~\ref{sub:general_design_decisions}) has been moved to the general evaluation section and extended to reflect research done by the authors within the past year.
 	\item In the integration section (Sect.~\ref{sub:integration}) of the ontology definition, the Common Tag vocabulary has been added. It is briefly introduced, and the integrated terms are specified.
@@ -369,7 +371,7 @@ In summary, the ontology is supposed to facilitate support for the user in the d
 \textcolor{white}{\textbf{Scope}} & \textbf{Concepts:} \emph{Component}, \emph{Resource}, \emph{Screen}, \emph{Backend Service}, \emph{Flow Control Element}, \emph{Operator}, \emph{Screenflow Start}, \emph{Screenflow End}, \emph{Connector}, \emph{Form Element}, \emph{Pre-condition}, \emph{Post-condition}, \emph{Query}, \emph{Label}, \emph{Icon}, \emph{User}, \emph{User Profile}, \emph{Tag}
 
 \textbf{Properties:} \emph{containsScreen}, \emph{hasLabel}, \emph{hasIcon}, \emph{hasPreCondition}, \emph{hasPostCondition}, \emph{hasTag}, \emph{hasProfile}\\ \hline
-\textcolor{white}{\textbf{Sources of Knowledge}} & FAST Architecture deliverable~\cite{solero2009fast_architecture}, FAST Requirements Specification~\cite{villoslada2010fast_requirements}, FAST State-of-the-art Document~\cite{urmetzer2010fast_state_of_the_art}, EzWeb documentation~\cite{lizcano2008ezweb} \\ \hline
+\textcolor{white}{\textbf{Sources of Knowledge}} & FAST Architecture deliverable~\cite{urena2010fast_architecture}, FAST Requirements Specification~\cite{villoslada2010fast_requirements}, FAST State-of-the-art Document~\cite{urmetzer2010fast_state_of_the_art}, EzWeb documentation~\cite{lizcano2008ezweb} \\ \hline
 \end{longtable}
 \end{small}
 \doublespacing
@@ -588,12 +590,14 @@ This living document specifies how the terms from the glossary of terms are expr
 \texttt{hasLabel} & DC & \texttt{dcterms:title} & ---  \\ \hline
 \texttt{hasCreator} & DC & \texttt{dcterms:creator} & DC defines the range of \texttt{dcterms:creator} to be \texttt{dcterms:Agent}. By inference, this obviously also holds within FAST. However, we will explicitly only use \texttt{foaf:Person} (also see Fig.~\ref{fig:dcterms_example}). \\ \hline
 \texttt{hasDescription} & DC & \texttt{dcterms:description} & --- \\ \hline
-\texttt{hasCreationDate} & DC & \texttt{created} & Dates should be formatted according to ISO 8601. \\ \hline
-\texttt{hasRights} & DC & \texttt{rights} & DC terms specify a number of classes to model the rights of resources. \texttt{dcterms:rights} links a resource to a \texttt{dcterms:RightsStatement}. The holder of the rights is specified by pointing from the resource to a \texttt{dcterms:Agent}, using the \texttt{dcterms:rightsHolder} property. \\ \hline
-\texttt{hasDomainContext} & DC & \texttt{subject} & DC specifies that subject should be non-literals. To allow simple tagging, we should represent tags as resources (TODO). \\ \hline
-\texttt{hasImage} & FOAF & \texttt{depiction} & The inverse \texttt{foaf:depicts} could also be used. \\ \hline
-\texttt{hasName} & FOAF & \texttt{name} & Apart from \texttt{foaf:name}, which is used for the full name, more fine-grained properties such as \texttt{foaf:firstName}, \texttt{foaf:surname} or \texttt{foaf:title} and \texttt{foaf:nick} can be used as well. \\ \hline
-\texttt{hasEmail} & FOAF & \texttt{mbox} & While \texttt{foaf:mbox} will be used for the plain e-mail address, \texttt{foaf:mbox\_sha1sum} will be used for an obfuscated version of the address. \\ \hline
+\texttt{hasCreationDate} & DC & \texttt{dcterms:created} & Dates should be formatted according to ISO 8601. \\ \hline
+\texttt{hasRights} & DC & \texttt{dcterms:rights} & DC terms specify a number of classes to model the rights of resources. \texttt{dcterms:rights} links a resource to a \texttt{dcterms:RightsStatement}. The holder of the rights is specified by pointing from the resource to a \texttt{dcterms:Agent}, using the \texttt{dcterms:rightsHolder} property. \\ \hline
+\texttt{hasDomainContext} & DC & \texttt{dcterms:subject} & DC specifies that subject should be non-literals. To allow simple tagging, we should represent tags as resources (TODO). \\ \hline
+\texttt{hasImage} & FOAF & \texttt{foaf:depiction} & The inverse \texttt{foaf:depicts} could also be used. \\ \hline
+\texttt{hasIcon} & FOAF & sub-property of \texttt{foaf:depiction} & Icons are a specific kind of image, so we can relate this property to the \texttt{foaf:depiciton}. \\ \hline
+\texttt{hasScreenshot} & FOAF & sub-property of \texttt{foaf:depiction} & Screenshots are a specific kind of image, so we can relate this property to the \texttt{foaf:depiciton}. \\ \hline
+\texttt{hasName} & FOAF & \texttt{foaf:name} & Apart from \texttt{foaf:name}, which is used for the full name, more fine-grained properties such as \texttt{foaf:firstName}, \texttt{foaf:surname} or \texttt{foaf:title} and \texttt{foaf:nick} can be used as well. \\ \hline
+\texttt{hasEmail} & FOAF & \texttt{foaf:mbox} & While \texttt{foaf:mbox} will be used for the plain e-mail address, \texttt{foaf:mbox\_sha1sum} will be used for an obfuscated version of the address. \\ \hline
 \texttt{hasInterests} & FOAF & \texttt{foaf:interest} & --- \\ \hline
 \texttt{hasUserName} & FOAF & \texttt{foaf:accountName} & --- \\ \hline
 \texttt{hasDomainContext} & Common Tag & \texttt{ctag:tagged} & The domain context of a resource in FAST can be expressed as a complex tag. Further Common Tag properties can then be applied to make assertions about the tag itself. \\ \hline
@@ -610,7 +614,67 @@ This living document specifies how the terms from the glossary of terms are expr
 \section{The FAST Gadget Ontology} % (fold)
 \label{sec:ontology}
 
-In the following sections we will define the FAST gadget ontology.
+While the previous section discussed the various steps preceding the definition of the actual ontology according to our chosen development methodology, this section focusses on concrete usage of the FAST gadget ontology in an RDFS/OWL environment.
+
+\subsection{Classes, Instances and Templates} % (fold)
+\label{sub:classes_instances_and_templates}
+
+In FAST, resources (gadgets, screenflows, screens and their components) exist in different stages throughout their lifecycle. Moving top-down from the high-level conceptual description to gadgets in use at runtime, the following differences can be made in terms of the level of instantiation:
+
+\begin{itemize}
+	\item \textbf{Abstract Class Level}: At this level, resources are defined on a categorical level, differentiating between the various kinds of things that are relevant in FAST, as fundamental classes such as screens, forms or services (see Sect.~\ref{ssub:glossary_of_terms}). These are implemented technically as classes in OWL.
+	\item \textbf{Screenflow-independent Component Definition}: When a user of the FAST GVS is building a new screenflow or screen, they do so by combining existing building blocks and configuring them. These building blocks are not the fundamental classes of FAST, but instead they are specific instances of those classes. In other words, users do not combine the idea of a screen with the idea of a service, but instead they combine the specific ``Log In Screen'' with the ``Amazon Web Service''. Technically, these concrete building blocks are implemented as instances of the fundamental classes, specified by asserting particular settings such as label or icons, pre- and post-conditions, etc.
+	\item \textbf{Instantiation within a Screenflow at Design-time}: Once a user selects a specific building block in the GVS and adds it to their new screen or screenflow project, they are in principle again instantiating from a conceptual to a concrete level: from the ``Log In Screen'' as such to a particular log in screen as used in that particular screenflow. Also in this stage, resources are implemented technically as instances.
+	\item \textbf{Runtime}: At the final level of instantiation, the screenflow has been packaged as a gadget, deployed to a gadget platform and is now being used by an end-user. At this level, all gadget components exist only in the form of Web standards compliant code (HTML, JavaScript, CSS). Any metadata still necessary or definitions for screen pre- and post-conditions are for performance now defined in the JavaScript native data format JSON, rather than in RDF. Therefore, at this level, the resources that make up the gadget are out of the scope of this deliverable.
+\end{itemize}
+
+\begin{figure}[ht]
+  \begin{center}
+    \includegraphics[width=\linewidth]{images/classes_templates_instances.pdf}
+    \caption{Different levels of representation of FAST resources}
+    \label{fig:classes_templates}
+  \end{center}
+\end{figure}
+
+When implementing these four stages, as illustrated in Fig.~\ref{fig:classes_templates}, to OWL DL semantics, one will be faced with an immediate problem. Conceptually, once would like to say that $Screen$ is a class, i.e., the set of all screens. As argues above, $LogInScreen$ would then be an instance of $Screen$ ($LogInScreen \subset Screen$), while a particular $LogInScreen_x$ in a particular screenflow would again be an instance of $LogInScreen$ ($LogInScreen_x \subset LogInScreen$). However, unless we want to move into OWL Full semantics, classes cannot be used as instances at the same time, so we cannot use this modelling approach. Furthermore, when we instantiate a resource such as a screen within a particular screenflow, we want to imply that the new instance ($LogInScreen_x$) has the same features such as label, icon or conditions, as $LogInScreen$. In other words, what we really require is a something like a \emph{copy} of the original $LogInScreen$. 
+
+Neither OWL nor RDFS semantics offer functionality to represent a relationship such as the copy of a resource formally. For this reason, we introduce the concept of \emph{templates for RDF instances} in FAST. One resource (e.g., $LogInScreen$) will play the role of a \emph{template}, while the other resource (e.g., $LogInScreen_x$) will be called a \emph{copy}. Conceptually, copying a resource means defining a named graph that contains all statements about this resource considered to be relevant, and creating a new graph with near-identical statements\footnote{The graphs are not completely identical: the identifiers for the resource and potentially other, contained resources will have changed.}. In practice, this procedure can be implemented using a SPARQL CONSTRUCT query, where the WHERE clause matches the graph pattern of the template, and the CONSTRUCT query will build the copy from it. The corresponding data on all three levels is shown in List.~\ref{list:templating}, using TriG syntax~\cite{bizer2004trig}.
+
+\singlespacing
+\lstset{
+	caption={Templating example --- different levels of representation of a FAST screen}, 
+	label=list:templating,
+	language=turtle
+}
+\begin{figure}[ht]
+	\lstinputlisting{exampleCode/templating_example.ttl}
+\end{figure}
+\doublespacing
+
+It should be pointed out that the term \emph{RDF template} has been used before, but with a different meaning. \cite{davis2003rdf_template} use the term in analogy to XSLT, but acting on an RDF graph rather than an XML tree. \cite{kawamoto2006kawawiki} present a semantic wiki, where templates help non-technical users to create semantic descriptions. 
+% subsection classes_instances_and_templates (end)
+
+\subsection{Basic Annotation} % (fold)
+\label{sub:basic_annotation}
+
+In this section, we will present the use of some basic resource annotation properties in FAST. In general, since screenflows, screens and their components are sub-classes of \htmlref{\texttt{fgo:Resource}}{subs:Resource}, all properties defined to have a domain of \htmlref{\texttt{fgo:Resource}}{subs:Resource} should be used. In addition, a number of terms from external ontologies should also be used to annotate resources. Note that all of these annotations are valid both for the screenflow-independent component definitions (templates) and the design time instances (copies). A detailed description of all terms from the FAST gadget ontology namespace can be found in Sect.~\ref{sec:ontology_terms} of this document.
+
+\singlespacing
+\lstset{
+	caption={Example of basic annotation of a FAST resource}, 
+	label=list:basic_annotation,
+	language=turtle
+}
+\begin{figure}[ht]
+	\lstinputlisting{exampleCode/screen_example.ttl}
+\end{figure}
+\doublespacing
+
+
+
+% subsection basic_annotation (end)
+
+
 
 \subsection{Defining Pre- and Post-conditions} % (fold)
 \label{sub:defining_pre_and_post_conditions}
@@ -744,32 +808,6 @@ Since SPARQL has no direct support for negation, and since there is a need to al
 
 % subsection instance_examples (end)
 
-
-\subsection{Classes} % (fold)
-\label{sub:classes}
-
-This section contains a definition of all classes defined in the \texttt{fgo} namespace. For classes integrated from other ontologies, see the integration document~\ref{ssub:integration_document}.
-
-\singlespacing
-\begin{small}
-\input{classes}
-\end{small}
-\doublespacing
-
-%subsection classes (end)
-
-\subsection{Properties} % (fold)
-\label{sub:properties}
-
-This section contains a definition of all properties defined in the \texttt{fgo} namespace. For properties integrated from other ontologies, see the integration document~\ref{ssub:integration_document}.
-
-\singlespacing
-\begin{small}
-\input{properties}
-\end{small}
-\doublespacing
-
-% subsection properties (end)
 
 \subsection{Extension towards Specific Domains} % (fold)
 \label{sub:extension_towards_specific_domains}
@@ -954,6 +992,7 @@ In Methontology, documentation is an activity which is automatically carried out
 \clearpage
 \phantomsection
 \section{Ontology Overview}
+\label{sec:ontology_overview}
 % \addcontentsline{toc}{section}{Ontology Overview}
 
 \begin{figure}[h]
@@ -963,6 +1002,37 @@ In Methontology, documentation is an activity which is automatically carried out
     \label{fig:ontology_uml}
   \end{center}
 \end{figure}
+
+
+\clearpage
+\phantomsection
+\section{Ontology Terms}
+\label{sec:ontology_terms}
+\subsection{Classes} % (fold)
+\label{sub:classes}
+
+This section contains a definition of all classes defined in the \texttt{fgo} namespace. For classes integrated from other ontologies, see the integration document~\ref{ssub:integration_document}.
+
+\singlespacing
+\begin{small}
+\input{classes}
+\end{small}
+\doublespacing
+
+%subsection classes (end)
+
+\subsection{Properties} % (fold)
+\label{sub:properties}
+
+This section contains a definition of all properties defined in the \texttt{fgo} namespace. For properties integrated from other ontologies, see the integration document~\ref{ssub:integration_document}.
+
+\singlespacing
+\begin{small}
+\input{properties}
+\end{small}
+\doublespacing
+
+% subsection properties (end)
 
 
 \clearpage
