@@ -14,6 +14,7 @@
 \usepackage{colortbl}
 \usepackage{longtable}
 \usepackage{array}
+\usepackage{booktabs}
 \usepackage{amssymb}
 \usepackage{paralist}
 
@@ -670,11 +671,39 @@ In this section, we will present the use of some basic resource annotation prope
 \end{figure}
 \doublespacing
 
-
-
 % subsection basic_annotation (end)
 
+\subsection{FAST Users} % (fold)
+\label{sub:fast_users}
 
+In modelling resources in FAST, the kind of users that are relevant are the users of the FAST tools themselves (i.e., the GVS), as opposed to end users of the gadgets. The following List.~\ref{list:user} shows how an individual user is modelled, using terminology from the FOAF and SIOC vocabularies.
+
+\singlespacing
+\lstset{
+	caption={Basic description of a user in FAST}, 
+	label=list:user,
+	language=turtle
+}
+\begin{figure}[ht]
+	\lstinputlisting{exampleCode/user_example_01.ttl}
+\end{figure}
+\doublespacing
+
+Once a user has been defined in this way, they can e.g. be used to specify the creators of individual screen and screenflow resources, as shown in List.~\ref{list:creator}. This kind of creation metadata is being added to other metadata as shown in Sect.~\ref{sub:basic_annotation}.
+
+\singlespacing
+\lstset{
+	caption={Modelling the creator of a resource}, 
+	label=list:creator,
+	language=turtle
+}
+\begin{figure}[ht]
+	\lstinputlisting{exampleCode/user_example_02.ttl}
+\end{figure}
+\doublespacing
+
+
+% subsection fast_users (end)
 
 \subsection{Defining Pre- and Post-conditions} % (fold)
 \label{sub:defining_pre_and_post_conditions}
@@ -751,62 +780,66 @@ Finally, during runtime, the post-condition's variables would be replaced with t
 \end{figure}
 \doublespacing
 
-
 Since graph patterns with variable cannot directly be expressed in RDF (short of using blank nodes, which cannot have labels), the graph patterns are expressed as RDF literals and linked \texttt{fast:Condition} instances using the \texttt{fast:hasPattern} property.
 Each such condition will be linked to a screen or screenflow using either the \texttt{fast:hasPreCondition} or \texttt{fast:hasPostCondition} property.
 
 Since SPARQL has no direct support for negation, and since there is a need to allow screens to remove facts from the canvas graph as well as adding them, both pre- and post-conditions can be modelled to be either \emph{positive} or \emph{negative} using the \texttt{fast:isPositive} property. For pre-conditions, the interpretation of \emph{positive} is that the condition must hold, while \emph{negative} means that the negation of the condition must hold. For post-conditions, \emph{positive} leads to the instantiated condition being added to the canvas, while \emph{negative} will remove the instantiated condition. These interpretations are summarised in Tab.~\ref{tab:is_positive}.
 
-\begin{table}[h]
-\caption{Different semantics for \texttt{isPositive}}
-\label{tab:is_positive}
-\begin{center}
-\begin{tabular}{|l|c|c|}
-\hline
-& pre-condition & post-condition \\ \hline
-\emph{isPositive ``YES''} & condition must be fulfilled & condition instantiated\\ \hline
-\emph{isPositive ``NO''} & $\neg$condition must be fulfilled & instantiated condition removed \\ \hline
-\end{tabular}
-\end{center}
+\begin{table}[ht]
+	\caption{Different semantics for \texttt{isPositive}}
+	\label{tab:is_positive}
+	\begin{center}
+		
+		\begin{tabular}{lcc}
+			\toprule
+			& \textbf{pre-condition} & \textbf{post-condition} \\ 
+			\midrule
+			\emph{isPositive ``YES''} & condition must be fulfilled & condition instantiated\\ 
+			\emph{isPositive ``NO''} & $\neg$condition must be fulfilled & instantiated condition removed \\ 
+			\bottomrule
+		\end{tabular}
+	\end{center}
 \end{table}
 
-\subsection{Instance Examples} % (fold)
-\label{sub:instance_examples}
 
-\subsubsection{Complete Screen with Opaque Code} % (fold)
-\label{ssub:complete_screen}
-
-\singlespacing
-\lstset{
-	caption={Complete Screen with Opaque Code}, 
-	label=list:screen_01
-}
-% \setlength\parindent{0in}
-% \begin{minipage}[t]{\textwidth}
-\lstinputlisting{exampleCode/01_screenExample.ttl}
-% \end{minipage}
-% \setlength\parindent{0.21in}
-\doublespacing
-
-% subsubsection complete_screen (end)
-
-\subsubsection{Complete Screen with Declarative Definition} % (fold)
-\label{ssub:complete_screen_with_declarative_definition}
-
-\singlespacing
-\lstset{
-	caption={Complete Screen with Declarative Definition}, 
-	label=list:screen_01
-}
-% \setlength\parindent{0in}
-% \begin{minipage}[t]{\textwidth}
-\lstinputlisting{exampleCode/02_screenExample.ttl}
-% \end{minipage}
-% \setlength\parindent{0.21in}
-\doublespacing
-% subsubsection complete_screen_with_declarative_definition (end)
-
-% subsection instance_examples (end)
+% 
+% \subsection{Instance Examples} % (fold)
+% \label{sub:instance_examples}
+% 
+% \subsubsection{Complete Screen with Opaque Code} % (fold)
+% \label{ssub:complete_screen}
+% 
+% \singlespacing
+% \lstset{
+% 	caption={Complete Screen with Opaque Code}, 
+% 	label=list:screen_01
+% }
+% % \setlength\parindent{0in}
+% % \begin{minipage}[t]{\textwidth}
+% \lstinputlisting{exampleCode/01_screenExample.ttl}
+% % \end{minipage}
+% % \setlength\parindent{0.21in}
+% \doublespacing
+% 
+% % subsubsection complete_screen (end)
+% 
+% \subsubsection{Complete Screen with Declarative Definition} % (fold)
+% \label{ssub:complete_screen_with_declarative_definition}
+% 
+% \singlespacing
+% \lstset{
+% 	caption={Complete Screen with Declarative Definition}, 
+% 	label=list:screen_02
+% }
+% % \setlength\parindent{0in}
+% % \begin{minipage}[t]{\textwidth}
+% \lstinputlisting{exampleCode/02_screenExample.ttl}
+% % \end{minipage}
+% % \setlength\parindent{0.21in}
+% \doublespacing
+% % subsubsection complete_screen_with_declarative_definition (end)
+% 
+% % subsection instance_examples (end)
 
 
 \subsection{Extension towards Specific Domains} % (fold)
@@ -909,11 +942,11 @@ Apart from the guidelines proposed by \cite{moeller2009ontology_soft_skills}, an
 
 The current version of deliverable 2.2 provides the foundation for enabling the semantic definition of gadgets within the context of the FAST platform. We have specified what the individual components of a gadget are, and how they interrelate. In developing our ontology, we have followed  well-known methodology for ontology development. During the course of this process, a number of living documents --- the requirements specification document, the glossary of terms, the integration document and finally the implementation document --- were produced. Those documents serve as a tool for development and as documentation at the same time, and will be extended and updated in the coming two years of the project and beyond. The driving force behind these changes will be testing and evaluation of the ontology within the FAST project, and possibly in other contexts as well.
 
-A solution for representing pre- and post-conditions of screens and screen flows --- a central aspect of FAST technology --- has been proposed, which will now have to be implemented and tested both within the FAST catalogue and the FAST GVS.
+A solution for representing pre- and post-conditions of screens and screen flows --- a central aspect of FAST technology --- has been presented, as it has been implemented and tested both within the FAST catalogue and the FAST GVS.
 
 The FAST gadget ontology has initially been developed using the original OWL ontology language (or OWL 1). Since the start of the project, OWL 2\footnote{\url{http://www.w3.org/TR/owl-overview/}} has been released and is now a W3C recommendation. In order to avoid any potential migration issues, we have so far refrained from adopting OWL 2, but may do so in the future.
 
-Finally, to contribute to a lasting legacy of the FAST project, the gadget ontology will serve as input to standardisation efforts for the definition of semantic gadgets, which will go beyond the scope of the project itself.
+% Finally, to contribute to a lasting legacy of the FAST project, the gadget ontology will serve as input to standardisation efforts for the definition of semantic gadgets, which will go beyond the scope of the project itself.
 % section conclusions (end)
 
 % \clearpage
@@ -995,7 +1028,7 @@ In Methontology, documentation is an activity which is automatically carried out
 \label{sec:ontology_overview}
 % \addcontentsline{toc}{section}{Ontology Overview}
 
-\begin{figure}[h]
+\begin{figure}[ht]
   \begin{center}
     \includegraphics[width=.82\linewidth]{images/fgo_uml_diagram}
     \caption{FAST Gadget Ontology Class Hierarchy}
