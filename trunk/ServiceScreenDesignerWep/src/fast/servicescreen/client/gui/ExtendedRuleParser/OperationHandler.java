@@ -56,19 +56,23 @@ public class OperationHandler
 			
 			//add last list
 			operationList.add(operationList_part);
-			
+
 			//set up last tag name for RuleGUI
 			ArrayList<Operation> currentList;
 			for (Iterator<ArrayList<Operation>> opList_it = operationList.iterator(); opList_it.hasNext();)
 			{
 				currentList = opList_it.next();
 				
-				SourceTag sourceTag = getLastSourceTag(xmlDoc, currentList, 0);
-				
-				if(sourceTag != null && sourceTag.getCurrentXmlPart() != null)
+				if(currentList.size() > 0)
 				{
-					lastRealTagname = sourceTag.getTagName();
-					break;
+					Kind startKind = currentList.get(0).kind;
+					
+					//if it is not a constant
+					if(Kind.constant != startKind)
+					{
+						//take the last real tagname
+						lastRealTagname = getLastTagnameOf(currentList);
+					}
 				}
 			}
 		}
@@ -113,35 +117,31 @@ public class OperationHandler
 	public String executeOperations(Node xmlDoc, int elementsItemID)
 	{
 		String result = "";
-		SourceTag sourceTag = null;
 		
 		//Execute any operationList
 		for (Iterator<ArrayList<Operation>> iterator = operationList.iterator(); iterator.hasNext();)
 		{
 			//take currentOpList
 			ArrayList<Operation> currentList = (ArrayList<Operation>) iterator.next();
-
-			//set up sourceTag with last real tagName AND a solved xmlDoc
-			sourceTag = getLastSourceTag(xmlDoc, currentList, elementsItemID);
 			
-			if(sourceTag == null)
+			if(currentList.size() > 0)
 			{
-				sourceTag = new SourceTag();
-			}
-			
-			//if source contains values named by tagName, attach. Otherwise add value as constant
-			if(sourceTag.getCurrentXmlPart() != null)
-			{
-				String nodeValue = sourceTag.getCurrentXmlPart().getFirstChild().getNodeValue();
+				//if const, add. If not, execute operation
+				Kind firstOpKind = currentList.get(0).kind;
+				if(Kind.constant == firstOpKind)
+				{
+					result += currentList.get(0).value;
+				}
+				else
+				{
+					//set up sourceTag with last real tagName AND a solved xmlDoc
+					SourceTag sourceTag = getLastSourceTag(xmlDoc, currentList, elementsItemID);
 
-				//create/expand the result
-				result += executeOperationList(currentList, nodeValue) + " ";
-			}
-			else
-			{
-				result += sourceTag.getTagName()/*constant*/ + " ";
-				
-				currentList.get(0).kind = Kind.constant;
+					String nodeValue = sourceTag.getCurrentXmlPart().getFirstChild().getNodeValue();
+
+					//create/expand the result
+					result += executeOperationList(currentList, nodeValue);
+				}
 			}
 		}
 

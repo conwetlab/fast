@@ -94,6 +94,10 @@ public class ExtendedRuleParser
 				case plus:		//save the plus 
 								saveEntry(currentToken.getWord(), Kind.plus);
 								break;
+								
+				case constant:	//save the constant
+								saveEntry(currentToken.getWord(), Kind.constant);
+								break;
 			}
 			
 			nextToken();
@@ -173,7 +177,6 @@ public class ExtendedRuleParser
 			return Kind.plus;
 		}
 		
-		
 		//much more operations HERE
 
 		else
@@ -197,29 +200,62 @@ public class ExtendedRuleParser
 			nextChar();
 		}
 		
-		//get the word
-		while((Character.isLetterOrDigit(currentChar)
-			|| currentChar == '+' || currentChar == '-')
-			&& Character.MIN_VALUE != currentChar)
+		//check, if we parse a constant or any other
+		if(currentChar == '"')
 		{
-			word += currentChar;
+			nextChar(); //skip START "
 			
-			nextChar();
-		}
+			//get the constant
+			while(currentChar != '"' && Character.MIN_VALUE != currentChar)
+			{
+				word += currentChar;
+				
+				nextChar();
+			}
+			
+			nextChar(); //skip END "
+			
+			if(! "".equals(word))
+			{
+				//set value
+				token.setWord(word);
 
-		if(! "".equals(word))
-		{
-			//set value
-			token.setWord(word);
+				//set kind = constant
+				token.setKind(Kind.constant);
 
-			//set kind
-			token.setKind(defineType(word));
-
-			currentToken = token;
+				currentToken = token;
+			}
+			else
+			{
+				currentToken = null;
+			}
 		}
 		else
 		{
-			currentToken = null;
+			//get the word
+			while((Character.isLetterOrDigit(currentChar)
+				  || currentChar == '+' || currentChar == '-')
+				  && Character.MIN_VALUE != currentChar)
+			{
+				word += currentChar;
+				
+				nextChar();
+			}
+			
+			if(! "".equals(word))
+			{
+				//set value
+				token.setWord(word);
+
+				//set kind
+				token.setKind(defineType(word));
+
+				currentToken = token;
+			}
+			else
+			{
+				currentToken = null;
+			}
 		}
 	}
 	

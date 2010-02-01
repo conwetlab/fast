@@ -283,7 +283,7 @@ public class CodeGenerator
 				{
 					current_opList = opList_iter.next();
 					
-					if(current_opList.get(0).kind == Kind.constant)
+					if(current_opList.size() > 0 && current_opList.get(0).kind == Kind.constant)
 					{
 						//add a constant
 						transCode += current_opList.get(0).value;
