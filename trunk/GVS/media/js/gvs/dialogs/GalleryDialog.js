@@ -30,7 +30,9 @@ var GalleryDialog = Class.create(FormDialog, /** @lends GalleryDialog.prototype 
         // Assigning the passed parameters, or defaults
         this._properties.set('showTitleRow', (properties.showTitleRow || false));
         this._properties.set('elementsPerPage', (properties.elementsPerPage || 10));
-        this._properties.set('onDblClick', (properties.onDblClick || null));
+        this._properties.set('onDblClick', (properties.onDblClick || function(){}));
+        // Disable all the events if the selected row is not valid
+        this._properties.set('disableIfNotValid', (properties.disableIfNotValid || false));
 
         /**
          * Table fields
@@ -45,6 +47,14 @@ var GalleryDialog = Class.create(FormDialog, /** @lends GalleryDialog.prototype 
          * @private
          */
         this._buttons = null;
+
+        /**
+         * List of buttons that will be disabled if the selected row
+         * is not valid
+         * @type Array
+         * @private
+         */
+        this._disabledButtons = new Array();
         
         /**
          * List of rows
@@ -146,22 +156,38 @@ var GalleryDialog = Class.create(FormDialog, /** @lends GalleryDialog.prototype 
 
                 var element = event.findElement(".row");
                 element.addClassName("selected");
+
+                if (row.isValid) {
+                    this._disabledButtons.each(function(button) {
+                        button.attr('disabled', false);
+                    });
+                } else {
+                    this._disabledButtons.each(function(button) {
+                        button.attr('disabled', true);
+                    });
+                }
                 
                 this._selectedRow = row;
             }.bind(this));
             if (this._properties.get('onDblClick')) {
-                rowNode.observe('dblclick', function() {
-                    this._properties.get('onDblClick')(row.key);
-                }.bind(this));
+                if (!this._properties.get('disableIfNotValid') ||
+                    row.isValid) {
+                        rowNode.observe('dblclick', function() {
+                            this._properties.get('onDblClick')(row.key);
+                        }.bind(this));
+                }
             }
             content.appendChild(rowNode);
         }.bind(this));
         if (loadAll && this._rows.size() > 0) {
             this._removeButtons();
             this._buttons.each(function(button){
-                this._addButton(button.value, function() {
+                var buttonWidget = this._addButton(button.value, function() {
                     button.handler(this._selectedRow.key);
                 }.bind(this));
+                if (button.disableIfNotValid) {
+                    this._disabledButtons.push(buttonWidget);
+                }
             }.bind(this));
         }      
         if (!this._properties.get("showTitleRow") && content.firstChild) {
@@ -176,6 +202,16 @@ var GalleryDialog = Class.create(FormDialog, /** @lends GalleryDialog.prototype 
             this._addButton("Close", this._dialog.hide.bind(this._dialog));
         }
         this._selectedRow = this._rows[0];
+        
+        if (this._selectedRow.isValid) {
+            this._disabledButtons.each(function(button) {
+                button.attr('disabled', false);
+            });
+        } else {
+            this._disabledButtons.each(function(button) {
+                button.attr('disabled', true);
+            });
+        }
         this._setContent(content);
     },
 

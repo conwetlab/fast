@@ -1111,6 +1111,7 @@ var ScreenDocument = Class.create(PaletteDocument,
             this._createConditions(this._canvasCache.getPostconditions(), this._areas.get('post'));
             this._createPipes(this._canvasCache.getPipes());
             this._createTriggers(this._canvasCache.getTriggers());
+            this._refreshReachability();
         }
     }
 });

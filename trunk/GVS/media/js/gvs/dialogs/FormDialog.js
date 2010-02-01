@@ -104,6 +104,7 @@ var FormDialog = Class.create( /** @lends FormDialog.prototype */ {
 
     /**
      * This function adds a button with an onclick handler
+     * @type dijit.form.Button
      * @private
      */
     _addButton: function (/** String */ label, /** Function */ handler) {
@@ -114,6 +115,7 @@ var FormDialog = Class.create( /** @lends FormDialog.prototype */ {
 
         
         this._buttonNode.appendChild(button.domNode);
+        return button;
     },
 
     /**

@@ -6,7 +6,8 @@ var ManageScreensDialog = Class.create(GalleryDialog /** @lends ManageScreensDia
      * @extends GalleryDialog
      */ 
     initialize: function($super) {  
-        $super("Screen browser", {'onDblClick': this._openScreen.bind(this)});
+        $super("Screen browser", {'onDblClick': this._openScreen.bind(this),
+                                  'disableIfNotValid': true });
 
         /**
          * List of screens
@@ -66,7 +67,8 @@ var ManageScreensDialog = Class.create(GalleryDialog /** @lends ManageScreensDia
 
         this._setButtons([{
                 'value': 'Open screen',
-                'handler': this._openScreen.bind(this)
+                'handler': this._openScreen.bind(this),
+                'disableIfNotValid': true
             }, {
                 'value': 'Share/Unshare screen',
                 'handler': this._shareScreen.bind(this)
@@ -105,7 +107,8 @@ var ManageScreensDialog = Class.create(GalleryDialog /** @lends ManageScreensDia
                                     data.description['en-gb'],
                                 '<span class=' + (screen.uri ? '"shared"': '"unshared"') +
                                     '>&nbsp;</span>'
-                             ]
+                             ],
+                             'isValid': data.definition ? true : false
                         });
         }.bind(this));
     },
