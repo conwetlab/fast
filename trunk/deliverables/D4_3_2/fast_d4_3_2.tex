@@ -17,13 +17,33 @@
 \usepackage{amssymb} 
 \parindent0pt
 
+% This is useful for switching in-line comments on and off!
+\usepackage{ifthen}
+\newboolean{showcomments}
+\setboolean{showcomments}{true}
+\ifthenelse{\boolean{showcomments}}
+{
+	\definecolor{Red}{rgb}{1,0,0}
+	\newcommand{\note}[1]{\begin{scriptsize}{{\textsf{\textbf{{\textcolor{Red}{[[#1]]}}}}}}\end{scriptsize}}
+	\definecolor{Orange}{rgb}{1,0.5,0}
+	\newcommand{\todo}[1]{\textsf{\textbf{\textcolor{Orange}{[[TODO: #1]]}}}}
+    \definecolor{Green}{rgb}{0,1,0}
+    \newcommand{\commentreply}[1]{\begin{scriptsize}{\textsf{\textbf{\textcolor{Green}{[[#1]]}}}}\end{scriptsize}}
+} {
+	\newcommand{\note}[1]{\textbf{}}
+	\newcommand{\todo}[1]{}
+    \newcommand{\commentreply}[1]{}
+}
+
+
+
 \newcommand\deliverableNumber{D4.3.2}
 \newcommand\deliverableTitle{Mechanisms for Gadget-Service Connections and Gadget Functionality}
 \newcommand\deliverableTitleShort{Mechanisms for Gadget-Service Connections}
 \newcommand\workpackageNumber{4}
 \newcommand\workpackageTitle{Visual composition of screen-flow resources and interoperability with back-end Web Services}
 \newcommand\authorOne{Ismael Rivera, NUIG}
-\newcommand\authorTwo{Author 2}
+\newcommand\authorTwo{Albert Z\"undorf, UniKassel}
 \newcommand\authorThree{Author 3}
 \newcommand\authorFour{Author 4}
 \newtheorem{example}{\emph{Example}}
@@ -67,7 +87,7 @@
 		{\LARGE \sffamily \textbf{\deliverableTitle}}\\
 		\vspace{2cm}
 		{\large \sffamily \authorOne}\\
-%		{\large \sffamily \authorTwo}\\
+		{\large \sffamily \authorTwo}\\
 		\vspace{0.5cm}
 		\vfill
 		{\large \sffamily Date: 26/02/2010}\\
@@ -138,8 +158,6 @@
                             \textcolor{white}{\textbf{Date}} &
                             \textcolor{white}{\textbf{Author (Partner)}} &
 							\textcolor{white}{\textbf{Change description}}\\ \hline
-%0.1 & 15.12.2008 & Knud M\"oller (NUIG) & template modelled \\ \hline
-%0.2 & 15.02.2009 & Knud M\"oller (NUIG) & content moved from wiki after internal review \\ \hline
 1.0 & 26.02.2010 & Ismael Rivera (NUIG) & Final version ready for external review \\ \hline
 \end{tabular}
 \end{small}
@@ -174,7 +192,7 @@
 
 This deliverable exposes several mechanisms which will allow the connection and interaction between end-user's interfaces to third-party back-end services.
 
-These back-end services cannot be directly used; hence they need to be encapsulated in what in the FAST platform is called Resource Adapters. The application of semantics to the back-end, through the corresponding Resource Adapters, and front-end building blocks assures a powerful instrument in the task of building new gadgets, improving the search, and enhancing the connection among the different building blocks which compose a gadget.
+These back-end services cannot be directly used; hence they need to be encapsulated in what in the FAST platform is called Resource Adapters. The application of semantics to the back-end, through the corresponding resource adapters, and front-end building blocks assures a powerful instrument in the task of building new gadgets, improving the search, and enhancing the connection among the different building blocks which compose a gadget.
 
 Therefore, the focus of this deliverable is to define how these wrappers will be constructed to allow the FAST platform exploiting web services \cite{GustavoAlonso2003} such as RESTful web services, SOAP-based web services and semantic web services through WSMO, and define mechanisms to connect them within the gadgets.
 
@@ -218,15 +236,15 @@ Therefore, the focus of this deliverable is to define how these wrappers will be
 	\textcolor{white}{\textbf{Delivery data}} & {\textbf{Due date}} & {28/02/2009} & {\textbf{Submitted}} & {27/02/2009}\\ \hline
 	\textcolor{white}{\textbf{Status}} & \multicolumn{2}{l|}{} & \multicolumn{2}{l|}{final}\\ \hline
 	\textcolor{white}{\textbf{Dissemination Level}} & \multicolumn{4}{l|}{Public $\boxtimes$ / Consortium $\square$}\\ \hline
-	\textcolor{white}{\textbf{Short description of contents}} & \multicolumn{4}{p{10.85cm}|}{D4.3.2 is...}\\ \hline
+	\textcolor{white}{\textbf{Short description of contents}} & \multicolumn{4}{p{10.85cm}|}{This deliverable presents techniques to exploit different kind of web services such as RESTful, SOAP-based and WSMO services. It exposes how these services are commonly defined, and what FAST need to allow these web services to be use within a gadget. In this deliverable is also presented a tool which apply some of these techniques allowing users to create the necessary wrappers for these services.}\\ \hline
 	\textcolor{white}{\textbf{Authors}} & \multicolumn{4}{l|}{\authorOne}\\
-%	{} & \multicolumn{4}{l|}{}\\ 
+	{} & \multicolumn{4}{l|}{\authorTwo}\\ 
 %	{} & \multicolumn{4}{l|}{}\\ 
 %	{} & \multicolumn{4}{l|}{}\\
 	\hline
 	\textcolor{white}{\textbf{Deliverable Owner}} & \multicolumn{2}{l|}{\authorOne} & \textbf{email} & {ismael.rivera@deri.org} \\ \cline{4-5}
-	\textcolor{white}{\textbf{(Partner)}} & \multicolumn{2}{l|}{} & \textbf{phone} & {+353 91 ******} \\ \hline
-	\textcolor{white}{\textbf{Keywords}} & \multicolumn{4}{p{10.85cm}|}{FAST, web services, WSDL, REST, SOAP, WSMO}\\ \hline
+	\textcolor{white}{\textbf{(Partner)}} & \multicolumn{2}{l|}{} & \textbf{phone} & {+353 91 495338} \\ \hline
+	\textcolor{white}{\textbf{Keywords}} & \multicolumn{4}{p{10.85cm}|}{FAST, web service, WSDL, REST, SOAP, WSMO, Resource Adapter}\\ \hline
 \end{tabular}
 \end{small}
 \newpage
@@ -260,19 +278,24 @@ The objective of this deliverable is the analysis and development of mechanisms 
 \subsection{Structure of the Document} % (fold)
 \label{sub:structure_of_the_document}
 
-This deliverable is structured as follows. Section ~\ref{sec:introduction} states the goal, scope and structure of the document. Section ~\ref{sec:web_services_wrapping} describes what a service wrapper is, how the platform is able to interact with web services, how they these wrappers are build and then discovered to be reused in any gadget. Finally, Section ~\ref{sec:restful_web_services_wrapper_tool} defines the service wrapper tool built to facilitate FAST users to create Resource Adapters of RESTful web services.
+This deliverable is structured as follows. Section~\ref{sec:introduction} states the goal, scope and structure of the document. Section~\ref{sec:resource_adapters} describes what a resource adapter is, how the platform is able to interact with web services, how they these wrappers or adapters are build and then discovered to be reused in any gadget. Then, Section~\ref{sec:restful_web_services_wrapper_tool} defines the service wrapper tool built to facilitate FAST users to create resource adapters of RESTful web services. Finally, Section~\ref{sec:related_work}...\todo{Finish it!}
 
 % section introduction (end)
 
 \clearpage
-\section{Web Services Wrapping} % (fold)
-\label{sec:web_services_wrapping}
+\section{Resource Adapters} % (fold)
+\label{sec:resource_adapters}
 
 In the context of FAST philosophy, a service is a software element or system, often deployed within enterprise boundaries, designed to support interoperable Machine-to-Machine interaction over a network (e.g. Web Services, Databases, CORBA or RPC interfaces...). These services have to be used by the gadgets, but there are several complications to be resolved in order to communicate the front-end (i.e. the gadget user interface and logic) with those services, such as the disparity of interfaces and invocation mechanisms. Another issue is the complexity for an end-user to interact with those services. Hence, this interaction will be shift to a user-interaction paradigm through a user-friendly graphical interface (service front-end), allowing both humans and machines to interact with the services through a uniform fashion.
 
-Therefore, a complex gadget in terms of FAST is aimed to provide a functional access from a graphical user interface to a set of services (SOAP or REST-based Web services) and data sources (Atom/RSS feeds). These services and data sources need to be modelled and encapsulated within the platform in order to allow the discovery and use of them by other components (i.e. forms and operators). This is called Resource Adapter in the FAST platform. Figure ~\ref{fig:complex_gadget_architecture} illustrates their position and interaction with the rest of the building blocks within a gadget.
+The following sections explain what a resource adapter is, how a user, in this case a resource developer, can build these resource adapters, and how another user, a screen developer for instance, is able to discover and connect them while creating a screen. Hence, these three phases are called: building, discovery and connection.
 
-\begin{figure}
+\subsection{Definition} % (fold)
+\label{sub:definition}
+
+A complex gadget in terms of FAST is aimed to provide a functional access from a graphical user interface to a set of services (SOAP or REST-based Web services) and data sources (Atom/RSS feeds). These services and data sources need to be modelled and encapsulated within the platform in order to allow the discovery and use of them by other components (i.e. forms and operators). This is called Resource Adapter in the FAST platform. Figure~\ref{fig:complex_gadget_architecture} illustrates the role they play and which other building blocks they interact with within a gadget.
+
+\begin{figure}[!htb]
   \begin{center}
     \includegraphics[width=\linewidth]{images/ComplexGadgetArchitecture.pdf}
     \caption{Complex Gadget Architecture}
@@ -280,26 +303,46 @@ Therefore, a complex gadget in terms of FAST is aimed to provide a functional ac
   \end{center}
 \end{figure}
 
-Once a brief background has been shown, the following sections explain how a user, in this case a resource developer, can build Resource Adapters, and how another user, a screen developer for instance, will discover and connect them while creating a screen. Hence, these three phases are called: building, discovery and connection.
+Basically, a resource adapter, from a design point of view, is composed of:
+
+\begin{enumerate}
+	\item \textbf{metadata} such as creator, label, description, version, and so on,
+	\item a set of \textbf{actions} or operations,
+	\item and a set of \textbf{postconditions} or outputs of the resource.
+\end{enumerate}
+
+Figure~\ref{fig:resource_adapter_overview} shows the information above in a graphical manner. An action (represented by a white square) is the minimum unit for the functionality a resource may have. Imagine a user clicking on a button to get a list of items for sale, or a checkout action performed in order to buy one of the items from the list. As an analogy, an action is what a operation is in a SOAP-based web service. Moreover, as these operations require some input, the actions may need a certain precondition (green circles) to be satisfied. And at last, the execution of these action may cause a postcondition (red circle) be satisfied, or following the same example, an output is returned as result of the execution of an operation.
+
+\begin{figure}[!htb]
+  \begin{center}
+    \includegraphics[width=12cm]{images/resource_adapter.pdf}
+    \caption{Resource Adapter Overview}
+    \label{fig:resource_adapter_overview}
+  \end{center}
+\end{figure}
+
+% subsection definition (end)
 
 \subsection{Building} % (fold)
 \label{sub:building}
 
+This section describes different approaches for describing and implementing web services, and how a resource adapter could be generated for these services.
+
 \subsubsection{REST-based Web Services} % (fold)
 \label{ssub:rest_based_web_services}
 
-REST is a term to describe an architecture style, not a standard, of networked systems. The acronym REST stands for Representational State Transfer. REST-based or RESTful web services \cite{Fielding2000} are created identifying all of the conceptual entities or resources which want to be exposed as services. Those entities or resources should be nouns, not verbs (orders, tickets, etc.). Then, the interaction with those resources is made by convention using HTTP verbs such as GET, POST, PUT or DELETE, in order to retrieve, create, modify or delete them.
+REST \cite{Fielding2000} is a term to describe an architecture style, not a standard, of networked systems. The acronym REST stands for Representational State Transfer. REST-based or RESTful web services are created identifying all of the conceptual entities or resources which want to be exposed as services. Those entities or resources should be nouns, not verbs (orders, tickets, etc.). Then, the interaction with those resources is made by convention using HTTP verbs such as GET, POST, PUT or DELETE, in order to retrieve, create, modify or delete them.
 
-REST is lightweight (not a lot of extra xml markup, human readable results), but unlike SOAP-based web services, which have a standard vocabulary, and commonly used, to describe the web service interface through WSDL, RESTful web services are currently not formally described most of the times. For a service consumer to understand the context and content of the data that must be sent to and received from the service, both the service consumer and service producer must have an out-of-band agreement. This takes the form of documentation, sample code, and an API that the service provider publishes for developers to use. For example, the many web-based services available from Google, Yahoo, Flickr, Amazon, and so on have accompanying artefacts describing how to consume the services. This style of documenting REST-based web services is fine for use by developers, but it averts tools from programmatically consuming such services and generating artefacts specific to programming languages, as a web service described using WSDL allows. Nevertheless, Web Application Description Language (WADL) attempts to resolve some of these issues by providing a means to describe services in terms of schemas, HTTP methods, and the request or response structures exchanged, but this language is not widely adopted yet by RESTful web service developers.
+RESTful web services are more lightweight than SOAP-based web services, avoiding the verbose XML-based messages, but unlike the former, which have a standard vocabulary, and commonly used, to describe the web service interface through WSDL, RESTful web services are currently not formally described most of the times. For a service consumer to understand the context and content of the data that must be sent to and received from the service, both the service consumer and service producer must have an out-of-band agreement. This takes the form of documentation, sample code, and an API that the service provider publishes for developers to use. For example, the many web-based services available from Google, Yahoo, Flickr, Amazon, and so on have accompanying artifacts describing how to consume the services. This style of documenting REST-based web services is fine for use by developers, but it averts tools from programmatically consuming such services and generating executable stubs for a given programming language, as a web service described using WSDL allows. Nevertheless, Web Application Description Language (WADL) attempts to resolve some of these issues by providing a means to describe services in terms of schemas, HTTP methods, and the request or response structures exchanged, but this language is not widely adopted yet by RESTful web service developers.
 
-To permit a high number of REST-based web services to be integrated to the FAST platform, the approach taken is from a manual development perspective. There is no need of a formal document such as WADL defining the web service, for this reason, building service wrappers for these services involve the correct understanding of the service by a human being and a tool to facilitate this task. This tool is explained in detail in Section ~\ref{sec:restful_web_services_wrapper_tool}.
+To permit a high number of REST-based web services to be integrated to the FAST platform, the approach taken is from a manual development perspective. There is no need of a formal document such as WADL defining the web service, for this reason, building service wrappers for these services involve the correct understanding of the service by a human being and a tool to facilitate this task. This tool is explained in detail in Section~\ref{sec:restful_web_services_wrapper_tool}.
 
 % subsubsection rest_based_web_services (end)
 
 \subsubsection{SOAP Web Services} % (fold)
 \label{ssub:soap_web_services}
 
-SOAP-based web Services or "Heavyweight Web Services" use Extensible Markup Language (XML) \cite{XML1.1} messages that follow the Simple Object Access Protocol (SOAP) standard \cite{SOAP1.2} and have been popular with traditional enterprise, usually relying on HTTP for message negotiation and transmission. In such services, there is often a machine-readable description of the operations offered by the service written in a Web Services Description Language (WSDL) document. Hence, the advantage of using WSDL is that it can be programmatically processed. 
+SOAP-based web Services or "Heavyweight Web Services" use Extensible Markup Language (XML) \cite{XML1.1} messages that follow the Simple Object Access Protocol (SOAP) standard \cite{SOAP1.2} and have been popular within traditional enterprise, usually relying on HTTP for message negotiation and transmission. In such services, there is often a machine-readable description of the operations offered by the service written in a Web Services Description Language (WSDL) document. The advantage of specifying the service in a using WSDL is that it can be programmatically processed. 
 
 Shortly, a WSDL definition of a service, regarding the WSDL 2.0 specification \cite{WSDL2.0}, will contain the following information:
 \begin{description}
@@ -310,9 +353,31 @@ Shortly, a WSDL definition of a service, regarding the WSDL 2.0 specification \c
 	\item[Type definitions] A set of Type Definition components defining the content model of the element information items such as that defined by an XML Schema global type definition.
 \end{description}
 
-From a specific WSDL definition, a set of methods or operations can be easily extracted which encloses a set of inputs and outputs. These operations would be transformed into actions, and the inputs and outputs would be used to define Resource Adapter pre/postconditions. With the use of this information along with the XML Schema defining the types, a Resource Adapter can be semantically defined.
+From a specific WSDL definition, a set of methods or operations can be easily extracted which encloses a set of inputs and outputs. These operations would be transformed into \emph{actions}, and the inputs and outputs would be used to define resource adapter \emph{pre/postconditions}. But there is a critical problem following this approach. The definition of the inputs, outputs, operations and their types are done in a XML Schema document. An XML schema describes, in a syntactic manner, the structure of an XML document, but there is no straight-forward relation with the concepts used to describe pre/postconditions in the building blocks. In order to illustrate the concepts of WSDL, and the gap between them and semantically-defined building blocks, a shorten version of a real Amazon E-commerce web service will be presented. Concretely, the choosen web service performs an item search through the Amazon catalog. It expects as input an ItemSearch element, which may contain an actor, an artist or an author, and the item availability. The output of the service would be a set of items. The WSDL including for this service is given below.
 
-Moreover, there are several frameworks to facilitate the programmatic use of these formal definitions of web services. These frameworks shall be use to transform a WSDL definition into an executable Resource Adapter ready to use inside a gadget.
+\singlespacing
+\begin{small}
+\verbatiminput{examples/amazon.wsdl}
+\end{small}
+\doublespacing
+
+As stated before, one of the advantages of describing web services in a formal document is that they can be programmatically consumed. In fact, there are many frameworks out there to facilitate such a task, parsing WSDL files, creating stubs to consume the web service and so on. However, in order to create a resource adapter from the WSDL defined above, the types defined in the XML Schema need to be translated into concepts from an ontology.
+
+This problem could be addressed in two different ways. First one, as a manual process mapping these types and their attributes to concepts and properties, as it was proposed for RESTful services. Second approach is taking advantage of SAWSDL, which keeps the process in the programmatically direction.
+
+SAWSDL \cite{sawsdl} stands for Semantic Annotations for WSDL and XML Schema, and it defines how to add semantic annotations to various parts of a WSDL document such as input and output message structures, interfaces and operations. These semantic annotations enable the possibility to develop resource adapters from WSDL documents. They reference a concept in an ontology or a mapping document, and are either independent of the ontology expression languages and mapping languages.
+
+Basically, there are three main concepts about SAWSDL: \emph{modelReference} to specify the association between a WSDL or XML Schema component and a concept from the ontology, and \emph{liftingSchemaMapping} and \emph{loweringSchemaMapping} to define the mapping mechanisms between semantic data and XML. These lowering and lifting schema mappings are not explained in this deliverable, however in Appendix A of the SAWSDL specification \cite{sawsdl} they are described in detail, and illustrated with examples.
+
+To illustrate the usage of these attributes, the following code shows a fragment of the previous example using SAWSDL to semantically annotate the service with concepts from an imaginary ontology defining the Amazon E-commerce web service.
+
+\singlespacing
+\begin{small}
+\verbatiminput{examples/amazon_sawsdl.wsdl}
+\end{small}
+\doublespacing
+
+Hence, SAWSDL enriches the web services descriptions made in WSDL with references to concepts from a semantic model and enables the possibility to create resource adapters from these definitions without a strong user participation in the process. If the semantic metadata is missing, a manual annotation process could be considered, where the user would need to relate concepts from an ontology with the WSDL or XML Schema elements, and create the mapping between them manually as well.
 
 % subsubsection soap_web_services (end)
 
@@ -329,24 +394,191 @@ Capabilities and interfaces are the two types of Web Service description in WSMO
 	\item How the functionality of a web service is enabled by interacting with other Web Services. This is called Orchestration.
 \end{enumerate}
 
-A web service in WSMO defines one and only one capability. The capability of a web service defines its functionality in terms of pre/postconditions, assumptions and effects. A web service capability is defined by specifying the following elements: non-functional properties, imported ontologies, used mediators, shared variables, precondition, postcondition, assumption, and effect.
+A web service in WSMO defines one and only one capability. The capability of a web service defines its functionality in terms of pre/postconditions, assumptions and effects. Apart from that, a web service capability is defined by specifying the following elements: non-functional properties, imported ontologies, used mediators, and shared variables. The creation of the resource adapters for these web services will just take into consideration the set of pre/postconditions.
 
-Basically, the web service will offers to a client a postcondition when some conditions are met in the information space (precondition). Effects and assumptions can stay out of this study, since they will not be taken into account by any of the building blocks of a gadget.
+In the rest of the section, the Amazon E-commerce web service will be used to build a WSMO web service with the same functionality \cite{wsmo_amazon}. In fact, just the small subset of the service, used in previous sections, will be tranformed.
 
-NEED TO BE FINISHED
+First of all, an ontology needs to be extracted from the XML Schema types of the WSDL definition. For the shake of simplificity, this example does a one-to-one mapping between the Schema types and the concepts, though a real sceneario may consider an different approach to optimise the modelling.
 
+The concept describing an item search request for the Amazon web service is:
+
+\singlespacing
+\begin{small}
+\begin{verbatim}
+concept itemSearchRequest
+    nonFunctionalProperties
+      dc#description hasValue "A request to search for an item"
+    endNonFunctionalProperties
+    author ofType _string
+    title ofType (1) _string
+    rating ofType ratings#audienceRating
+    minPrice ofType (1) _decimal
+    maxPrice ofType (1) _decimal
+\end{verbatim}
+\end{small}
+\doublespacing
+
+The concept \emph{itemContainer} describes a list of items returned in the item search response, and its code is presented below:
+
+\singlespacing
+\begin{small}
+\begin{verbatim}
+concept itemContainer
+    nonFunctionalProperties
+      dc#description hasValue "Contains a list of items"
+    endNonFunctionalProperties
+    items ofType item
+\end{verbatim}
+\end{small}
+\doublespacing
+
+Next step would be to describe the namespace and non-functional properties declarations for the WSMO Amazon web service, but as it was said, this information is not relevant for the example. Hence, the simplified version of the Amazon web service preconditions would look like:
+
+\singlespacing
+\begin{small}
+\begin{verbatim}
+precondition
+  nonFunctionalProperties
+     dc#description hasValue "The Amazon service handles requests 
+     for searching for items by keywords"
+  endNonFunctionalProperties
+  definedBy
+    // A search by author, title, minPrice or maxPrice
+    ?request memberOf am#itemSearchRequest
+\end{verbatim}
+\end{small}
+\doublespacing
+
+It is a fairly simple precondition, which the only condition required is the existence of a \emph{itemSearchRequest} object.
+
+However, postconditions are a bit more difficult to construct. They take the form of implication rules, so given a particular precondition, one particular postcondition will take effect. To follow the same example, these would be the postconditions for the Amazon search items functionality, including just the criterion author, title, minimum and maximum price as defined in the ontology.
+
+\singlespacing
+\begin{small}
+\begin{verbatim}
+ postcondition
+  nonFunctionalProperties
+    dc#description hasValue "The service returns a list of searched
+      items"
+  endNonFunctionalProperties
+  // The result for a search request by author is a container of products
+  // such that all items in the container have the requested author
+  (?request[
+      author hasValue ?author
+    ] memberOf am#searchItems implies 
+    exists ?container 
+      (?container memberOf am#itemContainer and 
+        forall ?item 
+          (?container[
+              items hasValue ?item
+            ] implies 
+            ?item[
+              author hasValue ?author
+            ]
+          )
+      )
+  ) and
+  
+  // The result for a search request by title is a container of products
+  // such that all items in the container have the requested title
+  (?request[
+      title hasValue ?title
+    ] memberOf am#searchItems implies 
+    exists ?container 
+      (?container memberOf am#itemContainer and 
+        forall ?item 
+          (?container[
+              items hasValue ?item
+            ] implies 
+            ?item[
+              title hasValue ?title
+            ]
+          )
+      )
+  ) and 
+  
+  // The result for a search request by minPrice is a container of products
+  // such that all items in the container have a price >= requested minPrice
+  (?request[
+      minPrice hasValue ?minPrice
+    ] memberOf am#searchItems implies 
+    exists ?container 
+      (?container memberOf am#itemContainer and 
+      forall{?item,?price} 
+        (?container[
+            items hasValue ?item
+          ] and 
+          ?item[
+            price hasValue ?price
+          ] implies 
+          ?price >= ?minPrice
+        )
+      )
+  ) and 
+  
+  // The result for a search request by maxPrice is a container of products
+  // such that all items in the container have a price <= requested maxPrice
+  (?request[
+      maxPrice hasValue ?maxPrice
+    ] memberOf am#searchItems implies 
+    exists ?container 
+      (?container memberOf am#itemContainer and 
+      forall {?item,?price} 
+        (?container[
+            items hasValue ?item
+          ] and 
+          ?item[
+            price hasValue ?price
+          ] implies 
+          ?price =< ?maxPrice
+        )
+      )
+  ).
+\end{verbatim}
+\end{small}
+\doublespacing
+
+The manner pre/postconditions are defined in WSMO web services are similar to the way they are defined in the Resource Adapters. Section 4.4 in \cite{moller2010fast_ontology} gives a detailed explanation on this topic. Basically, and using previous examples, the preconditions would be transformed as follows:
+
+\begin{verbatim}
+?request memberOf am#itemSearchRequest => ?request rdf:type am:itemSearchRequest
+\end{verbatim}
+
+And a simple postcondition would be transformed as follows:
+
+\begin{verbatim}
+exists ?container 
+      (?container memberOf am#itemContainer) => ?container rdf:type am:itemContainer
+\end{verbatim}
+
+      
 % subsection building (end)
 
-\subsection{Discovering} % (fold)
-\label{sub:discovering}
+\subsection{Discovery} % (fold)
+\label{sub:discovery}
 
-In the building phase, every Resource Adapter is created sharing a common structure for screen components, such as forms, operators and resources. Hence, it will have a set of actions which will contain a set of preconditions to satisfy in order to be executed, and after its execution, it may produce any of the conditions of their postconditions.
+In the building phase, every resource adapter is created sharing a common structure for screen components, such as forms, operators and resources. Hence, it will have a set of actions which will contain a set of preconditions to satisfy in order to be executed, and after its execution, it may produce any of the conditions of their postconditions.
 
 For this reason, a screen developer during the screen development phase is able to reuse these screen components which are already stored in the catalogue, establishing which the screen's pre/postconditions are, and then the system will suggest several screen components which may satisfy these pre/postconditions. In a first step, the system will suggest screen components which have any of the preconditions which can be connected to any of the screen preconditions (the connection will be represented by an internal pipe), and the same would happen for the postconditions. Once a screen component is inserted into the screen, the system will take its definition into consideration to recommend new screen components which can be connected to the ones the screen is composed of.
 
-In these bases, the mechanism is relatively similar to the screen recommender, used to find the best screens to create a screen flow. Once more, it is based on the pre/postconditions of a set of building blocks.
+On these basis, the mechanism is relatively similar to the screen recommender, used to find the best screens to create a screen flow. Once more, it is based on the pre/postconditions of a set of building blocks.
 
 % subsection discovery (end)
+
+\subsection{Connection} % (fold)
+\label{sub:connection}
+
+A resource adapter is aimed to perform some action on a web service. In order to perform a given action, a precondition may need to be fulfilled, and as a result of the execution a postcondition may be generated. These pre/postconditions are intended to be used by pre/postconditions of other building blocks within a gadget. This connection must be explicitly defined, because it will indicate the real data-flow between different building blocks. In FAST this is commonly called Piping, since a pipe in computer science is just that, a one-way communication channel for interprocess communication; therefore a pipe is a logical connection made between a precondition and a postcondition of different building blocks. Figure~\ref{fig:Piping} shows an example of a search form for the Amazon service. This is a screen, composed by a form and a resource adapter. The form allows the user to introduce a term for the search, producing a postcondition which will be redirect to a resource adapter precondition. The execution of the web services produces a list of results, which will be forward to the postcondition of the screen.
+
+\begin{figure}[!htb]
+  \begin{center}
+    \includegraphics[width=12cm]{images/piping.pdf}
+    \caption{Piping}
+    \label{fig:Piping}
+  \end{center}
+\end{figure}
+
+% subsection connection (end)
 
 % section web_services_wrapping (end)
 
@@ -354,7 +586,7 @@ In these bases, the mechanism is relatively similar to the screen recommender, u
 \section{RESTful Web Services Wrapper Tool} % (fold)
 \label{sec:restful_web_services_wrapper_tool}
 
-In FAST, the wrapper tool will be in charge of the Resource Adapters' building phase. At the moment, just supports RESTful web services. The building phase for this type of web services is done in two steps: a first step will be in charge of the construction of a service request and a second step will analyse the response got from the execution of the service, allowing the extraction of facts contained in that response and mapping them to domain-specific concepts from the ontologies used within FAST by any building block.
+In FAST, the wrapper tool will be in charge of the resource adapters' building phase. At the moment, it just supports RESTful web services. The building phase for this type of web services is done in two steps: a first step will be in charge of the construction of a service request and a second step will analyse the response got from the execution of the service, allowing the extraction of facts contained in that response and mapping them to domain-specific concepts from the ontologies used within FAST by any building block.
 
 \subsection{Constructing service requests} % (fold)
 \label{sub:constructing_service_requests}
@@ -377,70 +609,62 @@ If needed, a detailed specification of the Ebay Shopping API can be found at \ci
 
 The above URL for searching items in Ebay is followed by the query parameters, which take the form \textit{argument=value}, where the arguments and values are URL encoded, and are separated by an ampersand (\&). For instance, the only relevant parameter the user would need to specify is \emph{querykeywords}, thus somehow the service has to receive an input value for it, while the other parameters can be set to a default value. However, in order to develop a generic wrapper for the any service, all parameters might be set by the user.
 
-To achieve this, service wrappers will be handled as pseudo-screens with preconditions and postconditions (inputs and outputs). Therefore, these precondition ports might be used to determine values to parameters like query keywords coming from a building block inside the screen the service is placed or even an external screen as a screen precondition. 
+To achieve this, service wrappers will be handled as any buis with preconditions and postconditions (inputs and outputs). Therefore, these precondition ports might be used to determine values to parameters like query keywords coming from a building block inside the screen the service is placed or even an external screen as a screen precondition. The service wrapper tool composes the request using a template string which will contain placeholders for precondition values. Before sending the request to the service, the placeholders are replaced with their corresponding values and the resulting URL is then ready to be sent the service request.
 
-To define the preconditions and postconditions of a new service wrapper the FAST service wrapper tool provides a form that allows the editing of these entries, cf. Figure \ref{fig:construct_pre_post_conditions}\footnote{This screen dump is a combination of two different FAST tool screen dumps that show how the final tool will look like. We add a real screen dump ASAP.}. Note, we allow to edit example values for the preconditions. These example values may be used to test the service wrapper. 
+To achieve this, service wrappers will be handled as any other building block with preconditions and postconditions (inputs and outputs). Therefore, these precondition ports might be used to determine values to parameters like query keywords coming from a building block inside the screen the service is placed or even an external screen as a screen precondition. 
 
-\begin{figure}
-  \begin{center} \includegraphics[width=\linewidth]{images/ServiceWrapperToolGVSWithPortDefinitions.jpg}
-    \caption{Configuring pre- and postconditions of a service wrapper (photoshoped screen dump)}
+To define the preconditions and postconditions of a new service wrapper, the FAST service wrapper tool provides a form allowing the edition of these entries, cf. Figure~\ref{fig:construct_pre_post_conditions}\footnote{Note: These example values may be used to test the service wrapper, but they can be freely edited.} 
+
+\begin{figure}[!htb]
+  \begin{center}
+    \includegraphics[width=\linewidth]{images/ServiceWrapperToolGVSWithRequestExample.jpg}
+    \caption{Configuring pre/postconditions of a service wrapper}
     \label{fig:construct_pre_post_conditions}
   \end{center}
 \end{figure}
 
 The service wrapper tool composes the request using a template string which will contain placeholders for precondition values. Before sending the request to the service, the placeholders are replaced with their corresponding values and the resulting URL is then ready to be sent the service request.
 
-Figure ~\ref{fig:construct_service_request} shows the screen to construct the service requests.
+Figure~\ref{fig:construct_service_request} shows the screen to construct the service requests. In the top input field of Figure~\ref{fig:construct_service_request}, the user may drop an example HTTP request taken e.g. form the service documentation (e.g. \cite{eBayShoppingAPIs} for this example). The tool analyses the example request and, in the middle of the screen, a form for editing the request parameters is provided. This example shows how a user has connected the \textit{QueryKeywords} parameter with the precondition \textit{search\_key} by adding a corresponding reference to the value field of that parameter. In addition, an access key has been retrieved and has been entered as value for the \textit{appid} parameter.
 
-\begin{figure}
+\begin{figure}[!htb]
   \begin{center}
     \includegraphics[width=\linewidth]{images/ServiceWrapperToolGVSWithRequestExample.jpg}
-    \caption{Constructing the service request URL and its parameters (photoshoped screen dump)}
+    \caption{Constructing the service request URL and its parameters}
     \label{fig:construct_service_request}
   \end{center}
 \end{figure}
 
-In the top input field of Figure ~\ref{fig:construct_service_request}, the user may drop an example http request taken e.g. form the service documentation e.g. from \cite{eBayShoppingAPIs}. The tool analyses the example request and in the middle of the screen a form for editing the request parameters is provided. In our example, the user has connected the \textit{QueryKeywords} parameter with the precondition \textit{search\_key} by adding a corresponding reference to the value field of that parameter. In addition, we have retrieved an access key which has been entered as value for the \textit{appid} parameter.
-
-Below the request paramter editing form of Figure ~\ref{fig:construct_service_request}, a \textit{Send Request} button allows to validate the constructed service by sending it to the specified service address (via a server relay). Then the placeholders for preconditions are replaced with example values and the resulting http request is shown below the parameter form. In addition, the request is send and the response is shown on the bottom of that page. This gives the user a fast feedback whether the constructed request works as desired. 
-
-\subsubsection{Limitations} % (fold)
-\label{ssub:limitations}
-
-It is worth pointing out that currently the wrapper tool is able to construct input ports for the wrappers using just basic types. However, every building block accepts any (complex) concept as a pre/postcondition, so the wrapper tool needs to be adapted to permit any concept as input or precondition, extracting the required text to construct the request. This is planned for the third year. 
-
-% subsubsection limitations (end)
+Below the request paramter editing form of Figure~\ref{fig:construct_service_request}, a \textit{Send Request} button allows to validate the constructed service by sending it to the specified service address (via a server relay). Then the placeholders for preconditions are replaced with example values and the resulting HTTP request is shown below the parameter form. In addition, the request is sent and the response is shown on the bottom of that page, which helps the users to figure out quickly whether the constructed request works as desired. 
 
 % subsection constructing_service_requests (end)
 
 \subsection{Interpreting service responses} % (fold)
 \label{sub:interpreting_service_responses}
 
-Once the service request is constructed and sent to the service provider, it will send back a response. This response message could be serialize in any format, though the most common formats used nowadays are XML or JSON among others. To continue the example started in the previous section, the response of the Ebay Shopping service will be in XML as specified in the request, which is the format supported by the wrapper tool.
+Once the service request is constructed and sent to the service provider, it will send back a response. This response message could be serialize in any format, though the most common formats used nowadays are XML or JSON among others. To continue the example it was started in the previous section, the response of the Ebay Shopping service will be in XML as specified in the request, which is the format supported by the wrapper tool.
 
-\subsubsection{Translation XML into Facts} % (fold)
-\label{ssub:translation_xml_into_facts}
-
-Figure ~\ref{fig:response_service_execution} shows the data tranformation tab of the wrapper tool. 
+Figure~\ref{fig:response_service_execution} shows the transformation data tab of the wrapper tool. 
 
 \begin{figure}
   \begin{center}
-      \includegraphics[angle=90,width=0.8\linewidth]{images/ServiceWrapperToolGVSWithTransformationRules.jpg}
-    \caption{Interactive, rule based transforming of an XML response to FAST facts (photoshoped screen dump)}
+    \includegraphics[angle=90,width=0.8\linewidth]{images/ServiceWrapperToolGVSWithTransformationRules.jpg}
+    \caption{Interactive rule based transformation of an XML response to FAST facts}
     \label{fig:response_service_execution}
   \end{center}
 \end{figure}
 
-Once the service response, in XML format, has been retrieved, the transformation tab shows it as an interactive object tree on the left side of Figure ~\ref{fig:response_service_execution}. To construct this interactive object, the XML document has been parsed into a DOM, and a simplified tree representation of that DOM is built up. This tree representation of the XML data is used as an input to construct transformation rules.
+Once the service response, in XML format, has been retrieved, the transformation tab shows it as an interactive object tree on the left side of Figure~\ref{fig:response_service_execution}. To construct this interactive object, the XML document has been parsed into a DOM, and a simplified tree representation of that DOM is built up. This tree representation of the XML data is used as an input to construct transformation rules.
 
-A transformation rule is used to analyse the XML data and to generate domain-specific facts from concepts from the ontologies used by the pre/postconditions of the different building blocks. A transformation rule is composed of three elements, cf the middle part of Figure ~\ref{fig:response_service_execution}. First, the \textit{from} field indicates the XML elements to be translated by rule. These XML elementsare identified by the tagname of a DOM element from the XML document. Second, the type of the rule will be set, taking one of the following values: \emph{createObject}, \emph{fillAttributes} or \emph{dummy}. And third, the target of the rule specifies a certain concept or attribute, to be created or filled. A detailed explanation of the type of actions to be trigger from the transformation rules is:
+A transformation rule is used to analyse the XML data and to generate domain-specific facts from concepts from the ontologies used by the pre/postconditions of the different building blocks. A transformation rule is composed of three elements, cf the middle part of Figure~\ref{fig:response_service_execution}. First, the \textit{from} field indicates the XML elements to be translated by rule. These XML elementsare identified by the tagname of a DOM element from the XML document. Second, the type of the rule will be set, taking one of the following values: \emph{createObject}, \emph{fillAttributes} or \emph{dummy}. And third, the target of the rule specifies a certain concept or attribute, to be created or filled. A detailed explanation of the type of actions to be trigger from the transformation rules is:
+
 \begin{description}
-	\item[action \emph{createObject}] specifies the creation of a new fact object. The type of that new fact is provided in the third compartment. In the example being explained, the root rule searches for XML elements with tagname \emph{FindItemsResponse} and for each such element a \emph{List} fact is created. The resulting facts are shown in a facts tree in the right of Figure ~\ref{fig:response_service_execution}.
+	\item[action \emph{createObject}] specifies the creation of a new fact object. The type of that new fact is provided in the third compartment. In the example being explained, the root rule searches for XML elements with tagname \emph{FindItemsResponse} and for each such element a \emph{List} fact is created. The resulting facts are shown in a facts tree in the right of Figure~\ref{fig:response_service_execution}.
 	\item[action \emph{fillAttributes}] does not create a new fact but it fills the value of the attribute provided as third part of such rules. In our example, the third transformation rule searches for XML elements with tagname \emph{Title}. Note, the rule is a sub-rule of the second rule, which generates \emph{Product} facts. Thus, the sub-rule searches for \emph{Title} tags only in the subtree of the XML data that has been identified by an application of the parent rule before. For example, the \emph{Item} rule may just have been applied to the first \emph{Item} element of the XML data. Then, the \emph{Title} rule is applied only to the first \emph{Item} sub-tree of the XML data and thus it will find only one \emph{Title} element in that sub-tree (not visible in Figure ~\ref{fig:response_service_execution} ). The value of that \emph{Title} element is then transfered to the \emph{productName} attribute of the corresponding \emph{Product} fact. Actually, our \textit{from} fields allows also to refer to parts of an XML attribute e.g. to \textit{words} 1 through 3. It is also possible to combine constant text and elements of multiple XML tree elements. 
 	\item[action \emph{dummy}] does not create or modify any facts but such rules are just used to narrow the search space for their sub-rules. For example, in the Amazon case, the XML data for an item contains sections for \emph{minimum price}, \emph{maximum price}, and \emph{average price}. Each such section contains the \emph{plain price} and the \emph{formatted price}. Thus, in the Amazon case, a rule that searches for \emph{formatted price} elements within an \emph{Item} element would retrieve three matches. Using a dummy rule, we may first search for \emph{minimum price} elements and then search for \emph{formatted price} elements within that sub-tree.
 \end{description}
 
-Since FAST is storyboard oriented, the service wrapper tool follows the storyboard idea as well. Any time, a change to a transformation rule is done, the transformation process is triggered and the resulted facts tree is directly shown. This process helps the user to deal with the slightly complex semantics of the transformation rules avoiding errors or mistakes. In addition, FAST is semantic-driven, therefore, the service wrapper designer shall retrieve the domain-specific types from a FAST ontology server together with the structure of each type, i.e. together with a description of the attributes of each fact. Thus, the transformation rule editor is able to provide selection boxes for the target element of the rules. For a \emph{createObject} rule, this selection box shows the fact types available for that domain. For the \emph{fillAttributes} rules, the selection box shows the attributes of the fact type chosen in the parent rule. In addition, we may provide some analysis tool, which will help to guarantee that the facts generated by the transformation rules conform to the fact types defined in the corresponding FAST ontology. This helps to ensure that the facts generated by the designed pseudo screen will be compatible for precondition ports of subsequent filter steps and or screens.
+Since FAST is storyboard oriented, the service wrapper tool follows the storyboard idea as well. Any time, a change to a transformation rule is done, the transformation process is triggered and the resulted facts tree is directly shown. This process helps the user to deal with the slightly complex semantics of the transformation rules avoiding errors or mistakes. In addition, FAST is semantic-driven, therefore, the service wrapper designer shall retrieve the domain-specific types from a FAST ontology server together with the structure of each type, i.e. together with a description of the attributes of each fact. Thus, the transformation rule editor is able to provide selection boxes for the target element of the rules. For a \emph{createObject} rule, this selection box shows the fact types available for that domain. For the \emph{fillAttributes} rules, the selection box shows the attributes of the fact type chosen in the parent rule. In addition, we may provide some analysis tool, which will help to guarantee that the facts generated by the transformation rules conform to the fact types defined in the corresponding FAST ontology. This helps to ensure that the facts generated will be compatible for precondition ports of subsequent filter steps.
 
 % subsubsection translation_xml_into_facts (end)
 
@@ -449,7 +673,7 @@ Since FAST is storyboard oriented, the service wrapper tool follows the storyboa
 \subsection{Generating a Resource Adapter} % (fold)
 \label{sub:generating_a_resource_adapter}
 
-Once the wrapping of a service has been defined and tested in the service wrapper tool, it shall generate an implementation of the desired Resource Adapter in XML, HTML, and JavaScript, ready to be deployed and executed inside a gadget. This service wrapper implementation is compliant with the formats required by the Gadget Visual Storyboard Tool (GVS) and it shall be stored inside the FAST catalogue, in order to be found and used by any user.
+Once the wrapping of a service has been defined and tested in the service wrapper tool, it shall generate an implementation of the desired Resource Adapter in JSON, HTML, and JavaScript, ready to be deployed and executed inside a screen. This service wrapper implementation is compliant with the formats required by the Gadget Visual Storyboard Tool (GVS) and it shall be stored inside the FAST catalogue, in order to be found and used by any user.
 
 % subsection generating_a_resource_adapter (end)
 
@@ -468,14 +692,14 @@ However, we there are some transformations that these rules cannot perform. For 
 \section{Related Work} % (fold)
 \label{sec:related_work}
 
-The rule based approach of the service wrapper tool has been inspired by triple graph grammars, cf. \cite{conf/wg/Schurr94,JSZ97c}. While general triple graph grammars allow to relate complex graph structures with each other, in our case the target of a rule is always a single object or attribute. This facilitates the whole mechanism, reasonably. 
+The rule based approach of the service wrapper tool has been inspired by triple graph grammars, cf. \cite{Schurr94,JSZ97c}. While general triple graph grammars allow to relate complex graph structures with each other, in our case the target of a rule is always a single object or attribute. This facilitates the whole mechanism, reasonably. 
 
 Write about some related work such as:
 
 Wrapping WSDL-Described Web Services as Moby Services (using SAWSDL)
 \url{http://biomoby.open-bio.org/CVS_CONTENT/moby-live/Java/docs/sawsdlServlet.html}
 
-
+Perhaps, it's worth to mention the service wrappers Yahoo Pipes has, which are a fixed set developed by them, with no possibility for a user to create new ones, as we do. (other sites doing the same??)
 
 % section related_work (end)
 

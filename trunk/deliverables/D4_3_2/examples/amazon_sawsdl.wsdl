@@ -1,0 +1,56 @@
+<definitions
+  xmlns="http://schemas.xmlsoap.org/wsdl/"
+  xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+  xmlns:xs="http://www.w3.org/2001/XMLSchema"
+  xmlns:sawsdl="http://www.w3.org/ns/sawsdl"
+  xmlns:tns="http://webservices.amazon.com/AWSECommerceService/2009-11-01"
+  targetNamespace="http://webservices.amazon.com/AWSECommerceService/2009-11-01"> 
+  
+  <types> 
+  	<xs:schema
+      targetNamespace="http://webservices.amazon.com/AWSECommerceService/2009-11-01"
+      xmlns:xs="http://www.w3.org/2001/XMLSchema"
+      xmlns:tns="http://webservices.amazon.com/AWSECommerceService/2009-11-01"
+      elementFormDefault="qualified"> 
+
+      <xs:element name="ItemSearch"
+      		sawsdl:modelReference="http://ontologies.amazon.com/AWS#ItemSearch"
+      		sawsdl:loweringSchemaMapping="http://mapping.amazon.com/AWS/Ont2ItemSearch.xml" 
+      		sawsdl:liftingSchemaMapping="http://mapping.amazon.com/AWS/ItemSearch2Ont.xslt"> 
+        <xs:complexType> 
+          <xs:sequence> 
+            <xs:element name="Author" type="xs:string" minOccurs="0"/
+            		sawsdl:modelReference="someURI"
+            		sawsdl...> 
+            <xs:element name="Title" type="xs:string" minOccurs="0"/>
+            <xs:element ref="tns:AudienceRating" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element name="MinimumPrice" type="xs:nonNegativeInteger" minOccurs="0"/>
+            <xs:element name="MaximumPrice" type="xs:nonNegativeInteger" minOccurs="0"/>
+          </xs:sequence> 
+        </xs:complexType> 
+      </xs:element> 
+      <xs:element name="ItemSearchResponse"
+      		sawsdl:modelReference="http://ontologies.amazon.com/AWS#ItemSearch"
+      		sawsdl:loweringSchemaMapping="http://mapping.amazon.com/AWS/Ont2ItemSearch.xml"
+      		sawsdl:liftingSchemaMapping="http://mapping.amazon.com/AWS/ItemSearch2Ont.xslt"> 
+        <xs:complexType> 
+          <xs:sequence> 
+            <xs:element ref="tns:Items" minOccurs="0" maxOccurs="unbounded"/> 
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+    </xs:schema>
+  </types>
+    
+  <message name="ItemSearchRequestMsg"
+  		sawsdl:modelReference="http://ontologies.amazon.com/AWS#ItemSearchRequest"> 
+    <part name="body" element="tns:ItemSearch"/> 
+  </message> 
+  <message name="ItemSearchResponseMsg"
+  		sawsdl:modelReference="http://ontologies.amazon.com/AWS#ItemSearchResponse"> 
+    <part name="body" element="tns:ItemSearchResponse"/> 
+  </message> 
+  
+  ...
+  
+</definitions>

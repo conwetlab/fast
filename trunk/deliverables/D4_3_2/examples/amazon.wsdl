@@ -1,0 +1,74 @@
+<definitions
+  xmlns="http://schemas.xmlsoap.org/wsdl/"
+  xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+  xmlns:xs="http://www.w3.org/2001/XMLSchema"
+  xmlns:tns="http://webservices.amazon.com/AWSECommerceService/2009-11-01"
+  targetNamespace="http://webservices.amazon.com/AWSECommerceService/2009-11-01"> 
+  
+  <types> 
+  	<xs:schema
+      targetNamespace="http://webservices.amazon.com/AWSECommerceService/2009-11-01"
+      xmlns:xs="http://www.w3.org/2001/XMLSchema"
+      xmlns:tns="http://webservices.amazon.com/AWSECommerceService/2009-11-01"
+      elementFormDefault="qualified"> 
+
+      <xs:element name="ItemSearch"> 
+        <xs:complexType> 
+          <xs:sequence> 
+            <xs:element name="Author" type="xs:string" minOccurs="0"/> 
+            <xs:element name="Title" type="xs:string" minOccurs="0"/>
+            <xs:element ref="tns:AudienceRating" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element name="MinimumPrice" type="xs:nonNegativeInteger" minOccurs="0"/>
+            <xs:element name="MaximumPrice" type="xs:nonNegativeInteger" minOccurs="0"/>
+          </xs:sequence> 
+        </xs:complexType> 
+      </xs:element> 
+      <xs:element name="ItemSearchResponse"> 
+        <xs:complexType> 
+          <xs:sequence> 
+            <xs:element ref="tns:Items" minOccurs="0" maxOccurs="unbounded"/> 
+          </xs:sequence> 
+        </xs:complexType> 
+      </xs:element> 
+    </xs:schema> 
+  </types>
+  
+  <message name="ItemSearchRequestMsg"> 
+    <part name="body" element="tns:ItemSearch"/> 
+  </message> 
+  <message name="ItemSearchResponseMsg"> 
+    <part name="body" element="tns:ItemSearchResponse"/> 
+  </message> 
+  
+  <portType name="AWSECommerceServicePortType"> 
+    <operation name="Help"> 
+      <input message="tns:HelpRequestMsg"/> 
+      <output message="tns:HelpResponseMsg"/> 
+    </operation> 
+    <operation name="ItemSearch"> 
+      <input message="tns:ItemSearchRequestMsg"/> 
+      <output message="tns:ItemSearchResponseMsg"/> 
+    </operation> 
+  </portType>
+  
+  <binding name="AWSECommerceServiceBinding" type="tns:AWSECommerceServicePortType"> 
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/> 
+    <operation name="ItemSearch"> 
+      <soap:operation soapAction="http://soap.amazon.com/ItemSearch"/> 
+        <input> 
+          <soap:body use="literal"/> 
+        </input>
+        <output>
+          <soap:body use="literal"/> 
+        </output>
+    </operation>
+  </binding>
+  
+  <service name="AWSECommerceService"> 
+    <port name="AWSECommerceServicePort" binding="tns:AWSECommerceServiceBinding"> 
+      <soap:address
+      		location="https://ecs.amazonaws.com/onca/soap?Service=AWSECommerceService"/> 
+    </port> 
+  </service> 
+  
+</definitions>
