@@ -285,21 +285,17 @@ public class CodeGenerator
 					
 					if(current_opList.get(0).kind == Kind.constant)
 					{
-						//es gilt eine Konstante zu adden, how?!
-						
-						transCode += current_opList.get(0).value + " ";
+						//add a constant
+						transCode += current_opList.get(0).value;
 					}
 					else
 					{
-						//hier muss man eine um lastSourceTagname und elementsItemID eingeschränkte Nodelist beschaffen
-						//TODO bleibt immer title?! Also nur einmaliger TagName pro opList(part)
+						String lastSourceTagname = opHandler.getLastTagnameOf(current_opList);
 						
-						String lastSourceTagname = opHandler.getLastSourceTagname();
-						
+						//TODO create OpCode (use String_util), howTo get elemntsID?!
 						transCode += "xmlResponse.getElementsByTagName(" + lastSourceTagname
-						          +  ").getItem(" + "..elemItemID, aus opHandler?.." + "); \n";	//oder so..
-						
-						//TODO code that executes "currentOpList" with "nodeValue"..
+						          +  ").getItem(" + "..elemItemID, aus opHandler?.." + ")"
+						          +  "OPERATION CODE HERE; \n";
 					}
 				}
 			}
