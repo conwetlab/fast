@@ -833,7 +833,7 @@ var ScreenDocument = Class.create(PaletteDocument,
       */
      _findInstance: function(/** String */ instanceId) {
         return this._canvasInstances.values().detect(function(element) {
-                    return element.getId() == instanceId
+                    return element.getId() == instanceId;
          });
      },
 
@@ -1019,7 +1019,11 @@ var ScreenDocument = Class.create(PaletteDocument,
         }.bind(this));
     },
 
-    _createConditions: function(/** Array */ conditionList, /** DropZone */ area) {
+    /**
+     * Create the pre and post conditions
+     * @private
+     */
+     _createConditions: function(/** Array */ conditionList, /** DropZone */ area) {
         conditionList.each(function(condition) {
             var description = new BuildingBlockDescription(condition);
             var instance = new PrePostInstance(description, this._inferenceEngine, false);
@@ -1035,6 +1039,67 @@ var ScreenDocument = Class.create(PaletteDocument,
     },
 
     /**
+     * Creates the pipes programmatically
+     * @private
+     */
+    _createPipes: function(/** Array */ pipes) {
+        pipes.each(function(pipeData) {
+            var fromInstance;
+            var fromTerminal;
+            if (pipeData.from.buildingblock != "") {
+                fromInstance = this._findInstance(pipeData.from.buildingblock);
+                fromTerminal = fromInstance.getTerminal(pipeData.from.condition);
+            } else {
+                fromInstance = this._description.getPre(pipeData.from.condition);
+                if (!fromInstance) {
+                    fromInstance = this._description.getPost(pipeData.from.condition);
+                }
+                fromTerminal = fromInstance.getTerminal();
+            }
+            var toInstance;
+            var toTerminal;
+            if (pipeData.to.buildingblock != "") {
+                toInstance = this._findInstance(pipeData.to.buildingblock);
+                toTerminal = toInstance.getTerminal(pipeData.to.condition);
+            } else {
+                toInstance = this._description.getPre(pipeData.to.condition);
+                if (!toInstance) {
+                    toInstance = this._description.getPost(pipeData.to.condition);
+                }
+                toTerminal = toInstance.getTerminal();
+            }
+            var pipe = this._pipeFactory.getPipe(fromTerminal, toTerminal);
+            this._description.addPipe(pipe);
+        }.bind(this));
+    },
+
+    /**
+     * Creates the triggers
+     * @private
+     */
+    _createTriggers: function(/** Array */ triggers) {
+        triggers.each(function(triggerJSON) {
+            var fromInstance = null;
+            if (triggerJSON.from.buildingblock != "") {
+                fromInstance = this._findInstance(triggerJSON.from.buildingblock);
+            }
+            var toInstance = this._findInstance(triggerJSON.to.buildingblock);
+            var triggerData = {
+                'from': {
+                    'instance': fromInstance ? fromInstance : ScreenTrigger.INSTANCE_NAME,
+                    'name': fromInstance ? triggerJSON.from.name : ScreenTrigger.ONLOAD
+                },
+                'to': {
+                    'instance': toInstance,
+                    'action': triggerJSON.to.action
+                }
+            }
+            var trigger = this._triggerMappingFactory.createTrigger(triggerData);
+            this._description.addTrigger(trigger);
+        }.bind(this));
+    },
+
+    /**
      * Function that loads the triggers and the pipes of the loaded screens
      * @private
      */
@@ -1044,7 +1109,8 @@ var ScreenDocument = Class.create(PaletteDocument,
             // Load pre and postconditions
             this._createConditions(this._canvasCache.getPreconditions(), this._areas.get('pre'));
             this._createConditions(this._canvasCache.getPostconditions(), this._areas.get('post'));
-            this._refreshReachability();
+            this._createPipes(this._canvasCache.getPipes());
+            this._createTriggers(this._canvasCache.getTriggers());
         }
     }
 });

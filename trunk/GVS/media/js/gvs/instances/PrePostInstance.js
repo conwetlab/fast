@@ -261,6 +261,14 @@ var PrePostInstance = Class.create(ComponentInstance,
             this._terminal.onWireHandler(_handler);
         }
     },
+
+    /**
+     * Gets the terminal
+     * @type Terminal
+     */
+    getTerminal: function() {
+        return this._terminal;
+    },
     
     /**
      * Destroy the instance

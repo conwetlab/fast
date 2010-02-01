@@ -107,6 +107,7 @@ var Pipe = Class.create(
             });
         }
         this._wire.setOptions(options);
+        this._wire.redraw();
     },
 
     /**

@@ -15,10 +15,23 @@ var PipeFactory = Class.create(
     /**
      * Returns a pipe instance from the wire element
      */
-    getPipe: function (/** WireIt.Wire */ wire) {
-        var pipe = null;       
-        var source = wire.terminal1;
-        var destination = wire.terminal2;
+    getPipe: function (/** Variable Arguments */) {
+        var pipe = null;
+        var wire;
+        var source;
+        var destination;
+        if (arguments.length == 1) {
+            wire = arguments[0];
+            source = wire.terminal1;
+            destination = wire.terminal2;
+           
+        } else {
+            // Get pipe by the terminals
+            source = arguments[0];
+            destination = arguments[1];
+            wire = new WireIt.Wire(source, destination, document.body, source.options.wireConfig);
+            wire.redraw();
+        }
         var id = this._getPipeId(source, destination);
         pipe = new Pipe(wire, id);
         if (pipe.isValid()) {

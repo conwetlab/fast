@@ -112,9 +112,26 @@ var ScreenCanvasCache = Class.create( /** @lends ScreenCanvasCache.prototype */ 
 
     /**
      * Returns the list of postconditions
+     * @type Array
      */
     getPostconditions: function() {
         return this._postconditions;
+    },
+
+    /**
+     * Returns the list of pipes
+     * @type Array
+     */
+    getPipes: function() {
+        return this._pipes;
+    },
+
+    /**
+     * Returns the list of triggers
+     * @type Array
+     */
+    getTriggers: function() {
+        return this._triggers;
     },
 
     /**

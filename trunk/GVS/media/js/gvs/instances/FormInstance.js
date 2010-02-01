@@ -16,7 +16,7 @@ var FormInstance = Class.create(ComponentInstance,
          * @type Array
          * @private 
          */
-        this._terminals = new Array();
+        this._terminals = new Hash();
         
     },
 
@@ -30,18 +30,6 @@ var FormInstance = Class.create(ComponentInstance,
     getTitle: function() {
         return this._buildingBlockDescription.label['en-gb']; 
     },   
-    
-    /**
-     * Transform the instance into JSON-like
-     * string
-     * @type String
-     */
-    toJSON: function() {
-        var json = {
-           
-        }
-        return Object.toJSON(json);
-    },
     
     /**
      * @override
@@ -72,7 +60,7 @@ var FormInstance = Class.create(ComponentInstance,
                 }     
                 var node = this._view.getConditionNode(pre.id, action.name);
                 var terminal = new Terminal(node, options, this, pre.id, action.name);
-                this._terminals.push(terminal);                
+                this._terminals.set(pre.id, terminal);
             }.bind(this));   
         }.bind(this));
 
@@ -97,8 +85,16 @@ var FormInstance = Class.create(ComponentInstance,
                 var node = this._view.getConditionNode(post.id);
                 var terminal = new Terminal(node, options, this, post.id);
                 terminal.onWireHandler(handler);
-                this._terminals.push(terminal);
+                this._terminals.set(post.id, terminal);
             }.bind(this)); 
+    },
+
+    /**
+     * Gets a terminal from an id
+     * @type Terminal
+     */
+    getTerminal: function(/** String */ id) {
+        return this._terminals.get(id);
     },
     
     /**
@@ -108,7 +104,7 @@ var FormInstance = Class.create(ComponentInstance,
     destroy: function($super) {
         $super();
         if (this._terminals) {
-            this._terminals.each(function(terminal){
+            this._terminals.values().each(function(terminal){
                 terminal.destroy();    
             });
         }
@@ -130,7 +126,7 @@ var FormInstance = Class.create(ComponentInstance,
      */
     onUpdate: function(/** Number */ x, /** Number */ y) {
         if (this._terminals) {
-            this._terminals.each(function(terminal){
+            this._terminals.values().each(function(terminal){
                 terminal.updatePosition();    
             });
         }

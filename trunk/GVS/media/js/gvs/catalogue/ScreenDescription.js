@@ -141,13 +141,7 @@ var ScreenDescription = Class.create(BuildingBlockDescription,
      * Adds a pipe
      */
     addPipe: function(/** Pipe */ pipe) {
-        if (this._pipes.get(pipe.getId())) {
-            // TODO: is this situation possible?
-            this._pipes.unset(pipe.getId());
-            pipe.destroy();
-        } else {
-            this._pipes.set(pipe.getId(), pipe);
-        }
+        this._pipes.set(pipe.getId(), pipe);
     },
 
     addTrigger: function(/** Trigger */ trigger) {
@@ -215,11 +209,28 @@ var ScreenDescription = Class.create(BuildingBlockDescription,
     },
 
     /**
+     * Get a pre by its string identifier
+     * @type PrePostInstance
+     */
+    getPre: function(/** String */ id) {
+        if (this._preconditions.get(id)) {
+            return this._preconditions.get(id).buildingblock;
+        } else {
+            return null;
+        }
+        
+    },
+
+    /**
      * Get a post by its string identifier
      * @type PrePostInstance
      */
     getPost: function(/** String */ id) {
-        return this._postconditions.get(id).buildingblock;
+        if (this._postconditions.get(id)) {
+            return this._postconditions.get(id).buildingblock;
+        } else {
+            return null;
+        }
     },  
 
     /**
