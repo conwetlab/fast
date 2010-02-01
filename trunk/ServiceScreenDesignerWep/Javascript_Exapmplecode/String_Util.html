@@ -5,6 +5,173 @@
 
 <script>
 
+//checks given string for given sign(s), and return string from
+//the sepNr times appearance of the sign(s)
+//checks wrong entries
+function from(str, sign, sepNr)
+{
+	//Trims all needless whitespaces
+    var tmp = new String(Trim(noralizeSpaces(str)));
+	var save = "";
+	
+	if(sepNr < 1)
+	{
+		sepNr = 1;
+	}
+  
+    //build the result string
+	while(tmp.indexOf(sign) != -1 && sepNr > 0)
+	{
+		save = tmp.substring(tmp.indexOf(sign), tmp.indexOf(sign) + sign.length);
+		
+		tmp = tmp.substring(tmp.indexOf(sign) + sign.length, tmp.length);
+		
+		sepNr--;
+	}
+
+    //append last apperance of sign
+	tmp = save + tmp;
+
+    return tmp;
+}
+
+
+//checks given string for given sign(s), and return string until
+//the sepNr times appearance of the sign(s)
+//checks wrong entries
+function until(str, sign, sepNr)
+{
+	//Trims all needless whitespaces
+    var tmp = new String(Trim(noralizeSpaces(str)));
+    var res = "";
+    var length = sign.length;
+
+	if(sepNr < 1)
+	{
+		sepNr = 1;
+	}
+    
+    //build the result string
+	while(tmp.indexOf(sign) != -1 && sepNr > 0)
+	{
+		res += tmp.substring(0, tmp.indexOf(sign) + length);
+
+		tmp = tmp.substring(tmp.indexOf(sign) + length, tmp.length);
+
+		sepNr--;
+	}
+
+    return res;
+}
+
+
+//remove needless whitespaces and then return chars from-to
+//checks wrong entries
+function charsFromTo(str, from, to)
+{
+	//Trims all needless whitespaces
+    var tmp = new String(Trim(noralizeSpaces(str)));
+    var res = "";
+
+	if(from < 1)
+	{
+		from = 1;
+	}
+
+	if(to > tmp.length)
+	{
+		to = tmp.length;
+	}
+
+    //build the result string
+    for(from; from <= to; from++)
+	{
+		res += charAt(tmp, from);
+	}
+    
+    return res;
+}
+
+
+//return char at given possition.
+//checks wrong entries
+function charAt(str, index)
+{
+			//Trims all needless whitespaces
+	        //var tmp = new String(Trim(noralizeSpaces(str)));
+	        var res = '';
+	        
+	        if(index < 1)
+	        {
+		        index = 1;
+	        }
+	        else if(index > str.length)
+	        {
+		        index = str.length;
+	        }
+
+	        index = index - 1;
+
+	        res = str.charAt(index);
+		    
+	        return res;
+}
+
+
+//remove needless whitespaces and then return word with given index in given string
+//checks wrong entries
+function wordsFromTo(str, from, to)
+{
+			//Trims all needless whitespaces
+	        var tmp = new String(Trim(noralizeSpaces(str)));
+	        var res = "";
+	        
+	        var _split = tmp.split(" ");
+	        var length = _split.length;
+
+			if(from < 1)
+			{
+				from = 1;
+			}
+
+			if(to > length)
+			{
+				to = length;
+			}
+
+	        //build the result string
+	        for(from; from <= to; from++)
+			{
+				res =  res + wordAt(str, from) + " ";
+			}
+		    
+	        return res;
+}
+
+
+//remove needless whitespaces and then return word with given index in given string
+//checks wrong entries
+function wordAt(str, nr)
+{
+			//Trims all needless whitespaces
+	        var res = new String(Trim(noralizeSpaces(str)));
+	        var _split = res.split(" ");
+	        var length = _split.length;
+
+			nr = nr -1;	//identify the MEANDED word 
+	        
+	        //if index out of bounce, setup to last possible
+		    if(nr < 0 || nr >= length)
+			{
+				nr = length-1;
+			}
+			
+	        res = _split[nr];
+		    
+	        return res;
+}
+
+
 //Trims all spaces to the right of a specific string
 function seperateBySpace(str)
 {
@@ -100,8 +267,69 @@ function Trim(str)
 <body>
 <form name=f1ex>
 
+
+//CALL "from(..)"<BR>
+<input type=text name=t20 value="    A test - trim - trimtrim - string     " size=30>
+<input type=text name=t21 value="trim" size=10>
+<input type=text name=t22 value="3" size=10>
+<input type=button value="give string from x appearance of sign(s)"
+	onclick="this.form.t1.value=from(this.form.t20.value, this.form.t21.value, this.form.t22.value)"> <BR>
+
+<BR>
+<BR>
+
+//CALL "until(..)"<BR>
+<input type=text name=t17 value="    A test - trim - trimtrim - string     " size=30>
+<input type=text name=t18 value="trim" size=10>
+<input type=text name=t19 value="2" size=10>
+<input type=button value="give string until x appearance of sign(s)"
+	onclick="this.form.t1.value=until(this.form.t17.value, this.form.t18.value, this.form.t19.value)"> <BR>
+
+<BR>
+<BR>
+
+//CALL "charsFromTo(..)"<BR>
+<input type=text name=t14 value="    A test - trim - string     " size=30>
+<input type=text name=t15 value="1" size=10>
+<input type=text name=t16 value="6" size=10>
+<input type=button value="give words from-to"
+	onclick="this.form.t1.value=charsFromTo(this.form.t14.value, this.form.t15.value, this.form.t16.value)"> <BR>
+
+<BR>
+<BR>
+
+//CALL "charAt(..)"<BR>
+<input type=text name=t12 value="A test - trim - string" size=30>
+<input type=text name=t13 value="22" size=10>
+<input type=button value="give char by index"
+	onclick="this.form.t1.value=charAt(this.form.t12.value, this.form.t13.value)"> <BR>
+
+<BR>
+<BR>
+
+//CALL "wordsFromTo(..)"<BR>
+<input type=text name=t9 value="    A test - trim - string     " size=30>
+<input type=text name=t10 value="2" size=10>
+<input type=text name=t11 value="5" size=10>
+<input type=button value="give words from-to"
+	onclick="this.form.t1.value=wordsFromTo(this.form.t9.value, this.form.t10.value, this.form.t11.value)"> <BR>
+
+<BR>
+<BR>
+
+//CALL "wordAt(..)"<BR>
+<input type=text name=t7 value="    A test - trim - string     " size=30>
+<input type=text name=t8 value="2" size=10>
+<input type=button value="give word by index"
+	onclick="this.form.t1.value=wordAt(this.form.t7.value, this.form.t8.value)"> <BR>
+
+<!-- 
+
+<BR>
+<BR>
+
 //CALL "trimBoth(..)"<BR>
-<input type=text name=t6 value="    A test - trim - string     " size=50>
+<input type=text name=t6 value="    A test - trim - string     " size=30>
 <input type=button value="cut both sides spaces"
 	onclick="this.form.t1.value=Trim(this.form.t6.value)"> <BR>
 
@@ -109,7 +337,7 @@ function Trim(str)
 <BR>
 
 //CALL "trimLeft(..)"<BR>
-<input type=text name=t5 value="    A test - trim - string     " size=50>
+<input type=text name=t5 value="    A test - trim - string     " size=30>
 <input type=button value="cut left spaces"
 	onclick="this.form.t1.value=LTrim(this.form.t5.value)"> <BR>
 
@@ -117,7 +345,7 @@ function Trim(str)
 <BR>
 
 //CALL "trimRight(..)"<BR>
-<input type=text name=t4 value="    A test - trim - string     " size=50>
+<input type=text name=t4 value="    A test - trim - string     " size=30>
 <input type=button value="cut right spaces"
 	onclick="this.form.t1.value=RTrim(this.form.t4.value)"> <BR>
 
@@ -125,7 +353,7 @@ function Trim(str)
 <BR>
 
 //CALL "seperateBySpace(..)"<BR>
-<input type=text name=t3 value=" a string sepperated by spaces !" size=50>
+<input type=text name=t3 value=" a string sepperated by spaces !" size=30>
 <input type=button value="seperate by spaces"
 	onclick="this.form.t1.value=seperateBySpace(this.form.t3.value)"> <BR>
 
@@ -133,17 +361,23 @@ function Trim(str)
 <BR>
 
 //CALL "normalizeSpaces(..)"<BR>
-<input type=text name=t2 value="   Here where to       much spaces     !" size=50>
+<input type=text name=t2 value="   Here where to       much spaces     !" size=30>
 <input type=button value="normalize Spaces"
 	onclick="this.form.t1.value=noralizeSpaces(this.form.t2.value)"> <BR>
+
 	
-	
+-->
+
+	 
 <BR>
 <BR>
 <BR>
 
+
+ 
+ 
 RESULT:	
-<input type=text name=t1 value="press the button above to see result.." size=50>
+<input type=text name=t1 value="press the button above to see result.." size=30>
 
 </form>
 

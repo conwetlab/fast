@@ -14,6 +14,7 @@ public enum Kind
 	words,
 	chars,
 	until,
+	constant,
 	from,
 	Param,
 	plus

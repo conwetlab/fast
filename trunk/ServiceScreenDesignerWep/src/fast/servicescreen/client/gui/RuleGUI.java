@@ -439,8 +439,6 @@ public class RuleGUI
 	      RuleUtil.expandTree(aFactsTree);
    }
    
-   
-   private OperationHandler opHandler;
    /**
     * This method transform the data with the rules
     * to the this.factsTree
@@ -453,8 +451,11 @@ public class RuleGUI
     	  NodeList elements = null;
     	  
     	  //create a handler for operations in the decoded fromField 
-    	  opHandler = new OperationHandler(rule.getSourceTagname(), xmlDocElement); 
+    	  OperationHandler opHandler = new OperationHandler(rule.getSourceTagname(), xmlDocElement); 
     	  String sourceTagname = opHandler.getLastSourceTagname();
+    	  
+    	  //add the handler within parse results into the rule
+    	  rule.setOperationHandler(opHandler);
     	  
     	  //take source
           elements = RuleUtil.get_ElementsByTagname(xmlDocElement, sourceTagname);

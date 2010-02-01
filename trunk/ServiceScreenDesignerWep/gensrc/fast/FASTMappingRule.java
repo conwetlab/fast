@@ -10,6 +10,7 @@ package fast;
 import java.util.*;
 // GWT: de.upb.tools.fca.*
 
+import fast.servicescreen.client.gui.ExtendedRuleParser.OperationHandler;
 import fujaba.web.runtime.client.*;
 // GWT: de.upb.tools.sdm.*
 
@@ -21,7 +22,18 @@ import java.util.Iterator;
 
 public class FASTMappingRule extends FastObject
 {
-
+	//change ctr
+	private OperationHandler opHandler = null;
+	public void setOperationHandler(OperationHandler opHandler)
+	{
+		this.opHandler = opHandler;
+	}
+	public OperationHandler getOperationHandler()
+	{
+		return this.opHandler;
+	}
+	
+	
    public void removeAllFrom(String className) {
       if ("fast.FASTMappingRule".equals(className))
       {				

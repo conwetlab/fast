@@ -26,8 +26,8 @@ public class RequestServiceImpl extends RemoteServiceServlet implements RequestS
 	private ResponseHandler<String> responseHandler;
 	
 	//TODO: sry guys, but writing a file to relative (project) path does not work for webApps
-	//So everybody has to enter the projects path here.. 
-	private String path = "C:\\Tobi\\Uni\\HiWi\\ServiceScreenDesigner\\workspace\\ServiceScreenDesignerWep";
+	//until jet, so everybody has to enter the projects path here.. 
+	private String path = "D:\\Hiwi\\Workspace_ServiceScreenDesigner\\ServiceScreenDesignerWep";
 
 	@Override
 	public String sendHttpRequest_GET(String url)

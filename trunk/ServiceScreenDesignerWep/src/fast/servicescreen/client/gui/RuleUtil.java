@@ -222,8 +222,8 @@ public class RuleUtil
 		   
 		   while(words.contains(untilSign) && sepNr > 0)
 		   {
-			   result += words.substring(0, words.indexOf(untilSign) +1);
-			   words = words.substring(words.indexOf(untilSign) +1, words.length());
+			   result += words.substring(0, words.indexOf(untilSign) +untilSign.length());
+			   words = words.substring(words.indexOf(untilSign) +untilSign.length(), words.length());
 			   sepNr--;
 		   }
 		   
@@ -243,11 +243,15 @@ public class RuleUtil
 	    * */
 	   public static String wordsFrom(String words, String fromSign, int sepNr)
 	   {
+		   String save = "";
 		   while(words.contains(fromSign) && sepNr > 0)
 		   {
-			   words = words.substring(words.indexOf(fromSign), words.length()) + " ";
+			   save = words.substring(words.indexOf(fromSign), words.indexOf(fromSign) + fromSign.length());
+			   words = words.substring(words.indexOf(fromSign) + fromSign.length(), words.length()) + " ";
 			   sepNr--;
 		   }
+		   
+		   words = save + words;
 		   
 		   return words;
 	   }

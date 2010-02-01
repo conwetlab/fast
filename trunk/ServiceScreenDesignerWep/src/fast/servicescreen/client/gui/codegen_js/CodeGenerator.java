@@ -1,5 +1,6 @@
 package fast.servicescreen.client.gui.codegen_js;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 
@@ -12,14 +13,12 @@ import fast.servicescreen.client.RequestService;
 import fast.servicescreen.client.RequestServiceAsync;
 import fast.servicescreen.client.ServiceScreenDesignerWep;
 import fast.servicescreen.client.gui.RuleUtil;
+import fast.servicescreen.client.gui.ExtendedRuleParser.Kind;
+import fast.servicescreen.client.gui.ExtendedRuleParser.Operation;
+import fast.servicescreen.client.gui.ExtendedRuleParser.OperationHandler;
 
 /**
  * Use the constructor to create the first template
- * 
- * TODO s
- * Create rule - transformation
- *   
- * Any inport should be a param in url, so plz add it as it in ReqTemplate, Tobi
  * */
 public class CodeGenerator
 {
@@ -28,7 +27,6 @@ public class CodeGenerator
 	private String rootTemplate = "";
 	private boolean writeFile_result = true;
 	
-
 	@SuppressWarnings("unused")
 	private String outputPortName = "";	//use later to generate translation code
 	
@@ -76,9 +74,8 @@ public class CodeGenerator
 			"  <<outputport>> \n" +
 			"\n" +
 			
-			//TODO create the transformation code
 			"  //the transformation code \n"+
-			"  <<transformation>>; \n" +
+			"  <<transformation>> \n" +
 			"\n" +
 			
 			
@@ -94,7 +91,6 @@ public class CodeGenerator
 	public String generateJS()
 	{
 		table = new HashMap<String, String>();	
-		
 		
 		//Build the input port list
 		add_InPorts_toTable();
@@ -175,8 +171,6 @@ public class CodeGenerator
 		table.put("<<outputport>>", outputPortVar);
 	}
 	
-	//TODO: We get inport variable values by calling run function, did we really need this method?
-	//Or is simpel -for each inport name, replace with input value (given on runtime) 
 	@SuppressWarnings("unchecked")
 	private void add_PreRequestReplaces_toTable()
 	{	
@@ -251,65 +245,87 @@ public class CodeGenerator
 		table.put("<<sendrequest>>", sendRequest);
 	}
 	
+	private String transCode = "";
 	private void add_Translation_toTable()
 	{
-		String transCode = "";
+		transCode = "";
 		
 		//take rootRule
 		FASTMappingRule rootRule = (FASTMappingRule) designer.serviceScreen.iteratorOfMappingRules().next();
 		
 		//run threw all rules and append js code. Returns js cdoe    
-		transCode = transform(rootRule, transCode);
+		transform(rootRule);
 		
-		table.put("<<translation>>", transCode);
+		table.put("<<transformation>>", transCode);
 	}
 
-	private String transform(FASTMappingRule rule, String transCode)
+	private void transform(FASTMappingRule rule)
 	{
 		if(RuleUtil.isCompleteRule(rule))
 		{
-//			//create an operationHandler that parse the fromField from the given rule
-//			OperationHandler opHandler = new OperationHandler(rule.getSourceTagname());
-//
-//			String targetElemName = rule.getTargetElemName();
-//			String kind = rule.getKind();
-//			
-//			if (kind.equals("createObject"))
-//			{
-//				//HOW TO iterate over elements.items(0 - x), and execute following code for every item ??
-//				//aint got no xmlRequest here..
-//				
-//				//gets the operationList
-//				Iterator<ArrayList<Operation>> opList_iter = opHandler.getOperationlistIterator();
-//				ArrayList<Operation> current_opList = null;
-//				while(opList_iter.hasNext())
-//				{
-//					current_opList = opList_iter.next();
-//					String lastSourceTagname = opHandler.getLastSourceTagnameOperation(current_opList).value;
-//					
-//					transCode += "xmlResponse.getElementsByTagName(" + lastSourceTagname +").getItem(" + "..elemItemID.." + "); \n";	//oder so..
-//					
-//					//code that executes "currentOpList" with "nodeValue".. not possible, too
-//				}
-//			}
-//			else if (kind.equals("fillAttributes"))
-//			{
-//				
-//			}
-//			else if(kind.equals("dummy"))
-//			{
-//				
-//			}
+			//gets the current operationList 
+			OperationHandler opHandler = rule.getOperationHandler();
+			Iterator<ArrayList<Operation>> opList_iter = opHandler.getOperationlistIterator();
+			ArrayList<Operation> current_opList = null;
+			
+			String kind = rule.getKind();
+			
+			if ("createObject".equals(kind))
+			{
+				//create a Attr. in the object, how?!
+			}
+			else if ("fillAttributes".equals(kind))
+			{
+				//HOW TO iterate over elements.items(0 - x), and execute following code for every item ??
+				//aint got no xmlRequest here..
+				
+				while(opList_iter.hasNext())
+				{
+					current_opList = opList_iter.next();
+					
+					if(current_opList.get(0).kind == Kind.constant)
+					{
+						//es gilt eine Konstante zu adden, how?!
+						
+						transCode += current_opList.get(0).value + " ";
+					}
+					else
+					{
+						//hier muss man eine um lastSourceTagname und elementsItemID eingeschränkte Nodelist beschaffen
+						//TODO bleibt immer title?! Also nur einmaliger TagName pro opList(part)
+						
+						String lastSourceTagname = opHandler.getLastSourceTagname();
+						
+						transCode += "xmlResponse.getElementsByTagName(" + lastSourceTagname
+						          +  ").getItem(" + "..elemItemID, aus opHandler?.." + "); \n";	//oder so..
+						
+						//TODO code that executes "currentOpList" with "nodeValue"..
+					}
+				}
+			}
+			else if("dummy".equals(kind))
+			{
+				//simply no handling?
+			}
+			
+			callTransformForKids(rule);
 		}
-		
-		
-		// -> make recursive call for accessing any rule
-		
-
-		//return the transformation code
-		return transCode;
 	}
 	
+	/**
+	 * Should call tranformation method for any child of given rule
+	 * to add code into transCode
+	 * */
+	@SuppressWarnings("unchecked")
+	private void callTransformForKids(FASTMappingRule rule)
+	{
+		for (Iterator<FASTMappingRule> kidIter = rule.iteratorOfKids(); kidIter.hasNext();)
+		{
+			FASTMappingRule kid = (FASTMappingRule) kidIter.next();
+			transform(kid);
+		}
+	}
+
 	/**
 	 * Replace any <key> with a value, if the table contains it.
 	 * 

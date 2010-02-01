@@ -65,7 +65,7 @@ public class OperationHandler
 				
 				SourceTag sourceTag = getLastSourceTag(xmlDoc, currentList, 0);
 				
-				if(sourceTag.getCurrentXmlPart() != null)
+				if(sourceTag != null && sourceTag.getCurrentXmlPart() != null)
 				{
 					lastRealTagname = sourceTag.getTagName();
 					break;
@@ -95,6 +95,11 @@ public class OperationHandler
 			//set up sourceTag with last real tagName AND a solved xmlDoc
 			sourceTag = getLastSourceTag(xmlDoc, currentList, elementsItemID);
 			
+			if(sourceTag == null)
+			{
+				sourceTag = new SourceTag();
+			}
+			
 			//if source contains values named by tagName, attach. Otherwise add value as constant
 			if(sourceTag.getCurrentXmlPart() != null)
 			{
@@ -106,6 +111,8 @@ public class OperationHandler
 			else
 			{
 				result += sourceTag.getTagName()/*constant*/ + " ";
+				
+				currentList.get(0).kind = Kind.constant;
 			}
 		}
 
@@ -123,13 +130,13 @@ public class OperationHandler
 
 		if(opList.size() > count+1)
 		{
-			//take operation "Kind, Param"
+			//take operations "Kind, Param/Signs"
 			Operation currentOperation = opList.get(count);
 			Operation nextOperation = opList.get(++count);
 
 			while(nextOperation != null)
 			{	
-				nodeValue = executeOneOperation(currentOperation.kind, nextOperation.value, nodeValue);
+				nodeValue = executeOneOperation(currentOperation.kind, nextOperation.value, nextOperation.signs, nodeValue);
 
 				if(opList.size() > count+1)
 				{
@@ -147,23 +154,19 @@ public class OperationHandler
 	}
 
 	//executes one operation
-	private String executeOneOperation(Kind opKind, String parameter, String nodeValue)
+	private String executeOneOperation(Kind opKind, String parameter, String signs, String nodeValue)
 	{
 		int param_from = 1;
 		int param_to = 1;
 		
-		String sign = "";
 		int sepNr = 1;
 
-		//It should be a sign parameter(fe. .2), or a exactlyThis parameter(fe. 2), or a from-to parameter(fe. 3-7)
-		if(opKind == Kind.until || opKind == Kind.from)
+		//It should be a sign parameter, or a exactlyThis parameter, or a from-to parameter
+		if(signs != null)
 		{
-			sign = "" + parameter.charAt(0);
-			String sepNr_String = parameter.substring(1, parameter.length());
-			
 			try
 			{
-				sepNr = Integer.valueOf(sepNr_String).intValue();
+				sepNr = Integer.valueOf(parameter).intValue();
 			}
 			catch(java.lang.NumberFormatException e)
 			{
@@ -216,10 +219,10 @@ public class OperationHandler
 			case chars	:	nodeValue = RuleUtil.getChars(nodeValue, param_from, param_to);
 							break;
 							
-			case until	: 	nodeValue = RuleUtil.wordsUnitl(nodeValue, sign, sepNr);
+			case until	: 	nodeValue = RuleUtil.wordsUnitl(nodeValue, signs, sepNr);
 							break;
 							
-			case from	: 	nodeValue = RuleUtil.wordsFrom(nodeValue, sign, sepNr);
+			case from	: 	nodeValue = RuleUtil.wordsFrom(nodeValue, signs, sepNr);
 							break;
 
 			//add more operations here, in Kind and in ExRuleParser.define()

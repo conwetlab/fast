@@ -42,10 +42,10 @@ public class ExtendedRuleParser
 	private void startParsing()
 	{
 		nr = 0;
-		currentToken = nextToken();
+		nextToken();
 		Kind opKind;
 		
-		do
+		while(currentToken != null)
 		{
 			opKind = currentToken.getKind();
 			
@@ -62,7 +62,7 @@ public class ExtendedRuleParser
 								
 								//save founded param
 								nextChar();
-								currentToken = nextToken();
+								nextToken();
 								if(currentToken != null)
 									saveEntry(currentToken.getWord(), Kind.Param);
 								
@@ -74,59 +74,21 @@ public class ExtendedRuleParser
 					
 								//save founded param
 								nextChar();
-								currentToken = nextToken();
+								nextToken();
 								if(currentToken != null)
 									saveEntry(currentToken.getWord(), Kind.Param);
 								
 								nextChar();
 								break;
 								
-				case until:		//save founded operation
-								saveEntry(currentToken.getWord(), currentToken.getKind());
-					
-								//save founded param (fe. -2)
-								nextChar();						//skip .
-								String u_sign = "" + currentChar; //save sign
-								nextChar();						//skip sign
-								currentToken = nextToken();		//load sepNr
+				case until:		//save founded operation inkl. Params
+								saveUntilOrFrom_Operation();
 								
-								if(! "".equals(u_sign))
-								{
-									if(currentToken == null)
-									{
-										saveEntry(u_sign + "1", Kind.Param);	//default sepNr
-									}
-									else
-									{
-										saveEntry(u_sign + currentToken.getWord(), Kind.Param);
-									}
-								}
-								
-								nextChar();
 								break;
 								
-				case from:		//save founded operation
-								saveEntry(currentToken.getWord(), currentToken.getKind());
+				case from:		//save founded operation inkl. Params
+								saveUntilOrFrom_Operation();
 					
-								//save founded param (fe. -2)
-								nextChar();							//skip .
-								String f_sign = "" + currentChar; 	//save sign
-								nextChar();							//skip sign
-								currentToken = nextToken();			//load sepNr
-								
-								if(! "".equals(f_sign))
-								{
-									if(currentToken == null)
-									{
-										saveEntry(f_sign + "1", Kind.Param);	//default sepNr
-									}
-									else
-									{
-										saveEntry(f_sign + currentToken.getWord(), Kind.Param);
-									}
-								}
-								
-								nextChar();
 								break;
 				
 				case plus:		//save the plus 
@@ -134,17 +96,51 @@ public class ExtendedRuleParser
 								break;
 			}
 			
-			currentToken = nextToken();
+			nextToken();
 		}
-		while(currentToken != null);
 	}
 	
 	//save one entry in the parseResults list
-	private void saveEntry(String word, Kind kind)
+	private void saveEntry(String value, Kind kind)
 	{
-		parseResults.put(nr, new Operation(word, kind));
+		parseResults.put(nr, new Operation(value, kind));
 		
 		this.nr++;
+	}
+	
+	//save one entry in the parseResults list
+	private void saveEntry(String value, String signs, Kind kind)
+	{
+		parseResults.put(nr, new Operation(value, signs, kind));
+		
+		this.nr++;
+	}
+	
+	private void saveUntilOrFrom_Operation()
+	{
+		saveEntry(currentToken.getWord(), currentToken.getKind());
+		
+		//save founded param
+		nextChar();										//skip (
+		nextToken_withWhitespaces();					//load next word (signs)
+		String u_signs = "" + currentToken.getWord(); 	//save sign(s)
+		nextChar();										//skip ,
+		nextToken();									//load sepNr
+		
+		if(! "".equals(u_signs))
+		{
+			if(currentToken == null)
+			{
+				saveEntry("1", u_signs, Kind.Param);	//default sepNr
+			}
+			else
+			{
+				saveEntry(currentToken.getWord(), u_signs, Kind.Param);
+			}
+		}
+		
+		nextChar();		//skip )
+		nextChar();		//ev. skip next .
 	}
 	
 	/**
@@ -187,10 +183,10 @@ public class ExtendedRuleParser
 	}
 	
 	/**
-	 * Returns the next (type less) token.
+	 * Returns the next token.
 	 * */
 	@SuppressWarnings("deprecation")
-	private Token nextToken()
+	private void nextToken()
 	{
 		Token token = new Token();
 		String word = "";
@@ -219,11 +215,44 @@ public class ExtendedRuleParser
 			//set kind
 			token.setKind(defineType(word));
 
-			return token;
+			currentToken = token;
 		}
+		else
+		{
+			currentToken = null;
+		}
+	}
+	
+	/**
+	 * Returns the next token.
+	 * */
+	private void nextToken_withWhitespaces()
+	{
+		Token token = new Token();
+		String word = "";
 		
-		//else
-		return null;
+		//get the word
+		while(! (currentChar == ',') && Character.MIN_VALUE != currentChar)
+		{
+			word += currentChar;
+			
+			nextChar();
+		}
+
+		if(! "".equals(word))
+		{
+			//set value
+			token.setWord(word);
+
+			//set kind
+			token.setKind(defineType(word));
+
+			currentToken = token;
+		}
+		else
+		{
+			currentToken = null;
+		}
 	}
 	
 	/**
