@@ -241,6 +241,18 @@ var GVSSingleton = function(){
                                         'shortcut': 'Shift+N'
                                     }),
                                     'group': 0
+                                },
+                                'newScreen': {
+                                    'type': 'Action',
+                                    'action': new MenuAction({
+                                        'label': 'Screen',
+                                        'weight': 10,
+                                        'handler': function(){
+                                            this.action("newScreen")
+                                        }.bind(this),
+                                        'shortcut': 'Alt+N'
+                                    }),
+                                    'group': 0
                                 }
                             }
                         },
@@ -259,6 +271,18 @@ var GVSSingleton = function(){
                                             this.action("browseScreenflows");
                                         }.bind(this),
                                         'shortcut': 'Shift+O'
+                                    }),
+                                    'group': 0
+                                },
+                                'browseScreens': {
+                                    'type': 'Action',
+                                    'action': new MenuAction({
+                                        'label': 'Screens',
+                                        'weight': 10,
+                                        'handler': function(){
+                                            this.action("browseScreens")
+                                        }.bind(this),
+                                        'shortcut': 'Alt+N'
                                     }),
                                     'group': 0
                                 }
@@ -318,30 +342,6 @@ var GVSSingleton = function(){
             };
             if (!GlobalOptions.isPublicDemo) {
                 // Include the new screen feature
-                this._menuConfig.file.children['new'].children.newScreen = {
-                    'type': 'Action',
-                    'action': new MenuAction({
-                        'label': 'Screen',
-                        'weight': 10,
-                        'handler': function(){
-                            this.action("newScreen")
-                        }.bind(this),
-                        'shortcut': 'Alt+N'
-                    }),
-                    'group': 0
-                };
-                this._menuConfig.file.children['browse'].children.browseScreens = {
-                    'type': 'Action',
-                    'action': new MenuAction({
-                        'label': 'Screens',
-                        'weight': 10,
-                        'handler': function(){
-                            this.action("browseScreens")
-                        }.bind(this),
-                        'shortcut': 'Alt+N'
-                    }),
-                    'group': 0
-                };
             }
         }
     });
