@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -160,18 +161,31 @@ public class ScreenComponentFindCheckServlet extends GenericServlet {
 					backendServices.add(CatalogueAccessPoint.getCatalogue().getScreenComponent(uri));
 			}
 			
+			// extract pipes which are well defined (precondition and
+			// postcondition match)
+			ArrayList<Pipe> correctPipeList = new ArrayList<Pipe>();
+			for (Pipe pipe : pipes) {
+				if (isPipeCorrect(pipe, preconditions, postconditions))
+					correctPipeList.add(pipe);
+			}
+			
+			// check if elements in the canvas + pre/postconditions are reachable
+			List<Object> elements = new ArrayList<Object>();
+			elements.addAll(getReachableElements(canvas, preconditions, postconditions, correctPipeList));
+			
 			// check if the pipes are well defined
 			JSONArray jsonPipes = new JSONArray();
 			for (Pipe pipe : pipes) {
 				JSONObject jsonPipe = pipe.toJSON();
-				jsonPipe.put("satisfied", isPipeSatisfied(pipe, preconditions, postconditions));
+				jsonPipe.put("correct", correctPipeList.contains(pipe));
+				jsonPipe.put("satisfied", elements.contains(pipe));
 				jsonPipes.put(jsonPipe);
 			}
 			output.put("pipes", jsonPipes);
 
 			JSONArray canvasOut = new JSONArray();
 			for (ScreenComponent sc : canvas)
-				canvasOut.put(processComponent(canvas, sc, preconditions, postconditions, pipes));
+				canvasOut.put(processComponent(canvas, sc, pipes, elements));
 			output.put("canvas", canvasOut);
 
 			if (search) {
@@ -193,7 +207,7 @@ public class ScreenComponentFindCheckServlet extends GenericServlet {
 			
 			JSONArray postOut = new JSONArray();
 			for (Condition con : postconditions)
-				postOut.put(processPostcondition(canvas, con, preconditions, postconditions, pipes));
+				postOut.put(processPostcondition(canvas, con, pipes, elements));
 			output.put("postconditions", postOut);
 		
 			if (search && selectedItem != null) {
@@ -240,7 +254,7 @@ public class ScreenComponentFindCheckServlet extends GenericServlet {
 		return null;
 	}
 	
-	private boolean isPipeSatisfied(Pipe pipe, List<Condition> preconditions, List<Condition> postconditions) throws IOException {
+	private boolean isPipeCorrect(Pipe pipe, List<Condition> preconditions, List<Condition> postconditions) throws IOException {
 		boolean satisfied = false;
 		Condition conFrom, conTo;
 		if (pipe.getIdBBFrom() == null) {
@@ -259,16 +273,16 @@ public class ScreenComponentFindCheckServlet extends GenericServlet {
 		return satisfied;
 	}
 	
-	private JSONObject processPostcondition(Set<ScreenComponent> canvas, Condition postcondition, List<Condition> preconditions, List<Condition> postconditions, List<Pipe> pipes) throws JSONException, IOException {
+	private JSONObject processPostcondition(Set<ScreenComponent> canvas, Condition postcondition, List<Pipe> pipes, List<Object> elements) throws JSONException, IOException {
 		JSONObject jsonCon = new JSONObject();
-		Pipe pipe = CatalogueAccessPoint.getCatalogue().getPipeToPostcondition(postcondition, pipes);
-		boolean satisfied = pipe == null ? false : isPipeSatisfied(pipe, preconditions, postconditions);
+		Pipe pipe = getPipeToPostcondition(postcondition, pipes);
+		boolean satisfied = pipe == null ? false : elements.contains(pipe);
 		jsonCon.put("id", postcondition.getId());
 		jsonCon.put("satisfied", satisfied);
 		return jsonCon;
 	}
 	
-	private JSONObject processComponent(Set<ScreenComponent> canvas, ScreenComponent sc, List<Condition> preconditions, List<Condition> postconditions, List<Pipe> pipes) throws JSONException, IOException {
+	private JSONObject processComponent(Set<ScreenComponent> canvas, ScreenComponent sc, List<Pipe> pipes, List<Object> elements) throws JSONException, IOException {
 		JSONObject jsonSc = new JSONObject();
 		jsonSc.put("uri", sc.getUri());
 		JSONArray actionArray = new JSONArray();
@@ -277,8 +291,8 @@ public class ScreenComponentFindCheckServlet extends GenericServlet {
 			JSONArray conArray = new JSONArray();
 			boolean actionSatisfied = action.getPreconditions().isEmpty() ? true : false;
 			for (Condition con : action.getPreconditions()) {
-				Pipe pipe = CatalogueAccessPoint.getCatalogue().getPipeToComponent(sc, action, con, pipes);
-				boolean conSatisfied = pipe == null ? false : isPipeSatisfied(pipe, preconditions, postconditions);
+				Pipe pipe = getPipeToComponent(sc, action, con, pipes);
+				boolean conSatisfied = pipe == null ? false : elements.contains(pipe);
 				actionSatisfied = actionSatisfied || conSatisfied;
 				JSONObject jsonCon = con.toJSON();
 				jsonCon.put("satisfied", conSatisfied);
@@ -384,4 +398,127 @@ public class ScreenComponentFindCheckServlet extends GenericServlet {
 		return pipeList;
 	}
 	
+	private List<Object> getReachableElements(
+			Set<ScreenComponent> scList,
+			List<Condition> preconditions, 
+			List<Condition> postconditions,
+			List<Pipe> pipes) {
+		List<Object> elements = new ArrayList<Object>();
+
+		// pipes from preconditions are reachable
+		List<Pipe> reachablePipeList = getPipesFrom(pipes, null);
+		
+		// screen components without actions, or having an action without
+		// preconditions are reachable
+		List<ScreenComponent> reachableSCList = new ArrayList<ScreenComponent>();
+		for (ScreenComponent sc : scList) {
+			boolean reachable = false;
+			if (sc.getActions().size() == 0) {
+				reachable = true;
+			} else {
+				for (Action action : sc.getActions()) {
+					if (action.getPreconditions().size() == 0) {
+						reachable = true;
+						break;
+					}
+				}
+			}
+			if (reachable) {
+				reachableSCList.add(sc);
+			}
+		}
+		
+		// at first, no postcondition is reachable
+		List<Condition> reachablePost = new ArrayList<Condition>();
+		
+		// screen components connected to reachable pipes are also reachable
+		List<Pipe> pipesToCheck = new ArrayList<Pipe>(reachablePipeList);
+		List<Pipe> nextPipeList = new ArrayList<Pipe>();
+		while (pipesToCheck.size() > 0) {
+			for (Pipe pipe : pipesToCheck) {
+				if (pipe.getIdBBTo() == null) {
+					// it's a postcondition
+					Condition post = getConditionById(postconditions, pipe.getIdConditionTo());
+					if (reachablePost.contains(post))
+						reachablePost.add(post);
+					//elements.add(getConditionById(postconditions, pipe.getIdConditionTo()));
+				} else {
+					ScreenComponent sc = getScreenComponent(scList, pipe.getIdBBTo());
+					if (!reachableSCList.contains(sc)) {
+						reachableSCList.add(sc);
+						List<Pipe> toAdd = getPipesFrom(pipes, sc.getUri().toString());
+						reachablePipeList.addAll(toAdd);
+						nextPipeList.addAll(toAdd);
+					}
+				}
+			}
+			// if no new pipes are reachable, the loop finishes
+			pipesToCheck.clear();
+			pipesToCheck.addAll(nextPipeList);
+			nextPipeList.clear();
+		}
+
+		// puts all reachable elements together
+		elements.addAll(reachablePipeList);
+		elements.addAll(reachableSCList);
+		elements.addAll(reachablePost);
+		
+		return elements;
+	}
+	
+	private ScreenComponent getScreenComponent(Set<ScreenComponent> scList, String uri) {
+		for (ScreenComponent sc : scList)
+			if (sc.getUri().toString().equals(uri))
+				return sc;
+		return null;
+	}
+	
+	private List<Pipe> getPipesFrom(List<Pipe> pipes, String bbFrom) {
+		ArrayList<Pipe> results = new ArrayList<Pipe>();
+		for (Pipe pipe : pipes)
+			if (bbFrom == null && pipe.getIdBBFrom() == null)
+				results.add(pipe);
+			else if (bbFrom != null && pipe.getIdBBFrom() != null && bbFrom.equals(pipe.getIdBBFrom()))
+				results.add(pipe);
+		return results;
+	}
+	
+	/**
+	 * Returns the pipe which connects any other screen component to a precondition within this 
+	 * component, null in case there is no pipe connecting it
+	 * @param sc
+	 * @param action
+	 * @param precondition
+	 * @param pipes
+	 * @return
+	 */
+	private Pipe getPipeToComponent(ScreenComponent sc, Action action, Condition precondition, List<Pipe> pipes) {
+		for (Pipe pipe : pipes) {
+			if (pipe.getIdBBTo() != null && pipe.getIdBBTo().equals(sc.getUri().toString())
+					&& pipe.getIdActionTo().equals(action.getName())
+					&& pipe.getIdConditionTo().equals(precondition.getId())) {
+				return pipe;
+			}
+		}
+		return null;
+	}
+	
+	/**
+	 * Returns the pipe which connects a (screen) postcondition to any other screen component, null in
+	 * case there is no pipe connecting it
+	 * @param precondition
+	 * @param pipes
+	 * @return
+	 */
+	public Pipe getPipeToPostcondition(Condition postcondition, List<Pipe> pipes) {
+		for (Pipe pipe : pipes) {
+			if (pipe.getIdBBTo() == null
+					&& pipe.getIdConditionTo().equals(postcondition.getId())) {
+				return pipe;
+			}
+		}
+		return null;
+	}
+	
+
 }

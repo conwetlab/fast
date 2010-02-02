@@ -722,43 +722,6 @@ public class Catalogue {
 	}
 	
 	/**
-	 * Returns the pipe which connects any other screen component to a precondition within this 
-	 * component, null in case there is no pipe connecting it
-	 * @param sc
-	 * @param action
-	 * @param precondition
-	 * @param pipes
-	 * @return
-	 */
-	public Pipe getPipeToComponent(ScreenComponent sc, Action action, Condition precondition, List<Pipe> pipes) {
-		for (Pipe pipe : pipes) {
-			if (pipe.getIdBBTo() != null && pipe.getIdBBTo().equals(sc.getUri().toString())
-					&& pipe.getIdActionTo().equals(action.getName())
-					&& pipe.getIdConditionTo().equals(precondition.getId())) {
-				return pipe;
-			}
-		}
-		return null;
-	}
-	
-	/**
-	 * Returns the pipe which connects a (screen) postcondition to any other screen component, null in
-	 * case there is no pipe connecting it
-	 * @param precondition
-	 * @param pipes
-	 * @return
-	 */
-	public Pipe getPipeToPostcondition(Condition postcondition, List<Pipe> pipes) {
-		for (Pipe pipe : pipes) {
-			if (pipe.getIdBBTo() == null
-					&& pipe.getIdConditionTo().equals(postcondition.getId())) {
-				return pipe;
-			}
-		}
-		return null;
-	}
-	
-	/**
 	 * Returns the set of screens which contains only screens reachable in a set of screens
 	 * @param screens
 	 * @return
