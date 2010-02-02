@@ -187,7 +187,7 @@ var InferenceEngine = Class.create( /** @lends InferenceEngine.prototype */ {
      * @private
      */
     _onError: function(transport, e){
-        Utils.showMessage("Error loading building blocks. Maybe is it not working?", {
+        Utils.showMessage("Something went wrong", {
             'error': true,
             'hide': true
         });

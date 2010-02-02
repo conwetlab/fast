@@ -162,14 +162,15 @@ var ScreenDocument = Class.create(PaletteDocument,
          * @type Boolean
          * @private
          */
-        this._hasUnsavedChanges = false;
+        this._isDirty = false;
 
         /**
-         * A sharing operation was started but not finished
-         * @type Boolean
+         * An operation pending to be executed when
+         * the saving process is finished
+         * @type Function
          * @private
          */
-        this._sharingPending = false;
+        this._pendingOperation = null;
           
         /**
          * Resource instances on the canvas by uri
@@ -251,8 +252,7 @@ var ScreenDocument = Class.create(PaletteDocument,
                 this._description.updateBuildingBlock(element, position);
                 break;
         }
-        this._hasUnsavedChanges = true;
-        this._toolbarElements.get('save').setEnabled(true);
+        this._setDirty(true);
     },
 
     /**
@@ -280,6 +280,13 @@ var ScreenDocument = Class.create(PaletteDocument,
 
     // **************** PRIVATE METHODS **************** //
     
+    /**
+     * Sets the screen saving status
+     */
+    _setDirty: function(/** Boolean */ dirty) {
+        this._isDirty = dirty;
+        this._toolbarElements.get('save').setEnabled(dirty);
+    },
 
     /**
      * An element has been dropped into an area inside the canvas
@@ -341,8 +348,7 @@ var ScreenDocument = Class.create(PaletteDocument,
         instance.setEventListener(this);
         instance.enableDragNDrop(area,[area]);
         instance.getView().addGhost();
-        this._hasUnsavedChanges = true;
-        this._toolbarElements.get('save').setEnabled(true);
+        this._setDirty(true);
         return true;
     },
     
@@ -363,8 +369,7 @@ var ScreenDocument = Class.create(PaletteDocument,
                 }
                 this._refreshReachability();
             }
-            this._hasUnsavedChanges = true;
-            this._toolbarElements.get('save').setEnabled(true);
+            this._setDirty(true);
         }
     },
 
@@ -401,8 +406,7 @@ var ScreenDocument = Class.create(PaletteDocument,
         this._refreshReachability();
         this._setSelectedElement();
         instance.destroy();
-        this._hasUnsavedChanges = true;
-        this._toolbarElements.get('save').setEnabled(true);
+        this._setDirty(true);
     },
 
 
@@ -568,32 +572,17 @@ var ScreenDocument = Class.create(PaletteDocument,
      * @overrides
      * @private
      */
-    _closeDocument: function($super) {
-        if (this._hasUnsavedChanges) {
-             confirm("Are you sure you want to close the current Screen?" +
-                " Unsaved changes will be lost", this._confirmCallback.bind(this));
+    _closeDocument: function() {
+        if (this._isDirty) {
+            this._pendingOperation = this._closeDocument.bind(this);
+            this._save();
             return false;
         } else {
-            return true;
-        }
-    },
-    
-    
-    /**
-     * This function is called when the user has confirmed the closing
-     * @private
-     * @param close Boolean
-     *     The parameter represents if the user has accepted the closing (true)
-     *     or not (false)
-     */
-    _confirmCallback: function (close){
-        if (close){
-            GVS.getDocumentController().closeDocument(this._tabId);
-            // Be careful when removing instances
-            // from server if the document is saved
             this._canvasInstances.each(function(pair) {
-                pair.value.destroy(true);    
+                pair.value.destroy(true);
             }.bind(this));
+            
+            GVS.getDocumentController().closeDocument(this._tabId);
         }
     },
     
@@ -820,8 +809,7 @@ var ScreenDocument = Class.create(PaletteDocument,
             this._description.remove(trigger);
         }.bind(this));
         this._updatePanes();
-        this._hasUnsavedChanges = true;
-        this._toolbarElements.get('save').setEnabled(true);
+        this._setDirty(true);
      },
 
      /**
@@ -866,17 +854,16 @@ var ScreenDocument = Class.create(PaletteDocument,
      * @override
      */
     _save: function() {
+        Utils.showMessage("Saving screen");
         if (this._description.getId() == null) {
             // Save it for the first time
             PersistenceEngine.sendPost(URIs.screen, null, "buildingblock=" + Object.toJSON(this._description.toJSON()),
                                        this, this._onSaveSuccess, this._onSaveError);
-        } else {
-            Utils.showMessage("Saving screen...");
+        } else {            
             var uri = URIs.buildingblock + this._description.getId();
             PersistenceEngine.sendUpdate(uri, null, "buildingblock=" + Object.toJSON(this._description.toJSON()),
                                       this, this._onSaveSuccess, this._onSaveError);
         }
-        // TODO: Show a saving message
     },
 
     /**
@@ -884,19 +871,18 @@ var ScreenDocument = Class.create(PaletteDocument,
      * @private
      */
     _onSaveSuccess: function(/** XMLHttpRequest */ transport) {
-        this._hasUnsavedChanges = false;
-        this._toolbarElements.get('save').setEnabled(false);
+        this._setDirty(false);
+        Utils.showMessage("Saved", {
+            'hide': true
+        });
         if (this._description.getId() == null) {
             var data = JSON.parse(transport.responseText);
             this._description.addProperties({'id': data.id});
-        } else {
-            Utils.showMessage("Saving screen...Done", {
-                'hide': true
-            });
         }
-        if (this._sharingPending) {
-            this._sharingPending = false;
-            this._share();
+        if (this._pendingOperation) {
+            var operation = this._pendingOperation;
+            this._pendingOperation = null;
+            operation();
         }     
     },
 
@@ -918,8 +904,7 @@ var ScreenDocument = Class.create(PaletteDocument,
      * Call whenever a properties dialog has been changed
      */
     _onPropertiesChange: function() {
-        this._hasUnsavedChanged = true;
-        this._toolbarElements.get('save').setEnabled(true);
+        this._setDirty(true);
         // Just in case
         this._setTitle(this._description.name);
     },
@@ -930,8 +915,8 @@ var ScreenDocument = Class.create(PaletteDocument,
      */
     _share: function() {
         if (this._description.isValid()) {
-            if (this._hasUnsavedChanges) {
-                this._sharingPending = true;
+            if (this._isDirty) {
+                this._pendingOperation = this._share.bind(this);
                 this._save();
             } else {
                 var persistenceEngine = PersistenceEngineFactory.getInstance();
@@ -1108,6 +1093,7 @@ var ScreenDocument = Class.create(PaletteDocument,
             this._createConditions(this._canvasCache.getPostconditions(), this._areas.get('post'));
             this._createPipes(this._canvasCache.getPipes());
             this._createTriggers(this._canvasCache.getTriggers());
+            this._setDirty(false);
             this._refreshReachability();
         }
     }
