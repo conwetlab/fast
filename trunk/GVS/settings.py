@@ -135,9 +135,10 @@ STORAGE_FORMAT = 'base64string'
 # Url to the ezweb platform where the gadgets will be deployed
 EZWEB_URL = 'http://localhost:8000/'
 
+# Url of the wrapping service
+WRAPPER_SERVICE_URL = 'http://tomdev.cs.uni-kassel.de:8080/ServiceDesignerWep/'
+
 #Gadget Default Info
 DEFAULT_GADGET_IMAGE_URI='http://demo.fast.morfeo-project.org/fast/images/FASTLogo.png'
 DEFAULT_GADGET_HOMEPAGE_URI='http://fast.morfeo-project.eu'
 
-# Flow of operations against the catalogue in order to refresh the screens
-CATALOGUE_FLOW = 'check'
