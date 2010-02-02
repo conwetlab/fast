@@ -75,10 +75,10 @@ var ManageScreensDialog = Class.create(GalleryDialog /** @lends ManageScreensDia
             }, {
                 'value': 'Delete screen',
                 'handler': this._deleteScreen.bind(this)
-            }, {
+            }/*, {
                 'value': 'Add external screen',
                 'handler': this._addScreen.bind(this)
-            }]);
+            }*/]);
 
         this._createScreenList();
         this._render();
@@ -188,7 +188,7 @@ var ManageScreensDialog = Class.create(GalleryDialog /** @lends ManageScreensDia
      */
     _addScreen: function() {
         this._dialog.hide();
-        GVSSingleton.getInstance().action("addScreen");
+        //GVSSingleton.getInstance().action("addScreen");
     },
 
     /**
