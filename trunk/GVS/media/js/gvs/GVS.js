@@ -43,13 +43,6 @@ var GVS = Class.create(ToolbarModel,    /** @lends GVS.prototype */
          * @private
          */
         this._menuConfig = null;
-
-        this._dialogs.set("addScreen", new AddScreenDialog());
-        this._dialogs.set("newScreenflow", new NewScreenflowDialog());
-        this._dialogs.set("newScreen", new NewScreenDialog());
-        this._dialogs.set("browseScreens", new ManageScreensDialog());
-        this._dialogs.set("preferences", new PreferencesDialog());
-
     },
 
 
@@ -62,6 +55,13 @@ var GVS = Class.create(ToolbarModel,    /** @lends GVS.prototype */
      * @public
      */
     init: function(){
+
+        this._dialogs.set("addScreen", new AddScreenDialog());
+        this._dialogs.set("newScreenflow", new NewScreenflowDialog());
+        this._dialogs.set("newScreen", new NewScreenDialog());
+        this._dialogs.set("browseScreens", new ManageScreensDialog());
+        this._dialogs.set("preferences", new PreferencesDialog());
+        
         this._actions = {
             // browseScreenflow: this._browseScreenflow.bind(this),
             newScreenflow: this._newScreenflow.bind(this),
@@ -334,7 +334,10 @@ var GVS = Class.create(ToolbarModel,    /** @lends GVS.prototype */
         }
     }
 });
-
+// Hack to transform GVS into a static class
+// It cannot be defined as other static class, as it is derived
+// from a non static class
+GVS = new GVS();
 
 
 // vim:ts=4:sw=4:et:
