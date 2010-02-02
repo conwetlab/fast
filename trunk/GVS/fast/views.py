@@ -35,7 +35,8 @@ class RegisterForm(forms.Form):
 
 @login_required
 def index(request):
-    return render_to_response('index.html',{}, 
+    return render_to_response('index.html',{'EZWEB_URL' : settings.EZWEB_URL,
+                                            'WRAPPER_SERVICE_URL': settings.WRAPPER_SERVICE_URL},
                   context_instance=RequestContext(request))
     
 def register(request):

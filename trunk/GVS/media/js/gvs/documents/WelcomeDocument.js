@@ -42,20 +42,25 @@ var WelcomeDocument = Class.create(AbstractDocument,
         var gvs = GVSSingleton.getInstance();
         var newScreenflowButton = new dijit.form.Button({
             label: "Create a Screenflow from Scratch",
-            onClick: function() { gvs.action("newScreenflow"); }}
+            onClick: function() {gvs.action("newScreenflow");}}
         );
         var openScreenflowButton = new dijit.form.Button({
             label: "Open Existing Screenflow...",
-            onClick: function() { gvs.action("openScreenflow"); }}
+            onClick: function() {gvs.action("openScreenflow");}}
         );
 
         var newScreenButton = new dijit.form.Button({
             label: "Create a Screen from Scratch",
-            onClick: function() { gvs.action("newScreen"); }}
+            onClick: function() {gvs.action("newScreen");}}
         );
         var browseScreensButton = new dijit.form.Button({
             label: "Browse Screens...",
-            onClick: function() { gvs.action("browseScreens"); }}
+            onClick: function() {gvs.action("browseScreens");}}
+        );
+
+        var openWrapperServiceButton = new dijit.form.Button({
+            label: "Wrap existing services",
+            onClick: function() {gvs.action("wrapperService");}}
         );
 
         var buttonsContainer = new Element("div");
@@ -67,8 +72,10 @@ var WelcomeDocument = Class.create(AbstractDocument,
         buttonsContainer.appendChild(newScreenButton.domNode);
         buttonsContainer.appendChild(new Element("br"));
         buttonsContainer.appendChild(browseScreensButton.domNode);
+
         if (!GlobalOptions.isPublicDemo) {
-            
+            buttonsContainer.appendChild(new Element("div").update("Building blocks"));
+            buttonsContainer.appendChild(openWrapperServiceButton.domNode);
         }
         content.appendChild(buttonsContainer);
     }

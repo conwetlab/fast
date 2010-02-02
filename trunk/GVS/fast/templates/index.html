@@ -95,7 +95,9 @@
             URIs.about = "{{ MEDIA_URL }}resources/about.html";
             URIs.pre = "catalogue/preconditions/";
             URIs.post = "catalogue/postconditions/";
-            URIs.ezweb = "{{EZWEB_URL}}";
+            URIs.ezweb = "{{ EZWEB_URL }}";
+
+            URIs.wrapperService = "{{ WRAPPER_SERVICE_URL }}";
 
             var GlobalOptions = new Object();
 
@@ -184,6 +186,8 @@
         <!-- Documents -->
         <script type="text/javascript"
             src="{{ MEDIA_URL }}js/gvs/documents/AbstractDocument.js"></script>
+        <script type="text/javascript"
+            src="{{ MEDIA_URL }}js/gvs/documents/ExternalDocument.js"></script>
         <script type="text/javascript"
             src="{{ MEDIA_URL }}js/gvs/documents/PaletteDocument.js"></script>
         <script type="text/javascript"
@@ -378,6 +382,7 @@
                 dojo.require("dijit.layout.TabContainer");
                 dojo.require("dijit.layout.BorderContainer");
                 dojo.require("dijit.Dialog");
+                dojo.require("dojox.layout.ContentPane");
     
                 // ... other functions
                 dojo.require("dojox.fx");
@@ -461,6 +466,9 @@
             
             <!-- Workspace area -->
             <div dojoType="dijit.layout.TabContainer" id="documentContainer" region="center">
+                <!--<iframe id="prueba" dojoType="dijit.layout.ContentPane" src="http://www.marca.com" title="myPage" style="display: none;border:0px; width:100%; height:100%">
+
+                </iframe>-->
             </div> 
             <!-- end of Document area -->
         </div>       

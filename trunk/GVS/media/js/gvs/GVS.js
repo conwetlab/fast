@@ -87,7 +87,8 @@ var GVSSingleton = function(){
                 addScreen: this._addScreen.bind(this),
                 newScreen: this._newScreen.bind(this),
                 browseScreens: this._browseScreens.bind(this),
-                showAbout: this._showAboutDialog.bind(this)
+                showAbout: this._showAboutDialog.bind(this),
+                wrapperService: this._openWrapperService.bind(this)
             };
             this._documentController = new DocumentController();
             
@@ -183,6 +184,14 @@ var GVSSingleton = function(){
          */
         _browseScreens: function(){
             this._dialogs.get("browseScreens").show();
+        },
+
+        /**
+         * Open wrapper service
+         * @private
+         */
+        _openWrapperService: function() {
+            this._documentController.openWrapperService();
         },
         
         /**

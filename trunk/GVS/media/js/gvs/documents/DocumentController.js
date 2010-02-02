@@ -100,6 +100,14 @@ var DocumentController = Class.create(
         var uri = URIs.buildingblock + id;
         persistenceEngine.sendGet(uri, this, this._onScreenLoadSuccess, this._onLoadError);
     },
+
+    /**
+     * Opens a wrapper service session
+     */
+    openWrapperService: function() {
+        var wrapper = new ExternalDocument("Wrapper Service", URIs.wrapperService);
+        this.addDocument(wrapper);
+    },
     
     /**
      * Shows the welcome document

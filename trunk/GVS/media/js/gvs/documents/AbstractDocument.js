@@ -6,8 +6,11 @@ var AbstractDocument = Class.create(ToolbarModel, /** @lends AbstractDocument.pr
      * @abstract
      * @constructs
      */ 
-    initialize: function($super, /** String */ title) {
+    initialize: function($super, /** String */ title,
+        /** Boolean (Optional) */ _isWidgetProvided) {
         $super();
+
+        var isWidgetProvided = Utils.variableOrDefault(_isWidgetProvided, false);
         
         var uidGenerator = UIDGeneratorSingleton.getInstance();
         
@@ -37,20 +40,24 @@ var AbstractDocument = Class.create(ToolbarModel, /** @lends AbstractDocument.pr
         
         /**
          * Actual tab
-         * @type DOMNode
+         * @type dijit.layout.ContentPane
          * @private
          */
-        this._tab = new dijit.layout.ContentPane({
-            title: this._title,
-            id: this._tabId,
-            closable: true,
-            onClose: this._closeDocument.bind(this)
-        }, null);
-        
-        
-        this._tab.setContent(this._tabContent);
+        this._tab = null;
+
+        if (!isWidgetProvided) {
+            this._tab = new dijit.layout.ContentPane({
+                title: this._title,
+                id: this._tabId,
+                closable: true,
+                onClose: this._closeDocument.bind(this)
+            }, null);
+
+            this._tab.setContent(this._tabContent);
+        } else {
+            this._tab = this._getWidget();
+        }
     },
-    
 
     // **************** PUBLIC METHODS **************** //
 
@@ -105,11 +112,11 @@ var AbstractDocument = Class.create(ToolbarModel, /** @lends AbstractDocument.pr
     },
 
     show: function() {
-
+        // Do nothing
     },
 
     hide: function() {
-
+        // Do nothing
     },
     
     // **************** PRIVATE METHODS **************** //
