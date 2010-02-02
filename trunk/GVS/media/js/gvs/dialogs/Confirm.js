@@ -104,9 +104,9 @@ if (document.getElementById) {
     //Note that confirm is not blocking anymore
     //so a callback function is needed
     var browserConfirm = window.confirm;             
-    window.confirm = function(msg,callback) {
-        if (callback) {
-            ConfirmSingleton.getInstance().show(msg,callback);
+    window.confirm = function(msg, _callback) {
+        if (_callback) {
+            ConfirmSingleton.getInstance().show(msg,_callback);
         } else{ //In case you don't use the modified version
             browserConfirm(msg);
         }

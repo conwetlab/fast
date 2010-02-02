@@ -91,6 +91,26 @@
             URIs.about = "{{ MEDIA_URL }}resources/about.html";
             URIs.pre = "catalogue/preconditions/";
             URIs.post = "catalogue/postconditions/";
+
+            var Test = Class.create({
+                'initialize': function(testName, handler) {
+                    this._testName = testName;
+                    this._handler = handler;
+                },
+                'execute': function() {
+                    console.log(this._testName);
+                    this._handler();
+                }
+            });
+            Object.extend(Test,{
+                'assertEquals': function(result, expectedResult) {
+                    if (result == expectedResult) {
+                        console.log("\tOK");
+                    } else {
+                        console.log("\tERROR: " + result);
+                    }
+                }
+            })
         </script>
         
         

@@ -27,7 +27,7 @@ var PreferencesDialog = Class.create(ConfirmDialog /** @lends PreferencesDialog.
  
         this._setHeader("User preferences");
         
-        var user = GVSSingleton.getInstance().getUser();
+        var user = GVS.getUser();
              
         var formData = [
             {'type':'input', 'label': 'First Name:','name': 'firstName', 
@@ -58,7 +58,7 @@ var PreferencesDialog = Class.create(ConfirmDialog /** @lends PreferencesDialog.
             return;
         }
         else {
-            var user = GVSSingleton.getInstance().getUser();
+            var user = GVS.getUser();
             user.update(this._getForm().serialize(true));
             $super();
         }
@@ -70,7 +70,7 @@ var PreferencesDialog = Class.create(ConfirmDialog /** @lends PreferencesDialog.
      * @private
      */
     _reset: function ($super){
-        var user = GVSSingleton.getInstance().getUser();
+        var user = GVS.getUser();
         this._getForm().firstName.value = user.getFirstName();
         this._getForm().lastName.value = user.getLastName();
         this._getForm().email.value = user.getEmail();

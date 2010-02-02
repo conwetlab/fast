@@ -143,9 +143,8 @@ var User = Class.create( /** @lends User.prototype */ {
         var onError = function (/** XmlHttpRequest */ response, /** Exception */ e){         
             Logger.serverError (response, e);
         }
-        
-        var persistenceEngine = PersistenceEngineFactory.getInstance();        
-        persistenceEngine.sendGet(URIs.userPreferences, this, onSuccess, onError);
+              
+        PersistenceEngine.sendGet(URIs.userPreferences, this, onSuccess, onError);
     },
     /**
      *  This function updates the user to the server
@@ -176,8 +175,8 @@ var User = Class.create( /** @lends User.prototype */ {
         };
         var preferences = {preferences :Object.toJSON(object)};
         
-        var persistenceEngine = PersistenceEngineFactory.getInstance();
-        persistenceEngine.sendUpdate(URIs.userPreferences, preferences, null, this, onSuccess, onError);
+        PersistenceEngine.sendUpdate(URIs.userPreferences, preferences, null,
+                                this, onSuccess, onError);
     }
     
 });

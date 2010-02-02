@@ -66,7 +66,7 @@ var FormDialog = Class.create( /** @lends FormDialog.prototype */ {
         } else {
             this._reset();
         }
-        GVSSingleton.getInstance().setEnabled(false);
+        GVS.setEnabled(false);
         this._dialog.show();
     },
     
@@ -82,7 +82,7 @@ var FormDialog = Class.create( /** @lends FormDialog.prototype */ {
     },
     
     _hide: function() {
-        GVSSingleton.getInstance().setEnabled(true);
+        GVS.setEnabled(true);
     },
         
     /**

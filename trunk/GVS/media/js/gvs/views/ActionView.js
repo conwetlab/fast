@@ -18,9 +18,7 @@ var ActionView = Class.create(
          * @type Hash
          * @private
          */
-        this._preIcons = new Hash();            
-
-        var factFactory = FactFactorySingleton.getInstance();
+        this._preIcons = new Hash();
         
         this._node = new Element("div", {
             "class": "action"
@@ -35,7 +33,7 @@ var ActionView = Class.create(
             "class": "preArea"
         });
         description.preconditions.each(function(pre) {
-            var fact = factFactory.getFactIcon(pre, "embedded");                 
+            var fact = FactFactory.getFactIcon(pre, "embedded");
             this._preIcons.set(pre.id, fact);
             preArea.appendChild(fact.getNode());
         }.bind(this));

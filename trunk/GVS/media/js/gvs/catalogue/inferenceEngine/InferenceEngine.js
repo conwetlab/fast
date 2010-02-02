@@ -34,12 +34,11 @@ var InferenceEngine = Class.create( /** @lends InferenceEngine.prototype */ {
                          /** Function */ callback) {
         
         var body = this._constructBody(canvas, elements, tags, criteria);
-        var persistenceEngine = PersistenceEngineFactory.getInstance();
         var context = {
             'callback': callback,
             'mine': this
         };
-        persistenceEngine.sendPost(this._getUri("findCheck"), null, body,
+        PersistenceEngine.sendPost(this._getUri("findCheck"), null, body,
                 context, this._findCheckOnSuccess, this._onError);
     },
     
@@ -51,12 +50,11 @@ var InferenceEngine = Class.create( /** @lends InferenceEngine.prototype */ {
                     /** String*/ criteria, 
                     /** Function */ callback) {
         var body = this._constructBody(canvas, elements, tags, criteria, "check");
-        var persistenceEngine = PersistenceEngineFactory.getInstance();
         var context = {
             'callback': callback,
             'mine': this
         };
-        persistenceEngine.sendPost(this._getUri("check"), null, body, context, 
+        PersistenceEngine.sendPost(this._getUri("check"), null, body, context,
                                     this._checkOnSuccess, this._onError);                   
     },
 

@@ -229,7 +229,7 @@ var GalleryDialog = Class.create(FormDialog, /** @lends GalleryDialog.prototype 
      */
     _show: function() {
         this._initDialogInterface();
-        GVSSingleton.getInstance().setEnabled(false);
+        GVS.setEnabled(false);
         this._dialog.show();
     }
 });

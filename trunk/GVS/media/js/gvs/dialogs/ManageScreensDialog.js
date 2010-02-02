@@ -24,8 +24,7 @@ var ManageScreensDialog = Class.create(GalleryDialog /** @lends ManageScreensDia
      * @override
      */
     show: function() {
-        var persistenceEngine = PersistenceEngineFactory.getInstance();
-        persistenceEngine.sendGet(URIs.screen, this, this._onLoadSuccess, Utils.onAJAXError);
+        PersistenceEngine.sendGet(URIs.screen, this, this._onLoadSuccess, Utils.onAJAXError);
     },
 
 
@@ -137,7 +136,7 @@ var ManageScreensDialog = Class.create(GalleryDialog /** @lends ManageScreensDia
      * @private
      */
     _openScreen: function(/** String */ id) {
-        var documentController = GVSSingleton.getInstance().getDocumentController();
+        var documentController = GVS.getDocumentController();
         documentController.loadScreen(id);
         this._dialog.hide();
     },
@@ -147,7 +146,6 @@ var ManageScreensDialog = Class.create(GalleryDialog /** @lends ManageScreensDia
      * @private
      */
     _shareScreen: function(/** String */ id) {
-        var persistenceEngine = PersistenceEngineFactory.getInstance();
         var uri = URIs.share.replace("<id>", id);
 
         var screen = this._screens.detect(function(element) {
@@ -155,10 +153,10 @@ var ManageScreensDialog = Class.create(GalleryDialog /** @lends ManageScreensDia
         });
         if (screen.uri) {
             // Unshare screen       
-            persistenceEngine.sendDelete(uri, this, this._reload, Utils.onAJAXError);
+            PersistenceEngine.sendDelete(uri, this, this._reload, Utils.onAJAXError);
         } else {
             // Share screen
-            persistenceEngine.sendPost(uri, null, null, this, this._reload,
+            PersistenceEngine.sendPost(uri, null, null, this, this._reload,
                                         Utils.onAJAXError);
         }
     },
@@ -177,9 +175,8 @@ var ManageScreensDialog = Class.create(GalleryDialog /** @lends ManageScreensDia
      * @private
      */
     _confirmDelete: function() {
-        var persistenceEngine = PersistenceEngineFactory.getInstance();
         var uri = URIs.buildingblock + this.id;
-        persistenceEngine.sendDelete(uri, this.mine, this.mine._reload, Utils.onAJAXError);
+        PersistenceEngine.sendDelete(uri, this.mine, this.mine._reload, Utils.onAJAXError);
     },
 
     /**
@@ -188,7 +185,7 @@ var ManageScreensDialog = Class.create(GalleryDialog /** @lends ManageScreensDia
      */
     _addScreen: function() {
         this._dialog.hide();
-        //GVSSingleton.getInstance().action("addScreen");
+        //GVS.action("addScreen");
     },
 
     /**
@@ -196,8 +193,7 @@ var ManageScreensDialog = Class.create(GalleryDialog /** @lends ManageScreensDia
      * @private
      */
     _reload: function() {
-        var persistenceEngine = PersistenceEngineFactory.getInstance();
-        persistenceEngine.sendGet(URIs.screen, this, this._onReLoadSuccess, Utils.onAJAXError);
+        PersistenceEngine.sendGet(URIs.screen, this, this._onReLoadSuccess, Utils.onAJAXError);
     }
 });
 

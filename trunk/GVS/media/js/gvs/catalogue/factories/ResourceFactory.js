@@ -72,8 +72,8 @@ var ResourceFactory = Class.create(BuildingBlockFactory,
         
         if (pendingURIs.size() > 0) {
             var postData = Object.toJSON(pendingURIs);
-            var persistenceEngine = PersistenceEngineFactory.getInstance();
-            persistenceEngine.sendPost(URIs.catalogueGetMetadata,
+
+            PersistenceEngine.sendPost(URIs.catalogueGetMetadata,
                 null, postData,
                 {
                     'mine': this,

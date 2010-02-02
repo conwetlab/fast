@@ -328,10 +328,9 @@ var ComponentInstance = Class.create(DragSource,
      * @type String
      */
     _getConditionItem: function(/** Object */ condition, /** Object */ reachability) {
-        var factFactory = FactFactorySingleton.getInstance();
-        var uri = factFactory.getFactUri(condition);
+        var uri = FactFactory.getFactUri(condition);
 
-        var fact = factFactory.getFactIcon(condition, "embedded").getNode();
+        var fact = FactFactory.getFactIcon(condition, "embedded").getNode();
         if (reachability.constructor == Hash) {
             Utils.setSatisfeabilityClass(fact, reachability.get(uri));
         } else {

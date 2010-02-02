@@ -114,6 +114,20 @@
             src="{{ MEDIA_URL }}js/gvs/dragndrop/DragSource.js"></script>
         <script type="text/javascript"
             src="{{ MEDIA_URL }}js/gvs/dragndrop/Area.js"></script>
+
+        <!-- Factories -->
+        <script type="text/javascript"
+            src="{{ MEDIA_URL }}js/gvs/catalogue/factories/BuildingBlockFactory.js"></script>
+        <script type="text/javascript"
+            src="{{ MEDIA_URL }}js/gvs/catalogue/factories/ScreenFactory.js"></script>
+        <script type="text/javascript"
+            src="{{ MEDIA_URL }}js/gvs/catalogue/factories/DomainConceptFactory.js"></script>
+        <script type="text/javascript"
+            src="{{ MEDIA_URL }}js/gvs/catalogue/factories/FormFactory.js"></script>
+        <script type="text/javascript"
+            src="{{ MEDIA_URL }}js/gvs/catalogue/factories/OperatorFactory.js"></script>
+        <script type="text/javascript"
+            src="{{ MEDIA_URL }}js/gvs/catalogue/factories/ResourceFactory.js"></script>
         
         <!-- Catalogue Classes -->
         <script type="text/javascript"
@@ -131,21 +145,7 @@
         <script type="text/javascript" 
             src="{{ MEDIA_URL }}js/gvs/catalogue/inferenceEngine/ScreenflowInferenceEngine.js"></script>
         <script type="text/javascript" 
-            src="{{ MEDIA_URL }}js/gvs/catalogue/inferenceEngine/ScreenInferenceEngine.js"></script>
-
-        <!-- Factories -->
-        <script type="text/javascript"
-            src="{{ MEDIA_URL }}js/gvs/catalogue/factories/BuildingBlockFactory.js"></script>
-        <script type="text/javascript"
-            src="{{ MEDIA_URL }}js/gvs/catalogue/factories/ScreenFactory.js"></script>
-        <script type="text/javascript"
-            src="{{ MEDIA_URL }}js/gvs/catalogue/factories/DomainConceptFactory.js"></script>
-        <script type="text/javascript"
-            src="{{ MEDIA_URL }}js/gvs/catalogue/factories/FormFactory.js"></script>
-        <script type="text/javascript"
-            src="{{ MEDIA_URL }}js/gvs/catalogue/factories/OperatorFactory.js"></script>
-        <script type="text/javascript"
-            src="{{ MEDIA_URL }}js/gvs/catalogue/factories/ResourceFactory.js"></script>     
+            src="{{ MEDIA_URL }}js/gvs/catalogue/inferenceEngine/ScreenInferenceEngine.js"></script>  
 
         <!-- Sets -->
         <script type="text/javascript"
@@ -392,7 +392,11 @@
     
                 // Arming the GVS initialization method
                 dojo.addOnLoad(function() {
-                    GVSSingleton.getInstance().init();
+                    // Hack to transform GVS into a static class
+                    // It cannot be defined as other static class, as it is derived
+                    // from a non static class
+                    GVS = new GVS();
+                    GVS.init();
                     // FIXME: there is a problem rendering the different
                     // sections programatically. Repaint for better
                     // performance

@@ -48,7 +48,7 @@ var Builder = Class.create( /** @lends Builder.prototype */ {
         
         var saveParams = {'buildingblock': this._description.toJSON()};
         
-        PersistenceEngineFactory.getInstance().sendPost(URIs.screenflow, saveParams, null, 
+        PersistenceEngine.sendPost(URIs.screenflow, saveParams, null, 
                 this, this._onSaveCallback, this._onError);
     },
     
@@ -67,8 +67,7 @@ var Builder = Class.create( /** @lends Builder.prototype */ {
             'screenflow': this._description.id
         };        
         
-        var persistenceEngine = PersistenceEngineFactory.getInstance();
-        persistenceEngine.sendPost(URIs.store, storeParams, null, 
+        PersistenceEngine.sendPost(URIs.store, storeParams, null,
                 this, this._onBuildSuccess, this._onError);
     },
     

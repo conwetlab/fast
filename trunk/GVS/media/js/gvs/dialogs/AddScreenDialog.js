@@ -112,7 +112,7 @@ var AddScreenDialog = Class.create(ConfirmDialog /** @lends AddScreenDialog.prot
         console.log("After json");
         console.log(Object.toJSON(formToSend));
         
-        CatalogueSingleton.getInstance().createScreen(Object.toJSON(formToSend));
+        Catalogue.createScreen(Object.toJSON(formToSend));
 
     }
 });

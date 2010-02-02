@@ -26,16 +26,15 @@ var ScreenDocument = Class.create(PaletteDocument,
          */
         this._factPane = new FactPane(this._inspectorArea);
         
-        var catalogue = CatalogueSingleton.getInstance();
 
         // Palette sets
-        var formSet = new BuildingBlockSet(tags, catalogue.
+        var formSet = new BuildingBlockSet(tags, Catalogue.
                             getBuildingBlockFactory(Constants.BuildingBlock.FORM));
-        var operatorSet = new BuildingBlockSet(tags, catalogue.
+        var operatorSet = new BuildingBlockSet(tags, Catalogue.
                                 getBuildingBlockFactory(Constants.BuildingBlock.OPERATOR));
-        var resourceSet = new BuildingBlockSet(tags, catalogue.
+        var resourceSet = new BuildingBlockSet(tags, Catalogue.
                                 getBuildingBlockFactory(Constants.BuildingBlock.RESOURCE));
-        var domainConceptSet = new DomainConceptSet(tags, catalogue.
+        var domainConceptSet = new DomainConceptSet(tags, Catalogue.
                                 getBuildingBlockFactory(Constants.BuildingBlock.DOMAIN_CONCEPT));
         
         // Dropping areas
@@ -261,17 +260,17 @@ var ScreenDocument = Class.create(PaletteDocument,
      */
     loadInstances: function() {
 
-        var formFactory = CatalogueSingleton.getInstance().
+        var formFactory = Catalogue.
             getBuildingBlockFactory(Constants.BuildingBlock.FORM);
         formFactory.cacheBuildingBlocks(this._canvasCache.getFormURI(),
                     this._onFormLoaded.bind(this));
 
-        var operatorFactory = CatalogueSingleton.getInstance().
+        var operatorFactory = Catalogue.
             getBuildingBlockFactory(Constants.BuildingBlock.OPERATOR);
         operatorFactory.cacheBuildingBlocks(this._canvasCache.getOperatorURIs(),
                     this._onOperatorsLoaded.bind(this));
 
-        var resourceFactory = CatalogueSingleton.getInstance().
+        var resourceFactory = Catalogue.
             getBuildingBlockFactory(Constants.BuildingBlock.RESOURCE);
         resourceFactory.cacheBuildingBlocks(this._canvasCache.getResourceURIs(),
                     this._onResourcesLoaded.bind(this));
@@ -312,11 +311,11 @@ var ScreenDocument = Class.create(PaletteDocument,
             'top': position.top + "px",
             'position': 'absolute'
         });
-        var uidGenerator = UIDGeneratorSingleton.getInstance();
+        
         if (!instance.getId()) {
-            instance.setId(uidGenerator.generate(instance.getTitle()));
+            instance.setId(UIDGenerator.generate(instance.getTitle()));
         } else {
-            uidGenerator.setStartId(instance.getId());
+            UIDGenerator.setStartId(instance.getId());
         }
           
         if (instance.constructor != PrePostInstance) {
@@ -589,8 +588,7 @@ var ScreenDocument = Class.create(PaletteDocument,
      */
     _confirmCallback: function (close){
         if (close){
-            var gvs = GVSSingleton.getInstance();
-            gvs.getDocumentController().closeDocument(this._tabId);
+            GVS.getDocumentController().closeDocument(this._tabId);
             // Be careful when removing instances
             // from server if the document is saved
             this._canvasInstances.each(function(pair) {
@@ -868,15 +866,14 @@ var ScreenDocument = Class.create(PaletteDocument,
      * @override
      */
     _save: function() {
-        var persistenceEngine = PersistenceEngineFactory.getInstance();
         if (this._description.getId() == null) {
             // Save it for the first time
-            persistenceEngine.sendPost(URIs.screen, null, "buildingblock=" + Object.toJSON(this._description.toJSON()),
+            PersistenceEngine.sendPost(URIs.screen, null, "buildingblock=" + Object.toJSON(this._description.toJSON()),
                                        this, this._onSaveSuccess, this._onSaveError);
         } else {
             Utils.showMessage("Saving screen...");
             var uri = URIs.buildingblock + this._description.getId();
-            persistenceEngine.sendUpdate(uri, null, "buildingblock=" + Object.toJSON(this._description.toJSON()),
+            PersistenceEngine.sendUpdate(uri, null, "buildingblock=" + Object.toJSON(this._description.toJSON()),
                                       this, this._onSaveSuccess, this._onSaveError);
         }
         // TODO: Show a saving message
@@ -961,7 +958,7 @@ var ScreenDocument = Class.create(PaletteDocument,
      * @private
      */
     _onFormLoaded: function() {
-        var formFactory = CatalogueSingleton.getInstance().
+        var formFactory = Catalogue.
             getBuildingBlockFactory(Constants.BuildingBlock.FORM);
         var forms = formFactory.getBuildingBlocks(this._canvasCache.getFormURI());
         this._createInstances(formFactory, forms, this._areas.get('form'));
@@ -974,7 +971,7 @@ var ScreenDocument = Class.create(PaletteDocument,
      * @private
      */
     _onOperatorsLoaded: function() {
-        var operatorFactory = CatalogueSingleton.getInstance().
+        var operatorFactory = Catalogue.
                     getBuildingBlockFactory(Constants.BuildingBlock.OPERATOR);
         var operators = operatorFactory.getBuildingBlocks(this._canvasCache.getOperatorURIs());
         this._createInstances(operatorFactory, operators, this._areas.get('operator'));
@@ -987,7 +984,7 @@ var ScreenDocument = Class.create(PaletteDocument,
      * @private
      */
     _onResourcesLoaded: function() {
-        var resourceFactory = CatalogueSingleton.getInstance().
+        var resourceFactory = Catalogue.
                 getBuildingBlockFactory(Constants.BuildingBlock.RESOURCE);
         var resources = resourceFactory.getBuildingBlocks(this._canvasCache.getResourceURIs());
         this._createInstances(resourceFactory, resources, this._areas.get('resource'));

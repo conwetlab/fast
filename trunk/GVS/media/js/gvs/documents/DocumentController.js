@@ -96,9 +96,9 @@ var DocumentController = Class.create(
      * Opens an existing screen by its id
      */
     loadScreen: function(/** String */ id) {
-        var persistenceEngine = PersistenceEngineFactory.getInstance();
+        
         var uri = URIs.buildingblock + id;
-        persistenceEngine.sendGet(uri, this, this._onScreenLoadSuccess, this._onLoadError);
+        PersistenceEngine.sendGet(uri, this, this._onScreenLoadSuccess, this._onLoadError);
     },
 
     /**

@@ -208,8 +208,7 @@ var PrePostInstance = Class.create(ComponentInstance,
      * @type Array
      */
     getConditionTable: function(/** Boolean */ reachabilityInfo) {
-        var factFactory = FactFactorySingleton.getInstance();
-        var fact = factFactory.getFactIcon(this._getFactData(), "embedded").getNode();
+        var fact = FactFactory.getFactIcon(this._getFactData(), "embedded").getNode();
         var reachable;
         if (reachabilityInfo !== undefined) {
             reachable = reachabilityInfo;
@@ -333,9 +332,8 @@ var PrePostInstance = Class.create(ComponentInstance,
             
             // Calling the server to add the pre/post
             var catalogueResource = (this._type == 'pre') ? URIs.pre : URIs.post;
-            var persistenceEngine = PersistenceEngineFactory.getInstance();
             this._id = new Date().valueOf();
-            persistenceEngine.sendPost(catalogueResource,
+            PersistenceEngine.sendPost(catalogueResource,
                             null, this.toJSON(), this, 
                             this._onPostSuccess, Utils.onAJAXError); 
         } else {
@@ -377,8 +375,7 @@ var PrePostInstance = Class.create(ComponentInstance,
      * @private
      */
     _removeFromServer: function(/** String */ uri, /** String */ type) {
-        var persistenceEngine = PersistenceEngineFactory.getInstance();
-        persistenceEngine.sendDelete(uri,
+        PersistenceEngine.sendDelete(uri,
             this, 
             this._onDeleteSuccess, Utils.onAJAXError);
     },

@@ -1,0 +1,56 @@
+{% extends "tests/base.html" %}
+{% block classpath %}
+     
+<script type="text/javascript">
+    StaticClass = Class.create();
+    // Static attributes
+    Object.extend(StaticClass, {
+        
+        'stringAttr': 'a string',
+
+        'arrayAttr': new Array()
+    });
+    // Static methods
+    Object.extend(StaticClass, {
+       
+        'hello': function() {
+            return "Hello World";
+        },
+
+        'useStatic': function() {
+            return this.stringAttr;
+        },
+
+        'getSize': function() {
+            return this.arrayAttr.size();
+        },
+
+        'addElement': function() {
+            this.arrayAttr.push("bleh");
+        }
+    })
+
+</script>
+{% endblock %}
+
+{% block onload %}
+
+    new Test("Test 1: Static method without data", function() {
+        Test.assertEquals(StaticClass.hello(),"Hello World");
+    }).execute();
+
+    new Test("Test 2: Static attributes", function() {
+        Test.assertEquals(StaticClass.useStatic(),"a string");
+    }).execute();
+
+    new Test("Test 3: Modifying static attributes", function() {
+        Test.assertEquals(StaticClass.getSize(), 0);
+        StaticClass.addElement();
+        Test.assertEquals(StaticClass.getSize(), 1);
+    }).execute();
+        
+{% endblock %}
+
+{% block test_body %}
+<h1>Look at the console</h1>
+{% endblock %}

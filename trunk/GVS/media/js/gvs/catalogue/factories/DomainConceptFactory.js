@@ -26,8 +26,7 @@ var DomainConceptFactory = Class.create(BuildingBlockFactory,
      */
     getBuildingBlocks: function(/** Array */ tags, /** Function */ callback){
         var url = this._createUrl(tags);
-        var persistenceEngine = PersistenceEngineFactory.getInstance();
-        persistenceEngine.sendGet(url,
+        PersistenceEngine.sendGet(url,
                 {
                     'callback': callback
                 },

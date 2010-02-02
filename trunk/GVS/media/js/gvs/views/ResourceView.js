@@ -27,7 +27,6 @@ var ResourceView = Class.create(BuildingBlockView,
 
        
 
-        var factFactory = FactFactorySingleton.getInstance();
         var preArea = new Element("div", {"class": "preArea"});
         var postArea = new Element("div", {"class": "postArea"});
         
@@ -37,7 +36,7 @@ var ResourceView = Class.create(BuildingBlockView,
         // and separation between actions 
         actions.each(function(action) {
             action.preconditions.each(function(pre) {
-                var fact = factFactory.getFactIcon(pre, "embedded");                 
+                var fact = FactFactory.getFactIcon(pre, "embedded");
                 this._preIcons.set(pre.id, fact);
                 preArea.appendChild(fact.getNode());
             }.bind(this));
@@ -52,7 +51,7 @@ var ResourceView = Class.create(BuildingBlockView,
         }
         
         posts.each(function(post) {
-                var fact = factFactory.getFactIcon(post, "embedded");                 
+                var fact = FactFactory.getFactIcon(post, "embedded");
                 this._postIcons.set(post.id, fact);
                 postArea.appendChild(fact.getNode());
             }.bind(this));

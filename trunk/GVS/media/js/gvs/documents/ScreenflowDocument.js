@@ -22,11 +22,9 @@ var ScreenflowDocument = Class.create(PaletteDocument,
          */
         this._factPane = new FactPane(this._inspectorArea);
         
-        var catalogue = CatalogueSingleton.getInstance();
-        
-        var screenSet = new BuildingBlockSet(tags, catalogue.
+        var screenSet = new BuildingBlockSet(tags, Catalogue.
                             getBuildingBlockFactory(Constants.BuildingBlock.SCREEN));
-        var domainConceptSet = new DomainConceptSet(tags, catalogue.
+        var domainConceptSet = new DomainConceptSet(tags, Catalogue.
                             getBuildingBlockFactory(Constants.BuildingBlock.DOMAIN_CONCEPT));
         
         /**
@@ -363,8 +361,7 @@ var ScreenflowDocument = Class.create(PaletteDocument,
      */
     _confirmCallback: function (close){
         if (close){
-            var gvs = GVSSingleton.getInstance();
-            gvs.getDocumentController().closeDocument(this._tabId);
+            GVS.getDocumentController().closeDocument(this._tabId);
             // Be careful when removing instances
             // from server if the document is saved
             this._canvasInstances.each(function(pair) {

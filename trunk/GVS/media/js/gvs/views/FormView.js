@@ -31,7 +31,6 @@ var FormView = Class.create(BuildingBlockView,
          */         
         this._triggerIcons = new Hash(); 
 
-        var factFactory = FactFactorySingleton.getInstance();
         
         this._node = new Element("div", {
             "class": "view form",
@@ -88,7 +87,7 @@ var FormView = Class.create(BuildingBlockView,
         
         
         posts.each (function(post) {
-            var fact = factFactory.getFactIcon(post, "embedded");                 
+            var fact = FactFactory.getFactIcon(post, "embedded");
             this._postIcons.set(post.id, fact);
             postArea.appendChild(fact.getNode());
         }.bind(this));

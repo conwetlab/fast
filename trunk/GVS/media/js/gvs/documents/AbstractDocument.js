@@ -12,8 +12,6 @@ var AbstractDocument = Class.create(ToolbarModel, /** @lends AbstractDocument.pr
 
         var isWidgetProvided = Utils.variableOrDefault(_isWidgetProvided, false);
         
-        var uidGenerator = UIDGeneratorSingleton.getInstance();
-        
         /**
          * Tab title
          * @type String
@@ -26,7 +24,7 @@ var AbstractDocument = Class.create(ToolbarModel, /** @lends AbstractDocument.pr
          * @type String
          * @private
          */
-        this._tabId = uidGenerator.generate("tab");
+        this._tabId = UIDGenerator.generate("tab");
        
         
         /**
@@ -126,8 +124,7 @@ var AbstractDocument = Class.create(ToolbarModel, /** @lends AbstractDocument.pr
      * @private
      */
     _closeDocument: function() {
-        var gvs = GVSSingleton.getInstance();
-        gvs.getDocumentController().closeDocument(this._tabId);
+        GVS.getDocumentController().closeDocument(this._tabId);
         return true;
     },
 

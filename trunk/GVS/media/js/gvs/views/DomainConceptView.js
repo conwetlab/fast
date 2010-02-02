@@ -8,9 +8,8 @@ var DomainConceptView = Class.create( BuildingBlockView,
      */ 
     initialize: function($super, /** BuildingBlockDescription */ description) {
         $super();
-        
-        var factFactory = FactFactorySingleton.getInstance();
-        var factIcon = factFactory.getFactIcon(description, "standalone");
+
+        var factIcon = FactFactory.getFactIcon(description, "standalone");
         
         this._node = new Element("div", {
             "class": "view domainConcept"

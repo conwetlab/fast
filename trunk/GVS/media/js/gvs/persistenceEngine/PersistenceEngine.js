@@ -23,76 +23,55 @@
 *     http://morfeo-project.org
  */
 
+var PersistenceEngine = Class.create();
 
-var PersistenceEngineFactory = function () {
+// **************** STATIC METHODS **************** //
 
-    // *********************************
-    // SINGLETON INSTANCE
-    // *********************************
-    var instance = null;
+Object.extend(PersistenceEngine, {
 
-    function PersitenceEngine () {
+    sendGet: function (url, context, successHandler, errorHandler, requestHeaders) {
+        new Ajax.Request(url, {
+            method: 'get',
+            parameters: arguments[4],
+            onSuccess: successHandler.bind(context),
+            onFailure: errorHandler.bind(context),
+            onException: errorHandler.bind(context),
+            requestHeaders: requestHeaders
+        });
+    },
 
-        // ****************
-        // PUBLIC METHODS 
-        // ****************
-        PersitenceEngine.prototype.sendGet = function (url, context, successHandler, errorHandler, requestHeaders) {
-            new Ajax.Request(url, {
-                method: 'get',
-                parameters: arguments[4],
-                onSuccess: successHandler.bind(context),
-                //onFailure: errorHandler.bind(context),
-                //onException: errorHandler.bind(context),
-				requestHeaders: requestHeaders
-            });
-        }
+    sendPost: function (url, params, body, context, successHandler, errorHandler, requestHeaders) {
+        new Ajax.Request(url, {
+            method: 'post',
+            parameters: params,
+            postBody: body,
+            onSuccess: successHandler.bind(context),
+            onFailure: errorHandler.bind(context),
+            onException: errorHandler.bind(context),
+                            requestHeaders: requestHeaders
+        });
+    },
 
-        PersitenceEngine.prototype.sendPost = function (url, params, body, context, successHandler, errorHandler, requestHeaders) {
-            new Ajax.Request(url, {
-                method: 'post',
-                parameters: params,
-                postBody: body,
-                onSuccess: successHandler.bind(context),
-                onFailure: errorHandler.bind(context),
-                onException: errorHandler.bind(context),
-				requestHeaders: requestHeaders
-            });
-        }
+    sendDelete: function (url, context, successHandler, errorHandler, requestHeaders){
+        new Ajax.Request(url, {
+            method: 'delete',
+            onSuccess: successHandler.bind(context),
+            onFailure: errorHandler.bind(context),
+            onException: errorHandler.bind(context),
+                            requestHeaders: requestHeaders
+        });
+    },
 
-        PersitenceEngine.prototype.sendDelete = function (url, context, successHandler, errorHandler, requestHeaders){
-            new Ajax.Request(url, {
-                method: 'delete',
-                onSuccess: successHandler.bind(context),
-                onFailure: errorHandler.bind(context),
-                onException: errorHandler.bind(context),
-				requestHeaders: requestHeaders
-            });
-        }
-
-        PersitenceEngine.prototype.sendUpdate = function (url, params, body, context, successHandler, errorHandler, requestHeaders){
-        	//FIXME: If body -> it sends post
-        	new Ajax.Request(url, {
-                method: 'put',
-                parameters: params,
-                postBody: body,
-                onSuccess: successHandler.bind(context),
-                onFailure: errorHandler.bind(context),
-                onException: errorHandler.bind(context),
-				requestHeaders: requestHeaders
-            });
-        }
+    sendUpdate: function (url, params, body, context, successHandler, errorHandler, requestHeaders){
+        //FIXME: If body -> it sends post
+        new Ajax.Request(url, {
+            method: 'put',
+            parameters: params,
+            postBody: body,
+            onSuccess: successHandler.bind(context),
+            onFailure: errorHandler.bind(context),
+            onException: errorHandler.bind(context),
+                            requestHeaders: requestHeaders
+        });
     }
-
-    // *********************************
-    // SINGLETON GET INSTANCE
-    // *********************************
-    return new function() {
-        this.getInstance = function() {
-            if (instance == null) {
-                instance = new PersitenceEngine();
-            }
-            return instance;
-        }
-    }
-
-}();
+});

@@ -39,28 +39,27 @@ var WelcomeDocument = Class.create(AbstractDocument,
             update("Choose your desired action:");
         content.appendChild (welcomeIntro);
 
-        var gvs = GVSSingleton.getInstance();
         var newScreenflowButton = new dijit.form.Button({
             label: "Create a Screenflow from Scratch",
-            onClick: function() {gvs.action("newScreenflow");}}
+            onClick: function() {GVS.action("newScreenflow");}}
         );
         var openScreenflowButton = new dijit.form.Button({
             label: "Open Existing Screenflow...",
-            onClick: function() {gvs.action("openScreenflow");}}
+            onClick: function() {GVS.action("openScreenflow");}}
         );
 
         var newScreenButton = new dijit.form.Button({
             label: "Create a Screen from Scratch",
-            onClick: function() {gvs.action("newScreen");}}
+            onClick: function() {GVS.action("newScreen");}}
         );
         var browseScreensButton = new dijit.form.Button({
             label: "Browse Screens...",
-            onClick: function() {gvs.action("browseScreens");}}
+            onClick: function() {GVS.action("browseScreens");}}
         );
 
         var openWrapperServiceButton = new dijit.form.Button({
             label: "Wrap existing services",
-            onClick: function() {gvs.action("wrapperService");}}
+            onClick: function() {GVS.action("wrapperService");}}
         );
 
         var buttonsContainer = new Element("div");

@@ -24,7 +24,6 @@ var OperatorView = Class.create(BuildingBlockView,
          */
         this._postIcons = new Hash();            
 
-        var factFactory = FactFactorySingleton.getInstance();
         
         this._node = new Element("div", {
             "class": "view operator",
@@ -39,7 +38,7 @@ var OperatorView = Class.create(BuildingBlockView,
         
         actions.each(function(action) {
             action.preconditions.each(function(pre) {
-                var fact = factFactory.getFactIcon(pre, "embedded");                 
+                var fact = FactFactory.getFactIcon(pre, "embedded");
                 this._preIcons.set(pre.id, fact);
                 preOrdered.push(fact);
             }.bind(this));
@@ -107,7 +106,7 @@ var OperatorView = Class.create(BuildingBlockView,
         }
         
         posts.each(function(post) {
-                var fact = factFactory.getFactIcon(post, "embedded");                 
+                var fact = FactFactory.getFactIcon(post, "embedded");
                 this._postIcons.set(post.id, fact);
                 postOrdered.push(fact);
             }.bind(this));

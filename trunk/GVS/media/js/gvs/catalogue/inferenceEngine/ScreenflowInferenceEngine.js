@@ -23,8 +23,7 @@ var ScreenflowInferenceEngine = Class.create(InferenceEngine /** @lends Screenfl
             "canvas": canvas
         };
         var bodyJSON = Object.toJSON(body);
-        var persistenceEngine = PersistenceEngineFactory.getInstance();
-        persistenceEngine.sendPost(URIs.cataloguePlanner, null, bodyJSON, {'handler': handler}, 
+        PersistenceEngine.sendPost(URIs.cataloguePlanner, null, bodyJSON, {'handler': handler},
                                     this._planOnSuccess, this._onError);
     },
     
@@ -53,12 +52,12 @@ var ScreenflowInferenceEngine = Class.create(InferenceEngine /** @lends Screenfl
 
         /*var domainContext = {
             'tags': tags,
-            'user': GVSSingleton.getInstance().getUser().getUserName()
+            'user': GVS.getUser().getUserName()
         };*/
 
         var domainContext = {
             'tags': tags.collect(function(tag){ return tag.label['en-gb']}),
-            'user': GVSSingleton.getInstance().getUser().getUserName()
+            'user': GVS.getUser().getUserName()
         }
         var body = {
             'canvas': canvas,

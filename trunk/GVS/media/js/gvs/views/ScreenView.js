@@ -34,7 +34,6 @@ var ScreenView = Class.create(BuildingBlockView,
         var titleNode = new Element("div", {"class":"title"});
         titleNode.update(description.label['en-gb']);
 
-        var factFactory = FactFactorySingleton.getInstance();
         var preArea = new Element("div", {"class": "preArea"});
 
         if (description.preconditions.length > 1){ //More than one set of preconditions
@@ -47,7 +46,7 @@ var ScreenView = Class.create(BuildingBlockView,
         
         $A(preconditions).each(
                 function(pre) {
-                    var preFact = factFactory.getFactIcon(pre, "embedded");
+                    var preFact = FactFactory.getFactIcon(pre, "embedded");
                     this._preIcons.push(preFact);
                     preArea.appendChild(preFact.getNode());
                 }.bind(this)
@@ -65,7 +64,7 @@ var ScreenView = Class.create(BuildingBlockView,
         $A(postconditions).each(
                 function(post) {
                     if (post) {
-                        var postFact = factFactory.getFactIcon(post, "embedded");
+                        var postFact = FactFactory.getFactIcon(post, "embedded");
                         this._postIcons.push(postFact);
                         postArea.appendChild(postFact.getNode());
                     }
@@ -132,10 +131,9 @@ var ScreenView = Class.create(BuildingBlockView,
         }
         
         //Setting precondition reachability
-        var factFactory = FactFactorySingleton.getInstance();
         var preReachability = new Hash();
         $A(preconditionData).each(function(precondition) {
-            preReachability.set(factFactory.getFactUri(precondition), precondition.satisfied);    
+            preReachability.set(FactFactory.getFactUri(precondition), precondition.satisfied);
         });
       
         this._preIcons.each(function(preIcon) {
@@ -169,7 +167,6 @@ var ScreenView = Class.create(BuildingBlockView,
         var description = new Element('div').update(description.description['en-gb']);
         content.appendChild(description);
         
-        var factFactory = FactFactorySingleton.getInstance();
         
         if (description.preconditions.length > 1){ //More than one set of preconditions
             console.log("OR precondition support not implemented yet");

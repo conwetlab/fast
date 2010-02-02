@@ -69,7 +69,7 @@ var NewScreenflowDialog = Class.create(ConfirmDialog /** @lends NewScreenflowDia
 
             var processedTags = Utils.getCatalogueTags($A(tags), null);
             
-            var documentController = GVSSingleton.getInstance().getDocumentController();
+            var documentController = GVS.getDocumentController();
             documentController.createScreenflow(name, processedTags, version);
             
             $super();

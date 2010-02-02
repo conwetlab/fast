@@ -16,7 +16,7 @@ var PlanSet = Class.create(BuildingBlockSet, /** @lends PlanSet.prototype */ {
         this._plans = new Array();
                
         
-        this._factory = CatalogueSingleton.getInstance().
+        this._factory = Catalogue.
             getBuildingBlockFactory(Constants.BuildingBlock.SCREEN);
     },
     

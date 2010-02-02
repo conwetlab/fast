@@ -40,7 +40,7 @@ var BuildGadgetDialog = Class.create(ConfirmDialog /** @lends BuildGadgetDialog.
      */
     _initDialogInterface: function (){
  
-        var user = GVSSingleton.getInstance().getUser();
+        var user = GVS.getUser();
  
         this._setHeader("Fulfill Gadget Information", 
                              "Please fulfill the required information in order to" +
@@ -85,7 +85,7 @@ var BuildGadgetDialog = Class.create(ConfirmDialog /** @lends BuildGadgetDialog.
      * @override
      */
     _reset: function($super){
-        var user = GVSSingleton.getInstance().getUser();
+        var user = GVS.getUser();
         
         this._getForm().creator.value = user.getRealName();
         this._getForm().email.value = user.getEmail();

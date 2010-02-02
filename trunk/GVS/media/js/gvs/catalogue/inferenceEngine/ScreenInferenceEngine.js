@@ -28,12 +28,12 @@ var ScreenInferenceEngine = Class.create( /** @lends ScreenInferenceEngine.proto
         var method = Utils.variableOrDefault(_method, "");
         /*var domainContext = {
             'tags': tags,
-            'user': GVSSingleton.getInstance().getUser().getUserName()
+            'user': GVS.getUser().getUserName()
         };*/
 
         var domainContext = {
             'tags': tags.collect(function(tag){ return tag.label['en-gb']}),
-            'user': GVSSingleton.getInstance().getUser().getUserName()
+            'user': GVS.getUser().getUserName()
         }
         var body = {
             'canvas': canvas,
