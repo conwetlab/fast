@@ -3,7 +3,6 @@ package eu.morfeoproject.fast.server;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.Iterator;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -145,10 +144,13 @@ public class OperatorServlet extends GenericServlet {
 				} else {
 					response.setContentType(MediaType.APPLICATION_JSON);
 					JSONObject newOp = operator.toJSON();						
-					for (Iterator it = newOp.keys(); it.hasNext(); ) {
-						String key = it.next().toString();
-						json.put(key, newOp.get(key));
-					}
+//					for (Iterator it = newOp.keys(); it.hasNext(); ) {
+//						String key = it.next().toString();
+//						json.put(key, newOp.get(key));
+//					}
+					// only replaces URI and creationDate
+					json.put("uri", newOp.get("uri"));
+					json.put("creationDate", newOp.get("creationDate"));
 					writer.print(json.toString(2));
 				}
 				response.setStatus(HttpServletResponse.SC_OK);
@@ -209,10 +211,13 @@ public class OperatorServlet extends GenericServlet {
 				} else {
 					response.setContentType(MediaType.APPLICATION_JSON);
 					JSONObject newOp = operator.toJSON();						
-					for (Iterator it = newOp.keys(); it.hasNext(); ) {
-						String key = it.next().toString();
-						json.put(key, newOp.get(key));
-					}
+//					for (Iterator it = newOp.keys(); it.hasNext(); ) {
+//						String key = it.next().toString();
+//						json.put(key, newOp.get(key));
+//					}
+					// only replaces URI and creationDate
+					json.put("uri", newOp.get("uri"));
+					json.put("creationDate", newOp.get("creationDate"));
 					writer.print(json.toString(2));
 				}
 				response.setStatus(HttpServletResponse.SC_OK);
