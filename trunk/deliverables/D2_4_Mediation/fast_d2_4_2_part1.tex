@@ -422,13 +422,52 @@ gr:typeOfGood a align:Relation .
 
 Using this representation, complex correspondences can be modelled, using first order logic constructs.
 
-\subsection{Service Wrapping Tool}
-\textbf{\textit{Kassel will describe the service wrapping tool they've developed, that creates mapping instances between ontologies. 
-A description of the front-end and the creation of the mapping rules will be given here.}}
+\subsection{Facts Transformation Tool}
+
+For services the Kassel members of the FAST team have developed a service wrapper tool, cf. deliverable D4.3.2. One part of the service wrapper tool deals with a rule based approach for the transformation of server responses into FAST facts. This problem is closely related to the problem of ontology mediation. Thus, we plan to use these techniques for the development of a Facts Transformation Tool that allows to create data transformation operators, i.e. operators that mediate between two ontologies.
+
+Figure \ref{fig:FactsTransformationToolPortDefinitions} shows a photoshoped preview of the planned data transformation tool. The data transformation tool has two tabs. The \textit{General} tab allows to define the input and output ports for the desired data transformation operator. These ports shall be  typed according to the participating semantic elements to be derived from the FAST catalogue. This typing will provide the structure of the input and output data of the desired data transformation operator.  
+
+
+
+
+\begin{figure}
+  \begin{center}
+\includegraphics[width=0.8\linewidth]{images/FactsTransformationToolGVSWithPortDefinitions.jpg}
+    \caption{Definition input ports and output ports for data transformation operators (photoshoped screen dump)}
+    \label{fig:FactsTransformationToolPortDefinitions}
+  \end{center}
+\end{figure}
+
+Figure \ref{fig:FactsTransformationToolPortDefinitions} shows the planned editor for transformation rules. On the left of Figure \ref{fig:FactsTransformationToolPortDefinitions} there is a tree of example data that is used to validate the transformation rules during editing. Thus, the Facts Transformation Tool will execute the transformation rules after any editing in order to give direct feedback on their functionality and to enable the user to validate the achieved transformation. The transformation results are shown on the right of Figure \ref{fig:FactsTransformationToolPortDefinitions}. 
+
+The middle of Figure \ref{fig:FactsTransformationToolPortDefinitions} shows some possible transformation rules for our example. A \textit{createObject} rule may be used to create output fact objects. The \textit{Target} field of such a rule specifies the type of the created objects, in our example \textit{List}. The top rule fires for each element of the input data with the type specified in the \textit{From} field of the transformation rule. Thus, in our example, the input data is searched for objects of type \textit{List} firing for the root of our data. 
+
+The second rule of our example creates \textit{Customer} objects. This rule is a subrule of the root rule and thus the created objects are added to the \textit{List} object created by the parent rule. Similarly, the search for triggering objects of type \textit{Person} is restricted to the subtree below the from element that has triggered the parent rule, i.e. to our input \textit{List}. 
+
+The third rule is used to fill the attribute \textit{fullName} of the \textit{Customer} objects. This rule is an example for a many to one transformation. The result is a string concatenation of the \textit{lastName} of the \textit{Person} that has triggered the parent rule plus a text constant plus the \textit{firstName} of the current \textit{Person}. The resulting string is transferred to the \textit{fullName} attribute of the corresponding \textit{Customer}. 
+
+Note, simple one to one transformation rules may be derived by the ontology mediation approach described above and such rules may be added to the transformation tool, automatically. The more complex rules may then be added interactively. During editing, the semantics provided by the FAST catalogue may be used to support the user with completion proposals and consistency checking. In addition, the direct execution of the rules on example data will help the user to create appropriate rules and to validate their effects. 
+
+Note, so far our transformation rules are restricted to simple cases. So far we have focused on simple cases allowing a simple transformation approach that does not require to sophisticated skills from our users. However, as discussed on the Amazon to GoodRelations example, there exist more complex cases. In the third year of the project we will investigate how such more complex cases may be covered, too, and whether it is still possible to keep the rules simple and understandable. 
+
+
+
+\begin{figure}
+  \begin{center}
+\includegraphics[angle=90,width=0.8\linewidth]{images/FactsTransformationToolGVSWithTransformationRules.jpg}
+    \caption{Interactive, rule based transforming of Person facts (photoshoped screen dump)}
+    \label{fig:FactsTransformationToolTransformationRules}
+  \end{center}
+\end{figure}
+
 
 \subsection{Creating the Operator}
 
-\textbf{\textit{Kassel will describe the creation of the matching operator in the catalogue and the storage of the mapping rules.}}
+Once the data transformation operator has been defined, it may be added to the FAST catalogue in order to allow its use for the definition of piping configurations of new screens within the FAST CGS tool. For this purpose a simple semantics description will be send to FAST catalogue defining the semantics of the operator and the semantics of its input and output port.
+
+Currently, the Service Wrapper Tool uses its own proprietary repository for trees of transformation rules. First of all this has technical reasons since the development of the transformation tool is based on an reference architecture and libraries for web based interactive systems provided by Kassel University, cf. \cite{AsDH2009CVSM}. This repository has the special advantage that it provides support for teams of developers, thus the service wrapper tool allows to merge the contributions of multiple developers. However, on the long run, we may store the transformation rules together with the service wrapper and transformation operator definitions in the FAST catalogue.  
+
 
 \section{Gadget Building Phase}
 \label{sec:gadgetbuilding}
@@ -438,6 +477,7 @@ At the gadget building phase, whenever two screens are combined, the catalogue w
 
 \section{Runtime} 
 \label{sec:runtime}
-At runtime, the matching operator's rules are tranformed into JSON data used by the JavaScript gadget. Thus, when data come from the two disparate resources, the gadget will automatically transform data instances of the ontology belonging to the first resource, into instances of the ontology belonging to the second resource.
+For deployment, the gadgets implementation is generated in Javascript. In addition, a small FAST runtime library (again Javascript) is added to the gadget. This runtime library provides notification mechanisms and manages the fact base of the gadget. For data transformation we will generate Javascript code that connects itself to the fact base and any time a fact is send to the input port of the operator, it will do the data transformation and send the result to the output port. The code generated from the data transformation rules follows a recursive pattern where each rule becomes a Javascript function with parameters for the source and target fact subtrees to be transformed. The function body then uses code to search the source tree for sub elements that match the \textit{From} part of the rule and then code for the desired operation is generated. For debugging purposes the user may examine the code generated for an operator in the \textit{CodeGen Viewer} tab of the Facts Transformation tool. 
 
-\textbf{\textit{Kassel will describe the way the mapping rules are transformed into JSON and how they are used within the JavaScript gadget.}}
+Our code generation for service wrappers and transformation operators uses a template based approach. Thus, the \textit{CodeGen Viewer} tab will also allow to examine the templates used for code generation and to adapt the templates in order to meet changing APIs or to meet new requirements. Thereby, the code generation is not hard wired into our tool but the code generation may be adapted by (skilled) end users on the fly. 
+
