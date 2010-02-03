@@ -1079,6 +1079,7 @@ public class Catalogue {
 	
 	private boolean savePreOrPost(PreOrPost se) {
 		try {
+			tripleStore.addStatement(se.getUri(), FGO.hasName, se.getName());
 			BlankNode bag = tripleStore.createBlankNode();
 			tripleStore.addStatement(bag, RDF.type, RDF.Bag);
 			tripleStore.addStatement(se.getUri(), FGO.hasCondition, bag);
@@ -1088,6 +1089,7 @@ public class Catalogue {
 				tripleStore.addStatement(bag, RDF.li(i++), c);
 			}
 			logger.info("Pre/postcondition "+se.getUri()+" added.");
+			tripleStore.dump();
 			return true;
 		} catch (Exception e) {
 			logger.error("Error while saving pre/postcondition "+se.getUri(), e);
@@ -1871,6 +1873,8 @@ public class Catalogue {
 					conBag.close();
 				}
 				se.getConditions().addAll(conList);
+			} else if (predicate.equals(FGO.hasName)) {
+				se.setName(object.asDatatypeLiteral().getValue());
 			}
 		}
 		it.close();
