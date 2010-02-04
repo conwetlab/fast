@@ -93,21 +93,33 @@ var Pipe = Class.create(
     /**
      * Sets the reachability coloring information of the pipe
      */
-    setReachability: function(/** Boolean */ satisfied) {
+    setReachability: function(/** Object */ reachabilityData) {
         var options = this._wire.options;
-        if (satisfied) {
+        var satisfied = reachabilityData.satisfied;
+        if (!reachabilityData.correct) {
             options = Object.extend(options, {
-                'color': '#DDF7DD',
-                'bordercolor': '#008000'
+                'color': '#EAEAEA',
+                'bordercolor': '#808080'
             });
         } else {
-            options = Object.extend(options, {
-                'color': '#F5D9D9',
-                'bordercolor': '#B90000'
-            });
+            if (satisfied) {
+                options = Object.extend(options, {
+                    'color': '#DDF7DD',
+                    'bordercolor': '#008000'
+                });
+            } else {
+                options = Object.extend(options, {
+                    'color': '#F5D9D9',
+                    'bordercolor': '#B90000'
+                });
+            }
         }
         this._wire.setOptions(options);
         this._wire.redraw();
+
+        if (!reachabilityData.correct) {
+             this._wire.element.setStyle({'opacity': '0.5'});
+        }
     },
 
     /**

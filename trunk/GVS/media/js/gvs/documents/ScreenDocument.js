@@ -628,7 +628,7 @@ var ScreenDocument = Class.create(PaletteDocument,
         if (reachabilityData.pipes) {
             reachabilityData.pipes.each(function(pipeData) {
                 var pipe = this._pipeFactory.getPipeFromJSON(pipeData);
-                pipe.setReachability(pipeData.satisfied);
+                pipe.setReachability(pipeData);
             }.bind(this));
         }
         if (reachabilityData.connections) {

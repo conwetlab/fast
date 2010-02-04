@@ -200,18 +200,20 @@ var GalleryDialog = Class.create(FormDialog, /** @lends GalleryDialog.prototype 
             content.appendChild(info);
             this._removeButtons();
             this._addButton("Close", this._dialog.hide.bind(this._dialog));
-        }
-        this._selectedRow = this._rows[0];
-        
-        if (this._selectedRow.isValid) {
-            this._disabledButtons.each(function(button) {
-                button.attr('disabled', false);
-            });
         } else {
-            this._disabledButtons.each(function(button) {
-                button.attr('disabled', true);
-            });
+            this._selectedRow = this._rows[0];
+
+            if (this._selectedRow.isValid) {
+                this._disabledButtons.each(function(button) {
+                    button.attr('disabled', false);
+                });
+            } else {
+                this._disabledButtons.each(function(button) {
+                    button.attr('disabled', true);
+                });
+            }
         }
+        
         this._setContent(content);
     },
 
