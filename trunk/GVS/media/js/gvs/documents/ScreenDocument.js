@@ -575,7 +575,7 @@ var ScreenDocument = Class.create(PaletteDocument,
     _closeDocument: function() {
         if (this._isDirty) {
             this._pendingOperation = this._closeDocument.bind(this);
-            this._save();
+            this._save(false);
             return false;
         } else {
             this._canvasInstances.each(function(pair) {
@@ -853,8 +853,11 @@ var ScreenDocument = Class.create(PaletteDocument,
      * @private
      * @override
      */
-    _save: function() {
-        Utils.showMessage("Saving screen");
+    _save: function(/** Boolean (Optional) */ _showMessage) {
+        var showMessage = Utils.variableOrDefault(_showMessage, true);
+        if (showMessage) {
+            Utils.showMessage("Saving screen");
+        }
         if (this._description.getId() == null) {
             // Save it for the first time
             PersistenceEngine.sendPost(URIs.screen, null, "buildingblock=" + Object.toJSON(this._description.toJSON()),
@@ -893,11 +896,17 @@ var ScreenDocument = Class.create(PaletteDocument,
     _onSaveError: function(/** XMLHttpRequest */ transport) {
         // TODO: think about what to do when a screen cannot be saved
         // (problems with wrong versions)
-        Utils.showMessage("Cannot save screen. A screen with that name already " +
-        "exists", {
-            'hide': true,
-            'error': true
-        });
+        if (!this._pendingOperation) {
+            Utils.showMessage("Cannot save screen.", {
+                'hide': true,
+                'error': true
+            });
+        } else {
+            var operation = this._pendingOperation;
+            this._pendingOperation = null;
+            this._setDirty(false);
+            operation();
+        }
     },
 
     /**
@@ -917,7 +926,7 @@ var ScreenDocument = Class.create(PaletteDocument,
         if (this._description.isValid()) {
             if (this._isDirty) {
                 this._pendingOperation = this._share.bind(this);
-                this._save();
+                this._save(false);
             } else {
                 var persistenceEngine = PersistenceEngineFactory.getInstance();
                 var uri = URIs.share.replace("<id>", this._description.getId());
