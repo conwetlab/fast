@@ -14,6 +14,7 @@ from commons.utils import json_encode, cleanUrl
 from commons.httpUtils import PUT_parameter, validate_url, download_http_content
 from python_rest_client.restful_lib import Connection, isValidResponse
 from buildingblock.models import BuildingBlock, Screenflow, Screen, Form, Operator, Resource, BuildingBlockCode, UserVote, UserTag, Tag
+from utils import *
 
 class BuildingBlockCollection(resource.Resource):
     def read(self, request, bbtype):
@@ -64,7 +65,7 @@ class BuildingBlockCollection(resource.Resource):
                 bb = Resource(author=user, name=data.get('name'), version=data.get('version'), type=bbtype)
             else:
                 raise Exception(_('Expecting building block type.'))
-            
+
             bb.save()
             
             tags = data.get('tags')
