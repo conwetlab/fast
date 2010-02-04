@@ -41,9 +41,8 @@ var NewScreenDialog = Class.create(ConfirmDialog /** @lends NewScreenDialog.prot
                 'type':'input', 
                 'label': 'Version:', 
                 'name': 'version', 
-                'value': '0.1',
-                'message': 'Version cannot be blank',
-                'required': true
+                'value': '',
+                'message': 'Version cannot be blank'
             },
             {
                 'type':'input', 
@@ -83,7 +82,7 @@ var NewScreenDialog = Class.create(ConfirmDialog /** @lends NewScreenDialog.prot
     _reset: function ($super) {
         this._getForm().name.value = "New Screen";
         this._getForm().tags.value = "";
-        this._getForm().version.value = "0.1";
+        this._getForm().version.value = "";
         $super();
     }
 });

@@ -24,6 +24,7 @@ class BuildingBlock(models.Model):
     type = models.CharField(max_length=15, choices=BBTYPE)
     author = models.ForeignKey(User)
     name = models.CharField(max_length=150)
+    creationDate = models.DateTimeField()
     version = models.CharField(max_length=150)
     data = models.TextField()
     popularity = models.DecimalField(null=True, max_digits=3, decimal_places=2)
