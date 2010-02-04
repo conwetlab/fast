@@ -928,9 +928,8 @@ var ScreenDocument = Class.create(PaletteDocument,
                 this._pendingOperation = this._share.bind(this);
                 this._save(false);
             } else {
-                var persistenceEngine = PersistenceEngineFactory.getInstance();
                 var uri = URIs.share.replace("<id>", this._description.getId());
-                persistenceEngine.sendPost(uri, null, null,
+                PersistenceEngine.sendPost(uri, null, null,
                                         this, this._onShareSuccess, Utils.onAJAXError);
             }
            
