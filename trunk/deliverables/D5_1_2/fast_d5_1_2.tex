@@ -179,7 +179,7 @@ The present deliverable is intented to be the developer's manual of the prototyp
 	{| >{\columncolor{fast@lightgrey}}p{3.25cm}|p{1.4cm}|p{3.28cm}|p{1.6cm}|p{3.29cm}|}
 	\hline
 	\textcolor{white}{\textbf{Delivery data}} & {\textbf{Due date}} & {27/02/2010} & {\textbf{Submitted}} & {27/02/2010}\\ \hline
-	\textcolor{white}{\textbf{Status}} & \multicolumn{2}{l|}{Status} & \multicolumn{2}{l|}{final}\\ \hline
+	\textcolor{white}{\textbf{Status}} & \multicolumn{2}{l|}{} & \multicolumn{2}{l|}{final}\\ \hline
 	\textcolor{white}{\textbf{Dissemination Level}} & \multicolumn{4}{l|}{Public $\boxtimes$ / Consortium $\square$}\\ \hline
 	\textcolor{white}{\textbf{Short description of contents}} & \multicolumn{4}{p{10.85cm}|}{This deliverable is the technical documentation for the prototype developed as part of the WP5. It describes the catalogue's architecture, data interchange formats, APIs and examples of how to interact with it.}\\ \hline
 	\textcolor{white}{\textbf{Authors}} & \multicolumn{4}{l|}{\authorOne}\\
@@ -204,6 +204,11 @@ The present deliverable is intented to be the developer's manual of the prototyp
 \cleardoublepage
 \pagenumbering{arabic}
 
+\clearpage
+\listoftables
+
+\clearpage
+\listoffigures
 
 %%%%%%%%%%%%%%%%%%%%%%%%%
 % BEGINNING OF SECTIONS %
@@ -225,7 +230,7 @@ This is an introductory manual for developers who want to adopt and use the FAST
 \subsection{Structure of the document} % (fold)
 \label{sub:structure_of_the_document}
 
-The deliverable presents both the external and internal architecture in Section \ref{sec:architecture_overview}, then in Section \ref{sec:restful_catalogue_api} it is detailed the Catalogue API, query formats, interchange formats, error codes and so on.
+The deliverable presents both the external and internal architecture in Section~\ref{sec:architecture_overview}, then in Section~\ref{sec:restful_catalogue_api} it is detailed the Catalogue API, query formats, interchange formats, error codes and so on.
 
 % subsection goal_and_scope (end)
 
@@ -237,15 +242,16 @@ This should be the first version of this deliverable since in M12 the deliverabl
 There are several new sections and major changes which need to be mentioned:
 
 \begin{itemize}
-	\item Section \ref{sec:installation_guide}. Installation Guide describes a set of steps to be followed in order to install and execute the FAST Catalogue. Also some configuration instructions are specified.
-	\item Section \ref{sub:content_negotiation}. Content Negotiation states how the FAST Catalogue has adopted several of the content negotiation principles.
-	\item Section \ref{sec:restful_catalogue_api}. RESTful Catalogue API has been intensively extended and modified in order to  reflect all the new functionality and how every request or response is constructed. Some of the most important features added in this iteration are:
+	\item Section~\ref{sec:installation_guide}. Installation Guide describes a set of steps to be followed in order to install and execute the FAST Catalogue. Also some configuration instructions are specified.
+	\item Section~\ref{sub:content_negotiation}. Content Negotiation states how the FAST Catalogue has adopted several of the content negotiation principles.
+	\item Section~\ref{sec:restful_catalogue_api}. RESTful Catalogue API has been intensively extended and modified in order to  reflect all the new functionality and how every request or response is constructed. Some of the most important features added in this iteration are:
 	\begin{itemize}
 		\item support for form elements, operators and back-end services (see Section ...),
 		\item convenience operations for recommendation and checking satisfaction and reachability for form elements, operators and back-end services (see Section ...),
-		\item and, last but not least, support for Screen planning (see Section \ref{sub:planning}).
+		\item and, last but not least, support for Screen planning (see Section~\ref{sub:planning}).
 	\end{itemize}
 	\item Several appendixes have been added with the JSON structure of every building block the Catalogue can deal with.
+	\item Appendix A. Last year an evaluation to choose the best technology for the Catalogue was done. It was not included in any formal deliverable, so this year it has been documented as an appendix.
 \end{itemize}
 
 % subsection changes_from_previous_version (end)
@@ -267,7 +273,7 @@ In addition to the software itself, a standard FAST Catalogue installation has t
   \item A Java Servlet Container that supports Java Servlet API 2.4 and Java Server Pages (JSP) 2.0, or newer. We recommend using a recent, stable version of Apache Tomcat\footnote{http://tomcat.apache.org/}. At the time of writing, this is either version 5.5.x or 6.x.
 \end{itemize}
 
-In addition, there are various optional dependencies which are required if you want to use certain advanced features (see Section \ref{sub:installation_instructions}).
+In addition, there are various optional dependencies which are required if you want to use certain advanced features (see Section~\ref{sub:installation_instructions}).
 
 % subsection system_requirements (end)
 
@@ -291,13 +297,13 @@ Once you have got the source code, first step should be addressed is its compila
 Now you can compile, package and run the application via:
 \begin{verbatim}
 ant clean
+ant prepare
 ant compile
-ant dist
 \end{verbatim}
 
-Or using a task which gather the previous three tasks:
+Or using a task which gather the previous three tasks and creates WAR file ready to distribute or deploy:
 \begin{verbatim}
-ant main
+ant dist
 \end{verbatim}
 
 After executing with no errors this task, a WAR file should have been created in the /dist directory. A WAR file, which stands for  Web Application Archive, is just a JAR file used to distribute a collection of JavaServer Pages, servlets, Java classes, XML files, tag libraries and static Web pages (HTML and related files) that together constitute a Web application, in this case, the FAST Catalogue.
@@ -311,7 +317,7 @@ rm -r \$TOMCAT\_HOME/webapps/foo
 	\item Start Tomcat.
 \end{enumerate}
 
-Now you have successfully built the FAST catalogue, however we highly recommend you to read Section \ref{sub:configuration} and tune your FAST Catalogue instance.
+Now you have successfully built the FAST catalogue, however we highly recommend you to read Section~\ref{sub:configuration} and tune your FAST Catalogue instance.
 
 % subsection installation_instructions (end)
 
@@ -351,14 +357,13 @@ It is recommended to check if the FAST Catalogue has been successfully installed
 \section{Architecture Overview} % (fold)
 \label{sec:architecture_overview}
 
-This section presents a technical overview of the internal catalogue's architecture and which external components will interact with it. Basically three layers can be distinguished: Presentation, Business Logic and Persistence layer (see Figure \ref{fig:architecture}). 
+This section presents a technical overview of the internal catalogue's architecture and which external components will interact with it. Basically three layers can be distinguished: Presentation, Business Logic and Persistence layer (see Figure~\ref{fig:catalogue_architecture}). 
 
 \begin{figure}[htb]
-\label{fig:architecture}
+\label{fig:catalogue_architecture}
 \begin{center}
 	\includegraphics[width=12cm]{images/catalogue_architecture}
 	\caption{Catalogue's Architecture}
-	\label{fig:CatalogueInternalArchitecture}
 \end{center}
 \end{figure}
 
@@ -389,6 +394,7 @@ Every HTTP request should be encoded using the MIME type \texttt{application/jso
 
 The following is an example of a Find \& Check request:
 
+\singlespacing
 \begin{verbatim}
 {
   "canvas": [
@@ -410,11 +416,13 @@ The following is an example of a Find \& Check request:
   "criterion": "reachability"
 }
 \end{verbatim}
+\doublespacing
 
 \subsubsection{Internationalisation I18n} % (fold)
 
 In order to offers an adaptable solution to various languages and regions without major engineering changes, internationalisation is considered from an early stage in the catalogue development. Underlying representation technologies used to develop the catalogue (RDF/XML and JSON) allow to implement this feature. This feature is implemented by the addition of a language tag to every 'string' desired. The specification of this language tag is composed by the language code and the country code, following the ISO 639\footnote{http://ftp.ics.uci.edu/pub/ietf/http/related/iso639.txt} for languages and the ISO 3166\footnote{http://userpage.chemie.fu-berlin.de/diverse/doc/ISO\_3166.html} for countries. The following example illustrates how to use it properly in both formats.
 
+\singlespacing
 \begin{verbatim}
 {
   "label": {
@@ -429,7 +437,9 @@ In order to offers an adaptable solution to various languages and regions withou
   },
 }
 \end{verbatim}
+\doublespacing
 
+\singlespacing
 \begin{verbatim}
 <rdf:Description rdf:about="http://www.morfeoproject.eu/fast/fco#ExampleScreen">
   <rdf:type rdf:resource="http://www.morfeoproject.eu/fast/fco#Screen"/>
@@ -447,6 +457,7 @@ In order to offers an adaptable solution to various languages and regions withou
     xml:lang="de-DE">Dies ist ein einfaches Beispiel für einen Bildschirm</description>
 </rdf:Description>
 \end{verbatim}
+\doublespacing
 
 Until now, using internationalisation is allowed for the label and the description of a screen, but in the near future, more attributes will benefit from this feature.
 
@@ -458,14 +469,14 @@ Until now, using internationalisation is allowed for the label and the descripti
 Before any major details about how content negotiation is addressed by the catalogue, a few concepts need to be understood. First of all, say a URI is not a file name. It is common to see a URI as the location for a file, but a URI or Universal Resource Identifier is not a URL: it is not a file name or location, it is an identifier (or a reference) to a resource. Then by dereferencing a URI the actual resource can be retrieved. Let's see a request to retrieve the resource "Screen 123" is sent to the server. The resource is just a piece of information, however the server will answer an HTML document with a text describing the screen or an image representing it. On the Web, these equivalent representations of a resource are called variants, and content negotiation is the mechanism used to determine which of the representations of most appropiate for a given request.
 
 \begin{figure}[htb]
-\label{fig:ContentNegotiation}
+\label{fig:content_negotiation}
 \begin{center}
-	\includegraphics[width=10cm]{images/content_negotiation}
+	\includegraphics[width=12cm]{images/content_negotiation}
 	\caption{Content Negotiation}
 \end{center}
 \end{figure}
 
-In summary, the basic idea of content negotiation, as stated in the HTTP 1.1 specification \cite{http1.1}, is to serve the best variant for a resource, taking into account what variants are available, what variants the server may prefer to serve, what the client can accept, and with which preferences: in HTTP, this is done by the client which may send, in its request, Accept headers (Accept, Accept-Language and Accept-Encoding), to communicate its capabilities and preferences in Format, Language and Encoding, respectively.
+In summary, the basic idea of content negotiation, as stated in the HTTP 1.1 specification ~\cite{http1.1}, is to serve the best variant for a resource, taking into account what variants are available, what variants the server may prefer to serve, what the client can accept, and with which preferences: in HTTP, this is done by the client which may send, in its request, Accept headers (Accept, Accept-Language and Accept-Encoding), to communicate its capabilities and preferences in Format, Language and Encoding, respectively.
 
 In fact, what the catalogue really does is "format negotiation" since the alternate representationos are just based on the selection of the media type, through the Accept header, but does not consider different languages or encoding types. The formats supported are JSON, RDF+XML and HTML.
 
@@ -480,7 +491,7 @@ This section contains detailed descriptions of the interface provided by the cat
 
 \subsubsection{CRUD operations} % (fold)
 
-Any building block within the Catalogue is a resource in terms of REST philosophy, hence it can be created, retrieved, modified or deleted, using a certaing URL and a specific HTTP method for every operation. Two concepts have to be defined: \emph{collection}, as a set of resources which access URI is http://catalogueURL/<type>/ where catalogueURL is the specific URL where the Catalogue server is installed and <type> is the plural of the name of the building block (e.g. screens, services), and \emph{member} of the collection, in other words, the building block itself, which access URI is http://catalogueURL/<type>/<id> where the <id> has to be replaced by the identifier of a specific building block. The details of the operations and which HTTP verb has to be used can be found in the Table \ref{tab:crud_operations}.
+Any building block within the Catalogue is a resource in terms of REST philosophy, hence it can be created, retrieved, modified or deleted, using a certaing URL and a specific HTTP method for every operation. Two concepts have to be defined: \emph{collection}, as a set of resources which access URI is http://catalogueURL/<type>/ where catalogueURL is the specific URL where the Catalogue server is installed and <type> is the plural of the name of the building block (e.g. screens, services), and \emph{member} of the collection, in other words, the building block itself, which access URI is http://catalogueURL/<type>/<id> where the <id> has to be replaced by the identifier of a specific building block. The details of the operations and which HTTP verb has to be used can be found in the Table~\ref{tab:crud_operations}.
 
 \begin{table}[htb]
 \caption{CRUD operations}
@@ -504,10 +515,11 @@ Member URI & DELETE & N/A & \textbf{Delete} the addressed member of the collecti
 \end{center}
 \end{table}
 
-The JSON structure for create any building bock can be found in the appendixes. All of them are composed of a common structure which can be found in Section \ref{appendix_b}, and some specific information depending on the type. Screen-flows are defined in \ref{appendix_c}, screens in \ref{appendix_d} and forms, operators and back-end services share the same structure detailed in \ref{appendix_e}. However, a few examples of request and responses are shown in order to clarify how the request are constructed and sent, and how the responses look like.
+The JSON structure for create any building bock can be found in the appendixes. All of them are composed of a common structure which can be found in Section Appendix B, and some specific information depending on the type. Screen-flows are defined in Appendix C, screens in Appendix D and forms, operators and back-end services share the same structure detailed in Appendix E. However, a few examples of request and responses are shown in order to clarify how the request are constructed and sent, and how the responses look like.
 
 To create a new screen, a POST request is send to the catalogue server, including the JSON representation of the screen as the body of the request:
 
+\singlespacing
 \begin{verbatim}
 {
   "code": "http://demo.fast.morfeo-project.org/code/amazonList.js",
@@ -549,9 +561,11 @@ To create a new screen, a POST request is send to the catalogue server, includin
   "version": "0.1"
 }
 \end{verbatim}
+\doublespacing
 
 The URI of the screen is created using the id specified in the JSON request. So, the response for this operation is:
 
+\singlespacing
 \begin{verbatim}
 {
   "code": "http://demo.fast.morfeo-project.org/code/amazonList.js",
@@ -595,8 +609,11 @@ The URI of the screen is created using the id specified in the JSON request. So,
   "version": "0.1"
 }
 \end{verbatim}
+\doublespacing
 
 To obtain all the screens stored in the catalogue a HTTP GET request is sent to the Collection URI and the response may be something like this:
+
+\singlespacing
 \begin{verbatim}
 [
   {
@@ -656,13 +673,14 @@ To obtain all the screens stored in the catalogue a HTTP GET request is sent to 
   }
 ]
 \end{verbatim}
+\doublespacing
 
 \subsubsection{Screen Find} % (fold)
 \label{ssub:screen_find}
 
 The find operation searches inside the catalogue for any screen which could be somehow related to the gadget the user is creating. It provides a recommended set of screens depending on the domain context, the canvas, and so on.
 
-The specific URL to access this operation is http://catalogueURL/screens/find using HTTP POST method. From now on, the method 'find' only considers the domain context and the pre/postconditions of the screens. It will try to satisfy all the unsatisfied preconditions of a given list of screens also known as canvas. The results will be all the screens stored in the catalogue which fulfil some of these preconditions, and are tagged with the tags specified in the domain context. The request parameters are shown in Table \ref{tab:screen_find_request} and the response parameters are shown in Table \ref{tab:screen_find_response}.
+The specific URL to access this operation is http://catalogueURL/screens/find using HTTP POST method. From now on, the method 'find' only considers the domain context and the pre/postconditions of the screens. It will try to satisfy all the unsatisfied preconditions of a given list of screens also known as canvas. The results will be all the screens stored in the catalogue which fulfil some of these preconditions, and are tagged with the tags specified in the domain context. The request parameters are shown in Table~\ref{tab:screen_find_request} and the response parameters are shown in Table~\ref{tab:screen_find_response}.
 
 \begin{table}[htb]
 \caption{Screen Find Request Parameters}
@@ -696,6 +714,7 @@ N/A & A list of recommended screens URIs is returned. & Required \\ \hline
 
 Following is shown an example of usage of this operation considering a canvas with the screen \texttt{http://localhost:8080/catalogue/screens/654}.
 
+\singlespacing
 \begin{verbatim}
 {
   canvas: [
@@ -708,9 +727,11 @@ Following is shown an example of usage of this operation considering a canvas wi
   elements: []
 }
 \end{verbatim}
+\doublespacing
 
 After the execution of the recommendation algorithm, the response given by the catalogue is:
 
+\singlespacing
 \begin{verbatim}
 [
   "http://localhost:8080/catalogue/screens/371",
@@ -719,6 +740,7 @@ After the execution of the recommendation algorithm, the response given by the c
   "http://localhost:8080/catalogue/screens/12"
 ]
 \end{verbatim}
+\doublespacing
 
 
 \subsubsection{Screen Check} % (fold)
@@ -761,6 +783,7 @@ Elements & The elements indicating which satisfy the critetion. More aditional i
 
 The scenario for the following example is composed by a screen in the canvas which precondition is a foaf:Person which foaf:workplaceHomepage is \url{http://www.deri.ie/}, and a screen in the elements list which precondition is a foaf:Person. The state to check in this case is the reachability and satisfaction of the screens and preconditions.
 
+\singlespacing
 \begin{verbatim}
 {
   "canvas": [
@@ -781,9 +804,11 @@ The scenario for the following example is composed by a screen in the canvas whi
   criterion: "reachability"
 }
 \end{verbatim}
+\doublespacing
 
 The response shows that there are not reachable screens at the moment, and preconditions are not satisfied.
 
+\singlespacing
 \begin{verbatim}
 {
   "canvas": [{
@@ -808,6 +833,7 @@ The response shows that there are not reachable screens at the moment, and preco
   }]
 }
 \end{verbatim}
+\doublespacing
 
 
 \subsubsection{Screen Find \& Check} % (fold)
@@ -817,6 +843,7 @@ For convenience and to minimise the number of request, the Find operation may be
 
 The format of the request is the same as the one used in the Check operation:
 
+\singlespacing
 \begin{verbatim}
 {
   "canvas": [
@@ -837,9 +864,11 @@ The format of the request is the same as the one used in the Check operation:
   criterion: "reachability"
 }
 \end{verbatim}
+\doublespacing
 
 The response for the above request is:
 
+\singlespacing
 \begin{verbatim}
 {
   "canvas": [{
@@ -871,11 +900,12 @@ The response for the above request is:
   ]
 }
 \end{verbatim}
+\doublespacing
 
 
 \subsubsection{GetMetadata} % (fold)
 
-Although the information about a resource can be obtained by its specific retrieval operation supported by the CRUD interface, sometimes is needed to retrieve information which would imply a request per resource, hence this operation allow to get the metadata of a list of resources in only one request. This prototype supports this operation for screen-flows and screens. The specific URL to access this operation is http://catalogueURL/getmetadata using HTTP POST method. Table \ref{tab:getmetadata_request} shows the parameters needed for the invocation and Table \ref{tab:getmetadata_response} details the different parameters may contain a response.
+Although the information about a resource can be obtained by its specific retrieval operation supported by the CRUD interface, sometimes is needed to retrieve information which would imply a request per resource, hence this operation allow to get the metadata of a list of resources in only one request. This prototype supports this operation for screen-flows and screens. The specific URL to access this operation is http://catalogueURL/getmetadata using HTTP POST method. Table~\ref{tab:getmetadata_request} shows the parameters needed for the invocation and Table~\ref{tab:getmetadata_response} details the different parameters may contain a response.
 
 \begin{table}[htb]
 \caption{GetMetadata Request Parameters}
@@ -910,6 +940,8 @@ backendservices & A set of back-end services with all the metadata associated to
 \end{table}
 
 The following example send two URIs of screens and a URI of a screen-flow to the GetMetadata operation:
+
+\singlespacing
 \begin{verbatim}
 [
   "http://localhost:8080/catalogue/screens/12",
@@ -917,8 +949,11 @@ The following example send two URIs of screens and a URI of a screen-flow to the
   "http://localhost:8080/catalogue/forms/9",
 ]
 \end{verbatim}
+\doublespacing
 
 The response obtained are two lists, one containing all the metadata regarding to the screen-flows and another one with the information about the screens:
+
+\singlespacing
 \begin{verbatim}
 {
   "screenflows": [],
@@ -968,11 +1003,12 @@ The response obtained are two lists, one containing all the metadata regarding t
   "backendservices": []
 }
 \end{verbatim}
+\doublespacing
 
 \subsubsection{Screen Component Find \& Check} % (fold)
 \label{ssub:screen_component_findcheck}
 
-Similarly to the Screen Find \& Check described in Section \ref{ssub:screen_findcheck}, this operation search for screen components (forms, operators and back-end services) through the catalogue in order to satisfy a given request, and it will attach information about satisfaction and reachability as well.
+Similarly to the Screen Find \& Check described in Section~\ref{ssub:screen_findcheck}, this operation search for screen components (forms, operators and back-end services) through the catalogue in order to satisfy a given request, and it will attach information about satisfaction and reachability as well.
 
 A request is formed of the following parameters:
 
@@ -992,6 +1028,7 @@ The screen components recommended are based on the given domain context and the 
 
 An example of request is the following:
 
+\singlespacing
 \begin{verbatim}
 {
   "preconditions": [{
@@ -1030,9 +1067,11 @@ An example of request is the following:
   "selectedItem": "http://localhost:8080/catalogue/forms/1"
 }
 \end{verbatim}
+\doublespacing
 
 And the response according to the above request is:
 
+\singlespacing
 \begin{verbatim}
 {
   "backendservices": [],
@@ -1114,6 +1153,7 @@ And the response according to the above request is:
   "postconditions": []
 }
 \end{verbatim}
+\doublespacing
 
 For a screen component to be reachable, its preconditions need to be connected by a pipe to any other screen component which is already reachable, or to any of the screen preconditions. Moreover, the pipe needs to be satisfied, in other words, conditions in both edges are compatible.
 
@@ -1126,7 +1166,7 @@ The response includes an attribute called "connections". This attribute will be 
 \subsection{Planning}
 \label{sub:planning}
 
-While creating a screen-flow, the user need to find proper screens which will satisfy her necessity. Once the user has selected one or several screens to be included in her screen-flow, she needs to find screens which satisfy the preconditions of these screens, in order to create an executable screen-flow. The operation Find, detailed in Section \ref{ssub:screen_find}, helps the user to find these screens, however the response is just a set of screens which somehow may help to accomplish her goal, but not in a single and straight-forward step.
+While creating a screen-flow, the user need to find proper screens which will satisfy her necessity. Once the user has selected one or several screens to be included in her screen-flow, she needs to find screens which satisfy the preconditions of these screens, in order to create an executable screen-flow. The operation Find, detailed in Section~\ref{ssub:screen_find}, helps the user to find these screens, however the response is just a set of screens which somehow may help to accomplish her goal, but not in a single and straight-forward step.
 
 This functionality offers to the user the possibility to receive a whole set of screens, or plan, which will make a given screen, or goal, reachable. These plans take into account the screen which are already in the canvas, in order to minimise the number of screens.
 
@@ -1142,6 +1182,7 @@ The specific URL to access this operation is \url{http://catalogueURL/planner}, 
 Let's see the following example:
 
 Request
+\singlespacing
 \begin{verbatim}
 {
   "goal": "http://localhost:8080/catalogue/screens/35",
@@ -1153,8 +1194,10 @@ Request
   "per_page": 10 
 }
 \end{verbatim}
+\doublespacing
 
 Response
+\singlespacing
 \begin{verbatim}
 [
   [
@@ -1173,6 +1216,7 @@ Response
   ]
 ]
 \end{verbatim}
+\doublespacing
 
 The response is ranked based on adding the minimum number of new screens into the canvas, and giving preference to the screens the user has previously selected (canvas).
 
@@ -1222,14 +1266,27 @@ URITooLong & The URI exceeded the maximum limit of <maxLength>. & 400 Bad Reques
 
 
 \clearpage
-\doublespacing
-\section*{Appendix A. Lists of Tables and Figures}
+\section*{Appendix A. Semantic Web Technologies Evaluation}
 \label{appendix_a}
-\addcontentsline{toc}{section}{Appendix A. Lists of Tables and Figures}
+\addcontentsline{toc}{section}{Appendix A. Semantic Web Technologies Evaluation}
 
-\listoftables
+In \cite{urmetzer2010fast_state_of_the_art} were presented different technologies used in the Semantic Web community regarding Web services and catalogues or repositories. These are potential technologies to serve as the basis for the Catalogue implementation. Said that, an evaluation was done in order to choose the most accurate technology with the most advantages for it. Of particular importance in this evaluation is real-time performance, because the GVS (Gadget Visual Storyboard) actually relies on the Catalogue in parts of its user interface.
 
-\listoffigures
+Basically, two general solutions were considered. One was to build the Catalogue, and the internal components or building block of the gadgets, based on a dedicated SWS platform. The other was to build a light-weight solution from scratch based on RDF and RDFS.
+
+For both solutions, a few ideas about their potential benefits and disadvantages were in mind beforehand. SWS platforms were very tempting to use, because the modelling approach for screens in FAST is quite similar to SWS, in how they define their inputs and outputs. E.g., both FAST and WSMO have pre- and post-conditions, OWL-S has inputs/outputs. Also, SWS platforms come with ready-made implementations for service composition, which could have been used for automatically combining screens to screen-flows. On the downside, it was expected that SWS platforms a bit too slow for some FAST requirements, as the need of real-time discovery. On the other hand, building a light-weight implementation directly on RDFS promised to be faster. Moreover, there is a broader, more mature and probably more active tool support. However, going in this direction would imply to invest a lot more work in modelling and implementation efforts, since all the features that SWS would bring straight away are could not be reused.
+
+To perform the evaluation of the different approaches, an abstract random ontology of 40 concepts was created. About 70\% of those were randomly assigned to be sub-concepts of other concepts. The abstract ontology was instantiated in WSMO, OWLS and RDFS. Then, 3 sample sets of random screens of three different sizes (100, 1000 and 10000) were created, such that each screen has 0..3 random pre- and post-conditions. For each set in each technology, every screen was taken to perform a match with any other screen, and the average response time was measured. Figure~\ref{fig:comparison_chart} shows the results of the evaluation (RDFS in blue, WSMO in yellow and OWL-S in green). Be aware that the scale of the time is logarithmic.
+
+\begin{figure}[htb]
+\label{fig:comparison_chart}
+\begin{center}
+	\includegraphics[width=14cm]{images/comparison_chart}
+	\caption{Semantic Web Technologies Performance Comparison}
+\end{center}
+\end{figure}
+
+It can be seen that RDFS performs rather well, even in the 10.000 size set, whereas the other two are pretty far behind. E.g., average response times for WSMO is > 1.5 sec already for the smallest 100 size set. Hence, based on this evaluation the approach to follow for the implementation was RDFS, since WSMO and OWL-S simply could not give the performance required for the real-time discovery.
 
 
 \clearpage
@@ -1237,6 +1294,7 @@ URITooLong & The URI exceeded the maximum limit of <maxLength>. & 400 Bad Reques
 \label{appendix_b}
 \addcontentsline{toc}{section}{Appendix B. Generic Building Block JSON Structure}
 
+\singlespacing
 \begin{verbatim}
 {
   "code": "http://url.com/.../code.js",
@@ -1262,6 +1320,7 @@ URITooLong & The URI exceeded the maximum limit of <maxLength>. & 400 Bad Reques
   "version": "1.0"
 }
 \end{verbatim}
+\doublespacing
 
 
 \clearpage
@@ -1269,6 +1328,7 @@ URITooLong & The URI exceeded the maximum limit of <maxLength>. & 400 Bad Reques
 \label{appendix_c}
 \addcontentsline{toc}{section}{Appendix C. Screen-flow JSON Structure}
 
+\singlespacing
 \begin{verbatim}
 {
   <GENERIC BUILDING BLOCK JSON>,
@@ -1278,6 +1338,7 @@ URITooLong & The URI exceeded the maximum limit of <maxLength>. & 400 Bad Reques
   ],
 }
 \end{verbatim}
+\doublespacing
 
 
 \clearpage
@@ -1285,6 +1346,7 @@ URITooLong & The URI exceeded the maximum limit of <maxLength>. & 400 Bad Reques
 \label{appendix_d}
 \addcontentsline{toc}{section}{Appendix D. Screen JSON Structure}
 
+\singlespacing
 \begin{verbatim}
 {
   <GENERIC BUILDING BLOCK JSON>,
@@ -1348,6 +1410,7 @@ URITooLong & The URI exceeded the maximum limit of <maxLength>. & 400 Bad Reques
   }
 }
 \end{verbatim}
+\doublespacing
 
 
 \clearpage
@@ -1355,6 +1418,7 @@ URITooLong & The URI exceeded the maximum limit of <maxLength>. & 400 Bad Reques
 \label{appendix_e}
 \addcontentsline{toc}{section}{Appendix E. Screen Component JSON Structure}
 
+\singlespacing
 \begin{verbatim}
 {
   <GENERIC BUILDING BLOCK JSON>,
@@ -1382,5 +1446,6 @@ URITooLong & The URI exceeded the maximum limit of <maxLength>. & 400 Bad Reques
   "triggers": ["itemAmazon"]
 }
 \end{verbatim}
+\doublespacing
 
 \end{document}
