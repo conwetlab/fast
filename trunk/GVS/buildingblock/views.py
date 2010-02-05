@@ -52,7 +52,15 @@ class BuildingBlockCollection(resource.Resource):
 
         try:
             data = simplejson.loads(received_json)
-            
+
+            now = datetime.utcnow()
+            # Drop microseconds
+            now = datetime(now.year, now.month, now.day, now.hour, now.minute, now.second)
+
+            data['creationDate'] = now.isoformat() + "+0000" #UTC
+            if data.get('version') == '':
+                data['version'] = now.strftime("%Y%m%d-%H%M")
+
             bb = None
             if bbtype == 'screenflow':
                 bb = Screenflow(author=user, name=data.get('name'), version=data.get('version'), type=bbtype)
@@ -67,9 +75,7 @@ class BuildingBlockCollection(resource.Resource):
             else:
                 raise Exception(_('Expecting building block type.'))
 
-            bb.creationDate = datetime.now()
-            if bb.version == '':
-                bb.version = bb.creationDate.strftime("%Y%m%d-%H%M")
+            bb.creationDate = now
             bb.save()
             
             tags = data.get('tags')
@@ -175,7 +181,6 @@ class BuildingBlockCollectionSearch(resource.Resource):
 
             if bbtype == "screenflow":
                 q = Screenflow.objects.filter(author=user, type=bbtype)
-                info_fields.append("EzWebStoreURL")
             elif bbtype == "screen":
                 q = Screen.objects.filter(author=user, type=bbtype)
             elif bbtype == "form":
