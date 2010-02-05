@@ -71,7 +71,7 @@ public class OperationHandler
 					if(Kind.constant != startKind)
 					{
 						//take the last real tagname
-						lastRealTagname = getLastTagnameOf(currentList);
+						lastRealTagname = getLastTagnameOf(currentList).value;
 					}
 				}
 			}
@@ -85,10 +85,10 @@ public class OperationHandler
 	 * 
 	 * TODO geht für alles einfach so nach nächster änderung
 	 * */
-	public String getLastTagnameOf(ArrayList<Operation> opList)
+	public Operation getLastTagnameOf(ArrayList<Operation> opList)
 	{
 		Operation currentOp = null;
-		String ltn = ""; 
+		Operation returnOp = null; 
 		
 		for (Iterator<Operation> opList_it = opList.iterator(); opList_it.hasNext();)
 		{
@@ -96,7 +96,7 @@ public class OperationHandler
 			
 			if(Kind.RName.equals(currentOp.kind))
 			{
-				ltn = currentOp.value;
+				returnOp = currentOp;
 			}
 			else
 			{
@@ -104,7 +104,7 @@ public class OperationHandler
 			}
 		}
 		
-		return ltn;
+		return returnOp;
 	}
 	
 	/**
@@ -167,9 +167,9 @@ public class OperationHandler
 			{	
 				nodeValue = executeOneOperation(currentOperation.kind, nextOperation.value, nextOperation.signs, nodeValue);
 
-				if(opList.size() > count+1)
+				if(opList.size() > count+2)
 				{
-					currentOperation = opList.get(count);
+					currentOperation = opList.get(++count);
 					nextOperation = opList.get(++count);
 				}
 				else
@@ -185,9 +185,7 @@ public class OperationHandler
 	//executes one operation
 	private String executeOneOperation(Kind opKind, String parameter, String signs, String nodeValue)
 	{
-		int param_from = 1;
-		int param_to = 1;
-		
+		int param_from = 1, param_to = 1;
 		int sepNr = 1;
 
 		//It should be a sign parameter, or a exactlyThis parameter, or a from-to parameter
@@ -208,22 +206,12 @@ public class OperationHandler
 			//transform String parameter -> int param_from, param_to
 			try
 			{
-	    		//if param is a "from-to" param, decode it
-	    		if(parameter.contains("-"))
-	    		{
-	    			String par_from = parameter.substring(0, parameter.indexOf("-"));
-	    			String par_to = parameter.substring(parameter.indexOf("-") +1);
-	    			
-	    			param_from = Integer.valueOf(par_from).intValue();
-	    			param_to = Integer.valueOf(par_to).intValue();
-	    		}
-	    		//if param is a "exactlyThis" param
-	    		else
-	    		{
-	    			param_to = Integer.valueOf(parameter).intValue();
-	    			param_from = param_to;
-	    		}
+    			String par_from = parameter.substring(0, parameter.indexOf("-"));
+    			String par_to = parameter.substring(parameter.indexOf("-") +1);
 	    		
+    			param_from = Integer.valueOf(par_from).intValue();
+    			param_to = Integer.valueOf(par_to).intValue();
+    			
 	    		//avoid exceptions from user entry
 	    		if(param_from <= 0)
 	    			param_from = 1;

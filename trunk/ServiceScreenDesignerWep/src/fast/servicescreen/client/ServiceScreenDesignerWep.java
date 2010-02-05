@@ -32,7 +32,6 @@ import fujaba.web.runtime.client.CoobraRoot;
 import fujaba.web.runtime.client.CoobraService;
 import fujaba.web.runtime.client.DataLoadTimer;
 import fujaba.web.runtime.client.FAction;
-import fujaba.web.runtime.client.FTest;
 import fujaba.web.runtime.client.ICObject;
 
 /**
@@ -196,7 +195,7 @@ public class ServiceScreenDesignerWep implements EntryPoint
 //         FTest.assertTrue(ruleGUI.xmlTree != null, "xmltree should have been created, text size is: " + ruleGUI.xmlTree.toString().length());
          
          // the facts tree should contain elements
-         int itemCount = ruleGUI.factsTree.toString().length();
+//         int itemCount = ruleGUI.factsTree.toString().length();
 //         FTest.assertTrue(itemCount > 3, "Facts tree contains some items, text lenght is: " + itemCount);
          
 //         FTest.assertTrue(true, "init done");          

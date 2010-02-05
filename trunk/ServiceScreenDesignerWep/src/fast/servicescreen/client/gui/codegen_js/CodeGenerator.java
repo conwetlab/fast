@@ -30,6 +30,16 @@ public class CodeGenerator
 	@SuppressWarnings("unused")
 	private String outputPortName = "";	//use later to generate translation code
 	
+	//Operation names
+	private String util 		= "String_Util";
+	private String trimBoth 	= util + ".trimBoth(";
+	private String charsFromTo 	= util + ".charsFromTo(";
+	private String wordsFromTo 	= util + ".wordsFromTo(";
+	private String until 		= util + ".until(";
+	private String from 		= util + ".from(";
+	
+	private String getElementsByTagname = "xmlResponse.getElementsByTagName(";
+	
 	/**
 	 * The constructor creates the first template
 	 * */
@@ -187,7 +197,7 @@ public class CodeGenerator
 			preReqRepText += currentInpPort.get("name");
 			preReqRepText += ">/g,"; 
 			preReqRepText += currentInpPort.get("name");
-			preReqRepText += ".data.keyword); \n ";
+			preReqRepText += /*".data.keyword*/ "); \n ";	//TODO with, or without ?!
 		}
 		
 		//add result lines in the table
@@ -276,26 +286,51 @@ public class CodeGenerator
 			}
 			else if ("fillAttributes".equals(kind))
 			{
-				//HOW TO iterate over elements.items(0 - x), and execute following code for every item ??
-				//aint got no xmlRequest here..
+				String tmpCode;
 				
+				//Iterate over any opList entry
 				while(opList_iter.hasNext())
 				{
+					tmpCode = "";
+					
 					current_opList = opList_iter.next();
 					
 					if(current_opList.size() > 0 && current_opList.get(0).kind == Kind.constant)
 					{
 						//add a constant
-						transCode += current_opList.get(0).value;
+						tmpCode += "'" + current_opList.get(0).value + "'";
 					}
 					else
 					{
-						String lastSourceTagname = opHandler.getLastTagnameOf(current_opList);
+						Operation lastTagnameOperation = opHandler.getLastTagnameOf(current_opList);
+						String lastSourceTagname = lastTagnameOperation.value;
 						
-						//TODO create OpCode (use String_util), howTo get elemntsID?!
-						transCode += "xmlResponse.getElementsByTagName(" + lastSourceTagname
-						          +  ").getItem(" + "..elemItemID, aus opHandler?.." + ")"
-						          +  "OPERATION CODE HERE; \n";
+						//TODO following codegen should be made for any possible elementItemID ()
+						
+						//create code for getting the element/elementsItem
+						tmpCode += trimBoth +  getElementsByTagname	//TODO: at begin load xmlReq, then operate on a solved Xml!
+								+ lastSourceTagname + ").getItem(" + "elemItemID??" + "))";
+						
+						//create code for rest of operation list
+						int count = current_opList.indexOf(lastTagnameOperation) + 1;
+						for(; count < current_opList.size(); ++count)
+						{
+							Operation currentOp = current_opList.get(count);
+							
+							//create code for executing the currentOperation
+							tmpCode = createOperationCode(tmpCode, currentOp);
+						}
+					}
+					
+					//write into transCode
+					transCode += tmpCode;
+					if(opList_iter.hasNext())
+					{
+						transCode += " + ";
+					}
+					else
+					{
+						transCode += "; \n";
 					}
 				}
 			}
@@ -309,7 +344,42 @@ public class CodeGenerator
 	}
 	
 	/**
-	 * Should call tranformation method for any child of given rule
+	 * append code for given operation into tmpCode and return that
+	 * */
+	private String createOperationCode(String tmpCode, Operation op)
+	{
+		Kind kind = op.kind;
+		
+		switch(kind)
+		{
+			case chars: 	tmpCode =  charsFromTo + tmpCode + ", ";
+							break;
+				
+			case words:     tmpCode = wordsFromTo + tmpCode + ", ";
+							break;
+				
+			case Param: 	String signs = op.signs;
+							if(signs != null && ! "".equals(signs))
+							{
+								tmpCode += "'" + signs + "', ";
+							}
+							
+							tmpCode += op.value + ")";
+							break;
+				
+			case from: 		tmpCode = from + tmpCode + ", ";
+							break;
+
+				
+			case until: 	tmpCode = until + tmpCode + ", ";
+							break;
+		}
+		
+		return tmpCode;
+	}
+	
+	/**
+	 * Should call transformation method for any child of given rule
 	 * to add code into transCode
 	 * */
 	@SuppressWarnings("unchecked")

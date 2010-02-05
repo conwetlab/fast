@@ -64,7 +64,7 @@ public class ExtendedRuleParser
 								nextChar();
 								nextToken();
 								if(currentToken != null)
-									saveEntry(currentToken.getWord(), Kind.Param);
+									saveEntry(fillParam(currentToken.getWord()), Kind.Param);
 								
 								nextChar();
 								break;
@@ -76,7 +76,7 @@ public class ExtendedRuleParser
 								nextChar();
 								nextToken();
 								if(currentToken != null)
-									saveEntry(currentToken.getWord(), Kind.Param);
+									saveEntry(fillParam(currentToken.getWord()), Kind.Param);
 								
 								nextChar();
 								break;
@@ -102,6 +102,20 @@ public class ExtendedRuleParser
 			
 			nextToken();
 		}
+	}
+	
+	/**
+	 * if param doesn´t contain "-" (fe. 42) this will return
+	 * param with "-"param appended (fe. 42-42)
+	 * */
+	private String fillParam(String checkParam)
+	{
+		if(checkParam.length() == 1)
+		{
+			checkParam = checkParam + "-" + checkParam;
+		}
+		
+		return checkParam;
 	}
 	
 	//save one entry in the parseResults list
