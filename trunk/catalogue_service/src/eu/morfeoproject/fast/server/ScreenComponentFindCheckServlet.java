@@ -328,10 +328,10 @@ public class ScreenComponentFindCheckServlet extends GenericServlet {
 					if (isConditionCompatible(con, pre)) {
 						Pipe pipe = new Pipe();
 						pipe.setIdBBFrom(null);
-						pipe.setIdConditionFrom(pre.getId());
+						pipe.setIdConditionFrom(con.getId());
 						pipe.setIdBBTo(selectedItem.getUri().toString());
 						pipe.setIdActionTo(action.getName());
-						pipe.setIdConditionTo(con.getId());
+						pipe.setIdConditionTo(pre.getId());
 						if (!pipes.contains(pipe))
 							pipeList.add(pipe);
 					}
