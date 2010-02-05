@@ -210,7 +210,7 @@ public class ScreenComponentFindCheckServlet extends GenericServlet {
 				postOut.put(processPostcondition(canvas, con, pipes, elements));
 			output.put("postconditions", postOut);
 		
-			if (search && selectedItem != null) {
+			if (selectedItem != null) {
 				JSONArray connectionsOut = new JSONArray();
 				List<Pipe> connections = generatePipes(canvas, preconditions, postconditions, selectedItem, pipes);
 				for (Pipe pipe : connections)
@@ -441,7 +441,6 @@ public class ScreenComponentFindCheckServlet extends GenericServlet {
 					Condition post = getConditionById(postconditions, pipe.getIdConditionTo());
 					if (reachablePost.contains(post))
 						reachablePost.add(post);
-					//elements.add(getConditionById(postconditions, pipe.getIdConditionTo()));
 				} else {
 					ScreenComponent sc = getScreenComponent(scList, pipe.getIdBBTo());
 					if (!reachableSCList.contains(sc)) {
