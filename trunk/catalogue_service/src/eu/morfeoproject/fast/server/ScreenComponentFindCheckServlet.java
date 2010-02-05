@@ -425,6 +425,7 @@ public class ScreenComponentFindCheckServlet extends GenericServlet {
 			}
 			if (reachable) {
 				reachableSCList.add(sc);
+				reachablePipeList.addAll(getPipesFrom(pipes, sc.getUri().toString()));
 			}
 		}
 		
