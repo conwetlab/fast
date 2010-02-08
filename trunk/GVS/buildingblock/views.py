@@ -22,7 +22,7 @@ class BuildingBlockCollection(resource.Resource):
         try:
             user = get_user_authentication(request)
             
-            bb = None
+            bb = []
             if bbtype == 'screenflow':
                 bb = get_list_or_404(Screenflow, author=user)
             elif bbtype == 'screen':
@@ -35,8 +35,13 @@ class BuildingBlockCollection(resource.Resource):
                 bb = get_list_or_404(Resource, author=user)
             else:
                 bb = get_list_or_404(BuildingBlock, author=user)
+                
+            list = []
+            for element in bb:
+                list.append(element.data)
+            response = ','.join(list)
             
-            return HttpResponse(json_encode(bb), mimetype='application/json; charset=UTF-8')
+            return HttpResponse('[%s]' % response, mimetype='application/json; charset=UTF-8')
         except Http404:
             return HttpResponse(json_encode([]), mimetype='application/json; charset=UTF-8')
         except Exception, e:

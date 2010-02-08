@@ -90,24 +90,23 @@ var ManageScreensDialog = Class.create(GalleryDialog /** @lends ManageScreensDia
     _createScreenList: function() {
         this._emptyRows();
         this._screens.each(function(screen) {
-            var data = JSON.parse(screen.data);
             this._addRow({
                             'key': screen.id,
                             'values': [
-                                new Element('img', {'src': data.icon}),
-                                screen.name,
+                                new Element('img', {'src': screen.icon}),
+                                	screen.name,
                                 '<span class="bold">Version: </span>' +
                                      screen.version,
                                 '<span class="bold">Tags: </span>' +
-                                    data.tags.collect(function(tag) {
+                                	screen.tags.collect(function(tag) {
                                         return tag.label['en-gb'];
                                     }).join(", "),
                                 '<span class="bold">Description </span><br />'+
-                                    data.description['en-gb'],
+                                	screen.description['en-gb'],
                                 '<span class=' + (screen.uri ? '"shared"': '"unshared"') +
                                     '>&nbsp;</span>'
                              ],
-                             'isValid': data.definition ? true : false
+                             'isValid': screen.definition ? true : false
                         });
         }.bind(this));
     },
