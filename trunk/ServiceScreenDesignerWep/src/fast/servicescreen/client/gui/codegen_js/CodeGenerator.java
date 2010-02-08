@@ -273,7 +273,7 @@ public class CodeGenerator
 	{
 		if(RuleUtil.isCompleteRule(rule))
 		{
-			//gets the current operationList 
+			//get the current operationList 
 			OperationHandler opHandler = rule.getOperationHandler();
 			Iterator<ArrayList<Operation>> opList_iter = opHandler.getOperationlistIterator();
 			ArrayList<Operation> current_opList = null;

@@ -10,21 +10,37 @@
     <servlet-name>coobraServiceImpl</servlet-name>
     <servlet-class>fujaba.web.runtime.server.CoobraServiceImpl</servlet-class>
   </servlet>
+  
   <servlet-mapping>
     <servlet-name>coobraServiceImpl</servlet-name>
     <url-pattern>/servicescreendesignerwep/fujaba.web.runtime.CoobraService</url-pattern>
     <url-pattern>/fujaba.web.runtime.CoobraService</url-pattern>
   </servlet-mapping>
   
+  
   <!-- Manages Requests -->
   <servlet>
     <servlet-name>reqService</servlet-name>
     <servlet-class>fast.servicescreen.server.RequestServiceImpl</servlet-class>
   </servlet>
+  
   <servlet-mapping>
     <servlet-name>reqService</servlet-name>
     <url-pattern>/servicescreendesignerwep/request</url-pattern>
     <url-pattern>/request</url-pattern>
+  </servlet-mapping>
+  
+  
+  <!-- Manages Requests a s standalone servlet -->
+  
+  <servlet>
+    <servlet-name>standaloneRequestService</servlet-name>
+    <servlet-class>fast.servicescreen.server.RequestServlet</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>standaloneRequestService</servlet-name>
+    <url-pattern>/requestServlet</url-pattern>
   </servlet-mapping>
   
   <!-- Default page to serve -->
