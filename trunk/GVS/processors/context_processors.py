@@ -2,7 +2,8 @@
 from django.conf import settings
 
 def fast(request):
-    context = {}
+    context = {'EZWEB_URL' : settings.EZWEB_URL,
+               'WRAPPER_SERVICE_URL': settings.WRAPPER_SERVICE_URL}
 
     if hasattr(settings, 'ONLY_ONE_JS_FILE'):
         context ['only_one_js_file'] = settings.ONLY_ONE_JS_FILE
