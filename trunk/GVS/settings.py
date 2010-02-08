@@ -71,6 +71,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'django.core.context_processors.debug',
     'django.core.context_processors.i18n',
     'django.core.context_processors.media',
+    'processors.context_processors.fast'
 )
 
 MIDDLEWARE_CLASSES = (
@@ -142,3 +143,4 @@ WRAPPER_SERVICE_URL = 'http://tomdev.cs.uni-kassel.de:8080/ServiceDesignerWep/'
 DEFAULT_GADGET_IMAGE_URI='http://demo.fast.morfeo-project.org/fast/images/FASTLogo.png'
 DEFAULT_GADGET_HOMEPAGE_URI='http://fast.morfeo-project.eu'
 
+ONLY_ONE_JS_FILE = not DEBUG
