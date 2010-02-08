@@ -186,8 +186,8 @@ var FormDialog = Class.create( /** @lends FormDialog.prototype */ {
                                             'value': line.value
                                         });
                         }
-                        if (input.disabled) {
-                            input.attr('disabled', input.disabled);
+                        if (line.disabled) {
+                            input.attr('disabled', line.disabled);
                         }
                         inputNode = input.domNode;
                         lineNode = this._createLine(line.label, inputNode);
