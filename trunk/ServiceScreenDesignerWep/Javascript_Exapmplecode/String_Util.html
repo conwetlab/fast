@@ -12,7 +12,7 @@ function from(str, sign, sepNr)
 {
 	//Trims all needless whitespaces
     var tmp = new String(Trim(noralizeSpaces(str)));
-	var save = "";
+	var save = '';
 	
 	if(sepNr < 1)
 	{
@@ -43,7 +43,7 @@ function until(str, sign, sepNr)
 {
 	//Trims all needless whitespaces
     var tmp = new String(Trim(noralizeSpaces(str)));
-    var res = "";
+    var res = '';
     var length = sign.length;
 
 	if(sepNr < 1)
@@ -71,7 +71,7 @@ function charsFromTo(str, from, to)
 {
 	//Trims all needless whitespaces
     var tmp = new String(Trim(noralizeSpaces(str)));
-    var res = "";
+    var res = '';
 
 	if(from < 1)
 	{
@@ -124,9 +124,9 @@ function wordsFromTo(str, from, to)
 {
 			//Trims all needless whitespaces
 	        var tmp = new String(Trim(noralizeSpaces(str)));
-	        var res = "";
+	        var res = '';
 	        
-	        var _split = tmp.split(" ");
+	        var _split = tmp.split(' ');
 	        var length = _split.length;
 
 			if(from < 1)
@@ -142,7 +142,7 @@ function wordsFromTo(str, from, to)
 	        //build the result string
 	        for(from; from <= to; from++)
 			{
-				res =  res + wordAt(str, from) + " ";
+				res =  res + wordAt(str, from) + ' ';
 			}
 		    
 	        return res;
@@ -155,7 +155,7 @@ function wordAt(str, nr)
 {
 			//Trims all needless whitespaces
 	        var res = new String(Trim(noralizeSpaces(str)));
-	        var _split = res.split(" ");
+	        var _split = res.split(' ');
 	        var length = _split.length;
 
 			nr = nr -1;	//identify the MEANDED word 
@@ -176,14 +176,14 @@ function wordAt(str, nr)
 function seperateBySpace(str)
 {
 	        var s = new String(str);
-	        var res = new String("");
-	        var _split = s.split(" ");
+	        var res = new String('');
+	        var _split = s.split(' ');
 
 	    	for (i = 0; i < _split.length; i++)
 		    {
-	    		res = res + i + ": " + _split[i] + "   \n";
+	    		res = res + i + ': ' + _split[i] + '   \n';
 	    		
-	            var _split0 = _split[i].split(" ");
+	            var _split0 = _split[i].split(' ');
 	        }
             
 	        return res;
@@ -196,9 +196,9 @@ function noralizeSpaces(str)
         var s = new String(str);
 
         //while there are more then one Space in follow, replace with one
-        while (s.indexOf("  ") != -1)
+        while (s.indexOf('  ') != -1)
         {
-        	s = s.replace("  ", " ");
+        	s = s.replace('  ', ' ');
         }
     	
         return s;
@@ -208,7 +208,7 @@ function noralizeSpaces(str)
 // Trims all spaces to the left of a specific string
 function LTrim(str)
 {
-        var whitespace = new String(" \t\n\r ");
+        var whitespace = new String(' ');
         // last space character is not a space, but alt+0160,
         // another invisible char.
         var s = new String(str);
@@ -233,7 +233,7 @@ function RTrim(str)
         // We don't want to trip JUST spaces, but also tabs,
         // line feeds, etc.  Add anything else you want to
         // "trim" here in whitespace
-        var whitespace = new String(" \t\n\r ");
+        var whitespace = new String(' ');
         // last space character is not a space, but alt+0160,
         // another invisible char.
         var s = new String(str);
@@ -292,7 +292,7 @@ function Trim(str)
 <input type=text name=t14 value="    A test - trim - string     " size=30>
 <input type=text name=t15 value="1" size=10>
 <input type=text name=t16 value="6" size=10>
-<input type=button value="give words from-to"
+<input type=button value="give chars from-to"
 	onclick="this.form.t1.value=charsFromTo(this.form.t14.value, this.form.t15.value, this.form.t16.value)"> <BR>
 
 <BR>

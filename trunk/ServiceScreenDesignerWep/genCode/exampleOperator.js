@@ -1,4 +1,4 @@
-run: function (search_key) 
+function transform(search_key) 
 {
    //fill imput data into request template 
    var prerequest = 'http://open.api.sandbox.ebay.com/shopping?appid=KasselUn-efea-4b93-9505-5dc2ef1ceecd&version=517&callname=FindItems&ItemSort=EndTime&QueryKeywords=<search_key>&responseencoding=XML'; 

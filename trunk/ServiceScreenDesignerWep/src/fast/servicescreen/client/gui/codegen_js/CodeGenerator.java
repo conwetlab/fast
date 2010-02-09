@@ -31,12 +31,11 @@ public class CodeGenerator
 	private String outputPortName = "";	//use later to generate translation code
 	
 	//Operation names
-	private String util 		= "String_Util";
-	private String trimBoth 	= util + ".trimBoth(";
-	private String charsFromTo 	= util + ".charsFromTo(";
-	private String wordsFromTo 	= util + ".wordsFromTo(";
-	private String until 		= util + ".until(";
-	private String from 		= util + ".from(";
+	private String trimBoth 	= "trimBoth(";
+	private String charsFromTo 	= "charsFromTo(";
+	private String wordsFromTo 	= "wordsFromTo(";
+	private String until 		= "until(";
+	private String from 		= "from(";
 	
 	private String getElementsByTagname = "xmlResponse.getElementsByTagName(";
 	
@@ -56,7 +55,7 @@ public class CodeGenerator
 		rootTemplate =
 			
 			//declare method rump 
-			"run: function (<<inputportlist>>) \n" +
+			"function transform(<<inputportlist>>) \n" +
 			"{\n" +
 			
 			//fill request url
@@ -87,7 +86,6 @@ public class CodeGenerator
 			"  //the transformation code \n"+
 			"  <<transformation>> \n" +
 			"\n" +
-			
 			
 			//declare method end
 			"}\n";
@@ -159,11 +157,11 @@ public class CodeGenerator
 		table.put("<<inputportlist>>", inputPortText);
 	}
 	
-	//TODO, this should be more then one type. Send Xml as output?? ONE outpp ok?
 	@SuppressWarnings("unchecked")
 	private void add_outPort_toTable()
 	{
 		String outputPortVar = "";
+		String outPutVarType = "";
 		
 		//search outPortName
 		Iterator<FactPort> iterator = designer.serviceScreen.iteratorOfPostconditions();
@@ -172,11 +170,13 @@ public class CodeGenerator
 		if(currentOutPort != null && ! iterator.hasNext()/*only one allowed*/)
 		{
 			outputPortVar = "" + currentOutPort.get("name");
+			
+			outPutVarType = (String) currentOutPort.get("factType");	//Should be the outputs type
 		}
 
 		//create code for variable initialization 
-		this.outputPortName = outputPortVar;		//save name
-		outputPortVar = "var " + outputPortVar + " = ''; \n";
+		this.outputPortName = outputPortVar;
+		outputPortVar = outPutVarType + " " + outputPortVar + " = ''; \n";
 		
 		table.put("<<outputport>>", outputPortVar);
 	}
@@ -239,7 +239,7 @@ public class CodeGenerator
 			"  if (xmlHttp) \n" +
 			"  { \n" + 
 			"      //the <resource> tag should contain the requested information \n" +
-			"      xmlHttp.open('GET', '<resource>', true); \n" + 
+			"      xmlHttp.open('GET', request, true); \n" + 
 			"      xmlHttp.onreadystatechange = function () { \n" + 
 			"            if (xmlHttp.readyState == 4) \n" +
 			"            { \n" + 
@@ -282,10 +282,12 @@ public class CodeGenerator
 			
 			if ("createObject".equals(kind))
 			{
-				//create a Attr. in the object, how?!
+				//watch the example for loops
 			}
 			else if ("fillAttributes".equals(kind))
 			{
+				//watch the example for loops
+				
 				String tmpCode;
 				
 				//Iterate over any opList entry
@@ -308,8 +310,8 @@ public class CodeGenerator
 						//TODO following codegen should be made for any possible elementItemID ()
 						
 						//create code for getting the element/elementsItem
-						tmpCode += trimBoth +  getElementsByTagname	//TODO: at begin load xmlReq, then operate on a solved Xml!
-								+ lastSourceTagname + ").getItem(" + "elemItemID??" + "))";
+						tmpCode += trimBoth +  getElementsByTagname
+								+ lastSourceTagname + ").getItem(" + "1" + "))";
 						
 						//create code for rest of operation list
 						int count = current_opList.indexOf(lastTagnameOperation) + 1;
@@ -323,7 +325,7 @@ public class CodeGenerator
 					}
 					
 					//write into transCode
-					transCode += tmpCode;
+					transCode += tmpCode.substring(0, tmpCode.length() -1);	//cuts last .
 					if(opList_iter.hasNext())
 					{
 						transCode += " + ";
@@ -364,7 +366,7 @@ public class CodeGenerator
 								tmpCode += "'" + signs + "', ";
 							}
 							
-							tmpCode += op.value + ")";
+							tmpCode += op.value + ").";
 							break;
 				
 			case from: 		tmpCode = from + tmpCode + ", ";
@@ -417,7 +419,8 @@ public class CodeGenerator
 		// Instantiate service and set up its target url
 		RequestServiceAsync service = GWT.create(RequestService.class);
 
-		service.saveJsFileOnServer(rootTemplate, new AsyncCallback<String>()
+		//send pre - trans - post code to server
+		service.saveJsFileOnServer(preHtml + rootTemplate + postHtml, new AsyncCallback<String>()
 				{
 					@Override
 					public void onSuccess(String result)
@@ -443,9 +446,223 @@ public class CodeGenerator
 		return writeFile_result;
 	}
 	
+	/**
+	 * contains html end
+	 * */
+	private String postHtml =
+		"</script>\n" +
+		"	</head>\n" +
+		"		<body>\n" +
+		"			<form name=f1>\n" +
+		"				<input type='text' name=t2 value='Harry' size='50'> \n" +
+		"				<input type=button value='request and transform' \n" +
+		"					onclick='this.form.t1.value=transform(this.form.t2.value)'>	\n" +
+		"				<br><br><br><br> \n" +
+		"				RESULT:	\n" +
+		"				<input type=text name=t1 value='press the button above..' size=200>\n" +
+		"			</form>\n" +
+		"		</body>\n" +
+		"	</html>\n";
 	
-	
-	
+	/**
+	 *  Contains the html header and all javascript util functions
+	 * */
+	private String preHtml =
+		"<html> \n" +
+		"<head> \n" +
+		"    <meta http-equiv='Content-Type' content='text/html; charset=ISO-8859-1'> \n" +
+		"	  <title>Insert title here</title> \n" +
+		"	<script type='text/javascript'> \n" +
+
+		"	//all functions from util \n" +
+		"	function from(str, sign, sepNr) \n" +
+		"	{	 \n" +
+		"		//Trims all needless whitespaces \n" +
+		"		var tmp = new String(Trim(str)); \n" +
+		"		var save = ''; \n" +
+
+		"		if (sepNr < 1) \n" +
+		"		{ \n" +
+		"			sepNr = 1; \n" +
+		"		} \n" +
+
+		"		//build the result string \n" +
+		"		while (tmp.indexOf(sign) != -1 && sepNr > 0) \n" +
+		"		{ \n" +
+		"			save = tmp.substring(tmp.indexOf(sign), tmp.indexOf(sign) \n" +
+		"					+ sign.length); \n" +
+
+		"			tmp = tmp.substring(tmp.indexOf(sign) + sign.length, tmp.length); \n" +
+
+		"			sepNr--; \n" +
+		"		} \n" +
+
+		"		//append last apperance of sign \n" +
+		"		tmp = save + tmp; \n" +
+
+		"		return tmp; \n" +
+		"	} \n" +
+
+		"	function until(str, sign, sepNr) \n" +
+		"	{ \n" +
+		"		//Trims all needless whitespaces \n" +
+		"		var tmp = new String(Trim(str)); \n" +
+		"		var res = ''; \n" +
+		"		var length = sign.length; \n" +
+
+		"		if(sepNr < 1) \n" +
+		"		{ \n" +
+		"			sepNr = 1; \n" +
+		"		} \n" +
+
+		"		//build the result string \n" +
+		"		while(tmp.indexOf(sign) != -1 && sepNr > 0) \n" +
+		"		{ \n" +
+		"			res += tmp.substring(0, tmp.indexOf(sign) + length); \n" +
+
+		"		tmp = tmp.substring(tmp.indexOf(sign) + length, tmp.length); \n" +
+
+		"			sepNr--; \n" +
+		"		} \n" +
+
+		"		return res; \n" +
+		"	} \n" +
+
+		"	function charsFromTo(str, from, to) \n" +
+		"	{ \n" +
+		"		//Trims all needless whitespaces \n" +
+		"		var tmp = new String(Trim(str)); \n" +
+		"		var res = ''; \n" +
+		
+		"		if(from < 1) \n" +
+		"		{ \n" +
+		"			from = 1; \n" +
+		"		} \n" +
+		
+		"		if(to > tmp.length) \n" +
+		"		{ \n" +
+		"			to = tmp.length; \n" +
+		"		} \n" +
+		
+		"		//build the result string \n" +
+		"		for(from; from <= to; from++) \n" +
+		"		{ \n" +
+		"			res += charAt(tmp, from); \n" +
+		"		} \n" +
+		
+		"		return res; \n" +
+		"	} \n" +
+		
+		"	function charAt(str, index) \n" +
+		"	{ \n" +
+		"		//Trims all needless whitespaces \n" +
+		"		//var tmp = new String(Trim(str)); \n" +
+		"		var res = ''; \n" +
+		
+		"		if(index < 1) \n" +
+		"		{ \n" +
+		"			index = 1; \n" +
+		"		} \n" +
+		"		else if(index > str.length) \n" +
+		"		{ \n" +
+		"			index = str.length; \n" +
+		"		} \n" +
+		
+		"		index = index - 1; \n" +
+		
+		"		res = str.charAt(index); \n" +
+		
+		"		return res; \n" +
+		"	} \n" +
+		
+		"	function wordsFromTo(str, from, to) \n" +
+		"	{ \n" +
+		"		//Trims all needless whitespaces \n" +
+		"		var tmp = new String(Trim(str)); \n" +
+		"		var res = ''; \n" +
+		
+		"		var _split = tmp.split(' '); \n" +
+		"		var length = _split.length; \n" +
+		
+		"		if(from < 1) \n" +
+		"		{ \n" +
+		"			from = 1; \n" +
+		"		} \n" +
+		
+		"		if(to > length) \n" +
+		"		{ \n" +
+		"			to = length; \n" +
+		"		} \n" +
+		
+		"		//build the result string} \n" +
+		"		for(from; from <= to; from++) \n" +
+		"		{ \n" +
+		"			res =  res + wordAt(str, from) + ' '; \n" +
+		"		} \n" +
+		
+		"		return res; \n" +
+		"	} \n" +
+		
+		"	function wordAt(str, nr) \n" +
+		"	{ \n" +
+		"		//Trims all needless whitespaces \n" +
+		"		var res = new String(Trim(str)); \n" +
+		"		var _split = res.split(' '); \n" +
+		"		var length = _split.length; \n" +
+		
+		"		nr = nr -1; \n" +
+		
+		"		if(nr < 0 || nr >= length) \n" +
+		"		{ \n" +
+		"			nr = length-1; \n" +
+		"		} \n" +
+		
+		"		res = _split[nr]; \n" +
+		
+		"		return res; \n" +
+		"	} \n" +
+		
+		"	function Trim(str) \n" +
+		"	{ \n" +
+		"		return RTrim(LTrim(str)); \n" +
+		"	} \n" +
+		
+		"	function LTrim(str) \n" +
+		"	{ \n" +
+		"		var whitespace = new String(' '); \n" +
+
+		"		var s = new String(str); \n" +
+		"		if (whitespace.indexOf(s.charAt(0)) != -1) \n" +
+		"		{ \n" +
+		"			var j=0, i = s.length;} \n" +
+
+		"			while (j < i && whitespace.indexOf(s.charAt(j)) != -1) \n" +
+		"				j++; \n" +
+
+		"			s = s.substring(j, i); \n" +
+		"		} \n" +
+		"		return s; \n" +
+		"	} \n" +
+		
+		"	function RTrim(str) \n" +
+		"	{ \n" +
+		"		var whitespace = new String(' '); \n" +
+
+		"		var s = new String(str); \n" +
+		"		if (whitespace.indexOf(s.charAt(s.length-1)) != -1) \n" +
+		"		{ \n" +
+		"			var i = s.length - 1; \n" +
+
+		"			while (i >= 0 && whitespace.indexOf(s.charAt(i)) != -1) \n" +
+		"				i--; \n" +
+
+		"			s = s.substring(0, i+1); \n" +
+		"		} \n" +
+		
+		"		return s; \n" +
+		"	} \n" +
+		"\n";
+
 	//Getters, Setters, Helpers
 	
 	/**
