@@ -31,13 +31,13 @@ public class CodeGenerator
 	private String outputPortName = "";	//use later to generate translation code
 	
 	//Operation names
-	private String trimBoth 	= "trimBoth(";
+	private String trimBoth 	= "Trim(";
 	private String charsFromTo 	= "charsFromTo(";
 	private String wordsFromTo 	= "wordsFromTo(";
 	private String until 		= "until(";
 	private String from 		= "from(";
 	
-	private String getElementsByTagname = "xmlResponse.getElementsByTagName(";
+	private String getElementsByTagname = "xmlResponse.getElementsByTagName('";
 	
 	/**
 	 * The constructor creates the first template
@@ -130,7 +130,7 @@ public class CodeGenerator
 	private void add_PreRequest_toTable()
 	{	
 		// lookup the gui request text field
-		String prerequestText = designer.templateBox.getText();
+		String prerequestText = designer.serviceScreen.getRequestTemplate();
 		table.put("<<prerequest>>", prerequestText);
 	}
 	
@@ -176,7 +176,7 @@ public class CodeGenerator
 
 		//create code for variable initialization 
 		this.outputPortName = outputPortVar;
-		outputPortVar = outPutVarType + " " + outputPortVar + " = ''; \n";
+		outputPortVar = "var " + outputPortVar + " = new " + outPutVarType + "(); \n";
 		
 		table.put("<<outputport>>", outputPortVar);
 	}
@@ -239,7 +239,7 @@ public class CodeGenerator
 			"  if (xmlHttp) \n" +
 			"  { \n" + 
 			"      //the <resource> tag should contain the requested information \n" +
-			"      xmlHttp.open('GET', request, true); \n" + 
+			"      xmlHttp.open('GET', 'http://localhost:8080/requestServlet?url=http%3A%2F%2Fopen.api.sandbox.ebay.com%2Fshopping%3Fappid%3DKasselUn-efea-4b93-9505-5dc2ef1ceecd%26version%3D517%26callname%3DFindItems%26ItemSort%3DEndTime%26QueryKeywords%3DUSB%26responseencoding%3DXML', true); \n" + 
 			"      xmlHttp.onreadystatechange = function () { \n" + 
 			"            if (xmlHttp.readyState == 4) \n" +
 			"            { \n" + 
@@ -311,7 +311,7 @@ public class CodeGenerator
 						
 						//create code for getting the element/elementsItem
 						tmpCode += trimBoth +  getElementsByTagname
-								+ lastSourceTagname + ").getItem(" + "1" + "))";
+								+ lastSourceTagname + "').getItem(" + "1" + "))";
 						
 						//create code for rest of operation list
 						int count = current_opList.indexOf(lastTagnameOperation) + 1;
@@ -325,7 +325,7 @@ public class CodeGenerator
 					}
 					
 					//write into transCode
-					transCode += tmpCode.substring(0, tmpCode.length() -1);	//cuts last .
+					transCode += tmpCode;	
 					if(opList_iter.hasNext())
 					{
 						transCode += " + ";
@@ -366,7 +366,7 @@ public class CodeGenerator
 								tmpCode += "'" + signs + "', ";
 							}
 							
-							tmpCode += op.value + ").";
+							tmpCode += op.value + ")";
 							break;
 				
 			case from: 		tmpCode = from + tmpCode + ", ";
@@ -472,7 +472,7 @@ public class CodeGenerator
 		"<head> \n" +
 		"    <meta http-equiv='Content-Type' content='text/html; charset=ISO-8859-1'> \n" +
 		"	  <title>Insert title here</title> \n" +
-		"	<script type='text/javascript'> \n" +
+		"	<script type='text/javascript'> \n \n" +
 
 		"	//all functions from util \n" +
 		"	function from(str, sign, sepNr) \n" +
@@ -501,7 +501,7 @@ public class CodeGenerator
 		"		tmp = save + tmp; \n" +
 
 		"		return tmp; \n" +
-		"	} \n" +
+		"	} \n \n" +
 
 		"	function until(str, sign, sepNr) \n" +
 		"	{ \n" +
@@ -526,7 +526,7 @@ public class CodeGenerator
 		"		} \n" +
 
 		"		return res; \n" +
-		"	} \n" +
+		"	} \n \n" +
 
 		"	function charsFromTo(str, from, to) \n" +
 		"	{ \n" +
@@ -551,7 +551,7 @@ public class CodeGenerator
 		"		} \n" +
 		
 		"		return res; \n" +
-		"	} \n" +
+		"	} \n \n" +
 		
 		"	function charAt(str, index) \n" +
 		"	{ \n" +
@@ -573,7 +573,7 @@ public class CodeGenerator
 		"		res = str.charAt(index); \n" +
 		
 		"		return res; \n" +
-		"	} \n" +
+		"	} \n \n" +
 		
 		"	function wordsFromTo(str, from, to) \n" +
 		"	{ \n" +
@@ -601,7 +601,7 @@ public class CodeGenerator
 		"		} \n" +
 		
 		"		return res; \n" +
-		"	} \n" +
+		"	} \n \n" +
 		
 		"	function wordAt(str, nr) \n" +
 		"	{ \n" +
@@ -620,7 +620,7 @@ public class CodeGenerator
 		"		res = _split[nr]; \n" +
 		
 		"		return res; \n" +
-		"	} \n" +
+		"	} \n \n" +
 		
 		"	function Trim(str) \n" +
 		"	{ \n" +
@@ -634,7 +634,7 @@ public class CodeGenerator
 		"		var s = new String(str); \n" +
 		"		if (whitespace.indexOf(s.charAt(0)) != -1) \n" +
 		"		{ \n" +
-		"			var j=0, i = s.length;} \n" +
+		"			var j=0, i = s.length; \n" +
 
 		"			while (j < i && whitespace.indexOf(s.charAt(j)) != -1) \n" +
 		"				j++; \n" +
@@ -642,7 +642,7 @@ public class CodeGenerator
 		"			s = s.substring(j, i); \n" +
 		"		} \n" +
 		"		return s; \n" +
-		"	} \n" +
+		"	} \n \n" +
 		
 		"	function RTrim(str) \n" +
 		"	{ \n" +

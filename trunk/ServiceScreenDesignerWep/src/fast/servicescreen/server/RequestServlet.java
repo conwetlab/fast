@@ -20,6 +20,9 @@ import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
  * -> with URL Escape Codes: / -> %2F, = -> %3D, ? = %3F, & -> %26, : -> %3A
  * xxx = http%3A%2F%2Fopen.api.sandbox.ebay.com%2Fshopping%3Fappid%3DKasselUn-efea-4b93-9505-5dc2ef1ceecd%26version%3D517%26callname%3DFindItems%26ItemSort%3DEndTime%26QueryKeywords%3DUSB%26responseencoding%3DXML
  * 
+ * 
+ * TODO: Problem! Cannot execute html (request) from another origin.. That means
+ * i must execute html only in sdw? 
  * */
 @SuppressWarnings("serial")
 @RemoteServiceRelativePath("\requestServlet")
