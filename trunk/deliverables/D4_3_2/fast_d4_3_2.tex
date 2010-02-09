@@ -258,6 +258,12 @@ Therefore, the focus of this deliverable is to define how these wrappers will be
 \cleardoublepage
 \pagenumbering{arabic}
 
+%\clearpage
+%\listoftables
+
+\clearpage
+\listoffigures
+
 %%%%%%%%%%%%%%%%%%%%%%%%%
 % BEGINNING OF SECTIONS %
 %%%%%%%%%%%%%%%%%%%%%%%%%
@@ -278,9 +284,23 @@ The objective of this deliverable is the analysis and development of mechanisms 
 \subsection{Structure of the Document} % (fold)
 \label{sub:structure_of_the_document}
 
-This deliverable is structured as follows. Section~\ref{sec:introduction} states the goal, scope and structure of the document. Section~\ref{sec:resource_adapters} describes what a resource adapter is, how the platform is able to interact with web services, how these wrappers or adapters are build and then discovered to be reused in any gadget. Then, Section~\ref{sec:restful_web_services_wrapper_tool} defines the service wrapper tool built to facilitate FAST users to create resource adapters of RESTful web services. Finally, Section~\ref{sec:related_work}...\todo{Finish it!}
+This deliverable is structured as follows: Section~\ref{sec:introduction} states the goal, scope and structure of the document. Before going to the core of the document, a brief introduction to some related work is done in Section~\ref{sec:related_work}. Then, Section~\ref{sec:resource_adapters} describes what a resource adapter is, how the platform is able to interact with web services, how these wrappers or adapters are build and then discovered to be reused in any gadget. Finishing the deliverable, Section~\ref{sec:restful_web_services_wrapper_tool} defines the service wrapper tool built to facilitate FAST users to create resource adapters of RESTful web services.
 
 % section introduction (end)
+
+
+\clearpage
+\section{Related Work} % (fold)
+\label{sec:related_work}
+
+This section focuses on different approaches dealing with web services integration and reutilisation. That is not a novel idea, since one of the basic pillars of web services is to allow any application to access and execute third-party web services over a network, and there are already loads of approaches about this issue. However, most of these approaches require a high-level technical profile to accomplish this integration in a programmatically manner. The ones studied in this deliverable are those which presents and allow reusing data sources and web services using a graphical interface or wizard.
+
+\cite{urmetzer2010fast_state_of_the_art} presented several tools to create widgets, which allow the interaction with some kind of data sources and services. Yahoo! Pipes provides a set \emph{modules} to access different kind of data sources, such as RSS feeds, a given web page (HTML code), Flickr images, Google base or the Yahoo! search engine, among others. These modules are developed by the widget platform itself, they do not allow users to build their own modules, and it lacks of a way to interact with REST or SOAP web service. Another tool to reference is Apatar. Apatar is more enterprise-oriented, allowing the interaction with databases (MySQL, PostgreSql, Oracle), and powerful enterprise systems such as Salesforces.com or SugarCRM. It also provides access to data sources such as XML or text files. But again, there is no way to use web services. Finally, Presto is another solution enterprise-oriented. It allows the common data sources such as RSS and ATOM feeds or XML-based sources. However, Presto brings connectors to use services from HP SOA Systinet and any Oracle information technologies including Oracle 9i/10g/11g, Oracle Fusion SOAs, and Oracle Applications.
+
+Summarising up, none of the solutions in the market really facilitate the users to build up their own widgets using any kind of web service in a graphical manner. Their approaches are either data-oriented (RSS feeds, databases, raw text), or including a small set of web services in the case of Presto. FAST will bring the possibility of integrate REST or SOAP-based web service inside a gadget (by creating service wrappers), and graphical tool will be provided to facilitate the process of building these service wrappers. In a similar way, and in the context of bioinformatics web services, \cite{gordon2008} explains how to publish web services to be reused in their tool as Moby (semantic) services. They have developed the Daggoo\footnote{http://www.daggoo.net/} prototype which will create these service wrappers to be used in Moby.
+
+% section related_work (end)
+
 
 \clearpage
 \section{Resource Adapters} % (fold)
@@ -353,7 +373,7 @@ Shortly, a WSDL definition of a service, regarding the WSDL 2.0 specification \c
 	\item[Type definitions] A set of Type Definition components defining the content model of the element information items such as that defined by an XML Schema global type definition.
 \end{description}
 
-From a specific WSDL definition, a set of methods or operations can be easily extracted which encloses a set of inputs and outputs. These operations would be transformed into \emph{actions}, and the inputs and outputs would be used to define resource adapter \emph{pre/postconditions}. But there is a critical problem following this approach. The definition of the inputs, outputs, operations and their types are done in a XML Schema document. An XML schema describes, in a syntactic manner, the structure of an XML document, but there is no straight-forward relation with the concepts used to describe pre/postconditions in the building blocks. In order to illustrate the concepts of WSDL, and the gap between them and semantically-defined building blocks, a shorten version of a real Amazon E-commerce web service will be presented. Concretely, the choosen web service performs an item search through the Amazon catalog. It expects as input an ItemSearch element, which may contain an actor, an artist or an author, and the item availability. The output of the service would be a set of items. The WSDL including for this service is given below.
+From a specific WSDL definition, a set of methods or operations can be easily extracted which encloses a set of inputs and outputs. These operations would be transformed into \emph{actions}, and the inputs and outputs would be used to define resource adapter \emph{pre/postconditions}. But there is a critical problem following this approach. The definition of the inputs, outputs, operations and their types are done in a XML Schema document. An XML schema describes, in a syntactic manner, the structure of an XML document, but there is no straight-forward relation with the concepts used to describe pre and postconditions in the building blocks. In order to illustrate the concepts of WSDL, and the gap between them and semantically-defined building blocks, a shorten version of a real Amazon E-commerce web service will be presented. Concretely, the choosen web service performs an item search through the Amazon catalog. It expects as input an ItemSearch element, which may contain an actor, an artist or an author, and the item availability. The output of the service would be a set of items. The WSDL including for this service is given below.
 
 \singlespacing
 \begin{small}
@@ -560,7 +580,7 @@ In the previous example, there is not a formal expression saying that \emph{?con
 
 In the building phase, every resource adapter is created sharing a common structure for screen components, such as forms, operators and resources. Hence, it will have a set of actions which will contain a set of preconditions to be satisfied in order to be executed, and after its execution, it may produce any of the conditions of their postconditions.
 
-For this reason, a screen developer during the development phase is able to reuse these screen components which are already stored in the catalogue, establishing which the screen's pre/postconditions are, and then the system will suggest several screen components which may satisfy these pre/postconditions. In a first step, the system will suggest screen components having any of the required preconditions, which can be connected to any of the screen preconditions (the connection will be represented by an internal pipe), and the same would happen for the postconditions. Once a screen component is inserted into the screen, the system will take its definition into consideration to recommend new screen components which can be connected to the ones the screen is composed of.
+For this reason, a screen developer during the development phase is able to reuse these screen components which are already stored in the catalogue, establishing which the screen's pre and postconditions are, and then the system will suggest several screen components which may satisfy these pre or postconditions. In a first step, the system will suggest screen components having any of the required preconditions, which can be connected to any of the screen preconditions (the connection will be represented by an internal pipe), and the same would happen for the postconditions. Once a screen component is inserted into the screen, the system will take its definition into consideration to recommend new screen components which can be connected to the ones the screen is composed of.
 
 On these basis, the mechanism is relatively similar to the screen recommender, used to find the best screens to create a screen flow. Once more, it is based on the pre/postconditions of a set of building blocks.
 
@@ -622,7 +642,17 @@ To define the preconditions and postconditions of a new service wrapper, the FAS
   \end{center}
 \end{figure}
 
-The service wrapper tool composes the request using a template string which will contain placeholders for precondition values. Before sending the request to the service, the placeholders are filled with their corresponding values and the resulting URL is then ready to be sent as the service request.
+The service wrapper tool composes the request using a template string which will contain placeholders for precondition values. An example of a template with one placeholder (<search\_query>), to perform a search on google could be like:
+
+\begin{verbatim}
+http://www.google.com/search?lang=es&q=<search_query>
+\end{verbatim}
+
+Before sending the request to the service, the placeholders are filled with their corresponding values and the resulting URL is then ready to be sent as the service request. Following the previous example, the placeholder \emph{search\_query} is filled with a specific search term:
+
+\begin{verbatim}
+http://www.google.com/search?lang=es&q=six+nations+2010
+\end{verbatim}
 
 Figure~\ref{fig:construct_service_request} shows the screen to construct the service requests. In the top input field of Figure~\ref{fig:construct_service_request}, the user may drop an example HTTP request taken e.g. form the service documentation (e.g. \cite{eBayShoppingAPIs} for this example). The tool analyses the example request and, in the middle of the screen, a form for editing the request parameters is provided. This example shows how a user has connected the \textit{QueryKeywords} parameter with the precondition \textit{search\_key} by adding a corresponding reference to the value field of that parameter. In addition, an access key has been retrieved and has been entered as value for the \textit{appid} parameter.
 
@@ -654,6 +684,8 @@ Figure~\ref{fig:response_service_execution} shows the transformation data tab of
 \end{figure}
 
 Once the service response, in XML format, has been retrieved, the transformation tab shows it as an interactive object tree on the left side of Figure~\ref{fig:response_service_execution}. To construct this interactive object, the XML document has been parsed into a DOM, and a simplified tree representation of that DOM is built up. This tree representation of the XML data is used as an input to construct transformation rules.
+
+The rule based approach of the service wrapper tool has been inspired by triple graph grammars \cite{Schurr94,JSZ97c}. While general triple graph grammars allow to relate complex structures to each other, in the approach taken for FAST, the target of a rule is always a single object or attribute making the process as easy as possible for the user.
 
 A transformation rule is used to analyse the XML data and to generate domain-specific facts from concepts from the ontologies used by the pre/postconditions of the different building blocks. A transformation rule is composed of three elements (see the middle part of Figure~\ref{fig:response_service_execution}). First, the \textit{from} field indicates the XML elements to be translated by rule. These XML elements are identified by the tagname of a DOM element from the XML document. Second, the type of the rule will be set, taking one of the following values: \emph{createObject}, \emph{fillAttributes} or \emph{dummy}. And third, the target of the rule specifies a certain concept or attribute, to be created or filled. A detailed explanation of the type of actions to be triggered from the transformation rules is:
 
@@ -688,33 +720,8 @@ However, there are some transformations that these rules cannot perform. For exa
 % section restful_web_services_wrapper_tool (end)
 
 \clearpage
-\section{Related Work} % (fold)
-\label{sec:related_work}
-
-The rule based approach of the service wrapper tool has been inspired by triple graph grammars, cf. \cite{Schurr94,JSZ97c}. While general triple graph grammars allow to relate complex structures to each other, in our case the target of a rule is always a single object or attribute. This facilitates the whole mechanism, reasonably. 
-
-Write about some related work such as:
-
-Wrapping WSDL-Described Web Services as Moby Services (using SAWSDL)
-\url{http://biomoby.open-bio.org/CVS_CONTENT/moby-live/Java/docs/sawsdlServlet.html}
-
-Perhaps, it's worth to mention the service wrappers Yahoo Pipes has, which are a fixed set developed by them, with no possibility for a user to create new ones, as we do. (other sites doing the same??)
-
-% section related_work (end)
-
-\clearpage
 \bibliographystyle{apalike}
 \addcontentsline{toc}{section}{References}
 \bibliography{fast_d4_3_2}
-
-\clearpage
-\doublespacing
-\section*{Appendix A (Lists of Tables and Figures)}
-\addcontentsline{toc}{section}{Appendix A (Lists of Tables and Figures)}
-
-\listoftables
-
-\listoffigures
-
 
 \end{document}
