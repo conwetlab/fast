@@ -189,7 +189,7 @@
 \doublespacing
 Ontology mediation is a critical problem in heterogeneous environments, since inter-operating services and agents often use different
 ontologies, and the differences between them need to be determined and overcome to allow for a seamless data exchange between these parties.
-This is a difficult ask, with which web-based agents must cope. 
+This is a difficult task, with which web-based agents must cope. 
 
 In D2.4.1 we reviewed current work and literature, discussing the main areas of the topic, that is the core problem of ontology mediation, the types of mismatches that occur between ontologies, and the three main ontology mediation approaches, namely (1) the representation of correspondences between ontologies, (2) the (semi-)automatic process of discovering these correspondences and (3) creation of a new ontology from the source ontologies. 
 
@@ -235,7 +235,7 @@ Based on the theoretical foundations laid down in D2.4.1 we present our approach
     \textcolor{white}{\textbf{Delivery data}} & {\textbf{Due date}} & {28/02/2009} & {\textbf{Submitted}} & {27/02/2009}\\ \hline
     \textcolor{white}{\textbf{Status}} & \multicolumn{2}{l|}{} & \multicolumn{2}{l|}{final}\\ \hline
     \textcolor{white}{\textbf{Dissemination Level}} & \multicolumn{4}{l|}{Public $\boxtimes$ / Consortium $\square$}\\ \hline
-    \textcolor{white}{\textbf{Short description of contents}} & \multicolumn{4}{p{10.85cm}|}{D2.4.2 is the second iteration of the FAST ontology matching approach. The firsty iteration contained a general overview of the literature regarding ontology mediation, paving the way for futher analysis of the scenarios arising in FAST that require ontology mediation. Based on that general overview, this current interation presents the approach to implement ontology matching within FAST. We present the different roles within the platform, tasks and challenges related to them, and the way ontology matching is integrated within each role.}\\ \hline
+    \textcolor{white}{\textbf{Short description of contents}} & \multicolumn{4}{p{10.85cm}|}{D2.4.2 is the second iteration of the FAST ontology matching approach. The first iteration contained a general overview of the literature regarding ontology mediation, paving the way for futher analysis of the scenarios arising in FAST that require ontology mediation. Based on that general overview, this current interation presents the approach to implement ontology matching within FAST. We present the different roles within the platform, tasks and challenges related to them, and the way ontology matching is integrated within each role.}\\ \hline
     \textcolor{white}{\textbf{Authors}} & \multicolumn{4}{l|}{\authorOne}\\
 %   {} & \multicolumn{4}{l|}{}\\ 
 %   {} & \multicolumn{4}{l|}{}\\ 
@@ -267,7 +267,7 @@ Based on the theoretical foundations laid down in D2.4.1 we present our approach
 \section{Introduction} %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \label{sec:intro}
 \paragraph{Goal and Scope.}
-FAST is a visual programming platform allowing business users to build enterprise-class mashups, employing various underlying services and generating new ones. Resources in FAST are described semantically using different ontologies and vocabularies, and can therefore be combined to what we can call ``intelligent gadgets''. In the services used within the FAST environment, the ontologies involved in the creation of gadgets and building blocks come from different parties. These ontologies, though different, will sometimes cover the same domain, making ontology matching necessary, as the means to reconcile differences in the various conceptualisations.
+FAST is a visual programming platform allowing business users to build enterprise-class mashups, employing various underlying services and generating new ones. Resources in FAST are described semantically using different ontologies and vocabularies, and can therefore be combined to what we can call ``intelligent gadgets'', that rely on semantically enriched building blocks. In the services used within the FAST environment, the ontologies involved in the creation of gadgets and building blocks come from different parties. These ontologies, though different, will sometimes cover the same domain, making ontology matching necessary, as the means to reconcile differences in the various conceptualisations.
 
 We aim to integrate ontology matching into the FAST platform to allow for discrepant systems to intercommunicate.  We try to find a solution to these differences which range from simple naming differences to more complex data heterogeneity, behavioural differences, discrepant paradigms and other disparities. The reconciliation of these differences is called ontology matching (often mentioned in the specialised literature as ontology mediation, or ontology alignment, thus we will sometimes use these terms as well). 
 
@@ -277,18 +277,20 @@ Part \ref{part:d2.4.2} describes the approach of integrating ontology matching i
 %Describe the rest.
 Part \ref{part:d2.4.1} contains the first iteration of this document, D2.4.1, laying down the theoretical foundations of ontology matching. We discuss ontologies in general in Sect.~\ref{sec:ontologies}, present the ontology mediation problem in Sect.~\ref{sec:mediationproblem} , discuss the types  of mismatches between ontologies in Sect.~\ref{sec:ontologymismatches} and detail the main approaches to ontology mediation in Sect.~\ref{sec:mediationapproaches}.
 
-\paragraph{Overall Approach for WPX and relation to other Work Packages and Deliverables.}
+\paragraph{Overall Approach for WP2 and relation to other Work Packages and Deliverables.}
 Ontology matching will play an important role for the integration of different underlying resources in the user-built gadgets. 
 We present our initial research in the implementation of ontology matching in this second iteration of D2.4, after having laid the theoretical ground work of ontology matching in the first iteration. The final version of the deliverable (i.e., D2.4.3) will finalize the implementation of ontology mediation within the FAST platform. 
 
-
+\pagebreak
 \part{Implementing Ontology Matching within the FAST Platform}
 \label{part:d2.4.2}
 
 \include{fast_d2_4_2_part1}
 
+\pagebreak
 \part{D2.4.1: Theoretical Foundations for Ontology Mediation}
 \label{part:d2.4.1}
+
 \include{fast_d2_4_2_part2}
 
 \section{Summary}

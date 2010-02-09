@@ -284,7 +284,7 @@ We then ran the matching process for all for methods:
     \item equality,
     \item Levenshtein distance with a confidence threshold of \texttt{0.33} (meaning that any correspondence having a smaller confidence measure will be excluded),
     \item SMOA distance with a threshold of \texttt{0.5} and
-    \item Wordnet distance using a threshold of \texttt{0.5}.
+    \item Wordnet distance using a threshold of \texttt{0.5}\footnote{Thresholds were selected based on suggestions in the Alignment API documentation}.
 \end{inparaenum}
 To apply the results, we rendered an XSLT template to transform an example dataset.
 
@@ -316,7 +316,7 @@ The results of automatically aligning the Amazon and eBay ontologies were quite 
     \end{tabular}
 \end{table}
 
-The first row (reference) shows the reference alignment, which, naturally, has both perfect precision and recall. We can observe what intuition has predicted, namely that pure string equality (equality) is far too simple and irrelevant, by only taking identical labels. By using string distances and giving certain thresholds (Levenshtein and SMOA), we can see that the results are much less precise, but have a better recall, since this allows for entities having similar names to be discovered, at the expense of having quite a few incorrect results (lower precision); the thresholds allow for low-scored cases to be eliminated, although this results in the exclusion of some correct correspondences. The last column (JWNL) contains the results of the Wordnet-enabled method, which shows quite an improvement (precision of 0.67 and a recall of 0.75), due to the lexical analysis, which performs a much more relevant comparison of strings, giving a high number of correct results. The precision of the JWNL alignment shows only a tiny drop below the recall value, meaning that the number of incorrect correspondences discovered is small, and the main source of error is from the number of correspondences not discovered.
+The first row (reference) shows the reference alignment, which, naturally, has both perfect precision and recall. We can observe what intuition has predicted, namely that pure string equality (equality) is far too simple and irrelevant, by only taking identical labels. By using string distances and giving certain thresholds (Levenshtein and SMOA), we can see that the results are much less precise, but have a better recall, since this allows for entities having similar names to be discovered, at the expense of having quite a few incorrect results (lower precision); the thresholds allow for low-scored cases to be eliminated, although this results in the exclusion of some correct correspondences. The last column (JWNL) contains the results of the Wordnet-enabled method, which shows quite an improvement (precision of 0.67 and a recall of 0.75\footnote{The scores are orientative, giving a general picture of how the process approaches 100\% efficiency}), due to the lexical analysis, which performs a much more relevant comparison of strings, giving a high number of correct results. The precision of the JWNL alignment shows only a tiny drop below the recall value, meaning that the number of incorrect correspondences discovered is small, and the main source of error is from the number of correspondences not discovered.
 
 
 % \begin{center}
@@ -353,9 +353,8 @@ The first row (reference) shows the reference alignment, which, naturally, has b
 % \end{center}
 
 
-
 We can deduce that the results provided are satisfactory, even though the methods used were simple, string-based ones, and the process was completely automated without any user input.
-We are therefore confident that through some user assistance or an initial input alignment the tool can achieve 100\% correct results.
+We are therefore confident that through some user assistance or an initial input alignment the tool can achieve 100\% correct results, which is our aim for the tool to be used in practice.
 
 
 % \paragraph{XSLT:}
