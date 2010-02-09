@@ -4,7 +4,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -121,9 +120,15 @@ public class ScreenComponentFindCheckServlet extends GenericServlet {
 			// parses the pipes
 			List<Pipe> pipes = parsePipes(input.getJSONArray("pipes"));
 			// parses the selected item
-			ScreenComponent selectedItem = null;
-			if (input.has("selectedItem"))
-				selectedItem = CatalogueAccessPoint.getCatalogue().getScreenComponent(new URIImpl(input.getString("selectedItem")));
+			Object selectedItem = null;
+			if (input.has("selectedItem")) {
+				selectedItem = getConditionById(preconditions, input.getString("selectedItem"));
+				if (selectedItem == null) {
+					selectedItem = getConditionById(postconditions, input.getString("selectedItem"));
+					if (selectedItem == null)
+						selectedItem = CatalogueAccessPoint.getCatalogue().getScreenComponent(new URIImpl(input.getString("selectedItem")));
+				}
+			} 
 			// flag to search or not for new components
 			boolean search = input.has("search") ? input.getBoolean("search") : true;
 			
@@ -317,36 +322,74 @@ public class ScreenComponentFindCheckServlet extends GenericServlet {
 			Set<ScreenComponent> canvas,
 			List<Condition> preconditions,
 			List<Condition> postconditions,
-			ScreenComponent selectedItem,
+			Object selectedItem,
 			List<Pipe> pipes) throws IOException {
 		ArrayList<Pipe> pipeList = new ArrayList<Pipe>();
 		
-		// look for pipes from <somewhere> to the preconditions of the selected item
-		for (Action action : selectedItem.getActions()) {
-			for (Condition pre : action.getPreconditions()) {
-				for (Condition con : preconditions) {
-					if (isConditionCompatible(con, pre)) {
-						Pipe pipe = new Pipe();
-						pipe.setIdBBFrom(null);
-						pipe.setIdConditionFrom(con.getId());
-						pipe.setIdBBTo(selectedItem.getUri().toString());
-						pipe.setIdActionTo(action.getName());
-						pipe.setIdConditionTo(pre.getId());
-						if (!pipes.contains(pipe))
-							pipeList.add(pipe);
+		if (selectedItem instanceof ScreenComponent) {
+			ScreenComponent component = (ScreenComponent) selectedItem;
+			// look for pipes from <somewhere> to the preconditions of the selected item
+			for (Action action : component.getActions()) {
+				for (Condition pre : action.getPreconditions()) {
+					for (Condition con : preconditions) {
+						if (isConditionCompatible(con, pre)) {
+							Pipe pipe = new Pipe();
+							pipe.setIdBBFrom(null);
+							pipe.setIdConditionFrom(con.getId());
+							pipe.setIdBBTo(component.getUri().toString());
+							pipe.setIdActionTo(action.getName());
+							pipe.setIdConditionTo(pre.getId());
+							if (!pipes.contains(pipe))
+								pipeList.add(pipe);
+						}
+					}
+					for (ScreenComponent sc : canvas) {
+						if (sc.equals(component)) {
+							// discard selected item
+						} else {
+							for (List<Condition> conList : sc.getPostconditions()) {
+								for (Condition con : conList) {
+									if (isConditionCompatible(con, pre)) {
+										Pipe pipe = new Pipe();
+										pipe.setIdBBFrom(sc.getUri().toString());
+										pipe.setIdConditionFrom(con.getId());
+										pipe.setIdBBTo(component.getUri().toString());
+										pipe.setIdActionTo(action.getName());
+										pipe.setIdConditionTo(pre.getId());
+										if (!pipes.contains(pipe))
+											pipeList.add(pipe);
+									}
+								}
+							}
+						}
 					}
 				}
-				for (ScreenComponent sc : canvas) {
-					if (sc.equals(selectedItem)) {
-						// discard selected item
-					} else {
-						for (List<Condition> conList : sc.getPostconditions()) {
-							for (Condition con : conList) {
+			}
+			// look for pipes from the postconditions the selected item to <somewhere>
+			for (List<Condition> conList : component.getPostconditions()) {
+				for (Condition con : conList) {
+					for (Condition post : postconditions) {
+						if (isConditionCompatible(con, post)) {
+							Pipe pipe = new Pipe();
+							pipe.setIdBBFrom(component.getUri().toString());
+							pipe.setIdConditionFrom(con.getId());
+							pipe.setIdBBTo(null);
+							pipe.setIdActionTo(null);
+							pipe.setIdConditionTo(post.getId());
+							if (!pipes.contains(pipe))
+								pipeList.add(pipe);
+						}
+					}
+					for (ScreenComponent sc : canvas) {
+						if (sc.equals(component))
+							break; // discard selected item
+						for (Action action : sc.getActions()) {
+							for (Condition pre : action.getPreconditions()) {
 								if (isConditionCompatible(con, pre)) {
 									Pipe pipe = new Pipe();
-									pipe.setIdBBFrom(sc.getUri().toString());
+									pipe.setIdBBFrom(component.getUri().toString());
 									pipe.setIdConditionFrom(con.getId());
-									pipe.setIdBBTo(selectedItem.getUri().toString());
+									pipe.setIdBBTo(sc.getUri().toString());
 									pipe.setIdActionTo(action.getName());
 									pipe.setIdConditionTo(pre.getId());
 									if (!pipes.contains(pipe))
@@ -357,35 +400,38 @@ public class ScreenComponentFindCheckServlet extends GenericServlet {
 					}
 				}
 			}
-		}
-		
-		// look for pipes from the postconditions the selected item to <somewhere>
-		for (List<Condition> conList : selectedItem.getPostconditions()) {
-			for (Condition con : conList) {
-				for (Condition post : postconditions) {
-					if (isConditionCompatible(con, post)) {
-						Pipe pipe = new Pipe();
-						pipe.setIdBBFrom(selectedItem.getUri().toString());
-						pipe.setIdConditionFrom(con.getId());
-						pipe.setIdBBTo(null);
-						pipe.setIdActionTo(null);
-						pipe.setIdConditionTo(post.getId());
-						if (!pipes.contains(pipe))
-							pipeList.add(pipe);
-					}
-				}
+		} else {
+			Condition condition = (Condition) selectedItem;
+			if (preconditions.contains(condition)) {
+				// look for pipes from the precondition to <somewhere>
 				for (ScreenComponent sc : canvas) {
-					if (sc.equals(selectedItem))
-						break; // discard selected item
 					for (Action action : sc.getActions()) {
 						for (Condition pre : action.getPreconditions()) {
-							if (isConditionCompatible(con, pre)) {
+							if (isConditionCompatible(pre, condition)) {
 								Pipe pipe = new Pipe();
-								pipe.setIdBBFrom(selectedItem.getUri().toString());
-								pipe.setIdConditionFrom(con.getId());
+								pipe.setIdBBFrom(null);
+								pipe.setIdConditionFrom(condition.getId());
 								pipe.setIdBBTo(sc.getUri().toString());
 								pipe.setIdActionTo(action.getName());
 								pipe.setIdConditionTo(pre.getId());
+								if (!pipes.contains(pipe))
+									pipeList.add(pipe);
+							}
+						}
+					}
+				}
+			} else if (postconditions.contains(condition)) {
+				// look for pipes from <somewhere> to the postcondition
+				for (ScreenComponent sc : canvas) {
+					for (List<Condition> conList : sc.getPostconditions()) {
+						for (Condition post : conList) {
+							if (isConditionCompatible(post, condition)) {
+								Pipe pipe = new Pipe();
+								pipe.setIdBBFrom(sc.getUri().toString());
+								pipe.setIdConditionFrom(post.getId());
+								pipe.setIdBBTo(null);
+								pipe.setIdActionTo(null);
+								pipe.setIdConditionTo(condition.getId());
 								if (!pipes.contains(pipe))
 									pipeList.add(pipe);
 							}
