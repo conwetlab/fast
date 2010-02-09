@@ -319,6 +319,30 @@ h4{
     overflow: hidden;
 }
 
+.screenDesign .dropArea.pre {
+    background: white url(../images/gui/document/pre-tag.png) no-repeat left center;
+}
+
+.screenDesign .dropArea.post {
+    background: white url(../images/gui/document/post-tag.png) no-repeat right center;
+}
+
+.screenDesign .dropArea.form {
+    background: white url(../images/gui/document/form-tag.png) no-repeat center top;
+}
+
+.screenDesign .dropArea.screen {
+    background: white url(../images/gui/document/screens-tag.png) no-repeat center top;
+}
+
+.screenDesign .dropArea.operator {
+    background: white url(../images/gui/document/operators-tag.png) no-repeat center top;
+}
+
+.screenDesign .dropArea.resource {
+    background: white url(../images/gui/document/resources-tag.png) no-repeat center top;
+}
+
 .screenDesign .dijitSplitter {
     background: white;
 }
