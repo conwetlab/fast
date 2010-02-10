@@ -3,12 +3,15 @@ package eu.morfeoproject.fast.catalogue;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.StringTokenizer;
 
 import org.ontoware.aifbcommons.collection.ClosableIterator;
 import org.ontoware.rdf2go.RDF2Go;
@@ -29,6 +32,7 @@ import org.ontoware.rdf2go.vocabulary.RDF;
 import org.ontoware.rdf2go.vocabulary.RDFS;
 import org.ontoware.rdf2go.vocabulary.XSD;
 import org.openrdf.repository.RepositoryException;
+import org.openrdf.rio.RDFParseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -58,6 +62,7 @@ import eu.morfeoproject.fast.model.ScreenDefinition;
 import eu.morfeoproject.fast.model.ScreenFlow;
 import eu.morfeoproject.fast.model.Trigger;
 import eu.morfeoproject.fast.model.WithConditions;
+import eu.morfeoproject.fast.server.CatalogueAccessPoint;
 import eu.morfeoproject.fast.util.DateFormatter;
 import eu.morfeoproject.fast.vocabulary.CTAG;
 import eu.morfeoproject.fast.vocabulary.DC;
@@ -150,11 +155,6 @@ public class Catalogue {
 		return planner;
 	}
 
-	// TODO remove this method
-	public TripleStore getTripleStore() {
-		return tripleStore;
-	}
-	
     /**
      * Restore the catalogue
      * Should only be done when {@link #check()} returns true.
@@ -169,9 +169,17 @@ public class Catalogue {
                 	tripleStore.addOntology(ont.getUri(), ont.getAsRDFXML(), Syntax.RdfXml);
                 else if (ont.getSyntax().equals(Syntax.Turtle))
                 	tripleStore.addOntology(ont.getUri(), ont.getAsTurtle(), Syntax.Turtle);
+                else
+                	logger.error("Syntax for ontology '"+ont.getUri()+"' is not valid. Must be RDF/XML or Turtle");
             } catch (OntologyInvalidException e) {
                 logger.error("Cannot add default ontology '"+ont.getUri()+"': "+e, e);
-            }
+            } catch (RepositoryException e) {
+                logger.error("Cannot add default ontology '"+ont.getUri()+"': "+e, e);
+			} catch (RDFParseException e) {
+                logger.error("Cannot add default ontology '"+ont.getUri()+"': "+e, e);
+			} catch (IOException e) {
+                logger.error("Cannot read ontology '"+ont.getUri()+"': "+e, e);
+			}
         }
     }
     
@@ -219,6 +227,15 @@ public class Catalogue {
             return true;
         } catch (OntologyInvalidException e) {
             logger.error("Cannot add ontology '"+ont.getUri()+"': "+e, e);
+            return false;
+		} catch (RepositoryException e) {
+            logger.error("Cannot add ontology '"+ont.getUri()+"': "+e, e);
+            return false;
+		} catch (RDFParseException e) {
+            logger.error("Cannot add ontology '"+ont.getUri()+"': "+e, e);
+            return false;
+		} catch (IOException e) {
+            logger.error("Cannot read ontology '"+ont.getUri()+"': "+e, e);
             return false;
 		}
 	}
@@ -292,22 +309,6 @@ public class Catalogue {
 		return containsBackendService(bs.getUri());
 	}
 
-	public URI getOrCreateClass(String name)
-	throws OntologyInvalidException, RepositoryException {
-		return tripleStore.getOrCreateClass(name);
-	}
-	
-	public URI getOrCreateClass(String name, URI superClass)
-	throws OntologyInvalidException, RepositoryException {
-		return tripleStore.getOrCreateClass(name, superClass);
-	}
-	
-	// TODO has to create a new class to a specific ontology (namespace) 
-	public URI getOrCreateClass(String name, URI superClass, URI namespace)
-	throws OntologyInvalidException, RepositoryException {
-		return tripleStore.getOrCreateClass(name, superClass, namespace);
-	}
-	
     public ArrayList<Statement> listStatements(URI thingUri) {
     	ArrayList<Statement> listStatements = new ArrayList<Statement>();
     	ClosableIterator<Statement> it = tripleStore.findStatements(thingUri, Variable.ANY, Variable.ANY);
@@ -1744,8 +1745,7 @@ public class Catalogue {
 				sfTriples.close();
 			}
 		} catch (InvalidResourceTypeException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.error("The resource type is not valid: "+e, e);
 		}
 		
 		return sf;
@@ -1818,8 +1818,7 @@ public class Catalogue {
 				screenIt.close();
 			}
 		} catch (InvalidResourceTypeException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.error("The resource type is not valid: "+e, e);
 		}
 
 		return screen;
@@ -1983,8 +1982,7 @@ public class Catalogue {
 		try {
 			formElement = (FormElement) retrieveScreenComponent(FGO.FormElement, uri);
 		} catch (InvalidResourceTypeException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.error("The resource type is not valid: "+e, e);
 		}
 		return formElement;
 	}
@@ -1994,8 +1992,7 @@ public class Catalogue {
 		try {
 			operator = (Operator) retrieveScreenComponent(FGO.Operator, uri);
 		} catch (InvalidResourceTypeException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.error("The resource type is not valid: "+e, e);
 		}
 		return operator;
 	}
@@ -2005,8 +2002,7 @@ public class Catalogue {
 		try {
 			backendService = (BackendService) retrieveScreenComponent(FGO.BackendService, uri);
 		} catch (InvalidResourceTypeException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.error("The resource type is not valid: "+e, e);
 		}
 		return backendService;
 	}
@@ -2044,6 +2040,41 @@ public class Catalogue {
 
 		return c;
 	}
+	
+	public List<Statement> patternToStatements(String pattern) {
+		ArrayList<Statement> stmts = new ArrayList<Statement>();
+		HashMap<String, BlankNode> blankNodes = new HashMap<String, BlankNode>();
+
+		StringTokenizer tokens = new StringTokenizer(pattern);//, " . ");
+		for ( ; tokens.hasMoreTokens(); ) {
+			String subject = tokens.nextToken();
+			String predicate = tokens.nextToken();
+			String object = tokens.nextToken();
+			if (tokens.hasMoreTokens())
+				tokens.nextToken(); // discard the .
+			// gets if exists or creates the subject
+			BlankNode subjectNode = blankNodes.get(subject);
+			if (subjectNode == null) {
+				subjectNode = tripleStore.createBlankNode();
+				blankNodes.put(subject, subjectNode);
+			}
+			// creates a URI or BlankNode for the object
+			Node objectNode;
+			try {
+				objectNode = new URIImpl(object);
+			} catch (IllegalArgumentException e) { 
+				objectNode = blankNodes.get(object);
+				if (objectNode == null) {
+					objectNode = tripleStore.createBlankNode();
+					blankNodes.put(subject, subjectNode);
+				}
+			}
+			Statement st = tripleStore.createStatement(subjectNode, new URIImpl(predicate), objectNode);
+			stmts.add(st);
+		}
+		
+		return stmts;
+	}
 
 	public Set<Statement> getConcept(URI uri) {
 		Set<Statement> result = new HashSet<Statement>();
@@ -2065,16 +2096,7 @@ public class Catalogue {
 	 * @throws NotFoundException 
 	 */
 	public void removeConcept(URI uri) throws NotFoundException {
-		getTripleStore().removeResource(uri);
-	}
-	
-	public void exportToTrig() {
-		try {
-			tripleStore.export(new FileOutputStream("C:\\catalogue.n3"), Syntax.Trig);
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		tripleStore.removeResource(uri);
 	}
 	
 	public List<Plan> searchPlans(URI uri, Set<Resource> resources) {
@@ -2089,9 +2111,22 @@ public class Catalogue {
 	
 	
 	
+
+    // TODO only for debug purposes
+	public TripleStore getTripleStore() {
+		return tripleStore;
+	}
 	
+    // TODO only for debug purposes
+	public void exportToTrig() {
+		try {
+			tripleStore.export(new FileOutputStream("C:\\catalogue.n3"), Syntax.Trig);
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+	}
 	
-    //TODO remove this method
+    // TODO only for debug purposes
     public void printStatements() {
     	ClosableIterator<Statement> it = tripleStore.findStatements(Variable.ANY, Variable.ANY, Variable.ANY);
     	for ( ; it.hasNext(); ) {

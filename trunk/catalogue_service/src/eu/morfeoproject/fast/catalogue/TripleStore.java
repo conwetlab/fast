@@ -17,7 +17,6 @@ import org.ontoware.rdf2go.model.QuadPattern;
 import org.ontoware.rdf2go.model.QueryResultTable;
 import org.ontoware.rdf2go.model.Statement;
 import org.ontoware.rdf2go.model.Syntax;
-import org.ontoware.rdf2go.model.impl.DelegatingModel;
 import org.ontoware.rdf2go.model.node.BlankNode;
 import org.ontoware.rdf2go.model.node.DatatypeLiteral;
 import org.ontoware.rdf2go.model.node.LanguageTagLiteral;
@@ -30,7 +29,6 @@ import org.ontoware.rdf2go.model.node.URI;
 import org.ontoware.rdf2go.model.node.UriOrVariable;
 import org.ontoware.rdf2go.model.node.Variable;
 import org.ontoware.rdf2go.model.node.impl.URIImpl;
-import org.ontoware.rdf2go.util.RDFTool;
 import org.ontoware.rdf2go.vocabulary.OWL;
 import org.ontoware.rdf2go.vocabulary.RDF;
 import org.ontoware.rdf2go.vocabulary.RDFS;
@@ -47,7 +45,6 @@ import org.slf4j.LoggerFactory;
 
 import eu.morfeoproject.fast.util.DateFormatter;
 import eu.morfeoproject.fast.vocabulary.DC;
-import eu.morfeoproject.fast.vocabulary.FGO;
 
 // TODO: The triple store must guarantee safe operations to the rdf repository
 // 		 using synchronised statements when adding, deleting, and querying.
@@ -68,11 +65,6 @@ public class TripleStore {
 	 * the real persistent store
 	 */
 	private ModelSet persistentModelSet;
-
-	/**
-	 * default model is FCO
-	 */
-	private Model defaultModel;
 	
 	private List<URI> createdURIs;
 	
@@ -100,38 +92,17 @@ public class TripleStore {
 		persistentModelSet = new RepositoryModelSet(repository);
 		
 		createdURIs = new ArrayList<URI>();
-		
-		// TODO: Now create the screen under the ScreenOnt namespace, but this has to be
-		//       created in the user's namespace
-		defaultModel = getPersistentModelSet().getModel(FGO.NS_FGO);
 	}
 	
 	public void open() {
-		getDefaultModel().open();
 		getPersistentModelSet().open();
 	}
 	
 	public void close() {
-		// close the default model
-		getDefaultModel().close();
-		// close every model in the pool
-		
 		// close the model set
 		getPersistentModelSet().close();
 	}
-	
-    private Model getDefaultModel() {
-		return defaultModel;
-	}
 
-//	public void setWorkingModel(Model workingModel) throws ModelInvalidException {
-////		this.workingModel.close();//TODO i am not sure
-//		if (workingModel == null)
-//			throw new ModelInvalidException("The working model cannot be null");
-//		this.workingModel = workingModel;
-////		this.workingModel.open();//TODO i am not sure
-//	}
-	
 	public boolean isValidURI(String uri) {
 		return persistentModelSet.isValidURI(uri);
 	}
@@ -172,69 +143,37 @@ public class TripleStore {
 		return persistentModelSet.createURI(arg0);
 	}
 	
-//	public void namespaces() {
-//		RepositoryConnection con;
-//		try {
-//			con = repository.getConnection();
-//			
-//				try {
-//					RepositoryResult<Namespace> results = con.getNamespaces();
-//					while (results.hasNext())
-//						logger.debug(results.next());
-//				} catch (RepositoryException e) {
-//					// TODO Auto-generated catch block
-//					e.printStackTrace();
-//				} finally {
-//					con.close();
-//				}
-//		} catch (RepositoryException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-//	}
-	
 	/**
      * add the passed ontology to the main repository. The passed RDF model must only contain one ontology
-     * at a time. The ontology should have declared imports statements for other ontologies it 
-     * needs, these will be automatically compared to the list of ontologies, if a prerequisite
-     * misses, an  OntologyImportsNotSatisfiedException will be thrown.
-     * Before importing, the ontology will tested by merging it with its imports and 
-     * checked using the PIMO-Checker. If it does not pass this test, an OntologyInvalidException
-     * is thrown.
+     * at a time.
      * @param ontologyUri URI identifying the ontology in the passed rdf model
      * @param ontology a string with a serialized form of the ontology
      * @param syntax RDF syntax of the passed stream
-     * @param formatMimetype the rdf mimetype serialization format of the string, 
-     * see {@link RDFRepository} for an explanation. 
-     * @throws OntologyInvalidException if the ontology is not valid according to PimoChecker
 	 * @throws RepositoryException 
 	 * @throws IOException 
 	 * @throws RDFParseException 
      */
-    public void addOntology(URI ontologyUri, InputStream ontology, Syntax syntax) {
+    public void addOntology(URI ontologyUri, InputStream ontology, Syntax syntax) 
+    throws RepositoryException, RDFParseException, IOException, OntologyInvalidException {
     	if (containsOntology(ontologyUri)) {
     		logger.info("The ontology "+ontologyUri+" already exists.");
     	} else {
-			try {
-				RepositoryConnection connection = repository.getConnection();
-				ValueFactory factory = repository.getValueFactory();
-				RDFFormat format = RDFFormat.RDFXML; // RDF/XML by default
-				if (syntax.equals(Syntax.Ntriples)) format = RDFFormat.NTRIPLES;
-				else if (syntax.equals(Syntax.RdfXml)) format = RDFFormat.RDFXML;
-				else if (syntax.equals(Syntax.Trig)) format = RDFFormat.TRIG;
-				else if (syntax.equals(Syntax.Trix)) format = RDFFormat.TRIX;
-				else if (syntax.equals(Syntax.Turtle)) format = RDFFormat.TURTLE;
-		    	// add the ontology to the repository
-				connection.add(ontology, ontologyUri.toString(), format, factory.createURI(ontologyUri.toString()));
-			} catch (Exception e) {
-	            logger.error("Cannot add ontology '"+ontologyUri+"': "+e, e);
-			}
+			RepositoryConnection connection = repository.getConnection();
+			ValueFactory factory = repository.getValueFactory();
+			RDFFormat format = RDFFormat.RDFXML; // RDF/XML by default
+			if (syntax.equals(Syntax.Ntriples)) format = RDFFormat.NTRIPLES;
+			else if (syntax.equals(Syntax.RdfXml)) format = RDFFormat.RDFXML;
+			else if (syntax.equals(Syntax.Trig)) format = RDFFormat.TRIG;
+			else if (syntax.equals(Syntax.Trix)) format = RDFFormat.TRIX;
+			else if (syntax.equals(Syntax.Turtle)) format = RDFFormat.TURTLE;
+	    	// add the ontology to the repository
+			connection.add(ontology, ontologyUri.toString(), format, factory.createURI(ontologyUri.toString()));
     	}
     	
 // 		Ismael: this doesn't work properly when working with the HTTP sesame server
 //    	it always launch a Exception when querying the triple store. it may be a bug
 //		in the RDF2Go library?
-//		Solution: above using directly Sesame connection to the repository
+//		Solution: above code using directly Sesame connection to the repository
 		
 //	 	// creates a model for the ontology
 //  	Model ont = RDF2Go.getModelFactory().createModel(ontologyUri);
@@ -292,13 +231,8 @@ public class TripleStore {
     NotFoundException, OntologyInvalidException, RepositoryStorageException {
     	if (ontologyUri == null)
     		throw new IllegalArgumentException("ontologyUri is null");
-    	if (!containsOntology(ontologyUri))
+    	if (!existsOntology(ontologyUri))
     		throw new NotFoundException("Ontology "+ontologyUri+" not found or is not a valid ontology URI.");
-    	// you cannot remove the core ontologies
-//    	if (ontologyUri.equals(pimoClient.getPimoUri()))
-//    		throw new OntologyInvalidException("You cannot delete the PIMO of the user");
-//    	if (PimoDefaultOntologies.containsOntologyUri(ontologyUri))
-//    		throw new OntologyInvalidException("You cannot delete a default ontology");
 
     	Model ontInModelset = getPersistentModelSet().getModel(ontologyUri);
     	ontInModelset.open();
@@ -308,15 +242,15 @@ public class TripleStore {
     	getPersistentModelSet().removeModel(ontologyUri);
     }
 
-//    /**
-//     * Checks if a specific ontology already exists in the persistent modelset
-//     * @param ontologyUri
-//     * @return
-//     */
-//    public boolean existOntology(URI ontologyUri) {
-//    	Model model = getPersistentModelSet().getModel(ontologyUri);
-//    	return model.size() > 0;
-//    }
+    /**
+     * Checks if a specific ontology already exists in the persistent modelset
+     * @param ontologyUri
+     * @return
+     */
+    public boolean existsOntology(URI ontologyUri) {
+    	Model model = getPersistentModelSet().getModel(ontologyUri);
+    	return model.size() > 0;
+    }
 	
     /**
      * true if the ontology is in the named graphs of the repository
@@ -336,53 +270,57 @@ public class TripleStore {
     	return getPersistentModelSet().removeModel(uriModel);
     }
     
-    public List<URI> getDirectSubClasses(URI clazz) {
-    	return getDirectSubClasses(Variable.ANY, clazz);
+    public void addStatement(Statement statement) {
+    	getPersistentModelSet().addStatement(statement);
+    }
+    
+    public void addStatement(Resource subject, URI predicate, Node object) {
+    	getPersistentModelSet().addStatement(null, subject, predicate, object);
+    }
+    
+    public void addStatement(Resource subject, URI predicate, String object) {
+    	getPersistentModelSet().addStatement(null, subject, predicate, createDatatypeLiteral(object, XSD._string));
+    }
+    
+    public void addStatement(Resource subject, URI predicate, boolean object) {
+    	getPersistentModelSet().addStatement(null, subject, predicate, createDatatypeLiteral(new Boolean(object).toString(), XSD._boolean));
+    }
+    
+    public void addStatement(Resource subject, URI predicate, int object) {
+    	getPersistentModelSet().addStatement(null, subject, predicate, createDatatypeLiteral(new Integer(object).toString(), XSD._int));
+    }
+    
+    public void addStatement(Resource subject, URI predicate, Date object) {
+    	getPersistentModelSet().addStatement(null, subject, predicate, createDatatypeLiteral(DateFormatter.formatDateISO8601(object), XSD._dateTime));
+    }
+    
+    public void addStatement(URI context, Resource subject, URI predicate, Node object) {
+    	getPersistentModelSet().addStatement(context, subject, predicate, object);
+    }
+    
+    private void removeStatements(ResourceOrVariable subject, UriOrVariable predicate, NodeOrVariable object) {
+    	getPersistentModelSet().removeStatements(Variable.ANY, subject, predicate, object);
+    }
+    
+    public ClosableIterator<Statement> findStatements(QuadPattern arg0) throws ModelRuntimeException {
+    	return getPersistentModelSet().findStatements(arg0);
     }
 
-    public List<URI> getDirectSubClasses(UriOrVariable ontologyUri, URI clazz) {
-    	ArrayList<URI> results = new ArrayList<URI>();
-    	ClosableIterator<Statement> statements = getPersistentModelSet().findStatements(ontologyUri, Variable.ANY, RDFS.subClassOf, clazz);
-    	while (statements.hasNext()) {
-    		Statement st = statements.next();
-    		logger.debug("{SUBCLASSOF} "+st);
-    		URI subClass = st.getSubject().asURI();
-    		String prefix = subClass.toString().substring(0, subClass.toString().indexOf("#"));
-    		if (!subClass.equals(clazz)
-    				&& !prefix.equals(RDF.RDF_NS)
-    				&& !prefix.equals(RDFS.RDFS_NS)
-    				&& !prefix.equals(OWL.OWL_NS)) {
-    			if (!results.contains(subClass))
-    				results.add(subClass);
-    		}
-    	}
-    	statements.close();
-    	return results;
+    public ClosableIterator<Statement> findStatements(
+    		ResourceOrVariable subject,
+    		UriOrVariable predicate,
+    		NodeOrVariable object) throws ModelRuntimeException {
+    	return findStatements(Variable.ANY, subject, predicate, object);
     }
     
-    public List<URI> getDirectSuperClasses(URI clazz) {
-    	return getDirectSuperClasses(Variable.ANY, clazz);
+    public ClosableIterator<Statement> findStatements(
+    		UriOrVariable context,
+    		ResourceOrVariable subject,
+    		UriOrVariable predicate,
+    		NodeOrVariable object) throws ModelRuntimeException {
+    	return getPersistentModelSet().findStatements(context, subject, predicate, object);
     }
-    
-    public List<URI> getDirectSuperClasses(UriOrVariable ontologyUri, URI clazz) {
-    	ArrayList<URI> results = new ArrayList<URI>();
-    	ClosableIterator<Statement> statements = getPersistentModelSet().findStatements(ontologyUri, Variable.ANY, RDFS.subClassOf, clazz);
-    	while (statements.hasNext()) {
-    		Statement st = statements.next();
-    		URI superClass = st.getObject().asURI();
-    		String prefix = superClass.toString().substring(0, superClass.toString().indexOf("#"));
-    		if (!superClass.equals(clazz)
-    				&& !prefix.equals(RDF.RDF_NS)
-    				&& !prefix.equals(RDFS.RDFS_NS)
-    				&& !prefix.equals(OWL.OWL_NS)) {
-    			if (!results.contains(superClass))
-    				results.add(superClass);
-    		}
-    	}
-    	statements.close();
-        return results;
-    }
-    
+
 	/**
 	 * @return an open RDF2Go model as a view on a certain set of quads in the
 	 *         ContextModel
@@ -396,111 +334,6 @@ public class TripleStore {
 		return model;
 	}
 
-	/** return an in-memory Model, opened */
-//	public Model getTempModel(URI uri) {
-//		// IMPROVE for hardcore scalability use persistent modlsets here
-//		ModelSet inMemoryModelSet = new RepositoryModelFactory().createModelSet();
-//		inMemoryModelSet.open();
-//		Model m = inMemoryModelSet.getModel(uri);
-//		m.open();
-//		return new ClosingModel(m,inMemoryModelSet);
-//	}
-
-	class ClosingModel extends DelegatingModel {
-		private ModelSet modelset;
-
-		public ClosingModel(Model model, ModelSet modelset) {
-			super(model);
-			this.modelset = modelset;
-		}
-
-		public void close() {
-			super.close();
-			modelset.close();
-		}
-	}
-
-	/**
-	 * Adds the contents of an external model to the context model. Expensive
-	 * operation, as the model has to be copied.
-	 * 
-	 * @param m
-	 * @return the persistent Model, opened
-	 */
-//	public Model addModelAndPersist(Model m) {
-//		assert m != null;
-//
-//		// if m is a persistent model already: copy to memory first
-//		if (m.getContextURI() != null
-//				&& getPersistentModelSet().containsModel(m.getContextURI())) {
-//			throw new RuntimeException("A model with URI "+m.getContextURI()+" is already in the persistent store");
-//		} else {
-//			URI u = getPersistentModelSet().newRandomUniqueURI();
-//			Model persistent = getPersistentModel(u);
-//			ClosableIterator<Statement> it = m.iterator();
-//			persistent.addAll(it);
-//			it.close();
-//			return persistent;
-//		}
-//
-//	}
-
-	// TODO remove it
-	public void dump() {
-		getPersistentModelSet().dump();
-	}
-
-	public void clear() {
-		getPersistentModelSet().removeAll();
-	}
-
-	/**
-	 * Make sure all bnodes have a unique inverse functional property
-	 * 
-	 * TODO: test this method
-	 * 
-	 * @param m
-	 * @return
-	 * @throws Exception
-	 */
-	public static void bnodeEnrichment(Model m) throws Exception {
-//		Iterator<Statement> it = m.iterator();
-//		Map<BlankNode, URI> knownBnodes = new HashMap<BlankNode, URI>();
-//
-//		DiffImpl diff = new DiffImpl();
-//		boolean changed = false;
-//		while (it.hasNext()) {
-//			Statement s = it.next();
-//			if (s.getSubject() instanceof BlankNode) {
-//				changed = true;
-//				URI u = knownBnodes.get(s.getSubject());
-//				if (u == null) {
-//					u = m.newRandomUniqueURI();
-//					knownBnodes.put((BlankNode) s.getSubject(), u);
-//				}
-//				diff.addStatement(s.getSubject(), SemVersion.BLANK_NODE_ID,
-//						u);
-//			}
-//			if (s.getObject() instanceof BlankNode) {
-//				changed = true;
-//				URI u = knownBnodes.get(s.getObject());
-//				if (u == null) {
-//					u = m.newRandomUniqueURI();
-//					knownBnodes.put((BlankNode) s.getObject(), u);
-//				}
-//				diff.addStatement((Resource) s.getObject(),
-//						SemVersion.BLANK_NODE_ID, u);
-//			}
-//		}
-//		if (changed) {
-//			m.addAll(diff.getAdded().iterator());
-//		}
-	}
-
-	public URI newRandomUniqueURI() {
-		return getPersistentModelSet().newRandomUniqueURI();
-	}
-
 	/**
 	 * @return persistent ModelSet
 	 */
@@ -508,18 +341,9 @@ public class TripleStore {
 		return this.persistentModelSet;
 	}
 
-	/**
-	 * return a non-persistent copy of the model stored at the given URI.
-	 * Returned model is open
-	 */
-//	public Model getAsTempCopy(URI modelURI) {
-//		Model p = getPersistentModel(modelURI);
-//		Model copy = getTempModel(newRandomUniqueURI());
-//		ClosableIterator<Statement> it = p.iterator();
-//		copy.addAll(it);
-//		it.close();
-//		return copy;
-//	}
+	public void clear() {
+		getPersistentModelSet().removeAll();
+	}
 
 	public void finalize() {
 		getPersistentModelSet().close();
@@ -545,7 +369,7 @@ public class TripleStore {
      * @param property the property to check
      * @return true, if the URI has a type RDF.Property
      */
-    private boolean isProperty(URI property) {
+    public boolean isProperty(URI property) {
         boolean contains = getPersistentModelSet().containsStatements(
             Variable.ANY,
             property,
@@ -567,177 +391,6 @@ public class TripleStore {
         return getPersistentModelSet().containsStatements(Variable.ANY, resource, RDF.type, clazz);
     }    
     
-    public void addStatement(Statement statement) {
-    	getPersistentModelSet().addStatement(statement);
-    }
-    public void addStatement(Resource subject, URI predicate, Node object) {
-    	getPersistentModelSet().addStatement(null, subject, predicate, object);
-    }
-    public void addStatement(Resource subject, URI predicate, String object) {
-    	getPersistentModelSet().addStatement(null, subject, predicate, createDatatypeLiteral(object, XSD._string));
-    }
-    public void addStatement(Resource subject, URI predicate, boolean object) {
-    	getPersistentModelSet().addStatement(null, subject, predicate, createDatatypeLiteral(new Boolean(object).toString(), XSD._boolean));
-    }
-    public void addStatement(Resource subject, URI predicate, int object) {
-    	getPersistentModelSet().addStatement(null, subject, predicate, createDatatypeLiteral(new Integer(object).toString(), XSD._int));
-    }
-    public void addStatement(Resource subject, URI predicate, Date object) {
-    	getPersistentModelSet().addStatement(null, subject, predicate, createDatatypeLiteral(DateFormatter.formatDateISO8601(object), XSD._dateTime));
-    }
-    public void addStatement(URI context, Resource subject, URI predicate, Node object) {
-    	getPersistentModelSet().addStatement(context, subject, predicate, object);
-    }
-    
-    public List<URI> getSubClasses(URI clazz) {
-       	List<URI> results = new ArrayList<URI>();
-    	List<URI> subClasses = getDirectSubClasses(clazz);
-    	results.addAll(subClasses);
-    	for (URI subClass : subClasses)
-    		results.addAll(getSubClasses(subClass));
-    	return results;
-    }
-    
-    public List<URI> getSuperClasses(URI clazz) {
-    	List<URI> results = new ArrayList<URI>();
-    	List<URI> superClasses = getDirectSuperClasses(clazz);
-    	results.addAll(superClasses);
-    	for (URI superClass : superClasses)
-    		results.addAll(getSuperClasses(superClass));
-    	return results;
-    }
-    
-
-    //////////// METODOS EXTRAIDOS DE CLIENTSESSION ///////////////
-    
-    public URI getOrCreateClass(String name)
-    throws RepositoryException, OntologyInvalidException {
-    	return getOrCreateClass(name, getDefaultModel()); 
-    }
-    
-    private URI getOrCreateClass(String name, Model inModel)
-    throws RepositoryException, OntologyInvalidException {
-    	ClosableIterator<Statement> it = inModel.findStatements(Variable.ANY, RDF.type, RDFS.Class);
-    	for ( ; it.hasNext(); ) {
-			Resource r = it.next().getSubject();
-			if (RDFTool.getLabel(r).equals(toCleanName(name))) {
-				it.close();
-				return r.asURI();
-			}
-    	}
-    	it.close();
-    	// the class was not found, so it's created
-    	return createClass(name, inModel);
-    }
-    
-    public URI getOrCreateClass(String name, URI superClass) 
-    throws RepositoryException, OntologyInvalidException {
-    	return getOrCreateClass(name, superClass, getDefaultModel());
-    }
-
-    private URI getOrCreateClass(String name, URI superClass, Model inModel) 
-    throws RepositoryException, OntologyInvalidException {
-    	ClosableIterator<Statement> it = inModel.findStatements(Variable.ANY, RDF.type, RDFS.Class);
-    	for ( ; it.hasNext(); ) {
-			Resource r = it.next().getSubject();
-			if (RDFTool.getLabel(r).equals(toCleanName(name))) {
-				it.close();
-//			if (r.toString().equals(inModel.getContextURI() + name))
-				return r.asURI();
-			//TODO: should be checked if the class is a subClass of the superClass URI?
-			}
-    	}
-    	it.close();
-    	// the class was not found
-    	return createClass(name, superClass, inModel);
-    }
-    
-    public URI getOrCreateClass(String name, URI superClass, URI namespace) throws OntologyInvalidException {
-    	URI uri = new URIImpl(namespace+name);
-    	ClosableIterator<Statement> it = persistentModelSet.findStatements(namespace, uri, RDF.type, RDFS.Class);
-    	URI result = null;
-    	if (it.hasNext()) {
-    		result = it.next().getSubject().asURI();
-    		it.close();
-    	} else {
-    		result = createClass(name, superClass, namespace);
-    	}
-    	return result;
-    }    
-    
-    /**
-     * Create a new class for the user, it gets typed an rdfs:Class. Superclass
-     * is the passed class. New classes are always created in the workModel,
-     * which is a new context. The user can only create classes that have not
-     * been created by himself, to avoid duplication each class has to have a
-     * distinctive name.
-     * 
-     * @param name the name of the class, used as label and part of the uri
-     * @param superClass the uri of the superclass of the created class
-     * @param inModel the model in which the class is created
-     * @return the uri of the created class
-     * @throws OntologyInvalidException if the passed superClass is not defined
-     *         as class in the users pimo. Gunnar protested, we should not be
-     *         able to edit any model. Provenance MUST BE CORRECT!
-     * @throws RepositoryException 
-     */
-    public URI createClass(String name, Model inModel)
-    throws OntologyInvalidException, RepositoryException {
-    	return createClass(name, RDFS.Class, inModel);
-    }
-    
-    /**
-     * Create a new class for the user, it gets typed an rdfs:Class. Superclass
-     * is the passed class. New classes are always created in the workModel,
-     * which is a new context. The user can only create classes that have not
-     * been created by himself, to avoid duplication each class has to have a
-     * distinctive name.
-     * 
-     * @param name the name of the class, used as label and part of the uri
-     * @param superClass the uri of the superclass of the created class
-     * @param inModel the model in which the class is created
-     * @return the uri of the created class
-     * @throws OntologyInvalidException if the passed superClass is not defined
-     *         as class in the users pimo. Gunnar protested, we should not be
-     *         able to edit any model. Provenance MUST BE CORRECT!
-     * @throws RepositoryException 
-     */
-    public URI createClass(String name, URI superClass, Model inModel)
-    throws OntologyInvalidException, RepositoryException {
-    	URI uriClass = inModel.createURI(inModel.getContextURI()+name);
-    	if (isClass(uriClass))
-    		throw new OntologyInvalidException("There already exists a class with the same name '"
-    				+name+"' with URI "+uriClass);
-    	assertClass(superClass);
-    	inModel.addStatement(uriClass, RDF.type, RDFS.Class);
-    	inModel.addStatement(uriClass, RDFS.subClassOf, superClass);
-    	inModel.addStatement(uriClass, RDFS.label, name);
-    	logger.info("Created '"+uriClass+"' class in "+inModel.getContextURI()+".");
-    	return uriClass;
-    }
-    
-    // FIXME add a label to the class
-    public URI createClass(String name, URI superClass, URI namespace) throws OntologyInvalidException {
-    	URI uriClass = persistentModelSet.createURI(namespace+name);
-    	if (isClass(uriClass))
-    		throw new OntologyInvalidException("There already exists a class with the same name '"
-    				+name+"' with URI "+uriClass);
-    	if (superClass != null)
-    		assertClass(superClass);
-    	persistentModelSet.addStatement(namespace, uriClass, RDF.type, RDFS.Class);
-    	if (superClass != null)
-    		persistentModelSet.addStatement(namespace, uriClass, RDFS.subClassOf, superClass);
-//    	persistentModelSet.addStatement(namespace, uriClass, RDFS.label, new LiteralImpl(name));
-    	logger.info("Created '"+uriClass+"' class in "+namespace+".");
-    	return uriClass;
-    }
-    
-//    public URI createResource(URI namespace, String path, URI ofClass)
-//    throws OntologyInvalidException {
-//    	URI resourceUri = createUniqueUri(new URIImpl(namespace.toString()+"/"+path+"/"));
-//        return createResource(resourceUri, ofClass);
-//    }
-    
     /**
      * Creates a new resource with a specific URI
      * @param uri
@@ -752,122 +405,31 @@ public class TripleStore {
     	return uri;
     }
     
-    /**
-     * Create a new resource, an instance of a rdfs:Class New resources are
-     * always created in the workModel, which is a new context.
-     * The initial label of the resource will be derived from the class.
-     * 
-     * @param ofClass the uri of the class of the created resource
-     * @return the uri of the created resource
-     * @throws OntologyInvalidException if the passed uri is not defined as
-     *         class in the pimo.
-     */
-    private URI createResource(URI ofClass) throws OntologyInvalidException {
-    	return createResource(ofClass, getDefaultModel());
-    }
-    
-    /**
-     * Create a new resource, an instance of a rdfs:Class New resources are
-     * always created in the workModel, which is a new context.
-     * The initial label of the resource will be derived from the class.
-     * 
-     * @param ofClass the uri of the class of the created resource
-     * @return the uri of the created resource
-     * @throws OntologyInvalidException if the passed uri is not defined as
-     *         class in the pimo.
-     */
-    private URI createResource(URI ofClass, Model inModel) throws OntologyInvalidException {
-    	String name = RDFTool.getLabel(ofClass);
-    	return createResource(name, ofClass, inModel);
-    }
-
-    /**
-     * Create a new resource
-     * 
-     * @param name
-     * @param ofClass
-     * @param inModel
-     * @return the resource
-     * @throws OntologyInvalidException 
-     */
-    private URI createResource(String name, URI ofClass, Model inModel)
-    throws OntologyInvalidException {
-        URI resourceUri = createUniqueUriWithName(inModel.getContextURI(), name);
-        return createResource(resourceUri, ofClass, inModel);
-    }
-    
-    private URI createResource(URI uri, URI ofClass, Model inModel)
-    throws OntologyInvalidException {
-	    assertClass(ofClass);
-	    inModel.addStatement(uri, RDF.type, ofClass);
-	    return uri;
-    }
-    
     public void removeResource(Resource resource) throws NotFoundException {
 //    	if(!isResource(resource))
 //    		throw new NotFoundException();
     	// TODO: Only removes statements which subject is the resource, but the resource
     	// can still be in other statements as an object, and other resources only used
     	// by this resource are still in the store.
-    	if (getDefaultModel().contains(resource, Variable.ANY, Variable.ANY))
-    		getDefaultModel().removeStatements(resource, Variable.ANY, Variable.ANY);
-    	else if (getPersistentModelSet().containsStatements(Variable.ANY, resource, Variable.ANY, Variable.ANY)) {
-    		getPersistentModelSet().removeStatements(Variable.ANY, resource, Variable.ANY, Variable.ANY);
-    	}
-    }
-    
-//    public URI getOrCreateTag(String name, URI namespace)
-//    throws OntologyInvalidException, RepositoryException {
-//    	Model tagModel = getPersistentModel(namespace);
-//    	ClosableIterator<Statement> it = tagModel.findStatements(Variable.ANY, RDF.type, FCO.Tag);
-//    	for ( ; it.hasNext(); ) {
-//			Resource r = it.next().getSubject();
-//			if (RDFTool.getLabel(r).equals(toCleanName(name))) {
-//				it.close();
-//				return r.asURI();
-//			//TODO: should be checked if the class is a subClass of the superClass URI?
-//			}
-//    	}
-//    	it.close();
-//    	// the tag was not found
-//    	URI tag = createResource(name, FCO.Tag, tagModel);
-//    	tagModel.addStatement(tag, RDFS.label, name);
-//    	tagModel.close();
-//    	return tag;
-//    }
-    
-	/**
-     * Set the preflabel and RDFSlabel of the resource to the 
-     * passed label. The resource can be a thing, class,
-     * or property. The method deletes old rdfs:label and nao:prefLabel values
-     * and replaces them.
-     * @param resource the resource to change
-     * @param label the new label.
-	 * @throws OntologyReadonlyException when the resource is not writeable
-	 * @throws NotFoundException when the resource was not found or cannot be
-     * connected to an ontology in which it is defined
-     */
-    public void setLabel(URI resource, String label) throws OntologyReadonlyException, NotFoundException {
-    	setLabel(resource, label, getDefaultModel());
+   		getPersistentModelSet().removeStatements(Variable.ANY, resource, Variable.ANY, Variable.ANY);
     }
     
 	/**
-     * Set the preflabel and RDFSlabel of the resource to the 
+     * Set the RDFSlabel and DC:title of the resource to the 
      * passed label. The resource can be a thing, class,
-     * or property. The method deletes old rdfs:label and nao:prefLabel values
+     * or property. The method deletes old rdfs:label and dc:title values
      * and replaces them.
      * @param resource the resource to change
      * @param label the new label.
-	 * @throws OntologyReadonlyException when the resource is not writeable
+	 * @throws OntologyReadonlyException when the resource is not writable
 	 * @throws NotFoundException when the resource was not found or cannot be
      * connected to an ontology in which it is defined
      */
-    private void setLabel(URI resource, String label, Model inModel)
-    throws OntologyReadonlyException, NotFoundException {
-    	inModel.removeStatements(resource, DC.title, Variable.ANY);
-    	inModel.removeStatements(resource, RDFS.label, Variable.ANY);
-    	inModel.addStatement(resource, DC.title, label);
-    	inModel.addStatement(resource, RDFS.label, label);
+    public void setLabel(Resource resource, String label) throws OntologyReadonlyException, NotFoundException {
+    	removeStatements(resource, DC.title, Variable.ANY);
+    	removeStatements(resource, RDFS.label, Variable.ANY);
+    	addStatement(resource, DC.title, label);
+    	addStatement(resource, RDFS.label, label);
     }
     
     /**
@@ -881,7 +443,11 @@ public class TripleStore {
             throw new OntologyInvalidException("Class "+clazz+" is not an RDFS-class");
     }
     
-    /**
+	public URI newRandomUniqueURI() {
+		return getPersistentModelSet().newRandomUniqueURI();
+	}
+
+	/**
      * Creates a new URI inside the namespace returned by 
      * {@link #getUserNamespace()}. The name passed as parameter
      * will be used inside this url, to increase readability.
@@ -903,30 +469,7 @@ public class TripleStore {
     public URI createUniqueUriWithName(URI namespace, String name) {
     	return getCleanUniqueURI(namespace, name, false);
     }
-    
-    public ClosableIterator<Statement> findStatements(QuadPattern arg0)
-    throws ModelRuntimeException {
-    	return getPersistentModelSet().findStatements(arg0);
-    }
 
-    public ClosableIterator<Statement> findStatements(
-    		ResourceOrVariable subject,
-    		UriOrVariable predicate,
-    		NodeOrVariable object) throws ModelRuntimeException {
-    	return findStatements(Variable.ANY, subject, predicate, object);
-    }
-    
-    public ClosableIterator<Statement> findStatements(
-    		UriOrVariable context,
-    		ResourceOrVariable subject,
-    		UriOrVariable predicate,
-    		NodeOrVariable object) throws ModelRuntimeException {
-    	return getPersistentModelSet().findStatements(context, subject, predicate, object);
-    }
-
-
-    
-    
     /**
      * get an URI that was not used before, use the passed ontology to create
      * the uri in there. If the uri is already taken, add some numbers to it,
@@ -1048,16 +591,12 @@ public class TripleStore {
 			e.printStackTrace();
 		}
 	}
+
+
 	
-	
-	
-	
-	
-	
-	
-	
-    public long size() {
-    	ClosableIterator<Statement> it = findStatements(FGO.NS_FGO, Variable.ANY, RDF.type, Variable.ANY);
-    	return getPersistentModelSet().size();
-    }
+	// TODO remove it
+	public void dump() {
+		getPersistentModelSet().dump();
+	}
+
 }

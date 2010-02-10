@@ -2,11 +2,9 @@ package eu.morfeoproject.fast.server;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
-import java.util.StringTokenizer;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -17,8 +15,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.ontoware.rdf2go.model.Statement;
-import org.ontoware.rdf2go.model.node.BlankNode;
-import org.ontoware.rdf2go.model.node.Node;
 import org.ontoware.rdf2go.model.node.URI;
 import org.ontoware.rdf2go.model.node.impl.URIImpl;
 import org.ontoware.rdf2go.vocabulary.RDF;
@@ -330,7 +326,6 @@ public abstract class GenericServlet extends HttpServlet {
 	@SuppressWarnings("unchecked")
 	protected List<Condition> parseConditions(JSONArray conditionsArray) throws JSONException, IOException {
 		ArrayList<Condition> conditions = new ArrayList<Condition>();
-		HashMap<String, BlankNode> blankNodes = new HashMap<String, BlankNode>();
 		for (int i = 0; i < conditionsArray.length(); i++) {
 			JSONObject cJson = conditionsArray.getJSONObject(i);
 			Condition c = FastModelFactory.createCondition();
@@ -350,35 +345,7 @@ public abstract class GenericServlet extends HttpServlet {
 			c.setPatternString(patternString);
 			// only create the triples for the pattern in case of the condition is positive
 			if (positive) {
-				ArrayList<Statement> stmts = new ArrayList<Statement>();
-				StringTokenizer tokens = new StringTokenizer(patternString);//, " . ");
-				for ( ; tokens.hasMoreTokens(); ) {
-					String subject = tokens.nextToken();
-					String predicate = tokens.nextToken();
-					String object = tokens.nextToken();
-					if (tokens.hasMoreTokens())
-						tokens.nextToken(); // discard the .
-					// gets if exists or creates the subject
-					BlankNode subjectNode = blankNodes.get(subject);
-					if (subjectNode == null) {
-						subjectNode = CatalogueAccessPoint.getCatalogue().getTripleStore().createBlankNode();
-						blankNodes.put(subject, subjectNode);
-					}
-					// creates a URI or BlankNode for the object
-					Node objectNode;
-					try {
-						objectNode = new URIImpl(object);
-					} catch (IllegalArgumentException e) { 
-						objectNode = blankNodes.get(object);
-						if (objectNode == null) {
-							objectNode = CatalogueAccessPoint.getCatalogue().getTripleStore().createBlankNode();
-							blankNodes.put(subject, subjectNode);
-						}
-					}
-					Statement st = CatalogueAccessPoint.getCatalogue().getTripleStore().createStatement(subjectNode, new URIImpl(predicate), objectNode);
-					stmts.add(st);
-				}
-				c.setPattern(stmts);
+				c.setPattern(CatalogueAccessPoint.getCatalogue().patternToStatements(patternString));
 			}
 			conditions.add(c);
 		}
