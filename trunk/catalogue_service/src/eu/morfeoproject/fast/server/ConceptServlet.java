@@ -60,7 +60,18 @@ public class ConceptServlet extends GenericServlet {
 			// List the members of the collection
 			logger.info("Retrieving all concepts");
 			try {
-				if (format.equals(MediaType.APPLICATION_JSON)) {
+				if (format.equals(MediaType.APPLICATION_RDF_XML) ||
+						format.equals(MediaType.APPLICATION_TURTLE)) {
+					response.setContentType(format);
+					Model model = RDF2Go.getModelFactory().createModel();
+					model.open();
+					for (URI uri : CatalogueAccessPoint.getCatalogue().listConcepts(tags)) {
+						Set<Statement> concept = CatalogueAccessPoint.getCatalogue().getConcept(uri);
+						model.addAll(concept.iterator());
+					}
+					model.writeTo(writer, Syntax.forMimeType(format));
+					model.close();
+				} else {
 					response.setContentType(MediaType.APPLICATION_JSON);
 					JSONArray concepts = new JSONArray();
 					for (URI uri : CatalogueAccessPoint.getCatalogue().listConcepts(tags)) {
@@ -72,16 +83,6 @@ public class ConceptServlet extends GenericServlet {
 						}
 					}
 					writer.print(concepts.toString(2));
-				} else if (format.equals(MediaType.APPLICATION_RDF_XML)) {
-					response.setContentType(MediaType.APPLICATION_RDF_XML);
-					Model model = RDF2Go.getModelFactory().createModel();
-					model.open();
-					for (URI uri : CatalogueAccessPoint.getCatalogue().listConcepts(tags)) {
-						Set<Statement> concept = CatalogueAccessPoint.getCatalogue().getConcept(uri);
-						model.addAll(concept.iterator());
-					}
-					model.writeTo(writer, Syntax.RdfXml);
-					model.close();
 				}
 				response.setStatus(HttpServletResponse.SC_OK);
 			} catch (JSONException e) {
@@ -97,17 +98,18 @@ public class ConceptServlet extends GenericServlet {
 				response.sendError(HttpServletResponse.SC_NOT_FOUND, "The resource "+id+" has not been found.");
 			} else {
 				try {
-					if (format.equals(MediaType.APPLICATION_JSON)) {
-						response.setContentType(MediaType.APPLICATION_JSON);
-						writer.print(statements2JSON(concept).toString(2));
-					} else if (format.equals(MediaType.APPLICATION_RDF_XML)) {
-						response.setContentType(MediaType.APPLICATION_RDF_XML);
+					if (format.equals(MediaType.APPLICATION_RDF_XML) ||
+							format.equals(MediaType.APPLICATION_TURTLE)) {
+						response.setContentType(format);
 						Model model = RDF2Go.getModelFactory().createModel();
 						model.open();
 						model.addAll(concept.iterator());
-						model.writeTo(writer, Syntax.RdfXml);
+						model.writeTo(writer, Syntax.forMimeType(format));
 						model.close();
-					}				
+					} else {
+						response.setContentType(MediaType.APPLICATION_JSON);
+						writer.print(statements2JSON(concept).toString(2));
+					}
 					response.setStatus(HttpServletResponse.SC_OK);
 				} catch (JSONException e) {
 					e.printStackTrace();

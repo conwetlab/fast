@@ -56,8 +56,9 @@ public class ScreenServlet extends GenericServlet {
 			// List the members of the collection
 			logger.info("Retrieving all screens");
 			try {
-				if (format.equals(MediaType.APPLICATION_RDF_XML)) {
-					response.setContentType(MediaType.APPLICATION_RDF_XML);
+				if (format.equals(MediaType.APPLICATION_RDF_XML) ||
+						format.equals(MediaType.APPLICATION_TURTLE)) {
+					response.setContentType(format);
 					Model model = RDF2Go.getModelFactory().createModel();
 					try {
 						model.open();
@@ -68,13 +69,13 @@ public class ScreenServlet extends GenericServlet {
 							model.addModel(screenModel);
 							screenModel.close();
 						}
-						model.writeTo(writer, Syntax.RdfXml);
+						model.writeTo(writer, Syntax.forMimeType(format));
 					} catch (Exception e) {
 						e.printStackTrace();
 					} finally {
 						model.close();
 					}
-				} else { //if (format.equals(MediaType.APPLICATION_JSON)) {
+				} else { // by default returns APPLICATION_JSON
 					response.setContentType(MediaType.APPLICATION_JSON);
 					JSONArray screens = new JSONArray();
 					for (Screen s : CatalogueAccessPoint.getCatalogue().listScreens())
@@ -95,12 +96,13 @@ public class ScreenServlet extends GenericServlet {
 				response.sendError(HttpServletResponse.SC_NOT_FOUND, "The resource "+uri+" has not been found.");
 			} else {
 				try {
-					if (format.equals(MediaType.APPLICATION_RDF_XML)) {
-						response.setContentType(MediaType.APPLICATION_RDF_XML);
+					if (format.equals(MediaType.APPLICATION_RDF_XML) ||
+							format.equals(MediaType.APPLICATION_TURTLE)) {
+						response.setContentType(format);
 						Model screenModel = s.createModel();
-						screenModel.writeTo(writer, Syntax.RdfXml);
+						screenModel.writeTo(writer, Syntax.forMimeType(format));
 						screenModel.close();
-					} else {
+					} else { // by default returns APPLICATION_JSON
 						response.setContentType(MediaType.APPLICATION_JSON);
 						writer.print(s.toJSON().toString(2));
 					}				
@@ -136,10 +138,11 @@ public class ScreenServlet extends GenericServlet {
 			Screen screen = parseScreen(json, null);
 			try {
 				CatalogueAccessPoint.getCatalogue().addScreen(screen);
-				if (format.equals(MediaType.APPLICATION_RDF_XML)) {
-					response.setContentType(MediaType.APPLICATION_RDF_XML);
+				if (format.equals(MediaType.APPLICATION_RDF_XML) ||
+						format.equals(MediaType.APPLICATION_TURTLE)) {
+					response.setContentType(format);
 					Model screenModel = screen.createModel();
-					screenModel.writeTo(writer, Syntax.RdfXml);
+					screenModel.writeTo(writer, Syntax.forMimeType(format));
 					screenModel.close();
 				} else {
 					response.setContentType(MediaType.APPLICATION_JSON);
@@ -203,12 +206,13 @@ public class ScreenServlet extends GenericServlet {
 				JSONObject json = new JSONObject(body);
 				Screen screen = parseScreen(json, new URIImpl(uri));
 				CatalogueAccessPoint.getCatalogue().updateScreen(screen);
-				if (format.equals(MediaType.APPLICATION_RDF_XML)) {
-					response.setContentType(MediaType.APPLICATION_RDF_XML);
+				if (format.equals(MediaType.APPLICATION_RDF_XML) ||
+						format.equals(MediaType.APPLICATION_TURTLE)) {
+					response.setContentType(format);
 					Model screenModel = screen.createModel();
-					screenModel.writeTo(writer, Syntax.RdfXml);
+					screenModel.writeTo(writer, Syntax.forMimeType(format));
 					screenModel.close();
-				} else {
+				} else { // by default returns APPLICATION_JSON
 					response.setContentType(MediaType.APPLICATION_JSON);
 					JSONObject newScreen = screen.toJSON();						
 //					for (Iterator it = newScreen.keys(); it.hasNext(); ) {

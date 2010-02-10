@@ -55,8 +55,9 @@ public class OperatorServlet extends GenericServlet {
 			// List the members of the collection
 			logger.info("Retrieving all operators");
 			try {
-				if (format.equals(MediaType.APPLICATION_RDF_XML)) {
-					response.setContentType(MediaType.APPLICATION_RDF_XML);
+				if (format.equals(MediaType.APPLICATION_RDF_XML) ||
+						format.equals(MediaType.APPLICATION_TURTLE)) {
+					response.setContentType(format);
 					Model model = RDF2Go.getModelFactory().createModel();
 					try {
 						model.open();
@@ -67,13 +68,13 @@ public class OperatorServlet extends GenericServlet {
 							model.addModel(opModel);
 							opModel.close();
 						}
-						model.writeTo(writer, Syntax.RdfXml);
+						model.writeTo(writer, Syntax.forMimeType(format));
 					} catch (Exception e) {
 						e.printStackTrace();
 					} finally {
 						model.close();
 					}
-				} else { //if (format.equals(MediaType.APPLICATION_JSON)) {
+				} else { // by default returns APPLICATION_JSON)) {
 					response.setContentType(MediaType.APPLICATION_JSON);
 					JSONArray operators = new JSONArray();
 					for (Operator o : CatalogueAccessPoint.getCatalogue().listOperators())
@@ -94,10 +95,11 @@ public class OperatorServlet extends GenericServlet {
 				response.sendError(HttpServletResponse.SC_NOT_FOUND, "The resource "+uri+" has not been found.");
 			} else {
 				try {
-					if (format.equals(MediaType.APPLICATION_RDF_XML)) {
-						response.setContentType(MediaType.APPLICATION_RDF_XML);
+					if (format.equals(MediaType.APPLICATION_RDF_XML) ||
+							format.equals(MediaType.APPLICATION_TURTLE)) {
+						response.setContentType(format);
 						Model opModel = o.createModel();
-						opModel.writeTo(writer, Syntax.RdfXml);
+						opModel.writeTo(writer, Syntax.forMimeType(format));
 						opModel.dump();
 						opModel.close();
 					} else {
@@ -136,10 +138,11 @@ public class OperatorServlet extends GenericServlet {
 			Operator operator = parseOperator(json, null);
 			try {
 				CatalogueAccessPoint.getCatalogue().addOperator(operator);
-				if (format.equals(MediaType.APPLICATION_RDF_XML)) {
-					response.setContentType(MediaType.APPLICATION_RDF_XML);
+				if (format.equals(MediaType.APPLICATION_RDF_XML) ||
+						format.equals(MediaType.APPLICATION_TURTLE)) {
+					response.setContentType(format);
 					Model operatorModel = operator.createModel();
-					operatorModel.writeTo(writer, Syntax.RdfXml);
+					operatorModel.writeTo(writer, Syntax.forMimeType(format));
 					operatorModel.close();
 				} else {
 					response.setContentType(MediaType.APPLICATION_JSON);
@@ -203,10 +206,11 @@ public class OperatorServlet extends GenericServlet {
 				JSONObject json = new JSONObject(body);
 				Operator operator = parseOperator(json, new URIImpl(uri));
 				CatalogueAccessPoint.getCatalogue().updateOperator(operator);
-				if (format.equals(MediaType.APPLICATION_RDF_XML)) {
-					response.setContentType(MediaType.APPLICATION_RDF_XML);
+				if (format.equals(MediaType.APPLICATION_RDF_XML) ||
+						format.equals(MediaType.APPLICATION_TURTLE)) {
+					response.setContentType(format);
 					Model operatorModel = operator.createModel();
-					operatorModel.writeTo(writer, Syntax.RdfXml);
+					operatorModel.writeTo(writer, Syntax.forMimeType(format));
 					operatorModel.close();
 				} else {
 					response.setContentType(MediaType.APPLICATION_JSON);

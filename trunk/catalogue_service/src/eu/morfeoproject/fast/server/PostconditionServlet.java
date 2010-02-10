@@ -54,8 +54,9 @@ public class PostconditionServlet extends GenericServlet {
 			// List the members of the collection
 			logger.info("Retrieving all postconditions");
 			try {
-				if (format.equals(MediaType.APPLICATION_RDF_XML)) {
-					response.setContentType(MediaType.APPLICATION_RDF_XML);
+				if (format.equals(MediaType.APPLICATION_RDF_XML) ||
+						format.equals(MediaType.APPLICATION_TURTLE)) {
+					response.setContentType(format);
 					Model model = RDF2Go.getModelFactory().createModel();
 					try {
 						model.open();
@@ -66,13 +67,13 @@ public class PostconditionServlet extends GenericServlet {
 							model.addModel(postModel);
 							postModel.close();
 						}
-						model.writeTo(writer, Syntax.RdfXml);
+						model.writeTo(writer, Syntax.forMimeType(format));
 					} catch (Exception e) {
 						e.printStackTrace();
 					} finally {
 						model.close();
 					}
-				} else { //if (format.equals(MediaType.APPLICATION_JSON)) {
+				} else { // by default returns APPLICATION_JSON
 					response.setContentType(MediaType.APPLICATION_JSON);
 					JSONArray posts = new JSONArray();
 					for (Postcondition ev : CatalogueAccessPoint.getCatalogue().listPostconditions())
@@ -93,10 +94,11 @@ public class PostconditionServlet extends GenericServlet {
 				response.sendError(HttpServletResponse.SC_NOT_FOUND, "The resource "+uri+" has not been found.");
 			} else {
 				try {
-					if (format.equals(MediaType.APPLICATION_RDF_XML)) {
-						response.setContentType(MediaType.APPLICATION_RDF_XML);
+					if (format.equals(MediaType.APPLICATION_RDF_XML) ||
+							format.equals(MediaType.APPLICATION_TURTLE)) {
+						response.setContentType(format);
 						Model postModel = ev.createModel();
-						postModel.writeTo(writer, Syntax.RdfXml);
+						postModel.writeTo(writer, Syntax.forMimeType(format));
 						postModel.close();
 					} else {
 						response.setContentType(MediaType.APPLICATION_JSON);
@@ -134,10 +136,11 @@ public class PostconditionServlet extends GenericServlet {
 			Postcondition post = parsePostcondition(json, null);
 			try {
 				CatalogueAccessPoint.getCatalogue().addPreOrPost(post);
-				if (format.equals(MediaType.APPLICATION_RDF_XML)) {
-					response.setContentType(MediaType.APPLICATION_RDF_XML);
+				if (format.equals(MediaType.APPLICATION_RDF_XML) ||
+						format.equals(MediaType.APPLICATION_TURTLE)) {
+					response.setContentType(format);
 					Model postModel = post.createModel();
-					postModel.writeTo(writer, Syntax.RdfXml);
+					postModel.writeTo(writer, Syntax.forMimeType(format));
 					postModel.close();
 				} else {
 					response.setContentType(MediaType.APPLICATION_JSON);
@@ -190,10 +193,11 @@ public class PostconditionServlet extends GenericServlet {
 				JSONObject json = new JSONObject(body);
 				Postcondition post = parsePostcondition(json, new URIImpl(uri));
 				CatalogueAccessPoint.getCatalogue().updatePreOrPost(post);
-				if (format.equals(MediaType.APPLICATION_RDF_XML)) {
-					response.setContentType(MediaType.APPLICATION_RDF_XML);
+				if (format.equals(MediaType.APPLICATION_RDF_XML) ||
+						format.equals(MediaType.APPLICATION_TURTLE)) {
+					response.setContentType(format);
 					Model postModel = post.createModel();
-					postModel.writeTo(writer, Syntax.RdfXml);
+					postModel.writeTo(writer, Syntax.forMimeType(format));
 					postModel.close();
 				} else {
 					response.setContentType(MediaType.APPLICATION_JSON);

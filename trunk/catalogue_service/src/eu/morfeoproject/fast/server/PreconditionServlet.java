@@ -54,8 +54,9 @@ public class PreconditionServlet extends GenericServlet {
 			// List the members of the collection
 			logger.info("Retrieving all preconditions");
 			try {
-				if (format.equals(MediaType.APPLICATION_RDF_XML)) {
-					response.setContentType(MediaType.APPLICATION_RDF_XML);
+				if (format.equals(MediaType.APPLICATION_RDF_XML) ||
+						format.equals(MediaType.APPLICATION_TURTLE)) {
+					response.setContentType(format);
 					Model model = RDF2Go.getModelFactory().createModel();
 					try {
 						model.open();
@@ -66,13 +67,13 @@ public class PreconditionServlet extends GenericServlet {
 							model.addModel(preModel);
 							preModel.close();
 						}
-						model.writeTo(writer, Syntax.RdfXml);
+						model.writeTo(writer, Syntax.forMimeType(format));
 					} catch (Exception e) {
 						e.printStackTrace();
 					} finally {
 						model.close();
 					}
-				} else { //if (format.equals(MediaType.APPLICATION_JSON)) {
+				} else { // by default APPLICATION_JSON
 					response.setContentType(MediaType.APPLICATION_JSON);
 					JSONArray pres = new JSONArray();
 					for (Precondition s : CatalogueAccessPoint.getCatalogue().listPreconditions())
@@ -92,11 +93,12 @@ public class PreconditionServlet extends GenericServlet {
 				response.sendError(HttpServletResponse.SC_NOT_FOUND, "The resource "+uri+" has not been found.");
 			} else {
 				try {
-					if (format.equals(MediaType.APPLICATION_RDF_XML)) {
-							response.setContentType(MediaType.APPLICATION_RDF_XML);
-							Model preModel = s.createModel();
-							preModel.writeTo(writer, Syntax.RdfXml);
-							preModel.close();
+					if (format.equals(MediaType.APPLICATION_RDF_XML) ||
+							format.equals(MediaType.APPLICATION_TURTLE)) {
+						response.setContentType(format);
+						Model preModel = s.createModel();
+						preModel.writeTo(writer, Syntax.forMimeType(format));
+						preModel.close();
 					} else {
 						response.setContentType(MediaType.APPLICATION_JSON);
 						writer.print(s.toJSON().toString(2));
@@ -133,10 +135,11 @@ public class PreconditionServlet extends GenericServlet {
 			Precondition pre = parsePrecondition(json, null);
 			try {
 				CatalogueAccessPoint.getCatalogue().addPreOrPost(pre);
-				if (format.equals(MediaType.APPLICATION_RDF_XML)) {
-					response.setContentType(MediaType.APPLICATION_RDF_XML);
+				if (format.equals(MediaType.APPLICATION_RDF_XML) ||
+						format.equals(MediaType.APPLICATION_TURTLE)) {
+					response.setContentType(format);
 					Model preModel = pre.createModel();
-					preModel.writeTo(writer, Syntax.RdfXml);
+					preModel.writeTo(writer, Syntax.forMimeType(format));
 					preModel.close();
 				} else {
 					response.setContentType(MediaType.APPLICATION_JSON);
@@ -189,10 +192,11 @@ public class PreconditionServlet extends GenericServlet {
 				JSONObject json = new JSONObject(body);
 				Precondition pre = parsePrecondition(json, new URIImpl(uri));
 				CatalogueAccessPoint.getCatalogue().updatePreOrPost(pre);
-				if (format.equals(MediaType.APPLICATION_RDF_XML)) {
-					response.setContentType(MediaType.APPLICATION_RDF_XML);
+				if (format.equals(MediaType.APPLICATION_RDF_XML) ||
+						format.equals(MediaType.APPLICATION_TURTLE)) {
+					response.setContentType(format);
 					Model preModel = pre.createModel();
-					preModel.writeTo(writer, Syntax.RdfXml);
+					preModel.writeTo(writer, Syntax.forMimeType(format));
 					preModel.close();
 				} else {
 					response.setContentType(MediaType.APPLICATION_JSON);

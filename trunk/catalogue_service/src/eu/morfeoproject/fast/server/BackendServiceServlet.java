@@ -55,8 +55,9 @@ public class BackendServiceServlet extends GenericServlet {
 			// List the members of the collection
 			logger.info("Retrieving all services");
 			try {
-				if (format.equals(MediaType.APPLICATION_RDF_XML)) {
-					response.setContentType(MediaType.APPLICATION_RDF_XML);
+				if (format.equals(MediaType.APPLICATION_RDF_XML) ||
+						format.equals(MediaType.APPLICATION_TURTLE)) {
+					response.setContentType(format);
 					Model model = RDF2Go.getModelFactory().createModel();
 					try {
 						model.open();
@@ -67,13 +68,13 @@ public class BackendServiceServlet extends GenericServlet {
 							model.addModel(bsModel);
 							bsModel.close();
 						}
-						model.writeTo(writer, Syntax.RdfXml);
+						model.writeTo(writer, Syntax.forMimeType(format));
 					} catch (Exception e) {
 						e.printStackTrace();
 					} finally {
 						model.close();
 					}
-				} else { //if (format.equals(MediaType.APPLICATION_JSON)) {
+				} else { // by default returns APPLICATION_JSON
 					response.setContentType(MediaType.APPLICATION_JSON);
 					JSONArray services = new JSONArray();
 					for (BackendService b : CatalogueAccessPoint.getCatalogue().listBackendServices())
@@ -94,12 +95,13 @@ public class BackendServiceServlet extends GenericServlet {
 				response.sendError(HttpServletResponse.SC_NOT_FOUND, "The resource "+uri+" has not been found.");
 			} else {
 				try {
-					if (format.equals(MediaType.APPLICATION_RDF_XML)) {
-						response.setContentType(MediaType.APPLICATION_RDF_XML);
+					if (format.equals(MediaType.APPLICATION_RDF_XML) ||
+							format.equals(MediaType.APPLICATION_TURTLE)) {
+						response.setContentType(format);
 						Model bsModel = b.createModel();
-						bsModel.writeTo(writer, Syntax.RdfXml);
+						bsModel.writeTo(writer, Syntax.forMimeType(format));
 						bsModel.close();
-					} else {
+					} else { // by default returns APPLICATION_JSON
 						response.setContentType(MediaType.APPLICATION_JSON);
 						writer.print(b.toJSON().toString(2));
 					}				
@@ -135,12 +137,13 @@ public class BackendServiceServlet extends GenericServlet {
 			BackendService service = parseBackendService(json, null);
 			try {
 				CatalogueAccessPoint.getCatalogue().addBackendService(service);
-				if (format.equals(MediaType.APPLICATION_RDF_XML)) {
-					response.setContentType(MediaType.APPLICATION_RDF_XML);
+				if (format.equals(MediaType.APPLICATION_RDF_XML) ||
+						format.equals(MediaType.APPLICATION_TURTLE)) {
+					response.setContentType(format);
 					Model bsModel = service.createModel();
-					bsModel.writeTo(writer, Syntax.RdfXml);
+					bsModel.writeTo(writer, Syntax.forMimeType(format));
 					bsModel.close();
-				} else {
+				} else { // by default returns APPLICATION_JSON
 					response.setContentType(MediaType.APPLICATION_JSON);
 					JSONObject newBs = service.toJSON();						
 //					for (Iterator it = newBs.keys(); it.hasNext(); ) {
@@ -202,12 +205,13 @@ public class BackendServiceServlet extends GenericServlet {
 				JSONObject json = new JSONObject(body);
 				BackendService backendService = parseBackendService(json, new URIImpl(uri));
 				CatalogueAccessPoint.getCatalogue().updateBackendService(backendService);
-				if (format.equals(MediaType.APPLICATION_RDF_XML)) {
-					response.setContentType(MediaType.APPLICATION_RDF_XML);
+				if (format.equals(MediaType.APPLICATION_RDF_XML) ||
+						format.equals(MediaType.APPLICATION_TURTLE)) {
+					response.setContentType(format);
 					Model backendServiceModel = backendService.createModel();
-					backendServiceModel.writeTo(writer, Syntax.RdfXml);
+					backendServiceModel.writeTo(writer, Syntax.forMimeType(format));
 					backendServiceModel.close();
-				} else {
+				} else { // by default returns APPLICATION_JSON
 					response.setContentType(MediaType.APPLICATION_JSON);
 					JSONObject newBs = backendService.toJSON();						
 //					for (Iterator it = newBs.keys(); it.hasNext(); ) {

@@ -55,8 +55,9 @@ public class FormElementServlet extends GenericServlet {
 			// List the members of the collection
 			logger.info("Retrieving all formElements");
 			try {
-				if (format.equals(MediaType.APPLICATION_RDF_XML)) {
-					response.setContentType(MediaType.APPLICATION_RDF_XML);
+				if (format.equals(MediaType.APPLICATION_RDF_XML) ||
+						format.equals(MediaType.APPLICATION_TURTLE)) {
+					response.setContentType(format);
 					Model model = RDF2Go.getModelFactory().createModel();
 					try {
 						model.open();
@@ -67,13 +68,13 @@ public class FormElementServlet extends GenericServlet {
 							model.addModel(feModel);
 							feModel.close();
 						}
-						model.writeTo(writer, Syntax.RdfXml);
+						model.writeTo(writer, Syntax.forMimeType(format));
 					} catch (Exception e) {
 						e.printStackTrace();
 					} finally {
 						model.close();
 					}
-				} else { //if (format.equals(MediaType.APPLICATION_JSON)) {
+				} else { // by default returns APPLICATION_JSON
 					response.setContentType(MediaType.APPLICATION_JSON);
 					JSONArray formElements = new JSONArray();
 					for (FormElement f : CatalogueAccessPoint.getCatalogue().listFormElements())
@@ -94,10 +95,11 @@ public class FormElementServlet extends GenericServlet {
 				response.sendError(HttpServletResponse.SC_NOT_FOUND, "The resource "+uri+" has not been found.");
 			} else {
 				try {
-					if (format.equals(MediaType.APPLICATION_RDF_XML)) {
-						response.setContentType(MediaType.APPLICATION_RDF_XML);
+					if (format.equals(MediaType.APPLICATION_RDF_XML) ||
+							format.equals(MediaType.APPLICATION_TURTLE)) {
+						response.setContentType(format);
 						Model feModel = f.createModel();
-						feModel.writeTo(writer, Syntax.RdfXml);
+						feModel.writeTo(writer, Syntax.forMimeType(format));
 						feModel.close();
 					} else {
 						response.setContentType(MediaType.APPLICATION_JSON);
@@ -135,10 +137,11 @@ public class FormElementServlet extends GenericServlet {
 			FormElement formElement = parseFormElement(json, null);
 			try {
 				CatalogueAccessPoint.getCatalogue().addFormElement(formElement);
-				if (format.equals(MediaType.APPLICATION_RDF_XML)) {
-					response.setContentType(MediaType.APPLICATION_RDF_XML);
+				if (format.equals(MediaType.APPLICATION_RDF_XML) ||
+						format.equals(MediaType.APPLICATION_TURTLE)) {
+					response.setContentType(format);
 					Model formElementModel = formElement.createModel();
-					formElementModel.writeTo(writer, Syntax.RdfXml);
+					formElementModel.writeTo(writer, Syntax.forMimeType(format));
 					formElementModel.close();
 				} else {
 					response.setContentType(MediaType.APPLICATION_JSON);
@@ -202,10 +205,11 @@ public class FormElementServlet extends GenericServlet {
 				JSONObject json = new JSONObject(body);
 				FormElement formElement = parseFormElement(json, new URIImpl(uri));
 				CatalogueAccessPoint.getCatalogue().updateFormElement(formElement);
-				if (format.equals(MediaType.APPLICATION_RDF_XML)) {
-					response.setContentType(MediaType.APPLICATION_RDF_XML);
+				if (format.equals(MediaType.APPLICATION_RDF_XML) ||
+						format.equals(MediaType.APPLICATION_TURTLE)) {
+					response.setContentType(format);
 					Model formElementModel = formElement.createModel();
-					formElementModel.writeTo(writer, Syntax.RdfXml);
+					formElementModel.writeTo(writer, Syntax.forMimeType(format));
 					formElementModel.close();
 				} else {
 					response.setContentType(MediaType.APPLICATION_JSON);
