@@ -51,7 +51,10 @@ file_list = [
     "gvs/documents/DocumentController.js",
     "gvs/documents/ScreenflowDocument.js",
     "gvs/documents/ScreenDocument.js",
-    "gvs/documents/ScreenCanvasCache.js",
+
+    # Cache
+    "gvs/cache/ScreenCanvasCache.js",
+    "gvs/cache/ScreenflowCanvasCache.js",
 
     # Facts
     "gvs/facts/Fact.js",
