@@ -1,6 +1,5 @@
 package eu.morfeoproject.fast.server;
 
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
@@ -23,7 +22,6 @@ import org.ontoware.rdf2go.model.node.impl.URIImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import eu.morfeoproject.fast.catalogue.NotFoundException;
 import eu.morfeoproject.fast.util.URLUTF8Encoder;
 
 /**
@@ -125,122 +123,122 @@ public class ConceptServlet extends GenericServlet {
 	 * create it.
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		BufferedReader reader = request.getReader();
-		String[] chunks = request.getRequestURI().split("/");
-		String id = chunks[chunks.length-1];
-		StringBuffer buffer = new StringBuffer();
-		String line = reader.readLine();
-		while (line != null) {
-			buffer.append(line);
-			line = reader.readLine();
-		}
-		String body = buffer.toString();
-		
-		if (id != null) {
-			id = URLUTF8Encoder.decode(id);
-			try {
-				JSONObject json = new JSONObject(body);
-				for (String key : JSONObject.getNames(json)) {
-					Object object = json.get(key);
-					if (object instanceof JSONArray) {
-						JSONArray array = (JSONArray)object;
-						for (int idx = 0; idx < array.length(); idx++) {
-							try {
-								CatalogueAccessPoint.getCatalogue().getTripleStore().addStatement(new URIImpl(id), new URIImpl(key), new URIImpl(array.get(idx).toString()));
-							} catch(IllegalArgumentException e) {
-								CatalogueAccessPoint.getCatalogue().getTripleStore().addStatement(new URIImpl(id), new URIImpl(key), array.get(idx).toString());
-							}
-						}
-					} else if (object instanceof JSONObject) {
-						// do nothing
-					} else {
-						try {
-							CatalogueAccessPoint.getCatalogue().getTripleStore().addStatement(new URIImpl(id), new URIImpl(key), new URIImpl(json.get(key).toString()));
-						} catch(IllegalArgumentException e) {
-							CatalogueAccessPoint.getCatalogue().getTripleStore().addStatement(new URIImpl(id), new URIImpl(key), json.get(key).toString());
-						}
-					}
-				}
-				response.setStatus(HttpServletResponse.SC_OK);
-			} catch (JSONException e) {
-				e.printStackTrace();
-			}
-		} else {
-			response.sendError(HttpServletResponse.SC_BAD_REQUEST, "An ID must be specified.");
-		}
-	}
+//	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+//		BufferedReader reader = request.getReader();
+//		String[] chunks = request.getRequestURI().split("/");
+//		String id = chunks[chunks.length-1];
+//		StringBuffer buffer = new StringBuffer();
+//		String line = reader.readLine();
+//		while (line != null) {
+//			buffer.append(line);
+//			line = reader.readLine();
+//		}
+//		String body = buffer.toString();
+//		
+//		if (id != null) {
+//			id = URLUTF8Encoder.decode(id);
+//			try {
+//				JSONObject json = new JSONObject(body);
+//				for (String key : JSONObject.getNames(json)) {
+//					Object object = json.get(key);
+//					if (object instanceof JSONArray) {
+//						JSONArray array = (JSONArray)object;
+//						for (int idx = 0; idx < array.length(); idx++) {
+//							try {
+//								CatalogueAccessPoint.getCatalogue().getTripleStore().addStatement(new URIImpl(id), new URIImpl(key), new URIImpl(array.get(idx).toString()));
+//							} catch(IllegalArgumentException e) {
+//								CatalogueAccessPoint.getCatalogue().getTripleStore().addStatement(new URIImpl(id), new URIImpl(key), array.get(idx).toString());
+//							}
+//						}
+//					} else if (object instanceof JSONObject) {
+//						// do nothing
+//					} else {
+//						try {
+//							CatalogueAccessPoint.getCatalogue().getTripleStore().addStatement(new URIImpl(id), new URIImpl(key), new URIImpl(json.get(key).toString()));
+//						} catch(IllegalArgumentException e) {
+//							CatalogueAccessPoint.getCatalogue().getTripleStore().addStatement(new URIImpl(id), new URIImpl(key), json.get(key).toString());
+//						}
+//					}
+//				}
+//				response.setStatus(HttpServletResponse.SC_OK);
+//			} catch (JSONException e) {
+//				e.printStackTrace();
+//			}
+//		} else {
+//			response.sendError(HttpServletResponse.SC_BAD_REQUEST, "An ID must be specified.");
+//		}
+//	}
 
 	/**
 	 * Update the information about a concept. "Update" means the concept will be deleted and created again with
 	 * the new information. If the concept does not exist it will be created.
 	 * @see HttpServlet#doPut(HttpServletRequest, HttpServletResponse)
 	 */
-	protected void doPut(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		BufferedReader reader = request.getReader();
-		String[] chunks = request.getRequestURI().split("/");
-		String id = chunks[chunks.length-1];
-		StringBuffer body = new StringBuffer();
-		String line = reader.readLine();
-		while (line != null) {
-			body.append(line);
-			line = reader.readLine();
-		}
-		
-		if (id != null) {
-			id = URLUTF8Encoder.decode(id);
-			try {
-				CatalogueAccessPoint.getCatalogue().removeConcept(new URIImpl(id));
-			} catch (NotFoundException e) {}
-			try {
-				JSONObject json = new JSONObject(body.toString());
-				for (String key : JSONObject.getNames(json)) {
-					Object object = json.get(key);
-					if (object instanceof JSONArray) {
-						JSONArray array = (JSONArray)object;
-						for (int idx = 0; idx < array.length(); idx++) {
-							try {
-								CatalogueAccessPoint.getCatalogue().getTripleStore().addStatement(new URIImpl(id), new URIImpl(key), new URIImpl(array.get(idx).toString()));
-							} catch(IllegalArgumentException e) {
-								CatalogueAccessPoint.getCatalogue().getTripleStore().addStatement(new URIImpl(id), new URIImpl(key), array.get(idx).toString());
-							}
-						}
-					} else if (object instanceof JSONObject) {
-						// do nothing
-					} else {
-						try {
-							CatalogueAccessPoint.getCatalogue().getTripleStore().addStatement(new URIImpl(id), new URIImpl(key), new URIImpl(json.get(key).toString()));
-						} catch(IllegalArgumentException e) {
-							CatalogueAccessPoint.getCatalogue().getTripleStore().addStatement(new URIImpl(id), new URIImpl(key), json.get(key).toString());
-						}
-					}
-				}
-				response.setStatus(HttpServletResponse.SC_OK);
-			} catch (JSONException e) {
-				e.printStackTrace();
-			}
-		} else {
-			response.sendError(HttpServletResponse.SC_BAD_REQUEST, "An ID must be specified.");
-		}
-	}
+//	protected void doPut(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+//		BufferedReader reader = request.getReader();
+//		String[] chunks = request.getRequestURI().split("/");
+//		String id = chunks[chunks.length-1];
+//		StringBuffer body = new StringBuffer();
+//		String line = reader.readLine();
+//		while (line != null) {
+//			body.append(line);
+//			line = reader.readLine();
+//		}
+//		
+//		if (id != null) {
+//			id = URLUTF8Encoder.decode(id);
+//			try {
+//				CatalogueAccessPoint.getCatalogue().removeConcept(new URIImpl(id));
+//			} catch (NotFoundException e) {}
+//			try {
+//				JSONObject json = new JSONObject(body.toString());
+//				for (String key : JSONObject.getNames(json)) {
+//					Object object = json.get(key);
+//					if (object instanceof JSONArray) {
+//						JSONArray array = (JSONArray)object;
+//						for (int idx = 0; idx < array.length(); idx++) {
+//							try {
+//								CatalogueAccessPoint.getCatalogue().getTripleStore().addStatement(new URIImpl(id), new URIImpl(key), new URIImpl(array.get(idx).toString()));
+//							} catch(IllegalArgumentException e) {
+//								CatalogueAccessPoint.getCatalogue().getTripleStore().addStatement(new URIImpl(id), new URIImpl(key), array.get(idx).toString());
+//							}
+//						}
+//					} else if (object instanceof JSONObject) {
+//						// do nothing
+//					} else {
+//						try {
+//							CatalogueAccessPoint.getCatalogue().getTripleStore().addStatement(new URIImpl(id), new URIImpl(key), new URIImpl(json.get(key).toString()));
+//						} catch(IllegalArgumentException e) {
+//							CatalogueAccessPoint.getCatalogue().getTripleStore().addStatement(new URIImpl(id), new URIImpl(key), json.get(key).toString());
+//						}
+//					}
+//				}
+//				response.setStatus(HttpServletResponse.SC_OK);
+//			} catch (JSONException e) {
+//				e.printStackTrace();
+//			}
+//		} else {
+//			response.sendError(HttpServletResponse.SC_BAD_REQUEST, "An ID must be specified.");
+//		}
+//	}
 
 	/**
 	 * @see HttpServlet#doDelete(HttpServletRequest, HttpServletResponse)
 	 */
-	protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		String[] chunks = request.getRequestURI().split("/");
-		String id = chunks[chunks.length-1];
-		
-		if (id != null) {
-			id = URLUTF8Encoder.decode(id);
-			try {
-				CatalogueAccessPoint.getCatalogue().removeConcept(new URIImpl(id));
-				response.setStatus(HttpServletResponse.SC_OK);
-			} catch (NotFoundException e) {
-				response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
-			}
-		}
-	}
+//	protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+//		String[] chunks = request.getRequestURI().split("/");
+//		String id = chunks[chunks.length-1];
+//		
+//		if (id != null) {
+//			id = URLUTF8Encoder.decode(id);
+//			try {
+//				CatalogueAccessPoint.getCatalogue().removeConcept(new URIImpl(id));
+//				response.setStatus(HttpServletResponse.SC_OK);
+//			} catch (NotFoundException e) {
+//				response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
+//			}
+//		}
+//	}
 	
 	/**
 	 * Transform a string of tags into an array. The tags are
@@ -271,4 +269,5 @@ public class ConceptServlet extends GenericServlet {
 		}
 		return tags;
 	}
+	
 }
