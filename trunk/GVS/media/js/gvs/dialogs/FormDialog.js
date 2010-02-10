@@ -294,9 +294,11 @@ FormDialog.POSITION_RIGHT = "right";
 FormDialog.POSITION_BOTTOM = "bottom";
 FormDialog.POSITION_TOP = "top";
 
+FormDialog.POSITIVE_VALIDATION = '[1-9][0-9]*';
 FormDialog.EMAIL_VALIDATION = '[a-zA-Z0-9._%-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}';
 FormDialog.URL_VALIDATION = '([hH][tT][tT][pP][sS]?)://[A-Za-z0-9-_]+(\.[A-Za-z0-9-_]+)*(:\d+)?(/[a-zA-Z0-9\.\?=/#%&\+-]*)*';
 
+FormDialog.INVALID_POSITIVE_MESSAGE = 'Invalid number';
 FormDialog.INVALID_EMAIL_MESSAGE = 'Invalid email address';
 FormDialog.INVALID_URL_MESSAGE = 'Invalid URL';
 

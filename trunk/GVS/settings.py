@@ -142,5 +142,9 @@ WRAPPER_SERVICE_URL = 'http://tomdev.cs.uni-kassel.de:8080/ServiceDesignerWep/'
 #Gadget Default Info
 DEFAULT_GADGET_IMAGE_URI='http://demo.fast.morfeo-project.org/fast/images/FASTLogo.png'
 DEFAULT_GADGET_HOMEPAGE_URI='http://fast.morfeo-project.eu'
+DEFAULT_EZWEB_GADGET_HEIGHT='40'
+DEFAULT_EZWEB_GADGET_WIDTH='10'
+DEFAULT_EZWEB_AUTHOR_NAME='FAST'
+DEFAULT_EZWEB_AUTHOR_EMAIL='admin@admin.com'
 
 ONLY_ONE_JS_FILE = not DEBUG

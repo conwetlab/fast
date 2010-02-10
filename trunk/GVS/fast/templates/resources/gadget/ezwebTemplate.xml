@@ -5,7 +5,7 @@
         <Vendor>{{ gadgetVendor }}</Vendor>
         <Name>{{ gadgetTitle }}</Name>
         <Version>{{ gadgetVersion }}</Version>
-        <Author>{{ gadgetCreator }}</Author>
+        <Author>{{ gadgetAuthor }}</Author>
         <Mail>{{ gadgetMail }}</Mail>
         <Description>{{ gadgetDescription }}</Description>
         <ImageURI>{{ gadgetImageURI }}</ImageURI>
@@ -29,5 +29,5 @@
     <Platform.Link>
         <XHTML href="{{ gadgetUri }}/ezweb.html" />
     </Platform.Link>
-    <Platform.Rendering width="10" height="38" />
+    <Platform.Rendering width="{{ gadgetWidth }}" height="{{ gadgetHeight }}" />
 </Template>

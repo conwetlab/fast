@@ -6,9 +6,7 @@ class Storage(models.Model):
     owner = models.CharField(max_length=150)
     version = models.CharField(max_length=150)
     screenflow = models.ForeignKey(Screenflow)
-    gadgetURL = models.URLField(null=True)
-    gadgetResource = models.URLField(null=True)
-    gadgetPath = models.CharField(max_length=1000)
+    data = models.TextField()
     creationDate = models.DateTimeField(auto_now=True)
 
     class Meta:

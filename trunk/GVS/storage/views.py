@@ -5,7 +5,7 @@ from django.shortcuts import get_object_or_404, get_list_or_404
 from django.db import transaction
 from gadgetEzweb import getEzWebTemplate, getEzWebHTML
 from commons import resource, unzip
-from commons.utils import json_encode
+from commons.utils import json_encode, valueOrDefault, valueOrEmpty, notEmptyValueOrDefault
 from commons.authentication import get_user_authentication
 from os import path, mkdir
 import zipfile, shutil, tempfile, binascii
@@ -25,12 +25,19 @@ class GadgetStorage(resource.Resource):
             storage = []
             if request.GET.has_key('screenflow'):
                 storage = get_list_or_404(Storage, screenflow=request.GET['screenflow'])
+            else:
+                storage = get_list_or_404(Storage, screenflow__author=user)
+                    
+            list = []
+            for element in storage:
+                list.append(element.data)
+            response = ','.join(list)
                 
-            return HttpResponse(json_encode(storage), mimetype='application/json; charset=UTF-8')
+            return HttpResponse('[%s]' % response, mimetype='application/json; charset=UTF-8')
         except Http404:
             return HttpResponse(json_encode([]), mimetype='application/json; charset=UTF-8')
         except Exception, e:
-            return HttpResponseServerError(json_encode({"message":unicode(e)}), mimetype='application/json; charset=UTF-8')
+            return HttpResponseServerError(json_encode({'message':unicode(e)}), mimetype='application/json; charset=UTF-8')
 
 
     @transaction.commit_on_success
@@ -40,26 +47,32 @@ class GadgetStorage(resource.Resource):
     
             gadgetData = self.__completeGadgetData(request)
             
-            storage = Storage(name=gadgetData['name'], owner=gadgetData['vendor'], version=gadgetData['version'])
+            metadata = gadgetData['metadata']
+            
+            storage = Storage(name=metadata['name'],
+                              owner=metadata['owner'],
+                              version=metadata['version'])
             
             self.__createGadget(gadgetData)
             
-            self.__storeGadget(gadgetData)
+            self.__storeGadget(metadata)
             
-            storage.gadgetURL = gadgetData['gadgetUri']
-            storage.gadgetPath = gadgetData['gadgetRelativePath']
-            storage.gadgetResource = gadgetData['gadgetResource']
             storage.screenflow = gadgetData['screenflow']
             storage.save()
             
-            dict = {"id": None, "name": None, "screenflow_id": None, "owner": None,
-                    "version" : None, "gadgetURL" : None, "creationDate": None}
+            metadata['creationDate'] = storage.creationDate
+            metadata['id'] = storage.pk
+            storage.data = json_encode(metadata)
+            storage.save()
+            
+            dict = {'id': None, 'name': None, 'screenflow_id': None, 'owner': None,
+                    'version' : None, 'gadgetUri' : None, 'creationDate': None}
 
-            return HttpResponse(json_encode(storage, fields=dict), mimetype='application/json; charset=UTF-8')
+            return HttpResponse(json_encode(metadata, fields=dict), mimetype='application/json; charset=UTF-8')
         
         except Exception, e:
             transaction.rollback()
-            return HttpResponseServerError(json_encode({"message":unicode(e)}), mimetype='application/json; charset=UTF-8')
+            return HttpResponseServerError(json_encode({'message':unicode(e)}), mimetype='application/json; charset=UTF-8')
         
         
     def __getGadgetName(self, name, vendor, version):
@@ -67,47 +80,32 @@ class GadgetStorage(resource.Resource):
 
 
     def __completeGadgetData(self, request):
-        gadgetData = {}
+        gadgetData = {'metadata':{}}
         
         if request.POST.has_key('gadget'):
             json = simplejson.loads(request.POST['gadget'])
         else:
             raise Exception ('Gadget parameter expected in screenflow json')
-        if (json.has_key('label')):
-            gadgetData['label'] = json['label']
-        else:
-            gadgetData['label'] = {"en-gb": "FAST Gadget"}    
-        if (json.has_key('vendor')):
-            gadgetData['vendor'] = json['vendor']
-        else:
-            gadgetData['vendor'] = "Morfeo"               
-        if (json.has_key('version')):
-            gadgetData['version'] = json['version']
-        else:
-            gadgetData['version'] = "1.0"
-        if (json.has_key('description')):
-            gadgetData['description'] = json['description']
-        else:
-            gadgetData['description'] = {"en-gb": "Write the description here..."}
-        if (json.has_key('email')):
-            gadgetData['email'] = json['email']
-        else:
-            gadgetData['email'] = "author@email.com"
-        if (json.has_key('creator')):
-            gadgetData['creator'] = json['creator']
-        else:
-            gadgetData['creator'] = "Creator"
-        if (json.has_key('imageURI') and json['imageURI']!=''):
-            gadgetData['imageURI'] = json['imageURI']
-        else:
-            gadgetData['imageURI'] = settings.DEFAULT_GADGET_IMAGE_URI
-        if (json.has_key('homepage') and json['homepage']!=''):
-            gadgetData['homepage'] = json['homepage']
-        else:
-            gadgetData['homepage'] = settings.DEFAULT_GADGET_HOMEPAGE_URI
-            
-        gadgetData['name'] = gadgetData['label']['en-gb']
-            
+        
+        metadata = gadgetData['metadata']
+        #Gadget Data
+        metadata['label'] = valueOrDefault(json, 'label', {'en-gb': 'FAST Gadget'})
+        metadata['name'] = metadata['label']['en-gb']
+        metadata['shortname'] =  valueOrEmpty(json, 'owner')
+        metadata['owner'] =  valueOrDefault(json, 'owner', 'Morfeo')
+        metadata['vendor'] =  valueOrEmpty(json, 'vendor')
+        metadata['version'] = notEmptyValueOrDefault(json, 'version', '1.0')
+        metadata['description'] = valueOrDefault(json, 'description', {'en-gb': ''})
+        metadata['description'] = metadata['label']['en-gb']
+        metadata['imageURI'] = valueOrEmpty(json, 'imageURI')
+        metadata['gadgetHomepage'] = valueOrEmpty(json, 'gadgetHomepage')
+        metadata['height'] = valueOrEmpty(json, 'height')
+        metadata['width'] = valueOrEmpty(json, 'width')
+        #Author Data
+        metadata['authorName'] =  valueOrEmpty(json, 'authorName')
+        metadata['email'] = valueOrEmpty(json, 'email')
+        metadata['authorHomepage'] = valueOrEmpty(json, 'authorHomepage')
+        
         scrf = get_object_or_404(Screenflow, id=request.POST['screenflow'])
         gadgetData['screenflow'] = scrf
         screenflow = simplejson.loads(scrf.data)
@@ -124,37 +122,51 @@ class GadgetStorage(resource.Resource):
                 screen['allCode'] = BuildingBlockCode.objects.get(buildingBlock=screen['id']).code
                 gadgetData['screens'].append(screen)
                 
-        gadgetData['prec'] = []
-        if (definition.has_key('preconditions')):
-            gadgetData['prec'] = definition['preconditions']
-        gadgetData['post'] = []    
+        gadgetData['prec'] = definition['preconditions'] if definition.has_key('preconditions') else []
+        gadgetData['post'] = definition['postconditions'] if definition.has_key('postconditions') else []
         
-        if (definition.has_key('postconditions')):
-            gadgetData['post'] = definition['postconditions']
+        gadgetName = self.__getGadgetName(metadata['name'], metadata['owner'], metadata['version'])
+        metadata['gadgetName'] = gadgetName
         
-        gadgetName = self.__getGadgetName(gadgetData['name'], gadgetData['vendor'], gadgetData['version'])
-        gadgetData['gadgetName'] = gadgetName
-        
-        gadgetData['gadgetResource'] = None
+        metadata['gadgetResource'] = None
         if isLocalStorage():
             base_uri = request.build_absolute_uri('/static')     
-            gadgetData['gadgetUri'] =  '/'.join([base_uri, gadgetName])
+            metadata['gadgetUri'] =  '/'.join([base_uri, gadgetName])
         else:
             conn = Connection(settings.STORAGE_URL)
-            body = {'GadgetName': gadgetData['name'],'Owner': gadgetData['vendor'],'Version': gadgetData['version']}
+            body = {
+                'Owner': metadata['owner'],
+                'Version': metadata['version'],
+                'Author':{'AuthorName': metadata['authorName'],
+                          'href': metadata['authorHomepage'],
+                          'email': metadata['email']
+                          },
+                'Vendor':{'VendorName': metadata['vendor']},
+                'GadgetMetadata':{'GadgetName': metadata['name'],
+                                  'GadgetShortName': metadata['shortname'],
+                                  'GadgetDescription': metadata['description']
+                                  }
+                }
+            
+            if metadata['height']!='':
+                body['GadgetMetadata']['GadgetDefaultHeight'] = metadata['height']
+            if metadata['width']!='':
+                body['GadgetMetadata']['GadgetDefaultWidth'] = metadata['width']
+
             result = conn.request_post(resource='/gadgets/metadata', body=json_encode(body) , headers={'Accept':'application/json', 'Content-Type': 'application/json'})
             if not isValidResponse(result):
                 raise Exception(result['body'])
             data = simplejson.loads(result['body'])
-            gadgetData['gadgetUri'] = data['GadgetLocationURL']
-            gadgetData['gadgetResource'] = data['ServiceGadgetUri']
-            gadgetData['gadgetDataUri'] = data['GadgetDataUri']
+            metadata['gadgetUri'] = data['GadgetLocationURL']
+            metadata['gadgetResource'] = data['ServiceGadgetUri']
+            metadata['gadgetDataUri'] = data['GadgetDataUri']
         
         return gadgetData
 
 
     def __createGadget(self, gadgetData):
-        gadgetRelativePath = gadgetData['gadgetName']
+        metadata = gadgetData['metadata']
+        gadgetRelativePath = metadata['gadgetName']
         gadgetPath = path.join(STORAGE_DIR, gadgetRelativePath)
         if (not path.isdir(gadgetPath)):
             mkdir(gadgetPath)
@@ -185,32 +197,32 @@ class GadgetStorage(resource.Resource):
         shutil.rmtree(directory_name)
         zipFile.close()
         
-        gadgetData['gadgetRelativePath'] = gadgetRelativePath
-        gadgetData['gadgetPath'] = gadgetPath
-        gadgetData['gadgetZipFileName'] = gadgetZipFileName
+        metadata['gadgetRelativePath'] = gadgetRelativePath
     
     
-    def __storeGadget(self, gadgetData):
+    def __storeGadget(self, gadgetMetaData):
+        gadgetPath = path.join(STORAGE_DIR, gadgetMetaData['gadgetRelativePath'])
+        gadgetZipFileName = path.join(gadgetPath, STORAGE_GADGET_ZIP_NAME)
         #Remote Storage
-        if gadgetData.has_key('gadgetDataUri'):
-            conn = Connection(gadgetData['gadgetDataUri'])
+        if gadgetMetaData.has_key('gadgetDataUri'):
+            conn = Connection(gadgetMetaData['gadgetDataUri'])
             if settings.STORAGE_FORMAT == 'base64string':
-                f = open(gadgetData['gadgetZipFileName'], "rb")
+                f = open(gadgetZipFileName, 'rb')
                 data = f.read()
                 f.close()
                 data = binascii.b2a_base64(data)
                 format = settings.STORAGE_FORMAT
             else:
-                data = '/'.join([gadgetData['gadgetUri'], STORAGE_GADGET_ZIP_NAME])
+                data = '/'.join([gadgetMetaData['gadgetUri'], STORAGE_GADGET_ZIP_NAME])
                 format = 'URL'
-            body = {"Data":data,"DataType":format}
+            body = {'Data':data,'DataType':format}
             result = conn.request_post(resource='', body=json_encode(body) , headers={'Accept':'application/json', 'Content-Type': 'application/json'})
             if not isValidResponse(result):
                 raise Exception(result['body']) 
         #Local Storage
         else:
             un = unzip.unzip()
-            un.extract(gadgetData['gadgetZipFileName'], gadgetData['gadgetPath'])
+            un.extract(gadgetZipFileName, gadgetPath)
         
 
 
@@ -219,7 +231,7 @@ class StorageEntry(resource.Resource):
         user = get_user_authentication(request)
         
         st = get_object_or_404(Storage, id=storage_id)
-        return HttpResponse(json_encode(st), mimetype='application/json; charset=UTF-8')
+        return HttpResponse(st.data, mimetype='application/json; charset=UTF-8')
     
     
     @transaction.commit_on_success
@@ -227,13 +239,14 @@ class StorageEntry(resource.Resource):
         try:
             user = get_user_authentication(request)
             
-            storage = Storage.objects.get(id=storage_id)
-            gadgetPath = path.join(STORAGE_DIR, storage.gadgetPath)
+            st = Storage.objects.get(id=storage_id)
+            storage = simplejson.loads(st.data)
+            gadgetPath = path.join(STORAGE_DIR, storage['gadgetRelativePath'])
             
-            storage.delete()
+            st.delete()
             
-            if storage.gadgetResource != None:
-                conn = Connection(storage.gadgetResource)
+            if storage['gadgetResource'] != None:
+                conn = Connection(storage['gadgetResource'])
                 result = conn.request_delete(resource='', headers={'Accept':'application/json'})
                 if not isValidResponse(result):
                     raise Exception(result['body'])
@@ -243,11 +256,11 @@ class StorageEntry(resource.Resource):
             except Exception, ex:
                 pass
             
-            ok = json_encode({"message":"OK"})
+            ok = json_encode({'message':'OK'})
             return HttpResponse(ok, mimetype='application/json; charset=UTF-8')
         except Exception, e:
             transaction.rollback()
-            return HttpResponseServerError(json_encode({"message":unicode(e)}), mimetype='application/json; charset=UTF-8')
+            return HttpResponseServerError(json_encode({'message':unicode(e)}), mimetype='application/json; charset=UTF-8')
         
         
         

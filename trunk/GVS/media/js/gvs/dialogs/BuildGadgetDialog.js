@@ -49,22 +49,34 @@ var BuildGadgetDialog = Class.create(ConfirmDialog /** @lends BuildGadgetDialog.
         var formData = [
             {'type':'title', 'value': 'Gadget information'},
             {'type':'input', 'label': 'Gadget Name:','name': 'name', 'value': '', 'required': true},
-            {'type':'input', 'label': 'Vendor:','name': 'vendor', 'value': 'Morfeo', 'required': true},
+            {'type':'input', 'label': 'Gadget Short Name:', 'name': 'shortname', 'value': ''},
+            {'type':'input', 'label': 'Owner:','name': 'owner', 'value': 'Morfeo', 'required': true},
             {'type':'input', 'label': 'Version:','name': 'version', 'value': '1.0', 'required': true},
+            {'type':'input', 'label': 'Vendor:','name': 'vendor', 'value': 'Morfeo'},
             {'type':'input', 'label': 'Gadget Description:','name': 'desc', 'value': 'Write your description here...'},
             {'type':'input', 'label': 'Image URL:','name': 'imageURI', 
                 'value': '', 
                 'regExp': FormDialog.URL_VALIDATION, 
                 'message': FormDialog.INVALID_URL_MESSAGE},
-            {'type':'input', 'label': 'Gadget Homepage:','name': 'homepage', 
+            {'type':'input', 'label': 'Homepage:','name': 'gadgetHomepage',
                 'value': '', 
                 'regExp': FormDialog.URL_VALIDATION, 
                 'message': FormDialog.INVALID_URL_MESSAGE},
+            {'type':'input', 'label': 'Default Height:', 'name': 'height', 'value': '', 
+                'regExp': FormDialog.POSITIVE_VALIDATION, 
+                'message': FormDialog.INVALID_POSITIVE_MESSAGE},
+            {'type':'input', 'label': 'Default Width:', 'name': 'width', 'value': '', 
+            	'regExp': FormDialog.POSITIVE_VALIDATION, 
+            	'message': FormDialog.INVALID_POSITIVE_MESSAGE},
             {'type':'title', 'value': 'Author information'},
-            {'type':'input', 'label': 'Author Name:','name': 'creator', 'value': user.getRealName()},
+            {'type':'input', 'label': 'Author Name:','name': 'authorName', 'value': user.getRealName()},
             {'type':'input', 'label': 'E-Mail:','name': 'email', 'value': user.getEmail(), 
                 'regExp': FormDialog.EMAIL_VALIDATION, 
-                'message': FormDialog.INVALID_EMAIL_MESSAGE}
+                'message': FormDialog.INVALID_EMAIL_MESSAGE},
+            {'type':'input', 'label': 'Homepage:','name': 'authorHomepage',
+                'value': '', 
+                'regExp': FormDialog.URL_VALIDATION, 
+                'message': FormDialog.INVALID_URL_MESSAGE}
         ];     
         this._setContent(formData); 
     },
@@ -87,7 +99,7 @@ var BuildGadgetDialog = Class.create(ConfirmDialog /** @lends BuildGadgetDialog.
     _reset: function($super){
         var user = GVS.getUser();
         
-        this._getForm().creator.value = user.getRealName();
+        this._getForm().authorName.value = user.getRealName();
         this._getForm().email.value = user.getEmail();
         $super();
     }

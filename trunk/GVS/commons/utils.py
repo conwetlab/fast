@@ -126,3 +126,17 @@ def multipleReplace(text, wordDict):
     for key in wordDict:
         text = text.replace(key, wordDict[key])
     return text
+
+def presentAndNotEmpty(dict, key):
+    return dict.get(key)!='' if dict.has_key(key) else false
+
+def valueOrEmpty(dict, key):
+    return valueOrDefault(dict, key, '')
+
+def valueOrDefault(dict, key, default):
+    return dict.get(key) if dict.has_key(key) else default
+
+def notEmptyValueOrDefault(dict, key, default):
+    return dict.get(key) if presentAndNotEmpty(dict, key) else default
+
+
