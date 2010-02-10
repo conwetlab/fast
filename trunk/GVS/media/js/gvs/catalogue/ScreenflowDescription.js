@@ -7,15 +7,42 @@ var ScreenflowDescription = Class.create(BuildingBlockDescription,
      * @extends BuildingBlockDescription
      */
     initialize: function($super, /** Hash */ properties) {
-        this.definition = new Object();
-        this.definition.screens = new Array();
-        this.definition.preconditions = new Array();
-        this.definition.postconditions = new Array();
-        this.description = new Object();
-        this.label = new Object();
-        this.tags = new Array();
-        
         $super(properties);
+
+      
+        this._screens = new Hash();
+        this._preconditions = new Hash();
+        this._postconditions = new Hash();
+    },
+
+    /**
+     * to JSON object function
+     * @type Object
+     */
+    toJSON: function() {
+        var result = {
+            "definition": {
+                "screens": this._getScreens(),
+                "preconditions": this.getPreconditions().size() > 0 ? [this.getPreconditions()] : [],
+                "postconditions": this.getPostconditions().size() > 0 ? [this.getPostconditions()] : []
+            }
+        };
+        result = Object.extend(result,{
+            "name": this.name,
+            "label": this.label,
+            "tags": this.tags,
+            "version": this.version,
+            "id": this.id,
+            "creator": this.creator,
+            "description": this.description,
+            "rights": this.rights,
+            "creationDate": this.creationDate,
+            "icon": this.icon,
+            "screenshot": this.screenshot,
+            "homepage": this.homepage,
+            "type": "screenflow"
+        });
+        return result;
     },
     
     /**
@@ -24,9 +51,9 @@ var ScreenflowDescription = Class.create(BuildingBlockDescription,
      *      Screen to be added to the
      *      Screenflow document.
      */
-    addScreen: function (/** String */ uri, /** Object */ position) {
-        this.definition.screens.push({
-            "uri":   uri,
+    addScreen: function (/** ScreenInstance */ instance, /** Object */ position) {
+        this._screens.set(instance.getUri(), {
+            "buildingblock":   instance,
             "position": position
         });
     },
@@ -35,10 +62,7 @@ var ScreenflowDescription = Class.create(BuildingBlockDescription,
      * Updates the position of the screen
      */
     updateScreen: function (/** String */ uri, /** Object */ position) {
-        var screen = this.definition.screens.detect(function(element){
-            return (element.uri == uri);
-        });
-        screen.position = position;
+        this._screens.get(uri).position = position;
     },
 
     /**
@@ -47,71 +71,37 @@ var ScreenflowDescription = Class.create(BuildingBlockDescription,
      *      Screen to be deleted from the
      *      Screenflow document.
      */
-    removeScreen: function(/** String */ id) { 
-        for (var i=0; i < this.definition.screens.length; i++) {
-            if (this.definition.screens[i].uri == id) {
-                this.definition.screens.splice(i,1);
-                break;
-            }
-        }
+    remove: function(/** String */ uri) {
+        this._screens.unset(uri);
+        this._preconditions.unset(uri);
+        this._postconditions.unset(uri);
     },
     /**
      * Adds a new *-condition to the screenflow description
      */
-    addPrePost: function(/** PrePostInstance */ instance) {
+    addPrePost: function(/** PrePostInstance */ instance, /** Object */ position) {
         switch(instance.getType()) {
             case 'pre':
-                this.definition.preconditions.push(instance.getProperties());
+                this._preconditions.set(instance.getUri(), {'buildingblock': instance,
+                                                            'position': position});
                 break;
             case 'post':
-                this.definition.postconditions.push(instance.getProperties());
+                this._postconditions.set(instance.getUri(), {'buildingblock': instance,
+                                                            'position': position});
                 break;
             default:
                 //Do nothing
         }  
     },
 
-    updatePrePost: function(/** PrePostInstance */ instance, /** Object */ position) {
-        var list;
-        switch(instance.getType()) {
-            case 'pre':
-                list = this.definition.preconditions;
-                break;
-            case 'post':
-                list = this.definition.postconditions;
-                break;
-            default:
-                list = new Array();
+    updatePrePost: function(/** String */ uri, /** Object */ position) {
+        var condition = this._preconditions.get(uri);
+        if (condition) {
+            condition.position = position;
+        } else {
+            condition = this._postconditions.get(uri);
+            condition.position = position;
         }
-        var prepost = list.detect(function(element){
-            return (element.uri == instance.getUri());
-        });
-        if (prepost) {
-            prepost.position = position;
-        }
-    },
-
-    /**
-     * Removing a *-condition
-     */
-    removePrePost: function(/** String */ id) {
-        var found = false;
-        for (var i=0; i < this.definition.preconditions.length; i++) {
-            if (this.definition.preconditions[i].uri == id) {
-                this.definition.preconditions.splice(i,1);
-                found = true;
-                break;
-            }
-        }
-        if (!found) {
-            for (var i=0; i < this.definition.postconditions.length; i++) {
-                if (this.definition.postconditions[i].uri == id) {
-                    this.definition.postconditions.splice(i,1);
-                    found = true;
-                    break;
-                }
-            }            
-        }       
     },
     
     
@@ -129,18 +119,96 @@ var ScreenflowDescription = Class.create(BuildingBlockDescription,
         return info;
     },
     
-    
+    /**
+     * Get a list of preconditions in form of a JSON Object
+     * @type Array
+     */
+    getPreconditions: function() {
+        var list = new Array();
+        this._preconditions.values().each(function(pre) {
+            var element = Object.extend(pre.buildingblock.getFactData(), {'position':
+                pre.position});
+            element = Object.extend(element, {'id' : pre.buildingblock.getId()});
+            list.push(element);
+        }.bind(this));
+        return list;
+    },
+
+    /**
+     * Get a list of postconditions in form of a JSON Object
+     * @type Array
+     */
+    getPostconditions: function() {
+        var list = new Array();
+        this._postconditions.values().each(function(post) {
+            var element = Object.extend(post.buildingblock.getFactData(), {'position':
+                post.position});
+            element = Object.extend(element, {'id' : post.buildingblock.getId()});
+            list.push(element);
+        }.bind(this));
+        return list;
+    },
+
+    /**
+     * Get a list of canvas instances
+     * @type Array
+     */
+    getCanvasInstances: function() {
+        var result = new Array();
+        var list = this._screens.values().concat(this._preconditions.values());
+        list = list.concat(this._postconditions.values());
+        list.each(function(instance){
+            result.push(instance.buildingblock);
+        });
+        return result;
+    },
+
+    /**
+     * Returns true if an element with the parameter uri is in the screen
+     * @type Boolean
+     */
+    contains: function(/** String */ uri) {
+        var element = this._screens.values().detect(function(instance) {
+                    return instance.buildingblock.getUri() == uri;
+        });
+        if (element) {
+            return true;
+        } else {
+            return false;
+        }
+    },
+
+    /**
+     * Necessary for compatibility with other BuildingblockDescriptions
+     * @type Array
+     */
+    getConditionInstances: function() {
+        return new Array();
+    },
     
     //************************ PRIVATE METHODS *******************//
     /**
      * @type Array
+     * @private
      */
     _getScreenUris: function() {
-        var uris = [];
-        this.screens.each(function (pair) {
-            uris.push(pair.key);
+        return this._screens.keys();
+    },
+
+    /**
+     * Return the list of screens
+     * @type Array
+     * @private
+     */
+    _getScreens: function() {
+        var result = new Array();
+        this._screens.values().each(function(screen){
+            result.push({
+                'uri': screen.buildingblock.getUri(),
+                'position': screen.position
+            });
         });
-        return uris;
+        return result;
     }
 });
 

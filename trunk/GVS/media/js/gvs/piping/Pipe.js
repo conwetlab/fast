@@ -20,6 +20,13 @@ var Pipe = Class.create(
         * @type String
         */
         this._id = id;
+
+        /**
+         * Valid pipe
+         * @type Boolean
+         * @private
+         */
+        this._isValid = true;
     },
 
     /**
@@ -119,6 +126,15 @@ var Pipe = Class.create(
 
         if (!reachabilityData.correct) {
              this._wire.element.setStyle({'opacity': '0.5'});
+             if (this._isValid) {
+                 Utils.showMessage("The elements you have connected are not compatible." +
+                            " It may not work", {
+                            'hide': true,
+                            'error': true
+                            });
+                 this._isValid = false;
+             }
+             
         }
     },
 
@@ -128,7 +144,8 @@ var Pipe = Class.create(
      */
     isValid: function() {
         // TODO: check if there are more conditions
-        return this.getSource().getBuildingBlockId() != this.getDestination().getBuildingBlockId();
+        return (this.getSource().getBuildingBlockId() != this.getDestination().getBuildingBlockId())
+                && this._isValid;
     },
 
 

@@ -196,6 +196,44 @@ var ScreenDescription = Class.create(BuildingBlockDescription,
     },
 
     /**
+     * Get a list of canvas instances
+     * @type Array
+     */
+    getCanvasInstances: function() {
+        var result = new Array();
+        this._buildingBlocks.values().each(function(instance){
+            result.push(instance.buildingblock);
+        });
+        return result;
+    },
+
+   /**
+    * Finds an instance  by its id
+    * @private
+    * @type ComponentInstance
+    */
+    getInstance: function(/** String */ id) {
+        return this._buildingBlocks.values().detect(function(instance) {
+                    return instance.buildingblock.getId() == id;
+        }).buildingblock;
+    },
+
+    /**
+     * Returns true if an element with the parameter uri is in the screen
+     * @type Boolean
+     */
+    contains: function(/** String */ uri) {
+        var element = this._buildingBlocks.values().detect(function(instance) {
+                    return instance.buildingblock.getUri() == uri;
+        });
+        if (element) {
+            return true;
+        } else {
+            return false;
+        }
+    },
+
+    /**
      * Get a list of pre and post condition instances 
      * @type Array
      */
@@ -209,6 +247,7 @@ var ScreenDescription = Class.create(BuildingBlockDescription,
         });
         return result;
     },
+
 
     /**
      * Get a pre by its string identifier

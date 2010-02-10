@@ -93,7 +93,7 @@ var PlanPanel = Class.create(SetListener, /** @lends PlanPanel.prototype */ {
             node: this._node,
             duration: 300,
             onAnimate: this._updateDropArea.bind(this), 
-            onEnd: this._updateDropArea.bind(this)
+            onEnd: this._showDropArea.bind(this)
         }).play();
         this._visible = false;
     },
@@ -156,7 +156,11 @@ var PlanPanel = Class.create(SetListener, /** @lends PlanPanel.prototype */ {
      */
     _updateDropArea: function() {
         var top = (parseInt(this._node.clientHeight) + 1) + 'px';
-        this._dropZone.getNode().setStyle({'top': top});    
+        this._dropZone.getNode().setStyle({'top': top});
+     },
+
+     _showDropArea: function() {
+        this._dropZone.getNode().setStyle({'top': '0px'});
      },
      
      /**

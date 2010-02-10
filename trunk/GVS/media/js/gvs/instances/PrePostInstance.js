@@ -173,9 +173,24 @@ var PrePostInstance = Class.create(ComponentInstance,
      * Set the type in pre | post
      */
     setType: function(/** String */ type) {
-        this._isConfigurable = false;
         this._type = type;
-        this._onClick();
+        if (this._isConfigurable) {
+            this._onChange({
+                'label': this._label,
+                'binding': this._type == 'pre' ? 'slot' : 'event',
+                'varname': this._label,
+                'friendcode': this._label
+            });
+        } else {
+            this._onClick();
+        }
+    },
+
+    /**
+     * Sets the configurable status
+     */
+    setConfigurable: function(/** Boolean */ configurable) {
+        this._isConfigurable = configurable;
     },
     
     /**
@@ -195,7 +210,7 @@ var PrePostInstance = Class.create(ComponentInstance,
         if (this._isConfigurable) {
             if (!this._dialog) {
                 this._dialog = new PrePostDialog(this._onChange.bind(this),
-                                                    this.getTitle());
+                                                    this.getTitle(), this._type);
             }
             this._dialog.show();
         }
@@ -238,7 +253,8 @@ var PrePostInstance = Class.create(ComponentInstance,
                 'top': 2, 
                 'left': 15
             };
-            options.ddConfig = { // A precondition in screen design is an output (data to be consumed inside the screen)
+            options.ddConfig = {// A precondition in screen design is an output 
+                                // (data to be consumed inside the screen)
                 'type': 'output',
                 'allowedTypes': ['input']
             }
@@ -276,7 +292,8 @@ var PrePostInstance = Class.create(ComponentInstance,
     destroy: function($super, /** Boolean */ removeFromServer) {
         $super();
         if (this._uri && removeFromServer) {
-            this._removeFromServer(this._uri, this._type);
+            var catalogueResource = (this._type == 'pre') ? URIs.pre : URIs.post;
+            this._removeFromServer(catalogueResource + this._id);
         }
         if (this._terminal) {
             this._terminal.destroy();
@@ -324,18 +341,13 @@ var PrePostInstance = Class.create(ComponentInstance,
             this._platformProperties.get('ezweb').set('friendcode', data.friendcode);
         }
         
-        if (this._type != data.type) {
-            if (this._uri) {
-                this._removeFromServer(this._uri, this._type);    
-            }
-            this._type = data.type;
-            
+        if (!this._uri) {
             // Calling the server to add the pre/post
             var catalogueResource = (this._type == 'pre') ? URIs.pre : URIs.post;
             this._id = new Date().valueOf();
             PersistenceEngine.sendPost(catalogueResource,
-                            null, this.toJSON(), this, 
-                            this._onPostSuccess, Utils.onAJAXError); 
+                            null, this.toJSON(), this,
+                            this._onPostSuccess, Utils.onAJAXError);
         } else {
             this._onClick();
         }
@@ -346,18 +358,13 @@ var PrePostInstance = Class.create(ComponentInstance,
      */
     _onPostSuccess: function (/** XMLHttpRequest */ transport) {
         var result = JSON.parse(transport.responseText);
-        var previousUri = this._uri;
         this._uri = result.uri;
         
-        // Update notification listeners
-        if (previousUri) {
-            this._inferenceEngine.removeReachabilityListener(previousUri, this._view);
-        }
         
         this._inferenceEngine.addReachabilityListener(this._uri, this._view);
         
         // Notify change
-        this._changeHandler(previousUri, this);
+        this._changeHandler(this);
         
     },
     
@@ -374,7 +381,7 @@ var PrePostInstance = Class.create(ComponentInstance,
      * This function removes a pre/post from the server
      * @private
      */
-    _removeFromServer: function(/** String */ uri, /** String */ type) {
+    _removeFromServer: function(/** String */ uri) {
         PersistenceEngine.sendDelete(uri,
             this, 
             this._onDeleteSuccess, Utils.onAJAXError);

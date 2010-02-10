@@ -39,35 +39,23 @@ var Builder = Class.create( /** @lends Builder.prototype */ {
     // **************** PRIVATE METHODS **************** //
 
     _onBuildGadgetDialogCallback: function(/** Object */ data) {       
-        // save screenflow
-        // TODO: to be managed by the PM
-       
-        Utils.addProperties(this._description, data);
-        this._description.label['en-gb'] = data.name;
-        this._description.description['en-gb'] = data.desc;
-        
-        var saveParams = {'buildingblock': this._description.toJSON()};
-        
-        PersistenceEngine.sendPost(URIs.screenflow, saveParams, null, 
-                this, this._onSaveCallback, this._onError);
-    },
-    
-    _onSaveCallback: function(/** XMLHttpRequest */ transport) {
-        var json = JSON.parse(transport.responseText);
-        this._description.id = json.id;
-        this._description.uri = URIs.buildingblock + '/' + json.id;
-        
-        this._buildGadget();  
-    },
-    
-    _buildGadget: function() { 
-        
-        storeParams = {
-            'gadget': this._description.toJSON(),
-            'screenflow': this._description.id
-        };        
-        
-        PersistenceEngine.sendPost(URIs.store, storeParams, null,
+
+       var gadgetInfo = Object.extend(data, {
+                                            'description': {
+                                                'en-gb': data.desc
+                                             },
+                                             'uri': 'buildingblock/' + 
+                                                    this._description.getId(),
+                                             'label': {
+                                                 'en-gb': data.name
+                                                },
+                                             'id': this._description.getId()
+                                            });
+       var storeParams = {
+            'gadget': Object.toJSON(gadgetInfo),
+            'screenflow': this._description.getId()
+        };
+       PersistenceEngine.sendPost(URIs.store, storeParams, null,
                 this, this._onBuildSuccess, this._onError);
     },
     
