@@ -3,6 +3,7 @@ package fast.servicescreen.client.gui.codegen_js;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
@@ -21,7 +22,7 @@ public class CodeGenViewer
 	@SuppressWarnings("unused")
 	private ServiceScreenDesignerWep designer = null;
 	private FlexTable table = null;
-	private TextArea templateShowBox, jsShowBox, jsTestvalueShowBox;
+	private TextArea templateShowBox, jsShowBox;
 	public CodeGenerator generator = null;
 	
 	public CodeGenViewer(ServiceScreenDesignerWep designer)
@@ -72,11 +73,6 @@ public class CodeGenViewer
 		jsShowBox = new TextArea();
 		jsShowBox.setSize("18cm", "3cm");
 		
-		//create .js TestvalueShowBox
-		jsTestvalueShowBox = new TextArea();
-		jsTestvalueShowBox.setSize("18cm", "3cm");
-		jsTestvalueShowBox.setReadOnly(true);
-		
 		//create generateButton
 		Button generateButton = new Button("generate");
 		GenerateButtonHandler generateButtonHandler = new GenerateButtonHandler();
@@ -111,34 +107,41 @@ public class CodeGenViewer
 			}
 		});
 		
+		Button openHtml_Button = new Button("open Html");
+		openHtml_Button.addClickHandler(new ClickHandler()
+		{
+			@Override
+			public void onClick(ClickEvent event)
+			{
+				//irgendwie html hosten und hier angeben
+				String url = "embeddedOperator.html"; 
+			
+				try{
+					Window.open(url, "Wrapper_Operator", "no features?");
+				}catch(Exception e)
+				{
+					Window.alert(e.getLocalizedMessage());
+				}
+				
+			}
+		});
+		
 		//adding all together
 		table.setWidget(row, 0, generateButton);
 		table.setWidget(row, 1, restoreButton);
-		table.setWidget(row, 2, saveButton);
 		row++;
 		table.setWidget(row, 0, new Label("The choosen template"));
 		table.setWidget(row, 1, templateShowBox);
 		row++;	//next line
 		table.setWidget(row, 0, new Label("The .js code"));
 		table.setWidget(row, 1, jsShowBox);
-		row++;	//next line
-		table.setWidget(row, 0, new Label("The value result"));
-		table.setWidget(row, 1, jsTestvalueShowBox);	
+		row++;
+		table.setWidget(row, 0, saveButton);
+		table.setWidget(row, 1, openHtml_Button);
 		
 		return table;
 	}
-	
-	
-	
-	
-	
-	//Getters, Setters and Helpers
-	
-	public void set_jsTestValue_Text(String text)
-	{
-		if (jsTestvalueShowBox != null)
-			jsTestvalueShowBox.setText(text);
-	}
+
 	
 	public void set_js_Text(String text)
 	{

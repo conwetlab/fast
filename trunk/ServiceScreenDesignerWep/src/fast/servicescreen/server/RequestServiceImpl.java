@@ -61,7 +61,7 @@ public class RequestServiceImpl extends RemoteServiceServlet implements RequestS
 	{
 		try
 		{
-			FileWriter writer = new FileWriter(path + "\\genCode\\embeddedOperator.html", false);
+			FileWriter writer = new FileWriter(path + "\\war\\servicescreendesignerwep\\embeddedOperator.html", false);
 			
 			writer.write(fileContent);
 			

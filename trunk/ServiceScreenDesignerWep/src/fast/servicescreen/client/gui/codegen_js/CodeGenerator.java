@@ -26,6 +26,7 @@ public class CodeGenerator
 	private HashMap<String, String> table = null;
 	private String rootTemplate = "";
 	private boolean writeFile_result = true;
+	private String endbrakets = "";
 	
 	@SuppressWarnings("unused")
 	private String outputPortName = "";	//use later to generate translation code
@@ -35,9 +36,9 @@ public class CodeGenerator
 	private String charsFromTo 	= "charsFromTo(";
 	private String wordsFromTo 	= "wordsFromTo(";
 	private String until 		= "until(";
-	private String from 		= "from(";
+	private String _from 		= "from(";
 	
-	private String getElementsByTagname = "xmlResponse.getElementsByTagName('";
+	private boolean firstTime = true;
 	
 	/**
 	 * The constructor creates the first template
@@ -59,12 +60,10 @@ public class CodeGenerator
 			"{\n" +
 			
 			//fill request url
-			"   //fill imput data into request template \n" + 
 			"   var prerequest = '<<prerequest>>'; \n" +
 			"\n" +
 			
 			//should replace inports to real values in runtime!
-			"  //search and replace (Operator - Time replacement) \n" +
 			"  <<prerequestreplaces>>" +
 			"\n" +
 			
@@ -73,22 +72,20 @@ public class CodeGenerator
 			"\n" +
 			
 			//sending/recieving the request
-			"  //the code for sending a request to same domain resource \n"+
 			"  <<sendrequest>> \n" +
-			"  var xmlResponse =  response; \n" + 
 			"\n" +
 			
 			//the outputPort variable
-			"  //the outputPort variable \n"+
-			"  <<outputport>> \n" +
-			"\n" +
-			
-			"  //the transformation code \n"+
-			"  <<transformation>> \n" +
+//			"  <<outputport>> \n" +
 			"\n" +
 			
 			//declare method end
 			"}\n";
+
+		//resets some variables
+		endbrakets = "";
+		firstTime = true;
+		operationStart = true;
 		
 		return rootTemplate;
 	}
@@ -125,13 +122,35 @@ public class CodeGenerator
 
 		return rootTemplate;
 	}
-	
 
 	private void add_PreRequest_toTable()
 	{	
 		// lookup the gui request text field
 		String prerequestText = designer.serviceScreen.getRequestTemplate();
 		table.put("<<prerequest>>", prerequestText);
+	}
+	
+	@SuppressWarnings("unchecked")
+	private void add_PreRequestReplaces_toTable()
+	{	
+		// lookup the gui input ports
+		FactPort currentInpPort = null;
+		String preReqRepText = "";
+		
+		for (Iterator<FactPort> iterator = designer.serviceScreen.iteratorOfPreconditions(); iterator.hasNext();)
+		{
+			currentInpPort = iterator.next();
+			
+			//build prerequestreplaces
+			preReqRepText += "prerequest = prerequest.replace(/<";
+			preReqRepText += currentInpPort.get("name");
+			preReqRepText += ">/g,"; 
+			preReqRepText += currentInpPort.get("name");
+			preReqRepText += "); \n ";
+		}
+		
+		//add result lines in the table
+		table.put("<<prerequestreplaces>>", preReqRepText);
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -180,53 +199,26 @@ public class CodeGenerator
 		
 		table.put("<<outputport>>", outputPortVar);
 	}
-	
-	@SuppressWarnings("unchecked")
-	private void add_PreRequestReplaces_toTable()
-	{	
-		// lookup the gui input ports
-		FactPort currentInpPort = null;
-		String preReqRepText = "";
-		
-		for (Iterator<FactPort> iterator = designer.serviceScreen.iteratorOfPreconditions(); iterator.hasNext();)
-		{
-			currentInpPort = iterator.next();
-			
-			//build prerequestreplaces
-			preReqRepText += "prerequest = prerequest.replace(/<";
-			preReqRepText += currentInpPort.get("name");
-			preReqRepText += ">/g,"; 
-			preReqRepText += currentInpPort.get("name");
-			preReqRepText += /*".data.keyword*/ "); \n ";	//TODO with, or without ?!
-		}
-		
-		//add result lines in the table
-		table.put("<<prerequestreplaces>>", preReqRepText);
-	}
-	
+
 	private void add_SendRequest_toTable()
 	{
 		String sendRequest =
-		
 			"var xmlHttp = null; \n" + 
-			"  var respone = null; \n" + 
+			"  var xmlResponse = null; \n" + 
 			"  try \n" +
 			"  { \n" + 
-			"     // Mozilla, Opera, Safari sowie Internet Explorer (ab v7) \n" + 
 			"     xmlHttp = new XMLHttpRequest(); \n" + 
 			"  } \n" +
 			"  catch(e) \n" +
 			"  { \n" + 
 			"      try \n" +
 			"      { \n" + 
-			"          // MS Internet Explorer (ab v6) \n" + 
 			"          xmlHttp  = new ActiveXObject('Microsoft.XMLHTTP'); \n" + 
 			"      } \n" +
 			"      catch(e) \n" +
 			"      { \n" + 
 			"            try \n" +
 			"            { \n" + 
-			"                  // MS Internet Explorer (ab v5) \n" + 
 			"                  xmlHttp  = new ActiveXObject('Msxml2.XMLHTTP'); \n" + 
 			"            } \n" +
 			"            catch(e) \n" +
@@ -238,24 +230,40 @@ public class CodeGenerator
 			"\n" + 
 			"  if (xmlHttp) \n" +
 			"  { \n" + 
-			"      //the <resource> tag should contain the requested information \n" +
-			"      xmlHttp.open('GET', 'http://localhost:8080/requestServlet?url=http%3A%2F%2Fopen.api.sandbox.ebay.com%2Fshopping%3Fappid%3DKasselUn-efea-4b93-9505-5dc2ef1ceecd%26version%3D517%26callname%3DFindItems%26ItemSort%3DEndTime%26QueryKeywords%3DUSB%26responseencoding%3DXML', true); \n" + 
+			"      xmlHttp.open('GET', '" + requestServlet_URL + "' + replaceEscapeCharacter(request), true); \n" + 
 			"      xmlHttp.onreadystatechange = function () { \n" + 
 			"            if (xmlHttp.readyState == 4) \n" +
 			"            { \n" + 
-			"                  //the response should save requested information \n" +
-			"                  respone = xmlHttp.responseText; \n" + 
+			"                  xmlResponse = xmlHttp.responseXML; \n" + 
+			"\n" +
+			"					var currentTags = null; \n\n" +
+			"					var currentCount = null; \n\n" +
+			"					var result = new String(''); \n\n" +
+			"				   <<transformationCode>> \n" +
+
+			endbrakets +
+			
+			//"				result = result.replace(/./g, '\\\n');\n" +	//breaking the lines in the result
+			
+			"				document.getElementById('show').value = 'result: ' + result; \n" + 
 			"            } \n" + 
-			"      }; \n" + 
+			"   } } } \n" + 
 			"\n" +
 			"      xmlHttp.send(null); \n" + 
+			"\n" +
+			"      return 'waiting for response...'; \n" + 
 			"  } \n";
 
+		
+		//reset endBrakets
+		endbrakets = "";
+		
 		//add result in the table
 		table.put("<<sendrequest>>", sendRequest);
 	}
 	
-	private String transCode = "";
+	private String transCode = "";	// should only be added ONE time
+	private String currentTags = "currentTags";
 	private void add_Translation_toTable()
 	{
 		transCode = "";
@@ -266,9 +274,10 @@ public class CodeGenerator
 		//run threw all rules and append js code. Returns js cdoe    
 		transform(rootRule);
 		
-		table.put("<<transformation>>", transCode);
+		table.put("<<transformationCode>>", transCode);
 	}
 
+	private boolean operationStart = true;
 	private void transform(FASTMappingRule rule)
 	{
 		if(RuleUtil.isCompleteRule(rule))
@@ -282,7 +291,48 @@ public class CodeGenerator
 			
 			if ("createObject".equals(kind))
 			{
-				//watch the example for loops
+				String tmpCode = "";
+				
+				//from to
+				String from = rule.getSourceTagname();
+				String target = rule.getTargetElemName();
+				
+				String curTag = currentTags;
+				if(firstTime)
+				{
+					firstTime = false;	//reset by setStartTemplate()
+					
+					curTag = "xmlResponse";		//In first case we access from as current (root)Tag
+				}
+
+				
+				String lengthName =  from + "_length";
+				
+				//count of elements to iterate
+				tmpCode += "var " + lengthName + " = " + curTag + ".getElementsByTagName('" + from + "').length; \n";
+				
+				//count var for loop
+				String countVar = from + "_Count";
+				
+				//créate loop - code				
+				tmpCode += 
+							//get searched elementsList out of xmlResponse 
+							"var " + from + " = " + curTag + ".getElementsByTagName('" + from + "'); \n\n" +
+							
+							"for(var " + countVar + " = 0; " + countVar + " < " + lengthName + "; ++" + countVar + ")\n" +
+							"{\n" +
+							currentTags + " = " + from + ".item(" + countVar + ")  ;\n\n" +
+							
+							"currentCount = " + countVar + ";\n" + 	//adds a current index variable 
+							
+							"result += '" + target + "Object - '; \n" +	//adds a 'new object' in the result
+							
+							"\n\n";
+							
+							endbrakets += "} \n";	//manages end breaktes
+				
+				//overtake in real transcode
+				transCode += tmpCode;
 			}
 			else if ("fillAttributes".equals(kind))
 			{
@@ -295,6 +345,8 @@ public class CodeGenerator
 				{
 					tmpCode = "";
 					
+					String lastSourceTagname = "";
+					
 					current_opList = opList_iter.next();
 					
 					if(current_opList.size() > 0 && current_opList.get(0).kind == Kind.constant)
@@ -305,13 +357,11 @@ public class CodeGenerator
 					else
 					{
 						Operation lastTagnameOperation = opHandler.getLastTagnameOf(current_opList);
-						String lastSourceTagname = lastTagnameOperation.value;
-						
-						//TODO following codegen should be made for any possible elementItemID ()
+						lastSourceTagname = lastTagnameOperation.value;
 						
 						//create code for getting the element/elementsItem
-						tmpCode += trimBoth +  getElementsByTagname
-								+ lastSourceTagname + "').getItem(" + "1" + "))";
+						tmpCode += trimBoth +  currentTags + ".getElementsByTagName('"
+								+ lastSourceTagname + "').item(0).textContent)";
 						
 						//create code for rest of operation list
 						int count = current_opList.indexOf(lastTagnameOperation) + 1;
@@ -325,7 +375,17 @@ public class CodeGenerator
 					}
 					
 					//write into transCode
-					transCode += tmpCode;	
+					if(operationStart)
+					{
+						transCode += "result += '" + lastSourceTagname + "Attribute - ' + " + tmpCode;
+						
+						operationStart = false;
+					}
+					else
+					{
+						transCode += tmpCode;	
+					}
+					
 					if(opList_iter.hasNext())
 					{
 						transCode += " + ";
@@ -333,6 +393,8 @@ public class CodeGenerator
 					else
 					{
 						transCode += "; \n";
+						
+						operationStart = true;
 					}
 				}
 			}
@@ -366,10 +428,10 @@ public class CodeGenerator
 								tmpCode += "'" + signs + "', ";
 							}
 							
-							tmpCode += op.value + ")";
+							tmpCode += op.value.replace("-", ", ") + ")";
 							break;
 				
-			case from: 		tmpCode = from + tmpCode + ", ";
+			case from: 		tmpCode = _from + tmpCode + ", ";
 							break;
 
 				
@@ -445,6 +507,21 @@ public class CodeGenerator
 
 		return writeFile_result;
 	}
+
+	
+	/**
+	 * The path to the standalone GET Proxy Servlet
+	 * 
+	 * Add a Param before sending. Param should be the url u want to request,
+	 * but fill with escape code first:
+	 * url = http://open.api.sandbox.ebay.com/shopping?appid=KasselUn-efea-4b93-9505-5dc2ef1ceecd&version=517&callname=FindItems&ItemSort=EndTime&QueryKeywords=USB&responseencoding=XML
+	 * 
+	 * -> with URL Escape Codes: / -> %2F, = -> %3D, ? = %3F, & -> %26, : -> %3A
+	 * xxx = http%3A%2F%2Fopen.api.sandbox.ebay.com%2Fshopping%3Fappid%3DKasselUn-efea-4b93-9505-5dc2ef1ceecd%26version%3D517%26callname%3DFindItems%26ItemSort%3DEndTime%26QueryKeywords%3DUSB%26responseencoding%3DXML
+	 * 
+	 * to do this, there is a replaceEscapeCharacter method in this class!
+	 * */
+	private final String requestServlet_URL = "http://localhost:8080/servicescreendesignerwep/requestServlet?url=";  
 	
 	/**
 	 * contains html end
@@ -459,7 +536,7 @@ public class CodeGenerator
 		"					onclick='this.form.t1.value=transform(this.form.t2.value)'>	\n" +
 		"				<br><br><br><br> \n" +
 		"				RESULT:	\n" +
-		"				<input type=text name=t1 value='press the button above..' size=200>\n" +
+		"				<input type=text name=t1 id='show' value='press the button above..' size=200>\n" +
 		"			</form>\n" +
 		"		</body>\n" +
 		"	</html>\n";
@@ -474,10 +551,8 @@ public class CodeGenerator
 		"	  <title>Insert title here</title> \n" +
 		"	<script type='text/javascript'> \n \n" +
 
-		"	//all functions from util \n" +
 		"	function from(str, sign, sepNr) \n" +
 		"	{	 \n" +
-		"		//Trims all needless whitespaces \n" +
 		"		var tmp = new String(Trim(str)); \n" +
 		"		var save = ''; \n" +
 
@@ -486,7 +561,6 @@ public class CodeGenerator
 		"			sepNr = 1; \n" +
 		"		} \n" +
 
-		"		//build the result string \n" +
 		"		while (tmp.indexOf(sign) != -1 && sepNr > 0) \n" +
 		"		{ \n" +
 		"			save = tmp.substring(tmp.indexOf(sign), tmp.indexOf(sign) \n" +
@@ -497,7 +571,6 @@ public class CodeGenerator
 		"			sepNr--; \n" +
 		"		} \n" +
 
-		"		//append last apperance of sign \n" +
 		"		tmp = save + tmp; \n" +
 
 		"		return tmp; \n" +
@@ -505,7 +578,6 @@ public class CodeGenerator
 
 		"	function until(str, sign, sepNr) \n" +
 		"	{ \n" +
-		"		//Trims all needless whitespaces \n" +
 		"		var tmp = new String(Trim(str)); \n" +
 		"		var res = ''; \n" +
 		"		var length = sign.length; \n" +
@@ -515,7 +587,6 @@ public class CodeGenerator
 		"			sepNr = 1; \n" +
 		"		} \n" +
 
-		"		//build the result string \n" +
 		"		while(tmp.indexOf(sign) != -1 && sepNr > 0) \n" +
 		"		{ \n" +
 		"			res += tmp.substring(0, tmp.indexOf(sign) + length); \n" +
@@ -530,7 +601,6 @@ public class CodeGenerator
 
 		"	function charsFromTo(str, from, to) \n" +
 		"	{ \n" +
-		"		//Trims all needless whitespaces \n" +
 		"		var tmp = new String(Trim(str)); \n" +
 		"		var res = ''; \n" +
 		
@@ -544,7 +614,6 @@ public class CodeGenerator
 		"			to = tmp.length; \n" +
 		"		} \n" +
 		
-		"		//build the result string \n" +
 		"		for(from; from <= to; from++) \n" +
 		"		{ \n" +
 		"			res += charAt(tmp, from); \n" +
@@ -555,8 +624,6 @@ public class CodeGenerator
 		
 		"	function charAt(str, index) \n" +
 		"	{ \n" +
-		"		//Trims all needless whitespaces \n" +
-		"		//var tmp = new String(Trim(str)); \n" +
 		"		var res = ''; \n" +
 		
 		"		if(index < 1) \n" +
@@ -577,7 +644,6 @@ public class CodeGenerator
 		
 		"	function wordsFromTo(str, from, to) \n" +
 		"	{ \n" +
-		"		//Trims all needless whitespaces \n" +
 		"		var tmp = new String(Trim(str)); \n" +
 		"		var res = ''; \n" +
 		
@@ -594,7 +660,6 @@ public class CodeGenerator
 		"			to = length; \n" +
 		"		} \n" +
 		
-		"		//build the result string} \n" +
 		"		for(from; from <= to; from++) \n" +
 		"		{ \n" +
 		"			res =  res + wordAt(str, from) + ' '; \n" +
@@ -605,7 +670,6 @@ public class CodeGenerator
 		
 		"	function wordAt(str, nr) \n" +
 		"	{ \n" +
-		"		//Trims all needless whitespaces \n" +
 		"		var res = new String(Trim(str)); \n" +
 		"		var _split = res.split(' '); \n" +
 		"		var length = _split.length; \n" +
@@ -661,8 +725,21 @@ public class CodeGenerator
 		
 		"		return s; \n" +
 		"	} \n" +
-		"\n";
+		"\n" +
+		
+		"   function replaceEscapeCharacter(url)\n" +
+		"   {\n" +
+		"		url = url.replace(/\\//g, '%2F'); \n" +
+	    "		url = url.replace(/=/g, '%3D'); \n" +
+	    "		url = url.replace(/\\?/g, '%3F'); \n" +
+	    "		url = url.replace(/&/g, '%26'); \n" +
+	    "		url = url.replace(/:/g, '%3A'); \n" +
+	    "		return url; \n" +
+	    "    } \n\n";
 
+	
+	
+	
 	//Getters, Setters, Helpers
 	
 	/**
