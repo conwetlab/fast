@@ -24,6 +24,13 @@ var FormDialog = Class.create( /** @lends FormDialog.prototype */ {
         this._contentNode = new Element ('div',{
             'class': 'dialogContent'
         });
+        this._messageNode = new Element ('div',{
+            'class': 'dialogMessageZone hidden'
+        });
+        var messageWrapper = new Element ('div',{
+            'class': 'dialogMessageWrapper'
+        });
+        messageWrapper.appendChild(this._messageNode);
         this._buttonNode = new Element ('div',{
             'class': 'dialogButtonZone'
         });
@@ -41,6 +48,7 @@ var FormDialog = Class.create( /** @lends FormDialog.prototype */ {
                 break;
             default:
                 containerDiv.appendChild (this._contentNode);
+                containerDiv.appendChild (messageWrapper);
                 containerDiv.appendChild (this._buttonNode);
                 break;
         }
@@ -69,7 +77,7 @@ var FormDialog = Class.create( /** @lends FormDialog.prototype */ {
         GVS.setEnabled(false);
         this._dialog.show();
     },
-    
+
     // **************** PRIVATE METHODS **************** //
     /** 
      * initDialogInterface
@@ -246,8 +254,33 @@ var FormDialog = Class.create( /** @lends FormDialog.prototype */ {
         // Just in case
         dojo.parser.parse(this._contentNode);
     },    
-    
-    
+
+    /**
+     * Sets the message area content.
+     *
+     * @private
+     */
+    _setMessage: function(/** String */ message, type) {
+        if (arguments.length == 0) {
+            this._messageNode.className = 'dialogMessageZone hidden';
+            this._messageNode.update();
+            return;
+        }
+
+        this._messageNode.className = 'dialogMessageZone';
+        switch (type) {
+            case FormDialog.MESSAGE_WARNING:
+                this._messageNode.addClassName('warning');
+                break;
+            case FormDialog.MESSAGE_ERROR:
+                this._messageNode.addClassName('error');
+                break;
+            default:
+        }
+
+        this._messageNode.innerHTML = message;
+    },
+
     /**
      * Construct a form line provided the label text and the input node.
      * @type DOMNode
@@ -301,5 +334,9 @@ FormDialog.URL_VALIDATION = '([hH][tT][tT][pP][sS]?)://[A-Za-z0-9-_]+(\.[A-Za-z0
 FormDialog.INVALID_POSITIVE_MESSAGE = 'Invalid number';
 FormDialog.INVALID_EMAIL_MESSAGE = 'Invalid email address';
 FormDialog.INVALID_URL_MESSAGE = 'Invalid URL';
+
+FormDialog.MESSAGE_INFO = "info";
+FormDialog.MESSAGE_WARNING = "warning";
+FormDialog.MESSAGE_ERROR = "error";
 
 // vim:ts=4:sw=4:et:

@@ -16,12 +16,12 @@ var ConfirmDialog = Class.create(FormDialog, /** @lends ConfirmDialog.prototype 
         //Initializing buttons
         switch(buttons) {
             case 'ok':
-                this._addButton ('Ok',     this._onOk.bind(this));
+                this._okButton = this._addButton ('Ok',     this._onOk.bind(this));
                 break;
             
             case 'ok_cancel':
             default:
-                this._addButton ('Ok',     this._onOk.bind(this));
+                this._okButton = this._addButton ('Ok',     this._onOk.bind(this));
                 this._addButton ('Cancel', this._onCancel.bind(this));
                 break;
         }
@@ -33,7 +33,16 @@ var ConfirmDialog = Class.create(FormDialog, /** @lends ConfirmDialog.prototype 
     
     
     // **************** PRIVATE METHODS **************** //
-    
+
+    /**
+     * Enables/disables the ok button allowing/disallowing users to continue.
+     *
+     * @private
+     */
+    _setDisabled: function(disabled) {
+        this._okButton.setDisabled(disabled);
+    },
+
     /** 
      * onOK
      * This function is called when ok button is pressed (if any)

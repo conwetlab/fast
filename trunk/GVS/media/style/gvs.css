@@ -89,6 +89,29 @@ h4{
     padding: 1px 5px;
 }
 
+.dialogMessageWrapper {
+    line-height:1.5em;
+    text-align: center;
+    padding: 5px 0;
+    min-height: 1.5em;
+}
+
+.dialogMessageZone {
+    -moz-border-radius: 4px 4px;
+    -webkit-border-radius: 4px 4px;
+    background-color: #A5F7A5;
+    color: #000000;
+    font-weight: bold;
+    display: inline-block;
+    padding: 1px 5px;
+}
+.dialogMessageZone.hidden {
+    visibility: hidden;
+}
+.dialogMessageZone.error {
+    background-color: #F7A6A6;
+}
+
 #messages.hidden {
     opacity: 0;
     filter:alpha(opacity=0);
