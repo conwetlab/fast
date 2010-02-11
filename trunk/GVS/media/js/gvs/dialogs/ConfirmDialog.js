@@ -6,12 +6,13 @@ var ConfirmDialog = Class.create(FormDialog, /** @lends ConfirmDialog.prototype 
      * @constructs
      * @param buttons
      *     ['ok_cancel' (default) | 'ok']
+     * @param _options
      */ 
-    initialize: function($super, /** String */ title, /** String */ buttons) {
+    initialize: function($super, /** String */ title, /** String */ buttons, /** Hash */_options) {
         $super({
             'title': title,
             'style': 'display:none;'
-        });
+        }, _options);
 
         //Initializing buttons
         switch(buttons) {

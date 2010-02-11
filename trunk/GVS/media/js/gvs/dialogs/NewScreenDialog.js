@@ -13,7 +13,7 @@ var NewScreenDialog = Class.create(ConfirmDialog /** @lends NewScreenDialog.prot
          */
         this._available = true;
 
-        $super("New Screen");
+        $super("New Screen", 'ok_cancel', {'createMessageZone': true});
     },
     
     

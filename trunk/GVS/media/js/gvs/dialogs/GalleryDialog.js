@@ -15,7 +15,9 @@ var GalleryDialog = Class.create(FormDialog, /** @lends GalleryDialog.prototype 
         $super({
             'title': title,
             'style': 'display:none;'
-        }, FormDialog.POSITION_TOP);
+        }, {
+            'buttonPosition': FormDialog.POSITION_TOP
+        });
         
         var properties = Utils.variableOrDefault(_properties, {});
 

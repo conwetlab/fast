@@ -13,7 +13,7 @@ var NewScreenflowDialog = Class.create(ConfirmDialog /** @lends NewScreenflowDia
          */
         this._available = true;
 
-        $super("New Screenflow");
+        $super("New Screenflow", 'ok_cancel', {'createMessageZone': true});
     },
     
     

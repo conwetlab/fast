@@ -8,13 +8,27 @@ var FormDialog = Class.create( /** @lends FormDialog.prototype */ {
      *     * buttonsNode: containing the different buttons: handled by this class
      * @constructs
      * @param properties Hash
-     * @param _buttonPosition String(Optional) Sets the layout of the dialog,
-     *         stablishing the position of the button zone (top, bottom, left, right)
+     * @param _options Hash(Optional)
+     *         * (String) buttonPosition: Sets the layout of the dialog,
+     *         stablishing the position of the button zone (top, bottom, left,
+     *         right). Default: FormDialog.POSITION_BOTTOM
+     *         * (Boolean) createMessageZone: Adds a new zone "messageNode" that
+     *         can be used to show dinamic messages. Default: false
+     *         * (Numeric) minMessageLines: This option allows you to define a
+     *         minimum number of lines to reserve for the messageNode zone. This
+     *         option is ignored if createMessageZone == false. Default: 1
      * @abstract
      */
-    initialize: function(properties, _buttonPosition){
+    initialize: function(properties, _options) {
+        _options = Utils.variableOrDefault(_options, {});
+        var options = Object.extend ({
+            'buttonPosition': FormDialog.POSITION_BOTTOM,
+            'createMessageZone': false,
+            'minMessageLines': 1
+        }, _options);
 
-        var position = Utils.variableOrDefault(_buttonPosition, FormDialog.POSITION_BOTTOM);
+
+        var position = options.buttonPosition;
         this._dialog = new dijit.Dialog(properties);
         
         this._headerNode = new Element ('div',{
@@ -44,14 +58,22 @@ var FormDialog = Class.create( /** @lends FormDialog.prototype */ {
         switch (position) {
             case FormDialog.POSITION_TOP:
                 containerDiv.appendChild (this._buttonNode);
+
+                if (options.createMessageZone)
+                    containerDiv.appendChild (messageWrapper);
+
                 containerDiv.appendChild (this._contentNode);
                 break;
             default:
                 containerDiv.appendChild (this._contentNode);
-                containerDiv.appendChild (messageWrapper);
+
+                if (options.createMessageZone)
+                    containerDiv.appendChild (messageWrapper);
+
                 containerDiv.appendChild (this._buttonNode);
                 break;
         }
+        messageWrapper.style.minHeight = ((options.minMessageLines * 18) + 2) + 'px';
        
         this._dialog.attr ('content', containerDiv);
         
@@ -263,7 +285,7 @@ var FormDialog = Class.create( /** @lends FormDialog.prototype */ {
     _setMessage: function(/** String */ message, type) {
         if (arguments.length == 0) {
             this._messageNode.className = 'dialogMessageZone hidden';
-            this._messageNode.update();
+            this._messageNode.update('&nbsp;');
             return;
         }
 
