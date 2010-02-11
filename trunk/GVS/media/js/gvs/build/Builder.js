@@ -33,7 +33,13 @@ var Builder = Class.create( /** @lends Builder.prototype */ {
      */
     buildGadget: function (/** ScreenflowDescription */ description) {
         this._description = description;
-        this._buildGadgetDialog.show(description.label['en-gb']);
+        this._buildGadgetDialog.show({
+            'name': this._description.name,
+            'shortname': this._description.name,
+            'version': this._description.version,
+            'desc': this._description.description['en-gb'],
+            'owner': GVS.getUser().getUserName()
+        });
     }, 
 
     // **************** PRIVATE METHODS **************** //

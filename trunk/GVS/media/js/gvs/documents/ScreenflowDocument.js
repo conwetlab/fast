@@ -48,7 +48,7 @@ var ScreenflowDocument = Class.create(PaletteDocument,
      * @override
      */
     positionUpdated: function(/** ComponentInstance */ element, /** Object */ position) {
-        switch (element.constructor) {
+       switch (element.constructor) {
             case ScreenInstance:
                 this._description.updateScreen(element.getUri(), position);
                 break;
@@ -56,7 +56,7 @@ var ScreenflowDocument = Class.create(PaletteDocument,
                 this._description.updatePrePost(element.getUri(), position);
                 break;
         }
-       
+       this._setDirty(true);
     },
 
 
@@ -239,7 +239,7 @@ var ScreenflowDocument = Class.create(PaletteDocument,
                 this._setSelectedElement();
                 break;
         }
-        
+        this._setDirty(true);
         // Only for piping
         //instance.getView().addGhost();
         return true;
@@ -276,6 +276,12 @@ var ScreenflowDocument = Class.create(PaletteDocument,
                 'save',
                 this._save.bind(this),
                 false // disabled by default
+        ));
+        this._addToolbarElement('properties', new ToolbarButton(
+            'Edit screen properties',
+            'properties',
+            this._propertiesDialog.show.bind(this._propertiesDialog),
+            true
         ));
         this._addToolbarElement('previewElement', new ToolbarButton(
                 'Preview selected element',
@@ -398,7 +404,6 @@ var ScreenflowDocument = Class.create(PaletteDocument,
         // FIXME: we must learn about document reachability from the inference 
         //        engine. By the moment, one screen == deployable screenflow ;)
         this._toolbarElements.get('build').setEnabled(canvas.size() > 0);
-        this._toolbarElements.get('save').setEnabled(canvas.size() > 0);
     },
     
     
@@ -501,6 +506,7 @@ var ScreenflowDocument = Class.create(PaletteDocument,
         this.mine._refreshReachability();
         
         this.mine._setSelectedElement(instance);
+        this.mine._setDirty(true);
     },
     
     /**

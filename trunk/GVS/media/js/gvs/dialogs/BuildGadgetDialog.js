@@ -24,9 +24,11 @@ var BuildGadgetDialog = Class.create(ConfirmDialog /** @lends BuildGadgetDialog.
      * show
      * @override
      */
-    show: function ($super, /** String */ title) {
+    show: function ($super, /** Object */ properties) {
         $super();
-        this._getForm().name.setValue(title);
+        $H(properties).each(function(pair) {
+            this._getForm()[pair.key].setValue(pair.value);
+        }.bind(this));
     },
 
     // **************** PRIVATE METHODS **************** //
@@ -50,10 +52,10 @@ var BuildGadgetDialog = Class.create(ConfirmDialog /** @lends BuildGadgetDialog.
             {'type':'title', 'value': 'Gadget information'},
             {'type':'input', 'label': 'Gadget Name:','name': 'name', 'value': '', 'required': true},
             {'type':'input', 'label': 'Gadget Short Name:', 'name': 'shortname', 'value': ''},
-            {'type':'input', 'label': 'Owner:','name': 'owner', 'value': 'Morfeo', 'required': true},
-            {'type':'input', 'label': 'Version:','name': 'version', 'value': '1.0', 'required': true},
+            {'type':'input', 'label': 'Owner:','name': 'owner', 'value': '', 'required': true},
+            {'type':'input', 'label': 'Version:','name': 'version', 'value': '', 'required': true},
             {'type':'input', 'label': 'Vendor:','name': 'vendor', 'value': 'Morfeo'},
-            {'type':'input', 'label': 'Gadget Description:','name': 'desc', 'value': 'Write your description here...'},
+            {'type':'input', 'label': 'Gadget Description:','name': 'desc', 'value': ''},
             {'type':'input', 'label': 'Image URL:','name': 'imageURI', 
                 'value': '', 
                 'regExp': FormDialog.URL_VALIDATION, 

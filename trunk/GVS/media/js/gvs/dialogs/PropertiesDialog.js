@@ -72,8 +72,7 @@ var PropertiesDialog = Class.create(ConfirmDialog /** @lends PropertiesDialog.pr
                     'value': this._description.name,
                     'required': true},
             {'type':'input', 'label': 'Version:','name': 'version',
-                    'value': this._description.version,
-                    'required': true},
+                    'value': this._description.version},
             {'type':'input', 'label': 'Tags:','name': 'tags',
                     'value': this._description.tags.collect(function(tag) {
                                     return tag.label['en-gb'];

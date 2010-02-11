@@ -23,8 +23,8 @@ var ScreenflowDescription = Class.create(BuildingBlockDescription,
         var result = {
             "definition": {
                 "screens": this._getScreens(),
-                "preconditions": this.getPreconditions().size() > 0 ? [this.getPreconditions()] : [],
-                "postconditions": this.getPostconditions().size() > 0 ? [this.getPostconditions()] : []
+                "preconditions": this.getPreconditions(),//.size() > 0 ? [this.getPreconditions()] : [],
+                "postconditions": this.getPostconditions()//.size() > 0 ? [this.getPostconditions()] : []
             }
         };
         result = Object.extend(result,{
@@ -128,7 +128,7 @@ var ScreenflowDescription = Class.create(BuildingBlockDescription,
         this._preconditions.values().each(function(pre) {
             var element = Object.extend(pre.buildingblock.getFactData(), {'position':
                 pre.position});
-            element = Object.extend(element, {'id' : pre.buildingblock.getId()});
+            element = Object.extend(element, pre.buildingblock.getProperties());
             list.push(element);
         }.bind(this));
         return list;
@@ -143,7 +143,7 @@ var ScreenflowDescription = Class.create(BuildingBlockDescription,
         this._postconditions.values().each(function(post) {
             var element = Object.extend(post.buildingblock.getFactData(), {'position':
                 post.position});
-            element = Object.extend(element, {'id' : post.buildingblock.getId()});
+            element = Object.extend(element, post.buildingblock.getProperties());
             list.push(element);
         }.bind(this));
         return list;

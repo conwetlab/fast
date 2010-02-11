@@ -178,8 +178,8 @@ var PrePostInstance = Class.create(ComponentInstance,
             this._onChange({
                 'label': this._label,
                 'binding': this._type == 'pre' ? 'slot' : 'event',
-                'varname': this._label,
-                'friendcode': this._label
+                'varname': this._label.replace(" ",""),
+                'friendcode': this._label.replace(" ", "")
             });
         } else {
             this._onClick();
