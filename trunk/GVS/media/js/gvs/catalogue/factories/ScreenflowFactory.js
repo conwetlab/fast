@@ -1,8 +1,8 @@
-var ScreenFactory = Class.create(BuildingBlockFactory,
+var ScreenflowFactory = Class.create(BuildingBlockFactory,
     /** @lends ScreenFactory.prototype */ {
 
     /**
-     * Factory of screen building blocks.
+     * Factory of screenflow building blocks.
      * @constructs
      * @extends BuildingBlockFactory
      */
@@ -26,7 +26,7 @@ var ScreenFactory = Class.create(BuildingBlockFactory,
      * @override
      */
     getBuildingBlockType: function (){
-        return Constants.BuildingBlock.SCREEN;
+        return Constants.BuildingBlock.SCREENFLOW;
     },
     
     
@@ -42,7 +42,7 @@ var ScreenFactory = Class.create(BuildingBlockFactory,
                 result.push(this._buildingBlockDescriptions.get(uri));
             } else {
                 throw "Ooops. Something went wrong. " + 
-                      "ScreenFactory::getBuildingBlocks";
+                      "ScreenflowFactory::getBuildingBlocks";
             }        
         }.bind(this));
         return result;
@@ -81,7 +81,7 @@ var ScreenFactory = Class.create(BuildingBlockFactory,
      * @type ScreenInstance
      */
     getInstance: function(/** BuildingBlockDescription */description, /** InferenceEngine */ engine) {
-        return new ScreenInstance(description, engine);
+        return new ScreenflowInstance(description, engine);
     },
     
     // **************** PRIVATE METHODS **************** //
@@ -93,7 +93,7 @@ var ScreenFactory = Class.create(BuildingBlockFactory,
      */
     _onSuccess: function(/**XMLHttpRequest*/ transport) {
         var metadata = transport.responseText.evalJSON();
-        //update the Screen Factory
+        //update the Screenflow Factory
         this.mine._updateBuildingBlockDescriptions(metadata.screens);
         //call the callback function passed as argument
         this.callback();
@@ -103,11 +103,11 @@ var ScreenFactory = Class.create(BuildingBlockFactory,
      * This function creates the different screen Descriptions
      * @private
      */
-    _updateBuildingBlockDescriptions: function (/** Array */ screenDescriptions) {
+    _updateBuildingBlockDescriptions: function (/** Array */ screenflowDescriptions) {
 
-        for (var i=0; i< screenDescriptions.length ; i++) {
-            this._buildingBlockDescriptions.set(screenDescriptions[i].uri,
-                                        new ScreenDescription (screenDescriptions[i]));
+        for (var i=0; i< screenflowDescriptions.length ; i++) {
+            this._buildingBlockDescriptions.set(screenflowDescriptions[i].uri,
+                                        new ScreenflowDescription (screenflowDescriptions[i]));
         }
     }
 });

@@ -59,6 +59,7 @@ var GVS = Class.create(ToolbarModel,    /** @lends GVS.prototype */
         this._dialogs.set("addScreen", new AddScreenDialog());
         this._dialogs.set("newScreenflow", new NewScreenflowDialog());
         this._dialogs.set("newScreen", new NewScreenDialog());
+        this._dialogs.set("browseScreenflows", new ManageScreenflowsDialog());
         this._dialogs.set("browseScreens", new ManageScreensDialog());
         this._dialogs.set("preferences", new PreferencesDialog());
         
@@ -67,6 +68,7 @@ var GVS = Class.create(ToolbarModel,    /** @lends GVS.prototype */
             newScreenflow: this._newScreenflow.bind(this),
             addScreen: this._addScreen.bind(this),
             newScreen: this._newScreen.bind(this),
+            browseScreenflows: this._browseScreenflows.bind(this),
             browseScreens: this._browseScreens.bind(this),
             showAbout: this._showAboutDialog.bind(this),
             wrapperService: this._openWrapperService.bind(this)
@@ -159,6 +161,15 @@ var GVS = Class.create(ToolbarModel,    /** @lends GVS.prototype */
     _addScreen: function(){
         this._dialogs.get("addScreen").show();
     },
+
+    /**
+     * browse screenflows
+     * @private
+     */
+    _browseScreenflows: function(){
+        this._dialogs.get("browseScreenflows").show();
+    },
+
     /**
      * browse screens
      * @private
@@ -254,7 +265,7 @@ var GVS = Class.create(ToolbarModel,    /** @lends GVS.prototype */
                             'browseScreenflows': {
                                 'type': 'Action',
                                 'action': new MenuAction({
-                                    'label': 'Screenflow',
+                                    'label': 'Screenflows',
                                     'weight': 2,
                                     'handler': function() {
                                         this.action("browseScreenflows");

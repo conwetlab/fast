@@ -32,14 +32,14 @@ var ScreenflowDocument = Class.create(PaletteDocument,
     // **************** PUBLIC METHODS **************** //
 
     /**
-     * Loads the definition of a screen, when the screen is opened
+     * Loads the definition of a screenflow, when the screen is opened
      */
     loadInstances: function() {
 
         var screenFactory = Catalogue.
             getBuildingBlockFactory(Constants.BuildingBlock.SCREEN);
-        screenFactory.cacheBuildingBlocks(this._canvasCache.getFormURI(),
-                    this._onScreensLoaded.bind(this));
+        screenFactory.cacheBuildingBlocks(this._canvasCache.getScreenURIs(),
+                    this._onScreenLoaded.bind(this));
     },
 
 
@@ -568,13 +568,47 @@ var ScreenflowDocument = Class.create(PaletteDocument,
      * On screens loaded
      * @private
      */
-    _onScreensLoaded: function() {
+    _onScreenLoaded: function() {
         var screenFactory = Catalogue.
                 getBuildingBlockFactory(Constants.BuildingBlock.SCREEN);
-        var screens = screenFactory.getBuildingBlocks(this._canvasCache.getResourceURIs());
+        var screens = screenFactory.getBuildingBlocks(this._canvasCache.getScreenURIs());
         this._createInstances(screenFactory, screens, this._areas.get('screen'));
-        // TODO
-        // this._createConditions();
+        this._canvasCache.setLoaded(Constants.BuildingBlock.SCREEN);
+        //this._loadConditions(); TODO
+    },
+
+    /**
+     * Create the pre and post conditions
+     * @private
+     */
+     _createConditions: function(/** Array */ conditionList, /** DropZone */ area) {
+        conditionList.each(function(condition) {
+            var description = new BuildingBlockDescription(condition);
+            var instance = new PrePostInstance(description, this._inferenceEngine, false);
+            instance.onFinish(true, condition.position);
+            var zonePosition = area.getNode();
+            $("main").appendChild(instance.getView().getNode());
+            var effectivePosition = Geometry.adaptInitialPosition(zonePosition,
+                                    instance.getView().getNode(), condition.position);
+            $("main").removeChild(instance.getView().getNode());
+            this._drop(area, instance, effectivePosition, true);
+            this._description.addPrePost(instance, effectivePosition);
+        }.bind(this));
+    },
+
+    /**
+     * Function that loads the pre and post conditions
+     * @private
+     */
+    _loadConditions: function() {
+
+        if (this._canvasCache.areInstancesLoaded()) {
+            // Load pre and postconditions
+            this._createConditions(this._canvasCache.getPreconditions(), this._areas.get('pre'));
+            this._createConditions(this._canvasCache.getPostconditions(), this._areas.get('post'));
+            this._setDirty(false);
+            this._refreshReachability();
+        }
     }
 });
 

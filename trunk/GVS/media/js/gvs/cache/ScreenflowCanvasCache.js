@@ -1,44 +1,34 @@
-var ScreenCanvasCache = Class.create( /** @lends ScreenCanvasCache.prototype */ {
+var ScreenflowCanvasCache = Class.create( /** @lends ScreenCanvasCache.prototype */ {
     /**
      * 
      * @constructs
      */ 
     initialize: function (/** Object */ properties) {
         /**
-         * Buildingblocks of the screen
+         * Preconditions of the screenflow
          * @type Array
          * @private
          */
-        this._buildingblocks = properties.definition.buildingblocks;
+        this._screens = properties.definition.screens ?
+                        properties.definition.screens :
+                        new Array();
 
         /**
-         * Pipes of the screen
+         * Preconditions of the screenflow
          * @type Array
          * @private
          */
-        this._pipes = properties.definition.pipes;
+        this._preconditions = properties.definition.preconditions ?
+                              properties.definition.preconditions :
+                              new Array();
 
         /**
-         * Triggers of the screen
+         * Postconditions of the screenflow
          * @type Array
          * @private
          */
-        this._triggers = properties.definition.triggers;
-
-        /**
-         * Preconditions of the screen
-         * @type Array
-         * @private
-         */
-        this._preconditions = properties.preconditions[0] ? properties.preconditions[0]:
-                               new Array();
-
-        /**
-         * Postconditions of the screen
-         * @type Array
-         * @private
-         */
-        this._postconditions = properties.postconditions[0] ? properties.postconditions[0]:
+        this._postconditions = properties.definition.postconditions
+                               ? properties.definition.postconditions:
                                new Array();
 
         /**
@@ -51,53 +41,15 @@ var ScreenCanvasCache = Class.create( /** @lends ScreenCanvasCache.prototype */ 
   
     
     // **************** PRIVATE METHODS **************** //
-    /**
-     * Gets the uri of the form (if any) in form of Array, to
-     * get compatibility with factory method
-     * @type Array
-     */
-    getFormURI: function () {
-        var form = this._buildingblocks.detect(function(element) {
-            return (element.uri.search(/forms/i) != -1);
-        });
-        if (form) {
-            return [form.uri];
-        } else {
-            return [];
-        }
-        
-    },
 
     /**
-     * Returns the list of operator URIs
+     * Returns the list of screens
      * @type Array
      */
-    getOperatorURIs: function() {
-        var elements = this._buildingblocks.findAll(function(element) {
-            return (element.uri.search(/operators/i) != -1);
-        });
+    getScreenURIs: function() {
         var result = new Array();
-        elements.each(function(element) {
-            if (result.indexOf(element.uri) == -1) {
-                result.push(element.uri);
-            }
-        });
-        return result;
-    },
-
-    /**
-     * Returns the list of resource URIs
-     * @type Array
-     */
-    getResourceURIs: function() {
-        var elements = this._buildingblocks.findAll(function(element) {
-            return (element.uri.search(/services/i) != -1);
-        });
-        var result = new Array();
-        elements.each(function(element) {
-            if (result.indexOf(element.uri) == -1) {
-                result.push(element.uri);
-            }
+        this._screens.each(function(element) {
+            result.push(element.uri);
         });
         return result;
     },
@@ -119,31 +71,15 @@ var ScreenCanvasCache = Class.create( /** @lends ScreenCanvasCache.prototype */ 
     },
 
     /**
-     * Returns the list of pipes
-     * @type Array
-     */
-    getPipes: function() {
-        return this._pipes;
-    },
-
-    /**
-     * Returns the list of triggers
-     * @type Array
-     */
-    getTriggers: function() {
-        return this._triggers;
-    },
-
-    /**
      * Returns the id of an element by its URI
      * @type Array
      */
     getIds: function(/** String */ uri) {
-        var elements = this._buildingblocks.findAll(function(element) {
+        var elements = this._screens.findAll(function(element) {
             return element.uri == uri;
         });
         if (elements) {
-            return elements.collect(function(element){return element.id});
+            return elements.collect(function(element){return element.uri});
         } else {
             return null;
         }
@@ -154,8 +90,8 @@ var ScreenCanvasCache = Class.create( /** @lends ScreenCanvasCache.prototype */ 
      * @type Object
      */
     getPosition: function (/** String */ id) {
-        var element = this._buildingblocks.detect(function(element) {
-            return element.id == id;
+        var element = this._screens.detect(function(element) {
+            return element.uri == id;
         });
         if (element) {
             return element.position;
@@ -177,10 +113,7 @@ var ScreenCanvasCache = Class.create( /** @lends ScreenCanvasCache.prototype */ 
      * @type Boolean
      */
     areInstancesLoaded: function() {
-        var result = (this._elementsLoaded.indexOf(Constants.BuildingBlock.RESOURCE) != -1);
-        result = result && (this._elementsLoaded.indexOf(Constants.BuildingBlock.OPERATOR) != -1);
-        result = result && (this._elementsLoaded.indexOf(Constants.BuildingBlock.FORM) != -1);
-        return result;
+        return this._elementsLoaded.indexOf(Constants.BuildingBlock.SCREEN) != -1;
     }
     
 });

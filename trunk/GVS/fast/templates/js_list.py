@@ -6,6 +6,7 @@ file_list = [
 
     # Factories
     "gvs/catalogue/factories/BuildingBlockFactory.js",
+    "gvs/catalogue/factories/ScreenflowFactory.js",
     "gvs/catalogue/factories/ScreenFactory.js",
     "gvs/catalogue/factories/DomainConceptFactory.js",
     "gvs/catalogue/factories/FormFactory.js",
@@ -63,6 +64,7 @@ file_list = [
 
     # Component instances
     "gvs/instances/ComponentInstance.js",
+    "gvs/instances/ScreenflowInstance.js",
     "gvs/instances/ScreenInstance.js",
     "gvs/instances/PrePostInstance.js",
     "gvs/instances/ResourceInstance.js",
@@ -112,6 +114,7 @@ file_list = [
     "gvs/dialogs/NewScreenflowDialog.js",
     "gvs/dialogs/NewScreenDialog.js",
     "gvs/dialogs/GalleryDialog.js",
+    "gvs/dialogs/ManageScreenflowsDialog.js",
     "gvs/dialogs/ManageScreensDialog.js",
     "gvs/dialogs/PreviewDialog.js",
     "gvs/dialogs/TriggerDialog.js",

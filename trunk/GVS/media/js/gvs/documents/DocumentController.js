@@ -82,7 +82,16 @@ var DocumentController = Class.create(
         });
         this.addDocument(screenflow);
     },
-    
+
+    /**
+     * Opens an existing screenflow by its id
+     */
+    loadScreenflow: function(/** String */ id) {
+
+        var uri = URIs.buildingblock + id;
+        PersistenceEngine.sendGet(uri, this, this._onScreenflowLoadSuccess, this._onLoadError);
+    },
+
     /**
      * Creates a new screen document
      */
@@ -247,6 +256,17 @@ var DocumentController = Class.create(
      */
     _onKeyPressed: function(/** String */ key) {
         this._currentDocument.onKeyPressed(key);
+    },
+
+    /**
+     * On screenflow load success
+     * @private
+     */
+    _onScreenflowLoadSuccess: function (/** XMLHttpRequest */ transport) {
+        var screenflowData = JSON.parse(transport.responseText);
+        var screenflow = new ScreenflowDocument(screenflowData);
+        this.addDocument(screenflow);
+        screenflow.loadInstances();
     },
 
     /**

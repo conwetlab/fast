@@ -15,6 +15,7 @@ Object.extend(Catalogue, {
      */
     _factories: {
         'screen': new ScreenFactory(),
+        'screenflow': new ScreenflowFactory(),
         'domainConcept': new DomainConceptFactory(),
         'form': new FormFactory(),
         'resource': new ResourceFactory(),
