@@ -62,7 +62,6 @@ import eu.morfeoproject.fast.model.ScreenDefinition;
 import eu.morfeoproject.fast.model.ScreenFlow;
 import eu.morfeoproject.fast.model.Trigger;
 import eu.morfeoproject.fast.model.WithConditions;
-import eu.morfeoproject.fast.server.CatalogueAccessPoint;
 import eu.morfeoproject.fast.util.DateFormatter;
 import eu.morfeoproject.fast.vocabulary.CTAG;
 import eu.morfeoproject.fast.vocabulary.DC;
