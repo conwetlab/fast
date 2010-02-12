@@ -259,6 +259,7 @@ public abstract class Resource {
 		model.open();
 		model.setNamespace("dc", DC.NS_DC.toString());
 		model.setNamespace("fgo", FGO.NS_FGO.toString());
+		model.setNamespace("ctag", CTAG.NS_CTAG.toString());
 		
 		URI resourceUri = this.getUri();
 		for (String key : this.getLabels().keySet())
