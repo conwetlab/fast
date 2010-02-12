@@ -25,6 +25,11 @@ import eu.morfeoproject.fast.catalogue.NotFoundException;
 import eu.morfeoproject.fast.catalogue.OntologyInvalidException;
 import eu.morfeoproject.fast.catalogue.ResourceException;
 import eu.morfeoproject.fast.model.FormElement;
+import eu.morfeoproject.fast.model.templates.BuildingBlockTemplate;
+import eu.morfeoproject.fast.model.templates.CollectionTemplate;
+import eu.morfeoproject.fast.model.templates.TemplateManager;
+import eu.morfeoproject.fast.util.Accept;
+import freemarker.template.TemplateException;
 
 /**
  * Servlet implementation class FormElementServlet
@@ -46,69 +51,108 @@ public class FormElementServlet extends GenericServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		PrintWriter writer = response.getWriter();
-		String format = request.getHeader("accept") != null ? request.getHeader("accept") : MediaType.APPLICATION_JSON;
-		String[] chunks = request.getRequestURI().split("/");
-		String id = chunks[chunks.length-1];
-		if (id.equalsIgnoreCase("forms")) id = null;
-		
-		if (id == null) {
-			// List the members of the collection
-			logger.info("Retrieving all formElements");
-			try {
-				if (format.equals(MediaType.APPLICATION_RDF_XML) ||
-						format.equals(MediaType.APPLICATION_TURTLE)) {
-					response.setContentType(format);
-					Model model = RDF2Go.getModelFactory().createModel();
-					try {
-						model.open();
-						for (FormElement f : CatalogueAccessPoint.getCatalogue().listFormElements()) {
-							Model feModel = f.createModel();
-							for (String ns : feModel.getNamespaces().keySet())
-								model.setNamespace(ns, feModel.getNamespace(ns));
-							model.addModel(feModel);
-							feModel.close();
-						}
-						model.writeTo(writer, Syntax.forMimeType(format));
-					} catch (Exception e) {
-						e.printStackTrace();
-					} finally {
-						model.close();
-					}
-				} else { // by default returns APPLICATION_JSON
-					response.setContentType(MediaType.APPLICATION_JSON);
-					JSONArray formElements = new JSONArray();
-					for (FormElement f : CatalogueAccessPoint.getCatalogue().listFormElements())
-						formElements.put(f.toJSON());
-					writer.print(formElements.toString(2));
-				}
-				response.setStatus(HttpServletResponse.SC_OK);
-			} catch (JSONException e) {
-				e.printStackTrace();
-				response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
-			}
+		Accept accept = new Accept(request);
+		String format = accept.getDominating();
+		String servlet = request.getServletPath();
+		String url = request.getRequestURL().toString();
+		String[] chunks = url.substring(url.indexOf(servlet) + 1).split("/");
+		String id = chunks.length > 1 ? chunks[1] : null;
+		String extension = chunks.length > 2 ? chunks[2] : null;
+		if (MediaType.forExtension(id) != "") {
+			extension = id;
+			id = null;
+		}
+
+		if (extension == null) {
+			redirectToFormat(request, response, format);
 		} else {
-			// Retrieve the addressed member of the collection
-			String uri = request.getRequestURL().toString();
-			logger.info("Retrieving formElement "+uri);
-			FormElement f = CatalogueAccessPoint.getCatalogue().getFormElement(new URIImpl(uri));
-			if (f == null) {
-				response.sendError(HttpServletResponse.SC_NOT_FOUND, "The resource "+uri+" has not been found.");
-			} else {
+			if (id == null) {
+				// List the members of the collection
+				logger.info("Retrieving all forms");
+				// Override format regarding the given extension
+				format = MediaType.forExtension(extension);
 				try {
 					if (format.equals(MediaType.APPLICATION_RDF_XML) ||
 							format.equals(MediaType.APPLICATION_TURTLE)) {
 						response.setContentType(format);
-						Model feModel = f.createModel();
-						feModel.writeTo(writer, Syntax.forMimeType(format));
-						feModel.close();
-					} else {
+						Model model = RDF2Go.getModelFactory().createModel();
+						try {
+							model.open();
+							for (FormElement f : CatalogueAccessPoint.getCatalogue().listFormElements()) {
+								Model feModel = f.createModel();
+								for (String ns : feModel.getNamespaces().keySet())
+									model.setNamespace(ns, feModel.getNamespace(ns));
+								model.addModel(feModel);
+								feModel.close();
+							}
+							model.writeTo(writer, Syntax.forMimeType(format));
+						} catch (Exception e) {
+							e.printStackTrace();
+						} finally {
+							model.close();
+						}
+					} else if (format.equals(MediaType.TEXT_HTML) ||
+							format.equals(MediaType.APPLICATION_XHTML_XML) ||
+							format.equals(MediaType.APPLICATION_XML)) {
+						response.setContentType(MediaType.TEXT_HTML);
+						if (TemplateManager.getDefaultEncoding() != null)
+							response.setCharacterEncoding(TemplateManager.getDefaultEncoding());
+						if (TemplateManager.getLocale() != null)
+							response.setLocale(TemplateManager.getLocale());
+						CollectionTemplate.process(CatalogueAccessPoint.getCatalogue().listFormElements(), writer);
+					} else { // by default returns APPLICATION_JSON
 						response.setContentType(MediaType.APPLICATION_JSON);
-						writer.print(f.toJSON().toString(2));
-					}				
+						JSONArray formElements = new JSONArray();
+						for (FormElement f : CatalogueAccessPoint.getCatalogue().listFormElements())
+							formElements.put(f.toJSON());
+						writer.print(formElements.toString(2));
+					}
 					response.setStatus(HttpServletResponse.SC_OK);
 				} catch (JSONException e) {
 					e.printStackTrace();
 					response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
+				} catch (TemplateException e) {
+					e.printStackTrace();
+					response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
+				}
+			} else {
+				// Override format regarding the given extension
+				format = MediaType.forExtension(extension);
+				// Retrieve the addressed member of the collection
+				String uri = url.substring(0, url.indexOf(extension) - 1);
+				logger.info("Retrieving formElement "+uri);
+				FormElement form = CatalogueAccessPoint.getCatalogue().getFormElement(new URIImpl(uri));
+				if (form == null) {
+					response.sendError(HttpServletResponse.SC_NOT_FOUND, "The resource "+uri+" has not been found.");
+				} else {
+					try {
+						if (format.equals(MediaType.APPLICATION_RDF_XML) ||
+								format.equals(MediaType.APPLICATION_TURTLE)) {
+							response.setContentType(format);
+							Model feModel = form.createModel();
+							feModel.writeTo(writer, Syntax.forMimeType(format));
+							feModel.close();
+						} else if (format.equals(MediaType.TEXT_HTML) ||
+								format.equals(MediaType.APPLICATION_XHTML_XML) ||
+								format.equals(MediaType.APPLICATION_XML)) {
+							response.setContentType(MediaType.TEXT_HTML);
+							if (TemplateManager.getDefaultEncoding() != null)
+								response.setCharacterEncoding(TemplateManager.getDefaultEncoding());
+							if (TemplateManager.getLocale() != null)
+								response.setLocale(TemplateManager.getLocale());
+							BuildingBlockTemplate.process(form, writer);
+						} else {
+							response.setContentType(MediaType.APPLICATION_JSON);
+							writer.print(form.toJSON().toString(2));
+						}				
+						response.setStatus(HttpServletResponse.SC_OK);
+					} catch (JSONException e) {
+						e.printStackTrace();
+						response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
+					} catch (TemplateException e) {
+						e.printStackTrace();
+						response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
+					}
 				}
 			}
 		}
@@ -121,7 +165,8 @@ public class FormElementServlet extends GenericServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		BufferedReader reader = request.getReader();
 		PrintWriter writer = response.getWriter();
-		String format = request.getHeader("accept") != null ? request.getHeader("accept") : MediaType.APPLICATION_JSON;
+		Accept accept = new Accept(request);
+		String format = accept.getDominating();
 		StringBuffer buffer = new StringBuffer();
 		String line = reader.readLine();
 		while (line != null) {
@@ -134,18 +179,27 @@ public class FormElementServlet extends GenericServlet {
 		// the collection and it is returned.
 		try {
 			JSONObject json = new JSONObject(body);
-			FormElement formElement = parseFormElement(json, null);
+			FormElement form = parseFormElement(json, null);
 			try {
-				CatalogueAccessPoint.getCatalogue().addFormElement(formElement);
+				CatalogueAccessPoint.getCatalogue().addFormElement(form);
 				if (format.equals(MediaType.APPLICATION_RDF_XML) ||
 						format.equals(MediaType.APPLICATION_TURTLE)) {
 					response.setContentType(format);
-					Model formElementModel = formElement.createModel();
+					Model formElementModel = form.createModel();
 					formElementModel.writeTo(writer, Syntax.forMimeType(format));
 					formElementModel.close();
+				} else if (format.equals(MediaType.TEXT_HTML) ||
+						format.equals(MediaType.APPLICATION_XHTML_XML) ||
+						format.equals(MediaType.APPLICATION_XML)) {
+					response.setContentType(MediaType.TEXT_HTML);
+					if (TemplateManager.getDefaultEncoding() != null)
+						response.setCharacterEncoding(TemplateManager.getDefaultEncoding());
+					if (TemplateManager.getLocale() != null)
+						response.setLocale(TemplateManager.getLocale());
+					BuildingBlockTemplate.process(form, writer);
 				} else {
 					response.setContentType(MediaType.APPLICATION_JSON);
-					JSONObject newForm = formElement.toJSON();						
+					JSONObject newForm = form.toJSON();						
 //					for (Iterator it = newForm.keys(); it.hasNext(); ) {
 //						String key = it.next().toString();
 //						json.put(key, newForm.get(key));
@@ -168,6 +222,9 @@ public class FormElementServlet extends GenericServlet {
 			} catch (ResourceException e) {
 				e.printStackTrace();
 				response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
+			} catch (TemplateException e) {
+				e.printStackTrace();
+				response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
 			}
 		} catch (JSONException e) {
 			e.printStackTrace();
@@ -184,7 +241,8 @@ public class FormElementServlet extends GenericServlet {
 	protected void doPut(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		BufferedReader reader = request.getReader();
 		PrintWriter writer = response.getWriter();
-		String format = request.getHeader("accept") != null ? request.getHeader("accept") : MediaType.APPLICATION_JSON;
+		Accept accept = new Accept(request);
+		String format = accept.getDominating();
 		String[] chunks = request.getRequestURI().split("/");
 		String id = chunks[chunks.length-1];
 		if (id.equalsIgnoreCase("forms")) id = null;
@@ -203,17 +261,26 @@ public class FormElementServlet extends GenericServlet {
 			String uri = request.getRequestURL().toString();
 			try {
 				JSONObject json = new JSONObject(body);
-				FormElement formElement = parseFormElement(json, new URIImpl(uri));
-				CatalogueAccessPoint.getCatalogue().updateFormElement(formElement);
+				FormElement form = parseFormElement(json, new URIImpl(uri));
+				CatalogueAccessPoint.getCatalogue().updateFormElement(form);
 				if (format.equals(MediaType.APPLICATION_RDF_XML) ||
 						format.equals(MediaType.APPLICATION_TURTLE)) {
 					response.setContentType(format);
-					Model formElementModel = formElement.createModel();
+					Model formElementModel = form.createModel();
 					formElementModel.writeTo(writer, Syntax.forMimeType(format));
 					formElementModel.close();
+				} else if (format.equals(MediaType.TEXT_HTML) ||
+						format.equals(MediaType.APPLICATION_XHTML_XML) ||
+						format.equals(MediaType.APPLICATION_XML)) {
+					response.setContentType(MediaType.TEXT_HTML);
+					if (TemplateManager.getDefaultEncoding() != null)
+						response.setCharacterEncoding(TemplateManager.getDefaultEncoding());
+					if (TemplateManager.getLocale() != null)
+						response.setLocale(TemplateManager.getLocale());
+					BuildingBlockTemplate.process(form, writer);
 				} else {
 					response.setContentType(MediaType.APPLICATION_JSON);
-					JSONObject newForm = formElement.toJSON();						
+					JSONObject newForm = form.toJSON();						
 //					for (Iterator it = newForm.keys(); it.hasNext(); ) {
 //						String key = it.next().toString();
 //						json.put(key, newForm.get(key));
@@ -236,6 +303,9 @@ public class FormElementServlet extends GenericServlet {
 			} catch (ResourceException e) {
 				e.printStackTrace();
 				response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
+			} catch (TemplateException e) {
+				e.printStackTrace();
+				response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
 			}
 		}
 	}

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<#import "common.html" as com>
+
+<@com.page title="FAST Catalogue">
+
+  <h2>About: ${bb.uri}</h2>
+  <dl xmlns:dc="http://purl.org/dc/elements/1.1/"
+      xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+      xmlns:fgo="http://purl.oclc.org/fast/ontology/gadget#"
+      xmlns:foaf="http://xmlns.com/foaf/0.1/"
+      about="${bb.uri}">
+    <dt>Creation date:</dt>
+    <dd property="dc:date" datatype="xsd:date">${bb.creationDate?datetime}</dd>
+    <dt>Version:</dt>
+    <dd property="fgo:hasVersion">${bb.version}</dd>
+    <dt>Creator:</dt>
+    <dd property="dc:creator">${bb.creator}</dd>
+    <dt>Label:</dt>
+    <dd property="rdfs:label"><#list bb.labels?keys as key>${key}: ${bb.labels[key]}<br /></#list></dd>
+    <dt>Description:</dt>
+    <dd property="dc:title"><#list bb.descriptions?keys as key>${key}: ${bb.descriptions[key]}<br /></#list></dd>
+    <dt>Icon:</dt>
+    <dd><img property="fgo:hasIcon" src="${bb.icon}" alt="Icon of ${bb.uri}" /></dd>
+    <dt>Homepage:</dt>
+    <dd><a property="foaf:homepage" href="${bb.homepage}">${bb.homepage}</a></dd>
+    <dt>Rights:</dt>
+    <dd><a property="dc:rights" href="${bb.rights}">${bb.rights}</a></dd>
+    <dt>Code:</dt>
+    <dd><a property="fgo:hasCode" href="${bb.code}">${bb.code}</a></dd>
+    <dt>Screenshot:</dt>
+    <dd><img property="fgo:hasScreenshot" src="${bb.screenshot}" alt="Screenshot of ${bb.uri}" /></dd>
+  </dl>
+
+  <hr />
+  <p id="formats">Raw data in: <a href="${bb.uri}.ttl" title="Turtle Representation">Turtle</a> | <a href="${bb.uri}.rdf" title="RDF/XML Representation">RDF/XML</a> | <a href="${bb.uri}.json" title="JSON Representation">JSON</a></p>
+  <p id="credits">This is part of <a href="http://fast-fp7project.morfeo-project.org/">FAST</a>, a Small or Medium-scale Focused Research Collaborative Project (STREP) supported by the European Commission under its 7th Framework Programme (FP7).</p>
+
+</@com.page>

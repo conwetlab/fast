@@ -25,6 +25,11 @@ import eu.morfeoproject.fast.catalogue.NotFoundException;
 import eu.morfeoproject.fast.catalogue.OntologyInvalidException;
 import eu.morfeoproject.fast.catalogue.ResourceException;
 import eu.morfeoproject.fast.model.BackendService;
+import eu.morfeoproject.fast.model.templates.BuildingBlockTemplate;
+import eu.morfeoproject.fast.model.templates.CollectionTemplate;
+import eu.morfeoproject.fast.model.templates.TemplateManager;
+import eu.morfeoproject.fast.util.Accept;
+import freemarker.template.TemplateException;
 
 /**
  * Servlet implementation class BackendServiceServlet
@@ -46,69 +51,102 @@ public class BackendServiceServlet extends GenericServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		PrintWriter writer = response.getWriter();
-		String format = request.getHeader("accept") != null ? request.getHeader("accept") : MediaType.APPLICATION_JSON;
-		String[] chunks = request.getRequestURI().split("/");
-		String id = chunks[chunks.length-1];
-		if (id.equalsIgnoreCase("services")) id = null;
-		
-		if (id == null) {
-			// List the members of the collection
-			logger.info("Retrieving all services");
-			try {
-				if (format.equals(MediaType.APPLICATION_RDF_XML) ||
-						format.equals(MediaType.APPLICATION_TURTLE)) {
-					response.setContentType(format);
-					Model model = RDF2Go.getModelFactory().createModel();
-					try {
-						model.open();
-						for (BackendService b : CatalogueAccessPoint.getCatalogue().listBackendServices()) {
-							Model bsModel = b.createModel();
-							for (String ns : bsModel.getNamespaces().keySet())
-								model.setNamespace(ns, bsModel.getNamespace(ns));
-							model.addModel(bsModel);
-							bsModel.close();
-						}
-						model.writeTo(writer, Syntax.forMimeType(format));
-					} catch (Exception e) {
-						e.printStackTrace();
-					} finally {
-						model.close();
-					}
-				} else { // by default returns APPLICATION_JSON
-					response.setContentType(MediaType.APPLICATION_JSON);
-					JSONArray services = new JSONArray();
-					for (BackendService b : CatalogueAccessPoint.getCatalogue().listBackendServices())
-						services.put(b.toJSON());
-					writer.print(services.toString(2));
-				}
-				response.setStatus(HttpServletResponse.SC_OK);
-			} catch (JSONException e) {
-				e.printStackTrace();
-				response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
-			}
+		Accept accept = new Accept(request);
+		String format = accept.getDominating();
+		String servlet = request.getServletPath();
+		String url = request.getRequestURL().toString();
+		String[] chunks = url.substring(url.indexOf(servlet) + 1).split("/");
+		String id = chunks.length > 1 ? chunks[1] : null;
+		String extension = chunks.length > 2 ? chunks[2] : null;
+		if (MediaType.forExtension(id) != "") {
+			extension = id;
+			id = null;
+		}
+
+		if (extension == null) {
+			redirectToFormat(request, response, format);
 		} else {
-			// Retrieve the addressed member of the collection
-			String uri = request.getRequestURL().toString();
-			logger.info("Retrieving backend service "+uri);
-			BackendService b = CatalogueAccessPoint.getCatalogue().getBackendService(new URIImpl(uri));
-			if (b == null) {
-				response.sendError(HttpServletResponse.SC_NOT_FOUND, "The resource "+uri+" has not been found.");
-			} else {
+			if (id == null) {
+				// List the members of the collection
+				logger.info("Retrieving all services");
 				try {
 					if (format.equals(MediaType.APPLICATION_RDF_XML) ||
 							format.equals(MediaType.APPLICATION_TURTLE)) {
 						response.setContentType(format);
-						Model bsModel = b.createModel();
-						bsModel.writeTo(writer, Syntax.forMimeType(format));
-						bsModel.close();
+						Model model = RDF2Go.getModelFactory().createModel();
+						try {
+							model.open();
+							for (BackendService service : CatalogueAccessPoint.getCatalogue().listBackendServices()) {
+								Model bsModel = service.createModel();
+								for (String ns : bsModel.getNamespaces().keySet())
+									model.setNamespace(ns, bsModel.getNamespace(ns));
+								model.addModel(bsModel);
+								bsModel.close();
+							}
+							model.writeTo(writer, Syntax.forMimeType(format));
+						} catch (Exception e) {
+							e.printStackTrace();
+						} finally {
+							model.close();
+						}
+					} else if (format.equals(MediaType.TEXT_HTML)) {
+						response.setContentType(format);
+						if (TemplateManager.getDefaultEncoding() != null)
+							response.setCharacterEncoding(TemplateManager.getDefaultEncoding());
+						if (TemplateManager.getLocale() != null)
+							response.setLocale(TemplateManager.getLocale());
+						CollectionTemplate.process(CatalogueAccessPoint.getCatalogue().listBackendServices(), writer);
 					} else { // by default returns APPLICATION_JSON
 						response.setContentType(MediaType.APPLICATION_JSON);
-						writer.print(b.toJSON().toString(2));
-					}				
+						JSONArray services = new JSONArray();
+						for (BackendService b : CatalogueAccessPoint.getCatalogue().listBackendServices())
+							services.put(b.toJSON());
+						writer.print(services.toString(2));
+					}
 					response.setStatus(HttpServletResponse.SC_OK);
 				} catch (JSONException e) {
 					e.printStackTrace();
 					response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
+				} catch (TemplateException e) {
+					e.printStackTrace();
+					response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
+				}
+			} else {
+				// Override format regarding the given extension
+				format = MediaType.forExtension(extension);
+				// Retrieve the addressed member of the collection
+				String uri = url.substring(0, url.indexOf(extension) - 1);
+				logger.info("Retrieving backend service "+uri);
+				BackendService service = CatalogueAccessPoint.getCatalogue().getBackendService(new URIImpl(uri));
+				if (service == null) {
+					response.sendError(HttpServletResponse.SC_NOT_FOUND, "The resource "+uri+" has not been found.");
+				} else {
+					try {
+						if (format.equals(MediaType.APPLICATION_RDF_XML) ||
+								format.equals(MediaType.APPLICATION_TURTLE)) {
+							response.setContentType(format);
+							Model bsModel = service.createModel();
+							bsModel.writeTo(writer, Syntax.forMimeType(format));
+							bsModel.close();
+						} else if (format.equals(MediaType.TEXT_HTML)) {
+							response.setContentType(format);
+							if (TemplateManager.getDefaultEncoding() != null)
+								response.setCharacterEncoding(TemplateManager.getDefaultEncoding());
+							if (TemplateManager.getLocale() != null)
+								response.setLocale(TemplateManager.getLocale());
+							BuildingBlockTemplate.process(service, writer);
+						} else { // by default returns APPLICATION_JSON
+							response.setContentType(MediaType.APPLICATION_JSON);
+							writer.print(service.toJSON().toString(2));
+						}				
+						response.setStatus(HttpServletResponse.SC_OK);
+					} catch (JSONException e) {
+						e.printStackTrace();
+						response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
+					} catch (TemplateException e) {
+						e.printStackTrace();
+						response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
+					}
 				}
 			}
 		}
@@ -121,7 +159,8 @@ public class BackendServiceServlet extends GenericServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		BufferedReader reader = request.getReader();
 		PrintWriter writer = response.getWriter();
-		String format = request.getHeader("accept") != null ? request.getHeader("accept") : MediaType.APPLICATION_JSON;
+		Accept accept = new Accept(request);
+		String format = accept.getDominating();
 		StringBuffer buffer = new StringBuffer();
 		String line = reader.readLine();
 		while (line != null) {
@@ -143,6 +182,13 @@ public class BackendServiceServlet extends GenericServlet {
 					Model bsModel = service.createModel();
 					bsModel.writeTo(writer, Syntax.forMimeType(format));
 					bsModel.close();
+				} else if (format.equals(MediaType.TEXT_HTML)) {
+					response.setContentType(format);
+					if (TemplateManager.getDefaultEncoding() != null)
+						response.setCharacterEncoding(TemplateManager.getDefaultEncoding());
+					if (TemplateManager.getLocale() != null)
+						response.setLocale(TemplateManager.getLocale());
+					BuildingBlockTemplate.process(service, writer);
 				} else { // by default returns APPLICATION_JSON
 					response.setContentType(MediaType.APPLICATION_JSON);
 					JSONObject newBs = service.toJSON();						
@@ -168,6 +214,9 @@ public class BackendServiceServlet extends GenericServlet {
 			} catch (ResourceException e) {
 				e.printStackTrace();
 				response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
+			} catch (TemplateException e) {
+				e.printStackTrace();
+				response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
 			}
 		} catch (JSONException e) {
 			e.printStackTrace();
@@ -184,7 +233,8 @@ public class BackendServiceServlet extends GenericServlet {
 	protected void doPut(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		BufferedReader reader = request.getReader();
 		PrintWriter writer = response.getWriter();
-		String format = request.getHeader("accept") != null ? request.getHeader("accept") : MediaType.APPLICATION_JSON;
+		Accept accept = new Accept(request);
+		String format = accept.getDominating();
 		String[] chunks = request.getRequestURI().split("/");
 		String id = chunks[chunks.length-1];
 		if (id.equalsIgnoreCase("services")) id = null;
@@ -203,17 +253,24 @@ public class BackendServiceServlet extends GenericServlet {
 			String uri = request.getRequestURL().toString();
 			try {
 				JSONObject json = new JSONObject(body);
-				BackendService backendService = parseBackendService(json, new URIImpl(uri));
-				CatalogueAccessPoint.getCatalogue().updateBackendService(backendService);
+				BackendService service = parseBackendService(json, new URIImpl(uri));
+				CatalogueAccessPoint.getCatalogue().updateBackendService(service);
 				if (format.equals(MediaType.APPLICATION_RDF_XML) ||
 						format.equals(MediaType.APPLICATION_TURTLE)) {
 					response.setContentType(format);
-					Model backendServiceModel = backendService.createModel();
+					Model backendServiceModel = service.createModel();
 					backendServiceModel.writeTo(writer, Syntax.forMimeType(format));
 					backendServiceModel.close();
+				} else if (format.equals(MediaType.TEXT_HTML)) {
+					response.setContentType(format);
+					if (TemplateManager.getDefaultEncoding() != null)
+						response.setCharacterEncoding(TemplateManager.getDefaultEncoding());
+					if (TemplateManager.getLocale() != null)
+						response.setLocale(TemplateManager.getLocale());
+					BuildingBlockTemplate.process(service, writer);
 				} else { // by default returns APPLICATION_JSON
 					response.setContentType(MediaType.APPLICATION_JSON);
-					JSONObject newBs = backendService.toJSON();						
+					JSONObject newBs = service.toJSON();						
 //					for (Iterator it = newBs.keys(); it.hasNext(); ) {
 //						String key = it.next().toString();
 //						json.put(key, newBs.get(key));
@@ -236,6 +293,9 @@ public class BackendServiceServlet extends GenericServlet {
 			} catch (ResourceException e) {
 				e.printStackTrace();
 				response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
+			} catch (TemplateException e) {
+				e.printStackTrace();
+				response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
 			}
 		}
 	}

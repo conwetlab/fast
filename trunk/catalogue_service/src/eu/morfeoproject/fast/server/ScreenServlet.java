@@ -26,6 +26,11 @@ import eu.morfeoproject.fast.catalogue.OntologyInvalidException;
 import eu.morfeoproject.fast.catalogue.OntologyReadonlyException;
 import eu.morfeoproject.fast.catalogue.ResourceException;
 import eu.morfeoproject.fast.model.Screen;
+import eu.morfeoproject.fast.model.templates.BuildingBlockTemplate;
+import eu.morfeoproject.fast.model.templates.CollectionTemplate;
+import eu.morfeoproject.fast.model.templates.TemplateManager;
+import eu.morfeoproject.fast.util.Accept;
+import freemarker.template.TemplateException;
 
 /**
  * Servlet implementation class ScreenServlet
@@ -47,69 +52,102 @@ public class ScreenServlet extends GenericServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		PrintWriter writer = response.getWriter();
-		String format = request.getHeader("accept") != null ? request.getHeader("accept") : MediaType.APPLICATION_JSON;
-		String[] chunks = request.getRequestURI().split("/");
-		String id = chunks[chunks.length-1];
-		if (id.equalsIgnoreCase("screens")) id = null;
-		
-		if (id == null) {
-			// List the members of the collection
-			logger.info("Retrieving all screens");
-			try {
-				if (format.equals(MediaType.APPLICATION_RDF_XML) ||
-						format.equals(MediaType.APPLICATION_TURTLE)) {
-					response.setContentType(format);
-					Model model = RDF2Go.getModelFactory().createModel();
-					try {
-						model.open();
-						for (Screen s : CatalogueAccessPoint.getCatalogue().listScreens()) {
-							Model screenModel = s.createModel();
-							for (String ns : screenModel.getNamespaces().keySet())
-								model.setNamespace(ns, screenModel.getNamespace(ns));
-							model.addModel(screenModel);
-							screenModel.close();
-						}
-						model.writeTo(writer, Syntax.forMimeType(format));
-					} catch (Exception e) {
-						e.printStackTrace();
-					} finally {
-						model.close();
-					}
-				} else { // by default returns APPLICATION_JSON
-					response.setContentType(MediaType.APPLICATION_JSON);
-					JSONArray screens = new JSONArray();
-					for (Screen s : CatalogueAccessPoint.getCatalogue().listScreens())
-						screens.put(s.toJSON());
-					writer.print(screens.toString(2));
-				}
-				response.setStatus(HttpServletResponse.SC_OK);
-			} catch (JSONException e) {
-				e.printStackTrace();
-				response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
-			}
+		Accept accept = new Accept(request);
+		String format = accept.getDominating();
+		String servlet = request.getServletPath();
+		String url = request.getRequestURL().toString();
+		String[] chunks = url.substring(url.indexOf(servlet) + 1).split("/");
+		String id = chunks.length > 1 ? chunks[1] : null;
+		String extension = chunks.length > 2 ? chunks[2] : null;
+		if (MediaType.forExtension(id) != "") {
+			extension = id;
+			id = null;
+		}
+
+		if (extension == null) {
+			redirectToFormat(request, response, format);
 		} else {
-			// Retrieve the addressed member of the collection
-			String uri = request.getRequestURL().toString();
-			logger.info("Retrieving screen "+uri);
-			Screen s = CatalogueAccessPoint.getCatalogue().getScreen(new URIImpl(uri));
-			if (s == null) {
-				response.sendError(HttpServletResponse.SC_NOT_FOUND, "The resource "+uri+" has not been found.");
-			} else {
+			if (id == null) {
+				// List the members of the collection
+				logger.info("Retrieving all screens");
 				try {
 					if (format.equals(MediaType.APPLICATION_RDF_XML) ||
 							format.equals(MediaType.APPLICATION_TURTLE)) {
 						response.setContentType(format);
-						Model screenModel = s.createModel();
-						screenModel.writeTo(writer, Syntax.forMimeType(format));
-						screenModel.close();
+						Model model = RDF2Go.getModelFactory().createModel();
+						try {
+							model.open();
+							for (Screen s : CatalogueAccessPoint.getCatalogue().listScreens()) {
+								Model screenModel = s.createModel();
+								for (String ns : screenModel.getNamespaces().keySet())
+									model.setNamespace(ns, screenModel.getNamespace(ns));
+								model.addModel(screenModel);
+								screenModel.close();
+							}
+							model.writeTo(writer, Syntax.forMimeType(format));
+						} catch (Exception e) {
+							e.printStackTrace();
+						} finally {
+							model.close();
+						}
+					} else if (format.equals(MediaType.TEXT_HTML)) {
+						response.setContentType(format);
+						if (TemplateManager.getDefaultEncoding() != null)
+							response.setCharacterEncoding(TemplateManager.getDefaultEncoding());
+						if (TemplateManager.getLocale() != null)
+							response.setLocale(TemplateManager.getLocale());
+						CollectionTemplate.process(CatalogueAccessPoint.getCatalogue().listScreens(), writer);
 					} else { // by default returns APPLICATION_JSON
 						response.setContentType(MediaType.APPLICATION_JSON);
-						writer.print(s.toJSON().toString(2));
-					}				
+						JSONArray screens = new JSONArray();
+						for (Screen s : CatalogueAccessPoint.getCatalogue().listScreens())
+							screens.put(s.toJSON());
+						writer.print(screens.toString(2));
+					}
 					response.setStatus(HttpServletResponse.SC_OK);
 				} catch (JSONException e) {
 					e.printStackTrace();
 					response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
+				} catch (TemplateException e) {
+					e.printStackTrace();
+					response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
+				}
+			} else {
+				// Override format regarding the given extension
+				format = MediaType.forExtension(extension);
+				// Retrieve the addressed member of the collection
+				String uri = url.substring(0, url.indexOf(extension) - 1);
+				logger.info("Retrieving screen "+uri);
+				Screen screen = CatalogueAccessPoint.getCatalogue().getScreen(new URIImpl(uri));
+				if (screen == null) {
+					response.sendError(HttpServletResponse.SC_NOT_FOUND, "The resource "+uri+" has not been found.");
+				} else {
+					try {
+						if (format.equals(MediaType.APPLICATION_RDF_XML) ||
+								format.equals(MediaType.APPLICATION_TURTLE)) {
+							response.setContentType(format);
+							Model screenModel = screen.createModel();
+							screenModel.writeTo(writer, Syntax.forMimeType(format));
+							screenModel.close();
+						} else if (format.equals(MediaType.TEXT_HTML)) {
+							response.setContentType(format);
+							if (TemplateManager.getDefaultEncoding() != null)
+								response.setCharacterEncoding(TemplateManager.getDefaultEncoding());
+							if (TemplateManager.getLocale() != null)
+								response.setLocale(TemplateManager.getLocale());
+							BuildingBlockTemplate.process(screen, writer);
+						} else { // by default returns APPLICATION_JSON
+							response.setContentType(MediaType.APPLICATION_JSON);
+							writer.print(screen.toJSON().toString(2));
+						}				
+						response.setStatus(HttpServletResponse.SC_OK);
+					} catch (JSONException e) {
+						e.printStackTrace();
+						response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
+					} catch (TemplateException e) {
+						e.printStackTrace();
+						response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
+					}
 				}
 			}
 		}
@@ -144,6 +182,13 @@ public class ScreenServlet extends GenericServlet {
 					Model screenModel = screen.createModel();
 					screenModel.writeTo(writer, Syntax.forMimeType(format));
 					screenModel.close();
+				} else if (format.equals(MediaType.TEXT_HTML)) {
+					response.setContentType(format);
+					if (TemplateManager.getDefaultEncoding() != null)
+						response.setCharacterEncoding(TemplateManager.getDefaultEncoding());
+					if (TemplateManager.getLocale() != null)
+						response.setLocale(TemplateManager.getLocale());
+					BuildingBlockTemplate.process(screen, writer);
 				} else {
 					response.setContentType(MediaType.APPLICATION_JSON);
 					JSONObject newScreen = screen.toJSON();						
@@ -166,6 +211,9 @@ public class ScreenServlet extends GenericServlet {
 			} catch (ResourceException e) {
 				e.printStackTrace();
 				response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
+			} catch (TemplateException e) {
+				e.printStackTrace();
+				response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
 			}
 		} catch (ParseScreenException e) {
 			e.printStackTrace();
@@ -212,6 +260,13 @@ public class ScreenServlet extends GenericServlet {
 					Model screenModel = screen.createModel();
 					screenModel.writeTo(writer, Syntax.forMimeType(format));
 					screenModel.close();
+				} else if (format.equals(MediaType.TEXT_HTML)) {
+					response.setContentType(format);
+					if (TemplateManager.getDefaultEncoding() != null)
+						response.setCharacterEncoding(TemplateManager.getDefaultEncoding());
+					if (TemplateManager.getLocale() != null)
+						response.setLocale(TemplateManager.getLocale());
+					BuildingBlockTemplate.process(screen, writer);
 				} else { // by default returns APPLICATION_JSON
 					response.setContentType(MediaType.APPLICATION_JSON);
 					JSONObject newScreen = screen.toJSON();						
@@ -249,6 +304,9 @@ public class ScreenServlet extends GenericServlet {
 			} catch (ResourceException e) {
 				e.printStackTrace();
 				response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
+			} catch (TemplateException e) {
+				e.printStackTrace();
+				response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
 			}
 		}
 	}

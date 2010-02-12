@@ -69,6 +69,14 @@ public abstract class GenericServlet extends HttpServlet {
 		response.setStatus(HttpServletResponse.SC_METHOD_NOT_ALLOWED);
 	}
 
+	protected void redirectToFormat(HttpServletRequest request, HttpServletResponse response, String format) throws IOException {
+		String extension = MediaType.getExtension(format);
+		extension = extension == null ? MediaType.getExtension(MediaType.APPLICATION_JSON) : extension;
+		String url = request.getRequestURL().toString();
+		url = (url.charAt(url.length() - 1) == '/') ? url.concat(extension) : url.concat("/"+extension);
+		response.sendRedirect(url);
+	}
+	
 	@SuppressWarnings("unchecked")
 	protected void parseResource(Resource resource, JSONObject jsonResource, URI uri) throws JSONException, IOException {
 		if (uri != null)

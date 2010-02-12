@@ -85,5 +85,6 @@
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/sesame-runtime-osgi-2.3-pr1.jar"/>
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/slf4j-api-1.5.6.jar"/>
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/slf4j-log4j12-1.5.6.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/freemarker.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>
