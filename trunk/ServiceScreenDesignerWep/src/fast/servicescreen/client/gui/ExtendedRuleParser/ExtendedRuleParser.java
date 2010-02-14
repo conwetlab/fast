@@ -54,7 +54,7 @@ public class ExtendedRuleParser
 				case RName:		//save founded name
 								saveEntry(currentToken.getWord(), currentToken.getKind());
 								
-								nextChar();
+								nextChar_NoWSJump();
 								break;
 					
 				case words:		//save founded operation
@@ -66,7 +66,7 @@ public class ExtendedRuleParser
 								if(currentToken != null)
 									saveEntry(fillParam(currentToken.getWord()), Kind.Param);
 								
-								nextChar();
+								nextChar_NoWSJump();
 								break;
 								
 				case chars:		//save founded operation
@@ -78,7 +78,7 @@ public class ExtendedRuleParser
 								if(currentToken != null)
 									saveEntry(fillParam(currentToken.getWord()), Kind.Param);
 								
-								nextChar();
+								nextChar_NoWSJump();
 								break;
 								
 				case until:		//save founded operation inkl. Params
@@ -92,7 +92,7 @@ public class ExtendedRuleParser
 								break;
 				
 				case plus:		//save the plus 
-								saveEntry(currentToken.getWord(), Kind.plus);
+								saveEntry("+", Kind.plus);
 								break;
 								
 				case constant:	//save the constant
@@ -103,6 +103,8 @@ public class ExtendedRuleParser
 			nextToken();
 		}
 	}
+	
+
 	
 	/**
 	 * if param doesn´t contain "-" (fe. 42) this will return
@@ -126,7 +128,7 @@ public class ExtendedRuleParser
 		this.nr++;
 	}
 	
-	//save one entry in the parseResults list
+	//save one entry (with signs) in the parseResults list
 	private void saveEntry(String value, String signs, Kind kind)
 	{
 		parseResults.put(nr, new Operation(value, signs, kind));
@@ -140,7 +142,8 @@ public class ExtendedRuleParser
 		
 		//save founded param
 		nextChar();										//skip (
-		nextToken_withWhitespaces();					//load next word (signs)
+		nextToken_Sings();								//load the signs
+		
 		String u_signs = "" + currentToken.getWord(); 	//save sign(s)
 		nextChar();										//skip ,
 		nextToken();									//load sepNr
@@ -157,12 +160,12 @@ public class ExtendedRuleParser
 			}
 		}
 		
-		nextChar();		//skip )
-		nextChar();		//ev. skip next .
+		nextChar();					//skip )
+		nextChar_NoWSJump();		//maybee skip next .
 	}
 	
 	/**
-	 * Returns the Kind - enum with matchs
+	 * Returns the Kind - enum witch matches
 	 * the given String.
 	 * 
 	 * Notice: An undefined String will
@@ -186,10 +189,6 @@ public class ExtendedRuleParser
 		{
 			return Kind.from;
 		}
-		else if(defineMe.equals(Kind.plus.toString()) || defineMe.equals("+"))
-		{
-			return Kind.plus;
-		}
 		
 		//much more operations HERE
 
@@ -208,14 +207,22 @@ public class ExtendedRuleParser
 		Token token = new Token();
 		String word = "";
 		
-		//jump over spaces
-		while(Character.isSpace(currentChar) && Character.MIN_VALUE != currentChar)
+		//a WHITESPACE is interpreted as + operation, and a plus Token will be returned
+		if(Character.isSpace(currentChar))
 		{
-			nextChar();
+			//skips all whitespaces (more flexible)
+			while( ! (currentChar == Character.MIN_VALUE) && Character.isSpace(currentChar))
+			{
+				nextChar(); //skip whitespace
+			}
+			
+			token.setKind(Kind.plus);
+			
+			currentToken = token;
 		}
 		
-		//check, if we parse a constant or any other
-		if(currentChar == '"')
+		//check, if we parse a CONSTANT or any other
+		else if(currentChar == '"')
 		{
 			nextChar(); //skip START "
 			
@@ -236,7 +243,7 @@ public class ExtendedRuleParser
 
 				//set kind = constant
 				token.setKind(Kind.constant);
-
+				
 				currentToken = token;
 			}
 			else
@@ -247,8 +254,7 @@ public class ExtendedRuleParser
 		else
 		{
 			//get the word
-			while((Character.isLetterOrDigit(currentChar)
-				  || currentChar == '+' || currentChar == '-')
+			while((Character.isLetterOrDigit(currentChar) || currentChar == '-')
 				  && Character.MIN_VALUE != currentChar)
 			{
 				word += currentChar;
@@ -263,7 +269,7 @@ public class ExtendedRuleParser
 
 				//set kind
 				token.setKind(defineType(word));
-
+				
 				currentToken = token;
 			}
 			else
@@ -274,9 +280,39 @@ public class ExtendedRuleParser
 	}
 	
 	/**
-	 * Returns the next token.
+	 * To allow that a whitespace is handled as '+',
+	 * operations should not jump over a static '.' in the end,
+	 * because it should be end of operations, and we won´t jump over a
+	 * whitespace! So call this method, to setup next Char after parsing
+	 * a operation or Param! 
 	 * */
-	private void nextToken_withWhitespaces()
+	@SuppressWarnings("deprecation")
+	private void nextChar_NoWSJump()
+	{		
+		if(readPos < text.length())
+		{
+			if(! Character.isSpace(currentChar))
+			{
+				readPos++;
+				
+				currentChar = lookAheadChar;
+				
+				lookAheadChar = text.charAt(readPos);
+			}
+		}
+		else
+		{
+			currentChar = lookAheadChar;
+			
+			lookAheadChar = Character.MIN_VALUE;
+		}
+	}
+	
+	/**
+	 * Returns the next token. The result will be
+	 * any sings until a , or EOT is founded.
+	 * */
+	private void nextToken_Sings()
 	{
 		Token token = new Token();
 		String word = "";
@@ -306,8 +342,7 @@ public class ExtendedRuleParser
 	}
 	
 	/**
-	 * Call nextToken instead, to jump over blanks!
-	 * This method also set blanks as currentChar.
+	 * Setup nextChar anyway
 	 * */
 	private void nextChar()
 	{

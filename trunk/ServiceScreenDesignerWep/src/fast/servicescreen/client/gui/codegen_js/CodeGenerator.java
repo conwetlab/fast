@@ -26,7 +26,7 @@ public class CodeGenerator
 	private HashMap<String, String> table = null;
 	private String rootTemplate = "";
 	private boolean writeFile_result = true;
-	private String endbrakets = "";
+	private String endbrackets = "";
 	
 	@SuppressWarnings("unused")
 	private String outputPortName = "";	//use later to generate translation code
@@ -37,6 +37,12 @@ public class CodeGenerator
 	private String wordsFromTo 	= "wordsFromTo(";
 	private String until 		= "until(";
 	private String _from 		= "from(";
+	
+	private String depth  = "	";
+	private String depth2 = "		";
+	private String depth3 = "			";
+	private String depth4 = "				";
+	private String depth5 = "					";
 	
 	private boolean firstTime = true;
 	
@@ -56,34 +62,32 @@ public class CodeGenerator
 		rootTemplate =
 			
 			//declare method rump 
-			"function transform(<<inputportlist>>) \n" +
-			"{\n" +
+			depth + "function transform(<<inputportlist>>) \n" +
+			depth + "{\n" +
 			
 			//fill request url
-			"   var prerequest = '<<prerequest>>'; \n" +
-			"\n" +
+			depth2 + "var prerequest = '<<prerequest>>'; \n\n" +
 			
 			//should replace inports to real values in runtime!
-			"  <<prerequestreplaces>>" +
-			"\n" +
+			"<<prerequestreplaces>>" +
 			
 			//save the complete url with an xmlHttp request (made for Ajax access to SameDomain Resources)
-			"  var request = prerequest; \n" +
+			depth2 + "var request = prerequest; \n" +
 			"\n" +
 			
 			//sending/recieving the request
-			"  <<sendrequest>> \n" +
+			"<<sendrequest>>" +
 			"\n" +
 			
 			//the outputPort variable
-//			"  <<outputport>> \n" +
-			"\n" +
+//			"<<outputport>> \n" +
+//			"\n" +
 			
 			//declare method end
 			"}\n";
 
 		//resets some variables
-		endbrakets = "";
+		endbrackets = "";
 		firstTime = true;
 		operationStart = true;
 		
@@ -112,6 +116,9 @@ public class CodeGenerator
 		
 		//Build the exRules - feature
 		add_Translation_toTable();
+		
+		//add the end brakets of transformation code
+		table.put("<<endbrackets>>", endbrackets);
 		
 		
 		//load the current template text into root template (for user changes, delete it later)
@@ -142,7 +149,7 @@ public class CodeGenerator
 			currentInpPort = iterator.next();
 			
 			//build prerequestreplaces
-			preReqRepText += "prerequest = prerequest.replace(/<";
+			preReqRepText += depth2 + "prerequest = prerequest.replace(/<";
 			preReqRepText += currentInpPort.get("name");
 			preReqRepText += ">/g,"; 
 			preReqRepText += currentInpPort.get("name");
@@ -195,7 +202,7 @@ public class CodeGenerator
 
 		//create code for variable initialization 
 		this.outputPortName = outputPortVar;
-		outputPortVar = "var " + outputPortVar + " = new " + outPutVarType + "(); \n";
+		outputPortVar = depth2 + "var " + outputPortVar + " = new " + outPutVarType + "(); \n";
 		
 		table.put("<<outputport>>", outputPortVar);
 	}
@@ -203,60 +210,57 @@ public class CodeGenerator
 	private void add_SendRequest_toTable()
 	{
 		String sendRequest =
-			"var xmlHttp = null; \n" + 
-			"  var xmlResponse = null; \n" + 
-			"  try \n" +
-			"  { \n" + 
-			"     xmlHttp = new XMLHttpRequest(); \n" + 
-			"  } \n" +
-			"  catch(e) \n" +
-			"  { \n" + 
-			"      try \n" +
-			"      { \n" + 
-			"          xmlHttp  = new ActiveXObject('Microsoft.XMLHTTP'); \n" + 
-			"      } \n" +
-			"      catch(e) \n" +
-			"      { \n" + 
-			"            try \n" +
-			"            { \n" + 
-			"                  xmlHttp  = new ActiveXObject('Msxml2.XMLHTTP'); \n" + 
-			"            } \n" +
-			"            catch(e) \n" +
-			"            { \n" + 
-			"                  xmlHttp  = null; \n" + 
-			"            } \n" + 
-			"      } \n" + 
-			"  } \n" + 
-			"\n" + 
-			"  if (xmlHttp) \n" +
-			"  { \n" + 
-			"      xmlHttp.open('GET', '" + requestServlet_URL + "' + replaceEscapeCharacter(request), true); \n" + 
-			"      xmlHttp.onreadystatechange = function () { \n" + 
-			"            if (xmlHttp.readyState == 4) \n" +
-			"            { \n" + 
-			"                  xmlResponse = xmlHttp.responseXML; \n" + 
-			"\n" +
-			"					var currentTags = null; \n\n" +
-			"					var currentCount = null; \n\n" +
-			"					var result = new String(''); \n\n" +
-			"				   <<transformationCode>> \n" +
+			depth2 + "var xmlHttp = null; \n" + 
+			depth2 + "var xmlResponse = null; \n" + 
+			depth2 + "try \n" +
+			depth2 + "{ \n" + 
+			depth3 + "xmlHttp = new XMLHttpRequest(); \n" + 
+			depth2 + "} \n" +
+			depth2 + "catch(e) \n" +
+			depth2 + "{ \n" + 
+			depth3 + "try \n" +
+			depth3 + "{ \n" + 
+			depth4 + "xmlHttp  = new ActiveXObject('Microsoft.XMLHTTP'); \n" + 
+			depth3 + "} \n" +
+			depth3 + "catch(e) \n" +
+			depth3 + "{ \n" + 
+			depth4 + "try \n" +
+			depth4 + "{ \n" + 
+			depth5 + "xmlHttp  = new ActiveXObject('Msxml2.XMLHTTP'); \n" + 
+			depth4 + "} \n" +
+			depth4 + "catch(e) \n" +
+			depth4 + "{ \n" + 
+			depth5 + "xmlHttp  = null; \n" + 
+			depth4 + "} \n" + 
+			depth3 + "} \n" + 
+			depth2 + "} \n\n" + 
+			
+			depth2 + "if (xmlHttp) \n" +
+			depth2 + "{ \n" + 
+			depth3 + "xmlHttp.open('GET', '" + requestServlet_URL + "' + replaceEscapeCharacter(request), true); \n" + 
+			depth3 + "xmlHttp.onreadystatechange = function () { \n" + 
+			depth3 + "if (xmlHttp.readyState == 4) \n" +
+			depth3 + "{ \n" + 
+			depth4 + "xmlResponse = xmlHttp.responseXML; \n\n" + 
+			depth4 + "var currentTags = null; \n\n" +
+			depth4 + "var currentCount = null; \n\n" +
+			depth4 + "var result = new String(''); \n\n" +
 
-			endbrakets +
+			"<<transformationCode>>" +
+
+			"<<endbrackets>>\n" +
 			
-			//"				result = result.replace(/./g, '\\\n');\n" +	//breaking the lines in the result
-			
-			"				document.getElementById('show').value = 'result: ' + result; \n" + 
-			"            } \n" + 
-			"   } } } \n" + 
-			"\n" +
-			"      xmlHttp.send(null); \n" + 
-			"\n" +
-			"      return 'waiting for response...'; \n" + 
-			"  } \n";
+			depth3 + "document.getElementById('show').value = 'result: ' + result; \n" + 
+			depth3 + "} \n" + 
+			depth2 + "} \n" + 
+			depth2 + "}\n\n" +
+			depth2 + "xmlHttp.send(null); \n\n" + 
+			depth2 + "return 'waiting for response...'; \n" + 
+			depth2 + "} \n";
 
 		
 		//reset endBrakets
-		endbrakets = "";
+		endbrackets = "";
 		
 		//add result in the table
 		table.put("<<sendrequest>>", sendRequest);
@@ -302,68 +306,70 @@ public class CodeGenerator
 				{
 					firstTime = false;	//reset by setStartTemplate()
 					
-					curTag = "xmlResponse";		//In first case we access from as current (root)Tag
+					curTag = "xmlResponse";		//In first case we access from the root Tag
 				}
 
-				
+				//element count
 				String lengthName =  from + "_length";
 				
-				//count of elements to iterate
-				tmpCode += "var " + lengthName + " = " + curTag + ".getElementsByTagName('" + from + "').length; \n";
+				//create element count variable
+				tmpCode += depth4 + "var " + lengthName + " = " + curTag + ".getElementsByTagName('" + from + "').length; \n";
 				
-				//count var for loop
+				//increment var for loop
 				String countVar = from + "_Count";
 				
 				//créate loop - code				
 				tmpCode += 
 							//get searched elementsList out of xmlResponse 
-							"var " + from + " = " + curTag + ".getElementsByTagName('" + from + "'); \n\n" +
+					depth4 + "var " + from + " = " + curTag + ".getElementsByTagName('" + from + "'); \n\n" +
 							
-							"for(var " + countVar + " = 0; " + countVar + " < " + lengthName + "; ++" + countVar + ")\n" +
-							"{\n" +
-							currentTags + " = " + from + ".item(" + countVar + ")  ;\n\n" +
+							//declare loop rump
+					depth4 + "for(var " + countVar + " = 0; " + countVar + " < " + lengthName + "; ++" + countVar + ")\n" +
+					depth4 + "{\n" +
 							
-							"currentCount = " + countVar + ";\n" + 	//adds a current index variable 
+							//declare loop body
+					depth4 + currentTags + " = " + from + ".item(" + countVar + ");\n\n" +
 							
-							"result += '" + target + "Object - '; \n" +	//adds a 'new object' in the result
+					depth4 + "currentCount = " + countVar + ";\n" + 	//adds a current index variable 
 							
-							"\n\n";
+					depth4 + "result += '" + target + "Object - '; \n" +	//adds a 'new object' in the result
 							
-							endbrakets += "} \n";	//manages end breaktes
+					depth4 + "\n\n";
+							
+							endbrackets += depth4 + "} \n";	//add end bracket
 				
-				//overtake in real transcode
+				//overtake loop in real transcode
 				transCode += tmpCode;
 			}
 			else if ("fillAttributes".equals(kind))
 			{
-				//watch the example for loops
-				
 				String tmpCode;
 				
 				//Iterate over any opList entry
 				while(opList_iter.hasNext())
 				{
 					tmpCode = "";
-					
 					String lastSourceTagname = "";
 					
 					current_opList = opList_iter.next();
 					
+					//if constant
 					if(current_opList.size() > 0 && current_opList.get(0).kind == Kind.constant)
 					{
 						//add a constant
 						tmpCode += "'" + current_opList.get(0).value + "'";
 					}
+					//if operations
 					else
 					{
 						Operation lastTagnameOperation = opHandler.getLastTagnameOf(current_opList);
 						lastSourceTagname = lastTagnameOperation.value;
 						
-						//create code for getting the element/elementsItem
+						//create code for getting the current (working)element list
 						tmpCode += trimBoth +  currentTags + ".getElementsByTagName('"
 								+ lastSourceTagname + "').item(0).textContent)";
 						
-						//create code for rest of operation list
+						//create code for the hole operation list
 						int count = current_opList.indexOf(lastTagnameOperation) + 1;
 						for(; count < current_opList.size(); ++count)
 						{
@@ -374,10 +380,10 @@ public class CodeGenerator
 						}
 					}
 					
-					//write into transCode
+					//overtake operation code in real transcode
 					if(operationStart)
 					{
-						transCode += "result += '" + lastSourceTagname + "Attribute - ' + " + tmpCode;
+						transCode += depth4 + "result += '" + lastSourceTagname + "Attribute - ' + " + tmpCode;
 						
 						operationStart = false;
 					}
@@ -386,6 +392,7 @@ public class CodeGenerator
 						transCode += tmpCode;	
 					}
 					
+					//if there are more operationLists, add a +
 					if(opList_iter.hasNext())
 					{
 						transCode += " + ";
@@ -528,18 +535,18 @@ public class CodeGenerator
 	 * */
 	private String postHtml =
 		"</script>\n" +
-		"	</head>\n" +
-		"		<body>\n" +
-		"			<form name=f1>\n" +
-		"				<input type='text' name=t2 value='Harry' size='50'> \n" +
-		"				<input type=button value='request and transform' \n" +
-		"					onclick='this.form.t1.value=transform(this.form.t2.value)'>	\n" +
-		"				<br><br><br><br> \n" +
-		"				RESULT:	\n" +
-		"				<input type=text name=t1 id='show' value='press the button above..' size=200>\n" +
-		"			</form>\n" +
-		"		</body>\n" +
-		"	</html>\n";
+		"</head>\n" +
+		"<body>\n" +
+		"<form name=f1>\n" +
+		"<input type='text' name=t2 value='Harry' size='50'> \n" +
+		"<input type=button value='request and transform' \n" +
+		"onclick='this.form.t1.value=transform(this.form.t2.value)'>	\n" +
+		"<br><br><br><br> \n" +
+		"RESULT:	\n" +
+		"<input type=text name=t1 id='show' value='press the button above..' size=200>\n" +
+		"</form>\n" +
+		"</body>\n" +
+		"</html>\n";
 	
 	/**
 	 *  Contains the html header and all javascript util functions
@@ -547,197 +554,194 @@ public class CodeGenerator
 	private String preHtml =
 		"<html> \n" +
 		"<head> \n" +
-		"    <meta http-equiv='Content-Type' content='text/html; charset=ISO-8859-1'> \n" +
-		"	  <title>Insert title here</title> \n" +
-		"	<script type='text/javascript'> \n \n" +
+		"<meta http-equiv='Content-Type' content='text/html; charset=ISO-8859-1'> \n" +
+		"<title>Insert title here</title> \n" +
+		"<script type='text/javascript'> \n \n" +
 
-		"	function from(str, sign, sepNr) \n" +
-		"	{	 \n" +
-		"		var tmp = new String(Trim(str)); \n" +
-		"		var save = ''; \n" +
+		depth2 + "function from(str, sign, sepNr) \n" +
+		depth2 + "{ \n" +
+		depth3 + "var tmp = new String(Trim(str)); \n" +
+		depth3 + "var save = ''; \n" +
 
-		"		if (sepNr < 1) \n" +
-		"		{ \n" +
-		"			sepNr = 1; \n" +
-		"		} \n" +
+		depth3 + "if (sepNr < 1) \n" +
+		depth3 + "{ \n" +
+		depth3 + "sepNr = 1; \n" +
+		depth3 + "} \n" +
 
-		"		while (tmp.indexOf(sign) != -1 && sepNr > 0) \n" +
-		"		{ \n" +
-		"			save = tmp.substring(tmp.indexOf(sign), tmp.indexOf(sign) \n" +
-		"					+ sign.length); \n" +
+		depth3 + "while (tmp.indexOf(sign) != -1 && sepNr > 0) \n" +
+		depth3 + "{ \n" +
+		depth3 + "save = tmp.substring(tmp.indexOf(sign), tmp.indexOf(sign) \n" +
+		depth3 + "+ sign.length); \n" +
 
-		"			tmp = tmp.substring(tmp.indexOf(sign) + sign.length, tmp.length); \n" +
+		depth3 + "tmp = tmp.substring(tmp.indexOf(sign) + sign.length, tmp.length); \n" +
 
-		"			sepNr--; \n" +
-		"		} \n" +
+		depth3 + "sepNr--; \n" +
+		depth3 + "} \n" +
 
-		"		tmp = save + tmp; \n" +
+		depth3 + "tmp = save + tmp; \n" +
 
-		"		return tmp; \n" +
-		"	} \n \n" +
+		depth3 + "return tmp; \n" +
+		depth2 + "} \n \n" +
 
-		"	function until(str, sign, sepNr) \n" +
-		"	{ \n" +
-		"		var tmp = new String(Trim(str)); \n" +
-		"		var res = ''; \n" +
-		"		var length = sign.length; \n" +
+		depth2 + "function until(str, sign, sepNr) \n" +
+		depth2 + "{ \n" +
+		depth3 + "var tmp = new String(Trim(str)); \n" +
+		depth3 + "var res = ''; \n" +
+		depth3 + "var length = sign.length; \n" +
 
-		"		if(sepNr < 1) \n" +
-		"		{ \n" +
-		"			sepNr = 1; \n" +
-		"		} \n" +
+		depth3 + "if(sepNr < 1) \n" +
+		depth3 + "{ \n" +
+		depth3 + "sepNr = 1; \n" +
+		depth3 + "} \n" +
 
-		"		while(tmp.indexOf(sign) != -1 && sepNr > 0) \n" +
-		"		{ \n" +
-		"			res += tmp.substring(0, tmp.indexOf(sign) + length); \n" +
+		depth3 + "while(tmp.indexOf(sign) != -1 && sepNr > 0) \n" +
+		depth3 + "{ \n" +
+		depth3 + "res += tmp.substring(0, tmp.indexOf(sign) + length); \n" +
 
-		"		tmp = tmp.substring(tmp.indexOf(sign) + length, tmp.length); \n" +
+		depth3 + "tmp = tmp.substring(tmp.indexOf(sign) + length, tmp.length); \n" +
 
-		"			sepNr--; \n" +
-		"		} \n" +
+		depth3 + "sepNr--; \n" +
+		depth3 + "} \n" +
 
-		"		return res; \n" +
-		"	} \n \n" +
+		depth3 + "return res; \n" +
+		depth2 + "} \n \n" +
 
-		"	function charsFromTo(str, from, to) \n" +
-		"	{ \n" +
-		"		var tmp = new String(Trim(str)); \n" +
-		"		var res = ''; \n" +
+		depth2 + "function charsFromTo(str, from, to) \n" +
+		depth2 + "{ \n" +
+		depth3 + "var tmp = new String(Trim(str)); \n" +
+		depth3 + "var res = ''; \n" +
 		
-		"		if(from < 1) \n" +
-		"		{ \n" +
-		"			from = 1; \n" +
-		"		} \n" +
+		depth3 + "if(from < 1) \n" +
+		depth3 + "{ \n" +
+		depth3 + "from = 1; \n" +
+		depth3 + "} \n" +
 		
-		"		if(to > tmp.length) \n" +
-		"		{ \n" +
-		"			to = tmp.length; \n" +
-		"		} \n" +
+		depth3 + "if(to > tmp.length) \n" +
+		depth3 + "{ \n" +
+		depth3 + "to = tmp.length; \n" +
+		depth3 + "} \n" +
 		
-		"		for(from; from <= to; from++) \n" +
-		"		{ \n" +
-		"			res += charAt(tmp, from); \n" +
-		"		} \n" +
+		depth3 + "for(from; from <= to; from++) \n" +
+		depth3 + "{ \n" +
+		depth3 + "res += charAt(tmp, from); \n" +
+		depth3 + "} \n" +
 		
-		"		return res; \n" +
-		"	} \n \n" +
+		depth3 + "return res; \n" +
+		depth2 + "} \n \n" +
 		
-		"	function charAt(str, index) \n" +
-		"	{ \n" +
-		"		var res = ''; \n" +
+		depth2 + "function charAt(str, index) \n" +
+		depth2 + "{ \n" +
+		depth3 + "var res = ''; \n" +
 		
-		"		if(index < 1) \n" +
-		"		{ \n" +
-		"			index = 1; \n" +
-		"		} \n" +
-		"		else if(index > str.length) \n" +
-		"		{ \n" +
-		"			index = str.length; \n" +
-		"		} \n" +
+		depth3 + "if(index < 1) \n" +
+		depth3 + "{ \n" +
+		depth3 + "index = 1; \n" +
+		depth3 + "} \n" +
+		depth3 + "else if(index > str.length) \n" +
+		depth3 + "{ \n" +
+		depth3 + "index = str.length; \n" +
+		depth3 + "} \n" +
 		
-		"		index = index - 1; \n" +
+		depth3 + "index = index - 1; \n" +
 		
-		"		res = str.charAt(index); \n" +
+		depth3 + "res = str.charAt(index); \n" +
 		
-		"		return res; \n" +
-		"	} \n \n" +
+		depth3 + "return res; \n" +
+		depth2 + "} \n \n" +
 		
-		"	function wordsFromTo(str, from, to) \n" +
-		"	{ \n" +
-		"		var tmp = new String(Trim(str)); \n" +
-		"		var res = ''; \n" +
+		depth2 + "function wordsFromTo(str, from, to) \n" +
+		depth2 + "{ \n" +
+		depth3 + "var tmp = new String(Trim(str)); \n" +
+		depth3 + "var res = ''; \n" +
 		
-		"		var _split = tmp.split(' '); \n" +
-		"		var length = _split.length; \n" +
+		depth3 + "var _split = tmp.split(' '); \n" +
+		depth3 + "var length = _split.length; \n" +
 		
-		"		if(from < 1) \n" +
-		"		{ \n" +
-		"			from = 1; \n" +
-		"		} \n" +
+		depth3 + "if(from < 1) \n" +
+		depth3 + "{ \n" +
+		depth3 + "from = 1; \n" +
+		depth3 + "} \n" +
 		
-		"		if(to > length) \n" +
-		"		{ \n" +
-		"			to = length; \n" +
-		"		} \n" +
+		depth3 + "if(to > length) \n" +
+		depth3 + "{ \n" +
+		depth3 + "to = length; \n" +
+		depth3 + "} \n" +
 		
-		"		for(from; from <= to; from++) \n" +
-		"		{ \n" +
-		"			res =  res + wordAt(str, from) + ' '; \n" +
-		"		} \n" +
+		depth3 + "for(from; from <= to; from++) \n" +
+		depth3 + "{ \n" +
+		depth3 + "res =  res + wordAt(str, from) + ' '; \n" +
+		depth3 + "} \n" +
 		
-		"		return res; \n" +
-		"	} \n \n" +
+		depth3 + "return res; \n" +
+		depth2 + "} \n \n" +
 		
-		"	function wordAt(str, nr) \n" +
-		"	{ \n" +
-		"		var res = new String(Trim(str)); \n" +
-		"		var _split = res.split(' '); \n" +
-		"		var length = _split.length; \n" +
+		depth2 + "function wordAt(str, nr) \n" +
+		depth2 + "{ \n" +
+		depth3 + "var res = new String(Trim(str)); \n" +
+		depth3 + "var _split = res.split(' '); \n" +
+		depth3 + "var length = _split.length; \n" +
 		
-		"		nr = nr -1; \n" +
+		depth3 + "nr = nr -1; \n" +
 		
-		"		if(nr < 0 || nr >= length) \n" +
-		"		{ \n" +
-		"			nr = length-1; \n" +
-		"		} \n" +
+		depth3 + "if(nr < 0 || nr >= length) \n" +
+		depth3 + "{ \n" +
+		depth3 + "nr = length-1; \n" +
+		depth3 + "} \n" +
 		
-		"		res = _split[nr]; \n" +
+		depth3 + "res = _split[nr]; \n" +
 		
-		"		return res; \n" +
-		"	} \n \n" +
+		depth3 + "return res; \n" +
+		depth2 + "} \n \n" +
 		
-		"	function Trim(str) \n" +
-		"	{ \n" +
-		"		return RTrim(LTrim(str)); \n" +
-		"	} \n" +
+		depth2 + "function Trim(str) \n" +
+		depth2 + "{ \n" +
+		depth3 + "return RTrim(LTrim(str)); \n" +
+		depth2 + "} \n\n" +
 		
-		"	function LTrim(str) \n" +
-		"	{ \n" +
-		"		var whitespace = new String(' '); \n" +
+		depth2 + "function LTrim(str) \n" +
+		depth2 + "{ \n" +
+		depth3 + "var whitespace = new String(' '); \n" +
 
-		"		var s = new String(str); \n" +
-		"		if (whitespace.indexOf(s.charAt(0)) != -1) \n" +
-		"		{ \n" +
-		"			var j=0, i = s.length; \n" +
+		depth3 + "var s = new String(str); \n" +
+		depth3 + "if (whitespace.indexOf(s.charAt(0)) != -1) \n" +
+		depth3 + "{ \n" +
+		depth3 + "var j=0, i = s.length; \n" +
 
-		"			while (j < i && whitespace.indexOf(s.charAt(j)) != -1) \n" +
-		"				j++; \n" +
+		depth3 + "while (j < i && whitespace.indexOf(s.charAt(j)) != -1) \n" +
+		depth3 + "j++; \n" +
 
-		"			s = s.substring(j, i); \n" +
-		"		} \n" +
-		"		return s; \n" +
-		"	} \n \n" +
+		depth3 + "s = s.substring(j, i); \n" +
+		depth3 + "} \n" +
+		depth3 + "return s; \n" +
+		depth2 + "} \n \n" +
 		
-		"	function RTrim(str) \n" +
-		"	{ \n" +
-		"		var whitespace = new String(' '); \n" +
+		depth2 + "function RTrim(str) \n" +
+		depth2 + "{ \n" +
+		depth3 + "var whitespace = new String(' '); \n" +
 
-		"		var s = new String(str); \n" +
-		"		if (whitespace.indexOf(s.charAt(s.length-1)) != -1) \n" +
-		"		{ \n" +
-		"			var i = s.length - 1; \n" +
+		depth3 + "var s = new String(str); \n" +
+		depth3 + "if (whitespace.indexOf(s.charAt(s.length-1)) != -1) \n" +
+		depth3 + "{ \n" +
+		depth3 + "var i = s.length - 1; \n" +
 
-		"			while (i >= 0 && whitespace.indexOf(s.charAt(i)) != -1) \n" +
-		"				i--; \n" +
-
-		"			s = s.substring(0, i+1); \n" +
-		"		} \n" +
+		depth3 + "while (i >= 0 && whitespace.indexOf(s.charAt(i)) != -1) \n" +
+		depth3 + "i--; \n" +
+		depth3 + "s = s.substring(0, i+1); \n" +
+		depth3 + "} \n" +
 		
-		"		return s; \n" +
-		"	} \n" +
-		"\n" +
+		depth3 + "return s; \n" +
+		depth2 + "} \n\n" +
 		
-		"   function replaceEscapeCharacter(url)\n" +
-		"   {\n" +
-		"		url = url.replace(/\\//g, '%2F'); \n" +
-	    "		url = url.replace(/=/g, '%3D'); \n" +
-	    "		url = url.replace(/\\?/g, '%3F'); \n" +
-	    "		url = url.replace(/&/g, '%26'); \n" +
-	    "		url = url.replace(/:/g, '%3A'); \n" +
-	    "		return url; \n" +
-	    "    } \n\n";
+		depth2 + "function replaceEscapeCharacter(url)\n" +
+		depth2 + "{\n" +
+		depth3 + "url = url.replace(/\\//g, '%2F'); \n" +
+		depth3 + "url = url.replace(/=/g, '%3D'); \n" +
+		depth3 + "url = url.replace(/\\?/g, '%3F'); \n" +
+		depth3 + "url = url.replace(/&/g, '%26'); \n" +
+		depth3 + "url = url.replace(/:/g, '%3A'); \n" +
+		depth3 + "return url; \n" +
+	    depth2 + "} \n\n";
 
-	
 	
 	
 	//Getters, Setters, Helpers

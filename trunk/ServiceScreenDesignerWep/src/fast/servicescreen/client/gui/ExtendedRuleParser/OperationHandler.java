@@ -82,8 +82,6 @@ public class OperationHandler
 	 * NOTICE: this method returns the last real sourcetagname out of given opList, BUT
 	 * this way the method cannot check, if the opList is about a constat! So do not use if
 	 * u are not sure that it is a constant or not.
-	 * 
-	 * TODO geht für alles einfach so nach nächster änderung
 	 * */
 	public Operation getLastTagnameOf(ArrayList<Operation> opList)
 	{
