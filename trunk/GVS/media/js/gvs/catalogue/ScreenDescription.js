@@ -173,8 +173,7 @@ var ScreenDescription = Class.create(BuildingBlockDescription,
         var list = new Array();
         this._preconditions.values().each(function(pre) {
             var element = Object.extend(pre.buildingblock.getFactData(), {'position':
-                pre.position});
-            element = Object.extend(element, {'id' : pre.buildingblock.getId()});
+                pre.position, 'id' : pre.buildingblock.getId()});
             list.push(element);
         }.bind(this));
         return list;

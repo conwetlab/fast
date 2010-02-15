@@ -127,7 +127,8 @@ var PrePostInstance = Class.create(ComponentInstance,
         var json = {
             'conditions': [this.getFactData()],
             'id': this.getId(),
-            'name': this._label
+            'name': this._label,
+            'uri': this._buildingBlockDescription.uri
         }
         return Object.toJSON(json);
     },
@@ -141,7 +142,8 @@ var PrePostInstance = Class.create(ComponentInstance,
         return {
                 'label': {'en-gb': this._label},
                 'pattern': this._pattern,
-                'positive': true
+                'positive': true,
+                'uri': this._buildingBlockDescription.uri
             };
     },
     

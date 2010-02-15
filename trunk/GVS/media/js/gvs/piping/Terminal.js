@@ -142,6 +142,8 @@ Object.extend(Terminal.prototype, /** @lends Terminal.prototype */ {
      * Destroy the terminal
      */
     destroy: function() {
+        this.eventAddWire.unsubscribeAll();
+        this.eventRemoveWire.unsubscribeAll();
         this._terminalNode.parentNode.removeChild(this._terminalNode);
         this.removeAllWires();
         this.remove();

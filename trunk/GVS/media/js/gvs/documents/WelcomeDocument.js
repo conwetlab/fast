@@ -44,7 +44,7 @@ var WelcomeDocument = Class.create(AbstractDocument,
             onClick: function() {GVS.action("newScreenflow");}}
         );
         var openScreenflowButton = new dijit.form.Button({
-            label: "Open Existing Screenflow...",
+            label: "Browse Screenflows...",
             onClick: function() {GVS.action("browseScreenflows");}}
         );
 

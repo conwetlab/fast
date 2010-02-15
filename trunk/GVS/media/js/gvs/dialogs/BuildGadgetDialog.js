@@ -53,7 +53,7 @@ var BuildGadgetDialog = Class.create(ConfirmDialog /** @lends BuildGadgetDialog.
             {'type':'input', 'label': 'Gadget Name:','name': 'name', 'value': '', 'required': true},
             {'type':'input', 'label': 'Gadget Short Name:', 'name': 'shortname', 'value': ''},
             {'type':'input', 'label': 'Owner:','name': 'owner', 'value': '', 'required': true},
-            {'type':'input', 'label': 'Version:','name': 'version', 'value': '', 'required': true},
+            {'type':'input', 'label': 'Version:','name': 'version', 'value': '1.0', 'required': true},
             {'type':'input', 'label': 'Vendor:','name': 'vendor', 'value': 'Morfeo'},
             {'type':'input', 'label': 'Gadget Description:','name': 'desc', 'value': ''},
             {'type':'input', 'label': 'Image URL:','name': 'imageURI', 

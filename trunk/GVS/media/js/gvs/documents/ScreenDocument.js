@@ -486,9 +486,7 @@ var ScreenDocument = Class.create(PaletteDocument,
         if (reachabilityData.postconditions) {
             reachabilityData.postconditions.each(function(post) {
                 var postInstance = this._description.getPost(post.id);
-                if (postInstance) {
-                    postInstance.getView().setReachability(post);
-                }               
+                postInstance.getView().setReachability(post);
             }.bind(this));
         }
         if (reachabilityData.pipes) {
