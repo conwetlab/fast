@@ -60,6 +60,15 @@ var ConfirmDialog = Class.create(FormDialog, /** @lends ConfirmDialog.prototype 
      */
     _onCancel: function(){
         this._dialog.hide();
+    },
+
+    /**
+     * Reset method to leave the form as initially
+     * @private
+     */
+    _reset: function ($super) {
+        this._setDisabled(false);
+        $super();
     }
 });
 

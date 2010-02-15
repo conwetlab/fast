@@ -202,7 +202,6 @@ var NewScreenflowDialog = Class.create(ConfirmDialog /** @lends NewScreenflowDia
         this._getForm().version.value = "";
         this._available = true;
         this._setMessage();
-        this._setDisabled(false);
         $super();
     }
 });
