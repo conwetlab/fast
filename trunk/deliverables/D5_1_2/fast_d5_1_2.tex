@@ -243,7 +243,7 @@ There are several new sections and major changes which need to be mentioned:
 
 \begin{itemize}
 	\item Section~\ref{sec:installation_guide}. Installation Guide describes a set of steps to be followed in order to install and execute the FAST Catalogue. Also some configuration instructions are specified.
-	\item Section~\ref{sub:content_negotiation}. Content Negotiation states how the FAST Catalogue has adopted several of the content negotiation principles.
+	\item Section~\ref{sub:linked_data}. Content Negotiation states how the FAST Catalogue has adopted several of the content negotiation principles.
 	\item Section~\ref{sec:restful_catalogue_api}. RESTful Catalogue API has been intensively extended and modified in order to  reflect all the new functionality and how every request or response is constructed. Some of the most important features added in this iteration are:
 	\begin{itemize}
 		\item support for form elements, operators and back-end services (see Section ...),
@@ -308,6 +308,8 @@ ant dist
 
 After executing with no errors this task, a WAR file should have been created in the /dist directory. A WAR file, which stands for  Web Application Archive, is just a JAR file used to distribute a collection of JavaServer Pages, servlets, Java classes, XML files, tag libraries and static Web pages (HTML and related files) that together constitute a Web application, in this case, the FAST Catalogue.
 
+Note that it is also possible to get the compiled WAR file directly from the SVN server. This file can be located at \url{https://svn.forge.morfeo-project.org/fast-fp7project/distribution/catalogue}.
+
 Then, last step is to deply the WAR file into the servlet container. If the server chosen was Apache Tomcat, the procedure for deploying a Web application is:
 \begin{enumerate}
 	\item Stop Tomcat.
@@ -326,7 +328,7 @@ Now you have successfully built the FAST catalogue, however we highly recommend 
 
 The following section covers the configuration options you may have to set up before start using the Catalogue. The FAST Catalogue relies on a Sesame repository for the persistent storage. Sesame repositories can be local or remote. Remote does not mean, it has to be installed in a different machine, but in a servlet container such as Apache Tomcat. The advantage of remote repositories is the possibility of accessing it via a SPARQL endpoint. These configuration aspect can be found in the file \emph{repository.properties} in the root directory where the Catalogue has been deployed.
 
-Independently the type of repository, the parameter \emph{serverURL} needs to take the value of the URL where the FAST Catalogue instance has been deployed. If you are testing the application in your machine, it may be something like \url{http://localhost:8080/FASTCatalogue}.
+Independently the type of repository, the parameter \emph{serverURL} needs to take the value of the URL where the FAST Catalogue instance has been deployed. If you are testing the application in your machine, it may be something like \url{http://catalogueURL/FASTCatalogue}.
 
 Local repositories just need the parameter \emph{storageDir} pointing at a local directory, which has write permission in order to allow Sesame to create files in that directory or to delete any file in the directory. For instance:
 
@@ -346,7 +348,7 @@ repositoryID=c2
 \subsection{Hello World!} % (fold)
 \label{sub:hello_world}
 
-It is recommended to check if the FAST Catalogue has been successfully installed. To do that, a simple HTTP request, using a Web browser, can be sent to the URL the Catalogue is deployed, and specifying a type of resource such as Screen. The URL would be similar to \url{http://localhost:8080/FASTCatalogue/screens}. Depending on the variant chosen, the response may be different. For JSON, the response should be \verb|[]|, but in HTML the message \verb|No screens found.| should be shown.
+It is recommended to check if the FAST Catalogue has been successfully installed. To do that, a simple HTTP request, using a Web browser, can be sent to the URL the Catalogue is deployed, and specifying a type of resource such as Screen. The URL would be similar to \url{http://catalogueURL/FASTCatalogue/screens}. Depending on the variant chosen, the response may be different. For JSON, the response should be \verb|[]|, but in HTML the message \verb|No screens found.| should be shown.
 
 % subsection hello_world (end)
 
@@ -398,11 +400,11 @@ The following is an example of a Find \& Check request:
 \begin{verbatim}
 {
   "canvas": [
-    { "uri": "http://localhost:8080/catalogue/screens/238" },
-    { "uri": "http://localhost:8080/catalogue/screens/323" }
+    { "uri": "http://catalogueURL/catalogue/screens/238" },
+    { "uri": "http://catalogueURL/catalogue/screens/323" }
   ],
   "elements": [
-    { "uri": "http://localhost:8080/catalogue/screens/636" }
+    { "uri": "http://catalogueURL/catalogue/screens/636" }
   ],
   "domainContext": {
     "tags": [
@@ -463,8 +465,10 @@ Until now, using internationalisation is allowed for the label and the descripti
 
 % subsection json_interchange_format (end)
 
-\subsection{Content Negotiation} % (fold)
-\label{sub:content_negotiation}
+\subsection{Linked Data} % (fold)
+\label{sub:linked_data}
+
+Apart from serving as the back-end system for the Gadget Visual Storyboard or GVS, the catalogue publishes all FAST building blocks as linked data following the four rules or principles dictated in \cite{bernersLee2006linkedData}. Hence, building blocks are identified by URIs, concretely HTTP URIs so anyone can look them up. The data obtained for these building blocks is served in different standard formats such as JSON (GVS communication), RDF/XML, Turtle, or even HTML+RDFa as a human-readable version. And as the forth rule states, these building blocks links to other resources on the web. Moreover, principles and best practices from \cite{berrueta2008} and \cite{sauermann2008cool_uris} have been followed for the publication and identification of the building blocks. The mechanism to allow its publication/identification in different formats is called Content Negotiation.
 
 Before any major details about how content negotiation is addressed by the catalogue, a few concepts need to be understood. First of all, say a URI is not a file name. It is common to see a URI as the location for a file, but a URI or Universal Resource Identifier is not a URL: it is not a file name or location, it is an identifier (or a reference) to a resource. Then by dereferencing a URI the actual resource can be retrieved. Let's see a request to retrieve the resource "Screen 123" is sent to the server. The resource is just a piece of information, however the server will answer an HTML document with a text describing the screen or an image representing it. On the Web, these equivalent representations of a resource are called variants, and content negotiation is the mechanism used to determine which of the representations of most appropiate for a given request.
 
@@ -476,9 +480,9 @@ Before any major details about how content negotiation is addressed by the catal
 \end{center}
 \end{figure}
 
-In summary, the basic idea of content negotiation, as stated in the HTTP 1.1 specification ~\cite{http1.1}, is to serve the best variant for a resource, taking into account what variants are available, what variants the server may prefer to serve, what the client can accept, and with which preferences: in HTTP, this is done by the client which may send, in its request, Accept headers (Accept, Accept-Language and Accept-Encoding), to communicate its capabilities and preferences in Format, Language and Encoding, respectively.
+In summary, the basic idea of content negotiation, as stated in the \cite{http1.1}, is to serve the best variant for a resource, taking into account what variants are available, what variants the server may prefer to serve, what the client can accept, and with which preferences: in HTTP, this is done by the client which may send, in its request, Accept headers (Accept, Accept-Language and Accept-Encoding), to communicate its capabilities and preferences in Format, Language and Encoding, respectively.
 
-In fact, what the catalogue really does is "format negotiation" since the alternate representationos are just based on the selection of the media type, through the Accept header, but does not consider different languages or encoding types. The formats supported are JSON, RDF+XML and HTML.
+In fact, what the catalogue really does is "format negotiation" since the alternate representationos are just based on the selection of the media type, through the \emph{Accept} header, but does not consider different languages or encoding types. The formats supported are JSON, RDF/XML, Turtle and HTML+RDFa. Even though the \emph{Accept} header is desired, these different representations can be retrieved by adding the format at the end of the resource URI. For instance, to get the RDF representation of the screen 457, performing a GET HTTP request to <catalogue\_url>/screens/457.rdf will serve the information in RDF/XML.
 
 Lastly, content negotiation needs to identify which player is going to take the lead on it. There are two kinds of content negotiation which are possible in HTTP: server-driven and agent-driven negotiation. The approach followed by the catalogue is agent-driven negotiation, hence selecting a specific representation for a resource is responsibility of the user agent. If none is specified, by default, the server will choose the JSON representation.
 
@@ -517,7 +521,7 @@ Member URI & DELETE & N/A & \textbf{Delete} the addressed member of the collecti
 
 The JSON structure for create any building bock can be found in the appendixes. All of them are composed of a common structure which can be found in Section Appendix B, and some specific information depending on the type. Screen-flows are defined in Appendix C, screens in Appendix D and forms, operators and back-end services share the same structure detailed in Appendix E. However, a few examples of request and responses are shown in order to clarify how the request are constructed and sent, and how the responses look like.
 
-To create a new screen, a POST request is send to the catalogue server, including the JSON representation of the screen as the body of the request:
+To create a new screen, a POST request is send to the catalogue server, concretely to http://catalogueURL/screens, including the JSON representation of the screen in the body of the request:
 
 \singlespacing
 \begin{verbatim}
@@ -605,7 +609,7 @@ The URI of the screen is created using the id specified in the JSON request. So,
   "screenshot": "http://demo.fast.morfeo-project.org/images/amazonProductList.png",
   "tags": [{"label": {"en-gb": "amazon"}}],
   "type": "screen",
-  "uri": "http://localhost:8080/catalogue/screens/28",
+  "uri": "http://catalogueURL/catalogue/screens/28",
   "version": "0.1"
 }
 \end{verbatim}
@@ -654,21 +658,21 @@ To obtain all the screens stored in the catalogue a HTTP GET request is sent to 
     "screenshot": "http://demo.fast.morfeo-project.org/images/amazonProductList.png",
     "tags": [{"label": {"en-gb": "amazon"}}],
     "type": "screen",
-    "uri": "http://localhost:8080/catalogue/screens/28",
+    "uri": "http://catalogueURL/catalogue/screens/28",
     "version": "0.1"
   },
   {
     "creationDate": "2009-02-07T09:59:52+0000",
     "creator": "fabio",
     ...,
-	  "uri": "http://localhost:8080/catalogue/screens/14",
+	  "uri": "http://catalogueURL/catalogue/screens/14",
     "version": "1.0"
   },
   {
     "creationDate": "2009-02-07T09:59:52+0000",
     "creator": "javier",
     ...,
-	  "uri": "http://localhost:8080/catalogue/screens/564",
+	  "uri": "http://catalogueURL/catalogue/screens/564",
     "version": "1.0"
   }
 ]
@@ -712,13 +716,13 @@ N/A & A list of recommended screens URIs is returned. & Required \\ \hline
 \end{center}
 \end{table}
 
-Following is shown an example of usage of this operation considering a canvas with the screen \texttt{http://localhost:8080/catalogue/screens/654}.
+Following is shown an example of usage of this operation considering a canvas with the screen \texttt{http://catalogueURL/catalogue/screens/654}.
 
 \singlespacing
 \begin{verbatim}
 {
   canvas: [
-    { uri: "http://localhost:8080/catalogue/screens/654" }
+    { uri: "http://catalogueURL/catalogue/screens/654" }
   ],
   domainContext: {
     tags: [],
@@ -734,10 +738,10 @@ After the execution of the recommendation algorithm, the response given by the c
 \singlespacing
 \begin{verbatim}
 [
-  "http://localhost:8080/catalogue/screens/371",
-  "http://localhost:8080/catalogue/screens/24",
-  "http://localhost:8080/catalogue/screens/253",
-  "http://localhost:8080/catalogue/screens/12"
+  "http://catalogueURL/catalogue/screens/371",
+  "http://catalogueURL/catalogue/screens/24",
+  "http://catalogueURL/catalogue/screens/253",
+  "http://catalogueURL/catalogue/screens/12"
 ]
 \end{verbatim}
 \doublespacing
@@ -787,10 +791,10 @@ The scenario for the following example is composed by a screen in the canvas whi
 \begin{verbatim}
 {
   "canvas": [
-    { "uri": "http://localhost:8080/catalogue/screens/238" }
+    { "uri": "http://catalogueURL/catalogue/screens/238" }
   ],
   "elements": [
-    { "uri": "http://localhost:8080/catalogue/screens/636" }
+    { "uri": "http://catalogueURL/catalogue/screens/636" }
   ],
   "domainContext": {
     "tags": [
@@ -820,7 +824,7 @@ The response shows that there are not reachable screens at the moment, and preco
       "satisfied": false
     }],
     "reachability": false,
-    "uri": "http://localhost:8080/catalogue/screens/238"
+    "uri": "http://catalogueURL/catalogue/screens/238"
   }],
   "elements": [{
     "preconditions": [{
@@ -829,7 +833,7 @@ The response shows that there are not reachable screens at the moment, and preco
       "satisfied": false
     }],
     "reachability": false,
-    "uri": "http://localhost:8080/catalogue/screens/636"
+    "uri": "http://catalogueURL/catalogue/screens/636"
   }]
 }
 \end{verbatim}
@@ -847,10 +851,10 @@ The format of the request is the same as the one used in the Check operation:
 \begin{verbatim}
 {
   "canvas": [
-    { "uri": "http://localhost:8080/catalogue/screens/238" }
+    { "uri": "http://catalogueURL/catalogue/screens/238" }
   ],
   "elements": [
-    { "uri": "http://localhost:8080/catalogue/screens/636" }
+    { "uri": "http://catalogueURL/catalogue/screens/636" }
   ],
   "domainContext": {
     "tags": [
@@ -880,7 +884,7 @@ The response for the above request is:
       "satisfied": false
     }],
     "reachability": false,
-    "uri": "http://localhost:8080/catalogue/screens/238"
+    "uri": "http://catalogueURL/catalogue/screens/238"
   }],
   "elements": [
     {
@@ -890,12 +894,12 @@ The response for the above request is:
         "satisfied": false
       }],
       "reachability": false,
-      "uri": "http://localhost:8080/catalogue/screens/636"
+      "uri": "http://catalogueURL/catalogue/screens/636"
     },
     {
       "preconditions": [],
       "reachability": true,
-      "uri": "http://localhost:8080/catalogue/screens/132"
+      "uri": "http://catalogueURL/catalogue/screens/132"
     }
   ]
 }
@@ -944,9 +948,9 @@ The following example send two URIs of screens and a URI of a screen-flow to the
 \singlespacing
 \begin{verbatim}
 [
-  "http://localhost:8080/catalogue/screens/12",
-  "http://localhost:8080/catalogue/screens/48",
-  "http://localhost:8080/catalogue/forms/9",
+  "http://catalogueURL/catalogue/screens/12",
+  "http://catalogueURL/catalogue/screens/48",
+  "http://catalogueURL/catalogue/forms/9",
 ]
 \end{verbatim}
 \doublespacing
@@ -962,14 +966,14 @@ The response obtained are two lists, one containing all the metadata regarding t
       "creationDate": "2009-02-07T09:59:52+0000",
       "creator": "irivera",
       ...,
-      "uri": "http://localhost:8080/catalogue/screens/12",
+      "uri": "http://catalogueURL/catalogue/screens/12",
       "version": "1.0"
     },
     {
       "creationDate": "2009-02-07T09:59:52+0000",
       "creator": "irivera",
       ...,
-      "uri": "http://localhost:8080/catalogue/screens/12",
+      "uri": "http://catalogueURL/catalogue/screens/12",
       "version": "1.0"
     }
   ],
@@ -995,7 +999,7 @@ The response obtained are two lists, one containing all the metadata regarding t
         }
       ],
       ...,
-      "uri": "http://localhost:8080/FASTCatalogue/forms/9",
+      "uri": "http://catalogueURL/FASTCatalogue/forms/9",
       "version": "1.0"
     },
   ],
@@ -1019,6 +1023,7 @@ A request is formed of the following parameters:
 	\item[forms] It is a list of forms, such as the list of forms recommended last execution.
 	\item[operators] It is a list of operators, such as the list of operators recommended last execution.
 	\item[backendservices] It is a list of back-end services, such as the list of back-end services recommended last execution.
+	\item[search] Boolean indicating if forms/operators/services are required to be looked for. If \emph{false} the operation performed is just a check. If missed, it will act as \emph{true}.
 	\item[domainContext] The domain context contains a list of tags and a user.
 	\item[pipes] List of pipes for the connection between screen components.
 	\item[selectedItem] URI of a screen component from the canvas.
@@ -1041,12 +1046,13 @@ An example of request is the following:
   }],
   "postconditions": [],
   "canvas": [
-    { "uri": "http://localhost:8080/catalogue/forms/1" },
-    { "uri": "http://localhost:8080/catalogue/services/1" }
+    { "uri": "http://catalogueURL/catalogue/forms/1" },
+    { "uri": "http://catalogueURL/catalogue/services/1" }
   ],
   "forms": [],
   "operators": [],
   "backendservices": [],
+  "search": true,
   "domainContext": {
     "tags": [],
     "user": null
@@ -1054,17 +1060,17 @@ An example of request is the following:
   "pipes": [
     {
       "from": {
-        "buildingblock": "http://localhost:8080/catalogue/services/1",
+        "buildingblock": "http://catalogueURL/catalogue/services/1",
         "condition": "list"
       },
       "to": {
         "action": "showTable",
-        "buildingblock": "http://localhost:8080/catalogue/forms/1",
+        "buildingblock": "http://catalogueURL/catalogue/forms/1",
         "condition": "list"
       }
     }
   ],
-  "selectedItem": "http://localhost:8080/catalogue/forms/1"
+  "selectedItem": "http://catalogueURL/catalogue/forms/1"
 }
 \end{verbatim}
 \doublespacing
@@ -1092,7 +1098,7 @@ And the response according to the above request is:
         "uses": []
       }],
       "reachability": false,
-      "uri": "http://localhost:8080/catalogue/services/1"
+      "uri": "http://catalogueURL/catalogue/services/1"
     },
     {
       "actions": [
@@ -1118,7 +1124,7 @@ And the response according to the above request is:
         }
       ],
       "reachability": true,
-      "uri": "http://localhost:8080/catalogue/forms/1"
+      "uri": "http://catalogueURL/catalogue/forms/1"
     }
   ],
   "connections": [
@@ -1129,7 +1135,7 @@ And the response according to the above request is:
       },
       "to": {
         "action": "search",
-        "buildingblock": "http://localhost:8080/catalogue/services/1",
+        "buildingblock": "http://catalogueURL/catalogue/services/1",
         "condition": "filter"
       }
     },
@@ -1139,13 +1145,13 @@ And the response according to the above request is:
   "pipes": [
     {
       "from": {
-        "buildingblock": "http://localhost:8080/catalogue/services/1",
+        "buildingblock": "http://catalogueURL/catalogue/services/1",
         "condition": "list"
       },
       "satisfied": true,
       "to": {
         "action": "showTable",
-        "buildingblock": "http://localhost:8080/catalogue/forms/1",
+        "buildingblock": "http://catalogueURL/catalogue/forms/1",
         "condition": "list"
       }
     }
@@ -1185,10 +1191,10 @@ Request
 \singlespacing
 \begin{verbatim}
 {
-  "goal": "http://localhost:8080/catalogue/screens/35",
+  "goal": "http://catalogueURL/catalogue/screens/35",
   "canvas": [
-    { "uri": "http://localhost:8080/catalogue/screens/56" },
-    { "uri": "http://localhost:8080/catalogue/screens/85" }
+    { "uri": "http://catalogueURL/catalogue/screens/56" },
+    { "uri": "http://catalogueURL/catalogue/screens/85" }
   ],
   "page": 1,
   "per_page": 10 
@@ -1201,18 +1207,18 @@ Response
 \begin{verbatim}
 [
   [
-    "http://localhost:8080/catalogue/screens/13",
-    "http://localhost:8080/catalogue/screens/23"
+    "http://catalogueURL/catalogue/screens/13",
+    "http://catalogueURL/catalogue/screens/23"
   ],
   [
-    "http://localhost:8080/catalogue/screens/79",
-    "http://localhost:8080/catalogue/screens/37",
-    "http://localhost:8080/catalogue/screens/14"
+    "http://catalogueURL/catalogue/screens/79",
+    "http://catalogueURL/catalogue/screens/37",
+    "http://catalogueURL/catalogue/screens/14"
   ],
   [
-    "http://localhost:8080/catalogue/screens/16",
-    "http://localhost:8080/catalogue/screens/44",
-    "http://localhost:8080/catalogue/screens/32"
+    "http://catalogueURL/catalogue/screens/16",
+    "http://catalogueURL/catalogue/screens/44",
+    "http://catalogueURL/catalogue/screens/32"
   ]
 ]
 \end{verbatim}
@@ -1299,24 +1305,27 @@ It can be seen that RDFS performs rather well, even in the 10.000 size set, wher
 {
   "code": "http://url.com/.../code.js",
   "creationDate": "2009-04-20T17:00:00+0100",
-  "creator": "http://www.fabio.es/",
+  "creator": "username",
   "description": {"en-gb": "This is a description of the building block"},
-  "tags": {
-    "tags": [
-      "ebay",
-      "amazon",
+    "tags":[
+      {
+        "label":{"en-gb":"Amazon"},
+        "means":"http://dbpedia.org/page/Amazon.com"
+      },
+      {
+        "label":{"en-gb":"eBay"},
+        "means":"http://dbpedia.org/page/Ebay"
+      }
     ],
-    "user": <String> // not defined yet
-  },
-  "homepage": "http://www.homepage.ie/",
-  "icon": "http://url.com/images/icon.png",
-  "id": "Id of the resource",
+  "homepage": "http://url.com/.../homepage",
+  "icon": "http://url.com/images/.../icon.png",
+  "id": "Id of the building block", // i.e. 3545
   "label": {"en-gb": "Label or title of the building block"},
-  "name": "Amazon Item to Ebay Filter",
+  "name": "User-friendly name of the building block",
   "rights": "http://creativecommons.org/",
-  "screenshot": "http://www.deri.ie/eBayList-screenshot.jpg",
-  "type": "type of the building block", // screenflow, screen, form, operator y resource
-  "uri": "http://localhost:8080/catalogue/screens/525",
+  "screenshot": "http://url.com/.../screenshot.jpg",
+  "type": "type of the building block", // screenflow, screen, form, operator or resource
+  "uri": "http://url.com/screens/525",
   "version": "1.0"
 }
 \end{verbatim}
@@ -1333,8 +1342,8 @@ It can be seen that RDFS performs rather well, even in the 10.000 size set, wher
 {
   <GENERIC BUILDING BLOCK JSON>,
   "contains": [
-    "http://purl.oclc.org/fast/ontology/gadget#Screen1257860772723",
-    "http://purl.oclc.org/fast/ontology/gadget#Screen1257860720035",
+    "http://url.com/screens/72723",
+    "http://url.com/screens/20035",
   ],
 }
 \end{verbatim}
@@ -1432,9 +1441,15 @@ It can be seen that RDFS performs rather well, even in the 10.000 size set, wher
                   http://aws.amazon.com/AWSECommerceService#Item",
       "positive": true
     }]],
-    "uses": []
+    "uses": [{
+      "id":"cart",
+      "uri":"http://aws.amazon.com/AWSECommerceService#ShoppingCart"
+    }]
   }],
-  "libraries": [],
+  "libraries": [{
+    "language":"JavaScript",
+    "source":"http://url.com/libcode.js"
+  }],
   "postconditions": [[{
     "id": "filterEbay",
     "label": {"en-gb": "Ebay List"},
