@@ -423,32 +423,30 @@ Using this representation, complex correspondences can be modelled, using first 
 
 \subsection{Facts Transformation Tool}
 
-For services the Kassel members of the FAST team have developed a service wrapper tool, cf. deliverable D4.3.2. One part of the service wrapper tool deals with a rule based approach for the transformation of server responses into FAST facts. This problem is closely related to the problem of ontology mediation. Thus, we plan to use these techniques for the development of a Facts Transformation Tool that allows to create data transformation operators, i.e. operators that mediate between two ontologies.
+To support manual ontology mapping, we plan to develop a rule based, interactive Facts Transformation Tool. This tool utilizes techniques of our service wrapper tool, cf. deliverable D4.3.2. One part of the service wrapper tool deals with a rule based approach for the transformation of server responses into FAST facts. This problem is closely related to the problem of ontology mediation. Thus, these techniques will also allow to create data transformation operators, i.e. operators that mediate between two ontologies.
 
-Figure \ref{fig:FactsTransformationToolPortDefinitions} shows a photoshoped preview of the planned data transformation tool. The data transformation tool has two tabs. The \textit{General} tab allows to define the input and output ports for the desired data transformation operator. These ports shall be  typed according to the participating semantic elements to be derived from the FAST catalogue. This typing will provide the structure of the input and output data of the desired data transformation operator.  
+Figure \ref{fig:FactsTransformationToolPortDefinitions} shows a photoshoped preview of the planned Facts Transformation Tool. The Facts Transformation Tool has two tabs. The \textit{General} tab allows to define the input and output ports for the desired data transformation operator. These ports shall be  typed according to the participating semantic elements to be derived from the FAST catalogue. This typing will provide the structure of the input and output data of the desired data transformation operator.  
 
-
+Figure \ref{fig:FactsTransformationToolTransformationRules} shows the planned editor for transformation rules. On the left of Figure \ref{fig:FactsTransformationToolTransformationRules} there is a tree of example data that is used to validate the transformation rules during editing. Thus, the Facts Transformation Tool will execute the transformation rules after any editing in order to give direct feedback on their functionality and to enable the user to validate the achieved transformation. The transformation results are shown on the right of Figure \ref{fig:FactsTransformationToolTransformationRules}. 
 
 
 \begin{figure}
   \begin{center}
-\includegraphics[width=0.8\linewidth]{images/FactsTransformationToolGVSWithPortDefinitions.jpg}
-    \caption{Definition input ports and output ports for data transformation operators (photoshoped screen dump)}
+\includegraphics[width=0.8\linewidth]{images/FactsTransformationToolGVSWithPortDefinitionsNoGlitch2.png}
+    \caption{Definition of operator pre- / postconditions (photoshoped screen dump)}
     \label{fig:FactsTransformationToolPortDefinitions}
   \end{center}
 \end{figure}
 
-Figure \ref{fig:FactsTransformationToolPortDefinitions} shows the planned editor for transformation rules. On the left of Figure \ref{fig:FactsTransformationToolPortDefinitions} there is a tree of example data that is used to validate the transformation rules during editing. Thus, the Facts Transformation Tool will execute the transformation rules after any editing in order to give direct feedback on their functionality and to enable the user to validate the achieved transformation. The transformation results are shown on the right of Figure \ref{fig:FactsTransformationToolPortDefinitions}. 
-
-The middle of Figure \ref{fig:FactsTransformationToolPortDefinitions} shows some possible transformation rules for our example. A \textit{createObject} rule may be used to create output fact objects. The \textit{Target} field of such a rule specifies the type of the created objects, in our example \textit{List}. The top rule fires for each element of the input data with the type specified in the \textit{From} field of the transformation rule. Thus, in our example, the input data is searched for objects of type \textit{List} firing for the root of our data. 
+The middle of Figure \ref{fig:FactsTransformationToolTransformationRules} shows some possible transformation rules for our example. A \textit{createObject} rule may be used to create output fact objects. The \textit{Target} field of such a rule specifies the type of the created objects, in our example \textit{List}. The top rule fires for each element of the input data with the type specified in the \textit{From} field of the transformation rule. Thus, in our example, the input data is searched for objects of type \textit{List} firing for the root of our data. 
 
 The second rule of our example creates \textit{Customer} objects. This rule is a subrule of the root rule and thus the created objects are added to the \textit{List} object created by the parent rule. Similarly, the search for triggering objects of type \textit{Person} is restricted to the subtree below the from element that has triggered the parent rule, i.e. to our input \textit{List}. 
 
 The third rule is used to fill the attribute \textit{fullName} of the \textit{Customer} objects. This rule is an example for a many to one transformation. The result is a string concatenation of the \textit{lastName} of the \textit{Person} that has triggered the parent rule plus a text constant plus the \textit{firstName} of the current \textit{Person}. The resulting string is transferred to the \textit{fullName} attribute of the corresponding \textit{Customer}. 
 
-Note, simple one to one transformation rules may be derived by the ontology mediation approach described above and such rules may be added to the transformation tool, automatically. The more complex rules may then be added interactively. During editing, the semantics provided by the FAST catalogue may be used to support the user with completion proposals and consistency checking. In addition, the direct execution of the rules on example data will help the user to create appropriate rules and to validate their effects. 
+Note that simple one-to-one transformation rules should be derived with the help of the ontology mediation approach described above. Such simple rules should be added to the transformation tool, automatically. The more complex rules may then be added interactively. During editing, the semantics provided by the FAST catalogue will be used to support the user with completion proposals and consistency checking. In addition, the direct execution of the rules on example data will help the user to create appropriate rules and to validate their effects. 
 
-Note, so far our transformation rules are restricted to simple cases. So far we have focused on simple cases allowing a simple transformation approach that does not require to sophisticated skills from our users. However, as discussed on the Amazon to GoodRelations example, there exist more complex cases. In the third year of the project we will investigate how such more complex cases may be covered, too, and whether it is still possible to keep the rules simple and understandable. 
+So far our transformation rules are restricted to simple cases. So far we have focused on simple cases allowing a simple transformation approach that does not require to sophisticated skills from our users. However, as discussed on the Amazon to GoodRelations example, there exist more complex cases. In the third year of the project we will investigate how such more complex cases can be covered, too, and whether it is still possible to keep the rules simple and understandable. 
 
 
 
@@ -463,16 +461,16 @@ Note, so far our transformation rules are restricted to simple cases. So far we 
 
 \subsection{Creating the Operator}
 
-Once the data transformation operator has been defined, it may be added to the FAST catalogue in order to allow its use for the definition of piping configurations of new screens within the FAST CGS tool. For this purpose a simple semantics description will be send to FAST catalogue defining the semantics of the operator and the semantics of its input and output port.
+Once the data transformation operator has been defined, it will be added to the FAST catalogue in order to allow its use for the definition of piping configurations of new screens within the FAST CGS tool. For this purpose a simple semantics description will be send to FAST catalogue defining the semantics of the operator and the semantics of its input and output port.
 
-Currently, the Service Wrapper Tool uses its own proprietary repository for trees of transformation rules. First of all this has technical reasons since the development of the transformation tool is based on an reference architecture and libraries for web based interactive systems provided by Kassel University, cf. \cite{AsDH2009CVSM}. This repository has the special advantage that it provides support for teams of developers, thus the service wrapper tool allows to merge the contributions of multiple developers. However, on the long run, we may store the transformation rules together with the service wrapper and transformation operator definitions in the FAST catalogue.  
+Currently, the Service Wrapper Tool uses its own repository for trees of transformation rules. First of all this has technical reasons: The development of the transformation tool is based on an reference architecture and libraries for web based interactive systems provided by Kassel University, cf. \cite{AsDH2009CVSM}. This repository has the special advantage that it provides support for teams of developers, thus the service wrapper tool allows to merge the contributions of multiple developers. However, on the long run, we shall store the transformation rules together with the service wrapper and transformation operator definitions in the FAST catalogue.  
 
 
 \section{Gadget Building Phase}
 \label{sec:gadgetbuilding}
 Every time ontology matching is performed and an alignment is created between two underlying resources, the corresponding alignment rules are stored and an operator is created in the catalogue. 
 
-At the gadget building phase, whenever two screens are combined, the catalogue will provide the possible matching operators for the two screens. This way an operator can be placed between two screens that would otherwise be incompatible, making interoperation between the two possible.
+At the gadget building phase, whenever preconditions and postconditions of screens, resources or operators show a semantic mismatch, the catalogue will offer the possible mediation operators that would solve the incompatibility problem. This way an mediation operator can be placed between two pre- postconditions that would otherwise be incompatible, making interoperation between the two possible. In seldom cases, the catalogue may fail to retrieve an appropriate mediation operator. In such cases building of a new mediation operator with the help of the Facts Transformation Tool will be triggered in order to meet the users need.  
 
 \section{Runtime} 
 \label{sec:runtime}
