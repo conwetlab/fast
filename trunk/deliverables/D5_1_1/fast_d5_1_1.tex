@@ -16,13 +16,13 @@
 \usepackage{amssymb}
 \parindent0pt
 
-\newcommand\deliverableNumber{D5.1.2}
+\newcommand\deliverableNumber{D5.1.1}
 \newcommand\deliverableTitle{User Manual of the FAST Catalogue}
 \newcommand\deliverableTitleShort{Catalogue User Manual}
 \newcommand\workpackageNumber{5}
 \newcommand\workpackageTitle{Semantic catalogue of screen-flow resources and back-end Web Services}
 \newcommand\authorOne{Ismael Rivera, NUIG}
-\newcommand\authorTwo{Author 2}
+\newcommand\authorTwo{Ciprian Palaghita, Cyntelix}
 \newcommand\authorThree{Author 3}
 \newcommand\authorFour{Author 4}
 \newtheorem{example}{\emph{Example}}
@@ -67,9 +67,11 @@
 		{\LARGE \sffamily \textbf{\deliverableTitle}}\\
 		\vspace{2cm}
 		{\large \sffamily \authorOne}\\
+		\vspace{0.2cm}
+		{\large \sffamily \authorTwo}\\
 		\vspace{0.5cm}
 		\vfill
-		{\large \sffamily Date: 25/01/2010}\\
+		{\large \sffamily Date: 19/01/2010}\\
 		\vspace{1cm}
 		{\sffamily FAST is partially funded by the E.C. (grant code: FP7-ICT-2007-1-216048).}
 		
@@ -103,7 +105,8 @@
                          \textcolor{white}{\textbf{Date}} &
                          \textcolor{white}{\textbf{Author (Partner)}} &
                          \textcolor{white}{\textbf{Change description}}\\ \hline
-1.0 & 25/01/2010 & Ismael Rivera (NUIG) & First version of the deliverable \\ \hline
+1.0 & 19/01/2010 & Ismael Rivera (NUIG) & First version of the deliverable \\
+ & & Ciprian Palaghita (Cyntelix) & \\ \hline
 \end{tabular}
 \end{small}
 
@@ -237,7 +240,7 @@ The deliverable presents both the external and internal architecture in Section~
 \subsection{Changes from previous version} % (fold)
 \label{sub:changes_from_previous_version}
 
-This should be the first version of this deliverable since in M12 the deliverable 5.1 was not scheduled. Nevertheless, last year an extra document was written as an appendix to the FAST Catalogue in order to detail and clarify technical decisions and to have a technical reference manual. Hence, the deliverable D5.2.1 will evolve to become the D5.1.2, so it will be no longer needed by itself.
+This is the first version of this deliverable since in M12 the deliverable 5.1 was not scheduled. Nevertheless, last year an extra document was written as an appendix to the FAST Catalogue in order to detail and clarify technical decisions and to have a technical reference manual, which the content was taken from as the initial draft the present deliverable. Hence, the deliverable D5.2.1 will evolve to become the D5.1.1, so it will be no longer needed by itself.
 
 There are several new sections and major changes which need to be mentioned:
 
@@ -690,7 +693,7 @@ The specific URL to access this operation is http://catalogueURL/screens/find us
 \caption{Screen Find Request Parameters}
 \label{tab:screen_find_request}
 \begin{center}
-\begin{tabular}{|p{2cm}|p{9.5cm}|p{2cm}|}
+\begin{tabular}{|p{2.5cm}|p{9cm}|p{2cm}|}
 \hline
 \rowcolor{fast@lightgrey}\textcolor{white}{Name} &
                          \textcolor{white}{Description} &
@@ -706,7 +709,7 @@ elements & It is a list of resources, previously stored in the catalogue. For ex
 \caption{Screen Find Response Parameters}
 \label{tab:screen_find_response}
 \begin{center}
-\begin{tabular}{|p{2cm}|p{9.5cm}|p{2cm}|}
+\begin{tabular}{|p{2.5cm}|p{9cm}|p{2cm}|}
 \hline
 \rowcolor{fast@lightgrey}\textcolor{white}{Name} &
                          \textcolor{white}{Description} &
@@ -756,7 +759,7 @@ This operation verifies the state of certain list of screens depending on a spec
 \caption{Screen Check Request Parameters}
 \label{tab:screen_check_request}
 \begin{center}
-\begin{tabular}{|p{2cm}|p{9.5cm}|p{2cm}|}
+\begin{tabular}{|p{2.5cm}|p{9cm}|p{2cm}|}
 \hline
 \rowcolor{fast@lightgrey}\textcolor{white}{Name} &
                          \textcolor{white}{Description} &
@@ -773,14 +776,14 @@ criterion & The criterion specifies what it has to be check. The only possible s
 \caption{Screen Check Response Parameters}
 \label{tab:screen_check_response}
 \begin{center}
-\begin{tabular}{|p{2cm}|p{9.5cm}|p{2cm}|}
+\begin{tabular}{|p{2.5cm}|p{9cm}|p{2cm}|}
 \hline
 \rowcolor{fast@lightgrey}\textcolor{white}{Name} &
                          \textcolor{white}{Description} &
                          \textcolor{white}{Type}\\ \hline
-Canvas & The canvas indicating which screens satisfy the critetion. More aditional information may be included, for example, a satisfaction attribute for every precondition for reachability. & Optional\\ \hline
-Domain Context & The domain context contains a list of tags and a user. & Optional\\ \hline
-Elements & The elements indicating which satisfy the critetion. More aditional information may be included as in the Canvas. & Optional\\ \hline
+canvas & The canvas indicating which screens satisfy the critetion. More aditional information may be included, for example, a satisfaction attribute for every precondition for reachability. & Optional\\ \hline
+domainContext & The domain context contains a list of tags and a user. & Optional\\ \hline
+elements & The elements indicating which satisfy the critetion. More aditional information may be included as in the Canvas. & Optional\\ \hline
 \end{tabular}
 \end{center}
 \end{table}
@@ -915,7 +918,7 @@ Although the information about a resource can be obtained by its specific retrie
 \caption{GetMetadata Request Parameters}
 \label{tab:getmetadata_request}
 \begin{center}
-\begin{tabular}{|p{2cm}|p{9.5cm}|p{2cm}|}
+\begin{tabular}{|p{2.5cm}|p{9cm}|p{2cm}|}
 \hline
 \rowcolor{fast@lightgrey}\textcolor{white}{Name} &
                          \textcolor{white}{Description} &
@@ -929,7 +932,7 @@ N/A & A list of URIs. & Required\\ \hline
 \caption{GetMetadata Response Parameters}
 \label{tab:getmetadata_response}
 \begin{center}
-\begin{tabular}{|p{2cm}|p{9.5cm}|p{2cm}|}
+\begin{tabular}{|p{2.5cm}|p{9cm}|p{2cm}|}
 \hline
 \rowcolor{fast@lightgrey}\textcolor{white}{Name} &
                          \textcolor{white}{Description} &
@@ -1268,7 +1271,7 @@ URITooLong & The URI exceeded the maximum limit of <maxLength>. & 400 Bad Reques
 
 \clearpage
 \bibliographystyle{apalike}
-\bibliography{fast_d5_1_2}
+\bibliography{fast_d5_1_1}
 
 
 \clearpage
