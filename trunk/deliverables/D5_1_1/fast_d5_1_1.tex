@@ -14,6 +14,10 @@
 \usepackage{longtable}
 \usepackage{array}
 \usepackage{amssymb}
+
+% This helps to get hyphenation in typewriter font (\texttt)
+\usepackage[htt]{hyphenat}
+
 \parindent0pt
 
 \newcommand\deliverableNumber{D5.1.1}
@@ -431,14 +435,14 @@ In order to offers an adaptable solution to various languages and regions withou
 \begin{verbatim}
 {
   "label": {
-    "en-GB": "Simple Example",
+    "en-GB": "Product Search",
     "es-ES": "Ejemplo Sencillo",
-    "de-DE": "Einfaches Beispiel"
+    "de-DE": "Produktsuche"
   },
   "description": {
-    "en-GB": "This is a simple example of a screen",
+    "en-GB": "On this screen, the user can enter a search term.",
     "es-ES": "Esto es un ejemplo sencillo de pantalla",
-    "de-DE": "Dies ist ein einfaches Beispiel für einen Bildschirm"
+    "de-DE": "Auf diesem Screen kann der Benutzer einen Suchbegriff eingeben."
   },
 }
 \end{verbatim}
@@ -471,9 +475,12 @@ Until now, using internationalisation is allowed for the label and the descripti
 \subsection{Linked Data} % (fold)
 \label{sub:linked_data}
 
-Apart from serving as the back-end system for the Gadget Visual Storyboard or GVS, the catalogue publishes all FAST building blocks as linked data following the four rules or principles dictated in \cite{bernersLee2006linkedData}. Hence, building blocks are identified by URIs, concretely HTTP URIs so anyone can look them up. The data obtained for these building blocks is served in different standard formats such as JSON (GVS communication), RDF/XML, Turtle, or even HTML+RDFa as a human-readable version. And as the forth rule states, these building blocks links to other resources on the web. Moreover, principles and best practices from \cite{berrueta2008} and \cite{sauermann2008cool_uris} have been followed for the publication and identification of the building blocks. The mechanism to allow its publication/identification in different formats is called Content Negotiation.
+Apart from serving as the back-end system for the Gadget Visual Storyboard (GVS), the catalogue publishes all FAST building blocks as linked data, following the principles as originally defined in \cite{bernersLee2006linkedData}, in order to make them available to arbitrary third party applications. Each building block is identified by an HTTP URI and hosted through the catalogue so that it can be dereferenced through the same URI. For each building block, data is available in representations in different standard formats such as JSON (for communication with the GVS), RDF/XML, Turtle, or even HTML+RDFa as a human-readable version. 
+Following the principles and best practices proposed in \cite{berrueta2008} and \cite{sauermann2008cool_uris}, these representations are served based on the request issued by the requesting agent, using a technique called \emph{content negotiation}.
+As required by the forth rule of linked data, individual building blocks link to other data on the Web, thereby preventing so-called isolated ``data islands''.
 
-Before any major details about how content negotiation is addressed by the catalogue, a few concepts need to be understood. First of all, say a URI is not a file name. It is common to see a URI as the location for a file, but a URI or Universal Resource Identifier is not a URL: it is not a file name or location, it is an identifier (or a reference) to a resource. Then by dereferencing a URI the actual resource can be retrieved. Let's see a request to retrieve the resource "Screen 123" is sent to the server. The resource is just a piece of information, however the server will answer an HTML document with a text describing the screen or an image representing it. On the Web, these equivalent representations of a resource are called variants, and content negotiation is the mechanism used to determine which of the representations of most appropiate for a given request.
+In order to understand how content negotiation is implemented in the catalogue, a few concepts need to be understood. The URI of a particular building block must be understood as the identifier of the building block as such, as opposed to a particular representation (JSON, HTML, etc.) of it. In fact, each such representation has its own URI, under which it can be retrieved. Using the terminology established in \cite{w3c2004webArchitecture}, the building block is a \emph{non-information resource}, whereas each representation is an \emph{information resource}. In the process of content negotiation, the requesting agent will first request the URI of the building block as such (e.g., \texttt{http://catalogue.com/screens/235}), as well as the required representation format (e.g., JSON). The catalogue will then inspect the request and redirect the requester to the appropriate representation (e.g., \texttt{http://catalogue.com/screens/235.json}), as illustrated in Fig.~\ref{fig:content_negotiation}.
+On the Web, different representations for the same resource are called \emph{variants}, and content negotiation is the mechanism used to determine which of the representations of most appropriate for a given request.
 
 \begin{figure}[htb]
 \label{fig:content_negotiation}
@@ -483,9 +490,9 @@ Before any major details about how content negotiation is addressed by the catal
 \end{center}
 \end{figure}
 
-In summary, the basic idea of content negotiation, as stated in the \cite{http1.1}, is to serve the best variant for a resource, taking into account what variants are available, what variants the server may prefer to serve, what the client can accept, and with which preferences: in HTTP, this is done by the client which may send, in its request, Accept headers (Accept, Accept-Language and Accept-Encoding), to communicate its capabilities and preferences in Format, Language and Encoding, respectively.
+In summary, the basic idea of content negotiation, as stated in the \cite{http1.1}, is to serve the best variant for a resource, taking into account what variants are available, what variants the server may prefer to serve, what the client can accept, and with which preferences. In HTTP, this is done by the client which may send, in its request, accept headers (\texttt{Accept}, \texttt{Accept-Language} and \texttt{Accept-Encoding}), to communicate its capabilities and preferences in format, language and encoding, respectively.
 
-In fact, what the catalogue really does is "format negotiation" since the alternate representationos are just based on the selection of the media type, through the \emph{Accept} header, but does not consider different languages or encoding types. The formats supported are JSON, RDF/XML, Turtle and HTML+RDFa. Even though the \emph{Accept} header is desired, these different representations can be retrieved by adding the format at the end of the resource URI. For instance, to get the RDF representation of the screen 457, performing a GET HTTP request to <catalogue\_url>/screens/457.rdf will serve the information in RDF/XML.
+In fact, what the catalogue really does is ``format negotiation'' since the alternate representations are just based on the selection of the media type, through the accept header, but does not consider different languages or encoding types. The formats supported are JSON, RDF/XML, Turtle and HTML+RDFa. Even though the accept header is desired, the different representations can also be retrieved directly by dereferencing their own URI. The convention used in the catalogue for deriving a representation URI from a building block URI is to simply attach a matching suffix, such as \texttt{.rdf}, \texttt{.json} or \texttt{.html}.
 
 Lastly, content negotiation needs to identify which player is going to take the lead on it. There are two kinds of content negotiation which are possible in HTTP: server-driven and agent-driven negotiation. The approach followed by the catalogue is agent-driven negotiation, hence selecting a specific representation for a resource is responsibility of the user agent. If none is specified, by default, the server will choose the JSON representation.
 
@@ -524,7 +531,7 @@ Member URI & DELETE & N/A & \textbf{Delete} the addressed member of the collecti
 
 The JSON structure for create any building bock can be found in the appendixes. All of them are composed of a common structure which can be found in Section Appendix B, and some specific information depending on the type. Screen-flows are defined in Appendix C, screens in Appendix D and forms, operators and back-end services share the same structure detailed in Appendix E. However, a few examples of request and responses are shown in order to clarify how the request are constructed and sent, and how the responses look like.
 
-To create a new screen, a POST request is send to the catalogue server, concretely to http://catalogueURL/screens, including the JSON representation of the screen in the body of the request:
+To create a new screen, a POST request is sent to the catalogue server, concretely to \texttt{http://cata\-logueURL/screens}, including the JSON representation of the screen in the body of the request:
 
 \singlespacing
 \begin{verbatim}
