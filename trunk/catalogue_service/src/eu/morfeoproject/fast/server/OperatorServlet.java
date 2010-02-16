@@ -52,7 +52,7 @@ public class OperatorServlet extends GenericServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		PrintWriter writer = response.getWriter();
 		Accept accept = new Accept(request);
-		String format = accept.getDominating();
+		String format = accept.isEmpty() ? "" : accept.getDominating();
 		String servlet = request.getServletPath();
 		String url = request.getRequestURL().toString();
 		String[] chunks = url.substring(url.indexOf(servlet) + 1).split("/");
@@ -161,7 +161,7 @@ public class OperatorServlet extends GenericServlet {
 		BufferedReader reader = request.getReader();
 		PrintWriter writer = response.getWriter();
 		Accept accept = new Accept(request);
-		String format = accept.getDominating();
+		String format = accept.isEmpty() ? "" : accept.getDominating();
 		StringBuffer buffer = new StringBuffer();
 		String line = reader.readLine();
 		while (line != null) {
@@ -235,7 +235,7 @@ public class OperatorServlet extends GenericServlet {
 		BufferedReader reader = request.getReader();
 		PrintWriter writer = response.getWriter();
 		Accept accept = new Accept(request);
-		String format = accept.getDominating();
+		String format = accept.isEmpty() ? "" : accept.getDominating();
 		String[] chunks = request.getRequestURI().split("/");
 		String id = chunks[chunks.length-1];
 		if (id.equalsIgnoreCase("operators")) id = null;
