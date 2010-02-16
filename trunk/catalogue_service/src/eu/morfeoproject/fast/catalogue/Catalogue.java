@@ -1137,6 +1137,7 @@ public class Catalogue {
 		// remove the precondition from the planner
 		planner.remove(seUri);
 		logger.info(seUri+" removed.");
+		tripleStore.dump();
 	}
 
 	private boolean saveResource(Resource resource) {
@@ -1182,8 +1183,13 @@ public class Catalogue {
 					tripleStore.addStatement(bnTag, CTAG.means, tag.getMeans());
 				for (String lang : tag.getLabels().keySet())
 					tripleStore.addStatement(bnTag, CTAG.label, tripleStore.createLanguageTagLiteral(tag.getLabels().get(lang), lang));
-				if (tag.getTaggingDate() != null)
+				if (tag.getTaggingDate() != null) {
 					tripleStore.addStatement(bnTag, CTAG.taggingDate, tripleStore.createDatatypeLiteral(DateFormatter.formatDateISO8601(tag.getTaggingDate()), XSD._date));
+				} else { // no date provided, save the current date
+					Date currentDate = new Date();
+					tag.setTaggingDate(currentDate);
+					tripleStore.addStatement(bnTag, CTAG.taggingDate, tripleStore.createDatatypeLiteral(DateFormatter.formatDateISO8601(currentDate), XSD._date));
+				}
 			}
 			if (resource.getHomepage() != null)
 				tripleStore.addStatement(rUri, FOAF.homepage, resource.getHomepage());
@@ -1202,6 +1208,7 @@ public class Catalogue {
 				logger.error("Resource "+rUri+" does not exist.", nfe);
 			}
 		}
+		System.out.println(System.in);
 		return false;
 	}
 
