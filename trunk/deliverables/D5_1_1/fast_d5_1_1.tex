@@ -103,7 +103,7 @@
 \section*{Version History}
 
 \begin{small}
-\begin{tabular}{|l|l|l|p{7.5cm}|}
+\begin{tabular}{|l|l|l|p{6.6cm}|}
 \hline
 \rowcolor{fast@lightgrey}\textcolor{white}{\textbf{Rev. No.}} &
                          \textcolor{white}{\textbf{Date}} &
@@ -436,39 +436,45 @@ In order to offers an adaptable solution to various languages and regions withou
 {
   "label": {
     "en-GB": "Product Search",
-    "es-ES": "Ejemplo Sencillo",
+    "es-ES": "Búsqueda de productos",
     "de-DE": "Produktsuche"
   },
   "description": {
     "en-GB": "On this screen, the user can enter a search term.",
-    "es-ES": "Esto es un ejemplo sencillo de pantalla",
+    "es-ES": "En esta ventana, el usuario puede introducir el criterio de búsqueda",
     "de-DE": "Auf diesem Screen kann der Benutzer einen Suchbegriff eingeben."
-  },
+  }
 }
 \end{verbatim}
 \doublespacing
 
 \singlespacing
 \begin{verbatim}
-<rdf:Description rdf:about="http://www.morfeoproject.eu/fast/fco#ExampleScreen">
-  <rdf:type rdf:resource="http://www.morfeoproject.eu/fast/fco#Screen"/>
-  <rdfs:label xml:lang="en-GB">Simple Example</rdfs:label>
-  <rdfs:label xml:lang="es-ES">Ejemplo Sencillo</rdfs:label>
-  <rdfs:label xml:lang="de-DE">Einfaches Beispiel</rdfs:label>
-  <description
-    xmlns="http://purl.org/dc/terms/"
-    xml:lang="en-GB">This is a simple example of a screen</description>
-  <description
-    xmlns="http://purl.org/dc/terms/"
-    xml:lang="es-ES">Esto es un ejemplo sencillo de pantalla</description>
-  <description
-    xmlns="http://purl.org/dc/terms/"
-    xml:lang="de-DE">Dies ist ein einfaches Beispiel für einen Bildschirm</description>
-</rdf:Description>
+<rdf:RDF
+    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+    xmlns:foaf="http://xmlns.com/foaf/0.1/"
+    xmlns:dc="http://purl.org/dc/terms/"
+    xmlns:fgo="http://purl.oclc.org/fast/ontology/gadget#"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+    xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+    xmlns:ctag="http://commontag.org/ns#">
+  <rdf:Description rdf:about="http://demo.fast.morfeo-project.org/FASTCatalogue/screens/1">
+    <rdf:type rdf:resource="http://purl.oclc.org/fast/ontology/gadget#Screen"/>
+    <rdfs:label xml:lang="en-gb">Product Search</rdfs:label>
+    <rdfs:label xml:lang="en-es">Búsqueda de productos</rdfs:label>
+    <rdfs:label xml:lang="en-de">Produktsuche</rdfs:label>
+    <dc:description xml:lang="en-gb">On this screen, the user can enter a search
+    term.</dc:description>
+    <dc:description xml:lang="en-gb">En esta ventana, el usuario puede introducir
+    el criterio de búsqueda.</dc:description>
+    <dc:description xml:lang="en-gb">Auf diesem Screen kann der Benutzer einen
+    Suchbegriff eingeben.</dc:description>
+  </rdf:Description>
+</rdf:RDF>
 \end{verbatim}
 \doublespacing
 
-Until now, using internationalisation is allowed for the label and the description of a screen, but in the near future, more attributes will benefit from this feature.
+Internationalisation is being used by the attributes \emph{label} and \emph{description} of any building block, \emph{label} of the pre/postconditions and \emph{label} of the tags.
 
 % subsection json_interchange_format (end)
 
