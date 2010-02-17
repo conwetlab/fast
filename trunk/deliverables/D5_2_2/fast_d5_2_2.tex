@@ -1,0 +1,244 @@
+\documentclass{fast_latex}
+
+\usepackage{inputenc}
+\usepackage{lastpage}
+\usepackage{setspace}
+\usepackage{graphicx}
+\usepackage[pdfborder={0 0 0}]{hyperref}		% turn on when latex is used (not miktec)
+\usepackage{url} % LEO: urls \url{}
+\usepackage{verbatim} % code and comment
+\usepackage{longtable}
+\usepackage{xspace}   % whitespace after a macro if no punctuation after the macro
+\usepackage{multirow}
+\usepackage{colortbl}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{amssymb}
+
+% This helps to get hyphenation in typewriter font (\texttt)
+\usepackage[htt]{hyphenat}
+
+\parindent0pt
+
+\newcommand\deliverableNumber{D5.2.2}
+\newcommand\deliverableTitle{Prototype Semantic Catalogue for Screen-Flow Gadgets and Back-End Services}
+\newcommand\deliverableTitleShort{FAST Catalogue}
+\newcommand\workpackageNumber{5}
+\newcommand\workpackageTitle{Semantic catalogue of screen-flow resources and back-end Web Services}
+\newcommand\authorOne{Ismael Rivera, NUIG}
+\newcommand\authorTwo{Author 2}
+\newcommand\authorThree{Author 3}
+\newcommand\authorFour{Author 4}
+\newtheorem{example}{\emph{Example}}
+
+\begin{document}
+% explicit hyphenations
+\hyphenation{RDF-Re-po-si-to-ry}
+\hyphenation{name-space}
+
+%\fontfamily{tahoma}\selectfont
+\def\note#1{\marginpar{\footnotesize#1}} % use this to show the notes in the document
+%\def\note#1{} % use this to hide the notes
+
+
+\newenvironment{definition}{}{}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% TITLE PAGES 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\thispagestyle{empty}
+
+\pagenumbering{roman}
+
+\begin{flushright}
+	\includegraphics[width=3cm]{images/FP7_logo}
+\end{flushright}
+
+\vspace{1cm}
+
+%\begin{minipage}[p]{15cm}
+	\begin{center}
+		\includegraphics{images/FAST_logo}\\
+		\vspace{1cm}
+		{\LARGE{\sffamily \emph{FAST AND ADVANCED STORYBOARD TOOLS}}}\\
+		\vspace{0.5cm}
+		{\LARGE \sffamily \emph{FP7-ICT-2007-1-216048}}\\
+		\vspace{0.5cm}
+		{\LARGE \sffamily \emph{http://fast.morfeo-project.eu}}\\
+		\vspace{4cm}
+		{\LARGE \sffamily \textbf{Deliverable \deliverableNumber}}\\
+		\vspace{0.5cm}
+		{\LARGE \sffamily \textbf{\deliverableTitle}}\\
+		\vspace{2cm}
+		{\large \sffamily \authorOne}\\
+		\vspace{0.5cm}
+		\vfill
+		{\large \sffamily Date: 19/02/2010}\\
+		\vspace{1cm}
+		{\sffamily FAST is partially funded by the E.C. (grant code: FP7-ICT-2007-1-216048).}
+		
+	\end{center}
+%\end{minipage}
+
+
+\clearpage
+%%%%%%%%%%%%%%
+% NEXT PAGES %
+%%%%%%%%%%%%%%
+\pagestyle{scrheadings}
+
+\lohead{\includegraphics[width=4cm]{images/FAST_logo_transparent}}
+%\cohead{\small\textcolor{fast@lightgrey}{\deliverableTitle}}
+\rohead{\small{\today}}
+%\lofoot{\small\textcolor{fast@lightgrey}{Task Force Ontologies}}
+\cofoot{\small{FAST 216048 --- \deliverableTitleShort}}
+\rofoot{\small{\thepage}}
+
+\newpage
+
+\clearpage
+
+\section*{Version History}
+
+\begin{small}
+\begin{tabular}{|l|l|l|p{7.5cm}|}
+\hline
+\rowcolor{fast@lightgrey}\textcolor{white}{\textbf{Rev. No.}} &
+                         \textcolor{white}{\textbf{Date}} &
+                         \textcolor{white}{\textbf{Author (Partner)}} &
+                         \textcolor{white}{\textbf{Change description}}\\ \hline
+1.0 & 20/02/2009 & Ismael Rivera (NUIG) & First version of the deliverable \\ \hline
+2.0 & 19/02/2010 & Ismael Rivera (NUIG) & Second version of the deliverable \\ \hline
+\end{tabular}
+\end{small}
+
+\color{black}
+
+\vfill
+%{\bf Explanations of abbreviations on front page}\\
+%\\
+%%Nature \\
+%R: Report \\
+%P: Prototype \\
+%R/P: Report and Prototype \\
+%O: Other \\
+% \\
+%Dissemination level \\
+%PU: Public \\
+%PP: Restricted to other FP6 participants \\
+%RE: Restricted to specified group \\
+%CO: Confidential, only for NEPOMUK partners \\
+
+\newpage
+
+%%%%%%%%%%%%%%%%%%%%%
+% Executive Summary %
+%%%%%%%%%%%%%%%%%%%%%
+
+\clearpage
+
+\section*{Executive Summary}
+\doublespacing
+
+The present deliverable is an appendix to the software deliverable of the semantic catalogue prototype. It includes references to other deliverables where the reader can find further information about the catalogue.
+
+\newpage
+
+%%%%%%%%%%%%%%%%%%%%%
+% Document Summary %
+%%%%%%%%%%%%%%%%%%%%%
+
+\clearpage
+
+\section*{Document Summary}
+% double spacing from here on:
+\singlespacing
+
+\begin{small}
+\begin{tabular}
+	%{| >{\columncolor{fast@lightgrey}}p{3.25cm}|p{6cm}|p{2cm}|p{2cm}|}
+	{| >{\columncolor{fast@lightgrey}}p{3.25cm}|p{6cm}|p{2cm}|p{2cm}|}
+	\hline
+	\textcolor{white}{\textbf{Code}} & {FP7-ICT-2007-1-216048} & {\textbf{Acronym}} & {FAST}\\ \hline
+	\textcolor{white}{\textbf{Full title}} & \multicolumn{3}{l|}{Fast and Advanced Storyboard Tools}\\ \hline
+	\textcolor{white}{\textbf{URL}} & \multicolumn{3}{l|}{\url{http://fast.morfeo-project.eu}}\\ \hline
+	\textcolor{white}{\textbf{Project officer}} & \multicolumn{3}{l|}{Annalisa Bogliolo}\\ \hline
+\end{tabular}
+\end{small}
+
+\vspace{0.5cm}
+
+\begin{small}
+\begin{tabular}
+	{| >{\columncolor{fast@lightgrey}}p{3.25cm}|p{1.25cm}|p{1cm}|p{1cm}|p{6.32cm}|}
+	\hline
+	\textcolor{white}{\textbf{Deliverable}} & {\textbf{Number}} & {\deliverableNumber} & {\textbf{Name}} & {\deliverableTitle}\\ \hline
+	\textcolor{white}{\textbf{Work package}} & {\textbf{Number}} & {\workpackageNumber} & {\textbf{Name}} & {\workpackageTitle}\\ \hline
+\end{tabular}
+\end{small}
+
+\vspace{0.5cm}
+
+\begin{small}
+\begin{tabular}
+	{| >{\columncolor{fast@lightgrey}}p{3.25cm}|p{1.4cm}|p{3.2cm}|p{1.6cm}|p{3.37cm}|}
+	\hline
+	\textcolor{white}{\textbf{Delivery data}} & {\textbf{Due date}} & {27/02/2010} & {\textbf{Submitted}} & {27/02/2010}\\ \hline
+	\textcolor{white}{\textbf{Status}} & \multicolumn{2}{l|}{} & \multicolumn{2}{l|}{final}\\ \hline
+	\textcolor{white}{\textbf{Dissemination Level}} & \multicolumn{4}{l|}{Public $\boxtimes$ / Consortium $\square$}\\ \hline
+	\textcolor{white}{\textbf{Short description of contents}} & \multicolumn{4}{p{10.85cm}|}{This deliverable is the software prototype of the semantic catalogue. This document is just an appendix to it.}\\ \hline
+	\textcolor{white}{\textbf{Authors}} & \multicolumn{4}{l|}{\authorOne}\\
+%	{} & \multicolumn{4}{l|}{\authorTwo}\\ 
+%	{} & \multicolumn{4}{l|}{\authorOne}\\ 
+%	{} & \multicolumn{4}{l|}{\authorOne}\\
+  \hline
+	\textcolor{white}{\textbf{Deliverable Owner}} & \multicolumn{2}{l|}{\authorOne} & \textbf{email} & {ismael.rivera@deri.org} \\ \cline{4-5}
+	\textcolor{white}{\textbf{(Partner)}} & \multicolumn{2}{l|}{} & \textbf{phone} & {+353 91 495338} \\ \hline
+	\textcolor{white}{\textbf{Keywords}} & \multicolumn{4}{p{10.85cm}|}{FAST, semantic catalogue, gadget catalogue, RDF store}\\ \hline
+\end{tabular}
+\end{small}
+
+\newpage
+
+%%%%%%%%%%%%%%%%%%%%%
+% TABLE OF CONTENTS %
+%%%%%%%%%%%%%%%%%%%%%
+\doublespacing
+\setcounter{tocdepth}{2}
+\tableofcontents
+\cleardoublepage
+\pagenumbering{arabic}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%
+% BEGINNING OF SECTIONS %
+%%%%%%%%%%%%%%%%%%%%%%%%%
+\rofoot{\small{Page \thepage\ of \pageref{LastPage}}} 
+
+\clearpage
+\section{Introduction} % (fold)
+\label{sec:introduction}
+This section starts establishing the goal and scope of the present deliverable, and shows references to other deliverables for further information.
+
+\subsection{Goal and Scope} % (fold)
+\label{sub:goal_and_scope}
+
+The semantic catalogue will store and index screen-flow resources and back-end Web services, locate appropriate Web services for users, endow gadgets with functionality based on Service descriptions and resolve mediation problems between gadgets and their back-end services.
+
+This document serves as an appendix to the semantic catalogue deliverable.
+
+% subsection goal_and_scope (end)
+
+\subsection{Changes from previous version} % (fold)
+\label{sub:changes_from_previous_version}
+
+This document is not intended to provide any further information regarding the semantic catalogue prototype. For information regarding where the code of the catalogue can be found, installation instructions, system requirements, a overview of the catalogue architecture and a detail API, please read \cite{palaguita2010_usermanual}.
+
+% subsection changes_from_previous_version (end)
+
+% section introduction (end)
+
+\clearpage
+\bibliographystyle{apalike}
+\bibliography{fast_d5_2_2}
+
+\end{document}
