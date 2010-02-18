@@ -50,7 +50,6 @@ public class ScreenComponentFindCheckServlet extends GenericServlet {
 		logger.info("Entering FIND&CHECK operation...");
 		BufferedReader reader = request.getReader();
 		PrintWriter writer = response.getWriter();
-		String format = request.getHeader("accept") != null ? request.getHeader("accept") : MediaType.APPLICATION_JSON;
 		StringBuffer buffer = new StringBuffer();
 		String line = reader.readLine();
 		while (line != null) {
@@ -175,22 +174,22 @@ public class ScreenComponentFindCheckServlet extends GenericServlet {
 			}
 			
 			// check if elements in the canvas + pre/postconditions are reachable
-			List<Object> elements = new ArrayList<Object>();
-			elements.addAll(getReachableElements(canvas, preconditions, postconditions, correctPipeList));
+			List<Object> reachableElements = new ArrayList<Object>();
+			reachableElements.addAll(getReachableElements(canvas, preconditions, postconditions, correctPipeList));
 			
 			// check if the pipes are well defined
 			JSONArray jsonPipes = new JSONArray();
 			for (Pipe pipe : pipes) {
 				JSONObject jsonPipe = pipe.toJSON();
 				jsonPipe.put("correct", correctPipeList.contains(pipe));
-				jsonPipe.put("satisfied", elements.contains(pipe));
+				jsonPipe.put("satisfied", reachableElements.contains(pipe));
 				jsonPipes.put(jsonPipe);
 			}
 			output.put("pipes", jsonPipes);
 
 			JSONArray canvasOut = new JSONArray();
 			for (ScreenComponent sc : canvas)
-				canvasOut.put(processComponent(canvas, sc, pipes, elements));
+				canvasOut.put(processComponent(canvas, sc, pipes, reachableElements));
 			output.put("canvas", canvasOut);
 
 			if (search) {
@@ -212,7 +211,7 @@ public class ScreenComponentFindCheckServlet extends GenericServlet {
 			
 			JSONArray postOut = new JSONArray();
 			for (Condition con : postconditions)
-				postOut.put(processPostcondition(canvas, con, pipes, elements));
+				postOut.put(processPostcondition(canvas, con, pipes, reachableElements));
 			output.put("postconditions", postOut);
 		
 			if (selectedItem != null) {
@@ -287,18 +286,18 @@ public class ScreenComponentFindCheckServlet extends GenericServlet {
 		return jsonCon;
 	}
 	
-	private JSONObject processComponent(Set<ScreenComponent> canvas, ScreenComponent sc, List<Pipe> pipes, List<Object> elements) throws JSONException, IOException {
+	private JSONObject processComponent(Set<ScreenComponent> canvas, ScreenComponent sc, List<Pipe> pipes, List<Object> reachableElements) throws JSONException, IOException {
 		JSONObject jsonSc = new JSONObject();
 		jsonSc.put("uri", sc.getUri());
 		JSONArray actionArray = new JSONArray();
 		boolean reachability = sc.getActions().isEmpty() ? true : false;
 		for (Action action : sc.getActions()) {
 			JSONArray conArray = new JSONArray();
-			boolean actionSatisfied = action.getPreconditions().isEmpty() ? true : false;
+			boolean actionSatisfied = true;
 			for (Condition con : action.getPreconditions()) {
 				Pipe pipe = getPipeToComponent(sc, action, con, pipes);
-				boolean conSatisfied = pipe == null ? false : elements.contains(pipe);
-				actionSatisfied = actionSatisfied || conSatisfied;
+				boolean conSatisfied = pipe == null ? false : reachableElements.contains(pipe);
+				actionSatisfied = actionSatisfied && conSatisfied;
 				JSONObject jsonCon = con.toJSON();
 				jsonCon.put("satisfied", conSatisfied);
 				conArray.put(jsonCon);
