@@ -1,18 +1,20 @@
 <?xml version="1.0" ?>
-<project name="Catalogue" default="main" basedir=".">
+<project name="Catalogue" default="dist" basedir=".">
   <!-- set global properties for this build -->
-  <property name="app.name"      value="Catalogue"/>
+  <property name="app.name"      value="FASTCatalogue"/>
   <property name="app.path"      value="/${app.name}"/>
   <property name="app.version"   value="0.1-dev"/>
   <property name="build.home"    value="${basedir}/build"/>
-  <property name="catalina.home" value="C:\\Program Files\\Apache Software Foundation\\Tomcat 5.5"/>
+  <!--property name="catalina.home" value="C:\\Program Files\\Apache Software Foundation\\Tomcat 5.5"/-->
+  <property name="catalina.home" value="C:\\Program Files\\Apache Software Foundation\\Tomcat 6.0"/>
+
   <property name="dist.home"     value="${basedir}/dist"/>
   <property name="docs.home"     value="${basedir}/docs"/>
   <!--property name="manager.url"   value="http://localhost:8080/manager"/-->
   <property name="src.home"      value="${basedir}/src"/>
   <property name="web.home"      value="${basedir}/WebContent"/>
 
-  <path id="compile.classpath">
+  <!--path id="compile.classpath"> TOMCAT 5.5
     <pathelement location="${catalina.home}/common/classes"/>
     <fileset dir="${catalina.home}/common/endorsed">
       <include name="*.jar"/>
@@ -24,15 +26,25 @@
     <fileset dir="${catalina.home}/shared/lib">
       <include name="*.jar"/>
     </fileset>
-    <fileset dir="${catalina.home}/shared/lib"><!-- extraclasspath -->
+    <fileset dir="${catalina.home}/shared/lib"--><!-- extraclasspath -->
+      <!--include name="*.jar"/>
+    </fileset>
+    <fileset dir="${web.home}/WEB-INF/lib">
+      <include name="*.jar"/>
+    </fileset>
+  </path-->
+  <path id="compile.classpath"> <!-- TOMCAT 6 -->
+	<fileset dir="${catalina.home}/bin">
+      <include name="*.jar"/>
+    </fileset>
+    <pathelement location="${catalina.home}/lib"/>
+    <fileset dir="${catalina.home}/lib">
       <include name="*.jar"/>
     </fileset>
     <fileset dir="${web.home}/WEB-INF/lib">
       <include name="*.jar"/>
     </fileset>
   </path>
-  
-  <target name="main" depends="clean, compile, dist"/>
 
   <target name="prepare">
     <!-- Create build directories as needed -->
@@ -71,7 +83,7 @@
     </copy>
   </target>
   
-  <target name="dist" depends="compile, javadoc" description="Create binary distribution">
+  <target name="dist" depends="clean, compile, javadoc" description="Create binary distribution">
     <!-- Copy documentation subdirectories -->
     <mkdir dir="${dist.home}/docs"/>
     <copy todir="${dist.home}/docs">
