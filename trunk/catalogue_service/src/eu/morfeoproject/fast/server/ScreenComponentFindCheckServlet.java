@@ -152,7 +152,7 @@ public class ScreenComponentFindCheckServlet extends GenericServlet {
 			
 			// add results of 'find' to the list of forms
 			if (search) {
-				Set<URI> formResults = CatalogueAccessPoint.getCatalogue().findScreenComponents(null, conList, all, 0, -1, tags, FGO.FormElement);
+				Set<URI> formResults = CatalogueAccessPoint.getCatalogue().findScreenComponents(null, conList, all, 0, -1, tags, FGO.Form);
 				for (URI uri : formResults)
 					forms.add(CatalogueAccessPoint.getCatalogue().getScreenComponent(uri));
 				// add results of 'find' to the list of operators

@@ -15,9 +15,9 @@
 	</servlet>
 	<servlet>
 		<description></description>
-		<display-name>FormElementServlet</display-name>
-		<servlet-name>FormElementServlet</servlet-name>
-		<servlet-class>eu.morfeoproject.fast.server.FormElementServlet</servlet-class>
+		<display-name>FormServlet</display-name>
+		<servlet-name>FormServlet</servlet-name>
+		<servlet-class>eu.morfeoproject.fast.server.FormServlet</servlet-class>
 	</servlet>
 	<servlet>
 		<description></description>
@@ -100,7 +100,7 @@
 		<url-pattern>/screens/*</url-pattern>
 	</servlet-mapping>
 	<servlet-mapping>
-		<servlet-name>FormElementServlet</servlet-name>
+		<servlet-name>FormServlet</servlet-name>
 		<url-pattern>/forms/*</url-pattern>
 	</servlet-mapping>
 	<servlet-mapping>

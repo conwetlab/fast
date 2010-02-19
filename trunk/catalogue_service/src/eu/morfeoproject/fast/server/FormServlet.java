@@ -24,7 +24,7 @@ import eu.morfeoproject.fast.catalogue.InvalidResourceTypeException;
 import eu.morfeoproject.fast.catalogue.NotFoundException;
 import eu.morfeoproject.fast.catalogue.OntologyInvalidException;
 import eu.morfeoproject.fast.catalogue.ResourceException;
-import eu.morfeoproject.fast.model.FormElement;
+import eu.morfeoproject.fast.model.Form;
 import eu.morfeoproject.fast.model.templates.BuildingBlockTemplate;
 import eu.morfeoproject.fast.model.templates.CollectionTemplate;
 import eu.morfeoproject.fast.model.templates.TemplateManager;
@@ -32,17 +32,17 @@ import eu.morfeoproject.fast.util.Accept;
 import freemarker.template.TemplateException;
 
 /**
- * Servlet implementation class FormElementServlet
+ * Servlet implementation class FormServlet
  */
-public class FormElementServlet extends GenericServlet {
+public class FormServlet extends GenericServlet {
 	private static final long serialVersionUID = 1L;
 
-	static Logger logger = LoggerFactory.getLogger(FormElementServlet.class);
+	static Logger logger = LoggerFactory.getLogger(FormServlet.class);
     
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public FormElementServlet() {
+    public FormServlet() {
         super();
     }
 
@@ -78,7 +78,7 @@ public class FormElementServlet extends GenericServlet {
 						Model model = RDF2Go.getModelFactory().createModel();
 						try {
 							model.open();
-							for (FormElement f : CatalogueAccessPoint.getCatalogue().listFormElements()) {
+							for (Form f : CatalogueAccessPoint.getCatalogue().listForms()) {
 								Model feModel = f.createModel();
 								for (String ns : feModel.getNamespaces().keySet())
 									model.setNamespace(ns, feModel.getNamespace(ns));
@@ -99,11 +99,11 @@ public class FormElementServlet extends GenericServlet {
 							response.setCharacterEncoding(TemplateManager.getDefaultEncoding());
 						if (TemplateManager.getLocale() != null)
 							response.setLocale(TemplateManager.getLocale());
-						CollectionTemplate.process(CatalogueAccessPoint.getCatalogue().listFormElements(), writer);
+						CollectionTemplate.process(CatalogueAccessPoint.getCatalogue().listForms(), writer);
 					} else { // by default returns APPLICATION_JSON
 						response.setContentType(MediaType.APPLICATION_JSON);
 						JSONArray formElements = new JSONArray();
-						for (FormElement f : CatalogueAccessPoint.getCatalogue().listFormElements())
+						for (Form f : CatalogueAccessPoint.getCatalogue().listForms())
 							formElements.put(f.toJSON());
 						writer.print(formElements.toString(2));
 					}
@@ -121,7 +121,7 @@ public class FormElementServlet extends GenericServlet {
 				// Retrieve the addressed member of the collection
 				String uri = url.substring(0, url.indexOf(extension) - 1);
 				logger.info("Retrieving formElement "+uri);
-				FormElement form = CatalogueAccessPoint.getCatalogue().getFormElement(new URIImpl(uri));
+				Form form = CatalogueAccessPoint.getCatalogue().getForm(new URIImpl(uri));
 				if (form == null) {
 					response.sendError(HttpServletResponse.SC_NOT_FOUND, "The resource "+uri+" has not been found.");
 				} else {
@@ -179,9 +179,9 @@ public class FormElementServlet extends GenericServlet {
 		// the collection and it is returned.
 		try {
 			JSONObject json = new JSONObject(body);
-			FormElement form = parseFormElement(json, null);
+			Form form = parseForm(json, null);
 			try {
-				CatalogueAccessPoint.getCatalogue().addFormElement(form);
+				CatalogueAccessPoint.getCatalogue().addForm(form);
 				if (format.equals(MediaType.APPLICATION_RDF_XML) ||
 						format.equals(MediaType.APPLICATION_TURTLE)) {
 					response.setContentType(format);
@@ -261,8 +261,8 @@ public class FormElementServlet extends GenericServlet {
 			String uri = request.getRequestURL().toString();
 			try {
 				JSONObject json = new JSONObject(body);
-				FormElement form = parseFormElement(json, new URIImpl(uri));
-				CatalogueAccessPoint.getCatalogue().updateFormElement(form);
+				Form form = parseForm(json, new URIImpl(uri));
+				CatalogueAccessPoint.getCatalogue().updateForm(form);
 				if (format.equals(MediaType.APPLICATION_RDF_XML) ||
 						format.equals(MediaType.APPLICATION_TURTLE)) {
 					response.setContentType(format);
@@ -324,7 +324,7 @@ public class FormElementServlet extends GenericServlet {
 			// Delete the addressed member of the collection.
 			String uri = request.getRequestURL().toString();
 			try {
-				CatalogueAccessPoint.getCatalogue().removeFormElement(new URIImpl(uri));
+				CatalogueAccessPoint.getCatalogue().removeForm(new URIImpl(uri));
 				response.setStatus(HttpServletResponse.SC_OK);
 			} catch (NotFoundException e) {
 				response.sendError(HttpServletResponse.SC_NOT_FOUND, "The resource "+uri+" has not been found.");

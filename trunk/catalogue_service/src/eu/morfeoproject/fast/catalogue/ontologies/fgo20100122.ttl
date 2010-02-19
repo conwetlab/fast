@@ -100,7 +100,7 @@ rdfs:comment """Any kind of component that is used to connect backend services t
     form elements. Examples are simple pipes, aggregators or various kinds of 
     filters."""@en .
 
-fgo:FormElement a owl:Class ;
+fgo:Form a owl:Class ;
 rdfs:subClassOf fgo:ScreenComponent ;
 rdfs:label "Form Element"@en ;
 rdfs:comment "Form elements are UI elements in a particular screen."@en .

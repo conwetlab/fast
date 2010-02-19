@@ -14,8 +14,8 @@ public class FastModelFactory {
 		return new Screen(null);
 	}
 	
-	public static FormElement createFormElement() {
-		return new FormElement(null);
+	public static Form createForm() {
+		return new Form(null);
 	}
 	
 	public static Operator createOperator() {

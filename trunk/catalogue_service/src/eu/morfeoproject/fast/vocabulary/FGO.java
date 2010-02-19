@@ -4,7 +4,7 @@ import org.ontoware.rdf2go.model.node.URI;
 import org.ontoware.rdf2go.model.node.impl.URIImpl;
 
 /**
- * Vocabulary File. Created by org.ontoware.rdf2go.util.VocabularyWriter on Fri Jan 22 13:22:40 GMT 2010
+ * Vocabulary File. Created by org.ontoware.rdf2go.util.VocabularyWriter on Fri Feb 19 19:25:18 GMT 2010
  * input file: src/eu/morfeoproject/fast/catalogue/ontologies/fgo.rdf
  * namespace: http://purl.oclc.org/fast/ontology/gadget#
  */
@@ -71,10 +71,11 @@ public interface FGO {
     public static final URI Resource = new URIImpl("http://purl.oclc.org/fast/ontology/gadget#Resource", false);
 
     /**
-     * Label: Form Element@en 
-     * Comment: Form elements are UI elements in a particular screen.@en 
+     * Label: Postcondition@en 
+     * Comment: A postcondition is a result condition within a screenflow. It can be seen
+    as an output of the screenflow.@en 
      */
-    public static final URI FormElement = new URIImpl("http://purl.oclc.org/fast/ontology/gadget#FormElement", false);
+    public static final URI Postcondition = new URIImpl("http://purl.oclc.org/fast/ontology/gadget#Postcondition", false);
 
     /**
      * Label: Action@en 
@@ -83,13 +84,6 @@ public interface FGO {
 	be performed when data from a service is received).@en 
      */
     public static final URI Library = new URIImpl("http://purl.oclc.org/fast/ontology/gadget#Library", false);
-
-    /**
-     * Label: Postcondition@en 
-     * Comment: A postcondition is a result condition within a screenflow. It can be seen
-    as an output of the screenflow.@en 
-     */
-    public static final URI Postcondition = new URIImpl("http://purl.oclc.org/fast/ontology/gadget#Postcondition", false);
 
     /**
      * Label: Screen Flow@en 
@@ -216,6 +210,12 @@ public interface FGO {
 	for the condition be true as well.@en 
      */
     public static final URI Condition = new URIImpl("http://purl.oclc.org/fast/ontology/gadget#Condition", false);
+
+    /**
+     * Label: Form Element@en 
+     * Comment: Form elements are UI elements in a particular screen.@en 
+     */
+    public static final URI Form = new URIImpl("http://purl.oclc.org/fast/ontology/gadget#Form", false);
 
     /**
      */
@@ -456,14 +456,6 @@ public interface FGO {
      * Range: http://xmlns.com/foaf/0.1/Document 
      */
     public static final URI hasUri = new URIImpl("http://purl.oclc.org/fast/ontology/gadget#hasUri", false);
-
-    /**
-     * Label: tag creator@en 
-     * Comment: The creator of the tag.@en 
-     * Comment: http://commontag.org/ns#Tag 
-     * Range: http://xmlns.com/foaf/0.1/Agent 
-     */
-    public static final URI tagCreator = new URIImpl("http://purl.oclc.org/fast/ontology/gadget#tagCreator", false);
 
     /**
      * Label: has pre-condition@en 

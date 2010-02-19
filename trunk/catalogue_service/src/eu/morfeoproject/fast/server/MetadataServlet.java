@@ -63,8 +63,8 @@ public class MetadataServlet extends HttpServlet {
 					arrayScreenflows.put(CatalogueAccessPoint.getCatalogue().getScreenFlow(uri).toJSON());
 				else if (CatalogueAccessPoint.getCatalogue().containsScreen(uri))
 					arrayScreens.put(CatalogueAccessPoint.getCatalogue().getScreen(uri).toJSON());
-				else if (CatalogueAccessPoint.getCatalogue().containsFormElement(uri))
-					arrayForms.put(CatalogueAccessPoint.getCatalogue().getFormElement(uri).toJSON());
+				else if (CatalogueAccessPoint.getCatalogue().containsForm(uri))
+					arrayForms.put(CatalogueAccessPoint.getCatalogue().getForm(uri).toJSON());
 				else if (CatalogueAccessPoint.getCatalogue().containsOperator(uri))
 					arrayOperators.put(CatalogueAccessPoint.getCatalogue().getOperator(uri).toJSON());
 				else if (CatalogueAccessPoint.getCatalogue().containsBackendService(uri))

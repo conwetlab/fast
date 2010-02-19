@@ -244,7 +244,7 @@ public abstract class Resource {
 			json.put("type", "screenflow");
 		else if (this instanceof Screen)
 			json.put("type", "screen");
-		else if (this instanceof FormElement)
+		else if (this instanceof Form)
 			json.put("type", "form");
 		else if (this instanceof Operator)
 			json.put("type", "operator");

@@ -6,9 +6,9 @@ import org.ontoware.rdf2go.vocabulary.RDF;
 
 import eu.morfeoproject.fast.vocabulary.FGO;
 
-public class FormElement extends ScreenComponent {
+public class Form extends ScreenComponent {
 	
-	protected FormElement(URI uri) {
+	protected Form(URI uri) {
 		setUri(uri);
 	}
 	
@@ -16,7 +16,7 @@ public class FormElement extends ScreenComponent {
 	public Model createModel() {
 		Model model = super.createModel();
 		
-		model.addStatement(getUri(), RDF.type, FGO.FormElement);
+		model.addStatement(getUri(), RDF.type, FGO.Form);
 
 		return model;
 	}

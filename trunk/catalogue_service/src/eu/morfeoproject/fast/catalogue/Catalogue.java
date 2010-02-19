@@ -47,7 +47,7 @@ import eu.morfeoproject.fast.model.BackendService;
 import eu.morfeoproject.fast.model.CTag;
 import eu.morfeoproject.fast.model.Condition;
 import eu.morfeoproject.fast.model.FastModelFactory;
-import eu.morfeoproject.fast.model.FormElement;
+import eu.morfeoproject.fast.model.Form;
 import eu.morfeoproject.fast.model.Library;
 import eu.morfeoproject.fast.model.Operator;
 import eu.morfeoproject.fast.model.Pipe;
@@ -275,7 +275,7 @@ public class Catalogue {
 	}
 	
 	public boolean containsScreenComponent(URI uri) {
-		return containsFormElement(uri)
+		return containsForm(uri)
 			|| containsOperator(uri)
 			|| containsBackendService(uri);
 	}
@@ -284,12 +284,12 @@ public class Catalogue {
 		return containsScreenComponent(sc.getUri());
 	}
 	
-	public boolean containsFormElement(URI feUri) {
-		return tripleStore.isResource(feUri, FGO.FormElement);
+	public boolean containsForm(URI feUri) {
+		return tripleStore.isResource(feUri, FGO.Form);
 	}
 	
-	public boolean containsFormElement(FormElement fe) {
-		return containsFormElement(fe.getUri());
+	public boolean containsForm(Form fe) {
+		return containsForm(fe.getUri());
 	}
 
 	public boolean containsOperator(URI opUri) {
@@ -325,7 +325,7 @@ public class Catalogue {
     		int limit,
     		Set<String> domainContext) throws ClassCastException, ModelRuntimeException {
     	HashSet<URI> results = new HashSet<URI>();
-    	results.addAll(findScreenComponents(container, conditions, toExclude, offset, limit, domainContext, FGO.FormElement));
+    	results.addAll(findScreenComponents(container, conditions, toExclude, offset, limit, domainContext, FGO.Form));
     	results.addAll(findScreenComponents(container, conditions, toExclude, offset, limit, domainContext, FGO.Operator));
     	results.addAll(findScreenComponents(container, conditions, toExclude, offset, limit, domainContext, FGO.BackendService));
     	return results;
@@ -785,7 +785,7 @@ public class Catalogue {
 			return createResource(serverURL, "screenflows", ofClass, id);
 		} else if (ofClass.equals(FGO.Screen)) {
 			return createResource(serverURL, "screens", ofClass, id);
-		} else if (ofClass.equals(FGO.FormElement)) {
+		} else if (ofClass.equals(FGO.Form)) {
 			return createResource(serverURL, "forms", ofClass, id);
 		} else if (ofClass.equals(FGO.Operator)) {
 			return createResource(serverURL, "operators", ofClass, id);
@@ -1273,7 +1273,7 @@ public class Catalogue {
 	
 	private void addScreenComponent(URI type, ScreenComponent sc)
 	throws DuplicatedResourceException, OntologyInvalidException, InvalidResourceTypeException, ResourceException {
-		if (!type.equals(FGO.FormElement) && !type.equals(FGO.Operator) && !type.equals(FGO.BackendService))
+		if (!type.equals(FGO.Form) && !type.equals(FGO.Operator) && !type.equals(FGO.BackendService))
 			throw new InvalidResourceTypeException(type+" is not a ScreenComponent.");
 		
 		URI scUri = null;
@@ -1361,8 +1361,8 @@ public class Catalogue {
 		// do not call addScreen because it does not need to create a new URI for the screen
 		if (saveScreenComponent(sc)) {
 			// specify the type of screen component
-			if (sc instanceof FormElement)
-				tripleStore.addStatement(sc.getUri(), RDF.type, FGO.FormElement);
+			if (sc instanceof Form)
+				tripleStore.addStatement(sc.getUri(), RDF.type, FGO.Form);
 			else if (sc instanceof Operator)
 				tripleStore.addStatement(sc.getUri(), RDF.type, FGO.Operator);
 			else if (sc instanceof BackendService)
@@ -1421,16 +1421,16 @@ public class Catalogue {
 		logger.info("Screen component "+scUri+" removed.");
 	}
 	
-	public void addFormElement(FormElement fe)
+	public void addForm(Form fe)
 	throws DuplicatedResourceException, OntologyInvalidException, InvalidResourceTypeException, ResourceException {
-		addScreenComponent(FGO.FormElement, fe);
+		addScreenComponent(FGO.Form, fe);
 	}
 	
-	public void updateFormElement(FormElement fe) throws NotFoundException, ResourceException {
+	public void updateForm(Form fe) throws NotFoundException, ResourceException {
 		updateScreenComponent(fe);
 	}
 	
-	public void removeFormElement(URI feUri) throws NotFoundException {
+	public void removeForm(URI feUri) throws NotFoundException {
 		removeScreenComponent(feUri);
 	}
 	
@@ -1480,11 +1480,11 @@ public class Catalogue {
 		return results;
 	}
 	
-	public Collection<FormElement> listFormElements() {
-		ArrayList<FormElement> results = new ArrayList<FormElement>();
-		ClosableIterator<Statement> it = tripleStore.findStatements(Variable.ANY, RDF.type, FGO.FormElement);
+	public Collection<Form> listForms() {
+		ArrayList<Form> results = new ArrayList<Form>();
+		ClosableIterator<Statement> it = tripleStore.findStatements(Variable.ANY, RDF.type, FGO.Form);
 		while (it.hasNext())
-			results.add(getFormElement(it.next().getSubject().asURI()));
+			results.add(getForm(it.next().getSubject().asURI()));
 		it.close();
 		return results;
 	}
@@ -1571,8 +1571,8 @@ public class Catalogue {
     		return getPrecondition(uri);
     	} else if (isType(uri, FGO.Postcondition)) {
     		return getPostcondition(uri);
-    	} else if (isType(uri, FGO.FormElement)) {
-    		return getFormElement(uri);
+    	} else if (isType(uri, FGO.Form)) {
+    		return getForm(uri);
     	} else if (isType(uri, FGO.Operator)) {
     		return getOperator(uri);
     	} else if (isType(uri, FGO.BackendService)) {
@@ -1610,8 +1610,8 @@ public class Catalogue {
 			resource = FastModelFactory.createScreenFlow();
 		else if (type.equals(FGO.Screen))
 			resource = FastModelFactory.createScreen();
-		else if (type.equals(FGO.FormElement))
-			resource = FastModelFactory.createFormElement();
+		else if (type.equals(FGO.Form))
+			resource = FastModelFactory.createForm();
 		else if (type.equals(FGO.Operator))
 			resource = FastModelFactory.createOperator();
 		else if (type.equals(FGO.BackendService))
@@ -1887,7 +1887,7 @@ public class Catalogue {
 	}
 	
 	private ScreenComponent retrieveScreenComponent(URI type, URI uri) throws InvalidResourceTypeException {
-		if (!type.equals(FGO.FormElement) && !type.equals(FGO.Operator) && !type.equals(FGO.BackendService))
+		if (!type.equals(FGO.Form) && !type.equals(FGO.Operator) && !type.equals(FGO.BackendService))
 			throw new InvalidResourceTypeException(type+" is not a ScreenComponent.");
 		
 		ScreenComponent screenComponent = (ScreenComponent) retrieveResource(type, uri);
@@ -1974,8 +1974,8 @@ public class Catalogue {
 	public ScreenComponent getScreenComponent(URI uri) {
 		URI type = getType(uri);
 		if (type == null) return null;
-		if (type.equals(FGO.FormElement))
-			return getFormElement(uri);
+		if (type.equals(FGO.Form))
+			return getForm(uri);
 		else if (type.equals(FGO.Operator))
 			return getOperator(uri);
 		else if (type.equals(FGO.BackendService))
@@ -1983,10 +1983,10 @@ public class Catalogue {
 		return null;
 	}
 	
-	public FormElement getFormElement(URI uri) {
-		FormElement formElement = null;
+	public Form getForm(URI uri) {
+		Form formElement = null;
 		try {
-			formElement = (FormElement) retrieveScreenComponent(FGO.FormElement, uri);
+			formElement = (Form) retrieveScreenComponent(FGO.Form, uri);
 		} catch (InvalidResourceTypeException e) {
 			logger.error("The resource type is not valid: "+e, e);
 		}

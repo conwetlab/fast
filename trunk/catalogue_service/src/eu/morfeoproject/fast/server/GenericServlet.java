@@ -24,7 +24,7 @@ import eu.morfeoproject.fast.model.BackendService;
 import eu.morfeoproject.fast.model.CTag;
 import eu.morfeoproject.fast.model.Condition;
 import eu.morfeoproject.fast.model.FastModelFactory;
-import eu.morfeoproject.fast.model.FormElement;
+import eu.morfeoproject.fast.model.Form;
 import eu.morfeoproject.fast.model.Library;
 import eu.morfeoproject.fast.model.Operator;
 import eu.morfeoproject.fast.model.Pipe;
@@ -238,9 +238,9 @@ public abstract class GenericServlet extends HttpServlet {
 		return post;
 	}
 	
-	protected FormElement parseFormElement(JSONObject jsonFe, URI uri) throws JSONException, IOException {
-		FormElement fe = FastModelFactory.createFormElement();
-		parseScreenComponent(fe, jsonFe, uri);
+	protected Form parseForm(JSONObject jsonForm, URI uri) throws JSONException, IOException {
+		Form fe = FastModelFactory.createForm();
+		parseScreenComponent(fe, jsonForm, uri);
 		return fe;
 	}
 
