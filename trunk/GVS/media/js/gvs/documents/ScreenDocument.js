@@ -30,6 +30,13 @@ var ScreenDocument = Class.create(PaletteDocument,
          * @private
          */
         this._triggerMappingFactory = new TriggerMappingFactory();
+
+        /**
+         * List of dojo connection objects
+         * @type Array
+         * @private
+         */
+        this._dojoConnections = new Array();
        
         this._start();
     },
@@ -486,7 +493,10 @@ var ScreenDocument = Class.create(PaletteDocument,
         if (reachabilityData.postconditions) {
             reachabilityData.postconditions.each(function(post) {
                 var postInstance = this._description.getPost(post.id);
-                postInstance.getView().setReachability(post);
+                var view = postInstance.getView();
+                if (view) {
+                    view.setReachability(post);
+                }
             }.bind(this));
         }
         if (reachabilityData.pipes) {
@@ -752,7 +762,7 @@ var ScreenDocument = Class.create(PaletteDocument,
             var toTerminal;
             if (pipeData.to.buildingblock != "") {
                 toInstance = this._description.getInstance(pipeData.to.buildingblock);
-                toTerminal = toInstance.getTerminal(pipeData.to.condition);
+                toTerminal = toInstance.getTerminal(pipeData.to.condition, pipeData.to.action);
             } else {
                 toInstance = this._description.getPre(pipeData.to.condition);
                 if (!toInstance) {

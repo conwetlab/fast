@@ -145,8 +145,6 @@ Object.extend(Terminal.prototype, /** @lends Terminal.prototype */ {
         this.eventAddWire.unsubscribeAll();
         this.eventRemoveWire.unsubscribeAll();
         this._terminalNode.parentNode.removeChild(this._terminalNode);
-        this.removeAllWires();
-        this.remove();
     },
     
     /**
@@ -209,6 +207,8 @@ Object.extend(Terminal.prototype, /** @lends Terminal.prototype */ {
      * @private
      */
     _wireRemoveHandler: function(/** Event */ event, /** Array */ params) {
-        this.handler(event, params, false);    
+        if (!this._destroyed) {
+            this.handler(event, params, false);
+        }
     }
 });

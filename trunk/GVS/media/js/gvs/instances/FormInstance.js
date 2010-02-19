@@ -2,7 +2,7 @@ var FormInstance = Class.create(ComponentInstance,
     /** @lends FormInstance.prototype */ {
 
     /**
-     * Pre or Post instance.
+     * Form instance.
      * @constructs
      * @extends ComponentInstance
      */
@@ -49,7 +49,8 @@ var FormInstance = Class.create(ComponentInstance,
             }
         };
         this._buildingBlockDescription.actions.each(function(action) {
-            action.preconditions.each(function(pre) { 
+            var actionTerminals = new Hash();
+            action.preconditions.each(function(pre) {
                 options.ddConfig = {
                     'type': 'input',
                     'allowedTypes': ['output']
@@ -60,8 +61,9 @@ var FormInstance = Class.create(ComponentInstance,
                 }     
                 var node = this._view.getConditionNode(pre.id, action.name);
                 var terminal = new Terminal(node, options, this, pre.id, action.name);
-                this._terminals.set(pre.id, terminal);
-            }.bind(this));   
+                actionTerminals.set(pre.id, terminal);
+            }.bind(this));
+            this._terminals.set(action.name, actionTerminals);
         }.bind(this));
 
         var posts;
@@ -71,30 +73,41 @@ var FormInstance = Class.create(ComponentInstance,
         } else {
             posts = this._buildingBlockDescription.postconditions;
         }
-        
+
+        var postconditionTerminals = new Hash();
         posts.each(function(post) {
-                options.alwaysSrc = true;
-                options.ddConfig = {
-                     'type': 'output',
-                     'allowedTypes': ['input']
-                }
-                options.offsetPosition = {
-                    'top': 9,
-                    'left': 2
-                }
-                var node = this._view.getConditionNode(post.id);
-                var terminal = new Terminal(node, options, this, post.id);
-                terminal.onWireHandler(handler);
-                this._terminals.set(post.id, terminal);
-            }.bind(this)); 
+            options.alwaysSrc = true;
+            options.ddConfig = {
+                 'type': 'output',
+                 'allowedTypes': ['input']
+            }
+            options.offsetPosition = {
+                'top': 9,
+                'left': 2
+            }
+            var node = this._view.getConditionNode(post.id);
+            var terminal = new Terminal(node, options, this, post.id);
+            terminal.onWireHandler(handler);
+            postconditionTerminals.set(post.id, terminal);
+        }.bind(this));
+        this._terminals.set("postconditions", postconditionTerminals);
     },
 
     /**
      * Gets a terminal from an id
      * @type Terminal
      */
-    getTerminal: function(/** String */ id) {
-        return this._terminals.get(id);
+    getTerminal: function(/** String */ id, /** String (Optional) */ _action) {
+        var terminal = null;
+        if (_action) {
+            var actionTerminals = this._terminals.get(_action);
+            if (actionTerminals) {
+                terminal = actionTerminals.get(id);
+            }
+        } else {
+            terminal = this._terminals.get("postconditions").get(id);
+        }
+        return terminal;
     },
     
     /**
@@ -102,12 +115,19 @@ var FormInstance = Class.create(ComponentInstance,
      * @override
      */
     destroy: function($super) {
-        $super();
         if (this._terminals) {
-            this._terminals.values().each(function(terminal){
-                terminal.destroy();    
+            this._terminals.values().each(function(terminalGroup){
+                terminalGroup.values().each(function(terminal){
+                    terminal.destroy();
+                });
             });
+            /*this._terminals.values().each(function(terminalGroup){
+                terminalGroup.values().each(function(terminal){
+                    terminal.removeAllWires();
+                });
+            });*/
         }
+        $super();
     },
     
     /*onStart: function() {
@@ -126,8 +146,10 @@ var FormInstance = Class.create(ComponentInstance,
      */
     onUpdate: function(/** Number */ x, /** Number */ y) {
         if (this._terminals) {
-            this._terminals.values().each(function(terminal){
-                terminal.updatePosition();    
+            this._terminals.values().each(function(terminalGroup) {
+                terminalGroup.values().each(function(terminal) {
+                    terminal.updatePosition();
+                });
             });
         }
     },

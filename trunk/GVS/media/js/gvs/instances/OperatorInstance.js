@@ -50,6 +50,7 @@ var OperatorInstance = Class.create(ComponentInstance,
             }
         };
         this._buildingBlockDescription.actions.each(function(action) {
+            var actionTerminals = new Hash();
             action.preconditions.each(function(pre) { 
                 options.ddConfig = {
                     'type': 'input',
@@ -61,8 +62,9 @@ var OperatorInstance = Class.create(ComponentInstance,
                 }     
                 var node = this._view.getConditionNode(pre.id);
                 var terminal = new Terminal(node, options, this, pre.id, action.name);
-                this._terminals.set(pre.id, terminal);
-            }.bind(this));   
+                actionTerminals.set(pre.id, terminal);
+            }.bind(this));
+            this._terminals.set(action.name, actionTerminals);
         }.bind(this));
         
         var posts;
@@ -72,7 +74,8 @@ var OperatorInstance = Class.create(ComponentInstance,
         } else {
             posts = this._buildingBlockDescription.postconditions;
         }
-        
+
+        var postconditionTerminals = new Hash();
         posts.each(function(post) {
                 options.alwaysSrc = true;
                 options.ddConfig = {
@@ -86,16 +89,26 @@ var OperatorInstance = Class.create(ComponentInstance,
                 var node = this._view.getConditionNode(post.id);
                 var terminal = new Terminal(node, options, this, post.id);
                 terminal.onWireHandler(handler);
-                this._terminals.set(post.id, terminal);
-            }.bind(this)); 
+                postconditionTerminals.set(post.id, terminal);
+            }.bind(this));
+            this._terminals.set("postconditions", postconditionTerminals);
     },
 
     /**
      * Gets a terminal from an id
      * @type Terminal
      */
-    getTerminal: function(/** String */ id) {
-        return this._terminals.get(id);
+    getTerminal: function(/** String */ id, /** String (Optional) */ _action) {
+        var terminal = null;
+        if (_action) {
+            var actionTerminals = this._terminals.get(_action);
+            if (actionTerminals) {
+                terminal = actionTerminals.get(id);
+            }
+        } else {
+            terminal = this._terminals.get("postconditions").get(id);
+        }
+        return terminal;
     },
 
     /**
@@ -116,10 +129,20 @@ var OperatorInstance = Class.create(ComponentInstance,
      * @override
      */
     destroy: function($super) {
+        if (this._terminals) {
+            this._terminals.values().each(function(terminalGroup){
+                terminalGroup.values().each(function(terminal){
+                    terminal.destroy();
+                });
+            });
+        }
         $super();
         if (this._terminals) {
-            this._terminals.values().each(function(terminal){
-                terminal.destroy();    
+            this._terminals.values().each(function(terminalGroup){
+                terminalGroup.values().each(function(terminal){
+                    terminal.removeAllWires();
+                    terminal.remove();
+                });
             });
         }
     },
@@ -140,8 +163,10 @@ var OperatorInstance = Class.create(ComponentInstance,
      */
     onUpdate: function(/** Number */ x, /** Number */ y) {
         if (this._terminals) {
-            this._terminals.values().each(function(terminal){
-                terminal.updatePosition();    
+            this._terminals.values().each(function(terminalGroup) {
+                terminalGroup.values().each(function(terminal) {
+                    terminal.updatePosition();
+                });
             });
         }
     },
