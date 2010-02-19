@@ -16,7 +16,7 @@ public class MediaType {
 	/* turtle: textual serialization of RDF */
 	public static final String APPLICATION_TURTLE = "text/turtle";
 	
-	/* n3: extension¹ of turtle language expressing a superset of RDF */
+	/* n3: extension of turtle language expressing a superset of RDF */
 	public static final String TEXT_N3 = "text/rdf+n3";
 
 	public static String forExtension(String extension) {
