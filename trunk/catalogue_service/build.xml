@@ -53,9 +53,9 @@
     <mkdir dir="${build.home}/WEB-INF/classes"/>
 
     <!-- Copy static content of this web application -->
-    <!--copy todir="${build.home}">
+    <copy todir="${build.home}">
       <fileset dir="${web.home}"/>
-    </copy-->
+    </copy>
 
     <mkdir dir="${build.home}/WEB-INF/lib"/>
   </target>
