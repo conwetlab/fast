@@ -68,6 +68,8 @@ public class PostconditionServlet extends GenericServlet {
 			if (id == null) {
 				// List the members of the collection
 				logger.info("Retrieving all postconditions");
+				// Override format regarding the given extension
+				format = MediaType.forExtension(extension);
 				try {
 					if (format.equals(MediaType.APPLICATION_RDF_XML) ||
 							format.equals(MediaType.APPLICATION_TURTLE)) {
