@@ -1,4 +1,4 @@
-\documentclass{fast_latex}
+\documentclass[twoside]{fast_latex}
 % yay! We can use any kind of funky diacritic:
 \usepackage[utf8]{inputenc}
 
@@ -17,6 +17,7 @@
 \usepackage{booktabs}
 \usepackage{amssymb}
 \usepackage{paralist}
+\usepackage{courier}
 
 % This is useful for switching in-line comments on and off!
 \usepackage{ifthen}
@@ -56,13 +57,14 @@ morestring=[b]",
 \lstset{
 	captionpos=b, 
 	extendedchars=true,
-	basicstyle=\footnotesize \sffamily, 
+	% basicstyle=\footnotesize \sffamily, 
+	basicstyle={\footnotesize\ttfamily},
 	stringstyle=\bfseries,
 	frame=single,
 	frameround=tttt,
 	showstringspaces=false,
 	breaklines=true,
-	% inputencoding=utf8,
+	inputencoding=utf8,
 }
 
 
@@ -73,10 +75,10 @@ morestring=[b]",
 \newcommand\deliverableTitleShort{Ontology and Conceptual Model}
 \newcommand\workpackageNumber{2}
 \newcommand\workpackageTitle{Definition of Conceptual Model}
-\newcommand\authorOne{Knud M\"oller, NUIG}
+\newcommand\authorOne{Knud Möller, NUIG}
 \newcommand\authorTwo{Ismael Rivera, NUIG}
-\newcommand\authorThree{Author 3}
-\newcommand\authorFour{Author 4}
+\newcommand\authorThree{Marcos Reyes Ureña, TID}
+\newcommand\authorFour{Ciprian Alexandru Palaghita, Cyntelix}
 \newtheorem{example}{\emph{Example}}
 
 \begin{document}
@@ -120,6 +122,8 @@ morestring=[b]",
 		\vspace{2cm}
 		{\large \sffamily \authorOne}\\
 		{\large \sffamily \authorTwo}\\
+		{\large \sffamily \authorThree}\\
+		{\large \sffamily \authorFour}\\
 		\vspace{0.5cm}
 		\vfill
 		{\large \sffamily Date: 27/02/2010}\\
@@ -192,8 +196,8 @@ morestring=[b]",
 							\textcolor{white}{\textbf{Change description}}\\ \hline
 %0.1 & 15.12.2008 & Knud M\"oller (NUIG) & template modelled \\ \hline
 %0.2 & 15.02.2009 & Knud M\"oller (NUIG) & content moved from wiki after internal review \\ \hline
-1.0 & 27.02.2009 & Knud M\"oller (NUIG) & final version (D2.2.1) ready for external review \\ \hline
-2.0 & 27.02.2010 & Knud M\"oller (NUIG) & final version (D2.2.2) ready for external review \\ \hline
+1.0 & 27.02.2009 & \authorOne & final version (D2.2.1) ready for external review \\ \hline
+2.0 & 27.02.2010 & \authorOne & final version (D2.2.2) ready for external review \\ \hline
 \end{tabular}
 \end{small}
 
@@ -268,7 +272,7 @@ This deliverable defines the ontology and conceptual model for the semantic char
 	\textcolor{white}{\textbf{Status}} & \multicolumn{2}{l|}{} & \multicolumn{2}{l|}{final}\\ \hline
 	\textcolor{white}{\textbf{Dissemination Level}} & \multicolumn{4}{l|}{Public $\boxtimes$ / Consortium $\square$}\\ \hline
 	\textcolor{white}{\textbf{Short description of contents}} & \multicolumn{4}{p{10.85cm}|}{\deliverableNumber{} is the second iteration of the FAST Gadget ontology. The ontology provides a formal description of the conceptual model of FAST in general, and of the screen/screenflow architecture in particular. The document comprises a discussion of the ontology development methodology used, a number of intermediate representations which document the development process, and the final product in the form of an OWL ontology.}\\ \hline
-	\textcolor{white}{\textbf{Authors}} & \multicolumn{4}{l|}{\authorOne, \authorTwo}\\
+	\textcolor{white}{\textbf{Authors}} & \multicolumn{4}{p{10.85cm}|}{\authorOne, \authorTwo, \authorThree, \authorFour}\\
 %	{} & \multicolumn{4}{l|}{}\\ 
 %	{} & \multicolumn{4}{l|}{}\\ 
 %	{} & \multicolumn{4}{l|}{}\\
@@ -347,7 +351,7 @@ All of these references are discussed in \cite{urmetzer2010fast_state_of_the_art
 \section{Domain Analysis} % (fold)
 \label{sec:domain_analysis}
 
-In this section, we will apply a number of the phases proposed in Methontology to the process of developing the FAST gadget ontology. The names of the following sections reflect the names of the phases in Methontology.
+In this section, we will apply a number of the phases proposed in Methontology (see Sect. \ref{sub:methontology_a_methodology_for_ontology_development}) to the process of developing the FAST gadget ontology. The names of the following sections reflect the names of the phases in Methontology.
 
 \subsection{Specification} % (fold)
 \label{sub:specification}
@@ -390,49 +394,84 @@ In the conceptualisation phase, we first produce a \emph{glossary of terms} whic
 \paragraph{Classes} % (fold)
 \label{par:classes}
 
-``Classes'' here should be read as ``types of things'' in general. I.e., if a term is listed as a \emph{class} here, this has no direct implications on the concrete implementation of this term. For example, while \emph{label} is a type of thing that is important in FAST, it will not necessarily be represented as an \texttt{rdfs:Class} in the implementation step. It could just as likely be represented as a property.
+``Classes'' here should be read as ``types of things'' in general. I.e., if a term is listed as a \emph{class} here, this has no direct implications on the concrete implementation of this term. For example, while \emph{label} is a type of thing that is important in FAST, it will not necessarily be represented as an \texttt{owl:Class} in the implementation step, but could just as well be represented as a property.
 
-\emph{Components/Resources}
+\singlespacing
+\begin{small}
+\begin{longtable}{|p{4.25cm}|p{10cm}|}
+\caption{\label{tab:glossary_of_terms_classes}FAST Glossary of Terms, Classes}\\
+\hline
+\rowcolor{fast@lightgrey}\textcolor{white}{\textbf{Name}} & 
+	\textcolor{white}{\textbf{Description}} \\ \hline
+\endfirsthead
+\rowcolor{fast@lightgrey}\textcolor{white}{\textbf{Name}} & 
+	\textcolor{white}{\textbf{Description}} \\ \hline
+\endhead
+\multicolumn{2}{|c|}{\textbf{Gadgets, Components and Building Blocks}} \\ \hline
+\texttt{Gadget} & A FAST gadget is the wrapped and deployed instance of a screen flow. It is the end result of the FAST workflow. As such, it is an important part of the conceptual model of FAST, but will not be modelled as an entity in the FAST ontology. \\ \hline
+\texttt{Building\_Block} & Anything that is part of a gadget (or the gadget itself). Tentatively anything that can be ``touched'' and moved around in the FAST IDE, from the most complex units such as \texttt{ScreenFlow}s down to atomic \texttt{FormElement}s like a button or a label in a form. \\ \hline
+\texttt{Screen\_Flow} & A set of screens from which a gadget for a given target platform can be generated. \\ \hline
+\texttt{Screen} & An individual screen; the basic unit of user interaction in FAST. \\ \hline
+\texttt{Screen\_Component} & Screens are made up of screen components, which fundamentally include service \texttt{Resources}, \texttt{Operators} and \texttt{Forms}. \\ \hline
+\texttt{Resource} & A service resource in FAST is a wrapper around a Web service (the \texttt{BackendService}), which makes the service available to the platform, e.g., by mapping its definition to FAST facts and actions. Note that this is a re-definition of the term ``resource'', as compared to \cite{moeller2009fast_ontology}. \\ \hline
+\texttt{Backend\_Service} & A Web service which provides data and/or functionality to a screen. The actual backend service is external to FAST, and only available through a wrapper (the service \texttt{Resource}). \\ \hline
+\texttt{Operators} & Operators are intended to transform and/or modify data within a screen, usually for preparing data coming from service resources for the use in the screen's interface. Operators cover different kinds of data manipulations, from simple aggregation to mediating data with incompatible schemas. \\ \hline
+\texttt{Form} & A form is the visual aspect of a screen: its user interface. Each form is made up of individual form elements. \\ \hline
+\texttt{Form\_Element} & Form elements are UI elements in a particular \texttt{Screen}, such as buttons, lists or labels. \\ \hline
+\texttt{Pipe} & Pipes are used to explicitly define the flow of data within a screen, e.g., from service resource to operator to a specific form element. \\ \hline
+\texttt{Action} & Actions are representations of some specific functionality of a building block in FAST. Examples are methods of a Web service (e.g., \texttt{getItem}) or functionality to update or change the contents of a \texttt{Form}. \\ \hline
+\texttt{Trigger} & Triggers are the flip-side of actions. Certain events in a building blocks can cause a trigger to be fired. Other building blocks within the same screen, which are listening to it, will react with an \texttt{Action}. \\ \hline
+% \texttt{Flow\_Control\_Element} & A special kind of building block which can restrict the default flow of screens in a gadget. \\ \hline
+% \texttt{Screen\_Flow\_Start} & The entry point to a gadget; the first screen. \\ \hline
+% \texttt{Screen\_Flow\_End} & A screen that ends the workflow of the gadget. \\ \hline
+% \texttt{Connector} & An explicit connection between two screens, as opposed to the usual dynamic flow of screens defined by pre- and post-conditions. \\ \hline
+\multicolumn{2}{|c|}{\textbf{Pre- and Post-conditions}} \\ \hline
+\texttt{Condition} & The pre- or post-condition of either a certain kinds of building blocks. If the building block is a \texttt{Screen\_Flow}, each target platform will use these conditions in its own way, or may also ignore them. E.g., in EzWeb pre- and post-conditions correspond to the concepts of \emph{slot} and \emph{event}. \\ \hline
+\texttt{Pattern} & A set of facts which formally defines a condition. A pattern may contain one or more variables. \\ \hline
+\texttt{Fact} & The ``basic information unit of a FAST gadget''~\cite{urena2010fast_architecture} In terms of RDF, a fact will probably be one statement consisting of \emph{(S, P, O)}. \\ \hline
+\multicolumn{2}{|c|}{\textbf{Annotation}} \\ \hline
+\texttt{String} & A catch-all class of objects that serves for representing short labels, longer descriptions, dates, patterns, etc. If meant for human consumption, strings can have multiple representations for different languages. \\ \hline
+\texttt{Image} & Images are any kind of graphical object, such as icons, screenshots, etc. \\ \hline
+\texttt{Tag} & A short (usually one word) description of a resource. \\ \hline
+\multicolumn{2}{|c|}{\textbf{User and User Profiles}} \\ \hline
+\texttt{User} & A human user of the FAST IDE. \\ \hline
+\texttt{User\_Profile} & The settings and data known about a particular user. \\ \hline
+\end{longtable}
+\end{small}
+\doublespacing
 
-\begin{itemize}
-	\item \texttt{Component} (or \texttt{Resource}) - Anything that is part of a gadget (or the gadget itself). Tentatively anything that can be ``touched'' and moved around in the FAST IDE.
-	\begin{itemize}
-		\item \texttt{Screen\_Flow} - A set of screens from which a gadget for a given target platform can be generated.
-		\item \texttt{Screen} - An individual screen.
-		\item \texttt{Backend\_Service} - A Web service which provides data and/or functionality to a screen. A backend service will often be external to FAST, and will probably have to be wrapped by the screen.
-		\item \texttt{Flow\_Control\_Element} - Any kind of component which can restrict the default flow of screens in a gadget.
-		\begin{itemize}
-			\item \texttt{Screen\_Flow\_Start} - The entry point to a wigdet; the first screen.
-			\item \texttt{Screen\_Flow\_End} - A screen that ends the workflow of the gadget.
-			\item \texttt{Connector} - An explicit connection between two screens.
-		\end{itemize}
-		\item \texttt{Operator} - Any kind of component that is used to connect backend services to form elements. Examples are simple pipes, aggregators or various kinds of filters. Operators concern the inner mechanics of a screen and will be covered in years 2 and 3 of the project.
-		\item \texttt{Form\_Element} - Form elements are UI elements in a particular screen.
-	\end{itemize}
-\end{itemize}
+\begin{figure}[ht]
+  \begin{center}
+    \includegraphics[scale=.66]{images/uml_composition.pdf}
+    \caption{Important composition relationships within the FAST conceptual model}
+    \label{fig:uml_composition}
+  \end{center}
+\end{figure}
 
-\emph{Pre- and Post-conditions}
+\begin{figure}[ht]
+  \begin{center}
+    \includegraphics[scale=.66]{images/uml_screen_component.pdf}
+    \caption{Aggregation of screen components}
+    \label{fig:uml_screen_component}
+  \end{center}
+\end{figure}
 
-\begin{itemize}
-	\item \texttt{Condition} - The pre- or post-condition of either a screen or a screenflow. In the latter case, each target platform will use these conditions in its own way, or may also ignore them. E.g., in EzWeb pre- and post-conditions correspond to the concepts of \emph{slot} and \emph{event}.
-	\item \texttt{Pattern} - A set of facts which formally defines a condition. A pattern may contain one or more variables.
-	\item \texttt{Fact} - ``the basic information unit of a FAST gadget''~\cite{solero2009fast_architecture} In terms of RDF, a fact will probably be one statement consisting of \emph{(S, P, O)}.
-\end{itemize}
+\begin{figure}[ht]
+  \begin{center}
+    \includegraphics[scale=.66]{images/uml_definition.pdf}
+    \caption{Building blocks have either code or are defined declaratively}
+    \label{fig:uml_definition}
+  \end{center}
+\end{figure}
 
-\emph{Annotation}
+\begin{figure}[ht]
+  \begin{center}
+    \includegraphics[scale=.66]{images/uml_condition.pdf}
+    \caption{Building blocks with pre- and post-conditions}
+    \label{fig:uml_condition}
+  \end{center}
+\end{figure}
 
-\begin{itemize}
-	\item \texttt{String} - A catch-all class of objects that serves for representing short labels, longer descriptions, dates, patterns, etc. If meant for human consumption, strings can have multiple representations for different languages.
-	\item \texttt{Image} - Images are any kind of graphical object, such as icons, screenshots, etc.
-	\item \texttt{Tag} - A short (usually one word) description of a resource.
-\end{itemize}
-
-\emph{Users}
-
-\begin{itemize}
-	\item \texttt{User} - A human user of the FAST IDE.
-	\item \texttt{User\_Profile} - The settings and data known about a particular user.
-\end{itemize}
 
 % paragraph classes (end)
 
@@ -452,7 +491,7 @@ All properties are listed in Tab.~\ref{tab:glossary_of_terms_properties} (many o
 \rowcolor{fast@lightgrey}\textcolor{white}{\textbf{Name}} & 
 	\textcolor{white}{\textbf{Description}} \\ \hline
 \endhead
-\multicolumn{2}{|c|}{\textbf{Components/Resources}} \\ \hline
+\multicolumn{2}{|c|}{\textbf{Components/Building Blocks}} \\ \hline
 \texttt{contains} & Many kinds of components in FAST can contain other components: screenflows contain screens, screens contain forms or form elements, etc. \\ \hline
 \texttt{hasPreCondition} & This property links a screen or screenflow to its pre-condition, i.e., the facts that need to be fulfilled in order for this screen or screenflow to be reachable. \\ \hline
 \texttt{hasPostCondition} & This property links a screen or screenflow to its post-condition, i.e., the facts that are produced once the screen or screenflow has been executed. \\ \hline
@@ -491,7 +530,7 @@ In this section we will investigate out a number of established ontologies which
 
 The Friend of a Friend vocabulary is a simple ontology which main purpose to describe people --- represented as instances of the \texttt{foaf:Person} class --- in terms of their contact information, interests, or Web presence. More importantly, however, is the fact that FOAF provides some simple terms for specifying who knows who (using the propery \texttt{foaf:knows}), thereby effectively allowing to build a social network of people. There is no such thing as a centralised FOAF service to which people have to sign up. Instead, each person can maintain and host their own FOAF description (often in the form of a \emph{FOAF file}), or use one of many external services which provide this functionality, such as LiveJournal, TypePad, Vox, Hi5, etc., thus making the FOAF network a truly decentralised social network. Figure ~\ref{fig:foaf_example} depicts an excerpt of some typical FOAF files, describing two people called ``Knud M\"oller'' and ``Andreas Harth'', including the fact that Knud knows Andreas.
 
-\begin{figure}
+\begin{figure}[ht]
   \begin{center}
     \includegraphics[width=\linewidth]{images/foaf_example.pdf}
     \caption{Example of FOAF data}
@@ -511,7 +550,7 @@ Another vocabulary that is gaining a lot of uptake and support on the Semantic W
 
 \begin{figure}
   \begin{center}
-    \includegraphics[width=\linewidth]{images/sioc_overview}
+    \includegraphics[width=0.75\linewidth]{images/sioc_overview}
     \caption{Overview of the SIOC ontology}
     \label{fig:sioc_overview}
   \end{center}
@@ -639,7 +678,7 @@ In FAST, resources (gadgets, screenflows, screens and their components) exist in
 
 When implementing these four stages, as illustrated in Fig.~\ref{fig:classes_templates}, to OWL DL semantics, one will be faced with an immediate problem. Conceptually, once would like to say that $Screen$ is a class, i.e., the set of all screens. As argues above, $LogInScreen$ would then be an instance of $Screen$ ($LogInScreen \subset Screen$), while a particular $LogInScreen_x$ in a particular screenflow would again be an instance of $LogInScreen$ ($LogInScreen_x \subset LogInScreen$). However, unless we want to move into OWL Full semantics, classes cannot be used as instances at the same time, so we cannot use this modelling approach. Furthermore, when we instantiate a resource such as a screen within a particular screenflow, we want to imply that the new instance ($LogInScreen_x$) has the same features such as label, icon or conditions, as $LogInScreen$. In other words, what we really require is a something like a \emph{copy} of the original $LogInScreen$. 
 
-Neither OWL nor RDFS semantics offer functionality to represent a relationship such as the copy of a resource formally. For this reason, we introduce the concept of \emph{templates for RDF instances} in FAST. One resource (e.g., $LogInScreen$) will play the role of a \emph{template}, while the other resource (e.g., $LogInScreen_x$) will be called a \emph{copy}. Conceptually, copying a resource means defining a named graph that contains all statements about this resource considered to be relevant, and creating a new graph with near-identical statements\footnote{The graphs are not completely identical: the identifiers for the resource and potentially other, contained resources will have changed.}. In practice, this procedure can be implemented using a SPARQL CONSTRUCT query, where the WHERE clause matches the graph pattern of the template, and the CONSTRUCT query will build the copy from it. The corresponding data on all three levels is shown in List.~\ref{list:templating}, using TriG syntax~\cite{bizer2004trig}.
+Neither OWL nor RDFS semantics offer functionality to represent a relationship such as the copy of a resource formally. For this reason, we introduce the concept of \emph{templates for RDF instances} in FAST. One resource (e.g., $LogInScreen$) will play the role of a \emph{template}, while the other resource (e.g., $LogInScreen_x$) will be called a \emph{copy}. Conceptually, copying a resource means defining a named graph that contains all statements about this resource considered to be relevant, and creating a new graph with near-identical statements\footnote{The graphs are not completely identical: the identifiers for the resource and potentially other, contained resources will have changed.}. In practice, this procedure can be implemented using a SPARQL CONSTRUCT query, where the WHERE clause matches the graph pattern of the template, and the CONSTRUCT query will build the copy from it. The corresponding data on all three levels is shown in List.~\ref{list:templating}, using TriG syntax~\cite{bizer2004trig} (an extension of Turtle syntax for named graphs).
 
 \singlespacing
 \lstset{
@@ -1010,13 +1049,13 @@ The implementation phase is what is often (wrongly so) considered to be the main
 
 According to [Fernández et  al., 1997], evaluation ``means to carry out a technical judgment of the ontologies, their software environment and documentation with respect to a frame of reference'' (in this case the requirement specification document). Evaluation can take place at any time during the ontology development process, and comprises activities such as \emph{validation} and \emph{verification}.
 
-For the FAST Gadget Ontology, most of the evaluation process will take place as part of the work carried out in WP6 (Experimentation and Evaluation) in years two and three of the project.
+For the FAST Gadget Ontology, most of the evaluation process will take place as part of the general implementation efforts in WPs 3--5, which will either directly or indirectly make use of the ontology and therefore function as means to test its feasibility, as well as providing new input to its evolution. Additionally, the work carried out in WP6 (Experimentation and Evaluation) in years two and three of the project is providing valuable input to the evaluation of the ontology.
 % subsubsection evaluation (end)
 
 \subsubsection{Documentation} % (fold)
 \label{ssub:documentation}
 
-In Methontology, documentation is an activity which is automatically carried out throughout the development process, in the form of the various documents which form the output of the individual phases. Since this deliverable contains the current versions of all those documents, it is at the same time the ontology itself as well as its documentation.
+In Methontology, documentation is an activity which is automatically carried out throughout the development process, in the form of the various documents which form the output of the individual phases. Since this deliverable contains the current versions of all those documents, it represents a snapshot of the most recent documentation available at the time of its writing.
 % subsubsection documentation (end)
 
 % subsection methontology_a_methodology_for_ontology_development (end)
@@ -1030,7 +1069,7 @@ In Methontology, documentation is an activity which is automatically carried out
 
 \begin{figure}[ht]
   \begin{center}
-    \includegraphics[width=.82\linewidth]{images/fgo_uml_diagram}
+    \includegraphics[width=.80\linewidth]{images/fgo_uml_diagram}
     \caption{FAST Gadget Ontology Class Hierarchy}
     \label{fig:ontology_uml}
   \end{center}
@@ -1076,9 +1115,19 @@ This section contains a definition of all properties defined in the \texttt{fgo}
 Below is the complete code of the FAST gadget ontology in Turtle syntax. The latest version of this file can always be accessed at \url{http://purl.oclc.org/fast/ontology/gadget}.
 
 \singlespacing
-\begin{small}
-\verbatiminput{fast_gadget.owl}
-\end{small}
+% \begin{small}
+% \verbatiminput{fast_gadget.owl}
+% \end{small}
+\lstset{
+	frame=none,
+	caption={},
+	nolol=true,
+	basicstyle={\footnotesize\ttfamily},
+	label=list:ontology,
+	language=turtle
+}
+\lstinputlisting{fast_gadget.owl}
+
 
 \clearpage
 \doublespacing
