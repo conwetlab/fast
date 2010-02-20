@@ -386,10 +386,13 @@ In summary, the ontology is supposed to facilitate support for the user in the d
 \subsection{Conceptualisation} % (fold)
 \label{sub:conceptualisation}
 
-In the conceptualisation phase, we first produce a \emph{glossary of terms} which lists all classes and properties of our ontology. The glossary is seeded from the specification document (see previous section), but groups the terms according to relatedness. Also, new terms are added to this document, whereas the specification document mostly remains in its original state.
+In the conceptualisation phase, we first produce a \emph{glossary of terms} which lists all classes and properties of our ontology. After introducing the general terms, the conceptual model is then refined by relating the different terms with regards to type hierarchy, composition and aggregation.
 
 \subsubsection{Glossary of Terms} % (fold)
 \label{ssub:glossary_of_terms}
+
+The glossary of terms is seeded from the specification document (see previous section), but groups the terms according to relatedness. Also, the evolution of the ontology is mainly reflected in this document, as new terms being introduced based on the employment and ongoing evaluation of the ontology are added here, whereas the specification document remains in its original state.
+
 
 \paragraph{Classes} % (fold)
 \label{par:classes}
@@ -444,6 +447,56 @@ In the conceptualisation phase, we first produce a \emph{glossary of terms} whic
 \end{small}
 \doublespacing
 
+% paragraph classes (end)
+
+\paragraph{Properties} % (fold)
+\label{par:properties}
+
+All relevant properties of the FAST conceptual model are listed in Tab.~\ref{tab:glossary_of_terms_properties}. Many of the properties covered in this table will also have an inverse, which are not listed.
+
+\singlespacing
+\begin{small}
+\begin{longtable}{|p{3.25cm}|p{11cm}|}
+\caption{\label{tab:glossary_of_terms_properties}FAST Glossary of Terms, Properties}\\
+\hline
+\rowcolor{fast@lightgrey}\textcolor{white}{\textbf{Name}} & 
+	\textcolor{white}{\textbf{Description}} \\ \hline
+\endfirsthead
+\rowcolor{fast@lightgrey}\textcolor{white}{\textbf{Name}} & 
+	\textcolor{white}{\textbf{Description}} \\ \hline
+\endhead
+\multicolumn{2}{|c|}{\textbf{Components/Building Blocks}} \\ \hline
+\texttt{contains} & Many kinds of components in FAST can contain other components: screenflows contain screens, screens contain forms or form elements, etc. \\ \hline
+\texttt{hasPreCondition} & This property links a screen or screenflow to its pre-condition, i.e., the facts that need to be fulfilled in order for this screen or screenflow to be reachable. \\ \hline
+\texttt{hasPostCondition} & This property links a screen or screenflow to its post-condition, i.e., the facts that are produced once the screen or screenflow has been executed. \\ \hline
+\multicolumn{2}{|c|}{\textbf{Pre- and Post-conditions}} \\ \hline
+\texttt{hasPattern} & This property links a condition resource to the pattern which formally defines it. \\ \hline
+\texttt{isPositive} & Conditions can be positive or negative, depending on whether they must be fulfilled or must not be fulfilled (in the case of pre-conditions), or whether their facts will be added to the canvas or removed (in the case of post-conditions). \\ \hline
+\multicolumn{2}{|c|}{\textbf{Annotation}} \\ \hline
+\texttt{hasLabel} & A string attached to any FAST component or sub-component, which represents a short ($\sim$1-2 word) human-readable description of the component. \\ \hline
+\texttt{hasDescription} & A string attached to any FAST component or sub-component, which represents a longer, more detailed human-readable description of the component in natural language. \\ \hline
+\texttt{hasImage} & An abstract property defining the relation between a thing in FAST and an image which somehow represents it. \\ \hline
+\texttt{hasIcon} & A small graphical representation of any FAST component or sub-component. \\ \hline
+\texttt{hasScreenshot} & An image which shows a particular screen or screenflow in action, to aid users in deciding which screen or screenflow to choose out of many. \\ \hline
+\texttt{hasRights} & A human-readable description of license information or similar for a screen, screenflow or possibly other components. \\ \hline
+\texttt{hasCreator} & Every resource generated within FAST will contain metainformation about the person who created it. \\ \hline
+\texttt{hasVersion} & A string representing the version number of a resource in FAST. \\ \hline
+\texttt{hasCreationDate} & A date-formatted string representing the date when a resource in FAST was created first. \\ \hline
+\texttt{hasHomepage} & Links a resource in FAST to a main Webpage with information about it. We expect screenflows/gadgets to have homepages, as well as users. Other resources will most likely not have homepages. \\ \hline
+\texttt{hasDomainContext} & A catch-all property to annotate a resource in FAST with information about the domain for which it is relevant. The domain context will be utilised for searching, matching, etc. Domain contexts can be expressed either as tags or structured objects. \\ \hline
+\multicolumn{2}{|c|}{\textbf{User and User Profiles}} \\ \hline
+\texttt{hasName} & The full name of a FAST user. \\ \hline
+\texttt{hasUserName} & The user name of a FAST user, which will often be a short form of the full name, or a nick name. The user name must be a unique ID within an instance of FAST. \\ \hline
+\texttt{hasEmail} & The e-mail address of a FAST user. \\ \hline
+\texttt{hasProfile} & Connecting a user with their profile. \\ \hline
+\texttt{hasInterests} & Interests of a user as specified in their profile. Interests could be matched with a component's domain context to allow the FAST catalogue (and thereby the GVS) to suggest screens and other components to the user. \\ \hline
+\end{longtable}
+\end{small}
+\doublespacing
+
+\subsubsection{Term Relations within the Conceptual Model} % (fold)
+\label{ssub:term_relations_within_the_conceptual_model}
+
 Regarding the layering from the actual gadget down to the embedded Web services, the central classes in the conceptual model of FAST can be grouped into three levels: the gadget and screen flow level at the top, the level of individual screens in the middle, and the level of Web services at the bottom. This layering is reflected in Fig.~\ref{fig:uml_composition}, which illustrates the central compositional relationships of the model. As the figure shows, a \emph{gadget} in FAST is mainly composed of a \emph{screen flow}, which it wraps. The \emph{screen flow} is composed of one or more \emph{screens}, which is turn comprises the three \emph{screen components} of the visual front-end (the \emph{form}), the back end service (the \emph{resource}) and the data \emph{operator}. Finally, \emph{forms} are assembled from \emph{form elements}, while \emph{resources} wrap \emph{backend services}.
 
 
@@ -486,52 +539,8 @@ Figure~\ref{fig:uml_condition} illustrates how different building blocks relate 
 \end{figure}
 
 
-% paragraph classes (end)
 
-\paragraph{Properties} % (fold)
-\label{par:properties}
-
-All properties are listed in Tab.~\ref{tab:glossary_of_terms_properties} (many of the properties covered in this table will also have an inverse).
-
-\singlespacing
-\begin{small}
-\begin{longtable}{|p{3.25cm}|p{11cm}|}
-\caption{\label{tab:glossary_of_terms_properties}FAST Glossary of Terms, Properties}\\
-\hline
-\rowcolor{fast@lightgrey}\textcolor{white}{\textbf{Name}} & 
-	\textcolor{white}{\textbf{Description}} \\ \hline
-\endfirsthead
-\rowcolor{fast@lightgrey}\textcolor{white}{\textbf{Name}} & 
-	\textcolor{white}{\textbf{Description}} \\ \hline
-\endhead
-\multicolumn{2}{|c|}{\textbf{Components/Building Blocks}} \\ \hline
-\texttt{contains} & Many kinds of components in FAST can contain other components: screenflows contain screens, screens contain forms or form elements, etc. \\ \hline
-\texttt{hasPreCondition} & This property links a screen or screenflow to its pre-condition, i.e., the facts that need to be fulfilled in order for this screen or screenflow to be reachable. \\ \hline
-\texttt{hasPostCondition} & This property links a screen or screenflow to its post-condition, i.e., the facts that are produced once the screen or screenflow has been executed. \\ \hline
-\multicolumn{2}{|c|}{\textbf{Pre- and Post-conditions}} \\ \hline
-\texttt{hasPattern} & This property links a condition resource to the pattern which formally defines it. \\ \hline
-\texttt{isPositive} & Conditions can be positive or negative, depending on whether they must be fulfilled or must not be fulfilled (in the case of pre-conditions), or whether their facts will be added to the canvas or removed (in the case of post-conditions). \\ \hline
-\multicolumn{2}{|c|}{\textbf{Annotation}} \\ \hline
-\texttt{hasLabel} & A string attached to any FAST component or sub-component, which represents a short ($\sim$1-2 word) human-readable description of the component. \\ \hline
-\texttt{hasDescription} & A string attached to any FAST component or sub-component, which represents a longer, more detailed human-readable description of the component in natural language. \\ \hline
-\texttt{hasImage} & An abstract property defining the relation between a thing in FAST and an image which somehow represents it. \\ \hline
-\texttt{hasIcon} & A small graphical representation of any FAST component or sub-component. \\ \hline
-\texttt{hasScreenshot} & An image which shows a particular screen or screenflow in action, to aid users in deciding which screen or screenflow to choose out of many. \\ \hline
-\texttt{hasRights} & A human-readable description of license information or similar for a screen, screenflow or possibly other components. \\ \hline
-\texttt{hasCreator} & Every resource generated within FAST will contain metainformation about the person who created it. \\ \hline
-\texttt{hasVersion} & A string representing the version number of a resource in FAST. \\ \hline
-\texttt{hasCreationDate} & A date-formatted string representing the date when a resource in FAST was created first. \\ \hline
-\texttt{hasHomepage} & Links a resource in FAST to a main Webpage with information about it. We expect screenflows/gadgets to have homepages, as well as users. Other resources will most likely not have homepages. \\ \hline
-\texttt{hasDomainContext} & A catch-all property to annotate a resource in FAST with information about the domain for which it is relevant. The domain context will be utilised for searching, matching, etc. Domain contexts can be expressed either as tags or structured objects. \\ \hline
-\multicolumn{2}{|c|}{\textbf{User and User Profiles}} \\ \hline
-\texttt{hasName} & The full name of a FAST user. \\ \hline
-\texttt{hasUserName} & The user name of a FAST user, which will often be a short form of the full name, or a nick name. The user name must be a unique ID within an instance of FAST. \\ \hline
-\texttt{hasEmail} & The e-mail address of a FAST user. \\ \hline
-\texttt{hasProfile} & Connecting a user with their profile. \\ \hline
-\texttt{hasInterests} & Interests of a user as specified in their profile. Interests could be matched with a component's domain context to allow the FAST catalogue (and thereby the GVS) to suggest screens and other components to the user. \\ \hline
-\end{longtable}
-\end{small}
-\doublespacing
+% subsubsection term_relations_within_the_conceptual_model (end)
 
 \subsection{Integration} % (fold)
 \label{sub:integration}
