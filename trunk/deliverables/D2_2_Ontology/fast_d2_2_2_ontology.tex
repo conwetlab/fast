@@ -22,7 +22,7 @@
 % This is useful for switching in-line comments on and off!
 \usepackage{ifthen}
 \newboolean{showcomments}
-\setboolean{showcomments}{true}
+\setboolean{showcomments}{false}
 \ifthenelse{\boolean{showcomments}}
 {
 	\definecolor{Red}{rgb}{1,0,0}
@@ -386,18 +386,12 @@ In summary, the ontology is supposed to facilitate support for the user in the d
 \subsection{Conceptualisation} % (fold)
 \label{sub:conceptualisation}
 
-In the conceptualisation phase, we first produce a \emph{glossary of terms} which lists all classes and properties of our ontology. After introducing the general terms, the conceptual model is then refined by relating the different terms with regards to type hierarchy, composition and aggregation.
+In the conceptualisation phase, we first produce a \emph{glossary of terms} which lists all classes and properties of our ontology. The glossary of terms is seeded from the specification document (see previous section), but groups the terms according to relatedness. Also, the evolution of the ontology is mainly reflected in this document, as new terms being introduced based on the employment and ongoing evaluation of the ontology are added here, whereas the specification document remains in its original state. After introducing the general terms, the conceptual model is then refined by relating the different terms with regards to type hierarchy, composition and aggregation.
 
-\subsubsection{Glossary of Terms} % (fold)
-\label{ssub:glossary_of_terms}
+\subsubsection{Glossary of Terms: Classes} % (fold)
+\label{subs:classes}
 
-The glossary of terms is seeded from the specification document (see previous section), but groups the terms according to relatedness. Also, the evolution of the ontology is mainly reflected in this document, as new terms being introduced based on the employment and ongoing evaluation of the ontology are added here, whereas the specification document remains in its original state.
-
-
-\paragraph{Classes} % (fold)
-\label{par:classes}
-
-``Classes'' here should be read as ``types of things'' in general. I.e., if a term is listed as a \emph{class} here, this has no direct implications on the concrete implementation of this term. For example, while \emph{label} is a type of thing that is important in FAST, it will not necessarily be represented as an \texttt{owl:Class} in the implementation step, but could just as well be represented as a property. Table~\ref{tab:glossary_of_terms_classes} lists all classes considered in the conceptual model of FAST, loosely grouped according to their relevance for specific aspects of the platform.
+``Classes'' here should be read as ``types of things'' in general. I.e., if a term is listed as a \emph{class} here, this has no direct implications on the concrete implementation of the term. For example, while \emph{label} is a type of thing that is important in FAST, it will not necessarily be represented as an \texttt{owl:Class} in the implementation step, but could just as well be represented as a property. Table~\ref{tab:glossary_of_terms_classes} lists all classes considered in the conceptual model of FAST, loosely grouped according to their relevance for specific aspects of the platform.
 
 \singlespacing
 \begin{small}
@@ -415,44 +409,48 @@ The glossary of terms is seeded from the specification document (see previous se
 \texttt{Building\_Block} & Anything that is part of a gadget (or the gadget itself). Tentatively anything that can be ``touched'' and moved around in the FAST IDE, from the most complex units such as \texttt{Screen\_Flow}s down to atomic \texttt{Form\_Element}s like a button or a label in a form. \\ \hline
 \texttt{Screen\_Flow} & A set of screens from which a gadget for a given target platform can be generated. \\ \hline
 \texttt{Screen} & An individual screen; the basic unit of user interaction in FAST. \\ \hline
-\texttt{Screen\_Component} & Screens are made up of screen components, which fundamentally include service \texttt{Resources}, \texttt{Operators} and \texttt{Forms}. \\ \hline
-\texttt{Resource} & A service resource in FAST is a wrapper around a Web service (the \texttt{BackendService}), which makes the service available to the platform, e.g., by mapping its definition to FAST facts and actions. Note that this is a re-definition of the term ``resource'', as compared to \cite{moeller2009fast_ontology}. \\ \hline
+\texttt{Screen\_Component} & Screens are made up of screen components, which fundamentally include service \texttt{Resource}s, \texttt{Operator}s and \texttt{Form}s. \\ \hline
+\texttt{Resource} & A service resource in FAST is a wrapper around a Web service (the \texttt{BackendService}), which makes the service available to the platform, e.g., by mapping its definition to FAST facts and actions. Note that this meaning of the term ``resource'' is different from the previous version of the FAST ontology in \cite{moeller2009fast_ontology}. \\ \hline
 \texttt{Backend\_Service} & A Web service which provides data and/or functionality to a screen. The actual backend service is external to FAST, and only available through a wrapper (the service \texttt{Resource}). \\ \hline
 \texttt{Operators} & Operators are intended to transform and/or modify data within a screen, usually for preparing data coming from service resources for the use in the screen's interface. Operators cover different kinds of data manipulations, from simple aggregation to mediating data with incompatible schemas. \\ \hline
 \texttt{Form} & A form is the visual aspect of a screen: its user interface. Each form is made up of individual form elements. \\ \hline
 \texttt{Form\_Element} & Form elements are UI elements in a particular \texttt{Screen}, such as buttons, lists or labels. \\ \hline
 \texttt{Pipe} & Pipes are used to explicitly define the flow of data within a screen, e.g., from service resource to operator to a specific form element. \\ \hline
 \texttt{Action} & Actions are representations of some specific functionality of a building block in FAST. Examples are methods of a Web service (e.g., \texttt{getItem}) or functionality to update or change the contents of a \texttt{Form}. \\ \hline
-\texttt{Trigger} & Triggers are the flip-side of actions. Certain events in a building blocks can cause a trigger to be fired. Other building blocks within the same screen, which are listening to it, will react with an \texttt{Action}. \\ \hline
+\texttt{Trigger} & Triggers are the flip-side of actions. Certain events in a building block can cause a trigger to be fired. Other building blocks within the same screen, which are listening to it, will react with an \texttt{Action}. \\ \hline
 \multicolumn{2}{|c|}{\textbf{Pre- and Post-conditions}} \\ \hline
-\texttt{Condition} & The pre- or post-condition of either a certain kinds of building blocks. If the building block is a \texttt{Screen\_Flow}, each target platform will use these conditions in its own way, or may also ignore them. E.g., in EzWeb pre- and post-conditions correspond to the concepts of \emph{slot} and \emph{event}. \\ \hline
+\texttt{Condition} & The pre- or post-condition of a certain kinds of building block. If the building block is a \texttt{Screen\_Flow}, each target platform will use these conditions in its own way, or may also ignore them. E.g., in EzWeb pre- and post-conditions correspond to the concepts of \emph{slot} and \emph{event}. \\ \hline
+\texttt{Pre-condition} & The pre-condition of a building block comprises of a set of \texttt{Fact}s that need to be fulfilled or available in order for the building block to be activated. \\ \hline
+\texttt{Post-condition} & The post-condition of a building block is a set of \texttt{Fact}s it can produce, and which will be thus become available to other building blocks. \\ \hline
 \texttt{Pattern} & A set of facts which formally defines a condition. A pattern may contain one or more variables. \\ \hline
-\texttt{Fact} & The ``basic information unit of a FAST gadget''~\cite{urena2010fast_architecture} In terms of RDF, a fact will probably be one statement consisting of \emph{(S, P, O)}. \\ \hline
+\texttt{Fact} & The ``basic information unit of a FAST gadget''~\cite{urena2010fast_architecture}. In terms of RDF, a fact is a statement consisting of a subject, predicate and object \emph{(S, P, O)}. \\ \hline
+\texttt{Ontology} & \texttt{Fact}s in FAST are represented as RDF triples, using terminology from a particular vocabulary or ontology. A building block can explicitly specify which ontology or ontologies it uses to specify its pre- and post-conditions (e.g., in the case of a \texttt{Screen}), or which ontology or ontologies it can otherwise handle (e.g., in terms of a mediation \texttt{Operator}). \\ \hline
 \multicolumn{2}{|c|}{\textbf{Implementation}} \\ \hline
 \texttt{Code} & In case the implementation of a building block is hard-coded, the \texttt{Code} represents the source code that defines it. \\ \hline
-\texttt{Library} & For hard-coded building blocks, certain programming libraries may be necessary. The are represented as a \texttt{Library}. \\ \hline
-\texttt{Definition} & For building blocks which do not rely on a hard-coded implementation, but which are instead defined declaratively, the \texttt{Definition} represents this. \\ \hline
+\texttt{Library} & For hard-coded building blocks, certain programming libraries may be necessary. The are represented as instances of \texttt{Library}. \\ \hline
+\texttt{Definition} & For building blocks which do not rely on a hard-coded implementation, but which are instead defined declaratively, the definition is represented by this class. \\ \hline
 % \texttt{Flow\_Control\_Element} & A special kind of building block which can restrict the default flow of screens in a gadget. \\ \hline
 % \texttt{Screen\_Flow\_Start} & The entry point to a gadget; the first screen. \\ \hline
 % \texttt{Screen\_Flow\_End} & A screen that ends the workflow of the gadget. \\ \hline
 % \texttt{Connector} & An explicit connection between two screens, as opposed to the usual dynamic flow of screens defined by pre- and post-conditions. \\ \hline
+\multicolumn{2}{|c|}{\textbf{User and User Profiles}} \\ \hline
+\texttt{User} & A human user involved in the lifecycle of a FAST gadget. The kind of \texttt{User} in FAST that is most relevant to the gadget ontology is a user of the FAST IDE, since these users need to be represented and handled by the FAST platform directly (as opposed to gadget end users). \\ \hline
+\texttt{User\_Profile} & The settings and data known about a particular user of the FAST platform. \\ \hline
+\texttt{User\_Role} & Throughout the lifecycle of a FAST gadget different kinds of users are involved. These users are distinguished by playing a particular \texttt{User\_Role}. The particular user roles identified in \cite{villoslada2010fast_requirements} are \emph{end users} of a gadget, \emph{key users}, \emph{consultants} (i.e., gadget developers), \emph{screen developers} and \emph{resource developers}. Any particular \texttt{User} can theoretically play several roles at the same time. \\ \hline
 \multicolumn{2}{|c|}{\textbf{Annotation}} \\ \hline
 \texttt{String} & A catch-all class of objects that serves for representing short labels, longer descriptions, dates, patterns, etc. If meant for human consumption, strings can have multiple representations for different languages. \\ \hline
-\texttt{Image} & Images are any kind of graphical object, such as icons, screenshots, etc. \\ \hline
-\texttt{Tag} & A short (usually one word) description of a resource. \\ \hline
-\multicolumn{2}{|c|}{\textbf{User and User Profiles}} \\ \hline
-\texttt{User} & A human user of the FAST IDE. \\ \hline
-\texttt{User\_Profile} & The settings and data known about a particular user. \\ \hline
+\texttt{Image} & Images are any kind of graphical object, such as icons, screenshots, etc., and are used in the UI of the FAST platform to represent building blocks to users. \\ \hline
+\texttt{Tag} & A short (usually one word) description of a building block. Rather than being only simple literal string, a \texttt{Tag} in FAST is a complex object consisting of a string representation as well as a unique identifier, which unambiguously specifies the tags meaning. \\ \hline
 \end{longtable}
 \end{small}
 \doublespacing
 
 % paragraph classes (end)
 
-\paragraph{Properties} % (fold)
-\label{par:properties}
+\subsubsection{Glossary of Terms: Properties} % (fold)
+\label{subs:properties}
 
-All relevant properties of the FAST conceptual model are listed in Tab.~\ref{tab:glossary_of_terms_properties}. Many of the properties covered in this table will also have an inverse, which are not listed.
+All relevant properties of the FAST conceptual model are listed in Tab.~\ref{tab:glossary_of_terms_properties}. Not all properties which will eventually be defined in the formal ontology are listed in the table: in many cases, these concrete properties simply reflect particular instances of generic composition or aggregation relations, which become apparent in the diagrams in Sect.~\ref{ssub:term_relations_within_the_conceptual_model}. Usually, these concrete properties will follow a general naming scheme of \texttt{hasCLASS\_NAME}, e.g., \texttt{hasDefinition} or \texttt{hasPreCondition}.
 
 \singlespacing
 \begin{small}
@@ -466,8 +464,8 @@ All relevant properties of the FAST conceptual model are listed in Tab.~\ref{tab
 	\textcolor{white}{\textbf{Description}} \\ \hline
 \endhead
 \multicolumn{2}{|c|}{\textbf{Components/Building Blocks}} \\ \hline
-\texttt{contains} & Many kinds of components in FAST can contain other components: screenflows contain screens, screens contain forms or form elements, etc. \\ \hline
-\texttt{hasPreCondition} & This property links a screen or screenflow to its pre-condition, i.e., the facts that need to be fulfilled in order for this screen or screenflow to be reachable. \\ \hline
+\texttt{contains} & Many kinds of building blocks in FAST can contain other building blocks: screenflows contain screens, screens contain forms or operators, forms contain form elements, etc. In many cases, specific properties for particular containment relations could be specified in the formal ontology.  \\ \hline
+\texttt{hasPreCondition} & This property links a building block to its pre-condition, i.e., the facts that need to be fulfilled in order for this screen or screenflow to be reachable. \\ \hline
 \texttt{hasPostCondition} & This property links a screen or screenflow to its post-condition, i.e., the facts that are produced once the screen or screenflow has been executed. \\ \hline
 \multicolumn{2}{|c|}{\textbf{Pre- and Post-conditions}} \\ \hline
 \texttt{hasPattern} & This property links a condition resource to the pattern which formally defines it. \\ \hline
@@ -545,7 +543,7 @@ Figure~\ref{fig:uml_condition} illustrates how different building blocks relate 
 \subsection{Integration} % (fold)
 \label{sub:integration}
 
-In this section we will investigate out a number of established ontologies which cover part of the requirements laid out in the specification document, as well as the glossary of terms from the conceptualisation stage. In particular, we will look at the Friend of a Friend (FOAF) ontology, Semantically Interlinked Online Communities (SIOC), the Dublin Core metadata specification and Common Tag. Looking at the integrated vocabularies and ontologies, it becomes apparent that we integrate terms for those parts of the conceptual model which are not unique for FAST, i.e., users and user profiles, basic annotation needs or the tagging of building blocks. Aspects of the model which are unique to FAST, however, had been modelled from scratch. \todo{idea: move these last sentences to the conclusion.}
+In this section we will investigate out a number of established ontologies which cover part of the requirements laid out in the specification document, as well as the glossary of terms from the conceptualisation stage. In particular, we will look at the Friend of a Friend (FOAF) ontology, Semantically Interlinked Online Communities (SIOC), the Dublin Core metadata specification and Common Tag. 
 The outcome of the integration process is the living \emph{integration document} at \ref{ssub:integration_document}.
 
 \subsubsection{FOAF} % (fold)
@@ -677,7 +675,23 @@ This living document specifies how the terms from the glossary of terms are expr
 \section{The FAST Gadget Ontology} % (fold)
 \label{sec:ontology}
 
-While the previous section discussed the various steps preceding the definition of the actual ontology according to our chosen development methodology, this section focusses on concrete usage of the FAST gadget ontology in an RDFS/OWL environment.
+While the previous section discussed the various steps preceding the definition of the actual ontology according to our chosen development methodology, this section focusses on concrete usage of the FAST gadget ontology in an RDFS/OWL environment. As a point of reference, an overview of all concrete classes will be given in Sect.~\ref{sub:ontology_overview}, followed by a number of sections detailing concrete aspects of the usage of the FAST gadget ontology.
+
+\subsection{Ontology Overview} % (fold)
+\label{sub:ontology_overview}
+
+This section gives a general, birds-eye-view of the ontology in terms of its classes and properties. Fig.~\ref{fig:ontology_uml} shows all classes in their subsumption hierarchy as a UML diagram, including the properties defining those classes as their domain. A more detailed list of classes and properties, complete with human-readable comments and documentation can be found in the back of the document in App.~\ref{sec:ontology_terms}, while the complete ontology code in OWL is given in App.~\ref{sec:ontology_code}.
+
+\begin{figure}
+  \begin{center}
+    \includegraphics[width=\linewidth]{images/fgo_uml_diagram}
+    \caption{FAST Gadget Ontology Class Hierarchy}
+    \label{fig:ontology_uml}
+  \end{center}
+\end{figure}
+
+
+% subsection ontology_overview (end)
 
 \subsection{Classes, Instances and Templates} % (fold)
 \label{sub:classes_instances_and_templates}
@@ -685,7 +699,7 @@ While the previous section discussed the various steps preceding the definition 
 In FAST, resources (gadgets, screenflows, screens and their components) exist in different stages throughout their lifecycle. Moving top-down from the high-level conceptual description to gadgets in use at runtime, the following differences can be made in terms of the level of instantiation:
 
 \begin{itemize}
-	\item \textbf{Abstract Class Level}: At this level, resources are defined on a categorical level, differentiating between the various kinds of things that are relevant in FAST, as fundamental classes such as screens, forms or services (see Sect.~\ref{ssub:glossary_of_terms}). These are implemented technically as classes in OWL.
+	\item \textbf{Abstract Class Level}: At this level, resources are defined on a categorical level, differentiating between the various kinds of things that are relevant in FAST, as fundamental classes such as screens, forms or resources (see Sect.~\ref{sub:conceptualisation}). These are implemented technically as classes in OWL.
 	\item \textbf{Screenflow-independent Component Definition}: When a user of the FAST GVS is building a new screenflow or screen, they do so by combining existing building blocks and configuring them. These building blocks are not the fundamental classes of FAST, but instead they are specific instances of those classes. In other words, users do not combine the idea of a screen with the idea of a service, but instead they combine the specific ``Log In Screen'' with the ``Amazon Web Service''. Technically, these concrete building blocks are implemented as instances of the fundamental classes, specified by asserting particular settings such as label or icons, pre- and post-conditions, etc.
 	\item \textbf{Instantiation within a Screenflow at Design-time}: Once a user selects a specific building block in the GVS and adds it to their new screen or screenflow project, they are in principle again instantiating from a conceptual to a concrete level: from the ``Log In Screen'' as such to a particular log in screen as used in that particular screenflow. Also in this stage, resources are implemented technically as instances.
 	\item \textbf{Runtime}: At the final level of instantiation, the screenflow has been packaged as a gadget, deployed to a gadget platform and is now being used by an end-user. At this level, all gadget components exist only in the form of Web standards compliant code (HTML, JavaScript, CSS). Any metadata still necessary or definitions for screen pre- and post-conditions are for performance now defined in the JavaScript native data format JSON, rather than in RDF. Therefore, at this level, the resources that make up the gadget are out of the scope of this deliverable.
@@ -1006,7 +1020,9 @@ Apart from the guidelines proposed by \cite{moeller2009ontology_soft_skills}, an
 \section{Conclusions and Outlook} % (fold)
 \label{sec:conclusions}
 
-The current version of deliverable 2.2 provides the foundation for enabling the semantic definition of gadgets within the context of the FAST platform. We have specified what the individual components of a gadget are, and how they interrelate. In developing our ontology, we have followed  well-known methodology for ontology development. During the course of this process, a number of living documents --- the requirements specification document, the glossary of terms, the integration document and finally the implementation document --- were produced. Those documents serve as a tool for development and as documentation at the same time, and will be extended and updated in the coming two years of the project and beyond. The driving force behind these changes will be testing and evaluation of the ontology within the FAST project, and possibly in other contexts as well.
+The current version of deliverable 2.2 provides the foundation for enabling the semantic definition of gadgets within the context of the FAST platform. We have specified what the individual components of a gadget are, and how they interrelate. In developing our ontology, we have followed Methontology, a well-known methodology for ontology development, which we have extended with additional UML diagrams to define the conceptual model of the FAST platform. During the course of this process, a number of living documents --- the requirements specification document, the glossary of terms and conceptual model, the integration document and finally the implementation document --- were produced. 
+Looking at the integration document, it becomes apparent that we integrate terms for those parts of the conceptual model which are not unique for FAST, i.e., users and user profiles, basic annotation needs or the tagging of building blocks. Aspects of the model which are unique to FAST, however, had been modelled from scratch.
+The various documents eventually leading to the FAST gadget ontology serve as tools for development and as documentation at the same time, and are being extended and updated throughout the duration of the project and beyond. The driving force behind these changes is the testing and evaluation of the ontology within the FAST project, and possibly in other contexts as well.
 
 A solution for representing pre- and post-conditions of screens and screen flows --- a central aspect of FAST technology --- has been presented, as it has been implemented and tested both within the FAST catalogue and the FAST GVS.
 
@@ -1088,19 +1104,19 @@ In Methontology, documentation is an activity which is automatically carried out
 % subsection methontology_a_methodology_for_ontology_development (end)
 
 
-\clearpage
-\phantomsection
-\section{Ontology Overview}
-\label{sec:ontology_overview}
-% \addcontentsline{toc}{section}{Ontology Overview}
-
-\begin{figure}[ht]
-  \begin{center}
-    \includegraphics[width=.80\linewidth]{images/fgo_uml_diagram}
-    \caption{FAST Gadget Ontology Class Hierarchy}
-    \label{fig:ontology_uml}
-  \end{center}
-\end{figure}
+% \clearpage
+% \phantomsection
+% \section{Ontology Overview}
+% \label{sec:ontology_overview}
+% % \addcontentsline{toc}{section}{Ontology Overview}
+% 
+% \begin{figure}[ht]
+%   \begin{center}
+%     \includegraphics[width=.80\linewidth]{images/fgo_uml_diagram}
+%     \caption{FAST Gadget Ontology Class Hierarchy}
+%     \label{fig:ontology_uml}
+%   \end{center}
+% \end{figure}
 
 
 \clearpage
@@ -1137,6 +1153,7 @@ This section contains a definition of all properties defined in the \texttt{fgo}
 \clearpage
 \phantomsection
 \section{Ontology Code}
+\label{sec:ontology_code}
 % \addcontentsline{toc}{section}{Ontology Code}
 
 Below is the complete code of the FAST gadget ontology in Turtle syntax. The latest version of this file can always be accessed at \url{http://purl.oclc.org/fast/ontology/gadget}.
