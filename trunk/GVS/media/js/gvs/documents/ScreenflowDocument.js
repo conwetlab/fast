@@ -190,8 +190,7 @@ var ScreenflowDocument = Class.create(PaletteDocument,
         var isLoading = Utils.variableOrDefault(_isLoading, false);
 
         // Reject repeated elements (except domain concepts)
-        if ((instance.constructor != PrePostInstance) &&
-            this._description.contains(instance.getUri())) {
+        if (this._description.contains(instance.getUri())) {
             Utils.showMessage("There is another element like this. Cannot add it", {
                 'hide': true,
                 'error': true
@@ -202,7 +201,9 @@ var ScreenflowDocument = Class.create(PaletteDocument,
         if (!instance.getId()) {
             instance.setId(UIDGenerator.generate(instance.getTitle()));
         } else {
-            UIDGenerator.setStartId(instance.getId());
+            if (instance.constructor != PrePostInstance) {
+                UIDGenerator.setStartId(instance.getId());
+            }
         }
 
         if (instance.constructor != PlanInstance) {
@@ -223,7 +224,8 @@ var ScreenflowDocument = Class.create(PaletteDocument,
             case PrePostInstance:
                 instance.setChangeHandler(this._onPrePostChange.bind({
                         'mine':this,
-                        'position': position
+                        'position': position,
+                        'isLoading': isLoading
                     }));
                 if (area.getNode().className.include("pre")) {
                     instance.setType("pre");                
@@ -502,11 +504,11 @@ var ScreenflowDocument = Class.create(PaletteDocument,
      */
     _onPrePostChange: function(/** PrePostInstance */ instance) {
         this.mine._description.addPrePost(instance, this.position);
-        
-        this.mine._refreshReachability();
-        
-        this.mine._setSelectedElement(instance);
-        this.mine._setDirty(true);
+        if (!this.isLoading) {
+            this.mine._refreshReachability();
+            this.mine._setSelectedElement(instance);
+            this.mine._setDirty(true);
+        }
     },
     
     /**
@@ -573,8 +575,7 @@ var ScreenflowDocument = Class.create(PaletteDocument,
                 getBuildingBlockFactory(Constants.BuildingBlock.SCREEN);
         var screens = screenFactory.getBuildingBlocks(this._canvasCache.getScreenURIs());
         this._createInstances(screenFactory, screens, this._areas.get('screen'));
-        this._canvasCache.setLoaded(Constants.BuildingBlock.SCREEN);
-        //this._loadConditions(); TODO
+        this._loadConditions();
     },
 
     /**
@@ -583,8 +584,8 @@ var ScreenflowDocument = Class.create(PaletteDocument,
      */
      _createConditions: function(/** Array */ conditionList, /** DropZone */ area) {
         conditionList.each(function(condition) {
-            var description = new BuildingBlockDescription(condition);
-            var instance = new PrePostInstance(description, this._inferenceEngine, false);
+            var description = new PrePostDescription(condition);
+            var instance = new PrePostInstance(description, this._inferenceEngine);
             instance.onFinish(true, condition.position);
             var zonePosition = area.getNode();
             $("main").appendChild(instance.getView().getNode());
@@ -601,14 +602,11 @@ var ScreenflowDocument = Class.create(PaletteDocument,
      * @private
      */
     _loadConditions: function() {
-
-        if (this._canvasCache.areInstancesLoaded()) {
-            // Load pre and postconditions
-            this._createConditions(this._canvasCache.getPreconditions(), this._areas.get('pre'));
-            this._createConditions(this._canvasCache.getPostconditions(), this._areas.get('post'));
-            this._setDirty(false);
-            this._refreshReachability();
-        }
+        // Load pre and postconditions
+        this._createConditions(this._canvasCache.getPreconditions(), this._areas.get('pre'));
+        this._createConditions(this._canvasCache.getPostconditions(), this._areas.get('post'));
+        this._setDirty(false);
+        this._refreshReachability();
     }
 });
 

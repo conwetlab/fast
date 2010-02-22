@@ -126,9 +126,8 @@ var ScreenflowDescription = Class.create(BuildingBlockDescription,
     getPreconditions: function() {
         var list = new Array();
         this._preconditions.values().each(function(pre) {
-            var element = Object.extend(pre.buildingblock.getFactData(), {'position':
-                pre.position});
-            element = Object.extend(element, pre.buildingblock.getProperties());
+            var element = Object.extend(pre.buildingblock.toJSONForScreenflow(), {'position':
+                pre.position});            
             list.push(element);
         }.bind(this));
         return list;
@@ -141,9 +140,8 @@ var ScreenflowDescription = Class.create(BuildingBlockDescription,
     getPostconditions: function() {
         var list = new Array();
         this._postconditions.values().each(function(post) {
-            var element = Object.extend(post.buildingblock.getFactData(), {'position':
+            var element = Object.extend(post.buildingblock.toJSONForScreenflow(), {'position':
                 post.position});
-            element = Object.extend(element, post.buildingblock.getProperties());
             list.push(element);
         }.bind(this));
         return list;
@@ -168,7 +166,9 @@ var ScreenflowDescription = Class.create(BuildingBlockDescription,
      * @type Boolean
      */
     contains: function(/** String */ uri) {
-        var element = this._screens.values().detect(function(instance) {
+        var list = this._screens.values().concat(this._preconditions.values());
+        list = list.concat(this._postconditions.values());
+        var element = list.detect(function(instance) {
                     return instance.buildingblock.getUri() == uri;
         });
         if (element) {

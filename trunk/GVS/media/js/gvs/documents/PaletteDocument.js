@@ -482,21 +482,26 @@ var PaletteDocument = Class.create(AbstractDocument, /** @lends PaletteDocument.
      * @private
      */
     _closeDocument: function() {
-        if (this._isDirty && this._description.getId()) {
-            this._pendingOperation = this._closeDocument.bind(this);
-            this._save(false);
-            return false;
+        var removeFromServer = false;
+        if (this._description.getId()) {
+            if (this._isDirty) {
+                this._pendingOperation = this._closeDocument.bind(this);
+                this._save(false);
+                return false;
+            }
         } else {
-            this._description.getCanvasInstances().each(function(instance) {
-                instance.destroy();
-            }.bind(this));
-
-            this._description.getConditionInstances().each(function(instance) {
-                instance.destroy();
-            }.bind(this));
-
-            GVS.getDocumentController().closeDocument(this._tabId);
+            removeFromServer = true;
         }
+      
+        this._description.getCanvasInstances().each(function(instance) {
+            instance.destroy(removeFromServer);
+        }.bind(this));
+
+        this._description.getConditionInstances().each(function(instance) {
+            instance.destroy(removeFromServer);
+        }.bind(this));
+
+        GVS.getDocumentController().closeDocument(this._tabId);
     },
     
 

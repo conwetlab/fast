@@ -727,7 +727,7 @@ var ScreenDocument = Class.create(PaletteDocument,
      */
      _createConditions: function(/** Array */ conditionList, /** DropZone */ area) {
         conditionList.each(function(condition) {
-            var description = new BuildingBlockDescription(condition);
+            var description = new PrePostDescription(condition);
             var instance = new PrePostInstance(description, this._inferenceEngine, false);
             instance.setId(condition.id);
             instance.onFinish(true, condition.position);

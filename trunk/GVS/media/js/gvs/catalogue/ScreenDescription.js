@@ -172,8 +172,8 @@ var ScreenDescription = Class.create(BuildingBlockDescription,
     getPreconditions: function() {
         var list = new Array();
         this._preconditions.values().each(function(pre) {
-            var element = Object.extend(pre.buildingblock.getFactData(), {'position':
-                pre.position, 'id' : pre.buildingblock.getId()});
+            var element = Object.extend(pre.buildingblock.toJSONForScreen(),
+                            {'position': pre.position});
             list.push(element);
         }.bind(this));
         return list;
@@ -186,9 +186,8 @@ var ScreenDescription = Class.create(BuildingBlockDescription,
     getPostconditions: function() {
         var list = new Array();
         this._postconditions.values().each(function(post) {
-            var element = Object.extend(post.buildingblock.getFactData(), {'position':
-                post.position});
-            element = Object.extend(element, {'id' : post.buildingblock.getId()});
+            var element = Object.extend(post.buildingblock.toJSONForScreen(),
+                            {'position': post.position});
             list.push(element);
         }.bind(this));
         return list;

@@ -18,6 +18,7 @@ file_list = [
     "gvs/catalogue/BuildingBlockDescription.js",
     "gvs/catalogue/ScreenDescription.js",
     "gvs/catalogue/ScreenflowDescription.js",
+    "gvs/catalogue/PrePostDescription.js",
 
     # Inference Engine
     "gvs/catalogue/inferenceEngine/InferenceEngine.js",

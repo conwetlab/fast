@@ -9,60 +9,37 @@ var PrePostInstance = Class.create(ComponentInstance,
     initialize: function($super, /** BuildingBlockDescription */ domainConceptDescription,
             /** InferenceEngine */ inferenceEngine, /** Boolean (Optional) */ _isConfigurable) {
         $super(domainConceptDescription, inferenceEngine);
-        
-        /**
-         * Uri of the pre or post in the catalogue
-         * @type String
-         * @private @member
-         */
-        this._uri = null;
-        
-        /**
-         * Pattern of the *-condition
-         * @type String
-         * @private @member
-         */
-        this._pattern = null;
-
-        if (this._buildingBlockDescription.pattern) {
-            this._pattern = this._buildingBlockDescription.pattern;
-        } else {
-            this._pattern = "?x http://www.w3.org/1999/02/22-rdf-syntax-ns#type " +
-            this._buildingBlockDescription.uri;
+             
+        if (!this._buildingBlockDescription.pattern) {
+            this._buildingBlockDescription.pattern = "?x " +
+                "http://www.w3.org/1999/02/22-rdf-syntax-ns#type " +
+                this._buildingBlockDescription.uri;
         }
-        /**
-         * @type String
-         * @private @member
-         */
-        this._label = this._buildingBlockDescription.title ?
-                        this._buildingBlockDescription.title :
-                        this._buildingBlockDescription.label['en-gb'];
-        
+
+
+        if (!this._buildingBlockDescription.label) {
+            this._buildingBlockDescription.label = {
+                'en-gb': this._buildingBlockDescription.title
+            }
+        }
+
+        if (this._buildingBlockDescription.id) {
+            this._id = this._buildingBlockDescription.id;
+        }
+
         /**
          * @type DomainConceptDialog
          * @private @member
          */
         this._dialog = null;
         
-        /**
-         * This stores the platform-dependent properties
-         * @type Hash
-         * @private @member
-         */
-        this._platformProperties = new Hash();
-        this._platformProperties.set('ezweb', new Hash());
         
         /**
          * @private @member
          * @type Function
          */
         this._changeHandler = null;
-        /**
-         * Type pre/post
-         * @private @member
-         * @type String
-         */
-        this._type = null;
+
         
         /**
          * Terminal for screen design
@@ -88,7 +65,7 @@ var PrePostInstance = Class.create(ComponentInstance,
      * @override
      */
     getTitle: function() {
-        return this._label; 
+        return this._buildingBlockDescription.getTitle();
     },
     
     /**
@@ -99,15 +76,14 @@ var PrePostInstance = Class.create(ComponentInstance,
      */
     getInfo: function() {
         var info = new Hash();
-        info.set('Title', this._label);  
+        info.set('Title', this.getTitle());
         info.set('Uri', this._buildingBlockDescription.uri);
-        info.set('Type', this._type);
-        if (this._platformProperties.get('ezweb').get('binding')) {
-            info.set('EzWeb Binding', this._platformProperties.get('ezweb').get('binding'));
-            info.set('Friendcode', this._platformProperties.get('ezweb').get('friendcode'));
-            info.set('Variable Name', this._platformProperties.get('ezweb').get('varname'));
-        }
-        
+        info.set('Type', this.getType());
+        if (this._buildingBlockDescription.properties) {
+            info.set('EzWeb Binding', this._buildingBlockDescription.properties.ezweb.binding);
+            info.set('Friendcode', this._buildingBlockDescription.properties.ezweb.friendcode);
+            info.set('Variable Name',this._buildingBlockDescription.properties.ezweb.variableName);
+        }      
         return info;
     },
     
@@ -115,74 +91,73 @@ var PrePostInstance = Class.create(ComponentInstance,
      * Returning the type in {pre|post}
      */
     getType: function() {
-        return this._type;
+        return this._buildingBlockDescription.type;
     },
     
-    /**
-     * Transform the instance into JSON-like
-     * string
-     * @type String
-     */
-    toJSON: function() {
-        var json = {
-            'conditions': [this.getFactData()],
-            'id': this.getId(),
-            'name': this._label,
-            'uri': this._buildingBlockDescription.uri
-        }
-        return Object.toJSON(json);
-    },
 
     /**
      * Returns an object representing
      * the fact
      * @type Object
      */
-    getFactData: function() {
+    toJSONForScreen: function() {
         return {
-                'label': {'en-gb': this._label},
-                'pattern': this._pattern,
+                'label': this._buildingBlockDescription.label,
+                'pattern': this._buildingBlockDescription.pattern,
                 'positive': true,
-                'uri': this._buildingBlockDescription.uri
+                'uri': this._buildingBlockDescription.uri,
+                'id': this.getId(),
+                'type': this._buildingBlockDescription.type
             };
     },
-    
+
+
     /**
-     * Returns an object with the relevant
-     * information to the screenflow description
+     * Returns an object representing
+     * the fact
      * @type Object
      */
-    getProperties: function() {
-        var result = {
+    toJSONForScreenflow: function() {
+        return {
+            'conditions': [this._getCondition()],
+            'id': this.getId(),
+            'catalogueUri': this._buildingBlockDescription.catalogueUri,
             'semantics': this._buildingBlockDescription.uri,
-            'label': this._label,
-            'friendcode': this._platformProperties.get('ezweb').get('friendcode'),
-            'variableName': this._platformProperties.get('ezweb').get('varname'),
-            'binding': this._platformProperties.get('ezweb').get('binding'),
-            'uri': this._uri
+            'binding': this._buildingBlockDescription.properties.ezweb.binding,
+            'friendcode': this._buildingBlockDescription.properties.ezweb.friendcode,
+            'variableName': this._buildingBlockDescription.properties.ezweb.variableName,
+            'label': this.getTitle(),
+            'type': this._buildingBlockDescription.type,
+            'uri': this._buildingBlockDescription.uri
         };
-        return result;
     },
     
     /**
      * @override
      */
     getUri: function() {
-        return this._uri;    
+        return this._buildingBlockDescription.catalogueUri;
     },
     
     /**
      * Set the type in pre | post
      */
     setType: function(/** String */ type) {
-        this._type = type;
+        this._buildingBlockDescription.type = type;
         if (this._isConfigurable) {
-            this._onChange({
-                'label': this._label,
-                'binding': this._type == 'pre' ? 'slot' : 'event',
-                'varname': this._label.replace(" ",""),
-                'friendcode': this._label.replace(" ", "")
-            });
+            var data = {
+                'label': this.getTitle()
+            };
+            if (this._buildingBlockDescription.properties) {
+                data = Object.extend(data, this._buildingBlockDescription.properties.ezweb)
+            } else {
+                data = Object.extend(data, {
+                    'binding': this._buildingBlockDescription.type == 'pre' ? 'slot' : 'event',
+                    'variableName': this.getTitle().replace(" ",""),
+                    'friendcode': this.getTitle().replace(" ", "")
+                });
+            }
+            this._onChange(data);
         } else {
             this._onClick();
         }
@@ -212,7 +187,8 @@ var PrePostInstance = Class.create(ComponentInstance,
         if (this._isConfigurable) {
             if (!this._dialog) {
                 this._dialog = new PrePostDialog(this._onChange.bind(this),
-                                                    this.getTitle(), this._type);
+                                                 this.getTitle(), 
+                                                 this._buildingBlockDescription.type);
             }
             this._dialog.show();
         }
@@ -225,7 +201,7 @@ var PrePostInstance = Class.create(ComponentInstance,
      * @type Array
      */
     getConditionTable: function(/** Boolean */ reachabilityInfo) {
-        var fact = FactFactory.getFactIcon(this._getFactData(), "embedded").getNode();
+        var fact = FactFactory.getFactIcon(this._getCondition(), "embedded").getNode();
         var reachable;
         if (reachabilityInfo !== undefined) {
             reachable = reachabilityInfo;
@@ -234,7 +210,7 @@ var PrePostInstance = Class.create(ComponentInstance,
         }
         Utils.setSatisfeabilityClass(fact, reachable);
         
-        return [fact, this._label, this._buildingBlockDescription.uri]; 
+        return [fact, this.getTitle(), this._buildingBlockDescription.uri];
     },
     
     /**
@@ -248,7 +224,7 @@ var PrePostInstance = Class.create(ComponentInstance,
                 'drawingMethod': 'arrows'
             }
         };
-        if (this._type == 'pre') {
+        if (this._buildingBlockDescription.type == 'pre') {
             options.alwaysSrc = true;
             options.direction = [1,0];
             options.offsetPosition = {
@@ -274,7 +250,7 @@ var PrePostInstance = Class.create(ComponentInstance,
         
         this._terminal = new Terminal(this._view.getNode(), options, this,
                                         this.getId());
-        if (this._type == 'pre') {
+        if (this._buildingBlockDescription.type == 'pre') {
             this._terminal.onWireHandler(_handler);
         }
     },
@@ -292,14 +268,15 @@ var PrePostInstance = Class.create(ComponentInstance,
      * @override
      */
     destroy: function($super, /** Boolean */ removeFromServer) {
-        $super();
-        if (this._uri && removeFromServer) {
-            var catalogueResource = (this._type == 'pre') ? URIs.pre : URIs.post;
-            this._removeFromServer(catalogueResource + this._id);
+        if (this._buildingBlockDescription.catalogueUri && removeFromServer) {
+            var catalogueResource = (this._buildingBlockDescription.type == 'pre') ?
+                                    URIs.pre : URIs.post;
+            this._removeFromServer(catalogueResource + this.getId());
         }
         if (this._terminal) {
             this._terminal.destroy();
         }
+        $super();
     },
     
     /**
@@ -330,25 +307,60 @@ var PrePostInstance = Class.create(ComponentInstance,
     _onDoubleClick: function (/** Event */ event) {
         this.showPreviewDialog();
     },
+
+    /**
+     * Returns an object representing
+     * a single fact
+     * @type Object
+     * @private
+     */
+    _getCondition: function() {
+        return {
+                'label': {
+                    'en-gb': this.getTitle()
+                },
+                'pattern': this._buildingBlockDescription.pattern,
+                'positive': true,
+                'uri': this._buildingBlockDescription.uri
+            };
+    },
+
+    /**
+     * Returns an object representing
+     * the fact
+     * @type Object
+     * @private
+     */
+    _toJSONForCatalogue: function() {
+        return {
+            'conditions': [this._getCondition()],
+            'id': this.getId(),
+            'name': this.getTitle()
+        };
+    },
     
     /**
      * This function is called when the dialog is saved
      * @private
      */
     _onChange: function (/** Object */ data) {
-        this._label = data.label;
+        this._buildingBlockDescription.title = data.label;
         if (data.binding) {
-            this._platformProperties.get('ezweb').set('binding', data.binding);
-            this._platformProperties.get('ezweb').set('varname', data.varname);
-            this._platformProperties.get('ezweb').set('friendcode', data.friendcode);
+            this._buildingBlockDescription.properties = {
+                'ezweb': {
+                    'binding': data.binding,
+                    'variableName': data.variableName,
+                    'friendcode': data.friendcode
+                }
+            }
         }
         
-        if (!this._uri) {
+        if (!this._buildingBlockDescription.catalogueUri) {
             // Calling the server to add the pre/post
-            var catalogueResource = (this._type == 'pre') ? URIs.pre : URIs.post;
+            var catalogueResource = (this._buildingBlockDescription.type == 'pre') ? URIs.pre : URIs.post;
             this._id = new Date().valueOf();
             PersistenceEngine.sendPost(catalogueResource,
-                            null, this.toJSON(), this,
+                            null, Object.toJSON(this._toJSONForCatalogue()), this,
                             this._onPostSuccess, Utils.onAJAXError);
         } else {
             this._onClick();
@@ -360,10 +372,10 @@ var PrePostInstance = Class.create(ComponentInstance,
      */
     _onPostSuccess: function (/** XMLHttpRequest */ transport) {
         var result = JSON.parse(transport.responseText);
-        this._uri = result.uri;
+        this._buildingBlockDescription.catalogueUri = result.uri;
         
         
-        this._inferenceEngine.addReachabilityListener(this._uri, this._view);
+        this._inferenceEngine.addReachabilityListener(result.uri, this._view);
         
         // Notify change
         this._changeHandler(this);
@@ -387,21 +399,6 @@ var PrePostInstance = Class.create(ComponentInstance,
         PersistenceEngine.sendDelete(uri,
             this, 
             this._onDeleteSuccess, Utils.onAJAXError);
-    },
-
-    /**
-     * Returns an object representing
-     * the fact
-     * @type Object
-     */
-    _getFactData: function() {
-        return {
-                'label': {'en-gb': this._label},
-                'pattern': this._pattern,
-                'positive': true,
-                'id': this._buildingBlockDescription.uri,
-                'name': this._label
-            };
     }
 
 });

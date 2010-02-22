@@ -51,7 +51,7 @@ var DomainConceptFactory = Class.create(BuildingBlockFactory,
         var result = new Array();
         
         $A(metadata).each(function(conceptProperties) {
-            result.push(new BuildingBlockDescription(conceptProperties));
+            result.push(new PrePostDescription(conceptProperties));
         });
         this.callback(result);
     },
