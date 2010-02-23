@@ -4,20 +4,20 @@
 \hline
 \textcolor{white}{\textbf{label}} & contains \\ \hline
 \textcolor{white}{\textbf{description}} & Many kinds of components in FAST can contain other components: 
-    screenflows contain screens, screens contain forms or form elements, etc.
-    It points to a resource reference to give a unique `id' to each component
-    within the resource. \\ \hline
+screenflows contain screens, screens contain forms or form elements, etc.
+It points to a resource reference to give a unique `id' to each component
+within the resource. \\ \hline
 \textcolor{white}{\textbf{type}} & \texttt{owl:ObjectProperty} \\ \hline
-\textcolor{white}{\textbf{domain}} & \htmlref{\texttt{fgo:Definition}}{subs:Definition}, \htmlref{\texttt{fgo:Resource}}{subs:Resource} \\ \hline
-\textcolor{white}{\textbf{range}} & \htmlref{\texttt{fgo:ResourceReference}}{subs:ResourceReference} \\ \hline
+\textcolor{white}{\textbf{domain}} & \htmlref{\texttt{fgo:BuildingBlock}}{subs:BuildingBlock} \\ \hline
+\textcolor{white}{\textbf{range}} & \htmlref{\texttt{fgo:BuildingBlock}}{subs:BuildingBlock} \\ \hline
 \end{tabular}
 \subsubsection*{Property: \texttt{fgo:hasAction}}
 \label{subs:hasAction}
 \begin{tabular}{| >{\columncolor{fast@lightgrey}}p{2.5cm}|p{12cm}|}
 \hline
 \textcolor{white}{\textbf{label}} & has action \\ \hline
-\textcolor{white}{\textbf{description}} & This property indicates which actions are asociated and can be perfomed within 
-	a screen component. \\ \hline
+\textcolor{white}{\textbf{description}} & This property indicates which actions are associated and can be perfomed within 
+a screen component. \\ \hline
 \textcolor{white}{\textbf{type}} & \texttt{owl:ObjectProperty} \\ \hline
 \textcolor{white}{\textbf{domain}} & \htmlref{\texttt{fgo:ScreenComponent}}{subs:ScreenComponent} \\ \hline
 \textcolor{white}{\textbf{range}} & \htmlref{\texttt{fgo:Action}}{subs:Action} \\ \hline
@@ -27,30 +27,30 @@
 \begin{tabular}{| >{\columncolor{fast@lightgrey}}p{2.5cm}|p{12cm}|}
 \hline
 \textcolor{white}{\textbf{label}} & has code \\ \hline
-\textcolor{white}{\textbf{description}} & URL of the executable code of a particular screen. \\ \hline
+\textcolor{white}{\textbf{description}} & URL of the executable code of a particular building block (currently screens or screen components). \\ \hline
 \textcolor{white}{\textbf{type}} & \texttt{owl:ObjectProperty} \\ \hline
-\textcolor{white}{\textbf{domain}} & \htmlref{\texttt{fgo:Screen}}{subs:Screen} \\ \hline
+\textcolor{white}{\textbf{domain}} & \htmlref{\texttt{fgo:WithCode}}{subs:WithCode} \\ \hline
 \textcolor{white}{\textbf{range}} & \texttt{foaf:Document} \\ \hline
 \end{tabular}
-\subsubsection*{Property: \texttt{fgo:hasCondition}}
-\label{subs:hasCondition}
+\subsubsection*{Property: \texttt{fgo:hasForm}}
+\label{subs:hasForm}
 \begin{tabular}{| >{\columncolor{fast@lightgrey}}p{2.5cm}|p{12cm}|}
 \hline
-\textcolor{white}{\textbf{label}} & has condition \\ \hline
-\textcolor{white}{\textbf{description}} & This property links a precondition or postcondition to a certain condition. \\ \hline
+\textcolor{white}{\textbf{label}} & has form \\ \hline
+\textcolor{white}{\textbf{description}} & If a screen is defined declaratively, this property links it to its form (i.e., its visual user interface). \\ \hline
 \textcolor{white}{\textbf{type}} & \texttt{owl:ObjectProperty} \\ \hline
-\textcolor{white}{\textbf{domain}} & \htmlref{\texttt{fgo:Postcondition}}{subs:Postcondition}, \htmlref{\texttt{fgo:Precondition}}{subs:Precondition} \\ \hline
-\textcolor{white}{\textbf{range}} & \htmlref{\texttt{fgo:Condition}}{subs:Condition}, \texttt{rdf:Bag} \\ \hline
+\textcolor{white}{\textbf{domain}} & \htmlref{\texttt{fgo:Screen}}{subs:Screen} \\ \hline
+\textcolor{white}{\textbf{range}} & \htmlref{\texttt{fgo:Form}}{subs:Form} \\ \hline
 \end{tabular}
-\subsubsection*{Property: \texttt{fgo:hasDefinition}}
-\label{subs:hasDefinition}
+\subsubsection*{Property: \texttt{fgo:hasFormElement}}
+\label{subs:hasFormElement}
 \begin{tabular}{| >{\columncolor{fast@lightgrey}}p{2.5cm}|p{12cm}|}
 \hline
-\textcolor{white}{\textbf{label}} & has definition \\ \hline
-\textcolor{white}{\textbf{description}} & The structure and behaviour of a resource. \\ \hline
+\textcolor{white}{\textbf{label}} & has form element \\ \hline
+\textcolor{white}{\textbf{description}} & If a form is defined declaratively, its elements are linked to it with this property. \\ \hline
 \textcolor{white}{\textbf{type}} & \texttt{owl:ObjectProperty} \\ \hline
-\textcolor{white}{\textbf{domain}} & \htmlref{\texttt{fgo:Resource}}{subs:Resource} \\ \hline
-\textcolor{white}{\textbf{range}} & \htmlref{\texttt{fgo:Definition}}{subs:Definition} \\ \hline
+\textcolor{white}{\textbf{domain}} & \htmlref{\texttt{fgo:Form}}{subs:Form} \\ \hline
+\textcolor{white}{\textbf{range}} & \htmlref{\texttt{fgo:FormElement}}{subs:FormElement} \\ \hline
 \end{tabular}
 \subsubsection*{Property: \texttt{fgo:hasIcon}}
 \label{subs:hasIcon}
@@ -59,18 +59,8 @@
 \textcolor{white}{\textbf{label}} & has icon \\ \hline
 \textcolor{white}{\textbf{description}} & A small graphical representation of any FAST component or sub-component. \\ \hline
 \textcolor{white}{\textbf{type}} & \texttt{owl:ObjectProperty} \\ \hline
-\textcolor{white}{\textbf{domain}} & \htmlref{\texttt{fgo:Resource}}{subs:Resource} \\ \hline
+\textcolor{white}{\textbf{domain}} & \htmlref{\texttt{fgo:BuildingBlock}}{subs:BuildingBlock} \\ \hline
 \textcolor{white}{\textbf{range}} & \texttt{foaf:Image} \\ \hline
-\end{tabular}
-\subsubsection*{Property: \texttt{fgo:hasId}}
-\label{subs:hasId}
-\begin{tabular}{| >{\columncolor{fast@lightgrey}}p{2.5cm}|p{12cm}|}
-\hline
-\textcolor{white}{\textbf{label}} & has id \\ \hline
-\textcolor{white}{\textbf{description}} & The internal ID of the resource within the container resource. \\ \hline
-\textcolor{white}{\textbf{type}} & \texttt{owl:DatatypeProperty} \\ \hline
-\textcolor{white}{\textbf{domain}} & \htmlref{\texttt{fgo:Resource}}{subs:Resource}, \htmlref{\texttt{fgo:ResourceReference}}{subs:ResourceReference} \\ \hline
-\textcolor{white}{\textbf{range}} & \texttt{xsd:string} \\ \hline
 \end{tabular}
 \subsubsection*{Property: \texttt{fgo:hasIdActionTo}}
 \label{subs:hasIdActionTo}
@@ -139,18 +129,8 @@
 \textcolor{white}{\textbf{label}} & has library \\ \hline
 \textcolor{white}{\textbf{description}} & This property indicates which libraries are used by a screen component. \\ \hline
 \textcolor{white}{\textbf{type}} & \texttt{owl:ObjectProperty} \\ \hline
-\textcolor{white}{\textbf{domain}} & \htmlref{\texttt{fgo:ScreenComponent}}{subs:ScreenComponent} \\ \hline
+\textcolor{white}{\textbf{domain}} & \htmlref{\texttt{fgo:WithCode}}{subs:WithCode} \\ \hline
 \textcolor{white}{\textbf{range}} & \htmlref{\texttt{fgo:Library}}{subs:Library} \\ \hline
-\end{tabular}
-\subsubsection*{Property: \texttt{fgo:hasName}}
-\label{subs:hasName}
-\begin{tabular}{| >{\columncolor{fast@lightgrey}}p{2.5cm}|p{12cm}|}
-\hline
-\textcolor{white}{\textbf{label}} & has name \\ \hline
-\textcolor{white}{\textbf{description}} & The name the user gives to the resource. \\ \hline
-\textcolor{white}{\textbf{type}} & \texttt{owl:DatatypeProperty} \\ \hline
-\textcolor{white}{\textbf{domain}} & \htmlref{\texttt{fgo:Resource}}{subs:Resource} \\ \hline
-\textcolor{white}{\textbf{range}} & \texttt{xsd:string} \\ \hline
 \end{tabular}
 \subsubsection*{Property: \texttt{fgo:hasNameFrom}}
 \label{subs:hasNameFrom}
@@ -162,14 +142,22 @@
 \textcolor{white}{\textbf{domain}} & \htmlref{\texttt{fgo:Trigger}}{subs:Trigger} \\ \hline
 \textcolor{white}{\textbf{range}} & \texttt{xsd:string} \\ \hline
 \end{tabular}
+\subsubsection*{Property: \texttt{fgo:hasOperator}}
+\label{subs:hasOperator}
+\begin{tabular}{| >{\columncolor{fast@lightgrey}}p{2.5cm}|p{12cm}|}
+\hline
+\textcolor{white}{\textbf{label}} & has operator \\ \hline
+\textcolor{white}{\textbf{description}} & If a screen is defined declaratively, this property links it to an operator it might contain. \\ \hline
+\textcolor{white}{\textbf{type}} & \texttt{owl:ObjectProperty} \\ \hline
+\textcolor{white}{\textbf{domain}} & \htmlref{\texttt{fgo:Screen}}{subs:Screen} \\ \hline
+\textcolor{white}{\textbf{range}} & \htmlref{\texttt{fgo:Operator}}{subs:Operator} \\ \hline
+\end{tabular}
 \subsubsection*{Property: \texttt{fgo:hasPattern}}
 \label{subs:hasPattern}
 \begin{tabular}{| >{\columncolor{fast@lightgrey}}p{2.5cm}|p{12cm}|}
 \hline
 \textcolor{white}{\textbf{label}} & has pattern \\ \hline
-\textcolor{white}{\textbf{description}} & This property links a screen or screenflow to its pre-condition, 
-    i.e., the facts that need to be fulfilled in order for this screen or screenflow 
-    to be reachable. \\ \hline
+\textcolor{white}{\textbf{description}} & This property links the abstract representation of a fact (i.e., an RDF triple) in FAST to a graph resource containing the actual triple. \\ \hline
 \textcolor{white}{\textbf{type}} & \texttt{owl:ObjectProperty} \\ \hline
 \textcolor{white}{\textbf{domain}} & \htmlref{\texttt{fgo:Fact}}{subs:Fact} \\ \hline
 \textcolor{white}{\textbf{range}} & \texttt{rdfs:Resource} \\ \hline
@@ -179,7 +167,7 @@
 \begin{tabular}{| >{\columncolor{fast@lightgrey}}p{2.5cm}|p{12cm}|}
 \hline
 \textcolor{white}{\textbf{label}} & has pattern string \\ \hline
-\textcolor{white}{\textbf{description}} & This property is the textual representation of a condition. \\ \hline
+\textcolor{white}{\textbf{description}} & This property links to the textual representation of a fact (i.e., an RDF triple), e.g., in N3. \\ \hline
 \textcolor{white}{\textbf{type}} & \texttt{owl:DatatypeProperty} \\ \hline
 \textcolor{white}{\textbf{domain}} & \htmlref{\texttt{fgo:Fact}}{subs:Fact} \\ \hline
 \textcolor{white}{\textbf{range}} & \texttt{xsd:string} \\ \hline
@@ -190,11 +178,11 @@
 \hline
 \textcolor{white}{\textbf{label}} & has post-condition \\ \hline
 \textcolor{white}{\textbf{description}} & This property links certain type of resources to its post-condition, 
-    i.e., the facts that are produced once the screen or screenflow has been 
-    executed. \\ \hline
+i.e., the facts that are produced once the screen or screenflow has been 
+executed. \\ \hline
 \textcolor{white}{\textbf{type}} & \texttt{owl:ObjectProperty} \\ \hline
 \textcolor{white}{\textbf{domain}} & \htmlref{\texttt{fgo:WithPostConditions}}{subs:WithPostConditions} \\ \hline
-\textcolor{white}{\textbf{range}} & \htmlref{\texttt{fgo:Condition}}{subs:Condition}, \texttt{rdf:Bag} \\ \hline
+\textcolor{white}{\textbf{range}} & \htmlref{\texttt{fgo:Condition}}{subs:Condition} \\ \hline
 \end{tabular}
 \subsubsection*{Property: \texttt{fgo:hasPreCondition}}
 \label{subs:hasPreCondition}
@@ -202,11 +190,21 @@
 \hline
 \textcolor{white}{\textbf{label}} & has pre-condition \\ \hline
 \textcolor{white}{\textbf{description}} & This property links certain type of resources to its pre-condition, i.e., 
-    the facts that need to be fulfilled in order for this screen or screenflow to be 
-    reachable. \\ \hline
+the facts that need to be fulfilled in order for this screen or screenflow to be 
+reachable. \\ \hline
 \textcolor{white}{\textbf{type}} & \texttt{owl:ObjectProperty} \\ \hline
 \textcolor{white}{\textbf{domain}} & \htmlref{\texttt{fgo:WithPreConditions}}{subs:WithPreConditions} \\ \hline
-\textcolor{white}{\textbf{range}} & \htmlref{\texttt{fgo:Condition}}{subs:Condition}, \texttt{rdf:Bag} \\ \hline
+\textcolor{white}{\textbf{range}} & \htmlref{\texttt{fgo:Condition}}{subs:Condition} \\ \hline
+\end{tabular}
+\subsubsection*{Property: \texttt{fgo:hasResource}}
+\label{subs:hasResource}
+\begin{tabular}{| >{\columncolor{fast@lightgrey}}p{2.5cm}|p{12cm}|}
+\hline
+\textcolor{white}{\textbf{label}} & has resource \\ \hline
+\textcolor{white}{\textbf{description}} & If a screen is defined declaratively, this property links it to its service resource (i.e., its backend). \\ \hline
+\textcolor{white}{\textbf{type}} & \texttt{owl:ObjectProperty} \\ \hline
+\textcolor{white}{\textbf{domain}} & \htmlref{\texttt{fgo:Screen}}{subs:Screen} \\ \hline
+\textcolor{white}{\textbf{range}} & \htmlref{\texttt{fgo:Resource}}{subs:Resource} \\ \hline
 \end{tabular}
 \subsubsection*{Property: \texttt{fgo:hasScreenshot}}
 \label{subs:hasScreenshot}
@@ -214,62 +212,20 @@
 \hline
 \textcolor{white}{\textbf{label}} & has screenshot \\ \hline
 \textcolor{white}{\textbf{description}} & An image which shows a particular screen or screenflow in action, to 
-    aid users in deciding which screen or screenflow to choose out of many. \\ \hline
+aid users in deciding which screen or screenflow to choose out of many. \\ \hline
 \textcolor{white}{\textbf{type}} & \texttt{owl:ObjectProperty} \\ \hline
-\textcolor{white}{\textbf{domain}} & \htmlref{\texttt{fgo:Resource}}{subs:Resource} \\ \hline
+\textcolor{white}{\textbf{domain}} & \htmlref{\texttt{fgo:BuildingBlock}}{subs:BuildingBlock} \\ \hline
 \textcolor{white}{\textbf{range}} & \texttt{foaf:Image} \\ \hline
-\end{tabular}
-\subsubsection*{Property: \texttt{fgo:hasSource}}
-\label{subs:hasSource}
-\begin{tabular}{| >{\columncolor{fast@lightgrey}}p{2.5cm}|p{12cm}|}
-\hline
-\textcolor{white}{\textbf{label}} & has source \\ \hline
-\textcolor{white}{\textbf{description}} & URL of the source code of a particular library. \\ \hline
-\textcolor{white}{\textbf{type}} & \texttt{owl:ObjectProperty} \\ \hline
-\textcolor{white}{\textbf{domain}} & \htmlref{\texttt{fgo:Library}}{subs:Library} \\ \hline
-\textcolor{white}{\textbf{range}} & \texttt{foaf:Document} \\ \hline
-\end{tabular}
-\subsubsection*{Property: \texttt{fgo:hasTag}}
-\label{subs:hasTag}
-\begin{tabular}{| >{\columncolor{fast@lightgrey}}p{2.5cm}|p{12cm}|}
-\hline
-\textcolor{white}{\textbf{label}} & has tag \\ \hline
-\textcolor{white}{\textbf{description}} & A tag is used to annotate keywords of a particular resource. \\ \hline
-\textcolor{white}{\textbf{type}} & \texttt{owl:DatatypeProperty} \\ \hline
-\textcolor{white}{\textbf{domain}} & \htmlref{\texttt{fgo:Resource}}{subs:Resource} \\ \hline
-\textcolor{white}{\textbf{range}} & \texttt{xsd:string} \\ \hline
 \end{tabular}
 \subsubsection*{Property: \texttt{fgo:hasTrigger}}
 \label{subs:hasTrigger}
 \begin{tabular}{| >{\columncolor{fast@lightgrey}}p{2.5cm}|p{12cm}|}
 \hline
 \textcolor{white}{\textbf{label}} & has trigger string \\ \hline
-\textcolor{white}{\textbf{description}} & This property represents the events fired within a building block. e.g. a 
-	button to clear the shopping cart will fired a "clear cart" trigger. \\ \hline
+\textcolor{white}{\textbf{description}} & This property links a buildiong block to a Trigger. \\ \hline
 \textcolor{white}{\textbf{type}} & \texttt{owl:DatatypeProperty} \\ \hline
 \textcolor{white}{\textbf{domain}} & \htmlref{\texttt{fgo:ScreenComponent}}{subs:ScreenComponent} \\ \hline
-\textcolor{white}{\textbf{range}} & \texttt{xsd:string} \\ \hline
-\end{tabular}
-\subsubsection*{Property: \texttt{fgo:hasType}}
-\label{subs:hasType}
-\begin{tabular}{| >{\columncolor{fast@lightgrey}}p{2.5cm}|p{12cm}|}
-\hline
-\textcolor{white}{\textbf{label}} & has type \\ \hline
-\textcolor{white}{\textbf{description}} & The type of the resource. \\ \hline
-\textcolor{white}{\textbf{type}} & \texttt{owl:DatatypeProperty} \\ \hline
-\textcolor{white}{\textbf{domain}} & \htmlref{\texttt{fgo:Resource}}{subs:Resource} \\ \hline
-\textcolor{white}{\textbf{range}} & \texttt{xsd:string} \\ \hline
-\end{tabular}
-\subsubsection*{Property: \texttt{fgo:hasUri}}
-\label{subs:hasUri}
-\begin{tabular}{| >{\columncolor{fast@lightgrey}}p{2.5cm}|p{12cm}|}
-\hline
-\textcolor{white}{\textbf{label}} & has uri \\ \hline
-\textcolor{white}{\textbf{description}} & URI of a particular resource pointing from a reference within
-	another resource. \\ \hline
-\textcolor{white}{\textbf{type}} & \texttt{owl:ObjectProperty} \\ \hline
-\textcolor{white}{\textbf{domain}} & \htmlref{\texttt{fgo:ResourceReference}}{subs:ResourceReference} \\ \hline
-\textcolor{white}{\textbf{range}} & \texttt{foaf:Document} \\ \hline
+\textcolor{white}{\textbf{range}} & \htmlref{\texttt{fgo:Trigger}}{subs:Trigger} \\ \hline
 \end{tabular}
 \subsubsection*{Property: \texttt{fgo:hasUse}}
 \label{subs:hasUse}
@@ -277,29 +233,10 @@
 \hline
 \textcolor{white}{\textbf{label}} & has use string \\ \hline
 \textcolor{white}{\textbf{description}} & This property indicates concepts used within a building block, without being a 
-	pre/postcondition. \\ \hline
+pre/postcondition. \\ \hline
 \textcolor{white}{\textbf{type}} & \texttt{owl:ObjectProperty} \\ \hline
 \textcolor{white}{\textbf{domain}} & \htmlref{\texttt{fgo:Action}}{subs:Action} \\ \hline
-\textcolor{white}{\textbf{range}} & \htmlref{\texttt{fgo:ResourceReference}}{subs:ResourceReference} \\ \hline
-\end{tabular}
-\subsubsection*{Property: \texttt{fgo:hasVersion}}
-\label{subs:hasVersion}
-\begin{tabular}{| >{\columncolor{fast@lightgrey}}p{2.5cm}|p{12cm}|}
-\hline
-\textcolor{white}{\textbf{label}} & has version \\ \hline
-\textcolor{white}{\textbf{description}} & The version of a particular screen or screenflow, such as 1.0, 0.2beta, etc. \\ \hline
-\textcolor{white}{\textbf{type}} & \texttt{owl:DatatypeProperty} \\ \hline
-\textcolor{white}{\textbf{domain}} & \htmlref{\texttt{fgo:Resource}}{subs:Resource} \\ \hline
-\textcolor{white}{\textbf{range}} & \texttt{xsd:string} \\ \hline
-\end{tabular}
-\subsubsection*{Property: \texttt{fgo:integratesTerm}}
-\label{subs:integratesTerm}
-\begin{tabular}{| >{\columncolor{fast@lightgrey}}p{2.5cm}|p{12cm}|}
-\hline
-\textcolor{white}{\textbf{label}} & integratesTerm \\ \hline
-\textcolor{white}{\textbf{description}} & A way to explicitly say that an ontology uses terms from another namespace. 
-    Maybe a bit redundant, but why not. TODO: Must be moved to a different namespace! \\ \hline
-\textcolor{white}{\textbf{type}} & \texttt{owl:ObjectProperty} \\ \hline
+\textcolor{white}{\textbf{range}} & \texttt{rdfs:Resource} \\ \hline
 \end{tabular}
 \subsubsection*{Property: \texttt{fgo:isPositive}}
 \label{subs:isPositive}
@@ -307,8 +244,8 @@
 \hline
 \textcolor{white}{\textbf{label}} & is positive \\ \hline
 \textcolor{white}{\textbf{description}} & Facts can be set to a specific scope: design time, execution time,
-	or both of them. This will define when they have to be taken into account by the
-	inference engine or reasoner. \\ \hline
+or both of them. This property will define when they have to be taken into account by the
+inference engine or reasoner. \\ \hline
 \textcolor{white}{\textbf{type}} & \texttt{owl:DatatypeProperty} \\ \hline
 \textcolor{white}{\textbf{domain}} & \htmlref{\texttt{fgo:Fact}}{subs:Fact} \\ \hline
 \textcolor{white}{\textbf{range}} & \texttt{xsd:boolean} \\ \hline
