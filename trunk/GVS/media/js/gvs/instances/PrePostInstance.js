@@ -8,7 +8,8 @@ var PrePostInstance = Class.create(ComponentInstance,
      */
     initialize: function($super, /** BuildingBlockDescription */ domainConceptDescription,
             /** InferenceEngine */ inferenceEngine, /** Boolean (Optional) */ _isConfigurable) {
-        $super(domainConceptDescription, inferenceEngine);
+
+        $super(domainConceptDescription.clone(), inferenceEngine);
              
         if (!this._buildingBlockDescription.pattern) {
             this._buildingBlockDescription.pattern = "?x " +
@@ -151,11 +152,20 @@ var PrePostInstance = Class.create(ComponentInstance,
             if (this._buildingBlockDescription.properties) {
                 data = Object.extend(data, this._buildingBlockDescription.properties.ezweb)
             } else {
-                data = Object.extend(data, {
-                    'binding': this._buildingBlockDescription.type == 'pre' ? 'slot' : 'event',
-                    'variableName': this.getTitle().replace(" ",""),
-                    'friendcode': this.getTitle().replace(" ", "")
-                });
+                if (this._buildingBlockDescription.binding) {
+                    data = Object.extend (data, {
+                        'binding': this._buildingBlockDescription.binding,
+                        'variableName': this._buildingBlockDescription.variableName,
+                        'friendcode': this._buildingBlockDescription.friendcode
+                    });
+                } else {
+                     data = Object.extend(data, {
+                        'binding': this._buildingBlockDescription.type == 'pre' ? 'slot' : 'event',
+                        'variableName': this.getTitle().replace(" ",""),
+                        'friendcode': this.getTitle().replace(" ", "")
+                    });
+                }
+               
             }
             this._onChange(data);
         } else {

@@ -73,7 +73,7 @@ var PrePostDialog = Class.create(ConfirmDialog /** @lends PrePostDialog.prototyp
             {
                 'type': 'input',
                 'label': 'Variable name:',
-                'name': 'varname',
+                'name': 'variableName',
                 'value': this._label.replace(" ",""),
                 'required': true
             },

@@ -1,5 +1,5 @@
 var PrePostDescription = Class.create(BuildingBlockDescription,
-    /** @lends ScreenDescription.prototype */ {
+    /** @lends PrePostDescription.prototype */ {
 
     /**
      * Pre/Post building block description.
@@ -12,6 +12,9 @@ var PrePostDescription = Class.create(BuildingBlockDescription,
     
     // ****************** PUBLIC METHODS ******************* //
 
+    clone: function(){
+        return new PrePostDescription(JSON.parse(this.toJSON()));
+    },
 
     // ******************** PRIVATE METHODS ************** //
 
