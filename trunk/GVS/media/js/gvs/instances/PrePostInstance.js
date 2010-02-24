@@ -278,6 +278,16 @@ var PrePostInstance = Class.create(ComponentInstance,
         }
         $super();
     },
+
+    /*
+     * Destroy wires
+     */
+    destroyWires: function() {
+        if (this._terminal) {
+            this._terminal.removeAllWires();
+            this._terminal.remove();
+        }
+    },
     
     /**
      * On position update

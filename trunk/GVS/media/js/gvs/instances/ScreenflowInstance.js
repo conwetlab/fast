@@ -1,5 +1,5 @@
 var ScreenflowInstance = Class.create(ComponentInstance,
-    /** @lends ScreenInstance.prototype */ {
+    /** @lends ScreenflowInstance.prototype */ {
 
     /**
      * Screen instance.
@@ -67,7 +67,8 @@ var ScreenflowInstance = Class.create(ComponentInstance,
      * @override
      */
     _createView: function () {
-        return new ScreenView(this._buildingBlockDescription);
+        //return new ScreenflowView(this._buildingBlockDescription);
+        return null;
     },
 
     /**

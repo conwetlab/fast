@@ -97,6 +97,8 @@ var ScreenDocument = Class.create(PaletteDocument,
         this._setDirty(true);
     },
 
+
+
     // **************** PRIVATE METHODS **************** //
 
     /**
@@ -229,6 +231,22 @@ var ScreenDocument = Class.create(PaletteDocument,
             "postconditions":[],
             "pipes":[]
         };
+    },
+
+
+    /**
+     * @private
+     * @override
+     */
+    _closeDocument: function($super) {
+        $super();
+        this._description.getCanvasInstances().each(function(instance) {
+            instance.destroyWires();
+        }.bind(this));
+
+        this._description.getConditionInstances().each(function(instance) {
+            instance.destroyWires();
+        }.bind(this));
     },
     
 

@@ -121,13 +121,22 @@ var FormInstance = Class.create(ComponentInstance,
                     terminal.destroy();
                 });
             });
-            /*this._terminals.values().each(function(terminalGroup){
-                terminalGroup.values().each(function(terminal){
-                    terminal.removeAllWires();
-                });
-            });*/
         }
         $super();
+    },
+
+    /*
+     * Destroy wires
+     */
+    destroyWires: function() {
+        if (this._terminals) {
+            this._terminals.values().each(function(terminalGroup){
+                terminalGroup.values().each(function(terminal){
+                    terminal.removeAllWires();
+                    terminal.remove();
+                });
+            });
+        }
     },
     
     /*onStart: function() {

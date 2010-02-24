@@ -119,7 +119,13 @@ var ResourceInstance = Class.create(ComponentInstance,
             });
         }
         $super();
-         if (this._terminals) {
+    },
+
+    /*
+     * Destroy wires
+     */
+    destroyWires: function() {
+        if (this._terminals) {
             this._terminals.values().each(function(terminalGroup){
                 terminalGroup.values().each(function(terminal){
                     terminal.removeAllWires();
@@ -127,7 +133,7 @@ var ResourceInstance = Class.create(ComponentInstance,
                 });
             });
         }
-    },
+    }, 
     
     /*onStart: function() {
         if (this._terminals) {

@@ -8,7 +8,6 @@
  * respective view)
  * 
  * @constructs
- * @extends WireIt.Terminal
  */
 var Terminal = function(/** DOMNode */ conditionNode, /** Object */ options, 
                         /** ComponentInstance */ instance,

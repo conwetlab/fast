@@ -137,6 +137,12 @@ var OperatorInstance = Class.create(ComponentInstance,
             });
         }
         $super();
+    },
+
+    /*
+     * Destroy wires
+     */
+    destroyWires: function() {
         if (this._terminals) {
             this._terminals.values().each(function(terminalGroup){
                 terminalGroup.values().each(function(terminal){
