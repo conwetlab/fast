@@ -26,7 +26,7 @@
 % This is useful for switching in-line comments on and off!
 \usepackage{ifthen}
 \newboolean{showcomments}
-\setboolean{showcomments}{false}
+\setboolean{showcomments}{true}
 \ifthenelse{\boolean{showcomments}}
 {
 	\definecolor{Red}{rgb}{1,0,0}
@@ -711,7 +711,7 @@ In FAST, resources (gadgets, screenflows, screens and their components) exist in
 	\item \textbf{Abstract Class Level}: At this level, resources are defined on a categorical level, differentiating between the various kinds of things that are relevant in FAST, as fundamental classes such as screens, forms or resources (see Sect.~\ref{sub:conceptualisation}). These are implemented technically as classes in OWL.
 	\item \textbf{Prototypical Component Definition}: When a user of the FAST GVS is building a new screenflow or screen, they do so by combining existing building blocks and configuring them. These building blocks are not the fundamental classes of FAST, but instead they are specific instances of those classes. In other words, users do not combine the idea of a screen with the idea of a service, but instead they combine the specific ``Log In Screen'' with the ``Amazon Web Service''. Technically, these concrete building blocks are implemented as instances of the fundamental classes, specified by asserting particular settings such as label or icons, pre- and post-conditions, etc.
 	\item \textbf{Instantiation within a Screenflow at Design-time}: Once a user selects a specific building block in the GVS and adds it to their new screen or screenflow project, they are in principle again instantiating from a conceptual to a concrete level: from the ``Log In Screen'' as such to a particular log in screen as used in that particular screenflow. Also in this stage, resources are implemented technically as instances.
-	\item \textbf{Runtime}: At the final level of instantiation, the screenflow has been packaged as a gadget, deployed to a gadget platform and is now being used by an end-user. At this level, all gadget components exist only in the form of Web standards compliant code (HTML, JavaScript, CSS). Any metadata still necessary or definitions for screen pre- and post-conditions are for performance now defined in the JavaScript-native data format JSON, rather than in RDF. Therefore, at this level, the resources that make up the gadget are out of the scope of this deliverable.
+	\item \textbf{Runtime}: At the final level of instantiation, the screenflow has been packaged as a gadget, deployed to a gadget platform and is now being used by an end-user. At this level, all gadget components exist only in the form of Web standards compliant code (HTML, JavaScript, CSS). For performance reasons, the FAST catalogue transforms any metadata still necessary, as well as definitions for screen pre- and post-conditions, from their original RDF representations into the JavaScript Object Notation (JSON)\footnote{\url{http://www.json.org/}}. At this level, the resources that make up the gadget have moved out of the scope of the FAST platform and therefore out of the scope of this deliverable.
 \end{itemize}
 
 \begin{figure}[ht]
@@ -724,11 +724,17 @@ In FAST, resources (gadgets, screenflows, screens and their components) exist in
 
 When implementing these four stages, as illustrated in Fig.~\ref{fig:classes_templates}, to OWL DL semantics, one will be faced with an immediate problem. Conceptually, one would like to say that $Screen$ is a class, i.e., the set of all screens. As argued above, $LogInScreen$ would then be an instance of $Screen$ ($LogInScreen \subset Screen$), while a particular $LogInScreen_x$ in a particular screenflow would again be an instance of $LogInScreen$ ($LogInScreen_x \subset LogInScreen$). However, unless we want to move into OWL Full semantics, classes cannot be used as instances at the same time, so we cannot use this modelling approach. Furthermore, when we instantiate a resource such as a screen within a particular screenflow, we want to imply that the new instance ($LogInScreen_x$) has the same features such as label, icon or conditions, as $LogInScreen$. In other words, what we really require is a something like a \emph{copy} of the original $LogInScreen$. 
 
-Neither OWL nor RDFS semantics offer functionality to represent a relationship such as the copy of a resource formally. For this reason, we introduce the concept of \emph{templates for RDF instances} in FAST. One resource (e.g., $LogInScreen$) will play the role of a \emph{template}, while the other resource (e.g., $LogInScreen_x$) will be called a \emph{copy}. Conceptually, copying a resource means defining a named graph that contains all statements about this resource considered to be relevant, and creating a new graph with near-identical statements\footnote{The graphs are not completely identical: the identifiers for the resource and potentially other, contained resources will have changed.} \todo{explain this better}. In practice, this procedure can be implemented using a SPARQL CONSTRUCT query, where the WHERE clause matches the graph pattern of the template, and the CONSTRUCT query will build the copy from it. The corresponding data on all three levels is shown in List.~\ref{list:templating}, using TriG syntax~\cite{bizer2004trig} (an extension of Turtle syntax for named graphs).
+Neither OWL nor RDFS semantics offer functionality to represent a relationship such as the copy of a resource formally. For this reason, we introduce the concept of \emph{templates for RDF instances} in FAST. One resource (e.g., $LogInScreen$) will play the role of a \emph{template}, while the other resource (e.g., $LogInScreen_x$) will be called a \emph{copy}. Conceptually, copying a resource involves the following steps:
+\begin{inparaenum}[(i)]
+	\item Defining a named graph $G_1$ that contains all statements about this resource considered to be relevant.
+	\item Creating a second graph $G_2$ with copies of all statements in $G_1$.
+	\item During this copying process, the identifiers for the main resource and certain other resources in the graph will be changed from $I_{template}$ to $I_{copy}$.
+\end{inparaenum}	
+In practice, this procedure can be implemented using a SPARQL CONSTRUCT query, where the WHERE clause defines the graph pattern of the template, and the CONSTRUCT query will build the copy from it. The corresponding data on all three levels is shown in List.~\ref{list:templating}, using TriG syntax~\cite{bizer2004trig} (an extension of Turtle syntax for named graphs).
 
 \singlespacing
 \lstset{
-	caption={Templating example --- different levels of representation of a FAST screen}, 
+	caption={Templating example --- different levels of representation of a FAST screen (TriG)}, 
 	label=list:templating,
 	language=turtle
 }
@@ -736,6 +742,17 @@ Neither OWL nor RDFS semantics offer functionality to represent a relationship s
 	\lstinputlisting{exampleCode/templating_example.ttl}
 \end{figure}
 \doublespacing
+
+Figure \ref{fig:templating_example_graph} illustrates the same example graphically, using different colours to represent the two different graphs: the red graph in the background represents the original template resource, whereas the green graph in the front in represents the resource copy as it would be used in a concrete screen flow.
+
+\begin{figure}[ht]
+  \begin{center}
+    \includegraphics[width=.75\linewidth]{images/templating_example.pdf}
+    \caption{Templating example --- different levels of representation of a FAST screen (Diagramme)}
+    \label{fig:templating_example_graph}
+  \end{center}
+\end{figure}
+
 
 It should be pointed out that the term \emph{RDF template} has been used before, but with a different meaning. \cite{davis2003rdf_template} use the term in analogy to XSLT, but acting on an RDF graph rather than an XML tree. \cite{kawamoto2006kawawiki} present a semantic wiki, where templates help non-technical users to create semantic descriptions. 
 % subsection classes_instances_and_templates (end)
@@ -774,7 +791,7 @@ In modelling resources in FAST, the kind of users that are relevant are the user
 \end{figure}
 \doublespacing
 
-Once a user has been defined in this way, they can e.g. be used to specify the creators of individual screen and screenflow resources, as shown in List.~\ref{list:creator}. This kind of creation metadata is being added to other metadata as shown in Sect.~\ref{sub:basic_annotation}.
+Once a user has been defined in this way, they can for example be used to specify the creators of individual screen and screenflow resources, as shown in List.~\ref{list:creator}. This kind of creation metadata is being added to other metadata as shown in Sect.~\ref{sub:basic_annotation}.
 
 \singlespacing
 \lstset{
@@ -928,6 +945,21 @@ Since SPARQL has no direct support for negation, and since there is a need to al
 % 
 % % subsection instance_examples (end)
 
+\subsection{Piping within Screens} % (fold)
+\label{sub:piping_within_screens}
+
+\todo{needs text and code}
+
+\begin{figure}[ht]
+  \begin{center}
+    \includegraphics[width=\linewidth]{images/declarativeDefinitionExample.pdf}
+    \caption{Explicit piping within a screen from a post- to a pre-condition}
+    \label{fig:piping}
+  \end{center}
+\end{figure}
+
+
+% subsection piping_within_screens (end)
 
 \subsection{Extension towards Specific Domains} % (fold)
 \label{sub:extension_towards_specific_domains}
@@ -964,7 +996,7 @@ Apart from ``hard'' metrics for the evaluation of ontologies, so-called ``soft''
 	\item \textbf{reuse external ontologies} to facilitate integration and compatibility,
 	\item \textbf{avoid over-engineering} and keep the number of ontology terms down to reduce the cognitive load on implementers,
 	\item \textbf{be a good Web citizen} by following the principles of linked data,
-	\item \textbf{be well documented} to make it easy for implementers to understand and use the ontology correctly and
+	\item \textbf{document well} to make it easy for implementers to understand and use the ontology correctly and
 	\item \textbf{provide tool support} to ease the work-load involved in generating instance data.
 \end{itemize}
 \doublespacing
@@ -1003,7 +1035,7 @@ The FAST gadget ontology fulfils the previous criterion by following the best pr
 
 % subsubsection be_a_good_web_citizen (end)
 
-\subsubsection{Be Well Documented} % (fold)
+\subsubsection{Document Well} % (fold)
 \label{ssub:be_well_documented}
 
 A lack of good documentation for an ontology will make it hard for potential adopters to comprehend and make use of it, whereas on the other hand, good documentation can be the deciding factor in which ontology gains more uptake. On the most basic level, documentation can be provided by the use of annotation properties within the formal definition of the ontology itself (e.g., \texttt{rdfs:comment}). However, in practice this should be extended with human-readable documentation, ideally at the available online at the namespace URI of the ontology itself (see above in Sect.~\ref{ssub:be_a_good_web_citizen}). The human-readable documentation can be as simple as a list of terms and explanations generated from the ontology source, e.g., with a tool such as \emph{VocDoc}\footnote{\url{http://kantenwerk.org/vocdoc/}}, which was developed specifically to generate documentation for the FAST gadget ontology both in an online format and a print format. Much more useful than a simple list of terms, however, are concrete instance examples which illustrate the actual use of the various ontology terms in practice.
@@ -1061,7 +1093,8 @@ The FAST gadget ontology has initially been developed using the original OWL ont
 \subsection{\emph{Methontology}: A Methodology for Ontology Development} % (fold)
 \label{sub:methontology_a_methodology_for_ontology_development}
 
-In order to put the design of the ontology on a stable footing, we chose to adopt a tried and tested design methodology, rather than using a purely ad-hoc approach. We decided to use the \emph{Methontology} methodology, which was first introduced in \cite{gomez_perez1996conceptualise_ontologies} and \cite{fernandez1997methontology}. Methontology provides a good balance of formalisation and streamlining of the design process on the one hand, and on the other hand a looseness in its requirements on how strictly one needs to follow the individual phases and steps. The authors specifically advocate an ``evolving prototype life cycle'', which allows the ontology to ``grow depending on its needs'' \cite{fernandez1997methontology}.
+In order to put the design of the ontology on a stable footing, we chose to adopt a tried and tested design methodology, rather than using a purely ad-hoc approach. We decided to use the \emph{Methontology} methodology, which was first introduced in \cite{gomez_perez1996conceptualise_ontologies} and \cite{fernandez1997methontology}. Methontology provides a good balance of formalisation and streamlining of the design process on the one hand, while on the other hand its requirements on how strictly one needs to follow the individual phases and steps are intentionally left relatively loose.
+The authors specifically advocate an ``evolving prototype life cycle'', which allows the ontology to ``grow depending on its needs'' \cite{fernandez1997methontology}.
 
 Methontology consists of seven different stages, which will be briefly described in the following sections. For a more detailed discussion, we point the reader to the original papers proposing this methodology. The phases are \emph{specification}, \emph{knowledge acquisistion}, \emph{conceptualisation}, \emph{integration}, \emph{implementation}, \emph{evaluation} and \emph{documentation}. It is important to note that the phases do not have to be visited slavishly in the order presented here. Instead, a much more likely scenario is that the ontology designers will visit each phase roughly in this order, but are free to revisit each phase at any time to apply changes.
 

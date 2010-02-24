@@ -22,24 +22,28 @@ fgo:Screen1259310137675     a fgo:Screen;
              fgo:hasId "AmazonSearchService1";
              fgo:hasUri fgo:BackendService1259254307948 ],
                  [
+			 a fgo:Pipe ;
              fgo:hasIdActionTo "showTable";
              fgo:hasIdBBFrom "AmazonSearchService1";
              fgo:hasIdBBTo "amazonListForm1";
              fgo:hasIdConditionFrom "list";
              fgo:hasIdConditionTo "list" ],
                  [
+			 a fgo:Pipe ;
              fgo:hasIdActionTo "showMessage";
              fgo:hasIdBBFrom "AmazonSearchService1";
              fgo:hasIdBBTo "amazonListForm1";
              fgo:hasIdConditionFrom "message";
              fgo:hasIdConditionTo "message" ],
                  [
+			 a fgo:Pipe ;
              fgo:hasIdActionTo "search";
              fgo:hasIdBBFrom "amazonListForm1";
              fgo:hasIdBBTo "AmazonSearchService1";
              fgo:hasIdConditionFrom "filter";
              fgo:hasIdConditionTo "filter" ],
                  [
+			 a fgo:Pipe ;
              fgo:hasIdActionTo "";
              fgo:hasIdBBFrom "amazonListForm1";
              fgo:hasIdBBTo "";
@@ -84,3 +88,82 @@ fgo:Screen1259310137675     a fgo:Screen;
      <http://purl.org/dc/terms/rights> <http://creativecommons.org/>;
      :label "Product List Compound"@en-gb;
      <http://xmlns.com/foaf/0.1/homepage> <http://www.deri.ie/amazonList> .
+
+    fgo:FormElement1259253452048     a fgo:FormElement;
+         fgo:hasAction  [
+             :label "init" ],
+                 [
+             fgo:hasPreCondition  [
+                 fgo:hasId "list";
+                 fgo:hasPattern fgo:pattern1259253452141;
+                 fgo:hasPatternString "?PList http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#ProductList";
+                 fgo:isPositive true;
+                 :label "A product list"@en-gb ];
+             :label "showTable" ];
+         fgo:hasCode <http://localhost:8010/forms/amazonList.src.html>;
+         fgo:hasIcon <http://localhost:8010/images/catalogue/amazonList.png>;
+         fgo:hasId "9";
+         fgo:hasName "Amazon List Form";
+         fgo:hasPostCondition  [
+             a rdf:Bag;
+             rdf:_1  [
+                 fgo:hasId "item";
+                 fgo:hasPattern fgo:pattern1259253452188;
+                 fgo:hasPatternString "?Item http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#Item";
+                 fgo:isPositive true;
+                 :label "An item"@en-gb ];
+             rdf:_2  [
+                 fgo:hasId "filter";
+                 fgo:hasPattern fgo:pattern1259253452219;
+                 fgo:hasPatternString "?Filter http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#SearchCriteria";
+                 fgo:isPositive true;
+                 :label "A filter"@en-gb ] ];
+         fgo:hasScreenshot <http://www.deri.ie/amazonList-screenshot.jpg>;
+         fgo:hasTag "amazon",
+                "list";
+         fgo:hasType "form";
+         fgo:hasVersion "1.0";
+         <http://purl.org/dc/terms/creator> <http://www.fabio.es/>;
+         <http://purl.org/dc/terms/description> "This form shows the results of a given search in Amazon. It allows users to choose a product to see its details"@en-gb;
+         <http://purl.org/dc/terms/rights> <http://creativecommons.org/>;
+         :label "Product List"@en-gb;
+         <http://xmlns.com/foaf/0.1/homepage> <http://www.deri.ie/amazonList> .
+
+	    fgo:BackendService1259254307948     a fgo:BackendService;
+	         fgo:hasAction  [
+	             fgo:hasPreCondition  [
+	                 fgo:hasId "filter";
+	                 fgo:hasPattern fgo:pattern1259254308104;
+	                 fgo:hasPatternString "?F http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#SearchCriteria";
+	                 fgo:isPositive true;
+	                 :label "A search criteria"@en-gb ];
+	             :label "search" ];
+	         fgo:hasCode <http://localhost:8010/resources/amazonSearchService.src.js>;
+	         fgo:hasIcon <http://localhost:8010/images/catalogue/amazonSearchService.png>;
+	         fgo:hasId "24";
+	         fgo:hasLibrary  [
+	             fgo:hasLanguage "JavaScript";
+	             fgo:hasSource <http://piccolo.ls.fi.upm.es/amazonURL/signAmazonURLs.js> ],
+	                 [
+	             fgo:hasLanguage "JavaScript";
+	             fgo:hasSource <http://piccolo.ls.fi.upm.es/amazonURL/jssha2/sha2.js> ];
+	         fgo:hasName "Amazon Search Service";
+	         fgo:hasPostCondition  [
+	             a rdf:Bag;
+	             rdf:_1  [
+	                 fgo:hasId "list";
+	                 fgo:hasPattern fgo:pattern1259254308151;
+	                 fgo:hasPatternString "?PList http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#ProductList";
+	                 fgo:isPositive true;
+	                 :label "An Amazon Item List"@en-gb ] ];
+	         fgo:hasScreenshot <http://www.deri.ie/amazonList-screenshot.jpg>;
+	         fgo:hasTag "amazon",
+	                "list";
+	         fgo:hasTrigger "productList";
+	         fgo:hasType "resource";
+	         fgo:hasVersion "1.0";
+	         <http://purl.org/dc/terms/creator> <http://www.fabio.es/>;
+	         <http://purl.org/dc/terms/description> "This service provides information about products in Amazon Catalogue"@en-gb;
+	         <http://purl.org/dc/terms/rights> <http://creativecommons.org/>;
+	         :label "Amazon Search"@en-gb;
+	         <http://xmlns.com/foaf/0.1/homepage> <hhttp://www.deri.ie/amazonSearchService> .
