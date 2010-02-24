@@ -1,0 +1,44 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Database Name="CyntelixFast" EntityNamespace="StorageData" ContextNamespace="StorageData" Class="StorageDataDataContext" Serialization="Unidirectional" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
+  <Connection Mode="WebSettings" ConnectionString="Data Source=CYNTELIX02;Initial Catalog=FASTStorage;Persist Security Info=True;User ID=SqlCyntelixFast" SettingsObjectName="System.Configuration.ConfigurationManager.ConnectionStrings" SettingsPropertyName="FASTStorageConnectionString" Provider="System.Data.SqlClient" />
+  <Table Name="dbo.Author" Member="Authors">
+    <Type Name="Author">
+      <Column Name="AuthorId" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="AuthorName" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="href" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="email" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Vendor" Member="Vendors">
+    <Type Name="Vendor">
+      <Column Name="VendorId" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="VendorName" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Gadget" Member="Gadgets">
+    <Type Name="Gadget">
+      <Column Name="GadgetUri" Type="System.String" DbType="NVarChar(50) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="Owner" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Version" Type="System.String" DbType="NVarChar(7) NOT NULL" CanBeNull="false" />
+      <Column Name="AuthorId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="GadgetMetadataId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="VendorId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="AbsoluteURL" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="IsDeleted" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="NoContent" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Association Name="Author_Gadget" Member="Author" ThisKey="AuthorId" OtherKey="AuthorId" Type="Author" IsForeignKey="true" />
+      <Association Name="Vendor_Gadget" Member="Vendor" ThisKey="VendorId" OtherKey="VendorId" Type="Vendor" IsForeignKey="true" />
+      <Association Name="GadgetMetadata_Gadget" Member="GadgetMetadata" ThisKey="GadgetMetadataId" OtherKey="GadgetMetadataId" Type="GadgetMetadata" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.GadgetMetadata" Member="GadgetMetadatas">
+    <Type Name="GadgetMetadata">
+      <Column Name="GadgetMetadataId" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="GadgetName" Type="System.String" DbType="NVarChar(40) NOT NULL" CanBeNull="false" />
+      <Column Name="GadgetShortName" Type="System.String" DbType="NVarChar(10)" CanBeNull="true" />
+      <Column Name="GadgetDescription" Type="System.String" DbType="NVarChar(150)" CanBeNull="true" />
+      <Column Name="GadgetDefaultHeight" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="GadgetDefaultWidth" Type="System.Int32" DbType="Int" CanBeNull="true" />
+    </Type>
+  </Table>
+</Database>

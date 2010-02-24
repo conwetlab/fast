@@ -1,0 +1,22 @@
+﻿<%@ ServiceHost Language="C#" Debug="true" Service="Storage.Service" Factory="Storage.AppServiceHostFactory"%>
+
+using System;
+using System.ServiceModel;
+using System.ServiceModel.Activation;
+using Microsoft.ServiceModel.Web;
+using Microsoft.Practices.EnterpriseLibrary.Logging;
+
+namespace Storage 
+{
+  class AppServiceHostFactory : ServiceHostFactory
+  {
+    protected override ServiceHost CreateServiceHost(Type serviceType, Uri[] baseAddresses)
+    {
+        Logger.Write("Entered CreateServiceHost");
+        Logger.Write("Creating Service host with "+serviceType.FullName+" service type and "+baseAddresses.Length.ToString());
+        WebServiceHost2 host = new WebServiceHost2(serviceType, true, baseAddresses);
+        Logger.Write("Created host");
+        return host;
+    }
+  }
+}

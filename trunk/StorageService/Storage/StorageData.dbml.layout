@@ -1,0 +1,51 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ordesignerObjectsDiagram dslVersion="1.0.0.0" absoluteBounds="0, 0, 11, 8.5" name="StorageData">
+  <DataContextMoniker Name="/StorageDataDataContext" />
+  <nestedChildShapes>
+    <classShape Id="59e2b544-7461-455d-abd8-b99cc966e8a4" absoluteBounds="0.75, 2.375, 2, 1.5785953776041666">
+      <DataClassMoniker Name="/StorageDataDataContext/Author" />
+      <nestedChildShapes>
+        <elementListCompartment Id="af671608-07e1-48a5-a0d0-c2d41d22afd0" absoluteBounds="0.765, 2.835, 1.9700000000000002, 1.0185953776041665" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="12c6fe34-bb32-41e9-999e-bfe5c9be04a7" absoluteBounds="0.75, 1, 2, 1.1939925130208335">
+      <DataClassMoniker Name="/StorageDataDataContext/Vendor" />
+      <nestedChildShapes>
+        <elementListCompartment Id="761a4a49-f585-4845-b9a8-83d8d9809b14" absoluteBounds="0.765, 1.46, 1.9700000000000002, 0.63399251302083326" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="ab486a37-ce7a-4488-b815-4efe024951bd" absoluteBounds="3.5, 1.125, 2.375, 2.5401025390625005">
+      <DataClassMoniker Name="/StorageDataDataContext/Gadget" />
+      <nestedChildShapes>
+        <elementListCompartment Id="1c5fdab2-827a-42b3-8410-627109d673fd" absoluteBounds="3.515, 1.585, 2.3449999999999998, 1.9801025390625" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="03d32071-1caf-4bfb-9c75-348ec9b69b8e" absoluteBounds="6.5, 1.25, 2, 1.9631982421874996">
+      <DataClassMoniker Name="/StorageDataDataContext/GadgetMetadata" />
+      <nestedChildShapes>
+        <elementListCompartment Id="5bad773e-0b12-4e39-9208-a8075a8cb2a2" absoluteBounds="6.515, 1.71, 1.9700000000000002, 1.4031982421875" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <associationConnector edgePoints="[(2.75 : 3.02005126953125); (3.5 : 3.02005126953125)]" fixedFrom="Algorithm" fixedTo="Algorithm">
+      <AssociationMoniker Name="/StorageDataDataContext/Author/Author_Gadget" />
+      <nodes>
+        <classShapeMoniker Id="59e2b544-7461-455d-abd8-b99cc966e8a4" />
+        <classShapeMoniker Id="ab486a37-ce7a-4488-b815-4efe024951bd" />
+      </nodes>
+    </associationConnector>
+    <associationConnector edgePoints="[(2.75 : 1.65949625651042); (3.5 : 1.65949625651042)]" fixedFrom="Algorithm" fixedTo="Algorithm">
+      <AssociationMoniker Name="/StorageDataDataContext/Vendor/Vendor_Gadget" />
+      <nodes>
+        <classShapeMoniker Id="12c6fe34-bb32-41e9-999e-bfe5c9be04a7" />
+        <classShapeMoniker Id="ab486a37-ce7a-4488-b815-4efe024951bd" />
+      </nodes>
+    </associationConnector>
+    <associationConnector edgePoints="[(6.5 : 2.23159912109375); (5.875 : 2.23159912109375)]" fixedFrom="Algorithm" fixedTo="Algorithm">
+      <AssociationMoniker Name="/StorageDataDataContext/GadgetMetadata/GadgetMetadata_Gadget" />
+      <nodes>
+        <classShapeMoniker Id="03d32071-1caf-4bfb-9c75-348ec9b69b8e" />
+        <classShapeMoniker Id="ab486a37-ce7a-4488-b815-4efe024951bd" />
+      </nodes>
+    </associationConnector>
+  </nestedChildShapes>
+</ordesignerObjectsDiagram>
