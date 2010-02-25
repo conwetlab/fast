@@ -1393,18 +1393,6 @@ relationship at the structure level (two tables from
 \texttt{S1} match one table from
 \texttt{S2}).
 
-The example in Table \ref{tab:MappingPattern} \cite{debruin2005wsml} shows a mapping element from the
-motivating example from Section \ref{subsec:mediationproblem_motivatingexample}. Assume we have two ontologies
-\texttt{O1} and \texttt{O2} which both
-describe humans and their gender. Ontology \texttt{O1}
-describes the concept \texttt{Person} with an attribute
-\texttt{hasGender}, which has the two possible values
-{\textquotedblleft}\texttt{male}{\textquotedblright} and
-{\textquotedblleft}\texttt{female}{\textquotedblright}.
-Ontology \texttt{O2} describes the concept
-\texttt{Human}, and its subclasses
-\texttt{Man} and \texttt{Woman} to
-distinguish the gender.
 
 \begin{center}
 \tablecaption{Class by attribute mapping pattern and example. {\newline}Taken from \cite{debruin2005wsml}.}
@@ -1434,6 +1422,19 @@ attributeValueCondition(hasGender
 }{\textquotedblleft}female{\textquotedblright})) \\\hline
 \end{supertabular}
 \end{center}
+
+The example in Table \ref{tab:MappingPattern} \cite{debruin2005wsml} shows a mapping element from the
+motivating example from Section \ref{subsec:mediationproblem_motivatingexample}. Assume we have two ontologies
+\texttt{O1} and \texttt{O2} which both
+describe humans and their gender. Ontology \texttt{O1}
+describes the concept \texttt{Person} with an attribute
+\texttt{hasGender}, which has the two possible values
+{\textquotedblleft}\texttt{male}{\textquotedblright} and
+{\textquotedblleft}\texttt{female}{\textquotedblright}.
+Ontology \texttt{O2} describes the concept
+\texttt{Human}, and its subclasses
+\texttt{Man} and \texttt{Woman} to
+distinguish the gender.
 
 Notice that this is a typical case of a
 conceptual mismatch, namely a mismatch in the style of modeling. The
