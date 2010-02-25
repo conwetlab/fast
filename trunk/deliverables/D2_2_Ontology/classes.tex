@@ -6,7 +6,6 @@
 \textcolor{white}{\textbf{description}} & An action represents a specific routine which will be performed when a certain
 condition is fulfilled within a certain screen component. Examples are methods of a Web service (e.g., getItem) or functionality to update or change the contents of a form. \\ \hline
 \textcolor{white}{\textbf{sub\_class\_of}} & \htmlref{\texttt{fgo:BuildingBlock}}{subs:BuildingBlock} \\ \hline
-\textcolor{white}{\textbf{in\_domain\_of}} & \htmlref{\texttt{fgo:hasUse}}{subs:hasUse} \\ \hline
 \textcolor{white}{\textbf{in\_range\_of}} & \htmlref{\texttt{fgo:hasAction}}{subs:hasAction} \\ \hline
 \end{tabular}
 \subsubsection*{Class: \texttt{fgo:BackendService}}
@@ -23,8 +22,8 @@ condition is fulfilled within a certain screen component. Examples are methods o
 \hline
 \textcolor{white}{\textbf{label}} & BuildingBlock \\ \hline
 \textcolor{white}{\textbf{description}} & Anything that is part of a gadget. Tentatively anything that can be `touched' and moved around in the FAST IDE, from the most complex units such as screen flows, down to atomic form elements like a button or a label in a form. \\ \hline
-\textcolor{white}{\textbf{super\_class\_of}} & \htmlref{\texttt{fgo:Action}}{subs:Action}, \htmlref{\texttt{fgo:BackendService}}{subs:BackendService}, \htmlref{\texttt{fgo:Condition}}{subs:Condition}, \htmlref{\texttt{fgo:Fact}}{subs:Fact}, \htmlref{\texttt{fgo:FormElement}}{subs:FormElement}, \htmlref{\texttt{fgo:Library}}{subs:Library}, \htmlref{\texttt{fgo:Pipe}}{subs:Pipe}, \htmlref{\texttt{fgo:Screen}}{subs:Screen}, \htmlref{\texttt{fgo:ScreenComponent}}{subs:ScreenComponent}, \htmlref{\texttt{fgo:ScreenFlow}}{subs:ScreenFlow}, \htmlref{\texttt{fgo:Trigger}}{subs:Trigger} \\ \hline
-\textcolor{white}{\textbf{in\_domain\_of}} & \htmlref{\texttt{fgo:contains}}{subs:contains}, \htmlref{\texttt{fgo:hasCopy}}{subs:hasCopy}, \htmlref{\texttt{fgo:hasIcon}}{subs:hasIcon}, \htmlref{\texttt{fgo:hasScreenshot}}{subs:hasScreenshot}, \htmlref{\texttt{fgo:hasTemplate}}{subs:hasTemplate} \\ \hline
+\textcolor{white}{\textbf{super\_class\_of}} & \htmlref{\texttt{fgo:Action}}{subs:Action}, \htmlref{\texttt{fgo:BackendService}}{subs:BackendService}, \htmlref{\texttt{fgo:Condition}}{subs:Condition}, \htmlref{\texttt{fgo:FormElement}}{subs:FormElement}, \htmlref{\texttt{fgo:Library}}{subs:Library}, \htmlref{\texttt{fgo:Pipe}}{subs:Pipe}, \htmlref{\texttt{fgo:Screen}}{subs:Screen}, \htmlref{\texttt{fgo:ScreenComponent}}{subs:ScreenComponent}, \htmlref{\texttt{fgo:ScreenFlow}}{subs:ScreenFlow}, \htmlref{\texttt{fgo:Trigger}}{subs:Trigger} \\ \hline
+\textcolor{white}{\textbf{in\_domain\_of}} & \htmlref{\texttt{fgo:contains}}{subs:contains}, \htmlref{\texttt{fgo:hasCopy}}{subs:hasCopy}, \htmlref{\texttt{fgo:hasIcon}}{subs:hasIcon}, \htmlref{\texttt{fgo:hasScreenshot}}{subs:hasScreenshot}, \htmlref{\texttt{fgo:hasTemplate}}{subs:hasTemplate}, \htmlref{\texttt{fgo:uses}}{subs:uses} \\ \hline
 \textcolor{white}{\textbf{in\_range\_of}} & \htmlref{\texttt{fgo:contains}}{subs:contains}, \htmlref{\texttt{fgo:hasCopy}}{subs:hasCopy}, \htmlref{\texttt{fgo:hasTemplate}}{subs:hasTemplate} \\ \hline
 \end{tabular}
 \subsubsection*{Class: \texttt{fgo:Condition}}
@@ -33,19 +32,10 @@ condition is fulfilled within a certain screen component. Examples are methods o
 \hline
 \textcolor{white}{\textbf{label}} & Condition \\ \hline
 \textcolor{white}{\textbf{description}} & The pre- or post-condition of a certain kinds of building block. If the building block is a screen flow, each target platform will use these conditions in its own way, or may also ignore them. E.g., in EzWeb pre- and post-conditions correspond to the concepts of slot and event.
-A condition can be seen as a RDF bag of facts, where every fact has to be true
-for the condition be true as well. \\ \hline
+A condition is made up of individual facts, where each fact is represented internally as an RDF triple, usually involving a variable of blank node. \\ \hline
 \textcolor{white}{\textbf{sub\_class\_of}} & \htmlref{\texttt{fgo:BuildingBlock}}{subs:BuildingBlock} \\ \hline
-\textcolor{white}{\textbf{in\_range\_of}} & \htmlref{\texttt{fgo:hasPostCondition}}{subs:hasPostCondition}, \htmlref{\texttt{fgo:hasPreCondition}}{subs:hasPreCondition} \\ \hline
-\end{tabular}
-\subsubsection*{Class: \texttt{fgo:Fact}}
-\label{subs:Fact}
-\begin{tabular}{| >{\columncolor{fast@lightgrey}}p{2.5cm}|p{12cm}|}
-\hline
-\textcolor{white}{\textbf{label}} & Fact \\ \hline
-\textcolor{white}{\textbf{description}} & The `basic information unit of a FAST gadget'. In terms of RDF, a fact is a statement consisting of a subject, predicate and object (S, P, O). \\ \hline
-\textcolor{white}{\textbf{sub\_class\_of}} & \htmlref{\texttt{fgo:BuildingBlock}}{subs:BuildingBlock} \\ \hline
-\textcolor{white}{\textbf{in\_domain\_of}} & \htmlref{\texttt{fgo:hasPattern}}{subs:hasPattern}, \htmlref{\texttt{fgo:hasPatternString}}{subs:hasPatternString}, \htmlref{\texttt{fgo:isPositive}}{subs:isPositive} \\ \hline
+\textcolor{white}{\textbf{in\_domain\_of}} & \htmlref{\texttt{fgo:hasPattern}}{subs:hasPattern}, \htmlref{\texttt{fgo:isPositive}}{subs:isPositive} \\ \hline
+\textcolor{white}{\textbf{in\_range\_of}} & \htmlref{\texttt{fgo:from}}{subs:from}, \htmlref{\texttt{fgo:hasPostCondition}}{subs:hasPostCondition}, \htmlref{\texttt{fgo:hasPreCondition}}{subs:hasPreCondition}, \htmlref{\texttt{fgo:to}}{subs:to} \\ \hline
 \end{tabular}
 \subsubsection*{Class: \texttt{fgo:Form}}
 \label{subs:Form}
@@ -92,7 +82,7 @@ for the condition be true as well. \\ \hline
 \textcolor{white}{\textbf{label}} & pipe or connector \\ \hline
 \textcolor{white}{\textbf{description}} & Pipes are used to explicitly define the flow of data within a screen, e.g., from service resource to operator to a specific form element. \\ \hline
 \textcolor{white}{\textbf{sub\_class\_of}} & \htmlref{\texttt{fgo:BuildingBlock}}{subs:BuildingBlock} \\ \hline
-\textcolor{white}{\textbf{in\_domain\_of}} & \htmlref{\texttt{fgo:hasIdActionTo}}{subs:hasIdActionTo}, \htmlref{\texttt{fgo:hasIdBBFrom}}{subs:hasIdBBFrom}, \htmlref{\texttt{fgo:hasIdBBTo}}{subs:hasIdBBTo}, \htmlref{\texttt{fgo:hasIdConditionFrom}}{subs:hasIdConditionFrom}, \htmlref{\texttt{fgo:hasIdConditionTo}}{subs:hasIdConditionTo} \\ \hline
+\textcolor{white}{\textbf{in\_domain\_of}} & \htmlref{\texttt{fgo:from}}{subs:from}, \htmlref{\texttt{fgo:to}}{subs:to} \\ \hline
 \end{tabular}
 \subsubsection*{Class: \texttt{fgo:Resource}}
 \label{subs:Resource}
@@ -137,7 +127,6 @@ for the condition be true as well. \\ \hline
 \textcolor{white}{\textbf{label}} & Trigger \\ \hline
 \textcolor{white}{\textbf{description}} & Triggers are the flip-side of actions. Certain events in a building block can cause a trigger to be fired. Other building blocks within the same screen, which are listening to it, will react with an action. \\ \hline
 \textcolor{white}{\textbf{sub\_class\_of}} & \htmlref{\texttt{fgo:BuildingBlock}}{subs:BuildingBlock} \\ \hline
-\textcolor{white}{\textbf{in\_domain\_of}} & \htmlref{\texttt{fgo:hasIdActionTo}}{subs:hasIdActionTo}, \htmlref{\texttt{fgo:hasIdBBFrom}}{subs:hasIdBBFrom}, \htmlref{\texttt{fgo:hasIdBBTo}}{subs:hasIdBBTo}, \htmlref{\texttt{fgo:hasNameFrom}}{subs:hasNameFrom} \\ \hline
 \textcolor{white}{\textbf{in\_range\_of}} & \htmlref{\texttt{fgo:hasTrigger}}{subs:hasTrigger} \\ \hline
 \end{tabular}
 \subsubsection*{Class: \texttt{fgo:WithCode}}

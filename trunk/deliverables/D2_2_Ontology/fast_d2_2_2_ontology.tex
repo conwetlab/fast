@@ -294,12 +294,23 @@ This deliverable defines the ontology and conceptual model for the semantic char
 \doublespacing
 \setcounter{tocdepth}{3}
 \tableofcontents
+
+\clearpage
+\doublespacing
+\phantomsection
+\section*{Lists of Tables and Figures}
+% \addcontentsline{toc}{section}{Lists of Tables, Figures and Listings}
+
+\listoftables
+\listoffigures
+\lstlistoflistings
+
 \cleardoublepage
-\pagenumbering{arabic}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%
 % BEGINNING OF SECTIONS %
 %%%%%%%%%%%%%%%%%%%%%%%%%
+\pagenumbering{arabic}
 \clearpage
 \rofoot{\small{Page \thepage\ of \pageref{LastPage}}}
 
@@ -589,7 +600,7 @@ The Friend of a Friend vocabulary is a simple ontology which main purpose to des
 
 FOAF has been \emph{``evolving gradually since its creation in mid-2000''}~\cite{brickley2004foaf}. Over the years, it attracted a lot of attention and has become one of the major successes of the Semantic Web. Compared to most other ontologies or vocabularies, it has received a much higher uptake, with the number of FOAF files on the internet probably numbering tens of millions now. Its popularity in the community and beyond is also underlined by the fact that many other ontologies are integrating FOAF in order to represent basic information regarding people, or they are using it as a point of reference and extend the basic FOAF classes and properties for their own needs. Examples for this kind of integration are the increasingly popular SIOC (Semantically-Interlinked Online Communities) ontology~\cite{breslin2005communitiesEswc}, which uses FOAF description to unify identities in different online communities, or the Semantic Web Conference ontology~\cite{moeller2007dogfood}, where conference attendees or authors are represented as FOAF person instances.
 
-The specification document of the FAST ontology defines that part of the purpose of the ontology is ``the description of users and user profiles''. The most obvious solution for implementing this requirement is to integrate the FAST ontology with FOAF. This means that each user of FAST would be modelled as a \texttt{foaf:Person}. A lot of the basic necessities in terms of user profile information is covered by properties defined in FOAF (names, contact details, interests, user pictures, etc.) and could therefore be used as is. In other cases, rather generic FOAF terms might be good starting points for extension towards more specific needs that occur in FAST. The icons of various components in the GVS may serve as an example here: the relation that holds between an icon and the thing X of which it is an icon could be described as ``the icon depicts X''. FOAF provides the property \texttt{depiction} to express this general relation. However, \texttt{hasIcon} (our property for saying that something is the icon of a thing) can be considered a specialisation of this, and so we will say that \texttt{fast:hasIcon} is a specialisation of \texttt{foaf:depiction}. In terms of RDFS, we will say that \texttt{<fast:hasIcon> <rdfs:subPropertyOf> <foaf:depiction>}.
+The specification document of the FAST ontology defines that part of the purpose of the ontology is ``the description of users and user profiles''. The most obvious solution for implementing this requirement is to integrate the FAST ontology with FOAF. This means that each user of FAST would be modelled as a \texttt{foaf:Person}. A lot of the basic necessities in terms of user profile information is covered by properties defined in FOAF (names, contact details, interests, user pictures, etc.) and could therefore be used as is. In other cases, rather generic FOAF terms might be good starting points for extension towards more specific needs that occur in FAST. The icons of various components in the GVS may serve as an example here: the relation that holds between an icon and the thing X of which it is an icon could be described as ``the icon depicts X''. FOAF provides the property \texttt{depiction} to express this general relation. However, \texttt{hasIcon} (our property for saying that something is the icon of a thing) can be considered a specialisation of this, and so we will say that \texttt{fgo:hasIcon} is a specialisation of \texttt{foaf:depiction}. In terms of RDFS, we will say that \texttt{<fgo:hasIcon> <rdfs:subPropertyOf> <foaf:depiction>}.
 % subsubsection foaf (end)
 
 \subsubsection{SIOC} % (fold)
@@ -599,7 +610,7 @@ Another vocabulary that is gaining a lot of uptake and support on the Semantic W
 
 \begin{figure}
   \begin{center}
-    \includegraphics[width=0.75\linewidth]{images/sioc_overview}
+    \includegraphics[width=0.8\linewidth]{images/sioc_overview}
     \caption{Overview of the SIOC ontology}
     \label{fig:sioc_overview}
   \end{center}
@@ -613,7 +624,7 @@ From the point of view of the FAST gadget ontology, the most interesting feature
 \subsubsection{Common Tag} % (fold)
 \label{ssub:common_tag}
 
-Common Tag\footnote{\url{http://www.commontag.org}, 24/01/2010} is an open format and initiative for conceptual tagging, which is developed and backed by a number of relevant players in the Web community, including Yahoo! and DERI. The basic idea of conceptual tagging is to address the problem of ambiguity in the meaning of tags (e.g., does ``jaguar'' mean the car, the animal or the operating system?) as it occurs in free-text tagging. Rather than relying on methods such as clustering, applied to a whole corpus of tagged resources, conceptual tagging intends to disambiguate a tag right from the moment it is used, by linking it to an unambiguous concept from vocabularies such as DBpedia (representing Wikipedia as linked data) or Freebase. E.g., in order to disambiguate ``cocoa'' as meaning the API, not the drink or plant, it would be represented as a resource (rather than a plain literal) and linked to the DBpedia resource \url{http://dbpedia.org/resource/Cocoa_%28API%29}.
+Common Tag\footnote{\url{http://www.commontag.org}, 24/01/2010} is an open format and initiative for conceptual tagging, which is developed and backed by a number of relevant players in the Web community, including Yahoo! and DERI. The basic idea of conceptual tagging is to address the problem of ambiguity in the meaning of tags (e.g., does ``jaguar'' mean the car, the animal or the operating system?) as it occurs in free-text tagging. Rather than relying on methods such as clustering, applied to a whole corpus of tagged resources, conceptual tagging intends to disambiguate a tag right from the moment it is used, by linking it to an unambiguous concept from vocabularies such as Dbpedia~\cite{Auer07dbpedia} (representing Wikipedia as linked data) or Freebase\footnote{\url{http://www.freebase.com/}}. E.g., in order to disambiguate ``cocoa'' as meaning the API, not the drink or plant, it would be represented as a resource (rather than a plain literal) and linked to the DBpedia resource \url{http://dbpedia.org/resource/Cocoa_%28API%29}.
 
 Apart from facilitating the disambiguation of tags, Common Tag also allows to make further assertions about the nature of a tag, such as who applied it or when it was applied. As an example, List.~\ref{list:common_tag} shows how a blog post has been tagged on 20/01/2010 with ``cocoa'', meaning the API, not the drink or plant.
 
@@ -667,7 +678,7 @@ This living document specifies how the terms from the glossary of terms are expr
 \texttt{hasInterests} & FOAF & \texttt{foaf:interest} & --- \\ \hline
 \texttt{hasUserName} & FOAF & \texttt{foaf:accountName} & --- \\ \hline
 \texttt{hasDomainContext} & Common Tag & \texttt{ctag:tagged} & The domain context of a resource in FAST can be expressed as a complex tag. Further Common Tag properties can then be applied to make assertions about the tag itself. \\ \hline
-\texttt{hasVersion} & DOAP & \texttt{daop:revision} & DOAP (Description of a Project) is a widely used vocabulary for basic annotation of software and other projects. \\ \hline
+\texttt{hasVersion} & DOAP & \texttt{doap:revision} & DOAP (Description of a Project) is a widely used vocabulary for basic annotation of software and other projects. \\ \hline
 \end{longtable}
 \end{small}
 \doublespacing
@@ -680,8 +691,6 @@ This living document specifies how the terms from the glossary of terms are expr
 %
 \section{The FAST Gadget Ontology} % (fold)
 \label{sec:ontology}
-
-\todo{add graph figures to all examples}
 
 While the previous section discussed the various steps preceding the definition of the actual ontology according to our chosen development methodology, this section focusses on concrete usage of the FAST gadget ontology in an RDFS/OWL environment. As a point of reference, an overview of all concrete classes will be given in Sect.~\ref{sub:ontology_overview}, followed by a number of sections detailing concrete aspects of the usage of the FAST gadget ontology.
 
@@ -748,7 +757,7 @@ Figure \ref{fig:templating_example_graph} illustrates the same example graphical
 \begin{figure}[ht]
   \begin{center}
     \includegraphics[width=.75\linewidth]{images/templating_example.pdf}
-    \caption{Templating example --- different levels of representation of a FAST screen (Diagramme)}
+    \caption{Templating example --- different levels of representation of a FAST screen (diagramme)}
     \label{fig:templating_example_graph}
   \end{center}
 \end{figure}
@@ -810,9 +819,7 @@ Once a user has been defined in this way, they can for example be used to specif
 \subsection{Defining Pre- and Post-conditions} % (fold)
 \label{sub:defining_pre_and_post_conditions}
 
-\todo{change examples to good relations}
-
-The facts which define the pre- and post-conditions of screens and screenflows in FAST will be modelled as individual RDF triples. In effect, this means that conditions, which are sets of facts, can be modelled as graph patterns using SPARQL notation \cite{sparql2008spec}. E.g., a simple pre-condition such as \emph{``There has to be a user''} could be expressed as in List.~\ref{ex:simple_precondition}. Literally, this very simple pattern means \emph{``a variable ?user is of type sioc:User''}. In logical terms, it means something along the lines of \emph{``there exists a sioc:User''}. For the pre-condition to be fulfilled, it needs to be executed against the RDF graph in question (most likely the facts on the current canvas).
+The facts which define the pre- and post-conditions of screens and screenflows in FAST are modelled as individual RDF triples. In effect, this means that conditions, which are sets of facts, are modelled as graph patterns using SPARQL notation \cite{sparql2008spec}. E.g., a simple pre-condition such as \emph{``There has to be a user''} could be expressed as in List.~\ref{ex:simple_precondition}. Literally, this very simple pattern means \emph{``a variable ?user is of type sioc:User''}. In logical terms, it means something along the lines of \emph{``there exists a sioc:User''}. In order to determine if this  pre-condition can be fulfilled, it needs to be executed against the RDF graph in question. This graph could for example consist of the set of post-conditions of all screens currently available on the canvas.
 
 \singlespacing
 \lstset{
@@ -827,11 +834,11 @@ The facts which define the pre- and post-conditions of screens and screenflows i
 \end{figure}
 \doublespacing
 
-Post-conditions will be expressed in a similar fashion. At design time, post-condition patterns will have variable in the same way as pre-condition patterns. When a screen is added to the canvas, the pattern needs to be materialised. To do this, each variable will be replaced with a randomly generated URI or blank node. At runtime, variables will be replaced with actual values once the screen for which the post-condition holds has been executed. As an example, consider the post-condition of a login screen. In natural language, it could be \emph{``Once the login process has finished, there will be a user object''}. Using the same notation as before, this could be expressed as shown in List.~\ref{ex:postcondition}, extended with some additional facts (\emph{``There is a user object which has an account name. There is also a person which has a name, and which has the user object as an online account.''}).
+Post-conditions are expressed in a similar fashion. In the prototypical phase (i.e., as part of templates), post-condition patterns have variables in the same way as pre-condition patterns. When a building block is copied to the canvas, the pattern needs to be materialised. To do this, each variable will be replaced with a randomly generated URI or blank node. At runtime, variables are then replaced with actual values once the screen for which the post-condition holds has been executed. As an example, consider the post-condition of a login screen. In natural language, it could be \emph{``Once the login process has finished, there will be a user object''}. Using the same notation as before, this could be expressed as shown in List.~\ref{ex:postcondition}, extended with some additional facts (\emph{``There is a user object which has an account name. There is also a person which has a name, and which has the user object as an online account.''}).
 
 \singlespacing
 \lstset{
-	caption={Simple post-condition}, 
+	caption={Post-condition at the prototypical stage}, 
 	label=ex:postcondition,
 	language=sparql
 }
@@ -846,11 +853,11 @@ Post-conditions will be expressed in a similar fashion. At design time, post-con
 \end{figure}
 \doublespacing
 
-Once added to the canvas in the GVS (``instantiated at design time''), each variable would be replaced with a blank node identifier, as shown in example~\ref{ex:postcondition_canvas}. The pre-condition in example~\ref{ex:simple_precondition} could now be executed successfully as a SPARQL query against the canvas graph.
+Once added to the canvas in the GVS (``instantiated at design time''), each variable is then replaced with a blank node identifier, as shown in example~\ref{ex:postcondition_canvas}. This is necessary because, while variables are available in SPARQL, they cannot be represented directly in RDF. The pre-condition in example~\ref{ex:simple_precondition} could now be matched successfully as a SPARQL query against the canvas graph.
 
 \singlespacing
 \lstset{
-	caption={Post-condition on the FAST GVS canvas}, 
+	caption={Post-condition as instantiated during design time (on the FAST GVS canvas)}, 
 	label=ex:postcondition_canvas,
 	language=sparql
 }
@@ -865,7 +872,7 @@ Once added to the canvas in the GVS (``instantiated at design time''), each vari
 \end{figure}
 \doublespacing
 
-Finally, during runtime, the post-condition's variables would be replaced with the actual values of the user which completed the login screen (``instantiated during runtime''). E.g., this could result in a graph such as in example~\ref{ex:postcondition_runtime}.
+Finally, during runtime, the post-condition's variables would be replaced with the actual values of the user which completed the login screen (``instantiated during runtime''). E.g., this could result in a graph such as in example~\ref{ex:postcondition_runtime}. However, in the current implementation of FAST, gadgets do not use an RDF representation of facts at runtime, but instead a translation of the facts into the JSON format.
 
 \singlespacing
 \lstset{
@@ -884,10 +891,26 @@ Finally, during runtime, the post-condition's variables would be replaced with t
 \end{figure}
 \doublespacing
 
-Since graph patterns with variable cannot directly be expressed in RDF (short of using blank nodes, which cannot have labels), the graph patterns are expressed as RDF literals and linked \texttt{fast:Condition} instances using the \texttt{fast:hasPattern} property.
-Each such condition will be linked to a screen or screenflow using either the \texttt{fast:has\-PreCondition} or \texttt{fast:has\-Post\-Condition} property.
+Regarding the representation of condition graph patterns and their linking to building blocks in the FAST backend, two parallel approaches are being followed. Each graph pattern is 
+\begin{inparaenum}[(i)]
+	\item represented as a named graph which is linked from an \texttt{fgo:Condition} using the \texttt{fgo:hasPattern} property, and
+	\item as a string, linked from the condition using the \texttt{fgo:hasPatternString} property. This second approach is followed for convenient rendering in user interfaces and to allow optional support the use of a triple store without support for named graphs.
+\end{inparaenum}
+Each such condition will be linked to a screen or screenflow using either the \texttt{fgo:has\-PreCondition} or \texttt{fgo:has\-Post\-Condition} property. A concrete example of this principle is given in List.~\ref{list:post_condition}.
 
-Since SPARQL has no direct support for negation, and since there is a need to allow screens to remove facts from the canvas graph as well as adding them, both pre- and post-conditions can be modelled to be either \emph{positive} or \emph{negative} using the \texttt{fast:isPositive} property. For pre-conditions, the interpretation of \emph{positive} is that the condition must hold, while \emph{negative} means that the negation of the condition must hold. For post-conditions, \emph{positive} leads to the instantiated condition being added to the canvas, while \emph{negative} will remove the instantiated condition. These interpretations are summarised in Tab.~\ref{tab:is_positive}.
+\singlespacing
+\lstset{
+	caption={Linking screens to conditions}, 
+	label=list:post_condition,
+	language=turtle
+}
+\begin{figure}[ht]
+	\lstinputlisting{exampleCode/post_condition_example.ttl}
+\end{figure}
+\doublespacing
+
+
+Since SPARQL has no direct support for negation, and since there is a need to allow screens to remove facts from the canvas graph as well as adding them, both pre- and post-conditions can be modelled to be either \emph{positive} or \emph{negative} using the \texttt{fgo:isPositive} property. For pre-conditions, the interpretation of \emph{positive} is that the condition must hold, while \emph{negative} means that the negation of the condition must hold. For post-conditions, \emph{positive} leads to the instantiated condition being added to the canvas, while \emph{negative} will remove the instantiated condition. These interpretations are summarised in Tab.~\ref{tab:is_positive}.
 
 \begin{table}[ht]
 	\caption{Different semantics for \texttt{isPositive}}
@@ -945,18 +968,31 @@ Since SPARQL has no direct support for negation, and since there is a need to al
 % 
 % % subsection instance_examples (end)
 
-\subsection{Piping within Screens} % (fold)
+\subsection{Conditions and Piping within Screens} % (fold)
 \label{sub:piping_within_screens}
 
-\todo{needs text and code}
+In year two of the FAST project, work has been started to extend the flexibility of the GVS to also include the creation of new screens from building blocks, as opposed to only assembling pre-made screens into screen flows. The gadget ontology supports this by modelling screen internals such as \emph{forms}, \emph{service resources} and \emph{operators}. Each of those building blocks can have their own pre- and post-conditions (either directly or through their \emph{actions}). However, while conditions on the screen/screen flow level are matched automatically and the flow of data is establish dynamically, on the screen-internal level this is defined explicitly through \emph{pipes}. Pipes are themselves components of a particular screen and connect matching post- and pre-conditions of other components in the same screen. 
 
 \begin{figure}[ht]
   \begin{center}
     \includegraphics[width=\linewidth]{images/declarativeDefinitionExample.pdf}
-    \caption{Explicit piping within a screen from a post- to a pre-condition}
+    \caption{Explicit piping within a screen from a post- to a pre-condition (diagramme)}
     \label{fig:piping}
   \end{center}
 \end{figure}
+
+The concept of piping on this level of the FAST platform is illustrated graphically in Fig.~\ref{fig:piping}, and in code in List.~\ref{list:piping}\footnote{The example does not show a complete screen definition, but only the aspects which are relevant for this section.}. The screen is composed of (possibly among other things) a backend service resource, which wraps the Amazon search service, as well as a frontend Web form, which shows a list of Amazon products to the user. Additionally, the screen contains an instance of \texttt{fgo:Pipe}, which links the resource's post-condition (a product list) to the matching pre-condition of the form's ``showTable'' action. The desired functionality of this arrangement is that, whenever the service has returned a list of products in response to a search, this list will be piped to the form, where it will be displayed to the gadget's user.
+
+\singlespacing
+\lstset{
+	caption={Explicit piping within a screen from a post- to a pre-condition (code)}, 
+	label=list:piping,
+	language=turtle
+}
+\begin{figure}[ht]
+	\lstinputlisting{exampleCode/piping_example.ttl}
+\end{figure}
+\doublespacing
 
 
 % subsection piping_within_screens (end)
@@ -964,15 +1000,26 @@ Since SPARQL has no direct support for negation, and since there is a need to al
 \subsection{Extension towards Specific Domains} % (fold)
 \label{sub:extension_towards_specific_domains}
 
-At this point in the development of FAST, there are three main entry points at which external ontologies come into play:
+While the FAST gadget ontology provides the framework and scaffolding for the formal description of complex gadgets, any  tailoring of a gadget or building block for a specific domain requires the integration of external domain ontologies. These ontologies can either be existing domain ontologies (e.g., the Good Relations ontology~\cite{Hepp:2008jr}\footnote{\url{http://www.heppnetz.de/projects/goodrelations/}} for e-Commerce) or ontologies which were purpose-built for FAST.
+There are three main entry points at which external ontologies come into play:
 
 \begin{itemize}
-	\item \emph{Domain Contexts:} By providing a domain context for a screen (or any other FAST resource), it is possible to express what domain this resource is relevant for. Examples for domain contexts are ``medicine'', ``EU projects'', ``catering'', ``human resources'', ``books'', etc. As defined in the Integration Document in Sect.~\ref{ssub:integration_document}, domain contexts are given using the \emph{dcterms:subject} property. One option for finding domain identifiers to be used with this property is the use of DBpedia~\cite{Auer07dbpedia} identifiers such as \url{http://dbpedia.org/resource/Medicine} (DBpedia is a large RDF corpus automatically extracted from the info boxes of Wikipedia entries). This is now a widely used and recommended practice in the Semantic Web community (similar corpora could also be used). As an alternative or supplement to DBpedia identifiers, it is possible to use structured tagging approaches such as MOAT\footnote{\url{http://moat-project.org/}}.
-	\todo{update with reference to common tag!}
-	\todo{give concrete example with code, maybe Good Relations?}
-	\item \emph{User Interests:} In the same way as domain contexts, a user's interests can be specified using DBpedia identifiers or structured tagging. Both can then be used in combination to suggest resources to the user.
+	\item \emph{Domain Contexts:} By providing a domain context for a screen (or any other FAST building block), it is possible to express what domain this resource is relevant for. Examples for domain contexts are ``medicine'', ``EU projects'', ``catering'', ``human resources'', ``books'', etc. As defined in the Integration Document in Sect.~\ref{ssub:integration_document}, we integrate the \texttt{ctag:tagged} property from the Common Tag vocabulary to define domain contexts as complex tags. As discussed in Sect.~\ref{ssub:common_tag}, one option for finding domain identifiers to be used with this property is the use of DBpedia identifiers such as \url{http://dbpedia.org/resource/Medicine} (DBpedia is a large RDF corpus automatically extracted from the info boxes of Wikipedia entries). This is now a widely used and recommended practice in the Semantic Web community. Similar corpora such as FreeBase could also be used. A concrete example of defining the domain context of the login screen to the Amazon service is given in List.~\ref{list:domain_context}, showing the use of \texttt{ctag:means} to disambiguate the meaning of the tag ``Amazon.com''.
+	\item \emph{User Interests:} In the same way as domain contexts, a user's interests can be specified using DBpedia identifiers and structured tagging. Matching domain contexts to used interests, the GVS (through the catalogue) can then suggest relevant resources to the user.
 	\item \emph{Pre- and Post-conditions:} In specifying pre- and post-conditions, terminology for an open-ended number of domains is necessary. While a number of classes will be reused quite often, very specific screens will require very specific vocabulary. We cannot, as part of the FAST project, provide vocabulary for all conceivable domains of discourse, and while also here DBpedia identifiers may be an option, often more precise terms will be needed.
 \end{itemize}
+
+\singlespacing
+\lstset{
+	caption={Defining a screen's domain context using the Common Tag vocabulary}, 
+	label=list:domain_context,
+	language=turtle
+}
+\begin{figure}[ht]
+	\lstinputlisting{exampleCode/domain_context_example.ttl}
+\end{figure}
+\doublespacing
+
 
 It should be added that for any given screenflow, the concrete definition of both domain context could be derived automatically from any semantic description which the backend services might have. While this might happen directly, without any transformation or mapping, this approach would be impractical in practice. The reason for this is that each backend service can potentially (and very probably) express its semantics in different ontologies or vocabularies, which would render the pre- and post-condition mechanism in FAST useless. Therefore, we assume that a mapping or mediation layer will ensure that the different semantics at the backend service level will be mapped to a common set of terms within the FAST platform. This problem is the topic of deliverable 2.4 in FAST~\cite{ambrus2010fast_mediation} and has also been discussed in \cite{Ambrus:2009it}.
 % subsection extension_towards_specific_domains (end)
@@ -1219,16 +1266,6 @@ Below is the complete code of the FAST gadget ontology in Turtle syntax. The lat
 	language=turtle
 }
 \lstinputlisting{clean.ttl}
-
-
-\clearpage
-\doublespacing
-\phantomsection
-\section*{Lists of Tables and Figures}
-\addcontentsline{toc}{section}{Lists of Tables and Figures}
-
-\listoftables
-\listoffigures
 
 \clearpage
 \phantomsection

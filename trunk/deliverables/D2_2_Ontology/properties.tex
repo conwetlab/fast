@@ -11,6 +11,16 @@ within the resource. \\ \hline
 \textcolor{white}{\textbf{domain}} & \htmlref{\texttt{fgo:BuildingBlock}}{subs:BuildingBlock} \\ \hline
 \textcolor{white}{\textbf{range}} & \htmlref{\texttt{fgo:BuildingBlock}}{subs:BuildingBlock} \\ \hline
 \end{tabular}
+\subsubsection*{Property: \texttt{fgo:from}}
+\label{subs:from}
+\begin{tabular}{| >{\columncolor{fast@lightgrey}}p{2.5cm}|p{12cm}|}
+\hline
+\textcolor{white}{\textbf{label}} & from \\ \hline
+\textcolor{white}{\textbf{description}} & This property defines the starting point of a pipe within a screen. \\ \hline
+\textcolor{white}{\textbf{type}} & \texttt{owl:ObjectProperty} \\ \hline
+\textcolor{white}{\textbf{domain}} & \htmlref{\texttt{fgo:Pipe}}{subs:Pipe} \\ \hline
+\textcolor{white}{\textbf{range}} & \htmlref{\texttt{fgo:Condition}}{subs:Condition} \\ \hline
+\end{tabular}
 \subsubsection*{Property: \texttt{fgo:hasAction}}
 \label{subs:hasAction}
 \begin{tabular}{| >{\columncolor{fast@lightgrey}}p{2.5cm}|p{12cm}|}
@@ -72,56 +82,6 @@ a screen component. \\ \hline
 \textcolor{white}{\textbf{domain}} & \htmlref{\texttt{fgo:BuildingBlock}}{subs:BuildingBlock} \\ \hline
 \textcolor{white}{\textbf{range}} & \texttt{foaf:Image} \\ \hline
 \end{tabular}
-\subsubsection*{Property: \texttt{fgo:hasIdActionTo}}
-\label{subs:hasIdActionTo}
-\begin{tabular}{| >{\columncolor{fast@lightgrey}}p{2.5cm}|p{12cm}|}
-\hline
-\textcolor{white}{\textbf{label}} & has id action to \\ \hline
-\textcolor{white}{\textbf{description}} & action id of the `to' point of the pipe or trigger. \\ \hline
-\textcolor{white}{\textbf{type}} & \texttt{owl:DatatypeProperty} \\ \hline
-\textcolor{white}{\textbf{domain}} & \htmlref{\texttt{fgo:Pipe}}{subs:Pipe}, \htmlref{\texttt{fgo:Trigger}}{subs:Trigger} \\ \hline
-\textcolor{white}{\textbf{range}} & \texttt{xsd:string} \\ \hline
-\end{tabular}
-\subsubsection*{Property: \texttt{fgo:hasIdBBFrom}}
-\label{subs:hasIdBBFrom}
-\begin{tabular}{| >{\columncolor{fast@lightgrey}}p{2.5cm}|p{12cm}|}
-\hline
-\textcolor{white}{\textbf{label}} & has id building block from \\ \hline
-\textcolor{white}{\textbf{description}} & building block id of the `from' point of the pipe or trigger. \\ \hline
-\textcolor{white}{\textbf{type}} & \texttt{owl:DatatypeProperty} \\ \hline
-\textcolor{white}{\textbf{domain}} & \htmlref{\texttt{fgo:Pipe}}{subs:Pipe}, \htmlref{\texttt{fgo:Trigger}}{subs:Trigger} \\ \hline
-\textcolor{white}{\textbf{range}} & \texttt{xsd:string} \\ \hline
-\end{tabular}
-\subsubsection*{Property: \texttt{fgo:hasIdBBTo}}
-\label{subs:hasIdBBTo}
-\begin{tabular}{| >{\columncolor{fast@lightgrey}}p{2.5cm}|p{12cm}|}
-\hline
-\textcolor{white}{\textbf{label}} & has id building block to \\ \hline
-\textcolor{white}{\textbf{description}} & building block id of the `to' point of the pipe or trigger. \\ \hline
-\textcolor{white}{\textbf{type}} & \texttt{owl:DatatypeProperty} \\ \hline
-\textcolor{white}{\textbf{domain}} & \htmlref{\texttt{fgo:Pipe}}{subs:Pipe}, \htmlref{\texttt{fgo:Trigger}}{subs:Trigger} \\ \hline
-\textcolor{white}{\textbf{range}} & \texttt{xsd:string} \\ \hline
-\end{tabular}
-\subsubsection*{Property: \texttt{fgo:hasIdConditionFrom}}
-\label{subs:hasIdConditionFrom}
-\begin{tabular}{| >{\columncolor{fast@lightgrey}}p{2.5cm}|p{12cm}|}
-\hline
-\textcolor{white}{\textbf{label}} & has id condition from \\ \hline
-\textcolor{white}{\textbf{description}} & condition id of the `from' point of the pipe. \\ \hline
-\textcolor{white}{\textbf{type}} & \texttt{owl:DatatypeProperty} \\ \hline
-\textcolor{white}{\textbf{domain}} & \htmlref{\texttt{fgo:Pipe}}{subs:Pipe} \\ \hline
-\textcolor{white}{\textbf{range}} & \texttt{xsd:string} \\ \hline
-\end{tabular}
-\subsubsection*{Property: \texttt{fgo:hasIdConditionTo}}
-\label{subs:hasIdConditionTo}
-\begin{tabular}{| >{\columncolor{fast@lightgrey}}p{2.5cm}|p{12cm}|}
-\hline
-\textcolor{white}{\textbf{label}} & has id condition to \\ \hline
-\textcolor{white}{\textbf{description}} & condition id of the `to' point of the pipe. \\ \hline
-\textcolor{white}{\textbf{type}} & \texttt{owl:DatatypeProperty} \\ \hline
-\textcolor{white}{\textbf{domain}} & \htmlref{\texttt{fgo:Pipe}}{subs:Pipe} \\ \hline
-\textcolor{white}{\textbf{range}} & \texttt{xsd:string} \\ \hline
-\end{tabular}
 \subsubsection*{Property: \texttt{fgo:hasLanguage}}
 \label{subs:hasLanguage}
 \begin{tabular}{| >{\columncolor{fast@lightgrey}}p{2.5cm}|p{12cm}|}
@@ -142,16 +102,6 @@ a screen component. \\ \hline
 \textcolor{white}{\textbf{domain}} & \htmlref{\texttt{fgo:WithCode}}{subs:WithCode} \\ \hline
 \textcolor{white}{\textbf{range}} & \htmlref{\texttt{fgo:Library}}{subs:Library} \\ \hline
 \end{tabular}
-\subsubsection*{Property: \texttt{fgo:hasNameFrom}}
-\label{subs:hasNameFrom}
-\begin{tabular}{| >{\columncolor{fast@lightgrey}}p{2.5cm}|p{12cm}|}
-\hline
-\textcolor{white}{\textbf{label}} & has name from \\ \hline
-\textcolor{white}{\textbf{description}} & name of the trigger. \\ \hline
-\textcolor{white}{\textbf{type}} & \texttt{owl:DatatypeProperty} \\ \hline
-\textcolor{white}{\textbf{domain}} & \htmlref{\texttt{fgo:Trigger}}{subs:Trigger} \\ \hline
-\textcolor{white}{\textbf{range}} & \texttt{xsd:string} \\ \hline
-\end{tabular}
 \subsubsection*{Property: \texttt{fgo:hasOperator}}
 \label{subs:hasOperator}
 \begin{tabular}{| >{\columncolor{fast@lightgrey}}p{2.5cm}|p{12cm}|}
@@ -169,7 +119,7 @@ a screen component. \\ \hline
 \textcolor{white}{\textbf{label}} & has pattern \\ \hline
 \textcolor{white}{\textbf{description}} & This property links the abstract representation of a fact (i.e., an RDF triple) in FAST to a graph resource containing the actual triple. \\ \hline
 \textcolor{white}{\textbf{type}} & \texttt{owl:ObjectProperty} \\ \hline
-\textcolor{white}{\textbf{domain}} & \htmlref{\texttt{fgo:Fact}}{subs:Fact} \\ \hline
+\textcolor{white}{\textbf{domain}} & \htmlref{\texttt{fgo:Condition}}{subs:Condition} \\ \hline
 \textcolor{white}{\textbf{range}} & \texttt{rdfs:Resource} \\ \hline
 \end{tabular}
 \subsubsection*{Property: \texttt{fgo:hasPatternString}}
@@ -180,7 +130,7 @@ a screen component. \\ \hline
 \textcolor{white}{\textbf{description}} & This property links to the textual representation of a fact (i.e., an RDF triple), e.g., in N3. \\ \hline
 \textcolor{white}{\textbf{type}} & \texttt{owl:DatatypeProperty} \\ \hline
 \textcolor{white}{\textbf{domain}} & \htmlref{\texttt{fgo:Fact}}{subs:Fact} \\ \hline
-\textcolor{white}{\textbf{range}} & \texttt{xsd:string} \\ \hline
+\textcolor{white}{\textbf{range}} & \texttt{xsd:Condition} \\ \hline
 \end{tabular}
 \subsubsection*{Property: \texttt{fgo:hasPostCondition}}
 \label{subs:hasPostCondition}
@@ -247,17 +197,6 @@ aid users in deciding which screen or screenflow to choose out of many. \\ \hlin
 \textcolor{white}{\textbf{domain}} & \htmlref{\texttt{fgo:ScreenComponent}}{subs:ScreenComponent} \\ \hline
 \textcolor{white}{\textbf{range}} & \htmlref{\texttt{fgo:Trigger}}{subs:Trigger} \\ \hline
 \end{tabular}
-\subsubsection*{Property: \texttt{fgo:hasUse}}
-\label{subs:hasUse}
-\begin{tabular}{| >{\columncolor{fast@lightgrey}}p{2.5cm}|p{12cm}|}
-\hline
-\textcolor{white}{\textbf{label}} & has use string \\ \hline
-\textcolor{white}{\textbf{description}} & This property indicates concepts used within a building block, without being a 
-pre/postcondition. \\ \hline
-\textcolor{white}{\textbf{type}} & \texttt{owl:ObjectProperty} \\ \hline
-\textcolor{white}{\textbf{domain}} & \htmlref{\texttt{fgo:Action}}{subs:Action} \\ \hline
-\textcolor{white}{\textbf{range}} & \texttt{rdfs:Resource} \\ \hline
-\end{tabular}
 \subsubsection*{Property: \texttt{fgo:isPositive}}
 \label{subs:isPositive}
 \begin{tabular}{| >{\columncolor{fast@lightgrey}}p{2.5cm}|p{12cm}|}
@@ -267,6 +206,27 @@ pre/postcondition. \\ \hline
 or both of them. This property will define when they have to be taken into account by the
 inference engine or reasoner. \\ \hline
 \textcolor{white}{\textbf{type}} & \texttt{owl:DatatypeProperty} \\ \hline
-\textcolor{white}{\textbf{domain}} & \htmlref{\texttt{fgo:Fact}}{subs:Fact} \\ \hline
+\textcolor{white}{\textbf{domain}} & \htmlref{\texttt{fgo:Condition}}{subs:Condition} \\ \hline
 \textcolor{white}{\textbf{range}} & \texttt{xsd:boolean} \\ \hline
+\end{tabular}
+\subsubsection*{Property: \texttt{fgo:to}}
+\label{subs:to}
+\begin{tabular}{| >{\columncolor{fast@lightgrey}}p{2.5cm}|p{12cm}|}
+\hline
+\textcolor{white}{\textbf{label}} & to \\ \hline
+\textcolor{white}{\textbf{description}} & This property defines the end point of a pipe within a screen. \\ \hline
+\textcolor{white}{\textbf{type}} & \texttt{owl:ObjectProperty} \\ \hline
+\textcolor{white}{\textbf{domain}} & \htmlref{\texttt{fgo:Pipe}}{subs:Pipe} \\ \hline
+\textcolor{white}{\textbf{range}} & \htmlref{\texttt{fgo:Condition}}{subs:Condition} \\ \hline
+\end{tabular}
+\subsubsection*{Property: \texttt{fgo:uses}}
+\label{subs:uses}
+\begin{tabular}{| >{\columncolor{fast@lightgrey}}p{2.5cm}|p{12cm}|}
+\hline
+\textcolor{white}{\textbf{label}} & uses \\ \hline
+\textcolor{white}{\textbf{description}} & This property indicates concepts used within a building block, without being a 
+pre- or post-condition. \\ \hline
+\textcolor{white}{\textbf{type}} & \texttt{owl:ObjectProperty} \\ \hline
+\textcolor{white}{\textbf{domain}} & \htmlref{\texttt{fgo:BuildingBlock}}{subs:BuildingBlock} \\ \hline
+\textcolor{white}{\textbf{range}} & \texttt{rdfs:Resource} \\ \hline
 \end{tabular}
