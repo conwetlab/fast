@@ -137,6 +137,7 @@ file_list = [
     "gvs/user/User.js",
 
     # Miscelaneous utilities -->
+    "gvs/utils/RecommendationManager.js",
     "gvs/utils/UIDGenerator.js",
     "gvs/utils/BrowserUtils.js",
     "gvs/utils/Utils.js",

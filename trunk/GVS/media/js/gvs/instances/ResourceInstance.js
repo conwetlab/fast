@@ -41,7 +41,7 @@ var ResourceInstance = Class.create(ComponentInstance,
     /**
      * Creates the terminal
      */
-    createTerminals: function(/** Function */ handler) {
+    createTerminals: function(/** Function */ handlers) {
         var options = {
             'direction':[0,1],
             'offsetPosition': {
@@ -61,6 +61,7 @@ var ResourceInstance = Class.create(ComponentInstance,
                   }       
                 var node = this._view.getConditionNode(pre.id);
                 var terminal = new Terminal(node, options, this, pre.id, action.name);
+                terminal.onWireHandler(handlers);
                 actionTerminals.set(pre.id, terminal);
             }.bind(this));
             this._terminals.set(action.name, actionTerminals);
@@ -83,7 +84,7 @@ var ResourceInstance = Class.create(ComponentInstance,
             }
             var node = this._view.getConditionNode(post.id);
             var terminal = new Terminal(node, options, this, post.id);
-            terminal.onWireHandler(handler);
+            terminal.onWireHandler(handlers);
             postconditionTerminals.set(post.id, terminal);
         }.bind(this));
         this._terminals.set("postconditions", postconditionTerminals);

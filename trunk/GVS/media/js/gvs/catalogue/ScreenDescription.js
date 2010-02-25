@@ -206,15 +206,24 @@ var ScreenDescription = Class.create(BuildingBlockDescription,
     },
 
    /**
-    * Finds an instance  by its id
+    * Finds an instance by its id
     * @private
     * @type ComponentInstance
     */
     getInstance: function(/** String */ id) {
-        return this._buildingBlocks.values().detect(function(instance) {
-                    return instance.buildingblock.getId() == id;
-        }).buildingblock;
+        return this._buildingBlocks.get(id).buildingblock;
     },
+
+    /**
+     * Finds an instance by its uri
+     * @private
+     * @type ComponentInstance
+     */
+     getInstanceByUri: function(/** String */ uri) {
+         return this._buildingBlocks.values().detect(function(instance) {
+                     return instance.buildingblock.getUri() == uri;
+         }).buildingblock;
+     },
 
     /**
      * Returns true if an element with the parameter uri is in the screen

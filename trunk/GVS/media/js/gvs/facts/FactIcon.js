@@ -28,8 +28,19 @@ var FactIcon = Class.create( /** @lends FactIcon.prototype */ {
          */
         this._node = new Element ("div", {
                 "class": this._size + "_fact fact",
-                'title': this._fact.getDescription()}
-            ).update(this._fact.getShortcut());
+                'title': this._fact.getDescription()
+                });
+        
+        var contentLayer = new Element("div", {
+    	        "class": "contentLayer"
+                });
+        this._node.appendChild(contentLayer);
+        contentLayer.update(this._fact.getShortcut());
+
+        var recommendationLayer = new Element("div", {
+    	    "class": "recommendationLayer"
+            });
+        this._node.appendChild(recommendationLayer);
     },
 
     

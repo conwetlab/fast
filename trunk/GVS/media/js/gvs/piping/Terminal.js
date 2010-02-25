@@ -157,10 +157,11 @@ Object.extend(Terminal.prototype, /** @lends Terminal.prototype */ {
     /**
      * Adds a handler listening for the connection or deconnection of wires
      */
-    onWireHandler: function(/** Function */ handler) {
-        var context = {
-            'handler': handler
-        }
+    onWireHandler: function(/** Hash */ handlers) {
+    	var context = {};
+    	context = Object.extend(context, handlers);
+    	context['refTerminal'] = this;
+
         this.eventAddWire.subscribe(this._wireAddHandler.bind(context));
         this.eventRemoveWire.subscribe(this._wireRemoveHandler.bind(context));    
     },
@@ -197,7 +198,16 @@ Object.extend(Terminal.prototype, /** @lends Terminal.prototype */ {
      * @private
      */
     _wireAddHandler: function(/** Event */ event, /** Array */ params) {
-        this.handler(event, params, true);    
+    	var wire = params[0];
+    	if (wire.terminal1.parentEl && wire.terminal2.parentEl) {
+    		if (wire.terminal1 == this.refTerminal) {
+    			this.onPipeCreation(wire);
+    		}
+    	} else if (wire.terminal1 == this.refTerminal) {
+    		this.onPipeCreationStart(wire, wire.terminal1);
+    	} else if (wire.terminal2 == this.refTerminal) {
+    		this.onPipeCreationStart(wire, wire.terminal2);
+    	}
     },
 
 
@@ -206,8 +216,13 @@ Object.extend(Terminal.prototype, /** @lends Terminal.prototype */ {
      * @private
      */
     _wireRemoveHandler: function(/** Event */ event, /** Array */ params) {
-        if (!this._destroyed) {
-            this.handler(event, params, false);
-        }
+    	var wire = params[0];
+    	if (wire.terminal1.parentEl && wire.terminal2.parentEl) {
+    		if (wire.terminal1 == this.refTerminal) {
+    			this.onPipeDeletion(wire);
+    		}
+    	} else if (wire.terminal1 == this.refTerminal || wire.terminal2 == this.refTerminal) {
+    		this.onPipeCreationCancel(wire);
+    	}
     }
 });

@@ -525,10 +525,10 @@ var PaletteDocument = Class.create(AbstractDocument, /** @lends PaletteDocument.
     _deleteInstance: function(instance) {
         var node = instance.getView().getNode();
         node.parentNode.removeChild(node);
-        this._refreshReachability();
         this._setSelectedElement();
         instance.destroy(true);
         this._setDirty(true);
+        this._refreshReachability();
     },
 
     _addToArea:function(/** Area */ area, /** ComponentInstance */ instance,

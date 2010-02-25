@@ -42,7 +42,7 @@ var OperatorInstance = Class.create(ComponentInstance,
     /**
      * Creates the terminal
      */
-    createTerminals: function(/** Function */ handler) {
+    createTerminals: function(/** Hash */ handlers) {
         var options = {
             'direction':[0,1],
             'wireConfig': {
@@ -55,13 +55,14 @@ var OperatorInstance = Class.create(ComponentInstance,
                 options.ddConfig = {
                     'type': 'input',
                     'allowedTypes': ['output']
-                }
+                };
                 options.offsetPosition =  {
                     'top': 6,
                     'left': 0
-                }     
+                };
                 var node = this._view.getConditionNode(pre.id);
                 var terminal = new Terminal(node, options, this, pre.id, action.name);
+                terminal.onWireHandler(handlers);
                 actionTerminals.set(pre.id, terminal);
             }.bind(this));
             this._terminals.set(action.name, actionTerminals);
@@ -81,14 +82,14 @@ var OperatorInstance = Class.create(ComponentInstance,
                 options.ddConfig = {
                      'type': 'output',
                      'allowedTypes': ['input']
-                }
+                };
                 options.offsetPosition = {
                     'top': -10,
                     'left': 2
-                }
+                };
                 var node = this._view.getConditionNode(post.id);
                 var terminal = new Terminal(node, options, this, post.id);
-                terminal.onWireHandler(handler);
+                terminal.onWireHandler(handlers);
                 postconditionTerminals.set(post.id, terminal);
             }.bind(this));
             this._terminals.set("postconditions", postconditionTerminals);
