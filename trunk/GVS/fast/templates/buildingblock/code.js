@@ -1,7 +1,7 @@
 var {{name}} = Class.create(BuildingBlock,{
     /** @constructs */
-    initialize: function($super, screenId, buildingBlockId){
-		$super(screenId, buildingBlockId);
+    initialize: function($super, screenId, buildingBlockId, parameter){
+		$super(screenId, buildingBlockId, parameter);
     },
     
     manageData: function(triggers, addedFacts, deletedFacts){

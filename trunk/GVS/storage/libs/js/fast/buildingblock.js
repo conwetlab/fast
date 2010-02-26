@@ -1,7 +1,8 @@
 var BuildingBlock = Class.create({
-    initialize: function(screenId, buildingBlockId){
+    initialize: function(screenId, buildingBlockId, parameter){
 		this.screenId = screenId;
 		this.buildingBlockId = buildingBlockId;
+		this.parameter = parameter;
 		ScreenEngineFactory.getInstance(screenId).addBuildingBlock(this.buildingBlockId, this);
     },
     

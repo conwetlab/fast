@@ -43,7 +43,7 @@ FastAPI.Request = Class.create(FastBaseAPI.Request,{
      *      url to be requested
      * @param options
      *      - method: 'get' || 'post'
-     *      - content: 'xml' || 'text'
+     *      - content: 'xml' || 'text' || 'json'
      *      - context: context of the invoking object
      *      - parameters: either as a URL-encoded string or as any Hash-compatible object.
      *      - requestHeaders: a javascript object with properties representing headers.
@@ -64,6 +64,11 @@ FastAPI.Request = Class.create(FastBaseAPI.Request,{
         
         params.onSuccess = onSuccess;
         
+        if (params.content == 'json'){
+        	params['evalJSON'] = true;
+        	params['sanitizeJSON'] = true;
+        }
+        
         EzWebAPI.send(this.url, params.context, params);
 
         // This function handles a success in the asynchronous call
@@ -75,10 +80,49 @@ FastAPI.Request = Class.create(FastBaseAPI.Request,{
                 case 'text':
                     (_onSuccess || Prototype.emptyFunction)(transport.responseText);
                     break;
+                case 'json':
+                	var json = transport.responseJSON;
+                	if (!json){
+                		json = transport.responseText.evalJSON(true);
+                	}
+                    (_onSuccess || Prototype.emptyFunction)(json);
+                    break;
                 default:
                 	(_onSuccess || Prototype.emptyFunction)(transport);
                 	break;
             }
         }
+    }
+});
+
+/**
+ * Implementation of FastBaseAPI.Utils for EzWeb.
+ * @constructs
+ * @extends FastBaseAPI.Utils
+ */
+FastAPI.Utils = Class.create(FastBaseAPI.Utils,{
+    initialize: function($super) {
+    	$super();
+	},
+
+	/**
+     * Returns a JSON object.
+     * @param obj
+     *      represents the name of the variable
+     * @type JSON object
+     */
+    toJSONString: function (obj) {
+        return Object.toJSON(obj);
+    },
+
+    /**
+     * Returns a JSON string.
+     * @param string
+     *      represents the name of the variable
+     * @type string
+     * 		
+     */
+    toJSONObject: function (string) {
+    	return string.evalJSON(true);
     }
 });

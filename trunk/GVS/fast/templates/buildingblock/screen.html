@@ -17,7 +17,7 @@
 	var _bb{{id}} = [
 {% for element in definition.buildingblocks %}
 		{
-			object: new BB{{element.buildingblockId}}("{{id}}", "{{element.id}}"),
+			object: new BB{{element.buildingblockId}}("{{id}}", "{{element.id}}", {% if element.parameter %}{{element.parameter|safe}}{% else %}null{% endif %}),
     		name:"{{element.id}}",
     		scope: ScreenEngineFactory.getInstance("{{id}}").getBuildingBlock("{{element.id}}"),
 	        actions: [

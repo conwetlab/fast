@@ -74,3 +74,19 @@ FastBaseAPI.Request = Class.create({
               'FastAPI.Request :: request';
     }
 });
+
+
+FastBaseAPI.Utils = Class.create({
+    initialize: function() {
+    },
+
+    toJSONString: function (obj) {
+        throw 'Abstract Method invocation. ' + 
+              'FastAPI.Utils :: toJSONString';
+    },
+
+    toJSONObject: function (string) {
+        throw 'Abstract Method invocation. ' + 
+              'FastAPI.Utils :: toJSONObject';
+    }
+});

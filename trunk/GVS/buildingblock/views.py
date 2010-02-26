@@ -17,6 +17,7 @@ from buildingblock.models import BuildingBlock, Screenflow, Screen, Form, Operat
 from utils import *
 from datetime import datetime
 
+
 class BuildingBlockCollection(resource.Resource):
     def read(self, request, bbtype):
         try:
@@ -524,6 +525,7 @@ class Sharing(resource.Resource):
                 bbdefinition['type'] = bb.type
                 bbdefinition['libraries'] = bbdata.get('libraries')
                 bbdefinition['actions'] = bbdata.get('actions')
+                bbdefinition['parameter'] = simplejson.dumps(bbdefinition.get('parameter'))
                 bbc = get_object_or_404(BuildingBlockCode, buildingBlock=bb)
                 if bb.type == 'form':
                     context = Context({'buildingblockId': 'BB' + str(bb.id), 'screenId': str(buildingblock.id), 'buildingblockInstance': bbdefinition['id']})
