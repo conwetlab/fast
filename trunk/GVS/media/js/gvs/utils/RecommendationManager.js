@@ -116,6 +116,7 @@ var RecommendationManager = Class.create(/** @lends RecommendationManager.protot
     	this._clear();
     	this._stopAnimation();
     	this._recommendations = new Hash();
+    	this._activeRecommendations = new Hash();
     	this._currentRecommendation = 1;
     	this._dirty = false;
     },
