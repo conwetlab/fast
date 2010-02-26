@@ -28,9 +28,10 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \setlength{\textwidth}{15cm}
 \setlength{\topskip}{1cm}
-\setlength{\textheight}{24cm}
+\setlength{\textheight}{23.5cm}
 \setlength{\oddsidemargin}{0.44cm}
 \setlength{\topmargin}{-1.0cm}
+\setlength\headsep{1cm}
 \reversemarginpar
 \setlength{\marginparwidth}{4cm}
 \renewcommand{\arraystretch}{1.7}
