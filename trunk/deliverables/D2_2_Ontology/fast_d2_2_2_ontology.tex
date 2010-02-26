@@ -45,7 +45,7 @@
 \usepackage{listings}
 
 \lstdefinelanguage{turtle} 
-{morekeywords={@prefix, a}, 
+{morekeywords={@prefix, a, true, false}, 
 sensitive=false, 
 morecomment=[l]{\#}, 
 morestring=[b]",
@@ -233,7 +233,8 @@ morestring=[b]",
 \section*{Executive Summary}
 \doublespacing
 
-This deliverable defines the ontology and conceptual model for the semantic characterisation of complex gadgets in the FAST project. As such, it feeds directly into the various implementation efforts within the project. In the document, we present the ontology development methodology (Methontology) and design principles we have applied. Following Methontology, our design and development process results in a number of different living documents, which both function as a development tool, as well as documentation for the ontology itself. The major part of the deliverable is made up of these documents, resulting in the final \emph{implementation document} which formally defines the ontology in OWL DL semantics.
+This deliverable defines the abstract conceptual model and concrete ontology for the semantic characterisation of complex gadgets in the FAST project. As such, it feeds directly into the various implementation efforts within the project. 
+Throughout the document, we apply the \emph{Methontology} ontology development methodology. Our design and development process is therefore defined by a number of different living documents, which function both as a development tool, as well as documentation for the ontology itself. The major part of the deliverable is made up of these documents, resulting in the final \emph{implementation document} which formally defines the ontology in OWL DL semantics. Throughout the document, we provide extensive code examples and visual representations of the different aspects of both model and ontology.
 
 \newpage
 
@@ -275,7 +276,7 @@ This deliverable defines the ontology and conceptual model for the semantic char
 	\textcolor{white}{\textbf{Delivery data}} & {\textbf{Due date}} & {28/02/2010} & {\textbf{Submitted}} & {27/02/2010}\\ \hline
 	\textcolor{white}{\textbf{Status}} & \multicolumn{2}{l|}{} & \multicolumn{2}{l|}{final}\\ \hline
 	\textcolor{white}{\textbf{Dissemination Level}} & \multicolumn{4}{l|}{Public $\boxtimes$ / Consortium $\square$}\\ \hline
-	\textcolor{white}{\textbf{Short description of contents}} & \multicolumn{4}{p{10.85cm}|}{\deliverableNumber{} is the second iteration of the FAST Gadget ontology. The ontology provides a formal description of the conceptual model of FAST in general, and of the screen/screenflow architecture in particular. The document comprises a discussion of the ontology development methodology used, a number of intermediate representations which document the development process, and the final product in the form of an OWL ontology.}\\ \hline
+	\textcolor{white}{\textbf{Short description of contents}} & \multicolumn{4}{p{10.85cm}|}{\deliverableNumber{} is the second iteration of the FAST Gadget ontology. The ontology provides a formal description of the conceptual model of FAST in general, and of the screen/screenflow architecture in particular. The document a number of successive intermediate representations which document the development process, and the final product in the form of an OWL ontology. Numerous code examples and visual representations of the ontology terms are provided.}\\ \hline
 	\textcolor{white}{\textbf{Authors}} & \multicolumn{4}{p{10.85cm}|}{\authorOne, \authorTwo, \authorThree, \authorFour}\\
 %	{} & \multicolumn{4}{l|}{}\\ 
 %	{} & \multicolumn{4}{l|}{}\\ 
@@ -320,7 +321,7 @@ This deliverable defines the ontology and conceptual model for the semantic char
 \subsection{Goal and Scope} % (fold)
 \label{sub:goal_and_scope}
 
-As the corner stone of the theoretical work undertaken in the FAST project, the definition of a conceptual model and ontology for the characterisation of complex gadgets feeds directly into the project's three main development activities: the development environment for complex gadgets (GVS), the development of gadget components and the semantic catalogue which represents the backend of the architecture. For all these different aspects of FAST, the ontology developed and presented in this deliverable provides a structured definition of their common domain of discourse. The ontology formally defines the parts which a complex gadget is made of, how the parts interrelate, what kind of metadata is available for each part, how users of the system are represented, etc.
+As the corner stone of the theoretical work undertaken in the FAST project, the definition of a conceptual model and ontology for the characterisation of complex gadgets feeds directly into the project's three main development activities: the development environment for complex gadgets (GVS), the development of gadget components and the semantic catalogue which represents the backend of the architecture. For all these different aspects of FAST, the ontology developed and presented in this deliverable provides a structured definition of their common domain of discourse. The ontology formally defines the parts which a complex gadget is made of, how the parts interrelate, what kind of metadata is available for each part, how users of the system are represented, etc. It should be pointed out that the conceptual model and ontology are not meant to cover every conceivable aspect of the development of complex gadgets, not even every conceivable aspect of the FAST platform. Rather, the goal is the following: FAST is about the \emph{development of complex gadgets for end users}, and so the conceptual model and ontology provide the terminology and conceptual framework that is needed for specifically this task. In other words, while this document provides the theoretical underpinning for the implementation-oriented work in the project, the implementation-oriented work on the other hand defines the scope and requirements for the model.
 
 While following an ontology design methodology which is agnostic to particular data models or implementation languages (see Appendix A), we have chosen to represent the final ontology specification using the Resource Description Framework (RDF) and OWL semantics.
 
@@ -331,32 +332,40 @@ In FAST, we have adopted the term \emph{gadget} for the small, Web-based softwar
 \subsection{Structure of the Document} % (fold)
 \label{sub:structure_of_the_document}
 
-This deliverable is structured as follows: as part of the introduction, we will present the methodology we chose to adopt for the development of the FAST gadget ontology, by discussing  each of its proposed stages in detail. Following, we will conclude the introduction by elaborating more on some of the general design decisions we are following. After briefly addressing the topic of related work in Sect.~\ref{sec:related_work} --- which is mainly covered in a different deliverable from this work package, \cite{urmetzer2010fast_state_of_the_art} --- the structure of the remainder of this document follows directly from our adopted methodology: we will perform a domain analysis in Sect.~\ref{sec:domain_analysis}, covering the stages of specification, conceptualisation and integration of existing vocabularies. This is then followed by the implementation step in Sect.~\ref{sec:ontology}, which covers the ontology in its form at this moment of the project. Finishing the deliverable, we present our conclusions and outlook on years two and three of the project in Sect.~\ref{sec:conclusions}.
+This deliverable is structured as follows: 
+we will start off by outlining the main changes that this document has undergone since its previous version, so as to enable the reader to quickly identify new material.
+After briefly addressing the topic of related work in Sect.~\ref{sec:related_work} --- which is mainly covered in a different deliverable from this work package, \cite{urmetzer2010fast_state_of_the_art} --- the structure of the following sections follows directly from our adopted ontology development methodology: we will perform a domain analysis in Sect.~\ref{sec:domain_analysis}, covering the stages of specification, conceptualisation and integration of existing vocabularies. This is then followed by the implementation step in Sect.~\ref{sec:ontology}, which covers the concrete ontology in its form at this moment of the project. 
+After a section discussing an evaluation of the FAST gadget ontology, the deliverable will be concluded with a summary of our work in Sect.~\ref{sec:conclusions}.\ref{sub:methontology_a_methodology_for_ontology_development}
+A number of appendices have been added to the document: App.~\ref{sec:methodology} presents the development methodology adopted by us, App.~\ref{sec:ontology_terms} provides documentation for the ontology in the form of a detailed list of terms, while App.~\ref{sec:ontology_code} contains the complete code of the ontology.
 
 % subsection structure_of_the_document (end)
 
 \subsection{Changes from Previous Version} % (fold)
 \label{sub:changes_from_previous_version}
 
-\todo{update this section, refer to change requests in last review}
-
 The following changes have been made with respect to the previous version of this deliverable, D2.2.1.~\cite{moeller2009fast_ontology}:
 
 \begin{itemize}
 	\item Sect.~\ref{sub:goal_and_scope} has been revised to better define the scope of this deliverable with respect to other deliverables.
 	\item The list of classes and properties has been moved to the appendix section at the back of the document (App.~\ref{sec:ontology_terms}), because it was felt that it would otherwise hinder the flow of the text.
-	\item In response to the M12 review, a UML overview of the ontology in App.~\ref{sec:ontology_overview} now complements the list of terms.
-	\item The section on our adopted development methodology (previously Sect.~1.3) has been moved to the end of the document (App.~\ref{sub:methontology_a_methodology_for_ontology_development}), but otherwise did not change.
-	\item An evaluation section has been added (Sect.~\ref{sec:evaluation}).
-	\item The section on design principles (previously Sect.~1.4, now Sect.~\ref{sub:general_design_decisions}) has been moved to the general evaluation section and extended to reflect research done by the authors within the past year.
-	\item In the integration section (Sect.~\ref{sub:integration}) of the ontology definition, the Common Tag vocabulary has been added. It is briefly introduced, and the integrated terms are specified.
-	\item The namespace abbreviation for the FAST gadget ontology changed from \texttt{fast} to \texttt{fgo}, in order to distinguish from other FAST ontologies which may be added in the future.
+	\item In response to the M12 review, numerous graphical representations both of the underlying conceptual model as well as the concrete gadget ontology have been added to the document, using UML notation. As an example, Sect.~\ref{sub:ontology_overview} now provides a complete overview of the ontology with all classes and properties.
+	\item Also in response to the previous review, conceptual model and ontology have been extended both in breadth and depth.
+	\item As an addition to the glossary of terms in the conceptualisation phase, a section discussing and illustrating the relations between the different classes has been provided.
+	\item In order to reflect the extension of the scope of FAST towards screen creation (as opposed to screen flow creation), the conceptual model and ontology have been extended accordingly.
+	\item A mechanism for RDF templating has been devised and is discussed in Sect.~\ref{sub:classes_instances_and_templates}.
+	\item As the result of the ongoing dialogue between ontology developers and application implementers, many classes and properties have been added, changed or removed.
+	\item The section on our adopted development methodology (previously Sect.~1.3) has been moved to the end of the document (App.~\ref{sub:methontology_a_methodology_for_ontology_development}), but otherwise did not change significantly.
+	\item An evaluation section has been added (Sect.~\ref{sec:evaluation}), based on research done by the authors within the past year.
+	\item The section on design principles (previously Sect.~1.4, now Sect.~\ref{sub:general_design_decisions}) has been moved to the general evaluation section.
+	\item In the integration section (Sect.~\ref{sub:integration}) of the ontology definition, the Common Tag vocabulary for complex tagging has been added. It is briefly introduced, and the integrated terms are specified.
+	\item On a technical note, the namespace abbreviation for the FAST gadget ontology changed from \texttt{fast} to \texttt{fgo}, in order to distinguish from other FAST ontologies which may be added in the future.
 \end{itemize}
 
 % subsection changes_from_previous_version (end)
 
 % section introduction (end)
 
+\clearpage
 \section{Related Work} % (fold)
 \label{sec:related_work}
 
@@ -365,7 +374,8 @@ We are not aware of any other project which has already developed or planned to 
 All of these references are discussed in \cite{urmetzer2010fast_state_of_the_art}, and we refer the reader to this deliverable for more detail.
 % section related_work (end)
 
-\section{Domain Analysis} % (fold)
+\clearpage
+\section{Domain Analysis and Conceptualisation} % (fold)
 \label{sec:domain_analysis}
 
 In this section, we will apply a number of the phases proposed in Methontology (see Sect. \ref{sub:methontology_a_methodology_for_ontology_development}) to the process of developing the FAST gadget ontology. The names of the following sections reflect the names of the phases in Methontology.
@@ -400,7 +410,7 @@ In summary, the ontology is supposed to facilitate support for the user in the d
 
 % subsection specification (end)
 
-\subsection{Conceptualisation} % (fold)
+\subsection{Conceptual Model} % (fold)
 \label{sub:conceptualisation}
 
 In the conceptualisation phase, we first produce a \emph{glossary of terms} which lists all classes and properties of our ontology. The glossary of terms is seeded from the specification document (see previous section), but groups the terms according to relatedness. Also, the evolution of the ontology is mainly reflected in this document, as new terms being introduced based on the employment and ongoing evaluation of the ontology are added here, whereas the specification document remains in its original state. After introducing the general terms, the conceptual model is then refined by relating the different terms with regards to type hierarchy, composition and aggregation.
@@ -410,6 +420,7 @@ In the conceptualisation phase, we first produce a \emph{glossary of terms} whic
 
 ``Classes'' here should be read as ``types of things'' in general. I.e., if a term is listed as a \emph{class} here, this has no direct implications on the concrete implementation of the term. For example, while \emph{label} is a type of thing that is important in FAST, it will not necessarily be represented as an \texttt{owl:Class} in the implementation step, but could just as well be represented as a property. Table~\ref{tab:glossary_of_terms_classes} lists all classes considered in the conceptual model of FAST, loosely grouped according to their relevance for specific aspects of the platform.
 
+\clearpage
 \singlespacing
 \begin{small}
 \begin{longtable}{|p{4.25cm}|p{10cm}|}
@@ -515,7 +526,7 @@ All relevant properties of the FAST conceptual model are listed in Tab.~\ref{tab
 Regarding the layering from the actual gadget down to the embedded Web services, the central classes in the conceptual model of FAST can be grouped into three levels: the gadget and screen flow level at the top, the level of individual screens in the middle, and the level of Web services at the bottom. This layering is reflected in Fig.~\ref{fig:uml_composition}, which illustrates the central compositional relationships of the model. As the figure shows, a \emph{gadget} in FAST is mainly composed of a \emph{screen flow}, which it wraps. The \emph{screen flow} is composed of one or more \emph{screens}, which is turn comprises the three \emph{screen components} of the visual front-end (the \emph{form}), the back end service (the \emph{resource}) and the data \emph{operator}. Finally, \emph{forms} are assembled from \emph{form elements}, while \emph{resources} wrap \emph{backend services}.
 
 
-\begin{figure}[ht]
+\begin{figure}
   \begin{center}
     \includegraphics[scale=.66]{images/uml_composition.pdf}
     \caption{Important composition relationships within the FAST conceptual model}
@@ -525,7 +536,7 @@ Regarding the layering from the actual gadget down to the embedded Web services,
 
 Figure~\ref{fig:uml_screen_component} looks closer at the features of individual screens. These are forms, resources and operators, which are all specialisations of the general \emph{screen component} concept. Each such screen component may or may not have an action or trigger associated with them, which declaratively define their behaviour in terms of their own functionality or functionality they can trigger in other building blocks.
 
-\begin{figure}[ht]
+\begin{figure}
   \begin{center}
     \includegraphics[scale=.66]{images/uml_screen_component.pdf}
     \caption{Aggregation of screen components}
@@ -535,7 +546,7 @@ Figure~\ref{fig:uml_screen_component} looks closer at the features of individual
 
 Regarding their implementation, different kinds of building blocks in FAST can either be defined hard-coded as a piece of source code, or they can be defined declaratively in the terms of the FAST ontology (using pipes, operators, etc.). In the former case, a building block such as a screen would have been implemented and added to the FAST platform by an engineer, whereas in the latter case, ordinary users of the FAST platform would have assembled the building block using the tools available in the GVS\footnote{At this moment, only screens can be assembled in the GVS. Forms may or may not be editable in the GVS in the future. Other kinds of building blocks are not currently planned to be editable.}. This principle is reflected in Fig.~\ref{fig:uml_definition}, showing how certain kinds of building blocks aggregate either a \texttt{Definition} or \texttt{Code}, whereas other kinds of building blocks are always hard-coded. It should be noted that, in theory, there is no reason why not any kind of building block could be defined either way. However, the concrete set of building blocks which can be defined declaratively or in code is changing dynamically according to the current state and plans of the FAST project. The situation depicted in Fig.~\ref{fig:uml_definition} --- \texttt{Screen} and any kind of \texttt{Screen\_Component} can be defined in code, whereas only \texttt{Screen} and \texttt{Form} can be defined declaratively --- reflects the status at M24 of the project. 
 
-\begin{figure}[ht]
+\begin{figure}
   \begin{center}
     \includegraphics[scale=.66]{images/uml_definition.pdf}
     \caption{Building blocks have either code or are defined declaratively}
@@ -545,7 +556,7 @@ Regarding their implementation, different kinds of building blocks in FAST can e
 
 Figure~\ref{fig:uml_condition} illustrates how different building blocks relate to the concepts of pre- and post-conditions. While all building blocks can essentially have such conditions, only screens and screen flows directly aggregate both kinds of conditions. However, in the case of the three different kinds of screen components (form, resource and operator), the relation to a pre-condition is only established through their actions, which represent their basic functionality. For all building blocks, both pre- and post-conditions are entirely optional.
 
-\begin{figure}[ht]
+\begin{figure}
   \begin{center}
     \includegraphics[scale=.66]{images/uml_condition.pdf}
     \caption{Building blocks with pre- and post-conditions}
@@ -572,8 +583,6 @@ While it is possible to express DC in plain HTML, the more widely used language 
 
 In order to reconcile with the simplicity of the original, flat DC elements and the newer, more structured DC terms, DC also includes the so-called ``DumbDown'' principle, which basically says that structured values of DC terms should always carry a literal description as well, in order to cater for ``dumb'' agents processing the data. These literals should be expressed using properties such as \emph{rdfs:label} or \emph{rdf:value}.
 
-Because of the open nature of the RDF model and the open-world assumption usually applied for RDFS and OWL, it is possible to integrate DC with other ontologies such as FOAF. E.g., it is possible and good practice to make a statement saying that the \texttt{dcterms:creator} of a document is an instance of \texttt{foaf:Person}. By inference following from the DC terms specification, this person would then also be a \texttt{dcterms:Agent}. This scenario is illustrated in Fig.~\ref{fig:dcterms_example}. A similar, but slightly out-dated example is given in \url{http://dublincore.org/documents/dcq-rdf-xml/}.
-
 \begin{figure}
   \begin{center}
     \includegraphics[width=\linewidth]{images/dcterms_example.pdf}
@@ -582,9 +591,11 @@ Because of the open nature of the RDF model and the open-world assumption usuall
   \end{center}
 \end{figure}
 
+Because of the open nature of the RDF model and the open-world assumption usually applied for RDFS and OWL, it is possible to integrate DC with other ontologies such as FOAF. E.g., it is possible and good practice to make a statement saying that the \texttt{dcterms:creator} of a document is an instance of \texttt{foaf:Person}. By inference following from the DC terms specification, this person would then also be a \texttt{dcterms:Agent}. This scenario is illustrated in Fig.~\ref{fig:dcterms_example}. A similar, but slightly out-dated example is given in \url{http://dublincore.org/documents/dcq-rdf-xml/}.
 
 Looking at the requirements specification document, DC can be integrated into the FAST gadget ontology in many ways. A lot of the metadata needs for screens, screenflows and their components are identical to those of the media resources originally intended by DC. For this reason, many properties such as \texttt{title}, \texttt{creator}, \texttt{rights} or various \texttt{date} properties can be used directly (more details in the integration document). 
 % subsubsection dublin_core (end)
+
 \subsubsection{FOAF} % (fold)
 \label{ssub:foaf}
 
@@ -634,7 +645,7 @@ Apart from facilitating the disambiguation of tags, Common Tag also allows to ma
 	label=list:common_tag,
 	language=turtle
 }
-\begin{figure}[ht]
+\begin{figure}
 	\lstinputlisting{exampleCode/common_tag_example.ttl}
 \end{figure}
 \doublespacing
@@ -648,6 +659,7 @@ Within FAST, Common Tag is used to cover the tagging needs as specified in the o
 %
 This living document specifies how the terms from the glossary of terms are expressed using terms from the various ontologies presented in the previous sections.
 
+\clearpage
 \singlespacing
 \begin{small}
 \begin{longtable}{|p{3cm}|p{1.5cm}|p{3.5cm}|p{6.1cm}|}
@@ -689,6 +701,7 @@ This living document specifies how the terms from the glossary of terms are expr
 %
 %% section domain_analysis (end)
 %
+\clearpage
 \section{The FAST Gadget Ontology} % (fold)
 \label{sec:ontology}
 
@@ -723,7 +736,7 @@ In FAST, resources (gadgets, screenflows, screens and their components) exist in
 	\item \textbf{Runtime}: At the final level of instantiation, the screenflow has been packaged as a gadget, deployed to a gadget platform and is now being used by an end-user. At this level, all gadget components exist only in the form of Web standards compliant code (HTML, JavaScript, CSS). For performance reasons, the FAST catalogue transforms any metadata still necessary, as well as definitions for screen pre- and post-conditions, from their original RDF representations into the JavaScript Object Notation (JSON)\footnote{\url{http://www.json.org/}}. At this level, the resources that make up the gadget have moved out of the scope of the FAST platform and therefore out of the scope of this deliverable.
 \end{itemize}
 
-\begin{figure}[ht]
+\begin{figure}
   \begin{center}
     \includegraphics[width=\linewidth]{images/classes_templates_instances.pdf}
     \caption{Different levels of representation of FAST resources}
@@ -743,18 +756,18 @@ In practice, this procedure can be implemented using a SPARQL CONSTRUCT query, w
 
 \singlespacing
 \lstset{
-	caption={Templating example --- different levels of representation of a FAST screen (TriG)}, 
+	caption={Templating example --- different levels of representation of a FAST screen (code)}, 
 	label=list:templating,
 	language=turtle
 }
-\begin{figure}[ht]
+\begin{figure}
 	\lstinputlisting{exampleCode/templating_example.ttl}
 \end{figure}
 \doublespacing
 
 Figure \ref{fig:templating_example_graph} illustrates the same example graphically, using different colours to represent the two different graphs: the red graph $G_1$ in the background represents the original template resource, whereas the green graph $G_2$ in the front in represents the resource copy as it would be used in a concrete screen flow. \texttt{catalogue:LoginScreen} $\subset I_{template}$ has been changed to \texttt{catalogue:LoginScreen\_74382} $\subset I_{copy}$.
 
-\begin{figure}[ht]
+\begin{figure}
   \begin{center}
     \includegraphics[width=.75\linewidth]{images/templating_example.pdf}
     \caption{Templating example --- different levels of representation of a FAST screen (diagramme)}
@@ -777,7 +790,7 @@ In this section, we will present the use of some basic resource annotation prope
 	label=list:basic_annotation,
 	language=turtle
 }
-\begin{figure}[ht]
+\begin{figure}
 	\lstinputlisting{exampleCode/screen_example.ttl}
 \end{figure}
 \doublespacing
@@ -795,7 +808,7 @@ In modelling resources in FAST, the kind of users that are relevant are the user
 	label=list:user,
 	language=turtle
 }
-\begin{figure}[ht]
+\begin{figure}
 	\lstinputlisting{exampleCode/user_example_01.ttl}
 \end{figure}
 \doublespacing
@@ -808,7 +821,7 @@ Once a user has been defined in this way, they can for example be used to specif
 	label=list:creator,
 	language=turtle
 }
-\begin{figure}[ht]
+\begin{figure}
 	\lstinputlisting{exampleCode/user_example_02.ttl}
 \end{figure}
 \doublespacing
@@ -827,7 +840,7 @@ The facts which define the pre- and post-conditions of screens and screenflows i
 	label=ex:simple_precondition,
 	language=sparql
 }
-\begin{figure}[ht]
+\begin{figure}
 \begin{lstlisting}
 	?user a sioc:User .
 \end{lstlisting}
@@ -842,7 +855,7 @@ Post-conditions are expressed in a similar fashion. In the prototypical phase (i
 	label=ex:postcondition,
 	language=sparql
 }
-\begin{figure}[ht]
+\begin{figure}
 \begin{lstlisting}
 	?user a sioc:User ;
 	      foaf:accountName ?account_name .
@@ -861,7 +874,7 @@ Once added to the canvas in the GVS (``instantiated at design time''), each vari
 	label=ex:postcondition_canvas,
 	language=sparql
 }
-\begin{figure}[ht]
+\begin{figure}
 \begin{lstlisting}
 	_:b0 a sioc:User ;
 	      foaf:accountName _:b1 .
@@ -880,7 +893,7 @@ Finally, during runtime, the post-condition's variables would be replaced with t
 	label=ex:postcondition_runtime,
 	language=sparql
 }
-\begin{figure}[ht]
+\begin{figure}
 \begin{lstlisting}
 	<http://fast.org/gvs/knud> a sioc:User ;
 	      foaf:accountName "dunk" .
@@ -904,7 +917,7 @@ Each such condition will be linked to a screen or screenflow using either the \t
 	label=list:post_condition,
 	language=turtle
 }
-\begin{figure}[ht]
+\begin{figure}
 	\lstinputlisting{exampleCode/post_condition_example.ttl}
 \end{figure}
 \doublespacing
@@ -921,8 +934,8 @@ Since SPARQL has no direct support for negation, and since there is a need to al
 			\toprule
 			& \textbf{pre-condition} & \textbf{post-condition} \\ 
 			\midrule
-			\emph{isPositive ``YES''} & condition must be fulfilled & condition instantiated\\ 
-			\emph{isPositive ``NO''} & $\neg$condition must be fulfilled & instantiated condition removed \\ 
+			\emph{isPositive: true} & condition must be fulfilled & condition instantiated\\ 
+			\emph{isPositive: false} & $\neg$condition must be fulfilled & instantiated condition removed \\ 
 			\bottomrule
 		\end{tabular}
 	\end{center}
@@ -973,7 +986,7 @@ Since SPARQL has no direct support for negation, and since there is a need to al
 
 In year two of the FAST project, work has been started to extend the flexibility of the GVS to also include the creation of new screens from building blocks, as opposed to only assembling pre-made screens into screen flows. The gadget ontology supports this by modelling screen internals such as \emph{forms}, \emph{service resources} and \emph{operators}. Each of those building blocks can have their own pre- and post-conditions (either directly or through their \emph{actions}). However, while conditions on the screen/screen flow level are matched automatically and the flow of data is establish dynamically, on the screen-internal level this is defined explicitly through \emph{pipes}. Pipes are themselves components of a particular screen and connect matching post- and pre-conditions of other components in the same screen. 
 
-\begin{figure}[ht]
+\begin{figure}
   \begin{center}
     \includegraphics[width=\linewidth]{images/declarativeDefinitionExample.pdf}
     \caption{Explicit piping within a screen from a post- to a pre-condition (diagramme)}
@@ -989,7 +1002,7 @@ The concept of piping on this level of the FAST platform is illustrated graphica
 	label=list:piping,
 	language=turtle
 }
-\begin{figure}[ht]
+\begin{figure}
 	\lstinputlisting{exampleCode/piping_example.ttl}
 \end{figure}
 \doublespacing
@@ -1015,7 +1028,7 @@ There are three main entry points at which external ontologies come into play:
 	label=list:domain_context,
 	language=turtle
 }
-\begin{figure}[ht]
+\begin{figure}
 	\lstinputlisting{exampleCode/domain_context_example.ttl}
 \end{figure}
 \doublespacing
@@ -1026,6 +1039,7 @@ It should be added that for any given screenflow, the concrete definition of bot
 
 % section the_fast_gadget_ontology (end)
 
+\clearpage
 \section{Evaluation} % (fold)
 \label{sec:evaluation}
 
@@ -1063,7 +1077,7 @@ Rather than reinventing the wheel in the various terms that have been defined in
 
 The concrete interpretation of this criterion depends to a large degree on the intended use case and user community of the ontology. For a large-scale undertaking spanning many domains, and where reasoning is in the centre of attention --- CyC\footnote{\url{http://cyc.com/cyc/opencyc}} e.g. represents this type of ontology  --- a certain amount of complexity is necessary. However, in order to appeal to adopters who are familiar with formal knowledge representation, simplicity can be an important factor. Good examples of such ontologies are FOAF and SIOC, which would arguably not have had such an impact in the wider Web community if they tried to model their respective domains in a much more complex way, making use of the full range of expressivity offered by e.g. the RDFS and OWL ontology languages. Indirect support for this argument is provided by \cite{wang2006owl_survey}, who show that most ontologies found on the Web are on the lower end of the expressivity spectrum, indicating that practitioners either don't need or don't understand the full range of possible expressiveness.
 
-At the moment, the use case for the FAST gadget ontology is the tool-internal representation of gadgets and their components, which means that simplicity for users in the wider community is only of secondary importance. However, the ontology is still kept relatively basic, both in terms of the number of terms (currently 19 classes and 22 properties\todo{Recount!}), and in the complexity of the class definitions themselves, which are mostly restricted to a straightforward class subsumption hierarchy, with the exception of the sparse use of the boolean class expression \texttt{owl:unionOf}.
+At the moment, the use case for the FAST gadget ontology is the tool-internal representation of gadgets and their components, which means that simplicity for users in the wider community is only of secondary importance. However, the ontology is still kept relatively basic, both in terms of the number of terms (currently 18 classes and 22 properties), and in the complexity of the class definitions themselves, which are mostly restricted to a straightforward class subsumption hierarchy, with the exception of the sparse use of the boolean class expression \texttt{owl:unionOf}.
 
 As another measure to avoid over-engineering, it was ensured that the logical complexity of the ontology falls within the DL fragment\footnote{We use the Pellet reasoner: \url{http://www.mindswap.org/2003/pellet/demo} to measure complexity.} of OWL. While this does not necessarily ensure that an ontology is easy to comprehend by users, it can help to achieve this goal.
 
@@ -1101,25 +1115,28 @@ A further guideline to ease and encourage adoption of an ontology is the provisi
 \subsubsection{Modularisation} % (fold)
 \label{ssub:modularisation}
 
-Apart from the guidelines proposed by \cite{moeller2009ontology_soft_skills}, another basic design principle which helps to improve accessibility and understanding of the ontology is modularisation. While all terms reside in the same namespace, classes and properties are nevertheless be grouped according to the specific sub-tasks which they belong to. E.g., terms are grouped into defining \emph{resources}, \emph{pre- and post-conditions}, \emph{general annotation} or \emph{users and user profiles}. \todo{Implement this in the online documentation through VocDoc.}
+Apart from the guidelines proposed by \cite{moeller2009ontology_soft_skills}, another basic design principle which helps to improve accessibility and understanding of the ontology is modularisation. While all terms reside in the same namespace, classes and properties are nevertheless be grouped according to the specific sub-tasks which they belong to. E.g., terms are grouped into defining \emph{resources}, \emph{pre- and post-conditions}, \emph{general annotation} or \emph{users and user profiles}. 
+% \todo{Implement this in the online documentation through VocDoc.}
 % subsubsection modularisation (end)
 
 % subsection general_design_decisions (end)
 
 % section evaluation (end)
 
+\clearpage
 \section{Conclusions and Outlook} % (fold)
 \label{sec:conclusions}
 
 The current version of deliverable 2.2 provides the foundation for enabling the semantic definition of gadgets within the context of the FAST platform. We have specified what the individual components of a gadget are, and how they interrelate. In developing our ontology, we have followed Methontology, a well-known methodology for ontology development, which we have extended with additional UML diagrams to define the conceptual model of the FAST platform. During the course of this process, a number of living documents --- the requirements specification document, the glossary of terms and conceptual model, the integration document and finally the implementation document --- were produced. 
 Looking at the integration document, it becomes apparent that we integrate terms for those parts of the conceptual model which are not unique for FAST, i.e., users and user profiles, basic annotation needs or the tagging of building blocks. Aspects of the model which are unique to FAST, however, had been modelled from scratch.
-The various documents eventually leading to the FAST gadget ontology serve as tools for development and as documentation at the same time, and are being extended and updated throughout the duration of the project and beyond. The driving force behind these changes is the testing and evaluating of the ontology within the FAST project, and possibly in other contexts as well.
 
-A solution for representing pre- and post-conditions of screens and screen flows --- a central aspect of FAST technology --- has been presented, as it has been implemented and tested both within the FAST catalogue and the FAST GVS.
+The various documents eventually leading to the FAST gadget ontology serve as tools for development and as documentation at the same time, and are being extended and updated throughout the duration of the project and beyond. The driving force behind these changes is the dialogue between ontology and application developers, as well as the testing and evaluating of the ontology within the FAST project.
+
+Apart from the conceptual model and ontology as such, we have introduced the notion of RDF graph templates as a means to overcome the strict separation of classes and instances in OWL. Within FAST, we use these templates to distinguish between prototypical building blocks and instances of such prototypes within a concrete screen flow. Also, a solution for representing pre- and post-conditions of building blocks such as screens flows, screens and screen components --- a central contribution of FAST technology --- has been presented, implemented and tested both within the FAST catalogue and the FAST GVS.
 
 The FAST gadget ontology has initially been developed using the original OWL ontology language (or OWL 1). Since the start of the project, OWL 2\footnote{\url{http://www.w3.org/TR/owl-overview/}} has been released and is now a W3C recommendation. In order to avoid any potential migration issues, we have so far refrained from adopting OWL 2, but may do so in the future.
 
-\todo{Extend conclusion!}
+The latest version of the ontology and its documentation can always be accessed at \url{http://purl.oclc.org/fast/ontology/gadget}.
 
 % Finally, to contribute to a lasting legacy of the FAST project, the gadget ontology will serve as input to standardisation efforts for the definition of semantic gadgets, which will go beyond the scope of the project itself.
 % section conclusions (end)
@@ -1135,6 +1152,7 @@ The FAST gadget ontology has initially been developed using the original OWL ont
 \appendix
 
 \section{Development Methodology}
+\label{sec:methodology}
 % \addcontentsline{toc}{section}{Development Methodology}
 
 \subsection{\emph{Methontology}: A Methodology for Ontology Development} % (fold)
@@ -1143,7 +1161,7 @@ The FAST gadget ontology has initially been developed using the original OWL ont
 In order to put the design of the ontology on a stable footing, we chose to adopt a tried and tested design methodology, rather than using a purely ad-hoc approach. We decided to use the \emph{Methontology} methodology, which was first introduced in \cite{gomez_perez1996conceptualise_ontologies} and \cite{fernandez1997methontology}. Methontology provides a good balance of formalisation and streamlining of the design process on the one hand, while on the other hand its requirements on how strictly one needs to follow the individual phases and steps are intentionally left relatively loose.
 The authors specifically advocate an ``evolving prototype life cycle'', which allows the ontology to ``grow depending on its needs'' \cite{fernandez1997methontology}.
 
-Methontology consists of seven different stages, which will be briefly described in the following sections. For a more detailed discussion, we point the reader to the original papers proposing this methodology. The phases are \emph{specification}, \emph{knowledge acquisistion}, \emph{conceptualisation}, \emph{integration}, \emph{implementation}, \emph{evaluation} and \emph{documentation}. It is important to note that the phases do not have to be visited slavishly in the order presented here. Instead, a much more likely scenario is that the ontology designers will visit each phase roughly in this order, but are free to revisit each phase at any time to apply changes.
+Methontology consists of seven different stages, which will be briefly described in the following sections. For a more detailed discussion, we point the reader to the original papers proposing this methodology. The phases are \emph{specification}, \emph{knowledge acquisition}, \emph{conceptualisation}, \emph{integration}, \emph{implementation}, \emph{evaluation} and \emph{documentation}. It is important to note that the phases do not have to be visited slavishly in the order presented here. Instead, a much more likely scenario is that the ontology designers will visit each phase roughly in this order, but are free to revisit each phase at any time to apply changes.
 
 \subsubsection{Specification} % (fold)
 \label{ssub:specification}
@@ -1204,7 +1222,7 @@ In Methontology, documentation is an activity which is automatically carried out
 % \label{sec:ontology_overview}
 % % \addcontentsline{toc}{section}{Ontology Overview}
 % 
-% \begin{figure}[ht]
+% \begin{figure}
 %   \begin{center}
 %     \includegraphics[width=.80\linewidth]{images/fgo_uml_diagram}
 %     \caption{FAST Gadget Ontology Class Hierarchy}
@@ -1251,7 +1269,6 @@ This section contains a definition of all properties defined in the \texttt{fgo}
 % \addcontentsline{toc}{section}{Ontology Code}
 
 Below is the complete code of the FAST gadget ontology in Turtle syntax. The latest version of this file can always be accessed at \url{http://purl.oclc.org/fast/ontology/gadget}.
-\todo{check the line lengths for nice layout in this document}
 
 \singlespacing
 % \begin{small}
