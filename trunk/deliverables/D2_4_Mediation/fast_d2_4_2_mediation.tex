@@ -58,7 +58,8 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \thispagestyle{empty}
 
-\pagenumbering{roman}
+%\pagenumbering{roman}
+\pagenumbering{arabic}
 
 \begin{flushright}
     \includegraphics[width=3cm]{images/FP7_logo.png}
@@ -104,8 +105,9 @@
 %\cohead{\small\textcolor{fast@lightgrey}{\deliverableTitle}}
 %\rohead{\small{\today}}
 %\lofoot{\small\textcolor{fast@lightgrey}{Task Force Ontologies}}
-\cofoot{\small{FAST 216048 --- \deliverableTitleShort}}
-\rofoot{\small{\thepage}}
+\cofoot{\small{FAST $\bullet$ 216048 $\bullet$ \deliverableTitleShort\ $\bullet$ Page \thepage\ of \pageref{LastPage}}}
+%\rofoot{\small{}}
+%\rofoot{\small{\thepage}}
 
 \newpage
 %
@@ -267,7 +269,7 @@ Based on the theoretical foundations laid down in D2.4.1 we present our approach
 \listoftables
 \listoffigures
 \cleardoublepage
-\pagenumbering{arabic}
+%\pagenumbering{arabic}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%
 % BEGINNING OF SECTIONS %
