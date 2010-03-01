@@ -1,9 +1,5 @@
 from django.utils.translation import ugettext as _
-
-from django.utils.translation import ugettext as _
-
 from django.contrib.auth.models import User
-
 from django.contrib.auth.views import logout_then_login
 
 class Http403(Exception):
