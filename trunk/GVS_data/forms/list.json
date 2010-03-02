@@ -1,0 +1,74 @@
+{
+    "name": "List Form",
+    "code":"http://hercules.ls.fi.upm.es/gvsdata/forms/list.src.html",
+    "creationDate":"2009-04-20T17:00:00+0100",
+    "creator":"admin",
+    "description":{
+        "en-gb":"This form shows a list of items."
+    },
+    "tags":[
+        {
+            "label":{
+                "en-gb":"amazon"
+            },
+            "means":"http://dbpedia.org/page/Amazon.com"
+        },
+        {
+            "label":{
+                "en-gb":"list"
+            }
+        }
+    ],
+    "user":"admin",
+    "homepage":"http://www.deri.ie/amazonList",
+    "icon":"http://demo.fast.morfeo-project.org/gvsdata/images/catalogue/amazonList.png",
+    "label":{
+        "en-gb":"Product List"
+    },
+    "rights":"http://creativecommons.org/",
+    "screenshot":"http://demo.fast.morfeo-project.org/gvsdata/images/screenshots/amazonProductList.png",
+    "version":"1.0",
+    "libraries":[],
+    "actions":[
+        {
+            "name":"init",
+            "preconditions":[],
+            "uses":[]
+        },
+        {
+            "name":"showTable",
+            "preconditions":[
+                {
+                    "id":"list",
+                    "label":{
+                        "en-gb":"A list"
+                    },
+                    "pattern":"?PList http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#ProductList",
+                    "positive":"true"
+                }
+            ],
+            "uses": []
+        }
+    ],
+    "postconditions":[
+        [
+            {
+                "id":"item",
+                "label":{
+                    "en-gb":"An item"
+                },
+                "pattern":"?Item http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#Item",
+                "positive":"true"
+            },
+            {
+                "id":"filter",
+                "label":{
+                    "en-gb":"A filter"
+                },
+                "pattern":"?Filter http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#SearchCriteria",
+                "positive":"true"
+            }
+        ]
+    ],
+    "triggers":[]
+}

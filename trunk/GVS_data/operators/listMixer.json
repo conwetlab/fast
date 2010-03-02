@@ -1,0 +1,68 @@
+{
+    "name": "Item Group Mixer Filter",
+    "code": "http://hercules.ls.fi.upm.es/gvsdata/operators/listMixer.src.js",
+    "creationDate":"2009-04-20T18:00:00+0200",
+    "creator":"admin",
+    "description":{
+        "en-gb": "This operator converts two item lists into a mixed item list"
+    },
+    "tags":[
+        {
+            "label":{
+                "en-gb":"amazon"
+            },
+            "means":"http://dbpedia.org/page/Amazon.com"
+        },
+        {
+            "label":{
+                "en-gb":"ebay"
+            }
+        }
+    ],
+    "homepage": "http://www.deri.ie/eBayList",
+    "icon": "http://demo.fast.morfeo-project.org/gvsdata/images/catalogue/eBayList.png",
+    "label": {
+        "en-gb": "Group Mixer"
+    },
+    "rights": "http://creativecommons.org/",
+    "screenshot": "http://www.deri.ie/eBayList-screenshot.jpg",
+    "version": "1.0",
+    "libraries": [],
+    "actions":[
+        {
+            "name": "mix",
+            "preconditions": [
+                {
+                    "id": "list1",
+                    "label": {
+                        "en-gb": "An item group"
+                    },
+                    "pattern":"?ItemGroup http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#ItemGroup",
+                    "positive":"true"
+                },
+                {
+                    "id": "list2",
+                    "label": {
+                        "en-gb": "An item group"
+                    },
+                    "pattern":"?ItemGroup http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#ItemGroup",
+                    "positive":"true"
+                }
+            ],
+            "uses": []
+        }
+    ],
+    "postconditions": [
+        [
+            {
+                "id": "mixedList",
+                "label":{
+                    "en-gb": "A mixed item group"
+                },
+                "pattern":  "?ItemGroup http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#ItemGroup",
+                "positive": "true"
+            }
+        ]
+    ],
+    "triggers":[]
+}

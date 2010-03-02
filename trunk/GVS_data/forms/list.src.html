@@ -1,0 +1,277 @@
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta http-equiv="Content-Type" content="application/xhtml+xml; charset=UTF-8" />
+		<link type="text/css" rel="stylesheet" href="http://demo.fast.morfeo-project.org/gvsdata/amazonScreens/style/table.css" />
+		<link type="text/css" rel="stylesheet" href="http://demo.fast.morfeo-project.org/gvsdata/amazonScreens/style/screen.css" />
+		<style type="text/css">
+		    .list_title {
+    		    color:       #FEBF43;
+                font-family: Arial,Helvetica,sans-serif;
+                font-size:   24px;
+                font-style:  italic;
+                font-weight: bold;
+                margin:      5px;
+                text-align:  center;
+            }
+
+            .pages {
+                color: #FEBF43;
+                font-weight: bold;
+                padding: 10px;
+            }
+
+            .firstColumn {
+                -moz-border-radius: 13px 0px 0px 0px;
+            }
+
+            .lastColumn {
+                -moz-border-radius: 0px 13px 0px 0px;
+            }
+
+            .previousButton, .nextButton {
+                visibility: hidden;
+            }
+
+            .loadingImg {
+                margin: auto;
+                padding-top: 10px;
+            }
+
+            .logoLayer {
+                position: absolute;
+                right: 0px;
+                top: 3px;
+            }
+
+            .selectCell {
+                border-right: none;
+            }
+
+            .buttonArea {
+                text-align: center;
+            }
+
+            .button {
+                cursor: pointer;
+            }
+
+            tr.selected {
+                background: #FFF8E8;
+            }
+		</style>
+
+		<script type="text/javascript">
+
+            var {{buildingblockId}} = Class.create(BuildingBlock,{
+
+                init: function () {
+                    var defaultParams = {
+                        'title': 'Item list',
+                        'logo':  'http://demo.fast.morfeo-project.org/gvsdata/amazonScreens/images/amazon.png',
+                        'columns': [
+                                {
+                                    field: 'image',
+                                    title: '',
+                                    type:  'text'
+                                },{
+                                    field: 'title',
+                                    title: 'Title',
+                                    type:  'text'
+                                }, {
+                                    field: 'price',
+                                    title: 'Price',
+                                    type:  'text'
+                                }, {
+                                    field: 'type',
+                                    title: 'Product Group'
+                                }
+                        ]
+                    };
+                    var params = Object.extend(defaultParams, this.params);
+                    this._columns = params.columns;
+
+                    $("{{screenId}}_logo").href = params.logo;
+                    $("{{screenId}}_title").update(params.title);
+
+                    // Base elements
+                    this._loadingImg = $("{{screenId}}_loadingImg");
+
+                    this._nextButton = $("{{screenId}}_nextButton");
+                    this._nextButton.observe('click', this.nextPage.bind(this));
+
+                    this._previousButton = $("{{screenId}}_previousButton")
+                    this._previousButton.observe('click', this.previousPage.bind(this));
+
+                    this._tableHeader = $("{{screenId}}_tableHeader");
+                    this._tableHeader.update();
+                    var row = this._tableHeader.insertRow(-1);
+                    for (var i = 0; i < this._columns.length; i++) {
+                        var cell = document.createElement('th');
+                        row.appendChild(cell);
+                        cell.innerHTML = this._columns[i].title;
+
+                        if (i == 0) {
+                            cell.addClassName('firstColumn');
+                        }
+                    }
+                    // select column
+                    var cell = document.createElement('th');
+                    row.appendChild(cell);
+                    cell.addClassName('lastColumn');
+
+                    this._tableBody = $("{{screenId}}_listBody");
+                    this._tableBody.update("");
+
+                    this._buttonArea = $("{{screenId}}_buttonArea");
+                    this._buttonArea.hide();
+                    
+                    this.showProgress();
+
+                    this._items = [];
+                },
+
+                productDetail: function () {
+                    this.form.clearSelected();
+
+                    var entryInfo = this.form._items[this.item];
+                    entryInfo.row.addClassName('selected');
+                    this._selectedItem = this.item;
+
+                    var item = {
+                        id: 'item',
+                        data: entryInfo.entry
+                    };
+
+                    this.manageData(null, [item], []);
+                },
+
+                clearSelected: function () {
+                    if (this._selectedItem) {
+                        this._items[this._selectedItem].row.removeClassName('selected');
+                        this._selectedItem = null;
+                    }
+                },
+
+                showProgress: function () {
+                    this._loadingImg.show();
+                },
+
+                showTable: function (_listFact) {
+                    var listFact = _listFact.data;
+
+                    this._loadingImg.hide();
+
+                    this._tableBody.update("");
+                    this._items = [];
+
+                    // Print the appropriate elements
+                    //for (var i = 0; i < listFact.productList.length; i++) {
+                    for (var i = 0; i < listFact.length; i++) {
+                        //var entry = listFact.productList[i];
+                        var entry = listFact[i];
+
+                        if (!entry)
+                            continue
+
+                        var row = this._tableBody.insertRow(-1);
+
+                        for (var j = 0; j < this._columns.length; j++) {
+                            var cell = row.insertCell(-1);
+                            cell.innerHTML = entry[this._columns[j].field];
+                        }
+
+                        var selectCell = row.insertCell(-1);
+                        selectCell.addClassName('selectCell');
+                        var button = document.createElement('input');
+                        button.addClassName('button');
+                        button.type = 'button';
+                        button.value = 'Select';
+                        selectCell.appendChild(button);
+
+                        var context = {'form': this, 'item': this._items.length};
+                        button.observe('click', this.productDetail.bind(context));
+
+                        this._items.push({'entry': entry, 'row': row});
+                    }
+
+                    /* Update Interface
+                    if (listFact.currentPage < listFact.totalPages - 1) {
+                        $("nextButton").setStyle({visibility: "visible"});
+                    } else {
+                        $("nextButton").setStyle({visibility: "hidden"});
+                    }
+                    if (listFact.currentPage > 1) {
+                        $("previousButton").setStyle({visibility: "visible"});
+                    } else {
+                        $("previousButton").setStyle({visibility: "hidden"});
+                    }
+
+                    if (listFact.totalPages > 0) {
+                        $("curPage").innerHTML = listFact.currentPage;
+                        $("totalPages").update(listFact.totalPages);
+                    } else {
+                        $("curPage").innerHTML = "-";
+                        $("totalPages").update("-");
+                    }*/
+
+                    this._lastFact = listFact;
+                }/*,
+
+                nextPage: function () {
+                    this._tableBody.update("");
+                    this.showProgress();
+
+                    var listFact = this._lastFact;
+
+                    var filter = {
+                        id: "filter",
+                        data: {
+                            productType: listFact.productType,
+                            searchText: listFact.searchText,
+                            currentPage: parseInt(listFact.currentPage) + 1
+                        }
+                    };
+                    this.manageData(["newFilter"], [filter], []);
+                },
+
+                previousPage: function () {
+                    this._tableBody.update("");
+                    this.showProgress();
+
+                    var listFact = this._lastFact;
+
+                    var filter = {
+                                     id: "filter",
+                                     data: {
+                                         productType: listFact.productType,
+                                         searchText:  listFact.searchText,
+                                         currentPage: parseInt(listFact.currentPage) - 1
+                                     }
+                                 };
+                    this.manageData(["newFilter"], [filter], []);
+                }*/
+            });
+		</script>
+	</head>
+	
+	<body>
+		<div id="{{screenId}}_bodyDiv">
+		    <div class="logoLayer"><img id="{{screenId}}_logo" src="http://demo.fast.morfeo-project.org/gvsdata/amazonScreens/images/amazon.png" /></div>
+			<h1 id="{{screenId}}_title" class="list_title">Item list</h1>
+			<div>
+				<table>
+				    <thead id="{{screenId}}_tableHeader">
+				    </thead>
+				    <tbody id="{{screenId}}_listBody">
+				    </tbody>
+				</table>
+				<img id="{{screenId}}_loadingImg" class="loadingImg" src="http://demo.fast.morfeo-project.org/gvsdata/amazonScreens/images/ajaxLoader.gif" />
+				<div id="{{screenId}}_buttonArea" class="buttonArea">
+				    <input type="button" id="{{screenId}}_previousButton" class="button previousButton" value="<" />
+				    <span id="pages" class="pages"> Page <span id="curPage">-</span>/<span id="totalPages">-</span></span>
+				    <input type="button" id="{{screenId}}_nextButton" class="button nextButton" value=">" />
+				</div>
+			</div>
+		</div>
+	</body>
+</html>
