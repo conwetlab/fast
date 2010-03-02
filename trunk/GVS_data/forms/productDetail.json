@@ -1,0 +1,61 @@
+{
+    "name":"Detail Form",
+    "code":"http://piccolo.ls.fi.upm.es/forms/productDetail.src.html",
+    "creationDate":"2009-04-20T17:00:00+0100",
+    "creator":"admin",
+    "description":{
+        "en-gb":"This screen shows the the details of an item"
+    },
+    "tags":[
+        {
+            "label":{
+                "en-gb":"amazon"
+            },
+            "means":"http://dbpedia.org/page/Amazon.com"
+        },
+        {
+            "label":{
+                "en-gb":"details"
+            }
+        }
+    ],
+    "homepage":"http://www.deri.ie/amazonProduct",
+    "icon":"http://demo.fast.morfeo-project.org/gvsdata/images/catalogue/amazonProduct.png",
+    "label":{
+        "en-gb":"Item Details"
+    },
+    "rights":"http://creativecommons.org/",
+    "screenshot":"http://demo.fast.morfeo-project.org/gvsdata/images/screenshots/amazonProductDetail.png",
+    "version":"1.0",
+    "libraries":[
+        
+    ],
+    "actions":[
+        {
+            "name":"init",
+            "preconditions":[               
+            ],
+            "uses":[              
+            ]
+        },
+        {
+            "name":"showProductInfo",
+            "preconditions":[
+                {
+                    "id":"product",
+                    "label":{
+                        "en-gb":"An item"
+                    },
+                    "pattern":"?Item http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#Item",
+                    "positive":"true"
+                }
+            ],
+            "uses":[             
+            ]
+        }
+    ],
+    "postconditions":[      
+    ],
+    "triggers":[
+    ]
+}

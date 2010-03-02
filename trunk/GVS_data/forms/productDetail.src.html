@@ -1,0 +1,289 @@
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="application/xhtml+xml; charset=UTF-8" />
+        <link type="text/css" rel="stylesheet" href="http://demo.fast.morfeo-project.org/gvsdata/amazonScreens/style/screen.css" />
+		<style type="text/css">
+		    .detailsForm {
+		        max-width:550px;
+				text-align:center;
+				margin: 8px auto 20px auto;
+				height:270px;
+		    }
+			.image{
+				height: 170px;
+				-moz-border-radius: 13px 13px;
+				background: #FFF8E8 url(http://demo.fast.morfeo-project.org/gvsdata/amazonScreens/style/bg_td2.jpg) repeat-x;
+				border:1px solid #F8A704;
+				margin:0px auto 13px;
+				text-align:center;
+				width:88%;
+				padding-bottom:5px;
+				padding-top:10px;
+			}
+			.image img {
+			    width: 99%;
+			}
+			.leftColumn{
+				position: relative;
+				float:left;
+				height: 100%;
+				width: 35%;
+			}
+			.rightColumn{
+				position: relative;
+				float:right;
+				height: 268px;
+				width: 60%;
+				-moz-border-radius:13px 13px;
+				background:#FFF8E8 url(http://demo.fast.morfeo-project.org/gvsdata/amazonScreens/style/bg_td2.jpg) repeat-x;
+				border:1px solid #F8A704;
+				padding-top:5px;
+				padding-right:0px;
+				padding-left:5px;
+				padding-bottom: 5px;
+				position:relative;
+			}
+			.itemTitle {
+			    font-size: 20px; 
+			    padding: 2px; 
+			    color:#F8A704; 
+			    font-weight: bold; 
+			    font-style: italic; 
+			    font-family: Arial, Helvetica, sans-serif; 
+			    overflow: hidden;
+			}
+			.infoArea{
+				text-align: left;
+			}
+			.titleInfo{
+				float:left;
+				margin: 5px;
+				width:25%;
+				overflow: hidden;
+			}
+			.valueInfo{
+				float:left;
+				margin: 5px;
+				width: 65%;
+			}
+			.moreInfo{
+				float:left;
+				margin-left: 5px;
+			}
+			.title{
+				padding: 2px;
+				color:#AAAAAA;
+				font-weight: bold;
+				font-family:Arial,Helvetica,sans-serif;	
+				white-space:nowrap;
+				overflow: hidden;
+			}
+			.info{
+				padding: 2px;
+				color:#888888;
+				font-family:Arial,Helvetica,sans-serif;
+				font-weight: bold;
+				text-align: justify;
+				white-space: nowrap;
+				overflow: hidden;
+			}
+			.moreInfoText {
+				color: #888888;
+				font-family: Arial, Helvetica, sans-serif;
+				font-size: 13px;
+				height: 133px;
+				margin: 0;
+				overflow: auto;
+				padding: 2px 15px 2px 2px;
+				text-align: left;
+				width: 300px;
+				max-width: 300px;
+				border-top:1px dotted #AAAAAA;
+			}
+			.detailsElement {
+				color:#888888;
+				font-weight:bold;
+			}
+		</style>
+       <script language="JavaScript">
+        	var {{buildingblockId}} = Class.create(BuildingBlock,{
+					init: function (){
+					    var details = new Element('div', {
+						    'class': 'detailsForm'
+						});
+						document.body.appendChild(details);
+						
+						// Left Column (Image)
+						var leftColumn = new Element('div', {
+						    'class': 'leftColumn'
+						});
+						this._image = new Element('div', {
+						    'class': 'image'
+						});
+						leftColumn.appendChild(this._image);
+						details.appendChild(leftColumn);
+						
+						// Right Column (Details)
+						var rightColumn = new Element('div', {
+						    'class': 'rightColumn'
+						});					
+						details.appendChild(rightColumn);
+						
+						this._title = new Element('div', {
+						    'class': 'itemTitle'
+						});
+						rightColumn.appendChild(this._title);
+						var infoArea = new Element('div', {
+					        'class': 'infoArea'
+						});
+                        rightColumn.appendChild(infoArea);
+                        
+                        this._titleInfo = new Element('div', {
+                            'class': 'titleInfo'
+                        });
+                        infoArea.appendChild(this._titleInfo);
+                        this._valueInfo = new Element('div', {
+                            'class': 'valueInfo'
+                        });
+                        infoArea.appendChild(this._valueInfo);
+                        var moreInfo = new Element('div', {
+                            'class': 'moreInfo'
+                        });
+                        this._moreInfoTitle = new Element('div', {
+                            'class': 'title'
+                        });
+                        this._moreInfoText = new Element('div', {
+                            'class': 'moreInfoText'
+                        });
+                        moreInfo.appendChild(this._moreInfoTitle);
+                        moreInfo.appendChild(this._moreInfoText);
+                        infoArea.appendChild(moreInfo);
+					},
+
+					showProductInfo: function (_product){
+						if (_product.data.title) {
+							//Reset styles
+							this._title.setStyle ({"fontSize":"20px"});
+							this._moreInfoText.setStyle({"height": "133px"});
+							this._title.update(_product.data.title);
+							if (this._title.clientHeight > 28) {//Big title
+								//Big title, adapt styles
+								this._title.setStyle ({"fontSize":"16px"});
+								if (this._title.clientHeight > 23) {//More than one line
+									if (this._title.clientHeight > 46) {//More than two lines
+										if (this._title.clientHeight > 69) {//More than three lines
+											this._title.setStyle ({"fontSize":"13px"});
+											if (this._title.clientHeight > 49) {//Still more than three lines
+												this._moreInfoText.setStyle({"height": "90px"});
+											} else {
+												this._moreInfoText.setStyle({"height": "110px"});
+											}
+										} 
+										else{//Three lines
+											this._moreInfoText.setStyle({"height": "110px"});
+											this._title.setStyle ({"fontSize":"14px"});	
+										}
+									} else {//Two lines
+										this._moreInfoText.setStyle({"height": "115px"});
+									}	
+								}
+							}
+							
+						}
+						
+						this.insertElement("Website", _product.data.url);
+						if (_product.data.image) {
+							var img = new Element ('img',{src: _product.data.image});
+							this._image.update(img);
+						} 
+						if (this.params && this.params.elements) {
+						    this.params.elements.each(function(element) {
+						        this.insertElement(this.capitalize(element), _product.data.details[element]);
+						    }.bind(this));
+						}
+						this.showAdvancedDetails(_product);				 
+					},
+					
+					showAdvancedDetails: function(_product) {
+					    
+				        var details = $H(_product.data.details);
+				        if (details) {
+				            if (this.params && this.params.itemTitle) {
+				                this._moreInfoTitle.update(this.params.itemTitle + " Details");
+				            } else {
+				                this._moreInfoTitle.update("Details");
+				            }
+                
+                            var list = new Element('ul');
+				            details.each(function(pair){
+				                var appendElement = true;
+				                if (this.params && this.params.elements) {
+				                    if (this.params.elements.lastIndexOf(pair.key) != -1) {
+				                        appendElement = false;
+				                    }
+				                }
+				                if (appendElement) {
+				                    var node = this.createDetailNode(pair.key, pair.value);
+				                    if (node) {
+				                       list.appendChild(node);
+				                    }
+				                }				                
+				            }.bind(this));
+				            this._moreInfoText.appendChild(list);
+				        }
+					},
+					
+					
+					
+					createDetailNode: function(key, value) {
+					    var title = this.capitalize(key);
+					    var li = new Element('li').update(title + ": ");
+                        if (typeof value == "string") {				        
+					        li.appendChild(new Element('span', {
+					            'class': 'detailsElement'
+					        }).update(this.sanitize(value)));
+					        return li;
+                        } else if (value instanceof Array) {
+                            var finalValue = value.join(", ");
+                            li.appendChild(new Element('span', {
+					            'class': 'detailsElement'
+					        }).update(finalValue));
+					        return li; 
+                        } else {
+                            return null;
+                        }
+					},
+					
+					insertElement: function(title, value) {
+					    if(value) {
+				            this._titleInfo.appendChild(new Element('div', {
+						        'class': 'title'
+						    }).update(title + ': '));
+							this._valueInfo.appendChild(new Element('div', {
+							    'class': 'info'
+							}).update(this.sanitize(value)));
+						}
+					},
+					
+					sanitize: function(value) {
+					    var validChars = "[\\w\\!\\#\\$\\%\\&\\\'\\*\\+\\-\\/\\=\\?\\^\\`\\{\\|\\}\\~]+";
+                        var mail = new RegExp("("+validChars+"(?:\\."+validChars+")*@"+validChars+"(?:\\."+validChars+")+)", "g");
+                        var url = new RegExp("(\\w+\\:\\/\\/\\w+(?:\\.\\w+)*(?:\\:\\d+)?(?:\\/\\w+)*(?:[\\w\\.\\?\\=\\/\\#\\%\\&\\+\\-]*))", "g");
+					    var finalValue = value.replace(mail, '<a href="mailto:$1">$1</a>');
+                        finalValue = finalValue.replace(url, '<a href="$1" target="_blank">$1</a>');
+                        return finalValue;
+					},
+					
+					capitalize: function(text) {
+					    return text.split(" ").collect(function(e){return e.capitalize()}).join(" ");
+					},
+					
+					showMessage: function (message){
+						// TODO
+					}
+        	});
+		</script>
+    </head>
+    <body>
+    </body>
+</html>
