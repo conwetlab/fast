@@ -1,0 +1,75 @@
+{
+    "name":"Ebay Generic Search Service",
+    "code":"http://localhost:8010/resources/ebay/ebayGenericSearchService.src.js",
+    "creationDate":"2009-04-20T17:00:00+0100",
+    "creator":"admin",
+    "description":{
+        "en-gb":"This service provides information about products in eBay Catalogue"
+    },
+    "tags":[
+        {
+            "label":{
+                "en-gb":"ebay"
+            }
+        },
+        {
+            "label":{
+                "en-gb":"generic"
+            }
+        },
+        {
+            "label":{
+                "en-gb":"search"
+            }
+        },
+        {
+            "label":{
+                "en-gb":"list"
+            }
+        }
+    ],
+    "homepage":"http://www.deri.ie/ebaySearchService",
+    "icon":"http://demo.fast.morfeo-project.org/gvsdata/images/catalogue/ebaySearchService.png",
+    "label":{
+        "en-gb":"eBay GenericSearch"
+    },
+    "rights":"http://creativecommons.org/",
+    "screenshot":"http://www.deri.ie/ebaySearchService.jpg",
+    "version":"1.0",
+    "libraries":[
+        
+    ],
+    "actions":[
+        {
+            "name":"search",
+            "preconditions":[
+                {
+                    "id":"filter",
+                    "label":{
+                        "en-gb":"A filter"
+                    },
+                    "pattern":"?eFilter http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#SearchCriteria",
+                    "positive":"true"
+                }
+            ],
+            "uses":[
+                
+            ]
+        }
+    ],
+    "postconditions":[
+        [
+            {
+                "id":"list",
+                "label":{
+                    "en-gb":"A Generic Item List"
+                },
+                "pattern":"?ItemGroup http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#ItemGroup",
+                "positive":"true"
+            }
+        ]
+    ],
+    "triggers":[
+        "itemList"
+    ]
+}

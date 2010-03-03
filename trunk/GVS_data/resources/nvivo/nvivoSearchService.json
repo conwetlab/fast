@@ -1,0 +1,76 @@
+{
+    "name":"Nvivo Search Service",
+    "code":"http://localhost:8010/resources/nvivo/nvivoSearchService.src.js",
+    "creationDate":null,
+    "creator":"admin",
+    "description":{
+        "en-gb":"Returns the gigs that will be happening at a specific venue, city"
+    },
+    "tags":[
+        {
+            "label":{
+                "en-gb":"nvivo"
+            }
+        },
+        {
+            "label":{
+                "en-gb":"events"
+            }
+        },
+        {
+            "label":{
+                "en-gb":"search"
+            }
+        },
+        {
+            "label":{
+                "en-gb":"list"
+            }
+        }
+    ],
+    "homepage":"hhttp://www.deri.ie/amazonSearchService",
+    "icon":"http://demo.fast.morfeo-project.org/gvsdata/images/catalogue/amazonSearchService.png",
+    "label":{
+        "en-gb":"Nvivo Search Service"
+    },
+    "rights":"http://creativecommons.org/",
+    "screenshot":"http://www.deri.ie/amazonList-screenshot.jpg",
+    "type":"resource",
+    "version":"1.0",
+    "parameterized":true,
+    "libraries":[
+    ],
+    "actions":[
+        {
+            "name":"search",
+            "preconditions":[
+                {
+                    "id":"filter",
+                    "label":{
+                        "en-gb":"A search criteria"
+                    },
+                    "pattern":"?F http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#SearchCriteria",
+                    "positive":"true"
+                }
+            ],
+            "uses":[
+                
+            ]
+        }
+    ],
+    "postconditions":[
+        [
+            {
+                "id":"list",
+                "label":{
+                    "en-gb":"Nvivo Event List"
+                },
+                "pattern":"?EList http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#ItemGroup",
+                "positive":"true"
+            }
+        ]
+    ],
+    "triggers":[
+        "eventList"
+    ]
+}

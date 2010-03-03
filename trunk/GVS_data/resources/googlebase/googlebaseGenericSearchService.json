@@ -1,0 +1,81 @@
+{
+    "name":"Google Base Generic Search Service",
+    "code":"http://localhost:8010/resources/googlebase/googlebaseGenericSearchService.src.js",
+    "creationDate":null,
+    "creator":"admin",
+    "description":{
+        "en-gb":"This service provides a list of all data items that match the query string in Google Base"
+    },
+    "tags":[
+        {
+            "label":{
+                "en-gb":"google"
+            }
+        },
+        {
+            "label":{
+                "en-gb":"generic"
+            }
+        },
+        {
+            "label":{
+                "en-gb":"shopping"
+            }
+        },
+        {
+            "label":{
+                "en-gb":"search"
+            }
+        },
+        {
+            "label":{
+                "en-gb":"list"
+            }
+        }
+    ],
+    "homepage":"hhttp://www.deri.ie/amazonSearchService",
+    "icon":"http://demo.fast.morfeo-project.org/gvsdata/images/catalogue/amazonSearchService.png",
+    "label":{
+        "en-gb":"Google Base Generic Search Service"
+    },
+    "rights":"http://creativecommons.org/",
+    "screenshot":"http://www.deri.ie/amazonList-screenshot.jpg",
+    "type":"resource",
+    "version":"1.0",
+    "parameterized":true,
+    "libraries":[
+    ],
+    "actions":[
+        {
+            "name":"search",
+            "preconditions":[
+                {
+                    "id":"filter",
+                    "label":{
+                        "en-gb":"A search criteria"
+                    },
+                    "pattern":"?F http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#SearchCriteria",
+                    "positive":"true"
+                }
+            ],
+            "uses":[
+                
+            ]
+        }
+    ],
+    "postconditions":[
+        [
+            {
+                "id":"list",
+                "label":{
+                    "en-gb":"A Generic Item List"
+                },
+                "pattern":"?ItemGroup http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#ItemGroup",
+                "positive":"true"
+            }
+        ]
+    ],
+    "triggers":[
+        "itemList"
+    ]
+}
