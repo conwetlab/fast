@@ -36,7 +36,7 @@ mix: function (list1, list2) {
         mixedList = list1.data.concat(list2.data);
     }
 
-    var facts = [{id: 'mixedList', data: result}];
+    var facts = [{id: 'mixedList', data: mixedList}];
 
     this.manageData([], facts, []);
 }

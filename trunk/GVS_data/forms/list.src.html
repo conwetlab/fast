@@ -32,6 +32,10 @@
                 visibility: hidden;
             }
 
+            .imgCell {
+                text-align:center;
+            }
+
             .loadingImg {
                 margin: auto;
                 padding-top: 10px;
@@ -72,18 +76,21 @@
                                 {
                                     field: 'image',
                                     title: '',
-                                    type:  'text'
+                                    type:  'img',
+                                    width: '80px'
                                 },{
                                     field: 'title',
                                     title: 'Title',
-                                    type:  'text'
+                                    type:  'text',
+                                    width: '60%'
+                                }, {
+                                    field: 'type',
+                                    title: 'Product Group',
+                                    width: '20%'
                                 }, {
                                     field: 'price',
                                     title: 'Price',
                                     type:  'text'
-                                }, {
-                                    field: 'type',
-                                    title: 'Product Group'
                                 }
                         ]
                     };
@@ -96,11 +103,11 @@
                     // Base elements
                     this._loadingImg = $("{{screenId}}_loadingImg");
 
-                    this._nextButton = $("{{screenId}}_nextButton");
+/*                    this._nextButton = $("{{screenId}}_nextButton");
                     this._nextButton.observe('click', this.nextPage.bind(this));
 
                     this._previousButton = $("{{screenId}}_previousButton")
-                    this._previousButton.observe('click', this.previousPage.bind(this));
+                    this._previousButton.observe('click', this.previousPage.bind(this));*/
 
                     this._tableHeader = $("{{screenId}}_tableHeader");
                     this._tableHeader.update();
@@ -109,6 +116,7 @@
                         var cell = document.createElement('th');
                         row.appendChild(cell);
                         cell.innerHTML = this._columns[i].title;
+                        cell.style.width = this._columns[i].width;
 
                         if (i == 0) {
                             cell.addClassName('firstColumn');
@@ -176,8 +184,22 @@
                         var row = this._tableBody.insertRow(-1);
 
                         for (var j = 0; j < this._columns.length; j++) {
+                            var colDef = this._columns[j];
                             var cell = row.insertCell(-1);
-                            cell.innerHTML = entry[this._columns[j].field];
+
+                            switch (colDef.type) {
+                            case 'img':
+                                cell.className = 'imgCell';
+                                cell.innerHTML = '';
+                                var img = document.createElement('img');
+                                img.src = entry[colDef.field];
+                                cell.appendChild(img);
+                                break;
+                            case 'text':
+                            default:
+                                cell.className = '';
+                                cell.innerHTML = entry[colDef.field];
+                            }
                         }
 
                         var selectCell = row.insertCell(-1);

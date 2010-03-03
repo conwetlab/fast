@@ -23,7 +23,7 @@
     "homepage":"http://www.deri.ie/amazonList",
     "icon":"http://demo.fast.morfeo-project.org/gvsdata/images/catalogue/amazonList.png",
     "label":{
-        "en-gb":"Product List"
+        "en-gb":"List"
     },
     "rights":"http://creativecommons.org/",
     "screenshot":"http://demo.fast.morfeo-project.org/gvsdata/images/screenshots/amazonProductList.png",
@@ -43,7 +43,7 @@
                     "label":{
                         "en-gb":"A list"
                     },
-                    "pattern":"?PList http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#ProductList",
+                    "pattern":"?ItemGroup http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#ItemGroup",
                     "positive":"true"
                 }
             ],
