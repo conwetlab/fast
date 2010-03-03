@@ -53,4 +53,8 @@ public class FastModelFactory {
 		return new Action();
 	}
 	
+	public static Concept createConcept() {
+		return new Concept(null);
+	}
+	
 }

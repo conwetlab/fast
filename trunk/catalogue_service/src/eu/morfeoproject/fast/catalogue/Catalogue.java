@@ -45,6 +45,7 @@ import eu.morfeoproject.fast.model.AuthorCTag;
 import eu.morfeoproject.fast.model.AutoCTag;
 import eu.morfeoproject.fast.model.BackendService;
 import eu.morfeoproject.fast.model.CTag;
+import eu.morfeoproject.fast.model.Concept;
 import eu.morfeoproject.fast.model.Condition;
 import eu.morfeoproject.fast.model.FastModelFactory;
 import eu.morfeoproject.fast.model.Form;
@@ -772,7 +773,52 @@ public class Catalogue {
     	return results;
 	}
 	
-    public URI createResource(URI namespace, String resource, URI ofClass, String id)
+    public URI createClass(URI clazz) {
+    	tripleStore.addStatement(null, clazz, RDF.type, RDFS.Class);
+    	return clazz;
+	}
+
+    public URI createClass(URI clazz, URI subClassOf) {
+    	tripleStore.addStatement(null, clazz, RDF.type, RDFS.Class);
+    	tripleStore.addStatement(null, clazz, RDFS.subClassOf, subClassOf);
+    	return clazz;
+	}
+    
+    public void setLabel(URI clazz, String lang, String label) {
+		tripleStore.addStatement(clazz, RDFS.label, tripleStore.createLanguageTagLiteral(label, lang));
+    }
+
+    public void setDescription(URI clazz, String lang, String description) {
+		tripleStore.addStatement(clazz, DC.description, tripleStore.createLanguageTagLiteral(description, lang));
+    }
+
+    public void setTag(URI clazz, CTag tag) {
+		BlankNode bnTag = tripleStore.createBlankNode();
+		tripleStore.addStatement(clazz, CTAG.tagged, bnTag);
+		
+		if (tag instanceof AuthorCTag)
+			tripleStore.addStatement(bnTag, RDF.type, CTAG.AuthorTag);
+		else if (tag instanceof ReaderCTag)
+			tripleStore.addStatement(bnTag, RDF.type, CTAG.ReaderTag);
+		else if (tag instanceof AutoCTag)
+			tripleStore.addStatement(bnTag, RDF.type, CTAG.AutoTag);
+		else
+			tripleStore.addStatement(bnTag, RDF.type, CTAG.Tag);
+		
+		if (tag.getMeans() != null)
+			tripleStore.addStatement(bnTag, CTAG.means, tag.getMeans());
+		for (String lang : tag.getLabels().keySet())
+			tripleStore.addStatement(bnTag, CTAG.label, tripleStore.createLanguageTagLiteral(tag.getLabels().get(lang), lang));
+		if (tag.getTaggingDate() != null) {
+			tripleStore.addStatement(bnTag, CTAG.taggingDate, tripleStore.createDatatypeLiteral(DateFormatter.formatDateISO8601(tag.getTaggingDate()), XSD._date));
+		} else { // no date provided, save the current date
+			Date currentDate = new Date();
+			tag.setTaggingDate(currentDate);
+			tripleStore.addStatement(bnTag, CTAG.taggingDate, tripleStore.createDatatypeLiteral(DateFormatter.formatDateISO8601(currentDate), XSD._date));
+		}
+    }
+
+	public URI createResource(URI namespace, String resource, URI ofClass, String id)
     throws DuplicatedResourceException, OntologyInvalidException {
     	URI resourceUri = new URIImpl(namespace.toString()+"/"+resource+"/"+id);
     	if (containsResource(resourceUri))
@@ -2082,16 +2128,51 @@ public class Catalogue {
 		return stmts;
 	}
 
-	public Set<Statement> getConcept(URI uri) {
-		Set<Statement> result = new HashSet<Statement>();
+	public Concept getConcept(URI uri) {
+		Concept concept = FastModelFactory.createConcept();
+		
+		// fill the information about the concept
+		concept.setUri(uri);
 		ClosableIterator<Statement> cIt = tripleStore.findStatements(uri, Variable.ANY, Variable.ANY);
+		if (!cIt.hasNext()) // the resource does not exist
+			return null;
 		for ( ; cIt.hasNext(); ) {
 			Statement st = cIt.next();
-			if (st.getPredicate().asURI().equals(RDFS.label) ||
-					st.getPredicate().asURI().equals(RDF.type))
-				result.add(st);
+			URI predicate = st.getPredicate();
+			Node object = st.getObject();
+			if (predicate.equals(RDFS.label)) {
+				if (object instanceof LanguageTagLiteral) {
+					LanguageTagLiteral label = object.asLanguageTagLiteral();
+					concept.getLabels().put(label.getLanguageTag(), label.getValue());
+				}
+			} else if (predicate.equals(DC.description)) {
+				LanguageTagLiteral description = object.asLanguageTagLiteral();
+				concept.getDescriptions().put(description.getLanguageTag(), description.getValue());
+			} else if (predicate.equals(CTAG.tagged)) {
+				CTag tag = new CTag();
+				BlankNode bnTag = object.asBlankNode();
+				ClosableIterator<Statement> tagIt = tripleStore.findStatements(bnTag, Variable.ANY, Variable.ANY);
+				for ( ; tagIt.hasNext(); ) {
+					Statement tagSt = tagIt.next();
+					URI tagPredicate = tagSt.getPredicate();
+					Node tagObject = tagSt.getObject();
+					if (tagPredicate.equals(CTAG.means)) {
+						tag.setMeans(tagObject.asURI());
+					} else if (tagPredicate.equals(CTAG.label)) {
+						if (tagObject instanceof LanguageTagLiteral) {
+							LanguageTagLiteral label = tagObject.asLanguageTagLiteral();
+							tag.getLabels().put(label.getLanguageTag(), label.getValue());
+						}
+					} else if (tagPredicate.equals(CTAG.taggingDate)) {
+						tag.setTaggingDate(DateFormatter.parseDateISO8601(tagObject.asDatatypeLiteral().getValue()));
+					} 
+				}
+				concept.getTags().add(tag);
+			}
 		}
-		return result;
+		cIt.close();
+		
+		return concept;
 	}
 	
 	/**

@@ -1,8 +1,10 @@
 package eu.morfeoproject.fast.server;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.Set;
 
 import javax.servlet.ServletException;
@@ -22,6 +24,9 @@ import org.ontoware.rdf2go.model.node.impl.URIImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import eu.morfeoproject.fast.model.CTag;
+import eu.morfeoproject.fast.model.Concept;
+import eu.morfeoproject.fast.util.DateFormatter;
 import eu.morfeoproject.fast.util.URLUTF8Encoder;
 
 /**
@@ -66,8 +71,8 @@ public class ConceptServlet extends GenericServlet {
 					Model model = RDF2Go.getModelFactory().createModel();
 					model.open();
 					for (URI uri : CatalogueAccessPoint.getCatalogue().listConcepts(tags)) {
-						Set<Statement> concept = CatalogueAccessPoint.getCatalogue().getConcept(uri);
-						model.addAll(concept.iterator());
+						Concept concept = CatalogueAccessPoint.getCatalogue().getConcept(uri);
+						model.addModel(concept.createModel());
 					}
 					model.writeTo(writer, Syntax.forMimeType(format));
 					model.close();
@@ -75,12 +80,8 @@ public class ConceptServlet extends GenericServlet {
 					response.setContentType(MediaType.APPLICATION_JSON);
 					JSONArray concepts = new JSONArray();
 					for (URI uri : CatalogueAccessPoint.getCatalogue().listConcepts(tags)) {
-						Set<Statement> conceptStmt = CatalogueAccessPoint.getCatalogue().getConcept(uri);
-						if (conceptStmt != null && conceptStmt.size() > 0) {
-							JSONObject concept = statements2JSON(conceptStmt);
-							concept.accumulate("uri", uri);
-							concepts.put(concept);
-						}
+						Concept concept = CatalogueAccessPoint.getCatalogue().getConcept(uri);
+						concepts.put(concept.toJSON());
 					}
 					writer.print(concepts.toString(2));
 				}
@@ -88,33 +89,6 @@ public class ConceptServlet extends GenericServlet {
 			} catch (JSONException e) {
 				e.printStackTrace();
 				response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
-			}
-		} else {
-			id = URLUTF8Encoder.decode(id);
-			// Retrieve the addressed member of the collection
-			logger.info("Retrieving concept "+id);
-			Set<Statement> concept = CatalogueAccessPoint.getCatalogue().getConcept(new URIImpl(id));
-			if (concept == null || concept.size() == 0) {
-				response.sendError(HttpServletResponse.SC_NOT_FOUND, "The resource "+id+" has not been found.");
-			} else {
-				try {
-					if (format.equals(MediaType.APPLICATION_RDF_XML) ||
-							format.equals(MediaType.APPLICATION_TURTLE)) {
-						response.setContentType(format);
-						Model model = RDF2Go.getModelFactory().createModel();
-						model.open();
-						model.addAll(concept.iterator());
-						model.writeTo(writer, Syntax.forMimeType(format));
-						model.close();
-					} else {
-						response.setContentType(MediaType.APPLICATION_JSON);
-						writer.print(statements2JSON(concept).toString(2));
-					}
-					response.setStatus(HttpServletResponse.SC_OK);
-				} catch (JSONException e) {
-					e.printStackTrace();
-					response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
-				}
 			}
 		}
 		writer.close();
@@ -125,51 +99,71 @@ public class ConceptServlet extends GenericServlet {
 	 * create it.
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
-//	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-//		BufferedReader reader = request.getReader();
-//		String[] chunks = request.getRequestURI().split("/");
-//		String id = chunks[chunks.length-1];
-//		StringBuffer buffer = new StringBuffer();
-//		String line = reader.readLine();
-//		while (line != null) {
-//			buffer.append(line);
-//			line = reader.readLine();
-//		}
-//		String body = buffer.toString();
-//		
-//		if (id != null) {
-//			id = URLUTF8Encoder.decode(id);
-//			try {
-//				JSONObject json = new JSONObject(body);
-//				for (String key : JSONObject.getNames(json)) {
-//					Object object = json.get(key);
-//					if (object instanceof JSONArray) {
-//						JSONArray array = (JSONArray)object;
-//						for (int idx = 0; idx < array.length(); idx++) {
-//							try {
-//								CatalogueAccessPoint.getCatalogue().getTripleStore().addStatement(new URIImpl(id), new URIImpl(key), new URIImpl(array.get(idx).toString()));
-//							} catch(IllegalArgumentException e) {
-//								CatalogueAccessPoint.getCatalogue().getTripleStore().addStatement(new URIImpl(id), new URIImpl(key), array.get(idx).toString());
-//							}
-//						}
-//					} else if (object instanceof JSONObject) {
-//						// do nothing
-//					} else {
-//						try {
-//							CatalogueAccessPoint.getCatalogue().getTripleStore().addStatement(new URIImpl(id), new URIImpl(key), new URIImpl(json.get(key).toString()));
-//						} catch(IllegalArgumentException e) {
-//							CatalogueAccessPoint.getCatalogue().getTripleStore().addStatement(new URIImpl(id), new URIImpl(key), json.get(key).toString());
-//						}
-//					}
-//				}
-//				response.setStatus(HttpServletResponse.SC_OK);
-//			} catch (JSONException e) {
-//				e.printStackTrace();
-//			}
-//		} else {
-//			response.sendError(HttpServletResponse.SC_BAD_REQUEST, "An ID must be specified.");
-//		}
-//	}
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		BufferedReader reader = request.getReader();
+		String[] chunks = request.getRequestURI().split("/");
+		String id = chunks[chunks.length-1];
+		StringBuffer buffer = new StringBuffer();
+		String line = reader.readLine();
+		while (line != null) {
+			buffer.append(line);
+			line = reader.readLine();
+		}
+		String body = buffer.toString();
+		
+		try {
+			JSONObject json = new JSONObject(body);
+			if (json.has("uri")) {
+				URI uri = new URIImpl(json.getString("uri"));
+				if (json.has("subClassOf"))
+					CatalogueAccessPoint.getCatalogue().createClass(uri, new URIImpl(json.getString("subClassOf")));
+				else
+					CatalogueAccessPoint.getCatalogue().createClass(uri);
+
+				if (json.has("label")) {
+					JSONObject jsonLabels = json.getJSONObject("label");
+					Iterator<String> labels = jsonLabels.keys();
+					for ( ; labels.hasNext(); ) {
+						String key = labels.next();
+						CatalogueAccessPoint.getCatalogue().setLabel(uri, key, jsonLabels.getString(key));
+					}
+				}
+				if (json.has("description")) {
+					JSONObject jsonDescriptions = json.getJSONObject("description");
+					Iterator<String> descriptions = jsonDescriptions.keys();
+					for ( ; descriptions.hasNext(); ) {
+						String key = descriptions.next();
+						CatalogueAccessPoint.getCatalogue().setDescription(uri, key, jsonDescriptions.getString(key));
+					}
+				}
+				if (json.has("tags")) {
+					JSONArray aTag = json.getJSONArray("tags");
+					for (int i = 0; i < aTag.length(); i++) {
+						CTag tag = new CTag();
+						JSONObject oTag = aTag.getJSONObject(i);
+						if (oTag.has("means") && !oTag.isNull("means") && oTag.getString("means") != "")
+							tag.setMeans(new URIImpl(oTag.getString("means")));
+						if (oTag.has("label")){
+							JSONObject jsonLabels = oTag.getJSONObject("label");
+							Iterator<String> labels = jsonLabels.keys();
+							for ( ; labels.hasNext(); ) {
+								String key = labels.next();
+								tag.getLabels().put(key, jsonLabels.getString(key));
+							}
+						}
+						if (oTag.has("taggingDate") && !oTag.isNull("taggingDate") && oTag.getString("taggingDate") != "")
+							tag.setTaggingDate(DateFormatter.parseDateISO8601(oTag.getString("taggingDate")));
+						CatalogueAccessPoint.getCatalogue().setTag(uri, tag);
+					}
+				}				
+				response.setStatus(HttpServletResponse.SC_OK);
+			} else {
+				response.sendError(HttpServletResponse.SC_BAD_REQUEST, "URI is required.");
+			}
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+	}
 
 	/**
 	 * Update the information about a concept. "Update" means the concept will be deleted and created again with

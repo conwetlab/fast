@@ -22,6 +22,7 @@ import org.ontoware.rdf2go.vocabulary.RDF;
 import eu.morfeoproject.fast.model.Action;
 import eu.morfeoproject.fast.model.BackendService;
 import eu.morfeoproject.fast.model.CTag;
+import eu.morfeoproject.fast.model.Concept;
 import eu.morfeoproject.fast.model.Condition;
 import eu.morfeoproject.fast.model.FastModelFactory;
 import eu.morfeoproject.fast.model.Form;
@@ -78,6 +79,49 @@ public abstract class GenericServlet extends HttpServlet {
 	}
 	
 	@SuppressWarnings("unchecked")
+	protected void parseConcept(Concept concept, JSONObject json, URI uri) throws JSONException, IOException {
+		if (uri != null)
+			concept.setUri(uri);
+		if (json.has("label")) {
+			JSONObject jsonLabels = json.getJSONObject("label");
+			Iterator<String> labels = jsonLabels.keys();
+			for ( ; labels.hasNext(); ) {
+				String key = labels.next();
+				concept.getLabels().put(key, jsonLabels.getString(key));
+			}
+		}
+		if (json.has("description")) {
+			JSONObject jsonDescriptions = json.getJSONObject("description");
+			Iterator<String> descriptions = jsonDescriptions.keys();
+			for ( ; descriptions.hasNext(); ) {
+				String key = descriptions.next();
+				concept.getDescriptions().put(key, jsonDescriptions.getString(key));
+			}
+		}
+		// parse the tags
+		JSONArray aTag = json.getJSONArray("tags");
+		ArrayList<CTag> tags = new ArrayList<CTag>(aTag.length());
+		for (int i = 0; i < aTag.length(); i++) {
+			CTag tag = new CTag();
+			JSONObject oTag = aTag.getJSONObject(i);
+			if (oTag.has("means") && !oTag.isNull("means") && oTag.getString("means") != "")
+				tag.setMeans(new URIImpl(oTag.getString("means")));
+			if (oTag.has("label")){
+				JSONObject jsonLabels = oTag.getJSONObject("label");
+				Iterator<String> labels = jsonLabels.keys();
+				for ( ; labels.hasNext(); ) {
+					String key = labels.next();
+					tag.getLabels().put(key, jsonLabels.getString(key));
+				}
+			}
+			if (oTag.has("taggingDate") && !oTag.isNull("taggingDate") && oTag.getString("taggingDate") != "")
+				tag.setTaggingDate(DateFormatter.parseDateISO8601(oTag.getString("taggingDate")));
+			tags.add(tag);
+		}
+		concept.setTags(tags);
+	}
+	
+	@SuppressWarnings("unchecked")
 	protected void parseResource(Resource resource, JSONObject jsonResource, URI uri) throws JSONException, IOException {
 		if (uri != null)
 			resource.setUri(uri);
@@ -124,12 +168,12 @@ public abstract class GenericServlet extends HttpServlet {
 				}
 			}
 			if (oTag.has("taggingDate") && !oTag.isNull("taggingDate") && oTag.getString("taggingDate") != "")
-				tag.setTaggingDate(DateFormatter.parseDateISO8601(jsonResource.getString("creationDate")));
+				tag.setTaggingDate(DateFormatter.parseDateISO8601(oTag.getString("taggingDate")));
 			tags.add(tag);
 		}
 		resource.setTags(tags);
 	}
-	
+
 	protected ScreenFlow parseScreenFlow(JSONObject jsonScreenFlow, URI uri) throws JSONException, IOException {
 		ScreenFlow screenFlow = FastModelFactory.createScreenFlow();
 
