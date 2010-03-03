@@ -22,6 +22,7 @@ import eu.morfeoproject.fast.vocabulary.DC;
 public class Concept {
 	
 	private URI uri;
+	private URI subClassOf;
 	private Map<String, String> labels;
 	private Map<String, String> descriptions;
     private List<CTag> tags;
@@ -37,6 +38,14 @@ public class Concept {
 
 	public void setUri(URI uri) {
 		this.uri = uri;
+	}
+
+    public URI getSubClassOf() {
+		return subClassOf;
+	}
+
+	public void setSubClassOf(URI subClassOf) {
+		this.subClassOf = subClassOf;
 	}
 
 	public Map<String, String> getLabels() {
@@ -98,6 +107,8 @@ public class Concept {
 			json.put("uri", JSONObject.NULL);
 		else
 			json.put("uri", getUri().toString());
+		if (getSubClassOf() != null)
+			json.put("subClassOf", getSubClassOf().toString());
 		if (getLabels() == null)
 			json.put("label", JSONObject.NULL);
 		else if (!getLabels().isEmpty()) {
@@ -133,6 +144,7 @@ public class Concept {
 		model.setNamespace("ctag", CTAG.NS_CTAG.toString());
 		
 		URI resourceUri = this.getUri();
+		model.addStatement(resourceUri, RDFS.subClassOf, this.getSubClassOf());
 		for (String key : this.getLabels().keySet())
 			model.addStatement(resourceUri, RDFS.label, model.createLanguageTagLiteral(this.getLabels().get(key), key));
 		for (String key : this.getDescriptions().keySet())

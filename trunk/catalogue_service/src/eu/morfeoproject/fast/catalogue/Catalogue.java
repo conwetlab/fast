@@ -2140,7 +2140,9 @@ public class Catalogue {
 			Statement st = cIt.next();
 			URI predicate = st.getPredicate();
 			Node object = st.getObject();
-			if (predicate.equals(RDFS.label)) {
+			if (predicate.equals(RDFS.subClassOf)) {
+				concept.setSubClassOf(object.asURI());
+			} else if (predicate.equals(RDFS.label)) {
 				if (object instanceof LanguageTagLiteral) {
 					LanguageTagLiteral label = object.asLanguageTagLiteral();
 					concept.getLabels().put(label.getLanguageTag(), label.getValue());

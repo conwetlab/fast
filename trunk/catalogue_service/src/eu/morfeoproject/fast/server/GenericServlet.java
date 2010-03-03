@@ -82,6 +82,9 @@ public abstract class GenericServlet extends HttpServlet {
 	protected void parseConcept(Concept concept, JSONObject json, URI uri) throws JSONException, IOException {
 		if (uri != null)
 			concept.setUri(uri);
+		if (json.has("subClassOf")) {
+			concept.setSubClassOf(new URIImpl(json.getString("subClassOf")));
+		}
 		if (json.has("label")) {
 			JSONObject jsonLabels = json.getJSONObject("label");
 			Iterator<String> labels = jsonLabels.keys();
