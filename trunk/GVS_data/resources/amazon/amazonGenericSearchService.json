@@ -44,6 +44,14 @@
     "version":"1.0",
     "parameterized":true,
     "libraries":[
+        {
+            "language":"JavaScript",
+            "source":"http://demo.fast.morfeo-project.org/gvsdata/amazonURL/signAmazonURLs.js"
+        },
+        {
+            "language":"JavaScript",
+            "source":"http://demo.fast.morfeo-project.org/gvsdata/amazonURL/jssha2/sha2.js"
+        }
     ],
     "actions":[
         {
