@@ -268,7 +268,7 @@ class BuildingBlockEntry(resource.Resource):
             
             updateCatalogueBuildingBlock(bb)
 
-            return HttpResponse(json_encode(bb.data), mimetype='application/json; charset=UTF-8')
+            return HttpResponse(bb.data, mimetype='application/json; charset=UTF-8')
         except Exception, e:
             transaction.rollback()
             return HttpResponseServerError(json_encode({'message':unicode(e)}), mimetype='application/json; charset=UTF-8')   
