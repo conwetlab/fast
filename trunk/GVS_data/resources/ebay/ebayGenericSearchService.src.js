@@ -16,61 +16,42 @@ search: function (filter){
 	
 	var url = 'http://open.api.ebay.com/shopping?' + Object.toQueryString(parameters);
 
-	//Invoke the service
     new FastAPI.Request(url,{
         'method':       'get',
         'content':      'xml',
         'context':      this,
-        'onSuccess':    function (transport){this.addToList(transport, filter)}.bind(this)
+        'onSuccess':    this.addToList.bind(this)
     });
 },
 
-addToList: function (transport, filter){
+addToList: function (transport){
 	var eBayList = {id: 'list', data:new Array()};
-	var xml = transport;
-    var items = xml.getElementsByTagName("Item");
-    //Fill the table, 1 row per item
+    var items = transport.getElementsByTagName("Item");
     $A(items).each(function(item){
-         if (item.getElementsByTagName("ItemID").length > 0) {
-         	var itemID = item.getElementsByTagName("ItemID")[0].firstChild.nodeValue;
-         } else {
-			var itemID = "&nbsp;";
-         }
-         if (item.getElementsByTagName("Title").length > 0) {
-         	var title = item.getElementsByTagName("Title")[0].firstChild.nodeValue;
-		 } else {
-			var title = "&nbsp;";
-		 }
-		 if (item.getElementsByTagName("PrimaryCategoryName").length > 0) {
-         	var category = item.getElementsByTagName("PrimaryCategoryName")[0].firstChild.nodeValue;
-		 } else {
-			var category = "&nbsp;";
-		 }
-		 if (item.getElementsByTagName("ConvertedCurrentPrice").length > 0) {
-         	var currentPrice = '$' + item.getElementsByTagName("ConvertedCurrentPrice")[0].firstChild.nodeValue;
-		 } else {
-			var currentPrice = "&nbsp;";
-		 }
-		 if (item.getElementsByTagName("GalleryURL").length > 0) {
-             var image = item.getElementsByTagName("GalleryURL")[0].firstChild.nodeValue;
-		 } else {
-         	var image = "";
-		 }
-		 if (item.getElementsByTagName("ViewItemURLForNaturalSearch").length > 0) {
-             var url = item.getElementsByTagName("ViewItemURLForNaturalSearch")[0].firstChild.nodeValue;
-		 } else {
-         	var url = "";
-		 }
-		 var row = {
-			 source: 'eBay',
-         	 id: itemID,
-             title:  title.replace(/\x27/g,"`"),
-             type: category,
-             price: currentPrice,
-             image: image,
-             url: url
-         };
-         eBayList.data.push(row);
+    	var row = {source: 'eBay'};
+    	
+		if (item.getElementsByTagName("ItemID").length > 0) {
+			row.itemID = item.getElementsByTagName("ItemID")[0].firstChild.nodeValue;
+		}
+		if (item.getElementsByTagName("Title").length > 0) {
+			row.title = item.getElementsByTagName("Title")[0].firstChild.nodeValue;
+		}
+		if (item.getElementsByTagName("PrimaryCategoryName").length > 0) {
+			row.category = item.getElementsByTagName("PrimaryCategoryName")[0].firstChild.nodeValue;
+		}
+		if (item.getElementsByTagName("ConvertedCurrentPrice").length > 0) {
+			var price = item.getElementsByTagName("ConvertedCurrentPrice")[0];
+			var currency = price.getAttribute("currencyID");
+			item.data.currentPrice = price.firstChild.nodeValue + " " + currency;
+		}
+		if (item.getElementsByTagName("GalleryURL").length > 0) {
+			row.image = item.getElementsByTagName("GalleryURL")[0].firstChild.nodeValue;
+		}
+		if (item.getElementsByTagName("ViewItemURLForNaturalSearch").length > 0) {
+			row.url = item.getElementsByTagName("ViewItemURLForNaturalSearch")[0].firstChild.nodeValue;
+		}
+		 
+        eBayList.data.push(row);
      });
      this.manageData(["itemList"], [eBayList], []);
 },

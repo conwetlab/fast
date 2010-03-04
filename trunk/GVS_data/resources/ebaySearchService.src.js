@@ -41,8 +41,15 @@ addToList: function (transport, filter){
 		 } else {
 			var category = "&nbsp;";
 		 }
-		 if (item.getElementsByTagName("ConvertedCurrentPrice").length > 0) {
+		 if (item.getElementsByTagName("ConvertedCurrentPrice ").length > 0) {
          	var currentPrice = '$' + item.getElementsByTagName("ConvertedCurrentPrice")[0].firstChild.nodeValue;
+		 } else {
+			var currentPrice = "&nbsp;";
+		 }
+		 if (item.getElementsByTagName("ConvertedCurrentPrice").length > 0) {
+			var price = item.getElementsByTagName("ConvertedCurrentPrice")[0];
+			var currency = price.getAttribute("currencyID");
+			currentPrice = price.firstChild.nodeValue + " " + currency;
 		 } else {
 			var currentPrice = "&nbsp;";
 		 }

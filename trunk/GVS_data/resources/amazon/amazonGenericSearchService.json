@@ -80,6 +80,14 @@
                 },
                 "pattern":"?ItemGroup http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#ItemGroup",
                 "positive":"true"
+            },
+            {
+                "id":"message",
+                "label":{
+                    "en-gb":"A message"
+                },
+                "pattern":"?Message http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#Message",
+                "positive":"true"
             }
         ]
     ],

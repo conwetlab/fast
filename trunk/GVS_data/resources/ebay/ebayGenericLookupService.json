@@ -1,0 +1,76 @@
+{
+    "name":"Google Base Generic Lookup Service",
+    "code":"http://localhost:8010/resources/googlebase/googlebaseGenericLookupService.src.js",
+    "creationDate":"2009-04-20T17:00:00+0100",
+    "creator":"admin",
+    "description":{
+        "en-gb":"This service search information about an Amazon product"
+    },
+    "tags":[
+        {
+            "label":{
+                "en-gb":"google"
+            }
+        },
+        {
+            "label":{
+                "en-gb":"generic"
+            }
+        },
+        {
+            "label":{
+                "en-gb":"item"
+            }
+        }
+    ],
+    "homepage":"http://www.deri.ie/amazonLookupService",
+    "icon":"http://demo.fast.morfeo-project.org/gvsdata/images/catalogue/amazonLookupService.png",
+    "label":{
+        "en-gb":"Google Base Lookup Service"
+    },
+    "rights":"http://creativecommons.org/",
+    "screenshot":"http://www.deri.ie/amazonLookupService.jpg",
+    "version":"1.0",
+    "libraries":[
+        {
+            "language":"JavaScript",
+            "source":"http://demo.fast.morfeo-project.org/gvsdata/amazonURL/signAmazonURLs.js"
+        },
+        {
+            "language":"JavaScript",
+            "source":"http://demo.fast.morfeo-project.org/gvsdata/amazonURL/jssha2/sha2.js"
+        }
+    ],
+    "actions":[
+        {
+            "name":"search",
+            "preconditions":[
+                {
+                    "id":"item",
+                    "label":{
+                        "en-gb":"A generic item"
+                    },
+                    "pattern":"?Item http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#Item"
+                }
+            ],
+            "uses":[
+                
+            ]
+        }
+    ],
+    "postconditions":[
+        [
+            {
+                "id":"item",
+                "label":{
+                    "en-gb":"A generic item"
+                },
+                "pattern":"?Item http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#Item",
+                "positive":"true"
+            }
+        ]
+    ],
+    "triggers":[
+        "newItem"
+    ]
+}

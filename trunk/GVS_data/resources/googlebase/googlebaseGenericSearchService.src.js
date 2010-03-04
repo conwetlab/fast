@@ -24,11 +24,11 @@ createList: function (transport){
 		var entry = items[i];
 		var item = {'source': 'Google Base'};
 		if(entry['id'] != undefined) item['id'] = entry['id']['$t']; 
-		if(entry['title']['$t'] != undefined) item['title'] = entry['title']['$t'];
+		if(entry['title'] != undefined) item['title'] = entry['title']['$t'];
 		if(entry['g$product_type'] != undefined) item['type'] = entry['g$product_type']['$t']; 
 		if(entry['g$image_link'] != undefined) item['image'] = entry['g$image_link']['$t']; 
-		if(entry['link'][0]['href'] != undefined) item['url'] = entry['link'][0]['href']; 
-		if(entry['g$price'][0] != undefined) item['price'] = entry['g$price'][0]['$t']; 
+		if(entry['link'] != undefined) item['url'] = entry['link'][0]['href']; 
+		if(entry['g$price'] != undefined) item['price'] = entry['g$price'][0]['$t']; 
 		l.data.push(item);
 	}
     this.manageData(["itemList"], [l], []);
