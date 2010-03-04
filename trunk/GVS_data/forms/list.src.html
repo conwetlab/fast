@@ -132,7 +132,7 @@
 
                     this._buttonArea = $("{{screenId}}_buttonArea");
                     this._buttonArea.hide();
-                    
+
                     this.showProgress();
 
                     this._items = [];
@@ -150,7 +150,7 @@
                         data: entryInfo.entry
                     };
 
-                    this.manageData(null, [item], []);
+                    this.form.manageData(null, [item], []);
                 },
 
                 clearSelected: function () {
