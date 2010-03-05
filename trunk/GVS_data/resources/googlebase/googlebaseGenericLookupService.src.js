@@ -18,8 +18,8 @@ search: function (item){
     	var entry = transport['entry'];
     	if(entry['id'] != undefined) item.data['id'] = entry['id']['$t']; 
     	if(entry['title'] != undefined) item.data['title'] = entry['title']['$t'];
-    	if(entry['g$product_type'] != undefined) item.data['type'] = entry['g$product_type']['$t']; 
-    	if(entry['g$image_link'] != undefined) item.data['image'] = entry['g$image_link']['$t']; 
+    	if(entry['g$product_type'] != undefined) item.data['type'] = entry['g$product_type'][0]['$t']; 
+		if(entry['g$image_link'] != undefined) item.data['image'] = entry['g$image_link'][0]['$t'];
     	if(entry['link'] != undefined) item.data['url'] = entry['link'][0]['href']; 
     	if(entry['g$price'] != undefined) item.data['price'] = entry['g$price'][0]['$t'];
     	

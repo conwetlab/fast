@@ -28,7 +28,7 @@ createItem: function (transport){
 		it.data.title = item.getElementsByTagName("Title")[0].firstChild.nodeValue;
 	}
 	if (item.getElementsByTagName("PrimaryCategoryName").length > 0) {
-		it.data.category = item.getElementsByTagName("PrimaryCategoryName")[0].firstChild.nodeValue;
+		it.data.type = item.getElementsByTagName("PrimaryCategoryName")[0].firstChild.nodeValue;
 	}
 	if (item.getElementsByTagName("ConvertedCurrentPrice").length > 0) {
 		var price = item.getElementsByTagName("ConvertedCurrentPrice")[0];

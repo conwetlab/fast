@@ -37,7 +37,7 @@ addToList: function (transport){
 			row.title = item.getElementsByTagName("Title")[0].firstChild.nodeValue;
 		}
 		if (item.getElementsByTagName("PrimaryCategoryName").length > 0) {
-			row.category = item.getElementsByTagName("PrimaryCategoryName")[0].firstChild.nodeValue;
+			row.type = item.getElementsByTagName("PrimaryCategoryName")[0].firstChild.nodeValue;
 		}
 		if (item.getElementsByTagName("ConvertedCurrentPrice").length > 0) {
 			var price = item.getElementsByTagName("ConvertedCurrentPrice")[0];
