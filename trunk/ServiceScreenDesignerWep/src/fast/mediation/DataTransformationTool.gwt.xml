@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE module PUBLIC "-//Google Inc.//DTD Google Web Toolkit 1.7.1//EN" "http://google-web-toolkit.googlecode.com/svn/tags/1.7.1/distro-source/core/src/gwt-module.dtd">
+<module>
+  <inherits name='com.google.gwt.xml.XML'/>
+  <inherits name='com.google.gwt.json.JSON'/>
+
+  <inherits name='com.google.gwt.user.theme.standard.Standard'/>
+
+  <inherits name="fujaba.web.runtime.FujabaRuntime"/>
+  <inherits name="de.uni_kassel.webcoobra.Webcoobra"/>
+  <inherits name="fast"/>
+  <entry-point class="fast.mediation.client.DataTransformationTool" />
+</module>

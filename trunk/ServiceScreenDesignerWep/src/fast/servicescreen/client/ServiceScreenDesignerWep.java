@@ -18,6 +18,9 @@ import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.user.client.ui.FlexTable.FlexCellFormatter;
 
+import de.uni_kassel.webcoobra.client.CoobraRoot;
+import de.uni_kassel.webcoobra.client.CoobraService;
+import de.uni_kassel.webcoobra.client.DataLoadTimer;
 import fast.FactPort;
 import fast.ServiceScreen;
 import fast.ServiceScreenModel;
@@ -28,9 +31,6 @@ import fast.servicescreen.client.gui.RuleGUI;
 import fast.servicescreen.client.gui.SaveLoadJsonHandler;
 import fast.servicescreen.client.gui.codegen_js.CodeGenViewer;
 import fast.servicescreen.client.rpc.SendRequestHandler;
-import fujaba.web.runtime.client.CoobraRoot;
-import fujaba.web.runtime.client.CoobraService;
-import fujaba.web.runtime.client.DataLoadTimer;
 import fujaba.web.runtime.client.FAction;
 import fujaba.web.runtime.client.ICObject;
 
@@ -203,7 +203,7 @@ public class ServiceScreenDesignerWep implements EntryPoint
 
    }
 
-public void buildGUI()
+   public void buildGUI()
    {
       /*
        * panel containing the designer-gui
@@ -234,13 +234,13 @@ public void buildGUI()
       rowCount++;
 
       // add input ports to general info
-      portGUI = new PortGUI(this);
+      portGUI = new PortGUI(serviceScreen);
       Widget inputPortTable = portGUI.createInputPortTable();
       generalInformationTable.setWidget(rowCount, 0, inputPortTable);
       rowCount++;
       
-      // add input ports to general info
-      portGUI = new PortGUI(this);
+      // add output ports to general info
+      portGUI = new PortGUI(serviceScreen);
       Widget outputPortTable = portGUI.createOutputPortTable();
       generalInformationTable.setWidget(rowCount, 0, outputPortTable);
       rowCount++;
@@ -290,13 +290,13 @@ public void buildGUI()
       int numRows = transformationTable.getRowCount();
       
       // Add translationtable
-      ruleGUI = new RuleGUI(this);
+      ruleGUI = new RuleGUI(serviceScreen, requestHandler);
       transformationTable.setWidget(numRows, 1, ruleGUI.createTranslationTable());
 
       transformationTable.ensureDebugId("cwFlexTable");
       
       // Add into tabpanel
-      tabPanel.add(transformationTable, "exTransformation");
+      tabPanel.add(transformationTable, "Transformation");
  
       //Adding part three, just to test code generation, there is a show of selected rules, templates and the .js results
       codeGenViewer = new CodeGenViewer(this);

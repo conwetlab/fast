@@ -1,10 +1,10 @@
-package fast.servicescreen.client.gui.ExtendedRuleParser;
+package fast.servicescreen.client.gui.ExtendedRuleParser;  
 
 /**
  * These kinds mark finite automata for ExtendedOpParser.
  * If u want to extend enums, u should handle this in ExtendedRuleParser.defineType, too!
- * */
-public enum Kind
+ * */ 
+public enum Kind 
 {
 	//Kinds
 	EOT,

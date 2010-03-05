@@ -17,7 +17,7 @@ import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.SuggestOracle.Suggestion;
 
 import fujaba.web.runtime.client.CObject;
-import fujaba.web.runtime.client.ModelRoot;
+import de.uni_kassel.webcoobra.client.ModelRoot;
 import fujaba.web.runtime.client.PropertyChangeEvent;
 import fujaba.web.runtime.client.PropertyChangeListener;
 import fujaba.web.runtime.client.reflect.CClass;

@@ -8,15 +8,16 @@
   <!-- Manages Coobra -->
   <servlet>
     <servlet-name>coobraServiceImpl</servlet-name>
-    <servlet-class>fujaba.web.runtime.server.CoobraServiceImpl</servlet-class>
+    <servlet-class>de.uni_kassel.webcoobra.server.CoobraServiceImpl</servlet-class>
   </servlet>
   
   <servlet-mapping>
     <servlet-name>coobraServiceImpl</servlet-name>
-    <url-pattern>/servicescreendesignerwep/fujaba.web.runtime.CoobraService</url-pattern>
-    <url-pattern>/fujaba.web.runtime.CoobraService</url-pattern>
+    <url-pattern>/servicescreendesignerwep/de.uni_kassel.webcoobra.client.CoobraService</url-pattern>
+    <url-pattern>/fast.mediation.DataTransformationTool/de.uni_kassel.webcoobra.client.CoobraService</url-pattern>
+    <url-pattern>/datatool/de.uni_kassel.webcoobra.client.CoobraService</url-pattern>
+    <url-pattern>/de.uni_kassel.webcoobra.client.CoobraService</url-pattern>
   </servlet-mapping>
-  
   
   <!-- Manages Requests -->
   <servlet>

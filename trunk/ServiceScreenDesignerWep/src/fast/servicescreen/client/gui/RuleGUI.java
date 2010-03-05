@@ -26,21 +26,25 @@ import com.google.gwt.user.client.ui.SuggestOracle.Suggestion;
 import com.google.gwt.xml.client.Node;
 import com.google.gwt.xml.client.NodeList;
 
+import fast.BuildingBlock;
 import fast.FASTMappingRule;
 import fast.FactAttribute;
 import fast.FactType;
 import fast.ServiceDesigner;
 import fast.servicescreen.client.ServiceScreenDesignerWep;
 import fast.servicescreen.client.gui.ExtendedRuleParser.OperationHandler;
+import fast.servicescreen.client.rpc.SendRequestHandler;
 
 public class RuleGUI
 {
-   public RuleGUI(ServiceScreenDesignerWep serviceScreenDesignerWep)
+   public RuleGUI(BuildingBlock buildingBlock, SendRequestHandler rh)
    {
-      designer = serviceScreenDesignerWep;
+      this.buildingBlock = buildingBlock;
+      requestHandler = rh;
    }
 
-   private ServiceScreenDesignerWep designer;
+   private BuildingBlock buildingBlock;
+   private SendRequestHandler requestHandler;
    
    public Tree xmlTree;
 
@@ -168,13 +172,13 @@ public class RuleGUI
       TreeItem treeParent = rulesTree.addItem("Rules:");
       
       //  root rule
-      if (designer.serviceScreen.sizeOfMappingRules() == 0)
+      if (buildingBlock.sizeOfMappingRules() == 0)
       {
-         designer.serviceScreen.addToMappingRules(new FASTMappingRule());
+         buildingBlock.addToMappingRules(new FASTMappingRule());
       }
       
       // add existing rules to the tree
-      Iterator<FASTMappingRule> iteratorOfMappingRules = designer.serviceScreen.iteratorOfMappingRules();
+      Iterator<FASTMappingRule> iteratorOfMappingRules = buildingBlock.iteratorOfMappingRules();
       
       while (iteratorOfMappingRules.hasNext())
       {
@@ -206,7 +210,7 @@ public class RuleGUI
       }
    }
 
-   private RulefieldsListener rulefieldListener = new RulefieldsListener(designer);
+   private RulefieldsListener rulefieldListener = new RulefieldsListener(buildingBlock);
    
    private TreeItem createRuleEditor(FASTMappingRule nextRule, TreeItem treeParent)
    {
@@ -352,10 +356,10 @@ public class RuleGUI
    
    private ServiceDesigner createDefaultTypeStructure()
    {
-      tmpServiceDesigner = designer.serviceScreen.getServiceDesigner(); 
+      tmpServiceDesigner = buildingBlock.getServiceDesigner(); 
       if (tmpServiceDesigner == null)
       {
-         tmpServiceDesigner = new ServiceDesigner().withScreens(designer.serviceScreen);
+         tmpServiceDesigner = new ServiceDesigner().withScreens(buildingBlock);
          addToFactTypes("List");
         
          addToFactTypes("Product");
@@ -399,7 +403,7 @@ public class RuleGUI
    private FactType findFactType(String typeName)
    {
       FactType factType = null;
-      for (Iterator iter = designer.serviceScreen.getServiceDesigner().iteratorOfFactTypes(); iter.hasNext();)
+      for (Iterator iter = buildingBlock.getServiceDesigner().iteratorOfFactTypes(); iter.hasNext();)
       {
          factType = (FactType) iter.next();
          if (factType.getTypeName().equals(typeName))
@@ -419,10 +423,10 @@ public class RuleGUI
       //transforms the rule hierarchy to Strings in facts - tree
       if (rootRule == null)
       {
-         rootRule = (FASTMappingRule) designer.serviceScreen.iteratorOfMappingRules().next();
+         rootRule = (FASTMappingRule) buildingBlock.iteratorOfMappingRules().next();
       }
       
-      designer.requestHandler.xmlDoc.getDocumentElement();
+      requestHandler.xmlDoc.getDocumentElement();
       
       buildFatcsTrees(factsTree);
    }
@@ -434,7 +438,7 @@ public class RuleGUI
 	      
 	      TreeItem rootItem = aFactsTree.addItem("Facts:");
 	      
-	      transform(designer.requestHandler.xmlDoc, rootRule, rootItem);
+	      transform(requestHandler.xmlDoc, rootRule, rootItem);
 	      
 	      RuleUtil.expandTree(aFactsTree);
    }
@@ -521,11 +525,11 @@ public class RuleGUI
    class RulefieldsListener implements ChangeHandler, SelectionHandler<Suggestion>
    {      
 	      @SuppressWarnings("unused")
-	      private ServiceScreenDesignerWep designer = null;
+	      private BuildingBlock buildingBlock = null;
 	      
-	      public RulefieldsListener(ServiceScreenDesignerWep designer)
+	      public RulefieldsListener(BuildingBlock block)
 	      {
-	         this.designer = designer;
+	         this.buildingBlock = block;
 	      }
 
 	      /**

@@ -12,17 +12,18 @@ import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.user.client.ui.HTMLTable.Cell;
 
+import fast.BuildingBlock;
 import fast.FactPort;
 import fast.servicescreen.client.ServiceScreenDesignerWep;
 
 public class PortGUI
 {
-   public PortGUI(ServiceScreenDesignerWep serviceScreenDesignerWep)
+   public PortGUI(BuildingBlock buildingBlock)
    {
-      designer = serviceScreenDesignerWep;
+      this.buildingBlock = buildingBlock;
    }
    
-   private ServiceScreenDesignerWep designer;
+   private BuildingBlock buildingBlock;
    public FlexTable inputPortTable;
    public FlexTable outputPortTable;
 
@@ -34,24 +35,24 @@ public class PortGUI
       int numRows = inputPortTable.getRowCount();
       
        // add headlines
-       inputPortTable.setHTML(numRows, 0, "Input Ports:");
+       inputPortTable.setHTML(numRows, 0, "Input Facts:");
        numRows++;
        
        // add the add-buttons
        // Add new input port Button
-       Button addInputPortButton = new Button("Add Port");
+       Button addInputPortButton = new Button("Add Fact");
        addInputPortButton.addClickHandler(new AddNewInputPortHandler());
        inputPortTable.setWidget(numRows, 0, addInputPortButton);
        numRows++;
 
        // add input header row
-       inputPortTable.setWidget(numRows, 0, new Label("Port Name"));
-       inputPortTable.setWidget(numRows, 1, new Label("Port Type"));
+       inputPortTable.setWidget(numRows, 0, new Label("Fact Name"));
+       inputPortTable.setWidget(numRows, 1, new Label("Fact Type"));
        inputPortTable.setWidget(numRows, 2, new Label("Example Value"));
        numRows++;
      
        // add rows for existing input fact ports
-       Iterator<FactPort> iteratorOfPreconditions = designer.serviceScreen.iteratorOfPreconditions();
+       Iterator<FactPort> iteratorOfPreconditions = buildingBlock.iteratorOfPreconditions();
        while (iteratorOfPreconditions.hasNext())
        {
           FactPort factPort = iteratorOfPreconditions.next();
@@ -94,23 +95,23 @@ public class PortGUI
       int numRows = outputPortTable.getRowCount();
       
        // add headlines
-      outputPortTable.setHTML(numRows, 0, "Output Ports:");
+      outputPortTable.setHTML(numRows, 0, "Output Facts:");
        numRows++;
        
        // Add new output port Button
-       Button addOutputPortButton = new Button("Add Port");
+       Button addOutputPortButton = new Button("Add Fact");
        addOutputPortButton.addClickHandler(new AddNewOutputPortHandler());
        outputPortTable.setWidget(numRows, 0, addOutputPortButton);
        numRows++;
 
        // add output header row
-       outputPortTable.setWidget(numRows, 0, new Label("Port Name"));
-       outputPortTable.setWidget(numRows, 1, new Label("Port Type"));
+       outputPortTable.setWidget(numRows, 0, new Label("Fact Name"));
+       outputPortTable.setWidget(numRows, 1, new Label("Fact Type"));
        outputPortTable.setWidget(numRows, 2, new Label("Example Value"));
        numRows++;
        
        // add rows for existing output fact ports
-       Iterator<FactPort> iteratorOfPostconditions = designer.serviceScreen.iteratorOfPostconditions();
+       Iterator<FactPort> iteratorOfPostconditions = buildingBlock.iteratorOfPostconditions();
        while (iteratorOfPostconditions.hasNext())
        {
           FactPort factPort = iteratorOfPostconditions.next();
@@ -151,7 +152,7 @@ public class PortGUI
      public void onClick(ClickEvent event)
      {
         FactPort factPort = new FactPort();
-        designer.serviceScreen.addToPreconditions(factPort);
+        buildingBlock.addToPreconditions(factPort);
         createInputTableRowFor(factPort);
      }
    }
@@ -184,7 +185,7 @@ public class PortGUI
         inputPortTable.removeRow(rowCount);
         
         // remove factport from preconditions
-        designer.serviceScreen.removeFromPreconditions(factPort);
+        buildingBlock.removeFromPreconditions(factPort);
      } 
    }
    
@@ -194,7 +195,7 @@ public class PortGUI
      public void onClick(ClickEvent event)
      {
         FactPort factPort = new FactPort();
-        designer.serviceScreen.addToPostconditions(factPort);
+        buildingBlock.addToPostconditions(factPort);
         createOutputTableRowFor(factPort);
      }
    }
@@ -227,7 +228,7 @@ public class PortGUI
     	  outputPortTable.removeRow(rowCount);
         
     	  // remove factport from postconditions
-    	  designer.serviceScreen.removeFromPostconditions(factPort);
+    	  buildingBlock.removeFromPostconditions(factPort);
      } 
    }
    
