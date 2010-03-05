@@ -42,7 +42,7 @@ addToList: function (transport){
 		if (item.getElementsByTagName("ConvertedCurrentPrice").length > 0) {
 			var price = item.getElementsByTagName("ConvertedCurrentPrice")[0];
 			var currency = price.getAttribute("currencyID");
-			item.data.currentPrice = price.firstChild.nodeValue + " " + currency;
+			row.price = price.firstChild.nodeValue + " " + currency;
 		}
 		if (item.getElementsByTagName("GalleryURL").length > 0) {
 			row.image = item.getElementsByTagName("GalleryURL")[0].firstChild.nodeValue;
