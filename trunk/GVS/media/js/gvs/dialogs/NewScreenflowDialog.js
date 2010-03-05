@@ -129,7 +129,9 @@ var NewScreenflowDialog = Class.create(ConfirmDialog /** @lends NewScreenflowDia
                         "value": version
                     }
                 ]
-            }
+            },
+            "fields": ["version"],
+            "limit": 1
         }
         PersistenceEngine.sendPost(URIs.screenflowSearch, null,
                 Object.toJSON(query), this, this._onAvailabilityCheckSuccess,

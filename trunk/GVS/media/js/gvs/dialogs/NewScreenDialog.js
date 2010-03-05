@@ -129,7 +129,9 @@ var NewScreenDialog = Class.create(ConfirmDialog /** @lends NewScreenDialog.prot
                         "value": version
                     }
                 ]
-            }
+            },
+            "fields": ["version"],
+            "limit": 1
         }
         PersistenceEngine.sendPost(URIs.screenSearch, null,
                 Object.toJSON(query), this, this._onAvailabilityCheckSuccess,
