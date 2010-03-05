@@ -92,6 +92,15 @@ var ScreenDocument = Class.create(PaletteDocument,
      * Implementing event listener
      * @override
      */
+    modified: function(/** ComponentInstance */ element) {
+    	this._updatePanes();
+        this._setDirty(true);
+    },
+
+    /**
+     * Implementing event listener
+     * @override
+     */
     positionUpdated: function(/** ComponentInstance */ element, /** Object */ position) {
         switch (element.constructor) {
             case PrePostInstance:
@@ -689,12 +698,12 @@ var ScreenDocument = Class.create(PaletteDocument,
                 var preReachability = this._inferenceEngine.getPreconditionReachability(
                             this._selectedElement.getUri());
                 var preconditions = this._selectedElement.getPreconditionTable(preReachability);
-                
+
                 var postReachability = this._inferenceEngine.isReachable(
                             this._selectedElement.getUri());
                 var postconditions = this._selectedElement.getPostconditionTable(postReachability);
-                
-                this._factPane.fillTable(preconditions,postconditions,[]);           
+
+                this._factPane.fillTable(preconditions,postconditions,[]);
             } else {
                 //PrePostInstance
                 if (this._selectedElement.getType()) {

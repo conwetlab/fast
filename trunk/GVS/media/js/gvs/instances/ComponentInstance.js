@@ -31,6 +31,14 @@ var ComponentInstance = Class.create(DragSource,
          * @private
          */
         this._view = this._createView();
+
+        /**
+         * BuildingBlock params
+         * @type String
+         * @private
+         */
+        this._params = '{}';
+
         /**
          * Inference engine to receive reachability updates
          * @type InferenceEngine
@@ -51,7 +59,6 @@ var ComponentInstance = Class.create(DragSource,
         
         
     },
-    
 
     // **************** PUBLIC METHODS **************** //
     
@@ -79,6 +86,18 @@ var ComponentInstance = Class.create(DragSource,
         info.set('Tags', this._buildingBlockDescription.tags.collect(function(tag) {
                 return tag.label['en-gb'];
             }).join(", "));
+
+        var params = document.createElement('div');
+
+        var text = document.createTextNode(this.getParams());
+        params.appendChild(text);
+
+        var paramsDialog = new ParamsDialog(this.getTitle(),
+        		               this.getParams(),
+                               this.setParams.bind(this));
+        params.appendChild(paramsDialog.getButtonNode());
+
+        info.set('Parameters', params);
         return info;
     },
 
@@ -150,6 +169,27 @@ var ComponentInstance = Class.create(DragSource,
         this.getHandlerNode().style.top = position.top + "px";
     },
 
+    /**
+     * Gets the component params
+     * @type Object
+     * @public
+     */
+    getParams: function() {
+        return this._params;
+    },
+
+    /**
+     * Sets the component params
+     * @params Object
+     * @public
+     */
+    setParams: function(/** Object */ params) {
+        this._params = params;
+
+        if (this._listener && this._listener.modified) {
+            this._listener.modified(this);
+        }
+    },
 
     /**
      * Returns the building block description

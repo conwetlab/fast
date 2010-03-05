@@ -150,6 +150,21 @@ var ScreenCanvasCache = Class.create( /** @lends ScreenCanvasCache.prototype */ 
     },
 
     /**
+     * Returns the parameters of an element by its URI
+     * @type Object
+     */
+    getParams: function (/** String */ id) {
+        var element = this._buildingblocks.detect(function(element) {
+            return element.id == id;
+        });
+        if (element) {
+            return element.parameter;
+        } else {
+            return null;
+        }
+    },
+
+    /**
      * Returns the position of an element by its URI
      * @type Object
      */

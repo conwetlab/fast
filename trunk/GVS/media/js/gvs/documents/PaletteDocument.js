@@ -618,6 +618,11 @@ var PaletteDocument = Class.create(AbstractDocument, /** @lends PaletteDocument.
             ids.each(function(id) {
                 var instance = factory.getInstance(buildingBlock, this._inferenceEngine);
                 instance.setId(id);
+                var parameters = this._canvasCache.getParams(id);
+                if (typeof parameters !== "string") {
+                	parameters = parameters.toJSON();
+                }
+                instance.setParams(parameters);
                 var position = this._canvasCache.getPosition(id);
                 instance.onFinish(true, position);
                 var dropNode = area.getNode();

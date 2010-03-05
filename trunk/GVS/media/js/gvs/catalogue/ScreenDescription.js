@@ -315,10 +315,16 @@ var ScreenDescription = Class.create(BuildingBlockDescription,
      _getScreenBuildingBlocks: function() {
         var buildingBlocks = new Array();
         this._buildingBlocks.values().each(function(block) {
+        	var params = block.buildingblock.getParams();
+        	try {
+        		params = JSON.parse(params);
+        	} catch (e) {
+        	}
             buildingBlocks.push({
                 'id': block.buildingblock.getId(),
                 'uri': block.buildingblock.getUri(),
-                'position': block.position
+                'position': block.position,
+                'parameter': params
             });
         });
         return buildingBlocks;
