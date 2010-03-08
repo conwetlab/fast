@@ -31,7 +31,7 @@ var NewScreenDialog = Class.create(ConfirmDialog /** @lends NewScreenDialog.prot
      */
     _initDialogInterface: function (){
  
-        this._setHeader("Fulfill Gadget Information", 
+        this._setHeader("Fulfill Screen Information", 
                              "Please fulfill the required information in order to " +
                              "create a new screen.");
 

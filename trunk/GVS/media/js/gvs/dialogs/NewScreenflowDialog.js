@@ -31,7 +31,7 @@ var NewScreenflowDialog = Class.create(ConfirmDialog /** @lends NewScreenflowDia
      */
     _initDialogInterface: function (){
  
-        this._setHeader("Fulfill Gadget Information", 
+        this._setHeader("Fulfill Screenflow Information", 
                              "Please fulfill the required information in order to " +
                              "create a new screenflow.");
 
