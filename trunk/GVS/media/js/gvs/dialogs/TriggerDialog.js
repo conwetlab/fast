@@ -146,7 +146,7 @@ var TriggerDialog = Class.create(ConfirmDialog /** @lends TriggerDialog.prototyp
         this._addTriggerButton = new dijit.form.Button({
             'iconClass': 'plusIcon',
             'showLabel': true,
-            'label': '+',
+            'label': '<',
             'style': 'width:25px',
             'onClick': this._onAddTrigger.bind(this)
         });
@@ -155,7 +155,7 @@ var TriggerDialog = Class.create(ConfirmDialog /** @lends TriggerDialog.prototyp
         this._removeTriggerButton = new dijit.form.Button({
             'iconClass': 'minusIcon',
             'showLabel': true,
-            'label': '-',
+            'label': '>',
             'style': 'width:25px',
             'onClick': this._onRemoveTrigger.bind(this)
         });
