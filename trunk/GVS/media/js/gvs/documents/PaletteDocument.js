@@ -620,7 +620,7 @@ var PaletteDocument = Class.create(AbstractDocument, /** @lends PaletteDocument.
                 instance.setId(id);
                 var parameters = this._canvasCache.getParams(id);
                 if (typeof parameters !== "string") {
-                	parameters = parameters.toJSON();
+                	parameters = Object.toJSON(parameters);
                 }
                 instance.setParams(parameters);
                 var position = this._canvasCache.getPosition(id);
