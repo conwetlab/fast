@@ -7,9 +7,8 @@ var ScreenDocument = Class.create(PaletteDocument,
      * @extends PaletteDocument
      */
     initialize: function($super, /** Object */ properties) {     
-        $super("Screen", properties, new ScreenInferenceEngine());
 
-         /**
+		/**
          * Form instance of the screen, if any
          * @type FormInstance
          * @private
@@ -44,6 +43,11 @@ var ScreenDocument = Class.create(PaletteDocument,
          */
         this._recommendationManager = new RecommendationManager();
 
+        this._repaint = this._repaint.bind(this);
+
+
+
+        $super("Screen", properties, new ScreenInferenceEngine());
 
         this._start();
     },
@@ -263,6 +267,14 @@ var ScreenDocument = Class.create(PaletteDocument,
         this._description.getConditionInstances().each(function(instance) {
             instance.destroyWires();
         }.bind(this));
+
+        this._dojoConnections.each(function(connection){
+            dojo.disconnect(connection);
+        }.bind(this));
+
+        // Remove circular dependencies
+        this._dojoConnections = null;
+        this._repaint = null;
     },
     
 
@@ -515,24 +527,24 @@ var ScreenDocument = Class.create(PaletteDocument,
         });
 
         var leftSplitter = centerContainer.getSplitter("left");
-        dojo.connect(leftSplitter,'onmousemove', this._repaint.bind(this));
+        this._dojoConnections.push(dojo.connect(leftSplitter,'onmousemove', this._repaint));
 
         var bottomSplitter = centerContainer.getSplitter("bottom");
-        dojo.connect(bottomSplitter,'onmousemove', this._repaint.bind(this));
+        this._dojoConnections.push(dojo.connect(bottomSplitter,'onmousemove', this._repaint));
 
         this._designContainer.domNode.addClassName('canvas');
 
         leftSplitter = this._designContainer.getSplitter("left");
-        dojo.connect(leftSplitter,'onmousemove', this._repaint.bind(this));
+        this._dojoConnections.push(dojo.connect(leftSplitter,'onmousemove', this._repaint));
 
         bottomSplitter = this._designContainer.getSplitter("bottom");
-        dojo.connect(bottomSplitter,'onmousemove', this._repaint.bind(this));
+        this._dojoConnections.push(dojo.connect(bottomSplitter,'onmousemove', this._repaint));
 
         var rightSplitter = this._designContainer.getSplitter("right");
-        dojo.connect(rightSplitter,'onmousemove', this._repaint.bind(this));
+        this._dojoConnections.push(dojo.connect(rightSplitter,'onmousemove', this._repaint));
 
         var topSplitter = this._designContainer.getSplitter("top");
-        dojo.connect(topSplitter,'onmousemove', this._repaint.bind(this));
+        this._dojoConnections.push(dojo.connect(topSplitter,'onmousemove', this._repaint));
 
         centerContainer.addChild(this._designContainer);
         centerContainer.addChild(this._inspectorArea);
