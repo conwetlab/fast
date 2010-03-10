@@ -210,6 +210,7 @@ public class FactEditor
             // check object coobraRoot is really bound
             JavaSDM.ensure ( coobraRoot != null );
             dataLoadTimer = DataLoadTimer.get();
+            dataLoadTimer.sessionId = (String) this.resultValue;
 
             // check object dataLoadTimer is really bound
             JavaSDM.ensure ( dataLoadTimer != null );

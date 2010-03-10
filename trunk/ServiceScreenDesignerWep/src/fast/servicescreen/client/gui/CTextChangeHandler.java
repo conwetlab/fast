@@ -16,6 +16,8 @@ import com.google.gwt.user.client.ui.SuggestOracle;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.SuggestOracle.Suggestion;
 
+import fast.common.client.FactType;
+import fast.common.client.ServiceDesigner;
 import fujaba.web.runtime.client.CObject;
 import de.uni_kassel.webcoobra.client.ModelRoot;
 import fujaba.web.runtime.client.PropertyChangeEvent;
@@ -71,23 +73,24 @@ public class CTextChangeHandler implements ChangeHandler, PropertyChangeListener
    }
    
    @SuppressWarnings({ "unchecked" })
-   public static SuggestBox createTypeSuggestBox(CObject obj, String attrName)
+   public static SuggestBox createTypeSuggestBox(ServiceDesigner designer, CObject obj, String attrName)
    {
 	   //create oracle and all the types
 	   MultiWordSuggestOracle oracle = new MultiWordSuggestOracle();
-	   ModelRoot root = ModelRoot.get();
+	   
 	   final ArrayList<String> words = new ArrayList<String>();
-	   words.add("String");
-
-	   for (Iterator<CClass> types = root.iteratorOfCClasses(); types.hasNext();) 
+	   
+	   for (Iterator<FactType> types = designer.iteratorOfFactTypes(); types.hasNext();) 
 	   {
-	      CClass type = (CClass) types.next();
-	      String typeName = type.getName();
+		  FactType type = (FactType) types.next();
+	      String typeName = type.getTypeName();
 	      //format type name: (e.g. Book - fast.amazon)
-	      typeName = typeName.substring(typeName.lastIndexOf(".") + 1) + " - " +
-	      typeName.subSequence(0, typeName.lastIndexOf("."));
+	      // typeName = typeName.substring(typeName.lastIndexOf(".") + 1) + " - " +
+	      // typeName.subSequence(0, typeName.lastIndexOf("."));
 	      //add to oracle words
+	      System.out.println("Add type to oracle: " + typeName);
 	      words.add(typeName);
+	      words.add("List of " +  typeName);
 	   }
 	   for (Iterator wordIt = words.iterator(); wordIt.hasNext();)
 	   {
@@ -106,7 +109,7 @@ public class CTextChangeHandler implements ChangeHandler, PropertyChangeListener
 			@Override
 			public void onFocus(FocusEvent event)
 			{
-				   if(!words.contains(suggestBox.getText()))
+				   if(!words.contains(suggestBox.getText())  && words.size() > 0)
 				   {
 					   textBox.setText(words.get(0));
 				   }

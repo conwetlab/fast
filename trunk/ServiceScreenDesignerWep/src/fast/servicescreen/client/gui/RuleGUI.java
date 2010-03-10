@@ -356,31 +356,31 @@ public class RuleGUI
    private ServiceDesigner createDefaultTypeStructure()
    {
       tmpServiceDesigner = buildingBlock.getServiceDesigner(); 
-      if (tmpServiceDesigner == null)
-      {
-         tmpServiceDesigner = new ServiceDesigner().withScreens(buildingBlock);
-         addToFactTypes("List");
-        
-         addToFactTypes("Product");
-         withNewFactAttr("productName");
-         withNewFactAttr("price");
-         withNewFactAttr("uri");
-         
-         addToFactTypes("Person");
-         withNewFactAttr("fullName");
-         withNewFactAttr("address");
-         
-         addToFactTypes("Address");
-         withNewFactAttr("street");
-         withNewFactAttr("cipcode");
-         withNewFactAttr("city");
-         withNewFactAttr("country");
-                  
-         addToFactTypes("ShoppingCard");
-      
-         addToFactTypes("String");
-         withNewFactAttr("value");
-      }
+//      if (tmpServiceDesigner == null)
+//      {
+//         tmpServiceDesigner = new ServiceDesigner().withScreens(buildingBlock);
+//         addToFactTypes("List");
+//        
+//         addToFactTypes("Product");
+//         withNewFactAttr("productName");
+//         withNewFactAttr("price");
+//         withNewFactAttr("uri");
+//         
+//         addToFactTypes("Person");
+//         withNewFactAttr("fullName");
+//         withNewFactAttr("address");
+//         
+//         addToFactTypes("Address");
+//         withNewFactAttr("street");
+//         withNewFactAttr("cipcode");
+//         withNewFactAttr("city");
+//         withNewFactAttr("country");
+//                  
+//         addToFactTypes("ShoppingCard");
+//      
+//         addToFactTypes("String");
+//         withNewFactAttr("value");
+//      }
       return tmpServiceDesigner;
    }
    

@@ -22,6 +22,7 @@ import de.uni_kassel.webcoobra.client.CoobraRoot;
 import de.uni_kassel.webcoobra.client.CoobraService;
 import de.uni_kassel.webcoobra.client.DataLoadTimer;
 import fast.common.client.FactPort;
+import fast.common.client.ServiceDesigner;
 import fast.common.client.ServiceScreen;
 import fast.common.client.ServiceScreenModel;
 import fast.servicescreen.client.gui.CTextChangeHandler;
@@ -32,6 +33,7 @@ import fast.servicescreen.client.gui.SaveLoadJsonHandler;
 import fast.servicescreen.client.gui.codegen_js.CodeGenViewer;
 import fast.servicescreen.client.rpc.SendRequestHandler;
 import fujaba.web.runtime.client.FAction;
+import fujaba.web.runtime.client.FTest;
 import fujaba.web.runtime.client.ICObject;
 
 /**
@@ -39,6 +41,7 @@ import fujaba.web.runtime.client.ICObject;
  */
 public class ServiceScreenDesignerWep implements EntryPoint
 {
+   public ServiceDesigner designer;
    public ServiceScreen serviceScreen;
 
    /**
@@ -46,8 +49,8 @@ public class ServiceScreenDesignerWep implements EntryPoint
     */
    public void onModuleLoad()
    {
-//      FTest.init();
-//      FTest.assertTrue(true, "entry point has been reached");
+      FTest.init();
+      FTest.assertTrue(true, "entry point has been reached");
 
       // build action graph
       initFActions();
@@ -97,7 +100,9 @@ public class ServiceScreenDesignerWep implements EntryPoint
          ServiceScreenModel servicemodel = new ServiceScreenModel();
          servicemodel.registerModelRoot();
          // fujaba.web.runtime.client.ModelRoot.addEventListener(servicemodel);
+         DataLoadTimer.get().sessionId = result;
          DataLoadTimer.get().run(buildAction, null);
+         
          
       }
    }
@@ -133,25 +138,36 @@ public class ServiceScreenDesignerWep implements EntryPoint
          while (iter.hasNext())
          {
             Object obj = iter.next();
-            if (obj instanceof ServiceScreen)
+            if (obj instanceof ServiceDesigner)
             {
-               serviceScreen = (ServiceScreen) obj;
+               designer = (ServiceDesigner) obj;
                break;
             }
          }
 
-         if (serviceScreen == null)
+         if (designer == null)
          {
-            serviceScreen = new ServiceScreen();
+        	 designer = new ServiceDesigner();
+         }
+         
+         Iterator iteratorOfScreens = designer.iteratorOfScreens();
+         if (iteratorOfScreens.hasNext())
+         {
+        	 serviceScreen = (ServiceScreen) iteratorOfScreens.next();
+         }
+         else
+         {
+        	 serviceScreen = new ServiceScreen();
+        	 designer.addToScreens(serviceScreen);
          }
          
          buildGUI();
          
          // in case of testing 
-         if (getToSuccess() != null)
-         {
-            getToSuccess().doAction();
-         }
+//         if (getToSuccess() != null)
+//         {
+//            getToSuccess().doAction();
+//         }
          
       }
    }
