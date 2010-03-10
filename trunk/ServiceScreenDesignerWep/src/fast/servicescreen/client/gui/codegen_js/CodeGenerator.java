@@ -7,15 +7,15 @@ import java.util.Iterator;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
-import fast.FASTMappingRule;
-import fast.FactPort;
+import fast.common.client.FASTMappingRule;
+import fast.common.client.FactPort;
 import fast.servicescreen.client.RequestService;
 import fast.servicescreen.client.RequestServiceAsync;
 import fast.servicescreen.client.ServiceScreenDesignerWep;
 import fast.servicescreen.client.gui.RuleUtil;
-import fast.servicescreen.client.gui.ExtendedRuleParser.Kind;
-import fast.servicescreen.client.gui.ExtendedRuleParser.Operation;
-import fast.servicescreen.client.gui.ExtendedRuleParser.OperationHandler;
+import fast.servicescreen.client.gui.parser.Kind;
+import fast.servicescreen.client.gui.parser.Operation;
+import fast.servicescreen.client.gui.parser.OperationHandler;
 
 /**
  * Use the constructor to create the first template

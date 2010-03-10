@@ -26,13 +26,12 @@ import com.google.gwt.user.client.ui.SuggestOracle.Suggestion;
 import com.google.gwt.xml.client.Node;
 import com.google.gwt.xml.client.NodeList;
 
-import fast.BuildingBlock;
-import fast.FASTMappingRule;
-import fast.FactAttribute;
-import fast.FactType;
-import fast.ServiceDesigner;
-import fast.servicescreen.client.ServiceScreenDesignerWep;
-import fast.servicescreen.client.gui.ExtendedRuleParser.OperationHandler;
+import fast.common.client.BuildingBlock;
+import fast.common.client.FASTMappingRule;
+import fast.common.client.FactAttribute;
+import fast.common.client.FactType;
+import fast.common.client.ServiceDesigner;
+import fast.servicescreen.client.gui.parser.OperationHandler;
 import fast.servicescreen.client.rpc.SendRequestHandler;
 
 public class RuleGUI

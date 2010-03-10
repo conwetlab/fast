@@ -1,0 +1,5 @@
+<module>
+   <source path="client"/>
+   <inherits name="com.google.gwt.user.User"/>
+   <inherits name="fast.servicescreen.ServiceScreenDesignerWepSource"/>
+</module>

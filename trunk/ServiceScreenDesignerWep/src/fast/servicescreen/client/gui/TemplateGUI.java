@@ -12,7 +12,7 @@ import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.user.client.ui.HTMLTable.Cell;
 
-import fast.TemplateParameter;
+import fast.common.client.TemplateParameter;
 import fast.servicescreen.client.ServiceScreenDesignerWep;
 import fujaba.web.runtime.client.PropertyChangeEvent;
 import fujaba.web.runtime.client.PropertyChangeListener;

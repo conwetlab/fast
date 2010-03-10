@@ -15,8 +15,8 @@ import com.google.gwt.xml.client.Node;
 import com.google.gwt.xml.client.NodeList;
 import com.google.gwt.xml.client.XMLParser;
 
-import fast.FactPort;
-import fast.TemplateParameter;
+import fast.common.client.FactPort;
+import fast.common.client.TemplateParameter;
 import fast.servicescreen.client.RequestService;
 import fast.servicescreen.client.RequestServiceAsync;
 import fast.servicescreen.client.ServiceScreenDesignerWep;

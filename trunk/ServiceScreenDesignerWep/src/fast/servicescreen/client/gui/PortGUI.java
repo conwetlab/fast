@@ -12,9 +12,8 @@ import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.user.client.ui.HTMLTable.Cell;
 
-import fast.BuildingBlock;
-import fast.FactPort;
-import fast.servicescreen.client.ServiceScreenDesignerWep;
+import fast.common.client.BuildingBlock;
+import fast.common.client.FactPort;
 
 public class PortGUI
 {

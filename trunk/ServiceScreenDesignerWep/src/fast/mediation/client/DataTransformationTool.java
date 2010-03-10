@@ -12,16 +12,15 @@ import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.user.client.ui.FlexTable.FlexCellFormatter;
 
-
-import fast.ServiceScreenModel;
-import fast.TrafoOperator;
+import de.uni_kassel.webcoobra.client.CoobraRoot;
+import de.uni_kassel.webcoobra.client.CoobraService;
+import de.uni_kassel.webcoobra.client.DataLoadTimer;
+import fast.common.client.ServiceScreenModel;
+import fast.common.client.TrafoOperator;
 import fast.servicescreen.client.gui.CTextChangeHandler;
 import fast.servicescreen.client.gui.PortGUI;
 import fast.servicescreen.client.gui.RuleGUI;
 import fast.servicescreen.client.rpc.SendRequestHandler;
-import de.uni_kassel.webcoobra.client.CoobraRoot;
-import de.uni_kassel.webcoobra.client.CoobraService;
-import de.uni_kassel.webcoobra.client.DataLoadTimer;
 import fujaba.web.runtime.client.FAction;
 import fujaba.web.runtime.client.FTest;
 import fujaba.web.runtime.client.ICObject;
@@ -150,7 +149,9 @@ public class DataTransformationTool implements EntryPoint
 		generalInformationTable.setCellPadding(3);
 		generalInfoFormatter.setHorizontalAlignment(0, 1, HasHorizontalAlignment.ALIGN_LEFT);
 		generalInfoFormatter.setColSpan(0, 0, 2);
-
+		
+		
+	
 		int rowCount = generalInformationTable.getRowCount();
 
 		// add label and nameTextBox

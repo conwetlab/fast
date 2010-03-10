@@ -8,9 +8,9 @@ import com.google.gwt.json.client.JSONString;
 import com.google.gwt.json.client.JSONValue;
 import com.google.gwt.user.client.ui.RootPanel;
 
-import fast.FASTMappingRule;
-import fast.FactPort;
-import fast.ServiceScreen;
+import fast.common.client.FASTMappingRule;
+import fast.common.client.FactPort;
+import fast.common.client.ServiceScreen;
 import fast.servicescreen.client.ServiceScreenDesignerWep;
 
 public class SaveLoadJsonHandler {

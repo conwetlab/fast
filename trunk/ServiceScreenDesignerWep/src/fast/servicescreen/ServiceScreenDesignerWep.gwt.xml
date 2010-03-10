@@ -4,6 +4,9 @@
 <module rename-to='servicescreendesignerwep'>
 
   <!-- Inherit the core Web Toolkit stuff.                        -->
+  <source path="client"/>
+  
+  <inherits name="com.google.gwt.user.User"/>
   <inherits name='com.google.gwt.xml.XML'/>
   <inherits name='com.google.gwt.json.JSON'/>
 
@@ -11,7 +14,7 @@
 
   <inherits name="fujaba.web.runtime.FujabaRuntime"/>
   <inherits name="de.uni_kassel.webcoobra.Webcoobra"/>
-  <inherits name="fast"/>
+  <inherits name="fast.common.FastCommon"/>
   
   <!-- Specify the app entry point class.                         -->
   <entry-point class='fast.servicescreen.client.ServiceScreenDesignerWep'/>

@@ -14,7 +14,7 @@ import com.google.gwt.xml.client.Element;
 import com.google.gwt.xml.client.Node;
 import com.google.gwt.xml.client.NodeList;
 
-import fast.FASTMappingRule;
+import fast.common.client.FASTMappingRule;
 
 /**
  * This class contain static versions of helper methods needed
