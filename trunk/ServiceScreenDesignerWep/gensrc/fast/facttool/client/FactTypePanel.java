@@ -13,6 +13,7 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import fast.facttool.client.AttributeTextBox;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Button;
+import fast.facttool.client.DeleteAttributeButton;
 import fujaba.web.runtime.client.reflect.*;
 import fujaba.web.runtime.client.*;
 import java.util.*;
@@ -20,7 +21,7 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
 
 
-
+ //test
 
 public class FactTypePanel
 {
@@ -57,16 +58,17 @@ public class FactTypePanel
    // create attributes for all objects in all states of this statechart
    private HorizontalPanel panel;
    private FactAttribute newAttr;
+   private DeleteAttributeButton deleteButton;
+   private AttributeTextBox mnemonicBox;
    private AttributeTextBox uriTextBox;
    private HorizontalPanel attrTreeRootPanel;
    private Label attrTreeRootLabel;
    private AttributeTextBox nameBox;
+   private TreeItem treeItem;
+   private FactAttribute factAttr;
    private FactAttrPanel attrPanel;
    private Iterator fujaba__IterFactTypeToFactAttr;
    private Button attrAddButton;
-   private AttributeTextBox mnemonicBox;
-   private TreeItem treeItem;
-   private FactAttribute factAttr;
    private TreeItem attrRootItem;
 
    public void start()
@@ -237,6 +239,9 @@ public class FactTypePanel
             // create object attrRootItem
             attrRootItem = treeItem.addItem(attrTreeRootPanel);
 
+            // create object deleteButton
+            deleteButton = new DeleteAttributeButton ( );
+
             // assign attribute nameBox
             nameBox.setAttrName ("typeName");
             // assign attribute mnemonicBox
@@ -259,6 +264,8 @@ public class FactTypePanel
             mnemonicBox.start(panel, factType);
             // collabStat call
             uriTextBox.start(panel, factType);
+            // collabStat call
+            deleteButton.start(panel, factType);
             fujaba__Success = true;
          }
          catch ( JavaSDMException fujaba__InternalException )

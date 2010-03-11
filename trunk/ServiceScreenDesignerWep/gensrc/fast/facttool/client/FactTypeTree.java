@@ -11,6 +11,7 @@ import java.util.*;
 import de.uni_kassel.webcoobra.client.CoobraRoot;
 import com.google.gwt.user.client.ui.RootPanel;
 import fujaba.web.runtime.client.FTest;
+import com.google.gwt.user.client.ui.TabPanel;
 import com.google.gwt.user.client.ui.Tree;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
@@ -23,7 +24,7 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
 
 
-
+ //test
 
 public class FactTypeTree
 {
@@ -60,18 +61,19 @@ public class FactTypeTree
    // create attributes for all objects in all states of this statechart
    private HorizontalPanel panel;
    private Iterator fujaba__IterDesignerToFactType;
+   private ServiceDesigner designer;
    private CoobraRoot coobraRoot;
+   private TreeItem rootItem;
    private FactType factType;
+   private Label label;
    private FactType newType;
    private FactTypePanel factTypePanel;
-   private Tree tree;
-   private RootPanel rootPanel;
-   private Object _TmpObject;
-   private ServiceDesigner designer;
-   private TreeItem rootItem;
-   private Label label;
    private Iterator fujaba__IterCoobraRootToDesigner;
+   private Tree tree;
    private Button addButton;
+   private RootPanel rootPanel;
+   private TabPanel tabPanel;
+   private Object _TmpObject;
 
    public void start()
    {
@@ -259,6 +261,9 @@ public class FactTypeTree
                }
             }
             JavaSDM.ensure (fujaba__Success);
+            // create object tabPanel
+            tabPanel = new TabPanel ( );
+
             // create object tree
             tree = new Tree ( );
 
@@ -278,8 +283,8 @@ public class FactTypeTree
             label.setText ("Fact Types: ");
             // assign attribute addButton
             addButton.setText ("add");
-            // create link widget from rootPanel to tree
-            rootPanel.add (tree);
+            // create link widget from rootPanel to tabPanel
+            rootPanel.add (tabPanel);
 
             // create link widget from panel to label
             panel.add (label);
@@ -289,6 +294,10 @@ public class FactTypeTree
 
             // collabStat call
             FTest.assertTrue(true, "build panel reached");
+            // collabStat call
+            tabPanel.add(tree,"FactTool");
+            // collabStat call
+            tabPanel.selectTab(0);
             fujaba__Success = true;
          }
          catch ( JavaSDMException fujaba__InternalException )

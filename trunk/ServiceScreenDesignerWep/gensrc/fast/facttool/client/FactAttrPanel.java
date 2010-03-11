@@ -20,7 +20,7 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
 
 
-
+ //test
 
 public class FactAttrPanel
 {
@@ -56,14 +56,14 @@ public class FactAttrPanel
 
    // create attributes for all objects in all states of this statechart
    private HorizontalPanel panel;
+   private ServiceDesigner designer;
    private FactType factType;
    private MultiWordSuggestOracle oracle;
    private AttributeTextBox nameBox;
-   private Iterator fujaba__IterDesignerToSomeType;
-   private Object _TmpObject;
-   private ServiceDesigner designer;
    private String tname;
    private SuggestBox typeBox;
+   private Iterator fujaba__IterDesignerToSomeType;
+   private Object _TmpObject;
    private FactType someType;
 
    public void start()

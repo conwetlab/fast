@@ -4,8 +4,9 @@
 
 package fast.facttool.client;
 
-import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Panel;
+import com.google.gwt.user.client.ui.Button;
+import java.util.*;
 import fujaba.web.runtime.client.CObject;
 import fujaba.web.runtime.client.reflect.*;
 import fujaba.web.runtime.client.*;
@@ -16,7 +17,7 @@ import com.google.gwt.event.dom.client.ClickEvent;
 
  //test
 
-public class AttributeTextBox
+public class DeleteAttributeButton
 {
 
    public void removeAllFrom(String className) 
@@ -29,7 +30,6 @@ public class AttributeTextBox
    public java.util.ArrayList arrayListOfAttrNames() 
    {
       java.util.ArrayList vec = new java.util.ArrayList();
-      vec.add("attrName");
    	
       return vec;
    }
@@ -37,10 +37,7 @@ public class AttributeTextBox
    // generic set and get methods
    public void set (String fieldName, Object value)
    {
-      // attrName
-      if ("attrName".equals(fieldName)){				
-         setAttrName((String) value);
-      }   }  
+   }  
 
    public void add (String fieldName, Object value)
    {
@@ -49,15 +46,14 @@ public class AttributeTextBox
 
    public Object get (String fieldName)
    {
-      // attrName
-      if ("attrName".equals(fieldName)){
-         return (String) getAttrName();
-      }
       return null;
    }
 
    // create attributes for all objects in all states of this statechart
-   private TextBox textBox;
+   private Button deleteButton;
+   private Panel child;
+   private Iterator fujaba__IterParentToChild;
+   private Object _TmpObject;
 
    public void start()
    {
@@ -81,46 +77,17 @@ public class AttributeTextBox
       if(build != null)
          return;
 
-      attrChangeListener = new AttrChangeListener ();
       build = new Build ();
-      texBoxChangeHandler = new TexBoxChangeHandler ();
+      deleteHandler = new DeleteHandler ();
+      remove = new Remove ();
       // NONE
 
-      //build.addToFollowers("object.change", attrChangeListener);
+      //deleteHandler.addToFollowers("auto", remove);
       // NONE
 
-      //build.addToFollowers("textBox.change", texBoxChangeHandler);
+      //build.addToFollowers("deleteButton.click", deleteHandler);
    }
 
-
-   private AttrChangeListener attrChangeListener;
-   public class AttrChangeListener extends FAction
-   {
-       public void doAction()
-       {
-   		 boolean fujaba__Success = false;
-
-         // story pattern storypatternwiththis
-         try 
-         {
-            fujaba__Success = false; 
-
-            // check object textBox is really bound
-            JavaSDM.ensure ( textBox != null );
-            // assign attribute textBox
-            textBox.setText ((String) object.get(attrName));
-            fujaba__Success = true;
-         }
-         catch ( JavaSDMException fujaba__InternalException )
-         {
-            fujaba__Success = false;
-         }
-
-
-
-       }
-
-   }
 
    private Build build;
    public class Build extends FAction
@@ -136,13 +103,13 @@ public class AttributeTextBox
 
             // check object parent is really bound
             JavaSDM.ensure ( parent != null );
-            // create object textBox
-            textBox = new TextBox ( );
+            // create object deleteButton
+            deleteButton = new Button ( );
 
-            // assign attribute textBox
-            textBox.setText ((String) object.get(attrName));
-            // create link widget from parent to textBox
-            parent.add (textBox);
+            // assign attribute deleteButton
+            deleteButton.setText ("delete");
+            // create link widget from parent to deleteButton
+            parent.add (deleteButton);
 
             fujaba__Success = true;
          }
@@ -152,15 +119,83 @@ public class AttributeTextBox
          }
 
 
-         textBox.addChangeHandler(texBoxChangeHandler);
-         object.addPropertyChangeListener(attrChangeListener);
+         deleteButton.addClickHandler(deleteHandler);
 
        }
 
    }
 
-   private TexBoxChangeHandler texBoxChangeHandler;
-   public class TexBoxChangeHandler extends FAction
+   private DeleteHandler deleteHandler;
+   public class DeleteHandler extends FAction
+   {
+       public void doAction()
+       {
+   		 boolean fujaba__Success = false;
+
+         // story pattern storypatternwiththis
+         try 
+         {
+            fujaba__Success = false; 
+
+            // check object parent is really bound
+            JavaSDM.ensure ( parent != null );
+            // iterate to-many link widget from parent to child
+            fujaba__Success = false;
+            fujaba__IterParentToChild = parent.iterator ();
+
+            while ( fujaba__IterParentToChild.hasNext () )
+            {
+               try
+               {
+                  _TmpObject =  fujaba__IterParentToChild.next ();
+
+                  // ensure correct type and really bound of object child
+                  JavaSDM.ensure ( _TmpObject instanceof Panel );
+                  child = (Panel) _TmpObject;
+
+                  // check isomorphic binding between objects parent and child
+                  JavaSDM.ensure ( !parent.equals (child) );
+
+                  // destroy link widget from parent to child
+                  parent.remove (child);
+
+                  fujaba__Success = true;
+               }
+               catch ( JavaSDMException fujaba__InternalException )
+               {
+                  fujaba__Success = false;
+               }
+            }
+            JavaSDM.ensure (fujaba__Success);
+            fujaba__Success = true;
+         }
+         catch ( JavaSDMException fujaba__InternalException )
+         {
+            fujaba__Success = false;
+         }
+
+
+
+   		 if( autoGuardDeleteHandler1 == null)
+   		 {
+   			 autoGuardDeleteHandler1 = new AutoGuardDeleteHandler1();
+   			 autoGuardDeleteHandler1.setSource(deleteHandler);
+   			 autoGuardDeleteHandler1.setTarget(remove);
+   			 deleteHandler.addToAutoTransitions(autoGuardDeleteHandler1.toString(), autoGuardDeleteHandler1);
+   		 }
+
+   		 doAuto();
+       }
+
+      private AutoGuardDeleteHandler1 autoGuardDeleteHandler1;
+      private class AutoGuardDeleteHandler1 extends FGuard
+      {
+      }
+
+   }
+
+   private Remove remove;
+   public class Remove extends FAction
    {
        public void doAction()
        {
@@ -173,8 +208,12 @@ public class AttributeTextBox
 
             // check object object is really bound
             JavaSDM.ensure ( object != null );
+            // check object parent is really bound
+            JavaSDM.ensure ( parent != null );
             // collabStat call
-            object.set (attrName, textBox.getText());
+            object.removeYou();
+            // collabStat call
+            parent.removeFromParent();
             fujaba__Success = true;
          }
          catch ( JavaSDMException fujaba__InternalException )
@@ -193,24 +232,6 @@ public class AttributeTextBox
 
    // my style test for method.vm
 
-
-   private String attrName;
-
-   public void setAttrName (String value)
-   {
-      this.attrName = value;
-   }
-
-   public AttributeTextBox withAttrName (String value)
-   {
-      setAttrName (value);
-      return this;
-   }
-
-   public String getAttrName ()
-   {
-      return this.attrName;
-   }
    public void start (Panel parent , CObject object )
    { 
       // copy parameters to attributes
