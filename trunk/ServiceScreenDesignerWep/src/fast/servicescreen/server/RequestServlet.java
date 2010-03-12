@@ -26,13 +26,12 @@ public class RequestServlet extends HttpServlet
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException
 	{
-		//get the URL out of the requests parameter. Form escape codes
-		//back to a real URL, too
+		//get the URL out of the requests parameter and form escape codes back to a real URL
 		String url = req.getParameter("url");
 		
 		if(url != null && ! "".equals(url))
 		{
-			//execute a GET call with the param URL
+			//execute a GET call with the params URL
 			String value = sendHttpRequest_GET(url);
 			
 			//attach the responses output stream
@@ -42,6 +41,7 @@ public class RequestServlet extends HttpServlet
 			//the forward to the original transmitter)
 			byte[] outByte = value.getBytes();
 			out.write(outByte);
+//			out.close();
 		}
 	}
 	

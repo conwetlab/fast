@@ -12,6 +12,7 @@ import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.user.client.ui.FlexTable.FlexCellFormatter;
 
+import fast.common.client.ServiceScreen;
 import fast.servicescreen.client.ServiceScreenDesignerWep;
 
 /**
@@ -19,16 +20,13 @@ import fast.servicescreen.client.ServiceScreenDesignerWep;
  * */
 public class CodeGenViewer
 {
-	@SuppressWarnings("unused")
-	private ServiceScreenDesignerWep designer = null;
 	private FlexTable table = null;
 	private TextArea templateShowBox, jsShowBox;
 	public CodeGenerator generator = null;
 	
-	public CodeGenViewer(ServiceScreenDesignerWep designer)
+	public CodeGenViewer(ServiceScreenDesignerWep designer, ServiceScreen screen)
 	{
-		this.designer = designer;
-		generator = new CodeGenerator(designer);
+		generator = new CodeGenerator(designer, screen);
 		
 		//create templateShowBox
 		templateShowBox = new TextArea();

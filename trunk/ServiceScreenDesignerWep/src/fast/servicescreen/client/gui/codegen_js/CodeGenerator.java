@@ -9,6 +9,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import fast.common.client.FASTMappingRule;
 import fast.common.client.FactPort;
+import fast.common.client.ServiceScreen;
 import fast.servicescreen.client.RequestService;
 import fast.servicescreen.client.RequestServiceAsync;
 import fast.servicescreen.client.ServiceScreenDesignerWep;
@@ -23,10 +24,15 @@ import fast.servicescreen.client.gui.parser.OperationHandler;
 public class CodeGenerator
 {
 	private ServiceScreenDesignerWep designer = null;
+	ServiceScreen screen = null;
 	private HashMap<String, String> table = null;
+	private HashMap<String, String> bracketTable = null;
+	
 	private String rootTemplate = "";
+	private String endbrackets_forLoop = "";
+//	private String endbrackets_outObject = "";
 	private boolean writeFile_result = true;
-	private String endbrackets = "";
+	private boolean firstOperation = true;
 	
 	@SuppressWarnings("unused")
 	private String outputPortName = "";	//use later to generate translation code
@@ -44,14 +50,14 @@ public class CodeGenerator
 	private String depth4 = "				";
 	private String depth5 = "					";
 	
-	private boolean firstTime = true;
 	
 	/**
 	 * The constructor creates the first template
 	 * */
-	public CodeGenerator(ServiceScreenDesignerWep designer)
+	public CodeGenerator(ServiceScreenDesignerWep designer, ServiceScreen screen)
 	{
 		this.designer = designer;
+		this.screen = screen;
 		
 		setStartingRootTemplate();
 	}
@@ -69,26 +75,24 @@ public class CodeGenerator
 			depth2 + "var prerequest = '<<prerequest>>'; \n\n" +
 			
 			//should replace inports to real values in runtime!
-			"<<prerequestreplaces>>" +
+			depth2 + "<<prerequestreplaces>> \n\n" +
 			
 			//save the complete url with an xmlHttp request (made for Ajax access to SameDomain Resources)
 			depth2 + "var request = prerequest; \n" +
 			"\n" +
 			
 			//sending/recieving the request
-			"<<sendrequest>>" +
-			"\n" +
+			depth2 + "<<sendrequest>> \n";
 			
 			//the outputPort variable
 //			"<<outputport>> \n" +
 //			"\n" +
 			
-			//declare method end
-			"}\n";
 
 		//resets some variables
-		endbrackets = "";
-		firstTime = true;
+		endbrackets_forLoop = "";
+//		endbrackets_outObject = "";
+		firstOperation = true;
 		operationStart = true;
 		
 		return rootTemplate;
@@ -100,6 +104,7 @@ public class CodeGenerator
 	public String generateJS()
 	{
 		table = new HashMap<String, String>();	
+		bracketTable = new HashMap<String, String>();	
 		
 		//Build the input port list
 		add_InPorts_toTable();
@@ -117,8 +122,12 @@ public class CodeGenerator
 		//Build the exRules - feature
 		add_Translation_toTable();
 		
+		
+//		//add the object end brakets of transformation code
+//		bracketTable.put("<<endbrackets_outObject>>", endbrackets_outObject);
+		
 		//add the end brakets of transformation code
-		table.put("<<endbrackets>>", endbrackets);
+		bracketTable.put("<<endbrackets_forLoop>>", endbrackets_forLoop);
 		
 		
 		//load the current template text into root template (for user changes, delete it later)
@@ -246,21 +255,18 @@ public class CodeGenerator
 			depth4 + "var currentCount = null; \n\n" +
 			depth4 + "var result = new String(''); \n\n" +
 
-			"<<transformationCode>>" +
+			"<<transformationCode>>\n" +
 
-			"<<endbrackets>>\n" +
+//			"<<endbrackets_outObject>>\n" +
+			"<<endbrackets_forLoop>>\n" +
 			
-			depth3 + "document.getElementById('show').value = 'result: ' + result; \n" + 
+			depth3 + "document.getElementById('show').value = '{' + result + '}'; \n" + 
 			depth3 + "} \n" + 
 			depth2 + "} \n" + 
 			depth2 + "}\n\n" +
 			depth2 + "xmlHttp.send(null); \n\n" + 
 			depth2 + "return 'waiting for response...'; \n" + 
-			depth2 + "} \n";
-
-		
-		//reset endBrakets
-		endbrackets = "";
+			depth + "} \n";
 		
 		//add result in the table
 		table.put("<<sendrequest>>", sendRequest);
@@ -275,7 +281,7 @@ public class CodeGenerator
 		//take rootRule
 		FASTMappingRule rootRule = (FASTMappingRule) designer.serviceScreen.iteratorOfMappingRules().next();
 		
-		//run threw all rules and append js code. Returns js cdoe    
+		//run threw all rules and append js code. Returns js code    
 		transform(rootRule);
 		
 		table.put("<<transformationCode>>", transCode);
@@ -284,10 +290,10 @@ public class CodeGenerator
 	private boolean operationStart = true;
 	private void transform(FASTMappingRule rule)
 	{
-		if(RuleUtil.isCompleteRule(rule))
+		if(RuleUtil.isCompleteRule(rule) && rule.getOperationHandler() != null)
 		{
 			//get the current operationList 
-			OperationHandler opHandler = rule.getOperationHandler();
+			OperationHandler opHandler = (OperationHandler) rule.getOperationHandler();
 			Iterator<ArrayList<Operation>> opList_iter = opHandler.getOperationlistIterator();
 			ArrayList<Operation> current_opList = null;
 			
@@ -301,12 +307,13 @@ public class CodeGenerator
 				String from = rule.getSourceTagname();
 				String target = rule.getTargetElemName();
 				
+				//In first case we have to access from the root Tag
 				String curTag = currentTags;
-				if(firstTime)
+				if(firstOperation)
 				{
-					firstTime = false;	//reset by setStartTemplate()
+					firstOperation = false;
 					
-					curTag = "xmlResponse";		//In first case we access from the root Tag
+					curTag = "xmlResponse";
 				}
 
 				//element count
@@ -330,16 +337,22 @@ public class CodeGenerator
 							//declare loop body
 					depth4 + currentTags + " = " + from + ".item(" + countVar + ");\n\n" +
 							
-					depth4 + "currentCount = " + countVar + ";\n" + 	//adds a current index variable 
-							
-					depth4 + "result += '" + target + "Object - '; \n" +	//adds a 'new object' in the result
+					depth4 + "currentCount = " + countVar + ";\n" + 			//adds a current index variable 
+					
+					depth4 + "result += '\"" + target + "Object\" : { '; \n" +	//adds a 'new object' in the result
 							
 					depth4 + "\n\n";
 							
-							endbrackets += depth4 + "} \n";	//add end bracket
 				
 				//overtake loop in real transcode
 				transCode += tmpCode;
+				
+				
+				//add for loop end bracket
+				endbrackets_forLoop += depth4 + "} \n";	
+				
+				//adds the endbraket for the objects (would be added later)
+//				endbrackets_outObject += depth4 + "result += '}'; \n";
 			}
 			else if ("fillAttributes".equals(kind))
 			{
@@ -380,10 +393,11 @@ public class CodeGenerator
 						}
 					}
 					
+					
 					//overtake operation code in real transcode
 					if(operationStart)
 					{
-						transCode += depth4 + "result += '" + lastSourceTagname + "Attribute - ' + " + tmpCode;
+						transCode += depth4 + "result += '\"" + lastSourceTagname + "Attribute\" : \"' + " + tmpCode ;
 						
 						operationStart = false;
 					}
@@ -392,14 +406,23 @@ public class CodeGenerator
 						transCode += tmpCode;	
 					}
 					
-					//if there are more operationLists, add a +
+					
+					//if there are more operationLists, add a '+' , else a ';'
 					if(opList_iter.hasNext())
 					{
 						transCode += " + ";
 					}
 					else
 					{
-						transCode += "; \n";
+						//means, we reach the last fillAttr. rule!
+						if(rule.getParent().getLastOfKids() == rule)
+						{
+							transCode += " + '\"} '; \n";
+						}
+						else
+						{
+							transCode += " + '\", '; \n";
+						}
 						
 						operationStart = true;
 					}
@@ -407,8 +430,9 @@ public class CodeGenerator
 			}
 			else if("dummy".equals(kind))
 			{
-				//simply no handling?
+				//simply no handling? Not nessaery
 			}
+			
 			
 			callTransformForKids(rule);
 		}
@@ -470,9 +494,17 @@ public class CodeGenerator
 	 * */
 	private String expandTemplateKeys(String template)
 	{
+		//code
 		for (String key : table.keySet()) 
 		{
 			String value = table.get(key);
+			template = template.replaceAll(key, value);
+		}
+		
+		//endBrakets for forLoops and outObjects
+		for (String key : bracketTable.keySet()) 
+		{
+			String value = bracketTable.get(key);
 			template = template.replaceAll(key, value);
 		}
 		

@@ -315,10 +315,10 @@ public class ServiceScreenDesignerWep implements EntryPoint
       tabPanel.add(transformationTable, "Transformation");
  
       //Adding part three, just to test code generation, there is a show of selected rules, templates and the .js results
-      codeGenViewer = new CodeGenViewer(this);
+      codeGenViewer = new CodeGenViewer(this, serviceScreen);
       tabPanel.add(codeGenViewer.createCodeGenViewer(), "CodeGen Viewer");
       
-      tabPanel.selectTab(2);
+      tabPanel.selectTab(1);
       
       rootPanel.add(tabPanel);
    }

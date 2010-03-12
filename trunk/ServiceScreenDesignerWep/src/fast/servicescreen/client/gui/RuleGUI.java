@@ -311,10 +311,14 @@ public class RuleGUI
          FASTMappingRule parent = nextRule.getParent();
          String typeName = parent.getTargetElemName();
          FactType factType = findFactType(typeName);
-         for (Iterator iter = factType.iteratorOfFactAttributes(); iter.hasNext();)
+         
+         if(factType != null)
          {
-            FactAttribute attr = (FactAttribute) iter.next();
-            types.add(attr.getAttrName());
+        	 for (Iterator iter = factType.iteratorOfFactAttributes(); iter.hasNext();)
+        	 {
+        		 FactAttribute attr = (FactAttribute) iter.next();
+        		 types.add(attr.getAttrName());
+        	 }
          }
       }
       
@@ -384,6 +388,7 @@ public class RuleGUI
       return tmpServiceDesigner;
    }
    
+   @SuppressWarnings("unused")
    private void withNewFactAttr(String string)
    {
       FactAttribute factAttribute = new FactAttribute()
@@ -391,6 +396,7 @@ public class RuleGUI
       tmpFactType.addToFactAttributes(factAttribute);
    }
 
+   @SuppressWarnings("unused")
    private void addToFactTypes(String string)
    {
       tmpFactType = new FactType()

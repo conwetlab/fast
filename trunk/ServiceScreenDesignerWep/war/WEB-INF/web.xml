@@ -13,6 +13,8 @@
   
   <servlet-mapping>
     <servlet-name>coobraServiceImpl</servlet-name>
+    <url-pattern>/fast.servicescreen.ServiceScreenDesignerWepSource/de.uni_kassel.webcoobra.client.CoobraService</url-pattern>
+    <url-pattern>/fast.common.FastCommon/de.uni_kassel.webcoobra.client.CoobraService</url-pattern>
     <url-pattern>/servicescreendesignerwep/de.uni_kassel.webcoobra.client.CoobraService</url-pattern>
     <url-pattern>/fast.mediation.DataTransformationTool/de.uni_kassel.webcoobra.client.CoobraService</url-pattern>
     <url-pattern>/fast.facttool.FactTool/de.uni_kassel.webcoobra.client.CoobraService</url-pattern>
