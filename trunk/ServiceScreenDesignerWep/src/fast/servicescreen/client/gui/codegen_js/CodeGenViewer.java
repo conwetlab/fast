@@ -112,11 +112,15 @@ public class CodeGenViewer
 			public void onClick(ClickEvent event)
 			{
 				//irgendwie html hosten und hier angeben
-				String url = "embeddedOperator.html"; 
+//				String url = "embeddedOperator.html"; 
 			
-				try{
-					Window.open(url, "Wrapper_Operator", "no features?");
-				}catch(Exception e)
+				try
+				{
+					//TODO! Relative!
+					Window.open("http://127.0.0.1:8888/servicescreendesignerwep/embeddedOperator.html",
+								"the wrapper", "no features");
+				}
+				catch(Exception e)
 				{
 					Window.alert(e.getLocalizedMessage());
 				}

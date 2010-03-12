@@ -560,7 +560,7 @@ public class CodeGenerator
 	 * 
 	 * to do this, there is a replaceEscapeCharacter method in this class!
 	 * */
-	private final String requestServlet_URL = "http://localhost:8080/servicescreendesignerwep/requestServlet?url=";  
+	private final String requestServlet_URL = "http://127.0.0.1:8888/servicescreendesignerwep/requestServlet?url=";  
 	
 	/**
 	 * contains html end
