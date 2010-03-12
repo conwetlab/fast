@@ -24,7 +24,7 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
 
 
- //test
+
 
 public class FactTypeTree
 {
@@ -61,19 +61,19 @@ public class FactTypeTree
    // create attributes for all objects in all states of this statechart
    private HorizontalPanel panel;
    private Iterator fujaba__IterDesignerToFactType;
-   private ServiceDesigner designer;
    private CoobraRoot coobraRoot;
-   private TreeItem rootItem;
    private FactType factType;
-   private Label label;
    private FactType newType;
    private FactTypePanel factTypePanel;
-   private Iterator fujaba__IterCoobraRootToDesigner;
    private Tree tree;
-   private Button addButton;
    private RootPanel rootPanel;
-   private TabPanel tabPanel;
    private Object _TmpObject;
+   private ServiceDesigner designer;
+   private TreeItem rootItem;
+   private Label label;
+   private Iterator fujaba__IterCoobraRootToDesigner;
+   private Button addButton;
+   private TabPanel tabPanel;
 
    public void start()
    {

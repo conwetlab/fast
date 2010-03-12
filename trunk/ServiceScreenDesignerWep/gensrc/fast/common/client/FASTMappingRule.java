@@ -16,7 +16,7 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
 
 
- //test
+
 
 public class FASTMappingRule extends FastObject
 {
@@ -560,7 +560,6 @@ public class FASTMappingRule extends FastObject
     *           fASTMappingRule               operationHandler
     * </pre>
     */
-   public static final String PROPERTY_OPERATION_HANDLER = "operationHandler";
 
    private transient OperationHandler operationHandler;
 
@@ -573,7 +572,6 @@ public class FASTMappingRule extends FastObject
       
          OperationHandler oldValue = this.operationHandler;
          this.operationHandler = value;
-         getPropertyChangeSupport().firePropertyChange(PROPERTY_OPERATION_HANDLER, oldValue, value);
          changed = true;
       
       }

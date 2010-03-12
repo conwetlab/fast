@@ -21,7 +21,7 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
 
 
- //test
+
 
 public class FactEditor
 {
@@ -57,13 +57,13 @@ public class FactEditor
 
    // create attributes for all objects in all states of this statechart
    private CoobraServiceAsync coobraService;
-   private FactTypeTree factTypeTree;
    private CoobraRoot coobraRoot;
+   private Object _TmpObject;
+   private FactTypeTree factTypeTree;
    private ServiceDesigner designer;
    private DataLoadTimer dataLoadTimer;
    private Iterator fujaba__IterCoobraRootToDesigner;
    private ServiceScreenModel modelRoot;
-   private Object _TmpObject;
 
    public void start()
    {

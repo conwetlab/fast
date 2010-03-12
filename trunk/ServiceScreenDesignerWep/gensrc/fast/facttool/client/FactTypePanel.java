@@ -21,7 +21,7 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
 
 
- //test
+
 
 public class FactTypePanel
 {
@@ -58,17 +58,17 @@ public class FactTypePanel
    // create attributes for all objects in all states of this statechart
    private HorizontalPanel panel;
    private FactAttribute newAttr;
-   private DeleteAttributeButton deleteButton;
-   private AttributeTextBox mnemonicBox;
    private AttributeTextBox uriTextBox;
    private HorizontalPanel attrTreeRootPanel;
    private Label attrTreeRootLabel;
    private AttributeTextBox nameBox;
-   private TreeItem treeItem;
-   private FactAttribute factAttr;
    private FactAttrPanel attrPanel;
    private Iterator fujaba__IterFactTypeToFactAttr;
    private Button attrAddButton;
+   private DeleteAttributeButton deleteButton;
+   private AttributeTextBox mnemonicBox;
+   private TreeItem treeItem;
+   private FactAttribute factAttr;
    private TreeItem attrRootItem;
 
    public void start()

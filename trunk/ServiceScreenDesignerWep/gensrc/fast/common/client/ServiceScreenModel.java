@@ -14,7 +14,7 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
 
 
- //test
+
 
 public class ServiceScreenModel extends CObject implements PropertyChangeClient, ModelRootEventListener
 {

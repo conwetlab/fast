@@ -164,10 +164,10 @@ public class ServiceScreenDesignerWep implements EntryPoint
          buildGUI();
          
          // in case of testing 
-//         if (getToSuccess() != null)
-//         {
-//            getToSuccess().doAction();
-//         }
+         if (getToSuccess() != null)
+         {
+            getToSuccess().doAction();
+         }
          
       }
    }

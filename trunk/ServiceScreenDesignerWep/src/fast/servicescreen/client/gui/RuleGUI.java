@@ -302,7 +302,9 @@ public class RuleGUI
          for (Iterator typeIter = serviceDesigner.iteratorOfFactTypes(); typeIter.hasNext();)
          {
             FactType factType = (FactType) typeIter.next();
-            types.add(factType.getTypeName());
+            String typeName = factType.getTypeName();
+			types.add(typeName);
+			types.add("List of " + typeName);
          }
       }
       else if ("fillAttributes".equals(kind))
