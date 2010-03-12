@@ -52,13 +52,14 @@ var ResourceInstance = Class.create(ComponentInstance,
                 'drawingMethod': 'arrows'
             }
         };
-        var actionTerminals = new Hash();
+        var actionTerminals;
         this._buildingBlockDescription.actions.each(function(action) {
+        	actionTerminals = new Hash();
             action.preconditions.each(function(pre) { 
                   options.ddConfig = {
                      'type': 'input',
                      'allowedTypes': ['output']
-                  }       
+                  };
                 var node = this._view.getConditionNode(pre.id);
                 var terminal = new Terminal(node, options, this, pre.id, action.name);
                 terminal.onWireHandler(handlers);
