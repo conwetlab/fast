@@ -771,6 +771,51 @@ public class ServiceScreenModel extends CObject implements PropertyChangeClient,
 			}
 		}
 		
+		crole = new CRole();
+		crole.setName("factType");
+		ccardinality = new CCardinality();
+		upperBound = 1;
+		if (upperBound == 0) {
+			 ccardinality.setCardString("0");
+		} else if (upperBound == 1) {
+			ccardinality.setCardString("1");
+		} else {
+			ccardinality.setCardString("n");
+		}
+		crole.setCCardinality(ccardinality);
+		
+		cassoc = new CAssoc();
+	    cassoc.setName("factExampleValue");
+	    cassoc.addToCRole(crole);
+		crole.setCAssoc(cassoc);
+		tClass = ModelRoot.get().getCClass("fast.common.client.FactType");
+		tClass.addToCRoles(crole);
+		
+		rightRole = new CRole();
+		rightRole.setName("factExampleValue");
+		ccardinality = new CCardinality();
+		upperBound = 2147483647;
+		if (upperBound == 0) {
+			 ccardinality.setCardString("0");
+		} else if (upperBound == 1) {
+			ccardinality.setCardString("1");
+		} else {
+			ccardinality.setCardString("n");
+		}
+		rightRole.setCCardinality(ccardinality);
+		cassoc.addToCRole(rightRole);
+		
+		// Add role to CClass
+		iter = ModelRoot.get().iteratorOfCClasses();
+		while(iter.hasNext()) {
+			CClass theCClass = (CClass) iter.next();
+			
+			if ( theCClass.getName().equals("fast.common.client.FactExampleValue")) {
+				theCClass.addToCRoles(rightRole);
+				break;
+			}
+		}
+		
 	 
 	}
 

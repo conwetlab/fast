@@ -17,7 +17,7 @@ import com.google.gwt.event.dom.client.ClickEvent;
 
 
 
-public class DeleteAttributeButton
+public class DeleteFactTypeButton
 {
 
    public void removeAllFrom(String className) 
@@ -50,7 +50,7 @@ public class DeleteAttributeButton
    }
 
    // create attributes for all objects in all states of this statechart
-   private Button deleteButton;
+   private Button deleteFactTypeButton;
 
    public void start()
    {
@@ -75,10 +75,10 @@ public class DeleteAttributeButton
          return;
 
       build = new Build ();
-      deleteHandler = new DeleteHandler ();
+      deleteButtonClickHandler = new DeleteButtonClickHandler ();
       // NONE
 
-      //build.addToFollowers("deleteButton.click", deleteHandler);
+      //build.addToFollowers("deleteFactTypeButton.click", deleteButtonClickHandler);
    }
 
 
@@ -94,15 +94,15 @@ public class DeleteAttributeButton
          {
             fujaba__Success = false; 
 
-            // check object parent is really bound
-            JavaSDM.ensure ( parent != null );
-            // create object deleteButton
-            deleteButton = new Button ( );
+            // check object panel is really bound
+            JavaSDM.ensure ( panel != null );
+            // create object deleteFactTypeButton
+            deleteFactTypeButton = new Button ( );
 
-            // assign attribute deleteButton
-            deleteButton.setText ("delete");
-            // create link widget from parent to deleteButton
-            parent.add (deleteButton);
+            // assign attribute deleteFactTypeButton
+            deleteFactTypeButton.setText ("delete");
+            // create link widget from panel to deleteFactTypeButton
+            panel.add (deleteFactTypeButton);
 
             fujaba__Success = true;
          }
@@ -112,14 +112,14 @@ public class DeleteAttributeButton
          }
 
 
-         deleteButton.addClickHandler(deleteHandler);
+         deleteFactTypeButton.addClickHandler(deleteButtonClickHandler);
 
        }
 
    }
 
-   private DeleteHandler deleteHandler;
-   public class DeleteHandler extends FAction
+   private DeleteButtonClickHandler deleteButtonClickHandler;
+   public class DeleteButtonClickHandler extends FAction
    {
        public void doAction()
        {
@@ -153,17 +153,17 @@ public class DeleteAttributeButton
 
    // my style test for method.vm
 
-   public void start (Panel parent , CObject object , TreeItem parentItem )
+   public void start (Panel panel , CObject object , TreeItem parentItem )
    { 
       // copy parameters to attributes
-      this.parent = parent;
+      this.panel = panel;
       this.object = object;
       this.parentItem = parentItem;
       start();
    }
 
    // attributes for action container method parameters 
-   public Panel parent;
+   public Panel panel;
    public CObject object;
    public TreeItem parentItem;
 

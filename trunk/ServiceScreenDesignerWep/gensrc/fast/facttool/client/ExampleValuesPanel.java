@@ -4,10 +4,8 @@
 
 package fast.facttool.client;
 
-import com.google.gwt.user.client.ui.Panel;
-import com.google.gwt.user.client.ui.Button;
-import fujaba.web.runtime.client.CObject;
 import com.google.gwt.user.client.ui.TreeItem;
+import fast.common.client.FactType;
 import fujaba.web.runtime.client.reflect.*;
 import fujaba.web.runtime.client.*;
 import java.util.*;
@@ -17,7 +15,7 @@ import com.google.gwt.event.dom.client.ClickEvent;
 
 
 
-public class DeleteAttributeButton
+public class ExampleValuesPanel
 {
 
    public void removeAllFrom(String className) 
@@ -50,7 +48,7 @@ public class DeleteAttributeButton
    }
 
    // create attributes for all objects in all states of this statechart
-   private Button deleteButton;
+   private TreeItem rootItem;
 
    public void start()
    {
@@ -75,10 +73,6 @@ public class DeleteAttributeButton
          return;
 
       build = new Build ();
-      deleteHandler = new DeleteHandler ();
-      // NONE
-
-      //build.addToFollowers("deleteButton.click", deleteHandler);
    }
 
 
@@ -94,50 +88,11 @@ public class DeleteAttributeButton
          {
             fujaba__Success = false; 
 
-            // check object parent is really bound
-            JavaSDM.ensure ( parent != null );
-            // create object deleteButton
-            deleteButton = new Button ( );
+            // check object treeItem is really bound
+            JavaSDM.ensure ( treeItem != null );
+            // create object rootItem
+            rootItem = new TreeItem ( );
 
-            // assign attribute deleteButton
-            deleteButton.setText ("delete");
-            // create link widget from parent to deleteButton
-            parent.add (deleteButton);
-
-            fujaba__Success = true;
-         }
-         catch ( JavaSDMException fujaba__InternalException )
-         {
-            fujaba__Success = false;
-         }
-
-
-         deleteButton.addClickHandler(deleteHandler);
-
-       }
-
-   }
-
-   private DeleteHandler deleteHandler;
-   public class DeleteHandler extends FAction
-   {
-       public void doAction()
-       {
-   		 boolean fujaba__Success = false;
-
-         // story pattern storypatternwiththis
-         try 
-         {
-            fujaba__Success = false; 
-
-            // check object object is really bound
-            JavaSDM.ensure ( object != null );
-            // check object parentItem is really bound
-            JavaSDM.ensure ( parentItem != null );
-            // collabStat call
-            object.removeYou();
-            // collabStat call
-            parentItem.remove();
             fujaba__Success = true;
          }
          catch ( JavaSDMException fujaba__InternalException )
@@ -150,22 +105,17 @@ public class DeleteAttributeButton
        }
 
    }
-
-   // my style test for method.vm
-
-   public void start (Panel parent , CObject object , TreeItem parentItem )
+   public void start (TreeItem treeItem , FactType factType )
    { 
       // copy parameters to attributes
-      this.parent = parent;
-      this.object = object;
-      this.parentItem = parentItem;
+      this.treeItem = treeItem;
+      this.factType = factType;
       start();
    }
 
    // attributes for action container method parameters 
-   public Panel parent;
-   public CObject object;
-   public TreeItem parentItem;
+   public TreeItem treeItem;
+   public FactType factType;
 
 
    public void removeYou()

@@ -13,7 +13,8 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import fast.facttool.client.AttributeTextBox;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Button;
-import fast.facttool.client.DeleteAttributeButton;
+import fast.facttool.client.DeleteFactTypeButton;
+import com.google.gwt.user.client.ui.TextBox;
 import fujaba.web.runtime.client.reflect.*;
 import fujaba.web.runtime.client.*;
 import java.util.*;
@@ -57,18 +58,22 @@ public class FactTypePanel
 
    // create attributes for all objects in all states of this statechart
    private HorizontalPanel panel;
+   private TextBox typeCaption;
    private FactAttribute newAttr;
+   private DeleteFactTypeButton deleteButton;
+   private AttributeTextBox mnemonicBox;
    private AttributeTextBox uriTextBox;
+   private HorizontalPanel captionPanel;
    private HorizontalPanel attrTreeRootPanel;
    private Label attrTreeRootLabel;
+   private TextBox nameCaption;
    private AttributeTextBox nameBox;
+   private TreeItem treeItem;
+   private TreeItem captionItem;
    private FactAttrPanel attrPanel;
+   private FactAttribute factAttr;
    private Iterator fujaba__IterFactTypeToFactAttr;
    private Button attrAddButton;
-   private DeleteAttributeButton deleteButton;
-   private AttributeTextBox mnemonicBox;
-   private TreeItem treeItem;
-   private FactAttribute factAttr;
    private TreeItem attrRootItem;
 
    public void start()
@@ -96,12 +101,16 @@ public class FactTypePanel
       addKids = new AddKids ();
       attrAddButtonHandler = new AttrAddButtonHandler ();
       build = new Build ();
+      expandTree = new ExpandTree ();
       // NONE
 
       //build.addToFollowers("attrAddButton.click", attrAddButtonHandler);
       // NONE
 
       //build.addToFollowers("auto", addKids);
+      // NONE
+
+      //addKids.addToFollowers("auto", expandTree);
    }
 
 
@@ -154,7 +163,21 @@ public class FactTypePanel
 
 
 
+   		 if( autoGuardAddKids1 == null)
+   		 {
+   			 autoGuardAddKids1 = new AutoGuardAddKids1();
+   			 autoGuardAddKids1.setSource(addKids);
+   			 autoGuardAddKids1.setTarget(expandTree);
+   			 addKids.addToAutoTransitions(autoGuardAddKids1.toString(), autoGuardAddKids1);
+   		 }
+
+   		 doAuto();
        }
+
+      private AutoGuardAddKids1 autoGuardAddKids1;
+      private class AutoGuardAddKids1 extends FGuard
+      {
+      }
 
    }
 
@@ -240,7 +263,19 @@ public class FactTypePanel
             attrRootItem = treeItem.addItem(attrTreeRootPanel);
 
             // create object deleteButton
-            deleteButton = new DeleteAttributeButton ( );
+            deleteButton = new DeleteFactTypeButton ( );
+
+            // create object captionPanel
+            captionPanel = new HorizontalPanel ( );
+
+            // create object nameCaption
+            nameCaption = new TextBox ( );
+
+            // create object typeCaption
+            typeCaption = new TextBox ( );
+
+            // create object captionItem
+            captionItem = attrRootItem.addItem(captionPanel);
 
             // assign attribute nameBox
             nameBox.setAttrName ("typeName");
@@ -252,11 +287,27 @@ public class FactTypePanel
             attrTreeRootLabel.setText ("Fact Attributes:   ");
             // assign attribute attrAddButton
             attrAddButton.setText ("add");
+            // assign attribute attrRootItem
+            attrRootItem.setState (true);
+            // assign attribute nameCaption
+            nameCaption.setText ("name");
+            // assign attribute nameCaption
+            nameCaption.setEnabled (false);
+            // assign attribute typeCaption
+            typeCaption.setText ("type");
+            // assign attribute typeCaption
+            typeCaption.setEnabled (false);
             // create link widget from attrTreeRootPanel to attrTreeRootLabel
             attrTreeRootPanel.add (attrTreeRootLabel);
 
             // create link widget from attrTreeRootPanel to attrAddButton
             attrTreeRootPanel.add (attrAddButton);
+
+            // create link widget from captionPanel to nameCaption
+            captionPanel.add (nameCaption);
+
+            // create link widget from captionPanel to typeCaption
+            captionPanel.add (typeCaption);
 
             // collabStat call
             nameBox.start(panel, factType);
@@ -265,7 +316,7 @@ public class FactTypePanel
             // collabStat call
             uriTextBox.start(panel, factType);
             // collabStat call
-            deleteButton.start(panel, factType);
+            deleteButton.start(panel, factType, treeItem);
             fujaba__Success = true;
          }
          catch ( JavaSDMException fujaba__InternalException )
@@ -293,6 +344,38 @@ public class FactTypePanel
       }
 
    }
+
+   private ExpandTree expandTree;
+   public class ExpandTree extends FAction
+   {
+       public void doAction()
+       {
+   		 boolean fujaba__Success = false;
+
+         // story pattern storypatternwiththis
+         try 
+         {
+            fujaba__Success = false; 
+
+            // check object treeItem is really bound
+            JavaSDM.ensure ( treeItem != null );
+            // assign attribute treeItem
+            treeItem.setState (true);
+            fujaba__Success = true;
+         }
+         catch ( JavaSDMException fujaba__InternalException )
+         {
+            fujaba__Success = false;
+         }
+
+
+
+       }
+
+   }
+
+   // my style test for method.vm
+
 
    // my style test for method.vm
 

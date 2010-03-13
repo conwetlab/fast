@@ -17,6 +17,7 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.TreeItem;
+import com.google.gwt.user.client.ui.TextBox;
 import fujaba.web.runtime.client.reflect.*;
 import fujaba.web.runtime.client.*;
 import java.util.*;
@@ -61,19 +62,24 @@ public class FactTypeTree
    // create attributes for all objects in all states of this statechart
    private HorizontalPanel panel;
    private Iterator fujaba__IterDesignerToFactType;
+   private ServiceDesigner designer;
    private CoobraRoot coobraRoot;
+   private TreeItem rootItem;
    private FactType factType;
+   private Label label;
    private FactType newType;
    private FactTypePanel factTypePanel;
-   private Tree tree;
-   private RootPanel rootPanel;
-   private Object _TmpObject;
-   private ServiceDesigner designer;
-   private TreeItem rootItem;
-   private Label label;
+   private HorizontalPanel captionPanel;
+   private TextBox uriCaption;
+   private TextBox nameCaption;
    private Iterator fujaba__IterCoobraRootToDesigner;
+   private Tree tree;
+   private TreeItem captionItem;
    private Button addButton;
+   private RootPanel rootPanel;
+   private TextBox mnemonicCaption;
    private TabPanel tabPanel;
+   private Object _TmpObject;
 
    public void start()
    {
@@ -279,18 +285,54 @@ public class FactTypeTree
             // create object rootItem
             rootItem = tree.addItem(panel);
 
+            // create object captionPanel
+            captionPanel = new HorizontalPanel ( );
+
+            // create object nameCaption
+            nameCaption = new TextBox ( );
+
+            // create object mnemonicCaption
+            mnemonicCaption = new TextBox ( );
+
+            // create object uriCaption
+            uriCaption = new TextBox ( );
+
+            // create object captionItem
+            captionItem = rootItem.addItem(captionPanel);
+
             // assign attribute label
             label.setText ("Fact Types: ");
             // assign attribute addButton
             addButton.setText ("add");
-            // create link widget from rootPanel to tabPanel
-            rootPanel.add (tabPanel);
-
+            // assign attribute nameCaption
+            nameCaption.setText ("name");
+            // assign attribute nameCaption
+            nameCaption.setEnabled (false);
+            // assign attribute mnemonicCaption
+            mnemonicCaption.setText ("mnemonic");
+            // assign attribute mnemonicCaption
+            mnemonicCaption.setEnabled (false);
+            // assign attribute uriCaption
+            uriCaption.setText ("uri");
+            // assign attribute uriCaption
+            uriCaption.setEnabled (false);
             // create link widget from panel to label
             panel.add (label);
 
             // create link widget from panel to addButton
             panel.add (addButton);
+
+            // create link widget from rootPanel to tabPanel
+            rootPanel.add (tabPanel);
+
+            // create link widget from captionPanel to nameCaption
+            captionPanel.add (nameCaption);
+
+            // create link widget from captionPanel to mnemonicCaption
+            captionPanel.add (mnemonicCaption);
+
+            // create link widget from captionPanel to uriCaption
+            captionPanel.add (uriCaption);
 
             // collabStat call
             FTest.assertTrue(true, "build panel reached");

@@ -9,6 +9,7 @@ import fast.common.client.FactAttribute;
 import com.google.gwt.user.client.ui.TreeItem;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import fast.facttool.client.AttributeTextBox;
+import fast.facttool.client.DeleteAttributeButton;
 import com.google.gwt.user.client.ui.MultiWordSuggestOracle;
 import java.util.*;
 import fast.common.client.FactType;
@@ -56,15 +57,17 @@ public class FactAttrPanel
 
    // create attributes for all objects in all states of this statechart
    private HorizontalPanel panel;
-   private FactType factType;
-   private MultiWordSuggestOracle oracle;
    private AttributeTextBox nameBox;
-   private Iterator fujaba__IterDesignerToSomeType;
-   private Object _TmpObject;
    private ServiceDesigner designer;
    private String tname;
+   private FactType factType;
    private SuggestBox typeBox;
+   private Iterator fujaba__IterDesignerToSomeType;
+   private MultiWordSuggestOracle oracle;
+   private TreeItem parentItem;
+   private Object _TmpObject;
    private FactType someType;
+   private DeleteAttributeButton deleteAttrButton;
 
    public void start()
    {
@@ -158,6 +161,12 @@ public class FactAttrPanel
             // create object typeBox
             typeBox = new SuggestBox ( );
 
+            // create object deleteAttrButton
+            deleteAttrButton = new DeleteAttributeButton ( );
+
+            // create object parentItem
+            parentItem = parent.addItem(panel);
+
             // assign attribute nameBox
             nameBox.setAttrName ("attrName");
             // assign attribute typeBox
@@ -165,9 +174,9 @@ public class FactAttrPanel
             // collabStat call
             nameBox.start(panel, factAttribute);
             // collabStat call
-            parent.addItem(panel);
-            // collabStat call
             panel.add(typeBox);
+            // collabStat call
+            deleteAttrButton.start(panel, factAttribute, parentItem);
             fujaba__Success = true;
          }
          catch ( JavaSDMException fujaba__InternalException )
