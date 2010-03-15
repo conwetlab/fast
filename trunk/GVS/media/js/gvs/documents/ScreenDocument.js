@@ -684,8 +684,12 @@ var ScreenDocument = Class.create(PaletteDocument,
             reachabilityData.connections.each(function(connection) {
             	var from, to, localNode, externalNode;
 
-            	from = this._parseConnectionElement(connection.from, true);
-            	to = this._parseConnectionElement(connection.to, false);
+            	try {
+            		from = this._parseConnectionElement(connection.from, true);
+            		to = this._parseConnectionElement(connection.to, false);
+            	} catch (e) {
+            		continue;
+            	}
 
             	if (from.instance == this._selectedElement) {
             		localNode = from;
