@@ -377,6 +377,10 @@ var ComponentInstance = Class.create(DragSource,
             Utils.setSatisfeabilityClass(fact, reachability);
         }
 
+        if (condition.positive === false) {
+        	fact.addClassName('negative');
+        }
+
         var description = condition.label['en-gb'];
 
         return [fact, description, uri];
