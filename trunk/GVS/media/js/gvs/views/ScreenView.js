@@ -66,6 +66,10 @@ var ScreenView = Class.create(BuildingBlockView,
                     if (post) {
                         var postFact = FactFactory.getFactIcon(post, "embedded");
                         this._postIcons.push(postFact);
+
+                        if (!post.positive)
+                        	postFact.getNode().addClassName('negative');
+
                         postArea.appendChild(postFact.getNode());
                     }
                 }.bind(this)

@@ -920,18 +920,17 @@ h4{
     color: white; 
     background: url("../images/facts/20x20/grey.png") no-repeat center center;
 }
-.satisfeable .embedded_fact .contentLayer {
-    background: url("../images/facts/20x20/green.png") no-repeat center center;
-}
-.unsatisfeable .embedded_fact .contentLayer {
-    background: url("../images/facts/20x20/red.png") no-repeat center center;
-}
 .embedded_fact.satisfeable .contentLayer {
     background: url("../images/facts/20x20/green.png") no-repeat center center;
 }
 .embedded_fact.unsatisfeable .contentLayer {
     background: url("../images/facts/20x20/red.png") no-repeat center center;
 }
+.embedded_fact.negative .contentLayer {
+	background: url("../images/facts/20x20/negative.png") no-repeat center center;
+	color: #FFFFFF;
+}
+
 
 .standalone_fact .contentLayer {
     width: 25px;
@@ -942,11 +941,11 @@ h4{
     color: #808080; 
     background: url("../images/facts/25x25/grey.png") no-repeat center center;
 }
-.satisfeable .standalone_fact .contentLayer {
+.satisfeable.standalone_fact .contentLayer {
     background: url("../images/facts/25x25/green.png") no-repeat center center;
     color: #068106; 
 }
-.unsatisfeable .standalone_fact .contentLayer {
+.unsatisfeable.standalone_fact .contentLayer {
     background: url("../images/facts/25x25/red.png") no-repeat center center;
     color: #B90000; 
 }
@@ -954,13 +953,17 @@ h4{
     background: url("../images/facts/25x25/grey_selected.png") no-repeat center center;
     color: #EAEAEA; 
 }
-.satisfeable.selected .standalone_fact .contentLayer {
+.selected .standalone_fact.satisfeable .contentLayer {
     background: url("../images/facts/25x25/green_selected.png") no-repeat center center;
     color: #ddf7dd; 
 }
-.unsatisfeable.selected .standalone_fact .contentLayer {
+.selected .standalone_fact.unsatisfeable .contentLayer {
     background: url("../images/facts/25x25/red_selected.png") no-repeat center center;
     color: #f5d9d9; 
+}
+.standalone_fact.negative .contentLayer {
+	background: url("../images/facts/25x25/negative.png") no-repeat center center;
+	color: #FFFFFF;
 }
 
 /*******************

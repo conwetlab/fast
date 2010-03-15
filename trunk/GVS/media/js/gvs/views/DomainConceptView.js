@@ -9,12 +9,12 @@ var DomainConceptView = Class.create( BuildingBlockView,
     initialize: function($super, /** BuildingBlockDescription */ description) {
         $super();
 
-        var factIcon = FactFactory.getFactIcon(description, "standalone");
-        
+        this._factIcon = FactFactory.getFactIcon(description, "standalone").getNode();
+
         this._node = new Element("div", {
             "class": "view domainConcept"
         });
-        this._node.appendChild(factIcon.getNode());
+        this._node.appendChild(this._factIcon);
 
     },
 
@@ -36,7 +36,7 @@ var DomainConceptView = Class.create( BuildingBlockView,
     setReachability: function (/** Object */ reachabilityData) {
         var reachability = (reachabilityData.reachability !== undefined) ?
                             reachabilityData.reachability : reachabilityData.satisfied;
-        Utils.setSatisfeabilityClass(this._node, reachability);
+        Utils.setSatisfeabilityClass(this._factIcon, reachability);
     }
 
 });
