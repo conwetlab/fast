@@ -129,7 +129,7 @@
 						// Right Column (Details)
 						var rightColumn = new Element('div', {
 						    'class': 'rightColumn'
-						});					
+						});
 						details.appendChild(rightColumn);
 						
 						this._title = new Element('div', {
@@ -184,11 +184,11 @@
 										} 
 										else{//Three lines
 											this._moreInfoText.setStyle({"height": "110px"});
-											this._title.setStyle ({"fontSize":"14px"});	
+											this._title.setStyle ({"fontSize":"14px"});
 										}
 									} else {//Two lines
 										this._moreInfoText.setStyle({"height": "115px"});
-									}	
+									}
 								}
 							}
 							
@@ -198,21 +198,21 @@
 						if (_product.data.image) {
 							var img = new Element ('img',{src: _product.data.image});
 							this._image.update(img);
-						} 
-						if (this.params && this.params.elements) {
-						    this.params.elements.each(function(element) {
+						}
+						if (this.parameter && this.parameter.elements) {
+						    this.parameter.elements.each(function(element) {
 						        this.insertElement(this.capitalize(element), _product.data.details[element]);
 						    }.bind(this));
 						}
-						this.showAdvancedDetails(_product);				 
+						this.showAdvancedDetails(_product);
 					},
 					
 					showAdvancedDetails: function(_product) {
 					    
 				        var details = $H(_product.data.details);
 				        if (details) {
-				            if (this.params && this.params.itemTitle) {
-				                this._moreInfoTitle.update(this.params.itemTitle + " Details");
+				            if (this.parameter && this.parameter.itemTitle) {
+				                this._moreInfoTitle.update(this.parameter.itemTitle + " Details");
 				            } else {
 				                this._moreInfoTitle.update("Details");
 				            }
@@ -220,8 +220,8 @@
                             var list = new Element('ul');
 				            details.each(function(pair){
 				                var appendElement = true;
-				                if (this.params && this.params.elements) {
-				                    if (this.params.elements.lastIndexOf(pair.key) != -1) {
+				                if (this.parameter && this.parameter.elements) {
+				                    if (this.parameter.elements.lastIndexOf(pair.key) != -1) {
 				                        appendElement = false;
 				                    }
 				                }
@@ -230,7 +230,7 @@
 				                    if (node) {
 				                       list.appendChild(node);
 				                    }
-				                }				                
+				                }
 				            }.bind(this));
 				            this._moreInfoText.appendChild(list);
 				        }
@@ -241,7 +241,7 @@
 					createDetailNode: function(key, value) {
 					    var title = this.capitalize(key);
 					    var li = new Element('li').update(title + ": ");
-                        if (typeof value == "string") {				        
+                        if (typeof value == "string") {
 					        li.appendChild(new Element('span', {
 					            'class': 'detailsElement'
 					        }).update(this.sanitize(value)));
