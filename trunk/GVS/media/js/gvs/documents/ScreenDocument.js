@@ -688,7 +688,7 @@ var ScreenDocument = Class.create(PaletteDocument,
             		from = this._parseConnectionElement(connection.from, true);
             		to = this._parseConnectionElement(connection.to, false);
             	} catch (e) {
-            		continue;
+            		return;
             	}
 
             	if (from.instance == this._selectedElement) {
