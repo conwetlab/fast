@@ -366,6 +366,7 @@ var ScreenDocument = Class.create(PaletteDocument,
     		factKey = instance.getType() + "_" + instance.getId();
     	} else if (instance instanceof ResourceInstance) {
     		factKey = "service_" + instance.getId() +
+                      "_" + startTerminal.getActionId() +
 	                  "_" + startTerminal.getConditionId();
     	} else if (instance instanceof OperatorInstance) {
     		factKey = "operator_" + instance.getId() +
@@ -606,12 +607,19 @@ var ScreenDocument = Class.create(PaletteDocument,
      * 
      * @private
      */
-    _parseConnectionElement: function(desc) {
+    _parseConnectionElement: function(/** Hash */ desc, /** Boolean */ origin) {
     	if (desc.buildingblock == null) {
     		// Pre/Post condition
-    		var type = 'pre';
-    		var instance = this._description.getPre(desc.condition);
-    		instance = instance ? instance : this._description.getPost(desc.condition);
+    		var type;
+    		var instance;
+
+    		if (origin) {
+    			type = 'pre';
+    		    instance = this._description.getPre(desc.condition);
+    		} else {
+    			type = 'post';
+    			instance = this._description.getPost(desc.condition);
+    		}
 
     		return {'instance': instance,
     			    'node': instance.getView().getNode(),
@@ -627,9 +635,19 @@ var ScreenDocument = Class.create(PaletteDocument,
     				    'node': buildingblock.getView().getConditionNode(desc.condition, desc.action),
     				    'key': key};
     		} else if (desc.buildingblock.search("/services/") != -1) {
+    			var view = buildingblock.getView();
+
+    			var actionName;
+    			if (origin) {
+    				actionName = "postconditions";
+    			} else {
+    				actionName = view._icons.keys()[0];  // TODO remove this hack
+    			}
+				var node = view.getConditionNode(desc.condition, actionName);
+
     			return {'instance': buildingblock,
-    				    'node': buildingblock.getView().getConditionNode(desc.condition),
-    				    'key': 'service_' + buildingblock.getId() + "_" + desc.condition};
+    				    'node': node,
+    				    'key': 'service_' + buildingblock.getId() + "_" + actionName + "_" + desc.condition};
     		} else if (desc.buildingblock.search("/operators/") != -1) {
     			return {'instance': buildingblock,
     				    'node': buildingblock.getView().getConditionNode(desc.condition, desc.action),
@@ -666,8 +684,8 @@ var ScreenDocument = Class.create(PaletteDocument,
             reachabilityData.connections.each(function(connection) {
             	var from, to, localNode, externalNode;
 
-            	from = this._parseConnectionElement(connection.from);
-            	to = this._parseConnectionElement(connection.to);
+            	from = this._parseConnectionElement(connection.from, true);
+            	to = this._parseConnectionElement(connection.to, false);
 
             	if (from.instance == this._selectedElement) {
             		localNode = from;

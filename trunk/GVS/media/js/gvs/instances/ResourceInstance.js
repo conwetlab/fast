@@ -60,7 +60,7 @@ var ResourceInstance = Class.create(ComponentInstance,
                      'type': 'input',
                      'allowedTypes': ['output']
                   };
-                var node = this._view.getConditionNode(pre.id);
+                var node = this._view.getConditionNode(pre.id, action.name);
                 var terminal = new Terminal(node, options, this, pre.id, action.name);
                 terminal.onWireHandler(handlers);
                 actionTerminals.set(pre.id, terminal);
@@ -82,8 +82,8 @@ var ResourceInstance = Class.create(ComponentInstance,
             options.ddConfig = {
                  'type': 'output',
                  'allowedTypes': ['input']
-            }
-            var node = this._view.getConditionNode(post.id);
+            };
+            var node = this._view.getConditionNode(post.id, "postconditions");
             var terminal = new Terminal(node, options, this, post.id);
             terminal.onWireHandler(handlers);
             postconditionTerminals.set(post.id, terminal);

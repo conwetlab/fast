@@ -11,50 +11,42 @@ var ResourceView = Class.create(BuildingBlockView,
         $super();
 
         /**
-         * Precondition Icons
+         * Fact Icons
          * @type Hash
          * @private
          */
-        this._preIcons = new Hash();
-
-        /**
-         * Postcondition Icons
-         * @type Hash
-         * @private
-         */
-        this._postIcons = new Hash();
-        
-
+        this._icons = new Hash();
        
 
         var preArea = new Element("div", {"class": "preArea"});
         var postArea = new Element("div", {"class": "postArea"});
         
         var actions = description.actions;
-        
-        // TODO: Better action support: put the name of the action somewhere
-        // and separation between actions 
+        var actionIcons;
         actions.each(function(action) {
+        	actionIcons = new Hash();
             action.preconditions.each(function(pre) {
                 var fact = FactFactory.getFactIcon(pre, "embedded");
-                this._preIcons.set(pre.id, fact);
+                actionIcons.set(pre.id, fact);
                 preArea.appendChild(fact.getNode());
             }.bind(this));
-            
+            this._icons.set(action.name, actionIcons)
         }.bind(this));
 
         var posts;
         if (description.postconditions && description.postconditions[0] instanceof Array) {
-            posts =  description.postconditions[0];
+            posts = description.postconditions[0];
         } else {
             posts = description.postconditions;
         }
-        
+
+        actionIcons = new Hash();
         posts.each(function(post) {
                 var fact = FactFactory.getFactIcon(post, "embedded");
-                this._postIcons.set(post.id, fact);
+                actionIcons.set(post.id, fact);
                 postArea.appendChild(fact.getNode());
             }.bind(this));
+        this._icons.set("postconditions", actionIcons);
 
         var prePostSeparator = new Element("div",
                 {"class": "prePostSeparator"});
@@ -89,12 +81,18 @@ var ResourceView = Class.create(BuildingBlockView,
     
     // **************** PUBLIC METHODS **************** //
     /**
-     * This function returns the domNode of the condition that has
+     * This function returns the domNode of the precondition that has
      * the identification passed as parameter
      */
-    getConditionNode: function(/** String */ id) {
-        return this._preIcons.get(id) ? this._preIcons.get(id).getNode() :
-                this._postIcons.get(id).getNode();
+    getConditionNode: function(/** String */ id, /** String */ action) {
+    	var actionIcons = this._icons.get(action);
+    	if (actionIcons) {
+    		var icon = actionIcons.get(id);
+    		if (icon)
+    			return icon.getNode();
+    	}
+
+    	return null;
     },
     
     /**
@@ -102,8 +100,21 @@ var ResourceView = Class.create(BuildingBlockView,
      * @public @override
      */
     setReachability: function( /** Hash */ reachabilityData) {
-        this._setViewReachability(reachabilityData, this._preIcons,
-                               this._postIcons.values(), this._node);
+        var satisfeable = reachabilityData.reachability;
+        Utils.setSatisfeabilityClass(this._node, satisfeable);
+
+        this._icons.get("postconditions").each(function(post) {
+            Utils.setSatisfeabilityClass(post.value.getNode(), satisfeable);
+        });
+
+        reachabilityData.actions.each(function(actionData) {
+        	var actionIcons = this._icons.get(actionData.name);
+
+        	actionData.preconditions.each(function(preData) {
+        		var factNode = this.get(preData.id).getNode();
+        		Utils.setSatisfeabilityClass(factNode, preData.satisfied);
+        	}.bind(actionIcons));
+        }.bind(this));
     },
     
     /**
@@ -112,8 +123,7 @@ var ResourceView = Class.create(BuildingBlockView,
      */
     destroy: function () {
         // Let the garbage collector to do its job
-        this._preIcons = null;
-        this._postIcons = null;
+        this._icons = null;
         this._node = null;
     }
     
