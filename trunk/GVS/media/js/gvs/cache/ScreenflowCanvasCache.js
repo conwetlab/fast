@@ -86,6 +86,14 @@ var ScreenflowCanvasCache = Class.create( /** @lends ScreenCanvasCache.prototype
     },
 
     /**
+     * Returns the parameters of an element by its URI
+     * @type Object
+     */
+    getParams: function (/** String */ id) {
+        return "";
+    },
+
+    /**
      * Returns the position of an element by its URI
      * @type Object
      */
