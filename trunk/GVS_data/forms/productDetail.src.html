@@ -21,7 +21,7 @@
 				padding-top:10px;
 			}
 			.image img {
-			    width: 99%;
+			    max-width: 99%;
 			}
 			.leftColumn{
 				position: relative;
@@ -201,7 +201,8 @@
 						}
 						if (this.parameter && this.parameter.elements) {
 						    this.parameter.elements.each(function(element) {
-						        this.insertElement(this.capitalize(element), _product.data.details[element]);
+						        this.insertElement(this.capitalize(element), 
+						            _product.data.details[element]);
 						    }.bind(this));
 						}
 						this.showAdvancedDetails(_product);
