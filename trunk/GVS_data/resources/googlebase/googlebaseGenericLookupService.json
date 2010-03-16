@@ -1,15 +1,15 @@
 {
-    "name":"eBay Generic Lookup Service",
-    "code":"http://localhost:8010/resources/ebay/ebayGenericLookupService.src.js",
+    "name":"Google Base Generic Lookup Service",
+    "code":"http://localhost:8010/resources/googlebase/googlebaseGenericLookupService.src.js",
     "creationDate":"2009-04-20T17:00:00+0100",
     "creator":"admin",
     "description":{
-        "en-gb":"This service search information about an Amazon product"
+        "en-gb":"This service search information about an Google Base product"
     },
     "tags":[
         {
             "label":{
-                "en-gb":"ebay"
+                "en-gb":"google"
             }
         },
         {
@@ -26,7 +26,7 @@
     "homepage":"http://www.deri.ie/amazonLookupService",
     "icon":"http://demo.fast.morfeo-project.org/gvsdata/images/catalogue/amazonLookupService.png",
     "label":{
-        "en-gb":"eBay Lookup Service"
+        "en-gb":"Google Base Generic Lookup Service"
     },
     "rights":"http://creativecommons.org/",
     "screenshot":"http://www.deri.ie/amazonLookupService.jpg",
@@ -41,7 +41,8 @@
                     "label":{
                         "en-gb":"A generic item"
                     },
-                    "pattern":"?Item http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#Item"
+                    "pattern":"?Item http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#Item",
+                    "positive":"true"
                 }
             ],
             "uses":[

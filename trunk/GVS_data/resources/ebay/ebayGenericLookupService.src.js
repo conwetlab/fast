@@ -22,7 +22,7 @@ createItem: function (transport){
 	var it = {id: 'item', data: {'source': 'eBay', 'details':{}}};
 	var item = transport.getElementsByTagName("Item")[0];
 	if (item.getElementsByTagName("ItemID").length > 0) {
-		it.data.itemID = item.getElementsByTagName("ItemID")[0].firstChild.nodeValue;
+		it.data.id = item.getElementsByTagName("ItemID")[0].firstChild.nodeValue;
 	}
 	if (item.getElementsByTagName("Title").length > 0) {
 		it.data.title = item.getElementsByTagName("Title")[0].firstChild.nodeValue;

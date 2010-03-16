@@ -51,7 +51,8 @@
                     "label":{
                         "en-gb":"A generic item"
                     },
-                    "pattern":"?Item http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#Item"
+                    "pattern":"?Item http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#Item",
+                    "positive":"true"
                 }
             ],
             "uses":[

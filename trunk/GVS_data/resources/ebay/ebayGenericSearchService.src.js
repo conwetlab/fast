@@ -31,7 +31,7 @@ addToList: function (transport){
     	var row = {source: 'eBay'};
     	
 		if (item.getElementsByTagName("ItemID").length > 0) {
-			row.itemID = item.getElementsByTagName("ItemID")[0].firstChild.nodeValue;
+			row.id = item.getElementsByTagName("ItemID")[0].firstChild.nodeValue;
 		}
 		if (item.getElementsByTagName("Title").length > 0) {
 			row.title = item.getElementsByTagName("Title")[0].firstChild.nodeValue;

@@ -140,7 +140,7 @@ fetchProductInfo: function (transport){
 			break;	
 	}
     
-	_item.details = this.getDetails(item, elementList);
+	_item.data.details = this.getDetails(item, elementList);
     this.manageData(["newItem"], [_item], []);	
 },
 
