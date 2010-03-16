@@ -65,21 +65,4 @@ public class Pipe {
 		return json;
 	}
 
-	@Override
-	public boolean equals(Object o) {
-		Pipe pipe;
-		if (o instanceof Pipe)
-			pipe = (Pipe) o;
-		else 
-			return false;
-		try {
-			return (this.idBBFrom == null && pipe.getIdBBFrom() == null) || this.idBBFrom.equals(pipe.getIdBBFrom())
-			&& this.idConditionFrom.equals(pipe.getIdConditionFrom())
-			&& (this.idBBTo == null && pipe.getIdBBTo() == null) || this.idBBTo.equals(pipe.getIdBBTo())
-			&& (this.idActionTo == null && pipe.getIdActionTo() == null) || this.idActionTo.equals(pipe.getIdActionTo())
-			&& this.idConditionTo.equals(pipe.getIdConditionTo());
-		} catch (NullPointerException e) {
-			return false;
-		}
-	}
 }
