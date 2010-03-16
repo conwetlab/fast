@@ -30,7 +30,11 @@
 	   						{
 	   						    id:"{{pre.id}}",
 	   						    pattern:"{{pre.pattern}}",
-	   						    positive:{{pre.positive|lower}}
+	   				{% if pre.positive %}
+	   						 	positive:{{pre.positive|lower}}
+	   				{% else %}
+	   							positive:true
+	   				{% endif %}
 	   						}{% if not forloop.last %},{% endif %}
 	   		{% endfor %}
 	   			     	],
