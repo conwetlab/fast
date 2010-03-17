@@ -6,7 +6,7 @@ var PublishGadgetDialog = Class.create(ConfirmDialog /** @lends PublishGadgetDia
      * @extends ConfirmDialog
      */ 
     initialize: function($super) {
-        $super("Publish Gadget", "ok");   
+        $super("Publish Gadget", ConfirmDialog.OK);
         
         /**
          * Base url of the gadget being published

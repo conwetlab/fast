@@ -482,28 +482,55 @@ var PaletteDocument = Class.create(AbstractDocument, /** @lends PaletteDocument.
      * @private
      */
     _closeDocument: function() {
-        var removeFromServer = false;
-        if (this._description.getId()) {
-            if (this._isDirty) {
-                this._pendingOperation = this._closeDocument.bind(this);
-                this._save(false);
-                return false;
-            }
+
+        if (this._isDirty) {
+            var dialog = new ConfirmDialog("Warning",
+                                           ConfirmDialog.SAVE_DISCARD_CANCEL,
+                                           {'callback': this._effectiveCloseDocument.bind(this),
+                                            'contents': "The document has unsaved changes.\n\
+                                                         Do you want to save?"});
+            dialog.show();
         } else {
-            removeFromServer = true;
+            this._effectiveCloseDocument(ConfirmDialog.DISCARD);
         }
-      
-        this._description.getCanvasInstances().each(function(instance) {
-            instance.destroy(removeFromServer);
-        }.bind(this));
-
-        this._description.getConditionInstances().each(function(instance) {
-            instance.destroy(removeFromServer);
-        }.bind(this));
-
-        GVS.getDocumentController().closeDocument(this._tabId);
+        return false;
     },
     
+
+    /**
+     * Effectively close the document
+     * @private
+     */
+    _effectiveCloseDocument: function(/** String */ status) {
+
+        switch (status) {
+            case ConfirmDialog.SAVE:
+                this._pendingOperation = this._effectiveCloseDocument.bind(this);
+                this._save(false);
+                break;
+
+            case ConfirmDialog.CANCEL:
+                break;
+                
+            case ConfirmDialog.DISCARD:
+            default:
+                var removeFromServer = false;
+                if (!this._description.getId()) {
+                    removeFromServer = true;
+                }
+                this._description.getCanvasInstances().each(function(instance) {
+                    instance.destroy(removeFromServer);
+                }.bind(this));
+
+                this._description.getConditionInstances().each(function(instance) {
+                    instance.destroy(removeFromServer);
+                }.bind(this));
+
+                GVS.getDocumentController().closeDocument(this._tabId);
+            
+        }
+    },
+
 
     /**
      * onClick handler

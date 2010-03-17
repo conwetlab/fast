@@ -21,14 +21,14 @@ var FormDialog = Class.create( /** @lends FormDialog.prototype */ {
      */
     initialize: function(properties, _options) {
         _options = Utils.variableOrDefault(_options, {});
-        var options = Object.extend ({
+        this._options = Object.extend ({
             'buttonPosition': FormDialog.POSITION_BOTTOM,
             'createMessageZone': false,
             'minMessageLines': 1
         }, _options);
 
 
-        var position = options.buttonPosition;
+        var position = this._options.buttonPosition;
         this._dialog = new dijit.Dialog(properties);
         
         this._headerNode = new Element ('div',{
@@ -59,7 +59,7 @@ var FormDialog = Class.create( /** @lends FormDialog.prototype */ {
             case FormDialog.POSITION_TOP:
                 containerDiv.appendChild (this._buttonNode);
 
-                if (options.createMessageZone)
+                if (this._options.createMessageZone)
                     containerDiv.appendChild (messageWrapper);
 
                 containerDiv.appendChild (this._contentNode);
@@ -67,13 +67,13 @@ var FormDialog = Class.create( /** @lends FormDialog.prototype */ {
             default:
                 containerDiv.appendChild (this._contentNode);
 
-                if (options.createMessageZone)
+                if (this._options.createMessageZone)
                     containerDiv.appendChild (messageWrapper);
 
                 containerDiv.appendChild (this._buttonNode);
                 break;
         }
-        messageWrapper.style.minHeight = ((options.minMessageLines * 18) + 2) + 'px';
+        messageWrapper.style.minHeight = ((this._options.minMessageLines * 18) + 2) + 'px';
        
         this._dialog.attr ('content', containerDiv);
         

@@ -16,13 +16,36 @@ var ConfirmDialog = Class.create(FormDialog, /** @lends ConfirmDialog.prototype 
 
         //Initializing buttons
         switch(buttons) {
-            case 'ok':
+            case ConfirmDialog.OK:
                 this._okButton = this._addButton ('Ok',     this._onOk.bind(this));
                 break;
-            
-            case 'ok_cancel':
+
+            case ConfirmDialog.SAVE_DISCARD_CANCEL:
+                if (_options && _options.callback) {
+
+                    this._addButton('Save', this._onButtonPressed.bind({
+                        'mine': this,
+                        'pressedButton': ConfirmDialog.SAVE,
+                        'callback': _options.callback
+                    }));
+                    this._addButton('Discard', this._onButtonPressed.bind({
+                        'mine': this,
+                        'pressedButton': ConfirmDialog.DISCARD,
+                        'callback': _options.callback
+                    }));
+                    this._addButton('Cancel', this._onButtonPressed.bind({
+                        'mine': this,
+                        'pressedButton': ConfirmDialog.CANCEL,
+                        'callback': _options.callback
+                    }));
+                } else {
+                    throw "Cannot create a confirm dialog with that configuration. " +
+                          "ConfirmDialog::initialize";
+                }
+                break;
+            case ConfirmDialog.OK_CANCEL:
             default:
-                this._okButton = this._addButton ('Ok',     this._onOk.bind(this));
+                this._okButton = this._addButton ('Ok', this._onOk.bind(this));
                 this._addButton ('Cancel', this._onCancel.bind(this));
                 break;
         }
@@ -34,6 +57,17 @@ var ConfirmDialog = Class.create(FormDialog, /** @lends ConfirmDialog.prototype 
     
     
     // **************** PRIVATE METHODS **************** //
+
+    /**
+     * Inits the user interface
+     * It may be overriden
+     * @private
+     */
+    _initDialogInterface: function() {
+        if (this._options.contents) {
+            this._setContent(this._options.contents);
+        }
+    },
 
     /**
      * Enables/disables the ok button allowing/disallowing users to continue.
@@ -63,6 +97,15 @@ var ConfirmDialog = Class.create(FormDialog, /** @lends ConfirmDialog.prototype 
     },
 
     /**
+     * On button pressed
+     * @private
+     */
+    _onButtonPressed: function() {
+        this.mine._dialog.hide();
+        this.callback(this.pressedButton);
+    },
+
+    /**
      * Reset method to leave the form as initially
      * @private
      */
@@ -71,5 +114,14 @@ var ConfirmDialog = Class.create(FormDialog, /** @lends ConfirmDialog.prototype 
         $super();
     }
 });
+
+
+// Static attributes
+ConfirmDialog.OK = 'ok';
+ConfirmDialog.OK_CANCEL = 'ok_cancel';
+ConfirmDialog.SAVE_DISCARD_CANCEL = 'save_discard_cancel';
+ConfirmDialog.SAVE = 'save';
+ConfirmDialog.DISCARD = 'discard';
+ConfirmDialog.CANCEL = 'cancel';
 
 // vim:ts=4:sw=4:et:

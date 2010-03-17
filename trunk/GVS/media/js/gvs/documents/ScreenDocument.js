@@ -253,28 +253,30 @@ var ScreenDocument = Class.create(PaletteDocument,
         };
     },
 
-
     /**
      * @private
      * @override
      */
-    _closeDocument: function($super) {
-        $super();
-        this._description.getCanvasInstances().each(function(instance) {
-            instance.destroyWires();
-        }.bind(this));
+    _effectiveCloseDocument: function($super, /** String */ status) {
+        $super(status);
 
-        this._description.getConditionInstances().each(function(instance) {
-            instance.destroyWires();
-        }.bind(this));
+        if (!status || status == ConfirmDialog.DISCARD) {
+            this._description.getCanvasInstances().each(function(instance) {
+                instance.destroyWires();
+            }.bind(this));
 
-        this._dojoConnections.each(function(connection){
-            dojo.disconnect(connection);
-        }.bind(this));
+            this._description.getConditionInstances().each(function(instance) {
+                instance.destroyWires();
+            }.bind(this));
 
-        // Remove circular dependencies
-        this._dojoConnections = null;
-        this._repaint = null;
+            this._dojoConnections.each(function(connection){
+                dojo.disconnect(connection);
+            }.bind(this));
+
+            // Remove circular dependencies
+            this._dojoConnections = null;
+            this._repaint = null;
+        }      
     },
     
 

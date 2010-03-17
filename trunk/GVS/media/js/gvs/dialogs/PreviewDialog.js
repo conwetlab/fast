@@ -6,7 +6,7 @@ var PreviewDialog = Class.create(ConfirmDialog /** @lends PreviewDialog.prototyp
      * @extends ConfirmDialog
      */ 
     initialize: function($super, /** String */ title, /** DOMNode */ content) {
-        $super("Preview of " + title, "ok");
+        $super("Preview of " + title, ConfirmDialog.OK);
         this._setContent(content);
     },
     
