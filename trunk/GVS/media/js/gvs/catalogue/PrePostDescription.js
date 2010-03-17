@@ -41,7 +41,14 @@ var PrePostDescription = Class.create(BuildingBlockDescription,
                  this['http://www.w3.org/2000/01/rdf-schema#label'].
                  replace("@en","");
 
-        } else { //Extract the title from the uri
+        } else if (this['label']) {
+            var languages = $H(this['label']).keys();
+            if (languages.size() == 1) {
+                this.title = this['label'][languages[0]];
+            } else {
+                // TODO: What to do here?
+            }
+        } else { // Extract the title from the uri
             var uri;
             if (this.uri) {
                 uri = this.uri;

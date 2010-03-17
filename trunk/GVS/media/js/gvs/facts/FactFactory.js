@@ -90,6 +90,7 @@ Object.extend(FactFactory, {
             identifier = pieces[pieces.length - 1];
         }
 
+        identifier = identifier.substr(0, 1).toUpperCase() + identifier.substr(1);
 
         //Let's try with capital letters...
         var letters = identifier.match(/[A-Z]/g);

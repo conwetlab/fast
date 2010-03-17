@@ -1,0 +1,106 @@
+{% extends "tests/base.html" %}
+{% block classpath %}
+        <script type="text/javascript" 
+            src="{{ MEDIA_URL }}js/gvs/dragndrop/DragHandler.js"></script>
+        <script type="text/javascript" 
+            src="{{ MEDIA_URL }}js/gvs/dragndrop/DragSource.js"></script>
+        <script type="text/javascript"
+            src="{{ MEDIA_URL }}js/gvs/dragndrop/Area.js"></script>
+        
+        <!-- Descriptions -->   
+        <script type="text/javascript"
+            src="{{ MEDIA_URL }}js/gvs/catalogue/BuildingBlockDescription.js"></script>
+        <script type="text/javascript"
+            src="{{ MEDIA_URL }}js/gvs/catalogue/PrePostDescription.js"></script>
+        
+        <!-- Palette component classes -->    
+        <script type="text/javascript" 
+            src="{{ MEDIA_URL }}js/gvs/palette/PaletteComponent.js"></script>
+        <script type="text/javascript" 
+            src="{{ MEDIA_URL }}js/gvs/palette/DomainConceptComponent.js"></script>
+            
+        <!-- Building Block view classes -->
+        <script type="text/javascript" 
+            src="{{ MEDIA_URL }}js/gvs/views/BuildingBlockView.js"></script>
+        <script type="text/javascript" 
+            src="{{ MEDIA_URL }}js/gvs/views/DomainConceptView.js"></script>
+            
+        <!-- Fact classes -->
+        <script type="text/javascript" 
+            src="{{ MEDIA_URL }}js/gvs/facts/Fact.js"></script>
+        <script type="text/javascript" 
+            src="{{ MEDIA_URL }}js/gvs/facts/FactFactory.js"></script>  
+        <script type="text/javascript" 
+            src="{{ MEDIA_URL }}js/gvs/facts/FactIcon.js"></script>
+      
+        <!-- Aux functions and dumb interfacees -->
+        <script type="text/javascript">
+             var DumbInferenceEngine = Class.create({
+                addReachabilityListener: function(){},
+                removeReachabilityListener: function(){}
+            });
+            
+            
+        </script>
+{% endblock %}
+
+{% block onload %}
+    var descriptions = [
+        {
+            "description": {"en-gb": "Final Information with Approval"},
+            "label": {"en-gb": "Final Info with Approval"},
+            "tags": [{"label": {"en-gb": "usecase"}, "taggingDate": "2010-03-17T09:37:20+0100"}],
+            "uri": "http://www.sap.com/general#finalInfoWithAppr"
+        },
+        {   "description": {"en-gb": "New Event"},
+            "label": {"en-gb": "New event"},
+            "tags": [{"label": {"en-gb": "usecase"}, "taggingDate": "2010-03-17T09:37:49+0100"}],
+            "uri": "http://www.sap.com#newEvent"
+        },
+        {
+            "description": {"en-gb": "Event Details"},
+            "label": {"en-gb": "Event Details"},
+            "tags": [{"label": {"en-gb": "usecase"},
+            "taggingDate": "2010-03-17T09:38:02+0100"}],
+            "uri": "http://www.sap.com/general#eventDetails"},
+        {
+            "description": {"en-gb": "Staff"},
+            "label": {"en-gb": "Staff"},
+            "tags": [{"label": {"en-gb": "usecase"},
+            "taggingDate": "2010-03-17T09:38:14+0100"}],
+            "uri": "http://www.sap.com/general#staff"
+        },
+        {
+            "description": {"en-gb": "Approval"},
+            "label": {"en-gb": "Approval"},
+            "tags": [{"label": {"en-gb": "usecase"}, "taggingDate": "2010-03-17T09:38:24+0100"}],
+            "uri": "http://www.sap.com/general#approval"
+        },
+        {
+            "description": {"en-gb": "Accepted Request"},
+            "label": {"en-gb": "Accepted Request"},
+            "tags": [{"label": {"en-gb": "usecase"},"taggingDate": "2010-03-17T09:38:35+0100"}],
+            "uri": "http://www.sap.com/general#acceptedRequest"
+        },
+        {
+            "description": {"en-gb": "Rejected Request"},
+            "label": {"en-gb": "Rejected Request"},
+            "tags": [{"label": {"en-gb": "usecase"},"taggingDate": "2010-03-17T09:38:43+0100"}],
+            "uri": "http://www.sap.com/general#rejectedRequest"
+        }];
+
+    descriptions.each(function(description){
+        var component = new DomainConceptComponent( new PrePostDescription(description),
+                                                    [],
+                                                    new DumbInferenceEngine());
+        $("domainConcepts").appendChild(component.getNode());
+    });
+
+        
+{% endblock %}
+
+{% block test_body %}
+<h1>Test Domain Concepts</h1>
+
+<div id="domainConcepts"></div>
+{% endblock %}
