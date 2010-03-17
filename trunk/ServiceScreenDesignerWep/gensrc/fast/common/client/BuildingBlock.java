@@ -7,7 +7,6 @@ package fast.common.client;
 import fast.common.client.FASTMappingRule;
 import java.util.*;
 import fast.common.client.FactPort;
-import fast.common.client.ServiceDesigner;
 import fast.common.client.TemplateParameter;
 import fast.common.client.FastObject;
 import fujaba.web.runtime.client.reflect.*;
@@ -79,17 +78,9 @@ public class BuildingBlock extends FastObject
  else// mappingRules
       if ("mappingRules".equals(fieldName)){				
          addToMappingRules ((fast.common.client.FASTMappingRule) value);
-      }//( toMany false || toMany2 true || qualified $qualified || 
-// internalQualified false ||  
-// role.Qualifier $role.Qualifier || ordered false || sorted false)
- //2[! (  ( toMany || !toMany2) && !( toMany && toMany2)  && role.Qualifier  ) ]
-//2.2[ !( qualified && !internalQualified ) ]
- else// serviceDesigner
-      if ("serviceDesigner".equals(fieldName)){				
-         setServiceDesigner ((fast.common.client.ServiceDesigner) value);
       }//( toMany true || toMany2 false || qualified $qualified || 
 // internalQualified false ||  
-// role.Qualifier $role.Qualifier || ordered false || sorted false)
+// role.Qualifier $role.Qualifier || ordered $ordered || sorted $sorted)
  //2[! (  ( toMany || !toMany2) && !( toMany && toMany2)  && role.Qualifier  ) ]
 //2.2[ !( qualified && !internalQualified ) ]
  else// templateParameters
@@ -119,10 +110,6 @@ public class BuildingBlock extends FastObject
       else      if ("mappingRules".equals(fieldName))
       {				
          return iteratorOfMappingRules();
-      }
-      else      if ("serviceDesigner".equals(fieldName))
-      {				
-         return getServiceDesigner();
       }
       else      if ("templateParameters".equals(fieldName))
       {				
@@ -448,55 +435,6 @@ public class BuildingBlock extends FastObject
       return ((this.preconditions == null)
               ? 0
               : this.preconditions.size ());
-   }
-
-   /**
-    * <pre>
-    *           0..n     screens     0..1
-    * BuildingBlock ------------------------- ServiceDesigner
-    *           screens               serviceDesigner
-    * </pre>
-    */
-   public static final String PROPERTY_SERVICE_DESIGNER = "serviceDesigner";
-
-   private ServiceDesigner serviceDesigner;
-
-   public boolean setServiceDesigner (ServiceDesigner value)
-   {
-      boolean changed = false;
-
-      if (this.serviceDesigner != value)
-      {
-      
-         ServiceDesigner oldValue = this.serviceDesigner;
-         BuildingBlock source = this;
-         if (this.serviceDesigner != null)
-         {
-            this.serviceDesigner = null;
-            oldValue.removeFromScreens (this);
-         }
-         this.serviceDesigner = value;
-
-         if (value != null)
-         {
-            value.addToScreens (this);
-         }
-            getPropertyChangeSupport().firePropertyChange(PROPERTY_SERVICE_DESIGNER, oldValue, value);
-         changed = true;
-      
-      }
-      return changed;
-   }
-
-   public BuildingBlock withServiceDesigner (ServiceDesigner value)
-   {
-      setServiceDesigner (value);
-      return this;
-   }
-
-   public ServiceDesigner getServiceDesigner ()
-   {
-      return this.serviceDesigner;
    }
 
    /**
@@ -907,7 +845,6 @@ public class BuildingBlock extends FastObject
       this.removeAllFromMappingRules ();
       this.removeAllFromPostconditions ();
       this.removeAllFromPreconditions ();
-      this.setServiceDesigner (null);
       this.removeAllFromTemplateParameters ();
       super.removeYou ();
    }

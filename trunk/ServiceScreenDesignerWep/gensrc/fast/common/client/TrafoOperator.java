@@ -4,6 +4,7 @@
 
 package fast.common.client;
 
+import fast.common.client.ServiceDesigner;
 import fast.common.client.BuildingBlock;
 import fujaba.web.runtime.client.reflect.*;
 import fujaba.web.runtime.client.*;
@@ -38,6 +39,14 @@ public class TrafoOperator extends BuildingBlock
       // name
       if ("name".equals(fieldName)){				
          setName((String) value);
+      }//( toMany false || toMany2 true || qualified $qualified || 
+// internalQualified false ||  
+// role.Qualifier $role.Qualifier || ordered false || sorted false)
+ //2[! (  ( toMany || !toMany2) && !( toMany && toMany2)  && role.Qualifier  ) ]
+//2.2[ !( qualified && !internalQualified ) ]
+ else// serviceDesigner
+      if ("serviceDesigner".equals(fieldName)){				
+         setServiceDesigner ((fast.common.client.ServiceDesigner) value);
       }   }  
 
    public void add (String fieldName, Object value)
@@ -51,9 +60,67 @@ public class TrafoOperator extends BuildingBlock
       if ("name".equals(fieldName)){
          return (String) getName();
       }
+      else      if ("serviceDesigner".equals(fieldName))
+      {				
+         return getServiceDesigner();
+      }
       return null;
    }
 
+   /**
+    * <pre>
+    *           0..*     trafoOperators     0..1
+    * TrafoOperator ------------------------- ServiceDesigner
+    *           trafoOperators               serviceDesigner
+    * </pre>
+    */
+   public static final String PROPERTY_SERVICE_DESIGNER = "serviceDesigner";
+
+   private ServiceDesigner serviceDesigner;
+
+   public boolean setServiceDesigner (ServiceDesigner value)
+   {
+      boolean changed = false;
+
+      if (this.serviceDesigner != value)
+      {
+      
+         ServiceDesigner oldValue = this.serviceDesigner;
+         TrafoOperator source = this;
+         if (this.serviceDesigner != null)
+         {
+            this.serviceDesigner = null;
+            oldValue.removeFromTrafoOperators (this);
+         }
+         this.serviceDesigner = value;
+
+         if (value != null)
+         {
+            value.addToTrafoOperators (this);
+         }
+            getPropertyChangeSupport().firePropertyChange(PROPERTY_SERVICE_DESIGNER, oldValue, value);
+         changed = true;
+      
+      }
+      return changed;
+   }
+
+   public TrafoOperator withServiceDesigner (ServiceDesigner value)
+   {
+      setServiceDesigner (value);
+      return this;
+   }
+
+   public ServiceDesigner getServiceDesigner ()
+   {
+      return this.serviceDesigner;
+   }
+
+   public void removeYou()
+   {
+      this.setServiceDesigner (null);
+      super.removeYou ();
+   }
 }
 
 

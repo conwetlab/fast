@@ -405,7 +405,6 @@ public class ServiceScreenModel extends CObject implements PropertyChangeClient,
 			}
 		}
 		
-		
 		crole = new CRole();
 		crole.setName("serviceScreen");
 		ccardinality = new CCardinality();
@@ -450,6 +449,8 @@ public class ServiceScreenModel extends CObject implements PropertyChangeClient,
 				break;
 			}
 		}
+		
+		
 		
 		
 		crole = new CRole();
@@ -582,7 +583,7 @@ public class ServiceScreenModel extends CObject implements PropertyChangeClient,
 		while(iter.hasNext()) {
 			CClass theCClass = (CClass) iter.next();
 			
-			if ( theCClass.getName().equals("fast.common.client.BuildingBlock")) {
+			if ( theCClass.getName().equals("fast.common.client.ServiceScreen")) {
 				theCClass.addToCRoles(rightRole);
 				break;
 			}
@@ -628,6 +629,51 @@ public class ServiceScreenModel extends CObject implements PropertyChangeClient,
 			CClass theCClass = (CClass) iter.next();
 			
 			if ( theCClass.getName().equals("fast.common.client.FactType")) {
+				theCClass.addToCRoles(rightRole);
+				break;
+			}
+		}
+		
+		crole = new CRole();
+		crole.setName("serviceDesigner");
+		ccardinality = new CCardinality();
+		upperBound = 1;
+		if (upperBound == 0) {
+			 ccardinality.setCardString("0");
+		} else if (upperBound == 1) {
+			ccardinality.setCardString("1");
+		} else {
+			ccardinality.setCardString("n");
+		}
+		crole.setCCardinality(ccardinality);
+		
+		cassoc = new CAssoc();
+	    cassoc.setName("trafoOperators");
+	    cassoc.addToCRole(crole);
+		crole.setCAssoc(cassoc);
+		tClass = ModelRoot.get().getCClass("fast.common.client.ServiceDesigner");
+		tClass.addToCRoles(crole);
+		
+		rightRole = new CRole();
+		rightRole.setName("trafoOperators");
+		ccardinality = new CCardinality();
+		upperBound = 2147483647;
+		if (upperBound == 0) {
+			 ccardinality.setCardString("0");
+		} else if (upperBound == 1) {
+			ccardinality.setCardString("1");
+		} else {
+			ccardinality.setCardString("n");
+		}
+		rightRole.setCCardinality(ccardinality);
+		cassoc.addToCRole(rightRole);
+		
+		// Add role to CClass
+		iter = ModelRoot.get().iteratorOfCClasses();
+		while(iter.hasNext()) {
+			CClass theCClass = (CClass) iter.next();
+			
+			if ( theCClass.getName().equals("fast.common.client.TrafoOperator")) {
 				theCClass.addToCRoles(rightRole);
 				break;
 			}

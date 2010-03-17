@@ -361,7 +361,7 @@ public class RuleGUI
    
    private ServiceDesigner createDefaultTypeStructure()
    {
-      tmpServiceDesigner = buildingBlock.getServiceDesigner(); 
+      tmpServiceDesigner = (ServiceDesigner) buildingBlock.get("serviceDesigner"); 
 //      if (tmpServiceDesigner == null)
 //      {
 //         tmpServiceDesigner = new ServiceDesigner().withScreens(buildingBlock);
@@ -410,7 +410,7 @@ public class RuleGUI
    private FactType findFactType(String typeName)
    {
       FactType factType = null;
-      for (Iterator iter = buildingBlock.getServiceDesigner().iteratorOfFactTypes(); iter.hasNext();)
+      for (Iterator iter = ((ServiceDesigner) buildingBlock.get("serviceDesigner")).iteratorOfFactTypes(); iter.hasNext();)
       {
          factType = (FactType) iter.next();
          if (factType.getTypeName().equals(typeName))

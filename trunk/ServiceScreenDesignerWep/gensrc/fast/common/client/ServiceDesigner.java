@@ -6,7 +6,8 @@ package fast.common.client;
 
 import fast.common.client.FactType;
 import java.util.*;
-import fast.common.client.BuildingBlock;
+import fast.common.client.ServiceScreen;
+import fast.common.client.TrafoOperator;
 import fast.common.client.FastObject;
 import fujaba.web.runtime.client.reflect.*;
 import fujaba.web.runtime.client.*;
@@ -22,11 +23,14 @@ public class ServiceDesigner extends FastObject
 
    public void removeAllFrom(String className) 
    {
-      if ("fast.common.client.BuildingBlock".equals(className)){				
+      if ("fast.common.client.ServiceScreen".equals(className)){				
          removeAllFromScreens();
       }
       else      if ("fast.common.client.FactType".equals(className)){				
          removeAllFromFactTypes();
+      }
+      else      if ("fast.common.client.TrafoOperator".equals(className)){				
+         removeAllFromTrafoOperators();
       }
    }
    
@@ -50,7 +54,7 @@ public class ServiceDesigner extends FastObject
 //2.2[ !( qualified && !internalQualified ) ]
  // screens
       if ("screens".equals(fieldName)){				
-         addToScreens ((fast.common.client.BuildingBlock) value);
+         addToScreens ((fast.common.client.ServiceScreen) value);
       }//( toMany true || toMany2 false || qualified $qualified || 
 // internalQualified false ||  
 // role.Qualifier $role.Qualifier || ordered $ordered || sorted $sorted)
@@ -59,6 +63,14 @@ public class ServiceDesigner extends FastObject
  else// factTypes
       if ("factTypes".equals(fieldName)){				
          addToFactTypes ((fast.common.client.FactType) value);
+      }//( toMany true || toMany2 false || qualified $qualified || 
+// internalQualified false ||  
+// role.Qualifier $role.Qualifier || ordered $ordered || sorted $sorted)
+ //2[! (  ( toMany || !toMany2) && !( toMany && toMany2)  && role.Qualifier  ) ]
+//2.2[ !( qualified && !internalQualified ) ]
+ else// trafoOperators
+      if ("trafoOperators".equals(fieldName)){				
+         addToTrafoOperators ((fast.common.client.TrafoOperator) value);
       }   }  
 
    public void add (String fieldName, Object value)
@@ -75,6 +87,10 @@ public class ServiceDesigner extends FastObject
       else      if ("factTypes".equals(fieldName))
       {				
          return iteratorOfFactTypes();
+      }
+      else      if ("trafoOperators".equals(fieldName))
+      {				
+         return iteratorOfTrafoOperators();
       }
       return null;
    }
@@ -180,26 +196,26 @@ public class ServiceDesigner extends FastObject
    /**
     * <pre>
     *           0..1     screens     0..n
-    * ServiceDesigner ------------------------- BuildingBlock
+    * ServiceDesigner ------------------------- ServiceScreen
     *           serviceDesigner               screens
     * </pre>
     */
    public static final String PROPERTY_SCREENS = "screens";
 
-   private FPropHashSet<BuildingBlock> screens;
+   private FPropHashSet<ServiceScreen> screens;
 
-   public FPropHashSet<BuildingBlock> getScreens () {
+   public FPropHashSet<ServiceScreen> getScreens () {
       return screens;
    }
 
-   public boolean addToScreens (BuildingBlock value) {
+   public boolean addToScreens (ServiceScreen value) {
       boolean changed = false;
 
       if (value != null)
       {
          if (this.screens == null)
          {
-            this.screens = new FPropHashSet<BuildingBlock> (this, PROPERTY_SCREENS);
+            this.screens = new FPropHashSet<ServiceScreen> (this, PROPERTY_SCREENS);
 
          }
       
@@ -213,17 +229,17 @@ public class ServiceDesigner extends FastObject
       return changed;
    }
 
-   public ServiceDesigner withScreens (BuildingBlock value ) {
+   public ServiceDesigner withScreens (ServiceScreen value ) {
          addToScreens ( value);
       return this;
    }
 
-   public ServiceDesigner withoutScreens (BuildingBlock value) {
+   public ServiceDesigner withoutScreens (ServiceScreen value) {
       removeFromScreens (value);
       return this;
    }
 
-   public boolean removeFromScreens (BuildingBlock value) {
+   public boolean removeFromScreens (ServiceScreen value) {
       boolean changed = false;
 
       if ((this.screens != null) && (value != null))
@@ -241,7 +257,7 @@ public class ServiceDesigner extends FastObject
 
    public void removeAllFromScreens () {
    
-      BuildingBlock tmpValue;
+      ServiceScreen tmpValue;
 
       if (screens != null) {
          java.util.Vector tempSet = new java.util.Vector(screens);
@@ -249,14 +265,14 @@ public class ServiceDesigner extends FastObject
       
          while (iter.hasNext ())
          {
-            tmpValue = (BuildingBlock) iter.next ();
+            tmpValue = (ServiceScreen) iter.next ();
             this.removeFromScreens (tmpValue);
          }
       } 
    
    }
 
-   public boolean hasInScreens (BuildingBlock value) {
+   public boolean hasInScreens (ServiceScreen value) {
       return ((this.screens != null) &&
               (value != null) &&
               this.screens.contains (value));
@@ -275,10 +291,109 @@ public class ServiceDesigner extends FastObject
               : this.screens.size ());
    }
 
+   /**
+    * <pre>
+    *           0..1     trafoOperators     0..*
+    * ServiceDesigner ------------------------- TrafoOperator
+    *           serviceDesigner               trafoOperators
+    * </pre>
+    */
+   public static final String PROPERTY_TRAFO_OPERATORS = "trafoOperators";
+
+   private FPropHashSet<TrafoOperator> trafoOperators;
+
+   public FPropHashSet<TrafoOperator> getTrafoOperators () {
+      return trafoOperators;
+   }
+
+   public boolean addToTrafoOperators (TrafoOperator value) {
+      boolean changed = false;
+
+      if (value != null)
+      {
+         if (this.trafoOperators == null)
+         {
+            this.trafoOperators = new FPropHashSet<TrafoOperator> (this, PROPERTY_TRAFO_OPERATORS);
+
+         }
+      
+         changed = this.trafoOperators.add (value);
+         if (changed)
+         {
+            value.setServiceDesigner (this);
+         }
+      
+      }
+      return changed;
+   }
+
+   public ServiceDesigner withTrafoOperators (TrafoOperator value ) {
+         addToTrafoOperators ( value);
+      return this;
+   }
+
+   public ServiceDesigner withoutTrafoOperators (TrafoOperator value) {
+      removeFromTrafoOperators (value);
+      return this;
+   }
+
+   public boolean removeFromTrafoOperators (TrafoOperator value) {
+      boolean changed = false;
+
+      if ((this.trafoOperators != null) && (value != null))
+      {
+      
+         changed = this.trafoOperators.remove (value);
+         if (changed)
+         {
+            value.setServiceDesigner (null);
+         }
+      
+      }
+      return changed;
+   }
+
+   public void removeAllFromTrafoOperators () {
+   
+      TrafoOperator tmpValue;
+
+      if (trafoOperators != null) {
+         java.util.Vector tempSet = new java.util.Vector(trafoOperators);
+         Iterator iter = tempSet.iterator ();
+      
+         while (iter.hasNext ())
+         {
+            tmpValue = (TrafoOperator) iter.next ();
+            this.removeFromTrafoOperators (tmpValue);
+         }
+      } 
+   
+   }
+
+   public boolean hasInTrafoOperators (TrafoOperator value) {
+      return ((this.trafoOperators != null) &&
+              (value != null) &&
+              this.trafoOperators.contains (value));
+   }
+
+   public Iterator iteratorOfTrafoOperators () {
+      return ((this.trafoOperators == null)
+              ? FEmptyIterator.get ()
+              : this.trafoOperators.iterator ());
+
+   }
+
+   public int sizeOfTrafoOperators () {
+      return ((this.trafoOperators == null)
+              ? 0
+              : this.trafoOperators.size ());
+   }
+
    public void removeYou()
    {
       this.removeAllFromFactTypes ();
       this.removeAllFromScreens ();
+      this.removeAllFromTrafoOperators ();
       super.removeYou ();
    }
 }

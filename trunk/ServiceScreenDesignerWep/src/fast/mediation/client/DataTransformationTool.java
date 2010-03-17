@@ -3,12 +3,16 @@ package fast.mediation.client;
 import java.util.Iterator;
 
 import com.google.gwt.core.client.EntryPoint;
+import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.FlexTable;
+import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
+import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.TabPanel;
 import com.google.gwt.user.client.ui.TextBox;
+import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.user.client.ui.FlexTable.FlexCellFormatter;
 
@@ -18,6 +22,7 @@ import de.uni_kassel.webcoobra.client.DataLoadTimer;
 import fast.common.client.ServiceDesigner;
 import fast.common.client.ServiceScreenModel;
 import fast.common.client.TrafoOperator;
+import fast.facttool.client.FactEditor;
 import fast.servicescreen.client.FastTool;
 import fast.servicescreen.client.gui.CTextChangeHandler;
 import fast.servicescreen.client.gui.PortGUI;
@@ -119,22 +124,18 @@ public class DataTransformationTool extends FastTool implements EntryPoint
 				designer = new ServiceDesigner();
 			}
 			
-			Iterator iteratorOfScreens = designer.iteratorOfScreens();
-			while (iteratorOfScreens.hasNext())
+			Iterator iteratorOfTrafoOperators = designer.iteratorOfTrafoOperators();
+			if (iteratorOfTrafoOperators.hasNext())
 			{
-				Object obj = iteratorOfScreens.next();
-				if (obj instanceof TrafoOperator)
-				{
-					trafoOperator = (TrafoOperator) obj;
-					break;
-				}
+				trafoOperator = (TrafoOperator) iteratorOfTrafoOperators.next();
 			}
 
-			// if there has been no data loaded, create an inital ServiceScreen
+			// if there has been no data loaded, create an inital trafoOperator
 			if (trafoOperator == null)
 			{
 				trafoOperator = new TrafoOperator();
-				designer.addToScreens(trafoOperator);
+				designer.addToTrafoOperators(trafoOperator);
+				trafoOperator.setName("new Operator");
 			}
 
 			buildGUI();
@@ -153,14 +154,39 @@ public class DataTransformationTool extends FastTool implements EntryPoint
 	{
 	    FTest.assertTrue(true, "buildGUI has been reached");
 
-		/*
-		 * panel containing the designer-gui
-		 * */
-		RootPanel rootPanel = RootPanel.get();
+		rootPanel = RootPanel.get();
 
-		// tabPanel contains the design steps
-		TabPanel tabPanel = new TabPanel();
+		tabPanel = new TabPanel();
+		tabPanel.setWidth("900px");
+		
+		
+		overviewFlowPanel = new FlowPanel();
+		overviewFlowPanel.setWidth("895px");
+		addTrafoOpHandler = new AddTrafoOpHandler();
+		trafoOpListener = new TrafoOpListener();
+		trafoOpSelectionHandler = new TrafoOpSelectionHandler();
+		
+		refreshOverviewPanel();
+		
+		designer.addPropertyChangeListener(ServiceDesigner.PROPERTY_TRAFO_OPERATORS, trafoOpListener);
+		
+		tabPanel.add(overviewFlowPanel, "Overview");
+		tabPanel.selectTab(0);
 
+		rebuildOperatorTabs();
+	}
+	
+	
+	private void rebuildOperatorTabs() 
+	{
+		// remove old tabs
+		int widgetCount = tabPanel.getWidgetCount();
+		while (widgetCount > 1)
+		{
+			tabPanel.remove(widgetCount-1);
+			widgetCount = tabPanel.getWidgetCount();
+		}
+		
 		// general tab
 		FlexTable generalInformationTable = new FlexTable();
 		FlexCellFormatter generalInfoFormatter = generalInformationTable.getFlexCellFormatter();
@@ -183,8 +209,6 @@ public class DataTransformationTool extends FastTool implements EntryPoint
 		generalInformationTable.setWidget(rowCount, 0, nameTextBox);
 		rowCount++;
 
-		FTest.assertTrue(nameTextBox.getText().equals("CustomerToPerson"), "Transformation operator CustomerToPerson found");
-		
 		// add form for input fact
 		portGUI = new PortGUI(trafoOperator);
 		Widget inputPortTable = portGUI.createInputPortTable();
@@ -199,7 +223,7 @@ public class DataTransformationTool extends FastTool implements EntryPoint
 
 		// add to tab panel
 		tabPanel.add(generalInformationTable, "General");
-		tabPanel.selectTab(0);
+		
 
 
 		// transformation tab
@@ -231,5 +255,88 @@ public class DataTransformationTool extends FastTool implements EntryPoint
 		// add tabPanel to root
 		rootPanel.add(tabPanel);
 		System.out.println("Tab panel has been added to root " + tabPanel);
+	}
+	
+	public void refreshOverviewPanel() 
+	{
+		overviewFlowPanel.clear();
+		// add operator panels
+		for (TrafoOperator trafoOp : designer.getTrafoOperators()) 
+		{
+			VerticalPanel verticalPanel = new VerticalPanel();
+			Image image = new Image ("images/DataTransformationOperatorIcon.png");
+			verticalPanel.add(image);
+			Label label = new Label(trafoOp.getName());
+			verticalPanel.add(label);
+			if (trafoOp == trafoOperator)
+			{
+				verticalPanel.setBorderWidth(3);
+			}
+			TrafoOpSelectionHandler selectHandler = new TrafoOpSelectionHandler();
+			selectHandler.myOp = trafoOp;
+			image.addClickHandler(selectHandler);
+			overviewFlowPanel.add(verticalPanel);
+			
+			TrafoOpNameListener trafoOpNameListener = new TrafoOpNameListener();
+			trafoOpNameListener.myLabel = label;
+			trafoOp.addPropertyChangeListener(TrafoOperator.PROPERTY_NAME, trafoOpNameListener);
+		}
+		
+		// add add button
+		Button button = new Button("add");
+		button.addClickHandler(addTrafoOpHandler);
+		overviewFlowPanel.add(button);
+	}
+	
+	public AddTrafoOpHandler addTrafoOpHandler;
+	public FlowPanel overviewFlowPanel;
+	class AddTrafoOpHandler extends FAction
+	{
+		@Override
+		public void doAction()
+		{
+			TrafoOperator newOp = new TrafoOperator();
+			newOp.setName("new Operator");
+			designer.addToTrafoOperators(newOp);
+		}
+	}
+	
+	TrafoOpListener trafoOpListener;
+	class TrafoOpListener extends FAction
+	{
+		@Override
+		public void doAction()
+		{
+			System.out.println("trafo op list hast changed");
+			refreshOverviewPanel();
+		}
+	}
+	
+	TrafoOpSelectionHandler trafoOpSelectionHandler;
+	public RootPanel rootPanel;
+	public TabPanel tabPanel;
+	class TrafoOpSelectionHandler extends FAction
+	{
+		public TrafoOperator myOp;
+		
+		@Override
+		public void doAction()
+		{
+			trafoOperator = myOp;
+			refreshOverviewPanel();
+			rebuildOperatorTabs();
+		}
+	}
+
+	class TrafoOpNameListener extends FAction
+	{
+		public Label myLabel;
+		
+		@Override
+		public void doAction()
+		{
+			TrafoOperator myOp = (TrafoOperator) propertyEvent.getSource();
+			myLabel.setText(myOp.getName());
+		}		
 	}
 }

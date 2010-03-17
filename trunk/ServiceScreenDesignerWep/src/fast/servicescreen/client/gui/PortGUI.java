@@ -14,6 +14,7 @@ import com.google.gwt.user.client.ui.HTMLTable.Cell;
 
 import fast.common.client.BuildingBlock;
 import fast.common.client.FactPort;
+import fast.common.client.ServiceDesigner;
 
 public class PortGUI
 {
@@ -68,7 +69,7 @@ public class PortGUI
    private void createInputTableRowFor(FactPort factPort)
    {
       TextBox nameBox = CTextChangeHandler.createTextBox(factPort, "name");
-      SuggestBox typeBox = CTextChangeHandler.createTypeSuggestBox(factPort.getServiceScreen().getServiceDesigner(), factPort, "factType");
+      SuggestBox typeBox = CTextChangeHandler.createTypeSuggestBox((ServiceDesigner) factPort.getServiceScreen().get("serviceDesigner"), factPort, "factType");
       TextBox exampleBox = CTextChangeHandler.createTextBox(factPort, "exampleValue");
       
       int inputNumRows = inputPortTable.getRowCount();
@@ -127,7 +128,7 @@ public class PortGUI
    private void createOutputTableRowFor(FactPort factPort)
    {
       TextBox nameBox = CTextChangeHandler.createTextBox(factPort, "name");
-      SuggestBox typeBox = CTextChangeHandler.createTypeSuggestBox(factPort.getServiceScreen2().getServiceDesigner(), factPort, "factType");
+      SuggestBox typeBox = CTextChangeHandler.createTypeSuggestBox((ServiceDesigner) factPort.getServiceScreen2().get("serviceDesigner"), factPort, "factType");
       TextBox exampleBox = CTextChangeHandler.createTextBox(factPort, "exampleValue");
       
       int outputNumRows = outputPortTable.getRowCount();
