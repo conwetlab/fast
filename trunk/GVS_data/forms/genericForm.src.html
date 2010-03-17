@@ -1,0 +1,203 @@
+<html>
+<head>
+<script lang="javascript">
+var {{buildingblockId}} = Class.create(BuildingBlock,{
+    _fields: [],
+
+    init: function () {
+        var defaultParams = {
+            acceptButtonLabel: "Accept",
+            fields: [ {name:"input", value:"value"} ]
+        };
+        var params = Object.extend(defaultParams, this.parameter);
+        
+        var title = $("{{screenId}}_title");
+        title.innerHTML = params['title'] || "";
+        
+        var tableBody = $("{{screenId}}_tableBody");
+        this.buildFields(tableBody, params.fields);
+        
+        var cancelButton = $("{{screenId}}_cancelButton");
+        cancelButton.observe('click', function() {
+            for (var i=0, field; field=this._fields[i]; i++){
+                field.value = "";
+            }
+        }.bind(this));
+        if (params['cancelButtonLabel']) {
+            cancelButton.innerHTML = params['cancelButtonLabel'];
+        } else {
+            cancelButton.remove();
+        }
+        
+        var acceptButton = $("{{screenId}}_acceptButton");
+        acceptButton.innerHTML = params['acceptButtonLabel'];
+        acceptButton.observe('click', function() {
+            var formData = this.getFieldsValues();
+            var item = {id: "item", data: formData};
+			this.manageData(["newItem"], [item], []);
+        }.bind(this));
+    },
+    
+    getFieldsValues: function() {
+        var fieldsValues = {};
+        for (var i=0, field; field=this._fields[i]; i++) {
+            fieldsValues[field.name] = field.value;
+        }
+        return fieldsValues;
+    },
+    
+    buildFields: function (table, fields) {
+        table.innerHTML = "";
+        this._fields = [];
+        
+        for (var i=0, field; field = fields[i]; i++) {
+            var fieldName = field['name'];
+            var fieldType = field['type'];
+        
+            var row = table.insertRow(-1);
+                        
+            var label = document.createElement('label');
+            label.appendChild(document.createTextNode(field['label'] || fieldName));
+            
+            var input = this.inputFactory.create(fieldName, fieldType, field);
+            this._fields.push(input);
+            
+            if (field['required']) {
+                row.addClassName('required');
+            }
+                      
+            var labelCell = row.insertCell(-1);
+            labelCell.appendChild(label);
+            
+            var inputCell = row.insertCell(-1);
+            inputCell.appendChild(input);               
+        }
+    },
+    
+    inputFactory: {
+        create: function(name, type, options) {
+            var element;
+            if (this[type]) {
+                element = this[type](name, options)
+            } else {
+                element = this['text'](name, options);
+            }
+            
+            return element;
+        },
+        
+        createElement: function(elementName, options) {
+            var element = document.createElement(elementName);
+            Element.writeAttribute(element, options);
+            return element;
+        },
+
+
+        input: function(type, name, options) {
+            var element = this.createElement('input', options);
+            element.setAttribute('name', name);
+            element.setAttribute('type', type);
+            return element;
+        },
+
+        text: function(name, options) {
+            return this.input('text', name, options);
+        },
+        
+        password: function(name, options) {
+            return this.input('password', name, options);
+        },
+        
+//       hidden: function(name, options) {
+//            return this.input('hidden', name, options);
+//        },
+        
+        checkbox: function(name, options) {
+            return this.input('checkbox', name, options);
+        },
+        
+        radio: function(name, options) {
+            return this.input('radio', name, options);
+        },
+        
+        textbox: function(name, options) {
+            var element = this.createElement('textarea', options);
+        	element.setAttribute('name', name);
+        	element.innerHTML = options['value'];
+        	return element;
+        }
+    }  
+});
+</script>
+<style>
+.genericForm {
+    text-align:center;
+}
+
+.genericForm .box {
+    background:#FFF8E8 url(http://demo.fast.morfeo-project.org/gvsdata/amazonScreens/style/bg_td2.jpg) repeat-x scroll 0 0;
+    border:1px solid #F8A704;
+    margin:5px auto 0;
+    padding:.8em;
+    text-align:center;
+
+    border-radius:13px;
+    -moz-border-radius:13px;
+    -webkit-border-radius:13px;
+}
+
+.genericForm label {
+    color:#979797;
+    font-family:Arial,Helvetica,sans-serif;
+    font-weight:bold;
+    overflow:hidden;
+    padding:2px;
+    white-space:nowrap
+}
+.genericForm h1 {
+    color:#FEBF43;
+    font-family:Arial,Helvetica,sans-serif;
+    font-size:24px;
+    font-style:italic;
+    font-weight:bold;
+    margin:5px;
+}
+
+.genericForm button {
+    background-color:#FFCA5E;
+    border:medium none;
+    color:white;
+    font-weight:bold;
+    margin:3px;
+    padding:2px 4px;
+
+    cursor:pointer;
+
+    border-radius:5px;
+    -moz-border-radius:5px;
+    -webkit-border-radius:5px;
+}
+
+.genericForm button.cancel:hover {
+     background-color:#fc5746;
+}
+
+.genericForm button.accept:hover {
+    background-color:#69cb55;
+}
+
+</style>
+</head>
+<body>
+<div class="genericForm">
+    <h1 id="{{screenId}}_title"></h1>
+    <div class="box">
+        <table><tbody id="{{screenId}}_tableBody"></tbody></table>
+        <div style="text-align:right">
+        <button type="button" class="cancel" id="{{screenId}}_cancelButton">Cancel</button>
+        <button type="button" class="accept" id="{{screenId}}_acceptButton">Accept</button>
+        </div>
+    </div>
+</div>
+</body>
+</html>
