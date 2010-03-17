@@ -60,64 +60,65 @@
 <span class='line'> 53</span>      * Register key handlers
 <span class='line'> 54</span>      * @override
 <span class='line'> 55</span>      */</span><span class="WHIT">
-<span class='line'> 56</span>     </span><span class="NAME">registerKeyHandlers</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="COMM">/** KeyPressRegistry */</span><span class="WHIT"> </span><span class="NAME">registry</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 56</span>     </span><span class="NAME">register</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="COMM">/** KeyPressRegistry */</span><span class="WHIT"> </span><span class="NAME">registry</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
 <span class='line'> 57</span>         </span><span class="NAME">this._groups.each</span><span class="PUNC">(</span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">group</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
 <span class='line'> 58</span>             </span><span class="NAME">group.each</span><span class="PUNC">(</span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">child</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'> 59</span>                 </span><span class="NAME">child.registerKeyHandlers</span><span class="PUNC">(</span><span class="NAME">registry</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">    
+<span class='line'> 59</span>                 </span><span class="NAME">child.register</span><span class="PUNC">(</span><span class="NAME">registry</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">    
 <span class='line'> 60</span>             </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">   
 <span class='line'> 61</span>         </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'> 62</span>     </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
 <span class='line'> 63</span>     
 <span class='line'> 64</span>     </span><span class="COMM">/**
-<span class='line'> 65</span>      * Unregister key handlers
+<span class='line'> 65</span>      * Unregister key handlers and destroy the widget
 <span class='line'> 66</span>      * @override
 <span class='line'> 67</span>      */</span><span class="WHIT">
-<span class='line'> 68</span>     </span><span class="NAME">unregisterKeyHandlers</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="COMM">/** KeyPressRegistry */</span><span class="WHIT"> </span><span class="NAME">registry</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 68</span>     </span><span class="NAME">unregister</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="COMM">/** KeyPressRegistry */</span><span class="WHIT"> </span><span class="NAME">registry</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
 <span class='line'> 69</span>         </span><span class="NAME">this._groups.each</span><span class="PUNC">(</span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">group</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
 <span class='line'> 70</span>             </span><span class="NAME">group.each</span><span class="PUNC">(</span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">child</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'> 71</span>                 </span><span class="NAME">child.unregisterKeyHandlers</span><span class="PUNC">(</span><span class="NAME">registry</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">    
+<span class='line'> 71</span>                 </span><span class="NAME">child.unregister</span><span class="PUNC">(</span><span class="NAME">registry</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">    
 <span class='line'> 72</span>             </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">   
-<span class='line'> 73</span>         </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">         
-<span class='line'> 74</span>     </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'> 75</span>     
-<span class='line'> 76</span>     </span><span class="COMM">// ***************** PRIVATE METHODS *************** //</span><span class="WHIT">
-<span class='line'> 77</span>     
-<span class='line'> 78</span>      </span><span class="COMM">/**
-<span class='line'> 79</span>      * Adds a new child to the submenu
-<span class='line'> 80</span>      * @private
-<span class='line'> 81</span>      */</span><span class="WHIT">
-<span class='line'> 82</span>     </span><span class="NAME">_addChild</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="COMM">/** Number */</span><span class="WHIT"> </span><span class="NAME">group</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="COMM">/** MenuElement */</span><span class="WHIT"> </span><span class="NAME">child</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'> 83</span>         </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="PUNC">!</span><span class="NAME">this._groups</span><span class="PUNC">[</span><span class="NAME">group</span><span class="PUNC">]</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'> 84</span>             </span><span class="NAME">this._groups</span><span class="PUNC">[</span><span class="NAME">group</span><span class="PUNC">]</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">Array</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'> 85</span>         </span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'> 86</span>         </span><span class="NAME">this._groups</span><span class="PUNC">[</span><span class="NAME">group</span><span class="PUNC">]</span><span class="PUNC">.</span><span class="NAME">push</span><span class="PUNC">(</span><span class="NAME">child</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'> 87</span>         </span><span class="NAME">this._groups</span><span class="PUNC">[</span><span class="NAME">group</span><span class="PUNC">]</span><span class="PUNC">.</span><span class="NAME">sort</span><span class="PUNC">(</span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">a</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">b</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'> 88</span>             </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">a.getWeight</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">-</span><span class="WHIT"> </span><span class="NAME">b.getWeight</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'> 89</span>         </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'> 90</span>     </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'> 91</span>     
+<span class='line'> 73</span>         </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 74</span>         </span><span class="NAME">this._widget.destroy</span><span class="PUNC">(</span><span class="KEYW">false</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">      
+<span class='line'> 75</span>     </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 76</span>     
+<span class='line'> 77</span>     </span><span class="COMM">// ***************** PRIVATE METHODS *************** //</span><span class="WHIT">
+<span class='line'> 78</span>     
+<span class='line'> 79</span>      </span><span class="COMM">/**
+<span class='line'> 80</span>      * Adds a new child to the submenu
+<span class='line'> 81</span>      * @private
+<span class='line'> 82</span>      */</span><span class="WHIT">
+<span class='line'> 83</span>     </span><span class="NAME">_addChild</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="COMM">/** Number */</span><span class="WHIT"> </span><span class="NAME">group</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="COMM">/** MenuElement */</span><span class="WHIT"> </span><span class="NAME">child</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 84</span>         </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="PUNC">!</span><span class="NAME">this._groups</span><span class="PUNC">[</span><span class="NAME">group</span><span class="PUNC">]</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 85</span>             </span><span class="NAME">this._groups</span><span class="PUNC">[</span><span class="NAME">group</span><span class="PUNC">]</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">Array</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 86</span>         </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'> 87</span>         </span><span class="NAME">this._groups</span><span class="PUNC">[</span><span class="NAME">group</span><span class="PUNC">]</span><span class="PUNC">.</span><span class="NAME">push</span><span class="PUNC">(</span><span class="NAME">child</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 88</span>         </span><span class="NAME">this._groups</span><span class="PUNC">[</span><span class="NAME">group</span><span class="PUNC">]</span><span class="PUNC">.</span><span class="NAME">sort</span><span class="PUNC">(</span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">a</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">b</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 89</span>             </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">a.getWeight</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">-</span><span class="WHIT"> </span><span class="NAME">b.getWeight</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 90</span>         </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 91</span>     </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
 <span class='line'> 92</span>     
-<span class='line'> 93</span>     </span><span class="COMM">/**
-<span class='line'> 94</span>      * creates the submenu widget with the information
-<span class='line'> 95</span>      * stored in the children's list
-<span class='line'> 96</span>      * @private
-<span class='line'> 97</span>      */</span><span class="WHIT">
-<span class='line'> 98</span>     </span><span class="NAME">_createSubMenu</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="COMM">/** Menu */</span><span class="WHIT"> </span><span class="NAME">parent</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'> 99</span>         
-<span class='line'>100</span>         </span><span class="KEYW">for</span><span class="PUNC">(</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">i</span><span class="PUNC">=</span><span class="NUMB">0</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="NAME">i</span><span class="WHIT"> </span><span class="PUNC">&lt;</span><span class="WHIT"> </span><span class="NAME">this._groups.size</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="NAME">i</span><span class="PUNC">++</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>101</span>             </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">this._groups</span><span class="PUNC">[</span><span class="NAME">i</span><span class="PUNC">]</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>102</span>                 </span><span class="NAME">this._groups</span><span class="PUNC">[</span><span class="NAME">i</span><span class="PUNC">]</span><span class="PUNC">.</span><span class="NAME">each</span><span class="PUNC">(</span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">element</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>103</span>                     </span><span class="NAME">parent.addChild</span><span class="PUNC">(</span><span class="NAME">element.getWidget</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">    
-<span class='line'>104</span>                 </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>105</span>                 </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">i</span><span class="WHIT"> </span><span class="PUNC">!=</span><span class="WHIT"> </span><span class="NAME">this._groups.size</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">-</span><span class="WHIT"> </span><span class="NUMB">1</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>106</span>                     </span><span class="COMM">// Not last group</span><span class="WHIT">
-<span class='line'>107</span>                     </span><span class="NAME">parent.addChild</span><span class="PUNC">(</span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">dijit.MenuSeparator</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>108</span>                 </span><span class="PUNC">}</span><span class="WHIT">    
-<span class='line'>109</span>             </span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>110</span>         </span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>111</span>         </span><span class="NAME">parent.startup</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>112</span>     </span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>113</span> </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>114</span> 
-<span class='line'>115</span> </span><span class="COMM">// vim:ts=4:sw=4:et:</span><span class="WHIT">
-<span class='line'>116</span> </span></pre></body></html>
+<span class='line'> 93</span>     
+<span class='line'> 94</span>     </span><span class="COMM">/**
+<span class='line'> 95</span>      * creates the submenu widget with the information
+<span class='line'> 96</span>      * stored in the children's list
+<span class='line'> 97</span>      * @private
+<span class='line'> 98</span>      */</span><span class="WHIT">
+<span class='line'> 99</span>     </span><span class="NAME">_createSubMenu</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="COMM">/** Menu */</span><span class="WHIT"> </span><span class="NAME">parent</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>100</span>         
+<span class='line'>101</span>         </span><span class="KEYW">for</span><span class="PUNC">(</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">i</span><span class="PUNC">=</span><span class="NUMB">0</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="NAME">i</span><span class="WHIT"> </span><span class="PUNC">&lt;</span><span class="WHIT"> </span><span class="NAME">this._groups.size</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="NAME">i</span><span class="PUNC">++</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>102</span>             </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">this._groups</span><span class="PUNC">[</span><span class="NAME">i</span><span class="PUNC">]</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>103</span>                 </span><span class="NAME">this._groups</span><span class="PUNC">[</span><span class="NAME">i</span><span class="PUNC">]</span><span class="PUNC">.</span><span class="NAME">each</span><span class="PUNC">(</span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">element</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>104</span>                     </span><span class="NAME">parent.addChild</span><span class="PUNC">(</span><span class="NAME">element.getWidget</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">    
+<span class='line'>105</span>                 </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>106</span>                 </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">i</span><span class="WHIT"> </span><span class="PUNC">!=</span><span class="WHIT"> </span><span class="NAME">this._groups.size</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">-</span><span class="WHIT"> </span><span class="NUMB">1</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>107</span>                     </span><span class="COMM">// Not last group</span><span class="WHIT">
+<span class='line'>108</span>                     </span><span class="NAME">parent.addChild</span><span class="PUNC">(</span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">dijit.MenuSeparator</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>109</span>                 </span><span class="PUNC">}</span><span class="WHIT">    
+<span class='line'>110</span>             </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>111</span>         </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>112</span>         </span><span class="NAME">parent.startup</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>113</span>     </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>114</span> </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>115</span> 
+<span class='line'>116</span> </span><span class="COMM">// vim:ts=4:sw=4:et:</span><span class="WHIT">
+<span class='line'>117</span> </span></pre></body></html>

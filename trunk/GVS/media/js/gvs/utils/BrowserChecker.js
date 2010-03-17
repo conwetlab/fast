@@ -1,9 +1,9 @@
 /**
 * This checks the browser name and version
 */ 
-var BrowserChecker = Class.create({ /** @lends BrowserChecker.prototype */
+var BrowserChecker = Class.create(/** @lends BrowserChecker.prototype */ {
     /**
-     * Constructs
+     * @constructs
      */
     initialize: function() {
         

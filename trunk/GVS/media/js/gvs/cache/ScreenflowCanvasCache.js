@@ -1,4 +1,4 @@
-var ScreenflowCanvasCache = Class.create( /** @lends ScreenCanvasCache.prototype */ {
+var ScreenflowCanvasCache = Class.create( /** @lends ScreenflowCanvasCache.prototype */ {
     /**
      * 
      * @constructs

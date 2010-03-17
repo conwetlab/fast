@@ -55,19 +55,20 @@
 <span class='line'> 48</span>      * Register key handlers
 <span class='line'> 49</span>      * @abstract
 <span class='line'> 50</span>      */</span><span class="WHIT">
-<span class='line'> 51</span>     </span><span class="NAME">registerKeyHandlers</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="COMM">/** KeyPressRegistry */</span><span class="WHIT"> </span><span class="NAME">registry</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'> 52</span>         </span><span class="KEYW">throw</span><span class="WHIT"> </span><span class="STRN">"Abstract method invocation. MenuElement::registerKeyHandlers"</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 51</span>     </span><span class="NAME">register</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="COMM">/** KeyPressRegistry */</span><span class="WHIT"> </span><span class="NAME">registry</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 52</span>         </span><span class="KEYW">throw</span><span class="WHIT"> </span><span class="STRN">"Abstract method invocation. MenuElement::register"</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'> 53</span>     </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
 <span class='line'> 54</span>     
 <span class='line'> 55</span>     </span><span class="COMM">/**
-<span class='line'> 56</span>      * Unregister key handlers
-<span class='line'> 57</span>      * @abstract
-<span class='line'> 58</span>      */</span><span class="WHIT">
-<span class='line'> 59</span>     </span><span class="NAME">unregisterKeyHandlers</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="COMM">/** KeyPressRegistry */</span><span class="WHIT"> </span><span class="NAME">registry</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'> 60</span>         </span><span class="KEYW">throw</span><span class="WHIT"> </span><span class="STRN">"Abstract method invocation. MenuElement::unregisterKeyHandlers"</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'> 61</span>     </span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'> 62</span> </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'> 63</span> </span><span class="COMM">// *************** CONSTANTS **************//</span><span class="WHIT">
-<span class='line'> 64</span> </span><span class="NAME">MenuElement.MAXIMUM_WEIGHT</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NUMB">10000</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'> 65</span> </span><span class="COMM">// vim:ts=4:sw=4:et:</span><span class="WHIT">
-<span class='line'> 66</span> </span></pre></body></html>
+<span class='line'> 56</span>      * Unregister key handlers and destroy the 
+<span class='line'> 57</span>      * widgets when necessary
+<span class='line'> 58</span>      * @abstract
+<span class='line'> 59</span>      */</span><span class="WHIT">
+<span class='line'> 60</span>     </span><span class="NAME">unregister</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="COMM">/** KeyPressRegistry */</span><span class="WHIT"> </span><span class="NAME">registry</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 61</span>         </span><span class="KEYW">throw</span><span class="WHIT"> </span><span class="STRN">"Abstract method invocation. MenuElement::unregister"</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 62</span>     </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'> 63</span> </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 64</span> </span><span class="COMM">// *************** CONSTANTS **************//</span><span class="WHIT">
+<span class='line'> 65</span> </span><span class="NAME">MenuElement.MAXIMUM_WEIGHT</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NUMB">10000</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 66</span> </span><span class="COMM">// vim:ts=4:sw=4:et:</span><span class="WHIT">
+<span class='line'> 67</span> </span></pre></body></html>

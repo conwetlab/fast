@@ -43,12 +43,22 @@
 <span class='line'> 36</span> </span><span class="WHIT">    </span><span class="COMM">/**
 <span class='line'> 37</span>      * Gets building block descriptions by URI
 <span class='line'> 38</span>      * @type {BuildingBlockDescription[]}
-<span class='line'> 39</span>      */</span><span class="WHIT">
-<span class='line'> 40</span> </span><span class="WHIT">    </span><span class="NAME">getBuildingBlocks</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="COMM">/*...*/</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'> 41</span> </span><span class="WHIT">        </span><span class="KEYW">throw</span><span class="WHIT"> </span><span class="STRN">"Abstract method invocation. BuildingBlockFactory::getBuildingBlockDescriptions"</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'> 42</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'> 43</span> 
-<span class='line'> 44</span> </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'> 45</span> 
-<span class='line'> 46</span> </span><span class="COMM">// vim:ts=4:sw=4:et: </span><span class="WHIT">
-<span class='line'> 47</span> </span></pre></body></html>
+<span class='line'> 39</span>      * @abstract
+<span class='line'> 40</span>      */</span><span class="WHIT">
+<span class='line'> 41</span> </span><span class="WHIT">    </span><span class="NAME">getBuildingBlocks</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="COMM">/*...*/</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 42</span> </span><span class="WHIT">        </span><span class="KEYW">throw</span><span class="WHIT"> </span><span class="STRN">"Abstract method invocation. BuildingBlockFactory::getBuildingBlockDescriptions"</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 43</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 44</span> 
+<span class='line'> 45</span> </span><span class="WHIT">    </span><span class="COMM">/**
+<span class='line'> 46</span>      * Gets a new instance of the type of the factory
+<span class='line'> 47</span>      * @abstract
+<span class='line'> 48</span>      * @type ComponentInstance
+<span class='line'> 49</span>      */</span><span class="WHIT">
+<span class='line'> 50</span> </span><span class="WHIT">    </span><span class="NAME">getInstance</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="COMM">/** BuildingBlockDescription */</span><span class="NAME">description</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="COMM">/** InferenceEngine */</span><span class="WHIT"> </span><span class="NAME">engine</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 51</span> </span><span class="WHIT">        </span><span class="KEYW">throw</span><span class="WHIT"> </span><span class="STRN">"Abstract method invocation. BuildingBlockFactory::getInstance"</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 52</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'> 53</span> 
+<span class='line'> 54</span> </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 55</span> 
+<span class='line'> 56</span> </span><span class="COMM">// vim:ts=4:sw=4:et: </span><span class="WHIT">
+<span class='line'> 57</span> </span></pre></body></html>

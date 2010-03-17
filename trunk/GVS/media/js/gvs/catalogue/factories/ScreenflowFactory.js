@@ -1,5 +1,5 @@
 var ScreenflowFactory = Class.create(BuildingBlockFactory,
-    /** @lends ScreenFactory.prototype */ {
+    /** @lends ScreenflowFactory.prototype */ {
 
     /**
      * Factory of screenflow building blocks.

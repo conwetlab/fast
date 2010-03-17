@@ -105,76 +105,88 @@
 <span class='line'> 98</span>         </span><span class="NAME">this._firstName</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">userData.firstName</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'> 99</span>         </span><span class="NAME">this._lastName</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">userData.lastName</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'>100</span>         </span><span class="NAME">this._email</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">userData.email</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>101</span>         </span><span class="NAME">this._ezWebURL</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">userData.ezWebURL</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>102</span>         
-<span class='line'>103</span>         </span><span class="COMM">//Send it to the server</span><span class="WHIT">
-<span class='line'>104</span>         </span><span class="NAME">this._updateUser</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>105</span>     </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>106</span>     </span><span class="COMM">// **************** PRIVATE METHODS **************** //</span><span class="WHIT">
-<span class='line'>107</span>     
-<span class='line'>108</span>     </span><span class="COMM">/**
-<span class='line'>109</span>      *  This function gets the user from the server
-<span class='line'>110</span>      *  @private
-<span class='line'>111</span>      */</span><span class="WHIT">
-<span class='line'>112</span>     </span><span class="NAME">_getUser</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>113</span>         </span><span class="COMM">/**
-<span class='line'>114</span>          * onSuccess handler
-<span class='line'>115</span>          * @private
-<span class='line'>116</span>          */</span><span class="WHIT">
-<span class='line'>117</span>         </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">onSuccess</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="COMM">/** XmlHttpRequest */</span><span class="WHIT"> </span><span class="NAME">response</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>118</span>             </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">remoteUser</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">JSON.parse</span><span class="PUNC">(</span><span class="NAME">response.responseText</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>119</span>             
-<span class='line'>120</span>             </span><span class="NAME">this._userName</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">remoteUser.user.username</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>121</span>             </span><span class="NAME">this._firstName</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">remoteUser.user.first_name</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>122</span>             </span><span class="NAME">this._lastName</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">remoteUser.user.last_name</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>123</span>             </span><span class="NAME">this._email</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">remoteUser.user.email</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>124</span>             </span><span class="NAME">this._ezWebURL</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">remoteUser.profile.ezweb_url</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>125</span>         </span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>126</span>         </span><span class="COMM">/**
-<span class='line'>127</span>          * onError handler
-<span class='line'>128</span>          * @private
-<span class='line'>129</span>          */</span><span class="WHIT">
-<span class='line'>130</span>         </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">onError</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="COMM">/** XmlHttpRequest */</span><span class="WHIT"> </span><span class="NAME">response</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="COMM">/** Exception */</span><span class="WHIT"> </span><span class="NAME">e</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">         
-<span class='line'>131</span>             </span><span class="NAME">Logger.serverError</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">response</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">e</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>132</span>         </span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>133</span>         
-<span class='line'>134</span>         </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">persistenceEngine</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">PersistenceEngineFactory.getInstance</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">        
-<span class='line'>135</span>         </span><span class="NAME">persistenceEngine.sendGet</span><span class="PUNC">(</span><span class="NAME">URIs.userPreferences</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">this</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">onSuccess</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">onError</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>136</span>     </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>137</span>     </span><span class="COMM">/**
-<span class='line'>138</span>      *  This function updates the user to the server
-<span class='line'>139</span>      *  @private
-<span class='line'>140</span>      */</span><span class="WHIT">
-<span class='line'>141</span>     </span><span class="NAME">_updateUser</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>142</span>         
-<span class='line'>143</span>         </span><span class="COMM">/**
-<span class='line'>144</span>          * onSuccess handler
-<span class='line'>145</span>          * @private
-<span class='line'>146</span>          */</span><span class="WHIT">
-<span class='line'>147</span>         </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">onSuccess</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="COMM">/** XmlHttpRequest */</span><span class="WHIT"> </span><span class="NAME">response</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>148</span>         </span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>149</span>         
-<span class='line'>150</span>         </span><span class="COMM">/**
-<span class='line'>151</span>          * onError handler
-<span class='line'>152</span>          * @private
-<span class='line'>153</span>          */</span><span class="WHIT">
-<span class='line'>154</span>         </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">onError</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="COMM">/** XmlHttpRequest */</span><span class="WHIT"> </span><span class="NAME">response</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>155</span>             </span><span class="NAME">Logger.serverError</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">response</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">e</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>156</span>         </span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>157</span>         
-<span class='line'>158</span>         </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">object</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>159</span>             </span><span class="STRN">'first_name'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">this._firstName</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>160</span>             </span><span class="STRN">'last_name'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">this._lastName</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>161</span>             </span><span class="STRN">'email'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">this._email</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>162</span>             </span><span class="STRN">'ezweb_url'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">this._ezWebURL</span><span class="WHIT">
-<span class='line'>163</span>         </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>164</span>         </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">preferences</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="NAME">preferences</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="NAME">Object.toJSON</span><span class="PUNC">(</span><span class="NAME">object</span><span class="PUNC">)</span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>165</span>         
-<span class='line'>166</span>         </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">persistenceEngine</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">PersistenceEngineFactory.getInstance</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>167</span>         </span><span class="NAME">persistenceEngine.sendUpdate</span><span class="PUNC">(</span><span class="NAME">URIs.userPreferences</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">preferences</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">this</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">onSuccess</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">onError</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>168</span>     </span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>169</span>     
-<span class='line'>170</span> </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>171</span> 
-<span class='line'>172</span> </span><span class="COMM">// vim:ts=4:sw=4:et:</span><span class="WHIT">
-<span class='line'>173</span> </span></pre></body></html>
+<span class='line'>101</span>        
+<span class='line'>102</span>         </span><span class="NAME">this._ezWebURL</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">userData.ezWebURL</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>103</span>         
+<span class='line'>104</span>         </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">this._ezWebURL</span><span class="PUNC">[</span><span class="NAME">this._ezWebURL.length</span><span class="PUNC">-</span><span class="NUMB">1</span><span class="PUNC">]</span><span class="WHIT"> </span><span class="PUNC">!=</span><span class="WHIT"> </span><span class="STRN">'/'</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>105</span>             </span><span class="NAME">this._ezWebURL</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">'/'</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>106</span>         </span><span class="PUNC">}</span><span class="WHIT"> 
+<span class='line'>107</span>         
+<span class='line'>108</span>         </span><span class="NAME">URIs.ezweb</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this._ezWebURL</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>109</span>         
+<span class='line'>110</span>         </span><span class="COMM">//Send it to the server</span><span class="WHIT">
+<span class='line'>111</span>         </span><span class="NAME">this._updateUser</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>112</span>     </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>113</span>     </span><span class="COMM">// **************** PRIVATE METHODS **************** //</span><span class="WHIT">
+<span class='line'>114</span>     
+<span class='line'>115</span>     </span><span class="COMM">/**
+<span class='line'>116</span>      *  This function gets the user from the server
+<span class='line'>117</span>      *  @private
+<span class='line'>118</span>      */</span><span class="WHIT">
+<span class='line'>119</span>     </span><span class="NAME">_getUser</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>120</span>         </span><span class="COMM">/**
+<span class='line'>121</span>          * onSuccess handler
+<span class='line'>122</span>          * @private
+<span class='line'>123</span>          */</span><span class="WHIT">
+<span class='line'>124</span>         </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">onSuccess</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="COMM">/** XmlHttpRequest */</span><span class="WHIT"> </span><span class="NAME">response</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>125</span>             </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">remoteUser</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">JSON.parse</span><span class="PUNC">(</span><span class="NAME">response.responseText</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>126</span>             
+<span class='line'>127</span>             </span><span class="NAME">this._userName</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">remoteUser.user.username</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>128</span>             </span><span class="NAME">this._firstName</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">remoteUser.user.first_name</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>129</span>             </span><span class="NAME">this._lastName</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">remoteUser.user.last_name</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>130</span>             </span><span class="NAME">this._email</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">remoteUser.user.email</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>131</span>             </span><span class="NAME">this._ezWebURL</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">remoteUser.profile.ezweb_url</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>132</span>             
+<span class='line'>133</span>             </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">this._ezWebURL</span><span class="PUNC">[</span><span class="NAME">this._ezWebURL.length</span><span class="PUNC">-</span><span class="NUMB">1</span><span class="PUNC">]</span><span class="WHIT"> </span><span class="PUNC">!=</span><span class="WHIT"> </span><span class="STRN">'/'</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>134</span>                 </span><span class="NAME">this._ezWebURL</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">'/'</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>135</span>             </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>136</span>             
+<span class='line'>137</span>             </span><span class="NAME">URIs.ezweb</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this._ezWebURL</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>138</span>         </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>139</span>         </span><span class="COMM">/**
+<span class='line'>140</span>          * onError handler
+<span class='line'>141</span>          * @private
+<span class='line'>142</span>          */</span><span class="WHIT">
+<span class='line'>143</span>         </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">onError</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="COMM">/** XmlHttpRequest */</span><span class="WHIT"> </span><span class="NAME">response</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="COMM">/** Exception */</span><span class="WHIT"> </span><span class="NAME">e</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">         
+<span class='line'>144</span>             </span><span class="NAME">Logger.serverError</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">response</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">e</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>145</span>         </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>146</span>               
+<span class='line'>147</span>         </span><span class="NAME">PersistenceEngine.sendGet</span><span class="PUNC">(</span><span class="NAME">URIs.userPreferences</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">this</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">onSuccess</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">onError</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>148</span>     </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>149</span>     </span><span class="COMM">/**
+<span class='line'>150</span>      *  This function updates the user to the server
+<span class='line'>151</span>      *  @private
+<span class='line'>152</span>      */</span><span class="WHIT">
+<span class='line'>153</span>     </span><span class="NAME">_updateUser</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>154</span>         
+<span class='line'>155</span>         </span><span class="COMM">/**
+<span class='line'>156</span>          * onSuccess handler
+<span class='line'>157</span>          * @private
+<span class='line'>158</span>          */</span><span class="WHIT">
+<span class='line'>159</span>         </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">onSuccess</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="COMM">/** XmlHttpRequest */</span><span class="WHIT"> </span><span class="NAME">response</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>160</span>         </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>161</span>         
+<span class='line'>162</span>         </span><span class="COMM">/**
+<span class='line'>163</span>          * onError handler
+<span class='line'>164</span>          * @private
+<span class='line'>165</span>          */</span><span class="WHIT">
+<span class='line'>166</span>         </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">onError</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="COMM">/** XmlHttpRequest */</span><span class="WHIT"> </span><span class="NAME">response</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>167</span>             </span><span class="NAME">Logger.serverError</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">response</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">e</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>168</span>         </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>169</span>         
+<span class='line'>170</span>         </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">object</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>171</span>             </span><span class="STRN">'first_name'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">this._firstName</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>172</span>             </span><span class="STRN">'last_name'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">this._lastName</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>173</span>             </span><span class="STRN">'email'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">this._email</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>174</span>             </span><span class="STRN">'ezweb_url'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">this._ezWebURL</span><span class="WHIT">
+<span class='line'>175</span>         </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>176</span>         </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">preferences</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="NAME">preferences</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="NAME">Object.toJSON</span><span class="PUNC">(</span><span class="NAME">object</span><span class="PUNC">)</span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>177</span>         
+<span class='line'>178</span>         </span><span class="NAME">PersistenceEngine.sendUpdate</span><span class="PUNC">(</span><span class="NAME">URIs.userPreferences</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">preferences</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>179</span>                                 </span><span class="KEYW">this</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">onSuccess</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">onError</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>180</span>     </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>181</span>     
+<span class='line'>182</span> </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>183</span> 
+<span class='line'>184</span> </span><span class="COMM">// vim:ts=4:sw=4:et:</span><span class="WHIT">
+<span class='line'>185</span> </span></pre></body></html>
