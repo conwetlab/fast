@@ -58,22 +58,22 @@ public class FactTypePanel
 
    // create attributes for all objects in all states of this statechart
    private HorizontalPanel panel;
-   private TextBox typeCaption;
    private FactAttribute newAttr;
-   private DeleteFactTypeButton deleteButton;
-   private AttributeTextBox mnemonicBox;
    private AttributeTextBox uriTextBox;
-   private HorizontalPanel captionPanel;
    private HorizontalPanel attrTreeRootPanel;
    private Label attrTreeRootLabel;
    private TextBox nameCaption;
    private AttributeTextBox nameBox;
-   private TreeItem treeItem;
-   private TreeItem captionItem;
    private FactAttrPanel attrPanel;
-   private FactAttribute factAttr;
    private Iterator fujaba__IterFactTypeToFactAttr;
    private Button attrAddButton;
+   private TextBox typeCaption;
+   private DeleteFactTypeButton deleteButton;
+   private AttributeTextBox mnemonicBox;
+   private HorizontalPanel captionPanel;
+   private TreeItem treeItem;
+   private TreeItem captionItem;
+   private FactAttribute factAttr;
    private TreeItem attrRootItem;
 
    public void start()

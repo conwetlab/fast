@@ -57,13 +57,13 @@ public class FactEditor
 
    // create attributes for all objects in all states of this statechart
    private CoobraServiceAsync coobraService;
+   private CoobraRoot coobraRoot;
+   private Object _TmpObject;
    private FactTypeTree factTypeTree;
+   private ServiceDesigner designer;
    private DataLoadTimer dataLoadTimer;
    private Iterator fujaba__IterCoobraRootToDesigner;
-   private CoobraRoot coobraRoot;
-   private ServiceDesigner designer;
    private ServiceScreenModel modelRoot;
-   private Object _TmpObject;
 
    public void start()
    {

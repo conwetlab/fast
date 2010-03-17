@@ -62,24 +62,24 @@ public class FactTypeTree
    // create attributes for all objects in all states of this statechart
    private HorizontalPanel panel;
    private Iterator fujaba__IterDesignerToFactType;
-   private ServiceDesigner designer;
    private CoobraRoot coobraRoot;
-   private TreeItem rootItem;
    private FactType factType;
-   private Label label;
    private FactType newType;
    private FactTypePanel factTypePanel;
-   private HorizontalPanel captionPanel;
    private TextBox uriCaption;
    private TextBox nameCaption;
-   private Iterator fujaba__IterCoobraRootToDesigner;
    private Tree tree;
-   private TreeItem captionItem;
-   private Button addButton;
    private RootPanel rootPanel;
    private TextBox mnemonicCaption;
-   private TabPanel tabPanel;
    private Object _TmpObject;
+   private ServiceDesigner designer;
+   private TreeItem rootItem;
+   private Label label;
+   private HorizontalPanel captionPanel;
+   private Iterator fujaba__IterCoobraRootToDesigner;
+   private TreeItem captionItem;
+   private Button addButton;
+   private TabPanel tabPanel;
 
    public void start()
    {
