@@ -15,17 +15,20 @@ import com.google.gwt.user.client.ui.FlexTable.FlexCellFormatter;
 import de.uni_kassel.webcoobra.client.CoobraRoot;
 import de.uni_kassel.webcoobra.client.CoobraService;
 import de.uni_kassel.webcoobra.client.DataLoadTimer;
+import fast.common.client.ServiceDesigner;
 import fast.common.client.ServiceScreenModel;
 import fast.common.client.TrafoOperator;
+import fast.servicescreen.client.FastTool;
 import fast.servicescreen.client.gui.CTextChangeHandler;
 import fast.servicescreen.client.gui.PortGUI;
 import fast.servicescreen.client.gui.RuleGUI;
+import fast.servicescreen.client.gui.codegen_js.CodeGenViewer;
 import fast.servicescreen.client.rpc.SendRequestHandler;
 import fujaba.web.runtime.client.FAction;
 import fujaba.web.runtime.client.FTest;
 import fujaba.web.runtime.client.ICObject;
 
-public class DataTransformationTool implements EntryPoint 
+public class DataTransformationTool extends FastTool implements EntryPoint 
 {
 
 	@Override
@@ -85,6 +88,7 @@ public class DataTransformationTool implements EntryPoint
 	}
 
 	public BuildAction buildAction;
+	public ServiceDesigner designer = null;
 	public TrafoOperator trafoOperator = null;
 	public SendRequestHandler requestHandler;
 	   
@@ -103,6 +107,22 @@ public class DataTransformationTool implements EntryPoint
 			while (iter.hasNext())
 			{
 				Object obj = iter.next();
+				if (obj instanceof ServiceDesigner)
+				{
+					designer = (ServiceDesigner) obj;
+					break;
+				}
+			}
+			
+			if (designer == null)
+			{
+				designer = new ServiceDesigner();
+			}
+			
+			Iterator iteratorOfScreens = designer.iteratorOfScreens();
+			while (iteratorOfScreens.hasNext())
+			{
+				Object obj = iteratorOfScreens.next();
 				if (obj instanceof TrafoOperator)
 				{
 					trafoOperator = (TrafoOperator) obj;
@@ -114,6 +134,7 @@ public class DataTransformationTool implements EntryPoint
 			if (trafoOperator == null)
 			{
 				trafoOperator = new TrafoOperator();
+				designer.addToScreens(trafoOperator);
 			}
 
 			buildGUI();
@@ -162,7 +183,7 @@ public class DataTransformationTool implements EntryPoint
 		generalInformationTable.setWidget(rowCount, 0, nameTextBox);
 		rowCount++;
 
-		FTest.assertTrue(nameTextBox.getText().equals("CustomerToPerson"), "Transformation operator Customer2Person found");
+		FTest.assertTrue(nameTextBox.getText().equals("CustomerToPerson"), "Transformation operator CustomerToPerson found");
 		
 		// add form for input fact
 		portGUI = new PortGUI(trafoOperator);
@@ -201,8 +222,14 @@ public class DataTransformationTool implements EntryPoint
 	     
 		tabPanel.add(transformationTable, "exTransformation");
 		 
+		
+		//Adding part three, just to test code generation, there is a show of selected rules, templates and the .js results
+		codeGenViewer = new CodeGenViewer(this, trafoOperator); 
+		tabPanel.add(codeGenViewer.createCodeGenViewer(), "CodeGen Viewer");
+
 
 		// add tabPanel to root
 		rootPanel.add(tabPanel);
+		System.out.println("Tab panel has been added to root " + tabPanel);
 	}
 }

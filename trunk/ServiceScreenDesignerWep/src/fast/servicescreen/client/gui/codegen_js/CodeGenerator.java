@@ -7,9 +7,11 @@ import java.util.Iterator;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
+import fast.common.client.BuildingBlock;
 import fast.common.client.FASTMappingRule;
 import fast.common.client.FactPort;
 import fast.common.client.ServiceScreen;
+import fast.servicescreen.client.FastTool;
 import fast.servicescreen.client.RequestService;
 import fast.servicescreen.client.RequestServiceAsync;
 import fast.servicescreen.client.ServiceScreenDesignerWep;
@@ -23,8 +25,8 @@ import fast.servicescreen.client.gui.parser.OperationHandler;
  * */
 public class CodeGenerator
 {
-	private ServiceScreenDesignerWep designer = null;
-	ServiceScreen screen = null;
+	private FastTool designer = null;
+	BuildingBlock screen = null;
 	private HashMap<String, String> table = null;
 	private HashMap<String, String> bracketTable = null;
 	
@@ -54,7 +56,7 @@ public class CodeGenerator
 	/**
 	 * The constructor creates the first template
 	 * */
-	public CodeGenerator(ServiceScreenDesignerWep designer, ServiceScreen screen)
+	public CodeGenerator(FastTool designer, BuildingBlock screen)
 	{
 		this.designer = designer;
 		this.screen = screen;
@@ -142,8 +144,11 @@ public class CodeGenerator
 	private void add_PreRequest_toTable()
 	{	
 		// lookup the gui request text field
-		String prerequestText = designer.serviceScreen.getRequestTemplate();
-		table.put("<<prerequest>>", prerequestText);
+		if (screen instanceof ServiceScreen)
+		{
+			String prerequestText = ((ServiceScreen)screen).getRequestTemplate();
+			table.put("<<prerequest>>", prerequestText);
+		}
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -153,7 +158,7 @@ public class CodeGenerator
 		FactPort currentInpPort = null;
 		String preReqRepText = "";
 		
-		for (Iterator<FactPort> iterator = designer.serviceScreen.iteratorOfPreconditions(); iterator.hasNext();)
+		for (Iterator<FactPort> iterator = screen.iteratorOfPreconditions(); iterator.hasNext();)
 		{
 			currentInpPort = iterator.next();
 			
@@ -176,7 +181,7 @@ public class CodeGenerator
 		String inputPortText = "";
 		FactPort currentInPort = null;
 		
-		for (Iterator<FactPort> iterator = designer.serviceScreen.iteratorOfPreconditions(); iterator.hasNext();)
+		for (Iterator<FactPort> iterator = screen.iteratorOfPreconditions(); iterator.hasNext();)
 		{
 			currentInPort = iterator.next();
 			
@@ -199,7 +204,7 @@ public class CodeGenerator
 		String outPutVarType = "";
 		
 		//search outPortName
-		Iterator<FactPort> iterator = designer.serviceScreen.iteratorOfPostconditions();
+		Iterator<FactPort> iterator = screen.iteratorOfPostconditions();
 		FactPort currentOutPort = iterator.next();
 		
 		if(currentOutPort != null && ! iterator.hasNext()/*only one allowed*/)
@@ -279,7 +284,7 @@ public class CodeGenerator
 		transCode = "";
 		
 		//take rootRule
-		FASTMappingRule rootRule = (FASTMappingRule) designer.serviceScreen.iteratorOfMappingRules().next();
+		FASTMappingRule rootRule = (FASTMappingRule) screen.iteratorOfMappingRules().next();
 		
 		//run threw all rules and append js code. Returns js code    
 		transform(rootRule);

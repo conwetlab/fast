@@ -39,7 +39,7 @@ import fujaba.web.runtime.client.ICObject;
 /**
  * Entry point classes define <code>onModuleLoad()</code>.
  */
-public class ServiceScreenDesignerWep implements EntryPoint
+public class ServiceScreenDesignerWep extends FastTool implements EntryPoint
 {
    public ServiceDesigner designer;
    public ServiceScreen serviceScreen;
@@ -117,7 +117,6 @@ public class ServiceScreenDesignerWep implements EntryPoint
    public Button requestButton;
    public RuleGUI ruleGUI;
    public SendRequestHandler requestHandler;
-   public CodeGenViewer codeGenViewer;
    private TestServiceRequestAction testServiceRequestAction;
    private JSONValue savedJson;
    
