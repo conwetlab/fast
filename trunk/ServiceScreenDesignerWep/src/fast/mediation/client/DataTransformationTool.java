@@ -1,8 +1,18 @@
 package fast.mediation.client;
 
 import java.util.Iterator;
+import java.util.Set;
 
 import com.google.gwt.core.client.EntryPoint;
+import com.google.gwt.core.client.GWT;
+import com.google.gwt.dev.shell.remoteui.RemoteMessageProto.Message.Request;
+import com.google.gwt.json.client.JSONArray;
+import com.google.gwt.json.client.JSONObject;
+import com.google.gwt.json.client.JSONParser;
+import com.google.gwt.json.client.JSONString;
+import com.google.gwt.json.client.JSONValue;
+import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.FlowPanel;
@@ -12,6 +22,8 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.TabPanel;
 import com.google.gwt.user.client.ui.TextBox;
+import com.google.gwt.user.client.ui.Tree;
+import com.google.gwt.user.client.ui.TreeItem;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.user.client.ui.FlexTable.FlexCellFormatter;
@@ -31,6 +43,8 @@ import fast.servicescreen.client.gui.codegen_js.CodeGenViewer;
 import fast.servicescreen.client.rpc.SendRequestHandler;
 import fujaba.web.runtime.client.FAction;
 import fujaba.web.runtime.client.FTest;
+import fast.servicescreen.client.RequestService;
+import fast.servicescreen.client.RequestServiceAsync;
 import fujaba.web.runtime.client.ICObject;
 
 public class DataTransformationTool extends FastTool implements EntryPoint 
@@ -240,7 +254,12 @@ public class DataTransformationTool extends FastTool implements EntryPoint
 		
 		// Add rule GUI
 		ruleGUI = new RuleGUI(trafoOperator, requestHandler);
-		transformationTable.setWidget(numRows, 1, ruleGUI.createTranslationTable());
+		transformationTable.setWidget(numRows, 1, ruleGUI.createJsonTranslationTable());
+		getJson();
+		
+		TreeItem rootJsonItem = ruleGUI.jsonTree.addItem("JSON");
+		rootJsonItem.setState(true);
+		buildJsonTree(rootJsonItem, jsonValue);
 		
 		transformationTable.ensureDebugId("cwFlexTable");
 	     
@@ -338,5 +357,75 @@ public class DataTransformationTool extends FastTool implements EntryPoint
 			TrafoOperator myOp = (TrafoOperator) propertyEvent.getSource();
 			myLabel.setText(myOp.getName());
 		}		
+	}
+	
+	private void getJson() {
+		String alonso = "{\"MRData\":{\"xmlns\": \"http:////ergast.com//mrd//1.1\",\"series\": \"f1\",\"url\": \"\"," +
+                        "\"limit\": \"30\",\"offset\": \"0\",\"total\": \"2\",\"SeasonTable\": {\"driverId\": \"alonso\"," + 
+                        "\"driverStandings\": \"1\",\"Seasons\": [{\"season\": \"2005\", \"url\": \"http:////en.wikipedia.org//wiki//2005_Formula_One_season\"}," +
+                        "{\"season\": \"2006\", \"url\": \"http:////en.wikipedia.org//wiki//2006_Formula_One_season\"}]}}}";
+		
+		jsonValue = JSONParser.parse(alonso);
+		
+//		RequestServiceAsync service = GWT.create(RequestService.class);
+//		String request = "http:////ergast.com//api//f1//drivers//alonso//driverStandings//1//seasons.json";
+//			
+//		service.sendHttpRequest_GET(request, new ParseJSONAction());
+	}
+
+	//TODO just for testing
+	private JSONValue jsonValue;
+	
+	private void buildJsonTree(TreeItem parentItem, JSONValue node)
+	{	
+		JSONArray jsonArray = node.isArray();
+		if(jsonArray != null)
+		{
+			TreeItem treeSection = parentItem.addItem("Array: ");
+			treeSection.setState(true);
+			
+			for (int i = 0; i < jsonArray.size(); i++)
+			{
+				buildJsonTree(treeSection, jsonArray.get(i));
+			}
+		}
+		
+		JSONString jsonString = node.isString();
+		if(jsonString != null)
+		{
+			//add the leaf
+			parentItem.addItem(jsonString.stringValue());
+		}
+		
+		JSONObject operator = node.isObject();
+		if( operator != null )
+		{	
+			Set<String> keys = operator.keySet();
+
+			for (Iterator<String> iterator = keys.iterator(); iterator.hasNext();)
+			{
+				String key = (String) iterator.next();
+
+				TreeItem treeSection = parentItem.addItem(key + ":");
+				treeSection.setState(true);
+
+				JSONValue child = operator.get(key);
+				buildJsonTree(treeSection, child);
+			}
+		}
+	}
+	
+	// http://ergast.com/api/f1/drivers/alonso/driverStandings/1/seasons.json
+	class ParseJSONAction implements AsyncCallback<String>
+	{
+		@Override
+		public void onSuccess(String result) {
+			jsonValue = JSONParser.parse(result);
+		}
+
+		@Override
+		public void onFailure(Throwable caught) {
+			Window.alert("Fehler: " + caught.getLocalizedMessage());
+		}
 	}
 }

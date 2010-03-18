@@ -46,6 +46,8 @@ public class RuleGUI
    private SendRequestHandler requestHandler;
    
    public Tree xmlTree;
+   
+   public Tree jsonTree;
 
    public Tree factsTree;
 
@@ -54,6 +56,8 @@ public class RuleGUI
    private FASTMappingRule selectedRule;
 
    private Node xmlDocumentElement;
+   
+   private Node jsonDocumentElement;
 
    /**
     * creates and returns a flextable containing the trees
@@ -79,6 +83,53 @@ public class RuleGUI
       xmlTree = new Tree();
       xmlTree.addSelectionHandler(new XmlTreeHandler());
       resultScrollPanel.setWidget(xmlTree);
+      translationTable.setWidget(rowCount, 0, resultScrollPanel);
+       
+      // add rule table
+      ScrollPanel rulesScrollPanel = new ScrollPanel();
+      rulesScrollPanel.setAlwaysShowScrollBars(true);
+      rulesScrollPanel.setSize("11cm", "11cm");
+      rulesScrollPanel.setWidget(createRulesTree());
+      translationTable.setWidget(rowCount, 1, rulesScrollPanel);
+         
+      // add facts tree
+      ScrollPanel factsScrollPanel = new ScrollPanel();
+      factsScrollPanel.setAlwaysShowScrollBars(true);
+      factsScrollPanel.setSize("11cm", "11cm");
+      
+      factsTree = new Tree();
+      factsScrollPanel.setWidget(factsTree);
+      translationTable.setWidget(rowCount, 2, factsScrollPanel);
+      
+      // return the table
+      translationTable.ensureDebugId("cwFlexTable");
+      return translationTable;
+   }
+   
+   /**
+    * creates and returns a flextable containing the trees
+    * for translation design
+    * */
+   public Widget createJsonTranslationTable()
+   {
+      final FlexTable translationTable = new FlexTable();
+      int rowCount = translationTable.getRowCount();
+      
+      // headlines, labels and buttons in first row
+      translationTable.setWidget(rowCount, 0, new Label("Result:"));
+      translationTable.setWidget(rowCount, 1, createRulesHeadlineTable());
+      translationTable.setWidget(rowCount, 2, new Label("Facts:"));
+      rowCount++;
+      
+      // add result tree
+      ScrollPanel resultScrollPanel = new ScrollPanel();
+      resultScrollPanel.setAlwaysShowScrollBars(true);
+      resultScrollPanel.setSize("11cm", "11cm"); 
+      
+      //create xmlTree and add a selection/PropertyChange - handler
+      jsonTree = new Tree();
+      jsonTree.addSelectionHandler(new JsonTreeHandler());
+      resultScrollPanel.setWidget(jsonTree);
       translationTable.setWidget(rowCount, 0, resultScrollPanel);
        
       // add rule table
@@ -631,6 +682,75 @@ public class RuleGUI
 
       return result;
    }
+   
+   /**
+    * Handles the json tree (Selection and PropChange)
+    * */
+   class JsonTreeHandler implements SelectionHandler<TreeItem>
+   {
+      @Override
+      public void onSelection(SelectionEvent<TreeItem> event)
+      {
+         // print selected element in rule area
+         TreeItem selectedItem = event.getSelectedItem();
+         String text = selectedItem.getText();
+         
+//         // try to find corresponding xmlDoc element
+//         String name = text.split(":")[0].trim();
+//         
+//         if(selectedRule != null)
+//         {
+//             // transfer tagName to the currently selected mapping rule. 
+//             selectedRule.setSourceTagname(name);
+//             
+//             ArrayList<Node> elementsByTagName = new ArrayList<Node>();
+//             elementsByTagName(jsonDocumentElement, name, elementsByTagName);
+//             
+//             StringBuffer resultText = new StringBuffer();
+//             // print found names to factText
+//             for (int i = 0; i < elementsByTagName.size(); i++)
+//             {
+//                Node item = elementsByTagName.get(i);
+//                resultText.append(item.getNodeName());
+//                resultText.append(":");
+//                resultText.append(item.getNodeValue());
+//                resultText.append("\n");
+//             }
+//             
+//             if(elementsByTagName.size() > 0)
+//             {
+//            	 xmlDocumentElement = elementsByTagName.get(0);
+//             }
+//         }
+      }
+   }
+   
+   //JSON METHOD
+//   private ArrayList<Node> elementsByTagName(Node root, String tagName, ArrayList<Node> result)
+//   {  
+//	  if(root != null)
+//	  {
+//	      NodeList childs = root.getChildNodes();
+//	      
+//	      for (int i = 0; i < childs.getLength(); i++)
+//	      {
+//	         Node item = childs.item(i);
+//	         
+//	         if (item == null) continue;
+//	         
+//	         if (item.getNodeName().equals(tagName))
+//	         {
+//	            result.add(item);
+//	         }
+//	         else
+//	         {
+//	            elementsByTagName(item, tagName, result);
+//	         }
+//	      }
+//	  }
+//
+//      return result;
+//   }
    
    class RulesTreeHandler implements SelectionHandler<TreeItem>
    {
