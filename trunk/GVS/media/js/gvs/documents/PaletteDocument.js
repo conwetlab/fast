@@ -243,13 +243,24 @@ var PaletteDocument = Class.create(AbstractDocument, /** @lends PaletteDocument.
                             'type': 'Action',
                             'action': new MenuAction({
                                 'label': 'Save',
-                                'weight': 1,
                                 'handler': function() {
                                     this._save();
                                 }.bind(this),
+
                                 'shortcut': 'Alt+S'
                             }),
                             'weight': 1,
+                            'group': 1
+                        },
+                        'saveas': {
+                            'type': 'Action',
+                            'action': new MenuAction({
+                                'label': 'Save as...',
+                                'handler': function() {
+                                    this._saveAs();
+                                }.bind(this)
+                            }),
+                            'weight': 2,
                             'group': 1
                         }
                     }
@@ -484,11 +495,13 @@ var PaletteDocument = Class.create(AbstractDocument, /** @lends PaletteDocument.
     _closeDocument: function() {
 
         if (this._isDirty) {
+            var text = new Element('div', {
+                'style': 'text-align:center'
+            }).update("The document has unsaved changes. Do you want to save?");
             var dialog = new ConfirmDialog("Warning",
                                            ConfirmDialog.SAVE_DISCARD_CANCEL,
                                            {'callback': this._effectiveCloseDocument.bind(this),
-                                            'contents': "The document has unsaved changes.\n\
-                                                         Do you want to save?"});
+                                            'contents': text});
             dialog.show();
         } else {
             this._effectiveCloseDocument(ConfirmDialog.DISCARD);
@@ -590,6 +603,31 @@ var PaletteDocument = Class.create(AbstractDocument, /** @lends PaletteDocument.
         }
     },
 
+    /**
+     * Create a copy of the document with a new name/version
+     * @private
+     */
+    _saveAs: function() {
+        if (this._description.getId()) {
+            var saveAsDialog = new SaveAsDialog(this._description.name,
+                                                this._description.version,
+                                                this._onSaveAsSuccess.bind(this));
+            saveAsDialog.show();
+        } else {
+            this._save();
+        }
+    },
+
+    _onSaveAsSuccess: function(/** String */ name, /** String */ version) {
+        this._description.name = name;
+        this._description.label['en-gb'] = name;
+        this._description.version = version;
+        this._description.id = null;
+        this._description.creationDate = null;
+        this._setTitle(this._description.name);
+        this._save();
+    },
+
 
     /**
      * On success handler when saving
@@ -600,6 +638,7 @@ var PaletteDocument = Class.create(AbstractDocument, /** @lends PaletteDocument.
         Utils.showMessage("Saved", {
             'hide': true
         });
+        this._updatePanes();
         if (this._description.getId() == null) {
             var data = JSON.parse(transport.responseText);
             this._description.addProperties({'id': data.id,
@@ -717,6 +756,14 @@ var PaletteDocument = Class.create(AbstractDocument, /** @lends PaletteDocument.
      * @private
      */
     _updateToolbar: function(/** ComponentInstance */ element) {
+        // Do nothing
+    },
+
+    /**
+     * Updates the panes with the selected element
+     * @private
+     */
+    _updatePanes: function() {
         // Do nothing
     },
 

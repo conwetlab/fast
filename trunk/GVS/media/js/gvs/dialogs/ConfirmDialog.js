@@ -28,7 +28,7 @@ var ConfirmDialog = Class.create(FormDialog, /** @lends ConfirmDialog.prototype 
                         'pressedButton': ConfirmDialog.SAVE,
                         'callback': _options.callback
                     }));
-                    this._addButton('Discard', this._onButtonPressed.bind({
+                    this._addButton('Discard changes', this._onButtonPressed.bind({
                         'mine': this,
                         'pressedButton': ConfirmDialog.DISCARD,
                         'callback': _options.callback

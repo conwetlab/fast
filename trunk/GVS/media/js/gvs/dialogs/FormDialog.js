@@ -225,8 +225,10 @@ var FormDialog = Class.create( /** @lends FormDialog.prototype */ {
     
                     case 'label':
                         lineNode = new Element('div', {
-                                        'class': 'line'
+                                        'class': 'line',
+                                        'style': line.style
                                     }).update(line.value);
+
                         break;
                         
                     case 'hidden':
