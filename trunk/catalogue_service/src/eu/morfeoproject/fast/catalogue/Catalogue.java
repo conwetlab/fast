@@ -308,6 +308,10 @@ public class Catalogue {
 	public boolean containsBackendService(BackendService bs) {
 		return containsBackendService(bs.getUri());
 	}
+	
+	public boolean containsConcept(URI uri) {
+		return isConcept(uri);
+	}
 
     public ArrayList<Statement> listStatements(URI thingUri) {
     	ArrayList<Statement> listStatements = new ArrayList<Statement>();
@@ -773,12 +777,12 @@ public class Catalogue {
     	return results;
 	}
 	
-    public URI createClass(URI clazz) {
+    private URI createClass(URI clazz) {
     	tripleStore.addStatement(null, clazz, RDF.type, RDFS.Class);
     	return clazz;
 	}
 
-    public URI createClass(URI clazz, URI subClassOf) {
+    private URI createClass(URI clazz, URI subClassOf) {
     	tripleStore.addStatement(null, clazz, RDF.type, RDFS.Class);
     	tripleStore.addStatement(null, clazz, RDFS.subClassOf, subClassOf);
     	return clazz;
@@ -817,7 +821,31 @@ public class Catalogue {
 			tripleStore.addStatement(bnTag, CTAG.taggingDate, tripleStore.createDatatypeLiteral(DateFormatter.formatDateISO8601(currentDate), XSD._date));
 		}
     }
+    
+    public URI createConcept(String name, String domain) throws DuplicatedResourceException {
+    	return createConcept(new URIImpl(serverURL+"/concepts/"+domain+"/"+name));
+    }
 
+    public URI createConcept(String name, String domain, URI subClassOf) throws DuplicatedResourceException {
+    	return createConcept(new URIImpl(serverURL+"/concepts/"+domain+"/"+name), subClassOf);
+    }
+    
+    public URI createConcept(URI uri) throws DuplicatedResourceException {
+    	if (isConcept(uri))
+    		throw new DuplicatedResourceException("Concept "+uri+" already exists.");
+    	return createClass(uri);
+    }
+    
+    public URI createConcept(URI uri, URI subClassOf) throws DuplicatedResourceException {
+    	if (isConcept(uri))
+    		throw new DuplicatedResourceException("Concept "+uri+" already exists.");
+    	return createClass(uri, subClassOf);
+    }
+    
+    public boolean isConcept(URI concept) {
+    	return tripleStore.isClass(concept);
+    }
+    
 	public URI createResource(URI namespace, String resource, URI ofClass, String id)
     throws DuplicatedResourceException, OntologyInvalidException {
     	URI resourceUri = new URIImpl(namespace.toString()+"/"+resource+"/"+id);
@@ -1254,7 +1282,6 @@ public class Catalogue {
 				logger.error("Resource "+rUri+" does not exist.", nfe);
 			}
 		}
-		System.out.println(System.in);
 		return false;
 	}
 
@@ -1270,7 +1297,7 @@ public class Catalogue {
 	 * @param rUri
 	 * @throws NotFoundException 
 	 */
-	private void removeTags(URI rUri) throws NotFoundException {
+	public void removeTags(URI rUri) throws NotFoundException {
 		ClosableIterator<Statement> tagIt = tripleStore.findStatements(rUri, CTAG.tagged, Variable.ANY);
 		for ( ; tagIt.hasNext(); ) {
 			Node oTag = tagIt.next().getObject();
@@ -2185,7 +2212,9 @@ public class Catalogue {
 	 * @throws NotFoundException 
 	 */
 	public void removeConcept(URI uri) throws NotFoundException {
+		removeTags(uri);
 		tripleStore.removeResource(uri);
+		printStatements();
 	}
 	
 	public List<Plan> searchPlans(URI uri, Set<Resource> resources) {

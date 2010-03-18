@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.Set;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -17,17 +16,18 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.ontoware.rdf2go.RDF2Go;
 import org.ontoware.rdf2go.model.Model;
-import org.ontoware.rdf2go.model.Statement;
 import org.ontoware.rdf2go.model.Syntax;
 import org.ontoware.rdf2go.model.node.URI;
 import org.ontoware.rdf2go.model.node.impl.URIImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import eu.morfeoproject.fast.catalogue.Catalogue;
+import eu.morfeoproject.fast.catalogue.DuplicatedResourceException;
+import eu.morfeoproject.fast.catalogue.NotFoundException;
 import eu.morfeoproject.fast.model.CTag;
 import eu.morfeoproject.fast.model.Concept;
 import eu.morfeoproject.fast.util.DateFormatter;
-import eu.morfeoproject.fast.util.URLUTF8Encoder;
 
 /**
  * Servlet implementation class ConceptServlet
@@ -101,8 +101,6 @@ public class ConceptServlet extends GenericServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		BufferedReader reader = request.getReader();
-		String[] chunks = request.getRequestURI().split("/");
-		String id = chunks[chunks.length-1];
 		StringBuffer buffer = new StringBuffer();
 		String line = reader.readLine();
 		while (line != null) {
@@ -112,20 +110,21 @@ public class ConceptServlet extends GenericServlet {
 		String body = buffer.toString();
 		
 		try {
+			Catalogue catalogue = CatalogueAccessPoint.getCatalogue();
 			JSONObject json = new JSONObject(body);
-			if (json.has("uri")) {
-				URI uri = new URIImpl(json.getString("uri"));
-				if (json.has("subClassOf"))
-					CatalogueAccessPoint.getCatalogue().createClass(uri, new URIImpl(json.getString("subClassOf")));
-				else
-					CatalogueAccessPoint.getCatalogue().createClass(uri);
+			if (json.has("name") && json.has("domain")) {
+				String name = json.getString("name");
+				String domain = json.getString("domain");
+				URI uri = json.has("subClassOf") ? 
+						catalogue.createConcept(name, domain, new URIImpl(json.getString("subClassOf"))) :
+						catalogue.createConcept(name, domain);
 
 				if (json.has("label")) {
 					JSONObject jsonLabels = json.getJSONObject("label");
 					Iterator<String> labels = jsonLabels.keys();
 					for ( ; labels.hasNext(); ) {
 						String key = labels.next();
-						CatalogueAccessPoint.getCatalogue().setLabel(uri, key, jsonLabels.getString(key));
+						catalogue.setLabel(uri, key, jsonLabels.getString(key));
 					}
 				}
 				if (json.has("description")) {
@@ -133,7 +132,7 @@ public class ConceptServlet extends GenericServlet {
 					Iterator<String> descriptions = jsonDescriptions.keys();
 					for ( ; descriptions.hasNext(); ) {
 						String key = descriptions.next();
-						CatalogueAccessPoint.getCatalogue().setDescription(uri, key, jsonDescriptions.getString(key));
+						catalogue.setDescription(uri, key, jsonDescriptions.getString(key));
 					}
 				}
 				if (json.has("tags")) {
@@ -153,13 +152,20 @@ public class ConceptServlet extends GenericServlet {
 						}
 						if (oTag.has("taggingDate") && !oTag.isNull("taggingDate") && oTag.getString("taggingDate") != "")
 							tag.setTaggingDate(DateFormatter.parseDateISO8601(oTag.getString("taggingDate")));
-						CatalogueAccessPoint.getCatalogue().setTag(uri, tag);
+						catalogue.setTag(uri, tag);
 					}
-				}				
+				}
+				catalogue.printStatements();
 				response.setStatus(HttpServletResponse.SC_OK);
 			} else {
 				response.sendError(HttpServletResponse.SC_BAD_REQUEST, "URI is required.");
 			}
+		} catch (IllegalArgumentException e) {
+			e.printStackTrace();
+			response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
+		} catch (DuplicatedResourceException e) {
+			e.printStackTrace();
+			response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
@@ -170,71 +176,111 @@ public class ConceptServlet extends GenericServlet {
 	 * the new information. If the concept does not exist it will be created.
 	 * @see HttpServlet#doPut(HttpServletRequest, HttpServletResponse)
 	 */
-//	protected void doPut(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-//		BufferedReader reader = request.getReader();
-//		String[] chunks = request.getRequestURI().split("/");
-//		String id = chunks[chunks.length-1];
-//		StringBuffer body = new StringBuffer();
-//		String line = reader.readLine();
-//		while (line != null) {
-//			body.append(line);
-//			line = reader.readLine();
-//		}
-//		
-//		if (id != null) {
-//			id = URLUTF8Encoder.decode(id);
-//			try {
-//				CatalogueAccessPoint.getCatalogue().removeConcept(new URIImpl(id));
-//			} catch (NotFoundException e) {}
-//			try {
-//				JSONObject json = new JSONObject(body.toString());
-//				for (String key : JSONObject.getNames(json)) {
-//					Object object = json.get(key);
-//					if (object instanceof JSONArray) {
-//						JSONArray array = (JSONArray)object;
-//						for (int idx = 0; idx < array.length(); idx++) {
-//							try {
-//								CatalogueAccessPoint.getCatalogue().getTripleStore().addStatement(new URIImpl(id), new URIImpl(key), new URIImpl(array.get(idx).toString()));
-//							} catch(IllegalArgumentException e) {
-//								CatalogueAccessPoint.getCatalogue().getTripleStore().addStatement(new URIImpl(id), new URIImpl(key), array.get(idx).toString());
-//							}
-//						}
-//					} else if (object instanceof JSONObject) {
-//						// do nothing
-//					} else {
-//						try {
-//							CatalogueAccessPoint.getCatalogue().getTripleStore().addStatement(new URIImpl(id), new URIImpl(key), new URIImpl(json.get(key).toString()));
-//						} catch(IllegalArgumentException e) {
-//							CatalogueAccessPoint.getCatalogue().getTripleStore().addStatement(new URIImpl(id), new URIImpl(key), json.get(key).toString());
-//						}
-//					}
-//				}
-//				response.setStatus(HttpServletResponse.SC_OK);
-//			} catch (JSONException e) {
-//				e.printStackTrace();
-//			}
-//		} else {
-//			response.sendError(HttpServletResponse.SC_BAD_REQUEST, "An ID must be specified.");
-//		}
-//	}
+	protected void doPut(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		String[] chunks = request.getRequestURI().split("/");
+		String id = chunks[chunks.length-1];
+		BufferedReader reader = request.getReader();
+		StringBuffer buffer = new StringBuffer();
+		String line = reader.readLine();
+		while (line != null) {
+			buffer.append(line);
+			line = reader.readLine();
+		}
+		String body = buffer.toString();
+		if (id.equalsIgnoreCase("concepts")) id = null;
+		
+		if (id == null) {
+			response.sendError(HttpServletResponse.SC_BAD_REQUEST, "An ID must be specified.");
+		} else {
+			// Update the given member of the collection.
+			URI uri = new URIImpl(request.getRequestURL().toString());
+			try {
+				Catalogue catalogue = CatalogueAccessPoint.getCatalogue();
+				JSONObject json = new JSONObject(body);
+
+				if (!catalogue.containsConcept(uri))
+					throw new NotFoundException("Concept "+uri+" does not exist.");
+
+				catalogue.removeConcept(uri);
+				if (json.has("subClassOf"))
+					catalogue.createConcept(uri, new URIImpl(json.getString("subClassOf")));
+				else
+					catalogue.createConcept(uri);
+						
+				if (json.has("label")) {
+					JSONObject jsonLabels = json.getJSONObject("label");
+					Iterator<String> labels = jsonLabels.keys();
+					for ( ; labels.hasNext(); ) {
+						String key = labels.next();
+						catalogue.setLabel(uri, key, jsonLabels.getString(key));
+					}
+				}
+				if (json.has("description")) {
+					JSONObject jsonDescriptions = json.getJSONObject("description");
+					Iterator<String> descriptions = jsonDescriptions.keys();
+					for ( ; descriptions.hasNext(); ) {
+						String key = descriptions.next();
+						catalogue.setDescription(uri, key, jsonDescriptions.getString(key));
+					}
+				}
+				if (json.has("tags")) {
+					JSONArray aTag = json.getJSONArray("tags");
+					for (int i = 0; i < aTag.length(); i++) {
+						CTag tag = new CTag();
+						JSONObject oTag = aTag.getJSONObject(i);
+						if (oTag.has("means") && !oTag.isNull("means") && oTag.getString("means") != "")
+							tag.setMeans(new URIImpl(oTag.getString("means")));
+						if (oTag.has("label")){
+							JSONObject jsonLabels = oTag.getJSONObject("label");
+							Iterator<String> labels = jsonLabels.keys();
+							for ( ; labels.hasNext(); ) {
+								String key = labels.next();
+								tag.getLabels().put(key, jsonLabels.getString(key));
+							}
+						}
+						if (oTag.has("taggingDate") && !oTag.isNull("taggingDate") && oTag.getString("taggingDate") != "")
+							tag.setTaggingDate(DateFormatter.parseDateISO8601(oTag.getString("taggingDate")));
+						catalogue.setTag(uri, tag);
+					}
+				}
+				catalogue.printStatements();
+				response.setStatus(HttpServletResponse.SC_OK);
+			} catch (DuplicatedResourceException e) {
+				e.printStackTrace();
+				response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
+			} catch (IllegalArgumentException e) {
+				e.printStackTrace();
+				response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
+			} catch (NotFoundException e) {
+				e.printStackTrace();
+				response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
+			} catch (JSONException e) {
+				e.printStackTrace();
+			}
+		}
+	}
 
 	/**
 	 * @see HttpServlet#doDelete(HttpServletRequest, HttpServletResponse)
 	 */
-//	protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-//		String[] chunks = request.getRequestURI().split("/");
-//		String id = chunks[chunks.length-1];
-//		
-//		if (id != null) {
-//			id = URLUTF8Encoder.decode(id);
-//			try {
-//				CatalogueAccessPoint.getCatalogue().removeConcept(new URIImpl(id));
-//				response.setStatus(HttpServletResponse.SC_OK);
-//			} catch (NotFoundException e) {
-//				response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
-//			}
-//		}
-//	}
+	protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		String[] chunks = request.getRequestURI().split("/");
+		String id = chunks[chunks.length-1];
+		if (id.equalsIgnoreCase("concepts")) id = null;
+		
+		if (id == null) {
+			response.sendError(HttpServletResponse.SC_BAD_REQUEST, "An ID must be specified.");
+		} else {
+			// Delete the addressed member of the collection.
+			String uri = request.getRequestURL().toString();
+			try {
+				CatalogueAccessPoint.getCatalogue().removeConcept(new URIImpl(uri));
+				response.setStatus(HttpServletResponse.SC_OK);
+			} catch (NotFoundException e) {
+				response.sendError(HttpServletResponse.SC_NOT_FOUND, "The concept "+uri+" has not been found.");
+			}
+		}
+	}
 	
 	/**
 	 * Transform a string of tags into an array. The tags are
