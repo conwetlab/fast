@@ -2,6 +2,7 @@ package fast.servicescreen.client.gui;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.Set;
 
 import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ChangeHandler;
@@ -11,6 +12,10 @@ import com.google.gwt.event.logical.shared.SelectionEvent;
 import com.google.gwt.event.logical.shared.SelectionHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
+import com.google.gwt.json.client.JSONArray;
+import com.google.gwt.json.client.JSONObject;
+import com.google.gwt.json.client.JSONString;
+import com.google.gwt.json.client.JSONValue;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.Grid;
@@ -57,7 +62,7 @@ public class RuleGUI
 
    private Node xmlDocumentElement;
    
-   private Node jsonDocumentElement;
+   private JSONValue jsonElement;
 
    /**
     * creates and returns a flextable containing the trees
@@ -693,63 +698,59 @@ public class RuleGUI
       {
          // print selected element in rule area
          TreeItem selectedItem = event.getSelectedItem();
-         String text = selectedItem.getText();
+         String name = selectedItem.getText();
          
-//         // try to find corresponding xmlDoc element
-//         String name = text.split(":")[0].trim();
-//         
-//         if(selectedRule != null)
-//         {
-//             // transfer tagName to the currently selected mapping rule. 
-//             selectedRule.setSourceTagname(name);
-//             
-//             ArrayList<Node> elementsByTagName = new ArrayList<Node>();
-//             elementsByTagName(jsonDocumentElement, name, elementsByTagName);
-//             
-//             StringBuffer resultText = new StringBuffer();
-//             // print found names to factText
-//             for (int i = 0; i < elementsByTagName.size(); i++)
-//             {
-//                Node item = elementsByTagName.get(i);
-//                resultText.append(item.getNodeName());
-//                resultText.append(":");
-//                resultText.append(item.getNodeValue());
-//                resultText.append("\n");
-//             }
-//             
-//             if(elementsByTagName.size() > 0)
-//             {
-//            	 xmlDocumentElement = elementsByTagName.get(0);
-//             }
-//         }
+         if(selectedRule != null)
+         {
+        	 selectedRule.setSourceTagname(name);
+        	 
+//        	 jsonElement = jsonValueByTagName(, tagName);
+         }
+         
       }
    }
    
-   //JSON METHOD
-//   private ArrayList<Node> elementsByTagName(Node root, String tagName, ArrayList<Node> result)
-//   {  
-//	  if(root != null)
-//	  {
-//	      NodeList childs = root.getChildNodes();
-//	      
-//	      for (int i = 0; i < childs.getLength(); i++)
-//	      {
-//	         Node item = childs.item(i);
-//	         
-//	         if (item == null) continue;
-//	         
-//	         if (item.getNodeName().equals(tagName))
-//	         {
-//	            result.add(item);
-//	         }
-//	         else
-//	         {
-//	            elementsByTagName(item, tagName, result);
-//	         }
-//	      }
-//	  }
+   //TODO somthing like that?
+//   private JSONValue jsonValueByTagName(JSONValue root, String tagName)
+//   {
+//	   //if it's an array, search among it's children
+//	   JSONArray jsonArray = root.isArray();
+//	   if(jsonArray != null)
+//	   {	
+//		   for (int i = 0; i < jsonArray.size(); i++)
+//		   { 
+//			   jsonValueByTagName(jsonArray.get(i), tagName);
+//		   }
+//	   }
 //
-//      return result;
+//	   //maybe it's the value
+//	   JSONString jsonString = root.isString();
+//	   if(jsonString != null && tagName.equals(jsonString.stringValue()))
+//	   {
+//		   return jsonString;
+//	   }
+//
+//	   //if it's an object, maybe it's the 
+//	   JSONObject operator = root.isObject();
+//	   if( operator != null )
+//	   {	
+//		   if( operator.containsKey(tagName) )
+//		   {
+//			   return operator.get(tagName);
+//		   }
+//		   
+//		   Set<String> keys = operator.keySet();
+//
+//		   for (Iterator<String> iterator = keys.iterator(); iterator.hasNext();)
+//		   {
+//			   String key = (String) iterator.next();
+//			   JSONValue child = operator.get(key);
+//			   jsonValueByTagName(child, tagName);
+//		   }
+//	   }
+//	   
+//	   //if nothing is found
+//	   return null;
 //   }
    
    class RulesTreeHandler implements SelectionHandler<TreeItem>
