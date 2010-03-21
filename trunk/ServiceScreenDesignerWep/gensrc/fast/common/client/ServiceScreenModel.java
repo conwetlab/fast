@@ -453,6 +453,7 @@ public class ServiceScreenModel extends CObject implements PropertyChangeClient,
 		
 		
 		
+		
 		crole = new CRole();
 		crole.setName("parent");
 		ccardinality = new CCardinality();
@@ -678,6 +679,7 @@ public class ServiceScreenModel extends CObject implements PropertyChangeClient,
 				break;
 			}
 		}
+		
 		
 		
 		
