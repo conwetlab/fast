@@ -25,6 +25,7 @@ import fast.common.client.FactPort;
 import fast.common.client.ServiceDesigner;
 import fast.common.client.ServiceScreen;
 import fast.common.client.ServiceScreenModel;
+import fast.common.client.ServiceWrapperOverviewTab;
 import fast.servicescreen.client.gui.CTextChangeHandler;
 import fast.servicescreen.client.gui.PortGUI;
 import fast.servicescreen.client.gui.RequestGUI;
@@ -41,11 +42,33 @@ import fujaba.web.runtime.client.ICObject;
  */
 public class ServiceScreenDesignerWep extends FastTool implements EntryPoint
 {
-   public ServiceDesigner designer;
-   public ServiceScreen serviceScreen;
+	public ServiceDesigner designer;
+	public ServiceDesigner getDesigner() {
+		return designer;
+	}
 
-   /**
-    * This is the entry point method.
+	public void setDesigner(ServiceDesigner designer) {
+		this.designer = designer;
+	}
+
+	public ServiceScreen serviceScreen;
+
+	public ServiceScreen getServiceScreen() 
+	{
+		return serviceScreen;
+	}
+
+	public void setServiceScreen(ServiceScreen serviceScreen) 
+	{
+		if (this.serviceScreen != serviceScreen)
+		{
+			this.serviceScreen = serviceScreen;
+			rebuildOtherTabs();
+		}
+	}
+
+	/**
+	 * This is the entry point method.
     */
    public void onModuleLoad()
    {
@@ -119,6 +142,7 @@ public class ServiceScreenDesignerWep extends FastTool implements EntryPoint
    public SendRequestHandler requestHandler;
    private TestServiceRequestAction testServiceRequestAction;
    private JSONValue savedJson;
+private TabPanel tabPanel;
    
    class BuildAction extends FAction
    {
@@ -128,7 +152,7 @@ public class ServiceScreenDesignerWep extends FastTool implements EntryPoint
       {
          CoobraRoot.get().setAutoLoadData(true);
          CoobraRoot.get().setSendBufferTimeout(500);
-         CoobraRoot.get().setEnableSendBuffer(true);
+         CoobraRoot.get().setEnableSendBuffer(false);
          
          // CoobraService.Util.getInstance().init(servicemodel, this);
          
@@ -225,12 +249,32 @@ public class ServiceScreenDesignerWep extends FastTool implements EntryPoint
        * */
       RootPanel rootPanel = RootPanel.get();
       
-      // tabPanel contains the design steps
-      TabPanel tabPanel = new TabPanel();
+      tabPanel = new TabPanel();
       
-      // general tab
-      FlexTable generalInformationTable = new FlexTable();
-      FlexCellFormatter generalInfoFormatter = generalInformationTable.getFlexCellFormatter();
+      
+      // build overview panel
+      ServiceWrapperOverviewTab serviceWrapperOverviewTab = new ServiceWrapperOverviewTab();
+      serviceWrapperOverviewTab.start(this, tabPanel);
+      
+      rebuildOtherTabs();
+      
+      
+      rootPanel.add(tabPanel);
+   }
+
+   private void rebuildOtherTabs() 
+   {
+	  // remove old tabs
+	   int widgetCount = tabPanel.getWidgetCount();
+	   while (widgetCount > 1)
+	   {
+		   tabPanel.remove(widgetCount-1);
+		   widgetCount = tabPanel.getWidgetCount();
+	   }
+
+	  // general tab
+	  FlexTable generalInformationTable = new FlexTable();
+	  FlexCellFormatter generalInfoFormatter = generalInformationTable.getFlexCellFormatter();
       generalInformationTable.addStyleName("cw-FlexTable");
       generalInformationTable.setWidth("32em");
       generalInformationTable.setCellSpacing(5);
@@ -316,11 +360,7 @@ public class ServiceScreenDesignerWep extends FastTool implements EntryPoint
       //Adding part three, just to test code generation, there is a show of selected rules, templates and the .js results
       codeGenViewer = new CodeGenViewer(this, serviceScreen);
       tabPanel.add(codeGenViewer.createCodeGenViewer(), "CodeGen Viewer");
-      
-      tabPanel.selectTab(1);
-      
-      rootPanel.add(tabPanel);
-   }
+}
 
    public void setResultText(TextArea resultText)
    {

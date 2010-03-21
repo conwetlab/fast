@@ -86,14 +86,14 @@ public class TemplateGUI
 		   
 		   designer.serviceScreen.removeAllFromTemplateParameters();
 		   
-		   if(requestTemplate.indexOf("?") == -1)
+		   int fixPartEnd = requestTemplate.indexOf("?");
+		   if( fixPartEnd == -1)
 		   {
-			   Window.alert("Malformed request template!");
-			   return;
+			  fixPartEnd = requestTemplate.length()-1;
 		   }
 		   
-		   String serverUrl = requestTemplate.substring(0, requestTemplate.indexOf("?")+1);
-		   requestTemplate = requestTemplate.substring(requestTemplate.indexOf("?")+1);
+		   String serverUrl = requestTemplate.substring(0, fixPartEnd+1);
+		   requestTemplate = requestTemplate.substring(fixPartEnd+1);
 		   
 		   TemplateParameter server = new TemplateParameter();
 		   server.setName("Server:");
