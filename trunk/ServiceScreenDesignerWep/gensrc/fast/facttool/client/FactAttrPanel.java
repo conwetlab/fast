@@ -56,6 +56,7 @@ public class FactAttrPanel
    }
 
    // create attributes for all objects in all states of this statechart
+   private TreeItem parentItem;
    private HorizontalPanel panel;
    private FactType factType;
    private MultiWordSuggestOracle oracle;
@@ -66,7 +67,6 @@ public class FactAttrPanel
    private ServiceDesigner designer;
    private String tname;
    private SuggestBox typeBox;
-   private TreeItem parentItem;
    private FactType someType;
 
    public void start()

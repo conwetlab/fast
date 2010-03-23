@@ -15,6 +15,8 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Button;
 import fast.facttool.client.DeleteFactTypeButton;
 import com.google.gwt.user.client.ui.TextBox;
+import fast.common.client.FactExample;
+import fast.facttool.client.ExampleValuesPanel;
 import fujaba.web.runtime.client.reflect.*;
 import fujaba.web.runtime.client.*;
 import java.util.*;
@@ -57,24 +59,30 @@ public class FactTypePanel
    }
 
    // create attributes for all objects in all states of this statechart
-   private HorizontalPanel panel;
-   private FactAttribute newAttr;
    private AttributeTextBox uriTextBox;
-   private HorizontalPanel attrTreeRootPanel;
+   private HorizontalPanel exampleValTreeRootPanel;
    private Label attrTreeRootLabel;
-   private TextBox nameCaption;
-   private AttributeTextBox nameBox;
    private FactAttrPanel attrPanel;
-   private Iterator fujaba__IterFactTypeToFactAttr;
-   private Button attrAddButton;
-   private TextBox typeCaption;
+   private TreeItem exampleValRootItem;
    private DeleteFactTypeButton deleteButton;
    private AttributeTextBox mnemonicBox;
    private HorizontalPanel captionPanel;
+   private Label exampleValTreeRootLabel;
    private TreeItem treeItem;
-   private TreeItem captionItem;
    private FactAttribute factAttr;
    private TreeItem attrRootItem;
+   private HorizontalPanel panel;
+   private FactAttribute newAttr;
+   private FactExample newExampleVal;
+   private HorizontalPanel attrTreeRootPanel;
+   private TextBox nameCaption;
+   private AttributeTextBox nameBox;
+   private Button exampleValAddButton;
+   private Iterator fujaba__IterFactTypeToFactAttr;
+   private Button attrAddButton;
+   private TextBox typeCaption;
+   private ExampleValuesPanel exampleValPanel;
+   private TreeItem captionItem;
 
    public void start()
    {
@@ -101,6 +109,7 @@ public class FactTypePanel
       addKids = new AddKids ();
       attrAddButtonHandler = new AttrAddButtonHandler ();
       build = new Build ();
+      exampleValAddButtonHandler = new ExampleValAddButtonHandler ();
       expandTree = new ExpandTree ();
       // NONE
 
@@ -111,6 +120,9 @@ public class FactTypePanel
       // NONE
 
       //addKids.addToFollowers("auto", expandTree);
+      // NONE
+
+      //build.addToFollowers("exampleValAddButton.click", exampleValAddButtonHandler);
    }
 
 
@@ -277,6 +289,18 @@ public class FactTypePanel
             // create object captionItem
             captionItem = attrRootItem.addItem(captionPanel);
 
+            // create object exampleValTreeRootPanel
+            exampleValTreeRootPanel = new HorizontalPanel ( );
+
+            // create object exampleValTreeRootLabel
+            exampleValTreeRootLabel = new Label ( );
+
+            // create object exampleValAddButton
+            exampleValAddButton = new Button ( );
+
+            // create object exampleValRootItem
+            exampleValRootItem = treeItem.addItem(exampleValTreeRootPanel);
+
             // assign attribute nameBox
             nameBox.setAttrName ("typeName");
             // assign attribute mnemonicBox
@@ -297,6 +321,12 @@ public class FactTypePanel
             typeCaption.setText ("type");
             // assign attribute typeCaption
             typeCaption.setEnabled (false);
+            // assign attribute exampleValTreeRootLabel
+            exampleValTreeRootLabel.setText ("Example Values: ");
+            // assign attribute exampleValAddButton
+            exampleValAddButton.setText ("add");
+            // assign attribute exampleValRootItem
+            exampleValRootItem.setState (true);
             // create link widget from attrTreeRootPanel to attrTreeRootLabel
             attrTreeRootPanel.add (attrTreeRootLabel);
 
@@ -308,6 +338,12 @@ public class FactTypePanel
 
             // create link widget from captionPanel to typeCaption
             captionPanel.add (typeCaption);
+
+            // create link widget from exampleValTreeRootPanel to exampleValTreeRootLabel
+            exampleValTreeRootPanel.add (exampleValTreeRootLabel);
+
+            // create link widget from exampleValTreeRootPanel to exampleValAddButton
+            exampleValTreeRootPanel.add (exampleValAddButton);
 
             // collabStat call
             nameBox.start(panel, factType);
@@ -326,6 +362,7 @@ public class FactTypePanel
 
 
          attrAddButton.addClickHandler(attrAddButtonHandler);
+         exampleValAddButton.addClickHandler(exampleValAddButtonHandler);
 
    		 if( autoGuardBuild1 == null)
    		 {
@@ -342,6 +379,44 @@ public class FactTypePanel
       private class AutoGuardBuild1 extends FGuard
       {
       }
+
+   }
+
+   private ExampleValAddButtonHandler exampleValAddButtonHandler;
+   public class ExampleValAddButtonHandler extends FAction
+   {
+       public void doAction()
+       {
+   		 boolean fujaba__Success = false;
+
+         // story pattern storypatternwiththis
+         try 
+         {
+            fujaba__Success = false; 
+
+            // check object factType is really bound
+            JavaSDM.ensure ( factType != null );
+            // create object newExampleVal
+            newExampleVal = new FactExample ( );
+
+            // create object exampleValPanel
+            exampleValPanel = new ExampleValuesPanel ( );
+
+            // create link factExamples from newExampleVal to factType
+            newExampleVal.setFactType (factType);
+
+            // collabStat call
+            exampleValPanel.start(newExampleVal, exampleValRootItem);
+            fujaba__Success = true;
+         }
+         catch ( JavaSDMException fujaba__InternalException )
+         {
+            fujaba__Success = false;
+         }
+
+
+
+       }
 
    }
 
@@ -373,6 +448,9 @@ public class FactTypePanel
        }
 
    }
+
+   // my style test for method.vm
+
 
    // my style test for method.vm
 

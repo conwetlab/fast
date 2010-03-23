@@ -833,14 +833,14 @@ public class ServiceScreenModel extends CObject implements PropertyChangeClient,
 		crole.setCCardinality(ccardinality);
 		
 		cassoc = new CAssoc();
-	    cassoc.setName("factExampleValue");
+	    cassoc.setName("factExamples");
 	    cassoc.addToCRole(crole);
 		crole.setCAssoc(cassoc);
 		tClass = ModelRoot.get().getCClass("fast.common.client.FactType");
 		tClass.addToCRoles(crole);
 		
 		rightRole = new CRole();
-		rightRole.setName("factExampleValue");
+		rightRole.setName("factExamples2");
 		ccardinality = new CCardinality();
 		upperBound = 2147483647;
 		if (upperBound == 0) {
@@ -858,7 +858,7 @@ public class ServiceScreenModel extends CObject implements PropertyChangeClient,
 		while(iter.hasNext()) {
 			CClass theCClass = (CClass) iter.next();
 			
-			if ( theCClass.getName().equals("fast.common.client.FactExampleValue")) {
+			if ( theCClass.getName().equals("fast.common.client.FactExample")) {
 				theCClass.addToCRoles(rightRole);
 				break;
 			}

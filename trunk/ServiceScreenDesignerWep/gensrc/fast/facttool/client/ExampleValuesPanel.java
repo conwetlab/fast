@@ -4,8 +4,11 @@
 
 package fast.facttool.client;
 
+import fast.common.client.FactExample;
 import com.google.gwt.user.client.ui.TreeItem;
-import fast.common.client.FactType;
+import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.TextBox;
+import com.google.gwt.user.client.ui.Button;
 import fujaba.web.runtime.client.reflect.*;
 import fujaba.web.runtime.client.*;
 import java.util.*;
@@ -48,6 +51,9 @@ public class ExampleValuesPanel
    }
 
    // create attributes for all objects in all states of this statechart
+   private HorizontalPanel factExamplePanel;
+   private TextBox exampleValTextBox;
+   private Button exampleValDeleteButton;
    private TreeItem rootItem;
 
    public void start()
@@ -73,6 +79,18 @@ public class ExampleValuesPanel
          return;
 
       build = new Build ();
+      exampleValDeleteButtonHandler = new ExampleValDeleteButtonHandler ();
+      exampleValTextBoxChangeHandler = new ExampleValTextBoxChangeHandler ();
+      factExampleChangeListener = new FactExampleChangeListener ();
+      // NONE
+
+      //build.addToFollowers("exampleValDeleteButton.click", exampleValDeleteButtonHandler);
+      // NONE
+
+      //build.addToFollowers("exampleValTextBox", exampleValTextBoxChangeHandler);
+      // NONE
+
+      //build.addToFollowers("factExample.change", factExampleChangeListener);
    }
 
 
@@ -88,11 +106,67 @@ public class ExampleValuesPanel
          {
             fujaba__Success = false; 
 
-            // check object treeItem is really bound
-            JavaSDM.ensure ( treeItem != null );
+            // check object factExample is really bound
+            JavaSDM.ensure ( factExample != null );
+            // check object parent is really bound
+            JavaSDM.ensure ( parent != null );
             // create object rootItem
-            rootItem = new TreeItem ( );
+            rootItem = parent.addItem(factExamplePanel);
 
+            // create object factExamplePanel
+            factExamplePanel = new HorizontalPanel ( );
+
+            // create object exampleValTextBox
+            exampleValTextBox = new TextBox ( );
+
+            // create object exampleValDeleteButton
+            exampleValDeleteButton = new Button ( );
+
+            // assign attribute exampleValTextBox
+            exampleValTextBox.setText (factExample.getJson());
+            // assign attribute exampleValDeleteButton
+            exampleValDeleteButton.setText ("delete");
+            // create link widget from factExamplePanel to exampleValTextBox
+            factExamplePanel.add (exampleValTextBox);
+
+            // create link widget from factExamplePanel to exampleValDeleteButton
+            factExamplePanel.add (exampleValDeleteButton);
+
+            fujaba__Success = true;
+         }
+         catch ( JavaSDMException fujaba__InternalException )
+         {
+            fujaba__Success = false;
+         }
+
+
+         exampleValDeleteButton.addClickHandler(exampleValDeleteButtonHandler);
+         factExample.addPropertyChangeListener(factExampleChangeListener);
+
+       }
+
+   }
+
+   private ExampleValDeleteButtonHandler exampleValDeleteButtonHandler;
+   public class ExampleValDeleteButtonHandler extends FAction
+   {
+       public void doAction()
+       {
+   		 boolean fujaba__Success = false;
+
+         // story pattern storypatternwiththis
+         try 
+         {
+            fujaba__Success = false; 
+
+            // check object factExample is really bound
+            JavaSDM.ensure ( factExample != null );
+            // check object rootItem is really bound
+            JavaSDM.ensure ( rootItem != null );
+            // collabStat call
+            factExample.removeYou();
+            // collabStat call
+            rootItem.remove();
             fujaba__Success = true;
          }
          catch ( JavaSDMException fujaba__InternalException )
@@ -105,17 +179,84 @@ public class ExampleValuesPanel
        }
 
    }
-   public void start (TreeItem treeItem , FactType factType )
+
+   private ExampleValTextBoxChangeHandler exampleValTextBoxChangeHandler;
+   public class ExampleValTextBoxChangeHandler extends FAction
+   {
+       public void doAction()
+       {
+   		 boolean fujaba__Success = false;
+
+         // story pattern storypatternwiththis
+         try 
+         {
+            fujaba__Success = false; 
+
+            // check object factExample is really bound
+            JavaSDM.ensure ( factExample != null );
+            // assign attribute factExample
+            factExample.setJson (exampleValTextBox.getText());
+            fujaba__Success = true;
+         }
+         catch ( JavaSDMException fujaba__InternalException )
+         {
+            fujaba__Success = false;
+         }
+
+
+
+       }
+
+   }
+
+   private FactExampleChangeListener factExampleChangeListener;
+   public class FactExampleChangeListener extends FAction
+   {
+       public void doAction()
+       {
+   		 boolean fujaba__Success = false;
+
+         // story pattern storypatternwiththis
+         try 
+         {
+            fujaba__Success = false; 
+
+            // check object exampleValTextBox is really bound
+            JavaSDM.ensure ( exampleValTextBox != null );
+            // assign attribute exampleValTextBox
+            exampleValTextBox.setText (factExample.getJson());
+            fujaba__Success = true;
+         }
+         catch ( JavaSDMException fujaba__InternalException )
+         {
+            fujaba__Success = false;
+         }
+
+
+
+       }
+
+   }
+
+   // my style test for method.vm
+
+
+   // my style test for method.vm
+
+
+   // my style test for method.vm
+
+   public void start (FactExample factExample , TreeItem parent )
    { 
       // copy parameters to attributes
-      this.treeItem = treeItem;
-      this.factType = factType;
+      this.factExample = factExample;
+      this.parent = parent;
       start();
    }
 
    // attributes for action container method parameters 
-   public TreeItem treeItem;
-   public FactType factType;
+   public FactExample factExample;
+   public TreeItem parent;
 
 
    public void removeYou()

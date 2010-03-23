@@ -10,7 +10,6 @@ import fast.common.client.ServiceDesigner;
 import fast.common.client.ServiceScreen;
 import fast.common.client.ScreenPanel;
 import java.util.*;
-import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.TabPanel;
 import fast.servicescreen.client.ServiceScreenDesignerWep;
 import fujaba.web.runtime.client.reflect.*;
@@ -82,15 +81,13 @@ public class ServiceWrapperOverviewTab implements PropertyChangeClient
 
 
    // create attributes for all objects in all states of this statechart
-   private ScreenPanel screenPanel;
-   private Button theAddScreenButton;
-   private RootPanel rootPanel;
+   private Button button;
    private ServiceScreen newScreen;
-   private Object _TmpObject;
    private ServiceScreen screen;
+   private FlowPanel overviewFlowPanel;
+   private ScreenPanel screenPanel;
    private ServiceDesigner designer;
    private Iterator fujaba__IterDesignerToScreen;
-   private FlowPanel overviewFlowPanel;
 
    public void start()
    {
@@ -118,22 +115,22 @@ public class ServiceWrapperOverviewTab implements PropertyChangeClient
       addScreenButtonHandler = new AddScreenButtonHandler ();
       addScreenPanels = new AddScreenPanels ();
       buildGUI = new BuildGUI ();
-      refreshOverViewPanel = new RefreshOverViewPanel ();
+      refreshOverviewPanel = new RefreshOverviewPanel ();
       // NONE
 
-      //buildGUI.addToFollowers("auto", refreshOverViewPanel);
+      //buildGUI.addToFollowers("auto", refreshOverviewPanel);
       // NONE
 
-      //refreshOverViewPanel.addToFollowers("auto", addScreenPanels);
+      //refreshOverviewPanel.addToFollowers("auto", addScreenPanels);
       // NONE
 
       //addScreenPanels.addToFollowers("auto", addScreenButton);
       // NONE
 
-      //buildGUI.addToFollowers("designer.change", refreshOverViewPanel);
+      //addScreenButton.addToFollowers("button.click", addScreenButtonHandler);
       // NONE
 
-      //addScreenButton.addToFollowers("theAddScreenButton.click", addScreenButtonHandler);
+      //buildGUI.addToFollowers("designer.change", refreshOverviewPanel);
    }
 
 
@@ -151,13 +148,13 @@ public class ServiceWrapperOverviewTab implements PropertyChangeClient
 
             // check object overviewFlowPanel is really bound
             JavaSDM.ensure ( overviewFlowPanel != null );
-            // create object theAddScreenButton
-            theAddScreenButton = new Button ( );
+            // create object button
+            button = new Button ( );
 
-            // assign attribute theAddScreenButton
-            theAddScreenButton.setText ("add");
-            // create link widget from overviewFlowPanel to theAddScreenButton
-            overviewFlowPanel.add (theAddScreenButton);
+            // assign attribute button
+            button.setText ("add");
+            // create link widget from overviewFlowPanel to button
+            overviewFlowPanel.add (button);
 
             fujaba__Success = true;
          }
@@ -167,7 +164,7 @@ public class ServiceWrapperOverviewTab implements PropertyChangeClient
          }
 
 
-         theAddScreenButton.addClickHandler(addScreenButtonHandler);
+         button.addClickHandler(addScreenButtonHandler);
 
        }
 
@@ -191,9 +188,9 @@ public class ServiceWrapperOverviewTab implements PropertyChangeClient
             newScreen = new ServiceScreen ( );
 
             // assign attribute newScreen
-            newScreen.setName ("new screen");
-            // create link screens from designer to newScreen
-            designer.addToScreens (newScreen);
+            newScreen.setName ("new Screen");
+            // create link screens from newScreen to designer
+            newScreen.setServiceDesigner (designer);
 
             fujaba__Success = true;
          }
@@ -240,7 +237,7 @@ public class ServiceWrapperOverviewTab implements PropertyChangeClient
                   screenPanel = new ScreenPanel ( );
 
                   // collabStat call
-                  screenPanel.start(wrapperTool, screen, overviewFlowPanel, refreshOverViewPanel);
+                  screenPanel.start(wrapperTool, screen, overviewFlowPanel, refreshOverviewPanel);
 
                   fujaba__Success = true;
                }
@@ -289,10 +286,6 @@ public class ServiceWrapperOverviewTab implements PropertyChangeClient
          {
             fujaba__Success = false; 
 
-            rootPanel = RootPanel.get();
-
-            // check object rootPanel is really bound
-            JavaSDM.ensure ( rootPanel != null );
             // check object tabPanel is really bound
             JavaSDM.ensure ( tabPanel != null );
             // check object wrapperTool is really bound
@@ -321,13 +314,13 @@ public class ServiceWrapperOverviewTab implements PropertyChangeClient
          }
 
 
-         designer.addPropertyChangeListener(refreshOverViewPanel);
+         designer.addPropertyChangeListener(refreshOverviewPanel);
 
    		 if( autoGuardBuildGUI1 == null)
    		 {
    			 autoGuardBuildGUI1 = new AutoGuardBuildGUI1();
    			 autoGuardBuildGUI1.setSource(buildGUI);
-   			 autoGuardBuildGUI1.setTarget(refreshOverViewPanel);
+   			 autoGuardBuildGUI1.setTarget(refreshOverviewPanel);
    			 buildGUI.addToAutoTransitions(autoGuardBuildGUI1.toString(), autoGuardBuildGUI1);
    		 }
 
@@ -341,8 +334,8 @@ public class ServiceWrapperOverviewTab implements PropertyChangeClient
 
    }
 
-   private RefreshOverViewPanel refreshOverViewPanel;
-   public class RefreshOverViewPanel extends FAction
+   private RefreshOverviewPanel refreshOverviewPanel;
+   public class RefreshOverviewPanel extends FAction
    {
        public void doAction()
        {
@@ -366,19 +359,19 @@ public class ServiceWrapperOverviewTab implements PropertyChangeClient
 
 
 
-   		 if( autoGuardRefreshOverViewPanel1 == null)
+   		 if( autoGuardRefreshOverviewPanel1 == null)
    		 {
-   			 autoGuardRefreshOverViewPanel1 = new AutoGuardRefreshOverViewPanel1();
-   			 autoGuardRefreshOverViewPanel1.setSource(refreshOverViewPanel);
-   			 autoGuardRefreshOverViewPanel1.setTarget(addScreenPanels);
-   			 refreshOverViewPanel.addToAutoTransitions(autoGuardRefreshOverViewPanel1.toString(), autoGuardRefreshOverViewPanel1);
+   			 autoGuardRefreshOverviewPanel1 = new AutoGuardRefreshOverviewPanel1();
+   			 autoGuardRefreshOverviewPanel1.setSource(refreshOverviewPanel);
+   			 autoGuardRefreshOverviewPanel1.setTarget(addScreenPanels);
+   			 refreshOverviewPanel.addToAutoTransitions(autoGuardRefreshOverviewPanel1.toString(), autoGuardRefreshOverviewPanel1);
    		 }
 
    		 doAuto();
        }
 
-      private AutoGuardRefreshOverViewPanel1 autoGuardRefreshOverViewPanel1;
-      private class AutoGuardRefreshOverViewPanel1 extends FGuard
+      private AutoGuardRefreshOverviewPanel1 autoGuardRefreshOverviewPanel1;
+      private class AutoGuardRefreshOverviewPanel1 extends FGuard
       {
       }
 

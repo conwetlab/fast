@@ -97,7 +97,7 @@ public class FactExample implements PropertyChangeClient
     * <pre>
     *           0..*     factExamples     0..1
     * FactExample ------------------------- FactType
-    *           factExamples               factType
+    *           factExamples2               factType
     * </pre>
     */
    public static final String PROPERTY_FACT_TYPE = "factType";
@@ -116,13 +116,13 @@ public class FactExample implements PropertyChangeClient
          if (this.factType != null)
          {
             this.factType = null;
-            oldValue.removeFromFactExamples (this);
+            oldValue.removeFromFactExamples2 (this);
          }
          this.factType = value;
 
          if (value != null)
          {
-            value.addToFactExamples (this);
+            value.addToFactExamples2 (this);
          }
             getPropertyChangeSupport().firePropertyChange(PROPERTY_FACT_TYPE, oldValue, value);
          changed = true;
