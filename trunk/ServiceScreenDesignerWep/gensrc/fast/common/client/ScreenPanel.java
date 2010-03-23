@@ -9,8 +9,8 @@ import fast.common.client.ServiceScreen;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
-import fast.servicescreen.client.ServiceScreenDesignerWep;
 import fujaba.web.runtime.client.FAction;
+import fast.servicescreen.client.ServiceScreenDesignerWep;
 import fujaba.web.runtime.client.reflect.*;
 import fujaba.web.runtime.client.*;
 import java.util.*;
@@ -107,6 +107,14 @@ public class ScreenPanel implements PropertyChangeClient
          return;
 
       buildGUI = new BuildGUI ();
+      imageHandler = new ImageHandler ();
+      screenListener = new ScreenListener ();
+      // NONE
+
+      //buildGUI.addToFollowers("image.click", imageHandler);
+      // NONE
+
+      //buildGUI.addToFollowers("screen.change", screenListener);
    }
 
 
@@ -136,8 +144,7 @@ public class ScreenPanel implements PropertyChangeClient
             label = new Label ( );
 
             // assign attribute label
-            String name = screen.getName();
-			label.setText (name);
+            label.setText (screen.getName());
             // create link widget from panel to vertPanel
             panel.add (vertPanel);
 
@@ -145,6 +152,49 @@ public class ScreenPanel implements PropertyChangeClient
             vertPanel.add(image);
             // collabStat call
             vertPanel.add(label);
+            // collabStat call
+            if ( screen == wrapperTool.getServiceScreen() )
+            {
+            vertPanel.setBorderWidth(3);
+            }
+            fujaba__Success = true;
+         }
+         catch ( JavaSDMException fujaba__InternalException )
+         {
+            fujaba__Success = false;
+         }
+
+
+         screen.addPropertyChangeListener(screenListener);
+         image.addClickHandler(imageHandler);
+
+       }
+
+   }
+
+   private ImageHandler imageHandler;
+   public class ImageHandler extends FAction
+   {
+       public void doAction()
+       {
+   		 boolean fujaba__Success = false;
+
+         // story pattern storypatternwiththis
+         try 
+         {
+            fujaba__Success = false; 
+
+            // check object refreshAction is really bound
+            JavaSDM.ensure ( refreshAction != null );
+            // check object screen is really bound
+            JavaSDM.ensure ( screen != null );
+            // check object wrapperTool is really bound
+            JavaSDM.ensure ( wrapperTool != null );
+            // create link serviceScreen from wrapperTool to screen
+            wrapperTool.setServiceScreen (screen);
+
+            // collabStat call
+            refreshAction.doAction();
             fujaba__Success = true;
          }
          catch ( JavaSDMException fujaba__InternalException )
@@ -157,6 +207,41 @@ public class ScreenPanel implements PropertyChangeClient
        }
 
    }
+
+   private ScreenListener screenListener;
+   public class ScreenListener extends FAction
+   {
+       public void doAction()
+       {
+   		 boolean fujaba__Success = false;
+
+         // story pattern storypatternwiththis
+         try 
+         {
+            fujaba__Success = false; 
+
+            // check object label is really bound
+            JavaSDM.ensure ( label != null );
+            // assign attribute label
+            label.setText (screen.getName());
+            fujaba__Success = true;
+         }
+         catch ( JavaSDMException fujaba__InternalException )
+         {
+            fujaba__Success = false;
+         }
+
+
+
+       }
+
+   }
+
+   // my style test for method.vm
+
+
+   // my style test for method.vm
+
    public void start (ServiceScreenDesignerWep wrapperTool , ServiceScreen screen , Panel panel , FAction refreshAction )
    { 
       // copy parameters to attributes

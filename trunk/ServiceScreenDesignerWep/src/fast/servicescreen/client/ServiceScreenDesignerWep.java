@@ -256,6 +256,7 @@ private TabPanel tabPanel;
       ServiceWrapperOverviewTab serviceWrapperOverviewTab = new ServiceWrapperOverviewTab();
       serviceWrapperOverviewTab.start(this, tabPanel);
       
+      
       rebuildOtherTabs();
       
       
