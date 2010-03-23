@@ -120,7 +120,7 @@ public class SaveLoadJsonHandler {
 		JSONString requestTemplateJson = new JSONString(requestTemplate); 
 		operator.put("requestTemplate", requestTemplateJson);
 
-		// rules (TODO screen only needs a rootRule??)
+		// rules
 		JSONObject rules = new JSONObject();
 		for (Iterator<FASTMappingRule> iterator = screen.iteratorOfMappingRules(); iterator.hasNext();) {
 			FASTMappingRule rule = (FASTMappingRule) iterator.next();
@@ -129,12 +129,8 @@ public class SaveLoadJsonHandler {
 
 			rules.put("rootRule", mappingRule);
 		}
+		
 		operator.put("rules", rules);
-
-		// extended rules TODO
-//		FASTMappingRule extendedRoot = designer.extendedRuleGUI.getRootRule();
-//		JSONValue extendedRules = rulesToJsonValue(extendedRoot);
-//		operator.put("extendedRules", extendedRules);
 
 		return operator;
 	}

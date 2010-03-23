@@ -14,7 +14,6 @@ import fast.common.client.ServiceScreen;
 import fast.servicescreen.client.FastTool;
 import fast.servicescreen.client.RequestService;
 import fast.servicescreen.client.RequestServiceAsync;
-import fast.servicescreen.client.ServiceScreenDesignerWep;
 import fast.servicescreen.client.gui.RuleUtil;
 import fast.servicescreen.client.gui.parser.Kind;
 import fast.servicescreen.client.gui.parser.Operation;
@@ -119,7 +118,7 @@ public class CodeGenerator
 		add_SendRequest_toTable();
 
 		//Build the outport (setup this.outputPortName, too)
-		add_outPort_toTable();
+//		add_outPort_toTable();
 		
 		//Build the exRules - feature
 		add_Translation_toTable();
@@ -197,7 +196,7 @@ public class CodeGenerator
 		table.put("<<inputportlist>>", inputPortText);
 	}
 	
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({ "unchecked", "unused" })
 	private void add_outPort_toTable()
 	{
 		String outputPortVar = "";
@@ -344,7 +343,7 @@ public class CodeGenerator
 							
 					depth4 + "currentCount = " + countVar + ";\n" + 			//adds a current index variable 
 					
-					depth4 + "result += '\"" + target + "Object\" : { '; \n" +	//adds a 'new object' in the result
+					depth4 + "result += '\"" + target + "Object\" : [{ '; \n" +	//adds a 'new object' in the result
 							
 					depth4 + "\n\n";
 							
@@ -422,7 +421,7 @@ public class CodeGenerator
 						//means, we reach the last fillAttr. rule!
 						if(rule.getParent().getLastOfKids() == rule)
 						{
-							transCode += " + '\"} '; \n";
+							transCode += " + '\"}], '; \n";
 						}
 						else
 						{
@@ -562,6 +561,11 @@ public class CodeGenerator
 	 * 
 	 * -> with URL Escape Codes: / -> %2F, = -> %3D, ? = %3F, & -> %26, : -> %3A
 	 * xxx = http%3A%2F%2Fopen.api.sandbox.ebay.com%2Fshopping%3Fappid%3DKasselUn-efea-4b93-9505-5dc2ef1ceecd%26version%3D517%26callname%3DFindItems%26ItemSort%3DEndTime%26QueryKeywords%3DUSB%26responseencoding%3DXML
+	 * 
+	 * request = http://open.api.sandbox.ebay.com/shopping?appid=KasselUni
+	 * 
+	 * 
+	 * request = http%3A%2F%2Fopen.api.sandbox.ebay.com%2Fshopping%3Fappid%3DKasselUni
 	 * 
 	 * to do this, there is a replaceEscapeCharacter method in this class!
 	 * */

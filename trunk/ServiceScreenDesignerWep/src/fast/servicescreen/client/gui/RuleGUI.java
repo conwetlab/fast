@@ -2,7 +2,6 @@ package fast.servicescreen.client.gui;
 
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.Set;
 
 import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ChangeHandler;
@@ -12,10 +11,6 @@ import com.google.gwt.event.logical.shared.SelectionEvent;
 import com.google.gwt.event.logical.shared.SelectionHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
-import com.google.gwt.json.client.JSONArray;
-import com.google.gwt.json.client.JSONObject;
-import com.google.gwt.json.client.JSONString;
-import com.google.gwt.json.client.JSONValue;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.Grid;
@@ -47,22 +42,19 @@ public class RuleGUI
       requestHandler = rh;
    }
 
-   private BuildingBlock buildingBlock;
-   private SendRequestHandler requestHandler;
+   protected BuildingBlock buildingBlock;
+   protected SendRequestHandler requestHandler;
    
+   //Ressource Trees
    public Tree xmlTree;
-   
-   public Tree jsonTree;
+   private Node xmlDocumentElement;
 
+   //Output Tree
    public Tree factsTree;
 
+   //TransRule Tree
    public Tree rulesTree;
-
-   private FASTMappingRule selectedRule;
-
-   private Node xmlDocumentElement;
-   
-   private JSONValue jsonElement;
+   protected FASTMappingRule selectedRule;
 
    /**
     * creates and returns a flextable containing the trees
@@ -111,55 +103,9 @@ public class RuleGUI
       return translationTable;
    }
    
-   /**
-    * creates and returns a flextable containing the trees
-    * for translation design
-    * */
-   public Widget createJsonTranslationTable()
-   {
-      final FlexTable translationTable = new FlexTable();
-      int rowCount = translationTable.getRowCount();
-      
-      // headlines, labels and buttons in first row
-      translationTable.setWidget(rowCount, 0, new Label("Result:"));
-      translationTable.setWidget(rowCount, 1, createRulesHeadlineTable());
-      translationTable.setWidget(rowCount, 2, new Label("Facts:"));
-      rowCount++;
-      
-      // add result tree
-      ScrollPanel resultScrollPanel = new ScrollPanel();
-      resultScrollPanel.setAlwaysShowScrollBars(true);
-      resultScrollPanel.setSize("11cm", "11cm"); 
-      
-      //create xmlTree and add a selection/PropertyChange - handler
-      jsonTree = new Tree();
-      jsonTree.addSelectionHandler(new JsonTreeHandler());
-      resultScrollPanel.setWidget(jsonTree);
-      translationTable.setWidget(rowCount, 0, resultScrollPanel);
-       
-      // add rule table
-      ScrollPanel rulesScrollPanel = new ScrollPanel();
-      rulesScrollPanel.setAlwaysShowScrollBars(true);
-      rulesScrollPanel.setSize("11cm", "11cm");
-      rulesScrollPanel.setWidget(createRulesTree());
-      translationTable.setWidget(rowCount, 1, rulesScrollPanel);
-         
-      // add facts tree
-      ScrollPanel factsScrollPanel = new ScrollPanel();
-      factsScrollPanel.setAlwaysShowScrollBars(true);
-      factsScrollPanel.setSize("11cm", "11cm");
-      
-      factsTree = new Tree();
-      factsScrollPanel.setWidget(factsTree);
-      translationTable.setWidget(rowCount, 2, factsScrollPanel);
-      
-      // return the table
-      translationTable.ensureDebugId("cwFlexTable");
-      return translationTable;
-   }
-
+   
    //rules headline table
-   private Widget createRulesHeadlineTable()
+   protected Widget createRulesHeadlineTable()
    {
       FlexTable rulesHeadlineTable = new FlexTable();
       
@@ -216,7 +162,7 @@ public class RuleGUI
    
    //build rules-tree new
    @SuppressWarnings("unchecked")
-   private Tree createRulesTree()
+   protected Tree createRulesTree()
    {
       if (rulesTree == null)
     	  rulesTree = new Tree();
@@ -253,7 +199,7 @@ public class RuleGUI
    }
 
    @SuppressWarnings("unchecked")
-   private void addRuleTree(FASTMappingRule nextRule, TreeItem treeParent)
+   protected void addRuleTree(FASTMappingRule nextRule, TreeItem treeParent)
    {
       TreeItem ruleEditor = createRuleEditor(nextRule, treeParent);
       
@@ -265,9 +211,9 @@ public class RuleGUI
       }
    }
 
-   private RulefieldsListener rulefieldListener = new RulefieldsListener(buildingBlock);
+   protected RulefieldsListener rulefieldListener = new RulefieldsListener(buildingBlock);
    
-   private TreeItem createRuleEditor(FASTMappingRule nextRule, TreeItem treeParent)
+   protected TreeItem createRuleEditor(FASTMappingRule nextRule, TreeItem treeParent)
    {
       // "from" attribute
       // new SuggestBox
@@ -278,7 +224,6 @@ public class RuleGUI
       ArrayList<String> words = new ArrayList<String>();
       
       words.add("createObject");
-      words.add("dummy");
       words.add("fillAttributes");
       
       for(String word : words)
@@ -347,7 +292,7 @@ public class RuleGUI
    }
 
    @SuppressWarnings("unchecked")
-   private void fillTypesOracle(FASTMappingRule nextRule,
+   protected void fillTypesOracle(FASTMappingRule nextRule,
          MultiWordSuggestOracle typeOracle, ServiceDesigner serviceDesigner)
    {
       // for create object rules add fact types to oracle
@@ -388,9 +333,9 @@ public class RuleGUI
    
    class UpdateTargetBoxOracleHandler implements SelectionHandler<Suggestion>
    {
-      private FASTMappingRule rule;
-      private MultiWordSuggestOracle oracle;
-      private ServiceDesigner serviceDesigner;
+	   protected FASTMappingRule rule;
+	   protected MultiWordSuggestOracle oracle;
+	   protected ServiceDesigner serviceDesigner;
       
       public UpdateTargetBoxOracleHandler(FASTMappingRule rule, MultiWordSuggestOracle oracle, ServiceDesigner serviceDesigner)
       {
@@ -411,11 +356,9 @@ public class RuleGUI
    }
    
    
-   private ServiceDesigner tmpServiceDesigner = null;
-
-   private FactType tmpFactType;
-   
-   private ServiceDesigner createDefaultTypeStructure()
+   protected ServiceDesigner tmpServiceDesigner = null;
+   protected FactType tmpFactType;
+   protected ServiceDesigner createDefaultTypeStructure()
    {
       tmpServiceDesigner = (ServiceDesigner) buildingBlock.get("serviceDesigner"); 
 //      if (tmpServiceDesigner == null)
@@ -446,16 +389,14 @@ public class RuleGUI
       return tmpServiceDesigner;
    }
    
-   @SuppressWarnings("unused")
-   private void withNewFactAttr(String string)
+   protected void withNewFactAttr(String string)
    {
       FactAttribute factAttribute = new FactAttribute()
                                     .withAttrName(string);
       tmpFactType.addToFactAttributes(factAttribute);
    }
 
-   @SuppressWarnings("unused")
-   private void addToFactTypes(String string)
+   protected void addToFactTypes(String string)
    {
       tmpFactType = new FactType()
                     .withTypeName(string);
@@ -463,7 +404,7 @@ public class RuleGUI
    }
 
    @SuppressWarnings("unchecked")
-   private FactType findFactType(String typeName)
+   protected FactType findFactType(String typeName)
    {
       FactType factType = null;
       for (Iterator iter = ((ServiceDesigner) buildingBlock.get("serviceDesigner")).iteratorOfFactTypes(); iter.hasNext();)
@@ -477,9 +418,10 @@ public class RuleGUI
       return null;
    }
 
-   private FASTMappingRule rootRule;
+   
+   protected FASTMappingRule rootRule;
    /**
-    * Updates the facts trees
+    * Updates the facts trees (for XML Ressources!)
     * */
    public void updateFactsTree()
    {
@@ -491,10 +433,10 @@ public class RuleGUI
       
       requestHandler.xmlDoc.getDocumentElement();
       
-      buildFatcsTrees(factsTree);
+      buildFactsTree(factsTree);
    }
    
-   private void buildFatcsTrees(Tree aFactsTree)
+   protected void buildFactsTree(Tree aFactsTree)
    {
 	      //(re)build the facts tree 
 	   	  aFactsTree.clear();
@@ -508,7 +450,7 @@ public class RuleGUI
    
    /**
     * This method transform the data with the rules
-    * to the this.factsTree
+    * to the this.factsTree (XML)
     * */
    public void transform(Node xmlDocElement, FASTMappingRule rule, TreeItem treeItem)
    {
@@ -550,15 +492,6 @@ public class RuleGUI
                 kidItem = treeItem.addItem(targetElemName + " : " + nodeValue);
              }
           }
-
-          //"dummy" calls transform(..) for all kids to jump over dummy tags
-          else if(rule.getKind().equals("dummy"))
-          {
-             for (int i = 0; i < elements.getLength(); ++i)
-             {
-                callTransformForKids(elements.item(i), rule, treeItem);
-             }
-          }
       }
    }
    
@@ -567,7 +500,7 @@ public class RuleGUI
     * rule the rule u gave got. 
    * */
    @SuppressWarnings("unchecked")
-   private void callTransformForKids(Node xmlDocElement, FASTMappingRule rule, TreeItem treeItem)
+   protected void callTransformForKids(Node xmlDocElement, FASTMappingRule rule, TreeItem treeItem)
    {
       for (Iterator<FASTMappingRule> kidIter = rule.iteratorOfKids(); kidIter.hasNext();)
       {
@@ -587,8 +520,7 @@ public class RuleGUI
     * */
    class RulefieldsListener implements ChangeHandler, SelectionHandler<Suggestion>
    {      
-	      @SuppressWarnings("unused")
-	      private BuildingBlock buildingBlock = null;
+	      protected BuildingBlock buildingBlock = null;
 	      
 	      public RulefieldsListener(BuildingBlock block)
 	      {
@@ -625,6 +557,9 @@ public class RuleGUI
     * */
    class XmlTreeHandler implements SelectionHandler<TreeItem>
    {
+	   
+	   //TODO needed? no, or?! I think we should set up selected rule, that´s all.
+	   
       @Override
       public void onSelection(SelectionEvent<TreeItem> event)
       {
@@ -662,7 +597,7 @@ public class RuleGUI
       }
    }
    
-   private ArrayList<Node> elementsByTagName(Node root, String tagName, ArrayList<Node> result)
+   protected ArrayList<Node> elementsByTagName(Node root, String tagName, ArrayList<Node> result)
    {  
 	  if(root != null)
 	  {
@@ -687,71 +622,6 @@ public class RuleGUI
 
       return result;
    }
-   
-   /**
-    * Handles the json tree (Selection and PropChange)
-    * */
-   class JsonTreeHandler implements SelectionHandler<TreeItem>
-   {
-      @Override
-      public void onSelection(SelectionEvent<TreeItem> event)
-      {
-         // print selected element in rule area
-         TreeItem selectedItem = event.getSelectedItem();
-         String name = selectedItem.getText();
-         
-         if(selectedRule != null)
-         {
-        	 selectedRule.setSourceTagname(name);
-        	 
-//        	 jsonElement = jsonValueByTagName(, tagName);
-         }
-         
-      }
-   }
-   
-   //TODO somthing like that?
-//   private JSONValue jsonValueByTagName(JSONValue root, String tagName)
-//   {
-//	   //if it's an array, search among it's children
-//	   JSONArray jsonArray = root.isArray();
-//	   if(jsonArray != null)
-//	   {	
-//		   for (int i = 0; i < jsonArray.size(); i++)
-//		   { 
-//			   jsonValueByTagName(jsonArray.get(i), tagName);
-//		   }
-//	   }
-//
-//	   //maybe it's the value
-//	   JSONString jsonString = root.isString();
-//	   if(jsonString != null && tagName.equals(jsonString.stringValue()))
-//	   {
-//		   return jsonString;
-//	   }
-//
-//	   //if it's an object, maybe it's the 
-//	   JSONObject operator = root.isObject();
-//	   if( operator != null )
-//	   {	
-//		   if( operator.containsKey(tagName) )
-//		   {
-//			   return operator.get(tagName);
-//		   }
-//		   
-//		   Set<String> keys = operator.keySet();
-//
-//		   for (Iterator<String> iterator = keys.iterator(); iterator.hasNext();)
-//		   {
-//			   String key = (String) iterator.next();
-//			   JSONValue child = operator.get(key);
-//			   jsonValueByTagName(child, tagName);
-//		   }
-//	   }
-//	   
-//	   //if nothing is found
-//	   return null;
-//   }
    
    class RulesTreeHandler implements SelectionHandler<TreeItem>
    {

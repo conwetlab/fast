@@ -13,9 +13,7 @@ import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.user.client.ui.FlexTable.FlexCellFormatter;
 
 import fast.common.client.BuildingBlock;
-import fast.common.client.ServiceScreen;
 import fast.servicescreen.client.FastTool;
-import fast.servicescreen.client.ServiceScreenDesignerWep;
 
 /**
  * This Tab should show result steps of code generation.
@@ -32,7 +30,7 @@ public class CodeGenViewer
 		
 		//create templateShowBox
 		templateShowBox = new TextArea();
-		templateShowBox.setSize("18cm", "3cm");
+		templateShowBox.setSize("18cm", "5cm");
 		
 		set_templateShow_Text(generator.getCurrentTemplate());
 	}
@@ -71,7 +69,7 @@ public class CodeGenViewer
 		
 		//create .js ShowBox
 		jsShowBox = new TextArea();
-		jsShowBox.setSize("18cm", "3cm");
+		jsShowBox.setSize("18cm", "5cm");
 		
 		//create generateButton
 		Button generateButton = new Button("generate");

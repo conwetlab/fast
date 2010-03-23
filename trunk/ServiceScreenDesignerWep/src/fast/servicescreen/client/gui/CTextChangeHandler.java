@@ -19,10 +19,8 @@ import com.google.gwt.user.client.ui.SuggestOracle.Suggestion;
 import fast.common.client.FactType;
 import fast.common.client.ServiceDesigner;
 import fujaba.web.runtime.client.CObject;
-import de.uni_kassel.webcoobra.client.ModelRoot;
 import fujaba.web.runtime.client.PropertyChangeEvent;
 import fujaba.web.runtime.client.PropertyChangeListener;
-import fujaba.web.runtime.client.reflect.CClass;
 
 public class CTextChangeHandler implements ChangeHandler, PropertyChangeListener, SelectionHandler<Suggestion>
 {

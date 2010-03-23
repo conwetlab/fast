@@ -1,17 +1,8 @@
 package fast.mediation.client;
 
 import java.util.Iterator;
-import java.util.Set;
 
 import com.google.gwt.core.client.EntryPoint;
-import com.google.gwt.core.client.GWT;
-import com.google.gwt.json.client.JSONArray;
-import com.google.gwt.json.client.JSONObject;
-import com.google.gwt.json.client.JSONParser;
-import com.google.gwt.json.client.JSONString;
-import com.google.gwt.json.client.JSONValue;
-import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.FlowPanel;
@@ -21,7 +12,6 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.TabPanel;
 import com.google.gwt.user.client.ui.TextBox;
-import com.google.gwt.user.client.ui.TreeItem;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.user.client.ui.FlexTable.FlexCellFormatter;
@@ -32,17 +22,14 @@ import de.uni_kassel.webcoobra.client.DataLoadTimer;
 import fast.common.client.ServiceDesigner;
 import fast.common.client.ServiceScreenModel;
 import fast.common.client.TrafoOperator;
+import fast.mediation.client.gui.MediationRuleGUI;
 import fast.servicescreen.client.FastTool;
-import fast.servicescreen.client.RequestService;
-import fast.servicescreen.client.RequestServiceAsync;
 import fast.servicescreen.client.gui.CTextChangeHandler;
 import fast.servicescreen.client.gui.PortGUI;
-import fast.servicescreen.client.gui.RuleGUI;
 import fast.servicescreen.client.gui.codegen_js.CodeGenViewer;
 import fast.servicescreen.client.rpc.SendRequestHandler;
 import fujaba.web.runtime.client.FAction;
 import fujaba.web.runtime.client.FTest;
-import fast.servicescreen.server.RequestServlet;
 import fujaba.web.runtime.client.ICObject;
 
 public class DataTransformationTool extends FastTool implements EntryPoint 
@@ -51,8 +38,6 @@ public class DataTransformationTool extends FastTool implements EntryPoint
 	@Override
 	public void onModuleLoad() 
 	{
-		RootPanel root = RootPanel.get();
-
 		FTest.init();
 		FTest.assertTrue(true, "entry point has been reached");
 
@@ -111,7 +96,7 @@ public class DataTransformationTool extends FastTool implements EntryPoint
 	   
 	class BuildAction extends FAction
 	{
-		@SuppressWarnings("deprecation")
+		@SuppressWarnings("unchecked")
 		@Override
 		public void doAction()
 		{
@@ -159,7 +144,7 @@ public class DataTransformationTool extends FastTool implements EntryPoint
 	// GUI elements
 	private TextBox nameTextBox;
 	private PortGUI portGUI;
-	public RuleGUI ruleGUI;
+	public MediationRuleGUI ruleGUI;
 	      
 
 	public void buildGUI()
@@ -209,8 +194,6 @@ public class DataTransformationTool extends FastTool implements EntryPoint
 		generalInfoFormatter.setHorizontalAlignment(0, 1, HasHorizontalAlignment.ALIGN_LEFT);
 		generalInfoFormatter.setColSpan(0, 0, 2);
 		
-		
-	
 		int rowCount = generalInformationTable.getRowCount();
 
 		// add label and nameTextBox
@@ -237,7 +220,6 @@ public class DataTransformationTool extends FastTool implements EntryPoint
 		tabPanel.add(generalInformationTable, "General");
 		
 
-
 		// transformation tab
 		FlexTable transformationTable = new FlexTable();
 		FlexCellFormatter transformationTableCellFormatter = transformationTable.getFlexCellFormatter();
@@ -251,12 +233,8 @@ public class DataTransformationTool extends FastTool implements EntryPoint
 		int numRows = transformationTable.getRowCount();
 		
 		// Add rule GUI
-		ruleGUI = new RuleGUI(trafoOperator, requestHandler);
+		ruleGUI = new MediationRuleGUI(trafoOperator, requestHandler);
 		transformationTable.setWidget(numRows, 1, ruleGUI.createJsonTranslationTable());
-		getJson();
-		TreeItem rootJsonItem = ruleGUI.jsonTree.addItem("JSON");
-		rootJsonItem.setState(true);
-		buildJsonTree(rootJsonItem, jsonValue);
 		
 		transformationTable.ensureDebugId("cwFlexTable");
 	     
@@ -323,7 +301,7 @@ public class DataTransformationTool extends FastTool implements EntryPoint
 		@Override
 		public void doAction()
 		{
-			System.out.println("trafo op list hast changed");
+			System.out.println("trafo op list has changed");
 			refreshOverviewPanel();
 		}
 	}
@@ -354,84 +332,5 @@ public class DataTransformationTool extends FastTool implements EntryPoint
 //			TrafoOperator myOp = (TrafoOperator) propertyEvent.getSource();
 //			myLabel.setText(myOp.getName());
 		}		
-	}
-	
-	//testing json responses
-	private RequestServiceAsync reqService;
-	
-	private void getJson() {
-		String alonso = "{\"MRData\":{\"xmlns\": \"http:////ergast.com//mrd//1.1\",\"series\": \"f1\",\"url\": \"\"," +
-                        "\"limit\": \"30\",\"offset\": \"0\",\"total\": \"2\",\"SeasonTable\": {\"driverId\": \"alonso\"," + 
-                        "\"driverStandings\": \"1\",\"Seasons\": [{\"season\": \"2005\", \"url\": \"http:////en.wikipedia.org//wiki//2005_Formula_One_season\"}," +
-                        "{\"season\": \"2006\", \"url\": \"http:////en.wikipedia.org//wiki//2006_Formula_One_season\"}]}}}";
-		
-		jsonValue = JSONParser.parse(alonso);
-		
-//		String requestUrl = "http:////ergast.com//api//f1//drivers//alonso//driverStandings//1//seasons.json";
-//		reqService = GWT.create(RequestService.class);
-//		
-//		reqService.sendHttpRequest_GET(requestUrl, new AsyncCallback<String>() {
-//			@Override
-//			public void onSuccess(String result) {
-//				jsonValue = JSONParser.parse(result);
-//				
-//				TreeItem rootJsonItem = ruleGUI.jsonTree.addItem("JSON");
-//				rootJsonItem.setState(true);
-//				buildJsonTree(rootJsonItem, jsonValue);
-//			}
-//
-//			@Override
-//			public void onFailure(Throwable caught) {
-//				Window.alert("Fehler: " + caught.getLocalizedMessage());
-//			}
-//		});
-	}
-
-	//TODO just for testing
-	private JSONValue jsonValue;
-	
-	/**
-	 * recursive method to generate a tree that represents a json value
-	 * */
-	private void buildJsonTree(TreeItem parentItem, JSONValue node)
-	{	
-		//if it's an object, build the tree for all children
-		JSONArray jsonArray = node.isArray();
-		if(jsonArray != null)
-		{	
-			for (int i = 0; i < jsonArray.size(); i++)
-			{
-				//add a section item for every child
-				TreeItem treeSection = parentItem.addItem("ArrayItem");
-				treeSection.setState(true);
-				
-				buildJsonTree(treeSection, jsonArray.get(i));
-			}
-		}
-		
-		//if it's a string add the leaf (maybe for isNumber() too)
-		JSONString jsonString = node.isString();
-		if(jsonString != null)
-		{
-			parentItem.addItem(jsonString.stringValue());
-		}
-		
-		//if it's an object, build the tree for all children
-		JSONObject operator = node.isObject();
-		if( operator != null )
-		{	
-			Set<String> keys = operator.keySet();
-
-			for (Iterator<String> iterator = keys.iterator(); iterator.hasNext();)
-			{
-				String key = (String) iterator.next();
-
-				TreeItem treeSection = parentItem.addItem(key);
-				treeSection.setState(true);
-
-				JSONValue child = operator.get(key);
-				buildJsonTree(treeSection, child);
-			}
-		}
 	}
 }

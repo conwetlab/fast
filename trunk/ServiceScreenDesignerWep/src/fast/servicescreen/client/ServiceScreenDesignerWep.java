@@ -146,7 +146,7 @@ private TabPanel tabPanel;
    
    class BuildAction extends FAction
    {
-      @SuppressWarnings("deprecation")
+      @SuppressWarnings({ "deprecation", "unchecked" })
       @Override
       public void doAction()
       {
@@ -255,7 +255,6 @@ private TabPanel tabPanel;
       // build overview panel
       ServiceWrapperOverviewTab serviceWrapperOverviewTab = new ServiceWrapperOverviewTab();
       serviceWrapperOverviewTab.start(this, tabPanel);
-      
       
       rebuildOtherTabs();
       
