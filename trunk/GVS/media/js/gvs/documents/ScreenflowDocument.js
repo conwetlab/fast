@@ -607,6 +607,9 @@ var ScreenflowDocument = Class.create(PaletteDocument,
         this._createConditions(this._canvasCache.getPostconditions(), this._areas.get('post'));
         this._setDirty(false);
         this._refreshReachability();
+        if (this._description.cloned) {
+            this._saveAs(true);
+        }
     }
 });
 

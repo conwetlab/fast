@@ -6,7 +6,7 @@ var SaveAsDialog = Class.create(ConfirmDialog /** @lends SaveAsDialog.prototype 
      * @extends ConfirmDialog
      */ 
     initialize: function($super, /** String */ name, /** String */ version,
-                        /** Function */ onOkHandler) {
+                        /** Function */ onOkHandler, /** Boolean(optional) */ _cloned) {
         /**
          * Current name/version availability
          * @private
@@ -35,7 +35,14 @@ var SaveAsDialog = Class.create(ConfirmDialog /** @lends SaveAsDialog.prototype 
          */
         this._onOkHandler = onOkHandler;
 
-        $super("Save As...", ConfirmDialog.OK_CANCEL, {'createMessageZone': true});
+        var buttons = ConfirmDialog.OK_CANCEL;
+        var options = {'createMessageZone': true};
+        if(_cloned) {
+            buttons = ConfirmDialog.OK;
+            options.closable = false;
+        }
+
+        $super("Choose new name/version", buttons, options);
     },
     
     

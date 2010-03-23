@@ -66,6 +66,10 @@ var ManageScreenflowsDialog = Class.create(GalleryDialog /** @lends ManageScreen
                 'handler': this._openScreenflow.bind(this),
                 'disableIfNotValid': true
             }, {
+                'value': 'Clone screenflow',
+                'handler': this._cloneScreenflow.bind(this),
+                'disableIfNotValid': true
+            }, {
                 'value': 'Share/Unshare screenflow',
                 'handler': this._shareScreenflow.bind(this)
             }, {
@@ -87,6 +91,8 @@ var ManageScreenflowsDialog = Class.create(GalleryDialog /** @lends ManageScreen
     _createScreenflowList: function() {
         this._emptyRows();
         this._screenflows.each(function(screenflow) {
+            var valid = screenflow.definition ? true : false;
+            valid = valid && (screenflow.uri) ? false : true;
             this._addRow({
                             'key': screenflow.id,
                             'values': [
@@ -102,7 +108,7 @@ var ManageScreenflowsDialog = Class.create(GalleryDialog /** @lends ManageScreen
                                        '<span class=' + (screenflow.uri ? '"shared"': '"unshared"') +
                                          '>&nbsp;</span>'
                                       ],
-                            'isValid': screenflow.definition ? true : false
+                            'isValid': valid
                         });
         }.bind(this));
     },
@@ -133,6 +139,16 @@ var ManageScreenflowsDialog = Class.create(GalleryDialog /** @lends ManageScreen
     _openScreenflow: function(/** String */ id) {
         var documentController = GVS.getDocumentController();
         documentController.loadScreenflow(id);
+        this._dialog.hide();
+    },
+
+    /**
+     * Clone a screen by its id
+     * @private
+     */
+    _cloneScreenflow: function(/** String */ id) {
+        var documentController = GVS.getDocumentController();
+        documentController.cloneScreenflow(id);
         this._dialog.hide();
     },
 

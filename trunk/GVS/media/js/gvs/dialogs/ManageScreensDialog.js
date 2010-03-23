@@ -69,12 +69,16 @@ var ManageScreensDialog = Class.create(GalleryDialog /** @lends ManageScreensDia
                 'handler': this._openScreen.bind(this),
                 'disableIfNotValid': true
             }, {
+                'value': 'Clone screen',
+                'handler': this._cloneScreen.bind(this)
+            }, {
                 'value': 'Share/Unshare screen',
                 'handler': this._shareScreen.bind(this)
             }, {
                 'value': 'Delete screen',
                 'handler': this._deleteScreen.bind(this)
-            }/*, {
+            }
+            /*, {
                 'value': 'Add external screen',
                 'handler': this._addScreen.bind(this)
             }*/]);
@@ -90,6 +94,8 @@ var ManageScreensDialog = Class.create(GalleryDialog /** @lends ManageScreensDia
     _createScreenList: function() {
         this._emptyRows();
         this._screens.each(function(screen) {
+            var valid =  screen.definition ? true : false;
+            valid = valid && (screen.uri) ? false : true;
             this._addRow({
                             'key': screen.id,
                             'values': [
@@ -106,7 +112,7 @@ var ManageScreensDialog = Class.create(GalleryDialog /** @lends ManageScreensDia
                                 '<span class=' + (screen.uri ? '"shared"': '"unshared"') +
                                     '>&nbsp;</span>'
                              ],
-                             'isValid': screen.definition ? true : false
+                             'isValid': valid
                         });
         }.bind(this));
     },
@@ -137,6 +143,12 @@ var ManageScreensDialog = Class.create(GalleryDialog /** @lends ManageScreensDia
     _openScreen: function(/** String */ id) {
         var documentController = GVS.getDocumentController();
         documentController.loadScreen(id);
+        this._dialog.hide();
+    },
+
+    _cloneScreen: function(/** String */ id) {
+        var documentController = GVS.getDocumentController();
+        documentController.cloneScreen(id);
         this._dialog.hide();
     },
 

@@ -89,8 +89,21 @@ var DocumentController = Class.create(
     loadScreenflow: function(/** String */ id) {
 
         var uri = URIs.buildingblock + id;
-        PersistenceEngine.sendGet(uri, this, this._onScreenflowLoadSuccess, this._onLoadError);
+        PersistenceEngine.sendGet(uri, {'mine':this}, this._onScreenflowLoadSuccess,
+                                        this._onLoadError);
     },
+
+    /**
+     * Opens an existing screenflow by its id
+     */
+    cloneScreenflow: function(/** String */ id) {
+
+        var uri = URIs.buildingblock + id;
+        PersistenceEngine.sendGet(uri, {'mine':this, 'cloned': true},
+                                        this._onScreenflowLoadSuccess,
+                                        this._onLoadError);
+    },
+
 
     /**
      * Creates a new screen document
@@ -111,7 +124,18 @@ var DocumentController = Class.create(
     loadScreen: function(/** String */ id) {
         
         var uri = URIs.buildingblock + id;
-        PersistenceEngine.sendGet(uri, this, this._onScreenLoadSuccess, this._onLoadError);
+        PersistenceEngine.sendGet(uri, {'mine':this}, this._onScreenLoadSuccess,
+                                    this._onLoadError);
+    },
+
+    /**
+     * Clones an existing screen
+     */
+    cloneScreen: function(/** String */ id) {
+        var uri = URIs.buildingblock + id;
+        PersistenceEngine.sendGet(uri, {'mine':this, 'cloned': true},
+                                    this._onScreenLoadSuccess,
+                                    this._onLoadError);
     },
 
     /**
@@ -264,8 +288,10 @@ var DocumentController = Class.create(
      */
     _onScreenflowLoadSuccess: function (/** XMLHttpRequest */ transport) {
         var screenflowData = JSON.parse(transport.responseText);
+        screenflowData.cloned = this.cloned;
+        screenflowData.uri = null;
         var screenflow = new ScreenflowDocument(screenflowData);
-        this.addDocument(screenflow);
+        this.mine.addDocument(screenflow);
         screenflow.loadInstances();
     },
 
@@ -275,8 +301,10 @@ var DocumentController = Class.create(
      */
     _onScreenLoadSuccess: function (/** XMLHttpRequest */ transport) {
         var screenData = JSON.parse(transport.responseText);
+        screenData.cloned = this.cloned;
+        screenData.uri = null;
         var screen = new ScreenDocument(screenData);
-        this.addDocument(screen);
+        this.mine.addDocument(screen);
         screen.loadInstances();
     },
 

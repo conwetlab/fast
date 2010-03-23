@@ -1011,6 +1011,9 @@ var ScreenDocument = Class.create(PaletteDocument,
             this._createTriggers(this._canvasCache.getTriggers());
             this._setDirty(false);
             this._refreshReachability();
+            if (this._description.cloned) {
+                this._saveAs(true);
+            }
         }
     }
 });

@@ -382,6 +382,11 @@ var PaletteDocument = Class.create(AbstractDocument, /** @lends PaletteDocument.
     _setDirty: function(/** Boolean */ dirty) {
         this._isDirty = dirty;
         this._toolbarElements.get('save').setEnabled(dirty);
+        if (dirty) {
+            this._setTitle(this._description.name + '*');
+        } else {
+            this._setTitle(this._description.name);
+        }
     },
 
     
@@ -607,11 +612,12 @@ var PaletteDocument = Class.create(AbstractDocument, /** @lends PaletteDocument.
      * Create a copy of the document with a new name/version
      * @private
      */
-    _saveAs: function() {
+    _saveAs: function(/** Boolean */ cloned) {
         if (this._description.getId()) {
             var saveAsDialog = new SaveAsDialog(this._description.name,
                                                 this._description.version,
-                                                this._onSaveAsSuccess.bind(this));
+                                                this._onSaveAsSuccess.bind(this),
+                                                cloned);
             saveAsDialog.show();
         } else {
             this._save();

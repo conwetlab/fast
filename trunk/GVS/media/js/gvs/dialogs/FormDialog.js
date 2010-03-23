@@ -24,12 +24,17 @@ var FormDialog = Class.create( /** @lends FormDialog.prototype */ {
         this._options = Object.extend ({
             'buttonPosition': FormDialog.POSITION_BOTTOM,
             'createMessageZone': false,
-            'minMessageLines': 1
+            'minMessageLines': 1,
+            'closable': true
         }, _options);
 
 
         var position = this._options.buttonPosition;
         this._dialog = new dijit.Dialog(properties);
+
+        if (!this._options.closable) {
+            this._dialog.closeButtonNode.style.display = 'none';
+        }
         
         this._headerNode = new Element ('div',{
             'class': 'dialogHeader'
