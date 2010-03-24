@@ -5,6 +5,7 @@
 package fast.common.client;
 
 import fast.common.client.FactType;
+import fast.common.client.FastObject;
 import fujaba.web.runtime.client.reflect.*;
 import fujaba.web.runtime.client.*;
 import java.util.*;
@@ -14,7 +15,7 @@ import com.google.gwt.event.dom.client.ClickEvent;
 
 
 
-public class FactExample implements PropertyChangeClient
+public class FactExample extends FastObject
 {
 
    public void removeAllFrom(String className) 
@@ -65,39 +66,12 @@ public class FactExample implements PropertyChangeClient
       }
       return null;
    }
-	protected final PropertyChangeSupport listeners = new PropertyChangeSupport(this);
-
-	public void addPropertyChangeListener(PropertyChangeListener listener)
-	{
-		getPropertyChangeSupport().addPropertyChangeListener(listener);
-	}
-
-	public void removePropertyChangeListener(PropertyChangeListener listener)
-	{
-		getPropertyChangeSupport().removePropertyChangeListener(listener);
-	}
-
-	public void addPropertyChangeListener(String property, PropertyChangeListener listener)
-	{
-		getPropertyChangeSupport().addPropertyChangeListener(property, listener);
-	}
-
-	public void removePropertyChangeListener(String property, PropertyChangeListener listener)
-	{
-		getPropertyChangeSupport().removePropertyChangeListener(property, listener);
-	}
-
-	public PropertyChangeSupport getPropertyChangeSupport()
-	{
-		return listeners;
-	}
-
 
    /**
     * <pre>
     *           0..*     factExamples     0..1
     * FactExample ------------------------- FactType
-    *           factExamples2               factType
+    *           factExamples               factType
     * </pre>
     */
    public static final String PROPERTY_FACT_TYPE = "factType";
@@ -116,13 +90,13 @@ public class FactExample implements PropertyChangeClient
          if (this.factType != null)
          {
             this.factType = null;
-            oldValue.removeFromFactExamples2 (this);
+            oldValue.removeFromFactExamples (this);
          }
          this.factType = value;
 
          if (value != null)
          {
-            value.addToFactExamples2 (this);
+            value.addToFactExamples (this);
          }
             getPropertyChangeSupport().firePropertyChange(PROPERTY_FACT_TYPE, oldValue, value);
          changed = true;
@@ -170,6 +144,7 @@ public class FactExample implements PropertyChangeClient
    public void removeYou()
    {
       this.setFactType (null);
+      super.removeYou ();
    }
 }
 

@@ -242,6 +242,22 @@ public class ServiceScreenModel extends CObject implements PropertyChangeClient,
 
 		//add methods
 
+		/*********************************
+		Generate CClass fast.common.client.FactExample
+		*********************************/
+		cclass = new CClass ();
+		cclass.setName("fast.common.client.FactExample");
+		ModelRoot.get().addToCClasses(cclass);
+			
+		
+		// add attributes to cclass
+		cattr = new CAttribute();
+		cattr.setName ("json");
+		cattr.setType("String");
+		cclass.addToCAttributes (cattr); 
+
+		//add methods
+
 
 
 
@@ -819,50 +835,6 @@ public class ServiceScreenModel extends CObject implements PropertyChangeClient,
 			}
 		}
 		
-		crole = new CRole();
-		crole.setName("factType");
-		ccardinality = new CCardinality();
-		upperBound = 1;
-		if (upperBound == 0) {
-			 ccardinality.setCardString("0");
-		} else if (upperBound == 1) {
-			ccardinality.setCardString("1");
-		} else {
-			ccardinality.setCardString("n");
-		}
-		crole.setCCardinality(ccardinality);
-		
-		cassoc = new CAssoc();
-	    cassoc.setName("factExamples");
-	    cassoc.addToCRole(crole);
-		crole.setCAssoc(cassoc);
-		tClass = ModelRoot.get().getCClass("fast.common.client.FactType");
-		tClass.addToCRoles(crole);
-		
-		rightRole = new CRole();
-		rightRole.setName("factExamples2");
-		ccardinality = new CCardinality();
-		upperBound = 2147483647;
-		if (upperBound == 0) {
-			 ccardinality.setCardString("0");
-		} else if (upperBound == 1) {
-			ccardinality.setCardString("1");
-		} else {
-			ccardinality.setCardString("n");
-		}
-		rightRole.setCCardinality(ccardinality);
-		cassoc.addToCRole(rightRole);
-		
-		// Add role to CClass
-		iter = ModelRoot.get().iteratorOfCClasses();
-		while(iter.hasNext()) {
-			CClass theCClass = (CClass) iter.next();
-			
-			if ( theCClass.getName().equals("fast.common.client.FactExample")) {
-				theCClass.addToCRoles(rightRole);
-				break;
-			}
-		}
 		
 	 
 	}
@@ -919,6 +891,11 @@ public class ServiceScreenModel extends CObject implements PropertyChangeClient,
       else if ("fast.common.client.TemplateParameter".equals(classname))
       {
          return new fast.common.client.TemplateParameter();
+      }
+ 
+      else if ("fast.common.client.FactExample".equals(classname))
+      {
+         return new fast.common.client.FactExample();
       }
   
       else if ("fast.common.client.ServiceScreenModel".equals(classname))

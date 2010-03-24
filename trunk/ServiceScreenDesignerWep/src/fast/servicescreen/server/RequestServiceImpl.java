@@ -27,7 +27,7 @@ public class RequestServiceImpl extends RemoteServiceServlet implements RequestS
 	
 	//TODO: sry guys, but writing a file to relative (project) path does not work for webApps
 	//until jet, so everybody has to enter the projects path here.. 
-	private String path = "D:\\Hiwi\\Workspace_ServiceScreenDesigner\\ServiceScreenDesignerWep";
+	private String path = ".";
 	
 	@Override
 	public String sendHttpRequest_GET(String url)
@@ -61,7 +61,8 @@ public class RequestServiceImpl extends RemoteServiceServlet implements RequestS
 	{
 		try
 		{
-			FileWriter writer = new FileWriter(path + "\\war\\servicescreendesignerwep\\embeddedOperator.html", false);
+			String fileName = path + "/servicescreendesignerwep/embeddedOperator.html";
+			FileWriter writer = new FileWriter(fileName, false);
 			
 			writer.write(fileContent);
 			

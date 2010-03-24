@@ -36,9 +36,6 @@ public class FactType extends FastObject
       else      if ("fast.common.client.FactExample".equals(className)){				
          removeAllFromFactExamples();
       }
-      else      if ("fast.common.client.FactExample".equals(className)){				
-         removeAllFromFactExamples2();
-      }
    }
    
    /**
@@ -106,14 +103,6 @@ public class FactType extends FastObject
  else// factExamples
       if ("factExamples".equals(fieldName)){				
          addToFactExamples ((fast.common.client.FactExample) value);
-      }//( toMany true || toMany2 false || qualified $qualified || 
-// internalQualified false ||  
-// role.Qualifier $role.Qualifier || ordered false || sorted false)
- //2[! (  ( toMany || !toMany2) && !( toMany && toMany2)  && role.Qualifier  ) ]
-//2.2[ !( qualified && !internalQualified ) ]
- else// factExamples2
-      if ("factExamples2".equals(fieldName)){				
-         addToFactExamples2 ((fast.common.client.FactExample) value);
       }   }  
 
    public void add (String fieldName, Object value)
@@ -154,10 +143,6 @@ public class FactType extends FastObject
       else      if ("factExamples".equals(fieldName))
       {				
          return iteratorOfFactExamples();
-      }
-      else      if ("factExamples2".equals(fieldName))
-      {				
-         return iteratorOfFactExamples2();
       }
       return null;
    }
@@ -258,104 +243,6 @@ public class FactType extends FastObject
       return ((this.factAttributes == null)
               ? 0
               : this.factAttributes.size ());
-   }
-
-   /**
-    * <pre>
-    *           0..1     factExamples     0..*
-    * FactType ------------------------- FactExample
-    *           factType               factExamples2
-    * </pre>
-    */
-   public static final String PROPERTY_FACT_EXAMPLES2 = "factExamples2";
-
-   private FPropHashSet<FactExample> factExamples2;
-
-   public FPropHashSet<FactExample> getFactExamples2 () {
-      return factExamples2;
-   }
-
-   public boolean addToFactExamples2 (FactExample value) {
-      boolean changed = false;
-
-      if (value != null)
-      {
-         if (this.factExamples2 == null)
-         {
-            this.factExamples2 = new FPropHashSet<FactExample> (this, PROPERTY_FACT_EXAMPLES2);
-
-         }
-      
-         changed = this.factExamples2.add (value);
-         if (changed)
-         {
-            value.setFactType (this);
-         }
-      
-      }
-      return changed;
-   }
-
-   public FactType withFactExamples2 (FactExample value ) {
-         addToFactExamples2 ( value);
-      return this;
-   }
-
-   public FactType withoutFactExamples2 (FactExample value) {
-      removeFromFactExamples2 (value);
-      return this;
-   }
-
-   public boolean removeFromFactExamples2 (FactExample value) {
-      boolean changed = false;
-
-      if ((this.factExamples2 != null) && (value != null))
-      {
-      
-         changed = this.factExamples2.remove (value);
-         if (changed)
-         {
-            value.setFactType (null);
-         }
-      
-      }
-      return changed;
-   }
-
-   public void removeAllFromFactExamples2 () {
-   
-      FactExample tmpValue;
-
-      if (factExamples2 != null) {
-         java.util.Vector tempSet = new java.util.Vector(factExamples2);
-         Iterator iter = tempSet.iterator ();
-      
-         while (iter.hasNext ())
-         {
-            tmpValue = (FactExample) iter.next ();
-            this.removeFromFactExamples2 (tmpValue);
-         }
-      } 
-   
-   }
-
-   public boolean hasInFactExamples2 (FactExample value) {
-      return ((this.factExamples2 != null) &&
-              (value != null) &&
-              this.factExamples2.contains (value));
-   }
-
-   public Iterator iteratorOfFactExamples2 () {
-      return ((this.factExamples2 == null)
-              ? FEmptyIterator.get ()
-              : this.factExamples2.iterator ());
-
-   }
-
-   public int sizeOfFactExamples2 () {
-      return ((this.factExamples2 == null)
-              ? 0
-              : this.factExamples2.size ());
    }
 
    /**
@@ -779,7 +666,6 @@ public class FactType extends FastObject
    public void removeYou()
    {
       this.removeAllFromFactAttributes ();
-      this.removeAllFromFactExamples2 ();
       this.removeAllFromFactExamples ();
       this.removeAllFromIsa ();
       this.setServiceDesigner (null);
