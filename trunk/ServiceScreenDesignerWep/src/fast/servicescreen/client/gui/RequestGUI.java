@@ -8,6 +8,7 @@ import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.user.client.ui.FlexTable.FlexCellFormatter;
 
+import fast.common.client.ServiceScreen;
 import fast.servicescreen.client.ServiceScreenDesignerWep;
 import fast.servicescreen.client.rpc.SendRequestHandler;
 import fujaba.web.runtime.client.FAction;
@@ -41,7 +42,8 @@ public class RequestGUI
 		String textSize = "20cm";
 		designer.templateBox = CTextChangeHandler.createWidthTextBox(designer.serviceScreen, textSize, "requestTemplate");
 		templateBoxHandler = new TemplateBoxHandler();
-		designer.templateBox.addChangeHandler(templateBoxHandler);
+		designer.serviceScreen.addPropertyChangeListener(ServiceScreen.PROPERTY_REQUEST_TEMPLATE, templateBoxHandler);
+		// designer.templateBox.addChangeHandler(templateBoxHandler);
 		requestTable.setWidget(numRows, 1, designer.templateBox);
 		numRows++;
 

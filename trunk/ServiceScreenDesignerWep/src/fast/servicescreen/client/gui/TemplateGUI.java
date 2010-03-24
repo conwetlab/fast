@@ -150,17 +150,7 @@ public class TemplateGUI
 		{
 			paramChangeHandler = new ParamChangeHandler();
 		}
-		nameBox.addChangeHandler(paramChangeHandler);
-		valueBox.addChangeHandler(paramChangeHandler);
-		//		   param.addPropertyChangeListener(new PropertyChangeListener()
-		//	       {
-		//				@Override
-		//				public void propertyChanged(PropertyChangeEvent evt) {
-		//					// if text changes build new template url
-		//					String result = buildRequestUrl();
-		//				    designer.serviceScreen.setRequestTemplate(result);
-		//				}
-		//	       });
+		param.addPropertyChangeListener(paramChangeHandler);
 
 		// add remove button
 		Button removeParameterButton = new Button("Remove Parameter");
