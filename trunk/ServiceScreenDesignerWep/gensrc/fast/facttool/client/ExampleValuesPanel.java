@@ -4,10 +4,10 @@
 
 package fast.facttool.client;
 
-import fast.common.client.FactExample;
 import com.google.gwt.user.client.ui.TreeItem;
+import fast.common.client.FactExample;
 import com.google.gwt.user.client.ui.HorizontalPanel;
-import com.google.gwt.user.client.ui.TextBox;
+import fast.facttool.client.AttributeTextArea;
 import com.google.gwt.user.client.ui.Button;
 import fujaba.web.runtime.client.reflect.*;
 import fujaba.web.runtime.client.*;
@@ -52,9 +52,9 @@ public class ExampleValuesPanel
 
    // create attributes for all objects in all states of this statechart
    private HorizontalPanel factExamplePanel;
-   private TextBox exampleValTextBox;
+   private AttributeTextArea exampleValTextBox;
    private Button exampleValDeleteButton;
-   private TreeItem rootItem;
+   private TreeItem exampleItem;
 
    public void start()
    {
@@ -78,21 +78,45 @@ public class ExampleValuesPanel
       if(build != null)
          return;
 
+      addToTree = new AddToTree ();
       build = new Build ();
       exampleValDeleteButtonHandler = new ExampleValDeleteButtonHandler ();
-      exampleValTextBoxChangeHandler = new ExampleValTextBoxChangeHandler ();
-      factExampleChangeListener = new FactExampleChangeListener ();
+      // NONE
+
+      //build.addToFollowers("auto", addToTree);
       // NONE
 
       //build.addToFollowers("exampleValDeleteButton.click", exampleValDeleteButtonHandler);
-      // NONE
-
-      //build.addToFollowers("exampleValTextBox", exampleValTextBoxChangeHandler);
-      // NONE
-
-      //build.addToFollowers("factExample.change", factExampleChangeListener);
    }
 
+
+   private AddToTree addToTree;
+   public class AddToTree extends FAction
+   {
+       public void doAction()
+       {
+   		 boolean fujaba__Success = false;
+
+         // story pattern storypatternwiththis
+         try 
+         {
+            fujaba__Success = false; 
+
+            // create object exampleItem
+            exampleItem = parent.addItem(factExamplePanel);
+
+            fujaba__Success = true;
+         }
+         catch ( JavaSDMException fujaba__InternalException )
+         {
+            fujaba__Success = false;
+         }
+
+
+
+       }
+
+   }
 
    private Build build;
    public class Build extends FAction
@@ -110,28 +134,23 @@ public class ExampleValuesPanel
             JavaSDM.ensure ( factExample != null );
             // check object parent is really bound
             JavaSDM.ensure ( parent != null );
-            // create object rootItem
-            rootItem = parent.addItem(factExamplePanel);
-
             // create object factExamplePanel
             factExamplePanel = new HorizontalPanel ( );
 
             // create object exampleValTextBox
-            exampleValTextBox = new TextBox ( );
+            exampleValTextBox = new AttributeTextArea ( );
 
             // create object exampleValDeleteButton
             exampleValDeleteButton = new Button ( );
 
             // assign attribute exampleValTextBox
-            exampleValTextBox.setText (factExample.getJson());
+            exampleValTextBox.setAttrName ("json");
             // assign attribute exampleValDeleteButton
             exampleValDeleteButton.setText ("delete");
-            // create link widget from factExamplePanel to exampleValTextBox
-            factExamplePanel.add (exampleValTextBox);
-
-            // create link widget from factExamplePanel to exampleValDeleteButton
-            factExamplePanel.add (exampleValDeleteButton);
-
+            // collabStat call
+            exampleValTextBox.start(factExamplePanel, factExample);
+            // collabStat call
+            factExamplePanel.add(exampleValDeleteButton);
             fujaba__Success = true;
          }
          catch ( JavaSDMException fujaba__InternalException )
@@ -141,9 +160,22 @@ public class ExampleValuesPanel
 
 
          exampleValDeleteButton.addClickHandler(exampleValDeleteButtonHandler);
-         factExample.addPropertyChangeListener(factExampleChangeListener);
 
+   		 if( autoGuardBuild1 == null)
+   		 {
+   			 autoGuardBuild1 = new AutoGuardBuild1();
+   			 autoGuardBuild1.setSource(build);
+   			 autoGuardBuild1.setTarget(addToTree);
+   			 build.addToAutoTransitions(autoGuardBuild1.toString(), autoGuardBuild1);
+   		 }
+
+   		 doAuto();
        }
+
+      private AutoGuardBuild1 autoGuardBuild1;
+      private class AutoGuardBuild1 extends FGuard
+      {
+      }
 
    }
 
@@ -159,14 +191,14 @@ public class ExampleValuesPanel
          {
             fujaba__Success = false; 
 
+            // check object exampleItem is really bound
+            JavaSDM.ensure ( exampleItem != null );
             // check object factExample is really bound
             JavaSDM.ensure ( factExample != null );
-            // check object rootItem is really bound
-            JavaSDM.ensure ( rootItem != null );
             // collabStat call
             factExample.removeYou();
             // collabStat call
-            rootItem.remove();
+            exampleItem.remove();
             fujaba__Success = true;
          }
          catch ( JavaSDMException fujaba__InternalException )
@@ -179,67 +211,6 @@ public class ExampleValuesPanel
        }
 
    }
-
-   private ExampleValTextBoxChangeHandler exampleValTextBoxChangeHandler;
-   public class ExampleValTextBoxChangeHandler extends FAction
-   {
-       public void doAction()
-       {
-   		 boolean fujaba__Success = false;
-
-         // story pattern storypatternwiththis
-         try 
-         {
-            fujaba__Success = false; 
-
-            // check object factExample is really bound
-            JavaSDM.ensure ( factExample != null );
-            // assign attribute factExample
-            factExample.setJson (exampleValTextBox.getText());
-            fujaba__Success = true;
-         }
-         catch ( JavaSDMException fujaba__InternalException )
-         {
-            fujaba__Success = false;
-         }
-
-
-
-       }
-
-   }
-
-   private FactExampleChangeListener factExampleChangeListener;
-   public class FactExampleChangeListener extends FAction
-   {
-       public void doAction()
-       {
-   		 boolean fujaba__Success = false;
-
-         // story pattern storypatternwiththis
-         try 
-         {
-            fujaba__Success = false; 
-
-            // check object exampleValTextBox is really bound
-            JavaSDM.ensure ( exampleValTextBox != null );
-            // assign attribute exampleValTextBox
-            exampleValTextBox.setText (factExample.getJson());
-            fujaba__Success = true;
-         }
-         catch ( JavaSDMException fujaba__InternalException )
-         {
-            fujaba__Success = false;
-         }
-
-
-
-       }
-
-   }
-
-   // my style test for method.vm
-
 
    // my style test for method.vm
 

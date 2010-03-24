@@ -5,8 +5,10 @@
 package fast.facttool.client;
 
 import fast.common.client.FactType;
-import fast.facttool.client.FactAttrPanel;
+import fast.facttool.client.ExampleValuesPanel;
 import java.util.*;
+import fast.common.client.FactExample;
+import fast.facttool.client.FactAttrPanel;
 import fast.common.client.FactAttribute;
 import com.google.gwt.user.client.ui.TreeItem;
 import com.google.gwt.user.client.ui.HorizontalPanel;
@@ -15,8 +17,6 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Button;
 import fast.facttool.client.DeleteFactTypeButton;
 import com.google.gwt.user.client.ui.TextBox;
-import fast.common.client.FactExample;
-import fast.facttool.client.ExampleValuesPanel;
 import fujaba.web.runtime.client.reflect.*;
 import fujaba.web.runtime.client.*;
 import java.util.*;
@@ -64,12 +64,14 @@ public class FactTypePanel
    private Label attrTreeRootLabel;
    private FactAttrPanel attrPanel;
    private TreeItem exampleValRootItem;
+   private Iterator fujaba__IterFactTypeToExample;
    private DeleteFactTypeButton deleteButton;
    private AttributeTextBox mnemonicBox;
    private HorizontalPanel captionPanel;
    private Label exampleValTreeRootLabel;
    private TreeItem treeItem;
    private FactAttribute factAttr;
+   private FactExample example;
    private TreeItem attrRootItem;
    private HorizontalPanel panel;
    private FactAttribute newAttr;
@@ -82,6 +84,7 @@ public class FactTypePanel
    private Button attrAddButton;
    private TextBox typeCaption;
    private ExampleValuesPanel exampleValPanel;
+   private ExampleValuesPanel examplePanel;
    private TreeItem captionItem;
 
    public void start()
@@ -106,6 +109,7 @@ public class FactTypePanel
       if(build != null)
          return;
 
+      addExampleValues = new AddExampleValues ();
       addKids = new AddKids ();
       attrAddButtonHandler = new AttrAddButtonHandler ();
       build = new Build ();
@@ -122,9 +126,65 @@ public class FactTypePanel
       //addKids.addToFollowers("auto", expandTree);
       // NONE
 
+      //expandTree.addToFollowers("auto", addExampleValues);
+      // NONE
+
       //build.addToFollowers("exampleValAddButton.click", exampleValAddButtonHandler);
    }
 
+
+   private AddExampleValues addExampleValues;
+   public class AddExampleValues extends FAction
+   {
+       public void doAction()
+       {
+   		 boolean fujaba__Success = false;
+
+         // story pattern storypatternwiththis
+         try 
+         {
+            fujaba__Success = false; 
+
+            // check object factType is really bound
+            JavaSDM.ensure ( factType != null );
+            // iterate to-many link factExamples from factType to example
+            fujaba__Success = false;
+            fujaba__IterFactTypeToExample = factType.iteratorOfFactExamples ();
+
+            while ( fujaba__IterFactTypeToExample.hasNext () )
+            {
+               try
+               {
+                  example = (FactExample) fujaba__IterFactTypeToExample.next ();
+
+                  // check object example is really bound
+                  JavaSDM.ensure ( example != null );
+                  // create object examplePanel
+                  examplePanel = new ExampleValuesPanel ( );
+
+                  // collabStat call
+                  examplePanel.start(example, exampleValRootItem);
+
+                  fujaba__Success = true;
+               }
+               catch ( JavaSDMException fujaba__InternalException )
+               {
+                  fujaba__Success = false;
+               }
+            }
+            JavaSDM.ensure (fujaba__Success);
+            fujaba__Success = true;
+         }
+         catch ( JavaSDMException fujaba__InternalException )
+         {
+            fujaba__Success = false;
+         }
+
+
+
+       }
+
+   }
 
    private AddKids addKids;
    public class AddKids extends FAction
@@ -445,9 +505,26 @@ public class FactTypePanel
 
 
 
+   		 if( autoGuardExpandTree1 == null)
+   		 {
+   			 autoGuardExpandTree1 = new AutoGuardExpandTree1();
+   			 autoGuardExpandTree1.setSource(expandTree);
+   			 autoGuardExpandTree1.setTarget(addExampleValues);
+   			 expandTree.addToAutoTransitions(autoGuardExpandTree1.toString(), autoGuardExpandTree1);
+   		 }
+
+   		 doAuto();
        }
 
+      private AutoGuardExpandTree1 autoGuardExpandTree1;
+      private class AutoGuardExpandTree1 extends FGuard
+      {
+      }
+
    }
+
+   // my style test for method.vm
+
 
    // my style test for method.vm
 
