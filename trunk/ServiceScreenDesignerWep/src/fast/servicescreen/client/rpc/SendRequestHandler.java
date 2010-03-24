@@ -79,6 +79,10 @@ public class SendRequestHandler implements ClickHandler
 		   if(param.getName() == "Server:")
 		   {
 			   result += param.getValue();
+			   if ( iteratorOfTemplateParams.hasNext() && ! result.endsWith("?"))
+			   {
+				   result += "?"; 
+			   }
 		   }
 		   else
 		   {
