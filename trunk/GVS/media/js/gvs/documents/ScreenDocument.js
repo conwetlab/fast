@@ -853,26 +853,52 @@ var ScreenDocument = Class.create(PaletteDocument,
         }.bind(this));
         this._updatePanes();
         this._setDirty(true);
-     },    
+     },
 
-    /**
-     * Publish a screen into the catalogue
-     * @private
-     */
-    _share: function() {
+     _share: function() {
         if (this._description.isValid()) {
             if (this._isDirty) {
                 this._pendingOperation = this._share.bind(this);
                 this._save(false);
             } else {
-                var uri = URIs.share.replace("<id>", this._description.getId());
-                PersistenceEngine.sendPost(uri, null, null,
-                                        this, this._onShareSuccess, Utils.onAJAXError);
+                var text = new Element('div', {
+                    'style': 'text-align:center; width: 30em; margin: 0 auto;'
+                }).update("You are about to share the screen. After that, " +
+                         "you will not be able to edit the screen anymore. " +
+                         "You can either close the screen or create a clone " +
+                         "(Save with another name/version)");
+                var dialog = new ConfirmDialog("Warning",
+                                               ConfirmDialog.CUSTOM,
+                                               {'callback': this._onShareDialogEvent.bind(this),
+                                                'contents': text,
+                                                'buttons': {
+                                                    'clone': 'Share and create a clone',
+                                                    'close': 'Share and close',
+                                                    'cancel': 'Cancel'
+                                                },
+                                                'style': 'width: '
+                                                });
+                dialog.show();
             }
-           
+
         } else {
             this._propertiesDialog.show(this._share.bind(this));
         }
+
+     },
+
+    /**
+     * This function will be called whenever an event is triggered in the
+     * share dialog
+     * @private
+     */
+    _onShareDialogEvent: function(/** String */ status) {
+        if (status != "cancel") {
+            var uri = URIs.share.replace("<id>", this._description.getId());
+            PersistenceEngine.sendPost(uri, null, null,
+                                      {'mine': this, 'status': status},
+                                      this._onShareSuccess, Utils.onAJAXError);
+        }  
     },
 
     /**
@@ -881,6 +907,14 @@ var ScreenDocument = Class.create(PaletteDocument,
      */
     _onShareSuccess: function(/** XMLHttpRequest */ transport) {
         Utils.showMessage("Screen successfully shared", {'hide': true});
+        switch(this.status) {
+            case 'clone':
+                this.mine._saveAs(true);
+                break;
+            case 'close':
+                this.mine._effectiveCloseDocument(ConfirmDialog.DISCARD);
+                break;
+        }
     },
 
     /**

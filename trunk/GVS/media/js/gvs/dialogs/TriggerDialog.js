@@ -305,6 +305,7 @@ var TriggerDialog = Class.create(ConfirmDialog /** @lends TriggerDialog.prototyp
 
     /**
      * Unselect all the elements from a list
+     * @private
      */
     _unselectAll: function(/** DOMNode */ selectNode) {
         while (selectNode.selectedIndex != -1) {

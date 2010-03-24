@@ -43,6 +43,20 @@ var ConfirmDialog = Class.create(FormDialog, /** @lends ConfirmDialog.prototype 
                           "ConfirmDialog::initialize";
                 }
                 break;
+            case ConfirmDialog.CUSTOM:
+                 if (_options && _options.callback && _options.buttons) {
+                    $H(_options.buttons).each(function(pair) {
+                        this._addButton(pair.value, this._onButtonPressed.bind({
+                            'mine': this,
+                            'pressedButton': pair.key,
+                            'callback': _options.callback
+                        }));
+                    }.bind(this));
+                 } else {
+                    throw "Cannot create a confirm dialog with that configuration. " +
+                          "ConfirmDialog::initialize";
+                 }
+                 break;
             case ConfirmDialog.OK_CANCEL:
             default:
                 this._okButton = this._addButton ('Ok', this._onOk.bind(this));
@@ -120,6 +134,7 @@ var ConfirmDialog = Class.create(FormDialog, /** @lends ConfirmDialog.prototype 
 ConfirmDialog.OK = 'ok';
 ConfirmDialog.OK_CANCEL = 'ok_cancel';
 ConfirmDialog.SAVE_DISCARD_CANCEL = 'save_discard_cancel';
+ConfirmDialog.CUSTOM = 'custom';
 ConfirmDialog.SAVE = 'save';
 ConfirmDialog.DISCARD = 'discard';
 ConfirmDialog.CANCEL = 'cancel';
