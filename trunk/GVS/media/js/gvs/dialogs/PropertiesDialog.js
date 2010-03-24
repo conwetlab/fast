@@ -118,6 +118,9 @@ var PropertiesDialog = Class.create(ConfirmDialog /** @lends PropertiesDialog.pr
                 'tags': Utils.getCatalogueTags(tags, null),
                 'description': {
                     'en-gb': $F(this._getForm().description)
+                },
+                'label': {
+                    'en-gb': $F(this._getForm().name)
                 }
             };
             var form = this._getForm();

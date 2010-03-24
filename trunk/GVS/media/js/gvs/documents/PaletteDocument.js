@@ -429,9 +429,8 @@ var PaletteDocument = Class.create(AbstractDocument, /** @lends PaletteDocument.
      * @private
      */
     _onPropertiesChange: function() {
-        this._setDirty(true);
-        // Just in case
         this._setTitle(this._description.name);
+        this._setDirty(true);
     },
 
 
