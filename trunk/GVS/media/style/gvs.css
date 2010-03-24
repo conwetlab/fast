@@ -1211,4 +1211,6 @@ label {
  ***************/
 #about {
     text-align: center;
+    width: 40em;
+    margin: 0px auto;
 }
