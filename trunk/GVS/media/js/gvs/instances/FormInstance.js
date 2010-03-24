@@ -54,11 +54,11 @@ var FormInstance = Class.create(ComponentInstance,
                 options.ddConfig = {
                     'type': 'input',
                     'allowedTypes': ['output']
-                }
+                };
                 options.offsetPosition =  {
                     'top': 6,
                     'left': 2
-                }     
+                };
                 var node = this._view.getConditionNode(pre.id, action.name);
                 var terminal = new Terminal(node, options, this, pre.id, action.name);
                 terminal.onWireHandler(handlers);
@@ -81,11 +81,11 @@ var FormInstance = Class.create(ComponentInstance,
             options.ddConfig = {
                  'type': 'output',
                  'allowedTypes': ['input']
-            }
+            };
             options.offsetPosition = {
                 'top': 9,
                 'left': 2
-            }
+            };
             var node = this._view.getConditionNode(post.id);
             var terminal = new Terminal(node, options, this, post.id);
             terminal.onWireHandler(handlers);
@@ -115,31 +115,18 @@ var FormInstance = Class.create(ComponentInstance,
      * Destroy the instance
      * @override
      */
-    destroy: function($super) {
+    destroy: function($super, /** Boolean */ removeFromServer) {
         if (this._terminals) {
             this._terminals.values().each(function(terminalGroup){
                 terminalGroup.values().each(function(terminal){
                     terminal.destroy();
                 });
             });
+            this._terminals = null;
         }
         $super();
     },
 
-    /*
-     * Destroy wires
-     */
-    destroyWires: function() {
-        if (this._terminals) {
-            this._terminals.values().each(function(terminalGroup){
-                terminalGroup.values().each(function(terminal){
-                    terminal.removeAllWires();
-                    terminal.remove();
-                });
-            });
-        }
-    },
-    
     /*onStart: function() {
         if (this._terminals) {
             this._terminals.each(function(terminal){

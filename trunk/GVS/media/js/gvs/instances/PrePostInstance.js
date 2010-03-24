@@ -21,7 +21,7 @@ var PrePostInstance = Class.create(ComponentInstance,
         if (!this._buildingBlockDescription.label) {
             this._buildingBlockDescription.label = {
                 'en-gb': this._buildingBlockDescription.title
-            }
+            };
         }
 
         if (this._buildingBlockDescription.id) {
@@ -219,7 +219,7 @@ var PrePostInstance = Class.create(ComponentInstance,
             reachable = this._view.getNode().hasClassName("satisfeable");
         }
         Utils.setSatisfeabilityClass(fact, reachable);
-        
+
         return [fact, this.getTitle(), this._buildingBlockDescription.uri];
     },
     
@@ -245,7 +245,7 @@ var PrePostInstance = Class.create(ComponentInstance,
                                 // (data to be consumed inside the screen)
                 'type': 'output',
                 'allowedTypes': ['input']
-            }
+            };
         } else {
             options.direction = [-1,0];
             options.offsetPosition = {
@@ -255,7 +255,7 @@ var PrePostInstance = Class.create(ComponentInstance,
             options.ddConfig = { // Viceversa
                 'type': 'input',
                 'allowedTypes': ['output']
-            }   
+            };
         }
         
         this._terminal = new Terminal(this._view.getNode(), options, this,
@@ -285,20 +285,11 @@ var PrePostInstance = Class.create(ComponentInstance,
         }
         if (this._terminal) {
             this._terminal.destroy();
+            this._terminal = null;
         }
         $super();
     },
-
-    /*
-     * Destroy wires
-     */
-    destroyWires: function() {
-        if (this._terminal) {
-            this._terminal.removeAllWires();
-            this._terminal.remove();
-        }
-    },
-    
+   
     /**
      * On position update
      * @override

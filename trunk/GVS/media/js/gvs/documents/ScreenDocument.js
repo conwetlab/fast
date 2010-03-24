@@ -43,6 +43,13 @@ var ScreenDocument = Class.create(PaletteDocument,
          */
         this._recommendationManager = new RecommendationManager();
 
+        /**
+         * Whether this ScreenDocument is closing
+         * @private
+         */
+        this._closed = false;
+
+
         this._repaint = this._repaint.bind(this);
 
 
@@ -258,17 +265,13 @@ var ScreenDocument = Class.create(PaletteDocument,
      * @override
      */
     _effectiveCloseDocument: function($super, /** String */ status) {
+        if (!status || status == ConfirmDialog.DISCARD) {
+            this._closed = true;
+        }
+
         $super(status);
 
         if (!status || status == ConfirmDialog.DISCARD) {
-            this._description.getCanvasInstances().each(function(instance) {
-                instance.destroyWires();
-            }.bind(this));
-
-            this._description.getConditionInstances().each(function(instance) {
-                instance.destroyWires();
-            }.bind(this));
-
             this._dojoConnections.each(function(connection){
                 dojo.disconnect(connection);
             }.bind(this));
@@ -394,14 +397,17 @@ var ScreenDocument = Class.create(PaletteDocument,
      * @private
      */
     _onPipeDeletionHandler: function(/** Wire */ wire) {
-    	var pipe = this._pipeFactory.getPipe(wire);
-    	if (pipe) {
-    		this._pipeFactory.removePipe(pipe);
-    		this._description.remove(pipe);
+    	if (this._closed)
+            return;
 
-    		this._refreshReachability();
-    		this._setDirty(true);
-    	}
+        var pipe = this._pipeFactory.getPipe(wire);
+        if (pipe) {
+            this._pipeFactory.removePipe(pipe);
+            this._description.remove(pipe);
+
+            this._refreshReachability();
+            this._setDirty(true);
+        }
     },
 
     /**

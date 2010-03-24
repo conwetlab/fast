@@ -129,31 +129,19 @@ var OperatorInstance = Class.create(ComponentInstance,
      * Destroy the instance
      * @override
      */
-    destroy: function($super) {
-        if (this._terminals) {
+    destroy: function($super, /** Boolean */ removeFromServer) {
+    	if (this._terminals) {
             this._terminals.values().each(function(terminalGroup){
                 terminalGroup.values().each(function(terminal){
                     terminal.destroy();
                 });
             });
+            this._terminals = null;
         }
         $super();
     },
 
-    /*
-     * Destroy wires
-     */
-    destroyWires: function() {
-        if (this._terminals) {
-            this._terminals.values().each(function(terminalGroup){
-                terminalGroup.values().each(function(terminal){
-                    terminal.removeAllWires();
-                    terminal.remove();
-                });
-            });
-        }
-    },
-    
+   
     /*onStart: function() {
         if (this._terminals) {
             this._terminals.each(function(terminal){

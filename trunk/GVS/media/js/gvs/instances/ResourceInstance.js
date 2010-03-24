@@ -112,7 +112,7 @@ var ResourceInstance = Class.create(ComponentInstance,
      * Destroy the instance
      * @override
      */
-    destroy: function($super) {
+    destroy: function($super, /** Boolean */ removeFromServer) {
         if (this._terminals) {
             this._terminals.values().each(function(terminalGroup){
                 terminalGroup.values().each(function(terminal){
@@ -123,20 +123,6 @@ var ResourceInstance = Class.create(ComponentInstance,
         $super();
     },
 
-    /*
-     * Destroy wires
-     */
-    destroyWires: function() {
-        if (this._terminals) {
-            this._terminals.values().each(function(terminalGroup){
-                terminalGroup.values().each(function(terminal){
-                    terminal.removeAllWires();
-                    terminal.remove();
-                });
-            });
-        }
-    }, 
-    
     /*onStart: function() {
         if (this._terminals) {
             this._terminals.each(function(terminal){
