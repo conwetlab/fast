@@ -64,7 +64,6 @@ var DocumentController = Class.create(
         
         this._registry.addHandler('delete', this._onKeyPressed.bind(this)); 
         this._registry.addHandler('space' , this._onKeyPressed.bind(this));
-
     },
 
     // **************** PUBLIC METHODS **************** //
@@ -162,20 +161,13 @@ var DocumentController = Class.create(
     /**
      * Adds a new document.
      */
-    addDocument: function(document){
-        this._documents.set(document.getTabId(), document);
-        this._documentContainer.addChild(document.getTab());
-
-        $$(".tabLabel").each(function(canvas) {
-            canvas.observe("focus",function(e) {
-                var element = Event.element(e);
-                element.blur();
-            })
-        });
+    addDocument: function(doc){
+        this._documents.set(doc.getTabId(), doc);
+        this._documentContainer.addChild(doc.getTab());
         
         if (this._documents.keys().size() > 1) {
-            this._documentContainer.selectChild(document.getTabId());    
-        }     
+            this._documentContainer.selectChild(doc.getTabId());
+        }
     },
 
     /**
@@ -271,6 +263,9 @@ var DocumentController = Class.create(
         
         this._toolbar.setModel(1, this._currentDocument);
         this._menu.setModel('document', this._currentDocument);
+        // FIXME: Workaround for removing focus from the tab node
+        $("logout").focus();
+        $("logout").blur();
     },
     
     

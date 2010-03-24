@@ -213,7 +213,7 @@
                           {% if is_anonymous %}{% trans "anonymous" %}
                           </div> | <a href="/accounts/login/?next=/">{% trans "Sign in" %}</a>
                           {% else %} {% trans "Welcome" %}, {{ user.username }} | 
-                          <a href="/logout">{% trans "Exit" %}</a></div>
+                          <a id="logout" href="/logout">{% trans "Exit" %}</a></div>
                           {% endif %}
                 </div>
                 <!-- Menu area -->
