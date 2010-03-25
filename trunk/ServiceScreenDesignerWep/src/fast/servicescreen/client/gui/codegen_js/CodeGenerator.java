@@ -42,11 +42,11 @@ public class CodeGenerator
 	private String until 		= "until(";
 	private String _from 		= "from(";
 	
-	private String depth  = "   ";
-	private String depth2 = "      ";
-	private String depth3 = "         ";
-	private String depth4 = "            ";
-	private String depth5 = "               ";
+	private String depth  = "	";
+	private String depth2 = "		";
+	private String depth3 = "			";
+	private String depth4 = "				";
+	private String depth5 = "					";
 	
 	
 	/**
@@ -555,13 +555,13 @@ public class CodeGenerator
 		"</head>\n" +
 		"<body>\n" +
 		"<form name=f1>\n" +
-		"<input type='text' name=t2 value='f1' size='50'> \n" +
-		"//<input type='text' name=t3 value='2009' size='50'> \n" +
+		"<input type='text' name=t2 value='x' size='50'> \n" +
+		"//<input type='text' name=t3 value='y' size='50'> \n" +
+		"//<input type='text' name=t4 value='z' size='50'> \n" +
 		"<input type=button value='request and transform' \n" +
-		"onclick='this.form.t1.value=transform(this.form.t2.value /*, this.form.t3.value*/)'>	\n" +
+		"onclick='this.form.t1.value=transform(this.form.t2.value /*, this.form.t3.value, this.form.t4.value*/)'>	\n" +
 		"<br><br><br><br> \n" +
-		"RESULT: <br> \n" +
-		"<textarea name='t1' id='show' value='press the button above..' cols='80' rows='40'></textarea>\n" +
+		"<textarea name=t1 id='show' cols=70 rows=20> To see the results, press the button above.. </textarea>" +
 		"</form>\n" +
 		"</body>\n" +
 		"</html>\n";

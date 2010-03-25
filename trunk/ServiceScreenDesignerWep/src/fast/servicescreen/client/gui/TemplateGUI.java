@@ -104,13 +104,13 @@ public class TemplateGUI
 		while(requestTemplate.length() > 0)
 		{
 			TemplateParameter param = new TemplateParameter();
-
-			if(requestTemplate.indexOf("=") < 0)
+			
+			String name = "";
+			if(requestTemplate.contains("="))
 			{
-				return;
+				name = requestTemplate.substring(0, requestTemplate.indexOf("="));
 			}
 			
-			String name = requestTemplate.substring(0, requestTemplate.indexOf("="));
 			requestTemplate = requestTemplate.substring(requestTemplate.indexOf("=")+1);
 			requestTemplate.replace(name + "=", "");
 
