@@ -23,7 +23,7 @@ import fast.servicescreen.client.gui.parser.OperationHandler;
  * */
 public class CodeGenerator
 {
-	BuildingBlock screen = null;
+	public BuildingBlock screen = null;
 	private HashMap<String, String> table = null;
 	private HashMap<String, String> bracketTable = null;
 	
@@ -433,17 +433,22 @@ public class CodeGenerator
 		return template;
 	}
 	
+	
+	private static RequestServiceAsync service;
+
 	/**
 	 * This method send the current template to
 	 * an service which writes a js and a html file with it as content. 
 	 * */
 	public boolean write_JS_File()
 	{
-		// Instantiate service and set up its target url
-		RequestServiceAsync service = GWT.create(RequestService.class);
+		if (service == null)
+		{ 
+			service = GWT.create(RequestService.class);
+		}
 
 		//send pre - trans - post code to server
-		service.saveJsFileOnServer(prehtml, helperMethods + rootTemplate, posthtml, new AsyncCallback<String>()
+		service.saveJsFileOnServer(screen.getName(), prehtml, helperMethods + rootTemplate, posthtml, new AsyncCallback<String>()
 				{
 					@Override
 					public void onSuccess(String result)
@@ -760,6 +765,7 @@ public class CodeGenerator
 		depth3 + "url = url.replace(/:/g, '%3A'); \n" +
 		depth3 + "return url; \n" +
 	    depth2 + "} \n\n";
+	
 }
 
 /**

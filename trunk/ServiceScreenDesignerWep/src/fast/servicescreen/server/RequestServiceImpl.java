@@ -56,7 +56,7 @@ public class RequestServiceImpl extends RemoteServiceServlet implements RequestS
 	 * into a file, and save it as .js
 	 * */
 	@Override
-	public String saveJsFileOnServer(String preHTMLCode, String transCode, String postHTMLCode)
+	public String saveJsFileOnServer(String opName, String preHTMLCode, String transCode, String postHTMLCode)
 	{
 		//the HTML file content
 		String htmlContent = preHTMLCode + transCode + postHTMLCode;
@@ -65,12 +65,22 @@ public class RequestServiceImpl extends RemoteServiceServlet implements RequestS
 		{
 			//TODO write sep. js file
 			
-			String fileName = path + "/servicescreendesignerwep/embeddedOperator.html";
+			String baseFileName = path + "/servicescreendesignerwep/" + opName + "Operator";
+			String fileName = baseFileName + ".html";
 			FileWriter writer = new FileWriter(fileName, false);
 			
 			writer.write(htmlContent);
 			
 			writer.close();
+			
+			// write the pure json script, too
+			fileName = baseFileName + ".js";
+			writer = new FileWriter(fileName, false);
+			
+			writer.write(transCode);
+			
+			writer.close();
+			
 		}
 		catch (Exception e)
 		{

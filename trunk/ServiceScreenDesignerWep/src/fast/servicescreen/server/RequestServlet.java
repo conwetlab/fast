@@ -1,6 +1,7 @@
 package fast.servicescreen.server;
 
 import java.io.IOException;
+import java.nio.charset.Charset;
 
 import javax.servlet.ServletException;
 import javax.servlet.ServletOutputStream;
@@ -39,7 +40,7 @@ public class RequestServlet extends HttpServlet
 			
 			//write the GET result into the response (this will trigger
 			//the forward to the original transmitter)
-			byte[] outByte = value.getBytes();
+			byte[] outByte = value.getBytes("utf-8");
 			out.write(outByte);
 			out.close();
 		}

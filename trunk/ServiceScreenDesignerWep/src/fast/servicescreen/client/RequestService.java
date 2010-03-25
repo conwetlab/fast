@@ -11,5 +11,5 @@ public interface RequestService extends RemoteService
 {
 	String sendHttpRequest_GET(String url);
 	
-	String saveJsFileOnServer(String preHTMLCode, String transCode, String postHTMLCode);
+	String saveJsFileOnServer(String opName, String preHTMLCode, String transCode, String postHTMLCode);
 }

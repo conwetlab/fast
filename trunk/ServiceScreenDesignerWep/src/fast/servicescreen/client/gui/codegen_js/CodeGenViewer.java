@@ -1,5 +1,6 @@
 package fast.servicescreen.client.gui.codegen_js;
 
+import com.gargoylesoftware.htmlunit.javascript.host.Screen;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ChangeHandler;
@@ -109,7 +110,7 @@ public class CodeGenViewer
 			{
 				try
 				{
-					Window.open("./servicescreendesignerwep/embeddedOperator.html",
+					Window.open("./servicescreendesignerwep/" + generator.screen.getName() + "Operator.html",
 								"the wrapper", "no features");
 				}
 				catch(Exception e)
