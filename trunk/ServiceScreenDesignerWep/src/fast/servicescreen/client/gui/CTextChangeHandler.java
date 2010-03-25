@@ -6,8 +6,6 @@ import java.util.Iterator;
 
 import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ChangeHandler;
-import com.google.gwt.event.dom.client.FocusEvent;
-import com.google.gwt.event.dom.client.FocusHandler;
 import com.google.gwt.event.logical.shared.SelectionEvent;
 import com.google.gwt.event.logical.shared.SelectionHandler;
 import com.google.gwt.user.client.ui.MultiWordSuggestOracle;
@@ -19,6 +17,7 @@ import com.google.gwt.user.client.ui.SuggestOracle.Suggestion;
 import fast.common.client.FactType;
 import fast.common.client.ServiceDesigner;
 import fujaba.web.runtime.client.CObject;
+import fujaba.web.runtime.client.FAction;
 import fujaba.web.runtime.client.PropertyChangeEvent;
 import fujaba.web.runtime.client.PropertyChangeListener;
 
@@ -70,50 +69,61 @@ public class CTextChangeHandler implements ChangeHandler, PropertyChangeListener
 	   	this.suggestBox = box;
    }
    
+   public static FactTypesListener factTypesListener;
+
+   static class FactTypesListener extends FAction
+   {
+	   public ServiceDesigner designer;
+	   @Override
+	   public void doAction() 
+	   {
+		   // refresh the oracle
+		   refreshOracle(designer);
+		   
+		   Object newValue = propertyEvent.getNewValue();
+		   
+		   if (newValue != null && newValue instanceof FactType)
+		   {
+			   FactType newType = (FactType) newValue;
+			   newType.addPropertyChangeListener(FactType.PROPERTY_TYPE_NAME, this);
+			   System.out.println("Added type name listener to new fact type");
+		   }
+	   }
+   }
+   
+   
    @SuppressWarnings({ "unchecked" })
    public static SuggestBox createTypeSuggestBox(ServiceDesigner designer, CObject obj, String attrName)
    {
-	   //create oracle and all the types
-	   MultiWordSuggestOracle oracle = new MultiWordSuggestOracle();
-	   
-	   final ArrayList<String> words = new ArrayList<String>();
-	   
-	   for (Iterator<FactType> types = designer.iteratorOfFactTypes(); types.hasNext();) 
+	   if (oracle == null) 
 	   {
-		  FactType type = (FactType) types.next();
-	      String typeName = type.getTypeName();
-	      //format type name: (e.g. Book - fast.amazon)
-	      // typeName = typeName.substring(typeName.lastIndexOf(".") + 1) + " - " +
-	      // typeName.subSequence(0, typeName.lastIndexOf("."));
-	      //add to oracle words
-	      System.out.println("Add type to oracle: " + typeName);
-	      words.add(typeName);
-	      words.add("List of " +  typeName);
+		   oracle = new MultiWordSuggestOracle();
+
+		   // provide updater for type oracle
+		   factTypesListener = new FactTypesListener();
+		   factTypesListener.designer = designer;
+		   designer.addPropertyChangeListener(ServiceDesigner.PROPERTY_FACT_TYPES, factTypesListener);
 	   }
-	   for (Iterator wordIt = words.iterator(); wordIt.hasNext();)
-	   {
-	      String word = (String) wordIt.next();
-	      oracle.add(word);
-	   }
-	   oracle.setDefaultSuggestionsFromText(words);
+	   
+	   refreshOracle(designer);
 	   
 	   final SuggestBox suggestBox = createSuggestBox(obj, attrName, oracle);
 	   final TextBox textBox = (TextBox)suggestBox.getTextBox();
 	   @SuppressWarnings("unused")
 	   SuggestOracle boxOracle = suggestBox.getSuggestOracle();
 	   
-	   textBox.addFocusHandler(new FocusHandler()
-	   {
-			@Override
-			public void onFocus(FocusEvent event)
-			{
-				   if(!words.contains(suggestBox.getText())  && words.size() > 0)
-				   {
-					   textBox.setText(words.get(0));
-				   }
-			}
-	   });
-	   
+//	   textBox.addFocusHandler(new FocusHandler()
+//	   {
+//			@Override
+//			public void onFocus(FocusEvent event)
+//			{
+//				   if(!words.contains(suggestBox.getText())  && words.size() > 0)
+//				   {
+//					   textBox.setText(words.get(0));
+//				   }
+//			}
+//	   });
+//	   
 //	   ((TextBox)suggestBox.getTextBox()).addKeyPressHandler(new KeyPressHandler()
 //	   {
 //
@@ -126,7 +136,36 @@ public class CTextChangeHandler implements ChangeHandler, PropertyChangeListener
 	   
 	   return suggestBox;
    }
-   
+
+   private static void refreshOracle(ServiceDesigner designer) 
+   {
+	   final ArrayList<String> words = new ArrayList<String>();
+
+	   for (Iterator<FactType> types = designer.iteratorOfFactTypes(); types.hasNext();) 
+	   {
+		   FactType type = (FactType) types.next();
+		   String typeName = type.getTypeName();
+		   //format type name: (e.g. Book - fast.amazon)
+		   // typeName = typeName.substring(typeName.lastIndexOf(".") + 1) + " - " +
+		   // typeName.subSequence(0, typeName.lastIndexOf("."));
+		   //add to oracle words
+		   System.out.println("Add type to oracle: " + typeName);
+		   if (typeName != null) 
+		   {
+			   words.add(typeName);
+			   words.add("List of " + typeName);
+		   }
+	   }
+	   
+	   oracle.clear();
+	   for (Iterator wordIt = words.iterator(); wordIt.hasNext();)
+	   {
+		   String word = (String) wordIt.next();
+		   oracle.add(word);
+	   }
+	   oracle.setDefaultSuggestionsFromText(words);
+   }
+
    public static SuggestBox createWidthSuggestBox(CObject obj, String width, String attrName, MultiWordSuggestOracle oracle)
    {
 	   SuggestBox suggestBox = createSuggestBox(obj, attrName, oracle);
@@ -163,6 +202,7 @@ public class CTextChangeHandler implements ChangeHandler, PropertyChangeListener
    }
    
    private String targetAttrName;
+   private static MultiWordSuggestOracle oracle;
 
    public String getTargetAttrName()
    {
