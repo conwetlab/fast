@@ -8,6 +8,7 @@ import java.util.Set;
 import com.google.gwt.event.logical.shared.SelectionEvent;
 import com.google.gwt.event.logical.shared.SelectionHandler;
 import com.google.gwt.json.client.JSONArray;
+import com.google.gwt.json.client.JSONBoolean;
 import com.google.gwt.json.client.JSONNumber;
 import com.google.gwt.json.client.JSONObject;
 import com.google.gwt.json.client.JSONParser;
@@ -28,6 +29,7 @@ import fast.servicescreen.client.gui.RuleGUI;
 import fast.servicescreen.client.gui.RuleUtil;
 import fast.servicescreen.client.gui.parser.OperationHandler;
 import fast.servicescreen.client.rpc.SendRequestHandler;
+import fast.servicescreen.server.RequestServlet;
 
 /**
  * Specifies the RuleGUI working with JSON instead XML.
@@ -86,98 +88,146 @@ public class MediationRuleGUI extends RuleGUI
       factsTree = new Tree();
       factsScrollPanel.setWidget(factsTree);
       translationTable.setWidget(rowCount, 2, factsScrollPanel);
-      
-      
-		//TODO: This is a testvalue... If we want to access Ressource, we should change the sendreq Handler
-		getJson();		
-		TreeItem rootJsonItem = jsonTree.addItem("JSON");
-		rootJsonItem.setState(true);
-		buildJsonTree(rootJsonItem, jsonValue);
-		RuleUtil.expandTree(jsonTree);
-      
-      
+
+
+      //TODO: get access to the real resource 
+      getJson();	
+      TreeItem rootJsonItem = jsonTree.addItem("JSONValue:");
+      rootJsonItem.setState(true);
+      buildJsonTree(rootJsonItem, jsonValue, "JSONValue");
+      RuleUtil.expandTree(jsonTree);
+
+
       // return the table
       translationTable.ensureDebugId("cwFlexTable");
       return translationTable;
    }
 
    @Override
+   public void updateFactsTree()
+   {
+	   //transforms the rule hierarchy to Strings in facts - tree
+	   if (rootRule == null)
+	   {
+		   rootRule = (FASTMappingRule) buildingBlock.iteratorOfMappingRules().next();
+	   }
+	   
+	   buildFactsTree(factsTree);
+   }
+   
+   @Override
    public void buildFactsTree(Tree aFactsTree)
    {
-	   //TODO override updateFTree, too! needed!
-	   
-	      //(re)build the facts tree 
-	   	  aFactsTree.clear();
-	      
-	      TreeItem rootItem = aFactsTree.addItem("Facts:");
-	      
-//	      transform(/*TODO*/, rootRule, rootItem);
-	      
-	      RuleUtil.expandTree(aFactsTree);
+	   //(re)build the facts tree 
+	   aFactsTree.clear();
+
+	   TreeItem rootItem = aFactsTree.addItem("Facts:");
+
+	   transform(jsonValue, rootRule, rootItem);
+
+	   RuleUtil.expandTree(aFactsTree);
    }
    
    /**
-    * This method transform the data with the rules
+    * This method transforms the data with the rules
     * to the this.factsTree (JSON)
-    * */   
-   public void transform(JSONValue jsonVal, FASTMappingRule rule, TreeItem treeItem)
+    *
+    * */
+   @SuppressWarnings("unchecked")
+   public void transform(JSONValue rootJsonValue, FASTMappingRule rule, TreeItem treeItem)
    {
-//	   if(RuleUtil.isCompleteRule(rule))
-//	      {
-//	    	  TreeItem kidItem = null;
-//	    	  NodeList elements = null;
-//	    	  
-//	    	  //FIXME: Make that work at time..
-//	    	  //create a handler for operations in the decoded fromField 
-////	    	  OperationHandler opHandler = new OperationHandler(rule.getSourceTagname(), xmlDocElement); 
-////	    	  String sourceTagname = opHandler.getLastSourceTagname();
-//	    	  
-//	    	  String sourceTagname = rule.getSourceTagname();
-//	    	  
-//	    	  //add the handler within parse results into the rule
-////	    	  rule.setOperationHandler(opHandler);
-//	    	  
-//	    	  //take source
-//	          elements = RuleUtil.get_ElementsByTagname(xmlDocElement, sourceTagname);
-//	          
-//	             
-//	          //"createObject" creates a new tag
-//	          String targetElemName = rule.getTargetElemName();
-//	          if (rule.getKind().equals("createObject"))
-//	          {
-//	             for (int i = 0; i < elements.getLength(); ++i)
-//	             {
-//	                kidItem = treeItem.addItem(targetElemName);
-//	                callTransformForKids(elements.item(i), rule, kidItem);
-//	             }
-//	          }
-//
-//	          //"fillAttribute" fills attribute strings on right possition
-//	          else if (rule.getKind().equals("fillAttributes"))
-//	          {
-//	             // create tag value pair for that attributes
-//	             for (int i = 0; i < elements.getLength(); ++i)
-//	             {
-//	       		    //execute operation
-//	       		    String nodeValue = opHandler.executeOperations(xmlDocElement, i);
-//	       		    
-//	                kidItem = treeItem.addItem(targetElemName + " : " + nodeValue);
-//	             }
-//	          }
-//	      }
+	   if(RuleUtil.isCompleteRule(rule))
+	   {
+		   String sourceTagname = rule.getSourceTagname();
+		   String kind = rule.getKind();
+		   String targetElemName = rule.getTargetElemName();
+		   
+		   JSONArray elements = new JSONArray();
+		   //for normal sourceTagnames retrieve the elements recursive
+		   if(! sourceTagname.endsWith("_Item"))
+		   {
+			   jsonValuesByTagName(elements, rootJsonValue, sourceTagname);
+		   }
+		   //special case: array items
+		   else
+		   {
+			   //add children to elements directly
+			   JSONArray jsonArray = rootJsonValue.isArray();
+			   if(jsonArray != null)
+			   {	
+				   for (int i = 0; i < jsonArray.size(); i++)
+				   {
+					   JSONValue kid = jsonArray.get(i); 
+
+					   int index = elements.size();
+					   elements.set(index, kid);
+				   }
+			   }
+		   }
+		   
+		   //"createObject" creates an object for every element in the list
+		   //and starts recursive call of transform
+		   if (kind.equals("createObject"))
+		   {
+			   for (int i = 0; i < elements.size(); i++)
+			   {
+				   JSONValue tmpElement = elements.get(i);
+				   TreeItem kidItem = treeItem.addItem(targetElemName);
+				   transformKids(tmpElement, rule, kidItem);
+			   }
+		   }
+		   //"fillAttribute" fills attribute strings on right position
+		   else if (kind.equals("fillAttributes"))
+		   {
+			   for (int i = 0; i < elements.size(); i++)
+			   {
+				   JSONValue tmpElement = elements.get(i);
+
+				   //add content of the element which IS (JSONBoolean, JSONNumber or JSONString)
+				   JSONBoolean attrBoolean = tmpElement.isBoolean();
+				   if(attrBoolean != null)
+				   {
+					   treeItem.addItem(targetElemName + ": " + attrBoolean.booleanValue());
+				   }
+				   JSONNumber attrNumber = tmpElement.isNumber();
+				   if(attrNumber != null)
+				   {
+					   treeItem.addItem(targetElemName + ": " + attrNumber.doubleValue());
+				   }
+				   JSONString attrString = tmpElement.isString();
+				   if(attrString != null)
+				   {
+					   treeItem.addItem(targetElemName + ": " + attrString.stringValue());
+				   }
+			   }
+		   }
+	   }
    }
    
    /**
-    * Handles the json tree (Selection and PropChange)
+    * calls transform for all children of a rule
+    * */
+   public void transformKids(JSONValue rootJsonValue, FASTMappingRule rule, TreeItem treeItem)
+   {
+	   for (Iterator<FASTMappingRule> kidIter = rule.iteratorOfKids(); kidIter.hasNext();)
+	   {
+		   FASTMappingRule kid = (FASTMappingRule) kidIter.next();
+		   //call transform for the kid
+		   transform(rootJsonValue, kid, treeItem);
+	   }
+   }
+   
+   /**
+    * handles the json tree (Selection and PropChange)
     * */
    class JsonTreeHandler implements SelectionHandler<TreeItem>
    {
       @Override
       public void onSelection(SelectionEvent<TreeItem> event)
       {
-         // print selected element in rule area
+         //print first part ("name" from "name : value") of selected element in rule area
          TreeItem selectedItem = event.getSelectedItem();
-         String name = selectedItem.getText();
+         String name = selectedItem.getText().split(":")[0].trim();
          
          if(selectedRule != null)
          {
@@ -191,33 +241,58 @@ public class MediationRuleGUI extends RuleGUI
 	@SuppressWarnings("unused")
 	private RequestServiceAsync reqService;
 	
-	public void getJson() {
-		String alonso = "{\"MRData\":{\"xmlns\": \"http:////ergast.com//mrd//1.1\",\"series\": \"f1\",\"url\": \"\"," +
-                       "\"limit\": \"30\",\"offset\": \"0\",\"total\": \"2\",\"SeasonTable\": {\"driverId\": \"alonso\"," + 
-                       "\"driverStandings\": \"1\",\"Seasons\": [{\"season\": \"2005\", \"url\": \"http:////en.wikipedia.org//wiki//2005_Formula_One_season\"}," +
-                       "{\"season\": \"2006\", \"url\": \"http:////en.wikipedia.org//wiki//2006_Formula_One_season\"}]}}}";
+	public void getJson()
+	{
+//		String alonso = "{\"MRData\":{\"xmlns\": \"http:////ergast.com//mrd//1.1\",\"series\": \"f1\",\"url\": \"\"," +
+//                       "\"limit\": \"30\",\"offset\": \"0\",\"total\": \"2\",\"SeasonTable\": {\"driverId\": \"alonso\"," + 
+//                       "\"driverStandings\": \"1\",\"Seasons\": [{\"season\": \"2005\", \"url\": \"http:////en.wikipedia.org//wiki//2005_Formula_One_season\"}," +
+//                       "{\"season\": \"2006\", \"url\": \"http:////en.wikipedia.org//wiki//2006_Formula_One_season\"}]}}}";
 		
-		jsonValue = JSONParser.parse(alonso);
+		String drivers = "{\"MRData\": {" +
+			             "\"xmlns\": \"http:////ergast.com//mrd//1.1\",\"series\": \"f1\",\"url\": \"\",\"limit\": \"30\",\"offset\": \"0\",\"total\": \"812\","+
+			             "\"DriverTable\": {\"Drivers\": ["+
+			             "{"+
+			             "\"driverId\": \"alesi\","+
+			             "\"url\": \"http:////en.wikipedia.org//wiki//Jean_Alesi\","+
+			             "\"givenName\": \"Jean\","+
+			             "\"familyName\": \"Alesi\","+
+			             "\"dateOfBirth\": \"1964-06-11\","+
+			             "\"nationality\": \"French\","+
+			             "},"+
+			             "{"+
+			             "\"driverId\": \"alonso\","+
+			             "\"url\": \"http:////en.wikipedia.org//wiki//Fernando_Alonso\","+
+			             "\"givenName\": \"Fernando\","+
+			             "\"familyName\": \"Alonso\","+
+			             "\"dateOfBirth\": \"1981-07-29\","+
+			             "\"nationality\": \"Spanish\","+
+			             "},"+
+			             "{"+
+			             "\"driverId\": \"amati\","+
+			             "\"url\": \"http:////en.wikipedia.org//wiki//Giovanna_Amati\","+
+			             "\"givenName\": \"Giovanna\","+
+			             "\"familyName\": \"Amati\","+
+			             "\"dateOfBirth\": \"1962-07-20\","+
+			             "\"nationality\": \"Italian\","+
+			             "},"+
+			             "{"+
+			             "\"driverId\": \"arnold\","+
+			             "\"url\": \"http:////en.wikipedia.org//wiki//Chuck_Arnold\","+
+			             "\"givenName\": \"Chuck\","+
+			             "\"familyName\": \"Arnold\","+
+			             "\"dateOfBirth\": \"1926-05-30\","+
+			             "\"nationality\": \"American\","+
+			             "}" +
+			             "]}}}";
+
+		jsonValue = JSONParser.parse(drivers);
 		
 		//FIXME: Make that work at time
-//		String requestUrl = "http:////ergast.com//api//f1//drivers//alonso//driverStandings//1//seasons.json";
-//		reqService = GWT.create(RequestService.class);
+//		String url = "http:////ergast.com//api//f1//drivers//alonso//driverStandings//1//seasons.json";
+//		RequestServlet service = new RequestServlet();
+//		String response = service.sendHttpRequest_GET(url);
 //		
-//		reqService.sendHttpRequest_GET(requestUrl, new AsyncCallback<String>() {
-//			@Override
-//			public void onSuccess(String result) {
-//				jsonValue = JSONParser.parse(result);
-//				
-//				TreeItem rootJsonItem = ruleGUI.jsonTree.addItem("JSON");
-//				rootJsonItem.setState(true);
-//				buildJsonTree(rootJsonItem, jsonValue);
-//			}
-//
-//			@Override
-//			public void onFailure(Throwable caught) {
-//				Window.alert("Fehler: " + caught.getLocalizedMessage());
-//			}
-//		});
+//		jsonValue = JSONParser.parse(response);
 	}
 
 
@@ -225,7 +300,7 @@ public class MediationRuleGUI extends RuleGUI
 	/**
 	 * recursive method to generate a tree that represents a json value
 	 * */
-	private void buildJsonTree(TreeItem parentItem, JSONValue node)
+	private void buildJsonTree(TreeItem parentItem, JSONValue node, String parentName)
 	{	
 		//if it's an object, build the tree for all children
 		JSONArray jsonArray = node.isArray();
@@ -234,10 +309,10 @@ public class MediationRuleGUI extends RuleGUI
 			for (int i = 0; i < jsonArray.size(); i++)
 			{
 				//add a section item for every child
-				TreeItem treeSection = parentItem.addItem("ArrayItem");
+				TreeItem treeSection = parentItem.addItem(parentName + "_Item:");
 				treeSection.setState(true);
 				
-				buildJsonTree(treeSection, jsonArray.get(i));
+				buildJsonTree(treeSection, jsonArray.get(i), parentName);
 			}
 		}
 		
@@ -245,7 +320,9 @@ public class MediationRuleGUI extends RuleGUI
 		JSONString jsonString = node.isString();
 		if(jsonString != null)
 		{
-			parentItem.addItem(jsonString.stringValue());
+			String parentText = parentItem.getText();
+			String attributeText = jsonString.stringValue();
+			parentItem.setText(parentText + " " + attributeText);
 		}
 		
 		//if it's an object, build the tree for all children
@@ -258,18 +335,21 @@ public class MediationRuleGUI extends RuleGUI
 			{
 				String key = (String) iterator.next();
 
-				TreeItem treeSection = parentItem.addItem(key);
+				TreeItem treeSection = parentItem.addItem(key + ":");
 				treeSection.setState(true);
 
 				JSONValue child = operator.get(key);
-				buildJsonTree(treeSection, child);
+				buildJsonTree(treeSection, child, key);
 			}
 		}
 	}
 	
-	private JSONValue kidsValueByTagName(JSONValue root, String tagName)
+	/**
+	 * recursive method for retrieving all jsonvalues for a specified tagName
+	 * */
+	private void jsonValuesByTagName(JSONArray elements, JSONValue root, String tagName)
 	{ 
-		   //if object	
+		   //if object
 		   JSONObject object = root.isObject();
 		   if( object != null )
 		   {	
@@ -281,69 +361,49 @@ public class MediationRuleGUI extends RuleGUI
 			   {
 				   String key = (String) iterator.next();
 				   
+				   //found - add it
 				   if(key.equals(tagName))
 				   {
-					   return object.get(key);
+					   int index = elements.size();
+					   elements.set(index, object.get(key));
 				   }
 				   else
 				   {
-					   return kidsValueByTagName(object.get(key), tagName);
+					   //depth-search
+					   jsonValuesByTagName(elements, object.get(key), tagName);
 				   }
 			   }
 		   }
 		   
-		   //if it's an array, search among it's children and call rec method
-		   //for any position
+		   //if it's an array, search among it's children by calling recursive method
+		   //for every child
 		   JSONArray jsonArray = root.isArray();
 		   if(jsonArray != null)
 		   {	
 			   for (int i = 0; i < jsonArray.size(); i++)
-			   { 
-				   jsonValueByTagName(jsonArray.get(i), tagName);
+			   {
+				   jsonValuesByTagName(elements, jsonArray.get(i), tagName);
 			   }
 		   }
 
-		   //maybe it's the value/nrValue
-//		   JSONString jsonString = root.isString();
-//		   if(jsonString != null && tagName.equals(jsonString.stringValue()))
-//		   {
-//			   return jsonString;
-//		   }
-//		   
-//		   JSONNumber jsonNumber = root.isNumber();
-//		   
-
-		return null;
-	}
-   
-   /**
-    * Tiefensuche
-    * */
-   private JSONValue jsonValueByTagName(JSONValue root, String tagName)
-   {
-	   //The first value should be an object any time 
-	   JSONObject object = root.isObject();
-	   if( object != null )
-	   {	
-		   //gets all (first layer) keys contained in the JSONValue
-		   Set<String> keys = object.keySet();
-
-		   //try to find on layer one
-		   for (Iterator<String> iterator = keys.iterator(); iterator.hasNext();)
+		   //if it's a matching boolean, number or string: add it
+		   JSONBoolean jsonBoolean = root.isBoolean();
+		   if(jsonBoolean != null && tagName.equals(jsonBoolean.booleanValue()))
 		   {
-			   String key = (String) iterator.next();
-			   
-			   if(key.equals(tagName))
-			   {
-				   return object.get(key);
-			   }
-			   else
-			   {
-				   return kidsValueByTagName(object.get(key), tagName);
-			   }
+			   int index = elements.size();
+			   elements.set(index, jsonBoolean);
 		   }
-	   }
-
-	   return null;
-   }
+		   JSONNumber jsonNumber = root.isNumber();
+		   if(jsonNumber != null && tagName.equals(jsonNumber.doubleValue()))
+		   {
+			   int index = elements.size();
+			   elements.set(index, jsonNumber);
+		   }
+		   JSONString jsonString = root.isString();
+		   if(jsonString != null && tagName.equals(jsonString.stringValue()))
+		   {
+			   int index = elements.size();
+			   elements.set(index, jsonString);
+		   }
+	}
 }

@@ -329,8 +329,8 @@ public class DataTransformationTool extends FastTool implements EntryPoint
 		@Override
 		public void doAction()
 		{
-//			TrafoOperator myOp = (TrafoOperator) propertyEvent.getSource();
-//			myLabel.setText(myOp.getName());
+			TrafoOperator myOp = (TrafoOperator) propertyEvent.getSource();
+			myLabel.setText(myOp.getName());
 		}		
 	}
 }
