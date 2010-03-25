@@ -59,7 +59,10 @@ public class SendRequestHandler implements ClickHandler
       designer.requestUrlBox.setText(request);
 
       // Instanciate service
-      service = GWT.create(RequestService.class);
+      if(service == null)
+      {
+    	  service = GWT.create(RequestService.class);
+      }
       
       designer.getResultText().setText("Waiting for server response ...");
 

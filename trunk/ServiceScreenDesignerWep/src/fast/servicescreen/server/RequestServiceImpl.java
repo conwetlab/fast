@@ -25,8 +25,7 @@ public class RequestServiceImpl extends RemoteServiceServlet implements RequestS
 	private HttpGet httpget;
 	private ResponseHandler<String> responseHandler;
 	
-	//TODO: sry guys, but writing a file to relative (project) path does not work for webApps
-	//until jet, so everybody has to enter the projects path here.. 
+	//the current path
 	private String path = ".";
 	
 	@Override
@@ -57,14 +56,19 @@ public class RequestServiceImpl extends RemoteServiceServlet implements RequestS
 	 * into a file, and save it as .js
 	 * */
 	@Override
-	public String saveJsFileOnServer(String fileContent)
+	public String saveJsFileOnServer(String preHTMLCode, String transCode, String postHTMLCode)
 	{
+		//the HTML file content
+		String htmlContent = preHTMLCode + transCode + postHTMLCode;
+		
 		try
 		{
+			//TODO write sep. js file
+			
 			String fileName = path + "/servicescreendesignerwep/embeddedOperator.html";
 			FileWriter writer = new FileWriter(fileName, false);
 			
-			writer.write(fileContent);
+			writer.write(htmlContent);
 			
 			writer.close();
 		}

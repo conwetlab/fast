@@ -11,7 +11,6 @@ import fast.common.client.BuildingBlock;
 import fast.common.client.FASTMappingRule;
 import fast.common.client.FactPort;
 import fast.common.client.ServiceScreen;
-import fast.servicescreen.client.FastTool;
 import fast.servicescreen.client.RequestService;
 import fast.servicescreen.client.RequestServiceAsync;
 import fast.servicescreen.client.gui.RuleUtil;
@@ -24,12 +23,10 @@ import fast.servicescreen.client.gui.parser.OperationHandler;
  * */
 public class CodeGenerator
 {
-	private FastTool designer = null;
 	BuildingBlock screen = null;
 	private HashMap<String, String> table = null;
 	private HashMap<String, String> bracketTable = null;
 	
-	private String rootTemplate = "";
 	private String endbrackets_forLoop = "";
 //	private String endbrackets_outObject = "";
 	private boolean writeFile_result = true;
@@ -55,42 +52,22 @@ public class CodeGenerator
 	/**
 	 * The constructor creates the first template
 	 * */
-	public CodeGenerator(FastTool designer, BuildingBlock screen)
+	public CodeGenerator(BuildingBlock screen)
 	{
-		this.designer = designer;
 		this.screen = screen;
-		
-		setStartingRootTemplate();
 	}
 	
-	public String setStartingRootTemplate()
+	public String resetTemplates()
 	{
-		//fill the rootTemplate
-		rootTemplate =
-			
-			//declare method rump 
-			depth + "function transform(<<inputportlist>>) \n" +
-			depth + "{\n" +
-			
-			//fill request url
-			depth2 + "var prerequest = '<<prerequest>>'; \n\n" +
-			
-			//should replace inports to real values in runtime!
-			depth2 + "<<prerequestreplaces>> \n\n" +
-			
-			//save the complete url with an xmlHttp request (made for Ajax access to SameDomain Resources)
-			depth2 + "var request = prerequest; \n" +
-			"\n" +
-			
-			//sending/recieving the request
-			depth2 + "<<sendrequest>> \n";
-			
-			//the outputPort variable
-//			"<<outputport>> \n" +
-//			"\n" +
-			
-
-		//resets some variables
+		//resets the templates
+		CodeGenerator tmp = new CodeGenerator(null);
+		rootTemplate = tmp.rootTemplate;
+		sendrequest = tmp.sendrequest;
+		prehtml = tmp.prehtml;
+		posthtml = tmp.posthtml;
+		helperMethods = tmp.helperMethods;
+		
+		//resets some state variables
 		endbrackets_forLoop = "";
 //		endbrackets_outObject = "";
 		firstOperation = true;
@@ -129,10 +106,6 @@ public class CodeGenerator
 		
 		//add the end brakets of transformation code
 		bracketTable.put("<<endbrackets_forLoop>>", endbrackets_forLoop);
-		
-		
-		//load the current template text into root template (for user changes, delete it later)
-		rootTemplate = designer.codeGenViewer.get_templateShow_Text();
 		
 		//fill founded values into the <keywords> in rootTemplate
 		rootTemplate = expandTemplateKeys(rootTemplate);
@@ -222,58 +195,8 @@ public class CodeGenerator
 
 	private void add_SendRequest_toTable()
 	{
-		String sendRequest =
-			depth2 + "var xmlHttp = null; \n" + 
-			depth2 + "var xmlResponse = null; \n" + 
-			depth2 + "try \n" +
-			depth2 + "{ \n" + 
-			depth3 + "xmlHttp = new XMLHttpRequest(); \n" + 
-			depth2 + "} \n" +
-			depth2 + "catch(e) \n" +
-			depth2 + "{ \n" + 
-			depth3 + "try \n" +
-			depth3 + "{ \n" + 
-			depth4 + "xmlHttp  = new ActiveXObject('Microsoft.XMLHTTP'); \n" + 
-			depth3 + "} \n" +
-			depth3 + "catch(e) \n" +
-			depth3 + "{ \n" + 
-			depth4 + "try \n" +
-			depth4 + "{ \n" + 
-			depth5 + "xmlHttp  = new ActiveXObject('Msxml2.XMLHTTP'); \n" + 
-			depth4 + "} \n" +
-			depth4 + "catch(e) \n" +
-			depth4 + "{ \n" + 
-			depth5 + "xmlHttp  = null; \n" + 
-			depth4 + "} \n" + 
-			depth3 + "} \n" + 
-			depth2 + "} \n\n" + 
-			
-			depth2 + "if (xmlHttp) \n" +
-			depth2 + "{ \n" + 
-			depth3 + "xmlHttp.open('GET', '" + requestServlet_URL + "' + replaceEscapeCharacter(request), true); \n" + 
-			depth3 + "xmlHttp.onreadystatechange = function () { \n" + 
-			depth3 + "if (xmlHttp.readyState == 4) \n" +
-			depth3 + "{ \n" + 
-			depth4 + "xmlResponse = xmlHttp.responseXML; \n\n" + 
-			depth4 + "var currentTags = null; \n\n" +
-			depth4 + "var currentCount = null; \n\n" +
-			depth4 + "var result = new String(''); \n\n" +
-
-			"<<transformationCode>>\n" +
-
-//			"<<endbrackets_outObject>>\n" +
-			"<<endbrackets_forLoop>>\n" +
-			
-			depth3 + "document.getElementById('show').value = '{' + result + '}'; \n" + 
-			depth3 + "} \n" + 
-			depth2 + "} \n" + 
-			depth2 + "}\n\n" +
-			depth2 + "xmlHttp.send(null); \n\n" + 
-			depth2 + "return 'waiting for response...'; \n" + 
-			depth + "} \n";
-		
 		//add result in the table
-		table.put("<<sendrequest>>", sendRequest);
+		table.put("<<sendrequest>>", sendrequest);
 	}
 	
 	private String transCode = "";	// should only be added ONE time
@@ -432,11 +355,6 @@ public class CodeGenerator
 					}
 				}
 			}
-			else if("dummy".equals(kind))
-			{
-				//simply no handling? Not nessaery
-			}
-			
 			
 			callTransformForKids(rule);
 		}
@@ -517,7 +435,7 @@ public class CodeGenerator
 	
 	/**
 	 * This method send the current template to
-	 * an service which writes a js file with it as content. 
+	 * an service which writes a js and a html file with it as content. 
 	 * */
 	public boolean write_JS_File()
 	{
@@ -525,7 +443,7 @@ public class CodeGenerator
 		RequestServiceAsync service = GWT.create(RequestService.class);
 
 		//send pre - trans - post code to server
-		service.saveJsFileOnServer(preHtml + rootTemplate + postHtml, new AsyncCallback<String>()
+		service.saveJsFileOnServer(prehtml, helperMethods + rootTemplate, posthtml, new AsyncCallback<String>()
 				{
 					@Override
 					public void onSuccess(String result)
@@ -550,38 +468,97 @@ public class CodeGenerator
 
 		return writeFile_result;
 	}
-
 	
-	/**
-	 * The path to the standalone GET Proxy Servlet
-	 * 
-	 * Add a Param before sending. Param should be the url u want to request,
-	 * but fill with escape code first:
-	 * url = http://open.api.sandbox.ebay.com/shopping?appid=KasselUn-efea-4b93-9505-5dc2ef1ceecd&version=517&callname=FindItems&ItemSort=EndTime&QueryKeywords=USB&responseencoding=XML
-	 * 
-	 * -> with URL Escape Codes: / -> %2F, = -> %3D, ? = %3F, & -> %26, : -> %3A
-	 * xxx = http%3A%2F%2Fopen.api.sandbox.ebay.com%2Fshopping%3Fappid%3DKasselUn-efea-4b93-9505-5dc2ef1ceecd%26version%3D517%26callname%3DFindItems%26ItemSort%3DEndTime%26QueryKeywords%3DUSB%26responseencoding%3DXML
-	 * 
-	 * request = http://open.api.sandbox.ebay.com/shopping?appid=KasselUni
-	 * 
-	 * 
-	 * request = http%3A%2F%2Fopen.api.sandbox.ebay.com%2Fshopping%3Fappid%3DKasselUni
-	 * 
-	 * to do this, there is a replaceEscapeCharacter method in this class!
-	 * */
-	private final String requestServlet_URL = "http://127.0.0.1:8888/servicescreendesignerwep/requestServlet?url=";  
+	
+	
+	// -------------- the templte strings -------------- //
+	
+	public String sendrequest =
+		depth2 + "var xmlHttp = null; \n" + 
+		depth2 + "var xmlResponse = null; \n" + 
+		depth2 + "try \n" +
+		depth2 + "{ \n" + 
+		depth3 + "xmlHttp = new XMLHttpRequest(); \n" + 
+		depth2 + "} \n" +
+		depth2 + "catch(e) \n" +
+		depth2 + "{ \n" + 
+		depth3 + "try \n" +
+		depth3 + "{ \n" + 
+		depth4 + "xmlHttp  = new ActiveXObject('Microsoft.XMLHTTP'); \n" + 
+		depth3 + "} \n" +
+		depth3 + "catch(e) \n" +
+		depth3 + "{ \n" + 
+		depth4 + "try \n" +
+		depth4 + "{ \n" + 
+		depth5 + "xmlHttp  = new ActiveXObject('Msxml2.XMLHTTP'); \n" + 
+		depth4 + "} \n" +
+		depth4 + "catch(e) \n" +
+		depth4 + "{ \n" + 
+		depth5 + "xmlHttp  = null; \n" + 
+		depth4 + "} \n" + 
+		depth3 + "} \n" + 
+		depth2 + "} \n\n" + 
+		
+		depth2 + "if (xmlHttp) \n" +
+		depth2 + "{ \n" + 
+		depth3 + "xmlHttp.open('GET', '" + "http://127.0.0.1:8888/servicescreendesignerwep/requestServlet?url=" + "' + replaceEscapeCharacter(request), true); \n" + 
+		depth3 + "xmlHttp.onreadystatechange = function () { \n" + 
+		depth3 + "if (xmlHttp.readyState == 4) \n" +
+		depth3 + "{ \n" + 
+		depth4 + "xmlResponse = xmlHttp.responseXML; \n\n" + 
+		depth4 + "var currentTags = null; \n\n" +
+		depth4 + "var currentCount = null; \n\n" +
+		depth4 + "var result = new String(''); \n\n" +
+
+		"<<transformationCode>>\n" +
+
+//		"<<endbrackets_outObject>>\n" +
+		"<<endbrackets_forLoop>>\n" +
+		
+		depth3 + "document.getElementById('show').value = '{' + result + '}'; \n" + 
+		depth3 + "} \n" + 
+		depth2 + "} \n" + 
+		depth2 + "}\n\n" +
+		depth2 + "xmlHttp.send(null); \n\n" + 
+		depth2 + "return 'waiting for response...'; \n" + 
+		depth + "} \n";
+	
+	
+	//fill the rootTemplate
+	public String rootTemplate = 
+		//declare method rump 
+		depth + "function transform(<<inputportlist>>) \n" +
+		depth + "{\n" +
+		
+		//fill request url
+		depth2 + "var prerequest = '<<prerequest>>'; \n\n" +
+		
+		//should replace inports to real values in runtime!
+		depth2 + "<<prerequestreplaces>> \n\n" +
+		
+		//save the complete url with an xmlHttp request (made for Ajax access to SameDomain Resources)
+		depth2 + "var request = prerequest; \n" +
+		"\n" +
+		
+		//sending/recieving the request
+		depth2 + "<<sendrequest>> \n";
+		
+		//the outputPort variable
+//		"<<outputport>> \n" +
+//		"\n" +
 	
 	/**
 	 * contains html end
 	 * */
-	private String postHtml =
+	public String posthtml =
 		"</script>\n" +
 		"</head>\n" +
 		"<body>\n" +
 		"<form name=f1>\n" +
-		"<input type='text' name=t2 value='Harry' size='50'> \n" +
+		"<input type='text' name=t2 value='f1' size='50'> \n" +
+		"//<input type='text' name=t3 value='2009' size='50'> \n" +
 		"<input type=button value='request and transform' \n" +
-		"onclick='this.form.t1.value=transform(this.form.t2.value)'>	\n" +
+		"onclick='this.form.t1.value=transform(this.form.t2.value, /*this.form.t3.value*/)'>	\n" +
 		"<br><br><br><br> \n" +
 		"RESULT:	\n" +
 		"<input type=text name=t1 id='show' value='press the button above..' size=200>\n" +
@@ -592,13 +569,14 @@ public class CodeGenerator
 	/**
 	 *  Contains the html header and all javascript util functions
 	 * */
-	private String preHtml =
+	public String prehtml =
 		"<html> \n" +
 		"<head> \n" +
 		"<meta http-equiv='Content-Type' content='text/html; charset=ISO-8859-1'> \n" +
 		"<title>Insert title here</title> \n" +
-		"<script type='text/javascript'> \n \n" +
+		"<script type='text/javascript'> \n \n";
 
+	public String helperMethods = 
 		depth2 + "function from(str, sign, sepNr) \n" +
 		depth2 + "{ \n" +
 		depth3 + "var tmp = new String(Trim(str)); \n" +
@@ -782,24 +760,17 @@ public class CodeGenerator
 		depth3 + "url = url.replace(/:/g, '%3A'); \n" +
 		depth3 + "return url; \n" +
 	    depth2 + "} \n\n";
-
-	
-	
-	//Getters, Setters, Helpers
-	
-	/**
-	 * Returns the current template
-	 * */
-	public String getCurrentTemplate()
-	{
-		return this.rootTemplate;
-	}
-	
-	/**
-	 * Set up the current template
-	 * */
-	public void setCurrentTemplate(String text)
-	{
-		this.rootTemplate = text;
-	}
 }
+
+/**
+ * The path to the standalone GET Proxy Servlet
+ * 
+ * Add a Param before sending. Param should be the url u want to request,
+ * but fill with escape code first:
+ * url = http://open.api.sandbox.ebay.com/shopping?appid=KasselUn-efea-4b93-9505-5dc2ef1ceecd&version=517&callname=FindItems&ItemSort=EndTime&QueryKeywords=USB&responseencoding=XML
+ * 
+ * -> with URL Escape Codes: / -> %2F, = -> %3D, ? = %3F, & -> %26, : -> %3A
+ * xxx = http%3A%2F%2Fopen.api.sandbox.ebay.com%2Fshopping%3Fappid%3DKasselUn-efea-4b93-9505-5dc2ef1ceecd%26version%3D517%26callname%3DFindItems%26ItemSort%3DEndTime%26QueryKeywords%3DUSB%26responseencoding%3DXML
+ * 
+ * to do this, there is a replaceEscapeCharacter method in this class!
+ * */

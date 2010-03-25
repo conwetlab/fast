@@ -105,6 +105,11 @@ public class TemplateGUI
 		{
 			TemplateParameter param = new TemplateParameter();
 
+			if(requestTemplate.indexOf("=") < 0)
+			{
+				return;
+			}
+			
 			String name = requestTemplate.substring(0, requestTemplate.indexOf("="));
 			requestTemplate = requestTemplate.substring(requestTemplate.indexOf("=")+1);
 			requestTemplate.replace(name + "=", "");
@@ -181,7 +186,7 @@ public class TemplateGUI
 		
 	}
 
-	@SuppressWarnings({ "unchecked", "unused" })
+	@SuppressWarnings({ "unchecked" })
 	private String buildRequestUrl()
 	{
 		String result = "";

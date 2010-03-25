@@ -9,5 +9,5 @@ public interface RequestServiceAsync
 {
 	void sendHttpRequest_GET(String url, AsyncCallback<String> callback);
 	
-	void saveJsFileOnServer(String fileContent, AsyncCallback<String> callback);
+	void saveJsFileOnServer(String preHTMLCode, String transCode, String postHTMLCode, AsyncCallback<String> callback);
 }

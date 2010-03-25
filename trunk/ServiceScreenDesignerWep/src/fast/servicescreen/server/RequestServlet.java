@@ -41,7 +41,7 @@ public class RequestServlet extends HttpServlet
 			//the forward to the original transmitter)
 			byte[] outByte = value.getBytes();
 			out.write(outByte);
-//			out.close();
+			out.close();
 		}
 	}
 	
