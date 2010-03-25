@@ -1,6 +1,5 @@
 package fast.servicescreen.client.gui.codegen_js;
 
-import com.gargoylesoftware.htmlunit.javascript.host.Screen;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ChangeHandler;
@@ -53,13 +52,13 @@ public class CodeGenViewer
 		
 		//create templateShowBox
 		templateShowBox = new TextArea();
-		templateShowBox.setSize("30cm", "5cm");
+		templateShowBox.setSize("28cm", "5cm");
 		set_templateShow_Text(generator.rootTemplate);	//start content
 		templateShowBox.addChangeHandler(new TemplateChangeHandler());
 		
 		//create .js ShowBox
 		jsShowBox = new TextArea();
-		jsShowBox.setSize("30cm", "5cm");
+		jsShowBox.setSize("28cm", "5cm");
 		
 		//create generateButton
 		Button generateButton = new Button("generate");

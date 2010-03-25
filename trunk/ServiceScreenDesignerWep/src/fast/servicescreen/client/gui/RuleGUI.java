@@ -464,10 +464,16 @@ public class RuleGUI
              }
              if (elements.getLength() == 0)
              {
-            	 NamedNodeMap attributes = xmlDocElement.getAttributes();
-            	 Node namedItem = attributes.getNamedItem(sourceTagname);
-            	 String nodeValue = namedItem.getNodeValue();
-            	 kidItem = treeItem.addItem(targetElemName + " : " + nodeValue);
+               	 NamedNodeMap attributes = xmlDocElement.getAttributes();
+               	 Node namedItem = attributes.getNamedItem(sourceTagname);
+               	 String nodeValue = "";
+               	 if(namedItem != null)
+               	 {
+               		nodeValue = namedItem.getNodeValue();
+               	 }
+                		  
+               	 kidItem = treeItem.addItem(targetElemName + " : " + nodeValue);
+
              }
           }
       }

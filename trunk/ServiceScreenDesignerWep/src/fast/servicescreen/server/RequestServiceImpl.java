@@ -63,8 +63,6 @@ public class RequestServiceImpl extends RemoteServiceServlet implements RequestS
 		
 		try
 		{
-			//TODO write sep. js file
-			
 			String baseFileName = path + "/servicescreendesignerwep/" + opName + "Operator";
 			String fileName = baseFileName + ".html";
 			FileWriter writer = new FileWriter(fileName, false);

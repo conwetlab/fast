@@ -264,12 +264,18 @@ public class CodeGenerator
 							//declare loop body
 					depth4 + currentTags + " = " + from + ".item(" + countVar + ");\n\n" +
 							
-					depth4 + "currentCount = " + countVar + ";\n" + 			//adds a current index variable 
-					
-					depth4 + "result += '\"" + target + "Object\" : [{ '; \n" +	//adds a 'new object' in the result
-							
-					depth4 + "\n\n";
-							
+					//adds a current index variable
+					depth4 + "currentCount = " + countVar + "; \n\n";			 
+						
+					//adds a 'new object' in the result, jumps over Typses that are needles in JSON
+					if(target.startsWith("List of"))
+					{
+						tmpCode += depth4 + "result += '\"" + target + "\" : [ '; \n\n";
+					}
+					else
+					{
+						tmpCode += depth4 + "result += '{ '; \n\n";
+					}
 				
 				//overtake loop in real transcode
 				transCode += tmpCode;
@@ -290,6 +296,7 @@ public class CodeGenerator
 				{
 					tmpCode = "";
 					String lastSourceTagname = "";
+					String attrName = rule.getTargetElemName();
 					
 					current_opList = opList_iter.next();
 					
@@ -324,7 +331,7 @@ public class CodeGenerator
 					//overtake operation code in real transcode
 					if(operationStart)
 					{
-						transCode += depth4 + "result += '\"" + lastSourceTagname + "Attribute\" : \"' + " + tmpCode ;
+						transCode += depth4 + "result += '\"" + attrName + "\" : \"' + " + tmpCode ;
 						
 						operationStart = false;
 					}
@@ -344,7 +351,7 @@ public class CodeGenerator
 						//means, we reach the last fillAttr. rule!
 						if(rule.getParent().getLastOfKids() == rule)
 						{
-							transCode += " + '\"}], '; \n";
+							transCode += " + '\"}, '; \n";
 						}
 						else
 						{
