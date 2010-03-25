@@ -61,7 +61,10 @@ public class RequestGUI
 		designer.requestUrlBox = CTextChangeHandler.createWidthTextBox(designer.serviceScreen, textSize, "requestUrl");
 
 		// Add request button with handler
-		designer.requestHandler = new SendRequestHandler(designer);
+		if (designer.requestHandler == null) 
+		{
+			designer.requestHandler = new SendRequestHandler(designer);
+		}
 		designer.requestButton = new Button("Send Request", designer.requestHandler);
 
 		designer.requestButton.addStyleName("sc-FixedWidthButton");

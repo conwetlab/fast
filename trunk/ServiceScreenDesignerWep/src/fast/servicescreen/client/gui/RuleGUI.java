@@ -23,6 +23,7 @@ import com.google.gwt.user.client.ui.Tree;
 import com.google.gwt.user.client.ui.TreeItem;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.user.client.ui.SuggestOracle.Suggestion;
+import com.google.gwt.xml.client.NamedNodeMap;
 import com.google.gwt.xml.client.Node;
 import com.google.gwt.xml.client.NodeList;
 
@@ -235,7 +236,7 @@ public class RuleGUI
       // "target" attribute
       MultiWordSuggestOracle typeOracle = new MultiWordSuggestOracle();
       
-      ServiceDesigner serviceDesigner = createDefaultTypeStructure();
+      ServiceDesigner serviceDesigner = (ServiceDesigner) buildingBlock.get("serviceDesigner");
       
       fillTypesOracle(nextRule, typeOracle, serviceDesigner);
       final SuggestBox targetBox = CTextChangeHandler.createWidthSuggestBox(nextRule, "3cm", "targetElemName", typeOracle);;
@@ -358,36 +359,6 @@ public class RuleGUI
    
    protected ServiceDesigner tmpServiceDesigner = null;
    protected FactType tmpFactType;
-   protected ServiceDesigner createDefaultTypeStructure()
-   {
-      tmpServiceDesigner = (ServiceDesigner) buildingBlock.get("serviceDesigner"); 
-//      if (tmpServiceDesigner == null)
-//      {
-//         tmpServiceDesigner = new ServiceDesigner().withScreens(buildingBlock);
-//         addToFactTypes("List");
-//        
-//         addToFactTypes("Product");
-//         withNewFactAttr("productName");
-//         withNewFactAttr("price");
-//         withNewFactAttr("uri");
-//         
-//         addToFactTypes("Person");
-//         withNewFactAttr("fullName");
-//         withNewFactAttr("address");
-//         
-//         addToFactTypes("Address");
-//         withNewFactAttr("street");
-//         withNewFactAttr("cipcode");
-//         withNewFactAttr("city");
-//         withNewFactAttr("country");
-//                  
-//         addToFactTypes("ShoppingCard");
-//      
-//         addToFactTypes("String");
-//         withNewFactAttr("value");
-//      }
-      return tmpServiceDesigner;
-   }
    
    protected void withNewFactAttr(String string)
    {
@@ -490,6 +461,13 @@ public class RuleGUI
        		    String nodeValue = opHandler.executeOperations(xmlDocElement, i);
        		    
                 kidItem = treeItem.addItem(targetElemName + " : " + nodeValue);
+             }
+             if (elements.getLength() == 0)
+             {
+            	 NamedNodeMap attributes = xmlDocElement.getAttributes();
+            	 Node namedItem = attributes.getNamedItem(sourceTagname);
+            	 String nodeValue = namedItem.getNodeValue();
+            	 kidItem = treeItem.addItem(targetElemName + " : " + nodeValue);
              }
           }
       }

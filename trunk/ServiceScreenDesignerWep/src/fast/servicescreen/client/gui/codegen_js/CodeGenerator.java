@@ -42,11 +42,11 @@ public class CodeGenerator
 	private String until 		= "until(";
 	private String _from 		= "from(";
 	
-	private String depth  = "	";
-	private String depth2 = "		";
-	private String depth3 = "			";
-	private String depth4 = "				";
-	private String depth5 = "					";
+	private String depth  = "   ";
+	private String depth2 = "      ";
+	private String depth3 = "         ";
+	private String depth4 = "            ";
+	private String depth5 = "               ";
 	
 	
 	/**
@@ -558,10 +558,10 @@ public class CodeGenerator
 		"<input type='text' name=t2 value='f1' size='50'> \n" +
 		"//<input type='text' name=t3 value='2009' size='50'> \n" +
 		"<input type=button value='request and transform' \n" +
-		"onclick='this.form.t1.value=transform(this.form.t2.value, /*this.form.t3.value*/)'>	\n" +
+		"onclick='this.form.t1.value=transform(this.form.t2.value /*, this.form.t3.value*/)'>	\n" +
 		"<br><br><br><br> \n" +
-		"RESULT:	\n" +
-		"<input type=text name=t1 id='show' value='press the button above..' size=200>\n" +
+		"RESULT: <br> \n" +
+		"<textarea name='t1' id='show' value='press the button above..' cols='80' rows='40'></textarea>\n" +
 		"</form>\n" +
 		"</body>\n" +
 		"</html>\n";
