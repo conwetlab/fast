@@ -121,6 +121,9 @@ var ScreenDocument = Class.create(PaletteDocument,
                 this._description.updateBuildingBlock(element, position);
                 break;
         }
+
+        element._onClick();
+
         this._setDirty(true);
     },
 

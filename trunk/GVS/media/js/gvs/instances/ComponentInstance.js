@@ -252,7 +252,6 @@ var ComponentInstance = Class.create(DragSource,
         if (changingZone) {
             this._view.addEventListener (function(event){
                 event.stop();
-                this._onClick(event);
             }.bind(this),'click');
             this._view.addEventListener (function(event){
                 event.stop();
@@ -311,9 +310,9 @@ var ComponentInstance = Class.create(DragSource,
      * must be overriden by descendants
      * @private
      */
-    _onClick: function (/** Event */ event){
+    _onClick: function (){
         if (this._listener) {
-            this._listener.elementClicked(this, event);
+            this._listener.elementClicked(this);
         }
     },
     /**

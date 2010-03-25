@@ -193,7 +193,7 @@ var PaletteDocument = Class.create(AbstractDocument, /** @lends PaletteDocument.
     /**
      * Implementing event listener
      */
-    elementClicked: function(/** ComponentInstance */ element, /** Event */ e) {
+    elementClicked: function(/** ComponentInstance */ element) {
         this._setSelectedElement(element);    
     },
     
