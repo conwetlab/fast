@@ -311,15 +311,8 @@ public class CodeGenerator
 						Operation lastTagnameOperation = opHandler.getLastTagnameOf(current_opList);
 						lastSourceTagname = lastTagnameOperation.value;
 						
-						transCode += depth4 + "elemValue = ''; \n";
-						transCode += depth4 + "elemItem = " + currentTags + ".getElementsByTagName('" + lastSourceTagname + "').item(0); \n";
-						transCode += depth4 + "if( elemItem != null ) \n" +
-								     depth4 + "{ elemValue = elemItem.textContent; } \n" +
-									 depth4 + "else if( currentTags.attributes.getNamedItem('" + lastSourceTagname + "') != null ) \n" +
-									 depth4 + "{ elemValue = currentTags.attributes.getNamedItem('" + lastSourceTagname + "').value; } \n\n";
-						
 						//create code for getting the current (working)element list
-						tmpCode += trimBoth +  " elemValue)";
+						tmpCode += trimBoth +  " getValue(currentTags, '" + lastSourceTagname + "') )";
 						
 						//create code for the hole operation list
 						int count = current_opList.indexOf(lastTagnameOperation) + 1;
@@ -538,8 +531,6 @@ public class CodeGenerator
 		depth4 + "xmlResponse = xmlHttp.responseXML; \n\n" + 
 		depth4 + "var currentTags = null; \n\n" +
 		depth4 + "var currentCount = null; \n\n" +
-		depth4 + "var elemItem = null; \n\n" +
-		depth4 + "var elemValue = null; \n\n" +
 		depth4 + "var result = new String(''); \n\n" +
 
 		"<<transformationCode>>\n" +
@@ -791,6 +782,17 @@ public class CodeGenerator
 		depth3 + "url = url.replace(/&/g, '%26'); \n" +
 		depth3 + "url = url.replace(/:/g, '%3A'); \n" +
 		depth3 + "return url; \n" +
+	    depth2 + "} \n\n" +
+	    
+		depth2 + "function getValue(currentTags, name)\n" +
+		depth2 + "{\n" +
+		depth3 + "	var elemValue = '';\n" +
+		depth3 + "	var elemItem = currentTags.getElementsByTagName(name).item(0);\n" +
+		depth3 + "	if( elemItem != null )\n" +
+		depth3 + "	{ elemValue = elemItem.textContent; }\n" +
+		depth3 + "	else if( currentTags.attributes.getNamedItem(name) != null )\n" +
+		depth3 + "  { elemValue = currentTags.attributes.getNamedItem(name).value; }\n\n" +
+		depth3 + "  return elemValue; \n" +
 	    depth2 + "} \n\n";
 	
 }
