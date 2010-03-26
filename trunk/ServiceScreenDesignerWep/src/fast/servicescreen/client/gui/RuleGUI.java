@@ -464,6 +464,7 @@ public class RuleGUI
              }
              if (elements.getLength() == 0)
              {
+            	 //TODO in OpHandler, too!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
                	 NamedNodeMap attributes = xmlDocElement.getAttributes();
                	 Node namedItem = attributes.getNamedItem(sourceTagname);
                	 String nodeValue = "";

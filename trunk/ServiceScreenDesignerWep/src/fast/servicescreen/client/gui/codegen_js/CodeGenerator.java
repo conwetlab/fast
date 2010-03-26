@@ -28,7 +28,6 @@ public class CodeGenerator
 	private HashMap<String, String> bracketTable = null;
 	
 	private String endbrackets_forLoop = "";
-//	private String endbrackets_outObject = "";
 	private boolean writeFile_result = true;
 	private boolean firstOperation = true;
 	
@@ -69,9 +68,10 @@ public class CodeGenerator
 		
 		//resets some state variables
 		endbrackets_forLoop = "";
-//		endbrackets_outObject = "";
+		bracketBuffer = "";
 		firstOperation = true;
 		operationStart = true;
+		lastWas_fillAttr = false;
 		
 		return rootTemplate;
 	}
@@ -99,10 +99,6 @@ public class CodeGenerator
 		
 		//Build the exRules - feature
 		add_Translation_toTable();
-		
-		
-//		//add the object end brakets of transformation code
-//		bracketTable.put("<<endbrackets_outObject>>", endbrackets_outObject);
 		
 		//add the end brakets of transformation code
 		bracketTable.put("<<endbrackets_forLoop>>", endbrackets_forLoop);
@@ -213,7 +209,9 @@ public class CodeGenerator
 		
 		table.put("<<transformationCode>>", transCode);
 	}
-
+	
+	private String bracketBuffer = "";
+	private boolean lastWas_fillAttr = false;
 	private boolean operationStart = true;
 	private void transform(FASTMappingRule rule)
 	{
@@ -225,7 +223,7 @@ public class CodeGenerator
 			ArrayList<Operation> current_opList = null;
 			
 			String kind = rule.getKind();
-			
+						
 			if ("createObject".equals(kind))
 			{
 				String tmpCode = "";
@@ -267,10 +265,12 @@ public class CodeGenerator
 					//adds a current index variable
 					depth4 + "currentCount = " + countVar + "; \n\n";			 
 						
-					//adds a 'new object' in the result, jumps over Typses that are needles in JSON
+					//adds a 'new object' in the result, jumps over types that are needles in JSON
 					if(target.startsWith("List of"))
 					{
-						tmpCode += depth4 + "result += '\"" + target + "\" : [ '; \n\n";
+						tmpCode += depth4 + "result += '\"" + target + "\" : [ '; \n";
+
+						bracketBuffer += "']' \n";
 					}
 					else
 					{
@@ -280,16 +280,15 @@ public class CodeGenerator
 				//overtake loop in real transcode
 				transCode += tmpCode;
 				
-				
 				//add for loop end bracket
-				endbrackets_forLoop += depth4 + "} \n";	
-				
-				//adds the endbraket for the objects (would be added later)
-//				endbrackets_outObject += depth4 + "result += '}'; \n";
+				endbrackets_forLoop += depth4 + "} \n\n";	
 			}
+			
 			else if ("fillAttributes".equals(kind))
 			{
 				String tmpCode;
+				
+//				lastWas_fillAttr = true;	//TODO
 				
 				//Iterate over any opList entry
 				while(opList_iter.hasNext())
@@ -312,9 +311,15 @@ public class CodeGenerator
 						Operation lastTagnameOperation = opHandler.getLastTagnameOf(current_opList);
 						lastSourceTagname = lastTagnameOperation.value;
 						
+						transCode += depth4 + "elemValue = ''; \n";
+						transCode += depth4 + "elemItem = " + currentTags + ".getElementsByTagName('" + lastSourceTagname + "').item(0); \n";
+						transCode += depth4 + "if( elemItem != null ) \n" +
+								     depth4 + "{ elemValue = elemItem.textContent; } \n" +
+									 depth4 + "else if( currentTags.attributes.getNamedItem('" + lastSourceTagname + "') != null ) \n" +
+									 depth4 + "{ elemValue = currentTags.attributes.getNamedItem('" + lastSourceTagname + "').value; } \n";
+						
 						//create code for getting the current (working)element list
-						tmpCode += trimBoth +  currentTags + ".getElementsByTagName('"
-								+ lastSourceTagname + "').item(0).textContent)";
+						tmpCode += trimBoth +  " elemValue)";
 						
 						//create code for the hole operation list
 						int count = current_opList.indexOf(lastTagnameOperation) + 1;
@@ -409,6 +414,19 @@ public class CodeGenerator
 	@SuppressWarnings("unchecked")
 	private void callTransformForKids(FASTMappingRule rule)
 	{
+//		if(lastWas_fillAttr && rule != null
+//				   && ! "fillAttributes".equals(rule.getKind())
+//				   && ! rule.getTargetElemName().startsWith("List of")
+//				   && ! "".equals(bracketBuffer))
+//		{
+//					transCode += bracketBuffer;
+//					
+//					bracketBuffer = "";
+//					lastWas_fillAttr = false;
+//		} TODO
+		
+		
+		
 		for (Iterator<FASTMappingRule> kidIter = rule.iteratorOfKids(); kidIter.hasNext();)
 		{
 			FASTMappingRule kid = (FASTMappingRule) kidIter.next();
@@ -520,6 +538,8 @@ public class CodeGenerator
 		depth4 + "xmlResponse = xmlHttp.responseXML; \n\n" + 
 		depth4 + "var currentTags = null; \n\n" +
 		depth4 + "var currentCount = null; \n\n" +
+		depth4 + "var elemItem = null; \n\n" +	//TODO new
+		depth4 + "var elemValue = null; \n\n" +	//TODO new
 		depth4 + "var result = new String(''); \n\n" +
 
 		"<<transformationCode>>\n" +

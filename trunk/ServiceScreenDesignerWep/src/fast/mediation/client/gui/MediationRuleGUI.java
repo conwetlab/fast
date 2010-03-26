@@ -1,8 +1,6 @@
 package fast.mediation.client.gui;
 
 import java.util.Iterator;
-import java.util.LinkedHashMap;
-import java.util.LinkedHashSet;
 import java.util.Set;
 
 import com.google.gwt.event.logical.shared.SelectionEvent;
@@ -20,16 +18,13 @@ import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.Tree;
 import com.google.gwt.user.client.ui.TreeItem;
 import com.google.gwt.user.client.ui.Widget;
-import com.google.gwt.xml.client.NodeList;
 
 import fast.common.client.BuildingBlock;
 import fast.common.client.FASTMappingRule;
 import fast.servicescreen.client.RequestServiceAsync;
 import fast.servicescreen.client.gui.RuleGUI;
 import fast.servicescreen.client.gui.RuleUtil;
-import fast.servicescreen.client.gui.parser.OperationHandler;
 import fast.servicescreen.client.rpc.SendRequestHandler;
-import fast.servicescreen.server.RequestServlet;
 
 /**
  * Specifies the RuleGUI working with JSON instead XML.
@@ -132,7 +127,6 @@ public class MediationRuleGUI extends RuleGUI
     * This method transforms the data with the rules
     * to the this.factsTree (JSON)
     * */
-   @SuppressWarnings("unchecked")
    public void transform(JSONValue rootJsonValue, FASTMappingRule rule, TreeItem treeItem)
    {
 	   if(RuleUtil.isCompleteRule(rule))
@@ -216,6 +210,7 @@ public class MediationRuleGUI extends RuleGUI
    /**
     * calls transform for all children of a rule
     * */
+   @SuppressWarnings("unchecked")
    public void transformKids(JSONValue rootJsonValue, FASTMappingRule rule, TreeItem treeItem)
    {
 	   for (Iterator<FASTMappingRule> kidIter = rule.iteratorOfKids(); kidIter.hasNext();)

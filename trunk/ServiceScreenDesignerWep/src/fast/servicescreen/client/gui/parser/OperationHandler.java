@@ -132,6 +132,8 @@ public class OperationHandler
 				}
 				else
 				{
+					//TODO hier irgendwie...
+					
 					//set up sourceTag with last real tagName AND a solved xmlDoc
 					SourceTag sourceTag = getLastSourceTag(xmlDoc, currentList, elementsItemID);
 
