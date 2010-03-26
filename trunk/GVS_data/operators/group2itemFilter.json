@@ -1,6 +1,6 @@
 {
     "name": "Group to Item Filter",
-    "code": "http://localhost:8010/operators/group2itemFilter.src.js",
+    "code": "http://demo.fast.morfeo-project.org/gvsdata/operators/group2itemFilter.src.js",
     "creationDate":"2010-03-08T18:00:00+0200",
     "creator":"admin",
     "description":{

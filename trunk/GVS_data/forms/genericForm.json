@@ -1,6 +1,6 @@
 {
     "name":"Generic Form",
-    "code":"http://hercules.ls.fi.upm.es/gvsdata/forms/genericForm.src.html",
+    "code":"http://demo.fast.morfeo-project.org/gvsdata/forms/genericForm.src.html",
     "creationDate":"2010-03-16T11:09:00+0100",
     "creator":"admin",
     "description":{
@@ -19,12 +19,12 @@
         }
     ],
     "homepage":"http://www.deri.ie/genericForm",
-    "icon":"http://hercules.ls.fi.upm.es/gvsdata/images/catalogue/genericForm.png",
+    "icon":"http://demo.fast.morfeo-project.org/gvsdata/images/catalogue/genericForm.png",
     "label":{
         "en-gb":"Generic Form"
     },
     "rights":"http://creativecommons.org/",
-    "screenshot":"http://hercules.ls.fi.upm.es/gvsdata/images/screenshots/genericForm.png",
+    "screenshot":"http://demo.fast.morfeo-project.org/gvsdata/images/screenshots/genericForm.png",
     "version":"1.0",
     "libraries":[],
     "actions":[

@@ -1,6 +1,6 @@
 {
-    "name":"Ebay Generic Search Service",
-    "code":"http://localhost:8010/resources/ebay/ebayGenericSearchService.src.js",
+    "name":"Generic Ebay Search Service",
+    "code":"http://demo.fast.morfeo-project.org/gvsdata/resources/ebay/ebayGenericSearchService.src.js",
     "creationDate":"2009-04-20T17:00:00+0100",
     "creator":"admin",
     "description":{
@@ -31,7 +31,7 @@
     "homepage":"http://www.deri.ie/ebaySearchService",
     "icon":"http://demo.fast.morfeo-project.org/gvsdata/images/catalogue/ebaySearchService.png",
     "label":{
-        "en-gb":"eBay GenericSearch"
+        "en-gb":"Generic Ebay Search Service"
     },
     "rights":"http://creativecommons.org/",
     "screenshot":"http://www.deri.ie/ebaySearchService.jpg",

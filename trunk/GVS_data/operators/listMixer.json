@@ -1,6 +1,6 @@
 {
-    "name": "Item Group Mixer Filter",
-    "code": "http://hercules.ls.fi.upm.es/gvsdata/operators/listMixer.src.js",
+    "name": "Item Group Mixer",
+    "code": "http://demo.fast.morfeo-project.org/gvsdata/operators/listMixer.src.js",
     "creationDate":"2009-04-20T18:00:00+0200",
     "creator":"admin",
     "description":{
@@ -9,20 +9,19 @@
     "tags":[
         {
             "label":{
-                "en-gb":"amazon"
-            },
-            "means":"http://dbpedia.org/page/Amazon.com"
+                "en-gb":"mixer"
+            }
         },
         {
             "label":{
-                "en-gb":"ebay"
+                "en-gb":"generic"
             }
         }
     ],
     "homepage": "http://www.deri.ie/eBayList",
     "icon": "http://demo.fast.morfeo-project.org/gvsdata/images/catalogue/eBayList.png",
     "label": {
-        "en-gb": "Group Mixer"
+        "en-gb": "Item Group Mixer"
     },
     "rights": "http://creativecommons.org/",
     "screenshot": "http://www.deri.ie/eBayList-screenshot.jpg",

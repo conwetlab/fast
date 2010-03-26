@@ -1,6 +1,6 @@
 {
-    "name": "Item Filter",
-    "code": "http://hercules.ls.fi.upm.es/gvsdata/operators/itemFilter.src.js",
+    "name": "Group to Item Filter",
+    "code": "http://demo.fast.morfeo-project.org/gvsdata/operators/itemFilter.src.js",
     "creationDate":"2010-03-08T18:00:00+0200",
     "creator":"admin",
     "description":{
@@ -24,12 +24,12 @@
         }
     ],
     "homepage": "http://www.deri.ie/itemFilter",
-    "icon": "http://hercules.ls.fi.upm.es/gvsdata/images/catalogue/itemFilter.png",
+    "icon": "http://demo.fast.morfeo-project.org/gvsdata/images/catalogue/itemFilter.png",
     "label": {
-        "en-gb": "Item Filter"
+        "en-gb": "Group to Item Filter"
     },
     "rights": "http://creativecommons.org/",
-    "screenshot": "http://hercules.ls.fi.upm.es/gvsdata/images/catalogue/itemFilter.png",
+    "screenshot": "http://demo.fast.morfeo-project.org/gvsdata/images/catalogue/itemFilter.png",
     "version": "1.0",
     "libraries": [],
     "actions":[

@@ -1,6 +1,6 @@
 {
     "name":"Google Base Search Service",
-    "code":"http://localhost:8010/resources/googlebase/googlebaseSearchService.src.js",
+    "code":"http://demo.fast.morfeo-project.org/gvsdata/resources/googlebase/googlebaseSearchService.src.js",
     "creationDate":null,
     "creator":"admin",
     "description":{

@@ -1,6 +1,6 @@
 {
-    "name": "List Form",
-    "code":"http://hercules.ls.fi.upm.es/gvsdata/forms/list.src.html",
+    "name": "Generic List Form",
+    "code":"http://demo.fast.morfeo-project.org/gvsdata/forms/list.src.html",
     "creationDate":"2009-04-20T17:00:00+0100",
     "creator":"admin",
     "description":{
@@ -9,9 +9,8 @@
     "tags":[
         {
             "label":{
-                "en-gb":"amazon"
-            },
-            "means":"http://dbpedia.org/page/Amazon.com"
+                "en-gb":"generic"
+            }
         },
         {
             "label":{
@@ -23,7 +22,7 @@
     "homepage":"http://www.deri.ie/amazonList",
     "icon":"http://demo.fast.morfeo-project.org/gvsdata/images/catalogue/amazonList.png",
     "label":{
-        "en-gb":"List"
+        "en-gb":"Generic List Form"
     },
     "rights":"http://creativecommons.org/",
     "screenshot":"http://demo.fast.morfeo-project.org/gvsdata/images/screenshots/amazonProductList.png",

@@ -1,6 +1,6 @@
 {
     "name":"Nvivo Search Service",
-    "code":"http://localhost:8010/resources/nvivo/nvivoSearchService.src.js",
+    "code":"http://demo.fast.morfeo-project.org/gvsdata/resources/nvivo/nvivoSearchService.src.js",
     "creationDate":null,
     "creator":"admin",
     "description":{

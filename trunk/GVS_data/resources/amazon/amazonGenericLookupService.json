@@ -1,6 +1,6 @@
 {
-    "name":"Amazon Generic Lookup Service",
-    "code":"http://localhost:8010/resources/amazon/amazonGenericLookupService.src.js",
+    "name":"Generic Amazon Lookup Service",
+    "code":"http://demo.fast.morfeo-project.org/gvsdata/resources/amazon/amazonGenericLookupService.src.js",
     "creationDate":"2009-04-20T17:00:00+0100",
     "creator":"admin",
     "description":{
@@ -27,7 +27,7 @@
     "homepage":"http://www.deri.ie/amazonLookupService",
     "icon":"http://demo.fast.morfeo-project.org/gvsdata/images/catalogue/amazonLookupService.png",
     "label":{
-        "en-gb":"Amazon Generic Lookup Service"
+        "en-gb":"Generic Amazon Lookup Service"
     },
     "rights":"http://creativecommons.org/",
     "screenshot":"http://www.deri.ie/amazonLookupService.jpg",

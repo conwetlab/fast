@@ -1,6 +1,6 @@
 {
-    "name":"Google Base Generic Search Service",
-    "code":"http://localhost:8010/resources/googlebase/googlebaseGenericSearchService.src.js",
+    "name":"Generic Google Base Search Service",
+    "code":"http://demo.fast.morfeo-project.org/gvsdata/resources/googlebase/googlebaseGenericSearchService.src.js",
     "creationDate":null,
     "creator":"admin",
     "description":{
@@ -36,7 +36,7 @@
     "homepage":"hhttp://www.deri.ie/amazonSearchService",
     "icon":"http://demo.fast.morfeo-project.org/gvsdata/images/catalogue/amazonSearchService.png",
     "label":{
-        "en-gb":"Google Base Generic Search Service"
+        "en-gb":"Generic Google Base Search Service"
     },
     "rights":"http://creativecommons.org/",
     "screenshot":"http://www.deri.ie/amazonList-screenshot.jpg",
