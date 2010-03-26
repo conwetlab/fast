@@ -23,7 +23,6 @@ import com.google.gwt.user.client.ui.Tree;
 import com.google.gwt.user.client.ui.TreeItem;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.user.client.ui.SuggestOracle.Suggestion;
-import com.google.gwt.xml.client.NamedNodeMap;
 import com.google.gwt.xml.client.Node;
 import com.google.gwt.xml.client.NodeList;
 
@@ -462,19 +461,13 @@ public class RuleGUI
        		    
                 kidItem = treeItem.addItem(targetElemName + " : " + nodeValue);
              }
+             
+             //access attribute if there where no elements
              if (elements.getLength() == 0)
              {
-            	 //TODO in OpHandler, too!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-               	 NamedNodeMap attributes = xmlDocElement.getAttributes();
-               	 Node namedItem = attributes.getNamedItem(sourceTagname);
-               	 String nodeValue = "";
-               	 if(namedItem != null)
-               	 {
-               		nodeValue = namedItem.getNodeValue();
-               	 }
-                		  
-               	 kidItem = treeItem.addItem(targetElemName + " : " + nodeValue);
-
+            	String nodeValue = RuleUtil.get_AttributeByName(xmlDocElement, sourceTagname);
+            	
+               	kidItem = treeItem.addItem(targetElemName + " : " + nodeValue);
              }
           }
       }

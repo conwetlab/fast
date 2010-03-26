@@ -132,13 +132,13 @@ public class OperationHandler
 				}
 				else
 				{
-					//TODO hier irgendwie...
-					
 					//set up sourceTag with last real tagName AND a solved xmlDoc
 					SourceTag sourceTag = getLastSourceTag(xmlDoc, currentList, elementsItemID);
-
+					
 					String nodeValue = sourceTag.getCurrentXmlPart().getFirstChild().getNodeValue();
 
+					//TODO HERE MUST BE CALLED GETATTR, IF IT IS NO ELEMVALUE!!!
+					
 					//create/expand the result
 					result += executeOperationList(currentList, nodeValue);
 				}

@@ -316,7 +316,7 @@ public class CodeGenerator
 						transCode += depth4 + "if( elemItem != null ) \n" +
 								     depth4 + "{ elemValue = elemItem.textContent; } \n" +
 									 depth4 + "else if( currentTags.attributes.getNamedItem('" + lastSourceTagname + "') != null ) \n" +
-									 depth4 + "{ elemValue = currentTags.attributes.getNamedItem('" + lastSourceTagname + "').value; } \n";
+									 depth4 + "{ elemValue = currentTags.attributes.getNamedItem('" + lastSourceTagname + "').value; } \n\n";
 						
 						//create code for getting the current (working)element list
 						tmpCode += trimBoth +  " elemValue)";
@@ -538,8 +538,8 @@ public class CodeGenerator
 		depth4 + "xmlResponse = xmlHttp.responseXML; \n\n" + 
 		depth4 + "var currentTags = null; \n\n" +
 		depth4 + "var currentCount = null; \n\n" +
-		depth4 + "var elemItem = null; \n\n" +	//TODO new
-		depth4 + "var elemValue = null; \n\n" +	//TODO new
+		depth4 + "var elemItem = null; \n\n" +
+		depth4 + "var elemValue = null; \n\n" +
 		depth4 + "var result = new String(''); \n\n" +
 
 		"<<transformationCode>>\n" +
@@ -547,7 +547,7 @@ public class CodeGenerator
 //		"<<endbrackets_outObject>>\n" +
 		"<<endbrackets_forLoop>>\n" +
 		
-		depth3 + "document.getElementById('show').value = '{' + result + '}'; \n" + 
+		depth3 + "document.getElementById('show').value = '{' + result + ']}'; \n" + //TODO cheat! 
 		depth3 + "} \n" + 
 		depth2 + "} \n" + 
 		depth2 + "}\n\n" +

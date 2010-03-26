@@ -11,6 +11,7 @@ import com.google.gwt.user.client.ui.Tree;
 import com.google.gwt.user.client.ui.TreeItem;
 import com.google.gwt.xml.client.Document;
 import com.google.gwt.xml.client.Element;
+import com.google.gwt.xml.client.NamedNodeMap;
 import com.google.gwt.xml.client.Node;
 import com.google.gwt.xml.client.NodeList;
 
@@ -142,8 +143,40 @@ public class RuleUtil
 		   {
 			   elements = ((Element) xmlDoc).getElementsByTagName(tagName);
 		   }
-
+		   
 		   return elements;
+	   }
+	   
+	   /**
+	    * This method checks if given xmlDoc contains tagName, if not, it
+	    * watch for Attr. in given xmlDoc
+	    * */
+	   public static String get_AttributeByName(Node xmlDoc, String tagName)
+	   {
+		   NodeList elements = null;
+		   String nodeValue = "";
+		   
+		   if (xmlDoc instanceof Document)
+		   {
+			   elements = ((Document) xmlDoc).getElementsByTagName(tagName);
+		   }
+		   else if (xmlDoc instanceof Element)
+		   {
+			   elements = ((Element) xmlDoc).getElementsByTagName(tagName);
+		   }
+		   
+		   //if there are no Elem, it must be attribute
+           if (elements.getLength() == 0)
+           {
+             	 NamedNodeMap attributes = xmlDoc.getAttributes();
+             	 Node namedItem = attributes.getNamedItem(tagName);
+             	 if(namedItem != null)
+             	 {
+             		nodeValue = namedItem.getNodeValue();
+             	 }
+           }
+		   
+		   return nodeValue;
 	   }
 	   
 	   
