@@ -140,7 +140,9 @@
 					    var details = new Element('div', {
 						    'class': 'detailsForm'
 						});
-						document.body.appendChild(details);
+					    var body = $('{{screenId}}_body');
+						body.innerHTML = '';
+						body.appendChild(details);
 						
 						// Left Column (Image)
 						var leftColumn = new Element('div', {
@@ -406,5 +408,6 @@
 		</script>
     </head>
     <body>
+    	<div id="{{screenId}}_body"></div>
     </body>
 </html>
