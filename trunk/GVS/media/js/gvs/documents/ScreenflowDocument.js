@@ -56,6 +56,7 @@ var ScreenflowDocument = Class.create(PaletteDocument,
                 this._description.updatePrePost(element.getUri(), position);
                 break;
         }
+        element._onClick();
        this._setDirty(true);
     },
 
