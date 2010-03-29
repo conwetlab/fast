@@ -1,11 +1,11 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
-	<head>
-		<meta http-equiv="Content-Type" content="application/xhtml+xml; charset=UTF-8" />
-		<link type="text/css" rel="stylesheet" href="http://demo.fast.morfeo-project.org/gvsdata/amazonScreens/style/table.css" />
-		<link type="text/css" rel="stylesheet" href="http://demo.fast.morfeo-project.org/gvsdata/amazonScreens/style/screen.css" />
-		<style type="text/css">
-		    .list_title {
-    		    color:       #FEBF43;
+    <head>
+        <meta http-equiv="Content-Type" content="application/xhtml+xml; charset=UTF-8" />
+        <link type="text/css" rel="stylesheet" href="http://demo.fast.morfeo-project.org/gvsdata/amazonScreens/style/table.css" />
+        <link type="text/css" rel="stylesheet" href="http://demo.fast.morfeo-project.org/gvsdata/amazonScreens/style/screen.css" />
+        <style type="text/css">
+            .list_title {
+                color:       #FEBF43;
                 font-family: Arial,Helvetica,sans-serif;
                 font-size:   24px;
                 font-style:  italic;
@@ -62,9 +62,9 @@
             tr.selected {
                 background: #FFF8E8;
             }
-		</style>
+        </style>
 
-		<script type="text/javascript">
+        <script type="text/javascript">
 
             var {{buildingblockId}} = Class.create(BuildingBlock,{
 
@@ -77,7 +77,8 @@
                                     field: 'image',
                                     title: '',
                                     type:  'img',
-                                    width: '80px'
+                                    width: '80px',
+                                    heigth: '80px'
                                 },{
                                     field: 'title',
                                     title: 'Title',
@@ -194,6 +195,8 @@
                                 var img = document.createElement('img');
                                 img.src = entry[colDef.field];
                                 cell.appendChild(img);
+                                cell.style.maxWidth = cell.width;
+                                cell.style.maxHeigth = cell.heigth;
                                 break;
                             case 'text':
                             default:
@@ -273,27 +276,27 @@
                     this.manageData(["newFilter"], [filter], []);
                 }*/
             });
-		</script>
-	</head>
-	
-	<body>
-		<div id="{{screenId}}_bodyDiv">
-		    <div class="logoLayer"><img id="{{screenId}}_logo" src="http://demo.fast.morfeo-project.org/gvsdata/amazonScreens/images/amazon.png" /></div>
-			<h1 id="{{screenId}}_title" class="list_title">Item list</h1>
-			<div>
-				<table>
-				    <thead id="{{screenId}}_tableHeader">
-				    </thead>
-				    <tbody id="{{screenId}}_listBody">
-				    </tbody>
-				</table>
-				<img id="{{screenId}}_loadingImg" class="loadingImg" src="http://demo.fast.morfeo-project.org/gvsdata/amazonScreens/images/ajaxLoader.gif" />
-				<div id="{{screenId}}_buttonArea" class="buttonArea">
-				    <input type="button" id="{{screenId}}_previousButton" class="button previousButton" value="<" />
-				    <span id="pages" class="pages"> Page <span id="curPage">-</span>/<span id="totalPages">-</span></span>
-				    <input type="button" id="{{screenId}}_nextButton" class="button nextButton" value=">" />
-				</div>
-			</div>
-		</div>
-	</body>
+        </script>
+    </head>
+
+    <body>
+        <div id="{{screenId}}_bodyDiv">
+            <div class="logoLayer"><img id="{{screenId}}_logo" src="http://demo.fast.morfeo-project.org/gvsdata/amazonScreens/images/amazon.png" /></div>
+            <h1 id="{{screenId}}_title" class="list_title">Item list</h1>
+            <div>
+                <table>
+                    <thead id="{{screenId}}_tableHeader">
+                    </thead>
+                    <tbody id="{{screenId}}_listBody">
+                    </tbody>
+                </table>
+                <img id="{{screenId}}_loadingImg" class="loadingImg" src="http://demo.fast.morfeo-project.org/gvsdata/amazonScreens/images/ajaxLoader.gif" />
+                <div id="{{screenId}}_buttonArea" class="buttonArea">
+                    <input type="button" id="{{screenId}}_previousButton" class="button previousButton" value="<" />
+                    <span id="pages" class="pages"> Page <span id="curPage">-</span>/<span id="totalPages">-</span></span>
+                    <input type="button" id="{{screenId}}_nextButton" class="button nextButton" value=">" />
+                </div>
+            </div>
+        </div>
+    </body>
 </html>

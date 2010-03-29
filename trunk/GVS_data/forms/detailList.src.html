@@ -22,9 +22,10 @@
 				padding-bottom:5px;
 				padding-top:10px;
 			}
-			.image img {
-			    max-width: 99%;
-			}
+            .image img {
+                max-width: 99%;
+                max-height: 99%;
+            }
 			.leftColumn{
 				position: relative;
 				float:left;
@@ -35,7 +36,7 @@
 				float:right;
 				height: 268px;
 				width: 60%;
-				
+
 				padding-top:5px;
 				padding-right:0px;
 				padding-left:5px;
@@ -43,12 +44,12 @@
 				position:relative;
 			}
 			.itemTitle {
-			    font-size: 20px; 
-			    padding: 2px; 
-			    color:#F8A704; 
-			    font-weight: bold; 
-			    font-style: italic; 
-			    font-family: Arial, Helvetica, sans-serif; 
+			    font-size: 20px;
+			    padding: 2px;
+			    color:#F8A704;
+			    font-weight: bold;
+			    font-style: italic;
+			    font-family: Arial, Helvetica, sans-serif;
 			    overflow: hidden;
 			}
 			.infoArea{
@@ -224,8 +225,7 @@
                         
                         details.appendChild(buttonArea);
 					},
-		
-                                			
+
 					showListElements: function (_list) {
 					    if (_list.data) {
 					        this._list = _list.data;
@@ -273,7 +273,7 @@
 				        }
 					},
 
-					_showProductInfo: function (_product){
+					_showProductInfo: function (_product) {
 						if (_product.title) {
 							//Reset styles
 							this._reset();
@@ -290,8 +290,7 @@
 											} else {
 												this._moreInfoText.setStyle({"height": "110px"});
 											}
-										} 
-										else{//Three lines
+										} else {//Three lines
 											this._moreInfoText.setStyle({"height": "110px"});
 											this._title.setStyle ({"fontSize":"14px"});	
 										}
@@ -316,13 +315,13 @@
 						        this._insertElement(this._capitalize(element), _product.details[element]);
 						    }.bind(this));
 						}
-						this._showAdvancedDetails(_product);				 
+						this._showAdvancedDetails(_product);
 					},
 					
 					_showAdvancedDetails: function(_product) {
 					    
 				        var details = $H(_product.details);
-				        if (details && details.keys().size() > 0) {	        
+				        if (details && details.keys().size() > 0) {
 				            this._moreInfoText.addClassName("moreInfoText");
 				            if (this.parameter && this.parameter.itemTitle) {
 				                this._moreInfoTitle.update(this.parameter.itemTitle + " Details");
@@ -343,17 +342,16 @@
 				                    if (node) {
 				                       list.appendChild(node);
 				                    }
-				                }				                
+				                }
 				            }.bind(this));
 				            this._moreInfoText.appendChild(list);
 				        }
 					},
-					
-					
+
 					_createDetailNode: function(key, value) {
 					    var title = this._capitalize(key);
 					    var li = new Element('li').update(title + ": ");
-                        if (typeof value == "string") {				        
+                        if (typeof value == "string") {
 					        li.appendChild(new Element('span', {
 					            'class': 'detailsElement'
 					        }).update(this._sanitize(value)));
@@ -404,10 +402,10 @@
 					_capitalize: function(text) {
 					    return text.split(" ").collect(function(e){return e.capitalize()}).join(" ");
 					}
-        	});
-		</script>
+            });
+        </script>
     </head>
     <body>
-    	<div id="{{screenId}}_body"></div>
+        <div id="{{screenId}}_body"></div>
     </body>
 </html>
