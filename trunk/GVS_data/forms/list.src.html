@@ -195,8 +195,8 @@
                                 var img = document.createElement('img');
                                 img.src = entry[colDef.field];
                                 cell.appendChild(img);
-                                cell.style.maxWidth = cell.width;
-                                cell.style.maxHeigth = cell.heigth;
+                                img.style.maxWidth = cell.width;
+                                img.style.maxHeigth = cell.heigth;
                                 break;
                             case 'text':
                             default:
