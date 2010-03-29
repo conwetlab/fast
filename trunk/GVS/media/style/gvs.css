@@ -823,11 +823,7 @@ h4{
     padding: 0px;
     text-align: center;
 }
-.form .image {
-    max-height: 140px;
-    margin: auto;
-    margin-bottom: 68px;
-}
+
 .form .fact, .form .trigger {
     margin: 2px 5px;
     float: left;

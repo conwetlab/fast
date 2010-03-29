@@ -18,6 +18,12 @@ var FormInstance = Class.create(ComponentInstance,
          */
         this._terminals = new Hash();
         
+        /**
+         * @type PreviewDialog
+         * @private @member
+         */
+        this._dialog = null;
+        
     },
 
     // **************** PUBLIC METHODS **************** //
@@ -30,6 +36,17 @@ var FormInstance = Class.create(ComponentInstance,
     getTitle: function() {
         return this._buildingBlockDescription.label['en-gb']; 
     },   
+    
+    /**
+     * This function shows the dialog to change
+     * the instance properties
+     */
+    showPreviewDialog: function () {
+        if (!this._dialog) {
+            this._dialog = new PreviewDialog(this.getTitle(), this._buildingBlockDescription.getPreview());
+        }
+        this._dialog.show();        
+    },
     
     /**
      * @override
@@ -171,7 +188,16 @@ var FormInstance = Class.create(ComponentInstance,
      */
     _createView: function () {
         return new FormView(this._buildingBlockDescription);
-    }
+    },
+    
+    /**
+     * This function is called when the attached view is dbl-clicked
+     * @private
+     * @override
+     */
+    _onDoubleClick: function (/** Event */ event){
+        this.showPreviewDialog(); 
+    } 
     
 });
 

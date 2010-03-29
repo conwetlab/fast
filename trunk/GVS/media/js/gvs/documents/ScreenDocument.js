@@ -142,11 +142,11 @@ var ScreenDocument = Class.create(PaletteDocument,
         var formArea = new Area('form',
                                 $A([Constants.BuildingBlock.FORM]),
                                 this._drop.bind(this),
-                                {splitter: true, region: 'top', minHeight:300});
+                                {splitter: true, region: 'top', minHeight:150});
         var operatorArea = new Area('operator',
                                     $A([Constants.BuildingBlock.OPERATOR]),
                                     this._drop.bind(this),
-                                    {splitter: true, region: 'center', minHeight:200, minWidth:200});
+                                    {splitter: true, region: 'center', minHeight:350, minWidth:200});
         var resourceArea = new Area('resource',
                                     $A([Constants.BuildingBlock.RESOURCE]),
                                     this._drop.bind(this),

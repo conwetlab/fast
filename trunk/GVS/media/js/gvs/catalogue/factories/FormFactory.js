@@ -107,7 +107,7 @@ var FormFactory = Class.create(BuildingBlockFactory,
 
         for (var i=0; i< formDescriptions.length ; i++) {
             this._buildingBlockDescriptions.set(formDescriptions[i].uri,
-                                        new BuildingBlockDescription (formDescriptions[i]));
+                                        new FormDescription (formDescriptions[i]));
         }
     }
 });

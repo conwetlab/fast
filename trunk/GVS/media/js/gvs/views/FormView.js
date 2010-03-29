@@ -94,16 +94,7 @@ var FormView = Class.create(BuildingBlockView,
         triggerPostContainer.appendChild(postArea);
         
         this._node.appendChild(triggerPostContainer);
-        
-        var imageUrl = description.screenshot;
 
-        var image = new Element ('img',{
-                'class': 'image', 
-                'src': imageUrl,
-                'onerror': 'this.src = "/fast/images/gui/imageNotFound.png"; '
-        });
-        this._node.appendChild(image);      
-        
     },
     
     // **************** PUBLIC METHODS **************** //
