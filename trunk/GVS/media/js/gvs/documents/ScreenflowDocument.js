@@ -292,6 +292,12 @@ var ScreenflowDocument = Class.create(PaletteDocument,
                 this._previewSelectedElement.bind(this),
                 false // disabled by default
         ));
+        this._addToolbarElement('cloneElement', new ToolbarButton(
+                'Edit selected element',
+                'clone',
+                this._cloneSelectedElement.bind(this),
+                false // disabled by default
+        ));
         this._addToolbarElement('planner', new ToolbarButton(
                 'Create a plan for this screen',
                 'planner',
@@ -321,6 +327,10 @@ var ScreenflowDocument = Class.create(PaletteDocument,
         this._toolbarElements.get('previewElement').setEnabled(element!=null);
         this._toolbarElements.get('planner').setEnabled(
             element!=null && element.constructor == ScreenInstance
+        );
+        this._toolbarElements.get('cloneElement').setEnabled(
+            element!=null && element.constructor == ScreenInstance &&
+            element.getBuildingBlockDescription().definition != null
         );
     },
 
@@ -610,6 +620,17 @@ var ScreenflowDocument = Class.create(PaletteDocument,
         this._refreshReachability();
         if (this._description.cloned) {
             this._saveAs(true);
+        }
+    },
+
+    /**
+     * Creates a clone of the selected screen
+     * @private
+     */
+    _cloneSelectedElement: function() {
+        var description = this._selectedElement.getBuildingBlockDescription();
+        if (description.definition) {
+            GVS.getDocumentController().cloneScreen(description.id);
         }
     }
 });
