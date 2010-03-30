@@ -41,11 +41,11 @@ public class CodeGenerator
 	private String until 		= "until(";
 	private String _from 		= "from(";
 	
-	private String depth  = "	";
-	private String depth2 = "		";
-	private String depth3 = "			";
-	private String depth4 = "				";
-	private String depth5 = "					";
+	private String depth  = "   ";
+	private String depth2 = "      ";
+	private String depth3 = "         ";
+	private String depth4 = "            ";
+	private String depth5 = "               ";
 	
 	
 	/**
@@ -125,17 +125,19 @@ public class CodeGenerator
 		// lookup the gui input ports
 		FactPort currentInpPort = null;
 		String preReqRepText = "";
+		String indent = "";
 		
 		for (Iterator<FactPort> iterator = screen.iteratorOfPreconditions(); iterator.hasNext();)
 		{
 			currentInpPort = iterator.next();
 			
 			//build prerequestreplaces
-			preReqRepText += depth2 + "prerequest = prerequest.replace(/<";
+			preReqRepText += indent + "prerequest = prerequest.replace(/<";
 			preReqRepText += currentInpPort.get("name");
 			preReqRepText += ">/g,"; 
 			preReqRepText += currentInpPort.get("name");
 			preReqRepText += "); \n ";
+			indent = depth2;
 		}
 		
 		//add result lines in the table
@@ -215,6 +217,7 @@ public class CodeGenerator
 	private boolean operationStart = true;
 	private void transform(FASTMappingRule rule)
 	{
+		String closeSquareBracket = "";
 		if(RuleUtil.isCompleteRule(rule) && rule.getOperationHandler() != null)
 		{
 			//get the current operationList 
@@ -239,6 +242,12 @@ public class CodeGenerator
 					firstOperation = false;
 					
 					curTag = "xmlResponse";
+					
+					tmpCode += depth4 + "var indent = ''; \n";
+				}
+				else
+				{
+					tmpCode += depth4 + "indent = indent + '   '; \n";
 				}
 
 				//element count
@@ -260,28 +269,28 @@ public class CodeGenerator
 					depth4 + "{\n" +
 							
 							//declare loop body
-					depth4 + currentTags + " = " + from + ".item(" + countVar + ");\n\n" +
+					   depth5 + currentTags + " = " + from + ".item(" + countVar + ");\n\n" +
 							
-					//adds a current index variable
-					depth4 + "currentCount = " + countVar + "; \n\n";			 
+					   //adds a current index variable
+					   depth5 + "currentCount = " + countVar + "; \n\n";			 
 						
-					//adds a 'new object' in the result, jumps over types that are needles in JSON
-					if(target.startsWith("List of"))
-					{
-						tmpCode += depth4 + "result += '\"" + target + "\" : [ '; \n";
+					   //adds a 'new object' in the result, jumps over types that are needles in JSON
+				if(target.startsWith("List of"))
+				{
+					tmpCode += depth5 + "result += indent + '\"" + target + "\" : [ \\\\n'; \n";
 
-						bracketBuffer += "']' \n";
-					}
-					else
-					{
-						tmpCode += depth4 + "result += '{ '; \n\n";
-					}
-				
+					closeSquareBracket += "']' \n";
+				}
+				else
+				{
+					tmpCode += depth5 + "result += indent + '{ \\\\n'; \n\n";
+				}
+
 				//overtake loop in real transcode
 				transCode += tmpCode;
 				
 				//add for loop end bracket
-				endbrackets_forLoop += depth4 + "} \n\n";	
+				endbrackets_forLoop += depth4 + closeSquareBracket + "} \n\n";	
 			}
 			
 			else if ("fillAttributes".equals(kind))
@@ -329,7 +338,7 @@ public class CodeGenerator
 					//overtake operation code in real transcode
 					if(operationStart)
 					{
-						transCode += depth4 + "result += '\"" + attrName + "\" : \"' + " + tmpCode ;
+						transCode += depth4 + "result += indent + '   \"" + attrName + "\" : \"' + " + tmpCode;
 						
 						operationStart = false;
 					}
@@ -349,11 +358,11 @@ public class CodeGenerator
 						//means, we reach the last fillAttr. rule!
 						if(rule.getParent().getLastOfKids() == rule)
 						{
-							transCode += " + '\"}, '; \n";
+							transCode += " + '\" \\\\n' + indent + '}, \\\\n'; \n";
 						}
 						else
 						{
-							transCode += " + '\", '; \n";
+							transCode += " + '\", \\\\n'; \n";
 						}
 						
 						operationStart = true;
@@ -501,25 +510,25 @@ public class CodeGenerator
 		depth2 + "var xmlResponse = null; \n" + 
 		depth2 + "try \n" +
 		depth2 + "{ \n" + 
-		depth3 + "xmlHttp = new XMLHttpRequest(); \n" + 
+		   depth3 + "xmlHttp = new XMLHttpRequest(); \n" + 
 		depth2 + "} \n" +
 		depth2 + "catch(e) \n" +
 		depth2 + "{ \n" + 
-		depth3 + "try \n" +
-		depth3 + "{ \n" + 
-		depth4 + "xmlHttp  = new ActiveXObject('Microsoft.XMLHTTP'); \n" + 
-		depth3 + "} \n" +
-		depth3 + "catch(e) \n" +
-		depth3 + "{ \n" + 
-		depth4 + "try \n" +
-		depth4 + "{ \n" + 
-		depth5 + "xmlHttp  = new ActiveXObject('Msxml2.XMLHTTP'); \n" + 
-		depth4 + "} \n" +
-		depth4 + "catch(e) \n" +
-		depth4 + "{ \n" + 
-		depth5 + "xmlHttp  = null; \n" + 
-		depth4 + "} \n" + 
-		depth3 + "} \n" + 
+		   depth3 + "try \n" +
+		   depth3 + "{ \n" + 
+		      depth4 + "xmlHttp  = new ActiveXObject('Microsoft.XMLHTTP'); \n" + 
+		   depth3 + "} \n" +
+		   depth3 + "catch(e) \n" +
+		   depth3 + "{ \n" + 
+		      depth4 + "try \n" +
+		      depth4 + "{ \n" + 
+		         depth5 + "xmlHttp  = new ActiveXObject('Msxml2.XMLHTTP'); \n" + 
+		      depth4 + "} \n" +
+		      depth4 + "catch(e) \n" +
+		      depth4 + "{ \n" + 
+		         depth5 + "xmlHttp  = null; \n" + 
+		      depth4 + "} \n" + 
+		   depth3 + "} \n" + 
 		depth2 + "} \n\n" + 
 		
 		depth2 + "if (xmlHttp) \n" +

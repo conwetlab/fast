@@ -1,6 +1,7 @@
 <project name="ServiceDesignerWep">
 <war destfile="ServiceDesignerWep.war" webxml="war/WEB-INF/web.xml">
   <fileset dir="war"/>
+  <classes dir="../de.uni_kassel.webcoobra/bin"/>
   <classes dir="../fujaba.web.runtime/bin"/>
 </war>
 </project>

@@ -34,6 +34,9 @@ public class RequestServlet extends HttpServlet
 			//execute a GET call with the params URL
 			String value = sendHttpRequest_GET(url);
 			
+			// to facilitate debugging strip xslt tag
+			value = value.replaceFirst("<\\?xml-stylesheet type=\"text/xsl\" href=\"http://ergast.com/schemas/mrd-1.1.xsl\"\\?>", "");
+			
 			//attach the responses output stream
 			ServletOutputStream out = resp.getOutputStream();
 			
@@ -41,6 +44,7 @@ public class RequestServlet extends HttpServlet
 			//the forward to the original transmitter)
 			byte[] outByte = value.getBytes("utf-8");
 			out.write(outByte);
+			out.flush();
 			out.close();
 		}
 	}
@@ -67,7 +71,7 @@ public class RequestServlet extends HttpServlet
 		catch (Exception e)
 		{
 			e.printStackTrace();
-			responseBody = "-1";
+			responseBody = "-42";
 		}
 		return responseBody;
 	}
