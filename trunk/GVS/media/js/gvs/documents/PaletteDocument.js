@@ -536,11 +536,11 @@ var PaletteDocument = Class.create(AbstractDocument, /** @lends PaletteDocument.
                     removeFromServer = true;
                 }
                 this._description.getCanvasInstances().each(function(instance) {
-                    instance.destroy(removeFromServer);
+                    instance.destroy(removeFromServer, true);
                 }.bind(this));
 
                 this._description.getConditionInstances().each(function(instance) {
-                    instance.destroy(removeFromServer);
+                    instance.destroy(removeFromServer, true);
                 }.bind(this));
 
                 GVS.getDocumentController().closeDocument(this._tabId);
@@ -689,11 +689,7 @@ var PaletteDocument = Class.create(AbstractDocument, /** @lends PaletteDocument.
             ids.each(function(id) {
                 var instance = factory.getInstance(buildingBlock, this._inferenceEngine);
                 instance.setId(id);
-                var parameters = this._canvasCache.getParams(id);
-                if (typeof parameters !== "string") {
-                	parameters = Object.toJSON(parameters);
-                }
-                instance.setParams(parameters);
+                instance.setParams(this._canvasCache.getParams(id));
                 var position = this._canvasCache.getPosition(id);
                 instance.onFinish(true, position);
                 var dropNode = area.getNode();

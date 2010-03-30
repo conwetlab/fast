@@ -93,7 +93,7 @@ var ComponentInstance = Class.create(DragSource,
         params.appendChild(text);
 
         var paramsDialog = new ParamsDialog(this.getTitle(),
-        		               this.getParams(),
+                               this.getParams(),
                                this.setParams.bind(this));
         params.appendChild(paramsDialog.getButtonNode());
 
