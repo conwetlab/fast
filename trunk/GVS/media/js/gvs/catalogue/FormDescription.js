@@ -1,8 +1,8 @@
 var FormDescription = Class.create(BuildingBlockDescription,
-    /** @lends ScreenflowDescription.prototype */ {
+    /** @lends FormDescription.prototype */ {
 
     /**
-     * Screenflow building block description.
+     * Form building block description.
      * @constructs
      * @extends BuildingBlockDescription
      */
@@ -12,7 +12,7 @@ var FormDescription = Class.create(BuildingBlockDescription,
 
     /**
      * This method creates a DOM Node with the preview
-     * of the Screen
+     * of the Form
      * @type DOMNode
      */
     getPreview: function() {
