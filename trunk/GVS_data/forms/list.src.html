@@ -35,6 +35,11 @@
             .imgCell {
                 text-align:center;
             }
+            
+            .imgCell img{
+                max-width:150px;
+                max-heigh:150px;
+            }
 
             .loadingImg {
                 margin: auto;
@@ -71,7 +76,7 @@
                 init: function () {
                     var defaultParams = {
                         'title': 'Item list',
-                        'logo':  'http://demo.fast.morfeo-project.org/gvsdata/amazonScreens/images/amazon.png',
+                        'logo':  'http://demo.fast.morfeo-project.org/fast/images/gui/fastLogo.png',
                         'columns': [
                                 {
                                     field: 'image',
@@ -80,10 +85,15 @@
                                     width: '80px',
                                     heigth: '80px'
                                 },{
+                                    field: 'source',
+                                    title: 'Source',
+                                    type:  'text',
+                                    width: '10%'
+                                },{
                                     field: 'title',
                                     title: 'Title',
                                     type:  'text',
-                                    width: '60%'
+                                    width: '50%'
                                 }, {
                                     field: 'type',
                                     title: 'Product Group',
@@ -281,7 +291,7 @@
 
     <body>
         <div id="{{screenId}}_bodyDiv">
-            <div class="logoLayer"><img id="{{screenId}}_logo" src="http://demo.fast.morfeo-project.org/gvsdata/amazonScreens/images/amazon.png" /></div>
+            <div class="logoLayer"><img id="{{screenId}}_logo" src="http://demo.fast.morfeo-project.org/fast/images/gui/fastLogo.png" /></div>
             <h1 id="{{screenId}}_title" class="list_title">Item list</h1>
             <div>
                 <table>

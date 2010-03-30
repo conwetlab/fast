@@ -9,9 +9,8 @@
     "tags":[
         {
             "label":{
-                "en-gb":"amazon"
-            },
-            "means":"http://dbpedia.org/page/Amazon.com"
+                "en-gb":"generic"
+            }
         },
         {
             "label":{
