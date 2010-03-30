@@ -116,15 +116,15 @@ var Palette = Class.create(SetListener, /** @lends Palette.prototype */ {
      * @private
      */
     _updateComponents: function() {
-        var descs = this._set.getBuildingBlocks();
-  
-        $A(descs).each(
-            function(desc) {
-                if (!this._components.get(desc.uri)) {
-                    this._addComponentFor(desc);
-                }
-            }.bind(this)
-        );
+        var descs = $A(this._set.getBuildingBlocks());
+        var sortDescs = descs.sortBy(function(desc){ return desc.getTitle() });
+
+        for (var i=0, desc; desc = sortDescs[i]; i++) {
+            if (!this._components.get(desc.uri)) {
+                this._addComponentFor(desc);
+            }
+        }
+
         if (this._set.getBuildingBlockType() == Constants.BuildingBlock.SCREEN ||
             this._set.getBuildingBlockType() == Constants.BuildingBlock.FORM) {
             Utils.showMessage("Building blocks loaded", {'hide': true});
