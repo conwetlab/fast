@@ -5,7 +5,7 @@
 package fast.common.client;
 
 import fast.common.client.BuildingBlock;
-import fast.common.client.FastObject;
+import fujaba.web.runtime.client.CObject;
 import fujaba.web.runtime.client.reflect.*;
 import fujaba.web.runtime.client.*;
 import java.util.*;
@@ -15,7 +15,7 @@ import com.google.gwt.event.dom.client.ClickEvent;
 
 
 
-public class TemplateParameter extends FastObject
+public class TemplateParameter extends CObject implements PropertyChangeClient
 {
 
    public void removeAllFrom(String className) 
@@ -74,6 +74,33 @@ public class TemplateParameter extends FastObject
       }
       return null;
    }
+	protected final PropertyChangeSupport listeners = new PropertyChangeSupport(this);
+
+	public void addPropertyChangeListener(PropertyChangeListener listener)
+	{
+		getPropertyChangeSupport().addPropertyChangeListener(listener);
+	}
+
+	public void removePropertyChangeListener(PropertyChangeListener listener)
+	{
+		getPropertyChangeSupport().removePropertyChangeListener(listener);
+	}
+
+	public void addPropertyChangeListener(String property, PropertyChangeListener listener)
+	{
+		getPropertyChangeSupport().addPropertyChangeListener(property, listener);
+	}
+
+	public void removePropertyChangeListener(String property, PropertyChangeListener listener)
+	{
+		getPropertyChangeSupport().removePropertyChangeListener(property, listener);
+	}
+
+	public PropertyChangeSupport getPropertyChangeSupport()
+	{
+		return listeners;
+	}
+
 
    public static final String PROPERTY_NAME = "name";
 
@@ -107,9 +134,8 @@ public class TemplateParameter extends FastObject
     *           templateParameters               serviceScreen
     * </pre>
     */
-   public static final String PROPERTY_SERVICE_SCREEN = "serviceScreen";
 
-   private BuildingBlock serviceScreen;
+   private transient BuildingBlock serviceScreen;
 
    public boolean setServiceScreen (BuildingBlock value)
    {
@@ -131,7 +157,6 @@ public class TemplateParameter extends FastObject
          {
             value.addToTemplateParameters (this);
          }
-            getPropertyChangeSupport().firePropertyChange(PROPERTY_SERVICE_SCREEN, oldValue, value);
          changed = true;
       
       }
@@ -177,7 +202,6 @@ public class TemplateParameter extends FastObject
    public void removeYou()
    {
       this.setServiceScreen (null);
-      super.removeYou ();
    }
 }
 

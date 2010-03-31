@@ -222,27 +222,6 @@ public class ServiceScreenModel extends CObject implements PropertyChangeClient,
 		//add methods
 
 		/*********************************
-		Generate CClass fast.common.client.TemplateParameter
-		*********************************/
-		cclass = new CClass ();
-		cclass.setName("fast.common.client.TemplateParameter");
-		ModelRoot.get().addToCClasses(cclass);
-			
-		
-		// add attributes to cclass
-		cattr = new CAttribute();
-		cattr.setName ("name");
-		cattr.setType("String");
-		cclass.addToCAttributes (cattr); 
-
-		cattr = new CAttribute();
-		cattr.setName ("value");
-		cattr.setType("String");
-		cclass.addToCAttributes (cattr); 
-
-		//add methods
-
-		/*********************************
 		Generate CClass fast.common.client.FactExample
 		*********************************/
 		cclass = new CClass ();
@@ -270,6 +249,29 @@ public class ServiceScreenModel extends CObject implements PropertyChangeClient,
 			
 		
 		// add attributes to cclass
+		//add methods
+
+
+
+		/*********************************
+		Generate CClass fast.common.client.TemplateParameter
+		*********************************/
+		cclass = new CClass ();
+		cclass.setName("fast.common.client.TemplateParameter");
+		ModelRoot.get().addToCClasses(cclass);
+			
+		
+		// add attributes to cclass
+		cattr = new CAttribute();
+		cattr.setName ("name");
+		cattr.setType("String");
+		cclass.addToCAttributes (cattr); 
+
+		cattr = new CAttribute();
+		cattr.setName ("value");
+		cattr.setType("String");
+		cclass.addToCAttributes (cattr); 
+
 		//add methods
 
 
@@ -835,8 +837,8 @@ public class ServiceScreenModel extends CObject implements PropertyChangeClient,
 			}
 		}
 		
-		
-	 
+				
+ 
 	}
 
    // gwt class table for the creation of objects from class names
@@ -888,11 +890,6 @@ public class ServiceScreenModel extends CObject implements PropertyChangeClient,
          return new fast.common.client.FactType();
       }
  
-      else if ("fast.common.client.TemplateParameter".equals(classname))
-      {
-         return new fast.common.client.TemplateParameter();
-      }
- 
       else if ("fast.common.client.FactExample".equals(classname))
       {
          return new fast.common.client.FactExample();
@@ -901,6 +898,11 @@ public class ServiceScreenModel extends CObject implements PropertyChangeClient,
       else if ("fast.common.client.ServiceScreenModel".equals(classname))
       {
          return new fast.common.client.ServiceScreenModel();
+      }
+ 
+      else if ("fast.common.client.TemplateParameter".equals(classname))
+      {
+         return new fast.common.client.TemplateParameter();
       }
         return null;
    }

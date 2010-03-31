@@ -444,11 +444,10 @@ public class BuildingBlock extends FastObject
     *           serviceScreen               templateParameters
     * </pre>
     */
-   public static final String PROPERTY_TEMPLATE_PARAMETERS = "templateParameters";
 
-   private FPropLinkedList<TemplateParameter> templateParameters;
+   private transient FLinkedList<TemplateParameter> templateParameters;
 
-   public FPropLinkedList<TemplateParameter> getTemplateParameters () {
+   public FLinkedList<TemplateParameter> getTemplateParameters () {
       return templateParameters;
    }
 
@@ -459,7 +458,7 @@ public class BuildingBlock extends FastObject
       {
          if (this.templateParameters == null)
          {
-            this.templateParameters = new FPropLinkedList<TemplateParameter> (this, PROPERTY_TEMPLATE_PARAMETERS);
+            this.templateParameters = new FLinkedList<TemplateParameter> ();
 
          }
       
@@ -707,7 +706,7 @@ public class BuildingBlock extends FastObject
       {
          if (this.templateParameters == null)
          {
-            this.templateParameters = new FPropLinkedList<TemplateParameter> (this, PROPERTY_TEMPLATE_PARAMETERS); // or FTreeSet () or FLinkedList ()
+            this.templateParameters = new FLinkedList<TemplateParameter> (); // or FTreeSet () or FLinkedList ()
          }
          int oldIndex = this.indexOfTemplateParameters (value);
          if (oldIndex != index)
@@ -744,7 +743,7 @@ public class BuildingBlock extends FastObject
       {
          if (this.templateParameters == null)
          {
-            this.templateParameters = new FPropLinkedList<TemplateParameter> (this, PROPERTY_TEMPLATE_PARAMETERS); // or FTreeSet () or FLinkedList ()
+            this.templateParameters = new FLinkedList<TemplateParameter> (); // or FTreeSet () or FLinkedList ()
          }
          int oldIndex = this.indexOfTemplateParameters (value);
          if (oldIndex != index)

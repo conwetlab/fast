@@ -207,7 +207,7 @@ public class CodeGenerator
 		FASTMappingRule rootRule = (FASTMappingRule) screen.iteratorOfMappingRules().next();
 		
 		//run threw all rules and append js code. Returns js code    
-		transform(rootRule);
+		transform(rootRule, depth4);
 		
 		table.put("<<transformationCode>>", transCode);
 	}
@@ -215,7 +215,7 @@ public class CodeGenerator
 	private String bracketBuffer = "";
 	private boolean lastWas_fillAttr = false;
 	private boolean operationStart = true;
-	private void transform(FASTMappingRule rule)
+	private void transform(FASTMappingRule rule, String codeIndent)
 	{
 		String closeSquareBracket = "";
 		if(RuleUtil.isCompleteRule(rule) && rule.getOperationHandler() != null)
@@ -243,18 +243,18 @@ public class CodeGenerator
 					
 					curTag = "xmlResponse";
 					
-					tmpCode += depth4 + "var indent = ''; \n";
+					tmpCode += codeIndent + "var indent = ''; \n";
 				}
 				else
 				{
-					tmpCode += depth4 + "indent = indent + '   '; \n";
+					tmpCode += codeIndent + "indent = indent + '   '; \n";
 				}
 
 				//element count
 				String lengthName =  from + "_length";
 				
 				//create element count variable
-				tmpCode += depth4 + "var " + lengthName + " = " + curTag + ".getElementsByTagName('" + from + "').length; \n";
+				tmpCode += codeIndent + "var " + lengthName + " = " + curTag + ".getElementsByTagName('" + from + "').length; \n";
 				
 				//increment var for loop
 				String countVar = from + "_Count";
@@ -262,35 +262,35 @@ public class CodeGenerator
 				//créate loop - code				
 				tmpCode += 
 							//get searched elementsList out of xmlResponse 
-					depth4 + "var " + from + " = " + curTag + ".getElementsByTagName('" + from + "'); \n\n" +
+					codeIndent + "var " + from + " = " + curTag + ".getElementsByTagName('" + from + "'); \n\n" +
 							
 							//declare loop rump
-					depth4 + "for(var " + countVar + " = 0; " + countVar + " < " + lengthName + "; ++" + countVar + ")\n" +
-					depth4 + "{\n" +
+					codeIndent + "for(var " + countVar + " = 0; " + countVar + " < " + lengthName + "; ++" + countVar + ")\n" +
+					codeIndent + "{\n" +
 							
 							//declare loop body
-					   depth5 + currentTags + " = " + from + ".item(" + countVar + ");\n\n" +
+					codeIndent + depth + currentTags + " = " + from + ".item(" + countVar + ");\n\n" +
 							
 					   //adds a current index variable
-					   depth5 + "currentCount = " + countVar + "; \n\n";			 
+					codeIndent + depth + "currentCount = " + countVar + "; \n\n";			 
 						
 					   //adds a 'new object' in the result, jumps over types that are needles in JSON
 				if(target.startsWith("List of"))
 				{
-					tmpCode += depth5 + "result += indent + '\"" + target + "\" : [ \\\\n'; \n";
+					tmpCode += codeIndent + depth + "result += indent + '\"" + target + "\" : [ \\\\n'; \n";
 
 					closeSquareBracket += "']' \n";
 				}
 				else
 				{
-					tmpCode += depth5 + "result += indent + '{ \\\\n'; \n\n";
+					tmpCode += codeIndent + depth + "result += indent + '{ \\\\n'; \n\n";
 				}
 
 				//overtake loop in real transcode
 				transCode += tmpCode;
 				
 				//add for loop end bracket
-				endbrackets_forLoop += depth4 + closeSquareBracket + "} \n\n";	
+				endbrackets_forLoop += codeIndent + closeSquareBracket + "} \n\n";	
 			}
 			
 			else if ("fillAttributes".equals(kind))
@@ -338,7 +338,7 @@ public class CodeGenerator
 					//overtake operation code in real transcode
 					if(operationStart)
 					{
-						transCode += depth4 + "result += indent + '   \"" + attrName + "\" : \"' + " + tmpCode;
+						transCode += codeIndent + "result += indent + '   \"" + attrName + "\" : \"' + " + tmpCode;
 						
 						operationStart = false;
 					}
@@ -370,7 +370,7 @@ public class CodeGenerator
 				}
 			}
 			
-			callTransformForKids(rule);
+			callTransformForKids(rule, codeIndent + depth);
 		}
 	}
 	
@@ -414,7 +414,7 @@ public class CodeGenerator
 	 * to add code into transCode
 	 * */
 	@SuppressWarnings("unchecked")
-	private void callTransformForKids(FASTMappingRule rule)
+	private void callTransformForKids(FASTMappingRule rule, String codeIndent)
 	{
 //		if(lastWas_fillAttr && rule != null
 //				   && ! "fillAttributes".equals(rule.getKind())
@@ -432,7 +432,7 @@ public class CodeGenerator
 		for (Iterator<FASTMappingRule> kidIter = rule.iteratorOfKids(); kidIter.hasNext();)
 		{
 			FASTMappingRule kid = (FASTMappingRule) kidIter.next();
-			transform(kid);
+			transform(kid, codeIndent);
 		}
 	}
 

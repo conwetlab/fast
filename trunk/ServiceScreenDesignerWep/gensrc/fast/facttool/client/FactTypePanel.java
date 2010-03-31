@@ -114,7 +114,6 @@ public class FactTypePanel
       attrAddButtonHandler = new AttrAddButtonHandler ();
       build = new Build ();
       exampleValAddButtonHandler = new ExampleValAddButtonHandler ();
-      expandTree = new ExpandTree ();
       // NONE
 
       //build.addToFollowers("attrAddButton.click", attrAddButtonHandler);
@@ -123,10 +122,7 @@ public class FactTypePanel
       //build.addToFollowers("auto", addKids);
       // NONE
 
-      //addKids.addToFollowers("auto", expandTree);
-      // NONE
-
-      //expandTree.addToFollowers("auto", addExampleValues);
+      //addKids.addToFollowers("auto", addExampleValues);
       // NONE
 
       //build.addToFollowers("exampleValAddButton.click", exampleValAddButtonHandler);
@@ -239,7 +235,7 @@ public class FactTypePanel
    		 {
    			 autoGuardAddKids1 = new AutoGuardAddKids1();
    			 autoGuardAddKids1.setSource(addKids);
-   			 autoGuardAddKids1.setTarget(expandTree);
+   			 autoGuardAddKids1.setTarget(addExampleValues);
    			 addKids.addToAutoTransitions(autoGuardAddKids1.toString(), autoGuardAddKids1);
    		 }
 
@@ -372,7 +368,7 @@ public class FactTypePanel
             // assign attribute attrAddButton
             attrAddButton.setText ("add");
             // assign attribute attrRootItem
-            attrRootItem.setState (true);
+            attrRootItem.setState (false);
             // assign attribute nameCaption
             nameCaption.setText ("name");
             // assign attribute nameCaption
@@ -386,7 +382,7 @@ public class FactTypePanel
             // assign attribute exampleValAddButton
             exampleValAddButton.setText ("add");
             // assign attribute exampleValRootItem
-            exampleValRootItem.setState (true);
+            exampleValRootItem.setState (false);
             // create link widget from attrTreeRootPanel to attrTreeRootLabel
             attrTreeRootPanel.add (attrTreeRootLabel);
 
@@ -479,52 +475,6 @@ public class FactTypePanel
        }
 
    }
-
-   private ExpandTree expandTree;
-   public class ExpandTree extends FAction
-   {
-       public void doAction()
-       {
-   		 boolean fujaba__Success = false;
-
-         // story pattern storypatternwiththis
-         try 
-         {
-            fujaba__Success = false; 
-
-            // check object treeItem is really bound
-            JavaSDM.ensure ( treeItem != null );
-            // assign attribute treeItem
-            treeItem.setState (true);
-            fujaba__Success = true;
-         }
-         catch ( JavaSDMException fujaba__InternalException )
-         {
-            fujaba__Success = false;
-         }
-
-
-
-   		 if( autoGuardExpandTree1 == null)
-   		 {
-   			 autoGuardExpandTree1 = new AutoGuardExpandTree1();
-   			 autoGuardExpandTree1.setSource(expandTree);
-   			 autoGuardExpandTree1.setTarget(addExampleValues);
-   			 expandTree.addToAutoTransitions(autoGuardExpandTree1.toString(), autoGuardExpandTree1);
-   		 }
-
-   		 doAuto();
-       }
-
-      private AutoGuardExpandTree1 autoGuardExpandTree1;
-      private class AutoGuardExpandTree1 extends FGuard
-      {
-      }
-
-   }
-
-   // my style test for method.vm
-
 
    // my style test for method.vm
 

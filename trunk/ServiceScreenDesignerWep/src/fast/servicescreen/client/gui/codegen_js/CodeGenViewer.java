@@ -6,6 +6,7 @@ import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.ChangeListener;
 import com.google.gwt.user.client.ui.FlexTable;
@@ -101,24 +102,27 @@ public class CodeGenViewer
 			}
 		});
 		
-		Button openHtml_Button = new Button("open Html");
-		openHtml_Button.addClickHandler(new ClickHandler()
-		{
-			@Override
-			public void onClick(ClickEvent event)
-			{
-				try
-				{
-					Window.open("./servicescreendesignerwep/" + generator.screen.getName() + "Operator.html",
-								"the wrapper", "no features");
-				}
-				catch(Exception e)
-				{
-					Window.alert(e.getLocalizedMessage());
-				}
-				
-			}
-		});
+		String operatorURL = "./servicescreendesignerwep/" + generator.screen.getName() + "Operator.html";
+		Anchor a = new Anchor(operatorURL, operatorURL, "_blank");
+		
+//		Button openHtml_Button = new Button("open Html");
+//		openHtml_Button.addClickHandler(new ClickHandler()
+//		{
+//			@Override
+//			public void onClick(ClickEvent event)
+//			{
+//				try
+//				{
+//					Window.open("./servicescreendesignerwep/" + generator.screen.getName() + "Operator.html",
+//								"the wrapper", "no features");
+//				}
+//				catch(Exception e)
+//				{
+//					Window.alert(e.getLocalizedMessage());
+//				}
+//				
+//			}
+//		});
 		
 		//create the template choose to make user changes possible 
 		// -> Only things that make sense at time are lited here
@@ -142,7 +146,7 @@ public class CodeGenViewer
 		table.setWidget(row, 1, jsShowBox);
 		row++;
 		table.setWidget(row, 0, saveButton);
-		table.setWidget(row, 1, openHtml_Button);
+		table.setWidget(row, 1, a);
 		
 		return table;
 	}
