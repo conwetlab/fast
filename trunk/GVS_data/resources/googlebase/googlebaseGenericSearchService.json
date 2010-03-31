@@ -54,7 +54,7 @@
                     "label":{
                         "en-gb":"A search criteria"
                     },
-                    "pattern":"?F http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#SearchCriteria",
+                    "pattern":"?F http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://localhost:9000/FASTCatalogue/concepts/generic/SearchCriteria",
                     "positive":"true"
                 }
             ],
@@ -70,7 +70,7 @@
                 "label":{
                     "en-gb":"A Generic Item List"
                 },
-                "pattern":"?ItemGroup http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#ItemGroup",
+                "pattern":"?ElementList http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://localhost:9000/FASTCatalogue/concepts/generic/ElementList",
                 "positive":"true"
             }
         ]

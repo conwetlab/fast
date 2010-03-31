@@ -36,7 +36,7 @@
                     "label": {
                         "en-gb": "An item group"
                     },
-                    "pattern":"?ItemGroup http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#ItemGroup",
+                    "pattern":"?ElementList http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://localhost:9000/FASTCatalogue/concepts/generic/ElementList",
                     "positive":"true"
                 },
                 {
@@ -44,7 +44,7 @@
                     "label": {
                         "en-gb": "An item group"
                     },
-                    "pattern":"?ItemGroup http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#ItemGroup",
+                    "pattern":"?ElementList http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://localhost:9000/FASTCatalogue/concepts/generic/ElementList",
                     "positive":"true"
                 }
             ],
@@ -58,7 +58,7 @@
                 "label":{
                     "en-gb": "A mixed item group"
                 },
-                "pattern":  "?ItemGroup http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#ItemGroup",
+                "pattern":  "?ElementList http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://localhost:9000/FASTCatalogue/concepts/generic/ElementList",
                 "positive": "true"
             }
         ]

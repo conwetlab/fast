@@ -49,7 +49,7 @@
                     "label":{
                         "en-gb":"A search criteria"
                     },
-                    "pattern":"?F http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#SearchCriteria",
+                    "pattern":"?F http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://localhost:9000/FASTCatalogue/concepts/nvivo/EventSearchCriteria",
                     "positive":"true"
                 }
             ],
@@ -65,7 +65,7 @@
                 "label":{
                     "en-gb":"Nvivo Event List"
                 },
-                "pattern":"?EList http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#ItemGroup",
+                "pattern":"?EList http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://localhost:9000/FASTCatalogue/concepts/nvivo/EventList",
                 "positive":"true"
             }
         ]

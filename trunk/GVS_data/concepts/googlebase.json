@@ -1,0 +1,29 @@
+[
+    {
+	   "description": {"en-gb": "Google Base List"},
+	   "label": {"en-gb": "Google Base List"},
+	   "tags": [{
+	     "label": {"en-gb": "google"}
+	   }],
+	   "name": "BaseList",
+	   "domain": "google"
+	},
+	{
+	   "description": {"en-gb": "Google Base Search Criteria"},
+	   "label": {"en-gb": "Google Base Search Criteria"},
+	   "tags": [{
+	     "label": {"en-gb": "google"}
+	   }],
+	   "name": "BaseSearchCriteria",
+	   "domain": "google"
+	},
+	{
+	   "description": {"en-gb": "Google Base Item"},
+	   "label": {"en-gb": "Google Base Item"},
+	   "tags": [{
+	     "label": {"en-gb": "google"}
+	   }],
+	   "name": "BaseSearchItem",
+	   "domain": "google"
+	}
+]

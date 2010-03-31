@@ -1,0 +1,29 @@
+[
+    {
+	   "description": {"en-gb": "Nvivo Event List"},
+	   "label": {"en-gb": "Nvivo Event List"},
+	   "tags": [{
+	     "label": {"en-gb": "nvivo"}
+	   }],
+	   "name": "EventList",
+	   "domain": "nvivo"
+	},
+	{
+	   "description": {"en-gb": "Nvivo Search Criteria"},
+	   "label": {"en-gb": "Nvivo Search Criteria"},
+	   "tags": [{
+	     "label": {"en-gb": "nvivo"}
+	   }],
+	   "name": "EventSearchCriteria",
+	   "domain": "nvivo"
+	},
+	{
+	   "description": {"en-gb": "Nvivo Event"},
+	   "label": {"en-gb": "Nvivo Event"},
+	   "tags": [{
+	     "label": {"en-gb": "nvivo"}
+	   }],
+	   "name": "Event",
+	   "domain": "nvivo"
+	}
+]

@@ -1,0 +1,38 @@
+[
+    {
+	   "description": {"en-gb": "Generic Search Criteria"},
+	   "label": {"en-gb": "Generic Search Criteria"},
+	   "tags": [{
+	     "label": {"en-gb": "generic"}
+	   }],
+	   "name": "SearchCriteria",
+	   "domain": "generic"
+	},
+	{
+	   "description": {"en-gb": "Generic Element List"},
+	   "label": {"en-gb": "Generic Element List"},
+	   "tags": [{
+	     "label": {"en-gb": "generic"}
+	   }],
+	   "name": "ElementList",
+	   "domain": "generic"
+	},
+	{
+	   "description": {"en-gb": "Generic Element"},
+	   "label": {"en-gb": "Generic Element"},
+	   "tags": [{
+	     "label": {"en-gb": "generic"}
+	   }],
+	   "name": "GenericElement",
+	   "domain": "generic"
+	},
+	{
+	   "description": {"en-gb": "Generic Message"},
+	   "label": {"en-gb": "Generic Message"},
+	   "tags": [{
+	     "label": {"en-gb": "generic"}
+	   }],
+	   "name": "GenericMessage",
+	   "domain": "generic"
+	}    
+]

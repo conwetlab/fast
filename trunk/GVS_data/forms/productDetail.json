@@ -45,7 +45,7 @@
                     "label":{
                         "en-gb":"An item"
                     },
-                    "pattern":"?Item http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#Item",
+                    "pattern":"?Element http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://localhost:9000/FASTCatalogue/concepts/generic/GenericElement",
                     "positive":"true"
                 }
             ],

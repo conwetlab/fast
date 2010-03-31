@@ -96,7 +96,7 @@
 					alert ("You must introduce at least one keyword");
 					return;
 				}
-				var filter = {uri: 'http://aws.amazon.com/AWSECommerceService#SearchCriteria', data:{productType: $F("productType"), keywords: $F("searchText")}};
+				var filter = {uri: 'http://localhost:9000/FASTCatalogue/concepts/generic/SearchCriteria', data:{productType: $F("productType"), keywords: $F("searchText")}};
 				ScreenflowEngineFactory.getInstance().manageFacts([filter],[]);
 			}
 			
