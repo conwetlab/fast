@@ -465,8 +465,8 @@ public class RuleGUI
              //access attribute if there where no elements
              if (elements.getLength() == 0)
              {
-            	String nodeValue = RuleUtil.get_AttributeByName(xmlDocElement, sourceTagname);
-            	
+            	String nodeValue = opHandler.executeOperations(xmlDocElement, 0);
+            	 
                	kidItem = treeItem.addItem(targetElemName + " : " + nodeValue);
              }
           }

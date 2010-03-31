@@ -135,9 +135,12 @@ public class OperationHandler
 					//set up sourceTag with last real tagName AND a solved xmlDoc
 					SourceTag sourceTag = getLastSourceTag(xmlDoc, currentList, elementsItemID);
 					
-					String nodeValue = sourceTag.getCurrentXmlPart().getFirstChild().getNodeValue();
-
-					//TODO HERE MUST BE CALLED GETATTR, IF IT IS NO ELEMVALUE!!!
+					String nodeValue = sourceTag.getAttributeValue();
+					//if it is not a attribute
+					if(nodeValue == null)
+					{
+						nodeValue = sourceTag.getCurrentXmlPart().getFirstChild().getNodeValue();
+					}
 					
 					//create/expand the result
 					result += executeOperationList(currentList, nodeValue);
@@ -267,18 +270,28 @@ public class OperationHandler
 		for (Iterator<Operation> iterator = opList.iterator(); iterator.hasNext();)
 		{
 			currentOperation = (Operation) iterator.next();
+			String tagName = currentOperation.value;
 			
 			if(currentOperation.kind == Kind.RName)
 			{
 				sourceTag = new SourceTag();
 				
-				//gets node list out of a currentXmlDoc and a currentTagName
-				tmpNodeList = RuleUtil.get_ElementsByTagname(tmpNode, currentOperation.value);
-				
-				sourceTag.setUp(tmpNodeList, currentOperation.value, itemID);
-				
-				//this setup the solve currentXml for next iteration 
-				tmpNode = sourceTag.getCurrentXmlPart();
+				String attrValue = RuleUtil.get_AttributeByName(xmlDoc, tagName);
+				//if it is a attribute
+				if(attrValue != null)
+				{
+					sourceTag.setAttributeValue(attrValue);
+				}
+				else
+				{
+					//gets node list out of a currentXmlDoc and a currentTagName
+					tmpNodeList = RuleUtil.get_ElementsByTagname(tmpNode, tagName);
+					
+					sourceTag.setUp(tmpNodeList, currentOperation.value, itemID);
+					
+					//this setup the solve currentXml for next iteration 
+					tmpNode = sourceTag.getCurrentXmlPart();					
+				}
 			}
 			else
 			{
@@ -301,6 +314,19 @@ public class OperationHandler
 	 * */
 	protected class SourceTag
 	{
+		//attribute management
+		private String attrValue = null;
+		public void setAttributeValue(String value)
+		{
+			attrValue = value; 
+		}
+		
+		public String getAttributeValue()
+		{
+			return attrValue;
+		}
+		
+		//element management
 		private String tagName = "";
 		private Node currentXmlDoc = null;
 		

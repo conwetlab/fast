@@ -148,33 +148,19 @@ public class RuleUtil
 	   }
 	   
 	   /**
-	    * This method checks if given xmlDoc contains tagName, if not, it
-	    * watch for Attr. in given xmlDoc
+	    * This method watch for Attr. (exactly) in given xmlDoc (TODO:maybee
+	    * we want to allow to acces any Attr. in any lower tag?)
 	    * */
 	   public static String get_AttributeByName(Node xmlDoc, String tagName)
 	   {
-		   NodeList elements = null;
-		   String nodeValue = "";
+		   String nodeValue = null;
 		   
-		   if (xmlDoc instanceof Document)
+		   NamedNodeMap attributes = xmlDoc.getAttributes();
+		   Node namedItem = attributes.getNamedItem(tagName);
+		   if(namedItem != null)
 		   {
-			   elements = ((Document) xmlDoc).getElementsByTagName(tagName);
+          		nodeValue = namedItem.getNodeValue();
 		   }
-		   else if (xmlDoc instanceof Element)
-		   {
-			   elements = ((Element) xmlDoc).getElementsByTagName(tagName);
-		   }
-		   
-		   //if there are no Elem, it must be attribute
-           if (elements.getLength() == 0)
-           {
-             	 NamedNodeMap attributes = xmlDoc.getAttributes();
-             	 Node namedItem = attributes.getNamedItem(tagName);
-             	 if(namedItem != null)
-             	 {
-             		nodeValue = namedItem.getNodeValue();
-             	 }
-           }
 		   
 		   return nodeValue;
 	   }
