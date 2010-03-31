@@ -27,7 +27,7 @@ public class CodeGenerator
 	private HashMap<String, String> table = null;
 	private HashMap<String, String> bracketTable = null;
 	
-	private String endbrackets_forLoop = "";
+	// private String endbrackets_forLoop = "";
 	private boolean writeFile_result = true;
 	private boolean firstOperation = true;
 	
@@ -67,7 +67,7 @@ public class CodeGenerator
 		helperMethods = tmp.helperMethods;
 		
 		//resets some state variables
-		endbrackets_forLoop = "";
+		// endbrackets_forLoop = "";
 		bracketBuffer = "";
 		firstOperation = true;
 		operationStart = true;
@@ -95,13 +95,13 @@ public class CodeGenerator
 		add_SendRequest_toTable();
 
 		//Build the outport (setup this.outputPortName, too)
-//		add_outPort_toTable();
+		//		add_outPort_toTable();
 		
 		//Build the exRules - feature
 		add_Translation_toTable();
 		
 		//add the end brakets of transformation code
-		bracketTable.put("<<endbrackets_forLoop>>", endbrackets_forLoop);
+		// bracketTable.put("<<endbrackets_forLoop>>", endbrackets_forLoop);
 		
 		//fill founded values into the <keywords> in rootTemplate
 		rootTemplate = expandTemplateKeys(rootTemplate);
@@ -207,7 +207,7 @@ public class CodeGenerator
 		FASTMappingRule rootRule = (FASTMappingRule) screen.iteratorOfMappingRules().next();
 		
 		//run threw all rules and append js code. Returns js code    
-		transform(rootRule, depth4);
+		transform(rootRule, depth5);
 		
 		table.put("<<transformationCode>>", transCode);
 	}
@@ -215,9 +215,11 @@ public class CodeGenerator
 	private String bracketBuffer = "";
 	private boolean lastWas_fillAttr = false;
 	private boolean operationStart = true;
+	
 	private void transform(FASTMappingRule rule, String codeIndent)
 	{
-		String closeSquareBracket = "";
+		boolean hasOpenSqareBracket = false;
+		boolean hasOpenForLoop = false;
 		if(RuleUtil.isCompleteRule(rule) && rule.getOperationHandler() != null)
 		{
 			//get the current operationList 
@@ -243,7 +245,7 @@ public class CodeGenerator
 					
 					curTag = "xmlResponse";
 					
-					tmpCode += codeIndent + "var indent = ''; \n";
+					tmpCode += "var indent = ''; \n";
 				}
 				else
 				{
@@ -272,14 +274,14 @@ public class CodeGenerator
 					codeIndent + depth + currentTags + " = " + from + ".item(" + countVar + ");\n\n" +
 							
 					   //adds a current index variable
-					codeIndent + depth + "currentCount = " + countVar + "; \n\n";			 
+					codeIndent + depth + "currentCount = " + countVar + "; \n\n";		
+				hasOpenForLoop = true;
 						
 					   //adds a 'new object' in the result, jumps over types that are needles in JSON
 				if(target.startsWith("List of"))
 				{
 					tmpCode += codeIndent + depth + "result += indent + '\"" + target + "\" : [ \\\\n'; \n";
-
-					closeSquareBracket += "']' \n";
+					hasOpenSqareBracket = true;
 				}
 				else
 				{
@@ -290,7 +292,7 @@ public class CodeGenerator
 				transCode += tmpCode;
 				
 				//add for loop end bracket
-				endbrackets_forLoop += codeIndent + closeSquareBracket + "} \n\n";	
+				//endbrackets_forLoop += codeIndent + "} \n\n";	
 			}
 			
 			else if ("fillAttributes".equals(kind))
@@ -371,6 +373,16 @@ public class CodeGenerator
 			}
 			
 			callTransformForKids(rule, codeIndent + depth);
+			
+			if (hasOpenForLoop)
+			{
+				transCode += codeIndent + "} \n";
+			}
+			
+			if (hasOpenSqareBracket)
+			{
+				transCode += codeIndent + "result += ' ]\\\\n';";
+			}
 		}
 	}
 	
@@ -451,11 +463,11 @@ public class CodeGenerator
 		}
 		
 		//endBrakets for forLoops and outObjects
-		for (String key : bracketTable.keySet()) 
-		{
-			String value = bracketTable.get(key);
-			template = template.replaceAll(key, value);
-		}
+		//		for (String key : bracketTable.keySet()) 
+		//		{
+		//			String value = bracketTable.get(key);
+		//			template = template.replaceAll(key, value);
+		//		}
 		
 		return template;
 	}
@@ -503,7 +515,7 @@ public class CodeGenerator
 	
 	
 	
-	// -------------- the templte strings -------------- //
+	// -------------- the template strings -------------- //
 	
 	public String sendrequest =
 		depth2 + "var xmlHttp = null; \n" + 
@@ -533,23 +545,23 @@ public class CodeGenerator
 		
 		depth2 + "if (xmlHttp) \n" +
 		depth2 + "{ \n" + 
-		depth3 + "xmlHttp.open('GET', '" + "http://127.0.0.1:8888/servicescreendesignerwep/requestServlet?url=" + "' + replaceEscapeCharacter(request), true); \n" + 
-		depth3 + "xmlHttp.onreadystatechange = function () { \n" + 
-		depth3 + "if (xmlHttp.readyState == 4) \n" +
-		depth3 + "{ \n" + 
-		depth4 + "xmlResponse = xmlHttp.responseXML; \n\n" + 
-		depth4 + "var currentTags = null; \n\n" +
-		depth4 + "var currentCount = null; \n\n" +
-		depth4 + "var result = new String(''); \n\n" +
+		   depth3 + "xmlHttp.open('GET', '" + "http://127.0.0.1:8888/servicescreendesignerwep/requestServlet?url=" + "' + replaceEscapeCharacter(request), true); \n" + 
+		   depth3 + "xmlHttp.onreadystatechange = function () { \n" + 
+		      depth4 + "if (xmlHttp.readyState == 4) \n" +
+		      depth4 + "{ \n" + 
+		         depth5 + "xmlResponse = xmlHttp.responseXML; \n\n" + 
+		         depth5 + "var currentTags = null; \n\n" +
+		         depth5 + "var currentCount = null; \n\n" +
+		         depth5 + "var result = new String(''); \n\n" +
 
-		"<<transformationCode>>\n" +
+		         depth5 + "<<transformationCode>>\n\n" +
 
-//		"<<endbrackets_outObject>>\n" +
-		"<<endbrackets_forLoop>>\n" +
-		
-		depth3 + "document.getElementById('show').value = '{' + result + ']}'; \n" + //TODO cheat! 
-		depth3 + "} \n" + 
-		depth2 + "} \n" + 
+		//		"<<endbrackets_outObject>>\n" +
+		//		"<<endbrackets_forLoop>>\n" +
+
+   	             depth5 + "document.getElementById('show').value = '{' + result + '}'; \n" + 
+		      depth4 + "} \n" + 
+		   depth3 + "} \n" + 
 		depth2 + "}\n\n" +
 		depth2 + "xmlHttp.send(null); \n\n" + 
 		depth2 + "return 'waiting for response...'; \n" + 
