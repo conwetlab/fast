@@ -35,8 +35,8 @@ createItem: function (transport){
 		var currency = price.getAttribute("currencyID");
 		it.data.currentPrice = price.firstChild.nodeValue + " " + currency;
 	}
-	if (item.getElementsByTagName("GalleryURL").length > 0) {
-		it.data.image = item.getElementsByTagName("GalleryURL")[0].firstChild.nodeValue;
+	if (item.getElementsByTagName("PictureURL").length > 0) {
+		it.data.image = item.getElementsByTagName("PictureURL")[0].firstChild.nodeValue;
 	}
 	if (item.getElementsByTagName("ViewItemURLForNaturalSearch").length > 0) {
 		it.data.url = item.getElementsByTagName("ViewItemURLForNaturalSearch")[0].firstChild.nodeValue;
