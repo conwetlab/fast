@@ -102,7 +102,7 @@ public class CodeGenViewer
 			}
 		});
 		
-		String operatorURL = "./servicescreendesignerwep/" + generator.screen.getName() + "Operator.html";
+		String operatorURL = "./servicescreendesignerwep/" + generator.screen.getName() + "Op.html";
 		Anchor a = new Anchor(operatorURL, operatorURL, "_blank");
 		
 //		Button openHtml_Button = new Button("open Html");

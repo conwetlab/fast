@@ -1,6 +1,8 @@
 package fast.servicescreen.server;
 
+import java.io.File;
 import java.io.FileWriter;
+import java.net.URL;
 
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.ResponseHandler;
@@ -61,16 +63,29 @@ public class RequestServiceImpl extends RemoteServiceServlet implements RequestS
 	{
 		//the HTML file content
 		String htmlContent = preHTMLCode + transCode + postHTMLCode;
+		String answer = "";
 		
 		try
 		{
-			if ( ! GWT.isScript())
+			path = ".";
+			
+			File file = new File(".");
+			String absolutePath = file.getAbsolutePath();
+			
+			answer += "pwd: " + absolutePath;
+
+			if ( ! answer.contains("ServiceScreenDesignerWep"))
 			{
-				path = "./webapps/ServiceDesignerWep";
+				path = "/var/lib/tomcat6/webapps/ServiceDesignerWep";
+				
+				answer += " IsOnTomcat ";
 			}
 			
-			String baseFileName = path + "/servicescreendesignerwep/" + opName + "Operator";
+			String baseFileName = path + "/servicescreendesignerwep/" + opName + "Op";
 			String fileName = baseFileName + ".html";
+			
+			answer += " fileName " + fileName;
+			
 			FileWriter writer = new FileWriter(fileName, false);
 			
 			writer.write(htmlContent);
@@ -85,12 +100,19 @@ public class RequestServiceImpl extends RemoteServiceServlet implements RequestS
 			
 			writer.close();
 			
+			Class<? extends RequestServiceImpl> myClass = this.getClass();
+			String myClassName = myClass.getName();
+			URL classpath = myClass.getClassLoader().getSystemResource(myClassName + ".class");
+			answer += " classpath: " + classpath;
+			
 		}
 		catch (Exception e)
 		{
-			return "false";
+			answer += " Error: " + e.getLocalizedMessage();
+			
+			return answer;
 		} 
 		
-		return "true";
+		return answer;
 	}
 }

@@ -492,15 +492,16 @@ public class CodeGenerator
 					@Override
 					public void onSuccess(String result)
 					{
-						if(RuleUtil.getBool(result))
-						{
-							//If onSucces, and result = "true", return true
-							writeFile_result = true;
-						}
-						else
-						{
-							writeFile_result = false;
-						}
+						com.google.gwt.user.client.Window.alert(result);
+						//						if(RuleUtil.getBool(result))
+						//						{
+						//							//If onSucces, and result = "true", return true
+						//							writeFile_result = true;
+						//						}
+						//						else
+						//						{
+						//							writeFile_result = false;
+						//						}
 					}
 
 					@Override
@@ -545,7 +546,8 @@ public class CodeGenerator
 		
 		depth2 + "if (xmlHttp) \n" +
 		depth2 + "{ \n" + 
-		   depth3 + "xmlHttp.open('GET', '" + "./servicescreendesignerwep/requestServlet?url=" + "' + encodeURIComponent(request), true); \n" + 
+  	       depth3 + "var requestServletUrl = window.location.protocol + '//' + window.location.host  + '/ServiceDesignerWep/servicescreendesignerwep/requestServlet?url='; \n" +
+		   depth3 + "xmlHttp.open('GET', requestServletUrl + encodeURIComponent(request), true); \n" + 
 		   depth3 + "xmlHttp.onreadystatechange = function () { \n" + 
 		      depth4 + "if (xmlHttp.readyState == 4) \n" +
 		      depth4 + "{ \n" + 
