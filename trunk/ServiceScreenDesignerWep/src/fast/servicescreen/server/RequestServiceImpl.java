@@ -8,6 +8,7 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.BasicResponseHandler;
 import org.apache.http.impl.client.DefaultHttpClient;
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
 import fast.servicescreen.client.RequestService;
@@ -63,6 +64,11 @@ public class RequestServiceImpl extends RemoteServiceServlet implements RequestS
 		
 		try
 		{
+			if ( ! GWT.isScript())
+			{
+				path = "./webapps/ServiceDesignerWep";
+			}
+			
 			String baseFileName = path + "/servicescreendesignerwep/" + opName + "Operator";
 			String fileName = baseFileName + ".html";
 			FileWriter writer = new FileWriter(fileName, false);

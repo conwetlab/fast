@@ -545,7 +545,7 @@ public class CodeGenerator
 		
 		depth2 + "if (xmlHttp) \n" +
 		depth2 + "{ \n" + 
-		   depth3 + "xmlHttp.open('GET', '" + "http://127.0.0.1:8888/servicescreendesignerwep/requestServlet?url=" + "' + replaceEscapeCharacter(request), true); \n" + 
+		   depth3 + "xmlHttp.open('GET', '" + "./servicescreendesignerwep/requestServlet?url=" + "' + encodeURIComponent(request), true); \n" + 
 		   depth3 + "xmlHttp.onreadystatechange = function () { \n" + 
 		      depth4 + "if (xmlHttp.readyState == 4) \n" +
 		      depth4 + "{ \n" + 
@@ -795,15 +795,15 @@ public class CodeGenerator
 		depth3 + "return s; \n" +
 		depth2 + "} \n\n" +
 		
-		depth2 + "function replaceEscapeCharacter(url)\n" +
-		depth2 + "{\n" +
-		depth3 + "url = url.replace(/\\//g, '%2F'); \n" +
-		depth3 + "url = url.replace(/=/g, '%3D'); \n" +
-		depth3 + "url = url.replace(/\\?/g, '%3F'); \n" +
-		depth3 + "url = url.replace(/&/g, '%26'); \n" +
-		depth3 + "url = url.replace(/:/g, '%3A'); \n" +
-		depth3 + "return url; \n" +
-	    depth2 + "} \n\n" +
+		//		depth2 + "function replaceEscapeCharacter(url)\n" +
+		//		depth2 + "{\n" +
+		//		depth3 + "url = url.replace(/\\//g, '%2F'); \n" +
+		//		depth3 + "url = url.replace(/=/g, '%3D'); \n" +
+		//		depth3 + "url = url.replace(/\\?/g, '%3F'); \n" +
+		//		depth3 + "url = url.replace(/&/g, '%26'); \n" +
+		//		depth3 + "url = url.replace(/:/g, '%3A'); \n" +
+		//		depth3 + "return url; \n" +
+		//	    depth2 + "} \n\n" +
 	    
 		depth2 + "function getValue(currentTags, name)\n" +
 		depth2 + "{\n" +
