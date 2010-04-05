@@ -26,6 +26,19 @@ var ScreenflowDocument = Class.create(PaletteDocument,
         this._builder = new Builder();
 
         this._start();
+
+        /**
+         * "Edit the selected element" menu action
+         * @type MenuAction
+         * @private
+         */
+        this._editMenuAction = new MenuAction({
+                            'label': 'Edit screen',
+                            'weight':1,
+                            'enabled': false,
+                            'handler': function() {
+                                this._cloneSelectedElement();
+                            }.bind(this)});
     },
 
 
@@ -58,6 +71,27 @@ var ScreenflowDocument = Class.create(PaletteDocument,
         }
         element._onClick();
        this._setDirty(true);
+    },
+
+    /**
+     * @override
+     */
+    getMenuElements: function($super) {
+        var parentMenu = $super();
+        return Object.extend(parentMenu, {
+            'edit': {
+                'type': 'SubMenu',
+                'weight': 2,
+                'label': 'Edit',
+                'children': {
+                    'clone': {
+                        'type': 'Action',
+                        'action': this._editMenuAction,
+                        'group': 0
+                    }
+                }
+            }
+        });
     },
 
 
@@ -328,30 +362,12 @@ var ScreenflowDocument = Class.create(PaletteDocument,
         this._toolbarElements.get('planner').setEnabled(
             element!=null && element.constructor == ScreenInstance
         );
-        this._toolbarElements.get('cloneElement').setEnabled(
-            element!=null && element.constructor == ScreenInstance &&
-            element.getBuildingBlockDescription().definition != null
-        );
+        var enableClone = (element!=null &&
+                            element.constructor == ScreenInstance &&
+                            element.getBuildingBlockDescription().definition != null);
+        this._toolbarElements.get('cloneElement').setEnabled(enableClone);
+        this._editMenuAction.setEnabled(enableClone);
     },
-
-    /**
-     * Constructs the document content.
-     * @override
-     * @private
-     */
-    /*_renderMainUI: function(){
-
-        this._mainBorderContainer = new dijit.layout.BorderContainer({
-            design:"sidebar",
-            liveSplitters:"false",
-            splitter:"true"
-        });
-
-        this._mainBorderContainer.addChild(this._renderCenterContainer());
-
-
-        this._tab.setContent(this._mainBorderContainer.domNode);
-    },*/
 
     /**
      * This function creates the area containing the canvas

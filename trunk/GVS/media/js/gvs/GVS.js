@@ -304,7 +304,7 @@ var GVS = Class.create(ToolbarModel,    /** @lends GVS.prototype */
                                 this._dialogs.get("preferences").show();
                             }.bind(this)
                         }),
-                        'group': 0
+                        'group': 1
                     }
                 }
 
