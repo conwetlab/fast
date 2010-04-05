@@ -12,7 +12,7 @@
 
             div {
                 background: lightCoral;
-                padding: 1em;
+                padding: 0.5em;
                 border-radius: 10px;
                 -moz-border-radius: 10px;
                 border: 1px solid black;
@@ -20,6 +20,9 @@
             }
             div.valid {
                 background: lightGreen;
+            }
+            h3 {
+                margin: 1px;
             }
         </style>
     </head>
@@ -55,15 +58,22 @@
             var result = formatParameterTemplate(template.value);
             
             var div = document.createElement('div');
+
+            var counter = document.createElement('h3');
+            counter.textContent = "#" + count++;
+            div.appendChild(counter);
+ 
+            var pre = document.createElement('pre');
+            div.appendChild(pre);
             if (result.valid) {
                 div.className = "valid";
             }
-            // "#" + count++;
-            div.textContent = result.text;
+            pre.textContent = '"' + result.text +'"';
 
-            var bodyDivs = document.body.getElementsByTagName('div');
-            if (bodyDivs)
-                document.body.insertBefore(div, bodyDivs[0]);
+
+            var bodypres = document.body.getElementsByTagName('div');
+            if (bodypres)
+                document.body.insertBefore(div, bodypres[0]);
             else
                 document.body.appendChild(div);
         }
