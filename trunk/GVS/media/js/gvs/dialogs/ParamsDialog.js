@@ -6,8 +6,9 @@ var ParamsDialog = Class.create(ConfirmDialog /** @lends ParamsDialog.prototype 
      * @extends ConfirmDialog
      */ 
     initialize: function($super, /** String */ buildingblockName,
-    		            /** Array */ initialParams,
-                        /** Function */ onChangeCallback) {
+                            /** String */ initialParameter,
+                            /** String */ templateParameter,
+                            /** Function */ onChangeCallback) {
         
         $super(buildingblockName + " Parameters");
 
@@ -20,10 +21,17 @@ var ParamsDialog = Class.create(ConfirmDialog /** @lends ParamsDialog.prototype 
 
         /**
          * Params initially assigned to the buildingblock
-         * @type Array
+         * @type String
          * @private
          */
-        this._initialParams = initialParams;
+        this._initialParameter = initialParameter;
+
+        /**
+         * Template parameters
+         * @type String
+         * @private
+         */
+        this._templateParameter = templateParameter;
 
         /**
          * Textarea to edit the buildingblock params
@@ -31,7 +39,28 @@ var ParamsDialog = Class.create(ConfirmDialog /** @lends ParamsDialog.prototype 
          * @private
          */
         this._textarea = new dijit.form.SimpleTextarea();
-        this._textarea.setValue(this._initialParams);
+        this._textarea.domNode.addClassName('parameterArea');
+        this._textarea.setValue(this._initialParameter);
+
+        this._tooltipButton = new Element('div', {
+            'class': 'initialParameterButton'
+        }).update("&nbsp;");
+
+        this._tooltipButton.observe('click', function() {
+            var dialog = new ExternalContentDialog("Example parameter configuration");
+            dialog.show(new Element('pre').update(this._templateParameter));
+        }.bind(this));
+
+        /**
+         * Example parameter configuration, in a tooltip
+         * @type dijit.Tooltip
+         * @private
+         */
+        this._templateParameterTooltip = new dijit.Tooltip({
+            'connectId': [this._tooltipButton],
+            'label': "<h4> Example parameter configuration </h4>" + 
+                "<pre>" + this._templateParameter + "</pre>"
+        });
 
         /**
          * @type Function
@@ -79,6 +108,9 @@ var ParamsDialog = Class.create(ConfirmDialog /** @lends ParamsDialog.prototype 
 
         content.appendChild(this._textarea.domNode);
 
+        if (this._templateParameter) {
+            content.appendChild(this._tooltipButton);
+        }      
         this._setContent(content);
     },
 

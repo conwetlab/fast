@@ -7,7 +7,7 @@ var ExternalContentDialog = Class.create(ConfirmDialog /** @lends ExternalConten
      * @extends ConfirmDialog
      */ 
     initialize: function($super, title) {
-        $super(title, ConfirmDialog.OK);
+        $super(title, ConfirmDialog.NONE);
     },
     
     // **************** PUBLIC METHODS **************** //

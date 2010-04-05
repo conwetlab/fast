@@ -43,6 +43,8 @@ var ConfirmDialog = Class.create(FormDialog, /** @lends ConfirmDialog.prototype 
                           "ConfirmDialog::initialize";
                 }
                 break;
+            case ConfirmDialog.NONE:
+                break;
             case ConfirmDialog.CUSTOM:
                  if (_options && _options.callback && _options.buttons) {
                     $H(_options.buttons).each(function(pair) {
@@ -135,6 +137,7 @@ ConfirmDialog.OK = 'ok';
 ConfirmDialog.OK_CANCEL = 'ok_cancel';
 ConfirmDialog.SAVE_DISCARD_CANCEL = 'save_discard_cancel';
 ConfirmDialog.CUSTOM = 'custom';
+ConfirmDialog.NONE = 'none';
 ConfirmDialog.SAVE = 'save';
 ConfirmDialog.DISCARD = 'discard';
 ConfirmDialog.CANCEL = 'cancel';

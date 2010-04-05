@@ -38,6 +38,10 @@ var ComponentInstance = Class.create(DragSource,
          * @private
          */
         this._params = '{}';
+        
+        if (this._buildingBlockDescription.parameterTemplate) {
+            this._params = this._buildingBlockDescription.parameterTemplate;
+        }
 
         /**
          * Inference engine to receive reachability updates
@@ -94,6 +98,7 @@ var ComponentInstance = Class.create(DragSource,
 
         var paramsDialog = new ParamsDialog(this.getTitle(),
                                this.getParams(),
+                               this._buildingBlockDescription.parameterTemplate,
                                this.setParams.bind(this));
         params.appendChild(paramsDialog.getButtonNode());
 

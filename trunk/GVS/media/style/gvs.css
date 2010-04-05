@@ -1203,6 +1203,30 @@ label {
     width: 16px;
 }
 
+/*********************
+ * Parameter dialog  *
+ *********************/
+.initialParameterButton {
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    padding: 0px;
+    background: transparent url("../images/gui/info.png") no-repeat center;
+    cursor: pointer;
+    bottom: 10px;
+    right: 7px;
+}
+
+.parameterArea {
+    height: 13em;
+}
+
+pre {
+    padding: 0.5em;
+    font-size: 12px;
+    font-family: Myriad,Helvetica,Tahoma,Arial,clean,sans-serif;
+}
+
 /***************
  * About       *
  ***************/
