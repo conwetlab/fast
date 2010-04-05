@@ -4,7 +4,7 @@ var BuildingBlock = Class.create({
         this.buildingBlockId = buildingBlockId;
 
         try {
-            var json = parameter.replace(new RegExp('/\\*([^\\*]|\\*[^/]).*\\*/', 'g'), '');
+            var json = parameter.replace(new RegExp('/\\*([^\\*]|\\*[^/])*\\*/', 'g'), '');
             json = json.replace(new RegExp('//[^\n\r]*', 'g'), '');
 
             this.parameter = json.evalJSON(json);
