@@ -35,7 +35,7 @@
             .imgCell {
                 text-align:center;
             }
-            
+
             .imgCell img{
                 max-width:150px;
                 max-heigh:150px;
@@ -147,26 +147,27 @@
                     this.showProgress();
 
                     this._items = [];
+                    this._selectedItem = null;
                 },
 
-                productDetail: function () {
-                    this.form.clearSelected();
+                productDetail: function (index) {
+                    this.clearSelected();
 
-                    var entryInfo = this.form._items[this.item];
+                    var entryInfo = this._items[index];
                     entryInfo.row.addClassName('selected');
-                    this._selectedItem = this.item;
+                    this._selectedItem = entryInfo;
 
                     var item = {
                         id: 'item',
                         data: entryInfo.entry
                     };
 
-                    this.form.manageData(null, [item], []);
+                    this.manageData(null, [item], []);
                 },
 
                 clearSelected: function () {
-                    if (this._selectedItem) {
-                        this._items[this._selectedItem].row.removeClassName('selected');
+                    if (this._selectedItem !== null) {
+                        this._selectedItem.row.removeClassName('selected');
                         this._selectedItem = null;
                     }
                 },
@@ -224,7 +225,7 @@
                         selectCell.appendChild(button);
 
                         var context = {'form': this, 'item': this._items.length};
-                        button.observe('click', this.productDetail.bind(context));
+                        button.observe('click', function() { this.form.productDetail(this.item);}.bind(context));
 
                         this._items.push({'entry': entry, 'row': row});
                     }
