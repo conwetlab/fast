@@ -69,16 +69,26 @@ public class RequestServiceImpl extends RemoteServiceServlet implements RequestS
 		{
 			path = ".";
 			
-			File file = new File(".");
-			String absolutePath = file.getAbsolutePath();
+			String classLocation = getClassLocation ();
 			
-			answer += "pwd: " + absolutePath;
+			answer += "pwd: " + classLocation;
 
-			if ( ! answer.contains("ServiceScreenDesignerWep"))
+			if ( classLocation.contains("ServiceDesignerWep"))
 			{
-				path = "/var/lib/tomcat6/webapps/ServiceDesignerWep";
+				int prefixLength = classLocation.indexOf("ServiceDesignerWep");
+				prefixLength += "ServiceDesignerWep".length();
+				String installDir = classLocation.substring(0, prefixLength);
+				path = installDir;
 				
-				answer += " IsOnTomcat ";
+				answer += " IsOnTomcat at " + installDir;
+			}
+			else
+			{
+				int prefixLength = classLocation.indexOf("ServiceScreenDesignerWep/war");
+				prefixLength += "ServiceScreenDesignerWep/war".length();
+				String installDir = classLocation.substring(0, prefixLength);
+				
+				answer += " IsLocal at " + installDir;
 			}
 			
 			String baseFileName = path + "/servicescreendesignerwep/" + opName + "Op";
@@ -100,11 +110,6 @@ public class RequestServiceImpl extends RemoteServiceServlet implements RequestS
 			
 			writer.close();
 			
-			Class<? extends RequestServiceImpl> myClass = this.getClass();
-			String myClassName = myClass.getName();
-			URL classpath = myClass.getClassLoader().getSystemResource(myClassName + ".class");
-			answer += " classpath: " + classpath;
-			
 		}
 		catch (Exception e)
 		{
@@ -114,5 +119,16 @@ public class RequestServiceImpl extends RemoteServiceServlet implements RequestS
 		} 
 		
 		return answer;
+	}
+
+	private String getClassLocation() 
+	{
+		Class<? extends RequestServiceImpl> myClass = this.getClass();
+		String myClassName = myClass.getName();
+		String resourceName = myClassName.replace('.', '/') + ".class";
+		String classpath = myClass.getClassLoader().getResource(resourceName).toString();
+		
+		return classpath;
+	    
 	}
 }
