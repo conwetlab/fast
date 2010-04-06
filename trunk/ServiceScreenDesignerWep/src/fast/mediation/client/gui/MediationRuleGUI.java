@@ -197,6 +197,7 @@ public class MediationRuleGUI extends RuleGUI
 						   treeItem.addItem(targetElemName + ": " + stringValue);
 					   }
 					   //FIXME if string is null or empty ("", " ", etc.) show it to the user??
+					   //TODO: Yes! A user should see empty values like any other..
 					   else
 					   {
 						   treeItem.addItem(targetElemName + ": -");

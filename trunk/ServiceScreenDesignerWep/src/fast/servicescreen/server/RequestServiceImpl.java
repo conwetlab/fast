@@ -1,8 +1,6 @@
 package fast.servicescreen.server;
 
-import java.io.File;
 import java.io.FileWriter;
-import java.net.URL;
 
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.ResponseHandler;
@@ -10,7 +8,6 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.BasicResponseHandler;
 import org.apache.http.impl.client.DefaultHttpClient;
 
-import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
 import fast.servicescreen.client.RequestService;
