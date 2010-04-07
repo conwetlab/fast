@@ -35,7 +35,6 @@ import fujaba.web.runtime.client.ICObject;
 
 public class DataTransformationTool extends FastTool implements EntryPoint 
 {
-
 	@Override
 	public void onModuleLoad() 
 	{
@@ -46,6 +45,7 @@ public class DataTransformationTool extends FastTool implements EntryPoint
 		initFActions(); 
 		openAction.doAction();
 	}
+	
 	public void initFActions()
 	{
 		openAction = new OpenFAction();
@@ -54,7 +54,6 @@ public class DataTransformationTool extends FastTool implements EntryPoint
 
 		openAction.setToSuccess(initAction);
 		initAction.setToSuccess(buildAction);
-
 	}
 
 	public OpenFAction openAction;
@@ -216,13 +215,13 @@ public class DataTransformationTool extends FastTool implements EntryPoint
 		rowCount++;
 
 		// add form for input fact
-		portGUI = new PortGUI(trafoOperator);
+		portGUI = new PortGUI(trafoOperator, true);
 		Widget inputPortTable = portGUI.createInputPortTable();
 		generalInformationTable.setWidget(rowCount, 0, inputPortTable);
 		rowCount++;
 		
 		// add form for output fact
-		portGUI = new PortGUI(trafoOperator);
+		portGUI = new PortGUI(trafoOperator, true);
 		Widget outputPortTable = portGUI.createOutputPortTable();
 		generalInformationTable.setWidget(rowCount, 0, outputPortTable);
 		rowCount++;

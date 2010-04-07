@@ -19,6 +19,7 @@ import com.google.gwt.user.client.ui.Widget;
 
 import fast.common.client.BuildingBlock;
 import fast.common.client.FASTMappingRule;
+import fast.common.client.FactPort;
 import fast.servicescreen.client.RequestServiceAsync;
 import fast.servicescreen.client.gui.RuleGUI;
 import fast.servicescreen.client.gui.RuleUtil;
@@ -82,18 +83,23 @@ public class MediationRuleGUI extends RuleGUI
       factsTree = new Tree();
       factsScrollPanel.setWidget(factsTree);
       translationTable.setWidget(rowCount, 2, factsScrollPanel);
-
-      //TODO: get access to the real resource 
-      getJson();	
-      TreeItem rootJsonItem = jsonTree.addItem("JSONValue:");
-      rootJsonItem.setState(true);
-      buildJsonTree(rootJsonItem, jsonValue, "JSONValue");
-      RuleUtil.expandItem(jsonTree.getItem(0));
-      updateFactsTree();
-
+      
+      //build the result tree
+      createResultTree("{}");
+      
       // return the table
       translationTable.ensureDebugId("cwFlexTable");
       return translationTable;
+   }
+
+   //called to build the result tree
+   public void createResultTree(String value)
+   {
+	   setJsonValue(value);
+	   TreeItem rootJsonItem = jsonTree.addItem("JSONValue:");
+	   rootJsonItem.setState(true);
+	   buildJsonTree(rootJsonItem, jsonValue, "JSONValue");
+	   RuleUtil.expandTree(jsonTree);
    }
 
    @Override
@@ -225,53 +231,25 @@ public class MediationRuleGUI extends RuleGUI
 	@SuppressWarnings("unused")
 	private RequestServiceAsync reqService;
 	
-	public void getJson()
+	private void setJsonValue(String value)
 	{
-//		String alonso = "{\"MRData\":{\"xmlns\": \"http:////ergast.com//mrd//1.1\",\"series\": \"f1\",\"url\": \"\"," +
-//                       "\"limit\": \"30\",\"offset\": \"0\",\"total\": \"2\",\"SeasonTable\": {\"driverId\": \"alonso\"," + 
-//                       "\"driverStandings\": \"1\",\"Seasons\": [{\"season\": \"2005\", \"url\": \"http:////en.wikipedia.org//wiki//2005_Formula_One_season\"}," +
-//                       "{\"season\": \"2006\", \"url\": \"http:////en.wikipedia.org//wiki//2006_Formula_One_season\"}]}}}";
+		String jsonValueString = value;
 		
-		String drivers = "{\"MRData\": {" +
-			             "\"xmlns\": \"http:////ergast.com//mrd//1.1\",\"series\": \"f1\",\"url\": \"\",\"limit\": \"30\",\"offset\": \"0\",\"total\": \"812\","+
-			             "\"DriverTable\": {\"Drivers\": ["+
-			             "{"+
-			             "\"driverId\": \"alesi\","+
-			             "\"url\": \"http:////en.wikipedia.org//wiki//Jean_Alesi\","+
-			             "\"givenName\": \"Jean\","+
-			             "\"familyName\": \"Alesi\","+
-			             "\"dateOfBirth\": \"1964-06-11\","+
-			             "\"nationality\": \"French\","+
-			             "},"+
-			             "{"+
-			             "\"driverId\": \"alonso\","+
-			             "\"url\": \"http:////en.wikipedia.org//wiki//Fernando_Alonso\","+
-			             "\"givenName\": \"Fernando\","+
-			             "\"familyName\": \"Alonso\","+
-			             "\"dateOfBirth\": \"1981-07-29\","+
-			             "\"nationality\": \"Spanish\","+
-			             "},"+
-			             "{"+
-			             "\"driverId\": \"amati\","+
-			             "\"url\": \"http:////en.wikipedia.org//wiki//Giovanna_Amati\","+
-			             "\"givenName\": \"Giovanna\","+
-			             "\"familyName\": \"Amati\","+
-			             "\"dateOfBirth\": \"1962-07-20\","+
-			             "\"nationality\": \"Italian\","+
-			             "},"+
-			             "{"+
-			             "\"driverId\": \"arnold\","+
-			             "\"url\": \"http:////en.wikipedia.org//wiki//Chuck_Arnold\","+
-			             "\"givenName\": \"Chuck\","+
-			             "\"familyName\": \"Arnold\","+
-			             "\"dateOfBirth\": \"1926-05-30\","+
-			             "\"nationality\": \"American\","+
-			             "}" +
-			             "]}}}";
-
-		jsonValue = JSONParser.parse(drivers);
+		if(buildingBlock.getPreconditions() != null){
+			for (Iterator<FactPort> iterator = buildingBlock.getPreconditions().iterator(); iterator.hasNext();)
+			{
+				FactPort factPort = (FactPort) iterator.next();
+				String exampleValueString = factPort.getExampleValue(); 
+				if(exampleValueString != null && ! "".equals(exampleValueString))
+				{
+				jsonValueString = exampleValueString;
+				}
+			}
+		}
 		
-		//FIXME: Make that work at time
+		jsonValue = JSONParser.parse(jsonValueString);
+		
+		//FIXME: access the real resource if gui is in service-wrapper-tool
 //		String url = "http:////ergast.com//api//f1//drivers//alonso//driverStandings//1//seasons.json";
 //		RequestServlet service = new RequestServlet();
 //		String response = service.sendHttpRequest_GET(url);

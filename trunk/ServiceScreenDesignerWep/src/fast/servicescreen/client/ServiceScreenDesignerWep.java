@@ -298,14 +298,14 @@ private TabPanel tabPanel;
       generalInformationTable.setWidget(rowCount, 0, nameTextBox);
       rowCount++;
 
-      // add input ports to general info
-      portGUI = new PortGUI(serviceScreen);
+      // add input ports to general info with short example value
+      portGUI = new PortGUI(serviceScreen, false);
       Widget inputPortTable = portGUI.createInputPortTable();
       generalInformationTable.setWidget(rowCount, 0, inputPortTable);
       rowCount++;
       
       // add output ports to general info
-      portGUI = new PortGUI(serviceScreen);
+      portGUI = new PortGUI(serviceScreen, false);
       Widget outputPortTable = portGUI.createOutputPortTable();
       generalInformationTable.setWidget(rowCount, 0, outputPortTable);
       rowCount++;

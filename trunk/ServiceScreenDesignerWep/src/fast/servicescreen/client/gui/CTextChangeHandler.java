@@ -11,11 +11,15 @@ import com.google.gwt.event.logical.shared.SelectionHandler;
 import com.google.gwt.user.client.ui.MultiWordSuggestOracle;
 import com.google.gwt.user.client.ui.SuggestBox;
 import com.google.gwt.user.client.ui.SuggestOracle;
+import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.SuggestOracle.Suggestion;
 
+import fast.common.client.FactExample;
+import fast.common.client.FactPort;
 import fast.common.client.FactType;
 import fast.common.client.ServiceDesigner;
+import fast.common.client.TrafoOperator;
 import fujaba.web.runtime.client.CObject;
 import fujaba.web.runtime.client.FAction;
 import fujaba.web.runtime.client.PropertyChangeEvent;
@@ -57,6 +61,36 @@ public class CTextChangeHandler implements ChangeHandler, PropertyChangeListener
       return textBox;
    }
    
+   private TextArea textArea;
+
+   public void setTextArea(TextArea textArea)
+   {
+	   this.textArea = textArea;
+   }
+
+   public TextArea getTextArea()
+   {
+	   return textArea;
+   }
+   
+   public static TextArea createTextArea(CObject obj, String width, String height, String attrName)
+   {
+	      CTextChangeHandler handler = new CTextChangeHandler();
+	      TextArea textArea = new TextArea();
+	      
+	      textArea.setSize(width, height);
+	      
+	      handler.setTarget(obj);
+	      handler.setTargetAttrName(attrName);
+	      handler.setTextArea(textArea);
+	      String oldValue = (String) obj.get(attrName);
+	      textArea.setValue(oldValue);
+	      textArea.addChangeHandler(handler);
+	      obj.addPropertyChangeListener(attrName, handler);
+	      
+	      return textArea;
+   }
+   
    private SuggestBox suggestBox;
    
    public SuggestBox getSuggestBox()
@@ -91,7 +125,6 @@ public class CTextChangeHandler implements ChangeHandler, PropertyChangeListener
 	   }
    }
    
-   
    @SuppressWarnings({ "unchecked" })
    public static SuggestBox createTypeSuggestBox(ServiceDesigner designer, CObject obj, String attrName)
    {
@@ -111,28 +144,6 @@ public class CTextChangeHandler implements ChangeHandler, PropertyChangeListener
 	   final TextBox textBox = (TextBox)suggestBox.getTextBox();
 	   @SuppressWarnings("unused")
 	   SuggestOracle boxOracle = suggestBox.getSuggestOracle();
-	   
-//	   textBox.addFocusHandler(new FocusHandler()
-//	   {
-//			@Override
-//			public void onFocus(FocusEvent event)
-//			{
-//				   if(!words.contains(suggestBox.getText())  && words.size() > 0)
-//				   {
-//					   textBox.setText(words.get(0));
-//				   }
-//			}
-//	   });
-//	   
-//	   ((TextBox)suggestBox.getTextBox()).addKeyPressHandler(new KeyPressHandler()
-//	   {
-//
-//			@Override
-//			public void onKeyPress(KeyPressEvent event)
-//			{
-//				//TODO do nothing or stop all event firing!
-//			}
-//	   });
 	   
 	   return suggestBox;
    }
@@ -158,7 +169,7 @@ public class CTextChangeHandler implements ChangeHandler, PropertyChangeListener
 	   }
 	   
 	   oracle.clear();
-	   for (Iterator wordIt = words.iterator(); wordIt.hasNext();)
+	   for (Iterator<String> wordIt = words.iterator(); wordIt.hasNext();)
 	   {
 		   String word = (String) wordIt.next();
 		   oracle.add(word);
@@ -179,11 +190,10 @@ public class CTextChangeHandler implements ChangeHandler, PropertyChangeListener
       SuggestBox suggestBox = new SuggestBox(oracle);
       handler.setTarget(obj);
       handler.setTargetAttrName(attrName);
+      handler.setSuggestBox(suggestBox);
       String oldValue = (String) obj.get(attrName);
       suggestBox.setValue(oldValue);
       suggestBox.addSelectionHandler(handler);
-      //TODO: test if change comes to and from server 
-//      ((TextBox)suggestBox.getTextBox()).addChangeHandler(handler);
       
       obj.addPropertyChangeListener(attrName, handler);
       return suggestBox;
@@ -218,21 +228,85 @@ public class CTextChangeHandler implements ChangeHandler, PropertyChangeListener
    public void onChange(ChangeEvent event)
    {
       Object source = event.getSource();
-      String text = ((TextBox) source).getValue();
+      String text = "";
+      if(source instanceof TextBox)
+      {
+    	  text = ((TextBox) source).getValue();
+      }
+      else if(source instanceof TextArea)
+      {
+    	  text = ((TextArea) source).getValue();
+    	  //assign the value to the associated factType
+    	  writeExampleValueToFactType(text);
+      }
       System.out.println("Box: " + event.toString());
       System.out.println("value has changed to " + text);
       target.set(targetAttrName, text);
+   }
+   
+   /**
+    * assign the value to the associated factType
+    * */
+   @SuppressWarnings("unchecked")
+   private void writeExampleValueToFactType(String value)
+   { 
+	   if(target instanceof FactPort)
+	   {
+		   FactPort factPort = (FactPort)target;
+		   String factTypeName = factPort.getFactType();
+		   
+		   if(factPort.getServiceScreen() instanceof TrafoOperator)
+		   {
+			   TrafoOperator trafOp = (TrafoOperator)factPort.getServiceScreen();
+			   ServiceDesigner designer = trafOp.getServiceDesigner();
+			   
+			   for (Iterator<FactType> iterator = designer.iteratorOfFactTypes(); iterator.hasNext();) {
+				   FactType factType = (FactType) iterator.next();
+				   if( factTypeName.equals(factType.getTypeName()))
+				   {
+					   FactExample firstExample = getFirstExample(factType);
+					   firstExample.setJson(value);
+					   break;
+				   }
+			   }
+		   }
+	   }
+   }
+
+   private FactExample getFirstExample(FactType factType) 
+   {
+	   Iterator iter = factType.iteratorOfFactExamples();
+	   FactExample next;
+	   if (iter.hasNext())
+	   {
+		   next = (FactExample) iter.next();
+	   }
+	   else
+	   {
+		   next = new FactExample();
+		   factType.addToFactExamples(next);
+	   }
+	
+	   return next;
    }
 
    @Override
    public void propertyChanged(PropertyChangeEvent evt)
    {
-      // change content of the textbox
+	   // change content of the textbox
       String newValue = (String) target.get(targetAttrName);
       if(textBox != null)
+      {
     	  textBox.setValue(newValue);
+      }
       else if(suggestBox != null)
+      {
     	  suggestBox.setValue(newValue);
+      }
+      else if (textArea != null)
+      {
+    	  textArea.setValue(newValue);
+      }
    }
 
    @Override
@@ -241,6 +315,65 @@ public class CTextChangeHandler implements ChangeHandler, PropertyChangeListener
       String text = event.getSelectedItem().getReplacementString();
       System.out.println("Box: " + event.toString());
       System.out.println("value has changed to " + text);
+      //fetch example value
+      if(target instanceof FactPort)
+      {
+    	  fetchExampleValue();
+      }
       target.set(targetAttrName, text);
    }
+
+   /**
+    * fetches the example value for the target factport
+    * */
+   private void fetchExampleValue()
+   {
+	   FactPort factPort = (FactPort)target;
+	   String factTypeName = factPort.getFactType();
+	   
+	   if(factPort.getServiceScreen() instanceof TrafoOperator)
+	   {
+		   TrafoOperator trafOp = (TrafoOperator)factPort.getServiceScreen();
+		   ServiceDesigner designer = trafOp.getServiceDesigner();
+		   
+		   for (Iterator<FactType> iterator = designer.iteratorOfFactTypes(); iterator.hasNext();) {
+			   FactType factType = (FactType) iterator.next();
+			   if( factTypeName.equals(factType.getTypeName()) & factType.iteratorOfFactExamples().hasNext())
+			   {
+				   FactExample example = (FactExample) getFirstExample(factType);
+				   factPort.setExampleValue(example.getJson());
+			   }
+		   }
+	   }
+   }
+   
+// fillExampleBox(factPort, exampleBox);
+// @SuppressWarnings("unchecked")
+// private void fillExampleBox(FactPort factPort, TextBox exampleBox)
+// {
+//	   String searchedTypeName = factPort.getFactType();
+//	   
+//	   //get the right factType
+//	   ServiceDesigner designer = (ServiceDesigner) factPort.getServiceScreen().get("serviceDesigner");
+//	   for (Iterator<FactType> iterator = designer.iteratorOfFactTypes(); iterator.hasNext();)
+//	   {
+//		   FactType factType = (FactType) iterator.next();
+//		   if(factType.getFactExamples() == null)
+//		   {
+//			   break;
+//		   }
+//		   Iterator<FactExample> exampleIterator = factType.getFactExamples().iterator();
+//		   String typeName = factType.getTypeName();
+//		   
+//		   //assign an example value to the exampleBox
+//		   if (searchedTypeName.equals(typeName) && exampleIterator.hasNext())
+//		   {
+//			   String exampleValueString = exampleIterator.next().getJson();
+//			   if(exampleValueString != null && ! "".equals(exampleValueString))
+//			   {
+//				   exampleBox.setText(exampleValueString);
+//			   }
+//		   }
+//	   }
+// }
 }
