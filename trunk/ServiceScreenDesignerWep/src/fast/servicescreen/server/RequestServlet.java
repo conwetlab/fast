@@ -34,6 +34,10 @@ public class RequestServlet extends HttpServlet
 			//execute a GET call with the params URL
 			String value = sendHttpRequest_GET(url);
 			
+			// to facilitate debugging strip xslt tag
+			// value = value.replaceFirst("<\\?xml-stylesheet type=\"text/xsl\" href=\"http://ergast.com/schemas/mrd-1.1.xsl\"\\?>", "");
+			
+
 			//attach the responses output stream
 			ServletOutputStream out = resp.getOutputStream();
 			

@@ -125,6 +125,9 @@ public class RequestServiceImpl extends RemoteServiceServlet implements RequestS
 		String resourceName = myClassName.replace('.', '/') + ".class";
 		String classpath = myClass.getClassLoader().getResource(resourceName).toString();
 		
+		// cut file: prefix
+		classpath = classpath.substring("file:".length());
+		
 		return classpath;
 	    
 	}

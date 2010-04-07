@@ -7,6 +7,7 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.json.client.JSONValue;
 import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
@@ -260,6 +261,11 @@ private TabPanel tabPanel;
       
       
       rootPanel.add(tabPanel);
+      
+      // add link to fact tool 
+      String factToolURL = "./" + "FactTool.html";
+      Anchor a = new Anchor(factToolURL, factToolURL, "_blank");
+      rootPanel.add(a);
    }
 
    private void rebuildOtherTabs() 

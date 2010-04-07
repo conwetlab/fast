@@ -3,6 +3,7 @@ package fast.mediation.client;
 import java.util.Iterator;
 
 import com.google.gwt.core.client.EntryPoint;
+import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.FlowPanel;
@@ -171,6 +172,16 @@ public class DataTransformationTool extends FastTool implements EntryPoint
 		tabPanel.selectTab(0);
 
 		rebuildOperatorTabs();
+
+		// add tabPanel to root
+		rootPanel.add(tabPanel);
+		FTest.assertTrue(true, "Tab panel has been added to root ");
+
+		// add link to fact tool 
+		String factToolURL = "./" + "FactTool.html";
+		Anchor a = new Anchor(factToolURL, factToolURL, "_blank");
+		rootPanel.add(a);
+
 	}
 	
 	
@@ -244,11 +255,6 @@ public class DataTransformationTool extends FastTool implements EntryPoint
 		//Adding part three, just to test code generation, there is a show of selected rules, templates and the .js results
 		codeGenViewer = new CodeGenViewer(trafoOperator); 
 		tabPanel.add(codeGenViewer.createCodeGenViewer(), "CodeGen Viewer");
-
-
-		// add tabPanel to root
-		rootPanel.add(tabPanel);
-		System.out.println("Tab panel has been added to root " + tabPanel);
 	}
 	
 	public void refreshOverviewPanel() 
