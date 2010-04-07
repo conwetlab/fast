@@ -53,19 +53,20 @@ public class RuleUtil
 	    * */
 	   public static boolean isCompleteRule(FASTMappingRule checkRule)
 	   {
-		   if(checkRule != null
-			  && null != checkRule.getSourceTagname()
-		      && null != checkRule.getTargetElemName()
-			  && null != checkRule.getKind()
-			  && ! "".equals(checkRule.getSourceTagname())
-		      && ! "".equals(checkRule.getTargetElemName())
-		      && ! "".equals(checkRule.getKind()))
+		   if(checkRule != null && isCompleteString(checkRule.getSourceTagname())
+		      && isCompleteString(checkRule.getTargetElemName())
+		      && isCompleteString(checkRule.getKind()))
 		   {
 			   return true;
 		   }
 		   
 		   //else
 		   return false;
+	   }
+	   
+	   public static boolean isCompleteString (String str)
+	   {
+		   return str != null && ! "".equals(str);
 	   }
 	
 	   /**
