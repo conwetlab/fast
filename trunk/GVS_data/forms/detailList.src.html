@@ -43,6 +43,11 @@
 				padding-bottom: 5px;
 				position:relative;
 			}
+			.loadingImg {
+			    position: relative;
+			    top: 118px;
+			    
+			}
 			.itemTitle {
 			    font-size: 20px;
 			    padding: 2px;
@@ -160,6 +165,13 @@
 						    'class': 'rightColumn container'
 						});					
 						details.appendChild(rightColumn);
+
+						this._loadingImg = new Element('img', {
+						    'src': "http://demo.fast.morfeo-project.org/gvsdata/amazonScreens/images/ajaxLoader.gif",
+						    'class': 'loadingImg'
+						});
+
+						rightColumn.appendChild(this._loadingImg);
 						
 						this._title = new Element('div', {
 						    'class': 'itemTitle'
@@ -274,6 +286,7 @@
 					},
 
 					_showProductInfo: function (_product) {
+					    this._loadingImg.hide();
 						if (_product.title) {
 							//Reset styles
 							this._reset();
