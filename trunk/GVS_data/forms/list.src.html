@@ -42,14 +42,16 @@
             }
 
             .loadingImg {
-                margin: auto;
-                padding-top: 10px;
+                text-align: center;
             }
 
             .logoLayer {
                 position: absolute;
                 right: 0px;
                 top: 3px;
+            }
+            .logoLayer img {
+                height: 35px;
             }
 
             .selectCell {
@@ -301,7 +303,9 @@
                     <tbody id="{{screenId}}_listBody">
                     </tbody>
                 </table>
-                <img id="{{screenId}}_loadingImg" class="loadingImg" src="http://demo.fast.morfeo-project.org/gvsdata/amazonScreens/images/ajaxLoader.gif" />
+                <div class="loadingImg">
+                    <img id="{{screenId}}_loadingImg" src="http://demo.fast.morfeo-project.org/gvsdata/amazonScreens/images/ajaxLoader.gif" />
+                </div>               
                 <div id="{{screenId}}_buttonArea" class="buttonArea">
                     <input type="button" id="{{screenId}}_previousButton" class="button previousButton" value="<" />
                     <span id="pages" class="pages"> Page <span id="curPage">-</span>/<span id="totalPages">-</span></span>
