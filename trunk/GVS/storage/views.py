@@ -51,14 +51,15 @@ class GadgetStorage(resource.Resource):
             
             storage = Storage(name=metadata['name'],
                               owner=metadata['owner'],
-                              version=metadata['version'])
+                              version=metadata['version'],
+                              screenflow = gadgetData['screenflow'])
+            storage.save()
             
-            self.__createGadget(gadgetData)
+            self.__createResourceURI(request, metadata, storage)
+            
+            self.__createGadget(gadgetData, storage)
             
             self.__storeGadget(metadata)
-            
-            storage.screenflow = gadgetData['screenflow']
-            storage.save()
             
             metadata['creationDate'] = storage.creationDate
             metadata['id'] = storage.pk
@@ -74,16 +75,11 @@ class GadgetStorage(resource.Resource):
             transaction.rollback()
             return HttpResponseServerError(json_encode({'message':unicode(e)}), mimetype='application/json; charset=UTF-8')
         
-        
-    def __getGadgetName(self, name, vendor, version):
-        return ('-'.join([vendor, name, version])).replace(' ', '_')
-
-
     def __completeGadgetData(self, request):
         gadgetData = {'metadata':{}}
         
         if request.POST.has_key('gadget'):
-            json = simplejson.loads(request.POST['gadget'])
+            json = simplejson.loads(request.POST['gadget'], encoding = 'utf-8')
         else:
             raise Exception ('Gadget parameter expected in screenflow json')
         
@@ -125,13 +121,13 @@ class GadgetStorage(resource.Resource):
         gadgetData['prec'] = definition['preconditions'] if definition.has_key('preconditions') else []
         gadgetData['post'] = definition['postconditions'] if definition.has_key('postconditions') else []
         
-        gadgetName = self.__getGadgetName(metadata['name'], metadata['owner'], metadata['version'])
-        metadata['gadgetName'] = gadgetName
-        
+        return gadgetData
+    
+    def __createResourceURI(self, request, metadata, storage):
         metadata['gadgetResource'] = None
         if isLocalStorage():
             base_uri = request.build_absolute_uri('/static')     
-            metadata['gadgetUri'] =  '/'.join([base_uri, gadgetName])
+            metadata['gadgetUri'] =  '/'.join([base_uri, str(storage.pk)])
         else:
             conn = Connection(settings.STORAGE_URL)
             body = {
@@ -160,13 +156,11 @@ class GadgetStorage(resource.Resource):
             metadata['gadgetUri'] = data['GadgetLocationURL']
             metadata['gadgetResource'] = data['ServiceGadgetUri']
             metadata['gadgetDataUri'] = data['GadgetDataUri']
-        
-        return gadgetData
 
 
-    def __createGadget(self, gadgetData):
+    def __createGadget(self, gadgetData, storage):
         metadata = gadgetData['metadata']
-        gadgetRelativePath = metadata['gadgetName']
+        gadgetRelativePath = str(storage.pk)
         gadgetPath = path.join(STORAGE_DIR, gadgetRelativePath)
         if (not path.isdir(gadgetPath)):
             mkdir(gadgetPath)
@@ -184,13 +178,13 @@ class GadgetStorage(resource.Resource):
         #EzWeb
         ezWebTemplate = getEzWebTemplate(gadgetData)
         ezWebTemplateFile = open (path.join(directory_name, 'ezweb.xml'), 'w')
-        ezWebTemplateFile.write(ezWebTemplate)
+        ezWebTemplateFile.write(ezWebTemplate.encode('utf-8'))
         ezWebTemplateFile.close()
         zipFile.write(ezWebTemplateFile.name,'./ezweb.xml')
         
         ezWebHTML = getEzWebHTML(gadgetData)
         ezWebHTMLFile = open (path.join(directory_name, 'ezweb.html'), 'w')
-        ezWebHTMLFile.write (ezWebHTML)
+        ezWebHTMLFile.write(ezWebHTML.encode('utf-8'))
         ezWebHTMLFile.close()
         zipFile.write(ezWebHTMLFile.name,'./ezweb.html')
         

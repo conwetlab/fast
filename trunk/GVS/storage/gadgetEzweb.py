@@ -1,7 +1,6 @@
 from django.conf import settings
 from django.template import RequestContext, Template, Context, loader
 from os import path, mkdir
-from django.utils.encoding import smart_str
 from commons.utils import notEmptyValueOrDefault
   
 def getEzWebTemplate(gadgetData):

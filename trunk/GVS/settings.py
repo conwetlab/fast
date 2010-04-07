@@ -32,6 +32,10 @@ DATABASE_PORT = ''             # Set to empty string for default. Not used with 
 TIME_ZONE = 'Europe/Madrid'
 DATE_FORMAT = 'd/m/Y'
 
+#Encoding
+DEFAULT_CHARSET = 'utf-8'
+FILE_CHARSET = 'utf-8'
+
 # Language code for this installation. All choices can be found here:
 # http://www.i18nguy.com/unicode/language-identifiers.html
 LANGUAGE_CODE = 'en'
@@ -125,7 +129,7 @@ AUTH_PROFILE_MODULE = 'user.UserProfile'
 NOT_PROXY_FOR = ['localhost', '127.0.0.1']
 
 # Url to the server that holds the semantic catalogue
-CATALOGUE_URL = 'http://localhost:8080/FASTCatalogue'
+CATALOGUE_URL = 'http://localhost:9000/FASTCatalogue'
 
 # Url to the server that holds the storage service (empty if local storage in GVS)
 STORAGE_URL = None
