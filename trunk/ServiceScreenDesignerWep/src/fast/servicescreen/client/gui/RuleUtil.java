@@ -2,8 +2,11 @@ package fast.servicescreen.client.gui;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.Set;
 
 import com.google.gwt.json.client.JSONArray;
+import com.google.gwt.json.client.JSONBoolean;
+import com.google.gwt.json.client.JSONNumber;
 import com.google.gwt.json.client.JSONObject;
 import com.google.gwt.json.client.JSONString;
 import com.google.gwt.json.client.JSONValue;
@@ -69,7 +72,106 @@ public class RuleUtil
 		   }
 	   }
 	   
+	   /**
+		 * Recursive method for retrieving all jsonvalues for a specified tagName
+		 * */
+	   public static void jsonValuesByTagName(JSONArray elements, JSONValue root, String tagName)
+	   { 
+		   //if object search on first layer. on failure begin depth-search
+		   JSONObject object = root.isObject();
+		   if( object != null )
+		   {	
+			   //get (first layer) keys contained in the JSONValue
+			   Set<String> keys = object.keySet();
+
+			   //seek on first layer
+			   for (Iterator<String> iterator = keys.iterator(); iterator.hasNext();)
+			   {
+				   String key = (String) iterator.next();
+
+				   //found - add it and stop
+				   if(key.equals(tagName))
+				   {
+					   int index = elements.size();
+					   elements.set(index, object.get(key));
+					   //stop - key can occur only once on first layer
+					   break;
+				   }
+				   //nothing found - depth-search
+				   else
+				   {
+					   jsonValuesByTagName(elements, object.get(key), tagName);
+				   }
+			   }
+		   }
+
+		   //if it's an array, search among it's children by calling recursive method
+		   //for every child
+		   JSONArray jsonArray = root.isArray();
+		   if(jsonArray != null)
+		   {	
+			   for (int i = 0; i < jsonArray.size(); i++)
+			   {
+				   jsonValuesByTagName(elements, jsonArray.get(i), tagName);
+			   }
+		   }
+
+		   //if it's a matching boolean, number or string: add it
+		   JSONBoolean jsonBoolean = root.isBoolean();
+		   if(jsonBoolean != null && tagName.equals(jsonBoolean.booleanValue()))
+		   {
+			   int index = elements.size();
+			   elements.set(index, jsonBoolean);
+		   }
+		   JSONNumber jsonNumber = root.isNumber();
+		   if(jsonNumber != null && tagName.equals(jsonNumber.doubleValue()))
+		   {
+			   int index = elements.size();
+			   elements.set(index, jsonNumber);
+		   }
+		   JSONString jsonString = root.isString();
+		   if(jsonString != null && tagName.equals(jsonString.stringValue()))
+		   {
+			   int index = elements.size();
+			   elements.set(index, jsonString);
+		   }
+	   }
 	   
+	   /**
+	    * Returns the String value of given JSONValue, or "" if
+	    * value was emtpy
+	    * */
+	   public static String getJSONValue_AsString(JSONValue jsonValue)
+	   {
+		   //Define JSON valuetype. Get its sting value 
+		   String nodeValue = "";
+		   JSONBoolean attrBoolean = jsonValue.isBoolean();
+		   JSONNumber attrNumber = jsonValue.isNumber();
+		   JSONString attrString = jsonValue.isString();
+		   
+		   if(attrBoolean != null)
+		   {
+			   nodeValue = "" + attrBoolean.booleanValue();
+		   }
+		   else if(attrNumber != null)
+		   {
+			   nodeValue = "" + attrNumber.doubleValue();
+		   }
+		   else if(attrString != null)
+		   {
+			   String stringValue = attrString.stringValue();
+			   if(stringValue != null && !"".equals(stringValue.trim()))
+			   {
+				   nodeValue = "" + stringValue;
+			   }
+			   else
+			   {
+				   nodeValue = "";
+			   }
+		   }
+		   
+		   return nodeValue;
+	   }
 	   
 	   /**
 	    * Returns true, if given Rule contains source, target and kind

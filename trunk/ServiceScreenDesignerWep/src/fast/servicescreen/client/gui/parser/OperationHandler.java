@@ -3,6 +3,8 @@ package fast.servicescreen.client.gui.parser;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+import com.google.gwt.json.client.JSONArray;
+import com.google.gwt.json.client.JSONValue;
 import com.google.gwt.xml.client.Node;
 import com.google.gwt.xml.client.NodeList;
 
@@ -16,7 +18,7 @@ public class OperationHandler
 {
 	private ExtendedRuleParser exRuleParser = null;
 	private ArrayList<ArrayList<Operation>> operationList = null;
-	private String lastRealTagname = "";
+	private String lastRealTagname = null;
 
 	/**
 	 * Initialize with this constructor will create
@@ -68,7 +70,7 @@ public class OperationHandler
 					Kind startKind = currentList.get(0).kind;
 					
 					//if it is not a constant
-					if(Kind.constant != startKind)
+					if(lastRealTagname == null && Kind.constant != startKind)
 					{
 						//take the last real tagname
 						lastRealTagname = getLastTagnameOf(currentList).value;
@@ -106,10 +108,12 @@ public class OperationHandler
 	}
 	
 	/**
-	 * This method executes all operations.
+	 * This method executes all operations for XML.
 	 * 
 	 * Returns the transformed nodeValue or even the
-	 * nodeValue himself, if anything was wrong 
+	 * nodeValue himself, if anything was wrong.
+	 * 
+	 * Notice: This method is overloaded: (JSONValue) OR (Node, int)
 	 * */
 	//execute hole operationList
 	public String executeOperations(Node xmlDoc, int elementsItemID)
@@ -150,6 +154,52 @@ public class OperationHandler
 
 		return result;
 	}
+	
+	
+	/**
+	 * This method executes all operations for JSON.
+	 * 
+	 * Returns the transformed nodeValue or even the
+	 * nodeValue himself, if anything was wrong.
+	 * 
+	 * Notice: This method is overloaded: (JSONValue) OR (Node, int)
+	 * */
+	//execute hole operationList 
+	public String executeOperations(JSONValue jsonValue)
+	{
+		String result = "";
+		
+		//Execute any operationList
+		for (Iterator<ArrayList<Operation>> iterator = operationList.iterator(); iterator.hasNext();)
+		{
+			//take currentOpList
+			ArrayList<Operation> currentList = (ArrayList<Operation>) iterator.next();
+			
+			if(currentList.size() > 0)
+			{
+				//if const, add. If not, execute operation
+				Kind firstOpKind = currentList.get(0).kind;
+				if(Kind.constant == firstOpKind)
+				{
+					result += currentList.get(0).value;
+				}
+				else
+				{
+					String tagName = currentList.get(0).value; // should be the name of the meaned JSONValue
+					JSONArray elements = new JSONArray();
+					RuleUtil.jsonValuesByTagName(elements, jsonValue, tagName);
+					
+					String nodeValue = RuleUtil.getJSONValue_AsString(elements.get(0));
+					
+					//create/expand the result
+					result += executeOperationList(currentList, nodeValue);
+				}
+			}
+		}
+
+		return result;
+	}
+	
 	
 	/**
 	 * Executes a list of instructions and transform the given nodeValue.

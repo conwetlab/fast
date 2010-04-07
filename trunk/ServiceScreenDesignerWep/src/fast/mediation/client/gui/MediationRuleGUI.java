@@ -6,8 +6,6 @@ import java.util.Set;
 import com.google.gwt.event.logical.shared.SelectionEvent;
 import com.google.gwt.event.logical.shared.SelectionHandler;
 import com.google.gwt.json.client.JSONArray;
-import com.google.gwt.json.client.JSONBoolean;
-import com.google.gwt.json.client.JSONNumber;
 import com.google.gwt.json.client.JSONObject;
 import com.google.gwt.json.client.JSONParser;
 import com.google.gwt.json.client.JSONString;
@@ -85,7 +83,6 @@ public class MediationRuleGUI extends RuleGUI
       factsScrollPanel.setWidget(factsTree);
       translationTable.setWidget(rowCount, 2, factsScrollPanel);
 
-
       //TODO: get access to the real resource 
       getJson();	
       TreeItem rootJsonItem = jsonTree.addItem("JSONValue:");
@@ -136,17 +133,19 @@ public class MediationRuleGUI extends RuleGUI
 		   String kind = rule.getKind();
 		   String targetElemName = rule.getTargetElemName();
 		   
+		   
 		   //create a handler for operations in the decoded fromField 
 		   OperationHandler opHandler = new OperationHandler(rule.getSourceTagname()); 
 		   String sourceTagname = opHandler.getLastSourceTagname();
 	       //add the handler within parse results into the rule
 		   rule.setOperationHandler(opHandler);
 		   
+		   
 		   JSONArray elements = new JSONArray();
 		   //for normal sourceTagnames retrieve the elements recursive
 		   if(! sourceTagname.endsWith("_Item"))
 		   {
-			   jsonValuesByTagName(elements, rootJsonValue, sourceTagname);
+			   RuleUtil.jsonValuesByTagName(elements, rootJsonValue, sourceTagname);
 		   }
 		   //special case: array items
 		   else
@@ -180,36 +179,9 @@ public class MediationRuleGUI extends RuleGUI
 		   //"fillAttribute" fills attribute strings on right position
 		   else if (kind.equals("fillAttributes"))
 		   {
-			   for (int i = 0; i < elements.size(); i++)
-			   {
-				   JSONValue tmpElement = elements.get(i);
-
-				   //add content of the element which IS (JSONBoolean, JSONNumber or JSONString)
-				   JSONBoolean attrBoolean = tmpElement.isBoolean();
-				   if(attrBoolean != null)
-				   {
-					   treeItem.addItem(targetElemName + ": " + attrBoolean.booleanValue());
-				   }
-				   JSONNumber attrNumber = tmpElement.isNumber();
-				   if(attrNumber != null)
-				   {
-					   treeItem.addItem(targetElemName + ": " + attrNumber.doubleValue());
-				   }
-				   JSONString attrString = tmpElement.isString();
-				   if(attrString != null)
-				   {
-					   
-					   String stringValue = attrString.stringValue();
-					   if(stringValue != null && !"".equals(stringValue.trim()))
-					   {
-						   treeItem.addItem(targetElemName + ": " + stringValue);
-					   }
-					   else
-					   {
-						   treeItem.addItem(targetElemName + ": ");
-					   }
-				   }
-			   }
+				String nodeValue = opHandler.executeOperations(rootJsonValue);
+				   
+				treeItem.addItem(targetElemName + ": " + nodeValue);
 		   }
 	   }
    }
@@ -225,71 +197,6 @@ public class MediationRuleGUI extends RuleGUI
 		   FASTMappingRule kid = (FASTMappingRule) kidIter.next();
 		   //call transform for the kid
 		   transform(rootJsonValue, kid, treeItem);
-	   }
-   }
-   
-   /**
-	 * recursive method for retrieving all jsonvalues for a specified tagName
-	 * */
-   private void jsonValuesByTagName(JSONArray elements, JSONValue root, String tagName)
-   { 
-	   //if object search on first layer. on failure begin depth-search
-	   JSONObject object = root.isObject();
-	   if( object != null )
-	   {	
-		   //get (first layer) keys contained in the JSONValue
-		   Set<String> keys = object.keySet();
-
-		   //seek on first layer
-		   for (Iterator<String> iterator = keys.iterator(); iterator.hasNext();)
-		   {
-			   String key = (String) iterator.next();
-
-			   //found - add it and stop
-			   if(key.equals(tagName))
-			   {
-				   int index = elements.size();
-				   elements.set(index, object.get(key));
-				   //stop - key can occur only once on first layer
-				   break;
-			   }
-			   //nothing found - depth-search
-			   else
-			   {
-				   jsonValuesByTagName(elements, object.get(key), tagName);
-			   }
-		   }
-	   }
-
-	   //if it's an array, search among it's children by calling recursive method
-	   //for every child
-	   JSONArray jsonArray = root.isArray();
-	   if(jsonArray != null)
-	   {	
-		   for (int i = 0; i < jsonArray.size(); i++)
-		   {
-			   jsonValuesByTagName(elements, jsonArray.get(i), tagName);
-		   }
-	   }
-
-	   //if it's a matching boolean, number or string: add it
-	   JSONBoolean jsonBoolean = root.isBoolean();
-	   if(jsonBoolean != null && tagName.equals(jsonBoolean.booleanValue()))
-	   {
-		   int index = elements.size();
-		   elements.set(index, jsonBoolean);
-	   }
-	   JSONNumber jsonNumber = root.isNumber();
-	   if(jsonNumber != null && tagName.equals(jsonNumber.doubleValue()))
-	   {
-		   int index = elements.size();
-		   elements.set(index, jsonNumber);
-	   }
-	   JSONString jsonString = root.isString();
-	   if(jsonString != null && tagName.equals(jsonString.stringValue()))
-	   {
-		   int index = elements.size();
-		   elements.set(index, jsonString);
 	   }
    }
 
