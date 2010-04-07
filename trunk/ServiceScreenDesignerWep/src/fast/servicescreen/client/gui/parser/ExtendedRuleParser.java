@@ -254,7 +254,8 @@ public class ExtendedRuleParser
 		else
 		{
 			//get the word
-			while((Character.isLetterOrDigit(currentChar) || currentChar == '-')
+			while((Character.isLetterOrDigit(currentChar) 
+				  || currentChar == '_' || currentChar == '-')
 				  && Character.MIN_VALUE != currentChar)
 			{
 				word += currentChar;

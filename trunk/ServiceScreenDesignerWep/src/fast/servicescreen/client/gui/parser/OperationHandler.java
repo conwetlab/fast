@@ -22,9 +22,9 @@ public class OperationHandler
 	 * Initialize with this constructor will create
 	 * the parser and parse/ the given line
 	 * */
-	public OperationHandler(String fromField, Node xmlDoc)
+	public OperationHandler(String fromField)
 	{
-		if(fromField != null && ! "".equals(fromField) && xmlDoc != null)
+		if(fromField != null && ! "".equals(fromField))
 		{
 			exRuleParser = new ExtendedRuleParser();
 			

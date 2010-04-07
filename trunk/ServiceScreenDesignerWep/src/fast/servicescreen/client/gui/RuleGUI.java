@@ -430,7 +430,7 @@ public class RuleGUI
     	  NodeList elements = null;
     	  
     	  //create a handler for operations in the decoded fromField 
-    	  OperationHandler opHandler = new OperationHandler(rule.getSourceTagname(), xmlDocElement); 
+    	  OperationHandler opHandler = new OperationHandler(rule.getSourceTagname()); 
     	  String sourceTagname = opHandler.getLastSourceTagname();
     	  
     	  //add the handler within parse results into the rule

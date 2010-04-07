@@ -49,6 +49,29 @@ public class RuleUtil
 	   }
 	   
 	   /**
+	    * Expands the hole Tree (if u give the rootitem of the tree) or even
+	    * the subitems of given item.
+	    * */
+	   public static void expandItem(TreeItem item)
+	   {
+		   if (item != null)
+		   {
+			   item.setState(true);
+			   
+			   for (int i = 0; i < item.getChildCount(); i++)
+			   {
+				   TreeItem tempChild = item.getChild(i);
+				   
+				   tempChild.setState(true);
+				   
+				   expandItem(tempChild);
+			   }
+		   }
+	   }
+	   
+	   
+	   
+	   /**
 	    * Returns true, if given Rule contains source, target and kind
 	    * */
 	   public static boolean isCompleteRule(FASTMappingRule checkRule)

@@ -24,6 +24,7 @@ import fast.common.client.FASTMappingRule;
 import fast.servicescreen.client.RequestServiceAsync;
 import fast.servicescreen.client.gui.RuleGUI;
 import fast.servicescreen.client.gui.RuleUtil;
+import fast.servicescreen.client.gui.parser.OperationHandler;
 import fast.servicescreen.client.rpc.SendRequestHandler;
 
 /**
@@ -90,7 +91,7 @@ public class MediationRuleGUI extends RuleGUI
       TreeItem rootJsonItem = jsonTree.addItem("JSONValue:");
       rootJsonItem.setState(true);
       buildJsonTree(rootJsonItem, jsonValue, "JSONValue");
-      RuleUtil.expandTree(jsonTree);
+      RuleUtil.expandItem(jsonTree.getItem(0));
       updateFactsTree();
 
       // return the table
@@ -120,7 +121,8 @@ public class MediationRuleGUI extends RuleGUI
 
 	   transform(jsonValue, rootRule, rootItem);
 
-	   RuleUtil.expandTree(aFactsTree);
+//	   RuleUtil.expandTree(aFactsTree);				//This expand 3 steps
+	   RuleUtil.expandItem(aFactsTree.getItem(0));	//This expand the HOLE tree
    }
    
    /**
@@ -131,9 +133,14 @@ public class MediationRuleGUI extends RuleGUI
    {
 	   if(RuleUtil.isCompleteRule(rule))
 	   {
-		   String sourceTagname = rule.getSourceTagname();
 		   String kind = rule.getKind();
 		   String targetElemName = rule.getTargetElemName();
+		   
+		   //create a handler for operations in the decoded fromField 
+		   OperationHandler opHandler = new OperationHandler(rule.getSourceTagname()); 
+		   String sourceTagname = opHandler.getLastSourceTagname();
+	       //add the handler within parse results into the rule
+		   rule.setOperationHandler(opHandler);
 		   
 		   JSONArray elements = new JSONArray();
 		   //for normal sourceTagnames retrieve the elements recursive
@@ -169,6 +176,7 @@ public class MediationRuleGUI extends RuleGUI
 				   transformKids(tmpElement, rule, kidItem);
 			   }
 		   }
+		   
 		   //"fillAttribute" fills attribute strings on right position
 		   else if (kind.equals("fillAttributes"))
 		   {
@@ -196,11 +204,9 @@ public class MediationRuleGUI extends RuleGUI
 					   {
 						   treeItem.addItem(targetElemName + ": " + stringValue);
 					   }
-					   //FIXME if string is null or empty ("", " ", etc.) show it to the user??
-					   //TODO: Yes! A user should see empty values like any other..
 					   else
 					   {
-						   treeItem.addItem(targetElemName + ": -");
+						   treeItem.addItem(targetElemName + ": ");
 					   }
 				   }
 			   }
@@ -304,7 +310,6 @@ public class MediationRuleGUI extends RuleGUI
         	 selectedRule.setSourceTagname(name);
          }
          
-         //TODO finally update the facts-tree??
          updateFactsTree();
       }
    }
