@@ -203,8 +203,8 @@ public class PortGUI
 	   
 	   //updateListener
 	   UpdateTransformationTabListener updateTabListener = new UpdateTransformationTabListener();
-	   factPort.addPropertyChangeListener(FactPort.PROPERTY_NAME, updateTabListener);
-	   factPort.addPropertyChangeListener(FactPort.PROPERTY_FACT_TYPE, updateTabListener);
+	   factPort.addPropertyChangeListener("name", updateTabListener);
+	   factPort.addPropertyChangeListener("factType", updateTabListener);
    }
    
    class UpdateTransformationTabListener implements PropertyChangeListener
