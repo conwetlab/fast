@@ -346,34 +346,4 @@ public class CTextChangeHandler implements ChangeHandler, PropertyChangeListener
 		   }
 	   }
    }
-   
-// fillExampleBox(factPort, exampleBox);
-// @SuppressWarnings("unchecked")
-// private void fillExampleBox(FactPort factPort, TextBox exampleBox)
-// {
-//	   String searchedTypeName = factPort.getFactType();
-//	   
-//	   //get the right factType
-//	   ServiceDesigner designer = (ServiceDesigner) factPort.getServiceScreen().get("serviceDesigner");
-//	   for (Iterator<FactType> iterator = designer.iteratorOfFactTypes(); iterator.hasNext();)
-//	   {
-//		   FactType factType = (FactType) iterator.next();
-//		   if(factType.getFactExamples() == null)
-//		   {
-//			   break;
-//		   }
-//		   Iterator<FactExample> exampleIterator = factType.getFactExamples().iterator();
-//		   String typeName = factType.getTypeName();
-//		   
-//		   //assign an example value to the exampleBox
-//		   if (searchedTypeName.equals(typeName) && exampleIterator.hasNext())
-//		   {
-//			   String exampleValueString = exampleIterator.next().getJson();
-//			   if(exampleValueString != null && ! "".equals(exampleValueString))
-//			   {
-//				   exampleBox.setText(exampleValueString);
-//			   }
-//		   }
-//	   }
-// }
 }

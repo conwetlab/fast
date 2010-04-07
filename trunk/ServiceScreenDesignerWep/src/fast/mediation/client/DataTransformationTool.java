@@ -215,13 +215,13 @@ public class DataTransformationTool extends FastTool implements EntryPoint
 		rowCount++;
 
 		// add form for input fact
-		portGUI = new PortGUI(trafoOperator, true);
+		portGUI = new PortGUI(this, trafoOperator, true);
 		Widget inputPortTable = portGUI.createInputPortTable();
 		generalInformationTable.setWidget(rowCount, 0, inputPortTable);
 		rowCount++;
 		
 		// add form for output fact
-		portGUI = new PortGUI(trafoOperator, true);
+		portGUI = new PortGUI(this, trafoOperator, true);
 		Widget outputPortTable = portGUI.createOutputPortTable();
 		generalInformationTable.setWidget(rowCount, 0, outputPortTable);
 		rowCount++;
@@ -230,6 +230,18 @@ public class DataTransformationTool extends FastTool implements EntryPoint
 		tabPanel.add(generalInformationTable, "General");
 		
 
+		refreshRuleAndCodeTab();
+	}
+
+	public void refreshRuleAndCodeTab() {
+		// remove old tabs
+		int widgetCount = tabPanel.getWidgetCount();
+		while (widgetCount > 2)
+		{
+			tabPanel.remove(widgetCount-1);
+			widgetCount = tabPanel.getWidgetCount();
+		}
+		
 		// transformation tab
 		FlexTable transformationTable = new FlexTable();
 		FlexCellFormatter transformationTableCellFormatter = transformationTable.getFlexCellFormatter();

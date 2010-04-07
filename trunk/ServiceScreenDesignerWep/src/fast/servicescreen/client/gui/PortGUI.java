@@ -16,6 +16,10 @@ import com.google.gwt.user.client.ui.HTMLTable.Cell;
 import fast.common.client.BuildingBlock;
 import fast.common.client.FactPort;
 import fast.common.client.ServiceDesigner;
+import fast.mediation.client.DataTransformationTool;
+import fast.servicescreen.client.FastTool;
+import fujaba.web.runtime.client.PropertyChangeEvent;
+import fujaba.web.runtime.client.PropertyChangeListener;
 
 public class PortGUI
 {
@@ -25,6 +29,14 @@ public class PortGUI
       this.longExampleValues = longExampleValues;
    }
    
+   public PortGUI(FastTool fastTool, BuildingBlock buildingBlock, boolean longExampleValues)
+   {
+	  this.fastTool = fastTool;
+      this.buildingBlock = buildingBlock;
+      this.longExampleValues = longExampleValues;
+   }
+   
+   private FastTool fastTool;
    private BuildingBlock buildingBlock;
    private boolean longExampleValues;
    public FlexTable inputPortTable;
@@ -73,7 +85,7 @@ public class PortGUI
        
        // return the panel
        inputPortTable.ensureDebugId("cwFlexTable");
-      return inputPortTable;
+       return inputPortTable;
    }
 
    private void createInputTableRowFor(FactPort factPort)
@@ -96,7 +108,14 @@ public class PortGUI
 		   RemoveInputPortHandler inputPortHandler = new RemoveInputPortHandler();
 		   inputPortHandler.setFactPort(factPort);
 		   removePortButton.addClickHandler(inputPortHandler);
+		   
 		   inputPortTable.setWidget(inputNumRows, 3, removePortButton);
+		   
+		   //updateListener
+		   UpdateTransformationTabListener updateTabListener = new UpdateTransformationTabListener();
+    	   factPort.addPropertyChangeListener("name", updateTabListener);
+    	   factPort.addPropertyChangeListener("factType", updateTabListener);
+    	   factPort.addPropertyChangeListener("exampleValue", updateTabListener);
 	   }
 	   else
 	   {
@@ -119,35 +138,6 @@ public class PortGUI
 		   inputPortTable.setWidget(inputNumRows, 3, removePortButton);
 	   }
    }
-   
-//   @SuppressWarnings("unchecked")
-//   private void fillExampleBox(FactPort factPort, TextBox exampleBox)
-//   {
-//	   String searchedTypeName = factPort.getFactType();
-//	   
-//	   //get the right factType
-//	   ServiceDesigner designer = (ServiceDesigner) factPort.getServiceScreen().get("serviceDesigner");
-//	   for (Iterator<FactType> iterator = designer.iteratorOfFactTypes(); iterator.hasNext();)
-//	   {
-//		   FactType factType = (FactType) iterator.next();
-//		   if(factType.getFactExamples() == null)
-//		   {
-//			   break;
-//		   }
-//		   Iterator<FactExample> exampleIterator = factType.getFactExamples().iterator();
-//		   String typeName = factType.getTypeName();
-//		   
-//		   //assign an example value to the exampleBox
-//		   if (searchedTypeName.equals(typeName) && exampleIterator.hasNext())
-//		   {
-//			   String exampleValueString = exampleIterator.next().getJson();
-//			   if(exampleValueString != null && ! "".equals(exampleValueString))
-//			   {
-//				   exampleBox.setText(exampleValueString);
-//			   }
-//		   }
-//	   }
-//   }
 
    @SuppressWarnings("unchecked")
    public Widget createOutputPortTable() 
@@ -181,6 +171,13 @@ public class PortGUI
 		   createOutputTableRowFor(factPort);
 	   }
 
+       if(longExampleValues)
+       {
+		   //updateListener
+		   UpdateTransformationTabListener updateTabListener = new UpdateTransformationTabListener();
+    	   buildingBlock.addPropertyChangeListener(BuildingBlock.PROPERTY_POSTCONDITIONS, updateTabListener);
+       }
+	   
 	   // return the panel
 	   outputPortTable.ensureDebugId("cwFlexTable");
 	   return outputPortTable;
@@ -203,8 +200,25 @@ public class PortGUI
 	   outputPortHandler.setFactPort(factPort);
 	   removePortButton.addClickHandler(outputPortHandler);
 	   outputPortTable.setWidget(outputNumRows, 3, removePortButton);
+	   
+	   //updateListener
+	   UpdateTransformationTabListener updateTabListener = new UpdateTransformationTabListener();
+	   factPort.addPropertyChangeListener(FactPort.PROPERTY_NAME, updateTabListener);
+	   factPort.addPropertyChangeListener(FactPort.PROPERTY_FACT_TYPE, updateTabListener);
    }
-
+   
+   class UpdateTransformationTabListener implements PropertyChangeListener
+   {
+	   @Override
+	   public void propertyChanged(PropertyChangeEvent evt)
+	   {
+		   if(fastTool instanceof DataTransformationTool)
+		   {
+			   ((DataTransformationTool) fastTool).refreshRuleAndCodeTab();
+		   }
+	   }
+   }
+   
    class AddNewInputPortHandler implements ClickHandler
    {
 	   @Override

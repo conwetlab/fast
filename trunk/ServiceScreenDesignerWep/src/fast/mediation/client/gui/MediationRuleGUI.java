@@ -20,6 +20,7 @@ import com.google.gwt.user.client.ui.Widget;
 import fast.common.client.BuildingBlock;
 import fast.common.client.FASTMappingRule;
 import fast.common.client.FactPort;
+import fast.common.client.ServiceDesigner;
 import fast.servicescreen.client.RequestServiceAsync;
 import fast.servicescreen.client.gui.RuleGUI;
 import fast.servicescreen.client.gui.RuleUtil;
@@ -85,7 +86,7 @@ public class MediationRuleGUI extends RuleGUI
       translationTable.setWidget(rowCount, 2, factsScrollPanel);
       
       //build the result tree
-      createResultTree("{}");
+      createResultTree();
       
       // return the table
       translationTable.ensureDebugId("cwFlexTable");
@@ -93,9 +94,9 @@ public class MediationRuleGUI extends RuleGUI
    }
 
    //called to build the result tree
-   public void createResultTree(String value)
+   public void createResultTree()
    {
-	   setJsonValue(value);
+	   setJsonValue("{}");
 	   TreeItem rootJsonItem = jsonTree.addItem("JSONValue:");
 	   rootJsonItem.setState(true);
 	   buildJsonTree(rootJsonItem, jsonValue, "JSONValue");
