@@ -109,6 +109,7 @@ var ScreenDescription = Class.create(BuildingBlockDescription,
 
     /**
      * Updates the position of a *-condition
+     * @type Boolean
      */
     updatePrePost: function(/** PrePostInstance */ prepost, /** Object */ position) {
         var list;
@@ -117,7 +118,15 @@ var ScreenDescription = Class.create(BuildingBlockDescription,
         } else {
             list = this._postconditions;
         }
-        list.get(prepost.getId()).position = position;
+        var prePost = list.get(prepost.getId());
+        var origin = prePost.position;
+
+        if (origin.top != position.top || origin.left != position.left) {
+            prePost.position = position;
+            return true;
+        } else {
+            return false;
+        }
     },
 
     /**
@@ -132,9 +141,17 @@ var ScreenDescription = Class.create(BuildingBlockDescription,
 
     /**
      * Updates the position of a building block
+     * @type Boolean
      */
     updateBuildingBlock: function (/** ComponentInstance */ instance, /** Object */ position) {
-        this._buildingBlocks.get(instance.getId()).position = position;
+        var buildingBlock = this._buildingBlocks.get(instance.getId());
+        var origin = buildingBlock.position;
+
+        if (origin.top != position.top || origin.left != position.left) {
+            buildingBlock.position = position;
+            return true;
+        }
+        return false;
     },
 
     /**

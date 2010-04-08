@@ -61,16 +61,18 @@ var ScreenflowDocument = Class.create(PaletteDocument,
      * @override
      */
     positionUpdated: function(/** ComponentInstance */ element, /** Object */ position) {
-       switch (element.constructor) {
+        var isChanged;
+        switch (element.constructor) {
             case ScreenInstance:
-                this._description.updateScreen(element.getUri(), position);
+                isChanged = this._description.updateScreen(element.getUri(), position);
                 break;
             case PrePostInstance:
-                this._description.updatePrePost(element.getUri(), position);
+                isChanged = this._description.updatePrePost(element.getUri(), position);
                 break;
         }
-        element._onClick();
-       this._setDirty(true);
+        if (isChanged) {
+            this._setDirty(true);
+        }
     },
 
     /**

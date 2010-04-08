@@ -62,7 +62,15 @@ var ScreenflowDescription = Class.create(BuildingBlockDescription,
      * Updates the position of the screen
      */
     updateScreen: function (/** String */ uri, /** Object */ position) {
-        this._screens.get(uri).position = position;
+        var buildingBlock = this._screens.get(uri);
+        var origin = buildingBlock.position;
+
+        if (origin.top != position.top || origin.left != position.left) {
+            buildingBlock.position = position;
+            return true;
+        } else {
+            return false;
+        }
     },
 
     /**
@@ -96,12 +104,15 @@ var ScreenflowDescription = Class.create(BuildingBlockDescription,
 
     updatePrePost: function(/** String */ uri, /** Object */ position) {
         var condition = this._preconditions.get(uri);
-        if (condition) {
-            condition.position = position;
-        } else {
+        if (!condition) {
             condition = this._postconditions.get(uri);
-            condition.position = position;
         }
+        var origin = condition.position;
+        if (origin.top != position.top || origin.left != position.left) {
+            condition.position = position;
+            return true;
+        }
+        return false;
     },
     
     

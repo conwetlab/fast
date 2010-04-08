@@ -113,18 +113,18 @@ var ScreenDocument = Class.create(PaletteDocument,
      * @override
      */
     positionUpdated: function(/** ComponentInstance */ element, /** Object */ position) {
+        var isChanged;
         switch (element.constructor) {
             case PrePostInstance:
-                this._description.updatePrePost(element, position);
+                isChanged = this._description.updatePrePost(element, position);
                 break;
             default:
-                this._description.updateBuildingBlock(element, position);
+                isChanged = this._description.updateBuildingBlock(element, position);
                 break;
         }
-
-        element._onClick();
-
-        this._setDirty(true);
+        if (isChanged) {
+            this._setDirty(true);
+        }
     },
 
 

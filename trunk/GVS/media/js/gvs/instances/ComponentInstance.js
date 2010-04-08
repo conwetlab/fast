@@ -263,6 +263,7 @@ var ComponentInstance = Class.create(DragSource,
                 this._onDoubleClick(event);
             }.bind(this),'dblclick');
         } else {
+            this._onClick();
             if (this._listener) {
                 this._listener.positionUpdated(this, position);
             }
