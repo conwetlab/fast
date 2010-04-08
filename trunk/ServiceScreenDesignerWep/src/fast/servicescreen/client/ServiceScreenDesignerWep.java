@@ -266,6 +266,11 @@ private TabPanel tabPanel;
       String factToolURL = "./" + "FactTool.html";
       Anchor a = new Anchor(factToolURL, factToolURL, "_blank");
       rootPanel.add(a);
+      
+      // add link to data transformation tool 
+      String dataTransformationToolURL = "./" + "DataTransformationTool.html";
+      a = new Anchor(factToolURL, dataTransformationToolURL);
+      rootPanel.add(a);
    }
 
    private void rebuildOtherTabs() 

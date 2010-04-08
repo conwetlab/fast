@@ -258,6 +258,8 @@ public class DataTransformationTool extends FastTool implements EntryPoint
 		ruleGUI = new MediationRuleGUI(trafoOperator, requestHandler);
 		transformationTable.setWidget(numRows, 1, ruleGUI.createJsonTranslationTable());
 		
+		// FTest.assertTrue(true, "createJsonTranslationTable succeeded");
+		
 		transformationTable.ensureDebugId("cwFlexTable");
 	     
 		tabPanel.add(transformationTable, "exTransformation");

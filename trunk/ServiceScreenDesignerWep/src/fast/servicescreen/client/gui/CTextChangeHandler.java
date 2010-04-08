@@ -284,6 +284,7 @@ public class CTextChangeHandler implements ChangeHandler, PropertyChangeListener
 	   else
 	   {
 		   next = new FactExample();
+		   next.setJson("{}");
 		   factType.addToFactExamples(next);
 	   }
 	
@@ -315,12 +316,14 @@ public class CTextChangeHandler implements ChangeHandler, PropertyChangeListener
       String text = event.getSelectedItem().getReplacementString();
       System.out.println("Box: " + event.toString());
       System.out.println("value has changed to " + text);
+      
+      target.set(targetAttrName, text);
+
       //fetch example value
       if(target instanceof FactPort)
       {
     	  fetchExampleValue();
       }
-      target.set(targetAttrName, text);
    }
 
    /**
@@ -338,7 +341,7 @@ public class CTextChangeHandler implements ChangeHandler, PropertyChangeListener
 		   
 		   for (Iterator<FactType> iterator = designer.iteratorOfFactTypes(); iterator.hasNext();) {
 			   FactType factType = (FactType) iterator.next();
-			   if( factTypeName.equals(factType.getTypeName()) & factType.iteratorOfFactExamples().hasNext())
+			   if( factTypeName.equals(factType.getTypeName()))
 			   {
 				   FactExample example = (FactExample) getFirstExample(factType);
 				   factPort.setExampleValue(example.getJson());
