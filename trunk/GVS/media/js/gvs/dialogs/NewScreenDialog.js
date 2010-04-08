@@ -45,7 +45,10 @@ var NewScreenDialog = Class.create(ConfirmDialog /** @lends NewScreenDialog.prot
                 'message': 'Screen cannot be blank',
                 'required': true,
                 'events': {
-                    'keypress': callback
+                    'keypress': callback,
+                    'blur': function() {
+                                this._getForm().name.value = Utils.sanitize($F(this._getForm().name));
+                            }.bind(this)
                 }
             },
             {
@@ -103,7 +106,7 @@ var NewScreenDialog = Class.create(ConfirmDialog /** @lends NewScreenDialog.prot
      * @private
      */
     _availabilityCheck: function() {
-        var name = $F(this._getForm().name);
+        var name = Utils.sanitize($F(this._getForm().name));
         var version = $F(this._getForm().version);
 
         if (name == "" || version == "") {
@@ -168,7 +171,7 @@ var NewScreenDialog = Class.create(ConfirmDialog /** @lends NewScreenDialog.prot
      */
     _onOk: function($super){
         if (this._getFormWidget().validate() && this._available) {
-            var name = $F(this._getForm().name);
+            var name = Utils.sanitize($F(this._getForm().name));
             var tags = $F(this._getForm().tags).split(/[\s,]+/).without("");
             var version = $F(this._getForm().version);
 

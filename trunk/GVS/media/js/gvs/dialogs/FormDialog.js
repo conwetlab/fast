@@ -224,8 +224,8 @@ var FormDialog = Class.create( /** @lends FormDialog.prototype */ {
                         if (line.disabled) {
                             input.attr('disabled', line.disabled);
                         }
-                        inputNode = input.domNode;
-                        lineNode = this._createLine(line.label, inputNode);
+                        inputNode = input.textbox;
+                        lineNode = this._createLine(line.label, input.domNode);
                         break;
     
                     case 'label':
@@ -269,8 +269,9 @@ var FormDialog = Class.create( /** @lends FormDialog.prototype */ {
                 }
                       
                 this._formWidget.domNode.appendChild(lineNode);   
-                
-                this._armEvents(inputNode, line.events);
+                if (inputNode) {
+                    this._armEvents(inputNode, line.events);
+                }
             }.bind(this));
             
             this._contentNode.update(this._formWidget.domNode);  

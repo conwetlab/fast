@@ -140,5 +140,18 @@ Object.extend(Utils, {
             });
         });
         return result;
+    },
+
+    /**
+     * This function sanitizes a string, removing:
+     *    - Heading and trailing white spaces, and extra white spaces
+     *    - Tabs
+     *    - Carrier return
+     * @type String
+     */
+    sanitize: function(/** String */ text) {
+        var result = text.replace(/^\s+|\n|\s+$/g,"");
+        result = result.replace(/\s+/g, " ");
+        return result;
     }
 }); 

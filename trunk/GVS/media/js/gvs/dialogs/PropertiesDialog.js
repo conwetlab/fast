@@ -70,7 +70,13 @@ var PropertiesDialog = Class.create(ConfirmDialog /** @lends PropertiesDialog.pr
             {'type': 'title', 'value': 'Basic information'},
             {'type':'input', 'label': 'Building block name:','name': 'name',
                     'value': this._description.name,
-                    'required': true},
+                    'required': true,
+                    'events': {
+                        'blur': function() {
+                            this._getForm().name.value = Utils.sanitize($F(this._getForm().name));
+                        }.bind(this)
+                    }
+            },
             {'type':'input', 'label': 'Version:','name': 'version',
                     'value': this._description.version},
             {'type':'input', 'label': 'Tags:','name': 'tags',
@@ -120,11 +126,12 @@ var PropertiesDialog = Class.create(ConfirmDialog /** @lends PropertiesDialog.pr
                     'en-gb': $F(this._getForm().description)
                 },
                 'label': {
-                    'en-gb': $F(this._getForm().name)
-                }
+                    'en-gb': Utils.sanitize($F(this._getForm().name))
+                },
+                'name': Utils.sanitize($F(this._getForm().name))
             };
             var form = this._getForm();
-            var elements = [form.name, form.version, form.creator, form.rights,
+            var elements = [form.version, form.creator, form.rights,
                 form.icon, form.screenshot, form.homepage];
             Object.extend(description, Form.serializeElements(elements, {'hash': true}));
             var changed = false;
