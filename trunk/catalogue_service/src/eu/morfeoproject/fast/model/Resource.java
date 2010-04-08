@@ -38,6 +38,7 @@ public abstract class Resource {
     private List<CTag> tags;
     private String id;
     private String name;
+    private String parameterTemplate;
     
     public URI getUri() {
 		return uri;
@@ -149,6 +150,14 @@ public abstract class Resource {
 		this.name = name;
 	}
 
+	public String getParameterTemplate() {
+		return parameterTemplate;
+	}
+
+	public void setParameterTemplate(String parameterTemplate) {
+		this.parameterTemplate = parameterTemplate;
+	}
+
 	/**
 	 * Compare if two resources have the same URI
 	 * @param r the resource to compare with
@@ -238,6 +247,10 @@ public abstract class Resource {
 			json.put("name", JSONObject.NULL);
 		else
 			json.put("name", getName());
+		if (getParameterTemplate() == null)
+			json.put("parameterTemplate", JSONObject.NULL);
+		else
+			json.put("parameterTemplate", getParameterTemplate());
 		
 		// for convenience, the type of the resource is specified in the JSON description
 		if (this instanceof ScreenFlow)
@@ -293,6 +306,8 @@ public abstract class Resource {
 			model.addStatement(resourceUri, FOAF.homepage, this.getHomepage());
 		if (this.getName() != null)
 			model.addStatement(resourceUri, FGO.hasName, this.getName());
+		if (this.getParameterTemplate() != null)
+			model.addStatement(resourceUri, FGO.hasParameterTemplate, this.getParameterTemplate());
 		
 		return model;
 	}

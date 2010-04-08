@@ -36,7 +36,7 @@ public class DefaultOntologies {
     public static Ontology DC = 
         new Ontology(new URIImpl("http://purl.org/dc/elements/1.1/"), "dc.rdf", Syntax.RdfXml, true);
     public static Ontology FGO =
-    	new Ontology(new URIImpl("http://purl.oclc.org/fast/ontology/gadget#"), "fgo20100122.ttl", Syntax.Turtle, true);
+    	new Ontology(new URIImpl("http://purl.oclc.org/fast/ontology/gadget#"), "fgo20100408.ttl", Syntax.Turtle, true);
     public static Ontology FOAF =
     	new Ontology(new URIImpl("http://xmlns.com/foaf/0.1/"), "foaf.rdf", Syntax.RdfXml, true);
     public static Ontology SIOC =
@@ -61,6 +61,11 @@ public class DefaultOntologies {
 //    			"http://www.heppnetz.de/ontologies/goodrelations/v1.owl",
 //    			Syntax.RdfXml,
 //    			true);
+    public static Ontology GEO =
+    	new Ontology(new URIImpl("http://www.w3.org/2003/01/geo/wgs84_pos#"), 
+    			"http://www.w3.org/2003/01/geo/wgs84_pos.rdf",
+    			Syntax.RdfXml,
+    			true);
     
     
     /**

@@ -4,7 +4,7 @@ import org.ontoware.rdf2go.model.node.URI;
 import org.ontoware.rdf2go.model.node.impl.URIImpl;
 
 /**
- * Vocabulary File. Created by org.ontoware.rdf2go.util.VocabularyWriter on Fri Feb 19 19:25:18 GMT 2010
+ * Vocabulary File. Created by org.ontoware.rdf2go.util.VocabularyWriter on Thu Apr 08 13:10:08 BST 2010
  * input file: src/eu/morfeoproject/fast/catalogue/ontologies/fgo.rdf
  * namespace: http://purl.oclc.org/fast/ontology/gadget#
  */
@@ -261,6 +261,14 @@ public interface FGO {
      * Range: http://www.w3.org/2001/XMLSchema#string 
      */
     public static final URI hasVersion = new URIImpl("http://purl.oclc.org/fast/ontology/gadget#hasVersion", false);
+
+    /**
+     * Label: has parameterTemplate@en 
+     * Comment: A template string for custom parameters for any building block.@en 
+     * Comment: http://purl.oclc.org/fast/ontology/gadget#Resource 
+     * Range: http://www.w3.org/2001/XMLSchema#string 
+     */
+    public static final URI hasParameterTemplate = new URIImpl("http://purl.oclc.org/fast/ontology/gadget#hasParameterTemplate", false);
 
     /**
      * Label: is positive@en 

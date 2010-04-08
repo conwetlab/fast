@@ -175,6 +175,8 @@ public abstract class GenericServlet extends HttpServlet {
 			tags.add(tag);
 		}
 		resource.setTags(tags);
+		if (jsonResource.has("parameterTemplate"))
+			resource.setParameterTemplate(jsonResource.getString("parameterTemplate"));
 	}
 
 	protected ScreenFlow parseScreenFlow(JSONObject jsonScreenFlow, URI uri) throws JSONException, IOException {
