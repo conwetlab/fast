@@ -269,7 +269,7 @@ private TabPanel tabPanel;
       
       // add link to data transformation tool 
       String dataTransformationToolURL = "./" + "DataTransformationTool.html";
-      a = new Anchor(factToolURL, dataTransformationToolURL);
+      a = new Anchor(dataTransformationToolURL, dataTransformationToolURL);
       rootPanel.add(a);
    }
 

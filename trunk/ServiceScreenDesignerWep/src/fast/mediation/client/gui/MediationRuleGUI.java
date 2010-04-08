@@ -248,7 +248,12 @@ public class MediationRuleGUI extends RuleGUI
 			}
 		}
 		
-		jsonValue = JSONParser.parse(jsonValueString);
+		try {
+			jsonValue = JSONParser.parse(jsonValueString);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			jsonValue = JSONParser.parse("{}");
+		}
 		
 		//FIXME: access the real resource if gui is in service-wrapper-tool
 //		String url = "http:////ergast.com//api//f1//drivers//alonso//driverStandings//1//seasons.json";

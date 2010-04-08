@@ -15,6 +15,7 @@
   <inherits name="fujaba.web.runtime.FujabaRuntime"/>
   <inherits name="de.uni_kassel.webcoobra.Webcoobra"/>
   <inherits name="fast.common.FastCommon"/>
+  <inherits name="fast.mediation.DataTransformationToolSource"/>
   
   <!-- Specify the app entry point class.                         -->
   <entry-point class='fast.servicescreen.client.ServiceScreenDesignerWep'/>

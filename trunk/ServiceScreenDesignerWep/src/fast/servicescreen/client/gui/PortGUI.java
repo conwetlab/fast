@@ -101,6 +101,7 @@ public class PortGUI
 		   
 		   //add the text and suggest boxes
 		   inputPortTable.setWidget(inputNumRows, 0, nameBox);
+		   
 		   inputPortTable.setWidget(inputNumRows, 1, typeBox);
 		   inputPortTable.setWidget(inputNumRows, 2, exampleArea);
 		   // add remove button
