@@ -1747,6 +1747,8 @@ public class Catalogue {
 				resource.setHomepage(object.asURI());
 			} else if (predicate.equals(FGO.hasName)) {
 				resource.setName(object.asDatatypeLiteral().getValue());
+			} else if (predicate.equals(FGO.hasParameterTemplate)) {
+				resource.setParameterTemplate(object.asDatatypeLiteral().getValue());
 			}
 		}
 		cIt.close();
