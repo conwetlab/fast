@@ -598,11 +598,11 @@ var PaletteDocument = Class.create(AbstractDocument, /** @lends PaletteDocument.
         }
         if (this._description.getId() == null) {
             // Save it for the first time
-            PersistenceEngine.sendPost(this._getSaveUri(), null, "buildingblock=" + Object.toJSON(this._description.toJSON()),
+            PersistenceEngine.sendPost(this._getSaveUri(), {'buildingblock':  Object.toJSON(this._description.toJSON())}, null,
                                        this, this._onSaveSuccess, this._onSaveError);
         } else {
             var uri = URIs.buildingblock + this._description.getId();
-            PersistenceEngine.sendUpdate(uri, null, "buildingblock=" + Object.toJSON(this._description.toJSON()),
+            PersistenceEngine.sendUpdate(uri, {'buildingblock': Object.toJSON(this._description.toJSON())}, null,
                                       this, this._onSaveSuccess, this._onSaveError);
         }
     },
