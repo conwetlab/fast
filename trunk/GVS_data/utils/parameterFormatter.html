@@ -75,5 +75,36 @@
             else
                 document.body.appendChild(div);
         }
+
+        document.getElementById('json').onkeypress = function(evt) {
+            var t = evt.target;
+            var ss = t.selectionStart;
+            var se = t.selectionEnd;
+            var tab = "    ";
+
+            // Tab key - insert tab expansion
+            if (evt.keyCode == 9) {
+                evt.preventDefault();
+
+                var selectedText = t.value.slice(ss, se);
+                var match = selectedText.match(/\n/g);
+                var lines = match ? match.length + 1 : 1;
+
+                if (evt.shiftKey) {
+
+                } else {
+
+                    // In case selection was not of entire lines (e.g. selection begins in the middle of a line)
+                    // we ought to tab at the beginning as well as at the start of every following line.
+
+                    var pre = t.value.slice(0, ss);
+                    var sel = selectedText.replace(/\n/g, "\n"+tab);
+                    var post = t.value.slice(se, t.value.length);
+                    t.value = pre.concat(tab).concat(sel).concat(post);
+                    t.selectionStart = ss + tab.length;
+                    t.selectionEnd = se + tab.length * lines;
+                }
+            }
+        }
     </script>
 </html>
