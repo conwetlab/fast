@@ -56,5 +56,6 @@
     "postconditions":[      
     ],
     "triggers":[
-    ]
+    ],
+    "parameterTemplate": "{\n    // The itemTitle is a string which represents the type of element being showed\n    // in the form. e.g. \"Product\", \"User\", etc.\n    \"itemTitle\": \"title\", \n    \n    // Elements contains a list of fields which will be shown as relevant information and not\n    // in the \"details\" area. The name of the fields depend on the underlying service being used\n    \"elements\": [\"description\", \"otherField\" /*, ... (More fields)*/]\n}"
 }
