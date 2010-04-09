@@ -60,5 +60,6 @@
             }
         ]
     ],
+    "parameterTemplate": "[//List of filters (And)\n{\n\"keyField\": \"source\", //Name of the attribute\n\"searchCondition\": \"eq\", //Comparator function: eq (=), ne (!=), lt (<), le (<=), gt (>), ge (>=)\n\"searchValue\": \"Amazon\" //Value to compare\n},\n{\n\"keyField\": \"type\", \n\"searchCondition\": \"eq\",\n\"searchValue\": \"Book\"\n}\n]",
     "triggers":[]
 }
