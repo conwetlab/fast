@@ -25,6 +25,7 @@
                 margin: 1px;
             }
         </style>
+        <script type="text/javascript" src="cjson_parse.js"></script>
     </head>
 
     <body>
@@ -34,12 +35,9 @@
 
     <script>
         function formatParameterTemplate(template) {
-            var json = template.replace(new RegExp('/\\*([^\\*]|\\*[^/])*\\*/', 'g'), '');
-            json = json.replace(new RegExp('//[^\n\r]*', 'g'), '');
-
             var valid = true;
             try {
-                JSON.parse(json);
+                cjson_parse(template);
             } catch (e) {
                 valid = false;
             }
@@ -56,13 +54,13 @@
             var template = document.getElementById('json');
 
             var result = formatParameterTemplate(template.value);
-            
+
             var div = document.createElement('div');
 
             var counter = document.createElement('h3');
             counter.textContent = "#" + count++;
             div.appendChild(counter);
- 
+
             var pre = document.createElement('pre');
             div.appendChild(pre);
             if (result.valid) {
