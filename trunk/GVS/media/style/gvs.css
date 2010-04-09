@@ -465,11 +465,37 @@ h4{
     clear: both;
     width: 100%;
 }
+
 .paletteElement {
     width:100%;
 }
+
+.paletteElement .searchBox {
+    background:transparent url(/fast/images/gui/palette/search.png) no-repeat scroll 1px 1px;
+    border:1px solid #EEE;
+    margin: -2px -3px 0;
+    padding:1px 1px 1px 20px;
+}
+.paletteElement .searchBox input {
+    border:0;
+    height:16px;
+    font-size:12px;
+    width:100%;
+}
+.paletteElement .searchBox input.defaultValue {
+   color:#777;
+}
+
 .paletteContent {
-    margin:5px;
+    border-top:1px solid #EEEEEE;
+    bottom:0;
+    left:0;
+    margin:0;
+    overflow:auto;
+    padding:5px;
+    position:absolute;
+    right:0;
+    top:25px;
 }
 
 /******************

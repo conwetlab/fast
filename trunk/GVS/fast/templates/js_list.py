@@ -77,6 +77,7 @@ file_list = [
     "gvs/palette/Palette.js",
     "gvs/palette/PaletteComponent.js",
     "gvs/palette/PaletteController.js",
+    "gvs/palette/PaletteSearchBox.js",
     "gvs/palette/ScreenComponent.js",
     "gvs/palette/DomainConceptComponent.js",
     "gvs/palette/ResourceComponent.js",

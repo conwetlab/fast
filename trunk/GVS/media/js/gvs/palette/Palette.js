@@ -98,17 +98,22 @@ var Palette = Class.create(SetListener, /** @lends Palette.prototype */ {
      * @private
      */
     _renderUI: function() {
-       
         this._node = new dijit.layout.AccordionPane({
             'title':this._set.getBuildingBlockName(),
             'class':'paletteElement'
         });
         
         this._contentNode = new Element('div', {
-            'class': 'paletteContent'
+            'class':'paletteContent'
         });
-        
-        this._node.setContent(this._contentNode);
+
+        this._searchBox = new PaletteSearchBox();
+        this._searchBox.addEventListener(function(){
+            this.setChanged();
+        }.bind(this));
+        this._node.setContent(this._searchBox.getDOMNode());
+
+        this._searchBox.getDOMNode().insert({after:this._contentNode});
     },
 
     /**
@@ -125,12 +130,30 @@ var Palette = Class.create(SetListener, /** @lends Palette.prototype */ {
             }
         }
 
+        this._filterComponents();
+
         if (this._set.getBuildingBlockType() == Constants.BuildingBlock.SCREEN ||
             this._set.getBuildingBlockType() == Constants.BuildingBlock.FORM) {
             Utils.showMessage("Building blocks loaded", {'hide': true});
         }
     },
 
+    /**
+     * Hiden component if not match filter
+     */
+    _filterComponents: function() {
+        this._components.each(function(item) {
+            var component = item.value;
+            var title = component.getBuildingBlockDescription().getTitle().toLowerCase();
+            var searchValue = this._searchBox.getValue().toLowerCase();
+            
+            if (searchValue.blank() || title.match(searchValue)) { 
+                component.getNode().show();
+            } else {
+                component.getNode().hide();
+            }
+        }.bind(this));
+    }, 
     
     /**
      * Adds a new component to the palette
