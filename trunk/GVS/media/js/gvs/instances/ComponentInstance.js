@@ -38,10 +38,6 @@ var ComponentInstance = Class.create(DragSource,
          * @private
          */
         this._params = '{}';
-        
-        if (this._buildingBlockDescription.parameterTemplate) {
-            this._params = this._buildingBlockDescription.parameterTemplate;
-        }
 
         /**
          * Inference engine to receive reachability updates
