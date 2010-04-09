@@ -16,6 +16,7 @@ file_list = [
     # Catalogue Classes
     "gvs/catalogue/Catalogue.js",
     "gvs/catalogue/BuildingBlockDescription.js",
+    "gvs/catalogue/FormDescription.js",
     "gvs/catalogue/ScreenDescription.js",
     "gvs/catalogue/ScreenflowDescription.js",
     "gvs/catalogue/PrePostDescription.js",
@@ -135,10 +136,10 @@ file_list = [
     # Build
     "gvs/build/Builder.js",
 
-    # User account -->
+    # User account
     "gvs/user/User.js",
 
-    # Miscelaneous utilities -->
+    # Miscelaneous utilities
     "gvs/utils/RecommendationManager.js",
     "gvs/utils/UIDGenerator.js",
     "gvs/utils/BrowserUtils.js",
@@ -147,7 +148,7 @@ file_list = [
     "gvs/utils/KeyPressRegistry.js",
     "gvs/utils/Geometry.js",
 
-    # Constants -->
+    # Constants
     "gvs/commons/Constants.js",
 
     # GVS Entry point
