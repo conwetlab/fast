@@ -1271,6 +1271,8 @@ public class Catalogue {
 				tripleStore.addStatement(rUri, FGO.hasVersion, resource.getVersion());
 			if (resource.getName() != null)
 				tripleStore.addStatement(rUri, FGO.hasName, resource.getName());
+			if (resource.getParameterTemplate() != null)
+				tripleStore.addStatement(rUri, FGO.hasParameterTemplate, resource.getParameterTemplate());
 			
 			logger.info("Resource "+rUri+" saved.");
 			return true;
