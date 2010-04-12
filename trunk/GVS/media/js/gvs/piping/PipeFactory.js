@@ -43,7 +43,6 @@ var PipeFactory = Class.create(
             pipe = null;
         }
         return pipe;
-        
     },
 
     /**
@@ -54,11 +53,21 @@ var PipeFactory = Class.create(
     },
 
     /**
-     * Returns a pipe instance from its JSON data
+     * Returns a pipe given its source and destination terminals
      * @type Pipe
      */
-    getPipeFromJSON: function(/** Object */ data) {
-        return this._pipes.get(this._getPipeIdFromJSON(data));
+    getPipeFromTerminals: function(/** Terminal */ src, /** Terminal */ dst) {
+        var values = this._pipes.values();
+        
+        for (var i = 0; i < values.size(); i++) {
+            var pipe = values[i];
+            var found = pipe.getSource() == src;
+            found = found && pipe.getDestination() == dst;
+            if (found) {
+                return pipe;
+            }
+        }
+        return null;
     },
 
     /**
@@ -104,18 +113,8 @@ var PipeFactory = Class.create(
      * @type String
      */
     _getPipeId: function(/** Terminal */ source, /** Terminal */ destination) {
-        return source.getBuildingBlockUri() + source.getConditionId() +
-            destination.getBuildingBlockUri() + destination.getActionId() +
+        return source.getBuildingBlockId() + source.getConditionId() +
+            destination.getBuildingBlockId() + destination.getActionId() +
             destination.getConditionId();
-    },
-
-    /**
-     * Gets an id from its json data
-     * @private
-     * @type String
-     */
-    _getPipeIdFromJSON: function(/** Object */ data) {
-        return data.from.buildingblock + data.from.condition + data.to.buildingblock +
-            data.to.action + data.to.condition;
     }
 });

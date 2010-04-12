@@ -684,10 +684,33 @@ var ScreenDocument = Class.create(PaletteDocument,
         }
         if (reachabilityData.pipes) {
             reachabilityData.pipes.each(function(pipeData) {
-                var pipe = this._pipeFactory.getPipeFromJSON(pipeData);
-                if (pipe) {
-                    pipe.setReachability(pipeData);
+                // TODO improve this
+
+                var from, destinations;
+
+                if (pipeData.from.buildingblock) {
+                    var fromInstance = this._description.getInstanceByUri(pipeData.from.buildingblock);
+                    from = fromInstance.getTerminal(pipeData.from.condition, "postconditions");
+                } else {
+                    from = this._description.getPre(pipeData.from.condition).getTerminal();
                 }
+
+                if (pipeData.to.buildingblock) {
+                    var toInstances = this._description.getInstancesByUri(pipeData.to.buildingblock);
+
+                    destinations = toInstances.map(function(toInstance) {
+                        return toInstance.getTerminal(pipeData.to.condition, pipeData.to.action);
+                    });
+                } else {
+                    destinations = [this._description.getPost(pipeData.to.condition).getTerminal()];
+                }
+
+                destinations.each(function(to) {
+                    var pipe = this._pipeFactory.getPipeFromTerminals(from, to);
+                    if (pipe) {
+                        pipe.setReachability(pipeData);
+                    }
+                }.bind(this));
             }.bind(this));
         }
 

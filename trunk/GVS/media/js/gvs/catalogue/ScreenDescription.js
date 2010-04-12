@@ -243,6 +243,22 @@ var ScreenDescription = Class.create(BuildingBlockDescription,
      },
 
     /**
+     * Finds all instance with a given uri
+     * @private
+     * @type ComponentInstance
+     */
+     getInstancesByUri: function(/** String */ uri) {
+         var elements = [];
+
+         this._buildingBlocks.values().each(function(instance) {
+             if (instance.buildingblock.getUri() == uri)
+                 elements.push(instance.buildingblock);
+         }).buildingblock;
+
+         return elements;
+     },
+
+    /**
      * Returns true if an element with the parameter uri is in the screen
      * @type Boolean
      */
