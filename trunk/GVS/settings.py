@@ -17,8 +17,7 @@ ADMINS = (
 
 MANAGERS = ADMINS
 
-DATABASE_ENGINE = 'mysql'           # 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
-DATABASE_OPTIONS = {"init_command": "SET storage_engine=InnoDB"}
+DATABASE_ENGINE = 'postgresql_psycopg2'           # 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
 DATABASE_NAME = 'fast'             # Or path to database file if using sqlite3.
 DATABASE_USER = 'fast'             # Not used with sqlite3.
 DATABASE_PASSWORD = 'fast'         # Not used with sqlite3.
@@ -104,7 +103,7 @@ INSTALLED_APPS = (
 )
 
 #Authentication
-AUTHENTICATION_BACKENDS = (
+AUTHENTICATION_BACKENDS = (  
 'django.contrib.auth.backends.ModelBackend',
 )
 
