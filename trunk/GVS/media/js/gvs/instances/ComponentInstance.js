@@ -88,9 +88,29 @@ var ComponentInstance = Class.create(DragSource,
             }).join(", "));
 
         var params = document.createElement('div');
+        var paramsText = this.getParams();
+        var parameterized = paramsText.strip().length > 0;  
+        if (parameterized) {
+            try {
+                var json = json = cjson_parse(paramsText);
 
-        var text = document.createTextNode(this.getParams());
-        params.appendChild(text);
+                parameterized = false;
+                for (var i in json) {
+                    params.addClassName('json-icon-bg');
+                    parameterized = true;
+                    break;
+                }
+            } catch (e) {
+                params.addClassName('text-icon-bg');
+            }
+        }
+
+        if (!parameterized) {
+            var span = document.createElement('span');
+            span.addClassName('triggerInfo');
+            span.appendChild(document.createTextNode('No parameterized'));
+            params.appendChild(span);
+        }
 
         var paramsDialog = new ParamsDialog(this.getTitle(),
                                this.getParams(),

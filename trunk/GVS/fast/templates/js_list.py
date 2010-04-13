@@ -1,4 +1,6 @@
 file_list = [
+    "lib/cjson_parse/cjson_parse.js",
+
     # Drag n Drop support
     "gvs/dragndrop/DragHandler.js",
     "gvs/dragndrop/DragSource.js",

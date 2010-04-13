@@ -1231,6 +1231,13 @@ label {
 /*********************
  * Parameter dialog  *
  *********************/
+.json-icon-bg {
+    background: transparent url('../images/gui/json_file.png') no-repeat center;
+}
+.text-icon-bg {
+    background: transparent url('../images/gui/text_file.png') no-repeat center;
+}
+
 .initialParameterButton {
     position: absolute;
     width: 16px;
