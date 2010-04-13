@@ -20,7 +20,6 @@ import com.google.gwt.user.client.ui.Widget;
 import fast.common.client.BuildingBlock;
 import fast.common.client.FASTMappingRule;
 import fast.common.client.FactPort;
-import fast.common.client.ServiceDesigner;
 import fast.servicescreen.client.RequestServiceAsync;
 import fast.servicescreen.client.gui.RuleGUI;
 import fast.servicescreen.client.gui.RuleUtil;

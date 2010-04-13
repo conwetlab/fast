@@ -14,25 +14,27 @@ import fast.common.client.ServiceScreen;
 import fast.servicescreen.client.RequestService;
 import fast.servicescreen.client.RequestServiceAsync;
 import fast.servicescreen.client.gui.RuleUtil;
+import fast.servicescreen.client.gui.codegen_js.CodeGenViewer.RequestType;
 import fast.servicescreen.client.gui.parser.Kind;
 import fast.servicescreen.client.gui.parser.Operation;
 import fast.servicescreen.client.gui.parser.OperationHandler;
 
 /**
  * Use the constructor to create the first template
+ * 
+ * TODO s: generate dynamic input ports in html / generate JSON->JSON / save template changes into cdr
  * */
 public class CodeGenerator
 {
 	public BuildingBlock screen = null;
 	private HashMap<String, String> table = null;
-	private HashMap<String, String> bracketTable = null;
+	
+	//the reqestet source type
+	RequestType reqType;
 	
 	// private String endbrackets_forLoop = "";
 	private boolean writeFile_result = true;
 	private boolean firstOperation = true;
-	
-	@SuppressWarnings("unused")
-	private String outputPortName = "";	//use later to generate translation code
 	
 	//Operation names
 	private String trimBoth 	= "Trim(";
@@ -48,18 +50,17 @@ public class CodeGenerator
 	private String depth5 = "               ";
 	
 	
-	/**
-	 * The constructor creates the first template
-	 * */
-	public CodeGenerator(BuildingBlock screen)
+	public CodeGenerator(BuildingBlock screen, RequestType reqType)
 	{
 		this.screen = screen;
+		
+		this.reqType = reqType;
 	}
 	
 	public String resetTemplates()
 	{
 		//resets the templates
-		CodeGenerator tmp = new CodeGenerator(null);
+		CodeGenerator tmp = new CodeGenerator(null, null);
 		rootTemplate = tmp.rootTemplate;
 		sendrequest = tmp.sendrequest;
 		prehtml = tmp.prehtml;
@@ -67,11 +68,8 @@ public class CodeGenerator
 		helperMethods = tmp.helperMethods;
 		
 		//resets some state variables
-		// endbrackets_forLoop = "";
-		bracketBuffer = "";
 		firstOperation = true;
 		operationStart = true;
-		lastWas_fillAttr = false;
 		
 		return rootTemplate;
 	}
@@ -81,8 +79,7 @@ public class CodeGenerator
 	 * */
 	public String generateJS()
 	{
-		table = new HashMap<String, String>();	
-		bracketTable = new HashMap<String, String>();	
+		table = new HashMap<String, String>();		
 		
 		//Build the input port list
 		add_InPorts_toTable();
@@ -93,15 +90,9 @@ public class CodeGenerator
 		
 		//Build the request - code
 		add_SendRequest_toTable();
-
-		//Build the outport (setup this.outputPortName, too)
-		//		add_outPort_toTable();
 		
 		//Build the exRules - feature
 		add_Translation_toTable();
-		
-		//add the end brakets of transformation code
-		// bracketTable.put("<<endbrackets_forLoop>>", endbrackets_forLoop);
 		
 		//fill founded values into the <keywords> in rootTemplate
 		rootTemplate = expandTemplateKeys(rootTemplate);
@@ -166,30 +157,6 @@ public class CodeGenerator
 
 		table.put("<<inputportlist>>", inputPortText);
 	}
-	
-	@SuppressWarnings({ "unchecked", "unused" })
-	private void add_outPort_toTable()
-	{
-		String outputPortVar = "";
-		String outPutVarType = "";
-		
-		//search outPortName
-		Iterator<FactPort> iterator = screen.iteratorOfPostconditions();
-		FactPort currentOutPort = iterator.next();
-		
-		if(currentOutPort != null && ! iterator.hasNext()/*only one allowed*/)
-		{
-			outputPortVar = "" + currentOutPort.get("name");
-			
-			outPutVarType = (String) currentOutPort.get("factType");	//Should be the outputs type
-		}
-
-		//create code for variable initialization 
-		this.outputPortName = outputPortVar;
-		outputPortVar = depth2 + "var " + outputPortVar + " = new " + outPutVarType + "(); \n";
-		
-		table.put("<<outputport>>", outputPortVar);
-	}
 
 	private void add_SendRequest_toTable()
 	{
@@ -197,7 +164,7 @@ public class CodeGenerator
 		table.put("<<sendrequest>>", sendrequest);
 	}
 	
-	private String transCode = "";	// should only be added ONE time
+	private String transCode = "";
 	private String currentTags = "currentTags";
 	private void add_Translation_toTable()
 	{
@@ -212,14 +179,12 @@ public class CodeGenerator
 		table.put("<<transformationCode>>", transCode);
 	}
 	
-	private String bracketBuffer = "";
-	private boolean lastWas_fillAttr = false;
 	private boolean operationStart = true;
-	
 	private void transform(FASTMappingRule rule, String codeIndent)
 	{
 		boolean hasOpenSqareBracket = false;
 		boolean hasOpenForLoop = false;
+		
 		if(RuleUtil.isCompleteRule(rule) && rule.getOperationHandler() != null)
 		{
 			//get the current operationList 
@@ -263,21 +228,22 @@ public class CodeGenerator
 				
 				//créate loop - code				
 				tmpCode += 
-							//get searched elementsList out of xmlResponse 
+					//get searched elementsList out of xmlResponse 
 					codeIndent + "var " + from + " = " + curTag + ".getElementsByTagName('" + from + "'); \n\n" +
 							
-							//declare loop rump
+					//declare loop rump
 					codeIndent + "for(var " + countVar + " = 0; " + countVar + " < " + lengthName + "; ++" + countVar + ")\n" +
 					codeIndent + "{\n" +
 							
-							//declare loop body
+					//declare loop body
 					codeIndent + depth + currentTags + " = " + from + ".item(" + countVar + ");\n\n" +
 							
-					   //adds a current index variable
+					 //adds a current index variable
 					codeIndent + depth + "currentCount = " + countVar + "; \n\n";		
+				
 				hasOpenForLoop = true;
 						
-					   //adds a 'new object' in the result, jumps over types that are needles in JSON
+				 //adds a 'new object' in the result, jumps over types that are needles in JSON
 				if(target.startsWith("List of"))
 				{
 					tmpCode += codeIndent + depth + "result += indent + '\"" + target + "\" : [ \\\\n'; \n";
@@ -290,16 +256,11 @@ public class CodeGenerator
 
 				//overtake loop in real transcode
 				transCode += tmpCode;
-				
-				//add for loop end bracket
-				//endbrackets_forLoop += codeIndent + "} \n\n";	
 			}
 			
 			else if ("fillAttributes".equals(kind))
 			{
 				String tmpCode;
-				
-//				lastWas_fillAttr = true;	//TODO
 				
 				//Iterate over any opList entry
 				while(opList_iter.hasNext())
@@ -391,11 +352,9 @@ public class CodeGenerator
 	 * */
 	private String createOperationCode(String tmpCode, Operation op)
 	{
-		Kind kind = op.kind;
-		
-		switch(kind)
+		switch(op.kind)
 		{
-			case chars: 	tmpCode =  charsFromTo + tmpCode + ", ";
+			case chars: 	tmpCode = charsFromTo + tmpCode + ", ";
 							break;
 				
 			case words:     tmpCode = wordsFromTo + tmpCode + ", ";
@@ -428,19 +387,6 @@ public class CodeGenerator
 	@SuppressWarnings("unchecked")
 	private void callTransformForKids(FASTMappingRule rule, String codeIndent)
 	{
-//		if(lastWas_fillAttr && rule != null
-//				   && ! "fillAttributes".equals(rule.getKind())
-//				   && ! rule.getTargetElemName().startsWith("List of")
-//				   && ! "".equals(bracketBuffer))
-//		{
-//					transCode += bracketBuffer;
-//					
-//					bracketBuffer = "";
-//					lastWas_fillAttr = false;
-//		} TODO
-		
-		
-		
 		for (Iterator<FASTMappingRule> kidIter = rule.iteratorOfKids(); kidIter.hasNext();)
 		{
 			FASTMappingRule kid = (FASTMappingRule) kidIter.next();
@@ -455,26 +401,17 @@ public class CodeGenerator
 	 * */
 	private String expandTemplateKeys(String template)
 	{
-		//code
 		for (String key : table.keySet()) 
 		{
 			String value = table.get(key);
 			template = template.replaceAll(key, value);
 		}
 		
-		//endBrakets for forLoops and outObjects
-		//		for (String key : bracketTable.keySet()) 
-		//		{
-		//			String value = bracketTable.get(key);
-		//			template = template.replaceAll(key, value);
-		//		}
-		
 		return template;
 	}
 	
 	
 	private static RequestServiceAsync service;
-
 	/**
 	 * This method send the current template to
 	 * an service which writes a js and a html file with it as content. 
@@ -588,10 +525,6 @@ public class CodeGenerator
 		
 		//sending/recieving the request
 		depth2 + "<<sendrequest>> \n";
-		
-		//the outputPort variable
-//		"<<outputport>> \n" +
-//		"\n" +
 	
 	/**
 	 * contains html end
@@ -796,16 +729,6 @@ public class CodeGenerator
 		
 		depth3 + "return s; \n" +
 		depth2 + "} \n\n" +
-		
-		//		depth2 + "function replaceEscapeCharacter(url)\n" +
-		//		depth2 + "{\n" +
-		//		depth3 + "url = url.replace(/\\//g, '%2F'); \n" +
-		//		depth3 + "url = url.replace(/=/g, '%3D'); \n" +
-		//		depth3 + "url = url.replace(/\\?/g, '%3F'); \n" +
-		//		depth3 + "url = url.replace(/&/g, '%26'); \n" +
-		//		depth3 + "url = url.replace(/:/g, '%3A'); \n" +
-		//		depth3 + "return url; \n" +
-		//	    depth2 + "} \n\n" +
 	    
 		depth2 + "function getValue(currentTags, name)\n" +
 		depth2 + "{\n" +
@@ -819,6 +742,32 @@ public class CodeGenerator
 	    depth2 + "} \n\n";
 	
 }
+
+
+
+//@SuppressWarnings({ "unchecked", "unused" })
+//private void add_outPort_toTable()
+//{
+//	String outputPortVar = "";
+//	String outPutVarType = "";
+//	
+//	//search outPortName
+//	Iterator<FactPort> iterator = screen.iteratorOfPostconditions();
+//	FactPort currentOutPort = iterator.next();
+//	
+//	if(currentOutPort != null && ! iterator.hasNext()/*only one allowed*/)
+//	{
+//		outputPortVar = "" + currentOutPort.get("name");
+//		
+//		outPutVarType = (String) currentOutPort.get("factType");	//Should be the outputs type
+//	}
+//
+//	//create code for variable initialization 
+//	this.outputPortName = outputPortVar;
+//	outputPortVar = depth2 + "var " + outputPortVar + " = new " + outPutVarType + "(); \n";
+//	
+//	table.put("<<outputport>>", outputPortVar);
+//}
 
 /**
  * The path to the standalone GET Proxy Servlet

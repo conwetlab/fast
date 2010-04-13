@@ -1,4 +1,3 @@
-
 package fast.servicescreen.client.gui;
 
 import java.util.ArrayList;
@@ -10,7 +9,6 @@ import com.google.gwt.event.logical.shared.SelectionEvent;
 import com.google.gwt.event.logical.shared.SelectionHandler;
 import com.google.gwt.user.client.ui.MultiWordSuggestOracle;
 import com.google.gwt.user.client.ui.SuggestBox;
-import com.google.gwt.user.client.ui.SuggestOracle;
 import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.SuggestOracle.Suggestion;
@@ -125,7 +123,6 @@ public class CTextChangeHandler implements ChangeHandler, PropertyChangeListener
 	   }
    }
    
-   @SuppressWarnings({ "unchecked" })
    public static SuggestBox createTypeSuggestBox(ServiceDesigner designer, CObject obj, String attrName)
    {
 	   if (oracle == null) 
@@ -141,13 +138,13 @@ public class CTextChangeHandler implements ChangeHandler, PropertyChangeListener
 	   refreshOracle(designer);
 	   
 	   final SuggestBox suggestBox = createSuggestBox(obj, attrName, oracle);
-	   final TextBox textBox = (TextBox)suggestBox.getTextBox();
-	   @SuppressWarnings("unused")
-	   SuggestOracle boxOracle = suggestBox.getSuggestOracle();
+//	   final TextBox textBox = (TextBox)suggestBox.getTextBox();
+//	   SuggestOracle boxOracle = suggestBox.getSuggestOracle();
 	   
 	   return suggestBox;
    }
 
+   @SuppressWarnings("unchecked")
    private static void refreshOracle(ServiceDesigner designer) 
    {
 	   final ArrayList<String> words = new ArrayList<String>();
@@ -273,6 +270,7 @@ public class CTextChangeHandler implements ChangeHandler, PropertyChangeListener
 	   }
    }
 
+   @SuppressWarnings("unchecked")
    private FactExample getFirstExample(FactType factType) 
    {
 	   Iterator iter = factType.iteratorOfFactExamples();
@@ -329,6 +327,7 @@ public class CTextChangeHandler implements ChangeHandler, PropertyChangeListener
    /**
     * fetches the example value for the target factport
     * */
+   @SuppressWarnings("unchecked")
    private void fetchExampleValue()
    {
 	   FactPort factPort = (FactPort)target;

@@ -47,7 +47,6 @@ public class RuleGUI
    
    //Ressource Trees
    public Tree xmlTree;
-   private Node xmlDocumentElement;
 
    //Output Tree
    public Tree factsTree;
@@ -266,7 +265,6 @@ public class RuleGUI
       kindBox.addSelectionHandler(rulefieldListener);
       targetBox.addSelectionHandler(rulefieldListener);
       
-      //FIXME if from box changes update facts tree
       fromBox.addValueChangeHandler(new ValueChangeHandler<String>()
       {
     	  @Override
@@ -275,15 +273,6 @@ public class RuleGUI
     		  updateFactsTree();
     	  }
       });
-      //FIXME when kind box changes, empty target box 
-//      kindBox.addChangeListener(new ChangeListener()
-//      {
-//		@Override
-//		public void onChange(Widget sender) {
-//			targetBox.setValue("", true);
-//		}
-//      });
-      
       
       TreeItem result = treeParent.addItem(ruleRow);
       result.setUserObject(nextRule);
@@ -408,7 +397,6 @@ public class RuleGUI
    
    protected void buildFactsTree(Tree aFactsTree)
    {
-	      //(re)build the facts tree 
 	   	  aFactsTree.clear();
 	      
 	      TreeItem rootItem = aFactsTree.addItem("Facts:");
@@ -534,10 +522,7 @@ public class RuleGUI
     * Handles the xml tree (Selection and PropChange)
     * */
    class XmlTreeHandler implements SelectionHandler<TreeItem>
-   {
-	   
-	   //TODO needed? no, or?! I think we should set up selected rule, that´s all.
-	   
+   { 
       @Override
       public void onSelection(SelectionEvent<TreeItem> event)
       {
@@ -553,52 +538,9 @@ public class RuleGUI
              // transfer tagName to the currently selected mapping rule. 
              selectedRule.setSourceTagname(tagName);
              
-             ArrayList<Node> elementsByTagName = new ArrayList<Node>();
-             elementsByTagName(xmlDocumentElement, tagName, elementsByTagName);
-             
-             StringBuffer resultText = new StringBuffer();
-             // print found names to factText
-             for (int i = 0; i < elementsByTagName.size(); i++)
-             {
-                Node item = elementsByTagName.get(i);
-                resultText.append(item.getNodeName());
-                resultText.append(":");
-                resultText.append(item.getNodeValue());
-                resultText.append("\n");
-             }
-             
-             if(elementsByTagName.size() > 0)
-             {
-            	 xmlDocumentElement = elementsByTagName.get(0);
-             }
+             updateFactsTree();
          }
       }
-   }
-   
-   protected ArrayList<Node> elementsByTagName(Node root, String tagName, ArrayList<Node> result)
-   {  
-	  if(root != null)
-	  {
-	      NodeList childs = root.getChildNodes();
-	      
-	      for (int i = 0; i < childs.getLength(); i++)
-	      {
-	         Node item = childs.item(i);
-	         
-	         if (item == null) continue;
-	         
-	         if (item.getNodeName().equals(tagName))
-	         {
-	            result.add(item);
-	         }
-	         else
-	         {
-	            elementsByTagName(item, tagName, result);
-	         }
-	      }
-	  }
-
-      return result;
    }
    
    class RulesTreeHandler implements SelectionHandler<TreeItem>

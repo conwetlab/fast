@@ -5,7 +5,6 @@ import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.ChangeListener;
@@ -29,9 +28,24 @@ public class CodeGenViewer
 	private TextArea templateShowBox, jsShowBox;
 	public CodeGenerator generator = null;
 	
-	public CodeGenViewer(BuildingBlock screen)
+	/**
+	 * A type should be set, that marks if we handle XML or JSON
+	 * */
+	static enum RequestType
 	{
-		generator = new CodeGenerator(screen);
+		XML, JSON;
+	}
+	
+	public CodeGenViewer(BuildingBlock screen, boolean isJSON)
+	{
+		if(isJSON)
+		{
+			generator = new CodeGenerator(screen, RequestType.JSON);
+		}
+		else
+		{
+			generator = new CodeGenerator(screen, RequestType.XML);
+		}
 	}
 
 	ListBox choosenTemplate = null;
@@ -105,24 +119,6 @@ public class CodeGenViewer
 		String operatorURL = "./servicescreendesignerwep/" + generator.screen.getName() + "Op.html";
 		Anchor a = new Anchor(operatorURL, operatorURL, "_blank");
 		
-//		Button openHtml_Button = new Button("open Html");
-//		openHtml_Button.addClickHandler(new ClickHandler()
-//		{
-//			@Override
-//			public void onClick(ClickEvent event)
-//			{
-//				try
-//				{
-//					Window.open("./servicescreendesignerwep/" + generator.screen.getName() + "Operator.html",
-//								"the wrapper", "no features");
-//				}
-//				catch(Exception e)
-//				{
-//					Window.alert(e.getLocalizedMessage());
-//				}
-//				
-//			}
-//		});
 		
 		//create the template choose to make user changes possible 
 		// -> Only things that make sense at time are lited here
@@ -216,7 +212,7 @@ public class CodeGenViewer
 			}
 		}
 	}
-	
+
 	/**
 	 * Trigger the code generation
 	 * */

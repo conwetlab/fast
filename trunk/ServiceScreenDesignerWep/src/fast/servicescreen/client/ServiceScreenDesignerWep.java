@@ -369,7 +369,7 @@ private TabPanel tabPanel;
       tabPanel.add(transformationTable, "Transformation");
  
       //Adding part three, just to test code generation, there is a show of selected rules, templates and the .js results
-      codeGenViewer = new CodeGenViewer(serviceScreen);
+      codeGenViewer = new CodeGenViewer(serviceScreen, false/*false = type is XML*/);
       tabPanel.add(codeGenViewer.createCodeGenViewer(), "CodeGen Viewer");
 }
 

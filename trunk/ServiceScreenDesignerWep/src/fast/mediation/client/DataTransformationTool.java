@@ -266,7 +266,7 @@ public class DataTransformationTool extends FastTool implements EntryPoint
 		 
 		
 		//Adding part three, just to test code generation, there is a show of selected rules, templates and the .js results
-		codeGenViewer = new CodeGenViewer(trafoOperator); 
+		codeGenViewer = new CodeGenViewer(trafoOperator, true /*true = type is JSON*/); 
 		tabPanel.add(codeGenViewer.createCodeGenViewer(), "CodeGen Viewer");
 	}
 	
