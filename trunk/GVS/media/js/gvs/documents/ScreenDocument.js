@@ -689,10 +689,12 @@ var ScreenDocument = Class.create(PaletteDocument,
                 var from, destinations;
 
                 if (pipeData.from.buildingblock) {
-                    var fromInstance = this._description.getInstanceByUri(pipeData.from.buildingblock);
-                    from = fromInstance.getTerminal(pipeData.from.condition, "postconditions");
+                    var fromInstances = this._description.getInstancesByUri(pipeData.from.buildingblock);
+                    origins = fromInstances.map(function(fromInstance) {
+                        return fromInstance.getTerminal(pipeData.from.condition, "postconditions");
+                    });
                 } else {
-                    from = this._description.getPre(pipeData.from.condition).getTerminal();
+                    origins = [this._description.getPre(pipeData.from.condition).getTerminal()];
                 }
 
                 if (pipeData.to.buildingblock) {
@@ -705,11 +707,13 @@ var ScreenDocument = Class.create(PaletteDocument,
                     destinations = [this._description.getPost(pipeData.to.condition).getTerminal()];
                 }
 
-                destinations.each(function(to) {
-                    var pipe = this._pipeFactory.getPipeFromTerminals(from, to);
-                    if (pipe) {
-                        pipe.setReachability(pipeData);
-                    }
+                origins.each(function(from) {
+                    destinations.each(function(to) {
+                        var pipe = this._pipeFactory.getPipeFromTerminals(from, to);
+                        if (pipe) {
+                            pipe.setReachability(pipeData);
+                        }
+                    }.bind(this));
                 }.bind(this));
             }.bind(this));
         }
