@@ -55,6 +55,10 @@ public class CodeGenerator
 		this.screen = screen;
 		
 		this.reqType = reqType;
+		
+		setSendRequest();	//sets sendReq template to JSON or XML template
+		
+		//TODO same with transcode
 	}
 	
 	public String resetTemplates()
@@ -62,10 +66,10 @@ public class CodeGenerator
 		//resets the templates
 		CodeGenerator tmp = new CodeGenerator(null, null);
 		rootTemplate = tmp.rootTemplate;
-		sendrequest = tmp.sendrequest;
 		prehtml = tmp.prehtml;
 		posthtml = tmp.posthtml;
 		helperMethods = tmp.helperMethods;
+		setSendRequest();
 		
 		//resets some state variables
 		firstOperation = true;
@@ -455,7 +459,36 @@ public class CodeGenerator
 	
 	// -------------- the template strings -------------- //
 	
-	public String sendrequest =
+	
+	/**
+	 * This string contains template code for JSON or XML
+	 * requests, decided by the CodeGenerators constructor given RequestType.
+	 * */
+	public String sendrequest = "";
+	private void setSendRequest()
+	{
+		if(reqType == RequestType.JSON)
+		{
+			sendrequest = sendreq_JSON;
+		}
+		else
+		{
+			sendrequest = sendreq_XML;
+		}
+	}
+	
+	private String sendreq_JSON = 	
+		depth2 + "var jsonRespone = null; \n\n" + 
+		depth2 + "var requestServletUrl = window.location.protocol + '//' + window.location.host  + '/ServiceDesignerWep/servicescreendesignerwep/requestServlet?url='; \n" +
+		depth2 + "requestServletUrl + encodeURIComponent(request)" + 
+		depth2 + "var ajaxRequest = new ajaxObject('XXXXXXXX'); \n\n" + 
+		
+		depth2 + "ajaxRequest.callback = function (responseText) { \n" + 
+			depth3 + "jsonRespone = responseText.parseJSON(); \n" + 
+			depth3 + "//TODO" + 
+		depth2 + "} \n\n";
+	
+	private String sendreq_XML =
 		depth2 + "var xmlHttp = null; \n" + 
 		depth2 + "var xmlResponse = null; \n" + 
 		depth2 + "try \n" +
@@ -494,9 +527,6 @@ public class CodeGenerator
 		         depth5 + "var result = new String(''); \n\n" +
 
 		         depth5 + "<<transformationCode>>\n\n" +
-
-		//		"<<endbrackets_outObject>>\n" +
-		//		"<<endbrackets_forLoop>>\n" +
 
    	             depth5 + "document.getElementById('show').value = '{' + result + '}'; \n" + 
 		      depth4 + "} \n" + 
