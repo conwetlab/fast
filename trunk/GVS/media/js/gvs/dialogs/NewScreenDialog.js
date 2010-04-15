@@ -41,7 +41,7 @@ var NewScreenDialog = Class.create(ConfirmDialog /** @lends NewScreenDialog.prot
                 'type':'input', 
                 'label': 'Screen Name:',
                 'name': 'name', 
-                'value': 'New Screen',
+                'value': '',
                 'message': 'Screen cannot be blank',
                 'required': true,
                 'events': {

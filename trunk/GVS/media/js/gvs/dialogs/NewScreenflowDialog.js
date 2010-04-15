@@ -41,7 +41,7 @@ var NewScreenflowDialog = Class.create(ConfirmDialog /** @lends NewScreenflowDia
                 'type':'input', 
                 'label': 'Screenflow Name:',
                 'name': 'name', 
-                'value': 'New Screenflow',
+                'value': '',
                 'message': 'Screenflow cannot be blank',
                 'required': true,
                 'events': {
