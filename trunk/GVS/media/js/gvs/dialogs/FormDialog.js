@@ -118,6 +118,11 @@ var FormDialog = Class.create( /** @lends FormDialog.prototype */ {
     
     _hide: function() {
         GVS.setEnabled(true);
+
+        // Dojo lets you move the dialog anywhere you like
+        // but does not restore the window scroll when the dialog is closed.
+        // Force window scroll restore.
+        document.documentElement.scrollTop = 0;
     },
         
     /**
