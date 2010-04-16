@@ -350,6 +350,45 @@ var ScreenDocument = Class.create(PaletteDocument,
             }
         }
         if (!isLoading) {
+            var triggerAction = null;
+            switch (instance.constructor) {
+            case FormInstance:
+                var found = false;
+                var actions = instance.getBuildingBlockDescription().actions;
+                for (var i = 0; i < actions.length; i++) {
+                    if (actions[i].name == 'init') {
+                        found = true;
+                        break;
+                    }
+                }
+
+                if (found)
+                    triggerAction = 'init';
+
+                break;
+            case ResourceInstance:
+                var actions = instance.getBuildingBlockDescription().actions;
+                if (actions.length > 0)
+                    triggerAction = actions[0].name;
+
+                break;
+            }
+
+            if (triggerAction) {
+                var triggerData = {
+                    'from': {
+                        'instance': ScreenTrigger.INSTANCE_NAME,
+                        'name': ScreenTrigger.ONLOAD
+                    },
+                    'to': {
+                        'instance': instance,
+                        'action': triggerAction
+                    }
+                }
+                var trigger = this._triggerMappingFactory.createTrigger(triggerData);
+                this._description.addTrigger(trigger);
+            }
+
             this._setSelectedElement(instance);
         }
         instance.setEventListener(this);
