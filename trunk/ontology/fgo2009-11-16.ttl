@@ -24,12 +24,11 @@
 @prefix sioc: <http://rdfs.org/sioc/ns#> .
 @prefix dcterms: <http://purl.org/dc/terms/> .
 @prefix misc: <http://data.semanticweb.org/ns/misc#> .
+@prefix ctag: <http://commontag.org/ns#> .
 
 <http://purl.oclc.org/fast/ontology/gadget> a owl:Ontology ;
 rdfs:label "The FAST Gagdet Ontology v0.2 (M24)"@en ;
-rdfs:comment """This ontology defines terms for modelling semantic, interoperable 
-gadgets or widgets. It has been developed as part of the EU project 'FAST' 
-(FAST AND ADVANCED STORYBOARD TOOLS), FP7-ICT-2007-1-216048."""@en ;
+rdfs:comment """This ontology defines terms for modelling semantic, interoperable gadgets or widgets. It has been developed as part of the EU project 'FAST' (FAST AND ADVANCED STORYBOARD TOOLS), FP7-ICT-2007-1-216048."""@en ;
 dcterms:created "2009-02-09"@en ;
 dcterms:modified "$Date$"@en ;
 dcterms:creator <http://kantenwerk.org/metadata/foaf.rdf#me> ;
@@ -111,25 +110,38 @@ fgo:Condition a owl:Class ;
 rdfs:subClassOf fgo:BuildingBlock ;
 rdfs:label "Condition"@en ;
 rdfs:comment """The pre- or post-condition of a certain kinds of building block. If the building block is a screen flow, each target platform will use these conditions in its own way, or may also ignore them. E.g., in EzWeb pre- and post-conditions correspond to the concepts of slot and event.
-A condition can be seen as a RDF bag of facts, where every fact has to be true
-for the condition be true as well."""@en .
+A condition is made up of individual facts, where each fact is represented internally as an RDF triple, usually involving a variable of blank node."""@en .
 
-fgo:Fact a owl:Class ;
-rdfs:subClassOf fgo:BuildingBlock ;
-rdfs:label "Fact"@en ;
-rdfs:comment """The 'basic information unit of a FAST gadget'. In terms of RDF, a fact is a statement consisting of a subject, predicate and object (S, P, O)."""@en .
+# (NO_DELIV) fgo:Fact a owl:Class ;
+# (NO_DELIV) rdfs:subClassOf fgo:BuildingBlock ;
+# (NO_DELIV) rdfs:label "Fact"@en ;
+# (NO_DELIV) rdfs:comment """The 'basic information unit of a FAST gadget'. In terms of RDF, a fact is a statement consisting of a subject, predicate and object (S, P, O)."""@en .
 
 fgo:WithPreConditions a owl:Class ;
-rdfs:subClassOf fgo:BuildingBlock ;
+# (NO_DELIV) rdfs:subClassOf fgo:BuildingBlock ;
 owl:unionOf (fgo:ScreenFlow fgo:Screen fgo:Action) ;
 rdfs:label "With Pre-condition"@en ;
 rdfs:comment """Those kinds of building blocks which can have pre-conditions."""@en .
 
 fgo:WithPostConditions a owl:Class ;
-rdfs:subClassOf fgo:BuildingBlock ;
+# (NO_DELIV) rdfs:subClassOf fgo:BuildingBlock ;
 owl:unionOf (fgo:ScreenFlow fgo:Screen fgo:ScreenComponent) ;
 rdfs:label "With Post-condition"@en ;
 rdfs:comment """Those kinds of building blocks which can have post-conditions."""@en .
+
+# defining building blocks
+
+fgo:WithDefinition a owl:Class ;
+# (NO_DELIV) rdfs:subClassOf fgo:BuildingBlock ;
+owl:unionOf (fgo:Screen fgo:Form) ;
+rdfs:label "With Definition"@en ;
+rdfs:comment "Any kind of building block that can be defined declaratively in the GVS."@en .
+
+fgo:WithCode a owl:Class ;
+# (NO_DELIV) rdfs:subClassOf fgo:BuildingBlock ;
+owl:unionOf (fgo:Screen fgo:Form fgo:Resource fgo:Operator) ;
+rdfs:label "With Code"@en ;
+rdfs:comment "Any kind of building block that can be defined as a whole through code."@en .
 
 # (NO_DELIV) I removed the following three classes, I don't get what we need them for:
 # (NO_DELIV) 
@@ -240,18 +252,41 @@ rdfs:comment """Triggers are the flip-side of actions. Certain events in a build
 
 fgo:contains a owl:ObjectProperty ;
 rdfs:label "contains"@en ;
-rdfs:comment """Many kinds of components in FAST can contain other components: 
-screenflows contain screens, screens contain forms or form elements, etc.
-It points to a resource reference to give a unique 'id' to each component
-within the resource."""@en ;
+rdfs:comment """Many kinds of components in FAST can contain other components: screenflows contain screens, screens contain forms, operators and resources, forms contain form elements, etc."""@en ;
 rdfs:domain fgo:BuildingBlock ;
 rdfs:range fgo:BuildingBlock .
 
+fgo:hasForm a owl:ObjectProperty ;
+rdfs:subPropertyOf fgo:contains ;
+rdfs:label "has form"@en ;
+rdfs:comment "If a screen is defined declaratively, this property links it to its form (i.e., its visual user interface)."@en ;
+rdfs:domain fgo:Screen ;
+rdfs:range fgo:Form .
+
+fgo:hasResource a owl:ObjectProperty ;
+rdfs:subPropertyOf fgo:contains ;
+rdfs:label "has resource"@en ;
+rdfs:comment "If a screen is defined declaratively, this property links it to its service resource (i.e., its backend)."@en ;
+rdfs:domain fgo:Screen ;
+rdfs:range fgo:Resource .
+
+fgo:hasOperator a owl:ObjectProperty ;
+rdfs:subPropertyOf fgo:contains ;
+rdfs:label "has operator"@en ;
+rdfs:comment "If a screen is defined declaratively, this property links it to an operator it might contain."@en ;
+rdfs:domain fgo:Screen ;
+rdfs:range fgo:Operator .
+
+fgo:hasFormElement a owl:ObjectProperty ;
+rdfs:subPropertyOf fgo:contains ;
+rdfs:label "has form element"@en ;
+rdfs:comment "If a form is defined declaratively, its elements are linked to it with this property."@en ;
+rdfs:domain fgo:Form ;
+rdfs:range fgo:FormElement .
+
 fgo:hasPreCondition a owl:ObjectProperty ;
 rdfs:label "has pre-condition"@en ;
-rdfs:comment """This property links certain type of resources to its pre-condition, i.e., 
-the facts that need to be fulfilled in order for this screen or screenflow to be 
-reachable."""@en ;
+rdfs:comment """This property links certain type of building blocks to their pre-condition, i.e., the facts that need to be fulfilled in order for the building block to be reachable."""@en ;
 rdfs:domain fgo:WithPreConditions ;
 # (NO_DELIV) I removed the rdf:bag from the range. We can have several conditions anyway, just
 # (NO_DELIV) by having several hasPreCondition statements.
@@ -259,33 +294,48 @@ rdfs:range fgo:Condition .
 
 fgo:hasPostCondition a owl:ObjectProperty ;
 rdfs:label "has post-condition"@en ;
-rdfs:comment """This property links certain type of resources to its post-condition, 
-i.e., the facts that are produced once the screen or screenflow has been 
-executed."""@en ;
+rdfs:comment """This property links certain type of building blocks to their post-condition, i.e., the facts that are produced once the building block has been executed."""@en ;
 rdfs:domain fgo:WithPostConditions ;
 # (NO_DELIV) see comment @ hasPreCondition.
 rdfs:range fgo:Condition .
 
-# Defining Facts:
+fgo:hasAction a owl:ObjectProperty ;
+rdfs:label "has action"@en ;
+rdfs:comment """This property indicates which actions are associated and can be perfomed within a screen component."""@en ;
+rdfs:domain fgo:ScreenComponent ;
+rdfs:range fgo:Action .
+
+fgo:hasTrigger a owl:DatatypeProperty ;
+rdfs:label "has trigger string"@en ;
+rdfs:comment """This property links a buildiong block to a trigger."""@en ;
+rdfs:domain fgo:ScreenComponent ;
+rdfs:range fgo:Trigger .
+
+fgo:uses a owl:ObjectProperty ;
+rdfs:label "uses"@en ;
+rdfs:comment """This property indicates concepts used within a building block, without being a pre- or post-condition."""@en ;
+rdfs:domain fgo:BuildingBlock ;
+# (NO_DELIV) instead of the weird fgo:ResourceReference, why not just use rdfs:Resource?
+rdfs:range rdfs:Resource .
+
+# Defining Condtions:
 
 fgo:hasPattern a owl:ObjectProperty ;
 rdfs:label "has pattern"@en ;
 rdfs:comment """This property links the abstract representation of a fact (i.e., an RDF triple) in FAST to a graph resource containing the actual triple."""@en ;
-rdfs:domain fgo:Fact ;
+rdfs:domain fgo:Condition ;
 rdfs:range rdfs:Resource .
 
 fgo:hasPatternString a owl:DatatypeProperty ;
 rdfs:label "has pattern string"@en ;
 rdfs:comment """This property links to the textual representation of a fact (i.e., an RDF triple), e.g., in N3."""@en ;
-rdfs:domain fgo:Fact ;
-rdfs:range xsd:string .
+rdfs:domain fgo:Condition ;
+rdfs:range xsd:String .
 
 fgo:isPositive a owl:DatatypeProperty ;
 rdfs:label "is positive"@en ;
-rdfs:comment """Facts can be set to a specific scope: design time, execution time,
-or both of them. This property will define when they have to be taken into account by the
-inference engine or reasoner."""@en ;
-rdfs:domain fgo:Fact ;
+rdfs:comment """Facts can be set to a specific scope: design time, execution time, or both of them. This property defines how they have to be taken into account by the inference engine or reasoner."""@en ;
+rdfs:domain fgo:Condition ;
 rdfs:range xsd:boolean .
 
 # annotating building blocks
@@ -299,8 +349,7 @@ rdfs:range foaf:Image .
 
 fgo:hasScreenshot a owl:ObjectProperty ;
 rdfs:label "has screenshot"@en ;
-rdfs:comment """An image which shows a particular screen or screenflow in action, to 
-aid users in deciding which screen or screenflow to choose out of many."""@en ;
+rdfs:comment """An image which shows a particular screen or screenflow in action, to aid users in deciding which screen or screenflow to choose out of many."""@en ;
 rdfs:subPropertyOf foaf:depiction ;
 rdfs:domain fgo:BuildingBlock ;
 rdfs:range foaf:Image .
@@ -321,11 +370,26 @@ rdfs:range foaf:Image .
 # (NO_DELIV) rdfs:domain fgo:Resource ;
 # (NO_DELIV) rdfs:range xsd:string .
 # (NO_DELIV) 
+
+# properties concerning definitions through code
+
 fgo:hasCode a owl:ObjectProperty ;
 rdfs:label "has code"@en ;
-rdfs:comment """URL of the executable code of a particular building block (currently screens or screen components)."""@en ;
-rdfs:domain fgo:Screen, fgo:ScreenComponent ;
+rdfs:comment """This property links to the executable code of a particular building block (currently screens or screen components)."""@en ;
+rdfs:domain fgo:WithCode ;
 rdfs:range foaf:Document .
+
+fgo:hasLibrary a owl:ObjectProperty ;
+rdfs:label "has library"@en ;
+rdfs:comment """This property indicates which programming libraries are used by the code of a screen component."""@en ;
+rdfs:domain fgo:WithCode ;
+rdfs:range fgo:Library .
+
+fgo:hasLanguage a owl:DatatypeProperty ;
+rdfs:label "has language string"@en ;
+rdfs:comment """This property defines the programming language a particular programming library uses."""@en ;
+rdfs:domain fgo:Library ;
+rdfs:range xsd:string .
 
 # (NO_DELIV) I don't see how this property makes sense if we already have hasPreCondition and hasPostCondition
 # (NO_DELIV) 
@@ -335,38 +399,6 @@ rdfs:range foaf:Document .
 # (NO_DELIV) rdfs:domain fgo:Precondition, fgo:Postcondition ;
 # (NO_DELIV) rdfs:range fgo:Condition, rdf:Bag .
 # (NO_DELIV) 
-fgo:hasAction a owl:ObjectProperty ;
-rdfs:label "has action"@en ;
-rdfs:comment """This property indicates which actions are associated and can be perfomed within 
-a screen component."""@en ;
-rdfs:domain fgo:ScreenComponent ;
-rdfs:range fgo:Action .
-
-fgo:hasTrigger a owl:DatatypeProperty ;
-rdfs:label "has trigger string"@en ;
-rdfs:comment """This property links a buildiong block to a Trigger."""@en ;
-rdfs:domain fgo:ScreenComponent ;
-rdfs:range fgo:Trigger .
-
-fgo:hasUse a owl:ObjectProperty ;
-rdfs:label "has use string"@en ;
-rdfs:comment """This property indicates concepts used within a building block, without being a 
-pre/postcondition."""@en ;
-rdfs:domain fgo:Action ;
-# (NO_DELIV) instead of the weird fgo:ResourceReference, why not just use rdfs:Resource?
-rdfs:range rdfs:Resource .
-
-fgo:hasLibrary a owl:ObjectProperty ;
-rdfs:label "has library"@en ;
-rdfs:comment """This property indicates which libraries are used by a screen component."""@en ;
-rdfs:domain fgo:ScreenComponent ;
-rdfs:range fgo:Library .
-
-fgo:hasLanguage a owl:DatatypeProperty ;
-rdfs:label "has language string"@en ;
-rdfs:comment """This property is the language the library is written in."""@en ;
-rdfs:domain fgo:Library ;
-rdfs:range xsd:string .
 
 # (NO_DELIV) Instead of hasSource, why don't we just use hasCode? Isn't it the same?
 # (NO_DELIV) 
@@ -403,58 +435,93 @@ rdfs:range xsd:string .
 # (NO_DELIV) rdfs:domain fgo:ResourceReference ;
 # (NO_DELIV) rdfs:range foaf:Document .
 # (NO_DELIV) 
-fgo:hasDefinition a owl:ObjectProperty ;
-rdfs:label "has definition"@en ;
-rdfs:comment """The structure and behaviour of a resource."""@en ;
-rdfs:domain fgo:Resource ;
-rdfs:range fgo:Definition .
+# (NO_DELIV) fgo:hasDefinition a owl:ObjectProperty ;
+# (NO_DELIV) rdfs:label "has definition"@en ;
+# (NO_DELIV) rdfs:comment """The structure and behaviour of a resource."""@en ;
+# (NO_DELIV) rdfs:domain fgo:Resource ;
+# (NO_DELIV) rdfs:range fgo:Definition .
+# (NO_DELIV) 
+# (NO_DELIV) fgo:hasIdBBFrom a owl:DatatypeProperty ;
+# (NO_DELIV) rdfs:label "has id building block from"@en ;
+# (NO_DELIV) rdfs:comment """building block id of the 'from' point of the pipe or trigger."""@en ;
+# (NO_DELIV) rdfs:domain fgo:Pipe, fgo:Trigger ;
+# (NO_DELIV) rdfs:range xsd:string .
+# (NO_DELIV) 
+# (NO_DELIV) fgo:hasIdConditionFrom a owl:DatatypeProperty ;
+# (NO_DELIV) rdfs:label "has id condition from"@en ;
+# (NO_DELIV) rdfs:comment """condition id of the 'from' point of the pipe."""@en ;
+# (NO_DELIV) rdfs:domain fgo:Pipe ;
+# (NO_DELIV) rdfs:range xsd:string .
+# (NO_DELIV) 
+# (NO_DELIV) fgo:hasIdBBTo a owl:DatatypeProperty ;
+# (NO_DELIV) rdfs:label "has id building block to"@en ;
+# (NO_DELIV) rdfs:comment """building block id of the 'to' point of the pipe or trigger."""@en ;
+# (NO_DELIV) rdfs:domain fgo:Pipe, fgo:Trigger ;
+# (NO_DELIV) rdfs:range xsd:string .
+# (NO_DELIV) 
+# (NO_DELIV) fgo:hasIdConditionTo a owl:DatatypeProperty ;
+# (NO_DELIV) rdfs:label "has id condition to"@en ;
+# (NO_DELIV) rdfs:comment """condition id of the 'to' point of the pipe."""@en ;
+# (NO_DELIV) rdfs:domain fgo:Pipe ;
+# (NO_DELIV) rdfs:range xsd:string .
+# (NO_DELIV) 
+# (NO_DELIV) fgo:hasIdActionTo a owl:DatatypeProperty ;
+# (NO_DELIV) rdfs:label "has id action to"@en ;
+# (NO_DELIV) rdfs:comment """action id of the 'to' point of the pipe or trigger."""@en ;
+# (NO_DELIV) rdfs:domain fgo:Pipe, fgo:Trigger ;
+# (NO_DELIV) rdfs:range xsd:string .
+# (NO_DELIV) 
+# (NO_DELIV) fgo:hasNameFrom a owl:DatatypeProperty ;
+# (NO_DELIV) rdfs:label "has name from"@en ;
+# (NO_DELIV) rdfs:comment """name of the trigger."""@en ;
+# (NO_DELIV) rdfs:domain fgo:Trigger ;
+# (NO_DELIV) rdfs:range xsd:string .
 
-fgo:hasIdBBFrom a owl:DatatypeProperty ;
-rdfs:label "has id building block from"@en ;
-rdfs:comment """building block id of the 'from' point of the pipe or trigger."""@en ;
-rdfs:domain fgo:Pipe, fgo:Trigger ;
-rdfs:range xsd:string .
+# relating resource templates and copies:
 
-fgo:hasIdConditionFrom a owl:DatatypeProperty ;
-rdfs:label "has id condition from"@en ;
-rdfs:comment """condition id of the 'from' point of the pipe."""@en ;
+fgo:hasTemplate a owl:ObjectProperty ;
+rdfs:label "has template"@en ;
+rdfs:comment "Links the copy of a building block as used in a particular screen flow to its template, as used in the palette or catalogue of available building blocks."@en ;
+rdfs:domain fgo:BuildingBlock ;
+rdfs:range fgo:BuildingBlock ;
+owl:inverseOf fgo:hasCopy .
+
+fgo:hasCopy a owl:ObjectProperty ;
+rdfs:label "has copy"@en ;
+rdfs:comment "Links the template of a building block as used in the palette or catalogue of available building blocks to its copy, as used in a particular screen flow."@en ;
+rdfs:domain fgo:BuildingBlock ;
+rdfs:range fgo:BuildingBlock ;
+owl:inverseOf fgo:hasTemplate .
+
+# defining pipes
+
+fgo:from a owl:ObjectProperty ;
+rdfs:label "from"@en ;
+rdfs:comment "This property defines the starting point of a pipe within a screen." ;
 rdfs:domain fgo:Pipe ;
-rdfs:range xsd:string .
+rdfs:range fgo:Condition .
 
-fgo:hasIdBBTo a owl:DatatypeProperty ;
-rdfs:label "has id building block to"@en ;
-rdfs:comment """building block id of the 'to' point of the pipe or trigger."""@en ;
-rdfs:domain fgo:Pipe, fgo:Trigger ;
-rdfs:range xsd:string .
-
-fgo:hasIdConditionTo a owl:DatatypeProperty ;
-rdfs:label "has id condition to"@en ;
-rdfs:comment """condition id of the 'to' point of the pipe."""@en ;
+fgo:to a owl:ObjectProperty ;
+rdfs:label "to"@en ;
+rdfs:comment "This property defines the end point of a pipe within a screen." ;
 rdfs:domain fgo:Pipe ;
-rdfs:range xsd:string .
-
-fgo:hasIdActionTo a owl:DatatypeProperty ;
-rdfs:label "has id action to"@en ;
-rdfs:comment """action id of the 'to' point of the pipe or trigger."""@en ;
-rdfs:domain fgo:Pipe, fgo:Trigger ;
-rdfs:range xsd:string .
-
-fgo:hasNameFrom a owl:DatatypeProperty ;
-rdfs:label "has name from"@en ;
-rdfs:comment """name of the trigger."""@en ;
-rdfs:domain fgo:Trigger ;
-rdfs:range xsd:string .
+rdfs:range fgo:Condition .
 
 # terms used from other ontologies
 
 misc:integratesTerm a owl:ObjectProperty ;
 rdfs:label "integratesTerm"@en ;
-rdfs:comment """A way to explicitly say that an ontology uses terms from another namespace. 
-Maybe a bit redundant, but why not."""@en .
+rdfs:comment """A way to explicitly say that an ontology uses terms from another namespace."""@en .
+
+# this partially reflects the integration document of the FAST gadget ontology
 
 <http://purl.oclc.org/fast/ontology/gadget> misc:integratesTerm  
-sioc:User, foaf:Person,foaf:Image, foaf:OnlineAccount, foaf:holdsAccount,
-foaf:depiction, foaf:name, foaf:mbox, foaf:mbox_sha1sum, foaf:interest, foaf:accountName,
+foaf:Person, foaf:Image, foaf:OnlineAccount, 
+foaf:holdsAccount, foaf:depiction, foaf:name, foaf:mbox, foaf:mbox_sha1sum, foaf:interest, 
+foaf:accountName,
+sioc:User,
+ctag:Tag,
+ctag:tagged, ctag:means,
 dcterms:title, dcterms:creator, dcterms:description, dcterms:created, dcterms:subject, 
 dcterms:rights, dcterms:RightsStatement, dcterms:rightsHolder,
 doap:revision .
@@ -468,6 +535,7 @@ foaf:Image a owl:Class .
 foaf:OnlineAccount a owl:Class .
 sioc:User a owl:Class .
 dcterms:RightsStatement a owl:Class .
+ctag:Tag a owl:Class .
 
 dcterms:modified a owl:DatatypeProperty .
 dcterms:created a owl:DatatypeProperty .
@@ -488,5 +556,8 @@ foaf:interest a owl:ObjectProperty .
 foaf:member a owl:ObjectProperty .
 
 doap:revision a owl:DatatypeProperty .
+
+ctag:tagged a owl:ObjectProperty .
+ctag:means a owl:ObjectProperty .
 
 <http://purl.oclc.org/fast/ontology/gadget> a owl:Thing.
