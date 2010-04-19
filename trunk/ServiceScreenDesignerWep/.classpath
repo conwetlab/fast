@@ -11,6 +11,6 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/de.uni_kassel.webcoobra"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/fujaba.web.runtime"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/httpclient-4.0.1.jar"/>
-	<classpathentry kind="lib" path="war/WEB-INF/lib/coobra2.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/coobra2.jar" sourcepath="C:/Users/zuendorf/eclipseworkspaces/fujabaDevelopment/de.uni_kassel.coobra/src"/>
 	<classpathentry kind="output" path="war/WEB-INF/classes"/>
 </classpath>

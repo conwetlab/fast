@@ -9,6 +9,7 @@ import fast.common.client.ServiceScreen;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.HorizontalPanel;
 import fujaba.web.runtime.client.FAction;
 import fast.servicescreen.client.ServiceScreenDesignerWep;
 import fujaba.web.runtime.client.reflect.*;
@@ -83,6 +84,8 @@ public class ScreenPanel implements PropertyChangeClient
    private VerticalPanel vertPanel;
    private Image image;
    private Label label;
+   private Image delImage;
+   private HorizontalPanel horiPanel;
 
    public void start()
    {
@@ -108,7 +111,11 @@ public class ScreenPanel implements PropertyChangeClient
 
       buildGUI = new BuildGUI ();
       imageHandler = new ImageHandler ();
+      removeWrapperHandler = new RemoveWrapperHandler ();
       screenListener = new ScreenListener ();
+      // NONE
+
+      //buildGUI.addToFollowers("delImage.click", removeWrapperHandler);
       // NONE
 
       //buildGUI.addToFollowers("image.click", imageHandler);
@@ -143,13 +150,23 @@ public class ScreenPanel implements PropertyChangeClient
             // create object label
             label = new Label ( );
 
+            // create object delImage
+            delImage = new Image("images/x.png");
+
+            // create object horiPanel
+            horiPanel = new HorizontalPanel ( );
+
             // assign attribute label
             label.setText (screen.getName());
             // create link widget from panel to vertPanel
             panel.add (vertPanel);
 
             // collabStat call
-            vertPanel.add(image);
+            horiPanel.add(image);
+            // collabStat call
+            horiPanel.add(delImage);
+            // collabStat call
+            vertPanel.add(horiPanel);
             // collabStat call
             vertPanel.add(label);
             // collabStat call
@@ -167,6 +184,7 @@ public class ScreenPanel implements PropertyChangeClient
 
          screen.addPropertyChangeListener(screenListener);
          image.addClickHandler(imageHandler);
+         delImage.addClickHandler(removeWrapperHandler);
 
        }
 
@@ -208,6 +226,36 @@ public class ScreenPanel implements PropertyChangeClient
 
    }
 
+   private RemoveWrapperHandler removeWrapperHandler;
+   public class RemoveWrapperHandler extends FAction
+   {
+       public void doAction()
+       {
+   		 boolean fujaba__Success = false;
+
+         // story pattern storypatternwiththis
+         try 
+         {
+            fujaba__Success = false; 
+
+            // check object screen is really bound
+            JavaSDM.ensure ( screen != null );
+            // delete object screen
+            screen.removeYou ();
+
+            fujaba__Success = true;
+         }
+         catch ( JavaSDMException fujaba__InternalException )
+         {
+            fujaba__Success = false;
+         }
+
+
+
+       }
+
+   }
+
    private ScreenListener screenListener;
    public class ScreenListener extends FAction
    {
@@ -236,6 +284,9 @@ public class ScreenPanel implements PropertyChangeClient
        }
 
    }
+
+   // my style test for method.vm
+
 
    // my style test for method.vm
 

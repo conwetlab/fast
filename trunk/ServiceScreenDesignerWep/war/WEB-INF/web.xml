@@ -45,6 +45,7 @@
   <servlet-mapping>
     <servlet-name>standaloneRequestService</servlet-name>
     <url-pattern>/servicescreendesignerwep/requestServlet</url-pattern>
+    <url-pattern>/ServiceDesignerWep/servicescreendesignerwep/requestServlet</url-pattern>
   </servlet-mapping>
   
   <!-- Default page to serve -->

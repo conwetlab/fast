@@ -8,6 +8,7 @@ import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
+import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RootPanel;
@@ -277,8 +278,16 @@ public class DataTransformationTool extends FastTool implements EntryPoint
 		for (TrafoOperator trafoOp : designer.getTrafoOperators()) 
 		{
 			VerticalPanel verticalPanel = new VerticalPanel();
+			HorizontalPanel imagePanel = new HorizontalPanel();
 			Image image = new Image ("images/DataTransformationOperatorIcon.png");
-			verticalPanel.add(image);
+			imagePanel.add(image);
+			Image delImage = new Image ("images/x.png"); 
+			
+			delImage.addClickHandler(new TrafoOpRemoveHandler(trafoOp));
+
+			imagePanel.add(delImage);
+			
+			verticalPanel.add(imagePanel);
 			Label label = new Label(trafoOp.getName());
 			verticalPanel.add(label);
 			if (trafoOp == trafoOperator)
@@ -351,5 +360,21 @@ public class DataTransformationTool extends FastTool implements EntryPoint
 			TrafoOperator myOp = (TrafoOperator) propertyEvent.getSource();
 			myLabel.setText(myOp.getName());
 		}		
+	}
+	
+	class TrafoOpRemoveHandler extends FAction
+	{
+		private TrafoOperator trafoOp;
+
+		public TrafoOpRemoveHandler(TrafoOperator trafoOp)
+		{
+			this.trafoOp = trafoOp;
+		}
+		
+		@Override
+		public void doAction()
+		{
+			this.trafoOp.removeYou();
+		}
 	}
 }

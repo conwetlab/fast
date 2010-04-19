@@ -161,7 +161,7 @@ public class CTextChangeHandler implements ChangeHandler, PropertyChangeListener
 		   if (typeName != null) 
 		   {
 			   words.add(typeName);
-			   words.add("List of " + typeName);
+			   words.add(typeName + "List");
 		   }
 	   }
 	   

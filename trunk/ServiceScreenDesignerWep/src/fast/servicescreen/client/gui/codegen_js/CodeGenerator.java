@@ -129,9 +129,9 @@ public class CodeGenerator
 			//build prerequestreplaces
 			preReqRepText += indent + "prerequest = prerequest.replace(/<";
 			preReqRepText += currentInpPort.get("name");
-			preReqRepText += ">/g,"; 
+			preReqRepText += ">/g,encodeURIComponent("; 
 			preReqRepText += currentInpPort.get("name");
-			preReqRepText += "); \n ";
+			preReqRepText += ")); \n ";
 			indent = depth2;
 		}
 		
@@ -248,14 +248,14 @@ public class CodeGenerator
 				hasOpenForLoop = true;
 						
 				 //adds a 'new object' in the result, jumps over types that are needles in JSON
-				if(target.startsWith("List of"))
+				if(target.endsWith("List"))
 				{
-					tmpCode += codeIndent + depth + "result += indent + '\"" + target + "\" : [ \\\\n'; \n";
+					tmpCode += codeIndent + depth + "result += indent + '\"" + target + "\" : [ \\n'; \n";
 					hasOpenSqareBracket = true;
 				}
 				else
 				{
-					tmpCode += codeIndent + depth + "result += indent + '{ \\\\n'; \n\n";
+					tmpCode += codeIndent + depth + "result += indent + '{ \\n'; \n\n";
 				}
 
 				//overtake loop in real transcode
@@ -325,11 +325,11 @@ public class CodeGenerator
 						//means, we reach the last fillAttr. rule!
 						if(rule.getParent().getLastOfKids() == rule)
 						{
-							transCode += " + '\" \\\\n' + indent + '}, \\\\n'; \n";
+							transCode += " + '\" \\n' + indent + '}, \\n'; \n";
 						}
 						else
 						{
-							transCode += " + '\", \\\\n'; \n";
+							transCode += " + '\", \\n'; \n";
 						}
 						
 						operationStart = true;
@@ -346,7 +346,7 @@ public class CodeGenerator
 			
 			if (hasOpenSqareBracket)
 			{
-				transCode += codeIndent + "result += ' ]\\\\n';";
+				transCode += codeIndent + "result += ' ]\\n';";
 			}
 		}
 	}
@@ -408,13 +408,26 @@ public class CodeGenerator
 		for (String key : table.keySet()) 
 		{
 			String value = table.get(key);
-			template = template.replaceAll(key, value);
+			// template = template.replaceAll(key, value);
+			template = replaceKey(template, key, value);
 		}
 		
 		return template;
 	}
 	
 	
+	private String replaceKey(String text, String key, String value) 
+	{
+		// find key and replace by value
+		String result = text;
+		int pos = text.indexOf(key);
+		if (pos >= 0)
+		{
+			result = text.substring(0, pos) + value + text.substring(pos + key.length());
+		}
+		return result;
+	}
+
 	private static RequestServiceAsync service;
 	/**
 	 * This method send the current template to

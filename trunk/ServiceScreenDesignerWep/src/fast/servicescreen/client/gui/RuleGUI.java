@@ -294,7 +294,7 @@ public class RuleGUI
             FactType factType = (FactType) typeIter.next();
             String typeName = factType.getTypeName();
 			types.add(typeName);
-			types.add("List of " + typeName);
+			types.add(typeName + "List");
          }
       }
       else if ("fillAttributes".equals(kind))
@@ -397,15 +397,20 @@ public class RuleGUI
    
    protected void buildFactsTree(Tree aFactsTree)
    {
-	   	  aFactsTree.clear();
-	      
-	      TreeItem rootItem = aFactsTree.addItem("Facts:");
-	      
-	      transform(requestHandler.xmlDoc, rootRule, rootItem);
-	      
-	      RuleUtil.expandTree(aFactsTree);
+	   //(re)build the facts tree 
+	   aFactsTree.clear();
+
+	   TreeItem rootItem = aFactsTree.addItem("Facts:");
+
+	   try {
+		   transform(requestHandler.xmlDoc, rootRule, rootItem);
+	   } catch (Exception e) {
+		   e.printStackTrace();
+	   }
+	   RuleUtil.expandTree(aFactsTree);
+
    }
-   
+
    /**
     * This method transform the data with the rules
     * to the this.factsTree (XML)

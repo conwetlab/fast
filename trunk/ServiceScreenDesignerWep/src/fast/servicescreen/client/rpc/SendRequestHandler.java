@@ -5,6 +5,7 @@ import java.util.Iterator;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.http.client.URL;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Tree;
@@ -52,7 +53,8 @@ public class SendRequestHandler implements ClickHandler
              && portName != null && ! portName.equals(""))
          {
             // do expansion
-            request = request.replaceAll("<" + portName + ">", exampleValue);
+        	String encodedValue = URL.encode(exampleValue);
+            request = request.replaceAll("<" + portName + ">", encodedValue);
          }
       }
 

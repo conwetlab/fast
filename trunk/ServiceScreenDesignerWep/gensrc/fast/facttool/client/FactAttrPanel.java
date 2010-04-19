@@ -259,7 +259,7 @@ public class FactAttrPanel
                   // collabStat call
                   oracle.add(tname);
                   // collabStat call
-                  oracle.add("List of " + tname);
+                  oracle.add(tname + "List");
 
                   fujaba__Success = true;
                }
