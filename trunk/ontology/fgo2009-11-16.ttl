@@ -26,6 +26,7 @@
 @prefix misc: <http://data.semanticweb.org/ns/misc#> .
 @prefix ctag: <http://commontag.org/ns#> .
 @prefix swrc_ext: <http://www.cs.vu.nl/~mcaklein/onto/swrc_ext/2005/05#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
 
 <http://purl.oclc.org/fast/ontology/gadget> a owl:Ontology ;
 	rdfs:label "The FAST Gagdet Ontology v0.2 (M24)"@en ;
@@ -45,23 +46,23 @@
 	dcterms:hasVersion <http://kantenwerk.org/ontology/fast_gadget_content/2009-02-24.rdf> .
 
 <http://kantenwerk.org/metadata/foaf.rdf#me> a foaf:Person ;
-foaf:name "Knud Möller"@en ;
-foaf:homepage <http://kantenwerk.org> ;
-rdfs:seeAlso <http://kantenwerk.org/metadata/foaf.rdf> .
+	foaf:name "Knud Möller"@en ;
+	foaf:homepage <http://kantenwerk.org> ;
+	rdfs:seeAlso <http://kantenwerk.org/metadata/foaf.rdf> .
 
 <http://data.semanticweb.org/organization/deri-nui-galway> a foaf:Organization;
-foaf:name "DERI"@en ;
-foaf:homepage <http://www.deri.ie> ;
-foaf:member <http://kantenwerk.org/metadata/foaf.rdf#me> ;
-foaf:member fgo:Ismael .
+	foaf:name "DERI"@en ;
+	foaf:homepage <http://www.deri.ie> ;
+	foaf:member <http://kantenwerk.org/metadata/foaf.rdf#me> ;
+	foaf:member fgo:Ismael .
 
 fgo:fast_members a foaf:Group ;
-foaf:name "Members of the FAST project"@en .
+	foaf:name "Members of the FAST project"@en .
 
 fgo:Ismael a foaf:Person ;
-foaf:name "Ismael Rivera"@en ;
-foaf:homepage <http://www.deri.ie/about/team/member/ismael_rivera/> ;
-rdfs:seeAlso <http://www.deri.ie/fileadmin/scripts/foaf.php?id=356> .
+	foaf:name "Ismael Rivera"@en ;
+	foaf:homepage <http://www.deri.ie/about/team/member/ismael_rivera/> ;
+	rdfs:seeAlso <http://www.deri.ie/fileadmin/scripts/foaf.php?id=356> .
 
 fgo:author_list a owl:Thing;
 	rdf:_1 <http://kantenwerk.org/metadata/foaf.rdf#me> .
@@ -83,53 +84,73 @@ fgo:license_doc
 		""";
     a owl:Thing .
 
+# some topics:
+
+fgo:TopicBuildingBlocks a skos:Concept ;
+	skos:prefLabel "FAST Building Blocks"@en .
+	
+fgo:TopicConditions a skos:Concept ;
+	skos:prefLabel "Conditions"@en .
+
+fgo:TopicDefiningBuildingBlocks a skos:Concept ;
+	skos:prefLabel "Defining Building Blocks"@en .
+
 # Classes
 
+### Building Blocks (Screenflows, Screens and screen components)
+
 fgo:BuildingBlock a owl:Class ;
-rdfs:label "BuildingBlock"@en ;
-rdfs:comment """Anything that is part of a gadget. Tentatively anything that can be 'touched' and moved around in the FAST IDE, from the most complex units such as screen flows, down to atomic form elements like a button or a label in a form."""@en .
+	rdfs:label "BuildingBlock"@en ;
+	rdfs:comment """Anything that is part of a gadget. Tentatively anything that can be 'touched' and moved around in the FAST IDE, from the most complex units such as screen flows, down to atomic form elements like a button or a label in a form."""@en ;
+    misc:subject fgo:TopicBuildingBlocks .
 
 fgo:ScreenFlow a owl:Class ;
-rdfs:subClassOf fgo:BuildingBlock ;
-rdfs:label "Screen Flow"@en ;
-rdfs:comment "A set of screens from which a gadget for a given target platform can be generated."@en .
-
-### Screens and screen components
+	rdfs:subClassOf fgo:BuildingBlock ;
+	rdfs:label "Screen Flow"@en ;
+	rdfs:comment "A set of screens from which a gadget for a given target platform can be generated."@en ;
+    misc:subject fgo:TopicBuildingBlocks .
 
 fgo:Screen a owl:Class ;
 rdfs:subClassOf fgo:BuildingBlock ;
 rdfs:label "Screen"@en ;
-rdfs:comment "An individual screen; the basic unit of user interaction in FAST. A screen is the interface through which a user gets access to data and functionality of a backend service."@en .
+rdfs:comment "An individual screen; the basic unit of user interaction in FAST. A screen is the interface through which a user gets access to data and functionality of a backend service."@en	 ;
+    misc:subject fgo:TopicBuildingBlocks .
 
 fgo:ScreenComponent a owl:Class ;
 rdfs:subClassOf fgo:BuildingBlock ;
 rdfs:label "Screen Component"@en ;
-rdfs:comment "Screens are made up of screen components, which fundamentally include service resources, operators and forms."@en .
+rdfs:comment "Screens are made up of screen components, which fundamentally include service resources, operators and forms."@en	 ;
+    misc:subject fgo:TopicBuildingBlocks .
 
 fgo:Operator a owl:Class ;
 rdfs:subClassOf fgo:ScreenComponent ;
 rdfs:label "Operator"@en ;
-rdfs:comment """Operators are intended to transform and/or modify data within a screen, usually for preparing data coming from service resources for the use in the screen's interface. Operators cover different kinds of data manipulations, from simple aggregation to mediating data with incompatible schemas."""@en .
+rdfs:comment """Operators are intended to transform and/or modify data within a screen, usually for preparing data coming from service resources for the use in the screen's interface. Operators cover different kinds of data manipulations, from simple aggregation to mediating data with incompatible schemas."""@en ;
+    misc:subject fgo:TopicBuildingBlocks .
 
 fgo:Resource a owl:Class ;
 rdfs:subClassOf fgo:ScreenComponent ;
 rdfs:label "Resource"@en ;
-rdfs:comment "A service resource in FAST is a wrapper around a Web service (the backend service), which makes the service available to the platform, e.g., by mapping its definition to FAST facts and actions."@en .
+rdfs:comment "A service resource in FAST is a wrapper around a Web service (the backend service), which makes the service available to the platform, e.g., by mapping its definition to FAST facts and actions."@en ;
+    misc:subject fgo:TopicBuildingBlocks .
 
 fgo:Form a owl:Class ;
 rdfs:subClassOf fgo:ScreenComponent ;
 rdfs:label "Form"@en ;
-rdfs:comment "A form is the visual aspect of a screen: its user interface. Each form is made up of individual form elements."@en .
+rdfs:comment "A form is the visual aspect of a screen: its user interface. Each form is made up of individual form elements."@en ;
+    misc:subject fgo:TopicBuildingBlocks .
 
 fgo:BackendService a owl:Class ;
 rdfs:subClassOf fgo:BuildingBlock ;
 rdfs:label "Backend Service"@en ;
-rdfs:comment """A Web service which provides data and/or functionality to a screen. The actual backend service is external to FAST, and only available through a wrapper (the service Resource)."""@en .
+rdfs:comment """A Web service which provides data and/or functionality to a screen. The actual backend service is external to FAST, and only available through a wrapper (the service Resource)."""@en	;
+    misc:subject fgo:TopicBuildingBlocks .
 
 fgo:FormElement a owl:Class ;
 rdfs:subClassOf fgo:BuildingBlock ;
 rdfs:label "Form Element"@en ;
-rdfs:comment "Form elements are UI elements in a particular screen, such as buttons, lists or labels."@en .
+rdfs:comment "Form elements are UI elements in a particular screen, such as buttons, lists or labels."@en ;
+    misc:subject fgo:TopicBuildingBlocks .
 
 ### Conditions
 
@@ -137,7 +158,8 @@ fgo:Condition a owl:Class ;
 rdfs:subClassOf fgo:BuildingBlock ;
 rdfs:label "Condition"@en ;
 rdfs:comment """The pre- or post-condition of a building block. If the building block is a screen flow, each target platform will use these conditions in its own way, or may also ignore them. E.g., in EzWeb pre- and post-conditions correspond to the concepts of slot and event.
-A condition is made up of individual facts, where each fact is represented internally as an RDF triple, usually involving a variable of blank node."""@en .
+A condition is made up of individual facts, where each fact is represented internally as an RDF triple, usually involving a variable of blank node."""@en ;
+   misc:subject fgo:TopicConditions .
 
 # (NO_DELIV) fgo:Fact a owl:Class ;
 # (NO_DELIV) rdfs:subClassOf fgo:BuildingBlock ;
@@ -148,13 +170,15 @@ fgo:WithPreConditions a owl:Class ;
 # (NO_DELIV) rdfs:subClassOf fgo:BuildingBlock ;
 owl:unionOf (fgo:ScreenFlow fgo:Screen fgo:Action) ;
 rdfs:label "With Pre-condition"@en ;
-rdfs:comment """Those kinds of building blocks which can have pre-conditions."""@en .
+rdfs:comment """Those kinds of building blocks which can have pre-conditions."""@en	;
+	misc:subject fgo:TopicConditions .
 
 fgo:WithPostConditions a owl:Class ;
 # (NO_DELIV) rdfs:subClassOf fgo:BuildingBlock ;
 owl:unionOf (fgo:ScreenFlow fgo:Screen fgo:ScreenComponent) ;
 rdfs:label "With Post-condition"@en ;
-rdfs:comment """Those kinds of building blocks which can have post-conditions."""@en .
+rdfs:comment """Those kinds of building blocks which can have post-conditions."""@en ;
+	misc:subject fgo:TopicConditions .
 
 # defining building blocks
 
@@ -162,13 +186,15 @@ fgo:WithDefinition a owl:Class ;
 # (NO_DELIV) rdfs:subClassOf fgo:BuildingBlock ;
 owl:unionOf (fgo:Screen fgo:Form) ;
 rdfs:label "With Definition"@en ;
-rdfs:comment "Any kind of building block that can be defined declaratively in the GVS."@en .
+rdfs:comment "Any kind of building block that can be defined declaratively in the GVS."@en ;
+	misc:subject fgo:TopicDefiningBuildingBlocks .
 
 fgo:WithCode a owl:Class ;
 # (NO_DELIV) rdfs:subClassOf fgo:BuildingBlock ;
 owl:unionOf (fgo:Screen fgo:Form fgo:Resource fgo:Operator) ;
 rdfs:label "With Code"@en ;
-rdfs:comment "Any kind of building block that can be defined as a whole through code."@en .
+rdfs:comment "Any kind of building block that can be defined as a whole through code."@en ;
+	misc:subject fgo:TopicDefiningBuildingBlocks .
 
 # (NO_DELIV) I removed the following three classes, I don't get what we need them for:
 # (NO_DELIV) 
@@ -194,22 +220,26 @@ fgo:Action a owl:Class ;
 rdfs:subClassOf fgo:BuildingBlock ;
 rdfs:label "Action"@en ;
 rdfs:comment """An action represents a specific routine which will be performed when a certain
-condition is fulfilled within a certain screen component. Examples are methods of a Web service (e.g., getItem) or functionality to update or change the contents of a form."""@en .
+condition is fulfilled within a certain screen component. Examples are methods of a Web service (e.g., getItem) or functionality to update or change the contents of a form."""@en;
+	misc:subject fgo:TopicDefiningBuildingBlocks .
 
 fgo:Library a owl:Class ;
 rdfs:subClassOf fgo:BuildingBlock ;
 rdfs:label "Library"@en ;
-rdfs:comment """Libraries are references to external code libraries required for the execution of a particular building block at runtime."""@en .
+rdfs:comment """Libraries are references to external code libraries required for the execution of a particular building block at runtime."""@en ;
+	misc:subject fgo:TopicDefiningBuildingBlocks .
 
 fgo:Pipe a owl:Class ;
 rdfs:subClassOf fgo:BuildingBlock ;
 rdfs:label "pipe or connector"@en ;
-rdfs:comment """Pipes are used to explicitly define the flow of data within a screen, e.g., from service resource to operator to a specific form element."""@en .
+rdfs:comment """Pipes are used to explicitly define the flow of data within a screen, e.g., from service resource to operator to a specific form element."""@en ;
+	misc:subject fgo:TopicDefiningBuildingBlocks .
 
 fgo:Trigger a owl:Class ;
 rdfs:subClassOf fgo:BuildingBlock ;
 rdfs:label "Trigger"@en ;
-rdfs:comment """Triggers are the flip-side of actions. Certain events in a building block can cause a trigger to be fired. Other building blocks within the same screen, which are listening to it, will react with an action."""@en .
+rdfs:comment """Triggers are the flip-side of actions. Certain events in a building block can cause a trigger to be fired. Other building blocks within the same screen, which are listening to it, will react with an action."""@en ;
+	misc:subject fgo:TopicDefiningBuildingBlocks .
 
 # (NO_DELIV) Removed ResourceReference, we don't need two references for a resource. The URI is enough.
 # (NO_DELIV) 

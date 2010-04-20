@@ -20,8 +20,9 @@ div.rdf-proplist {
         background-color: #ddf;
         border: 1px solid black;
         float: left;
-/*        width: 26%; */
-        margin: 0.3em 1%; 
+		width: 300px;
+		/*        margin: 0.3em 1%; */
+		margin: 5px;
 }
 img { border: 0 } 
 

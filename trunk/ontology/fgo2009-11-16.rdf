@@ -10,6 +10,7 @@
    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
    xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
    xmlns:sioc="http://rdfs.org/sioc/ns#"
+   xmlns:skos="http://www.w3.org/2004/02/skos/core#"
    xmlns:swrc_ext="http://www.cs.vu.nl/~mcaklein/onto/swrc_ext/2005/05#"
    xmlns:xsd="http://www.w3.org/2001/XMLSchema#">
   <owl:Class rdf:about="http://commontag.org/ns#Tag"/>
@@ -72,32 +73,38 @@
     <foaf:maker rdf:resource="http://kantenwerk.org/metadata/foaf.rdf#me"/>
   </owl:Ontology>
   <owl:Class rdf:about="http://purl.oclc.org/fast/ontology/gadget#Action">
+    <misc:subject rdf:resource="http://purl.oclc.org/fast/ontology/gadget#TopicDefiningBuildingBlocks"/>
     <rdfs:comment xml:lang="en">An action represents a specific routine which will be performed when a certain
 condition is fulfilled within a certain screen component. Examples are methods of a Web service (e.g., getItem) or functionality to update or change the contents of a form.</rdfs:comment>
     <rdfs:label xml:lang="en">Action</rdfs:label>
     <rdfs:subClassOf rdf:resource="http://purl.oclc.org/fast/ontology/gadget#BuildingBlock"/>
   </owl:Class>
   <owl:Class rdf:about="http://purl.oclc.org/fast/ontology/gadget#BackendService">
+    <misc:subject rdf:resource="http://purl.oclc.org/fast/ontology/gadget#TopicBuildingBlocks"/>
     <rdfs:comment xml:lang="en">A Web service which provides data and/or functionality to a screen. The actual backend service is external to FAST, and only available through a wrapper (the service Resource).</rdfs:comment>
     <rdfs:label xml:lang="en">Backend Service</rdfs:label>
     <rdfs:subClassOf rdf:resource="http://purl.oclc.org/fast/ontology/gadget#BuildingBlock"/>
   </owl:Class>
   <owl:Class rdf:about="http://purl.oclc.org/fast/ontology/gadget#BuildingBlock">
+    <misc:subject rdf:resource="http://purl.oclc.org/fast/ontology/gadget#TopicBuildingBlocks"/>
     <rdfs:comment xml:lang="en">Anything that is part of a gadget. Tentatively anything that can be 'touched' and moved around in the FAST IDE, from the most complex units such as screen flows, down to atomic form elements like a button or a label in a form.</rdfs:comment>
     <rdfs:label xml:lang="en">BuildingBlock</rdfs:label>
   </owl:Class>
   <owl:Class rdf:about="http://purl.oclc.org/fast/ontology/gadget#Condition">
+    <misc:subject rdf:resource="http://purl.oclc.org/fast/ontology/gadget#TopicConditions"/>
     <rdfs:comment xml:lang="en">The pre- or post-condition of a building block. If the building block is a screen flow, each target platform will use these conditions in its own way, or may also ignore them. E.g., in EzWeb pre- and post-conditions correspond to the concepts of slot and event.
 A condition is made up of individual facts, where each fact is represented internally as an RDF triple, usually involving a variable of blank node.</rdfs:comment>
     <rdfs:label xml:lang="en">Condition</rdfs:label>
     <rdfs:subClassOf rdf:resource="http://purl.oclc.org/fast/ontology/gadget#BuildingBlock"/>
   </owl:Class>
   <owl:Class rdf:about="http://purl.oclc.org/fast/ontology/gadget#Form">
+    <misc:subject rdf:resource="http://purl.oclc.org/fast/ontology/gadget#TopicBuildingBlocks"/>
     <rdfs:comment xml:lang="en">A form is the visual aspect of a screen: its user interface. Each form is made up of individual form elements.</rdfs:comment>
     <rdfs:label xml:lang="en">Form</rdfs:label>
     <rdfs:subClassOf rdf:resource="http://purl.oclc.org/fast/ontology/gadget#ScreenComponent"/>
   </owl:Class>
   <owl:Class rdf:about="http://purl.oclc.org/fast/ontology/gadget#FormElement">
+    <misc:subject rdf:resource="http://purl.oclc.org/fast/ontology/gadget#TopicBuildingBlocks"/>
     <rdfs:comment xml:lang="en">Form elements are UI elements in a particular screen, such as buttons, lists or labels.</rdfs:comment>
     <rdfs:label xml:lang="en">Form Element</rdfs:label>
     <rdfs:subClassOf rdf:resource="http://purl.oclc.org/fast/ontology/gadget#BuildingBlock"/>
@@ -108,46 +115,64 @@ A condition is made up of individual facts, where each fact is represented inter
     <foaf:name xml:lang="en">Ismael Rivera</foaf:name>
   </foaf:Person>
   <owl:Class rdf:about="http://purl.oclc.org/fast/ontology/gadget#Library">
+    <misc:subject rdf:resource="http://purl.oclc.org/fast/ontology/gadget#TopicDefiningBuildingBlocks"/>
     <rdfs:comment xml:lang="en">Libraries are references to external code libraries required for the execution of a particular building block at runtime.</rdfs:comment>
     <rdfs:label xml:lang="en">Library</rdfs:label>
     <rdfs:subClassOf rdf:resource="http://purl.oclc.org/fast/ontology/gadget#BuildingBlock"/>
   </owl:Class>
   <owl:Class rdf:about="http://purl.oclc.org/fast/ontology/gadget#Operator">
+    <misc:subject rdf:resource="http://purl.oclc.org/fast/ontology/gadget#TopicBuildingBlocks"/>
     <rdfs:comment xml:lang="en">Operators are intended to transform and/or modify data within a screen, usually for preparing data coming from service resources for the use in the screen's interface. Operators cover different kinds of data manipulations, from simple aggregation to mediating data with incompatible schemas.</rdfs:comment>
     <rdfs:label xml:lang="en">Operator</rdfs:label>
     <rdfs:subClassOf rdf:resource="http://purl.oclc.org/fast/ontology/gadget#ScreenComponent"/>
   </owl:Class>
   <owl:Class rdf:about="http://purl.oclc.org/fast/ontology/gadget#Pipe">
+    <misc:subject rdf:resource="http://purl.oclc.org/fast/ontology/gadget#TopicDefiningBuildingBlocks"/>
     <rdfs:comment xml:lang="en">Pipes are used to explicitly define the flow of data within a screen, e.g., from service resource to operator to a specific form element.</rdfs:comment>
     <rdfs:label xml:lang="en">pipe or connector</rdfs:label>
     <rdfs:subClassOf rdf:resource="http://purl.oclc.org/fast/ontology/gadget#BuildingBlock"/>
   </owl:Class>
   <owl:Class rdf:about="http://purl.oclc.org/fast/ontology/gadget#Resource">
+    <misc:subject rdf:resource="http://purl.oclc.org/fast/ontology/gadget#TopicBuildingBlocks"/>
     <rdfs:comment xml:lang="en">A service resource in FAST is a wrapper around a Web service (the backend service), which makes the service available to the platform, e.g., by mapping its definition to FAST facts and actions.</rdfs:comment>
     <rdfs:label xml:lang="en">Resource</rdfs:label>
     <rdfs:subClassOf rdf:resource="http://purl.oclc.org/fast/ontology/gadget#ScreenComponent"/>
   </owl:Class>
   <owl:Class rdf:about="http://purl.oclc.org/fast/ontology/gadget#Screen">
+    <misc:subject rdf:resource="http://purl.oclc.org/fast/ontology/gadget#TopicBuildingBlocks"/>
     <rdfs:comment xml:lang="en">An individual screen; the basic unit of user interaction in FAST. A screen is the interface through which a user gets access to data and functionality of a backend service.</rdfs:comment>
     <rdfs:label xml:lang="en">Screen</rdfs:label>
     <rdfs:subClassOf rdf:resource="http://purl.oclc.org/fast/ontology/gadget#BuildingBlock"/>
   </owl:Class>
   <owl:Class rdf:about="http://purl.oclc.org/fast/ontology/gadget#ScreenComponent">
+    <misc:subject rdf:resource="http://purl.oclc.org/fast/ontology/gadget#TopicBuildingBlocks"/>
     <rdfs:comment xml:lang="en">Screens are made up of screen components, which fundamentally include service resources, operators and forms.</rdfs:comment>
     <rdfs:label xml:lang="en">Screen Component</rdfs:label>
     <rdfs:subClassOf rdf:resource="http://purl.oclc.org/fast/ontology/gadget#BuildingBlock"/>
   </owl:Class>
   <owl:Class rdf:about="http://purl.oclc.org/fast/ontology/gadget#ScreenFlow">
+    <misc:subject rdf:resource="http://purl.oclc.org/fast/ontology/gadget#TopicBuildingBlocks"/>
     <rdfs:comment xml:lang="en">A set of screens from which a gadget for a given target platform can be generated.</rdfs:comment>
     <rdfs:label xml:lang="en">Screen Flow</rdfs:label>
     <rdfs:subClassOf rdf:resource="http://purl.oclc.org/fast/ontology/gadget#BuildingBlock"/>
   </owl:Class>
+  <skos:Concept rdf:about="http://purl.oclc.org/fast/ontology/gadget#TopicBuildingBlocks">
+    <skos:prefLabel xml:lang="en">FAST Building Blocks</skos:prefLabel>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://purl.oclc.org/fast/ontology/gadget#TopicConditions">
+    <skos:prefLabel xml:lang="en">Conditions</skos:prefLabel>
+  </skos:Concept>
+  <skos:Concept rdf:about="http://purl.oclc.org/fast/ontology/gadget#TopicDefiningBuildingBlocks">
+    <skos:prefLabel xml:lang="en">Defining Building Blocks</skos:prefLabel>
+  </skos:Concept>
   <owl:Class rdf:about="http://purl.oclc.org/fast/ontology/gadget#Trigger">
+    <misc:subject rdf:resource="http://purl.oclc.org/fast/ontology/gadget#TopicDefiningBuildingBlocks"/>
     <rdfs:comment xml:lang="en">Triggers are the flip-side of actions. Certain events in a building block can cause a trigger to be fired. Other building blocks within the same screen, which are listening to it, will react with an action.</rdfs:comment>
     <rdfs:label xml:lang="en">Trigger</rdfs:label>
     <rdfs:subClassOf rdf:resource="http://purl.oclc.org/fast/ontology/gadget#BuildingBlock"/>
   </owl:Class>
   <owl:Class rdf:about="http://purl.oclc.org/fast/ontology/gadget#WithCode">
+    <misc:subject rdf:resource="http://purl.oclc.org/fast/ontology/gadget#TopicDefiningBuildingBlocks"/>
     <rdfs:comment xml:lang="en">Any kind of building block that can be defined as a whole through code.</rdfs:comment>
     <rdfs:label xml:lang="en">With Code</rdfs:label>
     <owl:unionOf>
@@ -173,6 +198,7 @@ A condition is made up of individual facts, where each fact is represented inter
     </owl:unionOf>
   </owl:Class>
   <owl:Class rdf:about="http://purl.oclc.org/fast/ontology/gadget#WithDefinition">
+    <misc:subject rdf:resource="http://purl.oclc.org/fast/ontology/gadget#TopicDefiningBuildingBlocks"/>
     <rdfs:comment xml:lang="en">Any kind of building block that can be defined declaratively in the GVS.</rdfs:comment>
     <rdfs:label xml:lang="en">With Definition</rdfs:label>
     <owl:unionOf>
@@ -188,6 +214,7 @@ A condition is made up of individual facts, where each fact is represented inter
     </owl:unionOf>
   </owl:Class>
   <owl:Class rdf:about="http://purl.oclc.org/fast/ontology/gadget#WithPostConditions">
+    <misc:subject rdf:resource="http://purl.oclc.org/fast/ontology/gadget#TopicConditions"/>
     <rdfs:comment xml:lang="en">Those kinds of building blocks which can have post-conditions.</rdfs:comment>
     <rdfs:label xml:lang="en">With Post-condition</rdfs:label>
     <owl:unionOf>
@@ -208,6 +235,7 @@ A condition is made up of individual facts, where each fact is represented inter
     </owl:unionOf>
   </owl:Class>
   <owl:Class rdf:about="http://purl.oclc.org/fast/ontology/gadget#WithPreConditions">
+    <misc:subject rdf:resource="http://purl.oclc.org/fast/ontology/gadget#TopicConditions"/>
     <rdfs:comment xml:lang="en">Those kinds of building blocks which can have pre-conditions.</rdfs:comment>
     <rdfs:label xml:lang="en">With Pre-condition</rdfs:label>
     <owl:unionOf>
