@@ -25,17 +25,24 @@
 @prefix dcterms: <http://purl.org/dc/terms/> .
 @prefix misc: <http://data.semanticweb.org/ns/misc#> .
 @prefix ctag: <http://commontag.org/ns#> .
+@prefix swrc_ext: <http://www.cs.vu.nl/~mcaklein/onto/swrc_ext/2005/05#> .
 
 <http://purl.oclc.org/fast/ontology/gadget> a owl:Ontology ;
-rdfs:label "The FAST Gagdet Ontology v0.2 (M24)"@en ;
-rdfs:comment """This ontology defines terms for modelling semantic, interoperable gadgets or widgets. It has been developed as part of the EU project 'FAST' (FAST AND ADVANCED STORYBOARD TOOLS), FP7-ICT-2007-1-216048."""@en ;
-dcterms:created "2009-02-09"@en ;
-dcterms:modified "$Date$"@en ;
-dcterms:creator <http://kantenwerk.org/metadata/foaf.rdf#me> ;
-dcterms:contributor fgo:Ismael ;
-dcterms:contributor fgo:fast_members ;
-foaf:maker <http://kantenwerk.org/metadata/foaf.rdf#me> ;
-doap:revision "$Revision$" .
+	rdfs:label "The FAST Gagdet Ontology v0.2 (M24)"@en ;
+	rdfs:comment """This ontology defines terms for modelling semantic, interoperable gadgets or widgets. It has been developed as part of the EU project 'FAST' (FAST AND ADVANCED STORYBOARD TOOLS), FP7-ICT-2007-1-216048."""@en ;
+	foaf:logo <http://kantenwerk.org/ontology/fast_gadget_content/fast.png> ;
+	dcterms:created "2009-02-09"@en ;
+	dcterms:modified "$Date$"@en ;
+	dcterms:creator <http://kantenwerk.org/metadata/foaf.rdf#me> ;
+	foaf:maker <http://kantenwerk.org/metadata/foaf.rdf#me> ;
+	swrc_ext:authorList fgo:author_list;
+	dcterms:contributor fgo:Ismael , fgo:fast_members ;
+	dcterms:license <http://creativecommons.org/licenses/by/3.0/>;
+    misc:licenseDoc fgo:license_doc;
+	foaf:maker <http://kantenwerk.org/metadata/foaf.rdf#me> ;
+	doap:revision "$Revision$" ;
+    sioc:earlier_version <http://kantenwerk.org/ontology/fast_gadget_content/2009-02-24.rdf>;
+	dcterms:hasVersion <http://kantenwerk.org/ontology/fast_gadget_content/2009-02-24.rdf> .
 
 <http://kantenwerk.org/metadata/foaf.rdf#me> a foaf:Person ;
 foaf:name "Knud Möller"@en ;
@@ -55,6 +62,26 @@ fgo:Ismael a foaf:Person ;
 foaf:name "Ismael Rivera"@en ;
 foaf:homepage <http://www.deri.ie/about/team/member/ismael_rivera/> ;
 rdfs:seeAlso <http://www.deri.ie/fileadmin/scripts/foaf.php?id=356> .
+
+fgo:author_list a owl:Thing;
+	rdf:_1 <http://kantenwerk.org/metadata/foaf.rdf#me> .
+
+fgo:license_doc
+    rdfs:label "License Statement";
+    rdfs:comment """
+			<!-- Creative Commons License -->
+			<p class=\"copyright\">
+				Copyright &copy; 2007-2010 FAST Project Consortium (FP7-ICT-2007-1-216048);.<br/>
+				<br/>
+				<a href=\"http://creativecommons.org/licenses/by/3.0/\"><img alt=\"Creative Commons License\" style=\"border: 0; float: right; padding: 10px;\" src=\"somerights.gif\" /></a>
+				This work is licensed under a <a href=\"http://creativecommons.org/licenses/by/3.0/\">Creative Commons Attribution License</a>. 
+				This copyright applies to the <em>FAST Gadget Ontology (FGO)</em> and accompanying documentation in RDF.
+				Regarding underlying technology, FGO uses W3C's <a href=\"http://www.w3.org/RDF/\">RDF</a> technology, an
+				open Web standard that can be freely used by anyone.
+			</p>
+
+		""";
+    a owl:Thing .
 
 # Classes
 
@@ -109,7 +136,7 @@ rdfs:comment "Form elements are UI elements in a particular screen, such as butt
 fgo:Condition a owl:Class ;
 rdfs:subClassOf fgo:BuildingBlock ;
 rdfs:label "Condition"@en ;
-rdfs:comment """The pre- or post-condition of a certain kinds of building block. If the building block is a screen flow, each target platform will use these conditions in its own way, or may also ignore them. E.g., in EzWeb pre- and post-conditions correspond to the concepts of slot and event.
+rdfs:comment """The pre- or post-condition of a building block. If the building block is a screen flow, each target platform will use these conditions in its own way, or may also ignore them. E.g., in EzWeb pre- and post-conditions correspond to the concepts of slot and event.
 A condition is made up of individual facts, where each fact is represented internally as an RDF triple, usually involving a variable of blank node."""@en .
 
 # (NO_DELIV) fgo:Fact a owl:Class ;
