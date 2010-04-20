@@ -1,0 +1,641 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html>
+<head>
+<title>The FAST Gagdet Ontology v0.2 (M24)</title>
+<link href='xmlns-style.css' rel='stylesheet' type='text/css' />
+<link href='ont_style.css' rel='stylesheet' type='text/css'/>
+</head>
+<body>
+<img style='border: 0; float: right; padding: 10px;' src='http://fast.morfeo-project.eu/workshops/ugs2009/images/UGS_logo.png' />
+<h1>The FAST Gagdet Ontology v0.2 (M24)</h1>
+<dl>
+<dt>This version:</dt>
+<dd><a href='http://kantenwerk.org/ontology/fast_gadget_content/fgo2009-11-16.html'>http://kantenwerk.org/ontology/fast_gadget_content/fgo2009-11-16.html</a> (<a href='http://kantenwerk.org/ontology/fast_gadget_content/fgo2009-11-16.rdf'>RDF</a>)</dd>
+<dt>Latest version:</dt>
+<dd><a href='http://purl.oclc.org/fast/ontology/gadget'>http://purl.oclc.org/fast/ontology/gadget</a></dd>
+<dt>Previous version:</dt>
+<dd><a href='http://kantenwerk.org/ontology/fast_gadget_content/2009-02-24.html'>http://kantenwerk.org/ontology/fast_gadget_content/2009-02-24.html</a> (<a href='http://kantenwerk.org/ontology/fast_gadget_content/2009-02-24.rdf'>RDF</a>)</dd>
+<dt>Revision:</dt>
+<dd>$Revision: 790 $</dd>
+<dt>First created:</dt>
+<dd>2009-02-09</dd>
+<dt>Last change:</dt>
+<dd>$Date: 2010-04-19 16:09:47 +0100 (Mon, 19 Apr 2010) $</dd>
+<dt>Main authors:</dt>
+<dd><a href='http://kantenwerk.org'>Knud Möller</a> (<a href='http://www.deri.ie'>DERI</a>)</dd>
+<dt>Contributors:</dt>
+<dd><a href='http://www.deri.ie/about/team/member/ismael_rivera/'>Ismael Rivera</a> (<a href='http://www.deri.ie'>DERI</a>), Members of the FAST project</dd>
+</dl>
+
+			<!-- Creative Commons License -->
+			<p class="copyright">
+				Copyright &copy; 2007-2010 FAST Project Consortium (FP7-ICT-2007-1-216048);.<br/>
+				<br/>
+				<a href="http://creativecommons.org/licenses/by/3.0/"><img alt="Creative Commons License" style="border: 0; float: right; padding: 10px;" src="somerights.gif" /></a>
+				This work is licensed under a <a href="http://creativecommons.org/licenses/by/3.0/">Creative Commons Attribution License</a>. 
+				This copyright applies to the <em>FAST Gadget Ontology (FGO)</em> and accompanying documentation in RDF.
+				Regarding underlying technology, FGO uses W3C's <a href="http://www.w3.org/RDF/">RDF</a> technology, an
+				open Web standard that can be freely used by anyone.
+			</p>
+
+		
+<hr/>
+<p>This ontology defines terms for modelling semantic, interoperable gadgets or widgets. It has been developed as part of the EU project 'FAST' (FAST AND ADVANCED STORYBOARD TOOLS), FP7-ICT-2007-1-216048.</p>
+<h2>Overview</h2>
+<div style="padding: 5px; border: solid; background-color: #ddd;">
+<p>Classes: |
+<a href='#Action'>Action</a> |
+<a href='#BackendService'>BackendService</a> |
+<a href='#BuildingBlock'>BuildingBlock</a> |
+<a href='#Condition'>Condition</a> |
+<a href='#Form'>Form</a> |
+<a href='#FormElement'>FormElement</a> |
+<a href='#Library'>Library</a> |
+<a href='#Operator'>Operator</a> |
+<a href='#Pipe'>Pipe</a> |
+<a href='#Resource'>Resource</a> |
+<a href='#Screen'>Screen</a> |
+<a href='#ScreenComponent'>ScreenComponent</a> |
+<a href='#ScreenFlow'>ScreenFlow</a> |
+<a href='#Trigger'>Trigger</a> |
+<a href='#WithCode'>WithCode</a> |
+<a href='#WithDefinition'>WithDefinition</a> |
+<a href='#WithPostConditions'>WithPostConditions</a> |
+<a href='#WithPreConditions'>WithPreConditions</a> |
+</p>
+<p>Properties: |
+<a href='#contains'>contains</a> |
+<a href='#from'>from</a> |
+<a href='#hasAction'>hasAction</a> |
+<a href='#hasCode'>hasCode</a> |
+<a href='#hasCopy'>hasCopy</a> |
+<a href='#hasForm'>hasForm</a> |
+<a href='#hasFormElement'>hasFormElement</a> |
+<a href='#hasIcon'>hasIcon</a> |
+<a href='#hasLanguage'>hasLanguage</a> |
+<a href='#hasLibrary'>hasLibrary</a> |
+<a href='#hasOperator'>hasOperator</a> |
+<a href='#hasPattern'>hasPattern</a> |
+<a href='#hasPatternString'>hasPatternString</a> |
+<a href='#hasPostCondition'>hasPostCondition</a> |
+<a href='#hasPreCondition'>hasPreCondition</a> |
+<a href='#hasResource'>hasResource</a> |
+<a href='#hasScreenshot'>hasScreenshot</a> |
+<a href='#hasTemplate'>hasTemplate</a> |
+<a href='#hasTrigger'>hasTrigger</a> |
+<a href='#isPositive'>isPositive</a> |
+<a href='#to'>to</a> |
+<a href='#uses'>uses</a> |
+</p>
+</div>
+<p>Terms grouped in broad categories</p>
+<table>
+<tr>
+<td valign='top'>
+<div class='rdf-proplist'>
+<h3>other</h3>
+<ul>
+<li><a href='#Action'>Action</a></li>
+<li><a href='#BackendService'>BackendService</a></li>
+<li><a href='#BuildingBlock'>BuildingBlock</a></li>
+<li><a href='#Condition'>Condition</a></li>
+<li><a href='#Form'>Form</a></li>
+<li><a href='#FormElement'>FormElement</a></li>
+<li><a href='#Library'>Library</a></li>
+<li><a href='#Operator'>Operator</a></li>
+<li><a href='#Pipe'>Pipe</a></li>
+<li><a href='#Resource'>Resource</a></li>
+<li><a href='#Screen'>Screen</a></li>
+<li><a href='#ScreenComponent'>ScreenComponent</a></li>
+<li><a href='#ScreenFlow'>ScreenFlow</a></li>
+<li><a href='#Trigger'>Trigger</a></li>
+<li><a href='#WithCode'>WithCode</a></li>
+<li><a href='#WithDefinition'>WithDefinition</a></li>
+<li><a href='#WithPostConditions'>WithPostConditions</a></li>
+<li><a href='#WithPreConditions'>WithPreConditions</a></li>
+</ul>
+</div>
+</td>
+</tr>
+</table>
+<div style='clear: left;'></div>
+<h2>Classes</h2>
+<div class='specterm'>
+<h3><a name='Action'/>Class: <code>Action</code></a></h3>
+<table>
+<tr><th>Label</th><td>Action</td></tr>
+<tr><th>sub-class-of</th><td><a href='#BuildingBlock'><code>fgo:BuildingBlock</code></a></td></tr>
+<tr><th>in-range-of</th><td><a href='#hasAction'><code>fgo:hasAction</code></a></td></tr>
+<tr><th>status</th><td>testing</td></tr>
+</table>
+<p>An action represents a specific routine which will be performed when a certain
+condition is fulfilled within a certain screen component. Examples are methods of a Web service (e.g., getItem) or functionality to update or change the contents of a form.</p>
+<p>Look for usage of this class on <a href='http://sindice.com/search?q=*%20%3Chttp://www.w3.org/1999/02/22-rdf-syntax-ns%23type%3E%20%3Chttp://purl.oclc.org/fast/ontology/gadget%23Action%3E&qt=advanced' target='_blank'>Sindice</a>.</p>
+</div>
+<br/>
+<div class='specterm'>
+<h3><a name='BackendService'/>Class: <code>BackendService</code></a></h3>
+<table>
+<tr><th>Label</th><td>Backend Service</td></tr>
+<tr><th>sub-class-of</th><td><a href='#BuildingBlock'><code>fgo:BuildingBlock</code></a></td></tr>
+<tr><th>status</th><td>testing</td></tr>
+</table>
+<p>A Web service which provides data and/or functionality to a screen. The actual backend service is external to FAST, and only available through a wrapper (the service Resource).</p>
+<p>Look for usage of this class on <a href='http://sindice.com/search?q=*%20%3Chttp://www.w3.org/1999/02/22-rdf-syntax-ns%23type%3E%20%3Chttp://purl.oclc.org/fast/ontology/gadget%23BackendService%3E&qt=advanced' target='_blank'>Sindice</a>.</p>
+</div>
+<br/>
+<div class='specterm'>
+<h3><a name='BuildingBlock'/>Class: <code>BuildingBlock</code></a></h3>
+<table>
+<tr><th>Label</th><td>BuildingBlock</td></tr>
+<tr><th>super-class-of</th><td><a href='#Action'><code>fgo:Action</code></a>, <a href='#BackendService'><code>fgo:BackendService</code></a>, <a href='#Condition'><code>fgo:Condition</code></a>, <a href='#FormElement'><code>fgo:FormElement</code></a>, <a href='#Library'><code>fgo:Library</code></a>, <a href='#Pipe'><code>fgo:Pipe</code></a>, <a href='#Screen'><code>fgo:Screen</code></a>, <a href='#ScreenComponent'><code>fgo:ScreenComponent</code></a>, <a href='#ScreenFlow'><code>fgo:ScreenFlow</code></a>, <a href='#Trigger'><code>fgo:Trigger</code></a></td></tr>
+<tr><th>in-domain-of</th><td><a href='#contains'><code>fgo:contains</code></a>, <a href='#hasCopy'><code>fgo:hasCopy</code></a>, <a href='#hasIcon'><code>fgo:hasIcon</code></a>, <a href='#hasScreenshot'><code>fgo:hasScreenshot</code></a>, <a href='#hasTemplate'><code>fgo:hasTemplate</code></a>, <a href='#uses'><code>fgo:uses</code></a></td></tr>
+<tr><th>in-range-of</th><td><a href='#contains'><code>fgo:contains</code></a>, <a href='#hasCopy'><code>fgo:hasCopy</code></a>, <a href='#hasTemplate'><code>fgo:hasTemplate</code></a></td></tr>
+<tr><th>status</th><td>testing</td></tr>
+</table>
+<p>Anything that is part of a gadget. Tentatively anything that can be 'touched' and moved around in the FAST IDE, from the most complex units such as screen flows, down to atomic form elements like a button or a label in a form.</p>
+<p>Look for usage of this class on <a href='http://sindice.com/search?q=*%20%3Chttp://www.w3.org/1999/02/22-rdf-syntax-ns%23type%3E%20%3Chttp://purl.oclc.org/fast/ontology/gadget%23BuildingBlock%3E&qt=advanced' target='_blank'>Sindice</a>.</p>
+</div>
+<br/>
+<div class='specterm'>
+<h3><a name='Condition'/>Class: <code>Condition</code></a></h3>
+<table>
+<tr><th>Label</th><td>Condition</td></tr>
+<tr><th>sub-class-of</th><td><a href='#BuildingBlock'><code>fgo:BuildingBlock</code></a></td></tr>
+<tr><th>in-domain-of</th><td><a href='#hasPattern'><code>fgo:hasPattern</code></a>, <a href='#hasPatternString'><code>fgo:hasPatternString</code></a>, <a href='#isPositive'><code>fgo:isPositive</code></a></td></tr>
+<tr><th>in-range-of</th><td><a href='#from'><code>fgo:from</code></a>, <a href='#hasPostCondition'><code>fgo:hasPostCondition</code></a>, <a href='#hasPreCondition'><code>fgo:hasPreCondition</code></a>, <a href='#to'><code>fgo:to</code></a></td></tr>
+<tr><th>status</th><td>testing</td></tr>
+</table>
+<p>The pre- or post-condition of a building block. If the building block is a screen flow, each target platform will use these conditions in its own way, or may also ignore them. E.g., in EzWeb pre- and post-conditions correspond to the concepts of slot and event.
+A condition is made up of individual facts, where each fact is represented internally as an RDF triple, usually involving a variable of blank node.</p>
+<p>Look for usage of this class on <a href='http://sindice.com/search?q=*%20%3Chttp://www.w3.org/1999/02/22-rdf-syntax-ns%23type%3E%20%3Chttp://purl.oclc.org/fast/ontology/gadget%23Condition%3E&qt=advanced' target='_blank'>Sindice</a>.</p>
+</div>
+<br/>
+<div class='specterm'>
+<h3><a name='Form'/>Class: <code>Form</code></a></h3>
+<table>
+<tr><th>Label</th><td>Form</td></tr>
+<tr><th>sub-class-of</th><td><a href='#ScreenComponent'><code>fgo:ScreenComponent</code></a></td></tr>
+<tr><th>in-domain-of</th><td><a href='#hasFormElement'><code>fgo:hasFormElement</code></a></td></tr>
+<tr><th>in-range-of</th><td><a href='#hasForm'><code>fgo:hasForm</code></a></td></tr>
+<tr><th>status</th><td>testing</td></tr>
+</table>
+<p>A form is the visual aspect of a screen: its user interface. Each form is made up of individual form elements.</p>
+<p>Look for usage of this class on <a href='http://sindice.com/search?q=*%20%3Chttp://www.w3.org/1999/02/22-rdf-syntax-ns%23type%3E%20%3Chttp://purl.oclc.org/fast/ontology/gadget%23Form%3E&qt=advanced' target='_blank'>Sindice</a>.</p>
+</div>
+<br/>
+<div class='specterm'>
+<h3><a name='FormElement'/>Class: <code>FormElement</code></a></h3>
+<table>
+<tr><th>Label</th><td>Form Element</td></tr>
+<tr><th>sub-class-of</th><td><a href='#BuildingBlock'><code>fgo:BuildingBlock</code></a></td></tr>
+<tr><th>in-range-of</th><td><a href='#hasFormElement'><code>fgo:hasFormElement</code></a></td></tr>
+<tr><th>status</th><td>testing</td></tr>
+</table>
+<p>Form elements are UI elements in a particular screen, such as buttons, lists or labels.</p>
+<p>Look for usage of this class on <a href='http://sindice.com/search?q=*%20%3Chttp://www.w3.org/1999/02/22-rdf-syntax-ns%23type%3E%20%3Chttp://purl.oclc.org/fast/ontology/gadget%23FormElement%3E&qt=advanced' target='_blank'>Sindice</a>.</p>
+</div>
+<br/>
+<div class='specterm'>
+<h3><a name='Library'/>Class: <code>Library</code></a></h3>
+<table>
+<tr><th>Label</th><td>Library</td></tr>
+<tr><th>sub-class-of</th><td><a href='#BuildingBlock'><code>fgo:BuildingBlock</code></a></td></tr>
+<tr><th>in-domain-of</th><td><a href='#hasLanguage'><code>fgo:hasLanguage</code></a></td></tr>
+<tr><th>in-range-of</th><td><a href='#hasLibrary'><code>fgo:hasLibrary</code></a></td></tr>
+<tr><th>status</th><td>testing</td></tr>
+</table>
+<p>Libraries are references to external code libraries required for the execution of a particular building block at runtime.</p>
+<p>Look for usage of this class on <a href='http://sindice.com/search?q=*%20%3Chttp://www.w3.org/1999/02/22-rdf-syntax-ns%23type%3E%20%3Chttp://purl.oclc.org/fast/ontology/gadget%23Library%3E&qt=advanced' target='_blank'>Sindice</a>.</p>
+</div>
+<br/>
+<div class='specterm'>
+<h3><a name='Operator'/>Class: <code>Operator</code></a></h3>
+<table>
+<tr><th>Label</th><td>Operator</td></tr>
+<tr><th>sub-class-of</th><td><a href='#ScreenComponent'><code>fgo:ScreenComponent</code></a></td></tr>
+<tr><th>in-range-of</th><td><a href='#hasOperator'><code>fgo:hasOperator</code></a></td></tr>
+<tr><th>status</th><td>testing</td></tr>
+</table>
+<p>Operators are intended to transform and/or modify data within a screen, usually for preparing data coming from service resources for the use in the screen's interface. Operators cover different kinds of data manipulations, from simple aggregation to mediating data with incompatible schemas.</p>
+<p>Look for usage of this class on <a href='http://sindice.com/search?q=*%20%3Chttp://www.w3.org/1999/02/22-rdf-syntax-ns%23type%3E%20%3Chttp://purl.oclc.org/fast/ontology/gadget%23Operator%3E&qt=advanced' target='_blank'>Sindice</a>.</p>
+</div>
+<br/>
+<div class='specterm'>
+<h3><a name='Pipe'/>Class: <code>Pipe</code></a></h3>
+<table>
+<tr><th>Label</th><td>pipe or connector</td></tr>
+<tr><th>sub-class-of</th><td><a href='#BuildingBlock'><code>fgo:BuildingBlock</code></a></td></tr>
+<tr><th>in-domain-of</th><td><a href='#from'><code>fgo:from</code></a>, <a href='#to'><code>fgo:to</code></a></td></tr>
+<tr><th>status</th><td>testing</td></tr>
+</table>
+<p>Pipes are used to explicitly define the flow of data within a screen, e.g., from service resource to operator to a specific form element.</p>
+<p>Look for usage of this class on <a href='http://sindice.com/search?q=*%20%3Chttp://www.w3.org/1999/02/22-rdf-syntax-ns%23type%3E%20%3Chttp://purl.oclc.org/fast/ontology/gadget%23Pipe%3E&qt=advanced' target='_blank'>Sindice</a>.</p>
+</div>
+<br/>
+<div class='specterm'>
+<h3><a name='Resource'/>Class: <code>Resource</code></a></h3>
+<table>
+<tr><th>Label</th><td>Resource</td></tr>
+<tr><th>sub-class-of</th><td><a href='#ScreenComponent'><code>fgo:ScreenComponent</code></a></td></tr>
+<tr><th>in-range-of</th><td><a href='#hasResource'><code>fgo:hasResource</code></a></td></tr>
+<tr><th>status</th><td>testing</td></tr>
+</table>
+<p>A service resource in FAST is a wrapper around a Web service (the backend service), which makes the service available to the platform, e.g., by mapping its definition to FAST facts and actions.</p>
+<p>Look for usage of this class on <a href='http://sindice.com/search?q=*%20%3Chttp://www.w3.org/1999/02/22-rdf-syntax-ns%23type%3E%20%3Chttp://purl.oclc.org/fast/ontology/gadget%23Resource%3E&qt=advanced' target='_blank'>Sindice</a>.</p>
+</div>
+<br/>
+<div class='specterm'>
+<h3><a name='Screen'/>Class: <code>Screen</code></a></h3>
+<table>
+<tr><th>Label</th><td>Screen</td></tr>
+<tr><th>sub-class-of</th><td><a href='#BuildingBlock'><code>fgo:BuildingBlock</code></a></td></tr>
+<tr><th>in-domain-of</th><td><a href='#hasForm'><code>fgo:hasForm</code></a>, <a href='#hasOperator'><code>fgo:hasOperator</code></a>, <a href='#hasResource'><code>fgo:hasResource</code></a></td></tr>
+<tr><th>status</th><td>testing</td></tr>
+</table>
+<p>An individual screen; the basic unit of user interaction in FAST. A screen is the interface through which a user gets access to data and functionality of a backend service.</p>
+<p>Look for usage of this class on <a href='http://sindice.com/search?q=*%20%3Chttp://www.w3.org/1999/02/22-rdf-syntax-ns%23type%3E%20%3Chttp://purl.oclc.org/fast/ontology/gadget%23Screen%3E&qt=advanced' target='_blank'>Sindice</a>.</p>
+</div>
+<br/>
+<div class='specterm'>
+<h3><a name='ScreenComponent'/>Class: <code>ScreenComponent</code></a></h3>
+<table>
+<tr><th>Label</th><td>Screen Component</td></tr>
+<tr><th>super-class-of</th><td><a href='#Form'><code>fgo:Form</code></a>, <a href='#Operator'><code>fgo:Operator</code></a>, <a href='#Resource'><code>fgo:Resource</code></a></td></tr>
+<tr><th>sub-class-of</th><td><a href='#BuildingBlock'><code>fgo:BuildingBlock</code></a></td></tr>
+<tr><th>in-domain-of</th><td><a href='#hasAction'><code>fgo:hasAction</code></a>, <a href='#hasTrigger'><code>fgo:hasTrigger</code></a></td></tr>
+<tr><th>status</th><td>testing</td></tr>
+</table>
+<p>Screens are made up of screen components, which fundamentally include service resources, operators and forms.</p>
+<p>Look for usage of this class on <a href='http://sindice.com/search?q=*%20%3Chttp://www.w3.org/1999/02/22-rdf-syntax-ns%23type%3E%20%3Chttp://purl.oclc.org/fast/ontology/gadget%23ScreenComponent%3E&qt=advanced' target='_blank'>Sindice</a>.</p>
+</div>
+<br/>
+<div class='specterm'>
+<h3><a name='ScreenFlow'/>Class: <code>ScreenFlow</code></a></h3>
+<table>
+<tr><th>Label</th><td>Screen Flow</td></tr>
+<tr><th>sub-class-of</th><td><a href='#BuildingBlock'><code>fgo:BuildingBlock</code></a></td></tr>
+<tr><th>status</th><td>testing</td></tr>
+</table>
+<p>A set of screens from which a gadget for a given target platform can be generated.</p>
+<p>Look for usage of this class on <a href='http://sindice.com/search?q=*%20%3Chttp://www.w3.org/1999/02/22-rdf-syntax-ns%23type%3E%20%3Chttp://purl.oclc.org/fast/ontology/gadget%23ScreenFlow%3E&qt=advanced' target='_blank'>Sindice</a>.</p>
+</div>
+<br/>
+<div class='specterm'>
+<h3><a name='Trigger'/>Class: <code>Trigger</code></a></h3>
+<table>
+<tr><th>Label</th><td>Trigger</td></tr>
+<tr><th>sub-class-of</th><td><a href='#BuildingBlock'><code>fgo:BuildingBlock</code></a></td></tr>
+<tr><th>in-range-of</th><td><a href='#hasTrigger'><code>fgo:hasTrigger</code></a></td></tr>
+<tr><th>status</th><td>testing</td></tr>
+</table>
+<p>Triggers are the flip-side of actions. Certain events in a building block can cause a trigger to be fired. Other building blocks within the same screen, which are listening to it, will react with an action.</p>
+<p>Look for usage of this class on <a href='http://sindice.com/search?q=*%20%3Chttp://www.w3.org/1999/02/22-rdf-syntax-ns%23type%3E%20%3Chttp://purl.oclc.org/fast/ontology/gadget%23Trigger%3E&qt=advanced' target='_blank'>Sindice</a>.</p>
+</div>
+<br/>
+<div class='specterm'>
+<h3><a name='WithCode'/>Class: <code>WithCode</code></a></h3>
+<table>
+<tr><th>Label</th><td>With Code</td></tr>
+<tr><th>union-of</th><td><a href='#Form'><code>fgo:Form</code></a>, <a href='#Operator'><code>fgo:Operator</code></a>, <a href='#Resource'><code>fgo:Resource</code></a>, <a href='#Screen'><code>fgo:Screen</code></a></td></tr>
+<tr><th>in-domain-of</th><td><a href='#hasCode'><code>fgo:hasCode</code></a>, <a href='#hasLibrary'><code>fgo:hasLibrary</code></a></td></tr>
+<tr><th>status</th><td>testing</td></tr>
+</table>
+<p>Any kind of building block that can be defined as a whole through code.</p>
+<p>Look for usage of this class on <a href='http://sindice.com/search?q=*%20%3Chttp://www.w3.org/1999/02/22-rdf-syntax-ns%23type%3E%20%3Chttp://purl.oclc.org/fast/ontology/gadget%23WithCode%3E&qt=advanced' target='_blank'>Sindice</a>.</p>
+</div>
+<br/>
+<div class='specterm'>
+<h3><a name='WithDefinition'/>Class: <code>WithDefinition</code></a></h3>
+<table>
+<tr><th>Label</th><td>With Definition</td></tr>
+<tr><th>union-of</th><td><a href='#Form'><code>fgo:Form</code></a>, <a href='#Screen'><code>fgo:Screen</code></a></td></tr>
+<tr><th>status</th><td>testing</td></tr>
+</table>
+<p>Any kind of building block that can be defined declaratively in the GVS.</p>
+<p>Look for usage of this class on <a href='http://sindice.com/search?q=*%20%3Chttp://www.w3.org/1999/02/22-rdf-syntax-ns%23type%3E%20%3Chttp://purl.oclc.org/fast/ontology/gadget%23WithDefinition%3E&qt=advanced' target='_blank'>Sindice</a>.</p>
+</div>
+<br/>
+<div class='specterm'>
+<h3><a name='WithPostConditions'/>Class: <code>WithPostConditions</code></a></h3>
+<table>
+<tr><th>Label</th><td>With Post-condition</td></tr>
+<tr><th>union-of</th><td><a href='#Screen'><code>fgo:Screen</code></a>, <a href='#ScreenComponent'><code>fgo:ScreenComponent</code></a>, <a href='#ScreenFlow'><code>fgo:ScreenFlow</code></a></td></tr>
+<tr><th>in-domain-of</th><td><a href='#hasPostCondition'><code>fgo:hasPostCondition</code></a></td></tr>
+<tr><th>status</th><td>testing</td></tr>
+</table>
+<p>Those kinds of building blocks which can have post-conditions.</p>
+<p>Look for usage of this class on <a href='http://sindice.com/search?q=*%20%3Chttp://www.w3.org/1999/02/22-rdf-syntax-ns%23type%3E%20%3Chttp://purl.oclc.org/fast/ontology/gadget%23WithPostConditions%3E&qt=advanced' target='_blank'>Sindice</a>.</p>
+</div>
+<br/>
+<div class='specterm'>
+<h3><a name='WithPreConditions'/>Class: <code>WithPreConditions</code></a></h3>
+<table>
+<tr><th>Label</th><td>With Pre-condition</td></tr>
+<tr><th>union-of</th><td><a href='#Action'><code>fgo:Action</code></a>, <a href='#Screen'><code>fgo:Screen</code></a>, <a href='#ScreenFlow'><code>fgo:ScreenFlow</code></a></td></tr>
+<tr><th>in-domain-of</th><td><a href='#hasPreCondition'><code>fgo:hasPreCondition</code></a></td></tr>
+<tr><th>status</th><td>testing</td></tr>
+</table>
+<p>Those kinds of building blocks which can have pre-conditions.</p>
+<p>Look for usage of this class on <a href='http://sindice.com/search?q=*%20%3Chttp://www.w3.org/1999/02/22-rdf-syntax-ns%23type%3E%20%3Chttp://purl.oclc.org/fast/ontology/gadget%23WithPreConditions%3E&qt=advanced' target='_blank'>Sindice</a>.</p>
+</div>
+<br/>
+<h2>Properties</h2>
+<div class='specterm'>
+<h3><a name='contains'/>Property: <code>contains</code></a></h3>
+<table>
+<tr><th>Label</th><td>contains</td></tr>
+<tr><th>Type</th><td><code>owl:ObjectProperty</code></td></tr>
+<tr><th>super_property_of</th><td><a href='#hasForm'><code>fgo:hasForm</code></a>, <a href='#hasFormElement'><code>fgo:hasFormElement</code></a>, <a href='#hasOperator'><code>fgo:hasOperator</code></a>, <a href='#hasResource'><code>fgo:hasResource</code></a></td></tr>
+<tr><th>domain</th><td><a href='#BuildingBlock'><code>fgo:BuildingBlock</code></a></td></tr>
+<tr><th>range</th><td><a href='#BuildingBlock'><code>fgo:BuildingBlock</code></a></td></tr>
+<tr><th>status</th><td>testing</td></tr>
+</table>
+<p>Many kinds of components in FAST can contain other components: screenflows contain screens, screens contain forms, operators and resources, forms contain form elements, etc.</p>
+<p>Look for usage of this property on <a href='http://sindice.com/search?q=*%20%3Chttp://purl.oclc.org/fast/ontology/gadget%23contains%3E%20*&qt=advanced' target='_blank'>Sindice</a>.</p>
+</div>
+<br/>
+<div class='specterm'>
+<h3><a name='from'/>Property: <code>from</code></a></h3>
+<table>
+<tr><th>Label</th><td>from</td></tr>
+<tr><th>Type</th><td><code>owl:ObjectProperty</code></td></tr>
+<tr><th>domain</th><td><a href='#Pipe'><code>fgo:Pipe</code></a></td></tr>
+<tr><th>range</th><td><a href='#Condition'><code>fgo:Condition</code></a></td></tr>
+<tr><th>status</th><td>testing</td></tr>
+</table>
+<p>This property defines the starting point of a pipe within a screen.</p>
+<p>Look for usage of this property on <a href='http://sindice.com/search?q=*%20%3Chttp://purl.oclc.org/fast/ontology/gadget%23from%3E%20*&qt=advanced' target='_blank'>Sindice</a>.</p>
+</div>
+<br/>
+<div class='specterm'>
+<h3><a name='hasAction'/>Property: <code>hasAction</code></a></h3>
+<table>
+<tr><th>Label</th><td>has action</td></tr>
+<tr><th>Type</th><td><code>owl:ObjectProperty</code></td></tr>
+<tr><th>domain</th><td><a href='#ScreenComponent'><code>fgo:ScreenComponent</code></a></td></tr>
+<tr><th>range</th><td><a href='#Action'><code>fgo:Action</code></a></td></tr>
+<tr><th>status</th><td>testing</td></tr>
+</table>
+<p>This property indicates which actions are associated and can be perfomed within a screen component.</p>
+<p>Look for usage of this property on <a href='http://sindice.com/search?q=*%20%3Chttp://purl.oclc.org/fast/ontology/gadget%23hasAction%3E%20*&qt=advanced' target='_blank'>Sindice</a>.</p>
+</div>
+<br/>
+<div class='specterm'>
+<h3><a name='hasCode'/>Property: <code>hasCode</code></a></h3>
+<table>
+<tr><th>Label</th><td>has code</td></tr>
+<tr><th>Type</th><td><code>owl:ObjectProperty</code></td></tr>
+<tr><th>domain</th><td><a href='#WithCode'><code>fgo:WithCode</code></a></td></tr>
+<tr><th>range</th><td><code>foaf:Document</code></td></tr>
+<tr><th>status</th><td>testing</td></tr>
+</table>
+<p>This property links to the executable code of a particular building block (currently screens or screen components).</p>
+<p>Look for usage of this property on <a href='http://sindice.com/search?q=*%20%3Chttp://purl.oclc.org/fast/ontology/gadget%23hasCode%3E%20*&qt=advanced' target='_blank'>Sindice</a>.</p>
+</div>
+<br/>
+<div class='specterm'>
+<h3><a name='hasCopy'/>Property: <code>hasCopy</code></a></h3>
+<table>
+<tr><th>Label</th><td>has copy</td></tr>
+<tr><th>Type</th><td><code>owl:ObjectProperty</code></td></tr>
+<tr><th>domain</th><td><a href='#BuildingBlock'><code>fgo:BuildingBlock</code></a></td></tr>
+<tr><th>range</th><td><a href='#BuildingBlock'><code>fgo:BuildingBlock</code></a></td></tr>
+<tr><th>inverse_of</th><td><a href='#hasTemplate'><code>fgo:hasTemplate</code></a></td></tr>
+<tr><th>status</th><td>testing</td></tr>
+</table>
+<p>Links the template of a building block as used in the palette or catalogue of available building blocks to its copy, as used in a particular screen flow.</p>
+<p>Look for usage of this property on <a href='http://sindice.com/search?q=*%20%3Chttp://purl.oclc.org/fast/ontology/gadget%23hasCopy%3E%20*&qt=advanced' target='_blank'>Sindice</a>.</p>
+</div>
+<br/>
+<div class='specterm'>
+<h3><a name='hasForm'/>Property: <code>hasForm</code></a></h3>
+<table>
+<tr><th>Label</th><td>has form</td></tr>
+<tr><th>Type</th><td><code>owl:ObjectProperty</code></td></tr>
+<tr><th>sub_property_of</th><td><a href='#contains'><code>fgo:contains</code></a></td></tr>
+<tr><th>domain</th><td><a href='#Screen'><code>fgo:Screen</code></a></td></tr>
+<tr><th>range</th><td><a href='#Form'><code>fgo:Form</code></a></td></tr>
+<tr><th>status</th><td>testing</td></tr>
+</table>
+<p>If a screen is defined declaratively, this property links it to its form (i.e., its visual user interface).</p>
+<p>Look for usage of this property on <a href='http://sindice.com/search?q=*%20%3Chttp://purl.oclc.org/fast/ontology/gadget%23hasForm%3E%20*&qt=advanced' target='_blank'>Sindice</a>.</p>
+</div>
+<br/>
+<div class='specterm'>
+<h3><a name='hasFormElement'/>Property: <code>hasFormElement</code></a></h3>
+<table>
+<tr><th>Label</th><td>has form element</td></tr>
+<tr><th>Type</th><td><code>owl:ObjectProperty</code></td></tr>
+<tr><th>sub_property_of</th><td><a href='#contains'><code>fgo:contains</code></a></td></tr>
+<tr><th>domain</th><td><a href='#Form'><code>fgo:Form</code></a></td></tr>
+<tr><th>range</th><td><a href='#FormElement'><code>fgo:FormElement</code></a></td></tr>
+<tr><th>status</th><td>testing</td></tr>
+</table>
+<p>If a form is defined declaratively, its elements are linked to it with this property.</p>
+<p>Look for usage of this property on <a href='http://sindice.com/search?q=*%20%3Chttp://purl.oclc.org/fast/ontology/gadget%23hasFormElement%3E%20*&qt=advanced' target='_blank'>Sindice</a>.</p>
+</div>
+<br/>
+<div class='specterm'>
+<h3><a name='hasIcon'/>Property: <code>hasIcon</code></a></h3>
+<table>
+<tr><th>Label</th><td>has icon</td></tr>
+<tr><th>Type</th><td><code>owl:ObjectProperty</code></td></tr>
+<tr><th>sub_property_of</th><td><code>foaf:depiction</code></td></tr>
+<tr><th>domain</th><td><a href='#BuildingBlock'><code>fgo:BuildingBlock</code></a></td></tr>
+<tr><th>range</th><td><code>foaf:Image</code></td></tr>
+<tr><th>status</th><td>testing</td></tr>
+</table>
+<p>A small graphical representation of any FAST component or sub-component.</p>
+<p>Look for usage of this property on <a href='http://sindice.com/search?q=*%20%3Chttp://purl.oclc.org/fast/ontology/gadget%23hasIcon%3E%20*&qt=advanced' target='_blank'>Sindice</a>.</p>
+</div>
+<br/>
+<div class='specterm'>
+<h3><a name='hasLanguage'/>Property: <code>hasLanguage</code></a></h3>
+<table>
+<tr><th>Label</th><td>has language string</td></tr>
+<tr><th>Type</th><td><code>owl:DatatypeProperty</code></td></tr>
+<tr><th>domain</th><td><a href='#Library'><code>fgo:Library</code></a></td></tr>
+<tr><th>range</th><td><code>xsd:string</code></td></tr>
+<tr><th>status</th><td>testing</td></tr>
+</table>
+<p>This property defines the programming language a particular programming library uses.</p>
+<p>Look for usage of this property on <a href='http://sindice.com/search?q=*%20%3Chttp://purl.oclc.org/fast/ontology/gadget%23hasLanguage%3E%20*&qt=advanced' target='_blank'>Sindice</a>.</p>
+</div>
+<br/>
+<div class='specterm'>
+<h3><a name='hasLibrary'/>Property: <code>hasLibrary</code></a></h3>
+<table>
+<tr><th>Label</th><td>has library</td></tr>
+<tr><th>Type</th><td><code>owl:ObjectProperty</code></td></tr>
+<tr><th>domain</th><td><a href='#WithCode'><code>fgo:WithCode</code></a></td></tr>
+<tr><th>range</th><td><a href='#Library'><code>fgo:Library</code></a></td></tr>
+<tr><th>status</th><td>testing</td></tr>
+</table>
+<p>This property indicates which programming libraries are used by the code of a screen component.</p>
+<p>Look for usage of this property on <a href='http://sindice.com/search?q=*%20%3Chttp://purl.oclc.org/fast/ontology/gadget%23hasLibrary%3E%20*&qt=advanced' target='_blank'>Sindice</a>.</p>
+</div>
+<br/>
+<div class='specterm'>
+<h3><a name='hasOperator'/>Property: <code>hasOperator</code></a></h3>
+<table>
+<tr><th>Label</th><td>has operator</td></tr>
+<tr><th>Type</th><td><code>owl:ObjectProperty</code></td></tr>
+<tr><th>sub_property_of</th><td><a href='#contains'><code>fgo:contains</code></a></td></tr>
+<tr><th>domain</th><td><a href='#Screen'><code>fgo:Screen</code></a></td></tr>
+<tr><th>range</th><td><a href='#Operator'><code>fgo:Operator</code></a></td></tr>
+<tr><th>status</th><td>testing</td></tr>
+</table>
+<p>If a screen is defined declaratively, this property links it to an operator it might contain.</p>
+<p>Look for usage of this property on <a href='http://sindice.com/search?q=*%20%3Chttp://purl.oclc.org/fast/ontology/gadget%23hasOperator%3E%20*&qt=advanced' target='_blank'>Sindice</a>.</p>
+</div>
+<br/>
+<div class='specterm'>
+<h3><a name='hasPattern'/>Property: <code>hasPattern</code></a></h3>
+<table>
+<tr><th>Label</th><td>has pattern</td></tr>
+<tr><th>Type</th><td><code>owl:ObjectProperty</code></td></tr>
+<tr><th>domain</th><td><a href='#Condition'><code>fgo:Condition</code></a></td></tr>
+<tr><th>range</th><td><code>rdfs:Resource</code></td></tr>
+<tr><th>status</th><td>testing</td></tr>
+</table>
+<p>This property links the abstract representation of a fact (i.e., an RDF triple) in FAST to a graph resource containing the actual triple.</p>
+<p>Look for usage of this property on <a href='http://sindice.com/search?q=*%20%3Chttp://purl.oclc.org/fast/ontology/gadget%23hasPattern%3E%20*&qt=advanced' target='_blank'>Sindice</a>.</p>
+</div>
+<br/>
+<div class='specterm'>
+<h3><a name='hasPatternString'/>Property: <code>hasPatternString</code></a></h3>
+<table>
+<tr><th>Label</th><td>has pattern string</td></tr>
+<tr><th>Type</th><td><code>owl:DatatypeProperty</code></td></tr>
+<tr><th>domain</th><td><a href='#Condition'><code>fgo:Condition</code></a></td></tr>
+<tr><th>range</th><td><code>xsd:String</code></td></tr>
+<tr><th>status</th><td>testing</td></tr>
+</table>
+<p>This property links to the textual representation of a fact (i.e., an RDF triple), e.g., in N3.</p>
+<p>Look for usage of this property on <a href='http://sindice.com/search?q=*%20%3Chttp://purl.oclc.org/fast/ontology/gadget%23hasPatternString%3E%20*&qt=advanced' target='_blank'>Sindice</a>.</p>
+</div>
+<br/>
+<div class='specterm'>
+<h3><a name='hasPostCondition'/>Property: <code>hasPostCondition</code></a></h3>
+<table>
+<tr><th>Label</th><td>has post-condition</td></tr>
+<tr><th>Type</th><td><code>owl:ObjectProperty</code></td></tr>
+<tr><th>domain</th><td><a href='#WithPostConditions'><code>fgo:WithPostConditions</code></a></td></tr>
+<tr><th>range</th><td><a href='#Condition'><code>fgo:Condition</code></a></td></tr>
+<tr><th>status</th><td>testing</td></tr>
+</table>
+<p>This property links certain type of building blocks to their post-condition, i.e., the facts that are produced once the building block has been executed.</p>
+<p>Look for usage of this property on <a href='http://sindice.com/search?q=*%20%3Chttp://purl.oclc.org/fast/ontology/gadget%23hasPostCondition%3E%20*&qt=advanced' target='_blank'>Sindice</a>.</p>
+</div>
+<br/>
+<div class='specterm'>
+<h3><a name='hasPreCondition'/>Property: <code>hasPreCondition</code></a></h3>
+<table>
+<tr><th>Label</th><td>has pre-condition</td></tr>
+<tr><th>Type</th><td><code>owl:ObjectProperty</code></td></tr>
+<tr><th>domain</th><td><a href='#WithPreConditions'><code>fgo:WithPreConditions</code></a></td></tr>
+<tr><th>range</th><td><a href='#Condition'><code>fgo:Condition</code></a></td></tr>
+<tr><th>status</th><td>testing</td></tr>
+</table>
+<p>This property links certain type of building blocks to their pre-condition, i.e., the facts that need to be fulfilled in order for the building block to be reachable.</p>
+<p>Look for usage of this property on <a href='http://sindice.com/search?q=*%20%3Chttp://purl.oclc.org/fast/ontology/gadget%23hasPreCondition%3E%20*&qt=advanced' target='_blank'>Sindice</a>.</p>
+</div>
+<br/>
+<div class='specterm'>
+<h3><a name='hasResource'/>Property: <code>hasResource</code></a></h3>
+<table>
+<tr><th>Label</th><td>has resource</td></tr>
+<tr><th>Type</th><td><code>owl:ObjectProperty</code></td></tr>
+<tr><th>sub_property_of</th><td><a href='#contains'><code>fgo:contains</code></a></td></tr>
+<tr><th>domain</th><td><a href='#Screen'><code>fgo:Screen</code></a></td></tr>
+<tr><th>range</th><td><a href='#Resource'><code>fgo:Resource</code></a></td></tr>
+<tr><th>status</th><td>testing</td></tr>
+</table>
+<p>If a screen is defined declaratively, this property links it to its service resource (i.e., its backend).</p>
+<p>Look for usage of this property on <a href='http://sindice.com/search?q=*%20%3Chttp://purl.oclc.org/fast/ontology/gadget%23hasResource%3E%20*&qt=advanced' target='_blank'>Sindice</a>.</p>
+</div>
+<br/>
+<div class='specterm'>
+<h3><a name='hasScreenshot'/>Property: <code>hasScreenshot</code></a></h3>
+<table>
+<tr><th>Label</th><td>has screenshot</td></tr>
+<tr><th>Type</th><td><code>owl:ObjectProperty</code></td></tr>
+<tr><th>sub_property_of</th><td><code>foaf:depiction</code></td></tr>
+<tr><th>domain</th><td><a href='#BuildingBlock'><code>fgo:BuildingBlock</code></a></td></tr>
+<tr><th>range</th><td><code>foaf:Image</code></td></tr>
+<tr><th>status</th><td>testing</td></tr>
+</table>
+<p>An image which shows a particular screen or screenflow in action, to aid users in deciding which screen or screenflow to choose out of many.</p>
+<p>Look for usage of this property on <a href='http://sindice.com/search?q=*%20%3Chttp://purl.oclc.org/fast/ontology/gadget%23hasScreenshot%3E%20*&qt=advanced' target='_blank'>Sindice</a>.</p>
+</div>
+<br/>
+<div class='specterm'>
+<h3><a name='hasTemplate'/>Property: <code>hasTemplate</code></a></h3>
+<table>
+<tr><th>Label</th><td>has template</td></tr>
+<tr><th>Type</th><td><code>owl:ObjectProperty</code></td></tr>
+<tr><th>domain</th><td><a href='#BuildingBlock'><code>fgo:BuildingBlock</code></a></td></tr>
+<tr><th>range</th><td><a href='#BuildingBlock'><code>fgo:BuildingBlock</code></a></td></tr>
+<tr><th>inverse_of</th><td><a href='#hasCopy'><code>fgo:hasCopy</code></a></td></tr>
+<tr><th>status</th><td>testing</td></tr>
+</table>
+<p>Links the copy of a building block as used in a particular screen flow to its template, as used in the palette or catalogue of available building blocks.</p>
+<p>Look for usage of this property on <a href='http://sindice.com/search?q=*%20%3Chttp://purl.oclc.org/fast/ontology/gadget%23hasTemplate%3E%20*&qt=advanced' target='_blank'>Sindice</a>.</p>
+</div>
+<br/>
+<div class='specterm'>
+<h3><a name='hasTrigger'/>Property: <code>hasTrigger</code></a></h3>
+<table>
+<tr><th>Label</th><td>has trigger string</td></tr>
+<tr><th>Type</th><td><code>owl:DatatypeProperty</code></td></tr>
+<tr><th>domain</th><td><a href='#ScreenComponent'><code>fgo:ScreenComponent</code></a></td></tr>
+<tr><th>range</th><td><a href='#Trigger'><code>fgo:Trigger</code></a></td></tr>
+<tr><th>status</th><td>testing</td></tr>
+</table>
+<p>This property links a buildiong block to a trigger.</p>
+<p>Look for usage of this property on <a href='http://sindice.com/search?q=*%20%3Chttp://purl.oclc.org/fast/ontology/gadget%23hasTrigger%3E%20*&qt=advanced' target='_blank'>Sindice</a>.</p>
+</div>
+<br/>
+<div class='specterm'>
+<h3><a name='isPositive'/>Property: <code>isPositive</code></a></h3>
+<table>
+<tr><th>Label</th><td>is positive</td></tr>
+<tr><th>Type</th><td><code>owl:DatatypeProperty</code></td></tr>
+<tr><th>domain</th><td><a href='#Condition'><code>fgo:Condition</code></a></td></tr>
+<tr><th>range</th><td><code>xsd:boolean</code></td></tr>
+<tr><th>status</th><td>testing</td></tr>
+</table>
+<p>Facts can be set to a specific scope: design time, execution time, or both of them. This property defines how they have to be taken into account by the inference engine or reasoner.</p>
+<p>Look for usage of this property on <a href='http://sindice.com/search?q=*%20%3Chttp://purl.oclc.org/fast/ontology/gadget%23isPositive%3E%20*&qt=advanced' target='_blank'>Sindice</a>.</p>
+</div>
+<br/>
+<div class='specterm'>
+<h3><a name='to'/>Property: <code>to</code></a></h3>
+<table>
+<tr><th>Label</th><td>to</td></tr>
+<tr><th>Type</th><td><code>owl:ObjectProperty</code></td></tr>
+<tr><th>domain</th><td><a href='#Pipe'><code>fgo:Pipe</code></a></td></tr>
+<tr><th>range</th><td><a href='#Condition'><code>fgo:Condition</code></a></td></tr>
+<tr><th>status</th><td>testing</td></tr>
+</table>
+<p>This property defines the end point of a pipe within a screen.</p>
+<p>Look for usage of this property on <a href='http://sindice.com/search?q=*%20%3Chttp://purl.oclc.org/fast/ontology/gadget%23to%3E%20*&qt=advanced' target='_blank'>Sindice</a>.</p>
+</div>
+<br/>
+<div class='specterm'>
+<h3><a name='uses'/>Property: <code>uses</code></a></h3>
+<table>
+<tr><th>Label</th><td>uses</td></tr>
+<tr><th>Type</th><td><code>owl:ObjectProperty</code></td></tr>
+<tr><th>domain</th><td><a href='#BuildingBlock'><code>fgo:BuildingBlock</code></a></td></tr>
+<tr><th>range</th><td><code>rdfs:Resource</code></td></tr>
+<tr><th>status</th><td>testing</td></tr>
+</table>
+<p>This property indicates concepts used within a building block, without being a pre- or post-condition.</p>
+<p>Look for usage of this property on <a href='http://sindice.com/search?q=*%20%3Chttp://purl.oclc.org/fast/ontology/gadget%23uses%3E%20*&qt=advanced' target='_blank'>Sindice</a>.</p>
+</div>
+<br/>
+<hr/>
+</body>
+</html>
