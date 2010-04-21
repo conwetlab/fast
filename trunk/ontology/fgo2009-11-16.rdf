@@ -63,9 +63,9 @@
     <dcterms:creator rdf:resource="http://kantenwerk.org/metadata/foaf.rdf#me"/>
     <dcterms:hasVersion rdf:resource="http://kantenwerk.org/ontology/fast_gadget_content/2009-02-24.rdf"/>
     <dcterms:license rdf:resource="http://creativecommons.org/licenses/by/3.0/"/>
-    <dcterms:modified xml:lang="en">$Date: 2010-04-20 18:07:25 +0100 (Tue, 20 Apr 2010) $</dcterms:modified>
+    <dcterms:modified xml:lang="en">$Date: 2010-04-21 20:00:25 +0100 (Wed, 21 Apr 2010) $</dcterms:modified>
     <sioc:earlier_version rdf:resource="http://kantenwerk.org/ontology/fast_gadget_content/2009-02-24.rdf"/>
-    <doap:revision>$Revision: 796 $</doap:revision>
+    <doap:revision>$Revision: 799 $</doap:revision>
     <swrc_ext:authorList rdf:resource="http://purl.oclc.org/fast/ontology/gadget#author_list"/>
     <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Thing"/>
     <rdfs:comment xml:lang="en">This ontology defines terms for modelling semantic, interoperable gadgets or widgets. It has been developed as part of the EU project 'FAST' (FAST AND ADVANCED STORYBOARD TOOLS), FP7-ICT-2007-1-216048.</rdfs:comment>
@@ -470,7 +470,7 @@ A condition is made up of individual facts, where each fact is represented inter
     <rdfs:comment>
 			&lt;!-- Creative Commons License --&gt;
 			&lt;p class="copyright"&gt;
-				Copyright &amp;copy; 2007-2010 FAST Project Consortium (FP7-ICT-2007-1-216048);.&lt;br/&gt;
+				Copyright &amp;copy; 2007-2010 FAST Project Consortium (FP7-ICT-2007-1-216048).&lt;br/&gt;
 				&lt;br/&gt;
 				&lt;a href="http://creativecommons.org/licenses/by/3.0/"&gt;&lt;img alt="Creative Commons License" style="border: 0; float: right; padding: 10px;" src="images/somerights.gif" /&gt;&lt;/a&gt;
 				This work is licensed under a &lt;a href="http://creativecommons.org/licenses/by/3.0/"&gt;Creative Commons Attribution License&lt;/a&gt;. 
