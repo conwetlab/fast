@@ -74,7 +74,7 @@ fgo:license_doc
     rdfs:comment """
 			<!-- Creative Commons License -->
 			<p class=\"copyright\">
-				Copyright &copy; 2007-2010 FAST Project Consortium (FP7-ICT-2007-1-216048);.<br/>
+				Copyright &copy; 2007-2010 FAST Project Consortium (FP7-ICT-2007-1-216048).<br/>
 				<br/>
 				<a href=\"http://creativecommons.org/licenses/by/3.0/\"><img alt=\"Creative Commons License\" style=\"border: 0; float: right; padding: 10px;\" src=\"images/somerights.gif\" /></a>
 				This work is licensed under a <a href=\"http://creativecommons.org/licenses/by/3.0/\">Creative Commons Attribution License</a>. 
