@@ -212,6 +212,13 @@ var PaletteDocument = Class.create(AbstractDocument, /** @lends PaletteDocument.
     },
     
     /**
+     * Implementing event listener
+     */
+    orientationUpdated: function(/** ComponentInstance */ element, /** Integer */ orientation) {
+        this._setDirty(true);
+    },
+    
+    /**
      * Key press event handler
      * @override
      */
@@ -353,6 +360,21 @@ var PaletteDocument = Class.create(AbstractDocument, /** @lends PaletteDocument.
                         }
                     }.bind(this)
             );
+        }       
+    },
+    
+    /**
+     * This function rotate the element
+     * @private
+     */
+    _rotateSelectedElement: function () {
+    	var element = this._selectedElement;
+        if (element != null) { //Rotate an element from the canvas
+        	element.setOrientation((element.getOrientation() + 1) % 2);
+        	var orientation = element.getOrientation();
+        	element.getView().updateOrientation(orientation);
+        	element.onRotate(orientation);
+        	this.orientationUpdated(element, orientation);
         }       
     },
     
@@ -576,14 +598,19 @@ var PaletteDocument = Class.create(AbstractDocument, /** @lends PaletteDocument.
     },
 
     _addToArea:function(/** Area */ area, /** ComponentInstance */ instance,
-                        /** Object */ position){
-        var node = instance.getView().getNode();
+                        /** Object */ position, /** Integer */ orientation){
+    	var view = instance.getView();
+        var node = view.getNode();
         area.getNode().appendChild(node);
         node.setStyle({
             'left': position.left + "px",
             'top': position.top + "px",
             'position': 'absolute'
         });
+        
+        if (instance.constructor == OperatorInstance) {
+            view.updateOrientation(orientation);
+        }
     },
 
     /**
@@ -697,7 +724,7 @@ var PaletteDocument = Class.create(AbstractDocument, /** @lends PaletteDocument.
                 var effectivePosition = Geometry.adaptInitialPosition(dropNode,
                                         instance.getView().getNode(), position);
                 $("main").removeChild(instance.getView().getNode());
-                this._drop(area, instance, effectivePosition, true);
+                this._drop(area, instance, effectivePosition, this._canvasCache.getOrientation(id), true);
             }.bind(this));
         }.bind(this));
     },

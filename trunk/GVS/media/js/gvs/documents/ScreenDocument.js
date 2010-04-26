@@ -112,21 +112,20 @@ var ScreenDocument = Class.create(PaletteDocument,
      * Implementing event listener
      * @override
      */
-    positionUpdated: function(/** ComponentInstance */ element, /** Object */ position) {
+    positionUpdated: function(/** ComponentInstance */ element, /** Object */ position, /** Integer */ orientation) {
         var isChanged;
         switch (element.constructor) {
             case PrePostInstance:
                 isChanged = this._description.updatePrePost(element, position);
                 break;
             default:
-                isChanged = this._description.updateBuildingBlock(element, position);
+                isChanged = this._description.updateBuildingBlock(element, position, orientation);
                 break;
         }
         if (isChanged) {
             this._setDirty(true);
         }
     },
-
 
 
     // **************** PRIVATE METHODS **************** //
@@ -291,7 +290,7 @@ var ScreenDocument = Class.create(PaletteDocument,
      * @private
      * @type Boolean
      */
-    _drop: function(/** Area */ area, /** ComponentInstance */ instance, /** Object */ position, 
+    _drop: function(/** Area */ area, /** ComponentInstance */ instance, /** Object */ position, /** Integer */ orientation,
         /** Boolean (Optional) */ _isLoading) {
         var isLoading = Utils.variableOrDefault(_isLoading, false);
         // Reject repeated elements (except domain concepts or operators)
@@ -317,7 +316,7 @@ var ScreenDocument = Class.create(PaletteDocument,
             }
         }
 
-        this._addToArea(area, instance, position);
+        this._addToArea(area, instance, position, orientation);
         
         if (!instance.getId()) {
             instance.setId(UIDGenerator.generate(instance.getTitle()));
@@ -334,7 +333,7 @@ var ScreenDocument = Class.create(PaletteDocument,
 
         if (instance.constructor != PrePostInstance) {
             instance.createTerminals(terminalHandlers);
-            this._description.addBuildingBlock(instance, position);
+            this._description.addBuildingBlock(instance, position, orientation);
         } else {
             instance.setConfigurable(false);
             
@@ -553,6 +552,12 @@ var ScreenDocument = Class.create(PaletteDocument,
             this._share.bind(this),
             true
         ));
+        this._addToolbarElement('rotate', new ToolbarButton(
+                'Rotate selected element',
+                'rotate',
+                this._rotateSelectedElement.bind(this),
+                false
+        ));
     },
 
     /**
@@ -562,6 +567,10 @@ var ScreenDocument = Class.create(PaletteDocument,
      */
     _updateToolbar: function(/** ComponentInstance */ element) {
         this._toolbarElements.get('deleteElement').setEnabled(element!=null);
+        if (element!=null){
+        	var elementDescription = element.getBuildingBlockDescription();
+        	this._toolbarElements.get('rotate').setEnabled(elementDescription.type == Constants.BuildingBlock.OPERATOR);
+        }
     },
 
     /**

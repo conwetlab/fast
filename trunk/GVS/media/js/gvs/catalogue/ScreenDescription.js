@@ -132,23 +132,26 @@ var ScreenDescription = Class.create(BuildingBlockDescription,
     /**
      * Adds a building block (other than pre/post) to the description
      */
-    addBuildingBlock: function (/** ComponentInstance */ instance, /** Object */ position) {
+    addBuildingBlock: function (/** ComponentInstance */ instance, /** Object */ position, /** Integer */ orientation) {
         this._buildingBlocks.set(instance.getId(),{
             'buildingblock': instance,
-            'position': position
+            'position': position,
+            'orientation': orientation
         });
     },
-
+  
     /**
      * Updates the position of a building block
      * @type Boolean
      */
-    updateBuildingBlock: function (/** ComponentInstance */ instance, /** Object */ position) {
+    updateBuildingBlock: function (/** ComponentInstance */ instance, /** Object */ position, /** Integer */ orientation) {
         var buildingBlock = this._buildingBlocks.get(instance.getId());
         var origin = buildingBlock.position;
 
-        if (origin.top != position.top || origin.left != position.left) {
+        if (origin.top != position.top || origin.left != position.left
+        		|| origin.orientation != orientation) {
             buildingBlock.position = position;
+            buildingBlock.orientation = orientation;
             return true;
         }
         return false;
@@ -352,6 +355,7 @@ var ScreenDescription = Class.create(BuildingBlockDescription,
                 'id': block.buildingblock.getId(),
                 'uri': block.buildingblock.getUri(),
                 'position': block.position,
+                'orientation': block.buildingblock.getOrientation(),
                 'parameter': block.buildingblock.getParams()
             });
         });

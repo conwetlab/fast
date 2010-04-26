@@ -165,6 +165,20 @@ var OperatorInstance = Class.create(ComponentInstance,
             });
         }
     },
+    
+    /**
+     * On rotate
+     * @override
+     */
+    onRotate: function(/** Number */ orientation) {
+        if (this._terminals) {
+            this._terminals.values().each(function(terminalGroup) {
+                terminalGroup.values().each(function(terminal) {
+                    terminal.updatePosition();
+                });
+            });
+        }
+    },
 
     // **************** PRIVATE METHODS **************** //
     /**
@@ -173,7 +187,7 @@ var OperatorInstance = Class.create(ComponentInstance,
      * @override
      */
     _createView: function () {
-        return new OperatorView(this._buildingBlockDescription);
+        return new OperatorView(this._buildingBlockDescription, this._orientation);
     }
     
 });

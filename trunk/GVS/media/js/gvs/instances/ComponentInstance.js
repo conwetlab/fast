@@ -24,6 +24,13 @@ var ComponentInstance = Class.create(DragSource,
          * @private
          */
         this._id = null;
+        
+        /**
+         * Orientation of the instance inside its container
+         * @type Integer
+         * @private
+         */
+        this._orientation = 0;
 
         /**
          * BuildingBlock description graphical representation
@@ -179,6 +186,15 @@ var ComponentInstance = Class.create(DragSource,
         };
         return position;
     },
+    
+    /**
+     * Gets the component orientation
+     * @type Integer
+     * @public
+     */
+    getOrientation: function() {
+        return this._orientation;
+    },
 
     /**
      * Sets the component position
@@ -188,6 +204,15 @@ var ComponentInstance = Class.create(DragSource,
     setPosition: function(/** Object */ position) {
         this.getHandlerNode().style.left = position.left + "px";
         this.getHandlerNode().style.top = position.top + "px";
+    },
+    
+    /**
+     * Sets the component orientation
+     * @params Integer
+     * @public
+     */
+    setOrientation: function(/** Object */ orientation) {
+        this._orientation = orientation;
     },
 
     /**

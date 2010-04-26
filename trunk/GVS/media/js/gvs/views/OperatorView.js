@@ -45,58 +45,6 @@ var OperatorView = Class.create(BuildingBlockView,
             
         }.bind(this));
         
-        var size = preOrdered.size();
-        var factNode;
-        
-        switch (size) {
-            case 0:
-                // Do nothing
-                break;
-            case 1:
-                factNode = preOrdered[0].getNode();
-                this._node.appendChild(factNode);
-                factNode.setStyle({
-                    'top': '60px',
-                    'left': '37px'
-                });
-                break;
-            case 2:
-                factNode = preOrdered[0].getNode();
-                this._node.appendChild(factNode);
-                factNode.setStyle({
-                    'top': '48px',
-                    'left': '13px'
-                });
-                factNode = preOrdered[1].getNode();
-                this._node.appendChild(factNode);
-                factNode.setStyle({
-                    'top': '48px',
-                    'left': '59px'
-                });
-                break;
-            case 3:
-                factNode = preOrdered[0].getNode();
-                this._node.appendChild(factNode);
-                factNode.setStyle({
-                    'top': '45px',
-                    'left': '10px'
-                });
-                factNode = preOrdered[1].getNode();
-                this._node.appendChild(factNode);
-                factNode.setStyle({
-                    'top': '45px',
-                    'left': '65px'
-                });
-                factNode = preOrdered[2].getNode();
-                this._node.appendChild(factNode);
-                factNode.setStyle({
-                    'top': '60px',
-                    'left': '37px'
-                });
-            default:
-                console.log("Too many preconditions");                
-        }
-        
         var postOrdered = new Array();
         
         if (description.postconditions && description.postconditions[0] instanceof Array) {
@@ -110,57 +58,27 @@ var OperatorView = Class.create(BuildingBlockView,
                 this._postIcons.set(post.id, fact);
                 postOrdered.push(fact);
             }.bind(this));
+        
+        var size = preOrdered.size();
+        for (var i=0; i < size; i++){
+        	var factNode = preOrdered[i].getNode();
+        	this._node.appendChild(factNode);
+        	var position = this._getPosition(true, i, size, 0);
+            factNode.setStyle({
+                'top': Math.round(position.y) + 'px',
+                'left': Math.round(position.x) + 'px'
+            });
+        }
             
         size = postOrdered.size();
-            
-        
-        switch (size) {
-            case 0:
-                // Do nothing
-                break;
-            case 1:
-                factNode = postOrdered[0].getNode();
-                this._node.appendChild(factNode);
-                factNode.setStyle({
-                    'top': '0px',
-                    'left': '37px'
-                });
-                break;
-            case 2:
-                factNode = postOrdered[0].getNode();
-                this._node.appendChild(factNode);
-                factNode.setStyle({
-                    'top': '10px',
-                    'left': '13px'
-                });
-                factNode = postOrdered[1].getNode();
-                this._node.appendChild(factNode);
-                factNode.setStyle({
-                    'top': '10px',
-                    'left': '59px'
-                });
-                break;
-            case 3:
-                factNode = postOrdered[0].getNode();
-                this._node.appendChild(factNode);
-                factNode.setStyle({
-                    'top': '15px',
-                    'left': '10px'
-                });
-                factNode = postOrdered[1].getNode();
-                this._node.appendChild(factNode);
-                factNode.setStyle({
-                    'top': '15px',
-                    'left': '65px'
-                });
-                factNode = postOrdered[2].getNode();
-                this._node.appendChild(factNode);
-                factNode.setStyle({
-                    'top': '0px',
-                    'left': '37px'
-                });
-            default:
-                console.log("Too many postconditions");                
+        for (var i=0; i < size; i++){
+        	var factNode = postOrdered[i].getNode();
+        	var position = this._getPosition(false, i, size, 0);
+        	this._node.appendChild(factNode);
+            factNode.setStyle({
+                'top': Math.round(position.y) + 'px',
+                'left': Math.round(position.x) + 'px'
+            });
         }
 
         /*if (description.icon){
@@ -183,6 +101,36 @@ var OperatorView = Class.create(BuildingBlockView,
         
     },
     
+    // **************** PRIVATE METHODS **************** //
+    
+    /**
+     * This function returns the position of a PRE/POST fact
+     * 
+     */
+    _getPosition: function(/** Boolean */ isPre, /** Integer */ order, /** Integer */ size, /** Integer */ orientation) {
+    	var width = 74;
+        var height = 60;
+    	var x = width * (order+1) / (size+1);
+    	if ((order+1) != (size + 1) / 2) { // No middle
+    		x += (order < size/2)? -4 : 3;
+    	}
+    	
+    	if(isPre && orientation == 0 || !isPre && orientation == 1){ 
+	    	if (x > width/2) { // Choose side
+				var y = 3*height/2 - x *(height/2)/(width/2);
+			} else {
+				var y = x*(height/2)/(width/2) + height/2;
+			}
+    	} else {
+	    	if(x > width/2) { // Choose side
+				var y = x*(height/2)/(width/2) - height/2 - 4;
+			} else {
+				var y = height/2 - x *(height/2)/(width/2) - 4;
+			}
+    	}
+        return {'x': x, 'y': y};
+    },
+    
     // **************** PUBLIC METHODS **************** //
     /**
      * This function returns the domNode of the condition that has
@@ -199,6 +147,36 @@ var OperatorView = Class.create(BuildingBlockView,
     setReachability: function( /** Hash */ reachabilityData) {
         this._setViewReachability(reachabilityData, this._preIcons,
                                 this._postIcons.values(), this._node);
+    },
+    
+    /**
+     * This function update orientation of the operator
+     * 
+     */
+    updateOrientation: function(orientation) {
+    	if(!orientation){
+    		orientation = 0;
+    	}
+    	var pres = this._preIcons.values();
+    	var size = pres.length;
+    	for(var i=0; i < size; i++){
+    		var factNode = pres[i].getNode();
+    		var position = this._getPosition(true, i, size, orientation);
+    		factNode.setStyle({
+                'top': Math.round(position.y) + 'px',
+                'left': Math.round(position.x) + 'px'
+            });
+    	}
+    	var posts = this._postIcons.values();
+    	var size = posts.length;
+    	for(var i=0; i < size; i++){
+    		var factNode = posts[i].getNode();
+    		var position = this._getPosition(false, i, size, orientation);
+    		factNode.setStyle({
+                'top': Math.round(position.y) + 'px',
+                'left': Math.round(position.x) + 'px'
+            });
+    	}	
     },
     
     /**
