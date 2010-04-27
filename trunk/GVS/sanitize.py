@@ -34,14 +34,11 @@ def sanitize(filename, retab):
     try:
         fd = codecs.open(filename, 'rb', 'utf-8')
         lines = fd.readlines()
-
         fd.close()
+
         fd = codecs.open(filename, 'wb', 'utf-8')
         fd.truncate(0)
         for line in lines:
-            import ipdb
-            ipdb.set_trace()
-
             output_line = sanitize_endline(line)
             if retab:
                 output_line = sanitize_tabs(output_line)
@@ -66,7 +63,7 @@ def main():
 
     for filename in args:
         sanitize(filename, retab)
-                
+
 
 if __name__ == "__main__":
     main()
