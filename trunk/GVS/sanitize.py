@@ -4,7 +4,7 @@ import codecs
 import os
 import re
 import sys
- 
+    
 # Spaces per tab
 TAB_SPACES = '    '
 ROGUE_NL = re.compile(r'(\s|\n|\r)*$', re.UNICODE)
@@ -61,11 +61,9 @@ def main():
         usage()
         sys.exit(2)
 
-    recursive = False
     retab = False
     for (opt, _) in opts:
         if (opt == "--retab"): retab = True
-        if (opt == "-R"): recursive = True
 
     if len(args) != 1:
         usage()
