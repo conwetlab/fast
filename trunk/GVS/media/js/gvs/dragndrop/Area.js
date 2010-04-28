@@ -4,7 +4,7 @@ var Area = Class.create( /** @lends Area.prototype */ {
      * It implements the DropZone interface
      * @param Function onDropHandler(DropZone zone, ComponentInstance droppedInstance)
      * @constructs
-     */ 
+     */
     initialize: function(/** String */ areaClass, /** Array */ acceptedElements, /** Function */ onDropHandler, /** Object */ _options) {
         var options = Utils.variableOrDefault(_options, {});
         options = Object.extend ({
@@ -17,8 +17,8 @@ var Area = Class.create( /** @lends Area.prototype */ {
          * @private
          */
         this._acceptedElements = acceptedElements;
-        
-        
+
+
         /**
          * Function to be called whenever an element
          * is dropped into the area
@@ -54,7 +54,7 @@ var Area = Class.create( /** @lends Area.prototype */ {
         });
         this._contentPane.setContent(this._node);
     },
-    
+
 
     // **************** PUBLIC METHODS **************** //
 
@@ -65,7 +65,7 @@ var Area = Class.create( /** @lends Area.prototype */ {
     getNode: function() {
         return this._node;
     },
-    
+
     /**
      * Returns the  widget
      * @type dijit.*
@@ -79,30 +79,30 @@ var Area = Class.create( /** @lends Area.prototype */ {
      * @type DOMNode
      */
     drop: function(/** ComponentInstance */ element, /** Object */ position) {
-        
+
         var accepted =  this._onDropHandler(this, element, position);
         return accepted;
     },
 
-   
+
     /**
      * Implementing DropZone Interface: accepts
      * @type DOMNode
      */
     accepts: function() {
-        return this._acceptedElements;    
+        return this._acceptedElements;
     },
-    
-    
+
+
     setLayout: function() {
-        //TODO: Think about Layouts    
+        //TODO: Think about Layouts
     }
-   
-   
+
+
     // **************** PRIVATE METHODS **************** //
 
-    
-    
+
+
 });
 
 // vim:ts=4:sw=4:et:

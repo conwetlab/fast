@@ -5,7 +5,7 @@ var ScreenView = Class.create(BuildingBlockView,
      * Screens graphical representation
      * @constructs
      * @extends BuildingBlockView
-     */ 
+     */
     initialize: function($super,/** ScreenDescription */ description) {
 
         $super();
@@ -23,7 +23,7 @@ var ScreenView = Class.create(BuildingBlockView,
          * @private
          */
         this._postIcons = new Array();
-        
+
         /**
          * Tooltip
          * @type dijit.Tooltip
@@ -42,8 +42,8 @@ var ScreenView = Class.create(BuildingBlockView,
         else {
             var preconditions = description.preconditions[0];
         }
-    
-        
+
+
         $A(preconditions).each(
                 function(pre) {
                     var preFact = FactFactory.getFactIcon(pre, "embedded");
@@ -51,7 +51,7 @@ var ScreenView = Class.create(BuildingBlockView,
                     preArea.appendChild(preFact.getNode());
                 }.bind(this)
         );
-        
+
         var postArea = new Element("div", {"class": "postArea"});
 
         if (description.postconditions.length > 1){ //More than one set of preconditions
@@ -59,8 +59,8 @@ var ScreenView = Class.create(BuildingBlockView,
         }
         else {
             var postconditions = description.postconditions[0];
-        }      
-        
+        }
+
         $A(postconditions).each(
                 function(post) {
                     if (post) {
@@ -82,14 +82,14 @@ var ScreenView = Class.create(BuildingBlockView,
             var imageContainer = new Element ('div',
                     {'class': 'image' });
             var image = new Element ('img',{
-                    'class': 'img', 
+                    'class': 'img',
                     'src': description.icon
                     //If we want an onerror image...
                     /*'onError': 'if (this.src != URIs.screenImageNotFound){'+
                                 'this.src = URIs.screenImageNotFound;'+
                             '}'*/
                     });
-            imageContainer.appendChild (image); 
+            imageContainer.appendChild (image);
         }
 
         this._node = new Element("div", {
@@ -102,30 +102,30 @@ var ScreenView = Class.create(BuildingBlockView,
             this._node.appendChild(imageContainer);
         }
         this._node.appendChild(postArea);
-        
+
         this._createTooltip(description);
     },
-    
+
     // **************** PUBLIC METHODS **************** //
-    
+
     /**
      * Colorize the component depending on the reachability
      * @public @override
      */
     setReachability: function( /** Hash */ reachabilityData) {
-        
+
         var satisfeable = reachabilityData.reachability;
-        
+
         // screen
         Utils.setSatisfeabilityClass(this.getNode(), satisfeable);
-       
+
         // posts
         this._postIcons.each(function(postIcon) {
-            Utils.setSatisfeabilityClass(postIcon.getNode(), satisfeable);  
+            Utils.setSatisfeabilityClass(postIcon.getNode(), satisfeable);
         });
-        
+
         // pres
-        var preconditionList = reachabilityData.preconditions;  
+        var preconditionList = reachabilityData.preconditions;
         if (preconditionList.length > 1) {
             //More than one set of preconditions is NOT YET SUPPORTED
             console.log("OR precondition support not implemented yet");
@@ -133,19 +133,19 @@ var ScreenView = Class.create(BuildingBlockView,
         } else {
             var preconditionData = preconditionList[0];
         }
-        
+
         //Setting precondition reachability
         var preReachability = new Hash();
         $A(preconditionData).each(function(precondition) {
             preReachability.set(FactFactory.getFactUri(precondition), precondition.satisfied);
         });
-      
+
         this._preIcons.each(function(preIcon) {
             var factUri = preIcon.getFact().getUri();
             Utils.setSatisfeabilityClass(preIcon.getNode(), preReachability.get(factUri));
         });
     },
-    
+
     /**
      * Removes the DOM Elements and frees building blocks
      * @override
@@ -156,7 +156,7 @@ var ScreenView = Class.create(BuildingBlockView,
         this._postIcons = null;
         this._node = null;
     },
-    
+
     // **************** PRIVATE METHODS **************** //
     /**
      * This function creates the tooltip for the view
@@ -164,14 +164,14 @@ var ScreenView = Class.create(BuildingBlockView,
      */
     _createTooltip: function (/** ScreenDescription */ description) {
         /*var content = new Element('div');
-        
+
         var title = new Element('h3').update(description.label['en-gb']);
         content.appendChild(title);
-        
+
         var description = new Element('div').update(description.description['en-gb']);
         content.appendChild(description);
-        
-        
+
+
         if (description.preconditions.length > 1){ //More than one set of preconditions
             console.log("OR precondition support not implemented yet");
         }

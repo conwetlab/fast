@@ -5,7 +5,7 @@ var ResourceView = Class.create(BuildingBlockView,
      * Resources graphical representation
      * @constructs
      * @extends BuildingBlockView
-     */ 
+     */
     initialize: function($super,/** ResourceDescription */ description) {
 
         $super();
@@ -16,11 +16,11 @@ var ResourceView = Class.create(BuildingBlockView,
          * @private
          */
         this._icons = new Hash();
-       
+
 
         var preArea = new Element("div", {"class": "preArea"});
         var postArea = new Element("div", {"class": "postArea"});
-        
+
         var actions = description.actions;
         var actionIcons;
         actions.each(function(action) {
@@ -55,30 +55,30 @@ var ResourceView = Class.create(BuildingBlockView,
             var imageContainer = new Element ('div',
                     {'class': 'screenImage' });
             var image = new Element ('img',{
-                    'class': 'img', 
+                    'class': 'img',
                     'src': description.icon
-            imageContainer.appendChild (image); 
+            imageContainer.appendChild (image);
         }*/
 
         this._node = new Element("div", {
             "class": "view resource",
             "title": description.name
         });
-        
+
         this._node.appendChild(preArea);
         this._node.appendChild(prePostSeparator);
-        
+
         /*if (description.icon){
             this._node.appendChild(imageContainer);
         }*/
         this._node.appendChild(postArea);
-        
+
         var titleNode = new Element("div", {"class":"title"});
         titleNode.update(description.label['en-gb']);
         this._node.appendChild(titleNode);
-        
+
     },
-    
+
     // **************** PUBLIC METHODS **************** //
     /**
      * This function returns the domNode of the precondition that has
@@ -94,7 +94,7 @@ var ResourceView = Class.create(BuildingBlockView,
 
     	return null;
     },
-    
+
     /**
      * Colorize the component depending on the reachability
      * @public @override
@@ -116,7 +116,7 @@ var ResourceView = Class.create(BuildingBlockView,
         	}.bind(actionIcons));
         }.bind(this));
     },
-    
+
     /**
      * Removes the DOM Elements and frees building blocks
      * @override
@@ -126,7 +126,7 @@ var ResourceView = Class.create(BuildingBlockView,
         this._icons = null;
         this._node = null;
     }
-    
+
     // **************** PRIVATE METHODS **************** //
 });
 

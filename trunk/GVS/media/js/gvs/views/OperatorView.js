@@ -5,7 +5,7 @@ var OperatorView = Class.create(BuildingBlockView,
      * Operators graphical representation
      * @constructs
      * @extends BuildingBlockView
-     */ 
+     */
     initialize: function($super,/** OperatorDescription */ description) {
 
         $super();
@@ -22,43 +22,43 @@ var OperatorView = Class.create(BuildingBlockView,
          * @type Hash
          * @private
          */
-        this._postIcons = new Hash();            
+        this._postIcons = new Hash();
 
-        
+
         this._node = new Element("div", {
             "class": "view operator",
             "title": description.name
         });
-        
+
         var actions = description.actions;
-        
+
         // TODO: Better action support: put the name of the action somewhere
-        // and separation between actions      
+        // and separation between actions
         var preOrdered = new Array();
-        
+
         actions.each(function(action) {
             action.preconditions.each(function(pre) {
                 var fact = FactFactory.getFactIcon(pre, "embedded");
                 this._preIcons.set(pre.id, fact);
                 preOrdered.push(fact);
             }.bind(this));
-            
+
         }.bind(this));
-        
+
         var postOrdered = new Array();
-        
+
         if (description.postconditions && description.postconditions[0] instanceof Array) {
             var posts =  description.postconditions[0];
         } else {
             var posts = description.postconditions;
         }
-        
+
         posts.each(function(post) {
                 var fact = FactFactory.getFactIcon(post, "embedded");
                 this._postIcons.set(post.id, fact);
                 postOrdered.push(fact);
             }.bind(this));
-        
+
         var size = preOrdered.size();
         for (var i=0; i < size; i++){
         	var factNode = preOrdered[i].getNode();
@@ -69,7 +69,7 @@ var OperatorView = Class.create(BuildingBlockView,
                 'left': Math.round(position.x) + 'px'
             });
         }
-            
+
         size = postOrdered.size();
         for (var i=0; i < size; i++){
         	var factNode = postOrdered[i].getNode();
@@ -85,27 +85,27 @@ var OperatorView = Class.create(BuildingBlockView,
             var imageContainer = new Element ('div',
                     {'class': 'screenImage' });
             var image = new Element ('img',{
-                    'class': 'img', 
+                    'class': 'img',
                     'src': description.icon
-            imageContainer.appendChild (image); 
-        }*/      
-        
+            imageContainer.appendChild (image);
+        }*/
+
         /*if (description.icon){
             this._node.appendChild(imageContainer);
         }*/
-        
+
         var titleNode = new Element("div", {"class":"title"});
         titleNode.update(description.label['en-gb']);
         this._node.appendChild(titleNode);
-        
-        
+
+
     },
-    
+
     // **************** PRIVATE METHODS **************** //
-    
+
     /**
      * This function returns the position of a PRE/POST fact
-     * 
+     *
      */
     _getPosition: function(/** Boolean */ isPre, /** Integer */ order, /** Integer */ size, /** Integer */ orientation) {
     	var width = 74;
@@ -114,8 +114,8 @@ var OperatorView = Class.create(BuildingBlockView,
     	if ((order+1) != (size + 1) / 2) { // No middle
     		x += (order < size/2)? -4 : 3;
     	}
-    	
-    	if(isPre && orientation == 0 || !isPre && orientation == 1){ 
+
+    	if(isPre && orientation == 0 || !isPre && orientation == 1){
 	    	if (x > width/2) { // Choose side
 				var y = 3*height/2 - x *(height/2)/(width/2);
 			} else {
@@ -130,7 +130,7 @@ var OperatorView = Class.create(BuildingBlockView,
     	}
         return {'x': x, 'y': y};
     },
-    
+
     // **************** PUBLIC METHODS **************** //
     /**
      * This function returns the domNode of the condition that has
@@ -139,7 +139,7 @@ var OperatorView = Class.create(BuildingBlockView,
     getConditionNode: function(/** String */ id) {
         return this._preIcons.get(id) ? this._preIcons.get(id).getNode() : this._postIcons.get(id).getNode();
     },
-    
+
     /**
      * Colorize the component depending on the reachability
      * @public @override
@@ -148,10 +148,10 @@ var OperatorView = Class.create(BuildingBlockView,
         this._setViewReachability(reachabilityData, this._preIcons,
                                 this._postIcons.values(), this._node);
     },
-    
+
     /**
      * This function update orientation of the operator
-     * 
+     *
      */
     updateOrientation: function(orientation) {
     	if(!orientation){
@@ -176,9 +176,9 @@ var OperatorView = Class.create(BuildingBlockView,
                 'top': Math.round(position.y) + 'px',
                 'left': Math.round(position.x) + 'px'
             });
-    	}	
+    	}
     },
-    
+
     /**
      * Removes the DOM Elements and frees building blocks
      * @override
@@ -189,7 +189,7 @@ var OperatorView = Class.create(BuildingBlockView,
         this._postIcons = null;
         this._node = null;
     }
-    
+
     // **************** PRIVATE METHODS **************** //
 });
 

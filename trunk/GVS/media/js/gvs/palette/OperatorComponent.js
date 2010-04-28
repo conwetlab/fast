@@ -1,6 +1,6 @@
-var OperatorComponent = Class.create(PaletteComponent, 
+var OperatorComponent = Class.create(PaletteComponent,
     /** @lends OperatorComponent.prototype */ {
-        
+
     /**
      * Palette component of a domain concept building block.
      * @param BuildingBlockDescription OperatorBuildingBlockDescription
@@ -16,7 +16,7 @@ var OperatorComponent = Class.create(PaletteComponent,
 
 
     // **************** PRIVATE METHODS **************** //
-    
+
     /**
      * Creates a new View instance for the component
      * @type BuildingBlockView
@@ -25,16 +25,16 @@ var OperatorComponent = Class.create(PaletteComponent,
     _createView: function () {
         return new OperatorView(this._buildingBlockDescription);
     },
-    
+
     /**
      * Creates a new Operator to be dragged.
      * @type OperatorInstance
      * @override
      */
-    _createInstance: function () {     
+    _createInstance: function () {
         return new OperatorInstance(this._buildingBlockDescription, this._inferenceEngine);
     },
-    
+
     /**
      * @type String
      * @override
@@ -42,7 +42,7 @@ var OperatorComponent = Class.create(PaletteComponent,
     _getTitle: function () {
         return this._buildingBlockDescription.label['en-gb'];
     }
-    
+
 });
 
 // vim:ts=4:sw=4:et:

@@ -1,5 +1,5 @@
 /**
- * <p>This class implements the Singleton Design Pattern to make sure there is 
+ * <p>This class implements the Singleton Design Pattern to make sure there is
  * only one instance of the class Preferences.
  *
  * <p> It should be accessed as follows.
@@ -7,7 +7,7 @@
  * @constructor
  * @example
  * var confirm = ConfirmSingleton.getInstance();
- */ 
+ */
 var ConfirmSingleton = function() {
 
     /**
@@ -15,29 +15,29 @@ var ConfirmSingleton = function() {
      * @private @member
      */
     var _instance = null;
-    
+
 
     var Confirm = Class.create(ConfirmDialog,
         /** @lends ConfirmSingleton-Confirm.prototype */ {
 
-        /** 
+        /**
          * Confirm dialog
          * @constructs
          * @extends ConfirmDialog
          */
         initialize: function($super) {
             $super('Warning');
-            
+
             /**
              * Callback function to be called
              * @type Function
              * @private @member
              */
             this._callback = null;
-            
-            this._contentNode.addClassName("systemDialog"); 
+
+            this._contentNode.addClassName("systemDialog");
         },
-        
+
         /**
          * This function shows a message
          */
@@ -59,7 +59,7 @@ var ConfirmSingleton = function() {
         /**
          * @override
          * @private
-         */        
+         */
         _onCancel: function ($super){
             this._callback(false);
             this._callback = null;
@@ -81,7 +81,7 @@ var ConfirmSingleton = function() {
             if (this._callback) {
                 this._callback(false);
                 this._callback = null;
-            }        
+            }
         }
     });
 
@@ -103,14 +103,14 @@ var ConfirmSingleton = function() {
 if (document.getElementById) {
     //Note that confirm is not blocking anymore
     //so a callback function is needed
-    var browserConfirm = window.confirm;             
+    var browserConfirm = window.confirm;
     window.confirm = function(msg, _callback) {
         if (_callback) {
             ConfirmSingleton.getInstance().show(msg,_callback);
         } else{ //In case you don't use the modified version
             browserConfirm(msg);
         }
-    }    
+    }
 }
 
 

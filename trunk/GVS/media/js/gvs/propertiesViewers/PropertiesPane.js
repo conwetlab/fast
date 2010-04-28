@@ -2,23 +2,23 @@ var PropertiesPane = Class.create( /** @lends PropertiesPane.prototype */ {
     /**
      * This class handles the properties pane
      * @constructs
-     */ 
+     */
     initialize: function(/** DOMNode */ parentNode) {
-        /** 
+        /**
          * Variable
          * @type Table
          * @private @member
          */
         this._propertiesTable = new Table(parentNode, 'Properties', 'left');
-        
+
         this._propertiesTable.insertFieldTitles(['Property','Value']);
-        
+
     },
-    
+
 
     // **************** PUBLIC METHODS **************** //
 
-    
+
     /**
      * This function updates the table with data coming from
      * the currently selected element
@@ -32,7 +32,7 @@ var PropertiesPane = Class.create( /** @lends PropertiesPane.prototype */ {
         this._clearElement();
 
         var title = element.getTitle();
-       
+
         this._propertiesTable.insertDataValues(element.getInfo());
         this._propertiesTable.setTitle((title ? 'Properties of '  + title : 'Properties'));
     },
@@ -47,7 +47,7 @@ var PropertiesPane = Class.create( /** @lends PropertiesPane.prototype */ {
     },
 
     // **************** PRIVATE METHODS **************** //
-    
+
     /**
      * This function empties the table
      * @private
@@ -58,7 +58,7 @@ var PropertiesPane = Class.create( /** @lends PropertiesPane.prototype */ {
         this._propertiesTable.insertFieldTitles(['Property','Value']);
     }
 
-    
+
 });
 
 // vim:ts=4:sw=4:et:

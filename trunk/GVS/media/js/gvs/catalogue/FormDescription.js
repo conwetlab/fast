@@ -23,15 +23,15 @@ var FormDescription = Class.create(BuildingBlockDescription,
             'class': 'error'
         });
         node.appendChild(errorField);
-        
+
         var image = new Element ('img', {
-            'src': this.screenshot, 
+            'src': this.screenshot,
             'onerror': 'this.src = "/fast/images/gui/imageNotFound.png";'
         });
-        
+
         node.appendChild(image);
         return node;
     },
 });
 
-// vim:ts=4:sw=4:et: 
+// vim:ts=4:sw=4:et:

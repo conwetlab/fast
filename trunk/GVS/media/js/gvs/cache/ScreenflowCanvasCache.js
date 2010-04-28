@@ -1,8 +1,8 @@
 var ScreenflowCanvasCache = Class.create( /** @lends ScreenflowCanvasCache.prototype */ {
     /**
-     * 
+     *
      * @constructs
-     */ 
+     */
     initialize: function (/** Object */ properties) {
         /**
          * Preconditions of the screenflow
@@ -38,8 +38,8 @@ var ScreenflowCanvasCache = Class.create( /** @lends ScreenflowCanvasCache.proto
          */
         this._elementsLoaded = new Array();
     },
-  
-    
+
+
     // **************** PRIVATE METHODS **************** //
 
     /**
@@ -123,7 +123,7 @@ var ScreenflowCanvasCache = Class.create( /** @lends ScreenflowCanvasCache.proto
     areInstancesLoaded: function() {
         return this._elementsLoaded.indexOf(Constants.BuildingBlock.SCREEN) != -1;
     }
-    
+
 });
 
 // vim:ts=4:sw=4:et:

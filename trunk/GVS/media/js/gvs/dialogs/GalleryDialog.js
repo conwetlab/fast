@@ -9,7 +9,7 @@ var GalleryDialog = Class.create(FormDialog, /** @lends GalleryDialog.prototype 
      * @abstract
      * @extends FormDialog
      * @constructs
-     */ 
+     */
     initialize: function($super, /** String */ title,
                         /** Object (Optional) */ _properties) {
         $super({
@@ -18,7 +18,7 @@ var GalleryDialog = Class.create(FormDialog, /** @lends GalleryDialog.prototype 
         }, {
             'buttonPosition': FormDialog.POSITION_TOP
         });
-        
+
         var properties = Utils.variableOrDefault(_properties, {});
 
         /**
@@ -28,7 +28,7 @@ var GalleryDialog = Class.create(FormDialog, /** @lends GalleryDialog.prototype 
          */
         this._properties = new Hash();
 
-        
+
         // Assigning the passed parameters, or defaults
         this._properties.set('showTitleRow', (properties.showTitleRow || false));
         this._properties.set('elementsPerPage', (properties.elementsPerPage || 10));
@@ -57,7 +57,7 @@ var GalleryDialog = Class.create(FormDialog, /** @lends GalleryDialog.prototype 
          * @private
          */
         this._disabledButtons = new Array();
-        
+
         /**
          * List of rows
          * @type Array
@@ -72,7 +72,7 @@ var GalleryDialog = Class.create(FormDialog, /** @lends GalleryDialog.prototype 
          */
         this._selectedRow = null;
     },
-    
+
 
     // **************** PUBLIC METHODS **************** //
 
@@ -82,7 +82,7 @@ var GalleryDialog = Class.create(FormDialog, /** @lends GalleryDialog.prototype 
     show: function() {
         // Do nothing. To be overriden
     },
-    
+
     // **************** PRIVATE METHODS **************** //
     /**
      * Set the field list
@@ -128,7 +128,7 @@ var GalleryDialog = Class.create(FormDialog, /** @lends GalleryDialog.prototype 
      */
     _render: function(/** Boolean(Optional) */ _loadAll) {
         var loadAll = Utils.variableOrDefault(_loadAll, true);
-        
+
         var content = new Element('div', {
             'class': 'gallery'
         });
@@ -168,7 +168,7 @@ var GalleryDialog = Class.create(FormDialog, /** @lends GalleryDialog.prototype 
                         button.attr('disabled', true);
                     });
                 }
-                
+
                 this._selectedRow = row;
             }.bind(this));
             if (this._properties.get('onDblClick')) {
@@ -191,7 +191,7 @@ var GalleryDialog = Class.create(FormDialog, /** @lends GalleryDialog.prototype 
                     this._disabledButtons.push(buttonWidget);
                 }
             }.bind(this));
-        }      
+        }
         if (!this._properties.get("showTitleRow") && content.firstChild) {
             content.firstChild.addClassName("selected");
         }
@@ -215,7 +215,7 @@ var GalleryDialog = Class.create(FormDialog, /** @lends GalleryDialog.prototype 
                 });
             }
         }
-        
+
         this._setContent(content);
     },
 

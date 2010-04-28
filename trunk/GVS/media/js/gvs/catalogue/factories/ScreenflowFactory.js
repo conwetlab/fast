@@ -7,8 +7,8 @@ var ScreenflowFactory = Class.create(BuildingBlockFactory,
      * @extends BuildingBlockFactory
      */
     initialize: function($super) {
-        $super();        
- 
+        $super();
+
          /**
          * Hash table (organized by URI)
          * containing all the BB descriptions
@@ -16,7 +16,7 @@ var ScreenflowFactory = Class.create(BuildingBlockFactory,
          * @private @member
          */
         this._buildingBlockDescriptions = new Hash();
-        
+
     },
 
     // **************** PUBLIC METHODS **************** //
@@ -28,8 +28,8 @@ var ScreenflowFactory = Class.create(BuildingBlockFactory,
     getBuildingBlockType: function (){
         return Constants.BuildingBlock.SCREENFLOW;
     },
-    
-    
+
+
     /**
      * Gets building block descriptions by URI
      * @type {BuildingBlockDescription[]}
@@ -41,26 +41,26 @@ var ScreenflowFactory = Class.create(BuildingBlockFactory,
             if(this._buildingBlockDescriptions.get(uri)) {
                 result.push(this._buildingBlockDescriptions.get(uri));
             } else {
-                throw "Ooops. Something went wrong. " + 
+                throw "Ooops. Something went wrong. " +
                       "ScreenflowFactory::getBuildingBlocks";
-            }        
+            }
         }.bind(this));
         return result;
     },
-    
+
     /**
      * This function retrieves the pending elements from the serverside
      * catalogue
      */
-    cacheBuildingBlocks: function (/** Array */ uris, /** Function */ callback){ 
+    cacheBuildingBlocks: function (/** Array */ uris, /** Function */ callback){
         //URIs not already retrieved
         var pendingURIs = new Array();
         $A(uris).each (function (uri){
             if (!this._buildingBlockDescriptions.get(uri)){
-                pendingURIs.push (uri);  
-            } 
+                pendingURIs.push (uri);
+            }
         }.bind(this));
-        
+
         if (pendingURIs.size() > 0) {
             var postData = Object.toJSON(pendingURIs);
             PersistenceEngine.sendPost(URIs.catalogueGetMetadata,
@@ -72,7 +72,7 @@ var ScreenflowFactory = Class.create(BuildingBlockFactory,
                 this._onSuccess, Utils.onAJAXError);
         } else {
             callback();
-        }       
+        }
     },
 
     /**
@@ -83,11 +83,11 @@ var ScreenflowFactory = Class.create(BuildingBlockFactory,
     getInstance: function(/** BuildingBlockDescription */description, /** InferenceEngine */ engine) {
         return new ScreenflowInstance(description, engine);
     },
-    
+
     // **************** PRIVATE METHODS **************** //
-    
- 
-           
+
+
+
     /**
      * Callback function
      */
@@ -98,7 +98,7 @@ var ScreenflowFactory = Class.create(BuildingBlockFactory,
         //call the callback function passed as argument
         this.callback();
     },
-    
+
     /**
      * This function creates the different screen Descriptions
      * @private
@@ -112,4 +112,4 @@ var ScreenflowFactory = Class.create(BuildingBlockFactory,
     }
 });
 
-// vim:ts=4:sw=4:et: 
+// vim:ts=4:sw=4:et:

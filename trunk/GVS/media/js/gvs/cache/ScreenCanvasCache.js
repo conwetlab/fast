@@ -1,8 +1,8 @@
 var ScreenCanvasCache = Class.create( /** @lends ScreenCanvasCache.prototype */ {
     /**
-     * 
+     *
      * @constructs
-     */ 
+     */
     initialize: function (/** Object */ properties) {
         /**
          * Buildingblocks of the screen
@@ -48,8 +48,8 @@ var ScreenCanvasCache = Class.create( /** @lends ScreenCanvasCache.prototype */ 
          */
         this._elementsLoaded = new Array();
     },
-  
-    
+
+
     // **************** PRIVATE METHODS **************** //
     /**
      * Gets the uri of the form (if any) in form of Array, to
@@ -65,7 +65,7 @@ var ScreenCanvasCache = Class.create( /** @lends ScreenCanvasCache.prototype */ 
         } else {
             return [];
         }
-        
+
     },
 
     /**
@@ -178,7 +178,7 @@ var ScreenCanvasCache = Class.create( /** @lends ScreenCanvasCache.prototype */ 
             return null;
         }
     },
-    
+
     /**
      * Returns the orientation of an element by its URI
      * @type Object
@@ -212,7 +212,7 @@ var ScreenCanvasCache = Class.create( /** @lends ScreenCanvasCache.prototype */ 
         result = result && (this._elementsLoaded.indexOf(Constants.BuildingBlock.FORM) != -1);
         return result;
     }
-    
+
 });
 
 // vim:ts=4:sw=4:et:

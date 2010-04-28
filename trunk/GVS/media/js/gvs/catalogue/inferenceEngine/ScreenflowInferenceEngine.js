@@ -4,19 +4,19 @@ var ScreenflowInferenceEngine = Class.create(InferenceEngine /** @lends Screenfl
      * It communicates with the serverside catalogue to retrieve this information
      * @extends InferenceEngine
      * @constructs
-     */ 
+     */
     initialize: function($super) {
-        $super();   
+        $super();
     },
-    
+
 
     // **************** PUBLIC METHODS **************** //
-    
-    
+
+
     /**
      * This function calls the catalogue to create a plan for a given screen
      */
-    getPlans: function(/** Array */ canvas, /** String */ screenUri, 
+    getPlans: function(/** Array */ canvas, /** String */ screenUri,
                         /** Function */ handler) {
         var body = {
             "goal": screenUri,
@@ -26,21 +26,21 @@ var ScreenflowInferenceEngine = Class.create(InferenceEngine /** @lends Screenfl
         PersistenceEngine.sendPost(URIs.cataloguePlanner, null, bodyJSON, {'handler': handler},
                                     this._planOnSuccess, this._onError);
     },
-    
+
     // **************** PRIVATE METHODS **************** //
-    
+
     /**
      * plan onSuccess
      * @private
      */
     _planOnSuccess: function(transport) {
         var result = JSON.parse(transport.responseText);
-        this.handler(result); 
+        this.handler(result);
     },
-    
-    
+
+
     /**
-     * Creates a body to be sent in an AJAX call to the 
+     * Creates a body to be sent in an AJAX call to the
      * catalogue
      * @private
      * @overrides
@@ -67,12 +67,12 @@ var ScreenflowInferenceEngine = Class.create(InferenceEngine /** @lends Screenfl
         };
         return Object.toJSON(body);
     },
-    
+
     /**
      * Gets the uri for a given operation
      * @private
      * @overrides
-     */ 
+     */
     _getUri:function (/** String */ operation) {
         switch(operation) {
             case "findCheck":
@@ -82,11 +82,11 @@ var ScreenflowInferenceEngine = Class.create(InferenceEngine /** @lends Screenfl
                 return URIs.catalogueScreenflowCheck;
                 break;
             default:
-                return ""; 
+                return "";
         }
     },
-        
-    /** 
+
+    /**
      * onSuccess callback
      * @private
      * @overrides
@@ -96,19 +96,19 @@ var ScreenflowInferenceEngine = Class.create(InferenceEngine /** @lends Screenfl
         if (result.elements) {
             var paletteElements = result.elements;
         }
-        
-        
+
+
         this.mine._updateReachability(paletteElements);
-        
+
         // Notifying about new uris
         var screenURIs = new Array();
         $A(paletteElements).each(function(element) {
-           screenURIs.push(element.uri); 
-        }); 
+           screenURIs.push(element.uri);
+        });
 
-        this.callback(screenURIs);        
+        this.callback(screenURIs);
     },
-    
+
     /**
      * onSuccess callback
      * @private
@@ -117,8 +117,8 @@ var ScreenflowInferenceEngine = Class.create(InferenceEngine /** @lends Screenfl
     _checkOnSuccess: function(transport){
         var result = JSON.parse(transport.responseText);
         var elements = result.elements.concat(result.canvas).uniq();
-        
-        this.mine._updateReachability(elements);       
+
+        this.mine._updateReachability(elements);
         this.callback();
     }
 });

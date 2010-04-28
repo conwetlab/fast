@@ -1,29 +1,29 @@
 var Builder = Class.create( /** @lends Builder.prototype */ {
     /**
      * On charge of building screenflows and showing the possibility to
-     * Deploy the gadget into the mashup platrom 
+     * Deploy the gadget into the mashup platrom
      * @constructs
-     */ 
+     */
     initialize: function() {
-        /** 
+        /**
          * @type StoreGadgetDialog
          * @private @member
          */
         this._buildGadgetDialog = new BuildGadgetDialog(this._onBuildGadgetDialogCallback.bind(this));
-        
-        /** 
+
+        /**
          * @type PublishGadgetDialog
          * @private @member
          */
-        this._publishGadgetDialog = new PublishGadgetDialog();       
-        
+        this._publishGadgetDialog = new PublishGadgetDialog();
+
         /**
          * @type ScreenflowDescription
          * @private @member
-         */ 
+         */
         this._description = null;
     },
-    
+
 
     // **************** PUBLIC METHODS **************** //
 
@@ -39,17 +39,17 @@ var Builder = Class.create( /** @lends Builder.prototype */ {
             'desc': this._description.description['en-gb'],
             'owner': GVS.getUser().getUserName()
         });
-    }, 
+    },
 
     // **************** PRIVATE METHODS **************** //
 
-    _onBuildGadgetDialogCallback: function(/** Object */ data) {       
+    _onBuildGadgetDialogCallback: function(/** Object */ data) {
 
        var gadgetInfo = Object.extend(data, {
                                             'description': {
                                                 'en-gb': data.desc
                                              },
-                                             'uri': 'buildingblock/' + 
+                                             'uri': 'buildingblock/' +
                                                     this._description.getId(),
                                              'label': {
                                                  'en-gb': data.name
@@ -63,17 +63,17 @@ var Builder = Class.create( /** @lends Builder.prototype */ {
        PersistenceEngine.sendPost(URIs.store, storeParams, null,
                 this, this._onBuildSuccess, this._onError);
     },
-    
+
     _onBuildSuccess: function(/** XMLHttpRequest */ transport) {
         var result = JSON.parse(transport.responseText);
         var gadgetBaseUrl = result.gadgetUri;
         this._publishGadgetDialog.show(gadgetBaseUrl);
     },
-    
+
     _onError: function(/** XMLHttpRequest */ transport, /** Exception */ e) {
         Logger.serverError(transport, e);
     }
-    
+
 });
 
 // vim:ts=4:sw=4:et:

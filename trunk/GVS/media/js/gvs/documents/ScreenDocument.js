@@ -6,7 +6,7 @@ var ScreenDocument = Class.create(PaletteDocument,
      * @constructs
      * @extends PaletteDocument
      */
-    initialize: function($super, /** Object */ properties) {     
+    initialize: function($super, /** Object */ properties) {
 
 		/**
          * Form instance of the screen, if any
@@ -36,7 +36,7 @@ var ScreenDocument = Class.create(PaletteDocument,
          * @private
          */
         this._dojoConnections = new Array();
-       
+
         /**
          * Recommendation Manager
          * @private
@@ -61,7 +61,7 @@ var ScreenDocument = Class.create(PaletteDocument,
 
 
     // **************** PUBLIC METHODS **************** //
-    
+
 
     /**
      * @override
@@ -77,7 +77,7 @@ var ScreenDocument = Class.create(PaletteDocument,
         this._pipeFactory.hidePipes();
     },
 
-    
+
     /**
      * Loads the definition of a screen, when the screen is opened
      */
@@ -281,9 +281,9 @@ var ScreenDocument = Class.create(PaletteDocument,
             // Remove circular dependencies
             this._dojoConnections = null;
             this._repaint = null;
-        }      
+        }
     },
-    
+
 
     /**
      * An element has been dropped into an area inside the canvas
@@ -317,7 +317,7 @@ var ScreenDocument = Class.create(PaletteDocument,
         }
 
         this._addToArea(area, instance, position, orientation);
-        
+
         if (!instance.getId()) {
             instance.setId(UIDGenerator.generate(instance.getTitle()));
         } else {
@@ -336,7 +336,7 @@ var ScreenDocument = Class.create(PaletteDocument,
             this._description.addBuildingBlock(instance, position, orientation);
         } else {
             instance.setConfigurable(false);
-            
+
             if (area.getNode().className.include("pre")) {
                 instance.setType("pre");
                 instance.createTerminal(terminalHandlers);
@@ -479,7 +479,7 @@ var ScreenDocument = Class.create(PaletteDocument,
 
     	$super(element);
     },
-    
+
     /**
      * Delete an instance.
      * @param instance ComponentInstance
@@ -488,7 +488,7 @@ var ScreenDocument = Class.create(PaletteDocument,
      * @override
      */
     _deleteInstance: function($super, /** ComponentInstance */ instance) {
-        
+
         if (instance.constructor == FormInstance) {
                 this._formInstance = null;
         }
@@ -518,7 +518,7 @@ var ScreenDocument = Class.create(PaletteDocument,
             if (palette) {
                 var set = palette.getBuildingBlockSet();
                 set.addURIs(pair.value);
-            } 
+            }
         }.bind(this));
     },
 
@@ -527,7 +527,7 @@ var ScreenDocument = Class.create(PaletteDocument,
      * @private
      */
     _configureToolbar: function() {
-       
+
         this._addToolbarElement('save', new ToolbarButton(
             'Save the current screen',
             'save',
@@ -579,7 +579,7 @@ var ScreenDocument = Class.create(PaletteDocument,
      * @override
      */
     _renderCenterContainer: function() {
-        
+
         var centerContainer = new dijit.layout.BorderContainer({
             design:"headline",
             liveSplitters:"false",
@@ -612,7 +612,7 @@ var ScreenDocument = Class.create(PaletteDocument,
         return centerContainer;
     },
 
-    
+
     /**
      * This function repaints the terminals in the document
      * @private
@@ -625,8 +625,8 @@ var ScreenDocument = Class.create(PaletteDocument,
             instance.onUpdate();
         });
     },
-    
-    
+
+
     /**
      * This function updates the reachability in all
      * Elements: canvas and palettes
@@ -651,7 +651,7 @@ var ScreenDocument = Class.create(PaletteDocument,
         } else if (this._selectedElement) {
         	body.selectedItem = this._selectedElement.getId();
         }
-        
+
         if (isFindCheck) {
             this._inferenceEngine.findCheck(canvas, body,  this._tags,
                                     'reachability', this._onUpdateReachability.bind(this));
@@ -662,8 +662,8 @@ var ScreenDocument = Class.create(PaletteDocument,
     },
 
     /**
-     * Parses the information coming in the 
-     * 
+     * Parses the information coming in the
+     *
      * @private
      */
     _parseConnectionElement: function(/** Hash */ desc, /** Boolean */ origin) {
@@ -794,10 +794,10 @@ var ScreenDocument = Class.create(PaletteDocument,
 
         this._updatePanes();
     },
-    
-    
+
+
     /**
-     * This function updates the properties table and 
+     * This function updates the properties table and
      * the pre/post pane depending on the selected element
      * @private
      */
@@ -805,11 +805,11 @@ var ScreenDocument = Class.create(PaletteDocument,
 
         if (!this._selectedElement) {
             this._propertiesPane.fillTable(this._description);
-            var facts = this._getAllFacts();     
+            var facts = this._getAllFacts();
             this._factPane.fillTable([], [], facts);
         } else {
             this._propertiesPane.fillTable(this._selectedElement);
-           
+
             if (this._selectedElement.constructor != PrePostInstance) {
 
                 var instanceActions = this._getInstanceActions();
@@ -831,10 +831,10 @@ var ScreenDocument = Class.create(PaletteDocument,
                     var factInfo = [this._selectedElement.getConditionTable()];
                     this._factPane.fillTable([], [], factInfo);
                 }
-            }    
+            }
         }
     },
-   
+
 
     /**
      * This function returns a hash containing all the actions of the
@@ -858,8 +858,8 @@ var ScreenDocument = Class.create(PaletteDocument,
      * @private
      * @type DOMNode
      */
-    _buildTriggerList: function(/** String */ actionName, /** Array */ triggerList) {     
-        
+    _buildTriggerList: function(/** String */ actionName, /** Array */ triggerList) {
+
         var result = new Element('div');
         var content = "";
         if (triggerList) {
@@ -976,7 +976,7 @@ var ScreenDocument = Class.create(PaletteDocument,
             PersistenceEngine.sendPost(uri, null, null,
                                       {'mine': this, 'status': status},
                                       this._onShareSuccess, Utils.onAJAXError);
-        }  
+        }
     },
 
     /**
@@ -1004,7 +1004,7 @@ var ScreenDocument = Class.create(PaletteDocument,
             getBuildingBlockFactory(Constants.BuildingBlock.FORM);
         var forms = formFactory.getBuildingBlocks(this._canvasCache.getFormURI());
         this._createInstances(formFactory, forms, this._areas.get('form'));
-        this._canvasCache.setLoaded(Constants.BuildingBlock.FORM);     
+        this._canvasCache.setLoaded(Constants.BuildingBlock.FORM);
         this._loadConnections();
     },
 

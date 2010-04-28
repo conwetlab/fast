@@ -4,7 +4,7 @@ var PipeFactory = Class.create(
     /**
      * Handles all pipes for a given screenflow
      * @constructs
-     */ 
+     */
     initialize: function () {
         /**
          * Hash containing all the pipes for the screen
@@ -24,7 +24,7 @@ var PipeFactory = Class.create(
             wire = arguments[0];
             source = wire.terminal1;
             destination = wire.terminal2;
-           
+
         } else {
             // Get pipe by the terminals
             source = arguments[0];
@@ -58,7 +58,7 @@ var PipeFactory = Class.create(
      */
     getPipeFromTerminals: function(/** Terminal */ src, /** Terminal */ dst) {
         var values = this._pipes.values();
-        
+
         for (var i = 0; i < values.size(); i++) {
             var pipe = values[i];
             var found = pipe.getSource() == src;
@@ -104,7 +104,7 @@ var PipeFactory = Class.create(
            pipe.setVisible(true);
         });
     },
-    
+
     // **************** PRIVATE METHODS **************** //
 
     /**

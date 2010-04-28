@@ -1,5 +1,5 @@
 /**
- * <p>This class implements the Singleton Design Pattern to make sure there is 
+ * <p>This class implements the Singleton Design Pattern to make sure there is
  * only one instance of the class %%CLASSNAME%%.
  *
  * <p> It should be accessed as follows.
@@ -7,30 +7,30 @@
  * @constructor
  * @example
  * var instance = %%CLASNAME%%Singleton.getInstance();
- */ 
+ */
 var %%CLASSNAME%%Singleton = function() {
     /**
      * Singleton instance
      * @private @member
      */
     var _instance = null;
-    
+
 
     var %%CLASSNAME%% = Class.create( /** @lends %%CLASSNAME%%Singleton-%%CLASSNAME%%.prototype */ {
         /** @constructs */
         initialize: function() {
 
-            /** 
+            /**
              * Private variable
              * @type String
              * @private @member
              */
             this._privateVar = null;
         },
-        
+
 
         // **************** PUBLIC METHODS **************** //
-        
+
 
         /**
          * foo
@@ -42,16 +42,16 @@ var %%CLASSNAME%%Singleton = function() {
         // **************** PRIVATE METHODS **************** //
 
 
-        /** 
+        /**
          * bar
          * @private
          */
         _bar: function () {
         }
-        
+
     });
-    
-  
+
+
     return new function() {
         /**
          * Returns the singleton instance
@@ -66,4 +66,4 @@ var %%CLASSNAME%%Singleton = function() {
     }
 }();
 
-// vim:ts=4:sw=4:et: 
+// vim:ts=4:sw=4:et:

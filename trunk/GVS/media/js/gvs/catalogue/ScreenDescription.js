@@ -16,7 +16,7 @@ var ScreenDescription = Class.create(BuildingBlockDescription,
         this._pipes = new Hash();
         this._triggers = new Hash();
     },
-    
+
     // ****************** PUBLIC METHODS ******************* //
 
     /**
@@ -50,7 +50,7 @@ var ScreenDescription = Class.create(BuildingBlockDescription,
         });
         return result;
     },
-    
+
     /**
      * This method creates a DOM Node with the preview
      * of the Screen
@@ -65,7 +65,7 @@ var ScreenDescription = Class.create(BuildingBlockDescription,
         });
         node.appendChild(errorField);
         var image = new Element ('img', {
-            'src': this.screenshot, 
+            'src': this.screenshot,
             'onerror': "this.parentNode.childNodes[0].update('Image not available');" +
                 "this.src='"+ URIs.logoFast + "';"
         });
@@ -139,7 +139,7 @@ var ScreenDescription = Class.create(BuildingBlockDescription,
             'orientation': orientation
         });
     },
-  
+
     /**
      * Updates the position of a building block
      * @type Boolean
@@ -277,7 +277,7 @@ var ScreenDescription = Class.create(BuildingBlockDescription,
     },
 
     /**
-     * Get a list of pre and post condition instances 
+     * Get a list of pre and post condition instances
      * @type Array
      */
     getConditionInstances: function() {
@@ -302,7 +302,7 @@ var ScreenDescription = Class.create(BuildingBlockDescription,
         } else {
             return null;
         }
-        
+
     },
 
     /**
@@ -315,7 +315,7 @@ var ScreenDescription = Class.create(BuildingBlockDescription,
         } else {
             return null;
         }
-    },  
+    },
 
     /**
      * Removes an instance from the screen description
@@ -390,4 +390,4 @@ var ScreenDescription = Class.create(BuildingBlockDescription,
 
 });
 
-// vim:ts=4:sw=4:et: 
+// vim:ts=4:sw=4:et:

@@ -5,7 +5,7 @@ var FormView = Class.create(BuildingBlockView,
      * Forms graphical representation
      * @constructs
      * @extends BuildingBlockView
-     */ 
+     */
     initialize: function($super, /** FormDescription */ description) {
 
         $super();
@@ -22,27 +22,27 @@ var FormView = Class.create(BuildingBlockView,
          * @type Hash
          * @private
          */
-        this._postIcons = new Hash();  
-        
+        this._postIcons = new Hash();
+
         /**
          * Trigger icons
          * @type Hash
-         * @private 
-         */         
-        this._triggerIcons = new Hash(); 
+         * @private
+         */
+        this._triggerIcons = new Hash();
 
-        
+
         this._node = new Element("div", {
             "class": "view form",
             "title": description.name
         });
-        
+
         var title = new Element("div", {
             "class": "title"
         }).update(description.label['en-gb']);
-        
+
         this._node.appendChild(title);
-        
+
         var actionsNode = new Element("div", {
             "class": "actions"
         });
@@ -51,59 +51,59 @@ var FormView = Class.create(BuildingBlockView,
         }).update("Actions");
         this._node.appendChild(actionsNode);
         actionsNode.appendChild(actionsTitle);
-        
-        var actions = description.actions;      
+
+        var actions = description.actions;
         actions.each( function(action) {
             var actionView = new ActionView(action);
             this._actions.set(action.name, actionView);
-            actionsNode.appendChild(actionView.getNode());           
+            actionsNode.appendChild(actionView.getNode());
         }.bind(this));
-        
+
         var triggerPostContainer = new Element("div", {
-            "class": "postTriggerContainer"    
+            "class": "postTriggerContainer"
         });
-        
+
         var containerTitle = new Element("div", {
             "class": "title"
         }).update("Postconditions");
         triggerPostContainer.appendChild(containerTitle);
-        
+
         var triggerArea = new Element("div", {
             "class": "triggerArea"
         });
         triggerPostContainer.appendChild(triggerArea);
-        
+
         var posts;
         if (description.postconditions && description.postconditions[0] instanceof Array) {
             posts =  description.postconditions[0];
         } else {
             posts = description.postconditions;
         }
-        
+
         var postArea = new Element("div", {
-            "class": "postArea"    
+            "class": "postArea"
         });
-        
-        
-        
+
+
+
         posts.each (function(post) {
             var fact = FactFactory.getFactIcon(post, "embedded");
             this._postIcons.set(post.id, fact);
             postArea.appendChild(fact.getNode());
         }.bind(this));
         triggerPostContainer.appendChild(postArea);
-        
+
         this._node.appendChild(triggerPostContainer);
 
     },
-    
+
     // **************** PUBLIC METHODS **************** //
     /**
      * This function returns the domNode of the condition that has
      * the id passed as parameter
      * @type DOMNode
      */
-    getConditionNode: function(/** String */ id, 
+    getConditionNode: function(/** String */ id,
                             /** String (Optional) */ _action) {
         if (_action) {
             return this._actions.get(_action).getConditionNode(id);
@@ -111,7 +111,7 @@ var FormView = Class.create(BuildingBlockView,
             return this._postIcons.get(id).getNode();
         }
     },
-    
+
     /**
      * Colorize the component depending on the reachability
      * @public @override
@@ -127,23 +127,23 @@ var FormView = Class.create(BuildingBlockView,
             Utils.setSatisfeabilityClass(post.getNode(), satisfeable);
         });
     },
-    
+
     /**
      * Removes the DOM Elements and frees building blocks
      * @override
      */
     destroy: function () {
         // Let the garbage collector to do its job
-        
+
         this._actions.each(function(pair) {
             pair.value.destroy();
         });
         this._postIcons = null;
         this._triggerIcons.each(function(pair) {
-            pair.value.destroy();    
+            pair.value.destroy();
         });
     }
-    
+
     // **************** PRIVATE METHODS **************** //
 });
 

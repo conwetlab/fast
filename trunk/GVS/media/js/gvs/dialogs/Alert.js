@@ -1,5 +1,5 @@
 /**
- * <p>This class implements the Singleton Design Pattern to make sure there is 
+ * <p>This class implements the Singleton Design Pattern to make sure there is
  * only one instance of the class Preferences.
  *
  * <p> It should be accessed as follows.
@@ -7,7 +7,7 @@
  * @constructor
  * @example
  * var alert = AlertSingleton.getInstance();
- */ 
+ */
 var AlertSingleton = function() {
 
     /**
@@ -15,12 +15,12 @@ var AlertSingleton = function() {
      * @private @member
      */
     var _instance = null;
-    
+
 
     var Alert = Class.create(FormDialog,
         /** @lends AlertSingleton-Alert.prototype */ {
 
-        /** 
+        /**
          * Alert dialog
          * @constructs
          * @extends FormDialog
@@ -30,10 +30,10 @@ var AlertSingleton = function() {
                'title': 'Warning',
                'style': 'display:none'
             });
-            this._contentNode.addClassName("systemDialog"); 
-            
+            this._contentNode.addClassName("systemDialog");
+
             this._addButton ('Ok', function(){
-                this._dialog.hide();   
+                this._dialog.hide();
             }.bind(this));
         },
         /**
@@ -41,7 +41,7 @@ var AlertSingleton = function() {
          */
         show: function  ($super, /** String */ message){
             this._contentNode.update(message);
-            
+
             $super();
         },
         /**
@@ -50,7 +50,7 @@ var AlertSingleton = function() {
          */
         _initDialogInterface: function() {
             // Do nothing
-        }        
+        }
     });
 
     return new function(){
@@ -72,7 +72,7 @@ if (document.getElementById) {
     window.alert = function(msg) {
         AlertSingleton.getInstance().show(msg);
         console.log(msg);
-    }   
+    }
 }
 
 

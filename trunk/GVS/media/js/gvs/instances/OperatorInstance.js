@@ -6,18 +6,18 @@ var OperatorInstance = Class.create(ComponentInstance,
      * @constructs
      * @extends ComponentInstance
      */
-    initialize: function($super, /** BuildingBlockDescription */ description, 
+    initialize: function($super, /** BuildingBlockDescription */ description,
             /** InferenceEngine */ inferenceEngine) {
         $super(description, inferenceEngine);
-              
-        
+
+
         /**
          * Terminals for screen design
          * @type Hash
-         * @private 
+         * @private
          */
         this._terminals = new Hash();
-        
+
     },
 
     // **************** PUBLIC METHODS **************** //
@@ -28,17 +28,17 @@ var OperatorInstance = Class.create(ComponentInstance,
      * @override
      */
     getTitle: function() {
-        return this._buildingBlockDescription.label['en-gb']; 
+        return this._buildingBlockDescription.label['en-gb'];
     },
-     
-    
+
+
     /**
      * @override
      */
     getUri: function() {
-        return this._buildingBlockDescription.uri;    
+        return this._buildingBlockDescription.uri;
     },
-    
+
     /**
      * Creates the terminal
      */
@@ -51,7 +51,7 @@ var OperatorInstance = Class.create(ComponentInstance,
         };
         this._buildingBlockDescription.actions.each(function(action) {
             var actionTerminals = new Hash();
-            action.preconditions.each(function(pre) { 
+            action.preconditions.each(function(pre) {
                 options.ddConfig = {
                     'type': 'input',
                     'allowedTypes': ['output']
@@ -67,9 +67,9 @@ var OperatorInstance = Class.create(ComponentInstance,
             }.bind(this));
             this._terminals.set(action.name, actionTerminals);
         }.bind(this));
-        
+
         var posts;
-        if (this._buildingBlockDescription.postconditions && 
+        if (this._buildingBlockDescription.postconditions &&
                 this._buildingBlockDescription.postconditions[0] instanceof Array) {
             posts = this._buildingBlockDescription.postconditions[0];
         } else {
@@ -123,8 +123,8 @@ var OperatorInstance = Class.create(ComponentInstance,
         return this._getConditionList("actions", reachability);
     },
 
-    
-    
+
+
     /**
      * Destroy the instance
      * @override
@@ -141,17 +141,17 @@ var OperatorInstance = Class.create(ComponentInstance,
         $super();
     },
 
-   
+
     /*onStart: function() {
         if (this._terminals) {
             this._terminals.each(function(terminal){
                 terminal.wires.each(function(wire) {
-                    wire.element.setStyle({'display': 'none'});            
+                    wire.element.setStyle({'display': 'none'});
                 });
             });
         }
     },*/
-    
+
     /**
      * On position update
      * @override
@@ -165,7 +165,7 @@ var OperatorInstance = Class.create(ComponentInstance,
             });
         }
     },
-    
+
     /**
      * On rotate
      * @override
@@ -189,7 +189,7 @@ var OperatorInstance = Class.create(ComponentInstance,
     _createView: function () {
         return new OperatorView(this._buildingBlockDescription, this._orientation);
     }
-    
+
 });
 
 // vim:ts=4:sw=4:et:

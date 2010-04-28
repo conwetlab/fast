@@ -4,26 +4,26 @@ var PlanSet = Class.create(BuildingBlockSet, /** @lends PlanSet.prototype */ {
      * This list will be updated.
      * @constructs
      * @extends BuildingBlockSet
-     */ 
+     */
     initialize: function($super) {
         $super([]);
-        
-        /** 
+
+        /**
          * List of Plans
          * @type Array
          * @private @member
          */
         this._plans = new Array();
-               
-        
+
+
         this._factory = Catalogue.
             getBuildingBlockFactory(Constants.BuildingBlock.SCREEN);
     },
-    
+
 
     // **************** PUBLIC METHODS **************** //
 
-    
+
     /**
      * Returns all the building blocks ordered by plan from the set
      * @type Array
@@ -32,11 +32,11 @@ var PlanSet = Class.create(BuildingBlockSet, /** @lends PlanSet.prototype */ {
     getBuildingBlocks: function () {
         var result = new Array();
         this._plans.each(function(plan) {
-            result.push(this._factory.getBuildingBlocks(plan));    
+            result.push(this._factory.getBuildingBlocks(plan));
         }.bind(this));
         return result;
     },
-    
+
     /**
      * Add new building blocks to the set by uri
      */
@@ -49,13 +49,13 @@ var PlanSet = Class.create(BuildingBlockSet, /** @lends PlanSet.prototype */ {
     // **************** PRIVATE METHODS **************** //
 
     /**
-     * This is the callback called when returning from the 
+     * This is the callback called when returning from the
      * building block factory
      */
     _cachedElements: function () {
         this._listener.setChanged();
     }
-    
+
 });
 
 // vim:ts=4:sw=4:et:

@@ -4,7 +4,7 @@ var NewScreenDialog = Class.create(ConfirmDialog /** @lends NewScreenDialog.prot
      * to create a new Screen
      * @constructs
      * @extends ConfirmDialog
-     */ 
+     */
     initialize: function($super) {
         /**
          * Current screen name/version availability
@@ -15,32 +15,32 @@ var NewScreenDialog = Class.create(ConfirmDialog /** @lends NewScreenDialog.prot
 
         $super("New Screen", ConfirmDialog.OK_CANCEL, {'createMessageZone': true});
     },
-    
-    
+
+
     // **************** PUBLIC METHODS **************** //
 
 
     // **************** PRIVATE METHODS **************** //
 
 
-    /** 
+    /**
      * initDialogInterface
      * This function creates the dom structure and
      * @private
      * @override
      */
     _initDialogInterface: function (){
- 
-        this._setHeader("Fulfill Screen Information", 
+
+        this._setHeader("Fulfill Screen Information",
                              "Please fulfill the required information in order to " +
                              "create a new screen.");
 
         var callback = this._scheduleAvailabilityCheck.bind(this);
         var formData = [
             {
-                'type':'input', 
+                'type':'input',
                 'label': 'Screen Name:',
-                'name': 'name', 
+                'name': 'name',
                 'value': '',
                 'message': 'Screen cannot be blank',
                 'required': true,
@@ -52,9 +52,9 @@ var NewScreenDialog = Class.create(ConfirmDialog /** @lends NewScreenDialog.prot
                 }
             },
             {
-                'type':'input', 
-                'label': 'Version:', 
-                'name': 'version', 
+                'type':'input',
+                'label': 'Version:',
+                'name': 'version',
                 'value': '',
                 'message': 'Version cannot be blank',
                 'events': {
@@ -62,7 +62,7 @@ var NewScreenDialog = Class.create(ConfirmDialog /** @lends NewScreenDialog.prot
                 }
             },
             {
-                'type':'input', 
+                'type':'input',
                 'label': 'Tags:',
                 'name': 'tags',
                 'value': ''
@@ -179,9 +179,9 @@ var NewScreenDialog = Class.create(ConfirmDialog /** @lends NewScreenDialog.prot
 
             var documentController = GVS.getDocumentController();
             documentController.createScreen(name, processedTags, version);
-            
+
             $super();
-        }       
+        }
     },
 
      /**

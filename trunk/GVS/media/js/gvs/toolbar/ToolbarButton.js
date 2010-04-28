@@ -4,12 +4,12 @@ var ToolbarButton = Class.create( /** @lends ToolbarButton.prototype */ {
      * Implementing ToolbarElement interface
      * @constructs
      * @param Boolean enabled (optional)
-     */ 
+     */
     initialize: function(/** String */ label, /** String */ iconName,
             /** Function */ onClick, /** Boolean*/ enabled) {
-        /** 
+        /**
          * The button Widget
-         * @type dijit.form.Button 
+         * @type dijit.form.Button
          * @private @member
          */
         this._widget = new dijit.form.Button ({
@@ -20,11 +20,11 @@ var ToolbarButton = Class.create( /** @lends ToolbarButton.prototype */ {
             'disabled': (enabled !== undefined)? (!enabled) : false
         });
     },
-    
+
 
     // **************** PUBLIC METHODS **************** //
 
-    
+
     /**
      * Returns the button widget
      * @type dijit.form.Button
@@ -32,11 +32,11 @@ var ToolbarButton = Class.create( /** @lends ToolbarButton.prototype */ {
     getWidget: function () {
         return this._widget;
     },
-    
+
     setEnabled: function(/** Boolean */ enabled) {
         this._widget.attr('disabled',!enabled);
     }
-    
+
 });
 
 // vim:ts=4:sw=4:et:

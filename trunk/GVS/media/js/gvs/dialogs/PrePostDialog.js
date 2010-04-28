@@ -4,11 +4,11 @@ var PrePostDialog = Class.create(ConfirmDialog /** @lends PrePostDialog.prototyp
      * to update the *-condition properties
      * @constructs
      * @extends ConfirmDialog
-     */ 
+     */
     initialize: function($super,
             /** Function */ onChangeCallback, /** String */ label, /** String */ type) {
         $super("Pre/Post Condition");
-        
+
         /**
          * @type String
          * @private @member
@@ -25,22 +25,22 @@ var PrePostDialog = Class.create(ConfirmDialog /** @lends PrePostDialog.prototyp
 
         this._onChangeCallback = onChangeCallback;
     },
-    
-    
+
+
     // **************** PUBLIC METHODS **************** //
 
     // **************** PRIVATE METHODS **************** //
 
 
-    /** 
+    /**
      * initDialogInterface
      * This function creates the dom structure and
      * @private
      * @overrides
      */
     _initDialogInterface: function (){
- 
-        this._setHeader("Check domain concept details", 
+
+        this._setHeader("Check domain concept details",
                              "Please fulfill the required information in order to" +
                              " set up the Domain Concept");
 
@@ -85,8 +85,8 @@ var PrePostDialog = Class.create(ConfirmDialog /** @lends PrePostDialog.prototyp
                 'required': true
             }
         ];
-        
-        this._setContent(formData);               
+
+        this._setContent(formData);
         this._onTypeChange();
     },
     /**
@@ -98,13 +98,13 @@ var PrePostDialog = Class.create(ConfirmDialog /** @lends PrePostDialog.prototyp
         this._onChangeCallback(this._getForm().serialize({'hash':true}));
         $super();
     },
- 
+
     /**
      * Function called when the type of domain concept changes
      * @private
-     */    
+     */
     _onTypeChange: function() {
-        
+
         var bindings = new Array();
         switch ($F(this._getForm().type)) {
             case 'pre':
@@ -115,7 +115,7 @@ var PrePostDialog = Class.create(ConfirmDialog /** @lends PrePostDialog.prototyp
             case 'post':
                 bindings.push({'value':'event','label':'Event'});
                 break;
-            default: 
+            default:
                 break;
         }
         var bindingNode = $(this._getForm().binding);
@@ -124,8 +124,8 @@ var PrePostDialog = Class.create(ConfirmDialog /** @lends PrePostDialog.prototyp
            var optionNode = new Element('option', {
                              'value': binding.value
                         }).update(binding.label);
-           bindingNode.appendChild(optionNode);                      
-        });                    
+           bindingNode.appendChild(optionNode);
+        });
     }
 });
 

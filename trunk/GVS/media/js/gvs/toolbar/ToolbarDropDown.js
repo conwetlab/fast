@@ -4,19 +4,19 @@ var ToolbarDropDown = Class.create( /** @lends ToolbarDropDown.prototype */ {
      * Implementing ToolbarElement interface
      * @constructs
      * @param Boolean enabled (optional)
-     */ 
+     */
     initialize: function(/** String */ label, /** String */ iconName, /** Boolean*/ enabled) {
-        
+
         /**
          * The Menu inside the DropDown
          * @type dijit.Menu
          * @private
          */
         this._menu = new dijit.Menu();
-        
-        /** 
+
+        /**
          * The DropDown Widget
-         * @type dijit.form.DropDown 
+         * @type dijit.form.DropDown
          * @private @member
          */
         this._widget = new dijit.form.DropDownButton ({
@@ -27,7 +27,7 @@ var ToolbarDropDown = Class.create( /** @lends ToolbarDropDown.prototype */ {
             'disabled': (enabled !== undefined)? (!enabled) : false
         });
     },
-    
+
 
     // **************** PUBLIC METHODS **************** //
     /**
@@ -37,14 +37,14 @@ var ToolbarDropDown = Class.create( /** @lends ToolbarDropDown.prototype */ {
         var item = new dijit.MenuItem({
             'label': label,
             'showLabel': true,
-            'onClick': onClick  
+            'onClick': onClick
         });
         if (iconName) {
             item.attr('iconClass', 'dropDownIcon ' + iconName + 'Icon');
         }
         this._menu.addChild(item);
     },
-    
+
     /**
      * Returns the DropDown widget
      * @type dijit.form.DropDown
@@ -52,7 +52,7 @@ var ToolbarDropDown = Class.create( /** @lends ToolbarDropDown.prototype */ {
     getWidget: function () {
         return this._widget;
     },
-    
+
     /**
      * Set the status of the widget
      */

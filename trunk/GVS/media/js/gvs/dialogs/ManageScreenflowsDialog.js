@@ -4,8 +4,8 @@ var ManageScreenflowsDialog = Class.create(GalleryDialog /** @lends ManageScreen
      * to open an existing screen
      * @constructs
      * @extends GalleryDialog
-     */ 
-    initialize: function($super) {  
+     */
+    initialize: function($super) {
         $super("Screenflow browser", {'onDblClick': this._openScreenflow.bind(this),
                                       'disableIfNotValid': true });
 
@@ -16,8 +16,8 @@ var ManageScreenflowsDialog = Class.create(GalleryDialog /** @lends ManageScreen
          */
         this._screenflows = null;
     },
-    
-    
+
+
     // **************** PUBLIC METHODS **************** //
 
     /**
@@ -31,7 +31,7 @@ var ManageScreenflowsDialog = Class.create(GalleryDialog /** @lends ManageScreen
     // **************** PRIVATE METHODS **************** //
 
 
-    /** 
+    /**
      * initDialogInterface
      * This function creates the dom structure
      * @private
@@ -112,7 +112,7 @@ var ManageScreenflowsDialog = Class.create(GalleryDialog /** @lends ManageScreen
                         });
         }.bind(this));
     },
-    
+
     /**
      * On Success handler
      * @private
@@ -163,7 +163,7 @@ var ManageScreenflowsDialog = Class.create(GalleryDialog /** @lends ManageScreen
             return element.id == id;
         });
         if (screen.uri) {
-            // Unshare screen       
+            // Unshare screen
             PersistenceEngine.sendDelete(uri, this, this._reload, Utils.onAJAXError);
         } else {
             // Share screen

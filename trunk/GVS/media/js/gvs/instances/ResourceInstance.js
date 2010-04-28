@@ -6,17 +6,17 @@ var ResourceInstance = Class.create(ComponentInstance,
      * @constructs
      * @extends ComponentInstance
      */
-    initialize: function($super, /** BuildingBlockDescription */ description, 
+    initialize: function($super, /** BuildingBlockDescription */ description,
             /** InferenceEngine */ inferenceEngine) {
-        $super(description, inferenceEngine);  
-        
+        $super(description, inferenceEngine);
+
         /**
          * Terminals for screen design
          * @type Array
-         * @private 
+         * @private
          */
         this._terminals = new Hash();
-        
+
     },
 
     // **************** PUBLIC METHODS **************** //
@@ -27,17 +27,17 @@ var ResourceInstance = Class.create(ComponentInstance,
      * @override
      */
     getTitle: function() {
-        return this._buildingBlockDescription.label['en-gb']; 
+        return this._buildingBlockDescription.label['en-gb'];
     },
-    
-    
+
+
     /**
      * @override
      */
     getUri: function() {
-        return this._buildingBlockDescription.uri    
+        return this._buildingBlockDescription.uri
     },
-    
+
     /**
      * Creates the terminal
      */
@@ -55,7 +55,7 @@ var ResourceInstance = Class.create(ComponentInstance,
         var actionTerminals;
         this._buildingBlockDescription.actions.each(function(action) {
         	actionTerminals = new Hash();
-            action.preconditions.each(function(pre) { 
+            action.preconditions.each(function(pre) {
                   options.ddConfig = {
                      'type': 'input',
                      'allowedTypes': ['output']
@@ -69,7 +69,7 @@ var ResourceInstance = Class.create(ComponentInstance,
         }.bind(this));
 
         var posts;
-        if (this._buildingBlockDescription.postconditions && 
+        if (this._buildingBlockDescription.postconditions &&
                 this._buildingBlockDescription.postconditions[0] instanceof Array) {
             posts = this._buildingBlockDescription.postconditions[0];
         } else {
@@ -107,7 +107,7 @@ var ResourceInstance = Class.create(ComponentInstance,
         }
         return terminal;
     },
-    
+
     /**
      * Destroy the instance
      * @override
@@ -127,12 +127,12 @@ var ResourceInstance = Class.create(ComponentInstance,
         if (this._terminals) {
             this._terminals.each(function(terminal){
                 terminal.wires.each(function(wire) {
-                    wire.element.setStyle({'display': 'none'});            
+                    wire.element.setStyle({'display': 'none'});
                 });
             });
         }
     },*/
-    
+
     /**
      * On position update
      * @override
@@ -167,7 +167,7 @@ var ResourceInstance = Class.create(ComponentInstance,
     _createView: function () {
         return new ResourceView(this._buildingBlockDescription);
     }
-    
+
 });
 
 // vim:ts=4:sw=4:et:

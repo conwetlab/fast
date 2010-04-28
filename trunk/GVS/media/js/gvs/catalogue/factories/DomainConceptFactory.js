@@ -8,7 +8,7 @@ var DomainConceptFactory = Class.create(BuildingBlockFactory,
      */
     initialize: function($super) {
         $super();
-        
+
     },
 
     /**
@@ -32,9 +32,9 @@ var DomainConceptFactory = Class.create(BuildingBlockFactory,
                 },
                 this._onSuccess, this._onError);
     },
-   
+
     // **************** PUBLIC METHODS **************** //
-    
+
     _createUrl: function(/** Array */ tags){
         if (tags.size() > 0) {
             var processedTags = tags.collect(function(tag) {
@@ -45,21 +45,21 @@ var DomainConceptFactory = Class.create(BuildingBlockFactory,
             return URIs.catalogueAllConcepts;
         }
     },
-    
+
     _onSuccess: function (/** XMLHttpRequest */ transport) {
         var metadata = transport.responseText.evalJSON();
         var result = new Array();
-        
+
         $A(metadata).each(function(conceptProperties) {
             result.push(new PrePostDescription(conceptProperties));
         });
         this.callback(result);
     },
-    
+
     _onError: function (/**XMLHttpRequest*/ transport, /** Exception */ e) {
         Logger.serverError(transport, e);
     }
-    
+
 });
 
-// vim:ts=4:sw=4:et: 
+// vim:ts=4:sw=4:et:

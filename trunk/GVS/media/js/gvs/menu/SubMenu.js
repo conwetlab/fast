@@ -3,12 +3,12 @@ var SubMenu = Class.create(MenuElement, /** @lends SubMenu.prototype */ {
      * Element for a menu
      * @constructs
      * @extends MenuElement
-     */ 
+     */
     initialize: function($super, /** Object */ data, /** Boolean */ mainMenu) {
         $super(data.weight);
-        
+
         var menu = new dijit.Menu({});
-        
+
         if (mainMenu) {
             this._widget = new dijit.PopupMenuBarItem({
                     'label': data.label,
@@ -19,8 +19,8 @@ var SubMenu = Class.create(MenuElement, /** @lends SubMenu.prototype */ {
                     'label': data.label,
                     'popup': menu
                 });
-        }   
-        
+        }
+
 
         /**
          * Array for storing the different groups
@@ -29,7 +29,7 @@ var SubMenu = Class.create(MenuElement, /** @lends SubMenu.prototype */ {
          * @private
          */
         this._groups = new Array();
-        
+
         var child;
         $H(data.children).each(function(pair) {
             var childData = $H(pair.value).toObject();
@@ -39,16 +39,16 @@ var SubMenu = Class.create(MenuElement, /** @lends SubMenu.prototype */ {
                     break;
                 case 'submenu':
                     child = new SubMenu(childData);
-                    break;                
+                    break;
             }
             this._addChild(childData.group, child);
         }.bind(this));
         this._createSubMenu(menu);
     },
-    
 
-    // **************** PUBLIC METHODS **************** //   
-    
+
+    // **************** PUBLIC METHODS **************** //
+
     /**
      * Register key handlers
      * @override
@@ -56,11 +56,11 @@ var SubMenu = Class.create(MenuElement, /** @lends SubMenu.prototype */ {
     register: function(/** KeyPressRegistry */ registry) {
         this._groups.each(function(group) {
             group.each(function(child){
-                child.register(registry);    
-            });   
+                child.register(registry);
+            });
         });
     },
-    
+
     /**
      * Unregister key handlers and destroy the widget
      * @override
@@ -68,14 +68,14 @@ var SubMenu = Class.create(MenuElement, /** @lends SubMenu.prototype */ {
     unregister: function(/** KeyPressRegistry */ registry) {
         this._groups.each(function(group) {
             group.each(function(child){
-                child.unregister(registry);    
-            });   
+                child.unregister(registry);
+            });
         });
-        this._widget.destroy(false);      
+        this._widget.destroy(false);
     },
-    
+
     // ***************** PRIVATE METHODS *************** //
-    
+
      /**
      * Adds a new child to the submenu
      * @private
@@ -89,24 +89,24 @@ var SubMenu = Class.create(MenuElement, /** @lends SubMenu.prototype */ {
             return a.getWeight() - b.getWeight();
         });
     },
-    
-    
+
+
     /**
      * creates the submenu widget with the information
      * stored in the children's list
      * @private
      */
     _createSubMenu: function(/** Menu */ parent) {
-        
+
         for(var i=0; i < this._groups.size(); i++) {
             if (this._groups[i]) {
                 this._groups[i].each(function(element){
-                    parent.addChild(element.getWidget());    
+                    parent.addChild(element.getWidget());
                 });
                 if (i != this._groups.size() - 1) {
                     // Not last group
                     parent.addChild(new dijit.MenuSeparator());
-                }    
+                }
             }
         }
         parent.startup();

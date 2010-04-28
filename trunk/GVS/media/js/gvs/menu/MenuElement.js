@@ -3,15 +3,15 @@ var MenuElement = Class.create( /** @lends MenuElement.prototype */ {
      * Element for a menu
      * @constructs
      * @abstract
-     */ 
+     */
     initialize: function(/** Number */ weight) {
-        /** 
+        /**
          * The button Widget
          * @type dijit.*
          * @private
          */
-        this._widget = null;  
-        
+        this._widget = null;
+
         /**
          * Ordering weight, the lower, the sooner the menu element
          * appears within a menu group
@@ -23,11 +23,11 @@ var MenuElement = Class.create( /** @lends MenuElement.prototype */ {
             this._weight = MenuElement.MAXIMUM_WEIGHT;
         }
     },
-    
+
 
     // **************** PUBLIC METHODS **************** //
 
-    
+
     /**
      * Returns the  widget
      * @type dijit.*
@@ -35,15 +35,15 @@ var MenuElement = Class.create( /** @lends MenuElement.prototype */ {
     getWidget: function () {
         return this._widget;
     },
-    
+
     /**
      * Returns the weight
      * @type Number
      */
     getWeight: function() {
-        return this._weight;    
+        return this._weight;
     },
-    
+
     /**
      * Register key handlers
      * @abstract
@@ -51,9 +51,9 @@ var MenuElement = Class.create( /** @lends MenuElement.prototype */ {
     register: function(/** KeyPressRegistry */ registry) {
         throw "Abstract method invocation. MenuElement::register";
     },
-    
+
     /**
-     * Unregister key handlers and destroy the 
+     * Unregister key handlers and destroy the
      * widgets when necessary
      * @abstract
      */

@@ -6,10 +6,10 @@ var ScreenflowInstance = Class.create(ComponentInstance,
      * @constructs
      * @extends ComponentInstance
      */
-    initialize: function($super, /**BuildingBlockDescription*/ buildingBlockDescription, 
+    initialize: function($super, /**BuildingBlockDescription*/ buildingBlockDescription,
              /** InferenceEngine */ inferenceEngine) {
         $super(buildingBlockDescription, inferenceEngine);
-        
+
         /**
          * @type PreviewDialog
          * @private @member
@@ -24,7 +24,7 @@ var ScreenflowInstance = Class.create(ComponentInstance,
      * @override
      */
     getTitle: function() {
-        return this._buildingBlockDescription.label['en-gb'];    
+        return this._buildingBlockDescription.label['en-gb'];
     },
     /**
      * @override
@@ -38,7 +38,7 @@ var ScreenflowInstance = Class.create(ComponentInstance,
             }).join(", "));
         return info;
     },
-    
+
     /**
      * This function shows the dialog to change
      * the instance properties
@@ -47,17 +47,17 @@ var ScreenflowInstance = Class.create(ComponentInstance,
         if (!this._dialog) {
             this._dialog = new PreviewDialog(this.getTitle(), this._buildingBlockDescription.getPreview());
         }
-        this._dialog.show();        
+        this._dialog.show();
     },
-    
+
     /**
-     * This function returns a list with all the 
-     * preconditions of the instance, 
+     * This function returns a list with all the
+     * preconditions of the instance,
      * ready to be set in the FactPane
      * @type Array
      */
     getPreconditionTable: function(/** Hash */ reachability) {
-        return this._getConditionList("preconditions", reachability);    
+        return this._getConditionList("preconditions", reachability);
     },
 
     // **************** PRIVATE METHODS **************** //
@@ -77,8 +77,8 @@ var ScreenflowInstance = Class.create(ComponentInstance,
      * @override
      */
     _onDoubleClick: function (/** Event */ event){
-        this.showPreviewDialog(); 
-    } 
+        this.showPreviewDialog();
+    }
 });
 
 // vim:ts=4:sw=4:et:

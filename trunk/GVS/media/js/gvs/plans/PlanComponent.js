@@ -5,13 +5,13 @@ var PlanComponent = Class.create(DragSource,
      * GUI element that represents a Plan element.
      * @constructs
      * @extends DragSource
-     */ 
-    initialize: function($super,/** Array */ plan, /** DropZone */ dropZone, 
+     */
+    initialize: function($super,/** Array */ plan, /** DropZone */ dropZone,
                         /** InferenceEngine */ inferenceEngine) {
         $super();
-        
+
         /**
-         * Component and instance Drop zone 
+         * Component and instance Drop zone
          * @type DropZone
          * @private
          */
@@ -23,30 +23,30 @@ var PlanComponent = Class.create(DragSource,
          * @private
          */
         this._plan = plan;
-        
-        
+
+
         /**
          * Inference engine
          * @type InferenceEngine
          * @private
          */
         this._inferenceEngine = inferenceEngine;
-        
+
         /**
          * Plan view
          * @type PlanView
          * @private
          */
         this._view = new PlanView(this._plan);
-        
+
         /**
          * Node of the component.
          * @type DOMNode
          * @private
          */
         this._node = this._view.getNode();
-        
-        
+
+
         this.enableDragNDrop(null, [this._dropZone]);
     },
 
@@ -60,7 +60,7 @@ var PlanComponent = Class.create(DragSource,
     getNode: function() {
         return this._node;
     },
-    
+
 
     /**
      * Returns the node that can be clicked to start a drag-n-drop operation.
@@ -89,7 +89,7 @@ var PlanComponent = Class.create(DragSource,
         return instance;
     },
 
-    
+
     // **************** PRIVATE METHODS **************** //
 
     /**
@@ -98,7 +98,7 @@ var PlanComponent = Class.create(DragSource,
      * @private
      */
     _getContentOffsetTop: function() {
-        
+
         return this._node.cumulativeOffset().top -
                 this._node.cumulativeScrollOffset().top;
     },

@@ -13,10 +13,10 @@ var RecommendationManager = Class.create(/** @lends RecommendationManager.protot
         this._recommendations = new Hash();
 
         /**
-         * 
+         *
          */
         this._activeRecommendations = new Hash();
-        
+
         /**
          * Current recommendation id
          * @type Number
@@ -32,16 +32,16 @@ var RecommendationManager = Class.create(/** @lends RecommendationManager.protot
         this._step = 0;
 
         /**
-         * Timestamp when the animation started 
-         * 
+         * Timestamp when the animation started
+         *
          * @type Number
          * @private
          */
         this._startTimespam = 0;
 
         /**
-         * setTimeout handler 
-         * 
+         * setTimeout handler
+         *
          * @type Number
          * @private
          */
@@ -49,7 +49,7 @@ var RecommendationManager = Class.create(/** @lends RecommendationManager.protot
     },
 
     // **************** PUBLIC METHODS **************** //
-    
+
 	/**
 	 * Sets the recommendations to manage
 	 *
@@ -94,7 +94,7 @@ var RecommendationManager = Class.create(/** @lends RecommendationManager.protot
     	if (this._startFact)
     		this.startAnimation();
     },
-    
+
     /**
      * Starts recommendation animation
      */
@@ -126,7 +126,7 @@ var RecommendationManager = Class.create(/** @lends RecommendationManager.protot
     /**
      * Updates this._activeRecommedations using the current contents of
      * this._recommendations and this._startFact.
-     * 
+     *
      * @private
      */
     _filterRecommendations: function() {
@@ -144,7 +144,7 @@ var RecommendationManager = Class.create(/** @lends RecommendationManager.protot
 
     /**
      * Removes all node style included for recommendations.
-     * 
+     *
      * @private
      */
     _clear: function() {
@@ -161,7 +161,7 @@ var RecommendationManager = Class.create(/** @lends RecommendationManager.protot
 
 	/**
 	 * Stops recommendation animation
-	 * 
+	 *
 	 * @private
 	 */
     _stopAnimation: function() {
@@ -173,7 +173,7 @@ var RecommendationManager = Class.create(/** @lends RecommendationManager.protot
 
 	/**
 	 * Starts recommendation animation
-	 * 
+	 *
 	 * @private
 	 */
     _startAnimation: function(duration) {
@@ -228,7 +228,7 @@ var RecommendationManager = Class.create(/** @lends RecommendationManager.protot
     		this._timeout = setTimeout(this._timeoutCallback.bind(this), 100);
     	}
     }
-    
+
 });
 
 //vim:ts=4:sw=4:et:

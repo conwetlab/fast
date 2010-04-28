@@ -6,24 +6,24 @@ var FormInstance = Class.create(ComponentInstance,
      * @constructs
      * @extends ComponentInstance
      */
-    initialize: function($super, /** BuildingBlockDescription */ description, 
+    initialize: function($super, /** BuildingBlockDescription */ description,
             /** InferenceEngine */ inferenceEngine) {
         $super(description, inferenceEngine);
-              
-        
+
+
         /**
          * Terminals for screen design
          * @type Array
-         * @private 
+         * @private
          */
         this._terminals = new Hash();
-        
+
         /**
          * @type PreviewDialog
          * @private @member
          */
         this._dialog = null;
-        
+
     },
 
     // **************** PUBLIC METHODS **************** //
@@ -34,9 +34,9 @@ var FormInstance = Class.create(ComponentInstance,
      * @override
      */
     getTitle: function() {
-        return this._buildingBlockDescription.label['en-gb']; 
-    },   
-    
+        return this._buildingBlockDescription.label['en-gb'];
+    },
+
     /**
      * This function shows the dialog to change
      * the instance properties
@@ -45,16 +45,16 @@ var FormInstance = Class.create(ComponentInstance,
         if (!this._dialog) {
             this._dialog = new PreviewDialog(this.getTitle(), this._buildingBlockDescription.getPreview());
         }
-        this._dialog.show();        
+        this._dialog.show();
     },
-    
+
     /**
      * @override
      */
     getUri: function() {
-        return this._buildingBlockDescription.uri;    
+        return this._buildingBlockDescription.uri;
     },
-    
+
     /**
      * Creates the terminal
      */
@@ -85,7 +85,7 @@ var FormInstance = Class.create(ComponentInstance,
         }.bind(this));
 
         var posts;
-        if (this._buildingBlockDescription.postconditions && 
+        if (this._buildingBlockDescription.postconditions &&
                 this._buildingBlockDescription.postconditions[0] instanceof Array) {
             posts = this._buildingBlockDescription.postconditions[0];
         } else {
@@ -127,7 +127,7 @@ var FormInstance = Class.create(ComponentInstance,
         }
         return terminal;
     },
-    
+
     /**
      * Destroy the instance
      * @override
@@ -148,12 +148,12 @@ var FormInstance = Class.create(ComponentInstance,
         if (this._terminals) {
             this._terminals.each(function(terminal){
                 terminal.wires.each(function(wire) {
-                    wire.element.setStyle({'display': 'none'});            
+                    wire.element.setStyle({'display': 'none'});
                 });
             });
         }
     },*/
-    
+
     /**
      * On position update
      * @override
@@ -189,16 +189,16 @@ var FormInstance = Class.create(ComponentInstance,
     _createView: function () {
         return new FormView(this._buildingBlockDescription);
     },
-    
+
     /**
      * This function is called when the attached view is dbl-clicked
      * @private
      * @override
      */
     _onDoubleClick: function (/** Event */ event){
-        this.showPreviewDialog(); 
-    } 
-    
+        this.showPreviewDialog();
+    }
+
 });
 
 // vim:ts=4:sw=4:et:

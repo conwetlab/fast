@@ -18,5 +18,5 @@ Object.extend(Logger, {
         }
         console.log(msg);
     }
-    
+
 });

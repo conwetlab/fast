@@ -28,7 +28,7 @@ var Fact = Class.create(
          */
         this._description = description;
     },
-    
+
     // **************** PUBLIC METHODS **************** //
 
 
@@ -57,7 +57,7 @@ var Fact = Class.create(
     getDescription: function (){
         return this._description;
     }
-    
+
     // **************** PRIVATE METHODS **************** //
 });
 

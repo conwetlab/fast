@@ -4,7 +4,7 @@ var NewScreenflowDialog = Class.create(ConfirmDialog /** @lends NewScreenflowDia
      * to create a new screenflow
      * @constructs
      * @extends ConfirmDialog
-     */ 
+     */
     initialize: function($super) {
         /**
          * Current screenflow name/version availability
@@ -15,32 +15,32 @@ var NewScreenflowDialog = Class.create(ConfirmDialog /** @lends NewScreenflowDia
 
         $super("New Screenflow", ConfirmDialog.OK_CANCEL, {'createMessageZone': true});
     },
-    
-    
+
+
     // **************** PUBLIC METHODS **************** //
 
 
     // **************** PRIVATE METHODS **************** //
 
 
-    /** 
+    /**
      * initDialogInterface
      * This function creates the dom structure and
      * @private
      * @override
      */
     _initDialogInterface: function (){
- 
-        this._setHeader("Fulfill Screenflow Information", 
+
+        this._setHeader("Fulfill Screenflow Information",
                              "Please fulfill the required information in order to " +
                              "create a new screenflow.");
 
         var callback = this._scheduleAvailabilityCheck.bind(this);
         var formData = [
             {
-                'type':'input', 
+                'type':'input',
                 'label': 'Screenflow Name:',
-                'name': 'name', 
+                'name': 'name',
                 'value': '',
                 'message': 'Screenflow cannot be blank',
                 'required': true,
@@ -52,9 +52,9 @@ var NewScreenflowDialog = Class.create(ConfirmDialog /** @lends NewScreenflowDia
                 }
             },
             {
-                'type':'input', 
-                'label': 'Version:', 
-                'name': 'version', 
+                'type':'input',
+                'label': 'Version:',
+                'name': 'version',
                 'value': '',
                 'message': 'Version cannot be blank',
                 'events': {
@@ -62,13 +62,13 @@ var NewScreenflowDialog = Class.create(ConfirmDialog /** @lends NewScreenflowDia
                 }
             },
             {
-                'type':'input', 
+                'type':'input',
                 'label': 'Tags:',
                 'name': 'tags',
                 'value': ''
             }
         ];
-        
+
         this._setContent(formData);
     },
 
@@ -176,12 +176,12 @@ var NewScreenflowDialog = Class.create(ConfirmDialog /** @lends NewScreenflowDia
             var version = $F(this._getForm().version);
 
             var processedTags = Utils.getCatalogueTags($A(tags), null);
-            
+
             var documentController = GVS.getDocumentController();
             documentController.createScreenflow(name, processedTags, version);
-            
+
             $super();
-        }       
+        }
     },
 
      /**

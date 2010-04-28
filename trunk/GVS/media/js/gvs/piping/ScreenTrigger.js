@@ -5,7 +5,7 @@ var ScreenTrigger = Class.create(Trigger,
      * Screen onload Triggers representation
      * @constructs
      * @extends Trigger
-     */ 
+     */
     initialize: function ($super, /** Object */ to) {
         var from = {
             'instance': ScreenTrigger.INSTANCE_NAME,
@@ -54,7 +54,7 @@ var ScreenTrigger = Class.create(Trigger,
             }
         };
     },
-    
+
     // **************** PRIVATE METHODS **************** //
 
     /**

@@ -5,9 +5,9 @@ var ExternalDocument = Class.create(AbstractDocument, /** @lends ExternalDocumen
      * @abstract
      * @extends AbstractDocument
      * @constructs
-     */ 
+     */
     initialize: function ($super,
-            /** String */ title, 
+            /** String */ title,
             /** String */ url) {
 
         /**
@@ -36,7 +36,7 @@ var ExternalDocument = Class.create(AbstractDocument, /** @lends ExternalDocumen
         var result = dijit.byId(this._tabId);
         result.attr("closable", true);
         result.connect('onClose', this._closeDocument.bind(this));
-        
+
         return result;
     }
 });

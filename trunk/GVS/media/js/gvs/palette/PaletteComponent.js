@@ -5,13 +5,13 @@ var PaletteComponent = Class.create(DragSource,
      * GUI element that represents a palette element.
      * @constructs
      * @extends DragSource
-     */ 
-    initialize: function($super,/** BuildingBlockDescription */ buildingBlockDescription, 
+     */
+    initialize: function($super,/** BuildingBlockDescription */ buildingBlockDescription,
             /** Array */ dropZones, /** InferenceEngine */ inferenceEngine) {
         $super();
-        
+
         /**
-         * Component and instance Drop zone 
+         * Component and instance Drop zone
          * @type Array
          * @private
          */
@@ -23,11 +23,11 @@ var PaletteComponent = Class.create(DragSource,
          * @private
          */
         this._buildingBlockDescription = buildingBlockDescription;
-        
-        /** 
-         * @type InferenceEngine 
+
+        /**
+         * @type InferenceEngine
          * @private @member
-         */ 
+         */
         this._inferenceEngine = inferenceEngine;
 
         /**
@@ -36,7 +36,7 @@ var PaletteComponent = Class.create(DragSource,
          * @private
          */
         this._view = this._createView();
-        
+
         /**
          * Node of the component.
          * @type DOMNode
@@ -55,7 +55,7 @@ var PaletteComponent = Class.create(DragSource,
     getNode: function() {
         return this._node;
     },
-    
+
 
     /**
      * Returns the node that can be clicked to start a drag-n-drop operation.
@@ -97,7 +97,7 @@ var PaletteComponent = Class.create(DragSource,
         return this._view;
     },
 
-    
+
     // **************** PRIVATE METHODS **************** //
     /**
      * Creates an slot (GUI frame around a component) with a given title.
@@ -113,7 +113,7 @@ var PaletteComponent = Class.create(DragSource,
 
         return node;
     },
-    
+
     /**
      * Gets the title of the palette component
      * @type String
@@ -122,7 +122,7 @@ var PaletteComponent = Class.create(DragSource,
     _getTitle: function () {
         throw "Abstract Method invocation: PaletteComponent::_getTitle"
     },
-    
+
     /**
      * Creates a new View instance for the component
      * @type BuildingBlockView
@@ -131,7 +131,7 @@ var PaletteComponent = Class.create(DragSource,
     _createView: function () {
         throw "Abstract Method invocation: PaletteComponent::_createView"
     },
-    
+
 
     /**
      * Creates a new component to be dragged.
@@ -148,7 +148,7 @@ var PaletteComponent = Class.create(DragSource,
      * @private
      */
     _getContentOffsetTop: function() {
-        
+
         return this.getView().getNode().cumulativeOffset().top -
                 this.getView().getNode().cumulativeScrollOffset().top;
     },

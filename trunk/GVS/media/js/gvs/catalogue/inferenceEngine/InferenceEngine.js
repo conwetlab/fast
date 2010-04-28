@@ -4,7 +4,7 @@ var InferenceEngine = Class.create( /** @lends InferenceEngine.prototype */ {
      * catalogue, handling the reachability and recommendation of building blocks
      * @constructs
      * @abstract
-     */ 
+     */
     initialize: function() {
         /**
          * This stores the reachability data
@@ -12,18 +12,18 @@ var InferenceEngine = Class.create( /** @lends InferenceEngine.prototype */ {
          * @private @member
          */
         this._reachabilityData = new Hash();
-        
+
         /**
          * Listeners list hashed by resource URI
          * @type Hash
          * @private @member
          */
         this._listeners = new Hash();
-    }, 
-    
+    },
+
 
     // **************** PUBLIC METHODS **************** //
-    
+
     /**
      * This function calls findAndCheck in the catalogue and calls a
      * callback upon completion.
@@ -32,7 +32,7 @@ var InferenceEngine = Class.create( /** @lends InferenceEngine.prototype */ {
                          /** Array */ tags,
                          /** String*/ criteria,
                          /** Function */ callback) {
-        
+
         var body = this._constructBody(canvas, elements, tags, criteria);
         var context = {
             'callback': callback,
@@ -41,13 +41,13 @@ var InferenceEngine = Class.create( /** @lends InferenceEngine.prototype */ {
         PersistenceEngine.sendPost(this._getUri("findCheck"), null, body,
                 context, this._findCheckOnSuccess, this._onError);
     },
-    
+
     /**
      * This function calls the check operation in the catalogue
      */
     check: function (/**Array*/ canvas, /** Object */ elements,
                     /** Array */ tags,
-                    /** String*/ criteria, 
+                    /** String*/ criteria,
                     /** Function */ callback) {
         var body = this._constructBody(canvas, elements, tags, criteria, "check");
         var context = {
@@ -55,33 +55,33 @@ var InferenceEngine = Class.create( /** @lends InferenceEngine.prototype */ {
             'mine': this
         };
         PersistenceEngine.sendPost(this._getUri("check"), null, body, context,
-                                    this._checkOnSuccess, this._onError);                   
+                                    this._checkOnSuccess, this._onError);
     },
 
     /**
      * Register an object for interest on the reachability of a URI-identified
      * resources. The listener object must implement these methods:
-     *    
+     *
      *    void setReachability(Hash reachabilityData);
-     *    
+     *
      * Reachability data vary for different resource types:
      *   * Screens: TODO
      *   * ...
      */
     addReachabilityListener: function(/** String */ uri, /** Object */ listener) {
         this._getListenerList(uri).push(listener);
-        
+
         if (this._reachabilityData.get(uri)) {
             listener.setReachability(this._reachabilityData.get(uri));
         }
     },
-    
+
     /**
      * De-register an object from the reachability listeners
      */
     removeReachabilityListener: function (/** String  */uri, /** Object */ listener) {
         var index = this._getListenerList(uri).indexOf(listener);
-        
+
         if (index >= 0) {
             //Remove the element
             this._listeners.get(uri)[index] = null;
@@ -139,11 +139,11 @@ var InferenceEngine = Class.create( /** @lends InferenceEngine.prototype */ {
             return null;
          }
      },
-    
+
     // **************** PRIVATE METHODS **************** //
-    
+
     /**
-     * Creates a body to be sent in an AJAX call to the 
+     * Creates a body to be sent in an AJAX call to the
      * catalogue
      * @private @abstract
      * @type String
@@ -151,20 +151,20 @@ var InferenceEngine = Class.create( /** @lends InferenceEngine.prototype */ {
     _constructBody: function(/**Array*/ canvas, /** Object */ elements,
                     /** Array */ tags,
                     /** String*/ criteria) {
-        throw "Abstract Method invocation: InferenceEngine::_constructBody";     
+        throw "Abstract Method invocation: InferenceEngine::_constructBody";
     },
-    
+
     /**
      * Gets the uri to be called
      * @private @abstract
      * @type String
      */
     _getUri: function (/** String */ operation) {
-        throw "Abstract Method invocation: InferenceEngine::_getUri";       
+        throw "Abstract Method invocation: InferenceEngine::_getUri";
     },
-    
-    
-    /** 
+
+
+    /**
      * onSuccess callback
      * @private
      * @abstract
@@ -181,7 +181,7 @@ var InferenceEngine = Class.create( /** @lends InferenceEngine.prototype */ {
     _checkOnSuccess: function(transport){
         throw "Abstract method invocation: InferenceEngine::_CheckOnSuccess";
     },
-    
+
     /**
      * Error handler
      * @private
@@ -193,7 +193,7 @@ var InferenceEngine = Class.create( /** @lends InferenceEngine.prototype */ {
         });
         Logger.serverError(transport,e);
     },
-    
+
     /**
      * Returns a list of listeners of an uri
      * @private
@@ -207,7 +207,7 @@ var InferenceEngine = Class.create( /** @lends InferenceEngine.prototype */ {
         return list;
     },
     /**
-     * Updates and notifies the reachability 
+     * Updates and notifies the reachability
      * of a list of elements
      * @private
      */
@@ -215,18 +215,18 @@ var InferenceEngine = Class.create( /** @lends InferenceEngine.prototype */ {
         elements.each(function(element) {
             this._reachabilityData.set(element.uri, element);
             this._notifyReachability(element.uri);
-        }.bind(this));  
+        }.bind(this));
     },
-    
+
     /**
      * Notifies the reachability information to all the relevant
      * listeners
-     * @private 
+     * @private
      */
     _notifyReachability: function(/** String */ uri) {
         this._getListenerList(uri).each(function(listener) {
             listener.setReachability(this._reachabilityData.get(uri));
-        }.bind(this));        
+        }.bind(this));
     }
 });
 

@@ -7,8 +7,8 @@ var BuildingBlockFactory = Class.create(
      * @abstract
      */
     initialize: function() {
-        
- 
+
+
     },
 
 
@@ -53,4 +53,4 @@ var BuildingBlockFactory = Class.create(
 
 });
 
-// vim:ts=4:sw=4:et: 
+// vim:ts=4:sw=4:et:

@@ -5,14 +5,14 @@ var ExternalContentDialog = Class.create(ConfirmDialog /** @lends ExternalConten
      * normally coming from an AJAX call
      * @constructs
      * @extends ConfirmDialog
-     */ 
+     */
     initialize: function($super, title) {
         $super(title, ConfirmDialog.NONE);
     },
-    
+
     // **************** PUBLIC METHODS **************** //
 
-    
+
     /**
      * show
      * @override
@@ -25,7 +25,7 @@ var ExternalContentDialog = Class.create(ConfirmDialog /** @lends ExternalConten
     // **************** PRIVATE METHODS **************** //
 
 
-    /** 
+    /**
      * initDialogInterface
      * This function creates the dom structure
      * @private

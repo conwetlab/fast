@@ -4,12 +4,12 @@ var ParamsDialog = Class.create(ConfirmDialog /** @lends ParamsDialog.prototype 
      * to assign triggers to actions
      * @constructs
      * @extends ConfirmDialog
-     */ 
+     */
     initialize: function($super, /** String */ buildingblockName,
                             /** String */ initialParameter,
                             /** String */ templateParameter,
                             /** Function */ onChangeCallback) {
-        
+
         $super(buildingblockName + " Parameters");
 
         /**
@@ -58,7 +58,7 @@ var ParamsDialog = Class.create(ConfirmDialog /** @lends ParamsDialog.prototype 
          */
         this._templateParameterTooltip = new dijit.Tooltip({
             'connectId': [this._tooltipButton],
-            'label': "<h4> Example parameter configuration </h4>" + 
+            'label': "<h4> Example parameter configuration </h4>" +
                 "<pre>" + this._templateParameter + "</pre>"
         });
 
@@ -68,7 +68,7 @@ var ParamsDialog = Class.create(ConfirmDialog /** @lends ParamsDialog.prototype 
          */
         this._onChangeCallback = onChangeCallback;
     },
-    
+
     // **************** PUBLIC METHODS **************** //
 
     /**
@@ -91,7 +91,7 @@ var ParamsDialog = Class.create(ConfirmDialog /** @lends ParamsDialog.prototype 
     // **************** PRIVATE METHODS **************** //
 
 
-    /** 
+    /**
      * initDialogInterface
      * This function creates the dom structure
      * @private
@@ -110,7 +110,7 @@ var ParamsDialog = Class.create(ConfirmDialog /** @lends ParamsDialog.prototype 
 
         if (this._templateParameter) {
             content.appendChild(this._tooltipButton);
-        }      
+        }
         this._setContent(content);
     },
 

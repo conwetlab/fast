@@ -4,15 +4,15 @@ var DragSource = Class.create( /** @lends DragSource.prototype */ {
      * operations.
      * @abstract
      * @constructs
-     */ 
+     */
     initialize: function() {
-    
+
         /**
          * Handles the drag'n'drop stuff
          * @type DragHandler
          * @private
          */
-        this._dragHandler = new DragHandler(this);    
+        this._dragHandler = new DragHandler(this);
     },
 
     // **************** PUBLIC METHODS **************** //
@@ -25,14 +25,14 @@ var DragSource = Class.create( /** @lends DragSource.prototype */ {
     getHandlerNode: function () {
         throw "Abstract Method invocation: DragSource::_getHandlerNode";
     },
-    
+
     /**
      * Enables the drag'n'drop
      */
     enableDragNDrop: function(/** DropZone */ currentDropZone, /** Array */ validDropZones) {
-        this._dragHandler.enableDragNDrop(currentDropZone, validDropZones);    
+        this._dragHandler.enableDragNDrop(currentDropZone, validDropZones);
     },
-    
+
 
     /**
      * Returns the object to be dragged.
@@ -49,14 +49,14 @@ var DragSource = Class.create( /** @lends DragSource.prototype */ {
      * @protected
      */
     onStart: function() {},
-    
+
 
     /**
      * Update position event handler
      * @protected
      */
     onUpdate: function(/** Number */ x, /** Number */ y) {},
-    
+
 
     /**
      * Drag'n'drop position event handler

@@ -26,7 +26,7 @@ Object.extend(Catalogue, {
 // **************** STATIC METHODS ******************* //
 
 Object.extend(Catalogue, {
-        
+
     // **************** PUBLIC METHODS **************** //
 
     /**
@@ -38,19 +38,19 @@ Object.extend(Catalogue, {
         return this._factories[buildingBlockType];
     },
 
-    getFacts: function(){
-        var onSuccess = function(response){
+    getFacts: function() {
+        var onSuccess = function(response) {
             var factMetadata = response.responseText.evalJSON();
             FactFactory.setFacts(factMetadata);
         }
-        var onError = function(response, e){
+        var onError = function(response, e) {
             console.error(e);
         }
 
         PersistenceEngine.sendGet(URIs.catalogueGetFacts, this, onSuccess, onError);
     },
 
-    getDomainConcepts: function(){
+    getDomainConcepts: function() {
         var onDConceptsSuccess = function(response){
             var domainConceptMetadata = response.responseText.evalJSON();
             this.getBuildingBlockFactory(Constants.BuildingBlock.DOMAIN_CONCEPT).
@@ -61,7 +61,7 @@ Object.extend(Catalogue, {
                 getPalette(Constants.BuildingBlock.DOMAIN_CONCEPT);
             domainConceptPalette.paintComponents();
         }
-        var onDConceptsError = function(response, e){
+        var onDConceptsError = function(response, e) {
             console.error(e);
         }
 
@@ -70,7 +70,7 @@ Object.extend(Catalogue, {
     },
 
     // TODO: redesign
-    createScreen: function(/**String*/screenJson){
+    createScreen: function(/**String*/screenJson) {
         var createScreenOnSuccess = function(response){
 
             var screen = JSON.parse(response.responseText);
@@ -97,4 +97,4 @@ Object.extend(Catalogue, {
     }
 });
 
-// vim:ts=4:sw=4:et: 
+// vim:ts=4:sw=4:et:

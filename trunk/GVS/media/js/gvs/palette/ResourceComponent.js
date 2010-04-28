@@ -1,6 +1,6 @@
-var ResourceComponent = Class.create(PaletteComponent, 
+var ResourceComponent = Class.create(PaletteComponent,
     /** @lends ResourceComponent.prototype */ {
-        
+
     /**
      * Palette component of a domain concept building block.
      * @param BuildingBlockDescription ResourceBuildingBlockDescription
@@ -16,7 +16,7 @@ var ResourceComponent = Class.create(PaletteComponent,
 
 
     // **************** PRIVATE METHODS **************** //
-    
+
     /**
      * Creates a new View instance for the component
      * @type BuildingBlockView
@@ -25,16 +25,16 @@ var ResourceComponent = Class.create(PaletteComponent,
     _createView: function () {
         return new ResourceView(this._buildingBlockDescription);
     },
-    
+
     /**
      * Creates a new resource to be dragged.
      * @type ResourceInstance
      * @override
      */
-    _createInstance: function () {     
+    _createInstance: function () {
         return new ResourceInstance(this._buildingBlockDescription, this._inferenceEngine);
     },
-    
+
     /**
      * @type String
      * @override
@@ -42,7 +42,7 @@ var ResourceComponent = Class.create(PaletteComponent,
     _getTitle: function () {
         return this._buildingBlockDescription.label['en-gb'];
     }
-    
+
 });
 
 // vim:ts=4:sw=4:et:

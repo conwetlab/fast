@@ -5,13 +5,13 @@ var PlanView = Class.create(BuildingBlockView,
      * Plans graphical representation
      * @constructs
      * @extends BuildingBlockView
-     */ 
+     */
     initialize: function($super, /** Array */ plan) {
 
         $super();
 
         this._node = new Element('div', {'class': 'plan view'});
-        
+
         var nScreens = 0;
         plan.each(function(screenDescription) {
             var screenView = new ScreenView(screenDescription);
@@ -24,27 +24,27 @@ var PlanView = Class.create(BuildingBlockView,
         var widthText = width + 'px';
         this._node.setStyle({'width': widthText});
     },
-    
+
     // **************** PUBLIC METHODS **************** //
-    
+
     /**
      * Colorize the component depending on the reachability
      * @public @override
      */
     setReachability: function( /** Hash */ reachabilityData) {
-        
+
         //Do nothing
     },
-    
+
     /**
      * Removes the DOM Elements and frees building blocks
      * @override
      */
     destroy: function () {
         // Let the garbage collector to do its job
-        
+
     }
-    
+
     // **************** PRIVATE METHODS **************** //
 });
 

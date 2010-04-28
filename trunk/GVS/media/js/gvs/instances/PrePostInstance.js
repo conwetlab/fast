@@ -10,7 +10,7 @@ var PrePostInstance = Class.create(ComponentInstance,
             /** InferenceEngine */ inferenceEngine, /** Boolean (Optional) */ _isConfigurable) {
 
         $super(domainConceptDescription.clone(), inferenceEngine);
-             
+
         if (!this._buildingBlockDescription.pattern) {
             this._buildingBlockDescription.pattern = "?x " +
                 "http://www.w3.org/1999/02/22-rdf-syntax-ns#type " +
@@ -33,19 +33,19 @@ var PrePostInstance = Class.create(ComponentInstance,
          * @private @member
          */
         this._dialog = null;
-        
-        
+
+
         /**
          * @private @member
          * @type Function
          */
         this._changeHandler = null;
 
-        
+
         /**
          * Terminal for screen design
          * @type Terminal
-         * @private 
+         * @private
          */
         this._terminal = null;
 
@@ -68,7 +68,7 @@ var PrePostInstance = Class.create(ComponentInstance,
     getTitle: function() {
         return this._buildingBlockDescription.getTitle();
     },
-    
+
     /**
      * This function returns the relevant info
      * to the properties table
@@ -84,17 +84,17 @@ var PrePostInstance = Class.create(ComponentInstance,
             info.set('EzWeb Binding', this._buildingBlockDescription.properties.ezweb.binding);
             info.set('Friendcode', this._buildingBlockDescription.properties.ezweb.friendcode);
             info.set('Variable Name',this._buildingBlockDescription.properties.ezweb.variableName);
-        }      
+        }
         return info;
     },
-    
+
     /**
      * Returning the type in {pre|post}
      */
     getType: function() {
         return this._buildingBlockDescription.type;
     },
-    
+
 
     /**
      * Returns an object representing
@@ -132,14 +132,14 @@ var PrePostInstance = Class.create(ComponentInstance,
             'uri': this._buildingBlockDescription.uri
         };
     },
-    
+
     /**
      * @override
      */
     getUri: function() {
         return this._buildingBlockDescription.catalogueUri;
     },
-    
+
     /**
      * Set the type in pre | post
      */
@@ -165,7 +165,7 @@ var PrePostInstance = Class.create(ComponentInstance,
                         'friendcode': this.getTitle().replace(" ", "")
                     });
                 }
-               
+
             }
             this._onChange(data);
         } else {
@@ -179,16 +179,16 @@ var PrePostInstance = Class.create(ComponentInstance,
     setConfigurable: function(/** Boolean */ configurable) {
         this._isConfigurable = configurable;
     },
-    
+
     /**
      * Due to the slopy catalogue implementation, uri changes can
      * be notified via handler.
      * @public
      */
     setChangeHandler: function(/** Function */ handler) {
-        this._changeHandler = handler;        
+        this._changeHandler = handler;
     },
-    
+
     /**
      * This function shows the dialog to change
      * the instance properties
@@ -197,15 +197,15 @@ var PrePostInstance = Class.create(ComponentInstance,
         if (this._isConfigurable) {
             if (!this._dialog) {
                 this._dialog = new PrePostDialog(this._onChange.bind(this),
-                                                 this.getTitle(), 
+                                                 this.getTitle(),
                                                  this._buildingBlockDescription.type);
             }
             this._dialog.show();
         }
     },
-    
+
     /**
-     * Returns a list the 
+     * Returns a list the
      * information about the instance
      * ready to be set in the FactPane
      * @type Array
@@ -222,7 +222,7 @@ var PrePostInstance = Class.create(ComponentInstance,
 
         return [fact, this.getTitle(), this._buildingBlockDescription.uri];
     },
-    
+
     /**
      * Creates the terminal
      */
@@ -238,10 +238,10 @@ var PrePostInstance = Class.create(ComponentInstance,
             options.alwaysSrc = true;
             options.direction = [1,0];
             options.offsetPosition = {
-                'top': 2, 
+                'top': 2,
                 'left': 15
             };
-            options.ddConfig = {// A precondition in screen design is an output 
+            options.ddConfig = {// A precondition in screen design is an output
                                 // (data to be consumed inside the screen)
                 'type': 'output',
                 'allowedTypes': ['input']
@@ -249,7 +249,7 @@ var PrePostInstance = Class.create(ComponentInstance,
         } else {
             options.direction = [-1,0];
             options.offsetPosition = {
-                'top': 2, 
+                'top': 2,
                 'left': -8
             };
             options.ddConfig = { // Viceversa
@@ -257,7 +257,7 @@ var PrePostInstance = Class.create(ComponentInstance,
                 'allowedTypes': ['output']
             };
         }
-        
+
         this._terminal = new Terminal(this._view.getNode(), options, this,
                                         this.getId());
         if (this._buildingBlockDescription.type == 'pre') {
@@ -272,7 +272,7 @@ var PrePostInstance = Class.create(ComponentInstance,
     getTerminal: function() {
         return this._terminal;
     },
-    
+
     /**
      * Destroy the instance
      * @override
@@ -289,7 +289,7 @@ var PrePostInstance = Class.create(ComponentInstance,
         }
         $super();
     },
-   
+
     /**
      * On position update
      * @override
@@ -309,7 +309,7 @@ var PrePostInstance = Class.create(ComponentInstance,
     _createView: function () {
         return new DomainConceptView(this._buildingBlockDescription);
     },
-    
+
     /**
      * This function is called when the attached view is dbl-clicked
      * @private
@@ -349,7 +349,7 @@ var PrePostInstance = Class.create(ComponentInstance,
             'name': this.getTitle()
         };
     },
-    
+
     /**
      * This function is called when the dialog is saved
      * @private
@@ -365,7 +365,7 @@ var PrePostInstance = Class.create(ComponentInstance,
                 }
             }
         }
-        
+
         if (!this._buildingBlockDescription.catalogueUri) {
             // Calling the server to add the pre/post
             var catalogueResource = (this._buildingBlockDescription.type == 'pre') ? URIs.pre : URIs.post;
@@ -384,15 +384,15 @@ var PrePostInstance = Class.create(ComponentInstance,
     _onPostSuccess: function (/** XMLHttpRequest */ transport) {
         var result = JSON.parse(transport.responseText);
         this._buildingBlockDescription.catalogueUri = result.uri;
-        
-        
+
+
         this._inferenceEngine.addReachabilityListener(result.uri, this._view);
-        
+
         // Notify change
         this._changeHandler(this);
-        
+
     },
-    
+
     /**
      * onDeleteSucces
      * @private
@@ -400,15 +400,15 @@ var PrePostInstance = Class.create(ComponentInstance,
     _onDeleteSuccess: function(/** XMLHttpRequest */ transport){
         console.log('deleted');
     },
-    
-    
+
+
     /**
      * This function removes a pre/post from the server
      * @private
      */
     _removeFromServer: function(/** String */ uri) {
         PersistenceEngine.sendDelete(uri,
-            this, 
+            this,
             this._onDeleteSuccess, Utils.onAJAXError);
     }
 

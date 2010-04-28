@@ -11,11 +11,11 @@ var Geometry = Class.create();
 // **************** STATIC METHODS **************** //
 
 Object.extend(Geometry, {
-    
+
     /**
      * Calculate the cumulative offLimit offset and the effective delta for
      * an axis given the axis range and the current offLimit offset.
-     * 
+     *
      * @param Object range
      *     range.min
      *     range.max
@@ -26,10 +26,10 @@ Object.extend(Geometry, {
      *     result.offLimit
      */
     updateAxis: function(/** Object */ range, /** Number */ delta, /** Number */ offLimit) {
-        
+
         function _positiveUpdateAxis(/** Number */ max, /** Number */ delta, /** Number */ offLimit) {
             var result = new Object();
-            
+
             if (delta > max) {
                 // Stop at the limit
                 result.delta = max;
@@ -48,10 +48,10 @@ Object.extend(Geometry, {
                 result.delta = delta;
                 result.offLimit = offLimit;
             }
-            
+
             return result;
         }
-        
+
         if (delta >= 0) {
             return _positiveUpdateAxis(range.max, delta, offLimit);
         } else {
@@ -61,12 +61,12 @@ Object.extend(Geometry, {
             return result;
         }
     },
-    
+
     contains: function(/** Object */ container, /** Object */ element) {
         return (element.left >= container.left) &&
             (element.top >= container.top) &&
             (element.right <= container.right) &&
-            (element.bottom <= container.bottom);  
+            (element.bottom <= container.bottom);
     },
 
     intersects: function(/** Object */ container, /** Object */ element) {
@@ -77,7 +77,7 @@ Object.extend(Geometry, {
     },
 
     getRectangle: function(/** DOMNode */ node) {
-        
+
         var position = Utils.getPosition(node);
         return {
             'top': position.top,
@@ -86,7 +86,7 @@ Object.extend(Geometry, {
             'right': position.left + node.offsetWidth
         }
     },
-    
+
     getClientRectangle: function(/** DOMNode */ node) {
         var computedStyle = document.defaultView.getComputedStyle(node, null);
         var topBorder = computedStyle.getPropertyCSSValue('border-top-width').getFloatValue(CSSPrimitiveValue.CSS_PX);
@@ -100,7 +100,7 @@ Object.extend(Geometry, {
             'right': position.left + node.clientWidth
         }
     },
-    
+
     dragRanges: function(/** Object */ container, /** Object */ element) {
         return {
             'x': {
@@ -148,7 +148,7 @@ Object.extend(Geometry, {
             'right': containerElement.offsetWidth,
             'bottom': containerElement.offsetHeight
         }
-        
+
         var elementBounds = {
             'top': position.top,
             'left': position.left,
@@ -175,4 +175,4 @@ Object.extend(Geometry, {
 
         return result;
     }
-}); 
+});

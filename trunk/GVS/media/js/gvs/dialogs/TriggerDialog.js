@@ -4,11 +4,11 @@ var TriggerDialog = Class.create(ConfirmDialog /** @lends TriggerDialog.prototyp
      * to assign triggers to actions
      * @constructs
      * @extends ConfirmDialog
-     */ 
+     */
     initialize: function($super,
                         /** String */ actionName, /** Array */ initialTriggerList,
                         /** Array */  canvasInstances, /** Function */ onChangeCallback) {
-        
+
         $super("Assign triggers to " + actionName);
 
         /**
@@ -72,7 +72,7 @@ var TriggerDialog = Class.create(ConfirmDialog /** @lends TriggerDialog.prototyp
 
         this._removeTriggerButton = null;
     },
-    
+
     // **************** PUBLIC METHODS **************** //
 
     /**
@@ -89,7 +89,7 @@ var TriggerDialog = Class.create(ConfirmDialog /** @lends TriggerDialog.prototyp
     // **************** PRIVATE METHODS **************** //
 
 
-    /** 
+    /**
      * initDialogInterface
      * This function creates the dom structure
      * @private
@@ -137,7 +137,7 @@ var TriggerDialog = Class.create(ConfirmDialog /** @lends TriggerDialog.prototyp
                 }
             }.bind(this));
         }
-       
+
         content.appendChild(this._selectedTriggerListNode);
 
         var addRemoveZone = new Element('div', {
@@ -193,7 +193,7 @@ var TriggerDialog = Class.create(ConfirmDialog /** @lends TriggerDialog.prototyp
         }.bind(this));
 
         content.appendChild(this._unselectedTriggerListNode);
-        
+
         this._setContent(content);
 
         this._onListChange();

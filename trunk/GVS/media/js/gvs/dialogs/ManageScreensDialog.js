@@ -4,8 +4,8 @@ var ManageScreensDialog = Class.create(GalleryDialog /** @lends ManageScreensDia
      * to open an existing screen
      * @constructs
      * @extends GalleryDialog
-     */ 
-    initialize: function($super) {  
+     */
+    initialize: function($super) {
         $super("Screen browser", {'onDblClick': this._openScreen.bind(this),
                                   'disableIfNotValid': true });
 
@@ -16,8 +16,8 @@ var ManageScreensDialog = Class.create(GalleryDialog /** @lends ManageScreensDia
          */
         this._screens = null;
     },
-    
-    
+
+
     // **************** PUBLIC METHODS **************** //
 
     /**
@@ -31,7 +31,7 @@ var ManageScreensDialog = Class.create(GalleryDialog /** @lends ManageScreensDia
     // **************** PRIVATE METHODS **************** //
 
 
-    /** 
+    /**
      * initDialogInterface
      * This function creates the dom structure
      * @private
@@ -116,7 +116,7 @@ var ManageScreensDialog = Class.create(GalleryDialog /** @lends ManageScreensDia
                         });
         }.bind(this));
     },
-    
+
     /**
      * On Success handler
      * @private
@@ -163,7 +163,7 @@ var ManageScreensDialog = Class.create(GalleryDialog /** @lends ManageScreensDia
             return element.id == id;
         });
         if (screen.uri) {
-            // Unshare screen       
+            // Unshare screen
             PersistenceEngine.sendDelete(uri, this, this._reload, Utils.onAJAXError);
         } else {
             // Share screen

@@ -5,7 +5,7 @@ var BuildingBlockView = Class.create( /** @lends BuildingBlockView.prototype */ 
      * @constructs
      */
     initialize: function() {
-        /** 
+        /**
          * DOM Node
          * @type DOMNode
          * @private @member
@@ -16,7 +16,7 @@ var BuildingBlockView = Class.create( /** @lends BuildingBlockView.prototype */ 
 
     // **************** PUBLIC METHODS **************** //
 
-    
+
     /**
      * getNode
      * @type DOMNode
@@ -31,16 +31,16 @@ var BuildingBlockView = Class.create( /** @lends BuildingBlockView.prototype */ 
      * @public
      */
     setReachability: function( /** Hash */ reachabilityData) {
-        throw 'Abstract Method invocation. ' + 
+        throw 'Abstract Method invocation. ' +
             'BuildingBlockView :: setReachability';
     },
-    
+
     setSelected: function(/** Boolean */ selected) {
         if (selected) {
             this._node.addClassName('selected');
         } else {
             this._node.removeClassName('selected');
-        }    
+        }
     },
 
     /**
@@ -48,7 +48,7 @@ var BuildingBlockView = Class.create( /** @lends BuildingBlockView.prototype */ 
      */
     destroy: function () {
     },
-    
+
     /**
      * Adds an event listener
      */

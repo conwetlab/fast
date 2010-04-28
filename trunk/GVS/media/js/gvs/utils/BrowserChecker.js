@@ -1,12 +1,12 @@
 /**
 * This checks the browser name and version
-*/ 
+*/
 var BrowserChecker = Class.create(/** @lends BrowserChecker.prototype */ {
     /**
      * @constructs
      */
     initialize: function() {
-        
+
         /**
          * Browser name
          * @private
@@ -19,15 +19,15 @@ var BrowserChecker = Class.create(/** @lends BrowserChecker.prototype */ {
          * @private
          * @type Number
          */
-        this._fullVersion  = ''+parseFloat(navigator.appVersion); 
+        this._fullVersion  = ''+parseFloat(navigator.appVersion);
 
         /**
          * Short version of the browser
-         * @private 
+         * @private
          * @type Number
          */
         this._shortVersion = parseInt(navigator.appVersion,10);
-        
+
         /**
          * List of checked browsers
          * @private
@@ -35,7 +35,7 @@ var BrowserChecker = Class.create(/** @lends BrowserChecker.prototype */ {
          */
         this._browserList = {'MSIE': {
                                 'name': "Microsoft Internet Explorer",
-                                'isThis': false            
+                                'isThis': false
                             },
                             'Opera': {
                                 'name': 'Opera',
@@ -53,14 +53,14 @@ var BrowserChecker = Class.create(/** @lends BrowserChecker.prototype */ {
                                 'name': 'Firefox',
                                 'isThis': false
                             }
-        
+
         };
-            
+
         var pattern;
         var match;
-                    
+
         var ok = false;
-        
+
         $H(this._browserList).each(function(pair) {
             pattern = ".*" + pair.key + "[/|\\s]+((\\w+)(\\.\\w+)*).*";
             if (!ok && (match = navigator.userAgent.match(pattern)) != null) {
@@ -69,11 +69,11 @@ var BrowserChecker = Class.create(/** @lends BrowserChecker.prototype */ {
                 this._shortVersion = match[2];
                 this._browserList[pair.key].isThis = true;
                 ok = true;
-            }    
+            }
         }.bind(this));
-        
+
         pattern = ".*\\s+(\\w+)[/|\\s]+((\\w+)(\\.\\w+)*)";
-        
+
         if (!ok && ((match = navigator.userAgent.match(pattern)) != null)) {
             this._fullVersion  = match[2];
             this._shortVersion = match[3];
@@ -87,15 +87,15 @@ var BrowserChecker = Class.create(/** @lends BrowserChecker.prototype */ {
             ok = true;
         }
     },
-    
+
     getName: function() {
         return this._browserName;
     },
-       
+
     getVersion: function() {
         return this._fullVersion;
     },
-        
+
     getShortVersion: function() {
         return this._shortVersion;
     },
@@ -103,22 +103,22 @@ var BrowserChecker = Class.create(/** @lends BrowserChecker.prototype */ {
     isIE: function() {
         return this._browserList['MSIE'].isThis;
     },
-    
+
     isOpera: function() {
         return this._browserList['Opera'].isThis;
     },
-        
+
     isChrome: function() {
         return this._browserList['Chrome'].isThis;
     },
-        
+
     isSafari: function() {
         return this._browserList['Safari'].isThis;
     },
-    
+
     isFirefox: function() {
         return this._browserList['Firefox'].isThis;
     }
-    
+
 });
 // vim:ts=4:sw=4:et:

@@ -4,7 +4,7 @@ var SaveAsDialog = Class.create(ConfirmDialog /** @lends SaveAsDialog.prototype 
      * to save as a new document
      * @constructs
      * @extends ConfirmDialog
-     */ 
+     */
     initialize: function($super, /** String */ name, /** String */ version,
                         /** Function */ onOkHandler, /** Boolean(optional) */ _cloned) {
         /**
@@ -44,29 +44,29 @@ var SaveAsDialog = Class.create(ConfirmDialog /** @lends SaveAsDialog.prototype 
 
         $super("Choose new name/version", buttons, options);
     },
-    
-    
+
+
     // **************** PUBLIC METHODS **************** //
 
 
     // **************** PRIVATE METHODS **************** //
 
 
-    /** 
+    /**
      * initDialogInterface
      * This function creates the dom structure and
      * @private
      * @override
      */
     _initDialogInterface: function (){
- 
+
 
         var callback = this._scheduleAvailabilityCheck.bind(this);
         var formData = [
             {
-                'type':'input', 
+                'type':'input',
                 'label': 'New Name:',
-                'name': 'name', 
+                'name': 'name',
                 'value': this._name,
                 'message': 'Name cannot be blank',
                 'required': true,
@@ -75,9 +75,9 @@ var SaveAsDialog = Class.create(ConfirmDialog /** @lends SaveAsDialog.prototype 
                 }
             },
             {
-                'type':'input', 
-                'label': 'Version:', 
-                'name': 'version', 
+                'type':'input',
+                'label': 'Version:',
+                'name': 'version',
                 'value': '',
                 'message': 'Version cannot be blank',
                 'events': {
@@ -196,13 +196,13 @@ var SaveAsDialog = Class.create(ConfirmDialog /** @lends SaveAsDialog.prototype 
     _onOk: function($super){
         if (this._getFormWidget().validate() && this._available) {
             var name = $F(this._getForm().name);
-            
+
             var version = $F(this._getForm().version);
 
             this._onOkHandler(name, version);
-            
+
             $super();
-        }       
+        }
     },
 
      /**

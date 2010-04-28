@@ -1,19 +1,19 @@
 var PaletteDocument = Class.create(AbstractDocument, /** @lends PaletteDocument.prototype */ {
     /**
-     * Represents a document and its tab. Subclasses must provide the 
+     * Represents a document and its tab. Subclasses must provide the
      * inner content.
      * @abstract
      * @extends AbstractDocument
      * @constructs
      * @param validBuildingBlocks
      *      Containing the different valid building blocks and their respective drop Zones
-     */ 
+     */
     initialize: function ($super,
             /** String */ typeName,
             /** Object */ properties,
             /** InferenceEngine */ inferenceEngine) {
         $super(properties.name);
-        
+
         /**
          * List of tags
          * @type Array
@@ -91,7 +91,7 @@ var PaletteDocument = Class.create(AbstractDocument, /** @lends PaletteDocument.
          * @private @member
          */
         this._factPane = new FactPane(this._inspectorArea);
-        
+
         /**
          * Main border container
          * @type dijit.layout.BorderContainer
@@ -125,7 +125,7 @@ var PaletteDocument = Class.create(AbstractDocument, /** @lends PaletteDocument.
          * @private
          */
         this._pendingOperation = null;
-        
+
         this._renderMainUI();
 
         // Adding the dropping areas to the document
@@ -142,8 +142,8 @@ var PaletteDocument = Class.create(AbstractDocument, /** @lends PaletteDocument.
                 this._onClick();
             }.bind(this));
         }.bind(this));
-        
-    
+
+
          /**
          * This property represents the selected element
          * @type BuildingBlockInstance
@@ -171,7 +171,7 @@ var PaletteDocument = Class.create(AbstractDocument, /** @lends PaletteDocument.
             this._canvasCache = this._getCanvasCache(properties);
         }
     },
-    
+
     /**
      * Returns the selected element for the screenflow document
      * @type ComponentInstance
@@ -179,7 +179,7 @@ var PaletteDocument = Class.create(AbstractDocument, /** @lends PaletteDocument.
     getSelectedElement: function () {
         return this._selectedElement;
     },
-    
+
 
     /**
      * Returns the BuildingBlock Description for the screenflow document
@@ -189,19 +189,19 @@ var PaletteDocument = Class.create(AbstractDocument, /** @lends PaletteDocument.
         return this._description;
     },
 
-    
+
     /**
      * Implementing event listener
      */
     elementClicked: function(/** ComponentInstance */ element) {
-        this._setSelectedElement(element);    
+        this._setSelectedElement(element);
     },
-    
+
     /**
      * Implementing event listener
      */
     elementDblClicked: function(/** ComponentInstance */ element, /** Event */ e) {
-        this._setSelectedElement(element);    
+        this._setSelectedElement(element);
     },
 
     /**
@@ -210,14 +210,14 @@ var PaletteDocument = Class.create(AbstractDocument, /** @lends PaletteDocument.
     positionUpdated: function(/** ComponentInstance */ element, /** Object */ position) {
         this._setDirty(true);
     },
-    
+
     /**
      * Implementing event listener
      */
     orientationUpdated: function(/** ComponentInstance */ element, /** Integer */ orientation) {
         this._setDirty(true);
     },
-    
+
     /**
      * Key press event handler
      * @override
@@ -274,7 +274,7 @@ var PaletteDocument = Class.create(AbstractDocument, /** @lends PaletteDocument.
                 }
             };
     },
-    
+
     // **************** PRIVATE METHODS **************** //
 
     /**
@@ -310,7 +310,7 @@ var PaletteDocument = Class.create(AbstractDocument, /** @lends PaletteDocument.
         }
     },
 
-    
+
     /**
      * Select an element in the document
      * @param element ComponentInstance
@@ -322,7 +322,7 @@ var PaletteDocument = Class.create(AbstractDocument, /** @lends PaletteDocument.
         if (this._selectedElement != null) {
             this._selectedElement.getView().setSelected(false);
         }
-        
+
         if (element != undefined) {
             this._selectedElement = element;
             this._selectedElement.getView().setSelected(true);
@@ -331,15 +331,15 @@ var PaletteDocument = Class.create(AbstractDocument, /** @lends PaletteDocument.
         }
 
         this._updateToolbar(this._selectedElement);
-        
+
         if (element) {
             this._refreshReachability();
         } else {
             this._updatePanes();
         }
     },
-    
-    
+
+
     /**
      * This function init the process of deleting the element
      * @private
@@ -352,17 +352,17 @@ var PaletteDocument = Class.create(AbstractDocument, /** @lends PaletteDocument.
             } else {
                 title = "the selected element";
             }
-            
-            confirm("You are about to remove " + title + " from canvas. Are you sure?", 
+
+            confirm("You are about to remove " + title + " from canvas. Are you sure?",
                     function(/** Boolean */ confirmed) {
                         if (confirmed) {
                             this._deleteSelectedElement();
                         }
                     }.bind(this)
             );
-        }       
+        }
     },
-    
+
     /**
      * This function rotate the element
      * @private
@@ -375,10 +375,10 @@ var PaletteDocument = Class.create(AbstractDocument, /** @lends PaletteDocument.
         	element.getView().updateOrientation(orientation);
         	element.onRotate(orientation);
         	this.orientationUpdated(element, orientation);
-        }       
+        }
     },
-    
-    
+
+
     /**
      * Constructs the document content.
      * @private
@@ -390,7 +390,7 @@ var PaletteDocument = Class.create(AbstractDocument, /** @lends PaletteDocument.
             liveSplitters:"false",
             splitter:"true"
         });
-       
+
         this._mainBorderContainer.addChild(this._renderCenterContainer());
 
         this._tab.setContent(this._mainBorderContainer.domNode);
@@ -411,7 +411,7 @@ var PaletteDocument = Class.create(AbstractDocument, /** @lends PaletteDocument.
         }
     },
 
-    
+
     /**
      * Renders the palette area
      * @private
@@ -432,7 +432,7 @@ var PaletteDocument = Class.create(AbstractDocument, /** @lends PaletteDocument.
         }
     },
 
-    
+
     /**
      * Previews the selected element
      * depending on the type of the
@@ -534,7 +534,7 @@ var PaletteDocument = Class.create(AbstractDocument, /** @lends PaletteDocument.
         }
         return false;
     },
-    
+
 
     /**
      * Effectively close the document
@@ -550,7 +550,7 @@ var PaletteDocument = Class.create(AbstractDocument, /** @lends PaletteDocument.
 
             case ConfirmDialog.CANCEL:
                 break;
-                
+
             case ConfirmDialog.DISCARD:
             default:
                 var removeFromServer = false;
@@ -566,7 +566,7 @@ var PaletteDocument = Class.create(AbstractDocument, /** @lends PaletteDocument.
                 }.bind(this));
 
                 GVS.getDocumentController().closeDocument(this._tabId);
-            
+
         }
     },
 
@@ -607,7 +607,7 @@ var PaletteDocument = Class.create(AbstractDocument, /** @lends PaletteDocument.
             'top': position.top + "px",
             'position': 'absolute'
         });
-        
+
         if (instance.constructor == OperatorInstance) {
             view.updateOrientation(orientation);
         }

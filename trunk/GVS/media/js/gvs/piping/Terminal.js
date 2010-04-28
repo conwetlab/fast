@@ -1,24 +1,24 @@
 /**
  * This class handles the creation of pipes based on WireIt.Terminal
  * and WireIt.Wire classes. Due to the use of these classes, which are
- * not Prototype compliant classes, the syntax of the class is quite 
+ * not Prototype compliant classes, the syntax of the class is quite
  * different than usual
  * The terminal object will be attached to each pre or post condition
- * of the instances (specifically, to the condition nodes of their 
+ * of the instances (specifically, to the condition nodes of their
  * respective view)
- * 
+ *
  * @constructs
  */
-var Terminal = function(/** DOMNode */ conditionNode, /** Object */ options, 
+var Terminal = function(/** DOMNode */ conditionNode, /** Object */ options,
                         /** ComponentInstance */ instance,
                         /** String */ conditionId, /** String(optional) */ action) {
-    
+
     /**
      * @private
      * @type DOMNode
      */
     this._conditionNode = conditionNode;
-    
+
     /**
      * @private
      * @type DOMNode
@@ -27,17 +27,17 @@ var Terminal = function(/** DOMNode */ conditionNode, /** Object */ options,
     {
         'title': this._conditionNode.title
     });
-    
+
     var style = {
         'position':'absolute',
         'width': '1px',
         'height': '1px',
         'z-index': '50'
     };
-    this._terminalNode.setStyle(style);  
+    this._terminalNode.setStyle(style);
     this._recalculatePosition();
-    document.body.appendChild(this._terminalNode); 
-   
+    document.body.appendChild(this._terminalNode);
+
     var wireConfig = {
             'width': 2,
             'borderwidth': 2,
@@ -47,7 +47,7 @@ var Terminal = function(/** DOMNode */ conditionNode, /** Object */ options,
     var extendedOptions = {};
     extendedOptions = Object.extend(extendedOptions, options);
     extendedOptions.wireConfig = Object.extend(wireConfig, options.wireConfig);
-         
+
     WireIt.Terminal.call(this, this._terminalNode, extendedOptions);
 
     /**
@@ -56,7 +56,7 @@ var Terminal = function(/** DOMNode */ conditionNode, /** Object */ options,
      * @private
      */
     this._instance = instance;
-    
+
     /**
      * This is the id of the condition inside the
      * resource that contains the terminal
@@ -71,14 +71,14 @@ var Terminal = function(/** DOMNode */ conditionNode, /** Object */ options,
      * @type String
      */
     this._action = action ? action: "";
-} 
+}
 
 // Inheriting all methods
 Object.extend(Terminal.prototype, WireIt.Terminal.prototype);
 
-Object.extend(Terminal.prototype, /** @lends Terminal.prototype */ { 
+Object.extend(Terminal.prototype, /** @lends Terminal.prototype */ {
 
-    
+
     // **************** PUBLIC METHODS **************** //
 
     /**
@@ -96,7 +96,7 @@ Object.extend(Terminal.prototype, /** @lends Terminal.prototype */ {
         }
         return uri;
     },
-    
+
     /**
      * Returns the resourceId
      * @type String
@@ -136,7 +136,7 @@ Object.extend(Terminal.prototype, /** @lends Terminal.prototype */ {
     getInstance: function() {
         return this._instance;
     },
-    
+
     /**
      * Destroy the terminal
      */
@@ -145,15 +145,15 @@ Object.extend(Terminal.prototype, /** @lends Terminal.prototype */ {
         this.remove();
         this._terminalNode.parentNode.removeChild(this._terminalNode);
     },
-    
+
     /**
      * Updates the position when the container is moving
      */
     updatePosition: function() {
         this._recalculatePosition();
-        this.redrawAllWires();        
+        this.redrawAllWires();
     },
-    
+
     /**
      * Adds a handler listening for the connection or deconnection of wires
      */
@@ -163,7 +163,7 @@ Object.extend(Terminal.prototype, /** @lends Terminal.prototype */ {
     	context['refTerminal'] = this;
 
         this.eventAddWire.subscribe(this._wireAddHandler.bind(context));
-        this.eventRemoveWire.subscribe(this._wireRemoveHandler.bind(context));    
+        this.eventRemoveWire.subscribe(this._wireRemoveHandler.bind(context));
     },
 
     /**
@@ -175,7 +175,7 @@ Object.extend(Terminal.prototype, /** @lends Terminal.prototype */ {
         };
         this.el.setStyle(style);
     },
-    
+
      // **************** PRIVATE METHODS **************** //
 
 
@@ -188,7 +188,7 @@ Object.extend(Terminal.prototype, /** @lends Terminal.prototype */ {
         var style = {
             'top': position.top + 'px',
             'left':  position.left + 'px'
-        }     
+        }
         this._terminalNode.setStyle(style);
     },
 

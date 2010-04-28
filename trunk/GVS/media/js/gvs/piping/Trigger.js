@@ -4,7 +4,7 @@ var Trigger = Class.create(
     /**
      * Triggers representation
      * @constructs
-     */ 
+     */
     initialize: function (/** Object */ from, /** Object */ to) {
 
         /**
@@ -73,7 +73,7 @@ var Trigger = Class.create(
             }
         };
     },
-    
+
     // **************** PRIVATE METHODS **************** //
 
     /**

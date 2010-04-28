@@ -9,7 +9,7 @@ var ScreenflowDescription = Class.create(BuildingBlockDescription,
     initialize: function($super, /** Hash */ properties) {
         $super(properties);
 
-      
+
         this._screens = new Hash();
         this._preconditions = new Hash();
         this._postconditions = new Hash();
@@ -44,7 +44,7 @@ var ScreenflowDescription = Class.create(BuildingBlockDescription,
         });
         return result;
     },
-    
+
     /**
      * Adds a new screen.
      * @param ScreenDescription
@@ -99,7 +99,7 @@ var ScreenflowDescription = Class.create(BuildingBlockDescription,
                 break;
             default:
                 //Do nothing
-        }  
+        }
     },
 
     updatePrePost: function(/** String */ uri, /** Object */ position) {
@@ -114,8 +114,8 @@ var ScreenflowDescription = Class.create(BuildingBlockDescription,
         }
         return false;
     },
-    
-    
+
+
     /**
      * Implementing the TableModel interface
      * @type Array
@@ -129,7 +129,7 @@ var ScreenflowDescription = Class.create(BuildingBlockDescription,
         info.set('Version', this.version);
         return info;
     },
-    
+
     /**
      * Get a list of preconditions in form of a JSON Object
      * @type Array
@@ -138,7 +138,7 @@ var ScreenflowDescription = Class.create(BuildingBlockDescription,
         var list = new Array();
         this._preconditions.values().each(function(pre) {
             var element = Object.extend(pre.buildingblock.toJSONForScreenflow(), {'position':
-                pre.position});            
+                pre.position});
             list.push(element);
         }.bind(this));
         return list;
@@ -196,7 +196,7 @@ var ScreenflowDescription = Class.create(BuildingBlockDescription,
     getConditionInstances: function() {
         return new Array();
     },
-    
+
     //************************ PRIVATE METHODS *******************//
     /**
      * @type Array
@@ -223,4 +223,4 @@ var ScreenflowDescription = Class.create(BuildingBlockDescription,
     }
 });
 
-// vim:ts=4:sw=4:et: 
+// vim:ts=4:sw=4:et:

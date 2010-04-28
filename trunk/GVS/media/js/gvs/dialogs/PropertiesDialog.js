@@ -4,11 +4,11 @@ var PropertiesDialog = Class.create(ConfirmDialog /** @lends PropertiesDialog.pr
      * that shows the screen/screenflow properties
      * @constructs
      * @extends ConfirmDialog
-     */ 
+     */
     initialize: function($super, /** String */ type,
                         /** BuildingBlockDescription */ description,
                         /** Function */ onChangeHandler) {
-        
+
         /**
          * Title of the dialog
          * @private
@@ -38,17 +38,17 @@ var PropertiesDialog = Class.create(ConfirmDialog /** @lends PropertiesDialog.pr
         this._onChangeHandler = onChangeHandler;
 
         $super(this._title);
-        
+
     },
-    
-    
+
+
     // **************** PUBLIC METHODS **************** //
 
     /**
      * @override
      */
     show: function($super, /** Function(Optional) */ _handler) {
-        var handler = Utils.variableOrDefault(_handler, null);      
+        var handler = Utils.variableOrDefault(_handler, null);
         this._onFinishHandler = handler;
         $super();
     },
@@ -56,16 +56,16 @@ var PropertiesDialog = Class.create(ConfirmDialog /** @lends PropertiesDialog.pr
     // **************** PRIVATE METHODS **************** //
 
 
-    /** 
+    /**
      * initDialogInterface
      * This function creates the dom structure and
      * @private
      * @override
      */
     _initDialogInterface: function () {
- 
+
         this._setHeader(this._title);
-             
+
         var formData = [
             {'type': 'title', 'value': 'Basic information'},
             {'type':'input', 'label': 'Building block name:','name': 'name',
@@ -96,7 +96,7 @@ var PropertiesDialog = Class.create(ConfirmDialog /** @lends PropertiesDialog.pr
                     'required': true},
             {'type':'input', 'label': 'Icon:','name': 'icon',
                     'value': this._description.icon,
-                    'regExp': '([hH][tT][tT][pP][sS]?)://[A-Za-z0-9-_]+(\.[A-Za-z0-9-_]+)*(:\d+)?(/[a-zA-Z0-9\.\?=/#%&\+-]*)*', 
+                    'regExp': '([hH][tT][tT][pP][sS]?)://[A-Za-z0-9-_]+(\.[A-Za-z0-9-_]+)*(:\d+)?(/[a-zA-Z0-9\.\?=/#%&\+-]*)*',
                     'message': 'Invalid URL'},
             {'type':'input', 'label': 'Screenshot:','name': 'screenshot',
                     'value': this._description.screenshot,
@@ -107,7 +107,7 @@ var PropertiesDialog = Class.create(ConfirmDialog /** @lends PropertiesDialog.pr
                     'regExp': '([hH][tT][tT][pP][sS]?)://[A-Za-z0-9-_]+(\.[A-Za-z0-9-_]+)*(:\d+)?(/[a-zA-Z0-9\.\?=/#%&\+-]*)*',
                     'message': 'Invalid URL'}
         ];
-        
+
         this._setContent(formData);
 
     },
@@ -116,9 +116,9 @@ var PropertiesDialog = Class.create(ConfirmDialog /** @lends PropertiesDialog.pr
      * @override
      * @private
      */
-    _onOk: function($super){        
+    _onOk: function($super){
         if (this._getFormWidget().validate()) {
-        
+
             var tags = $F(this._getForm().tags).split(/[\s,]+/).without("");
             var description = {
                 'tags': Utils.getCatalogueTags(tags, null),
@@ -152,7 +152,7 @@ var PropertiesDialog = Class.create(ConfirmDialog /** @lends PropertiesDialog.pr
             }
         }
     },
-    
+
     /**
      * Reset method to leave the form as initially
      * @override

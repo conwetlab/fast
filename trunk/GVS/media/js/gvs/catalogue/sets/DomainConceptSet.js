@@ -4,19 +4,19 @@ var DomainConceptSet = Class.create(BuildingBlockSet, /** @lends DomainConceptSe
      * This list will be updated.
      * @constructs
      * @extends BuildingBlockSet
-     */ 
+     */
     initialize: function($super, /** Array */ tags, /** DomainConceptFactory */ factory) {
         $super(tags, factory);
-        
+
         /**
          * Domain concepts
          * @type Array
          * @private
          */
         this._domainConcepts = new Array();
-        
+
     },
-    
+
 
     // **************** PUBLIC METHODS **************** //
 
@@ -26,8 +26,8 @@ var DomainConceptSet = Class.create(BuildingBlockSet, /** @lends DomainConceptSe
     startRetrievingData: function() {
         this._factory.getBuildingBlocks(this._tags, this._onSuccess.bind(this));
     },
-    
-    
+
+
     /**
      * Returns all the building block descriptions from the set
      * @type Array
@@ -36,9 +36,9 @@ var DomainConceptSet = Class.create(BuildingBlockSet, /** @lends DomainConceptSe
     getBuildingBlocks: function () {
         return this._domainConcepts;
     },
-    
+
     // **************** PRIVATE METHODS **************** //
-    
+
     /**
      * @private
      */

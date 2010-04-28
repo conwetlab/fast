@@ -13,12 +13,12 @@ var ScreenflowDocument = Class.create(PaletteDocument,
          * @type PlanPanel
          */
         this._planPanel = new PlanPanel();
-        
-        $super("Screenflow", properties, new ScreenflowInferenceEngine());      
-        
+
+        $super("Screenflow", properties, new ScreenflowInferenceEngine());
+
         this._planPanel.setDropZone(this._areas.get('screen'));
         this._planPanel.setInferenceEngine(this._inferenceEngine);
-        
+
         /**
          * @type Builder
          * @private @member
@@ -180,7 +180,7 @@ var ScreenflowDocument = Class.create(PaletteDocument,
 
         return new ScreenflowDescription(description);
     },
-    
+
     /**
      * Get the canvas cache for loading
      * @override
@@ -255,7 +255,7 @@ var ScreenflowDocument = Class.create(PaletteDocument,
                 if (!isLoading) {
                     this._setSelectedElement(instance);
                 }
-                
+
                 break;
 
             case PrePostInstance:
@@ -265,7 +265,7 @@ var ScreenflowDocument = Class.create(PaletteDocument,
                         'isLoading': isLoading
                     }));
                 if (area.getNode().className.include("pre")) {
-                    instance.setType("pre");                
+                    instance.setType("pre");
                 } else if (area.getNode().className.include("post")) {
                     instance.setType("post");
                 }
@@ -283,7 +283,7 @@ var ScreenflowDocument = Class.create(PaletteDocument,
         //instance.getView().addGhost();
         return true;
     },
-    
+
     /**
      * Delete an instance.
      * @param ComponentInstance
@@ -292,23 +292,23 @@ var ScreenflowDocument = Class.create(PaletteDocument,
      * @override
      */
     _deleteInstance: function($super, /** ComponentInstance */ instance) {
-        
+
         this._description.remove(instance.getUri());
         $super(instance);
     },
-    
+
     /**
      * Callback to be called when the findCheck operation
      * finishes
      * @private
      */
     _findCheckCallback: function(/** Array */ uris) {
-        // Update screen palette        
+        // Update screen palette
         var screenPalette = this._paletteController.getPalette(Constants.BuildingBlock.SCREEN);
-        var screenSet = screenPalette.getBuildingBlockSet();      
+        var screenSet = screenPalette.getBuildingBlockSet();
         screenSet.addURIs(uris);
     },
-    
+
     _configureToolbar: function() {
         this._addToolbarElement('save', new ToolbarButton(
                 'Save the current screenflow',
@@ -377,29 +377,29 @@ var ScreenflowDocument = Class.create(PaletteDocument,
      * @override
      */
     _renderCenterContainer: function() {
-        
+
         var centerContainer = new dijit.layout.BorderContainer({
             design:"headline",
             liveSplitters:"false",
             region:"center"
         });
-        
+
         this._designContainer.domNode.addClassName('canvas');
 
         centerContainer.addChild(this._designContainer);
         centerContainer.addChild(this._inspectorArea);
-        
+
         return centerContainer;
     },
-    
-    
+
+
     /**
      * This function creates
      * the inspector area
      * @private
      */
     _createInspectorArea: function(){
-     
+
         var inspectorArea = new dijit.layout.BorderContainer({
             region:"bottom",
             design:"horizontal",
@@ -411,9 +411,9 @@ var ScreenflowDocument = Class.create(PaletteDocument,
             });
         return inspectorArea;
     },
-    
-    
-    
+
+
+
     /**
      * This function updates the reachability in all
      * Elements: canvas and palettes
@@ -423,44 +423,44 @@ var ScreenflowDocument = Class.create(PaletteDocument,
         var isFindCheck = Utils.variableOrDefault(_isFindCheck, false);
         var canvas = this._getCanvasUris();
         var palette = this._paletteController.getComponentUris(Constants.BuildingBlock.SCREEN);
-        
+
         if (isFindCheck) {
             this._inferenceEngine.findCheck(canvas, palette, this._tags,
                                     'reachability', this._updatePanes.bind(this));
         } else {
             this._inferenceEngine.check(canvas, palette, this._tags,
                                     'reachability', this._updatePanes.bind(this));
-        }      
-        
-        // FIXME: we must learn about document reachability from the inference 
+        }
+
+        // FIXME: we must learn about document reachability from the inference
         //        engine. By the moment, one screen == deployable screenflow ;)
         this._toolbarElements.get('build').setEnabled(canvas.size() > 0);
     },
-    
-    
+
+
     /**
-     * This function updates the properties table and 
+     * This function updates the properties table and
      * the pre/post pane depending on the selected element
      * @private
      */
     _updatePanes: function() {
         var facts = this._getAllFacts();
         if (!this._selectedElement) {
-            this._propertiesPane.fillTable(this._description);          
+            this._propertiesPane.fillTable(this._description);
             this._factPane.fillTable([], [], facts);
         } else {
             this._propertiesPane.fillTable(this._selectedElement);
-           
+
             if (this._selectedElement.constructor == ScreenInstance) {
                 var preReachability = this._inferenceEngine.getPreconditionReachability(
                             this._selectedElement.getUri());
                 var preconditions = this._selectedElement.getPreconditionTable(preReachability);
-                
+
                 var postReachability = this._inferenceEngine.isReachable(
                             this._selectedElement.getUri());
                 var postconditions = this._selectedElement.getPostconditionTable(postReachability);
-                
-                this._factPane.fillTable(preconditions,postconditions,[]);           
+
+                this._factPane.fillTable(preconditions,postconditions,[]);
             } else {
                 //PrePostInstance
                 if (this._selectedElement.getType()) {
@@ -470,10 +470,10 @@ var ScreenflowDocument = Class.create(PaletteDocument,
                     )];
                     this._factPane.fillTable([], [], factInfo);
                 }
-            }    
+            }
         }
     },
-    
+
     /**
      * This function returns the data array containing all the
      * facts belonging to the screenflow
@@ -485,16 +485,16 @@ var ScreenflowDocument = Class.create(PaletteDocument,
             if (instance.constructor == ScreenInstance) {
                 var preReachability = this._inferenceEngine.getPreconditionReachability(
                             instance.getUri());
-                var preconditions = instance.getPreconditionTable(preReachability);               
+                var preconditions = instance.getPreconditionTable(preReachability);
                 preconditions.each(function(pre) {
                     if (!resultHash.get(pre[2]/*The uri of the pre*/)) {
                         resultHash.set(pre[2], pre);
                     }
                 });
-                
+
                 var postReachability = this._inferenceEngine.isReachable(
                             instance.getUri());
-                var postconditions = instance.getPostconditionTable(postReachability);               
+                var postconditions = instance.getPostconditionTable(postReachability);
                 postconditions.each(function(post) {
                     if (!resultHash.get(post[2]/*The uri of the post*/)) {
                         resultHash.set(post[2], post);
@@ -512,8 +512,8 @@ var ScreenflowDocument = Class.create(PaletteDocument,
         }.bind(this));
         return resultHash.values();
     },
-    
-    
+
+
     /**
      * Build a gadget for the screenflow
      * @private
@@ -526,7 +526,7 @@ var ScreenflowDocument = Class.create(PaletteDocument,
             this._builder.buildGadget(this._description);
         }
     },
-    
+
     /**
      * Runs when a *-condition changes
      * @private
@@ -539,9 +539,9 @@ var ScreenflowDocument = Class.create(PaletteDocument,
             this.mine._setDirty(true);
         }
     },
-    
+
     /**
-     * Creates a plan taking as end the selected Element 
+     * Creates a plan taking as end the selected Element
      * @private
      */
     _getPlans: function() {
@@ -549,25 +549,25 @@ var ScreenflowDocument = Class.create(PaletteDocument,
             var canvas = this._getCanvasUris();
             var uri = this._selectedElement.getUri();
             this._inferenceEngine.getPlans(canvas, uri,
-                                            this._onSuccessGetPlans.bind(this));        
+                                            this._onSuccessGetPlans.bind(this));
         } else {
             this._planPanel.hide();
         }
     },
-    
+
     /**
      * Called when the plans are returned
      * @private
      */
-    _onSuccessGetPlans: function(/** Array */ plans) { 
+    _onSuccessGetPlans: function(/** Array */ plans) {
         if (plans.length > 0 && plans[0].length > 0) {
-            this._planPanel.showPlans(plans);    
+            this._planPanel.showPlans(plans);
         } else {
             alert("Sorry, but there is not any available plan for the selected screen");
         }
     },
 
-    
+
     /**
      * This function adds all the (new) screens of the plan
      * to the screenflow
@@ -578,20 +578,20 @@ var ScreenflowDocument = Class.create(PaletteDocument,
             'left': position.left + 3, //with margin
             'top': position.top + 3
         };
-        
+
         plan.getPlanElements().each(function(screenDescription) {
             if (!this._description.contains(screenDescription.uri)) {
                 var screen = new ScreenInstance(screenDescription,
-                        this._inferenceEngine);      
+                        this._inferenceEngine);
                 this._description.addScreen(screen, screenPosition);
                 screen.onFinish(true);
-                
+
                 this._addToArea(this._areas.get('screen'), screen, screenPosition);
                 //Incrementing the screen position for the next screen
                 screenPosition.left += 108; // Screen size=100 + margin=6 + border=2
                 screen.setEventListener(this);
                 screen.enableDragNDrop(this._areas.get('screen'),[this._areas.get('screen')]);
-            }  
+            }
         }.bind(this));
     },
 

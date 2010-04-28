@@ -7,7 +7,7 @@ var ConfirmDialog = Class.create(FormDialog, /** @lends ConfirmDialog.prototype 
      * @param buttons
      *     ['ok_cancel' (default) | 'ok']
      * @param _options
-     */ 
+     */
     initialize: function($super, /** String */ title, /** String */ buttons, /** Hash */_options) {
         $super({
             'title': title,
@@ -66,12 +66,12 @@ var ConfirmDialog = Class.create(FormDialog, /** @lends ConfirmDialog.prototype 
                 break;
         }
     },
-    
+
 
     // **************** PUBLIC METHODS **************** //
 
-    
-    
+
+
     // **************** PRIVATE METHODS **************** //
 
     /**
@@ -94,7 +94,7 @@ var ConfirmDialog = Class.create(FormDialog, /** @lends ConfirmDialog.prototype 
         this._okButton.setDisabled(disabled);
     },
 
-    /** 
+    /**
      * onOK
      * This function is called when ok button is pressed (if any)
      * @private
@@ -102,8 +102,8 @@ var ConfirmDialog = Class.create(FormDialog, /** @lends ConfirmDialog.prototype 
     _onOk: function(){
         this._dialog.hide();
     },
-    
-    /** 
+
+    /**
      * onCancel
      * This function is called when ok button is pressed (if any)
      * @private

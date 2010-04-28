@@ -9,7 +9,7 @@ var PrePostDescription = Class.create(BuildingBlockDescription,
     initialize: function($super, /** Hash */ properties) {
         $super(properties);
     },
-    
+
     // ****************** PUBLIC METHODS ******************* //
 
     clone: function(){
@@ -104,4 +104,4 @@ var PrePostDescription = Class.create(BuildingBlockDescription,
 
 });
 
-// vim:ts=4:sw=4:et: 
+// vim:ts=4:sw=4:et:

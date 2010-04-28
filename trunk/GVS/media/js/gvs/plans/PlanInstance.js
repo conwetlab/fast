@@ -6,16 +6,16 @@ var PlanInstance = Class.create(ComponentInstance,
      * @constructs
      * @extends ComponentInstance
      */
-    initialize: function($super, /** Array */ plan, 
+    initialize: function($super, /** Array */ plan,
             /** Array */ dropZones, /** InferenceEngine */ inferenceEngine) {
-        
+
         /**
          * The plan
          * @type Array
          * @private
          */
         this._plan = plan;
-        
+
         $super([], dropZones, inferenceEngine);
     },
 
@@ -26,7 +26,7 @@ var PlanInstance = Class.create(ComponentInstance,
      * @override
      */
     getTitle: function() {
-        return "";    
+        return "";
     },
     /**
      * @override
@@ -34,20 +34,20 @@ var PlanInstance = Class.create(ComponentInstance,
     getInfo: function() {
         return new Hash();
     },
-    
+
     /**
      * @override
      */
     getUri: function() {
         return "";
     },
-    
+
     /**
      * Returns the plan
      * @type Array
      */
     getPlanElements: function() {
-        return this._plan;  
+        return this._plan;
     },
 
     // **************** PRIVATE METHODS **************** //
@@ -56,7 +56,7 @@ var PlanInstance = Class.create(ComponentInstance,
      * @type BuildingBlockView
      * @override
      */
-    _createView: function () {        
+    _createView: function () {
         return new PlanView(this._plan);
     }
 });

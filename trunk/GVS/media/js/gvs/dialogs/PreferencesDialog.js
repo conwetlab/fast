@@ -4,46 +4,46 @@ var PreferencesDialog = Class.create(ConfirmDialog /** @lends PreferencesDialog.
      * that shows the user preferences
      * @constructs
      * @extends ConfirmDialog
-     */ 
+     */
     initialize: function($super) {
-        
+
         $super("User Preferences");
     },
-    
-    
+
+
     // **************** PUBLIC METHODS **************** //
 
 
     // **************** PRIVATE METHODS **************** //
 
 
-    /** 
+    /**
      * initDialogInterface
      * This function creates the dom structure and
      * @private
      * @override
      */
     _initDialogInterface: function () {
- 
+
         this._setHeader("User preferences");
-        
+
         var user = GVS.getUser();
-             
+
         var formData = [
-            {'type':'input', 'label': 'First Name:','name': 'firstName', 
+            {'type':'input', 'label': 'First Name:','name': 'firstName',
                     'value': user.getFirstName()},
-            {'type':'input', 'label': 'Last Name:','name': 'lastName', 
+            {'type':'input', 'label': 'Last Name:','name': 'lastName',
                     'value': user.getLastName()},
             {'type':'input', 'label': 'Email:','name': 'email', 'value': user.getEmail(),
-                    'regExp': FormDialog.EMAIL_VALIDATION, 
+                    'regExp': FormDialog.EMAIL_VALIDATION,
                     'message': FormDialog.INVALID_EMAIL_MESSAGE,
                     'required': true},
-            {'type':'input', 'label': 'EzWeb URL:','name': 'ezWebURL', 
-                    'value': user.getEzWebURL(), 
-                    'regExp': FormDialog.URL_VALIDATION, 
+            {'type':'input', 'label': 'EzWeb URL:','name': 'ezWebURL',
+                    'value': user.getEzWebURL(),
+                    'regExp': FormDialog.URL_VALIDATION,
                     'message': FormDialog.INVALID_URL_MESSAGE}
         ];
-        
+
         this._setContent(formData);
 
     },
@@ -53,7 +53,7 @@ var PreferencesDialog = Class.create(ConfirmDialog /** @lends PreferencesDialog.
      * @private
      */
     _onOk: function($super){
-        
+
         if (!this._getFormWidget().validate()) {
             return;
         }
@@ -63,7 +63,7 @@ var PreferencesDialog = Class.create(ConfirmDialog /** @lends PreferencesDialog.
             $super();
         }
     },
-    
+
     /**
      * Reset method to leave the form as initially
      * @override

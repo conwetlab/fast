@@ -5,7 +5,7 @@ var TriggerMappingFactory = Class.create(
      * It handles the connection and deconnection of actions and triggers
      * for a screen
      * @constructs
-     */ 
+     */
     initialize: function () {
         /**
          * This contains all the triggers in the screen
@@ -37,7 +37,7 @@ var TriggerMappingFactory = Class.create(
             trigger = this._createFromJSON(element);
         } else {
             trigger = element;
-        }       
+        }
         this._triggers.unset(trigger.getId());
         return trigger;
     },
@@ -75,7 +75,7 @@ var TriggerMappingFactory = Class.create(
         });
         return result;
     },
-    
+
     // **************** PRIVATE METHODS **************** //
 
     /**

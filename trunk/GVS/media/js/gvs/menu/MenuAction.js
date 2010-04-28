@@ -7,8 +7,8 @@ var MenuAction = Class.create(MenuElement, /** @lends MenuAction.prototype */ {
      *           Hash containing some of these extra params
      *           * (String)iconName Name of the icon if present
      *           * (Boolean)enabled state of the element
-     *           * (String)accelKey key shortcut to access to the element   
-     */ 
+     *           * (String)accelKey key shortcut to access to the element
+     */
     initialize: function($super, /** Object */ data, /** Boolean */ mainMenu) {
         $super(data.weight);
         if (mainMenu) {
@@ -22,9 +22,9 @@ var MenuAction = Class.create(MenuElement, /** @lends MenuAction.prototype */ {
                 'label': data.label,
                 'onClick': data.handler,
                 'showLabel': true
-            });    
+            });
         }
-        
+
         /**
          * Handler function
          * @type Function
@@ -39,7 +39,7 @@ var MenuAction = Class.create(MenuElement, /** @lends MenuAction.prototype */ {
          * @private
          */
         this._shortcut = (data.shortcut ? data.shortcut : null);
-        
+
         if (this._shortcut) {
             this._widget.attr('accelKey', this._shortcut);
         }
@@ -50,28 +50,28 @@ var MenuAction = Class.create(MenuElement, /** @lends MenuAction.prototype */ {
          * @private
          */
         this._enabled = null;
-        this.setEnabled(data.enabled !== undefined ? data.enabled : true);  
-        
+        this.setEnabled(data.enabled !== undefined ? data.enabled : true);
+
         if (data.iconName) {
             this._widget.attr('iconClass', 'dijitMenuItemIcon menuIcon ' + data.iconName + 'MenuIcon');
         }
     },
-    
+
 
     // **************** PUBLIC METHODS **************** //
 
-    
+
     /**
      * Sets the element enabled
      * It must be called to set it disabled
      * when the menuitem is going to be left
-     * outside of the menu 
+     * outside of the menu
      */
     setEnabled: function(/** Boolean */ enabled) {
         this._enabled = enabled;
         this._widget.attr('disabled',!enabled);
     },
-    
+
     /**
      * Register key handlers
      * @override
@@ -79,9 +79,9 @@ var MenuAction = Class.create(MenuElement, /** @lends MenuAction.prototype */ {
     register: function(/** KeyPressRegistry */ registry) {
         if (this._shortcut) {
             registry.addHandler(this._shortcut, this._keyPressHandler.bind(this));
-        }    
+        }
     },
-    
+
     /**
      * Unregister key handlers
      * @override
@@ -91,17 +91,17 @@ var MenuAction = Class.create(MenuElement, /** @lends MenuAction.prototype */ {
             registry.removeHandler(this._shortcut);
         }
     },
-    
+
     // ************** PRIVATE METHODS **************** //
-    
+
     /**
-     * function to capture key strokes and decide if 
+     * function to capture key strokes and decide if
      * calling the handler depending on the status of the
      * action (enabled or disabled)
      */
     _keyPressHandler: function() {
         if (this._enabled) {
-           this._handler(); 
+           this._handler();
         }
     }
 });

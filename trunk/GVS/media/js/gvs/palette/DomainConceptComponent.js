@@ -1,6 +1,6 @@
-var DomainConceptComponent = Class.create(PaletteComponent, 
+var DomainConceptComponent = Class.create(PaletteComponent,
     /** @lends DomainConceptComponent.prototype */ {
-        
+
     /**
      * Palette component of a domain concept building block.
      * @param BuildingBlockDescription domainConceptBuildingBlockDescription
@@ -16,7 +16,7 @@ var DomainConceptComponent = Class.create(PaletteComponent,
 
 
     // **************** PRIVATE METHODS **************** //
-    
+
     /**
      * Creates a new View instance for the component
      * @type BuildingBlockView
@@ -25,16 +25,16 @@ var DomainConceptComponent = Class.create(PaletteComponent,
     _createView: function () {
         return new DomainConceptView(this._buildingBlockDescription);
     },
-    
+
     /**
      * Creates a new domain concept to be dragged.
      * @type DomainConceptInstance
      * @override
      */
-    _createInstance: function () {     
+    _createInstance: function () {
         return new PrePostInstance(this._buildingBlockDescription, this._inferenceEngine);
     },
-    
+
     /**
      * @type String
      * @override

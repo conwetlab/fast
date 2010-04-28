@@ -4,19 +4,19 @@ var ScreenInferenceEngine = Class.create( /** @lends ScreenInferenceEngine.proto
      * It communicates with the serverside catalogue to retrieve this information
      * @extends InferenceEngine
      * @constructs
-     */ 
+     */
     initialize: function($super) {
-        $super();    
+        $super();
     },
-    
+
 
     // **************** PUBLIC METHODS **************** //
 
-    
-    
+
+
     // **************** PRIVATE METHODS **************** //
      /**
-     * Creates a body to be sent in an AJAX call to the 
+     * Creates a body to be sent in an AJAX call to the
      * catalogue
      * @private
      * @overrides
@@ -46,32 +46,32 @@ var ScreenInferenceEngine = Class.create( /** @lends ScreenInferenceEngine.proto
         body = Object.extend(body, elements);
         return Object.toJSON(body);
     },
-    
+
     /**
      * Gets the uri for a given operation
      * @private
      * @overrides
-     */ 
+     */
     _getUri:function (/** String */ operation) {
         return URIs.catalogueScreenFindCheck;
     },
-    
-    /** 
+
+    /**
      * onSuccess callback
      * @private
      * @overrides
      */
     _findCheckOnSuccess: function(/** XMLHttpRequest */ transport){
         var result = JSON.parse(transport.responseText);
-        
+
         if (result.canvas && result.canvas.length > 0) {
             // There is some reachability information
               this.mine._updateReachability(result.canvas);
         }
-        
-        this.callback(result);        
+
+        this.callback(result);
     },
-    
+
     /**
      * onSuccess callback
      * @private

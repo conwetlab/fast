@@ -35,11 +35,11 @@ var FormDialog = Class.create( /** @lends FormDialog.prototype */ {
         if (!this._options.closable) {
             this._dialog.closeButtonNode.style.display = 'none';
         }
-        
+
         this._headerNode = new Element ('div',{
             'class': 'dialogHeader'
         });
-        
+
         this._contentNode = new Element ('div',{
             'class': 'dialogContent'
         });
@@ -54,11 +54,11 @@ var FormDialog = Class.create( /** @lends FormDialog.prototype */ {
             'class': 'dialogButtonZone'
         });
         this._formWidget = null;
-               
+
         var containerDiv = new Element ('div', {
             'class': position
         });
-        
+
         containerDiv.appendChild (this._headerNode);
         switch (position) {
             case FormDialog.POSITION_TOP:
@@ -79,16 +79,16 @@ var FormDialog = Class.create( /** @lends FormDialog.prototype */ {
                 break;
         }
         messageWrapper.style.minHeight = ((this._options.minMessageLines * 18) + 2) + 'px';
-       
+
         this._dialog.attr ('content', containerDiv);
-        
+
         this._initialized = false;
         dojo.connect(this._dialog,"hide", this._hide.bind(this));
-        
+
     },
 
-    
-    // **************** PUBLIC METHODS **************** //  
+
+    // **************** PUBLIC METHODS **************** //
 
     /**
      * Shows the dialog
@@ -106,7 +106,7 @@ var FormDialog = Class.create( /** @lends FormDialog.prototype */ {
     },
 
     // **************** PRIVATE METHODS **************** //
-    /** 
+    /**
      * initDialogInterface
      * This function creates the dom structure
      * @private
@@ -115,7 +115,7 @@ var FormDialog = Class.create( /** @lends FormDialog.prototype */ {
     _initDialogInterface: function(){
         throw "Abstract method invocation FormDialog :: _initDialogInterface"
     },
-    
+
     _hide: function() {
         GVS.setEnabled(true);
 
@@ -124,7 +124,7 @@ var FormDialog = Class.create( /** @lends FormDialog.prototype */ {
         // Force window scroll restore.
         document.documentElement.scrollTop = 0;
     },
-        
+
     /**
      * Gets the form node.
      * @type DOMNode
@@ -153,7 +153,7 @@ var FormDialog = Class.create( /** @lends FormDialog.prototype */ {
             onClick: handler
         });
 
-        
+
         this._buttonNode.appendChild(button.domNode);
         return button;
     },
@@ -165,17 +165,17 @@ var FormDialog = Class.create( /** @lends FormDialog.prototype */ {
     _removeButtons: function() {
         this._buttonNode.update("");
     },
-    
+
     /**
      * This function sets the header and a subtitle if passed
      * @private
      */
     _setHeader: function (/** String */ title, /** String */ subtitle){
-        
+
         this._headerNode.update("");
         var titleNode = new Element("h2").update(title);
         this._headerNode.appendChild(titleNode);
-        
+
         if (subtitle && subtitle != ""){
             var subtitleNode = new Element("div", {
                 "class": "line"
@@ -200,17 +200,17 @@ var FormDialog = Class.create( /** @lends FormDialog.prototype */ {
                     'method': 'post'
                 });
             }
-            
+
             // Instantiate form elements
             $A(data).each (function(line){
                 var lineNode;
                 var inputNode;
-                
+
                 switch (line.type) {
                     case 'title':
                         lineNode = new Element ('h3').update(line.value);
                         break;
-                        
+
                     case 'input':
                         if (line.regExp || line.required) {
                             var input = new dijit.form.ValidationTextBox({
@@ -232,7 +232,7 @@ var FormDialog = Class.create( /** @lends FormDialog.prototype */ {
                         inputNode = input.textbox;
                         lineNode = this._createLine(line.label, input.domNode);
                         break;
-    
+
                     case 'label':
                         lineNode = new Element('div', {
                                         'class': 'line',
@@ -240,55 +240,55 @@ var FormDialog = Class.create( /** @lends FormDialog.prototype */ {
                                     }).update(line.value);
 
                         break;
-                        
+
                     case 'hidden':
                         lineNode = new Element('input',{
                                         'type': 'hidden',
                                         'name': line.name,
                                         'value': line.value
                                     });
-                        break;                    
-                                     
+                        break;
+
                     case 'comboBox':
                         inputNode = new Element('select', {
                             'name': line.name
                         });
-                        
+
                         $A(line.options).each(function(option) {
                             var optionNode = new Element('option', {
                                  'value': option.value
                             }).update(option.label);
-                            
+
                             if (option.value == line.value) {
                                 optionNode.selected = "selected";
                             }
-                            
+
                             inputNode.appendChild(optionNode);
                         });
-                        
+
                         lineNode = this._createLine(line.label, inputNode);
                         break;
-                        
+
                     default:
                         throw "Unimplemented form field type";
                 }
-                      
-                this._formWidget.domNode.appendChild(lineNode);   
+
+                this._formWidget.domNode.appendChild(lineNode);
                 if (inputNode) {
                     this._armEvents(inputNode, line.events);
                 }
             }.bind(this));
-            
-            this._contentNode.update(this._formWidget.domNode);  
-                        
+
+            this._contentNode.update(this._formWidget.domNode);
+
         } else {
             // Data is a DOMNode
             this._contentNode.update(data);
-        }        
+        }
 
         // Just in case
         dojo.parser.parse(this._contentNode);
-    },    
+    },
 
     /**
      * Sets the message area content.
@@ -328,11 +328,11 @@ var FormDialog = Class.create( /** @lends FormDialog.prototype */ {
         var labelNode = new Element ('label').update(label);
         lineNode.appendChild(labelNode);
         lineNode.appendChild(inputNode);
-        
+
         return lineNode;
     },
-    
-    
+
+
     /**
      * Attach the event handlers to the input DOM node
      * @private
@@ -352,8 +352,8 @@ var FormDialog = Class.create( /** @lends FormDialog.prototype */ {
         if (this._getFormWidget()) {
             this._getFormWidget().validate();
         }
-    }  
-     
+    }
+
 });
 
 // STATIC ATTRIBUTES

@@ -1,32 +1,32 @@
 var AbstractDocument = Class.create(ToolbarModel, /** @lends AbstractDocument.prototype */ {
     /**
-     * Represents a document and its tab. Subclasses must provide the 
+     * Represents a document and its tab. Subclasses must provide the
      * inner content.
      * @extends ToolbarModel
      * @abstract
      * @constructs
-     */ 
+     */
     initialize: function($super, /** String */ title,
         /** Boolean (Optional) */ _isWidgetProvided) {
         $super();
 
         var isWidgetProvided = Utils.variableOrDefault(_isWidgetProvided, false);
-        
+
         /**
          * Tab title
          * @type String
          * @private
          */
         this._title = title;
-        
+
         /**
          * Actual Tab Id
          * @type String
          * @private
          */
         this._tabId = UIDGenerator.generate("tab");
-       
-        
+
+
         /**
          * Initial tab content (empty by default)
          * @type DOMNode
@@ -34,8 +34,8 @@ var AbstractDocument = Class.create(ToolbarModel, /** @lends AbstractDocument.pr
          */
         this._tabContent = new Element("div", {
             "class": "document"
-        });        
-        
+        });
+
         /**
          * Actual tab
          * @type dijit.layout.ContentPane
@@ -66,8 +66,8 @@ var AbstractDocument = Class.create(ToolbarModel, /** @lends AbstractDocument.pr
     getTabId: function() {
         return this._tabId;
     },
-    
-    
+
+
     /**
      * Gets the tab node.
      * @type DOMNode
@@ -75,8 +75,8 @@ var AbstractDocument = Class.create(ToolbarModel, /** @lends AbstractDocument.pr
     getTab: function() {
         return this._tab;
     },
-    
-    
+
+
     /**
      * Gets the title.
      * @type String
@@ -92,7 +92,7 @@ var AbstractDocument = Class.create(ToolbarModel, /** @lends AbstractDocument.pr
     getNode: function() {
         return this._tabContent;
     },
-    
+
     /**
      * Method called on del. Might be overloaded
      */
@@ -100,13 +100,13 @@ var AbstractDocument = Class.create(ToolbarModel, /** @lends AbstractDocument.pr
         // Do nothing
     },
 
-        
+
     /**
      * Implementing menu model interface
      * @type Object
      */
     getMenuElements: function() {
-        return {};    
+        return {};
     },
 
     show: function() {
@@ -116,7 +116,7 @@ var AbstractDocument = Class.create(ToolbarModel, /** @lends AbstractDocument.pr
     hide: function() {
         // Do nothing
     },
-    
+
     // **************** PRIVATE METHODS **************** //
 
     /**

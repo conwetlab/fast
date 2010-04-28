@@ -1,6 +1,6 @@
 var GVS = Class.create(ToolbarModel,    /** @lends GVS.prototype */
 {
-    
+
     /**
      * GVS is the system facade.
      * @constructs
@@ -62,7 +62,7 @@ var GVS = Class.create(ToolbarModel,    /** @lends GVS.prototype */
         this._dialogs.set("browseScreenflows", new ManageScreenflowsDialog());
         this._dialogs.set("browseScreens", new ManageScreensDialog());
         this._dialogs.set("preferences", new PreferencesDialog());
-        
+
         this._actions = {
             // browseScreenflow: this._browseScreenflow.bind(this),
             newScreenflow: this._newScreenflow.bind(this),

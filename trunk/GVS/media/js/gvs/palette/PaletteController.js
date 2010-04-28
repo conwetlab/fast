@@ -11,15 +11,15 @@ var PaletteController = Class.create(
      */
     initialize: function(/** Array */ buildingBlockSets, /** Array */ dropZones,
         /** InferenceEngine */ inferenceEngine) {
-        
-        
+
+
         /**
          * List of available palettes
          * @type {Hash}
          * @private @member
          */
         this._palettes = new Hash();
-        
+
         /**
          * AccordionContainer which contains the different palettes
          * @type AccordionContainer
@@ -34,16 +34,16 @@ var PaletteController = Class.create(
                 "livesplitters":"false",
                 "style":"width:260px;"
                 });
-         
+
         //Create all the document necessary palettes
         $A(buildingBlockSets).each (function(set) {
             var validDropZones = new Array();
             dropZones.each(function(dropZone) {
                 if (dropZone.accepts().include(set.getBuildingBlockType())) {
                     validDropZones.push(dropZone);
-                }    
+                }
             });
-            var palette = new Palette (set, validDropZones, inferenceEngine); 
+            var palette = new Palette (set, validDropZones, inferenceEngine);
             this._palettes.set(set.getBuildingBlockType(), palette);
             this._node.addChild(palette.getNode());
         }.bind(this));
@@ -53,11 +53,11 @@ var PaletteController = Class.create(
     getPalette: function (/** String */ type) {
         return this._palettes.get(type);
     },
-    
+
     getNode: function() {
         return this._node;
     },
-    
+
     /**
      * All uris of all the components (of all the palettes)
      */
@@ -66,7 +66,7 @@ var PaletteController = Class.create(
     }
 
     // **************** PRIVATE METHODS **************** //
-    
+
 });
 
-// vim:ts=4:sw=4:et: 
+// vim:ts=4:sw=4:et:

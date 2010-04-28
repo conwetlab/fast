@@ -6,12 +6,12 @@ var ComponentInstance = Class.create(DragSource,
      * in the Document area
      * @constructs
      * @extends DragSource
-     */ 
-    initialize: function($super, /**BuildingBlockDescription*/ buildingBlockDescription, 
+     */
+    initialize: function($super, /**BuildingBlockDescription*/ buildingBlockDescription,
              /** InferenceEngine */ inferenceEngine) {
         $super();
-        
-        /** 
+
+        /**
          * BuildingBlock description this class is instance of
          * @type BuildingBlockDescription
          * @private @member
@@ -24,7 +24,7 @@ var ComponentInstance = Class.create(DragSource,
          * @private
          */
         this._id = null;
-        
+
         /**
          * Orientation of the instance inside its container
          * @type Integer
@@ -52,23 +52,23 @@ var ComponentInstance = Class.create(DragSource,
          * @private
          */
         this._inferenceEngine = inferenceEngine;
-        
+
         /**
          * Event listener
          * @type Object
          * @private
          */
         this._listener = null;
-        
+
         if (this.getUri()) {
-            this._inferenceEngine.addReachabilityListener(this.getUri(), this._view);           
+            this._inferenceEngine.addReachabilityListener(this.getUri(), this._view);
         }
-        
-        
+
+
     },
 
     // **************** PUBLIC METHODS **************** //
-    
+
     /**
      * Somehow something the user can comprehend
      * Implementing TableModel interface
@@ -76,7 +76,7 @@ var ComponentInstance = Class.create(DragSource,
      * @type String
      */
     getTitle: function() {
-        throw "Abstract method invocation. ComponentInstance::getTitle";    
+        throw "Abstract method invocation. ComponentInstance::getTitle";
     },
 
     /**
@@ -96,7 +96,7 @@ var ComponentInstance = Class.create(DragSource,
 
         var params = document.createElement('div');
         var paramsText = this.getParams();
-        var parameterized = paramsText.strip().length > 0;  
+        var parameterized = paramsText.strip().length > 0;
         if (parameterized) {
             try {
                 var json = json = cjson_parse(paramsText);
@@ -134,7 +134,7 @@ var ComponentInstance = Class.create(DragSource,
      * Adds event listener
      */
     setEventListener: function(/** Object */ listener) {
-        this._listener = listener;    
+        this._listener = listener;
     },
 
     /**
@@ -142,7 +142,7 @@ var ComponentInstance = Class.create(DragSource,
      * @type
      */
     getUri: function() {
-        return this._buildingBlockDescription.uri;    
+        return this._buildingBlockDescription.uri;
     },
 
     /**
@@ -186,7 +186,7 @@ var ComponentInstance = Class.create(DragSource,
         };
         return position;
     },
-    
+
     /**
      * Gets the component orientation
      * @type Integer
@@ -205,7 +205,7 @@ var ComponentInstance = Class.create(DragSource,
         this.getHandlerNode().style.left = position.left + "px";
         this.getHandlerNode().style.top = position.top + "px";
     },
-    
+
     /**
      * Sets the component orientation
      * @params Integer
@@ -254,7 +254,7 @@ var ComponentInstance = Class.create(DragSource,
         return this._buildingBlockType;
     },
 
-    
+
     /**
      * Gets the id
      */
@@ -286,7 +286,7 @@ var ComponentInstance = Class.create(DragSource,
     onUpdate: function(/** Number */ x, /** Number */ y) {
 
     },
-    
+
     /**
      * Drop event handler for the DragSource
      * @param changingZone
@@ -311,16 +311,16 @@ var ComponentInstance = Class.create(DragSource,
         }
         this.onUpdate();
     },
-    
+
     /**
      * Called when the scroll has been moved
      * Implementing Scroll Listener interface
-     * 
+     *
      */
     onScroll: function () {
         this.onUpdate();
     },
-    
+
     /**
      * This function returns a list with all the
      * preconditions of the instance,
@@ -342,7 +342,7 @@ var ComponentInstance = Class.create(DragSource,
     },
 
     // **************** PRIVATE METHODS **************** //
-    
+
     /**
      * Creates a new View instance for the component
      * @type BuildingBlockView
@@ -351,7 +351,7 @@ var ComponentInstance = Class.create(DragSource,
     _createView: function () {
         throw "Abstract Method invocation: ComponentInstance::_createView"
     },
-    
+
     /**
      * This function is called when the attached view is clicked
      * must be overriden by descendants
@@ -389,7 +389,7 @@ var ComponentInstance = Class.create(DragSource,
         else {
             var result = new Array();
             if (type != "actions") {
-                var conditions = this._buildingBlockDescription[type][0];  
+                var conditions = this._buildingBlockDescription[type][0];
                 $A(conditions).each(
                     function(condition) {
                         result.push(this._getConditionItem(condition, reachability));

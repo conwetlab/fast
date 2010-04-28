@@ -20,14 +20,14 @@ var Palette = Class.create(SetListener, /** @lends Palette.prototype */ {
          * @private @member
          */
         this._set = set;
-        
+
         /**
          * Zones to drop components
          * @type Array
          * @private @member
          */
         this._dropZones = dropZones;
-        
+
         /**
          * Collection of components the palette offers.
          * @type Hash   Hash of URI to PaletteComponent
@@ -41,15 +41,15 @@ var Palette = Class.create(SetListener, /** @lends Palette.prototype */ {
          * @private @member
          */
         this._node = null;
-        
+
         /**
          * Palette content
          * @type DOMNode
          * @private @member
          */
         this._contentNode = null;
-        
-        this._renderUI(); 
+
+        this._renderUI();
         this._set.setListener(this);
     },
 
@@ -63,7 +63,7 @@ var Palette = Class.create(SetListener, /** @lends Palette.prototype */ {
     getNode: function() {
         return this._node;
     },
-    
+
     /**
      * This function will be called whenever
      * the set of building blocks changes
@@ -76,7 +76,7 @@ var Palette = Class.create(SetListener, /** @lends Palette.prototype */ {
     getBuildingBlockSet: function() {
         return this._set;
     },
-    
+
     /**
      * All uris of all the components
      */
@@ -89,7 +89,7 @@ var Palette = Class.create(SetListener, /** @lends Palette.prototype */ {
         });
         return uris;
     },
-    
+
     // **************** PRIVATE METHODS **************** //
 
     /**
@@ -102,7 +102,7 @@ var Palette = Class.create(SetListener, /** @lends Palette.prototype */ {
             'title':this._set.getBuildingBlockName(),
             'class':'paletteElement'
         });
-        
+
         this._contentNode = new Element('div', {
             'class':'paletteContent'
         });
@@ -146,34 +146,34 @@ var Palette = Class.create(SetListener, /** @lends Palette.prototype */ {
             var component = item.value;
             var title = component.getBuildingBlockDescription().getTitle().toLowerCase();
             var searchValue = this._searchBox.getValue().toLowerCase();
-            
-            if (searchValue.blank() || title.match(searchValue)) { 
+
+            if (searchValue.blank() || title.match(searchValue)) {
                 component.getNode().show();
             } else {
                 component.getNode().hide();
             }
         }.bind(this));
-    }, 
-    
+    },
+
     /**
      * Adds a new component to the palette
      */
     _addComponentFor: function(/** BuildingBlockDescription */ desc) {
         var component = null;
-        
+
         switch(this._set.getBuildingBlockType()) {
             case Constants.BuildingBlock.SCREEN:
                 component = new ScreenComponent(desc, this._dropZones, this._inferenceEngine);
                 break;
-                
+
             case Constants.BuildingBlock.DOMAIN_CONCEPT:
                 component = new DomainConceptComponent(desc, this._dropZones, this._inferenceEngine);
                 break;
-            
+
             case Constants.BuildingBlock.FORM:
                 component = new FormComponent(desc, this._dropZones, this._inferenceEngine);
                 break;
-            
+
             case Constants.BuildingBlock.RESOURCE:
                 component = new ResourceComponent(desc, this._dropZones, this._inferenceEngine);
                 break;
@@ -181,13 +181,13 @@ var Palette = Class.create(SetListener, /** @lends Palette.prototype */ {
             case Constants.BuildingBlock.OPERATOR:
                 component = new OperatorComponent(desc, this._dropZones, this._inferenceEngine);
                 break;
-                
+
             default:
                 throw "Unsupported building block type";
         }
         this._components.set(desc.uri, component);
 
-        var separator = new Element("div", {"class": "paletteSeparator"});   
+        var separator = new Element("div", {"class": "paletteSeparator"});
         this._contentNode.appendChild(component.getNode());
         this._contentNode.appendChild(separator);
     }

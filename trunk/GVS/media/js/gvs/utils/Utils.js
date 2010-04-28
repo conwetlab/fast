@@ -3,7 +3,7 @@ var Utils = Class.create();
 // **************** STATIC METHODS **************** //
 
 Object.extend(Utils, {
-    
+
     getIsoDateNow: function(/**Date*/ dateObject) {
         var dateString = dateObject.toJSON();
         dateString = dateString.replace(/"/,'');
@@ -13,7 +13,7 @@ Object.extend(Utils, {
         }
         return dateString;
     },
-    
+
     ezWebDeploy: function(/** domNode */ buttonNode, /**String*/ templateUrl) {
         var button = dijit.byId(buttonNode.id);
         button.attr("label", "Done!");
@@ -21,13 +21,13 @@ Object.extend(Utils, {
         window.open(URIs.ezweb + "interfaces/gadget?template_uri=" + templateUrl);
         console.log(URIs.ezweb + "interfaces/gadget?template_uri=" + templateUrl);
     },
-    
+
     igoogleDeploy: function(/**String*/ uri) {
         alert("iGoogle Deployment service being developed (<a href='" + uri + "'>" + uri +"</a>)");
     },
-    
+
     /**
-     * Copy the properties of an object into another. 
+     * Copy the properties of an object into another.
      */
     addProperties: function(/** Object */ to, /** Object */ properties) {
         if (properties) {
@@ -36,7 +36,7 @@ Object.extend(Utils, {
             });
         }
     },
-    
+
     setSatisfeabilityClass: function (/** DOMNode */ node, /** Boolean */ satisfeable) {
         if (satisfeable === null || satisfeable === undefined) {
             //Unknown satisfeability
@@ -47,7 +47,7 @@ Object.extend(Utils, {
             node.addClassName(satisfeable ? 'satisfeable' : 'unsatisfeable');
         }
     },
-    
+
     /**
      * This function extracts an uri from a rdf pattern
      * @type String
@@ -58,16 +58,16 @@ Object.extend(Utils, {
             return pieces[2];
         } else {
             return "";
-        }      
+        }
     },
-       
+
     /**
      * Logs an AJAX error
-     */ 
+     */
     onAJAXError: function(transport, e){
         Logger.serverError(transport, e);
     },
-    
+
     /**
     * This function returns the position of a node
     * @type Object
@@ -75,16 +75,16 @@ Object.extend(Utils, {
     getPosition: function (/** DOMNode */ node){
         var left = 0;
         var top  = 0;
-    
+
         while (node.offsetParent){
             left += node.offsetLeft - node.scrollLeft;
             top  += node.offsetTop - node.scrollTop;
             node  = node.offsetParent;
         }
-    
+
         left += node.offsetLeft;
         top  += node.offsetTop;
-    
+
         return {'left':left, 'top':top};
     },
 
@@ -95,7 +95,7 @@ Object.extend(Utils, {
         $("messages").removeClassName("error");
         $("messages").removeClassName("hidden");
         $("messages").update(text);
-        
+
         var position = Math.floor(($("header").clientWidth / 2) -
                                     ($("messages").clientWidth / 2));
         $("messages").setStyle({'opacity': '1', 'left': position + 'px'});
@@ -154,4 +154,4 @@ Object.extend(Utils, {
         result = result.replace(/\s+/g, " ");
         return result;
     }
-}); 
+});

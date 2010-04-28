@@ -4,7 +4,7 @@ var Pipe = Class.create(
     /**
      * Pipes graphical representation
      * @constructs
-     */ 
+     */
     initialize: function (/** WireIt.Wire */ wire, /** String */ id) {
 
         /**
@@ -134,7 +134,7 @@ var Pipe = Class.create(
                             });
                  this._isValid = false;
              }
-             
+
         }
     },
 
@@ -172,7 +172,7 @@ var Pipe = Class.create(
         }
         this._wire.element.setStyle(style);
     }
-    
+
     // **************** PRIVATE METHODS **************** //
 
 });

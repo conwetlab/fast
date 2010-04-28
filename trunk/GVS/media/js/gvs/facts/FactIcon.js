@@ -3,7 +3,7 @@ var FactIcon = Class.create( /** @lends FactIcon.prototype */ {
     /**
      * Graphical representation of a fact.
      * @constructs
-     * @param Fact fact   
+     * @param Fact fact
      * @param String size  Icon size ("inline"|"embedded"|"standalone")
      */
     initialize: function(fact, size) {
@@ -22,7 +22,7 @@ var FactIcon = Class.create( /** @lends FactIcon.prototype */ {
         this._size = size;
 
         /**
-         * Fact icon root node 
+         * Fact icon root node
          * @type DOMNode
          * @private
          */
@@ -30,7 +30,7 @@ var FactIcon = Class.create( /** @lends FactIcon.prototype */ {
                 "class": this._size + "_fact fact",
                 'title': this._fact.getDescription()
                 });
-        
+
         var contentLayer = new Element("div", {
     	        "class": "contentLayer"
                 });
@@ -43,7 +43,7 @@ var FactIcon = Class.create( /** @lends FactIcon.prototype */ {
         this._node.appendChild(recommendationLayer);
     },
 
-    
+
     // **************** PUBLIC METHODS **************** //
 
 
@@ -54,7 +54,7 @@ var FactIcon = Class.create( /** @lends FactIcon.prototype */ {
      */
     getNode: function () {
         return this._node;
-    }, 
+    },
      /**
      * Gets the fact object
      * @type Fact

@@ -4,7 +4,7 @@ var ActionView = Class.create(
     /**
      * Actions graphical representation
      * @constructs
-     */ 
+     */
     initialize: function(/** Object */ description) {
 
         /**
@@ -19,16 +19,16 @@ var ActionView = Class.create(
          * @private
          */
         this._preIcons = new Hash();
-        
+
         this._node = new Element("div", {
             "class": "action"
         });
-        
+
         var title = new Element("div", {
             "class": "title"
         }).update(description.name);
         this._node.appendChild(title);
-        
+
         var preArea = new Element("div",{
             "class": "preArea"
         });
@@ -37,16 +37,16 @@ var ActionView = Class.create(
             this._preIcons.set(pre.id, fact);
             preArea.appendChild(fact.getNode());
         }.bind(this));
-        this._node.appendChild(preArea);       
-        
+        this._node.appendChild(preArea);
+
     },
-    
+
     // **************** PUBLIC METHODS **************** //
-    
+
     getNode: function() {
-        return this._node;        
+        return this._node;
     },
-    
+
     /**
      * This function returns the domNode of the condition that has
      * the id passed as parameter
@@ -73,7 +73,7 @@ var ActionView = Class.create(
                                         preData.satisfied);
         }.bind(this));
     }
-    
+
     // **************** PRIVATE METHODS **************** //
 });
 

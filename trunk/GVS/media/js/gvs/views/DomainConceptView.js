@@ -5,7 +5,7 @@ var DomainConceptView = Class.create( BuildingBlockView,
      * Domain Concepts graphical representation
      * @constructs
      * @extends BuildingBlockView
-     */ 
+     */
     initialize: function($super, /** BuildingBlockDescription */ description) {
         $super();
 
@@ -19,7 +19,7 @@ var DomainConceptView = Class.create( BuildingBlockView,
     },
 
     // **************** PUBLIC METHODS **************** //
-    
+
     /**
      * Removes the DOM Elements and frees building blocks
      * @override
@@ -28,8 +28,8 @@ var DomainConceptView = Class.create( BuildingBlockView,
         // Let the garbage collector to do its job
         this._node = null;
     },
-    
-    
+
+
     /**
      * @override
      */
