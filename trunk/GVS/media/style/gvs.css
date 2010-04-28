@@ -23,12 +23,12 @@ div.WireIt-Container-focused { z-index: 16; }
 /******************
  * #main area     *
  ******************/
-html, body,#main { 
-    height: 100%; 
-    width: 100%; 
+html, body,#main {
+    height: 100%;
+    width: 100%;
     overflow: hidden;
-    padding: 0; 
-    border: 0; 
+    padding: 0;
+    border: 0;
 }
 
 h1{
@@ -160,12 +160,12 @@ h4{
  ******************/
 /* Modifying toolbar interface */
 .soria .dijitToolbar {
-    background-image: url('../images/gui/toolbar/toolbar_bg.png');    
+    background-image: url('../images/gui/toolbar/toolbar_bg.png');
 }
 
 .dijitMenuItem.dijitMenuItemSelected, .dijitMenuItemLabel.dijitMenuItem.dijitMenuItemHover  {
     background-color: #6189C4;
-    color: white; 
+    color: white;
 }
  .toolbarIcon
 /* All of the selectors for the icons go here */
@@ -205,7 +205,7 @@ h4{
 .aboutMenuIcon { background-position:    -16px;}
 
 /******************
- * workspace	  *
+ * workspace      *
  ******************/
 #workspace {
     padding: 0;
@@ -240,7 +240,7 @@ h4{
 }
 
 /******************
- * welcome doc	  *
+ * welcome doc    *
  ******************/
 
 .welcome div {
@@ -253,12 +253,12 @@ h4{
 .welcome #intro {
     margin: 10px;
     font-size: 16px;
-    
+
 }
 .welcome {
     padding-top: 20px;
     background: transparent url("../images/gui/document/welcomeBackground.png") repeat;
-    
+
 }
 .welcome button {
     width: 200px;
@@ -314,7 +314,7 @@ h4{
     overflow: auto;
     width: 97%;
     padding: 5px;
-    
+
 }
 
 .plan.view {
@@ -459,7 +459,7 @@ h4{
 
 
 /******************
- * palette	  *
+ * palette        *
  ******************/
 
 .paletteSeparator {
@@ -539,7 +539,7 @@ h4{
 
 .prePostSeparator {
     position: absolute;
-      
+
 }
 /*******************
 * screen component *
@@ -568,7 +568,7 @@ h4{
     color:white;
     font-weight:normal;
     -moz-border-radius:3px 3px 0 0;
-    -webkit-border-top-left-radius:3px; 
+    -webkit-border-top-left-radius:3px;
     -webkit-border-top-right-radius:3px;
     background-color: #808080;
 }
@@ -609,7 +609,7 @@ h4{
     bottom: 0px;
     right: 50%;
     left: 50%;
-    border-left: 1px dashed #aaa;    
+    border-left: 1px dashed #aaa;
 }
 
 .screen.satisfeable.selected {
@@ -635,7 +635,7 @@ h4{
     height:62px;
     margin:5px;
     padding:0;
-    width:125px;    
+    width:125px;
     background-color: white;
 }
 .view.resource.unsatisfeable {
@@ -655,7 +655,7 @@ h4{
     padding-top: 3px;
     position:absolute;
     right:0;
-    text-align: center;  
+    text-align: center;
 }
 .resource.unsatisfeable .title {
      border-top: 2px solid #B90000;
@@ -664,7 +664,7 @@ h4{
 }
 .resource.satisfeable .title {
      border-top: 2px solid green;
-	 background-color: green;     
+     background-color: green;
      color: white;
 }
 .resource .prePostSeparator {
@@ -673,7 +673,7 @@ h4{
     right: 50%;
     left: 50%;
     border-left: 1px dashed #aaa;
-} 
+}
 
 .resource .preArea, .resource .postArea {
     height:55%;
@@ -700,7 +700,7 @@ h4{
 }
 
 /*********************
- * operator          * 
+ * operator          *
  *********************/
 .view.operator {
     background: transparent url("../images/resources/operator.png")
@@ -765,7 +765,7 @@ h4{
     position: absolute;
 }
 /*********************
- * form              * 
+ * form              *
  *********************/
 .view.form {
     border: 2px dotted #808080;
@@ -857,7 +857,7 @@ h4{
 }
 
 .paramsDialog textarea {
-	width: 100% !important;
+    width: 100% !important;
 }
 
 /*********************
@@ -876,7 +876,7 @@ h4{
 
 }
 /*********************
- * properties tables *	 
+ * properties tables *
  *********************/
 .tableArea .dijitAccordionTitle {
     cursor: auto;
@@ -907,7 +907,7 @@ h4{
     font-weight:bold;
 }
 /******************
- * facts		  *
+ * facts          *
  ******************/
 .inline_fact {
     width: 17px;
@@ -940,7 +940,7 @@ h4{
     line-height: 20px;
     text-align: center;
     font-weight: bold;
-    color: white; 
+    color: white;
     background: url("../images/facts/20x20/grey.png") no-repeat center center;
 }
 .embedded_fact.satisfeable .contentLayer {
@@ -950,8 +950,8 @@ h4{
     background: url("../images/facts/20x20/red.png") no-repeat center center;
 }
 .embedded_fact.negative .contentLayer {
-	background: url("../images/facts/20x20/negative.png") no-repeat center center;
-	color: #FFFFFF;
+    background: url("../images/facts/20x20/negative.png") no-repeat center center;
+    color: #FFFFFF;
 }
 
 
@@ -961,32 +961,32 @@ h4{
     line-height: 25px;
     text-align: center;
     font-weight: bold;
-    color: #808080; 
+    color: #808080;
     background: url("../images/facts/25x25/grey.png") no-repeat center center;
 }
 .satisfeable.standalone_fact .contentLayer {
     background: url("../images/facts/25x25/green.png") no-repeat center center;
-    color: #068106; 
+    color: #068106;
 }
 .unsatisfeable.standalone_fact .contentLayer {
     background: url("../images/facts/25x25/red.png") no-repeat center center;
-    color: #B90000; 
+    color: #B90000;
 }
 .selected .standalone_fact .contentLayer {
     background: url("../images/facts/25x25/grey_selected.png") no-repeat center center;
-    color: #EAEAEA; 
+    color: #EAEAEA;
 }
 .selected .standalone_fact.satisfeable .contentLayer {
     background: url("../images/facts/25x25/green_selected.png") no-repeat center center;
-    color: #ddf7dd; 
+    color: #ddf7dd;
 }
 .selected .standalone_fact.unsatisfeable .contentLayer {
     background: url("../images/facts/25x25/red_selected.png") no-repeat center center;
-    color: #f5d9d9; 
+    color: #f5d9d9;
 }
 .standalone_fact.negative .contentLayer {
-	background: url("../images/facts/25x25/negative.png") no-repeat center center;
-	color: #FFFFFF;
+    background: url("../images/facts/25x25/negative.png") no-repeat center center;
+    color: #FFFFFF;
 }
 
 /*******************
@@ -1060,7 +1060,7 @@ label {
 }
 
 .dialogButtonZone span { /* Buttons */
-   margin: 0px 2px; 
+   margin: 0px 2px;
 }
 
 .dialogContent {
@@ -1087,7 +1087,7 @@ label {
 
 .preview {
     margin: 0px auto;
-    text-align: center;    
+    text-align: center;
 }
 .preview .error {
     margin: 10px;
