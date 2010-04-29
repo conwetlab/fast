@@ -57,8 +57,8 @@ var GVS = Class.create(ToolbarModel,    /** @lends GVS.prototype */
     init: function(){
 
         this._dialogs.set("addScreen", new AddScreenDialog());
-        this._dialogs.set("newScreenflow", new NewScreenflowDialog());
-        this._dialogs.set("newScreen", new NewScreenDialog());
+        this._dialogs.set("newScreenflow", new NewBuildingBlockDialog('Screenflow'));
+        this._dialogs.set("newScreen", new NewBuildingBlockDialog('Screen'));
         this._dialogs.set("browseScreenflows", new ManageScreenflowsDialog());
         this._dialogs.set("browseScreens", new ManageScreensDialog());
         this._dialogs.set("preferences", new PreferencesDialog());

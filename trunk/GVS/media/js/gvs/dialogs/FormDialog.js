@@ -133,6 +133,7 @@ var FormDialog = Class.create( /** @lends FormDialog.prototype */ {
     _getForm: function() {
         return this._formWidget.domNode;
     },
+
     /**
      * Gets the form Widget
      * @type dijit.form.Form
@@ -341,6 +342,15 @@ var FormDialog = Class.create( /** @lends FormDialog.prototype */ {
         $H(events).each(function(pair) {
             Element.observe(input, pair.key, pair.value);
         });
+    },
+
+    /**
+     * This method is called to validate user input
+     * Overwrite when necessary.
+     * @private
+     */
+    _validate: function() {
+        return this._getFormWidget().validate();
     },
 
     /**

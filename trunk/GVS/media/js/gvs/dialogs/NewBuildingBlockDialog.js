@@ -1,19 +1,36 @@
-var NewScreenflowDialog = Class.create(ConfirmDialog /** @lends NewScreenflowDialog.prototype */, {
+var NewBuildingBlockDialog = Class.create(ConfirmDialog /** @lends NewBuildingBlockDialog.prototype */, {
+
     /**
-     * This class handles the dialog
-     * to create a new screenflow
+     * This class handles building block creation dialogs
+     * @abstract
      * @constructs
      * @extends ConfirmDialog
      */
-    initialize: function($super) {
+    initialize: function($super, buildingblockName) {
+
+
         /**
-         * Current screenflow name/version availability
+         * Name of the Building Block this Dialog handles
+         * @private
+         * @type String
+         */
+        this._buildingblockName = buildingblockName;
+
+        /**
+         * URI used for asking buildingblock availability
+         * @private
+         * @type String
+         */
+        this._searchURI = URIs[this._buildingblockName + 'Search'];
+
+        /**
+         * Current building block availability
          * @private
          * @type Boolean
          */
         this._available = true;
 
-        $super("New Screenflow", ConfirmDialog.OK_CANCEL, {'createMessageZone': true});
+        $super("New " + this._buildingblockName, ConfirmDialog.OK_CANCEL, {'createMessageZone': true});
     },
 
 
@@ -29,20 +46,22 @@ var NewScreenflowDialog = Class.create(ConfirmDialog /** @lends NewScreenflowDia
      * @private
      * @override
      */
-    _initDialogInterface: function (){
+    _initDialogInterface: function () {
 
-        this._setHeader("Fulfill Screenflow Information",
-                             "Please fulfill the required information in order to " +
-                             "create a new screenflow.");
+        this._setHeader(
+                "Fulfill " + this._buildingblockName + " Information",
+                "Please fulfill the required information in order to " +
+                "create a new " + this._buildingblockName + "."
+        );
 
         var callback = this._scheduleAvailabilityCheck.bind(this);
         var formData = [
             {
                 'type':'input',
-                'label': 'Screenflow Name:',
+                'label': this._buildingblockName + ' Name:',
                 'name': 'name',
                 'value': '',
-                'message': 'Screenflow cannot be blank',
+                'message': this._buildingblockName + 'Name cannot be blank',
                 'required': true,
                 'events': {
                     'keypress': callback,
@@ -74,7 +93,7 @@ var NewScreenflowDialog = Class.create(ConfirmDialog /** @lends NewScreenflowDia
 
     /**
      * This function updates this dialog taking into account the availability
-     * status. For example, if the screen name/version is not available, this
+     * status. For example, if current building block name/version is not available, this
      * dialog will be disabled.
      *
      * @private
@@ -83,7 +102,7 @@ var NewScreenflowDialog = Class.create(ConfirmDialog /** @lends NewScreenflowDia
         if (this._available) {
             this._setMessage();
         } else {
-            this._setMessage('Please, use a diferent Version or Screen Name.',
+            this._setMessage('Please, use a diferent Version or ' + this._buildingblockName + ' Name.',
                              FormDialog.MESSAGE_ERROR);
         }
         this._setDisabled(!this._available);
@@ -136,7 +155,7 @@ var NewScreenflowDialog = Class.create(ConfirmDialog /** @lends NewScreenflowDia
             "fields": ["version"],
             "limit": 1
         }
-        PersistenceEngine.sendPost(URIs.screenflowSearch, null,
+        PersistenceEngine.sendPost(this._searchURI, null,
                 Object.toJSON(query), this, this._onAvailabilityCheckSuccess,
                 Utils.onAJAXError);
     },
@@ -159,7 +178,7 @@ var NewScreenflowDialog = Class.create(ConfirmDialog /** @lends NewScreenflowDia
             clearTimeout(this._timeout);
         } catch (e) {}
 
-        this._setMessage('Checking if the screen already exists...');
+        this._setMessage('Checking if the ' + this._buildingblockName + ' already exists...');
         this._timeout = setTimeout(this._availabilityCheck.bind(this), 1000);
         this._setDisabled(true);
     },
@@ -169,19 +188,28 @@ var NewScreenflowDialog = Class.create(ConfirmDialog /** @lends NewScreenflowDia
      * @override
      * @private
      */
-    _onOk: function($super){
-        if (this._getFormWidget().validate() && this._available) {
+    _onOk: function($super) {
+        if (this._validate()) {
+            $super();
+
             var name = Utils.sanitize($F(this._getForm().name));
             var tags = $F(this._getForm().tags).split(/[\s,]+/).without("");
             var version = $F(this._getForm().version);
 
             var processedTags = Utils.getCatalogueTags($A(tags), null);
 
-            var documentController = GVS.getDocumentController();
-            documentController.createScreenflow(name, processedTags, version);
-
-            $super();
+            this._create(name, processedTags, version);
         }
+    },
+
+    /**
+     * Creates the building block
+     * @override
+     * @private
+     */
+    _create: function(name, processedTags, version) {
+        var documentController = GVS.getDocumentController();
+        documentController['create' + this._buildingblockName](name, processedTags, version);
     },
 
      /**
@@ -202,12 +230,14 @@ var NewScreenflowDialog = Class.create(ConfirmDialog /** @lends NewScreenflowDia
      * @private
      */
     _reset: function ($super) {
+        $super();
+
         this._getForm().name.value = "";
         this._getForm().tags.value = "";
         this._getForm().version.value = "";
-        this._available = true;
+        this._available = false;
+        this._setDisabled(true);
         this._setMessage();
-        $super();
     }
 });
 
