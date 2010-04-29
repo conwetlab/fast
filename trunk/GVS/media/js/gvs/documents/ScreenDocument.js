@@ -553,11 +553,41 @@ var ScreenDocument = Class.create(PaletteDocument,
             true
         ));
         this._addToolbarElement('rotate', new ToolbarButton(
-                'Rotate selected element',
-                'rotate',
-                this._rotateSelectedElement.bind(this),
-                false
+            'Rotate selected element',
+            'rotate',
+            this._rotateSelectedElement.bind(this),
+            false
         ));
+        this._addToolbarElement('refresh', new ToolbarButton(
+            'Refresh the buildingBlocks catalog',
+            'refresh',
+            this._refresh.bind(this),
+            true
+        ));
+    },
+
+    /**
+     * This function updates all the BuildingBlocks
+     * Elements: canvas and palettes
+     * @private
+     */
+    _refresh: function() {
+        var body = {
+            'forms': this._paletteController.getComponentUris(Constants.BuildingBlock.FORM),
+            'operators': this._paletteController.getComponentUris(Constants.BuildingBlock.OPERATOR),
+            'backendservices': this._paletteController.getComponentUris(Constants.BuildingBlock.RESOURCE),
+            'pipes': this._description.getPipes(),
+            'preconditions': this._description.getPreconditions(),
+            'postconditions': this._description.getPostconditions()
+        }
+
+        this._inferenceEngine.findCheck(
+            [],
+            body,
+            this._tags,
+            'reachability',
+            this._findCheckCallback.bind(this)
+        );
     },
 
     /**

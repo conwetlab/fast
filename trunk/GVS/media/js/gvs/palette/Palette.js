@@ -108,9 +108,7 @@ var Palette = Class.create(SetListener, /** @lends Palette.prototype */ {
         });
 
         this._searchBox = new PaletteSearchBox();
-        this._searchBox.addEventListener(function(){
-            this.setChanged();
-        }.bind(this));
+        this._searchBox.addEventListener(this._filterComponents.bind(this));
         this._node.setContent(this._searchBox.getDOMNode());
 
         this._searchBox.getDOMNode().insert({after:this._contentNode});
@@ -124,10 +122,20 @@ var Palette = Class.create(SetListener, /** @lends Palette.prototype */ {
         var descs = $A(this._set.getBuildingBlocks());
         var sortDescs = descs.sortBy(function(desc){ return desc.getTitle() });
 
+        var component;
+        var lastComponent;
         for (var i=0, desc; desc = sortDescs[i]; i++) {
-            if (!this._components.get(desc.uri)) {
-                this._addComponentFor(desc);
+            component = this._components.get(desc.uri);
+            if (!component) {
+                component = this._buildComponentFor(desc);
+                if (lastComponent) {
+                    lastComponent.insert({after: component.getNode()});
+                } else {
+                    this._contentNode.appendChild(component.getNode())
+                }
+                component.getNode().insert({after: new Element("div", {"class": "paletteSeparator"})});
             }
+            lastComponent = component.getNode().next();
         }
 
         this._filterComponents();
@@ -156,9 +164,9 @@ var Palette = Class.create(SetListener, /** @lends Palette.prototype */ {
     },
 
     /**
-     * Adds a new component to the palette
+     * Build a new component
      */
-    _addComponentFor: function(/** BuildingBlockDescription */ desc) {
+    _buildComponentFor: function(/** BuildingBlockDescription */ desc) {
         var component = null;
 
         switch(this._set.getBuildingBlockType()) {
@@ -187,9 +195,7 @@ var Palette = Class.create(SetListener, /** @lends Palette.prototype */ {
         }
         this._components.set(desc.uri, component);
 
-        var separator = new Element("div", {"class": "paletteSeparator"});
-        this._contentNode.appendChild(component.getNode());
-        this._contentNode.appendChild(separator);
+        return component;
     }
 });
 

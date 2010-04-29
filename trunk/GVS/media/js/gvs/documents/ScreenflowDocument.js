@@ -352,6 +352,30 @@ var ScreenflowDocument = Class.create(PaletteDocument,
                 this._buildGadget.bind(this),
                 false // disabled by default
         ));
+        this._addToolbarElement('refresh', new ToolbarButton(
+            'Refresh the buildingBlocks catalog',
+            'refresh',
+            this._refresh.bind(this),
+            true
+        ));
+    },
+
+    /**
+     * This function updates all the BuildingBlocks
+     * Elements: canvas and palettes
+     * @private
+     */
+    _refresh: function() {
+        var canvas = this._getCanvasUris();
+        var palette = this._paletteController.getComponentUris(Constants.BuildingBlock.SCREEN);
+
+        this._inferenceEngine.findCheck(
+                canvas,
+                palette,
+                this._tags,
+                'reachability',
+                this._findCheckCallback.bind(this)
+        );
     },
 
     /**
