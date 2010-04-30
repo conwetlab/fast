@@ -2,7 +2,7 @@ from django.conf import settings
 from django.template import RequestContext, Template, Context, loader
 from os import path, mkdir
 from commons.utils import notEmptyValueOrDefault
-  
+
 def getEzWebTemplate(gadgetData):
     metadata = gadgetData['metadata']
     ezWebContext = Context({'gadgetUri': metadata['gadgetUri'],
@@ -22,7 +22,8 @@ def getEzWebTemplate(gadgetData):
 
 def getEzWebHTML(gadgetData):
     metadata = gadgetData['metadata']
-    ezWebContext = Context({'gadgetUri': metadata['gadgetUri'],
+    ezWebContext = Context({'platform': 'ezweb',
+                            'gadgetUri': metadata['gadgetUri'],
                             'gadgetTitle': metadata['name'],
                             'gadgetSlots': gadgetData['prec'],
                             'gadgetEvents': gadgetData['post'],

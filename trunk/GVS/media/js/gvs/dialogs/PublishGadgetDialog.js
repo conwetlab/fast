@@ -34,9 +34,6 @@ var PublishGadgetDialog = Class.create(ConfirmDialog /** @lends PublishGadgetDia
         this._gadgetBaseUrl = gadgetBaseUrl;
         this._initDialogInterface();
         $super();
-        this._buttons.get('ezweb').attr("label", "Publish it!");
-        this._buttons.get('ezweb').attr("disabled", false);
-
     },
 
     // **************** PRIVATE METHODS **************** //
@@ -45,11 +42,32 @@ var PublishGadgetDialog = Class.create(ConfirmDialog /** @lends PublishGadgetDia
      * Publishes the created gadget
      * @private
      */
-    _publishGadget: function(/** dijit.form.Button */ button, /** String */ mashupPlatform) {
-        if (mashupPlatform == 'ezweb') {
-            var gadgetUrl = this._gadgetBaseUrl + '/ezweb.xml';
-            Utils.ezWebDeploy(button, gadgetUrl);
+    _publishGadget: function(/** dijit.form.Button */ button, /** Hash */ options, /** String */ templateUrl) {
+        var url = null;
+        if (options.mashupPlatform == 'ezweb') {
+            url = URIs.ezweb + "interfaces/gadget?template_uri=" + templateUrl;
+        } else if (options.mashupPlatform == 'igoogle') {
+            if (options.destination=='directory') {
+                url = "http://www.google.com/ig/submit?url=" + templateUrl;
+            } else if (options.destination=='personal'){
+                url = "http://www.google.com/ig/adde?moduleurl=" + templateUrl;
+            }
+        } else if (options.mashupPlatform == 'orkut') {
+            url = "http://sandbox.orkut.com/Main#AppInfo?appUrl=" + templateUrl;
         }
+        this._deploy(button, url);
+    },
+
+    /**
+     * This function deploy a gadget to EzWeb
+     * @private
+     */
+    _deploy: function(/** domNode */ buttonNode, /**String*/ url) {
+        var button = dijit.byId(buttonNode.id);
+        button.attr("label", "Done!");
+        button.attr("disabled", true);
+        window.open(url);
+        console.log(url);
     },
 
     /**
@@ -74,54 +92,58 @@ var PublishGadgetDialog = Class.create(ConfirmDialog /** @lends PublishGadgetDia
         contents.appendChild(table);
         dom.appendChild(contents);
 
-        this._buttons.set('ezweb', new dijit.form.Button({
-            'label': 'Publish it!',
-            'onClick': function(e) {
-                        this._publishGadget(e.element(), 'ezweb');
-                    }.bind(this)
-        }));
-
-        this._buttons.set('igoogle', new dijit.form.Button({
-            'label': 'Publish it!',
-            'onClick': function(e) {
-                        this._publishGadget(e.element(), 'igoogle');
-                    }.bind(this),
-            'disabled': true
-        }));
-
-
         var tableData = [
             {'className': 'tableHeader',
              'fields': [{
-                'className': 'left',
-                'node': 'Mashup platform'
-             },{
-                'className': 'left',
-                'node': ''
-             }]
-            },
-            {'className': '',
-             'fields': [{
-                'className': 'mashup',
-                'node': 'EzWeb ' + '[<a href="' + this._gadgetBaseUrl + "/ezweb.xml" + '" target="blank">Template</a>]'
-             },{
-                'className': '',
-                'node': this._buttons.get('ezweb').domNode
-             }]
-            },
-             {'className': '',
-             'fields': [{
-                'className': 'mashup',
-                'node': 'iGoogle (Not available)'
-             },{
-                'className': '',
-                'node': this._buttons.get('igoogle').domNode
-             }]
+                    'className': 'left',
+                    'node': 'Mashup platform'
+                 },{
+                    'className': 'left',
+                    'node': ''
+                 }]
             }
         ];
 
+        tableData.push(this._createPlatformRow('ezweb',
+                {mashupPlatform: 'ezweb'},
+                'EzWeb',
+                this._gadgetBaseUrl + '/ezweb.xml'));
+        tableData.push(this._createPlatformRow('igoogleDirectory',
+                {mashupPlatform: 'igoogle', destination: 'directory'},
+                'iGoogle Directory',
+                this._gadgetBaseUrl + "/igoogle.xml"));
+        tableData.push(this._createPlatformRow('igooglePersonal',
+                {mashupPlatform: 'igoogle', destination: 'personal'},
+                'iGoogle Personal Page',
+                this._gadgetBaseUrl + "/igoogle.xml"));
+        tableData.push(this._createPlatformRow('orkut',
+                {mashupPlatform: 'orkut'},
+                'Orkut',
+                this._gadgetBaseUrl + "/igoogle.xml"));
+
         this._fillTable(table, tableData);
         this._setContent(dom);
+    },
+
+    /**
+     * This function create a row for a destination platform
+     * @private
+     */
+    _createPlatformRow: function (/** String */ id, /** Hash */ options, /** String */ title, /** String */ url) {
+        return {'className': '',
+            'fields': [{
+                'className': 'mashup',
+                'node': title + ' [<a href="' + url + '" target="blank">Template</a>]'
+             },{
+                'className': '',
+                'node': this._buttons.set(id, new dijit.form.Button({
+                    'label': 'Publish it!',
+                    'onClick': function(e) {
+                                this._publishGadget(e.element(), options, url);
+                            }.bind(this)
+                })).domNode
+             }]
+         };
     },
 
     /**

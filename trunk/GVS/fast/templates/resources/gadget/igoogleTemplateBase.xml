@@ -1,11 +1,11 @@
-<?xml version="1.0" encoding="UTF-8" ?> 
+<?xml version="1.0" encoding="UTF-8" ?>
 <Module>
 <ModulePrefs title="{{ gadgetTitle }}"
-        title_url="{{ gadgetTemplateURI }}"
-        author="{{ gadgetCreator }}"
+        title_url="{{ gadgetUri }}/igoogle.xml"
+        author="{{ gadgetVendor }}"
         author_email="{{ gadgetMail }}"
         description="{{ gadgetDescription }}"
-        scrolling="true" height="400">
+        scrolling="true" height="{{ gadgetHeight }}" width="{{ gadgetWidth }}">
     <Require feature="dynamic-height"/>
 </ModulePrefs>
 <Content type="html">

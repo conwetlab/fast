@@ -42,7 +42,7 @@ FastAPI.Request = Class.create(FastBaseAPI.Request,{
      * @param url
      *      url to be requested
      * @param options
-     *      - method: 'get' || 'post'
+     *      - method: 'get' || 'post' || 'put' || 'delete'
      *      - content: 'xml' || 'text' || 'json'
      *      - context: context of the invoking object
      *      - parameters: either as a URL-encoded string or as any Hash-compatible object.
@@ -59,16 +59,16 @@ FastAPI.Request = Class.create(FastBaseAPI.Request,{
      */
     request: function() {
         var params = this.options;
-        
+
         var _onSuccess = params.onSuccess;
-        
+
         params.onSuccess = onSuccess;
-        
+
         if (params.content == 'json'){
-        	params['evalJSON'] = true;
-        	params['sanitizeJSON'] = true;
+            params['evalJSON'] = true;
+            params['sanitizeJSON'] = true;
         }
-        
+
         EzWebAPI.send(this.url, params.context, params);
 
         // This function handles a success in the asynchronous call
@@ -81,15 +81,15 @@ FastAPI.Request = Class.create(FastBaseAPI.Request,{
                     (_onSuccess || Prototype.emptyFunction)(transport.responseText);
                     break;
                 case 'json':
-                	var json = transport.responseJSON;
-                	if (!json){
-                		json = transport.responseText.evalJSON(true);
-                	}
+                    var json = transport.responseJSON;
+                    if (!json){
+                        json = transport.responseText.evalJSON(true);
+                    }
                     (_onSuccess || Prototype.emptyFunction)(json);
                     break;
                 default:
-                	(_onSuccess || Prototype.emptyFunction)(transport);
-                	break;
+                    (_onSuccess || Prototype.emptyFunction)(transport);
+                    break;
             }
         }
     }
@@ -102,13 +102,13 @@ FastAPI.Request = Class.create(FastBaseAPI.Request,{
  */
 FastAPI.Utils = Class.create(FastBaseAPI.Utils,{
     initialize: function($super) {
-    	$super();
-	},
+        $super();
+    },
 
-	/**
-     * Returns a JSON object.
+    /**
+     * Returns a JSON string.
      * @param obj
-     *      represents the name of the variable
+     *      represents the object to convert
      * @type JSON object
      */
     toJSONString: function (obj) {
@@ -116,13 +116,13 @@ FastAPI.Utils = Class.create(FastBaseAPI.Utils,{
     },
 
     /**
-     * Returns a JSON string.
+     * Returns a JSON object.
      * @param string
-     *      represents the name of the variable
+     *      represents the string to convert
      * @type string
-     * 		
+     *
      */
     toJSONObject: function (string) {
-    	return string.evalJSON(true);
+        return string.evalJSON(true);
     }
 });
