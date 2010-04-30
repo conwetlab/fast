@@ -8,7 +8,7 @@ var ScreenDocument = Class.create(PaletteDocument,
      */
     initialize: function($super, /** Object */ properties) {
 
-		/**
+        /**
          * Form instance of the screen, if any
          * @type FormInstance
          * @private
@@ -104,7 +104,7 @@ var ScreenDocument = Class.create(PaletteDocument,
      * @override
      */
     modified: function(/** ComponentInstance */ element) {
-    	this._updatePanes();
+        this._updatePanes();
         this._setDirty(true);
     },
 
@@ -325,10 +325,10 @@ var ScreenDocument = Class.create(PaletteDocument,
         }
 
         var terminalHandlers = {
-        	'onPipeCreationStart': this._onPipeCreationStartHandler.bind(this),
-        	'onPipeCreationCancel': this._onPipeCreationCancelHandler.bind(this),
-        	'onPipeCreation': this._onPipeCreationHandler.bind(this),
-        	'onPipeDeletion': this._onPipeDeletionHandler.bind(this)
+            'onPipeCreationStart': this._onPipeCreationStartHandler.bind(this),
+            'onPipeCreationCancel': this._onPipeCreationCancelHandler.bind(this),
+            'onPipeCreation': this._onPipeCreationHandler.bind(this),
+            'onPipeDeletion': this._onPipeDeletionHandler.bind(this)
         };
 
         if (instance.constructor != PrePostInstance) {
@@ -401,36 +401,36 @@ var ScreenDocument = Class.create(PaletteDocument,
      * Launched whenever a pipe creation is started
      */
     _onPipeCreationStartHandler: function(/** Wire */ wire, /** Terminal */ startTerminal) {
-    	var instance = startTerminal.getInstance();
-    	var factKey;
+        var instance = startTerminal.getInstance();
+        var factKey;
 
-    	if (instance instanceof FormInstance) {
-    		factKey = "form_" + instance.getId() +
-    		          (startTerminal.getActionId() ? "_" + startTerminal.getActionId() : '') +
-    		          "_" + startTerminal.getConditionId();
-    	} else if (instance instanceof PrePostInstance) {
-    		factKey = instance.getType() + "_" + instance.getId();
-    	} else if (instance instanceof ResourceInstance) {
-    		factKey = "service_" + instance.getId() +
-                      "_" + startTerminal.getActionId() +
-	                  "_" + startTerminal.getConditionId();
-    	} else if (instance instanceof OperatorInstance) {
-    		factKey = "operator_" + instance.getId() +
+        if (instance instanceof FormInstance) {
+            factKey = "form_" + instance.getId() +
+                      (startTerminal.getActionId() ? "_" + startTerminal.getActionId() : '') +
+                      "_" + startTerminal.getConditionId();
+        } else if (instance instanceof PrePostInstance) {
+            factKey = instance.getType() + "_" + instance.getId();
+        } else if (instance instanceof ResourceInstance) {
+            factKey = "service_" + instance.getId() +
                       "_" + startTerminal.getActionId() +
                       "_" + startTerminal.getConditionId();
-    	}
+        } else if (instance instanceof OperatorInstance) {
+            factKey = "operator_" + instance.getId() +
+                      "_" + startTerminal.getActionId() +
+                      "_" + startTerminal.getConditionId();
+        }
 
-    	if (this._selectedElement != instance)
-    		this._setSelectedElement(instance);
+        if (this._selectedElement != instance)
+            this._setSelectedElement(instance);
 
-    	this._recommendationManager.setStartFact(factKey);
+        this._recommendationManager.setStartFact(factKey);
     },
 
     /**
      * Launched whenever a pipe creation is canceled
      */
     _onPipeCreationCancelHandler: function(/** Wire */ wire) {
-    	this._recommendationManager.setStartFact(null);
+        this._recommendationManager.setStartFact(null);
     },
 
     /**
@@ -438,7 +438,7 @@ var ScreenDocument = Class.create(PaletteDocument,
      * @private
      */
     _onPipeDeletionHandler: function(/** Wire */ wire) {
-    	if (this._closed)
+        if (this._closed)
             return;
 
         var pipe = this._pipeFactory.getPipe(wire);
@@ -456,13 +456,13 @@ var ScreenDocument = Class.create(PaletteDocument,
      * @private
      */
     _onPipeCreationHandler: function(/** Wire */ wire) {
-    	var pipe = this._pipeFactory.getPipe(wire);
-    	if (pipe) {
-			this._description.addPipe(pipe);
+        var pipe = this._pipeFactory.getPipe(wire);
+        if (pipe) {
+            this._description.addPipe(pipe);
 
-			this._refreshReachability();
-	    	this._setDirty(true);
-    	}
+            this._refreshReachability();
+            this._setDirty(true);
+        }
     },
 
     /**
@@ -473,11 +473,11 @@ var ScreenDocument = Class.create(PaletteDocument,
      * @override
      */
     _setSelectedElement: function ($super, element) {
-    	if (element == null) {
-    		this._recommendationManager.clear();
-    	}
+        if (element == null) {
+            this._recommendationManager.clear();
+        }
 
-    	$super(element);
+        $super(element);
     },
 
     /**
@@ -529,41 +529,41 @@ var ScreenDocument = Class.create(PaletteDocument,
     _configureToolbar: function() {
 
         this._addToolbarElement('save', new ToolbarButton(
-            'Save the current screen',
-            'save',
-            this._save.bind(this),
-            false
-        ));
+                'Save the current screen',
+                'save',
+                this._save.bind(this),
+                false
+            ));
         this._addToolbarElement('properties', new ToolbarButton(
-            'Edit screen properties',
-            'properties',
-            this._propertiesDialog.show.bind(this._propertiesDialog),
-            true
-        ));
-        this._addToolbarElement('deleteElement', new ToolbarButton(
-            'Delete selected element',
-            'delete',
-            this._startDeletingSelectedElement.bind(this),
-            false // disabled by default
-        ));
+                'Edit screen properties',
+                'properties',
+                this._propertiesDialog.show.bind(this._propertiesDialog),
+                true
+            ));
         this._addToolbarElement('share', new ToolbarButton(
-            'Share the current screen with the community',
-            'share',
-            this._share.bind(this),
-            true
-        ));
-        this._addToolbarElement('rotate', new ToolbarButton(
-            'Rotate selected element',
-            'rotate',
-            this._rotateSelectedElement.bind(this),
-            false
-        ));
+                'Share the current screen with the community',
+                'share',
+                this._share.bind(this),
+                true
+            ));
         this._addToolbarElement('refresh', new ToolbarButton(
-            'Refresh the buildingBlocks catalog',
-            'refresh',
-            this._refresh.bind(this),
-            true
-        ));
+                'Refresh the buildingBlocks catalog',
+                'refresh',
+                this._refresh.bind(this),
+                true
+            ));
+        this._addToolbarElement('deleteElement', new ToolbarButton(
+                'Delete selected element',
+                'delete',
+                this._startDeletingSelectedElement.bind(this),
+                false // disabled by default
+            ));
+        this._addToolbarElement('rotate', new ToolbarButton(
+                'Rotate selected element',
+                'rotate',
+                this._rotateSelectedElement.bind(this),
+                false
+            ));
     },
 
     /**
@@ -598,8 +598,8 @@ var ScreenDocument = Class.create(PaletteDocument,
     _updateToolbar: function(/** ComponentInstance */ element) {
         this._toolbarElements.get('deleteElement').setEnabled(element!=null);
         if (element!=null){
-        	var elementDescription = element.getBuildingBlockDescription();
-        	this._toolbarElements.get('rotate').setEnabled(elementDescription.type == Constants.BuildingBlock.OPERATOR);
+            var elementDescription = element.getBuildingBlockDescription();
+            this._toolbarElements.get('rotate').setEnabled(elementDescription.type == Constants.BuildingBlock.OPERATOR);
         }
     },
 
@@ -679,7 +679,7 @@ var ScreenDocument = Class.create(PaletteDocument,
         if (this._selectedElement && this._selectedElement.getUri()) {
             body.selectedItem = this._selectedElement.getUri();
         } else if (this._selectedElement) {
-        	body.selectedItem = this._selectedElement.getId();
+            body.selectedItem = this._selectedElement.getId();
         }
 
         if (isFindCheck) {
@@ -697,55 +697,55 @@ var ScreenDocument = Class.create(PaletteDocument,
      * @private
      */
     _parseConnectionElement: function(/** Hash */ desc, /** Boolean */ origin) {
-    	if (desc.buildingblock == null) {
-    		// Pre/Post condition
-    		var type;
-    		var instance;
+        if (desc.buildingblock == null) {
+            // Pre/Post condition
+            var type;
+            var instance;
 
-    		if (origin) {
-    			type = 'pre';
-    		    instance = this._description.getPre(desc.condition);
-    		} else {
-    			type = 'post';
-    			instance = this._description.getPost(desc.condition);
-    		}
+            if (origin) {
+                type = 'pre';
+                instance = this._description.getPre(desc.condition);
+            } else {
+                type = 'post';
+                instance = this._description.getPost(desc.condition);
+            }
 
-    		return {'instance': instance,
-    			    'node': instance.getView().getNode(),
-    			    'key': type + '_' + desc.condition};
-    	} else {
-    		var buildingblock = this._description.getInstanceByUri(desc.buildingblock);
+            return {'instance': instance,
+                    'node': instance.getView().getNode(),
+                    'key': type + '_' + desc.condition};
+        } else {
+            var buildingblock = this._description.getInstanceByUri(desc.buildingblock);
 
-    		if (desc.buildingblock.search("/forms/") != -1) {
-    			var key = 'form_' + buildingblock.getId() +
-    			          (desc.action ? '_' + desc.action : '') +
-    			          '_' + desc.condition
-    			return {'instance': buildingblock,
-    				    'node': buildingblock.getView().getConditionNode(desc.condition, desc.action),
-    				    'key': key};
-    		} else if (desc.buildingblock.search("/services/") != -1) {
-    			var view = buildingblock.getView();
+            if (desc.buildingblock.search("/forms/") != -1) {
+                var key = 'form_' + buildingblock.getId() +
+                          (desc.action ? '_' + desc.action : '') +
+                          '_' + desc.condition
+                return {'instance': buildingblock,
+                        'node': buildingblock.getView().getConditionNode(desc.condition, desc.action),
+                        'key': key};
+            } else if (desc.buildingblock.search("/services/") != -1) {
+                var view = buildingblock.getView();
 
-    			var actionName;
-    			if (origin) {
-    				actionName = "postconditions";
-    			} else {
-    				actionName = view._icons.keys()[0];  // TODO remove this hack
-    			}
-				var node = view.getConditionNode(desc.condition, actionName);
+                var actionName;
+                if (origin) {
+                    actionName = "postconditions";
+                } else {
+                    actionName = view._icons.keys()[0];  // TODO remove this hack
+                }
+                var node = view.getConditionNode(desc.condition, actionName);
 
-    			return {'instance': buildingblock,
-    				    'node': node,
-    				    'key': 'service_' + buildingblock.getId() + "_" + actionName + "_" + desc.condition};
-    		} else if (desc.buildingblock.search("/operators/") != -1) {
-    			return {'instance': buildingblock,
-    				    'node': buildingblock.getView().getConditionNode(desc.condition, desc.action),
-    				    'key': 'operator_' + buildingblock.getId() + "_" + desc.action + "_" + desc.condition};
-        	} else {
-        		throw 'unknowk building block at ScreenDocument::_parseConnectionElement';
-        	}
-    	}
-	},
+                return {'instance': buildingblock,
+                        'node': node,
+                        'key': 'service_' + buildingblock.getId() + "_" + actionName + "_" + desc.condition};
+            } else if (desc.buildingblock.search("/operators/") != -1) {
+                return {'instance': buildingblock,
+                        'node': buildingblock.getView().getConditionNode(desc.condition, desc.action),
+                        'key': 'operator_' + buildingblock.getId() + "_" + desc.action + "_" + desc.condition};
+            } else {
+                throw 'unknowk building block at ScreenDocument::_parseConnectionElement';
+            }
+        }
+    },
 
     /**
      * @private
@@ -798,26 +798,26 @@ var ScreenDocument = Class.create(PaletteDocument,
 
         if (reachabilityData.connections) {
             reachabilityData.connections.each(function(connection) {
-            	var from, to, localNode, externalNode;
+                var from, to, localNode, externalNode;
 
-            	try {
-            		from = this._parseConnectionElement(connection.from, true);
-            		to = this._parseConnectionElement(connection.to, false);
-            	} catch (e) {
-            		return;
-            	}
+                try {
+                    from = this._parseConnectionElement(connection.from, true);
+                    to = this._parseConnectionElement(connection.to, false);
+                } catch (e) {
+                    return;
+                }
 
-            	if (from.instance == this._selectedElement) {
-            		localNode = from;
-            		externalNode = to;
-            	} else if (to.instance == this._selectedElement) {
-            		localNode = to;
-            		externalNode = from;
-            	} else {
-            		return; // We are not interested in this connection => continue with the next
-            	}
+                if (from.instance == this._selectedElement) {
+                    localNode = from;
+                    externalNode = to;
+                } else if (to.instance == this._selectedElement) {
+                    localNode = to;
+                    externalNode = from;
+                } else {
+                    return; // We are not interested in this connection => continue with the next
+                }
 
-            	this._recommendationManager.addRecommendation(localNode, externalNode);
+                this._recommendationManager.addRecommendation(localNode, externalNode);
             }.bind(this));
             this._recommendationManager.startAnimation();
         }
