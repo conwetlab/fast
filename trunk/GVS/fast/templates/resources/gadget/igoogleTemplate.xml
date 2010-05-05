@@ -8,7 +8,7 @@
 <SCRIPT language="javascript" src="{{ gadgetUri }}/js/fast/screenEngine.js"></SCRIPT>
 <SCRIPT language="javascript" src="{{ gadgetUri }}/js/fast/buildingblock.js"></SCRIPT>
 <SCRIPT language="javascript" src="{{ gadgetUri }}/js/fastAPI/fastAPI.js"></SCRIPT>
-<SCRIPT language="javascript" src="{{ gadgetUri }}/js/fastAPI/fastAPI_ezweb.js"></SCRIPT>
+<SCRIPT language="javascript" src="{{ gadgetUri }}/js/fastAPI/fastAPI_igoogle.js"></SCRIPT>
 {% include 'resources/gadget/jsTemplate.js' %}
 <SCRIPT language="javascript">
     _IG_RegisterOnloadHandler(loadMenu);
