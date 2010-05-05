@@ -109,6 +109,21 @@ var ScreenflowCanvasCache = Class.create( /** @lends ScreenflowCanvasCache.proto
     },
 
     /**
+     * Returns the orientation of an element by its URI
+     * @type Object
+     */
+    getOrientation: function (/** String */ id) {
+        var element = this._screens.detect(function(element) {
+            return element.uri == id;
+        });
+        if (element) {
+            return element.orientation;
+        } else {
+            return null;
+        }
+    },
+
+    /**
      * Sets a buildingblock type as already loaded
      */
     setLoaded: function (/** String */ buildingblocktype) {
