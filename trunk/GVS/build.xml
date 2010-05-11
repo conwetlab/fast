@@ -1,26 +1,26 @@
 <?xml version="1.0" ?>
 <project name="FAST GVS" default="main" basedir=".">
-	<!-- set global properties for this build -->
-	<property name="gadget_destdir" value="${basedir}/storage/libs"/>
-	<property name="gadget_zip_file_name" value="gadget.zip"/>
+    <!-- set global properties for this build -->
+    <property name="gadget_destdir" value="${basedir}/media/gadget"/>
+    <property name="gadget_zip_file_name" value="gadget.zip"/>
     <property name="gadget_zip_path" value="${gadget_destdir}/${gadget_zip_file_name}"/>
-    <property name="store_libs_dir" value="${basedir}/storage/libs"/>
+    <property name="store_libs_dir" value="${basedir}/media/gadget"/>
 
-	<target name="clean_base_gadget" description="Clean up base gadget">
-		<!-- Delete the Base Gadget Zip -->
-		<delete file="${gadget_zip_path}" verbose="true"/>
-	</target>
-	
-	<target name="create_base_gadget" description="Create a base gadget">
-		<!-- Create Base Gadget Zip -->
-		<zip destfile="${gadget_zip_path}" 
-		    basedir="${store_libs_dir}" 
-		    excludes=".svn/**" 
-		    includes="js/**, resources/**"/>
-	</target>
-	
-	<target name="base_gadget" depends="clean_base_gadget, create_base_gadget"/>
-    
+    <target name="clean_base_gadget" description="Clean up base gadget">
+        <!-- Delete the Base Gadget Zip -->
+        <delete file="${gadget_zip_path}" verbose="true"/>
+    </target>
+
+    <target name="create_base_gadget" description="Create a base gadget">
+        <!-- Create Base Gadget Zip -->
+        <zip destfile="${gadget_zip_path}"
+            basedir="${store_libs_dir}"
+            excludes=".svn/**, **/fastAPI_player.js"
+            includes="js/**, resources/**"/>
+    </target>
+
+    <target name="base_gadget" depends="clean_base_gadget, create_base_gadget"/>
+
     <target name="main" depends="base_gadget"/>
-    	
+
 </project>

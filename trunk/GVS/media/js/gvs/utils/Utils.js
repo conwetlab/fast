@@ -14,18 +14,6 @@ Object.extend(Utils, {
         return dateString;
     },
 
-    ezWebDeploy: function(/** domNode */ buttonNode, /**String*/ templateUrl) {
-        var button = dijit.byId(buttonNode.id);
-        button.attr("label", "Done!");
-        button.attr("disabled", true);
-        window.open(URIs.ezweb + "interfaces/gadget?template_uri=" + templateUrl);
-        console.log(URIs.ezweb + "interfaces/gadget?template_uri=" + templateUrl);
-    },
-
-    igoogleDeploy: function(/**String*/ uri) {
-        alert("iGoogle Deployment service being developed (<a href='" + uri + "'>" + uri +"</a>)");
-    },
-
     /**
      * Copy the properties of an object into another.
      */

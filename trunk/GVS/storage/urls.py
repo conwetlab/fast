@@ -7,4 +7,6 @@ urlpatterns = patterns('storage.views',
         GadgetStorage(permitted_methods=('POST', 'GET'))),
     (r'^(?P<storage_id>\d+)[/]?$',
         StorageEntry(permitted_methods=('GET', 'DELETE'))),
+    (r'^player[/]?$',
+        GadgetPlayer(permitted_methods=('GET',))),
 )

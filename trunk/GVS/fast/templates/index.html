@@ -1,32 +1,32 @@
 {% load i18n %}
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
-"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"> 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
     <head>
         <title>FAST: Gadget Visual Storyboard</title>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-        
+
         <link rel="shortcut icon" type="image/x-icon" href="{{ MEDIA_URL }}images/gui/favicon.ico" />
-        
+
         <!-- WireIt -->
-        <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}js/lib/wireit/lib/yui/fonts/fonts-min.css" /> 
+        <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}js/lib/wireit/lib/yui/fonts/fonts-min.css" />
         <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}js/lib/wireit/lib/yui/reset/reset-min.css" />
-        <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}js/lib/wireit/css/WireIt.css" />   
-        
+        <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}js/lib/wireit/css/WireIt.css" />
+
         <!-- CSS -->
         <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}js/lib/dojo/dijit/themes/soria/soria.css" />
         <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}js/lib/dojo/dojo/resources/dojo.css" />
-        <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}style/gvs.css" />                      
+        <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}style/gvs.css" />
 
         <script type="text/javascript">
         /* <![CDATA[ */
            //Dojo Configuration parameters
             var djConfig = {
-                isDebug:false, 
+                isDebug:false,
                 parseOnLoad:true
             };
 
-            
+
         /* ]]> */
         </script>
 
@@ -37,36 +37,37 @@
 
         <!-- Excanvas -->
         <!--[if IE]><script type="text/javascript" src="./WireIt-0.5.0/lib/excanvas.js"></script><![endif]-->
-        
+
         <!-- WireIt -->
         <script type="text/javascript" src="{{ MEDIA_URL }}js/lib/wireit/lib/yui/utilities/utilities.js"></script>
         <script type="text/javascript" src="{{ MEDIA_URL }}js/lib/wireit/js/WireIt.js"></script>
         <script type="text/javascript" src="{{ MEDIA_URL }}js/lib/wireit/js/Layer.js"></script>
-        <script type="text/javascript" src="{{ MEDIA_URL }}js/lib/wireit/js/Container.js"></script>      
+        <script type="text/javascript" src="{{ MEDIA_URL }}js/lib/wireit/js/Container.js"></script>
         <script type="text/javascript" src="{{ MEDIA_URL }}js/lib/wireit/js/CanvasElement.js"></script>
         <script type="text/javascript" src="{{ MEDIA_URL }}js/lib/wireit/js/Wire.js"></script>
         <script type="text/javascript" src="{{ MEDIA_URL }}js/lib/wireit/js/Terminal.js"></script>
-        
+
         <!-- Dojo -->
         <script type="text/javascript" src="{{ MEDIA_URL }}js/lib/dojo/dojo/dojo.js"></script>
-        
+
         <!-- Prototype -->
         <script type="text/javascript" src="{{ MEDIA_URL }}js/lib/prototype/prototype.js"></script>
-        <script type="text/javascript" src="{{ MEDIA_URL }}js/lib/prototype/prototype.improvements.js"></script>  
-        
+        <script type="text/javascript" src="{{ MEDIA_URL }}js/lib/prototype/prototype.improvements.js"></script>
+
         <!-- Browser checker -->
-        <script type="text/javascript" src="{{ MEDIA_URL }}js/gvs/utils/BrowserChecker.js"></script> 
-    
-        <!-- Graceful degradation of firebug console --> 
-        <script type="text/javascript" src="{{ MEDIA_URL }}js/lib/utils/firebugx.js"></script>      
-        
+        <script type="text/javascript" src="{{ MEDIA_URL }}js/gvs/utils/BrowserChecker.js"></script>
+
+        <!-- Graceful degradation of firebug console -->
+        <script type="text/javascript" src="{{ MEDIA_URL }}js/lib/utils/firebugx.js"></script>
+
         <!-- URI constants -->
         <script type="text/javascript">
-            
+
             var browser = new BrowserChecker();
-            
+
             var URIs = new Object();
             URIs.store = "storage/";
+            URIs.storePlayScreenflow = "storage/player";
             // Catalogue URIs
             URIs.catalogue = "catalogue";
             URIs.catalogueScreens = "catalogue/screens";
@@ -96,6 +97,9 @@
             URIs.about = "{{ MEDIA_URL }}resources/about.html";
             URIs.pre = "catalogue/preconditions/";
             URIs.post = "catalogue/postconditions/";
+            // Proxy
+            URIs.proxy = "proxy";
+
             URIs.ezweb = "{{ EZWEB_URL }}";
 
             URIs.wrapperService = "{{ WRAPPER_SERVICE_URL }}";
@@ -135,7 +139,7 @@
                 dojo.require("dijit.Toolbar");
                 dojo.require("dijit.ToolbarSeparator");
                 dojo.require("dijit.Tooltip");
-                
+
                 // ... layouts used in page
                 dojo.require("dijit.layout.AccordionContainer");
                 dojo.require("dijit.layout.ContentPane");
@@ -143,13 +147,13 @@
                 dojo.require("dijit.layout.BorderContainer");
                 dojo.require("dijit.Dialog");
                 dojo.require("dojox.layout.ContentPane");
-    
+
                 // ... other functions
                 dojo.require("dojox.fx");
-                
+
                 // ... the parser
                 dojo.require("dojo.parser");
-    
+
                 // Arming the GVS initialization method
                 dojo.addOnLoad(function() {
                     GVS.init();
@@ -158,7 +162,7 @@
                     // performance
                     dijit.byId("main").layout();
                 });
-                
+
                 // Handling navigator close
                 window.onbeforeunload = function(evt) {
                     // TODO: call the server and save whatever necessary
@@ -174,10 +178,10 @@
                         return message;
                     }
                 }
-                
+
                 window.onunload = function() {
                     // Do something
-                }               
+                }
             } else {
                 // IE
                 window.onload = function() {
@@ -193,27 +197,27 @@
             <center>
             <p style="font-size: 24px;color:#243C5F;font-weight:bold">
                 Your browser is still not supported, please download the latest version
-            of Mozilla Firefox 
+            of Mozilla Firefox
             </p>
             <a href="http://getfirefox.com/" title="Get Firefox - The Browser, Reloaded.">
-            <img src="{{ MEDIA_URL }}images/gui/getfirefox.png" 
-                border="0" alt="Get Firefox" 
+            <img src="{{ MEDIA_URL }}images/gui/getfirefox.png"
+                border="0" alt="Get Firefox"
                 style="margin:20px auto 0; display: block;" />
             </a>
             </center>
         <![endif]-->
-        <!-- Setting the layout of the page. --> 
-        <div id="main" dojoType="dijit.layout.BorderContainer" 
-                        liveSplitters="true" design="headline" splitter="true" gutter="true">           
+        <!-- Setting the layout of the page. -->
+        <div id="main" dojoType="dijit.layout.BorderContainer"
+                        liveSplitters="true" design="headline" splitter="true" gutter="true">
             <!-- Header -->
             <div id="header" dojoType="dijit.layout.ContentPane" region="top">
                 <img src="{{ MEDIA_URL }}images/gui/fastLogo_small.png" class="fastLogo" alt="FAST Logo"/>
                 <div id="messages" class="hidden"></div>
-                <div id="greeting"> 
+                <div id="greeting">
                         <div>
                           {% if is_anonymous %}{% trans "anonymous" %}
                           </div> | <a href="/accounts/login/?next=/">{% trans "Sign in" %}</a>
-                          {% else %} {% trans "Welcome" %}, {{ user.username }} | 
+                          {% else %} {% trans "Welcome" %}, {{ user.username }} |
                           <a id="logout" href="/logout">{% trans "Exit" %}</a></div>
                           {% endif %}
                 </div>
@@ -223,15 +227,15 @@
                 <div id="toolbar" dojoType="dijit.Toolbar">
                 </div>
             </div>
-            
+
             <!-- Workspace area -->
             <div dojoType="dijit.layout.TabContainer" id="documentContainer" region="center">
                 <!--<iframe id="prueba" dojoType="dijit.layout.ContentPane" src="http://www.marca.com" title="myPage" style="display: none;border:0px; width:100%; height:100%">
 
                 </iframe>-->
-            </div> 
+            </div>
             <!-- end of Document area -->
-        </div>       
+        </div>
     </body>
 </html>
 <!-- vim: set ts=4 sw=4 et:  -->

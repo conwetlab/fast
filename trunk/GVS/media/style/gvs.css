@@ -188,6 +188,7 @@ h4{
 .cloneIcon       {  background-position: -216px; }
 .rotateIcon      {  background-position: -240px; }
 .refreshIcon     {  background-position: -264px; }
+.playerIcon      {  background-position: -288px; }
 
 
 /********************
@@ -1095,6 +1096,18 @@ label {
     font-size: 14pt;
     font-weight: bold;
     color: red;
+}
+
+.player {
+    margin: 0px auto;
+    text-align: center;
+    width: 600px;
+    height: 400px;
+}
+
+.player .embed {
+    width: 100%;
+    height: 100%;
 }
 
 /*******************

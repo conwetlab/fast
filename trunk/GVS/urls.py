@@ -14,22 +14,25 @@ urlpatterns = patterns('',
 
     # Fast
     (r'^', include('fast.urls')),
-   
+
     # Storage
     (r'^storage/', include('storage.urls')),
 
     # Catalogue
     (r'^catalogue/', include('catalogue.urls')),
-    
+
     # User
     (r'^user/', include('user.urls')),
-    
+
     # BuildingBlock
     (r'^buildingblock/', include('buildingblock.urls')),
 
+    # Proxy
+    (r'^proxy', include('proxy.urls')),
+
     #Admin interface
     (r'^admin/(.*)', admin.site.root),
-    
+
     (r'^accounts/login/$', 'django.contrib.auth.views.login'),
     (r'^logout$', 'commons.authentication.logout', {'login_url': '/'}),
     (r'^admin/logout/$', 'commons.authentication.logout', {'next_page': '/'}),

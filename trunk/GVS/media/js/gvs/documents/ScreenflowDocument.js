@@ -25,6 +25,12 @@ var ScreenflowDocument = Class.create(PaletteDocument,
          */
         this._builder = new Builder();
 
+        /**
+         * @type Player
+         * @private @member
+         */
+        this._player = new ScreenflowPlayer();
+
         this._start();
 
         /**
@@ -322,6 +328,12 @@ var ScreenflowDocument = Class.create(PaletteDocument,
                 this._propertiesDialog.show.bind(this._propertiesDialog),
                 true
             ));
+        this._addToolbarElement('player', new ToolbarButton(
+                'Play Screenflow',
+                'player',
+                this._playScreenflow.bind(this),
+                false // disabled by default
+            ));
         this._addToolbarElement('build', new ToolbarButton(
                 'Build Gadget',
                 'build',
@@ -460,6 +472,7 @@ var ScreenflowDocument = Class.create(PaletteDocument,
         // FIXME: we must learn about document reachability from the inference
         //        engine. By the moment, one screen == deployable screenflow ;)
         this._toolbarElements.get('build').setEnabled(canvas.size() > 0);
+        this._toolbarElements.get('player').setEnabled(canvas.size() > 0);
     },
 
 
@@ -538,6 +551,18 @@ var ScreenflowDocument = Class.create(PaletteDocument,
         return resultHash.values();
     },
 
+    /**
+     * Play a screenflow
+     * @private
+     */
+    _playScreenflow: function () {
+        if (this._isDirty) {
+                this._pendingOperation = this._playScreenflow.bind(this);
+                this._save(false);
+        } else {
+            this._player.playScreenflow(this._description);
+        }
+    },
 
     /**
      * Build a gadget for the screenflow

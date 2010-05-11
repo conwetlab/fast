@@ -138,6 +138,9 @@ file_list = [
     # Build
     "gvs/build/Builder.js",
 
+    # Player
+    "gvs/player/ScreenflowPlayer.js",
+
     # User account
     "gvs/user/User.js",
 

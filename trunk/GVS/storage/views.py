@@ -3,19 +3,18 @@ from django.utils import simplejson
 from django.http import HttpResponse, HttpResponseServerError, Http404
 from django.shortcuts import get_object_or_404, get_list_or_404
 from django.db import transaction
-from gadgetEzweb import getEzWebTemplate, getEzWebHTML
-from gadgetIgoogle import getIGoogleTemplate
+from gadget import getEzWebTemplate, getEzWebHTML, getIGoogleTemplate, getPlayerHTML
 from commons import resource, unzip
 from commons.utils import json_encode, valueOrDefault, valueOrEmpty, notEmptyValueOrDefault
 from commons.authentication import get_user_authentication
-from os import path, mkdir
+from os import path, mkdir, remove
 import zipfile, shutil, tempfile, binascii
 from python_rest_client.restful_lib import Connection, isValidResponse
 from storage.models import Storage
 from buildingblock.models import Screen, Screenflow, BuildingBlockCode
 
 STORAGE_DIR = path.join(settings.BASEDIR, 'static')
-GADGET_ZIP_DIR = path.join(settings.BASEDIR, 'storage/libs')
+GADGET_ZIP_DIR = path.join(settings.BASEDIR, 'media/gadget')
 STORAGE_GADGET_ZIP_NAME = 'gadget.zip'
 
 class GadgetStorage(resource.Resource):
@@ -77,12 +76,12 @@ class GadgetStorage(resource.Resource):
             return HttpResponseServerError(json_encode({'message':unicode(e)}), mimetype='application/json; charset=UTF-8')
 
     def __completeGadgetData(self, request):
-        gadgetData = {'metadata':{}}
-
         if request.POST.has_key('gadget'):
             json = simplejson.loads(request.POST['gadget'], encoding = 'utf-8')
         else:
             raise Exception ('Gadget parameter expected in screenflow json')
+
+        gadgetData = getGadgetData(request.POST['screenflow'])
 
         metadata = gadgetData['metadata']
         #Gadget Data
@@ -102,25 +101,6 @@ class GadgetStorage(resource.Resource):
         metadata['authorName'] =  valueOrEmpty(json, 'authorName')
         metadata['email'] = valueOrEmpty(json, 'email')
         metadata['authorHomepage'] = valueOrEmpty(json, 'authorHomepage')
-
-        scrf = get_object_or_404(Screenflow, id=request.POST['screenflow'])
-        gadgetData['screenflow'] = scrf
-        screenflow = simplejson.loads(scrf.data)
-
-        definition = screenflow['definition']
-        gadgetData['screens'] = []
-        if (definition.has_key('screens')):
-            scrs=definition['screens']
-            for screen in scrs:
-                screen = get_object_or_404(Screen, uri=screen['uri'])
-                screen = simplejson.loads(screen.data)
-                aux = screen['label']
-                screen['label'] = aux['en-gb']
-                screen['allCode'] = BuildingBlockCode.objects.get(buildingBlock=screen['id']).code
-                gadgetData['screens'].append(screen)
-
-        gadgetData['prec'] = definition['preconditions'] if definition.has_key('preconditions') else []
-        gadgetData['post'] = definition['postconditions'] if definition.has_key('postconditions') else []
 
         return gadgetData
 
@@ -225,6 +205,7 @@ class GadgetStorage(resource.Resource):
         else:
             un = unzip.unzip()
             un.extract(gadgetZipFileName, gadgetPath)
+            remove(gadgetZipFileName)
 
 
 
@@ -264,6 +245,43 @@ class StorageEntry(resource.Resource):
             transaction.rollback()
             return HttpResponseServerError(json_encode({'message':unicode(e)}), mimetype='application/json; charset=UTF-8')
 
+
+class GadgetPlayer(resource.Resource):
+    def read(self, request):
+        try:
+            user = get_user_authentication(request)
+
+            gadgetData = getGadgetData(request.GET['screenflow'])
+
+            playerHTML = getPlayerHTML(gadgetData)
+
+            return HttpResponse(playerHTML, mimetype='text/html; charset=UTF-8')
+        except Http404:
+            return HttpResponse(json_encode([]), mimetype='application/json; charset=UTF-8')
+        except Exception, e:
+            return HttpResponseServerError(json_encode({'message':unicode(e)}), mimetype='application/json; charset=UTF-8')
+
+
+def getGadgetData(screenflowId):
+    gadgetData = {'metadata':{}}
+    scrf = get_object_or_404(Screenflow, id=screenflowId)
+    gadgetData['screenflow'] = scrf
+    screenflow = simplejson.loads(scrf.data)
+    definition = screenflow['definition']
+    gadgetData['screens'] = []
+    if (definition.has_key('screens')):
+        scrs = definition['screens']
+        for screen in scrs:
+            screen = get_object_or_404(Screen, uri=screen['uri'])
+            screen = simplejson.loads(screen.data)
+            aux = screen['label']
+            screen['label'] = aux['en-gb']
+            screen['allCode'] = BuildingBlockCode.objects.get(buildingBlock=screen['id']).code
+            gadgetData['screens'].append(screen)
+
+    gadgetData['prec'] = definition['preconditions'] if definition.has_key('preconditions') else []
+    gadgetData['post'] = definition['postconditions'] if definition.has_key('postconditions') else []
+    return gadgetData
 
 
 def isLocalStorage():
