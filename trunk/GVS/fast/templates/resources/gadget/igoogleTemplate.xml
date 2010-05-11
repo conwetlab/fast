@@ -1,17 +1,17 @@
 {% extends "resources/gadget/igoogleTemplateBase.xml" %}
 {% block content %}
 <link rel="stylesheet" type="text/css" href="{{ gadgetUri }}/resources/menu/css/menu.css" />
-<SCRIPT language="javascript" src="{{ gadgetUri }}/js/prototype/prototype.js"></SCRIPT>
-<SCRIPT language="javascript" src="{{ gadgetUri }}/js/cjson_parse/cjson_parse.js"></SCRIPT>
-<SCRIPT language="javascript" src="{{ gadgetUri }}/js/fast/menu.js"></SCRIPT>
-<SCRIPT language="javascript" src="{{ gadgetUri }}/js/fast/screenflowEngine.js"></SCRIPT>
-<SCRIPT language="javascript" src="{{ gadgetUri }}/js/fast/screenEngine.js"></SCRIPT>
-<SCRIPT language="javascript" src="{{ gadgetUri }}/js/fast/buildingblock.js"></SCRIPT>
-<SCRIPT language="javascript" src="{{ gadgetUri }}/js/fastAPI/fastAPI.js"></SCRIPT>
-<SCRIPT language="javascript" src="{{ gadgetUri }}/js/fastAPI/fastAPI_igoogle.js"></SCRIPT>
+<script type="text/javascript" language="javascript" src="{{ gadgetUri }}/js/prototype/prototype.js"></script>
+<script type="text/javascript" language="javascript" src="{{ gadgetUri }}/js/cjson_parse/cjson_parse.js"></script>
+<script type="text/javascript" language="javascript" src="{{ gadgetUri }}/js/fast/menu.js"></script>
+<script type="text/javascript" language="javascript" src="{{ gadgetUri }}/js/fast/screenflowEngine.js"></script>
+<script type="text/javascript" language="javascript" src="{{ gadgetUri }}/js/fast/screenEngine.js"></script>
+<script type="text/javascript" language="javascript" src="{{ gadgetUri }}/js/fast/buildingblock.js"></script>
+<script type="text/javascript" language="javascript" src="{{ gadgetUri }}/js/fastAPI/fastAPI.js"></script>
+<script type="text/javascript" language="javascript" src="{{ gadgetUri }}/js/fastAPI/fastAPI_igoogle.js"></script>
 {% include 'resources/gadget/jsTemplate.js' %}
-<SCRIPT language="javascript">
+<script type="text/javascript" language="javascript">
     _IG_RegisterOnloadHandler(loadMenu);
-</SCRIPT>
+</script>
 {% include 'resources/gadget/htmlTemplate.html' %}
 {% endblock content %}

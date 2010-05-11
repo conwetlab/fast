@@ -1,4 +1,4 @@
-<SCRIPT language="javascript">
+<script type="text/javascript" language="javascript">
     var menu = null;
     var screens = [
 {# Here the screens involved inside the gadget are defined #}
@@ -41,4 +41,4 @@
 
         ScreenflowEngineFactory.getInstance().run();
     }
-</SCRIPT>
+</script>
