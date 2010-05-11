@@ -37,12 +37,9 @@ class BuildingBlockCollection(resource.Resource):
             else:
                 bb = get_list_or_404(BuildingBlock, author=user)
 
-            list = []
-            for element in bb:
-                list.append(element.data)
-            response = ','.join(list)
+            response = json_encode([simplejson.loads(element.data) for element in bb])
 
-            return HttpResponse('[%s]' % response, mimetype='application/json; charset=UTF-8')
+            return HttpResponse(response, mimetype='application/json; charset=UTF-8')
         except Http404:
             return HttpResponse(json_encode([]), mimetype='application/json; charset=UTF-8')
         except Exception, e:
