@@ -28,7 +28,7 @@ import org.openrdf.sail.inferencer.InferencerConnectionWrapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import eu.morfeoproject.fast.vocabulary.FGO;
+import eu.morfeoproject.fast.catalogue.vocabulary.FGO;
 
 /**
  * A reduced set of forward-chaining RDF Schema inferencer, using the rules from the <a

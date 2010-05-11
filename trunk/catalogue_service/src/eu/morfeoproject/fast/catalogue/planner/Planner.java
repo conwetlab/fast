@@ -10,12 +10,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import eu.morfeoproject.fast.catalogue.Catalogue;
-import eu.morfeoproject.fast.model.Condition;
-import eu.morfeoproject.fast.model.FastModelFactory;
-import eu.morfeoproject.fast.model.Postcondition;
-import eu.morfeoproject.fast.model.Precondition;
-import eu.morfeoproject.fast.model.Resource;
-import eu.morfeoproject.fast.model.Screen;
+import eu.morfeoproject.fast.catalogue.buildingblocks.Condition;
+import eu.morfeoproject.fast.catalogue.buildingblocks.FastModelFactory;
+import eu.morfeoproject.fast.catalogue.buildingblocks.Postcondition;
+import eu.morfeoproject.fast.catalogue.buildingblocks.Precondition;
+import eu.morfeoproject.fast.catalogue.buildingblocks.Resource;
+import eu.morfeoproject.fast.catalogue.buildingblocks.Screen;
 
 public class Planner {
 	

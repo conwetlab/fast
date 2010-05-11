@@ -43,8 +43,8 @@ import org.openrdf.rio.RDFParseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import eu.morfeoproject.fast.util.DateFormatter;
-import eu.morfeoproject.fast.vocabulary.DC;
+import eu.morfeoproject.fast.catalogue.util.DateFormatter;
+import eu.morfeoproject.fast.catalogue.vocabulary.DC;
 
 // TODO: The triple store must guarantee safe operations to the rdf repository
 // 		 using synchronised statements when adding, deleting, and querying.

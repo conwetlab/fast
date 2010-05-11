@@ -5,91 +5,91 @@
 		<description></description>
 		<display-name>ScreenflowServlet</display-name>
 		<servlet-name>ScreenflowServlet</servlet-name>
-		<servlet-class>eu.morfeoproject.fast.server.ScreenflowServlet</servlet-class>
+		<servlet-class>eu.morfeoproject.fast.catalogue.services.ScreenflowServlet</servlet-class>
 	</servlet>
 	<servlet>
 		<description></description>
 		<display-name>ScreenServlet</display-name>
 		<servlet-name>ScreenServlet</servlet-name>
-		<servlet-class>eu.morfeoproject.fast.server.ScreenServlet</servlet-class>
+		<servlet-class>eu.morfeoproject.fast.catalogue.services.ScreenServlet</servlet-class>
 	</servlet>
 	<servlet>
 		<description></description>
 		<display-name>FormServlet</display-name>
 		<servlet-name>FormServlet</servlet-name>
-		<servlet-class>eu.morfeoproject.fast.server.FormServlet</servlet-class>
+		<servlet-class>eu.morfeoproject.fast.catalogue.services.FormServlet</servlet-class>
 	</servlet>
 	<servlet>
 		<description></description>
 		<display-name>OperatorServlet</display-name>
 		<servlet-name>OperatorServlet</servlet-name>
-		<servlet-class>eu.morfeoproject.fast.server.OperatorServlet</servlet-class>
+		<servlet-class>eu.morfeoproject.fast.catalogue.services.OperatorServlet</servlet-class>
 	</servlet>
 	<servlet>
 		<description></description>
 		<display-name>BackendServiceServlet</display-name>
 		<servlet-name>BackendServiceServlet</servlet-name>
-		<servlet-class>eu.morfeoproject.fast.server.BackendServiceServlet</servlet-class>
+		<servlet-class>eu.morfeoproject.fast.catalogue.services.BackendServiceServlet</servlet-class>
 	</servlet>
 	<servlet>
 		<description></description>
 		<display-name>ConceptServlet</display-name>
 		<servlet-name>ConceptServlet</servlet-name>
-		<servlet-class>eu.morfeoproject.fast.server.ConceptServlet</servlet-class>
+		<servlet-class>eu.morfeoproject.fast.catalogue.services.ConceptServlet</servlet-class>
 	</servlet>
 	<servlet>
 		<description></description>
 		<display-name>PreconditionServlet</display-name>
 		<servlet-name>PreconditionServlet</servlet-name>
-		<servlet-class>eu.morfeoproject.fast.server.PreconditionServlet</servlet-class>
+		<servlet-class>eu.morfeoproject.fast.catalogue.services.PreconditionServlet</servlet-class>
 	</servlet>
 	<servlet>
 		<description></description>
 		<display-name>PostconditionServlet</display-name>
 		<servlet-name>PostconditionServlet</servlet-name>
-		<servlet-class>eu.morfeoproject.fast.server.PostconditionServlet</servlet-class>
+		<servlet-class>eu.morfeoproject.fast.catalogue.services.PostconditionServlet</servlet-class>
 	</servlet>
 	<servlet>
 		<description></description>
 		<display-name>ScreenFindServlet</display-name>
 		<servlet-name>ScreenFindServlet</servlet-name>
-		<servlet-class>eu.morfeoproject.fast.server.ScreenFindServlet</servlet-class>
+		<servlet-class>eu.morfeoproject.fast.catalogue.services.ScreenFindServlet</servlet-class>
 	</servlet>
 	<servlet>
 		<description></description>
 		<display-name>ScreenCheckServlet</display-name>
 		<servlet-name>ScreenCheckServlet</servlet-name>
-		<servlet-class>eu.morfeoproject.fast.server.ScreenCheckServlet</servlet-class>
+		<servlet-class>eu.morfeoproject.fast.catalogue.services.ScreenCheckServlet</servlet-class>
 	</servlet>
 	<servlet>
 		<description></description>
 		<display-name>ScreenFindCheckServlet</display-name>
 		<servlet-name>ScreenFindCheckServlet</servlet-name>
-		<servlet-class>eu.morfeoproject.fast.server.ScreenFindCheckServlet</servlet-class>
+		<servlet-class>eu.morfeoproject.fast.catalogue.services.ScreenFindCheckServlet</servlet-class>
 	</servlet>
 	<servlet>
 		<description></description>
 		<display-name>ScreenComponentFindCheckServlet</display-name>
 		<servlet-name>ScreenComponentFindCheckServlet</servlet-name>
-		<servlet-class>eu.morfeoproject.fast.server.ScreenComponentFindCheckServlet</servlet-class>
+		<servlet-class>eu.morfeoproject.fast.catalogue.services.ScreenComponentFindCheckServlet</servlet-class>
 	</servlet>
 	<servlet>
 		<description></description>
 		<display-name>MetadataServlet</display-name>
 		<servlet-name>MetadataServlet</servlet-name>
-		<servlet-class>eu.morfeoproject.fast.server.MetadataServlet</servlet-class>
+		<servlet-class>eu.morfeoproject.fast.catalogue.services.MetadataServlet</servlet-class>
 	</servlet>
 	<servlet>
 		<description></description>
 		<display-name>OntologyServlet</display-name>
 		<servlet-name>OntologyServlet</servlet-name>
-		<servlet-class>eu.morfeoproject.fast.server.OntologyServlet</servlet-class>
+		<servlet-class>eu.morfeoproject.fast.catalogue.services.OntologyServlet</servlet-class>
 	</servlet>
 	<servlet>
 		<description></description>
 		<display-name>PlannerServlet</display-name>
 		<servlet-name>PlannerServlet</servlet-name>
-		<servlet-class>eu.morfeoproject.fast.server.PlannerServlet</servlet-class>
+		<servlet-class>eu.morfeoproject.fast.catalogue.services.PlannerServlet</servlet-class>
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>ScreenflowServlet</servlet-name>
