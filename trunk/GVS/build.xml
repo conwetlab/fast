@@ -15,7 +15,7 @@
         <!-- Create Base Gadget Zip -->
         <zip destfile="${gadget_zip_path}"
             basedir="${store_libs_dir}"
-            excludes=".svn/**, **/fastAPI_player.js"
+            excludes=".svn/**, **/fastAPI_*.js"
             includes="js/**, resources/**"/>
     </target>
 

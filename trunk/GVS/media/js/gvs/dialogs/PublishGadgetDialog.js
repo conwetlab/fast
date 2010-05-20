@@ -9,11 +9,11 @@ var PublishGadgetDialog = Class.create(ConfirmDialog /** @lends PublishGadgetDia
         $super("Publish Gadget", ConfirmDialog.OK);
 
         /**
-         * Base url of the gadget being published
+         * Publication Info
          * @private
          * @type String
          */
-        this._gadgetBaseUrl = null;
+        this._publication = null;
 
         /**
          * Hash containing the references to all the buttons
@@ -21,6 +21,13 @@ var PublishGadgetDialog = Class.create(ConfirmDialog /** @lends PublishGadgetDia
          * @private
          */
         this._buttons = new Hash();
+
+        /**
+         * Standalone Dialog
+         * @type Hash
+         * @private
+         */
+        this._standaloneDialog = null;
     },
 
     // **************** PUBLIC METHODS **************** //
@@ -30,8 +37,8 @@ var PublishGadgetDialog = Class.create(ConfirmDialog /** @lends PublishGadgetDia
      * show
      * @override
      */
-    show: function ($super, /** String */ gadgetBaseUrl) {
-        this._gadgetBaseUrl = gadgetBaseUrl;
+    show: function ($super, /** Object */ publication) {
+        this._publication = publication;
         this._initDialogInterface();
         $super();
     },
@@ -42,31 +49,40 @@ var PublishGadgetDialog = Class.create(ConfirmDialog /** @lends PublishGadgetDia
      * Publishes the created gadget
      * @private
      */
-    _publishGadget: function(/** dijit.form.Button */ button, /** Hash */ options, /** String */ templateUrl) {
-        var url = null;
+    _publishGadget: function(/** dijit.form.Button */ button, /** Hash */ options) {
+        var publicationUrl = options.url;
         if (options.mashupPlatform == 'ezweb') {
-            url = URIs.ezweb + "interfaces/gadget?template_uri=" + templateUrl;
+            publicationUrl = URIs.ezweb + "interfaces/gadget?template_uri=" + options.url;
         } else if (options.mashupPlatform == 'igoogle') {
             if (options.destination=='directory') {
-                url = "http://www.google.com/ig/submit?url=" + templateUrl;
+                publicationUrl = "http://www.google.com/ig/submit?url=" + options.url;
             } else if (options.destination=='personal'){
-                url = "http://www.google.com/ig/adde?moduleurl=" + templateUrl;
+                publicationUrl = "http://www.google.com/ig/adde?moduleurl=" + options.url;
             }
         } else if (options.mashupPlatform == 'orkut') {
-            url = "http://sandbox.orkut.com/Main#AppInfo?appUrl=" + templateUrl;
+            publicationUrl = "http://sandbox.orkut.com/Main#AppInfo?appUrl=" + options.url;
         }
-        this._deploy(button, url);
+        this._deploy(button, options, publicationUrl);
     },
 
     /**
      * This function deploy a gadget to EzWeb
      * @private
      */
-    _deploy: function(/** domNode */ buttonNode, /**String*/ url) {
+    _deploy: function(/** domNode */ buttonNode, /** Hash */ options, /**String*/ url) {
         var button = dijit.byId(buttonNode.id);
-        button.attr("label", "Done!");
-        button.attr("disabled", true);
-        window.open(url);
+        if (options.disableAfterPublishing){
+            button.attr("label", options.doneButtonLabel);
+            button.attr("disabled", true);
+        }
+        if (options.mashupPlatform == 'standalone'){
+            if (!this._standaloneDialog){
+                this._standaloneDialog = new StandaloneEmbeddingDialog(this._publication.name, url);
+            }
+            this._standaloneDialog.show();
+        } else {
+            window.open(url);
+        }
         console.log(url);
     },
 
@@ -104,22 +120,14 @@ var PublishGadgetDialog = Class.create(ConfirmDialog /** @lends PublishGadgetDia
             }
         ];
 
-        tableData.push(this._createPlatformRow('ezweb',
-                {mashupPlatform: 'ezweb'},
-                'EzWeb',
-                this._gadgetBaseUrl + '/ezweb.xml'));
-        tableData.push(this._createPlatformRow('igoogleDirectory',
-                {mashupPlatform: 'igoogle', destination: 'directory'},
-                'iGoogle Directory',
-                this._gadgetBaseUrl + "/igoogle.xml"));
-        tableData.push(this._createPlatformRow('igooglePersonal',
-                {mashupPlatform: 'igoogle', destination: 'personal'},
-                'iGoogle Personal Page',
-                this._gadgetBaseUrl + "/igoogle.xml"));
-        tableData.push(this._createPlatformRow('orkut',
-                {mashupPlatform: 'orkut'},
-                'Orkut',
-                this._gadgetBaseUrl + "/igoogle.xml"));
+        var gadgets = new Hash(this._publication.gadgets);
+        gadgets.each(function(gadget) {
+                var destinations = PublishGadgetDialog.GADGET_DESTINATIONS.get(gadget.key);
+                destinations.each(function(destination) {
+                    destination.url = gadget.value;
+                    tableData.push(this._createPlatformRow(destination));
+                }.bind(this));
+            }.bind(this));
 
         this._fillTable(table, tableData);
         this._setContent(dom);
@@ -129,17 +137,17 @@ var PublishGadgetDialog = Class.create(ConfirmDialog /** @lends PublishGadgetDia
      * This function create a row for a destination platform
      * @private
      */
-    _createPlatformRow: function (/** String */ id, /** Hash */ options, /** String */ title, /** String */ url) {
+    _createPlatformRow: function (/** Hash */ options) {
         return {'className': '',
             'fields': [{
                 'className': 'mashup',
-                'node': title + ' [<a href="' + url + '" target="blank">Template</a>]'
+                'node': options.title + ' [<a href="' + options.url + '" target="blank">' + options.urlLabel + '</a>]'
              },{
                 'className': '',
-                'node': this._buttons.set(id, new dijit.form.Button({
-                    'label': 'Publish it!',
+                'node': this._buttons.set(options.id, new dijit.form.Button({
+                    'label': options.buttonLabel,
                     'onClick': function(e) {
-                                this._publishGadget(e.element(), options, url);
+                                this._publishGadget(e.element(), options);
                             }.bind(this)
                 })).domNode
              }]
@@ -165,5 +173,58 @@ var PublishGadgetDialog = Class.create(ConfirmDialog /** @lends PublishGadgetDia
         });
     }
 });
+
+//STATIC ATTRIBUTES
+PublishGadgetDialog.GADGET_DESTINATIONS = new Hash();
+PublishGadgetDialog.GADGET_DESTINATIONS.set('ezweb',
+        [
+             {	id: 'ezweb',
+                 mashupPlatform: 'ezweb',
+                title: 'EzWeb',
+                urlLabel: 'Template',
+                buttonLabel: 'Publish it!',
+                disableAfterPublishing: true,
+                doneButtonLabel: 'Done'
+            }
+        ]);
+PublishGadgetDialog.GADGET_DESTINATIONS.set('google',
+        [
+             {	id: 'igoogleDirectory',
+                mashupPlatform: 'igoogle',
+                destination: 'directory',
+                title: 'iGoogle Directory',
+                urlLabel: 'Template',
+                buttonLabel: 'Publish it!',
+                disableAfterPublishing: true,
+                doneButtonLabel: 'Done'
+            },
+            {	id: 'igooglePersonal',
+                mashupPlatform: 'igoogle',
+                destination: 'personal',
+                title: 'iGoogle Personal Page',
+                urlLabel: 'Template',
+                buttonLabel: 'Publish it!',
+                disableAfterPublishing: true,
+                doneButtonLabel: 'Done'
+            },
+            {	id: 'orkut',
+                mashupPlatform: 'orkut',
+                title: 'Orkut',
+                urlLabel: 'Template',
+                buttonLabel: 'Publish it!',
+                disableAfterPublishing: true,
+                doneButtonLabel: 'Done'
+            }
+        ]);
+PublishGadgetDialog.GADGET_DESTINATIONS.set('player',
+        [
+            {	id: 'standalone',
+                mashupPlatform: 'standalone',
+                title: 'Standalone',
+                urlLabel: 'HTML',
+                buttonLabel: 'Embed it!',
+                disableAfterPublishing: false
+            }
+        ]);
 
 // vim:ts=4:sw=4:et:

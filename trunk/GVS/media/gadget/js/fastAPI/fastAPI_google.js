@@ -1,7 +1,7 @@
 var FastAPI = {};
 
 /**
- * Implementation of FastBaseAPI.IO for iGoogle.
+ * Implementation of FastBaseAPI.IO for Google.
  * @constructs
  * @extends FastBaseAPI.IO
  */
@@ -11,7 +11,7 @@ FastAPI.IO = Class.create(FastBaseAPI.IO,{
     },
 
     /**
-     * Creates a Slot Variable for iGoogle.
+     * Creates a Slot Variable for Google.
      * @param variable
      *      represents the name of the variable
      * @param handler
@@ -23,7 +23,7 @@ FastAPI.IO = Class.create(FastBaseAPI.IO,{
     },
 
     /**
-     * Creates an Event Variable for iGoogle.
+     * Creates an Event Variable for Google.
      * @param variable
      *      represents the name of the variable
      */
@@ -34,13 +34,13 @@ FastAPI.IO = Class.create(FastBaseAPI.IO,{
 });
 
 /**
- * Implementation of FastBaseAPI.Request for iGoogle.
+ * Implementation of FastBaseAPI.Request for Google.
  * @constructs
  * @extends FastBaseAPI.Request
  */
 FastAPI.Request = Class.create(FastBaseAPI.Request,{
     /**
-     * Initializes an object to make requests in iGoogle.
+     * Initializes an object to make requests in Google.
      * @param url
      *      url to be requested
      * @param options
@@ -166,7 +166,7 @@ FastAPI.Request = Class.create(FastBaseAPI.Request,{
 });
 
 /**
- * Implementation of FastBaseAPI.Utils for iGoogle.
+ * Implementation of FastBaseAPI.Utils for Google.
  * @constructs
  * @extends FastBaseAPI.Utils
  */

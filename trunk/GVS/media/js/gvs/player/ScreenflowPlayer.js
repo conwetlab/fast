@@ -33,7 +33,7 @@ var ScreenflowPlayer = Class.create( /** @lends ScreenflowPlayer.prototype */ {
 
             this._dialog = new PreviewDialog(title, this._getPreview());
         } else {
-            this._dialog._setContent(this._getPreview());
+            this._dialog.setContent(this._getPreview());
         }
         this._dialog.show();
 

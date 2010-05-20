@@ -13,18 +13,18 @@ var PreviewDialog = Class.create(ConfirmDialog /** @lends PreviewDialog.prototyp
 
     // **************** PUBLIC METHODS **************** //
 
+    /**
+     * This function set the form content based on a array-like
+     * structure, containing the different elements of the form,
+     * and, optionally, form parameters
+     * @private
+     */
+    setContent: function (/** Array | DOMNode */ data, /** Hash */ formParams){
+        this._setContent(data, formParams);
+    }
 
     // **************** PRIVATE METHODS **************** //
 
-
-    /**
-     * initDialogInterface
-     * This function creates the dom structure
-     * @private
-     * @override
-     */
-    _initDialogInterface: function () {
-    }
 });
 
 // vim:ts=4:sw=4:et:

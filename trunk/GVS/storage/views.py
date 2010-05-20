@@ -3,7 +3,7 @@ from django.utils import simplejson
 from django.http import HttpResponse, HttpResponseServerError, Http404
 from django.shortcuts import get_object_or_404, get_list_or_404
 from django.db import transaction
-from gadget import getEzWebTemplate, getEzWebHTML, getIGoogleTemplate, getPlayerHTML
+from gadget import getEzWebTemplate, getEzWebHTML, getGoogleTemplate, getPlayerHTML
 from commons import resource, unzip
 from commons.utils import json_encode, valueOrDefault, valueOrEmpty, notEmptyValueOrDefault
 from commons.authentication import get_user_authentication
@@ -15,6 +15,8 @@ from buildingblock.models import Screen, Screenflow, BuildingBlockCode
 
 STORAGE_DIR = path.join(settings.BASEDIR, 'static')
 GADGET_ZIP_DIR = path.join(settings.BASEDIR, 'media/gadget')
+API_DIR = 'js/fastAPI'
+GADGET_API_DIR = path.join(GADGET_ZIP_DIR, API_DIR)
 STORAGE_GADGET_ZIP_NAME = 'gadget.zip'
 
 class GadgetStorage(resource.Resource):
@@ -66,10 +68,7 @@ class GadgetStorage(resource.Resource):
             storage.data = json_encode(metadata)
             storage.save()
 
-            dict = {'id': None, 'name': None, 'screenflow_id': None, 'owner': None,
-                    'version' : None, 'gadgetUri' : None, 'creationDate': None}
-
-            return HttpResponse(json_encode(metadata, fields=dict), mimetype='application/json; charset=UTF-8')
+            return HttpResponse(storage.data, mimetype='application/json; charset=UTF-8')
 
         except Exception, e:
             transaction.rollback()
@@ -101,6 +100,8 @@ class GadgetStorage(resource.Resource):
         metadata['authorName'] =  valueOrEmpty(json, 'authorName')
         metadata['email'] = valueOrEmpty(json, 'email')
         metadata['authorHomepage'] = valueOrEmpty(json, 'authorHomepage')
+        #Platforms
+        metadata['platforms'] = valueOrDefault(json, 'platforms', [])
 
         return gadgetData
 
@@ -140,7 +141,15 @@ class GadgetStorage(resource.Resource):
 
 
     def __createGadget(self, gadgetData, storage):
+
         metadata = gadgetData['metadata']
+
+        if metadata.has_key('platforms'):
+            if (type(metadata['platforms']) is str) or (type(metadata['platforms']) is unicode):
+                metadata['platforms'] = [str(metadata['platforms'])]
+        else:
+            raise Exception('Invalid destination platform list')
+
         gadgetRelativePath = str(storage.pk)
         gadgetPath = path.join(STORAGE_DIR, gadgetRelativePath)
         if (not path.isdir(gadgetPath)):
@@ -156,29 +165,50 @@ class GadgetStorage(resource.Resource):
 
         directory_name = tempfile.mkdtemp(dir=gadgetPath)
 
-        #EzWeb
-        ezWebTemplate = getEzWebTemplate(gadgetData)
-        ezWebTemplateFile = open (path.join(directory_name, 'ezweb.xml'), 'w')
-        ezWebTemplateFile.write(ezWebTemplate.encode('utf-8'))
-        ezWebTemplateFile.close()
-        zipFile.write(ezWebTemplateFile.name,'./ezweb.xml')
+        gadgets = {}
 
-        ezWebHTML = getEzWebHTML(gadgetData)
-        ezWebHTMLFile = open (path.join(directory_name, 'ezweb.html'), 'w')
-        ezWebHTMLFile.write(ezWebHTML.encode('utf-8'))
-        ezWebHTMLFile.close()
-        zipFile.write(ezWebHTMLFile.name,'./ezweb.html')
+        for platform in metadata['platforms']:
+            if platform == 'ezweb':
+                templateFileName = str(platform + '.xml')
+                htmlFileName = str(platform + '.html')
+                ezWebTemplate = getEzWebTemplate(gadgetData)
+                ezWebTemplateFile = open (path.join(directory_name, templateFileName), 'w')
+                ezWebTemplateFile.write(ezWebTemplate.encode('utf-8'))
+                ezWebTemplateFile.close()
+                zipFile.write(ezWebTemplateFile.name, path.join('.', templateFileName))
+                ezWebHTML = getEzWebHTML(gadgetData)
+                ezWebHTMLFile = open (path.join(directory_name, htmlFileName), 'w')
+                ezWebHTMLFile.write(ezWebHTML.encode('utf-8'))
+                ezWebHTMLFile.close()
+                zipFile.write(ezWebHTMLFile.name, path.join('.', htmlFileName))
+                gadgets[platform] = '/'.join([metadata['gadgetUri'],  templateFileName])
 
-        #iGoogle
-        igoogleTemplate = getIGoogleTemplate(gadgetData)
-        igoogleTemplateFile = open (path.join(directory_name, 'igoogle.xml'), 'w')
-        igoogleTemplateFile.write(igoogleTemplate.encode('utf-8'))
-        igoogleTemplateFile.close()
-        zipFile.write(igoogleTemplateFile.name,'./igoogle.xml')
+            elif platform == 'google':
+                templateFileName = str(platform + '.xml')
+                googleTemplate = getGoogleTemplate(gadgetData)
+                googleTemplateFile = open (path.join(directory_name, templateFileName), 'w')
+                googleTemplateFile.write(googleTemplate.encode('utf-8'))
+                googleTemplateFile.close()
+                zipFile.write(googleTemplateFile.name,path.join('.', templateFileName))
+                gadgets[platform] = '/'.join([metadata['gadgetUri'], templateFileName])
+
+            elif platform == 'player':
+                htmlFileName = str(platform + '.html')
+                playerHTML = getPlayerHTML(gadgetData, metadata['gadgetUri'])
+                playerHTMLFile = open (path.join(directory_name, htmlFileName), 'w')
+                playerHTMLFile.write(playerHTML.encode('utf-8'))
+                playerHTMLFile.close()
+                zipFile.write(playerHTMLFile.name, path.join('.', htmlFileName))
+                gadgets[platform] = '/'.join([metadata['gadgetUri'], htmlFileName])
+
+            #Copying APIs
+            apiFileName = str('fastAPI_' + platform + '.js')
+            zipFile.write(path.join(GADGET_API_DIR, apiFileName), path.join(API_DIR, apiFileName))
 
         shutil.rmtree(directory_name)
         zipFile.close()
 
+        metadata['gadgets'] = gadgets
         metadata['gadgetRelativePath'] = gadgetRelativePath
 
 
@@ -253,7 +283,7 @@ class GadgetPlayer(resource.Resource):
 
             gadgetData = getGadgetData(request.GET['screenflow'])
 
-            playerHTML = getPlayerHTML(gadgetData)
+            playerHTML = getPlayerHTML(gadgetData, '/'.join([settings.MEDIA_URL, 'gadget']))
 
             return HttpResponse(playerHTML, mimetype='text/html; charset=UTF-8')
         except Http404:

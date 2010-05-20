@@ -1,0 +1,17 @@
+{% extends "resources/gadget/googleTemplateBase.xml" %}
+{% block content %}
+<link rel="stylesheet" type="text/css" href="{{ gadgetUri }}/resources/menu/css/menu.css" />
+<script language="javascript" src="{{ gadgetUri }}/js/prototype/prototype.js"></script>
+<script language="javascript" src="{{ gadgetUri }}/js/cjson_parse/cjson_parse.js"></script>
+<script language="javascript" src="{{ gadgetUri }}/js/fast/menu.js"></script>
+<script language="javascript" src="{{ gadgetUri }}/js/fast/screenflowEngine.js"></script>
+<script language="javascript" src="{{ gadgetUri }}/js/fast/screenEngine.js"></script>
+<script language="javascript" src="{{ gadgetUri }}/js/fast/buildingblock.js"></script>
+<script language="javascript" src="{{ gadgetUri }}/js/fastAPI/fastAPI.js"></script>
+<script language="javascript" src="{{ gadgetUri }}/js/fastAPI/fastAPI_google.js"></script>
+{% include 'resources/gadget/jsTemplate.js' %}
+<script language="javascript">
+    _IG_RegisterOnloadHandler(loadMenu);
+</script>
+{% include 'resources/gadget/htmlTemplate.html' %}
+{% endblock content %}

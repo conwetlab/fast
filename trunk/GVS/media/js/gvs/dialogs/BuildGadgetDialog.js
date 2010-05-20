@@ -68,8 +68,8 @@ var BuildGadgetDialog = Class.create(ConfirmDialog /** @lends BuildGadgetDialog.
                 'regExp': FormDialog.POSITIVE_VALIDATION,
                 'message': FormDialog.INVALID_POSITIVE_MESSAGE},
             {'type':'input', 'label': 'Default Width:', 'name': 'width', 'value': '',
-            	'regExp': FormDialog.POSITIVE_VALIDATION,
-            	'message': FormDialog.INVALID_POSITIVE_MESSAGE},
+                'regExp': FormDialog.POSITIVE_VALIDATION,
+                'message': FormDialog.INVALID_POSITIVE_MESSAGE},
             {'type':'title', 'value': 'Author information'},
             {'type':'input', 'label': 'Author Name:','name': 'authorName', 'value': user.getRealName()},
             {'type':'input', 'label': 'E-Mail:','name': 'email', 'value': user.getEmail(),
@@ -78,7 +78,17 @@ var BuildGadgetDialog = Class.create(ConfirmDialog /** @lends BuildGadgetDialog.
             {'type':'input', 'label': 'Homepage:','name': 'authorHomepage',
                 'value': '',
                 'regExp': FormDialog.URL_VALIDATION,
-                'message': FormDialog.INVALID_URL_MESSAGE}
+                'message': FormDialog.INVALID_URL_MESSAGE},
+            {'type':'title', 'value': 'Destination Gadgets'},
+            {'type':'checkbox', 'label': 'EzWeb:','name': 'platforms',
+                'value': 'ezweb',
+                'checked': true},
+            {'type':'checkbox', 'label': 'Google:','name': 'platforms',
+                'value': 'google',
+                'checked': true},
+            {'type':'checkbox', 'label': 'Standalone:','name': 'platforms',
+                'value': 'player',
+                'checked': true}
         ];
         this._setContent(formData);
     },
@@ -88,10 +98,13 @@ var BuildGadgetDialog = Class.create(ConfirmDialog /** @lends BuildGadgetDialog.
      * @override
      */
     _onOk: function($super){
-    	if (this._getFormWidget().validate()) {
-    		$super();
-    		this._onDeployCallback(this._getForm().serialize({'hash':true}));
-    	}
+        if (this._getFormWidget().validate()) {
+            var form = this._getForm().serialize({'hash':true});
+            if (form.platforms){
+                $super();
+                this._onDeployCallback(form);
+            }
+        }
     },
     /**
      * Reset form

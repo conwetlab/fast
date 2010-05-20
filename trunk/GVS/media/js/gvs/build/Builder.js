@@ -66,8 +66,7 @@ var Builder = Class.create( /** @lends Builder.prototype */ {
 
     _onBuildSuccess: function(/** XMLHttpRequest */ transport) {
         var result = JSON.parse(transport.responseText);
-        var gadgetBaseUrl = result.gadgetUri;
-        this._publishGadgetDialog.show(gadgetBaseUrl);
+        this._publishGadgetDialog.show(result);
     },
 
     _onError: function(/** XMLHttpRequest */ transport, /** Exception */ e) {

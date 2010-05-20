@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <Module>
 <ModulePrefs title="{{ gadgetTitle }}"
-        title_url="{{ gadgetUri }}/igoogle.xml"
+        title_url="{{ gadgetUri }}/google.xml"
         author="{{ gadgetVendor }}"
         author_email="{{ gadgetMail }}"
         description="{{ gadgetDescription }}"

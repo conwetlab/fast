@@ -234,12 +234,36 @@ var FormDialog = Class.create( /** @lends FormDialog.prototype */ {
                         lineNode = this._createLine(line.label, input.domNode);
                         break;
 
+                    case 'checkbox':
+
+                        var checkbox = new dijit.form.CheckBox({
+                                    'name' : line.name,
+                                    'value': line.value
+                                });
+                        if (line.disabled) {
+                            checkbox.attr('disabled', line.disabled);
+                        }
+
+                        if (line.checked) {
+                            checkbox.attr('checked', line.checked);
+                        }
+
+                        inputNode = checkbox.domNode;
+                        lineNode = this._createLine(line.label, checkbox.domNode);
+                        break;
+
                     case 'label':
                         lineNode = new Element('div', {
                                         'class': 'line',
                                         'style': line.style
                                     }).update(line.value);
+                        break;
 
+                    case 'pre':
+                        lineNode = new Element('pre', {
+                                        'class': 'line',
+                                        'style': line.style
+                                    }).update(line.value);
                         break;
 
                     case 'hidden':
@@ -324,12 +348,13 @@ var FormDialog = Class.create( /** @lends FormDialog.prototype */ {
      */
     _createLine: function(/** String */ label, /** DOMNode */ inputNode) {
         var lineNode = new Element('div', {
-                        'class' : 'line'
-                    });
-        var labelNode = new Element ('label').update(label);
-        lineNode.appendChild(labelNode);
+            'class' : 'line'
+        });
+        if (label) {
+            var labelNode = new Element ('label').update(label);
+            lineNode.appendChild(labelNode);
+        }
         lineNode.appendChild(inputNode);
-
         return lineNode;
     },
 

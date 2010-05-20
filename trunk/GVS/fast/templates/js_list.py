@@ -127,6 +127,7 @@ file_list = [
     "gvs/dialogs/PropertiesDialog.js",
     "gvs/dialogs/Alert.js",
     "gvs/dialogs/Confirm.js",
+    "gvs/dialogs/StandaloneEmbeddingDialog.js",
 
     # Plans
     "gvs/plans/PlanPanel.js",

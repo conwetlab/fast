@@ -30,9 +30,9 @@ def getEzWebHTML(gadgetData):
                             'gadgetScreens': gadgetData['screens']})
     return loader.render_to_string(path.join('resources','gadget','ezwebTemplate.html'), ezWebContext);
 
-def getIGoogleTemplate(gadgetData):
+def getGoogleTemplate(gadgetData):
     metadata = gadgetData['metadata']
-    igoogleContext = Context({'platform': 'igoogle',
+    googleContext = Context({'platform': 'google',
                               'gadgetUri': metadata['gadgetUri'],
                               'gadgetTitle': metadata['name'],
                               'gadgetVendor': notEmptyValueOrDefault(metadata, 'vendor', metadata['owner']),
@@ -41,12 +41,12 @@ def getIGoogleTemplate(gadgetData):
                               'gadgetHeight': notEmptyValueOrDefault(metadata, 'height', settings.DEFAULT_EZWEB_GADGET_HEIGHT),
                               'gadgetWidth': notEmptyValueOrDefault(metadata, 'width', settings.DEFAULT_EZWEB_GADGET_WIDTH),
                               'gadgetScreens': gadgetData['screens']})
-    return loader.render_to_string(path.join('resources','gadget','igoogleTemplate.xml'), igoogleContext);
+    return loader.render_to_string(path.join('resources','gadget','googleTemplate.xml'), googleContext);
 
-def getPlayerHTML(gadgetData):
+def getPlayerHTML(gadgetData, gadgetUri):
     metadata = gadgetData['metadata']
 
-    playerContext = Context({'gadgetUri': settings.MEDIA_URL,
+    playerContext = Context({'gadgetUri': gadgetUri,
                              'gadgetSlots': gadgetData['prec'],
                              'gadgetEvents': gadgetData['post'],
                              'gadgetScreens': gadgetData['screens']})
