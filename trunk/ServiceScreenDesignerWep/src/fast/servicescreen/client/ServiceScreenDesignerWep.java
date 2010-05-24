@@ -33,6 +33,7 @@ import fast.servicescreen.client.gui.RequestGUI;
 import fast.servicescreen.client.gui.RuleGUI;
 import fast.servicescreen.client.gui.SaveLoadJsonHandler;
 import fast.servicescreen.client.gui.codegen_js.CodeGenViewer;
+import fast.servicescreen.client.gui.codegen_js.CodeGenViewer.WrappingType;
 import fast.servicescreen.client.rpc.SendRequestHandler;
 import fujaba.web.runtime.client.FAction;
 import fujaba.web.runtime.client.FTest;
@@ -369,7 +370,7 @@ private TabPanel tabPanel;
       tabPanel.add(transformationTable, "Transformation");
  
       //Adding part three, just to test code generation, there is a show of selected rules, templates and the .js results
-      codeGenViewer = new CodeGenViewer(serviceScreen, false/*false = type is XML*/);
+      codeGenViewer = new CodeGenViewer(serviceScreen, WrappingType.WRAP_AND_REQUEST_XML /*TODO make that dynamic! See codegenViewer*/);
       tabPanel.add(codeGenViewer.createCodeGenViewer(), "CodeGen Viewer");
 }
 

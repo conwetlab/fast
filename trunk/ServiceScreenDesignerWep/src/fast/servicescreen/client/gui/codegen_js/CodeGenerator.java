@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import fast.common.client.BuildingBlock;
@@ -14,7 +15,7 @@ import fast.common.client.ServiceScreen;
 import fast.servicescreen.client.RequestService;
 import fast.servicescreen.client.RequestServiceAsync;
 import fast.servicescreen.client.gui.RuleUtil;
-import fast.servicescreen.client.gui.codegen_js.CodeGenViewer.RequestType;
+import fast.servicescreen.client.gui.codegen_js.CodeGenViewer.WrappingType;
 import fast.servicescreen.client.gui.parser.Kind;
 import fast.servicescreen.client.gui.parser.Operation;
 import fast.servicescreen.client.gui.parser.OperationHandler;
@@ -22,60 +23,66 @@ import fast.servicescreen.client.gui.parser.OperationHandler;
 /**
  * Use the constructor to create the first template
  * 
- * TODO s: generate dynamic input ports in html / generate JSON->JSON / save template changes into cdr
+ * TODO s: generate dynamic input ports in html /save template changes into cdr
  * */
 public class CodeGenerator
 {
 	public BuildingBlock screen = null;
-	private HashMap<String, String> table = null;
+	protected HashMap<String, String> table = null;
 	
 	//the reqestet source type
-	RequestType reqType;
+	WrappingType reqType;
 	
-	// private String endbrackets_forLoop = "";
-	private boolean writeFile_result = true;
-	private boolean firstOperation = true;
+	protected boolean firstOperation = true;
 	
 	//Operation names
-	private String trimBoth 	= "Trim(";
-	private String charsFromTo 	= "charsFromTo(";
-	private String wordsFromTo 	= "wordsFromTo(";
-	private String until 		= "until(";
-	private String _from 		= "from(";
+	protected String trimBoth 	 = "Trim(";
+	protected String charsFromTo = "charsFromTo(";
+	protected String wordsFromTo = "wordsFromTo(";
+	protected String until 		 = "until(";
+	protected String _from 		 = "from(";
 	
-	private String depth  = "   ";
-	private String depth2 = "      ";
-	private String depth3 = "         ";
-	private String depth4 = "            ";
-	private String depth5 = "               ";
+	protected String depth  = "   ";
+	protected String depth2 = "      ";
+	protected String depth3 = "         ";
+	protected String depth4 = "            ";
+	protected String depth5 = "               ";
 	
 	
-	public CodeGenerator(BuildingBlock screen, RequestType reqType)
+	public CodeGenerator(BuildingBlock screen)
 	{
 		this.screen = screen;
 		
-		this.reqType = reqType;
-		
-		setSendRequest();	//sets sendReq template to JSON or XML template
-		
-		//TODO same with transcode
+		//set up the templates for the specific code generator
+		setTemplates();
 	}
 	
 	public String resetTemplates()
 	{
 		//resets the templates
-		CodeGenerator tmp = new CodeGenerator(null, null);
+		CodeGenerator tmp = createEmptyGenerator();
 		rootTemplate = tmp.rootTemplate;
 		prehtml = tmp.prehtml;
 		posthtml = tmp.posthtml;
 		helperMethods = tmp.helperMethods;
-		setSendRequest();
 		
 		//resets some state variables
 		firstOperation = true;
 		operationStart = true;
 		
 		return rootTemplate;
+	}
+	
+	/**
+	 * This method returns an empty CodeGenerator.
+	 * 
+	 * Overwrite this method to create a spezific CodeGenerator, 
+	 * it will be used to reset the Generator and make the resetTemplates()
+	 * method work!
+	 * */
+	protected CodeGenerator createEmptyGenerator()
+	{
+		return new CodeGenerator(null);
 	}
 	
 	/**
@@ -104,7 +111,7 @@ public class CodeGenerator
 		return rootTemplate;
 	}
 
-	private void add_PreRequest_toTable()
+	protected void add_PreRequest_toTable()
 	{	
 		// lookup the gui request text field
 		if (screen instanceof ServiceScreen)
@@ -115,7 +122,7 @@ public class CodeGenerator
 	}
 	
 	@SuppressWarnings("unchecked")
-	private void add_PreRequestReplaces_toTable()
+	protected void add_PreRequestReplaces_toTable()
 	{	
 		// lookup the gui input ports
 		FactPort currentInpPort = null;
@@ -140,7 +147,7 @@ public class CodeGenerator
 	}
 	
 	@SuppressWarnings("unchecked")
-	private void add_InPorts_toTable()
+	protected void add_InPorts_toTable()
 	{	
 		// lookup the gui input ports
 		String inputPortText = "";
@@ -162,15 +169,15 @@ public class CodeGenerator
 		table.put("<<inputportlist>>", inputPortText);
 	}
 
-	private void add_SendRequest_toTable()
+	protected void add_SendRequest_toTable()
 	{
 		//add result in the table
 		table.put("<<sendrequest>>", sendrequest);
 	}
 	
-	private String transCode = "";
-	private String currentTags = "currentTags";
-	private void add_Translation_toTable()
+	protected String transCode = "";
+	protected String currentTags = "currentTags";
+	protected void add_Translation_toTable()
 	{
 		transCode = "";
 		
@@ -183,8 +190,8 @@ public class CodeGenerator
 		table.put("<<transformationCode>>", transCode);
 	}
 	
-	private boolean operationStart = true;
-	private void transform(FASTMappingRule rule, String codeIndent)
+	protected boolean operationStart = true;
+	protected void transform(FASTMappingRule rule, String codeIndent)
 	{
 		boolean hasOpenSqareBracket = false;
 		boolean hasOpenForLoop = false;
@@ -354,7 +361,7 @@ public class CodeGenerator
 	/**
 	 * append code for given operation into tmpCode and return that
 	 * */
-	private String createOperationCode(String tmpCode, Operation op)
+	protected String createOperationCode(String tmpCode, Operation op)
 	{
 		switch(op.kind)
 		{
@@ -389,7 +396,7 @@ public class CodeGenerator
 	 * to add code into transCode
 	 * */
 	@SuppressWarnings("unchecked")
-	private void callTransformForKids(FASTMappingRule rule, String codeIndent)
+	protected void callTransformForKids(FASTMappingRule rule, String codeIndent)
 	{
 		for (Iterator<FASTMappingRule> kidIter = rule.iteratorOfKids(); kidIter.hasNext();)
 		{
@@ -403,7 +410,7 @@ public class CodeGenerator
 	 * 
 	 * Returns the filled template.
 	 * */
-	private String expandTemplateKeys(String template)
+	protected String expandTemplateKeys(String template)
 	{
 		for (String key : table.keySet()) 
 		{
@@ -416,7 +423,7 @@ public class CodeGenerator
 	}
 	
 	
-	private String replaceKey(String text, String key, String value) 
+	protected String replaceKey(String text, String key, String value) 
 	{
 		// find key and replace by value
 		String result = text;
@@ -428,12 +435,12 @@ public class CodeGenerator
 		return result;
 	}
 
-	private static RequestServiceAsync service;
+	protected static RequestServiceAsync service;
 	/**
 	 * This method send the current template to
 	 * an service which writes a js and a html file with it as content. 
 	 * */
-	public boolean write_JS_File()
+	public void write_JS_File()
 	{
 		if (service == null)
 		{ 
@@ -446,26 +453,19 @@ public class CodeGenerator
 					@Override
 					public void onSuccess(String result)
 					{
-						com.google.gwt.user.client.Window.alert(result);
-						//						if(RuleUtil.getBool(result))
-						//						{
-						//							//If onSucces, and result = "true", return true
-						//							writeFile_result = true;
-						//						}
-						//						else
-						//						{
-						//							writeFile_result = false;
-						//						}
+						GWT.log("Writing .js file to RequestService succed..", null);
+						
+						Window.alert(result);
 					}
 
 					@Override
 					public void onFailure(Throwable caught)
 					{
-						writeFile_result = false;
+						GWT.log("ERROR while writing .js file to RequestService..", null);
+						
+						Window.alert(caught.getLocalizedMessage());
 					}
 				});
-
-		return writeFile_result;
 	}
 	
 	
@@ -473,101 +473,89 @@ public class CodeGenerator
 	// -------------- the template strings -------------- //
 	
 	
-	/**
+	/** 
 	 * This string contains template code for JSON or XML
 	 * requests, decided by the CodeGenerators constructor given RequestType.
+	 * 
+	 * Is setted up in method setTemplates
 	 * */
-	public String sendrequest = "";
-	private void setSendRequest()
-	{
-		if(reqType == RequestType.JSON)
-		{
-			sendrequest = sendreq_JSON;
-		}
-		else
-		{
-			sendrequest = sendreq_XML;
-		}
-	}
+	String sendrequest = "";
 	
-	private String sendreq_JSON = 	
-		depth2 + "var jsonRespone = null; \n\n" + 
-		depth2 + "var requestServletUrl = window.location.protocol + '//' + window.location.host  + '/ServiceDesignerWep/servicescreendesignerwep/requestServlet?url='; \n" +
-		depth2 + "requestServletUrl + encodeURIComponent(request)" + 
-		depth2 + "var ajaxRequest = new ajaxObject('XXXXXXXX'); \n\n" + 
-		
-		depth2 + "ajaxRequest.callback = function (responseText) { \n" + 
-			depth3 + "jsonRespone = responseText.parseJSON(); \n" + 
-			depth3 + "//TODO" + 
-		depth2 + "} \n\n";
-	
-	private String sendreq_XML =
-		depth2 + "var xmlHttp = null; \n" + 
-		depth2 + "var xmlResponse = null; \n" + 
-		depth2 + "try \n" +
-		depth2 + "{ \n" + 
-		   depth3 + "xmlHttp = new XMLHttpRequest(); \n" + 
-		depth2 + "} \n" +
-		depth2 + "catch(e) \n" +
-		depth2 + "{ \n" + 
-		   depth3 + "try \n" +
-		   depth3 + "{ \n" + 
-		      depth4 + "xmlHttp  = new ActiveXObject('Microsoft.XMLHTTP'); \n" + 
-		   depth3 + "} \n" +
-		   depth3 + "catch(e) \n" +
-		   depth3 + "{ \n" + 
-		      depth4 + "try \n" +
-		      depth4 + "{ \n" + 
-		         depth5 + "xmlHttp  = new ActiveXObject('Msxml2.XMLHTTP'); \n" + 
-		      depth4 + "} \n" +
-		      depth4 + "catch(e) \n" +
-		      depth4 + "{ \n" + 
-		         depth5 + "xmlHttp  = null; \n" + 
-		      depth4 + "} \n" + 
-		   depth3 + "} \n" + 
-		depth2 + "} \n\n" + 
-		
-		depth2 + "if (xmlHttp) \n" +
-		depth2 + "{ \n" + 
-  	       depth3 + "var requestServletUrl = window.location.protocol + '//' + window.location.host  + '/ServiceDesignerWep/servicescreendesignerwep/requestServlet?url='; \n" +
-		   depth3 + "xmlHttp.open('GET', requestServletUrl + encodeURIComponent(request), true); \n" + 
-		   depth3 + "xmlHttp.onreadystatechange = function () { \n" + 
-		      depth4 + "if (xmlHttp.readyState == 4) \n" +
-		      depth4 + "{ \n" + 
-		         depth5 + "xmlResponse = xmlHttp.responseXML; \n\n" + 
-		         depth5 + "var currentTags = null; \n\n" +
-		         depth5 + "var currentCount = null; \n\n" +
-		         depth5 + "var result = new String(''); \n\n" +
-
-		         depth5 + "<<transformationCode>>\n\n" +
-
-   	             depth5 + "document.getElementById('show').value = '{' + result + '}'; \n" + 
-		      depth4 + "} \n" + 
-		   depth3 + "} \n" + 
-		depth2 + "}\n\n" +
-		depth2 + "xmlHttp.send(null); \n\n" + 
-		depth2 + "return 'waiting for response...'; \n" + 
-		depth + "} \n";
-	
-	
-	//fill the rootTemplate
-	public String rootTemplate = 
+	/**
+	 * Contains root template and is setted up in
+	 * setTemplates method
+	 * */
+	String rootTemplate = 
 		//declare method rump 
-		depth + "function transform(<<inputportlist>>) \n" +
+		depth + "function transform(<<inputportlist>>)\n" +
 		depth + "{\n" +
-		
-		//fill request url
-		depth2 + "var prerequest = '<<prerequest>>'; \n\n" +
-		
-		//should replace inports to real values in runtime!
-		depth2 + "<<prerequestreplaces>> \n\n" +
-		
-		//save the complete url with an xmlHttp request (made for Ajax access to SameDomain Resources)
-		depth2 + "var request = prerequest; \n" +
-		"\n" +
-		
-		//sending/recieving the request
-		depth2 + "<<sendrequest>> \n";
+			//fill request url
+			depth2 + "var prerequest = '<<prerequest>>';\n" +
+			
+			//should replace inports to real values in runtime!
+			depth2 + "<<prerequestreplaces>>\n\n" +
+			
+			//save the complete url with an xmlHttp request (made for Ajax access to SameDomain Resources)
+			depth2 + "var request = prerequest;\n" +
+			
+			//sending/recieving the request
+			depth2 + "<<sendrequest>>\n";
+	
+	/**
+	 * This method is used to overwrite and set up
+	 * templates this way
+	 * */
+	protected void setTemplates()
+	{
+		//set up sendRequest for wrapping requested XML
+		sendrequest = 
+			depth2 + "var xmlHttp = null; \n" + 
+			depth2 + "var xmlResponse = null; \n" + 
+			depth2 + "try \n" +
+			depth2 + "{ \n" + 
+			   depth3 + "xmlHttp = new XMLHttpRequest(); \n" + 
+			depth2 + "} \n" +
+			depth2 + "catch(e) \n" +
+			depth2 + "{ \n" + 
+			   depth3 + "try \n" +
+			   depth3 + "{ \n" + 
+			      depth4 + "xmlHttp  = new ActiveXObject('Microsoft.XMLHTTP'); \n" + 
+			   depth3 + "} \n" +
+			   depth3 + "catch(e) \n" +
+			   depth3 + "{ \n" + 
+			      depth4 + "try \n" +
+			      depth4 + "{ \n" + 
+			         depth5 + "xmlHttp  = new ActiveXObject('Msxml2.XMLHTTP'); \n" + 
+			      depth4 + "} \n" +
+			      depth4 + "catch(e) \n" +
+			      depth4 + "{ \n" + 
+			         depth5 + "xmlHttp  = null; \n" + 
+			      depth4 + "} \n" + 
+			   depth3 + "} \n" + 
+			depth2 + "} \n\n" + 
+			
+			depth2 + "if (xmlHttp) \n" +
+			depth2 + "{ \n" + 
+	  	       depth3 + "var requestServletUrl = window.location.protocol + '//' + window.location.host  + '/ServiceDesignerWep/servicescreendesignerwep/requestServlet?url='; \n" +
+			   depth3 + "xmlHttp.open('GET', requestServletUrl + encodeURIComponent(request), true); \n" + 
+			   depth3 + "xmlHttp.onreadystatechange = function () { \n" + 
+			      depth4 + "if (xmlHttp.readyState == 4) \n" +
+			      depth4 + "{ \n" + 
+			         depth5 + "xmlResponse = xmlHttp.responseXML; \n\n" + 
+			         depth5 + "var currentTags = null; \n\n" +
+			         depth5 + "var currentCount = null; \n\n" +
+			         depth5 + "var result = new String(''); \n\n" +
+
+			         depth5 + "<<transformationCode>>\n\n" +
+
+	   	             depth5 + "document.getElementById('show').value = '{' + result + '}'; \n" + 
+			      depth4 + "} \n" + 
+			   depth3 + "} \n" + 
+			depth2 + "}\n\n" +
+			depth2 + "xmlHttp.send(null); \n\n" + 
+			depth2 + "return 'waiting for response...'; \n" + 
+			depth + "} \n";
+	}
 	
 	/**
 	 * contains html end

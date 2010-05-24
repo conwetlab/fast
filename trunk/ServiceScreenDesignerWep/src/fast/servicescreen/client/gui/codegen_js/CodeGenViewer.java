@@ -1,6 +1,5 @@
 package fast.servicescreen.client.gui.codegen_js;
 
-import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -17,6 +16,7 @@ import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.user.client.ui.FlexTable.FlexCellFormatter;
 
 import fast.common.client.BuildingBlock;
+import fast.mediation.client.gui.MediationRuleGUI;
 
 /**
  * This Tab should show result steps of code generation.
@@ -29,24 +29,38 @@ public class CodeGenViewer
 	public CodeGenerator generator = null;
 	
 	/**
-	 * A type should be set, that marks if we handle XML or JSON
+	 * A type should be set, that marks if we handle XML or JSON, and if we have to request or get
+	 * the data
 	 * */
-	static enum RequestType
+	public static enum WrappingType
 	{
-		XML, JSON;
+		WRAP_AND_REQUEST_XML, 
+		WRAP_AND_REQUEST_JSON, 
+		WRAP_JSON;
 	}
 	
-	public CodeGenViewer(BuildingBlock screen, boolean isJSON)
+	//TODO! Typesetting should be dynamic! not a param while createing!
+	public CodeGenViewer(BuildingBlock screen, WrappingType type)
 	{
-		if(isJSON)
+		switch(type)
 		{
-			generator = new CodeGenerator(screen, RequestType.JSON);
-		}
-		else
-		{
-			generator = new CodeGenerator(screen, RequestType.XML);
+			case WRAP_AND_REQUEST_XML  : generator = new CodeGenerator(screen);			//SDW XML
+										 break;
+										
+			case WRAP_AND_REQUEST_JSON : generator = new CodeGenerator_reqJSON(screen); //SDW JSON
+										 break;
 		}
 	}
+	
+	public CodeGenViewer(BuildingBlock screen, WrappingType type, MediationRuleGUI gui)
+	{
+		switch(type)
+		{
+			case WRAP_JSON	:	generator = new CodeGenerator_JSON(screen, gui);	//DataMediation Tool
+								break;
+		}
+	}
+	
 
 	ListBox choosenTemplate = null;
 	/**
@@ -105,14 +119,7 @@ public class CodeGenViewer
 			@Override
 			public void onClick(ClickEvent event)
 			{
-					if(generator.write_JS_File())
-					{
-						GWT.log("Writing .js file to RequestService succed..", null);
-					}
-					else
-					{
-						GWT.log("ERROR while writing .js file to RequestService..", null);
-					}
+					generator.write_JS_File();
 			}
 		});
 		

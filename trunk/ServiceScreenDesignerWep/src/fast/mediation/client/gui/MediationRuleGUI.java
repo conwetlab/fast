@@ -43,6 +43,14 @@ public class MediationRuleGUI extends RuleGUI
 	private JSONValue jsonValue;
 	
 	/**
+	 * Returns the current json value from the RuleGUI
+	 * */
+	public JSONValue getJSONValue()
+	{
+		return jsonValue;
+	}
+	
+	/**
     * creates and returns a flextable containing the trees
     * for translation design
     * */

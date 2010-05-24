@@ -143,34 +143,39 @@ public class RuleUtil
 	    * */
 	   public static String getJSONValue_AsString(JSONValue jsonValue)
 	   {
-		   //Define JSON valuetype. Get its sting value 
-		   String nodeValue = "";
-		   JSONBoolean attrBoolean = jsonValue.isBoolean();
-		   JSONNumber attrNumber = jsonValue.isNumber();
-		   JSONString attrString = jsonValue.isString();
-		   
-		   if(attrBoolean != null)
+		   if(jsonValue != null)
 		   {
-			   nodeValue = "" + attrBoolean.booleanValue();
-		   }
-		   else if(attrNumber != null)
-		   {
-			   nodeValue = "" + attrNumber.doubleValue();
-		   }
-		   else if(attrString != null)
-		   {
-			   String stringValue = attrString.stringValue();
-			   if(stringValue != null && !"".equals(stringValue.trim()))
+				   		   //Define JSON valuetype. Get its sting value 
+			   String nodeValue = "";
+			   JSONBoolean attrBoolean = jsonValue.isBoolean();
+			   JSONNumber attrNumber = jsonValue.isNumber();
+			   JSONString attrString = jsonValue.isString();
+			   
+			   if(attrBoolean != null)
 			   {
-				   nodeValue = "" + stringValue;
+				   nodeValue = "" + attrBoolean.booleanValue();
 			   }
-			   else
+			   else if(attrNumber != null)
 			   {
-				   nodeValue = "";
+				   nodeValue = "" + attrNumber.doubleValue();
 			   }
+			   else if(attrString != null)
+			   {
+				   String stringValue = attrString.stringValue();
+				   if(stringValue != null && !"".equals(stringValue.trim()))
+				   {
+					   nodeValue = "" + stringValue;
+				   }
+				   else
+				   {
+					   nodeValue = "";
+				   }
+			   }
+			   
+			   return nodeValue;
 		   }
 		   
-		   return nodeValue;
+		   return "";
 	   }
 	   
 	   /**

@@ -29,6 +29,7 @@ import fast.servicescreen.client.FastTool;
 import fast.servicescreen.client.gui.CTextChangeHandler;
 import fast.servicescreen.client.gui.PortGUI;
 import fast.servicescreen.client.gui.codegen_js.CodeGenViewer;
+import fast.servicescreen.client.gui.codegen_js.CodeGenViewer.WrappingType;
 import fast.servicescreen.client.rpc.SendRequestHandler;
 import fujaba.web.runtime.client.FAction;
 import fujaba.web.runtime.client.FTest;
@@ -265,9 +266,8 @@ public class DataTransformationTool extends FastTool implements EntryPoint
 	     
 		tabPanel.add(transformationTable, "exTransformation");
 		 
-		
 		//Adding part three, just to test code generation, there is a show of selected rules, templates and the .js results
-		codeGenViewer = new CodeGenViewer(trafoOperator, true /*true = type is JSON*/); 
+		codeGenViewer = new CodeGenViewer(trafoOperator, WrappingType.WRAP_JSON, ruleGUI); 
 		tabPanel.add(codeGenViewer.createCodeGenViewer(), "CodeGen Viewer");
 	}
 	
