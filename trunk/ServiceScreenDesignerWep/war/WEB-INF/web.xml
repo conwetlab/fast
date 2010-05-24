@@ -31,6 +31,7 @@
   <servlet-mapping>
     <servlet-name>reqService</servlet-name>
     <url-pattern>/servicescreendesignerwep/request</url-pattern>
+    <url-pattern>/fast.mediation.DataTransformationTool/request</url-pattern>
     <url-pattern>/request</url-pattern>
   </servlet-mapping>
   
@@ -39,7 +40,7 @@
   
   <servlet>
     <servlet-name>standaloneRequestService</servlet-name>
-    <servlet-class>fast.servicescreen.server.RequestServlet</servlet-class>
+    <servlet-class>fast.servicescreen.server.RequestServlet</servlet-class> 
   </servlet>
 
   <servlet-mapping>
