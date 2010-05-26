@@ -186,6 +186,14 @@ var FormDialog = Class.create( /** @lends FormDialog.prototype */ {
     },
 
     /**
+     * This function sets the dialog title
+     * @private
+     */
+    _setTitle: function (/** String */ title){
+        this._dialog.setAttribute('title', title);
+    },
+
+    /**
      * This function set the form content based on a array-like
      * structure, containing the different elements of the form,
      * and, optionally, form parameters

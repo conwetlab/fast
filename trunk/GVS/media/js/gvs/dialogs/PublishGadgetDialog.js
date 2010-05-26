@@ -11,7 +11,7 @@ var PublishGadgetDialog = Class.create(ConfirmDialog /** @lends PublishGadgetDia
         /**
          * Publication Info
          * @private
-         * @type String
+         * @type Object
          */
         this._publication = null;
 
@@ -24,7 +24,7 @@ var PublishGadgetDialog = Class.create(ConfirmDialog /** @lends PublishGadgetDia
 
         /**
          * Standalone Dialog
-         * @type Hash
+         * @type StandaloneEmbeddingDialog
          * @private
          */
         this._standaloneDialog = null;
@@ -77,7 +77,9 @@ var PublishGadgetDialog = Class.create(ConfirmDialog /** @lends PublishGadgetDia
         }
         if (options.mashupPlatform == 'standalone'){
             if (!this._standaloneDialog){
-                this._standaloneDialog = new StandaloneEmbeddingDialog(this._publication.name, url);
+                this._standaloneDialog = new StandaloneEmbeddingDialog(this._publication, url);
+            } else {
+                this._standaloneDialog.updateDialog(this._publication, url);
             }
             this._standaloneDialog.show();
         } else {

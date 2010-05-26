@@ -5,7 +5,7 @@ var StandaloneEmbeddingDialog = Class.create(ConfirmDialog /** @lends PreviewDia
      * @constructs
      * @extends ConfirmDialog
      */
-    initialize: function($super, /** String */ title, /** String url */ url) {
+    initialize: function($super, /** Object */ publication, /** String */ url) {
 
         /**
          * URL to embed
@@ -14,12 +14,31 @@ var StandaloneEmbeddingDialog = Class.create(ConfirmDialog /** @lends PreviewDia
          */
         this._url = url;
 
-        $super('Embedding of ' + title + ' Standalone Gadget', ConfirmDialog.OK);
+        /**
+         * Publication info
+         * @private
+         * @type Object
+         */
+        this._publication = publication;
+
+        $super(this._getDialogTitle(this._publication.name), ConfirmDialog.OK);
         this._setContent(content);
     },
 
 
     // **************** PUBLIC METHODS **************** //
+
+    /**
+     * updateDialog
+     * Updates dialog header and content
+     * @public
+     */
+    updateDialog: function (/** Object */ publication, /** String */ url) {
+        this._url = url;
+        this._publication = publication;
+        this._initDialogInterface();
+        this._setTitle(this._getDialogTitle(this._publication.name), null);
+    },
 
     // **************** PRIVATE METHODS **************** //
 
@@ -41,13 +60,32 @@ var StandaloneEmbeddingDialog = Class.create(ConfirmDialog /** @lends PreviewDia
     },
 
     /**
-     * initDialogInterface
+     * getEmbedding
      * This function creates the dom structure and
      * @private
      * @override
      */
     _getEmbedding: function () {
-        return ('<object data="' + this._url + '" height="600" width="400" class="embed"></object>').escapeHTML();
+        var height = this._publication.height;
+        if (!height || height == ''){
+            height = '600';
+        }
+        var width = this._publication.width;
+        if (!width || width == ''){
+            width = '400';
+        }
+        return ('<object data="' + this._url + '" height="'+ height
+                + '" width="' + width + '" class="embed"></object>').escapeHTML();
+    },
+
+    /**
+     * getDialogTitle
+     * This function returns the dialog title
+     * @private
+     * @override
+     */
+    _getDialogTitle: function (/** String */ name) {
+        return 'Embedding of ' + name + ' Standalone Gadget';
     }
 
 });
