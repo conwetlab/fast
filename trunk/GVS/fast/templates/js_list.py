@@ -1,5 +1,7 @@
 file_list = [
+    # Libs
     "lib/cjson_parse/cjson_parse.js",
+    "lib/codemirror/js/codemirror.js",
 
     # Drag n Drop support
     "gvs/dragndrop/DragHandler.js",
@@ -56,6 +58,7 @@ file_list = [
     "gvs/documents/DocumentController.js",
     "gvs/documents/ScreenflowDocument.js",
     "gvs/documents/ScreenDocument.js",
+    "gvs/documents/BuildingBlockDocument.js",
 
     # Cache
     "gvs/cache/ScreenCanvasCache.js",

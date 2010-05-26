@@ -445,7 +445,8 @@ class Sharing(resource.Resource):
 
             data = simplejson.loads(bb.data)
 
-            self.__updateCode(bb, data)
+            code = request.POST.get('code', None)
+            self.__updateCode(bb, data, code)
 
             if (bb.uri == None) or (bb.uri == ''):
                 conn = Connection(cleanUrl(bb.get_catalogue_url()))
@@ -498,13 +499,19 @@ class Sharing(resource.Resource):
             return HttpResponseServerError(json_encode({'message':unicode(e)}), mimetype='application/json; charset=UTF-8')
 
 
-    def __updateCode(self, buildingblock, data):
+    def __updateCode(self, buildingblock, data, external_code=None):
         c = BuildingBlockCode.objects.get_or_create(buildingBlock=buildingblock)[0]
+
+        # getting code
         code = None
-        if data.has_key('code'):
-            code = data.get('code')
+        if external_code:
+            code = external_code
+        elif data.has_key('code'):
+            code_url = data.get('code')
             if (validate_url(code)):
-                code = download_http_content(code)
+                code = download_http_content(code_url)
+
+        if code:
             if buildingblock.type == 'screen':
                 context = Context({'screenId': str(buildingblock.id)})
                 t = Template(code)
@@ -513,6 +520,7 @@ class Sharing(resource.Resource):
                 context = Context({'name': 'BB' + str(buildingblock.id), 'code': code})
                 t = loader.get_template('buildingblock/code.js')
                 code =  t.render(context)
+
         elif data.has_key('definition') and buildingblock.type == 'screen':
             definition = data.get('definition')
             for bbdefinition in definition['buildingblocks']:

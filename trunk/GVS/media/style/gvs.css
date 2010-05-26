@@ -1282,3 +1282,38 @@ pre {
     width: 40em;
     margin: 0px auto;
 }
+
+
+/***********************
+ * BuildingBlockEditor *
+ ***********************/
+.codeContainer {
+    position:absolute;
+    top: 40px;
+    bottom: 5px;
+    left: 0px;
+    right: 5px;
+}
+.codeContainer textarea {
+    width: 100%;
+    height: 100%;
+}
+.CodeMirror-wrapping {
+    height: 100%;
+    border: 1px dotted #AAA;
+} 
+
+.CodeMirror-line-numbers {
+     font-size: 9pt;
+     font-family: monospace;
+     padding-top: 5px;
+     border-right: 1px solid #AAAAAA;
+     color: #AAAAAA;
+     text-align:right;
+}
+
+.CodeMirror-line-numbers div {
+    padding: 4px 3px 0 3px;
+    line-height: 13px;
+    margin: 0px;
+}

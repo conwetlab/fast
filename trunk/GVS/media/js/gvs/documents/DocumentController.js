@@ -138,6 +138,33 @@ var DocumentController = Class.create(
     },
 
     /**
+     * Creates a new buildingblock document
+     */
+    createForm: function(/** String */ name, /** Array */ tags,
+                            /** String */ version){
+        this._createBuildingBlock(name,tags,version,
+            BuildingBlockDocument.FORM);
+    },
+
+    /**
+     * Creates a new buildingblock document
+     */
+    createOperator: function(/** String */ name, /** Array */ tags,
+                            /** String */ version){
+        this._createBuildingBlock(name,tags,version,
+            BuildingBlockDocument.OPERATOR);
+    },
+
+    /**
+     * Creates a new buildingblock document
+     */
+    createResource: function(/** String */ name, /** Array */ tags,
+                            /** String */ version){
+        this._createBuildingBlock(name,tags,version,
+            BuildingBlockDocument.RESOURCE);
+    },
+
+    /**
      * Opens a wrapper service session
      */
     openWrapperService: function() {
@@ -302,6 +329,22 @@ var DocumentController = Class.create(
         this.mine.addDocument(screen);
         screen.loadInstances();
     },
+
+    /**
+     * Creates a new Building block
+     * @private
+     */
+    _createBuildingBlock: function(/** String */ name, /** Array */ tags,
+                                  /** String */ version, /** String */ type) {
+        var buildingBlock = new BuildingBlockDocument(type, {
+            'name': name,
+            'tags': tags,
+            'version': version
+        });
+        this.addDocument(buildingBlock);
+        buildingBlock.createTextEditors();
+    },
+
 
     _onLoadError: function() {
         Utils.showMessage("Can not open the selected element", {

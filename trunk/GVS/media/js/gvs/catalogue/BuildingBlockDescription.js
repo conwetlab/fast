@@ -22,8 +22,8 @@ var BuildingBlockDescription = Class.create(
 
     /**
      * This function translate the stored properties into
-     * a JSON-like string
-     * @type String
+     * a JSON-like object
+     * @type Object
      */
     toJSON: function() {
         var result = {};
@@ -33,7 +33,7 @@ var BuildingBlockDescription = Class.create(
             }
         });
 
-        return Object.toJSON(result);
+        return result;
 
     },
 
@@ -59,6 +59,20 @@ var BuildingBlockDescription = Class.create(
      */
     isValid: function() {
         return true;
+    },
+
+    /**
+     * For document descriptions, return the existing canvas instancies
+     */
+    getCanvasInstances:function() {
+        return [];
+    },
+
+    /**
+     * For document descriptions, return the existing canvas instancies
+     */
+    getConditionInstances:function() {
+        return [];
     }
 
     // **************** PRIVATE METHODS **************** //

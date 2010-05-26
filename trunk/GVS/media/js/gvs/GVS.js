@@ -59,12 +59,17 @@ var GVS = Class.create(ToolbarModel,    /** @lends GVS.prototype */
         this._dialogs.set("addScreen", new AddScreenDialog());
         this._dialogs.set("newScreenflow", new NewBuildingBlockDialog('Screenflow'));
         this._dialogs.set("newScreen", new NewBuildingBlockDialog('Screen'));
+        this._dialogs.set("newForm", new NewBuildingBlockDialog('Form'));
+        this._dialogs.set("newOperator", new NewBuildingBlockDialog('Operator'));
+        this._dialogs.set("newResource", new NewBuildingBlockDialog('Resource'));
         this._dialogs.set("browseScreenflows", new ManageScreenflowsDialog());
         this._dialogs.set("browseScreens", new ManageScreensDialog());
         this._dialogs.set("preferences", new PreferencesDialog());
 
         this._actions = {
-            // browseScreenflow: this._browseScreenflow.bind(this),
+            newForm: this._newForm.bind(this),
+            newOperator: this._newOperator.bind(this),
+            newResource: this._newResource.bind(this),
             newScreenflow: this._newScreenflow.bind(this),
             addScreen: this._addScreen.bind(this),
             newScreen: this._newScreen.bind(this),
@@ -153,6 +158,36 @@ var GVS = Class.create(ToolbarModel,    /** @lends GVS.prototype */
     _newScreen: function(){
         this._dialogs.get("newScreen").show();
     },
+
+    /**
+     * High-level action for creating a new form.
+     *
+     * @private
+     */
+    _newForm: function(){
+        this._dialogs.get("newForm").show();
+    },
+
+
+    /**
+     * High-level action for creating a new operator.
+     *
+     * @private
+     */
+    _newOperator: function(){
+        this._dialogs.get("newOperator").show();
+    },
+
+
+    /**
+     * High-level action for creating a new resource.
+     *
+     * @private
+     */
+    _newResource: function(){
+        this._dialogs.get("newResource").show();
+    },
+
 
     /**
      * High-level action for adding a new screen to the catalogue
@@ -253,6 +288,39 @@ var GVS = Class.create(ToolbarModel,    /** @lends GVS.prototype */
                                     'shortcut': 'Alt+N'
                                 }),
                                 'group': 0
+                            },
+                            'newOperator': {
+                                'type': 'Action',
+                                'action': new MenuAction({
+                                    'label': 'Operator',
+                                    'weight': 2,
+                                    'handler': function(){
+                                        this.action("newOperator")
+                                    }.bind(this),
+                                }),
+                                'group': 1
+                            },
+                            'newForm': {
+                                'type': 'Action',
+                                'action': new MenuAction({
+                                    'label': 'Form',
+                                    'weight': 1,
+                                    'handler': function(){
+                                        this.action("newForm")
+                                    }.bind(this),
+                                }),
+                                'group': 1
+                            },
+                            'newResource': {
+                                'type': 'Action',
+                                'action': new MenuAction({
+                                    'label': 'Resource',
+                                    'weight': 3,
+                                    'handler': function(){
+                                        this.action("newResource")
+                                    }.bind(this),
+                                }),
+                                'group': 1
                             }
                         }
                     },

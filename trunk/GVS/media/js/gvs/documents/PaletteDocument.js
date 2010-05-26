@@ -287,7 +287,9 @@ var PaletteDocument = Class.create(AbstractDocument, /** @lends PaletteDocument.
 
         this._renderPaletteArea();
         this._configureToolbar();
-        Utils.showMessage("Loading building blocks");
+        if (this._buildingBlockSets.size() > 0) {
+            Utils.showMessage("Loading building blocks");
+        }
         var paletteStatus = this._getEmptyPalette();
 
 
@@ -623,13 +625,17 @@ var PaletteDocument = Class.create(AbstractDocument, /** @lends PaletteDocument.
         if (showMessage) {
             Utils.showMessage("Saving " + this._typeName);
         }
+        var params = {'buildingblock':
+            Object.toJSON(this._description.toJSON())
+        };
+        params = Object.extend(params, this._getExtraParams());
         if (this._description.getId() == null) {
             // Save it for the first time
-            PersistenceEngine.sendPost(this._getSaveUri(), {'buildingblock':  Object.toJSON(this._description.toJSON())}, null,
+            PersistenceEngine.sendPost(this._getSaveUri(), params, null,
                                        this, this._onSaveSuccess, this._onSaveError);
         } else {
             var uri = URIs.buildingblock + this._description.getId();
-            PersistenceEngine.sendUpdate(uri, {'buildingblock': Object.toJSON(this._description.toJSON())}, null,
+            PersistenceEngine.sendUpdate(uri, params, null,
                                       this, this._onSaveSuccess, this._onSaveError);
         }
     },
@@ -793,6 +799,15 @@ var PaletteDocument = Class.create(AbstractDocument, /** @lends PaletteDocument.
      */
     _updatePanes: function() {
         // Do nothing
+    },
+
+    /**
+     * Returns extra params for specific building blocks
+     * @type Object
+     * @private
+     */
+    _getExtraParams: function() {
+        return {};
     },
 
     /**

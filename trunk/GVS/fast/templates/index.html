@@ -66,6 +66,7 @@
             var browser = new BrowserChecker();
 
             var URIs = new Object();
+            URIs.absolutePath = window.location.protocol + "//" + window.location.host + "/";
             URIs.store = "storage/";
             URIs.storePlayScreenflow = "storage/player";
             // Catalogue URIs
@@ -91,6 +92,12 @@
             URIs.screenSearch = URIs.screen + "/search";
             URIs.screenflow = "buildingblock/screenflow";
             URIs.screenflowSearch = URIs.screenflow + "/search";
+            URIs.operator = "buildingblock/operator";
+            URIs.resource = "buildingblock/resurce";
+            URIs.form = "buildingblock/form";
+            URIs.operatorSearch = URIs.operator + "/search";
+            URIs.resourceSearch = URIs.resource + "/search";
+            URIs.formSearch = URIs.form + "/search";
             URIs.userPreferences = "user/preferences";
             URIs.logoFast = "{{ MEDIA_URL }}images/gui/fastLogo.png";
             URIs.screenImageNotFound = "{{ MEDIA_URL }}images/gui/imageNotFound.png";
