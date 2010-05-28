@@ -24,7 +24,9 @@ var ScreenComponent = Class.create(PaletteComponent,
      * @override
      */
     _createView: function () {
-        return new ScreenView(this._buildingBlockDescription);
+        var view = new ScreenView(this._buildingBlockDescription);
+        this._createTooltip(view.getNode(), this._buildingBlockDescription);
+        return view;
     },
 
     /**

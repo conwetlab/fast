@@ -23,7 +23,9 @@ var FormComponent = Class.create(PaletteComponent,
      * @override
      */
     _createView: function () {
-        return new FormSnapshotView(this._buildingBlockDescription);
+        var view =  new FormSnapshotView(this._buildingBlockDescription);
+        this._createTooltip(view.getNode(), this._buildingBlockDescription);
+        return view;
     },
 
     /**
@@ -41,8 +43,25 @@ var FormComponent = Class.create(PaletteComponent,
      */
     _getTitle: function () {
         return this._buildingBlockDescription.label['en-gb'];
-    }
+    },
 
+    /**
+     * This function returns a list with all the
+     * preconditions of the component.
+     * @type Array
+     * @override
+     */
+    _getPreConditions: function() {
+        var result = [];
+        var actions = this._buildingBlockDescription.actions;
+        for (var i=0; actions && i < actions.length; i++) {
+            var preconditions = actions[i].preconditions;
+            for (var j=0; preconditions && j < preconditions.length; j++) {
+                result.push(preconditions[j]);
+            }
+        }
+        return result;
+    }
 });
 
 // vim:ts=4:sw=4:et:

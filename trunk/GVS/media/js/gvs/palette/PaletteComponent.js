@@ -163,6 +163,110 @@ var PaletteComponent = Class.create(DragSource,
 
        return this.getView().getNode().cumulativeOffset().left -
                 this.getView().getNode().cumulativeScrollOffset().left;
+    },
+
+    /**
+     * Creates a new Tooltip for the component view
+     * @type BuildingBlockView
+     * @private
+     */
+    _createTooltip: function (/*DomNode View*/ node) {
+        var screenName =this._buildingBlockDescription.getTitle();
+        var screenVersion =  this._buildingBlockDescription.version;
+        var screenDescription =  this._buildingBlockDescription.description['en-gb'];
+
+        var pres =  this._getPreConditions();
+        var posts =  this._getPostConditions();
+
+        var content = document.createElement('div');
+        var title = document.createElement('h3');
+        title.appendChild(document.createTextNode(screenName+' '));
+        var version = document.createElement('span');
+        version.style.color = '#444';
+        version.appendChild(document.createTextNode(screenVersion));
+        title.appendChild(version);
+        content.appendChild(title);
+
+        var description = document.createElement('p');
+        description.appendChild(document.createTextNode(screenDescription));
+        content.appendChild(description);
+
+        function buildTableConditions(conditions) {
+            var table = document.createElement('table');
+            for (var i=0;conditions && i < conditions.length; i++) {
+                var condition = conditions[i];
+                var label = condition.label['en-gb'];
+                var preFact = FactFactory.getFactIcon(condition, "embedded");
+
+                var td1 = document.createElement('td');
+                td1.style.border = 'none';
+                td1.style.width = '10%';
+                td1.appendChild(preFact.getNode());
+
+                var td2 = document.createElement('td');
+                td2.style.border = 'none';
+                td2.appendChild(document.createTextNode(label));
+
+                var tr = document.createElement('tr');
+                tr.appendChild(td1);
+                tr.appendChild(td2);
+
+                table.appendChild(tr);
+            }
+            return table;
+        }
+
+        if (pres && pres.length > 0) {
+            var inputFacts = document.createElement('h4');
+            inputFacts.appendChild(document.createTextNode('Input Facts:'));
+            content.appendChild(inputFacts);
+            content.appendChild(buildTableConditions(pres));
+        }
+        if (posts && posts.length > 0) {
+            var inputFacts = document.createElement('h4');
+            inputFacts.appendChild(document.createTextNode('Output Facts:'));
+            content.appendChild(inputFacts);
+            content.appendChild(buildTableConditions(posts));
+        }
+
+        var tip = new dijit.Tooltip({connectId:[node],
+            label:'<div style="max-width:300px">'+content.innerHTML+'</div>'});
+        tip.startup();
+    },
+
+    /**
+     * This function returns a list with all the
+     * preconditions of the component.
+     * @private
+     * @type Array
+     */
+    _getPreConditions: function() {
+        return this._getConditions("preconditions")
+    },
+
+    /**
+     * This function returns a list with all the
+     * postconditions of the component.
+     * @private
+     * @type Array
+     */
+    _getPostConditions: function() {
+        return this._getConditions("postconditions")
+    },
+
+    /**
+     * This function returns a list with all the
+     * conditions of the component.
+     * @private
+     * @type Array
+     */
+    _getConditions: function(/*String*/type) {
+        var result = [];
+        var conditions = this._buildingBlockDescription[type][0];
+        for (var i=0; conditions && i < conditions.length; i++) {
+            result.push(conditions[i]);
+        }
+        return result;
     }
 
 });
