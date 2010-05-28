@@ -13,7 +13,7 @@ var PrePostDescription = Class.create(BuildingBlockDescription,
     // ****************** PUBLIC METHODS ******************* //
 
     clone: function(){
-        return new PrePostDescription(JSON.parse(this.toJSON()));
+        return new PrePostDescription(this.toJSON());
     },
 
     // ******************** PRIVATE METHODS ************** //
