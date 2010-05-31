@@ -35,12 +35,6 @@ var PaletteDocument = Class.create(AbstractDocument, /** @lends PaletteDocument.
          */
         this._inferenceEngine = inferenceEngine;
 
-        /**
-         * Areas of the canvas
-         * @type Hash
-         * @private
-         */
-        this._areas = this._getAreas();
 
         /**
          * Building block sets of the palettes
@@ -99,18 +93,6 @@ var PaletteDocument = Class.create(AbstractDocument, /** @lends PaletteDocument.
          */
         this._mainBorderContainer = null;
 
-         /**
-         * Main border container
-         * @type dijit.layout.BorderContainer
-         * @private @member
-         */
-        this._designContainer = new dijit.layout.BorderContainer({
-            region: 'center',
-            design: 'sidebar',
-            splitter: true,
-            gutters: false
-        });
-
         /**
          * Has unsaved changes control variable
          * @type Boolean
@@ -126,7 +108,25 @@ var PaletteDocument = Class.create(AbstractDocument, /** @lends PaletteDocument.
          */
         this._pendingOperation = null;
 
-        this._renderMainUI();
+
+         /**
+         * Main border container
+         * @type dijit.layout.BorderContainer
+         * @private @member
+         */
+        this._designContainer = new dijit.layout.BorderContainer({
+            region: 'center',
+            design: 'sidebar',
+            splitter: true,
+            gutters: false
+        });
+
+        /**
+         * Areas of the canvas
+         * @type Hash
+         * @private
+         */
+        this._areas = this._getAreas();
 
         // Adding the dropping areas to the document
         this._areas.values().each(function(area) {
@@ -143,6 +143,7 @@ var PaletteDocument = Class.create(AbstractDocument, /** @lends PaletteDocument.
             }.bind(this));
         }.bind(this));
 
+        this._renderMainUI();
 
          /**
          * This property represents the selected element
