@@ -1,13 +1,22 @@
 package fast.servicescreen.client.gui.codegen_js;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 
 import fast.common.client.BuildingBlock;
+import fast.common.client.FASTMappingRule;
 import fast.mediation.client.gui.MediationRuleGUI;
+import fast.servicescreen.client.gui.RuleUtil;
+import fast.servicescreen.client.gui.parser.Kind;
+import fast.servicescreen.client.gui.parser.Operation;
+import fast.servicescreen.client.gui.parser.OperationHandler;
 
 public class CodeGenerator_JSON extends CodeGenerator
 {
 	MediationRuleGUI ruleGui = null;
+	
+	static final String value = "json";
 
 	public CodeGenerator_JSON(BuildingBlock screen, MediationRuleGUI gui)
 	{
@@ -42,15 +51,174 @@ public class CodeGenerator_JSON extends CodeGenerator
 	}
 	
 	@Override
-	protected void transform(fast.common.client.FASTMappingRule rule, String codeIndent)
+	protected void transform(FASTMappingRule rule, String codeIndent)
 	{
-		//Just a test at moment
+		boolean hasOpenSqareBracket = false;
+		boolean hasOpenForLoop = false;
 		
-		transCode +=
-					"var test1 = getJSONValue_byName(json, 'F1Drivers'); \n" + 
-					depth2 + "var test2 = getJSONValue_byName(test1, 'driverId'); \n\n" +
-		
-					depth2 + "alert('subValues are: ' + test2[0] + ' and ' + test2[1]); \n";
+		if(RuleUtil.isCompleteRule(rule) && rule.getOperationHandler() != null)
+		{
+			//get the current operationList 
+			OperationHandler opHandler = (OperationHandler) rule.getOperationHandler();
+			Iterator<ArrayList<Operation>> opList_iter = opHandler.getOperationlistIterator();
+			ArrayList<Operation> current_opList = null;
+			
+			String kind = rule.getKind();
+						
+			if ("createObject".equals(kind))
+			{
+				String tmpCode = "";
+				
+				//from to
+				String from = rule.getSourceTagname();
+				String target = rule.getTargetElemName();
+				
+				//If it is not just a strukture tag ( = tags insert by us, so user see JSON strukture better)
+				if(! from.endsWith("_Item"))//TODO????
+				{
+					//create indent for n1 JSON output
+					if(firstOperation)
+					{
+						tmpCode += "var indent = ''; \n";
+						
+						firstOperation = false;
+					}
+					else
+					{
+						tmpCode += codeIndent + "indent = indent + '   '; \n";
+					}
+					
+					
+					//create a elementcount variable name
+					String lengthName =  from + "_length";
+					
+					//get searched elementsList out of json value
+					tmpCode += codeIndent + "var " + from + " = getJSONValue_byName(" + value + ", '" + from + "'); \n";
+					
+					//fill element count variable
+					tmpCode += codeIndent + "var " + lengthName + " = " + from + ".length; \n\n";
+					
+					//increment var for loop
+					String countVar = from + "_Count";
+					
+					
+					//créate loop - code				
+					tmpCode += 
+						//declare loop rump
+						codeIndent + "for(var " + countVar + " = 0; " + countVar + " < " + lengthName + "; ++" + countVar + ")\n" +
+						codeIndent + "{\n" +
+								
+						//declare loop body
+						codeIndent + depth + currentTags + " = " + from + "[" + countVar + "];\n\n" +
+								
+						 //adds a current index variable
+						codeIndent + depth + "currentCount = " + countVar + "; \n\n";		
+					
+					hasOpenForLoop = true;
+							
+					 //adds a 'new object' in the result, jumps over types that are needles in JSON
+					if(target.endsWith("List"))
+					{
+						tmpCode += codeIndent + depth + "result += indent + '\"" + target + "\" : [ \\n'; \n";
+						hasOpenSqareBracket = true;
+					}
+					else
+					{
+						tmpCode += codeIndent + depth + "result += indent + '{ \\n'; \n\n";
+					}
+
+					//overtake loop in real transcode
+					transCode += tmpCode;
+				}
+			}
+			
+			else if ("fillAttributes".equals(kind))
+			{
+				String tmpCode;
+				
+				//Iterate over any opList entry
+				while(opList_iter.hasNext())
+				{
+					tmpCode = "";
+					String lastSourceTagname = "";
+					String attrName = rule.getTargetElemName();
+					
+					current_opList = opList_iter.next();
+					
+					//if constant
+					if(current_opList.size() > 0 && current_opList.get(0).kind == Kind.constant)
+					{
+						//add a constant
+						tmpCode += "'" + current_opList.get(0).value + "'";
+					}
+					//if operations
+					else
+					{
+						Operation lastTagnameOperation = opHandler.getLastTagnameOf(current_opList);
+						lastSourceTagname = lastTagnameOperation.value;
+						
+						//create code for getting the current (working)element list
+						tmpCode += trimBoth +  " currentTags['" + lastSourceTagname + "'] )";
+						
+						//create code for the hole operation list
+						int count = current_opList.indexOf(lastTagnameOperation) + 1;
+						for(; count < current_opList.size(); ++count)
+						{
+							Operation currentOp = current_opList.get(count);
+							
+							//create code for executing the currentOperation
+							tmpCode = createOperationCode(tmpCode, currentOp);
+						}
+					}
+					
+					
+					//overtake operation code in real transcode
+					if(operationStart)
+					{
+						transCode += codeIndent + "result += indent + '   \"" + attrName + "\" : \"' + " + tmpCode;
+						
+						operationStart = false;
+					}
+					else
+					{
+						transCode += tmpCode;	
+					}
+					
+					
+					//if there are more operationLists, add a '+' , else a ';'
+					if(opList_iter.hasNext())
+					{
+						transCode += " + ";
+					}
+					else
+					{
+						//means, we reach the last fillAttr. rule!
+						if(rule.getParent().getLastOfKids() == rule)
+						{
+							transCode += " + '\" \\n' + indent + '}, \\n'; \n";
+						}
+						else
+						{
+							transCode += " + '\", \\n'; \n";
+						}
+						
+						operationStart = true;
+					}
+				}
+			}
+			
+			callTransformForKids(rule, codeIndent + depth);
+			
+			if (hasOpenForLoop)
+			{
+				transCode += codeIndent + "} \n";
+			}
+			
+			if (hasOpenSqareBracket)
+			{
+				transCode += codeIndent + "result += ' ]\\n';";
+			}
+		}
 	}
 	
 	@Override
@@ -61,12 +229,16 @@ public class CodeGenerator_JSON extends CodeGenerator
 			//declare method rump 
 			depth + "function transform(unparsedJSON)\n" +
 			depth + "{\n" +
+				depth5 + "var result = ''; \n" +
+				depth5 + "var " + value + " = JSON.parse(unparsedJSON);\n" +
 			
-				depth2 + "var json = JSON.parse(unparsedJSON);\n" +
-			
-				//sending/recieving the request
-				depth2 + "<<transformationCode>>\n" +
+				//transform code
+				depth5 + "<<transformationCode>>\n\n" +
 		
+				//return result 
+				depth5 +  "return result; \n" + 
+				
+				
 			depth + "}\n\n";
 		
 		
