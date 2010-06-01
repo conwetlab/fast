@@ -511,6 +511,7 @@ class Sharing(resource.Resource):
             if (validate_url(code)):
                 code = download_http_content(code_url)
 
+        bbcodes = {}
         if code:
             if buildingblock.type == 'screen':
                 context = Context({'screenId': str(buildingblock.id)})
@@ -528,17 +529,18 @@ class Sharing(resource.Resource):
                 bbdata = simplejson.loads(bb.data)
                 bbdefinition['buildingblockId'] = bb.id
                 bbdefinition['type'] = bb.type
-                bbdefinition['libraries'] = bbdata.get('libraries')
                 bbdefinition['actions'] = bbdata.get('actions')
                 bbdefinition['parameter'] = simplejson.dumps(bbdefinition.get('parameter'))
                 bbc = get_object_or_404(BuildingBlockCode, buildingBlock=bb)
-                if bb.type == 'form':
-                    context = Context({'buildingblockId': 'BB' + str(bb.id), 'screenId': str(buildingblock.id), 'buildingblockInstance': bbdefinition['id']})
-                    t = Template(bbc.code)
-                    bbdefinition['code'] = t.render(context)
-                else:
-                    bbdefinition['code'] = bbc.code
-            context = Context({'id': buildingblock.id, 'name': buildingblock.name, 'definition': definition, 'pres': data.get('preconditions'), 'posts': data.get('postconditions')})
+                if not bbcodes.has_key(bb.id):
+                    if bb.type == 'form':
+                        context = Context({'buildingblockId': 'BB' + str(bb.id), 'screenId': str(buildingblock.id), 'buildingblockInstance': bbdefinition['id']})
+                        t = Template(bbc.code)
+                        code = t.render(context)
+                    else:
+                        code = bbc.code
+                    bbcodes[bb.id] = {'libraries': bbdata.get('libraries'), 'code': code, 'type': bbdefinition['type']}
+            context = Context({'id': buildingblock.id, 'name': buildingblock.name, 'definition': definition, 'codes': bbcodes.itervalues(), 'pres': data.get('preconditions'), 'posts': data.get('postconditions')})
             t = loader.get_template('buildingblock/screen.html')
             code =  t.render(context)
         c.code = code
