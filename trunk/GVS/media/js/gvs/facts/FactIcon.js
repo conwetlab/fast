@@ -27,18 +27,17 @@ var FactIcon = Class.create( /** @lends FactIcon.prototype */ {
          * @private
          */
         this._node = new Element ("div", {
-                "class": this._size + "_fact fact",
-                'title': this._fact.getDescription()
+                "class": this._size + "_fact fact"
                 });
 
         var contentLayer = new Element("div", {
-    	        "class": "contentLayer"
+                "class": "contentLayer"
                 });
         this._node.appendChild(contentLayer);
         contentLayer.update(this._fact.getShortcut());
 
         var recommendationLayer = new Element("div", {
-    	    "class": "recommendationLayer"
+            "class": "recommendationLayer"
             });
         this._node.appendChild(recommendationLayer);
     },
