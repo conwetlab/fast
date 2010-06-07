@@ -172,37 +172,12 @@ var ComponentInstance = Class.create(DragSource,
     },
 
     /**
-     * Gets the component position
-     * @type Object
-     * @public
-     */
-    getPosition: function() {
-        var left = parseInt(this.getHandlerNode().offsetLeft)-parseInt(this.getHandlerNode().getStyle("margin-left"));
-        var top = parseInt(this.getHandlerNode().offsetTop)-parseInt(this.getHandlerNode().getStyle("margin-top"));
-        var position = {
-            "left": left,
-            "top": top
-        };
-        return position;
-    },
-
-    /**
      * Gets the component orientation
      * @type Integer
      * @public
      */
     getOrientation: function() {
         return this._orientation;
-    },
-
-    /**
-     * Sets the component position
-     * @params Object
-     * @public
-     */
-    setPosition: function(/** Object */ position) {
-        this.getHandlerNode().style.left = position.left + "px";
-        this.getHandlerNode().style.top = position.top + "px";
     },
 
     /**
