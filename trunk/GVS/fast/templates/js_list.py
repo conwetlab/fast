@@ -71,7 +71,6 @@ file_list = [
 
     # Component instances
     "gvs/instances/ComponentInstance.js",
-    "gvs/instances/ScreenflowInstance.js",
     "gvs/instances/ScreenInstance.js",
     "gvs/instances/PrePostInstance.js",
     "gvs/instances/ResourceInstance.js",
