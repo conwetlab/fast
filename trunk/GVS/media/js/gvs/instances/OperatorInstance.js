@@ -141,17 +141,6 @@ var OperatorInstance = Class.create(ComponentInstance,
         $super();
     },
 
-
-    /*onStart: function() {
-        if (this._terminals) {
-            this._terminals.each(function(terminal){
-                terminal.wires.each(function(wire) {
-                    wire.element.setStyle({'display': 'none'});
-                });
-            });
-        }
-    },*/
-
     /**
      * On position update
      * @override

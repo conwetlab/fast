@@ -283,9 +283,7 @@ var ComponentInstance = Class.create(DragSource,
     /**
      * On position update
      */
-    onUpdate: function(/** Number */ x, /** Number */ y) {
-
-    },
+    onUpdate: function(/** Number */ x, /** Number */ y) {},
 
     /**
      * Drop event handler for the DragSource
@@ -424,7 +422,7 @@ var ComponentInstance = Class.create(DragSource,
         }
 
         if (condition.positive === false) {
-        	fact.addClassName('negative');
+            fact.addClassName('negative');
         }
 
         var description = condition.label['en-gb'];
