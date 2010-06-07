@@ -22,13 +22,6 @@ var ResourceInstance = Class.create(ComponentInstance,
     // **************** PUBLIC METHODS **************** //
 
     /**
-     * @override
-     */
-    getUri: function() {
-        return this._buildingBlockDescription.uri
-    },
-
-    /**
      * Creates the terminal
      */
     createTerminals: function(/** Function */ handlers) {

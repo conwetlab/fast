@@ -40,13 +40,6 @@ var FormInstance = Class.create(ComponentInstance,
     },
 
     /**
-     * @override
-     */
-    getUri: function() {
-        return this._buildingBlockDescription.uri;
-    },
-
-    /**
      * Creates the terminal
      */
     createTerminals: function(/** Hash */ handlers) {
