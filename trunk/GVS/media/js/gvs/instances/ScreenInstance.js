@@ -20,13 +20,6 @@ var ScreenInstance = Class.create(ComponentInstance,
     // **************** PUBLIC METHODS **************** //
 
     /**
-     * Somehow something the user can comprehend
-     * @override
-     */
-    getTitle: function() {
-        return this._buildingBlockDescription.label['en-gb'];
-    },
-    /**
      * @override
      */
     getInfo: function() {

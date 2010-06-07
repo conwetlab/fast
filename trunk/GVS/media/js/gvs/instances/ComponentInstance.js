@@ -72,11 +72,10 @@ var ComponentInstance = Class.create(DragSource,
     /**
      * Somehow something the user can comprehend
      * Implementing TableModel interface
-     * @abstract
      * @type String
      */
     getTitle: function() {
-        throw "Abstract method invocation. ComponentInstance::getTitle";
+        return this._buildingBlockDescription.getTitle();
     },
 
     /**
@@ -433,4 +432,3 @@ var ComponentInstance = Class.create(DragSource,
 });
 
 // vim:ts=4:sw=4:et:
-

@@ -22,16 +22,6 @@ var ResourceInstance = Class.create(ComponentInstance,
     // **************** PUBLIC METHODS **************** //
 
     /**
-     * Somehow something the user can comprehend
-     * Implementing TableModel interface
-     * @override
-     */
-    getTitle: function() {
-        return this._buildingBlockDescription.label['en-gb'];
-    },
-
-
-    /**
      * @override
      */
     getUri: function() {

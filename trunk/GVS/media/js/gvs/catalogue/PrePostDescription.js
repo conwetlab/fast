@@ -16,8 +16,6 @@ var PrePostDescription = Class.create(BuildingBlockDescription,
         return new PrePostDescription(this.toJSON());
     },
 
-    // ******************** PRIVATE METHODS ************** //
-
     /**
      * Overriding getTitle.
      * @type String
@@ -28,6 +26,8 @@ var PrePostDescription = Class.create(BuildingBlockDescription,
         }
         return this.title;
     },
+
+    // ******************** PRIVATE METHODS ************** //
 
     /**
      * Creates the title of the palette component

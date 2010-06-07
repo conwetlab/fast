@@ -29,15 +29,6 @@ var FormInstance = Class.create(ComponentInstance,
     // **************** PUBLIC METHODS **************** //
 
     /**
-     * Somehow something the user can comprehend
-     * Implementing TableModel interface
-     * @override
-     */
-    getTitle: function() {
-        return this._buildingBlockDescription.label['en-gb'];
-    },
-
-    /**
      * This function shows the dialog to change
      * the instance properties
      */

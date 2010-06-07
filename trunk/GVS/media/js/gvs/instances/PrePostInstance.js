@@ -61,15 +61,6 @@ var PrePostInstance = Class.create(ComponentInstance,
     // **************** PUBLIC METHODS **************** //
 
     /**
-     * Somehow something the user can comprehend
-     * Implementing TableModel interface
-     * @override
-     */
-    getTitle: function() {
-        return this._buildingBlockDescription.getTitle();
-    },
-
-    /**
      * This function returns the relevant info
      * to the properties table
      * Implementing TableModel interface
