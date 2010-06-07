@@ -43,16 +43,6 @@ var ScreenInstance = Class.create(ComponentInstance,
         this._dialog.show();
     },
 
-    /**
-     * This function returns a list with all the
-     * preconditions of the instance,
-     * ready to be set in the FactPane
-     * @type Array
-     */
-    getPreconditionTable: function(/** Hash */ reachability) {
-        return this._getConditionList("preconditions", reachability);
-    },
-
     // **************** PRIVATE METHODS **************** //
     /**
      * Creates a new View instance for the component

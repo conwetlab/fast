@@ -73,9 +73,33 @@ var BuildingBlockDescription = Class.create(
      */
     getConditionInstances:function() {
         return [];
-    }
+    },
+
+    getPreconditionsList: function() {
+        if (! this.actions) {
+            return this._getConditionsList("preconditions");
+        }
+        var result = [];
+        $A(this.actions).each(function(action) {
+            $A(action.preconditions).each(function(p){ result.push(p); });
+        });
+        return result;
+    },
+
+    getPostconditionsList: function() {
+        return this._getConditionsList("postconditions");
+    },
 
     // **************** PRIVATE METHODS **************** //
+
+    _getConditionsList: function(type){
+        if (this[type].length > 1){ //More than one set of conditions
+            console.log("OR support not implemented yet");
+            return null;
+        }
+        return this[type][0];
+    }
+
 });
 
 // vim:ts=4:sw=4:et:

@@ -291,7 +291,10 @@ var ComponentInstance = Class.create(DragSource,
      * @type Array
      */
     getPreconditionTable: function(/** Hash */ reachability) {
-        return new Array();
+        var conditions = this._buildingBlockDescription.getPreconditionsList();
+        return $A(conditions).map(function(condition){
+            return this._getConditionItem(condition, reachability);
+        }.bind(this));
     },
 
     /**
@@ -301,7 +304,10 @@ var ComponentInstance = Class.create(DragSource,
      * @type Array
      */
     getPostconditionTable: function(/** Boolean */ reachability) {
-        return this._getConditionList("postconditions", reachability);
+        var conditions = this._buildingBlockDescription.getPostconditionsList();
+        return $A(conditions).map(function(condition){
+            return this._getConditionItem(condition, reachability);
+        }.bind(this));
     },
 
     // **************** PRIVATE METHODS **************** //
@@ -333,41 +339,6 @@ var ComponentInstance = Class.create(DragSource,
     _onDoubleClick: function (/** Event */ event){
         if (this._listener) {
             this._listener.elementDblClicked(this, event);
-        }
-    },
-
-    /**
-     * Creates the data hash to be passed to the
-     * table
-     * @private
-     * @type Array
-     */
-    _getConditionList: function(/** String */ type, /** Hash | Boolean */ reachability) {
-
-        if (type != "actions" &&
-            this._buildingBlockDescription[type].length > 1){ //More than one set of conditions
-            console.log("OR support not implemented yet");
-            return null;
-        }
-        else {
-            var result = new Array();
-            if (type != "actions") {
-                var conditions = this._buildingBlockDescription[type][0];
-                $A(conditions).each(
-                    function(condition) {
-                        result.push(this._getConditionItem(condition, reachability));
-                    }.bind(this)
-                );
-            } else {
-                var actions = this._buildingBlockDescription.actions;
-
-                $A(actions).each(function(action) {
-                    $A(action.preconditions).each(function(pre) {
-                        result.push(this._getConditionItem(pre, reachability));
-                    }.bind(this));
-                }.bind(this));
-            }
-            return result;
         }
     },
 

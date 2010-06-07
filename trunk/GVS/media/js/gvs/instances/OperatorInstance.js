@@ -96,19 +96,6 @@ var OperatorInstance = Class.create(ComponentInstance,
     },
 
     /**
-     * This function returns a list with all the
-     * preconditions of the instance,
-     * ready to be set in the FactPane
-     * @type Array
-     * @override
-     */
-    getPreconditionTable: function(/** Hash */ reachability) {
-        return this._getConditionList("actions", reachability);
-    },
-
-
-
-    /**
      * Destroy the instance
      * @override
      */
