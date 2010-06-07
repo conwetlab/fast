@@ -73,6 +73,7 @@ file_list = [
     "gvs/instances/ComponentInstance.js",
     "gvs/instances/ScreenInstance.js",
     "gvs/instances/PrePostInstance.js",
+    "gvs/instances/ScreenComponentInstance.js",
     "gvs/instances/ResourceInstance.js",
     "gvs/instances/OperatorInstance.js",
     "gvs/instances/FormInstance.js",

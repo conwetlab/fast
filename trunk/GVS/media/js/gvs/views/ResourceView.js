@@ -24,7 +24,7 @@ var ResourceView = Class.create(BuildingBlockView,
         var actions = description.actions;
         var actionIcons;
         actions.each(function(action) {
-        	actionIcons = new Hash();
+            actionIcons = new Hash();
             action.preconditions.each(function(pre) {
                 var fact = FactFactory.getFactIcon(pre, "embedded");
                 actionIcons.set(pre.id, fact);
@@ -85,14 +85,16 @@ var ResourceView = Class.create(BuildingBlockView,
      * the identification passed as parameter
      */
     getConditionNode: function(/** String */ id, /** String */ action) {
-    	var actionIcons = this._icons.get(action);
-    	if (actionIcons) {
-    		var icon = actionIcons.get(id);
-    		if (icon)
-    			return icon.getNode();
-    	}
+        action = Utils.variableOrDefault(action, "postconditions");
+        var actionIcons = this._icons.get(action);
+        if (actionIcons) {
+            var icon = actionIcons.get(id);
+            if (icon) {
+                return icon.getNode();
+            }
+        }
 
-    	return null;
+        return null;
     },
 
     /**
@@ -108,12 +110,12 @@ var ResourceView = Class.create(BuildingBlockView,
         });
 
         reachabilityData.actions.each(function(actionData) {
-        	var actionIcons = this._icons.get(actionData.name);
+            var actionIcons = this._icons.get(actionData.name);
 
-        	actionData.preconditions.each(function(preData) {
-        		var factNode = this.get(preData.id).getNode();
-        		Utils.setSatisfeabilityClass(factNode, preData.satisfied);
-        	}.bind(actionIcons));
+            actionData.preconditions.each(function(preData) {
+                var factNode = this.get(preData.id).getNode();
+                Utils.setSatisfeabilityClass(factNode, preData.satisfied);
+            }.bind(actionIcons));
         }.bind(this));
     },
 
