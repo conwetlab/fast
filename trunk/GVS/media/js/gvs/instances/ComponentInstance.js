@@ -285,15 +285,6 @@ var ComponentInstance = Class.create(DragSource,
     },
 
     /**
-     * Called when the scroll has been moved
-     * Implementing Scroll Listener interface
-     *
-     */
-    onScroll: function () {
-        this.onUpdate();
-    },
-
-    /**
      * This function returns a list with all the
      * preconditions of the instance,
      * ready to be set in the FactPane
