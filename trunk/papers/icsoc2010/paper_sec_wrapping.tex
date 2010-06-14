@@ -2,26 +2,21 @@
 \section{Wrapping web services (Kassel)}
 \label{sec:wrapping_web_services}
 
-%This section talks about the service wrapper tool (Kassel prototype)
-%
-%What it offers (afaik now it supports RESTful services, if support for SOAP-based services is also implemented, talk about it, otherwise explain how you expect to address it in the future work section
-%
-%How to create a wrapper (test-and-construct approach)
-%
-%Place this component within the FAST architecture
-%
-%Talk about formats: JSON and XML??
-
 In our approach, wrapping web services is done in two steps: a first step is in charge of the construction of a service request and a second step analyzes the response got from the execution of the service, allowing the analysis of response data and the mapping to domain-specific concepts. From this input, we generate JavaScript code to be embedded into web gadgets. This JavaScript code takes query parameters, constructs the service request, analysis the service response and returns result data in the desired format. 
 
 \subsection{Constructing service requests} % (fold)
 \label{sub:constructing_service_requests}
 
-As a first approach, the interaction with services is limited to simple GET requests as supported e.g. by REST services. Support for other services like SOAP services is planned. A service request is thus assembled using a certain URL and a set of parameters. As an example, the Ebay Shopping web service will be studied. The following URL is invoked to retrieve a list of items corresponding to the search keywords \emph{USB}.
+As a first approach, the interaction with services is limited to simple GET requests as supported e.g. by REST services. Support for other services like SOAP services is planned. A service request is thus assembled using a certain URL and a set of parameters. As an example, the Ebay Shopping web service will be studied. The following URL is invoked to retrieve a list of items corresponding to the search keywords \emph{USB}:
 
-\url{http://open.api.sandbox.ebay.com/shopping?appid=KasselUn-efea-4b93-9505-5dc2ef1ceecd&version=517&callname=FindItems&ItemSort=EndTime&QueryKeywords=USB&responseencoding=XML}
+\begin{listing}
+\begin{verbatim}
+http://open.api.sandbox.ebay.com/shopping?appid=KasselUn-efea-4b93-9505-5dc2ef1ceecd
+  &version=517&callname=FindItems&ItemSort=EndTime&QueryKeywords=USB&responseencoding=XML
+\end{verbatim}
+\end{listing}
 
-As you may see, the URL invoked is http://open.api.sandbox.ebay.com/shopping and the parameters used in the example are:
+As you may see, the URL invoked is \url{http://open.api.sandbox.ebay.com/shopping} and the parameters used in the example are:
 \begin{description}
 	\item[appid] this is the application ID obtained to use the API.
 	\item[version] the API version.
@@ -37,24 +32,24 @@ The above URL for searching items in Ebay is followed by the query parameters, w
 
 To define the desired input parameters and the type of the expected result of a new service wrapper the FAST service wrapper tool provides a web based form that allows the editing of these entries, cf. Figure \ref{fig:construct_pre_post_conditions}. Note, we allow to edit example values for the input parameters. These example values may be used to test the service wrapper. 
 
-%\begin{figure}
-%  \begin{center} \includegraphics[width=\linewidth]{images/ServiceWrapperToolGVSWithPortDefinitions.jpg}
-%    \caption{Configuring parameters of a service wrapper (photoshoped screen dump)}
-%    \label{fig:construct_pre_post_conditions}
-%  \end{center}
-%\end{figure}
+\begin{figure}
+  \begin{center} \includegraphics[width=\linewidth]{images/ServiceWrapperToolGVSWithPortDefinitions.png}
+    \caption{Configuring parameters of a service wrapper}
+    \label{fig:construct_pre_post_conditions}
+  \end{center}
+\end{figure}
 
 The service wrapper tool composes the request using a template string which will contain placeholders for input values. Before sending the request to the service, the placeholders are replaced with their corresponding values and the resulting URL is then ready to be sent as the service request.
 
-Figure ~\ref{fig:construct_service_request} shows the web based tool to construct the service requests.
+Figure~\ref{fig:construct_service_request} shows the web based tool to construct the service requests.
 
-%\begin{figure}
-%  \begin{center}
-%    \includegraphics[width=\linewidth]{images/ServiceWrapperToolGVSWithRequestExample.jpg}
-%    \caption{Constructing the service request URL and its parameters (photoshoped screen dump)}
-%    \label{fig:construct_service_request}
-%  \end{center}
-%\end{figure}
+\begin{figure}
+  \begin{center}
+    \includegraphics[width=\linewidth]{images/ServiceWrapperToolGVSWithRequestExample.png}
+    \caption{Constructing the service request URL and its parameters}
+    \label{fig:construct_service_request}
+  \end{center}
+\end{figure}
 
 In the top input field of Figure ~\ref{fig:construct_service_request}, the user may drop an example http request taken e.g. form the service documentation e.g. from \cite{eBayShoppingAPIs}. The tool analyses the example request and in the middle of the screen a form for editing the request parameters is provided. In our example, the user has connected the \textit{QueryKeywords} parameter with the input parameter \textit{search\_key} by adding a corresponding reference to the value field of that parameter. In addition, we have retrieved an access key which has been entered as value for the \textit{appid} parameter.
 
@@ -81,13 +76,13 @@ Once the service request is constructed and sent to the service provider, it wil
 
 Figure ~\ref{fig:response_service_execution} shows the data transformation tab of the wrapper tool. 
 
-%\begin{figure}
-%  \begin{center}
-%      \includegraphics[angle=90,width=0.8\linewidth]{images/ServiceWrapperToolGVSWithTransformationRules.jpg}
-%    \caption{Interactive, rule based transforming of an XML response to domain objects (photoshoped screen %dump)}
-%    \label{fig:response_service_execution}
-%  \end{center}
-%\end{figure}
+\begin{figure}
+  \begin{center}
+    \includegraphics[width=\linewidth]{images/ServiceWrapperToolGVSWithTransformationRules.png}
+    \caption{Interactive, rule based transforming of an XML response to domain objects}
+    \label{fig:response_service_execution}
+  \end{center}
+\end{figure}
 
 Once the service response, in XML format, has been retrieved, the transformation tab shows it as an interactive object tree on the left side of Figure ~\ref{fig:response_service_execution}. To construct this interactive object tree, the XML document has been parsed into a DOM, and a simplified tree representation of that DOM is built up. 
 
