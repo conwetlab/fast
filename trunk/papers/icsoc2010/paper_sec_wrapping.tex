@@ -26,8 +26,6 @@ As you may see, the URL invoked is \url{http://open.api.sandbox.ebay.com/shoppin
 	\item[responseencoding] format of the response message obtained by the invocation of the request.
 \end{description}
 
-If needed, a detailed specification of the Ebay Shopping API can be found at \cite{eBayShoppingAPIs}.
-
 The above URL for searching items in Ebay is followed by the query parameters, which take the form \textit{argument=value}. In this example, the only relevant parameter the end user may want to provide is \emph{querykeywords}. Thus the end user may use some input field to provide a query keyword and pass this value to our service wrapper operation. Other parameters can be set to a default value. However, in order to develop a more generic wrapper to a service, more or even all parameters might be passed by the user.
 
 To define the desired input parameters and the type of the expected result of a new service wrapper the FAST service wrapper tool provides a web based form that allows the editing of these entries, cf. Figure \ref{fig:construct_pre_post_conditions}. Note, we allow to edit example values for the input parameters. These example values may be used to test the service wrapper. 
@@ -41,7 +39,7 @@ To define the desired input parameters and the type of the expected result of a 
 
 The service wrapper tool composes the request using a template string which will contain placeholders for input values. Before sending the request to the service, the placeholders are replaced with their corresponding values and the resulting URL is then ready to be sent as the service request.
 
-Figure~\ref{fig:construct_service_request} shows the web based tool to construct the service requests.
+An example of service request construction can be found in the Figure~\ref{fig:construct_service_request}. In the top input field the user may drop an example HTTP request taken e.g. form the service documentation e.g. from its website\footnote{http://developer.ebay.com/products/shopping/}. The tool analyses the example request and in the middle of the screen a form for editing the request parameters is provided. In our example, the user has connected the \textit{QueryKeywords} parameter with the input parameter \textit{search\_key} by adding a corresponding reference to the value field of that parameter. In addition, we have retrieved an access key which has been entered as value for the \textit{appid} parameter.
 
 \begin{figure}
   \begin{center}
@@ -50,8 +48,6 @@ Figure~\ref{fig:construct_service_request} shows the web based tool to construct
     \label{fig:construct_service_request}
   \end{center}
 \end{figure}
-
-In the top input field of Figure ~\ref{fig:construct_service_request}, the user may drop an example HTTP request taken e.g. form the service documentation e.g. from its website\footnote{http://developer.ebay.com/products/shopping/}. The tool analyses the example request and in the middle of the screen a form for editing the request parameters is provided. In our example, the user has connected the \textit{QueryKeywords} parameter with the input parameter \textit{search\_key} by adding a corresponding reference to the value field of that parameter. In addition, we have retrieved an access key which has been entered as value for the \textit{appid} parameter.
 
 Below the request parameter editing form of Figure ~\ref{fig:construct_service_request}, a \textit{Send Request} button allows to validate the constructed URL by sending it to the specified service address (via a server relay). Then the placeholders for input parameters are replaced by their example values and the resulting http request is shown below the parameter form. In addition, the request is send and the response is shown on the bottom of that page. This gives the user a fast feedback whether the constructed request works as desired. 
 
