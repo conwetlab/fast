@@ -1,0 +1,71 @@
+
+\section{Discovery: the marketplace}
+\label{sec:discovery}
+
+The area of web service publication and discovery has been subject for a lot of research since the very beginning the concept was coined. The current state of the art provides several solutions and strategies which providers and consumers may take advantage of. However, as explained in previous sections, a large number of them suffer from limitated syntactic-based descriptions and a simple keyword-based search, and the gap between discovery and consumption is an obstacle for their usage by a non-technical common user. In order to ligthen the issue, this paper presents yet another publishing platform, permiting any enterprise or individual to publish their public domain web services, with an enhanced semantic search based on the definition of the services, and serving``web service wrappers'' for easily consumption in any web application.
+
+\subsection{Overview}
+\label{ssec:overview}
+
+The main difference of this platform with regards to the state of the art is that it is clearly targeting a different kind of user, and covers many deficiencies others tools does not tackle with. As a briefly overview, the platform being presented:
+
+\begin{itemize}
+	\item offers web services as Linked Data;
+	\item serves web services wrappers ready-to-consume in any web application;
+	\item follows well-known best practices for publishing data on the web;
+	\item supports managing its resources via its RESTful API;
+	\item supports content negotiation so the different clients may retrieved the information in JSON, RDF/XML, RDF/N3 or a human-readable HTML version;
+	\item provices advanced search capabilites, based on the service formal definition and inferences extracted from it;
+	\item a SPARQL endpoint to access directly to the data allowing advanced queries;
+\end{itemize}
+
+This platform was intented and it is being used as part of the FAST storyboard tool. Others components communicates with it via its RESTful API, but a
+That said, The process of publishing a web service requires two steps: (i) generation of the wrapper (see Sec. \ref{sec:wrapping_web_services}, and (ii) creation of the resource in the publishing platform. The creation of the resources is done via the public RESTful API, and the language selected for the input for any operation is JSON. The following is an example of part of a request sent to create a new wrapper into the platform:
+
+\begin{listing}
+\begin{verbatim}
+{
+  "code": "http://demo.fast.morfeo-project.org/code/amazonService.js",
+  "creationDate": "2010-01-26T17:01:13+0000",
+  "description": {"en-gb": "Amazon web service"},
+  "label": {"en-gb": "Amazon web service"},
+  "preconditions": [
+    [
+      {
+        "id": "item",
+        "label": { "en-gb": "An item" },
+        "pattern": "?item 
+                    http://www.w3.org/1999/02/22-rdf-syntax-ns#type
+                    http://aws.amazon.com/AWSECommerceService#Item",
+        "positive": "true"
+      }
+    ]
+  ],
+  "postconditions": [
+    ...
+  ],
+  ...
+\end{verbatim}
+\label{lis:json_request}
+\end{listing}
+
+The architecture, as presented in the Figure \ref{fig:}, comprises a RDF store used for persistence, a business layer dealing with the model and reasoning, and public façade providing the core functionality as a RESTful API, and a SPARQL endpoint accessing directly the RDF store. This presentation layer is aimed to interact with the FAST Gadget Visual Storyboard, or any other third-party application.
+
+The RESTful API and the SPARQL endpoint are part of the presentation layer. The SPARQL endpoint is offered using the SPARQL protocol service as defined in the SPROT specification \cite{sprot} and is aimed to enable third-party developers to query directly the knowledge base using SPARQL queries. This feature is supported by the Sesame RESTful HTTP interface for SPARQL Protocol for RDF.
+
+The business logic layer contains all the domain-specific processing and reasoning. It provides functions to interact with all the elements of the domain model specified in \cite{sec:model}, acting as a mediator between the public RESTful API and the persistence layer.
+
+The persistence layer provides an API to work with a standard set of objects representing the model. The interaction with the underlying RDF store is made via RDF2Go, an abstraction over triple (and quad) stores, which allows to program against rdf2go interfaces and choose any the RDF store implementation. This allows having a completely extensible and configurable framework for storage mechanisms, inferencers, RDF file formats, query result formats and query languages...
+
+How to publish (RESTful app, anyone can create a wrapper and publish it)
+
+How to browse: will allow users to go through the given domains (ontologies) and concepts, and will explain how to find the services they want (operation Find of the catalogue) => how the recommendation/reasoning works
+
+
+
+It offers the wrapped web services as linked data and has an open sparql endpoint, allowing other developers to create applications on top of it...
+
+
+\input{paper_ssec_ontology}
+
+\input{paper_ssec_linked_data}

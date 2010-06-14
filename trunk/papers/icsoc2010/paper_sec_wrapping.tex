@@ -1,0 +1,124 @@
+
+\section{Wrapping web services (Kassel)}
+\label{sec:wrapping_web_services}
+
+%This section talks about the service wrapper tool (Kassel prototype)
+%
+%What it offers (afaik now it supports RESTful services, if support for SOAP-based services is also implemented, talk about it, otherwise explain how you expect to address it in the future work section
+%
+%How to create a wrapper (test-and-construct approach)
+%
+%Place this component within the FAST architecture
+%
+%Talk about formats: JSON and XML??
+
+In our approach, wrapping web services is done in two steps: a first step is in charge of the construction of a service request and a second step analyzes the response got from the execution of the service, allowing the analysis of response data and the mapping to domain-specific concepts. From this input, we generate JavaScript code to be embedded into web gadgets. This JavaScript code takes query parameters, constructs the service request, analysis the service response and returns result data in the desired format. 
+
+\subsection{Constructing service requests} % (fold)
+\label{sub:constructing_service_requests}
+
+As a first approach, the interaction with services is limited to simple GET requests as supported e.g. by REST services. Support for other services like SOAP services is planned. A service request is thus assembled using a certain URL and a set of parameters. As an example, the Ebay Shopping web service will be studied. The following URL is invoked to retrieve a list of items corresponding to the search keywords \emph{USB}.
+
+\url{http://open.api.sandbox.ebay.com/shopping?appid=KasselUn-efea-4b93-9505-5dc2ef1ceecd&version=517&callname=FindItems&ItemSort=EndTime&QueryKeywords=USB&responseencoding=XML}
+
+As you may see, the URL invoked is http://open.api.sandbox.ebay.com/shopping and the parameters used in the example are:
+\begin{description}
+	\item[appid] this is the application ID obtained to use the API.
+	\item[version] the API version.
+	\item[callname] in this case FindItems to search through all items in Ebay.
+	\item[itemsort] sorting method for the list of items.
+	\item[querykeywords] list of keywords.
+	\item[responseencoding] format of the response message obtained by the invocation of the request.
+\end{description}
+
+If needed, a detailed specification of the Ebay Shopping API can be found at \cite{eBayShoppingAPIs}.
+
+The above URL for searching items in Ebay is followed by the query parameters, which take the form \textit{argument=value}. In this example, the only relevant parameter the end user may want to provide is \emph{querykeywords}. Thus the end user may use some input field to provide a query keyword and pass this value to our service wrapper operation. Other parameters can be set to a default value. However, in order to develop a more generic wrapper to a service, more or even all parameters might be passed by the user.
+
+To define the desired input parameters and the type of the expected result of a new service wrapper the FAST service wrapper tool provides a web based form that allows the editing of these entries, cf. Figure \ref{fig:construct_pre_post_conditions}. Note, we allow to edit example values for the input parameters. These example values may be used to test the service wrapper. 
+
+%\begin{figure}
+%  \begin{center} \includegraphics[width=\linewidth]{images/ServiceWrapperToolGVSWithPortDefinitions.jpg}
+%    \caption{Configuring parameters of a service wrapper (photoshoped screen dump)}
+%    \label{fig:construct_pre_post_conditions}
+%  \end{center}
+%\end{figure}
+
+The service wrapper tool composes the request using a template string which will contain placeholders for input values. Before sending the request to the service, the placeholders are replaced with their corresponding values and the resulting URL is then ready to be sent as the service request.
+
+Figure ~\ref{fig:construct_service_request} shows the web based tool to construct the service requests.
+
+%\begin{figure}
+%  \begin{center}
+%    \includegraphics[width=\linewidth]{images/ServiceWrapperToolGVSWithRequestExample.jpg}
+%    \caption{Constructing the service request URL and its parameters (photoshoped screen dump)}
+%    \label{fig:construct_service_request}
+%  \end{center}
+%\end{figure}
+
+In the top input field of Figure ~\ref{fig:construct_service_request}, the user may drop an example http request taken e.g. form the service documentation e.g. from \cite{eBayShoppingAPIs}. The tool analyses the example request and in the middle of the screen a form for editing the request parameters is provided. In our example, the user has connected the \textit{QueryKeywords} parameter with the input parameter \textit{search\_key} by adding a corresponding reference to the value field of that parameter. In addition, we have retrieved an access key which has been entered as value for the \textit{appid} parameter.
+
+Below the request parameter editing form of Figure ~\ref{fig:construct_service_request}, a \textit{Send Request} button allows to validate the constructed URL by sending it to the specified service address (via a server relay). Then the placeholders for input parameters are replaced by their example values and the resulting http request is shown below the parameter form. In addition, the request is send and the response is shown on the bottom of that page. This gives the user a fast feedback whether the constructed request works as desired. 
+
+\subsubsection{Limitations} % (fold)
+\label{ssub:limitations}
+
+
+
+It is worth pointing out that currently the wrapper tool is able to construct input ports for the wrappers using just basic types. To construct URL requests from more complex input parameters, as e.g. a person object, we are currently developing access operations that will allow to access the values of fields of complex objects. For example, the expression \emph{customer.address} may refer to the \emph{address} field of a \emph{customer} parameter.  
+
+% subsubsection limitations (end)
+
+% subsection constructing_service_requests (end)
+
+\subsection{Interpreting service responses} % (fold)
+\label{sub:interpreting_service_responses}
+
+Once the service request is constructed and sent to the service provider, it will send back a response. This response message could be serialized in any format, though the most common formats used nowadays are XML or JSON among others. To continue the example started in the previous section, the response of the Ebay Shopping service will be in XML as specified in the request.
+
+\subsubsection{Translation XML into Facts} % (fold)
+\label{ssub:translation_xml_into_facts}
+
+Figure ~\ref{fig:response_service_execution} shows the data transformation tab of the wrapper tool. 
+
+%\begin{figure}
+%  \begin{center}
+%      \includegraphics[angle=90,width=0.8\linewidth]{images/ServiceWrapperToolGVSWithTransformationRules.jpg}
+%    \caption{Interactive, rule based transforming of an XML response to domain objects (photoshoped screen %dump)}
+%    \label{fig:response_service_execution}
+%  \end{center}
+%\end{figure}
+
+Once the service response, in XML format, has been retrieved, the transformation tab shows it as an interactive object tree on the left side of Figure ~\ref{fig:response_service_execution}. To construct this interactive object tree, the XML document has been parsed into a DOM, and a simplified tree representation of that DOM is built up. 
+
+A transformation rule is used to analyze the XML data and to generate domain-specific objects from concepts from the ontologies used by the parameters of the different building blocks. A transformation rule is composed of three elements, cf. the middle part of Figure ~\ref{fig:response_service_execution}. First, the \textit{from} field indicates the XML elements to be translated by the rule. These XML elements are identified by the tag name of a DOM element from the XML document. Second, the type of the rule will be set, taking one of the following values: \emph{createObject}, \emph{fillAttributes} or \emph{dummy}. And third, the target of the rule specifies a certain concept or attribute, to be created or filled. A detailed explanation of the type of actions to be trigger from the transformation rules is:
+\begin{description}
+	\item[action \emph{createObject}] specifies the creation of a new domain object. The type of that new object is provided in the third compartment. In the example being explained, the root rule searches for XML elements with tag name \emph{FindItemsResponse} and for each such element a \emph{List} object is created. The resulting objects are shown in a facts tree in the right of Figure ~\ref{fig:response_service_execution}.
+	\item[action \emph{fillAttributes}] does not create a new object but it fills the value of the attribute provided as third part of such rules. In our example, the third transformation rule searches for XML elements with tag name \emph{Title}. Note, the rule is a sub-rule of the second rule, which generates \emph{Product} objects. Thus, the sub-rule searches for \emph{Title} tags only in the subtree of the XML data that has been identified by an application of the parent rule before. For example, the \emph{Item} rule may just have been applied to the first \emph{Item} element of the XML data. Then, the \emph{Title} rule is applied only to the first \emph{Item} sub-tree of the XML data and thus it will find only one \emph{Title} element in that sub-tree (not visible in Figure ~\ref{fig:response_service_execution} ). The value of that \emph{Title} element is then transfered to the \emph{productName} attribute of the corresponding \emph{Product} object. Actually, our \textit{from} fields allows also to refer to parts of an XML attribute e.g. to \textit{words} 1 through 3. It is also possible to combine constant text and elements of multiple XML tree elements. 
+	\item[action \emph{dummy}] does not create or modify any objects but such rules are just used to narrow the search space for their sub-rules. For example, in Amazon product data, the XML data for an item contains sections for \emph{minimum price}, \emph{maximum price}, and \emph{average price}. Each such section contains the \emph{plain price} and the \emph{formatted price}. Thus, in the Amazon case, a rule that searches for \emph{formatted price} elements within an \emph{Item} element would retrieve three matches. Using a dummy rule, we may first search for \emph{minimum price} elements and then search for \emph{formatted price} elements within that sub-tree.
+\end{description}
+
+Our tool follows an interactive paradigm. Therefore, any time a change to a transformation rule is done, the transformation process is triggered and the resulting facts tree is directly shown. This process helps the user to deal with the slightly complex semantics of the transformation rules avoiding errors or mistakes. In addition, out tool is ontology-driven, therefore, the service wrapper designer shall retrieve the domain-specific types from a FAST ontology server together with the structure of each type, i.e. together with a description of the attributes of each object. Thus, the transformation rule editor is able to provide selection boxes for the target element of the rules. For a \emph{createObject} rule, this selection box shows the object types available for that domain. For the \emph{fillAttributes} rules, the selection box shows the attributes of the object type chosen in the parent rule. In addition, we may provide some analysis tool, which will help to guarantee that the objects generated by the transformation rules conform to the object types defined in the corresponding FAST ontology. This helps to ensure that the objects generated by the designed service wrapper will be compatible for input parameters of subsequent filter steps and or gadgets.
+
+% subsubsection translation_xml_into_facts (end)
+
+% subsection interpreting_service_responses (end)
+
+\subsection{Generating a Resource Adapter} % (fold)
+\label{sub:generating_a_resource_adapter}
+
+Once the wrapping of a service has been defined and tested in the service wrapper tool, we generate an implementation of the desired Resource Adapter in XML, HTML, and JavaScript, ready to be deployed and executed inside a web gadget. 
+
+% subsection generating_a_resource_adapter (end)
+
+\subsection{Limitations} % (fold)
+\label{sub:limitations}
+
+The rule driven approach presented above is somewhat limited. It is deliberately restricted to such a simple rule mechanism in order to keep things simple enough for end-users. Still, the selected approach suffices for many practical and real world cases. As a more complex example, the XML data for a person may provide two different tags for the first and the last name of a person. Contrarily, a person fact which conforms to a certain ontology for that domain may provide only one \emph{fullname} attribute that shall be filled by a concatenation of the first and the last name. To achieve this, the \textit{from} field of that tranforamtion rule might look like: \texttt{lastname"', "`firstname}. We are also able to do some navigation in the XML tree to follow XRef elements. For example the attribute \texttt{grandmother} could be filled using \texttt{mother.mother} in the \textit{from} field. 
+
+However, there are some transformations that these rules cannot perform. For example, we do not support any mathematical operations. Thus, transforming e.g. Fahrenheit into Celsius temperatures is not supported. To cover such  cases, intermediate object formats can be used which would allow generating objects to be further processed by additional filters. Such additional filters may be realized using (hand coded) operators, since some generic operators can act as filters for aggregation and conversions of objects from multiple sources. Then, service wrappers in combination with these filter operators will allow covering these complex cases.
+
+% subsection limitations (end)
+
+% section restful_web_services_wrapper_tool (end)
+
