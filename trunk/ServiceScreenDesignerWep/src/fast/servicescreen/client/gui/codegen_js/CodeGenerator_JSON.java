@@ -74,7 +74,7 @@ public class CodeGenerator_JSON extends CodeGenerator
 				String target = rule.getTargetElemName();
 				
 				//If it is not just a strukture tag ( = tags insert by us, so user see JSON strukture better)
-				if(! from.endsWith("_Item"))//TODO????
+				if(! from.endsWith("_Item"))
 				{
 					//create indent for n1 JSON output
 					if(firstOperation)
@@ -237,7 +237,6 @@ public class CodeGenerator_JSON extends CodeGenerator
 		
 				//return result 
 				depth5 +  "return result; \n" + 
-				
 				
 			depth + "}\n\n";
 		

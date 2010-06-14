@@ -144,7 +144,7 @@ public class ServiceScreenDesignerWep extends FastTool implements EntryPoint
    public SendRequestHandler requestHandler;
    private TestServiceRequestAction testServiceRequestAction;
    private JSONValue savedJson;
-private TabPanel tabPanel;
+   private TabPanel tabPanel;
    
    class BuildAction extends FAction
    {
@@ -369,10 +369,25 @@ private TabPanel tabPanel;
       // Add into tabpanel
       tabPanel.add(transformationTable, "Transformation");
  
-      //Adding part three, just to test code generation, there is a show of selected rules, templates and the .js results
-      codeGenViewer = new CodeGenViewer(serviceScreen, WrappingType.WRAP_AND_REQUEST_XML /*TODO make that dynamic! See codegenViewer*/);
-      tabPanel.add(codeGenViewer.createCodeGenViewer(), "CodeGen Viewer");
-}
+      // Add the Codegenerator and it´s UI (for XML at first)
+      codeGenViewer = new CodeGenViewer(serviceScreen, WrappingType.WRAP_AND_REQUEST_XML);
+      codeGenViewer_Panel = codeGenViewer.createCodeGenViewer();
+      tabPanel.add(codeGenViewer_Panel, "CodeGen Viewer"); 
+   }
+
+   public Widget codeGenViewer_Panel;
+   public void setCodeGenViewer(CodeGenViewer viewer)
+   {
+	   if(viewer != null && viewer != codeGenViewer)
+	   {
+		   tabPanel.remove(codeGenViewer_Panel);
+		   
+		   codeGenViewer = viewer;
+		   codeGenViewer_Panel = codeGenViewer.createCodeGenViewer();
+		   
+		   tabPanel.add(codeGenViewer_Panel, "CodeGen Viewer");
+	   }
+   }
 
    public void setResultText(TextArea resultText)
    {

@@ -74,6 +74,11 @@ public class RequestGUI
 		// Add textbox for actual request
 		requestTable.setWidget(numRows, 0, new Label("Sent request: "));
 		requestTable.setWidget(numRows, 1, designer.requestUrlBox);
+		
+		//Add handler to change code gen, if request type is changing
+		RequestTypeHandler reqTypeHandler = new RequestTypeHandler(designer, designer.serviceScreen);
+		requestTable.setWidget(numRows, 2, reqTypeHandler.getChooserPanel());
+		
 		numRows++;
 		numRows++;
 
