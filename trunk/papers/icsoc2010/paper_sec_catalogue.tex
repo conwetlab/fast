@@ -60,7 +60,7 @@ The RESTful API and the SPARQL endpoint are part of the presentation layer. The 
 The business logic layer contains all the domain-specific processing and reasoning. It provides functions to interact with all the elements of the domain model specified in \ref{ssec:ontology},
 acting as a mediator between the public RESTful API and the persistence layer.
 
-The persistence layer provides an API allowing to work with a standard set of objects representing the model. The interaction with the underlying RDF store is made via RDF2Go, an abstraction over triple (and quad) stores, which allows to program against rdf2go interfaces and choose any the RDF store implementation. This allows having a completely extensible and configurable framework for storage mechanisms, inferencers, RDF file formats, query result formats and query languages.
+The persistence layer provides an API allowing to work with a standard set of objects representing the model. The interaction with the underlying RDF store is made via RDF2Go, an abstraction over triple (and quad) stores, which allows to program against rdf2go interfaces and choose any RDF store implementation. This allows having a completely extensible and configurable framework for storage mechanisms, inferencers, RDF file formats, query result formats and query languages.
 
 \input{paper_ssec_ontology}
 
