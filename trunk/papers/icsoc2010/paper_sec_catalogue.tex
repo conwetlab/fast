@@ -3,7 +3,7 @@
 \section{Publishing and discovery platform}
 \label{sec:discovery}
 
-The area of web service publication and discovery has been subject for a lot of research since the very beginning the concept was coined. The current state of the art provides several solutions and strategies which providers and consumers may take advantage of. However, as explained in previous sections, a large number of them suffer from limitated syntactic-based descriptions and a simple keyword-based search, and the gap between discovery and consumption is an obstacle for their usage by a non-technical common user. In order to ligthen the issue, this paper presents yet another publishing platform, permiting any enterprise or individual to publish their public domain web services, with an enhanced semantic search based on the definition of the services, and serving``web service wrappers'' for an easy consumption in any web application.
+The area of web service publication and discovery has been subject for a lot of research since the very beginning the concept was coined. The current state of the art provides several solutions and strategies which providers and consumers may take advantage of. However, as explained in previous sections, a large number of them suffer from limited syntactic-based descriptions and a simple keyword-based search, and the gap between discovery and consumption is an obstacle for their usage by a non-technical common user. In order to lighten the issue, this paper presents yet another publishing platform, permitting any enterprise or individual to publish their public domain web services, with an enhanced semantic search based on the definition of the services, and serving ``web service wrappers'' for an easy consumption in any web application.
 
 \subsection{Overview}
 \label{ssec:overview}
@@ -13,7 +13,7 @@ The main difference of this platform with regards to the state of the art is tha
 \begin{itemize}
   \item allows functional discovery through web services pre and postconditions;
 	\item serves web services wrappers ready-to-consume in any web application;
-	\item provices advanced search capabilites, based on the service formal definition and inferences extracted from it;
+	\item provides advanced search capabilities, based on the service formal definition and inferences extracted from it;
 	\item supports managing its resources via its RESTful API;
 	\item a SPARQL endpoint to access directly to the data allowing advanced queries;
 	\item offers web services as Linked Data;
@@ -21,7 +21,7 @@ The main difference of this platform with regards to the state of the art is tha
 	\item supports content negotiation so the different clients may retrieved the information in JSON, RDF/XML, RDF/N3 or a human-readable HTML version;
 \end{itemize}
 
-This platform was intented and it is being used as part of the FAST storyboard tool, and it communicates with others components through its RESTful API, using JSON for the input of the requests. This paper will focus on the functionality regarding web services publication and discovery, and the process to publish any third-party web service into the platform. This process requires two steps: (i) generation of the wrapper (see Sec. \ref{sec:wrapping_web_services}, and (ii) creation of the resource in the publishing platform. The following is an example of part of a request sent to create a new wrapper into the platform (for the sake of clarity, some parts of the request have been ommitted, but the main idea is shown):
+This platform was intended and it is being used as part of the storyboard tool of the FAST platform~\cite{hoyer2009fast}, and it communicates with other components through its RESTful API, using JSON for the input of the requests. This paper will focus on the functionality regarding web services publication and discovery, and the process to publish any third-party web service into the platform. This process requires two steps: (i) generation of the wrapper (see Sec. \ref{sec:wrapping_web_services}, and (ii) creation of the resource in the publishing platform. The following is an example of part of a request sent to create a new wrapper into the platform (for the sake of clarity, some parts of the request have been omitted, but the main idea is shown):
 
 \begin{listing}
 \begin{verbatim}
@@ -57,12 +57,11 @@ The architecture comprises a RDF store used for persistence, a business layer de
 
 The RESTful API and the SPARQL endpoint are part of the presentation layer. The SPARQL endpoint is offered using the SPARQL protocol service as defined in the SPROT specification \cite{sprot} and is aimed to enable third-party developers to query directly the knowledge base using SPARQL queries. This feature is supported by the Sesame RESTful HTTP interface for SPARQL Protocol for RDF.
 
-The business logic layer contains all the domain-specific processing and reasoning. It provides functions to interact with all the elements of the domain model,
-% specified in \ref{ssec:ontology}
+The business logic layer contains all the domain-specific processing and reasoning. It provides functions to interact with all the elements of the domain model specified in \ref{ssec:ontology},
 acting as a mediator between the public RESTful API and the persistence layer.
 
 The persistence layer provides an API allowing to work with a standard set of objects representing the model. The interaction with the underlying RDF store is made via RDF2Go, an abstraction over triple (and quad) stores, which allows to program against rdf2go interfaces and choose any the RDF store implementation. This allows having a completely extensible and configurable framework for storage mechanisms, inferencers, RDF file formats, query result formats and query languages.
 
-% \input{paper_ssec_ontology}
+\input{paper_ssec_ontology}
 
 \input{paper_ssec_linked_data}
