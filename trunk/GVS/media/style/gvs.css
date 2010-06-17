@@ -1078,7 +1078,7 @@ label {
     margin-bottom:10px;
 }
 
-.line input, .line div.dijitTextBox /*Dijit inputs*/{
+.line input, .line div.dijitTextBox, .line .dijitTextArea /*Dijit inputs*/{
     width: 250px;
 }
 

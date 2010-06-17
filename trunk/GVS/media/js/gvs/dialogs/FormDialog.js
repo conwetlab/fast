@@ -302,6 +302,16 @@ var FormDialog = Class.create( /** @lends FormDialog.prototype */ {
                         lineNode = this._createLine(line.label, inputNode);
                         break;
 
+                    case 'textarea':
+                        var textArea = new dijit.form.SimpleTextarea({
+                            'name': line.name
+                        });
+                        textArea.attr("value", line.value);
+
+                        inputNode = textArea.domNode;
+                        lineNode = this._createLine(line.label, inputNode);
+                        break;
+
                     default:
                         throw "Unimplemented form field type";
                 }

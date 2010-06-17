@@ -84,7 +84,7 @@ var PropertiesDialog = Class.create(ConfirmDialog /** @lends PropertiesDialog.pr
                                     return tag.label['en-gb'];
                                }).join(", ")},
             {'type': 'title', 'value': 'Sharing information'},
-            {'type':'input', 'label': 'Description:','name': 'description',
+            {'type':'textarea', 'label': 'Description:','name': 'description',
                     'value': this._description.description['en-gb'],
                     'required': true},
             {'type':'input', 'label': 'Creator:','name': 'creator',
