@@ -28,7 +28,12 @@ var BuildingBlockDocument = Class.create(PaletteDocument, /** @lends BuildingBlo
     },
 
 
-
+    /**
+     * Create the CodeMirror text editors
+     * To be called after the document has been added into the GVS
+     * CodeMirror needs to be instantiated into Elements already
+     * added to the DOM
+     */
     createTextEditors: function() {
 
         var JSONContent = Object.toJSON(this._description.toJSON()).replace(/,\s*"/g, ",\n\"");
@@ -47,7 +52,9 @@ var BuildingBlockDocument = Class.create(PaletteDocument, /** @lends BuildingBlo
                 'lineNumbers': true,
                 'tabMode': "shift",
                 'reindentOnLoad': true,
-                'content': JSONContent
+                'content': JSONContent,
+                'saveFunction': this._save.bind(this),
+                'onChange': this._propertiesChanged.bind(this)
             });
 
         var parsers = ["tokenizejavascript.js", "parsejavascript.js"];
@@ -71,7 +78,10 @@ var BuildingBlockDocument = Class.create(PaletteDocument, /** @lends BuildingBlo
                 'lineNumbers': true,
                 'tabMode': "shift",
                 'reindentOnLoad': true,
-                'content': codeContent
+                'content': codeContent,
+                'onChange': function() {
+                                this._setDirty(true);
+                            }.bind(this)
             });
     },
 
@@ -264,7 +274,11 @@ var BuildingBlockDocument = Class.create(PaletteDocument, /** @lends BuildingBlo
             ));
     },
 
-
+    /**
+     * Starts the sharing process
+     * @private
+     * @overrides
+     */
      _share: function() {
         if (this._isDirty) {
             this._pendingOperation = this._share.bind(this);
@@ -278,14 +292,14 @@ var BuildingBlockDocument = Class.create(PaletteDocument, /** @lends BuildingBlo
                      "(Save with another name/version)");
             var dialog = new ConfirmDialog("Warning",
                                            ConfirmDialog.CUSTOM,
-                                           {'callback': this._onShareDialogEvent.bind(this),
+                                           {
+                                            'callback': this._onShareDialogEvent.bind(this),
                                             'contents': text,
                                             'buttons': {
                                                 'clone': 'Share and create a clone',
                                                 'close': 'Share and close',
                                                 'cancel': 'Cancel'
-                                            },
-                                            'style': 'width: '
+                                                },
                                             });
             dialog.show();
         }
@@ -320,6 +334,22 @@ var BuildingBlockDocument = Class.create(PaletteDocument, /** @lends BuildingBlo
                 break;
         }
     },
+
+    /**
+     * Callback called whenever the JSON properties editor is changed
+     * @private
+     */
+    _propertiesChanged: function() {
+        try {
+            var jsonContent = cjson_parse(this._jsonEditor.getCode());
+            this._description.addProperties(jsonContent);
+        } catch (e) {
+            Utils.showMessage("The properties are not well formed. It will not " +
+                              "work", {'error': true, 'hide': true});
+        }
+        this._setDirty(true);
+    },
+
     /**
      * This function creates the area containing the canvas
      * and the inspectors
@@ -341,6 +371,12 @@ var BuildingBlockDocument = Class.create(PaletteDocument, /** @lends BuildingBlo
         return centerContainer;
     },
 
+    /**
+     * This function returns the initial code content from a given
+     * building block
+     * @private
+     * @type String
+     */
     _getInitialCodeContent: function (buildingBlockType) {
         var content;
         switch (buildingBlockType) {
@@ -384,7 +420,11 @@ BuildingBlockDocument.FORM = "form";
 BuildingBlockDocument.OPERATOR = "operator";
 BuildingBlockDocument.RESOURCE = "resource";
 
-
+/**
+ * This class is included here due to PaletteDocument restrictions,
+ * which need an instance of an InferenceEngine. As this document
+ * does not need any kind of inference, the class does nothing
+ */
 var DumbInferenceEngine = Class.create({
     initialize: function(){},
     findCheck: function(){},

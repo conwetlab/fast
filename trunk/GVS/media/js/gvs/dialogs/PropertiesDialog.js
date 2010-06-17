@@ -160,6 +160,7 @@ var PropertiesDialog = Class.create(ConfirmDialog /** @lends PropertiesDialog.pr
      */
     _reset: function ($super){
         this._handler = null;
+        this._initDialogInterface();
         $super();
     }
 });
