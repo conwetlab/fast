@@ -266,6 +266,13 @@ var ScreenDocument = Class.create(PaletteDocument,
         return URIs.screen;
     },
 
+    /*
+     * @override
+     */
+    _getType: function() {
+        return "screen";
+    },
+
     /**
      * Returns the empty palette status
      * @type Object

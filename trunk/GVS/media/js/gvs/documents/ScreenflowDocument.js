@@ -207,8 +207,15 @@ var ScreenflowDocument = Class.create(PaletteDocument,
         return URIs.screenflow;
     },
 
+    /*
+     * @override
+     */
+    _getType: function() {
+        return "screenflow";
+    },
 
-/**
+
+    /**
      * Returns the empty palette status
      * @type Object
      * @private

@@ -215,6 +215,13 @@ var BuildingBlockDocument = Class.create(PaletteDocument, /** @lends BuildingBlo
         return this._uri;
     },
 
+    /*
+     * @override
+     */
+    _getType: function() {
+        return this._type;
+    },
+
     /**
      * Returns the empty palette status
      * @type Object

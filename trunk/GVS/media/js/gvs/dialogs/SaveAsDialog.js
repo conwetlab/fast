@@ -5,8 +5,17 @@ var SaveAsDialog = Class.create(ConfirmDialog /** @lends SaveAsDialog.prototype 
      * @constructs
      * @extends ConfirmDialog
      */
-    initialize: function($super, /** String */ name, /** String */ version,
+    initialize: function($super, /** String */ buildingBlockType,
+                        /** String */ name, /** String */ version,
                         /** Function */ onOkHandler, /** Boolean(optional) */ _cloned) {
+
+        /**
+         * Building block type of the element being saved
+         * @private
+         * @type String
+         */
+        this._type = buildingBlockType;
+
         /**
          * Current name/version availability
          * @private
@@ -107,7 +116,8 @@ var SaveAsDialog = Class.create(ConfirmDialog /** @lends SaveAsDialog.prototype 
         if (this._available) {
             this._setMessage();
         } else {
-            this._setMessage('Please, use a diferent Version or Screen Name.',
+            this._setMessage('Please, use a different ' +  this._type +
+                            ' Version or Name.',
                              FormDialog.MESSAGE_ERROR);
         }
         this._setDisabled(!this._available);
@@ -160,7 +170,7 @@ var SaveAsDialog = Class.create(ConfirmDialog /** @lends SaveAsDialog.prototype 
             "fields": ["version"],
             "limit": 1
         }
-        PersistenceEngine.sendPost(URIs.screenSearch, null,
+        PersistenceEngine.sendPost(URIs[this._type + "Search"], null,
                 Object.toJSON(query), this, this._onAvailabilityCheckSuccess,
                 Utils.onAJAXError);
     },
@@ -183,7 +193,7 @@ var SaveAsDialog = Class.create(ConfirmDialog /** @lends SaveAsDialog.prototype 
             clearTimeout(this._timeout);
         } catch (e) {}
 
-        this._setMessage('Checking if the screen already exists...');
+        this._setMessage('Checking if the name/version already exists...');
         this._timeout = setTimeout(this._availabilityCheck.bind(this), 1000);
         this._setDisabled(true);
     },

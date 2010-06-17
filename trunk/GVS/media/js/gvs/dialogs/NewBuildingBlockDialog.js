@@ -21,7 +21,7 @@ var NewBuildingBlockDialog = Class.create(ConfirmDialog /** @lends NewBuildingBl
          * @private
          * @type String
          */
-        this._searchURI = URIs[this._buildingblockName + 'Search'];
+        this._searchURI = URIs[this._buildingblockName.toLowerCase() + 'Search'];
 
         /**
          * Current building block availability

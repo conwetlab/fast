@@ -643,11 +643,13 @@ var PaletteDocument = Class.create(AbstractDocument, /** @lends PaletteDocument.
 
     /**
      * Create a copy of the document with a new name/version
+     * To be extended
      * @private
      */
     _saveAs: function(/** Boolean */ cloned) {
         if (this._description.getId()) {
-            var saveAsDialog = new SaveAsDialog(this._description.name,
+            var saveAsDialog = new SaveAsDialog(this._getType(),
+                                                this._description.name,
                                                 this._description.version,
                                                 this._onSaveAsSuccess.bind(this),
                                                 cloned);
@@ -829,6 +831,16 @@ var PaletteDocument = Class.create(AbstractDocument, /** @lends PaletteDocument.
      */
     _getEmptyPalette: function() {
         throw "Abstract method invocation. PaletteDocument::_getEmptyPalette";
+    },
+
+    /**
+     * Get the document type for saving purposes
+     * @type String
+     * @private
+     * @abstract
+     */
+    _getType: function() {
+        throw "Abstract method invocation. PaletteDocument::_getType";
     }
 });
 
