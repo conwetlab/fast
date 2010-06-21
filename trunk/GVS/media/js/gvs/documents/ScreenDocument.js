@@ -66,6 +66,8 @@ var ScreenDocument = Class.create(PaletteDocument,
 
         this._repaint = this._repaint.bind(this);
 
+        Event.observe(window, 'resize', this._repaint);
+
         var leftSplitter = this._mainBorderContainer.getSplitter("left");
         addEventDragSplitter(leftSplitter, this._repaint);
 
