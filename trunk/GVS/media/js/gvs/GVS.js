@@ -56,17 +56,8 @@ var GVS = Class.create(ToolbarModel,    /** @lends GVS.prototype */
      */
     init: function(){
 
-        this._dialogs.set("addScreen", new AddScreenDialog());
-        this._dialogs.set("newScreenflow", new NewBuildingBlockDialog('Screenflow'));
-        this._dialogs.set("newScreen", new NewBuildingBlockDialog('Screen'));
-        this._dialogs.set("newForm", new NewBuildingBlockDialog('Form'));
-        this._dialogs.set("newOperator", new NewBuildingBlockDialog('Operator'));
-        this._dialogs.set("newResource", new NewBuildingBlockDialog('Resource'));
-        this._dialogs.set("browseScreenflows", new ManageScreenflowsDialog());
-        this._dialogs.set("browseScreens", new ManageScreensDialog());
-        this._dialogs.set("preferences", new PreferencesDialog());
-
         this._actions = {
+            newBuildingBlock: this._newBuildingBlock.bind(this),
             newForm: this._newForm.bind(this),
             newOperator: this._newOperator.bind(this),
             newResource: this._newResource.bind(this),
@@ -78,6 +69,31 @@ var GVS = Class.create(ToolbarModel,    /** @lends GVS.prototype */
             showAbout: this._showAboutDialog.bind(this),
             wrapperService: this._openWrapperService.bind(this)
         };
+
+        this._dialogs.set("addScreen", new AddScreenDialog());
+        this._dialogs.set("newScreenflow", new NewBuildingBlockDialog('Screenflow'));
+        this._dialogs.set("newScreen", new NewBuildingBlockDialog('Screen'));
+        this._dialogs.set("newForm", new NewBuildingBlockDialog('Form'));
+        this._dialogs.set("newOperator", new NewBuildingBlockDialog('Operator'));
+        this._dialogs.set("newResource", new NewBuildingBlockDialog('Resource'));
+        this._dialogs.set("browseScreenflows", new ManageScreenflowsDialog());
+        this._dialogs.set("browseScreens", new ManageScreensDialog());
+        this._dialogs.set("preferences", new PreferencesDialog());
+        this._dialogs.set("newBuildingBlock", new ButtonArrayDialog([
+            {
+                'label': 'New Form',
+                'handler': this._actions.newForm
+            },
+            {
+                'label': 'New Operator',
+                'handler': this._actions.newOperator
+            },
+            {
+                'label': 'New Resource',
+                'handler': this._actions.newResource
+            }]
+        ));
+
         this._documentController = new DocumentController();
 
         // Toolbar
@@ -219,6 +235,14 @@ var GVS = Class.create(ToolbarModel,    /** @lends GVS.prototype */
      */
     _openWrapperService: function() {
         this._documentController.openWrapperService();
+    },
+
+    /**
+     * Opens a dialog to choose which building block to create
+     * @private
+     */
+    _newBuildingBlock: function() {
+        this._dialogs.get("newBuildingBlock").show();
     },
 
     /**

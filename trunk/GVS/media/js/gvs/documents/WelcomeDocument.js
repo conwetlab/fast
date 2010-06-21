@@ -40,7 +40,7 @@ var WelcomeDocument = Class.create(AbstractDocument,
         content.appendChild (welcomeIntro);
 
         var newScreenflowButton = new dijit.form.Button({
-            label: "Create a Screenflow from Scratch",
+            label: "Edit a new Screenflow",
             onClick: function() {GVS.action("newScreenflow");}}
         );
         var openScreenflowButton = new dijit.form.Button({
@@ -49,7 +49,7 @@ var WelcomeDocument = Class.create(AbstractDocument,
         );
 
         var newScreenButton = new dijit.form.Button({
-            label: "Create a Screen from Scratch",
+            label: "Edit a new Screen",
             onClick: function() {GVS.action("newScreen");}}
         );
         var browseScreensButton = new dijit.form.Button({
@@ -60,6 +60,11 @@ var WelcomeDocument = Class.create(AbstractDocument,
         var openWrapperServiceButton = new dijit.form.Button({
             label: "Wrap existing services",
             onClick: function() {GVS.action("wrapperService");}}
+        );
+
+        var newBuildingBlockButton = new dijit.form.Button({
+            label: "Add a Building Block from sources",
+            onClick: function() {GVS.action("newBuildingBlock");}}
         );
 
         var buttonsContainer = new Element("div");
@@ -75,6 +80,8 @@ var WelcomeDocument = Class.create(AbstractDocument,
         if (!GlobalOptions.isPublicDemo) {
             buttonsContainer.appendChild(new Element("div").update("Building blocks"));
             buttonsContainer.appendChild(openWrapperServiceButton.domNode);
+            buttonsContainer.appendChild(new Element("br"));
+            buttonsContainer.appendChild(newBuildingBlockButton.domNode);
         }
         content.appendChild(buttonsContainer);
     }

@@ -267,6 +267,7 @@ h4{
     font-weight: normal;
     font-size: 12px;
 }
+
 /******************
  * screenflow doc *
  ******************/
@@ -1108,6 +1109,18 @@ label {
 .player .embed {
     width: 100%;
     height: 100%;
+}
+
+/***********************
+ * Button Array Dialog *
+ ***********************/
+.buttonArray {
+    text-align: center;
+}
+.buttonArray button {
+    width: 200px;
+    font-weight: normal;
+    font-size: 12px;
 }
 
 /*******************
