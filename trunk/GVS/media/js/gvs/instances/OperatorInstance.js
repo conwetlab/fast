@@ -7,7 +7,7 @@ var OperatorInstance = Class.create(ScreenComponentInstance,
     initialize:function($super, buildingBlockDescription, inferenceEngine) {
         $super(buildingBlockDescription, inferenceEngine);
         this._menu.addOption('Rotate', function() {
-            this.document.rotateElement(this);
+            this.document.rotateInstance(this);
         }.bind(this));
     },
 

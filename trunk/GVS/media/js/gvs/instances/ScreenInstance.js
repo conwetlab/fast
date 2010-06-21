@@ -15,6 +15,18 @@ var ScreenInstance = Class.create(ComponentInstance,
          * @private @member
          */
         this._dialog = null;
+
+        this._menu.addOption('Preview', function(){
+            this.showPreviewDialog();
+        }.bind(this));
+        if (this.getBuildingBlockDescription().definition != null) {
+            this._menu.addOption('Clone', function(){
+                this.document.cloneElement(this);
+            }.bind(this));
+        }
+        this._menu.addOption('Create a Plan', function(){
+            this.document.getPlansElement(this);
+        }.bind(this));
     },
 
     // **************** PUBLIC METHODS **************** //

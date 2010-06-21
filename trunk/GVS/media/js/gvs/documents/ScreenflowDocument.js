@@ -102,6 +102,26 @@ var ScreenflowDocument = Class.create(PaletteDocument,
         });
     },
 
+    /**
+     * Creates a clone of the element screen
+     */
+    cloneElement: function(element) {
+        var description = element.getBuildingBlockDescription();
+        if (description.definition) {
+            GVS.getDocumentController().cloneScreen(description.id);
+        }
+    },
+
+    /**
+     * Creates a plan taking as end the Element
+     */
+    getPlansElement: function(element) {
+        var uri = element.getUri();
+        var canvas = this._getCanvasUris();
+        this._inferenceEngine.getPlans(canvas, uri,
+            this._onSuccessGetPlans.bind(this)
+        );
+    },
 
     // **************** PRIVATE METHODS **************** //
     /**
@@ -602,13 +622,10 @@ var ScreenflowDocument = Class.create(PaletteDocument,
      * @private
      */
     _getPlans: function() {
-        if (!this._planPanel.isVisible()){
-            var canvas = this._getCanvasUris();
-            var uri = this._selectedElement.getUri();
-            this._inferenceEngine.getPlans(canvas, uri,
-                                            this._onSuccessGetPlans.bind(this));
-        } else {
+        if (this._planPanel.isVisible()) {
             this._planPanel.hide();
+        } else {
+            this.getPlansElement(this._selectedElement);
         }
     },
 
@@ -703,10 +720,7 @@ var ScreenflowDocument = Class.create(PaletteDocument,
      * @private
      */
     _cloneSelectedElement: function() {
-        var description = this._selectedElement.getBuildingBlockDescription();
-        if (description.definition) {
-            GVS.getDocumentController().cloneScreen(description.id);
-        }
+        this.cloneElement(this._selectedElement);
     }
 });
 

@@ -389,7 +389,7 @@ var PaletteDocument = Class.create(AbstractDocument, /** @lends PaletteDocument.
      */
     _rotateSelectedElement: function () {
         var element = this._selectedElement;
-        if (! element) { //Rotate an element from the canvas
+        if (element != null) {
             this.rotateInstance(element);
         }
     },
