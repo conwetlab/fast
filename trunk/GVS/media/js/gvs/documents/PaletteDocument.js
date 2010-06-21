@@ -276,6 +276,23 @@ var PaletteDocument = Class.create(AbstractDocument, /** @lends PaletteDocument.
             };
     },
 
+    deleteInstance: function(instanceId) {
+        var title = instanceId.getTitle();
+        confirm("You are about to remove " + title + " from canvas. Are you sure?",
+            function(confirmed) {
+                confirmed && this._deleteInstance(instanceId);
+            }.bind(this)
+        );
+    },
+
+    rotateInstance: function(element) {
+        element.setOrientation((element.getOrientation() + 1) % 2);
+        var orientation = element.getOrientation();
+        element.getView().updateOrientation(orientation);
+        element.onRotate(orientation);
+        this.orientationUpdated(element, orientation);
+    },
+
     // **************** PRIVATE METHODS **************** //
 
     /**
@@ -371,13 +388,9 @@ var PaletteDocument = Class.create(AbstractDocument, /** @lends PaletteDocument.
      * @private
      */
     _rotateSelectedElement: function () {
-    	var element = this._selectedElement;
-        if (element != null) { //Rotate an element from the canvas
-        	element.setOrientation((element.getOrientation() + 1) % 2);
-        	var orientation = element.getOrientation();
-        	element.getView().updateOrientation(orientation);
-        	element.onRotate(orientation);
-        	this.orientationUpdated(element, orientation);
+        var element = this._selectedElement;
+        if (! element) { //Rotate an element from the canvas
+            this.rotateInstance(element);
         }
     },
 

@@ -39,6 +39,11 @@ var ComponentInstance = Class.create(DragSource,
          */
         this._view = this._createView();
 
+        this._menu = new MenuOptions(this._view.getNode());
+        this._menu.addOption('Delete', function(){
+            this.document.deleteInstance(this);
+        }.bind(this));
+
         /**
          * BuildingBlock params
          * @type String
@@ -59,6 +64,8 @@ var ComponentInstance = Class.create(DragSource,
          * @private
          */
         this._listener = null;
+
+        this.document = null;
 
         if (this.getUri()) {
             this._inferenceEngine.addReachabilityListener(this.getUri(), this._view);
@@ -134,6 +141,7 @@ var ComponentInstance = Class.create(DragSource,
      */
     setEventListener: function(/** Object */ listener) {
         this._listener = listener;
+        this.document = listener;
     },
 
     /**
@@ -270,13 +278,16 @@ var ComponentInstance = Class.create(DragSource,
         if (changingZone) {
             this._view.addEventListener (function(event){
                 event.stop();
-            }.bind(this),'click');
+                this._onClick();
+            }.bind(this),'mousedown');
+            this._view.addEventListener (function(event){
+                event.stop();
+            },'click');
             this._view.addEventListener (function(event){
                 event.stop();
                 this._onDoubleClick(event);
             }.bind(this),'dblclick');
         } else {
-            this._onClick();
             if (this._listener) {
                 this._listener.positionUpdated(this, position);
             }

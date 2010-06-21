@@ -4,6 +4,13 @@ var OperatorInstance = Class.create(ScreenComponentInstance,
     _preOffsetPosition:  {top:6, left:0},
     _postOffsetPosition: {top:-10, left:2},
 
+    initialize:function($super, buildingBlockDescription, inferenceEngine) {
+        $super(buildingBlockDescription, inferenceEngine);
+        this._menu.addOption('Rotate', function() {
+            this.document.rotateElement(this);
+        }.bind(this));
+    },
+
     // **************** PUBLIC METHODS **************** //
 
     /**

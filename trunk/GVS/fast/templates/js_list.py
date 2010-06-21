@@ -70,6 +70,7 @@ file_list = [
     "gvs/facts/FactIcon.js",
 
     # Component instances
+    "gvs/instances/MenuOptions.js",
     "gvs/instances/ComponentInstance.js",
     "gvs/instances/ScreenInstance.js",
     "gvs/instances/PrePostInstance.js",
