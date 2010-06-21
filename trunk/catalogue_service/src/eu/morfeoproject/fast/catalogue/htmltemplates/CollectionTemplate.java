@@ -9,7 +9,7 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import eu.morfeoproject.fast.catalogue.buildingblocks.Resource;
+import eu.morfeoproject.fast.catalogue.buildingblocks.BuildingBlock;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
 
@@ -19,7 +19,7 @@ public class CollectionTemplate {
 
 	private static final String tmplFile = "collection.html";
 	
-	public static void process(Collection<? extends Resource> collection, Writer writer) throws TemplateException {
+	public static void process(Collection<? extends BuildingBlock> collection, Writer writer) throws TemplateException {
 		// Build the data-model
         Map dataModel = new HashMap();
         dataModel.put("collection", collection);

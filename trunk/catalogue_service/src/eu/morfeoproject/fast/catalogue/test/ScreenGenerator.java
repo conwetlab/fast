@@ -72,11 +72,7 @@ public class ScreenGenerator {
 		labels.put("en", "Condition label");
 		labels.put("es", "Etiqueta de condicion");
 		c.setLabels(labels);
-		ArrayList<Statement> pattern = new ArrayList<Statement>();
 		BlankNode bn = catalogue.getTripleStore().createBlankNode();
-		Statement stmt = catalogue.getTripleStore().createStatement(bn, RDF.type, uri);
-		pattern.add(stmt);
-		c.setPattern(pattern);
 		c.setPatternString(bn.toString()+" "+RDF.type.toString()+" "+uri);
 		c.setPositive(true);
 		return c;

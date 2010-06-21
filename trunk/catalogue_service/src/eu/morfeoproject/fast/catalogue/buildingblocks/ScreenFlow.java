@@ -14,38 +14,37 @@ import eu.morfeoproject.fast.catalogue.vocabulary.FGO;
 
 public class ScreenFlow extends WithConditions {
 	
-	private List<URI> resources;
+	private List<URI> buildingBlockList;
 	
 	protected ScreenFlow(URI uri) {
 		setUri(uri);
 	}
 
-	public List<URI> getResources() {
-		if (resources == null)
-			resources = new ArrayList<URI>();
-		return resources;
+	public List<URI> getBuildingBlockList() {
+		if (buildingBlockList == null)
+			buildingBlockList = new ArrayList<URI>();
+		return buildingBlockList;
 	}
 
-	public void setResources(List<URI> resources) {
-		this.resources = resources;
+	public void setBuildingBlockList(List<URI> resources) {
+		this.buildingBlockList = resources;
 	}
 	
 	public JSONObject toJSON() throws JSONException {
 		JSONObject json = super.toJSON();
-		JSONArray resources = new JSONArray();
-		for (URI r : getResources()) {
-			resources.put(r);
-		}
-		json.put("contains", resources);
+		JSONArray list = new JSONArray();
+		for (URI r : getBuildingBlockList())
+			list.put(r);
+		json.put("contains", list);
 		return json;
 	}
 	
-	public Model createModel() {
-		Model model = super.createModel();		
+	public Model toRDF2GoModel() {
+		Model model = super.toRDF2GoModel();		
 		
 		URI sfUri = this.getUri();
 		model.addStatement(sfUri, RDF.type, FGO.ScreenFlow);
-		for (URI r : this.getResources())
+		for (URI r : this.getBuildingBlockList())
 			model.addStatement(sfUri, FGO.contains, r);
 		
 		return model;

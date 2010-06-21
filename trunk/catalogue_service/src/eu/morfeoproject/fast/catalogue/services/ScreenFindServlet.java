@@ -20,8 +20,9 @@ import org.ontoware.rdf2go.model.node.impl.URIImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import eu.morfeoproject.fast.catalogue.Catalogue;
 import eu.morfeoproject.fast.catalogue.NotFoundException;
-import eu.morfeoproject.fast.catalogue.buildingblocks.Resource;
+import eu.morfeoproject.fast.catalogue.buildingblocks.BuildingBlock;
 
 /**
  * Servlet implementation class ScreenFindServlet
@@ -53,16 +54,17 @@ public class ScreenFindServlet extends GenericServlet {
 			line = reader.readLine();
 		}
 		String body = buffer.toString();
+		Catalogue catalogue = CatalogueAccessPoint.getCatalogue();
 		
 		try {
 			// create JSON representation of the input
 			JSONObject input = new JSONObject(body);
 			// parse the canvas
-			HashSet<Resource> canvas = new HashSet<Resource>();
+			HashSet<BuildingBlock> canvas = new HashSet<BuildingBlock>();
 			JSONArray jsonCanvas = input.getJSONArray("canvas");
 			for (int i = 0; i < jsonCanvas.length(); i++) {
 				URI uri = new URIImpl(((JSONObject)jsonCanvas.get(i)).getString("uri"));
-				Resource r = CatalogueAccessPoint.getCatalogue().getResource(uri);
+				BuildingBlock r = catalogue.getBuildingBlock(uri);
 				if (r == null) 
 					throw new NotFoundException("Resource "+uri+" does not exist.");
 				canvas.add(r); 
@@ -82,14 +84,14 @@ public class ScreenFindServlet extends GenericServlet {
 			JSONArray jsonElements = input.getJSONArray("elements");
 			for (int i = 0; i < jsonElements.length(); i++) {
 				URI uri = new URIImpl(((JSONObject)jsonElements.get(i)).getString("uri"));
-				Resource r = CatalogueAccessPoint.getCatalogue().getResource(uri);
+				BuildingBlock r = catalogue.getBuildingBlock(uri);
 				if (r == null)
 					throw new NotFoundException("Screen "+uri+" does not exist.");
 				canvas.add(r); 
 			}
 
 			// make the call to the catalogue
-			Set<URI> results = CatalogueAccessPoint.getCatalogue().findBackwards(canvas, true, true, 0, -1, tags);
+			Set<URI> results = catalogue.findBackwards(canvas, true, true, 0, -1, tags);
 
 			// write the results in the output
 			JSONArray output = new JSONArray();

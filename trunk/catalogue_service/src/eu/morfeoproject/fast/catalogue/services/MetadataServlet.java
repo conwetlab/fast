@@ -17,6 +17,14 @@ import org.ontoware.rdf2go.model.node.impl.URIImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import eu.morfeoproject.fast.catalogue.Catalogue;
+import eu.morfeoproject.fast.catalogue.buildingblocks.BackendService;
+import eu.morfeoproject.fast.catalogue.buildingblocks.BuildingBlock;
+import eu.morfeoproject.fast.catalogue.buildingblocks.Form;
+import eu.morfeoproject.fast.catalogue.buildingblocks.Operator;
+import eu.morfeoproject.fast.catalogue.buildingblocks.Screen;
+import eu.morfeoproject.fast.catalogue.buildingblocks.ScreenFlow;
+
 /**
  * Servlet implementation class MetadataServlet
  */
@@ -39,7 +47,6 @@ public class MetadataServlet extends HttpServlet {
 		logger.debug("Entering GETMETADATA operation...");
 		BufferedReader reader = request.getReader();
 		PrintWriter writer = response.getWriter();
-		String format = request.getHeader("accept") != null ? request.getHeader("accept") : MediaType.APPLICATION_JSON;
 		StringBuffer buffer = new StringBuffer();
 		String line = reader.readLine();
 		while (line != null) {
@@ -47,6 +54,7 @@ public class MetadataServlet extends HttpServlet {
 			line = reader.readLine();
 		}
 		String body = buffer.toString();
+		Catalogue catalogue = CatalogueAccessPoint.getCatalogue();
 		
 		try {
 			// read and process the JSON input 
@@ -59,16 +67,17 @@ public class MetadataServlet extends HttpServlet {
 			
 			for (int i = 0; i < input.length(); i++) {
 				URI uri = new URIImpl(input.getString(i));
-				if (CatalogueAccessPoint.getCatalogue().containsScreenFlow(uri))
-					arrayScreenflows.put(CatalogueAccessPoint.getCatalogue().getScreenFlow(uri).toJSON());
-				else if (CatalogueAccessPoint.getCatalogue().containsScreen(uri))
-					arrayScreens.put(CatalogueAccessPoint.getCatalogue().getScreen(uri).toJSON());
-				else if (CatalogueAccessPoint.getCatalogue().containsForm(uri))
-					arrayForms.put(CatalogueAccessPoint.getCatalogue().getForm(uri).toJSON());
-				else if (CatalogueAccessPoint.getCatalogue().containsOperator(uri))
-					arrayOperators.put(CatalogueAccessPoint.getCatalogue().getOperator(uri).toJSON());
-				else if (CatalogueAccessPoint.getCatalogue().containsBackendService(uri))
-					arrayBackendServices.put(CatalogueAccessPoint.getCatalogue().getBackendService(uri).toJSON());
+				BuildingBlock bb = catalogue.getBuildingBlock(uri);
+				if (bb instanceof ScreenFlow)
+					arrayScreenflows.put(bb.toJSON());
+				else if (bb instanceof Screen)
+					arrayScreens.put(bb.toJSON());
+				else if (bb instanceof Form)
+					arrayForms.put(bb.toJSON());
+				else if (bb instanceof Operator)
+					arrayOperators.put(bb.toJSON());
+				else if (bb instanceof BackendService)
+					arrayBackendServices.put(bb.toJSON());
 			}
 			
 			// create the JSON output

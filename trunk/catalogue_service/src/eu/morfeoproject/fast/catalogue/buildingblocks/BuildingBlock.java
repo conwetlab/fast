@@ -17,13 +17,17 @@ import org.ontoware.rdf2go.vocabulary.RDF;
 import org.ontoware.rdf2go.vocabulary.RDFS;
 import org.ontoware.rdf2go.vocabulary.XSD;
 
+import eu.morfeoproject.fast.catalogue.commontag.AuthorCTag;
+import eu.morfeoproject.fast.catalogue.commontag.AutoCTag;
+import eu.morfeoproject.fast.catalogue.commontag.CTag;
+import eu.morfeoproject.fast.catalogue.commontag.ReaderCTag;
 import eu.morfeoproject.fast.catalogue.util.DateFormatter;
 import eu.morfeoproject.fast.catalogue.vocabulary.CTAG;
 import eu.morfeoproject.fast.catalogue.vocabulary.DC;
 import eu.morfeoproject.fast.catalogue.vocabulary.FGO;
 import eu.morfeoproject.fast.catalogue.vocabulary.FOAF;
 
-public abstract class Resource {
+public abstract class BuildingBlock {
 
 	private URI uri;
 	private Map<String, String> labels;
@@ -39,6 +43,10 @@ public abstract class Resource {
     private String id;
     private String name;
     private String parameterTemplate;
+    
+    protected BuildingBlock() {
+    	super();
+    }
     
     public URI getUri() {
 		return uri;
@@ -163,7 +171,7 @@ public abstract class Resource {
 	 * @param r the resource to compare with
 	 * @return true if their URIs are the same
 	 */
-	public boolean equals(Resource r) {
+	public boolean equals(BuildingBlock r) {
 		return r.getUri().equals(getUri());
 	}
 	
@@ -267,47 +275,58 @@ public abstract class Resource {
 		return json;
 	}
 	
-	public Model createModel() {
+	public Model toRDF2GoModel() {
 		Model model = RDF2Go.getModelFactory().createModel();
 		model.open();
 		model.setNamespace("dc", DC.NS_DC.toString());
 		model.setNamespace("fgo", FGO.NS_FGO.toString());
 		model.setNamespace("ctag", CTAG.NS_CTAG.toString());
 		
-		URI resourceUri = this.getUri();
+		URI bbUri = this.getUri();
 		for (String key : this.getLabels().keySet())
-			model.addStatement(resourceUri, RDFS.label, model.createLanguageTagLiteral(this.getLabels().get(key), key));
+			model.addStatement(bbUri, RDFS.label, model.createLanguageTagLiteral(this.getLabels().get(key), key));
 		for (String key : this.getDescriptions().keySet())
-			model.addStatement(resourceUri, DC.description, model.createLanguageTagLiteral(this.getDescriptions().get(key), key));
-		if (this.getCreator() != null)
-			model.addStatement(resourceUri, DC.creator, this.getCreator());
+			model.addStatement(bbUri, DC.description, model.createLanguageTagLiteral(this.getDescriptions().get(key), key));
+		if (this.getCreator() != null) {
+			model.addStatement(bbUri, DC.creator, this.getCreator());
+			model.addStatement(bbUri, FOAF.maker, this.getCreator());
+		}
 		if (this.getRights() != null)
-			model.addStatement(resourceUri, DC.rights, this.getRights());
+			model.addStatement(bbUri, DC.rights, this.getRights());
 		if (this.getVersion() != null)
-			model.addStatement(resourceUri, FGO.hasVersion, this.getVersion());
+			model.addStatement(bbUri, FGO.hasVersion, model.createDatatypeLiteral(this.getVersion(), XSD._string));
 		if (this.getCreationDate() != null)
-			model.addStatement(resourceUri, DC.date, DateFormatter.formatDateISO8601(this.getCreationDate()));
+			model.addStatement(bbUri, DC.date, model.createDatatypeLiteral(DateFormatter.formatDateISO8601(this.getCreationDate()), XSD._date));
 		if (this.getIcon() != null)
-			model.addStatement(resourceUri, FGO.hasIcon, this.getIcon());
+			model.addStatement(bbUri, FGO.hasIcon, this.getIcon());
 		if (this.getScreenshot() != null)
-			model.addStatement(resourceUri, FGO.hasScreenshot, this.getScreenshot());
+			model.addStatement(bbUri, FGO.hasScreenshot, this.getScreenshot());
+		if (this.getHomepage() != null)
+			model.addStatement(bbUri, FOAF.homepage, this.getHomepage());
 		for (CTag tag : this.getTags()) {
 			BlankNode bnTag = model.createBlankNode();
-			model.addStatement(resourceUri, CTAG.tagged, bnTag);
-			model.addStatement(bnTag, RDF.type, CTAG.Tag);
+			model.addStatement(bbUri, CTAG.tagged, bnTag);
+			
+			if (tag instanceof AuthorCTag)
+				model.addStatement(bnTag, RDF.type, CTAG.AuthorTag);
+			else if (tag instanceof ReaderCTag)
+				model.addStatement(bnTag, RDF.type, CTAG.ReaderTag);
+			else if (tag instanceof AutoCTag)
+				model.addStatement(bnTag, RDF.type, CTAG.AutoTag);
+			else
+				model.addStatement(bnTag, RDF.type, CTAG.Tag);
+			
 			if (tag.getMeans() != null)
 				model.addStatement(bnTag, CTAG.means, tag.getMeans());
 			for (String lang : tag.getLabels().keySet())
-				model.addStatement(bnTag, RDFS.label, model.createLanguageTagLiteral(lang, tag.getLabels().get(lang)));
+				model.addStatement(bnTag, CTAG.label, model.createLanguageTagLiteral(lang, tag.getLabels().get(lang)));
 			if (tag.getTaggingDate() != null)
 				model.addStatement(bnTag, CTAG.taggingDate, model.createDatatypeLiteral(tag.getTaggingDate().toString(), XSD._date));
 		}
-		if (this.getHomepage() != null)
-			model.addStatement(resourceUri, FOAF.homepage, this.getHomepage());
 		if (this.getName() != null)
-			model.addStatement(resourceUri, FGO.hasName, this.getName());
+			model.addStatement(bbUri, FGO.hasName, model.createDatatypeLiteral(this.getName(), XSD._string));
 		if (this.getParameterTemplate() != null)
-			model.addStatement(resourceUri, FGO.hasParameterTemplate, this.getParameterTemplate());
+			model.addStatement(bbUri, FGO.hasParameterTemplate, model.createDatatypeLiteral(this.getParameterTemplate(), XSD._string));
 		
 		return model;
 	}

@@ -13,16 +13,19 @@ import java.net.HttpURLConnection;
 import java.net.ProtocolException;
 import java.net.URL;
 
+import org.json.JSONObject;
+import org.ontoware.rdf2go.model.node.impl.URIImpl;
+
 public class Seed {
 
-	private static final String SERVER_URL = "http://localhost:8080/catalogue";
+	private static final String SERVER_URL = "http://localhost:9000/FASTCatalogue";
 	private static final String DATA_DIR = "C:\\svnFAST\\trunk\\catalogue_data";
 
 	public Seed() {
 	}
 	
 	private void run() throws Exception {
-		String[] buildingBlocks = {"screens", "forms", "operators", "services"};
+		String[] buildingBlocks = {"forms", "operators", "services", "screens"};
 		for (String buildingBlock : buildingBlocks)
 			process(buildingBlock);
 	}
@@ -35,7 +38,8 @@ public class Seed {
 			for (String filename : files) {
 				if (filename.endsWith("json")) {
 					System.out.println("Reading and sending "+DATA_DIR+"\\"+buildingBlock+"\\"+filename+"...");
-					postData(getFileContent(new File(DATA_DIR+"\\"+buildingBlock+"\\"+filename)), new URL(SERVER_URL+"/"+buildingBlock));
+					JSONObject json = new JSONObject(getFileContent(new File(DATA_DIR+"\\"+buildingBlock+"\\"+filename)));
+					postData(json.toString(), new URL(SERVER_URL+"/"+buildingBlock));
 				}
 		    }
 		}
@@ -45,7 +49,7 @@ public class Seed {
 		Seed seed = new Seed();
 		seed.run();
 	}
-
+	
 	/**
 	 * Fetch the entire contents of a text file, and return it in a String. This
 	 * style of implementation does not throw Exceptions to the caller.
@@ -96,11 +100,11 @@ public class Seed {
 			urlConn.setDoInput(true);
 			urlConn.setUseCaches(false);
 			urlConn.setAllowUserInteraction(false);
-			urlConn.setRequestProperty("Content-type", "text/xml; charset=UTF-8");
+			urlConn.setRequestProperty("Content-type", "application/json; charset=UTF-8");
 			OutputStream out = urlConn.getOutputStream();
 			try {
 				Writer writer = new OutputStreamWriter(out, "UTF-8");
-				 // Send POST output.
+				// Send POST output.
 				DataOutputStream printout = new DataOutputStream(urlConn.getOutputStream());
 			    printout.writeBytes(content);
 			    printout.flush();

@@ -48,6 +48,7 @@ public class ScreenDefinition {
 	
 	public JSONObject toJSON() throws JSONException {
 		JSONObject json = new JSONObject();
+		
 		// building blocks
 		JSONArray bbArray = new JSONArray();
 		for (String id : getBuildingBlocks().keySet()) {
@@ -57,6 +58,7 @@ public class ScreenDefinition {
 			bbArray.put(bb);
 		}
 		json.put("buildingblocks", bbArray);
+		
 		// pipes
 		JSONArray pipeArray = new JSONArray();
 		for (Pipe pipe : getPipes()) {
@@ -73,6 +75,7 @@ public class ScreenDefinition {
 			pipeArray.put(jsonPipe);
 		}
 		json.put("pipes", pipeArray);
+		
 		// triggers
 		JSONArray triggerArray = new JSONArray();
 		for (Trigger trigger : getTriggers()) {

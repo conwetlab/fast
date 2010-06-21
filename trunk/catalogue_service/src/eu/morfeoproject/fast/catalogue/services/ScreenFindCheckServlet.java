@@ -20,11 +20,12 @@ import org.ontoware.rdf2go.model.node.impl.URIImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import eu.morfeoproject.fast.catalogue.Catalogue;
 import eu.morfeoproject.fast.catalogue.NotFoundException;
 import eu.morfeoproject.fast.catalogue.buildingblocks.Condition;
 import eu.morfeoproject.fast.catalogue.buildingblocks.Postcondition;
 import eu.morfeoproject.fast.catalogue.buildingblocks.Precondition;
-import eu.morfeoproject.fast.catalogue.buildingblocks.Resource;
+import eu.morfeoproject.fast.catalogue.buildingblocks.BuildingBlock;
 import eu.morfeoproject.fast.catalogue.buildingblocks.Screen;
 
 /**
@@ -49,7 +50,6 @@ public class ScreenFindCheckServlet extends HttpServlet {
 		logger.info("Entering FIND&CHECK operation...");
 		BufferedReader reader = request.getReader();
 		PrintWriter writer = response.getWriter();
-		String format = request.getHeader("accept") != null ? request.getHeader("accept") : MediaType.APPLICATION_JSON;
 		StringBuffer buffer = new StringBuffer();
 		String line = reader.readLine();
 		while (line != null) {
@@ -57,26 +57,27 @@ public class ScreenFindCheckServlet extends HttpServlet {
 			line = reader.readLine();
 		}
 		String body = buffer.toString();
+		Catalogue catalogue = CatalogueAccessPoint.getCatalogue();
 		
 		try {
 			// create JSON representation of the input
 			JSONObject input = new JSONObject(body);
 			// parses the canvas
-			HashSet<Resource> canvas = new HashSet<Resource>();
+			HashSet<BuildingBlock> canvas = new HashSet<BuildingBlock>();
 			JSONArray jsonCanvas = input.getJSONArray("canvas");
 			for (int i = 0; i < jsonCanvas.length(); i++) {
 				URI uri = new URIImpl(((JSONObject)jsonCanvas.get(i)).getString("uri"));
-				Resource r = CatalogueAccessPoint.getCatalogue().getResource(uri);
+				BuildingBlock r = catalogue.getBuildingBlock(uri);
 				if (r == null) 
 					throw new NotFoundException("Resource "+uri+" does not exist.");
 				canvas.add(r); 
 			}
 			// parses the list of elements
-			HashSet<Resource> elements = new HashSet<Resource>();
+			HashSet<BuildingBlock> elements = new HashSet<BuildingBlock>();
 			JSONArray jsonElements = input.getJSONArray("elements");
 			for (int i = 0; i < jsonElements.length(); i++) {
 				URI uri = new URIImpl(((JSONObject)jsonElements.get(i)).getString("uri"));
-				Resource r = CatalogueAccessPoint.getCatalogue().getResource(uri);
+				BuildingBlock r = catalogue.getBuildingBlock(uri);
 				if (r == null) 
 					throw new NotFoundException("Resource "+uri+" does not exist.");
 				elements.add(r); 
@@ -96,19 +97,19 @@ public class ScreenFindCheckServlet extends HttpServlet {
 			String criterion = input.getString("criterion");
 			
 			// do the real work
-			HashSet<Resource> all = new HashSet<Resource>();
+			HashSet<BuildingBlock> all = new HashSet<BuildingBlock>();
 			all.addAll(canvas);
 			all.addAll(elements);
-			Set<URI> results = CatalogueAccessPoint.getCatalogue().findBackwards(all, true, true, 0, -1, tags);
+			Set<URI> results = catalogue.findBackwards(all, true, true, 0, -1, tags);
 			// add results of 'find' to the list of elements
 			for (URI uri : results)
-				elements.add(CatalogueAccessPoint.getCatalogue().getResource(uri));
-			Set<Resource> reachables = CatalogueAccessPoint.getCatalogue().filterReachableResources(canvas);
+				elements.add(catalogue.getBuildingBlock(uri));
+			Set<BuildingBlock> reachables = catalogue.filterReachableBuildingBlocks(canvas);
 			JSONObject output = new JSONObject();
 			if (criterion.equalsIgnoreCase("reachability")) {
 				JSONArray canvasOut = new JSONArray();
 				boolean reachability = true;
-				for (Resource r : canvas) {
+				for (BuildingBlock r : canvas) {
 					JSONObject jsonResource = new JSONObject();
 					if (r instanceof Screen) {
 						Screen s = (Screen)r;
@@ -118,7 +119,7 @@ public class ScreenFindCheckServlet extends HttpServlet {
 						boolean satisfied = false;
 						for (List<Condition> conList : s.getPreconditions()) { /* OR */
 							JSONArray conArray = new JSONArray();
-							satisfied = CatalogueAccessPoint.getCatalogue().isConditionSatisfied(reachables, conList, true, true, s.getUri());
+							satisfied = catalogue.isConditionSatisfied(reachables, conList, true, true, s.getUri());
 							reachability = reachability & satisfied;
 							for (Condition c : conList) {
 								JSONObject jsonPre = c.toJSON();
@@ -136,7 +137,7 @@ public class ScreenFindCheckServlet extends HttpServlet {
 					} else if (r instanceof Postcondition) {
 						Postcondition e = (Postcondition)r;
 						jsonResource.put("uri", e.getUri());
-						boolean satisfied = CatalogueAccessPoint.getCatalogue().isConditionSatisfied(reachables, e.getConditions(), true, true, e.getUri());
+						boolean satisfied = catalogue.isConditionSatisfied(reachables, e.getConditions(), true, true, e.getUri());
 						JSONArray conArray = new JSONArray();
 						for (Condition c : e.getConditions()) {
 							JSONObject jsonCon = c.toJSON();
@@ -151,7 +152,7 @@ public class ScreenFindCheckServlet extends HttpServlet {
 				}
 				output.put("canvas", canvasOut);
 				JSONArray elementsOut = new JSONArray();
-				for (Resource r : elements) { //TODO finish it
+				for (BuildingBlock r : elements) { //TODO finish it
 					JSONObject jsonResource = new JSONObject();
 					reachability = true;
 					if (r instanceof Screen) {
@@ -162,7 +163,7 @@ public class ScreenFindCheckServlet extends HttpServlet {
 						boolean satisfied = false;
 						for (List<Condition> conList : s.getPreconditions()) { /* OR */
 							JSONArray conArray = new JSONArray();
-							satisfied = CatalogueAccessPoint.getCatalogue().isConditionSatisfied(reachables, conList, true, true, s.getUri());
+							satisfied = catalogue.isConditionSatisfied(reachables, conList, true, true, s.getUri());
 							reachability = reachability & satisfied;
 							for (Condition c : conList) {
 								JSONObject jsonPre = c.toJSON();

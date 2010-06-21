@@ -1,21 +1,14 @@
 package eu.morfeoproject.fast.catalogue.buildingblocks;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.ontoware.rdf2go.RDF2Go;
-import org.ontoware.rdf2go.model.Model;
-import org.ontoware.rdf2go.model.Statement;
-import org.ontoware.rdf2go.model.node.BlankNode;
 
 public class Condition {
 	
 	private String patternString;
-	private List<Statement> pattern;
 	private boolean positive;
 	private Map<String, String> labels;
 	private String id;
@@ -24,23 +17,13 @@ public class Condition {
 		super();
 		this.positive = true; // by default a Condition will be positive
 	}
-	
+    
 	public String getPatternString() {
 		return patternString;
 	}
 	
 	public void setPatternString(String patternString) {
 		this.patternString = patternString;
-	}
-	
-	public List<Statement> getPattern() {
-		if (pattern == null)
-			pattern = new ArrayList<Statement>();
-		return pattern;
-	}
-
-	public void setPattern(List<Statement> pattern) {
-		this.pattern = pattern;
 	}
 	
 	public boolean isPositive() {
@@ -67,30 +50,6 @@ public class Condition {
 
 	public void setId(String id) {
 		this.id = id;
-	}
-
-	@Override
-	public boolean equals(Object o) {
-		if (o == null)
-			return false;
-		Condition condition = (Condition)o;
-		if (this.getPattern().size() == condition.getPattern().size()) {
-			Model condModel = RDF2Go.getModelFactory().createModel();
-			condModel.open();
-			condModel.addAll(this.getPattern().iterator());
-			
-			// create the ASK sparql query for a condition
-	    	String queryStr = "ASK {";
-	    	for (Statement st : condition.getPattern()) {
-				String su = (st.getSubject() instanceof BlankNode) ? st.getSubject().toString() : st.getSubject().toSPARQL();
-				String ob = (st.getObject() instanceof BlankNode) ? st.getObject().toString() : st.getObject().toSPARQL();
-				queryStr = queryStr.concat(su+" "+st.getPredicate().toSPARQL()+" "+ob+" . ");
-	    	}
-	    	queryStr = queryStr.concat("}");
-
-	    	return condModel.sparqlAsk(queryStr);
-		}
-		return false;
 	}
 	
 	@Override

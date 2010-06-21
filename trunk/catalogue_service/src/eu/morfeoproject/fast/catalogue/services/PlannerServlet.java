@@ -20,8 +20,9 @@ import org.ontoware.rdf2go.model.node.impl.URIImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import eu.morfeoproject.fast.catalogue.Catalogue;
 import eu.morfeoproject.fast.catalogue.NotFoundException;
-import eu.morfeoproject.fast.catalogue.buildingblocks.Resource;
+import eu.morfeoproject.fast.catalogue.buildingblocks.BuildingBlock;
 import eu.morfeoproject.fast.catalogue.planner.Plan;
 
 /**
@@ -54,6 +55,7 @@ public class PlannerServlet extends GenericServlet {
 			line = reader.readLine();
 		}
 		String body = buffer.toString();
+		Catalogue catalogue = CatalogueAccessPoint.getCatalogue();
 		
 		try {
 			// create JSON representation of the input
@@ -62,11 +64,11 @@ public class PlannerServlet extends GenericServlet {
 			URI goal = new URIImpl(input.getString("goal"));
 			// parse the canvas
 			ArrayList<URI> canvasUris = new ArrayList<URI>();
-			HashSet<Resource> canvas = new HashSet<Resource>();
+			HashSet<BuildingBlock> canvas = new HashSet<BuildingBlock>();
 			JSONArray jsonCanvas = input.getJSONArray("canvas");
 			for (int i = 0; i < jsonCanvas.length(); i++) {
 				URI uri = new URIImpl(((JSONObject)jsonCanvas.get(i)).getString("uri"));
-				Resource r = CatalogueAccessPoint.getCatalogue().getResource(uri);
+				BuildingBlock r = catalogue.getBuildingBlock(uri);
 				if (r == null) 
 					throw new NotFoundException("Resource "+uri+" does not exist.");
 				canvas.add(r);
@@ -77,7 +79,7 @@ public class PlannerServlet extends GenericServlet {
 			int perPage = input.has("per_page") ? input.getInt("per_page") : 0;
 			
 			// calculate the plans for a certain goal
-			List<Plan> plans = CatalogueAccessPoint.getCatalogue().searchPlans(goal, canvas);
+			List<Plan> plans = catalogue.searchPlans(goal, canvas);
 			logger.info("Found "+plans.size()+" plans for "+goal);
 			
 			// pagination

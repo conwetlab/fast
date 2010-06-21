@@ -13,8 +13,8 @@ public class BackendService extends ScreenComponent {
 	}
 	
 	@Override
-	public Model createModel() {
-		Model model = super.createModel();
+	public Model toRDF2GoModel() {
+		Model model = super.toRDF2GoModel();
 		
 		model.addStatement(getUri(), RDF.type, FGO.BackendService);
 

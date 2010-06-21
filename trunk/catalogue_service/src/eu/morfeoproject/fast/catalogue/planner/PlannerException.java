@@ -1,27 +1,27 @@
 /**
  * 
  */
-package eu.morfeoproject.fast.catalogue;
+package eu.morfeoproject.fast.catalogue.planner;
 
 /**
  * @author Ismael Rivera
  *
  */
-public class InvalidResourceTypeException extends Exception {
+public class PlannerException extends Exception {
 
 	private static final long serialVersionUID = 1L;
 
 	/**
 	 * 
 	 */
-	public InvalidResourceTypeException() {
+	public PlannerException() {
 		// TODO Auto-generated constructor stub
 	}
 
 	/**
 	 * @param message
 	 */
-	public InvalidResourceTypeException(String message) {
+	public PlannerException(String message) {
 		super(message);
 		// TODO Auto-generated constructor stub
 	}
@@ -29,7 +29,7 @@ public class InvalidResourceTypeException extends Exception {
 	/**
 	 * @param cause
 	 */
-	public InvalidResourceTypeException(Throwable cause) {
+	public PlannerException(Throwable cause) {
 		super(cause);
 		// TODO Auto-generated constructor stub
 	}
@@ -38,7 +38,7 @@ public class InvalidResourceTypeException extends Exception {
 	 * @param message
 	 * @param cause
 	 */
-	public InvalidResourceTypeException(String message, Throwable cause) {
+	public PlannerException(String message, Throwable cause) {
 		super(message, cause);
 		// TODO Auto-generated constructor stub
 	}

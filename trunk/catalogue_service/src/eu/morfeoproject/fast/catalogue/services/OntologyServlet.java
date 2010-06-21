@@ -16,6 +16,8 @@ import org.ontoware.rdf2go.model.node.impl.URIImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import eu.morfeoproject.fast.catalogue.Catalogue;
+
 /**
  * Servlet implementation class SlotServlet
  */
@@ -43,6 +45,7 @@ public class OntologyServlet extends GenericServlet {
 			line = reader.readLine();
 		}
 		String body = buffer.toString();
+		Catalogue catalogue = CatalogueAccessPoint.getCatalogue();
 		
 		try {
 			JSONObject json = new JSONObject(body);
@@ -54,7 +57,7 @@ public class OntologyServlet extends GenericServlet {
 			else if (syntaxStr.equalsIgnoreCase("turtle")) 	syntax = Syntax.Turtle;
 			
 			// add ontology to the catalogue
-			if (CatalogueAccessPoint.getCatalogue().addPublicOntology(uri, downloadUri, syntax))
+			if (catalogue.addPublicOntology(uri, downloadUri, syntax))
 				response.setStatus(HttpServletResponse.SC_OK);
 			else
 				response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Ontology '"+uri+"' cannot be added.");

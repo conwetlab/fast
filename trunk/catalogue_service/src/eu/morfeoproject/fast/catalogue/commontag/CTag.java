@@ -1,4 +1,4 @@
-package eu.morfeoproject.fast.catalogue.buildingblocks;
+package eu.morfeoproject.fast.catalogue.commontag;
 
 import java.util.Date;
 import java.util.HashMap;

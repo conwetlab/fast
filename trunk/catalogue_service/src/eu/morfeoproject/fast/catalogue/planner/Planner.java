@@ -10,42 +10,19 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import eu.morfeoproject.fast.catalogue.Catalogue;
+import eu.morfeoproject.fast.catalogue.buildingblocks.BuildingBlock;
 import eu.morfeoproject.fast.catalogue.buildingblocks.Condition;
 import eu.morfeoproject.fast.catalogue.buildingblocks.FastModelFactory;
 import eu.morfeoproject.fast.catalogue.buildingblocks.Postcondition;
 import eu.morfeoproject.fast.catalogue.buildingblocks.Precondition;
-import eu.morfeoproject.fast.catalogue.buildingblocks.Resource;
 import eu.morfeoproject.fast.catalogue.buildingblocks.Screen;
 
-public class Planner {
+public abstract class Planner {
 	
 	final Logger logger = LoggerFactory.getLogger(Planner.class);
 
-	private PlannerStore plannerStore;
-	private Catalogue catalogue;
-	
-	public Planner(Catalogue catalogue) {
-		this.plannerStore = new PlannerStore();
-		this.catalogue = catalogue;
-		run();
-	}
-	
-	/*
-	 * creates all the plans
-	 * TODO this should be stored permanently
-	 */
-	private void run() {
-		for (Screen screen : catalogue.listScreens()) {
-			if (screen.getPreconditions().size() > 0) {
-				HashSet<Resource> resources = new HashSet<Resource>();
-				resources.add(screen);
-				HashSet<URI> results = new HashSet<URI>();
-				results.addAll(catalogue.findBackwards(resources, true, true, 0, -1, null));
-				for (URI result : results)
-					plannerStore.add(result, screen.getUri());
-			}
-		}
-	}
+	protected PlannerStore plannerStore;
+	protected Catalogue catalogue;
 	
 	/**
 	 * Creates a list of plans which 
@@ -53,9 +30,9 @@ public class Planner {
 	 * @param resources
 	 * @return
 	 */
-	public List<Plan> searchPlans(URI uri, Set<Resource> resources) {
+	public List<Plan> searchPlans(URI uri, Set<BuildingBlock> resources) {
 		List<URI> uriList = new ArrayList<URI>();
-		for (Resource resource : resources)
+		for (BuildingBlock resource : resources)
 			uriList.add(resource.getUri());
 		
 		List<Plan> planList = searchPlans(uri);
@@ -135,13 +112,13 @@ public class Planner {
 		}
 	}
 	
-	public void add(Resource resource) {
+	public void add(BuildingBlock resource) {
 		calculateForwards(resource);
 		if (resource instanceof Screen)
 			calculateBackwards(resource);
 	}
 	
-	public void update(Resource newResource, Resource oldResource) {
+	public void update(BuildingBlock newResource, BuildingBlock oldResource) {
 		if (newResource instanceof Screen && oldResource instanceof Screen) {
 			if (!equalConditions(((Screen) newResource).getPreconditions(), ((Screen) oldResource).getPreconditions())) {
 				plannerStore.removeTo(newResource.getUri());
@@ -166,8 +143,12 @@ public class Planner {
 		plannerStore.removeTo(screenUri);
 	}
 	
-	private void calculateForwards(Resource resource) {
-		HashSet<Resource> resources = new HashSet<Resource>();
+	public void clear() {
+		plannerStore.clear();
+	}
+	
+	private void calculateForwards(BuildingBlock resource) {
+		HashSet<BuildingBlock> resources = new HashSet<BuildingBlock>();
 		if (resource instanceof Screen) {
 			if (((Screen) resource).getPostconditions().size() > 0)
 				resources.add(resource);
@@ -189,8 +170,8 @@ public class Planner {
 		}
 	}
 	
-	private void calculateBackwards(Resource resource) {
-		HashSet<Resource> resources = new HashSet<Resource>();
+	private void calculateBackwards(BuildingBlock resource) {
+		HashSet<BuildingBlock> resources = new HashSet<BuildingBlock>();
 		if (resource instanceof Screen) {
 			if (((Screen) resource).getPreconditions().size() > 0)
 				resources.add(resource);
@@ -224,7 +205,7 @@ public class Planner {
 
 	private boolean equalListCondition(List<Condition> lcA, List<Condition> lcB) {
 		for (int cIdx = 0; cIdx < lcA.size(); cIdx++)
-			if (!lcA.get(cIdx).equals(lcB.get(cIdx)))
+			if (!catalogue.isConditionCompatible(lcA.get(cIdx), lcB.get(cIdx)))
 				return false;
 		return true;
 	}
@@ -236,6 +217,22 @@ public class Planner {
 				result.add(uri);
 		}
 		return result;
+	}
+	
+	/**
+	 * Generates all the plans from a given set of screens, already stored in the catalogue
+	 */
+	protected void seed() {
+		for (Screen screen : catalogue.getScreens()) {
+			if (screen.getPreconditions().size() > 0) {
+				HashSet<BuildingBlock> resources = new HashSet<BuildingBlock>();
+				resources.add(screen);
+				HashSet<URI> results = new HashSet<URI>();
+				results.addAll(catalogue.findBackwards(resources, true, true, 0, -1, null));
+				for (URI result : results)
+					plannerStore.add(result, screen.getUri());
+			}
+		}
 	}
 	
 }

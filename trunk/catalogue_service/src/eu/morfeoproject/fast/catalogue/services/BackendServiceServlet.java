@@ -19,11 +19,13 @@ import org.ontoware.rdf2go.model.node.impl.URIImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import eu.morfeoproject.fast.catalogue.DuplicatedResourceException;
-import eu.morfeoproject.fast.catalogue.InvalidResourceTypeException;
+import eu.morfeoproject.fast.catalogue.BuildingBlockException;
+import eu.morfeoproject.fast.catalogue.BuildingBlockJSONBuilder;
+import eu.morfeoproject.fast.catalogue.Catalogue;
+import eu.morfeoproject.fast.catalogue.DuplicatedBuildingBlockException;
+import eu.morfeoproject.fast.catalogue.InvalidBuildingBlockTypeException;
 import eu.morfeoproject.fast.catalogue.NotFoundException;
 import eu.morfeoproject.fast.catalogue.OntologyInvalidException;
-import eu.morfeoproject.fast.catalogue.ResourceException;
 import eu.morfeoproject.fast.catalogue.buildingblocks.BackendService;
 import eu.morfeoproject.fast.catalogue.htmltemplates.BuildingBlockTemplate;
 import eu.morfeoproject.fast.catalogue.htmltemplates.CollectionTemplate;
@@ -62,6 +64,7 @@ public class BackendServiceServlet extends GenericServlet {
 			extension = id;
 			id = null;
 		}
+		Catalogue catalogue = CatalogueAccessPoint.getCatalogue();
 
 		if (extension == null) {
 			redirectToFormat(request, response, format);
@@ -78,8 +81,8 @@ public class BackendServiceServlet extends GenericServlet {
 						Model model = RDF2Go.getModelFactory().createModel();
 						try {
 							model.open();
-							for (BackendService service : CatalogueAccessPoint.getCatalogue().listBackendServices()) {
-								Model bsModel = service.createModel();
+							for (BackendService service : catalogue.getBackendServices()) {
+								Model bsModel = service.toRDF2GoModel();
 								for (String ns : bsModel.getNamespaces().keySet())
 									model.setNamespace(ns, bsModel.getNamespace(ns));
 								model.addModel(bsModel);
@@ -97,11 +100,11 @@ public class BackendServiceServlet extends GenericServlet {
 							response.setCharacterEncoding(TemplateManager.getDefaultEncoding());
 						if (TemplateManager.getLocale() != null)
 							response.setLocale(TemplateManager.getLocale());
-						CollectionTemplate.process(CatalogueAccessPoint.getCatalogue().listBackendServices(), writer);
+						CollectionTemplate.process(catalogue.getBackendServices(), writer);
 					} else { // by default returns APPLICATION_JSON
 						response.setContentType(MediaType.APPLICATION_JSON);
 						JSONArray services = new JSONArray();
-						for (BackendService b : CatalogueAccessPoint.getCatalogue().listBackendServices())
+						for (BackendService b : catalogue.getBackendServices())
 							services.put(b.toJSON());
 						writer.print(services.toString(2));
 					}
@@ -119,7 +122,7 @@ public class BackendServiceServlet extends GenericServlet {
 				// Retrieve the addressed member of the collection
 				String uri = url.substring(0, url.indexOf(extension) - 1);
 				logger.info("Retrieving backend service "+uri);
-				BackendService service = CatalogueAccessPoint.getCatalogue().getBackendService(new URIImpl(uri));
+				BackendService service = catalogue.getBackendService(new URIImpl(uri));
 				if (service == null) {
 					response.sendError(HttpServletResponse.SC_NOT_FOUND, "The resource "+uri+" has not been found.");
 				} else {
@@ -127,7 +130,7 @@ public class BackendServiceServlet extends GenericServlet {
 						if (format.equals(MediaType.APPLICATION_RDF_XML) ||
 								format.equals(MediaType.APPLICATION_TURTLE)) {
 							response.setContentType(format);
-							Model bsModel = service.createModel();
+							Model bsModel = service.toRDF2GoModel();
 							bsModel.writeTo(writer, Syntax.forMimeType(format));
 							bsModel.close();
 						} else if (format.equals(MediaType.TEXT_HTML)) {
@@ -170,18 +173,19 @@ public class BackendServiceServlet extends GenericServlet {
 			line = reader.readLine();
 		}
 		String body = buffer.toString();
+		Catalogue catalogue = CatalogueAccessPoint.getCatalogue();
 
 		// Create a new entry in the collection where the ID is assigned automatically by 
 		// the collection and it is returned.
 		try {
 			JSONObject json = new JSONObject(body);
-			BackendService service = parseBackendService(json, null);
+			BackendService service = BuildingBlockJSONBuilder.buildBackendService(json, null);
 			try {
-				CatalogueAccessPoint.getCatalogue().addBackendService(service);
+				catalogue.addBackendService(service);
 				if (format.equals(MediaType.APPLICATION_RDF_XML) ||
 						format.equals(MediaType.APPLICATION_TURTLE)) {
 					response.setContentType(format);
-					Model bsModel = service.createModel();
+					Model bsModel = service.toRDF2GoModel();
 					bsModel.writeTo(writer, Syntax.forMimeType(format));
 					bsModel.close();
 				} else if (format.equals(MediaType.TEXT_HTML)) {
@@ -204,16 +208,16 @@ public class BackendServiceServlet extends GenericServlet {
 					writer.print(json.toString(2));
 				}
 				response.setStatus(HttpServletResponse.SC_OK);
-			} catch (DuplicatedResourceException e) {
+			} catch (DuplicatedBuildingBlockException e) {
 				e.printStackTrace();
 				response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
 			} catch (OntologyInvalidException e) {
 				e.printStackTrace();
 				response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
-			} catch (InvalidResourceTypeException e) {
+			} catch (InvalidBuildingBlockTypeException e) {
 				e.printStackTrace();
 				response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
-			} catch (ResourceException e) {
+			} catch (BuildingBlockException e) {
 				e.printStackTrace();
 				response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
 			} catch (TemplateException e) {
@@ -247,6 +251,7 @@ public class BackendServiceServlet extends GenericServlet {
 			line = reader.readLine();
 		}
 		String body = buffer.toString();
+		Catalogue catalogue = CatalogueAccessPoint.getCatalogue();
 		
 		if (id == null) {
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
@@ -255,12 +260,12 @@ public class BackendServiceServlet extends GenericServlet {
 			String uri = request.getRequestURL().toString();
 			try {
 				JSONObject json = new JSONObject(body);
-				BackendService service = parseBackendService(json, new URIImpl(uri));
-				CatalogueAccessPoint.getCatalogue().updateBackendService(service);
+				BackendService service = BuildingBlockJSONBuilder.buildBackendService(json, new URIImpl(uri));
+				catalogue.updateBackendService(service);
 				if (format.equals(MediaType.APPLICATION_RDF_XML) ||
 						format.equals(MediaType.APPLICATION_TURTLE)) {
 					response.setContentType(format);
-					Model backendServiceModel = service.createModel();
+					Model backendServiceModel = service.toRDF2GoModel();
 					backendServiceModel.writeTo(writer, Syntax.forMimeType(format));
 					backendServiceModel.close();
 				} else if (format.equals(MediaType.TEXT_HTML)) {
@@ -292,7 +297,7 @@ public class BackendServiceServlet extends GenericServlet {
 			} catch (NotFoundException e) {
 				e.printStackTrace();
 				response.sendError(HttpServletResponse.SC_NOT_FOUND, "The resource "+uri+" has not been found.");
-			} catch (ResourceException e) {
+			} catch (BuildingBlockException e) {
 				e.printStackTrace();
 				response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
 			} catch (TemplateException e) {
@@ -309,6 +314,7 @@ public class BackendServiceServlet extends GenericServlet {
 		String[] chunks = request.getRequestURI().split("/");
 		String id = chunks[chunks.length-1];
 		if (id.equalsIgnoreCase("services")) id = null;
+		Catalogue catalogue = CatalogueAccessPoint.getCatalogue();
 		
 		if (id == null) {
 			response.sendError(HttpServletResponse.SC_BAD_REQUEST, "An ID must be specified.");
@@ -316,7 +322,7 @@ public class BackendServiceServlet extends GenericServlet {
 			// Delete the addressed member of the collection.
 			String uri = request.getRequestURL().toString();
 			try {
-				CatalogueAccessPoint.getCatalogue().removeBackendService(new URIImpl(uri));
+				catalogue.removeBackendService(new URIImpl(uri));
 				response.setStatus(HttpServletResponse.SC_OK);
 			} catch (NotFoundException e) {
 				response.sendError(HttpServletResponse.SC_NOT_FOUND, "The resource "+uri+" has not been found.");

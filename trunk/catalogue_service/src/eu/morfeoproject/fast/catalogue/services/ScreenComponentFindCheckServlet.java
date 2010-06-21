@@ -21,6 +21,8 @@ import org.ontoware.rdf2go.model.node.impl.URIImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import eu.morfeoproject.fast.catalogue.BuildingBlockJSONBuilder;
+import eu.morfeoproject.fast.catalogue.Catalogue;
 import eu.morfeoproject.fast.catalogue.NotFoundException;
 import eu.morfeoproject.fast.catalogue.buildingblocks.Action;
 import eu.morfeoproject.fast.catalogue.buildingblocks.Condition;
@@ -57,20 +59,21 @@ public class ScreenComponentFindCheckServlet extends GenericServlet {
 			line = reader.readLine();
 		}
 		String body = buffer.toString();
+		Catalogue catalogue = CatalogueAccessPoint.getCatalogue();
 		
 		try {
 			// create JSON representation of the input
 			JSONObject input = new JSONObject(body);
 			// parses the preconditions
-			List<Condition> preconditions = parseConditions(input.getJSONArray("preconditions"));
+			List<Condition> preconditions = BuildingBlockJSONBuilder.buildConditions(input.getJSONArray("preconditions"));
 			// parses the preconditions
-			List<Condition> postconditions = parseConditions(input.getJSONArray("postconditions"));
+			List<Condition> postconditions = BuildingBlockJSONBuilder.buildConditions(input.getJSONArray("postconditions"));
 			// parses the canvas
 			HashSet<ScreenComponent> canvas = new HashSet<ScreenComponent>();
 			JSONArray jsonCanvas = input.getJSONArray("canvas");
 			for (int i = 0; i < jsonCanvas.length(); i++) {
 				URI uri = new URIImpl(((JSONObject)jsonCanvas.get(i)).getString("uri"));
-				ScreenComponent sc = (ScreenComponent) CatalogueAccessPoint.getCatalogue().getResource(uri);
+				ScreenComponent sc = (ScreenComponent) catalogue.getBuildingBlock(uri);
 				if (sc == null) 
 					throw new NotFoundException("Resource "+uri+" does not exist.");
 				canvas.add(sc);
@@ -80,7 +83,7 @@ public class ScreenComponentFindCheckServlet extends GenericServlet {
 			JSONArray jsonForms = input.getJSONArray("forms");
 			for (int i = 0; i < jsonForms.length(); i++) {
 				URI uri = new URIImpl(((JSONObject)jsonForms.get(i)).getString("uri"));
-				ScreenComponent sc = (ScreenComponent) CatalogueAccessPoint.getCatalogue().getResource(uri);
+				ScreenComponent sc = (ScreenComponent) catalogue.getBuildingBlock(uri);
 				if (sc == null) 
 					throw new NotFoundException("Resource "+uri+" does not exist.");
 				forms.add(sc); 
@@ -90,7 +93,7 @@ public class ScreenComponentFindCheckServlet extends GenericServlet {
 			JSONArray jsonOperators = input.getJSONArray("operators");
 			for (int i = 0; i < jsonOperators.length(); i++) {
 				URI uri = new URIImpl(((JSONObject)jsonOperators.get(i)).getString("uri"));
-				ScreenComponent sc = (ScreenComponent) CatalogueAccessPoint.getCatalogue().getResource(uri);
+				ScreenComponent sc = (ScreenComponent) catalogue.getBuildingBlock(uri);
 				if (sc == null) 
 					throw new NotFoundException("Resource "+uri+" does not exist.");
 				operators.add(sc); 
@@ -100,7 +103,7 @@ public class ScreenComponentFindCheckServlet extends GenericServlet {
 			JSONArray jsonBackendServices = input.getJSONArray("backendservices");
 			for (int i = 0; i < jsonBackendServices.length(); i++) {
 				URI uri = new URIImpl(((JSONObject)jsonBackendServices.get(i)).getString("uri"));
-				ScreenComponent sc = (ScreenComponent) CatalogueAccessPoint.getCatalogue().getResource(uri);
+				ScreenComponent sc = (ScreenComponent) catalogue.getBuildingBlock(uri);
 				if (sc == null) 
 					throw new NotFoundException("Resource "+uri+" does not exist.");
 				backendServices.add(sc); 
@@ -117,7 +120,7 @@ public class ScreenComponentFindCheckServlet extends GenericServlet {
 			// TODO do something with the user
 			String user = jsonDomainContext.getString("user");
 			// parses the pipes
-			List<Pipe> pipes = parsePipes(input.getJSONArray("pipes"));
+			List<Pipe> pipes = BuildingBlockJSONBuilder.buildPipes(input.getJSONArray("pipes"));
 			// parses the selected item
 			Object selectedItem = null;
 			if (input.has("selectedItem")) {
@@ -125,7 +128,7 @@ public class ScreenComponentFindCheckServlet extends GenericServlet {
 				if (selectedItem == null) {
 					selectedItem = getConditionById(postconditions, input.getString("selectedItem"));
 					if (selectedItem == null)
-						selectedItem = CatalogueAccessPoint.getCatalogue().getScreenComponent(new URIImpl(input.getString("selectedItem")));
+						selectedItem = catalogue.getScreenComponent(new URIImpl(input.getString("selectedItem")));
 				}
 			} 
 			// flag to search or not for new components
@@ -152,17 +155,17 @@ public class ScreenComponentFindCheckServlet extends GenericServlet {
 			
 			// add results of 'find' to the list of forms
 			if (search) {
-				Set<URI> formResults = CatalogueAccessPoint.getCatalogue().findScreenComponents(null, conList, all, 0, -1, tags, FGO.Form);
+				Set<URI> formResults = catalogue.findScreenComponents(null, conList, all, 0, -1, tags, FGO.Form);
 				for (URI uri : formResults)
-					forms.add(CatalogueAccessPoint.getCatalogue().getScreenComponent(uri));
+					forms.add(catalogue.getScreenComponent(uri));
 				// add results of 'find' to the list of operators
-				Set<URI> opResults = CatalogueAccessPoint.getCatalogue().findScreenComponents(null, conList, all, 0, -1, tags, FGO.Operator);
+				Set<URI> opResults = catalogue.findScreenComponents(null, conList, all, 0, -1, tags, FGO.Operator);
 				for (URI uri : opResults)
-					operators.add(CatalogueAccessPoint.getCatalogue().getScreenComponent(uri));			
+					operators.add(catalogue.getScreenComponent(uri));			
 				// add results of 'find' to the list of backend services
-				Set<URI> bsResults = CatalogueAccessPoint.getCatalogue().findScreenComponents(null, conList, all, 0, -1, tags, FGO.BackendService);
+				Set<URI> bsResults = catalogue.findScreenComponents(null, conList, all, 0, -1, tags, FGO.BackendService);
 				for (URI uri : bsResults)
-					backendServices.add(CatalogueAccessPoint.getCatalogue().getScreenComponent(uri));
+					backendServices.add(catalogue.getScreenComponent(uri));
 			}
 			
 			// extract pipes which are well defined (precondition and
@@ -261,19 +264,22 @@ public class ScreenComponentFindCheckServlet extends GenericServlet {
 	private boolean isPipeCorrect(Pipe pipe, List<Condition> preconditions, List<Condition> postconditions) throws IOException {
 		boolean satisfied = false;
 		Condition conFrom, conTo;
+		Catalogue catalogue = CatalogueAccessPoint.getCatalogue();
+
 		if (pipe.getIdBBFrom() == null) {
 			conFrom = getConditionById(preconditions, pipe.getIdConditionFrom());
 		} else {
-			ScreenComponent sc = CatalogueAccessPoint.getCatalogue().getScreenComponent(new URIImpl(pipe.getIdBBFrom()));
+			ScreenComponent sc = catalogue.getScreenComponent(new URIImpl(pipe.getIdBBFrom()));
 			conFrom = getPostconditionById(sc, pipe.getIdConditionFrom());
 		}
 		if (pipe.getIdBBTo() == null) {
 			conTo = getConditionById(postconditions, pipe.getIdConditionTo());
 		} else {
-			ScreenComponent sc = CatalogueAccessPoint.getCatalogue().getScreenComponent(new URIImpl(pipe.getIdBBTo()));
+			ScreenComponent sc = catalogue.getScreenComponent(new URIImpl(pipe.getIdBBTo()));
 			conTo = getPreconditionById(sc, pipe.getIdConditionTo());
 		}
 		satisfied = isConditionCompatible(conFrom, conTo);
+		
 		return satisfied;
 	}
 	
@@ -314,7 +320,7 @@ public class ScreenComponentFindCheckServlet extends GenericServlet {
 	}
 	
 	private boolean isConditionCompatible(Condition conA, Condition conB) throws IOException {
-		return CatalogueAccessPoint.getCatalogue().isConditionCompatible(conA, conB);
+		return 	CatalogueAccessPoint.getCatalogue().isConditionCompatible(conA, conB);
 	}
 	
 	private List<Pipe> generatePipes(

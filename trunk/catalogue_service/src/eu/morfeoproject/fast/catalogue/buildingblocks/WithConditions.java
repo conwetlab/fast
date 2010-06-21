@@ -15,10 +15,14 @@ import org.ontoware.rdf2go.vocabulary.XSD;
 
 import eu.morfeoproject.fast.catalogue.vocabulary.FGO;
 
-public class WithConditions extends Resource {
+public class WithConditions extends BuildingBlock {
 
 	private List<List<Condition>> preconditions;
 	private List<List<Condition>> postconditions;
+
+	protected WithConditions() {
+		super();
+	}
 
 	public List<List<Condition>> getPreconditions() {
 		if (preconditions == null)
@@ -66,19 +70,19 @@ public class WithConditions extends Resource {
 	}
 	
 	@Override
-	public Model createModel() {
-		Model model = super.createModel();
-		
-		URI resourceUri = this.getUri();
+	public Model toRDF2GoModel() {
+		Model model = super.toRDF2GoModel();
+
+		URI bbUri = this.getUri();
 		for (List<Condition> conList : this.getPreconditions()) {
 			BlankNode bag = model.createBlankNode();
 			model.addStatement(bag, RDF.type, RDF.Bag);
-			model.addStatement(resourceUri, FGO.hasPreCondition, bag);
+			model.addStatement(bbUri, FGO.hasPreCondition, bag);
 			int i = 1;
 			for (Condition con : conList) {
 				BlankNode c = model.createBlankNode();
 				model.addStatement(bag, RDF.li(i++), c);
-				model.addStatement(c, FGO.hasPatternString, con.getPatternString());
+				model.addStatement(c, FGO.hasPatternString, model.createDatatypeLiteral(con.getPatternString(), XSD._string));
 				model.addStatement(c, FGO.isPositive, model.createDatatypeLiteral(new Boolean(con.isPositive()).toString(), XSD._boolean));
 				for (String key : con.getLabels().keySet())
 					model.addStatement(c, RDFS.label, model.createLanguageTagLiteral(con.getLabels().get(key), key));
@@ -87,12 +91,12 @@ public class WithConditions extends Resource {
 		for (List<Condition> conList : this.getPostconditions()) {
 			BlankNode bag = model.createBlankNode();
 			model.addStatement(bag, RDF.type, RDF.Bag);
-			model.addStatement(resourceUri, FGO.hasPostCondition, bag);
+			model.addStatement(bbUri, FGO.hasPostCondition, bag);
 			int i = 1;
 			for (Condition con : conList) {
 				BlankNode c = model.createBlankNode();
 				model.addStatement(bag, RDF.li(i++), c);
-				model.addStatement(c, FGO.hasPatternString, con.getPatternString());
+				model.addStatement(c, FGO.hasPatternString, model.createDatatypeLiteral(con.getPatternString(), XSD._string));
 				model.addStatement(c, FGO.isPositive, model.createDatatypeLiteral(new Boolean(con.isPositive()).toString(), XSD._boolean));
 				for (String key : con.getLabels().keySet())
 					model.addStatement(c, RDFS.label, model.createLanguageTagLiteral(con.getLabels().get(key), key));

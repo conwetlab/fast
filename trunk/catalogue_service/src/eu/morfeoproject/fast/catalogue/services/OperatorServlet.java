@@ -19,11 +19,13 @@ import org.ontoware.rdf2go.model.node.impl.URIImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import eu.morfeoproject.fast.catalogue.DuplicatedResourceException;
-import eu.morfeoproject.fast.catalogue.InvalidResourceTypeException;
+import eu.morfeoproject.fast.catalogue.BuildingBlockJSONBuilder;
+import eu.morfeoproject.fast.catalogue.Catalogue;
+import eu.morfeoproject.fast.catalogue.DuplicatedBuildingBlockException;
+import eu.morfeoproject.fast.catalogue.InvalidBuildingBlockTypeException;
 import eu.morfeoproject.fast.catalogue.NotFoundException;
 import eu.morfeoproject.fast.catalogue.OntologyInvalidException;
-import eu.morfeoproject.fast.catalogue.ResourceException;
+import eu.morfeoproject.fast.catalogue.BuildingBlockException;
 import eu.morfeoproject.fast.catalogue.buildingblocks.Operator;
 import eu.morfeoproject.fast.catalogue.htmltemplates.BuildingBlockTemplate;
 import eu.morfeoproject.fast.catalogue.htmltemplates.CollectionTemplate;
@@ -62,6 +64,7 @@ public class OperatorServlet extends GenericServlet {
 			extension = id;
 			id = null;
 		}
+		Catalogue catalogue = CatalogueAccessPoint.getCatalogue();
 
 		if (extension == null) {
 			redirectToFormat(request, response, format);
@@ -78,8 +81,8 @@ public class OperatorServlet extends GenericServlet {
 						Model model = RDF2Go.getModelFactory().createModel();
 						try {
 							model.open();
-							for (Operator o : CatalogueAccessPoint.getCatalogue().listOperators()) {
-								Model opModel = o.createModel();
+							for (Operator o : catalogue.getOperators()) {
+								Model opModel = o.toRDF2GoModel();
 								for (String ns : opModel.getNamespaces().keySet())
 									model.setNamespace(ns, opModel.getNamespace(ns));
 								model.addModel(opModel);
@@ -97,11 +100,11 @@ public class OperatorServlet extends GenericServlet {
 							response.setCharacterEncoding(TemplateManager.getDefaultEncoding());
 						if (TemplateManager.getLocale() != null)
 							response.setLocale(TemplateManager.getLocale());
-						CollectionTemplate.process(CatalogueAccessPoint.getCatalogue().listOperators(), writer);
+						CollectionTemplate.process(catalogue.getOperators(), writer);
 					} else { // by default returns APPLICATION_JSON)) {
 						response.setContentType(MediaType.APPLICATION_JSON);
 						JSONArray operators = new JSONArray();
-						for (Operator o : CatalogueAccessPoint.getCatalogue().listOperators())
+						for (Operator o : catalogue.getOperators())
 							operators.put(o.toJSON());
 						writer.print(operators.toString(2));
 					}
@@ -119,7 +122,7 @@ public class OperatorServlet extends GenericServlet {
 				// Retrieve the addressed member of the collection
 				String uri = url.substring(0, url.indexOf(extension) - 1);
 				logger.info("Retrieving operator "+uri);
-				Operator operator = CatalogueAccessPoint.getCatalogue().getOperator(new URIImpl(uri));
+				Operator operator = catalogue.getOperator(new URIImpl(uri));
 				if (operator == null) {
 					response.sendError(HttpServletResponse.SC_NOT_FOUND, "The resource "+uri+" has not been found.");
 				} else {
@@ -127,7 +130,7 @@ public class OperatorServlet extends GenericServlet {
 						if (format.equals(MediaType.APPLICATION_RDF_XML) ||
 								format.equals(MediaType.APPLICATION_TURTLE)) {
 							response.setContentType(format);
-							Model opModel = operator.createModel();
+							Model opModel = operator.toRDF2GoModel();
 							opModel.writeTo(writer, Syntax.forMimeType(format));
 							opModel.dump();
 							opModel.close();
@@ -171,18 +174,19 @@ public class OperatorServlet extends GenericServlet {
 			line = reader.readLine();
 		}
 		String body = buffer.toString();
+		Catalogue catalogue = CatalogueAccessPoint.getCatalogue();
 
 		// Create a new entry in the collection where the ID is assigned automatically by 
 		// the collection and it is returned.
 		try {
 			JSONObject json = new JSONObject(body);
-			Operator operator = parseOperator(json, null);
+			Operator operator = BuildingBlockJSONBuilder.buildOperator(json, null);
 			try {
-				CatalogueAccessPoint.getCatalogue().addOperator(operator);
+				catalogue.addOperator(operator);
 				if (format.equals(MediaType.APPLICATION_RDF_XML) ||
 						format.equals(MediaType.APPLICATION_TURTLE)) {
 					response.setContentType(format);
-					Model operatorModel = operator.createModel();
+					Model operatorModel = operator.toRDF2GoModel();
 					operatorModel.writeTo(writer, Syntax.forMimeType(format));
 					operatorModel.close();
 				} else if (format.equals(MediaType.TEXT_HTML)) {
@@ -205,16 +209,16 @@ public class OperatorServlet extends GenericServlet {
 					writer.print(json.toString(2));
 				}
 				response.setStatus(HttpServletResponse.SC_OK);
-			} catch (DuplicatedResourceException e) {
+			} catch (DuplicatedBuildingBlockException e) {
 				e.printStackTrace();
 				response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
 			} catch (OntologyInvalidException e) {
 				e.printStackTrace();
 				response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
-			} catch (InvalidResourceTypeException e) {
+			} catch (InvalidBuildingBlockTypeException e) {
 				e.printStackTrace();
 				response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
-			} catch (ResourceException e) {
+			} catch (BuildingBlockException e) {
 				e.printStackTrace();
 				response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
 			} catch (TemplateException e) {
@@ -248,6 +252,7 @@ public class OperatorServlet extends GenericServlet {
 			line = reader.readLine();
 		}
 		String body = buffer.toString();
+		Catalogue catalogue = CatalogueAccessPoint.getCatalogue();
 		
 		if (id == null) {
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
@@ -256,12 +261,12 @@ public class OperatorServlet extends GenericServlet {
 			String uri = request.getRequestURL().toString();
 			try {
 				JSONObject json = new JSONObject(body);
-				Operator operator = parseOperator(json, new URIImpl(uri));
-				CatalogueAccessPoint.getCatalogue().updateOperator(operator);
+				Operator operator = BuildingBlockJSONBuilder.buildOperator(json, new URIImpl(uri));
+				catalogue.updateOperator(operator);
 				if (format.equals(MediaType.APPLICATION_RDF_XML) ||
 						format.equals(MediaType.APPLICATION_TURTLE)) {
 					response.setContentType(format);
-					Model operatorModel = operator.createModel();
+					Model operatorModel = operator.toRDF2GoModel();
 					operatorModel.writeTo(writer, Syntax.forMimeType(format));
 					operatorModel.close();
 				} else if (format.equals(MediaType.TEXT_HTML)) {
@@ -293,7 +298,7 @@ public class OperatorServlet extends GenericServlet {
 			} catch (NotFoundException e) {
 				e.printStackTrace();
 				response.sendError(HttpServletResponse.SC_NOT_FOUND, "The resource "+uri+" has not been found.");
-			} catch (ResourceException e) {
+			} catch (BuildingBlockException e) {
 				e.printStackTrace();
 				response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
 			} catch (TemplateException e) {
@@ -310,6 +315,7 @@ public class OperatorServlet extends GenericServlet {
 		String[] chunks = request.getRequestURI().split("/");
 		String id = chunks[chunks.length-1];
 		if (id.equalsIgnoreCase("operators")) id = null;
+		Catalogue catalogue = CatalogueAccessPoint.getCatalogue();
 		
 		if (id == null) {
 			response.sendError(HttpServletResponse.SC_BAD_REQUEST, "An ID must be specified.");
@@ -317,7 +323,7 @@ public class OperatorServlet extends GenericServlet {
 			// Delete the addressed member of the collection.
 			String uri = request.getRequestURL().toString();
 			try {
-				CatalogueAccessPoint.getCatalogue().removeOperator(new URIImpl(uri));
+				catalogue.removeOperator(new URIImpl(uri));
 				response.setStatus(HttpServletResponse.SC_OK);
 			} catch (NotFoundException e) {
 				response.sendError(HttpServletResponse.SC_NOT_FOUND, "The resource "+uri+" has not been found.");

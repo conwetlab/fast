@@ -15,7 +15,7 @@ import org.ontoware.rdf2go.vocabulary.XSD;
 
 import eu.morfeoproject.fast.catalogue.vocabulary.FGO;
 
-public abstract class ScreenComponent extends Resource {
+public abstract class ScreenComponent extends BuildingBlock {
 
     private URI code;
 	private List<Action> actions;
@@ -72,35 +72,44 @@ public abstract class ScreenComponent extends Resource {
 	}
 
 	@Override
-	public Model createModel() {
-		Model model = super.createModel();
+	public Model toRDF2GoModel() {
+		Model model = super.toRDF2GoModel();
+
+		URI scUri = this.getUri();
 		
-		URI resourceUri = this.getUri();
 		// code
 		if (this.getCode() != null)
-			model.addStatement(resourceUri, FGO.hasCode, this.getCode());
+			model.addStatement(scUri, FGO.hasCode, this.getCode());
 
 		// actions
 		for (Action action : getActions()) {
-			BlankNode actionNode = model.createBlankNode();
-			model.addStatement(resourceUri, FGO.hasAction, actionNode);
-			model.addStatement(actionNode, RDFS.label, action.getName());
+			BlankNode aNode = model.createBlankNode();
+			model.addStatement(scUri, FGO.hasAction, aNode);
+			model.addStatement(aNode, RDFS.label, action.getName());
 			// preconditions
 			for (Condition con : action.getPreconditions()) {
 				BlankNode c = model.createBlankNode();
-				model.addStatement(actionNode, FGO.hasPreCondition, c);
-				model.addStatement(c, FGO.hasPatternString, model.createPlainLiteral(con.getPatternString()));
+				model.addStatement(aNode, FGO.hasPreCondition, c);
+				model.addStatement(c, FGO.hasPatternString, model.createDatatypeLiteral(con.getPatternString(), XSD._string));
 				model.addStatement(c, FGO.isPositive, model.createDatatypeLiteral(new Boolean(con.isPositive()).toString(), XSD._boolean));
 				for (String key : con.getLabels().keySet())
 					model.addStatement(c, RDFS.label, model.createLanguageTagLiteral(con.getLabels().get(key), key));
+			}
+			// uses
+			for (String id : action.getUses().keySet()) {
+				BlankNode uNode = model.createBlankNode();
+				model.addStatement(aNode, FGO.hasUse, uNode);
+				model.addStatement(uNode, RDF.type, FGO.ResourceReference);
+				model.addStatement(uNode, FGO.hasId, model.createDatatypeLiteral(id, XSD._string));
+				model.addStatement(uNode, FGO.hasUri, action.getUses().get(id));
 			}
 		}
 		
 		// libraries
 		for (Library library : getLibraries()) {
 			BlankNode libNode = model.createBlankNode();
-			model.addStatement(resourceUri, FGO.hasLibrary, libNode);
-			model.addStatement(libNode, FGO.hasLanguage, model.createPlainLiteral(library.getLanguage()));
+			model.addStatement(scUri, FGO.hasLibrary, libNode);
+			model.addStatement(libNode, FGO.hasLanguage, model.createDatatypeLiteral(library.getLanguage(), XSD._string));
 			model.addStatement(libNode, FGO.hasSource, library.getSource());
 		}
 		
@@ -108,20 +117,21 @@ public abstract class ScreenComponent extends Resource {
 		for (List<Condition> conList : getPostconditions()) {
 			BlankNode bag = model.createBlankNode();
 			model.addStatement(bag, RDF.type, RDF.Bag);
-			model.addStatement(resourceUri, FGO.hasPostCondition, bag);
+			model.addStatement(scUri, FGO.hasPostCondition, bag);
 			int i = 1;
 			for (Condition con : conList) {
 				BlankNode c = model.createBlankNode();
 				model.addStatement(bag, RDF.li(i++), c);
-				model.addStatement(c, FGO.hasPatternString, con.getPatternString());
+				model.addStatement(c, FGO.hasPatternString, model.createDatatypeLiteral(con.getPatternString(), XSD._string));
 				model.addStatement(c, FGO.isPositive, model.createDatatypeLiteral(new Boolean(con.isPositive()).toString(), XSD._boolean));
 				for (String key : con.getLabels().keySet())
 					model.addStatement(c, RDFS.label, model.createLanguageTagLiteral(con.getLabels().get(key), key));
 			}
 		}
+		
 		// triggers
 		for (String trigger : getTriggers())
-			model.addStatement(resourceUri, FGO.hasTrigger, model.createPlainLiteral(trigger));
+			model.addStatement(scUri, FGO.hasTrigger, model.createDatatypeLiteral(trigger, XSD._string));
 		
 		return model;
 	}
@@ -135,16 +145,19 @@ public abstract class ScreenComponent extends Resource {
 			json.put("code", JSONObject.NULL);
 		else
 			json.put("code", getCode().toString());
+		
 		// actions
 		JSONArray actionsArray = new JSONArray();
 		for (Action action : getActions())
 			actionsArray.put(action.toJSON());
 		json.put("actions", actionsArray);
+		
 		// libraries
 		JSONArray librariesArray = new JSONArray();
 		for (Library library : getLibraries())
 			librariesArray.put(library.toJSON());
 		json.put("libraries", librariesArray);
+		
 		// postconditions
 		JSONArray postArray = new JSONArray();
 		for (List<Condition> conditionList : getPostconditions()) {
@@ -154,6 +167,7 @@ public abstract class ScreenComponent extends Resource {
 			postArray.put(conditionArray);
 		}
 		json.put("postconditions", postArray);
+		
 		// triggers
 		JSONArray triggersArray = new JSONArray();
 		for (String trigger : getTriggers())

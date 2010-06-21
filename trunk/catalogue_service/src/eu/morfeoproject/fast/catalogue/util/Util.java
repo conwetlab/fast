@@ -103,5 +103,35 @@ public class Util {
 			IOUtils.closeQuietly(infRulesStream);
 		}
 	}
-
+	
+	/**
+	 * Transform a string of tags into an array. The tags are
+	 * separated by +. Example: amazon+shopping
+	 * @param tagsStr
+	 * @return an array of tags
+	 */
+	public static String [] splitTags(String tagsStr) {
+		String [] tags = null;
+		if (tagsStr == null)
+			return new String[0];
+		else if (tagsStr.contains("+")) {
+			//tags = tagsStr.split("+"); throws an exception!!
+			ArrayList<String> tmp = new ArrayList<String>();
+			int from = 0;
+			int to = tagsStr.indexOf("+");
+			while (to != -1) {
+				tmp.add(tagsStr.substring(from, to));
+				from = to + 1;
+				to = tagsStr.indexOf("+", from);
+			}
+			tmp.add(tagsStr.substring(from, tagsStr.length()));
+			tags = new String[tmp.size()];
+			tags = tmp.toArray(tags);
+		} else {
+			tags = new String[1];
+			tags[0] = tagsStr;
+		}
+		return tags;
+	}
+	
 }

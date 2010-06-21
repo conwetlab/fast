@@ -20,11 +20,13 @@ import org.openrdf.repository.RepositoryException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import eu.morfeoproject.fast.catalogue.DuplicatedResourceException;
+import eu.morfeoproject.fast.catalogue.BuildingBlockJSONBuilder;
+import eu.morfeoproject.fast.catalogue.Catalogue;
+import eu.morfeoproject.fast.catalogue.DuplicatedBuildingBlockException;
 import eu.morfeoproject.fast.catalogue.NotFoundException;
 import eu.morfeoproject.fast.catalogue.OntologyInvalidException;
 import eu.morfeoproject.fast.catalogue.OntologyReadonlyException;
-import eu.morfeoproject.fast.catalogue.ResourceException;
+import eu.morfeoproject.fast.catalogue.BuildingBlockException;
 import eu.morfeoproject.fast.catalogue.buildingblocks.Screen;
 import eu.morfeoproject.fast.catalogue.htmltemplates.BuildingBlockTemplate;
 import eu.morfeoproject.fast.catalogue.htmltemplates.CollectionTemplate;
@@ -63,6 +65,7 @@ public class ScreenServlet extends GenericServlet {
 			extension = id;
 			id = null;
 		}
+		Catalogue catalogue = CatalogueAccessPoint.getCatalogue();
 
 		if (extension == null) {
 			redirectToFormat(request, response, format);
@@ -79,8 +82,8 @@ public class ScreenServlet extends GenericServlet {
 						Model model = RDF2Go.getModelFactory().createModel();
 						try {
 							model.open();
-							for (Screen s : CatalogueAccessPoint.getCatalogue().listScreens()) {
-								Model screenModel = s.createModel();
+							for (Screen s : catalogue.getScreens()) {
+								Model screenModel = s.toRDF2GoModel();
 								for (String ns : screenModel.getNamespaces().keySet())
 									model.setNamespace(ns, screenModel.getNamespace(ns));
 								model.addModel(screenModel);
@@ -98,11 +101,11 @@ public class ScreenServlet extends GenericServlet {
 							response.setCharacterEncoding(TemplateManager.getDefaultEncoding());
 						if (TemplateManager.getLocale() != null)
 							response.setLocale(TemplateManager.getLocale());
-						CollectionTemplate.process(CatalogueAccessPoint.getCatalogue().listScreens(), writer);
+						CollectionTemplate.process(catalogue.getScreens(), writer);
 					} else { // by default returns APPLICATION_JSON
 						response.setContentType(MediaType.APPLICATION_JSON);
 						JSONArray screens = new JSONArray();
-						for (Screen s : CatalogueAccessPoint.getCatalogue().listScreens())
+						for (Screen s : catalogue.getScreens())
 							screens.put(s.toJSON());
 						writer.print(screens.toString(2));
 					}
@@ -120,7 +123,7 @@ public class ScreenServlet extends GenericServlet {
 				// Retrieve the addressed member of the collection
 				String uri = url.substring(0, url.indexOf(extension) - 1);
 				logger.info("Retrieving screen "+uri);
-				Screen screen = CatalogueAccessPoint.getCatalogue().getScreen(new URIImpl(uri));
+				Screen screen = catalogue.getScreen(new URIImpl(uri));
 				if (screen == null) {
 					response.sendError(HttpServletResponse.SC_NOT_FOUND, "The resource "+uri+" has not been found.");
 				} else {
@@ -128,7 +131,7 @@ public class ScreenServlet extends GenericServlet {
 						if (format.equals(MediaType.APPLICATION_RDF_XML) ||
 								format.equals(MediaType.APPLICATION_TURTLE)) {
 							response.setContentType(format);
-							Model screenModel = screen.createModel();
+							Model screenModel = screen.toRDF2GoModel();
 							screenModel.writeTo(writer, Syntax.forMimeType(format));
 							screenModel.close();
 						} else if (format.equals(MediaType.TEXT_HTML)) {
@@ -171,18 +174,19 @@ public class ScreenServlet extends GenericServlet {
 			line = reader.readLine();
 		}
 		String body = buffer.toString();
+		Catalogue catalogue = CatalogueAccessPoint.getCatalogue();
 
 		// Create a new entry in the collection where the ID is assigned automatically by 
 		// the collection and it is returned.
 		try {
 			JSONObject json = new JSONObject(body);
-			Screen screen = parseScreen(json, null);
+			Screen screen = BuildingBlockJSONBuilder.buildScreen(json, null);
 			try {
-				CatalogueAccessPoint.getCatalogue().addScreen(screen);
+				catalogue.addScreen(screen);
 				if (format.equals(MediaType.APPLICATION_RDF_XML) ||
 						format.equals(MediaType.APPLICATION_TURTLE)) {
 					response.setContentType(format);
-					Model screenModel = screen.createModel();
+					Model screenModel = screen.toRDF2GoModel();
 					screenModel.writeTo(writer, Syntax.forMimeType(format));
 					screenModel.close();
 				} else if (format.equals(MediaType.TEXT_HTML)) {
@@ -205,20 +209,20 @@ public class ScreenServlet extends GenericServlet {
 					writer.print(json.toString(2));
 				}
 				response.setStatus(HttpServletResponse.SC_OK);
-			} catch (DuplicatedResourceException e) {
+			} catch (DuplicatedBuildingBlockException e) {
 				e.printStackTrace();
 				response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
 			} catch (OntologyInvalidException e) {
 				e.printStackTrace();
 				response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
-			} catch (ResourceException e) {
+			} catch (BuildingBlockException e) {
 				e.printStackTrace();
 				response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
 			} catch (TemplateException e) {
 				e.printStackTrace();
 				response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
 			}
-		} catch (ParseScreenException e) {
+		} catch (BuildingBlockException e) {
 			e.printStackTrace();
 			response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
 		} catch (JSONException e) {
@@ -248,6 +252,7 @@ public class ScreenServlet extends GenericServlet {
 			line = reader.readLine();
 		}
 		String body = buffer.toString();
+		Catalogue catalogue = CatalogueAccessPoint.getCatalogue();
 		
 		if (id == null) {
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
@@ -256,12 +261,12 @@ public class ScreenServlet extends GenericServlet {
 			String uri = request.getRequestURL().toString();
 			try {
 				JSONObject json = new JSONObject(body);
-				Screen screen = parseScreen(json, new URIImpl(uri));
-				CatalogueAccessPoint.getCatalogue().updateScreen(screen);
+				Screen screen = BuildingBlockJSONBuilder.buildScreen(json, new URIImpl(uri));
+				catalogue.updateScreen(screen);
 				if (format.equals(MediaType.APPLICATION_RDF_XML) ||
 						format.equals(MediaType.APPLICATION_TURTLE)) {
 					response.setContentType(format);
-					Model screenModel = screen.createModel();
+					Model screenModel = screen.toRDF2GoModel();
 					screenModel.writeTo(writer, Syntax.forMimeType(format));
 					screenModel.close();
 				} else if (format.equals(MediaType.TEXT_HTML)) {
@@ -284,7 +289,7 @@ public class ScreenServlet extends GenericServlet {
 					writer.print(json.toString(2));
 				}
 				response.setStatus(HttpServletResponse.SC_OK);
-			} catch (ParseScreenException e) {
+			} catch (BuildingBlockException e) {
 				e.printStackTrace();
 				response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
 			} catch (JSONException e) {
@@ -305,9 +310,6 @@ public class ScreenServlet extends GenericServlet {
 			} catch (OntologyInvalidException e) {
 				e.printStackTrace();
 				response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
-			} catch (ResourceException e) {
-				e.printStackTrace();
-				response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
 			} catch (TemplateException e) {
 				e.printStackTrace();
 				response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
@@ -322,6 +324,7 @@ public class ScreenServlet extends GenericServlet {
 		String[] chunks = request.getRequestURI().split("/");
 		String id = chunks[chunks.length-1];
 		if (id.equalsIgnoreCase("screens")) id = null;
+		Catalogue catalogue = CatalogueAccessPoint.getCatalogue();
 		
 		if (id == null) {
 			response.sendError(HttpServletResponse.SC_BAD_REQUEST, "An ID must be specified.");
@@ -329,7 +332,7 @@ public class ScreenServlet extends GenericServlet {
 			// Delete the addressed member of the collection.
 			String uri = request.getRequestURL().toString();
 			try {
-				CatalogueAccessPoint.getCatalogue().removeScreen(new URIImpl(uri));
+				catalogue.removeScreen(new URIImpl(uri));
 				response.setStatus(HttpServletResponse.SC_OK);
 			} catch (NotFoundException e) {
 				response.sendError(HttpServletResponse.SC_NOT_FOUND, "The resource "+uri+" has not been found.");

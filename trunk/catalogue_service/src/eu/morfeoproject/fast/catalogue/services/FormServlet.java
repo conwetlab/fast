@@ -19,11 +19,13 @@ import org.ontoware.rdf2go.model.node.impl.URIImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import eu.morfeoproject.fast.catalogue.DuplicatedResourceException;
-import eu.morfeoproject.fast.catalogue.InvalidResourceTypeException;
+import eu.morfeoproject.fast.catalogue.BuildingBlockJSONBuilder;
+import eu.morfeoproject.fast.catalogue.Catalogue;
+import eu.morfeoproject.fast.catalogue.DuplicatedBuildingBlockException;
+import eu.morfeoproject.fast.catalogue.InvalidBuildingBlockTypeException;
 import eu.morfeoproject.fast.catalogue.NotFoundException;
 import eu.morfeoproject.fast.catalogue.OntologyInvalidException;
-import eu.morfeoproject.fast.catalogue.ResourceException;
+import eu.morfeoproject.fast.catalogue.BuildingBlockException;
 import eu.morfeoproject.fast.catalogue.buildingblocks.Form;
 import eu.morfeoproject.fast.catalogue.htmltemplates.BuildingBlockTemplate;
 import eu.morfeoproject.fast.catalogue.htmltemplates.CollectionTemplate;
@@ -62,6 +64,7 @@ public class FormServlet extends GenericServlet {
 			extension = id;
 			id = null;
 		}
+		Catalogue catalogue = CatalogueAccessPoint.getCatalogue();
 
 		if (extension == null) {
 			redirectToFormat(request, response, format);
@@ -78,8 +81,8 @@ public class FormServlet extends GenericServlet {
 						Model model = RDF2Go.getModelFactory().createModel();
 						try {
 							model.open();
-							for (Form f : CatalogueAccessPoint.getCatalogue().listForms()) {
-								Model feModel = f.createModel();
+							for (Form f : catalogue.getForms()) {
+								Model feModel = f.toRDF2GoModel();
 								for (String ns : feModel.getNamespaces().keySet())
 									model.setNamespace(ns, feModel.getNamespace(ns));
 								model.addModel(feModel);
@@ -99,11 +102,11 @@ public class FormServlet extends GenericServlet {
 							response.setCharacterEncoding(TemplateManager.getDefaultEncoding());
 						if (TemplateManager.getLocale() != null)
 							response.setLocale(TemplateManager.getLocale());
-						CollectionTemplate.process(CatalogueAccessPoint.getCatalogue().listForms(), writer);
+						CollectionTemplate.process(catalogue.getForms(), writer);
 					} else { // by default returns APPLICATION_JSON
 						response.setContentType(MediaType.APPLICATION_JSON);
 						JSONArray formElements = new JSONArray();
-						for (Form f : CatalogueAccessPoint.getCatalogue().listForms())
+						for (Form f : catalogue.getForms())
 							formElements.put(f.toJSON());
 						writer.print(formElements.toString(2));
 					}
@@ -121,7 +124,7 @@ public class FormServlet extends GenericServlet {
 				// Retrieve the addressed member of the collection
 				String uri = url.substring(0, url.indexOf(extension) - 1);
 				logger.info("Retrieving formElement "+uri);
-				Form form = CatalogueAccessPoint.getCatalogue().getForm(new URIImpl(uri));
+				Form form = catalogue.getForm(new URIImpl(uri));
 				if (form == null) {
 					response.sendError(HttpServletResponse.SC_NOT_FOUND, "The resource "+uri+" has not been found.");
 				} else {
@@ -129,7 +132,7 @@ public class FormServlet extends GenericServlet {
 						if (format.equals(MediaType.APPLICATION_RDF_XML) ||
 								format.equals(MediaType.APPLICATION_TURTLE)) {
 							response.setContentType(format);
-							Model feModel = form.createModel();
+							Model feModel = form.toRDF2GoModel();
 							feModel.writeTo(writer, Syntax.forMimeType(format));
 							feModel.close();
 						} else if (format.equals(MediaType.TEXT_HTML) ||
@@ -174,18 +177,19 @@ public class FormServlet extends GenericServlet {
 			line = reader.readLine();
 		}
 		String body = buffer.toString();
+		Catalogue catalogue = CatalogueAccessPoint.getCatalogue();
 
 		// Create a new entry in the collection where the ID is assigned automatically by 
 		// the collection and it is returned.
 		try {
 			JSONObject json = new JSONObject(body);
-			Form form = parseForm(json, null);
+			Form form = BuildingBlockJSONBuilder.buildForm(json, null);
 			try {
-				CatalogueAccessPoint.getCatalogue().addForm(form);
+				catalogue.addForm(form);
 				if (format.equals(MediaType.APPLICATION_RDF_XML) ||
 						format.equals(MediaType.APPLICATION_TURTLE)) {
 					response.setContentType(format);
-					Model formElementModel = form.createModel();
+					Model formElementModel = form.toRDF2GoModel();
 					formElementModel.writeTo(writer, Syntax.forMimeType(format));
 					formElementModel.close();
 				} else if (format.equals(MediaType.TEXT_HTML) ||
@@ -210,16 +214,16 @@ public class FormServlet extends GenericServlet {
 					writer.print(json.toString(2));
 				}
 				response.setStatus(HttpServletResponse.SC_OK);
-			} catch (DuplicatedResourceException e) {
+			} catch (DuplicatedBuildingBlockException e) {
 				e.printStackTrace();
 				response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
 			} catch (OntologyInvalidException e) {
 				e.printStackTrace();
 				response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
-			} catch (InvalidResourceTypeException e) {
+			} catch (InvalidBuildingBlockTypeException e) {
 				e.printStackTrace();
 				response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
-			} catch (ResourceException e) {
+			} catch (BuildingBlockException e) {
 				e.printStackTrace();
 				response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
 			} catch (TemplateException e) {
@@ -253,6 +257,7 @@ public class FormServlet extends GenericServlet {
 			line = reader.readLine();
 		}
 		String body = buffer.toString();
+		Catalogue catalogue = CatalogueAccessPoint.getCatalogue();
 		
 		if (id == null) {
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
@@ -261,12 +266,12 @@ public class FormServlet extends GenericServlet {
 			String uri = request.getRequestURL().toString();
 			try {
 				JSONObject json = new JSONObject(body);
-				Form form = parseForm(json, new URIImpl(uri));
-				CatalogueAccessPoint.getCatalogue().updateForm(form);
+				Form form = BuildingBlockJSONBuilder.buildForm(json, new URIImpl(uri));
+				catalogue.updateForm(form);
 				if (format.equals(MediaType.APPLICATION_RDF_XML) ||
 						format.equals(MediaType.APPLICATION_TURTLE)) {
 					response.setContentType(format);
-					Model formElementModel = form.createModel();
+					Model formElementModel = form.toRDF2GoModel();
 					formElementModel.writeTo(writer, Syntax.forMimeType(format));
 					formElementModel.close();
 				} else if (format.equals(MediaType.TEXT_HTML) ||
@@ -300,7 +305,7 @@ public class FormServlet extends GenericServlet {
 			} catch (NotFoundException e) {
 				e.printStackTrace();
 				response.sendError(HttpServletResponse.SC_NOT_FOUND, "The resource "+uri+" has not been found.");
-			} catch (ResourceException e) {
+			} catch (BuildingBlockException e) {
 				e.printStackTrace();
 				response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
 			} catch (TemplateException e) {
@@ -317,6 +322,7 @@ public class FormServlet extends GenericServlet {
 		String[] chunks = request.getRequestURI().split("/");
 		String id = chunks[chunks.length-1];
 		if (id.equalsIgnoreCase("forms")) id = null;
+		Catalogue catalogue = CatalogueAccessPoint.getCatalogue();
 		
 		if (id == null) {
 			response.sendError(HttpServletResponse.SC_BAD_REQUEST, "An ID must be specified.");
@@ -324,7 +330,7 @@ public class FormServlet extends GenericServlet {
 			// Delete the addressed member of the collection.
 			String uri = request.getRequestURL().toString();
 			try {
-				CatalogueAccessPoint.getCatalogue().removeForm(new URIImpl(uri));
+				catalogue.removeForm(new URIImpl(uri));
 				response.setStatus(HttpServletResponse.SC_OK);
 			} catch (NotFoundException e) {
 				response.sendError(HttpServletResponse.SC_NOT_FOUND, "The resource "+uri+" has not been found.");

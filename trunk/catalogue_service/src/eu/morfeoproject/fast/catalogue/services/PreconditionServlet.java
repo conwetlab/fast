@@ -19,10 +19,12 @@ import org.ontoware.rdf2go.model.node.impl.URIImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import eu.morfeoproject.fast.catalogue.DuplicatedResourceException;
+import eu.morfeoproject.fast.catalogue.BuildingBlockJSONBuilder;
+import eu.morfeoproject.fast.catalogue.Catalogue;
+import eu.morfeoproject.fast.catalogue.DuplicatedBuildingBlockException;
 import eu.morfeoproject.fast.catalogue.NotFoundException;
 import eu.morfeoproject.fast.catalogue.OntologyInvalidException;
-import eu.morfeoproject.fast.catalogue.ResourceException;
+import eu.morfeoproject.fast.catalogue.BuildingBlockException;
 import eu.morfeoproject.fast.catalogue.buildingblocks.Precondition;
 import eu.morfeoproject.fast.catalogue.htmltemplates.BuildingBlockTemplate;
 import eu.morfeoproject.fast.catalogue.htmltemplates.CollectionTemplate;
@@ -61,6 +63,7 @@ public class PreconditionServlet extends GenericServlet {
 			extension = id;
 			id = null;
 		}
+		Catalogue catalogue = CatalogueAccessPoint.getCatalogue();
 
 		if (extension == null) {
 			redirectToFormat(request, response, format);
@@ -77,8 +80,8 @@ public class PreconditionServlet extends GenericServlet {
 						Model model = RDF2Go.getModelFactory().createModel();
 						try {
 							model.open();
-							for (Precondition s : CatalogueAccessPoint.getCatalogue().listPreconditions()) {
-								Model preModel = s.createModel();
+							for (Precondition s : catalogue.getPreconditions()) {
+								Model preModel = s.toRDF2GoModel();
 								for (String ns : preModel.getNamespaces().keySet())
 									model.setNamespace(ns, preModel.getNamespace(ns));
 								model.addModel(preModel);
@@ -96,11 +99,11 @@ public class PreconditionServlet extends GenericServlet {
 							response.setCharacterEncoding(TemplateManager.getDefaultEncoding());
 						if (TemplateManager.getLocale() != null)
 							response.setLocale(TemplateManager.getLocale());
-						CollectionTemplate.process(CatalogueAccessPoint.getCatalogue().listPreconditions(), writer);
+						CollectionTemplate.process(catalogue.getPreconditions(), writer);
 					} else { // by default APPLICATION_JSON
 						response.setContentType(MediaType.APPLICATION_JSON);
 						JSONArray pres = new JSONArray();
-						for (Precondition s : CatalogueAccessPoint.getCatalogue().listPreconditions())
+						for (Precondition s : catalogue.getPreconditions())
 							pres.put(s.toJSON());
 						writer.print(pres.toString(2));
 					}
@@ -117,7 +120,7 @@ public class PreconditionServlet extends GenericServlet {
 				format = MediaType.forExtension(extension);
 				// Retrieve the addressed member of the collection
 				String uri = url.substring(0, url.indexOf(extension) - 1);
-				Precondition pre = CatalogueAccessPoint.getCatalogue().getPrecondition(new URIImpl(uri));
+				Precondition pre = catalogue.getPrecondition(new URIImpl(uri));
 				if (pre == null) {
 					response.sendError(HttpServletResponse.SC_NOT_FOUND, "The resource "+uri+" has not been found.");
 				} else {
@@ -125,7 +128,7 @@ public class PreconditionServlet extends GenericServlet {
 						if (format.equals(MediaType.APPLICATION_RDF_XML) ||
 								format.equals(MediaType.APPLICATION_TURTLE)) {
 							response.setContentType(format);
-							Model preModel = pre.createModel();
+							Model preModel = pre.toRDF2GoModel();
 							preModel.writeTo(writer, Syntax.forMimeType(format));
 							preModel.close();
 						} else if (format.equals(MediaType.TEXT_HTML)) {
@@ -168,18 +171,19 @@ public class PreconditionServlet extends GenericServlet {
 			line = reader.readLine();
 		}
 		String body = buffer.toString();
+		Catalogue catalogue = CatalogueAccessPoint.getCatalogue();
 
 		// Create a new entry in the collection where the ID is assigned automatically by 
 		// the collection and it is returned.
 		try {
 			JSONObject json = new JSONObject(body);
-			Precondition pre = parsePrecondition(json, null);
+			Precondition pre = BuildingBlockJSONBuilder.buildPrecondition(json, null);
 			try {
-				CatalogueAccessPoint.getCatalogue().addPreOrPost(pre);
+				catalogue.addPreOrPost(pre);
 				if (format.equals(MediaType.APPLICATION_RDF_XML) ||
 						format.equals(MediaType.APPLICATION_TURTLE)) {
 					response.setContentType(format);
-					Model preModel = pre.createModel();
+					Model preModel = pre.toRDF2GoModel();
 					preModel.writeTo(writer, Syntax.forMimeType(format));
 					preModel.close();
 				} else if (format.equals(MediaType.TEXT_HTML)) {
@@ -194,13 +198,13 @@ public class PreconditionServlet extends GenericServlet {
 					writer.print(pre.toJSON().toString(2));
 				}
 				response.setStatus(HttpServletResponse.SC_OK);
-			} catch (DuplicatedResourceException e) {
+			} catch (DuplicatedBuildingBlockException e) {
 				e.printStackTrace();
 				response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
 			} catch (OntologyInvalidException e) {
 				e.printStackTrace();
 				response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
-			} catch (ResourceException e) {
+			} catch (BuildingBlockException e) {
 				e.printStackTrace();
 				response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
 			} catch (TemplateException e) {
@@ -234,6 +238,7 @@ public class PreconditionServlet extends GenericServlet {
 			line = reader.readLine();
 		}
 		String body = buffer.toString();
+		Catalogue catalogue = CatalogueAccessPoint.getCatalogue();
 		
 		if (id == null) {
 			response.sendError(HttpServletResponse.SC_BAD_REQUEST, "An ID must be specified.");
@@ -242,12 +247,12 @@ public class PreconditionServlet extends GenericServlet {
 			String uri = request.getRequestURL().toString();
 			try {
 				JSONObject json = new JSONObject(body);
-				Precondition pre = parsePrecondition(json, new URIImpl(uri));
-				CatalogueAccessPoint.getCatalogue().updatePreOrPost(pre);
+				Precondition pre = BuildingBlockJSONBuilder.buildPrecondition(json, new URIImpl(uri));
+				catalogue.updatePreOrPost(pre);
 				if (format.equals(MediaType.APPLICATION_RDF_XML) ||
 						format.equals(MediaType.APPLICATION_TURTLE)) {
 					response.setContentType(format);
-					Model preModel = pre.createModel();
+					Model preModel = pre.toRDF2GoModel();
 					preModel.writeTo(writer, Syntax.forMimeType(format));
 					preModel.close();
 				} else if (format.equals(MediaType.TEXT_HTML)) {
@@ -271,7 +276,7 @@ public class PreconditionServlet extends GenericServlet {
 			} catch (NotFoundException e) {
 				e.printStackTrace();
 				response.sendError(HttpServletResponse.SC_NOT_FOUND, "The resource "+uri+" has not been found.");
-			} catch (ResourceException e) {
+			} catch (BuildingBlockException e) {
 				e.printStackTrace();
 				response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
 			} catch (TemplateException e) {
@@ -288,6 +293,7 @@ public class PreconditionServlet extends GenericServlet {
 		String[] chunks = request.getRequestURI().split("/");
 		String id = chunks[chunks.length-1];
 		if (id.equalsIgnoreCase("screens")) id = null;
+		Catalogue catalogue = CatalogueAccessPoint.getCatalogue();
 		
 		if (id == null) {
 			response.sendError(HttpServletResponse.SC_BAD_REQUEST, "An ID must be specified.");
@@ -295,7 +301,7 @@ public class PreconditionServlet extends GenericServlet {
 			// Delete the addressed member of the collection.
 			String uri = request.getRequestURL().toString();
 			try {
-				CatalogueAccessPoint.getCatalogue().removePreOrPost(new URIImpl(uri));
+				catalogue.removePreOrPost(new URIImpl(uri));
 				response.setStatus(HttpServletResponse.SC_OK);
 			} catch (NotFoundException e) {
 				response.sendError(HttpServletResponse.SC_NOT_FOUND, "The resource "+uri+" has not been found.");

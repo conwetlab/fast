@@ -16,6 +16,7 @@ import org.ontoware.rdf2go.vocabulary.RDF;
 import org.ontoware.rdf2go.vocabulary.RDFS;
 import org.ontoware.rdf2go.vocabulary.XSD;
 
+import eu.morfeoproject.fast.catalogue.commontag.CTag;
 import eu.morfeoproject.fast.catalogue.vocabulary.CTAG;
 import eu.morfeoproject.fast.catalogue.vocabulary.DC;
 
@@ -83,7 +84,7 @@ public class Concept {
 	 * @param r the resource to compare with
 	 * @return true if their URIs are the same
 	 */
-	public boolean equals(Resource r) {
+	public boolean equals(BuildingBlock r) {
 		return r.getUri().equals(getUri());
 	}
 	
@@ -137,21 +138,22 @@ public class Concept {
 		return json;
 	}
 	
-	public Model createModel() {
+	public Model toRDF2GoModel() {
 		Model model = RDF2Go.getModelFactory().createModel();
 		model.open();
 		model.setNamespace("dc", DC.NS_DC.toString());
 		model.setNamespace("ctag", CTAG.NS_CTAG.toString());
 		
-		URI resourceUri = this.getUri();
-		model.addStatement(resourceUri, RDFS.subClassOf, this.getSubClassOf());
+		URI cUri = this.getUri();
+		model.addStatement(cUri, RDF.type, RDFS.Class);
+		model.addStatement(cUri, RDFS.subClassOf, this.getSubClassOf());
 		for (String key : this.getLabels().keySet())
-			model.addStatement(resourceUri, RDFS.label, model.createLanguageTagLiteral(this.getLabels().get(key), key));
+			model.addStatement(cUri, RDFS.label, model.createLanguageTagLiteral(this.getLabels().get(key), key));
 		for (String key : this.getDescriptions().keySet())
-			model.addStatement(resourceUri, DC.description, model.createLanguageTagLiteral(this.getDescriptions().get(key), key));
+			model.addStatement(cUri, DC.description, model.createLanguageTagLiteral(this.getDescriptions().get(key), key));
 		for (CTag tag : this.getTags()) {
 			BlankNode bnTag = model.createBlankNode();
-			model.addStatement(resourceUri, CTAG.tagged, bnTag);
+			model.addStatement(cUri, CTAG.tagged, bnTag);
 			model.addStatement(bnTag, RDF.type, CTAG.Tag);
 			if (tag.getMeans() != null)
 				model.addStatement(bnTag, CTAG.means, tag.getMeans());

@@ -95,14 +95,43 @@ public class TripleStore {
 	}
 	
 	public void open() {
-		getPersistentModelSet().open();
+		persistentModelSet.open();
 	}
 	
 	public void close() {
 		// close the model set
-		getPersistentModelSet().close();
+		persistentModelSet.close();
 	}
 
+	public void addModel(Model model, URI uriModel) {
+    	if (uriModel == null)
+    		throw new IllegalArgumentException("uriModel is null");
+		persistentModelSet.addModel(model, uriModel);
+	}
+	
+	/**
+	 * Replaces blank nodes ids from the model to triple-store specific ids
+	 * @param model
+	 * @param uriModel
+	 */
+	private void addSafeModel(Model model, URI uriModel) {
+		 
+		persistentModelSet.addModel(model, uriModel);
+
+	}
+	
+	public Model getModel(URI uriModel) {
+    	if (uriModel == null)
+    		throw new IllegalArgumentException("uriModel is null");
+    	return persistentModelSet.getModel(uriModel);
+	}
+	
+    public boolean removeModel(URI uriModel) {
+    	if (uriModel == null)
+    		throw new IllegalArgumentException("uriModel is null");
+    	return persistentModelSet.removeModel(uriModel);
+    }
+    
 	public boolean isValidURI(String uri) {
 		return persistentModelSet.isValidURI(uri);
 	}
@@ -141,6 +170,60 @@ public class TripleStore {
 	
 	public URI createURI(String arg0) {
 		return persistentModelSet.createURI(arg0);
+	}
+	
+	public boolean isBlankNode(Node n) {
+		try {
+			n.asBlankNode();		
+		} catch (java.lang.ClassCastException e) {
+			return false;
+		}
+		return true;
+	}
+
+	public boolean isDatatypeLiteral(Node n) {
+		try {
+			n.asDatatypeLiteral();		
+		} catch (java.lang.ClassCastException e) {
+			return false;
+		}
+		return true;
+	}
+	
+	public boolean isLanguageTagLiteral(Node n) {
+		try {
+			n.asLanguageTagLiteral();		
+		} catch (java.lang.ClassCastException e) {
+			return false;
+		}
+		return true;
+	}
+
+	public boolean isLiteral(Node n) {
+		try {
+			n.asLiteral();		
+		} catch (java.lang.ClassCastException e) {
+			return false;
+		}
+		return true;
+	}
+
+	public boolean isResource(Node n) {
+		try {
+			n.asResource();		
+		} catch (java.lang.ClassCastException e) {
+			return false;
+		}
+		return true;
+	}
+
+	public boolean isURI(Node n) {
+		try {
+			n.asURI();		
+		} catch (java.lang.ClassCastException e) {
+			return false;
+		}
+		return true;
 	}
 	
 	/**
@@ -182,7 +265,7 @@ public class TripleStore {
 //  		// read the ontology from the inputstream
 //        ont.readFrom(ontology, syntax);
 //        // add the ontology to the persistent modelset
-//        getPersistentModelSet().addModel(ont);
+//        persistentModelSet.addModel(ont);
 //    } catch (IOException e) {
 //        throw new OntologyInvalidException(e.getLocalizedMessage(), e);
 //    } finally{
@@ -234,12 +317,12 @@ public class TripleStore {
     	if (!existsOntology(ontologyUri))
     		throw new NotFoundException("Ontology "+ontologyUri+" not found or is not a valid ontology URI.");
 
-    	Model ontInModelset = getPersistentModelSet().getModel(ontologyUri);
+    	Model ontInModelset = persistentModelSet.getModel(ontologyUri);
     	ontInModelset.open();
     	if (ontInModelset.size() == 0)
     		throw new NotFoundException("Ontology "+ontologyUri+" has no triples in the store");
     	ontInModelset.close();
-    	getPersistentModelSet().removeModel(ontologyUri);
+    	persistentModelSet.removeModel(ontologyUri);
     }
 
     /**
@@ -248,7 +331,7 @@ public class TripleStore {
      * @return
      */
     public boolean existsOntology(URI ontologyUri) {
-    	Model model = getPersistentModelSet().getModel(ontologyUri);
+    	Model model = persistentModelSet.getModel(ontologyUri);
     	return model.size() > 0;
     }
 	
@@ -259,51 +342,45 @@ public class TripleStore {
      */
     public boolean containsOntology(URI ontologyUri) {
     	// TODO: check if this is really an ontology and not just a graph
-   		return getPersistentModelSet().containsModel(ontologyUri);
+   		return persistentModelSet.containsModel(ontologyUri);
 //   		return false;
 //    	return true;
     }
     
-    public boolean removeModel(URI uriModel) {
-    	if (uriModel == null)
-    		throw new IllegalArgumentException("uriModel is null");
-    	return getPersistentModelSet().removeModel(uriModel);
-    }
-    
     public void addStatement(Statement statement) {
-    	getPersistentModelSet().addStatement(statement);
+    	persistentModelSet.addStatement(statement);
     }
     
     public void addStatement(Resource subject, URI predicate, Node object) {
-    	getPersistentModelSet().addStatement(null, subject, predicate, object);
+    	persistentModelSet.addStatement(null, subject, predicate, object);
     }
     
     public void addStatement(Resource subject, URI predicate, String object) {
-    	getPersistentModelSet().addStatement(null, subject, predicate, createDatatypeLiteral(object, XSD._string));
+    	persistentModelSet.addStatement(null, subject, predicate, createDatatypeLiteral(object, XSD._string));
     }
     
     public void addStatement(Resource subject, URI predicate, boolean object) {
-    	getPersistentModelSet().addStatement(null, subject, predicate, createDatatypeLiteral(new Boolean(object).toString(), XSD._boolean));
+    	persistentModelSet.addStatement(null, subject, predicate, createDatatypeLiteral(new Boolean(object).toString(), XSD._boolean));
     }
     
     public void addStatement(Resource subject, URI predicate, int object) {
-    	getPersistentModelSet().addStatement(null, subject, predicate, createDatatypeLiteral(new Integer(object).toString(), XSD._int));
+    	persistentModelSet.addStatement(null, subject, predicate, createDatatypeLiteral(new Integer(object).toString(), XSD._int));
     }
     
     public void addStatement(Resource subject, URI predicate, Date object) {
-    	getPersistentModelSet().addStatement(null, subject, predicate, createDatatypeLiteral(DateFormatter.formatDateISO8601(object), XSD._dateTime));
+    	persistentModelSet.addStatement(null, subject, predicate, createDatatypeLiteral(DateFormatter.formatDateISO8601(object), XSD._dateTime));
     }
     
     public void addStatement(URI context, Resource subject, URI predicate, Node object) {
-    	getPersistentModelSet().addStatement(context, subject, predicate, object);
+    	persistentModelSet.addStatement(context, subject, predicate, object);
     }
     
     private void removeStatements(ResourceOrVariable subject, UriOrVariable predicate, NodeOrVariable object) {
-    	getPersistentModelSet().removeStatements(Variable.ANY, subject, predicate, object);
+    	persistentModelSet.removeStatements(Variable.ANY, subject, predicate, object);
     }
     
     public ClosableIterator<Statement> findStatements(QuadPattern arg0) throws ModelRuntimeException {
-    	return getPersistentModelSet().findStatements(arg0);
+    	return persistentModelSet.findStatements(arg0);
     }
 
     public ClosableIterator<Statement> findStatements(
@@ -318,7 +395,7 @@ public class TripleStore {
     		ResourceOrVariable subject,
     		UriOrVariable predicate,
     		NodeOrVariable object) throws ModelRuntimeException {
-    	return getPersistentModelSet().findStatements(context, subject, predicate, object);
+    	return persistentModelSet.findStatements(context, subject, predicate, object);
     }
 
 	/**
@@ -329,24 +406,17 @@ public class TripleStore {
 		if (contextURI == null)
 			throw new IllegalArgumentException("null");
 		logger.debug("Getting model: " + contextURI);
-		Model model = getPersistentModelSet().getModel(contextURI);
+		Model model = persistentModelSet.getModel(contextURI);
 		model.open();
 		return model;
 	}
 
-	/**
-	 * @return persistent ModelSet
-	 */
-	ModelSet getPersistentModelSet() {
-		return this.persistentModelSet;
-	}
-
 	public void clear() {
-		getPersistentModelSet().removeAll();
+		persistentModelSet.removeAll();
 	}
 
 	public void finalize() {
-		getPersistentModelSet().close();
+		persistentModelSet.close();
 	}
 	
     /**
@@ -358,8 +428,8 @@ public class TripleStore {
      */
     public boolean isClass(URI clazz) {
         boolean contains = 
-        	getPersistentModelSet().containsStatements(Variable.ANY, clazz, RDF.type, RDFS.Class)
-        	|| getPersistentModelSet().containsStatements(Variable.ANY, clazz, RDF.type, OWL.Class);
+        	persistentModelSet.containsStatements(Variable.ANY, clazz, RDF.type, RDFS.Class)
+        	|| persistentModelSet.containsStatements(Variable.ANY, clazz, RDF.type, OWL.Class);
         return contains;
     }
     
@@ -370,7 +440,7 @@ public class TripleStore {
      * @return true, if the URI has a type RDF.Property
      */
     public boolean isProperty(URI property) {
-        boolean contains = getPersistentModelSet().containsStatements(
+        boolean contains = persistentModelSet.containsStatements(
             Variable.ANY,
             property,
             RDF.type,
@@ -388,22 +458,22 @@ public class TripleStore {
      */
     public boolean isResource(URI resource, URI clazz) {
     	if (resource == null) return false;
-        return getPersistentModelSet().containsStatements(Variable.ANY, resource, RDF.type, clazz);
+        return persistentModelSet.containsStatements(Variable.ANY, resource, RDF.type, clazz);
     }    
     
-    /**
-     * Creates a new resource with a specific URI
-     * @param uri
-     * @param ofClass
-     * @return
-     * @throws OntologyInvalidException
-     */
-    public URI createResource(URI uri, URI ofClass)
-    throws OntologyInvalidException {
-    	assertClass(ofClass);
-    	getPersistentModelSet().addStatement(null, uri, RDF.type, ofClass);
-    	return uri;
-    }
+//    /**
+//     * Creates a new resource with a specific URI
+//     * @param uri
+//     * @param ofClass
+//     * @return
+//     * @throws OntologyInvalidException
+//     */
+//    public URI createBuildingBlock(URI uri, URI ofClass)
+//    throws OntologyInvalidException {
+//    	assertClass(ofClass);
+//    	persistentModelSet.addStatement(null, uri, RDF.type, ofClass);
+//    	return uri;
+//    }
     
     public void removeResource(Resource resource) throws NotFoundException {
 //    	if(!isResource(resource))
@@ -411,7 +481,7 @@ public class TripleStore {
     	// TODO: Only removes statements which subject is the resource, but the resource
     	// can still be in other statements as an object, and other resources only used
     	// by this resource are still in the store.
-   		getPersistentModelSet().removeStatements(Variable.ANY, resource, Variable.ANY, Variable.ANY);
+   		persistentModelSet.removeStatements(Variable.ANY, resource, Variable.ANY, Variable.ANY);
     }
     
 	/**
@@ -444,7 +514,7 @@ public class TripleStore {
     }
     
 	public URI newRandomUniqueURI() {
-		return getPersistentModelSet().newRandomUniqueURI();
+		return persistentModelSet.newRandomUniqueURI();
 	}
 
 	/**
@@ -494,7 +564,7 @@ public class TripleStore {
         URI namespace,
         String name,
         boolean nullifexists) {
-        String cleanName = name == null ? "" : toCleanName(name);
+        String cleanName = name == null ? "" : name;//TODO toCleanName(name);
         
         long millis = System.currentTimeMillis();
         URI uri = new URIImpl(namespace + cleanName + millis);
@@ -504,13 +574,13 @@ public class TripleStore {
                 ok = true;
                 ok = ok && !createdURIs.contains(uri);
                 ok = ok
-                    && !getPersistentModelSet().containsStatements(
+                    && !persistentModelSet.containsStatements(
                         Variable.ANY,
                         uri,
                         Variable.ANY,
                         Variable.ANY);
                 ok = ok
-                    && !getPersistentModelSet().containsStatements(
+                    && !persistentModelSet.containsStatements(
                         Variable.ANY,
                         Variable.ANY,
                         Variable.ANY,
@@ -532,7 +602,6 @@ public class TripleStore {
 
     /**
      * make this name clean of all characters that should not be in a uri.
-     * Method used internally and by PimoQuery
      * @param name the name to clean
      * @return a name without funny characters. 
      */
@@ -569,19 +638,19 @@ public class TripleStore {
 	}
 	
 	public boolean sparqlAsk(String query) {
-        return getPersistentModelSet().sparqlAsk(query);
+        return persistentModelSet.sparqlAsk(query);
 	}
 
 	public ClosableIterable<Statement> sparqlConstruct(String query) {
-		return getPersistentModelSet().sparqlConstruct(query);
+		return persistentModelSet.sparqlConstruct(query);
 	}
 	
 	public ClosableIterable<Statement> sparqlDescribe(String query) {
-        return getPersistentModelSet().sparqlDescribe(query);
+        return persistentModelSet.sparqlDescribe(query);
 	}
 	
 	public QueryResultTable sparqlSelect(String query) {
-        return getPersistentModelSet().sparqlSelect(query);
+        return persistentModelSet.sparqlSelect(query);
 	}
 
 	public void export(OutputStream output, Syntax syntax) {
@@ -594,9 +663,10 @@ public class TripleStore {
 
 
 	
+	
 	// TODO remove it
 	public void dump() {
-		getPersistentModelSet().dump();
+		persistentModelSet.dump();
 	}
 
 }

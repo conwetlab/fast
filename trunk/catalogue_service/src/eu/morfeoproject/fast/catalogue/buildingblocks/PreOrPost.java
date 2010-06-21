@@ -17,7 +17,7 @@ import org.ontoware.rdf2go.vocabulary.XSD;
 import eu.morfeoproject.fast.catalogue.vocabulary.DC;
 import eu.morfeoproject.fast.catalogue.vocabulary.FGO;
 
-public abstract class PreOrPost extends Resource {
+public abstract class PreOrPost extends BuildingBlock {
 	
 	private List<Condition> conditions;
 
@@ -35,7 +35,8 @@ public abstract class PreOrPost extends Resource {
 		this.conditions = conditions;
 	}
 	
-	public Model createModel() {
+	public Model toRDF2GoModel() {
+		//TODO super.toRDF2GoModel() para incluir metadata basica de cualquier BB
 		Model model = RDF2Go.getModelFactory().createModel();
 		model.open();
 		model.setNamespace("dc", DC.NS_DC.toString());

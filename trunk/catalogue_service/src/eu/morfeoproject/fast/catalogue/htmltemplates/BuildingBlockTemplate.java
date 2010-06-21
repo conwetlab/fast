@@ -8,7 +8,7 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import eu.morfeoproject.fast.catalogue.buildingblocks.Resource;
+import eu.morfeoproject.fast.catalogue.buildingblocks.BuildingBlock;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
 
@@ -18,7 +18,7 @@ public class BuildingBlockTemplate {
 
 	private static final String tmplFile = "buildingblock.html";
 	
-	public static void process(Resource resource, Writer writer) throws TemplateException {
+	public static void process(BuildingBlock resource, Writer writer) throws TemplateException {
 		// Build the data-model
         Map dataModel = new HashMap();
         dataModel.put("bb", resource);

@@ -1,20 +1,20 @@
 package eu.morfeoproject.fast.catalogue;
 
-public class DuplicatedResourceException extends Exception {
+public class BuildingBlockException extends Exception {
 	
 	private static final long serialVersionUID = 1L;
 
 	/**
 	 * 
 	 */
-	public DuplicatedResourceException() {
+	public BuildingBlockException() {
 		// TODO Auto-generated constructor stub
 	}
 
 	/**
 	 * @param message
 	 */
-	public DuplicatedResourceException(String message) {
+	public BuildingBlockException(String message) {
 		super(message);
 		// TODO Auto-generated constructor stub
 	}
@@ -22,7 +22,7 @@ public class DuplicatedResourceException extends Exception {
 	/**
 	 * @param cause
 	 */
-	public DuplicatedResourceException(Throwable cause) {
+	public BuildingBlockException(Throwable cause) {
 		super(cause);
 		// TODO Auto-generated constructor stub
 	}
@@ -31,7 +31,7 @@ public class DuplicatedResourceException extends Exception {
 	 * @param message
 	 * @param cause
 	 */
-	public DuplicatedResourceException(String message, Throwable cause) {
+	public BuildingBlockException(String message, Throwable cause) {
 		super(message, cause);
 		// TODO Auto-generated constructor stub
 	}
