@@ -38,7 +38,7 @@ public class AttributeTextArea
    public void set (String fieldName, Object value)
    {
       // attrName
-      if ("attrName".equals(fieldName)){				
+      if ("attrName".equals(fieldName)){
          setAttrName((String) value);
       }   }  
 

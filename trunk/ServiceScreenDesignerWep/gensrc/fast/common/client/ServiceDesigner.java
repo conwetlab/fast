@@ -23,13 +23,13 @@ public class ServiceDesigner extends FastObject
 
    public void removeAllFrom(String className) 
    {
-      if ("fast.common.client.ServiceScreen".equals(className)){				
+      if ("fast.common.client.ServiceScreen".equals(className)){
          removeAllFromScreens();
       }
-      else      if ("fast.common.client.FactType".equals(className)){				
+      else      if ("fast.common.client.FactType".equals(className)){
          removeAllFromFactTypes();
       }
-      else      if ("fast.common.client.TrafoOperator".equals(className)){				
+      else      if ("fast.common.client.TrafoOperator".equals(className)){
          removeAllFromTrafoOperators();
       }
    }
@@ -47,29 +47,14 @@ public class ServiceDesigner extends FastObject
    // generic set and get methods
    public void set (String fieldName, Object value)
    {
-//( toMany true || toMany2 false || qualified $qualified || 
-// internalQualified false ||  
-// role.Qualifier $role.Qualifier || ordered $ordered || sorted $sorted)
- //2[! (  ( toMany || !toMany2) && !( toMany && toMany2)  && role.Qualifier  ) ]
-//2.2[ !( qualified && !internalQualified ) ]
- // screens
-      if ("screens".equals(fieldName)){				
+  // screens
+      if ("screens".equals(fieldName)){
          addToScreens ((fast.common.client.ServiceScreen) value);
-      }//( toMany true || toMany2 false || qualified $qualified || 
-// internalQualified false ||  
-// role.Qualifier $role.Qualifier || ordered $ordered || sorted $sorted)
- //2[! (  ( toMany || !toMany2) && !( toMany && toMany2)  && role.Qualifier  ) ]
-//2.2[ !( qualified && !internalQualified ) ]
- else// factTypes
-      if ("factTypes".equals(fieldName)){				
+      }  else// factTypes
+      if ("factTypes".equals(fieldName)){
          addToFactTypes ((fast.common.client.FactType) value);
-      }//( toMany true || toMany2 false || qualified $qualified || 
-// internalQualified false ||  
-// role.Qualifier $role.Qualifier || ordered $ordered || sorted $sorted)
- //2[! (  ( toMany || !toMany2) && !( toMany && toMany2)  && role.Qualifier  ) ]
-//2.2[ !( qualified && !internalQualified ) ]
- else// trafoOperators
-      if ("trafoOperators".equals(fieldName)){				
+      }  else// trafoOperators
+      if ("trafoOperators".equals(fieldName)){
          addToTrafoOperators ((fast.common.client.TrafoOperator) value);
       }   }  
 
@@ -81,15 +66,15 @@ public class ServiceDesigner extends FastObject
    public Object get (String fieldName)
    {
       if ("screens".equals(fieldName))
-      {				
+      {
          return iteratorOfScreens();
       }
       else      if ("factTypes".equals(fieldName))
-      {				
+      {
          return iteratorOfFactTypes();
       }
       else      if ("trafoOperators".equals(fieldName))
-      {				
+      {
          return iteratorOfTrafoOperators();
       }
       return null;

@@ -24,16 +24,16 @@ public class FactType extends FastObject
 
    public void removeAllFrom(String className) 
    {
-      if ("fast.common.client.FactAttribute".equals(className)){				
+      if ("fast.common.client.FactAttribute".equals(className)){
          removeAllFromFactAttributes();
       }
-      else      if ("fast.common.client.FactType".equals(className)){				
+      else      if ("fast.common.client.FactType".equals(className)){
          removeAllFromIsa();
       }
-      else      if ("fast.common.client.FactType".equals(className)){				
+      else      if ("fast.common.client.FactType".equals(className)){
          removeAllFromSubtypes();
       }
-      else      if ("fast.common.client.FactExample".equals(className)){				
+      else      if ("fast.common.client.FactExample".equals(className)){
          removeAllFromFactExamples();
       }
    }
@@ -55,53 +55,28 @@ public class FactType extends FastObject
    public void set (String fieldName, Object value)
    {
       // typeName
-      if ("typeName".equals(fieldName)){				
+      if ("typeName".equals(fieldName)){
          setTypeName((String) value);
       }      else      // mnemonic
-      if ("mnemonic".equals(fieldName)){				
+      if ("mnemonic".equals(fieldName)){
          setMnemonic((String) value);
       }      else      // uri
-      if ("uri".equals(fieldName)){				
+      if ("uri".equals(fieldName)){
          setUri((String) value);
-      }//( toMany false || toMany2 true || qualified $qualified || 
-// internalQualified false ||  
-// role.Qualifier $role.Qualifier || ordered false || sorted false)
- //2[! (  ( toMany || !toMany2) && !( toMany && toMany2)  && role.Qualifier  ) ]
-//2.2[ !( qualified && !internalQualified ) ]
- else// serviceDesigner
-      if ("serviceDesigner".equals(fieldName)){				
+      }  else// serviceDesigner
+      if ("serviceDesigner".equals(fieldName)){
          setServiceDesigner ((fast.common.client.ServiceDesigner) value);
-      }//( toMany true || toMany2 false || qualified $qualified || 
-// internalQualified false ||  
-// role.Qualifier $role.Qualifier || ordered false || sorted false)
- //2[! (  ( toMany || !toMany2) && !( toMany && toMany2)  && role.Qualifier  ) ]
-//2.2[ !( qualified && !internalQualified ) ]
- else// factAttributes
-      if ("factAttributes".equals(fieldName)){				
+      }  else// factAttributes
+      if ("factAttributes".equals(fieldName)){
          addToFactAttributes ((fast.common.client.FactAttribute) value);
-      }//( toMany true || toMany2 true || qualified $qualified || 
-// internalQualified false ||  
-// role.Qualifier $role.Qualifier || ordered false || sorted false)
- //2[! (  ( toMany || !toMany2) && !( toMany && toMany2)  && role.Qualifier  ) ]
-//2.2[ !( qualified && !internalQualified ) ]
- else// isa
-      if ("isa".equals(fieldName)){				
+      }  else// isa
+      if ("isa".equals(fieldName)){
          addToIsa ((fast.common.client.FactType) value);
-      }//( toMany true || toMany2 true || qualified $qualified || 
-// internalQualified false ||  
-// role.Qualifier $role.Qualifier || ordered false || sorted false)
- //2[! (  ( toMany || !toMany2) && !( toMany && toMany2)  && role.Qualifier  ) ]
-//2.2[ !( qualified && !internalQualified ) ]
- else// subtypes
-      if ("subtypes".equals(fieldName)){				
+      }  else// subtypes
+      if ("subtypes".equals(fieldName)){
          addToSubtypes ((fast.common.client.FactType) value);
-      }//( toMany true || toMany2 false || qualified $qualified || 
-// internalQualified false ||  
-// role.Qualifier $role.Qualifier || ordered false || sorted false)
- //2[! (  ( toMany || !toMany2) && !( toMany && toMany2)  && role.Qualifier  ) ]
-//2.2[ !( qualified && !internalQualified ) ]
- else// factExamples
-      if ("factExamples".equals(fieldName)){				
+      }  else// factExamples
+      if ("factExamples".equals(fieldName)){
          addToFactExamples ((fast.common.client.FactExample) value);
       }   }  
 
@@ -125,23 +100,23 @@ public class FactType extends FastObject
          return (String) getUri();
       }
       else      if ("serviceDesigner".equals(fieldName))
-      {				
+      {
          return getServiceDesigner();
       }
       else      if ("factAttributes".equals(fieldName))
-      {				
+      {
          return iteratorOfFactAttributes();
       }
       else      if ("isa".equals(fieldName))
-      {				
+      {
          return iteratorOfIsa();
       }
       else      if ("subtypes".equals(fieldName))
-      {				
+      {
          return iteratorOfSubtypes();
       }
       else      if ("factExamples".equals(fieldName))
-      {				
+      {
          return iteratorOfFactExamples();
       }
       return null;

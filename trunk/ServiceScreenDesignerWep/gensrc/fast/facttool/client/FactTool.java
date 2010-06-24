@@ -61,7 +61,7 @@ public class FactTool implements EntryPoint
          editor = new FactEditor ( );
 
          // collabStat call
-         FTest.init();
+         FTest.init(false);
          // collabStat call
          FTest.assertTrue(true, "module FactTool reached");
          // collabStat call

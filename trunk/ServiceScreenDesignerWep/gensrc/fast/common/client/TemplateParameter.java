@@ -38,18 +38,13 @@ public class TemplateParameter extends CObject implements PropertyChangeClient
    public void set (String fieldName, Object value)
    {
       // name
-      if ("name".equals(fieldName)){				
+      if ("name".equals(fieldName)){
          setName((String) value);
       }      else      // value
-      if ("value".equals(fieldName)){				
+      if ("value".equals(fieldName)){
          setValue((String) value);
-      }//( toMany false || toMany2 true || qualified $qualified || 
-// internalQualified false ||  
-// role.Qualifier $role.Qualifier || ordered true || sorted false)
- //2[! (  ( toMany || !toMany2) && !( toMany && toMany2)  && role.Qualifier  ) ]
-//2.2[ !( qualified && !internalQualified ) ]
- else// serviceScreen
-      if ("serviceScreen".equals(fieldName)){				
+      }  else// serviceScreen
+      if ("serviceScreen".equals(fieldName)){
          setServiceScreen ((fast.common.client.BuildingBlock) value);
       }   }  
 
@@ -69,7 +64,7 @@ public class TemplateParameter extends CObject implements PropertyChangeClient
          return (String) getValue();
       }
       else      if ("serviceScreen".equals(fieldName))
-      {				
+      {
          return getServiceScreen();
       }
       return null;
