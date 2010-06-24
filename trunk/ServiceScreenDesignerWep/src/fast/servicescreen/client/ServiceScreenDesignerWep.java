@@ -74,7 +74,7 @@ public class ServiceScreenDesignerWep extends FastTool implements EntryPoint
     */
    public void onModuleLoad()
    {
-      FTest.init();
+      FTest.init(false);
       FTest.assertTrue(true, "entry point has been reached");
 
       // build action graph

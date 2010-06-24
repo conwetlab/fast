@@ -40,7 +40,7 @@ public class DataTransformationTool extends FastTool implements EntryPoint
 	@Override
 	public void onModuleLoad() 
 	{
-		FTest.init();
+		FTest.init(false);
 		FTest.assertTrue(true, "entry point has been reached");
 
 		// build action graph
