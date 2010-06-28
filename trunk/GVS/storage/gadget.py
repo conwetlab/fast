@@ -16,6 +16,7 @@ def getEzWebTemplate(gadgetData):
                             'gadgetWikiURI': notEmptyValueOrDefault(metadata, 'gadgetHomepage', settings.DEFAULT_GADGET_HOMEPAGE_URI),
                             'gadgetHeight': notEmptyValueOrDefault(metadata, 'height', settings.DEFAULT_EZWEB_GADGET_HEIGHT),
                             'gadgetWidth': notEmptyValueOrDefault(metadata, 'width', settings.DEFAULT_EZWEB_GADGET_WIDTH),
+                            'gadgetPersistent': metadata['persistent'],
                             'gadgetSlots': gadgetData['prec'],
                             'gadgetEvents': gadgetData['post']})
     return loader.render_to_string(path.join('resources','gadget','ezwebTemplate.xml'), ezWebContext);
@@ -25,6 +26,7 @@ def getEzWebHTML(gadgetData):
     ezWebContext = Context({'platform': 'ezweb',
                             'gadgetUri': metadata['gadgetUri'],
                             'gadgetTitle': metadata['name'],
+                            'gadgetPersistent': metadata['persistent'],
                             'gadgetSlots': gadgetData['prec'],
                             'gadgetEvents': gadgetData['post'],
                             'gadgetScreens': gadgetData['screens']})
@@ -40,6 +42,7 @@ def getGoogleTemplate(gadgetData):
                               'gadgetDescription': notEmptyValueOrDefault(metadata, 'description', metadata['name']),
                               'gadgetHeight': notEmptyValueOrDefault(metadata, 'height', settings.DEFAULT_EZWEB_GADGET_HEIGHT),
                               'gadgetWidth': notEmptyValueOrDefault(metadata, 'width', settings.DEFAULT_EZWEB_GADGET_WIDTH),
+                              'gadgetPersistent': metadata['persistent'],
                               'gadgetScreens': gadgetData['screens']})
     return loader.render_to_string(path.join('resources','gadget','googleTemplate.xml'), googleContext);
 

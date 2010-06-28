@@ -96,6 +96,7 @@ class GadgetStorage(resource.Resource):
         metadata['gadgetHomepage'] = valueOrEmpty(json, 'gadgetHomepage')
         metadata['height'] = valueOrEmpty(json, 'height')
         metadata['width'] = valueOrEmpty(json, 'width')
+        metadata['persistent'] = valueOrDefault(json, 'persistent', 'false')[0].upper()=='T'
         #Author Data
         metadata['authorName'] =  valueOrEmpty(json, 'authorName')
         metadata['email'] = valueOrEmpty(json, 'email')

@@ -14,9 +14,10 @@ var ScreenflowEngineFactory = function () {
             this.loaders = new Hash();
             this.emptyTab = null;
             this.events = new Hash();
+            this.persistentKB = null;
         },
 
-        setEngine: function (screens, events, menu) {
+        setEngine: function (screens, events, menu, persistentKB) {
             this.menu = menu;
             for (var i=0; i < screens.length; i++) {
                 this.screens.set(screens[i].id, screens[i]);
@@ -30,6 +31,36 @@ var ScreenflowEngineFactory = function () {
                 }
                 variables.push(events[i]);
             }
+            this.persistentKB = persistentKB;
+            this.getPersistence();
+        },
+
+        getPersistence: function () {
+            if(this.persistentKB){
+                var persistence = new FastAPI.Persistence();
+                try {
+                    persistence.get(function(value){
+                        var facts = value.evalJSON(true);
+                        for (var i=0; facts!= null && i<facts.length; i++){
+                            this.addFact(facts[i]);
+                        }
+                    }.bind(this));
+                } catch (e) {
+                    return;
+                }
+            }
+        },
+
+        setPersistence: function () {
+            if(this.persistentKB){
+                var persistence = new FastAPI.Persistence();
+                var kb = this.facts.values();
+                try {
+                    persistence.set(Object.toJSON(kb));
+                } catch (e) {
+                    return;
+                }
+            }
         },
 
         transformFact: function(factURI, attributeName, value){
@@ -41,7 +72,7 @@ var ScreenflowEngineFactory = function () {
                 fact.data[attributeName] = value;
                 return fact;
             } else {
-                var fact = eval('('+value+')');
+                var fact = value.evalJSON(true);
                 if (fact.uri == factURI){
                     return fact;
                 } else {
@@ -65,6 +96,7 @@ var ScreenflowEngineFactory = function () {
             for (var i=0; deletedFacts!= null &&  i<deletedFacts.length; i++){
                 this.deleteFact(deletedFacts[i]);
             }
+            this.setPersistence();
             this.run();
         },
 
@@ -204,7 +236,7 @@ var ScreenflowEngineFactory = function () {
                 for(var i=0; i < oldTabIds.length ; i++){
                     newTabIds = newTabIds.without(oldTabIds[i]);
                 }
-                if(newTabIds.length==1 || emptyTabDeleted){
+                if(newTabIds.length==1 || oldTabIds.length ==0 || emptyTabDeleted){
                     this.menu.setActiveTab(this.showedTabs.get(newTabIds[0]));
                 }
             }

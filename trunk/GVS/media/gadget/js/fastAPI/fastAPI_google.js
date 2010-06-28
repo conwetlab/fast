@@ -10,23 +10,11 @@ FastAPI.IO = Class.create(FastBaseAPI.IO,{
         $super();
     },
 
-    /**
-     * Creates a Slot Variable for Google.
-     * @param variable
-     *      represents the name of the variable
-     * @param handler
-     *      represents the handler for a variable when its value is set
-     */
     createInVariable: function (variable, handler) {
         throw 'Method not supported.'  +
             'FastAPI.IO :: createInVariable';
     },
 
-    /**
-     * Creates an Event Variable for Google.
-     * @param variable
-     *      represents the name of the variable
-     */
     createOutVariable: function (variable) {
         throw 'Method not supported.'  +
             'FastAPI.IO :: createOutVariable';
@@ -39,26 +27,10 @@ FastAPI.IO = Class.create(FastBaseAPI.IO,{
  * @extends FastBaseAPI.Request
  */
 FastAPI.Request = Class.create(FastBaseAPI.Request,{
-    /**
-     * Initializes an object to make requests in Google.
-     * @param url
-     *      url to be requested
-     * @param options
-     *      - method: 'get' || 'post' || 'put' || 'delete'
-     *      - content: 'xml' || 'text' || 'json'
-     *      - context: context of the invoking object
-     *      - parameters: either as a URL-encoded string or as any Hash-compatible object.
-     *      - requestHeaders: a javascript object with properties representing headers.
-     *      - onSuccess: Invoked when a request completes and its status code is undefined or belongs in the 2xy family.
-     *      - onFailure: Invoked when a request completes and its status code exists but is not in the 2xy family.
-     */
     initialize: function($super, url, options) {
         $super(url, options);
     },
 
-    /**
-     * Make a general-purpose request to a remote server.
-     */
     request: function() {
         var params = this.options;
 
@@ -134,7 +106,6 @@ FastAPI.Request = Class.create(FastBaseAPI.Request,{
 
         gadgets.io.makeRequest(this._getUniqueUrl(this.url), onSuccess, reqParams);
 
-        // This function handles a success in the asynchronous call
         function onSuccess(transport) {
             switch(params.content){
                 case 'xml':
@@ -175,25 +146,71 @@ FastAPI.Utils = Class.create(FastBaseAPI.Utils,{
         $super();
     },
 
-    /**
-     * Returns a JSON string.
-     * @param obj
-     *      represents the name of the variable
-     * @type JSON object
-     */
     toJSONString: function (obj) {
         return gadgets.json.stringify(obj);
     },
 
-    /**
-     * Returns a JSON object.
-     * @param string
-     *      represents the name of the variable
-     * @type string
-     *
-     */
     toJSONObject: function (string) {
         return gadgets.json.parse(string);
     }
 });
 
+/**
+ * Implementation of FastBaseAPI.Properties for Google.
+ * @constructs
+ * @extends FastBaseAPI.Properties
+ */
+FastAPI.Properties = Class.create(FastBaseAPI.Properties,{
+    initialize: function($super) {
+        $super();
+        var variables = new Hash();
+    },
+
+    get: function (variable) {
+        throw 'Method not supported.' +
+        'FastAPI.Properties :: get';
+    },
+
+    set: function (variable, value) {
+        throw 'Method not supported.' +
+            'FastAPI.Properties :: set';
+    }
+});
+
+/**
+ * Implementation of FastBaseAPI.Persistence for Google.
+ * @constructs
+ * @extends FastBaseAPI.Persistence
+ */
+FastAPI.Persistence = Class.create(FastBaseAPI.Persistence,{
+    initialize: function($super) {
+        $super();
+    },
+
+    get: function (func) {
+        var req = opensocial.newDataRequest();
+        var fields = [FastAPI.Persistence.KB_VAR];
+
+        req.add(req.newFetchPersonAppDataRequest(opensocial.IdSpec.PersonId.VIEWER, fields), 'viewer_data');
+        req.add(req.newFetchPersonRequest(opensocial.DataRequest.PersonId.VIEWER), "viewer");
+        req.send(function(data){
+             var info = data.get('viewer_data').getData();
+             var me = data.get('viewer').getData().getId();
+             var kb = info[me][FastAPI.Persistence.KB_VAR];
+             func(kb);
+        }.bind(this));
+    },
+
+    set: function (value) {
+        var req = opensocial.newDataRequest();
+        req.add(req.newUpdatePersonAppDataRequest(opensocial.IdSpec.PersonId.VIEWER, FastAPI.Persistence.KB_VAR, value), 'set_data');
+        req.send(this._callBack);
+    },
+
+    _callBack: function (value) {
+        return value;
+    }
+});
+
+
+FastAPI.Persistence.KB_VAR = '__knowledgebase';

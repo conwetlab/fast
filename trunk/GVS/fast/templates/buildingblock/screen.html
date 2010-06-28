@@ -1,7 +1,6 @@
-
 {% for element in codes %}
     {% ifnotequal element.type 'form' %}
-<script language="JavaScript">
+<script type="text/javascript">
     {{element.code|safe}}
 </script>
     {% endifnotequal %}
@@ -21,7 +20,7 @@
             name:"{{element.id}}",
             scope: ScreenEngineFactory.getInstance("{{id}}").getBuildingBlock("{{element.id}}"),
             actions: [
-                      {% for action in element.actions %}
+           {% for action in element.actions %}
                     {
                         name: "{{action.name}}",
                         funct: ScreenEngineFactory.getInstance("{{id}}").getBuildingBlock("{{element.id}}").{{action.name}},
@@ -31,7 +30,7 @@
                                    id:"{{pre.id}}",
                                    pattern:"{{pre.pattern}}",
                        {% if pre.positive %}
-                                    positive:{{pre.positive|lower}}
+                                   positive:{{pre.positive|lower}}
                        {% else %}
                                    positive:true
                        {% endif %}
@@ -61,14 +60,14 @@
 
     var _triggers{{id}} = [
 {% for trigger in definition.triggers %}
-{from: {buildingblock: '{{trigger.from.buildingblock}}', name: '{{trigger.from.name}}'}, to: {buildingblock: '{{trigger.to.buildingblock}}', action: '{{trigger.to.action}}'}}{% if not forloop.last %},{% endif %}
+            {from: {buildingblock: '{{trigger.from.buildingblock}}', name: '{{trigger.from.name}}'}, to: {buildingblock: '{{trigger.to.buildingblock}}', action: '{{trigger.to.action}}'}}{% if not forloop.last %},{% endif %}
 {% endfor %}
         ];
 
     var _pres{{id}} = [
 {% for or in pres %}
     {% for and in or %}
-                {id:"{{and.id}}", pattern: "{{and.pattern}}"}{% if not forloop.last %},{% endif %}
+            {id:"{{and.id}}", pattern: "{{and.pattern}}"}{% if not forloop.last %},{% endif %}
     {% endfor %}
 {% endfor %}
         ];
@@ -76,7 +75,7 @@
     var _posts{{id}} = [
 {% for or in posts %}
     {% for and in or %}
-                {id:"{{and.id}}", pattern: "{{and.pattern}}"}{% if not forloop.last %},{% endif %}
+            {id:"{{and.id}}", pattern: "{{and.pattern}}"}{% if not forloop.last %},{% endif %}
     {% endfor %}
 {% endfor %}
         ];

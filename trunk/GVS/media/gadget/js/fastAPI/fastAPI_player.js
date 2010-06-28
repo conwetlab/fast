@@ -10,23 +10,11 @@ FastAPI.IO = Class.create(FastBaseAPI.IO,{
         $super();
     },
 
-    /**
-     * Creates a Slot Variable.
-     * @param variable
-     *      represents the name of the variable
-     * @param handler
-     *      represents the handler for a variable when its value is set
-     */
     createInVariable: function (variable, handler) {
         throw 'Method not supported.'  +
             'FastAPI.IO :: createInVariable';
     },
 
-    /**
-     * Creates an Event Variable.
-     * @param variable
-     *      represents the name of the variable
-     */
     createOutVariable: function (variable) {
         throw 'Method not supported.'  +
             'FastAPI.IO :: createOutVariable';
@@ -39,26 +27,11 @@ FastAPI.IO = Class.create(FastBaseAPI.IO,{
  * @extends FastBaseAPI.Request
  */
 FastAPI.Request = Class.create(FastBaseAPI.Request,{
-    /**
-     * Initializes an object to make requests in Player.
-     * @param url
-     *      url to be requested
-     * @param options
-     *      - method: 'get' || 'post' || 'put' || 'delete'
-     *      - content: 'xml' || 'text' || 'json'
-     *      - context: context of the invoking object
-     *      - parameters: either as a URL-encoded string or as any Hash-compatible object.
-     *      - requestHeaders: a javascript object with properties representing headers.
-     *      - onSuccess: Invoked when a request completes and its status code is undefined or belongs in the 2xy family.
-     *      - onFailure: Invoked when a request completes and its status code exists but is not in the 2xy family.
-     */
+
     initialize: function($super, url, options) {
         $super(url, options);
     },
 
-    /**
-     * Make a general-purpose request to a remote server.
-     */
     request: function() {
         var params = this.options;
 
@@ -113,24 +86,54 @@ FastAPI.Utils = Class.create(FastBaseAPI.Utils,{
         $super();
     },
 
-    /**
-     * Returns a JSON string.
-     * @param obj
-     *      represents the object to convert
-     * @type JSON object
-     */
     toJSONString: function (obj) {
         return Object.toJSON(obj);
     },
 
-    /**
-     * Returns a JSON object.
-     * @param string
-     *      represents the string to convert
-     * @type string
-     *
-     */
     toJSONObject: function (string) {
         return string.evalJSON(true);
+    }
+});
+
+/**
+ * Implementation of FastBaseAPI.Properties for Player.
+ * @constructs
+ * @extends FastBaseAPI.Properties
+ */
+FastAPI.Properties = Class.create(FastBaseAPI.Properties,{
+    initialize: function($super) {
+        $super();
+        var variables = new Hash();
+    },
+
+    get: function (variable) {
+        throw 'Method not supported.' +
+        'FastAPI.Properties :: get';
+    },
+
+    set: function (variable, value) {
+        throw 'Method not supported.' +
+            'FastAPI.Properties :: set';
+    }
+});
+
+/**
+ * Implementation of FastBaseAPI.Persistence for Player.
+ * @constructs
+ * @extends FastBaseAPI.Persistence
+ */
+FastAPI.Persistence = Class.create(FastBaseAPI.Persistence,{
+    initialize: function($super) {
+        $super();
+    },
+
+    get: function (func) {
+        throw 'Method not supported.' +
+        'FastAPI.Persistence :: get';
+    },
+
+    set: function (value) {
+        throw 'Method not supported.' +
+            'FastAPI.Persistence :: set';
     }
 });

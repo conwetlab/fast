@@ -60,7 +60,7 @@ var PublishGadgetDialog = Class.create(ConfirmDialog /** @lends PublishGadgetDia
                 publicationUrl = "http://www.google.com/ig/adde?moduleurl=" + options.url;
             }
         } else if (options.mashupPlatform == 'orkut') {
-            publicationUrl = "http://sandbox.orkut.com/Main#AppInfo?appUrl=" + options.url;
+            publicationUrl = "http://sandbox.orkut.com/Main#MyApps?appUrl=" + options.url;
         }
         this._deploy(button, options, publicationUrl);
     },

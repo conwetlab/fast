@@ -1,17 +1,17 @@
 <script type="text/javascript" language="javascript">
     var menu = null;
     var screens = [
-{# Here the screens involved inside the gadget are defined #}
 {% for screen in gadgetScreens %}
-        {id:"{{screen.id}}",
-        title: "{{ screen.label|cut:" " }}",
-        contentEl:"__{{screen.id}}",
-        {# TODO: negative facts #}
-        pre: [{% for pre in screen.preconditions %}
-                    [{% for ands in pre %}
-                        {pattern:'{{ ands.pattern }}', positive:{{ands.positive|lower}}}{% if not forloop.last %}, {% endif %}
-                      {% endfor %}]{% if not forloop.last %},{% endif %}
-              {% endfor %}]}{% if not forloop.last %},{% endif %}
+            {
+                id:"{{screen.id}}",
+                title: "{{ screen.label|cut:" " }}",
+                contentEl:"__{{screen.id}}",
+                pre: [{% for pre in screen.preconditions %}
+                        [{% for ands in pre %}
+                            {pattern:'{{ ands.pattern }}', positive:{{ands.positive|lower}}}{% if not forloop.last %}, {% endif %}
+                         {% endfor %}]{% if not forloop.last %},{% endif %}
+                      {% endfor %}]
+            }{% if not forloop.last %},{% endif %}
 {% endfor %}
         ];
 
@@ -36,9 +36,7 @@
 
     function loadMenu(){
         menu = new FASTMenu({renderTo: "menu"});
-
-        ScreenflowEngineFactory.getInstance().setEngine(screens, events, menu);
-
+        ScreenflowEngineFactory.getInstance().setEngine(screens, events, menu, {% if gadgetPersistent %}true{% else %}false{% endif %});
         ScreenflowEngineFactory.getInstance().run();
     }
 </script>

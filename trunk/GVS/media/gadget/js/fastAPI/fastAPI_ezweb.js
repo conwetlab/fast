@@ -10,22 +10,10 @@ FastAPI.IO = Class.create(FastBaseAPI.IO,{
         $super();
     },
 
-    /**
-     * Creates a Slot Variable for EzWeb.
-     * @param variable
-     *      represents the name of the variable
-     * @param handler
-     *      represents the handler for a variable when its value is set
-     */
     createInVariable: function (variable, handler) {
         return EzWebAPI.createRGadgetVariable(variable, handler);
     },
 
-    /**
-     * Creates an Event Variable for EzWeb.
-     * @param variable
-     *      represents the name of the variable
-     */
     createOutVariable: function (variable) {
         return EzWebAPI.createRWGadgetVariable(variable);
     }
@@ -37,26 +25,11 @@ FastAPI.IO = Class.create(FastBaseAPI.IO,{
  * @extends FastBaseAPI.Request
  */
 FastAPI.Request = Class.create(FastBaseAPI.Request,{
-    /**
-     * Initializes an object to make requests in EzWeb.
-     * @param url
-     *      url to be requested
-     * @param options
-     *      - method: 'get' || 'post' || 'put' || 'delete'
-     *      - content: 'xml' || 'text' || 'json'
-     *      - context: context of the invoking object
-     *      - parameters: either as a URL-encoded string or as any Hash-compatible object.
-     *      - requestHeaders: a javascript object with properties representing headers.
-     *      - onSuccess: Invoked when a request completes and its status code is undefined or belongs in the 2xy family.
-     *      - onFailure: Invoked when a request completes and its status code exists but is not in the 2xy family.
-     */
+
     initialize: function($super, url, options) {
         $super(url, options);
     },
 
-    /**
-     * Make a general-purpose request to a remote server.
-     */
     request: function() {
         var params = this.options;
 
@@ -71,7 +44,6 @@ FastAPI.Request = Class.create(FastBaseAPI.Request,{
 
         EzWebAPI.send(this.url, params.context, params);
 
-        // This function handles a success in the asynchronous call
         function onSuccess(transport) {
             switch(params.content){
                 case 'xml':
@@ -105,24 +77,125 @@ FastAPI.Utils = Class.create(FastBaseAPI.Utils,{
         $super();
     },
 
-    /**
-     * Returns a JSON string.
-     * @param obj
-     *      represents the object to convert
-     * @type JSON object
-     */
     toJSONString: function (obj) {
         return Object.toJSON(obj);
     },
 
-    /**
-     * Returns a JSON object.
-     * @param string
-     *      represents the string to convert
-     * @type string
-     *
-     */
     toJSONObject: function (string) {
         return string.evalJSON(true);
     }
 });
+
+/**
+ * Implementation of FastBaseAPI.Properties for EzWeb.
+ * @constructs
+ * @extends FastBaseAPI.Properties
+ */
+FastAPI.Properties = Class.create(FastBaseAPI.Properties,{
+    initialize: function($super) {
+        $super();
+        var variables = new Hash();
+    },
+
+    get: function (variable) {
+        return PropertiesSingleton.getInstance().get(variable);
+    },
+
+    set: function (variable, value) {
+        throw 'Method not supported.' +
+            'FastAPI.Properties :: set';
+    }
+});
+
+var PropertiesSingleton = function() {
+    var _instance = null;
+
+    var Properties = Class.create( /** @lends PropertiesSingleton-Properties.prototype */ {
+        initialize: function() {
+            this.equivalences = {};
+            this.equivalences[FastBaseAPI.Properties.LOGIN] = 'user_name';
+            this.equivalences[FastBaseAPI.Properties.LANGUAGE] = 'language';
+            this.equivalences[FastBaseAPI.Properties.ORIENTATION] = 'orientation';
+            this.equivalences[FastBaseAPI.Properties.GADGET_HEIGHT] = 'heightInPixels';
+            this.equivalences[FastBaseAPI.Properties.GADGET_WIDTH] = 'widthInPixels';
+            this.equivalences[FastBaseAPI.Properties.GADGET_X_POSITION] = 'xPosition';
+            this.equivalences[FastBaseAPI.Properties.GADGET_Y_POSITION] = 'yPosition';
+            this.variables = new Hash();
+        },
+
+        get: function (variable) {
+            if(!this.equivalences[variable]){
+                throw 'Variable not supported.' +
+                'FastAPI.Properties :: get';
+            }
+            var obj = this.variables.get(variable);
+            if(!obj){
+                obj = EzWebAPI.createRGadgetVariable(this.equivalences[variable], this._callBack);
+                this.variables.set(variable, obj);
+            }
+            return obj.get();
+        },
+
+        _callBack: function (value) {
+            return value;
+        }
+    });
+
+    return new function() {
+        this.getInstance = function() {
+            if (_instance == null) {
+                _instance = new Properties();
+            }
+            return _instance;
+        }
+    }
+}();
+
+/**
+ * Implementation of FastBaseAPI.Persistence for EzWeb.
+ * @constructs
+ * @extends FastBaseAPI.Persistence
+ */
+FastAPI.Persistence = Class.create(FastBaseAPI.Persistence,{
+    initialize: function($super) {
+        $super();
+    },
+
+    get: function (func) {
+        var value = PersistenceSingleton.getInstance().get(func);
+        func(value);
+    },
+
+    set: function (value) {
+        PersistenceSingleton.getInstance().set(value);
+    }
+});
+
+var PersistenceSingleton = function() {
+    var _instance = null;
+
+    var Persistence = Class.create( /** @lends PersistenceSingleton-Persistence.prototype */ {
+        initialize: function() {
+            this.variable = EzWebAPI.createRWGadgetVariable(FastAPI.Persistence.KB_VAR);
+        },
+
+        get: function (callBack) {
+            callBack(this.variable.get());
+        },
+
+        set: function (value) {
+            this.variable.set(value);
+        },
+    });
+
+    return new function() {
+        this.getInstance = function() {
+            if (_instance == null) {
+                _instance = new Persistence();
+            }
+            return _instance;
+        }
+    }
+}();
+
+FastAPI.Persistence.KB_VAR = '__knowledgebase';
