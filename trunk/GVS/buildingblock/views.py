@@ -448,6 +448,7 @@ class Sharing(resource.Resource):
             code = request.POST.get('code', None)
             self.__updateCode(bb, data, code)
 
+
             if (bb.uri == None) or (bb.uri == ''):
                 conn = Connection(cleanUrl(bb.get_catalogue_url()))
                 body = bb.data
@@ -508,7 +509,7 @@ class Sharing(resource.Resource):
             code = external_code
         elif data.has_key('code'):
             code_url = data.get('code')
-            if (validate_url(code)):
+            if (validate_url(code_url)):
                 code = download_http_content(code_url)
 
         bbcodes = {}
