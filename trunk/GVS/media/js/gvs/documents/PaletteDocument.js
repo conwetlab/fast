@@ -639,8 +639,10 @@ var PaletteDocument = Class.create(AbstractDocument, /** @lends PaletteDocument.
         if (showMessage) {
             Utils.showMessage("Saving " + this._typeName);
         }
+        var buildingblock = $H(this._description.toJSON())
+                            .merge($H(this._getExtraProperties()));
         var params = {'buildingblock':
-            Object.toJSON(this._description.toJSON())
+            Object.toJSON(buildingblock.toObject())
         };
         params = Object.extend(params, this._getExtraParams());
         if (this._description.getId() == null) {
@@ -823,6 +825,15 @@ var PaletteDocument = Class.create(AbstractDocument, /** @lends PaletteDocument.
      * @private
      */
     _getExtraParams: function() {
+        return {};
+    },
+
+    /**
+     * Returns extra properties of the building block
+     * @type Object
+     * @private
+     */
+    _getExtraProperties: function() {
         return {};
     },
 

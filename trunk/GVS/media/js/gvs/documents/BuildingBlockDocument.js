@@ -81,6 +81,9 @@ var BuildingBlockDocument = Class.create(PaletteDocument, /** @lends BuildingBlo
                 'content': codeContent,
                 'onChange': function() {
                                 this._setDirty(true);
+                                this._description.addProperties({
+                                    'codeInline': this._codeEditor.getCode()
+                                });
                             }.bind(this)
             });
     },
@@ -320,7 +323,7 @@ var BuildingBlockDocument = Class.create(PaletteDocument, /** @lends BuildingBlo
     _onShareDialogEvent: function(/** String */ status) {
         if (status != "cancel") {
             var uri = URIs.share.replace("<id>", this._description.getId());
-            PersistenceEngine.sendPost(uri, {'code': this._codeEditor.getCode()}, null,
+            PersistenceEngine.sendPost(uri, null, null,
                                       {'mine': this, 'status': status},
                                       this._onShareSuccess, Utils.onAJAXError);
         }
@@ -356,6 +359,7 @@ var BuildingBlockDocument = Class.create(PaletteDocument, /** @lends BuildingBlo
         }
         this._setDirty(true);
     },
+
 
     /**
      * This function creates the area containing the canvas
