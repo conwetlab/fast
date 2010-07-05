@@ -108,3 +108,7 @@ def confirm(request, activation_key):
 
 def unittest(request, test_name):
     return render_to_response('unittests/%s.html' % test_name, {'title':test_name}, context_instance=RequestContext(request))
+
+def buildingblock_debugger(request, buildingblock_type):
+    return render_to_response('buildingblockdebugger/test.html',
+    {'buildingblock':buildingblock_type}, context_instance=RequestContext(request))

@@ -1,0 +1,95 @@
+<html>
+<head>
+	<meta http-equiv="content-type" content="text/html; charset=utf-8">
+	<title>{{ buildingblock }} Test</title>
+	<script type="text/javascript" src="{{ MEDIA_URL }}js/buildingblockdebugger/prototype.js"></script>
+	<script type="text/javascript" src="{{ MEDIA_URL }}js/buildingblockdebugger/sprintf-0.6.js"></script>
+	<script type="text/javascript" src="{{ MEDIA_URL }}js/buildingblockdebugger/logger.js"></script>
+	<script type="text/javascript" src="{{ MEDIA_URL }}js/buildingblockdebugger/buildingblock.js"></script>
+	<script type="text/javascript" src="{{ MEDIA_URL }}js/buildingblockdebugger/test.js"></script>
+	<script type="text/javascript" src="{{ MEDIA_URL }}js/buildingblockdebugger/fastAPI.js"></script>
+	<script type="text/javascript" src="{{ MEDIA_URL }}js/buildingblockdebugger/fastAPI_debugger.js"></script>
+        <style type="text/css">
+            .error {
+                color: red;
+            }
+            .warning {
+                color: #E97700;
+            }
+            #sourceDiv, #actionsDiv, #factDiv, #logDiv {
+                float: left;
+                width: 50%;
+            }
+            #actionsDiv {
+                height: 340px;
+                overflow: auto;
+            }
+            .action {
+                width: 50%;
+            }
+            #log {
+                border: 1px solid #333;
+                background-color: #AAA;
+                height: 280px;
+                overflow: auto;
+                color: #158109;
+            }
+            ul.logger {
+                padding-left: 10px;
+            }
+            ul.logger li {
+                list-style-type: none;
+            }
+            .fact {
+                width: 150px;
+                margin: 10px;
+                float: left;
+                border: 2px solid #999;
+                text-align: center;
+                background-color: #BBB;
+            }
+            .factData {
+                padding: 5px;
+                overflow: auto;
+                height: 60px; 
+            }
+            .factId {
+                border-bottom: 1px solid #999;
+                padding: 5px;
+            }
+
+        </style>
+</head>
+<body onload="init();">
+    <h1>{{ buildingblock }} Test</h1>
+    <div id="sourceDiv">
+        <p>Fill in the {{ buildingblock }} source code</p>
+        <textarea id="code" rows="10" cols="80">
+        </textarea><br />
+        <textarea id="params" rows="5" cols="33"></textarea>
+        <div style="width: 50%; float: left;padding: 5px;">
+        Set the {{ buildingblock }} parameters (if any)
+        </div>
+        <div style="width: 50%; float: left;padding: 5px;">
+        (Optional) Choose operations to test</div> 
+        <input type="text" id="actionList"/>
+        <div style="clear:both;"></div>
+        <button id="send">Refresh Operation List</button>
+    </div>
+    <div id="actionsDiv">
+        <h2>Operation list</h2>
+        <div id="actions"></div>
+    </div>
+    <div style="clear:both"></div>
+    <div id="factDiv">
+        <h2>Fact base</h2>
+        <div id="facts"></div>
+    </div>
+    <div id="logDiv">
+        <h2>Event log</h2>
+        <div id="log"></div>
+        <div style="text-align:center"><button id="clearlog">Clear
+        log</button></div>
+    </div>
+</body>
+</html>
