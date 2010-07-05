@@ -6,5 +6,5 @@ urlpatterns = patterns('fast.views',
     (r'^signup$', 'signup'),
     (r'^confirm/(?P<activation_key>\w+)$', 'confirm'),
     # Comment on production
-    (r'^tests/(?P<test_name>\w+)$', 'test'),
+    (r'^unittests/(?P<test_name>\w+)$', 'test'),
 )
