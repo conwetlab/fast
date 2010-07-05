@@ -36,9 +36,8 @@ var BuildingBlockDocument = Class.create(PaletteDocument, /** @lends BuildingBlo
      */
     createTextEditors: function() {
 
-        var JSONContent = Object.toJSON(this._description.toJSON()).replace(/,\s*"/g, ",\n\"");
-        JSONContent = JSONContent.replace(/{/g, "{\n");
-        JSONContent = JSONContent.replace(/}/g, "\n}");
+
+        var JSONContent = this._getJSONProperties();
 
         this._jsonEditor = CodeMirror.fromTextArea(this._jsonText, {
                 'height': "100%",
@@ -358,6 +357,31 @@ var BuildingBlockDocument = Class.create(PaletteDocument, /** @lends BuildingBlo
                               "work", {'error': true, 'hide': true});
         }
         this._setDirty(true);
+    },
+
+    /**
+     * @override
+     */
+    _onPropertiesChange: function($super) {
+        $super();
+        this._jsonEditor.setCode(this._getJSONProperties());
+        this._jsonEditor.reindent();
+    },
+
+    /**
+     * Returns the building block properties in JSON-like string
+     * @private
+     * @type String
+     */
+    _getJSONProperties: function() {
+        var validContents = $H(this._description.toJSON()).clone();
+        ["code","codeInline", "id", "creationDate"].each(function(element){
+            validContents.unset(element);
+        });
+        var JSONContent = Object.toJSON(validContents.toObject()).replace(/,\s*"/g, ",\n\"");
+        JSONContent = JSONContent.replace(/{/g, "{\n");
+        JSONContent = JSONContent.replace(/}/g, "\n}");
+        return JSONContent;
     },
 
 
