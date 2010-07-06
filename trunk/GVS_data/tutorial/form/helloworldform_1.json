@@ -1,0 +1,21 @@
+{
+    "name":"Hello World Form",
+    "creator":"admin",
+    "description":{
+        "en-gb":"This form salutes the user"
+    },
+    "tags":[],
+    "user":"admin",
+    "homepage":"http://demo.fast.morfeo-project.org/helloworld",
+    "icon":"http://demo.fast.morfeo-project.org/gvsdata/images/catalogue/buildingblock.png",
+    "label":{
+        "en-gb":"Hello World Form"
+    },
+    "rights":"http://creativecommons.org/",
+    "screenshot":"http://demo.fast.morfeo-project.org/gvsdata/images/screenshots/buildingblock.png",
+    "version":"1.0",
+    "libraries":[],
+    "actions":[],
+    "postconditions":[],
+    "triggers":[]
+}
