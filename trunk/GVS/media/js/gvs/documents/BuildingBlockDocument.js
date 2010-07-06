@@ -5,7 +5,12 @@ var BuildingBlockDocument = Class.create(PaletteDocument, /** @lends BuildingBlo
      * @extends PaletteDocument
      * @constructs
      */
-    initialize: function ($super, /** String  */ type, /** Object */ properties) {
+    initialize: function ($super,/** Object */ properties) {
+        this._type = properties['type'];
+        this._uri = URIs[this._type];
+        this._codeURI = properties['code'];
+        this._codeInline = properties['codeInline'];
+
         this._jsonText = new Element("textarea");
         this._jsonContainer = new Element('div', {
             'class': 'codeContainer'
@@ -15,13 +20,6 @@ var BuildingBlockDocument = Class.create(PaletteDocument, /** @lends BuildingBlo
         this._codeContainer = new Element('div', {
             'class': 'codeContainer'
         }).update(this._codeText);
-
-
-        this._type = type;
-
-
-        this._uri = URIs[type];
-
 
         $super("Building Block", properties, new DumbInferenceEngine());
         this._start();
@@ -67,8 +65,6 @@ var BuildingBlockDocument = Class.create(PaletteDocument, /** @lends BuildingBlo
                         ];
         }
 
-        var codeContent = this._getInitialCodeContent(this._type);
-
         this._codeEditor = CodeMirror.fromTextArea(this._codeText, {
                 'height': "100%",
                 'parserfile': parsers,
@@ -77,17 +73,48 @@ var BuildingBlockDocument = Class.create(PaletteDocument, /** @lends BuildingBlo
                 'lineNumbers': true,
                 'tabMode': "shift",
                 'reindentOnLoad': true,
-                'content': codeContent,
                 'onChange': function() {
                                 this._setDirty(true);
                                 this._description.addProperties({
                                     'codeInline': this._codeEditor.getCode()
                                 });
-                            }.bind(this)
+                            }.bind(this),
+                'initCallback': this._loadCodeText.bind(this)
             });
     },
 
     // **************** PRIVATE METHODS **************** //
+
+    _loadCodeText: function(codeEditor) {
+        if (this._codeInline) {
+            codeEditor.setCode(this._codeInline);
+            this._setDirty(false);
+        } else {
+            if (this._codeURI) {
+                this._loadRemoteCodeText(codeEditor);
+            } else {
+                var codeText = this._getInitialCodeContent(this._type);
+                codeEditor.setCode(codeText);
+            }
+        }
+    },
+
+    _loadRemoteCodeText: function(codeEditor) {
+        new Ajax.Request('/proxy', {
+            method: 'post',
+            parameters: {url:this._codeURI, method:'get'},
+            onSuccess: function(transport) {
+                var codeText = transport.responseText
+                codeEditor.setCode(codeText);
+                this._setDirty(false);
+            }.bind(this),
+            onFailure: function() {
+                Utils.showMessage("Can not open code of the selected element", {
+                'error': true,
+                'hide': true});
+            }
+        });
+    },
 
     /**
      * Returns the areas of the document
@@ -154,6 +181,7 @@ var BuildingBlockDocument = Class.create(PaletteDocument, /** @lends BuildingBlo
         } else {
             // A new buildingblock
             description = {
+                'type': this._type,
                 'label': {'en-gb': properties.name},
                 'name': properties.name,
                 'version': properties.version,

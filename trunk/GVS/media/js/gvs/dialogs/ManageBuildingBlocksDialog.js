@@ -1,4 +1,4 @@
-var ManageScreensDialog = Class.create(GalleryDialog /** @lends ManageScreensDialog.prototype */, {
+var ManageBuildingBlocksDialog = Class.create(GalleryDialog /** @lends ManageScreensDialog.prototype */, {
     /**
      * This class handles the dialog
      * to open an existing screen
@@ -6,15 +6,17 @@ var ManageScreensDialog = Class.create(GalleryDialog /** @lends ManageScreensDia
      * @extends GalleryDialog
      */
     initialize: function($super) {
-        $super("Screen browser", {'onDblClick': this._openScreen.bind(this),
-                                  'disableIfNotValid': true });
+        $super("Building blocks browser", {
+            'onDblClick': this._openBuildingBlock.bind(this),
+            'disableIfNotValid': true
+        });
 
         /**
-         * List of screens
+         * List of building blocks
          * @type Array
          * @private
          */
-        this._screens = null;
+        this._buildingBlocks = null;
     },
 
 
@@ -24,7 +26,7 @@ var ManageScreensDialog = Class.create(GalleryDialog /** @lends ManageScreensDia
      * @override
      */
     show: function() {
-        PersistenceEngine.sendGet(URIs.screen, this, this._onLoadSuccess, Utils.onAJAXError);
+        this._loadBuildinBlocks(this._show.bind(this));
     },
 
 
@@ -39,8 +41,8 @@ var ManageScreensDialog = Class.create(GalleryDialog /** @lends ManageScreensDia
      */
     _initDialogInterface: function (){
 
-        this._setHeader("Browse your screens",
-                "These are the screens you have created. Here you can " +
+        this._setHeader("Browse your building blocks",
+                "These are the building blocks you have created. Here you can " +
                 "continue editing them and share your work with the community");
 
         this._setFields([{
@@ -65,50 +67,44 @@ var ManageScreensDialog = Class.create(GalleryDialog /** @lends ManageScreensDia
         ]);
 
         this._setButtons([{
-                'value': 'Open screen',
-                'handler': this._openScreen.bind(this),
+                'value': 'Open building block',
+                'handler': this._openBuildingBlock.bind(this),
                 'disableIfNotValid': true
             }, {
-                'value': 'Clone screen',
-                'handler': this._cloneScreen.bind(this)
+                'value': 'Share/Unshare building block',
+                'handler': this._shareBuildingBlock.bind(this)
             }, {
-                'value': 'Share/Unshare screen',
-                'handler': this._shareScreen.bind(this)
-            }, {
-                'value': 'Delete screen',
-                'handler': this._deleteScreen.bind(this)
+                'value': 'Delete building block',
+                'handler': this._deleteBuildingBlock.bind(this)
             }
-            /*, {
-                'value': 'Add external screen',
-                'handler': this._addScreen.bind(this)
-            }*/]);
+        ]);
 
-        this._createScreenList();
+        this._createBuildingBlockList();
         this._render();
     },
 
     /**
-     * Creates the the screen list to be handled by its parent class
+     * Creates the building block list to be handled by its parent class
      * @private
      */
-    _createScreenList: function() {
+    _createBuildingBlockList: function() {
         this._emptyRows();
-        this._screens.each(function(screen) {
+        this._buildingBlocks.each(function(screen) {
             var valid =  screen.definition ? true : false;
             valid = valid && (screen.uri) ? false : true;
             this._addRow({
                             'key': screen.id,
                             'values': [
                                 new Element('img', {'src': screen.icon}),
-                                	screen.name,
+                                    screen.name,
                                 '<span class="bold">Version: </span>' +
                                      screen.version,
                                 '<span class="bold">Tags: </span>' +
-                                	screen.tags.collect(function(tag) {
+                                    screen.tags.collect(function(tag) {
                                         return tag.label['en-gb'];
                                     }).join(", "),
                                 '<span class="bold">Description </span><br />'+
-                                	screen.description['en-gb'],
+                                    screen.description['en-gb'],
                                 '<span class=' + (screen.uri ? '"shared"': '"unshared"') +
                                     '>&nbsp;</span>'
                              ],
@@ -118,37 +114,12 @@ var ManageScreensDialog = Class.create(GalleryDialog /** @lends ManageScreensDia
     },
 
     /**
-     * On Success handler
+     * Open a building block by its id
      * @private
      */
-    _onLoadSuccess: function(/** XMLHttpRequest */ transport) {
-        this._screens = JSON.parse(transport.responseText);
-        this._show();
-    },
-
-    /**
-     * On Success handler, when reload
-     * @private
-     */
-    _onReLoadSuccess: function(/** XMLHttpRequest */ transport) {
-        this._screens = JSON.parse(transport.responseText);
-        this._createScreenList();
-        this._render(false);
-    },
-
-    /**
-     * Open a screen by its id
-     * @private
-     */
-    _openScreen: function(/** String */ id) {
+    _openBuildingBlock: function(/** String */ id) {
         var documentController = GVS.getDocumentController();
-        documentController.loadScreen(id);
-        this._dialog.hide();
-    },
-
-    _cloneScreen: function(/** String */ id) {
-        var documentController = GVS.getDocumentController();
-        documentController.cloneScreen(id);
+        documentController.loadBuildingBlock(id);
         this._dialog.hide();
     },
 
@@ -156,10 +127,10 @@ var ManageScreensDialog = Class.create(GalleryDialog /** @lends ManageScreensDia
      * Share or unshare a screen depending of its status
      * @private
      */
-    _shareScreen: function(/** String */ id) {
+    _shareBuildingBlock: function(/** String */ id) {
         var uri = URIs.share.replace("<id>", id);
 
-        var screen = this._screens.detect(function(element) {
+        var screen = this._buildingBlocks.detect(function(element) {
             return element.id == id;
         });
         if (screen.uri) {
@@ -173,16 +144,17 @@ var ManageScreensDialog = Class.create(GalleryDialog /** @lends ManageScreensDia
     },
 
     /**
-     * Starts the deletion of a screen
+     * Starts the deletion of a building block
      * @private
      */
-    _deleteScreen: function(/** String */ id) {
-        confirm("Are you sure you want to delete the screen? This action cannot " +
-        "be undone", this._confirmDelete.bind({'mine': this, 'id': id}));
+    _deleteBuildingBlock: function(/** String */ id) {
+        confirm("Are you sure you want to delete the building block? " +
+            "This action cannot be undone",
+            this._confirmDelete.bind({'mine': this, 'id': id}));
     },
 
     /**
-     * Execute the deletion of the screen
+     * Execute the deletion of the building block
      * @private
      */
     _confirmDelete: function(value) {
@@ -193,21 +165,33 @@ var ManageScreensDialog = Class.create(GalleryDialog /** @lends ManageScreensDia
     },
 
     /**
-     * Starts the process of adding an external screen
-     * @private
-     */
-    _addScreen: function() {
-        this._dialog.hide();
-        //GVS.action("addScreen");
-    },
-
-    /**
-     * Reloads the screen list
+     * Reloads the building block list
      * @private
      */
     _reload: function() {
-        PersistenceEngine.sendGet(URIs.screen, this, this._onReLoadSuccess, Utils.onAJAXError);
+        this._loadBuildinBlocks(function(){
+            this._createBuildingBlockList();
+            this._render(false);
+        }.bind(this));
+    },
+
+    /**
+     * Load all building blocks
+     * @private
+     */
+    _loadBuildinBlocks: function(onSucess) {
+        PersistenceEngine.sendGet(URIs.operator, this, function(transport) {
+            this._buildingBlocks = JSON.parse(transport.responseText);
+            PersistenceEngine.sendGet(URIs.resource, this, function(transport) {
+                this._buildingBlocks = this._buildingBlocks.concat(JSON.parse(transport.responseText));
+                PersistenceEngine.sendGet(URIs.form, this, function(transport) {
+                    this._buildingBlocks = this._buildingBlocks.concat(JSON.parse(transport.responseText));
+                    onSucess();
+                }, Utils.onAJAXError);
+            }, Utils.onAJAXError);
+        }, Utils.onAJAXError);
     }
+
 });
 
 // vim:ts=4:sw=4:et:

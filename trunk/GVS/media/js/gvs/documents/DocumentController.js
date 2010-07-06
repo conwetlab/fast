@@ -137,6 +137,16 @@ var DocumentController = Class.create(
                                     this._onLoadError);
     },
 
+    loadBuildingBlock: function(/** String */ id){
+        var uri = URIs.buildingblock + id;
+         PersistenceEngine.sendGet(uri, {'mine':this}, function(transport) {
+            var bBData = JSON.parse(transport.responseText);
+            var buildingBlock = new BuildingBlockDocument(bBData);
+            this.mine.addDocument(buildingBlock);
+            buildingBlock.createTextEditors();
+        }, this._onLoadError);
+    },
+
     /**
      * Creates a new buildingblock document
      */
@@ -336,7 +346,8 @@ var DocumentController = Class.create(
      */
     _createBuildingBlock: function(/** String */ name, /** Array */ tags,
                                   /** String */ version, /** String */ type) {
-        var buildingBlock = new BuildingBlockDocument(type, {
+        var buildingBlock = new BuildingBlockDocument({
+            'type': type,
             'name': name,
             'tags': tags,
             'version': version

@@ -67,6 +67,11 @@ var WelcomeDocument = Class.create(AbstractDocument,
             onClick: function() {GVS.action("newBuildingBlock");}}
         );
 
+        var browseBuildingBlockButton = new dijit.form.Button({
+            label: "Browse Building Blocks...",
+            onClick: function() {GVS.action("browseBuildingBlocks");}}
+        );
+
         var buttonsContainer = new Element("div");
         buttonsContainer.appendChild(new Element("div").update("Screenflows"));
         buttonsContainer.appendChild(newScreenflowButton.domNode);
@@ -82,6 +87,8 @@ var WelcomeDocument = Class.create(AbstractDocument,
             buttonsContainer.appendChild(openWrapperServiceButton.domNode);
             buttonsContainer.appendChild(new Element("br"));
             buttonsContainer.appendChild(newBuildingBlockButton.domNode);
+            buttonsContainer.appendChild(new Element("br"));
+            buttonsContainer.appendChild(browseBuildingBlockButton.domNode);
         }
         content.appendChild(buttonsContainer);
     }

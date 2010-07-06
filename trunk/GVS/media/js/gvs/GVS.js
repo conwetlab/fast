@@ -66,6 +66,7 @@ var GVS = Class.create(ToolbarModel,    /** @lends GVS.prototype */
             newScreen: this._newScreen.bind(this),
             browseScreenflows: this._browseScreenflows.bind(this),
             browseScreens: this._browseScreens.bind(this),
+            browseBuildingBlocks: this._browseBuildingBlocks.bind(this),
             showAbout: this._showAboutDialog.bind(this),
             wrapperService: this._openWrapperService.bind(this)
         };
@@ -78,6 +79,7 @@ var GVS = Class.create(ToolbarModel,    /** @lends GVS.prototype */
         this._dialogs.set("newResource", new NewBuildingBlockDialog('Resource'));
         this._dialogs.set("browseScreenflows", new ManageScreenflowsDialog());
         this._dialogs.set("browseScreens", new ManageScreensDialog());
+        this._dialogs.set("browseBuildingBlocks", new ManageBuildingBlocksDialog());
         this._dialogs.set("preferences", new PreferencesDialog());
         this._dialogs.set("newBuildingBlock", new ButtonArrayDialog([
             {
@@ -227,6 +229,14 @@ var GVS = Class.create(ToolbarModel,    /** @lends GVS.prototype */
      */
     _browseScreens: function(){
         this._dialogs.get("browseScreens").show();
+    },
+
+    /**
+     * browse building blocks
+     * @private
+     */
+    _browseBuildingBlocks: function(){
+        this._dialogs.get("browseBuildingBlocks").show();
     },
 
     /**
