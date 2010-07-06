@@ -1,0 +1,55 @@
+{
+    "name":"Hello World Form",
+    "creator":"admin",
+    "description":{
+        "en-gb":"This form salutes the user"
+    },
+    "tags":[],
+    "user":"admin",
+    "homepage":"http://demo.fast.morfeo-project.org/helloworld",
+    "icon":"http://demo.fast.morfeo-project.org/gvsdata/images/catalogue/buildingblock.png",
+    "label":{
+        "en-gb":"Hello World Form"
+    },
+    "rights":"http://creativecommons.org/",
+    "screenshot":"http://demo.fast.morfeo-project.org/gvsdata/images/screenshots/buildingblock.png",
+    "version":"1.0",
+    "libraries":[],
+    "actions":[
+        {
+            "name":"init",
+            "preconditions":[
+            ],
+            "uses":[
+            ]
+        },
+        {
+            "name":"showUser",
+            "preconditions":[
+                {
+                    "id":"user",
+                    "label":{
+                        "en-gb":"A user"
+                    },
+                    "pattern":"?User http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://ourdomain.com/FASTCatalogue/concepts/User",
+                    "positive":"true"
+                }
+            ],
+            "uses":[
+            ]
+        }
+    ],   
+    "postconditions":[ 
+        [ 
+            { 
+                "id":"message", 
+                "label":{ 
+                    "en-gb":"A message telling something" 
+                }, 
+                "pattern":"?Message http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://yourdomain.com/FASTCatalogue/concepts/Message", 
+                "positive":"true" 
+            } 
+        ] 
+    ],
+    "triggers": []
+}
