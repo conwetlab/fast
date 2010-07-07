@@ -1,3 +1,4 @@
+var FastAPI = {};
 var FastBaseAPI = {};
 
 FastBaseAPI.IO = Class.create({

@@ -1,8 +1,14 @@
+/**
+ * It represents the whols FastAPI
+ * @namespace
+ */
+var FastAPI = {};
 var FastBaseAPI = {};
 
-FastBaseAPI.IO = Class.create({
+FastBaseAPI.IO = Class.create(/** @lends FastAPI.IO.prototype */{
     /**
      * Creates an IO variable
+     * @constructs
      * @param variable
      *      variable name to be created
      */
@@ -32,9 +38,10 @@ FastBaseAPI.IO = Class.create({
     }
 });
 
-FastBaseAPI.Request = Class.create({
+FastBaseAPI.Request = Class.create(/** @lends FastAPI.Request.prototype */{
     /**
-     * Initializes an object to make requests in Google.
+     * Creates an object to make AJAX requests
+     * @constructs
      * @param url
      *      url to be requested
      * @param options
@@ -70,10 +77,12 @@ FastBaseAPI.Request = Class.create({
         this.request();
     },
 
-    /*
-     * sets the default headers, this method can be overriden and augmented by the implementations.
+    /**
+     * Sets the default headers.
+     * This method can be overriden and augmented by the implementations.
      *  - Accept defaults to 'text/javascript, text/html, application/xml, text/xml, *\/*'
      *  - Content-type is built based on the contentType and encoding options.
+     * @private
      */
     setRequestHeaders: function() {
         var headers = {
@@ -91,6 +100,7 @@ FastBaseAPI.Request = Class.create({
 
     /**
      * Make a general-purpose request to a remote server.
+     * @private
      */
     request: function() {
         throw 'Abstract Method invocation. ' +
@@ -99,7 +109,11 @@ FastBaseAPI.Request = Class.create({
 });
 
 
-FastBaseAPI.Utils = Class.create({
+FastBaseAPI.Utils = Class.create(/** @lends FastAPI.Utils.prototype */{
+    /**
+     * Utils class
+     * @constructs
+     */
     initialize: function() {
     },
 
@@ -107,7 +121,7 @@ FastBaseAPI.Utils = Class.create({
      * Returns a JSON string.
      * @param obj
      *      represents the name of the variable
-     * @type JSON object
+     * @type Object
      */
     toJSONString: function (obj) {
         throw 'Abstract Method invocation. ' +
@@ -118,7 +132,7 @@ FastBaseAPI.Utils = Class.create({
      * Returns a JSON object.
      * @param string
      *      represents the name of the variable
-     * @type string
+     * @type String
      *
      */
     toJSONObject: function (string) {
@@ -127,7 +141,12 @@ FastBaseAPI.Utils = Class.create({
     }
 });
 
-FastBaseAPI.Properties = Class.create({
+FastBaseAPI.Properties = Class.create(/** @lends FastAPI.Properties.prototype */{
+    /**
+     * This class is intended to access to context variables
+     * of the mashup platform
+     * @constructs
+     */
     initialize: function() {
     },
 
@@ -135,7 +154,7 @@ FastBaseAPI.Properties = Class.create({
      * Returns the context variable value.
      * @param obj
      *      represents the name of the variable
-     * @type JSON object
+     * @type Object
      */
     get: function (variable) {
         throw 'Abstract Method invocation. ' +
@@ -148,7 +167,7 @@ FastBaseAPI.Properties = Class.create({
      *      represents the name of the variable
      * @param value
      *      represents value of the variable
-     * @type string
+     * @type String
      *
      */
     set: function (variable, value) {
@@ -165,7 +184,11 @@ FastBaseAPI.Properties.GADGET_WIDTH = 'width'
 FastBaseAPI.Properties.GADGET_X_POSITION = 'xposition';
 FastBaseAPI.Properties.GADGET_Y_POSITION = 'yposition';
 
-FastBaseAPI.Persistence = Class.create({
+FastBaseAPI.Persistence = Class.create(/** @lends FastAPI.Persistence.prototype */{
+    /**
+     * This class access to the persistent properties of the mashup platform
+     * @constructs
+     */
     initialize: function() {
     },
 
@@ -173,7 +196,7 @@ FastBaseAPI.Persistence = Class.create({
      * Returns the persistent data.
      * @param obj
      *      represents the name of the variable
-     * @type JSON object
+     * @type Object
      */
     get: function (func) {
         throw 'Abstract Method invocation. ' +
@@ -184,7 +207,7 @@ FastBaseAPI.Persistence = Class.create({
      * Saves the data in persistent way.
      * @param value
      *      represents value of the variable
-     * @type string
+     * @type String
      *
      */
     set: function (value) {
