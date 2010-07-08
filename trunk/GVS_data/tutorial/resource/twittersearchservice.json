@@ -1,0 +1,52 @@
+{
+    "name":"Twitter search service",
+    "creator":"admin",
+    "description":{
+        "en-gb":"This service returns a list of twits for a given query"
+    },
+    "tags":[],
+    "user":"admin",
+    "homepage":"http://demo.fast.morfeo-project.org/twittersearch",
+    "icon":"http://demo.fast.morfeo-project.org/gvsdata/images/catalogue/buildingblock.png",
+    "label":{
+        "en-gb":"Twitter search service"
+    },
+    "rights":"http://creativecommons.org/",
+    "screenshot":"http://demo.fast.morfeo-project.org/gvsdata/images/screenshots/buildingblock.png",
+    "version":"1.0",
+    "libraries":[],
+    "actions":[
+        {
+            "name":"search",
+            "preconditions":[
+                {
+                    "id":"searchCriteria",
+                    "label":{
+                        "en-gb":"A search criteria in form of keywords"
+                    },
+                    "pattern":"?User
+                    http://www.w3.org/1999/02/22-rdf-syntax-ns#type
+                    http://ourdomain.com/FASTCatalogue/concepts/SearchCriteria",
+                    "positive":"true"
+                }
+            ],
+            "uses":[
+            ]
+        }
+    ],   
+    "postconditions":[ 
+        [ 
+            { 
+                "id":"twitList", 
+                "label":{ 
+                    "en-gb":"A list of twits that matches the search criteria" 
+                }, 
+                "pattern":"?Message
+                http://www.w3.org/1999/02/22-rdf-syntax-ns#type
+                http://yourdomain.com/FASTCatalogue/concepts/TwitList", 
+                "positive":"true" 
+            } 
+        ] 
+    ],
+    "triggers": []
+}
