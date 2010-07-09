@@ -82,14 +82,36 @@ var WelcomeDocument = Class.create(AbstractDocument,
         buttonsContainer.appendChild(new Element("br"));
         buttonsContainer.appendChild(browseScreensButton.domNode);
 
-        if (!GlobalOptions.isPublicDemo) {
-            buttonsContainer.appendChild(new Element("div").update("Building blocks"));
-            buttonsContainer.appendChild(openWrapperServiceButton.domNode);
-            buttonsContainer.appendChild(new Element("br"));
-            buttonsContainer.appendChild(newBuildingBlockButton.domNode);
-            buttonsContainer.appendChild(new Element("br"));
-            buttonsContainer.appendChild(browseBuildingBlockButton.domNode);
-        }
+        var wrapper = new Element("div", {
+            "style": "visibility:hidden;"
+        });
+        wrapper.appendChild(openWrapperServiceButton.domNode);
+        wrapper.appendChild(new Element("br"));
+        wrapper.appendChild(newBuildingBlockButton.domNode);
+        wrapper.appendChild(new Element("br"));
+        wrapper.appendChild(browseBuildingBlockButton.domNode);
+
+
+        var link = new Element("a", {
+            "href": "javascript:"
+        }).update("Show advanced features...");
+        link.observe("click", function(e) {
+            if (wrapper.style.visibility == "hidden") {
+                wrapper.setStyle({"visibility":"visible"});
+                link.update("Hide advanced features...");
+            } else {
+                wrapper.setStyle({"visibility":"hidden"});
+                link.update("Show advanced features...");
+            }
+        });
+
+        buttonsContainer.appendChild(new Element("br"));
+        buttonsContainer.appendChild(new Element("br"));
+        buttonsContainer.appendChild(link);
+        buttonsContainer.appendChild(new Element("br"));
+        buttonsContainer.appendChild(new Element("br"));
+        buttonsContainer.appendChild(wrapper);
+
         content.appendChild(buttonsContainer);
     }
 });
