@@ -377,14 +377,16 @@ var BuildingBlockDocument = Class.create(PaletteDocument, /** @lends BuildingBlo
      * @private
      */
     _propertiesChanged: function() {
+        this._setDirty(true);
         try {
             var jsonContent = cjson_parse(this._jsonEditor.getCode());
             this._description.addProperties(jsonContent);
+            Utils.showMessage();
         } catch (e) {
             Utils.showMessage("The properties are not well formed. It will not " +
-                              "work", {'error': true, 'hide': true});
+                              "work", {'error': true});
+            this._toolbarElements.get('save').setEnabled(false);
         }
-        this._setDirty(true);
     },
 
     /**
