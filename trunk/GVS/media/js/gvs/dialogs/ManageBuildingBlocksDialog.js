@@ -90,8 +90,7 @@ var ManageBuildingBlocksDialog = Class.create(GalleryDialog /** @lends ManageScr
     _createBuildingBlockList: function() {
         this._emptyRows();
         this._buildingBlocks.each(function(screen) {
-            var valid =  screen.definition ? true : false;
-            valid = valid && (screen.uri) ? false : true;
+            var valid = ! screen.uri;
             this._addRow({
                             'key': screen.id,
                             'values': [

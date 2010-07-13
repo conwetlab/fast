@@ -94,8 +94,7 @@ var ManageScreensDialog = Class.create(GalleryDialog /** @lends ManageScreensDia
     _createScreenList: function() {
         this._emptyRows();
         this._screens.each(function(screen) {
-            var valid =  screen.definition ? true : false;
-            valid = valid && (screen.uri) ? false : true;
+            var valid = screen.definition && ! screen.uri;
             this._addRow({
                             'key': screen.id,
                             'values': [
