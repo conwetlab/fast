@@ -3,7 +3,7 @@ var BuildingBlock = Class.create({
      * Constructor
      */
     initialize: function(_params) {
-        this.params = _params;
+        this.parameter = _params;
     },
 
     /**
