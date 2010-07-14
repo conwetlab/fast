@@ -532,7 +532,7 @@ def updateCode(buildingblock, data):
             bbdefinition['buildingblockId'] = bb.id
             bbdefinition['type'] = bb.type
             bbdefinition['actions'] = bbdata.get('actions')
-            bbdefinition['parameter'] = simplejson.dumps(bbdefinition.get('parameter'))
+            bbdefinition['parameter'] = bbdefinition.get('parameter')
             bbc = get_object_or_404(BuildingBlockCode, buildingBlock=bb)
             if not bbcodes.has_key(bb.id):
                 if bb.type == 'form':
