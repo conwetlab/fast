@@ -58,9 +58,6 @@ var GVS = Class.create(ToolbarModel,    /** @lends GVS.prototype */
 
         this._actions = {
             newBuildingBlock: this._newBuildingBlock.bind(this),
-            newForm: this._newForm.bind(this),
-            newOperator: this._newOperator.bind(this),
-            newResource: this._newResource.bind(this),
             newScreenflow: this._newScreenflow.bind(this),
             addScreen: this._addScreen.bind(this),
             newScreen: this._newScreen.bind(this),
@@ -81,20 +78,7 @@ var GVS = Class.create(ToolbarModel,    /** @lends GVS.prototype */
         this._dialogs.set("browseScreens", new ManageScreensDialog());
         this._dialogs.set("browseBuildingBlocks", new ManageBuildingBlocksDialog());
         this._dialogs.set("preferences", new PreferencesDialog());
-        this._dialogs.set("newBuildingBlock", new ButtonArrayDialog([
-            {
-                'label': 'New Form',
-                'handler': this._actions.newForm
-            },
-            {
-                'label': 'New Operator',
-                'handler': this._actions.newOperator
-            },
-            {
-                'label': 'New Resource',
-                'handler': this._actions.newResource
-            }]
-        ));
+        this._dialogs.set("newBuildingBlock", new NewBuildingBlockCodeDialog());
 
         this._documentController = new DocumentController();
 
@@ -176,36 +160,6 @@ var GVS = Class.create(ToolbarModel,    /** @lends GVS.prototype */
     _newScreen: function(){
         this._dialogs.get("newScreen").show();
     },
-
-    /**
-     * High-level action for creating a new form.
-     *
-     * @private
-     */
-    _newForm: function(){
-        this._dialogs.get("newForm").show();
-    },
-
-
-    /**
-     * High-level action for creating a new operator.
-     *
-     * @private
-     */
-    _newOperator: function(){
-        this._dialogs.get("newOperator").show();
-    },
-
-
-    /**
-     * High-level action for creating a new resource.
-     *
-     * @private
-     */
-    _newResource: function(){
-        this._dialogs.get("newResource").show();
-    },
-
 
     /**
      * High-level action for adding a new screen to the catalogue

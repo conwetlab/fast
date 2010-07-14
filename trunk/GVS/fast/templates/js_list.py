@@ -121,6 +121,7 @@ file_list = [
     "gvs/dialogs/PublishGadgetDialog.js",
     "gvs/dialogs/AddScreenDialog.js",
     "gvs/dialogs/NewBuildingBlockDialog.js",
+    "gvs/dialogs/NewBuildingBlockCodeDialog.js",
     "gvs/dialogs/SaveAsDialog.js",
     "gvs/dialogs/GalleryDialog.js",
     "gvs/dialogs/ManageScreenflowsDialog.js",
