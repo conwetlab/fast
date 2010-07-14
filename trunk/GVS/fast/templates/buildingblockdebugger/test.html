@@ -1,7 +1,7 @@
 <html>
 <head>
 	<meta http-equiv="content-type" content="text/html; charset=utf-8">
-	<title>{{ buildingblock }} Test</title>
+	<title>Buildingblock Test</title>
 	<script type="text/javascript" src="{{ MEDIA_URL }}js/buildingblockdebugger/prototype.js"></script>
 	<script type="text/javascript" src="{{ MEDIA_URL }}js/buildingblockdebugger/sprintf-0.6.js"></script>
 	<script type="text/javascript" src="{{ MEDIA_URL }}js/buildingblockdebugger/logger.js"></script>
@@ -61,23 +61,23 @@
         </style>
 </head>
 <body onload="init();">
-    <h1>{{ buildingblock }} Test</h1>
+    <h1>Test</h1>
     <div id="sourceDiv">
-        <p>Fill in the {{ buildingblock }} source code</p>
+        <p>Fill in the buildingblock source code</p>
         <textarea id="code" rows="10" cols="80">
         </textarea><br />
         <textarea id="params" rows="5" cols="33"></textarea>
         <div style="width: 50%; float: left;padding: 5px;">
-        Set the {{ buildingblock }} parameters (if any)
+        Set the buildingblock parameters (if any)
         </div>
         <div style="width: 50%; float: left;padding: 5px;">
-        (Optional) Choose operations to test</div> 
+        (Optional) Choose actions to test</div> 
         <input type="text" id="actionList"/>
         <div style="clear:both;"></div>
-        <button id="send">Refresh Operation List</button>
+        <button id="send">Refresh Action List</button>
     </div>
     <div id="actionsDiv">
-        <h2>Operation list</h2>
+        <h2>Action list</h2>
         <div id="actions"></div>
     </div>
     <div style="clear:both"></div>
