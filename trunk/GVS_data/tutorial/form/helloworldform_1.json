@@ -1,4 +1,5 @@
 {
+    "type": "form",
     "name":"Hello World Form",
     "creator":"admin",
     "description":{

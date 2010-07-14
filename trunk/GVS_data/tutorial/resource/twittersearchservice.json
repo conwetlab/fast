@@ -24,9 +24,7 @@
                     "label":{
                         "en-gb":"A search criteria in form of keywords"
                     },
-                    "pattern":"?User
-                    http://www.w3.org/1999/02/22-rdf-syntax-ns#type
-                    http://ourdomain.com/FASTCatalogue/concepts/SearchCriteria",
+                    "pattern":"?SearchCriteria http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://ourdomain.com/FASTCatalogue/concepts/SearchCriteria",
                     "positive":"true"
                 }
             ],

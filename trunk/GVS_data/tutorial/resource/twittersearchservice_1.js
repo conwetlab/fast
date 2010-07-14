@@ -34,7 +34,7 @@ _createList: function(responseJSON) {
     };
 
     var list = {
-        "id": "list",
+        "id": "twitList",
         "data": twitList
     };
     this.manageData([], [list], []);
