@@ -17,6 +17,10 @@ var ManageBuildingBlocksDialog = Class.create(GalleryDialog /** @lends ManageScr
          * @private
          */
         this._buildingBlocks = null;
+
+        this._showForms = true;
+        this._showOperators = true;
+        this._showResources = true;
     },
 
 
@@ -32,6 +36,61 @@ var ManageBuildingBlocksDialog = Class.create(GalleryDialog /** @lends ManageScr
 
     // **************** PRIVATE METHODS **************** //
 
+
+    /**
+     * Builds the user interface, using the gathered information
+     * @private
+     */
+    _render: function($super,/** Boolean(Optional) */ _loadAll) {
+        $super(_loadAll);
+
+        var content = document.createElement('div')
+        content.style.textAlign = 'right';
+        content.style.marginTop = '3px';
+        this._contentNode.appendChild(content);
+
+        var checkBox = new dijit.form.CheckBox({
+            name: 'Forms',
+            checked: this._showForms,
+            onChange: function(b) {
+                this._showForms = !(this._showForms && (this._showOperators || this._showResources))
+                this._reload();
+            }.bind(this)
+        });
+        content.appendChild(checkBox.domNode);
+
+        var label = document.createElement('span');
+        label.innerHTML = 'Forms '
+        content.appendChild(label);
+
+        var checkBox = new dijit.form.CheckBox({
+            name: 'Operators',
+            checked: this._showOperators,
+            onChange: function(b) {
+                this._showOperators = !(this._showOperators && (this._showForms || this._showResources))
+                this._reload();
+            }.bind(this)
+        });
+        content.appendChild(checkBox.domNode);
+
+        var label = document.createElement('span');
+        label.innerHTML = 'Operators '
+        content.appendChild(label);
+
+        var checkBox = new dijit.form.CheckBox({
+            name: 'Resources',
+            checked: this._showResources,
+            onChange: function(b) {
+                this._showResources = !(this._showResources && (this._showForms || this._showOperators));
+                this._reload();
+            }.bind(this)
+        });
+        content.appendChild(checkBox.domNode);
+
+        var label = document.createElement('span');
+        label.innerHTML = 'Resources'
+        content.appendChild(label);
+    },
 
     /**
      * initDialogInterface
@@ -175,21 +234,40 @@ var ManageBuildingBlocksDialog = Class.create(GalleryDialog /** @lends ManageScr
     },
 
     /**
-     * Load all building blocks
+     * Load selected building blocks
      * @private
      */
     _loadBuildinBlocks: function(onSucess) {
-        PersistenceEngine.sendGet(URIs.operator, this, function(transport) {
-            this._buildingBlocks = JSON.parse(transport.responseText);
-            PersistenceEngine.sendGet(URIs.resource, this, function(transport) {
+        var types = [];
+        this._buildingBlocks = [];
+
+        if (this._showForms) {
+            types.push('form');
+        }
+        if (this._showOperators) {
+            types.push('operator');
+        }
+        if (this._showResources) {
+            types.push('resource');
+        }
+        this._getBuildingBlocks(types, this, onSucess);
+    },
+
+    /**
+     * Get selected building blocks
+     * @private
+     */
+    _getBuildingBlocks: function(/*Array<String>*/types, /*Object*/context, /*Function*/onSucess) {
+        var type = types.pop()
+        if (!type && onSucess instanceof Function) {
+            onSucess.call(context);
+        } else {
+            PersistenceEngine.sendGet(URIs[type], context, function(transport) {
                 this._buildingBlocks = this._buildingBlocks.concat(JSON.parse(transport.responseText));
-                PersistenceEngine.sendGet(URIs.form, this, function(transport) {
-                    this._buildingBlocks = this._buildingBlocks.concat(JSON.parse(transport.responseText));
-                    onSucess();
-                }, Utils.onAJAXError);
+                this._getBuildingBlocks(types, context, onSucess)
             }, Utils.onAJAXError);
-        }, Utils.onAJAXError);
-    }
+        }
+    },
 
 });
 
