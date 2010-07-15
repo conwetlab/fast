@@ -1,0 +1,54 @@
+{
+    "name":"Order operator",
+    "creator":"admin",
+    "type": "operator",
+    "description":{
+        "en-gb":"This operator takes a list of elements as pre-condition and
+        returns the same list, but alphabetically ordered"
+    },
+    "tags":[],
+    "user":"admin",
+    "homepage":"http://demo.fast.morfeo-project.org/twittersearch",
+    "icon":"http://demo.fast.morfeo-project.org/gvsdata/images/catalogue/buildingblock.png",
+    "label":{
+        "en-gb":"Order operator"
+    },
+    "rights":"http://creativecommons.org/",
+    "screenshot":"http://demo.fast.morfeo-project.org/gvsdata/images/screenshots/buildingblock.png",
+    "version":"1.0",
+    "libraries":[],
+    "actions":[
+        {
+            "name":"order",
+            "preconditions":[
+                {
+                    "id":"list",
+                    "label":{
+                        "en-gb":"A list of elements"
+                    },
+                    "pattern":"?List
+                    http://www.w3.org/1999/02/22-rdf-syntax-ns#type
+                    http://ourdomain.com/FASTCatalogue/concepts/List",
+                    "positive":"true"
+                }
+            ],
+            "uses":[
+            ]
+        }
+    ],   
+    "postconditions":[ 
+        [ 
+            { 
+                "id":"orderedlist", 
+                "label":{ 
+                    "en-gb":"An ordered list of elements" 
+                }, 
+                "pattern":"?List
+                http://www.w3.org/1999/02/22-rdf-syntax-ns#type
+                http://yourdomain.com/FASTCatalogue/concepts/List", 
+                "positive":"true" 
+            } 
+        ] 
+    ],
+    "triggers": []
+}
