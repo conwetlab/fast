@@ -194,11 +194,9 @@ var BuildingBlockDocument = Class.create(PaletteDocument, /** @lends BuildingBlo
                 "homepage": "http://fast.morfeo-project.eu/",
                 "libraries": [],
                 "actions": [],
-                "preconditions": [],
+                "postconditions": [],
                 "triggers": [],
                 "parameterTemplate":"",
-                "preconditions": [],
-                "postconditions": [],
             };
         }
 
