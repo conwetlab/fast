@@ -60,12 +60,12 @@ public class MySQLPlannerStore implements PlannerStore {
 	}
 	
 	public void removeFrom(URI uri) {
-		String sql = "DELETE FROM FROM plans WHERE uri_from='"+uri.toString()+"';";
+		String sql = "DELETE FROM plans WHERE uri_from='"+uri.toString()+"';";
 		dbms.executeUpdate(sql);
 	}
 	
 	public void removeTo(URI uri) {
-		String sql = "DELETE FROM FROM plans WHERE uri_to='"+uri.toString()+"';";
+		String sql = "DELETE FROM plans WHERE uri_to='"+uri.toString()+"';";
 		dbms.executeUpdate(sql);
 	}
 	
@@ -86,7 +86,7 @@ public class MySQLPlannerStore implements PlannerStore {
 	public List<URI> getTo(URI uri) {
 		ArrayList<URI> list = new ArrayList<URI>();
 		try {
-			String sql = "SELECT uri_from FROM plans WHERE uri_to='"+uri.toString()+"';";
+			String sql = "SELECT uri_FROM plans WHERE uri_to='"+uri.toString()+"';";
 			ResultSet rs = dbms.executeQuery(sql);
 			while (rs.next())
 				list.add(new URIImpl(rs.getString("uri_from")));
