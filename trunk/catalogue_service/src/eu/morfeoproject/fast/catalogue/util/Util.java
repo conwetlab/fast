@@ -1,7 +1,9 @@
 package eu.morfeoproject.fast.catalogue.util;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -132,6 +134,16 @@ public class Util {
 			tags[0] = tagsStr;
 		}
 		return tags;
+	}
+	
+	public static String getFileContentAsString(String filePath) throws IOException {
+		InputStream is = Util.class.getClassLoader().getResourceAsStream(filePath);
+		BufferedReader reader = new BufferedReader(new InputStreamReader(is));
+		StringBuffer buffer = new StringBuffer();
+		String line = null;
+		while ((line = reader.readLine()) != null)
+		  buffer.append(line);
+		return buffer.toString();
 	}
 	
 }
