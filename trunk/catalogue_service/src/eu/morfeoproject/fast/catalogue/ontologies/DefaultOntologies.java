@@ -62,10 +62,11 @@ public class DefaultOntologies {
 //    			Syntax.RdfXml,
 //    			true);
     public static Ontology GEO =
-    	new Ontology(new URIImpl("http://www.w3.org/2003/01/geo/wgs84_pos#"), 
-    			"http://www.w3.org/2003/01/geo/wgs84_pos.rdf",
-    			Syntax.RdfXml,
-    			true);
+    	new Ontology(new URIImpl("http://www.w3.org/2003/01/geo/wgs84_pos#"), "wgs84_pos.rdf", Syntax.RdfXml, true);
+//    	new Ontology(new URIImpl("http://www.w3.org/2003/01/geo/wgs84_pos#"), 
+//    			"http://www.w3.org/2003/01/geo/wgs84_pos.rdf",
+//    			Syntax.RdfXml,
+//    			true);
     
     
     /**
