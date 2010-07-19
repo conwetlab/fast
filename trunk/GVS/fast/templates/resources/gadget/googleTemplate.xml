@@ -2,6 +2,10 @@
 {% block content %}
 <link rel="stylesheet" type="text/css" href="{{ gadgetUri }}/resources/menu/css/menu.css" />
 <script language="javascript" src="{{ gadgetUri }}/js/prototype/prototype.js"></script>
+<script type="text/javascript">
+//compatibility prototype-opensocial
+Array.prototype.toJSON = null;
+</script>
 <script language="javascript" src="{{ gadgetUri }}/js/cjson_parse/cjson_parse.js"></script>
 <script language="javascript" src="{{ gadgetUri }}/js/fast/menu.js"></script>
 <script language="javascript" src="{{ gadgetUri }}/js/fast/screenflowEngine.js"></script>
@@ -11,7 +15,7 @@
 <script language="javascript" src="{{ gadgetUri }}/js/fastAPI/fastAPI_google.js"></script>
 {% include 'resources/gadget/jsTemplate.js' %}
 <script language="javascript">
-    _IG_RegisterOnloadHandler(loadMenu);
+    gadgets.util.registerOnLoadHandler(loadMenu);
 </script>
 {% include 'resources/gadget/htmlTemplate.html' %}
 {% endblock content %}

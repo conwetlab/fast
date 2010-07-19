@@ -32,19 +32,22 @@ FastAPI.Request = Class.create(FastBaseAPI.Request,{
         $super(url, options);
     },
 
-    request: function() {
+    call: function() {
         var params = this.options;
 
         var _onSuccess = params.onSuccess;
 
         params.onSuccess = onSuccess;
 
+        //Add url and processed parameters to adapt them to the proxy required data
         var newParams = {url:this.url, method: params["method"]};
         if (params["parameters"]){
             if (typeof(params["parameters"])=="string")
                 var p = parameters;
-            else
-                var p = this.platform.Object.toJSON(params["parameters"]);
+            else{
+                var jsonLib = new FastAPI.Utils.JSON();
+                var p = jsonLib.toObject(params["parameters"]);
+            }
             newParams["params"] = p;
         }
         params["parameters"] = newParams;
@@ -64,7 +67,8 @@ FastAPI.Request = Class.create(FastBaseAPI.Request,{
                 case 'json':
                     var json = transport.responseJSON;
                     if (!json){
-                        json = transport.responseText.evalJSON(true);
+                        var jsonLib = new FastAPI.Utils.JSON();
+                        json = jsonLib.toObject(transport.responseText);
                     }
                     (_onSuccess || Prototype.emptyFunction)(json);
                     break;
@@ -76,24 +80,27 @@ FastAPI.Request = Class.create(FastBaseAPI.Request,{
     }
 });
 
-/**
- * Implementation of FastBaseAPI.Utils for Player.
- * @constructs
- * @extends FastBaseAPI.Utils
- */
-FastAPI.Utils = Class.create(FastBaseAPI.Utils,{
-    initialize: function($super) {
-        $super();
-    },
+FastAPI.Utils = {
 
-    toJSONString: function (obj) {
-        return Object.toJSON(obj);
-    },
+    /**
+     * Implementation of FastBaseAPI.Utils.JSON for StandAlone gadgets.
+     * @constructs
+     * @extends FastBaseAPI.Utils.JSON
+     */
+    JSON: Class.create(FastBaseAPI.Utils.JSON,{
+        initialize: function($super){
+            $super();
+        },
 
-    toJSONObject: function (string) {
-        return string.evalJSON(true);
-    }
-});
+        toString: function (obj) {
+            return Object.toJSON(obj);
+        },
+
+        toObject: function (string) {
+            return string.evalJSON(true);
+        }
+    })
+};
 
 /**
  * Implementation of FastBaseAPI.Properties for Player.
@@ -132,8 +139,75 @@ FastAPI.Persistence = Class.create(FastBaseAPI.Persistence,{
         'FastAPI.Persistence :: get';
     },
 
-    set: function (value) {
+    set: function (value, func) {
         throw 'Method not supported.' +
             'FastAPI.Persistence :: set';
     }
 });
+
+FastAPI.Social = {
+
+    /**
+     * Implementation of FastBaseAPI.Social.Login for StandAlone gadgets.
+     * @constructs
+     * @extends FastBaseAPI.Social.Login
+     */
+    Login: Class.create(FastBaseAPI.Social.Login,{
+
+        initialize: function($super) {
+            $super();
+        },
+
+        authenticate: function(credentials){
+            throw 'Method not supported.' +
+            'FastAPI.Social.Login :: authenticate';
+        }
+    }),
+
+    User: Class.create(FastBaseAPI.Social.User,{
+
+        initialize: function($super) {
+            $super();
+        },
+
+        get: function(property, func){
+            throw 'Method not supported.' +
+            'FastAPI.Social.User :: get';
+
+        },
+
+        set: function (property, value) {
+            throw 'Method not supported.' +
+            'FastAPI.Social.User :: set';
+        },
+
+        postStatus: function (status) {
+            throw 'Method not supported.' +
+            'FastAPI.Social.User :: postStatus';
+        },
+    }),
+
+    /**
+     * Implementation of FastBaseAPI.Social.Friends for StandAlone gadgets.
+     * @constructs
+     * @extends FastBaseAPI.Social.Friends
+     */
+    Friends: Class.create(FastBaseAPI.Social.Friends,{
+
+        initialize: function($super) {
+            $super();
+        },
+
+        getFriends: function (func) {
+            throw 'Method not supported.' +
+            'FastAPI.Social.Friends :: get';
+        },
+
+        tellAFriend: function () {
+            throw 'Method not supported.' +
+            'FastAPI.Social.Friends :: tellAFriend';
+        }
+
+    })
+
+};

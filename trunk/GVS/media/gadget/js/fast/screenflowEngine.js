@@ -40,14 +40,23 @@ var ScreenflowEngineFactory = function () {
                 var persistence = new FastAPI.Persistence();
                 try {
                     persistence.get(function(value){
-                        var facts = value.evalJSON(true);
+                        if(!value){
+                            //just run
+                            this.run();
+                            return;
+                        }
+                        var jsonLib = new FastAPI.Utils.JSON();
+                        var facts = jsonLib.toObject(value);
                         for (var i=0; facts!= null && i<facts.length; i++){
                             this.addFact(facts[i]);
                         }
+                        this.run();
                     }.bind(this));
                 } catch (e) {
                     return;
                 }
+            } else{
+                this.run();
             }
         },
 
@@ -56,7 +65,8 @@ var ScreenflowEngineFactory = function () {
                 var persistence = new FastAPI.Persistence();
                 var kb = this.facts.values();
                 try {
-                    persistence.set(Object.toJSON(kb));
+                    var jsonLib = new FastAPI.Utils.JSON();
+                    persistence.set(jsonLib.toString(kb));
                 } catch (e) {
                     return;
                 }
@@ -72,7 +82,8 @@ var ScreenflowEngineFactory = function () {
                 fact.data[attributeName] = value;
                 return fact;
             } else {
-                var fact = value.evalJSON(true);
+                var jsonLib = new FastAPI.Utils.JSON();
+                var fact = jsonLib.toObject(value);
                 if (fact.uri == factURI){
                     return fact;
                 } else {
@@ -113,7 +124,8 @@ var ScreenflowEngineFactory = function () {
                 var v = variables[i];
                 if(v.variable != null){
                     if(v.fact_attr == ''){
-                        v.variable.set(Object.toJSON(fact));
+                        var jsonLib = new FastAPI.Utils.JSON();
+                        v.variable.set(jsonLib.toString(fact));
                     } else {
                         v.variable.set(fact.data[v.fact_attr]);
                     }

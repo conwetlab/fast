@@ -7,7 +7,7 @@
         description="{{ gadgetDescription }}"
         scrolling="true" height="{{ gadgetHeight }}" width="{{ gadgetWidth }}">
     <Require feature="dynamic-height"/>
-    <Require feature="opensocial-0.7"/>
+    <Require feature="opensocial-0.8"/>
 </ModulePrefs>
 <Content type="html">
 <![CDATA[

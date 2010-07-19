@@ -5,7 +5,7 @@
 		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 		<meta name="generator" content="JsDoc Toolkit" />
 		
-		<title>JsDoc Reference - FastAPI.Properties</title>
+		<title>JsDoc Reference - FastAPI.Social.User</title>
 
 		<style type="text/css">
 			/* default.css */
@@ -224,7 +224,7 @@ ul.inheritsList
 <!-- ============================== class title ============================ -->
 			<h1 class="classTitle">
 				
-				Class FastAPI.Properties
+				Class FastAPI.Social.User
 			</h1>
 
 <!-- ============================== class summary ========================== -->			
@@ -240,7 +240,7 @@ ul.inheritsList
 
 <!-- ============================== constructor summary ==================== -->			
 			
-			<table class="summaryTable" cellspacing="0" summary="A summary of the constructor documented in the class FastAPI.Properties.">
+			<table class="summaryTable" cellspacing="0" summary="A summary of the constructor documented in the class FastAPI.Social.User.">
 				<caption>Class Summary</caption>
 				<thead>
 					<tr>
@@ -253,10 +253,9 @@ ul.inheritsList
 						<td class="attributes">&nbsp;</td>
 						<td class="nameDescription" >
 							<div class="fixedFont">
-								<b><a href="../symbols/FastAPI.Properties.html#constructor">FastAPI.Properties</a></b>()
+								<b><a href="../symbols/FastAPI.Social.User.html#constructor">FastAPI.Social.User</a></b>()
 							</div>
-							<div class="description">This class is intended to access to context variables
-of the mashup platform.</div>
+							<div class="description">This class allows managing the user's profile properties.</div>
 						</td>
 					</tr>
 				</tbody>
@@ -270,7 +269,7 @@ of the mashup platform.</div>
 			
 				
 				
-				<table class="summaryTable" cellspacing="0" summary="A summary of the methods documented in the class FastAPI.Properties.">
+				<table class="summaryTable" cellspacing="0" summary="A summary of the methods documented in the class FastAPI.Social.User.">
 					<caption>Method Summary</caption>
 					<thead>
 						<tr>
@@ -283,18 +282,27 @@ of the mashup platform.</div>
 						<tr>
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/FastAPI.Properties.html#get">get</a></b>(variable)
+								<div class="fixedFont"><b><a href="../symbols/FastAPI.Social.User.html#get">get</a></b>(property, func)
 								</div>
-								<div class="description">Returns the context variable value.</div>
+								<div class="description">Returns the value of a specific user property.</div>
 							</td>
 						</tr>
 					
 						<tr>
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/FastAPI.Properties.html#set">set</a></b>(variable, value)
+								<div class="fixedFont"><b><a href="../symbols/FastAPI.Social.User.html#postStatus">postStatus</a></b>(status)
 								</div>
-								<div class="description">Sets the value of a context variable.</div>
+								<div class="description">Sets the user's status.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/FastAPI.Social.User.html#set">set</a></b>(property, value)
+								</div>
+								<div class="description">Sets the value of a user property.</div>
 							</td>
 						</tr>
 					
@@ -313,20 +321,20 @@ of the mashup platform.</div>
 				</div>
 				
 				<div class="fixedFont">
-						<b>FastAPI.Properties</b>()
+						<b>FastAPI.Social.User</b>()
 				</div>
 				
 				<div class="description">
-					This class is intended to access to context variables
-of the mashup platform.
+					This class allows managing the user's profile properties.
 The properties that are available on request are:
-<li>FastBaseAPI.Properties.LOGIN or 'login'</li>
-<li>FastBaseAPI.Properties.LANGUAGE or 'language'</li>
-<li>FastBaseAPI.Properties.ORIENTATION or 'orientation'</li>
-<li>FastBaseAPI.Properties.GADGET_HEIGHT or 'height'</li>
-<li>FastBaseAPI.Properties.GADGET_WIDTH or 'width'</li>
-<li>FastBaseAPI.Properties.GADGET_X_POSITION or 'xposition'</li>
-<li>FastBaseAPI.Properties.GADGET_Y_POSITION or 'yposition'</li>
+<li>FastBaseAPI.Social.User.USER_NAME or 'USER_NAME'</li>
+<li>FastBaseAPI.Social.User.FIRST_NAME or 'FIRST_NAME'</li>
+<li>FastBaseAPI.Social.User.LAST_NAME or 'LAST_NAME'</li>
+<li>FastBaseAPI.Social.User.DOB or 'DOB'</li>
+<li>FastBaseAPI.Social.User.USER_EMAIL or 'EMAIL'</li>
+<li>FastBaseAPI.Social.User.CURRENT_LOCATION or 'CURRENT_LOCATION'</li>
+<li>FastBaseAPI.Social.User.STATUS or 'STATUS'</li>
+<li>FastBaseAPI.Social.User.THUMBNAIL or 'THUMBNAIL'</li>
 					
 				</div>
 				
@@ -357,11 +365,11 @@ The properties that are available on request are:
 					<div class="fixedFont">
 					
 					
-					<b>get</b>(variable)
+					<b>get</b>(property, func)
 					
 					</div>
 					<div class="description">
-						Returns the context variable value.
+						Returns the value of a specific user property.
 						
 						
 					</div>
@@ -373,10 +381,52 @@ The properties that are available on request are:
 							<dt class="heading">Parameters:</dt>
 							
 								<dt>
-									<span class="light fixedFont">{String}</span> <b>variable</b>
+									<span class="light fixedFont">{String}</span> <b>property</b>
 									
 								</dt>
-								<dd>represents the name of the variable</dd>
+								<dd>represents the name of the property</dd>
+							
+								<dt>
+									<span class="light fixedFont">{function}</span> <b>func</b>
+									
+								</dt>
+								<dd>callback handler</dd>
+							
+							</dl>
+						
+						
+						
+						
+						
+						
+						
+
+					<hr />
+				
+					<a name="postStatus"> </a>
+					<div class="fixedFont">
+					
+					
+					<b>postStatus</b>(status)
+					
+					</div>
+					<div class="description">
+						Sets the user's status.
+						
+						
+					</div>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<b>status</b>
+									
+								</dt>
+								<dd>represents the status of the user</dd>
 							
 							</dl>
 						
@@ -393,11 +443,11 @@ The properties that are available on request are:
 					<div class="fixedFont">
 					
 					
-					<b>set</b>(variable, value)
+					<b>set</b>(property, value)
 					
 					</div>
 					<div class="description">
-						Sets the value of a context variable.
+						Sets the value of a user property.
 						
 						
 					</div>
@@ -409,16 +459,16 @@ The properties that are available on request are:
 							<dt class="heading">Parameters:</dt>
 							
 								<dt>
-									<span class="light fixedFont">{String}</span> <b>variable</b>
+									<span class="light fixedFont">{String}</span> <b>property</b>
 									
 								</dt>
-								<dd>represents the name of the variable</dd>
+								<dd>represents the name of the property</dd>
 							
 								<dt>
 									<span class="light fixedFont">{String}</span> <b>value</b>
 									
 								</dt>
-								<dd>represents value of the variable</dd>
+								<dd>represents value of the property</dd>
 							
 							</dl>
 						

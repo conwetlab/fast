@@ -30,7 +30,7 @@ FastAPI.Request = Class.create(FastBaseAPI.Request,{
         $super(url, options);
     },
 
-    request: function() {
+    call: function() {
         var params = this.options;
 
         var _onSuccess = params.onSuccess;
@@ -55,7 +55,8 @@ FastAPI.Request = Class.create(FastBaseAPI.Request,{
                 case 'json':
                     var json = transport.responseJSON;
                     if (!json){
-                        json = transport.responseText.evalJSON(true);
+                        var jsonLib = new FastAPI.Utils.JSON();
+                        json = jsonLib.toObject(transport.responseText);
                     }
                     (_onSuccess || Prototype.emptyFunction)(json);
                     break;
@@ -67,24 +68,27 @@ FastAPI.Request = Class.create(FastBaseAPI.Request,{
     }
 });
 
-/**
- * Implementation of FastBaseAPI.Utils for EzWeb.
- * @constructs
- * @extends FastBaseAPI.Utils
- */
-FastAPI.Utils = Class.create(FastBaseAPI.Utils,{
-    initialize: function($super) {
-        $super();
-    },
+FastAPI.Utils = {
 
-    toJSONString: function (obj) {
-        return Object.toJSON(obj);
-    },
+    /**
+     * Implementation of FastBaseAPI.Utils.JSON for EzWeb.
+     * @constructs
+     * @extends FastBaseAPI.Utils.JSON
+     */
+    JSON: Class.create(FastBaseAPI.Utils.JSON,{
+        initialize: function($super){
+            $super();
+        },
 
-    toJSONObject: function (string) {
-        return string.evalJSON(true);
-    }
-});
+        toString: function (obj) {
+            return Object.toJSON(obj);
+        },
+
+        toObject: function (string) {
+            return string.evalJSON(true);
+        }
+    })
+};
 
 /**
  * Implementation of FastBaseAPI.Properties for EzWeb.
@@ -162,13 +166,23 @@ FastAPI.Persistence = Class.create(FastBaseAPI.Persistence,{
     },
 
     get: function (func) {
-        var value = PersistenceSingleton.getInstance().get(func);
-        func(value);
+        var value = PersistenceSingleton.getInstance().get();
+        //simulate asynchronous behaviour
+        setTimeout(function(){
+                this.func(this.value);
+            }.bind({'func':func, 'value':value}), 1);
     },
 
-    set: function (value) {
+    set: function (value, func) {
         PersistenceSingleton.getInstance().set(value);
-    }
+        if(func){
+            //simulate asynchronous behaviour
+            setTimeout(function(){
+                    this.func();
+                }.bind({'func':func}), 1);
+        }
+    },
+
 });
 
 var PersistenceSingleton = function() {
@@ -179,8 +193,8 @@ var PersistenceSingleton = function() {
             this.variable = EzWebAPI.createRWGadgetVariable(FastAPI.Persistence.KB_VAR);
         },
 
-        get: function (callBack) {
-            callBack(this.variable.get());
+        get: function () {
+            return this.variable.get();
         },
 
         set: function (value) {
@@ -199,3 +213,75 @@ var PersistenceSingleton = function() {
 }();
 
 FastAPI.Persistence.KB_VAR = '__knowledgebase';
+
+FastAPI.Social = {
+
+    /**
+     * Implementation of FastBaseAPI.Social.Login for EzWeb.
+     * @constructs
+     * @extends FastBaseAPI.Social.Login
+     */
+    Login: Class.create(FastBaseAPI.Social.Login,{
+
+        initialize: function($super) {
+            $super();
+        },
+
+        authenticate: function(credentials){
+            throw 'Method not supported.' +
+            'FastAPI.Social.Login :: authenticate';
+        }
+    }),
+
+    /**
+     * Implementation of FastBaseAPI.Social.User for EzWeb.
+     * @constructs
+     * @extends FastBaseAPI.Social.User
+     */
+    User: Class.create(FastBaseAPI.Social.User,{
+
+        initialize: function($super) {
+            $super();
+        },
+
+        get: function(property, func){
+            throw 'Method not supported.' +
+            'FastAPI.Social.User :: get';
+
+        },
+
+        set: function (property, value) {
+            throw 'Method not supported.' +
+            'FastAPI.Social.User :: set';
+        },
+
+        postStatus: function (status) {
+            throw 'Method not supported.' +
+            'FastAPI.Social.User :: postStatus';
+        },
+    }),
+
+    /**
+     * Implementation of FastBaseAPI.Social.Friends for EzWeb.
+     * @constructs
+     * @extends FastBaseAPI.Social.Friends
+     */
+    Friends: Class.create(FastBaseAPI.Social.Friends,{
+
+        initialize: function($super) {
+            $super();
+        },
+
+        getFriends: function (func) {
+            throw 'Method not supported.' +
+            'FastAPI.Social.Friends :: get';
+        },
+
+        tellAFriend: function () {
+            throw 'Method not supported.' +
+            'FastAPI.Social.Friends :: tellAFriend';
+        }
+
+    })
+
+};

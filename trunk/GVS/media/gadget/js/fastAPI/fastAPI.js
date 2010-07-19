@@ -1,5 +1,5 @@
 /**
- * It represents the whols FastAPI
+ * It represents the whole FastAPI
  * @namespace
  */
 var FastAPI = {};
@@ -45,22 +45,23 @@ FastBaseAPI.Request = Class.create(/** @lends FastAPI.Request.prototype */{
      * @param url
      *      url to be requested
      * @param options
-     *      - method: 'get' || 'post' || 'put' || 'delete'
-     *      - content: 'xml' || 'text' || 'json'
-     *      - context: context of the invoking object
-     *      - parameters: either as a URL-encoded string or as any Hash-compatible object.
-     *      - requestHeaders: a javascript object with properties representing headers.
-     *      - onSuccess: Invoked when a request completes and its status code is undefined or belongs in the 2xy family.
-     *      - onFailure: Invoked when a request completes and its status code exists but is not in the 2xy family.
+     * <li>method: 'get' || 'post' || 'put' || 'delete'</li>
+     * <li> content: 'xml' || 'text' || 'json'</li>
+     * <li> context: context of the invoking object</li>
+     * <li> parameters: either as a URL-encoded string or as any Hash-compatible object.</li>
+     * <li> requestHeaders: a javascript object with properties representing headers.</li>
+     * <li> onSuccess: Invoked when a request completes and its status code is undefined or belongs in the 2xy family.</li>
+     * <li> onFailure: Invoked when a request completes and its status code exists but is not in the 2xy family.</li>
+     * <li> onXYZ: (with XYZ representing any HTTP status code): Invoked just after the response</li>
+     *       is completed if the status code matchs the code used in the callback name. Prevents the execution of
+     *       onSuccess and onFailure. Happens before onComplete.</li>
+     * <li> onException: Fires when there was an exception while dispatching other callbacks.</li>
      */
     initialize: function(url, options) {
         this.url = url;
 
         this.options = {
             method:         'post',
-            asynchronous:   true,
-            contentType:    'application/x-www-form-urlencoded',
-            encoding:       'UTF-8',
             content:        '',
             onSuccess:      Prototype.emptyFunction,
             onFailure:      Prototype.emptyFunction
@@ -74,7 +75,7 @@ FastBaseAPI.Request = Class.create(/** @lends FastAPI.Request.prototype */{
         else if (Object.isHash(this.options.parameters))
             this.options.parameters = this.options.parameters.toObject();
         this.setRequestHeaders();
-        this.request();
+        this.call();
     },
 
     /**
@@ -102,49 +103,65 @@ FastBaseAPI.Request = Class.create(/** @lends FastAPI.Request.prototype */{
      * Make a general-purpose request to a remote server.
      * @private
      */
-    request: function() {
+    call: function() {
         throw 'Abstract Method invocation. ' +
               'FastAPI.Request :: request';
     }
 });
 
+/**
+ * It represents the Utils namespace
+ * @namespace
+ */
+FastAPI.Utils = {};
 
-FastBaseAPI.Utils = Class.create(/** @lends FastAPI.Utils.prototype */{
-    /**
-     * Utils class
-     * @constructs
-     */
-    initialize: function() {
-    },
+FastBaseAPI.Utils = {
 
-    /**
-     * Returns a JSON string.
-     * @param obj
-     *      represents the name of the variable
-     * @type Object
-     */
-    toJSONString: function (obj) {
-        throw 'Abstract Method invocation. ' +
-              'FastAPI.Utils :: toJSONString';
-    },
+    JSON: Class.create(/** @lends FastAPI.Utils.JSON.prototype */{
+        /**
+         * This class provides tools to deal with the JSON format
+         * @constructs
+         */
+        initialize: function(){
+        },
+        /**
+         * Returns a JSON string.
+         * @param {Object} obj
+         *      represents the name of the variable
+         * @type String
+         */
+        toString: function (obj) {
+            throw 'Abstract Method invocation. ' +
+                  'FastAPI.Utils :: toString';
+        },
 
-    /**
-     * Returns a JSON object.
-     * @param string
-     *      represents the name of the variable
-     * @type String
-     *
-     */
-    toJSONObject: function (string) {
-        throw 'Abstract Method invocation. ' +
-              'FastAPI.Utils :: toJSONObject';
-    }
-});
+        /**
+         * Returns an Object.
+         * @param {String} string
+         *      represents the name of the variable
+         * @type Object
+         *
+         */
+        toObject: function (string) {
+            throw 'Abstract Method invocation. ' +
+                  'FastAPI.Utils :: toObject';
+        }
+    })
+
+};
 
 FastBaseAPI.Properties = Class.create(/** @lends FastAPI.Properties.prototype */{
     /**
      * This class is intended to access to context variables
-     * of the mashup platform
+     * of the mashup platform.
+     * The properties that are available on request are:
+     * <li>FastBaseAPI.Properties.LOGIN or 'login'</li>
+     * <li>FastBaseAPI.Properties.LANGUAGE or 'language'</li>
+     * <li>FastBaseAPI.Properties.ORIENTATION or 'orientation'</li>
+     * <li>FastBaseAPI.Properties.GADGET_HEIGHT or 'height'</li>
+     * <li>FastBaseAPI.Properties.GADGET_WIDTH or 'width'</li>
+     * <li>FastBaseAPI.Properties.GADGET_X_POSITION or 'xposition'</li>
+     * <li>FastBaseAPI.Properties.GADGET_Y_POSITION or 'yposition'</li>
      * @constructs
      */
     initialize: function() {
@@ -152,9 +169,8 @@ FastBaseAPI.Properties = Class.create(/** @lends FastAPI.Properties.prototype */
 
     /**
      * Returns the context variable value.
-     * @param obj
+     * @param {String} variable
      *      represents the name of the variable
-     * @type Object
      */
     get: function (variable) {
         throw 'Abstract Method invocation. ' +
@@ -163,11 +179,10 @@ FastBaseAPI.Properties = Class.create(/** @lends FastAPI.Properties.prototype */
 
     /**
      * Sets the value of a context variable.
-     * @param string
+     * @param {String} variable
      *      represents the name of the variable
-     * @param value
+     * @param {String} value
      *      represents value of the variable
-     * @type String
      *
      */
     set: function (variable, value) {
@@ -193,10 +208,9 @@ FastBaseAPI.Persistence = Class.create(/** @lends FastAPI.Persistence.prototype 
     },
 
     /**
-     * Returns the persistent data.
-     * @param obj
-     *      represents the name of the variable
-     * @type Object
+     * Asynchronous method: gets the persistent data.
+     * @param {function} func
+     *      callback handler
      */
     get: function (func) {
         throw 'Abstract Method invocation. ' +
@@ -204,14 +218,142 @@ FastBaseAPI.Persistence = Class.create(/** @lends FastAPI.Persistence.prototype 
     },
 
     /**
-     * Saves the data in persistent way.
-     * @param value
+     * Asynchronous method: saves the data in persistent way.
+     * @param {String} value
      *      represents value of the variable
-     * @type String
-     *
+     * @param {function} [func]
+     *      callback handler
      */
-    set: function (value) {
+    set: function (value, func) {
         throw 'Abstract Method invocation. ' +
             'FastAPI.Persistence :: set';
     }
 });
+
+
+/**
+ * This set of methods are intended to access to the social data available in the platform
+ * @namespace
+ */
+FastAPI.Social = {};
+FastBaseAPI.Social = {
+
+    Login: Class.create(/** @lends FastAPI.Social.Login.prototype */{
+       /**
+         * This class allows authenticating users
+         * @constructs
+         */
+        initialize: function() {
+        },
+
+        /**
+         * Authenticates the user.
+         * @param {Options} credentials
+         *      represents the credentials needed for the authentication
+         */
+        authenticate: function(credentials){
+            throw 'Abstract Method invocation. ' +
+            'FastAPI.Social.Login :: authenticate';
+        }
+    }),
+
+    User: Class.create(/** @lends FastAPI.Social.User.prototype */{
+        /**
+         * This class allows managing the user's profile properties.
+         * The properties that are available on request are:
+         * <li>FastBaseAPI.Social.User.USER_NAME or 'USER_NAME'</li>
+         * <li>FastBaseAPI.Social.User.FIRST_NAME or 'FIRST_NAME'</li>
+         * <li>FastBaseAPI.Social.User.LAST_NAME or 'LAST_NAME'</li>
+         * <li>FastBaseAPI.Social.User.DOB or 'DOB'</li>
+         * <li>FastBaseAPI.Social.User.USER_EMAIL or 'EMAIL'</li>
+         * <li>FastBaseAPI.Social.User.CURRENT_LOCATION or 'CURRENT_LOCATION'</li>
+         * <li>FastBaseAPI.Social.User.STATUS or 'STATUS'</li>
+         * <li>FastBaseAPI.Social.User.THUMBNAIL or 'THUMBNAIL'</li>
+         * @constructs
+         */
+        initialize: function() {
+        },
+
+        /**
+         * Returns the value of a specific user property.
+         * @param {String} property
+         *      represents the name of the property
+         * @param {function} func
+         *         callback handler
+         */
+        get: function(property, func){
+            throw 'Abstract Method invocation. ' +
+            'FastAPI.Social.User :: get';
+        },
+
+        /**
+         * Sets the value of a user property.
+         * @param {String} property
+         *      represents the name of the property
+         * @param {String} value
+         *      represents value of the property
+         *
+         */
+        set: function (property, value) {
+            throw 'Abstract Method invocation. ' +
+                'FastAPI.Social.User :: set';
+        },
+
+        /**
+         * Sets the user's status.
+         * @param status
+         *      represents the status of the user
+         */
+        postStatus: function (status) {
+            throw 'Abstract Method invocation. ' +
+                'FastAPI.Social.User :: postStatus';
+        },
+    }),
+
+    Friends: Class.create(/** @lends FastAPI.Social.Friends.prototype */{
+        /**
+         * This class offers the methods to deal with the user's friends
+         * @constructs
+         */
+        initialize: function() {
+        },
+
+        /**
+         * Creates an array with the user's friends and applies the handler passed as parameter to it.
+         * The returned information about each friend contains:
+         * <ul>
+         * <li>id</li>
+         * <li>FastBaseAPI.Social.User.USER_NAME or 'USER_NAME'</li>
+         * <li>FastBaseAPI.Social.User.FIRST_NAME or 'FIRST_NAME'</li>
+         * <li>FastBaseAPI.Social.User.LAST_NAME or 'LAST_NAME'</li>
+         * <li>FastBaseAPI.Social.User.THUMBNAIL or 'THUMBNAIL'</li>
+         *  </ul>
+         * @param {function} func
+         *      callback handler
+         */
+
+        getFriends: function (func) {
+            throw 'Abstract Method invocation. ' +
+            'FastAPI.Social.Friends :: getFriends';
+        },
+
+        /**
+         * Not specified yed
+         */
+        tellAFriend: function () {
+            throw 'Abstract Method invocation. ' +
+            'FastAPI.Social.Friends :: tellAFriend';
+        }
+
+    })
+
+};
+
+FastBaseAPI.Social.User.USER_NAME = 'USER_NAME';
+FastBaseAPI.Social.User.FIRST_NAME = 'FIRST_NAME';
+FastBaseAPI.Social.User.LAST_NAME = 'LAST_NAME';
+FastBaseAPI.Social.User.DOB = 'DOB';
+FastBaseAPI.Social.User.USER_EMAIL = 'EMAIL';
+FastBaseAPI.Social.User.CURRENT_LOCATION = 'CURRENT_LOCATION';
+FastBaseAPI.Social.User.STATUS = 'STATUS';
+FastBaseAPI.Social.User.THUMBNAIL = 'THUMBNAIL';

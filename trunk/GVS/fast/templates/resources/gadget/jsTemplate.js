@@ -37,6 +37,5 @@
     function loadMenu(){
         menu = new FASTMenu({renderTo: "menu"});
         ScreenflowEngineFactory.getInstance().setEngine(screens, events, menu, {% if gadgetPersistent %}true{% else %}false{% endif %});
-        ScreenflowEngineFactory.getInstance().run();
     }
 </script>

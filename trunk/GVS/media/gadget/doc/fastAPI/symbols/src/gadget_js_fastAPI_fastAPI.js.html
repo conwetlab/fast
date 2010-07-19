@@ -6,7 +6,7 @@
 	.REGX {color: #339;}
 	.line {border-right: 1px dotted #666; color: #666; font-style: normal;}
 	</style></head><body><pre><span class='line'>  1</span> <span class="COMM">/**
-<span class='line'>  2</span>  * It represents the whols FastAPI
+<span class='line'>  2</span>  * It represents the whole FastAPI
 <span class='line'>  3</span>  * @namespace
 <span class='line'>  4</span>  */</span><span class="WHIT">
 <span class='line'>  5</span> </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">FastAPI</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
@@ -52,174 +52,316 @@
 <span class='line'> 45</span>      * @param url
 <span class='line'> 46</span>      *      url to be requested
 <span class='line'> 47</span>      * @param options
-<span class='line'> 48</span>      *      - method: 'get' || 'post' || 'put' || 'delete'
-<span class='line'> 49</span>      *      - content: 'xml' || 'text' || 'json'
-<span class='line'> 50</span>      *      - context: context of the invoking object
-<span class='line'> 51</span>      *      - parameters: either as a URL-encoded string or as any Hash-compatible object.
-<span class='line'> 52</span>      *      - requestHeaders: a javascript object with properties representing headers.
-<span class='line'> 53</span>      *      - onSuccess: Invoked when a request completes and its status code is undefined or belongs in the 2xy family.
-<span class='line'> 54</span>      *      - onFailure: Invoked when a request completes and its status code exists but is not in the 2xy family.
-<span class='line'> 55</span>      */</span><span class="WHIT">
-<span class='line'> 56</span>     </span><span class="NAME">initialize</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">url</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">options</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'> 57</span>         </span><span class="NAME">this.url</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">url</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'> 58</span> 
-<span class='line'> 59</span>         </span><span class="NAME">this.options</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'> 60</span>             </span><span class="NAME">method</span><span class="PUNC">:</span><span class="WHIT">         </span><span class="STRN">'post'</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'> 61</span>             </span><span class="NAME">asynchronous</span><span class="PUNC">:</span><span class="WHIT">   </span><span class="KEYW">true</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'> 62</span>             </span><span class="NAME">contentType</span><span class="PUNC">:</span><span class="WHIT">    </span><span class="STRN">'application/x-www-form-urlencoded'</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'> 63</span>             </span><span class="NAME">encoding</span><span class="PUNC">:</span><span class="WHIT">       </span><span class="STRN">'UTF-8'</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'> 64</span>             </span><span class="NAME">content</span><span class="PUNC">:</span><span class="WHIT">        </span><span class="STRN">''</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'> 65</span>             </span><span class="NAME">onSuccess</span><span class="PUNC">:</span><span class="WHIT">      </span><span class="NAME">Prototype.emptyFunction</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'> 66</span>             </span><span class="NAME">onFailure</span><span class="PUNC">:</span><span class="WHIT">      </span><span class="NAME">Prototype.emptyFunction</span><span class="WHIT">
-<span class='line'> 67</span>         </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'> 68</span>         </span><span class="NAME">Object.extend</span><span class="PUNC">(</span><span class="NAME">this.options</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">options</span><span class="WHIT"> </span><span class="PUNC">||</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT"> </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'> 69</span> 
-<span class='line'> 70</span>         </span><span class="NAME">this.options.method</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this.options.method.toLowerCase</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'> 71</span> 
-<span class='line'> 72</span>         </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">Object.isString</span><span class="PUNC">(</span><span class="NAME">this.options.parameters</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="WHIT">
-<span class='line'> 73</span>             </span><span class="NAME">this.options.parameters</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this.options.parameters.toQueryParams</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'> 74</span>         </span><span class="KEYW">else</span><span class="WHIT"> </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">Object.isHash</span><span class="PUNC">(</span><span class="NAME">this.options.parameters</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="WHIT">
-<span class='line'> 75</span>             </span><span class="NAME">this.options.parameters</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this.options.parameters.toObject</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'> 76</span>         </span><span class="NAME">this.setRequestHeaders</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'> 77</span>         </span><span class="NAME">this.request</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'> 78</span>     </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'> 79</span> 
-<span class='line'> 80</span>     </span><span class="COMM">/**
-<span class='line'> 81</span>      * Sets the default headers.
-<span class='line'> 82</span>      * This method can be overriden and augmented by the implementations.
-<span class='line'> 83</span>      *  - Accept defaults to 'text/javascript, text/html, application/xml, text/xml, *\/*'
-<span class='line'> 84</span>      *  - Content-type is built based on the contentType and encoding options.
-<span class='line'> 85</span>      * @private
-<span class='line'> 86</span>      */</span><span class="WHIT">
-<span class='line'> 87</span>     </span><span class="NAME">setRequestHeaders</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'> 88</span>         </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">headers</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'> 89</span>             </span><span class="STRN">'Accept'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">'text/javascript, text/html, application/xml, text/xml, application/json, */*'</span><span class="WHIT">
-<span class='line'> 90</span>         </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'> 91</span> 
-<span class='line'> 92</span>         </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">this.options.method</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="STRN">'post'</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'> 93</span>             </span><span class="NAME">headers</span><span class="PUNC">[</span><span class="STRN">'Content-type'</span><span class="PUNC">]</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this.options.contentType</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT">
-<span class='line'> 94</span>                 </span><span class="PUNC">(</span><span class="NAME">this.options.encoding</span><span class="WHIT"> </span><span class="PUNC">?</span><span class="WHIT"> </span><span class="STRN">'; charset='</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">this.options.encoding</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">''</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'> 95</span>         </span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'> 96</span> 
-<span class='line'> 97</span>         </span><span class="NAME">Object.extend</span><span class="PUNC">(</span><span class="NAME">headers</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">this.options.requestHeaders</span><span class="WHIT"> </span><span class="PUNC">||</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT"> </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'> 98</span>         </span><span class="NAME">this.options.requestHeaders</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">headers</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'> 99</span>     </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>100</span> 
-<span class='line'>101</span>     </span><span class="COMM">/**
-<span class='line'>102</span>      * Make a general-purpose request to a remote server.
-<span class='line'>103</span>      * @private
-<span class='line'>104</span>      */</span><span class="WHIT">
-<span class='line'>105</span>     </span><span class="NAME">request</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>106</span>         </span><span class="KEYW">throw</span><span class="WHIT"> </span><span class="STRN">'Abstract Method invocation. '</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT">
-<span class='line'>107</span>               </span><span class="STRN">'FastAPI.Request :: request'</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>108</span>     </span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>109</span> </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>110</span> 
+<span class='line'> 48</span>      * &lt;li>method: 'get' || 'post' || 'put' || 'delete'&lt;/li>
+<span class='line'> 49</span>      * &lt;li> content: 'xml' || 'text' || 'json'&lt;/li>
+<span class='line'> 50</span>      * &lt;li> context: context of the invoking object&lt;/li>
+<span class='line'> 51</span>      * &lt;li> parameters: either as a URL-encoded string or as any Hash-compatible object.&lt;/li>
+<span class='line'> 52</span>      * &lt;li> requestHeaders: a javascript object with properties representing headers.&lt;/li>
+<span class='line'> 53</span>      * &lt;li> onSuccess: Invoked when a request completes and its status code is undefined or belongs in the 2xy family.&lt;/li>
+<span class='line'> 54</span>      * &lt;li> onFailure: Invoked when a request completes and its status code exists but is not in the 2xy family.&lt;/li>
+<span class='line'> 55</span>      * &lt;li> onXYZ: (with XYZ representing any HTTP status code): Invoked just after the response&lt;/li>
+<span class='line'> 56</span>      *       is completed if the status code matchs the code used in the callback name. Prevents the execution of
+<span class='line'> 57</span>      *       onSuccess and onFailure. Happens before onComplete.&lt;/li>
+<span class='line'> 58</span>      * &lt;li> onException: Fires when there was an exception while dispatching other callbacks.&lt;/li>
+<span class='line'> 59</span>      */</span><span class="WHIT">
+<span class='line'> 60</span>     </span><span class="NAME">initialize</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">url</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">options</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 61</span>         </span><span class="NAME">this.url</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">url</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 62</span> 
+<span class='line'> 63</span>         </span><span class="NAME">this.options</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 64</span>             </span><span class="NAME">method</span><span class="PUNC">:</span><span class="WHIT">         </span><span class="STRN">'post'</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 65</span>             </span><span class="NAME">content</span><span class="PUNC">:</span><span class="WHIT">        </span><span class="STRN">''</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 66</span>             </span><span class="NAME">onSuccess</span><span class="PUNC">:</span><span class="WHIT">      </span><span class="NAME">Prototype.emptyFunction</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 67</span>             </span><span class="NAME">onFailure</span><span class="PUNC">:</span><span class="WHIT">      </span><span class="NAME">Prototype.emptyFunction</span><span class="WHIT">
+<span class='line'> 68</span>         </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 69</span>         </span><span class="NAME">Object.extend</span><span class="PUNC">(</span><span class="NAME">this.options</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">options</span><span class="WHIT"> </span><span class="PUNC">||</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT"> </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 70</span> 
+<span class='line'> 71</span>         </span><span class="NAME">this.options.method</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this.options.method.toLowerCase</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 72</span> 
+<span class='line'> 73</span>         </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">Object.isString</span><span class="PUNC">(</span><span class="NAME">this.options.parameters</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="WHIT">
+<span class='line'> 74</span>             </span><span class="NAME">this.options.parameters</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this.options.parameters.toQueryParams</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 75</span>         </span><span class="KEYW">else</span><span class="WHIT"> </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">Object.isHash</span><span class="PUNC">(</span><span class="NAME">this.options.parameters</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="WHIT">
+<span class='line'> 76</span>             </span><span class="NAME">this.options.parameters</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this.options.parameters.toObject</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 77</span>         </span><span class="NAME">this.setRequestHeaders</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 78</span>         </span><span class="NAME">this.call</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 79</span>     </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 80</span> 
+<span class='line'> 81</span>     </span><span class="COMM">/**
+<span class='line'> 82</span>      * Sets the default headers.
+<span class='line'> 83</span>      * This method can be overriden and augmented by the implementations.
+<span class='line'> 84</span>      *  - Accept defaults to 'text/javascript, text/html, application/xml, text/xml, *\/*'
+<span class='line'> 85</span>      *  - Content-type is built based on the contentType and encoding options.
+<span class='line'> 86</span>      * @private
+<span class='line'> 87</span>      */</span><span class="WHIT">
+<span class='line'> 88</span>     </span><span class="NAME">setRequestHeaders</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 89</span>         </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">headers</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 90</span>             </span><span class="STRN">'Accept'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">'text/javascript, text/html, application/xml, text/xml, application/json, */*'</span><span class="WHIT">
+<span class='line'> 91</span>         </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 92</span> 
+<span class='line'> 93</span>         </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">this.options.method</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="STRN">'post'</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 94</span>             </span><span class="NAME">headers</span><span class="PUNC">[</span><span class="STRN">'Content-type'</span><span class="PUNC">]</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this.options.contentType</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT">
+<span class='line'> 95</span>                 </span><span class="PUNC">(</span><span class="NAME">this.options.encoding</span><span class="WHIT"> </span><span class="PUNC">?</span><span class="WHIT"> </span><span class="STRN">'; charset='</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">this.options.encoding</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">''</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 96</span>         </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'> 97</span> 
+<span class='line'> 98</span>         </span><span class="NAME">Object.extend</span><span class="PUNC">(</span><span class="NAME">headers</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">this.options.requestHeaders</span><span class="WHIT"> </span><span class="PUNC">||</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT"> </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 99</span>         </span><span class="NAME">this.options.requestHeaders</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">headers</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>100</span>     </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>101</span> 
+<span class='line'>102</span>     </span><span class="COMM">/**
+<span class='line'>103</span>      * Make a general-purpose request to a remote server.
+<span class='line'>104</span>      * @private
+<span class='line'>105</span>      */</span><span class="WHIT">
+<span class='line'>106</span>     </span><span class="NAME">call</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>107</span>         </span><span class="KEYW">throw</span><span class="WHIT"> </span><span class="STRN">'Abstract Method invocation. '</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT">
+<span class='line'>108</span>               </span><span class="STRN">'FastAPI.Request :: request'</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>109</span>     </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>110</span> </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'>111</span> 
-<span class='line'>112</span> </span><span class="NAME">FastBaseAPI.Utils</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">Class.create</span><span class="PUNC">(</span><span class="COMM">/** @lends FastAPI.Utils.prototype */</span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>113</span>     </span><span class="COMM">/**
-<span class='line'>114</span>      * Utils class
-<span class='line'>115</span>      * @constructs
-<span class='line'>116</span>      */</span><span class="WHIT">
-<span class='line'>117</span>     </span><span class="NAME">initialize</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>118</span>     </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>112</span> </span><span class="COMM">/**
+<span class='line'>113</span>  * It represents the Utils namespace
+<span class='line'>114</span>  * @namespace
+<span class='line'>115</span>  */</span><span class="WHIT">
+<span class='line'>116</span> </span><span class="NAME">FastAPI.Utils</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>117</span> 
+<span class='line'>118</span> </span><span class="NAME">FastBaseAPI.Utils</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
 <span class='line'>119</span> 
-<span class='line'>120</span>     </span><span class="COMM">/**
-<span class='line'>121</span>      * Returns a JSON string.
-<span class='line'>122</span>      * @param obj
-<span class='line'>123</span>      *      represents the name of the variable
-<span class='line'>124</span>      * @type Object
-<span class='line'>125</span>      */</span><span class="WHIT">
-<span class='line'>126</span>     </span><span class="NAME">toJSONString</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">obj</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>127</span>         </span><span class="KEYW">throw</span><span class="WHIT"> </span><span class="STRN">'Abstract Method invocation. '</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT">
-<span class='line'>128</span>               </span><span class="STRN">'FastAPI.Utils :: toJSONString'</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>129</span>     </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>130</span> 
-<span class='line'>131</span>     </span><span class="COMM">/**
-<span class='line'>132</span>      * Returns a JSON object.
-<span class='line'>133</span>      * @param string
-<span class='line'>134</span>      *      represents the name of the variable
-<span class='line'>135</span>      * @type String
-<span class='line'>136</span>      *
-<span class='line'>137</span>      */</span><span class="WHIT">
-<span class='line'>138</span>     </span><span class="NAME">toJSONObject</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">string</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>139</span>         </span><span class="KEYW">throw</span><span class="WHIT"> </span><span class="STRN">'Abstract Method invocation. '</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT">
-<span class='line'>140</span>               </span><span class="STRN">'FastAPI.Utils :: toJSONObject'</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>141</span>     </span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>142</span> </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>143</span> 
-<span class='line'>144</span> </span><span class="NAME">FastBaseAPI.Properties</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">Class.create</span><span class="PUNC">(</span><span class="COMM">/** @lends FastAPI.Properties.prototype */</span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>145</span>     </span><span class="COMM">/**
-<span class='line'>146</span>      * This class is intended to access to context variables
-<span class='line'>147</span>      * of the mashup platform
-<span class='line'>148</span>      * @constructs
-<span class='line'>149</span>      */</span><span class="WHIT">
-<span class='line'>150</span>     </span><span class="NAME">initialize</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>151</span>     </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>120</span>     </span><span class="NAME">JSON</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">Class.create</span><span class="PUNC">(</span><span class="COMM">/** @lends FastAPI.Utils.JSON.prototype */</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>121</span>         </span><span class="COMM">/**
+<span class='line'>122</span>          * This class provides tools to deal with the JSON format
+<span class='line'>123</span>          * @constructs
+<span class='line'>124</span>          */</span><span class="WHIT">
+<span class='line'>125</span>         </span><span class="NAME">initialize</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>126</span>         </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>127</span>         </span><span class="COMM">/**
+<span class='line'>128</span>          * Returns a JSON string.
+<span class='line'>129</span>          * @param {Object} obj
+<span class='line'>130</span>          *      represents the name of the variable
+<span class='line'>131</span>          * @type String
+<span class='line'>132</span>          */</span><span class="WHIT">
+<span class='line'>133</span>         </span><span class="NAME">toString</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">obj</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>134</span>             </span><span class="KEYW">throw</span><span class="WHIT"> </span><span class="STRN">'Abstract Method invocation. '</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT">
+<span class='line'>135</span>                   </span><span class="STRN">'FastAPI.Utils :: toString'</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>136</span>         </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>137</span> 
+<span class='line'>138</span>         </span><span class="COMM">/**
+<span class='line'>139</span>          * Returns an Object.
+<span class='line'>140</span>          * @param {String} string
+<span class='line'>141</span>          *      represents the name of the variable
+<span class='line'>142</span>          * @type Object
+<span class='line'>143</span>          *
+<span class='line'>144</span>          */</span><span class="WHIT">
+<span class='line'>145</span>         </span><span class="NAME">toObject</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">string</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>146</span>             </span><span class="KEYW">throw</span><span class="WHIT"> </span><span class="STRN">'Abstract Method invocation. '</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT">
+<span class='line'>147</span>                   </span><span class="STRN">'FastAPI.Utils :: toObject'</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>148</span>         </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>149</span>     </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="WHIT">
+<span class='line'>150</span> 
+<span class='line'>151</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'>152</span> 
-<span class='line'>153</span>     </span><span class="COMM">/**
-<span class='line'>154</span>      * Returns the context variable value.
-<span class='line'>155</span>      * @param obj
-<span class='line'>156</span>      *      represents the name of the variable
-<span class='line'>157</span>      * @type Object
-<span class='line'>158</span>      */</span><span class="WHIT">
-<span class='line'>159</span>     </span><span class="NAME">get</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">variable</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>160</span>         </span><span class="KEYW">throw</span><span class="WHIT"> </span><span class="STRN">'Abstract Method invocation. '</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT">
-<span class='line'>161</span>               </span><span class="STRN">'FastAPI.Properties :: get'</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>162</span>     </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>163</span> 
-<span class='line'>164</span>     </span><span class="COMM">/**
-<span class='line'>165</span>      * Sets the value of a context variable.
-<span class='line'>166</span>      * @param string
-<span class='line'>167</span>      *      represents the name of the variable
-<span class='line'>168</span>      * @param value
-<span class='line'>169</span>      *      represents value of the variable
-<span class='line'>170</span>      * @type String
-<span class='line'>171</span>      *
-<span class='line'>172</span>      */</span><span class="WHIT">
-<span class='line'>173</span>     </span><span class="NAME">set</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">variable</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">value</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>174</span>         </span><span class="KEYW">throw</span><span class="WHIT"> </span><span class="STRN">'Abstract Method invocation. '</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT">
-<span class='line'>175</span>             </span><span class="STRN">'FastAPI.Properties :: set'</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>176</span>     </span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>177</span> </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>178</span> 
-<span class='line'>179</span> </span><span class="NAME">FastBaseAPI.Properties.LOGIN</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">'login'</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>180</span> </span><span class="NAME">FastBaseAPI.Properties.LANGUAGE</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">'language'</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>181</span> </span><span class="NAME">FastBaseAPI.Properties.ORIENTATION</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">'orientation'</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>182</span> </span><span class="NAME">FastBaseAPI.Properties.GADGET_HEIGHT</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">'height'</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>183</span> </span><span class="NAME">FastBaseAPI.Properties.GADGET_WIDTH</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">'width'</span><span class="WHIT">
-<span class='line'>184</span> </span><span class="NAME">FastBaseAPI.Properties.GADGET_X_POSITION</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">'xposition'</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>185</span> </span><span class="NAME">FastBaseAPI.Properties.GADGET_Y_POSITION</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">'yposition'</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>186</span> 
-<span class='line'>187</span> </span><span class="NAME">FastBaseAPI.Persistence</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">Class.create</span><span class="PUNC">(</span><span class="COMM">/** @lends FastAPI.Persistence.prototype */</span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>188</span>     </span><span class="COMM">/**
-<span class='line'>189</span>      * This class access to the persistent properties of the mashup platform
-<span class='line'>190</span>      * @constructs
-<span class='line'>191</span>      */</span><span class="WHIT">
-<span class='line'>192</span>     </span><span class="NAME">initialize</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>193</span>     </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>194</span> 
-<span class='line'>195</span>     </span><span class="COMM">/**
-<span class='line'>196</span>      * Returns the persistent data.
-<span class='line'>197</span>      * @param obj
-<span class='line'>198</span>      *      represents the name of the variable
-<span class='line'>199</span>      * @type Object
-<span class='line'>200</span>      */</span><span class="WHIT">
-<span class='line'>201</span>     </span><span class="NAME">get</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">func</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>202</span>         </span><span class="KEYW">throw</span><span class="WHIT"> </span><span class="STRN">'Abstract Method invocation. '</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT">
-<span class='line'>203</span>               </span><span class="STRN">'FastAPI.Persistence :: get'</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>204</span>     </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>205</span> 
-<span class='line'>206</span>     </span><span class="COMM">/**
-<span class='line'>207</span>      * Saves the data in persistent way.
-<span class='line'>208</span>      * @param value
-<span class='line'>209</span>      *      represents value of the variable
-<span class='line'>210</span>      * @type String
-<span class='line'>211</span>      *
-<span class='line'>212</span>      */</span><span class="WHIT">
-<span class='line'>213</span>     </span><span class="NAME">set</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">value</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>214</span>         </span><span class="KEYW">throw</span><span class="WHIT"> </span><span class="STRN">'Abstract Method invocation. '</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT">
-<span class='line'>215</span>             </span><span class="STRN">'FastAPI.Persistence :: set'</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>216</span>     </span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>217</span> </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>218</span> </span></pre></body></html>
+<span class='line'>153</span> </span><span class="NAME">FastBaseAPI.Properties</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">Class.create</span><span class="PUNC">(</span><span class="COMM">/** @lends FastAPI.Properties.prototype */</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>154</span>     </span><span class="COMM">/**
+<span class='line'>155</span>      * This class is intended to access to context variables
+<span class='line'>156</span>      * of the mashup platform.
+<span class='line'>157</span>      * The properties that are available on request are:
+<span class='line'>158</span>      * &lt;li>FastBaseAPI.Properties.LOGIN or 'login'&lt;/li>
+<span class='line'>159</span>      * &lt;li>FastBaseAPI.Properties.LANGUAGE or 'language'&lt;/li>
+<span class='line'>160</span>      * &lt;li>FastBaseAPI.Properties.ORIENTATION or 'orientation'&lt;/li>
+<span class='line'>161</span>      * &lt;li>FastBaseAPI.Properties.GADGET_HEIGHT or 'height'&lt;/li>
+<span class='line'>162</span>      * &lt;li>FastBaseAPI.Properties.GADGET_WIDTH or 'width'&lt;/li>
+<span class='line'>163</span>      * &lt;li>FastBaseAPI.Properties.GADGET_X_POSITION or 'xposition'&lt;/li>
+<span class='line'>164</span>      * &lt;li>FastBaseAPI.Properties.GADGET_Y_POSITION or 'yposition'&lt;/li>
+<span class='line'>165</span>      * @constructs
+<span class='line'>166</span>      */</span><span class="WHIT">
+<span class='line'>167</span>     </span><span class="NAME">initialize</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>168</span>     </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>169</span> 
+<span class='line'>170</span>     </span><span class="COMM">/**
+<span class='line'>171</span>      * Returns the context variable value.
+<span class='line'>172</span>      * @param {String} variable
+<span class='line'>173</span>      *      represents the name of the variable
+<span class='line'>174</span>      */</span><span class="WHIT">
+<span class='line'>175</span>     </span><span class="NAME">get</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">variable</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>176</span>         </span><span class="KEYW">throw</span><span class="WHIT"> </span><span class="STRN">'Abstract Method invocation. '</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT">
+<span class='line'>177</span>               </span><span class="STRN">'FastAPI.Properties :: get'</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>178</span>     </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>179</span> 
+<span class='line'>180</span>     </span><span class="COMM">/**
+<span class='line'>181</span>      * Sets the value of a context variable.
+<span class='line'>182</span>      * @param {String} variable
+<span class='line'>183</span>      *      represents the name of the variable
+<span class='line'>184</span>      * @param {String} value
+<span class='line'>185</span>      *      represents value of the variable
+<span class='line'>186</span>      *
+<span class='line'>187</span>      */</span><span class="WHIT">
+<span class='line'>188</span>     </span><span class="NAME">set</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">variable</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">value</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>189</span>         </span><span class="KEYW">throw</span><span class="WHIT"> </span><span class="STRN">'Abstract Method invocation. '</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT">
+<span class='line'>190</span>             </span><span class="STRN">'FastAPI.Properties :: set'</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>191</span>     </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>192</span> </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>193</span> 
+<span class='line'>194</span> </span><span class="NAME">FastBaseAPI.Properties.LOGIN</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">'login'</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>195</span> </span><span class="NAME">FastBaseAPI.Properties.LANGUAGE</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">'language'</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>196</span> </span><span class="NAME">FastBaseAPI.Properties.ORIENTATION</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">'orientation'</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>197</span> </span><span class="NAME">FastBaseAPI.Properties.GADGET_HEIGHT</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">'height'</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>198</span> </span><span class="NAME">FastBaseAPI.Properties.GADGET_WIDTH</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">'width'</span><span class="WHIT">
+<span class='line'>199</span> </span><span class="NAME">FastBaseAPI.Properties.GADGET_X_POSITION</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">'xposition'</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>200</span> </span><span class="NAME">FastBaseAPI.Properties.GADGET_Y_POSITION</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">'yposition'</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>201</span> 
+<span class='line'>202</span> </span><span class="NAME">FastBaseAPI.Persistence</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">Class.create</span><span class="PUNC">(</span><span class="COMM">/** @lends FastAPI.Persistence.prototype */</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>203</span>     </span><span class="COMM">/**
+<span class='line'>204</span>      * This class access to the persistent properties of the mashup platform
+<span class='line'>205</span>      * @constructs
+<span class='line'>206</span>      */</span><span class="WHIT">
+<span class='line'>207</span>     </span><span class="NAME">initialize</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>208</span>     </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>209</span> 
+<span class='line'>210</span>     </span><span class="COMM">/**
+<span class='line'>211</span>      * Asynchronous method: gets the persistent data.
+<span class='line'>212</span>      * @param {function} func
+<span class='line'>213</span>      *      callback handler
+<span class='line'>214</span>      */</span><span class="WHIT">
+<span class='line'>215</span>     </span><span class="NAME">get</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">func</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>216</span>         </span><span class="KEYW">throw</span><span class="WHIT"> </span><span class="STRN">'Abstract Method invocation. '</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT">
+<span class='line'>217</span>               </span><span class="STRN">'FastAPI.Persistence :: get'</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>218</span>     </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>219</span> 
+<span class='line'>220</span>     </span><span class="COMM">/**
+<span class='line'>221</span>      * Asynchronous method: saves the data in persistent way.
+<span class='line'>222</span>      * @param {String} value
+<span class='line'>223</span>      *      represents value of the variable
+<span class='line'>224</span>      * @param {function} [func]
+<span class='line'>225</span>      *      callback handler
+<span class='line'>226</span>      */</span><span class="WHIT">
+<span class='line'>227</span>     </span><span class="NAME">set</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">value</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">func</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>228</span>         </span><span class="KEYW">throw</span><span class="WHIT"> </span><span class="STRN">'Abstract Method invocation. '</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT">
+<span class='line'>229</span>             </span><span class="STRN">'FastAPI.Persistence :: set'</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>230</span>     </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>231</span> </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>232</span> 
+<span class='line'>233</span> 
+<span class='line'>234</span> </span><span class="COMM">/**
+<span class='line'>235</span>  * This set of methods are intended to access to the social data available in the platform
+<span class='line'>236</span>  * @namespace
+<span class='line'>237</span>  */</span><span class="WHIT">
+<span class='line'>238</span> </span><span class="NAME">FastAPI.Social</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>239</span> </span><span class="NAME">FastBaseAPI.Social</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>240</span> 
+<span class='line'>241</span>     </span><span class="NAME">Login</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">Class.create</span><span class="PUNC">(</span><span class="COMM">/** @lends FastAPI.Social.Login.prototype */</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>242</span>        </span><span class="COMM">/**
+<span class='line'>243</span>          * This class allows authenticating users
+<span class='line'>244</span>          * @constructs
+<span class='line'>245</span>          */</span><span class="WHIT">
+<span class='line'>246</span>         </span><span class="NAME">initialize</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>247</span>         </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>248</span> 
+<span class='line'>249</span>         </span><span class="COMM">/**
+<span class='line'>250</span>          * Authenticates the user.
+<span class='line'>251</span>          * @param {Options} credentials
+<span class='line'>252</span>          *      represents the credentials needed for the authentication
+<span class='line'>253</span>          */</span><span class="WHIT">
+<span class='line'>254</span>         </span><span class="NAME">authenticate</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">credentials</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>255</span>             </span><span class="KEYW">throw</span><span class="WHIT"> </span><span class="STRN">'Abstract Method invocation. '</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT">
+<span class='line'>256</span>             </span><span class="STRN">'FastAPI.Social.Login :: authenticate'</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>257</span>         </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>258</span>     </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>259</span> 
+<span class='line'>260</span>     </span><span class="NAME">User</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">Class.create</span><span class="PUNC">(</span><span class="COMM">/** @lends FastAPI.Social.User.prototype */</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>261</span>         </span><span class="COMM">/**
+<span class='line'>262</span>          * This class allows managing the user's profile properties.
+<span class='line'>263</span>          * The properties that are available on request are:
+<span class='line'>264</span>          * &lt;li>FastBaseAPI.Social.User.USER_NAME or 'USER_NAME'&lt;/li>
+<span class='line'>265</span>          * &lt;li>FastBaseAPI.Social.User.FIRST_NAME or 'FIRST_NAME'&lt;/li>
+<span class='line'>266</span>          * &lt;li>FastBaseAPI.Social.User.LAST_NAME or 'LAST_NAME'&lt;/li>
+<span class='line'>267</span>          * &lt;li>FastBaseAPI.Social.User.DOB or 'DOB'&lt;/li>
+<span class='line'>268</span>          * &lt;li>FastBaseAPI.Social.User.USER_EMAIL or 'EMAIL'&lt;/li>
+<span class='line'>269</span>          * &lt;li>FastBaseAPI.Social.User.CURRENT_LOCATION or 'CURRENT_LOCATION'&lt;/li>
+<span class='line'>270</span>          * &lt;li>FastBaseAPI.Social.User.STATUS or 'STATUS'&lt;/li>
+<span class='line'>271</span>          * &lt;li>FastBaseAPI.Social.User.THUMBNAIL or 'THUMBNAIL'&lt;/li>
+<span class='line'>272</span>          * @constructs
+<span class='line'>273</span>          */</span><span class="WHIT">
+<span class='line'>274</span>         </span><span class="NAME">initialize</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>275</span>         </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>276</span> 
+<span class='line'>277</span>         </span><span class="COMM">/**
+<span class='line'>278</span>          * Returns the value of a specific user property.
+<span class='line'>279</span>          * @param {String} property
+<span class='line'>280</span>          *      represents the name of the property
+<span class='line'>281</span>          * @param {function} func
+<span class='line'>282</span>          *         callback handler
+<span class='line'>283</span>          */</span><span class="WHIT">
+<span class='line'>284</span>         </span><span class="NAME">get</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">property</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">func</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>285</span>             </span><span class="KEYW">throw</span><span class="WHIT"> </span><span class="STRN">'Abstract Method invocation. '</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT">
+<span class='line'>286</span>             </span><span class="STRN">'FastAPI.Social.User :: get'</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>287</span>         </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>288</span> 
+<span class='line'>289</span>         </span><span class="COMM">/**
+<span class='line'>290</span>          * Sets the value of a user property.
+<span class='line'>291</span>          * @param {String} property
+<span class='line'>292</span>          *      represents the name of the property
+<span class='line'>293</span>          * @param {String} value
+<span class='line'>294</span>          *      represents value of the property
+<span class='line'>295</span>          *
+<span class='line'>296</span>          */</span><span class="WHIT">
+<span class='line'>297</span>         </span><span class="NAME">set</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">property</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">value</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>298</span>             </span><span class="KEYW">throw</span><span class="WHIT"> </span><span class="STRN">'Abstract Method invocation. '</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT">
+<span class='line'>299</span>                 </span><span class="STRN">'FastAPI.Social.User :: set'</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>300</span>         </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>301</span> 
+<span class='line'>302</span>         </span><span class="COMM">/**
+<span class='line'>303</span>          * Sets the user's status.
+<span class='line'>304</span>          * @param status
+<span class='line'>305</span>          *      represents the status of the user
+<span class='line'>306</span>          */</span><span class="WHIT">
+<span class='line'>307</span>         </span><span class="NAME">postStatus</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">status</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>308</span>             </span><span class="KEYW">throw</span><span class="WHIT"> </span><span class="STRN">'Abstract Method invocation. '</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT">
+<span class='line'>309</span>                 </span><span class="STRN">'FastAPI.Social.User :: postStatus'</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>310</span>         </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>311</span>     </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>312</span> 
+<span class='line'>313</span>     </span><span class="NAME">Friends</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">Class.create</span><span class="PUNC">(</span><span class="COMM">/** @lends FastAPI.Social.Friends.prototype */</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>314</span>         </span><span class="COMM">/**
+<span class='line'>315</span>          * This class offers the methods to deal with the user's friends
+<span class='line'>316</span>          * @constructs
+<span class='line'>317</span>          */</span><span class="WHIT">
+<span class='line'>318</span>         </span><span class="NAME">initialize</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>319</span>         </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>320</span> 
+<span class='line'>321</span>         </span><span class="COMM">/**
+<span class='line'>322</span>          * Creates an array with the user's friends and applies the handler passed as parameter to it.
+<span class='line'>323</span>          * The returned information about each friend contains:
+<span class='line'>324</span>          * &lt;ul>
+<span class='line'>325</span>          * &lt;li>id&lt;/li>
+<span class='line'>326</span>          * &lt;li>FastBaseAPI.Social.User.USER_NAME or 'USER_NAME'&lt;/li>
+<span class='line'>327</span>          * &lt;li>FastBaseAPI.Social.User.FIRST_NAME or 'FIRST_NAME'&lt;/li>
+<span class='line'>328</span>          * &lt;li>FastBaseAPI.Social.User.LAST_NAME or 'LAST_NAME'&lt;/li>
+<span class='line'>329</span>          * &lt;li>FastBaseAPI.Social.User.THUMBNAIL or 'THUMBNAIL'&lt;/li>
+<span class='line'>330</span>          *  &lt;/ul>
+<span class='line'>331</span>          * @param {function} func
+<span class='line'>332</span>          *      callback handler
+<span class='line'>333</span>          */</span><span class="WHIT">
+<span class='line'>334</span> 
+<span class='line'>335</span>         </span><span class="NAME">getFriends</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">func</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>336</span>             </span><span class="KEYW">throw</span><span class="WHIT"> </span><span class="STRN">'Abstract Method invocation. '</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT">
+<span class='line'>337</span>             </span><span class="STRN">'FastAPI.Social.Friends :: getFriends'</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>338</span>         </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>339</span> 
+<span class='line'>340</span>         </span><span class="COMM">/**
+<span class='line'>341</span>          * Not specified yed
+<span class='line'>342</span>          */</span><span class="WHIT">
+<span class='line'>343</span>         </span><span class="NAME">tellAFriend</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>344</span>             </span><span class="KEYW">throw</span><span class="WHIT"> </span><span class="STRN">'Abstract Method invocation. '</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT">
+<span class='line'>345</span>             </span><span class="STRN">'FastAPI.Social.Friends :: tellAFriend'</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>346</span>         </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>347</span> 
+<span class='line'>348</span>     </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="WHIT">
+<span class='line'>349</span> 
+<span class='line'>350</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>351</span> 
+<span class='line'>352</span> </span><span class="NAME">FastBaseAPI.Social.User.USER_NAME</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">'USER_NAME'</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>353</span> </span><span class="NAME">FastBaseAPI.Social.User.FIRST_NAME</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">'FIRST_NAME'</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>354</span> </span><span class="NAME">FastBaseAPI.Social.User.LAST_NAME</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">'LAST_NAME'</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>355</span> </span><span class="NAME">FastBaseAPI.Social.User.DOB</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">'DOB'</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>356</span> </span><span class="NAME">FastBaseAPI.Social.User.USER_EMAIL</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">'EMAIL'</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>357</span> </span><span class="NAME">FastBaseAPI.Social.User.CURRENT_LOCATION</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">'CURRENT_LOCATION'</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>358</span> </span><span class="NAME">FastBaseAPI.Social.User.STATUS</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">'STATUS'</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>359</span> </span><span class="NAME">FastBaseAPI.Social.User.THUMBNAIL</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">'THUMBNAIL'</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>360</span> </span></pre></body></html>
