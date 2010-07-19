@@ -16,6 +16,27 @@ var ScreenflowPlayer = Class.create( /** @lends ScreenflowPlayer.prototype */ {
          * @private @member
          */
         this._dialog = null;
+
+        /**
+         * Is the logging (debugging) enabled?
+         * @private
+         * @type Boolean
+         */
+        this._logEnabled = false;
+
+        /**
+         * DOM node of the player
+         * @private
+         * @type DOMNode
+         */
+        this._object = null;
+
+        /**
+         * DOM node of the open in new window link
+         * @private
+         * @type DOMNode
+         */
+        this._linkNode = null;
     },
 
 
@@ -50,20 +71,60 @@ var ScreenflowPlayer = Class.create( /** @lends ScreenflowPlayer.prototype */ {
         var node = new Element('div', {
             'class': 'player'
         });
+
         var errorField = new Element('div', {
             'class': 'error'
         });
         node.appendChild(errorField);
 
-        var obj = new Element ('object', {
-            'data': URIs.storePlayScreenflow + "?screenflow=" + this._description.getId(),
+        this._object = new Element ('object', {
+            'data': this._getScreenflowURL(),
             'class': 'embed'
         });
 
-        node.appendChild(obj);
+        node.appendChild(this._object);
+
+        var bottomZone = new Element('div');
+        this._linkNode = new Element("a", {
+            "href": this._getScreenflowURL(),
+            "target": "_blank"
+        }).update("[Open in new window]");
+        bottomZone.appendChild(this._linkNode);
+        bottomZone.appendChild(new Element("br"));
+
+        var loggingCheckBox = new dijit.form.CheckBox({
+            checked: this._logEnabled
+        });
+        bottomZone.appendChild(loggingCheckBox.domNode);
+        loggingCheckBox.domNode.observe("change",
+                this._toggleLogging.bind(this));
+
+        var label = new Element('span').update("Logging enabled (through Firebug)");
+        bottomZone.appendChild(label);
+
+        node.appendChild(bottomZone);
         return node;
+    },
+    /**
+     * Toggle the logging
+     * @private
+     */
+    _toggleLogging: function(/** Event*/ e) {
+        var checkbox = Event.element(e);
+        this._logEnabled = !this._logEnabled;
+        checkbox.checked = this._logEnabled;
+        this._object.contentDocument.location.href = this._getScreenflowURL();
+        this._linkNode.href = this._getScreenflowURL();
+    },
+
+    /**
+     * Gets the screenflow URL
+     * @type String
+     * @private
+     */
+    _getScreenflowURL: function() {
+        return URIs.storePlayScreenflow + "?screenflow=" +
+            this._description.getId() + "&debugging=" + this._logEnabled;
     }
-
 });
-
 // vim:ts=4:sw=4:et:

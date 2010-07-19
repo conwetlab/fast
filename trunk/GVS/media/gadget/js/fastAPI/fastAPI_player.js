@@ -30,6 +30,9 @@ FastAPI.Request = Class.create(FastBaseAPI.Request,{
 
     initialize: function($super, url, options) {
         $super(url, options);
+        if (_debugger) {
+            _debugger.request(this.url, this.options);
+        }
     },
 
     call: function() {
@@ -57,12 +60,13 @@ FastAPI.Request = Class.create(FastBaseAPI.Request,{
 
         // This function handles a success in the asynchronous call
         function onSuccess(transport) {
+            var response;
             switch(params.content){
                 case 'xml':
-                    (_onSuccess || Prototype.emptyFunction)(transport.responseXML);
+                    response = transport.responseXML;
                     break;
                 case 'text':
-                    (_onSuccess || Prototype.emptyFunction)(transport.responseText);
+                    response = transport.responseText;
                     break;
                 case 'json':
                     var json = transport.responseJSON;
@@ -70,11 +74,15 @@ FastAPI.Request = Class.create(FastBaseAPI.Request,{
                         var jsonLib = new FastAPI.Utils.JSON();
                         json = jsonLib.toObject(transport.responseText);
                     }
-                    (_onSuccess || Prototype.emptyFunction)(json);
+                    response = json;
                     break;
                 default:
-                    (_onSuccess || Prototype.emptyFunction)(transport);
+                    response = transport;
                     break;
+            }
+            (_onSuccess || Prototype.emptyFunction)(response);
+            if (_debugger) {
+                _debugger.onRequestSuccess(response, params.content);
             }
         }
     }

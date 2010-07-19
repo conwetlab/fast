@@ -1,5 +1,8 @@
 <script type="text/javascript" language="javascript">
     var menu = null;
+
+    var _debugger = null;
+
     var screens = [
 {% for screen in gadgetScreens %}
             {
@@ -35,7 +38,24 @@
         ];
 
     function loadMenu(){
+        var debugging = (getURLparam("debugging") == "true") ? true : false;
+        if (debugging) {
+            _debugger = new Debugger();
+        }
         menu = new FASTMenu({renderTo: "menu"});
         ScreenflowEngineFactory.getInstance().setEngine(screens, events, menu, {% if gadgetPersistent %}true{% else %}false{% endif %});
+        ScreenflowEngineFactory.getInstance().run();
+    }
+    function getURLparam(name) {
+        name = name.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
+        var regexS = "[\\?&]"+name+"=([^&#]*)";
+        var regex = new RegExp(regexS);
+        var results = regex.exec(window.location.href);
+        if (results == null) {
+            return null;
+        }
+        else {
+            return results[1];
+        }
     }
 </script>

@@ -115,6 +115,9 @@ var ScreenflowEngineFactory = function () {
             if(fact){
                 this.facts.set(fact.uri, fact);
                 this.throwEvents(fact);
+                if (_debugger) {
+                    _debugger.addFact(fact);
+                }
             }
         },
 
@@ -218,6 +221,9 @@ var ScreenflowEngineFactory = function () {
                 this.showedTabs.set(screen.id, tab);
                 this.allTabs.set(screen.id, tab);
                 this.menu.setEventListener(tab, "activate", this.loaders.get(screen.id));
+                if (_debugger) {
+                    _debugger.addScreen(screen);
+                }
             }
             this.menu.unhideTab(tab);
         },
