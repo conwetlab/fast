@@ -622,6 +622,40 @@ public class TripleStore {
         return cleanName;
     }
     
+    public URI getUniqueNamespace(
+        URI preffix,
+        String name,
+        boolean nullifexists) {
+        String cleanName = name == null ? "" : name;
+        
+        long millis = System.currentTimeMillis();
+        URI uri = new URIImpl(preffix + cleanName + millis);
+        try {
+            boolean ok = false;
+            while (!ok) {
+                ok = true;
+                ok = ok && !createdURIs.contains(uri);
+                ok = ok
+                    && !persistentModelSet.containsStatements(
+                    	uri,
+                    	Variable.ANY,
+                        Variable.ANY,
+                        Variable.ANY);
+                if (!ok) {
+                    if (nullifexists)
+                        return null;
+                    uri = new URIImpl(preffix + cleanName + millis);
+                    millis++;
+                }
+            }
+            createdURIs.add(uri);
+            
+        } catch (ModelRuntimeException e) {
+        	logger.error("Programming error: "+e);
+        }
+        return uri;
+    }
+    
     /**
      * Set the domain and range for the property. When an inverse propery exists,
      * will also change domain/range for that.

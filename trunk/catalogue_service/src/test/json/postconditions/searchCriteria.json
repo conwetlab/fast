@@ -1,0 +1,11 @@
+{
+"conditions": [
+	{
+		"label": {"en-gb": "Search Criteria"}, 
+		"pattern": "?x http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#SearchCriteria",
+		"positive": true, 
+		"uri": "http://aws.amazon.com/AWSECommerceService#SearchCriteria"
+	}], 
+	"id": 1279199558332, 
+	"name": "Search Criteria"
+}

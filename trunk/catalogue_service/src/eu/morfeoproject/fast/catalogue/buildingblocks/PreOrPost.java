@@ -36,7 +36,7 @@ public abstract class PreOrPost extends BuildingBlock {
 	}
 	
 	public Model toRDF2GoModel() {
-		//TODO super.toRDF2GoModel() para incluir metadata basica de cualquier BB
+		super.toRDF2GoModel();
 		Model model = RDF2Go.getModelFactory().createModel();
 		model.open();
 		model.setNamespace("dc", DC.NS_DC.toString());

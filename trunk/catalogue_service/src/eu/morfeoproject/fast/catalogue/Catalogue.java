@@ -102,7 +102,7 @@ public class Catalogue {
 			// creates a new triple store
 			tripleStore = new TripleStore(dir, indexes);
 	    	tripleStore.open();
-//	    	tripleStore.clear();
+	    	tripleStore.clear();
 	
 	    	// check if the catalogue is correct
 			if (!check()) {
@@ -151,7 +151,7 @@ public class Catalogue {
 	}
 
     /**
-     * Restore the catalogue
+     * Restores the catalogue
      * Should only be done when {@link #check()} returns true.
      * @throws Exception if something goes wrong.
      */
@@ -176,6 +176,13 @@ public class Catalogue {
                 logger.error("Cannot read ontology '"+ont.getUri()+"': "+e, e);
 			}
         }
+    }
+    
+    public void clear() {
+    	// clear the repository
+    	tripleStore.clear();
+    	// restores default ontologies
+    	restore();
     }
     
     public boolean check() {
@@ -748,6 +755,16 @@ public class Catalogue {
     	return clazz;
 	}
     
+	private URI saveModelToGraph(Model model) {
+		URI graphUri = tripleStore.getUniqueNamespace(serverURL, "/graphs/", false);
+		return saveModelToGraph(graphUri, model);
+	}
+	
+	private URI saveModelToGraph(URI graphUri, Model model) {
+		tripleStore.addModel(model, graphUri);
+		return graphUri;
+	}
+
     public void setLabel(URI clazz, String lang, String label) {
 		tripleStore.addStatement(clazz, RDFS.label, tripleStore.createLanguageTagLiteral(label, lang));
     }
@@ -790,7 +807,7 @@ public class Catalogue {
     	return tripleStore.isClass(concept);
     }
     
-	public URI getURIforBuildingBlock(URI namespace, String bb, URI ofClass, String id)
+	public URI createURIforBuildingBlock(URI namespace, String bb, URI ofClass, String id)
     throws DuplicatedBuildingBlockException, OntologyInvalidException {
     	URI bbUri = new URIImpl(namespace.toString()+"/"+bb+"/"+id);
     	if (containsBuildingBlock(bbUri))
@@ -798,25 +815,34 @@ public class Catalogue {
     	return bbUri;
     }
     
-    private URI getURIforBuildingBlock(URI ofClass, String id) throws DuplicatedBuildingBlockException, OntologyInvalidException {
+    private URI createURIforBuildingBlock(URI ofClass, String id) throws DuplicatedBuildingBlockException, OntologyInvalidException {
 		if (ofClass.equals(FGO.ScreenFlow)) {
-			return getURIforBuildingBlock(serverURL, "screenflows", ofClass, id);
+			return createURIforBuildingBlock(serverURL, "screenflows", ofClass, id);
 		} else if (ofClass.equals(FGO.Screen)) {
-			return getURIforBuildingBlock(serverURL, "screens", ofClass, id);
+			return createURIforBuildingBlock(serverURL, "screens", ofClass, id);
 		} else if (ofClass.equals(FGO.Form)) {
-			return getURIforBuildingBlock(serverURL, "forms", ofClass, id);
+			return createURIforBuildingBlock(serverURL, "forms", ofClass, id);
 		} else if (ofClass.equals(FGO.Operator)) {
-			return getURIforBuildingBlock(serverURL, "operators", ofClass, id);
+			return createURIforBuildingBlock(serverURL, "operators", ofClass, id);
 		} else if (ofClass.equals(FGO.BackendService)) {
-			return getURIforBuildingBlock(serverURL, "services", ofClass, id);
+			return createURIforBuildingBlock(serverURL, "services", ofClass, id);
 		} else if (ofClass.equals(FGO.Precondition)) {
-			return getURIforBuildingBlock(serverURL, "preconditions", ofClass, id);
+			return createURIforBuildingBlock(serverURL, "preconditions", ofClass, id);
 		} else if (ofClass.equals(FGO.Postcondition)) {
-			return getURIforBuildingBlock(serverURL, "postconditions", ofClass, id);
+			return createURIforBuildingBlock(serverURL, "postconditions", ofClass, id);
 		}
 		return null;
 	}
 	
+    private Model getModelForBuildingBlock(URI uri) {
+		ClosableIterator<Statement> it = tripleStore.findStatements(uri, new URIImpl("http://replace.for.real.one"), Variable.ANY);
+		URI graphUri = null;
+		if (it.hasNext())
+			graphUri = it.next().getObject().asURI();
+		it.close();
+		return tripleStore.getModel(graphUri);
+    }
+    
 	/**
 	 * Removes the graph containing the building block
 	 * @param rUri
@@ -837,7 +863,7 @@ public class Catalogue {
 			if (containsBuildingBlock(sf))
 				throw new DuplicatedBuildingBlockException(sf.getUri()+" already exists.");
 		} else {
-			sfUri = getURIforBuildingBlock(FGO.ScreenFlow, sf.getId());
+			sfUri = createURIforBuildingBlock(FGO.ScreenFlow, sf.getId());
 			sf.setUri(sfUri);
 		}
 		// sets current date if no date given
@@ -853,8 +879,9 @@ public class Catalogue {
 		URI sfUri = sf.getUri();
 		try {
 			Model model = sf.toRDF2GoModel();
-			tripleStore.addModel(model, sfUri);
-			generateConditionsStatements(model, sfUri);
+			URI graphUri = saveModelToGraph(model);
+			tripleStore.addStatement(graphUri, sfUri, new URIImpl("http://replace.for.real.one"), graphUri);
+			generateConditionsStatements(model, graphUri);
 			model.close();
 			return true;
 		} catch (Exception e) {
@@ -902,7 +929,7 @@ public class Catalogue {
 			if (containsBuildingBlock(screen))
 				throw new DuplicatedBuildingBlockException(screenUri+" already exists.");
 		} else {
-			screenUri = getURIforBuildingBlock(FGO.Screen, screen.getId());
+			screenUri = createURIforBuildingBlock(FGO.Screen, screen.getId());
 			screen.setUri(screenUri);
 		}
 		// sets current date if no date given
@@ -924,8 +951,9 @@ public class Catalogue {
 		URI sUri = screen.getUri();
 		try {
 			Model model = screen.toRDF2GoModel();
-			tripleStore.addModel(model, sUri);
-			generateConditionsStatements(model, sUri);
+			URI graphUri = saveModelToGraph(model);
+			tripleStore.addStatement(graphUri, sUri, new URIImpl("http://replace.for.real.one"), graphUri);
+			generateConditionsStatements(model, graphUri);
 			model.close();
 			return true;
 		} catch (Exception e) {
@@ -969,9 +997,9 @@ public class Catalogue {
 				throw new DuplicatedBuildingBlockException(seUri+" already exists.");
 		} else {
 			if (se instanceof Precondition)
-				seUri = getURIforBuildingBlock(FGO.Precondition, se.getId());
+				seUri = createURIforBuildingBlock(FGO.Precondition, se.getId());
 			else if (se instanceof Postcondition)
-				seUri = getURIforBuildingBlock(FGO.Postcondition, se.getId());
+				seUri = createURIforBuildingBlock(FGO.Postcondition, se.getId());
 			se.setUri(seUri);
 		}
 		// sets current date if no date given
@@ -986,8 +1014,9 @@ public class Catalogue {
 		URI uri = preOrPost.getUri();
 		try {
 			Model model = preOrPost.toRDF2GoModel();
-			tripleStore.addModel(model, uri);
-			generateConditionsStatements(model, uri);
+			URI graphUri = saveModelToGraph(model);
+			tripleStore.addStatement(graphUri, uri, new URIImpl("http://replace.for.real.one"), graphUri);
+			generateConditionsStatements(model, graphUri);
 			model.close();
 			return true;
 		} catch (Exception e) {
@@ -1027,7 +1056,7 @@ public class Catalogue {
 			if (containsBuildingBlock(sc))
 				throw new DuplicatedBuildingBlockException(scUri+" already exists.");
 		} else {
-			scUri = getURIforBuildingBlock(type, sc.getId());
+			scUri = createURIforBuildingBlock(type, sc.getId());
 			sc.setUri(scUri);
 		}
 		// sets current date if no date given
@@ -1042,8 +1071,9 @@ public class Catalogue {
 		URI scUri = sc.getUri();
 		try {
 			Model model = sc.toRDF2GoModel();
-			tripleStore.addModel(model, scUri);
-			generateConditionsStatements(model, scUri);
+			URI graphUri = saveModelToGraph(model);
+			tripleStore.addStatement(graphUri, scUri, new URIImpl("http://replace.for.real.one"), graphUri);
+			generateConditionsStatements(model, graphUri);
 			model.close();
 			return true;
 		} catch (Exception e) {
@@ -1264,67 +1294,23 @@ public class Catalogue {
     }
     
 	public ScreenFlow getScreenFlow(URI uri) {
-		return BuildingBlockRDF2GoBuilder.buildScreenFlow(tripleStore.getModel(uri));
+		return BuildingBlockRDF2GoBuilder.buildScreenFlow(getModelForBuildingBlock(uri));
 	}
 	
 	public Screen getScreen(URI uri) {
-		return BuildingBlockRDF2GoBuilder.buildScreen(tripleStore.getModel(uri));
+		return BuildingBlockRDF2GoBuilder.buildScreen(getModelForBuildingBlock(uri));
 	}
 
 	public Precondition getPrecondition(URI uri) {
-		Precondition pre = FastModelFactory.createPrecondition();
-		pre = (Precondition) getPreOrPost(uri, pre);
-		return pre;
+		return (Precondition) getPreOrPost(uri);
 	}
 
 	public Postcondition getPostcondition(URI uri) {
-		Postcondition post = FastModelFactory.createPostcondition();
-		post = (Postcondition) getPreOrPost(uri, post);
-		return post;
+		return (Postcondition) getPreOrPost(uri);
 	}
 
-	public PreOrPost getPreOrPost(URI uri) {
-		if (isType(uri, FGO.Precondition))
-			return getPrecondition(uri);
-		else if (isType(uri, FGO.Postcondition))
-			return getPostcondition(uri);
-		else
-			return null;
-	}
-	
-	private PreOrPost getPreOrPost(URI uri, PreOrPost se) {
-		// find all the info related to a pre/postcondition
-		ClosableIterator<Statement> it = tripleStore.findStatements(uri, Variable.ANY, Variable.ANY);
-		if (!it.hasNext()) // the pre/postcondition does not exist
-			return null;
-		se.setUri(uri);
-//		String sUri = uri.toString();
-//		se.setId(sUri.substring(sUri.lastIndexOf("/") + 1));
-//		for ( ; it.hasNext(); ) {
-//			Statement st = it.next();
-//			URI predicate = st.getPredicate();
-//			Node object = st.getObject();
-//			if (predicate.equals(FGO.hasCondition)) {
-//				ArrayList<Condition> conList = new ArrayList<Condition>();
-//				int i = 1;
-//				boolean stop = false;
-//				while (!stop) {
-//					ClosableIterator<Statement> conBag = tripleStore.findStatements(object.asBlankNode(), RDF.li(i++), Variable.ANY);
-//					if (!conBag.hasNext()) {
-//						stop = true;
-//					} else {
-//						while (conBag.hasNext())
-//							conList.add(getCondition(conBag.next().getObject().asBlankNode()));
-//					}
-//					conBag.close();
-//				}
-//				se.getConditions().addAll(conList);
-//			} else if (predicate.equals(FGO.hasName)) {
-//				se.setName(object.asDatatypeLiteral().getValue());
-//			}
-//		}
-//		it.close();
-		return se;
+	private PreOrPost getPreOrPost(URI uri) {
+		return BuildingBlockRDF2GoBuilder.buildPreOrPost(getModelForBuildingBlock(uri), uri);
 	}
 	
 	public ScreenComponent getScreenComponent(URI uri) {
@@ -1340,25 +1326,25 @@ public class Catalogue {
 	}
 	
 	public Form getForm(URI uri) {
-		return BuildingBlockRDF2GoBuilder.buildForm(tripleStore.getModel(uri));
+		return BuildingBlockRDF2GoBuilder.buildForm(getModelForBuildingBlock(uri));
 	}
 	
 	public Operator getOperator(URI uri) {
-		return BuildingBlockRDF2GoBuilder.buildOperator(tripleStore.getModel(uri));
+		return BuildingBlockRDF2GoBuilder.buildOperator(getModelForBuildingBlock(uri));
 	}
 
 	public BackendService getBackendService(URI uri) {
-		return BuildingBlockRDF2GoBuilder.buildBackendService(tripleStore.getModel(uri));
+		return BuildingBlockRDF2GoBuilder.buildBackendService(getModelForBuildingBlock(uri));
 	}
 
-	private void generateConditionsStatements(Model model, URI contextUri) {
+	private void generateConditionsStatements(Model model, URI graphUri) {
 		ClosableIterator<Statement> it = model.iterator();
 		for (; it.hasNext(); ) {
 			Statement stmt = it.next();
 			if (stmt.getPredicate().equals(FGO.hasPatternString) && isConditionPositive(model, stmt.getSubject().asBlankNode())) {
 				URI pUri = tripleStore.getCleanUniqueURI(serverURL, "/patterns/", false);
 				String pattern = stmt.getObject().asDatatypeLiteral().getValue();
-				tripleStore.addStatement(contextUri, stmt.getSubject(), FGO.hasPattern, pUri);
+				tripleStore.addStatement(graphUri, stmt.getSubject(), FGO.hasPattern, pUri);
 				tripleStore.addModel(patternToRDF2GoModel(pattern), pUri);
 			}
 		}
@@ -1474,7 +1460,8 @@ public class Catalogue {
 		URI cUri = concept.getUri();
 		try {
 			Model model = concept.toRDF2GoModel();
-			tripleStore.addModel(model, cUri);
+			URI graphUri = saveModelToGraph(model);
+			tripleStore.addStatement(cUri, new URIImpl("http://replace.for.real.one"), graphUri);
 			model.close();
 			return true;
 		} catch (Exception e) {

@@ -15,7 +15,7 @@ public class Postcondition extends PreOrPost {
 	@Override
 	public Model toRDF2GoModel() {
 		Model model = super.toRDF2GoModel();
-		model.addStatement(getUri(), RDF.type, FGO.Precondition);
+		model.addStatement(getUri(), RDF.type, FGO.Postcondition);
 		return model;
 	}
 	

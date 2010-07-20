@@ -14,6 +14,7 @@ import org.ontoware.rdf2go.model.node.URI;
 import org.ontoware.rdf2go.model.node.Variable;
 import org.ontoware.rdf2go.vocabulary.RDF;
 import org.ontoware.rdf2go.vocabulary.RDFS;
+import org.ontoware.rdf2go.vocabulary.XSD;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -26,6 +27,7 @@ import eu.morfeoproject.fast.catalogue.buildingblocks.Form;
 import eu.morfeoproject.fast.catalogue.buildingblocks.Library;
 import eu.morfeoproject.fast.catalogue.buildingblocks.Operator;
 import eu.morfeoproject.fast.catalogue.buildingblocks.Pipe;
+import eu.morfeoproject.fast.catalogue.buildingblocks.PreOrPost;
 import eu.morfeoproject.fast.catalogue.buildingblocks.Screen;
 import eu.morfeoproject.fast.catalogue.buildingblocks.ScreenComponent;
 import eu.morfeoproject.fast.catalogue.buildingblocks.ScreenDefinition;
@@ -62,6 +64,21 @@ public class BuildingBlockRDF2GoBuilder {
 		return screen;
 	}
 
+	public static PreOrPost buildPreOrPost(Model model, URI uri) {
+		PreOrPost pp = null;
+		try {
+			ClosableIterator<Statement> it = model.findStatements(uri, RDF.type, Variable.ANY);
+			URI type = null;
+			if (it.hasNext())
+				type = it.next().getObject().asURI();
+			it.close();
+			pp = (PreOrPost) retrievePreOrPost(type, model);
+		} catch (InvalidBuildingBlockTypeException e) {
+			logger.error("Only pre/postcondition type are valid: "+e, e);
+		}
+		return pp;
+	}
+
 	public static Form buildForm(Model model) {
 		Form form = null;
 		try {
@@ -95,12 +112,16 @@ public class BuildingBlockRDF2GoBuilder {
 	private static BuildingBlock retrieveBuildingBlock(URI type, Model model) throws InvalidBuildingBlockTypeException {
 		// create the resource of the given type
 		BuildingBlock bb = FastModelFactory.createBuildingBlock(type);
-		
+		// extract the URI for the building block
+		ClosableIterator<Statement> it = model.findStatements(Variable.ANY, RDF.type, type);
+		URI bbUri = null;
+		if (it.hasNext()) bbUri = it.next().getSubject().asURI(); it.close();
+		if (bbUri == null) return null;
 		// fill the information about the resource
-		bb.setUri(model.getContextURI());
-		String sUri = model.getContextURI().toString();
-		bb.setId(sUri.substring(sUri.lastIndexOf("/") + 1));
-		ClosableIterator<Statement> cIt = model.findStatements(model.getContextURI(), Variable.ANY, Variable.ANY);
+		bb.setUri(bbUri);
+		String strUri = model.getContextURI().toString();
+		bb.setId(strUri.substring(strUri.lastIndexOf("/") + 1));
+		ClosableIterator<Statement> cIt = model.findStatements(bbUri, Variable.ANY, Variable.ANY);
 		if (!cIt.hasNext()) // the resource does not exist
 			return null;
 		for ( ; cIt.hasNext(); ) {
@@ -259,7 +280,7 @@ public class BuildingBlockRDF2GoBuilder {
 	}
 	
 	private static WithConditions retrieveWithConditions(URI type, Model model) throws InvalidBuildingBlockTypeException {
-		if (!type.equals(FGO.Screen))
+		if (!type.equals(FGO.ScreenFlow) && !type.equals(FGO.Screen))
 			throw new InvalidBuildingBlockTypeException("Only ScreenFlow and Screen types are allowed.");
 		
 		// create the resource of the given type
@@ -311,6 +332,40 @@ public class BuildingBlockRDF2GoBuilder {
 		}
 		
 		return withConditions;
+	}
+	
+	private static PreOrPost retrievePreOrPost(URI type, Model model) throws InvalidBuildingBlockTypeException {
+		if (!type.equals(FGO.Precondition) && !type.equals(FGO.Postcondition))
+			throw new InvalidBuildingBlockTypeException(type+" is not a valid screen component type.");
+		
+		
+		PreOrPost pp = (PreOrPost) retrieveBuildingBlock(type, model);
+		if (pp != null) {
+			// find all the info related to a pre/postcondition
+			ClosableIterator<Statement> cIt = model.findStatements(pp.getUri(), Variable.ANY, Variable.ANY);
+			for ( ; cIt.hasNext(); ) {
+				Statement st = cIt.next();
+				URI predicate = st.getPredicate();
+				Node object = st.getObject();
+				if (predicate.equals(FGO.hasCondition)) {
+					ArrayList<Condition> conList = new ArrayList<Condition>();
+					int i = 1;
+					boolean stop = false;
+					while (!stop) {
+						ClosableIterator<Statement> conBag = model.findStatements(object.asBlankNode(), RDF.li(i++), Variable.ANY);
+						if (!conBag.hasNext()) {
+							stop = true;
+						} else {
+							while (conBag.hasNext())
+								conList.add(retrieveCondition(conBag.next().getObject().asBlankNode(), model));
+						}
+						conBag.close();
+					}
+					pp.getConditions().addAll(conList);
+				}
+			}
+		}
+		return pp;
 	}
 	
 	private static ScreenComponent retrieveScreenComponent(URI type, Model model) throws InvalidBuildingBlockTypeException {
