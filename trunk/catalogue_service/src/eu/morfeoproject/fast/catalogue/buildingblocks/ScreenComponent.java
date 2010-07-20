@@ -92,6 +92,7 @@ public abstract class ScreenComponent extends BuildingBlock {
 				model.addStatement(aNode, FGO.hasPreCondition, c);
 				model.addStatement(c, FGO.hasPatternString, model.createDatatypeLiteral(con.getPatternString(), XSD._string));
 				model.addStatement(c, FGO.isPositive, model.createDatatypeLiteral(new Boolean(con.isPositive()).toString(), XSD._boolean));
+				model.addStatement(c, FGO.hasId, model.createDatatypeLiteral(con.getId(), XSD._string));
 				for (String key : con.getLabels().keySet())
 					model.addStatement(c, RDFS.label, model.createLanguageTagLiteral(con.getLabels().get(key), key));
 			}
@@ -124,6 +125,7 @@ public abstract class ScreenComponent extends BuildingBlock {
 				model.addStatement(bag, RDF.li(i++), c);
 				model.addStatement(c, FGO.hasPatternString, model.createDatatypeLiteral(con.getPatternString(), XSD._string));
 				model.addStatement(c, FGO.isPositive, model.createDatatypeLiteral(new Boolean(con.isPositive()).toString(), XSD._boolean));
+				model.addStatement(c, FGO.hasId, model.createDatatypeLiteral(con.getId(), XSD._string));
 				for (String key : con.getLabels().keySet())
 					model.addStatement(c, RDFS.label, model.createLanguageTagLiteral(con.getLabels().get(key), key));
 			}

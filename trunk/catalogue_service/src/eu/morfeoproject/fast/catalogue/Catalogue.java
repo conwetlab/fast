@@ -676,8 +676,8 @@ public class Catalogue {
 	    	ClosableIterator<Statement> it = m2.iterator();
 	    	for (; it.hasNext(); ) {
 	    		Statement st = it.next();
-				String su = (st.getSubject() instanceof BlankNode) ? st.getSubject().toString() : st.getSubject().toSPARQL();
-				String ob = (st.getObject() instanceof BlankNode) ? st.getObject().toString() : st.getObject().toSPARQL();
+				String su = (st.getSubject() instanceof BlankNode) ? toCleanVariable(st.getSubject().toString()) : st.getSubject().toSPARQL();
+				String ob = (st.getObject() instanceof BlankNode) ? toCleanVariable(st.getObject().toString()) : st.getObject().toSPARQL();
 				queryStr = queryStr.concat(su+" "+st.getPredicate().toSPARQL()+" "+ob+" . ");
 	    	}
 	    	it.close();

@@ -190,6 +190,7 @@ public class BuildingBlockJSONBuilder {
 		bb.setScreenshot(new URIImpl(jsonResource.getString("screenshot")));
 		bb.setHomepage(new URIImpl(jsonResource.getString("homepage")));
 		bb.setId(jsonResource.getString("id"));
+		bb.setName(jsonResource.getString("name"));
 		bb.getTags().addAll((parseTags(jsonResource.getJSONArray("tags"))));
 		if (jsonResource.has("parameterTemplate"))
 			bb.setParameterTemplate(jsonResource.getString("parameterTemplate"));
@@ -278,6 +279,7 @@ public class BuildingBlockJSONBuilder {
 	
 	private static Precondition parsePrecondition(Precondition pre, JSONObject jsonPre) throws JSONException, IOException {
 		pre.setId(jsonPre.getString("id"));
+		pre.setName(jsonPre.getString("name"));
 		// conditions
 		JSONArray conditionsArray = jsonPre.getJSONArray("conditions");
 		pre.setConditions(buildConditions(conditionsArray));
@@ -286,6 +288,7 @@ public class BuildingBlockJSONBuilder {
 	
 	private static Postcondition parsePostcondition(Postcondition post, JSONObject jsonPost) throws JSONException, IOException {
 		post.setId(jsonPost.getString("id"));
+		post.setName(jsonPost.getString("name"));
 		// conditions
 		JSONArray conditionsArray = jsonPost.getJSONArray("conditions");
 		post.setConditions(buildConditions(conditionsArray));
