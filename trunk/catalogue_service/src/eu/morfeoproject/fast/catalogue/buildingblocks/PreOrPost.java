@@ -51,7 +51,7 @@ public abstract class PreOrPost extends BuildingBlock {
 			model.addStatement(bag, RDF.li(i++), c);
 			model.addStatement(c, FGO.hasPatternString, model.createDatatypeLiteral(con.getPatternString(), XSD._string));
 			model.addStatement(c, FGO.isPositive, model.createDatatypeLiteral(new Boolean(con.isPositive()).toString(), XSD._boolean));
-			model.addStatement(c, FGO.hasId, model.createDatatypeLiteral(con.getId(), XSD._string));
+//			model.addStatement(c, FGO.hasId, model.createDatatypeLiteral(con.getId(), XSD._string)); TODO: is it needed here for pre/postconditions??
 			for (String key : con.getLabels().keySet())
 				model.addStatement(c, RDFS.label, model.createLanguageTagLiteral(con.getLabels().get(key), key));
 		}
