@@ -15,6 +15,7 @@ import org.ontoware.rdf2go.model.node.impl.URIImpl;
 
 import eu.morfeoproject.fast.catalogue.BuildingBlockJSONBuilder;
 import eu.morfeoproject.fast.catalogue.Catalogue;
+import eu.morfeoproject.fast.catalogue.buildingblocks.BackendService;
 import eu.morfeoproject.fast.catalogue.buildingblocks.Condition;
 import eu.morfeoproject.fast.catalogue.buildingblocks.Form;
 import eu.morfeoproject.fast.catalogue.buildingblocks.Operator;
@@ -48,7 +49,7 @@ public class CatalogueTest extends TestCase {
 	
 	public void createForm() throws Exception {
 		JSONObject json = new JSONObject(Util.getFileContentAsString("test/json/forms/amazonList.json"));
-		URI fUri = new URIImpl("http://test.catalogue/forms/"+json.getString("id"));
+		URI fUri = new URIImpl("http://localhost:9000/FASTCatalogue/forms/"+json.getString("id"));
 		Form f1 = BuildingBlockJSONBuilder.buildForm(json, fUri);
 		catalogue.addForm(f1);
 		Form f2 = catalogue.getForm(fUri);
@@ -59,7 +60,7 @@ public class CatalogueTest extends TestCase {
 
 	public void createOperator() throws Exception {
 		JSONObject json = new JSONObject(Util.getFileContentAsString("test/json/operators/amazonEbayFilter.json"));
-		URI opUri = new URIImpl("http://test.catalogue/operators/"+json.getString("id"));
+		URI opUri = new URIImpl("http://localhost:9000/FASTCatalogue/operators/"+json.getString("id"));
 		Operator op1 = BuildingBlockJSONBuilder.buildOperator(json, opUri);
 		catalogue.addOperator(op1);
 		Operator op2 = catalogue.getOperator(opUri);
@@ -68,26 +69,41 @@ public class CatalogueTest extends TestCase {
 		Assert.assertEquals(op1.getPostconditions().size(), op2.getPostconditions().size());
 	}
 
+	public void createBackendService() throws Exception {
+		JSONObject json = new JSONObject(Util.getFileContentAsString("test/json/backendservices/amazonSearchService.json"));
+		URI bsUri = new URIImpl("http://localhost:9000/FASTCatalogue/services/"+json.getString("id"));
+		BackendService bs1 = BuildingBlockJSONBuilder.buildBackendService(json, bsUri);
+		catalogue.addBackendService(bs1);
+		BackendService bs2 = catalogue.getBackendService(bsUri);
+		Assert.assertTrue(bs1.equals(bs2));
+		Assert.assertEquals(bs1.getActions().size(), bs2.getActions().size());
+		Assert.assertEquals(bs1.getPostconditions().size(), bs2.getPostconditions().size());
+	}
+
 	public void createPostcondition() throws Exception {
 		JSONObject json = new JSONObject(Util.getFileContentAsString("test/json/postconditions/searchCriteria.json"));
-		URI pUri = new URIImpl("http://test.catalogue/postconditions/"+json.getString("id"));
+		URI pUri = new URIImpl("http://localhost:9000/FASTCatalogue/postconditions/"+json.getString("id"));
 		Postcondition p1 = BuildingBlockJSONBuilder.buildPostcondition(json, pUri);
 		catalogue.addPreOrPost(p1);
 		Postcondition p2 = catalogue.getPostcondition(pUri);
 		Assert.assertTrue(p1.equals(p2));
-		p2.toRDF2GoModel().dump();
 		Assert.assertEquals(p1.getConditions().size(), p2.getConditions().size());
 	}
 	
 	public void findAndCheck1() throws Exception {
-		JSONObject json = new JSONObject(Util.getFileContentAsString("test/json/forms/amazonList.json"));
-		URI fUri = new URIImpl("http://test.catalogue/forms/"+json.getString("id"));
-		Form form = BuildingBlockJSONBuilder.buildForm(json, fUri);
+		JSONObject json = null;
+		json = new JSONObject(Util.getFileContentAsString("test/json/forms/amazonList.json"));
+		Form form = BuildingBlockJSONBuilder.buildForm(json, new URIImpl("http://localhost:9000/FASTCatalogue/forms/"+json.getString("id")));
+		json = new JSONObject(Util.getFileContentAsString("test/json/backendservices/amazonSearchService.json"));
+		BackendService service = BuildingBlockJSONBuilder.buildBackendService(json, new URIImpl("http://localhost:9000/FASTCatalogue/services/"+json.getString("id")));
+		catalogue.addForm(form);
+		catalogue.addBackendService(service);
 		ArrayList<Condition> conList = new ArrayList<Condition>();
 		HashSet<ScreenComponent> all = new HashSet<ScreenComponent>();
 		all.add(form);
-		Set<URI> formResults = catalogue.findScreenComponents(null, conList, all, 0, -1, new HashSet<String>(), FGO.Form);
-		Assert.assertTrue(formResults.size() == 0);
+		Set<URI> results = catalogue.findScreenComponents(null, conList, all, 0, -1, new HashSet<String>(), FGO.BackendService);
+		Assert.assertEquals(1, results.size());
+		Assert.assertEquals(service.getUri(), results.toArray()[0]);
 	}
 	
 	public static Test suite(){
@@ -95,6 +111,7 @@ public class CatalogueTest extends TestCase {
 	    suite.addTest(new CatalogueTest("check"));
 	    suite.addTest(new CatalogueTest("createForm"));
 	    suite.addTest(new CatalogueTest("createOperator"));
+	    suite.addTest(new CatalogueTest("createBackendService"));
 	    suite.addTest(new CatalogueTest("createPostcondition"));
 	    suite.addTest(new CatalogueTest("findAndCheck1"));
 		return suite;
