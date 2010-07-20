@@ -93,10 +93,10 @@ public class CatalogueTest extends TestCase {
 	public static Test suite(){
 	    TestSuite suite = new TestSuite();
 	    suite.addTest(new CatalogueTest("check"));
-//	    suite.addTest(new CatalogueTest("createForm"));
-//	    suite.addTest(new CatalogueTest("createOperator"));
+	    suite.addTest(new CatalogueTest("createForm"));
+	    suite.addTest(new CatalogueTest("createOperator"));
 	    suite.addTest(new CatalogueTest("createPostcondition"));
-//	    suite.addTest(new CatalogueTest("findAndCheck1"));
+	    suite.addTest(new CatalogueTest("findAndCheck1"));
 		return suite;
 	}
 	
