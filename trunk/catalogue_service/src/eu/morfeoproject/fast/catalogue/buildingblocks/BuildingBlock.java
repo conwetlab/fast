@@ -41,7 +41,6 @@ public abstract class BuildingBlock {
     private URI homepage;
     private List<CTag> tags;
     private String id;
-    private String name;
     private String parameterTemplate;
     
     protected BuildingBlock() {
@@ -150,14 +149,6 @@ public abstract class BuildingBlock {
 		this.id = id;
 	}
 
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
 	public String getParameterTemplate() {
 		return parameterTemplate;
 	}
@@ -251,10 +242,6 @@ public abstract class BuildingBlock {
 			json.put("id", JSONObject.NULL);
 		else
 			json.put("id", getId());
-		if (getName() == null)
-			json.put("name", JSONObject.NULL);
-		else
-			json.put("name", getName());
 		if (getParameterTemplate() == null)
 			json.put("parameterTemplate", JSONObject.NULL);
 		else
@@ -323,8 +310,6 @@ public abstract class BuildingBlock {
 			if (tag.getTaggingDate() != null)
 				model.addStatement(bnTag, CTAG.taggingDate, model.createDatatypeLiteral(tag.getTaggingDate().toString(), XSD._date));
 		}
-		if (this.getName() != null)
-			model.addStatement(bbUri, FGO.hasName, model.createDatatypeLiteral(this.getName(), XSD._string));
 		if (this.getParameterTemplate() != null)
 			model.addStatement(bbUri, FGO.hasParameterTemplate, model.createDatatypeLiteral(this.getParameterTemplate(), XSD._string));
 		

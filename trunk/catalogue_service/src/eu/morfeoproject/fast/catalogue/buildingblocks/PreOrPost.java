@@ -69,10 +69,6 @@ public abstract class PreOrPost extends BuildingBlock {
 			json.put("id", JSONObject.NULL);
 		else
 			json.put("id", getId());
-		if (getName() == null)
-			json.put("name", JSONObject.NULL);
-		else
-			json.put("name", getName());
 		JSONArray conditions = new JSONArray();
 		for (Condition con : getConditions())
 			conditions.put(con.toJSON());

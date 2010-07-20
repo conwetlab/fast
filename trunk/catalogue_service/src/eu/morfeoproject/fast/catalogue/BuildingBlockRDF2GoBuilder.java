@@ -179,8 +179,6 @@ public class BuildingBlockRDF2GoBuilder {
 				bb.getTags().add(tag);
 			} else if (predicate.equals(FOAF.homepage)) {
 				bb.setHomepage(object.asURI());
-			} else if (predicate.equals(FGO.hasName)) {
-				bb.setName(object.asDatatypeLiteral().getValue());
 			} else if (predicate.equals(FGO.hasParameterTemplate)) {
 				bb.setParameterTemplate(object.asDatatypeLiteral().getValue());
 			}

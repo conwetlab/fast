@@ -337,14 +337,6 @@ public interface FGO {
     public static final URI mbox_sha1sum = new URIImpl("http://xmlns.com/foaf/0.1/mbox_sha1sum", false);
 
     /**
-     * Label: has name@en 
-     * Comment: The name the user gives to the resource.@en 
-     * Comment: http://purl.oclc.org/fast/ontology/gadget#Resource 
-     * Range: http://www.w3.org/2001/XMLSchema#string 
-     */
-    public static final URI hasName = new URIImpl("http://purl.oclc.org/fast/ontology/gadget#hasName", false);
-
-    /**
      */
     public static final URI modified = new URIImpl("http://purl.org/dc/terms/modified", false);
 
