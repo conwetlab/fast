@@ -88,7 +88,7 @@ var ScreenflowPlayer = Class.create( /** @lends ScreenflowPlayer.prototype */ {
         this._linkNode = new Element("a", {
             "href": this._getScreenflowURL(),
             "target": "_blank"
-        }).update("[Open in new window]");
+        }).update("[Debug in new window]");
         bottomZone.appendChild(this._linkNode);
         bottomZone.appendChild(new Element("br"));
 
