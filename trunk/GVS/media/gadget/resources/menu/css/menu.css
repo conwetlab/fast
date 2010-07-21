@@ -82,3 +82,36 @@ display:none;
 .tabcontentShow{
 display:inline;
 }
+
+/* Debugger */
+.logger {
+    height: 25%;
+    overflow: auto;
+    background-color: #EEE;
+    border: 1px solid #AAA;
+    padding: 2px 5px;
+    margin: 2px;
+    position: absolute;
+    bottom: 0px;
+    right: 0px;
+    left: 0px;
+    font-size: 80%;
+    font-family: Tahoma, Arial, Helvetica, sans-serif;
+}
+
+.group {
+    margin-left: 15px;
+    border: 1px solid #CCC;
+    padding: 5px;
+}
+
+.groupButton {
+    float: left;
+    margin-right: 3px;
+    width: 12px;
+    cursor: pointer;
+}
+.groupTitle {
+    font-weight: bold;
+    margin-bottom: 3px;
+}

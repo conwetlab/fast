@@ -99,7 +99,8 @@ var ScreenflowPlayer = Class.create( /** @lends ScreenflowPlayer.prototype */ {
         loggingCheckBox.domNode.observe("change",
                 this._toggleLogging.bind(this));
 
-        var label = new Element('span').update("Logging enabled (through Firebug)");
+        var label = new Element('span')
+                        .update("Logging enabled (better if you have Firebug)");
         bottomZone.appendChild(label);
 
         node.appendChild(bottomZone);
