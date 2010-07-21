@@ -5,9 +5,23 @@ var Debugger = Class.create(/** @lends Debugger.prototype */ {
      */
     initialize: function() {
 
+        /**
+         * Node of the Debugger area, in case Firebug is not
+         * installed
+         * @type DOMNode
+         * @private
+         */
         this._debuggerNode = new Element("div", {
             "id": "debugger"
         });
+
+        /**
+         * Number of logging groups opened
+         * @private
+         * @type Number
+         */
+        this._indentLevel = 0;
+
         this._initConsole();
     },
 
@@ -29,7 +43,15 @@ var Debugger = Class.create(/** @lends Debugger.prototype */ {
      * Init an AJAX call
      */
     request: function(url, options) {
+        // Ensure the log is in the top
+        for (var i=0; i < this._indentLevel; i++) {
+            this._groupEnd();
+            this._indentLevel--;
+        }
+
+        this._indentLevel++;
         this._logger.groupCollapsed("Remote request");
+
         this._logger.dir({
             "method": options.method,
             "url": url
@@ -41,6 +63,8 @@ var Debugger = Class.create(/** @lends Debugger.prototype */ {
      */
     onRequestSuccess: function(data, type) {
         this._logger.dir({"Response" : data});
+
+        this._indentLevel++;
         this._logger.groupCollapsed("Details");
         if (type == "xml") {
             this._logger.dirxml(data);
@@ -48,7 +72,9 @@ var Debugger = Class.create(/** @lends Debugger.prototype */ {
             this._logger.dir(data);
         }
         // Two groups must be closed
+        this._indentLevel--;
         this._logger.groupEnd();
+        this._indentLevel--;
         this._logger.groupEnd();
     },
 
