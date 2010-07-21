@@ -142,6 +142,9 @@ var ScreenflowEngineFactory = function () {
 
         deleteFact: function (uri){
             if(uri){
+                if (_debugger) {
+                    _debugger.removeFact(this.facts.get(uri));
+                }
                 this.facts.unset(uri);
             }
         },

@@ -33,6 +33,13 @@ var Debugger = Class.create(/** @lends Debugger.prototype */ {
     },
 
     /**
+     * Removes a fact from the fact base
+     */
+    removeFact: function(fact) {
+        this._showObject(fact, "Fact removed: %s", fact.uri);
+    },
+
+    /**
      * Adds a screen into the screenflow
      */
     addScreen: function(screen) {
