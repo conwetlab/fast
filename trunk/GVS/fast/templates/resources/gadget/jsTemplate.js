@@ -38,9 +38,10 @@
         ];
 
     function loadMenu(){
-        var debugging = (getURLparam("debugging") == "true") ? true : false;
+        var debugLevel = getURLparam("debugLevel");
+        var debugging = ["logging", "debug"].indexOf(debugLevel) != -1;
         if (debugging) {
-            _debugger = new Debugger();
+            _debugger = new Debugger(debugLevel);
         }
         menu = new FASTMenu({renderTo: "menu"});
         ScreenflowEngineFactory.getInstance().setEngine(screens, events, menu, {% if gadgetPersistent %}true{% else %}false{% endif %});

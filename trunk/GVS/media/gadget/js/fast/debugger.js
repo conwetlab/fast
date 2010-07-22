@@ -3,7 +3,15 @@ var Debugger = Class.create(/** @lends Debugger.prototype */ {
      * Class that handles all the debugging process
      * @constructs
      */
-    initialize: function() {
+    initialize: function(debugLevel) {
+
+        /**
+         * Debug level in logging|debug (debug is more complete than logging)
+         * @private
+         * @type String
+         */
+        this._debugLevel = debugLevel;
+
 
         /**
          * Node of the Debugger area, in case Firebug is not

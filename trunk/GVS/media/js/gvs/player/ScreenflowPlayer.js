@@ -31,12 +31,6 @@ var ScreenflowPlayer = Class.create( /** @lends ScreenflowPlayer.prototype */ {
          */
         this._object = null;
 
-        /**
-         * DOM node of the open in new window link
-         * @private
-         * @type DOMNode
-         */
-        this._linkNode = null;
     },
 
 
@@ -85,11 +79,11 @@ var ScreenflowPlayer = Class.create( /** @lends ScreenflowPlayer.prototype */ {
         node.appendChild(this._object);
 
         var bottomZone = new Element('div');
-        this._linkNode = new Element("a", {
-            "href": this._getScreenflowURL(),
+        var linkNode = new Element("a", {
+            "href": this._getScreenflowURL("debug"),
             "target": "_blank"
         }).update("[Debug in new window]");
-        bottomZone.appendChild(this._linkNode);
+        bottomZone.appendChild(linkNode);
         bottomZone.appendChild(new Element("br"));
 
         var loggingCheckBox = new dijit.form.CheckBox({
@@ -115,7 +109,6 @@ var ScreenflowPlayer = Class.create( /** @lends ScreenflowPlayer.prototype */ {
         this._logEnabled = !this._logEnabled;
         checkbox.checked = this._logEnabled;
         this._object.contentDocument.location.href = this._getScreenflowURL();
-        this._linkNode.href = this._getScreenflowURL();
     },
 
     /**
@@ -123,9 +116,10 @@ var ScreenflowPlayer = Class.create( /** @lends ScreenflowPlayer.prototype */ {
      * @type String
      * @private
      */
-    _getScreenflowURL: function() {
+    _getScreenflowURL: function(_debugLevel) {
+        var debugLevel = _debugLevel || (this._logEnabled  ? "logging" : "");
         return URIs.storePlayScreenflow + "?screenflow=" +
-            this._description.getId() + "&debugging=" + this._logEnabled;
+            this._description.getId() + "&debugLevel=" + debugLevel;
     }
 });
 // vim:ts=4:sw=4:et:
