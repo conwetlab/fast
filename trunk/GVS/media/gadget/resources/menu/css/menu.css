@@ -83,7 +83,22 @@ display:none;
 display:inline;
 }
 
+
 /* Debugger */
+
+#menu {
+    overflow: auto;
+    height: 100%;
+}
+
+.logging.no-firebug #menu, .debug #menu {
+    height: 72%;
+}
+
+.debug.no-firebug #menu{
+    height: 48%;
+}
+
 .logger {
     height: 25%;
     overflow: auto;

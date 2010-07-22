@@ -23,7 +23,7 @@ var Debugger = Class.create(/** @lends Debugger.prototype */ {
             "id": "debugger"
         });
         document.body.appendChild(this._debuggerNode);
-        $("menu").addClassName(this._debugLevel);
+        document.body.addClassName(this._debugLevel);
 
         /**
          * Number of logging groups opened
@@ -113,7 +113,7 @@ var Debugger = Class.create(/** @lends Debugger.prototype */ {
 
         if (this._testing || window.console === undefined) {
             this._logger = new Logger(this._debuggerNode);
-            $("menu").addClassName("no-firebug");
+            document.body.addClassName("no-firebug");
         } else {
             this._logger = window.console;
         }
