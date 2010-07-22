@@ -98,6 +98,16 @@ display:inline;
     font-size: 80%;
     font-family: Tahoma, Arial, Helvetica, sans-serif;
 }
+.logger a.clear {
+    color: #777;
+    font-weight: bold;
+    text-decoration: underline;
+}
+
+.logger a.clear:hover {
+    cursor: pointer;
+    color: #F8A704;
+}
 
 .group {
     margin-left: 15px;

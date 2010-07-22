@@ -23,6 +23,7 @@ var Debugger = Class.create(/** @lends Debugger.prototype */ {
             "id": "debugger"
         });
         document.body.appendChild(this._debuggerNode);
+        $("menu").addClassName(this._debugLevel);
 
         /**
          * Number of logging groups opened
@@ -112,6 +113,7 @@ var Debugger = Class.create(/** @lends Debugger.prototype */ {
 
         if (this._testing || window.console === undefined) {
             this._logger = new Logger(this._debuggerNode);
+            $("menu").addClassName("no-firebug");
         } else {
             this._logger = window.console;
         }
@@ -138,13 +140,32 @@ var Logger = Class.create({
      */
     initialize: function(debuggerNode) {
         this._loggerNode = new Element("div", {
+            "style": "margin-top:3px"
+        });
+
+
+        var clearButton = new Element("a", {
+            "class": "clear",
+            "href": "javascript:"
+        }).update("Clear");
+        clearButton.observe("click", function(){
+            this._loggerNode.update();
+            this._currentLevel = this._loggerNode;
+        }.bind(this));
+
+        var loggerContainer = new Element("div", {
             "class": "logger"
         });
-        debuggerNode.appendChild(this._loggerNode);
+        loggerContainer.appendChild(clearButton);
+        loggerContainer.appendChild(this._loggerNode);
+
+        debuggerNode.appendChild(loggerContainer);
 
         /**
          * Current DOM level of the log writing
          * Necessary to allow tree hierarchy
+         * @private
+         * @type DOMNode
          */
         this._currentLevel = this._loggerNode;
     },
