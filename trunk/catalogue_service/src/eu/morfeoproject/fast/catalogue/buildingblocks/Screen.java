@@ -94,7 +94,7 @@ public class Screen extends WithConditions {
 			// triggers
 			for (Trigger trigger : def.getTriggers()) {
 				BlankNode bnTrigger = model.createBlankNode();
-				model.addStatement(bnDef, FGO.hasTrigger, bnTrigger);
+				model.addStatement(bnDef, FGO.contains, bnTrigger);
 				model.addStatement(bnTrigger, RDF.type, FGO.Trigger);
 				if (trigger.getIdBBFrom() != null && !trigger.getIdBBFrom().equals(""))
 					model.addStatement(bnTrigger, FGO.hasIdBBFrom, model.createDatatypeLiteral(trigger.getIdBBFrom(), XSD._string));
@@ -105,7 +105,6 @@ public class Screen extends WithConditions {
 				if (trigger.getIdBBTo() != null && !trigger.getIdBBTo().equals(""))
 					model.addStatement(bnTrigger, FGO.hasIdActionTo, model.createDatatypeLiteral(trigger.getIdActionTo(), XSD._string));
 			}
-			
 		}
 		
 		return model;

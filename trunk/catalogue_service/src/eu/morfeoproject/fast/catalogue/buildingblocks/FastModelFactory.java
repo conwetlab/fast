@@ -95,6 +95,10 @@ public class FastModelFactory {
 		return new Pipe();
 	}
 	
+	public static Trigger createTrigger() {
+		return new Trigger();
+	}
+	
 	public static Action createAction() {
 		return new Action();
 	}

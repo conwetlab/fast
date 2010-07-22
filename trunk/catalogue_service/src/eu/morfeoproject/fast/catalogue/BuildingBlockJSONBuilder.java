@@ -238,7 +238,7 @@ public class BuildingBlockJSONBuilder {
 		return screen;
 	}
 	
-	private static ScreenDefinition parseScreenDefinition(JSONObject jsonDef) throws JSONException {
+	private static ScreenDefinition parseScreenDefinition(JSONObject jsonDef) throws JSONException, IOException {
 		ScreenDefinition definition = new ScreenDefinition();
 		// building blocks
 		JSONArray bbArray = jsonDef.getJSONArray("buildingblocks");
@@ -264,14 +264,7 @@ public class BuildingBlockJSONBuilder {
 		JSONArray triggerArray = jsonDef.getJSONArray("triggers");
 		for (int i = 0; i < triggerArray.length(); i++) {
 			JSONObject jsonTrigger = triggerArray.getJSONObject(i);
-			JSONObject triggerFrom = jsonTrigger.getJSONObject("from");
-			JSONObject triggerTo = jsonTrigger.getJSONObject("to");
-			Trigger trigger = new Trigger();
-			trigger.setIdBBFrom(triggerFrom.isNull("buildingblock") ? null : triggerFrom.getString("buildingblock"));
-			trigger.setNameFrom(triggerFrom.isNull("name") ? null : triggerFrom.getString("name"));
-			trigger.setIdBBTo(triggerTo.isNull("buildingblock") ? null : triggerTo.getString("buildingblock"));
-			trigger.setIdActionTo(triggerTo.isNull("action") ? null : triggerTo.getString("action"));
-			definition.getTriggers().add(trigger);
+			definition.getTriggers().add(parseTrigger(jsonTrigger));
 		}
 		return definition;
 	}
@@ -324,6 +317,17 @@ public class BuildingBlockJSONBuilder {
 			library.setSource(new URIImpl(jsonLibrary.getString("source")));
 
 		return library;
+	}
+	
+	private static Trigger parseTrigger(JSONObject jsonTrigger) throws JSONException, IOException {
+		JSONObject triggerFrom = jsonTrigger.getJSONObject("from");
+		JSONObject triggerTo = jsonTrigger.getJSONObject("to");
+		Trigger trigger = new Trigger();
+		trigger.setIdBBFrom(triggerFrom.isNull("buildingblock") ? null : triggerFrom.getString("buildingblock"));
+		trigger.setNameFrom(triggerFrom.isNull("name") ? null : triggerFrom.getString("name"));
+		trigger.setIdBBTo(triggerTo.isNull("buildingblock") ? null : triggerTo.getString("buildingblock"));
+		trigger.setIdActionTo(triggerTo.isNull("action") ? null : triggerTo.getString("action"));
+		return trigger;
 	}
 	
 	private static void parseScreenComponent(ScreenComponent sc, JSONObject jsonSc) throws JSONException, IOException {

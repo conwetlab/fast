@@ -31,6 +31,7 @@ import eu.morfeoproject.fast.catalogue.buildingblocks.Screen;
 import eu.morfeoproject.fast.catalogue.buildingblocks.ScreenComponent;
 import eu.morfeoproject.fast.catalogue.buildingblocks.ScreenDefinition;
 import eu.morfeoproject.fast.catalogue.buildingblocks.ScreenFlow;
+import eu.morfeoproject.fast.catalogue.buildingblocks.Trigger;
 import eu.morfeoproject.fast.catalogue.buildingblocks.WithConditions;
 import eu.morfeoproject.fast.catalogue.commontag.CTag;
 import eu.morfeoproject.fast.catalogue.util.DateFormatter;
@@ -59,6 +60,8 @@ public class BuildingBlockRDF2GoBuilder {
 			screen = (Screen) retrieveScreen(model);
 		} catch (InvalidBuildingBlockTypeException e) {
 			logger.error("The building block type is not valid: "+e, e);
+		} catch (BuildingBlockException e) {
+			logger.error(""+e, e);
 		}
 		return screen;
 	}
@@ -208,7 +211,7 @@ public class BuildingBlockRDF2GoBuilder {
 		return sf;
 	}
 	
-	private static Screen retrieveScreen(Model model) throws InvalidBuildingBlockTypeException {
+	private static Screen retrieveScreen(Model model) throws InvalidBuildingBlockTypeException, BuildingBlockException {
 		Screen screen = (Screen) retrieveWithConditions(FGO.Screen, model);
 		
 		if (screen != null) {
@@ -228,42 +231,36 @@ public class BuildingBlockRDF2GoBuilder {
 						URI defPredicate = defSt.getPredicate();
 						Node defObject = defSt.getObject();
 						if (defPredicate.equals(FGO.contains)) {
-							String idBB = null;
-							URI uriBB = null;
-							String idBBFrom = null, idConditionFrom = null, idBBTo = null, idConditionTo = null, idActionTo = null;
-							ClosableIterator<Statement> bbIt = model.findStatements(defObject.asBlankNode(), Variable.ANY, Variable.ANY);
-							for ( ; bbIt.hasNext(); ) {
-								Statement bbSt = bbIt.next();
-								URI bbPredicate = bbSt.getPredicate();
-								Node bbObject = bbSt.getObject();
-								if (bbPredicate.equals(FGO.hasId)) {
-									idBB = bbObject.asLiteral().getValue();
-								} else if (bbPredicate.equals(FGO.hasUri)) {
-									uriBB = bbObject.asURI();
-								} else if (bbPredicate.equals(FGO.hasIdBBFrom)) {
-									idBBFrom = bbObject.asLiteral().getValue();
-								} else if (bbPredicate.equals(FGO.hasIdConditionFrom)) {
-									idConditionFrom = bbObject.asLiteral().getValue();
-								} else if (bbPredicate.equals(FGO.hasIdBBTo)) {
-									idBBTo = bbObject.asLiteral().getValue();
-								} else if (bbPredicate.equals(FGO.hasIdConditionTo)) {
-									idConditionTo = bbObject.asLiteral().getValue();
-								} else if (bbPredicate.equals(FGO.hasIdActionTo)) {
-									idActionTo = bbObject.asLiteral().getValue();
-								}
-							}
-							if (idBB != null && uriBB != null) {
-								def.getBuildingBlocks().put(idBB, uriBB);
-							} else if (idBBFrom != null && idConditionFrom != null && idBBTo != null && idConditionTo != null && idActionTo != null) {
-								Pipe pipe = FastModelFactory.createPipe();
-								pipe.setIdBBFrom(idBBFrom);
-								pipe.setIdConditionFrom(idConditionFrom);
-								pipe.setIdBBTo(idBBTo);
-								pipe.setIdConditionTo(idConditionTo);
-								pipe.setIdActionTo(idActionTo);
-								def.getPipes().add(pipe);
-							}
+							URI type = null;
+							ClosableIterator<Statement> bbIt = model.findStatements(defObject.asBlankNode(), RDF.type, Variable.ANY);
+							if (bbIt.hasNext()) type = bbIt.next().getObject().asURI();
 							bbIt.close();
+							
+							if (type != null && type.equals(FGO.ResourceReference)) {
+								String idBB = null;
+								URI uriBB = null;
+								ClosableIterator<Statement> rrIt = model.findStatements(defObject.asBlankNode(), Variable.ANY, Variable.ANY);
+								for ( ; rrIt.hasNext(); ) {
+									Statement rrSt = rrIt.next();
+									URI rrPredicate = rrSt.getPredicate();
+									Node rrObject = rrSt.getObject();
+									if (rrPredicate.equals(FGO.hasId)) {
+										idBB = rrObject.asLiteral().getValue();
+									} else if (rrPredicate.equals(FGO.hasUri)) {
+										uriBB = rrObject.asURI();
+									}
+								}
+								rrIt.close();
+								if (idBB != null && uriBB != null) {
+									def.getBuildingBlocks().put(idBB, uriBB);
+								} else {
+									throw new BuildingBlockException("ResourceReference is not defined correctly.");
+								}
+							} else if (type != null && type.equals(FGO.Pipe)) {
+								def.getPipes().add(retrievePipe(defObject, model));
+							} else if (type != null && type.equals(FGO.Trigger)) {
+								def.getTriggers().add(retrieveTrigger(defObject, model));
+							}
 						}
 					}
 					defIt.close();
@@ -476,6 +473,50 @@ public class BuildingBlockRDF2GoBuilder {
 		cIt.close();
 
 		return c;
+	}
+	
+	private static Pipe retrievePipe(Node subject, Model model) {
+		Pipe pipe = FastModelFactory.createPipe();
+		ClosableIterator<Statement> pIt = model.findStatements(subject.asBlankNode(), Variable.ANY, Variable.ANY);
+		for ( ; pIt.hasNext(); ) {
+			Statement pSt = pIt.next();
+			URI pPredicate = pSt.getPredicate();
+			Node pObject = pSt.getObject();
+			if (pPredicate.equals(FGO.hasIdBBFrom)) {
+				pipe.setIdBBFrom(pObject.asLiteral().getValue());
+			} else if (pPredicate.equals(FGO.hasIdConditionFrom)) {
+				pipe.setIdConditionFrom(pObject.asLiteral().getValue());
+			} else if (pPredicate.equals(FGO.hasIdBBTo)) {
+				pipe.setIdBBTo(pObject.asLiteral().getValue());
+			} else if (pPredicate.equals(FGO.hasIdConditionTo)) {
+				pipe.setIdConditionTo(pObject.asLiteral().getValue());
+			} else if (pPredicate.equals(FGO.hasIdActionTo)) {
+				pipe.setIdActionTo(pObject.asLiteral().getValue());
+			}
+		}
+		pIt.close();
+		return pipe;
+	}
+
+	private static Trigger retrieveTrigger(Node subject, Model model) {
+		Trigger trigger = FastModelFactory.createTrigger();
+		ClosableIterator<Statement> tIt = model.findStatements(subject.asBlankNode(), Variable.ANY, Variable.ANY);
+		for ( ; tIt.hasNext(); ) {
+			Statement pipeSt = tIt.next();
+			URI tPredicate = pipeSt.getPredicate();
+			Node tObject = pipeSt.getObject();
+			if (tPredicate.equals(FGO.hasIdBBFrom)) {
+				trigger.setIdBBFrom(tObject.asLiteral().getValue());
+			} else if (tPredicate.equals(FGO.hasIdBBTo)) {
+				trigger.setIdBBFrom(tObject.asLiteral().getValue());
+			} else if (tPredicate.equals(FGO.hasIdActionTo)) {
+				trigger.setIdActionTo(tObject.asLiteral().getValue());
+			} else if (tPredicate.equals(FGO.hasNameFrom)) {
+				trigger.setNameFrom(tObject.asLiteral().getValue());
+			}
+		}
+		tIt.close();
+		return trigger;
 	}
 
 }

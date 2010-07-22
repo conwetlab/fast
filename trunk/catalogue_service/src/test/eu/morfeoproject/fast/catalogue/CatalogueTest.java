@@ -20,6 +20,7 @@ import eu.morfeoproject.fast.catalogue.buildingblocks.Condition;
 import eu.morfeoproject.fast.catalogue.buildingblocks.Form;
 import eu.morfeoproject.fast.catalogue.buildingblocks.Operator;
 import eu.morfeoproject.fast.catalogue.buildingblocks.Postcondition;
+import eu.morfeoproject.fast.catalogue.buildingblocks.Screen;
 import eu.morfeoproject.fast.catalogue.buildingblocks.ScreenComponent;
 import eu.morfeoproject.fast.catalogue.services.CatalogueAccessPoint;
 import eu.morfeoproject.fast.catalogue.util.Util;
@@ -49,47 +50,64 @@ public class CatalogueTest extends TestCase {
 	
 	public void createForm() throws Exception {
 		JSONObject json = new JSONObject(Util.getFileContentAsString("test/json/forms/amazonList.json"));
-		URI fUri = new URIImpl("http://localhost:9000/FASTCatalogue/forms/"+json.getString("id"));
-		Form f1 = BuildingBlockJSONBuilder.buildForm(json, fUri);
+		URI uri = new URIImpl("http://localhost:9000/FASTCatalogue/forms/"+json.getString("id"));
+		Form f1 = BuildingBlockJSONBuilder.buildForm(json, uri);
 		catalogue.addForm(f1);
-		Form f2 = catalogue.getForm(fUri);
+		Form f2 = catalogue.getForm(uri);
 		Assert.assertTrue(f1.equals(f2));
 		Assert.assertEquals(f1.getActions().size(), f2.getActions().size());
 		Assert.assertEquals(f1.getPostconditions().size(), f2.getPostconditions().size());
+		Assert.assertEquals(f1.getTriggers().size(), f2.getTriggers().size());
 	}
 
 	public void createOperator() throws Exception {
 		JSONObject json = new JSONObject(Util.getFileContentAsString("test/json/operators/amazonEbayFilter.json"));
-		URI opUri = new URIImpl("http://localhost:9000/FASTCatalogue/operators/"+json.getString("id"));
-		Operator op1 = BuildingBlockJSONBuilder.buildOperator(json, opUri);
+		URI uri = new URIImpl("http://localhost:9000/FASTCatalogue/operators/"+json.getString("id"));
+		Operator op1 = BuildingBlockJSONBuilder.buildOperator(json, uri);
 		catalogue.addOperator(op1);
-		Operator op2 = catalogue.getOperator(opUri);
+		Operator op2 = catalogue.getOperator(uri);
 		Assert.assertTrue(op1.equals(op2));
 		Assert.assertEquals(op1.getActions().size(), op2.getActions().size());
 		Assert.assertEquals(op1.getPostconditions().size(), op2.getPostconditions().size());
+		Assert.assertEquals(op1.getTriggers().size(), op2.getTriggers().size());
 	}
 
 	public void createBackendService() throws Exception {
 		JSONObject json = new JSONObject(Util.getFileContentAsString("test/json/backendservices/amazonSearchService.json"));
-		URI bsUri = new URIImpl("http://localhost:9000/FASTCatalogue/services/"+json.getString("id"));
-		BackendService bs1 = BuildingBlockJSONBuilder.buildBackendService(json, bsUri);
+		URI uri = new URIImpl("http://localhost:9000/FASTCatalogue/services/"+json.getString("id"));
+		BackendService bs1 = BuildingBlockJSONBuilder.buildBackendService(json, uri);
 		catalogue.addBackendService(bs1);
-		BackendService bs2 = catalogue.getBackendService(bsUri);
+		BackendService bs2 = catalogue.getBackendService(uri);
 		Assert.assertTrue(bs1.equals(bs2));
 		Assert.assertEquals(bs1.getActions().size(), bs2.getActions().size());
 		Assert.assertEquals(bs1.getPostconditions().size(), bs2.getPostconditions().size());
+		Assert.assertEquals(bs1.getTriggers().size(), bs2.getTriggers().size());
 	}
 
 	public void createPostcondition() throws Exception {
 		JSONObject json = new JSONObject(Util.getFileContentAsString("test/json/postconditions/searchCriteria.json"));
-		URI pUri = new URIImpl("http://localhost:9000/FASTCatalogue/postconditions/"+json.getString("id"));
-		Postcondition p1 = BuildingBlockJSONBuilder.buildPostcondition(json, pUri);
+		URI uri = new URIImpl("http://localhost:9000/FASTCatalogue/postconditions/"+json.getString("id"));
+		Postcondition p1 = BuildingBlockJSONBuilder.buildPostcondition(json, uri);
 		catalogue.addPreOrPost(p1);
-		Postcondition p2 = catalogue.getPostcondition(pUri);
+		Postcondition p2 = catalogue.getPostcondition(uri);
 		Assert.assertTrue(p1.equals(p2));
 		Assert.assertEquals(p1.getConditions().size(), p2.getConditions().size());
 	}
 	
+	public void createScreen() throws Exception {
+		JSONObject json = new JSONObject(Util.getFileContentAsString("test/json/screens/amazonList.json"));
+		URI uri = new URIImpl("http://localhost:9000/FASTCatalogue/screens/"+json.getString("id"));
+		Screen s1 = BuildingBlockJSONBuilder.buildScreen(json, uri);
+		catalogue.addScreen(s1);
+		Screen p2 = catalogue.getScreen(uri);
+		Assert.assertTrue(s1.equals(p2));
+		Assert.assertEquals(s1.getPreconditions().size(), p2.getPreconditions().size());
+		Assert.assertEquals(s1.getPostconditions().size(), p2.getPostconditions().size());
+		Assert.assertEquals(s1.getDefinition().getBuildingBlocks().size(), p2.getDefinition().getBuildingBlocks().size());
+		Assert.assertEquals(s1.getDefinition().getPipes().size(), p2.getDefinition().getPipes().size());
+		Assert.assertEquals(s1.getDefinition().getTriggers().size(), p2.getDefinition().getTriggers().size());
+	}
+
 	public void findAndCheck1() throws Exception {
 		JSONObject json = null;
 		json = new JSONObject(Util.getFileContentAsString("test/json/forms/amazonList.json"));
@@ -113,6 +131,7 @@ public class CatalogueTest extends TestCase {
 	    suite.addTest(new CatalogueTest("createOperator"));
 	    suite.addTest(new CatalogueTest("createBackendService"));
 	    suite.addTest(new CatalogueTest("createPostcondition"));
+	    suite.addTest(new CatalogueTest("createScreen"));
 	    suite.addTest(new CatalogueTest("findAndCheck1"));
 		return suite;
 	}
