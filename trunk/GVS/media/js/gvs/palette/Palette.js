@@ -149,19 +149,30 @@ var Palette = Class.create(SetListener, /** @lends Palette.prototype */ {
     /**
      * Hiden component if not match filter
      */
-    _filterComponents: function() {
-        this._components.each(function(item) {
-            var component = item.value;
-            var title = component.getBuildingBlockDescription().getTitle().toLowerCase();
-            var searchValue = this._searchBox.getValue().toLowerCase();
+    _filterComponents: (function() {
+        function matchFacts(svalue, facts){
+            if (!facts) { return false }
+            return facts.any(function(fact){
+                return fact.textContent.toLowerCase().match(svalue)
+            });
+        }
 
-            if (searchValue.blank() || title.match(searchValue)) {
-                component.getNode().show();
-            } else {
-                component.getNode().hide();
+        return function(input) {
+            var svalue = this._searchBox.getValue().toLowerCase();
+            var slots = this._contentNode.select('.slot');
+            for(var i = 0; i < slots.length; i++) {
+                var slot = slots[i];
+                if (svalue.blank() ||
+                    slot.select('.slotTitle').first().textContent.toLowerCase().match(svalue)||
+                    matchFacts(svalue, slot.select('.contentLayer'))
+                ) {
+                    slot.show();
+                } else {
+                    slot.hide();
+                }
             }
-        }.bind(this));
-    },
+        }
+    })(),
 
     /**
      * Build a new component
