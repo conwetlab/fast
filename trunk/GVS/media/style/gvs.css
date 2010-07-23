@@ -20,6 +20,25 @@ div.WireIt-Terminal { z-index: 16; }
 div.WireIt-Container { z-index: 15; }
 div.WireIt-Container-focused { z-index: 16; }
 
+/**************
+ * Search Box *
+ **************/
+.searchBox {
+    background:transparent url(/fast/images/gui/palette/search.png) no-repeat scroll 1px 1px;
+    border:1px solid #EEE;
+    padding:1px 1px 1px 20px;
+}
+.searchBox input {
+    border:0;
+    height:16px;
+    font-size:12px;
+    width:100%;
+}
+.searchBox input.defaultValue {
+   color:#777;
+}
+
+
 /******************
  * #main area     *
  ******************/
@@ -475,19 +494,7 @@ h4{
 }
 
 .paletteElement .searchBox {
-    background:transparent url(/fast/images/gui/palette/search.png) no-repeat scroll 1px 1px;
-    border:1px solid #EEE;
     margin: -2px -3px 0;
-    padding:1px 1px 1px 20px;
-}
-.paletteElement .searchBox input {
-    border:0;
-    height:16px;
-    font-size:12px;
-    width:100%;
-}
-.paletteElement .searchBox input.defaultValue {
-   color:#777;
 }
 
 .paletteContent {
@@ -1256,6 +1263,21 @@ label {
     width: 16px;
 }
 
+/**************
+ * Search Bar *
+ **************/
+.searchBar {
+    margin-top:3px;
+    border-top:1px solid #CCC;
+    padding-top:3px;
+    min-height:8px;
+}
+
+.searchBar .searchBox {
+    width: 300px;
+    float: left;
+}
+
 /*********************
  * Parameter dialog  *
  *********************/
@@ -1314,7 +1336,7 @@ pre {
 .CodeMirror-wrapping {
     height: 100%;
     border: 1px dotted #AAA;
-} 
+}
 
 .CodeMirror-line-numbers {
      font-size: 9pt;

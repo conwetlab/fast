@@ -38,16 +38,16 @@ var ManageBuildingBlocksDialog = Class.create(GalleryDialog /** @lends ManageScr
 
 
     /**
-     * Builds the user interface, using the gathered information
+     * Create the search bar
      * @private
+     * @type HTMLNode
      */
-    _render: function($super,/** Boolean(Optional) */ _loadAll) {
-        $super(_loadAll);
+    _createSearchBar: function($super) {
+        var searchBar = $super();
 
         var content = document.createElement('div')
         content.style.textAlign = 'right';
-        content.style.marginTop = '3px';
-        this._contentNode.appendChild(content);
+        searchBar.appendChild(content);
 
         var checkBox = new dijit.form.CheckBox({
             name: 'Forms',
@@ -90,6 +90,8 @@ var ManageBuildingBlocksDialog = Class.create(GalleryDialog /** @lends ManageScr
         var label = document.createElement('span');
         label.innerHTML = 'Resources'
         content.appendChild(label);
+
+        return searchBar;
     },
 
     /**

@@ -137,50 +137,50 @@ var GalleryDialog = Class.create(FormDialog, /** @lends GalleryDialog.prototype 
             // TODO
         }
 
+        var lastSelectedRowKey = this._selectedRow && this._selectedRow['key'];
+        this._selectedRow = null;
+
         this._rows.each(function(row) {
             var rowNode = new Element('div', {
                 'class': 'row'
             });
-            var rowValues = row.values;
 
-            for (var i=0; i < rowValues.size(); i++) {
+            for (var i=0, rValues = row.values; i < rValues.size(); i++) {
                 if (!this._fields[i].hidden) {
                     var field = new Element('div',{
                         'class': "field " + this._fields[i].className
-                    }).update(rowValues[i]);
+                    }).update(rValues[i]);
                     rowNode.appendChild(field);
                 }
             }
-            rowNode.observe('click', function(event) {
-                $$(".gallery .row").each(function(node) {
-                    node.removeClassName("selected");
-                });
 
-                var element = event.findElement(".row");
-                element.addClassName("selected");
-
-                if (row.isValid) {
-                    this._disabledButtons.each(function(button) {
-                        button.attr('disabled', false);
-                    });
-                } else {
-                    this._disabledButtons.each(function(button) {
-                        button.attr('disabled', true);
-                    });
-                }
-
+            var selectRow = function() {
+                this._unselectElements();
                 this._selectedRow = row;
-            }.bind(this));
-            if (this._properties.get('onDblClick')) {
-                if (!this._properties.get('disableIfNotValid') ||
-                    row.isValid) {
-                        rowNode.observe('dblclick', function() {
-                            this._properties.get('onDblClick')(row.key);
-                        }.bind(this));
+                rowNode.addClassName("selected");
+                for (var i = 0; i < this._disabledButtons.length; i++) {
+                    this._disabledButtons[i].attr('disabled', ! row.isValid);
                 }
+            }.bind(this);
+
+            rowNode.observe('click', selectRow);
+
+            if (this._properties.get('onDblClick') &&
+               (! this._properties.get('disableIfNotValid') || row.isValid))
+            {
+                rowNode.observe('dblclick', function() {
+                    this._properties.get('onDblClick')(row.key);
+                }.bind(this));
             }
+
+            if (lastSelectedRowKey == row.key) {
+                selectRow();
+            }
+
             content.appendChild(rowNode);
         }.bind(this));
+
+
         if (loadAll && this._rows.size() > 0) {
             this._removeButtons();
             this._buttons.each(function(button){
@@ -192,9 +192,7 @@ var GalleryDialog = Class.create(FormDialog, /** @lends GalleryDialog.prototype 
                 }
             }.bind(this));
         }
-        if (!this._properties.get("showTitleRow") && content.firstChild) {
-            content.firstChild.addClassName("selected");
-        }
+
         if (this._rows.size() == 0) {
             var info = new Element("div", {
                 'class': 'info'
@@ -202,21 +200,64 @@ var GalleryDialog = Class.create(FormDialog, /** @lends GalleryDialog.prototype 
             content.appendChild(info);
             this._removeButtons();
             this._addButton("Close", this._dialog.hide.bind(this._dialog));
-        } else {
-            this._selectedRow = this._rows[0];
-
-            if (this._selectedRow.isValid) {
-                this._disabledButtons.each(function(button) {
-                    button.attr('disabled', false);
-                });
-            } else {
-                this._disabledButtons.each(function(button) {
-                    button.attr('disabled', true);
-                });
-            }
+        } else if (! this._selectedRow &&
+                   ! this._properties.get("showTitleRow") &&
+                   content.firstChild)
+        {
+            content.firstChild.addClassName("selected");
+            var row = this._selectedRow = this._rows[0];
+            for (var i = 0; i < this._disabledButtons.length; i++) {
+                this._disabledButtons[i].attr('disabled', ! row.isValid);
+            };
         }
 
         this._setContent(content);
+        this._contentNode.appendChild(this._createSearchBar());
+    },
+
+    /**
+     * Unselect all elements
+     * @private
+     */
+    _unselectElements: function() {
+            $$('.gallery .row.selected').each(function(node) {
+                node.removeClassName("selected");
+            });
+            this._disabledButtons.each(function(button) {
+                button.attr('disabled', true);
+            });
+            this._selectedRow = null;
+    },
+
+    /**
+     * Create the search bar
+     * @private
+     * @type HTMLNode
+     */
+    _createSearchBar: function() {
+        var unselectElements = this._unselectElements.bind(this);
+        var searchBar = new Element('div', {'class':'searchBar'});
+        searchBar.style.marginTop = '3px';
+        var searchBox = new PaletteSearchBox();
+        searchBox.addEventListener(function(obj, value) {
+            var searchValue = value.toLowerCase();
+            var elements = $$('.gallery .row .field.name');
+            elements.each(function(elem){
+                var text = elem.textContent.toLowerCase();
+                if (searchValue.blank() || text.match(searchValue)) {
+                    elem.parentNode.show();
+                } else {
+                    var row =elem.parentNode;
+                    row.hide();
+                    if (row.hasClassName('selected')) {
+                        unselectElements();
+                    }
+                }
+            })
+        });
+
+        searchBar.appendChild(searchBox.getDOMNode());
+        return searchBar;
     },
 
     /**
