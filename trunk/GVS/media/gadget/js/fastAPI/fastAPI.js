@@ -162,6 +162,7 @@ FastBaseAPI.Properties = Class.create(/** @lends FastAPI.Properties.prototype */
      * <li>FastBaseAPI.Properties.GADGET_WIDTH or 'width'</li>
      * <li>FastBaseAPI.Properties.GADGET_X_POSITION or 'xposition'</li>
      * <li>FastBaseAPI.Properties.GADGET_Y_POSITION or 'yposition'</li>
+     * <li>FastBaseAPI.Properties.PLATFORM or 'platform'</li>
      * @constructs
      */
     initialize: function() {
@@ -198,6 +199,7 @@ FastBaseAPI.Properties.GADGET_HEIGHT = 'height';
 FastBaseAPI.Properties.GADGET_WIDTH = 'width'
 FastBaseAPI.Properties.GADGET_X_POSITION = 'xposition';
 FastBaseAPI.Properties.GADGET_Y_POSITION = 'yposition';
+FastBaseAPI.Properties.PLATFORM = 'platform';
 
 FastBaseAPI.Persistence = Class.create(/** @lends FastAPI.Persistence.prototype */{
     /**

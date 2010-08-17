@@ -124,7 +124,15 @@ var PropertiesSingleton = function() {
             this.equivalences[FastBaseAPI.Properties.GADGET_WIDTH] = 'widthInPixels';
             this.equivalences[FastBaseAPI.Properties.GADGET_X_POSITION] = 'xPosition';
             this.equivalences[FastBaseAPI.Properties.GADGET_Y_POSITION] = 'yPosition';
+            this.equivalences[FastBaseAPI.Properties.PLATFORM] = 'platform';
             this.variables = new Hash();
+
+            //EzWeb API only works on EzWeb platform
+            platform_obj = {
+                get: function(){return 'EzWeb'}
+            }
+            this.variables.set(this.equivalences[FastBaseAPI.Properties.PLATFORM], platform_obj);
+
         },
 
         get: function (variable) {

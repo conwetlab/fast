@@ -169,199 +169,201 @@
 <span class='line'>162</span>      * &lt;li>FastBaseAPI.Properties.GADGET_WIDTH or 'width'&lt;/li>
 <span class='line'>163</span>      * &lt;li>FastBaseAPI.Properties.GADGET_X_POSITION or 'xposition'&lt;/li>
 <span class='line'>164</span>      * &lt;li>FastBaseAPI.Properties.GADGET_Y_POSITION or 'yposition'&lt;/li>
-<span class='line'>165</span>      * @constructs
-<span class='line'>166</span>      */</span><span class="WHIT">
-<span class='line'>167</span>     </span><span class="NAME">initialize</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>168</span>     </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>169</span> 
-<span class='line'>170</span>     </span><span class="COMM">/**
-<span class='line'>171</span>      * Returns the context variable value.
-<span class='line'>172</span>      * @param {String} variable
-<span class='line'>173</span>      *      represents the name of the variable
-<span class='line'>174</span>      */</span><span class="WHIT">
-<span class='line'>175</span>     </span><span class="NAME">get</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">variable</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>176</span>         </span><span class="KEYW">throw</span><span class="WHIT"> </span><span class="STRN">'Abstract Method invocation. '</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT">
-<span class='line'>177</span>               </span><span class="STRN">'FastAPI.Properties :: get'</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>178</span>     </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>179</span> 
-<span class='line'>180</span>     </span><span class="COMM">/**
-<span class='line'>181</span>      * Sets the value of a context variable.
-<span class='line'>182</span>      * @param {String} variable
-<span class='line'>183</span>      *      represents the name of the variable
-<span class='line'>184</span>      * @param {String} value
-<span class='line'>185</span>      *      represents value of the variable
-<span class='line'>186</span>      *
-<span class='line'>187</span>      */</span><span class="WHIT">
-<span class='line'>188</span>     </span><span class="NAME">set</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">variable</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">value</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>189</span>         </span><span class="KEYW">throw</span><span class="WHIT"> </span><span class="STRN">'Abstract Method invocation. '</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT">
-<span class='line'>190</span>             </span><span class="STRN">'FastAPI.Properties :: set'</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>191</span>     </span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>192</span> </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>193</span> 
-<span class='line'>194</span> </span><span class="NAME">FastBaseAPI.Properties.LOGIN</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">'login'</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>195</span> </span><span class="NAME">FastBaseAPI.Properties.LANGUAGE</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">'language'</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>196</span> </span><span class="NAME">FastBaseAPI.Properties.ORIENTATION</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">'orientation'</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>197</span> </span><span class="NAME">FastBaseAPI.Properties.GADGET_HEIGHT</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">'height'</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>198</span> </span><span class="NAME">FastBaseAPI.Properties.GADGET_WIDTH</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">'width'</span><span class="WHIT">
-<span class='line'>199</span> </span><span class="NAME">FastBaseAPI.Properties.GADGET_X_POSITION</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">'xposition'</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>200</span> </span><span class="NAME">FastBaseAPI.Properties.GADGET_Y_POSITION</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">'yposition'</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>201</span> 
-<span class='line'>202</span> </span><span class="NAME">FastBaseAPI.Persistence</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">Class.create</span><span class="PUNC">(</span><span class="COMM">/** @lends FastAPI.Persistence.prototype */</span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>203</span>     </span><span class="COMM">/**
-<span class='line'>204</span>      * This class access to the persistent properties of the mashup platform
-<span class='line'>205</span>      * @constructs
-<span class='line'>206</span>      */</span><span class="WHIT">
-<span class='line'>207</span>     </span><span class="NAME">initialize</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>208</span>     </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>209</span> 
-<span class='line'>210</span>     </span><span class="COMM">/**
-<span class='line'>211</span>      * Asynchronous method: gets the persistent data.
-<span class='line'>212</span>      * @param {function} func
-<span class='line'>213</span>      *      callback handler
-<span class='line'>214</span>      */</span><span class="WHIT">
-<span class='line'>215</span>     </span><span class="NAME">get</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">func</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>216</span>         </span><span class="KEYW">throw</span><span class="WHIT"> </span><span class="STRN">'Abstract Method invocation. '</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT">
-<span class='line'>217</span>               </span><span class="STRN">'FastAPI.Persistence :: get'</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>218</span>     </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>219</span> 
-<span class='line'>220</span>     </span><span class="COMM">/**
-<span class='line'>221</span>      * Asynchronous method: saves the data in persistent way.
-<span class='line'>222</span>      * @param {String} value
-<span class='line'>223</span>      *      represents value of the variable
-<span class='line'>224</span>      * @param {function} [func]
-<span class='line'>225</span>      *      callback handler
-<span class='line'>226</span>      */</span><span class="WHIT">
-<span class='line'>227</span>     </span><span class="NAME">set</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">value</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">func</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>228</span>         </span><span class="KEYW">throw</span><span class="WHIT"> </span><span class="STRN">'Abstract Method invocation. '</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT">
-<span class='line'>229</span>             </span><span class="STRN">'FastAPI.Persistence :: set'</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>230</span>     </span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>231</span> </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>232</span> 
-<span class='line'>233</span> 
-<span class='line'>234</span> </span><span class="COMM">/**
-<span class='line'>235</span>  * This set of methods are intended to access to the social data available in the platform
-<span class='line'>236</span>  * @namespace
-<span class='line'>237</span>  */</span><span class="WHIT">
-<span class='line'>238</span> </span><span class="NAME">FastAPI.Social</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>239</span> </span><span class="NAME">FastBaseAPI.Social</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>240</span> 
-<span class='line'>241</span>     </span><span class="NAME">Login</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">Class.create</span><span class="PUNC">(</span><span class="COMM">/** @lends FastAPI.Social.Login.prototype */</span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>242</span>        </span><span class="COMM">/**
-<span class='line'>243</span>          * This class allows authenticating users
-<span class='line'>244</span>          * @constructs
-<span class='line'>245</span>          */</span><span class="WHIT">
-<span class='line'>246</span>         </span><span class="NAME">initialize</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>247</span>         </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>248</span> 
-<span class='line'>249</span>         </span><span class="COMM">/**
-<span class='line'>250</span>          * Authenticates the user.
-<span class='line'>251</span>          * @param {Options} credentials
-<span class='line'>252</span>          *      represents the credentials needed for the authentication
-<span class='line'>253</span>          */</span><span class="WHIT">
-<span class='line'>254</span>         </span><span class="NAME">authenticate</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">credentials</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>255</span>             </span><span class="KEYW">throw</span><span class="WHIT"> </span><span class="STRN">'Abstract Method invocation. '</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT">
-<span class='line'>256</span>             </span><span class="STRN">'FastAPI.Social.Login :: authenticate'</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>257</span>         </span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>258</span>     </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>259</span> 
-<span class='line'>260</span>     </span><span class="NAME">User</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">Class.create</span><span class="PUNC">(</span><span class="COMM">/** @lends FastAPI.Social.User.prototype */</span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>261</span>         </span><span class="COMM">/**
-<span class='line'>262</span>          * This class allows managing the user's profile properties.
-<span class='line'>263</span>          * The properties that are available on request are:
-<span class='line'>264</span>          * &lt;li>FastBaseAPI.Social.User.USER_NAME or 'USER_NAME'&lt;/li>
-<span class='line'>265</span>          * &lt;li>FastBaseAPI.Social.User.FIRST_NAME or 'FIRST_NAME'&lt;/li>
-<span class='line'>266</span>          * &lt;li>FastBaseAPI.Social.User.LAST_NAME or 'LAST_NAME'&lt;/li>
-<span class='line'>267</span>          * &lt;li>FastBaseAPI.Social.User.DOB or 'DOB'&lt;/li>
-<span class='line'>268</span>          * &lt;li>FastBaseAPI.Social.User.USER_EMAIL or 'EMAIL'&lt;/li>
-<span class='line'>269</span>          * &lt;li>FastBaseAPI.Social.User.CURRENT_LOCATION or 'CURRENT_LOCATION'&lt;/li>
-<span class='line'>270</span>          * &lt;li>FastBaseAPI.Social.User.STATUS or 'STATUS'&lt;/li>
-<span class='line'>271</span>          * &lt;li>FastBaseAPI.Social.User.THUMBNAIL or 'THUMBNAIL'&lt;/li>
-<span class='line'>272</span>          * @constructs
-<span class='line'>273</span>          */</span><span class="WHIT">
-<span class='line'>274</span>         </span><span class="NAME">initialize</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>275</span>         </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>276</span> 
-<span class='line'>277</span>         </span><span class="COMM">/**
-<span class='line'>278</span>          * Returns the value of a specific user property.
-<span class='line'>279</span>          * @param {String} property
-<span class='line'>280</span>          *      represents the name of the property
-<span class='line'>281</span>          * @param {function} func
-<span class='line'>282</span>          *         callback handler
-<span class='line'>283</span>          */</span><span class="WHIT">
-<span class='line'>284</span>         </span><span class="NAME">get</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">property</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">func</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>285</span>             </span><span class="KEYW">throw</span><span class="WHIT"> </span><span class="STRN">'Abstract Method invocation. '</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT">
-<span class='line'>286</span>             </span><span class="STRN">'FastAPI.Social.User :: get'</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>287</span>         </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>288</span> 
-<span class='line'>289</span>         </span><span class="COMM">/**
-<span class='line'>290</span>          * Sets the value of a user property.
-<span class='line'>291</span>          * @param {String} property
-<span class='line'>292</span>          *      represents the name of the property
-<span class='line'>293</span>          * @param {String} value
-<span class='line'>294</span>          *      represents value of the property
-<span class='line'>295</span>          *
-<span class='line'>296</span>          */</span><span class="WHIT">
-<span class='line'>297</span>         </span><span class="NAME">set</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">property</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">value</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>298</span>             </span><span class="KEYW">throw</span><span class="WHIT"> </span><span class="STRN">'Abstract Method invocation. '</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT">
-<span class='line'>299</span>                 </span><span class="STRN">'FastAPI.Social.User :: set'</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>300</span>         </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>301</span> 
-<span class='line'>302</span>         </span><span class="COMM">/**
-<span class='line'>303</span>          * Sets the user's status.
-<span class='line'>304</span>          * @param status
-<span class='line'>305</span>          *      represents the status of the user
-<span class='line'>306</span>          */</span><span class="WHIT">
-<span class='line'>307</span>         </span><span class="NAME">postStatus</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">status</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>308</span>             </span><span class="KEYW">throw</span><span class="WHIT"> </span><span class="STRN">'Abstract Method invocation. '</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT">
-<span class='line'>309</span>                 </span><span class="STRN">'FastAPI.Social.User :: postStatus'</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>310</span>         </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>311</span>     </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>312</span> 
-<span class='line'>313</span>     </span><span class="NAME">Friends</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">Class.create</span><span class="PUNC">(</span><span class="COMM">/** @lends FastAPI.Social.Friends.prototype */</span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>314</span>         </span><span class="COMM">/**
-<span class='line'>315</span>          * This class offers the methods to deal with the user's friends
-<span class='line'>316</span>          * @constructs
-<span class='line'>317</span>          */</span><span class="WHIT">
-<span class='line'>318</span>         </span><span class="NAME">initialize</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>319</span>         </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>320</span> 
-<span class='line'>321</span>         </span><span class="COMM">/**
-<span class='line'>322</span>          * Creates an array with the user's friends and applies the handler passed as parameter to it.
-<span class='line'>323</span>          * The returned information about each friend contains:
-<span class='line'>324</span>          * &lt;ul>
-<span class='line'>325</span>          * &lt;li>id&lt;/li>
-<span class='line'>326</span>          * &lt;li>FastBaseAPI.Social.User.USER_NAME or 'USER_NAME'&lt;/li>
-<span class='line'>327</span>          * &lt;li>FastBaseAPI.Social.User.FIRST_NAME or 'FIRST_NAME'&lt;/li>
-<span class='line'>328</span>          * &lt;li>FastBaseAPI.Social.User.LAST_NAME or 'LAST_NAME'&lt;/li>
-<span class='line'>329</span>          * &lt;li>FastBaseAPI.Social.User.THUMBNAIL or 'THUMBNAIL'&lt;/li>
-<span class='line'>330</span>          *  &lt;/ul>
-<span class='line'>331</span>          * @param {function} func
-<span class='line'>332</span>          *      callback handler
-<span class='line'>333</span>          */</span><span class="WHIT">
-<span class='line'>334</span> 
-<span class='line'>335</span>         </span><span class="NAME">getFriends</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">func</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>336</span>             </span><span class="KEYW">throw</span><span class="WHIT"> </span><span class="STRN">'Abstract Method invocation. '</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT">
-<span class='line'>337</span>             </span><span class="STRN">'FastAPI.Social.Friends :: getFriends'</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>338</span>         </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>339</span> 
-<span class='line'>340</span>         </span><span class="COMM">/**
-<span class='line'>341</span>          * Not specified yed
-<span class='line'>342</span>          */</span><span class="WHIT">
-<span class='line'>343</span>         </span><span class="NAME">tellAFriend</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>344</span>             </span><span class="KEYW">throw</span><span class="WHIT"> </span><span class="STRN">'Abstract Method invocation. '</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT">
-<span class='line'>345</span>             </span><span class="STRN">'FastAPI.Social.Friends :: tellAFriend'</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>346</span>         </span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>347</span> 
-<span class='line'>348</span>     </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="WHIT">
+<span class='line'>165</span>      * &lt;li>FastBaseAPI.Properties.PLATFORM or 'platform'&lt;/li>
+<span class='line'>166</span>      * @constructs
+<span class='line'>167</span>      */</span><span class="WHIT">
+<span class='line'>168</span>     </span><span class="NAME">initialize</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>169</span>     </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>170</span> 
+<span class='line'>171</span>     </span><span class="COMM">/**
+<span class='line'>172</span>      * Returns the context variable value.
+<span class='line'>173</span>      * @param {String} variable
+<span class='line'>174</span>      *      represents the name of the variable
+<span class='line'>175</span>      */</span><span class="WHIT">
+<span class='line'>176</span>     </span><span class="NAME">get</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">variable</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>177</span>         </span><span class="KEYW">throw</span><span class="WHIT"> </span><span class="STRN">'Abstract Method invocation. '</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT">
+<span class='line'>178</span>               </span><span class="STRN">'FastAPI.Properties :: get'</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>179</span>     </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>180</span> 
+<span class='line'>181</span>     </span><span class="COMM">/**
+<span class='line'>182</span>      * Sets the value of a context variable.
+<span class='line'>183</span>      * @param {String} variable
+<span class='line'>184</span>      *      represents the name of the variable
+<span class='line'>185</span>      * @param {String} value
+<span class='line'>186</span>      *      represents value of the variable
+<span class='line'>187</span>      *
+<span class='line'>188</span>      */</span><span class="WHIT">
+<span class='line'>189</span>     </span><span class="NAME">set</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">variable</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">value</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>190</span>         </span><span class="KEYW">throw</span><span class="WHIT"> </span><span class="STRN">'Abstract Method invocation. '</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT">
+<span class='line'>191</span>             </span><span class="STRN">'FastAPI.Properties :: set'</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>192</span>     </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>193</span> </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>194</span> 
+<span class='line'>195</span> </span><span class="NAME">FastBaseAPI.Properties.LOGIN</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">'login'</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>196</span> </span><span class="NAME">FastBaseAPI.Properties.LANGUAGE</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">'language'</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>197</span> </span><span class="NAME">FastBaseAPI.Properties.ORIENTATION</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">'orientation'</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>198</span> </span><span class="NAME">FastBaseAPI.Properties.GADGET_HEIGHT</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">'height'</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>199</span> </span><span class="NAME">FastBaseAPI.Properties.GADGET_WIDTH</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">'width'</span><span class="WHIT">
+<span class='line'>200</span> </span><span class="NAME">FastBaseAPI.Properties.GADGET_X_POSITION</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">'xposition'</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>201</span> </span><span class="NAME">FastBaseAPI.Properties.GADGET_Y_POSITION</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">'yposition'</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>202</span> </span><span class="NAME">FastBaseAPI.Properties.PLATFORM</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">'platform'</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>203</span> 
+<span class='line'>204</span> </span><span class="NAME">FastBaseAPI.Persistence</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">Class.create</span><span class="PUNC">(</span><span class="COMM">/** @lends FastAPI.Persistence.prototype */</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>205</span>     </span><span class="COMM">/**
+<span class='line'>206</span>      * This class access to the persistent properties of the mashup platform
+<span class='line'>207</span>      * @constructs
+<span class='line'>208</span>      */</span><span class="WHIT">
+<span class='line'>209</span>     </span><span class="NAME">initialize</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>210</span>     </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>211</span> 
+<span class='line'>212</span>     </span><span class="COMM">/**
+<span class='line'>213</span>      * Asynchronous method: gets the persistent data.
+<span class='line'>214</span>      * @param {function} func
+<span class='line'>215</span>      *      callback handler
+<span class='line'>216</span>      */</span><span class="WHIT">
+<span class='line'>217</span>     </span><span class="NAME">get</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">func</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>218</span>         </span><span class="KEYW">throw</span><span class="WHIT"> </span><span class="STRN">'Abstract Method invocation. '</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT">
+<span class='line'>219</span>               </span><span class="STRN">'FastAPI.Persistence :: get'</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>220</span>     </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>221</span> 
+<span class='line'>222</span>     </span><span class="COMM">/**
+<span class='line'>223</span>      * Asynchronous method: saves the data in persistent way.
+<span class='line'>224</span>      * @param {String} value
+<span class='line'>225</span>      *      represents value of the variable
+<span class='line'>226</span>      * @param {function} [func]
+<span class='line'>227</span>      *      callback handler
+<span class='line'>228</span>      */</span><span class="WHIT">
+<span class='line'>229</span>     </span><span class="NAME">set</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">value</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">func</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>230</span>         </span><span class="KEYW">throw</span><span class="WHIT"> </span><span class="STRN">'Abstract Method invocation. '</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT">
+<span class='line'>231</span>             </span><span class="STRN">'FastAPI.Persistence :: set'</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>232</span>     </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>233</span> </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>234</span> 
+<span class='line'>235</span> 
+<span class='line'>236</span> </span><span class="COMM">/**
+<span class='line'>237</span>  * This set of methods are intended to access to the social data available in the platform
+<span class='line'>238</span>  * @namespace
+<span class='line'>239</span>  */</span><span class="WHIT">
+<span class='line'>240</span> </span><span class="NAME">FastAPI.Social</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>241</span> </span><span class="NAME">FastBaseAPI.Social</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>242</span> 
+<span class='line'>243</span>     </span><span class="NAME">Login</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">Class.create</span><span class="PUNC">(</span><span class="COMM">/** @lends FastAPI.Social.Login.prototype */</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>244</span>        </span><span class="COMM">/**
+<span class='line'>245</span>          * This class allows authenticating users
+<span class='line'>246</span>          * @constructs
+<span class='line'>247</span>          */</span><span class="WHIT">
+<span class='line'>248</span>         </span><span class="NAME">initialize</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>249</span>         </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>250</span> 
+<span class='line'>251</span>         </span><span class="COMM">/**
+<span class='line'>252</span>          * Authenticates the user.
+<span class='line'>253</span>          * @param {Options} credentials
+<span class='line'>254</span>          *      represents the credentials needed for the authentication
+<span class='line'>255</span>          */</span><span class="WHIT">
+<span class='line'>256</span>         </span><span class="NAME">authenticate</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">credentials</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>257</span>             </span><span class="KEYW">throw</span><span class="WHIT"> </span><span class="STRN">'Abstract Method invocation. '</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT">
+<span class='line'>258</span>             </span><span class="STRN">'FastAPI.Social.Login :: authenticate'</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>259</span>         </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>260</span>     </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>261</span> 
+<span class='line'>262</span>     </span><span class="NAME">User</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">Class.create</span><span class="PUNC">(</span><span class="COMM">/** @lends FastAPI.Social.User.prototype */</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>263</span>         </span><span class="COMM">/**
+<span class='line'>264</span>          * This class allows managing the user's profile properties.
+<span class='line'>265</span>          * The properties that are available on request are:
+<span class='line'>266</span>          * &lt;li>FastBaseAPI.Social.User.USER_NAME or 'USER_NAME'&lt;/li>
+<span class='line'>267</span>          * &lt;li>FastBaseAPI.Social.User.FIRST_NAME or 'FIRST_NAME'&lt;/li>
+<span class='line'>268</span>          * &lt;li>FastBaseAPI.Social.User.LAST_NAME or 'LAST_NAME'&lt;/li>
+<span class='line'>269</span>          * &lt;li>FastBaseAPI.Social.User.DOB or 'DOB'&lt;/li>
+<span class='line'>270</span>          * &lt;li>FastBaseAPI.Social.User.USER_EMAIL or 'EMAIL'&lt;/li>
+<span class='line'>271</span>          * &lt;li>FastBaseAPI.Social.User.CURRENT_LOCATION or 'CURRENT_LOCATION'&lt;/li>
+<span class='line'>272</span>          * &lt;li>FastBaseAPI.Social.User.STATUS or 'STATUS'&lt;/li>
+<span class='line'>273</span>          * &lt;li>FastBaseAPI.Social.User.THUMBNAIL or 'THUMBNAIL'&lt;/li>
+<span class='line'>274</span>          * @constructs
+<span class='line'>275</span>          */</span><span class="WHIT">
+<span class='line'>276</span>         </span><span class="NAME">initialize</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>277</span>         </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>278</span> 
+<span class='line'>279</span>         </span><span class="COMM">/**
+<span class='line'>280</span>          * Returns the value of a specific user property.
+<span class='line'>281</span>          * @param {String} property
+<span class='line'>282</span>          *      represents the name of the property
+<span class='line'>283</span>          * @param {function} func
+<span class='line'>284</span>          *         callback handler
+<span class='line'>285</span>          */</span><span class="WHIT">
+<span class='line'>286</span>         </span><span class="NAME">get</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">property</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">func</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>287</span>             </span><span class="KEYW">throw</span><span class="WHIT"> </span><span class="STRN">'Abstract Method invocation. '</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT">
+<span class='line'>288</span>             </span><span class="STRN">'FastAPI.Social.User :: get'</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>289</span>         </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>290</span> 
+<span class='line'>291</span>         </span><span class="COMM">/**
+<span class='line'>292</span>          * Sets the value of a user property.
+<span class='line'>293</span>          * @param {String} property
+<span class='line'>294</span>          *      represents the name of the property
+<span class='line'>295</span>          * @param {String} value
+<span class='line'>296</span>          *      represents value of the property
+<span class='line'>297</span>          *
+<span class='line'>298</span>          */</span><span class="WHIT">
+<span class='line'>299</span>         </span><span class="NAME">set</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">property</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">value</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>300</span>             </span><span class="KEYW">throw</span><span class="WHIT"> </span><span class="STRN">'Abstract Method invocation. '</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT">
+<span class='line'>301</span>                 </span><span class="STRN">'FastAPI.Social.User :: set'</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>302</span>         </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>303</span> 
+<span class='line'>304</span>         </span><span class="COMM">/**
+<span class='line'>305</span>          * Sets the user's status.
+<span class='line'>306</span>          * @param status
+<span class='line'>307</span>          *      represents the status of the user
+<span class='line'>308</span>          */</span><span class="WHIT">
+<span class='line'>309</span>         </span><span class="NAME">postStatus</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">status</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>310</span>             </span><span class="KEYW">throw</span><span class="WHIT"> </span><span class="STRN">'Abstract Method invocation. '</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT">
+<span class='line'>311</span>                 </span><span class="STRN">'FastAPI.Social.User :: postStatus'</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>312</span>         </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>313</span>     </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>314</span> 
+<span class='line'>315</span>     </span><span class="NAME">Friends</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">Class.create</span><span class="PUNC">(</span><span class="COMM">/** @lends FastAPI.Social.Friends.prototype */</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>316</span>         </span><span class="COMM">/**
+<span class='line'>317</span>          * This class offers the methods to deal with the user's friends
+<span class='line'>318</span>          * @constructs
+<span class='line'>319</span>          */</span><span class="WHIT">
+<span class='line'>320</span>         </span><span class="NAME">initialize</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>321</span>         </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>322</span> 
+<span class='line'>323</span>         </span><span class="COMM">/**
+<span class='line'>324</span>          * Creates an array with the user's friends and applies the handler passed as parameter to it.
+<span class='line'>325</span>          * The returned information about each friend contains:
+<span class='line'>326</span>          * &lt;ul>
+<span class='line'>327</span>          * &lt;li>id&lt;/li>
+<span class='line'>328</span>          * &lt;li>FastBaseAPI.Social.User.USER_NAME or 'USER_NAME'&lt;/li>
+<span class='line'>329</span>          * &lt;li>FastBaseAPI.Social.User.FIRST_NAME or 'FIRST_NAME'&lt;/li>
+<span class='line'>330</span>          * &lt;li>FastBaseAPI.Social.User.LAST_NAME or 'LAST_NAME'&lt;/li>
+<span class='line'>331</span>          * &lt;li>FastBaseAPI.Social.User.THUMBNAIL or 'THUMBNAIL'&lt;/li>
+<span class='line'>332</span>          *  &lt;/ul>
+<span class='line'>333</span>          * @param {function} func
+<span class='line'>334</span>          *      callback handler
+<span class='line'>335</span>          */</span><span class="WHIT">
+<span class='line'>336</span> 
+<span class='line'>337</span>         </span><span class="NAME">getFriends</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">func</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>338</span>             </span><span class="KEYW">throw</span><span class="WHIT"> </span><span class="STRN">'Abstract Method invocation. '</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT">
+<span class='line'>339</span>             </span><span class="STRN">'FastAPI.Social.Friends :: getFriends'</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>340</span>         </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>341</span> 
+<span class='line'>342</span>         </span><span class="COMM">/**
+<span class='line'>343</span>          * Not specified yed
+<span class='line'>344</span>          */</span><span class="WHIT">
+<span class='line'>345</span>         </span><span class="NAME">tellAFriend</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>346</span>             </span><span class="KEYW">throw</span><span class="WHIT"> </span><span class="STRN">'Abstract Method invocation. '</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT">
+<span class='line'>347</span>             </span><span class="STRN">'FastAPI.Social.Friends :: tellAFriend'</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>348</span>         </span><span class="PUNC">}</span><span class="WHIT">
 <span class='line'>349</span> 
-<span class='line'>350</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>350</span>     </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="WHIT">
 <span class='line'>351</span> 
-<span class='line'>352</span> </span><span class="NAME">FastBaseAPI.Social.User.USER_NAME</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">'USER_NAME'</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>353</span> </span><span class="NAME">FastBaseAPI.Social.User.FIRST_NAME</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">'FIRST_NAME'</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>354</span> </span><span class="NAME">FastBaseAPI.Social.User.LAST_NAME</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">'LAST_NAME'</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>355</span> </span><span class="NAME">FastBaseAPI.Social.User.DOB</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">'DOB'</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>356</span> </span><span class="NAME">FastBaseAPI.Social.User.USER_EMAIL</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">'EMAIL'</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>357</span> </span><span class="NAME">FastBaseAPI.Social.User.CURRENT_LOCATION</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">'CURRENT_LOCATION'</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>358</span> </span><span class="NAME">FastBaseAPI.Social.User.STATUS</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">'STATUS'</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>359</span> </span><span class="NAME">FastBaseAPI.Social.User.THUMBNAIL</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">'THUMBNAIL'</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>360</span> </span></pre></body></html>
+<span class='line'>352</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>353</span> 
+<span class='line'>354</span> </span><span class="NAME">FastBaseAPI.Social.User.USER_NAME</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">'USER_NAME'</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>355</span> </span><span class="NAME">FastBaseAPI.Social.User.FIRST_NAME</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">'FIRST_NAME'</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>356</span> </span><span class="NAME">FastBaseAPI.Social.User.LAST_NAME</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">'LAST_NAME'</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>357</span> </span><span class="NAME">FastBaseAPI.Social.User.DOB</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">'DOB'</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>358</span> </span><span class="NAME">FastBaseAPI.Social.User.USER_EMAIL</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">'EMAIL'</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>359</span> </span><span class="NAME">FastBaseAPI.Social.User.CURRENT_LOCATION</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">'CURRENT_LOCATION'</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>360</span> </span><span class="NAME">FastBaseAPI.Social.User.STATUS</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">'STATUS'</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>361</span> </span><span class="NAME">FastBaseAPI.Social.User.THUMBNAIL</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">'THUMBNAIL'</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>362</span> </span></pre></body></html>
