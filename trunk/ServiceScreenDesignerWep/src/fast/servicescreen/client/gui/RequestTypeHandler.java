@@ -16,6 +16,9 @@ public class RequestTypeHandler
 	private ServiceScreen screen;
 	private AbsolutePanel panel;
 	
+	//start state
+	public WrappingType currentType = WrappingType.WRAP_AND_REQUEST_XML;
+	
 	public RequestTypeHandler(ServiceScreenDesignerWep designer, ServiceScreen screen)
 	{
 		this.designer = designer;
@@ -25,6 +28,9 @@ public class RequestTypeHandler
 		//create radiobuttons to choose
 		RadioButton reqJSON = new RadioButton("reqType", "JSON");
 		RadioButton reqXML = new RadioButton("reqType", "XML");
+		
+		//activate XML button as default
+		reqXML.setValue(true);
 		
 		//add it into one panel
 		panel.add(reqXML);
@@ -44,7 +50,13 @@ public class RequestTypeHandler
 		@Override
 		public void onClick(ClickEvent event)
 		{
-			designer.setCodeGenViewer(new CodeGenViewer(screen, WrappingType.WRAP_AND_REQUEST_XML));
+			currentType = WrappingType.WRAP_AND_REQUEST_XML;
+			
+			//This should replace MediationRuleGUI to normal RuleGUI to handle JSON
+			designer.setRuleGUI_byType(currentType);
+			
+			//This replace the CodeGenerator
+			designer.setCodeGenViewer(new CodeGenViewer(screen, currentType));
 		}
 	}
 
@@ -57,7 +69,13 @@ public class RequestTypeHandler
 		@Override
 		public void onClick(ClickEvent event)
 		{
-			designer.setCodeGenViewer(new CodeGenViewer(screen, WrappingType.WRAP_AND_REQUEST_JSON));
+			currentType = WrappingType.WRAP_AND_REQUEST_JSON;
+			
+			//This should replace normal Rule GUI to MediationRuleGUI to handle JSON
+			designer.setRuleGUI_byType(currentType);
+			
+			//This replace the CodeGenerator 
+			designer.setCodeGenViewer(new CodeGenViewer(screen, currentType));
 		}
 	}
 	

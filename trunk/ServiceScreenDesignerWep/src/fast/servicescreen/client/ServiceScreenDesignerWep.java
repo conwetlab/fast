@@ -27,6 +27,7 @@ import fast.common.client.ServiceDesigner;
 import fast.common.client.ServiceScreen;
 import fast.common.client.ServiceScreenModel;
 import fast.common.client.ServiceWrapperOverviewTab;
+import fast.mediation.client.gui.MediationRuleGUI;
 import fast.servicescreen.client.gui.CTextChangeHandler;
 import fast.servicescreen.client.gui.PortGUI;
 import fast.servicescreen.client.gui.RequestGUI;
@@ -146,6 +147,11 @@ public class ServiceScreenDesignerWep extends FastTool implements EntryPoint
    private JSONValue savedJson;
    private TabPanel tabPanel;
    
+   //Panles which changes in runtime
+   private Widget codeGenViewer_Panel;
+   private Widget ruleGUI_Panel;
+   FlexTable transformationTable;
+   
    class BuildAction extends FAction
    {
       @SuppressWarnings({ "deprecation", "unchecked" })
@@ -253,13 +259,11 @@ public class ServiceScreenDesignerWep extends FastTool implements EntryPoint
       
       tabPanel = new TabPanel();
       
-      
       // build overview panel
       ServiceWrapperOverviewTab serviceWrapperOverviewTab = new ServiceWrapperOverviewTab();
       serviceWrapperOverviewTab.start(this, tabPanel);
       
       rebuildOtherTabs();
-      
       
       rootPanel.add(tabPanel);
       
@@ -349,7 +353,7 @@ public class ServiceScreenDesignerWep extends FastTool implements EntryPoint
       tabPanel.add(requestTable, "Request");
       
       // transformation tab
-      FlexTable transformationTable = new FlexTable();
+      transformationTable = new FlexTable();
       FlexCellFormatter transformationTableCellFormatter = transformationTable.getFlexCellFormatter();
       transformationTable.addStyleName("cw-FlexTable");
       transformationTable.setWidth("32em");
@@ -362,7 +366,8 @@ public class ServiceScreenDesignerWep extends FastTool implements EntryPoint
       
       // Add translationtable
       ruleGUI = new RuleGUI(serviceScreen, requestHandler);
-      transformationTable.setWidget(numRows, 1, ruleGUI.createTranslationTable());
+      ruleGUI_Panel = ruleGUI.createTranslationTable();
+      transformationTable.setWidget(numRows, 1, ruleGUI_Panel);
 
       transformationTable.ensureDebugId("cwFlexTable");
       
@@ -372,10 +377,10 @@ public class ServiceScreenDesignerWep extends FastTool implements EntryPoint
       // Add the Codegenerator and it´s UI (for XML at first)
       codeGenViewer = new CodeGenViewer(serviceScreen, WrappingType.WRAP_AND_REQUEST_XML);
       codeGenViewer_Panel = codeGenViewer.createCodeGenViewer();
+      
       tabPanel.add(codeGenViewer_Panel, "CodeGen Viewer"); 
    }
 
-   public Widget codeGenViewer_Panel;
    public void setCodeGenViewer(CodeGenViewer viewer)
    {
 	   if(viewer != null && viewer != codeGenViewer)
@@ -387,6 +392,74 @@ public class ServiceScreenDesignerWep extends FastTool implements EntryPoint
 		   
 		   tabPanel.add(codeGenViewer_Panel, "CodeGen Viewer");
 	   }
+   }
+
+   /**
+    * Change of Rule GUI for XML or even JSON.
+    * Accept Wrap_AND_REQUEST_JSON and Wrap_AND_REQUEST_XML. 
+    * */
+   public void setRuleGUI_byType(WrappingType type)
+   {
+	   switch(type)
+	   {
+	   	case WRAP_AND_REQUEST_JSON: 
+	   								if(mediationGUI_tmp == null)
+	   								{
+	   									//create new mediationGUI
+	   									mediationGUI_tmp = new MediationRuleGUI(WrappingType.WRAP_AND_REQUEST_JSON, serviceScreen, requestHandler);
+	   									setRuleGUI(mediationGUI_tmp);
+	   								}
+	   								else
+	   								{
+	   									//set up last mediationGUI
+	   									setRuleGUI(mediationGUI_tmp);
+	   								}
+	   								
+	   								break;
+	   								
+	   	case WRAP_AND_REQUEST_XML:  if(ruleGUI_tmp == null)
+									{
+	   									//create new ruleGUI 
+										ruleGUI_tmp = new RuleGUI(serviceScreen, requestHandler);
+										setRuleGUI(ruleGUI_tmp);
+									}
+									else
+									{
+										//setup last ruleGUI
+										setRuleGUI(ruleGUI_tmp);
+									}
+			
+									break;
+	   }
+	   
+   }
+   
+   /**
+    * To switch RuleTab between JSON and XML handling.
+    * Accept RuleGUI and MediationGUI as input.
+    * */
+   RuleGUI ruleGUI_tmp = null;
+   MediationRuleGUI mediationGUI_tmp = null;
+   protected void setRuleGUI(RuleGUI ruleGUI)
+   {
+	   if(ruleGUI != null && this.ruleGUI != ruleGUI)
+	   {
+		   tabPanel.remove(transformationTable);
+		   tabPanel.remove(ruleGUI_Panel);
+		   
+		   ruleGUI_Panel = ruleGUI.createTranslationTable();
+		   this.ruleGUI = ruleGUI;
+		   
+		   tabPanel.add(ruleGUI_Panel, "Transformation");
+	   }
+   }
+   
+   /**
+    * Returns the Sendrequesthandler from this designer
+    * */
+   public SendRequestHandler getRequestHandler()
+   {
+	   return this.requestHandler;
    }
 
    public void setResultText(TextArea resultText)

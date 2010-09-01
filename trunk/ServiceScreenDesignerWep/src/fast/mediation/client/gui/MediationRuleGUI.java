@@ -20,9 +20,9 @@ import com.google.gwt.user.client.ui.Widget;
 import fast.common.client.BuildingBlock;
 import fast.common.client.FASTMappingRule;
 import fast.common.client.FactPort;
-import fast.servicescreen.client.RequestServiceAsync;
 import fast.servicescreen.client.gui.RuleGUI;
 import fast.servicescreen.client.gui.RuleUtil;
+import fast.servicescreen.client.gui.codegen_js.CodeGenViewer.WrappingType;
 import fast.servicescreen.client.gui.parser.OperationHandler;
 import fast.servicescreen.client.rpc.SendRequestHandler;
 
@@ -33,13 +33,16 @@ import fast.servicescreen.client.rpc.SendRequestHandler;
  * */
 public class MediationRuleGUI extends RuleGUI 
 {
-	public MediationRuleGUI(BuildingBlock buildingBlock, SendRequestHandler rh)
+	public MediationRuleGUI(WrappingType reqType, BuildingBlock buildingBlock, SendRequestHandler rh)
 	{
 		super(buildingBlock, rh);
+		
+		this.reqType = reqType;
 	}
 	
 	//The JSON resource and result - Tree
 	public Tree jsonTree;
+	public WrappingType reqType;
 	private JSONValue jsonValue;
 	
 	/**
@@ -54,8 +57,9 @@ public class MediationRuleGUI extends RuleGUI
     * creates and returns a flextable containing the trees
     * for translation design
     * */
-   public Widget createJsonTranslationTable()
-   {
+	@Override
+    public Widget createTranslationTable()
+    {
       final FlexTable translationTable = new FlexTable();
       int rowCount = translationTable.getRowCount();
       
@@ -70,7 +74,7 @@ public class MediationRuleGUI extends RuleGUI
       resultScrollPanel.setAlwaysShowScrollBars(true);
       resultScrollPanel.setSize("11cm", "11cm"); 
       
-      //create xmlTree and add a selection/PropertyChange - handler
+      //create Tree and add a selection/PropertyChange - handler
       jsonTree = new Tree();
       jsonTree.addSelectionHandler(new JsonTreeHandler());
       resultScrollPanel.setWidget(jsonTree);
@@ -92,18 +96,30 @@ public class MediationRuleGUI extends RuleGUI
       factsScrollPanel.setWidget(factsTree);
       translationTable.setWidget(rowCount, 2, factsScrollPanel);
       
-      //build the result tree
-      createResultTree();
+      
+       //build the result tree
+	   //if DataMTool -> overtake example values
+	   if(reqType == WrappingType.WRAP_JSON)
+	   {
+		   setJsonExampleValue("{}");
+		   
+		   createResultTree();
+		   
+		   updateFactsTree();		   
+	   }
       
       // return the table
       translationTable.ensureDebugId("cwFlexTable");
       return translationTable;
    }
 
-   //called to build the result tree
+   /**
+    * Called to build the result tree
+    * */
    public void createResultTree()
    {
-	   setJsonValue("{}");
+	   jsonTree.clear();
+	   
 	   TreeItem rootJsonItem = jsonTree.addItem("JSONValue:");
 	   rootJsonItem.setState(true);
 	   buildJsonTree(rootJsonItem, jsonValue, "JSONValue");
@@ -112,12 +128,14 @@ public class MediationRuleGUI extends RuleGUI
 
    @Override
    public void updateFactsTree()
-   {
+   {   
 	   //transforms the rule hierarchy to Strings in facts - tree
 	   if (rootRule == null)
 	   {
 		   rootRule = (FASTMappingRule) buildingBlock.iteratorOfMappingRules().next();
 	   }
+	   
+	   createResultTree();
 	   
 	   buildFactsTree(factsTree);
    }
@@ -132,8 +150,8 @@ public class MediationRuleGUI extends RuleGUI
 
 	   transform(jsonValue, rootRule, rootItem);
 
-//	   RuleUtil.expandTree(aFactsTree);				//This expand 3 steps
-	   RuleUtil.expandItem(aFactsTree.getItem(0));	//This expand the HOLE tree
+       //This expand the HOLE tree
+	   RuleUtil.expandItem(aFactsTree.getItem(0));	
    }
    
    /**
@@ -153,7 +171,6 @@ public class MediationRuleGUI extends RuleGUI
 		   String sourceTagname = opHandler.getLastSourceTagname();
 	       //add the handler within parse results into the rule
 		   rule.setOperationHandler(opHandler);
-		   
 		   
 		   JSONArray elements = new JSONArray();
 		   //for normal sourceTagnames retrieve the elements recursive
@@ -209,6 +226,7 @@ public class MediationRuleGUI extends RuleGUI
 	   for (Iterator<FASTMappingRule> kidIter = rule.iteratorOfKids(); kidIter.hasNext();)
 	   {
 		   FASTMappingRule kid = (FASTMappingRule) kidIter.next();
+		   
 		   //call transform for the kid
 		   transform(rootJsonValue, kid, treeItem);
 	   }
@@ -235,11 +253,27 @@ public class MediationRuleGUI extends RuleGUI
       }
    }
    
-	//testing json responses
-	@SuppressWarnings("unused")
-	private RequestServiceAsync reqService;
-	
-	private void setJsonValue(String value)
+   /**
+    * Setting up JSON vlue from request as input value
+    * */
+   public void setJsonRequestetValue(String value)
+   {
+		try
+		{
+			jsonValue = JSONParser.parse(value);
+		}
+		catch (Exception e)
+		{
+			jsonValue = JSONParser.parse("{}");
+			
+			e.printStackTrace();
+		}
+   }
+   
+	/**
+	 * Setting up JSON example values as input value
+	 * */
+	public void setJsonExampleValue(String value)
 	{
 		String jsonValueString = value;
 		
@@ -250,7 +284,7 @@ public class MediationRuleGUI extends RuleGUI
 				String exampleValueString = factPort.getExampleValue(); 
 				if(exampleValueString != null && ! "".equals(exampleValueString))
 				{
-				jsonValueString = exampleValueString;
+					jsonValueString = exampleValueString;
 				}
 			}
 		}
@@ -258,16 +292,8 @@ public class MediationRuleGUI extends RuleGUI
 		try {
 			jsonValue = JSONParser.parse(jsonValueString);
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			jsonValue = JSONParser.parse("{}");
 		}
-		
-		//FIXME: access the real resource if gui is in service-wrapper-tool
-//		String url = "http:////ergast.com//api//f1//drivers//alonso//driverStandings//1//seasons.json";
-//		RequestServlet service = new RequestServlet();
-//		String response = service.sendHttpRequest_GET(url);
-//		
-//		jsonValue = JSONParser.parse(response);
 	}
 
 

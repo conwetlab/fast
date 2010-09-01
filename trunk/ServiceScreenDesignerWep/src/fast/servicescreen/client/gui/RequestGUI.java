@@ -22,6 +22,7 @@ public class RequestGUI
 
 	private ServiceScreenDesignerWep designer;
 	private Widget templateTable;
+	public RequestTypeHandler reqTypeHandler;
 
 	public Widget createRequestTable()
 	{
@@ -76,7 +77,7 @@ public class RequestGUI
 		requestTable.setWidget(numRows, 1, designer.requestUrlBox);
 		
 		//Add handler to change code gen, if request type is changing
-		RequestTypeHandler reqTypeHandler = new RequestTypeHandler(designer, designer.serviceScreen);
+		reqTypeHandler = new RequestTypeHandler(designer, designer.serviceScreen);
 		requestTable.setWidget(numRows, 2, reqTypeHandler.getChooserPanel());
 		
 		numRows++;
@@ -84,7 +85,7 @@ public class RequestGUI
 
 		// Add textfield for result xml
 		designer.resultText.setSize("20cm", "6cm");
-		requestTable.setWidget(numRows, 1, new Label("Service Reply (XML): "));
+		requestTable.setWidget(numRows, 1, new Label("Service Reply : "));
 		requestTable.setWidget(numRows+1, 1, designer.resultText);
 		numRows++;
 		numRows++;

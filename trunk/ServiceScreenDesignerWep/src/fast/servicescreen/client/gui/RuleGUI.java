@@ -74,7 +74,7 @@ public class RuleGUI
       ScrollPanel resultScrollPanel = new ScrollPanel();
       resultScrollPanel.setAlwaysShowScrollBars(true);
       resultScrollPanel.setSize("11cm", "11cm"); 
-      
+
       //create xmlTree and add a selection/PropertyChange - handler
       xmlTree = new Tree();
       xmlTree.addSelectionHandler(new XmlTreeHandler());

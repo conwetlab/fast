@@ -18,16 +18,17 @@ import com.google.gwt.xml.client.XMLParser;
 
 import fast.common.client.FactPort;
 import fast.common.client.TemplateParameter;
+import fast.mediation.client.gui.MediationRuleGUI;
 import fast.servicescreen.client.RequestService;
 import fast.servicescreen.client.RequestServiceAsync;
 import fast.servicescreen.client.ServiceScreenDesignerWep;
 import fast.servicescreen.client.gui.RuleUtil;
+import fast.servicescreen.client.gui.codegen_js.CodeGenViewer.WrappingType;
 
 public class SendRequestHandler implements ClickHandler
 {
    private ServiceScreenDesignerWep designer;
    public RequestServiceAsync service;
-   
    public Document xmlDoc;
    
    public SendRequestHandler(ServiceScreenDesignerWep serviceScreenDesignerWep)
@@ -107,7 +108,8 @@ public class SendRequestHandler implements ClickHandler
    class ParseXMLAction implements AsyncCallback<String>
    {
       @Override
-      public void onSuccess(String result) {
+      public void onSuccess(String result)
+      {
          designer.resultText.setText(result);
          
          parseServerResponse(result);
@@ -122,16 +124,41 @@ public class SendRequestHandler implements ClickHandler
    }
 
    /**
-    * Parses the Xml requests result and add a 
+    * Parses the requests result and add a 
     * representing tree in two tabs
     * */
    private void parseServerResponse(String result)
    {
       System.out.println("Going to parse server response");
       
-      xmlDoc = XMLParser.parse(result);
-      
-      buildXmlTree(designer.ruleGUI.xmlTree);
+      if(designer.requestGui.reqTypeHandler.currentType == WrappingType.WRAP_AND_REQUEST_JSON) //parse JSON
+      {
+    	  //cut the trash from result value 
+    	  int first, last;
+    	  first = result.indexOf("{");
+    	  last = result.lastIndexOf("}");
+    	  if(first < 0 || last <= 0)
+    	  {
+    		  //do nothing
+    	  }
+    	  else if(last == result.length())
+    	  {
+    		  result = result.substring(first, last);
+    	  }
+    	  else
+    	  {
+    		  result = result.substring(first, last +1);
+    	  }
+
+    	  ((MediationRuleGUI) designer.ruleGUI).setJsonRequestetValue(result);
+    	  ((MediationRuleGUI) designer.ruleGUI).createResultTree();
+      }
+      else	//parse XML
+      {
+          xmlDoc = XMLParser.parse(result);
+          
+          buildXmlTree(designer.ruleGUI.xmlTree);  
+      }
    }
    
    //code reuse
