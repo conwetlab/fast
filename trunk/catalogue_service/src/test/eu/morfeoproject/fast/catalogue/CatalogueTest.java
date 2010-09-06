@@ -94,18 +94,30 @@ public class CatalogueTest extends TestCase {
 		Assert.assertEquals(p1.getConditions().size(), p2.getConditions().size());
 	}
 	
-	public void createScreen() throws Exception {
+	public void createScreen1() throws Exception {
 		JSONObject json = new JSONObject(Util.getFileContentAsString("test/json/screens/amazonList.json"));
 		URI uri = new URIImpl("http://localhost:9000/FASTCatalogue/screens/"+json.getString("id"));
 		Screen s1 = BuildingBlockJSONBuilder.buildScreen(json, uri);
 		catalogue.addScreen(s1);
-		Screen p2 = catalogue.getScreen(uri);
-		Assert.assertTrue(s1.equals(p2));
-		Assert.assertEquals(s1.getPreconditions().size(), p2.getPreconditions().size());
-		Assert.assertEquals(s1.getPostconditions().size(), p2.getPostconditions().size());
-		Assert.assertEquals(s1.getDefinition().getBuildingBlocks().size(), p2.getDefinition().getBuildingBlocks().size());
-		Assert.assertEquals(s1.getDefinition().getPipes().size(), p2.getDefinition().getPipes().size());
-		Assert.assertEquals(s1.getDefinition().getTriggers().size(), p2.getDefinition().getTriggers().size());
+		Screen s2 = catalogue.getScreen(uri);
+		Assert.assertTrue(s1.equals(s2));
+		Assert.assertEquals(s1.getPreconditions().size(), s2.getPreconditions().size());
+		Assert.assertEquals(s1.getPostconditions().size(), s2.getPostconditions().size());
+		Assert.assertEquals(s1.getDefinition().getBuildingBlocks().size(), s2.getDefinition().getBuildingBlocks().size());
+		Assert.assertEquals(s1.getDefinition().getPipes().size(), s2.getDefinition().getPipes().size());
+		Assert.assertEquals(s1.getDefinition().getTriggers().size(), s2.getDefinition().getTriggers().size());
+	}
+
+	public void createScreen2() throws Exception {
+		JSONObject json = new JSONObject(Util.getFileContentAsString("test/json/screens/amazonListCode.json"));
+		URI uri = new URIImpl("http://localhost:9000/FASTCatalogue/screens/"+json.getString("id"));
+		Screen s1 = BuildingBlockJSONBuilder.buildScreen(json, uri);
+		catalogue.addScreen(s1);
+		Screen s2 = catalogue.getScreen(uri);
+		Assert.assertTrue(s1.equals(s2));
+		Assert.assertEquals(s1.getPreconditions().size(), s2.getPreconditions().size());
+		Assert.assertEquals(s1.getPostconditions().size(), s2.getPostconditions().size());
+		Assert.assertEquals(s1.getCode(), s2.getCode());
 	}
 
 	public void findAndCheck1() throws Exception {
@@ -131,7 +143,8 @@ public class CatalogueTest extends TestCase {
 	    suite.addTest(new CatalogueTest("createOperator"));
 	    suite.addTest(new CatalogueTest("createBackendService"));
 	    suite.addTest(new CatalogueTest("createPostcondition"));
-	    suite.addTest(new CatalogueTest("createScreen"));
+	    suite.addTest(new CatalogueTest("createScreen1"));
+	    suite.addTest(new CatalogueTest("createScreen2"));
 	    suite.addTest(new CatalogueTest("findAndCheck1"));
 		return suite;
 	}
