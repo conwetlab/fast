@@ -165,14 +165,14 @@
         <field to="contenttypes.contenttype" name="content_type" rel="ManyToOneRel">18</field>
         <field type="CharField" name="codename">change_usertag</field>
     </object>
-    <object pk="59" model="auth.permission">
-        <field type="CharField" name="name">Can change user vote</field>
-        <field to="contenttypes.contenttype" name="content_type" rel="ManyToOneRel">20</field>
-        <field type="CharField" name="codename">change_uservote</field>
-    </object>
     <object pk="56" model="auth.permission">
         <field type="CharField" name="name">Can change user vote</field>
         <field to="contenttypes.contenttype" name="content_type" rel="ManyToOneRel">19</field>
+        <field type="CharField" name="codename">change_uservote</field>
+    </object>
+    <object pk="59" model="auth.permission">
+        <field type="CharField" name="name">Can change user vote</field>
+        <field to="contenttypes.contenttype" name="content_type" rel="ManyToOneRel">20</field>
         <field type="CharField" name="codename">change_uservote</field>
     </object>
     <object pk="48" model="auth.permission">
@@ -306,10 +306,10 @@
         <field type="CharField" name="last_name"></field>
         <field type="CharField" name="email">admin@admin.com</field>
         <field type="CharField" name="password">sha1$a6353$02150b7e837cc52074326933794690b816480076</field>
-        <field type="BooleanField" name="is_staff">True</field>
-        <field type="BooleanField" name="is_active">True</field>
-        <field type="BooleanField" name="is_superuser">True</field>
-        <field type="DateTimeField" name="last_login">2010-01-12 17:21:15</field>
+        <field type="BooleanField" name="is_staff">1</field>
+        <field type="BooleanField" name="is_active">1</field>
+        <field type="BooleanField" name="is_superuser">1</field>
+        <field type="DateTimeField" name="last_login">2010-09-07 16:05:43</field>
         <field type="DateTimeField" name="date_joined">2009-09-21 14:11:49</field>
         <field to="auth.group" name="groups" rel="ManyToManyRel"></field>
         <field to="auth.permission" name="user_permissions" rel="ManyToManyRel"></field>
