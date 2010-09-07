@@ -54,47 +54,16 @@ class BuildingBlockCollection(resource.Resource):
         received_json = request.POST['buildingblock']
 
         try:
-            data = simplejson.loads(received_json)
+            data = create_bb(simplejson.loads(received_json), bbtype, user)
 
-            now = datetime.utcnow()
-            # Drop microseconds
-            now = datetime(now.year, now.month, now.day, now.hour, now.minute, now.second)
-
-            data['creationDate'] = now.isoformat() + "+0000" #UTC
-            if data.get('version') == '':
-                data['version'] = now.strftime("%Y%m%d-%H%M")
-
-            bb = None
-            if bbtype == 'screenflow':
-                bb = Screenflow(author=user, name=data.get('name'), version=data.get('version'), type=bbtype)
-            elif bbtype == 'screen':
-                bb = Screen(author=user, name=data.get('name'), version=data.get('version'), type=bbtype)
-            elif bbtype == 'form':
-                bb = Form(author=user, name=data.get('name'), version=data.get('version'), type=bbtype)
-            elif bbtype == 'operator':
-                bb = Operator(author=user, name=data.get('name'), version=data.get('version'), type=bbtype)
-            elif bbtype == 'resource':
-                bb = Resource(author=user, name=data.get('name'), version=data.get('version'), type=bbtype)
-            else:
-                raise Exception(_('Expecting building block type.'))
-
-            bb.creationDate = now
-            bb.save()
-
-            tags = data.get('tags')
-            updateTags(user, bb, tags)
-            data['creator'] = user.username
-            data['id'] = bb.pk
-            data['type'] = bbtype
-
-            bb.data = json_encode(data)
-            bb.save()
-            updateCode(bb,data)
-
-            return HttpResponse(bb.data, mimetype='application/json; charset=UTF-8')
+            return HttpResponse(data, mimetype='application/json; charset=UTF-8')
         except Exception, e:
             transaction.rollback()
             return HttpResponseServerError(json_encode({'message':unicode(e)}), mimetype='application/json; charset=UTF-8')
+
+
+
+
 
 class BuildingBlockCollectionSearch(resource.Resource):
 
@@ -576,3 +545,41 @@ def updateTags(user, buildingblock, tags):
             usertag = UserTag.objects.get_or_create (user=user, tag=t, buildingBlock=buildingblock)[0]
             usertag.save()
 
+def create_bb(data, bbtype, author):
+
+    now = datetime.utcnow()
+    # Drop microseconds
+    now = datetime(now.year, now.month, now.day, now.hour, now.minute, now.second)
+
+    data['creationDate'] = now.isoformat() + "+0000" #UTC
+    if data.get('version') == '':
+        data['version'] = now.strftime("%Y%m%d-%H%M")
+
+    bb = None
+    if bbtype == 'screenflow':
+        bb = Screenflow(author=author, name=data.get('name'), version=data.get('version'), type=bbtype)
+    elif bbtype == 'screen':
+        bb = Screen(author=author, name=data.get('name'), version=data.get('version'), type=bbtype)
+    elif bbtype == 'form':
+        bb = Form(author=author, name=data.get('name'), version=data.get('version'), type=bbtype)
+    elif bbtype == 'operator':
+        bb = Operator(author=author, name=data.get('name'), version=data.get('version'), type=bbtype)
+    elif bbtype == 'resource':
+        bb = Resource(author=author, name=data.get('name'), version=data.get('version'), type=bbtype)
+    else:
+        raise Exception(_('Expecting building block type.'))
+
+    bb.creationDate = now
+    bb.save()
+
+    tags = data.get('tags')
+    updateTags(author, bb, tags)
+    data['creator'] = author.username
+    data['id'] = bb.pk
+    data['type'] = bbtype
+
+    bb.data = json_encode(data)
+    bb.save()
+    updateCode(bb,data)
+
+    return bb.data
