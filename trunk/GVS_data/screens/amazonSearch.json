@@ -1,5 +1,5 @@
 {
-    "name":"Compound Amazon Search Screen",
+    "name":"Amazon Search Screen",
     "creationDate":"2009-04-20T17:00:00+0100",
     "creator":"admin",
     "description":{
@@ -8,7 +8,7 @@
     "tags":[
         {
             "label":{
-                "en-gb":"compound"
+                "en-gb":"scratch"
             }
         },
         {
@@ -26,46 +26,14 @@
     "homepage":"http://www.deri.ie/amazonSearch",
     "icon":"http://demo.fast.morfeo-project.org/gvsdata/images/catalogue/amazonSearch.png",
     "label":{
-        "en-gb":"Product Search Compound"
+        "en-gb":"Product Search"
     },
     "rights":"http://creativecommons.org/",
     "screenshot":"http://demo.fast.morfeo-project.org/gvsdata/images/screenshots/amazonSearch.png",
     "version":"1.0",
-    "definition":{
-        "buildingblocks":[
-            {
-                "id":"amazonSearchForm1",
-                "uri":"http://purl.oclc.org/fast/ontology/gadget#FormElement1263313188505"
-            }
-        ],
-        "pipes":[
-            {
-                "from":{
-                    "buildingblock":"amazonSearchForm1",
-                    "condition":"filter"
-                },
-                "to":{
-                    "buildingblock":"",
-                    "action":"",
-                    "condition":"filter"
-                }
-            }
-        ],
-        "triggers":[
-            {
-                "from":{
-                    "buildingblock":"",
-                    "name":"_onload"
-                },
-                "to":{
-                    "buildingblock":"amazonSearchForm1",
-                    "action":"init"
-                }
-            }
-        ]
-    },
+    "code":"http://demo.fast.morfeo-project.org/gvsdata/screens/amazonSearch.scr.html",
     "preconditions":[
-        
+
     ],
     "postconditions":[
         [

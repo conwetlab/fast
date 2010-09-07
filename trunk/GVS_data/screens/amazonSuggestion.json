@@ -1,5 +1,5 @@
 {
-    "name":"Compound Amazon Suggestion Screen",
+    "name":"Amazon Suggestion Screen",
     "creationDate":"2009-04-20T17:00:00+0100",
     "creator":"admin",
     "description":{
@@ -8,7 +8,7 @@
     "tags":[
         {
             "label":{
-                "en-gb":"compound"
+                "en-gb":"scratch"
             }
         },
         {
@@ -31,117 +31,16 @@
     "homepage":"http://www.deri.ie/amazonSuggestion",
     "icon":"http://demo.fast.morfeo-project.org/gvsdata/images/catalogue/amazonSuggestion.png",
     "label":{
-        "en-gb":"Suggestion List Compound"
+        "en-gb":"Suggestion List"
     },
     "rights":"http://creativecommons.org/",
     "screenshot":"http://demo.fast.morfeo-project.org/gvsdata/images/screenshots/amazonSuggestion.png",
     "version":"1.0",
-    "definition":{
-        "buildingblocks":[
-            {
-                "id":"amazonSuggestionListForm1",
-                "uri":"http://purl.oclc.org/fast/ontology/gadget#FormElement1263313198255"
-            },
-            {
-                "id":"SuggestionListService1",
-                "uri":"http://purl.oclc.org/fast/ontology/gadget#BackendService1263313254194"
-            }
-        ],
-        "pipes":[
-            {
-                "from":{
-                    "buildingblock":"",
-                    "condition":"item"
-                },
-                "to":{
-                    "buildingblock":"amazonSuggestionListForm1",
-                    "condition":"item",
-                    "action":"init"
-                }
-            },
-            {
-                "from":{
-                    "buildingblock":"",
-                    "condition":"item"
-                },
-                "to":{
-                    "buildingblock":"SuggestionListService1",
-                    "condition":"item",
-                    "action":"fetch"
-                }
-            },
-            {
-                "from":{
-                    "buildingblock":"SuggestionListService1",
-                    "condition":"list"
-                },
-                "to":{
-                    "buildingblock":"amazonSuggestionListForm1",
-                    "condition":"list",
-                    "action":"showTable"
-                }
-            },
-            {
-                "from":{
-                    "buildingblock":"SuggestionListService1",
-                    "condition":"message"
-                },
-                "to":{
-                    "buildingblock":"amazonSuggestionListForm1",
-                    "condition":"message",
-                    "action":"showMessage"
-                }
-            },
-            {
-                "from":{
-                    "buildingblock":"amazonListForm1",
-                    "condition":"filter"
-                },
-                "to":{
-                    "buildingblock":"SuggestionListService1",
-                    "condition":"filter",
-                    "action":"search"
-                }
-            },
-            {
-                "from":{
-                    "buildingblock":"amazonSuggestionListForm1",
-                    "condition":"item"
-                },
-                "to":{
-                    "buildingblock":"",
-                    "action":"",
-                    "condition":"item"
-                }
-            }
-        ],
-        "triggers":[
-            {
-                "from":{
-                    "buildingblock":"",
-                    "name":"_onload"
-                },
-                "to":{
-                    "buildingblock":"amazonSuggestionListForm1",
-                    "action":"init"
-                }
-            },
-            {
-                "from":{
-                    "buildingblock":"",
-                    "name":"_onload"
-                },
-                "to":{
-                    "buildingblock":"SuggestionListService1",
-                    "action":"fetch"
-                }
-            }
-        ]
-    },
+    "code":"http://demo.fast.morfeo-project.org/gvsdata/screens/amazonSuggestion.scr.html",
     "preconditions":[
         [
             {
-                "id":"item",
+                "id": "item",
                 "label":{
                     "en-gb":"An item"
                 },

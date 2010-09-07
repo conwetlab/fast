@@ -1,5 +1,5 @@
 {
-    "name":"Compound Amazon List Screen",
+    "name":"Amazon List Screen",
     "creationDate":"2009-02-11T14:59:52+0100",
     "creator":"admin",
     "description":{
@@ -8,7 +8,7 @@
     "tags":[
         {
             "label":{
-                "en-gb":"compound"
+                "en-gb":"scratch"
             }
         },
         {
@@ -27,95 +27,16 @@
     "homepage":"http://www.deri.ie/amazonList",
     "icon":"http://demo.fast.morfeo-project.org/gvsdata/images/catalogue/amazonList.png",
     "label":{
-        "en-gb":"Product List Compound"
+        "en-gb":"Product List"
     },
     "rights":"http://creativecommons.org/",
-    "screenshot":"http://demo.fast.morfeo-project.org/gvsdata/images/screenshots/amazonProductList.png",
+    "screenshot":"http://localhost:8010/images/screenshots/amazonProductList.png",
     "version":"1.0",
-    "definition":{
-        "buildingblocks":[
-            {
-                "id":"amazonListForm1",
-                "uri":"http://purl.oclc.org/fast/ontology/gadget#FormElement1263313163770"
-            },
-            {
-                "id":"AmazonSearchService1",
-                "uri":"http://purl.oclc.org/fast/ontology/gadget#BackendService1263313249397"
-            }
-        ],
-        "pipes":[
-            {
-                "from":{
-                    "buildingblock":"",
-                    "condition":"filter"
-                },
-                "to":{
-                    "buildingblock":"AmazonSearchService1",
-                    "condition":"filter",
-                    "action":"search"
-                }
-            },
-            {
-                "from":{
-                    "buildingblock":"AmazonSearchService1",
-                    "condition":"list"
-                },
-                "to":{
-                    "buildingblock":"amazonListForm1",
-                    "condition":"list",
-                    "action":"showTable"
-                }
-            },
-            {
-                "from":{
-                    "buildingblock":"amazonListForm1",
-                    "condition":"filter"
-                },
-                "to":{
-                    "buildingblock":"AmazonSearchService1",
-                    "condition":"filter",
-                    "action":"search"
-                }
-            },
-            {
-                "from":{
-                    "buildingblock":"amazonListForm1",
-                    "condition":"item"
-                },
-                "to":{
-                    "buildingblock":"",
-                    "action":"",
-                    "condition":"item"
-                }
-            }
-        ],
-        "triggers":[
-            {
-                "from":{
-                    "buildingblock":"",
-                    "name":"_onload"
-                },
-                "to":{
-                    "buildingblock":"amazonListForm1",
-                    "action":"init"
-                }
-            },
-            {
-                "from":{
-                    "buildingblock":"",
-                    "name":"_onload"
-                },
-                "to":{
-                    "buildingblock":"AmazonSearchService1",
-                    "action":"search"
-                }
-            }
-        ]
-    },
+    "code":"http://demo.fast.morfeo-project.org/gvsdata/screens/amazonList.scr.html",
     "preconditions":[
         [
             {
-                "id":"filter",
+                "id": "searchCriteria",
                 "label":{
                     "en-gb":"A search criteria"
                 },

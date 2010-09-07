@@ -1,5 +1,5 @@
 {
-    "name":"Compound Amazon Product Screen",
+    "name":"Amazon Product Screen",
     "creationDate":"2009-04-20T17:00:00+0100",
     "creator":"admin",
     "description":{
@@ -8,7 +8,7 @@
     "tags":[
         {
             "label":{
-                "en-gb":"compound"
+                "en-gb":"scratch"
             }
         },
         {
@@ -31,131 +31,16 @@
     "homepage":"http://www.deri.ie/amazonProduct",
     "icon":"http://demo.fast.morfeo-project.org/gvsdata/images/catalogue/amazonProduct.png",
     "label":{
-        "en-gb":"Product Details Compound"
+        "en-gb":"Product Details"
     },
     "rights":"http://creativecommons.org/",
     "screenshot":"http://demo.fast.morfeo-project.org/gvsdata/images/screenshots/amazonProductDetail.png",
     "version":"1.0",
-    "definition":{
-        "buildingblocks":[
-            {
-                "id":"amazonProductForm1",
-                "uri":"http://purl.oclc.org/fast/ontology/gadget#FormElement1263313183724"
-            },
-            {
-                "id":"AmazonItemLookupService1",
-                "uri":"http://purl.oclc.org/fast/ontology/gadget#BackendService1263313234944"
-            },
-            {
-                "id":"AmazonAddItemToCartService1",
-                "uri":"http://purl.oclc.org/fast/ontology/gadget#BackendService1263313213318"
-            }
-        ],
-        "pipes":[
-            {
-                "from":{
-                    "buildingblock":"",
-                    "condition":"item"
-                },
-                "to":{
-                    "buildingblock":"AmazonItemLookupService1",
-                    "condition":"item",
-                    "action":"searchProduct"
-                }
-            },
-            {
-                "from":{
-                    "buildingblock":"",
-                    "condition":"item"
-                },
-                "to":{
-                    "buildingblock":"AmazonAddItemToCartService1",
-                    "condition":"item",
-                    "action":"add"
-                }
-            },
-            {
-                "from":{
-                    "buildingblock":"AmazonItemLookupService1",
-                    "condition":"product"
-                },
-                "to":{
-                    "buildingblock":"amazonProductForm1",
-                    "condition":"product",
-                    "action":"showProductInfo"
-                }
-            },
-            {
-                "from":{
-                    "buildingblock":"AmazonItemLookupService1",
-                    "condition":"message"
-                },
-                "to":{
-                    "buildingblock":"amazonProductForm1",
-                    "condition":"message",
-                    "action":"showMessage"
-                }
-            },
-            {
-                "from":{
-                    "buildingblock":"AmazonAddItemToCartService1",
-                    "condition":"message"
-                },
-                "to":{
-                    "buildingblock":"amazonProductForm1",
-                    "condition":"message",
-                    "action":"showMessage"
-                }
-            },
-            {
-                "from":{
-                    "buildingblock":"AmazonAddItemToCartService1",
-                    "condition":"cart"
-                },
-                "to":{
-                    "buildingblock":"",
-                    "action":"",
-                    "condition":"cart"
-                }
-            }
-        ],
-        "triggers":[
-            {
-                "from":{
-                    "buildingblock":"",
-                    "name":"_onload"
-                },
-                "to":{
-                    "buildingblock":"amazonProductForm1",
-                    "action":"init"
-                }
-            },
-            {
-                "from":{
-                    "buildingblock":"",
-                    "name":"_onload"
-                },
-                "to":{
-                    "buildingblock":"AmazonItemLookupService1",
-                    "action":"searchProduct"
-                }
-            },
-            {
-                "from":{
-                    "buildingblock":"amazonProductForm1",
-                    "name":"addToCart"
-                },
-                "to":{
-                    "buildingblock":"AmazonAddItemToCartService1",
-                    "action":"add"
-                }
-            }
-        ]
-    },
+    "code":"http://demo.fast.morfeo-project.org/gvsdata/screens/amazonProduct.scr.html",
     "preconditions":[
         [
             {
-                "id":"item",
+                "id": "item",
                 "label":{
                     "en-gb":"An item"
                 },

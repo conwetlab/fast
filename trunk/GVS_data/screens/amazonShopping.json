@@ -1,5 +1,5 @@
 {
-    "name":"Compound Amazon Shopping Cart Screen",
+    "name":"Amazon Shopping Cart Screen",
     "creationDate":"2009-04-20T17:00:00+0100",
     "creator":"admin",
     "description":{
@@ -8,7 +8,7 @@
     "tags":[
         {
             "label":{
-                "en-gb":"compound"
+                "en-gb":"scratch"
             }
         },
         {
@@ -26,221 +26,16 @@
     "homepage":"http://www.deri.ie/amazonShopping",
     "icon":"http://demo.fast.morfeo-project.org/gvsdata/images/catalogue/amazonShopping.png",
     "label":{
-        "en-gb":"Shopping Cart Compound"
+        "en-gb":"Shopping Cart"
     },
     "rights":"http://creativecommons.org/",
     "screenshot":"http://demo.fast.morfeo-project.org/gvsdata/images/screenshots/amazonShoppingCart.png",
     "version":"1.0",
-    "definition":{
-        "buildingblocks":[
-            {
-                "id":"amazonShoppingCartForm1",
-                "uri":"http://purl.oclc.org/fast/ontology/gadget#FormElement1263313193193"
-            },
-            {
-                "id":"AmazonClearCartService1",
-                "uri":"http://purl.oclc.org/fast/ontology/gadget#BackendService1263313229756"
-            },
-            {
-                "id":"AmazonUpdateCartService1",
-                "uri":"http://purl.oclc.org/fast/ontology/gadget#BackendService1263313258897"
-            },
-            {
-                "id":"AmazonSearchCartService1",
-                "uri":"http://purl.oclc.org/fast/ontology/gadget#BackendService1263313244553"
-            }
-        ],
-        "pipes":[
-            {
-                "from":{
-                    "buildingblock":"",
-                    "condition":"cart"
-                },
-                "to":{
-                    "buildingblock":"AmazonSearchCartService1",
-                    "condition":"cart",
-                    "action":"fetch"
-                }
-            },
-            {
-                "from":{
-                    "buildingblock":"",
-                    "condition":"cart"
-                },
-                "to":{
-                    "buildingblock":"AmazonUpdateCartService1",
-                    "condition":"cart",
-                    "action":"updateService"
-                }
-            },
-            {
-                "from":{
-                    "buildingblock":"",
-                    "condition":"cart"
-                },
-                "to":{
-                    "buildingblock":"AmazonClearCartService1",
-                    "condition":"cart",
-                    "action":"clearService"
-                }
-            },
-            {
-                "from":{
-                    "buildingblock":"AmazonSearchCartService1",
-                    "condition":"list"
-                },
-                "to":{
-                    "buildingblock":"amazonShoppingCartForm1",
-                    "condition":"list",
-                    "action":"showTable"
-                }
-            },
-            {
-                "from":{
-                    "buildingblock":"amazonShoppingCartForm1",
-                    "condition":"cartUpdate"
-                },
-                "to":{
-                    "buildingblock":"AmazonUpdateCartService1",
-                    "condition":"update",
-                    "action":"updateService"
-                }
-            },
-            {
-                "from":{
-                    "buildingblock":"AmazonSearchCartService1",
-                    "condition":"message"
-                },
-                "to":{
-                    "buildingblock":"amazonShoppingCartForm1",
-                    "condition":"message",
-                    "action":"showMessage"
-                }
-            },
-            {
-                "from":{
-                    "buildingblock":"AmazonClearCartService1",
-                    "condition":"message"
-                },
-                "to":{
-                    "buildingblock":"amazonShoppingCartForm1",
-                    "condition":"message",
-                    "action":"showMessage"
-                }
-            },
-            {
-                "from":{
-                    "buildingblock":"AmazonUpdateCartService1",
-                    "condition":"message"
-                },
-                "to":{
-                    "buildingblock":"amazonShoppingCartForm1",
-                    "condition":"message",
-                    "action":"showMessage"
-                }
-            },
-            {
-                "from":{
-                    "buildingblock":"AmazonClearCartService1",
-                    "condition":"purchase"
-                },
-                "to":{
-                    "buildingblock":"",
-                    "action":"",
-                    "condition":"notpurchase"
-                }
-            },
-            {
-                "from":{
-                    "buildingblock":"AmazonUpdateCartService1",
-                    "condition":"purchase"
-                },
-                "to":{
-                    "buildingblock":"",
-                    "action":"",
-                    "condition":"notpurchase"
-                }
-            },
-            {
-                "from":{
-                    "buildingblock":"amazonShoppingCartForm1",
-                    "condition":"purchase"
-                },
-                "to":{
-                    "buildingblock":"",
-                    "action":"",
-                    "condition":"purchase"
-                }
-            },
-            {
-                "from":{
-                    "buildingblock":"amazonShoppingCartForm1",
-                    "condition":"item"
-                },
-                "to":{
-                    "buildingblock":"",
-                    "action":"",
-                    "condition":"item"
-                }
-            }
-        ],
-        "triggers":[
-            {
-                "from":{
-                    "buildingblock":"",
-                    "name":"_onload"
-                },
-                "to":{
-                    "buildingblock":"amazonShoppingCartForm1",
-                    "action":"init"
-                }
-            },
-            {
-                "from":{
-                    "buildingblock":"",
-                    "name":"_onload"
-                },
-                "to":{
-                    "buildingblock":"AmazonSearchCartService1",
-                    "action":"fetch"
-                }
-            },
-            {
-                "from":{
-                    "buildingblock":"amazonShoppingCartForm1",
-                    "name":"clearCart"
-                },
-                "to":{
-                    "buildingblock":"AmazonClearCartService1",
-                    "action":"clearService"
-                }
-            },
-            {
-                "from":{
-                    "buildingblock":"AmazonClearCartService1",
-                    "name":"cartCleared"
-                },
-                "to":{
-                    "buildingblock":"AmazonSearchCartService1",
-                    "action":"fetch"
-                }
-            },
-            {
-                "from":{
-                    "buildingblock":"AmazonUpdateCartService1",
-                    "name":"cartUpdated"
-                },
-                "to":{
-                    "buildingblock":"AmazonSearchCartService1",
-                    "action":"fetch"
-                }
-            }
-        ]
-    },
+    "code":"http://demo.fast.morfeo-project.org/gvsdata/screens/amazonShopping.scr.html",
     "preconditions":[
         [
             {
-                "id":"cart",
+                "id": "cart",
                 "label":{
                     "en-gb":"A Cart"
                 },
@@ -269,6 +64,7 @@
             },
             {
                 "id":"item",
+                "origin":"amazonShoppingCartForm1",
                 "label":{
                     "en-gb":"An item"
                 },

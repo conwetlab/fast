@@ -1,5 +1,5 @@
 {
-    "name":"Compound Amazon Order Screen",
+    "name":"Amazon Order Screen",
     "creationDate":"2009-04-20T17:00:00+0100",
     "creator":"admin",
     "description":{
@@ -8,7 +8,7 @@
     "tags":[
         {
             "label":{
-                "en-gb":"compound"
+                "en-gb":"scratch"
             }
         },
         {
@@ -26,48 +26,16 @@
     "homepage":"http://www.deri.ie/amazonOrder",
     "icon":"http://demo.fast.morfeo-project.org/gvsdata/images/catalogue/amazonOrder.png",
     "label":{
-        "en-gb":"Order Compound"
+        "en-gb":"Order"
     },
     "rights":"http://creativecommons.org/",
     "screenshot":"http://demo.fast.morfeo-project.org/gvsdata/images/screenshots/amazonOrder.png",
     "version":"1.0",
-    "definition":{
-        "buildingblocks":[
-            {
-                "id":"amazonOrderForm1",
-                "uri":"http://purl.oclc.org/fast/ontology/gadget#FormElement1263313173317"
-            }
-        ],
-        "pipes":[
-            {
-                "from":{
-                    "buildingblock":"",
-                    "condition":"purchase"
-                },
-                "to":{
-                    "buildingblock":"amazonOrderForm1",
-                    "condition":"purchase",
-                    "action":"init"
-                }
-            }
-        ],
-        "triggers":[
-            {
-                "from":{
-                    "buildingblock":"",
-                    "name":"_onload"
-                },
-                "to":{
-                    "buildingblock":"amazonOrderForm1",
-                    "action":"init"
-                }
-            }
-        ]
-    },
+    "code":"http://demo.fast.morfeo-project.org/gvsdata/screens/amazonOrder.scr.html",
     "preconditions":[
         [
             {
-                "id":"purchase",
+                "id":"purchaseURL",
                 "label":{
                     "en-gb":"A Amazon Purchase URL"
                 },
@@ -77,6 +45,6 @@
         ]
     ],
     "postconditions":[
-        
+
     ]
 }

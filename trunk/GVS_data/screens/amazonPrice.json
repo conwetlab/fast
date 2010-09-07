@@ -1,5 +1,5 @@
 {
-    "name":"Compound Amazon Price Comparative Screen",
+    "name":"Amazon Price Comparative Screen",
     "creationDate":"2009-04-20T17:00:00+0100",
     "creator":"admin",
     "description":{
@@ -8,7 +8,7 @@
     "tags":[
         {
             "label":{
-                "en-gb":"compound"
+                "en-gb":"scratch"
             }
         },
         {
@@ -31,132 +31,16 @@
     "homepage":"http://www.deri.ie/amazonPrice",
     "icon":"http://demo.fast.morfeo-project.org/gvsdata/images/catalogue/amazonPrice.png",
     "label":{
-        "en-gb":"Price Comparative Compound"
+        "en-gb":"Price Comparative"
     },
     "rights":"http://creativecommons.org/",
     "screenshot":"http://demo.fast.morfeo-project.org/gvsdata/images/screenshots/amazonPriceComparative.png",
     "version":"1.0",
-    "definition":{
-        "buildingblocks":[
-            {
-                "id":"PriceComparativeForm1",
-                "uri":"http://purl.oclc.org/fast/ontology/gadget#FormElement1263313179380"
-            },
-            {
-                "id":"PriceComparativeService1",
-                "uri":"http://purl.oclc.org/fast/ontology/gadget#BackendService1263313239881"
-            },
-            {
-                "id":"AmazonAddOfferToCartService1",
-                "uri":"http://purl.oclc.org/fast/ontology/gadget#BackendService1263313221850"
-            }
-        ],
-        "pipes":[
-            {
-                "from":{
-                    "buildingblock":"",
-                    "condition":"item"
-                },
-                "to":{
-                    "buildingblock":"PriceComparativeForm1",
-                    "condition":"item",
-                    "action":"init"
-                }
-            },
-            {
-                "from":{
-                    "buildingblock":"",
-                    "condition":"item"
-                },
-                "to":{
-                    "buildingblock":"PriceComparativeService1",
-                    "condition":"item",
-                    "action":"fetch"
-                }
-            },
-            {
-                "from":{
-                    "buildingblock":"PriceComparativeService1",
-                    "condition":"list"
-                },
-                "to":{
-                    "buildingblock":"PriceComparativeForm1",
-                    "condition":"list",
-                    "action":"showTable"
-                }
-            },
-            {
-                "from":{
-                    "buildingblock":"PriceComparativeService1",
-                    "condition":"message"
-                },
-                "to":{
-                    "buildingblock":"PriceComparativeForm1",
-                    "condition":"message",
-                    "action":"showMessage"
-                }
-            },
-            {
-                "from":{
-                    "buildingblock":"AmazonAddOfferToCartService1",
-                    "condition":"message"
-                },
-                "to":{
-                    "buildingblock":"PriceComparativeForm1",
-                    "condition":"message",
-                    "action":"showMessage"
-                }
-            },
-            {
-                "from":{
-                    "buildingblock":"PriceComparativeForm1",
-                    "condition":"offer"
-                },
-                "to":{
-                    "buildingblock":"AmazonAddOfferToCartService1",
-                    "condition":"offer",
-                    "action":"addToCart"
-                }
-            },
-            {
-                "from":{
-                    "buildingblock":"AmazonAddOfferToCartService1",
-                    "condition":"cart"
-                },
-                "to":{
-                    "buildingblock":"",
-                    "action":"",
-                    "condition":"cart"
-                }
-            }
-        ],
-        "triggers":[
-            {
-                "from":{
-                    "buildingblock":"",
-                    "name":"_onload"
-                },
-                "to":{
-                    "buildingblock":"PriceComparativeForm1",
-                    "action":"init"
-                }
-            },
-            {
-                "from":{
-                    "buildingblock":"",
-                    "name":"_onload"
-                },
-                "to":{
-                    "buildingblock":"PriceComparativeService1",
-                    "action":"fetch"
-                }
-            }
-        ]
-    },
+    "code":"http://demo.fast.morfeo-project.org/gvsdata/screens/amazonPrice.scr.html",
     "preconditions":[
         [
             {
-                "id":"item",
+                "id": "item",
                 "label":{
                     "en-gb":"An item"
                 },

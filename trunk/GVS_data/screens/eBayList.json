@@ -1,5 +1,5 @@
 {
-    "name":"Compound Ebay List Screen",
+    "name":"Ebay List Screen",
     "creationDate":"2009-04-20T18:00:00+0200",
     "creator":"admin",
     "description":{
@@ -8,7 +8,7 @@
     "tags":[
         {
             "label":{
-                "en-gb":"compound"
+                "en-gb":"scratch"
             }
         },
         {
@@ -31,110 +31,16 @@
     "homepage":"http://www.deri.ie/eBayList",
     "icon":"http://demo.fast.morfeo-project.org/gvsdata/images/catalogue/eBayList.png",
     "label":{
-        "en-gb":"Ebay List Compound"
+        "en-gb":"Ebay List"
     },
     "rights":"http://creativecommons.org/",
     "screenshot":"http://demo.fast.morfeo-project.org/gvsdata/images/screenshots/ebayComparative.png",
     "version":"1.0",
-    "definition":{
-        "buildingblocks":[
-            {
-                "id":"eBayListForm1",
-                "uri":"http://purl.oclc.org/fast/ontology/gadget#FormElement1263313203474"
-            },
-            {
-                "id":"amazonEbayFilter1",
-                "uri":"http://purl.oclc.org/fast/ontology/gadget#Operator1263313208131"
-            },
-            {
-                "id":"ebaySearchService1",
-                "uri":"http://purl.oclc.org/fast/ontology/gadget#BackendService1263313263804"
-            }
-        ],
-        "pipes":[
-            {
-                "from":{
-                    "buildingblock":"",
-                    "condition":"item"
-                },
-                "to":{
-                    "buildingblock":"amazonEbayFilter1",
-                    "condition":"item",
-                    "action":"createFilter"
-                }
-            },
-            {
-                "from":{
-                    "buildingblock":"ebaySearchService1",
-                    "condition":"list"
-                },
-                "to":{
-                    "buildingblock":"eBayListForm1",
-                    "condition":"list",
-                    "action":"showTable"
-                }
-            },
-            {
-                "from":{
-                    "buildingblock":"amazonEbayFilter1",
-                    "condition":"filterEbay"
-                },
-                "to":{
-                    "buildingblock":"ebaySearchService1",
-                    "condition":"filter",
-                    "action":"fetch"
-                }
-            },
-            {
-                "from":{
-                    "buildingblock":"eBayListForm1",
-                    "condition":"filterEbay"
-                },
-                "to":{
-                    "buildingblock":"ebaySearchService1",
-                    "condition":"filter",
-                    "action":"fetch"
-                }
-            },
-            {
-                "from":{
-                    "buildingblock":"eBayListForm1",
-                    "condition":"itemEbay"
-                },
-                "to":{
-                    "buildingblock":"",
-                    "action":"",
-                    "condition":"itemEbay"
-                }
-            }
-        ],
-        "triggers":[
-            {
-                "from":{
-                    "buildingblock":"",
-                    "name":"_onload"
-                },
-                "to":{
-                    "buildingblock":"eBayListForm1",
-                    "action":"init"
-                }
-            },
-            {
-                "from":{
-                    "buildingblock":"",
-                    "name":"_onload"
-                },
-                "to":{
-                    "buildingblock":"amazonEbayFilter1",
-                    "action":"createFilter"
-                }
-            }
-        ]
-    },
+    "code":"http://demo.fast.morfeo-project.org/gvsdata/screens/eBayList.scr.html",
     "preconditions":[
         [
             {
-                "id":"item",
+                "id": "item",
                 "label":{
                     "en-gb":"An Amazon item"
                 },
