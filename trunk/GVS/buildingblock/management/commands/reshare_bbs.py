@@ -1,14 +1,30 @@
 from django.core.management.base import BaseCommand, CommandError
 from django.http import HttpResponse
 from django.utils import simplejson
+from django.conf import settings
 
 from buildingblock.models import BuildingBlock
 from buildingblock.views import unshareBuildingBlock
 
 from python_rest_client.restful_lib import Connection, isValidResponse
 from commons.utils import json_encode, cleanUrl
+from optparse import make_option
+
+import os
+from os import path
+import re
 
 class Command(BaseCommand):
+    concepts_url = cleanUrl(settings.CATALOGUE_URL) + "/concepts"
+    help = "Republish all the building block's into the catalogue"
+    option_list = BaseCommand.option_list + (
+        make_option('--concepts', '-c',
+            action='store',
+            dest='concepts_dir',
+            type='string',
+            help='Publish all the concepts stored in the parameter dir'),
+    )
+
 
     def handle(self, *args, **options):
         for bb in BuildingBlock.objects.exclude(uri=None):
@@ -25,3 +41,25 @@ class Command(BaseCommand):
                 obj = simplejson.loads(response.content)
                 bb.uri = obj['uri']
                 bb.save()
+
+        #import ipdb; ipdb.set_trace()
+        concepts_dir = options["concepts_dir"]
+        if concepts_dir:
+            if not path.isdir(concepts_dir):
+                raise CommandError("'%s' is not a valid directory" % concepts_dir)
+
+            json_pattern = re.compile(r'^.*\.json$')
+            for filename in filter(json_pattern.match, os.listdir(concepts_dir)):
+                filepath = path.join(concepts_dir, filename)
+                print "\nImporting %s..." % filepath,
+                f = open(filepath)
+                concepts = simplejson.load(f)
+                for concept in concepts:
+                    conn = Connection(self.concepts_url)
+                    body = simplejson.dumps(concept)
+                    result = conn.request_post('', body=body, headers={'Accept':'text/json'})
+                    if isValidResponse(result):
+                        print "OK ",
+                    else:
+                        print "Error"
+                        print result
