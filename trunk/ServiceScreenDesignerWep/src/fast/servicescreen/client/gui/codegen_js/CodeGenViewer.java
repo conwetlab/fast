@@ -17,6 +17,7 @@ import com.google.gwt.user.client.ui.FlexTable.FlexCellFormatter;
 
 import fast.common.client.BuildingBlock;
 import fast.mediation.client.gui.MediationRuleGUI;
+import fast.servicescreen.client.ServiceScreenDesignerWep;
 
 /**
  * This Tab should show result steps of code generation.
@@ -39,15 +40,19 @@ public class CodeGenViewer
 		WRAP_JSON;
 	}
 	
-	//TODO! Typesetting should be dynamic! not a param while createing!
-	public CodeGenViewer(BuildingBlock screen, WrappingType type)
+	/**
+	 * Give the needed wrapping type to initialize the Viewer and its generator
+	 * */
+	public CodeGenViewer(ServiceScreenDesignerWep serviceDesigner, WrappingType type)
 	{
+		BuildingBlock screen = serviceDesigner.serviceScreen;
+		
 		switch(type)
 		{
 			case WRAP_AND_REQUEST_XML  : generator = new CodeGenerator(screen);			//SDW XML
 										 break;
 										
-			case WRAP_AND_REQUEST_JSON : generator = new CodeGenerator_reqJSON(screen); //SDW JSON
+			case WRAP_AND_REQUEST_JSON : generator = new CodeGenerator_reqJSON(serviceDesigner, screen); //SDW JSON
 										 break;
 		}
 	}

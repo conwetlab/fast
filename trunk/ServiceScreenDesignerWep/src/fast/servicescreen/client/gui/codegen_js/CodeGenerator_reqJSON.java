@@ -5,6 +5,8 @@ import java.util.Iterator;
 
 import fast.common.client.BuildingBlock;
 import fast.common.client.FASTMappingRule;
+import fast.common.client.ServiceScreen;
+import fast.servicescreen.client.ServiceScreenDesignerWep;
 import fast.servicescreen.client.gui.RuleUtil;
 import fast.servicescreen.client.gui.parser.Kind;
 import fast.servicescreen.client.gui.parser.Operation;
@@ -16,11 +18,30 @@ import fast.servicescreen.client.gui.parser.OperationHandler;
  * */
 public class CodeGenerator_reqJSON extends CodeGenerator
 {
-	public CodeGenerator_reqJSON(BuildingBlock screen)
+	ServiceScreenDesignerWep serviceDesigner;
+	
+	public CodeGenerator_reqJSON(ServiceScreenDesignerWep serviceDesigner, BuildingBlock screen)
 	{
 		super(screen);
+		
+		this.serviceDesigner = serviceDesigner;
 	}
 
+	/**
+	 * Overwrite this method, to get the request URL out of the right MediationGUI
+	 * instead of the RuleGUI
+	 * */
+	@Override
+	protected void add_PreRequest_toTable()
+	{
+		// lookup the gui request text field
+		if (screen instanceof ServiceScreen)
+		{
+			String prerequestText = serviceDesigner.requestUrlBox.getText();
+			table.put("<<prerequest>>", prerequestText);
+		}
+	}
+	
 	@Override
 	protected void setTemplates()
 	{
@@ -57,7 +78,6 @@ public class CodeGenerator_reqJSON extends CodeGenerator
 			depth2 + "if (xmlHttp) \n" +
 			depth2 + "{ \n" + 
 	  	       depth3 + "var requestServletUrl = window.location.protocol + '//' + window.location.host  + '/ServiceDesignerWep/servicescreendesignerwep/requestServlet?url='; \n" +
-	  	       depth3 + "request = request.replace('XML', 'JSON'); //CHEAT! \n" +
 			   depth3 + "xmlHttp.open('GET', requestServletUrl + encodeURIComponent(request), true); \n" + 
 			   depth3 + "xmlHttp.onreadystatechange = function () { \n" + 
 			      depth4 + "if (xmlHttp.readyState == 4) \n" +
@@ -288,6 +308,6 @@ public class CodeGenerator_reqJSON extends CodeGenerator
 	@Override
 	protected CodeGenerator createEmptyGenerator()
 	{
-		return new CodeGenerator_reqJSON(null);
+		return new CodeGenerator_reqJSON(null, null);
 	}
 }

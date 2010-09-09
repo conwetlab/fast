@@ -5,7 +5,6 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.RadioButton;
 
-import fast.common.client.ServiceScreen;
 import fast.servicescreen.client.ServiceScreenDesignerWep;
 import fast.servicescreen.client.gui.codegen_js.CodeGenViewer;
 import fast.servicescreen.client.gui.codegen_js.CodeGenViewer.WrappingType;
@@ -13,16 +12,14 @@ import fast.servicescreen.client.gui.codegen_js.CodeGenViewer.WrappingType;
 public class RequestTypeHandler
 {
 	private ServiceScreenDesignerWep designer;
-	private ServiceScreen screen;
 	private AbsolutePanel panel;
 	
 	//start state
 	public WrappingType currentType = WrappingType.WRAP_AND_REQUEST_XML;
 	
-	public RequestTypeHandler(ServiceScreenDesignerWep designer, ServiceScreen screen)
+	public RequestTypeHandler(ServiceScreenDesignerWep designer)
 	{
 		this.designer = designer;
-		this.screen = screen;
 		panel = new AbsolutePanel();
 		
 		//create radiobuttons to choose
@@ -56,7 +53,7 @@ public class RequestTypeHandler
 			designer.setRuleGUI_byType(currentType);
 			
 			//This replace the CodeGenerator
-			designer.setCodeGenViewer(new CodeGenViewer(screen, currentType));
+			designer.setCodeGenViewer(new CodeGenViewer(designer, currentType));
 		}
 	}
 
@@ -75,7 +72,7 @@ public class RequestTypeHandler
 			designer.setRuleGUI_byType(currentType);
 			
 			//This replace the CodeGenerator 
-			designer.setCodeGenViewer(new CodeGenViewer(screen, currentType));
+			designer.setCodeGenViewer(new CodeGenViewer(designer, currentType));
 		}
 	}
 	

@@ -375,7 +375,7 @@ public class ServiceScreenDesignerWep extends FastTool implements EntryPoint
       tabPanel.add(transformationTable, "Transformation");
  
       // Add the Codegenerator and it´s UI (for XML at first)
-      codeGenViewer = new CodeGenViewer(serviceScreen, WrappingType.WRAP_AND_REQUEST_XML);
+      codeGenViewer = new CodeGenViewer(this, WrappingType.WRAP_AND_REQUEST_XML);
       codeGenViewer_Panel = codeGenViewer.createCodeGenViewer();
       
       tabPanel.add(codeGenViewer_Panel, "CodeGen Viewer"); 

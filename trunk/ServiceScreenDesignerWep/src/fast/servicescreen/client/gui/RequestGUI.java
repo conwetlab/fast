@@ -77,7 +77,7 @@ public class RequestGUI
 		requestTable.setWidget(numRows, 1, designer.requestUrlBox);
 		
 		//Add handler to change code gen, if request type is changing
-		reqTypeHandler = new RequestTypeHandler(designer, designer.serviceScreen);
+		reqTypeHandler = new RequestTypeHandler(designer);
 		requestTable.setWidget(numRows, 2, reqTypeHandler.getChooserPanel());
 		
 		numRows++;
