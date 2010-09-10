@@ -113,6 +113,7 @@ display:inline;
     font-size: 80%;
     font-family: Tahoma, Arial, Helvetica, sans-serif;
 }
+
 .logger a.clear {
     color: #777;
     font-weight: bold;
@@ -136,7 +137,54 @@ display:inline;
     width: 12px;
     cursor: pointer;
 }
+
 .groupTitle {
     font-weight: bold;
     margin-bottom: 3px;
+}
+
+.kb {
+    width: 20%;
+    border: 1px solid #999;
+    background-color: #AAA; 
+    height: 25%;
+    position: absolute;
+    right: 5px;
+    overflow: auto;
+}
+
+.kb .title {
+    color: white;
+    padding: 5px;
+}
+
+.fact {
+    width: 27px;
+    height: 25px;
+    line-height: 25px;
+    text-align: center;
+    font-weight: bold;
+    font-size: 14px;
+    background: url("../images/green_selected.png") no-repeat center center;
+    color: #ddf7dd;
+    margin: 5px;
+    cursor: pointer;
+    float: left;
+}
+
+.factIdentifier {
+    float:left;
+    height: 25px;
+    line-height: 25px;
+    margin: 5px;
+}
+
+.factDetails {
+    position: absolute;
+    display: none;
+    border: 1px solid #AAA;
+    background-color: #EEE;
+    padding: 5px;
+    max-width: 500px;
+    overflow: auto;
 }

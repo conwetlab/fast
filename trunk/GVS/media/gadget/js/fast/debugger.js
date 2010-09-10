@@ -12,7 +12,6 @@ var Debugger = Class.create(/** @lends Debugger.prototype */ {
          */
         this._debugLevel = debugLevel;
 
-
         /**
          * Node of the Debugger area, in case Firebug is not
          * installed
@@ -40,6 +39,8 @@ var Debugger = Class.create(/** @lends Debugger.prototype */ {
          */
         this._testing = false;
 
+
+        this._initKB();
         this._initConsole();
     },
 
@@ -47,7 +48,12 @@ var Debugger = Class.create(/** @lends Debugger.prototype */ {
      * Adds a new fact to the fact base
      */
     addFact: function(fact) {
-        this._showObject(fact, "Fact added: %s", fact.uri);
+        var updated = this._KB.addFact(fact);
+        var text = "added";
+        if (updated) {
+            text = "updated";
+        }
+        this._showObject(fact, "Fact %s: %s", text, fact.uri);
     },
 
     /**
@@ -55,6 +61,7 @@ var Debugger = Class.create(/** @lends Debugger.prototype */ {
      */
     removeFact: function(fact) {
         this._showObject(fact, "Fact removed: %s", fact.uri);
+        this._KB.removeFact(fact);
     },
 
     /**
@@ -116,6 +123,21 @@ var Debugger = Class.create(/** @lends Debugger.prototype */ {
             document.body.addClassName("no-firebug");
         } else {
             this._logger = window.console;
+        }
+    },
+
+    /**
+     * Init the KB, in case debug is enabled
+     */
+    _initKB: function() {
+        if (this._debugLevel == "debug") {
+            this._KB = new KnowledgeBase(this._debuggerNode);
+        } else {
+            // Dumb KB
+            this._KB = {
+                addFact: Prototype.emptyFunction,
+                removeFact: Prototype.emptyFunction
+            }
         }
     },
 
@@ -355,4 +377,167 @@ var Logger = Class.create({
         return result;
     }
 });
+var KnowledgeBase = Class.create({
+    initialize: function(parentNode) {
 
+        this._facts = new Hash();
+        this._factShortcuts = new Hash();
+
+        this._kbContent = new Element("div", {
+            "class": "kbContent"
+        });
+        var kbNode = new Element("div", {
+            "class": "kb"
+        });
+
+        var title = new Element("div", {
+            "class": "title"
+        }).update("Fact Base");
+
+        kbNode.appendChild(title);
+        kbNode.appendChild(this._kbContent);
+        parentNode.appendChild(kbNode);
+    },
+
+    /**
+     * Adds a new fact to the KB
+     */
+    addFact: function(fact) {
+        oldfact = this._facts.get(fact.uri);
+        var factIcon = this._createFact(fact);
+        this._facts.set(fact.uri, {
+            "fact": fact,
+            "node": factIcon
+        });
+        if (oldfact) {
+            this._kbContent.insertBefore(factIcon, oldfact.node);
+            this._kbContent.removeChild(oldfact.node);
+
+            factIcon.setStyle({"fontWeight":"bold"});
+            setTimeout(function(){
+                factIcon.setStyle({"fontWeight": "normal"});
+            }, 1000);
+        } else {
+            this._kbContent.appendChild(factIcon);
+        }
+        return oldfact ? true : false;
+    },
+
+    /**
+     * Removes a fact from the KB
+     */
+    removeFact: function(factUri) {
+        this._kbContent.removeChild(this._facts.get(factUri).node);
+    },
+
+    /**
+     * Creates the fact node
+     */
+    _createFact: function(fact) {
+        var factShortcut = this._createFactShortcut(fact.uri);
+
+        var factShortcutNode = new Element("div", {
+            "class": "fact"
+        }).update(factShortcut);
+
+        var factDetails = this._createFactDetails(fact);
+        factShortcutNode.observe("mouseover", function(e) {
+            var node = Event.element(e);
+            var left = node.cumulativeOffset()[0] - factDetails.getWidth() - 5;
+            factDetails.setStyle({
+                "display": "block",
+                "top": node.cumulativeOffset()[1] + "px",
+                "left": left + "px",
+            });
+        });
+        factShortcutNode.observe("mouseout", function(e) {
+            factDetails.setStyle({
+                "display": "none"
+            });
+        });
+
+        var factNode = new Element("div",{
+            "style": "overflow: auto"
+        });
+        factNode.appendChild(factShortcutNode);
+
+        var identifier = new Element("div", {
+            "class": "factIdentifier"
+        }).update(this._getFactIdentifier(fact.uri));
+        factNode.appendChild(identifier);
+
+        return factNode;
+    },
+
+    /**
+     * Creates the fact shortcut
+     */
+    _createFactShortcut: function(uri) {
+        var shortcut = this._factShortcuts.get(uri);
+        if (shortcut) {
+            return shortcut;
+        }
+
+        var identifier = this._getFactIdentifier(uri);
+
+        //Let's try with capital letters...
+        var letters = identifier.match(/[A-Z]/g);
+        if (letters && letters.length > 1) { //More than one capital letter
+            //try only with 2 letters
+            //Put the second letter in lower case
+            //letters[1]= letters[1].toLowerCase();
+            shortcut = letters.slice(0, 2).join("");
+            if (this._factShortcuts.values().indexOf(shortcut) == -1) {
+                this._factShortcuts.set(uri, shortcut);
+                return shortcut;
+            }
+        } else {
+            //Let's try with the first two letters
+            identifier[1]= identifier[1].toLowerCase();
+            shortcut = identifier.slice(0,2);
+            if (this._factShortcuts.values().indexOf(shortcut) == -1) {
+                this._factShortcuts.set(uri, shortcut);
+                return shortcut;
+            }
+        }
+        shortcut = identifier.slice(0,1);
+        this._factShortcuts.set(uri, shortcut);
+        return shortcut;
+    },
+
+    _createFactDetails: function(fact) {
+        var container = new Element("div", {
+            "class": "factDetails"
+        });
+
+        var factTitle = new Element("div", {
+            "class": "title"
+        }).update(fact.uri);
+
+        var factData = new Element("div", {
+            "class": "data"
+        }).update(Object.toJSON(fact.data));
+
+        container.appendChild(factTitle);
+        container.appendChild(factData);
+
+        document.body.appendChild(container);
+        return container;
+    },
+
+    /**
+     * Returns the fact "Identifier"
+     */
+    _getFactIdentifier: function(uri) {
+        var identifier = "";
+        var pieces = uri.split("#");
+        if (pieces.length > 1){
+            identifier = pieces[1];
+        } else { //The uri has not identifier, try the last part of the url
+            pieces = uri.split("/");
+            identifier = pieces[pieces.length - 1];
+        }
+        identifier = identifier.substr(0, 1).toUpperCase() + identifier.substr(1);
+        return identifier;
+    }
+});
