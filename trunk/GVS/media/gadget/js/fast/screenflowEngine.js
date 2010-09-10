@@ -237,6 +237,9 @@ var ScreenflowEngineFactory = function () {
                 this.menu.hideTab(tab);
                 this.showedTabs.unset(screen.id);
             }
+            if(tab && tab == this.menu.getActiveTab()) {
+                this.menu.setActiveTab(null);
+            }
         },
 
         addScreenLoader: function (screen, functionHandler){
@@ -254,10 +257,14 @@ var ScreenflowEngineFactory = function () {
                     this.emptyTab = null;
                     emptyTabDeleted = true;
                 }
+                var updatedTabIds = newTabIds.clone();
                 for(var i=0; i < oldTabIds.length ; i++){
-                    newTabIds = newTabIds.without(oldTabIds[i]);
+                    updatedTabIds = updatedTabIds.without(oldTabIds[i]);
                 }
-                if(newTabIds.length==1 || oldTabIds.length ==0 || emptyTabDeleted){
+                if(updatedTabIds.length==1 || oldTabIds.length ==0 || emptyTabDeleted){
+                    this.menu.setActiveTab(this.showedTabs.get(updatedTabIds[0]));
+                }
+                if (!this.menu.getActiveTab()) {
                     this.menu.setActiveTab(this.showedTabs.get(newTabIds[0]));
                 }
             }

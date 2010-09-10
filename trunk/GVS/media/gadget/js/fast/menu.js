@@ -55,8 +55,9 @@ var FASTMenu = Class.create({
 
     setActiveTab: function (tab) {
         var self = this;
-        var tab = this.getTab(tab);
-        this.tabs.each(function(pair){
+        if (tab) {
+            var tab = this.getTab(tab);
+            this.tabs.each(function(pair){
                 if(pair.key==tab.id){
                     pair.value.content.className = "tabcontentShow";
                     pair.value.link.className = "current";
@@ -66,9 +67,16 @@ var FASTMenu = Class.create({
                     pair.value.link.className = "";
                 }
             });
-        var handler = tab.eventListener.get("activate");
-        if(handler){
-            handler();
+            var handler = tab.eventListener.get("activate");
+            if(handler){
+                handler();
+            }
+        } else {
+            this.tabs.each(function(pair){
+                pair.value.content.className = "tabcontentHide";
+                pair.value.link.className = "";
+            });
+            this.activeTab = null;
         }
     },
 

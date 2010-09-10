@@ -178,6 +178,15 @@ display:inline;
     line-height: 25px;
     margin: 5px;
 }
+.removeFact {
+    float:left;
+    height: 25px;
+    line-height: 25px;
+    margin-top: 4px;
+    width: 25px;
+    background: transparent url("../images/minus.png") no-repeat center center;
+}
+
 
 .factDetails {
     position: absolute;

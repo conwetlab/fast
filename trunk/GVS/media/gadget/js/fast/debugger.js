@@ -61,7 +61,7 @@ var Debugger = Class.create(/** @lends Debugger.prototype */ {
      */
     removeFact: function(fact) {
         this._showObject(fact, "Fact removed: %s", fact.uri);
-        this._KB.removeFact(fact);
+        this._KB.removeFact(fact.uri);
     },
 
     /**
@@ -428,14 +428,32 @@ var KnowledgeBase = Class.create({
      */
     removeFact: function(factUri) {
         this._kbContent.removeChild(this._facts.get(factUri).node);
+        this._facts.unset(factUri);
     },
 
     /**
      * Creates the fact node
      */
     _createFact: function(fact) {
-        var factShortcut = this._createFactShortcut(fact.uri);
+        var factNode = new Element("div",{
+            "style": "overflow: auto"
+        });
 
+        // Remove fact
+        var removeFactNode = new Element("div", {
+            "class": "removeFact"
+        });
+        removeFactNode.observe("click", function(){
+            ScreenflowEngineFactory.getInstance().manageFacts([],[fact.uri]);
+        }.bind(this));
+        removeFactNode.observe("mouseover", function(){
+            removeFactNode.setStyle({"cursor": "pointer"});
+        });
+
+        factNode.appendChild(removeFactNode);
+
+        // Fact Shortcut
+        var factShortcut = this._createFactShortcut(fact.uri);
         var factShortcutNode = new Element("div", {
             "class": "fact"
         }).update(factShortcut);
@@ -455,12 +473,10 @@ var KnowledgeBase = Class.create({
                 "display": "none"
             });
         });
-
-        var factNode = new Element("div",{
-            "style": "overflow: auto"
-        });
         factNode.appendChild(factShortcutNode);
 
+
+        // Fact Identifier
         var identifier = new Element("div", {
             "class": "factIdentifier"
         }).update(this._getFactIdentifier(fact.uri));
