@@ -103,8 +103,6 @@ public class CodeGenerator_reqJSON extends CodeGenerator
 		
 		
 		//change helper methods (add getJSONValue_byName)
-		//TODO: Method must be recursive.. Doesn´t going deep into structure
-		//(Change in CodeGen_JSON, too)
 		helperMethods +=
 			depth + "function getJSONValue_byName(value, name) \n" + 
 			depth + "{  \n" +
@@ -135,6 +133,12 @@ public class CodeGenerator_reqJSON extends CodeGenerator
 	{
 		boolean hasOpenSqareBracket = false;
 		boolean hasOpenForLoop = false;
+		
+		
+		//TODO: Something like: if(Rule = DummyRule)
+		// tmpCode += codeIndent + "value = getJSONValue_byName(" + value + ", '" + from + "'); \n";
+		//Should change value -> value.get(from) to jump over unnessesary lines
+		//Make the same changes in JSON & XML CodeGen, too!
 		
 		if(RuleUtil.isCompleteRule(rule) && rule.getOperationHandler() != null)
 		{
