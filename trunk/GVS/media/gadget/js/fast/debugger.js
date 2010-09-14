@@ -39,7 +39,6 @@ var Debugger = Class.create(/** @lends Debugger.prototype */ {
          */
         this._testing = false;
 
-
         this._initKB();
         this._initConsole();
     },
@@ -138,6 +137,14 @@ var Debugger = Class.create(/** @lends Debugger.prototype */ {
                 addFact: Prototype.emptyFunction,
                 removeFact: Prototype.emptyFunction
             }
+        }
+    },
+
+    /**
+     * Creates the user interface of the debugger
+     */
+    _initUI: function() {
+        if (this._debugLevel == "debug") {
         }
     },
 
@@ -383,20 +390,8 @@ var KnowledgeBase = Class.create({
         this._facts = new Hash();
         this._factShortcuts = new Hash();
 
-        this._kbContent = new Element("div", {
-            "class": "kbContent"
-        });
-        var kbNode = new Element("div", {
-            "class": "kb"
-        });
+        this._initUI(parentNode);
 
-        var title = new Element("div", {
-            "class": "title"
-        }).update("Fact Base");
-
-        kbNode.appendChild(title);
-        kbNode.appendChild(this._kbContent);
-        parentNode.appendChild(kbNode);
     },
 
     /**
@@ -431,12 +426,97 @@ var KnowledgeBase = Class.create({
         this._facts.unset(factUri);
     },
 
+    _initUI: function(parentNode) {
+
+        // Add fact area
+
+        var createFactNode = new Element("div",{
+            "class": "createFact"
+        });
+
+        var title = new Element("div", {
+            "class": "title"
+        }).update("Create fact");
+        createFactNode.appendChild(title);
+
+        var uriNode = new Element("div",{
+            "class": "line"
+        });
+        var uriText = new Element("div", {
+            "class": "columnLeft"
+        }).update("Fact URI");
+        uriNode.appendChild(uriText);
+
+        var uriContent = new Element("div", {
+            "class": "columnRight"
+        });
+        this._uriInput = new Element("input", {
+           "type": "text"
+        });
+        uriContent.appendChild(this._uriInput);
+
+        uriNode.appendChild(uriContent);
+        createFactNode.appendChild(uriNode);
+
+        var dataNode = new Element("div",{
+            "class": "line"
+        });
+        var dataText = new Element("div", {
+            "class": "columnLeft"
+        }).update("Fact Data");
+        dataNode.appendChild(dataText);
+
+        var dataContent = new Element("div", {
+            "class": "columnRight"
+        });
+        this._dataInput = new Element("textarea", {
+            "rows": 3,
+            "cols": 26
+        });
+        dataContent.appendChild(this._dataInput);
+
+        dataNode.appendChild(dataContent);
+        createFactNode.appendChild(dataNode);
+
+        var send = new Element("button", {
+            "style": "position:absolute;bottom:5px;right:14px;"
+        }).update("Create fact");
+        send.observe("click", function(){
+            var fact = {
+                "uri": this._uriInput.value,
+                "data": cjson_parse(this._dataInput.value)
+            };
+            ScreenflowEngineFactory.getInstance().manageFacts([fact],[]);
+        }.bind(this));
+
+        createFactNode.appendChild(send);
+
+        parentNode.appendChild(createFactNode);
+
+        // Knowledge Base area
+
+        this._kbContent = new Element("div", {
+            "class": "kbContent"
+        });
+        var kbNode = new Element("div", {
+            "class": "kb"
+        });
+
+        var title = new Element("div", {
+            "class": "title"
+        }).update("Current Facts");
+
+        kbNode.appendChild(title);
+        kbNode.appendChild(this._kbContent);
+        parentNode.appendChild(kbNode);
+    },
+
     /**
      * Creates the fact node
      */
     _createFact: function(fact) {
         var factNode = new Element("div",{
-            "style": "overflow: auto"
+            "style": "overflow: auto; padding: 2px 5px;"
         });
 
         // Remove fact
@@ -446,9 +526,6 @@ var KnowledgeBase = Class.create({
         removeFactNode.observe("click", function(){
             ScreenflowEngineFactory.getInstance().manageFacts([],[fact.uri]);
         }.bind(this));
-        removeFactNode.observe("mouseover", function(){
-            removeFactNode.setStyle({"cursor": "pointer"});
-        });
 
         factNode.appendChild(removeFactNode);
 
@@ -473,6 +550,11 @@ var KnowledgeBase = Class.create({
                 "display": "none"
             });
         });
+        factShortcutNode.observe("click", function() {
+            this._uriInput.value = fact.uri;
+            this._dataInput.value = Object.toJSON(fact.data);
+        }.bind(this));
+
         factNode.appendChild(factShortcutNode);
 
 
@@ -480,6 +562,11 @@ var KnowledgeBase = Class.create({
         var identifier = new Element("div", {
             "class": "factIdentifier"
         }).update(this._getFactIdentifier(fact.uri));
+        identifier.observe("click", function() {
+            this._uriInput.value = fact.uri;
+            this._dataInput.value = Object.toJSON(fact.data);
+        }.bind(this));
+
         factNode.appendChild(identifier);
 
         return factNode;

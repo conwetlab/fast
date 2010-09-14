@@ -361,6 +361,12 @@ var ScreenflowDocument = Class.create(PaletteDocument,
                 this._playScreenflow.bind(this),
                 false // disabled by default
             ));
+        this._addToolbarElement('debugger', new ToolbarButton(
+                'Debug (Test) Screenflow',
+                'debugger',
+                this._debugScreenflow.bind(this),
+                false // disabled by default
+            ));
         this._addToolbarElement('build', new ToolbarButton(
                 'Build Gadget',
                 'build',
@@ -500,6 +506,7 @@ var ScreenflowDocument = Class.create(PaletteDocument,
         //        engine. By the moment, one screen == deployable screenflow ;)
         this._toolbarElements.get('build').setEnabled(canvas.size() > 0);
         this._toolbarElements.get('player').setEnabled(canvas.size() > 0);
+        this._toolbarElements.get('debugger').setEnabled(canvas.size() > 0);
     },
 
 
@@ -588,6 +595,19 @@ var ScreenflowDocument = Class.create(PaletteDocument,
                 this._save(false);
         } else {
             this._player.playScreenflow(this._description);
+        }
+    },
+
+    /**
+     * Debug a screenflow
+     * @private
+     */
+    _debugScreenflow: function () {
+        if (this._isDirty) {
+                this._pendingOperation = this._debugScreenflow.bind(this);
+                this._save(false);
+        } else {
+            this._player.debugScreenflow(this._description);
         }
     },
 

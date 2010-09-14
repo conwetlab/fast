@@ -54,6 +54,14 @@ var ScreenflowPlayer = Class.create( /** @lends ScreenflowPlayer.prototype */ {
 
     },
 
+    /**
+     * Debug screenflow in a new window
+     */
+    debugScreenflow: function(/** ScreenflowDescription*/ description) {
+        this._description = description;
+        window.open(this._getScreenflowURL("debug"));
+    },
+
     // **************** PRIVATE METHODS **************** //
 
     /**
