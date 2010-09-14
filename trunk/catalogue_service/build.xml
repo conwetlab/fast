@@ -117,11 +117,11 @@
   <target name="javadoc" depends="compile"
       description="Create Javadoc API documentation">
     <mkdir          dir="${docs.dir}/api"/>
-	<!--javadoc sourcepath="${src.dir}"
+	<javadoc sourcepath="${src.dir}"
                 destdir="${docs.dir}/api"
            packagenames="*">
       <classpath refid="compile.classpath"/>
-	</javadoc-->
+	</javadoc>
   </target>
 
   <target name="test" depends="clean, compile">
