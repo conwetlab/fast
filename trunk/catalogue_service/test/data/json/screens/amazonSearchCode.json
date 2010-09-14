@@ -1,0 +1,50 @@
+{
+    "id":"4",
+    "creationDate":"2009-04-20T17:00:00+0100",
+    "creator":"admin",
+    "description":{
+        "en-gb":"This screen allows users to look for a product in Amazon, providing a keyword search interface. It produces a search criteria or filter fact."
+    },
+    "tags":[
+        {
+            "label":{
+                "en-gb":"scratch"
+            }
+        },
+        {
+            "label":{
+                "en-gb":"amazon"
+            },
+            "means":"http://dbpedia.org/page/Amazon.com"
+        },
+        {
+            "label":{
+                "en-gb":"search"
+            }
+        }
+    ],
+    "homepage":"http://www.deri.ie/amazonSearch",
+    "icon":"http://demo.fast.morfeo-project.org/gvsdata/images/catalogue/amazonSearch.png",
+    "label":{
+        "en-gb":"Product Search"
+    },
+    "rights":"http://creativecommons.org/",
+    "screenshot":"http://demo.fast.morfeo-project.org/gvsdata/images/screenshots/amazonSearch.png",
+    "version":"1.0",
+    "code":"http://demo.fast.morfeo-project.org/gvsdata/screens/amazonSearch.scr.html",
+    "preconditions":[
+
+    ],
+    "postconditions":[
+        [
+            {
+                "id":"filter",
+                "label":{
+                    "en-gb":"A search criteria"
+                },
+                "pattern":"?F http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#SearchCriteria",
+                "positive":"true"
+            }
+        ]
+    ]
+}
