@@ -14,7 +14,7 @@ public class PlannerFactory {
 	final static Logger logger = LoggerFactory.getLogger(PlannerFactory.class);
 
 	public static Planner createPlanner(Catalogue catalogue) {
-		InputStream inStream = MySQLManager.class.getClassLoader().getResourceAsStream("planner.properties"); 
+		InputStream inStream = PlannerFactory.class.getClassLoader().getResourceAsStream("planner.properties"); 
 		if (inStream == null) {
 			logger.warn("Configuration file planner.properties not found. Creating in-memory planner by default.");
 			return new MemoryPlanner(catalogue);
