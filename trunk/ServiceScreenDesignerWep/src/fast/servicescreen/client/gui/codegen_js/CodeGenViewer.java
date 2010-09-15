@@ -15,6 +15,7 @@ import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.user.client.ui.FlexTable.FlexCellFormatter;
 
+import fast.servicescreen.client.rpc.ShareOperatorHandler;
 import fast.common.client.BuildingBlock;
 import fast.mediation.client.gui.MediationRuleGUI;
 import fast.servicescreen.client.ServiceScreenDesignerWep;
@@ -125,6 +126,10 @@ public class CodeGenViewer
 			public void onClick(ClickEvent event)
 			{
 					generator.write_JS_File();
+					
+					//share in GVS
+					ShareOperatorHandler shOpHandler = new ShareOperatorHandler();
+					shOpHandler.share(generator.screen);
 			}
 		});
 		

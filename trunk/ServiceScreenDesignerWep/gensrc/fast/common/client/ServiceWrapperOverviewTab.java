@@ -188,7 +188,7 @@ public class ServiceWrapperOverviewTab implements PropertyChangeClient
             newScreen = new ServiceScreen ( );
 
             // assign attribute newScreen
-            newScreen.setName ("new Screen");
+            newScreen.setName ("new Operator");
             // create link screens from newScreen to designer
             newScreen.setServiceDesigner (designer);
 
