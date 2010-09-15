@@ -9,6 +9,10 @@ import org.apache.http.impl.client.BasicResponseHandler;
 import org.apache.http.impl.client.DefaultHttpClient;
 
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
+import com.sun.jersey.api.client.Client;
+import com.sun.jersey.api.client.WebResource;
+import com.sun.jersey.api.client.config.ClientConfig;
+import com.sun.jersey.api.client.config.DefaultClientConfig;
 
 import fast.servicescreen.client.RequestService;
 
@@ -49,6 +53,35 @@ public class RequestServiceImpl extends RemoteServiceServlet implements RequestS
 			responseBody = "-1";
 		}
 		return responseBody;
+	}
+	
+	@Override
+	//TODO share the generated operator in GVS
+	public String shareOperator(String operator, String cookie) {
+		ClientConfig clientConfig = new DefaultClientConfig();
+		Client client = Client.create(clientConfig);
+
+		//send operator to GVS
+		WebResource webResource = client.resource("http://localhost:13337/buildingblock/operator");
+//		webResource.accept("buildingblock/operator");
+
+		webResource.header("Cookie", "gvsid=" + cookie);
+		String response = webResource.post(String.class, operator);
+
+		//if the operator was successfully posted to GVS it can be shared
+		if (response != "")
+		{
+			//fetch id of the posted operator
+			String id = "";
+			
+			//share the sent operator
+			webResource = client.resource("http://localhost:13337/buildingblock/" + id + "/sharing");
+//			webResource.accept("buildingblock/" + id + "/sharing");
+
+			webResource.header("Cookie", "gvsid=" + cookie);
+			response = webResource.post(String.class, operator);
+		}
+		return response;
 	}
 
 	/**
