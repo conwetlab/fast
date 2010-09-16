@@ -125,7 +125,7 @@
   </target>
 
   <target name="test" depends="clean, compile">
-    <junit printsummary="yes" haltonfailure="yes" showoutput="yes" >
+    <junit printsummary="yes" haltonfailure="no" showoutput="yes" >
       <classpath>
         <pathelement path="${build.dir}/WEB-INF/classes"/>
         <fileset dir="${build.dir}/WEB-INF/lib">
