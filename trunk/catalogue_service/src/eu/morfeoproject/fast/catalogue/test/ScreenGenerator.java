@@ -34,7 +34,7 @@ public class ScreenGenerator {
 	private List<URI> siocClasses;
 	
 	public ScreenGenerator() {
-		catalogue = new Catalogue(new URIImpl("http://localhost:8080/catalogue"), new File("C:\\Program Files\\eclipse\\prueba2"));
+		catalogue = new Catalogue(new URIImpl("http://localhost:8080/catalogue"), new File("C:\\Program Files\\eclipse\\prueba2"), "test");
 		
 		// extracts all concepts from the Amazon Ontology
 		amazonClasses = new ArrayList<URI>();

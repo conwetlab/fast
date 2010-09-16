@@ -146,7 +146,8 @@ public class Concept {
 		
 		URI cUri = this.getUri();
 		model.addStatement(cUri, RDF.type, RDFS.Class);
-		model.addStatement(cUri, RDFS.subClassOf, this.getSubClassOf());
+		if (this.getSubClassOf() != null)
+			model.addStatement(cUri, RDFS.subClassOf, this.getSubClassOf());
 		for (String key : this.getLabels().keySet())
 			model.addStatement(cUri, RDFS.label, model.createLanguageTagLiteral(this.getLabels().get(key), key));
 		for (String key : this.getDescriptions().keySet())

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<testsuite errors="0" failures="0" hostname="ismriv-laptop" name="test.eu.morfeoproject.fast.catalogue.CatalogueTest" tests="8" time="10.992" timestamp="2010-09-14T11:54:02">
+<testsuite errors="0" failures="0" hostname="ismriv-laptop" name="test.eu.morfeoproject.fast.catalogue.CatalogueTest" tests="9" time="8.662" timestamp="2010-09-16T11:33:33">
   <properties>
     <property name="java.vendor" value="Sun Microsystems Inc." />
     <property name="sun.java.launcher" value="SUN_STANDARD" />
@@ -76,14 +76,15 @@
     <property name="java.specification.version" value="1.6" />
     <property name="src.dir" value="/home/ismriv/eclipse-workspace/FASTCatalogue/src" />
   </properties>
-  <testcase classname="test.eu.morfeoproject.fast.catalogue.CatalogueTest" name="check" time="3.882" />
-  <testcase classname="test.eu.morfeoproject.fast.catalogue.CatalogueTest" name="createForm" time="1.295" />
-  <testcase classname="test.eu.morfeoproject.fast.catalogue.CatalogueTest" name="createOperator" time="0.805" />
-  <testcase classname="test.eu.morfeoproject.fast.catalogue.CatalogueTest" name="createBackendService" time="1.436" />
-  <testcase classname="test.eu.morfeoproject.fast.catalogue.CatalogueTest" name="createPostcondition" time="0.959" />
-  <testcase classname="test.eu.morfeoproject.fast.catalogue.CatalogueTest" name="createScreen1" time="1.012" />
-  <testcase classname="test.eu.morfeoproject.fast.catalogue.CatalogueTest" name="createScreen2" time="0.541" />
-  <testcase classname="test.eu.morfeoproject.fast.catalogue.CatalogueTest" name="findAndCheck1" time="0.63" />
+  <testcase classname="test.eu.morfeoproject.fast.catalogue.CatalogueTest" name="check" time="2.681" />
+  <testcase classname="test.eu.morfeoproject.fast.catalogue.CatalogueTest" name="createForm" time="1.587" />
+  <testcase classname="test.eu.morfeoproject.fast.catalogue.CatalogueTest" name="createOperator" time="0.846" />
+  <testcase classname="test.eu.morfeoproject.fast.catalogue.CatalogueTest" name="createBackendService" time="0.561" />
+  <testcase classname="test.eu.morfeoproject.fast.catalogue.CatalogueTest" name="createPostcondition" time="0.574" />
+  <testcase classname="test.eu.morfeoproject.fast.catalogue.CatalogueTest" name="createScreen1" time="0.75" />
+  <testcase classname="test.eu.morfeoproject.fast.catalogue.CatalogueTest" name="createScreen2" time="0.461" />
+  <testcase classname="test.eu.morfeoproject.fast.catalogue.CatalogueTest" name="createConcept" time="0.413" />
+  <testcase classname="test.eu.morfeoproject.fast.catalogue.CatalogueTest" name="findAndCheck1" time="0.484" />
   <system-out><![CDATA[]]></system-out>
   <system-err><![CDATA[]]></system-err>
 </testsuite>

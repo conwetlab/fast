@@ -9,10 +9,10 @@ import junit.framework.TestCase;
 import junit.framework.TestSuite;
 import test.eu.morfeoproject.fast.catalogue.TestUtils;
 import eu.morfeoproject.fast.catalogue.Catalogue;
+import eu.morfeoproject.fast.catalogue.CatalogueAccessPoint;
 import eu.morfeoproject.fast.catalogue.buildingblocks.BuildingBlock;
 import eu.morfeoproject.fast.catalogue.buildingblocks.Screen;
 import eu.morfeoproject.fast.catalogue.planner.Plan;
-import eu.morfeoproject.fast.catalogue.services.CatalogueAccessPoint;
 
 public class PlannerTest extends TestCase {
 
@@ -24,7 +24,7 @@ public class PlannerTest extends TestCase {
 	 
 	protected void setUp() throws Exception {
         super.setUp();
-		catalogue = CatalogueAccessPoint.getCatalogue();
+		catalogue = CatalogueAccessPoint.getCatalogue("test");
 		catalogue.clear();
 	}
 	

@@ -1,4 +1,4 @@
-package eu.morfeoproject.fast.catalogue.services;
+package eu.morfeoproject.fast.catalogue;
 
 import java.io.File;
 import java.io.IOException;
@@ -9,17 +9,17 @@ import org.ontoware.rdf2go.model.node.impl.URIImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import eu.morfeoproject.fast.catalogue.Catalogue;
-
 public class CatalogueAccessPoint {
 
 	final static Logger logger = LoggerFactory.getLogger(CatalogueAccessPoint.class);
 
-	private static final String defaultStorageDir = "C:\\fast\\catalogue\\repository";
-	
 	private static Catalogue catalogue;
 	
 	public static Catalogue getCatalogue() throws IOException {
+		return getCatalogue(null);
+	}
+	
+	public static Catalogue getCatalogue(String environment) throws IOException {
 		if (catalogue == null) {
 			InputStream inStream = CatalogueAccessPoint.class.getClassLoader().getResourceAsStream("repository.properties"); 
 			String storageDir = null;
@@ -32,16 +32,17 @@ public class CatalogueAccessPoint {
 			} else {
 				Properties properties = new Properties();
 				properties.load(inStream);
-				storageDir = properties.getProperty("storageDir", defaultStorageDir);
-				indexes = properties.getProperty("indexes");
-				sesameServer = properties.getProperty("sesameServer");
-				repositoryID = properties.getProperty("repositoryID");
-				serverURL = properties.getProperty("serverURL");
+				environment = environment == null ? "default" : environment;
+				storageDir = properties.getProperty(environment+"-storageDir");
+				indexes = properties.getProperty(environment+"-indexes");
+				sesameServer = properties.getProperty(environment+"-sesameServer");
+				repositoryID = properties.getProperty(environment+"-repositoryID");
+				serverURL = properties.getProperty(environment+"-serverURL");
 			}
 			if (sesameServer != null && repositoryID != null && serverURL != null) {
-				catalogue = new Catalogue(new URIImpl(serverURL), sesameServer, repositoryID);
+				catalogue = new Catalogue(new URIImpl(serverURL), sesameServer, repositoryID, environment);
 			} else if (storageDir != null) {
-				catalogue = new Catalogue(new URIImpl(serverURL), new File(storageDir), indexes);
+				catalogue = new Catalogue(new URIImpl(serverURL), new File(storageDir), indexes, environment);
 			} else {
 				throw new IOException("Configuration file repository.properties is incorrect.");
 			}

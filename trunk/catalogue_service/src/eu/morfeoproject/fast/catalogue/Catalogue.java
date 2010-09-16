@@ -75,19 +75,23 @@ public class Catalogue {
 	private TripleStore tripleStore;
 	private Planner planner;
 	private URI serverURL;
+	private String environment;
 	
-	public Catalogue(URI serverURL, String sesameServer, String repositoryID) {
+	public Catalogue(URI serverURL, String sesameServer, String repositoryID, String environment) {
 		this.serverURL = serverURL;
+		this.environment = environment;
 		create(serverURL, sesameServer, repositoryID);
 	}
 	
-	public Catalogue(URI serverURL, File dir, String indexes) {
+	public Catalogue(URI serverURL, File dir, String indexes, String environment) {
 		this.serverURL = serverURL;
+		this.environment = environment;
 		create(serverURL, dir, indexes);
 	}
 	
-	public Catalogue(URI serverURL, File dir) {
+	public Catalogue(URI serverURL, File dir, String environment) {
 		this.serverURL = serverURL;
+		this.environment = environment;
 		create(serverURL, dir, null);
 	}
 	
@@ -114,7 +118,7 @@ public class Catalogue {
 //			exportToTrig();
 			
 			// creates the planner
-			planner = PlannerFactory.createPlanner(this);
+			planner = PlannerFactory.createPlanner(this, this.environment);
 		}
 	}
 	
@@ -138,7 +142,7 @@ public class Catalogue {
 			}
 			
 			// creates the planner
-			planner = PlannerFactory.createPlanner(this);
+			planner = PlannerFactory.createPlanner(this, this.environment);
 		}
 	}
 	

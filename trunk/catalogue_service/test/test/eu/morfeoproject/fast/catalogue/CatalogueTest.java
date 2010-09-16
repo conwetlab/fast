@@ -14,6 +14,7 @@ import org.ontoware.rdf2go.model.node.URI;
 
 import eu.morfeoproject.fast.catalogue.BuildingBlockJSONBuilder;
 import eu.morfeoproject.fast.catalogue.Catalogue;
+import eu.morfeoproject.fast.catalogue.CatalogueAccessPoint;
 import eu.morfeoproject.fast.catalogue.buildingblocks.BackendService;
 import eu.morfeoproject.fast.catalogue.buildingblocks.Concept;
 import eu.morfeoproject.fast.catalogue.buildingblocks.Condition;
@@ -22,7 +23,6 @@ import eu.morfeoproject.fast.catalogue.buildingblocks.Operator;
 import eu.morfeoproject.fast.catalogue.buildingblocks.Postcondition;
 import eu.morfeoproject.fast.catalogue.buildingblocks.Screen;
 import eu.morfeoproject.fast.catalogue.buildingblocks.ScreenComponent;
-import eu.morfeoproject.fast.catalogue.services.CatalogueAccessPoint;
 import eu.morfeoproject.fast.catalogue.util.Util;
 import eu.morfeoproject.fast.catalogue.vocabulary.FGO;
 
@@ -36,7 +36,7 @@ public class CatalogueTest extends TestCase {
 	 
 	protected void setUp() throws Exception {
         super.setUp();
-		catalogue = CatalogueAccessPoint.getCatalogue();
+		catalogue = CatalogueAccessPoint.getCatalogue("test");
 		catalogue.clear();
 	}
 	

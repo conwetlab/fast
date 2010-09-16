@@ -31,7 +31,6 @@ import eu.morfeoproject.fast.catalogue.buildingblocks.ScreenDefinition;
 import eu.morfeoproject.fast.catalogue.buildingblocks.ScreenFlow;
 import eu.morfeoproject.fast.catalogue.buildingblocks.Trigger;
 import eu.morfeoproject.fast.catalogue.commontag.CTag;
-import eu.morfeoproject.fast.catalogue.services.CatalogueAccessPoint;
 import eu.morfeoproject.fast.catalogue.util.DateFormatter;
 
 public class BuildingBlockJSONBuilder {

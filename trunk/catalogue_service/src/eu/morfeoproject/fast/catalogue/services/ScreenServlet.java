@@ -22,6 +22,7 @@ import org.slf4j.LoggerFactory;
 
 import eu.morfeoproject.fast.catalogue.BuildingBlockJSONBuilder;
 import eu.morfeoproject.fast.catalogue.Catalogue;
+import eu.morfeoproject.fast.catalogue.CatalogueAccessPoint;
 import eu.morfeoproject.fast.catalogue.DuplicatedBuildingBlockException;
 import eu.morfeoproject.fast.catalogue.NotFoundException;
 import eu.morfeoproject.fast.catalogue.OntologyInvalidException;
