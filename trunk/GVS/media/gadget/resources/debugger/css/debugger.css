@@ -1,0 +1,166 @@
+
+/* Debugger */
+
+#menu {
+    overflow: auto;
+    height: 100%;
+}
+
+.logging.no-firebug #menu, .debug #menu {
+    height: 69%;
+}
+.debug #menu {
+    margin: 0px auto;
+    width: 80%;
+    border: 2px solid #8BA0BD;
+}
+.debuggerTitle {
+    margin: 5px 2px;
+    font-weight: bold;
+    font-size: 20px;
+    color: #8BA0BD;
+    text-align: center;
+}
+
+.logger {
+    height: 25%;
+    overflow: auto;
+    background-color: #EEE;
+    border: 1px solid #AAA;
+    padding: 2px 5px;
+    margin: 2px;
+    position: absolute;
+    bottom: 0px;
+    right: 0px;
+    left: 0px;
+    font-size: 80%;
+    font-family: Tahoma, Arial, Helvetica, sans-serif;
+}
+.debug .logger {
+    width: 50%;
+}
+
+.logger .clear {
+    color: #777;
+    font-weight: bold;
+    text-decoration: underline;
+    position: absolute;
+    right: 5px;
+    top: 2px;
+    cursor: pointer;
+}
+
+.logger a.clear:hover {
+    cursor: pointer;
+    color: #F8A704;
+}
+
+.group {
+    margin-left: 15px;
+    border: 1px solid #CCC;
+    padding: 5px;
+}
+
+.groupButton {
+    float: left;
+    margin-right: 3px;
+    width: 12px;
+    cursor: pointer;
+}
+
+.groupTitle {
+    font-weight: bold;
+    margin-bottom: 3px;
+}
+#debugger .line {
+    padding: 2px 5px;
+}
+
+#debugger .title {
+    color: #8BA0BD;
+    padding: 5px;
+    font-weight: bold;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 16px;
+}
+
+#debugger .columnLeft {
+    margin: 1px;
+    float: left;
+    width: 30%;
+}
+.columnRight * {
+    width: 67%;
+}
+.columnRight textarea {
+    height: 45%;
+}
+
+.createFact {
+    width: 25%;
+    height: 25%;
+    position: absolute;
+    left: 52%;
+    border: 1px solid #8BA0BD;
+    background-color: #E1EBFB;
+    bottom: 0px;
+    margin: 2px;
+    padding: 2px 5px;
+}
+
+
+.kb {
+    width: 20%;
+    border: 1px solid #8BA0BD;
+    background-color: #E1EBFB; 
+    height: 25%;
+    position: absolute;
+    right: 5px;
+    bottom: 0px;
+    overflow: auto;
+    margin: 2px;
+    padding: 2px 5px;
+}
+
+
+.fact {
+    width: 27px;
+    height: 25px;
+    line-height: 25px;
+    text-align: center;
+    font-weight: bold;
+    font-size: 14px;
+    background: url("../images/green_selected.png") no-repeat center center;
+    color: #ddf7dd;
+    margin: 5px;
+    cursor: pointer;
+    float: left;
+}
+
+.factIdentifier {
+    float:left;
+    height: 25px;
+    line-height: 25px;
+    margin: 5px;
+    cursor: pointer;
+}
+.removeFact {
+    float:left;
+    height: 25px;
+    line-height: 25px;
+    margin-top: 4px;
+    width: 25px;
+    background: transparent url("../images/minus.png") no-repeat center center;
+    cursor: pointer;
+}
+
+
+.factDetails {
+    position: absolute;
+    display: none;
+    border: 1px solid #AAA;
+    background-color: #EEE;
+    padding: 5px;
+    max-width: 500px;
+    overflow: auto;
+}

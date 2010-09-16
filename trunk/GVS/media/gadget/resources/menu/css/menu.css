@@ -92,11 +92,19 @@ display:inline;
 }
 
 .logging.no-firebug #menu, .debug #menu {
-    height: 72%;
+    height: 69%;
 }
-
-.debug.no-firebug #menu{
-    height: 48%;
+.debug #menu {
+    margin: 0px auto;
+    width: 80%;
+    border: 2px solid #8BA0BD;
+}
+.debuggerTitle {
+    margin: 5px 2px;
+    font-weight: bold;
+    font-size: 20px;
+    color: #8BA0BD;
+    text-align: center;
 }
 
 .logger {
@@ -113,11 +121,18 @@ display:inline;
     font-size: 80%;
     font-family: Tahoma, Arial, Helvetica, sans-serif;
 }
+.debug .logger {
+    width: 50%;
+}
 
-.logger a.clear {
+.logger .clear {
     color: #777;
     font-weight: bold;
     text-decoration: underline;
+    position: absolute;
+    right: 5px;
+    top: 2px;
+    cursor: pointer;
 }
 
 .logger a.clear:hover {
@@ -149,6 +164,9 @@ display:inline;
 #debugger .title {
     color: #8BA0BD;
     padding: 5px;
+    font-weight: bold;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 16px;
 }
 
 #debugger .columnLeft {
@@ -159,15 +177,20 @@ display:inline;
 .columnRight * {
     width: 67%;
 }
-
+.columnRight textarea {
+    height: 45%;
+}
 
 .createFact {
     width: 25%;
     height: 25%;
     position: absolute;
-    left: 53%;
+    left: 52%;
     border: 1px solid #8BA0BD;
     background-color: #E1EBFB;
+    bottom: 0px;
+    margin: 2px;
+    padding: 2px 5px;
 }
 
 
@@ -178,7 +201,10 @@ display:inline;
     height: 25%;
     position: absolute;
     right: 5px;
+    bottom: 0px;
     overflow: auto;
+    margin: 2px;
+    padding: 2px 5px;
 }
 
 

@@ -24,6 +24,13 @@ var Debugger = Class.create(/** @lends Debugger.prototype */ {
         document.body.appendChild(this._debuggerNode);
         document.body.addClassName(this._debugLevel);
 
+        if (this._debugLevel == "debug") {
+            var title = new Element("div", {
+                "class": "debuggerTitle"
+            }).update("Screenflow Debugger");
+            document.body.insertBefore(title, document.body.firstChild);
+        }
+
         /**
          * Number of logging groups opened
          * @private
@@ -117,9 +124,12 @@ var Debugger = Class.create(/** @lends Debugger.prototype */ {
      */
     _initConsole: function() {
 
-        if (this._testing || window.console === undefined) {
+        if (this._debugLevel == "debug" || window.console === undefined ||
+            this._testing) {
             this._logger = new Logger(this._debuggerNode);
-            document.body.addClassName("no-firebug");
+            if (window.console === undefined) {
+                document.body.addClassName("no-firebug");
+            }
         } else {
             this._logger = window.console;
         }
@@ -172,10 +182,13 @@ var Logger = Class.create({
             "style": "margin-top:3px"
         });
 
+        var title = new Element("div", {
+            "class": "title"
+        }).update("Event Log");
 
-        var clearButton = new Element("a", {
+
+        var clearButton = new Element("div", {
             "class": "clear",
-            "href": "javascript:"
         }).update("Clear");
         clearButton.observe("click", function(){
             this._loggerNode.update();
@@ -185,6 +198,7 @@ var Logger = Class.create({
         var loggerContainer = new Element("div", {
             "class": "logger"
         });
+        loggerContainer.appendChild(title);
         loggerContainer.appendChild(clearButton);
         loggerContainer.appendChild(this._loggerNode);
 
