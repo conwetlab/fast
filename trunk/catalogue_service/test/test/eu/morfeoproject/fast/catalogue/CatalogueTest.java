@@ -9,10 +9,13 @@ import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
+import org.json.JSONObject;
 import org.ontoware.rdf2go.model.node.URI;
 
+import eu.morfeoproject.fast.catalogue.BuildingBlockJSONBuilder;
 import eu.morfeoproject.fast.catalogue.Catalogue;
 import eu.morfeoproject.fast.catalogue.buildingblocks.BackendService;
+import eu.morfeoproject.fast.catalogue.buildingblocks.Concept;
 import eu.morfeoproject.fast.catalogue.buildingblocks.Condition;
 import eu.morfeoproject.fast.catalogue.buildingblocks.Form;
 import eu.morfeoproject.fast.catalogue.buildingblocks.Operator;
@@ -20,6 +23,7 @@ import eu.morfeoproject.fast.catalogue.buildingblocks.Postcondition;
 import eu.morfeoproject.fast.catalogue.buildingblocks.Screen;
 import eu.morfeoproject.fast.catalogue.buildingblocks.ScreenComponent;
 import eu.morfeoproject.fast.catalogue.services.CatalogueAccessPoint;
+import eu.morfeoproject.fast.catalogue.util.Util;
 import eu.morfeoproject.fast.catalogue.vocabulary.FGO;
 
 public class CatalogueTest extends TestCase {
@@ -104,6 +108,20 @@ public class CatalogueTest extends TestCase {
 		Assert.assertEquals(s1.getCode(), s2.getCode());
 	}
 
+	public void createConcept() throws Exception {
+		JSONObject json = new JSONObject(Util.getFileContentAsString("data/json/concepts/genericSearchCriteria.json"));
+		String name = json.getString("name");
+		String domain = json.getString("domain");
+		URI uri = catalogue.createConceptURI(name, domain);
+		Concept c1 = BuildingBlockJSONBuilder.buildConcept(json, uri);
+		catalogue.addConcept(c1);
+		Concept c2 = catalogue.getConcept(c1.getUri());
+		Assert.assertTrue(c2.getSubClassOf() == null);
+		Assert.assertEquals(c1.getUri().toString(), c2.getUri().toString());
+		Assert.assertEquals(c1.getDescriptions().size(), c2.getDescriptions().size());
+		Assert.assertEquals(c1.getLabels().values().toArray()[0], c2.getLabels().values().toArray()[0]);
+	}
+
 	public void findAndCheck1() throws Exception {
 		Form form = (Form) TestUtils.buildBB(catalogue.getServerURL(), "form", "data/json/forms/amazonList.json");
 		BackendService service = (BackendService) TestUtils.buildBB(catalogue.getServerURL(), "backendservice", "data/json/backendservices/amazonSearchService.json");
@@ -126,6 +144,7 @@ public class CatalogueTest extends TestCase {
 	    suite.addTest(new CatalogueTest("createPostcondition"));
 	    suite.addTest(new CatalogueTest("createScreen1"));
 	    suite.addTest(new CatalogueTest("createScreen2"));
+	    suite.addTest(new CatalogueTest("createConcept"));
 	    suite.addTest(new CatalogueTest("findAndCheck1"));
 		return suite;
 	}

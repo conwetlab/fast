@@ -10,6 +10,7 @@ import org.ontoware.rdf2go.model.node.impl.URIImpl;
 import eu.morfeoproject.fast.catalogue.BuildingBlockException;
 import eu.morfeoproject.fast.catalogue.BuildingBlockJSONBuilder;
 import eu.morfeoproject.fast.catalogue.buildingblocks.BuildingBlock;
+import eu.morfeoproject.fast.catalogue.buildingblocks.Concept;
 import eu.morfeoproject.fast.catalogue.util.Util;
 
 public class TestUtils {
@@ -37,5 +38,5 @@ public class TestUtils {
 		
 		return bb;
 	}
-
+	
 }
