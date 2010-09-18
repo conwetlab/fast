@@ -320,30 +320,6 @@ public class ServiceScreenDesignerWep extends FastTool implements EntryPoint
       generalInformationTable.setWidget(rowCount, 0, outputPortTable);
       rowCount++;
       
-      // add save and load buttons
-      Button saveJsonButton = new Button("Save Wrapper");
-      saveJsonButton.addClickHandler(new ClickHandler() {
-    	  @Override
-    	  public void onClick(ClickEvent event) {
-    		  //TODO save json
-    		  SaveLoadJsonHandler handler = new SaveLoadJsonHandler(ServiceScreenDesignerWep.this);
-    		  savedJson = handler.saveJson();
-    		  Window.alert(savedJson.toString());
-    	  }
-      });
-      generalInformationTable.setWidget(rowCount, 0, saveJsonButton);
-      Button loadJsonButton = new Button("Load Wrapper");
-      loadJsonButton.addClickHandler(new ClickHandler() {
-    	  @Override
-    	  public void onClick(ClickEvent event) {
-    		  //TODO load json
-    		  SaveLoadJsonHandler handler = new SaveLoadJsonHandler(ServiceScreenDesignerWep.this);
-    		  handler.loadJson(savedJson);
-    	  }
-      });
-      generalInformationTable.setWidget(rowCount, 1, loadJsonButton);
-      rowCount++;
-      
       // add general tab 
       tabPanel.add(generalInformationTable, "General");
       

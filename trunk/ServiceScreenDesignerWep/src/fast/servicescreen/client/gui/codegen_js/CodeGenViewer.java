@@ -8,17 +8,17 @@ import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.ChangeListener;
 import com.google.gwt.user.client.ui.FlexTable;
+import com.google.gwt.user.client.ui.FlexTable.FlexCellFormatter;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.Widget;
-import com.google.gwt.user.client.ui.FlexTable.FlexCellFormatter;
 
-import fast.servicescreen.client.rpc.ShareOperatorHandler;
 import fast.common.client.BuildingBlock;
 import fast.mediation.client.gui.MediationRuleGUI;
 import fast.servicescreen.client.ServiceScreenDesignerWep;
+import fast.servicescreen.client.rpc.ShareOperatorHandler;
 
 /**
  * This Tab should show result steps of code generation.
@@ -127,9 +127,10 @@ public class CodeGenViewer
 			{
 					generator.write_JS_File();
 					
+					//TODO: remove comment when no more internal server errors
 					//share in GVS
-					ShareOperatorHandler shOpHandler = new ShareOperatorHandler();
-					shOpHandler.share(generator.screen);
+//					ShareOperatorHandler shOpHandler = new ShareOperatorHandler();
+//					shOpHandler.share(generator.screen);
 			}
 		});
 		

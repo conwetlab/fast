@@ -11,7 +11,7 @@ public interface RequestService extends RemoteService
 {
 	String sendHttpRequest_GET(String url);
 	
-	String shareOperator(String op, String c);
+	String sendHttpRequest_POST(String url, String cookie, String body);
 	
 	String saveJsFileOnServer(String opName, String preHTMLCode, String transCode, String postHTMLCode);
 }

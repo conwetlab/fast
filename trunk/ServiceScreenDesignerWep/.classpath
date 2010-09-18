@@ -8,7 +8,6 @@
 	<classpathentry kind="lib" path="war/WEB-INF/lib/commons-logging-1.1.1.jar"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/httpcore-4.0.1.jar"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/httpcore-nio-4.0.1.jar"/>
-	<classpathentry kind="lib" path="lib/jersey-bundle-1.4.jar"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/de.uni_kassel.webcoobra"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/fujaba.web.runtime"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/httpclient-4.0.1.jar"/>
