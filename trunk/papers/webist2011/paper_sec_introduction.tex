@@ -1,0 +1,26 @@
+%!TEX root = paper.tex
+
+\section{Introduction}
+\label{sec:introduction}
+
+Business-to-business (B2B) integration is still a significant challenge, often requiring extensive efforts in terms of different aspects and technologies for protocols, architectures or security. Solutions based on open standards have reduced the complexity of integrating different business applications between different companies and partners. 
+In this sense, Web services and XML standards such as RosettaNet, ebXML or OAG have been a boon to the world of B2B. By web services standards we are referring to the following open standards: Web Services Description Language (WSDL --- to describe), Universal Description, Discovery and Integration (UDDI --- to advertise and syndicate), Simple Object Access Protocol (SOAP --- to communicate) and Web Services Flow Language (WSFL --- to define work flows). 
+A common scenario  in their usage is a company using WSDL to describe its web services, publishing them through a repository using UDDI, while these web services use SOAP-based messages to achieve dynamic integration between different, disparate applications.
+
+While the adoption of these standards has offered some advantages in business-to-consumer (B2C) integration as well,  the interaction and consumption of web services still requires programming skills and a deep understanding of the  technology, which poses an obstacle for an end-user with limited knowledge on the matter (in the sense as defined in~\cite{fuchsloch2010}). 
+Regarding the discovery of the right service for the right task --- a crucial requirement for the dynamic use of WS --- most publishing platforms are syntax-based, %leading to poor precision and recall in finding the correct service, 
+making it difficult to navigate through a large number of web services~\cite{pilioura_acm2009}, 
+therefore preventing end-users from performing these tasks. 
+Solutions such as Semantic Web Services (SWS) promised many advantages in discovery, composition and consumption of web services, independently of the provider's platform, location, service implementation or data format. 
+However, as of yet they have not been widely adopted, 
+possibly because the perceived potential benefits of SWS did not justify the additional investments required for businesses~\cite{shi2007}.
+In a similar vein as B2C, governments are currently opening their data to the public as linked data. 
+So far, the efforts are restricted to data only, so that users are left alone in finding applications of that data. 
+A natural further development in the public sector would be that their services for administration tasks and single-window applications will be opened as well. Hence, governments will benefit from the research done around these concepts and technologies.
+
+The motivation of our work has been strongly influenced by the end-users' needs. We are targeting users which are non-skilled in term of programming and software development, empowering them with a platform to discover and consume web services in a straight-forward manner.
+The web services and their specifications are not published right away in the platform, since this would simply mean to reimplement UDDI.
+However, their definition and behaviour are wrapped in what we call a ``web service wrapper''. The products resulting from the wrapping process are two artifacts: a specific definition of the web service to be used by this tool, and a ready-to-consume (inside a web browser) piece of code with the proper functions to invoke the web service.
+
+The remainder of this paper is organised as follows. Section~\ref{sec:related_work} covers the state of the art in web services publication, discovery and wrapping/consumption. In Section~\ref{sec:wrapping_web_services} we present our approach for web services wrapping, available possibilities and limitations. Next, Sect.~\ref{sec:discovery} describes our platform for publishing web services and empowering end-users to discover services. Section~\ref{sec:use_case} gives the reader a clearer use case and how this work is integrated into the FAST platform, and finally, we present our main conclusions and highlight future lines of research in Section~\ref{sec:conclusions}.
+

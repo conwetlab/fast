@@ -1,0 +1,15 @@
+%!TEX root = paper.tex
+
+\section{Conclusions and future work}
+\label{sec:conclusions}
+
+It has been demonstrated that adopting web services standards lead enterprises to increase operational efficiency, reduce costs and strengthen the relations with partners. Many of these standards have been widely adopted, such as WSDL, XML and UDDI, and many companies offer access to their information and operational systems through web services. 
+However, when dealing with end-users, the process for publication and consumption is not well defined. 
+The common way of publishing services is by providing some sort of definition on their websites, such a WSDL document and further details in a human-readable HTML page. 
+Discovery is performed through a search engine or aggregator, mainly in a syntax-based way. For consumption, in most cases, consultants with good programming skills are required. 
+In a move towards improving this situation, the work presented in this paper empowers the end-user with a platform (the \emph{catalogue}) to easily discover services based on functional behaviour (pre-/post-conditions) and other metadata, being able to download a so-called resource adapter allowing the consumption of web services using standard languages to execute within a web browser, and a tool to transform, in an interactive manner, formal definitions of web services into these resource adapters, ready for being publisher into the catalogue.
+
+The current version of the wrapping tool permits to create resource adapters for RESTful web services. 
+As a next step, we will tackle SOAP-based web services described in WSDL documents. Once this is done, we will cover the two major paradigms for defining web service interfaces. However, we also consider to include semantically enriched WSDL documents using SAWSDL, and to support other SWS approaches such as WSMO-lite services. 
+
+Another limitation of the platform is inherent in web client technologies and the cross-domain policy for security. This is solved within FAST using platform-dependent API calls. Hence, the code generated makes use of the FAST API, which will be transformed depending on the mashup platform the user intends to deploy the gadget. To avoid these issues, and to be able to provide platform-independent code right away, we are planning to deploy the JSONRequest approach as proposed by \cite{crockford2006} and other solutions.
