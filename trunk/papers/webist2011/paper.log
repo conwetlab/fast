@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009/Debian) (format=pdflatex 2010.9.17)  20 SEP 2010 17:06
+This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009/Debian) (format=pdflatex 2010.9.17)  20 SEP 2010 17:25
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -363,8 +363,10 @@ Underfull \hbox (badness 10000) in paragraph at lines 28--28
 
 \openout2 = `abstract.aux'.
 
-(./abstract.tex) (./paper_sec_introduction.tex [1{/var/lib/texmf/fonts/map/pdft
-ex/updmap/pdftex.map}
+(./abstract.tex) (./paper_sec_introduction.tex
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [1{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}
 
 
 
@@ -398,9 +400,11 @@ Underfull \hbox (badness 1132) in paragraph at lines 16--33
  []
 
 (./paper_sec_wrapping.tex
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [2]
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <12> not available
 (Font)              Font shape `OT1/ptm/b/n' tried instead on input line 8.
- [2]
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <7> not available
 (Font)              Font shape `OT1/ptm/b/n' tried instead on input line 13.
 
@@ -437,9 +441,8 @@ LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <5> not available
 File: images/ServiceWrapperToolGVSWithRequestExample.png Graphic file (type png
 )
  <use images/ServiceWrapperToolGVSWithRequestExample.png> [3 <./images/ServiceW
-rapperToolGVSWithPortDefinitions.png (PNG copy)> <./images/ServiceWrapperToolGV
-SWithRequestExample.png (PNG copy)>]
-<images/ServiceWrapperToolGVSWithTransformationRules.png, id=19, 1186.4325pt x 
+rapperToolGVSWithPortDefinitions.png (PNG copy)>]
+<images/ServiceWrapperToolGVSWithTransformationRules.png, id=18, 1186.4325pt x 
 534.99875pt>
 File: images/ServiceWrapperToolGVSWithTransformationRules.png Graphic file (typ
 e png)
@@ -447,7 +450,8 @@ e png)
 LaTeX Font Info:    Font shape `OT1/ptm/bx/it' in size <10> not available
 (Font)              Font shape `OT1/ptm/b/it' tried instead on input line 84.
 
-[4 <./images/ServiceWrapperToolGVSWithTransformationRules.png (PNG copy)>]
+[4 <./images/ServiceWrapperToolGVSWithRequestExample.png (PNG copy)> <./images/
+ServiceWrapperToolGVSWithTransformationRules.png (PNG copy)>]
 Underfull \hbox (badness 1097) in paragraph at lines 107--108
 []\OT1/ptm/m/n/10 However, there are some trans-for-ma-tions that
  []
@@ -455,7 +459,7 @@ Underfull \hbox (badness 1097) in paragraph at lines 107--108
 ) (./paper_sec_catalogue.tex
 LaTeX Font Info:    Font shape `OMS/ptm/m/n' in size <10> not available
 (Font)              Font shape `OMS/pzccm/m/n' tried instead on input line 14.
-
+ [5]
 Underfull \hbox (badness 1796) in paragraph at lines 21--22
 []\OT1/ptm/m/n/10 supports con-tent ne-go-ti-a-tion so that dif-fer-ent
  []
@@ -465,7 +469,7 @@ Underfull \hbox (badness 1184) in paragraph at lines 21--22
 \OT1/ptm/m/n/10 clients may re-trieve in-for-ma-tion in their pre-
  []
 
-[5]
+
 Overfull \hbox (42.91397pt too wide) in paragraph at lines 52--52
  []  \OT1/pcr/m/n/7 "code": "http://demo.fast.morfeo-project.org/code/amazonSea
 rch.js",[] 
@@ -489,7 +493,7 @@ Overfull \hbox (32.20404pt too wide) in paragraph at lines 52--52
 tem",[] 
  []
 
-(./paper_ssec_ontology.tex) (./paper_ssec_linked_data.tex [6]))
+(./paper_ssec_ontology.tex [6]) (./paper_ssec_linked_data.tex))
 (./paper_sec_use_case.tex
 <images/fast_architecture.pdf, id=32, 604.2575pt x 402.50375pt>
 File: images/fast_architecture.pdf Graphic file (type pdf)
@@ -529,25 +533,30 @@ Underfull \hbox (badness 5847) in paragraph at lines 26--27
 []\OT1/ptm/m/n/10 Because FAST al-
  []
 
-) (./paper_sec_conclusions.tex) (./paper.bbl [8]) [9
+) (./paper_sec_conclusions.tex
+Underfull \vbox (badness 10000) has occurred while \output is active []
 
-] (./paper.aux
-(./keywords.aux) (./abstract.aux)) ) 
+)
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [8]
+(./paper.bbl) [9] (./paper.aux (./keywords.aux) (./abstract.aux)) ) 
 Here is how much of TeX's memory you used:
  3773 strings out of 495061
  52488 string characters out of 1182621
- 120978 words of memory out of 3000000
+ 119978 words of memory out of 3000000
  6841 multiletter control sequences out of 15000+50000
  44922 words of font info for 96 fonts, out of 3000000 for 9000
  28 hyphenation exceptions out of 8191
  36i,10n,43p,1618b,329s stack positions out of 5000i,500n,10000p,200000b,50000s
-{/usr/share/texmf-texlive/fonts/enc/dvips/b
-ase/8r.enc}</usr/share/texmf-texlive/fonts/type1/public/amsfonts/cm/cmsy10.pfb>
-</usr/share/texmf-texlive/fonts/type1/urw/courier/ucrr8a.pfb></usr/share/texmf-
-texlive/fonts/type1/urw/times/utmb8a.pfb></usr/share/texmf-texlive/fonts/type1/
-urw/times/utmbi8a.pfb></usr/share/texmf-texlive/fonts/type1/urw/times/utmr8a.pf
-b></usr/share/texmf-texlive/fonts/type1/urw/times/utmri8a.pfb>
-Output written on paper.pdf (9 pages, 398508 bytes).
+{/usr/share/
+texmf-texlive/fonts/enc/dvips/base/8r.enc}</usr/share/texmf-texlive/fonts/type1
+/public/amsfonts/cm/cmsy10.pfb></usr/share/texmf-texlive/fonts/type1/urw/courie
+r/ucrr8a.pfb></usr/share/texmf-texlive/fonts/type1/urw/times/utmb8a.pfb></usr/s
+hare/texmf-texlive/fonts/type1/urw/times/utmbi8a.pfb></usr/share/texmf-texlive/
+fonts/type1/urw/times/utmr8a.pfb></usr/share/texmf-texlive/fonts/type1/urw/time
+s/utmri8a.pfb>
+Output written on paper.pdf (9 pages, 399263 bytes).
 PDF statistics:
  164 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
