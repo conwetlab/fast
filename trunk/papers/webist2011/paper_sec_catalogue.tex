@@ -5,6 +5,7 @@
 
 The area of web service publication and discovery has been subject for a lot of research since the very beginning the concept was coined. The current state of the art provides several solutions and strategies which providers and consumers may take advantage of. However, as explained in previous sections, a large number of them suffer from limited syntax-based descriptions and simple keyword-based search, and the gap between discovery and consumption is an obstacle for their usage by non-technical end-users. In order to improve this issue, this paper presents a novel publishing platform, permitting any enterprise or individual to publish their public domain web services, with an enhanced semantic search based on the definition of the services, and serving web service wrappers for easy consumption in web applications.
 
+% Overview subsection
 \subsection{Overview}
 \label{ssec:overview}
 
@@ -55,6 +56,7 @@ The following is an example of part of a request sent to create a new wrapper in
 
 The enriched search capabilities are supported by the definition of pre- and post-conditions. They allows to define the inputs and outputs of the services and other building blocks using concepts from any ontology, and in this way to find web services or other building blocks which match each other and can therefore be integrated. The concepts of pre-/post-conditions were strongly influenced by WSMO~\cite{roman2005}, simplified and implemented in RDFS for better live performance. The model used to define the web service wrappers and the ontology created are described in more detail in Sect.~\ref{ssec:ontology}.
 
+% Architecture subsection
 \subsection{Platform architecture}
 \label{ssec:architecture}
 
@@ -67,6 +69,14 @@ acting as a mediator between the public RESTful API and the persistence layer.
 
 The persistence layer provides an API allowing to work with a standard set of objects representing the model. The interaction with the underlying RDF store is made via RDF2Go, an abstraction over triple (and quad) stores, which allows to program against RDF2Go interfaces and choose any RDF store implementation. This allows having a completely extensible and configurable framework for storage mechanisms, inferencers, RDF file formats, query result formats and query languages.
 
+
+% Conceptual model subsection
 \input{paper_ssec_ontology}
 
+
+% Discovery and recommendations subsection
+\input{paper_ssec_discovery}
+
+
+% Conceptual model subsection
 \input{paper_ssec_linked_data}
