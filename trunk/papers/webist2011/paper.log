@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009/Debian) (format=pdflatex 2010.9.17)  27 SEP 2010 19:03
+This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009/Debian) (format=pdflatex 2010.9.17)  28 SEP 2010 21:17
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -494,22 +494,22 @@ tem",[]
  []
 
 (./paper_ssec_ontology.tex [6]) (./paper_ssec_discovery.tex
-Overfull \hbox (2.31468pt too wide) in paragraph at lines 50--50
-[]  \OT1/pcr/m/n/9 <http://www.w3.org/1999/02/22-rdf-syntax-ns#>[] 
+Overfull \hbox (3.64423pt too wide) in paragraph at lines 85--85
+ []\OT1/pcr/m/n/7 PREFIX amazon:<http://aws.amazon.com/AWSECommerceService#>[] 
+
  []
 
+[7]
+Missing character: There is no Ô in font ptmr7t!
+Missing character: There is no ¨ in font ptmr7t!
+Missing character: There is no Å in font ptmr7t!
 
-Overfull \hbox (16.08463pt too wide) in paragraph at lines 50--50
-[]    \OT1/pcr/m/n/9 GRAPH ?p { ?x rdf:type amazon:SearchCriteria }[] 
+Underfull \hbox (badness 2418) in paragraph at lines 128--129
+[]\OT1/ptm/m/n/10 it gives a higher po-si-tion to those build-ing
  []
 
-
-Overfull \hbox (6.90466pt too wide) in paragraph at lines 50--50
-[]  \OT1/pcr/m/n/9 FILTER (?bb != <http://fast.org/screens/1349>)[] 
- []
-
-) (./paper_ssec_linked_data.tex [7])) (./paper_sec_use_case.tex
-<images/fast_architecture.pdf, id=36, 604.2575pt x 402.50375pt>
+) (./paper_ssec_linked_data.tex [8])) (./paper_sec_use_case.tex
+<images/fast_architecture.pdf, id=39, 604.2575pt x 402.50375pt>
 File: images/fast_architecture.pdf Graphic file (type pdf)
 
 <use images/fast_architecture.pdf>
@@ -537,37 +537,37 @@ Underfull \hbox (badness 1406) in paragraph at lines 24--25
 \OT1/ptm/m/n/10 search-ing, rec-om-men-da-tion and plan-ning (the
  []
 
-
+[9 <./images/fast_architecture.pdf>]
 Overfull \hbox (5.03325pt too wide) in paragraph at lines 25--26
 []
  []
 
-[8 <./images/fast_architecture.pdf>]
+
 Underfull \hbox (badness 5847) in paragraph at lines 26--27
 []\OT1/ptm/m/n/10 Because FAST al-
  []
 
-) (./paper_sec_conclusions.tex) (./paper.bbl [9]) [10
+) (./paper_sec_conclusions.tex) (./paper.bbl [10]) [11
 
 ] (./paper.aux
 (./keywords.aux) (./abstract.aux)) ) 
 Here is how much of TeX's memory you used:
- 3780 strings out of 495061
- 52629 string characters out of 1182621
+ 3782 strings out of 495061
+ 52669 string characters out of 1182621
  119978 words of memory out of 3000000
- 6845 multiletter control sequences out of 15000+50000
+ 6847 multiletter control sequences out of 15000+50000
  44922 words of font info for 96 fonts, out of 3000000 for 9000
  28 hyphenation exceptions out of 8191
- 36i,10n,43p,1618b,329s stack positions out of 5000i,500n,10000p,200000b,50000s
+ 36i,10n,43p,1618b,428s stack positions out of 5000i,500n,10000p,200000b,50000s
 {/usr/share/texmf-texlive/fonts/enc/dvips/b
 ase/8r.enc}</usr/share/texmf-texlive/fonts/type1/public/amsfonts/cm/cmsy10.pfb>
 </usr/share/texmf-texlive/fonts/type1/urw/courier/ucrr8a.pfb></usr/share/texmf-
 texlive/fonts/type1/urw/times/utmb8a.pfb></usr/share/texmf-texlive/fonts/type1/
 urw/times/utmbi8a.pfb></usr/share/texmf-texlive/fonts/type1/urw/times/utmr8a.pf
 b></usr/share/texmf-texlive/fonts/type1/urw/times/utmri8a.pfb>
-Output written on paper.pdf (10 pages, 403297 bytes).
+Output written on paper.pdf (11 pages, 408538 bytes).
 PDF statistics:
- 167 PDF objects out of 1000 (max. 8388607)
+ 170 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
  21 words of extra memory for PDF output out of 10000 (max. 10000000)
 
