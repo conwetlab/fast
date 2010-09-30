@@ -214,6 +214,10 @@ public class MediationRuleGUI extends RuleGUI
 				   
 				treeItem.addItem(targetElemName + ": " + nodeValue);
 		   }
+	       else if(rule.getKind().equals("dummyRule"))
+	       {
+	    	   //TODO
+	       }
 	   }
    }
    

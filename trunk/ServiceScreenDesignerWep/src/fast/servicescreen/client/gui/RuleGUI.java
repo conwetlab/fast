@@ -224,6 +224,7 @@ public class RuleGUI
       
       words.add("createObject");
       words.add("fillAttributes");
+      words.add("dummyRule");
       
       for(String word : words)
         oracle.add(word);
@@ -312,6 +313,12 @@ public class RuleGUI
         		 types.add(attr.getAttrName());
         	 }
          }
+      }
+      else if("dummyRule".equals(kind))
+      {
+    	  //do nothin here?
+    	  
+    	  //handling of dummyRule only necessary in CodeGeneration 
       }
       
       for(String word : types)
@@ -462,6 +469,10 @@ public class RuleGUI
             	 
                	kidItem = treeItem.addItem(targetElemName + " : " + nodeValue);
              }
+          }
+          else if(rule.getKind().equals("dummyRule"))
+          {
+        	  //TODO
           }
       }
    }
