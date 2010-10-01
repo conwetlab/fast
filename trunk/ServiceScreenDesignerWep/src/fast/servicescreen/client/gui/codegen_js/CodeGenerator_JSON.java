@@ -232,6 +232,9 @@ public class CodeGenerator_JSON extends CodeGenerator
 				depth5 + "var result = ''; \n" +
 				depth5 + "var " + value + " = JSON.parse(unparsedJSON);\n" +
 			
+				depth5 + "var currentTags;\n" +
+				depth5 + "var currentCount;\n" +
+				
 				//transform code
 				depth5 + "<<transformationCode>>\n\n" +
 		
@@ -265,26 +268,91 @@ public class CodeGenerator_JSON extends CodeGenerator
 		
 		//change helper methods (add getJSONValue_byName)
 		helperMethods +=
-			depth + "function getJSONValue_byName(value, name) \n" + 
-			depth + "{  \n" +
-				depth2 + "var elements = value[name]; \n\n" +
-				depth2 + "if(elements == null || elements == undefined) \n" +
-				depth2 + "{ \n" +
-					depth3 + "elements = new Array(); \n" +
-					depth3 + "var count; \n" +
-					depth3 + "var length = value.length; \n\n" +
+			depth + "String.prototype.endsWith = function(str)\n" +
+			depth + "{\n" +
+				depth2 + "return (this.match(str + '$')==str)\n" +
+			depth + "}\n\n" +
 
-					depth3 + "for(count = 0; count < length; count++) \n" +
-					depth3 + "{ \n" +
-						depth4 + "var subValue = value[count]; \n" +
-						depth4 + "var realValue = subValue[name]; \n" +
-						depth4 + "elements.push(realValue); \n" +
-					depth3 + "} \n\n" +
-				depth2 + "} \n" +
+			depth + "function getJSONValue_byName(val, name)\n" +
+			depth + "{ \n" +
+				depth2 + "//if(name.endsWith('_Item'))\n" +
+				depth2 + "//{\n" +
+					depth3 + "//name = name.substring(0, name.length - 5)\n" +
+					depth3 + "//var parentValue = getJSONValue_byName(val, name);\n" +
+					depth3 + "//return parentValue[0];\n" +
+				depth2 + "//}\n\n" +
 
-				depth2 + "return elements;\n" +
-				
-				depth + "} \n\n";
+				depth2 + "var searchList = new Array();\n" + 
+				depth2 + "searchList.push(val);\n\n" +
+
+				depth2 + "//Breadth First Search over the list searchList\n" +
+				depth2 + "while(searchList.length != 0)\n" +
+				depth2 + "{\n" +
+					depth3 + "//get and pop first element\n" +
+					depth3 + "var value = searchList[0];	\n" +
+					depth3 + "searchList.shift();\n" +
+
+					depth3 + "//if value was found, return\n" +
+					depth3 + "if(isOn_nextLayer(value, name))\n" +
+					depth3 + "{\n" +
+						depth4 + "//in case of value[name] is an object, form in array\n" +
+						depth4 + "//if(typeof value[name] == 'object')\n" +
+						depth4 + "//{\n" +
+							depth5 + "//var elements = new Array();\n" +
+							depth5 + "//elements.push(value[name]);\n" +
+
+							depth5 + "//return elements;\n" +
+						depth4 + "//}\n\n" +
+						
+						depth4 + "return value[name]\n\n" +
+
+					depth3 + "//in case of value[name] is an array\n" +
+					depth3 + "return value[name];\n" +
+				depth2 + "}\n" +
+				depth2 + "//else attemp any sub-subValue to the searhList\n" +
+				depth2 + "else\n" +
+				depth2 + "{\n" +
+					depth3 + "var attributeNames = getAttributeNameArray(value);\n" +
+					depth3 + "for (var i = 0; i < attributeNames.length; ++i)\n" +
+					depth3 + "{\n" +
+						depth4 + "attribute = value[attributeNames[i]];\n\n" +
+						
+						depth4 + "//only save further objects\n" +
+						depth4 + "if(typeof attribute == 'object')\n" +
+						depth4 + "{\n" +
+							depth5 + "searchList.push(attribute);\n" +	
+						depth4 + "}\n" +
+					depth3 + "}\n" +
+				depth2 + "}\n" +
+			depth + "}\n\n" +
+
+			depth + "return null; //not found\n" +
+			depth + "}\n\n" +
+
+		depth + "function isOn_nextLayer(value, name)\n" +
+		depth + "{\n" +
+			depth2 + "var attributes = new Array();\n" + 
+			depth2 + "for(var aName in value)\n" +
+			depth2 + "{\n" +
+				depth3 + "if(aName == name)	//found!\n" +
+				depth3 + "{\n" +
+					depth4 + "return true;\n" + 
+				depth3 + "}\n" +
+			depth2 + "}\n\n" +
+
+			depth2 + "return false;\n" +
+		depth + "}\n\n" +
+
+		depth + "function getAttributeNameArray(value)\n" +
+		depth + "{\n" +
+			depth2 + "var attributes = new Array();\n" + 
+			depth2 + "for(var aName in value)\n" +
+			depth2 + "{\n" +
+				depth3 + "attributes.push(aName);\n" +
+			depth2 + "}\n\n" +
+
+			depth2 + "return attributes;\n" +
+	depth + "}\n" ;
 	}
 	
 	/**

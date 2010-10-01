@@ -67,6 +67,7 @@ public class RequestGUI
 			designer.requestHandler = new SendRequestHandler(designer);
 		}
 		designer.requestButton = new Button("Send Request", designer.requestHandler);
+		designer.requestButton.setStyleName("fastButton");
 
 		designer.requestButton.addStyleName("sc-FixedWidthButton");
 		requestTable.setWidget(numRows, 1, designer.requestButton);

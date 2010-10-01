@@ -97,11 +97,13 @@ public class CodeGenViewer
 		
 		//create generateButton
 		Button generateButton = new Button("generate");
+		generateButton.setStyleName("fastButton");
 		GenerateButtonHandler generateButtonHandler = new GenerateButtonHandler();
 		generateButton.addClickHandler(generateButtonHandler);
 		
 		//create setBack button (restore after user changes)
 		Button restoreButton = new Button("restore");
+		restoreButton.setStyleName("fastButton");
 		restoreButton.addClickHandler(new ClickHandler()
 		{
 			@Override
@@ -120,6 +122,7 @@ public class CodeGenViewer
 		
 		//create a save - Button
 		Button saveButton = new Button("save File");
+		saveButton.setStyleName("fastButton");
 		saveButton.addClickHandler(new ClickHandler()
 		{
 			@Override

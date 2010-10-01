@@ -33,6 +33,7 @@ import fast.servicescreen.client.gui.PortGUI;
 import fast.servicescreen.client.gui.RequestGUI;
 import fast.servicescreen.client.gui.RuleGUI;
 import fast.servicescreen.client.gui.SaveLoadJsonHandler;
+import fast.servicescreen.client.gui.TabWidget;
 import fast.servicescreen.client.gui.codegen_js.CodeGenViewer;
 import fast.servicescreen.client.gui.codegen_js.CodeGenViewer.WrappingType;
 import fast.servicescreen.client.rpc.SendRequestHandler;
@@ -258,12 +259,14 @@ public class ServiceScreenDesignerWep extends FastTool implements EntryPoint
       RootPanel rootPanel = RootPanel.get();
       
       tabPanel = new TabPanel();
+      tabPanel.setStyleName("fastTabPanel");
       
       // build overview panel
       ServiceWrapperOverviewTab serviceWrapperOverviewTab = new ServiceWrapperOverviewTab();
       serviceWrapperOverviewTab.start(this, tabPanel);
       
       rebuildOtherTabs();
+      //tabPanel.setStyleName("myPanel");
       
       rootPanel.add(tabPanel);
       
@@ -322,11 +325,15 @@ public class ServiceScreenDesignerWep extends FastTool implements EntryPoint
       
       // add general tab 
       tabPanel.add(generalInformationTable, "General");
+      //tabPanel.add(generalInformationTable, "<div>General</div>");
+      tabPanel.add(generalInformationTable, new TabWidget("General"));
+      //FIXME tabPanel.
       
       // add request tab
       requestGui = new RequestGUI(this);
       Widget requestTable = requestGui.createRequestTable();
-      tabPanel.add(requestTable, "Request");
+      tabPanel.add(requestTable, new TabWidget("Request"));
+      //tabPanel.add(requestTable, "Request");
       
       // transformation tab
       transformationTable = new FlexTable();
@@ -348,13 +355,15 @@ public class ServiceScreenDesignerWep extends FastTool implements EntryPoint
       transformationTable.ensureDebugId("cwFlexTable");
       
       // Add into tabpanel
-      tabPanel.add(transformationTable, "Transformation");
+      //tabPanel.add(transformationTable, "Transformation");
+      tabPanel.add(transformationTable, new TabWidget("Transformation"));
  
       // Add the Codegenerator and it´s UI (for XML at first)
       codeGenViewer = new CodeGenViewer(this, WrappingType.WRAP_AND_REQUEST_XML);
       codeGenViewer_Panel = codeGenViewer.createCodeGenViewer();
       
-      tabPanel.add(codeGenViewer_Panel, "CodeGen Viewer"); 
+      //tabPanel.add(codeGenViewer_Panel, "CodeGen Viewer"); 
+      tabPanel.add(codeGenViewer_Panel, new TabWidget("CodeGen Viewer"));
    }
 
    public void setCodeGenViewer(CodeGenViewer viewer)

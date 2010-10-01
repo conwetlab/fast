@@ -1,0 +1,74 @@
+@CHARSET "ISO-8859-1";
+
+button.fastButton{
+	background:url("images/buttonEnabled.png") repeat-x scroll left top #BCD5F0;
+	border-color:#8BA0BD #8BA0BD #657C9C;
+	border-style:solid;
+	padding:0.1em 0.2em 0.2em;
+	border:1px solid gray;
+	cursor:pointer;
+}
+button.fastButton:hover{
+	background:url("images/buttonHover.png") repeat-x scroll left top #000000;
+}
+
+.fastTabPanel .gwt-TabBar{
+	height:36px;
+	background: #E1EBFB;
+	border-bottom: 2px #94B4E6;
+	
+}
+div.gwt-TabPanelBottom{
+	border:none;
+	border-top: 4px solid #94B4E6;
+	
+}
+.fastTabPanel .gwt-TabBar .gwt-TabBarItem {
+	height:30px;
+	margin:0px;
+	padding:0px;
+	border: 0 solid black;
+}
+.fastTabPanel .gwt-TabBar .gwt-TabBarItem-selected {
+	height:30px;
+	margin:0px;
+	padding:0px;
+	border: 0 solid black;
+	background:none repeat scroll 0 0 #D0E4F6;
+	vertical-align:bottom;
+}
+.fastTabLeft {
+	background: url("images/tab/tabContainerSprite.gif") no-repeat scroll 0 -300px transparent;
+	height:18px;
+	width:1px:
+}
+.fastTabLeft:hover {
+	background: url("images/tab/tabContainerSprite.gif") no-repeat scroll right 0px transparent;
+}
+
+
+
+.fastTabRight {
+	background: url("images/tab/tabContainerSprite.gif") no-repeat scroll right -400px transparent;
+	height:18px;
+	width:1px:
+}
+.fastTabRight:hover {
+	background: url("images/tab/tabContainerSprite.gif") no-repeat scroll right -100px transparent;
+}
+
+td.fastTabText{
+	font: 13px Myriad,Helvetica,Tahoma,Arial,clean,sans-serif;
+	background:url("images/tab/tabContainerSprite.gif") repeat-x scroll 0 -350px transparent;
+	padding-left:15px;
+	padding-right:15px;
+	padding-top:5px;
+	padding-bottom:5px;
+	font-style:normal;
+	color: #243C5F;
+	height:18px;
+	white-space:nowrap;
+}
+td.fastTabText:hover{
+	background:url("images/tab/tabContainerSprite.gif") repeat-x scroll 0 -50px transparent;
+}

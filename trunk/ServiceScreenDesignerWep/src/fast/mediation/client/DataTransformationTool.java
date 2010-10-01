@@ -306,6 +306,7 @@ public class DataTransformationTool extends FastTool implements EntryPoint
 		
 		// add add button
 		Button button = new Button("add");
+		button.setStyleName("fastButton");
 		button.addClickHandler(addTrafoOpHandler);
 		overviewFlowPanel.add(button);
 	}

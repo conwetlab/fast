@@ -122,34 +122,40 @@ public class RuleGUI
       
       //add - button
       Button addRuleButton = new Button("Add Kid Rule");
+      addRuleButton.setStyleName("fastButton");
       addRuleButton.addClickHandler(new AddKidRuleHandler());
       rulesHeadlineTable.setWidget(rowCount, 0, addRuleButton);
       
       //remove - button
 	  Button removeRuleButton = new Button("Remove Rule");
+	  removeRuleButton.setStyleName("fastButton");
 	  removeRuleButton.addClickHandler(new RemoveRuleHandler());
 	  rulesHeadlineTable.setWidget(rowCount, 1, removeRuleButton);
 	  
 	  //up - button
 	  Button upButton = new Button("up");
+	  upButton.setStyleName("fastButton");
 	  upButton.setSize("50px", "35px");
 	  upButton.addClickHandler(new RuleUpHandler());
 	  rulesHeadlineTable.setWidget(rowCount_upAndDown, 0, upButton);
 
 	  //down - button
 	  Button downButton = new Button("down");
+	  downButton.setStyleName("fastButton");
 	  downButton.setSize("50px", "35px");
 	  downButton.addClickHandler(new RuleDownHandler());
 	  rulesHeadlineTable.setWidget(rowCount_upAndDown, 1, downButton);
 	  
 	  //left - button
 	  Button leftButton = new Button("left");
+	  leftButton.setStyleName("fastButton");
 	  leftButton.setSize("50px", "35px");
 	  leftButton.addClickHandler(new RuleLeftHandler());
 	  rulesHeadlineTable.setWidget(rowCount_leftAndRight, 0, leftButton);
 	  
 	  //right - button
 	  Button rightButton = new Button("right");
+	  rightButton.setStyleName("fastButton");
 	  rightButton.setSize("50px", "35px");
 	  rightButton.addClickHandler(new RuleRightHandler());
 	  rulesHeadlineTable.setWidget(rowCount_leftAndRight, 1, rightButton);

@@ -53,6 +53,7 @@ public class TemplateGUI
 
 		// add new parameter button
 		Button addParameterButton = new Button("Add Parameter");
+		addParameterButton.setStyleName("fastButton");
 		addParameterButton.addClickHandler(new AddNewParameterHandler());
 		templateTable.setWidget(numRows, 0, addParameterButton);
 		numRows++;
@@ -159,6 +160,7 @@ public class TemplateGUI
 
 		// add remove button
 		Button removeParameterButton = new Button("Remove Parameter");
+		removeParameterButton.setStyleName("fastButton");
 		RemoveParameterHandler parameterHandler = new RemoveParameterHandler();
 		parameterHandler.setTemplateParameter(param);
 		removeParameterButton.addClickHandler(parameterHandler);

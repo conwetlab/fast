@@ -56,6 +56,7 @@ public class PortGUI
        // add the add-buttons
        // Add new input port Button
        Button addInputPortButton = new Button("Add Fact");
+       addInputPortButton.setStyleName("fastButton");
        addInputPortButton.addClickHandler(new AddNewInputPortHandler());
        inputPortTable.setWidget(numRows, 0, addInputPortButton);
        numRows++;
@@ -106,6 +107,7 @@ public class PortGUI
 		   inputPortTable.setWidget(inputNumRows, 2, exampleArea);
 		   // add remove button
 		   Button removePortButton = new Button("Remove Port");
+		   removePortButton.setStyleName("fastButton");
 		   RemoveInputPortHandler inputPortHandler = new RemoveInputPortHandler();
 		   inputPortHandler.setFactPort(factPort);
 		   removePortButton.addClickHandler(inputPortHandler);
@@ -133,6 +135,7 @@ public class PortGUI
 
 		   // add remove button
 		   Button removePortButton = new Button("Remove Port");
+		   removePortButton.setStyleName("fastButton");
 		   RemoveInputPortHandler inputPortHandler = new RemoveInputPortHandler();
 		   inputPortHandler.setFactPort(factPort);
 		   removePortButton.addClickHandler(inputPortHandler);
@@ -153,6 +156,7 @@ public class PortGUI
 
 	   // Add new output port Button
 	   Button addOutputPortButton = new Button("Add Fact");
+	   addOutputPortButton.setStyleName("fastButton");
 	   addOutputPortButton.addClickHandler(new AddNewOutputPortHandler());
 	   outputPortTable.setWidget(numRows, 0, addOutputPortButton);
 	   numRows++;
@@ -197,6 +201,7 @@ public class PortGUI
 
 	   // add remove button
 	   Button removePortButton = new Button("Remove Port");
+	   removePortButton.setStyleName("fastButton");
 	   RemoveOutputPortHandler outputPortHandler = new RemoveOutputPortHandler();
 	   outputPortHandler.setFactPort(factPort);
 	   removePortButton.addClickHandler(outputPortHandler);

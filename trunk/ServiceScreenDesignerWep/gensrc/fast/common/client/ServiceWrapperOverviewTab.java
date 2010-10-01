@@ -12,6 +12,7 @@ import fast.common.client.ScreenPanel;
 import java.util.*;
 import com.google.gwt.user.client.ui.TabPanel;
 import fast.servicescreen.client.ServiceScreenDesignerWep;
+import fast.servicescreen.client.gui.TabWidget;
 import fujaba.web.runtime.client.reflect.*;
 import fujaba.web.runtime.client.*;
 import java.util.*;
@@ -217,7 +218,7 @@ public class ServiceWrapperOverviewTab implements PropertyChangeClient
          {
             fujaba__Success = false; 
 
-            // check object designer is really bound
+            // checkv object designer is really bound
             JavaSDM.ensure ( designer != null );
             // check object overviewFlowPanel is really bound
             JavaSDM.ensure ( overviewFlowPanel != null );
@@ -303,7 +304,9 @@ public class ServiceWrapperOverviewTab implements PropertyChangeClient
             // collabStat call
             tabPanel.setWidth("900px");
             // collabStat call
-            tabPanel.add(overviewFlowPanel, "Overview");
+            //FIXME
+            tabPanel.add(overviewFlowPanel, new TabWidget("Overview"));
+            //tabPanel.add(overviewFlowPanel, "Overview");
             // collabStat call
             tabPanel.selectTab(0);
             fujaba__Success = true;
