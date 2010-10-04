@@ -210,8 +210,6 @@ var BuildingBlockDocument = Class.create(PaletteDocument, /** @lends BuildingBlo
         var data = JSON.parse(transport.responseText);
         if (this._description.getId() == null) {
             this._description.addProperties({
-                    "code": URIs.absolutePath + URIs.buildingblock +
-                        data.id  + "/code",
                     "id": data.id,
                     "version": data.version,
                     "creationDate": data.creationDate

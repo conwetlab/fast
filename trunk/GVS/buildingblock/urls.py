@@ -18,4 +18,6 @@ urlpatterns = patterns('buildingblock.views',
         Sharing(permitted_methods=('POST', 'DELETE',))),
     (r'^(?P<buildingblock_id>\d+)/code[/]?$',
         Code(permitted_methods=('GET',))),
+    (r'^(?P<buildingblock_id>\d+)/unbound_code[/]?$',
+        UnboundCode(permitted_methods=('GET',))),
 )

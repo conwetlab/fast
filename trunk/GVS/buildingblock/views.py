@@ -8,6 +8,7 @@ from django.utils.translation import ugettext as _
 from django.shortcuts import get_list_or_404, get_object_or_404
 from django.template import Template, Context, loader
 from urllib2 import HTTPError
+from urlparse import urljoin
 from urllib import quote_plus
 from commons import resource
 from commons.utils import json_encode, cleanUrl
@@ -54,7 +55,7 @@ class BuildingBlockCollection(resource.Resource):
         received_json = request.POST['buildingblock']
 
         try:
-            data = create_bb(simplejson.loads(received_json), bbtype, user)
+            data = create_bb(request, simplejson.loads(received_json), bbtype, user)
 
             return HttpResponse(data, mimetype='application/json; charset=UTF-8')
         except Exception, e:
@@ -265,8 +266,22 @@ class Code(resource.Resource):
     def read(self, request, buildingblock_id):
         user = get_user_authentication(request)
 
+        bb = get_object_or_404(BuildingBlock,id=buildingblock_id)
+
+        data = simplejson.loads(bb.data)
+
+        updateCode(bb, data, True)
+
         bbc = get_object_or_404(BuildingBlockCode, buildingBlock=buildingblock_id)
         return HttpResponse(bbc.code, mimetype='application/json; charset=UTF-8')
+
+
+class UnboundCode(resource.Resource):
+    def read(self, request, buildingblock_id):
+        user = get_user_authentication(request)
+
+        bbc = get_object_or_404(BuildingBlockCode, buildingBlock=buildingblock_id)
+        return HttpResponse(bbc.unboundCode, mimetype='application/json; charset=UTF-8')
 
 
 
@@ -414,9 +429,9 @@ class Sharing(resource.Resource):
         try:
             bb = BuildingBlock.objects.get(id=buildingblock_id)
 
-            #data = simplejson.loads(bb.data)
+            data = simplejson.loads(bb.data)
 
-            #updateCode(bb, data)
+            updateCode(bb, data, True)
 
 
             if (bb.uri == None) or (bb.uri == ''):
@@ -470,51 +485,55 @@ class Sharing(resource.Resource):
             return HttpResponseServerError(json_encode({'message':unicode(e)}), mimetype='application/json; charset=UTF-8')
 
 
-def updateCode(buildingblock, data):
+def updateCode(buildingblock, data, compile=False):
     c = BuildingBlockCode.objects.get_or_create(buildingBlock=buildingblock)[0]
 
     # getting code
     code = None
     if data.has_key('codeInline'):
         code = data.get('codeInline')
-    elif data.has_key('code'):
+    elif data.has_key('code') and c.unboundCode == None:
         code_url = data.get('code')
         if (validate_url(code_url)):
             code = download_http_content(code_url)
 
-    bbcodes = {}
-    if code:
-        if buildingblock.type == 'screen':
-            context = Context({'screenId': str(buildingblock.id)})
-            t = Template(code)
-            code =  t.render(context)
-        elif buildingblock.type == 'resource' or buildingblock.type == 'operator':
-            context = Context({'name': 'BB' + str(buildingblock.id), 'code': code})
-            t = loader.get_template('buildingblock/code.js')
-            code =  t.render(context)
+    c.unboundCode = code
 
-    elif data.has_key('definition') and buildingblock.type == 'screen':
-        definition = data.get('definition')
-        for bbdefinition in definition['buildingblocks']:
-            bb = get_object_or_404(BuildingBlock, uri=bbdefinition.get('uri'))
-            bbdata = simplejson.loads(bb.data)
-            bbdefinition['buildingblockId'] = bb.id
-            bbdefinition['type'] = bb.type
-            bbdefinition['actions'] = bbdata.get('actions')
-            bbdefinition['parameter'] = bbdefinition.get('parameter')
-            bbc = get_object_or_404(BuildingBlockCode, buildingBlock=bb)
-            if not bbcodes.has_key(bb.id):
-                if bb.type == 'form':
-                    context = Context({'buildingblockId': 'BB' + str(bb.id), 'screenId': str(buildingblock.id), 'buildingblockInstance': bbdefinition['id']})
-                    t = Template(bbc.code)
-                    code = t.render(context)
-                else:
-                    code = bbc.code
-                bbcodes[bb.id] = {'libraries': bbdata.get('libraries'), 'code': code, 'type': bbdefinition['type']}
-        context = Context({'id': buildingblock.id, 'name': buildingblock.name, 'definition': definition, 'codes': bbcodes.itervalues(), 'pres': data.get('preconditions'), 'posts': data.get('postconditions')})
-        t = loader.get_template('buildingblock/screen.html')
-        code =  t.render(context)
-    c.code = code
+    if compile:
+        bbcodes = {}
+        if code:
+            if buildingblock.type == 'screen':
+                context = Context({'screenId': str(buildingblock.id)})
+                t = Template(code)
+                code =  t.render(context)
+            elif buildingblock.type == 'resource' or buildingblock.type == 'operator':
+                context = Context({'name': 'BB' + str(buildingblock.id), 'code': code})
+                t = loader.get_template('buildingblock/code.js')
+                code =  t.render(context)
+
+        elif data.has_key('definition') and buildingblock.type == 'screen':
+            definition = data.get('definition')
+            for bbdefinition in definition['buildingblocks']:
+                bb = get_object_or_404(BuildingBlock, uri=bbdefinition.get('uri'))
+                bbdata = simplejson.loads(bb.data)
+                bbdefinition['buildingblockId'] = bb.id
+                bbdefinition['type'] = bb.type
+                bbdefinition['actions'] = bbdata.get('actions')
+                bbdefinition['parameter'] = bbdefinition.get('parameter')
+                bbc = get_object_or_404(BuildingBlockCode, buildingBlock=bb)
+                if not bbcodes.has_key(bb.id):
+                    if bb.type == 'form':
+                        context = Context({'buildingblockId': 'BB' + str(bb.id), 'screenId': str(buildingblock.id), 'buildingblockInstance': bbdefinition['id']})
+                        t = Template(bbc.code)
+                        code = t.render(context)
+                    else:
+                        code = bbc.code
+                    bbcodes[bb.id] = {'libraries': bbdata.get('libraries'), 'code': code, 'type': bbdefinition['type']}
+            context = Context({'id': buildingblock.id, 'name': buildingblock.name, 'definition': definition, 'codes': bbcodes.itervalues(), 'pres': data.get('preconditions'), 'posts': data.get('postconditions')})
+            t = loader.get_template('buildingblock/screen.html')
+            code =  t.render(context)
+        c.code = code
+
     c.save()
 
 
@@ -545,7 +564,7 @@ def updateTags(user, buildingblock, tags):
             usertag = UserTag.objects.get_or_create (user=user, tag=t, buildingBlock=buildingblock)[0]
             usertag.save()
 
-def create_bb(data, bbtype, author):
+def create_bb(request, data, bbtype, author):
 
     now = datetime.utcnow()
     # Drop microseconds
@@ -578,8 +597,12 @@ def create_bb(data, bbtype, author):
     data['id'] = bb.pk
     data['type'] = bbtype
 
+    if bbtype == 'operator' or bbtype == 'form' or bbtype == 'resource':
+        updateCode(bb,data)
+        if not data.has_key('code'):
+            data['code'] = urljoin(request.build_absolute_uri(),'/buildingblock/%s/unbound_code' % (bb.pk))
+
     bb.data = json_encode(data)
     bb.save()
-    updateCode(bb,data)
 
     return bb.data

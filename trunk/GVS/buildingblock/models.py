@@ -29,13 +29,13 @@ class BuildingBlock(models.Model):
     data = models.TextField()
     popularity = models.DecimalField(null=True, max_digits=3, decimal_places=2)
     uri = models.URLField(null=True, db_index=True)
-    
+
     class Meta:
         unique_together = ('name', 'type', 'version')
-        
+
     def __unicode__(self):
         return u'%s %s: %s' % (self.type, self.pk, self.name)
-    
+
     def get_catalogue_url(self):
         if self.type == "screenflow":
             return cleanUrl(settings.CATALOGUE_URL) + "/screenflows"
@@ -49,7 +49,7 @@ class BuildingBlock(models.Model):
             return cleanUrl(settings.CATALOGUE_URL)  + "/services"
         else:
             return cleanUrl(settings.CATALOGUE_URL)
- 
+
 class Screenflow(BuildingBlock):
     def __unicode__(self):
         return u'Screenflow %s: %s' % (self.pk, self.name)
@@ -61,7 +61,7 @@ class Screen(BuildingBlock):
 class Form(BuildingBlock):
     def __unicode__(self):
         return u'Form %s: %s' % (self.pk, self.name)
-    
+
 class Operator(BuildingBlock):
     def __unicode__(self):
         return u'Operator %s: %s' % (self.pk, self.name)
@@ -69,25 +69,26 @@ class Operator(BuildingBlock):
 class Resource(BuildingBlock):
     def __unicode__(self):
         return u'Resource %s: %s' % (self.pk, self.name)
-    
+
 class BuildingBlockCode(models.Model):
     buildingBlock = models.ForeignKey(BuildingBlock, unique = True)
     code = models.TextField(null=True)
-        
+    unboundCode = models.TextField(null=True)
+
     def __unicode__(self):
         return u'%s:' % (self.buildingBlock, )
-    
+
 class Tag(models.Model):
     name = models.CharField(max_length=20)
     language = models.CharField(max_length=20)
     means = models.URLField(null=True)
-    
+
     class Meta:
         unique_together = ('name', 'language', 'means')
-    
+
     def __unicode__(self):
         return self.name
-    
+
 class UserTag(models.Model):
     tag = models.ForeignKey(Tag)
     user = models.ForeignKey(User)
@@ -99,7 +100,7 @@ class UserTag(models.Model):
     def __unicode__(self):
         return u'%s: user %s tags %s' % (self.buildingBlock, self.user, self.tag, )
 
-    
+
 class UserVote(models.Model):
     user = models.ForeignKey(User)
     buildingBlock = models.ForeignKey(BuildingBlock)
@@ -108,6 +109,6 @@ class UserVote(models.Model):
     class Meta:
         # One vote per user per object
         unique_together = ('user', 'buildingBlock')
-        
+
     def __unicode__(self):
         return u'%s: user %s votes %s' % (self.buildingBlock, self.user, self.value, )
