@@ -1,0 +1,21 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>{{ gadgetTitle }}</title>
+<link rel="stylesheet" type="text/css" href="{{ gadgetUri }}/resources/menu/css/menu.css" />
+<link rel="stylesheet" type="text/css" href="{{ gadgetUri }}/resources/debugger/css/debugger.css" />
+<script type="text/javascript" language="javascript" src="{{ gadgetUri }}/js/prototype/prototype.js"></script>
+<script type="text/javascript" language="javascript" src="{{ gadgetUri }}/js/cjson_parse/cjson_parse.js"></script>
+<script type="text/javascript" language="javascript" src="{{ gadgetUri }}/js/fast/menu.js"></script>
+<script type="text/javascript" language="javascript" src="{{ gadgetUri }}/js/fast/screenflowEngine.js"></script>
+<script type="text/javascript" language="javascript" src="{{ gadgetUri }}/js/fast/screenEngine.js"></script>
+<script type="text/javascript" language="javascript" src="{{ gadgetUri }}/js/fast/buildingblock.js"></script>
+<script type="text/javascript" language="javascript" src="{{ gadgetUri }}/js/fast/debugger.js"></script>
+<script type="text/javascript" language="javascript" src="{{ gadgetUri }}/js/fastAPI/fastAPI.js"></script>
+{% include 'resources/gadget/jsTemplate.js' %}
+</head>
+<body style="margin:1;padding:1;" onload="javascript:loadMenu();">
+{% include 'resources/gadget/htmlTemplate.html' %}
+</body>
+</html>
+

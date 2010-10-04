@@ -88,11 +88,19 @@ var BuildGadgetDialog = Class.create(ConfirmDialog /** @lends BuildGadgetDialog.
                 'checked': true},
             {'type':'checkbox', 'label': 'Google:','name': 'platforms',
                 'value': 'google',
-                'checked': true},
-            {'type':'checkbox', 'label': 'Standalone:','name': 'platforms',
-                'value': 'player',
                 'checked': true}
-        ];
+            ];
+            if (GlobalOptions.isLocalStorage == false) {
+                formData.push(
+                {
+                    'type':'checkbox', 'label': 'BeemBoard:','name': 'platforms',
+                    'value': 'beemboard',
+                    'checked': true
+                });
+            }
+            formData.push({'type':'checkbox', 'label': 'Standalone:','name': 'platforms',
+                'value': 'player',
+                'checked': true});
         this._setContent(formData);
     },
     /**

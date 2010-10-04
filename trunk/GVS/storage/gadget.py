@@ -54,3 +54,12 @@ def getPlayerHTML(gadgetData, gadgetUri):
                              'gadgetEvents': gadgetData['post'],
                              'gadgetScreens': gadgetData['screens']})
     return loader.render_to_string(path.join('resources','gadget','playerTemplate.html'), playerContext);
+
+def getUnboundHTML(gadgetData, gadgetUri):
+    metadata = gadgetData['metadata']
+
+    unboundContext = Context({'gadgetUri': gadgetUri,
+                             'gadgetSlots': gadgetData['prec'],
+                             'gadgetEvents': gadgetData['post'],
+                             'gadgetScreens': gadgetData['screens']})
+    return loader.render_to_string(path.join('resources','gadget','unboundTemplate.html'), unboundContext);

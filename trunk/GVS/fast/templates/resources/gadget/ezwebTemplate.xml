@@ -40,7 +40,7 @@
         <GadgetContext name="yPosition" type="text" concept="yPosition"/>
     </Platform.Context>
     <Platform.Link>
-        <XHTML href="{{ gadgetUri }}/ezweb.html" />
+        <XHTML href="{{ gadgetUri }}/index_ezweb.html" />
     </Platform.Link>
     <Platform.Rendering width="{{ gadgetWidth }}" height="{{ gadgetHeight }}" />
 </Template>

@@ -117,6 +117,12 @@
             // Only include the checked and finished features
             GlobalOptions.isPublicDemo = false;
 
+        {% if isLocalStorage %}
+            GlobalOptions.isLocalStorage = true;
+        {% else %}
+            GlobalOptions.isLocalStorage = false;
+        {% endif %}
+
         </script>
 
         <!-- GVS Code -->
