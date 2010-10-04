@@ -212,7 +212,8 @@ var BuildingBlockDocument = Class.create(PaletteDocument, /** @lends BuildingBlo
             this._description.addProperties({
                     "id": data.id,
                     "version": data.version,
-                    "creationDate": data.creationDate
+                    "creationDate": data.creationDate,
+                    "code": data.code
             });
             this._save(false);
         } else {
