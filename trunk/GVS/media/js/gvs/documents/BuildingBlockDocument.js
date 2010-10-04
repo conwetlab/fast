@@ -25,7 +25,6 @@ var BuildingBlockDocument = Class.create(PaletteDocument, /** @lends BuildingBlo
         this._start();
     },
 
-
     /**
      * Create the CodeMirror text editors
      * To be called after the document has been added into the GVS
@@ -84,6 +83,17 @@ var BuildingBlockDocument = Class.create(PaletteDocument, /** @lends BuildingBlo
     },
 
     // **************** PRIVATE METHODS **************** //
+
+    /**
+     * @private
+     * @override
+     */
+    _start: function($super) {
+        $super();
+        if (this._type == "operator" || this._type == "resource") {
+            this._toolbarElements.get('debugger').setEnabled(true);
+        }
+    },
 
     _loadCodeText: function(codeEditor) {
         if (this._codeInline) {
@@ -233,6 +243,15 @@ var BuildingBlockDocument = Class.create(PaletteDocument, /** @lends BuildingBlo
     },
 
     /**
+     * Returns the uri of code
+     * @private
+     * @type URI
+     */
+    _getCodeURI: function() {
+        return this._description['code'];
+    },
+
+    /**
      * Returns the save uri
      * @type String
      * @private
@@ -305,6 +324,21 @@ var BuildingBlockDocument = Class.create(PaletteDocument, /** @lends BuildingBlo
                 'share',
                 this._share.bind(this),
                 true
+            ));
+        this._addToolbarElement('debugger', new ToolbarButton(
+                'Debugger the current building block code',
+                'debugger',
+                function() {
+                    this._pendingOperation = function() {
+                        var url = 'http://localhost:8000/debugger/?url=' +
+                            encodeURIComponent(this._getCodeURI());
+                        var title = "BuildingBlockTest " + this.getTitle();
+                        var options = 'menubar=no,toolbar=no,width=800,height=600';
+                        window.open(url, title, options);
+                    }.bind(this);
+                    this._save(true);
+                }.bind(this),
+                false
             ));
     },
 

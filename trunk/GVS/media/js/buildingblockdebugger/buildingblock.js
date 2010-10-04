@@ -1,110 +1,76 @@
-var BuildingBlock = Class.create({
-    /**
-     * Constructor
-     */
-    initialize: function(_params) {
-        this.parameter = _params;
-    },
+/* vi:et:ts=4: */
 
-    /**
-     * Manage data function
-     */
+var BuildingBlock = Class.create({
+    initialize: function(params) {
+        this.parameter = params;
+    },
     manageData: function(triggers, addedFacts, deletedFacts) {
         if (triggers.size() > 0) {
-            Logger.log("Triggers thrown: " + triggers);
+            Triggers.set(triggers);
         }
         if (addedFacts.size() > 0) {
-            var facts = "";
-            addedFacts.each(function(fact) {
-                facts += "<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; " + Object.toJSON(fact) + "";
-            });
-            Logger.log("Added facts: " + facts);
             FactBase.setFacts(addedFacts);
         }
         if (deletedFacts.size() > 0) {
-            facts = "";
-            deletedFacts.each(function(fact) {
-                facts += "<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; " + Object.toJSON(fact) + "";
-            });
-            Logger.log("Deleted facts: " + facts);
             FactBase.removeFacts(deletedFacts);
         }
     }
 });
 
-var FactBase = Class.create({
-    initialize: function() {
-        this._rootNode = new Element('div');
-        this._facts = new Hash();
-    },
-    /**
-     * Set the root node of the fact base
-     */
-    setFactBase: function(node) {
-        node.update(this._rootNode);
-    },
-
-    /**
-     * Add new facts to the fact base
-     */
-    setFacts: function(facts) {
-        facts.each(function(fact){
-            var factNode;
-            if (this._facts.get(fact.id)) {
-                factNode = this._facts.get(fact.id);
-                factNode.update("");
-            } else {
-                factNode = new Element('div', {
-                    'class': 'fact'
-                });
-                factNode.observe('mouseover', function(e) {
-                    factNode.setStyle({
-                        'z-index': 10,
-                        'position': 'absolute',
-                        'width': '40%'
-                    });
-                    //FactData
-                    factNode.childNodes[1].setStyle({
-                        'height': '160px'
-                    });
-                });
-                factNode.observe('mouseout', function(e) {
-                    factNode.setStyle({
-                        'z-index': 1,
-                        'position': 'static',
-                        'width': '150px'
-                    });
-                    //FactData
-                    factNode.childNodes[1].setStyle({
-                        'height': '60px'
-                    });
-                });
-                this._facts.set(fact.id, factNode);
-                this._rootNode.appendChild(factNode);
-            }
-
-            var factId = new Element('div', {
-                'class': 'factId'
-            }).update(fact.id);
-            factNode.appendChild(factId);
-
-            var factData = new Element('div', {
-                'class': 'factData'
-            }).update(Object.toJSON(fact.data));
-            factNode.appendChild(factData);
-        }.bind(this));
-    },
-    /**
-     * Remove a set of facts from the fact base
-     */
-    removeFacts: function(facts) {
-        facts.each(function(fact){
-            var factNode = this._facts.get(fact);
-            if (factNode) {
-                this._facts.unset(fact);
-                factNode.parentNode.removeChild(factNode);
-            }
-        }.bind(this));
+var Triggers = {
+    set:function(triggers) {
+        triggers.each(function(trigger) {
+            Logger.log("Triggers thrown: ", trigger);
+        });
     }
-});
-FactBase = new FactBase();
+}
+
+var FactBase = {
+    _facts: new Hash(),
+    setFacts: function(facts) {
+        facts.each(function(fact) {
+            Logger.groupCollapsed("Added fact: ", fact.id);
+            Logger.dir(fact);
+            Logger.groupEnd();
+            this._facts.set(fact.id, fact);
+        }, this);
+        this._notifyObservers();
+    },
+    removeFacts: function(facts) {
+        facts.each(function(fact) {
+            Logger.log("Deleted fact: ", fact);
+            this._facts.unset(fact);
+        }, this);
+        this._notifyObservers();
+    },
+    each: function(func, context) {
+        this._facts.values().each(func, context);
+    },
+    _notifyObservers:function() {
+        this.observer.update(this);
+    }
+}
+
+var FactBaseView = {
+    getNode: function() {
+        return $("facts");
+    },
+    update: function(factBase) {
+        this.getNode().innerHTML='';
+        factBase.each(this._createFact, this);
+    },
+    _createFact: function(fact) {
+        var data = fact.data;
+        var data = JSON.formatJSON(data);
+        var idNode   = new Element('div', {class:'factId'}).update(fact.id);
+        var dataNode = new Element('pre', {class:'factData'}).update(data);
+        var factNode = new Element('div', {class:'fact'});
+        factNode.appendChild(idNode);
+        factNode.appendChild(dataNode);
+        this.getNode().appendChild(factNode);
+
+        new TextAreaResizer(factNode);
+    }
+}
+
+FactBase.observer = FactBaseView;
