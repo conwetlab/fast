@@ -487,8 +487,9 @@ public class CodeGenerator
 	 * */
 	String rootTemplate = 
 		//declare method rump 
-		depth + "function transform(<<inputportlist>>)\n" +
+		depth + "search: function (filter)\n" +
 		depth + "{\n" +
+		    depth2 + "var season = filter.data.season;\n" +
 			//fill request url
 			depth2 + "var prerequest = '<<prerequest>>';\n" +
 			
@@ -499,7 +500,36 @@ public class CodeGenerator
 			depth2 + "var request = prerequest;\n" +
 			
 			//sending/recieving the request
-			depth2 + "<<sendrequest>>\n";
+			depth2 + "//Invoke the service\n" +
+			depth2 + "    new FastAPI.Request(request,{\n" +
+			depth2 + "        'method':       'get',\n" +
+			depth2 + "        'content':      'xml',\n" +
+			depth2 + "        'context':      theOperator,\n" +
+			depth2 + "        'onSuccess':    theOperator.addToList\n" +
+			depth2 + "    });\n\n" +
+		depth + "},\n" +
+		depth + "\n" +
+		depth + "addToList: function (transport) \n" +
+		depth + "{ \n" +
+		    depth2 + "var xmlResponse = transport;\n" +
+	        depth2 + "var currentTags = null; \n\n" +
+	        depth2 + "var currentCount = null; \n\n" +
+	        depth2 + "var result = new String('{ '); \n\n" +
+	        depth2 + "<<transformationCode>>\n\n" +
+	        depth2 + "result += ' }'; \n" +
+		    depth2 + "var jsonResult = JSON.parse(result); \n" +
+		    depth2 + "var factResult = {data: {productList: jsonResult}}\n" +
+		    depth2 + "if (this.manageData) {\n" +
+		    depth2 + "   this.manageData([\"itemList\"], [factResult], [])\n" +
+		    depth2 + "}\n" +
+		    depth2 + "else {\n" +
+		    depth2 + "   document.getElementById('show').value = result;\n" +
+		    depth2 + "}\n" +
+			depth + "}, \n" +
+			depth + "\n" +
+			depth + "onError: function (transport){} \n" +
+			depth + "\n" +
+		"\n";
 	
 	/**
 	 * This method is used to overwrite and set up
@@ -508,68 +538,29 @@ public class CodeGenerator
 	protected void setTemplates()
 	{
 		//set up sendRequest for wrapping requested XML
-		sendrequest = 
-			depth2 + "var xmlHttp = null; \n" + 
-			depth2 + "var xmlResponse = null; \n" + 
-			depth2 + "try \n" +
-			depth2 + "{ \n" + 
-			   depth3 + "xmlHttp = new XMLHttpRequest(); \n" + 
-			depth2 + "} \n" +
-			depth2 + "catch(e) \n" +
-			depth2 + "{ \n" + 
-			   depth3 + "try \n" +
-			   depth3 + "{ \n" + 
-			      depth4 + "xmlHttp  = new ActiveXObject('Microsoft.XMLHTTP'); \n" + 
-			   depth3 + "} \n" +
-			   depth3 + "catch(e) \n" +
-			   depth3 + "{ \n" + 
-			      depth4 + "try \n" +
-			      depth4 + "{ \n" + 
-			         depth5 + "xmlHttp  = new ActiveXObject('Msxml2.XMLHTTP'); \n" + 
-			      depth4 + "} \n" +
-			      depth4 + "catch(e) \n" +
-			      depth4 + "{ \n" + 
-			         depth5 + "xmlHttp  = null; \n" + 
-			      depth4 + "} \n" + 
-			   depth3 + "} \n" + 
-			depth2 + "} \n\n" + 
-			
-			depth2 + "if (xmlHttp) \n" +
-			depth2 + "{ \n" + 
-	  	       depth3 + "var requestServletUrl = window.location.protocol + '//' + window.location.host  + '/ServiceDesignerWep/servicescreendesignerwep/requestServlet?url='; \n" +
-			   depth3 + "xmlHttp.open('GET', requestServletUrl + encodeURIComponent(request), true); \n" + 
-			   depth3 + "xmlHttp.onreadystatechange = function () { \n" + 
-			      depth4 + "if (xmlHttp.readyState == 4) \n" +
-			      depth4 + "{ \n" + 
-			         depth5 + "xmlResponse = xmlHttp.responseXML; \n\n" + 
-			         depth5 + "var currentTags = null; \n\n" +
-			         depth5 + "var currentCount = null; \n\n" +
-			         depth5 + "var result = new String(''); \n\n" +
-
-			         depth5 + "<<transformationCode>>\n\n" +
-
-	   	             depth5 + "document.getElementById('show').value = '{' + result + '}'; \n" + 
-			      depth4 + "} \n" + 
-			   depth3 + "} \n" + 
-			depth2 + "}\n\n" +
-			depth2 + "xmlHttp.send(null); \n\n" + 
-			depth2 + "return 'waiting for response...'; \n" + 
-			depth + "} \n";
+		// to be deleted.
 	}
 	
 	/**
 	 * contains html end
 	 * */
 	public String posthtml =
+		"}\n" + 
+		"\n" + 
+		"function transform (param) {\n" + 
+		"   var factParam = {data: {season: param}} \n" + 
+		"   var result = theOperator.search (factParam); \n" + 
+		"   \n" + 
+		"   \n" + 
+		"}\n" + 
+		"\n" + 
 		"</script>\n" +
 		"</head>\n" +
 		"<body>\n" +
 		"<form name=f1>\n" +
 		"<input type='text' name=t2 value='x' size='50'> \n" +
-		"//<input type='text' name=t3 value='y' size='50'> \n" +
-		"//<input type='text' name=t4 value='z' size='50'> \n" +
 		"<input type=button value='request and transform' \n" +
-		"onclick='this.form.t1.value=transform(this.form.t2.value /*, this.form.t3.value, this.form.t4.value*/)'>	\n" +
+		"onclick='this.form.t1.value=transform(this.form.t2.value )'>	\n" +
 		"<br><br><br><br> \n" +
 		"<textarea name=t1 id='show' cols=70 rows=20> To see the results, press the button above.. </textarea>" +
 		"</form>\n" +
@@ -584,193 +575,22 @@ public class CodeGenerator
 		"<head> \n" +
 		"<meta http-equiv='Content-Type' content='text/html; charset=ISO-8859-1'> \n" +
 		"<title>Insert title here</title> \n" +
-		"<script type='text/javascript'> \n \n";
+		"<script type=\"text/javascript\" language=\"javascript\" src=\"http://localhost:13337/static/1/js/prototype/prototype.js\"></script> \n" +
+		"<script type=\"text/javascript\" language=\"javascript\" src=\"http://localhost:13337/static/1/js/cjson_parse/cjson_parse.js\"></script> \n" +
+		"<script type=\"text/javascript\" language=\"javascript\" src=\"http://localhost:13337/static/1/js/fast/menu.js\"></script> \n" +
+		"<script type=\"text/javascript\" language=\"javascript\" src=\"http://localhost:13337/static/1/js/fast/screenflowEngine.js\"></script> \n" +
+		"<script type=\"text/javascript\" language=\"javascript\" src=\"http://localhost:13337/static/1/js/fast/screenEngine.js\"></script> \n" +
+		"<script type=\"text/javascript\" language=\"javascript\" src=\"http://localhost:13337/static/1/js/fast/buildingblock.js\"></script> \n" +
+		"<script type=\"text/javascript\" language=\"javascript\" src=\"http://localhost:13337/static/1/js/fast/debugger.js\"></script> \n" +
+		"<script type=\"text/javascript\" language=\"javascript\" src=\"http://localhost:13337/static/1/js/kasselStringUtils.js\"></script> \n" +
+		"<script type=\"text/javascript\" language=\"javascript\" src=\"http://localhost:13337/static/1/js/fastAPI/fastAPI.js\"></script> \n" +
+		"<script type=\"text/javascript\" language=\"javascript\" src=\"http://localhost:13337/static/1/js/fastAPI/fastAPI_player.js\"></script> \n" +
+		"<script type='text/javascript'> \n " + 
+		"   var theOperator = { \n" + 
+		"\n" + 
+		"\n";
 
-	public String helperMethods = 
-		depth2 + "function from(str, sign, sepNr) \n" +
-		depth2 + "{ \n" +
-		depth3 + "var tmp = new String(Trim(str)); \n" +
-		depth3 + "var save = ''; \n" +
-
-		depth3 + "if (sepNr < 1) \n" +
-		depth3 + "{ \n" +
-		depth3 + "sepNr = 1; \n" +
-		depth3 + "} \n" +
-
-		depth3 + "while (tmp.indexOf(sign) != -1 && sepNr > 0) \n" +
-		depth3 + "{ \n" +
-		depth3 + "save = tmp.substring(tmp.indexOf(sign), tmp.indexOf(sign) \n" +
-		depth3 + "+ sign.length); \n" +
-
-		depth3 + "tmp = tmp.substring(tmp.indexOf(sign) + sign.length, tmp.length); \n" +
-
-		depth3 + "sepNr--; \n" +
-		depth3 + "} \n" +
-
-		depth3 + "tmp = save + tmp; \n" +
-
-		depth3 + "return tmp; \n" +
-		depth2 + "} \n \n" +
-
-		depth2 + "function until(str, sign, sepNr) \n" +
-		depth2 + "{ \n" +
-		depth3 + "var tmp = new String(Trim(str)); \n" +
-		depth3 + "var res = ''; \n" +
-		depth3 + "var length = sign.length; \n" +
-
-		depth3 + "if(sepNr < 1) \n" +
-		depth3 + "{ \n" +
-		depth3 + "sepNr = 1; \n" +
-		depth3 + "} \n" +
-
-		depth3 + "while(tmp.indexOf(sign) != -1 && sepNr > 0) \n" +
-		depth3 + "{ \n" +
-		depth3 + "res += tmp.substring(0, tmp.indexOf(sign) + length); \n" +
-
-		depth3 + "tmp = tmp.substring(tmp.indexOf(sign) + length, tmp.length); \n" +
-
-		depth3 + "sepNr--; \n" +
-		depth3 + "} \n" +
-
-		depth3 + "return res; \n" +
-		depth2 + "} \n \n" +
-
-		depth2 + "function charsFromTo(str, from, to) \n" +
-		depth2 + "{ \n" +
-		depth3 + "var tmp = new String(Trim(str)); \n" +
-		depth3 + "var res = ''; \n" +
-		
-		depth3 + "if(from < 1) \n" +
-		depth3 + "{ \n" +
-		depth3 + "from = 1; \n" +
-		depth3 + "} \n" +
-		
-		depth3 + "if(to > tmp.length) \n" +
-		depth3 + "{ \n" +
-		depth3 + "to = tmp.length; \n" +
-		depth3 + "} \n" +
-		
-		depth3 + "for(from; from <= to; from++) \n" +
-		depth3 + "{ \n" +
-		depth3 + "res += charAt(tmp, from); \n" +
-		depth3 + "} \n" +
-		
-		depth3 + "return res; \n" +
-		depth2 + "} \n \n" +
-		
-		depth2 + "function charAt(str, index) \n" +
-		depth2 + "{ \n" +
-		depth3 + "var res = ''; \n" +
-		
-		depth3 + "if(index < 1) \n" +
-		depth3 + "{ \n" +
-		depth3 + "index = 1; \n" +
-		depth3 + "} \n" +
-		depth3 + "else if(index > str.length) \n" +
-		depth3 + "{ \n" +
-		depth3 + "index = str.length; \n" +
-		depth3 + "} \n" +
-		
-		depth3 + "index = index - 1; \n" +
-		
-		depth3 + "res = str.charAt(index); \n" +
-		
-		depth3 + "return res; \n" +
-		depth2 + "} \n \n" +
-		
-		depth2 + "function wordsFromTo(str, from, to) \n" +
-		depth2 + "{ \n" +
-		depth3 + "var tmp = new String(Trim(str)); \n" +
-		depth3 + "var res = ''; \n" +
-		
-		depth3 + "var _split = tmp.split(' '); \n" +
-		depth3 + "var length = _split.length; \n" +
-		
-		depth3 + "if(from < 1) \n" +
-		depth3 + "{ \n" +
-		depth3 + "from = 1; \n" +
-		depth3 + "} \n" +
-		
-		depth3 + "if(to > length) \n" +
-		depth3 + "{ \n" +
-		depth3 + "to = length; \n" +
-		depth3 + "} \n" +
-		
-		depth3 + "for(from; from <= to; from++) \n" +
-		depth3 + "{ \n" +
-		depth3 + "res =  res + wordAt(str, from) + ' '; \n" +
-		depth3 + "} \n" +
-		
-		depth3 + "return res; \n" +
-		depth2 + "} \n \n" +
-		
-		depth2 + "function wordAt(str, nr) \n" +
-		depth2 + "{ \n" +
-		depth3 + "var res = new String(Trim(str)); \n" +
-		depth3 + "var _split = res.split(' '); \n" +
-		depth3 + "var length = _split.length; \n" +
-		
-		depth3 + "nr = nr -1; \n" +
-		
-		depth3 + "if(nr < 0 || nr >= length) \n" +
-		depth3 + "{ \n" +
-		depth3 + "nr = length-1; \n" +
-		depth3 + "} \n" +
-		
-		depth3 + "res = _split[nr]; \n" +
-		
-		depth3 + "return res; \n" +
-		depth2 + "} \n \n" +
-		
-		depth2 + "function Trim(str) \n" +
-		depth2 + "{ \n" +
-		depth3 + "return RTrim(LTrim(str)); \n" +
-		depth2 + "} \n\n" +
-		
-		depth2 + "function LTrim(str) \n" +
-		depth2 + "{ \n" +
-		depth3 + "var whitespace = new String(' '); \n" +
-
-		depth3 + "var s = new String(str); \n" +
-		depth3 + "if (whitespace.indexOf(s.charAt(0)) != -1) \n" +
-		depth3 + "{ \n" +
-		depth3 + "var j=0, i = s.length; \n" +
-
-		depth3 + "while (j < i && whitespace.indexOf(s.charAt(j)) != -1) \n" +
-		depth3 + "j++; \n" +
-
-		depth3 + "s = s.substring(j, i); \n" +
-		depth3 + "} \n" +
-		depth3 + "return s; \n" +
-		depth2 + "} \n \n" +
-		
-		depth2 + "function RTrim(str) \n" +
-		depth2 + "{ \n" +
-		depth3 + "var whitespace = new String(' '); \n" +
-
-		depth3 + "var s = new String(str); \n" +
-		depth3 + "if (whitespace.indexOf(s.charAt(s.length-1)) != -1) \n" +
-		depth3 + "{ \n" +
-		depth3 + "var i = s.length - 1; \n" +
-
-		depth3 + "while (i >= 0 && whitespace.indexOf(s.charAt(i)) != -1) \n" +
-		depth3 + "i--; \n" +
-		depth3 + "s = s.substring(0, i+1); \n" +
-		depth3 + "} \n" +
-		
-		depth3 + "return s; \n" +
-		depth2 + "} \n\n" +
-	    
-		depth2 + "function getValue(currentTags, name)\n" +
-		depth2 + "{\n" +
-		depth3 + "	var elemValue = '';\n" +
-		depth3 + "	var elemItem = currentTags.getElementsByTagName(name).item(0);\n" +
-		depth3 + "	if( elemItem != null )\n" +
-		depth3 + "	{ elemValue = elemItem.textContent; }\n" +
-		depth3 + "	else if( currentTags.attributes.getNamedItem(name) != null )\n" +
-		depth3 + "  { elemValue = currentTags.attributes.getNamedItem(name).value; }\n\n" +
-		depth3 + "  return elemValue; \n" +
-	    depth2 + "} \n\n";
+	public String helperMethods = "";
 	
 }
 

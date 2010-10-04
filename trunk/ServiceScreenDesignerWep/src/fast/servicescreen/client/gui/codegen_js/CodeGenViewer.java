@@ -137,7 +137,7 @@ public class CodeGenViewer
 			}
 		});
 		
-		String operatorURL = "./servicescreendesignerwep/" + generator.screen.getName() + "Op.html";
+		String operatorURL = "http://localhost:13337/static/servicescreendesignerwep/" + generator.screen.getName() + "Op.html";
 		Anchor a = new Anchor(operatorURL, operatorURL, "_blank");
 		
 		
