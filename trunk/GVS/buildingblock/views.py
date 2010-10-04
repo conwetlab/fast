@@ -273,7 +273,7 @@ class Code(resource.Resource):
         updateCode(bb, data, True)
 
         bbc = get_object_or_404(BuildingBlockCode, buildingBlock=buildingblock_id)
-        return HttpResponse(bbc.code, mimetype='application/json; charset=UTF-8')
+        return HttpResponse(bbc.code, mimetype='application/javascript; charset=UTF-8')
 
 
 class UnboundCode(resource.Resource):
@@ -281,7 +281,7 @@ class UnboundCode(resource.Resource):
         user = get_user_authentication(request)
 
         bbc = get_object_or_404(BuildingBlockCode, buildingBlock=buildingblock_id)
-        return HttpResponse(bbc.unboundCode, mimetype='application/json; charset=UTF-8')
+        return HttpResponse(bbc.unboundCode, mimetype='text/plain; charset=UTF-8')
 
 
 
