@@ -103,7 +103,13 @@ public class RequestServiceImpl extends RemoteServiceServlet implements RequestS
 			
 			answer += "pwd: " + classLocation;
 
-			if ( classLocation.contains("ServiceDesignerWep"))
+			boolean localDemo = true;
+			if (localDemo)
+			{
+				
+				path = "../../GVS/static/";
+			}
+			else if ( classLocation.contains("ServiceDesignerWep"))
 			{
 				int prefixLength = classLocation.indexOf("ServiceDesignerWep");
 				prefixLength += "ServiceDesignerWep".length();
