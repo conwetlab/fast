@@ -105,6 +105,13 @@ var FormDialog = Class.create( /** @lends FormDialog.prototype */ {
         this._dialog.show();
     },
 
+    /**
+     * Returns true if the dialog is visible
+     */
+    isVisible: function() {
+        return this._dialog.attr("open");
+    },
+
     // **************** PRIVATE METHODS **************** //
     /**
      * initDialogInterface

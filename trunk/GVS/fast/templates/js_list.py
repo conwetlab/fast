@@ -144,7 +144,7 @@ file_list = [
     "gvs/plans/PlanInstance.js",
 
     # Build
-    "gvs/build/Builder.js",
+    "gvs/build/GadgetDialog.js",
 
     # Player
     "gvs/player/ScreenflowPlayer.js",

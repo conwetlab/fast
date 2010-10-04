@@ -20,10 +20,10 @@ var ScreenflowDocument = Class.create(PaletteDocument,
         this._planPanel.setInferenceEngine(this._inferenceEngine);
 
         /**
-         * @type Builder
+         * @type GadgetDialog
          * @private @member
          */
-        this._builder = new Builder();
+        this._gadgetDialog = new GadgetDialog(this._description);
 
         /**
          * @type Player
@@ -620,7 +620,7 @@ var ScreenflowDocument = Class.create(PaletteDocument,
                 this._pendingOperation = this._buildGadget.bind(this);
                 this._save(false);
         } else {
-            this._builder.buildGadget(this._description);
+            this._gadgetDialog.show();
         }
     },
 

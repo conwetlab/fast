@@ -54,6 +54,10 @@ Object.extend(Utils, {
      */
     onAJAXError: function(transport, e){
         Logger.serverError(transport, e);
+        Utils.showMessage("Ooops. Something unexpected happened. Try reloading",{
+            "error": true,
+            "hide": true
+        });
     },
 
     /**
