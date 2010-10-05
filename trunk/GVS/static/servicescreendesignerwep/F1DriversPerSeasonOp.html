@@ -1,0 +1,112 @@
+<html> 
+<head> 
+<meta http-equiv='Content-Type' content='text/html; charset=ISO-8859-1'> 
+<title>Insert title here</title> 
+<script type="text/javascript" language="javascript" src="http://localhost:13337/static/1/js/prototype/prototype.js"></script> 
+<script type="text/javascript" language="javascript" src="http://localhost:13337/static/1/js/cjson_parse/cjson_parse.js"></script> 
+<script type="text/javascript" language="javascript" src="http://localhost:13337/static/1/js/fast/menu.js"></script> 
+<script type="text/javascript" language="javascript" src="http://localhost:13337/static/1/js/fast/screenflowEngine.js"></script> 
+<script type="text/javascript" language="javascript" src="http://localhost:13337/static/1/js/fast/screenEngine.js"></script> 
+<script type="text/javascript" language="javascript" src="http://localhost:13337/static/1/js/fast/buildingblock.js"></script> 
+<script type="text/javascript" language="javascript" src="http://localhost:13337/static/1/js/fast/debugger.js"></script> 
+<script type="text/javascript" language="javascript" src="http://localhost:13337/static/1/js/kasselStringUtils.js"></script> 
+<script type="text/javascript" language="javascript" src="http://localhost:13337/static/1/js/fastAPI/fastAPI.js"></script> 
+<script type="text/javascript" language="javascript" src="http://localhost:13337/static/1/js/fastAPI/fastAPI_player.js"></script> 
+<script type='text/javascript'> 
+    var theOperator = { 
+
+
+   search: function (filter)
+   {
+      var season = filter.data.season;
+      var prerequest = 'http://ergast.com/api/f1/drivers?season=<season>';
+      prerequest = prerequest.replace(/<season>/g,encodeURIComponent(season)); 
+ 
+
+      var request = prerequest;
+      //Invoke the service
+          new FastAPI.Request(request,{
+              'method':       'get',
+              'content':      'xml',
+              'context':      theOperator,
+              'onSuccess':    theOperator.addToList
+          });
+
+   },
+   
+   addToList: function (transport) 
+   { 
+      var xmlResponse = transport;
+      var currentTags = null; 
+
+      var currentCount = null; 
+
+      var result = new String('{ '); 
+
+      var indent = ''; 
+               var DriverTable_length = xmlResponse.getElementsByTagName('DriverTable').length; 
+               var DriverTable = xmlResponse.getElementsByTagName('DriverTable'); 
+
+               for(var DriverTable_Count = 0; DriverTable_Count < DriverTable_length; ++DriverTable_Count)
+               {
+                  currentTags = DriverTable.item(DriverTable_Count);
+
+                  currentCount = DriverTable_Count; 
+
+                  result += indent + '"F1DriverList" : [ \n'; 
+                  indent = indent + '   '; 
+                  var Driver_length = currentTags.getElementsByTagName('Driver').length; 
+                  var Driver = currentTags.getElementsByTagName('Driver'); 
+
+                  for(var Driver_Count = 0; Driver_Count < Driver_length; ++Driver_Count)
+                  {
+                     currentTags = Driver.item(Driver_Count);
+
+                     currentCount = Driver_Count; 
+
+                     result += indent + '{ \n'; 
+
+                     result += indent + '   "driverId" : "' + Trim( getValue(currentTags, 'driverId') ) + '", \n'; 
+                     result += indent + '   "givenName" : "' + Trim( getValue(currentTags, 'GivenName') ) + '", \n'; 
+                     result += indent + '   "familyName" : "' + Trim( getValue(currentTags, 'FamilyName') ) + '", \n'; 
+                     result += indent + '   "dateOfBirth" : "' + Trim( getValue(currentTags, 'DateOfBirth') ) + '", \n'; 
+                     result += indent + '   "nationality" : "' + Trim( getValue(currentTags, 'Nationality') ) + '", \n'; 
+                     result += indent + '   "url" : "' + Trim( getValue(currentTags, 'url') ) + '" \n' + indent + '}, \n'; 
+                  } 
+               } 
+               result += ' ]\n';
+
+      result += ' }'; 
+      var jsonResult = JSON.parse(result); 
+      var factResult = {data: {productList: jsonResult}}
+      if (this.manageData) {
+         this.manageData(["itemList"], [factResult], [])
+      }
+      else {
+         document.getElementById('show').value = result;
+      }
+   }, 
+   
+   onError: function (transport){} 
+   
+
+}
+
+function transform (param) {
+   var factParam = {data: {season: param}} 
+   var result = theOperator.search (factParam); 
+   
+   
+}
+
+</script>
+</head>
+<body>
+<form name=f1>
+<input type='text' name=t2 value='x' size='50'> 
+<input type=button value='request and transform' 
+onclick='this.form.t1.value=transform(this.form.t2.value )'>	
+<br><br><br><br> 
+<textarea name=t1 id='show' cols=70 rows=20> To see the results, press the button above.. </textarea></form>
+</body>
+</html>
