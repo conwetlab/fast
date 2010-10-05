@@ -582,7 +582,7 @@ public class CodeGenerator
 		"<script type=\"text/javascript\" language=\"javascript\" src=\"http://localhost:13337/static/1/js/fast/screenEngine.js\"></script> \n" +
 		"<script type=\"text/javascript\" language=\"javascript\" src=\"http://localhost:13337/static/1/js/fast/buildingblock.js\"></script> \n" +
 		"<script type=\"text/javascript\" language=\"javascript\" src=\"http://localhost:13337/static/1/js/fast/debugger.js\"></script> \n" +
-		"<script type=\"text/javascript\" language=\"javascript\" src=\"http://localhost:13337/static/1/js/kasselStringUtils.js\"></script> \n" +
+		"<script type=\"text/javascript\" language=\"javascript\" src=\"http://localhost:13337/static/servicescreendesignerwep/kasselStringUtils.js\"></script> \n" +
 		"<script type=\"text/javascript\" language=\"javascript\" src=\"http://localhost:13337/static/1/js/fastAPI/fastAPI.js\"></script> \n" +
 		"<script type=\"text/javascript\" language=\"javascript\" src=\"http://localhost:13337/static/1/js/fastAPI/fastAPI_player.js\"></script> \n" +
 		"<script type='text/javascript'> \n " + 
