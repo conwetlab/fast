@@ -18,7 +18,7 @@ import com.google.gwt.user.client.ui.Widget;
 import fast.common.client.BuildingBlock;
 import fast.mediation.client.gui.MediationRuleGUI;
 import fast.servicescreen.client.ServiceScreenDesignerWep;
-import fast.servicescreen.client.rpc.ShareOperatorHandler;
+import fast.servicescreen.client.rpc.ShareResourceHandler;
 
 /**
  * This Tab should show result steps of code generation.
@@ -132,7 +132,7 @@ public class CodeGenViewer
 					
 					//TODO: remove comment when no more internal server errors
 					//share in GVS
-//					ShareOperatorHandler shOpHandler = new ShareOperatorHandler();
+//					ShareResourceHandler shOpHandler = new ShareResourceHandler();
 //					shOpHandler.share(generator.screen);
 			}
 		});

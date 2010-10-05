@@ -26,7 +26,7 @@ import com.google.gwt.event.dom.client.ClickEvent;
 
 
 
-public class FactTypePanel
+public class FactTypePanel implements PropertyChangeClient
 {
 
    public void removeAllFrom(String className) 
@@ -57,35 +57,62 @@ public class FactTypePanel
    {
       return null;
    }
+	protected final PropertyChangeSupport listeners = new PropertyChangeSupport(this);
+
+	public void addPropertyChangeListener(PropertyChangeListener listener)
+	{
+		getPropertyChangeSupport().addPropertyChangeListener(listener);
+	}
+
+	public void removePropertyChangeListener(PropertyChangeListener listener)
+	{
+		getPropertyChangeSupport().removePropertyChangeListener(listener);
+	}
+
+	public void addPropertyChangeListener(String property, PropertyChangeListener listener)
+	{
+		getPropertyChangeSupport().addPropertyChangeListener(property, listener);
+	}
+
+	public void removePropertyChangeListener(String property, PropertyChangeListener listener)
+	{
+		getPropertyChangeSupport().removePropertyChangeListener(property, listener);
+	}
+
+	public PropertyChangeSupport getPropertyChangeSupport()
+	{
+		return listeners;
+	}
+
 
    // create attributes for all objects in all states of this statechart
-   private AttributeTextBox uriTextBox;
-   private HorizontalPanel exampleValTreeRootPanel;
-   private Label attrTreeRootLabel;
-   private FactAttrPanel attrPanel;
-   private TreeItem exampleValRootItem;
-   private Iterator fujaba__IterFactTypeToExample;
-   private DeleteFactTypeButton deleteButton;
-   private AttributeTextBox mnemonicBox;
-   private HorizontalPanel captionPanel;
-   private Label exampleValTreeRootLabel;
-   private TreeItem treeItem;
-   private FactAttribute factAttr;
-   private FactExample example;
-   private TreeItem attrRootItem;
    private HorizontalPanel panel;
    private FactAttribute newAttr;
    private FactExample newExampleVal;
+   private AttributeTextBox uriTextBox;
+   private HorizontalPanel exampleValTreeRootPanel;
    private HorizontalPanel attrTreeRootPanel;
+   private Label attrTreeRootLabel;
    private TextBox nameCaption;
    private AttributeTextBox nameBox;
    private Button exampleValAddButton;
+   private FactAttrPanel attrPanel;
    private Iterator fujaba__IterFactTypeToFactAttr;
    private Button attrAddButton;
+   private TreeItem exampleValRootItem;
+   private Iterator fujaba__IterFactTypeToExample;
    private TextBox typeCaption;
+   private AttributeTextBox mnemonicBox;
+   private DeleteFactTypeButton deleteButton;
+   private HorizontalPanel captionPanel;
    private ExampleValuesPanel exampleValPanel;
    private ExampleValuesPanel examplePanel;
+   private TreeItem treeItem;
+   private Label exampleValTreeRootLabel;
    private TreeItem captionItem;
+   private FactAttribute factAttr;
+   private FactExample example;
+   private TreeItem attrRootItem;
 
    public void start()
    {
@@ -409,6 +436,10 @@ public class FactTypePanel
             uriTextBox.start(panel, factType);
             // collabStat call
             deleteButton.start(panel, factType, treeItem);
+            // collabStat call
+            attrAddButton.setStyleName("fastButton");
+            // collabStat call
+            exampleValAddButton.setStyleName("fastButton");
             fujaba__Success = true;
          }
          catch ( JavaSDMException fujaba__InternalException )

@@ -82,13 +82,14 @@ public class ServiceWrapperOverviewTab implements PropertyChangeClient
 
 
    // create attributes for all objects in all states of this statechart
-   private Button button;
-   private ServiceScreen newScreen;
    private ServiceScreen screen;
-   private FlowPanel overviewFlowPanel;
-   private ScreenPanel screenPanel;
-   private ServiceDesigner designer;
    private Iterator fujaba__IterDesignerToScreen;
+   private TabWidget tabWidget;
+   private Button button;
+   private FlowPanel overviewFlowPanel;
+   private ServiceDesigner designer;
+   private ServiceScreen newScreen;
+   private ScreenPanel screenPanel;
 
    public void start()
    {
@@ -157,6 +158,8 @@ public class ServiceWrapperOverviewTab implements PropertyChangeClient
             // create link widget from overviewFlowPanel to button
             overviewFlowPanel.add (button);
 
+            // collabStat call
+            button.setStyleName("fastButton");
             fujaba__Success = true;
          }
          catch ( JavaSDMException fujaba__InternalException )
@@ -189,7 +192,7 @@ public class ServiceWrapperOverviewTab implements PropertyChangeClient
             newScreen = new ServiceScreen ( );
 
             // assign attribute newScreen
-            newScreen.setName ("new Operator");
+            newScreen.setName ("new Screen");
             // create link screens from newScreen to designer
             newScreen.setServiceDesigner (designer);
 
@@ -218,7 +221,7 @@ public class ServiceWrapperOverviewTab implements PropertyChangeClient
          {
             fujaba__Success = false; 
 
-            // checkv object designer is really bound
+            // check object designer is really bound
             JavaSDM.ensure ( designer != null );
             // check object overviewFlowPanel is really bound
             JavaSDM.ensure ( overviewFlowPanel != null );
@@ -301,12 +304,13 @@ public class ServiceWrapperOverviewTab implements PropertyChangeClient
             // create object overviewFlowPanel
             overviewFlowPanel = new FlowPanel ( );
 
+            // create object tabWidget
+            tabWidget = new TabWidget("Overview");
+
             // collabStat call
             tabPanel.setWidth("900px");
             // collabStat call
-            //FIXME
-            tabPanel.add(overviewFlowPanel, new TabWidget("Overview"));
-            //tabPanel.add(overviewFlowPanel, "Overview");
+            tabPanel.add(overviewFlowPanel, tabWidget);
             // collabStat call
             tabPanel.selectTab(0);
             fujaba__Success = true;

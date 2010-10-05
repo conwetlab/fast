@@ -23,7 +23,7 @@ import com.google.gwt.event.dom.client.ClickEvent;
 
 
 
-public class FactAttrPanel
+public class FactAttrPanel implements PropertyChangeClient
 {
 
    public void removeAllFrom(String className) 
@@ -54,20 +54,47 @@ public class FactAttrPanel
    {
       return null;
    }
+	protected final PropertyChangeSupport listeners = new PropertyChangeSupport(this);
+
+	public void addPropertyChangeListener(PropertyChangeListener listener)
+	{
+		getPropertyChangeSupport().addPropertyChangeListener(listener);
+	}
+
+	public void removePropertyChangeListener(PropertyChangeListener listener)
+	{
+		getPropertyChangeSupport().removePropertyChangeListener(listener);
+	}
+
+	public void addPropertyChangeListener(String property, PropertyChangeListener listener)
+	{
+		getPropertyChangeSupport().addPropertyChangeListener(property, listener);
+	}
+
+	public void removePropertyChangeListener(String property, PropertyChangeListener listener)
+	{
+		getPropertyChangeSupport().removePropertyChangeListener(property, listener);
+	}
+
+	public PropertyChangeSupport getPropertyChangeSupport()
+	{
+		return listeners;
+	}
+
 
    // create attributes for all objects in all states of this statechart
-   private TreeItem parentItem;
    private HorizontalPanel panel;
-   private FactType factType;
-   private MultiWordSuggestOracle oracle;
    private AttributeTextBox nameBox;
-   private Iterator fujaba__IterDesignerToSomeType;
-   private Object _TmpObject;
-   private DeleteAttributeButton deleteAttrButton;
    private ServiceDesigner designer;
    private String tname;
+   private FactType factType;
    private SuggestBox typeBox;
+   private Iterator fujaba__IterDesignerToSomeType;
+   private MultiWordSuggestOracle oracle;
+   private TreeItem parentItem;
+   private Object _TmpObject;
    private FactType someType;
+   private DeleteAttributeButton deleteAttrButton;
 
    public void start()
    {

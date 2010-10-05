@@ -27,7 +27,7 @@ import com.google.gwt.event.dom.client.ClickEvent;
 
 
 
-public class FactTypeTree
+public class FactTypeTree implements PropertyChangeClient
 {
 
    public void removeAllFrom(String className) 
@@ -58,15 +58,35 @@ public class FactTypeTree
    {
       return null;
    }
+	protected final PropertyChangeSupport listeners = new PropertyChangeSupport(this);
+
+	public void addPropertyChangeListener(PropertyChangeListener listener)
+	{
+		getPropertyChangeSupport().addPropertyChangeListener(listener);
+	}
+
+	public void removePropertyChangeListener(PropertyChangeListener listener)
+	{
+		getPropertyChangeSupport().removePropertyChangeListener(listener);
+	}
+
+	public void addPropertyChangeListener(String property, PropertyChangeListener listener)
+	{
+		getPropertyChangeSupport().addPropertyChangeListener(property, listener);
+	}
+
+	public void removePropertyChangeListener(String property, PropertyChangeListener listener)
+	{
+		getPropertyChangeSupport().removePropertyChangeListener(property, listener);
+	}
+
+	public PropertyChangeSupport getPropertyChangeSupport()
+	{
+		return listeners;
+	}
+
 
    // create attributes for all objects in all states of this statechart
-   private Tree tree;
-   private RootPanel rootPanel;
-   private TextBox mnemonicCaption;
-   private Label label;
-   private HorizontalPanel captionPanel;
-   private Iterator fujaba__IterCoobraRootToDesigner;
-   private TabPanel tabPanel;
    private HorizontalPanel panel;
    private Iterator fujaba__IterDesignerToFactType;
    private CoobraRoot coobraRoot;
@@ -75,11 +95,18 @@ public class FactTypeTree
    private FactTypePanel factTypePanel;
    private TextBox uriCaption;
    private TextBox nameCaption;
+   private Tree tree;
+   private RootPanel rootPanel;
+   private TextBox mnemonicCaption;
    private Object _TmpObject;
    private ServiceDesigner designer;
    private TreeItem rootItem;
+   private Label label;
+   private HorizontalPanel captionPanel;
+   private Iterator fujaba__IterCoobraRootToDesigner;
    private TreeItem captionItem;
    private Button addButton;
+   private TabPanel tabPanel;
 
    public void start()
    {
@@ -340,6 +367,10 @@ public class FactTypeTree
             tabPanel.add(tree,"FactTool");
             // collabStat call
             tabPanel.selectTab(0);
+            // collabStat call
+            addButton.setStyleName("fastButton");
+            // collabStat call
+            tabPanel.setStyleName("fastTabPanel");
             fujaba__Success = true;
          }
          catch ( JavaSDMException fujaba__InternalException )

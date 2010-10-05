@@ -18,7 +18,7 @@ import com.google.gwt.event.dom.client.ClickEvent;
 
 
 
-public class ExampleValuesPanel
+public class ExampleValuesPanel implements PropertyChangeClient
 {
 
    public void removeAllFrom(String className) 
@@ -49,11 +49,38 @@ public class ExampleValuesPanel
    {
       return null;
    }
+	protected final PropertyChangeSupport listeners = new PropertyChangeSupport(this);
+
+	public void addPropertyChangeListener(PropertyChangeListener listener)
+	{
+		getPropertyChangeSupport().addPropertyChangeListener(listener);
+	}
+
+	public void removePropertyChangeListener(PropertyChangeListener listener)
+	{
+		getPropertyChangeSupport().removePropertyChangeListener(listener);
+	}
+
+	public void addPropertyChangeListener(String property, PropertyChangeListener listener)
+	{
+		getPropertyChangeSupport().addPropertyChangeListener(property, listener);
+	}
+
+	public void removePropertyChangeListener(String property, PropertyChangeListener listener)
+	{
+		getPropertyChangeSupport().removePropertyChangeListener(property, listener);
+	}
+
+	public PropertyChangeSupport getPropertyChangeSupport()
+	{
+		return listeners;
+	}
+
 
    // create attributes for all objects in all states of this statechart
    private HorizontalPanel factExamplePanel;
-   private AttributeTextArea exampleValTextBox;
    private Button exampleValDeleteButton;
+   private AttributeTextArea exampleValTextBox;
    private TreeItem exampleItem;
 
    public void start()
@@ -151,6 +178,8 @@ public class ExampleValuesPanel
             exampleValTextBox.start(factExamplePanel, factExample);
             // collabStat call
             factExamplePanel.add(exampleValDeleteButton);
+            // collabStat call
+            exampleValDeleteButton.setStyleName("fastButton");
             fujaba__Success = true;
          }
          catch ( JavaSDMException fujaba__InternalException )

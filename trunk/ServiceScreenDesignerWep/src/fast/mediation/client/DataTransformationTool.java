@@ -28,6 +28,7 @@ import fast.mediation.client.gui.MediationRuleGUI;
 import fast.servicescreen.client.FastTool;
 import fast.servicescreen.client.gui.CTextChangeHandler;
 import fast.servicescreen.client.gui.PortGUI;
+import fast.servicescreen.client.gui.TabWidget;
 import fast.servicescreen.client.gui.codegen_js.CodeGenViewer;
 import fast.servicescreen.client.gui.codegen_js.CodeGenViewer.WrappingType;
 import fast.servicescreen.client.rpc.SendRequestHandler;
@@ -156,7 +157,8 @@ public class DataTransformationTool extends FastTool implements EntryPoint
 		rootPanel = RootPanel.get();
 
 		tabPanel = new TabPanel();
-		tabPanel.setWidth("900px");
+//		tabPanel.setWidth("900px");
+	    tabPanel.setStyleName("fastTabPanel");
 		
 		
 		overviewFlowPanel = new FlowPanel();
@@ -169,7 +171,7 @@ public class DataTransformationTool extends FastTool implements EntryPoint
 		
 		designer.addPropertyChangeListener(ServiceDesigner.PROPERTY_TRAFO_OPERATORS, trafoOpListener);
 		
-		tabPanel.add(overviewFlowPanel, "Overview");
+		tabPanel.add(overviewFlowPanel, new TabWidget("Overview"));
 		tabPanel.selectTab(0);
 
 		rebuildOperatorTabs();
@@ -229,7 +231,7 @@ public class DataTransformationTool extends FastTool implements EntryPoint
 		rowCount++;
 
 		// add to tab panel
-		tabPanel.add(generalInformationTable, "General");
+		tabPanel.add(generalInformationTable, new TabWidget("General"));
 		
 
 		refreshRuleAndCodeTab();
@@ -264,11 +266,11 @@ public class DataTransformationTool extends FastTool implements EntryPoint
 		
 		transformationTable.ensureDebugId("cwFlexTable");
 	     
-		tabPanel.add(transformationTable, "exTransformation");
+		tabPanel.add(transformationTable, new TabWidget("exTransformation"));
 		 
 		//Adding part three, just to test code generation, there is a show of selected rules, templates and the .js results
 		codeGenViewer = new CodeGenViewer(trafoOperator, WrappingType.WRAP_JSON, ruleGUI); 
-		tabPanel.add(codeGenViewer.createCodeGenViewer(), "CodeGen Viewer");
+		tabPanel.add(codeGenViewer.createCodeGenViewer(), new TabWidget("CodeGen Viewer"));
 	}
 	
 	public void refreshOverviewPanel() 

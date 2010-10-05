@@ -37,10 +37,15 @@ public class FactExample extends FastObject
    public void set (String fieldName, Object value)
    {
       // json
-      if ("json".equals(fieldName)){
+      if ("json".equals(fieldName)){				
          setJson((String) value);
-      }  else// factType
-      if ("factType".equals(fieldName)){
+      }//( toMany false || toMany2 true || qualified $qualified || 
+// internalQualified false ||  
+// role.Qualifier $role.Qualifier || ordered false || sorted false)
+ //2[! (  ( toMany || !toMany2) && !( toMany && toMany2)  && role.Qualifier  ) ]
+//2.2[ !( qualified && !internalQualified ) ]
+ else// factType
+      if ("factType".equals(fieldName)){				
          setFactType ((fast.common.client.FactType) value);
       }   }  
 
@@ -56,7 +61,7 @@ public class FactExample extends FastObject
          return (String) getJson();
       }
       else      if ("factType".equals(fieldName))
-      {
+      {				
          return getFactType();
       }
       return null;

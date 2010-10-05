@@ -23,16 +23,16 @@ public class BuildingBlock extends FastObject
 
    public void removeAllFrom(String className) 
    {
-      if ("fast.common.client.FactPort".equals(className)){
+      if ("fast.common.client.FactPort".equals(className)){				
          removeAllFromPreconditions();
       }
-      else      if ("fast.common.client.FactPort".equals(className)){
+      else      if ("fast.common.client.FactPort".equals(className)){				
          removeAllFromPostconditions();
       }
-      else      if ("fast.common.client.FASTMappingRule".equals(className)){
+      else      if ("fast.common.client.FASTMappingRule".equals(className)){				
          removeAllFromMappingRules();
       }
-      else      if ("fast.common.client.TemplateParameter".equals(className)){
+      else      if ("fast.common.client.TemplateParameter".equals(className)){				
          removeAllFromTemplateParameters();
       }
    }
@@ -52,19 +52,39 @@ public class BuildingBlock extends FastObject
    public void set (String fieldName, Object value)
    {
       // name
-      if ("name".equals(fieldName)){
+      if ("name".equals(fieldName)){				
          setName((String) value);
-      }  else// preconditions
-      if ("preconditions".equals(fieldName)){
+      }//( toMany true || toMany2 false || qualified $qualified || 
+// internalQualified false ||  
+// role.Qualifier $role.Qualifier || ordered $ordered || sorted $sorted)
+ //2[! (  ( toMany || !toMany2) && !( toMany && toMany2)  && role.Qualifier  ) ]
+//2.2[ !( qualified && !internalQualified ) ]
+ else// preconditions
+      if ("preconditions".equals(fieldName)){				
          addToPreconditions ((fast.common.client.FactPort) value);
-      }  else// postconditions
-      if ("postconditions".equals(fieldName)){
+      }//( toMany true || toMany2 false || qualified $qualified || 
+// internalQualified false ||  
+// role.Qualifier $role.Qualifier || ordered $ordered || sorted $sorted)
+ //2[! (  ( toMany || !toMany2) && !( toMany && toMany2)  && role.Qualifier  ) ]
+//2.2[ !( qualified && !internalQualified ) ]
+ else// postconditions
+      if ("postconditions".equals(fieldName)){				
          addToPostconditions ((fast.common.client.FactPort) value);
-      }  else// mappingRules
-      if ("mappingRules".equals(fieldName)){
+      }//( toMany true || toMany2 false || qualified $qualified || 
+// internalQualified false ||  
+// role.Qualifier $role.Qualifier || ordered $ordered || sorted $sorted)
+ //2[! (  ( toMany || !toMany2) && !( toMany && toMany2)  && role.Qualifier  ) ]
+//2.2[ !( qualified && !internalQualified ) ]
+ else// mappingRules
+      if ("mappingRules".equals(fieldName)){				
          addToMappingRules ((fast.common.client.FASTMappingRule) value);
-      }  else// templateParameters
-      if ("templateParameters".equals(fieldName)){
+      }//( toMany true || toMany2 false || qualified $qualified || 
+// internalQualified false ||  
+// role.Qualifier $role.Qualifier || ordered $ordered || sorted $sorted)
+ //2[! (  ( toMany || !toMany2) && !( toMany && toMany2)  && role.Qualifier  ) ]
+//2.2[ !( qualified && !internalQualified ) ]
+ else// templateParameters
+      if ("templateParameters".equals(fieldName)){				
          addToTemplateParameters ((fast.common.client.TemplateParameter) value);
       }   }  
 
@@ -80,19 +100,19 @@ public class BuildingBlock extends FastObject
          return (String) getName();
       }
       else      if ("preconditions".equals(fieldName))
-      {
+      {				
          return iteratorOfPreconditions();
       }
       else      if ("postconditions".equals(fieldName))
-      {
+      {				
          return iteratorOfPostconditions();
       }
       else      if ("mappingRules".equals(fieldName))
-      {
+      {				
          return iteratorOfMappingRules();
       }
       else      if ("templateParameters".equals(fieldName))
-      {
+      {				
          return iteratorOfTemplateParameters();
       }
       return null;
@@ -424,10 +444,11 @@ public class BuildingBlock extends FastObject
     *           serviceScreen               templateParameters
     * </pre>
     */
+   public static final String PROPERTY_TEMPLATE_PARAMETERS = "templateParameters";
 
-   private transient FLinkedList<TemplateParameter> templateParameters;
+   private transient FPropLinkedList<TemplateParameter> templateParameters;
 
-   public FLinkedList<TemplateParameter> getTemplateParameters () {
+   public FPropLinkedList<TemplateParameter> getTemplateParameters () {
       return templateParameters;
    }
 
@@ -438,7 +459,7 @@ public class BuildingBlock extends FastObject
       {
          if (this.templateParameters == null)
          {
-            this.templateParameters = new FLinkedList<TemplateParameter> ();
+            this.templateParameters = new FPropLinkedList<TemplateParameter> (this, PROPERTY_TEMPLATE_PARAMETERS);
 
          }
       
@@ -686,7 +707,7 @@ public class BuildingBlock extends FastObject
       {
          if (this.templateParameters == null)
          {
-            this.templateParameters = new FLinkedList<TemplateParameter> (); // or FTreeSet () or FLinkedList ()
+            this.templateParameters = new FPropLinkedList<TemplateParameter> (this, PROPERTY_TEMPLATE_PARAMETERS); // or FTreeSet () or FLinkedList ()
          }
          int oldIndex = this.indexOfTemplateParameters (value);
          if (oldIndex != index)
@@ -723,7 +744,7 @@ public class BuildingBlock extends FastObject
       {
          if (this.templateParameters == null)
          {
-            this.templateParameters = new FLinkedList<TemplateParameter> (); // or FTreeSet () or FLinkedList ()
+            this.templateParameters = new FPropLinkedList<TemplateParameter> (this, PROPERTY_TEMPLATE_PARAMETERS); // or FTreeSet () or FLinkedList ()
          }
          int oldIndex = this.indexOfTemplateParameters (value);
          if (oldIndex != index)

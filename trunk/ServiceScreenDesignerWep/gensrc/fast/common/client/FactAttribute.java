@@ -38,13 +38,18 @@ public class FactAttribute extends FastObject
    public void set (String fieldName, Object value)
    {
       // attrName
-      if ("attrName".equals(fieldName)){
+      if ("attrName".equals(fieldName)){				
          setAttrName((String) value);
       }      else      // factType
-      if ("factType".equals(fieldName)){
+      if ("factType".equals(fieldName)){				
          setFactType((String) value);
-      }  else// owner
-      if ("owner".equals(fieldName)){
+      }//( toMany false || toMany2 true || qualified $qualified || 
+// internalQualified false ||  
+// role.Qualifier $role.Qualifier || ordered false || sorted false)
+ //2[! (  ( toMany || !toMany2) && !( toMany && toMany2)  && role.Qualifier  ) ]
+//2.2[ !( qualified && !internalQualified ) ]
+ else// owner
+      if ("owner".equals(fieldName)){				
          setOwner ((fast.common.client.FactType) value);
       }   }  
 
@@ -64,7 +69,7 @@ public class FactAttribute extends FastObject
          return (String) getFactType();
       }
       else      if ("owner".equals(fieldName))
-      {
+      {				
          return getOwner();
       }
       return null;

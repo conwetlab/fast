@@ -23,7 +23,7 @@ import com.google.gwt.event.dom.client.ClickEvent;
 
 
 
-public class FactEditor
+public class FactEditor implements PropertyChangeClient
 {
 
    public void removeAllFrom(String className) 
@@ -54,16 +54,43 @@ public class FactEditor
    {
       return null;
    }
+	protected final PropertyChangeSupport listeners = new PropertyChangeSupport(this);
+
+	public void addPropertyChangeListener(PropertyChangeListener listener)
+	{
+		getPropertyChangeSupport().addPropertyChangeListener(listener);
+	}
+
+	public void removePropertyChangeListener(PropertyChangeListener listener)
+	{
+		getPropertyChangeSupport().removePropertyChangeListener(listener);
+	}
+
+	public void addPropertyChangeListener(String property, PropertyChangeListener listener)
+	{
+		getPropertyChangeSupport().addPropertyChangeListener(property, listener);
+	}
+
+	public void removePropertyChangeListener(String property, PropertyChangeListener listener)
+	{
+		getPropertyChangeSupport().removePropertyChangeListener(property, listener);
+	}
+
+	public PropertyChangeSupport getPropertyChangeSupport()
+	{
+		return listeners;
+	}
+
 
    // create attributes for all objects in all states of this statechart
    private CoobraServiceAsync coobraService;
    private FactTypeTree factTypeTree;
-   private Iterator fujaba__IterCoobraRootToDesigner;
-   private ServiceScreenModel modelRoot;
-   private CoobraRoot coobraRoot;
-   private Object _TmpObject;
-   private ServiceDesigner designer;
    private DataLoadTimer dataLoadTimer;
+   private Iterator fujaba__IterCoobraRootToDesigner;
+   private CoobraRoot coobraRoot;
+   private ServiceDesigner designer;
+   private ServiceScreenModel modelRoot;
+   private Object _TmpObject;
 
    public void start()
    {

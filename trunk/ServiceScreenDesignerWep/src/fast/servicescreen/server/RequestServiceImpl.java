@@ -145,14 +145,13 @@ public class RequestServiceImpl extends RemoteServiceServlet implements RequestS
 			writer.write(transCode);
 			
 			writer.close();
-			
 		}
 		catch (Exception e)
 		{
 			answer += " Error: " + e.getLocalizedMessage();
 			
 			return answer;
-		} 
+		}
 		
 		return answer;
 	}

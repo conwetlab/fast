@@ -16,7 +16,7 @@ import com.google.gwt.event.dom.client.ClickEvent;
 
 
 
-public class FactTool implements EntryPoint
+public class FactTool implements PropertyChangeClient, EntryPoint
 {
 
    public void removeAllFrom(String className) 
@@ -47,6 +47,33 @@ public class FactTool implements EntryPoint
    {
       return null;
    }
+	protected final PropertyChangeSupport listeners = new PropertyChangeSupport(this);
+
+	public void addPropertyChangeListener(PropertyChangeListener listener)
+	{
+		getPropertyChangeSupport().addPropertyChangeListener(listener);
+	}
+
+	public void removePropertyChangeListener(PropertyChangeListener listener)
+	{
+		getPropertyChangeSupport().removePropertyChangeListener(listener);
+	}
+
+	public void addPropertyChangeListener(String property, PropertyChangeListener listener)
+	{
+		getPropertyChangeSupport().addPropertyChangeListener(property, listener);
+	}
+
+	public void removePropertyChangeListener(String property, PropertyChangeListener listener)
+	{
+		getPropertyChangeSupport().removePropertyChangeListener(property, listener);
+	}
+
+	public PropertyChangeSupport getPropertyChangeSupport()
+	{
+		return listeners;
+	}
+
    public void onModuleLoad ()
    { 
       boolean fujaba__Success = false;
@@ -61,7 +88,7 @@ public class FactTool implements EntryPoint
          editor = new FactEditor ( );
 
          // collabStat call
-         FTest.init(false);
+         FTest.init();
          // collabStat call
          FTest.assertTrue(true, "module FactTool reached");
          // collabStat call

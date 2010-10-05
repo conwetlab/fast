@@ -16,7 +16,7 @@ import com.google.gwt.event.dom.client.ClickEvent;
 
 
 
-public class AttributeTextBox
+public class AttributeTextBox implements PropertyChangeClient
 {
 
    public void removeAllFrom(String className) 
@@ -38,7 +38,7 @@ public class AttributeTextBox
    public void set (String fieldName, Object value)
    {
       // attrName
-      if ("attrName".equals(fieldName)){
+      if ("attrName".equals(fieldName)){				
          setAttrName((String) value);
       }   }  
 
@@ -55,6 +55,33 @@ public class AttributeTextBox
       }
       return null;
    }
+	protected final PropertyChangeSupport listeners = new PropertyChangeSupport(this);
+
+	public void addPropertyChangeListener(PropertyChangeListener listener)
+	{
+		getPropertyChangeSupport().addPropertyChangeListener(listener);
+	}
+
+	public void removePropertyChangeListener(PropertyChangeListener listener)
+	{
+		getPropertyChangeSupport().removePropertyChangeListener(listener);
+	}
+
+	public void addPropertyChangeListener(String property, PropertyChangeListener listener)
+	{
+		getPropertyChangeSupport().addPropertyChangeListener(property, listener);
+	}
+
+	public void removePropertyChangeListener(String property, PropertyChangeListener listener)
+	{
+		getPropertyChangeSupport().removePropertyChangeListener(property, listener);
+	}
+
+	public PropertyChangeSupport getPropertyChangeSupport()
+	{
+		return listeners;
+	}
+
 
    // create attributes for all objects in all states of this statechart
    private TextBox textBox;
@@ -194,11 +221,18 @@ public class AttributeTextBox
    // my style test for method.vm
 
 
+   public static final String PROPERTY_ATTR_NAME = "attrName";
+
    private String attrName;
 
    public void setAttrName (String value)
    {
-      this.attrName = value;
+      if ( ! JavaSDM.stringEquals (this.attrName, value))
+      {
+         String oldValue = this.attrName;
+         this.attrName = value;
+         getPropertyChangeSupport().firePropertyChange(PROPERTY_ATTR_NAME, oldValue, value);
+      }
    }
 
    public AttributeTextBox withAttrName (String value)

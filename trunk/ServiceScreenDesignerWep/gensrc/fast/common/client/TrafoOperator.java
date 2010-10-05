@@ -37,10 +37,15 @@ public class TrafoOperator extends BuildingBlock
    public void set (String fieldName, Object value)
    {
       // name
-      if ("name".equals(fieldName)){
+      if ("name".equals(fieldName)){				
          setName((String) value);
-      }  else// serviceDesigner
-      if ("serviceDesigner".equals(fieldName)){
+      }//( toMany false || toMany2 true || qualified $qualified || 
+// internalQualified false ||  
+// role.Qualifier $role.Qualifier || ordered false || sorted false)
+ //2[! (  ( toMany || !toMany2) && !( toMany && toMany2)  && role.Qualifier  ) ]
+//2.2[ !( qualified && !internalQualified ) ]
+ else// serviceDesigner
+      if ("serviceDesigner".equals(fieldName)){				
          setServiceDesigner ((fast.common.client.ServiceDesigner) value);
       }   }  
 
@@ -56,7 +61,7 @@ public class TrafoOperator extends BuildingBlock
          return (String) getName();
       }
       else      if ("serviceDesigner".equals(fieldName))
-      {
+      {				
          return getServiceDesigner();
       }
       return null;
