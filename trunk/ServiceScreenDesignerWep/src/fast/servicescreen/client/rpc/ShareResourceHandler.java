@@ -7,9 +7,12 @@ import com.google.gwt.json.client.JSONParser;
 import com.google.gwt.json.client.JSONString;
 import com.google.gwt.json.client.JSONValue;
 import com.google.gwt.user.client.Cookies;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import fast.common.client.BuildingBlock;
+import fast.common.client.FactPort;
+import fast.common.client.FactType;
 import fast.servicescreen.client.RequestService;
 import fast.servicescreen.client.RequestServiceAsync;
 
@@ -31,6 +34,8 @@ public class ShareResourceHandler {
 		
 		//build operator
 		String body = "buildingblock=" + buildResource(res);
+		
+		Window.alert("Resource: " + body);
 		
 		//upload to GVS
 		shResService = GWT.create(RequestService.class);
@@ -84,28 +89,29 @@ public class ShareResourceHandler {
 		resource.put("code", resCode);
 		
 		//version TODO has to be unique per operator and its development stages
-		JSONString resVersion = new JSONString("0.3");
+		JSONString resVersion = new JSONString("1");
 		resource.put("version", resVersion);
 		
 		//actions TODO: adjust
-//		JSONObject opActions = new JSONObject();
-//		//actions.name
-//		opActions.put("name", new JSONString("testOperator"));
-//		//actions.preconditions [id,label,pattern,positive] TODO: adjust
-//		JSONArray preConds = new JSONArray();
-//		JSONObject preCond1 = new JSONObject();
-//		//actions.preconditions.id
-//		preCond1.put("id", new JSONString("item"));		
-//		//actions.preconditions.label
-//		JSONObject preCond1Label = new JSONObject();
-//		preCond1Label.put("en-gb", new JSONString("An item"));
-//		preCond1.put("label", preCond1Label);
-//		//actions.preconditions.pattern
-//		String preCond1Pattern = "?Item http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#Item";
-//		preCond1.put("pattern", new JSONString(preCond1Pattern));
-//		//actions.preconditions.positive
-//		preCond1.put("positive", new JSONString("true"));
-//		preConds.set(0, preCond1);
+		JSONObject resActions = new JSONObject();
+		//actions.name
+		resActions.put("name", new JSONString(name + "Resource"));
+		//actions.preconditions [id,label,pattern,positive] TODO: adjust
+		FactPort preCondition = (FactPort)res.iteratorOfPreconditions().next();
+		JSONArray preConds = new JSONArray();
+		JSONObject preCond1 = new JSONObject();
+		//actions.preconditions.id
+		preCond1.put("id", new JSONString(preCondition.getName().toLowerCase()));		
+		//actions.preconditions.label
+		JSONObject preCond1Label = new JSONObject();
+		preCond1Label.put("en", new JSONString("A/An" + preCondition.getName().toLowerCase()));
+		preCond1.put("label", preCond1Label);
+		//actions.preconditions.pattern
+		String preCond1Pattern = "?" + preCondition.getName() + " " + preCondition.getUri();
+		preCond1.put("pattern", new JSONString(preCond1Pattern));
+		//actions.preconditions.positive
+		preCond1.put("positive", new JSONString("true"));
+		preConds.set(0, preCond1);
 		
 //		//preconditions[id,label,pattern,positive]
 //		JSONArray preConds = new JSONArray();
@@ -142,31 +148,32 @@ public class ShareResourceHandler {
 //			preConds.set(index, inPort);
 //			index++;
 //		}
-//		opActions.put("preconditions", preConds);
-//		//actions.uses
-//		opActions.put("uses", new JSONArray());
-//		resource.put("actions", opActions);
+		resActions.put("preconditions", preConds);
+		//actions.uses
+		resActions.put("uses", new JSONArray());
+		resource.put("actions", resActions);
 	
 		
 
 //		//postconditions: [id, label, pattern, positive] TODO adjust
-//		JSONArray postConds = new JSONArray();
-//		JSONArray innerPostConds = new JSONArray();
-//		JSONObject postCond1 = new JSONObject();
-//		//actions.preconditions.id
-//		postCond1.put("id", new JSONString("list"));		
-//		//actions.preconditions.label
-//		JSONObject postCond1Label = new JSONObject();
-//		postCond1Label.put("en-gb", new JSONString("A list"));
-//		postCond1.put("label", postCond1Label);
-//		//actions.preconditions.pattern
-//		String postCond1Pattern = "?eFilter http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://developer.ebay.com/DevZone/shopping/docs/CallRef/FindItemsAdvanced.html#Request";
-//		postCond1.put("pattern", new JSONString(postCond1Pattern));
-//		//actions.preconditions.positive
-//		postCond1.put("positive", new JSONString("true"));
-//		innerPostConds.set(0, postCond1);
-//		postConds.set(0, innerPostConds);
-//		operator.put("postconditions", postConds);
+		FactPort postCondition = (FactPort)res.iteratorOfPostconditions().next();
+		JSONArray postConds = new JSONArray();
+		JSONArray innerPostConds = new JSONArray();
+		JSONObject postCond1 = new JSONObject();
+		//actions.preconditions.id
+		postCond1.put("id", new JSONString(postCondition.getName().toLowerCase()));		
+		//actions.preconditions.label
+		JSONObject postCond1Label = new JSONObject();
+		postCond1Label.put("en", new JSONString("A/An" + postCondition.getName()));
+		postCond1.put("label", postCond1Label);
+		//actions.preconditions.pattern
+		String postCond1Pattern = "?" + postCondition.getName() + " " + postCondition.getUri();
+		postCond1.put("pattern", new JSONString(postCond1Pattern));
+		//actions.preconditions.positive
+		postCond1.put("positive", new JSONString("true"));
+		innerPostConds.set(0, postCond1);
+		postConds.set(0, innerPostConds);
+		resource.put("postconditions", postConds);
 		
 //		index = 0;
 //		for (Iterator<FactPort> iterator = screen.iteratorOfPostconditions(); iterator.hasNext();) {
@@ -208,8 +215,8 @@ public class ShareResourceHandler {
 //		resource.put("icon", opIcon);
 		
 		//screenshot TODO default screenshot?
-//		JSONString resScreenshot = new JSONString("http://www.deri.ie/" + "screenshot.jpg");
-//		resource.put("screenshot", resScreenshot);
+		JSONString resScreenshot = new JSONString("http://www.deri.ie/" + name + "screenshot.jpg");
+		resource.put("screenshot", resScreenshot);
 		
 		//label TODO default label?
 //		JSONObject resLabel = new JSONObject();
