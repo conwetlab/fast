@@ -198,7 +198,7 @@ public class RuleGUI
       SelectionHandler<TreeItem> handler = new RulesTreeHandler();
       rulesTree.addSelectionHandler(handler);
       
-      RuleUtil.expandTree(rulesTree);
+      RuleUtil.expandItem(rulesTree.getItem(0));
       
       return rulesTree;
    }
@@ -420,7 +420,7 @@ public class RuleGUI
 	   } catch (Exception e) {
 		   e.printStackTrace();
 	   }
-	   RuleUtil.expandTree(aFactsTree);
+	   RuleUtil.expandItem(aFactsTree.getItem(0));
 
    }
 

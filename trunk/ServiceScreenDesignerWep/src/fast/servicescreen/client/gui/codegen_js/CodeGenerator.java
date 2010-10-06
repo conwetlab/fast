@@ -21,9 +21,7 @@ import fast.servicescreen.client.gui.parser.Operation;
 import fast.servicescreen.client.gui.parser.OperationHandler;
 
 /**
- * Use the constructor to create the first template
- * 
- * TODO s: generate dynamic input ports in html /save template changes into cdr
+ * Use the constructor, it will create the template
  * */
 public class CodeGenerator
 {
@@ -57,6 +55,11 @@ public class CodeGenerator
 		setTemplates();
 	}
 	
+	/**
+	 * U should not use this constructor
+	 * */
+	public CodeGenerator(){}
+	
 	public String resetTemplates()
 	{
 		//resets the templates
@@ -76,7 +79,7 @@ public class CodeGenerator
 	/**
 	 * This method returns an empty CodeGenerator.
 	 * 
-	 * Overwrite this method to create a spezific CodeGenerator, 
+	 * Overwrite this method to create a specific CodeGenerator, 
 	 * it will be used to reset the Generator and make the resetTemplates()
 	 * method work!
 	 * */
@@ -99,14 +102,14 @@ public class CodeGenerator
 		add_PreRequest_toTable();
 		add_PreRequestReplaces_toTable();
 		
-		//Build the request - code
-		add_SendRequest_toTable();
-		
 		//Build the exRules - feature
 		add_Translation_toTable();
 		
 		//fill founded values into the <keywords> in rootTemplate
 		rootTemplate = expandTemplateKeys(rootTemplate);
+		
+		//replace input port in transform method outer root template 
+		posthtml = expandTemplateKeys(posthtml);
 
 		return rootTemplate;
 	}
@@ -146,6 +149,11 @@ public class CodeGenerator
 		table.put("<<prerequestreplaces>>", preReqRepText);
 	}
 	
+	
+	/**
+	 * This method currently adds more then one input port, if needed.
+	 * Notice: The current understanding of FAST is, that we an´t need more then one input value.
+	 * */
 	@SuppressWarnings("unchecked")
 	protected void add_InPorts_toTable()
 	{	
@@ -167,12 +175,6 @@ public class CodeGenerator
 		}
 
 		table.put("<<inputportlist>>", inputPortText);
-	}
-
-	protected void add_SendRequest_toTable()
-	{
-		//add result in the table
-		table.put("<<sendrequest>>", sendrequest);
 	}
 	
 	protected String transCode = "";
@@ -428,9 +430,10 @@ public class CodeGenerator
 		// find key and replace by value
 		String result = text;
 		int pos = text.indexOf(key);
-		if (pos >= 0)
+		while (pos >= 0)
 		{
-			result = text.substring(0, pos) + value + text.substring(pos + key.length());
+			result = text.substring(0, pos) + value + result.substring(pos + key.length());
+			pos = result.indexOf(key);
 		}
 		return result;
 	}
@@ -472,24 +475,16 @@ public class CodeGenerator
 	
 	// -------------- the template strings -------------- //
 	
-	
-	/** 
-	 * This string contains template code for JSON or XML
-	 * requests, decided by the CodeGenerators constructor given RequestType.
-	 * 
-	 * Is setted up in method setTemplates
-	 * */
-	String sendrequest = "";
-	
 	/**
-	 * Contains root template and is setted up in
+	 * Contains root template and is set up in
 	 * setTemplates method
 	 * */
 	String rootTemplate = 
 		//declare method rump 
 		depth + "search: function (filter)\n" +
 		depth + "{\n" +
-		    depth2 + "var season = filter.data.season;\n" +
+		    depth2 + "var <<inputportlist>> = filter.data.<<inputportlist>>;\n" +
+		    
 			//fill request url
 			depth2 + "var prerequest = '<<prerequest>>';\n" +
 			
@@ -509,6 +504,7 @@ public class CodeGenerator
 			depth2 + "    });\n\n" +
 		depth + "},\n" +
 		depth + "\n" +
+		//next method rump 
 		depth + "addToList: function (transport) \n" +
 		depth + "{ \n" +
 		    depth2 + "var xmlResponse = transport;\n" +
@@ -527,31 +523,20 @@ public class CodeGenerator
 		    depth2 + "}\n" +
 			depth + "}, \n" +
 			depth + "\n" +
+			//next method rump
 			depth + "onError: function (transport){} \n" +
 			depth + "\n" +
 		"\n";
 	
 	/**
-	 * This method is used to overwrite and set up
-	 * templates this way
-	 * */
-	protected void setTemplates()
-	{
-		//set up sendRequest for wrapping requested XML
-		// to be deleted.
-	}
-	
-	/**
-	 * contains html end
+	 * contains HTML end
 	 * */
 	public String posthtml =
 		"}\n" + 
 		"\n" + 
 		"function transform (param) {\n" + 
-		"   var factParam = {data: {season: param}} \n" + 
+		"   var factParam = {data: {<<inputportlist>>: param}} \n" + 
 		"   var result = theOperator.search (factParam); \n" + 
-		"   \n" + 
-		"   \n" + 
 		"}\n" + 
 		"\n" + 
 		"</script>\n" +
@@ -568,7 +553,7 @@ public class CodeGenerator
 		"</html>\n";
 	
 	/**
-	 *  Contains the html header and all javascript util functions
+	 *  Contains the HTML header
 	 * */
 	public String prehtml =
 		"<html> \n" +
@@ -585,15 +570,21 @@ public class CodeGenerator
 		"<script type=\"text/javascript\" language=\"javascript\" src=\"http://localhost:13337/static/servicescreendesignerwep/kasselStringUtils.js\"></script> \n" +
 		"<script type=\"text/javascript\" language=\"javascript\" src=\"http://localhost:13337/static/1/js/fastAPI/fastAPI.js\"></script> \n" +
 		"<script type=\"text/javascript\" language=\"javascript\" src=\"http://localhost:13337/static/1/js/fastAPI/fastAPI_player.js\"></script> \n" +
-		"<script type='text/javascript'> \n " + 
-		"   var theOperator = { \n" + 
-		"\n" + 
+		"<script type='text/javascript'> \n \n" + 
+		"  var theOperator = { \n" + 
 		"\n";
-
-	public String helperMethods = "";
 	
+	/**
+	 * This method is used to overwrite and set up
+	 * templates. In cooperation with string helpermethod, it´s a 
+	 * fast way to add .js code functionality.
+	 * */
+	protected void setTemplates()
+	{
+		//..
+	}
+	public String helperMethods = "";
 }
-
 
 
 //@SuppressWarnings({ "unchecked", "unused" })
@@ -619,16 +610,3 @@ public class CodeGenerator
 //	
 //	table.put("<<outputport>>", outputPortVar);
 //}
-
-/**
- * The path to the standalone GET Proxy Servlet
- * 
- * Add a Param before sending. Param should be the url u want to request,
- * but fill with escape code first:
- * url = http://open.api.sandbox.ebay.com/shopping?appid=KasselUn-efea-4b93-9505-5dc2ef1ceecd&version=517&callname=FindItems&ItemSort=EndTime&QueryKeywords=USB&responseencoding=XML
- * 
- * -> with URL Escape Codes: / -> %2F, = -> %3D, ? = %3F, & -> %26, : -> %3A
- * xxx = http%3A%2F%2Fopen.api.sandbox.ebay.com%2Fshopping%3Fappid%3DKasselUn-efea-4b93-9505-5dc2ef1ceecd%26version%3D517%26callname%3DFindItems%26ItemSort%3DEndTime%26QueryKeywords%3DUSB%26responseencoding%3DXML
- * 
- * to do this, there is a replaceEscapeCharacter method in this class!
- * */

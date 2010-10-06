@@ -123,7 +123,7 @@ public class MediationRuleGUI extends RuleGUI
 	   TreeItem rootJsonItem = jsonTree.addItem("JSONValue:");
 	   rootJsonItem.setState(true);
 	   buildJsonTree(rootJsonItem, jsonValue, "JSONValue");
-	   RuleUtil.expandTree(jsonTree);
+	   RuleUtil.expandItem(jsonTree.getItem(0));
    }
 
    @Override

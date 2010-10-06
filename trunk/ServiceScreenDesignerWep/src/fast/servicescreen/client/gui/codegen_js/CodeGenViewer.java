@@ -8,17 +8,16 @@ import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.ChangeListener;
 import com.google.gwt.user.client.ui.FlexTable;
-import com.google.gwt.user.client.ui.FlexTable.FlexCellFormatter;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.Widget;
+import com.google.gwt.user.client.ui.FlexTable.FlexCellFormatter;
 
 import fast.common.client.BuildingBlock;
 import fast.mediation.client.gui.MediationRuleGUI;
 import fast.servicescreen.client.ServiceScreenDesignerWep;
-import fast.servicescreen.client.rpc.ShareResourceHandler;
 
 /**
  * This Tab should show result steps of code generation.
@@ -129,14 +128,10 @@ public class CodeGenViewer
 			public void onClick(ClickEvent event)
 			{
 					generator.write_JS_File();
-					
-					//TODO: remove comment when no more internal server errors
-					//share in GVS
-//					ShareResourceHandler shOpHandler = new ShareResourceHandler();
-//					shOpHandler.share(generator.screen);
 			}
 		});
 		
+		//TODO: Should be changeable or auto - re - configured! 
 		String operatorURL = "http://localhost:13337/static/servicescreendesignerwep/" + generator.screen.getName() + "Op.html";
 		Anchor a = new Anchor(operatorURL, operatorURL, "_blank");
 		
@@ -184,10 +179,6 @@ public class CodeGenViewer
 				{
 					set_templateShow_Text(generator.rootTemplate);
 				}
-				else if("sendrequest".equals(currentTemplate))
-				{
-					set_templateShow_Text(generator.sendrequest);
-				}
 				else if("prehtml".equals(currentTemplate))
 				{
 					set_templateShow_Text(generator.prehtml);
@@ -214,10 +205,6 @@ public class CodeGenViewer
 			if("root".equals(currentTemplate))
 			{
 				generator.rootTemplate = get_templateShow_Text();
-			}
-			else if("sendrequest".equals(currentTemplate))
-			{
-				generator.sendrequest = get_templateShow_Text();
 			}
 			else if("prehtml".equals(currentTemplate))
 			{

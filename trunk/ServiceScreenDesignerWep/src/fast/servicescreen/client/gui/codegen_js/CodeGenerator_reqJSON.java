@@ -15,6 +15,10 @@ import fast.servicescreen.client.gui.parser.OperationHandler;
 /**
  * This class represents the codegenerator for wrapper, which
  * request JSON and then transform it.
+ * 
+ * TODO: Fix and make work for new CodeGen style!!!
+ * What´s with theOperator?!
+ * 
  * */
 public class CodeGenerator_reqJSON extends CodeGenerator
 {
@@ -26,6 +30,11 @@ public class CodeGenerator_reqJSON extends CodeGenerator
 		
 		this.serviceDesigner = serviceDesigner;
 	}
+	
+	/**
+	 * U should not use this constructor
+	 * */
+	public CodeGenerator_reqJSON(){}
 
 	/**
 	 * Overwrite this method, to get the request URL out of the right MediationGUI
@@ -44,155 +53,69 @@ public class CodeGenerator_reqJSON extends CodeGenerator
 	
 	@Override
 	protected void setTemplates()
-	{
-		//no need to change root template
-		
-		//no need to change pre- or postHtml
-		
-		//change sendRequest for generating JSON wrapping with request		
-		sendrequest = 
-			depth2 + "var xmlHttp = null; \n" + 
-			depth2 + "try \n" +
-			depth2 + "{ \n" + 
-			   depth3 + "xmlHttp = new XMLHttpRequest(); \n" + 
-			depth2 + "} \n" +
-			depth2 + "catch(e) \n" +
-			depth2 + "{ \n" + 
-			   depth3 + "try \n" +
-			   depth3 + "{ \n" + 
-			      depth4 + "xmlHttp  = new ActiveXObject('Microsoft.XMLHTTP'); \n" + 
-			   depth3 + "} \n" +
-			   depth3 + "catch(e) \n" +
-			   depth3 + "{ \n" + 
-			      depth4 + "try \n" +
-			      depth4 + "{ \n" + 
-			         depth5 + "xmlHttp  = new ActiveXObject('Msxml2.XMLHTTP'); \n" + 
-			      depth4 + "} \n" +
-			      depth4 + "catch(e) \n" +
-			      depth4 + "{ \n" + 
-			         depth5 + "xmlHttp  = null; \n" + 
-			      depth4 + "} \n" + 
-			   depth3 + "} \n" + 
-			depth2 + "} \n\n" + 
-			
-			depth2 + "if (xmlHttp) \n" +
-			depth2 + "{ \n" + 
-	  	       depth3 + "var requestServletUrl = window.location.protocol + '//' + window.location.host  + '/ServiceDesignerWep/servicescreendesignerwep/requestServlet?url='; \n" +
-			   depth3 + "xmlHttp.open('GET', requestServletUrl + encodeURIComponent(request), true); \n" + 
-			   depth3 + "xmlHttp.onreadystatechange = function () { \n" + 
-			      depth4 + "if (xmlHttp.readyState == 4) \n" +
-			      depth4 + "{ \n" + 
-					 depth5 + "var unparsedJSON = xmlHttp.responseText; \n" +
-					 depth5 + "var firstIndex = unparsedJSON.indexOf('{'); \n" +
-					 depth5 + "var lastIndex = unparsedJSON.lastIndexOf('}'); \n" +
-					 depth5 + "if(firstIndex >= 0 && lastIndex >= 0) \n" +
-					 depth5 + "{ \n" +
-					 depth5 + "		unparsedJSON = unparsedJSON.substring(firstIndex, lastIndex + 1); //CHEAT??\n" +
-					 depth5 + "} \n" +
-					 depth5 + "var " + value + " = JSON.parse(unparsedJSON);\n" + 
-					 depth5 + "var result = '';\n" +
-					 
-					 depth5 + "var currentTags;\n" +
-					 depth5 + "var currentCount;\n\n" +
-					 
-			         depth5 + "<<transformationCode>>\n\n" +
-
-	   	             depth5 + "document.getElementById('show').value = '{' + result + '}'; \n" + 
-			      depth4 + "} \n" + 
-			   depth3 + "} \n" + 
-			depth2 + "}\n\n" +
-			depth2 + "xmlHttp.send(null); \n\n" + 
-			depth2 + "return 'waiting for response...'; \n" + 
-			depth + "} \n";
-		
-		
-			//change helper methods (add getJSONValue_byName)
-			helperMethods +=
-				depth + "String.prototype.endsWith = function(str)\n" +
-				depth + "{\n" +
-					depth2 + "return (this.match(str + '$')==str)\n" +
-				depth + "}\n\n" +
-	
-				depth + "function getJSONValue_byName(val, name)\n" +
-				depth + "{ \n" +
-					depth2 + "if(name.endsWith('_Item'))\n" +
-					depth2 + "{\n" +
-						depth3 + "name = name.substring(0, name.length - 5)\n" +
-						depth3 + "var parentValue = getJSONValue_byName(val, name);\n" +
-						depth3 + "return parentValue[0];\n" +
-					depth2 + "}\n\n" +
-	
-					depth2 + "var searchList = new Array();\n" + 
-					depth2 + "searchList.push(val);\n\n" +
-	
-					depth2 + "//Breadth First Search over the list searchList\n" +
-					depth2 + "while(searchList.length != 0)\n" +
-					depth2 + "{\n" +
-						depth3 + "//get and pop first element\n" +
-						depth3 + "var value = searchList[0];	\n" +
-						depth3 + "searchList.shift();\n" +
-	
-						depth3 + "//if value was found, return\n" +
-						depth3 + "if(isOn_nextLayer(value, name))\n" +
-						depth3 + "{\n" +
-							depth4 + "//in case of value[name] is an object, form in array\n" +
-							depth4 + "if(typeof value[name] == 'object')\n" +
-							depth4 + "{\n" +
-								depth5 + "var elements = new Array();\n" +
-								depth5 + "elements.push(value[name]);\n" +
-	
-								depth5 + "return elements;\n" +
-							depth4 + "}\n\n" +
-	
-						depth3 + "//in case of value[name] is an array\n" +
-						depth3 + "return value[name];\n" +
-					depth2 + "}\n" +
-					depth2 + "//else attemp any sub-subValue to the searhList\n" +
-					depth2 + "else\n" +
-					depth2 + "{\n" +
-						depth3 + "var attributeNames = getAttributeNameArray(value);\n" +
-						depth3 + "for (var i = 0; i < attributeNames.length; ++i)\n" +
-						depth3 + "{\n" +
-							depth4 + "attribute = value[attributeNames[i]];\n\n" +
-							
-							depth4 + "//only save further objects\n" +
-							depth4 + "if(typeof attribute == 'object')\n" +
-							depth4 + "{\n" +
-								depth5 + "searchList.push(attribute);\n" +	
-							depth4 + "}\n" +
-						depth3 + "}\n" +
-					depth2 + "}\n" +
-				depth + "}\n\n" +
-	
-				depth + "return null; //not found\n" +
-				depth + "}\n\n" +
-	
-			depth + "function isOn_nextLayer(value, name)\n" +
+	{	
+		rootTemplate = 
+			//declare method rump 
+			depth + "search: function (filter)\n" +
 			depth + "{\n" +
-				depth2 + "var attributes = new Array();\n" + 
-				depth2 + "for(var aName in value)\n" +
-				depth2 + "{\n" +
-					depth3 + "if(aName == name)	//found!\n" +
-					depth3 + "{\n" +
-						depth4 + "return true;\n" + 
-					depth3 + "}\n" +
-				depth2 + "}\n\n" +
-	
-				depth2 + "return false;\n" +
-			depth + "}\n\n" +
-	
-			depth + "function getAttributeNameArray(value)\n" +
-			depth + "{\n" +
-				depth2 + "var attributes = new Array();\n" + 
-				depth2 + "for(var aName in value)\n" +
-				depth2 + "{\n" +
-					depth3 + "attributes.push(aName);\n" +
-				depth2 + "}\n\n" +
-	
-				depth2 + "return attributes;\n" +
-		depth + "}\n" ;
+			    depth2 + "var <<inputportlist>> = filter.data.<<inputportlist>>;\n" +
+			    
+				//fill request url
+				depth2 + "var prerequest = '<<prerequest>>';\n" +
+				
+				//should replace inports to real values in runtime!
+				depth2 + "<<prerequestreplaces>>\n\n" +
+				
+				//save the complete url with an xmlHttp request (made for Ajax access to SameDomain Resources)
+				depth2 + "var request = prerequest;\n" +
+				
+				//sending/recieving the request
+				depth2 + "//Invoke the service\n" +
+				depth2 + "    new FastAPI.Request(request,{\n" +
+				depth2 + "        'method':       'get',\n" +
+				depth2 + "        'content':      'json',\n" +
+				depth2 + "        'context':      theOperator,\n" +
+				depth2 + "        'onSuccess':    theOperator.addToList\n" +
+				depth2 + "    });\n\n" +
+			depth + "},\n" +
+			depth + "\n" +
+			//next method rump 
+			depth + "addToList: function (transport) \n" +
+			depth + "{ \n" +
+			    depth2 + "var xmlResponse = transport;\n" +
+				depth2 + "var unparsedJSON = xmlResponse.responseText; \n\n" +
+				 
+				depth2 + "var firstIndex = unparsedJSON.indexOf('{'); \n" +
+				depth2 + "var lastIndex = unparsedJSON.lastIndexOf('}'); \n" +
+				depth2 + "if(firstIndex >= 0 && lastIndex >= 0) \n" +
+				depth2 + "{ \n" +
+				depth2 + "		unparsedJSON = unparsedJSON.substring(firstIndex, lastIndex + 1); //CHEAT??\n" +
+				depth2 + "} \n" +
+				depth2 + "var " + value + " = JSON.parse(unparsedJSON);\n\n" +
+				 
+				depth2 + "var result = '';\n" +
+			    depth2 + "var currentTags = null; \n" +
+			    depth2 + "var currentCount = null; \n\n" +
+		        
+		        depth2 + "<<transformationCode>>\n\n" +
+		        
+			    depth2 + "var jsonResult = JSON.parse(result); \n" +
+			    depth2 + "var factResult = {data: {productList: jsonResult}}\n" +
+			    depth2 + "if (this.manageData) {\n" +
+			    depth2 + "   this.manageData([\"itemList\"], [factResult], [])\n" +
+			    depth2 + "}\n" +
+			    depth2 + "else {\n" +
+			    depth2 + "   document.getElementById('show').value = result;\n" +
+			    depth2 + "}\n" +
+				depth + "}, \n" +
+				depth + "\n" +
+				//next method rump
+				depth + "onError: function (transport){} \n" +
+				depth + "\n" +
+			"\n";
+		
+		//TODO: The post HTML would be define } and other things not needed here!
 	}
-	
 	
 	static final String value = "json";
 	@Override
@@ -201,10 +124,9 @@ public class CodeGenerator_reqJSON extends CodeGenerator
 		boolean hasOpenSqareBracket = false;
 		boolean hasOpenForLoop = false;
 		
-		
 		//TODO: Something like: if(Rule = DummyRule)
 		// tmpCode += codeIndent + "value = getJSONValue_byName(" + value + ", '" + from + "'); \n";
-		//Should change value -> value.get(from) to jump over unnessesary lines
+		//Should change value -> value.get(from) to jump over unnecessary lines
 		//Make the same changes in JSON & XML CodeGen, too!
 		
 		if(RuleUtil.isCompleteRule(rule) && rule.getOperationHandler() != null)
@@ -224,7 +146,7 @@ public class CodeGenerator_reqJSON extends CodeGenerator
 				String from = rule.getSourceTagname();
 				String target = rule.getTargetElemName();
 				
-				//If it is not just a strukture tag ( = tags insert by us, so user see JSON strukture better)
+//				If it is not just a structure tag ( = tags insert by us, so user see JSON strukture better)
 //				if(! from.endsWith("_Item"))
 //				{
 					//create indent for n1 JSON output
