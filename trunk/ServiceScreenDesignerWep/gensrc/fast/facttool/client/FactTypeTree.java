@@ -219,7 +219,7 @@ public class FactTypeTree implements PropertyChangeClient
 				public void onSuccess(String result) {
 					JSONArray conceptsArr = JSONParser.parse(result).isArray();
 		            if (conceptsArr != null) {
-//		            	designer.removeAllFromFactTypes();
+		            	designer.removeAllFromFactTypes();
 		            	
 						for (int i = 0; i < conceptsArr.size(); i++) {
 							JSONObject concept = conceptsArr.get(i).isObject();
