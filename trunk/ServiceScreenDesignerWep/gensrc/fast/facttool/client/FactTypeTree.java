@@ -11,6 +11,7 @@ import fast.servicescreen.client.RequestService;
 import fast.servicescreen.client.RequestServiceAsync;
 
 import java.util.*;
+
 import de.uni_kassel.webcoobra.client.CoobraRoot;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -219,7 +220,6 @@ public class FactTypeTree implements PropertyChangeClient
 				public void onSuccess(String result) {
 					JSONArray conceptsArr = JSONParser.parse(result).isArray();
 		            if (conceptsArr != null) {
-		            	designer.removeAllFromFactTypes();
 		            	
 						for (int i = 0; i < conceptsArr.size(); i++) {
 							JSONObject concept = conceptsArr.get(i).isObject();
@@ -245,7 +245,21 @@ public class FactTypeTree implements PropertyChangeClient
 								String mnemonic = "" + name.charAt(0);
 								newType.setMnemonic(mnemonic);
 								
-								designer.addToFactTypes(newType);
+								
+								boolean contained = false;
+								for (Iterator<FactType> iterator = (Iterator<FactType>)designer.iteratorOfFactTypes(); iterator.hasNext();)
+								{
+									FactType tmpFactType = (FactType) iterator.next();
+									if(tmpFactType.getTypeName().equals(name))
+									{
+										contained = true;
+									}
+								}
+								
+								if(!contained)
+								{
+									designer.addToFactTypes(newType);
+								}
 							}
 						}
 					}
