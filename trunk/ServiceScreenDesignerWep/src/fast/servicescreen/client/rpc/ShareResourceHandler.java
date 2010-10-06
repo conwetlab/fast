@@ -17,7 +17,7 @@ public class ShareResourceHandler {
 	
 	//TODO maybe roll out to config-file
 	private String gvsUrl = "http://localhost:13337/";
-	private String serviceWrapperUrl = "http://localhost:8080/ServiceScreenDesignerWep/servicescreendesignerwep/";
+	private String codeBaseUrl = "http://localhost:8080/ServiceScreenDesignerWep/servicescreendesignerwep/";
 	
 	private RequestServiceAsync shResService;
 
@@ -79,7 +79,7 @@ public class ShareResourceHandler {
 		resource.put("name", resName);
 		
 		//code
-		String codeUrl = serviceWrapperUrl + res.getName() + "Op.js";
+		String codeUrl = codeBaseUrl + res.getName() + "Op.js";
 		JSONString resCode = new JSONString(codeUrl);
 		resource.put("code", resCode);
 		
