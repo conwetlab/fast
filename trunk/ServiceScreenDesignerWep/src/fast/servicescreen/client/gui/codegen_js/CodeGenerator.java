@@ -105,11 +105,14 @@ public class CodeGenerator
 		//Build the exRules - feature
 		add_Translation_toTable();
 		
+		//TODO just try
+		String test = rootTemplate;
 		//fill founded values into the <keywords> in rootTemplate
-		rootTemplate = expandTemplateKeys(rootTemplate);
+		rootTemplate = expandTemplateKeys(test);
 		
+		test = posthtml;
 		//replace input port in transform method outer root template 
-		posthtml = expandTemplateKeys(posthtml);
+		posthtml = expandTemplateKeys(test);
 
 		return rootTemplate;
 	}
@@ -432,7 +435,7 @@ public class CodeGenerator
 		int pos = text.indexOf(key);
 		while (pos >= 0)
 		{
-			result = text.substring(0, pos) + value + result.substring(pos + key.length());
+			result = result.substring(0, pos) + value + result.substring(pos + key.length());
 			pos = result.indexOf(key);
 		}
 		return result;
@@ -533,7 +536,7 @@ public class CodeGenerator
 	 * */
 	public String posthtml =
 		"}\n" + 
-		"\n" + 
+		"var _debugger = null;\n" + 
 		"function transform (param) {\n" + 
 		"   var factParam = {data: {<<inputportlist>>: param}} \n" + 
 		"   var result = theOperator.search (factParam); \n" + 
