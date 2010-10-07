@@ -259,7 +259,7 @@ class GadgetStorage(resource.Resource):
     def __setPlatformUrls(self, metadata):
         conn = Connection(metadata['gadgetResource'] + "/platform")
         body = {
-            'PlatformName': ",".join(str(metadata['platforms']))
+            'PlatformName': ",".join(metadata['platforms'])
         }
         result = conn.request_post(resource='', body=json_encode(body),
                                 headers={'Accept': 'application/json',
