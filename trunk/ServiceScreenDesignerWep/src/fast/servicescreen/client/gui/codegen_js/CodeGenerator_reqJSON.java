@@ -82,16 +82,7 @@ public class CodeGenerator_reqJSON extends CodeGenerator
 			//next method rump 
 			depth + "addToList: function (transport) \n" +
 			depth + "{ \n" +
-			    depth2 + "var xmlResponse = transport;\n" +
-				depth2 + "var unparsedJSON = xmlResponse.responseText; \n\n" +
-				 
-				depth2 + "var firstIndex = unparsedJSON.indexOf('{'); \n" +
-				depth2 + "var lastIndex = unparsedJSON.lastIndexOf('}'); \n" +
-				depth2 + "if(firstIndex >= 0 && lastIndex >= 0) \n" +
-				depth2 + "{ \n" +
-				depth2 + "		unparsedJSON = unparsedJSON.substring(firstIndex, lastIndex + 1); //CHEAT??\n" +
-				depth2 + "} \n" +
-				depth2 + "var " + value + " = JSON.parse(unparsedJSON);\n\n" +
+				depth2 + "var " + value + " = transport;\n\n" +
 				 
 				depth2 + "var result = '';\n" +
 			    depth2 + "var currentTags = null; \n" +
@@ -99,7 +90,7 @@ public class CodeGenerator_reqJSON extends CodeGenerator
 		        
 		        depth2 + "<<transformationCode>>\n\n" +
 		        
-			    depth2 + "var jsonResult = JSON.parse(result); \n" +
+			    depth2 + "var jsonResult = JSON.parse('{' + result + '}'); \n" +
 			    depth2 + "var factResult = {data: {productList: jsonResult}}\n" +
 			    depth2 + "if (this.manageData) {\n" +
 			    depth2 + "   this.manageData([\"itemList\"], [factResult], [])\n" +

@@ -3,10 +3,6 @@ package fast.servicescreen.client;
 import java.util.Iterator;
 
 import com.google.gwt.core.client.EntryPoint;
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.json.client.JSONValue;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.FlexTable;
@@ -32,7 +28,6 @@ import fast.servicescreen.client.gui.CTextChangeHandler;
 import fast.servicescreen.client.gui.PortGUI;
 import fast.servicescreen.client.gui.RequestGUI;
 import fast.servicescreen.client.gui.RuleGUI;
-import fast.servicescreen.client.gui.SaveLoadJsonHandler;
 import fast.servicescreen.client.gui.TabWidget;
 import fast.servicescreen.client.gui.codegen_js.CodeGenViewer;
 import fast.servicescreen.client.gui.codegen_js.CodeGenViewer.WrappingType;
@@ -145,7 +140,6 @@ public class ServiceScreenDesignerWep extends FastTool implements EntryPoint
    public RuleGUI ruleGUI;
    public SendRequestHandler requestHandler;
    private TestServiceRequestAction testServiceRequestAction;
-   private JSONValue savedJson;
    private TabPanel tabPanel;
    
    //Panles which changes in runtime
@@ -276,9 +270,9 @@ public class ServiceScreenDesignerWep extends FastTool implements EntryPoint
       rootPanel.add(a);
       
       // add link to data transformation tool 
-      String dataTransformationToolURL = "./" + "DataTransformationTool.html";
-      a = new Anchor(dataTransformationToolURL, dataTransformationToolURL);
-      rootPanel.add(a);
+//      String dataTransformationToolURL = "./" + "DataTransformationTool.html";
+//      a = new Anchor(dataTransformationToolURL, dataTransformationToolURL);
+//      rootPanel.add(a);
    }
 
    private void rebuildOtherTabs() 
@@ -327,7 +321,6 @@ public class ServiceScreenDesignerWep extends FastTool implements EntryPoint
       tabPanel.add(generalInformationTable, "General");
       //tabPanel.add(generalInformationTable, "<div>General</div>");
       tabPanel.add(generalInformationTable, new TabWidget("General"));
-      //FIXME tabPanel.
       
       // add request tab
       requestGui = new RequestGUI(this);
@@ -375,7 +368,7 @@ public class ServiceScreenDesignerWep extends FastTool implements EntryPoint
 		   codeGenViewer = viewer;
 		   codeGenViewer_Panel = codeGenViewer.createCodeGenViewer();
 		   
-		   tabPanel.add(codeGenViewer_Panel, "CodeGen Viewer");
+		   tabPanel.add(codeGenViewer_Panel, new TabWidget("CodeGen Viewer"));
 	   }
    }
 
@@ -428,14 +421,14 @@ public class ServiceScreenDesignerWep extends FastTool implements EntryPoint
    protected void setRuleGUI(RuleGUI ruleGUI)
    {
 	   if(ruleGUI != null && this.ruleGUI != ruleGUI)
-	   {
+	   { 	
 		   tabPanel.remove(transformationTable);
 		   tabPanel.remove(ruleGUI_Panel);
 		   
 		   ruleGUI_Panel = ruleGUI.createTranslationTable();
 		   this.ruleGUI = ruleGUI;
 		   
-		   tabPanel.add(ruleGUI_Panel, "Transformation");
+		   tabPanel.add(ruleGUI_Panel, new TabWidget("Transformation"));
 	   }
    }
    
