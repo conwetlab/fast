@@ -4,6 +4,8 @@ from django.conf import settings
 def fast(request):
     context = {'EZWEB_URL' : settings.EZWEB_URL,
                'WRAPPER_SERVICE_URL': settings.WRAPPER_SERVICE_URL,
+               'DATA_MEDIATION_URL': settings.DATA_MEDIATION_URL,
+               'FACT_TOOL_URL': settings.FACT_TOOL_URL,
                'isLocalStorage': (not settings.STORAGE_URL or
                settings.STORAGE_URL == '')}
 

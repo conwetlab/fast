@@ -175,11 +175,11 @@ var DocumentController = Class.create(
     },
 
     /**
-     * Opens a wrapper service session
+     * Opens an external tool
      */
-    openWrapperService: function() {
-        var wrapper = new ExternalDocument("Wrapper Service", URIs.wrapperService);
-        this.addDocument(wrapper);
+    openExternalTool: function(title, uri) {
+        var tool = new ExternalDocument(title, uri);
+        this.addDocument(tool);
     },
 
     /**

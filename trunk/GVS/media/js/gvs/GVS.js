@@ -65,7 +65,9 @@ var GVS = Class.create(ToolbarModel,    /** @lends GVS.prototype */
             browseScreens: this._browseScreens.bind(this),
             browseBuildingBlocks: this._browseBuildingBlocks.bind(this),
             showAbout: this._showAboutDialog.bind(this),
-            wrapperService: this._openWrapperService.bind(this)
+            wrapperService: this._openWrapperService.bind(this),
+            mediation: this._openMediationTool.bind(this),
+            manageConcepts: this._openFactTool.bind(this)
         };
 
         this._dialogs.set("addScreen", new AddScreenDialog());
@@ -198,7 +200,21 @@ var GVS = Class.create(ToolbarModel,    /** @lends GVS.prototype */
      * @private
      */
     _openWrapperService: function() {
-        this._documentController.openWrapperService();
+        this._documentController.openExternalTool("Wrap a service", URIs.wrapperService);
+    },
+
+    /**
+     * @private
+     */
+    _openMediationTool: function() {
+        this._documentController.openExternalTool("Mediation between concepts", URIs.dataMediation);
+    },
+
+    /**
+     * @private
+     */
+    _openFactTool: function() {
+        this._documentController.openExternalTool("Manage concepts", URIs.factTool);
     },
 
     /**

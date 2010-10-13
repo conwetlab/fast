@@ -57,11 +57,6 @@ var WelcomeDocument = Class.create(AbstractDocument,
             onClick: function() {GVS.action("browseScreens");}}
         );
 
-        var openWrapperServiceButton = new dijit.form.Button({
-            label: "Wrap existing services",
-            onClick: function() {GVS.action("wrapperService");}}
-        );
-
         var newBuildingBlockButton = new dijit.form.Button({
             label: "Add a Building Block from sources",
             onClick: function() {GVS.action("newBuildingBlock");}}
@@ -70,6 +65,19 @@ var WelcomeDocument = Class.create(AbstractDocument,
         var browseBuildingBlockButton = new dijit.form.Button({
             label: "Browse Building Blocks...",
             onClick: function() {GVS.action("browseBuildingBlocks");}}
+        );
+
+        var openWrapperServiceButton = new dijit.form.Button({
+            label: "Create a resource from a service",
+            onClick: function() {GVS.action("wrapperService");}}
+        );
+        var mediationButton = new dijit.form.Button({
+            label: "Create operator for concepts",
+            onClick: function() {GVS.action("mediation");}}
+        );
+        var manageConceptsButton = new dijit.form.Button({
+            label: "Manage Domain Concepts",
+            onClick: function() {GVS.action("manageConcepts");}}
         );
 
         var buttonsContainer = new Element("div");
@@ -85,11 +93,23 @@ var WelcomeDocument = Class.create(AbstractDocument,
         var wrapper = new Element("div", {
             "style": "visibility:hidden;"
         });
-        wrapper.appendChild(openWrapperServiceButton.domNode);
-        wrapper.appendChild(new Element("br"));
         wrapper.appendChild(newBuildingBlockButton.domNode);
         wrapper.appendChild(new Element("br"));
         wrapper.appendChild(browseBuildingBlockButton.domNode);
+        wrapper.appendChild(new Element("br"));
+        wrapper.appendChild(document.createTextNode("---"));
+        if (URIs.wrapperService != "") {
+            wrapper.appendChild(new Element("br"));
+            wrapper.appendChild(openWrapperServiceButton.domNode);
+        }
+        if (URIs.dataMediation != "") {
+            wrapper.appendChild(new Element("br"));
+            wrapper.appendChild(mediationButton.domNode);
+        }
+        if (URIs.factTool != "") {
+            wrapper.appendChild(new Element("br"));
+            wrapper.appendChild(manageConceptsButton.domNode);
+        }
 
 
         var link = new Element("a", {

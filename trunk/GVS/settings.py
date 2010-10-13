@@ -143,6 +143,8 @@ EZWEB_URL = 'http://localhost:8000/'
 
 # Url of the wrapping service
 WRAPPER_SERVICE_URL = 'http://tomdev.cs.uni-kassel.de:8080/ServiceDesignerWep/'
+DATA_MEDIATION_URL = 'http://fast.morfeo-project.eu' # To be modified
+FACT_TOOL_URL = 'http://fast.morfeo-project.eu' # To be modified
 
 #Gadget Default Info
 DEFAULT_GADGET_IMAGE_URI='http://demo.fast.morfeo-project.org/fast/images/FASTLogo.png'
@@ -156,6 +158,6 @@ ONLY_ONE_JS_FILE = not DEBUG
 
 try:
     from settings_local import *
-except ImportError: 
+except ImportError:
     pass
 
