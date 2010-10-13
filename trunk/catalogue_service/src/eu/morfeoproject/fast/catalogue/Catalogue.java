@@ -37,6 +37,7 @@ import org.openrdf.rio.RDFParseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import eu.morfeoproject.fast.catalogue.buildingblocks.Attribute;
 import eu.morfeoproject.fast.catalogue.buildingblocks.BackendService;
 import eu.morfeoproject.fast.catalogue.buildingblocks.BuildingBlock;
 import eu.morfeoproject.fast.catalogue.buildingblocks.Concept;
@@ -70,7 +71,10 @@ import eu.morfeoproject.fast.catalogue.vocabulary.FGO;
  */
 public class Catalogue {
 	
-	final Logger logger = LoggerFactory.getLogger(Catalogue.class);
+	private final Logger logger = LoggerFactory.getLogger(Catalogue.class);
+	
+	private boolean IMPORT_ONTOLOGIES = true;
+	private boolean RDFS_REASONING = true;
 	
 	private TripleStore tripleStore;
 	private Planner planner;
@@ -886,6 +890,7 @@ public class Catalogue {
 			URI graphUri = saveModelToGraph(model);
 			tripleStore.addStatement(graphUri, sfUri, new URIImpl("http://replace.for.real.one"), graphUri);
 			generateConditionsStatements(model, graphUri);
+			if (IMPORT_ONTOLOGIES) importMissingOntologies(model);
 			model.close();
 			return true;
 		} catch (Exception e) {
@@ -958,6 +963,7 @@ public class Catalogue {
 			URI graphUri = saveModelToGraph(model);
 			tripleStore.addStatement(graphUri, sUri, new URIImpl("http://replace.for.real.one"), graphUri);
 			generateConditionsStatements(model, graphUri);
+			if (IMPORT_ONTOLOGIES) importMissingOntologies(model);
 			model.close();
 			return true;
 		} catch (Exception e) {
@@ -1021,6 +1027,7 @@ public class Catalogue {
 			URI graphUri = saveModelToGraph(model);
 			tripleStore.addStatement(graphUri, uri, new URIImpl("http://replace.for.real.one"), graphUri);
 			generateConditionsStatements(model, graphUri);
+			if (IMPORT_ONTOLOGIES) importMissingOntologies(model);
 			model.close();
 			return true;
 		} catch (Exception e) {
@@ -1078,6 +1085,7 @@ public class Catalogue {
 			URI graphUri = saveModelToGraph(model);
 			tripleStore.addStatement(graphUri, scUri, new URIImpl("http://replace.for.real.one"), graphUri);
 			generateConditionsStatements(model, graphUri);
+			if (IMPORT_ONTOLOGIES) importMissingOntologies(model);
 			model.close();
 			return true;
 		} catch (Exception e) {
@@ -1400,12 +1408,12 @@ public class Catalogue {
 		
 		return model;
 	}
-
+	
 	public Concept getConcept(URI uri) {
 		Concept concept = FastModelFactory.createConcept();
-		
-		// fill the information about the concept
 		concept.setUri(uri);
+
+		// fill the information about the concept
 		ClosableIterator<Statement> cIt = tripleStore.findStatements(uri, Variable.ANY, Variable.ANY);
 		if (!cIt.hasNext()) // the resource does not exist
 			return null;
@@ -1447,7 +1455,45 @@ public class Catalogue {
 		}
 		cIt.close();
 		
+		// read its attributes (properties)
+		concept.getAttributes().addAll(attributesFor(concept));
+		
 		return concept;
+	}
+	
+	private Attribute getAttribute(URI uri) {
+		Attribute att = FastModelFactory.createAttribute();
+		att.setUri(uri);
+
+		ClosableIterator<Statement> cIt = tripleStore.findStatements(uri, Variable.ANY, Variable.ANY);
+		if (!cIt.hasNext()) // the resource does not exist
+			return null;
+		for ( ; cIt.hasNext(); ) {
+			Statement st = cIt.next();
+			URI predicate = st.getPredicate();
+			Node object = st.getObject();
+			if (predicate.equals(RDFS.subPropertyOf)) {
+				att.setSubPropertyOf(object.asURI());
+			} else if (predicate.equals(RDFS.range)) {
+				att.setType(object.asURI());
+			}
+		}
+		cIt.close();
+		
+		return att;
+	}
+	
+	public List<Attribute> attributesFor(Concept concept) {
+		ArrayList<Attribute> attList = new ArrayList<Attribute>();
+		ClosableIterator<Statement> cIt = tripleStore.findStatements(Variable.ANY, RDFS.domain, concept.getUri());
+		for ( ; cIt.hasNext(); ) {
+			Statement st = cIt.next();
+			Attribute att = getAttribute(st.getSubject().asURI());
+			att.setConcept(concept);
+			attList.add(att);
+		}
+		cIt.close();
+		return attList;
 	}
 	
 	public void addConcept(Concept concept) throws DuplicatedBuildingBlockException, BuildingBlockException {
@@ -1514,6 +1560,21 @@ public class Catalogue {
 		return planList;
 	}
 	
+
+	public boolean importMissingOntologies(Model model) {
+		boolean imported = false;
+//TODO		ClosableIterator<Statement> it = model.iterator();
+//		for (; it.hasNext(); ) {
+//			Statement stmt = it.next();
+//			if (stmt.getPredicate().equals(FGO.hasPatternString)) {
+//				String pattern = stmt.getObject().asDatatypeLiteral().getValue();
+//				Model pModel = patternToRDF2GoModel(pattern);
+//				importMissingOntology()
+//			}
+//		}
+//		it.close();
+		return imported;
+	}
 	
 
 	

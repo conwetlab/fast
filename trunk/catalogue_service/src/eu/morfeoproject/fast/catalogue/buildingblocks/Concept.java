@@ -27,6 +27,7 @@ public class Concept {
 	private Map<String, String> labels;
 	private Map<String, String> descriptions;
     private List<CTag> tags;
+    private List<Attribute> attributes;
 	
 	protected Concept(URI uri) {
 		super();
@@ -78,6 +79,16 @@ public class Concept {
 	public void setTags(List<CTag> tags) {
 		this.tags = tags;
 	}
+	
+	public List<Attribute> getAttributes() {
+		if (attributes == null)
+			attributes = new ArrayList<Attribute>();
+		return attributes;
+	}
+
+	public void setAttributes(List<Attribute> attributes) {
+		this.attributes = attributes;
+	}
 
 	/**
 	 * Compare if two resources have the same URI
@@ -128,11 +139,19 @@ public class Concept {
 		}
 		if (getTags() == null)
 			json.put("tags", JSONObject.NULL);
-		else if (!getTags().isEmpty()) {
+		else {
 			JSONArray jsonTags = new JSONArray();
 			for (CTag tag : getTags())
 				jsonTags.put(tag.toJSON());
 			json.put("tags", jsonTags);
+		}
+		if (getAttributes() == null)
+			json.put("attributes", JSONObject.NULL);
+		else {
+			JSONArray jsonAttributes = new JSONArray();
+			for (Attribute att : getAttributes())
+				jsonAttributes.put(att.toJSON());
+			json.put("attributes", jsonAttributes);
 		}
 
 		return json;
@@ -162,6 +181,9 @@ public class Concept {
 				model.addStatement(bnTag, RDFS.label, model.createLanguageTagLiteral(lang, tag.getLabels().get(lang)));
 			if (tag.getTaggingDate() != null)
 				model.addStatement(bnTag, CTAG.taggingDate, model.createDatatypeLiteral(tag.getTaggingDate().toString(), XSD._date));
+		}
+		for (Attribute att : this.getAttributes()) {
+			model.addModel(att.toRDF2GoModel());
 		}
 		
 		return model;

@@ -111,6 +111,14 @@ public class FastModelFactory {
 		return new Concept(uri);
 	}
 	
+	public static Attribute createAttribute() {
+		return new Attribute(null, null, null);
+	}
+	
+	public static Attribute createAttribute(URI uri, URI type, Concept concept) {
+		return new Attribute(uri, type, concept);
+	}
+	
 	public static CTag createTag() {
 		return new CTag();
 	}

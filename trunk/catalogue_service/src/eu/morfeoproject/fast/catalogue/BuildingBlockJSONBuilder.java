@@ -14,6 +14,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import eu.morfeoproject.fast.catalogue.buildingblocks.Action;
+import eu.morfeoproject.fast.catalogue.buildingblocks.Attribute;
 import eu.morfeoproject.fast.catalogue.buildingblocks.BackendService;
 import eu.morfeoproject.fast.catalogue.buildingblocks.BuildingBlock;
 import eu.morfeoproject.fast.catalogue.buildingblocks.Concept;
@@ -138,9 +139,11 @@ public class BuildingBlockJSONBuilder {
 	public static Concept buildConcept(JSONObject json, URI uri) throws JSONException, IOException {
 		Concept concept = FastModelFactory.createConcept(uri);
 
+		// subClassOf
 		if (json.has("subClassOf")) {
 			concept.setSubClassOf(new URIImpl(json.getString("subClassOf")));
 		}
+		// label
 		if (json.has("label")) {
 			JSONObject jsonLabels = json.getJSONObject("label");
 			Iterator<String> labels = jsonLabels.keys();
@@ -149,6 +152,7 @@ public class BuildingBlockJSONBuilder {
 				concept.getLabels().put(key, jsonLabels.getString(key));
 			}
 		}
+		// description
 		if (json.has("description")) {
 			JSONObject jsonDescriptions = json.getJSONObject("description");
 			Iterator<String> descriptions = jsonDescriptions.keys();
@@ -157,8 +161,25 @@ public class BuildingBlockJSONBuilder {
 				concept.getDescriptions().put(key, jsonDescriptions.getString(key));
 			}
 		}
+		// tags
 		concept.getTags().addAll((parseTags(json.getJSONArray("tags"))));
-
+		// attributes
+		if (json.has("attributes")) {
+			JSONArray jsonAtts = json.getJSONArray("attributes");
+			for (int i = 0; i < jsonAtts.length(); i++) {
+				Attribute att = FastModelFactory.createAttribute();
+				JSONObject oAtt = jsonAtts.getJSONObject(i);
+				if (oAtt.has("uri") && !oAtt.isNull("uri") && oAtt.getString("uri") != "")
+					att.setUri(new URIImpl(oAtt.getString("uri")));
+				if (oAtt.has("type") && !oAtt.isNull("type") && oAtt.getString("type") != "")
+					att.setType(new URIImpl(oAtt.getString("type")));
+				if (oAtt.has("subPropertyOf") && !oAtt.isNull("subPropertyOf") && oAtt.getString("subPropertyOf") != "")
+					att.setSubPropertyOf(new URIImpl(oAtt.getString("subPropertyOf")));
+				att.setConcept(concept);
+				concept.getAttributes().add(att);
+			}
+		}
+		
 		return concept;
 	}
 	
