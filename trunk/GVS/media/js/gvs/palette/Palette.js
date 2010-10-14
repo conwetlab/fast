@@ -65,6 +65,15 @@ var Palette = Class.create(SetListener, /** @lends Palette.prototype */ {
     },
 
     /**
+     * Gets the node of the contents
+     * @type DOMNode
+     * @public
+     */
+    getContentNode: function() {
+        return this._contentNode;
+    },
+
+    /**
      * This function will be called whenever
      * the set of building blocks changes
      * @overrides

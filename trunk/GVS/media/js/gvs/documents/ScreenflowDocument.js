@@ -45,6 +45,9 @@ var ScreenflowDocument = Class.create(PaletteDocument,
                             'handler': function() {
                                 this._cloneSelectedElement();
                             }.bind(this)});
+
+        // Are the unreachable items shown?
+        this._unreachableShown = true;
     },
 
 
@@ -379,6 +382,12 @@ var ScreenflowDocument = Class.create(PaletteDocument,
                 this._refresh.bind(this),
                 true
             ));
+        this._addToolbarElement('toggleVisibility', new ToolbarButton(
+                'Toggle Unreachable screens visibility',
+                'toggle',
+                this._toggleUnreachableScreens.bind(this),
+                true
+            ));
         this._addToolbarElement('previewElement', new ToolbarButton(
                 'Preview selected element',
                 'preview',
@@ -544,6 +553,7 @@ var ScreenflowDocument = Class.create(PaletteDocument,
                 }
             }
         }
+        this._refreshVisibility();
     },
 
     /**
@@ -741,6 +751,43 @@ var ScreenflowDocument = Class.create(PaletteDocument,
      */
     _cloneSelectedElement: function() {
         this.cloneElement(this._selectedElement);
+    },
+
+    /**
+     * Toggles the status of the unreachable screens of the palette
+     * (hidden/shown)
+     * @private
+     */
+    _toggleUnreachableScreens: function() {
+        this._unreachableShown = !this._unreachableShown;
+        this._refreshVisibility();
+    },
+
+    /**
+     * Refreshes the visibility of unreachable screens
+     * @private
+     */
+    _refreshVisibility: function() {
+
+        var screenPalette = this._paletteController.getPalette(Constants.BuildingBlock.SCREEN);
+        var paletteNode = screenPalette.getContentNode();
+
+        var visibility = this._unreachableShown ? "block": "none";
+        $A(paletteNode.childNodes).each(function(element) {
+            if (element.match(".slot")) {
+
+                if (element.firstChild.match(".unsatisfeable")) {
+                    element.setStyle({
+                        "display": visibility
+                    });
+                }
+                if (element.firstChild.match(".satisfeable")) {
+                    element.setStyle({
+                        "display": "block"
+                    });
+                }
+            }
+        }, this);
     }
 });
 
