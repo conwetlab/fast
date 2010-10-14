@@ -119,7 +119,8 @@ var BBView = {
                 try {
                     data = data.evalJSON();
                 } catch(ex) {
-                    Logger.warn('Data of argument ' + actionName + '#'+ argName + " is't JSON valid.");
+                    Logger.warn('Data of argument ' + actionName + '#'+ argName
+                    + " is not JSON valid.");
                 }
                 return { uri: uri, data: data };
             });
