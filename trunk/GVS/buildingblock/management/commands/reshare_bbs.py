@@ -23,11 +23,19 @@ class Command(BaseCommand):
             dest='concepts_dir',
             type='string',
             help='Publish all the concepts stored in the parameter dir'),
+        make_option('--all', '-a',
+            action='store_true',
+            dest='all',
+            help='Share all the building blocks instead the previously shared ones'),
     )
 
 
     def handle(self, *args, **options):
-        for bb in BuildingBlock.objects.exclude(uri=None):
+        if options["all"]:
+            bb_list = BuildingBlock.objects.all()
+        else:
+            bb_list = BuildingBlock.objects.exclude(uri=None)
+        for bb in bb_list:
             try:
                 unshareBuildingBlock(bb)
             except Exception, e:

@@ -55,7 +55,7 @@ class BuildingBlockCollection(resource.Resource):
         received_json = request.POST['buildingblock']
 
         try:
-            data = create_bb(request, simplejson.loads(received_json), bbtype, user)
+            data = create_bb(simplejson.loads(received_json), bbtype, user, request)
 
             return HttpResponse(data, mimetype='application/json; charset=UTF-8')
         except Exception, e:
@@ -564,7 +564,7 @@ def updateTags(user, buildingblock, tags):
             usertag = UserTag.objects.get_or_create (user=user, tag=t, buildingBlock=buildingblock)[0]
             usertag.save()
 
-def create_bb(request, data, bbtype, author):
+def create_bb(data, bbtype, author, request=None):
 
     now = datetime.utcnow()
     # Drop microseconds
@@ -599,7 +599,7 @@ def create_bb(request, data, bbtype, author):
 
     if bbtype == 'operator' or bbtype == 'form' or bbtype == 'resource':
         updateCode(bb,data)
-        if not data.has_key('code'):
+        if not data.has_key('code') and request:
             data['code'] = urljoin(request.build_absolute_uri(),'/buildingblock/%s/unbound_code' % (bb.pk))
 
     bb.data = json_encode(data)
