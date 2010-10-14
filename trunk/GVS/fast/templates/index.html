@@ -181,6 +181,7 @@
                     // sections programatically. Repaint for better
                     // performance
                     dijit.byId("main").layout();
+
                 });
 
                 // Handling navigator close
@@ -238,7 +239,10 @@
                           {% if is_anonymous %}{% trans "anonymous" %}
                           </div> | <a href="/accounts/login/?next=/">{% trans "Sign in" %}</a>
                           {% else %} {% trans "Welcome" %}, {{ user.username }} |
-                          <a id="logout" href="/logout">{% trans "Exit" %}</a></div>
+                          <a href="javascript:"
+                        onclick="UserVoice.Popin.show(uservoiceOptions); return false;">
+                        Feedback</a>
+                          | <a id="logout" href="/logout">{% trans "Exit" %}</a></div>
                           {% endif %}
                 </div>
                 <!-- Menu area -->
@@ -256,6 +260,25 @@
             </div>
             <!-- end of Document area -->
         </div>
+<script type="text/javascript">
+  var uservoiceOptions = {
+    key: 'fast',
+    host: 'fast.uservoice.com', 
+    forum: '81243',
+    lang: 'en',
+    showTab: false 
+  };
+  function _loadUserVoice() {
+    var s = document.createElement('script');
+    s.src = ("https:" == document.location.protocol ? "https://" : "http://") + "uservoice.com/javascripts/widgets/tab.js";
+    document.getElementsByTagName('head')[0].appendChild(s);
+  }
+  _loadSuper = window.onload;
+  window.onload = (typeof window.onload != 'function') ? _loadUserVoice : function() { _loadSuper(); _loadUserVoice(); 
+  };
+
+</script>
+
     </body>
 </html>
 <!-- vim: set ts=4 sw=4 et:  -->

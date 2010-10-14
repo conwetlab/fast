@@ -407,6 +407,17 @@ var GVS = Class.create(ToolbarModel,    /** @lends GVS.prototype */
                             }.bind(this)
                         }),
                         'group': 0
+                    },
+                    'feedback': {
+                        'type': 'Action',
+                        'action': new MenuAction({
+                            'label': 'Send us feedback',
+                            'weight': 3,
+                            'handler': function() {
+                                UserVoice.Popin.show(uservoiceOptions);
+                            }.bind(this)
+                        }),
+                        'group': 0
                     }
                 }
 
