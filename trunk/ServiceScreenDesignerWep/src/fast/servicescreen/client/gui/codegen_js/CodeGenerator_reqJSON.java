@@ -13,12 +13,8 @@ import fast.servicescreen.client.gui.parser.Operation;
 import fast.servicescreen.client.gui.parser.OperationHandler;
 
 /**
- * This class represents the codegenerator for wrapper, which
+ * This class represents the code generator for wrapper, which
  * request JSON and then transform it.
- * 
- * TODO: Fix and make work for new CodeGen style!!!
- * What´s with theOperator?!
- * 
  * */
 public class CodeGenerator_reqJSON extends CodeGenerator
 {
@@ -90,14 +86,15 @@ public class CodeGenerator_reqJSON extends CodeGenerator
 		        
 		        depth2 + "<<transformationCode>>\n\n" +
 		        
-			    depth2 + "var jsonResult = JSON.parse('{' + result + '}'); \n" +
-			    depth2 + "var factResult = {data: {productList: jsonResult}}\n" +
-			    depth2 + "if (this.manageData) {\n" +
-			    depth2 + "   this.manageData([\"itemList\"], [factResult], [])\n" +
-			    depth2 + "}\n" +
-			    depth2 + "else {\n" +
+		        //TODO: within parsing, delete bracket mistakes!
+			    depth2 + "//var jsonResult = JSON.parse('{' + result + '}'); \n" +
+			    depth2 + "//var factResult = {data: {productList: jsonResult}}\n" +
+			    depth2 + "//if (this.manageData) {\n" +
+			    depth2 + "//   this.manageData([\"itemList\"], [factResult], [])\n" +
+			    depth2 + "//}\n" +
+			    depth2 + "//else {\n" +
 			    depth2 + "   document.getElementById('show').value = result;\n" +
-			    depth2 + "}\n" +
+			    depth2 + "//}\n" +
 				depth + "}, \n" +
 				depth + "\n" +
 				//next method rump

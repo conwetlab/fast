@@ -28,7 +28,7 @@ public class CodeGenerator
 	public BuildingBlock screen = null;
 	protected HashMap<String, String> table = null;
 	
-	//the reqestet source type
+	//the requested source type
 	WrappingType reqType;
 	
 	protected boolean firstOperation = true;
@@ -105,14 +105,13 @@ public class CodeGenerator
 		//Build the exRules - feature
 		add_Translation_toTable();
 		
-		//TODO just try
-		String test = rootTemplate;
 		//fill founded values into the <keywords> in rootTemplate
-		rootTemplate = expandTemplateKeys(test);
+		String tmp = rootTemplate;
+		rootTemplate = expandTemplateKeys(tmp);
 		
-		test = posthtml;
-		//replace input port in transform method outer root template 
-		posthtml = expandTemplateKeys(test);
+		//replace input port in transform method outer root template
+		tmp = posthtml;
+		posthtml = expandTemplateKeys(tmp);
 
 		return rootTemplate;
 	}
