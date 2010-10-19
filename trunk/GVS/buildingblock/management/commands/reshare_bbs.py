@@ -4,7 +4,7 @@ from django.utils import simplejson
 from django.conf import settings
 
 from buildingblock.models import BuildingBlock
-from buildingblock.views import unshareBuildingBlock
+from buildingblock.views import unshareBuildingBlock, compileCode
 
 from python_rest_client.restful_lib import Connection, isValidResponse
 from commons.utils import json_encode, cleanUrl
@@ -40,8 +40,12 @@ class Command(BaseCommand):
                 unshareBuildingBlock(bb)
             except Exception, e:
                 pass
-            conn = Connection(cleanUrl(bb.get_catalogue_url()))
+
             body = bb.data
+            data = simplejson.loads(bb.data)
+            compileCode(bb, data)
+
+            conn = Connection(cleanUrl(bb.get_catalogue_url()))
             result = conn.request_post('', body=body, headers={'Accept':'text/json'})
             if isValidResponse(result):
                 response = HttpResponse(result['body'], mimetype='application/json; charset=UTF-8')
@@ -50,7 +54,6 @@ class Command(BaseCommand):
                 bb.uri = obj['uri']
                 bb.save()
 
-        #import ipdb; ipdb.set_trace()
         concepts_dir = options["concepts_dir"]
         if concepts_dir:
             if not path.isdir(concepts_dir):
