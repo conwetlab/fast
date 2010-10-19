@@ -309,7 +309,7 @@
         <field type="BooleanField" name="is_staff">1</field>
         <field type="BooleanField" name="is_active">1</field>
         <field type="BooleanField" name="is_superuser">1</field>
-        <field type="DateTimeField" name="last_login">2010-09-07 16:05:43</field>
+        <field type="DateTimeField" name="last_login">2010-10-19 17:20:19</field>
         <field type="DateTimeField" name="date_joined">2009-09-21 14:11:49</field>
         <field to="auth.group" name="groups" rel="ManyToManyRel"></field>
         <field to="auth.permission" name="user_permissions" rel="ManyToManyRel"></field>
@@ -318,6 +318,6 @@
         <field to="auth.user" name="user" rel="OneToOneRel">1</field>
         <field type="CharField" name="activation_key"><None></None></field>
         <field type="DateTimeField" name="key_expires"><None></None></field>
-        <field type="CharField" name="ezweb_url">http://demo.ezweb.morfeo-project.com</field>
+        <field type="CharField" name="ezweb_url"><None></None></field>
     </object>
 </django-objects>
