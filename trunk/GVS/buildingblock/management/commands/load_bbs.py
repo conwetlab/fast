@@ -22,6 +22,7 @@ class Command(BaseCommand):
             default=False,
             help='Delete existing building blocks before creating the new ones'),
     )
+    json_pattern = re.compile(r'^.*\.json$')
 
     def handle(self, *args, **options):
         if len(args) == 0:
@@ -38,13 +39,21 @@ class Command(BaseCommand):
             BuildingBlock.objects.all().delete()
 
         # Create the new building blocks
-        json_pattern = re.compile(r'^.*\.json$')
         for bbtype in ("form", "operator", "resource", "screen",):
             bbdir = path.join(gvs_data, bbtype + "s")
-            for filename in filter(json_pattern.match, os.listdir(bbdir)):
-                filepath = path.join(bbdir,filename)
+            self.__load_bb(bbdir, bbtype)
+
+    def __load_bb(self, folder, bbtype):
+        for filename in filter(Command.json_pattern.match, os.listdir(folder)):
+            filepath = path.join(folder,filename)
+            if not path.isdir(filepath):
                 print "Importing %s... " % filepath,
                 f = open(filepath)
                 create_bb(simplejson.load(f), bbtype, User.objects.get(id=1))
                 print "OK"
+        for inner_folder in get_dirs(folder):
+            self.__load_bb(inner_folder,bbtype)
+
+def get_dirs(folder):
+    return [ os.path.join(folder,name) for name in os.listdir(folder) if os.path.isdir(os.path.join(folder, name)) and re.match(r"\.svn",name) == None]
 
