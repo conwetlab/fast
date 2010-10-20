@@ -86,23 +86,20 @@ public class CodeGenerator_reqJSON extends CodeGenerator
 		        
 		        depth2 + "<<transformationCode>>\n\n" +
 		        
-		        //TODO: within parsing, delete bracket mistakes!
-			    depth2 + "//var jsonResult = JSON.parse('{' + result + '}'); \n" +
-			    depth2 + "//var factResult = {data: {productList: jsonResult}}\n" +
-			    depth2 + "//if (this.manageData) {\n" +
-			    depth2 + "//   this.manageData([\"itemList\"], [factResult], [])\n" +
-			    depth2 + "//}\n" +
-			    depth2 + "//else {\n" +
+			    depth2 + "var jsonResult = JSON.parse('{' + result + '}'); \n" +
+			    depth2 + "var factResult = {data: {productList: jsonResult}}\n" +
+			    depth2 + "if (this.manageData) {\n" +
+			    depth2 + "   this.manageData([\"itemList\"], [factResult], [])\n" +
+			    depth2 + "}\n" +
+			    depth2 + "else {\n" +
 			    depth2 + "   document.getElementById('show').value = result;\n" +
-			    depth2 + "//}\n" +
+			    depth2 + "}\n" +
 				depth + "}, \n" +
 				depth + "\n" +
 				//next method rump
 				depth + "onError: function (transport){} \n" +
 				depth + "\n" +
 			"\n";
-		
-		//TODO: The post HTML would be define } and other things not needed here!
 	}
 	
 	static final String value = "json";
@@ -134,6 +131,7 @@ public class CodeGenerator_reqJSON extends CodeGenerator
 				String from = rule.getSourceTagname();
 				String target = rule.getTargetElemName();
 				
+				//TODO:????
 //				If it is not just a structure tag ( = tags insert by us, so user see JSON strukture better)
 //				if(! from.endsWith("_Item"))
 //				{

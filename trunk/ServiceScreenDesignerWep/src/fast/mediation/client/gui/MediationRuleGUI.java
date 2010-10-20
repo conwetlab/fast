@@ -181,8 +181,25 @@ public class MediationRuleGUI extends RuleGUI
 		   //special case: array items
 		   else
 		   {
+			   //TODO: (a) Plz review this new part. It fixes the problem that
+			   //an XXX_Item JSON tag not always contains a array. But if no array
+			   //is fount ("if jsonArray != null..."), no kid rules are proceed! Mad!
+			   //So this part below cuts the object surround the real array away.... Ok? 
+			   JSONObject obj = rootJsonValue.isObject();
+			   if(obj != null)
+			   {
+				   String jsonString = rootJsonValue.toString();
+				   
+				   jsonString = jsonString.substring(jsonString.indexOf("["), jsonString.lastIndexOf("]")+1);
+				   
+				   rootJsonValue = JSONParser.parse(jsonString);
+			   }
+			   
 			   //add children to elements directly
 			   JSONArray jsonArray = rootJsonValue.isArray();
+			   
+			   //TODO: (b) Plz review. Here the JSON tags are mapped.. if there is no array,
+			   //no kid rules will be succeed... damn bad..
 			   if(jsonArray != null)
 			   {	
 				   for (int i = 0; i < jsonArray.size(); i++)
@@ -199,10 +216,12 @@ public class MediationRuleGUI extends RuleGUI
 		   //and starts recursive call of transform
 		   if (kind.equals("createObject"))
 		   {
+			   //TODO: (c) Plz. review. Here we end if no array was found, then elements.size=0 and no kids are called..
 			   for (int i = 0; i < elements.size(); i++)
 			   {
 				   JSONValue tmpElement = elements.get(i);
 				   TreeItem kidItem = treeItem.addItem(targetElemName);
+				   
 				   transformKids(tmpElement, rule, kidItem);
 			   }
 		   }
