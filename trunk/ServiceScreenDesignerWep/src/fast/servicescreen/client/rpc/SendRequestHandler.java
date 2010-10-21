@@ -69,7 +69,7 @@ public class SendRequestHandler implements ClickHandler
       
       designer.getResultText().setText("Waiting for server response ...");
 
-      service.sendHttpRequest_GET(request, new ParseXMLAction());
+      service.sendHttpRequest_GET(request, null, new ParseXMLAction());
    }
 
    @SuppressWarnings("unchecked")
@@ -82,7 +82,7 @@ public class SendRequestHandler implements ClickHandler
 	   {
 		   TemplateParameter param = iteratorOfTemplateParams.next();
 		   
-		   if(param.getName() == "Server:")
+		   if(param.getName() == "Service:")
 		   {
 			   result += param.getValue();
 			   if ( iteratorOfTemplateParams.hasNext() && ! result.endsWith("?"))

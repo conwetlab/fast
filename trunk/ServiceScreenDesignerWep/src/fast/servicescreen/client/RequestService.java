@@ -1,5 +1,8 @@
 package fast.servicescreen.client;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+
 import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 
@@ -9,9 +12,13 @@ import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 @RemoteServiceRelativePath("request")	//the sub url to request
 public interface RequestService extends RemoteService
 {
-	String sendHttpRequest_GET(String url);
+	String sendHttpRequest_GET(String url, HashMap<String, String> headers);
 	
-	String sendHttpRequest_POST(String url, String cookie, String body);
+	String sendHttpRequest_POST(String url, HashMap<String, String> headers, String body);
+	
+	String sendHttpRequest_PUT(String url, HashMap<String, String> headers, String body);
+	
+	String sendHttpRequest_DELETE(String url, HashMap<String, String> headers);
 	
 	String saveJsFileOnServer(String opName, String preHTMLCode, String transCode, String postHTMLCode);
 }

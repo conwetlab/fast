@@ -22,9 +22,6 @@ public class TemplateGUI
 	public TemplateGUI(ServiceScreenDesignerWep serviceScreenDesignerWep)
 	{
 		designer = serviceScreenDesignerWep;
-
-		RequestTemplateListener requestTemplateListener = new RequestTemplateListener(designer);
-		designer.serviceScreen.addPropertyChangeListener("requestTemplate", requestTemplateListener);
 	}
 
 	private ServiceScreenDesignerWep designer;
@@ -39,10 +36,10 @@ public class TemplateGUI
 		}
 		else
 		{
-			templateTable.clear();
+			templateTable.removeAllRows();
 		}
 
-		int numRows = 0;
+		int numRows = templateTable.getRowCount();
 
 		// add headlines
 		templateTable.setHTML(numRows, 0, "Request Template:");
@@ -98,7 +95,7 @@ public class TemplateGUI
 		requestTemplate = requestTemplate.substring(fixPartEnd+1);
 
 		TemplateParameter server = new TemplateParameter();
-		server.setName("Server:");
+		server.setName("Service:");
 		server.setValue(serverUrl);
 		designer.serviceScreen.addToTemplateParameters(server);
 
@@ -140,7 +137,7 @@ public class TemplateGUI
 		TextBox nameBox = CTextChangeHandler.createWidthTextBox(param, textsize, "name");
 		TextBox valueBox = CTextChangeHandler.createWidthTextBox(param, textsize, "value");
 
-		if(param.getName() == "Server:")
+		if(param.getName() == "Service:")
 		{
 			nameBox.setReadOnly(true);
 		}
@@ -198,7 +195,7 @@ public class TemplateGUI
 		{
 			TemplateParameter param = iteratorOfTemplateParams.next();
 
-			if(param.getName() == "Server:")
+			if(param.getName() == "Service:")
 			{
 				result += param.getValue();
 				if ( iteratorOfTemplateParams.hasNext() && ! result.endsWith("?"))
@@ -266,27 +263,5 @@ public class TemplateGUI
 
 			designer.serviceScreen.removeFromTemplateParameters(templateParameter);
 		} 
-	}
-
-	class RequestTemplateListener implements PropertyChangeListener
-	{
-		@SuppressWarnings("unused")
-		private ServiceScreenDesignerWep designer;
-
-		public RequestTemplateListener(ServiceScreenDesignerWep designer) {
-			this.designer = designer;
-		}
-
-		@Override
-		public void propertyChanged(PropertyChangeEvent evt) {
-			//FIXME something is completely wrong here
-			//			   String requestTemplate = (String) designer.serviceScreen.get("requestTemplate"); 
-			//			   if(requestTemplate != null && requestTemplate != "")
-			//			   {
-			//				   designer.requestGui.getTemplateTable().removeFromParent();
-			//				   Widget templateTable = createTemplateTable();
-			//				   designer.requestGui.setTemplateTable(templateTable);
-			//			   }
-		}		   
 	}
 }

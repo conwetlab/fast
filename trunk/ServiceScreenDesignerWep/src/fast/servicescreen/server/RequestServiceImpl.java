@@ -2,11 +2,15 @@ package fast.servicescreen.server;
 
 import java.io.FileWriter;
 import java.io.UnsupportedEncodingException;
+import java.util.HashMap;
+import java.util.Iterator;
 
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.ResponseHandler;
+import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.methods.HttpPut;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.BasicResponseHandler;
 import org.apache.http.impl.client.DefaultHttpClient;
@@ -27,18 +31,30 @@ public class RequestServiceImpl extends RemoteServiceServlet implements RequestS
 	private HttpClient httpclient;
 	private HttpGet httpget;
 	private HttpPost httppost;
+	private HttpPut httpput;
+	private HttpDelete httpdelete;
 	private ResponseHandler<String> responseHandler;
 	
 	//the current path
 	private String path = ".";
 	
 	@Override
-	public String sendHttpRequest_GET(String url)
+	public String sendHttpRequest_GET(String url, HashMap<String, String> headers)
 	{
 		// create httpClient and httpGET container
 		httpclient = new DefaultHttpClient();
 		httpget = new HttpGet(url);
 
+		//add all headers
+		if(headers != null)
+		{
+			for (Iterator<String> iterator = headers.keySet().iterator(); iterator.hasNext();) {
+				String tmpKey = (String) iterator.next();
+				String tmpVal = headers.get(tmpKey);
+				httpget.addHeader(tmpKey, tmpVal);
+			}
+		}
+		
 		// Create response handler
 		responseHandler = new BasicResponseHandler();
 		
@@ -49,19 +65,29 @@ public class RequestServiceImpl extends RemoteServiceServlet implements RequestS
 		}
 		catch (Exception e)
 		{
-			e.printStackTrace();
+//			e.printStackTrace();
 			responseBody = "-1";
 		}
 		return responseBody;
 	}
 	
 	@Override
-	public String sendHttpRequest_POST(String url, String cookie, String body)
+	public String sendHttpRequest_POST(String url, HashMap<String, String> headers, String body)
 	{
 		// create httpClient and httpPOST container
 		httpclient = new DefaultHttpClient();
 		httppost = new HttpPost(url);
-		httppost.addHeader("Cookie", cookie);
+		
+		//add all headers
+		if(headers != null)
+		{
+			for (Iterator<String> iterator = headers.keySet().iterator(); iterator.hasNext();) {
+				String tmpKey = (String) iterator.next();
+				String tmpVal = headers.get(tmpKey);
+				httppost.addHeader(tmpKey, tmpVal);
+			}
+		}
+		
 		try {
 			httppost.setEntity(new StringEntity(body));
 		} catch (UnsupportedEncodingException uee) {
@@ -78,12 +104,84 @@ public class RequestServiceImpl extends RemoteServiceServlet implements RequestS
 		}
 		catch (Exception e)
 		{
-			e.printStackTrace();
+//			e.printStackTrace();
+			responseBody = "-1";
+		}
+		return responseBody;
+	}
+	
+	//TODO
+	public String sendHttpRequest_PUT(String url, HashMap<String, String> headers, String body)
+	{
+		// create httpClient and httpPOST container
+		httpclient = new DefaultHttpClient();
+		httpput = new HttpPut(url);
+		
+		//add all headers
+		if(headers != null)
+		{
+			for (Iterator<String> iterator = headers.keySet().iterator(); iterator.hasNext();) {
+				String tmpKey = (String) iterator.next();
+				String tmpVal = headers.get(tmpKey);
+				httpput.addHeader(tmpKey, tmpVal);
+			}
+		}
+		
+		try {
+			httpput.setEntity(new StringEntity(body));
+		} catch (UnsupportedEncodingException uee) {
+			uee.printStackTrace();
+		}
+
+		// Create response handler
+		responseHandler = new BasicResponseHandler();
+		
+		try
+		{
+			// send the POST request
+			responseBody = httpclient.execute(httpput, responseHandler);
+		}
+		catch (Exception e)
+		{
+//			e.printStackTrace();
 			responseBody = "-1";
 		}
 		return responseBody;
 	}
 
+	//TODO
+	public String sendHttpRequest_DELETE(String url, HashMap<String, String> headers)
+	{
+		// create httpClient and httpDELETE container
+		httpclient = new DefaultHttpClient();
+		httpdelete = new HttpDelete(url);
+		
+		//add all headers
+		if(headers != null)
+		{
+			for (Iterator<String> iterator = headers.keySet().iterator(); iterator.hasNext();) {
+				String tmpKey = (String) iterator.next();
+				String tmpVal = headers.get(tmpKey);
+				httpdelete.addHeader(tmpKey, tmpVal);
+			}
+		}
+
+		// Create response handler
+		responseHandler = new BasicResponseHandler();
+		
+		try
+		{
+			// send the POST request
+			responseBody = httpclient.execute(httpdelete, responseHandler);
+		}
+		catch (Exception e)
+		{
+//			e.printStackTrace();
+			responseBody = "-1";
+		}
+		return responseBody;
+	}
+	
 	/**
 	 * This method try to form a given String
 	 * into a file, and save it as .js
