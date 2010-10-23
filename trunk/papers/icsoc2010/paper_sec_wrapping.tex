@@ -8,7 +8,7 @@ In our approach, wrapping web services is done in two steps: a first step is in 
 \subsection{Constructing service requests} % (fold)
 \label{sub:constructing_service_requests}
 
-As a first approach, the interaction with services is limited to simple GET requests as supported e.g. by REST services. Support for other services like SOAP services is planned. A service request is thus assembled using a certain URL and a set of parameters. As an example, the Ebay Shopping web service will be studied. The following URL is invoked to retrieve a list of items corresponding to the search keywords \emph{USB}:
+In this paper we illustrate the interaction with services on simple GET requests as supported e.g. by REST services. Support for other services like POST based services is under construction. In case of a simple GET request, a service request is assembled using a certain URL and a set of parameters. (A POST request would have a text block to be posted. In addition, other header data may be needed to transfer e.g. session ids.) As an example, the Ebay Shopping web service will be studied. As documented on the corresponding web site, the following URL is invoked to retrieve a list of items corresponding to the search keywords \emph{USB}:
 
 \begin{listing}
 \begin{verbatim}
