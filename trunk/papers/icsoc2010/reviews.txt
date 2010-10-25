@@ -1,0 +1,94 @@
+Review 1
+========
+Comments for the authors
+------------------------
+The paper is well written with a minimum of misspellings (e.g., in section 1
+on page 2 the authors use mostly the word "Section" and once the abbreviation
+"Sect."). Beyond that, the paper is easy to read and easily to follow. Only
+the term "web service wrapper" (Section 1, page 2) can be misunderstood. In
+common speech, the term is sometimes used for a wrapper that wraps an
+arbitrary application to create a web service. But in this paper, the web
+service wrapper wraps a web service to create another (individual) web
+service. 
+
+In the related work section (section 2) the listing of the tools and data
+sources is to extensive. On the other hand, the authors don't discuss some
+important approaches (e.g., JNDI for web service discovery or BPEL Light to
+define the workflow). 
+
+The authors present a general approach in a more abstract way. They don't
+discuss technical details on a deeper level. In  particular, the use case
+section (section 5) is to short. According to this, it is difficult to point
+out the technical strengths and weaknesses of this approach in detail. 
+But on the conceptual level, the approach demonstrates a practicable way to
+create individual web services by end-users. 
+
+-=-=-=-=-=-=-=-=-=-=-
+
+
+Review 2
+========
+Comments for the authors
+------------------------
+Good points
+- There is certainly a need for frameworks of the sort described in this
+paper. 
+- Paper is understandable although the layout and paragraphs have not been
+adjusted properly. 
+- Paper proposes a comprehensive methodology stemming from existing approaches
+and provides also a clear vision for future work. 
+
+Critiques
+- The approach and tool environment described in this paper is still at a
+preliminary stage and only the lower layers of the system, and therefore very
+simple applications, have been implemented. As a result, there are still many
+open issues and the approach has still to be fully specified and evaluated in
+terms of developing applications of any complexity. I therefore consider this
+work not to be sufficiently advanced to represent a real contribution to the
+field and ready for publication in a conference such as ICSOC.
+- The service discovery component is not clearly described and leaves many
+questions unanswered. One of the main drawbacks of WSDL is that is has limited
+capabilities to specify natural language description of what the service
+actually does. To discover candidate services more effectively, service
+discovery methods needs features to overcome ambiguities in natural language
+text. How is this addressed in your approach? Also, section 4 mentions that
+most of existing approaches "suffer from limited syntax-based descriptions and
+simple keyword-based search". I have to disagree with that as they there exist
+many approaches that try to tackle the matching of web services using
+semantics. 
+- A discussion about experiments and considered application scenarios would
+contribute to improve the paper quality.
+- Minor issues: paper is not properly formatted with regards to the
+references.
+
+
+-=-=-=-=-=-=-=-=-=-=-
+
+
+Review 3
+========
+Comments for the authors
+------------------------
+
+The proposed solution is part of a larger platform, however the contribution
+present in this paper is too weak. This review is short because the paper is
+developed around a component of this platform that is insufficient for a
+research contribution.
+
+The generation of wrapper only deals with GET operations for REST services. A
+support for at least POST operation, which is similarly used, would have been
+welcome. The wrapper is a manually editable GUI, which is not a strong
+contribution per se. The transformation of XML into facts should be detailed.
+Which ontologies are used ? Please detail your given example.
+
+Page 7, the text is very difficult to understand, maybe a reformulation could
+help the reader.
+
+
+-=-=-=-=-=-=-=-=-=-=-
+
+
+
+
+
+
