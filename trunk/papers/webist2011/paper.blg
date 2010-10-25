@@ -5,9 +5,9 @@ A level-1 auxiliary file: abstract.aux
 The style file: apalike.bst
 Database file #1: paper.bib
 Warning--entry type for "uddi2004" isn't style-file defined
---line 90 of file paper.bib
+--line 84 of file paper.bib
 Warning--entry type for "http1.1" isn't style-file defined
---line 223 of file paper.bib
+--line 217 of file paper.bib
 Warning--empty institution in crockford2006
 You've used 17 entries,
             1935 wiz_defined-function locations,
