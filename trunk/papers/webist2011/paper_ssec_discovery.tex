@@ -4,25 +4,25 @@
 \label{ssec:discovery}
 
 The platform presented in this paper is intended to support web service discovery and recommendation capabilities.
-As explained in detail in Section~\ref{ssec:ontology}, there are different types of building block which can be modelled
-using the platform, leading to a necessity for different kind of discovery or recommendation mechanisms, depending
+As explained in detail in Section~\ref{ssec:ontology}, there are different types of building blocks which can be modelled
+using the platform, leading to a necessity for different kinds of discovery or recommendation mechanisms, depending
 on the level of composition to deal with: screen-flow or screen. In the screen-flow composition, the smallest
-functional unit is the screen, hance a screen-flow is composed by interconnecting a number of screens between 
-each other. In fact, this composition can be applied to any sort of building block since they all share the
-same structure: a set of pre- and post-conditions which make possible the communication with other building blocks.
+functional unit is the screen, meaning that a screen-flow is composed by interconnecting a number of screens between 
+each other. This composition can be applied to any sort of building block since they all share the
+same structure: a set of pre- and post-conditions, which make possible the communication with other building blocks.
 That said, technically the algorithms presented in this section could be used for the discovery and composition of
 any type of building block stored in the platform.
 
 At the screen-flow design level, the composition is made using a set of screens, and the pre- and post-conditions 
-of the screen-flow itself, used as entry and exit points. A screen is only reachable when its pre-conditions are satisfied
-as well, meaning that the post-conditions of another screen, or the pre-conditions of the screen-flow are compatible 
-with them.
+of the screen-flow itself used as entry and exit points of the screen-flow. A screen is only reachable when its 
+pre-conditions are satisfied as well, meaning that the post-conditions of another screen, or the pre-conditions of 
+the screen-flow are compatible with them.
 
 The main goal of the discovery process is to help the user to make the screen-flow executable, in other words, to make
-all the screens within a screen-flow reachable. To do that, the platform offers two mechanisms to find and recommend
+all the screens within a screen-flow reachable. The platform offers two mechanisms to find and recommend
 screens, previously stored in the building block base (the catalogue), which will make the screen-flow executable: a
-simple discovery based on pre- and postconditions, and a multi-step discovery or planning mechanism. Like any other
-search engine or recommender system, the results obtained in the discovery process need to rank before being presented
+simple discovery based on pre- and postconditions, and a multi-step discovery or planning algorithm. Like any other
+search engine or recommender system, the results are ranked before being presented
 to the user. The ranking algorithm is covered in Section~\ref{sssec:ranking}. 
 
 \subsubsection{Simple discovery based on pre- and post-conditions}
@@ -35,7 +35,7 @@ it collects the pre-conditions of all the unreachable building blocks, used as a
 in order to be matched against the post-conditions of any building block. In the following scenario, there are two 
 screens: \emph{s1} and \emph{s2}. \emph{s1} has as a pre-condition: ``there exists a search criteria'', and as a 
 post-condition: ``there exists a item''. \emph{s2} has just a pre-condition stating: ``there exists a search criteria''.
-The same example formally defined:
+Here you can see the same example but formally defined:
 
 \begin{listing}
 \begin{verbatim}
@@ -55,7 +55,7 @@ The same example formally defined:
 \end{listing}
 
 The algorithm will construct a SPARQL query to retrieve building blocks satisfying the pre-conditions \emph{c1} and \emph{c3}. 
-It would look something like:
+The query, although simplified for the sake of clarity, would look something like:
 
 \begin{listing}
 \begin{verbatim}
@@ -86,11 +86,12 @@ WHERE {
 \label{lis:sparql_find}
 \end{listing}
 
-However, you might have realised that the pre-condition \emph{c3} would be satisfied whether the screen \emph{s1} were 
-reachable, hence it will removed those pre-conditions that would be satisfied by the current elements being used in
-the composition. The removal of unnecessary pre-conditions improves the performance of the algorithm, and it leads to find
-better results for the user, since the focus is given to make satisfy the pre-conditions which could not be satisfied
-by any of the elements of the current composition.
+However, in the example presented, it is straight-forward to spot that the pre-condition \emph{c3} would be
+satisfied whether the screen \emph{s1} was reachable, being unnecessary to query the recommender algorithm 
+to retrieve screens satisfying this pre-condition, hence these pre-conditions are removed for the construction
+of the query reducing the complexity of the problem, hence improving the overall performance of the algorithm.
+Moreover, it leads to find better results for the user, since the focus is given to make satisfy the 
+pre-conditions which could not be satisfied by any of the elements of the current composition.
 
 \subsubsection{Enhanced discovery: search tree planning}
 \label{sssec:planning}
@@ -99,31 +100,35 @@ In artiﬁcial intelligence, the term \emph{planning} originally meant a search 
 that transform an initial world state into a desired goal state. Presently, it also includes many decision-theoretic ideas,
 imperfect state information, and game-theoretic equilibria.
 
-This paper applies the concept of planning to the design of building blocks. Back to the screen-flow design, the goal is to
-make the screen-flow executable, the initial state is a certain screen which is not yet reachable, and the plans are sets of 
-screens which are reachable by themselves, and accomplish the goal. The algorithm has been influenced by the ideas behing the 
-heuristic search. For a certain state, i.e. the initial state which contains the screen to make reachable, a large tree of 
-possible continuations is considered, in fact any screen would fit. Those screens which post-conditions do not satisfy in any
-form the unsatisfied pre-conditions are discarded, reducing the branches of the tree. A branch stops growing when a screens is
-already reachable (i.e. it has no pre-conditions) becoming a leaf of the tree. Once there are not screens added in a certain
-step, the algorithm stops and discards the incomplete branches, in other words, those branches where the leaf is not reachable.
+This paper applies the concept of planning to the design of building blocks. Back to the screen-flow design, the goal
+would be to make the screen-flow executable; the initial state would be a certain screen which is not yet reachable, 
+and the plans would be sets of screens which are reachable by themselves, and accomplish the goal. 
+The algorithm has been influenced by the ideas behing the heuristic search. For a certain state, i.e. the initial 
+state which contains the screen to make reachable, a large tree of possible continuations is considered, in 
+fact any screen would fit. Those screens which post-conditions do not satisfy in any form the unsatisfied 
+pre-conditions are discarded, reducing the branches of the tree. A branch stops growing when a screens is
+already reachable (i.e. it has no pre-conditions) becoming a leaf of the tree. Once there are not screens 
+added in a certain step, the algorithm stops and discards the incomplete branches, in other words, 
+those branches where the leaf is not reachable.
 
-It is worth pointing out some of the tree structure is pre-computed beforehand. Any time a building block is inserted into the
-catalogue, the algorithm is executed following two approaches: \emph{forward search} and \emph{backward search}. The forward
-search approach finds the building blocks whose pre-conditions will be satisfied by the post-conditions of the new building 
-block while the backward search finds the building blocks whose post-conditions will satisfy the pre-conditions of the recently
-created building block. This data is stored and used for the tree or plan builder algorithm, without needing to chec the
-compatibility of pre- and post-conditions for every single building block at every request, increasing highly the performance. 
+It is worth pointing out some of the tree structure is pre-computed beforehand to speed up the querying process at runtime. 
+Any time a building block is inserted into the catalogue, the algorithm is executed following two approaches: 
+\emph{forward search} and \emph{backward search}. The forward search approach finds the building blocks whose 
+pre-conditions will be satisfied by the post-conditions of the new building block while the backward search 
+finds the building blocks whose post-conditions will satisfy the pre-conditions of the recently
+created building block. This data is stored and used for the tree or plan builder algorithm, without
+needing to check the compatibility of pre- and post-conditions for every single building block at every 
+request. 
 
 \subsubsection{Results ranking}
 \label{sssec:ranking}
 
-In the previous sections there have been presented two ways of building block discovery for the composition or design of new
-building blocks. The ensure compatibility based on the functional specification of the building blocks, however both are leaving
-out the measurement of quality of the results. In other words, it can be seen as a search engine, returning a set of results
-for a certain input, and as any other single search engine, a ranking mechanism is needed.
+Previous sections presented different mechanisms to search or discover building blocks which may satisfy the user needs.
+The results ensure compatibility based on the functional specification of the building blocks, however they are not
+ranked, and their quality is not measured. This section explains the ranking techniques applied for the different
+discovery mechanisms.
 
-The simple discovery algorithm, in order to rank the results, applies the following rules:
+The ranking algorithm for~\ref{sssec:simple_discovery} applies the following rules:
 \begin{enumerate}
  \item it gives a higher position to those building blocks which satisfy the highest number of pre-conditions;
  \item it prioritise building blocks created by the same user who is querying;
@@ -137,5 +142,6 @@ known as \emph{preference-based planning}. The ranking algorithm:
 \begin{enumerate}
  \item minimizes the size of the plans, after removing the elements of the plan which are already in the canvas, so it gives
 priority to the elements the user has already inserted,
- \item adjust the rank by using the rules 2, 3 and 4 used in the ranking algorithm of simple discovery.
+ \item adjust the rank by using the rules 2, 3 and 4 used from the ranking algorithm of simple discovery based on 
+pre- and post-conditions.
 \end{enumerate}
