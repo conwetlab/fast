@@ -78,7 +78,6 @@ class Proxy(Resource):
         except urllib2.HTTPError, e:
             return e
 
-    @login_required
     def create(self, request):
         try:
             if request.get_host() != urlparse.urlparse(request.META["HTTP_REFERER"])[1]:
