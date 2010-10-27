@@ -41,7 +41,14 @@
         var debugLevel = getURLparam("debugLevel");
         var debugging = ["logging", "debug"].indexOf(debugLevel) != -1;
         if (debugging) {
-            _debugger = new Debugger(debugLevel);
+            var title;
+            if (getURLparam("screen")) {
+                title = "Screen";
+            } else {
+                title = "Screenflow";
+            }
+            _debugger = new Debugger(debugLevel, title,
+                decodeURIComponent(getURLparam("factURI")));
         }
         menu = new FASTMenu({renderTo: "menu"});
         ScreenflowEngineFactory.getInstance().setEngine(screens, events, menu, {% if gadgetPersistent %}true{% else %}false{% endif %});

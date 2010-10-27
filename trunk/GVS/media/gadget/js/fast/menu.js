@@ -29,7 +29,11 @@ var FASTMenu = Class.create({
             contentElement = new Element("div", {"class": "tabcontentHide"});
             var content = properties["html"];
             if (content){
-                contentElement.innerHTML = content;
+                if (content instanceof String) {
+                    contentElement.innerHTML = content;
+                } else {
+                    contentElement.appendChild(content);
+                }
             } else {
                 return;
             }

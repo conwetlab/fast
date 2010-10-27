@@ -312,16 +312,36 @@ class GadgetPlayer(resource.Resource):
         try:
             user = get_user_authentication(request)
 
-            gadgetData = getGadgetData(request.GET['screenflow'])
+            playerData = None
 
-            playerHTML = getPlayerHTML(gadgetData, '/'.join([settings.MEDIA_URL, 'gadget']))
+            if request.GET.has_key('screenflow') and not request.GET.has_key('screen'):
+                playerData = getGadgetData(request.GET['screenflow'])
+            elif request.GET.has_key('screen') and not request.GET.has_key('screenflow'):
+                playerData = getScreenData(request.GET['screen'])
+            else:
+                raise Exception('Invalid URL')
+
+            playerHTML = getPlayerHTML(playerData, '/'.join([settings.MEDIA_URL, 'gadget']))
 
             return HttpResponse(playerHTML, mimetype='text/html; charset=UTF-8')
         except Http404:
-            return HttpResponse(json_encode([]), mimetype='application/json; charset=UTF-8')
+            return HttpResponseServerError(json_encode({"message": "Object not found"}), mimetype='application/json; charset=UTF-8')
         except Exception, e:
             return HttpResponseServerError(json_encode({'message':unicode(e)}), mimetype='application/json; charset=UTF-8')
 
+
+def getScreenData(screenId):
+    gadgetData = {'metadata':{}}
+    gadgetData['screens'] = []
+    scr = get_object_or_404(Screen, id=screenId)
+    screen = simplejson.loads(scr.data)
+    aux = screen['label']
+    screen['label'] = aux['en-gb']
+    screen['allCode'] = scr.compile_code().code
+    gadgetData['screens'].append(screen)
+    gadgetData['prec'] = []
+    gadgetData['post'] = []
+    return gadgetData
 
 def getGadgetData(screenflowId):
     gadgetData = {'metadata':{}}

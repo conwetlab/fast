@@ -59,7 +59,8 @@ var ScreenflowPlayer = Class.create( /** @lends ScreenflowPlayer.prototype */ {
      */
     debugScreenflow: function(/** ScreenflowDescription*/ description) {
         this._description = description;
-        window.open(this._getScreenflowURL("debug"));
+        GVS.getDocumentController().openExternalTool("Screenflow Debugger",
+            this._getScreenflowURL("debug"));
     },
 
     // **************** PRIVATE METHODS **************** //

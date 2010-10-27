@@ -248,8 +248,18 @@ var ScreenflowEngineFactory = function () {
 
         manageTabs: function (oldTabIds, newTabIds){
             if(newTabIds.length==0){
-                this.emptyTab = this.menu.addTab({id: "", title: 'Gadget Message', html:'No reachable screens'});
-                this.menu.setActiveTab(this.emptyTab);
+                if (this.emptyTab == null) {
+                    var htmlEmpty = new Element("div", {
+                        "style": "padding: 5px; text-align: center; font-weight: bold; color: #8DB2E3;"
+                    });
+                    var htmlText = "There are no reachable screens.";
+                    if (_debugger) {
+                        htmlText += "<br />Please add the precondition value in 'Create Fact' dialog to start debugging";
+                    }
+                    htmlEmpty.update(htmlText);
+                    this.emptyTab = this.menu.addTab({id: "", title: 'Gadget Message', html: htmlEmpty});
+                    this.menu.setActiveTab(this.emptyTab);
+                }
             } else {
                 var emptyTabDeleted = false;
                 if(this.emptyTab != null){

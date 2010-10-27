@@ -570,6 +570,12 @@ var ScreenDocument = Class.create(PaletteDocument,
                 this._propertiesDialog.show.bind(this._propertiesDialog),
                 true
             ));
+        this._addToolbarElement('debugger', new ToolbarButton(
+                'Debug (Test) Screen',
+                'debugger',
+                this._debugScreen.bind(this),
+                false // disabled by default
+            ));
         this._addToolbarElement('share', new ToolbarButton(
                 'Share the current screen with the community',
                 'share',
@@ -630,7 +636,10 @@ var ScreenDocument = Class.create(PaletteDocument,
         if (element!=null){
             var elementDescription = element.getBuildingBlockDescription();
             this._toolbarElements.get('rotate').setEnabled(elementDescription.type == Constants.BuildingBlock.OPERATOR);
+        } else {
+            this._toolbarElements.get('rotate').setEnabled(false);
         }
+        this._toolbarElements.get("debugger").setEnabled(this._formInstance != null);
     },
 
     /**
@@ -1175,7 +1184,26 @@ var ScreenDocument = Class.create(PaletteDocument,
                 this._saveAs(true);
             }
         }
-    }
+    },
+
+    /**
+     * Debug a scree,
+     * @private
+     */
+    _debugScreen: function () {
+        if (this._isDirty) {
+                this._pendingOperation = this._debugScreen.bind(this);
+                this._save(false);
+        } else {
+            var uri = URIs.storePlayScreenflow + "?screen=" +
+            this._description.getId() + "&debugLevel=debug";
+            var pres = this._description.getPreconditions();
+            if (pres.length >= 1) {
+                uri+= "&factURI=" + encodeURIComponent(pres[0].uri);
+            }
+            GVS.getDocumentController().openExternalTool("Screen Debugger", uri);
+        }
+    },
 });
 
 // vim:ts=4:sw=4:et:

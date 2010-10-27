@@ -3,7 +3,7 @@ var Debugger = Class.create(/** @lends Debugger.prototype */ {
      * Class that handles all the debugging process
      * @constructs
      */
-    initialize: function(debugLevel) {
+    initialize: function(debugLevel, bbType, _factURI) {
 
         /**
          * Debug level in logging|debug (debug is more complete than logging)
@@ -27,7 +27,7 @@ var Debugger = Class.create(/** @lends Debugger.prototype */ {
         if (this._debugLevel == "debug") {
             var title = new Element("div", {
                 "class": "debuggerTitle"
-            }).update("Screenflow Debugger");
+            }).update(bbType + " Debugger");
             document.body.insertBefore(title, document.body.firstChild);
         }
 
@@ -46,7 +46,7 @@ var Debugger = Class.create(/** @lends Debugger.prototype */ {
          */
         this._testing = false;
 
-        this._initKB();
+        this._initKB(_factURI);
         this._initConsole();
     },
 
@@ -138,9 +138,9 @@ var Debugger = Class.create(/** @lends Debugger.prototype */ {
     /**
      * Init the KB, in case debug is enabled
      */
-    _initKB: function() {
+    _initKB: function(_factURI) {
         if (this._debugLevel == "debug") {
-            this._KB = new KnowledgeBase(this._debuggerNode);
+            this._KB = new KnowledgeBase(this._debuggerNode, _factURI);
         } else {
             // Dumb KB
             this._KB = {
@@ -399,12 +399,12 @@ var Logger = Class.create({
     }
 });
 var KnowledgeBase = Class.create({
-    initialize: function(parentNode) {
+    initialize: function(parentNode, _factURI) {
 
         this._facts = new Hash();
         this._factShortcuts = new Hash();
 
-        this._initUI(parentNode);
+        this._initUI(parentNode, _factURI);
 
     },
 
@@ -440,7 +440,7 @@ var KnowledgeBase = Class.create({
         this._facts.unset(factUri);
     },
 
-    _initUI: function(parentNode) {
+    _initUI: function(parentNode, _factURI) {
 
         // Add fact area
 
@@ -467,6 +467,9 @@ var KnowledgeBase = Class.create({
         this._uriInput = new Element("input", {
            "type": "text"
         });
+        if (_factURI != null && _factURI != "null") {
+            this._uriInput.value = _factURI;
+        }
         uriContent.appendChild(this._uriInput);
 
         uriNode.appendChild(uriContent);
