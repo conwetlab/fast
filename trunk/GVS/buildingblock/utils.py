@@ -1,5 +1,8 @@
 from django.db.models import Q
+from buildingblock.models import BuildingBlock, Screenflow, Screen, Form, Operator, Resource
 import re
+from datetime import datetime
+
 
 def check_required_fields(fields, data):
     emptyFields = []
@@ -84,3 +87,42 @@ def get_info_field(model, field):
         result = getattr(result, step)
 
     return result
+
+
+
+def create_bb(data, bbtype, author, server_url=None):
+
+    now = datetime.utcnow()
+    # Drop microseconds
+    now = datetime(now.year, now.month, now.day, now.hour, now.minute, now.second)
+
+    data['creationDate'] = now.isoformat() + "+0000" #UTC
+    if data.get('version') == '':
+        data['version'] = now.strftime("%Y%m%d-%H%M")
+
+    bb = None
+    if bbtype == 'screenflow':
+        bb = Screenflow(author=author, name=data.get('name'), version=data.get('version'))
+    elif bbtype == 'screen':
+        bb = Screen(author=author, name=data.get('name'), version=data.get('version'))
+    elif bbtype == 'form':
+        bb = Form(author=author, name=data.get('name'), version=data.get('version'))
+    elif bbtype == 'operator':
+        bb = Operator(author=author, name=data.get('name'), version=data.get('version'))
+    elif bbtype == 'resource':
+        bb = Resource(author=author, name=data.get('name'), version=data.get('version'))
+    else:
+        raise Exception(_('Expecting building block type.'))
+
+    bb.creationDate = now
+    bb.save()
+
+    bb.create_code_structure(data)
+    bb.update_unbound_code(data, server_url)
+
+    bb.update_tags(data.get('tags'))
+
+    json_data = bb.complete_bb_data(data)
+    bb.save()
+
+    return json_data

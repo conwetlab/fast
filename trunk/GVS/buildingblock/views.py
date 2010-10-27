@@ -1,23 +1,14 @@
-from __future__ import division
 from commons.authentication import get_user_authentication
 from django.db import transaction
-from django.core import serializers
 from django.http import HttpResponse, HttpResponseServerError, Http404, HttpResponseBadRequest
 from django.utils import simplejson
 from django.utils.translation import ugettext as _
 from django.shortcuts import get_list_or_404, get_object_or_404
-from django.template import Template, Context, loader
-from urllib2 import HTTPError
-from urlparse import urljoin
-from urllib import quote_plus
 from commons import resource
 from commons.utils import json_encode, cleanUrl
-from commons.httpUtils import PUT_parameter, validate_url, download_http_content
-from python_rest_client.restful_lib import Connection, isValidResponse
+from commons.httpUtils import PUT_parameter
 from buildingblock.models import BuildingBlock, Screenflow, Screen, Form, Operator, Resource, BuildingBlockCode, UserVote, UserTag, Tag
-from utils import *
-from datetime import datetime
-
+from buildingblock.utils import *
 
 class BuildingBlockCollection(resource.Resource):
     def read(self, request, bbtype):
@@ -55,7 +46,7 @@ class BuildingBlockCollection(resource.Resource):
         received_json = request.POST['buildingblock']
 
         try:
-            data = create_bb(simplejson.loads(received_json), bbtype, user, request)
+            data = create_bb(simplejson.loads(received_json), bbtype, user, request.build_absolute_uri())
 
             return HttpResponse(data, mimetype='application/json; charset=UTF-8')
         except Exception, e:
@@ -232,12 +223,11 @@ class BuildingBlockEntry(resource.Resource):
             bb = BuildingBlock.objects.get(id=buildingblock_id)
 
 
-            updateUnboundCode(bb, data, request)
-
-            bb.data = json_encode(data)
+            bb.update_unbound_code(data, request.build_absolute_uri())
+            json_data = bb.complete_bb_data(data)
             bb.save()
 
-            return HttpResponse(bb.data, mimetype='application/json; charset=UTF-8')
+            return HttpResponse(json_data, mimetype='application/json; charset=UTF-8')
         except Exception, e:
             transaction.rollback()
             return HttpResponseServerError(json_encode({'message':unicode(e)}), mimetype='application/json; charset=UTF-8')
@@ -250,7 +240,7 @@ class BuildingBlockEntry(resource.Resource):
 
             bb = BuildingBlock.objects.get(id=buildingblock_id)
 
-            unshareBuildingBlock(bb)
+            bb.unshare()
 
             bb.delete()
 
@@ -266,11 +256,9 @@ class Code(resource.Resource):
     def read(self, request, buildingblock_id):
         user = get_user_authentication(request)
 
-        bb = get_object_or_404(BuildingBlock,id=buildingblock_id)
+        bb = get_object_or_404(BuildingBlock,id=buildingblock_id).child_model()
 
-        data = simplejson.loads(bb.data)
-
-        bbCode = compileCode(bb, data)
+        bbCode = bb.compile_code()
 
         return HttpResponse(bbCode.code, mimetype='application/javascript; charset=UTF-8')
 
@@ -333,7 +321,7 @@ class TagCollection(resource.Resource):
                pass
 
             tags = simplejson.loads(received_json)
-            updateTags(user, bb, tags)
+            bb.update_tags(tags, user)
 
             data = simplejson.loads(bb.data)
             allTags = UserTag.objects.filter(buildingBlock=bb)
@@ -344,7 +332,7 @@ class TagCollection(resource.Resource):
             bb.data = json_encode(data)
             bb.save()
 
-            updateCatalogueBuildingBlock(bb)
+            bb.update_catalogue()
 
             ok = json_encode({'message':'OK'})
             return HttpResponse(ok, mimetype='application/json; charset=UTF-8')
@@ -400,7 +388,7 @@ class VoteCollection(resource.Resource):
             uv.value = request.POST.get('vote')
             uv.save()
             self.__updatePopularity(bb)
-            updateCatalogueBuildingBlock(bb)
+            bb.update_in_catalogue()
             ok = json_encode({'message':'OK'})
             return HttpResponse(ok, mimetype='application/json; charset=UTF-8')
         except Exception, e:
@@ -431,36 +419,13 @@ class Sharing(resource.Resource):
         user = get_user_authentication(request)
 
         try:
-            bb = BuildingBlock.objects.get(id=buildingblock_id)
+            bb = BuildingBlock.objects.get(id=buildingblock_id).child_model()
 
-            data = simplejson.loads(bb.data)
+            bb.compile_code()
+            bb.share()
 
-            compileCode(bb, data)
+            return HttpResponse(json_encode(bb.data), mimetype='application/json; charset=UTF-8')
 
-            if (bb.uri == None) or (bb.uri == ''):
-                conn = Connection(cleanUrl(bb.get_catalogue_url()))
-                body = bb.data
-                result = conn.request_post('', body=body, headers={'Accept':'text/json'})
-                if isValidResponse(result):
-                    response = HttpResponse(result['body'], mimetype='application/json; charset=UTF-8')
-                    bb.data = response.content
-                    obj = simplejson.loads(response.content)
-                    bb.uri = obj['uri']
-                    bb.save()
-                else:
-                    raise Exception(result['body'])
-            else:
-                conn = Connection(bb.uri)
-                result = conn.request_put('', body=bb.data, headers={'Accept':'text/json'})
-                if isValidResponse(result):
-                    response = HttpResponse(result['body'], mimetype='application/json; charset=UTF-8')
-                else:
-                    raise Exception(result['body'])
-
-            return response
-        except HTTPError, e:
-            transaction.rollback()
-            return HttpResponseServerError(json_encode({'message':_('Unable to access code: %s') % unicode(e)}), mimetype='application/json; charset=UTF-8')
         except Exception, e:
             transaction.rollback()
             return HttpResponseServerError(json_encode({'message':unicode(e)}), mimetype='application/json; charset=UTF-8')
@@ -473,162 +438,10 @@ class Sharing(resource.Resource):
 
             bb = BuildingBlock.objects.get(id=buildingblock_id)
 
-            unshareBuildingBlock(bb)
-
-            data = simplejson.loads(bb.data)
-            del data['uri']
-            bb.uri = None
-            bb.data = json_encode(data)
-            bb.save()
+            bb.unshare()
 
             ok = json_encode({'message':'OK'})
             return HttpResponse(ok, mimetype='application/json; charset=UTF-8')
         except Exception, e:
             transaction.rollback()
             return HttpResponseServerError(json_encode({'message':unicode(e)}), mimetype='application/json; charset=UTF-8')
-
-
-def createCodeStructure(bb, data):
-    c = BuildingBlockCode.objects.get_or_create(buildingBlock=bb)[0]
-
-    # getting code
-    code = None
-    if data.has_key('codeInline'):
-        code = data.get('codeInline')
-    elif data.has_key('code'):
-        code_url = data.get('code')
-        if (validate_url(code_url)):
-            code = download_http_content(code_url)
-        else:
-            raise Exception("Invalid Url in code parameter")
-
-    c.unboundCode = code
-    c.save()
-
-def updateUnboundCode(bb, data, request=None):
-    c = BuildingBlockCode.objects.get(buildingBlock=bb)
-    if data.has_key('codeInline'):
-        c.unboundCode = data.get('codeInline')
-        c.save()
-        if request:
-            data['code'] = urljoin(request.build_absolute_uri(),'/buildingblock/%s/unbound_code' % (bb.pk))
-
-def compileCode(bb, data):
-
-    if bb.type == 'screenflow':
-        return None # Screenflow is not compiled here
-
-    c = BuildingBlockCode.objects.get(buildingBlock=bb)
-
-    unboundCode = c.unboundCode
-    bbcodes = {}
-    if unboundCode:
-        if bb.type == 'screen':
-            context = Context({'screenId': str(bb.id)})
-            t = Template(unboundCode)
-            code =  t.render(context)
-        elif bb.type == 'resource' or bb.type == 'operator':
-            context = Context({'name': 'BB' + str(bb.id), 'code': unboundCode})
-            t = loader.get_template('buildingblock/code.js')
-            code =  t.render(context)
-        elif bb.type == 'form':
-            code = unboundCode
-        else: # Error
-            code = ""
-
-    elif data.has_key('definition') and bb.type == 'screen':
-        definition = data.get('definition')
-        for bbdefinition in definition['buildingblocks']:
-            bb_aux = get_object_or_404(BuildingBlock, uri=bbdefinition.get('uri'))
-            bbdata = simplejson.loads(bb_aux.data)
-            bbdefinition['buildingblockId'] = bb_aux.id
-            bbdefinition['type'] = bb_aux.type
-            bbdefinition['actions'] = bbdata.get('actions')
-            bbdefinition['parameter'] = bbdefinition.get('parameter')
-            bbc = get_object_or_404(BuildingBlockCode, buildingBlock=bb_aux)
-            if not bbcodes.has_key(bb_aux.id):
-                if bb_aux.type == 'form':
-                    context = Context({'buildingblockId': 'BB' + str(bb_aux.id),
-                    'screenId': str(bb.id), 'buildingblockInstance': bbdefinition['id']})
-                    t = Template(bbc.code)
-                    code = t.render(context)
-                else:
-                    code = bbc.code
-                bbcodes[bb_aux.id] = {'libraries': bbdata.get('libraries'), 'code': code, 'type': bbdefinition['type']}
-        context = Context({'id': bb.id, 'name': bb.name, 'definition': definition, 'codes': bbcodes.itervalues(), 'pres': data.get('preconditions'), 'posts': data.get('postconditions')})
-        t = loader.get_template('buildingblock/screen.html')
-        code =  t.render(context)
-    else: # Error
-        code=""
-
-    c.code = code
-    c.save()
-    return c
-
-def updateCatalogueBuildingBlock(buildingblock):
-    if (buildingblock.uri != None) and (buildingblock.uri != ''):
-        conn = Connection(buildingblock.uri)
-        result = conn.request_put('', body=buildingblock.data, headers={'Accept':'text/json'})
-        if not isValidResponse(result):
-            raise Exception(result['body'])
-
-
-def unshareBuildingBlock(buildingblock):
-    if (buildingblock.uri != None) and (buildingblock.uri != ''):
-        conn = Connection(buildingblock.uri)
-        result = conn.request_delete('', headers={'Accept':'text/json'})
-        if not isValidResponse(result):
-            raise Exception(result['body'])
-
-
-def updateTags(user, buildingblock, tags):
-    for tag in tags:
-        label = tag.get('label')
-        means = None
-        if tag.has_key('means'):
-            means = tag.get('means')
-        for lang in label.keys():
-            t = Tag.objects.get_or_create(name=label.get(lang), language=lang, means=means)[0]
-            usertag = UserTag.objects.get_or_create (user=user, tag=t, buildingBlock=buildingblock)[0]
-            usertag.save()
-
-def create_bb(data, bbtype, author, request=None):
-
-    now = datetime.utcnow()
-    # Drop microseconds
-    now = datetime(now.year, now.month, now.day, now.hour, now.minute, now.second)
-
-    data['creationDate'] = now.isoformat() + "+0000" #UTC
-    if data.get('version') == '':
-        data['version'] = now.strftime("%Y%m%d-%H%M")
-
-    bb = None
-    if bbtype == 'screenflow':
-        bb = Screenflow(author=author, name=data.get('name'), version=data.get('version'), type=bbtype)
-    elif bbtype == 'screen':
-        bb = Screen(author=author, name=data.get('name'), version=data.get('version'), type=bbtype)
-    elif bbtype == 'form':
-        bb = Form(author=author, name=data.get('name'), version=data.get('version'), type=bbtype)
-    elif bbtype == 'operator':
-        bb = Operator(author=author, name=data.get('name'), version=data.get('version'), type=bbtype)
-    elif bbtype == 'resource':
-        bb = Resource(author=author, name=data.get('name'), version=data.get('version'), type=bbtype)
-    else:
-        raise Exception(_('Expecting building block type.'))
-
-    bb.creationDate = now
-    bb.save()
-
-    tags = data.get('tags')
-    updateTags(author, bb, tags)
-    data['creator'] = author.username
-    data['id'] = bb.pk
-    data['type'] = bbtype
-
-    createCodeStructure(bb,data)
-    updateUnboundCode(bb,data,request)
-
-    bb.data = json_encode(data)
-    bb.save()
-
-    return bb.data

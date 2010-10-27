@@ -3,7 +3,7 @@ from django.utils import simplejson
 from django.contrib.auth.models import User
 
 from buildingblock.models import BuildingBlock
-from buildingblock.views import create_bb
+from buildingblock.utils import create_bb
 
 from commons.utils import json_encode, cleanUrl
 from optparse import make_option

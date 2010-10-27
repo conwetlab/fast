@@ -4,7 +4,6 @@ from django.utils import simplejson
 from django.conf import settings
 
 from buildingblock.models import BuildingBlock
-from buildingblock.views import unshareBuildingBlock, compileCode
 
 from python_rest_client.restful_lib import Connection, isValidResponse
 from commons.utils import json_encode, cleanUrl
@@ -36,23 +35,18 @@ class Command(BaseCommand):
         else:
             bb_list = BuildingBlock.objects.exclude(uri=None)
         for bb in bb_list:
+            bb = bb.child_model()
+            if bb.uri != None and bb.uri != '':
+                try:
+                    bb.unshare()
+                except Exception, e:
+                    print e
+
+            bb.compile_code()
             try:
-                unshareBuildingBlock(bb)
+                bb.share()
             except Exception, e:
-                pass
-
-            body = bb.data
-            data = simplejson.loads(bb.data)
-            compileCode(bb, data)
-
-            conn = Connection(cleanUrl(bb.get_catalogue_url()))
-            result = conn.request_post('', body=body, headers={'Accept':'text/json'})
-            if isValidResponse(result):
-                response = HttpResponse(result['body'], mimetype='application/json; charset=UTF-8')
-                bb.data = response.content
-                obj = simplejson.loads(response.content)
-                bb.uri = obj['uri']
-                bb.save()
+                print e
 
         concepts_dir = options["concepts_dir"]
         if concepts_dir:
