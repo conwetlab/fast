@@ -165,6 +165,22 @@ var ScreenCanvasCache = Class.create( /** @lends ScreenCanvasCache.prototype */ 
     },
 
     /**
+     * Returns the title of an element by its URI
+     * @type Object
+     */
+    getTitle: function (/** String */ id) {
+        var element = this._buildingblocks.detect(function(element) {
+            return element.id == id;
+        });
+        if (element) {
+            return element.title;
+        } else {
+            return null;
+        }
+    },
+
+
+    /**
      * Returns the position of an element by its URI
      * @type Object
      */

@@ -129,6 +129,7 @@ file_list = [
     "gvs/dialogs/PreviewDialog.js",
     "gvs/dialogs/TriggerDialog.js",
     "gvs/dialogs/ParamsDialog.js",
+    "gvs/dialogs/TitleDialog.js",
     "gvs/dialogs/PropertiesDialog.js",
     "gvs/dialogs/Alert.js",
     "gvs/dialogs/Confirm.js",

@@ -216,7 +216,8 @@ var ScreenflowDescription = Class.create(BuildingBlockDescription,
         this._screens.values().each(function(screen){
             result.push({
                 'uri': screen.buildingblock.getUri(),
-                'position': screen.position
+                'position': screen.position,
+                'title': screen.buildingblock.getTitle()
             });
         });
         return result;

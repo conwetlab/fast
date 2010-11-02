@@ -32,6 +32,14 @@ var ComponentInstance = Class.create(DragSource,
          */
         this._orientation = 0;
 
+
+        /**
+         * Title of the instance
+         * @private
+         * @type String
+         */
+        this._title = this._buildingBlockDescription.getTitle();
+
         /**
          * BuildingBlock description graphical representation
          * @type BuildingBlockView
@@ -82,7 +90,7 @@ var ComponentInstance = Class.create(DragSource,
      * @type String
      */
     getTitle: function() {
-        return this._buildingBlockDescription.getTitle();
+        return this._title;
     },
 
     /**
@@ -94,6 +102,7 @@ var ComponentInstance = Class.create(DragSource,
      */
     getInfo: function() {
         var info = new Hash();
+
         info.set('Title', this.getTitle());
         info.set('Description', this._buildingBlockDescription.description['en-gb']);
         info.set('Tags', this._buildingBlockDescription.tags.collect(function(tag) {
@@ -213,6 +222,19 @@ var ComponentInstance = Class.create(DragSource,
      */
     setParams: function(/** Object */ params) {
         this._params = params;
+
+        if (this._listener && this._listener.modified) {
+            this._listener.modified(this);
+        }
+    },
+
+    /**
+     * Sets the title of the instance
+     * @public
+     */
+    setTitle: function(/** String */ title) {
+        this._title = title;
+        this._view.setTitle(title);
 
         if (this._listener && this._listener.modified) {
             this._listener.modified(this);

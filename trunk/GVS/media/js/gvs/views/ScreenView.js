@@ -31,8 +31,14 @@ var ScreenView = Class.create(BuildingBlockView,
          */
         this._tooltip = null;
 
-        var titleNode = new Element("div", {"class":"title"});
-        titleNode.update(description.label['en-gb']);
+        /**
+         * Title node
+         * @type DOMNode
+         * @private
+         */
+        this._titleNode = new Element("div", {"class":"title"});
+
+        this._titleNode.update(description.label['en-gb']);
 
         var preArea = new Element("div", {"class": "preArea"});
 
@@ -95,7 +101,7 @@ var ScreenView = Class.create(BuildingBlockView,
         this._node = new Element("div", {
             "class": "view screen"
         });
-        this._node.appendChild(titleNode);
+        this._node.appendChild(this._titleNode);
         this._node.appendChild(preArea);
         this._node.appendChild(prePostSeparator);
         if (description.icon){
@@ -155,6 +161,13 @@ var ScreenView = Class.create(BuildingBlockView,
         this._preIcons = null;
         this._postIcons = null;
         this._node = null;
+    },
+
+    /**
+     * @override
+     */
+    setTitle: function(title) {
+        this._titleNode.update(title);
     },
 
     // **************** PRIVATE METHODS **************** //

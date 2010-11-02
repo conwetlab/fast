@@ -7,7 +7,11 @@
 {% for screen in gadgetScreens %}
             {
                 id:"{{screen.id}}",
-                title: "{{ screen.label|cut:" " }}",
+                {% if screen.title %}
+                title: "{{ screen.title }}",
+                {% else %}
+                title: "{{ screen.label }}",
+                {% endif %}
                 contentEl:"__{{screen.id}}",
                 pre: [{% for pre in screen.preconditions %}
                         [{% for ands in pre %}

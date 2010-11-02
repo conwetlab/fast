@@ -353,12 +353,13 @@ def getGadgetData(screenflowId):
     if (definition.has_key('screens')):
         scrs = definition['screens']
         for screen in scrs:
-            screen = get_object_or_404(Screen, uri=screen['uri'])
-            screen = simplejson.loads(screen.data)
-            aux = screen['label']
-            screen['label'] = aux['en-gb']
-            screen['allCode'] = BuildingBlockCode.objects.get(buildingBlock=screen['id']).code
-            gadgetData['screens'].append(screen)
+            scr_obj = get_object_or_404(Screen, uri=screen['uri'])
+            screen_data = simplejson.loads(scr_obj.data)
+            screen_data['label'] = screen_data['label']['en-gb']
+            if screen.has_key("title"):
+                screen_data['title'] = screen['title']
+            screen_data['allCode'] = BuildingBlockCode.objects.get(buildingBlock=scr_obj).code
+            gadgetData['screens'].append(screen_data)
 
     gadgetData['prec'] = definition['preconditions'] if definition.has_key('preconditions') else []
     gadgetData['post'] = definition['postconditions'] if definition.has_key('postconditions') else []

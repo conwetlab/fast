@@ -190,6 +190,15 @@ var PaletteDocument = Class.create(AbstractDocument, /** @lends PaletteDocument.
         return this._description;
     },
 
+    /**
+     * Implementing event listener
+     * @override
+     */
+    modified: function(/** ComponentInstance */ element) {
+        this._updatePanes();
+        this._setDirty(true);
+    },
+
 
     /**
      * Implementing event listener
@@ -741,6 +750,10 @@ var PaletteDocument = Class.create(AbstractDocument, /** @lends PaletteDocument.
                 var instance = factory.getInstance(buildingBlock, this._inferenceEngine);
                 instance.setId(id);
                 instance.setParams(this._canvasCache.getParams(id));
+                var title = this._canvasCache.getTitle(id);
+                if (title != null && title != "") {
+                    instance.setTitle(title);
+                }
                 var position = this._canvasCache.getPosition(id);
                 instance.onFinish(true, position);
                 var dropNode = area.getNode();

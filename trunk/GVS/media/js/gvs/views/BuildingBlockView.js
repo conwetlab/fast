@@ -25,6 +25,13 @@ var BuildingBlockView = Class.create( /** @lends BuildingBlockView.prototype */ 
         return this._node;
     },
 
+    /**
+     * Sets the title if possible
+     */
+    setTitle: function(title) {
+        // Do nothing
+    },
+
 
     /**
      * Colorize the component depending on the reachability

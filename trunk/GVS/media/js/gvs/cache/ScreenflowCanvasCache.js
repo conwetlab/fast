@@ -94,6 +94,21 @@ var ScreenflowCanvasCache = Class.create( /** @lends ScreenflowCanvasCache.proto
     },
 
     /**
+     * Returns the title of an element by its URI
+     * @type Object
+     */
+    getTitle: function (/** String */ id) {
+        var element = this._screens.detect(function(element) {
+            return element.uri == id;
+        });
+        if (element) {
+            return element.title;
+        } else {
+            return null;
+        }
+    },
+
+    /**
      * Returns the position of an element by its URI
      * @type Object
      */

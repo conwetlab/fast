@@ -36,7 +36,13 @@ var ScreenInstance = Class.create(ComponentInstance,
      */
     getInfo: function() {
         var info = new Hash();
-        info.set('Title', this._buildingBlockDescription.label['en-gb']);
+        var titleDialog = new TitleDialog(this.getTitle(),
+                                          this.setTitle.bind(this));
+        var titleArea = new Element("div");
+        var titleText = new Element("span").update(this.getTitle());
+        titleArea.appendChild(titleText);
+        titleArea.appendChild(titleDialog.getButtonNode());
+        info.set('Title', titleArea);
         info.set('Description', this._buildingBlockDescription.description['en-gb']);
         info.set('Tags', this._buildingBlockDescription.tags.collect(function(tag) {
                 return tag.label['en-gb'];

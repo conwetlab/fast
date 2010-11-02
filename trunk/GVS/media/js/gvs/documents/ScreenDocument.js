@@ -122,14 +122,6 @@ var ScreenDocument = Class.create(PaletteDocument,
                     this._onResourcesLoaded.bind(this));
     },
 
-    /**
-     * Implementing event listener
-     * @override
-     */
-    modified: function(/** ComponentInstance */ element) {
-        this._updatePanes();
-        this._setDirty(true);
-    },
 
     /**
      * Implementing event listener
