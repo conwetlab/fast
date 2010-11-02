@@ -82,3 +82,11 @@ display:none;
 .tabcontentShow{
 display:inline;
 }
+.screen_caption {
+-moz-border-radius:13px 13px 13px 13px;
+border:2px solid #8DB2E3;
+margin:2px auto;
+padding:4px;
+text-align:center;
+width:50%;
+}

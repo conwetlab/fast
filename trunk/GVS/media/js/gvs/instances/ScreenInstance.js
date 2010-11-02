@@ -27,6 +27,13 @@ var ScreenInstance = Class.create(ComponentInstance,
         this._menu.addOption('Create a Plan', function(){
             this.document.getPlansElement(this);
         }.bind(this));
+
+        /**
+         * Screen caption (optional
+         * @private
+         * @type String
+         */
+        this._caption = null;
     },
 
     // **************** PUBLIC METHODS **************** //
@@ -43,12 +50,54 @@ var ScreenInstance = Class.create(ComponentInstance,
         titleArea.appendChild(titleText);
         titleArea.appendChild(titleDialog.getButtonNode());
         info.set('Title', titleArea);
+
         info.set('Description', this._buildingBlockDescription.description['en-gb']);
+
+        var captionDialog = new CaptionDialog(this._caption,
+                                          this.setCaption.bind(this));
+        var captionArea = new Element("div");
+        var captionText;
+        if (this._caption != null) {
+            captionText = new Element("span");
+            var showedText = this._caption.stripTags().substring(0,10);
+            if (showedText != this._caption.stripTags()) {
+                // The caption is longer than 10 chars
+                showedText += "...";
+            }
+            captionText.update(showedText);
+        } else {
+            captionText = new Element("span", {
+                "class":"triggerInfo"
+            }).update("No caption set");
+        }
+        captionArea.appendChild(captionText);
+        captionArea.appendChild(captionDialog.getButtonNode());
+        info.set('Screen caption', captionArea);
+
         info.set('Tags', this._buildingBlockDescription.tags.collect(function(tag) {
                 return tag.label['en-gb'];
             }).join(", "));
         return info;
     },
+
+    /**
+     * Returns the caption of the screen if any
+     */
+    getCaption: function() {
+        return this._caption;
+    },
+
+    /**
+     * sets the caption
+     */
+    setCaption: function(/** String  */ caption) {
+        this._caption = caption.stripScripts();
+
+        if (this._listener && this._listener.modified) {
+            this._listener.modified(this);
+        }
+    },
+
 
     /**
      * This function shows the dialog to change

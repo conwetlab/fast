@@ -214,11 +214,16 @@ var ScreenflowDescription = Class.create(BuildingBlockDescription,
     _getScreens: function() {
         var result = new Array();
         this._screens.values().each(function(screen){
-            result.push({
+            var data = {
                 'uri': screen.buildingblock.getUri(),
                 'position': screen.position,
                 'title': screen.buildingblock.getTitle()
-            });
+            };
+            var caption = screen.buildingblock.getCaption();
+            if (caption != null && caption != "") {
+                data["caption"] = caption;
+            }
+            result.push(data);
         });
         return result;
     }

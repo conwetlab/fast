@@ -9852,6 +9852,13 @@ var ScreenInstance = Class.create(ComponentInstance,
         this._menu.addOption('Create a Plan', function(){
             this.document.getPlansElement(this);
         }.bind(this));
+
+        /**
+         * Screen caption (optional
+         * @private
+         * @type String
+         */
+        this._caption = null;
     },
 
     // **************** PUBLIC METHODS **************** //
@@ -9868,11 +9875,41 @@ var ScreenInstance = Class.create(ComponentInstance,
         titleArea.appendChild(titleText);
         titleArea.appendChild(titleDialog.getButtonNode());
         info.set('Title', titleArea);
+
         info.set('Description', this._buildingBlockDescription.description['en-gb']);
+
+        var captionDialog = new CaptionDialog(this._caption,
+                                          this.setCaption.bind(this));
+        var captionArea = new Element("div");
+        var captionText;
+        if (this._caption != null) {
+            captionText = new Element("span");
+            var showedText = this._caption.stripTags().substring(0,10);
+            if (showedText != this._caption.stripTags()) {
+                // The caption is longer than 10 chars
+                showedText += "...";
+            }
+            captionText.update(showedText);
+        } else {
+            captionText = new Element("span", {
+                "class":"triggerInfo"
+            }).update("No caption set");
+        }
+        captionArea.appendChild(captionText);
+        captionArea.appendChild(captionDialog.getButtonNode());
+        info.set('Screen caption', captionArea);
+
         info.set('Tags', this._buildingBlockDescription.tags.collect(function(tag) {
                 return tag.label['en-gb'];
             }).join(", "));
         return info;
+    },
+
+    /**
+     * Returns the caption of the screen if any
+     */
+    getCaption: function() {
+        return this._caption;
     },
 
     /**
@@ -16776,6 +16813,85 @@ var TitleDialog = Class.create(ConfirmDialog /** @lends ParamsDialog.prototype *
     _onOk: function($super) {
     	$super();
         this._onChangeCallback(this._getForm().title.value);
+    }
+});
+
+// vim:ts=4:sw=4:et:
+
+var CaptionDialog = Class.create(ConfirmDialog /** @lends CaptionDialog.prototype */, {
+    /**
+     * This class handles the dialog
+     * to set a caption for a screen
+     * @constructs
+     * @extends ConfirmDialog
+     */
+    initialize: function($super, /** String */ caption,
+                            /** Function */ onChangeCallback) {
+
+        $super("Add Screen caption");
+
+        this._caption = caption;
+
+
+        this._onChangeCallback = onChangeCallback;
+
+    },
+
+    // **************** PUBLIC METHODS **************** //
+
+    /**
+     * This function returns the DOMNode of the button that shows the
+     * dialog
+     * @type DOMNode
+     */
+    getButtonNode: function() {
+
+    	var button = new dijit.form.Button({
+            'label': '...',
+            'onClick': this.show.bind(this)
+        });
+
+        return new Element('div', {
+            'class': 'triggerButton'
+        }).update(button.domNode);
+    },
+
+    // **************** PRIVATE METHODS **************** //
+
+
+    /**
+     * initDialogInterface
+     * This function creates the dom structure
+     * @private
+     * @override
+     */
+    _initDialogInterface: function () {
+        this._setHeader(
+                "Add Screen caption",
+                "The caption will be shown in screen bottom when executing the"
+                + " gadget. You can use HTML tags to add formatting"
+        );
+
+        var formData = [
+            {
+                'type':'textarea',
+                'label': 'Screen Caption:',
+                'name': 'caption',
+                'value': this._caption
+            }
+        ];
+
+        this._setContent(formData);
+    },
+
+    /**
+     * Overriding onOk handler
+     * @private
+     * @override
+     */
+    _onOk: function($super) {
+    	$super();
+        this._onChangeCallback(this._getForm().caption.value);
     }
 });
 

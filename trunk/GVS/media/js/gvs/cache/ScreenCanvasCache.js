@@ -179,6 +179,10 @@ var ScreenCanvasCache = Class.create( /** @lends ScreenCanvasCache.prototype */ 
         }
     },
 
+    getCaption: function() {
+        return null;
+    },
+
 
     /**
      * Returns the position of an element by its URI

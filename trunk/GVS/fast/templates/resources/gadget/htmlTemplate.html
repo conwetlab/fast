@@ -5,5 +5,12 @@
     <object id="__{{screen.id}}_obj" width="100%" height="100%">
         {{ screen.allCode|safe }}
     </object>
+    {% if screen.caption %}
+    <div class="screen_caption">
+    {% autoescape off %}
+    {{ screen.caption|removetags:"script"|linebreaksbr }}
+    {% endautoescape %}
+    </div>
+    {% endif %}
 </div>
 {% endfor %}

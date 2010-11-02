@@ -754,6 +754,10 @@ var PaletteDocument = Class.create(AbstractDocument, /** @lends PaletteDocument.
                 if (title != null && title != "") {
                     instance.setTitle(title);
                 }
+                var caption = this._canvasCache.getCaption(id);
+                if (caption != null && caption != "") {
+                    instance.setCaption(caption);
+                }
                 var position = this._canvasCache.getPosition(id);
                 instance.onFinish(true, position);
                 var dropNode = area.getNode();

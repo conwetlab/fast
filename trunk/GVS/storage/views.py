@@ -358,6 +358,8 @@ def getGadgetData(screenflowId):
             screen_data['label'] = screen_data['label']['en-gb']
             if screen.has_key("title"):
                 screen_data['title'] = screen['title']
+            if screen.has_key("caption"):
+                screen_data["caption"] = screen["caption"]
             screen_data['allCode'] = BuildingBlockCode.objects.get(buildingBlock=scr_obj).code
             gadgetData['screens'].append(screen_data)
 
