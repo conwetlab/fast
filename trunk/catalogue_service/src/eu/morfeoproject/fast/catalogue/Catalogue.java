@@ -273,11 +273,11 @@ public class Catalogue {
     		Set<ScreenComponent> toExclude,
     		int offset,
     		int limit,
-    		Set<String> domainContext) throws ClassCastException, ModelRuntimeException {
+    		Set<String> tags) throws ClassCastException, ModelRuntimeException {
     	HashSet<URI> results = new HashSet<URI>();
-    	results.addAll(findScreenComponents(container, conditions, toExclude, offset, limit, domainContext, FGO.Form));
-    	results.addAll(findScreenComponents(container, conditions, toExclude, offset, limit, domainContext, FGO.Operator));
-    	results.addAll(findScreenComponents(container, conditions, toExclude, offset, limit, domainContext, FGO.BackendService));
+    	results.addAll(findScreenComponents(container, conditions, toExclude, offset, limit, tags, FGO.Form));
+    	results.addAll(findScreenComponents(container, conditions, toExclude, offset, limit, tags, FGO.Operator));
+    	results.addAll(findScreenComponents(container, conditions, toExclude, offset, limit, tags, FGO.BackendService));
     	return results;
     }
     
@@ -287,7 +287,7 @@ public class Catalogue {
     		Set<ScreenComponent> toExclude,
     		int offset,
     		int limit,
-    		Set<String> domainContext,
+    		Set<String> tags,
     		URI typeBuildingBlock) throws ClassCastException, ModelRuntimeException {
     	HashSet<URI> results = new HashSet<URI>();
 
@@ -300,10 +300,10 @@ public class Catalogue {
     	for (ScreenComponent comp : toExclude)
    			queryString = queryString.concat("FILTER (?bb != "+comp.getUri().toSPARQL()+") . ");
 
-    	// tags from the domain context
-    	if (domainContext != null && domainContext.size() > 0) {
+    	// tags
+    	if (tags != null && tags.size() > 0) {
         	queryString = queryString.concat("{");
-        	for (String tag : domainContext) {
+        	for (String tag : tags) {
 	    		queryString = queryString.concat(" { ?bb "+CTAG.tagged.toSPARQL()+" ?ctag . ?ctag "+CTAG.label.toSPARQL()+" ?tag . FILTER(regex(str(?tag), \""+tag+"\", \"i\")) } UNION");
         	}
         	// remove last 'UNION'
@@ -344,6 +344,7 @@ public class Catalogue {
 			queryString = queryString.concat("\nLIMIT "+limit);
 		queryString = queryString.concat("\nOFFSET "+offset);
 
+		logger.info(queryString);
     	QueryResultTable qrt = tripleStore.sparqlSelect(queryString);
     	ClosableIterator<QueryRow> itResults = qrt.iterator();
     	while (itResults.hasNext()) {
@@ -368,7 +369,7 @@ public class Catalogue {
      * @param subsume ignored at this version
      * @param offset indicate the start of the set of screens to be returned
      * @param limit specify the maximum number of screens to be returned [negative means no limit]
-     * @param domainContext the domain context contains information such a as tags, a user, etc.
+     * @param tags a list of tags for filtering the results
      * @return a recommended set of screens according to the input given
      * @throws ClassCastException
      * @throws ModelRuntimeException
@@ -379,7 +380,7 @@ public class Catalogue {
     		boolean subsume,
     		int offset,
     		int limit,
-    		Set<String> domainContext,
+    		Set<String> tags,
     		URI predicate) throws ClassCastException, ModelRuntimeException {
     	HashSet<URI> results = new HashSet<URI>();
     	ArrayList<Condition> unCon = getUnsatisfiedPreconditions(bbSet, plugin, subsume);
@@ -394,9 +395,9 @@ public class Catalogue {
     		if (r instanceof Screen)
     			queryString = queryString.concat("FILTER (?bb != "+r.getUri().toSPARQL()+") . ");
 
-    	if (domainContext != null && domainContext.size() > 0) {
+    	if (tags != null && tags.size() > 0) {
         	queryString = queryString.concat("{");
-        	for (String tag : domainContext) {
+        	for (String tag : tags) {
 	    		queryString = queryString.concat(" { ?bb "+CTAG.tagged.toSPARQL()+" ?ctag . ?ctag "+CTAG.label.toSPARQL()+" ?tag . FILTER(regex(str(?tag), \""+tag+"\", \"i\")) } UNION");
         	}
         	// remove last 'UNION'
@@ -440,9 +441,9 @@ public class Catalogue {
 //			if (r instanceof Precondition)
 //				queryString = queryString.concat("FILTER (?resource != "+r.getUri().toSPARQL()+") . ");
 //
-//		if (domainContext != null && domainContext.size() > 0) {
+//		if (tags != null && tags.size() > 0) {
 //	    	queryString = queryString.concat("{");
-//	    	for (String tag : domainContext) {
+//	    	for (String tag : tags) {
 //	    		queryString = queryString.concat(" { ?resource "+FGO.hasTag.toSPARQL()+" ?tag . FILTER regex(str(?tag), \""+tag+"\", \"i\")} UNION");
 //	    	}
 //	    	// remove last 'UNION'
@@ -475,7 +476,8 @@ public class Catalogue {
 			queryString = queryString.concat("\nLIMIT "+limit);
 		queryString = queryString.concat("\nOFFSET "+offset);
 
-    	QueryResultTable qrt = tripleStore.sparqlSelect(queryString);
+		logger.info(queryString);
+		QueryResultTable qrt = tripleStore.sparqlSelect(queryString);
     	ClosableIterator<QueryRow> itResults = qrt.iterator();
     	while (itResults.hasNext()) {
     		results.add(itResults.next().getValue("bb").asURI());
@@ -491,8 +493,8 @@ public class Catalogue {
     		boolean subsume,
     		int offset,
     		int limit,
-    		Set<String> domainContext) throws ClassCastException, ModelRuntimeException {
-    	return findScreens(bbSet, plugin, subsume, offset, limit, domainContext, FGO.hasPostCondition);
+    		Set<String> tags) throws ClassCastException, ModelRuntimeException {
+    	return findScreens(bbSet, plugin, subsume, offset, limit, tags, FGO.hasPostCondition);
     }
     
     public Set<URI> findForwards(
@@ -501,7 +503,7 @@ public class Catalogue {
     		boolean subsume,
     		int offset,
     		int limit,
-    		Set<String> domainContext) throws ClassCastException, ModelRuntimeException {
+    		Set<String> tags) throws ClassCastException, ModelRuntimeException {
     	Set<BuildingBlock> tmpBBSet = new HashSet<BuildingBlock>();
     	for (BuildingBlock bb : bbSet) {
     		if (bb instanceof Screen) {
@@ -513,7 +515,7 @@ public class Catalogue {
     			tmpBBSet.add(bb);
     		}
     	}
-    	return findScreens(tmpBBSet, plugin, subsume, offset, limit, domainContext, FGO.hasPreCondition);
+    	return findScreens(tmpBBSet, plugin, subsume, offset, limit, tags, FGO.hasPreCondition);
     }
 
     /**
