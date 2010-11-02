@@ -585,6 +585,103 @@ public class CodeGenerator
 	{
 		//..
 	}
+	
+	public String buildingBlockTemplate =
+		//declare JSON object 
+		depth + "{\n" +
+			//name
+		    depth2 + "\"name\" : \"<<name>>\"\n" +
+		    
+			//url of the code
+			depth2 + "\"code\" : \"<<codeUrl>>\"\n" +
+			
+			//actions = {name, id, preconditions, uses}
+			depth2 + "\"actions\" : {\n" +
+			
+				//name of the action
+				depth3 + "\"name\" : \"<<actionName>>\"\n" +
+				
+				//preconditions = [{},{...}]
+				depth3 + "\"preconditions\" : [\n" +
+				
+					//a precondition
+					depth4 + "{\n" +
+					
+						//precondition id
+						depth5 + "\"id\" : \"<<preconditionID>>\"\n" +
+					
+						//precondition label
+						depth5 + "\"label\" : \"<<preconditionLabel>>\"\n" +
+						
+						//precondition pattern
+						depth5 + "\"pattern\" : \"<<preconditionPattern>>\"\n" +
+						
+						//precondition positive default = true
+						depth5 + "\"positive\" : \"true\"\n" +
+					
+					depth4 + "}\n" +
+					
+				depth3 + "]\n" +
+				
+				//action uses
+				depth3 + "\"uses\" : []\n" +
+			
+			depth2 + "}\n" +
+			
+			//postconditions= [{},{...}]
+			depth2 + "\"postconditions\" : [\n" +
+			
+				//a postcondition
+				depth4 + "{\n" +
+			
+					//postcondition id
+					depth5 + "\"id\" : \"<<postconditionID>>\"\n" +
+				
+					//postcondition label
+					depth5 + "\"label\" : \"<<postconditionLabel>>\"\n" +
+					
+					//postcondition pattern
+					depth5 + "\"pattern\" : \"<<postconditionPattern>>\"\n" +
+					
+					//postcondition positive default = true
+					depth5 + "\"positive\" : \"true\"\n" +
+			
+				depth4 + "}\n" +
+			
+			depth2 + "]\n" +
+			
+			//version can be blank
+			depth2 + "\"version\" : \"\"\n" +
+			
+			//label
+			depth2 + "\"label\" : { \"en\" : \"<<label>>\"}\n" +
+			
+			//description
+			depth2 + "\"description\" : \"<<description>>\"\n" +
+			
+			//external libs that the bb needs to work
+			depth2 + "\"libraries\" : []\n" +
+			
+			//triggers
+			depth2 + "\"triggers\" : []\n" +
+			
+			//tags
+			depth2 + "\"tags\" : [<<tags>>]\n" +
+			
+			//default rights
+			depth2 + "\"rights\" : \"http://creativecommons.org/\"\n" +
+			
+			//default homepage
+			depth2 + "\"homepage\" : \"http://fast.morfeo-project.eu/\"\n" +
+			
+			//"default" icon
+			depth2 + "\"icon\" : \"http://demo.fast.morfeo-project.org/gvsdata/images/catalogue/<<name>>icon.jpg\"\n" +
+			
+			//"default" screenshot
+			depth2 + "\"screenshot\" : \"http://www.deri.ie/<<name>>screenshot.jpg\"\n" +
+		depth + "}\n" +
+		"\n";
+	
 	public String helperMethods = "";
 }
 

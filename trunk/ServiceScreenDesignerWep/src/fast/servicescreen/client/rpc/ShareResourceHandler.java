@@ -2,6 +2,8 @@ package fast.servicescreen.client.rpc;
 
 import java.util.HashMap;
 
+import net.sourceforge.htmlunit.corejs.javascript.json.JsonParser;
+
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.json.client.JSONArray;
 import com.google.gwt.json.client.JSONNumber;
@@ -23,7 +25,8 @@ public class ShareResourceHandler {
 	
 	//maybe roll out to config-file
 	private String gvsUrl = "http://localhost:13337/";
-	private String codeBaseUrl = "http://localhost:8080/ServiceScreenDesignerWep/servicescreendesignerwep/";
+	private String catalogueUrl = "http://localhost:8080/Catalogue-1";
+	private String codeBaseUrl = "static/servicescreendesignerwep/";
 	
 	private RequestServiceAsync shResService;
 
@@ -50,31 +53,31 @@ public class ShareResourceHandler {
 
 			@Override
 			public void onSuccess(String result) {
-				if(result != "-1")
-				{
-					JSONValue resourceVal = JSONParser.parse(result);
-					JSONObject resourceObj = resourceVal.isObject();
-					JSONValue idVal = resourceObj.get("id");
-					JSONNumber idNum = idVal.isNumber();
-					String id = idNum.toString();
-
-					String shareUrl = gvsUrl + "buildingblock/" + id + "/sharing";
-					shResService.sendHttpRequest_POST(shareUrl, headers, "", new AsyncCallback<String>(){
-						@Override
-						public void onFailure(Throwable caught)
-						{
-							//Resource couldn't be shared
-							System.out.println("Resource couldn't be shared" + caught.getMessage());
-						}
-
-						@Override
-						public void onSuccess(String result)
-						{
-							//Resource was shared
-							System.out.println("Resource was shared: " + result);
-						}
-					});
-				}
+//				if( result != null && result != "-1")
+//				{
+//					JSONValue resourceVal = JSONParser.parse(result);
+//					JSONObject resourceObj = resourceVal.isObject();
+//					JSONValue idVal = resourceObj.get("id");
+//					JSONNumber idNum = idVal.isNumber();
+//					String id = idNum.toString();
+//
+//					String shareUrl = gvsUrl + "buildingblock/" + id + "/sharing";
+//					shResService.sendHttpRequest_POST(shareUrl, headers, "", new AsyncCallback<String>(){
+//						@Override
+//						public void onFailure(Throwable caught)
+//						{
+//							//Resource couldn't be shared
+//							System.out.println("Resource couldn't be shared" + caught.getMessage());
+//						}
+//
+//						@Override
+//						public void onSuccess(String result)
+//						{
+//							//Resource was shared
+//							System.out.println("Resource was shared: " + result);
+//						}
+//					});
+//				}
 			}
 		});
 		
@@ -94,7 +97,7 @@ public class ShareResourceHandler {
 		
 		//code
 		String codeUrl = codeBaseUrl + res.getName() + "Op.js";
-		JSONString resCode = new JSONString(codeUrl);
+		JSONString resCode = new JSONString(/*codeUrl*/"http://localhost:8080/ServiceDesignerWep/servicescreendesignerwep/TestWrapper2Op.js");
 		resource.put("code", resCode);
 		
 		//version - left blank will let the gvs generate it
@@ -102,9 +105,10 @@ public class ShareResourceHandler {
 		resource.put("version", resVersion);
 		
 		//actions TODO: adjust
-		JSONObject resActions = new JSONObject();
+		JSONArray resActions = new JSONArray();
+		JSONObject actions1 = new JSONObject();
 		//actions.name
-		resActions.put("name", new JSONString(name + "Resource"));
+		actions1.put("name", new JSONString(name + "Resource"));
 		//actions.preconditions [id,label,pattern,positive] TODO: adjust
 		FactPort preCondition = (FactPort)res.iteratorOfPreconditions().next();
 		JSONArray preConds = new JSONArray();
@@ -113,10 +117,11 @@ public class ShareResourceHandler {
 		preCond1.put("id", new JSONString(preCondition.getName().toLowerCase()));		
 		//actions.preconditions.label
 		JSONObject preCond1Label = new JSONObject();
-		preCond1Label.put("en", new JSONString("A/An" + preCondition.getName().toLowerCase()));
+		preCond1Label.put("en", new JSONString("A" + preCondition.getName().toLowerCase()));
 		preCond1.put("label", preCond1Label);
 		//actions.preconditions.pattern
-		String preCond1Pattern = "?" + preCondition.getName() + " " + preCondition.getUri();
+//		String preCond1Pattern = "?" + preCondition.getName() + " " + preCondition.getUri() + " " + ;
+		String preCond1Pattern = "?" + preCondition.getName() + " " + "http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://developer.ebay.com/DevZone/shopping/docs/CallRef/FindItemsAdvanced.html#Request";
 		preCond1.put("pattern", new JSONString(preCond1Pattern));
 		//actions.preconditions.positive
 		preCond1.put("positive", new JSONString("true"));
@@ -157,9 +162,10 @@ public class ShareResourceHandler {
 //			preConds.set(index, inPort);
 //			index++;
 //		}
-		resActions.put("preconditions", preConds);
+		actions1.put("preconditions", preConds);
 		//actions.uses
-		resActions.put("uses", new JSONArray());
+		actions1.put("uses", new JSONArray());
+		resActions.set(0, actions1);
 		resource.put("actions", resActions);
 	
 		
@@ -173,10 +179,10 @@ public class ShareResourceHandler {
 		postCond1.put("id", new JSONString(postCondition.getName().toLowerCase()));		
 		//actions.preconditions.label
 		JSONObject postCond1Label = new JSONObject();
-		postCond1Label.put("en", new JSONString("A/An " + postCondition.getName()));
+		postCond1Label.put("en", new JSONString("A " + postCondition.getName()));
 		postCond1.put("label", postCond1Label);
 		//actions.preconditions.pattern
-		String postCond1Pattern = "?" + postCondition.getName() + " " + postCondition.getUri();
+		String postCond1Pattern = "?" + postCondition.getName() + " " + "http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://developer.ebay.com/DevZone/shopping/docs/CallRef/FindItemsAdvanced.html#Response";
 		postCond1.put("pattern", new JSONString(postCond1Pattern));
 		//actions.preconditions.positive
 		postCond1.put("positive", new JSONString("true"));
@@ -220,17 +226,26 @@ public class ShareResourceHandler {
 //		resource.put("postconditions", postConds);
 		
 		//label TODO default label?
-//		JSONObject resLabel = new JSONObject();
-//		resLabel.put("en", new JSONString(""));
-//		resource.put("label", resLabel);
+		JSONObject resLabel = new JSONObject();
+		resLabel.put("en", new JSONString("A" + res.getName()));
+		resource.put("label", resLabel);
 		
 		//description TODO
-		JSONString resDescription = new JSONString("A/An " + postCondition.getName());
+		JSONObject resDescription = new JSONObject();
+		resDescription.put("en", new JSONString("A " + postCondition.getName()));
 		resource.put("description", resDescription);
 		
-		//uri TODO
+		//uri TODO catalogue/services/<id>
 //		JSONString resUri = new JSONString("");
 //		resource.put("uri", resUri);
+		
+		//the external libs that the BB needs to work
+		JSONArray resLibs = new JSONArray();
+		resource.put("libraries", resLibs);
+		
+		//triggers
+		JSONArray resTriggers = new JSONArray();
+		resource.put("triggers", resTriggers);
 		
 		//tags TODO will be helpful when searching
 		JSONArray resTags = new JSONArray();
@@ -240,9 +255,9 @@ public class ShareResourceHandler {
 		JSONString resRights = new JSONString("http://creativecommons.org/");
 		resource.put("rights", resRights);
 		
-		//rights - default rights
+		//homepage - default homepage
 		JSONString resHomepage = new JSONString("http://fast.morfeo-project.eu/");
-		resource.put("rights", resHomepage);
+		resource.put("homepage", resHomepage);
 		
 		//icon - default icon
 		JSONString resIcon = new JSONString("http://demo.fast.morfeo-project.org/gvsdata/images/catalogue/" + name + "icon.jpg");
@@ -253,7 +268,7 @@ public class ShareResourceHandler {
 		resource.put("screenshot", resScreenshot);
 		
 		result = resource.toString();
-		
+
 		return result;
 	}
 }

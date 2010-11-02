@@ -18,6 +18,7 @@ import com.google.gwt.user.client.ui.FlexTable.FlexCellFormatter;
 import fast.common.client.BuildingBlock;
 import fast.mediation.client.gui.MediationRuleGUI;
 import fast.servicescreen.client.ServiceScreenDesignerWep;
+import fast.servicescreen.client.rpc.ShareResourceHandler;
 
 /**
  * This Tab should show result steps of code generation.
@@ -128,6 +129,11 @@ public class CodeGenViewer
 			public void onClick(ClickEvent event)
 			{
 					generator.write_JS_File();
+					
+					//TODO: remove comment when no more internal server errors
+					//share in GVS
+					ShareResourceHandler shOpHandler = new ShareResourceHandler();
+					shOpHandler.share(generator.screen);
 			}
 		});
 		
@@ -191,6 +197,10 @@ public class CodeGenViewer
 				{
 					set_templateShow_Text(generator.helperMethods);
 				}
+				else if("buildingBlockTemplate".equals(currentTemplate))
+				{
+					set_templateShow_Text(generator.buildingBlockTemplate);
+				}
 		}
 	}
 	
@@ -217,6 +227,10 @@ public class CodeGenViewer
 			else if("helpermethods".equals(currentTemplate))
 			{
 				generator.helperMethods = get_templateShow_Text();
+			}
+			else if("buildingBlockTemplate".equals(currentTemplate))
+			{
+				generator.buildingBlockTemplate = get_templateShow_Text();
 			}
 		}
 	}
