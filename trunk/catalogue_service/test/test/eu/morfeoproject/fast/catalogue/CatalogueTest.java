@@ -2,6 +2,7 @@ package test.eu.morfeoproject.fast.catalogue;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import junit.framework.Assert;
@@ -16,6 +17,7 @@ import eu.morfeoproject.fast.catalogue.BuildingBlockJSONBuilder;
 import eu.morfeoproject.fast.catalogue.Catalogue;
 import eu.morfeoproject.fast.catalogue.CatalogueAccessPoint;
 import eu.morfeoproject.fast.catalogue.buildingblocks.BackendService;
+import eu.morfeoproject.fast.catalogue.buildingblocks.BuildingBlock;
 import eu.morfeoproject.fast.catalogue.buildingblocks.Concept;
 import eu.morfeoproject.fast.catalogue.buildingblocks.Condition;
 import eu.morfeoproject.fast.catalogue.buildingblocks.Form;
@@ -68,7 +70,7 @@ public class CatalogueTest extends TestCase {
 		Assert.assertEquals(op1.getTriggers().size(), op2.getTriggers().size());
 	}
 
-	public void createBackendService() throws Exception {
+	public void createBackendService1() throws Exception {
 		BackendService bs1 = (BackendService) TestUtils.buildBB(catalogue.getServerURL(), "backendservice", "data/json/backendservices/amazonSearchService.json");
 		catalogue.addBackendService(bs1);
 		BackendService bs2 = catalogue.getBackendService(bs1.getUri());
@@ -78,6 +80,16 @@ public class CatalogueTest extends TestCase {
 		Assert.assertEquals(bs1.getTriggers().size(), bs2.getTriggers().size());
 	}
 
+	public void createBackendService2() throws Exception {
+		BackendService bs1 = (BackendService) TestUtils.buildBB(catalogue.getServerURL(), "backendservice", "data/json/backendservices/kasselTest1.json");
+		catalogue.addBackendService(bs1);
+		BackendService bs2 = catalogue.getBackendService(bs1.getUri());
+		Assert.assertTrue(bs1.equals(bs2));
+		Assert.assertEquals(bs1.getActions().size(), bs2.getActions().size());
+		Assert.assertEquals(bs1.getPostconditions().size(), bs2.getPostconditions().size());
+		Assert.assertEquals(bs1.getTriggers().size(), bs2.getTriggers().size());
+	}
+	
 	public void createPostcondition() throws Exception {
 		Postcondition p1 = (Postcondition) TestUtils.buildBB(catalogue.getServerURL(), "postcondition", "data/json/postconditions/searchCriteria.json");
 		catalogue.addPreOrPost(p1);
@@ -127,12 +139,31 @@ public class CatalogueTest extends TestCase {
 		BackendService service = (BackendService) TestUtils.buildBB(catalogue.getServerURL(), "backendservice", "data/json/backendservices/amazonSearchService.json");
 		catalogue.addForm(form);
 		catalogue.addBackendService(service);
-		ArrayList<Condition> conList = new ArrayList<Condition>();
-		HashSet<ScreenComponent> all = new HashSet<ScreenComponent>();
+		List<Condition> conList = new ArrayList<Condition>();
+		Set<ScreenComponent> all = new HashSet<ScreenComponent>();
 		all.add(form);
-		Set<URI> results = catalogue.findScreenComponents(null, conList, all, 0, -1, new HashSet<String>(), FGO.BackendService);
+		Set<String> tags = new HashSet<String>();
+		tags.add("amazon");
+		Set<URI> results = catalogue.findScreenComponents(null, conList, all, 0, -1, tags, FGO.BackendService);
 		Assert.assertEquals(1, results.size());
 		Assert.assertEquals(service.getUri(), results.toArray()[0]);
+	}
+	
+	public void findAndCheck2() throws Exception {
+		Screen s1 = (Screen) TestUtils.buildBB(catalogue.getServerURL(), "screen", "data/json/screens/amazonProductCode.json");
+		Screen s2 = (Screen) TestUtils.buildBB(catalogue.getServerURL(), "screen", "data/json/screens/amazonListCode.json");
+		Screen s3 = (Screen) TestUtils.buildBB(catalogue.getServerURL(), "screen", "data/json/screens/amazonSuggestionCode.json");
+		catalogue.addScreen(s1);
+		catalogue.addScreen(s2);
+		catalogue.addScreen(s3);
+		Set<BuildingBlock> all = new HashSet<BuildingBlock>();
+		all.add(s1);
+		Set<String> tags = new HashSet<String>();
+		tags.add("amazon");
+		Set<URI> results = catalogue.findBackwards(all, true, true, 0, -1, tags);
+		Assert.assertEquals(2, results.size());
+		Assert.assertTrue(results.contains(s2.getUri()));
+		Assert.assertTrue(results.contains(s3.getUri()));
 	}
 	
 	public static Test suite(){
@@ -140,12 +171,14 @@ public class CatalogueTest extends TestCase {
 	    suite.addTest(new CatalogueTest("check"));
 	    suite.addTest(new CatalogueTest("createForm"));
 	    suite.addTest(new CatalogueTest("createOperator"));
-	    suite.addTest(new CatalogueTest("createBackendService"));
+	    suite.addTest(new CatalogueTest("createBackendService1"));
+	    suite.addTest(new CatalogueTest("createBackendService2"));
 	    suite.addTest(new CatalogueTest("createPostcondition"));
 	    suite.addTest(new CatalogueTest("createScreen1"));
 	    suite.addTest(new CatalogueTest("createScreen2"));
 	    suite.addTest(new CatalogueTest("createConcept"));
 	    suite.addTest(new CatalogueTest("findAndCheck1"));
+	    suite.addTest(new CatalogueTest("findAndCheck2"));
 		return suite;
 	}
 	
