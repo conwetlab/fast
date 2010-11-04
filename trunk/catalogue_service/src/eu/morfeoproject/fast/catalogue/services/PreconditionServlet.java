@@ -121,36 +121,34 @@ public class PreconditionServlet extends GenericServlet {
 				format = MediaType.forExtension(extension);
 				// Retrieve the addressed member of the collection
 				String uri = url.substring(0, url.indexOf(extension) - 1);
-				Precondition pre = catalogue.getPrecondition(new URIImpl(uri));
-				if (pre == null) {
+				try {
+					Precondition pre = catalogue.getPrecondition(new URIImpl(uri));
+					if (format.equals(MediaType.APPLICATION_RDF_XML) ||
+							format.equals(MediaType.APPLICATION_TURTLE)) {
+						response.setContentType(format);
+						Model preModel = pre.toRDF2GoModel();
+						preModel.writeTo(writer, Syntax.forMimeType(format));
+						preModel.close();
+					} else if (format.equals(MediaType.TEXT_HTML)) {
+						response.setContentType(format);
+						if (TemplateManager.getDefaultEncoding() != null)
+							response.setCharacterEncoding(TemplateManager.getDefaultEncoding());
+						if (TemplateManager.getLocale() != null)
+							response.setLocale(TemplateManager.getLocale());
+						BuildingBlockTemplate.process(pre, writer);
+					} else {
+						response.setContentType(MediaType.APPLICATION_JSON);
+						writer.print(pre.toJSON().toString(2));
+					}				
+					response.setStatus(HttpServletResponse.SC_OK);
+				} catch (NotFoundException e1) {
 					response.sendError(HttpServletResponse.SC_NOT_FOUND, "The resource "+uri+" has not been found.");
-				} else {
-					try {
-						if (format.equals(MediaType.APPLICATION_RDF_XML) ||
-								format.equals(MediaType.APPLICATION_TURTLE)) {
-							response.setContentType(format);
-							Model preModel = pre.toRDF2GoModel();
-							preModel.writeTo(writer, Syntax.forMimeType(format));
-							preModel.close();
-						} else if (format.equals(MediaType.TEXT_HTML)) {
-							response.setContentType(format);
-							if (TemplateManager.getDefaultEncoding() != null)
-								response.setCharacterEncoding(TemplateManager.getDefaultEncoding());
-							if (TemplateManager.getLocale() != null)
-								response.setLocale(TemplateManager.getLocale());
-							BuildingBlockTemplate.process(pre, writer);
-						} else {
-							response.setContentType(MediaType.APPLICATION_JSON);
-							writer.print(pre.toJSON().toString(2));
-						}				
-						response.setStatus(HttpServletResponse.SC_OK);
-					} catch (JSONException e) {
-						e.printStackTrace();
-						response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
-					} catch (TemplateException e) {
-						e.printStackTrace();
-						response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
-					}
+				} catch (JSONException e) {
+					e.printStackTrace();
+					response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
+				} catch (TemplateException e) {
+					e.printStackTrace();
+					response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
 				}
 			}
 		}

@@ -16,6 +16,7 @@ import org.ontoware.rdf2go.model.node.URI;
 import eu.morfeoproject.fast.catalogue.BuildingBlockJSONBuilder;
 import eu.morfeoproject.fast.catalogue.Catalogue;
 import eu.morfeoproject.fast.catalogue.CatalogueAccessPoint;
+import eu.morfeoproject.fast.catalogue.NotFoundException;
 import eu.morfeoproject.fast.catalogue.buildingblocks.BackendService;
 import eu.morfeoproject.fast.catalogue.buildingblocks.BuildingBlock;
 import eu.morfeoproject.fast.catalogue.buildingblocks.Concept;
@@ -166,7 +167,21 @@ public class CatalogueTest extends TestCase {
 		Assert.assertTrue(results.contains(s3.getUri()));
 	}
 	
-	public static Test suite(){
+	public void removeScreen() throws Exception {
+		Screen s1 = (Screen) TestUtils.buildBB(catalogue.getServerURL(), "screen", "data/json/screens/amazonProductCode.json");
+		catalogue.addScreen(s1);
+		catalogue.removeScreen(s1.getUri());
+		try {
+			catalogue.getScreen(s1.getUri());
+		} catch (NotFoundException e) {
+			Assert.assertTrue(true);
+		}
+		catalogue.addScreen(s1);
+		Screen s2 = catalogue.getScreen(s1.getUri());
+		Assert.assertEquals(s1.getUri(), s2.getUri());
+	}
+	
+	public static Test suite() {
 	    TestSuite suite = new TestSuite();
 	    suite.addTest(new CatalogueTest("check"));
 	    suite.addTest(new CatalogueTest("createForm"));
@@ -179,6 +194,7 @@ public class CatalogueTest extends TestCase {
 	    suite.addTest(new CatalogueTest("createConcept"));
 	    suite.addTest(new CatalogueTest("findAndCheck1"));
 	    suite.addTest(new CatalogueTest("findAndCheck2"));
+	    suite.addTest(new CatalogueTest("removeScreen"));
 		return suite;
 	}
 	

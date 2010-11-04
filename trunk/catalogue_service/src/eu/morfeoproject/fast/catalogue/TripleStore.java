@@ -6,10 +6,12 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 import org.ontoware.aifbcommons.collection.ClosableIterable;
 import org.ontoware.aifbcommons.collection.ClosableIterator;
+import org.ontoware.rdf2go.RDF2Go;
 import org.ontoware.rdf2go.exception.ModelRuntimeException;
 import org.ontoware.rdf2go.model.Model;
 import org.ontoware.rdf2go.model.ModelSet;
@@ -107,6 +109,7 @@ public class TripleStore {
     	if (uriModel == null)
     		throw new IllegalArgumentException("uriModel is null");
 		persistentModelSet.addModel(model, uriModel);
+//    	addSafeModel(model, uriModel);
 	}
 	
 	/**
@@ -115,9 +118,7 @@ public class TripleStore {
 	 * @param uriModel
 	 */
 	private void addSafeModel(Model model, URI uriModel) {
-		 
 		persistentModelSet.addModel(model, uriModel);
-
 	}
 	
 	public Model getModel(URI uriModel) {

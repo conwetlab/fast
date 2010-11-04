@@ -19,6 +19,7 @@ import org.slf4j.LoggerFactory;
 
 import eu.morfeoproject.fast.catalogue.Catalogue;
 import eu.morfeoproject.fast.catalogue.CatalogueAccessPoint;
+import eu.morfeoproject.fast.catalogue.NotFoundException;
 import eu.morfeoproject.fast.catalogue.buildingblocks.BackendService;
 import eu.morfeoproject.fast.catalogue.buildingblocks.BuildingBlock;
 import eu.morfeoproject.fast.catalogue.buildingblocks.Form;
@@ -68,17 +69,21 @@ public class MetadataServlet extends HttpServlet {
 			
 			for (int i = 0; i < input.length(); i++) {
 				URI uri = new URIImpl(input.getString(i));
-				BuildingBlock bb = catalogue.getBuildingBlock(uri);
-				if (bb instanceof ScreenFlow)
-					arrayScreenflows.put(bb.toJSON());
-				else if (bb instanceof Screen)
-					arrayScreens.put(bb.toJSON());
-				else if (bb instanceof Form)
-					arrayForms.put(bb.toJSON());
-				else if (bb instanceof Operator)
-					arrayOperators.put(bb.toJSON());
-				else if (bb instanceof BackendService)
-					arrayBackendServices.put(bb.toJSON());
+				try {
+					BuildingBlock bb = catalogue.getBuildingBlock(uri);
+					if (bb instanceof ScreenFlow)
+						arrayScreenflows.put(bb.toJSON());
+					else if (bb instanceof Screen)
+						arrayScreens.put(bb.toJSON());
+					else if (bb instanceof Form)
+						arrayForms.put(bb.toJSON());
+					else if (bb instanceof Operator)
+						arrayOperators.put(bb.toJSON());
+					else if (bb instanceof BackendService)
+						arrayBackendServices.put(bb.toJSON());
+				} catch (NotFoundException e) {
+					logger.error(uri+" not found", e);
+				}
 			}
 			
 			// create the JSON output

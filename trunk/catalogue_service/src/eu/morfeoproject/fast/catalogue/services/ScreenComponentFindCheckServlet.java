@@ -267,19 +267,24 @@ public class ScreenComponentFindCheckServlet extends GenericServlet {
 		Condition conFrom, conTo;
 		Catalogue catalogue = CatalogueAccessPoint.getCatalogue();
 
-		if (pipe.getIdBBFrom() == null) {
-			conFrom = getConditionById(preconditions, pipe.getIdConditionFrom());
-		} else {
-			ScreenComponent sc = catalogue.getScreenComponent(new URIImpl(pipe.getIdBBFrom()));
-			conFrom = getPostconditionById(sc, pipe.getIdConditionFrom());
+		try {
+			if (pipe.getIdBBFrom() == null) {
+				conFrom = getConditionById(preconditions, pipe.getIdConditionFrom());
+			} else {
+				ScreenComponent sc = catalogue.getScreenComponent(new URIImpl(pipe.getIdBBFrom()));
+				conFrom = getPostconditionById(sc, pipe.getIdConditionFrom());
+			}
+			if (pipe.getIdBBTo() == null) {
+				conTo = getConditionById(postconditions, pipe.getIdConditionTo());
+			} else {
+				ScreenComponent sc = catalogue.getScreenComponent(new URIImpl(pipe.getIdBBTo()));
+				conTo = getPreconditionById(sc, pipe.getIdConditionTo());
+			}
+			satisfied = isConditionCompatible(conFrom, conTo);
+		} catch (NotFoundException e) {
+			logger.error(e.getMessage(), e);
+			return false;
 		}
-		if (pipe.getIdBBTo() == null) {
-			conTo = getConditionById(postconditions, pipe.getIdConditionTo());
-		} else {
-			ScreenComponent sc = catalogue.getScreenComponent(new URIImpl(pipe.getIdBBTo()));
-			conTo = getPreconditionById(sc, pipe.getIdConditionTo());
-		}
-		satisfied = isConditionCompatible(conFrom, conTo);
 		
 		return satisfied;
 	}

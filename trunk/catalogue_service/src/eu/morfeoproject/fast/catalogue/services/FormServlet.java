@@ -125,38 +125,36 @@ public class FormServlet extends GenericServlet {
 				// Retrieve the addressed member of the collection
 				String uri = url.substring(0, url.indexOf(extension) - 1);
 				logger.info("Retrieving formElement "+uri);
-				Form form = catalogue.getForm(new URIImpl(uri));
-				if (form == null) {
+				try {
+					Form form = catalogue.getForm(new URIImpl(uri));
+					if (format.equals(MediaType.APPLICATION_RDF_XML) ||
+							format.equals(MediaType.APPLICATION_TURTLE)) {
+						response.setContentType(format);
+						Model feModel = form.toRDF2GoModel();
+						feModel.writeTo(writer, Syntax.forMimeType(format));
+						feModel.close();
+					} else if (format.equals(MediaType.TEXT_HTML) ||
+							format.equals(MediaType.APPLICATION_XHTML_XML) ||
+							format.equals(MediaType.APPLICATION_XML)) {
+						response.setContentType(MediaType.TEXT_HTML);
+						if (TemplateManager.getDefaultEncoding() != null)
+							response.setCharacterEncoding(TemplateManager.getDefaultEncoding());
+						if (TemplateManager.getLocale() != null)
+							response.setLocale(TemplateManager.getLocale());
+						BuildingBlockTemplate.process(form, writer);
+					} else {
+						response.setContentType(MediaType.APPLICATION_JSON);
+						writer.print(form.toJSON().toString(2));
+					}				
+					response.setStatus(HttpServletResponse.SC_OK);
+				} catch (NotFoundException e1) {
 					response.sendError(HttpServletResponse.SC_NOT_FOUND, "The resource "+uri+" has not been found.");
-				} else {
-					try {
-						if (format.equals(MediaType.APPLICATION_RDF_XML) ||
-								format.equals(MediaType.APPLICATION_TURTLE)) {
-							response.setContentType(format);
-							Model feModel = form.toRDF2GoModel();
-							feModel.writeTo(writer, Syntax.forMimeType(format));
-							feModel.close();
-						} else if (format.equals(MediaType.TEXT_HTML) ||
-								format.equals(MediaType.APPLICATION_XHTML_XML) ||
-								format.equals(MediaType.APPLICATION_XML)) {
-							response.setContentType(MediaType.TEXT_HTML);
-							if (TemplateManager.getDefaultEncoding() != null)
-								response.setCharacterEncoding(TemplateManager.getDefaultEncoding());
-							if (TemplateManager.getLocale() != null)
-								response.setLocale(TemplateManager.getLocale());
-							BuildingBlockTemplate.process(form, writer);
-						} else {
-							response.setContentType(MediaType.APPLICATION_JSON);
-							writer.print(form.toJSON().toString(2));
-						}				
-						response.setStatus(HttpServletResponse.SC_OK);
-					} catch (JSONException e) {
-						e.printStackTrace();
-						response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
-					} catch (TemplateException e) {
-						e.printStackTrace();
-						response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
-					}
+				} catch (JSONException e) {
+					e.printStackTrace();
+					response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
+				} catch (TemplateException e) {
+					e.printStackTrace();
+					response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
 				}
 			}
 		}

@@ -123,37 +123,35 @@ public class OperatorServlet extends GenericServlet {
 				// Retrieve the addressed member of the collection
 				String uri = url.substring(0, url.indexOf(extension) - 1);
 				logger.info("Retrieving operator "+uri);
-				Operator operator = catalogue.getOperator(new URIImpl(uri));
-				if (operator == null) {
-					response.sendError(HttpServletResponse.SC_NOT_FOUND, "The resource "+uri+" has not been found.");
-				} else {
-					try {
-						if (format.equals(MediaType.APPLICATION_RDF_XML) ||
-								format.equals(MediaType.APPLICATION_TURTLE)) {
-							response.setContentType(format);
-							Model opModel = operator.toRDF2GoModel();
-							opModel.writeTo(writer, Syntax.forMimeType(format));
-							opModel.dump();
-							opModel.close();
-						} else if (format.equals(MediaType.TEXT_HTML)) {
-							response.setContentType(format);
-							if (TemplateManager.getDefaultEncoding() != null)
-								response.setCharacterEncoding(TemplateManager.getDefaultEncoding());
-							if (TemplateManager.getLocale() != null)
-								response.setLocale(TemplateManager.getLocale());
-							BuildingBlockTemplate.process(operator, writer);
-						} else {
-							response.setContentType(MediaType.APPLICATION_JSON);
-							writer.print(operator.toJSON().toString(2));
-						}
-						response.setStatus(HttpServletResponse.SC_OK);
-					} catch (JSONException e) {
-						e.printStackTrace();
-						response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
-					} catch (TemplateException e) {
-						e.printStackTrace();
-						response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
+				try {
+					Operator operator = catalogue.getOperator(new URIImpl(uri));
+					if (format.equals(MediaType.APPLICATION_RDF_XML) ||
+							format.equals(MediaType.APPLICATION_TURTLE)) {
+						response.setContentType(format);
+						Model opModel = operator.toRDF2GoModel();
+						opModel.writeTo(writer, Syntax.forMimeType(format));
+						opModel.dump();
+						opModel.close();
+					} else if (format.equals(MediaType.TEXT_HTML)) {
+						response.setContentType(format);
+						if (TemplateManager.getDefaultEncoding() != null)
+							response.setCharacterEncoding(TemplateManager.getDefaultEncoding());
+						if (TemplateManager.getLocale() != null)
+							response.setLocale(TemplateManager.getLocale());
+						BuildingBlockTemplate.process(operator, writer);
+					} else {
+						response.setContentType(MediaType.APPLICATION_JSON);
+						writer.print(operator.toJSON().toString(2));
 					}
+					response.setStatus(HttpServletResponse.SC_OK);
+				} catch (NotFoundException e1) {
+					response.sendError(HttpServletResponse.SC_NOT_FOUND, "The resource "+uri+" has not been found.");
+				} catch (JSONException e) {
+					e.printStackTrace();
+					response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
+				} catch (TemplateException e) {
+					e.printStackTrace();
+					response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
 				}
 			}
 		}

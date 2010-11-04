@@ -122,36 +122,34 @@ public class PostconditionServlet extends GenericServlet {
 				// Retrieve the addressed member of the collection
 				String uri = url.substring(0, url.indexOf(extension) - 1);
 				logger.info("Retrieving screen "+uri);
-				Postcondition post = catalogue.getPostcondition(new URIImpl(uri));
-				if (post == null) {
+				try {
+					Postcondition post = catalogue.getPostcondition(new URIImpl(uri));
+					if (format.equals(MediaType.APPLICATION_RDF_XML) ||
+							format.equals(MediaType.APPLICATION_TURTLE)) {
+						response.setContentType(format);
+						Model postModel = post.toRDF2GoModel();
+						postModel.writeTo(writer, Syntax.forMimeType(format));
+						postModel.close();
+					} else if (format.equals(MediaType.TEXT_HTML)) {
+						response.setContentType(format);
+						if (TemplateManager.getDefaultEncoding() != null)
+							response.setCharacterEncoding(TemplateManager.getDefaultEncoding());
+						if (TemplateManager.getLocale() != null)
+							response.setLocale(TemplateManager.getLocale());
+						BuildingBlockTemplate.process(post, writer);
+					} else {
+						response.setContentType(MediaType.APPLICATION_JSON);
+						writer.print(post.toJSON().toString(2));
+					}				
+					response.setStatus(HttpServletResponse.SC_OK);
+				} catch (NotFoundException e1) {
 					response.sendError(HttpServletResponse.SC_NOT_FOUND, "The resource "+uri+" has not been found.");
-				} else {
-					try {
-						if (format.equals(MediaType.APPLICATION_RDF_XML) ||
-								format.equals(MediaType.APPLICATION_TURTLE)) {
-							response.setContentType(format);
-							Model postModel = post.toRDF2GoModel();
-							postModel.writeTo(writer, Syntax.forMimeType(format));
-							postModel.close();
-						} else if (format.equals(MediaType.TEXT_HTML)) {
-							response.setContentType(format);
-							if (TemplateManager.getDefaultEncoding() != null)
-								response.setCharacterEncoding(TemplateManager.getDefaultEncoding());
-							if (TemplateManager.getLocale() != null)
-								response.setLocale(TemplateManager.getLocale());
-							BuildingBlockTemplate.process(post, writer);
-						} else {
-							response.setContentType(MediaType.APPLICATION_JSON);
-							writer.print(post.toJSON().toString(2));
-						}				
-						response.setStatus(HttpServletResponse.SC_OK);
-					} catch (JSONException e) {
-						e.printStackTrace();
-						response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
-					} catch (TemplateException e) {
-						e.printStackTrace();
-						response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
-					}
+				} catch (JSONException e) {
+					e.printStackTrace();
+					response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
+				} catch (TemplateException e) {
+					e.printStackTrace();
+					response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
 				}
 			}
 		}
