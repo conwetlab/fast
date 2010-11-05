@@ -3,6 +3,7 @@ from django.conf import settings
 from django.utils import simplejson
 from django.shortcuts import get_object_or_404
 from django.template import Template, Context, loader
+from urlparse import urljoin
 
 from django.contrib.auth.models import User
 
