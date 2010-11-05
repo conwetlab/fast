@@ -117,8 +117,8 @@ class BuildingBlock(models.Model):
             else:
                 raise Exception(result['body'])
         else:
-            conn = Connection(bb.uri)
-            result = conn.request_put('', body=bb.data, headers={'Accept':'text/json'})
+            conn = Connection(self.uri)
+            result = conn.request_put('', body=self.data, headers={'Accept':'text/json'})
             if not isValidResponse(result):
                 raise Exception(result['body'])
 

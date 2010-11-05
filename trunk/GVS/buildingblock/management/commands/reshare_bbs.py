@@ -38,14 +38,19 @@ class Command(BaseCommand):
             bb = bb.child_model()
             if bb.uri != None and bb.uri != '':
                 try:
+                    print "Unsharing: %s" % bb.pk
                     bb.unshare()
                 except Exception, e:
-                    print e
+                    print "Cannot unshare: %s. Maybe the catalogue was emptied before?" % bb.pk
+                    bb.uri = None
+                    bb.save()
 
             bb.compile_code()
             try:
+                print "Sharing %s" % bb.pk
                 bb.share()
             except Exception, e:
+                print "ERROR sharing: %s" % bb.pk
                 print e
 
         concepts_dir = options["concepts_dir"]
