@@ -18,7 +18,7 @@ import com.google.gwt.user.client.ui.FlexTable.FlexCellFormatter;
 import fast.common.client.BuildingBlock;
 import fast.mediation.client.gui.MediationRuleGUI;
 import fast.servicescreen.client.ServiceScreenDesignerWep;
-import fast.servicescreen.client.rpc.ShareResourceHandler;
+import fast.servicescreen.client.URL_Settings;
 
 /**
  * This Tab should show result steps of code generation.
@@ -46,14 +46,12 @@ public class CodeGenViewer
 	 * */
 	public CodeGenViewer(ServiceScreenDesignerWep serviceDesigner, WrappingType type)
 	{
-		BuildingBlock screen = serviceDesigner.serviceScreen;
-		
 		switch(type)
 		{
-			case WRAP_AND_REQUEST_XML  : generator = new CodeGenerator(screen);			//SDW XML
+			case WRAP_AND_REQUEST_XML  : generator = new CodeGenerator(serviceDesigner);			//SDW XML
 										 break;
 										
-			case WRAP_AND_REQUEST_JSON : generator = new CodeGenerator_reqJSON(serviceDesigner, screen); //SDW JSON
+			case WRAP_AND_REQUEST_JSON : generator = new CodeGenerator_reqJSON(serviceDesigner);	//SDW JSON
 										 break;
 		}
 	}
@@ -62,7 +60,7 @@ public class CodeGenViewer
 	{
 		switch(type)
 		{
-			case WRAP_JSON	:	generator = new CodeGenerator_JSON(screen, gui);	//DataMediation Tool
+			case WRAP_JSON	:	generator = new CodeGenerator_JSON(screen, gui);					//DataMediation Tool
 								break;
 		}
 	}
@@ -130,15 +128,14 @@ public class CodeGenViewer
 			{
 					generator.write_JS_File();
 					
-					//TODO: remove comment when no more internal server errors
-					//share in GVS
-					ShareResourceHandler shOpHandler = new ShareResourceHandler();
-					shOpHandler.share(generator.screen);
+					//TODO dk remove share method/handler. Code should be generatet by generator
+					//then this save button just have to call the post mehtod, currently called in sharedHandler
+//					ShareResourceHandler shOpHandler = new ShareResourceHandler();
+//					shOpHandler.share(generator.screen);
 			}
 		});
 		
-		//TODO: Should be changeable or auto - re - configured! 
-		String operatorURL = "http://localhost:13337/static/servicescreendesignerwep/" + generator.screen.getName() + "Op.html";
+		String operatorURL = URL_Settings.getGVSOperatorStorage_URL() + generator.screen.getName() + "Op.html";
 		Anchor a = new Anchor(operatorURL, operatorURL, "_blank");
 		
 		
@@ -146,7 +143,7 @@ public class CodeGenViewer
 		// -> Only things that make sense at time are lited here
 		choosenTemplate = new ListBox();
 		choosenTemplate.addItem("root");
-		choosenTemplate.addItem("sendrequest");
+		choosenTemplate.addItem("buildingBlock metadata");
 		choosenTemplate.addItem("prehtml");	
 		choosenTemplate.addItem("posthtml");
 		choosenTemplate.addItem("helpermethods");
@@ -197,7 +194,7 @@ public class CodeGenViewer
 				{
 					set_templateShow_Text(generator.helperMethods);
 				}
-				else if("buildingBlockTemplate".equals(currentTemplate))
+				else if("buildingBlock metadata".equals(currentTemplate))
 				{
 					set_templateShow_Text(generator.buildingBlockTemplate);
 				}
@@ -228,7 +225,7 @@ public class CodeGenViewer
 			{
 				generator.helperMethods = get_templateShow_Text();
 			}
-			else if("buildingBlockTemplate".equals(currentTemplate))
+			else if("buildingBlock metadata".equals(currentTemplate))
 			{
 				generator.buildingBlockTemplate = get_templateShow_Text();
 			}

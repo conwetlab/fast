@@ -37,8 +37,8 @@ public class RequestGUI
 
 		int numRows = requestTable.getRowCount();
 
-		// Add textboxes for the request template, url, the parameters and send button
-		requestTable.setWidget(numRows, 0, new Label("Request:"));
+		// Add text boxes for the request template, url, the parameters and send button
+		requestTable.setWidget(numRows, 0, new Label("Request URL: "));
 
 		String textSize = "20cm";
 		designer.templateBox = CTextChangeHandler.createWidthTextBox(designer.serviceScreen, textSize, "requestTemplate");
@@ -52,6 +52,7 @@ public class RequestGUI
 		{
 			templateGUI = new TemplateGUI(designer);			
 		}
+		
 		updateAtWork = true;
 		setTemplateTable(templateGUI.createTemplateTable());
 		requestTable.setWidget(numRows, 1, getTemplateTable());
@@ -66,20 +67,26 @@ public class RequestGUI
 		{
 			designer.requestHandler = new SendRequestHandler(designer);
 		}
+		
+		//Add handler to change code gen, if request type is changing.
+		reqTypeHandler = new RequestTypeHandler(designer);
+		requestTable.setWidget(numRows, 1, reqTypeHandler.getChooserPanel());
+		numRows++;
+		
+		//Add header, body fields
+		requestTable.setWidget(numRows, 1, reqTypeHandler.getHeaderBodyPanel());
+		numRows++;
+		
 		designer.requestButton = new Button("Send Request", designer.requestHandler);
 		designer.requestButton.setStyleName("fastButton");
-
 		designer.requestButton.addStyleName("sc-FixedWidthButton");
 		requestTable.setWidget(numRows, 1, designer.requestButton);
+		
 		numRows++;
 
 		// Add textbox for actual request
-		requestTable.setWidget(numRows, 0, new Label("Sent request: "));
+		requestTable.setWidget(numRows, 0, new Label("Final URL: "));
 		requestTable.setWidget(numRows, 1, designer.requestUrlBox);
-		
-		//Add handler to change code gen, if request type is changing
-		reqTypeHandler = new RequestTypeHandler(designer);
-		requestTable.setWidget(numRows, 2, reqTypeHandler.getChooserPanel());
 		
 		numRows++;
 		numRows++;
@@ -114,12 +121,13 @@ public class RequestGUI
 		}		
 	}
 
-
-	public void setTemplateTable(Widget templateTable) {
+	public void setTemplateTable(Widget templateTable)
+	{
 		this.templateTable = templateTable;
 	}
 
-	public Widget getTemplateTable() {
+	public Widget getTemplateTable()
+	{
 		return templateTable;
 	}
 }

@@ -14,7 +14,9 @@ import fast.common.client.FactPort;
 import fast.common.client.ServiceScreen;
 import fast.servicescreen.client.RequestService;
 import fast.servicescreen.client.RequestServiceAsync;
+import fast.servicescreen.client.ServiceScreenDesignerWep;
 import fast.servicescreen.client.gui.RuleUtil;
+import fast.servicescreen.client.gui.RequestTypeHandler.RequestMethodType;
 import fast.servicescreen.client.gui.codegen_js.CodeGenViewer.WrappingType;
 import fast.servicescreen.client.gui.parser.Kind;
 import fast.servicescreen.client.gui.parser.Operation;
@@ -29,7 +31,10 @@ public class CodeGenerator
 	protected HashMap<String, String> table = null;
 	
 	//the requested source type
-	WrappingType reqType;
+	WrappingType resType;
+	
+	//the serviceDesigner
+	ServiceScreenDesignerWep serviceDesigner;
 	
 	protected boolean firstOperation = true;
 	
@@ -47,9 +52,12 @@ public class CodeGenerator
 	protected String depth5 = "               ";
 	
 	
-	public CodeGenerator(BuildingBlock screen)
+	public CodeGenerator(ServiceScreenDesignerWep serviceDesigner)
 	{
-		this.screen = screen;
+		this.serviceDesigner = serviceDesigner;
+		
+		if(serviceDesigner != null)
+			this.screen = serviceDesigner.serviceScreen;
 		
 		//set up the templates for the specific code generator
 		setTemplates();
@@ -105,6 +113,9 @@ public class CodeGenerator
 		//Build the exRules - feature
 		add_Translation_toTable();
 		
+		//Build the method request type, get or json
+		add_MethodType_toTable();
+		
 		//fill founded values into the <keywords> in rootTemplate
 		String tmp = rootTemplate;
 		rootTemplate = expandTemplateKeys(tmp);
@@ -114,6 +125,20 @@ public class CodeGenerator
 		posthtml = expandTemplateKeys(tmp);
 
 		return rootTemplate;
+	}
+	
+	public void add_MethodType_toTable()
+	{
+		RequestMethodType type = serviceDesigner.requestGui.reqTypeHandler.getRequestType();
+		
+		if(type.equals(RequestMethodType.GET_REQUEST))
+		{
+			table.put("<<methodType>>", "get");
+		}
+		else if(type.equals(RequestMethodType.POST_REQUEST))
+		{
+			table.put("<<methodType>>", "post");
+		}
 	}
 
 	protected void add_PreRequest_toTable()
@@ -499,7 +524,7 @@ public class CodeGenerator
 			//sending/recieving the request
 			depth2 + "//Invoke the service\n" +
 			depth2 + "    new FastAPI.Request(request,{\n" +
-			depth2 + "        'method':       'get',\n" +
+			depth2 + "        'method':       '<<methodType>>',\n" +
 			depth2 + "        'content':      'xml',\n" +
 			depth2 + "        'context':      theOperator,\n" +
 			depth2 + "        'onSuccess':    theOperator.addToList\n" +

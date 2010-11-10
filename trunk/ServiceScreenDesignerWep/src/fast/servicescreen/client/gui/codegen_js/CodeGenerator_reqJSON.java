@@ -3,7 +3,6 @@ package fast.servicescreen.client.gui.codegen_js;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-import fast.common.client.BuildingBlock;
 import fast.common.client.FASTMappingRule;
 import fast.common.client.ServiceScreen;
 import fast.servicescreen.client.ServiceScreenDesignerWep;
@@ -18,13 +17,9 @@ import fast.servicescreen.client.gui.parser.OperationHandler;
  * */
 public class CodeGenerator_reqJSON extends CodeGenerator
 {
-	ServiceScreenDesignerWep serviceDesigner;
-	
-	public CodeGenerator_reqJSON(ServiceScreenDesignerWep serviceDesigner, BuildingBlock screen)
+	public CodeGenerator_reqJSON(ServiceScreenDesignerWep serviceDesigner)
 	{
-		super(screen);
-		
-		this.serviceDesigner = serviceDesigner;
+		super(serviceDesigner);
 	}
 	
 	/**
@@ -68,7 +63,7 @@ public class CodeGenerator_reqJSON extends CodeGenerator
 				//sending/recieving the request
 				depth2 + "//Invoke the service\n" +
 				depth2 + "    new FastAPI.Request(request,{\n" +
-				depth2 + "        'method':       'get',\n" +
+				depth2 + "        'method':       '<<methodType>>',\n" +
 				depth2 + "        'content':      'json',\n" +
 				depth2 + "        'context':      theOperator,\n" +
 				depth2 + "        'onSuccess':    theOperator.addToList\n" +
@@ -96,6 +91,7 @@ public class CodeGenerator_reqJSON extends CodeGenerator
 			    depth2 + "}\n" +
 				depth + "}, \n" +
 				depth + "\n" +
+				
 				//next method rump
 				depth + "onError: function (transport){} \n" +
 				depth + "\n" +
@@ -120,75 +116,70 @@ public class CodeGenerator_reqJSON extends CodeGenerator
 			OperationHandler opHandler = (OperationHandler) rule.getOperationHandler();
 			Iterator<ArrayList<Operation>> opList_iter = opHandler.getOperationlistIterator();
 			ArrayList<Operation> current_opList = null;
-			
+
 			String kind = rule.getKind();
-						
+
 			if ("createObject".equals(kind))
 			{
 				String tmpCode = "";
-				
+
 				//from to
 				String from = rule.getSourceTagname();
 				String target = rule.getTargetElemName();
-				
-				//TODO:????
-//				If it is not just a structure tag ( = tags insert by us, so user see JSON strukture better)
-//				if(! from.endsWith("_Item"))
-//				{
-					//create indent for n1 JSON output
-					if(firstOperation)
-					{
-						tmpCode += "var indent = ''; \n";
-						
-						firstOperation = false;
-					}
-					else
-					{
-						tmpCode += codeIndent + "indent = indent + '   '; \n";
-					}
-					
-					
-					//create a elementcount variable name
-					String lengthName =  from + "_length";
-					
-					//get searched elementsList out of json value
-					tmpCode += codeIndent + "var " + from + " = getJSONValue_byName(" + value + ", '" + from + "'); \n";
-					
-					//fill element count variable
-					tmpCode += codeIndent + "var " + lengthName + " = " + from + ".length; \n\n";
-					
-					//increment var for loop
-					String countVar = from + "_Count";
-					
-					
-					//créate loop - code				
-					tmpCode += 
-						//declare loop rump
-						codeIndent + "for(var " + countVar + " = 0; " + countVar + " < " + lengthName + "; ++" + countVar + ")\n" +
-						codeIndent + "{\n" +
-								
-						//declare loop body
-						codeIndent + depth + currentTags + " = " + from + "[" + countVar + "];\n\n" +
-								
-						 //adds a current index variable
-						codeIndent + depth + "currentCount = " + countVar + "; \n\n";		
-					
-					hasOpenForLoop = true;
-							
-					 //adds a 'new object' in the result, jumps over types that are needles in JSON
-					if(target.endsWith("List"))
-					{
-						tmpCode += codeIndent + depth + "result += indent + '\"" + target + "\" : [ \\n'; \n";
-						hasOpenSqareBracket = true;
-					}
-					else
-					{
-						tmpCode += codeIndent + depth + "result += indent + '{ \\n'; \n\n";
-					}
 
-					//overtake loop in real transcode
-					transCode += tmpCode;
-//				}
+				//create indent for n1 JSON output
+				if(firstOperation)
+				{
+					tmpCode += "var indent = ''; \n";
+
+					firstOperation = false;
+				}
+				else
+				{
+					tmpCode += codeIndent + "indent = indent + '   '; \n";
+				}
+
+
+				//create a elementcount variable name
+				String lengthName =  from + "_length";
+
+				//get searched elementsList out of json value
+				tmpCode += codeIndent + "var " + from + " = getJSONValue_byName(" + value + ", '" + from + "'); \n";
+
+				//fill element count variable
+				tmpCode += codeIndent + "var " + lengthName + " = " + from + ".length; \n\n";
+
+				//increment var for loop
+				String countVar = from + "_Count";
+
+
+				//créate loop - code				
+				tmpCode += 
+					//declare loop rump
+					codeIndent + "for(var " + countVar + " = 0; " + countVar + " < " + lengthName + "; ++" + countVar + ")\n" +
+					codeIndent + "{\n" +
+
+					//declare loop body
+					codeIndent + depth + currentTags + " = " + from + "[" + countVar + "];\n\n" +
+
+					//adds a current index variable
+					codeIndent + depth + "currentCount = " + countVar + "; \n\n";		
+
+				hasOpenForLoop = true;
+
+				//adds a 'new object' in the result, jumps over types that are needles in JSON
+				if(target.endsWith("List"))
+				{
+					tmpCode += codeIndent + depth + "result += indent + '\"" + target + "\" : [ \\n'; \n";
+					hasOpenSqareBracket = true;
+				}
+				else
+				{
+					tmpCode += codeIndent + depth + "result += indent + '{ \\n'; \n\n";
+				}
+
+				//overtake loop in real transcode
+				transCode += tmpCode;
 			}
 			
 			else if ("fillAttributes".equals(kind))
@@ -287,6 +278,6 @@ public class CodeGenerator_reqJSON extends CodeGenerator
 	@Override
 	protected CodeGenerator createEmptyGenerator()
 	{
-		return new CodeGenerator_reqJSON(null, null);
+		return new CodeGenerator_reqJSON(null);
 	}
 }

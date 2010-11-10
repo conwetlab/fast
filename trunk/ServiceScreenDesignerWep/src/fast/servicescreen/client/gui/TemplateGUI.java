@@ -14,8 +14,6 @@ import com.google.gwt.user.client.ui.HTMLTable.Cell;
 import fast.common.client.TemplateParameter;
 import fast.servicescreen.client.ServiceScreenDesignerWep;
 import fujaba.web.runtime.client.FAction;
-import fujaba.web.runtime.client.PropertyChangeEvent;
-import fujaba.web.runtime.client.PropertyChangeListener;
 
 public class TemplateGUI
 {

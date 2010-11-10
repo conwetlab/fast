@@ -81,7 +81,8 @@ public class RequestServiceImpl extends RemoteServiceServlet implements RequestS
 		//add all headers
 		if(headers != null)
 		{
-			for (Iterator<String> iterator = headers.keySet().iterator(); iterator.hasNext();) {
+			for (Iterator<String> iterator = headers.keySet().iterator(); iterator.hasNext();)
+			{
 				String tmpKey = (String) iterator.next();
 				String tmpVal = headers.get(tmpKey);
 				httppost.addHeader(tmpKey, tmpVal);

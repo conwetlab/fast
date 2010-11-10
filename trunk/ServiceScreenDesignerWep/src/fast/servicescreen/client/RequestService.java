@@ -1,6 +1,5 @@
 package fast.servicescreen.client;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 
 import com.google.gwt.user.client.rpc.RemoteService;

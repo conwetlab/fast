@@ -42,11 +42,14 @@ import fujaba.web.runtime.client.ICObject;
 public class ServiceScreenDesignerWep extends FastTool implements EntryPoint
 {
 	public ServiceDesigner designer;
-	public ServiceDesigner getDesigner() {
+	
+	public ServiceDesigner getDesigner()
+	{
 		return designer;
 	}
 
-	public void setDesigner(ServiceDesigner designer) {
+	public void setDesigner(ServiceDesigner designer)
+	{
 		this.designer = designer;
 	}
 
@@ -102,8 +105,7 @@ public class ServiceScreenDesignerWep extends FastTool implements EntryPoint
 	  @Override
       public void doAction()
       {
-         CoobraService.Util.getDefault().openSession("login", "pass2",
-               "ServiceScreenRepository.cdr", this);
+         CoobraService.Util.getDefault().openSession("login", "pass2", "ServiceScreenRepository.cdr", this);
       }
    }
 
@@ -124,8 +126,6 @@ public class ServiceScreenDesignerWep extends FastTool implements EntryPoint
          // fujaba.web.runtime.client.ModelRoot.addEventListener(servicemodel);
          DataLoadTimer.get().sessionId = result;
          DataLoadTimer.get().run(buildAction, null);
-         
-         
       }
    }
 
@@ -224,14 +224,14 @@ public class ServiceScreenDesignerWep extends FastTool implements EntryPoint
          String templateText = templateBox.getValue();
          if (templateText == null || "".equals(templateText))
          {
-            templateBox.setValue("http://open.api.sandbox.ebay.com/shopping?appid=KasselUn-efea-4b93-9505-5dc2ef1ceecd&version=517&callname=FindItems&ItemSort=EndTime&QueryKeywords=<query_keywords>&responseencoding=XML");
+            templateBox.setValue(URL_Settings.getTemplateBox_ExampleURL());
          }
          
 
          // xmldoc should still be null        
 //         FTest.assertTrue(requestHandler.xmlDoc == null, "xmldoc should be null is: " + requestHandler.xmlDoc);
          
-         requestButton.click();
+//         requestButton.click();
          
          // result tree should not be empty
 //         FTest.assertTrue(ruleGUI.xmlTree != null, "xmltree should have been created, text size is: " + ruleGUI.xmlTree.toString().length());
@@ -247,7 +247,7 @@ public class ServiceScreenDesignerWep extends FastTool implements EntryPoint
 
    public void buildGUI()
    {
-      /*
+      /**
        * panel containing the designer-gui
        * */
       RootPanel rootPanel = RootPanel.get();
@@ -265,14 +265,9 @@ public class ServiceScreenDesignerWep extends FastTool implements EntryPoint
       rootPanel.add(tabPanel);
       
       // add link to fact tool 
-      String factToolURL = "./" + "FactTool.html";
+      String factToolURL = URL_Settings.getFactTool_URL();
       Anchor a = new Anchor(factToolURL, factToolURL, "_blank");
       rootPanel.add(a);
-      
-      // add link to data transformation tool 
-//      String dataTransformationToolURL = "./" + "DataTransformationTool.html";
-//      a = new Anchor(dataTransformationToolURL, dataTransformationToolURL);
-//      rootPanel.add(a);
    }
 
    private void rebuildOtherTabs() 
@@ -449,5 +444,4 @@ public class ServiceScreenDesignerWep extends FastTool implements EntryPoint
    {
       return resultText;
    }
-   
 }

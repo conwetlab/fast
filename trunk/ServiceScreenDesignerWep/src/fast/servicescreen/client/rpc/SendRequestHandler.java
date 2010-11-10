@@ -1,5 +1,6 @@
 package fast.servicescreen.client.rpc;
 
+import java.util.HashMap;
 import java.util.Iterator;
 
 import com.google.gwt.core.client.GWT;
@@ -23,6 +24,7 @@ import fast.servicescreen.client.RequestService;
 import fast.servicescreen.client.RequestServiceAsync;
 import fast.servicescreen.client.ServiceScreenDesignerWep;
 import fast.servicescreen.client.gui.RuleUtil;
+import fast.servicescreen.client.gui.RequestTypeHandler.RequestMethodType;
 import fast.servicescreen.client.gui.codegen_js.CodeGenViewer.WrappingType;
 
 public class SendRequestHandler implements ClickHandler
@@ -31,6 +33,12 @@ public class SendRequestHandler implements ClickHandler
    public RequestServiceAsync service;
    public Document xmlDoc;
    
+   String header, body;
+   
+   /**
+    * A handler to click sendRequest and getting the result shown in resultField. Build
+    * up result tree in RuleGUIs, too
+    * */
    public SendRequestHandler(ServiceScreenDesignerWep serviceScreenDesignerWep)
    {
       designer = serviceScreenDesignerWep;
@@ -40,7 +48,6 @@ public class SendRequestHandler implements ClickHandler
    public void onClick(ClickEvent event) 
    {
       String request = buildRequestUrl();
-      // request = "http://open.api.sandbox.ebay.com/shopping?appid=KasselUn-efea-4b93-9505-5dc2ef1ceecd&version=517&callname=FindItems&ItemSort=EndTime&QueryKeywords=USB&responseencoding=XML";
 
       // insert example values for input port names
       Iterator iteratorOfPreconditions = designer.serviceScreen.iteratorOfPreconditions();
@@ -61,7 +68,7 @@ public class SendRequestHandler implements ClickHandler
 
       designer.requestUrlBox.setText(request);
 
-      // Instanciate service
+      // Instantiate service
       if(service == null)
       {
     	  service = GWT.create(RequestService.class);
@@ -69,7 +76,24 @@ public class SendRequestHandler implements ClickHandler
       
       designer.getResultText().setText("Waiting for server response ...");
 
-      service.sendHttpRequest_GET(request, null, new ParseXMLAction());
+      //send GET or POST request
+      RequestMethodType methodType = designer.requestGui.reqTypeHandler.getRequestType();
+      if(methodType.equals(RequestMethodType.GET_REQUEST))
+      {
+    	  service.sendHttpRequest_GET(request, null, new ParseXMLAction());
+      }
+      else if(methodType.equals(RequestMethodType.POST_REQUEST))
+      {
+    	  header = designer.requestGui.reqTypeHandler.getHeader();
+    	  body = designer.requestGui.reqTypeHandler.getBody();
+    	  
+    	  HashMap<String, String> headerMap = new HashMap<String, String>();
+    	  
+    	  headerMap.put("testKey", header);
+    	  
+    	  //TODO dk acces hashmap right way.. Do same tih GET?
+    	  service.sendHttpRequest_POST(request, headerMap, body, new ParseXMLAction());
+      }
    }
 
    @SuppressWarnings("unchecked")
@@ -131,7 +155,7 @@ public class SendRequestHandler implements ClickHandler
    {
       System.out.println("Going to parse server response");
       
-      if(designer.requestGui.reqTypeHandler.currentType == WrappingType.WRAP_AND_REQUEST_JSON) //parse JSON
+      if(designer.requestGui.reqTypeHandler.getRessourceType() == WrappingType.WRAP_AND_REQUEST_JSON) //parse JSON
       {
     	  //cut the trash from result value 
     	  int first, last;
