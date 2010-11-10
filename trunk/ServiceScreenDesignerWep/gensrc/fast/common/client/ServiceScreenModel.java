@@ -193,6 +193,16 @@ public class ServiceScreenModel extends CObject implements PropertyChangeClient,
 		cattr.setType("String");
 		cclass.addToCAttributes (cattr); 
 
+		cattr = new CAttribute();
+		cattr.setName ("uri");
+		cattr.setType("String");
+		cclass.addToCAttributes (cattr); 
+
+		cattr = new CAttribute();
+		cattr.setName ("type");
+		cattr.setType("String");
+		cclass.addToCAttributes (cattr); 
+
 		//add methods
 
 		/*********************************
@@ -216,6 +226,21 @@ public class ServiceScreenModel extends CObject implements PropertyChangeClient,
 
 		cattr = new CAttribute();
 		cattr.setName ("uri");
+		cattr.setType("String");
+		cclass.addToCAttributes (cattr); 
+
+		cattr = new CAttribute();
+		cattr.setName ("label");
+		cattr.setType("String");
+		cclass.addToCAttributes (cattr); 
+
+		cattr = new CAttribute();
+		cattr.setName ("description");
+		cattr.setType("String");
+		cclass.addToCAttributes (cattr); 
+
+		cattr = new CAttribute();
+		cattr.setName ("subclassOf");
 		cattr.setType("String");
 		cclass.addToCAttributes (cattr); 
 
@@ -832,6 +857,51 @@ public class ServiceScreenModel extends CObject implements PropertyChangeClient,
 			CClass theCClass = (CClass) iter.next();
 			
 			if ( theCClass.getName().equals("fast.common.client.FactExample")) {
+				theCClass.addToCRoles(rightRole);
+				break;
+			}
+		}
+		
+		crole = new CRole();
+		crole.setName("owner");
+		ccardinality = new CCardinality();
+		upperBound = 1;
+		if (upperBound == 0) {
+			 ccardinality.setCardString("0");
+		} else if (upperBound == 1) {
+			ccardinality.setCardString("1");
+		} else {
+			ccardinality.setCardString("n");
+		}
+		crole.setCCardinality(ccardinality);
+		
+		cassoc = new CAssoc();
+	    cassoc.setName("factTags");
+	    cassoc.addToCRole(crole);
+		crole.setCAssoc(cassoc);
+		tClass = ModelRoot.get().getCClass("fast.common.client.FactType");
+		tClass.addToCRoles(crole);
+		
+		rightRole = new CRole();
+		rightRole.setName("factTags");
+		ccardinality = new CCardinality();
+		upperBound = 2147483647;
+		if (upperBound == 0) {
+			 ccardinality.setCardString("0");
+		} else if (upperBound == 1) {
+			ccardinality.setCardString("1");
+		} else {
+			ccardinality.setCardString("n");
+		}
+		rightRole.setCCardinality(ccardinality);
+		cassoc.addToCRole(rightRole);
+		
+		// Add role to CClass
+		iter = ModelRoot.get().iteratorOfCClasses();
+		while(iter.hasNext()) {
+			CClass theCClass = (CClass) iter.next();
+			
+			if ( theCClass.getName().equals("fast.common.client.FactTag")) {
 				theCClass.addToCRoles(rightRole);
 				break;
 			}

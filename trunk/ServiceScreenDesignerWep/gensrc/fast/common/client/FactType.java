@@ -7,6 +7,7 @@ package fast.common.client;
 import fast.common.client.FactAttribute;
 import java.util.*;
 import fast.common.client.FactExample;
+import fast.common.client.FactTag;
 import fast.common.client.FactType;
 import fast.common.client.ServiceDesigner;
 import fast.common.client.FastObject;
@@ -36,6 +37,9 @@ public class FactType extends FastObject
       else      if ("fast.common.client.FactExample".equals(className)){				
          removeAllFromFactExamples();
       }
+      else      if ("fast.common.client.FactTag".equals(className)){				
+         removeAllFromFactTags();
+      }
    }
    
    /**
@@ -47,6 +51,9 @@ public class FactType extends FastObject
       vec.add("typeName");
       vec.add("mnemonic");
       vec.add("uri");
+      vec.add("label");
+      vec.add("description");
+      vec.add("subclassOf");
    	
       return vec;
    }
@@ -63,6 +70,15 @@ public class FactType extends FastObject
       }      else      // uri
       if ("uri".equals(fieldName)){				
          setUri((String) value);
+      }      else      // label
+      if ("label".equals(fieldName)){				
+         setLabel((String) value);
+      }      else      // description
+      if ("description".equals(fieldName)){				
+         setDescription((String) value);
+      }      else      // subclassOf
+      if ("subclassOf".equals(fieldName)){				
+         setSubclassOf((String) value);
       }//( toMany false || toMany2 true || qualified $qualified || 
 // internalQualified false ||  
 // role.Qualifier $role.Qualifier || ordered false || sorted false)
@@ -103,6 +119,14 @@ public class FactType extends FastObject
  else// factExamples
       if ("factExamples".equals(fieldName)){				
          addToFactExamples ((fast.common.client.FactExample) value);
+      }//( toMany true || toMany2 false || qualified $qualified || 
+// internalQualified false ||  
+// role.Qualifier $role.Qualifier || ordered false || sorted false)
+ //2[! (  ( toMany || !toMany2) && !( toMany && toMany2)  && role.Qualifier  ) ]
+//2.2[ !( qualified && !internalQualified ) ]
+ else// factTags
+      if ("factTags".equals(fieldName)){				
+         addToFactTags ((fast.common.client.FactTag) value);
       }   }  
 
    public void add (String fieldName, Object value)
@@ -124,6 +148,18 @@ public class FactType extends FastObject
       if ("uri".equals(fieldName)){
          return (String) getUri();
       }
+      else      // label
+      if ("label".equals(fieldName)){
+         return (String) getLabel();
+      }
+      else      // description
+      if ("description".equals(fieldName)){
+         return (String) getDescription();
+      }
+      else      // subclassOf
+      if ("subclassOf".equals(fieldName)){
+         return (String) getSubclassOf();
+      }
       else      if ("serviceDesigner".equals(fieldName))
       {				
          return getServiceDesigner();
@@ -144,7 +180,36 @@ public class FactType extends FastObject
       {				
          return iteratorOfFactExamples();
       }
+      else      if ("factTags".equals(fieldName))
+      {				
+         return iteratorOfFactTags();
+      }
       return null;
+   }
+
+   public static final String PROPERTY_DESCRIPTION = "description";
+
+   private String description;
+
+   public void setDescription (String value)
+   {
+      if ( ! JavaSDM.stringEquals (this.description, value))
+      {
+         String oldValue = this.description;
+         this.description = value;
+         getPropertyChangeSupport().firePropertyChange(PROPERTY_DESCRIPTION, oldValue, value);
+      }
+   }
+
+   public FactType withDescription (String value)
+   {
+      setDescription (value);
+      return this;
+   }
+
+   public String getDescription ()
+   {
+      return this.description;
    }
 
    /**
@@ -345,6 +410,104 @@ public class FactType extends FastObject
 
    /**
     * <pre>
+    *           0..1     factTags     0..*
+    * FactType ------------------------- FactTag
+    *           owner               factTags
+    * </pre>
+    */
+   public static final String PROPERTY_FACT_TAGS = "factTags";
+
+   private FPropHashSet<FactTag> factTags;
+
+   public FPropHashSet<FactTag> getFactTags () {
+      return factTags;
+   }
+
+   public boolean addToFactTags (FactTag value) {
+      boolean changed = false;
+
+      if (value != null)
+      {
+         if (this.factTags == null)
+         {
+            this.factTags = new FPropHashSet<FactTag> (this, PROPERTY_FACT_TAGS);
+
+         }
+      
+         changed = this.factTags.add (value);
+         if (changed)
+         {
+            value.setOwner (this);
+         }
+      
+      }
+      return changed;
+   }
+
+   public FactType withFactTags (FactTag value ) {
+         addToFactTags ( value);
+      return this;
+   }
+
+   public FactType withoutFactTags (FactTag value) {
+      removeFromFactTags (value);
+      return this;
+   }
+
+   public boolean removeFromFactTags (FactTag value) {
+      boolean changed = false;
+
+      if ((this.factTags != null) && (value != null))
+      {
+      
+         changed = this.factTags.remove (value);
+         if (changed)
+         {
+            value.setOwner (null);
+         }
+      
+      }
+      return changed;
+   }
+
+   public void removeAllFromFactTags () {
+   
+      FactTag tmpValue;
+
+      if (factTags != null) {
+         java.util.Vector tempSet = new java.util.Vector(factTags);
+         Iterator iter = tempSet.iterator ();
+      
+         while (iter.hasNext ())
+         {
+            tmpValue = (FactTag) iter.next ();
+            this.removeFromFactTags (tmpValue);
+         }
+      } 
+   
+   }
+
+   public boolean hasInFactTags (FactTag value) {
+      return ((this.factTags != null) &&
+              (value != null) &&
+              this.factTags.contains (value));
+   }
+
+   public Iterator iteratorOfFactTags () {
+      return ((this.factTags == null)
+              ? FEmptyIterator.get ()
+              : this.factTags.iterator ());
+
+   }
+
+   public int sizeOfFactTags () {
+      return ((this.factTags == null)
+              ? 0
+              : this.factTags.size ());
+   }
+
+   /**
+    * <pre>
     *           0..n     isa     0..n
     * FactType ------------------------- FactType
     *           subtypes               isa
@@ -441,6 +604,31 @@ public class FactType extends FastObject
               : this.isa.size ());
    }
 
+   public static final String PROPERTY_LABEL = "label";
+
+   private String label;
+
+   public void setLabel (String value)
+   {
+      if ( ! JavaSDM.stringEquals (this.label, value))
+      {
+         String oldValue = this.label;
+         this.label = value;
+         getPropertyChangeSupport().firePropertyChange(PROPERTY_LABEL, oldValue, value);
+      }
+   }
+
+   public FactType withLabel (String value)
+   {
+      setLabel (value);
+      return this;
+   }
+
+   public String getLabel ()
+   {
+      return this.label;
+   }
+
    public static final String PROPERTY_MNEMONIC = "mnemonic";
 
    private String mnemonic;
@@ -513,6 +701,31 @@ public class FactType extends FastObject
    public ServiceDesigner getServiceDesigner ()
    {
       return this.serviceDesigner;
+   }
+
+   public static final String PROPERTY_SUBCLASS_OF = "subclassOf";
+
+   private String subclassOf;
+
+   public void setSubclassOf (String value)
+   {
+      if ( ! JavaSDM.stringEquals (this.subclassOf, value))
+      {
+         String oldValue = this.subclassOf;
+         this.subclassOf = value;
+         getPropertyChangeSupport().firePropertyChange(PROPERTY_SUBCLASS_OF, oldValue, value);
+      }
+   }
+
+   public FactType withSubclassOf (String value)
+   {
+      setSubclassOf (value);
+      return this;
+   }
+
+   public String getSubclassOf ()
+   {
+      return this.subclassOf;
    }
 
    /**
@@ -667,6 +880,7 @@ public class FactType extends FastObject
    {
       this.removeAllFromFactAttributes ();
       this.removeAllFromFactExamples ();
+      this.removeAllFromFactTags ();
       this.removeAllFromIsa ();
       this.setServiceDesigner (null);
       this.removeAllFromSubtypes ();

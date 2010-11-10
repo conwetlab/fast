@@ -11,5 +11,6 @@
   <inherits name="fujaba.web.runtime.FujabaRuntime"/>
   <inherits name="de.uni_kassel.webcoobra.Webcoobra"/>
   <inherits name="fast.common.FastCommon"/>
+  
   <entry-point class="fast.facttool.client.FactTool" />
 </module>

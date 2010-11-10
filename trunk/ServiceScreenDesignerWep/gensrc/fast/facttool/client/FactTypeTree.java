@@ -7,14 +7,8 @@ package fast.facttool.client;
 import fast.common.client.ServiceDesigner;
 import fast.common.client.FactType;
 import fast.facttool.client.FactTypePanel;
-import fast.servicescreen.client.RequestService;
-import fast.servicescreen.client.RequestServiceAsync;
-
 import java.util.*;
-
 import de.uni_kassel.webcoobra.client.CoobraRoot;
-
-import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.RootPanel;
 import fujaba.web.runtime.client.FTest;
 import com.google.gwt.user.client.ui.TabPanel;
@@ -27,15 +21,8 @@ import com.google.gwt.user.client.ui.TextBox;
 import fujaba.web.runtime.client.reflect.*;
 import fujaba.web.runtime.client.*;
 import java.util.*;
-
-import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.json.client.JSONArray;
-import com.google.gwt.json.client.JSONObject;
-import com.google.gwt.json.client.JSONParser;
-import com.google.gwt.json.client.JSONString;
-import com.google.gwt.json.client.JSONValue;
 
 
 
@@ -197,9 +184,6 @@ public class FactTypeTree implements PropertyChangeClient
 
    }
 
-   
-   private RequestServiceAsync conceptService;
-   private String gvsUrl;
    private AddKids addKids;
    public class AddKids extends FAction
    {
@@ -210,94 +194,35 @@ public class FactTypeTree implements PropertyChangeClient
          // story pattern storypatternwiththis
          try 
          {
-            fujaba__Success = false;
-             
-            conceptService = GWT.create(RequestService.class);
-            gvsUrl = "http://localhost:13337/catalogue/concepts";
-            conceptService.sendHttpRequest_GET(gvsUrl, new AsyncCallback<String>() {
-				
-				@Override
-				public void onSuccess(String result) {
-					JSONArray conceptsArr = JSONParser.parse(result).isArray();
-		            if (conceptsArr != null) {
-		            	
-						for (int i = 0; i < conceptsArr.size(); i++) {
-							JSONObject concept = conceptsArr.get(i).isObject();
-							FactType newType = new FactType();
-							
-							if(concept.containsKey("uri"))
-							{
-								String uriStr = concept.get("uri").isString().toString();
-								String uri = uriStr.substring(1, uriStr.length()-1);
-								newType.setUri(uri);
-								
-								String name;
-								if(uri.contains("#"))
-								{
-									name = uri.substring(uri.lastIndexOf('#') + 1);
-								}
-								else
-								{
-									name = uri.substring(uri.lastIndexOf('/') + 1);
-								}
-								newType.setTypeName(name);
-									
-								String mnemonic = "" + name.charAt(0);
-								newType.setMnemonic(mnemonic);
-								
-								
-								boolean contained = false;
-								for (Iterator<FactType> iterator = (Iterator<FactType>)designer.iteratorOfFactTypes(); iterator.hasNext();)
-								{
-									FactType tmpFactType = (FactType) iterator.next();
-									if(tmpFactType.getTypeName().equals(name))
-									{
-										contained = true;
-									}
-								}
-								
-								if(!contained)
-								{
-									designer.addToFactTypes(newType);
-								}
-							}
-						}
-					}
-		            fujaba__IterDesignerToFactType = designer.iteratorOfFactTypes ();
+            fujaba__Success = false; 
 
-		            while ( fujaba__IterDesignerToFactType.hasNext () )
-		            {
-		               try
-		               {
-		                  factType = (FactType) fujaba__IterDesignerToFactType.next ();
-
-		                  // check object factType is really bound
-		                  JavaSDM.ensure ( factType != null );
-		                  // create object factTypePanel
-		                  factTypePanel = new FactTypePanel ( );
-
-		                  // collabStat call
-		                  factTypePanel.start(factType, rootItem);
-
-//		                  fujaba__Success = true;
-		               }
-		               catch ( JavaSDMException fujaba__InternalException )
-		               {
-//		                  fujaba__Success = false;
-		               }
-		            }
-				}
-				
-				@Override
-				public void onFailure(Throwable caught) {
-					//fail
-				}
-			});
-            
             // check object designer is really bound
             JavaSDM.ensure ( designer != null );
             // iterate to-many link factTypes from designer to factType
             fujaba__Success = false;
+            fujaba__IterDesignerToFactType = designer.iteratorOfFactTypes ();
+
+            while ( fujaba__IterDesignerToFactType.hasNext () )
+            {
+               try
+               {
+                  factType = (FactType) fujaba__IterDesignerToFactType.next ();
+
+                  // check object factType is really bound
+                  JavaSDM.ensure ( factType != null );
+                  // create object factTypePanel
+                  factTypePanel = new FactTypePanel ( );
+
+                  // collabStat call
+                  factTypePanel.start(factType, rootItem);
+
+                  fujaba__Success = true;
+               }
+               catch ( JavaSDMException fujaba__InternalException )
+               {
+                  fujaba__Success = false;
+               }
+            }
             JavaSDM.ensure (fujaba__Success);
             fujaba__Success = true;
          }

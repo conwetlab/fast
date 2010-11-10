@@ -82,14 +82,14 @@ public class ServiceWrapperOverviewTab implements PropertyChangeClient
 
 
    // create attributes for all objects in all states of this statechart
-   private ServiceScreen screen;
-   private Iterator fujaba__IterDesignerToScreen;
    private TabWidget tabWidget;
-   private Button button;
-   private FlowPanel overviewFlowPanel;
-   private ServiceDesigner designer;
-   private ServiceScreen newScreen;
    private ScreenPanel screenPanel;
+   private Button button;
+   private ServiceScreen newScreen;
+   private ServiceScreen screen;
+   private ServiceDesigner designer;
+   private Iterator fujaba__IterDesignerToScreen;
+   private FlowPanel overviewFlowPanel;
 
    public void start()
    {

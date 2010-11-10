@@ -573,7 +573,7 @@ public class FASTMappingRule extends FastObject
       
          OperationHandler oldValue = this.operationHandler;
          this.operationHandler = value;
-//         getPropertyChangeSupport().firePropertyChange(PROPERTY_OPERATION_HANDLER, oldValue, value);
+         getPropertyChangeSupport().firePropertyChange(PROPERTY_OPERATION_HANDLER, oldValue, value);
          changed = true;
       
       }

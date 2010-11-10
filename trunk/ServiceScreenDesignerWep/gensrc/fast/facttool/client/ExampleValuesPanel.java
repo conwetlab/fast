@@ -78,9 +78,9 @@ public class ExampleValuesPanel implements PropertyChangeClient
 
 
    // create attributes for all objects in all states of this statechart
-   private HorizontalPanel factExamplePanel;
-   private Button exampleValDeleteButton;
    private AttributeTextArea exampleValTextBox;
+   private Button exampleValDeleteButton;
+   private HorizontalPanel factExamplePanel;
    private TreeItem exampleItem;
 
    public void start()

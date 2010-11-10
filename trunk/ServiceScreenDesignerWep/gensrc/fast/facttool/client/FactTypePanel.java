@@ -102,13 +102,13 @@ public class FactTypePanel implements PropertyChangeClient
    private TreeItem exampleValRootItem;
    private Iterator fujaba__IterFactTypeToExample;
    private TextBox typeCaption;
-   private AttributeTextBox mnemonicBox;
    private DeleteFactTypeButton deleteButton;
+   private AttributeTextBox mnemonicBox;
    private HorizontalPanel captionPanel;
    private ExampleValuesPanel exampleValPanel;
    private ExampleValuesPanel examplePanel;
-   private TreeItem treeItem;
    private Label exampleValTreeRootLabel;
+   private TreeItem treeItem;
    private TreeItem captionItem;
    private FactAttribute factAttr;
    private FactExample example;

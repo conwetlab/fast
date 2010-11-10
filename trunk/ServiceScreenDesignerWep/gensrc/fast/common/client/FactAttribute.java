@@ -30,6 +30,8 @@ public class FactAttribute extends FastObject
       java.util.ArrayList vec = new java.util.ArrayList();
       vec.add("attrName");
       vec.add("factType");
+      vec.add("uri");
+      vec.add("type");
    	
       return vec;
    }
@@ -43,6 +45,12 @@ public class FactAttribute extends FastObject
       }      else      // factType
       if ("factType".equals(fieldName)){				
          setFactType((String) value);
+      }      else      // uri
+      if ("uri".equals(fieldName)){				
+         setUri((String) value);
+      }      else      // type
+      if ("type".equals(fieldName)){				
+         setType((String) value);
       }//( toMany false || toMany2 true || qualified $qualified || 
 // internalQualified false ||  
 // role.Qualifier $role.Qualifier || ordered false || sorted false)
@@ -67,6 +75,14 @@ public class FactAttribute extends FastObject
       else      // factType
       if ("factType".equals(fieldName)){
          return (String) getFactType();
+      }
+      else      // uri
+      if ("uri".equals(fieldName)){
+         return (String) getUri();
+      }
+      else      // type
+      if ("type".equals(fieldName)){
+         return (String) getType();
       }
       else      if ("owner".equals(fieldName))
       {				
@@ -172,6 +188,56 @@ public class FactAttribute extends FastObject
    public FactType getOwner ()
    {
       return this.owner;
+   }
+
+   public static final String PROPERTY_TYPE = "type";
+
+   private String type;
+
+   public void setType (String value)
+   {
+      if ( ! JavaSDM.stringEquals (this.type, value))
+      {
+         String oldValue = this.type;
+         this.type = value;
+         getPropertyChangeSupport().firePropertyChange(PROPERTY_TYPE, oldValue, value);
+      }
+   }
+
+   public FactAttribute withType (String value)
+   {
+      setType (value);
+      return this;
+   }
+
+   public String getType ()
+   {
+      return this.type;
+   }
+
+   public static final String PROPERTY_URI = "uri";
+
+   private String uri;
+
+   public void setUri (String value)
+   {
+      if ( ! JavaSDM.stringEquals (this.uri, value))
+      {
+         String oldValue = this.uri;
+         this.uri = value;
+         getPropertyChangeSupport().firePropertyChange(PROPERTY_URI, oldValue, value);
+      }
+   }
+
+   public FactAttribute withUri (String value)
+   {
+      setUri (value);
+      return this;
+   }
+
+   public String getUri ()
+   {
+      return this.uri;
    }
 
    public void removeYou()

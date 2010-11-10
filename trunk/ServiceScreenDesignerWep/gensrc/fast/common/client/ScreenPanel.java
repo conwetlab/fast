@@ -83,9 +83,9 @@ public class ScreenPanel implements PropertyChangeClient
    // create attributes for all objects in all states of this statechart
    private Image delImage;
    private VerticalPanel vertPanel;
+   private HorizontalPanel horiPanel;
    private Image image;
    private Label label;
-   private HorizontalPanel horiPanel;
 
    public void start()
    {

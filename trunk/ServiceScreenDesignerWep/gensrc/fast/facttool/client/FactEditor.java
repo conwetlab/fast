@@ -9,6 +9,11 @@ import de.uni_kassel.webcoobra.client.CoobraRoot;
 import java.util.*;
 import fast.common.client.ServiceDesigner;
 import fast.facttool.client.FactTypeTree;
+import com.google.gwt.json.client.JSONArray;
+import com.google.gwt.json.client.JSONParser;
+import fast.servicescreen.client.RequestServiceAsync;
+import com.google.gwt.core.client.GWT;
+import fast.servicescreen.client.RequestService;
 import de.uni_kassel.webcoobra.client.CoobraServiceAsync;
 import fast.common.client.BuildingBlock;
 import de.uni_kassel.webcoobra.client.DataLoadTimer;
@@ -84,13 +89,18 @@ public class FactEditor implements PropertyChangeClient
 
    // create attributes for all objects in all states of this statechart
    private CoobraServiceAsync coobraService;
+   private CoobraRoot coobraRoot;
+   private RequestService fixMe;
+   private Object _TmpObject;
    private FactTypeTree factTypeTree;
+   private GWT gwt;
+   private ServiceDesigner designer;
+   private JSONArray conceptArray;
+   private RequestServiceAsync getConceptService;
    private DataLoadTimer dataLoadTimer;
    private Iterator fujaba__IterCoobraRootToDesigner;
-   private CoobraRoot coobraRoot;
-   private ServiceDesigner designer;
+   private JSONParser fixme2;
    private ServiceScreenModel modelRoot;
-   private Object _TmpObject;
 
    public void start()
    {
@@ -115,13 +125,25 @@ public class FactEditor implements PropertyChangeClient
          return;
 
       buildModel = new BuildModel ();
+      conceptCallback = new ConceptCallback ();
+      getConceptsFromCatalogue = new GetConceptsFromCatalogue ();
       init = new Init ();
       loadData = new LoadData ();
       // success
       init.setToSuccess(loadData);
       // success
-      loadData.setToSuccess(buildModel);
+      loadData.setToSuccess(getConceptsFromCatalogue);
+      // success
+      conceptCallback.setToSuccess(buildModel);
+      // success
+      getConceptsFromCatalogue.setToSuccess(conceptCallback);
    }
+
+
+   // my style test for method.vm
+
+
+   // my style test for method.vm
 
 
    // my style test for method.vm
@@ -174,6 +196,73 @@ public class FactEditor implements PropertyChangeClient
             FTest.assertTrue(true, "build model reached " + designer);
             // collabStat call
             factTypeTree.start ();
+            fujaba__Success = true;
+         }
+         catch ( JavaSDMException fujaba__InternalException )
+         {
+            fujaba__Success = false;
+         }
+
+
+
+       }
+
+   }
+
+   private ConceptCallback conceptCallback;
+   public class ConceptCallback extends FAction
+   {
+       public void doAction()
+       {
+   		 boolean fujaba__Success = false;
+
+         // story pattern storypatternwiththis
+         try 
+         {
+            fujaba__Success = false; 
+
+            // create object conceptArray
+            conceptArray = JSONParser.parse((String)resultValue).isArray();
+
+            // create object fixme2
+            fixme2 = null;
+
+            fujaba__Success = true;
+         }
+         catch ( JavaSDMException fujaba__InternalException )
+         {
+            fujaba__Success = false;
+         }
+
+
+
+       }
+
+   }
+
+   private GetConceptsFromCatalogue getConceptsFromCatalogue;
+   public class GetConceptsFromCatalogue extends FAction
+   {
+       public void doAction()
+       {
+   		 boolean fujaba__Success = false;
+
+         // story pattern storypatternwiththis
+         try 
+         {
+            fujaba__Success = false; 
+
+            // create object getConceptService
+            getConceptService = GWT.create(RequestService.class);
+
+            // create object gwt
+            gwt = null;
+
+            // create object fixMe
+            fixMe = null;
+
+            // collabStat call
+            getConceptService.sendHttpRequest_GET("http://localhost:8080/Catalogue-1/concepts", null, conceptCallback);
             fujaba__Success = true;
          }
          catch ( JavaSDMException fujaba__InternalException )
@@ -256,7 +345,7 @@ public class FactEditor implements PropertyChangeClient
             // collabStat call
             modelRoot.registerModelRoot();
             // collabStat call
-            dataLoadTimer.run(buildModel, null);
+            dataLoadTimer.run(getConceptsFromCatalogue, null);
             fujaba__Success = true;
          }
          catch ( JavaSDMException fujaba__InternalException )

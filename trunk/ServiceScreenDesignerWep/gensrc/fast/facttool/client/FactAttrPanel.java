@@ -84,17 +84,17 @@ public class FactAttrPanel implements PropertyChangeClient
 
    // create attributes for all objects in all states of this statechart
    private HorizontalPanel panel;
+   private FactType factType;
+   private MultiWordSuggestOracle oracle;
    private AttributeTextBox nameBox;
+   private Iterator fujaba__IterDesignerToSomeType;
+   private Object _TmpObject;
+   private DeleteAttributeButton deleteAttrButton;
    private ServiceDesigner designer;
    private String tname;
-   private FactType factType;
    private SuggestBox typeBox;
-   private Iterator fujaba__IterDesignerToSomeType;
-   private MultiWordSuggestOracle oracle;
    private TreeItem parentItem;
-   private Object _TmpObject;
    private FactType someType;
-   private DeleteAttributeButton deleteAttrButton;
 
    public void start()
    {
