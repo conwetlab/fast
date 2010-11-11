@@ -3,7 +3,6 @@ package fast.servicescreen.client;
 import java.util.Iterator;
 
 import com.google.gwt.core.client.EntryPoint;
-import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
@@ -263,11 +262,6 @@ public class ServiceScreenDesignerWep extends FastTool implements EntryPoint
       //tabPanel.setStyleName("myPanel");
       
       rootPanel.add(tabPanel);
-      
-      // add link to fact tool 
-      String factToolURL = URL_Settings.getFactTool_URL();
-      Anchor a = new Anchor(factToolURL, factToolURL, "_blank");
-      rootPanel.add(a);
    }
 
    private void rebuildOtherTabs() 

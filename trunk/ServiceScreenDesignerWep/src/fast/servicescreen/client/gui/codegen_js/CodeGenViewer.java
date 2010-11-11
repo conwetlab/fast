@@ -48,10 +48,10 @@ public class CodeGenViewer
 	{
 		switch(type)
 		{
-			case WRAP_AND_REQUEST_XML  : generator = new CodeGenerator(serviceDesigner);			//SDW XML
+			case WRAP_AND_REQUEST_XML  : generator = new CodeGenerator(serviceDesigner);		//SDW XML
 										 break;
 										
-			case WRAP_AND_REQUEST_JSON : generator = new CodeGenerator_reqJSON(serviceDesigner);	//SDW JSON
+			case WRAP_AND_REQUEST_JSON : generator = new CodeGenerator_reqJSON(serviceDesigner);//SDW JSON
 										 break;
 		}
 	}
@@ -60,7 +60,7 @@ public class CodeGenViewer
 	{
 		switch(type)
 		{
-			case WRAP_JSON	:	generator = new CodeGenerator_JSON(screen, gui);					//DataMediation Tool
+			case WRAP_JSON	:	generator = new CodeGenerator_JSON(screen, gui);	//DataMediation Tool
 								break;
 		}
 	}

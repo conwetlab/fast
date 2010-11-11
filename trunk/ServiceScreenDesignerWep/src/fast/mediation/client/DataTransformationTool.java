@@ -3,7 +3,6 @@ package fast.mediation.client;
 import java.util.Iterator;
 
 import com.google.gwt.core.client.EntryPoint;
-import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.FlowPanel;
@@ -178,13 +177,8 @@ public class DataTransformationTool extends FastTool implements EntryPoint
 
 		// add tabPanel to root
 		rootPanel.add(tabPanel);
-		FTest.assertTrue(true, "Tab panel has been added to root ");
-
-		// add link to fact tool 
-		String factToolURL = "./" + "FactTool.html";
-		Anchor a = new Anchor(factToolURL, factToolURL, "_blank");
-		rootPanel.add(a);
-
+		
+//		FTest.assertTrue(true, "Tab panel has been added to root ");
 	}
 	
 	

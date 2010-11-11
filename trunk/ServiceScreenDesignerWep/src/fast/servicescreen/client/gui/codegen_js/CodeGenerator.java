@@ -472,10 +472,10 @@ public class CodeGenerator
 	 * */
 	public void write_JS_File()
 	{
-		if (service == null)
-		{ 
+//		if (service == null)
+//		{ 
 			service = GWT.create(RequestService.class);
-		}
+//		}
 
 		//send pre - trans - post code to server
 		service.saveJsFileOnServer(screen.getName(), prehtml, helperMethods + rootTemplate, posthtml, new AsyncCallback<String>()
