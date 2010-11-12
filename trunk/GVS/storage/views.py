@@ -100,7 +100,7 @@ class GadgetStorage(resource.Resource):
         metadata['version'] = notEmptyValueOrDefault(json, 'version', '1.0')
         metadata['description'] = valueOrDefault(json, 'description', {'en-gb': ''})
         metadata['description'] = metadata['description']['en-gb']
-        metadata['imageURI'] = valueOrEmpty(json, 'imageURI')
+        metadata['imageURI'] = valueOrDefault(json, 'imageURI', 'http://demo.fast.morfeo-project.org/fast/images/FASTLogo.png')
         metadata['gadgetHomepage'] = valueOrEmpty(json, 'gadgetHomepage')
         metadata['height'] = valueOrEmpty(json, 'height')
         metadata['width'] = valueOrEmpty(json, 'width')
@@ -132,6 +132,8 @@ class GadgetStorage(resource.Resource):
                 'GadgetMetadata':{'GadgetName': metadata['name'],
                                   'GadgetShortName': metadata['shortname'],
                                   'GadgetDescription': metadata['description']
+                                  'GadgetIcon': False,
+                                  'GadgetIconUrl': metadata['imageURI']
                                   }
                 }
 
