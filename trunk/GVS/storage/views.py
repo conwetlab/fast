@@ -60,6 +60,7 @@ class GadgetStorage(resource.Resource):
                               screenflow = gadgetData['screenflow'])
             storage.save()
 
+
             self.__createResourceURI(request, metadata, storage)
 
             self.__createGadget(gadgetData, storage)
@@ -174,17 +175,18 @@ class GadgetStorage(resource.Resource):
 
         directory_name = tempfile.mkdtemp(dir=gadgetPath)
 
-        if isLocalStorage():
-            gadgets = {}
-            for platform in metadata['platforms']:
-                if platform == 'ezweb':
-                    templateFileName = str(platform + '.xml')
-                    htmlFileName = str('index_' + platform + '.html')
-                    ezWebTemplate = getEzWebTemplate(gadgetData)
-                    ezWebTemplateFile = open (path.join(directory_name, templateFileName), 'w')
-                    ezWebTemplateFile.write(ezWebTemplate.encode('utf-8'))
-                    ezWebTemplateFile.close()
-                    zipFile.write(ezWebTemplateFile.name, path.join('.', templateFileName))
+        gadgets = {}
+        for platform in metadata['platforms']:
+            if platform == 'ezweb':
+                templateFileName = str(platform + '.xml')
+                htmlFileName = str('index_' + platform + '.html')
+                ezWebTemplate = getEzWebTemplate(gadgetData)
+                ezWebTemplateFile = open (path.join(directory_name, templateFileName), 'w')
+                ezWebTemplateFile.write(ezWebTemplate.encode('utf-8'))
+                ezWebTemplateFile.close()
+                zipFile.write(ezWebTemplateFile.name, path.join('.', templateFileName))
+
+                if isLocalStorage():
                     ezWebHTML = getEzWebHTML(gadgetData)
                     ezWebHTMLFile = open (path.join(directory_name, htmlFileName), 'w')
                     ezWebHTMLFile.write(ezWebHTML.encode('utf-8'))
@@ -192,16 +194,17 @@ class GadgetStorage(resource.Resource):
                     zipFile.write(ezWebHTMLFile.name, path.join('.', htmlFileName))
                     gadgets[platform] = '/'.join([metadata['gadgetUri'],  templateFileName])
 
-                elif platform == 'google':
-                    templateFileName = str(platform + '.xml')
-                    googleTemplate = getGoogleTemplate(gadgetData)
-                    googleTemplateFile = open (path.join(directory_name, templateFileName), 'w')
-                    googleTemplateFile.write(googleTemplate.encode('utf-8'))
-                    googleTemplateFile.close()
-                    zipFile.write(googleTemplateFile.name,path.join('.', templateFileName))
-                    gadgets[platform] = '/'.join([metadata['gadgetUri'], templateFileName])
+            elif platform == 'google':
+                templateFileName = str(platform + '.xml')
+                googleTemplate = getGoogleTemplate(gadgetData)
+                googleTemplateFile = open (path.join(directory_name, templateFileName), 'w')
+                googleTemplateFile.write(googleTemplate.encode('utf-8'))
+                googleTemplateFile.close()
+                zipFile.write(googleTemplateFile.name,path.join('.', templateFileName))
+                gadgets[platform] = '/'.join([metadata['gadgetUri'], templateFileName])
 
-                elif platform == 'player':
+            elif platform == 'player':
+                if isLocalStorage():
                     htmlFileName = str(platform + '.html')
                     playerHTML = getPlayerHTML(gadgetData, metadata['gadgetUri'])
                     playerHTMLFile = open (path.join(directory_name, htmlFileName), 'w')
@@ -210,6 +213,7 @@ class GadgetStorage(resource.Resource):
                     zipFile.write(playerHTMLFile.name, path.join('.', htmlFileName))
                     gadgets[platform] = '/'.join([metadata['gadgetUri'], htmlFileName])
 
+        if isLocalStorage():
             metadata['gadgets'] = gadgets
         else:
             htmlFileName = 'index.html'
@@ -259,13 +263,17 @@ class GadgetStorage(resource.Resource):
     def __setPlatformUrls(self, metadata):
         conn = Connection(metadata['gadgetResource'] + "/platform")
         body = {
-            'PlatformName': ",".join(metadata['platforms'])
+            'PlatformName': ",".join(translate_to_service(metadata['platforms']))
         }
         result = conn.request_post(resource='', body=json_encode(body),
                                 headers={'Accept': 'application/json',
                                 'Content-Type': 'application/json'})
         if isValidResponse(result):
-            metadata['gadgets'] = simplejson.loads(result['body'])
+            gadgets = {}
+            platform_list = simplejson.loads(result['body'])
+            for platform in platform_list:
+                gadgets[platform['PlatformName']]=platform['RedirectUri']
+            metadata['gadgets'] = gadgets
         else:
             raise Exception(result['body'])
 
@@ -372,3 +380,13 @@ def isLocalStorage():
     if settings.STORAGE_URL == None or settings.STORAGE_URL=='':
         return True
     return False
+
+
+def translate_to_service(platformList):
+    result = []
+    for platform in platformList:
+        if platform == 'player':
+            result.append('standalone')
+        else:
+            result.append(platform)
+    return result

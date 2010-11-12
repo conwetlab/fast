@@ -51,16 +51,18 @@ var PublishGadgetDialog = Class.create(ConfirmDialog /** @lends PublishGadgetDia
      */
     _publishGadget: function(/** dijit.form.Button */ button, /** Hash */ options) {
         var publicationUrl = options.url;
-        if (options.mashupPlatform == 'ezweb') {
-            publicationUrl = URIs.ezweb + "interfaces/gadget?template_uri=" + options.url;
-        } else if (options.mashupPlatform == 'igoogle') {
-            if (options.destination=='directory') {
-                publicationUrl = "http://www.google.com/ig/submit?url=" + options.url;
-            } else if (options.destination=='personal'){
-                publicationUrl = "http://www.google.com/ig/adde?moduleurl=" + options.url;
+        if (GlobalOptions.isLocalStorage) {
+            if (options.mashupPlatform == 'ezweb') {
+                publicationUrl = URIs.ezweb + "interfaces/gadget?template_uri=" + options.url;
+            } else if (options.mashupPlatform == 'igoogle') {
+                if (options.destination=='directory') {
+                    publicationUrl = "http://www.google.com/ig/submit?url=" + options.url;
+                } else if (options.destination=='personal'){
+                    publicationUrl = "http://www.google.com/ig/adde?moduleurl=" + options.url;
+                }
+            } else if (options.mashupPlatform == 'orkut') {
+                publicationUrl = "http://sandbox.orkut.com/Main#MyApps?appUrl=" + options.url;
             }
-        } else if (options.mashupPlatform == 'orkut') {
-            publicationUrl = "http://sandbox.orkut.com/Main#MyApps?appUrl=" + options.url;
         }
         this._deploy(button, options, publicationUrl);
     },
@@ -102,13 +104,6 @@ var PublishGadgetDialog = Class.create(ConfirmDialog /** @lends PublishGadgetDia
         }).update("Publish Gadget");
         dom.appendChild(title);
 
-        var contents = new Element('div', {
-            'class': 'deployment'
-        });
-
-        var table = new Element('table');
-        contents.appendChild(table);
-        dom.appendChild(contents);
 
         var tableData = [
             {'className': 'tableHeader',
@@ -123,15 +118,31 @@ var PublishGadgetDialog = Class.create(ConfirmDialog /** @lends PublishGadgetDia
         ];
 
         var gadgets = new Hash(this._publication.gadgets);
+
+        var hasGadget = false;
         gadgets.each(function(gadget) {
                 var destinations = PublishGadgetDialog.GADGET_DESTINATIONS.get(gadget.key);
                 destinations.each(function(destination) {
-                    destination.url = gadget.value;
-                    tableData.push(this._createPlatformRow(destination));
+                    if (gadget.value) {
+                        destination.url = gadget.value;
+                        tableData.push(this._createPlatformRow(destination));
+                        hasGadget = true;
+                    }
                 }.bind(this));
             }.bind(this));
 
-        this._fillTable(table, tableData);
+        var contents = new Element('div', {
+            'class': 'deployment'
+        });
+        dom.appendChild(contents);
+
+        if (hasGadget) {
+            var table = new Element('table');
+            contents.appendChild(table);
+            this._fillTable(table, tableData);
+        } else {
+            contents.update("Upps! There are no available gadgets");
+        }
         this._setContent(dom);
     },
 
@@ -226,6 +237,27 @@ PublishGadgetDialog.GADGET_DESTINATIONS.set('player',
                 urlLabel: 'HTML',
                 buttonLabel: 'Embed it!',
                 disableAfterPublishing: false
+            }
+        ]);
+PublishGadgetDialog.GADGET_DESTINATIONS.set('standalone',
+        [
+            {	id: 'standalone',
+                mashupPlatform: 'standalone',
+                title: 'Standalone',
+                urlLabel: 'HTML',
+                buttonLabel: 'Embed it!',
+                disableAfterPublishing: false
+            }
+        ]);
+PublishGadgetDialog.GADGET_DESTINATIONS.set('beemboard',
+        [
+            {	id: 'beemboard',
+                mashupPlatform: 'beemboard',
+                title: 'Beemboard',
+                urlLabel: 'HTML',
+                buttonLabel: 'Publish it!',
+                disableAfterPublishing: true,
+                doneButtonLabel: 'Done'
             }
         ]);
 

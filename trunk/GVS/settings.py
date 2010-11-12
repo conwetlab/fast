@@ -133,7 +133,7 @@ NOT_PROXY_FOR = ['localhost', '127.0.0.1']
 CATALOGUE_URL = 'http://localhost:9000/FASTCatalogue'
 
 # Url to the server that holds the storage service (empty if local storage in GVS)
-STORAGE_URL = None
+STORAGE_URL = 'http://fast.cyntelix.com/Storage/v1.2/Service.svc'
 
 # Format of the gadget sent to storage service ('URL' or 'base64string')
 STORAGE_FORMAT = 'base64string'

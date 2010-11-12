@@ -170,6 +170,7 @@ var GadgetDialog = Class.create(GalleryDialog, /** @lends Builder.prototype */ {
         };
        PersistenceEngine.sendPost(URIs.store, storeParams, null,
                 this, this._onBuildSuccess, this._onError);
+       Utils.showMessage("Creating and storing the gadget...");
     },
 
     _onBuildSuccess: function(/** XMLHttpRequest */ transport) {
@@ -179,6 +180,9 @@ var GadgetDialog = Class.create(GalleryDialog, /** @lends Builder.prototype */ {
         if (this.isVisible()) {
             this._render();
         }
+        Utils.showMessage("Creating and storing the gadget...Done", {
+            "hide":true
+        });
         this._showDeploymentInfo(result.id);
     },
 
