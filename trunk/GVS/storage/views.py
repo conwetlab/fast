@@ -131,7 +131,7 @@ class GadgetStorage(resource.Resource):
                 'Vendor':{'VendorName': metadata['vendor']},
                 'GadgetMetadata':{'GadgetName': metadata['name'],
                                   'GadgetShortName': metadata['shortname'],
-                                  'GadgetDescription': metadata['description']
+                                  'GadgetDescription': metadata['description'],
                                   'GadgetIcon': False,
                                   'GadgetIconUrl': metadata['imageURI']
                                   }
