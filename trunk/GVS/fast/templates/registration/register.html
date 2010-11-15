@@ -2,6 +2,7 @@
 {% load i18n %}
 {% block content %}
 	<form action="{{ app_path }}/signup" method="post" id="login-form">
+        {% csrf_token %}
 	  <div class="form-row">
 	  	<h2>Sign up</h2>
 	  	<table>
