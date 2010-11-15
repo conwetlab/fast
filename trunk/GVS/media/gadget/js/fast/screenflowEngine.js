@@ -83,11 +83,16 @@ var ScreenflowEngineFactory = function () {
                 return fact;
             } else {
                 var jsonLib = new FastAPI.Utils.JSON();
-                var fact = jsonLib.toObject(value);
-                if (fact.uri == factURI){
+                try {
+                    var fact = jsonLib.toObject(value);
+                    if (fact.uri == factURI){
+                        return fact;
+                    } else {
+                        return null;
+                    }
+                } catch (e) {
+                    var fact = {'uri': factURI, data: value};
                     return fact;
-                } else {
-                    return null;
                 }
             }
         },
