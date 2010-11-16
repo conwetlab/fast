@@ -1,0 +1,50 @@
+{
+    "id":"7",
+    "creationDate":"2009-04-20T17:00:00+0100",
+    "creator":"admin",
+    "description":{
+        "en-gb":"This form allows users to purchase their shopping cart. It shows an Amazon interface to fulfill the required data to purchase the shopping cart"
+    },
+    "tags":[
+        {
+            "label":{
+                "en-gb":"scratch"
+            }
+        },
+        {
+            "label":{
+                "en-gb":"amazon"
+            },
+            "means":"http://dbpedia.org/page/Amazon.com"
+        },
+        {
+            "label":{
+                "en-gb":"order"
+            }
+        }
+    ],
+    "homepage":"http://www.deri.ie/amazonOrder",
+    "icon":"http://demo.fast.morfeo-project.org/gvsdata/images/catalogue/amazonOrder.png",
+    "label":{
+        "en-gb":"Order"
+    },
+    "rights":"http://creativecommons.org/",
+    "screenshot":"http://demo.fast.morfeo-project.org/gvsdata/images/screenshots/amazonOrder.png",
+    "version":"1.0",
+    "code":"http://demo.fast.morfeo-project.org/gvsdata/screens/amazonOrder.scr.html",
+    "preconditions":[
+        [
+            {
+                "id":"purchaseURL",
+                "label":{
+                    "en-gb":"A Amazon Purchase URL"
+                },
+                "pattern":"?P http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#PurchaseURL",
+                "positive":"true"
+            }
+        ]
+    ],
+    "postconditions":[
+
+    ]
+}

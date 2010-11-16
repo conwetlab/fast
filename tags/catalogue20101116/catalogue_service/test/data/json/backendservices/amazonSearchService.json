@@ -1,0 +1,80 @@
+{
+    "id":"1",
+    "name":"Amazon Search Service",
+    "code":"http://demo.fast.morfeo-project.org/gvsdata/resources/amazonSearchService.src.js",
+    "creationDate":null,
+    "creator":"admin",
+    "description":{
+        "en-gb":"This service provides information about products in Amazon Catalogue"
+    },
+    "tags":[
+        {
+            "label":{
+                "en-gb":"amazon"
+            },
+            "means":"http://dbpedia.org/page/Amazon.com"
+        },
+        {
+            "label":{
+                "en-gb":"search"
+            }
+        },
+        {
+            "label":{
+                "en-gb":"list"
+            }
+        }
+    ],
+    "homepage":"hhttp://www.deri.ie/amazonSearchService",
+    "icon":"http://demo.fast.morfeo-project.org/gvsdata/images/catalogue/amazonSearchService.png",
+    "label":{
+        "en-gb":"Amazon Search"
+    },
+    "rights":"http://creativecommons.org/",
+    "screenshot":"http://www.deri.ie/amazonList-screenshot.jpg",
+    "type":"resource",
+    "version":"1.0",
+    "libraries":[
+        {
+            "language":"JavaScript",
+            "source":"http://demo.fast.morfeo-project.org/gvsdata/amazonURL/signAmazonURLs.js"
+        },
+        {
+            "language":"JavaScript",
+            "source":"http://demo.fast.morfeo-project.org/gvsdata/amazonURL/jssha2/sha2.js"
+        }
+    ],
+    "actions":[
+        {
+            "name":"search",
+            "preconditions":[
+                {
+                    "id":"filter",
+                    "label":{
+                        "en-gb":"A search criteria"
+                    },
+                    "pattern":"?F http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#SearchCriteria",
+                    "positive":"true"
+                }
+            ],
+            "uses":[
+                
+            ]
+        }
+    ],
+    "postconditions":[
+        [
+            {
+                "id":"list",
+                "label":{
+                    "en-gb":"An Amazon Item List"
+                },
+                "pattern":"?PList http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#ProductList",
+                "positive":"true"
+            }
+        ]
+    ],
+    "triggers":[
+        "productList"
+    ]
+}

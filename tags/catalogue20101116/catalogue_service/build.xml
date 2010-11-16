@@ -1,0 +1,144 @@
+<?xml version="1.0" ?>
+<project name="Catalogue" default="dist" basedir=".">
+  <!-- set global properties for this build -->
+  <property name="app.name"      value="FASTCatalogue"/>
+  <property name="app.path"      value="/${app.name}"/>
+  <property name="app.version"   value="0.1-dev"/>
+  <property name="build.dir"    value="${basedir}/build"/>
+  <!--property name="catalina.dir" value="C:\\Program Files\\Apache Software Foundation\\Tomcat 5.5"/-->
+  <property name="catalina.dir" value="/opt/apache-tomcat-6.0.29/"/>
+
+  <property name="dist.dir"     value="${basedir}/dist"/>
+  <property name="docs.dir"     value="${basedir}/docs"/>
+  <!--property name="manager.url"   value="http://localhost:8080/manager"/-->
+  <property name="src.dir"      value="${basedir}/src"/>
+  <property name="web.dir"      value="${basedir}/WebContent"/>
+  <property name="test.dir" location="${basedir}/test"/>
+  <property name="test.data.dir" location="${test.dir}/data"/>
+  <property name="test.reports.dir" location="${test.dir}/reports"/>
+
+  <!--path id="compile.classpath"> TOMCAT 5.5
+    <pathelement location="${catalina.dir}/common/classes"/>
+    <fileset dir="${catalina.dir}/common/endorsed">
+      <include name="*.jar"/>
+    </fileset>
+    <fileset dir="${catalina.dir}/common/lib">
+      <include name="*.jar"/>
+    </fileset>
+    <pathelement location="${catalina.dir}/shared/classes"/>
+    <fileset dir="${catalina.dir}/shared/lib">
+      <include name="*.jar"/>
+    </fileset>
+    <fileset dir="${catalina.dir}/shared/lib"--><!-- extraclasspath -->
+      <!--include name="*.jar"/>
+    </fileset>
+    <fileset dir="${web.dir}/WEB-INF/lib">
+      <include name="*.jar"/>
+    </fileset>
+  </path-->
+  <path id="compile.classpath"> <!-- TOMCAT 6 -->
+	<fileset dir="${catalina.dir}/bin">
+      <include name="*.jar"/>
+    </fileset>
+    <pathelement location="${catalina.dir}/lib"/>
+    <fileset dir="${catalina.dir}/lib">
+      <include name="*.jar"/>
+    </fileset>
+    <fileset dir="${web.dir}/WEB-INF/lib">
+      <include name="*.jar"/>
+    </fileset>
+  </path>
+
+  <target name="prepare">
+    <!-- Create build directories as needed -->
+    <mkdir dir="${build.dir}"/>
+    <mkdir dir="${build.dir}/WEB-INF"/>
+    <mkdir dir="${build.dir}/WEB-INF/classes"/>
+
+    <!-- Copy static content of this web application -->
+    <copy todir="${build.dir}">
+      <fileset dir="${web.dir}"/>
+    </copy>
+
+    <mkdir dir="${build.dir}/WEB-INF/lib"/>
+  </target>
+
+  <target name="compile" depends="prepare" description="Compile Java sources">
+    <!-- Compile Java classes as necessary -->
+    <mkdir dir="${build.dir}/WEB-INF/classes"/>
+    <javac srcdir="${src.dir}"
+          destdir="${build.dir}/WEB-INF/classes"
+            debug="${compile.debug}"
+      deprecation="${compile.deprecation}"
+         optimize="${compile.optimize}">
+      <classpath refid="compile.classpath"/>
+    </javac>
+    <javac srcdir="${test.dir}"
+          destdir="${build.dir}/WEB-INF/classes"
+            debug="${compile.debug}"
+      deprecation="${compile.deprecation}"
+         optimize="${compile.optimize}">
+      <classpath refid="compile.classpath"/>
+    </javac>
+	 
+    <!-- Copy application resources -->
+    <copy todir="${build.dir}/WEB-INF/classes">
+      <fileset dir="${src.dir}" excludes="**/*.java"/>
+    </copy>
+    <copy todir="${build.dir}/WEB-INF/classes">
+      <fileset dir="${test.dir}" excludes="**/*.java"/>
+    </copy>
+  	<copy todir="${build.dir}/WEB-INF/lib">
+      <fileset dir="${web.dir}/WEB-INF/lib"/>
+    </copy>
+  	<copy todir="${build.dir}/WEB-INF">
+      <fileset dir="${web.dir}/WEB-INF"/>
+    </copy>
+  </target>
+  
+  <target name="dist" depends="clean, compile, test, javadoc" description="Create binary distribution">
+    <!-- Copy documentation subdirectories -->
+    <mkdir dir="${dist.dir}/docs"/>
+    <copy todir="${dist.dir}/docs">
+      <fileset dir="${docs.dir}"/>
+    </copy>
+    <!-- Create application WAR file -->
+    <jar jarfile="${dist.dir}/${app.name}-${app.version}.war"
+         basedir="${build.dir}"/>
+    <!-- Copy additional files to ${dist.dir} as necessary -->
+  </target>
+  
+  <target name="clean" description="clean up">
+    <!-- Delete the ${build} and ${dist} directory trees -->
+    <delete dir="${build.dir}"/>
+    <delete dir="${dist.dir}"/>
+  </target>
+	  
+  <target name="javadoc" depends="compile"
+      description="Create Javadoc API documentation">
+    <mkdir          dir="${docs.dir}/api"/>
+	<javadoc sourcepath="${src.dir}"
+                destdir="${docs.dir}/api"
+           packagenames="*">
+      <classpath refid="compile.classpath"/>
+	</javadoc>
+  </target>
+
+  <target name="test" depends="clean, compile">
+    <junit printsummary="yes" haltonfailure="no" showoutput="yes" >
+      <classpath>
+        <pathelement path="${build.dir}/WEB-INF/classes"/>
+        <fileset dir="${build.dir}/WEB-INF/lib">
+          <include name="*.jar"/>
+        </fileset>
+      </classpath>                   
+      <batchtest fork="yes" todir="${test.reports.dir}/">
+        <formatter type="xml"/>
+        <formatter type="brief" usefile="false"/>
+        <fileset dir="${test.dir}">
+          <include name="**/*Test.java"/>
+        </fileset>
+      </batchtest>
+    </junit>
+  </target>
+</project>

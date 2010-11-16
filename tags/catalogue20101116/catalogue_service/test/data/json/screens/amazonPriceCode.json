@@ -1,0 +1,64 @@
+{
+    "id":"6",
+    "creationDate":"2009-04-20T17:00:00+0100",
+    "creator":"admin",
+    "description":{
+        "en-gb":"This screen shows a price comparative for a given product."
+    },
+    "tags":[
+        {
+            "label":{
+                "en-gb":"scratch"
+            }
+        },
+        {
+            "label":{
+                "en-gb":"amazon"
+            },
+            "means":"http://dbpedia.org/page/Amazon.com"
+        },
+        {
+            "label":{
+                "en-gb":"comparative"
+            }
+        },
+        {
+            "label":{
+                "en-gb":"list"
+            }
+        }
+    ],
+    "homepage":"http://www.deri.ie/amazonPrice",
+    "icon":"http://demo.fast.morfeo-project.org/gvsdata/images/catalogue/amazonPrice.png",
+    "label":{
+        "en-gb":"Price Comparative"
+    },
+    "rights":"http://creativecommons.org/",
+    "screenshot":"http://demo.fast.morfeo-project.org/gvsdata/images/screenshots/amazonPriceComparative.png",
+    "version":"1.0",
+    "code":"http://demo.fast.morfeo-project.org/gvsdata/screens/amazonPrice.scr.html",
+    "preconditions":[
+        [
+            {
+                "id": "item",
+                "label":{
+                    "en-gb":"An item"
+                },
+                "pattern":"?Item http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#Item",
+                "positive":"true"
+            }
+        ]
+    ],
+    "postconditions":[
+        [
+            {
+                "id":"cart",
+                "label":{
+                    "en-gb":"An shopping cart"
+                },
+                "pattern":"?Cart http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#ShoppingCart",
+                "positive":"true"
+            }
+        ]
+    ]
+}

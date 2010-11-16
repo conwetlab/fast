@@ -1,0 +1,71 @@
+{
+    "id":"1",
+    "code":"http://demo.fast.morfeo-project.org/gvsdata/operators/amazonEbayFilter.src.js",
+    "creationDate":"2009-04-20T18:00:00+0200",
+    "creator":"admin",
+    "description":{
+        "en-gb":"This operator generates an eBay filter from a Amazon item"
+    },
+    "tags":[
+        {
+            "label":{
+                "en-gb":"amazon"
+            },
+            "means":"http://dbpedia.org/page/Amazon.com"
+        },
+        {
+            "label":{
+                "en-gb":"ebay"
+            }
+        },
+        {
+            "label":{
+                "en-gb":"filter"
+            }
+        }
+    ],
+    "homepage":"http://www.deri.ie/eBayList",
+    "icon":"http://demo.fast.morfeo-project.org/gvsdata/images/catalogue/eBayList.png",
+    "label":{
+        "en-gb":"Ebay List"
+    },
+    "rights":"http://creativecommons.org/",
+    "screenshot":"http://www.deri.ie/eBayList-screenshot.jpg",
+    "version":"1.0",
+    "libraries":[
+        
+    ],
+    "actions":[
+        {
+            "name":"createFilter",
+            "preconditions":[
+                {
+                    "id":"item",
+                    "label":{
+                        "en-gb":"An item"
+                    },
+                    "pattern":"?Item http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#Item",
+                    "positive":"true"
+                }
+            ],
+            "uses":[
+                
+            ]
+        }
+    ],
+    "postconditions":[
+        [
+            {
+                "id":"filterEbay",
+                "label":{
+                    "en-gb":"An eBay filter"
+                },
+                "pattern":"?eFilter http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://developer.ebay.com/DevZone/shopping/docs/CallRef/FindItemsAdvanced.html#Request",
+                "positive":"true"
+            }
+        ]
+    ],
+    "triggers":[
+        "filterEbay"
+    ]
+}
