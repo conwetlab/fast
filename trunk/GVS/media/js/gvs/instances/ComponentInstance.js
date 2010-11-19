@@ -38,7 +38,7 @@ var ComponentInstance = Class.create(DragSource,
          * @private
          * @type String
          */
-        this._title = this._buildingBlockDescription.getTitle();
+        this._title = null;
 
         /**
          * BuildingBlock description graphical representation
@@ -90,6 +90,9 @@ var ComponentInstance = Class.create(DragSource,
      * @type String
      */
     getTitle: function() {
+        if (!this._title) {
+            this._title = this._buildingBlockDescription.getTitle();
+        }
         return this._title;
     },
 
