@@ -81,6 +81,7 @@ public class ExampleValuesPanel implements PropertyChangeClient
    private AttributeTextArea exampleValTextBox;
    private Button exampleValDeleteButton;
    private HorizontalPanel factExamplePanel;
+
    private TreeItem exampleItem;
 
    public void start()

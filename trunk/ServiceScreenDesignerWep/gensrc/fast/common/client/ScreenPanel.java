@@ -10,6 +10,7 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.Button;
 import fujaba.web.runtime.client.FAction;
 import fast.servicescreen.client.ServiceScreenDesignerWep;
 import fujaba.web.runtime.client.reflect.*;
@@ -81,11 +82,13 @@ public class ScreenPanel implements PropertyChangeClient
 
 
    // create attributes for all objects in all states of this statechart
-   private Image delImage;
    private VerticalPanel vertPanel;
-   private HorizontalPanel horiPanel;
+   private Button openButton;
    private Image image;
    private Label label;
+   private Image delImage;
+   private HorizontalPanel horiPanel;
+   private VerticalPanel buttonsPanel;
 
    public void start()
    {
@@ -111,6 +114,7 @@ public class ScreenPanel implements PropertyChangeClient
 
       buildGUI = new BuildGUI ();
       imageHandler = new ImageHandler ();
+      openHandler = new OpenHandler ();
       removeWrapperHandler = new RemoveWrapperHandler ();
       screenListener = new ScreenListener ();
       // NONE
@@ -119,6 +123,9 @@ public class ScreenPanel implements PropertyChangeClient
       // NONE
 
       //buildGUI.addToFollowers("image.click", imageHandler);
+      // NONE
+
+      //buildGUI.addToFollowers("openButton.click", openHandler);
       // NONE
 
       //buildGUI.addToFollowers("screen.change", screenListener);
@@ -156,15 +163,29 @@ public class ScreenPanel implements PropertyChangeClient
             // create object horiPanel
             horiPanel = new HorizontalPanel ( );
 
+            // create object buttonsPanel
+            buttonsPanel = new VerticalPanel ( );
+
+            // create object openButton
+            openButton = new Button ( );
+
             // assign attribute label
             label.setText (screen.getName());
+            // assign attribute openButton
+            openButton.setText ("open");
+            // assign attribute openButton
+            openButton.setStyleName ("fastButton");
             // create link widget from panel to vertPanel
             panel.add (vertPanel);
 
             // collabStat call
             horiPanel.add(image);
             // collabStat call
-            horiPanel.add(delImage);
+            buttonsPanel.add(delImage);
+            // collabStat call
+            buttonsPanel.add(openButton);
+            // collabStat call
+            horiPanel.add(buttonsPanel);
             // collabStat call
             vertPanel.add(horiPanel);
             // collabStat call
@@ -185,6 +206,7 @@ public class ScreenPanel implements PropertyChangeClient
          screen.addPropertyChangeListener(screenListener);
          image.addClickHandler(imageHandler);
          delImage.addClickHandler(removeWrapperHandler);
+         openButton.addClickHandler(openHandler);
 
        }
 
@@ -213,6 +235,44 @@ public class ScreenPanel implements PropertyChangeClient
 
             // collabStat call
             refreshAction.doAction();
+            fujaba__Success = true;
+         }
+         catch ( JavaSDMException fujaba__InternalException )
+         {
+            fujaba__Success = false;
+         }
+
+
+
+       }
+
+   }
+
+   private OpenHandler openHandler;
+   public class OpenHandler extends FAction
+   {
+       public void doAction()
+       {
+   		 boolean fujaba__Success = false;
+
+         // story pattern storypatternwiththis
+         try 
+         {
+            fujaba__Success = false; 
+
+            // check object refreshAction is really bound
+            JavaSDM.ensure ( refreshAction != null );
+            // check object screen is really bound
+            JavaSDM.ensure ( screen != null );
+            // check object wrapperTool is really bound
+            JavaSDM.ensure ( wrapperTool != null );
+            // create link serviceScreen from wrapperTool to screen
+            wrapperTool.setServiceScreen (screen);
+
+            // collabStat call
+            refreshAction.doAction();
+            // collabStat call
+            wrapperTool.tabPanel.selectTab(1);;
             fujaba__Success = true;
          }
          catch ( JavaSDMException fujaba__InternalException )
@@ -284,6 +344,9 @@ public class ScreenPanel implements PropertyChangeClient
        }
 
    }
+
+   // my style test for method.vm
+
 
    // my style test for method.vm
 

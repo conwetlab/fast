@@ -1,0 +1,52 @@
+{
+  "type": "resource",
+  "label": {
+    "en-gb": "F1DriverService2"
+  },
+  "name": "F1DriverService2",
+  "version": "",
+  "tags": [],
+  "creator": "admin",
+  "description": {
+    "en-gb": "Please fill the description..."
+  },
+  "rights": "http://creativecommons.org/",
+  "icon": "http://fast.morfeo-project.eu/icon.png",
+  "screenshot": "http://fast.morfeo-project.eu/screenshot.png",
+  "homepage": "http://fast.morfeo-project.eu/",
+  "libraries": [],
+  "actions":[
+  {
+   "name":"search",
+   "preconditions":[                    
+    {
+     "id":"filter",
+                    "label":{
+                        "en-gb":"A search criteria"
+                    },
+                    "pattern":"?F http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://localhost:8080/FASTCatalogue/concepts/generic/SearchCriteria",
+                    "positive":"true"
+    }
+   ],
+            "uses":[]
+  }
+    ],
+    "postconditions":[
+        [
+            {
+                "id":"list",
+                "label":{
+                    "en-gb":"A Generic Item List"
+                },
+                "pattern":"?ElementList http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://localhost:8080/FASTCatalogue/concepts/generic/ElementList",
+                "positive":"true"
+            }
+        ]
+    ],
+    "triggers":[
+        "itemList"
+    ],
+  "postconditions": [],
+  "triggers": [],
+  "parameterTemplate": ""
+}

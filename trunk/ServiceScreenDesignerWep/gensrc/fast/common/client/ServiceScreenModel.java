@@ -119,6 +119,10 @@ public class ServiceScreenModel extends CObject implements PropertyChangeClient,
 		cclass.addToCAttributes (cattr); 
 
 		//add methods
+		cmeth = new CMethod();
+		cmeth.setName("compareTo(Object)");
+		cmeth.setCClass(cclass);
+		
 
 		/*********************************
 		Generate CClass fast.common.client.TrafoOperator
@@ -492,6 +496,7 @@ public class ServiceScreenModel extends CObject implements PropertyChangeClient,
 				break;
 			}
 		}
+		
 		
 		
 		

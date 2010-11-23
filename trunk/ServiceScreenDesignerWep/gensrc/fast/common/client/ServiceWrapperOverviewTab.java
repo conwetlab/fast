@@ -8,6 +8,7 @@ import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Button;
 import fast.common.client.ServiceDesigner;
 import fast.common.client.ServiceScreen;
+import fast.common.client.Sorter;
 import fast.common.client.ScreenPanel;
 import java.util.*;
 import com.google.gwt.user.client.ui.TabPanel;
@@ -82,14 +83,16 @@ public class ServiceWrapperOverviewTab implements PropertyChangeClient
 
 
    // create attributes for all objects in all states of this statechart
-   private TabWidget tabWidget;
-   private ScreenPanel screenPanel;
    private Button button;
+   private Sorter sorter;
    private ServiceScreen newScreen;
    private ServiceScreen screen;
+   private Iterator fujaba__IterSorterToScreen;
+   private FlowPanel overviewFlowPanel;
+   private TabWidget tabWidget;
+   private ScreenPanel screenPanel;
    private ServiceDesigner designer;
    private Iterator fujaba__IterDesignerToScreen;
-   private FlowPanel overviewFlowPanel;
 
    public void start()
    {
@@ -118,15 +121,19 @@ public class ServiceWrapperOverviewTab implements PropertyChangeClient
       addScreenPanels = new AddScreenPanels ();
       buildGUI = new BuildGUI ();
       refreshOverviewPanel = new RefreshOverviewPanel ();
+      sortScreens = new SortScreens ();
       // NONE
 
       //buildGUI.addToFollowers("auto", refreshOverviewPanel);
       // NONE
 
-      //refreshOverviewPanel.addToFollowers("auto", addScreenPanels);
+      //refreshOverviewPanel.addToFollowers("auto", sortScreens);
       // NONE
 
       //addScreenPanels.addToFollowers("auto", addScreenButton);
+      // NONE
+
+      //sortScreens.addToFollowers("auto", addScreenPanels);
       // NONE
 
       //addScreenButton.addToFollowers("button.click", addScreenButtonHandler);
@@ -221,19 +228,19 @@ public class ServiceWrapperOverviewTab implements PropertyChangeClient
          {
             fujaba__Success = false; 
 
-            // check object designer is really bound
-            JavaSDM.ensure ( designer != null );
             // check object overviewFlowPanel is really bound
             JavaSDM.ensure ( overviewFlowPanel != null );
-            // iterate to-many link screens from designer to screen
+            // check object sorter is really bound
+            JavaSDM.ensure ( sorter != null );
+            // iterate to-many link serviceScreens from sorter to screen
             fujaba__Success = false;
-            fujaba__IterDesignerToScreen = designer.iteratorOfScreens ();
+            fujaba__IterSorterToScreen = sorter.iteratorOfServiceScreens ();
 
-            while ( fujaba__IterDesignerToScreen.hasNext () )
+            while ( fujaba__IterSorterToScreen.hasNext () )
             {
                try
                {
-                  screen = (ServiceScreen) fujaba__IterDesignerToScreen.next ();
+                  screen = (ServiceScreen) fujaba__IterSorterToScreen.next ();
 
                   // check object screen is really bound
                   JavaSDM.ensure ( screen != null );
@@ -308,7 +315,7 @@ public class ServiceWrapperOverviewTab implements PropertyChangeClient
             tabWidget = new TabWidget("Overview");
 
             // collabStat call
-            tabPanel.setWidth("900px");
+            tabPanel.setWidth("1400px");
             // collabStat call
             tabPanel.add(overviewFlowPanel, tabWidget);
             // collabStat call
@@ -355,6 +362,9 @@ public class ServiceWrapperOverviewTab implements PropertyChangeClient
 
             // check object overviewFlowPanel is really bound
             JavaSDM.ensure ( overviewFlowPanel != null );
+            // create object sorter
+            sorter = new Sorter ( );
+
             // collabStat call
             overviewFlowPanel.clear();
             fujaba__Success = true;
@@ -370,7 +380,7 @@ public class ServiceWrapperOverviewTab implements PropertyChangeClient
    		 {
    			 autoGuardRefreshOverviewPanel1 = new AutoGuardRefreshOverviewPanel1();
    			 autoGuardRefreshOverviewPanel1.setSource(refreshOverviewPanel);
-   			 autoGuardRefreshOverviewPanel1.setTarget(addScreenPanels);
+   			 autoGuardRefreshOverviewPanel1.setTarget(sortScreens);
    			 refreshOverviewPanel.addToAutoTransitions(autoGuardRefreshOverviewPanel1.toString(), autoGuardRefreshOverviewPanel1);
    		 }
 
@@ -383,6 +393,76 @@ public class ServiceWrapperOverviewTab implements PropertyChangeClient
       }
 
    }
+
+   private SortScreens sortScreens;
+   public class SortScreens extends FAction
+   {
+       public void doAction()
+       {
+   		 boolean fujaba__Success = false;
+
+         // story pattern storypatternwiththis
+         try 
+         {
+            fujaba__Success = false; 
+
+            // check object designer is really bound
+            JavaSDM.ensure ( designer != null );
+            // check object sorter is really bound
+            JavaSDM.ensure ( sorter != null );
+            // iterate to-many link screens from designer to screen
+            fujaba__Success = false;
+            fujaba__IterDesignerToScreen = designer.iteratorOfScreens ();
+
+            while ( fujaba__IterDesignerToScreen.hasNext () )
+            {
+               try
+               {
+                  screen = (ServiceScreen) fujaba__IterDesignerToScreen.next ();
+
+                  // check object screen is really bound
+                  JavaSDM.ensure ( screen != null );
+                  // create link serviceScreens from sorter to screen
+                  sorter.addToServiceScreens (screen);
+
+
+                  fujaba__Success = true;
+               }
+               catch ( JavaSDMException fujaba__InternalException )
+               {
+                  fujaba__Success = false;
+               }
+            }
+            JavaSDM.ensure (fujaba__Success);
+            fujaba__Success = true;
+         }
+         catch ( JavaSDMException fujaba__InternalException )
+         {
+            fujaba__Success = false;
+         }
+
+
+
+   		 if( autoGuardSortScreens1 == null)
+   		 {
+   			 autoGuardSortScreens1 = new AutoGuardSortScreens1();
+   			 autoGuardSortScreens1.setSource(sortScreens);
+   			 autoGuardSortScreens1.setTarget(addScreenPanels);
+   			 sortScreens.addToAutoTransitions(autoGuardSortScreens1.toString(), autoGuardSortScreens1);
+   		 }
+
+   		 doAuto();
+       }
+
+      private AutoGuardSortScreens1 autoGuardSortScreens1;
+      private class AutoGuardSortScreens1 extends FGuard
+      {
+      }
+
+   }
+
+   // my style test for method.vm
+
 
    // my style test for method.vm
 

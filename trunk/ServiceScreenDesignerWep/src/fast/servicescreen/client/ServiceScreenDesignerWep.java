@@ -139,7 +139,7 @@ public class ServiceScreenDesignerWep extends FastTool implements EntryPoint
    public RuleGUI ruleGUI;
    public SendRequestHandler requestHandler;
    private TestServiceRequestAction testServiceRequestAction;
-   private TabPanel tabPanel;
+   public TabPanel tabPanel;
    
    //Panles which changes in runtime
    private Widget codeGenViewer_Panel;
@@ -286,8 +286,14 @@ public class ServiceScreenDesignerWep extends FastTool implements EntryPoint
       
       int rowCount = generalInformationTable.getRowCount();
       
+      // add story board hint
+      Label hintLabel;
+      hintLabel = new Label("Step 1: define how this resource is connected to other building blocks.");
+      generalInformationTable.setWidget(rowCount, 0, hintLabel);
+      rowCount++;
+      
       // add label and nameTextBox
-      Label nameLabel = new Label("Name:");
+      Label nameLabel = new Label("Give this resource a name:");
       generalInformationTable.setWidget(rowCount, 0, nameLabel);
       rowCount++;
       nameTextBox = CTextChangeHandler.createTextBox(serviceScreen, "name");

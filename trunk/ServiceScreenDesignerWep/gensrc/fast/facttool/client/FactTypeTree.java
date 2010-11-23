@@ -87,6 +87,13 @@ public class FactTypeTree implements PropertyChangeClient
 
 
    // create attributes for all objects in all states of this statechart
+   private Tree tree;
+   private RootPanel rootPanel;
+   private TextBox mnemonicCaption;
+   private Label label;
+   private HorizontalPanel captionPanel;
+   private Iterator fujaba__IterCoobraRootToDesigner;
+   private TabPanel tabPanel;
    private HorizontalPanel panel;
    private Iterator fujaba__IterDesignerToFactType;
    private CoobraRoot coobraRoot;
@@ -95,18 +102,11 @@ public class FactTypeTree implements PropertyChangeClient
    private FactTypePanel factTypePanel;
    private TextBox uriCaption;
    private TextBox nameCaption;
-   private Tree tree;
-   private RootPanel rootPanel;
-   private TextBox mnemonicCaption;
    private Object _TmpObject;
    private ServiceDesigner designer;
    private TreeItem rootItem;
-   private Label label;
-   private HorizontalPanel captionPanel;
-   private Iterator fujaba__IterCoobraRootToDesigner;
    private TreeItem captionItem;
    private Button addButton;
-   private TabPanel tabPanel;
 
    public void start()
    {

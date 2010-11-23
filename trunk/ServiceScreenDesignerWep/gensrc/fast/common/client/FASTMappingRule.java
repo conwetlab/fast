@@ -23,7 +23,7 @@ public class FASTMappingRule extends FastObject
 
    public void removeAllFrom(String className) 
    {
-      if ("fast.common.client.FASTMappingRule".equals(className)){				
+      if ("fast.common.client.FASTMappingRule".equals(className)){
          removeAllFromKids();
       }
    }
@@ -45,45 +45,25 @@ public class FASTMappingRule extends FastObject
    public void set (String fieldName, Object value)
    {
       // sourceTagname
-      if ("sourceTagname".equals(fieldName)){				
+      if ("sourceTagname".equals(fieldName)){
          setSourceTagname((String) value);
       }      else      // targetElemName
-      if ("targetElemName".equals(fieldName)){				
+      if ("targetElemName".equals(fieldName)){
          setTargetElemName((String) value);
       }      else      // kind
-      if ("kind".equals(fieldName)){				
+      if ("kind".equals(fieldName)){
          setKind((String) value);
-      }//( toMany false || toMany2 true || qualified $qualified || 
-// internalQualified false ||  
-// role.Qualifier $role.Qualifier || ordered false || sorted false)
- //2[! (  ( toMany || !toMany2) && !( toMany && toMany2)  && role.Qualifier  ) ]
-//2.2[ !( qualified && !internalQualified ) ]
- else// serviceScreen
-      if ("serviceScreen".equals(fieldName)){				
+      }  else// serviceScreen
+      if ("serviceScreen".equals(fieldName)){
          setServiceScreen ((fast.common.client.BuildingBlock) value);
-      }//( toMany true || toMany2 false || qualified $qualified || 
-// internalQualified false ||  
-// role.Qualifier $role.Qualifier || ordered false || sorted false)
- //2[! (  ( toMany || !toMany2) && !( toMany && toMany2)  && role.Qualifier  ) ]
-//2.2[ !( qualified && !internalQualified ) ]
- else// kids
-      if ("kids".equals(fieldName)){				
+      }  else// kids
+      if ("kids".equals(fieldName)){
          addToKids ((fast.common.client.FASTMappingRule) value);
-      }//( toMany false || toMany2 true || qualified $qualified || 
-// internalQualified false ||  
-// role.Qualifier $role.Qualifier || ordered true || sorted false)
- //2[! (  ( toMany || !toMany2) && !( toMany && toMany2)  && role.Qualifier  ) ]
-//2.2[ !( qualified && !internalQualified ) ]
- else// parent
-      if ("parent".equals(fieldName)){				
+      }  else// parent
+      if ("parent".equals(fieldName)){
          setParent ((fast.common.client.FASTMappingRule) value);
-      }//( toMany false || toMany2 false || qualified $qualified || 
-// internalQualified false ||  
-// role.Qualifier $role.Qualifier || ordered true || sorted false)
- //2[! (  ( toMany || !toMany2) && !( toMany && toMany2)  && role.Qualifier  ) ]
-//2.2[ !( qualified && !internalQualified ) ]
- else// operationHandler
-      if ("operationHandler".equals(fieldName)){				
+      }  else// operationHandler
+      if ("operationHandler".equals(fieldName)){
          setOperationHandler ((fast.servicescreen.client.gui.parser.OperationHandler) value);
       }   }  
 
@@ -107,19 +87,19 @@ public class FASTMappingRule extends FastObject
          return (String) getKind();
       }
       else      if ("serviceScreen".equals(fieldName))
-      {				
+      {
          return getServiceScreen();
       }
       else      if ("kids".equals(fieldName))
-      {				
+      {
          return iteratorOfKids();
       }
       else      if ("parent".equals(fieldName))
-      {				
+      {
          return getParent();
       }
       else      if ("operationHandler".equals(fieldName))
-      {				
+      {
          return getOperationHandler();
       }
       return null;
@@ -560,7 +540,6 @@ public class FASTMappingRule extends FastObject
     *           fASTMappingRule               operationHandler
     * </pre>
     */
-   public static final String PROPERTY_OPERATION_HANDLER = "operationHandler";
 
    private transient OperationHandler operationHandler;
 
@@ -573,7 +552,6 @@ public class FASTMappingRule extends FastObject
       
          OperationHandler oldValue = this.operationHandler;
          this.operationHandler = value;
-//         getPropertyChangeSupport().firePropertyChange(PROPERTY_OPERATION_HANDLER, oldValue, value);
          changed = true;
       
       }

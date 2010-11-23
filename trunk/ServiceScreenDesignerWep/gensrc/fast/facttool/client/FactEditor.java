@@ -99,7 +99,6 @@ public class FactEditor implements PropertyChangeClient
    private RequestServiceAsync getConceptService;
    private DataLoadTimer dataLoadTimer;
    private Iterator fujaba__IterCoobraRootToDesigner;
-   private JSONParser fixme2;
    private ServiceScreenModel modelRoot;
 
    public void start()
@@ -225,7 +224,7 @@ public class FactEditor implements PropertyChangeClient
             conceptArray = JSONParser.parse((String)resultValue).isArray();
 
             // create object fixme2
-            fixme2 = null;
+            // fixme2 = null;
 
             fujaba__Success = true;
          }

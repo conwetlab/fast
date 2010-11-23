@@ -4,8 +4,10 @@
 
 package fast.common.client;
 
+import java.lang.Object;
 import fast.common.client.ServiceDesigner;
 import fast.common.client.BuildingBlock;
+import java.lang.Comparable;
 import fujaba.web.runtime.client.reflect.*;
 import fujaba.web.runtime.client.*;
 import java.util.*;
@@ -15,7 +17,7 @@ import com.google.gwt.event.dom.client.ClickEvent;
 
 
 
-public class ServiceScreen extends BuildingBlock
+public class ServiceScreen extends BuildingBlock implements Comparable
 {
 
    public void removeAllFrom(String className) 
@@ -39,21 +41,16 @@ public class ServiceScreen extends BuildingBlock
    public void set (String fieldName, Object value)
    {
       // requestTemplate
-      if ("requestTemplate".equals(fieldName)){				
+      if ("requestTemplate".equals(fieldName)){
          setRequestTemplate((String) value);
       }      else      // uri
-      if ("uri".equals(fieldName)){				
+      if ("uri".equals(fieldName)){
          setUri((String) value);
       }      else      // name
-      if ("name".equals(fieldName)){				
+      if ("name".equals(fieldName)){
          setName((String) value);
-      }//( toMany false || toMany2 true || qualified $qualified || 
-// internalQualified false ||  
-// role.Qualifier $role.Qualifier || ordered false || sorted false)
- //2[! (  ( toMany || !toMany2) && !( toMany && toMany2)  && role.Qualifier  ) ]
-//2.2[ !( qualified && !internalQualified ) ]
- else// serviceDesigner
-      if ("serviceDesigner".equals(fieldName)){				
+      }  else// serviceDesigner
+      if ("serviceDesigner".equals(fieldName)){
          setServiceDesigner ((fast.common.client.ServiceDesigner) value);
       }   }  
 
@@ -77,10 +74,15 @@ public class ServiceScreen extends BuildingBlock
          return (String) getName();
       }
       else      if ("serviceDesigner".equals(fieldName))
-      {				
+      {
          return getServiceDesigner();
       }
       return null;
+   }
+   public int compareTo (Object other )
+   { 
+
+      return getName().compareTo(((ServiceScreen)other).getName());
    }
 
    public static final String PROPERTY_REQUEST_TEMPLATE = "requestTemplate";

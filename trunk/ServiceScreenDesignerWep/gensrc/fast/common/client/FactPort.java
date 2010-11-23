@@ -41,35 +41,25 @@ public class FactPort extends FastObject
    public void set (String fieldName, Object value)
    {
       // name
-      if ("name".equals(fieldName)){				
+      if ("name".equals(fieldName)){
          setName((String) value);
       }      else      // uri
-      if ("uri".equals(fieldName)){				
+      if ("uri".equals(fieldName)){
          setUri((String) value);
       }      else      // exampleValue
-      if ("exampleValue".equals(fieldName)){				
+      if ("exampleValue".equals(fieldName)){
          setExampleValue((String) value);
       }      else      // factType
-      if ("factType".equals(fieldName)){				
+      if ("factType".equals(fieldName)){
          setFactType((String) value);
       }      else      // mnemonic
-      if ("mnemonic".equals(fieldName)){				
+      if ("mnemonic".equals(fieldName)){
          setMnemonic((String) value);
-      }//( toMany false || toMany2 true || qualified $qualified || 
-// internalQualified false ||  
-// role.Qualifier $role.Qualifier || ordered false || sorted false)
- //2[! (  ( toMany || !toMany2) && !( toMany && toMany2)  && role.Qualifier  ) ]
-//2.2[ !( qualified && !internalQualified ) ]
- else// serviceScreen
-      if ("serviceScreen".equals(fieldName)){				
+      }  else// serviceScreen
+      if ("serviceScreen".equals(fieldName)){
          setServiceScreen ((fast.common.client.BuildingBlock) value);
-      }//( toMany false || toMany2 true || qualified $qualified || 
-// internalQualified false ||  
-// role.Qualifier $role.Qualifier || ordered false || sorted false)
- //2[! (  ( toMany || !toMany2) && !( toMany && toMany2)  && role.Qualifier  ) ]
-//2.2[ !( qualified && !internalQualified ) ]
- else// serviceScreen2
-      if ("serviceScreen2".equals(fieldName)){				
+      }  else// serviceScreen2
+      if ("serviceScreen2".equals(fieldName)){
          setServiceScreen2 ((fast.common.client.BuildingBlock) value);
       }   }  
 
@@ -101,11 +91,11 @@ public class FactPort extends FastObject
          return (String) getMnemonic();
       }
       else      if ("serviceScreen".equals(fieldName))
-      {				
+      {
          return getServiceScreen();
       }
       else      if ("serviceScreen2".equals(fieldName))
-      {				
+      {
          return getServiceScreen2();
       }
       return null;

@@ -86,33 +86,33 @@ public class FactTypePanel implements PropertyChangeClient
 
 
    // create attributes for all objects in all states of this statechart
-   private HorizontalPanel panel;
-   private FactAttribute newAttr;
-   private FactExample newExampleVal;
    private AttributeTextBox uriTextBox;
    private HorizontalPanel exampleValTreeRootPanel;
-   private HorizontalPanel attrTreeRootPanel;
    private Label attrTreeRootLabel;
-   private TextBox nameCaption;
-   private AttributeTextBox nameBox;
-   private Button exampleValAddButton;
    private FactAttrPanel attrPanel;
-   private Iterator fujaba__IterFactTypeToFactAttr;
-   private Button attrAddButton;
    private TreeItem exampleValRootItem;
    private Iterator fujaba__IterFactTypeToExample;
-   private TextBox typeCaption;
    private DeleteFactTypeButton deleteButton;
    private AttributeTextBox mnemonicBox;
    private HorizontalPanel captionPanel;
-   private ExampleValuesPanel exampleValPanel;
-   private ExampleValuesPanel examplePanel;
    private Label exampleValTreeRootLabel;
    private TreeItem treeItem;
-   private TreeItem captionItem;
    private FactAttribute factAttr;
    private FactExample example;
    private TreeItem attrRootItem;
+   private HorizontalPanel panel;
+   private FactAttribute newAttr;
+   private FactExample newExampleVal;
+   private HorizontalPanel attrTreeRootPanel;
+   private TextBox nameCaption;
+   private AttributeTextBox nameBox;
+   private Button exampleValAddButton;
+   private Iterator fujaba__IterFactTypeToFactAttr;
+   private Button attrAddButton;
+   private TextBox typeCaption;
+   private ExampleValuesPanel exampleValPanel;
+   private ExampleValuesPanel examplePanel;
+   private TreeItem captionItem;
 
    public void start()
    {

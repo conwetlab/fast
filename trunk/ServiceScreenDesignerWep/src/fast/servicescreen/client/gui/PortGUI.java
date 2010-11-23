@@ -10,11 +10,13 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.SuggestBox;
 import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.TextBox;
+import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.user.client.ui.HTMLTable.Cell;
 
 import fast.common.client.BuildingBlock;
 import fast.common.client.FactPort;
+import fast.common.client.FastButton;
 import fast.common.client.ServiceDesigner;
 import fast.mediation.client.DataTransformationTool;
 import fast.servicescreen.client.FastTool;
@@ -23,295 +25,305 @@ import fujaba.web.runtime.client.PropertyChangeListener;
 
 public class PortGUI
 {
-   public PortGUI(BuildingBlock buildingBlock, boolean longExampleValues)
-   {
-      this.buildingBlock = buildingBlock;
-      this.longExampleValues = longExampleValues;
-   }
-   
-   public PortGUI(FastTool fastTool, BuildingBlock buildingBlock, boolean longExampleValues)
-   {
-	  this.fastTool = fastTool;
-      this.buildingBlock = buildingBlock;
-      this.longExampleValues = longExampleValues;
-   }
-   
-   private FastTool fastTool;
-   private BuildingBlock buildingBlock;
-   private boolean longExampleValues;
-   public FlexTable inputPortTable;
-   public FlexTable outputPortTable;
+	public PortGUI(BuildingBlock buildingBlock, boolean longExampleValues)
+	{
+		this.buildingBlock = buildingBlock;
+		this.longExampleValues = longExampleValues;
+	}
 
-   @SuppressWarnings("unchecked")
-   public Widget createInputPortTable()
-   {
-      inputPortTable = new FlexTable();
-      
-      int numRows = inputPortTable.getRowCount();
-      
-       // add headlines
-       inputPortTable.setHTML(numRows, 0, "Input Facts:");
-       numRows++;
-       
-       // add the add-buttons
-       // Add new input port Button
-       Button addInputPortButton = new Button("Add Fact");
-       addInputPortButton.setStyleName("fastButton");
-       addInputPortButton.addClickHandler(new AddNewInputPortHandler());
-       inputPortTable.setWidget(numRows, 0, addInputPortButton);
-       numRows++;
+	public PortGUI(FastTool fastTool, BuildingBlock buildingBlock, boolean longExampleValues)
+	{
+		this.fastTool = fastTool;
+		this.buildingBlock = buildingBlock;
+		this.longExampleValues = longExampleValues;
+	}
 
-       // add input header row
-       inputPortTable.setWidget(numRows, 0, new Label("Fact Name"));
-       inputPortTable.setWidget(numRows, 1, new Label("Fact Type"));
-       if(longExampleValues)
-       {
-    	   inputPortTable.setWidget(numRows, 2, new Label("List Of Example Values"));
-       }
-       else
-       {
-    	   inputPortTable.setWidget(numRows, 2, new Label("Example Value"));
-       }
-       numRows++;
-     
-       // add rows for existing input fact ports
-       Iterator<FactPort> iteratorOfPreconditions = buildingBlock.iteratorOfPreconditions();
-       while (iteratorOfPreconditions.hasNext())
-       {
-          FactPort factPort = iteratorOfPreconditions.next();
-            
-          // per fact port add one row with three text boxes for name, type, and example value
-          createInputTableRowFor(factPort);
-       }
-       
-       // return the panel
-       inputPortTable.ensureDebugId("cwFlexTable");
-       return inputPortTable;
-   }
+	private FastTool fastTool;
+	private BuildingBlock buildingBlock;
+	private boolean longExampleValues;
+	public FlexTable inputPortTable;
+	public FlexTable outputPortTable;
+	private VerticalPanel portPanel;
 
-   private void createInputTableRowFor(FactPort factPort)
-   {
-	   if (longExampleValues)
-	   {
-		   TextBox nameBox = CTextChangeHandler.createTextBox(factPort, "name");
-		   SuggestBox typeBox = CTextChangeHandler.createTypeSuggestBox((ServiceDesigner)factPort.getServiceScreen().get("serviceDesigner"), factPort, "factType");
-		   TextArea exampleArea = CTextChangeHandler.createTextArea(factPort, "10cm", "8cm", "exampleValue");
-		   
-		   int inputNumRows = inputPortTable.getRowCount();
-		   inputPortTable.getRowFormatter().addStyleName(inputNumRows, "FindStyleForAlignTop");
-		   
-		   //add the text and suggest boxes
-		   inputPortTable.setWidget(inputNumRows, 0, nameBox);
-		   
-		   inputPortTable.setWidget(inputNumRows, 1, typeBox);
-		   inputPortTable.setWidget(inputNumRows, 2, exampleArea);
-		   // add remove button
-		   Button removePortButton = new Button("Remove Port");
-		   removePortButton.setStyleName("fastButton");
-		   RemoveInputPortHandler inputPortHandler = new RemoveInputPortHandler();
-		   inputPortHandler.setFactPort(factPort);
-		   removePortButton.addClickHandler(inputPortHandler);
-		   
-		   inputPortTable.setWidget(inputNumRows, 3, removePortButton);
-		   
-		   //updateListener
-		   UpdateTransformationTabListener updateTabListener = new UpdateTransformationTabListener();
-    	   factPort.addPropertyChangeListener("name", updateTabListener);
-    	   factPort.addPropertyChangeListener("factType", updateTabListener);
-    	   factPort.addPropertyChangeListener("exampleValue", updateTabListener);
-	   }
-	   else
-	   {
-		   TextBox nameBox = CTextChangeHandler.createTextBox(factPort, "name");
-		   SuggestBox typeBox = CTextChangeHandler.createTypeSuggestBox((ServiceDesigner) factPort.getServiceScreen().get("serviceDesigner"), factPort, "factType");
-		   TextBox exampleBox = CTextChangeHandler.createTextBox(factPort, "exampleValue");
+	@SuppressWarnings("unchecked")
+	public Widget createInputPortTable()
+	{
+		portPanel = new VerticalPanel();
 
-		   int inputNumRows = inputPortTable.getRowCount();
+		Label hintLabel = new Label("Define the preconditions where previous building blocks may provide data:");
 
-		   //add the text and suggest boxes
-		   inputPortTable.setWidget(inputNumRows, 0, nameBox);
-		   inputPortTable.setWidget(inputNumRows, 1, typeBox);
-		   inputPortTable.setWidget(inputNumRows, 2, exampleBox);
+		portPanel.add(hintLabel);
 
-		   // add remove button
-		   Button removePortButton = new Button("Remove Port");
-		   removePortButton.setStyleName("fastButton");
-		   RemoveInputPortHandler inputPortHandler = new RemoveInputPortHandler();
-		   inputPortHandler.setFactPort(factPort);
-		   removePortButton.addClickHandler(inputPortHandler);
-		   inputPortTable.setWidget(inputNumRows, 3, removePortButton);
-	   }
-   }
+		inputPortTable = new FlexTable();
 
-   @SuppressWarnings("unchecked")
-   public Widget createOutputPortTable() 
-   {
-	   outputPortTable = new FlexTable();
+		int numRows = inputPortTable.getRowCount();
 
-	   int numRows = outputPortTable.getRowCount();
+		// add the add-buttons
+		// Add new input port Button
+		Button addInputPortButton = new FastButton("Add precondition");
+		addInputPortButton.addClickHandler(new AddNewInputPortHandler());
+		inputPortTable.setWidget(numRows, 0, addInputPortButton);
+		numRows++;
 
-	   // add headlines
-	   outputPortTable.setHTML(numRows, 0, "Output Facts:");
-	   numRows++;
+		// add input header row
+		inputPortTable.setWidget(numRows, 0, new Label("Precondition name:"));
+		inputPortTable.setWidget(numRows, 1, new Label("Precondition type:"));
+		if(longExampleValues)
+		{
+			inputPortTable.setWidget(numRows, 2, new Label("List of example values"));
+		}
+		else
+		{
+			inputPortTable.setWidget(numRows, 2, new Label("Example value:"));
+		}
+		numRows++;
 
-	   // Add new output port Button
-	   Button addOutputPortButton = new Button("Add Fact");
-	   addOutputPortButton.setStyleName("fastButton");
-	   addOutputPortButton.addClickHandler(new AddNewOutputPortHandler());
-	   outputPortTable.setWidget(numRows, 0, addOutputPortButton);
-	   numRows++;
+		// add rows for existing input fact ports
+		Iterator<FactPort> iteratorOfPreconditions = buildingBlock.iteratorOfPreconditions();
+		while (iteratorOfPreconditions.hasNext())
+		{
+			FactPort factPort = iteratorOfPreconditions.next();
 
-	   // add output header row
-	   outputPortTable.setWidget(numRows, 0, new Label("Fact Name"));
-	   outputPortTable.setWidget(numRows, 1, new Label("Fact Type"));
-	   numRows++;
+			// per fact port add one row with three text boxes for name, type, and example value
+			createInputTableRowFor(factPort);
+		}
 
-	   // add rows for existing output fact ports
-	   Iterator<FactPort> iteratorOfPostconditions = buildingBlock.iteratorOfPostconditions();
-	   while (iteratorOfPostconditions.hasNext())
-	   {
-		   FactPort factPort = iteratorOfPostconditions.next();
+		// return the panel
+		inputPortTable.ensureDebugId("cwFlexTable");
+		
+		portPanel.add(inputPortTable);
+		
+		return portPanel;
+	}
 
-		   // per fact port add one row with three text boxes for name, type, and example value
-		   createOutputTableRowFor(factPort);
-	   }
+	private void createInputTableRowFor(FactPort factPort)
+	{
+		if (longExampleValues)
+		{
+			TextBox nameBox = CTextChangeHandler.createTextBox(factPort, "name");
+			SuggestBox typeBox = CTextChangeHandler.createTypeSuggestBox((ServiceDesigner)factPort.getServiceScreen().get("serviceDesigner"), factPort, "factType");
+			TextArea exampleArea = CTextChangeHandler.createTextArea(factPort, "10cm", "8cm", "exampleValue");
 
-       if(longExampleValues)
-       {
-		   //updateListener
-		   UpdateTransformationTabListener updateTabListener = new UpdateTransformationTabListener();
-    	   buildingBlock.addPropertyChangeListener(BuildingBlock.PROPERTY_POSTCONDITIONS, updateTabListener);
-       }
-	   
-	   // return the panel
-	   outputPortTable.ensureDebugId("cwFlexTable");
-	   return outputPortTable;
-   }
+			int inputNumRows = inputPortTable.getRowCount();
+			inputPortTable.getRowFormatter().addStyleName(inputNumRows, "FindStyleForAlignTop");
 
-   private void createOutputTableRowFor(FactPort factPort)
-   {
-	   TextBox nameBox = CTextChangeHandler.createTextBox(factPort, "name");
-	   SuggestBox typeBox = CTextChangeHandler.createTypeSuggestBox((ServiceDesigner) factPort.getServiceScreen2().get("serviceDesigner"), factPort, "factType");
+			//add the text and suggest boxes
+			inputPortTable.setWidget(inputNumRows, 0, nameBox);
 
-	   int outputNumRows = outputPortTable.getRowCount();
+			inputPortTable.setWidget(inputNumRows, 1, typeBox);
+			inputPortTable.setWidget(inputNumRows, 2, exampleArea);
+			// add remove button
+			Button removePortButton = new Button("Remove precondition");
+			removePortButton.setStyleName("fastButton");
+			RemoveInputPortHandler inputPortHandler = new RemoveInputPortHandler();
+			inputPortHandler.setFactPort(factPort);
+			removePortButton.addClickHandler(inputPortHandler);
 
-	   //add the text and suggest boxes
-	   outputPortTable.setWidget(outputNumRows, 0, nameBox);
-	   outputPortTable.setWidget(outputNumRows, 1, typeBox);
+			inputPortTable.setWidget(inputNumRows, 3, removePortButton);
 
-	   // add remove button
-	   Button removePortButton = new Button("Remove Port");
-	   removePortButton.setStyleName("fastButton");
-	   RemoveOutputPortHandler outputPortHandler = new RemoveOutputPortHandler();
-	   outputPortHandler.setFactPort(factPort);
-	   removePortButton.addClickHandler(outputPortHandler);
-	   outputPortTable.setWidget(outputNumRows, 3, removePortButton);
-	   
-	   //updateListener
-	   UpdateTransformationTabListener updateTabListener = new UpdateTransformationTabListener();
-	   factPort.addPropertyChangeListener("name", updateTabListener);
-	   factPort.addPropertyChangeListener("factType", updateTabListener);
-   }
-   
-   class UpdateTransformationTabListener implements PropertyChangeListener
-   {
-	   @Override
-	   public void propertyChanged(PropertyChangeEvent evt)
-	   {
-		   if(fastTool instanceof DataTransformationTool)
-		   {
-			   ((DataTransformationTool) fastTool).refreshRuleAndCodeTab();
-		   }
-	   }
-   }
-   
-   class AddNewInputPortHandler implements ClickHandler
-   {
-	   @Override
-	   public void onClick(ClickEvent event)
-	   {
-		   FactPort factPort = new FactPort();
-		   buildingBlock.addToPreconditions(factPort);
-		   createInputTableRowFor(factPort);
-	   }
-   }
-   
-   /**
-    * This Handler is for removing and adding Ports
-    * */
-   class RemoveInputPortHandler implements ClickHandler
-   {
-      
-	   private FactPort factPort;
+			//updateListener
+			UpdateTransformationTabListener updateTabListener = new UpdateTransformationTabListener();
+			factPort.addPropertyChangeListener("name", updateTabListener);
+			factPort.addPropertyChangeListener("factType", updateTabListener);
+			factPort.addPropertyChangeListener("exampleValue", updateTabListener);
+		}
+		else
+		{
+			TextBox nameBox = CTextChangeHandler.createTextBox(factPort, "name");
+			SuggestBox typeBox = CTextChangeHandler.createTypeSuggestBox((ServiceDesigner) factPort.getServiceScreen().get("serviceDesigner"), factPort, "factType");
+			TextBox exampleBox = CTextChangeHandler.createTextBox(factPort, "exampleValue");
 
-	   public FactPort getFactPort()
-	   {
-		   return factPort;
-	   }
+			int inputNumRows = inputPortTable.getRowCount();
 
-	   public void setFactPort(FactPort factPort)
-	   {
-		   this.factPort = factPort;
-	   }
+			//add the text and suggest boxes
+			inputPortTable.setWidget(inputNumRows, 0, nameBox);
+			inputPortTable.setWidget(inputNumRows, 1, typeBox);
+			inputPortTable.setWidget(inputNumRows, 2, exampleBox);
 
-	   @Override
-	   public void onClick(ClickEvent event)
-	   {
-		   //do not remove last row
-		   if(inputPortTable.getRowCount() == 4)
-		   {
-			   return;
-		   }
+			// add remove button
+			Button removePortButton = new Button("Remove precondition");
+			removePortButton.setStyleName("fastButton");
+			RemoveInputPortHandler inputPortHandler = new RemoveInputPortHandler();
+			inputPortHandler.setFactPort(factPort);
+			removePortButton.addClickHandler(inputPortHandler);
+			inputPortTable.setWidget(inputNumRows, 3, removePortButton);
+		}
+	}
 
-		   Cell cell = inputPortTable.getCellForEvent(event);         
-		   int rowCount = cell.getRowIndex();
-		   inputPortTable.removeRow(rowCount);
+	@SuppressWarnings("unchecked")
+	public Widget createOutputPortTable() 
+	{
+		VerticalPanel outputPanel = new VerticalPanel();
+		
+		Label hintLabel = new Label("Define the postcondtion where this resource will deliver results:");	      
+		
+		outputPanel.add(hintLabel);
+		
+		outputPortTable = new FlexTable();
 
-		   // remove factport from preconditions
-		   buildingBlock.removeFromPreconditions(factPort);
-	   } 
-   }
+		int numRows = outputPortTable.getRowCount();
 
-   class AddNewOutputPortHandler implements ClickHandler
-   {
-	   @Override
-	   public void onClick(ClickEvent event)
-	   {
-		   FactPort factPort = new FactPort();
-		   buildingBlock.addToPostconditions(factPort);
-		   createOutputTableRowFor(factPort);
-	   }
-   }
-   
-   class RemoveOutputPortHandler implements ClickHandler
-   {
-      private FactPort factPort;
-      
-      public FactPort getFactPort()
-      {
-         return factPort;
-      }
+		// Add new output port Button
+		Button addOutputPortButton = new Button("Add postcondition");
+		addOutputPortButton.setStyleName("fastButton");
+		addOutputPortButton.addClickHandler(new AddNewOutputPortHandler());
+		outputPortTable.setWidget(numRows, 0, addOutputPortButton);
+		numRows++;
 
-      public void setFactPort(FactPort factPort)
-      {
-         this.factPort = factPort;
-      }
-      
-      @Override
-      public void onClick(ClickEvent event)
-      {
-    	  //don't remove last row
-    	  if(outputPortTable.getRowCount() == 4)
-    	  {
-    		  return;
-    	  }
+		// add output header row
+		outputPortTable.setWidget(numRows, 0, new Label("Postcondition name"));
+		outputPortTable.setWidget(numRows, 1, new Label("Postcondition type"));
+		numRows++;
 
-    	  Cell cell = outputPortTable.getCellForEvent(event);         
-    	  int rowCount = cell.getRowIndex();
-    	  outputPortTable.removeRow(rowCount);
+		// add rows for existing output fact ports
+		Iterator<FactPort> iteratorOfPostconditions = buildingBlock.iteratorOfPostconditions();
+		while (iteratorOfPostconditions.hasNext())
+		{
+			FactPort factPort = iteratorOfPostconditions.next();
 
-    	  // remove factport from postconditions
-    	  buildingBlock.removeFromPostconditions(factPort);
-      } 
-   }
+			// per fact port add one row with three text boxes for name, type, and example value
+			createOutputTableRowFor(factPort);
+		}
+
+		if(longExampleValues)
+		{
+			//updateListener
+			UpdateTransformationTabListener updateTabListener = new UpdateTransformationTabListener();
+			buildingBlock.addPropertyChangeListener(BuildingBlock.PROPERTY_POSTCONDITIONS, updateTabListener);
+		}
+
+		// return the panel
+		outputPortTable.ensureDebugId("cwFlexTable");
+		
+		outputPanel.add(outputPortTable);
+		
+		return outputPanel;
+	}
+
+	private void createOutputTableRowFor(FactPort factPort)
+	{
+		TextBox nameBox = CTextChangeHandler.createTextBox(factPort, "name");
+		SuggestBox typeBox = CTextChangeHandler.createTypeSuggestBox((ServiceDesigner) factPort.getServiceScreen2().get("serviceDesigner"), factPort, "factType");
+
+		int outputNumRows = outputPortTable.getRowCount();
+
+		//add the text and suggest boxes
+		outputPortTable.setWidget(outputNumRows, 0, nameBox);
+		outputPortTable.setWidget(outputNumRows, 1, typeBox);
+
+		// add remove button
+		Button removePortButton = new Button("Remove postcondition");
+		removePortButton.setStyleName("fastButton");
+		RemoveOutputPortHandler outputPortHandler = new RemoveOutputPortHandler();
+		outputPortHandler.setFactPort(factPort);
+		removePortButton.addClickHandler(outputPortHandler);
+		outputPortTable.setWidget(outputNumRows, 3, removePortButton);
+
+		//updateListener
+		UpdateTransformationTabListener updateTabListener = new UpdateTransformationTabListener();
+		factPort.addPropertyChangeListener("name", updateTabListener);
+		factPort.addPropertyChangeListener("factType", updateTabListener);
+	}
+
+	class UpdateTransformationTabListener implements PropertyChangeListener
+	{
+		@Override
+		public void propertyChanged(PropertyChangeEvent evt)
+		{
+			if(fastTool instanceof DataTransformationTool)
+			{
+				((DataTransformationTool) fastTool).refreshRuleAndCodeTab();
+			}
+		}
+	}
+
+	class AddNewInputPortHandler implements ClickHandler
+	{
+		@Override
+		public void onClick(ClickEvent event)
+		{
+			FactPort factPort = new FactPort();
+			buildingBlock.addToPreconditions(factPort);
+			createInputTableRowFor(factPort);
+		}
+	}
+
+	/**
+	 * This Handler is for removing and adding Ports
+	 * */
+	class RemoveInputPortHandler implements ClickHandler
+	{
+
+		private FactPort factPort;
+
+		public FactPort getFactPort()
+		{
+			return factPort;
+		}
+
+		public void setFactPort(FactPort factPort)
+		{
+			this.factPort = factPort;
+		}
+
+		@Override
+		public void onClick(ClickEvent event)
+		{
+			//do not remove last row
+			if(inputPortTable.getRowCount() == 4)
+			{
+				return;
+			}
+
+			Cell cell = inputPortTable.getCellForEvent(event);         
+			int rowCount = cell.getRowIndex();
+			inputPortTable.removeRow(rowCount);
+
+			// remove factport from preconditions
+			buildingBlock.removeFromPreconditions(factPort);
+		} 
+	}
+
+	class AddNewOutputPortHandler implements ClickHandler
+	{
+		@Override
+		public void onClick(ClickEvent event)
+		{
+			FactPort factPort = new FactPort();
+			buildingBlock.addToPostconditions(factPort);
+			createOutputTableRowFor(factPort);
+		}
+	}
+
+	class RemoveOutputPortHandler implements ClickHandler
+	{
+		private FactPort factPort;
+
+		public FactPort getFactPort()
+		{
+			return factPort;
+		}
+
+		public void setFactPort(FactPort factPort)
+		{
+			this.factPort = factPort;
+		}
+
+		@Override
+		public void onClick(ClickEvent event)
+		{
+			//don't remove last row
+			if(outputPortTable.getRowCount() == 4)
+			{
+				return;
+			}
+
+			Cell cell = outputPortTable.getCellForEvent(event);         
+			int rowCount = cell.getRowIndex();
+			outputPortTable.removeRow(rowCount);
+
+			// remove factport from postconditions
+			buildingBlock.removeFromPostconditions(factPort);
+		} 
+	}
 }

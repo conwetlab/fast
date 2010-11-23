@@ -83,6 +83,7 @@ public class FactAttrPanel implements PropertyChangeClient
 
 
    // create attributes for all objects in all states of this statechart
+   private TreeItem parentItem;
    private HorizontalPanel panel;
    private FactType factType;
    private MultiWordSuggestOracle oracle;
@@ -93,7 +94,6 @@ public class FactAttrPanel implements PropertyChangeClient
    private ServiceDesigner designer;
    private String tname;
    private SuggestBox typeBox;
-   private TreeItem parentItem;
    private FactType someType;
 
    public void start()
