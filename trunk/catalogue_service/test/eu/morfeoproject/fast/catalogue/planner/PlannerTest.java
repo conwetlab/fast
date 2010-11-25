@@ -30,7 +30,7 @@ public class PlannerTest {
 		TestUtils.getCatalogue().addScreen((Screen) TestUtils.buildBB(TestUtils.getCatalogue().getServerURL(), "screen", "data/json/screens/amazonShoppingCode.json"));
 		TestUtils.getCatalogue().addScreen((Screen) TestUtils.buildBB(TestUtils.getCatalogue().getServerURL(), "screen", "data/json/screens/amazonSuggestionCode.json"));
 
-		assertEquals(7, TestUtils.getCatalogue().getScreens().size());
+		assertEquals(7, TestUtils.getCatalogue().getAllScreens().size());
 		HashSet<BuildingBlock> canvas = new HashSet<BuildingBlock>();
 		canvas.add(goal);
 		List<Plan> plans = TestUtils.getCatalogue().searchPlans(goal.getUri(), canvas);
