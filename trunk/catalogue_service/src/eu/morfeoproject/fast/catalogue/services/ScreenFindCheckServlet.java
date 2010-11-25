@@ -17,26 +17,20 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.ontoware.rdf2go.model.node.URI;
 import org.ontoware.rdf2go.model.node.impl.URIImpl;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-import eu.morfeoproject.fast.catalogue.Catalogue;
-import eu.morfeoproject.fast.catalogue.CatalogueAccessPoint;
 import eu.morfeoproject.fast.catalogue.NotFoundException;
-import eu.morfeoproject.fast.catalogue.buildingblocks.Condition;
-import eu.morfeoproject.fast.catalogue.buildingblocks.Postcondition;
-import eu.morfeoproject.fast.catalogue.buildingblocks.Precondition;
-import eu.morfeoproject.fast.catalogue.buildingblocks.BuildingBlock;
-import eu.morfeoproject.fast.catalogue.buildingblocks.Screen;
+import eu.morfeoproject.fast.catalogue.model.BuildingBlock;
+import eu.morfeoproject.fast.catalogue.model.Condition;
+import eu.morfeoproject.fast.catalogue.model.Postcondition;
+import eu.morfeoproject.fast.catalogue.model.Precondition;
+import eu.morfeoproject.fast.catalogue.model.Screen;
 
 /**
  * Servlet implementation class ScreenFindCheckServlet
  */
-public class ScreenFindCheckServlet extends HttpServlet {
+public class ScreenFindCheckServlet extends GenericServlet {
 	private static final long serialVersionUID = 1L;
        
-	final Logger logger = LoggerFactory.getLogger(ScreenCheckServlet.class);
-	
 	/**
      * @see HttpServlet#HttpServlet()
      */
@@ -48,7 +42,6 @@ public class ScreenFindCheckServlet extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		logger.info("Entering FIND&CHECK operation...");
 		BufferedReader reader = request.getReader();
 		PrintWriter writer = response.getWriter();
 		StringBuffer buffer = new StringBuffer();
@@ -58,7 +51,6 @@ public class ScreenFindCheckServlet extends HttpServlet {
 			line = reader.readLine();
 		}
 		String body = buffer.toString();
-		Catalogue catalogue = CatalogueAccessPoint.getCatalogue();
 		
 		try {
 			// create JSON representation of the input
@@ -68,7 +60,7 @@ public class ScreenFindCheckServlet extends HttpServlet {
 			JSONArray jsonCanvas = input.getJSONArray("canvas");
 			for (int i = 0; i < jsonCanvas.length(); i++) {
 				URI uri = new URIImpl(((JSONObject)jsonCanvas.get(i)).getString("uri"));
-				BuildingBlock r = catalogue.getBuildingBlock(uri);
+				BuildingBlock r = getCatalogue().getBuildingBlock(uri);
 				if (r == null) 
 					throw new NotFoundException("Resource "+uri+" does not exist.");
 				canvas.add(r); 
@@ -78,7 +70,7 @@ public class ScreenFindCheckServlet extends HttpServlet {
 			JSONArray jsonElements = input.getJSONArray("elements");
 			for (int i = 0; i < jsonElements.length(); i++) {
 				URI uri = new URIImpl(((JSONObject)jsonElements.get(i)).getString("uri"));
-				BuildingBlock r = catalogue.getBuildingBlock(uri);
+				BuildingBlock r = getCatalogue().getBuildingBlock(uri);
 				if (r == null) 
 					throw new NotFoundException("Resource "+uri+" does not exist.");
 				elements.add(r); 
@@ -101,11 +93,11 @@ public class ScreenFindCheckServlet extends HttpServlet {
 			HashSet<BuildingBlock> all = new HashSet<BuildingBlock>();
 			all.addAll(canvas);
 			all.addAll(elements);
-			Set<URI> results = catalogue.findBackwards(all, true, true, 0, -1, tags);
+			Set<URI> results = getCatalogue().findBackwards(all, true, true, 0, -1, tags);
 			// add results of 'find' to the list of elements
 			for (URI uri : results)
-				elements.add(catalogue.getBuildingBlock(uri));
-			Set<BuildingBlock> reachables = catalogue.filterReachableBuildingBlocks(canvas);
+				elements.add(getCatalogue().getBuildingBlock(uri));
+			Set<BuildingBlock> reachables = getCatalogue().filterReachableBuildingBlocks(canvas);
 			JSONObject output = new JSONObject();
 			if (criterion.equalsIgnoreCase("reachability")) {
 				JSONArray canvasOut = new JSONArray();
@@ -120,7 +112,7 @@ public class ScreenFindCheckServlet extends HttpServlet {
 						boolean satisfied = false;
 						for (List<Condition> conList : s.getPreconditions()) { /* OR */
 							JSONArray conArray = new JSONArray();
-							satisfied = catalogue.isConditionSatisfied(reachables, conList, true, true, s.getUri());
+							satisfied = getCatalogue().isConditionSatisfied(reachables, conList, true, true, s.getUri());
 							reachability = reachability & satisfied;
 							for (Condition c : conList) {
 								JSONObject jsonPre = c.toJSON();
@@ -130,7 +122,7 @@ public class ScreenFindCheckServlet extends HttpServlet {
 							preArray.put(conArray);
 						}
 						jsonResource.put("reachability", reachability);
-						logger.info("["+(reachability ? "REACHABLE" : "NO REACHABLE")+"] "+s.getUri());
+						if (log.isInfoEnabled()) log.info("["+(reachability ? "REACHABLE" : "NO REACHABLE")+"] "+s.getUri());
 						jsonResource.put("preconditions", preArray);
 					} else if (r instanceof Precondition) {
 						jsonResource.put("uri", r.getUri());
@@ -138,7 +130,7 @@ public class ScreenFindCheckServlet extends HttpServlet {
 					} else if (r instanceof Postcondition) {
 						Postcondition e = (Postcondition)r;
 						jsonResource.put("uri", e.getUri());
-						boolean satisfied = catalogue.isConditionSatisfied(reachables, e.getConditions(), true, true, e.getUri());
+						boolean satisfied = getCatalogue().isConditionSatisfied(reachables, e.getConditions(), true, true, e.getUri());
 						JSONArray conArray = new JSONArray();
 						for (Condition c : e.getConditions()) {
 							JSONObject jsonCon = c.toJSON();
@@ -147,7 +139,7 @@ public class ScreenFindCheckServlet extends HttpServlet {
 						}
 						jsonResource.put("conditions", conArray);
 						jsonResource.put("reachability", satisfied);
-						logger.info("["+(satisfied ? "REACHABLE" : "NO REACHABLE")+"] "+e.getUri());
+						if (log.isInfoEnabled()) log.info("["+(satisfied ? "REACHABLE" : "NO REACHABLE")+"] "+e.getUri());
 					}
 					canvasOut.put(jsonResource);
 				}
@@ -164,7 +156,7 @@ public class ScreenFindCheckServlet extends HttpServlet {
 						boolean satisfied = false;
 						for (List<Condition> conList : s.getPreconditions()) { /* OR */
 							JSONArray conArray = new JSONArray();
-							satisfied = catalogue.isConditionSatisfied(reachables, conList, true, true, s.getUri());
+							satisfied = getCatalogue().isConditionSatisfied(reachables, conList, true, true, s.getUri());
 							reachability = reachability & satisfied;
 							for (Condition c : conList) {
 								JSONObject jsonPre = c.toJSON();
@@ -174,7 +166,7 @@ public class ScreenFindCheckServlet extends HttpServlet {
 							preArray.put(conArray);
 						}
 						jsonResource.put("reachability", reachability);
-						logger.info("["+(reachability ? "REACHABLE" : "NO REACHABLE")+"] "+s.getUri());
+						if (log.isInfoEnabled()) log.info("["+(reachability ? "REACHABLE" : "NO REACHABLE")+"] "+s.getUri());
 						jsonResource.put("preconditions", preArray);
 					} else if (r instanceof Precondition) {
 						jsonResource.put("uri", r.getUri());
@@ -192,13 +184,12 @@ public class ScreenFindCheckServlet extends HttpServlet {
 				response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Critetion not allowed.");
 			}
 		} catch (JSONException e) {
-			e.printStackTrace();
+			log.error(e.toString(), e);
 			response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
 		} catch (NotFoundException e) {
-			e.printStackTrace();
+			log.error(e.toString(), e);
 			response.sendError(HttpServletResponse.SC_NOT_FOUND, e.getMessage());
 		}
-		logger.info("...Exiting FIND&CHECK operation");
 	}
 	
 }

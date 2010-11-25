@@ -17,16 +17,12 @@ import org.ontoware.rdf2go.model.Model;
 import org.ontoware.rdf2go.model.Syntax;
 import org.ontoware.rdf2go.model.node.URI;
 import org.ontoware.rdf2go.model.node.impl.URIImpl;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import eu.morfeoproject.fast.catalogue.BuildingBlockException;
-import eu.morfeoproject.fast.catalogue.BuildingBlockJSONBuilder;
-import eu.morfeoproject.fast.catalogue.Catalogue;
-import eu.morfeoproject.fast.catalogue.CatalogueAccessPoint;
-import eu.morfeoproject.fast.catalogue.DuplicatedBuildingBlockException;
+import eu.morfeoproject.fast.catalogue.DuplicatedException;
 import eu.morfeoproject.fast.catalogue.NotFoundException;
-import eu.morfeoproject.fast.catalogue.buildingblocks.Concept;
+import eu.morfeoproject.fast.catalogue.builder.BuildingBlockJSONBuilder;
+import eu.morfeoproject.fast.catalogue.model.Concept;
 import eu.morfeoproject.fast.catalogue.util.Util;
 
 /**
@@ -35,8 +31,6 @@ import eu.morfeoproject.fast.catalogue.util.Util;
 public class ConceptServlet extends GenericServlet {
 	private static final long serialVersionUID = 1L;
 
-	static Logger logger = LoggerFactory.getLogger(ConceptServlet.class);
-    
     /**
      * @see HttpServlet#HttpServlet()
      */
@@ -60,19 +54,18 @@ public class ConceptServlet extends GenericServlet {
 		String[] tags = null;
 		if (chunks[chunks.length-3].equalsIgnoreCase("tags"))
 			tags = Util.splitTags(chunks[chunks.length-2]);
-		Catalogue catalogue = CatalogueAccessPoint.getCatalogue();
 		
 		if (id == null) {
 			// List the members of the collection
-			logger.info("Retrieving all concepts");
+			if (log.isInfoEnabled()) log.info("Retrieving all concepts");
 			try {
 				if (format.equals(MediaType.APPLICATION_RDF_XML) ||
 						format.equals(MediaType.APPLICATION_TURTLE)) {
 					response.setContentType(format);
 					Model model = RDF2Go.getModelFactory().createModel();
 					model.open();
-					for (URI uri : catalogue.getConcepts(tags)) {
-						Concept concept = catalogue.getConcept(uri);
+					for (URI uri : getCatalogue().getConcepts(tags)) {
+						Concept concept = getCatalogue().getConcept(uri);
 						model.addModel(concept.toRDF2GoModel());
 					}
 					model.writeTo(writer, Syntax.forMimeType(format));
@@ -80,15 +73,15 @@ public class ConceptServlet extends GenericServlet {
 				} else {
 					response.setContentType(MediaType.APPLICATION_JSON);
 					JSONArray concepts = new JSONArray();
-					for (URI uri : catalogue.getConcepts(tags)) {
-						Concept concept = catalogue.getConcept(uri);
+					for (URI uri : getCatalogue().getConcepts(tags)) {
+						Concept concept = getCatalogue().getConcept(uri);
 						concepts.put(concept.toJSON());
 					}
 					writer.print(concepts.toString(2));
 				}
 				response.setStatus(HttpServletResponse.SC_OK);
 			} catch (JSONException e) {
-				e.printStackTrace();
+				log.error(e.toString(), e);
 				response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
 			}
 		}
@@ -109,31 +102,30 @@ public class ConceptServlet extends GenericServlet {
 			line = reader.readLine();
 		}
 		String body = buffer.toString();
-		Catalogue catalogue = CatalogueAccessPoint.getCatalogue();
 		
 		try {
 			JSONObject json = new JSONObject(body);
 			if (json.has("name") && json.has("domain")) {
 				String name = json.getString("name");
 				String domain = json.getString("domain");
-				URI uri = catalogue.createConceptURI(name, domain);
+				URI uri = getCatalogue().createConceptURI(name, domain);
 				Concept concept = BuildingBlockJSONBuilder.buildConcept(json, uri);
-				catalogue.addConcept(concept);
+				getCatalogue().addConcept(concept);
 				response.setStatus(HttpServletResponse.SC_OK);
 			} else {
 				response.sendError(HttpServletResponse.SC_BAD_REQUEST, "URI is required.");
 			}
 		} catch (IllegalArgumentException e) {
-			e.printStackTrace();
+			log.error(e.toString(), e);
 			response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
-		} catch (DuplicatedBuildingBlockException e) {
-			e.printStackTrace();
+		} catch (DuplicatedException e) {
+			log.error(e.toString(), e);
 			response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
 		} catch (JSONException e) {
-			e.printStackTrace();
+			log.error(e.toString(), e);
 			response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
 		} catch (BuildingBlockException e) {
-			e.printStackTrace();
+			log.error(e.toString(), e);
 			response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
 		}
 	}
@@ -155,7 +147,6 @@ public class ConceptServlet extends GenericServlet {
 		}
 		String body = buffer.toString();
 		if (id.equalsIgnoreCase("concepts")) id = null;
-		Catalogue catalogue = CatalogueAccessPoint.getCatalogue();
 		
 		if (id == null) {
 			response.sendError(HttpServletResponse.SC_BAD_REQUEST, "An ID must be specified.");
@@ -165,19 +156,19 @@ public class ConceptServlet extends GenericServlet {
 			try {
 				JSONObject json = new JSONObject(body);
 				Concept concept = BuildingBlockJSONBuilder.buildConcept(json, new URIImpl(uri));
-				catalogue.updateConcept(concept);
+				getCatalogue().updateConcept(concept);
 				response.setStatus(HttpServletResponse.SC_OK);
 			} catch (IllegalArgumentException e) {
-				e.printStackTrace();
+				log.error(e.toString(), e);
 				response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
 			} catch (NotFoundException e) {
-				e.printStackTrace();
+				log.error(e.toString(), e);
 				response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
 			} catch (JSONException e) {
-				e.printStackTrace();
+				log.error(e.toString(), e);
 				response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
 			} catch (BuildingBlockException e) {
-				e.printStackTrace();
+				log.error(e.toString(), e);
 				response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
 			}
 		}
@@ -190,7 +181,6 @@ public class ConceptServlet extends GenericServlet {
 		String[] chunks = request.getRequestURI().split("/");
 		String id = chunks[chunks.length-1];
 		if (id.equalsIgnoreCase("concepts")) id = null;
-		Catalogue catalogue = CatalogueAccessPoint.getCatalogue();
 		
 		if (id == null) {
 			response.sendError(HttpServletResponse.SC_BAD_REQUEST, "An ID must be specified.");
@@ -198,7 +188,7 @@ public class ConceptServlet extends GenericServlet {
 			// Delete the addressed member of the collection.
 			String uri = request.getRequestURL().toString();
 			try {
-				catalogue.removeConcept(new URIImpl(uri));
+				getCatalogue().removeConcept(new URIImpl(uri));
 				response.setStatus(HttpServletResponse.SC_OK);
 			} catch (NotFoundException e) {
 				response.sendError(HttpServletResponse.SC_NOT_FOUND, "The concept "+uri+" has not been found.");

@@ -1,0 +1,17 @@
+{
+  "type": "http://xmlns.com/foaf/0.1/Person",
+  "properties": [
+    {
+      "uri": "http://xmlns.com/foaf/0.1/mbox",
+      "value": "ismael.rivera@deri.org",
+      "type": "literal",
+      "datatype": "string"
+    },
+    {
+      "uri": "http://xmlns.com/foaf/0.1/name",
+      "value": "Ismael Rivera",
+      "type" : "literal",
+      "lang" : "en-gb"
+    }
+  ]
+}

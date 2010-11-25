@@ -18,17 +18,13 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.ontoware.rdf2go.model.node.URI;
 import org.ontoware.rdf2go.model.node.impl.URIImpl;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-import eu.morfeoproject.fast.catalogue.BuildingBlockJSONBuilder;
-import eu.morfeoproject.fast.catalogue.Catalogue;
-import eu.morfeoproject.fast.catalogue.CatalogueAccessPoint;
 import eu.morfeoproject.fast.catalogue.NotFoundException;
-import eu.morfeoproject.fast.catalogue.buildingblocks.Action;
-import eu.morfeoproject.fast.catalogue.buildingblocks.Condition;
-import eu.morfeoproject.fast.catalogue.buildingblocks.Pipe;
-import eu.morfeoproject.fast.catalogue.buildingblocks.ScreenComponent;
+import eu.morfeoproject.fast.catalogue.builder.BuildingBlockJSONBuilder;
+import eu.morfeoproject.fast.catalogue.model.Action;
+import eu.morfeoproject.fast.catalogue.model.Condition;
+import eu.morfeoproject.fast.catalogue.model.Pipe;
+import eu.morfeoproject.fast.catalogue.model.ScreenComponent;
 import eu.morfeoproject.fast.catalogue.vocabulary.FGO;
 
 /**
@@ -37,8 +33,6 @@ import eu.morfeoproject.fast.catalogue.vocabulary.FGO;
 public class ScreenComponentFindCheckServlet extends GenericServlet {
 	private static final long serialVersionUID = 1L;
        
-	final Logger logger = LoggerFactory.getLogger(ScreenCheckServlet.class);
-	
 	/**
      * @see HttpServlet#HttpServlet()
      */
@@ -50,7 +44,6 @@ public class ScreenComponentFindCheckServlet extends GenericServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		logger.info("Entering FIND&CHECK operation...");
 		BufferedReader reader = request.getReader();
 		PrintWriter writer = response.getWriter();
 		StringBuffer buffer = new StringBuffer();
@@ -60,7 +53,6 @@ public class ScreenComponentFindCheckServlet extends GenericServlet {
 			line = reader.readLine();
 		}
 		String body = buffer.toString();
-		Catalogue catalogue = CatalogueAccessPoint.getCatalogue();
 		
 		try {
 			// create JSON representation of the input
@@ -74,7 +66,7 @@ public class ScreenComponentFindCheckServlet extends GenericServlet {
 			JSONArray jsonCanvas = input.getJSONArray("canvas");
 			for (int i = 0; i < jsonCanvas.length(); i++) {
 				URI uri = new URIImpl(((JSONObject)jsonCanvas.get(i)).getString("uri"));
-				ScreenComponent sc = (ScreenComponent) catalogue.getBuildingBlock(uri);
+				ScreenComponent sc = (ScreenComponent) getCatalogue().getBuildingBlock(uri);
 				if (sc == null) 
 					throw new NotFoundException("Resource "+uri+" does not exist.");
 				canvas.add(sc);
@@ -84,7 +76,7 @@ public class ScreenComponentFindCheckServlet extends GenericServlet {
 			JSONArray jsonForms = input.getJSONArray("forms");
 			for (int i = 0; i < jsonForms.length(); i++) {
 				URI uri = new URIImpl(((JSONObject)jsonForms.get(i)).getString("uri"));
-				ScreenComponent sc = (ScreenComponent) catalogue.getBuildingBlock(uri);
+				ScreenComponent sc = (ScreenComponent) getCatalogue().getBuildingBlock(uri);
 				if (sc == null) 
 					throw new NotFoundException("Resource "+uri+" does not exist.");
 				forms.add(sc); 
@@ -94,7 +86,7 @@ public class ScreenComponentFindCheckServlet extends GenericServlet {
 			JSONArray jsonOperators = input.getJSONArray("operators");
 			for (int i = 0; i < jsonOperators.length(); i++) {
 				URI uri = new URIImpl(((JSONObject)jsonOperators.get(i)).getString("uri"));
-				ScreenComponent sc = (ScreenComponent) catalogue.getBuildingBlock(uri);
+				ScreenComponent sc = (ScreenComponent) getCatalogue().getBuildingBlock(uri);
 				if (sc == null) 
 					throw new NotFoundException("Resource "+uri+" does not exist.");
 				operators.add(sc); 
@@ -104,7 +96,7 @@ public class ScreenComponentFindCheckServlet extends GenericServlet {
 			JSONArray jsonBackendServices = input.getJSONArray("backendservices");
 			for (int i = 0; i < jsonBackendServices.length(); i++) {
 				URI uri = new URIImpl(((JSONObject)jsonBackendServices.get(i)).getString("uri"));
-				ScreenComponent sc = (ScreenComponent) catalogue.getBuildingBlock(uri);
+				ScreenComponent sc = (ScreenComponent) getCatalogue().getBuildingBlock(uri);
 				if (sc == null) 
 					throw new NotFoundException("Resource "+uri+" does not exist.");
 				backendServices.add(sc); 
@@ -129,7 +121,7 @@ public class ScreenComponentFindCheckServlet extends GenericServlet {
 				if (selectedItem == null) {
 					selectedItem = getConditionById(postconditions, input.getString("selectedItem"));
 					if (selectedItem == null)
-						selectedItem = catalogue.getScreenComponent(new URIImpl(input.getString("selectedItem")));
+						selectedItem = getCatalogue().getScreenComponent(new URIImpl(input.getString("selectedItem")));
 				}
 			} 
 			// flag to search or not for new components
@@ -156,17 +148,17 @@ public class ScreenComponentFindCheckServlet extends GenericServlet {
 			
 			// add results of 'find' to the list of forms
 			if (search) {
-				Set<URI> formResults = catalogue.findScreenComponents(null, conList, all, 0, -1, tags, FGO.Form);
+				Set<URI> formResults = getCatalogue().findScreenComponents(null, conList, all, 0, -1, tags, FGO.Form);
 				for (URI uri : formResults)
-					forms.add(catalogue.getScreenComponent(uri));
+					forms.add(getCatalogue().getScreenComponent(uri));
 				// add results of 'find' to the list of operators
-				Set<URI> opResults = catalogue.findScreenComponents(null, conList, all, 0, -1, tags, FGO.Operator);
+				Set<URI> opResults = getCatalogue().findScreenComponents(null, conList, all, 0, -1, tags, FGO.Operator);
 				for (URI uri : opResults)
-					operators.add(catalogue.getScreenComponent(uri));			
+					operators.add(getCatalogue().getScreenComponent(uri));			
 				// add results of 'find' to the list of backend services
-				Set<URI> bsResults = catalogue.findScreenComponents(null, conList, all, 0, -1, tags, FGO.BackendService);
+				Set<URI> bsResults = getCatalogue().findScreenComponents(null, conList, all, 0, -1, tags, FGO.BackendService);
 				for (URI uri : bsResults)
-					backendServices.add(catalogue.getScreenComponent(uri));
+					backendServices.add(getCatalogue().getScreenComponent(uri));
 			}
 			
 			// extract pipes which are well defined (precondition and
@@ -230,13 +222,12 @@ public class ScreenComponentFindCheckServlet extends GenericServlet {
 			response.setContentType(MediaType.APPLICATION_JSON);
 			response.setStatus(HttpServletResponse.SC_OK);
 		} catch (JSONException e) {
-			e.printStackTrace();
+			log.error(e.toString(), e);
 			response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
 		} catch (NotFoundException e) {
-			e.printStackTrace();
+			log.error(e.toString(), e);
 			response.sendError(HttpServletResponse.SC_NOT_FOUND, e.getMessage());
 		}
-		logger.info("...Exiting FIND&CHECK operation");
 	}
 	
 	private Condition getConditionById(List<Condition> conditions, String id) {
@@ -265,24 +256,23 @@ public class ScreenComponentFindCheckServlet extends GenericServlet {
 	private boolean isPipeCorrect(Pipe pipe, List<Condition> preconditions, List<Condition> postconditions) throws IOException {
 		boolean satisfied = false;
 		Condition conFrom, conTo;
-		Catalogue catalogue = CatalogueAccessPoint.getCatalogue();
 
 		try {
 			if (pipe.getIdBBFrom() == null) {
 				conFrom = getConditionById(preconditions, pipe.getIdConditionFrom());
 			} else {
-				ScreenComponent sc = catalogue.getScreenComponent(new URIImpl(pipe.getIdBBFrom()));
+				ScreenComponent sc = getCatalogue().getScreenComponent(new URIImpl(pipe.getIdBBFrom()));
 				conFrom = getPostconditionById(sc, pipe.getIdConditionFrom());
 			}
 			if (pipe.getIdBBTo() == null) {
 				conTo = getConditionById(postconditions, pipe.getIdConditionTo());
 			} else {
-				ScreenComponent sc = catalogue.getScreenComponent(new URIImpl(pipe.getIdBBTo()));
+				ScreenComponent sc = getCatalogue().getScreenComponent(new URIImpl(pipe.getIdBBTo()));
 				conTo = getPreconditionById(sc, pipe.getIdConditionTo());
 			}
 			satisfied = isConditionCompatible(conFrom, conTo);
 		} catch (NotFoundException e) {
-			logger.error(e.getMessage(), e);
+			log.error(e.getMessage(), e);
 			return false;
 		}
 		
@@ -326,7 +316,7 @@ public class ScreenComponentFindCheckServlet extends GenericServlet {
 	}
 	
 	private boolean isConditionCompatible(Condition conA, Condition conB) throws IOException {
-		return 	CatalogueAccessPoint.getCatalogue().isConditionCompatible(conA, conB);
+		return getCatalogue().isConditionCompatible(conA, conB);
 	}
 	
 	private List<Pipe> generatePipes(

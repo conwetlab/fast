@@ -17,9 +17,9 @@ import org.ontoware.rdf2go.vocabulary.RDF;
 import org.ontoware.rdf2go.vocabulary.RDFS;
 
 import eu.morfeoproject.fast.catalogue.Catalogue;
-import eu.morfeoproject.fast.catalogue.buildingblocks.Condition;
-import eu.morfeoproject.fast.catalogue.buildingblocks.FastModelFactory;
-import eu.morfeoproject.fast.catalogue.buildingblocks.Screen;
+import eu.morfeoproject.fast.catalogue.buildingblocks.factory.BuildingBlockFactory;
+import eu.morfeoproject.fast.catalogue.model.Condition;
+import eu.morfeoproject.fast.catalogue.model.Screen;
 
 /**
  * This is a catalogue generator for testing purposes. It creates a certain number
@@ -34,7 +34,7 @@ public class ScreenGenerator {
 	private List<URI> siocClasses;
 	
 	public ScreenGenerator() {
-		catalogue = new Catalogue(new URIImpl("http://localhost:8080/catalogue"), new File("C:\\Program Files\\eclipse\\prueba2"), "test");
+//		catalogue = new Catalogue(new URIImpl("http://localhost:8080/catalogue"), new File("C:\\Program Files\\eclipse\\prueba2"), "test");
 		
 		// extracts all concepts from the Amazon Ontology
 		amazonClasses = new ArrayList<URI>();
@@ -67,7 +67,7 @@ public class ScreenGenerator {
 	
 	public Condition createCondition(List<URI> classes) {
 		URI uri = classes.get((int)(Math.random() * classes.size()));
-		Condition c = FastModelFactory.createCondition();
+		Condition c = BuildingBlockFactory.createCondition();
 		HashMap<String, String> labels = new HashMap<String, String>();
 		labels.put("en", "Condition label");
 		labels.put("es", "Etiqueta de condicion");
@@ -79,7 +79,7 @@ public class ScreenGenerator {
 	}
 	
 	public void generateScreen() {
-		Screen s = FastModelFactory.createScreen();
+		Screen s = BuildingBlockFactory.createScreen();
 		s.setCode(new URIImpl("http://someurl.com/code"));
 		s.setCreationDate(new Date());
 		s.setCreator(new URIImpl("http://someurl.com/creator"));

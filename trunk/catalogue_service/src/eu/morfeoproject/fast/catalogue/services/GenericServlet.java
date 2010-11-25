@@ -7,12 +7,24 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-public abstract class GenericServlet extends HttpServlet {
-	private static final long serialVersionUID = 1L;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
+import eu.morfeoproject.fast.catalogue.Catalogue;
+
+public abstract class GenericServlet extends HttpServlet {
+	
+	private static final long serialVersionUID = 1L;
+	protected final Log log = LogFactory.getLog(this.getClass());
+	
+	protected Catalogue getCatalogue() {
+		return (Catalogue) getServletContext().getAttribute("catalogue");
+	}
+	
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
+	@Override	
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		response.setStatus(HttpServletResponse.SC_METHOD_NOT_ALLOWED);
 	}
@@ -20,6 +32,7 @@ public abstract class GenericServlet extends HttpServlet {
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
+	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		response.setStatus(HttpServletResponse.SC_METHOD_NOT_ALLOWED);
 	}
@@ -27,6 +40,7 @@ public abstract class GenericServlet extends HttpServlet {
 	/**
 	 * @see HttpServlet#doPut(HttpServletRequest request, HttpServletResponse response)
 	 */
+	@Override
 	protected void doPut(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		response.setStatus(HttpServletResponse.SC_METHOD_NOT_ALLOWED);
 	}
@@ -34,6 +48,7 @@ public abstract class GenericServlet extends HttpServlet {
 	/**
 	 * @see HttpServlet#doDelete(HttpServletRequest request, HttpServletResponse response)
 	 */
+	@Override
 	protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		response.setStatus(HttpServletResponse.SC_METHOD_NOT_ALLOWED);
 	}

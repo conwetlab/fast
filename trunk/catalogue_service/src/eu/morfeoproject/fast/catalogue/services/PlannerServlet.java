@@ -17,13 +17,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.ontoware.rdf2go.model.node.URI;
 import org.ontoware.rdf2go.model.node.impl.URIImpl;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-import eu.morfeoproject.fast.catalogue.Catalogue;
-import eu.morfeoproject.fast.catalogue.CatalogueAccessPoint;
 import eu.morfeoproject.fast.catalogue.NotFoundException;
-import eu.morfeoproject.fast.catalogue.buildingblocks.BuildingBlock;
+import eu.morfeoproject.fast.catalogue.model.BuildingBlock;
 import eu.morfeoproject.fast.catalogue.planner.Plan;
 
 /**
@@ -31,7 +27,6 @@ import eu.morfeoproject.fast.catalogue.planner.Plan;
  */
 public class PlannerServlet extends GenericServlet {
 	private static final long serialVersionUID = 1L;
-	final Logger logger = LoggerFactory.getLogger(PlannerServlet.class);
     
     /**
      * @throws IOException 
@@ -45,7 +40,6 @@ public class PlannerServlet extends GenericServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		logger.info("Entering PLANNER operation...");
 		BufferedReader reader = request.getReader();
 		PrintWriter writer = response.getWriter();
 		String format = request.getHeader("accept") != null ? request.getHeader("accept") : MediaType.APPLICATION_JSON;
@@ -56,7 +50,6 @@ public class PlannerServlet extends GenericServlet {
 			line = reader.readLine();
 		}
 		String body = buffer.toString();
-		Catalogue catalogue = CatalogueAccessPoint.getCatalogue();
 		
 		try {
 			// create JSON representation of the input
@@ -69,7 +62,7 @@ public class PlannerServlet extends GenericServlet {
 			JSONArray jsonCanvas = input.getJSONArray("canvas");
 			for (int i = 0; i < jsonCanvas.length(); i++) {
 				URI uri = new URIImpl(((JSONObject)jsonCanvas.get(i)).getString("uri"));
-				BuildingBlock r = catalogue.getBuildingBlock(uri);
+				BuildingBlock r = getCatalogue().getBuildingBlock(uri);
 				if (r == null) 
 					throw new NotFoundException("Resource "+uri+" does not exist.");
 				canvas.add(r);
@@ -80,8 +73,8 @@ public class PlannerServlet extends GenericServlet {
 			int perPage = input.has("per_page") ? input.getInt("per_page") : 0;
 			
 			// calculate the plans for a certain goal
-			List<Plan> plans = catalogue.searchPlans(goal, canvas);
-			logger.info("Found "+plans.size()+" plans for "+goal);
+			List<Plan> plans = getCatalogue().searchPlans(goal, canvas);
+			if (log.isInfoEnabled()) log.info("Found "+plans.size()+" plans for "+goal);
 			
 			// pagination
 			if (page < 1) page = 1; // if no page, show page 1
@@ -103,12 +96,11 @@ public class PlannerServlet extends GenericServlet {
 			response.setContentType(MediaType.APPLICATION_JSON);
 			response.setStatus(HttpServletResponse.SC_OK);
 		} catch (JSONException e) {
-			e.printStackTrace();
+			log.error(e.toString(), e);
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 		} catch (NotFoundException e) {
-			e.printStackTrace();
+			log.error(e.toString(), e);
 			response.sendError(HttpServletResponse.SC_NOT_FOUND, e.getMessage());
 		}
-		logger.info("...Exiting PLANNER operation");
 	}
 }

@@ -2,6 +2,8 @@ package eu.morfeoproject.fast.catalogue;
 
 import java.io.File;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.openrdf.repository.Repository;
 import org.openrdf.repository.RepositoryException;
 import org.openrdf.repository.config.RepositoryConfigException;
@@ -10,8 +12,6 @@ import org.openrdf.repository.manager.RepositoryManager;
 import org.openrdf.repository.sail.SailRepository;
 import org.openrdf.sail.NotifyingSail;
 import org.openrdf.sail.nativerdf.NativeStore;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 
 /**
@@ -20,12 +20,13 @@ import org.slf4j.LoggerFactory;
  */
 public class PersistentRepository {
 	
-	final Logger logger = LoggerFactory.getLogger(PersistentRepository.class);
+	protected final Log log = LogFactory.getLog(PersistentRepository.class);
 	
-	static final String defaultIndexes = "spoc, posc, sopc, psoc, ospc, opsc";
-	static final int defaultInferencer = TripleStore.FORWARD_CHAINING_RDFS_INFERENCER;
+	private static final String defaultIndexes = "spoc, posc, sopc, psoc, ospc, opsc";
+	private static final int defaultInferencer = TripleStore.FORWARD_CHAINING_RDFS_INFERENCER;
 	
-	public static Repository getHTTPRepository(String sesameServer, String repositoryID) throws RepositoryException, RepositoryConfigException {
+	public static Repository getHTTPRepository(String sesameServer, String repositoryID)
+	throws RepositoryException, RepositoryConfigException {
 		RepositoryManager manager = RemoteRepositoryManager.getInstance(sesameServer);
 		Repository repository = null;
 		repository = manager.getRepository(repositoryID);
@@ -33,7 +34,8 @@ public class PersistentRepository {
 		return repository;
 	}
 	
-	public static Repository getLocalRepository(File dir, String indexes) throws RepositoryException {
+	public static Repository getLocalRepository(File dir, String indexes)
+	throws RepositoryException {
 		//RepositoryManager manager = new LocalRepositoryManager(dir);
 		//manager.getRepository(arg0);
 		if (indexes == null) indexes = defaultIndexes;

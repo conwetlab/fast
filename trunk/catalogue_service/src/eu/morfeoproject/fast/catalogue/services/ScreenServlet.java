@@ -17,22 +17,18 @@ import org.ontoware.rdf2go.model.Model;
 import org.ontoware.rdf2go.model.Syntax;
 import org.ontoware.rdf2go.model.node.impl.URIImpl;
 import org.openrdf.repository.RepositoryException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-import eu.morfeoproject.fast.catalogue.BuildingBlockJSONBuilder;
-import eu.morfeoproject.fast.catalogue.Catalogue;
-import eu.morfeoproject.fast.catalogue.CatalogueAccessPoint;
-import eu.morfeoproject.fast.catalogue.DuplicatedBuildingBlockException;
+import eu.morfeoproject.fast.catalogue.BuildingBlockException;
+import eu.morfeoproject.fast.catalogue.DuplicatedException;
 import eu.morfeoproject.fast.catalogue.NotFoundException;
 import eu.morfeoproject.fast.catalogue.OntologyInvalidException;
 import eu.morfeoproject.fast.catalogue.OntologyReadonlyException;
-import eu.morfeoproject.fast.catalogue.BuildingBlockException;
-import eu.morfeoproject.fast.catalogue.buildingblocks.Screen;
+import eu.morfeoproject.fast.catalogue.builder.BuildingBlockJSONBuilder;
 import eu.morfeoproject.fast.catalogue.htmltemplates.BuildingBlockTemplate;
 import eu.morfeoproject.fast.catalogue.htmltemplates.CollectionTemplate;
 import eu.morfeoproject.fast.catalogue.htmltemplates.TemplateManager;
-import eu.morfeoproject.fast.catalogue.util.Accept;
+import eu.morfeoproject.fast.catalogue.model.Screen;
+import eu.morfeoproject.fast.catalogue.services.util.Accept;
 import freemarker.template.TemplateException;
 
 /**
@@ -41,8 +37,6 @@ import freemarker.template.TemplateException;
 public class ScreenServlet extends GenericServlet {
 	private static final long serialVersionUID = 1L;
 
-	static Logger logger = LoggerFactory.getLogger(ScreenServlet.class);
-    
     /**
      * @see HttpServlet#HttpServlet()
      */
@@ -66,14 +60,13 @@ public class ScreenServlet extends GenericServlet {
 			extension = id;
 			id = null;
 		}
-		Catalogue catalogue = CatalogueAccessPoint.getCatalogue();
 
 		if (extension == null) {
 			redirectToFormat(request, response, format);
 		} else {
 			if (id == null) {
 				// List the members of the collection
-				logger.info("Retrieving all screens");
+				if (log.isInfoEnabled()) log.info("Retrieving all screens");
 				// Override format regarding the given extension
 				format = MediaType.forExtension(extension);
 				try {
@@ -83,7 +76,7 @@ public class ScreenServlet extends GenericServlet {
 						Model model = RDF2Go.getModelFactory().createModel();
 						try {
 							model.open();
-							for (Screen s : catalogue.getScreens()) {
+							for (Screen s : getCatalogue().getScreens()) {
 								Model screenModel = s.toRDF2GoModel();
 								for (String ns : screenModel.getNamespaces().keySet())
 									model.setNamespace(ns, screenModel.getNamespace(ns));
@@ -92,7 +85,7 @@ public class ScreenServlet extends GenericServlet {
 							}
 							model.writeTo(writer, Syntax.forMimeType(format));
 						} catch (Exception e) {
-							e.printStackTrace();
+							log.error(e.toString(), e);
 						} finally {
 							model.close();
 						}
@@ -102,20 +95,20 @@ public class ScreenServlet extends GenericServlet {
 							response.setCharacterEncoding(TemplateManager.getDefaultEncoding());
 						if (TemplateManager.getLocale() != null)
 							response.setLocale(TemplateManager.getLocale());
-						CollectionTemplate.process(catalogue.getScreens(), writer);
+						CollectionTemplate.process(getCatalogue().getScreens(), writer);
 					} else { // by default returns APPLICATION_JSON
 						response.setContentType(MediaType.APPLICATION_JSON);
 						JSONArray screens = new JSONArray();
-						for (Screen s : catalogue.getScreens())
+						for (Screen s : getCatalogue().getScreens())
 							screens.put(s.toJSON());
 						writer.print(screens.toString(2));
 					}
 					response.setStatus(HttpServletResponse.SC_OK);
 				} catch (JSONException e) {
-					e.printStackTrace();
+					log.error(e.toString(), e);
 					response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
 				} catch (TemplateException e) {
-					e.printStackTrace();
+					log.error(e.toString(), e);
 					response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
 				}
 			} else {
@@ -123,9 +116,9 @@ public class ScreenServlet extends GenericServlet {
 				format = MediaType.forExtension(extension);
 				// Retrieve the addressed member of the collection
 				String uri = url.substring(0, url.indexOf(extension) - 1);
-				logger.info("Retrieving screen "+uri);
+				if (log.isInfoEnabled()) log.info("Retrieving screen "+uri);
 				try {
-					Screen screen = catalogue.getScreen(new URIImpl(uri));
+					Screen screen = getCatalogue().getScreen(new URIImpl(uri));
 					if (format.equals(MediaType.APPLICATION_RDF_XML) ||
 							format.equals(MediaType.APPLICATION_TURTLE)) {
 						response.setContentType(format);
@@ -147,10 +140,10 @@ public class ScreenServlet extends GenericServlet {
 				} catch (NotFoundException e1) {
 					response.sendError(HttpServletResponse.SC_NOT_FOUND, "The resource "+uri+" has not been found.");
 				} catch (JSONException e) {
-					e.printStackTrace();
+					log.error(e.toString(), e);
 					response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
 				} catch (TemplateException e) {
-					e.printStackTrace();
+					log.error(e.toString(), e);
 					response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
 				}
 			}
@@ -173,7 +166,6 @@ public class ScreenServlet extends GenericServlet {
 			line = reader.readLine();
 		}
 		String body = buffer.toString();
-		Catalogue catalogue = CatalogueAccessPoint.getCatalogue();
 
 		// Create a new entry in the collection where the ID is assigned automatically by 
 		// the collection and it is returned.
@@ -181,7 +173,7 @@ public class ScreenServlet extends GenericServlet {
 			JSONObject json = new JSONObject(body);
 			Screen screen = BuildingBlockJSONBuilder.buildScreen(json, null);
 			try {
-				catalogue.addScreen(screen);
+				getCatalogue().addScreen(screen);
 				if (format.equals(MediaType.APPLICATION_RDF_XML) ||
 						format.equals(MediaType.APPLICATION_TURTLE)) {
 					response.setContentType(format);
@@ -208,27 +200,27 @@ public class ScreenServlet extends GenericServlet {
 					writer.print(json.toString(2));
 				}
 				response.setStatus(HttpServletResponse.SC_OK);
-			} catch (DuplicatedBuildingBlockException e) {
-				e.printStackTrace();
+			} catch (DuplicatedException e) {
+				log.error(e.toString(), e);
 				response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
 			} catch (OntologyInvalidException e) {
-				e.printStackTrace();
+				log.error(e.toString(), e);
 				response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
 			} catch (BuildingBlockException e) {
-				e.printStackTrace();
+				log.error(e.toString(), e);
 				response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
 			} catch (TemplateException e) {
-				e.printStackTrace();
+				log.error(e.toString(), e);
 				response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
 			}
 		} catch (BuildingBlockException e) {
-			e.printStackTrace();
+			log.error(e.toString(), e);
 			response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
 		} catch (JSONException e) {
-			e.printStackTrace();
+			log.error(e.toString(), e);
 			response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
 		} catch (IOException e) {
-			e.printStackTrace();
+			log.error(e.toString(), e);
 			response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
 		}	
 	}
@@ -251,7 +243,6 @@ public class ScreenServlet extends GenericServlet {
 			line = reader.readLine();
 		}
 		String body = buffer.toString();
-		Catalogue catalogue = CatalogueAccessPoint.getCatalogue();
 		
 		if (id == null) {
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
@@ -261,7 +252,7 @@ public class ScreenServlet extends GenericServlet {
 			try {
 				JSONObject json = new JSONObject(body);
 				Screen screen = BuildingBlockJSONBuilder.buildScreen(json, new URIImpl(uri));
-				catalogue.updateScreen(screen);
+				getCatalogue().updateScreen(screen);
 				if (format.equals(MediaType.APPLICATION_RDF_XML) ||
 						format.equals(MediaType.APPLICATION_TURTLE)) {
 					response.setContentType(format);
@@ -289,28 +280,28 @@ public class ScreenServlet extends GenericServlet {
 				}
 				response.setStatus(HttpServletResponse.SC_OK);
 			} catch (BuildingBlockException e) {
-				e.printStackTrace();
+				log.error(e.toString(), e);
 				response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
 			} catch (JSONException e) {
-				e.printStackTrace();
+				log.error(e.toString(), e);
 				response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
 			} catch (IOException e) {
-				e.printStackTrace();
+				log.error(e.toString(), e);
 				response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
 			} catch (RepositoryException e) {
-				e.printStackTrace();
+				log.error(e.toString(), e);
 				response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
 			} catch (NotFoundException e) {
-				e.printStackTrace();
+				log.error(e.toString(), e);
 				response.sendError(HttpServletResponse.SC_NOT_FOUND, "The resource "+uri+" has not been found.");
 			} catch (OntologyReadonlyException e) {
-				e.printStackTrace();
+				log.error(e.toString(), e);
 				response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
 			} catch (OntologyInvalidException e) {
-				e.printStackTrace();
+				log.error(e.toString(), e);
 				response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
 			} catch (TemplateException e) {
-				e.printStackTrace();
+				log.error(e.toString(), e);
 				response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
 			}
 		}
@@ -323,7 +314,6 @@ public class ScreenServlet extends GenericServlet {
 		String[] chunks = request.getRequestURI().split("/");
 		String id = chunks[chunks.length-1];
 		if (id.equalsIgnoreCase("screens")) id = null;
-		Catalogue catalogue = CatalogueAccessPoint.getCatalogue();
 		
 		if (id == null) {
 			response.sendError(HttpServletResponse.SC_BAD_REQUEST, "An ID must be specified.");
@@ -331,7 +321,7 @@ public class ScreenServlet extends GenericServlet {
 			// Delete the addressed member of the collection.
 			String uri = request.getRequestURL().toString();
 			try {
-				catalogue.removeScreen(new URIImpl(uri));
+				getCatalogue().removeScreen(new URIImpl(uri));
 				response.setStatus(HttpServletResponse.SC_OK);
 			} catch (NotFoundException e) {
 				response.sendError(HttpServletResponse.SC_NOT_FOUND, "The resource "+uri+" has not been found.");

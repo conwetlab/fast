@@ -1,25 +1,25 @@
 package eu.morfeoproject.fast.catalogue.planner;
 
-import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.ontoware.rdf2go.model.node.URI;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import eu.morfeoproject.fast.catalogue.Catalogue;
-import eu.morfeoproject.fast.catalogue.buildingblocks.BuildingBlock;
-import eu.morfeoproject.fast.catalogue.buildingblocks.Condition;
-import eu.morfeoproject.fast.catalogue.buildingblocks.FastModelFactory;
-import eu.morfeoproject.fast.catalogue.buildingblocks.Postcondition;
-import eu.morfeoproject.fast.catalogue.buildingblocks.Precondition;
-import eu.morfeoproject.fast.catalogue.buildingblocks.Screen;
+import eu.morfeoproject.fast.catalogue.buildingblocks.factory.BuildingBlockFactory;
+import eu.morfeoproject.fast.catalogue.cache.Cacheable;
+import eu.morfeoproject.fast.catalogue.model.BuildingBlock;
+import eu.morfeoproject.fast.catalogue.model.Condition;
+import eu.morfeoproject.fast.catalogue.model.Postcondition;
+import eu.morfeoproject.fast.catalogue.model.Precondition;
+import eu.morfeoproject.fast.catalogue.model.Screen;
 
-public abstract class Planner {
-	
-	final Logger logger = LoggerFactory.getLogger(Planner.class);
+public abstract class Planner extends Cacheable<List<Plan>> {
+	protected final transient Log log = LogFactory.getLog(this.getClass());
 
 	protected PlannerStore plannerStore;
 	protected Catalogue catalogue;
@@ -31,13 +31,21 @@ public abstract class Planner {
 	 * @return
 	 */
 	public List<Plan> searchPlans(URI uri, Set<BuildingBlock> resources) {
-		List<URI> uriList = new ArrayList<URI>();
+		LinkedList<URI> uriList = new LinkedList<URI>();
 		for (BuildingBlock resource : resources)
 			uriList.add(resource.getUri());
 		
-		List<Plan> planList = searchPlans(uri);
-		List<Plan> newList = new ArrayList<Plan>();
+		LinkedList<Plan> planList = new LinkedList<Plan>();
+		List<Plan> cacheList = cache.get(uri.toString());
+		if (cacheList == null) {
+			List<Plan> searchList = searchPlans(uri);
+			cache.put(uri.toString(), searchList);
+			planList.addAll(searchList);
+		} else {
+			planList.addAll(cacheList);
+		}
 		
+		List<Plan> newList = new LinkedList<Plan>();
 		int [] count = new int[planList.size()];
 		for (int idx = 0; idx < planList.size(); idx++)
 			count[idx] = countItems(planList.get(idx).getUriList(), uriList);
@@ -55,21 +63,11 @@ public abstract class Planner {
 						added = true;
 						break;
 					}
-//					if (count[i] < count[idx]) {
-//						newList.add(i, plan);
-//						added = true;
-//						break;
-//					} else if ((count[i] == count[idx])
-//							&& (plan.getUriList().size() < planList.get(i).getUriList().size())) {
-//						newList.add(i, plan);
-//						added = true;
-//						break;
-//					}
 				}
-				if (!added)
-					newList.add(plan);
+				if (!added) newList.add(plan);
 			}
 		}
+		
 		return newList;
 	}
 	
@@ -81,14 +79,14 @@ public abstract class Planner {
 	 */
 	private int countItems(List<URI> listA, List<URI> listB) {
 		int count = 0;
-		for (URI uri : listB)
-			if (listA.contains(uri))
-				count++;
+		for (URI uri : listB) {
+			if (listA.contains(uri)) count++;
+		}
 		return count;
 	}
 	
 	private List<Plan> searchPlans(URI uri) {
-		ArrayList<Plan> plans = new ArrayList<Plan>();
+		LinkedList<Plan> plans = new LinkedList<Plan>();
 		List<URI> toList = plannerStore.getTo(uri);
 		for (URI u : toList) {
 			Plan p = new Plan();
@@ -114,8 +112,7 @@ public abstract class Planner {
 	
 	public void add(BuildingBlock resource) {
 		calculateForwards(resource);
-		if (resource instanceof Screen)
-			calculateBackwards(resource);
+		if (resource instanceof Screen) calculateBackwards(resource);
 	}
 	
 	public void update(BuildingBlock newResource, BuildingBlock oldResource) {
@@ -134,7 +131,7 @@ public abstract class Planner {
 				calculateForwards(newResource);
 			}
 		} else {
-			logger.error(newResource.getUri()+" and "+oldResource+" are not the same type of resource.");
+			log.error(newResource.getUri()+" and "+oldResource+" are not the same type of resource.");
 		}
 	}
 	
@@ -150,11 +147,12 @@ public abstract class Planner {
 	private void calculateForwards(BuildingBlock resource) {
 		HashSet<BuildingBlock> resources = new HashSet<BuildingBlock>();
 		if (resource instanceof Screen) {
-			if (((Screen) resource).getPostconditions().size() > 0)
+			if (((Screen) resource).getPostconditions().size() > 0) {
 				resources.add(resource);
+			}
 		} else if (resource instanceof Precondition) {
 			if (((Precondition) resource).getConditions().size() > 0) {
-				Postcondition post = FastModelFactory.createPostcondition();
+				Postcondition post = BuildingBlockFactory.createPostcondition();
 				// need to create an Event for the FIND operation, Slots don't
 				// have unsatisfied preconditions
 				post.setUri(resource.getUri());
@@ -165,25 +163,29 @@ public abstract class Planner {
 		if (resources.size() > 0) {
 			HashSet<URI> results = new HashSet<URI>();
 			results.addAll(catalogue.findForwards(resources, true, true, 0, -1, null));
-			for (URI result : results)
+			for (URI result : results) {
 				plannerStore.add(resource.getUri(), result);
+			}
 		}
 	}
 	
 	private void calculateBackwards(BuildingBlock resource) {
 		HashSet<BuildingBlock> resources = new HashSet<BuildingBlock>();
 		if (resource instanceof Screen) {
-			if (((Screen) resource).getPreconditions().size() > 0)
+			if (((Screen) resource).getPreconditions().size() > 0) {
 				resources.add(resource);
+			}
 		} else if (resource instanceof Precondition) {
-			if (((Precondition) resource).getConditions().size() > 0)
+			if (((Precondition) resource).getConditions().size() > 0) {
 				resources.add(resource);
+			}
 		}
 		if (resources.size() > 0) {
 			HashSet<URI> results = new HashSet<URI>();
 			results.addAll(catalogue.findBackwards(resources, true, true, 0, -1, null));
-			for (URI result : results)
+			for (URI result : results) {
 				plannerStore.add(result, resource.getUri());
+			}
 		}
 	}
 	
@@ -204,17 +206,18 @@ public abstract class Planner {
 	}
 
 	private boolean equalListCondition(List<Condition> lcA, List<Condition> lcB) {
-		for (int cIdx = 0; cIdx < lcA.size(); cIdx++)
-			if (!catalogue.isConditionCompatible(lcA.get(cIdx), lcB.get(cIdx)))
+		for (int cIdx = 0; cIdx < lcA.size(); cIdx++) {
+			if (!catalogue.isConditionCompatible(lcA.get(cIdx), lcB.get(cIdx))) {
 				return false;
+			}
+		}
 		return true;
 	}
 	
 	private List<URI> diff(List<URI> listA, List<URI> listB) {
-		ArrayList<URI> result = new ArrayList<URI>();
+		LinkedList<URI> result = new LinkedList<URI>();
 		for (URI uri : listA) {
-			if (!listB.contains(uri))
-				result.add(uri);
+			if (!listB.contains(uri)) result.add(uri);
 		}
 		return result;
 	}
@@ -229,8 +232,9 @@ public abstract class Planner {
 				resources.add(screen);
 				HashSet<URI> results = new HashSet<URI>();
 				results.addAll(catalogue.findBackwards(resources, true, true, 0, -1, null));
-				for (URI result : results)
+				for (URI result : results) {
 					plannerStore.add(result, screen.getUri());
+				}
 			}
 		}
 	}

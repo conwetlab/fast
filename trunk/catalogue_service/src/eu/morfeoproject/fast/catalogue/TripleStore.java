@@ -1,17 +1,16 @@
 package eu.morfeoproject.fast.catalogue;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.ontoware.aifbcommons.collection.ClosableIterable;
 import org.ontoware.aifbcommons.collection.ClosableIterator;
-import org.ontoware.rdf2go.RDF2Go;
 import org.ontoware.rdf2go.exception.ModelRuntimeException;
 import org.ontoware.rdf2go.model.Model;
 import org.ontoware.rdf2go.model.ModelSet;
@@ -42,8 +41,6 @@ import org.openrdf.repository.RepositoryConnection;
 import org.openrdf.repository.RepositoryException;
 import org.openrdf.rio.RDFFormat;
 import org.openrdf.rio.RDFParseException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import eu.morfeoproject.fast.catalogue.util.DateFormatter;
 import eu.morfeoproject.fast.catalogue.vocabulary.DC;
@@ -55,9 +52,9 @@ import eu.morfeoproject.fast.catalogue.vocabulary.DC;
  * @author Ismael Rivera
  *
  */
-public class TripleStore {
+public abstract class TripleStore {
 
-	final Logger logger = LoggerFactory.getLogger(TripleStore.class);
+	protected final Log log = LogFactory.getLog(this.getClass());
 
 	public static final String SPARQL_PREAMBLE = "";
 	
@@ -66,33 +63,14 @@ public class TripleStore {
 	/**
 	 * the real persistent store
 	 */
-	private ModelSet persistentModelSet;
+	protected ModelSet persistentModelSet;
 	
-	private List<URI> createdURIs;
+	protected List<URI> createdURIs;
 	
-	private Repository repository;
+	protected Repository repository;
 	
-	public TripleStore(String sesameServer, String repositoryID) {
-		try {
-			repository = PersistentRepository.getHTTPRepository(sesameServer, repositoryID);
-			initStore(repository);
-		} catch (Exception e) {
-			logger.error("The triple store cannot be initialized.", e);
-		}
-	}
-	
-	public TripleStore(File dir, String indexes) {
-		try {
-			repository = PersistentRepository.getLocalRepository(dir, indexes);
-			initStore(repository);
-		} catch (RepositoryException e) {
-			logger.error("The triple store cannot be initialized.", e);
-		}
-	}
-	
-	private void initStore(Repository repository) {
+	protected void init(Repository repository) {
 		persistentModelSet = new RepositoryModelSet(repository);
-		
 		createdURIs = new ArrayList<URI>();
 	}
 	
@@ -237,22 +215,24 @@ public class TripleStore {
 	 * @throws IOException 
 	 * @throws RDFParseException 
      */
-    public void addOntology(URI ontologyUri, InputStream ontology, Syntax syntax) 
+    public boolean addOntology(URI ontologyUri, InputStream ontology, Syntax syntax) 
     throws RepositoryException, RDFParseException, IOException, OntologyInvalidException {
     	if (containsOntology(ontologyUri)) {
-    		logger.info("The ontology "+ontologyUri+" already exists.");
-    	} else {
-			RepositoryConnection connection = repository.getConnection();
-			ValueFactory factory = repository.getValueFactory();
-			RDFFormat format = RDFFormat.RDFXML; // RDF/XML by default
-			if (syntax.equals(Syntax.Ntriples)) format = RDFFormat.NTRIPLES;
-			else if (syntax.equals(Syntax.RdfXml)) format = RDFFormat.RDFXML;
-			else if (syntax.equals(Syntax.Trig)) format = RDFFormat.TRIG;
-			else if (syntax.equals(Syntax.Trix)) format = RDFFormat.TRIX;
-			else if (syntax.equals(Syntax.Turtle)) format = RDFFormat.TURTLE;
-	    	// add the ontology to the repository
-			connection.add(ontology, ontologyUri.toString(), format, factory.createURI(ontologyUri.toString()));
+    		log.info("The ontology " + ontologyUri + " already exists.");
+    		return false;
     	}
+    	
+    	RepositoryConnection connection = repository.getConnection();
+		ValueFactory factory = repository.getValueFactory();
+		RDFFormat format = RDFFormat.RDFXML; // RDF/XML by default
+		if (syntax.equals(Syntax.Ntriples)) format = RDFFormat.NTRIPLES;
+		else if (syntax.equals(Syntax.RdfXml)) format = RDFFormat.RDFXML;
+		else if (syntax.equals(Syntax.Trig)) format = RDFFormat.TRIG;
+		else if (syntax.equals(Syntax.Trix)) format = RDFFormat.TRIX;
+		else if (syntax.equals(Syntax.Turtle)) format = RDFFormat.TURTLE;
+    	// add the ontology to the repository
+		connection.add(ontology, ontologyUri.toString(), format, factory.createURI(ontologyUri.toString()));
+    	return true;
     	
 // 		Ismael: this doesn't work properly when working with the HTTP sesame server
 //    	it always launch a Exception when querying the triple store. it may be a bug
@@ -406,7 +386,7 @@ public class TripleStore {
 	public Model getPersistentModel(URI contextURI) {
 		if (contextURI == null)
 			throw new IllegalArgumentException("null");
-		logger.debug("Getting model: " + contextURI);
+		log.debug("Getting model: " + contextURI);
 		Model model = persistentModelSet.getModel(contextURI);
 		model.open();
 		return model;
@@ -561,7 +541,7 @@ public class TripleStore {
      *        passed name exists in that ontology
      * @return a new URI
      */
-    public URI getCleanUniqueURI(
+    private URI getCleanUniqueURI(
         URI namespace,
         String name,
         boolean nullifexists) {
@@ -596,7 +576,7 @@ public class TripleStore {
             createdURIs.add(uri);
             
         } catch (ModelRuntimeException e) {
-        	logger.error("Programming error: "+e);
+        	log.error("Programming error: "+e);
         }
         return uri;
     }
@@ -652,7 +632,7 @@ public class TripleStore {
             createdURIs.add(uri);
             
         } catch (ModelRuntimeException e) {
-        	logger.error("Programming error: "+e);
+        	log.error("Programming error: "+e);
         }
         return uri;
     }
@@ -695,11 +675,10 @@ public class TripleStore {
 			e.printStackTrace();
 		}
 	}
-
-
 	
-	
-	// TODO remove it
+	/**
+	 * For debugging, dumps the content of the store
+	 */
 	public void dump() {
 		persistentModelSet.dump();
 	}

@@ -14,26 +14,20 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.ontoware.rdf2go.model.node.URI;
 import org.ontoware.rdf2go.model.node.impl.URIImpl;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-import eu.morfeoproject.fast.catalogue.Catalogue;
-import eu.morfeoproject.fast.catalogue.CatalogueAccessPoint;
 import eu.morfeoproject.fast.catalogue.NotFoundException;
-import eu.morfeoproject.fast.catalogue.buildingblocks.BackendService;
-import eu.morfeoproject.fast.catalogue.buildingblocks.BuildingBlock;
-import eu.morfeoproject.fast.catalogue.buildingblocks.Form;
-import eu.morfeoproject.fast.catalogue.buildingblocks.Operator;
-import eu.morfeoproject.fast.catalogue.buildingblocks.Screen;
-import eu.morfeoproject.fast.catalogue.buildingblocks.ScreenFlow;
+import eu.morfeoproject.fast.catalogue.model.BackendService;
+import eu.morfeoproject.fast.catalogue.model.BuildingBlock;
+import eu.morfeoproject.fast.catalogue.model.Form;
+import eu.morfeoproject.fast.catalogue.model.Operator;
+import eu.morfeoproject.fast.catalogue.model.Screen;
+import eu.morfeoproject.fast.catalogue.model.ScreenFlow;
 
 /**
  * Servlet implementation class MetadataServlet
  */
-public class MetadataServlet extends HttpServlet {
+public class MetadataServlet extends GenericServlet {
 	private static final long serialVersionUID = 1L;
-    
-	final Logger logger = LoggerFactory.getLogger(MetadataServlet.class);
 
     /**
      * @see HttpServlet#HttpServlet()
@@ -46,7 +40,6 @@ public class MetadataServlet extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		logger.debug("Entering GETMETADATA operation...");
 		BufferedReader reader = request.getReader();
 		PrintWriter writer = response.getWriter();
 		StringBuffer buffer = new StringBuffer();
@@ -56,7 +49,6 @@ public class MetadataServlet extends HttpServlet {
 			line = reader.readLine();
 		}
 		String body = buffer.toString();
-		Catalogue catalogue = CatalogueAccessPoint.getCatalogue();
 		
 		try {
 			// read and process the JSON input 
@@ -70,7 +62,7 @@ public class MetadataServlet extends HttpServlet {
 			for (int i = 0; i < input.length(); i++) {
 				URI uri = new URIImpl(input.getString(i));
 				try {
-					BuildingBlock bb = catalogue.getBuildingBlock(uri);
+					BuildingBlock bb = getCatalogue().getBuildingBlock(uri);
 					if (bb instanceof ScreenFlow)
 						arrayScreenflows.put(bb.toJSON());
 					else if (bb instanceof Screen)
@@ -82,7 +74,7 @@ public class MetadataServlet extends HttpServlet {
 					else if (bb instanceof BackendService)
 						arrayBackendServices.put(bb.toJSON());
 				} catch (NotFoundException e) {
-					logger.error(uri+" not found", e);
+					log.error(e.toString(), e);
 				}
 			}
 			
@@ -103,10 +95,9 @@ public class MetadataServlet extends HttpServlet {
 			response.setContentType(MediaType.APPLICATION_JSON);
 			response.setStatus(HttpServletResponse.SC_OK);
 		} catch (JSONException e) {
-			e.printStackTrace();
+			log.error(e.toString(), e);
 			response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
 		}
-		logger.debug("...Exiting GETMETADATA operation");
 	}
 
 }

@@ -13,20 +13,13 @@ import org.json.JSONObject;
 import org.ontoware.rdf2go.model.Syntax;
 import org.ontoware.rdf2go.model.node.URI;
 import org.ontoware.rdf2go.model.node.impl.URIImpl;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import eu.morfeoproject.fast.catalogue.Catalogue;
-import eu.morfeoproject.fast.catalogue.CatalogueAccessPoint;
 
 /**
- * Servlet implementation class SlotServlet
+ * Servlet implementation class OntologyServlet
  */
 public class OntologyServlet extends GenericServlet {
 	private static final long serialVersionUID = 1L;
 
-	static Logger logger = LoggerFactory.getLogger(OntologyServlet.class);
-    
     /**
      * @see HttpServlet#HttpServlet()
      */
@@ -46,7 +39,6 @@ public class OntologyServlet extends GenericServlet {
 			line = reader.readLine();
 		}
 		String body = buffer.toString();
-		Catalogue catalogue = CatalogueAccessPoint.getCatalogue();
 		
 		try {
 			JSONObject json = new JSONObject(body);
@@ -58,12 +50,12 @@ public class OntologyServlet extends GenericServlet {
 			else if (syntaxStr.equalsIgnoreCase("turtle")) 	syntax = Syntax.Turtle;
 			
 			// add ontology to the catalogue
-			if (catalogue.addPublicOntology(uri, downloadUri, syntax))
+			if (getCatalogue().addPublicOntology(uri, downloadUri, syntax))
 				response.setStatus(HttpServletResponse.SC_OK);
 			else
 				response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Ontology '"+uri+"' cannot be added.");
 		} catch (JSONException e) {
-			logger.error("Error while parsing JSON: "+e, e);
+			log.error("Error while parsing JSON: "+e, e);
 			response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
 		}
 	}

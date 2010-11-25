@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<testsuite errors="0" failures="0" hostname="ismriv-laptop" name="test.eu.morfeoproject.fast.catalogue.CatalogueTest" tests="9" time="8.662" timestamp="2010-09-16T11:33:33">
+<testsuite errors="0" failures="0" hostname="ismriv-laptop" name="test.eu.morfeoproject.fast.catalogue.CatalogueTest" tests="9" time="9.89" timestamp="2010-09-27T17:49:53">
   <properties>
     <property name="java.vendor" value="Sun Microsystems Inc." />
     <property name="sun.java.launcher" value="SUN_STANDARD" />
@@ -76,15 +76,65 @@
     <property name="java.specification.version" value="1.6" />
     <property name="src.dir" value="/home/ismriv/eclipse-workspace/FASTCatalogue/src" />
   </properties>
-  <testcase classname="test.eu.morfeoproject.fast.catalogue.CatalogueTest" name="check" time="2.681" />
-  <testcase classname="test.eu.morfeoproject.fast.catalogue.CatalogueTest" name="createForm" time="1.587" />
-  <testcase classname="test.eu.morfeoproject.fast.catalogue.CatalogueTest" name="createOperator" time="0.846" />
-  <testcase classname="test.eu.morfeoproject.fast.catalogue.CatalogueTest" name="createBackendService" time="0.561" />
-  <testcase classname="test.eu.morfeoproject.fast.catalogue.CatalogueTest" name="createPostcondition" time="0.574" />
-  <testcase classname="test.eu.morfeoproject.fast.catalogue.CatalogueTest" name="createScreen1" time="0.75" />
-  <testcase classname="test.eu.morfeoproject.fast.catalogue.CatalogueTest" name="createScreen2" time="0.461" />
-  <testcase classname="test.eu.morfeoproject.fast.catalogue.CatalogueTest" name="createConcept" time="0.413" />
-  <testcase classname="test.eu.morfeoproject.fast.catalogue.CatalogueTest" name="findAndCheck1" time="0.484" />
-  <system-out><![CDATA[]]></system-out>
+  <testcase classname="test.eu.morfeoproject.fast.catalogue.CatalogueTest" name="check" time="4.046" />
+  <testcase classname="test.eu.morfeoproject.fast.catalogue.CatalogueTest" name="createForm" time="1.136" />
+  <testcase classname="test.eu.morfeoproject.fast.catalogue.CatalogueTest" name="createOperator" time="0.806" />
+  <testcase classname="test.eu.morfeoproject.fast.catalogue.CatalogueTest" name="createBackendService" time="0.675" />
+  <testcase classname="test.eu.morfeoproject.fast.catalogue.CatalogueTest" name="createPostcondition" time="0.564" />
+  <testcase classname="test.eu.morfeoproject.fast.catalogue.CatalogueTest" name="createScreen1" time="0.567" />
+  <testcase classname="test.eu.morfeoproject.fast.catalogue.CatalogueTest" name="createScreen2" time="0.529" />
+  <testcase classname="test.eu.morfeoproject.fast.catalogue.CatalogueTest" name="createConcept" time="0.529" />
+  <testcase classname="test.eu.morfeoproject.fast.catalogue.CatalogueTest" name="findAndCheck1" time="0.513" />
+  <system-out><![CDATA[SELECT DISTINCT ?bb 
+WHERE {
+{ ?bb <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://purl.oclc.org/fast/ontology/gadget#Screen> . FILTER (?bb != <http://localhost:9000/FASTCatalogue/screens/1>) . {{ ?bb <http://purl.oclc.org/fast/ontology/gadget#hasPostCondition> ?b .  ?b ?li ?c .  ?c <http://purl.oclc.org/fast/ontology/gadget#hasPattern> ?p . GRAPH ?p {?40b64d5012b5450ae247fff <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://aws.amazon.com/AWSECommerceService#SearchCriteria> . } } }
+} }
+OFFSET 0
+SELECT DISTINCT ?bb 
+WHERE {
+{ ?bb <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://purl.oclc.org/fast/ontology/gadget#Screen> . FILTER (?bb != <http://localhost:9000/FASTCatalogue/screens/7>) . {{ ?bb <http://purl.oclc.org/fast/ontology/gadget#hasPostCondition> ?b .  ?b ?li ?c .  ?c <http://purl.oclc.org/fast/ontology/gadget#hasPattern> ?p . GRAPH ?p {?40b64d5012b5450ae247ffd <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://aws.amazon.com/AWSECommerceService#PurchaseURL> . } } }
+} }
+OFFSET 0
+SELECT DISTINCT ?bb 
+WHERE {
+{ ?bb <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://purl.oclc.org/fast/ontology/gadget#Screen> . FILTER (?bb != <http://localhost:9000/FASTCatalogue/screens/5>) . {{ ?bb <http://purl.oclc.org/fast/ontology/gadget#hasPostCondition> ?b .  ?b ?li ?c .  ?c <http://purl.oclc.org/fast/ontology/gadget#hasPattern> ?p . GRAPH ?p {?40b64d5012b5450ae247ffb <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://aws.amazon.com/AWSECommerceService#Item> . } } }
+} }
+OFFSET 0
+SELECT DISTINCT ?bb 
+WHERE {
+{ ?bb <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://purl.oclc.org/fast/ontology/gadget#Screen> . FILTER (?bb != <http://localhost:9000/FASTCatalogue/screens/6>) . {{ ?bb <http://purl.oclc.org/fast/ontology/gadget#hasPostCondition> ?b .  ?b ?li ?c .  ?c <http://purl.oclc.org/fast/ontology/gadget#hasPattern> ?p . GRAPH ?p {?40b64d5012b5450ae247ff9 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://aws.amazon.com/AWSECommerceService#Item> . } } }
+} }
+OFFSET 0
+SELECT DISTINCT ?bb 
+WHERE {
+{ ?bb <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://purl.oclc.org/fast/ontology/gadget#Screen> . FILTER (?bb != <http://localhost:9000/FASTCatalogue/screens/3>) . {{ ?bb <http://purl.oclc.org/fast/ontology/gadget#hasPostCondition> ?b .  ?b ?li ?c .  ?c <http://purl.oclc.org/fast/ontology/gadget#hasPattern> ?p . GRAPH ?p {?40b64d5012b5450ae247ff7 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://aws.amazon.com/AWSECommerceService#ShoppingCart> . } } }
+} }
+OFFSET 0
+SELECT DISTINCT ?bb 
+WHERE {
+{ ?bb <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://purl.oclc.org/fast/ontology/gadget#Screen> . FILTER (?bb != <http://localhost:9000/FASTCatalogue/screens/2>) . {{ ?bb <http://purl.oclc.org/fast/ontology/gadget#hasPostCondition> ?b .  ?b ?li ?c .  ?c <http://purl.oclc.org/fast/ontology/gadget#hasPattern> ?p . GRAPH ?p {?40b64d5012b5450ae247ff5 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://aws.amazon.com/AWSECommerceService#Item> . } } }
+} }
+OFFSET 0
+SELECT DISTINCT ?bb 
+WHERE {
+{ ?bb <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://purl.oclc.org/fast/ontology/gadget#Screen> . FILTER (?bb != <http://localhost:9000/FASTCatalogue/screens/1>) . {{ ?bb <http://purl.oclc.org/fast/ontology/gadget#hasPreCondition> ?b .  ?b ?li ?c .  ?c <http://purl.oclc.org/fast/ontology/gadget#hasPattern> ?p . GRAPH ?p {?40b64d5012b5450ae247fbf <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://aws.amazon.com/AWSECommerceService#Item> . } } }
+} }
+OFFSET 0
+SELECT DISTINCT ?bb 
+WHERE {
+{ ?bb <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://purl.oclc.org/fast/ontology/gadget#Screen> . FILTER (?bb != <http://localhost:9000/FASTCatalogue/screens/1>) . {{ ?bb <http://purl.oclc.org/fast/ontology/gadget#hasPostCondition> ?b .  ?b ?li ?c .  ?c <http://purl.oclc.org/fast/ontology/gadget#hasPattern> ?p . GRAPH ?p {?40b64d5012b5450ae247fbd <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://aws.amazon.com/AWSECommerceService#SearchCriteria> . } } }
+} }
+OFFSET 0
+SELECT DISTINCT ?bb 
+WHERE {
+{ ?bb <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://purl.oclc.org/fast/ontology/gadget#Screen> . FILTER (?bb != <http://localhost:9000/FASTCatalogue/screens/1>) . {{ ?bb <http://purl.oclc.org/fast/ontology/gadget#hasPreCondition> ?b .  ?b ?li ?c .  ?c <http://purl.oclc.org/fast/ontology/gadget#hasPattern> ?p . GRAPH ?p {?40b64d5012b5450ae247fb2 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://aws.amazon.com/AWSECommerceService#Item> . } } }
+} }
+OFFSET 0
+SELECT DISTINCT ?bb 
+WHERE {
+{ ?bb <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://purl.oclc.org/fast/ontology/gadget#Screen> . FILTER (?bb != <http://localhost:9000/FASTCatalogue/screens/1>) . {{ ?bb <http://purl.oclc.org/fast/ontology/gadget#hasPostCondition> ?b .  ?b ?li ?c .  ?c <http://purl.oclc.org/fast/ontology/gadget#hasPattern> ?p . GRAPH ?p {?40b64d5012b5450ae247fb0 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://aws.amazon.com/AWSECommerceService#SearchCriteria> . } } }
+} }
+OFFSET 0
+]]></system-out>
   <system-err><![CDATA[]]></system-err>
 </testsuite>

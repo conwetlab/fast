@@ -17,13 +17,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.ontoware.rdf2go.model.node.URI;
 import org.ontoware.rdf2go.model.node.impl.URIImpl;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-import eu.morfeoproject.fast.catalogue.Catalogue;
-import eu.morfeoproject.fast.catalogue.CatalogueAccessPoint;
 import eu.morfeoproject.fast.catalogue.NotFoundException;
-import eu.morfeoproject.fast.catalogue.buildingblocks.BuildingBlock;
+import eu.morfeoproject.fast.catalogue.model.BuildingBlock;
 
 /**
  * Servlet implementation class ScreenFindServlet
@@ -31,8 +27,6 @@ import eu.morfeoproject.fast.catalogue.buildingblocks.BuildingBlock;
 public class ScreenFindServlet extends GenericServlet {
 	private static final long serialVersionUID = 1L;
     
-	final Logger logger = LoggerFactory.getLogger(ScreenFindServlet.class);
-
     /**
      * @see HttpServlet#HttpServlet()
      */
@@ -44,7 +38,6 @@ public class ScreenFindServlet extends GenericServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		logger.info("Entering FIND operation...");
 		BufferedReader reader = request.getReader();
 		PrintWriter writer = response.getWriter();
 		String format = request.getHeader("accept") != null ? request.getHeader("accept") : MediaType.APPLICATION_JSON;
@@ -55,7 +48,6 @@ public class ScreenFindServlet extends GenericServlet {
 			line = reader.readLine();
 		}
 		String body = buffer.toString();
-		Catalogue catalogue = CatalogueAccessPoint.getCatalogue();
 		
 		try {
 			// create JSON representation of the input
@@ -65,7 +57,7 @@ public class ScreenFindServlet extends GenericServlet {
 			JSONArray jsonCanvas = input.getJSONArray("canvas");
 			for (int i = 0; i < jsonCanvas.length(); i++) {
 				URI uri = new URIImpl(((JSONObject)jsonCanvas.get(i)).getString("uri"));
-				BuildingBlock r = catalogue.getBuildingBlock(uri);
+				BuildingBlock r = getCatalogue().getBuildingBlock(uri);
 				if (r == null) 
 					throw new NotFoundException("Resource "+uri+" does not exist.");
 				canvas.add(r); 
@@ -85,14 +77,14 @@ public class ScreenFindServlet extends GenericServlet {
 			JSONArray jsonElements = input.getJSONArray("elements");
 			for (int i = 0; i < jsonElements.length(); i++) {
 				URI uri = new URIImpl(((JSONObject)jsonElements.get(i)).getString("uri"));
-				BuildingBlock r = catalogue.getBuildingBlock(uri);
+				BuildingBlock r = getCatalogue().getBuildingBlock(uri);
 				if (r == null)
 					throw new NotFoundException("Screen "+uri+" does not exist.");
 				canvas.add(r); 
 			}
 
 			// make the call to the catalogue
-			Set<URI> results = catalogue.findBackwards(canvas, true, true, 0, -1, tags);
+			Set<URI> results = getCatalogue().findBackwards(canvas, true, true, 0, -1, tags);
 
 			// write the results in the output
 			JSONArray output = new JSONArray();
@@ -104,13 +96,12 @@ public class ScreenFindServlet extends GenericServlet {
 			response.setContentType(MediaType.APPLICATION_JSON);
 			response.setStatus(HttpServletResponse.SC_OK);
 		} catch (JSONException e) {
-			e.printStackTrace();
+			log.error(e.toString(), e);
 			response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
 		} catch (NotFoundException e) {
-			e.printStackTrace();
+			log.error(e.toString(), e);
 			response.sendError(HttpServletResponse.SC_NOT_FOUND, e.getMessage());
 		}
-		logger.info("...Exiting FIND operation");
 	}
 
 }

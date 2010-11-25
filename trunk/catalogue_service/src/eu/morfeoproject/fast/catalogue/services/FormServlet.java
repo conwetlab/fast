@@ -16,22 +16,18 @@ import org.ontoware.rdf2go.RDF2Go;
 import org.ontoware.rdf2go.model.Model;
 import org.ontoware.rdf2go.model.Syntax;
 import org.ontoware.rdf2go.model.node.impl.URIImpl;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-import eu.morfeoproject.fast.catalogue.BuildingBlockJSONBuilder;
-import eu.morfeoproject.fast.catalogue.Catalogue;
-import eu.morfeoproject.fast.catalogue.CatalogueAccessPoint;
-import eu.morfeoproject.fast.catalogue.DuplicatedBuildingBlockException;
+import eu.morfeoproject.fast.catalogue.BuildingBlockException;
+import eu.morfeoproject.fast.catalogue.DuplicatedException;
 import eu.morfeoproject.fast.catalogue.InvalidBuildingBlockTypeException;
 import eu.morfeoproject.fast.catalogue.NotFoundException;
 import eu.morfeoproject.fast.catalogue.OntologyInvalidException;
-import eu.morfeoproject.fast.catalogue.BuildingBlockException;
-import eu.morfeoproject.fast.catalogue.buildingblocks.Form;
+import eu.morfeoproject.fast.catalogue.builder.BuildingBlockJSONBuilder;
 import eu.morfeoproject.fast.catalogue.htmltemplates.BuildingBlockTemplate;
 import eu.morfeoproject.fast.catalogue.htmltemplates.CollectionTemplate;
 import eu.morfeoproject.fast.catalogue.htmltemplates.TemplateManager;
-import eu.morfeoproject.fast.catalogue.util.Accept;
+import eu.morfeoproject.fast.catalogue.model.Form;
+import eu.morfeoproject.fast.catalogue.services.util.Accept;
 import freemarker.template.TemplateException;
 
 /**
@@ -40,8 +36,6 @@ import freemarker.template.TemplateException;
 public class FormServlet extends GenericServlet {
 	private static final long serialVersionUID = 1L;
 
-	static Logger logger = LoggerFactory.getLogger(FormServlet.class);
-    
     /**
      * @see HttpServlet#HttpServlet()
      */
@@ -65,14 +59,13 @@ public class FormServlet extends GenericServlet {
 			extension = id;
 			id = null;
 		}
-		Catalogue catalogue = CatalogueAccessPoint.getCatalogue();
 
 		if (extension == null) {
 			redirectToFormat(request, response, format);
 		} else {
 			if (id == null) {
 				// List the members of the collection
-				logger.info("Retrieving all forms");
+				if (log.isInfoEnabled()) log.info("Retrieving all forms");
 				// Override format regarding the given extension
 				format = MediaType.forExtension(extension);
 				try {
@@ -82,7 +75,7 @@ public class FormServlet extends GenericServlet {
 						Model model = RDF2Go.getModelFactory().createModel();
 						try {
 							model.open();
-							for (Form f : catalogue.getForms()) {
+							for (Form f : getCatalogue().getForms()) {
 								Model feModel = f.toRDF2GoModel();
 								for (String ns : feModel.getNamespaces().keySet())
 									model.setNamespace(ns, feModel.getNamespace(ns));
@@ -91,7 +84,7 @@ public class FormServlet extends GenericServlet {
 							}
 							model.writeTo(writer, Syntax.forMimeType(format));
 						} catch (Exception e) {
-							e.printStackTrace();
+							log.error(e.toString(), e);
 						} finally {
 							model.close();
 						}
@@ -103,20 +96,20 @@ public class FormServlet extends GenericServlet {
 							response.setCharacterEncoding(TemplateManager.getDefaultEncoding());
 						if (TemplateManager.getLocale() != null)
 							response.setLocale(TemplateManager.getLocale());
-						CollectionTemplate.process(catalogue.getForms(), writer);
+						CollectionTemplate.process(getCatalogue().getForms(), writer);
 					} else { // by default returns APPLICATION_JSON
 						response.setContentType(MediaType.APPLICATION_JSON);
 						JSONArray formElements = new JSONArray();
-						for (Form f : catalogue.getForms())
+						for (Form f : getCatalogue().getForms())
 							formElements.put(f.toJSON());
 						writer.print(formElements.toString(2));
 					}
 					response.setStatus(HttpServletResponse.SC_OK);
 				} catch (JSONException e) {
-					e.printStackTrace();
+					log.error(e.toString(), e);
 					response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
 				} catch (TemplateException e) {
-					e.printStackTrace();
+					log.error(e.toString(), e);
 					response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
 				}
 			} else {
@@ -124,9 +117,9 @@ public class FormServlet extends GenericServlet {
 				format = MediaType.forExtension(extension);
 				// Retrieve the addressed member of the collection
 				String uri = url.substring(0, url.indexOf(extension) - 1);
-				logger.info("Retrieving formElement "+uri);
+				if (log.isInfoEnabled()) log.info("Retrieving formElement "+uri);
 				try {
-					Form form = catalogue.getForm(new URIImpl(uri));
+					Form form = getCatalogue().getForm(new URIImpl(uri));
 					if (format.equals(MediaType.APPLICATION_RDF_XML) ||
 							format.equals(MediaType.APPLICATION_TURTLE)) {
 						response.setContentType(format);
@@ -150,10 +143,10 @@ public class FormServlet extends GenericServlet {
 				} catch (NotFoundException e1) {
 					response.sendError(HttpServletResponse.SC_NOT_FOUND, "The resource "+uri+" has not been found.");
 				} catch (JSONException e) {
-					e.printStackTrace();
+					log.error(e.toString(), e);
 					response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
 				} catch (TemplateException e) {
-					e.printStackTrace();
+					log.error(e.toString(), e);
 					response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
 				}
 			}
@@ -176,7 +169,6 @@ public class FormServlet extends GenericServlet {
 			line = reader.readLine();
 		}
 		String body = buffer.toString();
-		Catalogue catalogue = CatalogueAccessPoint.getCatalogue();
 
 		// Create a new entry in the collection where the ID is assigned automatically by 
 		// the collection and it is returned.
@@ -184,7 +176,7 @@ public class FormServlet extends GenericServlet {
 			JSONObject json = new JSONObject(body);
 			Form form = BuildingBlockJSONBuilder.buildForm(json, null);
 			try {
-				catalogue.addForm(form);
+				getCatalogue().addForm(form);
 				if (format.equals(MediaType.APPLICATION_RDF_XML) ||
 						format.equals(MediaType.APPLICATION_TURTLE)) {
 					response.setContentType(format);
@@ -213,27 +205,27 @@ public class FormServlet extends GenericServlet {
 					writer.print(json.toString(2));
 				}
 				response.setStatus(HttpServletResponse.SC_OK);
-			} catch (DuplicatedBuildingBlockException e) {
-				e.printStackTrace();
+			} catch (DuplicatedException e) {
+				log.error(e.toString(), e);
 				response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
 			} catch (OntologyInvalidException e) {
-				e.printStackTrace();
+				log.error(e.toString(), e);
 				response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
 			} catch (InvalidBuildingBlockTypeException e) {
-				e.printStackTrace();
+				log.error(e.toString(), e);
 				response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
 			} catch (BuildingBlockException e) {
-				e.printStackTrace();
+				log.error(e.toString(), e);
 				response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
 			} catch (TemplateException e) {
-				e.printStackTrace();
+				log.error(e.toString(), e);
 				response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
 			}
 		} catch (JSONException e) {
-			e.printStackTrace();
+			log.error(e.toString(), e);
 			response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
 		} catch (IOException e) {
-			e.printStackTrace();
+			log.error(e.toString(), e);
 			response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
 		}	
 	}
@@ -256,7 +248,6 @@ public class FormServlet extends GenericServlet {
 			line = reader.readLine();
 		}
 		String body = buffer.toString();
-		Catalogue catalogue = CatalogueAccessPoint.getCatalogue();
 		
 		if (id == null) {
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
@@ -266,7 +257,7 @@ public class FormServlet extends GenericServlet {
 			try {
 				JSONObject json = new JSONObject(body);
 				Form form = BuildingBlockJSONBuilder.buildForm(json, new URIImpl(uri));
-				catalogue.updateForm(form);
+				getCatalogue().updateForm(form);
 				if (format.equals(MediaType.APPLICATION_RDF_XML) ||
 						format.equals(MediaType.APPLICATION_TURTLE)) {
 					response.setContentType(format);
@@ -296,19 +287,19 @@ public class FormServlet extends GenericServlet {
 				}
 				response.setStatus(HttpServletResponse.SC_OK);
 			} catch (JSONException e) {
-				e.printStackTrace();
+				log.error(e.toString(), e);
 				response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
 			} catch (IOException e) {
-				e.printStackTrace();
+				log.error(e.toString(), e);
 				response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
 			} catch (NotFoundException e) {
-				e.printStackTrace();
+				log.error(e.toString(), e);
 				response.sendError(HttpServletResponse.SC_NOT_FOUND, "The resource "+uri+" has not been found.");
 			} catch (BuildingBlockException e) {
-				e.printStackTrace();
+				log.error(e.toString(), e);
 				response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
 			} catch (TemplateException e) {
-				e.printStackTrace();
+				log.error(e.toString(), e);
 				response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
 			}
 		}
@@ -321,7 +312,6 @@ public class FormServlet extends GenericServlet {
 		String[] chunks = request.getRequestURI().split("/");
 		String id = chunks[chunks.length-1];
 		if (id.equalsIgnoreCase("forms")) id = null;
-		Catalogue catalogue = CatalogueAccessPoint.getCatalogue();
 		
 		if (id == null) {
 			response.sendError(HttpServletResponse.SC_BAD_REQUEST, "An ID must be specified.");
@@ -329,7 +319,7 @@ public class FormServlet extends GenericServlet {
 			// Delete the addressed member of the collection.
 			String uri = request.getRequestURL().toString();
 			try {
-				catalogue.removeForm(new URIImpl(uri));
+				getCatalogue().removeForm(new URIImpl(uri));
 				response.setStatus(HttpServletResponse.SC_OK);
 			} catch (NotFoundException e) {
 				response.sendError(HttpServletResponse.SC_NOT_FOUND, "The resource "+uri+" has not been found.");

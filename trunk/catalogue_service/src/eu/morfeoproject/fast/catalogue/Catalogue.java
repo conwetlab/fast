@@ -1,18 +1,28 @@
 package eu.morfeoproject.fast.catalogue;
 
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 import java.util.StringTokenizer;
 
+import javax.naming.ConfigurationException;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.commontag.AuthorCTag;
+import org.commontag.AutoCTag;
+import org.commontag.CTag;
+import org.commontag.ReaderCTag;
 import org.ontoware.aifbcommons.collection.ClosableIterator;
 import org.ontoware.rdf2go.RDF2Go;
 import org.ontoware.rdf2go.exception.ModelRuntimeException;
@@ -34,36 +44,40 @@ import org.ontoware.rdf2go.vocabulary.RDFS;
 import org.ontoware.rdf2go.vocabulary.XSD;
 import org.openrdf.repository.RepositoryException;
 import org.openrdf.rio.RDFParseException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-import eu.morfeoproject.fast.catalogue.buildingblocks.Attribute;
-import eu.morfeoproject.fast.catalogue.buildingblocks.BackendService;
-import eu.morfeoproject.fast.catalogue.buildingblocks.BuildingBlock;
-import eu.morfeoproject.fast.catalogue.buildingblocks.Concept;
-import eu.morfeoproject.fast.catalogue.buildingblocks.Condition;
-import eu.morfeoproject.fast.catalogue.buildingblocks.FastModelFactory;
-import eu.morfeoproject.fast.catalogue.buildingblocks.Form;
-import eu.morfeoproject.fast.catalogue.buildingblocks.Operator;
-import eu.morfeoproject.fast.catalogue.buildingblocks.Postcondition;
-import eu.morfeoproject.fast.catalogue.buildingblocks.PreOrPost;
-import eu.morfeoproject.fast.catalogue.buildingblocks.Precondition;
-import eu.morfeoproject.fast.catalogue.buildingblocks.Screen;
-import eu.morfeoproject.fast.catalogue.buildingblocks.ScreenComponent;
-import eu.morfeoproject.fast.catalogue.buildingblocks.ScreenFlow;
-import eu.morfeoproject.fast.catalogue.commontag.AuthorCTag;
-import eu.morfeoproject.fast.catalogue.commontag.AutoCTag;
-import eu.morfeoproject.fast.catalogue.commontag.CTag;
-import eu.morfeoproject.fast.catalogue.commontag.ReaderCTag;
+import eu.morfeoproject.fast.catalogue.builder.BuildingBlockRDF2GoBuilder;
+import eu.morfeoproject.fast.catalogue.builder.SampleRDF2GoBuilder;
+import eu.morfeoproject.fast.catalogue.buildingblocks.factory.BuildingBlockFactory;
+import eu.morfeoproject.fast.catalogue.model.BackendService;
+import eu.morfeoproject.fast.catalogue.model.BuildingBlock;
+import eu.morfeoproject.fast.catalogue.model.Concept;
+import eu.morfeoproject.fast.catalogue.model.Condition;
+import eu.morfeoproject.fast.catalogue.model.Form;
+import eu.morfeoproject.fast.catalogue.model.Operator;
+import eu.morfeoproject.fast.catalogue.model.Postcondition;
+import eu.morfeoproject.fast.catalogue.model.PreOrPost;
+import eu.morfeoproject.fast.catalogue.model.Precondition;
+import eu.morfeoproject.fast.catalogue.model.Property;
+import eu.morfeoproject.fast.catalogue.model.Sample;
+import eu.morfeoproject.fast.catalogue.model.Screen;
+import eu.morfeoproject.fast.catalogue.model.ScreenComponent;
+import eu.morfeoproject.fast.catalogue.model.ScreenFlow;
 import eu.morfeoproject.fast.catalogue.ontologies.DefaultOntologies;
+import eu.morfeoproject.fast.catalogue.ontologies.OntologyFetcher;
+import eu.morfeoproject.fast.catalogue.ontologies.OntologyFinder;
+import eu.morfeoproject.fast.catalogue.ontologies.OntologyManager;
+import eu.morfeoproject.fast.catalogue.ontologies.SindiceOntologyFinder;
+import eu.morfeoproject.fast.catalogue.ontologies.DefaultOntologies.Ontology;
 import eu.morfeoproject.fast.catalogue.ontologies.DefaultOntologies.PublicOntology;
 import eu.morfeoproject.fast.catalogue.planner.Plan;
 import eu.morfeoproject.fast.catalogue.planner.Planner;
 import eu.morfeoproject.fast.catalogue.planner.PlannerFactory;
 import eu.morfeoproject.fast.catalogue.util.DateFormatter;
+import eu.morfeoproject.fast.catalogue.util.MiscUtil;
 import eu.morfeoproject.fast.catalogue.vocabulary.CTAG;
 import eu.morfeoproject.fast.catalogue.vocabulary.DC;
 import eu.morfeoproject.fast.catalogue.vocabulary.FGO;
+import eu.morfeoproject.fast.util.TestUtils;
 
 /**
  * Catalogue
@@ -72,90 +86,67 @@ import eu.morfeoproject.fast.catalogue.vocabulary.FGO;
  */
 public class Catalogue {
 
-	private final Logger logger = LoggerFactory.getLogger(Catalogue.class);
+	protected final Log log = LogFactory.getLog(this.getClass());
 
-	private boolean IMPORT_ONTOLOGIES = true;
-	private boolean RDFS_REASONING = true;
-
+	private CatalogueConfiguration configuration;
+	private OntologyManager ontologyManager; // TODO do it persistent, now it's just in memory, so when the catalogue is loaded, the ontology list is empty
 	private TripleStore tripleStore;
 	private Planner planner;
-	private URI serverURL;
 	private String environment;
 
-	public Catalogue(URI serverURL, String sesameServer, String repositoryID,
-			String environment) {
-		this.serverURL = serverURL;
-		this.environment = environment;
-		create(serverURL, sesameServer, repositoryID);
+	public Catalogue(CatalogueConfiguration conf) {
+		this(conf, "default");
 	}
-
-	public Catalogue(URI serverURL, File dir, String indexes, String environment) {
-		this.serverURL = serverURL;
+	
+	public Catalogue(CatalogueConfiguration conf, String environment) {
+		this.configuration = conf;
 		this.environment = environment;
-		create(serverURL, dir, indexes);
-	}
-
-	public Catalogue(URI serverURL, File dir, String environment) {
-		this.serverURL = serverURL;
-		this.environment = environment;
-		create(serverURL, dir, null);
-	}
-
-	/**
-	 * Returns a opened connection to a local repository
-	 */
-	private void create(URI serverURL, File dir, String indexes) {
-		logger.info("Catalogue loaded at " + dir.getAbsolutePath() + " ["
-				+ indexes + "]");
-		if (serverURL == null) {
-			logger.error("Server URL must hold a valid URL");
-		} else {
-			// creates a new triple store
-			tripleStore = new TripleStore(dir, indexes);
-			tripleStore.open();
-			// tripleStore.clear();
-
-			// check if the catalogue is correct
-			if (!check()) {
-				// recover the catalogue
-				restore();
-			}
-			// printStatements();
-			// dump();
-			// exportToTrig();
-
-			// creates the planner
-			planner = PlannerFactory.createPlanner(this, this.environment);
+		
+		try {
+			init();
+		} catch (Exception e) {
+			throw new RuntimeException("Unable to start the catalogue service.", e);
 		}
 	}
+	
+	protected void init() throws ConfigurationException, TripleStoreException {
+		// read configuration
+		String serverURL = this.configuration.get(this.environment, "serverURL");
+		String sesameServer = this.configuration.get(this.environment, "sesameServer");
+		String repositoryID = this.configuration.get(this.environment, "repositoryID");
+		String storageDir = this.configuration.get(this.environment, "storageDir");
+		String indexes = this.configuration.get(this.environment, "indexes");
+		
+		// connect to local or remote triple store
+		tripleStore = (sesameServer != null && repositoryID != null) ?
+			new RemoteTripleStore(sesameServer, repositoryID) :
+				new LocalTripleStore(storageDir, indexes);
+		tripleStore.open();
 
-	/**
-	 * Returns a opened connection to a remote repository
-	 */
-	private void create(URI serverURL, String sesameServer, String repositoryID) {
-		logger.info("Catalogue loaded at " + sesameServer + ", ID="
-				+ repositoryID);
-		if (serverURL == null) {
-			logger.error("Server URL must hold a valid URL");
-		} else {
-			// creates a new triple store
-			tripleStore = new TripleStore(sesameServer, repositoryID);
-			tripleStore.open();
-			// tripleStore.clear();
-
-			// check if the catalogue is correct
-			if (!check()) {
-				// recover the catalogue
-				restore();
-			}
-
-			// creates the planner
-			planner = PlannerFactory.createPlanner(this, this.environment);
+		// creates the ontology manager
+		ontologyManager = new OntologyManager(getAllOntologies());
+		
+		// check if the catalogue is correct
+		if (!check()) {
+			// recover the catalogue
+			restore();
 		}
+		
+		// creates the planner
+		planner = PlannerFactory.createPlanner(this, this.environment);
 	}
 
-	public URI getServerURL() {
-		return serverURL;
+	public OntologyManager getManager() { return ontologyManager; }
+	public static void main(String[] args) {
+		Catalogue catalogue = TestUtils.getCatalogue();
+//		catalogue.printStatements();
+//		for (URI oUri : catalogue.getManager().list())
+//			System.out.println(oUri);
+		System.out.println(catalogue.getServerURL());
+	}
+	
+	public URL getServerURL() {
+		return configuration.getURL(this.environment, "serverURL");
 	}
 
 	public Planner getPlanner() {
@@ -165,40 +156,55 @@ public class Catalogue {
 	/**
 	 * Restores the catalogue Should only be done when {@link #check()} returns
 	 * true.
-	 * 
-	 * @throws Exception
-	 *             if something goes wrong.
 	 */
-	private void restore() {
+	protected void restore() {
 		// add default ontologies
-		for (DefaultOntologies.Ontology ont : DefaultOntologies.getDefaults()) {
-			try {
-				logger.info("adding default ontology '" + ont.getUri() + "'");
-				if (ont.getSyntax().equals(Syntax.RdfXml))
-					tripleStore.addOntology(ont.getUri(), ont.getAsRDFXML(),
-							Syntax.RdfXml);
-				else if (ont.getSyntax().equals(Syntax.Turtle))
-					tripleStore.addOntology(ont.getUri(), ont.getAsTurtle(),
-							Syntax.Turtle);
-				else
-					logger.error("Syntax for ontology '" + ont.getUri()
-							+ "' is not valid. Must be RDF/XML or Turtle");
-			} catch (OntologyInvalidException e) {
-				logger.error("Cannot add default ontology '" + ont.getUri()
-						+ "': " + e, e);
-			} catch (RepositoryException e) {
-				logger.error("Cannot add default ontology '" + ont.getUri()
-						+ "': " + e, e);
-			} catch (RDFParseException e) {
-				logger.error("Cannot add default ontology '" + ont.getUri()
-						+ "': " + e, e);
-			} catch (IOException e) {
-				logger.error("Cannot read ontology '" + ont.getUri() + "': "
-						+ e, e);
-			}
+		for (DefaultOntologies.Ontology ontology : DefaultOntologies.getDefaults()) {
+			if(log.isInfoEnabled()) log.info("adding default ontology '" + ontology.getUri() + "'");
+			addOntology(ontology);
 		}
 	}
+	
+	protected boolean addOntology(Ontology ontology) {
+		try {
+			return addOntology(ontology.getUri(), ontology.getInputStream(), ontology.getSyntax());
+		} catch (OntologyInvalidException e) {
+			log.error("Cannot add ontology '" + ontology.getUri() + "': " + e, e);
+		}
+		return false;
+	}
+	
+	protected boolean addOntology(URI uri, InputStream in, Syntax syntax) {
+		try {
+			boolean added = tripleStore.addOntology(uri, in, syntax);
+			if (added) ontologyManager.add(uri);
+			return added;
+		} catch (OntologyInvalidException e) {
+			log.error("Cannot add ontology '" + uri + "': " + e, e);
+		} catch (RepositoryException e) {
+			log.error("Cannot add ontology '" + uri + "': " + e, e);
+		} catch (RDFParseException e) {
+			log.error("Cannot add ontology '" + uri + "': " + e, e);
+		} catch (IOException e) {
+			log.error("Cannot read ontology '" + uri + "': " + e, e);
+		}
+		return false;
+	}
+	
+	public boolean addPublicOntology(URI uri, String downloadUri, Syntax syntax) {
+		return addOntology(new PublicOntology(uri, downloadUri, syntax));
+	}
 
+	public List<URI> getAllOntologies() {
+		LinkedList<URI> ontologies = new LinkedList<URI>();
+		ClosableIterator<Statement> it = tripleStore.findStatements(Variable.ANY, RDF.type, OWL.Ontology);
+		for (; it.hasNext(); ) {
+			URI uri = it.next().getSubject().asURI();
+			if (!ontologies.contains(uri)) ontologies.add(uri);
+		}
+		return ontologies;
+	}
+	
 	public void clear() {
 		// clear the repository
 		tripleStore.clear();
@@ -220,10 +226,9 @@ public class Catalogue {
 		boolean result = false;
 		// are the default ontologies here?
 		for (DefaultOntologies.Ontology ont : DefaultOntologies.getDefaults()) {
-			logger.info("checking ontology '" + ont.getUri() + "'...");
+			if(log.isInfoEnabled()) log.info("checking ontology '" + ont.getUri() + "'...");
 			boolean misses = (!tripleStore.containsOntology(ont.getUri()));
-			logger.info("default ontology '" + ont.getUri()
-					+ "' is in the store: " + !misses);
+			if(log.isInfoEnabled()) log.info("default ontology '" + ont.getUri() + "' is in the store: " + !misses);
 			result = result || misses;
 		}
 		return !result;
@@ -235,39 +240,6 @@ public class Catalogue {
 
 	public void close() {
 		tripleStore.close();
-	}
-
-	public boolean addPublicOntology(URI uri, String downloadUri, Syntax syntax) {
-		PublicOntology ont = new PublicOntology(uri, downloadUri, syntax);
-		try {
-			logger.info("adding ontology '" + ont.getUri() + "'");
-			if (syntax.equals(Syntax.RdfXml))
-				tripleStore
-						.addOntology(ont.getUri(), ont.getAsRDFXML(), syntax);
-			else if (syntax.equals(Syntax.Turtle))
-				tripleStore
-						.addOntology(ont.getUri(), ont.getAsTurtle(), syntax);
-			else {
-				logger.error("Cannot add ontology '" + ont.getUri()
-						+ "': Syntax '" + syntax + "' not allowed.");
-				return false;
-			}
-			return true;
-		} catch (OntologyInvalidException e) {
-			logger.error("Cannot add ontology '" + ont.getUri() + "': " + e, e);
-			return false;
-		} catch (RepositoryException e) {
-			logger.error("Cannot add ontology '" + ont.getUri() + "': " + e, e);
-			return false;
-		} catch (RDFParseException e) {
-			logger.error("Cannot add ontology '" + ont.getUri() + "': " + e, e);
-			return false;
-		} catch (IOException e) {
-			logger
-					.error("Cannot read ontology '" + ont.getUri() + "': " + e,
-							e);
-			return false;
-		}
 	}
 
 	public boolean containsBuildingBlock(URI uri) {
@@ -284,6 +256,10 @@ public class Catalogue {
 		return containsBuildingBlock(bb.getUri());
 	}
 
+	public boolean containsResource(URI uri) {
+		return tripleStore.isResource(uri);
+	}
+	
 	public boolean containsConcept(URI uri) {
 		return isConcept(uri);
 	}
@@ -293,12 +269,9 @@ public class Catalogue {
 			int offset, int limit, Set<String> tags) throws ClassCastException,
 			ModelRuntimeException {
 		HashSet<URI> results = new HashSet<URI>();
-		results.addAll(findScreenComponents(container, conditions, toExclude,
-				offset, limit, tags, FGO.Form));
-		results.addAll(findScreenComponents(container, conditions, toExclude,
-				offset, limit, tags, FGO.Operator));
-		results.addAll(findScreenComponents(container, conditions, toExclude,
-				offset, limit, tags, FGO.BackendService));
+		results.addAll(findScreenComponents(container, conditions, toExclude, offset, limit, tags, FGO.Form));
+		results.addAll(findScreenComponents(container, conditions, toExclude, offset, limit, tags, FGO.Operator));
+		results.addAll(findScreenComponents(container, conditions, toExclude, offset, limit, tags, FGO.BackendService));
 		return results;
 	}
 
@@ -308,30 +281,25 @@ public class Catalogue {
 			throws ClassCastException, ModelRuntimeException {
 		HashSet<URI> results = new HashSet<URI>();
 
-		String queryString = "SELECT DISTINCT ?bb \n" + "WHERE {\n" + "{ ?bb "
-				+ RDF.type.toSPARQL() + " " + typeBuildingBlock.toSPARQL()
-				+ " . ";
+		String queryString = "SELECT DISTINCT ?bb " 
+			+ " WHERE { { ?bb " + RDF.type.toSPARQL() + " " + typeBuildingBlock.toSPARQL() + " . ";
 
 		// doesn't include the building blocks where the postconditions were
 		// taken from
 		for (ScreenComponent comp : toExclude)
-			queryString = queryString.concat("FILTER (?bb != "
-					+ comp.getUri().toSPARQL() + ") . ");
+			queryString = queryString.concat("FILTER (?bb != " + comp.getUri().toSPARQL() + ") . ");
 
 		// tags
 		if (tags != null && tags.size() > 0) {
 			queryString = queryString.concat("{");
 			for (String tag : tags) {
-				queryString = queryString.concat(" { ?bb "
-						+ CTAG.tagged.toSPARQL() + " ?ctag . ?ctag "
-						+ CTAG.label.toSPARQL()
-						+ " ?tag . FILTER(regex(str(?tag), \"" + tag
-						+ "\", \"i\")) } UNION");
+				queryString = queryString.concat(" { ?bb " + CTAG.tagged.toSPARQL() + " ?ctag . "
+						+ " ?ctag " + CTAG.label.toSPARQL() + " ?tag . "
+						+ " FILTER(regex(str(?tag), \"" + tag + "\", \"i\")) } UNION");
 			}
 			// remove last 'UNION'
 			if (queryString.endsWith("UNION"))
-				queryString = queryString
-						.substring(0, queryString.length() - 5);
+				queryString = queryString.substring(0, queryString.length() - 5);
 			queryString = queryString.concat("} . ");
 		}
 
@@ -341,44 +309,37 @@ public class Catalogue {
 		if (conditions.size() > 0) {
 			queryString = queryString.concat("{");
 			for (Condition con : conditions) {
-				queryString = queryString.concat("{ ?bb "
-						+ FGO.hasAction.toSPARQL() + " ?a . ");
-				queryString = queryString.concat(" ?a "
-						+ FGO.hasPreCondition.toSPARQL() + " ?c . ");
-				queryString = queryString.concat(" ?c "
-						+ FGO.hasPattern.toSPARQL() + " ?p . ");
+				queryString = queryString.concat("{ ?bb " + FGO.hasAction.toSPARQL() + " ?a . ");
+				queryString = queryString.concat(" ?a " + FGO.hasPreCondition.toSPARQL() + " ?c . ");
+				queryString = queryString.concat(" ?c " + FGO.hasPattern.toSPARQL() + " ?p . ");
 				queryString = queryString.concat("GRAPH ?p {");
-				ClosableIterator<Statement> it = patternToRDF2GoModel(
-						con.getPatternString()).iterator();
+				ClosableIterator<Statement> it = patternToRDF2GoModel(con.getPatternString()).iterator();
 				for (; it.hasNext();) {
 					Statement st = it.next();
 					Resource subject = st.getSubject();
 					Node object = st.getObject();
-					String s = (subject instanceof BlankNode) ? toCleanVariable(subject
-							.toString())
-							: subject.toSPARQL();
-					String o = (object instanceof BlankNode) ? toCleanVariable(object
-							.toString())
-							: object.toSPARQL();
-					queryString = queryString.concat(s + " "
-							+ st.getPredicate().toSPARQL() + " " + o + " . ");
+					String s = (subject instanceof BlankNode) ?
+							toCleanVariable(subject.toString()) :
+								subject.toSPARQL();
+					String o = (object instanceof BlankNode) ?
+							toCleanVariable(object.toString()) :
+								object.toSPARQL();
+					queryString = queryString.concat(s + " " + st.getPredicate().toSPARQL() + " " + o + " . ");
 				}
 				it.close();
 				queryString = queryString.concat("} } UNION");
 			}
 			// remove last 'UNION'
 			if (queryString.endsWith("UNION"))
-				queryString = queryString
-						.substring(0, queryString.length() - 5);
+				queryString = queryString.substring(0, queryString.length() - 5);
 			queryString = queryString.concat("}");
 		}
-		queryString = queryString.concat("\n} }");
+		queryString = queryString.concat("} }");
 
-		if (limit > 0)
-			queryString = queryString.concat("\nLIMIT " + limit);
-		queryString = queryString.concat("\nOFFSET " + offset);
+		if (limit > 0) queryString = queryString.concat(" LIMIT " + limit);
+		queryString = queryString.concat(" OFFSET " + offset);
 
-		logger.info(queryString);
+		if (log.isInfoEnabled()) log.info(queryString);
 		QueryResultTable qrt = tripleStore.sparqlSelect(queryString);
 		ClosableIterator<QueryRow> itResults = qrt.iterator();
 		while (itResults.hasNext()) {
@@ -416,50 +377,41 @@ public class Catalogue {
 	 * @throws ClassCastException
 	 * @throws ModelRuntimeException
 	 */
-	private Set<URI> findScreens(Set<BuildingBlock> bbSet, boolean plugin,
+	protected Set<URI> findScreens(Set<BuildingBlock> bbSet, boolean plugin,
 			boolean subsume, int offset, int limit, Set<String> tags,
 			URI predicate) throws ClassCastException, ModelRuntimeException {
 		HashSet<URI> results = new HashSet<URI>();
-		ArrayList<Condition> unCon = getUnsatisfiedPreconditions(bbSet, plugin,
-				subsume);
+		ArrayList<Condition> unCon = getUnsatisfiedPreconditions(bbSet, plugin, subsume);
 
-		String queryString = "SELECT DISTINCT ?bb \n" + "WHERE {\n" + "{ ?bb "
-				+ RDF.type.toSPARQL() + " " + FGO.Screen.toSPARQL() + " . ";
+		String queryString = "SELECT DISTINCT ?bb " 
+			+ "WHERE { { ?bb " + RDF.type.toSPARQL() + " " + FGO.Screen.toSPARQL() + " . ";
 
 		// ///*** LOOK FOR SCREENS ***/////
 		for (BuildingBlock r : bbSet)
 			if (r instanceof Screen)
-				queryString = queryString.concat("FILTER (?bb != "
-						+ r.getUri().toSPARQL() + ") . ");
+				queryString = queryString.concat("FILTER (?bb != " + r.getUri().toSPARQL() + ") . ");
 
 		if (tags != null && tags.size() > 0) {
 			queryString = queryString.concat("{");
 			for (String tag : tags) {
-				queryString = queryString.concat(" { ?bb "
-						+ CTAG.tagged.toSPARQL() + " ?ctag . ?ctag "
-						+ CTAG.label.toSPARQL()
-						+ " ?tag . FILTER(regex(str(?tag), \"" + tag
-						+ "\", \"i\")) } UNION");
+				queryString = queryString.concat(" { ?bb " + CTAG.tagged.toSPARQL() + " ?ctag . "
+						+ " ?ctag " + CTAG.label.toSPARQL() + " ?tag . "
+						+ " FILTER(regex(str(?tag), \"" + tag + "\", \"i\")) } UNION");
 			}
 			// remove last 'UNION'
 			if (queryString.endsWith("UNION"))
-				queryString = queryString
-						.substring(0, queryString.length() - 5);
+				queryString = queryString.substring(0, queryString.length() - 5);
 			queryString = queryString.concat("} . ");
 		}
 
 		if (unCon.size() > 0) {
 			queryString = queryString.concat("{");
 			for (Condition con : unCon) {
-				if (logger.isDebugEnabled())
-					logger.debug("[UNSATISFIED] " + con.toString());
-				queryString = queryString.concat("{ ?bb "
-						+ predicate.toSPARQL() + " ?b . ");
-				queryString = queryString.concat(" ?b ?li ?c . "); // :_bag
-																	// rdf:li_1
-																	// :_condition
-				queryString = queryString.concat(" ?c "
-						+ FGO.hasPattern.toSPARQL() + " ?p . ");
+				if (log.isDebugEnabled())
+					log.debug("[UNSATISFIED] " + con.toString());
+				queryString = queryString.concat("{ ?bb " + predicate.toSPARQL() + " ?b . ");
+				queryString = queryString.concat(" ?b ?li ?c . "); // :_bag rdf:li_1 :_condition
+				queryString = queryString.concat(" ?c " + FGO.hasPattern.toSPARQL() + " ?p . ");
 				queryString = queryString.concat("GRAPH ?p {");
 				ClosableIterator<Statement> it = patternToRDF2GoModel(
 						con.getPatternString()).iterator();
@@ -467,78 +419,28 @@ public class Catalogue {
 					Statement st = it.next();
 					Resource subject = st.getSubject();
 					Node object = st.getObject();
-					String s = (subject instanceof BlankNode) ? toCleanVariable(subject
-							.toString())
-							: subject.toSPARQL();
-					String o = (object instanceof BlankNode) ? toCleanVariable(object
-							.toString())
-							: object.toSPARQL();
-					queryString = queryString.concat(s + " "
-							+ st.getPredicate().toSPARQL() + " " + o + " . ");
+					String s = (subject instanceof BlankNode) ?
+							toCleanVariable(subject.toString()) :
+								subject.toSPARQL();
+					String o = (object instanceof BlankNode) ?
+							toCleanVariable(object.toString()) :
+								object.toSPARQL();
+					queryString = queryString.concat(s + " " + st.getPredicate().toSPARQL() + " " + o + " . ");
 				}
 				it.close();
 				queryString = queryString.concat("} } UNION");
 			}
 			// remove last 'UNION'
 			if (queryString.endsWith("UNION"))
-				queryString = queryString
-						.substring(0, queryString.length() - 5);
+				queryString = queryString.substring(0, queryString.length() - 5);
 			queryString = queryString.concat("}");
 		}
-		// queryString = queryString.concat("\n} UNION ");
-		//		
-		// /////*** LOOK FOR PRECONDITIONS (SLOTS) ***/////
-		// queryString =
-		// queryString.concat("{ ?resource "+RDF.type.toSPARQL()+" "+FGO.Precondition.toSPARQL()+" . ");
-		//		
-		// for (Resource r : resources)
-		// if (r instanceof Precondition)
-		// queryString =
-		// queryString.concat("FILTER (?resource != "+r.getUri().toSPARQL()+") . ");
-		//
-		// if (tags != null && tags.size() > 0) {
-		// queryString = queryString.concat("{");
-		// for (String tag : tags) {
-		// queryString =
-		// queryString.concat(" { ?resource "+FGO.hasTag.toSPARQL()+" ?tag . FILTER regex(str(?tag), \""+tag+"\", \"i\")} UNION");
-		// }
-		// // remove last 'UNION'
-		// if (queryString.endsWith("UNION"))
-		// queryString = queryString.substring(0, queryString.length() - 5);
-		// queryString = queryString.concat("} . ");
-		// }
-		// if (unCon.size() > 0) {
-		// queryString = queryString.concat("{");
-		// for (Condition con : unCon) {
-		// queryString =
-		// queryString.concat("{ ?resource "+FGO.hasCondition.toSPARQL()+" ?b . ");
-		// queryString = queryString.concat(" ?b ?li ?c . "); // :_bag rdf:li_1
-		// :_condition
-		// queryString =
-		// queryString.concat(" ?c "+FGO.hasPattern.toSPARQL()+" ?p . ");
-		// queryString = queryString.concat("GRAPH ?p {");
-		// for (Statement st : con.getPattern()) {
-		// String s = (st.getSubject() instanceof BlankNode) ?
-		// st.getSubject().toString() : st.getSubject().toSPARQL();
-		// String o = (st.getObject() instanceof BlankNode) ?
-		// st.getObject().toString() : st.getObject().toSPARQL();
-		// queryString =
-		// queryString.concat(s+" "+st.getPredicate().toSPARQL()+" "+o+" . ");
-		// }
-		// queryString = queryString.concat("} } UNION");
-		// }
-		// // remove last 'UNION'
-		// if (queryString.endsWith("UNION"))
-		// queryString = queryString.substring(0, queryString.length() - 5);
-		// queryString = queryString.concat("}");
-		// }
-		queryString = queryString.concat("\n} }");
+		queryString = queryString.concat("} }");
 
-		if (limit > 0)
-			queryString = queryString.concat("\nLIMIT " + limit);
-		queryString = queryString.concat("\nOFFSET " + offset);
+		if (limit > 0) queryString = queryString.concat(" LIMIT " + limit);
+		queryString = queryString.concat(" OFFSET " + offset);
 
-		logger.info(queryString);
+		if (log.isInfoEnabled()) log.info(queryString);
 		QueryResultTable qrt = tripleStore.sparqlSelect(queryString);
 		ClosableIterator<QueryRow> itResults = qrt.iterator();
 		while (itResults.hasNext()) {
@@ -552,8 +454,7 @@ public class Catalogue {
 	public Set<URI> findBackwards(Set<BuildingBlock> bbSet, boolean plugin,
 			boolean subsume, int offset, int limit, Set<String> tags)
 			throws ClassCastException, ModelRuntimeException {
-		return findScreens(bbSet, plugin, subsume, offset, limit, tags,
-				FGO.hasPostCondition);
+		return findScreens(bbSet, plugin, subsume, offset, limit, tags, FGO.hasPostCondition);
 	}
 
 	public Set<URI> findForwards(Set<BuildingBlock> bbSet, boolean plugin,
@@ -562,7 +463,7 @@ public class Catalogue {
 		Set<BuildingBlock> tmpBBSet = new HashSet<BuildingBlock>();
 		for (BuildingBlock bb : bbSet) {
 			if (bb instanceof Screen) {
-				Screen s = FastModelFactory.createScreen();
+				Screen s = BuildingBlockFactory.createScreen();
 				s.setUri(bb.getUri());
 				s.setPreconditions(((Screen) bb).getPostconditions());
 				tmpBBSet.add(s);
@@ -570,8 +471,7 @@ public class Catalogue {
 				tmpBBSet.add(bb);
 			}
 		}
-		return findScreens(tmpBBSet, plugin, subsume, offset, limit, tags,
-				FGO.hasPreCondition);
+		return findScreens(tmpBBSet, plugin, subsume, offset, limit, tags, FGO.hasPreCondition);
 	}
 
 	/**
@@ -594,22 +494,18 @@ public class Catalogue {
 			if (bb instanceof Screen) {
 				Screen s = (Screen) bb;
 				for (List<Condition> conList : s.getPreconditions()) {
-					if (!isConditionSatisfied(bbSet, conList, plugin, subsume,
-							s.getUri())) {
+					if (!isConditionSatisfied(bbSet, conList, plugin, subsume, s.getUri())) {
 						for (Condition c : conList) {
-							if (c.isPositive())
-								unsatisfied.add(c);
+							if (c.isPositive()) unsatisfied.add(c);
 						}
 					}
 				}
 			} else if (bb instanceof Postcondition) {
 				Postcondition e = (Postcondition) bb;
 				List<Condition> conList = e.getConditions();
-				if (!isConditionSatisfied(bbSet, conList, plugin, subsume, e
-						.getUri())) {
+				if (!isConditionSatisfied(bbSet, conList, plugin, subsume, e.getUri())) {
 					for (Condition c : conList) {
-						if (c.isPositive())
-							unsatisfied.add(c);
+						if (c.isPositive()) unsatisfied.add(c);
 					}
 				}
 			}
@@ -642,15 +538,13 @@ public class Catalogue {
 		Set<BuildingBlock> tmpBBSet = new HashSet<BuildingBlock>();
 
 		// if no conditions are provided, then returns true
-		if (precondition.isEmpty())
-			return true;
+		if (precondition.isEmpty()) return true;
 
 		// copy the set of screens except the screen to be excluded
 		for (BuildingBlock bb : bbSet)
 			if (bb instanceof Precondition)
 				tmpBBSet.add(bb);
-			else if (bb instanceof Screen
-					&& !bb.getUri().equals(screenExcluded))
+			else if (bb instanceof Screen && !bb.getUri().equals(screenExcluded))
 				tmpBBSet.add((Screen) bb);
 
 		// creates all possible combination of preconditions
@@ -661,18 +555,16 @@ public class Catalogue {
 		String queryStr = "ASK {";
 		for (Condition condition : precondition) {
 			if (condition.isPositive()) {
-				ClosableIterator<Statement> it = patternToRDF2GoModel(
-						condition.getPatternString()).iterator();
+				ClosableIterator<Statement> it = patternToRDF2GoModel(condition.getPatternString()).iterator();
 				for (; it.hasNext();) {
 					Statement st = it.next();
-					String su = (st.getSubject() instanceof BlankNode) ? toCleanVariable(st
-							.getSubject().toString())
-							: st.getSubject().toSPARQL();
-					String ob = (st.getObject() instanceof BlankNode) ? toCleanVariable(st
-							.getObject().toString())
-							: st.getObject().toSPARQL();
-					queryStr = queryStr.concat(su + " "
-							+ st.getPredicate().toSPARQL() + " " + ob + " . ");
+					String su = (st.getSubject() instanceof BlankNode) ?
+							toCleanVariable(st.getSubject().toString()) :
+								st.getSubject().toSPARQL();
+					String ob = (st.getObject() instanceof BlankNode) ?
+							toCleanVariable(st.getObject().toString()) :
+								st.getObject().toSPARQL();
+					queryStr = queryStr.concat(su + " " + st.getPredicate().toSPARQL() + " " + ob + " . ");
 				}
 				it.close();
 			}
@@ -680,20 +572,17 @@ public class Catalogue {
 		queryStr = queryStr.concat("}");
 
 		// empty query = is satisfied
-		if (queryStr.equals("ASK {}"))
-			return true;
+		if (queryStr.equals("ASK {}")) return true;
 
 		for (Model m : models) {
 			satisfied = m.sparqlAsk(queryStr);
-			if (satisfied)
-				break;
+			if (satisfied) break;
 		}
 
 		return satisfied;
 	}
 
-	public Set<Model> createModels(Set<BuildingBlock> bbSet, boolean plugin,
-			boolean subsume) {
+	public Set<Model> createModels(Set<BuildingBlock> bbSet, boolean plugin, boolean subsume) {
 		Set<Model> models = new HashSet<Model>();
 		if (bbSet.isEmpty()) {
 			return models;
@@ -702,21 +591,15 @@ public class Catalogue {
 			if (r instanceof Precondition) {
 				Model m = RDF2Go.getModelFactory().createModel();
 				m.open();
-				for (Condition c : ((Precondition) r).getConditions()) {
-					if (c.isPositive())
-						m.addModel(patternToRDF2GoModel(c.getPatternString()));
-				}
+				for (Condition c : ((Precondition) r).getConditions())
+					if (c.isPositive()) m.addModel(patternToRDF2GoModel(c.getPatternString()));
 				models.add(m);
 			} else if (r instanceof Screen) {
 				Model m = RDF2Go.getModelFactory().createModel();
 				m.open();
-				for (List<Condition> postcondition : ((Screen) r)
-						.getPostconditions()) {
-					for (Condition c : postcondition) {
-						if (c.isPositive())
-							m.addModel(patternToRDF2GoModel(c
-									.getPatternString()));
-					}
+				for (List<Condition> postcondition : ((Screen) r).getPostconditions()) {
+					for (Condition c : postcondition)
+						if (c.isPositive()) m.addModel(patternToRDF2GoModel(c.getPatternString()));
 				}
 				models.add(m);
 			}
@@ -728,23 +611,16 @@ public class Catalogue {
 				if (bb instanceof Precondition) {
 					Model m = RDF2Go.getModelFactory().createModel();
 					m.open();
-					for (Condition c : ((Precondition) bb).getConditions()) {
-						if (c.isPositive())
-							m.addModel(patternToRDF2GoModel(c
-									.getPatternString()));
-					}
+					for (Condition c : ((Precondition) bb).getConditions())
+						if (c.isPositive()) m.addModel(patternToRDF2GoModel(c.getPatternString()));
 					m.addModel(model);
 					models.add(m);
 				} else if (bb instanceof Screen) {
 					Model m = RDF2Go.getModelFactory().createModel();
 					m.open();
-					for (List<Condition> postcondition : ((Screen) bb)
-							.getPostconditions()) {
-						for (Condition c : postcondition) {
-							if (c.isPositive())
-								m.addModel(patternToRDF2GoModel(c
-										.getPatternString()));
-						}
+					for (List<Condition> postcondition : ((Screen) bb).getPostconditions()) {
+						for (Condition c : postcondition)
+							if (c.isPositive()) m.addModel(patternToRDF2GoModel(c.getPatternString()));
 					}
 					m.addModel(model);
 					models.add(m);
@@ -764,8 +640,7 @@ public class Catalogue {
 	 * @return
 	 */
 	public boolean isConditionCompatible(Condition c1, Condition c2) {
-		if (c1 == null || c2 == null)
-			return false;
+		if (c1 == null || c2 == null) return false;
 		Model m1 = patternToRDF2GoModel(c1.getPatternString());
 		Model m2 = patternToRDF2GoModel(c2.getPatternString());
 		if (m1.size() == m2.size()) {
@@ -774,12 +649,12 @@ public class Catalogue {
 			ClosableIterator<Statement> it = m2.iterator();
 			for (; it.hasNext();) {
 				Statement st = it.next();
-				String su = (st.getSubject() instanceof BlankNode) ? toCleanVariable(st
-						.getSubject().toString())
-						: st.getSubject().toSPARQL();
-				String ob = (st.getObject() instanceof BlankNode) ? toCleanVariable(st
-						.getObject().toString())
-						: st.getObject().toSPARQL();
+				String su = (st.getSubject() instanceof BlankNode) ?
+						toCleanVariable(st.getSubject().toString()) :
+							st.getSubject().toSPARQL();
+				String ob = (st.getObject() instanceof BlankNode) ?
+						toCleanVariable(st.getObject().toString()) :
+							st.getObject().toSPARQL();
 				queryStr = queryStr.concat(su + " "
 						+ st.getPredicate().toSPARQL() + " " + ob + " . ");
 			}
@@ -799,8 +674,7 @@ public class Catalogue {
 	 * @param bbSet
 	 * @return
 	 */
-	public Set<BuildingBlock> filterReachableBuildingBlocks(
-			Set<BuildingBlock> bbSet) {
+	public Set<BuildingBlock> filterReachableBuildingBlocks(Set<BuildingBlock> bbSet) {
 		HashSet<BuildingBlock> results = new HashSet<BuildingBlock>();
 		HashSet<BuildingBlock> toCheck = new HashSet<BuildingBlock>();
 		for (BuildingBlock bb : bbSet) {
@@ -819,8 +693,7 @@ public class Catalogue {
 		return results;
 	}
 
-	private Set<BuildingBlock> filterReachableBuildingBlocks(
-			Set<BuildingBlock> reachables, Set<BuildingBlock> bbSet) {
+	protected Set<BuildingBlock> filterReachableBuildingBlocks(Set<BuildingBlock> reachables, Set<BuildingBlock> bbSet) {
 		HashSet<BuildingBlock> results = new HashSet<BuildingBlock>();
 		HashSet<BuildingBlock> toCheck = new HashSet<BuildingBlock>();
 		for (BuildingBlock bb : bbSet) {
@@ -849,27 +722,27 @@ public class Catalogue {
 		return results;
 	}
 
-	private String toCleanVariable(String name) {
+	protected String toCleanVariable(String name) {
 		return "?" + name.replaceAll("[^a-zA-Z0-9]", "");
 	}
 
-	private URI createClass(URI clazz) {
+	protected URI createClass(URI clazz) {
 		tripleStore.addStatement(null, clazz, RDF.type, RDFS.Class);
 		return clazz;
 	}
 
-	private URI createClass(URI clazz, URI subClassOf) {
+	protected URI createClass(URI clazz, URI subClassOf) {
 		tripleStore.addStatement(null, clazz, RDF.type, RDFS.Class);
 		tripleStore.addStatement(null, clazz, RDFS.subClassOf, subClassOf);
 		return clazz;
 	}
 
-	private URI saveModelToGraph(Model model) {
-		URI graphUri = tripleStore.getUniqueNamespace(serverURL, "/bb/", false);
+	protected URI saveModelToGraph(Model model) {
+		URI graphUri = tripleStore.getUniqueNamespace(configuration.getURI(environment, "serverURL"), "/bb/", false);
 		return saveModelToGraph(graphUri, model);
 	}
 
-	private URI saveModelToGraph(URI graphUri, Model model) {
+	protected URI saveModelToGraph(URI graphUri, Model model) {
 		tripleStore.addModel(model, graphUri);
 		return graphUri;
 	}
@@ -898,59 +771,59 @@ public class Catalogue {
 		if (tag.getMeans() != null)
 			tripleStore.addStatement(bnTag, CTAG.means, tag.getMeans());
 		for (String lang : tag.getLabels().keySet())
-			tripleStore.addStatement(bnTag, CTAG.label, tripleStore
-					.createLanguageTagLiteral(tag.getLabels().get(lang), lang));
+			tripleStore.addStatement(bnTag, CTAG.label, tripleStore.createLanguageTagLiteral(tag.getLabels().get(lang), lang));
 		if (tag.getTaggingDate() != null) {
-			tripleStore.addStatement(bnTag, CTAG.taggingDate, tripleStore
-					.createDatatypeLiteral(DateFormatter.formatDateISO8601(tag
-							.getTaggingDate()), XSD._date));
+			tripleStore.addStatement(bnTag, CTAG.taggingDate, 
+					tripleStore.createDatatypeLiteral(DateFormatter.formatDateISO8601(tag.getTaggingDate()), XSD._date));
 		} else { // no date provided, save the current date
 			Date currentDate = new Date();
 			tag.setTaggingDate(currentDate);
-			tripleStore.addStatement(bnTag, CTAG.taggingDate, tripleStore
-					.createDatatypeLiteral(DateFormatter
-							.formatDateISO8601(currentDate), XSD._date));
+			tripleStore.addStatement(bnTag, CTAG.taggingDate, 
+					tripleStore.createDatatypeLiteral(DateFormatter.formatDateISO8601(currentDate), XSD._date));
 		}
 	}
 
 	public URI createConceptURI(String name, String domain) {
-		return new URIImpl(serverURL + "/concepts/" + domain + "/" + name);
+		return new URIImpl(configuration.getURI(environment, "serverURL") + "/concepts/" + domain + "/" + name);
 	}
 
 	public boolean isConcept(URI concept) {
 		return tripleStore.isClass(concept);
 	}
 
-	public URI createURIforBuildingBlock(URI namespace, String bb, URI ofClass, String id) 
-	throws DuplicatedBuildingBlockException,
-			OntologyInvalidException {
+	public URI createURIforBuildingBlock(URL namespace, String bb, URI ofClass, String id) 
+	throws DuplicatedException, OntologyInvalidException {
 		URI bbUri = new URIImpl(namespace.toString() + "/" + bb + "/" + id);
 		if (containsBuildingBlock(bbUri))
-			throw new DuplicatedBuildingBlockException(bbUri + " already exists.");
+			throw new DuplicatedException(bbUri + " already exists.");
 		return bbUri;
 	}
 
-	private URI createURIforBuildingBlock(URI ofClass, String id)
-			throws DuplicatedBuildingBlockException, OntologyInvalidException {
+	protected URI createURIforBuildingBlock(URI ofClass, String id)
+	throws DuplicatedException, OntologyInvalidException {
 		if (ofClass.equals(FGO.ScreenFlow)) {
-			return createURIforBuildingBlock(serverURL, "screenflows", ofClass, id);
+			return createURIforBuildingBlock(getServerURL(), "screenflows", ofClass, id);
 		} else if (ofClass.equals(FGO.Screen)) {
-			return createURIforBuildingBlock(serverURL, "screens", ofClass, id);
+			return createURIforBuildingBlock(getServerURL(), "screens", ofClass, id);
 		} else if (ofClass.equals(FGO.Form)) {
-			return createURIforBuildingBlock(serverURL, "forms", ofClass, id);
+			return createURIforBuildingBlock(getServerURL(), "forms", ofClass, id);
 		} else if (ofClass.equals(FGO.Operator)) {
-			return createURIforBuildingBlock(serverURL, "operators", ofClass, id);
+			return createURIforBuildingBlock(getServerURL(), "operators", ofClass, id);
 		} else if (ofClass.equals(FGO.BackendService)) {
-			return createURIforBuildingBlock(serverURL, "services", ofClass, id);
+			return createURIforBuildingBlock(getServerURL(), "services", ofClass, id);
 		} else if (ofClass.equals(FGO.Precondition)) {
-			return createURIforBuildingBlock(serverURL, "preconditions", ofClass, id);
+			return createURIforBuildingBlock(getServerURL(), "preconditions", ofClass, id);
 		} else if (ofClass.equals(FGO.Postcondition)) {
-			return createURIforBuildingBlock(serverURL, "postconditions", ofClass, id);
+			return createURIforBuildingBlock(getServerURL(), "postconditions", ofClass, id);
 		}
 		return null;
 	}
 
-	private Model getModelForBuildingBlock(URI uri) {
+	protected Model getModelForSubject(Resource subject) {
+		return tripleStore.getModel(subject.asURI());
+	}
+	
+	protected Model getModelForBuildingBlock(URI uri) {
 		ClosableIterator<Statement> it = tripleStore.findStatements(uri, new URIImpl("http://replace.for.real.one"), Variable.ANY);
 		URI graphUri = null;
 		if (it.hasNext())
@@ -966,7 +839,7 @@ public class Catalogue {
 	 * @throws NotFoundException
 	 */
 	// TODO needs to remove statements created for the patterns
-	private void removeBuildingBlock(URI bbUri) throws NotFoundException {
+	protected void removeBuildingBlock(URI bbUri) throws NotFoundException {
 		if (!containsBuildingBlock(bbUri))
 			throw new NotFoundException();
 		URI graphUri = getGraphForBuildingBlock(bbUri);
@@ -974,23 +847,22 @@ public class Catalogue {
 			throw new NotFoundException();
 		removeConditionsStatements(graphUri);
 		tripleStore.removeModel(graphUri);
-		logger.info(bbUri+" removed.");
+		if(log.isInfoEnabled()) log.info(bbUri+" removed.");
 	}
 
-	private URI getGraphForBuildingBlock(URI bbUri) {
+	protected URI getGraphForBuildingBlock(URI bbUri) {
 		ClosableIterator<Statement> it = tripleStore.findStatements(bbUri, new URIImpl("http://replace.for.real.one"), Variable.ANY);
 		if (it.hasNext()) return it.next().getObject().asURI();
 		return null;
 	}
 	
 	public void addScreenFlow(ScreenFlow sf)
-			throws DuplicatedBuildingBlockException, OntologyInvalidException,
-			OntologyReadonlyException, NotFoundException,
-			BuildingBlockException {
+	throws DuplicatedException, OntologyInvalidException,
+			OntologyReadonlyException, NotFoundException, BuildingBlockException {
 		URI sfUri = sf.getUri();
 		if (sfUri != null) {
 			if (containsBuildingBlock(sf))
-				throw new DuplicatedBuildingBlockException(sf.getUri() + " already exists.");
+				throw new DuplicatedException(sf.getUri() + " already exists.");
 		} else {
 			sfUri = createURIforBuildingBlock(FGO.ScreenFlow, sf.getId());
 			sf.setUri(sfUri);
@@ -1002,27 +874,25 @@ public class Catalogue {
 		if (!saveScreenFlow(sf)) {
 			throw new BuildingBlockException("An error ocurred while saving the screen-flow. Please, ensure the screen-flow is well defined.");
 		}
-		logger.info("Screenflow " + sfUri + " added.");
+		if(log.isInfoEnabled()) log.info("Screenflow " + sfUri + " added.");
 	}
 
-	private boolean saveScreenFlow(ScreenFlow sf)
-			throws OntologyReadonlyException, NotFoundException {
+	protected boolean saveScreenFlow(ScreenFlow sf)
+	throws OntologyReadonlyException, NotFoundException {
 		URI sfUri = sf.getUri();
 		try {
 			Model model = sf.toRDF2GoModel();
 			URI graphUri = saveModelToGraph(model);
 			tripleStore.addStatement(graphUri, sfUri, new URIImpl("http://replace.for.real.one"), graphUri);
 			generateConditionsStatements(model, graphUri);
-			if (IMPORT_ONTOLOGIES)
-				importMissingOntologies(model);
 			model.close();
 			return true;
 		} catch (Exception e) {
-			logger.error("Error while saving screen " + sfUri, e);
+			log.error("Error while saving screen " + sfUri, e);
 			try {
 				removeScreenFlow(sfUri);
 			} catch (NotFoundException nfe) {
-				logger.error("Screen-flow " + sfUri + " does not exist.", nfe);
+				log.error("Screen-flow " + sfUri + " does not exist.", nfe);
 			}
 		}
 		return false;
@@ -1031,13 +901,13 @@ public class Catalogue {
 	public void updateScreenFlow(ScreenFlow screenflow)
 			throws NotFoundException, OntologyReadonlyException,
 			BuildingBlockException {
-		logger.info("Updating screenflow " + screenflow.getUri() + "...");
+		if(log.isInfoEnabled()) log.info("Updating screenflow " + screenflow.getUri() + "...");
 		removeScreenFlow(screenflow.getUri());
 		// save new content with the same URI
 		if (!saveScreenFlow(screenflow)) {
 			throw new BuildingBlockException("An error ocurred while saving the screen-flow. Please, ensure the screen-flow is well defined.");
 		}
-		logger.info("Screenflow " + screenflow.getUri() + " updated.");
+		if(log.isInfoEnabled()) log.info("Screenflow " + screenflow.getUri() + " updated.");
 	}
 
 	/**
@@ -1048,7 +918,8 @@ public class Catalogue {
 	 *            the URI of the screen flow to be deleted
 	 * @throws NotFoundException
 	 */
-	public void removeScreenFlow(URI sfUri) throws NotFoundException {
+	public void removeScreenFlow(URI sfUri)
+	throws NotFoundException {
 		removeBuildingBlock(sfUri);
 	}
 
@@ -1056,18 +927,17 @@ public class Catalogue {
 	 * Creates a new Screen into the catalogue
 	 * 
 	 * @param screen
-	 * @throws DuplicatedBuildingBlockException
+	 * @throws DuplicatedException
 	 * @throws OntologyInvalidException
 	 * @throws BuildingBlockException
 	 */
 	public void addScreen(Screen screen)
-			throws DuplicatedBuildingBlockException, OntologyInvalidException,
-			BuildingBlockException {
+	throws DuplicatedException, OntologyInvalidException, BuildingBlockException {
 		URI screenUri = null;
 		if (screen.getUri() != null) {
 			screenUri = screen.getUri();
 			if (containsBuildingBlock(screen))
-				throw new DuplicatedBuildingBlockException(screenUri + " already exists.");
+				throw new DuplicatedException(screenUri + " already exists.");
 		} else {
 			screenUri = createURIforBuildingBlock(FGO.Screen, screen.getId());
 			screen.setUri(screenUri);
@@ -1078,8 +948,7 @@ public class Catalogue {
 		// persists the screen
 		if (saveScreen(screen)) {
 			// create plans for the screen
-			if (planner != null)
-				planner.add(screen);
+			if (planner != null) planner.add(screen);
 		} else {
 			throw new BuildingBlockException("An error ocurred while saving the screen. Please, ensure the screen is well defined.");
 		}
@@ -1090,24 +959,21 @@ public class Catalogue {
 	 * well-formed unique URI To be invoked by addScreen and updateScreen
 	 * methods
 	 */
-	private boolean saveScreen(Screen screen) {
+	protected boolean saveScreen(Screen screen) {
 		URI sUri = screen.getUri();
 		try {
 			Model model = screen.toRDF2GoModel();
 			URI graphUri = saveModelToGraph(model);
 			tripleStore.addStatement(graphUri, sUri, new URIImpl("http://replace.for.real.one"), graphUri);
 			generateConditionsStatements(model, graphUri);
-			if (IMPORT_ONTOLOGIES)
-				importMissingOntologies(model);
 			model.close();
 			return true;
 		} catch (Exception e) {
-			e.printStackTrace();
-			logger.error("Error while saving screen " + sUri, e);
+			log.error(e.toString(), e);
 			try {
 				removeScreen(sUri);
 			} catch (NotFoundException nfe) {
-				logger.error("Screen " + sUri + " does not exist.", nfe);
+				log.error(nfe.toString(), nfe);
 			}
 		}
 		return false;
@@ -1116,16 +982,15 @@ public class Catalogue {
 	public void updateScreen(Screen screen) throws NotFoundException,
 			OntologyReadonlyException, RepositoryException,
 			OntologyInvalidException, BuildingBlockException {
-		logger.info("Updating screen " + screen.getUri() + "...");
+		if(log.isInfoEnabled()) log.info("Updating screen " + screen.getUri() + "...");
 		Screen oldScreen = getScreen(screen.getUri());
 		// remove screen from the catalogue
 		removeScreen(screen.getUri());
 		// save new content with the same URI
 		if (saveScreen(screen)) {
 			// calculate new plans if necessary
-			if (planner != null)
-				planner.update(screen, oldScreen);
-			logger.info("Screen " + screen.getUri() + " updated.");
+			if (planner != null) planner.update(screen, oldScreen);
+			if(log.isInfoEnabled()) log.info("Screen " + screen.getUri() + " updated.");
 		} else {
 			throw new BuildingBlockException("An error ocurred while saving the screen. Please, ensure the screen is well defined.");
 		}
@@ -1134,18 +999,16 @@ public class Catalogue {
 	public void removeScreen(URI screenUri) throws NotFoundException {
 		removeBuildingBlock(screenUri);
 		// remove the screen from the planner
-		if (planner != null)
-			planner.remove(screenUri);
+		if (planner != null) planner.remove(screenUri);
 	}
 
 	public void addPreOrPost(PreOrPost se)
-			throws DuplicatedBuildingBlockException, OntologyInvalidException,
-			BuildingBlockException {
+	throws DuplicatedException, OntologyInvalidException, BuildingBlockException {
 		URI seUri = null;
 		if (se.getUri() != null) {
 			seUri = se.getUri();
 			if (containsBuildingBlock(se))
-				throw new DuplicatedBuildingBlockException(seUri + " already exists.");
+				throw new DuplicatedException(seUri + " already exists.");
 		} else {
 			if (se instanceof Precondition)
 				seUri = createURIforBuildingBlock(FGO.Precondition, se.getId());
@@ -1162,35 +1025,33 @@ public class Catalogue {
 		}
 	}
 
-	private boolean savePreOrPost(PreOrPost preOrPost) {
+	protected boolean savePreOrPost(PreOrPost preOrPost) {
 		URI uri = preOrPost.getUri();
 		try {
 			Model model = preOrPost.toRDF2GoModel();
 			URI graphUri = saveModelToGraph(model);
 			tripleStore.addStatement(graphUri, uri, new URIImpl("http://replace.for.real.one"), graphUri);
 			generateConditionsStatements(model, graphUri);
-			if (IMPORT_ONTOLOGIES)
-				importMissingOntologies(model);
 			model.close();
 			return true;
 		} catch (Exception e) {
-			logger.error("Error while saving pre/postcondition " + uri, e);
+			log.error("Error while saving pre/postcondition " + uri, e);
 			try {
 				removeScreen(uri);
 			} catch (NotFoundException nfe) {
-				logger.error("Pre/postcondition " + uri + " does not exist.", nfe);
+				log.error("Pre/postcondition " + uri + " does not exist.", nfe);
 			}
 		}
 		return false;
 	}
 
-	public void updatePreOrPost(PreOrPost se) throws NotFoundException,
-			BuildingBlockException {
-		logger.info("Updating pre/postcondition " + se.getUri() + "...");
+	public void updatePreOrPost(PreOrPost se)
+	throws NotFoundException, BuildingBlockException {
+		if(log.isInfoEnabled()) log.info("Updating pre/postcondition " + se.getUri() + "...");
 		removePreOrPost(se.getUri());
 		// save new content with the same URI
 		if (savePreOrPost(se)) {
-			logger.info(se.getUri() + " updated.");
+			if(log.isInfoEnabled()) log.info(se.getUri() + " updated.");
 		} else {
 			throw new BuildingBlockException("An error ocurred while saving the pre/postcondition. Please, ensure the screen is well defined.");
 		}
@@ -1200,8 +1061,8 @@ public class Catalogue {
 		removeBuildingBlock(uri);
 	}
 
-	private void addScreenComponent(URI type, ScreenComponent sc)
-			throws DuplicatedBuildingBlockException, OntologyInvalidException,
+	protected void addScreenComponent(URI type, ScreenComponent sc)
+	throws DuplicatedException, OntologyInvalidException,
 			InvalidBuildingBlockTypeException, BuildingBlockException {
 		if (!type.equals(FGO.Form)
 				&& !type.equals(FGO.Operator)
@@ -1212,7 +1073,7 @@ public class Catalogue {
 		if (sc.getUri() != null) {
 			scUri = sc.getUri();
 			if (containsBuildingBlock(sc))
-				throw new DuplicatedBuildingBlockException(scUri + " already exists.");
+				throw new DuplicatedException(scUri + " already exists.");
 		} else {
 			scUri = createURIforBuildingBlock(type, sc.getId());
 			sc.setUri(scUri);
@@ -1226,45 +1087,48 @@ public class Catalogue {
 		}
 	}
 
-	private boolean saveScreenComponent(ScreenComponent sc) {
+	// TODO methods "save" should throw the exception, so we have more details to show in the servlet when an error occurs
+	protected boolean saveScreenComponent(ScreenComponent sc) {
 		URI scUri = sc.getUri();
 		try {
 			Model model = sc.toRDF2GoModel();
+//			ClosableIterator<Statement> it = model.findStatements(Variable.ANY, Variable.ANY, Variable.ANY);
+//			for (;it.hasNext();) {
+//				System.out.println(it.next());
+//			}
 			URI graphUri = saveModelToGraph(model);
 			tripleStore.addStatement(graphUri, scUri, new URIImpl("http://replace.for.real.one"), graphUri);
 			generateConditionsStatements(model, graphUri);
-			if (IMPORT_ONTOLOGIES)
-				importMissingOntologies(model);
 			model.close();
 			return true;
 		} catch (Exception e) {
-			logger.error("Error while saving screen component " + scUri, e);
+			e.printStackTrace();
+			log.error("Error while saving screen component " + scUri, e);
 			try {
 				removeBuildingBlock(scUri);
 			} catch (NotFoundException nfe) {
-				logger.error("Screen component " + scUri + " does not exist.",
-						nfe);
+				log.error("Screen component " + scUri + " does not exist.", nfe);
 			}
 		}
 		return false;
 	}
 
-	private void updateScreenComponent(ScreenComponent sc)
+	protected void updateScreenComponent(ScreenComponent sc)
 			throws NotFoundException, BuildingBlockException {
-		logger.info("Updating screen component " + sc.getUri() + "...");
+		if(log.isInfoEnabled()) log.info("Updating screen component " + sc.getUri() + "...");
 		// remove old screen component from the catalogue
 		removeScreenComponent(sc.getUri());
 		// save new content with the same URI
 		if (!saveScreenComponent(sc))
 			throw new BuildingBlockException("An error ocurred while saving the screen component. Please, ensure the component is well defined.");
-		logger.info("Screen component " + sc.getUri() + " updated.");
+		if(log.isInfoEnabled()) log.info("Screen component " + sc.getUri() + " updated.");
 	}
 
-	private void removeScreenComponent(URI scUri) throws NotFoundException {
+	protected void removeScreenComponent(URI scUri) throws NotFoundException {
 		URI type = getType(scUri);
 		if (type == null) {
 			removeBuildingBlock(scUri);
-			logger.warn("Type is unknown: " + scUri + " cannot be removed.");
+			log.warn("Type is unknown: " + scUri + " cannot be removed.");
 		} else {
 			if (type.equals(FGO.Form))
 				removeForm(scUri);
@@ -1274,28 +1138,29 @@ public class Catalogue {
 				removeBackendService(scUri);
 			else {
 				removeBuildingBlock(scUri);
-				logger.warn(scUri + " is not of type: Form, Operator or BackendService. Removing as generic building block.");
+				log.warn(scUri + " is not of type: Form, Operator or BackendService. Removing as generic building block.");
 			}
 		}
 	}
 
-	public void addForm(Form fe) throws DuplicatedBuildingBlockException,
-			OntologyInvalidException, InvalidBuildingBlockTypeException,
-			BuildingBlockException {
+	public void addForm(Form fe)
+	throws DuplicatedException, OntologyInvalidException,
+			InvalidBuildingBlockTypeException, BuildingBlockException {
 		addScreenComponent(FGO.Form, fe);
 	}
 
-	public void updateForm(Form fe) throws NotFoundException,
-			BuildingBlockException {
+	public void updateForm(Form fe)
+	throws NotFoundException, BuildingBlockException {
 		updateScreenComponent(fe);
 	}
 
-	public void removeForm(URI formUri) throws NotFoundException {
+	public void removeForm(URI formUri)
+	throws NotFoundException {
 		removeBuildingBlock(formUri);
 	}
 
 	public void addOperator(Operator op)
-			throws DuplicatedBuildingBlockException, OntologyInvalidException,
+	throws DuplicatedException, OntologyInvalidException,
 			InvalidBuildingBlockTypeException, BuildingBlockException {
 		addScreenComponent(FGO.Operator, op);
 	}
@@ -1310,17 +1175,18 @@ public class Catalogue {
 	}
 
 	public void addBackendService(BackendService bs)
-			throws DuplicatedBuildingBlockException, OntologyInvalidException,
+	throws DuplicatedException, OntologyInvalidException,
 			InvalidBuildingBlockTypeException, BuildingBlockException {
 		addScreenComponent(FGO.BackendService, bs);
 	}
 
 	public void updateBackendService(BackendService bs)
-			throws NotFoundException, BuildingBlockException {
+	throws NotFoundException, BuildingBlockException {
 		updateScreenComponent(bs);
 	}
 
-	public void removeBackendService(URI bsUri) throws NotFoundException {
+	public void removeBackendService(URI bsUri)
+	throws NotFoundException {
 		removeBuildingBlock(bsUri);
 	}
 
@@ -1331,7 +1197,7 @@ public class Catalogue {
 			try {
 				results.add(getScreenFlow(it.next().getSubject().asURI()));
 			} catch (NotFoundException e) {
-				logger.error(e.getMessage(), e);
+				log.error(e.getMessage(), e);
 			}
 		it.close();
 		return results;
@@ -1344,7 +1210,7 @@ public class Catalogue {
 			try {
 				results.add(getScreen(it.next().getSubject().asURI()));
 			} catch (NotFoundException e) {
-				logger.error(e.getMessage(), e);
+				log.error(e.getMessage(), e);
 			}
 		}
 		it.close();
@@ -1358,7 +1224,7 @@ public class Catalogue {
 			try {
 				results.add(getForm(it.next().getSubject().asURI()));
 			} catch (NotFoundException e) {
-				logger.error(e.getMessage(), e);
+				log.error(e.getMessage(), e);
 			}
 		}
 		it.close();
@@ -1372,7 +1238,7 @@ public class Catalogue {
 			try {
 				results.add(getOperator(it.next().getSubject().asURI()));
 			} catch (NotFoundException e) {
-				logger.error(e.getMessage(), e);
+				log.error(e.getMessage(), e);
 			}
 		}
 		it.close();
@@ -1386,7 +1252,7 @@ public class Catalogue {
 			try {
 				results.add(getBackendService(it.next().getSubject().asURI()));
 			} catch (NotFoundException e) {
-				logger.error(e.getMessage(), e);
+				log.error(e.getMessage(), e);
 			}
 		}
 		it.close();
@@ -1400,7 +1266,7 @@ public class Catalogue {
 			try {
 				results.add(getPrecondition(it.next().getSubject().asURI()));
 			} catch (NotFoundException e) {
-				logger.error(e.getMessage(), e);
+				log.error(e.getMessage(), e);
 			}
 		}
 		it.close();
@@ -1415,7 +1281,7 @@ public class Catalogue {
 			try {
 				results.add(getPostcondition(it.next().getSubject().asURI()));
 			} catch (NotFoundException e) {
-				logger.error(e.getMessage(), e);
+				log.error(e.getMessage(), e);
 			}
 		}
 		it.close();
@@ -1525,7 +1391,7 @@ public class Catalogue {
 		return (Postcondition) getPreOrPost(uri);
 	}
 
-	private PreOrPost getPreOrPost(URI uri) throws NotFoundException {
+	protected PreOrPost getPreOrPost(URI uri) throws NotFoundException {
 		if (!containsBuildingBlock(uri))
 			throw new NotFoundException();
 		return BuildingBlockRDF2GoBuilder.buildPreOrPost(getModelForBuildingBlock(uri), uri);
@@ -1562,22 +1428,25 @@ public class Catalogue {
 		return BuildingBlockRDF2GoBuilder.buildBackendService(getModelForBuildingBlock(uri));
 	}
 
-	private void generateConditionsStatements(Model model, URI graphUri) {
+	protected void generateConditionsStatements(Model model, URI graphUri) {
 		ClosableIterator<Statement> it = model.iterator();
 		for (; it.hasNext();) {
 			Statement stmt = it.next();
 			if (stmt.getPredicate().equals(FGO.hasPatternString)
 					&& isConditionPositive(model, stmt.getSubject().asBlankNode())) {
-				URI pUri = tripleStore.getCleanUniqueURI(serverURL, "/pattern/", false);
+				URI pUri = tripleStore.createUniqueUriWithName(configuration.getURI(environment, "serverURL"), "/pattern/");
 				String pattern = stmt.getObject().asDatatypeLiteral().getValue();
+				Model patternModel = patternToRDF2GoModel(pattern);
 				tripleStore.addStatement(graphUri, stmt.getSubject(), FGO.hasPattern, pUri);
-				tripleStore.addModel(patternToRDF2GoModel(pattern), pUri);
+				tripleStore.addModel(patternModel, pUri);
+				if (configuration.getBoolean("import-ontologies", this.environment)) 
+					importMissingOntologies(patternModel);
 			}
 		}
 		it.close();
 	}
 
-	private boolean isConditionPositive(Model model, BlankNode cNode) {
+	protected boolean isConditionPositive(Model model, BlankNode cNode) {
 		boolean isPositive = false;
 		ClosableIterator<Statement> it = model.findStatements(cNode, FGO.isPositive, Variable.ANY);
 		if (it.hasNext()) {
@@ -1623,7 +1492,7 @@ public class Catalogue {
 		return model;
 	}
 
-	private void removeConditionsStatements(URI graphUri) {
+	protected void removeConditionsStatements(URI graphUri) {
 		ClosableIterator<Statement> it = tripleStore.findStatements(graphUri, Variable.ANY, FGO.hasPattern, Variable.ANY);
 		for (; it.hasNext();) {
 			Statement stmt = it.next();
@@ -1633,12 +1502,11 @@ public class Catalogue {
 	}
 	
 	public Concept getConcept(URI uri) {
-		Concept concept = FastModelFactory.createConcept();
+		Concept concept = BuildingBlockFactory.createConcept();
 		concept.setUri(uri);
 
 		// fill the information about the concept
-		ClosableIterator<Statement> cIt = tripleStore.findStatements(uri,
-				Variable.ANY, Variable.ANY);
+		ClosableIterator<Statement> cIt = tripleStore.findStatements(uri, Variable.ANY, Variable.ANY);
 		if (!cIt.hasNext()) // the resource does not exist
 			return null;
 		for (; cIt.hasNext();) {
@@ -1685,8 +1553,8 @@ public class Catalogue {
 		return concept;
 	}
 
-	private Attribute getAttribute(URI uri) {
-		Attribute att = FastModelFactory.createAttribute();
+	protected Property getAttribute(URI uri) {
+		Property att = BuildingBlockFactory.createAttribute();
 		att.setUri(uri);
 
 		ClosableIterator<Statement> cIt = tripleStore.findStatements(uri, Variable.ANY, Variable.ANY);
@@ -1707,12 +1575,12 @@ public class Catalogue {
 		return att;
 	}
 
-	public List<Attribute> attributesFor(Concept concept) {
-		ArrayList<Attribute> attList = new ArrayList<Attribute>();
+	public List<Property> attributesFor(Concept concept) {
+		ArrayList<Property> attList = new ArrayList<Property>();
 		ClosableIterator<Statement> cIt = tripleStore.findStatements(Variable.ANY, RDFS.domain, concept.getUri());
 		for (; cIt.hasNext();) {
 			Statement st = cIt.next();
-			Attribute att = getAttribute(st.getSubject().asURI());
+			Property att = getAttribute(st.getSubject().asURI());
 			att.setConcept(concept);
 			attList.add(att);
 		}
@@ -1721,17 +1589,17 @@ public class Catalogue {
 	}
 
 	public void addConcept(Concept concept)
-			throws DuplicatedBuildingBlockException, BuildingBlockException {
+			throws DuplicatedException, BuildingBlockException {
 		URI cUri = concept.getUri();
 		if (containsConcept(cUri))
-			throw new DuplicatedBuildingBlockException(cUri + " already exists.");
+			throw new DuplicatedException(cUri + " already exists.");
 		// persists the concept
 		if (!saveConcept(concept)) {
 			throw new BuildingBlockException("An error ocurred while saving the concept. Please, ensure the concept is well defined.");
 		}
 	}
 
-	private boolean saveConcept(Concept concept) {
+	protected boolean saveConcept(Concept concept) {
 		URI cUri = concept.getUri();
 		try {
 			Model model = concept.toRDF2GoModel();
@@ -1740,23 +1608,22 @@ public class Catalogue {
 			model.close();
 			return true;
 		} catch (Exception e) {
-			logger.error("Error while saving concept " + cUri, e);
+			log.error("Error while saving concept " + cUri, e);
 			try {
 				removeScreen(cUri);
 			} catch (NotFoundException nfe) {
-				logger.error("Concept " + cUri + " does not exist.", nfe);
+				log.error("Concept " + cUri + " does not exist.", nfe);
 			}
 		}
 		return false;
 	}
 
-	public void updateConcept(Concept concept) throws NotFoundException,
-			BuildingBlockException {
-		logger.info("Updating concept " + concept.getUri() + "...");
+	public void updateConcept(Concept concept) throws NotFoundException, BuildingBlockException {
+		if(log.isInfoEnabled()) log.info("Updating concept " + concept.getUri() + "...");
 		removeConcept(concept.getUri());
 		// save new content with the same URI
 		if (saveConcept(concept)) {
-			logger.info("Concept " + concept.getUri() + " updated.");
+			if(log.isInfoEnabled()) log.info("Concept " + concept.getUri() + " updated.");
 		} else {
 			throw new BuildingBlockException("An error ocurred while saving the concept. Please, ensure the concept is well defined.");
 		}
@@ -1788,21 +1655,94 @@ public class Catalogue {
 		return planList;
 	}
 
-	public boolean importMissingOntologies(Model model) {
-		boolean imported = false;
-		// TODO ClosableIterator<Statement> it = model.iterator();
-		// for (; it.hasNext(); ) {
-		// Statement stmt = it.next();
-		// if (stmt.getPredicate().equals(FGO.hasPatternString)) {
-		// String pattern = stmt.getObject().asDatatypeLiteral().getValue();
-		// Model pModel = patternToRDF2GoModel(pattern);
-		// importMissingOntology()
-		// }
-		// }
-		// it.close();
-		return imported;
+	/**
+	 * Says whether a given object is an URI
+	 * @param o the object to be checked
+	 * @return true if the object is an URI
+	 */
+	public boolean isURI(Object o) {
+		return o instanceof URI;
 	}
-
+	
+	/**
+	 * Imports into the catalogue any ontology which is being
+	 * used in the given model, in the form of a concept or a
+	 * property for example.
+	 * Ex: if the model contains the URI http://xmlns.com/foaf/0.1/Person,
+	 * the FOAF (http://xmlns.com/foaf/0.1) ontology will be imported.
+	 * @param model set of triples used to check for URIs
+	 */
+	protected void importMissingOntologies(Model model) {
+		ClosableIterator<Statement> it = model.iterator();
+		for (; it.hasNext(); ) {
+			Statement stmt = it.next();
+			Resource subject = stmt.getSubject();
+			URI predicate = stmt.getPredicate();
+			Node object = stmt.getObject();
+			if (isURI(subject)) importIfMissing(subject.asURI());
+			importIfMissing(predicate);
+			if (isURI(object)) importIfMissing(object.asURI());
+		}
+		it.close();
+	}
+	
+	/**
+	 * Figures out the ontology URI for a given concept or 
+	 * property URI, then it fetches and store the ontology
+	 * in the catalogue.
+	 * @param uri
+	 */
+	protected void importIfMissing(URI uri) {
+		OntologyFinder finder = new SindiceOntologyFinder();
+		for (URI ontUri : ontologyManager.list())
+			if (ontologyManager.isDefinedBy(uri, ontUri)) return;
+		
+		URI oUri = finder.find(uri);
+		if (oUri != null) {
+			Ontology ontology = OntologyFetcher.fetch(MiscUtil.RDF2GoURItoURL(oUri));
+			if (ontology != null) addOntology(ontology);
+		}
+	}
+	
+	public Sample getSample(URI uri) {
+		return SampleRDF2GoBuilder.buildSample(getModelForSubject(uri));
+	}
+	
+	public Sample addSample(Sample sample) {
+		URI uri = tripleStore.createUniqueUriWithName(MiscUtil.URLtoRDF2GoURI(getServerURL()), "/samples/");
+		sample.setUri(uri);
+		return saveSample(sample) ? sample : null;
+	}
+	
+	protected boolean saveSample(Sample sample) {
+		URI uri = sample.getUri();
+		try {
+			Model model = sample.toRDF2GoModel();
+			saveModelToGraph(uri, model);
+			model.close();
+			return true;
+		} catch (Exception e) {
+			log.error(e.toString(), e);
+			try {
+				removeSample(uri);
+			} catch (NotFoundException nfe) {
+				log.error(nfe.toString(), nfe);
+			}
+		}
+		return false;
+	}
+	
+	public void updateSample(Sample sample) throws BuildingBlockException, NotFoundException {
+		removeSample(sample.getUri());
+		if (!saveSample(sample)) {
+			throw new BuildingBlockException("An error ocurred while saving the sample. Please, ensure the sample is well defined.");
+		}
+	}
+	
+	public void removeSample(URI uri) throws NotFoundException {
+		tripleStore.removeResource(uri);
+	}
+	
 	// TODO only for debug purposes
 	public TripleStore getTripleStore() {
 		return tripleStore;
@@ -1819,12 +1759,10 @@ public class Catalogue {
 
 	// TODO only for debug purposes
 	public void printStatements() {
-		ClosableIterator<Statement> it = tripleStore.findStatements(
-				Variable.ANY, Variable.ANY, Variable.ANY);
+		ClosableIterator<Statement> it = tripleStore.findStatements(Variable.ANY, Variable.ANY, Variable.ANY);
 		for (; it.hasNext();) {
 			Statement st = it.next();
-			System.out.println(st.getContext() + " - " + st.getSubject()
-					+ " - " + st.getPredicate() + " - " + st.getObject());
+			System.out.println(st.getContext() + " - " + st.getSubject()+ " - " + st.getPredicate() + " - " + st.getObject());
 		}
 	}
 

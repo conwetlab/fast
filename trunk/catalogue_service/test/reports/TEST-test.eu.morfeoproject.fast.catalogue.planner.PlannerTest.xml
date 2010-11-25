@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<testsuite errors="0" failures="0" hostname="ismriv-laptop" name="test.eu.morfeoproject.fast.catalogue.planner.PlannerTest" tests="1" time="4.413" timestamp="2010-09-16T11:33:42">
+<testsuite errors="0" failures="0" hostname="ismriv-laptop" name="test.eu.morfeoproject.fast.catalogue.planner.PlannerTest" tests="1" time="5.507" timestamp="2010-09-27T17:50:03">
   <properties>
     <property name="java.vendor" value="Sun Microsystems Inc." />
     <property name="sun.java.launcher" value="SUN_STANDARD" />
@@ -76,7 +76,67 @@
     <property name="java.specification.version" value="1.6" />
     <property name="src.dir" value="/home/ismriv/eclipse-workspace/FASTCatalogue/src" />
   </properties>
-  <testcase classname="test.eu.morfeoproject.fast.catalogue.planner.PlannerTest" name="runPlanner" time="4.171" />
-  <system-out><![CDATA[]]></system-out>
+  <testcase classname="test.eu.morfeoproject.fast.catalogue.planner.PlannerTest" name="runPlanner" time="5.255" />
+  <system-out><![CDATA[SELECT DISTINCT ?bb 
+WHERE {
+{ ?bb <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://purl.oclc.org/fast/ontology/gadget#Screen> . FILTER (?bb != <http://localhost:9000/FASTCatalogue/screens/7>) . {{ ?bb <http://purl.oclc.org/fast/ontology/gadget#hasPostCondition> ?b .  ?b ?li ?c .  ?c <http://purl.oclc.org/fast/ontology/gadget#hasPattern> ?p . GRAPH ?p {?30203fcc12b5450dfa37ff9 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://aws.amazon.com/AWSECommerceService#PurchaseURL> . } } }
+} }
+OFFSET 0
+SELECT DISTINCT ?bb 
+WHERE {
+{ ?bb <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://purl.oclc.org/fast/ontology/gadget#Screen> . FILTER (?bb != <http://localhost:9000/FASTCatalogue/screens/4>) . {{ ?bb <http://purl.oclc.org/fast/ontology/gadget#hasPreCondition> ?b .  ?b ?li ?c .  ?c <http://purl.oclc.org/fast/ontology/gadget#hasPattern> ?p . GRAPH ?p {?30203fcc12b5450dfa37ff1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://aws.amazon.com/AWSECommerceService#SearchCriteria> . } } }
+} }
+OFFSET 0
+SELECT DISTINCT ?bb 
+WHERE {
+{ ?bb <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://purl.oclc.org/fast/ontology/gadget#Screen> . FILTER (?bb != <http://localhost:9000/FASTCatalogue/screens/1>) . {{ ?bb <http://purl.oclc.org/fast/ontology/gadget#hasPreCondition> ?b .  ?b ?li ?c .  ?c <http://purl.oclc.org/fast/ontology/gadget#hasPattern> ?p . GRAPH ?p {?30203fcc12b5450dfa37fe6 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://aws.amazon.com/AWSECommerceService#Item> . } } }
+} }
+OFFSET 0
+SELECT DISTINCT ?bb 
+WHERE {
+{ ?bb <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://purl.oclc.org/fast/ontology/gadget#Screen> . FILTER (?bb != <http://localhost:9000/FASTCatalogue/screens/1>) . {{ ?bb <http://purl.oclc.org/fast/ontology/gadget#hasPostCondition> ?b .  ?b ?li ?c .  ?c <http://purl.oclc.org/fast/ontology/gadget#hasPattern> ?p . GRAPH ?p {?30203fcc12b5450dfa37fe4 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://aws.amazon.com/AWSECommerceService#SearchCriteria> . } } }
+} }
+OFFSET 0
+SELECT DISTINCT ?bb 
+WHERE {
+{ ?bb <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://purl.oclc.org/fast/ontology/gadget#Screen> . FILTER (?bb != <http://localhost:9000/FASTCatalogue/screens/5>) . {{ ?bb <http://purl.oclc.org/fast/ontology/gadget#hasPreCondition> ?b .  ?b ?li ?c .  ?c <http://purl.oclc.org/fast/ontology/gadget#hasPattern> ?p . GRAPH ?p {?30203fcc12b5450dfa37fd8 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://aws.amazon.com/AWSECommerceService#ShoppingCart> . } } }
+} }
+OFFSET 0
+SELECT DISTINCT ?bb 
+WHERE {
+{ ?bb <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://purl.oclc.org/fast/ontology/gadget#Screen> . FILTER (?bb != <http://localhost:9000/FASTCatalogue/screens/5>) . {{ ?bb <http://purl.oclc.org/fast/ontology/gadget#hasPostCondition> ?b .  ?b ?li ?c .  ?c <http://purl.oclc.org/fast/ontology/gadget#hasPattern> ?p . GRAPH ?p {?30203fcc12b5450dfa37fd6 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://aws.amazon.com/AWSECommerceService#Item> . } } }
+} }
+OFFSET 0
+SELECT DISTINCT ?bb 
+WHERE {
+{ ?bb <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://purl.oclc.org/fast/ontology/gadget#Screen> . FILTER (?bb != <http://localhost:9000/FASTCatalogue/screens/6>) . {{ ?bb <http://purl.oclc.org/fast/ontology/gadget#hasPreCondition> ?b .  ?b ?li ?c .  ?c <http://purl.oclc.org/fast/ontology/gadget#hasPattern> ?p . GRAPH ?p {?30203fcc12b5450dfa37fca <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://aws.amazon.com/AWSECommerceService#ShoppingCart> . } } }
+} }
+OFFSET 0
+SELECT DISTINCT ?bb 
+WHERE {
+{ ?bb <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://purl.oclc.org/fast/ontology/gadget#Screen> . FILTER (?bb != <http://localhost:9000/FASTCatalogue/screens/6>) . {{ ?bb <http://purl.oclc.org/fast/ontology/gadget#hasPostCondition> ?b .  ?b ?li ?c .  ?c <http://purl.oclc.org/fast/ontology/gadget#hasPattern> ?p . GRAPH ?p {?30203fcc12b5450dfa37fc8 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://aws.amazon.com/AWSECommerceService#Item> . } } }
+} }
+OFFSET 0
+SELECT DISTINCT ?bb 
+WHERE {
+{ ?bb <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://purl.oclc.org/fast/ontology/gadget#Screen> . FILTER (?bb != <http://localhost:9000/FASTCatalogue/screens/3>) . {{ ?bb <http://purl.oclc.org/fast/ontology/gadget#hasPreCondition> ?b .  ?b ?li ?c .  ?c <http://purl.oclc.org/fast/ontology/gadget#hasPattern> ?p . GRAPH ?p {?30203fcc12b5450dfa37fb9 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://aws.amazon.com/AWSECommerceService#PurchaseURL> . } } UNION{ ?bb <http://purl.oclc.org/fast/ontology/gadget#hasPreCondition> ?b .  ?b ?li ?c .  ?c <http://purl.oclc.org/fast/ontology/gadget#hasPattern> ?p . GRAPH ?p {?30203fcc12b5450dfa37fb8 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://aws.amazon.com/AWSECommerceService#Item> . } } }
+} }
+OFFSET 0
+SELECT DISTINCT ?bb 
+WHERE {
+{ ?bb <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://purl.oclc.org/fast/ontology/gadget#Screen> . FILTER (?bb != <http://localhost:9000/FASTCatalogue/screens/3>) . {{ ?bb <http://purl.oclc.org/fast/ontology/gadget#hasPostCondition> ?b .  ?b ?li ?c .  ?c <http://purl.oclc.org/fast/ontology/gadget#hasPattern> ?p . GRAPH ?p {?30203fcc12b5450dfa37fb6 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://aws.amazon.com/AWSECommerceService#ShoppingCart> . } } }
+} }
+OFFSET 0
+SELECT DISTINCT ?bb 
+WHERE {
+{ ?bb <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://purl.oclc.org/fast/ontology/gadget#Screen> . FILTER (?bb != <http://localhost:9000/FASTCatalogue/screens/2>) . {{ ?bb <http://purl.oclc.org/fast/ontology/gadget#hasPreCondition> ?b .  ?b ?li ?c .  ?c <http://purl.oclc.org/fast/ontology/gadget#hasPattern> ?p . GRAPH ?p {?30203fcc12b5450dfa37faa <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://aws.amazon.com/AWSECommerceService#Item> . } } }
+} }
+OFFSET 0
+SELECT DISTINCT ?bb 
+WHERE {
+{ ?bb <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://purl.oclc.org/fast/ontology/gadget#Screen> . FILTER (?bb != <http://localhost:9000/FASTCatalogue/screens/2>) . {{ ?bb <http://purl.oclc.org/fast/ontology/gadget#hasPostCondition> ?b .  ?b ?li ?c .  ?c <http://purl.oclc.org/fast/ontology/gadget#hasPattern> ?p . GRAPH ?p {?30203fcc12b5450dfa37fa8 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://aws.amazon.com/AWSECommerceService#Item> . } } }
+} }
+OFFSET 0
+]]></system-out>
   <system-err><![CDATA[]]></system-err>
 </testsuite>

@@ -16,21 +16,17 @@ import org.ontoware.rdf2go.RDF2Go;
 import org.ontoware.rdf2go.model.Model;
 import org.ontoware.rdf2go.model.Syntax;
 import org.ontoware.rdf2go.model.node.impl.URIImpl;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-import eu.morfeoproject.fast.catalogue.BuildingBlockJSONBuilder;
-import eu.morfeoproject.fast.catalogue.Catalogue;
-import eu.morfeoproject.fast.catalogue.CatalogueAccessPoint;
-import eu.morfeoproject.fast.catalogue.DuplicatedBuildingBlockException;
+import eu.morfeoproject.fast.catalogue.BuildingBlockException;
+import eu.morfeoproject.fast.catalogue.DuplicatedException;
 import eu.morfeoproject.fast.catalogue.NotFoundException;
 import eu.morfeoproject.fast.catalogue.OntologyInvalidException;
-import eu.morfeoproject.fast.catalogue.BuildingBlockException;
-import eu.morfeoproject.fast.catalogue.buildingblocks.Precondition;
+import eu.morfeoproject.fast.catalogue.builder.BuildingBlockJSONBuilder;
 import eu.morfeoproject.fast.catalogue.htmltemplates.BuildingBlockTemplate;
 import eu.morfeoproject.fast.catalogue.htmltemplates.CollectionTemplate;
 import eu.morfeoproject.fast.catalogue.htmltemplates.TemplateManager;
-import eu.morfeoproject.fast.catalogue.util.Accept;
+import eu.morfeoproject.fast.catalogue.model.Precondition;
+import eu.morfeoproject.fast.catalogue.services.util.Accept;
 import freemarker.template.TemplateException;
 
 /**
@@ -39,8 +35,6 @@ import freemarker.template.TemplateException;
 public class PreconditionServlet extends GenericServlet {
 	private static final long serialVersionUID = 1L;
 
-	static Logger logger = LoggerFactory.getLogger(PreconditionServlet.class);
-    
     /**
      * @see HttpServlet#HttpServlet()
      */
@@ -64,14 +58,13 @@ public class PreconditionServlet extends GenericServlet {
 			extension = id;
 			id = null;
 		}
-		Catalogue catalogue = CatalogueAccessPoint.getCatalogue();
 
 		if (extension == null) {
 			redirectToFormat(request, response, format);
 		} else {
 			if (id == null) {
 				// List the members of the collection
-				logger.info("Retrieving all preconditions");
+				if (log.isInfoEnabled()) log.info("Retrieving all preconditions");
 				// Override format regarding the given extension
 				format = MediaType.forExtension(extension);
 				try {
@@ -81,7 +74,7 @@ public class PreconditionServlet extends GenericServlet {
 						Model model = RDF2Go.getModelFactory().createModel();
 						try {
 							model.open();
-							for (Precondition s : catalogue.getPreconditions()) {
+							for (Precondition s : getCatalogue().getPreconditions()) {
 								Model preModel = s.toRDF2GoModel();
 								for (String ns : preModel.getNamespaces().keySet())
 									model.setNamespace(ns, preModel.getNamespace(ns));
@@ -90,7 +83,7 @@ public class PreconditionServlet extends GenericServlet {
 							}
 							model.writeTo(writer, Syntax.forMimeType(format));
 						} catch (Exception e) {
-							e.printStackTrace();
+							log.error(e.toString(), e);
 						} finally {
 							model.close();
 						}
@@ -100,20 +93,20 @@ public class PreconditionServlet extends GenericServlet {
 							response.setCharacterEncoding(TemplateManager.getDefaultEncoding());
 						if (TemplateManager.getLocale() != null)
 							response.setLocale(TemplateManager.getLocale());
-						CollectionTemplate.process(catalogue.getPreconditions(), writer);
+						CollectionTemplate.process(getCatalogue().getPreconditions(), writer);
 					} else { // by default APPLICATION_JSON
 						response.setContentType(MediaType.APPLICATION_JSON);
 						JSONArray pres = new JSONArray();
-						for (Precondition s : catalogue.getPreconditions())
+						for (Precondition s : getCatalogue().getPreconditions())
 							pres.put(s.toJSON());
 						writer.print(pres.toString(2));
 					}
 					response.setStatus(HttpServletResponse.SC_OK);
 				} catch (JSONException e) {
-					e.printStackTrace();
+					log.error(e.toString(), e);
 					response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
 				} catch (TemplateException e) {
-					e.printStackTrace();
+					log.error(e.toString(), e);
 					response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
 				}
 			} else {
@@ -122,7 +115,7 @@ public class PreconditionServlet extends GenericServlet {
 				// Retrieve the addressed member of the collection
 				String uri = url.substring(0, url.indexOf(extension) - 1);
 				try {
-					Precondition pre = catalogue.getPrecondition(new URIImpl(uri));
+					Precondition pre = getCatalogue().getPrecondition(new URIImpl(uri));
 					if (format.equals(MediaType.APPLICATION_RDF_XML) ||
 							format.equals(MediaType.APPLICATION_TURTLE)) {
 						response.setContentType(format);
@@ -144,10 +137,10 @@ public class PreconditionServlet extends GenericServlet {
 				} catch (NotFoundException e1) {
 					response.sendError(HttpServletResponse.SC_NOT_FOUND, "The resource "+uri+" has not been found.");
 				} catch (JSONException e) {
-					e.printStackTrace();
+					log.error(e.toString(), e);
 					response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
 				} catch (TemplateException e) {
-					e.printStackTrace();
+					log.error(e.toString(), e);
 					response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
 				}
 			}
@@ -170,7 +163,6 @@ public class PreconditionServlet extends GenericServlet {
 			line = reader.readLine();
 		}
 		String body = buffer.toString();
-		Catalogue catalogue = CatalogueAccessPoint.getCatalogue();
 
 		// Create a new entry in the collection where the ID is assigned automatically by 
 		// the collection and it is returned.
@@ -178,7 +170,7 @@ public class PreconditionServlet extends GenericServlet {
 			JSONObject json = new JSONObject(body);
 			Precondition pre = BuildingBlockJSONBuilder.buildPrecondition(json, null);
 			try {
-				catalogue.addPreOrPost(pre);
+				getCatalogue().addPreOrPost(pre);
 				if (format.equals(MediaType.APPLICATION_RDF_XML) ||
 						format.equals(MediaType.APPLICATION_TURTLE)) {
 					response.setContentType(format);
@@ -197,24 +189,24 @@ public class PreconditionServlet extends GenericServlet {
 					writer.print(pre.toJSON().toString(2));
 				}
 				response.setStatus(HttpServletResponse.SC_OK);
-			} catch (DuplicatedBuildingBlockException e) {
-				e.printStackTrace();
+			} catch (DuplicatedException e) {
+				log.error(e.toString(), e);
 				response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
 			} catch (OntologyInvalidException e) {
-				e.printStackTrace();
+				log.error(e.toString(), e);
 				response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
 			} catch (BuildingBlockException e) {
-				e.printStackTrace();
+				log.error(e.toString(), e);
 				response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
 			} catch (TemplateException e) {
-				e.printStackTrace();
+				log.error(e.toString(), e);
 				response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
 			}
 		} catch (JSONException e) {
-			e.printStackTrace();
+			log.error(e.toString(), e);
 			response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
 		} catch (IOException e) {
-			e.printStackTrace();
+			log.error(e.toString(), e);
 			response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
 		}	
 	}
@@ -237,7 +229,6 @@ public class PreconditionServlet extends GenericServlet {
 			line = reader.readLine();
 		}
 		String body = buffer.toString();
-		Catalogue catalogue = CatalogueAccessPoint.getCatalogue();
 		
 		if (id == null) {
 			response.sendError(HttpServletResponse.SC_BAD_REQUEST, "An ID must be specified.");
@@ -247,7 +238,7 @@ public class PreconditionServlet extends GenericServlet {
 			try {
 				JSONObject json = new JSONObject(body);
 				Precondition pre = BuildingBlockJSONBuilder.buildPrecondition(json, new URIImpl(uri));
-				catalogue.updatePreOrPost(pre);
+				getCatalogue().updatePreOrPost(pre);
 				if (format.equals(MediaType.APPLICATION_RDF_XML) ||
 						format.equals(MediaType.APPLICATION_TURTLE)) {
 					response.setContentType(format);
@@ -267,19 +258,19 @@ public class PreconditionServlet extends GenericServlet {
 				}
 				response.setStatus(HttpServletResponse.SC_OK);
 			} catch (JSONException e) {
-				e.printStackTrace();
+				log.error(e.toString(), e);
 				response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
 			} catch (IOException e) {
-				e.printStackTrace();
+				log.error(e.toString(), e);
 				response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
 			} catch (NotFoundException e) {
-				e.printStackTrace();
+				log.error(e.toString(), e);
 				response.sendError(HttpServletResponse.SC_NOT_FOUND, "The resource "+uri+" has not been found.");
 			} catch (BuildingBlockException e) {
-				e.printStackTrace();
+				log.error(e.toString(), e);
 				response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
 			} catch (TemplateException e) {
-				e.printStackTrace();
+				log.error(e.toString(), e);
 				response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
 			}
 		}
@@ -292,7 +283,6 @@ public class PreconditionServlet extends GenericServlet {
 		String[] chunks = request.getRequestURI().split("/");
 		String id = chunks[chunks.length-1];
 		if (id.equalsIgnoreCase("screens")) id = null;
-		Catalogue catalogue = CatalogueAccessPoint.getCatalogue();
 		
 		if (id == null) {
 			response.sendError(HttpServletResponse.SC_BAD_REQUEST, "An ID must be specified.");
@@ -300,7 +290,7 @@ public class PreconditionServlet extends GenericServlet {
 			// Delete the addressed member of the collection.
 			String uri = request.getRequestURL().toString();
 			try {
-				catalogue.removePreOrPost(new URIImpl(uri));
+				getCatalogue().removePreOrPost(new URIImpl(uri));
 				response.setStatus(HttpServletResponse.SC_OK);
 			} catch (NotFoundException e) {
 				response.sendError(HttpServletResponse.SC_NOT_FOUND, "The resource "+uri+" has not been found.");
