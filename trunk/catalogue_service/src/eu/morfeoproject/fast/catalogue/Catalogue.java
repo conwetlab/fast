@@ -15,8 +15,6 @@ import java.util.List;
 import java.util.Set;
 import java.util.StringTokenizer;
 
-import javax.naming.ConfigurationException;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.commontag.AuthorCTag;
@@ -77,7 +75,6 @@ import eu.morfeoproject.fast.catalogue.util.MiscUtil;
 import eu.morfeoproject.fast.catalogue.vocabulary.CTAG;
 import eu.morfeoproject.fast.catalogue.vocabulary.DC;
 import eu.morfeoproject.fast.catalogue.vocabulary.FGO;
-import eu.morfeoproject.fast.util.TestUtils;
 
 /**
  * Catalogue
@@ -134,15 +131,6 @@ public class Catalogue {
 		
 		// creates the planner
 		planner = PlannerFactory.createPlanner(this, this.environment);
-	}
-
-	public OntologyManager getManager() { return ontologyManager; }
-	public static void main(String[] args) {
-		Catalogue catalogue = TestUtils.getCatalogue();
-//		catalogue.printStatements();
-//		for (URI oUri : catalogue.getManager().list())
-//			System.out.println(oUri);
-		System.out.println(catalogue.getServerURL());
 	}
 	
 	public URL getServerURL() {
