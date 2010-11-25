@@ -75,7 +75,7 @@ public class ScreenflowServlet extends GenericServlet {
 						Model model = RDF2Go.getModelFactory().createModel();
 						try {
 							model.open();
-							for (ScreenFlow sf : getCatalogue().getScreenFlows()) {
+							for (ScreenFlow sf : getCatalogue().getAllScreenFlows()) {
 								Model sfModel = sf.toRDF2GoModel();
 								for (String ns : sfModel.getNamespaces().keySet())
 									model.setNamespace(ns, sfModel.getNamespace(ns));
@@ -94,11 +94,11 @@ public class ScreenflowServlet extends GenericServlet {
 							response.setCharacterEncoding(TemplateManager.getDefaultEncoding());
 						if (TemplateManager.getLocale() != null)
 							response.setLocale(TemplateManager.getLocale());
-						CollectionTemplate.process(getCatalogue().getScreenFlows(), writer);
+						CollectionTemplate.process(getCatalogue().getAllScreenFlows(), writer);
 					} else { // by default returns APPLICATION_JSON
 						response.setContentType(MediaType.APPLICATION_JSON);
 						JSONArray screenflows = new JSONArray();
-						for (ScreenFlow sf : getCatalogue().getScreenFlows())
+						for (ScreenFlow sf : getCatalogue().getAllScreenFlows())
 							screenflows.put(sf.toJSON());
 						writer.print(screenflows.toString(2));
 					}

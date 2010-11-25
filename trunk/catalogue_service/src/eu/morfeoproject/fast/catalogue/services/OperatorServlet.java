@@ -75,7 +75,7 @@ public class OperatorServlet extends GenericServlet {
 						Model model = RDF2Go.getModelFactory().createModel();
 						try {
 							model.open();
-							for (Operator o : getCatalogue().getOperators()) {
+							for (Operator o : getCatalogue().getAllOperators()) {
 								Model opModel = o.toRDF2GoModel();
 								for (String ns : opModel.getNamespaces().keySet())
 									model.setNamespace(ns, opModel.getNamespace(ns));
@@ -94,11 +94,11 @@ public class OperatorServlet extends GenericServlet {
 							response.setCharacterEncoding(TemplateManager.getDefaultEncoding());
 						if (TemplateManager.getLocale() != null)
 							response.setLocale(TemplateManager.getLocale());
-						CollectionTemplate.process(getCatalogue().getOperators(), writer);
+						CollectionTemplate.process(getCatalogue().getAllOperators(), writer);
 					} else { // by default returns APPLICATION_JSON)) {
 						response.setContentType(MediaType.APPLICATION_JSON);
 						JSONArray operators = new JSONArray();
-						for (Operator o : getCatalogue().getOperators())
+						for (Operator o : getCatalogue().getAllOperators())
 							operators.put(o.toJSON());
 						writer.print(operators.toString(2));
 					}

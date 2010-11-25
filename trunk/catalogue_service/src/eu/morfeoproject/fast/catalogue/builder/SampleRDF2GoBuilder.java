@@ -14,8 +14,8 @@ import org.ontoware.rdf2go.vocabulary.RDF;
 
 import eu.morfeoproject.fast.catalogue.MyRDFFactory;
 import eu.morfeoproject.fast.catalogue.RDFFactory;
-import eu.morfeoproject.fast.catalogue.buildingblocks.factory.BuildingBlockFactory;
 import eu.morfeoproject.fast.catalogue.model.Sample;
+import eu.morfeoproject.fast.catalogue.model.factory.BuildingBlockFactory;
 
 public class SampleRDF2GoBuilder {
 

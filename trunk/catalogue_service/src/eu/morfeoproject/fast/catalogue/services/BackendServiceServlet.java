@@ -75,7 +75,7 @@ public class BackendServiceServlet extends GenericServlet {
 						Model model = RDF2Go.getModelFactory().createModel();
 						try {
 							model.open();
-							for (BackendService service : getCatalogue().getBackendServices()) {
+							for (BackendService service : getCatalogue().getAllBackendServices()) {
 								Model bsModel = service.toRDF2GoModel();
 								for (String ns : bsModel.getNamespaces().keySet())
 									model.setNamespace(ns, bsModel.getNamespace(ns));
@@ -94,11 +94,11 @@ public class BackendServiceServlet extends GenericServlet {
 							response.setCharacterEncoding(TemplateManager.getDefaultEncoding());
 						if (TemplateManager.getLocale() != null)
 							response.setLocale(TemplateManager.getLocale());
-						CollectionTemplate.process(getCatalogue().getBackendServices(), writer);
+						CollectionTemplate.process(getCatalogue().getAllBackendServices(), writer);
 					} else { // by default returns APPLICATION_JSON
 						response.setContentType(MediaType.APPLICATION_JSON);
 						JSONArray services = new JSONArray();
-						for (BackendService b : getCatalogue().getBackendServices())
+						for (BackendService b : getCatalogue().getAllBackendServices())
 							services.put(b.toJSON());
 						writer.print(services.toString(2));
 					}

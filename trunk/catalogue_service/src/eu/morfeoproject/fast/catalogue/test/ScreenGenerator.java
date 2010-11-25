@@ -17,9 +17,9 @@ import org.ontoware.rdf2go.vocabulary.RDF;
 import org.ontoware.rdf2go.vocabulary.RDFS;
 
 import eu.morfeoproject.fast.catalogue.Catalogue;
-import eu.morfeoproject.fast.catalogue.buildingblocks.factory.BuildingBlockFactory;
 import eu.morfeoproject.fast.catalogue.model.Condition;
 import eu.morfeoproject.fast.catalogue.model.Screen;
+import eu.morfeoproject.fast.catalogue.model.factory.BuildingBlockFactory;
 
 /**
  * This is a catalogue generator for testing purposes. It creates a certain number

@@ -74,7 +74,7 @@ public class PreconditionServlet extends GenericServlet {
 						Model model = RDF2Go.getModelFactory().createModel();
 						try {
 							model.open();
-							for (Precondition s : getCatalogue().getPreconditions()) {
+							for (Precondition s : getCatalogue().getAllPreconditions()) {
 								Model preModel = s.toRDF2GoModel();
 								for (String ns : preModel.getNamespaces().keySet())
 									model.setNamespace(ns, preModel.getNamespace(ns));
@@ -93,11 +93,11 @@ public class PreconditionServlet extends GenericServlet {
 							response.setCharacterEncoding(TemplateManager.getDefaultEncoding());
 						if (TemplateManager.getLocale() != null)
 							response.setLocale(TemplateManager.getLocale());
-						CollectionTemplate.process(getCatalogue().getPreconditions(), writer);
+						CollectionTemplate.process(getCatalogue().getAllPreconditions(), writer);
 					} else { // by default APPLICATION_JSON
 						response.setContentType(MediaType.APPLICATION_JSON);
 						JSONArray pres = new JSONArray();
-						for (Precondition s : getCatalogue().getPreconditions())
+						for (Precondition s : getCatalogue().getAllPreconditions())
 							pres.put(s.toJSON());
 						writer.print(pres.toString(2));
 					}

@@ -12,8 +12,8 @@ import org.ontoware.rdf2go.model.node.impl.URIImpl;
 import org.ontoware.rdf2go.vocabulary.XSD;
 
 import eu.morfeoproject.fast.catalogue.BadFormatException;
-import eu.morfeoproject.fast.catalogue.buildingblocks.factory.BuildingBlockFactory;
 import eu.morfeoproject.fast.catalogue.model.Sample;
+import eu.morfeoproject.fast.catalogue.model.factory.BuildingBlockFactory;
 
 public class SampleJSONBuilder {
 
@@ -21,6 +21,12 @@ public class SampleJSONBuilder {
 
 	public static Sample buildSample(JSONObject json) throws JSONException, IOException, BadFormatException {
 		Sample sample = BuildingBlockFactory.createSample();
+		parseSample(sample, json);
+		return sample;
+	}
+	
+	public static Sample buildSample(JSONObject json, URI uri) throws JSONException, IOException, BadFormatException {
+		Sample sample = BuildingBlockFactory.createSample(uri);
 		parseSample(sample, json);
 		return sample;
 	}

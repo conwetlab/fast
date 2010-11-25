@@ -2,7 +2,6 @@ package eu.morfeoproject.fast.catalogue.model;
 
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Vector;
 
 import org.json.JSONArray;
 import org.json.JSONException;

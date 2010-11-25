@@ -64,7 +64,7 @@ public class ConceptServlet extends GenericServlet {
 					response.setContentType(format);
 					Model model = RDF2Go.getModelFactory().createModel();
 					model.open();
-					for (URI uri : getCatalogue().getConcepts(tags)) {
+					for (URI uri : getCatalogue().getAllConcepts(tags)) {
 						Concept concept = getCatalogue().getConcept(uri);
 						model.addModel(concept.toRDF2GoModel());
 					}
@@ -73,7 +73,7 @@ public class ConceptServlet extends GenericServlet {
 				} else {
 					response.setContentType(MediaType.APPLICATION_JSON);
 					JSONArray concepts = new JSONArray();
-					for (URI uri : getCatalogue().getConcepts(tags)) {
+					for (URI uri : getCatalogue().getAllConcepts(tags)) {
 						Concept concept = getCatalogue().getConcept(uri);
 						concepts.put(concept.toJSON());
 					}

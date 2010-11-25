@@ -11,11 +11,14 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import eu.morfeoproject.fast.catalogue.Catalogue;
+import eu.morfeoproject.fast.catalogue.MyRDFFactory;
+import eu.morfeoproject.fast.catalogue.RDFFactory;
 
 public abstract class GenericServlet extends HttpServlet {
 	
 	private static final long serialVersionUID = 1L;
 	protected final Log log = LogFactory.getLog(this.getClass());
+	protected RDFFactory rdfFactory = new MyRDFFactory();
 	
 	protected Catalogue getCatalogue() {
 		return (Catalogue) getServletContext().getAttribute("catalogue");

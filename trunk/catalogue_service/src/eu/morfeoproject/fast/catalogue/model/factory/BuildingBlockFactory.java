@@ -1,32 +1,47 @@
-package eu.morfeoproject.fast.catalogue.buildingblocks;
+package eu.morfeoproject.fast.catalogue.model.factory;
 
+import org.commontag.AuthorCTag;
+import org.commontag.AutoCTag;
+import org.commontag.CTag;
+import org.commontag.ReaderCTag;
 import org.ontoware.rdf2go.model.node.URI;
 
 import eu.morfeoproject.fast.catalogue.InvalidBuildingBlockTypeException;
-import eu.morfeoproject.fast.catalogue.commontag.AuthorCTag;
-import eu.morfeoproject.fast.catalogue.commontag.AutoCTag;
-import eu.morfeoproject.fast.catalogue.commontag.CTag;
-import eu.morfeoproject.fast.catalogue.commontag.ReaderCTag;
+import eu.morfeoproject.fast.catalogue.model.Action;
+import eu.morfeoproject.fast.catalogue.model.BackendService;
+import eu.morfeoproject.fast.catalogue.model.BuildingBlock;
+import eu.morfeoproject.fast.catalogue.model.Concept;
+import eu.morfeoproject.fast.catalogue.model.Condition;
+import eu.morfeoproject.fast.catalogue.model.Form;
+import eu.morfeoproject.fast.catalogue.model.Operator;
+import eu.morfeoproject.fast.catalogue.model.Pipe;
+import eu.morfeoproject.fast.catalogue.model.Postcondition;
+import eu.morfeoproject.fast.catalogue.model.Precondition;
+import eu.morfeoproject.fast.catalogue.model.Property;
+import eu.morfeoproject.fast.catalogue.model.Sample;
+import eu.morfeoproject.fast.catalogue.model.Screen;
+import eu.morfeoproject.fast.catalogue.model.ScreenFlow;
+import eu.morfeoproject.fast.catalogue.model.Trigger;
 import eu.morfeoproject.fast.catalogue.vocabulary.CTAG;
 import eu.morfeoproject.fast.catalogue.vocabulary.FGO;
 
-public class FastModelFactory {
+public class BuildingBlockFactory {
 	
 	public static BuildingBlock createBuildingBlock(URI type) throws InvalidBuildingBlockTypeException {
 		if (type.equals(FGO.ScreenFlow))
-			return FastModelFactory.createScreenFlow();
+			return BuildingBlockFactory.createScreenFlow();
 		else if (type.equals(FGO.Screen))
-			return FastModelFactory.createScreen();
+			return BuildingBlockFactory.createScreen();
 		else if (type.equals(FGO.Form))
-			return FastModelFactory.createForm();
+			return BuildingBlockFactory.createForm();
 		else if (type.equals(FGO.Operator))
-			return FastModelFactory.createOperator();
+			return BuildingBlockFactory.createOperator();
 		else if (type.equals(FGO.BackendService))
-			return FastModelFactory.createBackendService();
+			return BuildingBlockFactory.createBackendService();
 		else if (type.equals(FGO.Precondition))
-			return FastModelFactory.createPrecondition();
+			return BuildingBlockFactory.createPrecondition();
 		else if (type.equals(FGO.Postcondition))
-			return FastModelFactory.createPostcondition();
+			return BuildingBlockFactory.createPostcondition();
 		else
 			throw new InvalidBuildingBlockTypeException(type+" is not a valid building block type.");
 	}
@@ -104,21 +119,29 @@ public class FastModelFactory {
 	}
 	
 	public static Concept createConcept() {
-		return new Concept(null);
+		return new Concept();
 	}
 	
 	public static Concept createConcept(URI uri) {
 		return new Concept(uri);
 	}
 	
-	public static Attribute createAttribute() {
-		return new Attribute(null, null, null);
+	public static Property createAttribute() {
+		return new Property();
 	}
 	
-	public static Attribute createAttribute(URI uri, URI type, Concept concept) {
-		return new Attribute(uri, type, concept);
+	public static Property createAttribute(URI uri, URI type, Concept concept) {
+		return new Property(uri, type, concept);
 	}
 	
+	public static Sample createSample() {
+		return new Sample();
+	}
+
+	public static Sample createSample(URI uri) {
+		return new Sample(uri);
+	}
+
 	public static CTag createTag() {
 		return new CTag();
 	}

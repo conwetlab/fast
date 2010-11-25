@@ -10,13 +10,13 @@ import org.apache.commons.logging.LogFactory;
 import org.ontoware.rdf2go.model.node.URI;
 
 import eu.morfeoproject.fast.catalogue.Catalogue;
-import eu.morfeoproject.fast.catalogue.buildingblocks.factory.BuildingBlockFactory;
 import eu.morfeoproject.fast.catalogue.cache.Cacheable;
 import eu.morfeoproject.fast.catalogue.model.BuildingBlock;
 import eu.morfeoproject.fast.catalogue.model.Condition;
 import eu.morfeoproject.fast.catalogue.model.Postcondition;
 import eu.morfeoproject.fast.catalogue.model.Precondition;
 import eu.morfeoproject.fast.catalogue.model.Screen;
+import eu.morfeoproject.fast.catalogue.model.factory.BuildingBlockFactory;
 
 public abstract class Planner extends Cacheable<List<Plan>> {
 	protected final transient Log log = LogFactory.getLog(this.getClass());
@@ -226,7 +226,7 @@ public abstract class Planner extends Cacheable<List<Plan>> {
 	 * Generates all the plans from a given set of screens, already stored in the catalogue
 	 */
 	protected void seed() {
-		for (Screen screen : catalogue.getScreens()) {
+		for (Screen screen : catalogue.getAllScreens()) {
 			if (screen.getPreconditions().size() > 0) {
 				HashSet<BuildingBlock> resources = new HashSet<BuildingBlock>();
 				resources.add(screen);

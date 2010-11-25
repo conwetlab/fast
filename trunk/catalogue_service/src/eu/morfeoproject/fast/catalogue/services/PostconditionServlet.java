@@ -74,7 +74,7 @@ public class PostconditionServlet extends GenericServlet {
 						Model model = RDF2Go.getModelFactory().createModel();
 						try {
 							model.open();
-							for (Postcondition ev : getCatalogue().getPostconditions()) {
+							for (Postcondition ev : getCatalogue().getAllPostconditions()) {
 								Model postModel = ev.toRDF2GoModel();
 								for (String ns : postModel.getNamespaces().keySet())
 									model.setNamespace(ns, postModel.getNamespace(ns));
@@ -93,11 +93,11 @@ public class PostconditionServlet extends GenericServlet {
 							response.setCharacterEncoding(TemplateManager.getDefaultEncoding());
 						if (TemplateManager.getLocale() != null)
 							response.setLocale(TemplateManager.getLocale());
-						CollectionTemplate.process(getCatalogue().getPostconditions(), writer);
+						CollectionTemplate.process(getCatalogue().getAllPostconditions(), writer);
 					} else { // by default returns APPLICATION_JSON
 						response.setContentType(MediaType.APPLICATION_JSON);
 						JSONArray posts = new JSONArray();
-						for (Postcondition ev : getCatalogue().getPostconditions())
+						for (Postcondition ev : getCatalogue().getAllPostconditions())
 							posts.put(ev.toJSON());
 						writer.print(posts.toString(2));
 					}

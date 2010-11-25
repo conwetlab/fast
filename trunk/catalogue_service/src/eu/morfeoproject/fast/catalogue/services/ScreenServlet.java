@@ -76,7 +76,7 @@ public class ScreenServlet extends GenericServlet {
 						Model model = RDF2Go.getModelFactory().createModel();
 						try {
 							model.open();
-							for (Screen s : getCatalogue().getScreens()) {
+							for (Screen s : getCatalogue().getAllScreens()) {
 								Model screenModel = s.toRDF2GoModel();
 								for (String ns : screenModel.getNamespaces().keySet())
 									model.setNamespace(ns, screenModel.getNamespace(ns));
@@ -95,11 +95,11 @@ public class ScreenServlet extends GenericServlet {
 							response.setCharacterEncoding(TemplateManager.getDefaultEncoding());
 						if (TemplateManager.getLocale() != null)
 							response.setLocale(TemplateManager.getLocale());
-						CollectionTemplate.process(getCatalogue().getScreens(), writer);
+						CollectionTemplate.process(getCatalogue().getAllScreens(), writer);
 					} else { // by default returns APPLICATION_JSON
 						response.setContentType(MediaType.APPLICATION_JSON);
 						JSONArray screens = new JSONArray();
-						for (Screen s : getCatalogue().getScreens())
+						for (Screen s : getCatalogue().getAllScreens())
 							screens.put(s.toJSON());
 						writer.print(screens.toString(2));
 					}

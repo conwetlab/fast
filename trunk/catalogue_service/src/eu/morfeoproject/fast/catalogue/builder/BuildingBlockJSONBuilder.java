@@ -15,7 +15,6 @@ import org.ontoware.rdf2go.model.node.URI;
 import org.ontoware.rdf2go.model.node.impl.URIImpl;
 
 import eu.morfeoproject.fast.catalogue.BuildingBlockException;
-import eu.morfeoproject.fast.catalogue.buildingblocks.factory.BuildingBlockFactory;
 import eu.morfeoproject.fast.catalogue.model.Action;
 import eu.morfeoproject.fast.catalogue.model.BackendService;
 import eu.morfeoproject.fast.catalogue.model.BuildingBlock;
@@ -33,6 +32,7 @@ import eu.morfeoproject.fast.catalogue.model.ScreenComponent;
 import eu.morfeoproject.fast.catalogue.model.ScreenDefinition;
 import eu.morfeoproject.fast.catalogue.model.ScreenFlow;
 import eu.morfeoproject.fast.catalogue.model.Trigger;
+import eu.morfeoproject.fast.catalogue.model.factory.BuildingBlockFactory;
 import eu.morfeoproject.fast.catalogue.util.DateFormatter;
 
 public class BuildingBlockJSONBuilder {

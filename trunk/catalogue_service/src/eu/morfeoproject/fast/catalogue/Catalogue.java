@@ -34,6 +34,7 @@ import org.ontoware.rdf2go.model.node.LanguageTagLiteral;
 import org.ontoware.rdf2go.model.node.Node;
 import org.ontoware.rdf2go.model.node.Resource;
 import org.ontoware.rdf2go.model.node.URI;
+import org.ontoware.rdf2go.model.node.UriOrVariable;
 import org.ontoware.rdf2go.model.node.Variable;
 import org.ontoware.rdf2go.model.node.impl.URIImpl;
 import org.ontoware.rdf2go.vocabulary.OWL;
@@ -45,7 +46,6 @@ import org.openrdf.rio.RDFParseException;
 
 import eu.morfeoproject.fast.catalogue.builder.BuildingBlockRDF2GoBuilder;
 import eu.morfeoproject.fast.catalogue.builder.SampleRDF2GoBuilder;
-import eu.morfeoproject.fast.catalogue.buildingblocks.factory.BuildingBlockFactory;
 import eu.morfeoproject.fast.catalogue.model.BackendService;
 import eu.morfeoproject.fast.catalogue.model.BuildingBlock;
 import eu.morfeoproject.fast.catalogue.model.Concept;
@@ -60,6 +60,7 @@ import eu.morfeoproject.fast.catalogue.model.Sample;
 import eu.morfeoproject.fast.catalogue.model.Screen;
 import eu.morfeoproject.fast.catalogue.model.ScreenComponent;
 import eu.morfeoproject.fast.catalogue.model.ScreenFlow;
+import eu.morfeoproject.fast.catalogue.model.factory.BuildingBlockFactory;
 import eu.morfeoproject.fast.catalogue.ontologies.DefaultOntologies;
 import eu.morfeoproject.fast.catalogue.ontologies.OntologyFetcher;
 import eu.morfeoproject.fast.catalogue.ontologies.OntologyFinder;
@@ -132,7 +133,7 @@ public class Catalogue {
 		// creates the planner
 		planner = PlannerFactory.createPlanner(this, this.environment);
 	}
-	
+
 	public URL getServerURL() {
 		return configuration.getURL(this.environment, "serverURL");
 	}
@@ -1178,8 +1179,8 @@ public class Catalogue {
 		removeBuildingBlock(bsUri);
 	}
 
-	public Collection<ScreenFlow> getScreenFlows() {
-		ArrayList<ScreenFlow> results = new ArrayList<ScreenFlow>();
+	public Collection<ScreenFlow> getAllScreenFlows() {
+		LinkedList<ScreenFlow> results = new LinkedList<ScreenFlow>();
 		ClosableIterator<Statement> it = tripleStore.findStatements(Variable.ANY, RDF.type, FGO.ScreenFlow);
 		while (it.hasNext())
 			try {
@@ -1191,8 +1192,8 @@ public class Catalogue {
 		return results;
 	}
 
-	public Collection<Screen> getScreens() {
-		ArrayList<Screen> results = new ArrayList<Screen>();
+	public Collection<Screen> getAllScreens() {
+		LinkedList<Screen> results = new LinkedList<Screen>();
 		ClosableIterator<Statement> it = tripleStore.findStatements(Variable.ANY, RDF.type, FGO.Screen);
 		while (it.hasNext()) {
 			try {
@@ -1205,8 +1206,8 @@ public class Catalogue {
 		return results;
 	}
 
-	public Collection<Form> getForms() {
-		ArrayList<Form> results = new ArrayList<Form>();
+	public Collection<Form> getAllForms() {
+		LinkedList<Form> results = new LinkedList<Form>();
 		ClosableIterator<Statement> it = tripleStore.findStatements(Variable.ANY, RDF.type, FGO.Form);
 		while (it.hasNext()) {
 			try {
@@ -1219,8 +1220,8 @@ public class Catalogue {
 		return results;
 	}
 
-	public Collection<Operator> getOperators() {
-		ArrayList<Operator> results = new ArrayList<Operator>();
+	public Collection<Operator> getAllOperators() {
+		LinkedList<Operator> results = new LinkedList<Operator>();
 		ClosableIterator<Statement> it = tripleStore.findStatements(Variable.ANY, RDF.type, FGO.Operator);
 		while (it.hasNext()) {
 			try {
@@ -1233,8 +1234,8 @@ public class Catalogue {
 		return results;
 	}
 
-	public Collection<BackendService> getBackendServices() {
-		ArrayList<BackendService> results = new ArrayList<BackendService>();
+	public Collection<BackendService> getAllBackendServices() {
+		LinkedList<BackendService> results = new LinkedList<BackendService>();
 		ClosableIterator<Statement> it = tripleStore.findStatements(Variable.ANY, RDF.type, FGO.BackendService);
 		while (it.hasNext()) {
 			try {
@@ -1247,8 +1248,8 @@ public class Catalogue {
 		return results;
 	}
 
-	public Collection<Precondition> getPreconditions() {
-		ArrayList<Precondition> results = new ArrayList<Precondition>();
+	public Collection<Precondition> getAllPreconditions() {
+		LinkedList<Precondition> results = new LinkedList<Precondition>();
 		ClosableIterator<Statement> it = tripleStore.findStatements(Variable.ANY, RDF.type, FGO.Precondition);
 		while (it.hasNext()) {
 			try {
@@ -1261,8 +1262,8 @@ public class Catalogue {
 		return results;
 	}
 
-	public Collection<Postcondition> getPostconditions() {
-		ArrayList<Postcondition> results = new ArrayList<Postcondition>();
+	public Collection<Postcondition> getAllPostconditions() {
+		LinkedList<Postcondition> results = new LinkedList<Postcondition>();
 		ClosableIterator<Statement> it = tripleStore.findStatements(
 				Variable.ANY, RDF.type, FGO.Postcondition);
 		while (it.hasNext()) {
@@ -1276,8 +1277,8 @@ public class Catalogue {
 		return results;
 	}
 
-	public Collection<URI> getConcepts(String[] tags) {
-		ArrayList<URI> results = new ArrayList<URI>();
+	public Collection<URI> getAllConcepts(String[] tags) {
+		LinkedList<URI> results = new LinkedList<URI>();
 		String queryString = "SELECT DISTINCT ?concept \n" + "WHERE {\n";
 		queryString = queryString.concat("{ { ?concept " + RDF.type.toSPARQL()
 				+ " " + RDFS.Class.toSPARQL() + " } UNION { ?concept "
@@ -1315,28 +1316,19 @@ public class Catalogue {
 	}
 
 	public BuildingBlock getBuildingBlock(URI uri) throws NotFoundException {
-		if (isType(uri, FGO.ScreenFlow)) {
-			return getScreenFlow(uri);
-		} else if (isType(uri, FGO.Screen)) {
-			return getScreen(uri);
-		} else if (isType(uri, FGO.Precondition)) {
-			return getPrecondition(uri);
-		} else if (isType(uri, FGO.Postcondition)) {
-			return getPostcondition(uri);
-		} else if (isType(uri, FGO.Form)) {
-			return getForm(uri);
-		} else if (isType(uri, FGO.Operator)) {
-			return getOperator(uri);
-		} else if (isType(uri, FGO.BackendService)) {
-			return getBackendService(uri);
-		}
+		if (isType(uri, FGO.ScreenFlow))			return getScreenFlow(uri);
+		else if (isType(uri, FGO.Screen))			return getScreen(uri);
+		else if (isType(uri, FGO.Precondition))		return getPrecondition(uri);
+		else if (isType(uri, FGO.Postcondition))	return getPostcondition(uri);
+		else if (isType(uri, FGO.Form))				return getForm(uri);
+		else if (isType(uri, FGO.Operator))			return getOperator(uri);
+		else if (isType(uri, FGO.BackendService))	return getBackendService(uri);
 		return null;
 	}
 
 	public boolean isType(URI uri, URI type) {
 		URI t = getType(uri);
-		if (t != null && t.equals(type))
-			return true;
+		if (t != null && t.equals(type)) return true;
 		return false;
 	}
 
@@ -1349,64 +1341,54 @@ public class Catalogue {
 	public URI getType(URI uri) {
 		ClosableIterator<Statement> it = tripleStore.findStatements(uri, RDF.type, Variable.ANY);
 		URI type = null;
-		if (it.hasNext())
+		if (it.hasNext()) {
 			type = it.next().getObject().asURI();
+		}
 		it.close();
 		return type;
 	}
 
 	public ScreenFlow getScreenFlow(URI uri) throws NotFoundException {
-		if (!containsBuildingBlock(uri))
-			throw new NotFoundException();
+		if (!containsBuildingBlock(uri)) throw new NotFoundException();
 		return BuildingBlockRDF2GoBuilder.buildScreenFlow(getModelForBuildingBlock(uri));
 	}
 
 	public Screen getScreen(URI uri) throws NotFoundException {
-		if (!containsBuildingBlock(uri))
-			throw new NotFoundException();
+		if (!containsBuildingBlock(uri)) throw new NotFoundException();
 		return BuildingBlockRDF2GoBuilder.buildScreen(getModelForBuildingBlock(uri));
 	}
 
 	public Precondition getPrecondition(URI uri) throws NotFoundException {
-		if (!containsBuildingBlock(uri))
-			throw new NotFoundException();
+		if (!containsBuildingBlock(uri)) throw new NotFoundException();
 		return (Precondition) getPreOrPost(uri);
 	}
 
 	public Postcondition getPostcondition(URI uri) throws NotFoundException {
-		if (!containsBuildingBlock(uri))
-			throw new NotFoundException();
+		if (!containsBuildingBlock(uri)) throw new NotFoundException();
 		return (Postcondition) getPreOrPost(uri);
 	}
 
 	protected PreOrPost getPreOrPost(URI uri) throws NotFoundException {
-		if (!containsBuildingBlock(uri))
-			throw new NotFoundException();
+		if (!containsBuildingBlock(uri)) throw new NotFoundException();
 		return BuildingBlockRDF2GoBuilder.buildPreOrPost(getModelForBuildingBlock(uri), uri);
 	}
 
 	public ScreenComponent getScreenComponent(URI uri) throws NotFoundException {
 		URI type = getType(uri);
-		if (type == null)
-			return null;
-		if (type.equals(FGO.Form))
-			return getForm(uri);
-		else if (type.equals(FGO.Operator))
-			return getOperator(uri);
-		else if (type.equals(FGO.BackendService))
-			return getBackendService(uri);
+		if (type == null)							return null;
+		if (type.equals(FGO.Form))					return getForm(uri);
+		else if (type.equals(FGO.Operator))			return getOperator(uri);
+		else if (type.equals(FGO.BackendService))	return getBackendService(uri);
 		return null;
 	}
 
 	public Form getForm(URI uri) throws NotFoundException {
-		if (!containsBuildingBlock(uri))
-			throw new NotFoundException();
+		if (!containsBuildingBlock(uri)) throw new NotFoundException();
 		return BuildingBlockRDF2GoBuilder.buildForm(getModelForBuildingBlock(uri));
 	}
 
 	public Operator getOperator(URI uri) throws NotFoundException {
-		if (!containsBuildingBlock(uri))
-			throw new NotFoundException();
+		if (!containsBuildingBlock(uri)) throw new NotFoundException();
 		return BuildingBlockRDF2GoBuilder.buildOperator(getModelForBuildingBlock(uri));
 	}
 
@@ -1564,7 +1546,7 @@ public class Catalogue {
 	}
 
 	public List<Property> attributesFor(Concept concept) {
-		ArrayList<Property> attList = new ArrayList<Property>();
+		LinkedList<Property> attList = new LinkedList<Property>();
 		ClosableIterator<Statement> cIt = tripleStore.findStatements(Variable.ANY, RDFS.domain, concept.getUri());
 		for (; cIt.hasNext();) {
 			Statement st = cIt.next();
@@ -1577,10 +1559,11 @@ public class Catalogue {
 	}
 
 	public void addConcept(Concept concept)
-			throws DuplicatedException, BuildingBlockException {
+	throws DuplicatedException, BuildingBlockException {
 		URI cUri = concept.getUri();
-		if (containsConcept(cUri))
+		if (containsConcept(cUri)) {
 			throw new DuplicatedException(cUri + " already exists.");
+		}
 		// persists the concept
 		if (!saveConcept(concept)) {
 			throw new BuildingBlockException("An error ocurred while saving the concept. Please, ensure the concept is well defined.");
@@ -1589,11 +1572,11 @@ public class Catalogue {
 
 	protected boolean saveConcept(Concept concept) {
 		URI cUri = concept.getUri();
+		Model model = null;
 		try {
-			Model model = concept.toRDF2GoModel();
+			model = concept.toRDF2GoModel();
 			URI graphUri = saveModelToGraph(model);
 			tripleStore.addStatement(cUri, new URIImpl("http://replace.for.real.one"), graphUri);
-			model.close();
 			return true;
 		} catch (Exception e) {
 			log.error("Error while saving concept " + cUri, e);
@@ -1602,6 +1585,8 @@ public class Catalogue {
 			} catch (NotFoundException nfe) {
 				log.error("Concept " + cUri + " does not exist.", nfe);
 			}
+		} finally {
+			if (model != null) model.close();
 		}
 		return false;
 	}
@@ -1638,8 +1623,9 @@ public class Catalogue {
 	 */
 	public List<Plan> searchPlans(URI uri, Set<BuildingBlock> buildingBlockSet) {
 		List<Plan> planList = new ArrayList<Plan>();
-		if (planner != null)
+		if (planner != null) {
 			planList.addAll(planner.searchPlans(uri, buildingBlockSet));
+		}
 		return planList;
 	}
 
@@ -1692,6 +1678,26 @@ public class Catalogue {
 		}
 	}
 	
+	public Collection<Sample> getAllSamples() {
+		return getAllSamples(null);
+	}
+
+	public Collection<Sample> getAllSamples(URI classUri) {
+		UriOrVariable object = classUri == null ? Variable.ANY : classUri;
+		LinkedList<Sample> results = new LinkedList<Sample>();
+		ClosableIterator<Statement> it = tripleStore.findStatements(Variable.ANY, RDF.type, object);
+		Sample sample;
+		while (it.hasNext()) {
+			Resource subject = it.next().getSubject();
+			if (isURI(subject) && subject.toString().startsWith(getServerURL()+"/samples/")) {
+				sample = getSample(subject.asURI());
+				if (sample != null) results.add(sample);
+			}
+		}
+		it.close();
+		return results;
+	}
+
 	public Sample getSample(URI uri) {
 		return SampleRDF2GoBuilder.buildSample(getModelForSubject(uri));
 	}

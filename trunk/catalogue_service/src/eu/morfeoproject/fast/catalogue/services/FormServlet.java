@@ -75,7 +75,7 @@ public class FormServlet extends GenericServlet {
 						Model model = RDF2Go.getModelFactory().createModel();
 						try {
 							model.open();
-							for (Form f : getCatalogue().getForms()) {
+							for (Form f : getCatalogue().getAllForms()) {
 								Model feModel = f.toRDF2GoModel();
 								for (String ns : feModel.getNamespaces().keySet())
 									model.setNamespace(ns, feModel.getNamespace(ns));
@@ -96,11 +96,11 @@ public class FormServlet extends GenericServlet {
 							response.setCharacterEncoding(TemplateManager.getDefaultEncoding());
 						if (TemplateManager.getLocale() != null)
 							response.setLocale(TemplateManager.getLocale());
-						CollectionTemplate.process(getCatalogue().getForms(), writer);
+						CollectionTemplate.process(getCatalogue().getAllForms(), writer);
 					} else { // by default returns APPLICATION_JSON
 						response.setContentType(MediaType.APPLICATION_JSON);
 						JSONArray formElements = new JSONArray();
-						for (Form f : getCatalogue().getForms())
+						for (Form f : getCatalogue().getAllForms())
 							formElements.put(f.toJSON());
 						writer.print(formElements.toString(2));
 					}
