@@ -1,4 +1,4 @@
-package eu.morfeoproject.fast.catalogue.buildingblocks;
+package eu.morfeoproject.fast.catalogue.model;
 
 import static org.junit.Assert.assertEquals;
 
