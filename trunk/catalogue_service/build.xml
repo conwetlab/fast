@@ -15,7 +15,7 @@
   <property name="web.dir"      value="${basedir}/WebContent"/>
   <property name="test.dir" location="${basedir}/test"/>
   <property name="test.data.dir" location="${test.dir}/data"/>
-  <property name="test.reports.dir" location="${test.dir}/reports"/>
+  <property name="test.reports.dir" location="${basedir}/test-reports"/>
 
   <!--path id="compile.classpath"> TOMCAT 5.5
     <pathelement location="${catalina.dir}/common/classes"/>
