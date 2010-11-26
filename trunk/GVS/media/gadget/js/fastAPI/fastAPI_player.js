@@ -36,27 +36,15 @@ FastAPI.Request = Class.create(FastBaseAPI.Request,{
     },
 
     call: function() {
+        this.options;
+
+        var _onSuccess = this.options.onSuccess;
+
+        this.options.onSuccess = onSuccess;
+
         var params = this.options;
 
-        var _onSuccess = params.onSuccess;
-
-        params.onSuccess = onSuccess;
-
-        //Add url and processed parameters to adapt them to the proxy required data
-        var newParams = {url:this.url, method: params["method"]};
-        if (params["parameters"]){
-            if (typeof(params["parameters"])=="string")
-                var p = parameters;
-            else{
-                var jsonLib = new FastAPI.Utils.JSON();
-                var p = jsonLib.toObject(params["parameters"]);
-            }
-            newParams["params"] = p;
-        }
-        params["parameters"] = newParams;
-        params["method"] = "POST";
-
-        new Ajax.Request('/proxy', params);
+        new Ajax.Request(buildProxyURL(this.url), this.options);
 
         // This function handles a success in the asynchronous call
         function onSuccess(transport) {
@@ -84,6 +72,30 @@ FastAPI.Request = Class.create(FastBaseAPI.Request,{
             if (_debugger) {
                 _debugger.onRequestSuccess(response, params.content);
             }
+        }
+
+        function buildProxyURL(url) {
+            var final_url = url;
+
+            var protocolEnd = url.indexOf('://');
+            if (protocolEnd != -1) {
+                    var domainStart = protocolEnd + 3;
+                    var pathStart = url.indexOf('/', domainStart);
+                    if (pathStart == -1) {
+                        pathStart = url.length;
+                    }
+
+                    var protocol = url.substr(0, protocolEnd);
+                    var domain = url.substr(domainStart, pathStart - domainStart);
+                    var rest = url.substring(pathStart);
+
+                    final_url = "/proxy" + '/' +
+                                encodeURIComponent(protocol) + '/' +
+                                encodeURIComponent(domain) + rest;
+            }
+
+            return final_url;
+
         }
     }
 });

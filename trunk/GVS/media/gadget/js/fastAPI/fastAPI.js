@@ -49,6 +49,8 @@ FastBaseAPI.Request = Class.create(/** @lends FastAPI.Request.prototype */{
      * <li> content: 'xml' || 'text' || 'json'</li>
      * <li> context: context of the invoking object</li>
      * <li> parameters: either as a URL-encoded string or as any Hash-compatible object.</li>
+     * <li> postBody: To be used instead of parameters, only for post/put. To be
+     * used with raw data</li>
      * <li> requestHeaders: a javascript object with properties representing headers.</li>
      * <li> onSuccess: Invoked when a request completes and its status code is undefined or belongs in the 2xy family.</li>
      * <li> onFailure: Invoked when a request completes and its status code exists but is not in the 2xy family.</li>
