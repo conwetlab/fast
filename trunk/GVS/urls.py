@@ -31,7 +31,7 @@ urlpatterns = patterns('',
     (r'^proxy', include('proxy.urls')),
 
     #Admin interface
-    (r'^admin/(.*)', admin.site.root),
+    (r'^admin/', include(admin.site.urls)),
 
     (r'^accounts/login/$', 'django.contrib.auth.views.login'),
     (r'^logout$', 'commons.authentication.logout', {'login_url': '/'}),
