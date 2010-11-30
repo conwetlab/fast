@@ -105,7 +105,7 @@ public class CodeGenerator_reqJSON extends CodeGenerator
 		boolean hasOpenSqareBracket = false;
 		boolean hasOpenForLoop = false;
 		
-		//TODO: Something like: if(Rule = DummyRule)
+		//TODO dk Something like: if(Rule = DummyRule)
 		// tmpCode += codeIndent + "value = getJSONValue_byName(" + value + ", '" + from + "'); \n";
 		//Should change value -> value.get(from) to jump over unnecessary lines
 		//Make the same changes in JSON & XML CodeGen, too!

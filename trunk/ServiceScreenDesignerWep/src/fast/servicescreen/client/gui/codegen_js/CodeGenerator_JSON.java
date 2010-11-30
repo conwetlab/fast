@@ -102,65 +102,6 @@ public class CodeGenerator_JSON extends CodeGenerator_reqJSON
 			"</form>\n" +
 			"</body>\n" +
 			"</html>\n";
-		
-		//TODO: Maybe change helper methods: Without: "if name ends with item" and
-		//"if value == object"
-//		helperMethods +=
-//			depth + "function getJSONValue_byName(val, name)\n" +
-//			depth + "{ \n" +
-//				depth2 + "//if(name.endsWith('_Item'))\n" +
-//				depth2 + "//{\n" +
-//					depth3 + "//name = name.substring(0, name.length - 5)\n" +
-//					depth3 + "//var parentValue = getJSONValue_byName(val, name);\n" +
-//					depth3 + "//return parentValue[0];\n" +
-//				depth2 + "//}\n\n" +
-//
-//				depth2 + "var searchList = new Array();\n" + 
-//				depth2 + "searchList.push(val);\n\n" +
-//
-//				depth2 + "//Breadth First Search over the list searchList\n" +
-//				depth2 + "while(searchList.length != 0)\n" +
-//				depth2 + "{\n" +
-//					depth3 + "//get and pop first element\n" +
-//					depth3 + "var value = searchList[0];	\n" +
-//					depth3 + "searchList.shift();\n" +
-//
-//					depth3 + "//if value was found, return\n" +
-//					depth3 + "if(isOn_nextLayer(value, name))\n" +
-//					depth3 + "{\n" +
-//						depth4 + "//in case of value[name] is an object, form in array\n" +
-//						depth4 + "//if(typeof value[name] == 'object')\n" +
-//						depth4 + "//{\n" +
-//							depth5 + "//var elements = new Array();\n" +
-//							depth5 + "//elements.push(value[name]);\n" +
-//
-//							depth5 + "//return elements;\n" +
-//						depth4 + "//}\n\n" +
-//						
-//						depth4 + "return value[name]\n\n" +
-//
-//					depth3 + "//in case of value[name] is an array\n" +
-//					depth3 + "return value[name];\n" +
-//				depth2 + "}\n" +
-//				depth2 + "//else attemp any sub-subValue to the searhList\n" +
-//				depth2 + "else\n" +
-//				depth2 + "{\n" +
-//					depth3 + "var attributeNames = getAttributeNameArray(value);\n" +
-//					depth3 + "for (var i = 0; i < attributeNames.length; ++i)\n" +
-//					depth3 + "{\n" +
-//						depth4 + "attribute = value[attributeNames[i]];\n\n" +
-//						
-//						depth4 + "//only save further objects\n" +
-//						depth4 + "if(typeof attribute == 'object')\n" +
-//						depth4 + "{\n" +
-//							depth5 + "searchList.push(attribute);\n" +	
-//						depth4 + "}\n" +
-//					depth3 + "}\n" +
-//				depth2 + "}\n" +
-//			depth + "}\n\n" +
-//
-//			depth + "return null; //not found\n" +
-//			depth + "}\n";
 	}
 	
 	/**

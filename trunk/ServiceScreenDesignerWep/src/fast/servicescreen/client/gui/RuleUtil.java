@@ -283,8 +283,7 @@ public class RuleUtil
 	   }
 	   
 	   /**
-	    * This method watch for Attr. (exactly) in given xmlDoc (TODO:maybee
-	    * we want to allow to acces any Attr. in any lower tag?)
+	    * This method watch for Attr. (exactly) in given xmlDoc
 	    * */
 	   public static String get_AttributeByName(Node xmlDoc, String tagName)
 	   {
@@ -299,8 +298,6 @@ public class RuleUtil
 		   
 		   return nodeValue;
 	   }
-	   
-	   
 	   
 	   
 	   //extended operations//

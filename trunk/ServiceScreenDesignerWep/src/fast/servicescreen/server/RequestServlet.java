@@ -17,7 +17,9 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 
 /**
- * Standalone Proxy Servlet
+ * Stand alone proxy servlet. Accessible in JavaScript runtime
+ * 
+ * TODO dk remove, if FASTApit works fine!
  * */
 @SuppressWarnings("serial")
 @RemoteServiceRelativePath("\requestServlet")

@@ -322,9 +322,7 @@ public class RuleGUI
       }
       else if("dummyRule".equals(kind))
       {
-    	  //do nothin here?
-    	  
-    	  //handling of dummyRule only necessary in CodeGeneration 
+    	 //do nothing here
       }
       
       for(String word : types)
@@ -415,11 +413,15 @@ public class RuleGUI
 
 	   TreeItem rootItem = aFactsTree.addItem("Facts:");
 
-	   try {
+	   try
+	   {
 		   transform(requestHandler.xmlDoc, rootRule, rootItem);
-	   } catch (Exception e) {
+	   } 
+	   catch (Exception e)
+	   {
 		   e.printStackTrace();
 	   }
+	   
 	   RuleUtil.expandItem(aFactsTree.getItem(0));
 
    }
@@ -430,6 +432,11 @@ public class RuleGUI
     * */
    public void transform(Node xmlDocElement, FASTMappingRule rule, TreeItem treeItem)
    {
+	  if("dummyRule".equals(rule.getKind()))
+	  {
+		  rule.setTargetElemName("useless");
+	  }
+	   
       if(RuleUtil.isCompleteRule(rule))
       {
     	  TreeItem kidItem = null;
@@ -476,9 +483,16 @@ public class RuleGUI
                	kidItem = treeItem.addItem(targetElemName + " : " + nodeValue);
              }
           }
+          //TODO dk need scenario.. This way it doesn´t work
           else if(rule.getKind().equals("dummyRule"))
           {
-        	  //TODO
+        	  String sourceName = rule.getSourceTagname();
+        	  
+        	  NodeList nodeList = RuleUtil.get_ElementsByTagname(xmlDocElement, sourceName); 
+        	  
+        	  xmlDocElement = nodeList.item(0); 
+        	  
+        	  callTransformForKids(xmlDocElement, rule, treeItem);
           }
       }
    }

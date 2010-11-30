@@ -107,12 +107,12 @@ public class ShareResourceHandler {
 		JSONString resVersion = new JSONString("");
 		resource.put("version", resVersion);
 
-		//actions TODO: adjust
+		//actions TODO tg adjust
 		JSONArray resActions = new JSONArray();
 		JSONObject actions1 = new JSONObject();
 		//actions.name
 		actions1.put("name", new JSONString(name + "Resource"));
-		//actions.preconditions [id,label,pattern,positive] TODO: adjust
+		//actions.preconditions [id,label,pattern,positive] TODO tg adjust
 		FactPort preCondition = (FactPort)res.iteratorOfPreconditions().next();
 		JSONArray preConds = new JSONArray();
 		JSONObject preCond1 = new JSONObject();
@@ -173,7 +173,7 @@ public class ShareResourceHandler {
 
 
 
-		//		//postconditions: [id, label, pattern, positive] TODO adjust
+		//postconditions: [id, label, pattern, positive] TODO tg adjust
 		FactPort postCondition = (FactPort)res.iteratorOfPostconditions().next();
 		JSONArray postConds = new JSONArray();
 		JSONArray innerPostConds = new JSONArray();
@@ -228,17 +228,17 @@ public class ShareResourceHandler {
 		//		}
 		//		resource.put("postconditions", postConds);
 
-		//label TODO default label?
+		//label TODO tg default label?
 		JSONObject resLabel = new JSONObject();
 		resLabel.put("en", new JSONString("A" + res.getName()));
 		resource.put("label", resLabel);
 
-		//description TODO
+		//description TODO tg
 		JSONObject resDescription = new JSONObject();
 		resDescription.put("en", new JSONString("A " + postCondition.getName()));
 		resource.put("description", resDescription);
 
-		//uri TODO catalogue/services/<id>
+		//uri TODO tg catalogue/services/<id>
 		//		JSONString resUri = new JSONString("");
 		//		resource.put("uri", resUri);
 
@@ -250,7 +250,7 @@ public class ShareResourceHandler {
 		JSONArray resTriggers = new JSONArray();
 		resource.put("triggers", resTriggers);
 
-		//tags TODO will be helpful when searching
+		//tags TODO tg will be helpful when searching
 		JSONArray resTags = new JSONArray();
 		resource.put("tags", resTags);
 

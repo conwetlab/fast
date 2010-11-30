@@ -214,7 +214,6 @@ public class SaveLoadJsonHandler {
 			screen.addToMappingRules(rootRule);
 		}
 		
-		//TODO looks quite nice at the moment
 		RootPanel.get().clear();
 		designer.buildGUI();
 	}

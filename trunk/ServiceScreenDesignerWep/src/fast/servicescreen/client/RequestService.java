@@ -15,9 +15,5 @@ public interface RequestService extends RemoteService
 	
 	String sendHttpRequest_POST(String url, HashMap<String, String> headers, String body);
 	
-	String sendHttpRequest_PUT(String url, HashMap<String, String> headers, String body);
-	
-	String sendHttpRequest_DELETE(String url, HashMap<String, String> headers);
-	
 	String saveJsFileOnServer(String opName, String preHTMLCode, String transCode, String postHTMLCode);
 }

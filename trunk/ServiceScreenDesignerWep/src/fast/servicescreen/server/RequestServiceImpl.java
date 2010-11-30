@@ -7,10 +7,8 @@ import java.util.Iterator;
 
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.ResponseHandler;
-import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
-import org.apache.http.client.methods.HttpPut;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.BasicResponseHandler;
 import org.apache.http.impl.client.DefaultHttpClient;
@@ -31,8 +29,6 @@ public class RequestServiceImpl extends RemoteServiceServlet implements RequestS
 	private HttpClient httpclient;
 	private HttpGet httpget;
 	private HttpPost httppost;
-	private HttpPut httpput;
-	private HttpDelete httpdelete;
 	private ResponseHandler<String> responseHandler;
 	
 	//the current path
@@ -102,78 +98,6 @@ public class RequestServiceImpl extends RemoteServiceServlet implements RequestS
 		{
 			// send the POST request
 			responseBody = httpclient.execute(httppost, responseHandler);
-		}
-		catch (Exception e)
-		{
-//			e.printStackTrace();
-			responseBody = "-1";
-		}
-		return responseBody;
-	}
-	
-	//TODO
-	public String sendHttpRequest_PUT(String url, HashMap<String, String> headers, String body)
-	{
-		// create httpClient and httpPOST container
-		httpclient = new DefaultHttpClient();
-		httpput = new HttpPut(url);
-		
-		//add all headers
-		if(headers != null)
-		{
-			for (Iterator<String> iterator = headers.keySet().iterator(); iterator.hasNext();) {
-				String tmpKey = (String) iterator.next();
-				String tmpVal = headers.get(tmpKey);
-				httpput.addHeader(tmpKey, tmpVal);
-			}
-		}
-		
-		try {
-			httpput.setEntity(new StringEntity(body));
-		} catch (UnsupportedEncodingException uee) {
-			uee.printStackTrace();
-		}
-
-		// Create response handler
-		responseHandler = new BasicResponseHandler();
-		
-		try
-		{
-			// send the POST request
-			responseBody = httpclient.execute(httpput, responseHandler);
-		}
-		catch (Exception e)
-		{
-//			e.printStackTrace();
-			responseBody = "-1";
-		}
-		return responseBody;
-	}
-
-	//TODO
-	public String sendHttpRequest_DELETE(String url, HashMap<String, String> headers)
-	{
-		// create httpClient and httpDELETE container
-		httpclient = new DefaultHttpClient();
-		httpdelete = new HttpDelete(url);
-		
-		//add all headers
-		if(headers != null)
-		{
-			for (Iterator<String> iterator = headers.keySet().iterator(); iterator.hasNext();) {
-				String tmpKey = (String) iterator.next();
-				String tmpVal = headers.get(tmpKey);
-				httpdelete.addHeader(tmpKey, tmpVal);
-			}
-		}
-
-		// Create response handler
-		responseHandler = new BasicResponseHandler();
-		
-		try
-		{
-			// send the POST request
-			responseBody = httpclient.execute(httpdelete, responseHandler);
 		}
 		catch (Exception e)
 		{
@@ -266,6 +190,5 @@ public class RequestServiceImpl extends RemoteServiceServlet implements RequestS
 		classpath = classpath.substring("file:".length());
 		
 		return classpath;
-	    
 	}
 }

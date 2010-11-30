@@ -1,5 +1,7 @@
 package fast.servicescreen.client.gui;
 
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
@@ -63,12 +65,12 @@ public class RequestGUI
 		designer.requestUrlBox = CTextChangeHandler.createWidthTextBox(designer.serviceScreen, textSize, "requestUrl");
 
 		// Add request button with handler
-		if (designer.requestHandler == null) 
+		if (designer.requestHandler == null)
 		{
 			designer.requestHandler = new SendRequestHandler(designer);
 		}
 		
-		//Add handler to change code gen, if request type is changing.
+		//Add handler to change code gen & request type, if request type is changing.
 		reqTypeHandler = new RequestTypeHandler(designer);
 		requestTable.setWidget(numRows, 1, reqTypeHandler.getChooserPanel());
 		numRows++;
@@ -77,10 +79,17 @@ public class RequestGUI
 		requestTable.setWidget(numRows, 1, reqTypeHandler.getHeaderBodyPanel());
 		numRows++;
 		
+		//WSDL button
+		Button wsdlButton = new Button("WSDL");
+		wsdlButton.addClickHandler(new WSDLButtonHandler());
+		wsdlButton.setStyleName("fastButton");
+		
 		designer.requestButton = new Button("Send Request", designer.requestHandler);
 		designer.requestButton.setStyleName("fastButton");
 		designer.requestButton.addStyleName("sc-FixedWidthButton");
 		requestTable.setWidget(numRows, 1, designer.requestButton);
+		requestTable.setCellSpacing(15);
+		requestTable.setWidget(numRows, 2, wsdlButton);
 		
 		numRows++;
 
@@ -121,6 +130,17 @@ public class RequestGUI
 		}		
 	}
 
+	/**
+	 * Set up the request URL and refresh parameter template
+	 * */
+	public void setRequestURL(String requestURL)
+	{
+		designer.templateBox.setText(requestURL);
+		
+		//TODO tg and dk: wtf why no updates come in?!?!?!?!
+		templateBoxHandler.doAction();
+	}
+	
 	public void setTemplateTable(Widget templateTable)
 	{
 		this.templateTable = templateTable;
@@ -129,5 +149,18 @@ public class RequestGUI
 	public Widget getTemplateTable()
 	{
 		return templateTable;
+	}
+	
+	/**
+	 * Open up a WSDl  widget helper, interacting with user
+	 * */
+	class WSDLButtonHandler implements ClickHandler
+	{
+		@Override
+		public void onClick(ClickEvent event)
+		{
+			WSDLWidget wsdlWidget = new WSDLWidget(RequestGUI.this);
+			wsdlWidget.show();
+		}
 	}
 }
