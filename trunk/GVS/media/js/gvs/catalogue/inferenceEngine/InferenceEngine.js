@@ -186,8 +186,14 @@ var InferenceEngine = Class.create( /** @lends InferenceEngine.prototype */ {
      * Error handler
      * @private
      */
-    _onError: function(transport, e){
-        Utils.showMessage("Something went wrong", {
+    _onError: function(transport, e) {
+        var message;
+        if (e) {
+            message = e;
+        } else {
+            message = "Catalogue cannot load";
+        }
+        Utils.showMessage("Something went wrong: " + message, {
             'error': true,
             'hide': true
         });

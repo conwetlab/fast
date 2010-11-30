@@ -192,7 +192,13 @@ var GadgetDialog = Class.create(GalleryDialog, /** @lends Builder.prototype */ {
     },
 
     _onError: function(/** XMLHttpRequest */ transport, /** Exception */ e) {
-        Utils.showMessage("Cannot store the gadget", {
+        var message;
+        if (e) {
+            message = e;
+        } else {
+            message = "Gadget already exists";
+        }
+        Utils.showMessage("Cannot store the gadget: " + message, {
             "error": true,
             "hide": true
         });

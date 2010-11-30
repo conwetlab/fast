@@ -54,7 +54,12 @@ Object.extend(Utils, {
      */
     onAJAXError: function(transport, e){
         Logger.serverError(transport, e);
-        Utils.showMessage("Ooops. Something unexpected happened. Try reloading",{
+
+        var message = "Try Reloading";
+        if (e) {
+            message = e;
+        }
+        Utils.showMessage("Ooops. Something unexpected happened: " + message,{
             "error": true,
             "hide": true
         });

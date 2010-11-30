@@ -725,7 +725,8 @@ var PaletteDocument = Class.create(AbstractDocument, /** @lends PaletteDocument.
         // TODO: think about what to do when a screen cannot be saved
         // (problems with wrong versions)
         if (!this._pendingOperation) {
-            Utils.showMessage("Cannot save " + this._typeName, {
+            Utils.showMessage("Cannot save " + this._typeName +
+            ": A buildingblock with that name already exists", {
                 'hide': true,
                 'error': true
             });
