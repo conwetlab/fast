@@ -131,6 +131,7 @@ var Palette = Class.create(SetListener, /** @lends Palette.prototype */ {
         var descs = $A(this._set.getBuildingBlocks());
         var sortDescs = descs.sortBy(function(desc){ return desc.getTitle() });
 
+        var newComponent = false;
         var component;
         var lastComponent;
         for (var i=0, desc; desc = sortDescs[i]; i++) {
@@ -143,14 +144,13 @@ var Palette = Class.create(SetListener, /** @lends Palette.prototype */ {
                     this._contentNode.appendChild(component.getNode())
                 }
                 component.getNode().insert({after: new Element("div", {"class": "paletteSeparator"})});
+                newComponent = true;
             }
             lastComponent = component.getNode().next();
         }
 
         this._filterComponents();
-
-        if (this._set.getBuildingBlockType() == Constants.BuildingBlock.SCREEN ||
-            this._set.getBuildingBlockType() == Constants.BuildingBlock.FORM) {
+        if (newComponent) {
             Utils.showMessage("Building blocks loaded", {'hide': true});
         }
     },
