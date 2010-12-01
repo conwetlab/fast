@@ -70,7 +70,7 @@ var BuildingBlockSet = Class.create( /** @lends BuildingBlockSet.prototype */ {
      /**
      * Add new building blocks to the set by uri
      */
-    addURIs: function (/** Array */ uris) {
+    setURIs: function (/** Array */ uris) {
         this._requestedUris = uris;
         this._factory.cacheBuildingBlocks(uris, this._cachedElements.bind(this));
     },
@@ -81,7 +81,7 @@ var BuildingBlockSet = Class.create( /** @lends BuildingBlockSet.prototype */ {
      * @private
      */
     _cachedElements: function () {
-        this._uris = this._uris.concat(this._requestedUris).uniq();
+        this._uris = this._requestedUris;
         this._listener.setChanged();
     }
 });

@@ -539,7 +539,7 @@ var ScreenDocument = Class.create(PaletteDocument,
             var palette = this._paletteController.getPalette(Constants.CatalogueRelationships[pair.key]);
             if (palette) {
                 var set = palette.getBuildingBlockSet();
-                set.addURIs(pair.value);
+                set.setURIs(pair.value);
             }
         }.bind(this));
     },
@@ -834,7 +834,7 @@ var ScreenDocument = Class.create(PaletteDocument,
             }.bind(this));
             this._recommendationManager.startAnimation();
         }
-
+        this._findCheckCallback(reachabilityData);
         this._updatePanes();
     },
 

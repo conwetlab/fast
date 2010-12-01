@@ -1,158 +1,160 @@
 var Palette = Class.create(SetListener, /** @lends Palette.prototype */ {
 
-    /**
-     * Represents a palette of droppable components of a given type.
-     *
-     * @constructs
-     * @extends SetListener
-     */
-    initialize: function(/** BuildingBlockSet */ set, /** Array */ dropZones,
-            /** InferenceEngine */ inferenceEngine) {
         /**
-         * @private @member
-         * @type InferenceEngine
+         * Represents a palette of droppable components of a given type.
+         *
+         * @constructs
+         * @extends SetListener
          */
-        this._inferenceEngine = inferenceEngine;
+        initialize: function(/** BuildingBlockSet */ set, /** Array */ dropZones,
+                /** InferenceEngine */ inferenceEngine) {
+            /**
+             * @private @member
+             * @type InferenceEngine
+             */
+            this._inferenceEngine = inferenceEngine;
+
+            /**
+             * Building block set
+             * @type BuildingBlockSet
+             * @private @member
+             */
+            this._set = set;
+
+            /**
+             * Zones to drop components
+             * @type Array
+             * @private @member
+             */
+            this._dropZones = dropZones;
+
+            /**
+             * Collection of components the palette offers.
+             * @type Hash   Hash of URI to PaletteComponent
+             * @private @member
+             */
+            this._components = new Hash();
+
+            /**
+             * Accordion pane node.
+             * @type DOMNode
+             * @private @member
+             */
+            this._node = null;
+
+            /**
+             * Palette content
+             * @type DOMNode
+             * @private @member
+             */
+            this._contentNode = null;
+
+            this._renderUI();
+            this._set.setListener(this);
+        },
+
+        // **************** PUBLIC METHODS **************** //
 
         /**
-         * Building block set
-         * @type BuildingBlockSet
-         * @private @member
-         */
-        this._set = set;
-
-        /**
-         * Zones to drop components
-         * @type Array
-         * @private @member
-         */
-        this._dropZones = dropZones;
-
-        /**
-         * Collection of components the palette offers.
-         * @type Hash   Hash of URI to PaletteComponent
-         * @private @member
-         */
-        this._components = new Hash();
-
-        /**
-         * Accordion pane node.
+         * Gets the node of the accordion pane
          * @type DOMNode
-         * @private @member
+         * @public
          */
-        this._node = null;
+        getNode: function() {
+            return this._node;
+        },
 
         /**
-         * Palette content
+         * Gets the node of the contents
          * @type DOMNode
-         * @private @member
+         * @public
          */
-        this._contentNode = null;
+        getContentNode: function() {
+            return this._contentNode;
+        },
 
-        this._renderUI();
-        this._set.setListener(this);
-    },
+        /**
+         * This function will be called whenever
+         * the set of building blocks changes
+         * @overrides
+         */
+        setChanged: function () {
+            this._updateComponents();
+        },
 
-    // **************** PUBLIC METHODS **************** //
+        getBuildingBlockSet: function() {
+            return this._set;
+        },
 
-    /**
-     * Gets the node of the accordion pane
-     * @type DOMNode
-     * @public
-     */
-    getNode: function() {
-        return this._node;
-    },
-
-    /**
-     * Gets the node of the contents
-     * @type DOMNode
-     * @public
-     */
-    getContentNode: function() {
-        return this._contentNode;
-    },
-
-    /**
-     * This function will be called whenever
-     * the set of building blocks changes
-     * @overrides
-     */
-    setChanged: function () {
-        this._updateComponents();
-    },
-
-    getBuildingBlockSet: function() {
-        return this._set;
-    },
-
-    /**
-     * All uris of all the components
-     */
-    getComponentUris: function() {
-        var uris = [];
-        this._set.getBuildingBlocks().each(function(buildingBlock) {
-            uris.push({
-                uri: buildingBlock.uri
+        /**
+         * All uris of all the components
+         */
+        getComponentUris: function() {
+            var uris = [];
+            this._set.getBuildingBlocks().each(function(buildingBlock) {
+                uris.push({
+                    uri: buildingBlock.uri
+                });
             });
-        });
-        return uris;
-    },
+            return uris;
+        },
 
-    // **************** PRIVATE METHODS **************** //
+        // **************** PRIVATE METHODS **************** //
 
-    /**
-     * Creates the GUI stuff that shows the content: components and separators.
-     * @type DOMNode
-     * @private
-     */
-    _renderUI: function() {
-        this._node = new dijit.layout.AccordionPane({
-            'title':this._set.getBuildingBlockName(),
-            'class':'paletteElement'
-        });
+        /**
+         * Creates the GUI stuff that shows the content: components and separators.
+         * @type DOMNode
+         * @private
+         */
+        _renderUI: function() {
+            this._node = new dijit.layout.AccordionPane({
+                'title':this._set.getBuildingBlockName(),
+                'class':'paletteElement'
+            });
 
-        this._contentNode = new Element('div', {
-            'class':'paletteContent'
-        });
+            this._contentNode = new Element('div', {
+                'class':'paletteContent'
+            });
 
-        this._searchBox = new PaletteSearchBox();
-        this._searchBox.addEventListener(this._filterComponents.bind(this));
-        this._node.setContent(this._searchBox.getDOMNode());
+            this._searchBox = new PaletteSearchBox();
+            this._searchBox.addEventListener(this._filterComponents.bind(this));
+            this._node.setContent(this._searchBox.getDOMNode());
 
-        this._searchBox.getDOMNode().insert({after:this._contentNode});
-    },
+            this._searchBox.getDOMNode().insert({after:this._contentNode});
+        },
 
-    /**
-     * Updates the palette components from building blocks by querying its building block factory.
-     * @private
-     */
-    _updateComponents: function() {
-        var descs = $A(this._set.getBuildingBlocks());
-        var sortDescs = descs.sortBy(function(desc){ return desc.getTitle() });
+        /**
+         * Updates the palette components from building blocks by querying its building block factory.
+         * @private
+         */
+        _updateComponents: function() {
+            var descs = $A(this._set.getBuildingBlocks());
 
-        var newComponent = false;
-        var component;
-        var lastComponent;
-        for (var i=0, desc; desc = sortDescs[i]; i++) {
-            component = this._components.get(desc.uri);
-            if (!component) {
-                component = this._buildComponentFor(desc);
-                if (lastComponent) {
-                    lastComponent.insert({after: component.getNode()});
-                } else {
-                    this._contentNode.appendChild(component.getNode())
-                }
-                component.getNode().insert({after: new Element("div", {"class": "paletteSeparator"})});
-                newComponent = true;
+            // Emptying the current components
+            if (this._components.values().size() < descs.size()) {
+                Utils.showMessage("Building blocks loaded", {'hide': true});
             }
-            lastComponent = component.getNode().next();
-        }
+            this._components = new Hash();
+            this._contentNode.update("");
 
-        this._filterComponents();
-        if (newComponent) {
-            Utils.showMessage("Building blocks loaded", {'hide': true});
-        }
+
+            var component;
+            var lastComponent;
+            for (var i=0, desc; desc = descs[i]; i++) {
+                component = this._components.get(desc.uri);
+                if (!component) {
+                    component = this._buildComponentFor(desc);
+                    if (lastComponent) {
+                        lastComponent.insert({after: component.getNode()});
+                    } else {
+                        this._contentNode.appendChild(component.getNode())
+                    }
+                    component.getNode().insert({after: new Element("div", {"class": "paletteSeparator"})});
+                }
+                lastComponent = component.getNode().next();
+            }
+
+            this._filterComponents();
     },
 
     /**

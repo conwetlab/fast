@@ -342,7 +342,8 @@ var ScreenflowDocument = Class.create(PaletteDocument,
         // Update screen palette
         var screenPalette = this._paletteController.getPalette(Constants.BuildingBlock.SCREEN);
         var screenSet = screenPalette.getBuildingBlockSet();
-        screenSet.addURIs(uris);
+        screenSet.setURIs(uris);
+        this._updatePanes();
     },
 
     _configureToolbar: function() {
@@ -499,13 +500,13 @@ var ScreenflowDocument = Class.create(PaletteDocument,
      * @private
      */
     _refreshReachability: function (/** Boolean (Optional) */_isFindCheck) {
-        var isFindCheck = Utils.variableOrDefault(_isFindCheck, false);
+        var isFindCheck = Utils.variableOrDefault(_isFindCheck, true);
         var canvas = this._getCanvasUris();
         var palette = this._paletteController.getComponentUris(Constants.BuildingBlock.SCREEN);
 
         if (isFindCheck) {
             this._inferenceEngine.findCheck(canvas, palette, this._tags,
-                                    'reachability', this._updatePanes.bind(this));
+                                    'reachability', this._findCheckCallback.bind(this));
         } else {
             this._inferenceEngine.check(canvas, palette, this._tags,
                                     'reachability', this._updatePanes.bind(this));
