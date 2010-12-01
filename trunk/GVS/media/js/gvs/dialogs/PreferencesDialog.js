@@ -41,7 +41,10 @@ var PreferencesDialog = Class.create(ConfirmDialog /** @lends PreferencesDialog.
             {'type':'input', 'label': 'EzWeb URL:','name': 'ezWebURL',
                     'value': user.getEzWebURL(),
                     'regExp': FormDialog.URL_VALIDATION,
-                    'message': FormDialog.INVALID_URL_MESSAGE}
+                    'message': FormDialog.INVALID_URL_MESSAGE},
+            {'type':'checkbox', 'label': 'Magic Catalogue Enabled',
+                    'name': 'catalogueMagic',
+                    'checked': user.getCatalogueMagic()}
         ];
 
         this._setContent(formData);
@@ -75,6 +78,7 @@ var PreferencesDialog = Class.create(ConfirmDialog /** @lends PreferencesDialog.
         this._getForm().lastName.value = user.getLastName();
         this._getForm().email.value = user.getEmail();
         this._getForm().ezWebURL.value = user.getEzWebURL();
+        this._getForm().catalogueMagic.checked = user.getCatalogueMagic() ? 'checked' : 'unchecked';
         $super();
     }
 });

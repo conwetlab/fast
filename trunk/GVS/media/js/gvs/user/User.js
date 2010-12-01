@@ -35,6 +35,16 @@ var User = Class.create( /** @lends User.prototype */ {
          */
         this._ezWebURL = null;
 
+
+        /**
+         * Defines the magic level of the catalogue.
+         * Magic stands for:
+         *    <li> Automatic reordering of the building blocks
+         * @type Boolean
+         * @private
+         */
+        this._catalogueMagic = false;
+
         //Bring the user from the server
         this._getUser();
     },
@@ -89,6 +99,21 @@ var User = Class.create( /** @lends User.prototype */ {
     getRealName: function () {
         return this._firstName + " " + this._lastName;
     },
+
+    /**
+     * @type Boolean
+     */
+    getCatalogueMagic: function() {
+        return this._catalogueMagic;
+    },
+
+    /**
+     * @param Boolean
+     */
+    setCatalogueMagic: function(catalogueMagic) {
+        this._catalogueMagic = catalogueMagic;
+    },
+
     /**
      * This function updates the user object
      * based on the data passed
@@ -98,6 +123,7 @@ var User = Class.create( /** @lends User.prototype */ {
         this._firstName = userData.firstName;
         this._lastName = userData.lastName;
         this._email = userData.email;
+        this._catalogueMagic = (userData.catalogueMagic != undefined);
 
         this._ezWebURL = userData.ezWebURL;
 

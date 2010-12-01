@@ -834,7 +834,9 @@ var ScreenDocument = Class.create(PaletteDocument,
             }.bind(this));
             this._recommendationManager.startAnimation();
         }
-        this._findCheckCallback(reachabilityData);
+        if (GVS.getUser().getCatalogueMagic()) {
+            this._findCheckCallback(reachabilityData);
+        }
         this._updatePanes();
     },
 

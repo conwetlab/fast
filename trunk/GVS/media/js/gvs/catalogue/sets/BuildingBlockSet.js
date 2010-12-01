@@ -81,7 +81,11 @@ var BuildingBlockSet = Class.create( /** @lends BuildingBlockSet.prototype */ {
      * @private
      */
     _cachedElements: function () {
-        this._uris = this._requestedUris;
+        if (GVS.getUser().getCatalogueMagic()) {
+            this._uris = this._requestedUris;
+        } else {
+            this._uris = this._uris.concat(this._requestedUris).uniq();
+        }
         this._listener.setChanged();
     }
 });
