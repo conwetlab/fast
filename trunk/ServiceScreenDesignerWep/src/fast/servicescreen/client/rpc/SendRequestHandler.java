@@ -1,6 +1,5 @@
 package fast.servicescreen.client.rpc;
 
-import java.util.HashMap;
 import java.util.Iterator;
 
 import com.google.gwt.core.client.GWT;
@@ -43,57 +42,75 @@ public class SendRequestHandler implements ClickHandler
    {
       designer = serviceScreenDesignerWep;
    }
-
+   
+   /**
+    * This method should replace the examplevalues into the inputPort tags.
+    * U can give the body String or the get url to replace values!
+    * */
    @SuppressWarnings("unchecked")
+   protected String replaceInPorts_byExampleValues(String url_or_body)
+   {
+	   // insert example values for input port names
+	   Iterator<FactPort> iteratorOfPreconditions = designer.serviceScreen.iteratorOfPreconditions();
+	   while (iteratorOfPreconditions.hasNext())
+	   {
+		   FactPort nextPort = iteratorOfPreconditions.next();
+		   String exampleValue = nextPort.getExampleValue();
+		   String portName = nextPort.getName();
+
+		   if (   exampleValue != null && ! exampleValue.equals("")
+				   && portName != null && ! portName.equals(""))
+		   {
+			   // do expansion
+			   String encodedValue = URL.encode(exampleValue);
+			   url_or_body = url_or_body.replaceAll("<" + portName + ">", encodedValue);
+		   }
+	   }
+	   
+	   return url_or_body;
+   }
+
+   /**
+    * This method replace example values into input port tags, for post into body, for get into url.
+    * Then toggle request
+    * */
    public void onClick(ClickEvent event) 
    {
-      String request = buildRequestUrl();
+	   String request = buildRequestUrl();
+	   
+	   //decide: send GET or POST request
+	   RequestMethodType methodType = designer.requestGui.reqTypeHandler.getRequestType();
+	   
+	   // Instantiate service
+	   if(service == null)
+	   {
+		   service = GWT.create(RequestService.class);
+	   }
+	   
+	   if(methodType.equals(RequestMethodType.GET_REQUEST))
+	   {
+		   request = replaceInPorts_byExampleValues(request);
+		   
+		   //invoke service
+		   service.sendHttpRequest_GET(request, null, new ParseXMLAction());
+	   }
+	   else if(methodType.equals(RequestMethodType.POST_REQUEST))
+	   {
+		   //	    	  header = designer.requestGui.reqTypeHandler.getHeader();
+		   //	    	  HashMap<String, String> headerMap = new HashMap<String, String>();
+		   //	    	  headerMap.put("testKey", header);
+		   
+		   body = designer.requestGui.reqTypeHandler.getBody();
+		   body = replaceInPorts_byExampleValues(body);
 
-      // insert example values for input port names
-      Iterator iteratorOfPreconditions = designer.serviceScreen.iteratorOfPreconditions();
-      while (iteratorOfPreconditions.hasNext())
-      {
-         FactPort nextPort = (FactPort) iteratorOfPreconditions.next();
-         String exampleValue = nextPort.getExampleValue();
-         String portName = nextPort.getName();
-         
-         if (   exampleValue != null && ! exampleValue.equals("")
-             && portName != null && ! portName.equals(""))
-         {
-            // do expansion
-        	String encodedValue = URL.encode(exampleValue);
-            request = request.replaceAll("<" + portName + ">", encodedValue);
-         }
-      }
+		   //invoke service
+		   service.sendHttpRequest_POST(request, null/*TODO dk&tg what about headers?*/, body, new ParseXMLAction());
+	   }
 
-      designer.requestUrlBox.setText(request);
+	   //show ready request url to user
+	   designer.requestUrlBox.setText(request);
 
-      // Instantiate service
-      if(service == null)
-      {
-    	  service = GWT.create(RequestService.class);
-      }
-      
-      designer.getResultText().setText("Waiting for server response ...");
-
-      //send GET or POST request
-      RequestMethodType methodType = designer.requestGui.reqTypeHandler.getRequestType();
-      if(methodType.equals(RequestMethodType.GET_REQUEST))
-      {
-    	  service.sendHttpRequest_GET(request, null, new ParseXMLAction());
-      }
-      else if(methodType.equals(RequestMethodType.POST_REQUEST))
-      {
-    	  header = designer.requestGui.reqTypeHandler.getHeader();
-    	  body = designer.requestGui.reqTypeHandler.getBody();
-    	  
-    	  HashMap<String, String> headerMap = new HashMap<String, String>();
-    	  
-    	  headerMap.put("testKey", header);
-    	  
-    	  //TODO dk acces hashmap right way.. Do same tih GET?
-    	  service.sendHttpRequest_POST(request, headerMap, body, new ParseXMLAction());
-      }
+	   designer.getResultText().setText("Waiting for server response ...");
    }
 
    @SuppressWarnings("unchecked")

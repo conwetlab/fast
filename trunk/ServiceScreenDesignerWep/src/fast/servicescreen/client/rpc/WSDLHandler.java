@@ -21,6 +21,7 @@ import fast.servicescreen.client.RequestServiceAsync;
 import fast.servicescreen.client.gui.RequestGUI;
 import fast.servicescreen.client.gui.RuleUtil;
 import fast.servicescreen.client.gui.WSDLWidget;
+import fast.servicescreen.client.gui.RequestTypeHandler.RequestMethodType;
 
 /**
  * This handler should be added to the WSDl widget, to handle 
@@ -32,7 +33,8 @@ public class WSDLHandler implements ClickHandler
 	protected RequestServiceAsync service;
 	protected WSDLWidget widget;
 	protected ListBox methods;
-	protected HashMap<String, String> methodsAndParameters;
+	protected HashMap<String, String> methodsAndParameters_GET;
+	protected HashMap<String, String> methodsAndParameters_POST;
 	protected String wsdlBaseURl;
 	protected RequestGUI requestGUI;
 	
@@ -105,7 +107,8 @@ public class WSDLHandler implements ClickHandler
 	 * */
 	protected void createMethodInformations(Document xmlDoc)
 	{
-		methodsAndParameters = new HashMap<String, String>();
+		methodsAndParameters_GET = new HashMap<String, String>();
+		methodsAndParameters_POST = new HashMap<String, String>();
 		
 		NodeList types = RuleUtil.get_ElementsByTagname(xmlDoc, "types");
 		
@@ -114,7 +117,8 @@ public class WSDLHandler implements ClickHandler
 		NodeList elements;
 		String methodName = "";
 		NodeList parameter;
-		String completeParameter = "";
+		String getParameter = "";
+		String postParameter = "";
 		
 		//for each type
 		for (int i = 0; i < types.getLength(); i++)
@@ -139,16 +143,19 @@ public class WSDLHandler implements ClickHandler
 						{
 							if(k > 0)
 							{
-								completeParameter += "&" + RuleUtil.get_AttributeByName(parameter.item(k), "name") + "=";
+								postParameter = RuleUtil.get_AttributeByName(parameter.item(k), "name") + "=";
+								getParameter += "&" + postParameter;
 							}
 							//if k = 0
 							else
 							{
-								completeParameter += "?" + RuleUtil.get_AttributeByName(parameter.item(k), "name") + "=";
+								postParameter = RuleUtil.get_AttributeByName(parameter.item(k), "name");
+								getParameter += "?" + postParameter + "=";
 							}
 						}
 						
-						methodsAndParameters.put(methodName, completeParameter);
+						methodsAndParameters_POST.put(methodName, postParameter);
+						methodsAndParameters_GET.put(methodName, getParameter);
 					}
 				}
 			}
@@ -168,7 +175,7 @@ public class WSDLHandler implements ClickHandler
 		methods.clear();
 		
 		String methodName = "";
-		for (Iterator<String> iterator = methodsAndParameters.keySet().iterator(); iterator.hasNext();)
+		for (Iterator<String> iterator = methodsAndParameters_GET.keySet().iterator(); iterator.hasNext();)
 		{
 			methodName = iterator.next();
 			
@@ -181,7 +188,7 @@ public class WSDLHandler implements ClickHandler
 	
 	/**
 	 * Handler for method choosing.
-	 * By choose, this build the requestURL and fill it to RequestGUI
+	 * By choose, this build the requestURL and parameters, and fill it to RequestGUI
 	 * */
 	class ChoosenMethodListener implements ClickListener
 	{
@@ -191,15 +198,32 @@ public class WSDLHandler implements ClickHandler
 			//get chosen entry
 			ListBox box = (ListBox) sender; 
 			String currentMethod = box.getItemText(box.getSelectedIndex());
+			
+			if(requestGUI.reqTypeHandler.getRequestType() == RequestMethodType.GET_REQUEST)
+			{
+				//find the bounded parameter
+				String parameter = methodsAndParameters_GET.get(currentMethod);
 
-			//find the bounded parameter
-			String parameter = methodsAndParameters.get(currentMethod);
+				//build request URL out of node List
+				String requestURL = wsdlBaseURl + "/" + currentMethod + parameter;
 
-			//build request URL out of node List
-			String requestURL = wsdlBaseURl + "/" + currentMethod + parameter;
+				//set the builded URL to the Request GUI
+				requestGUI.setRequestURL(requestURL);
+			}
+			else if(requestGUI.reqTypeHandler.getRequestType() == RequestMethodType.POST_REQUEST)
+			{
+				//find the bounded parameter
+				String parameter = methodsAndParameters_POST.get(currentMethod);
 
-			//set the builded URL to the Request GUI
-			requestGUI.setRequestURL(requestURL);
+				//build request URL out of node List
+				String requestURL = wsdlBaseURl + "/" + currentMethod;
+
+				//set the builded URL to the Request GUI
+				requestGUI.setRequestURL(requestURL);
+				
+				//set body field for POST request to parameter
+				requestGUI.reqTypeHandler.setBody(parameter);
+			}
 		}
 	}
 }

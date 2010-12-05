@@ -13,23 +13,26 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import fast.servicescreen.client.rpc.WSDLHandler;
 
 /**
- * 
+ * This widget presents a view, where user can put WSDL url and load that
+ * description. A chooser let them choose a service Method. Choosing will
+ * create the request URl and parameters for POST or GET
  */
 public class WSDLWidget extends DialogBox
 {
 	protected TextBox wsdlTextbox;
 	protected ListBox methods;
 	protected Button wsdlButton;
-	
+
 	/**
-	 * Shows a pop up, where u can fill in wsld path and
-	 * load the service the wsdl file describes 
-	 * */
+	 * This widget presents a view, where user can put WSDL url and load that
+	 * description. A chooser let them choose a service Method. Choosing will
+	 * create the request URl and parameters for POST or GET
+	 */
 	public WSDLWidget(RequestGUI requestGUI)
 	{		
 		methods = new ListBox();
 		methods.setSize("420px", "30px");
-		
+
 		wsdlTextbox = new TextBox();
 		wsdlTextbox.setText("http://www.webservicex.net/geoipservice.asmx?WSDL");
 		wsdlTextbox.setWidth("450px");

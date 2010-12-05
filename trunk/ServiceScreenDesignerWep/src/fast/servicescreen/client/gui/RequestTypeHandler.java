@@ -209,6 +209,11 @@ public class RequestTypeHandler
 		return "";
 	}
 	
+	public void setBody(String paramList)
+	{
+		body.setText(paramList);
+	}
+	
 	public WrappingType getRessourceType()
 	{
 		return this.currentRequestType;
