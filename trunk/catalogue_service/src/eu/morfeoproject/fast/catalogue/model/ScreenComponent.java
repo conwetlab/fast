@@ -99,7 +99,7 @@ public abstract class ScreenComponent extends BuildingBlock {
 			// uses
 			for (String id : action.getUses().keySet()) {
 				BlankNode uNode = model.createBlankNode();
-				model.addStatement(aNode, FGO.hasUse, uNode);
+				model.addStatement(aNode, FGO.uses, uNode);
 				model.addStatement(uNode, RDF.type, FGO.ResourceReference);
 				model.addStatement(uNode, FGO.hasId, model.createDatatypeLiteral(id, XSD._string));
 				model.addStatement(uNode, FGO.hasUri, action.getUses().get(id));
