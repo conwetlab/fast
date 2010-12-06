@@ -342,22 +342,8 @@ public class BuildingBlockRDF2GoBuilder {
 			for ( ; cIt.hasNext(); ) {
 				Statement st = cIt.next();
 				URI predicate = st.getPredicate();
-				Node object = st.getObject();
 				if (predicate.equals(FGO.hasCondition)) {
-					ArrayList<Condition> conList = new ArrayList<Condition>();
-					int i = 1;
-					boolean stop = false;
-					while (!stop) {
-						ClosableIterator<Statement> conBag = model.findStatements(object.asBlankNode(), RDF.li(i++), Variable.ANY);
-						if (!conBag.hasNext()) {
-							stop = true;
-						} else {
-							while (conBag.hasNext())
-								conList.add(retrieveCondition(conBag.next().getObject().asBlankNode(), model));
-						}
-						conBag.close();
-					}
-					pp.getConditions().addAll(conList);
+					pp.getConditions().add(retrieveCondition(st.getObject().asBlankNode(), model));
 				}
 			}
 		}

@@ -396,14 +396,11 @@ public class Catalogue {
 		if (unCon.size() > 0) {
 			queryString = queryString.concat("{");
 			for (Condition con : unCon) {
-				if (log.isDebugEnabled())
-					log.debug("[UNSATISFIED] " + con.toString());
-				queryString = queryString.concat("{ ?bb " + predicate.toSPARQL() + " ?b . ");
-				queryString = queryString.concat(" ?b ?li ?c . "); // :_bag rdf:li_1 :_condition
-				queryString = queryString.concat(" ?c " + FGO.hasPattern.toSPARQL() + " ?p . ");
-				queryString = queryString.concat("GRAPH ?p {");
-				ClosableIterator<Statement> it = patternToRDF2GoModel(
-						con.getPatternString()).iterator();
+				if (log.isDebugEnabled()) log.debug("[UNSATISFIED] " + con.toString());
+				queryString = queryString.concat("{ ?bb " + predicate.toSPARQL() + " ?condition . ");
+				queryString = queryString.concat(" ?condition " + FGO.hasPattern.toSPARQL() + " ?pattern . ");
+				queryString = queryString.concat("GRAPH ?pattern {");
+				ClosableIterator<Statement> it = patternToRDF2GoModel(con.getPatternString()).iterator();
 				for (; it.hasNext();) {
 					Statement st = it.next();
 					Resource subject = st.getSubject();
@@ -910,6 +907,11 @@ public class Catalogue {
 	public void removeScreenFlow(URI sfUri)
 	throws NotFoundException {
 		removeBuildingBlock(sfUri);
+	}
+
+	public void addScreens(Screen... screens)
+	throws DuplicatedException, OntologyInvalidException, BuildingBlockException {
+		for (Screen screen : screens) addScreen(screen);
 	}
 
 	/**

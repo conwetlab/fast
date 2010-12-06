@@ -9,7 +9,6 @@ import org.json.JSONObject;
 import org.ontoware.rdf2go.model.Model;
 import org.ontoware.rdf2go.model.node.BlankNode;
 import org.ontoware.rdf2go.model.node.URI;
-import org.ontoware.rdf2go.vocabulary.RDF;
 import org.ontoware.rdf2go.vocabulary.RDFS;
 import org.ontoware.rdf2go.vocabulary.XSD;
 
@@ -22,11 +21,11 @@ public abstract class WithConditions extends BuildingBlock {
 
 	protected WithConditions(URI uri) {
 		super(uri);
+		this.preconditions = new ArrayList<List<Condition>>();
+		this.postconditions = new ArrayList<List<Condition>>();
 	}
 
 	public List<List<Condition>> getPreconditions() {
-		if (preconditions == null)
-			preconditions = new ArrayList<List<Condition>>();
 		return preconditions;
 	}
 
@@ -35,8 +34,6 @@ public abstract class WithConditions extends BuildingBlock {
 	}
 
 	public List<List<Condition>> getPostconditions() {
-		if (postconditions == null)
-			postconditions = new ArrayList<List<Condition>>();
 		return postconditions;
 	}
 
@@ -75,33 +72,27 @@ public abstract class WithConditions extends BuildingBlock {
 
 		URI bbUri = this.getUri();
 		for (List<Condition> conList : this.getPreconditions()) {
-			BlankNode bag = model.createBlankNode();
-			model.addStatement(bag, RDF.type, RDF.Bag);
-			model.addStatement(bbUri, FGO.hasPreCondition, bag);
-			int i = 1;
 			for (Condition con : conList) {
 				BlankNode c = model.createBlankNode();
-				model.addStatement(bag, RDF.li(i++), c);
+				model.addStatement(bbUri, FGO.hasPreCondition, c);
 				model.addStatement(c, FGO.hasPatternString, model.createDatatypeLiteral(con.getPatternString(), XSD._string));
 				model.addStatement(c, FGO.isPositive, model.createDatatypeLiteral(new Boolean(con.isPositive()).toString(), XSD._boolean));
 				model.addStatement(c, FGO.hasId, model.createDatatypeLiteral(con.getId(), XSD._string));
-				for (String key : con.getLabels().keySet())
+				for (String key : con.getLabels().keySet()) {
 					model.addStatement(c, RDFS.label, model.createLanguageTagLiteral(con.getLabels().get(key), key));
+				}
 			}
 		}
 		for (List<Condition> conList : this.getPostconditions()) {
-			BlankNode bag = model.createBlankNode();
-			model.addStatement(bag, RDF.type, RDF.Bag);
-			model.addStatement(bbUri, FGO.hasPostCondition, bag);
-			int i = 1;
 			for (Condition con : conList) {
 				BlankNode c = model.createBlankNode();
-				model.addStatement(bag, RDF.li(i++), c);
+				model.addStatement(bbUri, FGO.hasPostCondition, c);
 				model.addStatement(c, FGO.hasPatternString, model.createDatatypeLiteral(con.getPatternString(), XSD._string));
 				model.addStatement(c, FGO.isPositive, model.createDatatypeLiteral(new Boolean(con.isPositive()).toString(), XSD._boolean));
 				model.addStatement(c, FGO.hasId, model.createDatatypeLiteral(con.getId(), XSD._string));
-				for (String key : con.getLabels().keySet())
+				for (String key : con.getLabels().keySet()) {
 					model.addStatement(c, RDFS.label, model.createLanguageTagLiteral(con.getLabels().get(key), key));
+				}
 			}
 		}
 		
