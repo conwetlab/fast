@@ -39,6 +39,7 @@ import eu.morfeoproject.fast.catalogue.model.factory.BuildingBlockFactory;
 import eu.morfeoproject.fast.catalogue.util.DateFormatter;
 import eu.morfeoproject.fast.catalogue.vocabulary.CTAG;
 import eu.morfeoproject.fast.catalogue.vocabulary.DC;
+import eu.morfeoproject.fast.catalogue.vocabulary.DOAP;
 import eu.morfeoproject.fast.catalogue.vocabulary.FGO;
 import eu.morfeoproject.fast.catalogue.vocabulary.FOAF;
 
@@ -144,7 +145,7 @@ public class BuildingBlockRDF2GoBuilder {
 				bb.setCreator(object.asURI());
 			} else if (predicate.equals(DC.rights)) {
 				bb.setRights(object.asURI());
-			} else if (predicate.equals(FGO.hasVersion)) {
+			} else if (predicate.equals(DOAP.revision)) {
 				bb.setVersion(object.asDatatypeLiteral().getValue());
 			} else if (predicate.equals(DC.date)) {
 				bb.setCreationDate(DateFormatter.parseDateISO8601(object.asDatatypeLiteral().getValue()));
@@ -373,7 +374,7 @@ public class BuildingBlockRDF2GoBuilder {
 							action.setName(o.asLiteral().toString());
 						} else if (p.equals(FGO.hasPreCondition)) {
 							action.getPreconditions().add(retrieveCondition(o.asBlankNode(), model));
-						} else if (p.equals(FGO.hasUse)) {
+						} else if (p.equals(FGO.uses)) {
 							ClosableIterator<Statement> useIt = model.findStatements(o.asBlankNode(), Variable.ANY, Variable.ANY);
 							String idUse = null;
 							URI uriUse = null;
@@ -421,7 +422,7 @@ public class BuildingBlockRDF2GoBuilder {
 						Node o = s.getObject();
 						if (p.equals(FGO.hasLanguage)) {
 							library.setLanguage(o.asDatatypeLiteral().getValue());
-						} else if (p.equals(FGO.hasSource)) {
+						} else if (p.equals(FGO.hasCode)) {
 							library.setSource(o.asURI());
 						}
 					}
