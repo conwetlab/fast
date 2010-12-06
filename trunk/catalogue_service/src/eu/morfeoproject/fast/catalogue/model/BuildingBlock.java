@@ -24,6 +24,7 @@ import org.ontoware.rdf2go.vocabulary.XSD;
 import eu.morfeoproject.fast.catalogue.util.DateFormatter;
 import eu.morfeoproject.fast.catalogue.vocabulary.CTAG;
 import eu.morfeoproject.fast.catalogue.vocabulary.DC;
+import eu.morfeoproject.fast.catalogue.vocabulary.DOAP;
 import eu.morfeoproject.fast.catalogue.vocabulary.FGO;
 import eu.morfeoproject.fast.catalogue.vocabulary.FOAF;
 
@@ -46,6 +47,9 @@ public abstract class BuildingBlock {
     protected BuildingBlock(URI uri) {
     	super();
     	this.uri = uri;
+    	this.labels = new HashMap<String, String>();
+    	this.descriptions = new HashMap<String, String>();
+		this.tags = new ArrayList<CTag>();
     }
     
     public URI getUri() {
@@ -57,8 +61,6 @@ public abstract class BuildingBlock {
 	}
 
 	public Map<String, String> getLabels() {
-		if (labels == null)
-			labels = new HashMap<String, String>();
 		return labels;
 	}
 
@@ -75,8 +77,6 @@ public abstract class BuildingBlock {
 	}
 
 	public Map<String, String> getDescriptions() {
-		if (descriptions == null)
-			descriptions = new HashMap<String, String>();
 		return descriptions;
 	}
 
@@ -133,8 +133,6 @@ public abstract class BuildingBlock {
 	}
 
 	public List<CTag> getTags() {
-		if (tags == null)
-			tags = new ArrayList<CTag>();
 		return tags;
 	}
 
@@ -250,7 +248,7 @@ public abstract class BuildingBlock {
 		if (this.getRights() != null)
 			model.addStatement(bbUri, DC.rights, this.getRights());
 		if (this.getVersion() != null)
-			model.addStatement(bbUri, FGO.hasVersion, model.createDatatypeLiteral(this.getVersion(), XSD._string));
+			model.addStatement(bbUri, DOAP.revision, model.createDatatypeLiteral(this.getVersion(), XSD._string));
 		if (this.getCreationDate() != null)
 			model.addStatement(bbUri, DC.date, model.createDatatypeLiteral(DateFormatter.formatDateISO8601(this.getCreationDate()), XSD._date));
 		if (this.getIcon() != null)
