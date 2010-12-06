@@ -111,7 +111,7 @@ public abstract class ScreenComponent extends BuildingBlock {
 			BlankNode libNode = model.createBlankNode();
 			model.addStatement(scUri, FGO.hasLibrary, libNode);
 			model.addStatement(libNode, FGO.hasLanguage, model.createDatatypeLiteral(library.getLanguage(), XSD._string));
-			model.addStatement(libNode, FGO.hasSource, library.getSource());
+			model.addStatement(libNode, FGO.hasCode, library.getSource());
 		}
 		
 		// postconditions
