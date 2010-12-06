@@ -141,17 +141,20 @@ public class WSDLHandler implements ClickHandler
 						parameter = RuleUtil.get_ElementsByTagname(elements.item(j), "element");
 						for (int k = 0; k < parameter.getLength(); k++)
 						{
+							postParameter = RuleUtil.get_AttributeByName(parameter.item(k), "name");
+							
 							if(k > 0)
 							{
-								postParameter = RuleUtil.get_AttributeByName(parameter.item(k), "name") + "=";
-								getParameter += "&" + postParameter;
+								getParameter += "&" + postParameter + "=";
 							}
 							//if k = 0
 							else
 							{
-								postParameter = RuleUtil.get_AttributeByName(parameter.item(k), "name");
 								getParameter += "?" + postParameter + "=";
 							}
+							
+							
+							postParameter = postParameter + "=<" + postParameter + ">";
 						}
 						
 						methodsAndParameters_POST.put(methodName, postParameter);
