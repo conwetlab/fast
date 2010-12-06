@@ -139,9 +139,11 @@ public class ScreenComponentFindCheckServlet extends GenericServlet {
 			// are used to find new components
 			ArrayList<Condition> conList = new ArrayList<Condition>();
 	    	conList.addAll(preconditions);
-			for (ScreenComponent comp : all)
-	    		for (List<Condition> cList : comp.getPostconditions())
+			for (ScreenComponent comp : all) {
+	    		for (List<Condition> cList : comp.getPostconditions()) {
 	    			conList.addAll(cList);
+	    		}
+			}
 	    	
 			// create the output
 			JSONObject output = new JSONObject();
@@ -149,16 +151,19 @@ public class ScreenComponentFindCheckServlet extends GenericServlet {
 			// add results of 'find' to the list of forms
 			if (search) {
 				Set<URI> formResults = getCatalogue().findScreenComponents(null, conList, all, 0, -1, tags, FGO.Form);
-				for (URI uri : formResults)
+				for (URI uri : formResults) {
 					forms.add(getCatalogue().getScreenComponent(uri));
+				}
 				// add results of 'find' to the list of operators
 				Set<URI> opResults = getCatalogue().findScreenComponents(null, conList, all, 0, -1, tags, FGO.Operator);
-				for (URI uri : opResults)
-					operators.add(getCatalogue().getScreenComponent(uri));			
+				for (URI uri : opResults) {
+					operators.add(getCatalogue().getScreenComponent(uri));
+				}
 				// add results of 'find' to the list of backend services
 				Set<URI> bsResults = getCatalogue().findScreenComponents(null, conList, all, 0, -1, tags, FGO.BackendService);
-				for (URI uri : bsResults)
+				for (URI uri : bsResults) {
 					backendServices.add(getCatalogue().getScreenComponent(uri));
+				}
 			}
 			
 			// extract pipes which are well defined (precondition and
@@ -184,30 +189,35 @@ public class ScreenComponentFindCheckServlet extends GenericServlet {
 			output.put("pipes", jsonPipes);
 
 			JSONArray canvasOut = new JSONArray();
-			for (ScreenComponent sc : canvas)
+			for (ScreenComponent sc : canvas) {
 				canvasOut.put(processComponent(canvas, sc, pipes, reachableElements));
+			}
 			output.put("canvas", canvasOut);
 
 			if (search) {
 				JSONArray formsOut = new JSONArray();
-				for (ScreenComponent sc : forms)
+				for (ScreenComponent sc : forms) {
 					formsOut.put(sc.getUri());
+				}
 				output.put("forms", formsOut);
 	
 				JSONArray operatorsOut = new JSONArray();
-				for (ScreenComponent sc : operators)
+				for (ScreenComponent sc : operators) {
 					operatorsOut.put(sc.getUri());
+				}
 				output.put("operators", operatorsOut);
 	
 				JSONArray servicesOut = new JSONArray();
-				for (ScreenComponent sc : backendServices)
+				for (ScreenComponent sc : backendServices) {
 					servicesOut.put(sc.getUri());
+				}
 				output.put("backendservices", servicesOut);
 			}
 			
 			JSONArray postOut = new JSONArray();
-			for (Condition con : postconditions)
+			for (Condition con : postconditions) {
 				postOut.put(processPostcondition(canvas, con, pipes, reachableElements));
+			}
 			output.put("postconditions", postOut);
 		
 			if (selectedItem != null) {
@@ -231,25 +241,36 @@ public class ScreenComponentFindCheckServlet extends GenericServlet {
 	}
 	
 	private Condition getConditionById(List<Condition> conditions, String id) {
-		for (Condition condition : conditions)
-			if (condition.getId() != null && condition.getId().equals(id))
+		for (Condition condition : conditions) {
+			if (condition.getId() != null 
+					&& condition.getId().equals(id)) {
 				return condition;
+			}
+		}
 		return null;
 	}
 
 	private Condition getPreconditionById(ScreenComponent sc, String id) {
-		for (Action action : sc.getActions())
-			for (Condition condition : action.getPreconditions())
-				if (condition.getId() != null && condition.getId().equals(id))
+		for (Action action : sc.getActions()) {
+			for (Condition condition : action.getPreconditions()) {
+				if (condition.getId() != null 
+						&& condition.getId().equals(id)) {
 					return condition;
+				}
+			}
+		}
 		return null;
 	}
 	
 	private Condition getPostconditionById(ScreenComponent sc, String id) {
-		for (List<Condition> conList : sc.getPostconditions())
-			for (Condition condition : conList)
-				if (condition.getId() != null && condition.getId().equals(id))
+		for (List<Condition> conList : sc.getPostconditions()) {
+			for (Condition condition : conList) {
+				if (condition.getId() != null 
+						&& condition.getId().equals(id)) {
 					return condition;
+				}
+			}
+		}
 		return null;
 	}
 	
@@ -340,8 +361,7 @@ public class ScreenComponentFindCheckServlet extends GenericServlet {
 							pipe.setIdBBTo(component.getUri().toString());
 							pipe.setIdActionTo(action.getName());
 							pipe.setIdConditionTo(pre.getId());
-							if (!pipes.contains(pipe))
-								pipeList.add(pipe);
+							if (!pipes.contains(pipe)) pipeList.add(pipe);
 						}
 					}
 					for (ScreenComponent sc : canvas) {
@@ -357,8 +377,7 @@ public class ScreenComponentFindCheckServlet extends GenericServlet {
 										pipe.setIdBBTo(component.getUri().toString());
 										pipe.setIdActionTo(action.getName());
 										pipe.setIdConditionTo(pre.getId());
-										if (!pipes.contains(pipe))
-											pipeList.add(pipe);
+										if (!pipes.contains(pipe)) pipeList.add(pipe);
 									}
 								}
 							}
@@ -377,13 +396,11 @@ public class ScreenComponentFindCheckServlet extends GenericServlet {
 							pipe.setIdBBTo(null);
 							pipe.setIdActionTo(null);
 							pipe.setIdConditionTo(post.getId());
-							if (!pipes.contains(pipe))
-								pipeList.add(pipe);
+							if (!pipes.contains(pipe)) pipeList.add(pipe);
 						}
 					}
 					for (ScreenComponent sc : canvas) {
-						if (sc.equals(component))
-							break; // discard selected item
+						if (sc.equals(component)) break; // discard selected item
 						for (Action action : sc.getActions()) {
 							for (Condition pre : action.getPreconditions()) {
 								if (isConditionCompatible(con, pre)) {
@@ -393,8 +410,7 @@ public class ScreenComponentFindCheckServlet extends GenericServlet {
 									pipe.setIdBBTo(sc.getUri().toString());
 									pipe.setIdActionTo(action.getName());
 									pipe.setIdConditionTo(pre.getId());
-									if (!pipes.contains(pipe))
-										pipeList.add(pipe);
+									if (!pipes.contains(pipe)) pipeList.add(pipe);
 								}
 							}
 						}
@@ -433,8 +449,7 @@ public class ScreenComponentFindCheckServlet extends GenericServlet {
 								pipe.setIdBBTo(null);
 								pipe.setIdActionTo(null);
 								pipe.setIdConditionTo(condition.getId());
-								if (!pipes.contains(pipe))
-									pipeList.add(pipe);
+								if (!pipes.contains(pipe)) pipeList.add(pipe);
 							}
 						}
 					}
@@ -514,19 +529,21 @@ public class ScreenComponentFindCheckServlet extends GenericServlet {
 	}
 	
 	private ScreenComponent getScreenComponent(Set<ScreenComponent> scList, String uri) {
-		for (ScreenComponent sc : scList)
-			if (sc.getUri().toString().equals(uri))
-				return sc;
+		for (ScreenComponent sc : scList) {
+			if (sc.getUri().toString().equals(uri)) return sc;
+		}
 		return null;
 	}
 	
 	private List<Pipe> getPipesFrom(List<Pipe> pipes, String bbFrom) {
 		ArrayList<Pipe> results = new ArrayList<Pipe>();
-		for (Pipe pipe : pipes)
-			if (bbFrom == null && pipe.getIdBBFrom() == null)
+		for (Pipe pipe : pipes) {
+			if (bbFrom == null && pipe.getIdBBFrom() == null) {
 				results.add(pipe);
-			else if (bbFrom != null && pipe.getIdBBFrom() != null && bbFrom.equals(pipe.getIdBBFrom()))
+			} else if (bbFrom != null && pipe.getIdBBFrom() != null && bbFrom.equals(pipe.getIdBBFrom())) {
 				results.add(pipe);
+			}
+		}
 		return results;
 	}
 	
@@ -541,7 +558,8 @@ public class ScreenComponentFindCheckServlet extends GenericServlet {
 	 */
 	private Pipe getPipeToComponent(ScreenComponent sc, Action action, Condition precondition, List<Pipe> pipes) {
 		for (Pipe pipe : pipes) {
-			if (pipe.getIdBBTo() != null && pipe.getIdBBTo().equals(sc.getUri().toString())
+			if (pipe.getIdBBTo() != null 
+					&& pipe.getIdBBTo().equals(sc.getUri().toString())
 					&& pipe.getIdActionTo().equals(action.getName())
 					&& pipe.getIdConditionTo().equals(precondition.getId())) {
 				return pipe;
