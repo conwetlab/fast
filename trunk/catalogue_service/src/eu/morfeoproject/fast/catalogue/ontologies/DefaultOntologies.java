@@ -27,7 +27,7 @@ public class DefaultOntologies {
     /** 
      * These ontologies have a class within the project representing their vocabularies, 
      * in the package eu.morfeoproject.fast.vocabulary
-     * Every time a change is made, the vocabulary has to be rewritten using the VocabularyWriter utility.
+     * Every time a change is made, the vocabulary has to be rewritten using the RDF2Go VocabularyWriter utility.
      */
     public static Ontology RDF = 
     	new Ontology(new URIImpl("http://www.w3.org/1999/02/22-rdf-syntax-ns#"), "rdf.rdf", Syntax.RdfXml, true);
@@ -35,6 +35,8 @@ public class DefaultOntologies {
         new Ontology(new URIImpl("http://www.w3.org/2000/01/rdf-schema#"), "rdfs.rdf", Syntax.RdfXml, true);
     public static Ontology DC = 
         new Ontology(new URIImpl("http://purl.org/dc/elements/1.1/"), "dc.rdf", Syntax.RdfXml, true);
+    public static Ontology DOAP = 
+        new Ontology(new URIImpl("http://usefulinc.com/ns/doap#"), "doap.rdf", Syntax.RdfXml, true);
     public static Ontology FGO =
     	new Ontology(new URIImpl("http://purl.oclc.org/fast/ontology/gadget#"), "fgo20100408.ttl", Syntax.Turtle, true);
 //    public static Ontology FOAF =
