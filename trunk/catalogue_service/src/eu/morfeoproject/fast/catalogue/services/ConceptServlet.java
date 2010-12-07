@@ -81,7 +81,7 @@ public class ConceptServlet extends GenericServlet {
 				}
 				response.setStatus(HttpServletResponse.SC_OK);
 			} catch (JSONException e) {
-				log.error(e.toString(), e);
+				log.error(e.getMessage(), e);
 				response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
 			}
 		}
@@ -113,19 +113,19 @@ public class ConceptServlet extends GenericServlet {
 				getCatalogue().addConcept(concept);
 				response.setStatus(HttpServletResponse.SC_OK);
 			} else {
-				response.sendError(HttpServletResponse.SC_BAD_REQUEST, "URI is required.");
+				response.sendError(HttpServletResponse.SC_BAD_REQUEST, "'name' and 'domain' are required.");
 			}
 		} catch (IllegalArgumentException e) {
-			log.error(e.toString(), e);
+			log.error(e.getMessage(), e);
 			response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
 		} catch (DuplicatedException e) {
-			log.error(e.toString(), e);
+			log.error(e.getMessage(), e);
 			response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
 		} catch (JSONException e) {
-			log.error(e.toString(), e);
+			log.error(e.getMessage(), e);
 			response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
 		} catch (BuildingBlockException e) {
-			log.error(e.toString(), e);
+			log.error(e.getMessage(), e);
 			response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
 		}
 	}
@@ -149,7 +149,7 @@ public class ConceptServlet extends GenericServlet {
 		if (id.equalsIgnoreCase("concepts")) id = null;
 		
 		if (id == null) {
-			response.sendError(HttpServletResponse.SC_BAD_REQUEST, "An ID must be specified.");
+			response.sendError(HttpServletResponse.SC_BAD_REQUEST, "URI must be specified.");
 		} else {
 			// Update the given member of the collection.
 			String uri = request.getRequestURL().toString();
@@ -159,16 +159,16 @@ public class ConceptServlet extends GenericServlet {
 				getCatalogue().updateConcept(concept);
 				response.setStatus(HttpServletResponse.SC_OK);
 			} catch (IllegalArgumentException e) {
-				log.error(e.toString(), e);
+				log.error(e.getMessage(), e);
 				response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
 			} catch (NotFoundException e) {
-				log.error(e.toString(), e);
+				log.error(e.getMessage(), e);
 				response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
 			} catch (JSONException e) {
-				log.error(e.toString(), e);
+				log.error(e.getMessage(), e);
 				response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
 			} catch (BuildingBlockException e) {
-				log.error(e.toString(), e);
+				log.error(e.getMessage(), e);
 				response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
 			}
 		}
@@ -183,7 +183,7 @@ public class ConceptServlet extends GenericServlet {
 		if (id.equalsIgnoreCase("concepts")) id = null;
 		
 		if (id == null) {
-			response.sendError(HttpServletResponse.SC_BAD_REQUEST, "An ID must be specified.");
+			response.sendError(HttpServletResponse.SC_BAD_REQUEST, "URI must be specified.");
 		} else {
 			// Delete the addressed member of the collection.
 			String uri = request.getRequestURL().toString();
