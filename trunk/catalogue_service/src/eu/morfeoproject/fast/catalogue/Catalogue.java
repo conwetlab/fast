@@ -815,7 +815,7 @@ public class Catalogue {
 	}
 
 	public URI createConceptURI(String name, String domain) {
-		return new URIImpl(configuration.getURI(environment, "serverURL") + "/concepts/" + domain + "/" + name);
+		return tripleStore.createURI(configuration.getURI(environment, "serverURL") + "/concepts/" + domain + "/" + name);
 	}
 
 	public boolean isConcept(URI concept) {
@@ -824,7 +824,7 @@ public class Catalogue {
 
 	public URI createURIforBuildingBlock(URL namespace, String bb, URI ofClass, String id) 
 	throws DuplicatedException, OntologyInvalidException {
-		URI bbUri = new URIImpl(namespace.toString() + "/" + bb + "/" + id);
+		URI bbUri = tripleStore.createURI(namespace.toString() + "/" + bb + "/" + id);
 		if (containsBuildingBlock(bbUri))
 			throw new DuplicatedException(bbUri + " already exists.");
 		return bbUri;
@@ -855,7 +855,7 @@ public class Catalogue {
 	}
 	
 	protected Model getModelForBuildingBlock(URI uri) {
-		ClosableIterator<Statement> it = tripleStore.findStatements(uri, new URIImpl("http://replace.for.real.one"), Variable.ANY);
+		ClosableIterator<Statement> it = tripleStore.findStatements(uri, tripleStore.createURI("http://replace.for.real.one"), Variable.ANY);
 		URI graphUri = null;
 		if (it.hasNext())
 			graphUri = it.next().getObject().asURI();
@@ -882,7 +882,7 @@ public class Catalogue {
 	}
 
 	protected URI getGraphForBuildingBlock(URI bbUri) {
-		ClosableIterator<Statement> it = tripleStore.findStatements(bbUri, new URIImpl("http://replace.for.real.one"), Variable.ANY);
+		ClosableIterator<Statement> it = tripleStore.findStatements(bbUri, tripleStore.createURI("http://replace.for.real.one"), Variable.ANY);
 		if (it.hasNext()) return it.next().getObject().asURI();
 		return null;
 	}
@@ -914,7 +914,7 @@ public class Catalogue {
 		try {
 			Model model = sf.toRDF2GoModel();
 			URI graphUri = saveModelToGraph(model);
-			tripleStore.addStatement(graphUri, sfUri, new URIImpl("http://replace.for.real.one"), graphUri);
+			tripleStore.addStatement(graphUri, sfUri, tripleStore.createURI("http://replace.for.real.one"), graphUri);
 			generateConditionsStatements(model, graphUri);
 			model.close();
 			return true;
@@ -1000,7 +1000,7 @@ public class Catalogue {
 		try {
 			Model model = screen.toRDF2GoModel();
 			URI graphUri = saveModelToGraph(model);
-			tripleStore.addStatement(graphUri, sUri, new URIImpl("http://replace.for.real.one"), graphUri);
+			tripleStore.addStatement(graphUri, sUri, tripleStore.createURI("http://replace.for.real.one"), graphUri);
 			generateConditionsStatements(model, graphUri);
 			model.close();
 			return true;
@@ -1068,7 +1068,7 @@ public class Catalogue {
 		try {
 			Model model = preOrPost.toRDF2GoModel();
 			URI graphUri = saveModelToGraph(model);
-			tripleStore.addStatement(graphUri, uri, new URIImpl("http://replace.for.real.one"), graphUri);
+			tripleStore.addStatement(graphUri, uri, tripleStore.createURI("http://replace.for.real.one"), graphUri);
 			generateConditionsStatements(model, graphUri);
 			model.close();
 			return true;
@@ -1130,7 +1130,7 @@ public class Catalogue {
 		try {
 			Model model = sc.toRDF2GoModel();
 			URI graphUri = saveModelToGraph(model);
-			tripleStore.addStatement(graphUri, scUri, new URIImpl("http://replace.for.real.one"), graphUri);
+			tripleStore.addStatement(graphUri, scUri, tripleStore.createURI("http://replace.for.real.one"), graphUri);
 			generateConditionsStatements(model, graphUri);
 			model.close();
 			return true;
@@ -1452,8 +1452,9 @@ public class Catalogue {
 				Model patternModel = patternToRDF2GoModel(pattern);
 				tripleStore.addStatement(graphUri, stmt.getSubject(), FGO.hasPattern, pUri);
 				tripleStore.addModel(patternModel, pUri);
-				if (configuration.getBoolean("import-ontologies", this.environment)) 
+				if (configuration.getBoolean("import-ontologies", this.environment)) {
 					importMissingOntologies(patternModel);
+				}
 			}
 		}
 		it.close();
@@ -1491,7 +1492,7 @@ public class Catalogue {
 			// creates a URI or BlankNode for the object
 			Node objectNode;
 			try {
-				objectNode = new URIImpl(object);
+				objectNode = tripleStore.createURI(object);
 			} catch (IllegalArgumentException e) {
 				objectNode = blankNodes.get(object);
 				if (objectNode == null) {
@@ -1499,7 +1500,7 @@ public class Catalogue {
 					blankNodes.put(subject, subjectNode);
 				}
 			}
-			model.addStatement(subjectNode, new URIImpl(predicate), objectNode);
+			model.addStatement(subjectNode, tripleStore.createURI(predicate), objectNode);
 		}
 
 		return model;
@@ -1619,7 +1620,7 @@ public class Catalogue {
 		try {
 			model = concept.toRDF2GoModel();
 			URI graphUri = saveModelToGraph(model);
-			tripleStore.addStatement(cUri, new URIImpl("http://replace.for.real.one"), graphUri);
+			tripleStore.addStatement(cUri, tripleStore.createURI("http://replace.for.real.one"), graphUri);
 			return true;
 		} catch (Exception e) {
 			log.error("Error while saving concept " + cUri, e);
