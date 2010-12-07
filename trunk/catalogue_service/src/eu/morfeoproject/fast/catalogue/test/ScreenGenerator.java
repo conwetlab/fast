@@ -1,6 +1,5 @@
 package eu.morfeoproject.fast.catalogue.test;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -54,15 +53,12 @@ public class ScreenGenerator {
 		itB.close();
 	}
 	
-	public List<List<Condition>> createConditions(List<URI> classes) {
-		ArrayList<List<Condition>> orConditions = new ArrayList<List<Condition>>();
-		for (int i = 0; i < Math.random()*2; i++) {
-			ArrayList<Condition> andConditions = new ArrayList<Condition>();
-			for (int j = 0; j < Math.random()*3; j++)
-				andConditions.add(createCondition(classes));
-			orConditions.add(andConditions);
+	public List<Condition> createConditions(List<URI> classes) {
+		ArrayList<Condition> conditions = new ArrayList<Condition>();
+		for (int j = 0; j < Math.random()*3; j++) {
+			conditions.add(createCondition(classes));
 		}
-		return orConditions;
+		return conditions;
 	}
 	
 	public Condition createCondition(List<URI> classes) {

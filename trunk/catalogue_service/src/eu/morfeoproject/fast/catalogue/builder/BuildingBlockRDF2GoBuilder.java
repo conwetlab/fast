@@ -283,6 +283,8 @@ public class BuildingBlockRDF2GoBuilder {
 		// create the resource of the given type
 		WithConditions withConditions = (WithConditions) retrieveBuildingBlock(type, model);
 		if (withConditions != null) {
+			withConditions.setPreconditions(new ArrayList<Condition>());
+			withConditions.setPostconditions(new ArrayList<Condition>());
 			// fill the conditions of the building block
 			ClosableIterator<Statement> cIt = model.findStatements(withConditions.getUri(), Variable.ANY, Variable.ANY);
 			for ( ; cIt.hasNext(); ) {
@@ -290,39 +292,10 @@ public class BuildingBlockRDF2GoBuilder {
 				URI predicate = st.getPredicate();
 				Node object = st.getObject();
 				
-				// preconditions
 				if (predicate.equals(FGO.hasPreCondition)) {
-					ArrayList<Condition> conList = new ArrayList<Condition>();
-					int i = 1;
-					boolean stop = false;
-					while (!stop) {
-						ClosableIterator<Statement> conBag = model.findStatements(object.asBlankNode(), RDF.li(i++), Variable.ANY);
-						if (!conBag.hasNext()) {
-							stop = true;
-						} else {
-							while (conBag.hasNext())
-								conList.add(retrieveCondition(conBag.next().getObject().asBlankNode(), model));
-						}
-						conBag.close();
-					}
-					withConditions.getPreconditions().add(conList);
-					
-				// postconditions
+					withConditions.getPreconditions().add(retrieveCondition(object.asBlankNode(), model));
 				} else if (predicate.equals(FGO.hasPostCondition)) {
-					ArrayList<Condition> conList = new ArrayList<Condition>();
-					int i = 1;
-					boolean stop = false;
-					while (!stop) {
-						ClosableIterator<Statement> conBag = model.findStatements(object.asBlankNode(), RDF.li(i++), Variable.ANY);
-						if (!conBag.hasNext()) {
-							stop = true;
-						} else {
-							while (conBag.hasNext())
-								conList.add(retrieveCondition(conBag.next().getObject().asBlankNode(), model));
-						}
-						conBag.close();
-					}
-					withConditions.getPostconditions().add(conList);
+					withConditions.getPostconditions().add(retrieveCondition(object.asBlankNode(), model));
 				}
 			}
 			cIt.close();
@@ -334,7 +307,6 @@ public class BuildingBlockRDF2GoBuilder {
 	private static PreOrPost retrievePreOrPost(URI type, Model model) throws InvalidBuildingBlockTypeException {
 		if (!type.equals(FGO.Precondition) && !type.equals(FGO.Postcondition))
 			throw new InvalidBuildingBlockTypeException(type+" is not a valid screen component type.");
-		
 		
 		PreOrPost pp = (PreOrPost) retrieveBuildingBlock(type, model);
 		if (pp != null) {
@@ -395,20 +367,7 @@ public class BuildingBlockRDF2GoBuilder {
 					actionIt.close();
 					sc.getActions().add(action);
 				} else if (predicate.equals(FGO.hasPostCondition)) {
-					ArrayList<Condition> conList = new ArrayList<Condition>();
-					int i = 1;
-					boolean stop = false;
-					while (!stop) {
-						ClosableIterator<Statement> conBag = model.findStatements(object.asBlankNode(), RDF.li(i++), Variable.ANY);
-						if (!conBag.hasNext()) {
-							stop = true;
-						} else {
-							while (conBag.hasNext())
-								conList.add(retrieveCondition(conBag.next().getObject().asBlankNode(), model));
-						}
-						conBag.close();
-					}
-					sc.getPostconditions().add(conList);
+					sc.getPostconditions().add(retrieveCondition(object.asBlankNode(), model));
 				} else if (predicate.equals(FGO.hasCode)) {
 					sc.setCode(object.asURI());
 				} else if (predicate.equals(FGO.hasTrigger)) {

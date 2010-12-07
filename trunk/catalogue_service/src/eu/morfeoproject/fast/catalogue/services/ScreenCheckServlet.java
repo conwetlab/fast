@@ -4,7 +4,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import javax.servlet.ServletException;
@@ -94,77 +93,65 @@ public class ScreenCheckServlet extends GenericServlet {
 			JSONObject output = new JSONObject();
 			if (criterion.equalsIgnoreCase("reachability")) {
 				JSONArray canvasOut = new JSONArray();
-				boolean reachability = true;
-				for (BuildingBlock r : canvas) {
+				for (BuildingBlock bb : canvas) {
 					JSONObject jsonResource = new JSONObject();
-					if (r instanceof Screen) {
-						Screen s = (Screen)r;
+					boolean reachability = true, satisfied = false;
+					if (bb instanceof Screen) {
+						Screen s = (Screen) bb;
 						jsonResource.put("uri", s.getUri());
 						JSONArray preArray = new JSONArray();
 						reachability = true;
-						boolean satisfied = false;
-						for (List<Condition> conList : s.getPreconditions()) { /* OR */
-							JSONArray conArray = new JSONArray();
-							satisfied = getCatalogue().isConditionSatisfied(reachables, conList, true, true, s.getUri());
+						for (Condition condition : s.getPreconditions()) {
+							satisfied = getCatalogue().isConditionSatisfied(reachables, condition, true, true, s.getUri());
 							reachability = reachability & satisfied;
-							for (Condition c : conList) {
-								JSONObject jsonPre = c.toJSON();
-								jsonPre.put("satisfied", satisfied);
-								conArray.put(jsonPre);
-							}
-							preArray.put(conArray);
+							JSONObject jsonPre = condition.toJSON();
+							jsonPre.put("satisfied", satisfied);
+							preArray.put(jsonPre);
 						}
 						jsonResource.put("reachability", reachability);
-						if (log.isInfoEnabled()) log.info("["+(reachability ? "REACHABLE" : "NO REACHABLE")+"] "+s.getUri());
 						jsonResource.put("preconditions", preArray);
-					} else if (r instanceof Precondition) {
-						jsonResource.put("uri", r.getUri());
+					} else if (bb instanceof Precondition) {
+						jsonResource.put("uri", bb.getUri());
 						jsonResource.put("reachability", true);
-					} else if (r instanceof Postcondition) {
-						Postcondition e = (Postcondition)r;
-						jsonResource.put("uri", e.getUri());
-						boolean satisfied = getCatalogue().isConditionSatisfied(reachables, e.getConditions(), true, true, e.getUri());
+					} else if (bb instanceof Postcondition) {
+						Postcondition p = (Postcondition) bb;
+						jsonResource.put("uri", p.getUri());
 						JSONArray conArray = new JSONArray();
-						for (Condition c : e.getConditions()) {
-							JSONObject jsonCon = c.toJSON();
+						reachability = true;
+						for (Condition condition : p.getConditions()) {
+							satisfied = getCatalogue().isConditionSatisfied(reachables, condition, true, true, p.getUri());
+							JSONObject jsonCon = condition.toJSON();
 							jsonCon.put("satisfied", satisfied);
 							conArray.put(jsonCon);
 						}
 						jsonResource.put("conditions", conArray);
-						jsonResource.put("reachability", satisfied);
-						if (log.isInfoEnabled()) log.info("["+(satisfied ? "REACHABLE" : "NO REACHABLE")+"] "+e.getUri());
+						jsonResource.put("reachability", reachability);
 					}
 					canvasOut.put(jsonResource);
 				}
 				output.put("canvas", canvasOut);
 				JSONArray elementsOut = new JSONArray();
-				for (BuildingBlock r : elements) { //TODO finish it
+				for (BuildingBlock bb : elements) { //TODO finish it
 					JSONObject jsonResource = new JSONObject();
-					reachability = true;
-					if (r instanceof Screen) {
-						Screen s = (Screen)r;
+					boolean reachability = true, satisfied = false;
+					if (bb instanceof Screen) {
+						Screen s = (Screen)bb;
 						jsonResource.put("uri", s.getUri());
 						JSONArray preArray = new JSONArray();
 						reachability = true;
-						boolean satisfied = false;
-						for (List<Condition> conList : s.getPreconditions()) { /* OR */
-							JSONArray conArray = new JSONArray();
-							satisfied = getCatalogue().isConditionSatisfied(reachables, conList, true, true, s.getUri());
+						for (Condition condition : s.getPreconditions()) {
+							satisfied = getCatalogue().isConditionSatisfied(reachables, condition, true, true, s.getUri());
 							reachability = reachability & satisfied;
-							for (Condition c : conList) {
-								JSONObject jsonPre = c.toJSON();
-								jsonPre.put("satisfied", satisfied);
-								conArray.put(jsonPre);
-							}
-							preArray.put(conArray);
+							JSONObject jsonPre = condition.toJSON();
+							jsonPre.put("satisfied", satisfied);
+							preArray.put(jsonPre);
 						}
-						jsonResource.put("reachability", reachability);
-						if (log.isInfoEnabled()) log.info("["+(reachability ? "REACHABLE" : "NO REACHABLE")+"] "+s.getUri());
 						jsonResource.put("preconditions", preArray);
-					} else if (r instanceof Precondition) {
-						jsonResource.put("uri", r.getUri());
 						jsonResource.put("reachability", reachability);
-					}else if (r instanceof Postcondition) {
+					} else if (bb instanceof Precondition) {
+						jsonResource.put("uri", bb.getUri());
+						jsonResource.put("reachability", true);
+					}else if (bb instanceof Postcondition) {
 						//TODO complete it
 					}
 					elementsOut.put(jsonResource);
@@ -177,10 +164,10 @@ public class ScreenCheckServlet extends GenericServlet {
 				response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Critetion not allowed.");
 			}
 		} catch (JSONException e) {
-			log.error(e.toString(), e);
+			log.error(e.getMessage(), e);
 			response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
 		} catch (NotFoundException e) {
-			log.error(e.toString(), e);
+			log.error(e.getMessage(), e);
 			response.sendError(HttpServletResponse.SC_NOT_FOUND, e.getMessage());
 		}
 	}

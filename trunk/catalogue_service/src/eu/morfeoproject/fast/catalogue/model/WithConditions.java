@@ -1,6 +1,6 @@
 package eu.morfeoproject.fast.catalogue.model;
 
-import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 import org.json.JSONArray;
@@ -16,28 +16,28 @@ import eu.morfeoproject.fast.catalogue.vocabulary.FGO;
 
 public abstract class WithConditions extends BuildingBlock {
 
-	private List<List<Condition>> preconditions;
-	private List<List<Condition>> postconditions;
+	private List<Condition> preconditions;
+	private List<Condition> postconditions;
 
 	protected WithConditions(URI uri) {
 		super(uri);
-		this.preconditions = new ArrayList<List<Condition>>();
-		this.postconditions = new ArrayList<List<Condition>>();
+		this.preconditions = new LinkedList<Condition>();
+		this.postconditions = new LinkedList<Condition>();
 	}
 
-	public List<List<Condition>> getPreconditions() {
+	public List<Condition> getPreconditions() {
 		return preconditions;
 	}
 
-	public void setPreconditions(List<List<Condition>> preconditions) {
+	public void setPreconditions(List<Condition> preconditions) {
 		this.preconditions = preconditions;
 	}
 
-	public List<List<Condition>> getPostconditions() {
+	public List<Condition> getPostconditions() {
 		return postconditions;
 	}
 
-	public void setPostconditions(List<List<Condition>> postconditions) {
+	public void setPostconditions(List<Condition> postconditions) {
 		this.postconditions = postconditions;
 	}
 	
@@ -46,20 +46,14 @@ public abstract class WithConditions extends BuildingBlock {
 		JSONObject json = super.toJSON();
 
 		JSONArray preconditions = new JSONArray();
-		for (List<Condition> conditionList : getPreconditions()) {
-			JSONArray conditionArray = new JSONArray();
-			for (Condition con : conditionList)
-				conditionArray.put(con.toJSON());
-			preconditions.put(conditionArray);
+		for (Condition condition : getPreconditions()) {
+			preconditions.put(condition.toJSON());
 		}
 		json.put("preconditions", preconditions);
 	
 		JSONArray postconditions = new JSONArray();
-		for (List<Condition> conditionList : getPostconditions()) {
-			JSONArray conditionArray = new JSONArray();
-			for (Condition con : conditionList)
-				conditionArray.put(con.toJSON());
-			postconditions.put(conditionArray);
+		for (Condition condition : getPostconditions()) {
+			postconditions.put(condition.toJSON());
 		}
 		json.put("postconditions", postconditions);
 
@@ -71,28 +65,24 @@ public abstract class WithConditions extends BuildingBlock {
 		Model model = super.toRDF2GoModel();
 
 		URI bbUri = this.getUri();
-		for (List<Condition> conList : this.getPreconditions()) {
-			for (Condition con : conList) {
-				BlankNode c = model.createBlankNode();
-				model.addStatement(bbUri, FGO.hasPreCondition, c);
-				model.addStatement(c, FGO.hasPatternString, model.createDatatypeLiteral(con.getPatternString(), XSD._string));
-				model.addStatement(c, FGO.isPositive, model.createDatatypeLiteral(new Boolean(con.isPositive()).toString(), XSD._boolean));
-				model.addStatement(c, FGO.hasId, model.createDatatypeLiteral(con.getId(), XSD._string));
-				for (String key : con.getLabels().keySet()) {
-					model.addStatement(c, RDFS.label, model.createLanguageTagLiteral(con.getLabels().get(key), key));
-				}
+		for (Condition condition : getPreconditions()) {
+			BlankNode c = model.createBlankNode();
+			model.addStatement(bbUri, FGO.hasPreCondition, c);
+			model.addStatement(c, FGO.hasPatternString, model.createDatatypeLiteral(condition.getPatternString(), XSD._string));
+			model.addStatement(c, FGO.isPositive, model.createDatatypeLiteral(new Boolean(condition.isPositive()).toString(), XSD._boolean));
+			model.addStatement(c, FGO.hasId, model.createDatatypeLiteral(condition.getId(), XSD._string));
+			for (String key : condition.getLabels().keySet()) {
+				model.addStatement(c, RDFS.label, model.createLanguageTagLiteral(condition.getLabels().get(key), key));
 			}
 		}
-		for (List<Condition> conList : this.getPostconditions()) {
-			for (Condition con : conList) {
-				BlankNode c = model.createBlankNode();
-				model.addStatement(bbUri, FGO.hasPostCondition, c);
-				model.addStatement(c, FGO.hasPatternString, model.createDatatypeLiteral(con.getPatternString(), XSD._string));
-				model.addStatement(c, FGO.isPositive, model.createDatatypeLiteral(new Boolean(con.isPositive()).toString(), XSD._boolean));
-				model.addStatement(c, FGO.hasId, model.createDatatypeLiteral(con.getId(), XSD._string));
-				for (String key : con.getLabels().keySet()) {
-					model.addStatement(c, RDFS.label, model.createLanguageTagLiteral(con.getLabels().get(key), key));
-				}
+		for (Condition condition : getPostconditions()) {
+			BlankNode c = model.createBlankNode();
+			model.addStatement(bbUri, FGO.hasPostCondition, c);
+			model.addStatement(c, FGO.hasPatternString, model.createDatatypeLiteral(condition.getPatternString(), XSD._string));
+			model.addStatement(c, FGO.isPositive, model.createDatatypeLiteral(new Boolean(condition.isPositive()).toString(), XSD._boolean));
+			model.addStatement(c, FGO.hasId, model.createDatatypeLiteral(condition.getId(), XSD._string));
+			for (String key : condition.getLabels().keySet()) {
+				model.addStatement(c, RDFS.label, model.createLanguageTagLiteral(condition.getLabels().get(key), key));
 			}
 		}
 		

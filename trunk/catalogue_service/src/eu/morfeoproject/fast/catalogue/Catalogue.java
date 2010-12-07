@@ -473,25 +473,23 @@ public class Catalogue {
 	 *            ignored at this version
 	 * @return a list of conditions which are unsatisfied
 	 */
-	protected ArrayList<Condition> getUnsatisfiedPreconditions(
-			Set<BuildingBlock> bbSet, boolean plugin, boolean subsume) {
+	protected ArrayList<Condition> getUnsatisfiedPreconditions(Set<BuildingBlock> bbSet, boolean plugin, boolean subsume) {
 		ArrayList<Condition> unsatisfied = new ArrayList<Condition>();
 		for (BuildingBlock bb : bbSet) {
 			if (bb instanceof Screen) {
 				Screen s = (Screen) bb;
-				for (List<Condition> conList : s.getPreconditions()) {
-					if (!isConditionSatisfied(bbSet, conList, plugin, subsume, s.getUri())) {
-						for (Condition c : conList) {
-							if (c.isPositive()) unsatisfied.add(c);
-						}
+				for (Condition condition : s.getPreconditions()) {
+					if (condition.isPositive() &&
+							!isConditionSatisfied(bbSet, condition, plugin, subsume, s.getUri())) {
+						unsatisfied.add(condition);
 					}
 				}
 			} else if (bb instanceof Postcondition) {
-				Postcondition e = (Postcondition) bb;
-				List<Condition> conList = e.getConditions();
-				if (!isConditionSatisfied(bbSet, conList, plugin, subsume, e.getUri())) {
-					for (Condition c : conList) {
-						if (c.isPositive()) unsatisfied.add(c);
+				Postcondition p = (Postcondition) bb;
+				for (Condition condition : p.getConditions()) {
+					if (condition.isPositive() &&
+							!isConditionSatisfied(bbSet, condition, plugin, subsume, p.getUri())) {
+						unsatisfied.add(condition);
 					}
 				}
 			}
@@ -508,7 +506,7 @@ public class Catalogue {
 	 * 
 	 * @param screens
 	 *            a set of screens which might satisfy the precondition
-	 * @param precondition
+	 * @param condition
 	 *            the condition to check if it is satisfied
 	 * @param plugin
 	 *            not yet implemented
@@ -519,6 +517,56 @@ public class Catalogue {
 	 * @return true if the condition is satisfied
 	 */
 	public boolean isConditionSatisfied(Set<BuildingBlock> bbSet,
+			Condition condition, boolean plugin, boolean subsume, URI screenExcluded) {
+		Set<BuildingBlock> tmpBBSet = new HashSet<BuildingBlock>();
+
+		// if no condition is provided, then returns true
+		if (condition == null) return true;
+
+		// copy the set of screens except the screen to be excluded
+		for (BuildingBlock bb : bbSet) {
+			if (bb instanceof Precondition) {
+				tmpBBSet.add(bb);
+			} else if (bb instanceof Screen 
+					&& !bb.getUri().equals(screenExcluded)) {
+				tmpBBSet.add((Screen) bb);
+			}
+		}
+
+		// create the ASK sparql query for a precondition
+		String queryStr = "ASK {";
+		if (condition.isPositive()) {
+			ClosableIterator<Statement> it = patternToRDF2GoModel(condition.getPatternString()).iterator();
+			for (; it.hasNext();) {
+				Statement st = it.next();
+				String subject = (st.getSubject() instanceof BlankNode) ?
+						toCleanVariable(st.getSubject().toString()) :
+							st.getSubject().toSPARQL();
+				String object = (st.getObject() instanceof BlankNode) ?
+						toCleanVariable(st.getObject().toString()) :
+							st.getObject().toSPARQL();
+				queryStr = queryStr.concat(subject + " " + st.getPredicate().toSPARQL() + " " + object + " . ");
+			}
+			it.close();
+		}
+		queryStr = queryStr.concat("}");
+
+		// empty query = is satisfied
+		if (queryStr.equals("ASK {}")) return true;
+
+		// creates all possible combination of preconditions
+		Set<Model> models = createModels(tmpBBSet, plugin, subsume);
+		boolean satisfied = false;
+
+		for (Model m : models) {
+			satisfied = m.sparqlAsk(queryStr);
+			if (satisfied) break;
+		}
+
+		return satisfied;
+	}
+
+	public boolean isConditionListSatisfied(Set<BuildingBlock> bbSet,
 			List<Condition> precondition, boolean plugin, boolean subsume,
 			URI screenExcluded) {
 		Set<BuildingBlock> tmpBBSet = new HashSet<BuildingBlock>();
@@ -544,13 +592,13 @@ public class Catalogue {
 				ClosableIterator<Statement> it = patternToRDF2GoModel(condition.getPatternString()).iterator();
 				for (; it.hasNext();) {
 					Statement st = it.next();
-					String su = (st.getSubject() instanceof BlankNode) ?
+					String subject = (st.getSubject() instanceof BlankNode) ?
 							toCleanVariable(st.getSubject().toString()) :
 								st.getSubject().toSPARQL();
-					String ob = (st.getObject() instanceof BlankNode) ?
+					String object = (st.getObject() instanceof BlankNode) ?
 							toCleanVariable(st.getObject().toString()) :
 								st.getObject().toSPARQL();
-					queryStr = queryStr.concat(su + " " + st.getPredicate().toSPARQL() + " " + ob + " . ");
+					queryStr = queryStr.concat(subject + " " + st.getPredicate().toSPARQL() + " " + object + " . ");
 				}
 				it.close();
 			}
@@ -567,7 +615,7 @@ public class Catalogue {
 
 		return satisfied;
 	}
-
+	
 	public Set<Model> createModels(Set<BuildingBlock> bbSet, boolean plugin, boolean subsume) {
 		Set<Model> models = new HashSet<Model>();
 		if (bbSet.isEmpty()) {
@@ -577,15 +625,15 @@ public class Catalogue {
 			if (r instanceof Precondition) {
 				Model m = RDF2Go.getModelFactory().createModel();
 				m.open();
-				for (Condition c : ((Precondition) r).getConditions())
+				for (Condition c : ((Precondition) r).getConditions()) {
 					if (c.isPositive()) m.addModel(patternToRDF2GoModel(c.getPatternString()));
+				}
 				models.add(m);
 			} else if (r instanceof Screen) {
 				Model m = RDF2Go.getModelFactory().createModel();
 				m.open();
-				for (List<Condition> postcondition : ((Screen) r).getPostconditions()) {
-					for (Condition c : postcondition)
-						if (c.isPositive()) m.addModel(patternToRDF2GoModel(c.getPatternString()));
+				for (Condition c: ((Screen) r).getPostconditions()) {
+					if (c.isPositive()) m.addModel(patternToRDF2GoModel(c.getPatternString()));
 				}
 				models.add(m);
 			}
@@ -597,16 +645,16 @@ public class Catalogue {
 				if (bb instanceof Precondition) {
 					Model m = RDF2Go.getModelFactory().createModel();
 					m.open();
-					for (Condition c : ((Precondition) bb).getConditions())
+					for (Condition c : ((Precondition) bb).getConditions()) {
 						if (c.isPositive()) m.addModel(patternToRDF2GoModel(c.getPatternString()));
+					}
 					m.addModel(model);
 					models.add(m);
 				} else if (bb instanceof Screen) {
 					Model m = RDF2Go.getModelFactory().createModel();
 					m.open();
-					for (List<Condition> postcondition : ((Screen) bb).getPostconditions()) {
-						for (Condition c : postcondition)
-							if (c.isPositive()) m.addModel(patternToRDF2GoModel(c.getPatternString()));
+					for (Condition c : ((Screen) bb).getPostconditions()) {
+						if (c.isPositive()) m.addModel(patternToRDF2GoModel(c.getPatternString()));
 					}
 					m.addModel(model);
 					models.add(m);
@@ -627,6 +675,7 @@ public class Catalogue {
 	 */
 	public boolean isConditionCompatible(Condition c1, Condition c2) {
 		if (c1 == null || c2 == null) return false;
+		
 		Model m1 = patternToRDF2GoModel(c1.getPatternString());
 		Model m2 = patternToRDF2GoModel(c2.getPatternString());
 		if (m1.size() == m2.size()) {
@@ -649,6 +698,7 @@ public class Catalogue {
 
 			return m1.sparqlAsk(queryStr);
 		}
+		
 		return false;
 	}
 
@@ -668,14 +718,16 @@ public class Catalogue {
 				results.add(bb);
 			} else if (bb instanceof Screen) {
 				Screen s = (Screen) bb;
-				if (s.getPreconditions().isEmpty())
+				if (s.getPreconditions().isEmpty()){
 					results.add(s);
-				else
+				} else {
 					toCheck.add(s);
+				}
 			}
 		}
-		if (!results.isEmpty() && !toCheck.isEmpty())
+		if (!results.isEmpty() && !toCheck.isEmpty()) {
 			results.addAll(filterReachableBuildingBlocks(results, toCheck));
+		}
 		return results;
 	}
 
@@ -685,19 +737,12 @@ public class Catalogue {
 		for (BuildingBlock bb : bbSet) {
 			if (bb instanceof Screen) {
 				Screen s = (Screen) bb;
-				boolean reachable = false;
-				// check whether a set of preconditions is fulfilled => makes
-				// the screen reachable
-				for (List<Condition> conList : s.getPreconditions()) { /* OR */
-					reachable = isConditionSatisfied(reachables, conList, true,
-							true, s.getUri());
-					if (reachable)
-						break;
-				}
-				if (reachable)
+				// check whether a set of preconditions is fulfilled => makes the screen reachable
+				if (isConditionListSatisfied(reachables, s.getPreconditions(), true, true, s.getUri())) {
 					results.add(s);
-				else
+				} else {
 					toCheck.add(s);
+				}
 			}
 		}
 		// if there are new reachable screens and screens to check
@@ -1001,10 +1046,12 @@ public class Catalogue {
 			if (containsBuildingBlock(se))
 				throw new DuplicatedException(seUri + " already exists.");
 		} else {
-			if (se instanceof Precondition)
+			if (se instanceof Precondition) {
 				seUri = createURIforBuildingBlock(FGO.Precondition, se.getId());
-			else if (se instanceof Postcondition)
+			}
+			else if (se instanceof Postcondition) {
 				seUri = createURIforBuildingBlock(FGO.Postcondition, se.getId());
+			}
 			se.setUri(seUri);
 		}
 		// sets current date if no date given

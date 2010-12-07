@@ -99,8 +99,9 @@ public class BuildingBlockJSONBuilder {
 		for (int i = 0; i < conditionsArray.length(); i++) {
 			JSONObject cJson = conditionsArray.getJSONObject(i);
 			Condition c = BuildingBlockFactory.createCondition();
-			if (cJson.has("id") && !cJson.isNull("id") && cJson.getString("id") != "") // optional
+			if (cJson.has("id") && !cJson.isNull("id") && cJson.getString("id") != "") { // optional
 				c.setId(cJson.getString("id"));
+			}
 			boolean positive = cJson.has("positive") ? cJson.getBoolean("positive") : true;
 			c.setPositive(positive);
 			if (cJson.get("label") != null) {
@@ -206,15 +207,17 @@ public class BuildingBlockJSONBuilder {
 		//bb.setCreator(new URIImpl(CatalogueAccessPoint.getCatalogue().getServerURL()+"/users/"+jsonResource.getString("creator")));
 		bb.setRights(new URIImpl(jsonResource.getString("rights")));
 		bb.setVersion(jsonResource.getString("version"));
-		if (jsonResource.has("creationDate") && !jsonResource.isNull("creationDate") && jsonResource.getString("creationDate") != "")
+		if (jsonResource.has("creationDate") && !jsonResource.isNull("creationDate") && jsonResource.getString("creationDate") != "") {
 			bb.setCreationDate(DateFormatter.parseDateISO8601(jsonResource.getString("creationDate")));
+		}
 		bb.setIcon(new URIImpl(jsonResource.getString("icon")));
 		bb.setScreenshot(new URIImpl(jsonResource.getString("screenshot")));
 		bb.setHomepage(new URIImpl(jsonResource.getString("homepage")));
 		bb.setId(jsonResource.getString("id"));
 		bb.getTags().addAll((parseTags(jsonResource.getJSONArray("tags"))));
-		if (jsonResource.has("parameterTemplate"))
+		if (jsonResource.has("parameterTemplate")) {
 			bb.setParameterTemplate(jsonResource.getString("parameterTemplate"));
+		}
 	}
 
 	private static ScreenFlow parseScreenFlow(ScreenFlow sf, JSONObject jsonScreenFlow) throws JSONException, IOException {
@@ -222,8 +225,9 @@ public class BuildingBlockJSONBuilder {
 		parseBuildingBlock(sf, jsonScreenFlow);
 
 		JSONArray resources = jsonScreenFlow.getJSONArray("contains");
-		for (int i = 0; i < resources.length(); i++)
+		for (int i = 0; i < resources.length(); i++) {
 			sf.getBuildingBlockList().add(new URIImpl(resources.getString(i)));
+		}
 		
 		return sf;
 	}
@@ -234,16 +238,12 @@ public class BuildingBlockJSONBuilder {
 
 		// preconditions
 		JSONArray preArray = jsonScreen.getJSONArray("preconditions");
-		ArrayList<List<Condition>> preconditions = new ArrayList<List<Condition>>();
-		for (int i = 0; i < preArray.length(); i++)
-			preconditions.add(buildConditions(preArray.getJSONArray(i)));
-		screen.setPreconditions(preconditions);
+		screen.setPreconditions(new ArrayList<Condition>());
+		screen.getPreconditions().addAll(buildConditions(preArray));
 		// postconditions
 		JSONArray postArray = jsonScreen.getJSONArray("postconditions");
-		ArrayList<List<Condition>> postconditions = new ArrayList<List<Condition>>();
-		for (int i = 0; i < postArray.length(); i++)
-			postconditions.add(buildConditions(postArray.getJSONArray(i)));
-		screen.setPostconditions(postconditions);
+		screen.setPostconditions(new ArrayList<Condition>());
+		screen.getPostconditions().addAll(buildConditions(postArray));
 		// code
 		if (jsonScreen.has("code") && jsonScreen.has("definition")) {
 			throw new BuildingBlockException("Either 'code' or 'definition' must be specified, but not both.");
@@ -311,8 +311,9 @@ public class BuildingBlockJSONBuilder {
 		Action action = BuildingBlockFactory.createAction();
 		
 		// name
-		if (jsonAction.get("name") != null)
+		if (jsonAction.get("name") != null) {
 			action.setName(jsonAction.getString("name"));
+		}
 		// preconditions
 		JSONArray preArray = jsonAction.getJSONArray("preconditions");
 		action.setPreconditions(buildConditions(preArray));
@@ -331,13 +332,13 @@ public class BuildingBlockJSONBuilder {
 	private static Library parseLibrary(JSONObject jsonLibrary) throws JSONException, IOException {
 		Library library = new Library();
 		
-		// name
-		if (jsonLibrary.get("language") != null)
+		if (jsonLibrary.get("language") != null) {
 			library.setLanguage(jsonLibrary.getString("language"));
-		// source
-		if (jsonLibrary.get("source") != null && !jsonLibrary.getString("source").equalsIgnoreCase("null"))
+		}
+		if (jsonLibrary.get("source") != null && !jsonLibrary.getString("source").equalsIgnoreCase("null")) {
 			library.setSource(new URIImpl(jsonLibrary.getString("source")));
-
+		}
+		
 		return library;
 	}
 	
@@ -358,26 +359,30 @@ public class BuildingBlockJSONBuilder {
 		
 		// actions
 		JSONArray actionsArray = jsonSc.getJSONArray("actions");
-		for (int i = 0; i < actionsArray.length(); i++)
+		for (int i = 0; i < actionsArray.length(); i++) {
 			sc.getActions().add(parseAction(actionsArray.getJSONObject(i)));
+		}
 		// postconditions
 		JSONArray postArray = jsonSc.getJSONArray("postconditions");
-		ArrayList<List<Condition>> postconditions = new ArrayList<List<Condition>>();
-		for (int i = 0; i < postArray.length(); i++)
-			postconditions.add(buildConditions(postArray.getJSONArray(i)));
-		sc.setPostconditions(postconditions);
+		sc.setPostconditions(new ArrayList<Condition>());
+		for (int i = 0; i < postArray.length(); i++) {
+			sc.getPostconditions().addAll(buildConditions(postArray.getJSONArray(i)));
+		}
 		// code
-		if (jsonSc.get("code") != null && !jsonSc.getString("code").equalsIgnoreCase("null"))
+		if (jsonSc.get("code") != null && !jsonSc.getString("code").equalsIgnoreCase("null")) {
 			sc.setCode(new URIImpl(jsonSc.getString("code")));
+		}
 		// libraries
 		JSONArray librariesArray = jsonSc.getJSONArray("libraries");
-		for (int i = 0; i < librariesArray.length(); i++)
+		for (int i = 0; i < librariesArray.length(); i++) {
 			sc.getLibraries().add(parseLibrary(librariesArray.getJSONObject(i)));
+		}
 		// triggers
 		if (jsonSc.get("triggers") != null) {
 			JSONArray triggersArray = jsonSc.getJSONArray("triggers");
-			for (int i = 0; i < triggersArray.length(); i++)
+			for (int i = 0; i < triggersArray.length(); i++) {
 				sc.getTriggers().add(triggersArray.getString(i));
+			}
 		}
 	}
 	
@@ -387,8 +392,9 @@ public class BuildingBlockJSONBuilder {
 		for (int i = 0; i < aTag.length(); i++) {
 			CTag tag = BuildingBlockFactory.createTag();
 			JSONObject oTag = aTag.getJSONObject(i);
-			if (oTag.has("means") && !oTag.isNull("means") && oTag.getString("means") != "")
+			if (oTag.has("means") && !oTag.isNull("means") && oTag.getString("means") != "") {
 				tag.setMeans(new URIImpl(oTag.getString("means")));
+			}
 			if (oTag.has("label")){
 				JSONObject jsonLabels = oTag.getJSONObject("label");
 				Iterator<String> labels = jsonLabels.keys();
@@ -397,8 +403,9 @@ public class BuildingBlockJSONBuilder {
 					tag.getLabels().put(key, jsonLabels.getString(key));
 				}
 			}
-			if (oTag.has("taggingDate") && !oTag.isNull("taggingDate") && oTag.getString("taggingDate") != "")
+			if (oTag.has("taggingDate") && !oTag.isNull("taggingDate") && oTag.getString("taggingDate") != "") {
 				tag.setTaggingDate(DateFormatter.parseDateISO8601(oTag.getString("taggingDate")));
+			}
 			tags.add(tag);
 		}
 		return tags;

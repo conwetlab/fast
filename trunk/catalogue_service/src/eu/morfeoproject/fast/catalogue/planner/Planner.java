@@ -117,11 +117,11 @@ public abstract class Planner extends Cacheable<List<Plan>> {
 	
 	public void update(BuildingBlock newResource, BuildingBlock oldResource) {
 		if (newResource instanceof Screen && oldResource instanceof Screen) {
-			if (!equalConditions(((Screen) newResource).getPreconditions(), ((Screen) oldResource).getPreconditions())) {
+			if (!equalListCondition(((Screen) newResource).getPreconditions(), ((Screen) oldResource).getPreconditions())) {
 				plannerStore.removeTo(newResource.getUri());
 				calculateBackwards(newResource);
 			}
-			if (!equalConditions(((Screen) newResource).getPostconditions(), ((Screen) oldResource).getPostconditions())) {
+			if (!equalListCondition(((Screen) newResource).getPostconditions(), ((Screen) oldResource).getPostconditions())) {
 				plannerStore.removeFrom(newResource.getUri());
 				calculateForwards(newResource);
 			}
@@ -189,23 +189,8 @@ public abstract class Planner extends Cacheable<List<Plan>> {
 		}
 	}
 	
-	private boolean equalConditions(List<List<Condition>> cA, List<List<Condition>> cB) {
-		if (cA.size() != cB.size()) {
-			return false;
-		} else {
-			for (int idx = 0; idx < cA.size(); idx++) {
-				if (cA.get(idx).size() != cB.get(idx).size()) {
-					return false;
-				} else {
-					if (!equalListCondition(cA.get(idx), cB.get(idx)))
-						return false;
-				}
-			}
-			return true;
-		}
-	}
-
 	private boolean equalListCondition(List<Condition> lcA, List<Condition> lcB) {
+		if (lcA.size() != lcB.size()) return false;
 		for (int cIdx = 0; cIdx < lcA.size(); cIdx++) {
 			if (!catalogue.isConditionCompatible(lcA.get(cIdx), lcB.get(cIdx))) {
 				return false;

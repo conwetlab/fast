@@ -20,14 +20,14 @@ public abstract class ScreenComponent extends BuildingBlock {
 	private URI code;
 	private List<Action> actions;
 	private List<Library> libraries;
-	private List<List<Condition>> postconditions;
+	private List<Condition> postconditions;
 	private List<String> triggers;
 
     protected ScreenComponent(URI uri) {
 		super(uri);
 		this.actions = new ArrayList<Action>();
 		this.libraries = new ArrayList<Library>();
-		this.postconditions = new ArrayList<List<Condition>>();
+		this.postconditions = new ArrayList<Condition>();
 		this.triggers = new ArrayList<String>();
 	}
 
@@ -55,11 +55,11 @@ public abstract class ScreenComponent extends BuildingBlock {
 		this.libraries = libraries;
 	}
 	
-	public List<List<Condition>> getPostconditions() {
+	public List<Condition> getPostconditions() {
 		return postconditions;
 	}
 
-	public void setPostconditions(List<List<Condition>> postconditions) {
+	public void setPostconditions(List<Condition> postconditions) {
 		this.postconditions = postconditions;
 	}
 
@@ -115,25 +115,20 @@ public abstract class ScreenComponent extends BuildingBlock {
 		}
 		
 		// postconditions
-		for (List<Condition> conList : getPostconditions()) {
-			BlankNode bag = model.createBlankNode();
-			model.addStatement(bag, RDF.type, RDF.Bag);
-			model.addStatement(scUri, FGO.hasPostCondition, bag);
-			int i = 1;
-			for (Condition con : conList) {
-				BlankNode c = model.createBlankNode();
-				model.addStatement(bag, RDF.li(i++), c);
-				model.addStatement(c, FGO.hasPatternString, model.createDatatypeLiteral(con.getPatternString(), XSD._string));
-				model.addStatement(c, FGO.isPositive, model.createDatatypeLiteral(new Boolean(con.isPositive()).toString(), XSD._boolean));
-				model.addStatement(c, FGO.hasId, model.createDatatypeLiteral(con.getId(), XSD._string));
-				for (String key : con.getLabels().keySet())
-					model.addStatement(c, RDFS.label, model.createLanguageTagLiteral(con.getLabels().get(key), key));
-			}
+		for (Condition condition : getPostconditions()) {
+			BlankNode conBN = model.createBlankNode();
+			model.addStatement(scUri, FGO.hasPostCondition, conBN);
+			model.addStatement(conBN, FGO.hasPatternString, model.createDatatypeLiteral(condition.getPatternString(), XSD._string));
+			model.addStatement(conBN, FGO.isPositive, model.createDatatypeLiteral(new Boolean(condition.isPositive()).toString(), XSD._boolean));
+			model.addStatement(conBN, FGO.hasId, model.createDatatypeLiteral(condition.getId(), XSD._string));
+			for (String key : condition.getLabels().keySet())
+				model.addStatement(conBN, RDFS.label, model.createLanguageTagLiteral(condition.getLabels().get(key), key));
 		}
 		
 		// triggers
-		for (String trigger : getTriggers())
+		for (String trigger : getTriggers()) {
 			model.addStatement(scUri, FGO.hasTrigger, model.createDatatypeLiteral(trigger, XSD._string));
+		}
 		
 		return model;
 	}
@@ -162,11 +157,8 @@ public abstract class ScreenComponent extends BuildingBlock {
 		
 		// postconditions
 		JSONArray postArray = new JSONArray();
-		for (List<Condition> conditionList : getPostconditions()) {
-			JSONArray conditionArray = new JSONArray();
-			for (Condition con : conditionList)
-				conditionArray.put(con.toJSON());
-			postArray.put(conditionArray);
+		for (Condition condition : getPostconditions()) {
+			postArray.put(condition.toJSON());
 		}
 		json.put("postconditions", postArray);
 		

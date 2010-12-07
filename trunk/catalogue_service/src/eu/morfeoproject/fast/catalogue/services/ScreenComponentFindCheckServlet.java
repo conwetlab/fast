@@ -140,9 +140,7 @@ public class ScreenComponentFindCheckServlet extends GenericServlet {
 			ArrayList<Condition> conList = new ArrayList<Condition>();
 	    	conList.addAll(preconditions);
 			for (ScreenComponent comp : all) {
-	    		for (List<Condition> cList : comp.getPostconditions()) {
-	    			conList.addAll(cList);
-	    		}
+				conList.addAll(comp.getPostconditions());
 			}
 	    	
 			// create the output
@@ -263,12 +261,10 @@ public class ScreenComponentFindCheckServlet extends GenericServlet {
 	}
 	
 	private Condition getPostconditionById(ScreenComponent sc, String id) {
-		for (List<Condition> conList : sc.getPostconditions()) {
-			for (Condition condition : conList) {
-				if (condition.getId() != null 
-						&& condition.getId().equals(id)) {
-					return condition;
-				}
+		for (Condition condition : sc.getPostconditions()) {
+			if (condition.getId() != null 
+					&& condition.getId().equals(id)) {
+				return condition;
 			}
 		}
 		return null;
@@ -368,17 +364,15 @@ public class ScreenComponentFindCheckServlet extends GenericServlet {
 						if (sc.equals(component)) {
 							// discard selected item
 						} else {
-							for (List<Condition> conList : sc.getPostconditions()) {
-								for (Condition con : conList) {
-									if (isConditionCompatible(con, pre)) {
-										Pipe pipe = new Pipe();
-										pipe.setIdBBFrom(sc.getUri().toString());
-										pipe.setIdConditionFrom(con.getId());
-										pipe.setIdBBTo(component.getUri().toString());
-										pipe.setIdActionTo(action.getName());
-										pipe.setIdConditionTo(pre.getId());
-										if (!pipes.contains(pipe)) pipeList.add(pipe);
-									}
+							for (Condition con : sc.getPostconditions()) {
+								if (isConditionCompatible(con, pre)) {
+									Pipe pipe = new Pipe();
+									pipe.setIdBBFrom(sc.getUri().toString());
+									pipe.setIdConditionFrom(con.getId());
+									pipe.setIdBBTo(component.getUri().toString());
+									pipe.setIdActionTo(action.getName());
+									pipe.setIdConditionTo(pre.getId());
+									if (!pipes.contains(pipe)) pipeList.add(pipe);
 								}
 							}
 						}
@@ -386,32 +380,30 @@ public class ScreenComponentFindCheckServlet extends GenericServlet {
 				}
 			}
 			// look for pipes from the postconditions the selected item to <somewhere>
-			for (List<Condition> conList : component.getPostconditions()) {
-				for (Condition con : conList) {
-					for (Condition post : postconditions) {
-						if (isConditionCompatible(con, post)) {
-							Pipe pipe = new Pipe();
-							pipe.setIdBBFrom(component.getUri().toString());
-							pipe.setIdConditionFrom(con.getId());
-							pipe.setIdBBTo(null);
-							pipe.setIdActionTo(null);
-							pipe.setIdConditionTo(post.getId());
-							if (!pipes.contains(pipe)) pipeList.add(pipe);
-						}
+			for (Condition con : component.getPostconditions()) {
+				for (Condition post : postconditions) {
+					if (isConditionCompatible(con, post)) {
+						Pipe pipe = new Pipe();
+						pipe.setIdBBFrom(component.getUri().toString());
+						pipe.setIdConditionFrom(con.getId());
+						pipe.setIdBBTo(null);
+						pipe.setIdActionTo(null);
+						pipe.setIdConditionTo(post.getId());
+						if (!pipes.contains(pipe)) pipeList.add(pipe);
 					}
-					for (ScreenComponent sc : canvas) {
-						if (sc.equals(component)) break; // discard selected item
-						for (Action action : sc.getActions()) {
-							for (Condition pre : action.getPreconditions()) {
-								if (isConditionCompatible(con, pre)) {
-									Pipe pipe = new Pipe();
-									pipe.setIdBBFrom(component.getUri().toString());
-									pipe.setIdConditionFrom(con.getId());
-									pipe.setIdBBTo(sc.getUri().toString());
-									pipe.setIdActionTo(action.getName());
-									pipe.setIdConditionTo(pre.getId());
-									if (!pipes.contains(pipe)) pipeList.add(pipe);
-								}
+				}
+				for (ScreenComponent sc : canvas) {
+					if (sc.equals(component)) break; // discard selected item
+					for (Action action : sc.getActions()) {
+						for (Condition pre : action.getPreconditions()) {
+							if (isConditionCompatible(con, pre)) {
+								Pipe pipe = new Pipe();
+								pipe.setIdBBFrom(component.getUri().toString());
+								pipe.setIdConditionFrom(con.getId());
+								pipe.setIdBBTo(sc.getUri().toString());
+								pipe.setIdActionTo(action.getName());
+								pipe.setIdConditionTo(pre.getId());
+								if (!pipes.contains(pipe)) pipeList.add(pipe);
 							}
 						}
 					}
@@ -440,17 +432,15 @@ public class ScreenComponentFindCheckServlet extends GenericServlet {
 			} else if (postconditions.contains(condition)) {
 				// look for pipes from <somewhere> to the postcondition
 				for (ScreenComponent sc : canvas) {
-					for (List<Condition> conList : sc.getPostconditions()) {
-						for (Condition post : conList) {
-							if (isConditionCompatible(post, condition)) {
-								Pipe pipe = new Pipe();
-								pipe.setIdBBFrom(sc.getUri().toString());
-								pipe.setIdConditionFrom(post.getId());
-								pipe.setIdBBTo(null);
-								pipe.setIdActionTo(null);
-								pipe.setIdConditionTo(condition.getId());
-								if (!pipes.contains(pipe)) pipeList.add(pipe);
-							}
+					for (Condition con : sc.getPostconditions()) {
+						if (isConditionCompatible(con, condition)) {
+							Pipe pipe = new Pipe();
+							pipe.setIdBBFrom(sc.getUri().toString());
+							pipe.setIdConditionFrom(con.getId());
+							pipe.setIdBBTo(null);
+							pipe.setIdActionTo(null);
+							pipe.setIdConditionTo(condition.getId());
+							if (!pipes.contains(pipe)) pipeList.add(pipe);
 						}
 					}
 				}
