@@ -10,12 +10,6 @@ import org.ontoware.rdf2go.model.node.URI;
 
 import eu.morfeoproject.fast.catalogue.NotFoundException;
 import eu.morfeoproject.fast.catalogue.builder.BuildingBlockJSONBuilder;
-import eu.morfeoproject.fast.catalogue.model.BackendService;
-import eu.morfeoproject.fast.catalogue.model.Concept;
-import eu.morfeoproject.fast.catalogue.model.Form;
-import eu.morfeoproject.fast.catalogue.model.Operator;
-import eu.morfeoproject.fast.catalogue.model.Postcondition;
-import eu.morfeoproject.fast.catalogue.model.Screen;
 import eu.morfeoproject.fast.catalogue.util.Util;
 import eu.morfeoproject.fast.util.TestUtils;
 
@@ -101,6 +95,24 @@ public class BuildingBlockTest {
 		assertEquals(s1.getPreconditions().size(), s2.getPreconditions().size());
 		assertEquals(s1.getPostconditions().size(), s2.getPostconditions().size());
 		assertEquals(s1.getCode(), s2.getCode());
+	}
+	
+	@Test
+	public void createScreenflow() throws Exception {
+		Screen s1 = (Screen) TestUtils.buildBB(TestUtils.getCatalogue().getServerURL(), "screen", "data/json/screens/amazonSearchCode.json");
+		Screen s2 = (Screen) TestUtils.buildBB(TestUtils.getCatalogue().getServerURL(), "screen", "data/json/screens/amazonListCode.json");
+		Screen s3 = (Screen) TestUtils.buildBB(TestUtils.getCatalogue().getServerURL(), "screen", "data/json/screens/amazonProductCode.json");
+		TestUtils.getCatalogue().addScreens(s1, s2, s3);
+		ScreenFlow sf1 = (ScreenFlow) TestUtils.buildBB(TestUtils.getCatalogue().getServerURL(), "screenflow", "data/json/screenflows/amazonSF1.json");
+		sf1.getBuildingBlockList().add(s1.getUri());
+		sf1.getBuildingBlockList().add(s2.getUri());
+		sf1.getBuildingBlockList().add(s3.getUri());
+		TestUtils.getCatalogue().addScreenFlow(sf1);
+		ScreenFlow sf2 = TestUtils.getCatalogue().getScreenFlow(sf1.getUri());
+		assertEquals(sf1.getUri(), sf2.getUri());
+		assertEquals(sf1.getHomepage(), sf2.getHomepage());
+		assertEquals(sf1.getBuildingBlockList().size(), sf2.getBuildingBlockList().size());
+		TestUtils.getCatalogue().printStatements();
 	}
 
 	@Test

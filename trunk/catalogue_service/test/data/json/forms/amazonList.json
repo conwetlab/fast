@@ -60,7 +60,6 @@
         }
     ],
     "postconditions":[
-        [
             {
                 "id":"item",
                 "label":{
@@ -77,7 +76,6 @@
                 "pattern":"?Filter http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#SearchCriteria",
                 "positive":"true"
             }
-        ]
     ],
     "triggers":[
         

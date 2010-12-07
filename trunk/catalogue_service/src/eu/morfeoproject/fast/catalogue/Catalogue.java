@@ -1117,8 +1117,7 @@ public class Catalogue {
 			sc.setUri(scUri);
 		}
 		// sets current date if no date given
-		if (sc.getCreationDate() == null)
-			sc.setCreationDate(new Date());
+		if (sc.getCreationDate() == null) sc.setCreationDate(new Date());
 		// persists the screen component
 		if (!saveScreenComponent(sc)) {
 			throw new BuildingBlockException("An error ocurred while saving the screen component. Please, ensure the component is well defined.");
@@ -1130,17 +1129,12 @@ public class Catalogue {
 		URI scUri = sc.getUri();
 		try {
 			Model model = sc.toRDF2GoModel();
-//			ClosableIterator<Statement> it = model.findStatements(Variable.ANY, Variable.ANY, Variable.ANY);
-//			for (;it.hasNext();) {
-//				System.out.println(it.next());
-//			}
 			URI graphUri = saveModelToGraph(model);
 			tripleStore.addStatement(graphUri, scUri, new URIImpl("http://replace.for.real.one"), graphUri);
 			generateConditionsStatements(model, graphUri);
 			model.close();
 			return true;
 		} catch (Exception e) {
-			e.printStackTrace();
 			log.error("Error while saving screen component " + scUri, e);
 			try {
 				removeBuildingBlock(scUri);
@@ -1152,7 +1146,7 @@ public class Catalogue {
 	}
 
 	protected void updateScreenComponent(ScreenComponent sc)
-			throws NotFoundException, BuildingBlockException {
+	throws NotFoundException, BuildingBlockException {
 		if(log.isInfoEnabled()) log.info("Updating screen component " + sc.getUri() + "...");
 		// remove old screen component from the catalogue
 		removeScreenComponent(sc.getUri());

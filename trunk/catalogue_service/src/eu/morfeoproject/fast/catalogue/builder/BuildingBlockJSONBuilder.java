@@ -365,9 +365,7 @@ public class BuildingBlockJSONBuilder {
 		// postconditions
 		JSONArray postArray = jsonSc.getJSONArray("postconditions");
 		sc.setPostconditions(new ArrayList<Condition>());
-		for (int i = 0; i < postArray.length(); i++) {
-			sc.getPostconditions().addAll(buildConditions(postArray.getJSONArray(i)));
-		}
+		sc.getPostconditions().addAll(buildConditions(postArray));
 		// code
 		if (jsonSc.get("code") != null && !jsonSc.getString("code").equalsIgnoreCase("null")) {
 			sc.setCode(new URIImpl(jsonSc.getString("code")));

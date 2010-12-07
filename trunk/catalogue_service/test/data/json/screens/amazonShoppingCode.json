@@ -33,7 +33,6 @@
     "version":"1.0",
     "code":"http://demo.fast.morfeo-project.org/gvsdata/screens/amazonShopping.scr.html",
     "preconditions":[
-        [
             {
                 "id": "cart",
                 "label":{
@@ -42,10 +41,8 @@
                 "pattern":"?Cart http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#ShoppingCart",
                 "positive":"true"
             }
-        ]
     ],
     "postconditions":[
-        [
             {
                 "id":"notpurchase",
                 "label":{
@@ -71,6 +68,5 @@
                 "pattern":"?Item http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#Item",
                 "positive":"true"
             }
-        ]
     ]
 }

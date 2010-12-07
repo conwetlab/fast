@@ -8,18 +8,18 @@
   "id": "1",
   "label": {"en-gb": "Product List"},
   "name": "Amazon List Screen",
-  "postconditions": [[{
+  "postconditions": [{
     "id": "item",
     "label": {"en-gb": "An item"},
     "pattern": "?I http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#Item",
     "positive": true
-  }]],
-  "preconditions": [[{
+  }],
+  "preconditions": [{
     "id":"filter",
     "label": {"en-gb": "A search criteria"},
     "pattern": "?F http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#SearchCriteria",
     "positive": true
-  }]],
+  }],
   "rights": "http://creativecommons.org/",
   "screenshot": "http://localhost:8010/images/screenshots/amazonProductList.png",
   "tags": [
