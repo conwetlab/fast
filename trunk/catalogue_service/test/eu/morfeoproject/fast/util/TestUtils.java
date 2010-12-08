@@ -27,8 +27,12 @@ public class TestUtils {
 		return catalogue;
 	}
 	
-	public static BuildingBlock buildBB(URL catalogueUrl, String type, String filePath) throws BuildingBlockException, JSONException, IOException {
-		JSONObject json = new JSONObject(Util.getFileContentAsString(filePath));
+	public static BuildingBlock buildBBFromFile(URL catalogueUrl, String type, String filePath) throws BuildingBlockException, JSONException, IOException {
+		return buildBBFromText(catalogueUrl, type, Util.getFileContentAsString(filePath));
+	}
+	
+	public static BuildingBlock buildBBFromText(URL catalogueUrl, String type, String text) throws BuildingBlockException, JSONException, IOException {
+		JSONObject json = new JSONObject(text);
 		URI uri = new URIImpl(catalogueUrl+"/"+type+"s/"+json.getString("id"));
 		BuildingBlock bb = null;
 		
