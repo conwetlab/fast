@@ -330,8 +330,7 @@ var BuildingBlockDocument = Class.create(PaletteDocument, /** @lends BuildingBlo
                 'debugger',
                 function() {
                     this._pendingOperation = function() {
-                        var url = URIs.debugger + '?url=' +
-                            encodeURIComponent(this._getCodeURI());
+                        var url = URIs.bbDebugger + '?url=' + encodeURIComponent(this._getCodeURI());
                         var title = "BuildingBlockTest " + this.getTitle();
                         var options = 'menubar=no,toolbar=no,width=800,height=600';
                         window.open(url, title, options);
