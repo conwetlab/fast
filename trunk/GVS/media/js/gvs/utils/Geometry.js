@@ -101,6 +101,13 @@ Object.extend(Geometry, {
         }
     },
 
+    getCenter: function(/** DOMNode */ node) {
+        return {
+            'top': (node.clientHeight - node.clientTop) / 2,
+            'left': (node.clientWidth - node.clientLeft) / 2
+        }
+    },
+
     dragRanges: function(/** Object */ container, /** Object */ element) {
         return {
             'x': {

@@ -53,6 +53,7 @@ var Area = Class.create( /** @lends Area.prototype */ {
             'class': 'dropArea ' + areaClass
         });
         this._contentPane.setContent(this._node);
+
     },
 
 
@@ -93,6 +94,16 @@ var Area = Class.create( /** @lends Area.prototype */ {
         return this._acceptedElements;
     },
 
+    /**
+     * Observe node
+     */
+    observe: function(/** String */ eventName, /** Function */ observer) {
+        this.getNode().observe(eventName, observer);
+    },
+
+    stopObserving: function(/** String */ eventName) {
+        this.getNode().stopObserving(eventName);
+    },
 
     setLayout: function() {
         //TODO: Think about Layouts

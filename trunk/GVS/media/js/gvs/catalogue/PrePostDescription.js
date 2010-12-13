@@ -27,6 +27,17 @@ var PrePostDescription = Class.create(BuildingBlockDescription,
         return this.title;
     },
 
+    /**
+     * Generates the PrePost uri if doesn't have it
+     */
+    generateUri: function() {
+        if (this.uri == undefined) {
+            if (this.pattern) {
+                this.uri = this.pattern.split(" ")[2];
+            }
+        }
+    },
+
     // ******************** PRIVATE METHODS ************** //
 
     /**

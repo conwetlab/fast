@@ -80,6 +80,17 @@ var ScreenDocument = Class.create(PaletteDocument,
             var splitter = this._designContainer.getSplitter(region);
             addEventDragSplitter(splitter, this._repaint);
         }.bind(this));
+
+
+        this._prePostNodes = {
+            "pre": null,
+            "post": null
+        };
+
+        this._prePostInstances = {
+            "pre": null,
+            "post": null
+        };
     },
 
 
@@ -174,14 +185,14 @@ var ScreenDocument = Class.create(PaletteDocument,
                                 this._drop.bind(this),
                                 {splitter: true, region: 'right', minWidth:100});
 
-        return $H({
+        this._areas = $H({
             'form': formArea,
             'operator': operatorArea,
             'resource': resourceArea,
             'pre': preArea,
             'post': postArea
         });
-
+        return this._areas;
     },
 
     /**
@@ -442,8 +453,24 @@ var ScreenDocument = Class.create(PaletteDocument,
                       "_" + startTerminal.getConditionId();
         }
 
-        if (this._selectedElement != instance)
+        if (instance.constructor != PrePostInstance) {
+            this._areas.get("pre").observe("mouseover",
+                this._showDropArea.bind({
+                    startTerminal: startTerminal,
+                    area: "pre",
+                    mine: this
+                }));
+            this._areas.get("post").observe("mouseover",
+                this._showDropArea.bind({
+                    startTerminal: startTerminal,
+                    area: "post",
+                    mine: this
+                }));
+        }
+
+        if (this._selectedElement != instance) {
             this._setSelectedElement(instance);
+        }
 
         this._recommendationManager.setStartFact(factKey);
     },
@@ -452,6 +479,34 @@ var ScreenDocument = Class.create(PaletteDocument,
      * Launched whenever a pipe creation is canceled
      */
     _onPipeCreationCancelHandler: function(/** Wire */ wire) {
+        this._areas.get("pre").stopObserving("mouseover");
+        this._areas.get("post").stopObserving("mouseover");
+
+        var area = this._prePostNodes["pre"] || this._prePostNodes["post"];
+
+        if (area) {
+            setTimeout(function() {
+                var area = "pre";
+                if (this._prePostNodes[area]) {
+                    this._areas.get(area).getNode().removeChild(this._prePostNodes[area]);
+                    this._prePostNodes[area] = null;
+                }
+                if (this._prePostInstances[area]) {
+                    this._deleteInstance(this._prePostInstances[area]);
+                    this._prePostInstances[area] = null;
+                }
+                area = "post";
+                if (this._prePostNodes[area]) {
+                    this._areas.get(area).getNode().removeChild(this._prePostNodes[area]);
+                    this._prePostNodes[area] = null;
+                }
+                if (this._prePostInstances[area]) {
+                    this._deleteInstance(this._prePostInstances[area]);
+                    this._prePostInstances[area] = null;
+                }
+            }.bind(this), 200);
+        }
+
         this._recommendationManager.setStartFact(null);
     },
 
@@ -460,8 +515,9 @@ var ScreenDocument = Class.create(PaletteDocument,
      * @private
      */
     _onPipeDeletionHandler: function(/** Wire */ wire) {
-        if (this._closed)
+        if (this._closed) {
             return;
+        }
 
         var pipe = this._pipeFactory.getPipe(wire);
         if (pipe) {
@@ -478,14 +534,77 @@ var ScreenDocument = Class.create(PaletteDocument,
      * @private
      */
     _onPipeCreationHandler: function(/** Wire */ wire) {
+
         var pipe = this._pipeFactory.getPipe(wire);
         if (pipe) {
             this._description.addPipe(pipe);
 
             this._refreshReachability();
             this._setDirty(true);
+
+            if (pipe.getSource().getInstance() == this._prePostInstances["pre"]) {
+                this._prePostInstances["pre"] = null;
+            }
+            if (pipe.getDestination().getInstance() ==
+                this._prePostInstances["post"]) {
+                this._prePostInstances["post"] = null;
+            }
+        }
+        this._areas.get("pre").stopObserving("mouseover");
+        this._areas.get("post").stopObserving("mouseover");
+    },
+
+    /**
+     * Show drop areas
+     * @private
+     * Parameters via context
+     */
+    _showDropArea: function() {
+        var startTerminal = this.startTerminal;
+        var area = this.area;
+
+
+        if (this.mine._prePostNodes[area] == null) {
+            this.mine._prePostNodes[area] = new Element("div", {
+                "style": "position:absolute; text-align: center; top: 0px;" +
+                "right: 0px; left: 0px; height:70px;" +
+                "border: 1px solid black; padding: 5px"
+            });
+            var title = new Element("div", {
+                "class": "dijitAccordionTitle"
+            }).update("Create " + area);
+            this.mine._prePostNodes[area].appendChild(title);
+            this.mine._areas.get(area).getNode().appendChild(this.mine._prePostNodes[area]);
+            var instanceDescription = startTerminal.getInstance().getBuildingBlockDescription();
+            var action = startTerminal.getActionId();
+            if (action) {
+                var conditionList =
+                instanceDescription.actions.detect(function(ac){
+                    return (ac.name == action);
+                }).preconditions;
+            } else {
+                var conditionList = instanceDescription.postconditions[0];
+            }
+            var condition = conditionList.detect(function(cond) {
+                return (cond.id == startTerminal.getConditionId());
+            });
+            var prePostDesc = new PrePostDescription(condition);
+            prePostDesc.generateUri();
+            this.mine._prePostInstances[area] = new PrePostInstance(prePostDesc,
+                                        this.mine._inferenceEngine, false);
+            var position = {
+                'top': 35,
+                'left': Geometry.getCenter(this.mine._prePostNodes[area]).left - 16
+            };
+            var id = UIDGenerator.generate(prePostDesc.id);
+            this.mine._prePostInstances[area].setId(id);
+            this.mine._prePostInstances[area].onFinish(position, true);
+            this.mine._drop(this.mine._areas.get(area),
+                this.mine._prePostInstances[area],
+                position, true);
         }
     },
+
 
     /**
      * Select an element in the document
@@ -767,9 +886,11 @@ var ScreenDocument = Class.create(PaletteDocument,
         if (reachabilityData.postconditions) {
             reachabilityData.postconditions.each(function(post) {
                 var postInstance = this._description.getPost(post.id);
-                var view = postInstance.getView();
-                if (view) {
-                    view.setReachability(post);
+                if (postInstance) {
+                    var view = postInstance.getView();
+                    if (view) {
+                        view.setReachability(post);
+                    }
                 }
             }.bind(this));
         }
