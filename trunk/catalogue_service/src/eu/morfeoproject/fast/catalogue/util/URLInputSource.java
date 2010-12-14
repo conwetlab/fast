@@ -21,6 +21,11 @@ public class URLInputSource implements InputStreamSource {
 	private URL url;
 	private String accept;
     
+    public URLInputSource(URL url)  {
+        this.url = url;
+        this.accept = "*/*";
+    }
+
     public URLInputSource(URL url, String accept)  {
         this.url = url;
         this.accept = accept;
