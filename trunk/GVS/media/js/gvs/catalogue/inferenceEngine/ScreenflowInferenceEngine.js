@@ -95,10 +95,23 @@ var ScreenflowInferenceEngine = Class.create(InferenceEngine /** @lends Screenfl
         var result = JSON.parse(transport.responseText);
         if (result.elements) {
             var paletteElements = result.elements;
+        } else {
+            var paletteElements = [];
         }
 
+        var allElements = paletteElements.clone();
 
-        this.mine._updateReachability(paletteElements);
+        result.canvas.each(function(bb) {
+            found = allElements.detect(function(element) {
+                return (element.uri == bb.uri);
+            });
+            if (!found) {
+                allElements.push(bb);
+            }
+        }, this);
+
+
+        this.mine._updateReachability(allElements);
 
         // Notifying about new uris
         var screenURIs = new Array();
