@@ -178,7 +178,8 @@ var ManageScreenflowsDialog = Class.create(GalleryDialog /** @lends ManageScreen
      */
     _deleteScreenflow: function(/** String */ id) {
         confirm("Are you sure you want to delete the screenflow? This action cannot " +
-        "be undone", this._confirmDelete.bind({'mine': this, 'id': id}));
+        "be undone. <br />All the generated gadgets will be destroyed (unless you have " +
+        "deployed them before).", this._confirmDelete.bind({'mine': this, 'id': id}));
     },
 
     /**

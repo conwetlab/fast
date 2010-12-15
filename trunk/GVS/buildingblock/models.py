@@ -141,6 +141,9 @@ class BuildingBlock(models.Model):
         if self.uri != None and self.uri != '':
             self.share()
 
+    def delete(self, *args, **kwargs):
+        self.unshare()
+        super(BuildingBlock, self).save(*args, **kwargs)
 
 class Screenflow(BuildingBlock):
     def __unicode__(self):
@@ -155,6 +158,13 @@ class Screenflow(BuildingBlock):
 
     def compile_code(self):
         return None # Screenflow is not compiled here
+
+    def delete(self, *args, **kwargs):
+        for storage in self.storage_set.all():
+            storage.delete()
+        super(Screenflow, self).delete(*args, **kwargs)
+        super(BuildingBlock, self).delete(*args, **kwargs)
+
 
 
 class Screen(BuildingBlock):

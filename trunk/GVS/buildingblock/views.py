@@ -238,9 +238,7 @@ class BuildingBlockEntry(resource.Resource):
         try:
             user = get_user_authentication(request)
 
-            bb = BuildingBlock.objects.get(id=buildingblock_id)
-
-            bb.unshare()
+            bb = BuildingBlock.objects.get(id=buildingblock_id).child_model()
 
             bb.delete()
 
