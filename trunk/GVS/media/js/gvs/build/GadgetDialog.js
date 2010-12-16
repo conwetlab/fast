@@ -106,6 +106,10 @@ var GadgetDialog = Class.create(GalleryDialog, /** @lends Builder.prototype */ {
                 'value': 'Show Available platforms',
                 'handler': this._showDeploymentInfo.bind(this),
                 'disableIfNotValid': true
+            }, {
+                'value': 'Delete Gadget',
+                'handler': this._confirmDeleteGadget.bind(this),
+                'disableIfNotValid': true
             }]);
         this._createGadgetList();
         this._render();
@@ -191,12 +195,36 @@ var GadgetDialog = Class.create(GalleryDialog, /** @lends Builder.prototype */ {
         this._publishGadgetDialog.show(result);
     },
 
+    _confirmDeleteGadget: function(/** String */ gadget_id) {
+        confirm("Are you sure you want to delete the gadget? This action" +
+        " cannot be undone", function(ok) {
+            if (ok) {
+                this._deleteGadget(gadget_id);
+            }
+        }.bind(this));
+    },
+
+    _deleteGadget: function(/** String */ gadget_id) {
+        var uri = URIs.store + gadget_id;
+        PersistenceEngine.sendDelete(uri, this, function() {
+            this._storedGadgets.unset(gadget_id);
+            this._createGadgetList();
+            if (this.isVisible()) {
+                this._render();
+            }
+        }, this._onError);
+    },
+
+    _onDelete: function() {
+
+    },
+
     _onError: function(/** XMLHttpRequest */ transport, /** Exception */ e) {
         var message;
         if (e) {
             message = e;
         } else {
-            message = "Gadget already exists";
+            message = transport.responseText;
         }
         Utils.showMessage("Cannot store the gadget: " + message, {
             "error": true,

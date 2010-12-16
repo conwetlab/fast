@@ -1,6 +1,8 @@
 from django.db import models
 from buildingblock.models import Screenflow
 from django.conf import settings
+from django.utils import simplejson
+from python_rest_client.restful_lib import Connection, isValidResponse
 
 from os import path
 import shutil
@@ -17,6 +19,13 @@ class Storage(models.Model):
     creationDate = models.DateTimeField(auto_now=True)
 
     def delete(self, *args, **kwargs):
+        json = simplejson.loads(self.data)
+        if json['gadgetResource'] != None:
+            conn = Connection(json['gadgetResource'])
+            result = conn.request_delete(resource='', headers={'Accept':'application/json'})
+            if not isValidResponse(result):
+                raise Exception(result['body'])
+
         gadget_relative_path = str(self.pk)
         gadget_path = path.join(STORAGE_DIR, gadget_relative_path)
         if path.isdir(gadget_path):

@@ -294,21 +294,8 @@ class StorageEntry(resource.Resource):
             user = get_user_authentication(request)
 
             st = Storage.objects.get(id=storage_id)
-            storage = simplejson.loads(st.data)
-            gadgetPath = path.join(STORAGE_DIR, storage['gadgetRelativePath'])
 
             st.delete()
-
-            if storage['gadgetResource'] != None:
-                conn = Connection(storage['gadgetResource'])
-                result = conn.request_delete(resource='', headers={'Accept':'application/json'})
-                if not isValidResponse(result):
-                    raise Exception(result['body'])
-
-            try:
-                shutil.rmtree(gadgetPath)
-            except Exception, ex:
-                pass
 
             ok = json_encode({'message':'OK'})
             return HttpResponse(ok, mimetype='application/json; charset=UTF-8')
