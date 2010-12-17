@@ -48,7 +48,11 @@
         <script type="text/javascript" src="{{ MEDIA_URL }}js/lib/wireit/js/Terminal.js"></script>
 
         <!-- Dojo -->
+        {% if DEBUG %}
+        <script type="text/javascript" src="{{ MEDIA_URL }}js/lib/dojo/dojo/dojo.js.uncompressed.js"></script>
+        {% else %}
         <script type="text/javascript" src="{{ MEDIA_URL }}js/lib/dojo/dojo/dojo.js"></script>
+        {% endif %}
 
         <!-- Prototype -->
         <script type="text/javascript" src="{{ MEDIA_URL }}js/lib/prototype/prototype.js"></script>
@@ -120,7 +124,11 @@
             var GlobalOptions = new Object();
 
             // Only include the checked and finished features
+        {% if DEBUG %}
             GlobalOptions.isPublicDemo = false;
+        {% else %}
+            GlobalOptions.isPublicDemo = true;
+        {% endif %}
 
         {% if isLocalStorage %}
             GlobalOptions.isLocalStorage = true;

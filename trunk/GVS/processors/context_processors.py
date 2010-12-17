@@ -7,7 +7,9 @@ def fast(request):
                'DATA_MEDIATION_URL': settings.DATA_MEDIATION_URL,
                'FACT_TOOL_URL': settings.FACT_TOOL_URL,
                'isLocalStorage': (not settings.STORAGE_URL or
-               settings.STORAGE_URL == '')}
+               settings.STORAGE_URL == ''),
+               'DEBUG': settings.DEBUG,
+               }
 
     if hasattr(settings, 'ONLY_ONE_JS_FILE'):
         context ['only_one_js_file'] = settings.ONLY_ONE_JS_FILE
