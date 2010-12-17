@@ -24,10 +24,16 @@ var ExternalDocument = Class.create(AbstractDocument, /** @lends ExternalDocumen
             'src': this._url,
             'style':'border: 0px; width: 100%; height: 100%; margin: 0px; padding:0px;'
         }));
-    }
+    },
 
     // **************** PRIVATE METHODS **************** //
-
+    /**
+     * @override
+     */
+    _closeDocument: function($super) {
+        this._tabContent.update("");
+        $super();
+    }
 });
 
 // vim:ts=4:sw=4:et:
