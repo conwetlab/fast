@@ -293,35 +293,13 @@ var GVS = Class.create(ToolbarModel,    /** @lends GVS.prototype */
                                 }),
                                 'group': 0
                             },
-                            'newOperator': {
+                            'newBuildingBlock': {
                                 'type': 'Action',
                                 'action': new MenuAction({
-                                    'label': 'Operator',
+                                    'label': 'Building Block',
                                     'weight': 2,
                                     'handler': function(){
-                                        this.action("newOperator")
-                                    }.bind(this),
-                                }),
-                                'group': 1
-                            },
-                            'newForm': {
-                                'type': 'Action',
-                                'action': new MenuAction({
-                                    'label': 'Form',
-                                    'weight': 1,
-                                    'handler': function(){
-                                        this.action("newForm")
-                                    }.bind(this),
-                                }),
-                                'group': 1
-                            },
-                            'newResource': {
-                                'type': 'Action',
-                                'action': new MenuAction({
-                                    'label': 'Resource',
-                                    'weight': 3,
-                                    'handler': function(){
-                                        this.action("newResource")
+                                        this.action("newBuildingBlock")
                                     }.bind(this),
                                 }),
                                 'group': 1
@@ -350,13 +328,24 @@ var GVS = Class.create(ToolbarModel,    /** @lends GVS.prototype */
                                 'type': 'Action',
                                 'action': new MenuAction({
                                     'label': 'Screens',
-                                    'weight': 10,
+                                    'weight': 3,
                                     'handler': function(){
                                         this.action("browseScreens")
                                     }.bind(this),
-                                    'shortcut': 'Alt+N'
+                                    'shortcut': 'Alt+O'
                                 }),
                                 'group': 0
+                            },
+                            'browseBuildingBlocks': {
+                                'type': 'Action',
+                                'action': new MenuAction({
+                                    'label': 'Building Blocks',
+                                    'weight': 4,
+                                    'handler': function(){
+                                        this.action("browseBuildingBlocks")
+                                    }.bind(this)
+                                }),
+                                'group': 1
                             }
                         }
                     }
@@ -371,12 +360,12 @@ var GVS = Class.create(ToolbarModel,    /** @lends GVS.prototype */
                         'type': 'Action',
                         'action': new MenuAction({
                             'label': 'User Preferences',
-                            'weight':1,
+                            'weight': MenuElement.MAXIMUM_WEIGHT,
                             'handler': function() {
                                 this._dialogs.get("preferences").show();
                             }.bind(this)
                         }),
-                        'group': 1
+                        'group': 2
                     }
                 }
 
@@ -411,7 +400,7 @@ var GVS = Class.create(ToolbarModel,    /** @lends GVS.prototype */
                     'feedback': {
                         'type': 'Action',
                         'action': new MenuAction({
-                            'label': 'Send us feedback',
+                            'label': 'Send feedback',
                             'weight': 3,
                             'handler': function() {
                                 UserVoice.Popin.show(uservoiceOptions);
@@ -423,9 +412,6 @@ var GVS = Class.create(ToolbarModel,    /** @lends GVS.prototype */
 
             }
         };
-        if (!GlobalOptions.isPublicDemo) {
-            // Include the new screen feature
-        }
     }
 });
 // Hack to transform GVS into a static class

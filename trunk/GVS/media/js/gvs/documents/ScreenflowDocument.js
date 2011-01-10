@@ -89,20 +89,34 @@ var ScreenflowDocument = Class.create(PaletteDocument,
      */
     getMenuElements: function($super) {
         var parentMenu = $super();
-        return Object.extend(parentMenu, {
-            'edit': {
-                'type': 'SubMenu',
-                'weight': 2,
-                'label': 'Edit',
-                'children': {
-                    'clone': {
-                        'type': 'Action',
-                        'action': this._editMenuAction,
-                        'group': 0
-                    }
-                }
-            }
-        });
+        parentMenu.edit.children.clone = {
+            'type': 'Action',
+            'action': this._editMenuAction,
+            'group': 1
+        };
+        parentMenu.file.children.play = {
+            'type': 'Action',
+            'action': new MenuAction({
+                'label': 'Play Gadget',
+                'handler': function() {
+                    this._playScreenflow();
+                }.bind(this),
+                'weight': 1
+            }),
+            'group': 2
+        };
+        parentMenu.file.children.gadget = {
+            'type': 'Action',
+            'action': new MenuAction({
+                'label': 'Build Gadget',
+                'handler': function() {
+                    this._buildGadget();
+                }.bind(this),
+                'weight': 2
+            }),
+            'group': 2
+        };
+        return parentMenu;
     },
 
     /**
@@ -371,12 +385,6 @@ var ScreenflowDocument = Class.create(PaletteDocument,
                 this._debugScreenflow.bind(this),
                 false // disabled by default
             ));
-        this._addToolbarElement('build', new ToolbarButton(
-                'Build Gadget',
-                'build',
-                this._buildGadget.bind(this),
-                false // disabled by default
-            ));
         this._addToolbarElement('refresh', new ToolbarButton(
                 'Refresh the buildingBlocks catalog',
                 'refresh',
@@ -413,7 +421,13 @@ var ScreenflowDocument = Class.create(PaletteDocument,
                 this._startDeletingSelectedElement.bind(this),
                 false // disabled by default
             ));
-
+        this._addToolbarElement('build', new ToolbarButton(
+                'Build Gadget',
+                'build',
+                this._buildGadget.bind(this),
+                false // disabled by default
+            ));
+        this._toolbarElements.get('build').setTextVisible(true);
     },
 
     /**

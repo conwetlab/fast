@@ -263,10 +263,9 @@ var PaletteDocument = Class.create(AbstractDocument, /** @lends PaletteDocument.
                                 'handler': function() {
                                     this._save();
                                 }.bind(this),
-
+                                'weight': 1,
                                 'shortcut': 'Alt+S'
                             }),
-                            'weight': 1,
                             'group': 1
                         },
                         'saveas': {
@@ -275,9 +274,28 @@ var PaletteDocument = Class.create(AbstractDocument, /** @lends PaletteDocument.
                                 'label': 'Save as...',
                                 'handler': function() {
                                     this._saveAs();
-                                }.bind(this)
+                                }.bind(this),
+                                'weight': 2
                             }),
-                            'weight': 2,
+                            'group': 1
+                        }
+                    }
+                },
+                'edit': {
+                    'type': 'SubMenu',
+                    'weight': 2,
+                    'label': 'Edit',
+                    'children': {
+                        'deleteElement': {
+                            'type': 'Action',
+                            'action': new MenuAction({
+                                'label': 'Delete Element',
+                                'handler': function() {
+                                    this._deleteSelectedElement();
+                                }.bind(this),
+                                'shortcut': 'Del',
+                                'weight': 2
+                            }),
                             'group': 1
                         }
                     }
@@ -454,6 +472,8 @@ var PaletteDocument = Class.create(AbstractDocument, /** @lends PaletteDocument.
         if (this._selectedElement) {
             this._deleteInstance(this._selectedElement);
             this._setSelectedElement();
+        } else {
+            alert("Please Choose an element to delete it");
         }
     },
 

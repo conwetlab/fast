@@ -687,12 +687,6 @@ var ScreenDocument = Class.create(PaletteDocument,
                 this._debugScreen.bind(this),
                 false // disabled by default
             ));
-        this._addToolbarElement('share', new ToolbarButton(
-                'Share the current screen with the community',
-                'share',
-                this._share.bind(this),
-                true
-            ));
         this._addToolbarElement('refresh', new ToolbarButton(
                 'Refresh the buildingBlocks catalog',
                 'refresh',
@@ -711,6 +705,13 @@ var ScreenDocument = Class.create(PaletteDocument,
                 this._rotateSelectedElement.bind(this),
                 false
             ));
+        this._addToolbarElement('share', new ToolbarButton(
+                'Share Screen',
+                'share',
+                this._share.bind(this),
+                true
+            ));
+        this._toolbarElements.get("share").setTextVisible(true);
     },
 
     /**

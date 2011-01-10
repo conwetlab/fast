@@ -24,6 +24,12 @@ var ToolbarButton = Class.create( /** @lends ToolbarButton.prototype */ {
 
     // **************** PUBLIC METHODS **************** //
 
+    /**
+     * Sets the text of the button visible or not
+     */
+    setTextVisible: function( /** Boolean */ visible) {
+        this._widget.attr('showLabel', visible);
+    },
 
     /**
      * Returns the button widget
