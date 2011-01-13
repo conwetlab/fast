@@ -24,7 +24,7 @@ public class CatalogueConfiguration {
 	}
 	
 	public void load(String confFile) {
-		InputStream inStream = CatalogueConfiguration.class.getClassLoader().getResourceAsStream("repository.properties");
+		InputStream inStream = CatalogueConfiguration.class.getClassLoader().getResourceAsStream(confFile);
 		String storageDir = null;
 		String indexes = null;
 		String sesameServer = null;
@@ -46,10 +46,8 @@ public class CatalogueConfiguration {
 		if (sesameServer != null && repositoryID != null && serverURL != null) {
 		} else if (storageDir != null) {
 		} else {
-//			throw new IOException("Configuration file repository.properties is incorrect.");
+//			throw new IOException("Configuration file "+confFile+" is incorrect.");
 		}
-
-
 	}
 	
 	public String get(String property) {
