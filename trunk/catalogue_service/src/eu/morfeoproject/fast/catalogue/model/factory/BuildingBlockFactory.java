@@ -106,12 +106,24 @@ public class BuildingBlockFactory {
 		return new Condition();
 	}
 	
-	public static Pipe createPipe() {
-		return new Pipe();
+	public static Condition createCondition(URI uri) {
+		return new Condition(uri);
 	}
 	
-	public static Trigger createTrigger() {
-		return new Trigger();
+	public static Pipe createPipe(Screen screen) {
+		return new Pipe(screen);
+	}
+	
+	public static Pipe createPipe(Screen screen, URI uri) {
+		return new Pipe(screen, uri);
+	}
+	
+	public static Trigger createTrigger(Screen screen) {
+		return new Trigger(screen);
+	}
+	
+	public static Trigger createTrigger(Screen screen, URI uri) {
+		return new Trigger(screen, uri);
 	}
 	
 	public static Action createAction() {

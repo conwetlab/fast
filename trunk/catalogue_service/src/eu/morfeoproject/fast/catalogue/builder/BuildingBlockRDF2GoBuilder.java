@@ -3,6 +3,7 @@ package eu.morfeoproject.fast.catalogue.builder;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.LinkedList;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -31,7 +32,6 @@ import eu.morfeoproject.fast.catalogue.model.Pipe;
 import eu.morfeoproject.fast.catalogue.model.PreOrPost;
 import eu.morfeoproject.fast.catalogue.model.Screen;
 import eu.morfeoproject.fast.catalogue.model.ScreenComponent;
-import eu.morfeoproject.fast.catalogue.model.ScreenDefinition;
 import eu.morfeoproject.fast.catalogue.model.ScreenFlow;
 import eu.morfeoproject.fast.catalogue.model.Trigger;
 import eu.morfeoproject.fast.catalogue.model.WithConditions;
@@ -218,59 +218,37 @@ public class BuildingBlockRDF2GoBuilder {
 		Screen screen = (Screen) retrieveWithConditions(FGO.Screen, model);
 		
 		if (screen != null) {
-			// find all the info related to a screen
-			ClosableIterator<Statement> sIt = model.findStatements(screen.getUri(), Variable.ANY, Variable.ANY);
-			for ( ; sIt.hasNext(); ) {
-				Statement st = sIt.next();
-				URI predicate = st.getPredicate();
-				Node object = st.getObject();
-				if (predicate.equals(FGO.hasCode)) {
-					screen.setCode(object.asURI());
-				} else if (predicate.equals(FGO.hasDefinition)) {
-					ScreenDefinition def = new ScreenDefinition();
-					ClosableIterator<Statement> defIt = model.findStatements(object.asBlankNode(), Variable.ANY, Variable.ANY);
-					for ( ; defIt.hasNext(); ) {
-						Statement defSt = defIt.next();
-						URI defPredicate = defSt.getPredicate();
-						Node defObject = defSt.getObject();
-						if (defPredicate.equals(FGO.contains)) {
-							URI type = null;
-							ClosableIterator<Statement> bbIt = model.findStatements(defObject.asBlankNode(), RDF.type, Variable.ANY);
-							if (bbIt.hasNext()) type = bbIt.next().getObject().asURI();
-							bbIt.close();
-							
-							if (type != null && type.equals(FGO.ResourceReference)) {
-								String idBB = null;
-								URI uriBB = null;
-								ClosableIterator<Statement> rrIt = model.findStatements(defObject.asBlankNode(), Variable.ANY, Variable.ANY);
-								for ( ; rrIt.hasNext(); ) {
-									Statement rrSt = rrIt.next();
-									URI rrPredicate = rrSt.getPredicate();
-									Node rrObject = rrSt.getObject();
-									if (rrPredicate.equals(FGO.hasId)) {
-										idBB = rrObject.asLiteral().getValue();
-									} else if (rrPredicate.equals(FGO.hasUri)) {
-										uriBB = rrObject.asURI();
-									}
-								}
-								rrIt.close();
-								if (idBB != null && uriBB != null) {
-									def.getBuildingBlocks().put(idBB, uriBB);
-								} else {
-									throw new BuildingBlockException("ResourceReference is not defined correctly.");
-								}
-							} else if (type != null && type.equals(FGO.Pipe)) {
-								def.getPipes().add(retrievePipe(defObject, model));
-							} else if (type != null && type.equals(FGO.Trigger)) {
-								def.getTriggers().add(retrieveTrigger(defObject, model));
-							}
-						}
+			ClosableIterator<Statement> cIt;
+			
+			// if 'code' is specified, the screen is returned with its value
+			cIt = model.findStatements(screen.getUri(), FGO.hasCode, Variable.ANY);
+			if (cIt.hasNext()) {
+				screen.setCode(cIt.next().getObject().asURI());
+				return screen;
+			}
+			
+			// the screen is defined in terms of its 'building blocks', 'pipes' and 'triggers'
+			screen.setBuildingBlocks(new LinkedList<URI>());
+			screen.setPipes(new LinkedList<Pipe>());
+			screen.setTriggers(new LinkedList<Trigger>());
+			cIt = model.findStatements(screen.getUri(), FGO.contains, Variable.ANY);
+			for ( ; cIt.hasNext(); ) {
+				Statement stmt = cIt.next();
+				URI predicate = stmt.getPredicate();
+				Node object = stmt.getObject();
+				if (predicate.equals(FGO.contains)) {
+					// FIXME: this is not the best way to do it, but in the model I cannot know which the type of the elements
+					String strObj = object.toString();
+					if (strObj.contains("/forms/") || strObj.contains("/operators/") || strObj.contains("/backendservices/")) {
+						screen.getBuildingBlocks().add(object.asURI());
+					} else if (strObj.contains("/pipes/")) {
+						screen.getPipes().add(retrievePipe(screen, object.asURI(), model));
+					} else if (strObj.contains("/triggers/")) {
+						screen.getTriggers().add(retrieveTrigger(screen, object.asURI(), model));
 					}
-					defIt.close();
-					screen.setDefinition(def);
 				}
 			}
-			sIt.close();
+			cIt.close();
 		}
 		
 		return screen;
@@ -291,11 +269,10 @@ public class BuildingBlockRDF2GoBuilder {
 				Statement st = cIt.next();
 				URI predicate = st.getPredicate();
 				Node object = st.getObject();
-				
 				if (predicate.equals(FGO.hasPreCondition)) {
-					withConditions.getPreconditions().add(retrieveCondition(object.asBlankNode(), model));
+					withConditions.getPreconditions().add(retrieveCondition(object.asURI(), model));
 				} else if (predicate.equals(FGO.hasPostCondition)) {
-					withConditions.getPostconditions().add(retrieveCondition(object.asBlankNode(), model));
+					withConditions.getPostconditions().add(retrieveCondition(object.asURI(), model));
 				}
 			}
 			cIt.close();
@@ -316,7 +293,7 @@ public class BuildingBlockRDF2GoBuilder {
 				Statement st = cIt.next();
 				URI predicate = st.getPredicate();
 				if (predicate.equals(FGO.hasCondition)) {
-					pp.getConditions().add(retrieveCondition(st.getObject().asBlankNode(), model));
+					pp.getConditions().add(retrieveCondition(st.getObject().asURI(), model));
 				}
 			}
 		}
@@ -332,49 +309,35 @@ public class BuildingBlockRDF2GoBuilder {
 			// find all the info related to a screen component
 			ClosableIterator<Statement> cIt = model.findStatements(sc.getUri(), Variable.ANY, Variable.ANY);
 			for ( ; cIt.hasNext(); ) {
-				Statement st = cIt.next();
-				URI predicate = st.getPredicate();
-				Node object = st.getObject();
-				if (predicate.equals(FGO.hasAction)) {
-					Action action = new Action();
-					ClosableIterator<Statement> actionIt = model.findStatements(object.asBlankNode(), Variable.ANY, Variable.ANY);
+				Statement scStmt = cIt.next();
+				URI scPre = scStmt.getPredicate();
+				Node scObj = scStmt.getObject();
+				if (scPre.equals(FGO.hasAction)) {
+					Action action = new Action(scObj.asURI());
+					ClosableIterator<Statement> actionIt = model.findStatements(scObj.asURI(), Variable.ANY, Variable.ANY);
 					for ( ; actionIt.hasNext(); ) {
-						Statement s = actionIt.next();
-						URI p = s.getPredicate();
-						Node o = s.getObject();
-						if (p.equals(RDFS.label)) {
-							action.setName(o.asLiteral().toString());
-						} else if (p.equals(FGO.hasPreCondition)) {
-							action.getPreconditions().add(retrieveCondition(o.asBlankNode(), model));
-						} else if (p.equals(FGO.uses)) {
-							ClosableIterator<Statement> useIt = model.findStatements(o.asBlankNode(), Variable.ANY, Variable.ANY);
-							String idUse = null;
-							URI uriUse = null;
-							for ( ; useIt.hasNext(); ) {
-								Statement sUse = useIt.next();
-								URI pUse = sUse.getPredicate();
-								Node oUse = sUse.getObject();
-								if (pUse.equals(FGO.hasId)) {
-									idUse = oUse.asDatatypeLiteral().getValue();
-								} else if (pUse.equals(FGO.hasUri)) {
-									uriUse = oUse.asURI();
-								}
-							}
-							action.getUses().put(idUse, uriUse);
-							useIt.close();
+						Statement acStmt = actionIt.next();
+						URI acPre = acStmt.getPredicate();
+						Node acObj = acStmt.getObject();
+						if (acPre.equals(RDFS.label)) {
+							action.setName(acObj.asLiteral().toString());
+						} else if (acPre.equals(FGO.hasPreCondition)) {
+							action.getPreconditions().add(retrieveCondition(acObj.asURI(), model));
+						} else if (acPre.equals(FGO.uses)) {
+							action.getUses().add(acObj.asURI());
 						}
 					}
 					actionIt.close();
 					sc.getActions().add(action);
-				} else if (predicate.equals(FGO.hasPostCondition)) {
-					sc.getPostconditions().add(retrieveCondition(object.asBlankNode(), model));
-				} else if (predicate.equals(FGO.hasCode)) {
-					sc.setCode(object.asURI());
-				} else if (predicate.equals(FGO.hasTrigger)) {
-					sc.getTriggers().add(object.asDatatypeLiteral().getValue());
-				} else if (predicate.equals(FGO.hasLibrary)) {
+				} else if (scPre.equals(FGO.hasPostCondition)) {
+					sc.getPostconditions().add(retrieveCondition(scObj.asURI(), model));
+				} else if (scPre.equals(FGO.hasCode)) {
+					sc.setCode(scObj.asURI());
+				} else if (scPre.equals(FGO.hasTrigger)) {
+					sc.getTriggers().add(scObj.asDatatypeLiteral().getValue());
+				} else if (scPre.equals(FGO.hasLibrary)) {
 					Library library = new Library();
-					ClosableIterator<Statement> libIt = model.findStatements(object.asBlankNode(), Variable.ANY, Variable.ANY);
+					ClosableIterator<Statement> libIt = model.findStatements(scObj.asBlankNode(), Variable.ANY, Variable.ANY);
 					for ( ; libIt.hasNext(); ) {
 						Statement s = libIt.next();
 						URI p = s.getPredicate();
@@ -398,9 +361,9 @@ public class BuildingBlockRDF2GoBuilder {
 	/*
 	 * Each condition will have only one pattern at most
 	 */
-	private static Condition retrieveCondition(Node subject, Model model) {
-		Condition c = BuildingBlockFactory.createCondition();
-		ClosableIterator<Statement> cIt = model.findStatements(subject.asBlankNode(), Variable.ANY, Variable.ANY);
+	private static Condition retrieveCondition(URI conUri, Model model) {
+		Condition condition = BuildingBlockFactory.createCondition(conUri);
+		ClosableIterator<Statement> cIt = model.findStatements(conUri, Variable.ANY, Variable.ANY);
 		for ( ; cIt.hasNext(); ) {
 			Statement st = cIt.next();
 			URI predicate = st.getPredicate();
@@ -408,48 +371,61 @@ public class BuildingBlockRDF2GoBuilder {
 			if (predicate.equals(RDFS.label)) {
 				if (object instanceof LanguageTagLiteral) {
 					LanguageTagLiteral label = object.asLanguageTagLiteral();
-					c.getLabels().put(label.getLanguageTag(), label.getValue());
+					condition.getLabels().put(label.getLanguageTag(), label.getValue());
 				}
 			} else if (predicate.equals(FGO.isPositive)) {
-				c.setPositive(Boolean.parseBoolean(object.asDatatypeLiteral().getValue()));
+				condition.setPositive(Boolean.parseBoolean(object.asDatatypeLiteral().getValue()));
 			} else if (predicate.equals(FGO.hasPatternString)) {
-				c.setPatternString(object.asDatatypeLiteral().getValue());
-			} else if (predicate.equals(FGO.hasId)) {
-				c.setId(object.asDatatypeLiteral().getValue());
+				condition.setPatternString(object.asDatatypeLiteral().getValue());
 			}
 		}
 		cIt.close();
-
-		return c;
+		return condition;
 	}
 	
-	private static Pipe retrievePipe(Node subject, Model model) {
-		Pipe pipe = BuildingBlockFactory.createPipe();
-		ClosableIterator<Statement> pIt = model.findStatements(subject.asBlankNode(), Variable.ANY, Variable.ANY);
-		for ( ; pIt.hasNext(); ) {
-			Statement pSt = pIt.next();
-			URI pPredicate = pSt.getPredicate();
-			Node pObject = pSt.getObject();
-			if (pPredicate.equals(FGO.hasIdBBFrom)) {
-				pipe.setIdBBFrom(pObject.asLiteral().getValue());
-			} else if (pPredicate.equals(FGO.hasIdConditionFrom)) {
-				pipe.setIdConditionFrom(pObject.asLiteral().getValue());
-			} else if (pPredicate.equals(FGO.hasIdBBTo)) {
-				pipe.setIdBBTo(pObject.asLiteral().getValue());
-			} else if (pPredicate.equals(FGO.hasIdConditionTo)) {
-				pipe.setIdConditionTo(pObject.asLiteral().getValue());
-			} else if (pPredicate.equals(FGO.hasIdActionTo)) {
-				pipe.setIdActionTo(pObject.asLiteral().getValue());
+	private static Pipe retrievePipe(Screen screen, URI pipeURI, Model model) {
+		Pipe pipe = BuildingBlockFactory.createPipe(screen, pipeURI);
+		ClosableIterator<Statement> cIt = model.findStatements(pipeURI, Variable.ANY, Variable.ANY);
+		for ( ; cIt.hasNext(); ) {
+			Statement stmt = cIt.next();
+			URI predicate = stmt.getPredicate();
+			Node object = stmt.getObject();
+			if (predicate.equals(FGO.from)) {
+				String str = object.asURI().toString();
+				int pCur = 0;
+				if ((pCur = str.indexOf("/preconditions/")) > -1) {
+					pipe.setBBFrom(null);
+					pipe.setConditionFrom(str.substring(pCur + 15));
+				} else {
+					pCur = str.indexOf("/postconditions/");
+					pipe.setBBFrom(model.createURI(str.substring(0, pCur)));
+					pipe.setConditionFrom(str.substring(pCur + 16));
+				}
+			} else if (predicate.equals(FGO.to)) {
+				String str = object.asURI().toString();
+				int pCur = 0, aCur = 0;
+				if ((pCur = str.indexOf("/postconditions/")) > -1) {
+					pipe.setBBTo(null);
+					pipe.setActionTo(null);
+					pipe.setConditionTo(str.substring(pCur + 16));
+				} else {
+					aCur = str.indexOf("/actions/");
+					pCur = str.indexOf("/preconditions/");
+					pipe.setBBTo(model.createURI(str.substring(0, aCur)));
+					pipe.setActionTo(str.substring(aCur + 9, str.indexOf('/', aCur + 9)));
+					pipe.setConditionTo(str.substring(pCur + 15));
+				}
 			}
 		}
-		pIt.close();
+		cIt.close();
 		return pipe;
 	}
 
-	private static Trigger retrieveTrigger(Node subject, Model model) {
-		Trigger trigger = BuildingBlockFactory.createTrigger();
-		ClosableIterator<Statement> tIt = model.findStatements(subject.asBlankNode(), Variable.ANY, Variable.ANY);
-		for ( ; tIt.hasNext(); ) {
+	private static Trigger retrieveTrigger(Screen screen, URI triggerURI, Model model) {
+		Trigger trigger = BuildingBlockFactory.createTrigger(screen, triggerURI);
+		ClosableIterator<Statement> tIt = model.findStatements(triggerURI, Variable.ANY, Variable.ANY);
+		//TODO retrieve triggers from RDF model
+		/*for ( ; tIt.hasNext(); ) {
 			Statement pipeSt = tIt.next();
 			URI tPredicate = pipeSt.getPredicate();
 			Node tObject = pipeSt.getObject();
@@ -462,7 +438,7 @@ public class BuildingBlockRDF2GoBuilder {
 			} else if (tPredicate.equals(FGO.hasNameFrom)) {
 				trigger.setNameFrom(tObject.asLiteral().getValue());
 			}
-		}
+		}*/
 		tIt.close();
 		return trigger;
 	}

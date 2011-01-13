@@ -5,9 +5,11 @@ import java.util.Map;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.ontoware.rdf2go.model.node.URI;
 
 public class Condition {
 	
+	private URI uri;
 	private String patternString;
 	private boolean positive;
 	private Map<String, String> labels;
@@ -18,6 +20,19 @@ public class Condition {
 		this.positive = true; // by default a Condition will be positive
 	}
     
+	public Condition(URI uri) {
+		this();
+		this.uri = uri;
+	}
+    
+	public URI getUri() {
+		return uri;
+	}
+
+	public void setUri(URI uri) {
+		this.uri = uri;
+	}
+
 	public String getPatternString() {
 		return patternString;
 	}

@@ -1,22 +1,29 @@
 package eu.morfeoproject.fast.catalogue.model;
 
+import java.util.LinkedList;
+import java.util.List;
+
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.ontoware.rdf2go.model.Model;
-import org.ontoware.rdf2go.model.node.BlankNode;
 import org.ontoware.rdf2go.model.node.URI;
 import org.ontoware.rdf2go.vocabulary.RDF;
-import org.ontoware.rdf2go.vocabulary.XSD;
 
 import eu.morfeoproject.fast.catalogue.vocabulary.FGO;
 
 public class Screen extends WithConditions {
 	
     private URI code;
-    private ScreenDefinition definition;
+	private List<URI> buildingBlocks;
+	private List<Pipe> pipes;
+	private List<Trigger> triggers;
 	
 	public Screen(URI uri) {
 		super(uri);
+		this.buildingBlocks = new LinkedList<URI>();
+		this.pipes = new LinkedList<Pipe>();
+		this.triggers = new LinkedList<Trigger>();
 	}
 	
 	public URI getCode() {
@@ -27,12 +34,28 @@ public class Screen extends WithConditions {
 		this.code = code;
 	}
 
-	public ScreenDefinition getDefinition() {
-		return definition;
+	public List<URI> getBuildingBlocks() {
+		return buildingBlocks;
 	}
 
-	public void setDefinition(ScreenDefinition definition) {
-		this.definition = definition;
+	public void setBuildingBlocks(List<URI> buildingBlocks) {
+		this.buildingBlocks = buildingBlocks;
+	}
+
+	public List<Pipe> getPipes() {
+		return pipes;
+	}
+
+	public void setPipes(List<Pipe> pipes) {
+		this.pipes = pipes;
+	}
+	
+	public List<Trigger> getTriggers() {
+		return triggers;
+	}
+
+	public void setTriggers(List<Trigger> triggers) {
+		this.triggers = triggers;
 	}
 
 	/**
@@ -43,10 +66,30 @@ public class Screen extends WithConditions {
 	@Override
 	public JSONObject toJSON() throws JSONException {
 		JSONObject json = super.toJSON();
+		
+		// a screen can be defined by its code, or a set of building blocks, pipes and 
+		// triggers; but not both
 		if (getCode() != null) {
 			json.put("code", getCode().toString());
-		} else if (getDefinition() != null) {
-			json.put("definition", getDefinition().toJSON());
+		} else {
+			JSONObject definition = new JSONObject();
+
+			// building blocks
+			JSONArray bbArray = new JSONArray();
+			for (URI uri : getBuildingBlocks()) bbArray.put(uri);
+			definition.put("buildingblocks", bbArray);
+			
+			// pipes
+			JSONArray pipeArray = new JSONArray();
+			for (Pipe pipe : getPipes()) pipeArray.put(pipe.toJSON());
+			definition.put("pipes", pipeArray);
+			
+			// triggers
+			JSONArray triggerArray = new JSONArray();
+			for (Trigger trigger : getTriggers()) triggerArray.put(trigger.toJSON());
+			definition.put("triggers", triggerArray);
+
+			json.put("definition", definition);
 		}
 		return json;
 	}
@@ -56,53 +99,34 @@ public class Screen extends WithConditions {
 		Model model = super.toRDF2GoModel();
 		
 		URI screenUri = getUri();
+		
 		model.addStatement(screenUri, RDF.type, FGO.Screen);
 		if (getCode() != null) {
 			model.addStatement(screenUri, FGO.hasCode, this.getCode());
-		} else if (getDefinition() != null) {
-			ScreenDefinition def = this.getDefinition();
-			BlankNode bnDef = model.createBlankNode();
-			model.addStatement(screenUri, FGO.hasDefinition, bnDef);
-			
+		} else {
 			// building blocks
-			for (String id : def.getBuildingBlocks().keySet()) {
-				BlankNode bnBB = model.createBlankNode();
-				model.addStatement(bnDef, FGO.contains, bnBB);
-				model.addStatement(bnBB, RDF.type, FGO.ResourceReference);
-				model.addStatement(bnBB, FGO.hasId, model.createDatatypeLiteral(id, XSD._string));
-				model.addStatement(bnBB, FGO.hasUri, def.getBuildingBlocks().get(id));
+			for (URI uri : getBuildingBlocks()) {
+				model.addStatement(screenUri, FGO.contains, uri);
 			}
-
 			// pipes
-			for (Pipe pipe : def.getPipes()) {
-				BlankNode bnPipe = model.createBlankNode();
-				model.addStatement(bnDef, FGO.contains, bnPipe);
-				model.addStatement(bnPipe, RDF.type, FGO.Pipe);
-				if (pipe.getIdBBFrom() != null && !pipe.getIdBBFrom().equals(""))
-					model.addStatement(bnPipe, FGO.hasIdBBFrom, model.createDatatypeLiteral(pipe.getIdBBFrom(), XSD._string));
-				if (pipe.getIdConditionFrom() != null && !pipe.getIdConditionFrom().equals(""))
-					model.addStatement(bnPipe, FGO.hasIdConditionFrom, model.createDatatypeLiteral(pipe.getIdConditionFrom(), XSD._string));
-				if (pipe.getIdBBTo() != null && !pipe.getIdBBTo().equals(""))
-					model.addStatement(bnPipe, FGO.hasIdBBTo, model.createDatatypeLiteral(pipe.getIdBBTo(), XSD._string));
-				if (pipe.getIdConditionTo() != null && !pipe.getIdConditionTo().equals(""))
-					model.addStatement(bnPipe, FGO.hasIdConditionTo, model.createDatatypeLiteral(pipe.getIdConditionTo(), XSD._string));
-				if (pipe.getIdActionTo() != null && !pipe.getIdActionTo().equals(""))
-					model.addStatement(bnPipe, FGO.hasIdActionTo, model.createDatatypeLiteral(pipe.getIdActionTo(), XSD._string));
+			for (Pipe pipe : getPipes()) {
+				URI pUri = pipe.getUri();
+				if (pUri == null) {
+					pUri = model.createURI(screenUri+"/pipes/"+System.currentTimeMillis());
+					pipe.setUri(pUri);
+				}
+				model.addStatement(screenUri, FGO.contains, pUri);
+				model.addModel(pipe.toRDF2GoModel());
 			}
-			
 			// triggers
-			for (Trigger trigger : def.getTriggers()) {
-				BlankNode bnTrigger = model.createBlankNode();
-				model.addStatement(bnDef, FGO.contains, bnTrigger);
-				model.addStatement(bnTrigger, RDF.type, FGO.Trigger);
-				if (trigger.getIdBBFrom() != null && !trigger.getIdBBFrom().equals(""))
-					model.addStatement(bnTrigger, FGO.hasIdBBFrom, model.createDatatypeLiteral(trigger.getIdBBFrom(), XSD._string));
-				if (trigger.getNameFrom() != null && !trigger.getNameFrom().equals(""))
-					model.addStatement(bnTrigger, FGO.hasNameFrom, model.createDatatypeLiteral(trigger.getNameFrom(), XSD._string));
-				if (trigger.getIdBBTo() != null && !trigger.getIdBBTo().equals(""))
-					model.addStatement(bnTrigger, FGO.hasIdBBTo, model.createDatatypeLiteral(trigger.getIdBBTo(), XSD._string));
-				if (trigger.getIdBBTo() != null && !trigger.getIdBBTo().equals(""))
-					model.addStatement(bnTrigger, FGO.hasIdActionTo, model.createDatatypeLiteral(trigger.getIdActionTo(), XSD._string));
+			for (Trigger trigger : getTriggers()) {
+				URI tUri = trigger.getUri();
+				if (tUri == null) {
+					tUri = model.createURI(screenUri+"/triggers/"+System.currentTimeMillis());
+					trigger.setUri(tUri);
+				}
+				model.addStatement(screenUri, FGO.contains, tUri);
+				model.addModel(trigger.toRDF2GoModel());
 			}
 		}
 		

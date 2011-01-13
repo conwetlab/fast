@@ -31,6 +31,7 @@ import eu.morfeoproject.fast.catalogue.vocabulary.FGO;
  * Servlet implementation class ScreenComponentFindCheckServlet
  */
 public class ScreenComponentFindCheckServlet extends GenericServlet {
+	
 	private static final long serialVersionUID = 1L;
        
 	/**
@@ -113,7 +114,7 @@ public class ScreenComponentFindCheckServlet extends GenericServlet {
 			// TODO do something with the user
 			String user = jsonDomainContext.getString("user");
 			// parses the pipes
-			List<Pipe> pipes = BuildingBlockJSONBuilder.buildPipes(input.getJSONArray("pipes"));
+			List<Pipe> pipes = BuildingBlockJSONBuilder.buildPipes(null, input.getJSONArray("pipes"));
 			// parses the selected item
 			Object selectedItem = null;
 			if (input.has("selectedItem")) {
@@ -248,44 +249,22 @@ public class ScreenComponentFindCheckServlet extends GenericServlet {
 		return null;
 	}
 
-	private Condition getPreconditionById(ScreenComponent sc, String id) {
-		for (Action action : sc.getActions()) {
-			for (Condition condition : action.getPreconditions()) {
-				if (condition.getId() != null 
-						&& condition.getId().equals(id)) {
-					return condition;
-				}
-			}
-		}
-		return null;
-	}
-	
-	private Condition getPostconditionById(ScreenComponent sc, String id) {
-		for (Condition condition : sc.getPostconditions()) {
-			if (condition.getId() != null 
-					&& condition.getId().equals(id)) {
-				return condition;
-			}
-		}
-		return null;
-	}
-	
 	private boolean isPipeCorrect(Pipe pipe, List<Condition> preconditions, List<Condition> postconditions) throws IOException {
 		boolean satisfied = false;
 		Condition conFrom, conTo;
 
 		try {
-			if (pipe.getIdBBFrom() == null) {
-				conFrom = getConditionById(preconditions, pipe.getIdConditionFrom());
+			if (pipe.getBBFrom() == null) {
+				conFrom = getConditionById(preconditions, pipe.getConditionFrom());
 			} else {
-				ScreenComponent sc = getCatalogue().getScreenComponent(new URIImpl(pipe.getIdBBFrom()));
-				conFrom = getPostconditionById(sc, pipe.getIdConditionFrom());
+				ScreenComponent sc = getCatalogue().getScreenComponent(pipe.getBBFrom());
+				conFrom = sc.getPostcondition(pipe.getConditionFrom());
 			}
-			if (pipe.getIdBBTo() == null) {
-				conTo = getConditionById(postconditions, pipe.getIdConditionTo());
+			if (pipe.getBBTo() == null) {
+				conTo = getConditionById(postconditions, pipe.getConditionTo());
 			} else {
-				ScreenComponent sc = getCatalogue().getScreenComponent(new URIImpl(pipe.getIdBBTo()));
-				conTo = getPreconditionById(sc, pipe.getIdConditionTo());
+				ScreenComponent sc = getCatalogue().getScreenComponent(pipe.getBBTo());
+				conTo = sc.getPrecondition(pipe.getConditionTo());
 			}
 			satisfied = isConditionCompatible(conFrom, conTo);
 		} catch (NotFoundException e) {
@@ -351,12 +330,12 @@ public class ScreenComponentFindCheckServlet extends GenericServlet {
 				for (Condition pre : action.getPreconditions()) {
 					for (Condition con : preconditions) {
 						if (isConditionCompatible(con, pre)) {
-							Pipe pipe = new Pipe();
-							pipe.setIdBBFrom(null);
-							pipe.setIdConditionFrom(con.getId());
-							pipe.setIdBBTo(component.getUri().toString());
-							pipe.setIdActionTo(action.getName());
-							pipe.setIdConditionTo(pre.getId());
+							Pipe pipe = new Pipe(null);
+							pipe.setBBFrom(null);
+							pipe.setConditionFrom(con.getId());
+							pipe.setBBTo(component.getUri());
+							pipe.setActionTo(action.getName());
+							pipe.setConditionTo(pre.getId());
 							if (!pipes.contains(pipe)) pipeList.add(pipe);
 						}
 					}
@@ -366,12 +345,12 @@ public class ScreenComponentFindCheckServlet extends GenericServlet {
 						} else {
 							for (Condition con : sc.getPostconditions()) {
 								if (isConditionCompatible(con, pre)) {
-									Pipe pipe = new Pipe();
-									pipe.setIdBBFrom(sc.getUri().toString());
-									pipe.setIdConditionFrom(con.getId());
-									pipe.setIdBBTo(component.getUri().toString());
-									pipe.setIdActionTo(action.getName());
-									pipe.setIdConditionTo(pre.getId());
+									Pipe pipe = new Pipe(null);
+									pipe.setBBFrom(sc.getUri());
+									pipe.setConditionFrom(con.getId());
+									pipe.setBBTo(component.getUri());
+									pipe.setActionTo(action.getName());
+									pipe.setConditionTo(pre.getId());
 									if (!pipes.contains(pipe)) pipeList.add(pipe);
 								}
 							}
@@ -383,12 +362,12 @@ public class ScreenComponentFindCheckServlet extends GenericServlet {
 			for (Condition con : component.getPostconditions()) {
 				for (Condition post : postconditions) {
 					if (isConditionCompatible(con, post)) {
-						Pipe pipe = new Pipe();
-						pipe.setIdBBFrom(component.getUri().toString());
-						pipe.setIdConditionFrom(con.getId());
-						pipe.setIdBBTo(null);
-						pipe.setIdActionTo(null);
-						pipe.setIdConditionTo(post.getId());
+						Pipe pipe = new Pipe(null);
+						pipe.setBBFrom(component.getUri());
+						pipe.setConditionFrom(con.getId());
+						pipe.setBBTo(null);
+						pipe.setActionTo(null);
+						pipe.setConditionTo(post.getId());
 						if (!pipes.contains(pipe)) pipeList.add(pipe);
 					}
 				}
@@ -397,12 +376,12 @@ public class ScreenComponentFindCheckServlet extends GenericServlet {
 					for (Action action : sc.getActions()) {
 						for (Condition pre : action.getPreconditions()) {
 							if (isConditionCompatible(con, pre)) {
-								Pipe pipe = new Pipe();
-								pipe.setIdBBFrom(component.getUri().toString());
-								pipe.setIdConditionFrom(con.getId());
-								pipe.setIdBBTo(sc.getUri().toString());
-								pipe.setIdActionTo(action.getName());
-								pipe.setIdConditionTo(pre.getId());
+								Pipe pipe = new Pipe(null);
+								pipe.setBBFrom(component.getUri());
+								pipe.setConditionFrom(con.getId());
+								pipe.setBBTo(sc.getUri());
+								pipe.setActionTo(action.getName());
+								pipe.setConditionTo(pre.getId());
 								if (!pipes.contains(pipe)) pipeList.add(pipe);
 							}
 						}
@@ -417,12 +396,12 @@ public class ScreenComponentFindCheckServlet extends GenericServlet {
 					for (Action action : sc.getActions()) {
 						for (Condition pre : action.getPreconditions()) {
 							if (isConditionCompatible(pre, condition)) {
-								Pipe pipe = new Pipe();
-								pipe.setIdBBFrom(null);
-								pipe.setIdConditionFrom(condition.getId());
-								pipe.setIdBBTo(sc.getUri().toString());
-								pipe.setIdActionTo(action.getName());
-								pipe.setIdConditionTo(pre.getId());
+								Pipe pipe = new Pipe(null);
+								pipe.setBBFrom(null);
+								pipe.setConditionFrom(condition.getId());
+								pipe.setBBTo(sc.getUri());
+								pipe.setActionTo(action.getName());
+								pipe.setConditionTo(pre.getId());
 								if (!pipes.contains(pipe))
 									pipeList.add(pipe);
 							}
@@ -434,12 +413,12 @@ public class ScreenComponentFindCheckServlet extends GenericServlet {
 				for (ScreenComponent sc : canvas) {
 					for (Condition con : sc.getPostconditions()) {
 						if (isConditionCompatible(con, condition)) {
-							Pipe pipe = new Pipe();
-							pipe.setIdBBFrom(sc.getUri().toString());
-							pipe.setIdConditionFrom(con.getId());
-							pipe.setIdBBTo(null);
-							pipe.setIdActionTo(null);
-							pipe.setIdConditionTo(condition.getId());
+							Pipe pipe = new Pipe(null);
+							pipe.setBBFrom(sc.getUri());
+							pipe.setConditionFrom(con.getId());
+							pipe.setBBTo(null);
+							pipe.setActionTo(null);
+							pipe.setConditionTo(condition.getId());
 							if (!pipes.contains(pipe)) pipeList.add(pipe);
 						}
 					}
@@ -489,13 +468,13 @@ public class ScreenComponentFindCheckServlet extends GenericServlet {
 		List<Pipe> nextPipeList = new ArrayList<Pipe>();
 		while (pipesToCheck.size() > 0) {
 			for (Pipe pipe : pipesToCheck) {
-				if (pipe.getIdBBTo() == null) {
+				if (pipe.getBBTo() == null) {
 					// it's a postcondition
-					Condition post = getConditionById(postconditions, pipe.getIdConditionTo());
+					Condition post = getConditionById(postconditions, pipe.getConditionTo());
 					if (reachablePost.contains(post))
 						reachablePost.add(post);
 				} else {
-					ScreenComponent sc = getScreenComponent(scList, pipe.getIdBBTo());
+					ScreenComponent sc = getScreenComponent(scList, pipe.getBBTo());
 					if (!reachableSCList.contains(sc)) {
 						reachableSCList.add(sc);
 						List<Pipe> toAdd = getPipesFrom(pipes, sc.getUri().toString());
@@ -518,9 +497,9 @@ public class ScreenComponentFindCheckServlet extends GenericServlet {
 		return elements;
 	}
 	
-	private ScreenComponent getScreenComponent(Set<ScreenComponent> scList, String uri) {
+	private ScreenComponent getScreenComponent(Set<ScreenComponent> scList, URI uri) {
 		for (ScreenComponent sc : scList) {
-			if (sc.getUri().toString().equals(uri)) return sc;
+			if (sc.getUri().equals(uri)) return sc;
 		}
 		return null;
 	}
@@ -528,9 +507,9 @@ public class ScreenComponentFindCheckServlet extends GenericServlet {
 	private List<Pipe> getPipesFrom(List<Pipe> pipes, String bbFrom) {
 		ArrayList<Pipe> results = new ArrayList<Pipe>();
 		for (Pipe pipe : pipes) {
-			if (bbFrom == null && pipe.getIdBBFrom() == null) {
+			if (bbFrom == null && pipe.getBBFrom() == null) {
 				results.add(pipe);
-			} else if (bbFrom != null && pipe.getIdBBFrom() != null && bbFrom.equals(pipe.getIdBBFrom())) {
+			} else if (bbFrom != null && pipe.getBBFrom() != null && bbFrom.equals(pipe.getBBFrom())) {
 				results.add(pipe);
 			}
 		}
@@ -548,10 +527,10 @@ public class ScreenComponentFindCheckServlet extends GenericServlet {
 	 */
 	private Pipe getPipeToComponent(ScreenComponent sc, Action action, Condition precondition, List<Pipe> pipes) {
 		for (Pipe pipe : pipes) {
-			if (pipe.getIdBBTo() != null 
-					&& pipe.getIdBBTo().equals(sc.getUri().toString())
-					&& pipe.getIdActionTo().equals(action.getName())
-					&& pipe.getIdConditionTo().equals(precondition.getId())) {
+			if (pipe.getBBTo() != null 
+					&& pipe.getBBTo().equals(sc.getUri())
+					&& pipe.getActionTo().equals(action.getName())
+					&& pipe.getConditionTo().equals(precondition.getId())) {
 				return pipe;
 			}
 		}
@@ -567,13 +546,12 @@ public class ScreenComponentFindCheckServlet extends GenericServlet {
 	 */
 	public Pipe getPipeToPostcondition(Condition postcondition, List<Pipe> pipes) {
 		for (Pipe pipe : pipes) {
-			if (pipe.getIdBBTo() == null
-					&& pipe.getIdConditionTo().equals(postcondition.getId())) {
+			if (pipe.getBBTo() == null
+					&& pipe.getConditionTo().equals(postcondition.getId())) {
 				return pipe;
 			}
 		}
 		return null;
 	}
-	
 
 }

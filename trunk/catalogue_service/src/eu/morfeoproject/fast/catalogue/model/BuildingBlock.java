@@ -197,7 +197,9 @@ public abstract class BuildingBlock {
 				jsonDescriptions.put(key, getDescriptions().get(key));
 			json.put("description", jsonDescriptions);
 		}
-		json.put("creator", getCreator() == null ? JSONObject.NULL : extractLogin(getCreator()));
+		//TODO figure out how to define creators (URI? string? etc.)
+//		json.put("creator", getCreator() == null ? JSONObject.NULL : extractLogin(getCreator()));
+		json.put("creator", getCreator() == null ? JSONObject.NULL : getCreator());
 		json.put("rights", getRights() == null ? JSONObject.NULL : getRights().toString());
 		json.put("version", getVersion() == null ? JSONObject.NULL : getVersion());
 		json.put("creationDate", getCreationDate() == null ? JSONObject.NULL : DateFormatter.formatDateISO8601(getCreationDate()));

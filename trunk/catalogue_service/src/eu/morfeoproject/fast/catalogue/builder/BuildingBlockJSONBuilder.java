@@ -3,6 +3,7 @@ package eu.morfeoproject.fast.catalogue.builder;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 
 import org.apache.commons.logging.Log;
@@ -15,6 +16,8 @@ import org.ontoware.rdf2go.model.node.URI;
 import org.ontoware.rdf2go.model.node.impl.URIImpl;
 
 import eu.morfeoproject.fast.catalogue.BuildingBlockException;
+import eu.morfeoproject.fast.catalogue.MyRDFFactory;
+import eu.morfeoproject.fast.catalogue.RDFFactory;
 import eu.morfeoproject.fast.catalogue.model.Action;
 import eu.morfeoproject.fast.catalogue.model.BackendService;
 import eu.morfeoproject.fast.catalogue.model.BuildingBlock;
@@ -29,7 +32,6 @@ import eu.morfeoproject.fast.catalogue.model.Precondition;
 import eu.morfeoproject.fast.catalogue.model.Property;
 import eu.morfeoproject.fast.catalogue.model.Screen;
 import eu.morfeoproject.fast.catalogue.model.ScreenComponent;
-import eu.morfeoproject.fast.catalogue.model.ScreenDefinition;
 import eu.morfeoproject.fast.catalogue.model.ScreenFlow;
 import eu.morfeoproject.fast.catalogue.model.Trigger;
 import eu.morfeoproject.fast.catalogue.model.factory.BuildingBlockFactory;
@@ -38,6 +40,7 @@ import eu.morfeoproject.fast.catalogue.util.DateFormatter;
 public class BuildingBlockJSONBuilder {
 
 	protected static final Log log = LogFactory.getLog(BuildingBlockJSONBuilder.class);
+	protected static final RDFFactory rdfFactory = new MyRDFFactory();
 
 	public static ScreenFlow buildScreenFlow(JSONObject json, URI uri) throws JSONException, IOException {
 		ScreenFlow sf = BuildingBlockFactory.createScreenFlow(uri);
@@ -95,7 +98,7 @@ public class BuildingBlockJSONBuilder {
 	 */
 	@SuppressWarnings("unchecked")
 	public static List<Condition> buildConditions(JSONArray conditionsArray) throws JSONException, IOException {
-		ArrayList<Condition> conditions = new ArrayList<Condition>();
+		LinkedList<Condition> conditions = new LinkedList<Condition>();
 		for (int i = 0; i < conditionsArray.length(); i++) {
 			JSONObject cJson = conditionsArray.getJSONObject(i);
 			Condition c = BuildingBlockFactory.createCondition();
@@ -119,22 +122,20 @@ public class BuildingBlockJSONBuilder {
 		return conditions;
 	}
 	
-	public static List<Pipe> buildPipes(JSONArray pipesArray) throws JSONException, IOException {
-		ArrayList<Pipe> pipes = new ArrayList<Pipe>();
+	public static List<Pipe> buildPipes(Screen screen, JSONArray pipesArray) throws JSONException, IOException {
+		LinkedList<Pipe> pipes = new LinkedList<Pipe>();
 		for (int i = 0; i < pipesArray.length(); i++) {
-			JSONObject pJson = pipesArray.getJSONObject(i);
-			Pipe p = BuildingBlockFactory.createPipe();
-			JSONObject fromJson = pJson.getJSONObject("from");
-			p.setIdBBFrom(fromJson.getString("buildingblock").equals("null") ? null : fromJson.getString("buildingblock"));
-			p.setIdConditionFrom(fromJson.getString("condition"));
-			JSONObject toJson = pJson.getJSONObject("to");
-			p.setIdBBTo(toJson.getString("buildingblock").equals("null") ? null : toJson.getString("buildingblock"));
-			p.setIdConditionTo(toJson.getString("condition"));
-			String action = toJson.has("action") ? (toJson.getString("action").equals("null") ? null : toJson.getString("action")) : null;
-			p.setIdActionTo(action);
-			pipes.add(p);
+			pipes.add(parsePipe(screen, pipesArray.getJSONObject(i)));
 		}
 		return pipes;
+	}
+	
+	public static List<Trigger> buildTriggers(Screen screen, JSONArray triggersArray) throws JSONException, IOException {
+		LinkedList<Trigger> triggers = new LinkedList<Trigger>();
+		for (int i = 0; i < triggersArray.length(); i++) {
+			triggers.add(parseTrigger(screen, triggersArray.getJSONObject(i)));
+		}
+		return triggers;
 	}
 
 	@SuppressWarnings("unchecked")
@@ -204,7 +205,7 @@ public class BuildingBlockJSONBuilder {
 			}
 		}
 		//TODO fix this problem with the users and URLs
-		//bb.setCreator(new URIImpl(CatalogueAccessPoint.getCatalogue().getServerURL()+"/users/"+jsonResource.getString("creator")));
+		bb.setCreator(new URIImpl("http://example.com/users/"+jsonResource.getString("creator")));
 		bb.setRights(new URIImpl(jsonResource.getString("rights")));
 		bb.setVersion(jsonResource.getString("version"));
 		if (jsonResource.has("creationDate") && !jsonResource.isNull("creationDate") && jsonResource.getString("creationDate") != "") {
@@ -238,11 +239,11 @@ public class BuildingBlockJSONBuilder {
 
 		// preconditions
 		JSONArray preArray = jsonScreen.getJSONArray("preconditions");
-		screen.setPreconditions(new ArrayList<Condition>());
+		screen.setPreconditions(new LinkedList<Condition>());
 		screen.getPreconditions().addAll(buildConditions(preArray));
 		// postconditions
 		JSONArray postArray = jsonScreen.getJSONArray("postconditions");
-		screen.setPostconditions(new ArrayList<Condition>());
+		screen.setPostconditions(new LinkedList<Condition>());
 		screen.getPostconditions().addAll(buildConditions(postArray));
 		// code
 		if (jsonScreen.has("code") && jsonScreen.has("definition")) {
@@ -252,43 +253,27 @@ public class BuildingBlockJSONBuilder {
 				throw new BuildingBlockException("'code' cannot be null.");
 			screen.setCode(new URIImpl(jsonScreen.getString("code")));
 		} else if (jsonScreen.has("definition")) {
-			ScreenDefinition sDef = parseScreenDefinition(jsonScreen.getJSONObject("definition"));
-			screen.setDefinition(sDef);
+			parseScreenDefinition(screen, jsonScreen.getJSONObject("definition"));
 		} else {
 			throw new BuildingBlockException("Either 'code' or 'definition' must be specified.");
 		}
 		return screen;
 	}
 	
-	private static ScreenDefinition parseScreenDefinition(JSONObject jsonDef) throws JSONException, IOException {
-		ScreenDefinition definition = new ScreenDefinition();
+	private static Screen parseScreenDefinition(Screen screen, JSONObject jsonDef) throws JSONException, IOException {
 		// building blocks
 		JSONArray bbArray = jsonDef.getJSONArray("buildingblocks");
+		screen.setBuildingBlocks(new LinkedList<URI>());
 		for (int i = 0; i < bbArray.length(); i++) {
-			JSONObject bb = bbArray.getJSONObject(i);
-			definition.getBuildingBlocks().put(bb.getString("id"), new URIImpl(bb.getString("uri")));
+			screen.getBuildingBlocks().add(rdfFactory.createURI(bbArray.getString(i)));
 		}
 		// pipes
-		JSONArray pipeArray = jsonDef.getJSONArray("pipes");
-		for (int i = 0; i < pipeArray.length(); i++) {
-			JSONObject jsonPipe = pipeArray.getJSONObject(i);
-			JSONObject pipeFrom = jsonPipe.getJSONObject("from");
-			JSONObject pipeTo = jsonPipe.getJSONObject("to");
-			Pipe pipe = BuildingBlockFactory.createPipe();
-			pipe.setIdBBFrom(pipeFrom.isNull("buildingblock") ? null : pipeFrom.getString("buildingblock"));
-			pipe.setIdConditionFrom(pipeFrom.isNull("condition") ? null : pipeFrom.getString("condition"));
-			pipe.setIdBBTo(pipeTo.isNull("buildingblock") ? null : pipeTo.getString("buildingblock"));
-			pipe.setIdConditionTo(pipeTo.isNull("condition") ? null : pipeTo.getString("condition"));
-			pipe.setIdActionTo(pipeTo.isNull("action") ? null : pipeTo.getString("action"));
-			definition.getPipes().add(pipe);
-		}
+		screen.setPipes(new LinkedList<Pipe>());
+		screen.getPipes().addAll(buildPipes(screen, jsonDef.getJSONArray("pipes")));
 		// triggers
-		JSONArray triggerArray = jsonDef.getJSONArray("triggers");
-		for (int i = 0; i < triggerArray.length(); i++) {
-			JSONObject jsonTrigger = triggerArray.getJSONObject(i);
-			definition.getTriggers().add(parseTrigger(jsonTrigger));
-		}
-		return definition;
+		screen.setTriggers(new LinkedList<Trigger>());
+		screen.getTriggers().addAll(buildTriggers(screen, jsonDef.getJSONArray("triggers")));
+		return screen;
 	}
 	
 	private static Precondition parsePrecondition(Precondition pre, JSONObject jsonPre) throws JSONException, IOException {
@@ -316,13 +301,14 @@ public class BuildingBlockJSONBuilder {
 		}
 		// preconditions
 		JSONArray preArray = jsonAction.getJSONArray("preconditions");
-		action.setPreconditions(buildConditions(preArray));
+		action.setPreconditions(new ArrayList<Condition>());
+		action.getPreconditions().addAll(buildConditions(preArray));
 		// uses
+		action.setUses(new ArrayList<URI>());
 		if (jsonAction.get("uses") != null) {
 			JSONArray usesArray = jsonAction.getJSONArray("uses");
 			for (int i = 0; i < usesArray.length(); i++) {
-				JSONObject useObject = usesArray.getJSONObject(i);
-				action.getUses().put(useObject.getString("id"), new URIImpl(useObject.getString("uri")));
+				action.getUses().add(rdfFactory.createURI(usesArray.getString(i)));
 			}
 		}
 
@@ -342,14 +328,35 @@ public class BuildingBlockJSONBuilder {
 		return library;
 	}
 	
-	private static Trigger parseTrigger(JSONObject jsonTrigger) throws JSONException, IOException {
-		JSONObject triggerFrom = jsonTrigger.getJSONObject("from");
-		JSONObject triggerTo = jsonTrigger.getJSONObject("to");
-		Trigger trigger = new Trigger();
-		trigger.setIdBBFrom(triggerFrom.isNull("buildingblock") ? null : triggerFrom.getString("buildingblock"));
-		trigger.setNameFrom(triggerFrom.isNull("name") ? null : triggerFrom.getString("name"));
-		trigger.setIdBBTo(triggerTo.isNull("buildingblock") ? null : triggerTo.getString("buildingblock"));
-		trigger.setIdActionTo(triggerTo.isNull("action") ? null : triggerTo.getString("action"));
+	private static Pipe parsePipe(Screen screen, JSONObject jsonPipe) throws JSONException, IOException {
+		Pipe pipe = BuildingBlockFactory.createPipe(screen);
+		JSONObject pipeFrom = jsonPipe.getJSONObject("from");
+		JSONObject pipeTo = jsonPipe.getJSONObject("to");
+		String bbFrom = pipeFrom.getString("buildingblock");
+		String conditionFrom = pipeFrom.getString("condition");
+		String bbTo = pipeTo.getString("buildingblock");
+		String actionTo = pipeTo.getString("action");
+		String conditionTo = pipeTo.getString("condition");
+		pipe.setBBFrom(bbFrom == null || bbFrom.equals("") ? null : rdfFactory.createURI(bbFrom));
+		pipe.setConditionFrom(conditionFrom == null || conditionFrom.equals("") ? null : conditionFrom);
+		pipe.setBBTo(bbTo == null || bbTo.equals("") ? null : rdfFactory.createURI(bbTo));
+		pipe.setActionTo(actionTo == null || actionTo.equals("") ? null : actionTo);
+		pipe.setConditionTo(conditionTo == null || conditionTo.equals("") ? null : conditionTo);
+		return pipe;
+	}
+	
+	private static Trigger parseTrigger(Screen screen, JSONObject jsonTrigger) throws JSONException, IOException {
+		Trigger trigger = new Trigger(screen);
+		JSONObject from = jsonTrigger.getJSONObject("from");
+		JSONObject to = jsonTrigger.getJSONObject("to");
+		String bbFrom = from.getString("buildingblock");
+		String nameFrom = from.getString("name");
+		String bbTo = to.getString("buildingblock");
+		String actionTo = to.getString("action");
+		trigger.setBBFrom(bbFrom == null || bbFrom.equals("") ? null : rdfFactory.createURI(bbFrom));
+		trigger.setNameFrom(nameFrom == null || nameFrom.equals("") ? null : nameFrom);
+		trigger.setBBTo(bbTo == null || bbTo.equals("") ? null : rdfFactory.createURI(bbTo));
+		trigger.setActionTo(actionTo == null || actionTo.equals("") ? null : actionTo);
 		return trigger;
 	}
 	
@@ -364,7 +371,7 @@ public class BuildingBlockJSONBuilder {
 		}
 		// postconditions
 		JSONArray postArray = jsonSc.getJSONArray("postconditions");
-		sc.setPostconditions(new ArrayList<Condition>());
+		sc.setPostconditions(new LinkedList<Condition>());
 		sc.getPostconditions().addAll(buildConditions(postArray));
 		// code
 		if (jsonSc.get("code") != null && !jsonSc.getString("code").equalsIgnoreCase("null")) {
@@ -385,8 +392,8 @@ public class BuildingBlockJSONBuilder {
 	}
 	
 	@SuppressWarnings("unchecked")
-	private static ArrayList<CTag> parseTags(JSONArray aTag) throws JSONException {
-		ArrayList<CTag> tags = new ArrayList<CTag>(aTag.length());
+	private static LinkedList<CTag> parseTags(JSONArray aTag) throws JSONException {
+		LinkedList<CTag> tags = new LinkedList<CTag>();
 		for (int i = 0; i < aTag.length(); i++) {
 			CTag tag = BuildingBlockFactory.createTag();
 			JSONObject oTag = aTag.getJSONObject(i);

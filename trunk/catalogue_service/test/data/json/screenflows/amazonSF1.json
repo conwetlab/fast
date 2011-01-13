@@ -1,0 +1,26 @@
+{
+    "id":"1",
+    "creator":"admin",
+    "description":{
+        "en-gb":"This screen shows the results of a given search in Amazon. It allows users to choose a product to see its details."
+    },
+    "tags":[
+        {
+            "label":{
+                "en-gb":"amazon"
+            },
+            "means":"http://dbpedia.org/page/Amazon.com"
+        }
+    ],
+    "homepage":"http://www.deri.ie/amazon",
+    "icon":"http://demo.fast.morfeo-project.org/gvsdata/images/catalogue/amazon.png",
+    "label":{
+        "en-gb":"Amazon Shopping screenflow"
+    },
+    "rights":"http://creativecommons.org/",
+    "screenshot":"http://demo.fast.morfeo-project.org/gvsdata/images/screenshots/amazon.png",
+    "version":"1.0",
+    "contains":[],
+    "preconditions":[],
+    "postconditions":[]
+}

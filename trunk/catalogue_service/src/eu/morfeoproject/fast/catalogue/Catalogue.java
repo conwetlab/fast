@@ -36,7 +36,6 @@ import org.ontoware.rdf2go.model.node.Resource;
 import org.ontoware.rdf2go.model.node.URI;
 import org.ontoware.rdf2go.model.node.UriOrVariable;
 import org.ontoware.rdf2go.model.node.Variable;
-import org.ontoware.rdf2go.model.node.impl.URIImpl;
 import org.ontoware.rdf2go.vocabulary.OWL;
 import org.ontoware.rdf2go.vocabulary.RDF;
 import org.ontoware.rdf2go.vocabulary.RDFS;
@@ -833,7 +832,7 @@ public class Catalogue {
 	protected URI createURIforBuildingBlock(URI ofClass, String id)
 	throws DuplicatedException, OntologyInvalidException {
 		if (ofClass.equals(FGO.ScreenFlow)) {
-			return createURIforBuildingBlock(getServerURL(), "screenflows", ofClass, id);
+			return createURIforBuildingBlock(getServerURL(), "screen-flows", ofClass, id);
 		} else if (ofClass.equals(FGO.Screen)) {
 			return createURIforBuildingBlock(getServerURL(), "screens", ofClass, id);
 		} else if (ofClass.equals(FGO.Form)) {
@@ -902,14 +901,11 @@ public class Catalogue {
 		if (sf.getCreationDate() == null)
 			sf.setCreationDate(new Date());
 		// persists the screen-flow
-		if (!saveScreenFlow(sf)) {
-			throw new BuildingBlockException("An error ocurred while saving the screen-flow. Please, ensure the screen-flow is well defined.");
-		}
+		saveScreenFlow(sf);
 		if(log.isInfoEnabled()) log.info("Screenflow " + sfUri + " added.");
 	}
 
-	protected boolean saveScreenFlow(ScreenFlow sf)
-	throws OntologyReadonlyException, NotFoundException {
+	protected void saveScreenFlow(ScreenFlow sf) throws OntologyReadonlyException, NotFoundException, BuildingBlockException {
 		URI sfUri = sf.getUri();
 		try {
 			Model model = sf.toRDF2GoModel();
@@ -917,28 +913,25 @@ public class Catalogue {
 			tripleStore.addStatement(graphUri, sfUri, tripleStore.createURI("http://replace.for.real.one"), graphUri);
 			generateConditionsStatements(model, graphUri);
 			model.close();
-			return true;
 		} catch (Exception e) {
-			log.error("Error while saving screen " + sfUri, e);
+			log.error("Error while saving screen-flow " + sfUri, e);
 			try {
 				removeScreenFlow(sfUri);
 			} catch (NotFoundException nfe) {
 				log.error("Screen-flow " + sfUri + " does not exist.", nfe);
 			}
+			throw new BuildingBlockException("An error ocurred while saving the screen-flow: " + e, e);
 		}
-		return false;
 	}
 
 	public void updateScreenFlow(ScreenFlow screenflow)
 			throws NotFoundException, OntologyReadonlyException,
 			BuildingBlockException {
-		if(log.isInfoEnabled()) log.info("Updating screenflow " + screenflow.getUri() + "...");
+		if(log.isInfoEnabled()) log.info("Updating screen-flow " + screenflow.getUri() + "...");
 		removeScreenFlow(screenflow.getUri());
 		// save new content with the same URI
-		if (!saveScreenFlow(screenflow)) {
-			throw new BuildingBlockException("An error ocurred while saving the screen-flow. Please, ensure the screen-flow is well defined.");
-		}
-		if(log.isInfoEnabled()) log.info("Screenflow " + screenflow.getUri() + " updated.");
+		saveScreenFlow(screenflow);
+		if(log.isInfoEnabled()) log.info("Screen-flow " + screenflow.getUri() + " updated.");
 	}
 
 	/**
@@ -982,20 +975,18 @@ public class Catalogue {
 		if (screen.getCreationDate() == null)
 			screen.setCreationDate(new Date());
 		// persists the screen
-		if (saveScreen(screen)) {
-			// create plans for the screen
-			if (planner != null) planner.add(screen);
-		} else {
-			throw new BuildingBlockException("An error ocurred while saving the screen. Please, ensure the screen is well defined.");
-		}
+		saveScreen(screen);
+		// create plans for the screen
+		if (planner != null) planner.add(screen);
 	}
 
 	/**
 	 * Do not check if the screen already exists, and assumes the screen has a
 	 * well-formed unique URI To be invoked by addScreen and updateScreen
 	 * methods
+	 * @throws BuildingBlockException 
 	 */
-	protected boolean saveScreen(Screen screen) {
+	protected void saveScreen(Screen screen) throws BuildingBlockException {
 		URI sUri = screen.getUri();
 		try {
 			Model model = screen.toRDF2GoModel();
@@ -1003,33 +994,28 @@ public class Catalogue {
 			tripleStore.addStatement(graphUri, sUri, tripleStore.createURI("http://replace.for.real.one"), graphUri);
 			generateConditionsStatements(model, graphUri);
 			model.close();
-			return true;
 		} catch (Exception e) {
-			log.error(e.toString(), e);
+			log.error("Error while saving screen " + sUri, e);
 			try {
 				removeScreen(sUri);
 			} catch (NotFoundException nfe) {
 				log.error(nfe.toString(), nfe);
 			}
+			throw new BuildingBlockException("An error ocurred while saving the screen: " + e, e);
 		}
-		return false;
 	}
 
-	public void updateScreen(Screen screen) throws NotFoundException,
-			OntologyReadonlyException, RepositoryException,
-			OntologyInvalidException, BuildingBlockException {
+	public void updateScreen(Screen screen) 
+	throws NotFoundException, OntologyReadonlyException, RepositoryException, OntologyInvalidException, BuildingBlockException {
 		if(log.isInfoEnabled()) log.info("Updating screen " + screen.getUri() + "...");
 		Screen oldScreen = getScreen(screen.getUri());
 		// remove screen from the catalogue
 		removeScreen(screen.getUri());
 		// save new content with the same URI
-		if (saveScreen(screen)) {
-			// calculate new plans if necessary
-			if (planner != null) planner.update(screen, oldScreen);
-			if(log.isInfoEnabled()) log.info("Screen " + screen.getUri() + " updated.");
-		} else {
-			throw new BuildingBlockException("An error ocurred while saving the screen. Please, ensure the screen is well defined.");
-		}
+		saveScreen(screen);
+		// calculate new plans
+		if (planner != null) planner.update(screen, oldScreen);
+		if(log.isInfoEnabled()) log.info("Screen " + screen.getUri() + " updated.");
 	}
 
 	public void removeScreen(URI screenUri) throws NotFoundException {
@@ -1037,7 +1023,50 @@ public class Catalogue {
 		// remove the screen from the planner
 		if (planner != null) planner.remove(screenUri);
 	}
+	
+	public URI getGraphForBuildingBlock(BuildingBlock bb) {
+		String query = "SELECT ?graph WHERE { <bb> <http://replace.for.real.one> ?graph }";
+		query = query.replaceFirst("<bb>", bb.getUri().toSPARQL());
+		ClosableIterator<QueryRow> it = tripleStore.sparqlSelect(query).iterator();
+		if (it.hasNext()) return it.next().getValue("graph").asURI();
+		return null;
+	}
+	
+	public URI createCopy(URI bbUri) throws NotFoundException, BuildingBlockException {
+		return createCopy(getBuildingBlock(bbUri));
+	}
+	
+	public URI createCopy(BuildingBlock bb) throws BuildingBlockException {
+		String type = null;
+		if (bb instanceof ScreenFlow)				type = "screenflows";
+		else if (bb instanceof Screen)				type = "screens";
+		else if (bb instanceof Form)				type = "forms";
+		else if (bb instanceof Operator)			type = "operators";
+		else if (bb instanceof BackendService)		type = "backendservices";
+		
+		if (type == null)
+			throw new BuildingBlockException("Building block must be a 'screenflow', 'screen', 'form', 'operator' or 'backend service'.");
+		
+		URI copyUri = tripleStore.createUniqueUriWithName(configuration.getURI(environment, "serverURL"), "/"+type+"/copies/");
+		String query = "CONSTRUCT { <copy> ?p ?o } WHERE { <bb> ?p ?o }";
+		query = query.replaceFirst("<copy>", copyUri.toSPARQL());
+		query = query.replaceFirst("<bb>", bb.getUri().toSPARQL());
+		ClosableIterator<Statement> it = tripleStore.sparqlConstruct(query).iterator();
+		while (it.hasNext()) {
+			Statement stmt = it.next();
+			if (stmt.getPredicate().equals(DC.date)) {
+				// overrides the creation date
+				tripleStore.addStatement(copyUri, DC.date, tripleStore.createDatatypeLiteral(DateFormatter.formatDateISO8601(new Date()), XSD._date));
+			} else {
+				tripleStore.addStatement(it.next());
+			}
+		}
+		tripleStore.addStatement(copyUri, FGO.hasTemplate, bb.getUri());
+		tripleStore.addStatement(bb.getUri(), FGO.hasCopy, copyUri);
 
+		return copyUri;
+	}
+	
 	public void addPreOrPost(PreOrPost se)
 	throws DuplicatedException, OntologyInvalidException, BuildingBlockException {
 		URI seUri = null;
@@ -1058,12 +1087,10 @@ public class Catalogue {
 		if (se.getCreationDate() == null)
 			se.setCreationDate(new Date());
 		// persists the pre/postcondition
-		if (!savePreOrPost(se)) {
-			throw new BuildingBlockException("An error ocurred while saving the screen. Please, ensure the screen is well defined.");
-		}
+		savePreOrPost(se);
 	}
 
-	protected boolean savePreOrPost(PreOrPost preOrPost) {
+	protected void savePreOrPost(PreOrPost preOrPost) throws BuildingBlockException {
 		URI uri = preOrPost.getUri();
 		try {
 			Model model = preOrPost.toRDF2GoModel();
@@ -1071,7 +1098,6 @@ public class Catalogue {
 			tripleStore.addStatement(graphUri, uri, tripleStore.createURI("http://replace.for.real.one"), graphUri);
 			generateConditionsStatements(model, graphUri);
 			model.close();
-			return true;
 		} catch (Exception e) {
 			log.error("Error while saving pre/postcondition " + uri, e);
 			try {
@@ -1079,20 +1105,16 @@ public class Catalogue {
 			} catch (NotFoundException nfe) {
 				log.error("Pre/postcondition " + uri + " does not exist.", nfe);
 			}
+			throw new BuildingBlockException("An error ocurred while saving the pre/postcondition: " + e, e);
 		}
-		return false;
 	}
 
-	public void updatePreOrPost(PreOrPost se)
-	throws NotFoundException, BuildingBlockException {
+	public void updatePreOrPost(PreOrPost se) throws NotFoundException, BuildingBlockException {
 		if(log.isInfoEnabled()) log.info("Updating pre/postcondition " + se.getUri() + "...");
 		removePreOrPost(se.getUri());
 		// save new content with the same URI
-		if (savePreOrPost(se)) {
-			if(log.isInfoEnabled()) log.info(se.getUri() + " updated.");
-		} else {
-			throw new BuildingBlockException("An error ocurred while saving the pre/postcondition. Please, ensure the screen is well defined.");
-		}
+		savePreOrPost(se);
+		if(log.isInfoEnabled()) log.info(se.getUri() + " updated.");
 	}
 
 	public void removePreOrPost(URI uri) throws NotFoundException {
@@ -1119,13 +1141,10 @@ public class Catalogue {
 		// sets current date if no date given
 		if (sc.getCreationDate() == null) sc.setCreationDate(new Date());
 		// persists the screen component
-		if (!saveScreenComponent(sc)) {
-			throw new BuildingBlockException("An error ocurred while saving the screen component. Please, ensure the component is well defined.");
-		}
+		saveScreenComponent(sc);
 	}
 
-	// TODO methods "save" should throw the exception, so we have more details to show in the servlet when an error occurs
-	protected boolean saveScreenComponent(ScreenComponent sc) {
+	protected void saveScreenComponent(ScreenComponent sc) throws BuildingBlockException {
 		URI scUri = sc.getUri();
 		try {
 			Model model = sc.toRDF2GoModel();
@@ -1133,26 +1152,21 @@ public class Catalogue {
 			tripleStore.addStatement(graphUri, scUri, tripleStore.createURI("http://replace.for.real.one"), graphUri);
 			generateConditionsStatements(model, graphUri);
 			model.close();
-			return true;
 		} catch (Exception e) {
 			log.error("Error while saving screen component " + scUri, e);
 			try {
 				removeBuildingBlock(scUri);
-			} catch (NotFoundException nfe) {
-				log.error("Screen component " + scUri + " does not exist.", nfe);
-			}
+			} catch (NotFoundException nfe) {}
+			throw new BuildingBlockException("An error ocurred while saving the screen component: " + e, e);
 		}
-		return false;
 	}
 
-	protected void updateScreenComponent(ScreenComponent sc)
-	throws NotFoundException, BuildingBlockException {
+	protected void updateScreenComponent(ScreenComponent sc) throws NotFoundException, BuildingBlockException {
 		if(log.isInfoEnabled()) log.info("Updating screen component " + sc.getUri() + "...");
 		// remove old screen component from the catalogue
 		removeScreenComponent(sc.getUri());
 		// save new content with the same URI
-		if (!saveScreenComponent(sc))
-			throw new BuildingBlockException("An error ocurred while saving the screen component. Please, ensure the component is well defined.");
+		saveScreenComponent(sc);
 		if(log.isInfoEnabled()) log.info("Screen component " + sc.getUri() + " updated.");
 	}
 
@@ -1446,7 +1460,7 @@ public class Catalogue {
 		for (; it.hasNext();) {
 			Statement stmt = it.next();
 			if (stmt.getPredicate().equals(FGO.hasPatternString)
-					&& isConditionPositive(model, stmt.getSubject().asBlankNode())) {
+					&& isConditionPositive(model, stmt.getSubject().asURI())) {
 				URI pUri = tripleStore.createUniqueUriWithName(configuration.getURI(environment, "serverURL"), "/pattern/");
 				String pattern = stmt.getObject().asDatatypeLiteral().getValue();
 				Model patternModel = patternToRDF2GoModel(pattern);
@@ -1460,9 +1474,9 @@ public class Catalogue {
 		it.close();
 	}
 
-	protected boolean isConditionPositive(Model model, BlankNode cNode) {
+	protected boolean isConditionPositive(Model model, URI conUri) {
 		boolean isPositive = false;
-		ClosableIterator<Statement> it = model.findStatements(cNode, FGO.isPositive, Variable.ANY);
+		ClosableIterator<Statement> it = model.findStatements(conUri, FGO.isPositive, Variable.ANY);
 		if (it.hasNext()) {
 			Statement stmt = it.next();
 			isPositive = Boolean.parseBoolean(stmt.getObject().asDatatypeLiteral().getValue());
@@ -1614,6 +1628,7 @@ public class Catalogue {
 		}
 	}
 
+	// FIXME: throw an exception instead of boolean
 	protected boolean saveConcept(Concept concept) {
 		URI cUri = concept.getUri();
 		Model model = null;
@@ -1752,6 +1767,7 @@ public class Catalogue {
 		return saveSample(sample) ? sample : null;
 	}
 	
+	// FIXME: throw an exception instead of boolean
 	protected boolean saveSample(Sample sample) {
 		URI uri = sample.getUri();
 		try {

@@ -34,14 +34,8 @@
     "version":"1.0",
     "definition":{
         "buildingblocks":[
-            {
-                "id":"AmazonListForm1",
-                "uri":"http://localhost:9000/FASTCatalogue/forms/1"
-            },
-            {
-                "id":"AmazonSearchService1",
-                "uri":"http://localhost:9000/FASTCatalogue/services/1"
-            }
+            "<amazon-list-form>",
+            "<amazon-search-service>"
         ],
         "pipes":[
             {
@@ -50,36 +44,36 @@
                     "condition":"filter"
                 },
                 "to":{
-                    "buildingblock":"AmazonSearchService1",
+                    "buildingblock":"<amazon-search-service>",
                     "condition":"filter",
                     "action":"search"
                 }
             },
             {
                 "from":{
-                    "buildingblock":"AmazonSearchService1",
+                    "buildingblock":"<amazon-search-service>",
                     "condition":"list"
                 },
                 "to":{
-                    "buildingblock":"AmazonListForm1",
+                    "buildingblock":"<amazon-list-form>",
                     "condition":"list",
                     "action":"showTable"
                 }
             },
             {
                 "from":{
-                    "buildingblock":"AmazonListForm1",
+                    "buildingblock":"<amazon-list-form>",
                     "condition":"filter"
                 },
                 "to":{
-                    "buildingblock":"AmazonSearchService1",
+                    "buildingblock":"<amazon-search-service>",
                     "condition":"filter",
                     "action":"search"
                 }
             },
             {
                 "from":{
-                    "buildingblock":"AmazonListForm1",
+                    "buildingblock":"<amazon-list-form>",
                     "condition":"item"
                 },
                 "to":{
@@ -96,7 +90,7 @@
                     "name":"_onload"
                 },
                 "to":{
-                    "buildingblock":"AmazonListForm1",
+                    "buildingblock":"<amazon-list-form>",
                     "action":"init"
                 }
             },
@@ -106,7 +100,7 @@
                     "name":"_onload"
                 },
                 "to":{
-                    "buildingblock":"AmazonSearchService1",
+                    "buildingblock":"<amazon-search-service>",
                     "action":"search"
                 }
             }

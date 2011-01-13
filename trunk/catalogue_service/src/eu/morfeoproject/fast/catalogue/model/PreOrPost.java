@@ -8,9 +8,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.ontoware.rdf2go.RDF2Go;
 import org.ontoware.rdf2go.model.Model;
-import org.ontoware.rdf2go.model.node.BlankNode;
 import org.ontoware.rdf2go.model.node.URI;
-import org.ontoware.rdf2go.vocabulary.RDF;
 import org.ontoware.rdf2go.vocabulary.RDFS;
 import org.ontoware.rdf2go.vocabulary.XSD;
 
@@ -39,20 +37,21 @@ public abstract class PreOrPost extends BuildingBlock {
 		Model model = RDF2Go.getModelFactory().createModel();
 		model.open();
 		model.setNamespace("dc", DC.NS_DC.toString());
-		model.setNamespace("FGO", FGO.NS_FGO.toString());
+		model.setNamespace("fgo", FGO.NS_FGO.toString());
 		
-		BlankNode bag = model.createBlankNode();
-		model.addStatement(bag, RDF.type, RDF.Bag);
-		model.addStatement(getUri(), FGO.hasCondition, bag);
-		int i = 1;
 		for (Condition con : conditions) {
-			BlankNode c = model.createBlankNode();
-			model.addStatement(bag, RDF.li(i++), c);
-			model.addStatement(c, FGO.hasPatternString, model.createDatatypeLiteral(con.getPatternString(), XSD._string));
-			model.addStatement(c, FGO.isPositive, model.createDatatypeLiteral(new Boolean(con.isPositive()).toString(), XSD._boolean));
-//			model.addStatement(c, FGO.hasId, model.createDatatypeLiteral(con.getId(), XSD._string)); TODO: is it needed here for pre/postconditions??
-			for (String key : con.getLabels().keySet())
-				model.addStatement(c, RDFS.label, model.createLanguageTagLiteral(con.getLabels().get(key), key));
+			URI conUri = con.getUri();
+			// FIXME: should be this done here? check it!!
+			if (conUri == null) {
+				conUri = model.createURI(getUri() + "/conditions/" + con.getId());
+				con.setUri(conUri);
+			}
+			model.addStatement(getUri(), FGO.hasCondition, conUri);
+			model.addStatement(conUri, FGO.hasPatternString, model.createDatatypeLiteral(con.getPatternString(), XSD._string));
+			model.addStatement(conUri, FGO.isPositive, model.createDatatypeLiteral(new Boolean(con.isPositive()).toString(), XSD._boolean));
+			for (String key : con.getLabels().keySet()) {
+				model.addStatement(conUri, RDFS.label, model.createLanguageTagLiteral(con.getLabels().get(key), key));
+			}
 		}
 
 		return model;

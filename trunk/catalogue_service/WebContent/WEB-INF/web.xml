@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <web-app id="WebApp_ID" version="2.4" xmlns="http://java.sun.com/xml/ns/j2ee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
 	<display-name>CatalogueService</display-name>
+	<listener>
+		<listener-class>eu.morfeoproject.fast.catalogue.services.ApplicationServletContext</listener-class>
+	</listener>
 	<servlet>
 		<description></description>
 		<display-name>ScreenflowServlet</display-name>
@@ -91,6 +94,12 @@
 		<servlet-name>PlannerServlet</servlet-name>
 		<servlet-class>eu.morfeoproject.fast.catalogue.services.PlannerServlet</servlet-class>
 	</servlet>
+	<servlet>
+		<description></description>
+		<display-name>CopyServlet</display-name>
+		<servlet-name>CopyServlet</servlet-name>
+		<servlet-class>eu.morfeoproject.fast.catalogue.services.CopyServlet</servlet-class>
+	</servlet>
 	<servlet-mapping>
 		<servlet-name>ScreenflowServlet</servlet-name>
 		<url-pattern>/screenflows/*</url-pattern>
@@ -154,6 +163,10 @@
 	<servlet-mapping>
 		<servlet-name>PlannerServlet</servlet-name>
 		<url-pattern>/planner</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>CopyServlet</servlet-name>
+		<url-pattern>/copies</url-pattern>
 	</servlet-mapping>
 	<welcome-file-list>
 		<welcome-file>index.html</welcome-file>

@@ -9,7 +9,6 @@ import org.json.JSONObject;
 import org.ontoware.rdf2go.model.Model;
 import org.ontoware.rdf2go.model.node.BlankNode;
 import org.ontoware.rdf2go.model.node.URI;
-import org.ontoware.rdf2go.vocabulary.RDF;
 import org.ontoware.rdf2go.vocabulary.RDFS;
 import org.ontoware.rdf2go.vocabulary.XSD;
 
@@ -70,6 +69,28 @@ public abstract class ScreenComponent extends BuildingBlock {
 	public void setTriggers(List<String> triggers) {
 		this.triggers = triggers;
 	}
+	
+	public Condition getPrecondition(String name) {
+		for (Action action : this.actions) {
+			for (Condition condition : action.getPreconditions()) {
+				if (condition.getId() != null 
+						&& condition.getId().equals(name)) {
+					return condition;
+				}
+			}
+		}
+		return null;
+	}
+	
+	public Condition getPostcondition(String name) {
+		for (Condition condition : this.postconditions) {
+			if (condition.getId() != null 
+					&& condition.getId().equals(name)) {
+				return condition;
+			}
+		}
+		return null;
+	}
 
 	@Override
 	public Model toRDF2GoModel() {
@@ -78,31 +99,38 @@ public abstract class ScreenComponent extends BuildingBlock {
 		URI scUri = this.getUri();
 		
 		// code
-		if (this.getCode() != null)
+		if (this.getCode() != null) {
 			model.addStatement(scUri, FGO.hasCode, this.getCode());
-
+		}
+		
 		// actions
 		for (Action action : getActions()) {
-			BlankNode aNode = model.createBlankNode();
-			model.addStatement(scUri, FGO.hasAction, aNode);
-			model.addStatement(aNode, RDFS.label, action.getName());
+			URI actionUri = action.getUri();
+			// FIXME: is this the place to assign URI to actions? rethink!!
+			if (actionUri == null) {
+				actionUri = model.createURI(scUri + "/actions/" + action.getName());
+				action.setUri(actionUri);
+			}
+			model.addStatement(scUri, FGO.hasAction, actionUri);
+			model.addStatement(action.getUri(), RDFS.label, action.getName());
 			// preconditions
 			for (Condition con : action.getPreconditions()) {
-				BlankNode c = model.createBlankNode();
-				model.addStatement(aNode, FGO.hasPreCondition, c);
-				model.addStatement(c, FGO.hasPatternString, model.createDatatypeLiteral(con.getPatternString(), XSD._string));
-				model.addStatement(c, FGO.isPositive, model.createDatatypeLiteral(new Boolean(con.isPositive()).toString(), XSD._boolean));
-				model.addStatement(c, FGO.hasId, model.createDatatypeLiteral(con.getId(), XSD._string));
-				for (String key : con.getLabels().keySet())
-					model.addStatement(c, RDFS.label, model.createLanguageTagLiteral(con.getLabels().get(key), key));
+				URI conUri = con.getUri();
+				// FIXME: is this the place to assign URI to actions? rethink!!
+				if (conUri == null) {
+					conUri = model.createURI(actionUri + "/preconditions/" + con.getId());
+					con.setUri(conUri);
+				}
+				model.addStatement(actionUri, FGO.hasPreCondition, conUri);
+				model.addStatement(conUri, FGO.hasPatternString, model.createDatatypeLiteral(con.getPatternString(), XSD._string));
+				model.addStatement(conUri, FGO.isPositive, model.createDatatypeLiteral(new Boolean(con.isPositive()).toString(), XSD._boolean));
+				for (String key : con.getLabels().keySet()) {
+					model.addStatement(conUri, RDFS.label, model.createLanguageTagLiteral(con.getLabels().get(key), key));
+				}
 			}
 			// uses
-			for (String id : action.getUses().keySet()) {
-				BlankNode uNode = model.createBlankNode();
-				model.addStatement(aNode, FGO.uses, uNode);
-				model.addStatement(uNode, RDF.type, FGO.ResourceReference);
-				model.addStatement(uNode, FGO.hasId, model.createDatatypeLiteral(id, XSD._string));
-				model.addStatement(uNode, FGO.hasUri, action.getUses().get(id));
+			for (URI useURI : action.getUses()) {
+				model.addStatement(actionUri, FGO.uses, useURI);
 			}
 		}
 		
@@ -115,14 +143,19 @@ public abstract class ScreenComponent extends BuildingBlock {
 		}
 		
 		// postconditions
-		for (Condition condition : getPostconditions()) {
-			BlankNode conBN = model.createBlankNode();
-			model.addStatement(scUri, FGO.hasPostCondition, conBN);
-			model.addStatement(conBN, FGO.hasPatternString, model.createDatatypeLiteral(condition.getPatternString(), XSD._string));
-			model.addStatement(conBN, FGO.isPositive, model.createDatatypeLiteral(new Boolean(condition.isPositive()).toString(), XSD._boolean));
-			model.addStatement(conBN, FGO.hasId, model.createDatatypeLiteral(condition.getId(), XSD._string));
-			for (String key : condition.getLabels().keySet())
-				model.addStatement(conBN, RDFS.label, model.createLanguageTagLiteral(condition.getLabels().get(key), key));
+		for (Condition con : getPostconditions()) {
+			URI conUri = con.getUri();
+			// FIXME: is this the place to assign URI to actions? rethink!!
+			if (conUri == null) {
+				conUri = model.createURI(scUri + "/postconditions/" + con.getId());
+				con.setUri(conUri);
+			}
+			model.addStatement(scUri, FGO.hasPostCondition, conUri);
+			model.addStatement(conUri, FGO.hasPatternString, model.createDatatypeLiteral(con.getPatternString(), XSD._string));
+			model.addStatement(conUri, FGO.isPositive, model.createDatatypeLiteral(new Boolean(con.isPositive()).toString(), XSD._boolean));
+			for (String key : con.getLabels().keySet()) {
+				model.addStatement(conUri, RDFS.label, model.createLanguageTagLiteral(con.getLabels().get(key), key));
+			}
 		}
 		
 		// triggers
@@ -138,21 +171,20 @@ public abstract class ScreenComponent extends BuildingBlock {
 		JSONObject json = super.toJSON();
 
 		// code
-		if (getCode() == null)
-			json.put("code", JSONObject.NULL);
-		else
-			json.put("code", getCode().toString());
+		json.put("code", getCode() == null ? JSONObject.NULL : getCode().toString());
 		
 		// actions
 		JSONArray actionsArray = new JSONArray();
-		for (Action action : getActions())
+		for (Action action : getActions()) {
 			actionsArray.put(action.toJSON());
+		}
 		json.put("actions", actionsArray);
 		
 		// libraries
 		JSONArray librariesArray = new JSONArray();
-		for (Library library : getLibraries())
+		for (Library library : getLibraries()) {
 			librariesArray.put(library.toJSON());
+		}
 		json.put("libraries", librariesArray);
 		
 		// postconditions
@@ -164,8 +196,9 @@ public abstract class ScreenComponent extends BuildingBlock {
 		
 		// triggers
 		JSONArray triggersArray = new JSONArray();
-		for (String trigger : getTriggers())
+		for (String trigger : getTriggers()) {
 			triggersArray.put(trigger);
+		}
 		json.put("triggers", triggersArray);
 
 		return json;

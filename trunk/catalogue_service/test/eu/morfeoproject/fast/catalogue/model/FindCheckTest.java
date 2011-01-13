@@ -12,12 +12,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.ontoware.rdf2go.model.node.URI;
 
-import eu.morfeoproject.fast.catalogue.model.BackendService;
-import eu.morfeoproject.fast.catalogue.model.BuildingBlock;
-import eu.morfeoproject.fast.catalogue.model.Condition;
-import eu.morfeoproject.fast.catalogue.model.Form;
-import eu.morfeoproject.fast.catalogue.model.Screen;
-import eu.morfeoproject.fast.catalogue.model.ScreenComponent;
 import eu.morfeoproject.fast.catalogue.vocabulary.FGO;
 import eu.morfeoproject.fast.util.TestUtils;
 
@@ -30,8 +24,8 @@ public class FindCheckTest {
 	
 	@Test
 	public void testFindAndCheck1() throws Exception {
-		Form form = (Form) TestUtils.buildBB(TestUtils.getCatalogue().getServerURL(), "form", "data/json/forms/amazonList.json");
-		BackendService service = (BackendService) TestUtils.buildBB(TestUtils.getCatalogue().getServerURL(), "backendservice", "data/json/backendservices/amazonSearchService.json");
+		Form form = (Form) TestUtils.buildBBFromFile(TestUtils.getCatalogue().getServerURL(), "form", "data/json/forms/amazonList.json");
+		BackendService service = (BackendService) TestUtils.buildBBFromFile(TestUtils.getCatalogue().getServerURL(), "backendservice", "data/json/backendservices/amazonSearchService.json");
 		TestUtils.getCatalogue().addForm(form);
 		TestUtils.getCatalogue().addBackendService(service);
 		List<Condition> conList = new ArrayList<Condition>();
@@ -46,9 +40,9 @@ public class FindCheckTest {
 	
 	@Test
 	public void testFindAndCheck2() throws Exception {
-		Screen s1 = (Screen) TestUtils.buildBB(TestUtils.getCatalogue().getServerURL(), "screen", "data/json/screens/amazonProductCode.json");
-		Screen s2 = (Screen) TestUtils.buildBB(TestUtils.getCatalogue().getServerURL(), "screen", "data/json/screens/amazonListCode.json");
-		Screen s3 = (Screen) TestUtils.buildBB(TestUtils.getCatalogue().getServerURL(), "screen", "data/json/screens/amazonSuggestionCode.json");
+		Screen s1 = (Screen) TestUtils.buildBBFromFile(TestUtils.getCatalogue().getServerURL(), "screen", "data/json/screens/amazonProductCode.json");
+		Screen s2 = (Screen) TestUtils.buildBBFromFile(TestUtils.getCatalogue().getServerURL(), "screen", "data/json/screens/amazonListCode.json");
+		Screen s3 = (Screen) TestUtils.buildBBFromFile(TestUtils.getCatalogue().getServerURL(), "screen", "data/json/screens/amazonSuggestionCode.json");
 		TestUtils.getCatalogue().addScreen(s1);
 		TestUtils.getCatalogue().addScreen(s2);
 		TestUtils.getCatalogue().addScreen(s3);

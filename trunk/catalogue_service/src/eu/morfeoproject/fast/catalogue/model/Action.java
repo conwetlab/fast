@@ -1,9 +1,7 @@
 package eu.morfeoproject.fast.catalogue.model;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -12,9 +10,29 @@ import org.ontoware.rdf2go.model.node.URI;
 
 public class Action {
 
+	private URI uri;
 	private String name;
 	private List<Condition> preconditions;
-	private Map<String, URI> uses;
+	private List<URI> uses;
+	
+	public Action() {
+		super();
+		this.preconditions = new ArrayList<Condition>();
+		this.uses = new ArrayList<URI>();
+	}
+
+	public Action(URI uri) {
+		this();
+		this.uri = uri;
+	}
+
+	public URI getUri() {
+		return uri;
+	}
+
+	public void setUri(URI uri) {
+		this.uri = uri;
+	}
 
 	public String getName() {
 		return name;
@@ -25,8 +43,6 @@ public class Action {
 	}
 
 	public List<Condition> getPreconditions() {
-		if (preconditions == null)
-			preconditions = new ArrayList<Condition>();
 		return preconditions;
 	}
 
@@ -35,33 +51,27 @@ public class Action {
 	}
 
 	
-	public Map<String, URI> getUses() {
-		if (uses == null)
-			uses = new HashMap<String, URI>();
+	public List<URI> getUses() {
 		return uses;
 	}
 
-	public void setUses(Map<String, URI> uses) {
+	public void setUses(List<URI> uses) {
 		this.uses = uses;
 	}
 
 	public JSONObject toJSON() throws JSONException {
 		JSONObject json = new JSONObject();
-		if (getName() == null)
-			json.put("name", JSONObject.NULL);
-		else
-			json.put("name", getName());
+		json.put("name", getName() == null ? JSONObject.NULL : getName());
+		// preconditions
 		JSONArray preArray = new JSONArray();
-		for (Condition condition : getPreconditions())
+		for (Condition condition : getPreconditions()) {
 			preArray.put(condition.toJSON());
+		}
 		json.put("preconditions", preArray);
 		// uses
 		JSONArray usesArray = new JSONArray();
-		for (String key : getUses().keySet()) {
-			JSONObject jsonUse = new JSONObject();
-			jsonUse.put("id", key);
-			jsonUse.put("uri", getUses().get(key));
-			usesArray.put(jsonUse);
+		for (URI useUri : getUses()) {
+			usesArray.put(useUri);
 		}
 		json.put("uses", usesArray);
 		return json;

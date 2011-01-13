@@ -21,14 +21,14 @@ public class PlannerTest {
 	
 	@Test
 	public void runPlanner() throws Exception {
-		Screen goal = (Screen) TestUtils.buildBB(TestUtils.getCatalogue().getServerURL(), "screen", "data/json/screens/amazonOrderCode.json");
+		Screen goal = (Screen) TestUtils.buildBBFromFile(TestUtils.getCatalogue().getServerURL(), "screen", "data/json/screens/amazonOrderCode.json");
 		TestUtils.getCatalogue().addScreen(goal);
-		TestUtils.getCatalogue().addScreen((Screen) TestUtils.buildBB(TestUtils.getCatalogue().getServerURL(), "screen", "data/json/screens/amazonSearchCode.json"));
-		TestUtils.getCatalogue().addScreen((Screen) TestUtils.buildBB(TestUtils.getCatalogue().getServerURL(), "screen", "data/json/screens/amazonListCode.json"));
-		TestUtils.getCatalogue().addScreen((Screen) TestUtils.buildBB(TestUtils.getCatalogue().getServerURL(), "screen", "data/json/screens/amazonProductCode.json"));
-		TestUtils.getCatalogue().addScreen((Screen) TestUtils.buildBB(TestUtils.getCatalogue().getServerURL(), "screen", "data/json/screens/amazonPriceCode.json"));
-		TestUtils.getCatalogue().addScreen((Screen) TestUtils.buildBB(TestUtils.getCatalogue().getServerURL(), "screen", "data/json/screens/amazonShoppingCode.json"));
-		TestUtils.getCatalogue().addScreen((Screen) TestUtils.buildBB(TestUtils.getCatalogue().getServerURL(), "screen", "data/json/screens/amazonSuggestionCode.json"));
+		TestUtils.getCatalogue().addScreen((Screen) TestUtils.buildBBFromFile(TestUtils.getCatalogue().getServerURL(), "screen", "data/json/screens/amazonSearchCode.json"));
+		TestUtils.getCatalogue().addScreen((Screen) TestUtils.buildBBFromFile(TestUtils.getCatalogue().getServerURL(), "screen", "data/json/screens/amazonListCode.json"));
+		TestUtils.getCatalogue().addScreen((Screen) TestUtils.buildBBFromFile(TestUtils.getCatalogue().getServerURL(), "screen", "data/json/screens/amazonProductCode.json"));
+		TestUtils.getCatalogue().addScreen((Screen) TestUtils.buildBBFromFile(TestUtils.getCatalogue().getServerURL(), "screen", "data/json/screens/amazonPriceCode.json"));
+		TestUtils.getCatalogue().addScreen((Screen) TestUtils.buildBBFromFile(TestUtils.getCatalogue().getServerURL(), "screen", "data/json/screens/amazonShoppingCode.json"));
+		TestUtils.getCatalogue().addScreen((Screen) TestUtils.buildBBFromFile(TestUtils.getCatalogue().getServerURL(), "screen", "data/json/screens/amazonSuggestionCode.json"));
 
 		assertEquals(7, TestUtils.getCatalogue().getAllScreens().size());
 		HashSet<BuildingBlock> canvas = new HashSet<BuildingBlock>();

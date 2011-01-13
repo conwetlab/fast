@@ -19,6 +19,7 @@ import org.ontoware.rdf2go.model.node.impl.URIImpl;
 import org.openrdf.repository.RepositoryException;
 
 import eu.morfeoproject.fast.catalogue.BuildingBlockException;
+import eu.morfeoproject.fast.catalogue.Catalogue;
 import eu.morfeoproject.fast.catalogue.DuplicatedException;
 import eu.morfeoproject.fast.catalogue.NotFoundException;
 import eu.morfeoproject.fast.catalogue.OntologyInvalidException;
@@ -95,6 +96,8 @@ public class ScreenServlet extends GenericServlet {
 							response.setCharacterEncoding(TemplateManager.getDefaultEncoding());
 						if (TemplateManager.getLocale() != null)
 							response.setLocale(TemplateManager.getLocale());
+						Catalogue c = getCatalogue();
+						c.printStatements();
 						CollectionTemplate.process(getCatalogue().getAllScreens(), writer);
 					} else { // by default returns APPLICATION_JSON
 						response.setContentType(MediaType.APPLICATION_JSON);

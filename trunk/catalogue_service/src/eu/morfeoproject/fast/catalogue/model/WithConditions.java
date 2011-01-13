@@ -7,7 +7,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.ontoware.rdf2go.model.Model;
-import org.ontoware.rdf2go.model.node.BlankNode;
 import org.ontoware.rdf2go.model.node.URI;
 import org.ontoware.rdf2go.vocabulary.RDFS;
 import org.ontoware.rdf2go.vocabulary.XSD;
@@ -65,24 +64,32 @@ public abstract class WithConditions extends BuildingBlock {
 		Model model = super.toRDF2GoModel();
 
 		URI bbUri = this.getUri();
-		for (Condition condition : getPreconditions()) {
-			BlankNode c = model.createBlankNode();
-			model.addStatement(bbUri, FGO.hasPreCondition, c);
-			model.addStatement(c, FGO.hasPatternString, model.createDatatypeLiteral(condition.getPatternString(), XSD._string));
-			model.addStatement(c, FGO.isPositive, model.createDatatypeLiteral(new Boolean(condition.isPositive()).toString(), XSD._boolean));
-			model.addStatement(c, FGO.hasId, model.createDatatypeLiteral(condition.getId(), XSD._string));
-			for (String key : condition.getLabels().keySet()) {
-				model.addStatement(c, RDFS.label, model.createLanguageTagLiteral(condition.getLabels().get(key), key));
+		for (Condition con : getPreconditions()) {
+			URI conUri = con.getUri();
+			// FIXME: is ok to do this here? rethink!!!
+			if (conUri == null) {
+				conUri = model.createURI(bbUri + "/preconditions/" + con.getId());
+				con.setUri(conUri);
+			}
+			model.addStatement(bbUri, FGO.hasPreCondition, con.getUri());
+			model.addStatement(con.getUri(), FGO.hasPatternString, model.createDatatypeLiteral(con.getPatternString(), XSD._string));
+			model.addStatement(con.getUri(), FGO.isPositive, model.createDatatypeLiteral(new Boolean(con.isPositive()).toString(), XSD._boolean));
+			for (String key : con.getLabels().keySet()) {
+				model.addStatement(con.getUri(), RDFS.label, model.createLanguageTagLiteral(con.getLabels().get(key), key));
 			}
 		}
-		for (Condition condition : getPostconditions()) {
-			BlankNode c = model.createBlankNode();
-			model.addStatement(bbUri, FGO.hasPostCondition, c);
-			model.addStatement(c, FGO.hasPatternString, model.createDatatypeLiteral(condition.getPatternString(), XSD._string));
-			model.addStatement(c, FGO.isPositive, model.createDatatypeLiteral(new Boolean(condition.isPositive()).toString(), XSD._boolean));
-			model.addStatement(c, FGO.hasId, model.createDatatypeLiteral(condition.getId(), XSD._string));
-			for (String key : condition.getLabels().keySet()) {
-				model.addStatement(c, RDFS.label, model.createLanguageTagLiteral(condition.getLabels().get(key), key));
+		for (Condition con : getPostconditions()) {
+			URI conUri = con.getUri();
+			// FIXME: is ok to do this here? rethink!!!
+			if (conUri == null) {
+				conUri = model.createURI(bbUri + "/preconditions/" + con.getId());
+				con.setUri(conUri);
+			}
+			model.addStatement(bbUri, FGO.hasPostCondition, con.getUri());
+			model.addStatement(con.getUri(), FGO.hasPatternString, model.createDatatypeLiteral(con.getPatternString(), XSD._string));
+			model.addStatement(con.getUri(), FGO.isPositive, model.createDatatypeLiteral(new Boolean(con.isPositive()).toString(), XSD._boolean));
+			for (String key : con.getLabels().keySet()) {
+				model.addStatement(con.getUri(), RDFS.label, model.createLanguageTagLiteral(con.getLabels().get(key), key));
 			}
 		}
 		

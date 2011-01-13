@@ -64,22 +64,22 @@
         }
     ],
     "postconditions":[
-            {
-                "id":"cart",
-                "label":{
-                    "en-gb":"A shopping cart"
-                },
-                "pattern":"?Cart http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#ShoppingCart",
-                "positive":"true"
+        {
+            "id":"cart",
+            "label":{
+                "en-gb":"A shopping cart"
             },
-            {
-                "id":"message",
-                "label":{
-                    "en-gb":"A message"
-                },
-                "pattern":"?Message http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#Message",
-                "positive":"true"
-            }
+            "pattern":"?Cart http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#ShoppingCart",
+            "positive":"true"
+        },
+        {
+            "id":"message",
+            "label":{
+                "en-gb":"A message"
+            },
+            "pattern":"?Message http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#Message",
+            "positive":"true"
+        }
     ],
     "triggers":[
         "message"
