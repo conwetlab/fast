@@ -31,7 +31,7 @@ public class CatalogueConfiguration {
 		String repositoryID = null;
 		String serverURL = null;
 		if (inStream == null) {
-			log.error("Configuration file repository.properties not found.");
+			log.error("Configuration file "+confFile+" not found.");
 		} else {
 			try {
 				properties.load(inStream);
