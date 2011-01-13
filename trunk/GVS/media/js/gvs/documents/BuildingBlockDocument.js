@@ -226,6 +226,7 @@ BBDescription = Class.create(BuildingBlockDescription, Observable, {
         if (!this.code) {
             var codeText = INITIAL_CODE[this.type] || "";
             this.setProperties({'codeInline': codeText});
+            return codeText;
         }
         new Ajax.Request('/proxy', {
             method: 'post',
@@ -233,6 +234,7 @@ BBDescription = Class.create(BuildingBlockDescription, Observable, {
             onSuccess: function(transport) {
                 var codeText = transport.responseText;
                 this.setProperties({'codeInline': codeText});
+                this.emit();
             }.bind(this),
             onFailure: function() {
                 Utils.showErrorMessage("Can not open code of the selected element", {'hide': true});
@@ -629,11 +631,11 @@ PostconditionsView.prototype.update = function update() {
 };
 PostconditionsView.prototype.init = PostconditionsView.prototype.update;
 PostconditionsView.prototype.dropInstance = function(description, position) {
-    var conditonName = prompt('Condition Name:', 'default');
+    var conditionName = prompt('Condition Name:', 'default');
     if (!conditionName) return;
 
     this.controller.create({
-        'id': conditonName,
+        'id': conditionName,
         'label': description.label,
         'pattern': description.pattern,
         'position': position
