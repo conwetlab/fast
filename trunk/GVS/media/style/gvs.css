@@ -210,6 +210,7 @@ h4{
 .playerIcon      {  background-position: -288px; }
 .debuggerIcon    {  background-position: -312px; }
 .toggleIcon      {  background-position: -336px; }
+.changeviewIcon  {  background-position: -360px; }
 
 /********************
  * Menu             *
@@ -1325,10 +1326,10 @@ pre {
  ***********************/
 .codeContainer {
     position:absolute;
-    top: 40px;
-    bottom: 5px;
+    top: 0px;
+    bottom: 0px;
     left: 0px;
-    right: 5px;
+    right: 0px;
 }
 .codeContainer textarea {
     width: 100%;

@@ -45,7 +45,7 @@ var ManageBuildingBlocksDialog = Class.create(GalleryDialog /** @lends ManageScr
     _createSearchBar: function($super) {
         var searchBar = $super();
 
-        var content = document.createElement('div')
+        var content = document.createElement('div');
         content.style.textAlign = 'right';
         searchBar.appendChild(content);
 
@@ -53,28 +53,28 @@ var ManageBuildingBlocksDialog = Class.create(GalleryDialog /** @lends ManageScr
             name: 'Forms',
             checked: this._showForms,
             onChange: function(b) {
-                this._showForms = !(this._showForms && (this._showOperators || this._showResources))
+                this._showForms = !(this._showForms && (this._showOperators || this._showResources));
                 this._reload();
             }.bind(this)
         });
         content.appendChild(checkBox.domNode);
 
         var label = document.createElement('span');
-        label.innerHTML = 'Forms '
+        label.innerHTML = 'Forms ';
         content.appendChild(label);
 
         var checkBox = new dijit.form.CheckBox({
             name: 'Operators',
             checked: this._showOperators,
             onChange: function(b) {
-                this._showOperators = !(this._showOperators && (this._showForms || this._showResources))
+                this._showOperators = !(this._showOperators && (this._showForms || this._showResources));
                 this._reload();
             }.bind(this)
         });
         content.appendChild(checkBox.domNode);
 
         var label = document.createElement('span');
-        label.innerHTML = 'Operators '
+        label.innerHTML = 'Operators ';
         content.appendChild(label);
 
         var checkBox = new dijit.form.CheckBox({
@@ -88,7 +88,7 @@ var ManageBuildingBlocksDialog = Class.create(GalleryDialog /** @lends ManageScr
         content.appendChild(checkBox.domNode);
 
         var label = document.createElement('span');
-        label.innerHTML = 'Resources'
+        label.innerHTML = 'Resources';
         content.appendChild(label);
 
         return searchBar;
@@ -260,16 +260,16 @@ var ManageBuildingBlocksDialog = Class.create(GalleryDialog /** @lends ManageScr
      * @private
      */
     _getBuildingBlocks: function(/*Array<String>*/types, /*Object*/context, /*Function*/onSucess) {
-        var type = types.pop()
+        var type = types.pop();
         if (!type && onSucess instanceof Function) {
             onSucess.call(context);
         } else {
             PersistenceEngine.sendGet(URIs[type], context, function(transport) {
                 this._buildingBlocks = this._buildingBlocks.concat(JSON.parse(transport.responseText));
-                this._getBuildingBlocks(types, context, onSucess)
+                this._getBuildingBlocks(types, context, onSucess);
             }, Utils.onAJAXError);
         }
-    },
+    }
 
 });
 

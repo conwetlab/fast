@@ -416,7 +416,7 @@ var ScreenDocument = Class.create(PaletteDocument,
                         'instance': instance,
                         'action': triggerAction
                     }
-                }
+                };
                 var trigger = this._triggerMappingFactory.createTrigger(triggerData);
                 this._description.addTrigger(trigger);
             }
@@ -727,7 +727,7 @@ var ScreenDocument = Class.create(PaletteDocument,
             'pipes': this._description.getPipes(),
             'preconditions': this._description.getPreconditions(),
             'postconditions': this._description.getPostconditions()
-        }
+        };
 
         this._inferenceEngine.findCheck(
             [],
@@ -808,7 +808,7 @@ var ScreenDocument = Class.create(PaletteDocument,
             'pipes': this._description.getPipes(),
             'preconditions': this._description.getPreconditions(),
             'postconditions': this._description.getPostconditions()
-        }
+        };
         if (this._selectedElement && this._selectedElement.getUri()) {
             body.selectedItem = this._selectedElement.getUri();
         } else if (this._selectedElement) {
@@ -852,7 +852,7 @@ var ScreenDocument = Class.create(PaletteDocument,
             if (desc.buildingblock.search("/forms/") != -1) {
                 var key = 'form_' + buildingblock.getId() +
                           (desc.action ? '_' + desc.action : '') +
-                          '_' + desc.condition
+                          '_' + desc.condition;
                 return {'instance': buildingblock,
                         'node': buildingblock.getView().getConditionNode(desc.condition, desc.action),
                         'key': key};
@@ -1070,7 +1070,7 @@ var ScreenDocument = Class.create(PaletteDocument,
                     'instance': this._selectedElement,
                     'action': action
                 }
-            }
+            };
             var trigger = this._triggerMappingFactory.createTrigger(triggerData);
             this._description.addTrigger(trigger);
         }.bind(this));
@@ -1092,7 +1092,7 @@ var ScreenDocument = Class.create(PaletteDocument,
                     'instance': this._selectedElement,
                     'action': action
                 }
-            }
+            };
             var trigger = this._triggerMappingFactory.removeTrigger(triggerData);
             this._description.remove(trigger);
         }.bind(this));
@@ -1276,7 +1276,7 @@ var ScreenDocument = Class.create(PaletteDocument,
                     'instance': toInstance,
                     'action': triggerJSON.to.action
                 }
-            }
+            };
             var trigger = this._triggerMappingFactory.createTrigger(triggerData);
             this._description.addTrigger(trigger);
         }.bind(this));
@@ -1319,7 +1319,7 @@ var ScreenDocument = Class.create(PaletteDocument,
             }
             GVS.getDocumentController().openExternalTool("Screen Debugger", uri);
         }
-    },
+    }
 });
 
 // vim:ts=4:sw=4:et:

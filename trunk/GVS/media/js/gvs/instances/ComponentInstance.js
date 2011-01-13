@@ -49,7 +49,9 @@ var ComponentInstance = Class.create(DragSource,
 
         this._menu = new MenuOptions(this._view.getNode());
         this._menu.addOption('Delete', function(){
-            this.document.deleteInstance(this);
+            if (this.document && this.document.deleteInstance) {
+                this.document.deleteInstance(this);
+            }
         }.bind(this));
 
         /**
@@ -191,6 +193,15 @@ var ComponentInstance = Class.create(DragSource,
         return this._view;
     },
 
+     /**
+     * return the dom element for use in the prototype.js functions
+     * @type DOMNode
+     * @public
+     */
+    toElement: function() {
+        return this._view.toElement();
+    },
+
     /**
      * Gets the component orientation
      * @type Integer
@@ -313,7 +324,7 @@ var ComponentInstance = Class.create(DragSource,
                 this._onDoubleClick(event);
             }.bind(this),'dblclick');
         } else {
-            if (this._listener) {
+            if (this._listener && this._listener.positionUpdated) {
                 this._listener.positionUpdated(this, position);
             }
         }
@@ -346,6 +357,13 @@ var ComponentInstance = Class.create(DragSource,
         }.bind(this));
     },
 
+    /**
+     * set position
+     */
+    setPosition: function(position) {
+        this._view.setPosition(position);
+    },
+
     // **************** PRIVATE METHODS **************** //
 
     /**
@@ -354,7 +372,7 @@ var ComponentInstance = Class.create(DragSource,
      * @abstract
      */
     _createView: function () {
-        throw "Abstract Method invocation: ComponentInstance::_createView"
+        throw "Abstract Method invocation: ComponentInstance::_createView";
     },
 
     /**
@@ -363,7 +381,7 @@ var ComponentInstance = Class.create(DragSource,
      * @private
      */
     _onClick: function (){
-        if (this._listener) {
+        if (this._listener && this._listener.elementClicked) {
             this._listener.elementClicked(this);
         }
     },
@@ -373,7 +391,7 @@ var ComponentInstance = Class.create(DragSource,
      * @private
      */
     _onDoubleClick: function (/** Event */ event){
-        if (this._listener) {
+        if (this._listener && this._listener.elementDblClicked) {
             this._listener.elementDblClicked(this, event);
         }
     },

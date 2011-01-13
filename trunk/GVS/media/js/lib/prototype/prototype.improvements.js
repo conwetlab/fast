@@ -3,6 +3,19 @@
  *
  * Various additions to the prototype.js
  */
+
+/* Hack to JSON.stringify() */
+(function(JSON) {
+    var stringify = JSON.stringify;
+    var toJSON = Array.prototype.toJSON;
+    JSON.stringify = function stringifyProxy() {
+        delete Array.prototype.toJSON;
+        var result = stringify.apply(JSON, arguments);
+        Array.prototype.toJSON = toJSON;
+        return result;
+    };
+})(JSON);
+
 Browser = {
     /**
      * Returns the user agent

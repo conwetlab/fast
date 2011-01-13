@@ -287,20 +287,42 @@ var GVS = Class.create(ToolbarModel,    /** @lends GVS.prototype */
                                     'label': 'Screen',
                                     'weight': 10,
                                     'handler': function(){
-                                        this.action("newScreen")
+                                        this.action("newScreen");
                                     }.bind(this),
                                     'shortcut': 'Alt+N'
                                 }),
                                 'group': 0
                             },
-                            'newBuildingBlock': {
+                            'newOperator': {
                                 'type': 'Action',
                                 'action': new MenuAction({
-                                    'label': 'Building Block',
+                                    'label': 'Operator',
                                     'weight': 2,
                                     'handler': function(){
-                                        this.action("newBuildingBlock")
-                                    }.bind(this),
+                                        this.action("newOperator");
+                                    }.bind(this)
+                                }),
+                                'group': 1
+                            },
+                            'newForm': {
+                                'type': 'Action',
+                                'action': new MenuAction({
+                                    'label': 'Form',
+                                    'weight': 1,
+                                    'handler': function(){
+                                        this.action("newForm");
+                                    }.bind(this)
+                                }),
+                                'group': 1
+                            },
+                            'newResource': {
+                                'type': 'Action',
+                                'action': new MenuAction({
+                                    'label': 'Resource',
+                                    'weight': 3,
+                                    'handler': function(){
+                                        this.action("newResource");
+                                    }.bind(this)
                                 }),
                                 'group': 1
                             }
@@ -328,24 +350,13 @@ var GVS = Class.create(ToolbarModel,    /** @lends GVS.prototype */
                                 'type': 'Action',
                                 'action': new MenuAction({
                                     'label': 'Screens',
-                                    'weight': 3,
+                                    'weight': 10,
                                     'handler': function(){
-                                        this.action("browseScreens")
+                                        this.action("browseScreens");
                                     }.bind(this),
-                                    'shortcut': 'Alt+O'
+                                    'shortcut': 'Alt+N'
                                 }),
                                 'group': 0
-                            },
-                            'browseBuildingBlocks': {
-                                'type': 'Action',
-                                'action': new MenuAction({
-                                    'label': 'Building Blocks',
-                                    'weight': 4,
-                                    'handler': function(){
-                                        this.action("browseBuildingBlocks")
-                                    }.bind(this)
-                                }),
-                                'group': 1
                             }
                         }
                     }
@@ -360,12 +371,12 @@ var GVS = Class.create(ToolbarModel,    /** @lends GVS.prototype */
                         'type': 'Action',
                         'action': new MenuAction({
                             'label': 'User Preferences',
-                            'weight': MenuElement.MAXIMUM_WEIGHT,
+                            'weight':1,
                             'handler': function() {
                                 this._dialogs.get("preferences").show();
                             }.bind(this)
                         }),
-                        'group': 2
+                        'group': 1
                     }
                 }
 
@@ -400,7 +411,7 @@ var GVS = Class.create(ToolbarModel,    /** @lends GVS.prototype */
                     'feedback': {
                         'type': 'Action',
                         'action': new MenuAction({
-                            'label': 'Send feedback',
+                            'label': 'Send us feedback',
                             'weight': 3,
                             'handler': function() {
                                 UserVoice.Popin.show(uservoiceOptions);
@@ -412,6 +423,9 @@ var GVS = Class.create(ToolbarModel,    /** @lends GVS.prototype */
 
             }
         };
+        if (!GlobalOptions.isPublicDemo) {
+            // Include the new screen feature
+        }
     }
 });
 // Hack to transform GVS into a static class

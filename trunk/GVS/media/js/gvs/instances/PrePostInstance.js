@@ -141,7 +141,7 @@ var PrePostInstance = Class.create(ComponentInstance,
                 'label': this.getTitle()
             };
             if (this._buildingBlockDescription.properties) {
-                data = Object.extend(data, this._buildingBlockDescription.properties.ezweb)
+                data = Object.extend(data, this._buildingBlockDescription.properties.ezweb);
             } else {
                 if (this._buildingBlockDescription.binding) {
                     data = Object.extend (data, {
@@ -354,7 +354,7 @@ var PrePostInstance = Class.create(ComponentInstance,
                     'variableName': data.variableName,
                     'friendcode': data.friendcode
                 }
-            }
+            };
         }
 
         if (!this._buildingBlockDescription.catalogueUri) {

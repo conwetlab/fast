@@ -107,8 +107,21 @@ var Area = Class.create( /** @lends Area.prototype */ {
 
     setLayout: function() {
         //TODO: Think about Layouts
-    }
+    },
 
+    /**
+     * Insert a Element
+     */
+    insert: function(/* Element */ element, /* Object */ position) {
+        $("main").insert(element);
+        position = Geometry.adaptInitialPosition(
+            this._node,
+            element.toElement(),
+            Object.extend({top: 33, left: 33}, position)
+        );
+        element.setPosition(position);
+        this._node.insert(element);
+    }
 
     // **************** PRIVATE METHODS **************** //
 

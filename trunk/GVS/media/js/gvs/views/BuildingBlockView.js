@@ -20,6 +20,7 @@ var BuildingBlockView = Class.create( /** @lends BuildingBlockView.prototype */ 
     /**
      * getNode
      * @type DOMNode
+     * @public
      */
     getNode: function () {
         return this._node;
@@ -32,6 +33,14 @@ var BuildingBlockView = Class.create( /** @lends BuildingBlockView.prototype */ 
         // Do nothing
     },
 
+    /*
+     * return the dom element for use in the prototype.js functions
+     * @type DOMNode
+     * @public
+     */
+    toElement: function() {
+        return this._node;
+    },
 
     /**
      * Colorize the component depending on the reachability
@@ -54,6 +63,15 @@ var BuildingBlockView = Class.create( /** @lends BuildingBlockView.prototype */ 
      * Removes the DOM Elements and frees building blocks
      */
     destroy: function () {
+        this.remove();
+        this._node = null;
+    },
+
+    /**
+     * Removes the DOM Elements off the DOM Document
+     */
+    remove:function() {
+        this._node.remove();
     },
 
     /**
@@ -74,6 +92,20 @@ var BuildingBlockView = Class.create( /** @lends BuildingBlockView.prototype */ 
             'class': 'ghost ghostLayer'
         });
         this._node.appendChild(ghost);
+    },
+
+    /**
+     * set position
+     */
+    setPosition: function(position) {
+        var top = position.top;
+        var left = position.left;
+        this._node.setStyle({
+            'position': 'absolute',
+            'top': top + 'px',
+            'left': left + 'px'
+        });
+        return this;
     },
 
     // **************** PRIVATE METHODS **************** //

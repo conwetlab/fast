@@ -1,5 +1,6 @@
 file_list = [
     # Libs
+    "lib/json/json2.js",
     "lib/cjson_parse/cjson_parse.js",
     "lib/codemirror/js/codemirror.js",
 

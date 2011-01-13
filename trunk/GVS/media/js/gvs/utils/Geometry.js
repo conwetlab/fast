@@ -84,7 +84,7 @@ Object.extend(Geometry, {
             'left': position.left,
             'bottom': position.top + node.offsetHeight,
             'right': position.left + node.offsetWidth
-        }
+        };
     },
 
     getClientRectangle: function(/** DOMNode */ node) {
@@ -98,14 +98,14 @@ Object.extend(Geometry, {
             'left': position.left + leftBorder,
             'bottom': position.top + node.clientHeight,
             'right': position.left + node.clientWidth
-        }
+        };
     },
 
     getCenter: function(/** DOMNode */ node) {
         return {
             'top': (node.clientHeight - node.clientTop) / 2,
             'left': (node.clientWidth - node.clientLeft) / 2
-        }
+        };
     },
 
     dragRanges: function(/** Object */ container, /** Object */ element) {
@@ -118,7 +118,7 @@ Object.extend(Geometry, {
                 'min': Math.min(-element.top, 0),
                 'max': Math.max((container.bottom - container.top) - element.bottom, 0)
             }
-        }
+        };
     },
 
     adaptDropPosition: function(/** Element */ containerElement, /** Element */ node) {
@@ -143,7 +143,7 @@ Object.extend(Geometry, {
         return {
             'left': element.left - containerBounds.left,
             'top': element.top - containerBounds.top
-        }
+        };
 
     },
 
@@ -154,14 +154,14 @@ Object.extend(Geometry, {
             'left': 0,
             'right': containerElement.offsetWidth,
             'bottom': containerElement.offsetHeight
-        }
+        };
 
         var elementBounds = {
             'top': position.top,
             'left': position.left,
             'right': position.left + node.clientWidth,
             'bottom': position.top + node.clientHeight
-        }
+        };
 
         var result = {
             'top': position.top,

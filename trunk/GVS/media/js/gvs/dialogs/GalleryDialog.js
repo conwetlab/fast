@@ -253,7 +253,7 @@ var GalleryDialog = Class.create(FormDialog, /** @lends GalleryDialog.prototype 
                         unselectElements();
                     }
                 }
-            })
+            });
         });
 
         searchBar.appendChild(searchBox.getDOMNode());

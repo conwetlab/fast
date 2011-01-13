@@ -120,7 +120,7 @@ var FormDialog = Class.create( /** @lends FormDialog.prototype */ {
      * @abstract
      */
     _initDialogInterface: function(){
-        throw "Abstract method invocation FormDialog :: _initDialogInterface"
+        throw "Abstract method invocation FormDialog :: _initDialogInterface";
     },
 
     _hide: function() {

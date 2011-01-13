@@ -32,9 +32,9 @@ var ScreenInferenceEngine = Class.create( /** @lends ScreenInferenceEngine.proto
         };*/
 
         var domainContext = {
-            'tags': tags.collect(function(tag){ return tag.label['en-gb']}),
+            'tags': tags.collect(function(tag){ return tag.label['en-gb']; }),
             'user': GVS.getUser().getUserName()
-        }
+        };
         var body = {
             'canvas': canvas,
             'domainContext': domainContext,

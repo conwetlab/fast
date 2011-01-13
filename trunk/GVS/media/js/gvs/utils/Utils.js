@@ -109,6 +109,9 @@ Object.extend(Utils, {
         }
     },
 
+    showErrorMessage: function(/** String */ text, /** Object(optional) */ options) {
+        this.showMessage(text, Object.extend(options || {}, {'error':true}));
+    },
     /**
      * This function returns the value of a variable, or a default one if it
      * is undefined

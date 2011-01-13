@@ -21,16 +21,6 @@ var DomainConceptView = Class.create( BuildingBlockView,
     // **************** PUBLIC METHODS **************** //
 
     /**
-     * Removes the DOM Elements and frees building blocks
-     * @override
-     */
-    destroy: function () {
-        // Let the garbage collector to do its job
-        this._node = null;
-    },
-
-
-    /**
      * @override
      */
     setReachability: function (/** Object */ reachabilityData) {

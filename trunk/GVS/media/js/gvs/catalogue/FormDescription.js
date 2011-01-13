@@ -31,7 +31,7 @@ var FormDescription = Class.create(BuildingBlockDescription,
 
         node.appendChild(image);
         return node;
-    },
+    }
 });
 
 // vim:ts=4:sw=4:et:

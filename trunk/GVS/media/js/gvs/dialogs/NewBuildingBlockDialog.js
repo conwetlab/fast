@@ -115,7 +115,7 @@ var NewBuildingBlockDialog = Class.create(ConfirmDialog /** @lends NewBuildingBl
      */
     _onAvailabilityCheckSuccess: function(/**XMLHttpRequest*/ transport) {
         var metadata = transport.responseText.evalJSON();
-        this._available = metadata.length == 0
+        this._available = metadata.length == 0;
         this._updateAvailabilityStatus();
     },
 
@@ -154,7 +154,7 @@ var NewBuildingBlockDialog = Class.create(ConfirmDialog /** @lends NewBuildingBl
             },
             "fields": ["version"],
             "limit": 1
-        }
+        };
         PersistenceEngine.sendPost(this._searchURI, null,
                 Object.toJSON(query), this, this._onAvailabilityCheckSuccess,
                 Utils.onAJAXError);

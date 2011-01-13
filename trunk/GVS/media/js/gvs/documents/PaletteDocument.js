@@ -121,6 +121,13 @@ var PaletteDocument = Class.create(AbstractDocument, /** @lends PaletteDocument.
             gutters: false
         });
 
+         /**
+         * The document description
+         * @type BuildingBlockDescription
+         * @private @member
+         */
+        this._description = this._getDescription(properties);
+
         /**
          * Areas of the canvas
          * @type Hash
@@ -151,13 +158,6 @@ var PaletteDocument = Class.create(AbstractDocument, /** @lends PaletteDocument.
          * @private @member
          */
         this._selectedElement = null;
-
-        /**
-         * The document description
-         * @type BuildingBlockDescription
-         * @private @member
-         */
-        this._description = this._getDescription(properties);
 
         /**
          * Properties dialog
@@ -348,7 +348,7 @@ var PaletteDocument = Class.create(AbstractDocument, /** @lends PaletteDocument.
         );
         var domainConceptSet = this._buildingBlockSets.detect(function(set) {
             return set.constructor == DomainConceptSet;
-        })
+        });
         if (domainConceptSet) {
             domainConceptSet.startRetrievingData();
         }

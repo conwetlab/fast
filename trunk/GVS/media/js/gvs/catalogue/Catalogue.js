@@ -42,10 +42,10 @@ Object.extend(Catalogue, {
         var onSuccess = function(response) {
             var factMetadata = response.responseText.evalJSON();
             FactFactory.setFacts(factMetadata);
-        }
+        };
         var onError = function(response, e) {
             console.error(e);
-        }
+        };
 
         PersistenceEngine.sendGet(URIs.catalogueGetFacts, this, onSuccess, onError);
     },
@@ -60,10 +60,10 @@ Object.extend(Catalogue, {
             var domainConceptPalette = paletteController.
                 getPalette(Constants.BuildingBlock.DOMAIN_CONCEPT);
             domainConceptPalette.paintComponents();
-        }
+        };
         var onDConceptsError = function(response, e) {
             console.error(e);
-        }
+        };
 
         PersistenceEngine.sendGet(URIs.catalogueGetDomainConcepts,
             this, onDConceptsSuccess, onDConceptsError);
@@ -83,13 +83,13 @@ Object.extend(Catalogue, {
                 var alertMsg = "Screen correctly created!\nLabel: " +
                         screen.label['en-GB'] + "\nURI: " + screen.uri;
                 alert(alertMsg);
-            }
-        }
+            };
+        };
 
         var createScreenOnError = function(transport, e){
             alert(e.message);
             //TODO error handling
-        }
+        };
 
         var persistenceEngine = PersistenceEngineFactory.getInstance();
         persistenceEngine.sendPost(URIs.catalogueCreateScreen, null, screenJson,

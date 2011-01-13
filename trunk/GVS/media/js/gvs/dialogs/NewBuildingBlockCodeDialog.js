@@ -119,7 +119,7 @@ var NewBuildingBlockCodeDialog = Class.create(ConfirmDialog /** @lends NewBuildi
      */
     _onAvailabilityCheckSuccess: function(/**XMLHttpRequest*/ transport) {
         var metadata = transport.responseText.evalJSON();
-        this._available = metadata.length == 0
+        this._available = metadata.length == 0;
         this._updateAvailabilityStatus();
     },
 
@@ -129,7 +129,7 @@ var NewBuildingBlockCodeDialog = Class.create(ConfirmDialog /** @lends NewBuildi
      * @private
      */
     _availabilityCheck: function() {
-        var type = $F(this._getForm().bBType)
+        var type = $F(this._getForm().bBType);
         var name = Utils.sanitize($F(this._getForm().name));
         var version = $F(this._getForm().version);
 
@@ -159,7 +159,7 @@ var NewBuildingBlockCodeDialog = Class.create(ConfirmDialog /** @lends NewBuildi
             },
             "fields": ["version"],
             "limit": 1
-        }
+        };
 
         var searchURI = URIs[type.toLowerCase() + 'Search'];
         PersistenceEngine.sendPost(searchURI, null,
