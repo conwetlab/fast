@@ -23,9 +23,6 @@ public class IServeQueryTest {
 		ArrayList<URI> list = new ArrayList<URI>();
 		list.add(new URIImpl("http://xmlns.com/foaf/0.1/Person"));
 		List<IServeResponse> results = client.query(list);
-//		for (IServeResponse result : results) {
-//			System.out.println(result.toString());
-//		}
 		assertTrue(results.size() > 0);
 	}
 
