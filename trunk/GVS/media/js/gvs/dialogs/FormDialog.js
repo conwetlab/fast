@@ -217,6 +217,8 @@ var FormDialog = Class.create( /** @lends FormDialog.prototype */ {
                 });
             }
 
+            var outputNode = this._formWidget.domNode;
+
             // Instantiate form elements
             $A(data).each (function(line){
                 var lineNode;
@@ -319,11 +321,42 @@ var FormDialog = Class.create( /** @lends FormDialog.prototype */ {
                         lineNode = this._createLine(line.label, inputNode);
                         break;
 
-                    default:
-                        throw "Unimplemented form field type";
-                }
+                    case 'advancedSeparator':
+                        if (outputNode == this._formWidget.domNode) {
+                            var wrapper = new Element("div", {
+                                "style": "display:none;"
+                            });
 
-                this._formWidget.domNode.appendChild(lineNode);
+                            var link = new Element("a", {
+                                "href": "javascript:"
+                            }).update("Show advanced options...");
+                            link.observe("click", function(e) {
+                                if (wrapper.style.display == "none") {
+                                    wrapper.setStyle({"display":"block"});
+                                    link.update("Hide advanced options...");
+                                } else {
+                                    wrapper.setStyle({"display":"none"});
+                                    link.update("Show advanced options...");
+                                }
+                            });
+                            var linkLine = this._createLine("", link);
+                            this._formWidget.domNode.appendChild(linkLine);
+                            this._formWidget.domNode.appendChild(wrapper);
+                            outputNode = wrapper;
+                        } else {
+                            throw "It cannot be more than one advancedSeparator." +
+                            "FormDialog::_setContent";
+                        }
+                        break;
+
+                    default:
+                        throw "Unimplemented form field type. " +
+                        "FormDialog::_setContent";
+                }
+                if (lineNode) {
+                    outputNode.appendChild(lineNode);
+                    lineNode = null;
+                }
                 if (inputNode) {
                     this._armEvents(inputNode, line.events);
                 }

@@ -71,6 +71,9 @@ var NewBuildingBlockDialog = Class.create(ConfirmDialog /** @lends NewBuildingBl
                 }
             },
             {
+                'type': 'advancedSeparator'
+            },
+            {
                 'type':'input',
                 'label': 'Version:',
                 'name': 'version',
@@ -82,7 +85,8 @@ var NewBuildingBlockDialog = Class.create(ConfirmDialog /** @lends NewBuildingBl
             },
             {
                 'type':'input',
-                'label': 'Tags:',
+                'label': 'Domain Concepts: <br /> (this will restrict the available ' +
+                'set of building blocks)',
                 'name': 'tags',
                 'value': ''
             }
