@@ -7,7 +7,7 @@ def getEzWebTemplate(gadgetData):
     metadata = gadgetData['metadata']
     ezWebContext = Context({'gadgetUri': metadata['gadgetUri'],
                             'gadgetTitle': metadata['name'],
-                            'gadgetVendor': notEmptyValueOrDefault(metadata, 'vendor', metadata['owner']),
+                            'gadgetVendor': metadata['vendor'],
                             'gadgetVersion': metadata['version'],
                             'gadgetAuthor': notEmptyValueOrDefault(metadata, 'authorName', settings.DEFAULT_EZWEB_AUTHOR_NAME),
                             'gadgetMail': notEmptyValueOrDefault(metadata, 'email', settings.DEFAULT_EZWEB_AUTHOR_EMAIL),

@@ -150,8 +150,7 @@ var GadgetDialog = Class.create(GalleryDialog, /** @lends Builder.prototype */ {
         this._buildGadgetDialog.show({
             'name': this._description.name,
             'shortname': this._description.name,
-            'desc': this._description.description['en-gb'],
-            'owner': GVS.getUser().getUserName()
+            'desc': this._description.description['en-gb']
         });
     },
 

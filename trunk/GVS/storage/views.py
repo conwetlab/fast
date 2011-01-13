@@ -94,7 +94,7 @@ class GadgetStorage(resource.Resource):
         #Gadget Data
         metadata['label'] = valueOrDefault(json, 'label', {'en-gb': 'FAST Gadget'})
         metadata['name'] = metadata['label']['en-gb']
-        metadata['shortname'] =  valueOrEmpty(json, 'owner')
+        metadata['shortname'] =  valueOrEmpty(json, 'shortname')
         metadata['owner'] =  valueOrDefault(json, 'owner', 'Morfeo')
         metadata['vendor'] =  valueOrEmpty(json, 'vendor')
         metadata['version'] = notEmptyValueOrDefault(json, 'version', '1.0')
