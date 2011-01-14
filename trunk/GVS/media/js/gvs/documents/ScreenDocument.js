@@ -681,6 +681,7 @@ var ScreenDocument = Class.create(PaletteDocument,
                 this._propertiesDialog.show.bind(this._propertiesDialog),
                 true
             ));
+        this._addToolbarElement("sep-1", new ToolbarSeparator());
         this._addToolbarElement('debugger', new ToolbarButton(
                 'Debug (Test) Screen',
                 'debugger',
@@ -693,18 +694,20 @@ var ScreenDocument = Class.create(PaletteDocument,
                 this._refresh.bind(this),
                 true
             ));
-        this._addToolbarElement('deleteElement', new ToolbarButton(
-                'Delete selected element',
-                'delete',
-                this._startDeletingSelectedElement.bind(this),
-                false // disabled by default
-            ));
         this._addToolbarElement('rotate', new ToolbarButton(
                 'Rotate selected element',
                 'rotate',
                 this._rotateSelectedElement.bind(this),
                 false
             ));
+        this._addToolbarElement('deleteElement', new ToolbarButton(
+                'Delete selected element',
+                'delete',
+                this._startDeletingSelectedElement.bind(this),
+                false // disabled by default
+            ));
+        this._addToolbarElement("sep-1", new ToolbarSeparator());
+
         this._addToolbarElement('share', new ToolbarButton(
                 'Share Screen',
                 'share',

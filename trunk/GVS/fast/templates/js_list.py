@@ -43,6 +43,7 @@ file_list = [
     "gvs/toolbar/Toolbar.js",
     "gvs/toolbar/ToolbarModel.js",
     "gvs/toolbar/ToolbarButton.js",
+    "gvs/toolbar/ToolbarSeparator.js",
     "gvs/toolbar/ToolbarDropDown.js",
 
     # Menu

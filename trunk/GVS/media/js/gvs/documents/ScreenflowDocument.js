@@ -373,6 +373,8 @@ var ScreenflowDocument = Class.create(PaletteDocument,
                 this._propertiesDialog.show.bind(this._propertiesDialog),
                 true
             ));
+        this._addToolbarElement('sep-1', new ToolbarSeparator());
+
         this._addToolbarElement('player', new ToolbarButton(
                 'Play Screenflow',
                 'player',
@@ -385,6 +387,8 @@ var ScreenflowDocument = Class.create(PaletteDocument,
                 this._debugScreenflow.bind(this),
                 false // disabled by default
             ));
+        this._addToolbarElement('sep-2', new ToolbarSeparator());
+
         this._addToolbarElement('refresh', new ToolbarButton(
                 'Refresh the buildingBlocks catalog',
                 'refresh',
@@ -397,16 +401,18 @@ var ScreenflowDocument = Class.create(PaletteDocument,
                 this._toggleUnreachableScreens.bind(this),
                 true
             ));
-        this._addToolbarElement('previewElement', new ToolbarButton(
-                'Preview selected element',
-                'preview',
-                this._previewSelectedElement.bind(this),
-                false // disabled by default
-            ));
         this._addToolbarElement('planner', new ToolbarButton(
                 'Create a plan for this screen',
                 'planner',
                 this._getPlans.bind(this),
+                false // disabled by default
+            ));
+        this._addToolbarElement('sep-3', new ToolbarSeparator());
+
+        this._addToolbarElement('previewElement', new ToolbarButton(
+                'Preview selected element',
+                'preview',
+                this._previewSelectedElement.bind(this),
                 false // disabled by default
             ));
         this._addToolbarElement('cloneElement', new ToolbarButton(
@@ -421,6 +427,8 @@ var ScreenflowDocument = Class.create(PaletteDocument,
                 this._startDeletingSelectedElement.bind(this),
                 false // disabled by default
             ));
+        this._addToolbarElement('sep-4', new ToolbarSeparator());
+
         this._addToolbarElement('build', new ToolbarButton(
                 'Build Gadget',
                 'build',
