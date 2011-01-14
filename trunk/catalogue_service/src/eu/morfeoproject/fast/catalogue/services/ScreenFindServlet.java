@@ -3,9 +3,9 @@ package eu.morfeoproject.fast.catalogue.services;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.HashSet;
+import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.Set;
+import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -53,7 +53,7 @@ public class ScreenFindServlet extends GenericServlet {
 			// create JSON representation of the input
 			JSONObject input = new JSONObject(body);
 			// parse the canvas
-			HashSet<BuildingBlock> canvas = new HashSet<BuildingBlock>();
+			ArrayList<BuildingBlock> canvas = new ArrayList<BuildingBlock>();
 			JSONArray jsonCanvas = input.getJSONArray("canvas");
 			for (int i = 0; i < jsonCanvas.length(); i++) {
 				URI uri = new URIImpl(((JSONObject)jsonCanvas.get(i)).getString("uri"));
@@ -65,7 +65,7 @@ public class ScreenFindServlet extends GenericServlet {
 			// parse the domain context
 			JSONObject jsonDomainContext = input.getJSONObject("domainContext");
 			JSONArray jsonTags = jsonDomainContext.getJSONArray("tags");
-			HashSet<String> tags = new HashSet<String>();
+			ArrayList<String> tags = new ArrayList<String>();
 			for (int i = 0; i < jsonTags.length(); i++)
 				tags.add(jsonTags.getString(i));
 			StringBuffer sb = new StringBuffer();
@@ -84,7 +84,7 @@ public class ScreenFindServlet extends GenericServlet {
 			}
 
 			// make the call to the catalogue
-			Set<URI> results = getCatalogue().findBackwards(canvas, true, true, 0, -1, tags);
+			List<URI> results = getCatalogue().findBackwards(canvas, true, true, 0, -1, tags);
 
 			// write the results in the output
 			JSONArray output = new JSONArray();

@@ -3,8 +3,8 @@ package eu.morfeoproject.fast.catalogue.services;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -55,7 +55,7 @@ public class ScreenFindCheckServlet extends GenericServlet {
 			// create JSON representation of the input
 			JSONObject input = new JSONObject(body);
 			// parses the canvas
-			HashSet<BuildingBlock> canvas = new HashSet<BuildingBlock>();
+			ArrayList<BuildingBlock> canvas = new ArrayList<BuildingBlock>();
 			JSONArray jsonCanvas = input.getJSONArray("canvas");
 			for (int i = 0; i < jsonCanvas.length(); i++) {
 				URI uri = new URIImpl(((JSONObject)jsonCanvas.get(i)).getString("uri"));
@@ -65,7 +65,7 @@ public class ScreenFindCheckServlet extends GenericServlet {
 				canvas.add(r); 
 			}
 			// parses the list of elements
-			HashSet<BuildingBlock> elements = new HashSet<BuildingBlock>();
+			ArrayList<BuildingBlock> elements = new ArrayList<BuildingBlock>();
 			JSONArray jsonElements = input.getJSONArray("elements");
 			for (int i = 0; i < jsonElements.length(); i++) {
 				URI uri = new URIImpl(((JSONObject)jsonElements.get(i)).getString("uri"));
@@ -77,7 +77,7 @@ public class ScreenFindCheckServlet extends GenericServlet {
 			// parses the domain context
 			JSONObject jsonDomainContext = input.getJSONObject("domainContext");
 			JSONArray jsonTags = jsonDomainContext.getJSONArray("tags");
-			HashSet<String> tags = new HashSet<String>();
+			ArrayList<String> tags = new ArrayList<String>();
 			for (int i = 0; i < jsonTags.length(); i++)
 				tags.add(jsonTags.getString(i));
 			StringBuffer sb = new StringBuffer();
@@ -89,14 +89,14 @@ public class ScreenFindCheckServlet extends GenericServlet {
 			String criterion = input.getString("criterion");
 			
 			// do the real work
-			HashSet<BuildingBlock> all = new HashSet<BuildingBlock>();
+			ArrayList<BuildingBlock> all = new ArrayList<BuildingBlock>();
 			all.addAll(canvas);
 			all.addAll(elements);
-			Set<URI> results = getCatalogue().findBackwards(all, true, true, 0, -1, tags);
+			List<URI> results = getCatalogue().findBackwards(all, true, true, 0, -1, tags);
 			// add results of 'find' to the list of elements
 			for (URI uri : results)
 				elements.add(getCatalogue().getBuildingBlock(uri));
-			Set<BuildingBlock> reachables = getCatalogue().filterReachableBuildingBlocks(canvas);
+			List<BuildingBlock> reachables = getCatalogue().filterReachableBuildingBlocks(canvas);
 			JSONObject output = new JSONObject();
 			if (criterion.equalsIgnoreCase("reachability")) {
 				JSONArray canvasOut = new JSONArray();

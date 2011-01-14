@@ -4,7 +4,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -58,7 +57,7 @@ public class PlannerServlet extends GenericServlet {
 			URI goal = new URIImpl(input.getString("goal"));
 			// parse the canvas
 			ArrayList<URI> canvasUris = new ArrayList<URI>();
-			HashSet<BuildingBlock> canvas = new HashSet<BuildingBlock>();
+			ArrayList<BuildingBlock> canvas = new ArrayList<BuildingBlock>();
 			JSONArray jsonCanvas = input.getJSONArray("canvas");
 			for (int i = 0; i < jsonCanvas.length(); i++) {
 				URI uri = new URIImpl(((JSONObject)jsonCanvas.get(i)).getString("uri"));

@@ -4,9 +4,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -28,12 +26,12 @@ public class FindCheckTest {
 		BackendService service = (BackendService) TestUtils.buildBBFromFile(TestUtils.getCatalogue().getServerURL(), "backendservice", "data/json/backendservices/amazonSearchService.json");
 		TestUtils.getCatalogue().addForm(form);
 		TestUtils.getCatalogue().addBackendService(service);
-		List<Condition> conList = new ArrayList<Condition>();
-		Set<ScreenComponent> all = new HashSet<ScreenComponent>();
+		ArrayList<Condition> conList = new ArrayList<Condition>();
+		ArrayList<ScreenComponent> all = new ArrayList<ScreenComponent>();
 		all.add(form);
-		Set<String> tags = new HashSet<String>();
+		ArrayList<String> tags = new ArrayList<String>();
 		tags.add("amazon");
-		Set<URI> results = TestUtils.getCatalogue().findScreenComponents(null, conList, all, 0, -1, tags, FGO.BackendService);
+		List<URI> results = TestUtils.getCatalogue().findScreenComponents(null, conList, all, 0, -1, tags, FGO.BackendService);
 		assertEquals(1, results.size());
 		assertEquals(service.getUri(), results.toArray()[0]);
 	}
@@ -46,11 +44,11 @@ public class FindCheckTest {
 		TestUtils.getCatalogue().addScreen(s1);
 		TestUtils.getCatalogue().addScreen(s2);
 		TestUtils.getCatalogue().addScreen(s3);
-		Set<BuildingBlock> all = new HashSet<BuildingBlock>();
+		ArrayList<BuildingBlock> all = new ArrayList<BuildingBlock>();
 		all.add(s1);
-		Set<String> tags = new HashSet<String>();
+		ArrayList<String> tags = new ArrayList<String>();
 		tags.add("amazon");
-		Set<URI> results = TestUtils.getCatalogue().findBackwards(all, true, true, 0, -1, tags);
+		List<URI> results = TestUtils.getCatalogue().findBackwards(all, true, true, 0, -1, tags);
 		assertEquals(2, results.size());
 		assertTrue(results.contains(s2.getUri()));
 		assertTrue(results.contains(s3.getUri()));

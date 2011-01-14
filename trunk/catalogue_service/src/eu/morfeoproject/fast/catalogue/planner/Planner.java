@@ -1,9 +1,8 @@
 package eu.morfeoproject.fast.catalogue.planner;
 
-import java.util.HashSet;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Set;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -30,7 +29,7 @@ public abstract class Planner extends Cacheable<List<Plan>> {
 	 * @param resources
 	 * @return
 	 */
-	public List<Plan> searchPlans(URI uri, Set<BuildingBlock> resources) {
+	public List<Plan> searchPlans(URI uri, List<BuildingBlock> resources) {
 		LinkedList<URI> uriList = new LinkedList<URI>();
 		for (BuildingBlock resource : resources)
 			uriList.add(resource.getUri());
@@ -145,7 +144,7 @@ public abstract class Planner extends Cacheable<List<Plan>> {
 	}
 	
 	private void calculateForwards(BuildingBlock resource) {
-		HashSet<BuildingBlock> resources = new HashSet<BuildingBlock>();
+		ArrayList<BuildingBlock> resources = new ArrayList<BuildingBlock>();
 		if (resource instanceof Screen) {
 			if (((Screen) resource).getPostconditions().size() > 0) {
 				resources.add(resource);
@@ -161,7 +160,7 @@ public abstract class Planner extends Cacheable<List<Plan>> {
 			}
 		}
 		if (resources.size() > 0) {
-			HashSet<URI> results = new HashSet<URI>();
+			ArrayList<URI> results = new ArrayList<URI>();
 			results.addAll(catalogue.findForwards(resources, true, true, 0, -1, null));
 			for (URI result : results) {
 				plannerStore.add(resource.getUri(), result);
@@ -170,7 +169,7 @@ public abstract class Planner extends Cacheable<List<Plan>> {
 	}
 	
 	private void calculateBackwards(BuildingBlock resource) {
-		HashSet<BuildingBlock> resources = new HashSet<BuildingBlock>();
+		ArrayList<BuildingBlock> resources = new ArrayList<BuildingBlock>();
 		if (resource instanceof Screen) {
 			if (((Screen) resource).getPreconditions().size() > 0) {
 				resources.add(resource);
@@ -181,7 +180,7 @@ public abstract class Planner extends Cacheable<List<Plan>> {
 			}
 		}
 		if (resources.size() > 0) {
-			HashSet<URI> results = new HashSet<URI>();
+			ArrayList<URI> results = new ArrayList<URI>();
 			results.addAll(catalogue.findBackwards(resources, true, true, 0, -1, null));
 			for (URI result : results) {
 				plannerStore.add(result, resource.getUri());
@@ -208,14 +207,14 @@ public abstract class Planner extends Cacheable<List<Plan>> {
 	}
 	
 	/**
-	 * Generates all the plans from a given set of screens, already stored in the catalogue
+	 * Generates all the plans from a given list of screens, already stored in the catalogue
 	 */
 	protected void seed() {
 		for (Screen screen : catalogue.getAllScreens()) {
 			if (screen.getPreconditions().size() > 0) {
-				HashSet<BuildingBlock> resources = new HashSet<BuildingBlock>();
+				ArrayList<BuildingBlock> resources = new ArrayList<BuildingBlock>();
 				resources.add(screen);
-				HashSet<URI> results = new HashSet<URI>();
+				ArrayList<URI> results = new ArrayList<URI>();
 				results.addAll(catalogue.findBackwards(resources, true, true, 0, -1, null));
 				for (URI result : results) {
 					plannerStore.add(result, screen.getUri());

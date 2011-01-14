@@ -4,9 +4,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -63,7 +61,7 @@ public class ScreenComponentFindCheckServlet extends GenericServlet {
 			// parses the preconditions
 			List<Condition> postconditions = BuildingBlockJSONBuilder.buildConditions(input.getJSONArray("postconditions"));
 			// parses the canvas
-			HashSet<ScreenComponent> canvas = new HashSet<ScreenComponent>();
+			ArrayList<ScreenComponent> canvas = new ArrayList<ScreenComponent>();
 			JSONArray jsonCanvas = input.getJSONArray("canvas");
 			for (int i = 0; i < jsonCanvas.length(); i++) {
 				URI uri = new URIImpl(((JSONObject)jsonCanvas.get(i)).getString("uri"));
@@ -73,7 +71,7 @@ public class ScreenComponentFindCheckServlet extends GenericServlet {
 				canvas.add(sc);
 			}
 			// parses the list of forms
-			HashSet<ScreenComponent> forms = new HashSet<ScreenComponent>();
+			ArrayList<ScreenComponent> forms = new ArrayList<ScreenComponent>();
 			JSONArray jsonForms = input.getJSONArray("forms");
 			for (int i = 0; i < jsonForms.length(); i++) {
 				URI uri = new URIImpl(((JSONObject)jsonForms.get(i)).getString("uri"));
@@ -83,7 +81,7 @@ public class ScreenComponentFindCheckServlet extends GenericServlet {
 				forms.add(sc); 
 			}
 			// parses the list of operators
-			HashSet<ScreenComponent> operators = new HashSet<ScreenComponent>();
+			ArrayList<ScreenComponent> operators = new ArrayList<ScreenComponent>();
 			JSONArray jsonOperators = input.getJSONArray("operators");
 			for (int i = 0; i < jsonOperators.length(); i++) {
 				URI uri = new URIImpl(((JSONObject)jsonOperators.get(i)).getString("uri"));
@@ -93,7 +91,7 @@ public class ScreenComponentFindCheckServlet extends GenericServlet {
 				operators.add(sc); 
 			}
 			// parses the list of backend services
-			HashSet<ScreenComponent> backendServices = new HashSet<ScreenComponent>();
+			ArrayList<ScreenComponent> backendServices = new ArrayList<ScreenComponent>();
 			JSONArray jsonBackendServices = input.getJSONArray("backendservices");
 			for (int i = 0; i < jsonBackendServices.length(); i++) {
 				URI uri = new URIImpl(((JSONObject)jsonBackendServices.get(i)).getString("uri"));
@@ -105,7 +103,7 @@ public class ScreenComponentFindCheckServlet extends GenericServlet {
 			// parses the domain context
 			JSONObject jsonDomainContext = input.getJSONObject("domainContext");
 			JSONArray jsonTags = jsonDomainContext.getJSONArray("tags");
-			HashSet<String> tags = new HashSet<String>();
+			ArrayList<String> tags = new ArrayList<String>();
 			for (int i = 0; i < jsonTags.length(); i++)
 				tags.add(jsonTags.getString(i));
 			StringBuffer sb = new StringBuffer();
@@ -130,7 +128,7 @@ public class ScreenComponentFindCheckServlet extends GenericServlet {
 			
 			// do the real work
 			//-----------------------------
-			HashSet<ScreenComponent> all = new HashSet<ScreenComponent>();
+			ArrayList<ScreenComponent> all = new ArrayList<ScreenComponent>();
 			all.addAll(canvas);
 			all.addAll(forms);
 			all.addAll(operators);
@@ -149,17 +147,17 @@ public class ScreenComponentFindCheckServlet extends GenericServlet {
 			
 			// add results of 'find' to the list of forms
 			if (search) {
-				Set<URI> formResults = getCatalogue().findScreenComponents(null, conList, all, 0, -1, tags, FGO.Form);
+				List<URI> formResults = getCatalogue().findScreenComponents(null, conList, all, 0, -1, tags, FGO.Form);
 				for (URI uri : formResults) {
 					forms.add(getCatalogue().getScreenComponent(uri));
 				}
 				// add results of 'find' to the list of operators
-				Set<URI> opResults = getCatalogue().findScreenComponents(null, conList, all, 0, -1, tags, FGO.Operator);
+				List<URI> opResults = getCatalogue().findScreenComponents(null, conList, all, 0, -1, tags, FGO.Operator);
 				for (URI uri : opResults) {
 					operators.add(getCatalogue().getScreenComponent(uri));
 				}
 				// add results of 'find' to the list of backend services
-				Set<URI> bsResults = getCatalogue().findScreenComponents(null, conList, all, 0, -1, tags, FGO.BackendService);
+				List<URI> bsResults = getCatalogue().findScreenComponents(null, conList, all, 0, -1, tags, FGO.BackendService);
 				for (URI uri : bsResults) {
 					backendServices.add(getCatalogue().getScreenComponent(uri));
 				}
@@ -275,7 +273,7 @@ public class ScreenComponentFindCheckServlet extends GenericServlet {
 		return satisfied;
 	}
 	
-	private JSONObject processPostcondition(Set<ScreenComponent> canvas, Condition postcondition, List<Pipe> pipes, List<Object> elements) throws JSONException, IOException {
+	private JSONObject processPostcondition(List<ScreenComponent> canvas, Condition postcondition, List<Pipe> pipes, List<Object> elements) throws JSONException, IOException {
 		JSONObject jsonCon = new JSONObject();
 		Pipe pipe = getPipeToPostcondition(postcondition, pipes);
 		boolean satisfied = pipe == null ? false : elements.contains(pipe);
@@ -284,7 +282,7 @@ public class ScreenComponentFindCheckServlet extends GenericServlet {
 		return jsonCon;
 	}
 	
-	private JSONObject processComponent(Set<ScreenComponent> canvas, ScreenComponent sc, List<Pipe> pipes, List<Object> reachableElements) throws JSONException, IOException {
+	private JSONObject processComponent(List<ScreenComponent> canvas, ScreenComponent sc, List<Pipe> pipes, List<Object> reachableElements) throws JSONException, IOException {
 		JSONObject jsonSc = new JSONObject();
 		jsonSc.put("uri", sc.getUri());
 		JSONArray actionArray = new JSONArray();
@@ -316,7 +314,7 @@ public class ScreenComponentFindCheckServlet extends GenericServlet {
 	}
 	
 	private List<Pipe> generatePipes(
-			Set<ScreenComponent> canvas,
+			List<ScreenComponent> canvas,
 			List<Condition> preconditions,
 			List<Condition> postconditions,
 			Object selectedItem,
@@ -430,7 +428,7 @@ public class ScreenComponentFindCheckServlet extends GenericServlet {
 	}
 	
 	private List<Object> getReachableElements(
-			Set<ScreenComponent> scList,
+			List<ScreenComponent> scList,
 			List<Condition> preconditions, 
 			List<Condition> postconditions,
 			List<Pipe> pipes) {
@@ -497,7 +495,7 @@ public class ScreenComponentFindCheckServlet extends GenericServlet {
 		return elements;
 	}
 	
-	private ScreenComponent getScreenComponent(Set<ScreenComponent> scList, URI uri) {
+	private ScreenComponent getScreenComponent(List<ScreenComponent> scList, URI uri) {
 		for (ScreenComponent sc : scList) {
 			if (sc.getUri().equals(uri)) return sc;
 		}

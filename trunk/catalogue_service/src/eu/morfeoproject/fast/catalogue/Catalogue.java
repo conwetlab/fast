@@ -9,10 +9,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Set;
 import java.util.StringTokenizer;
 
 import org.apache.commons.logging.Log;
@@ -252,22 +250,22 @@ public class Catalogue {
 		return isConcept(uri);
 	}
 
-	public Set<URI> findScreenComponents(Screen container,
-			List<Condition> conditions, Set<ScreenComponent> toExclude,
-			int offset, int limit, Set<String> tags) throws ClassCastException,
+	public List<URI> findScreenComponents(Screen container,
+			List<Condition> conditions, List<ScreenComponent> toExclude,
+			int offset, int limit, List<String> tags) throws ClassCastException,
 			ModelRuntimeException {
-		HashSet<URI> results = new HashSet<URI>();
+		ArrayList<URI> results = new ArrayList<URI>();
 		results.addAll(findScreenComponents(container, conditions, toExclude, offset, limit, tags, FGO.Form));
 		results.addAll(findScreenComponents(container, conditions, toExclude, offset, limit, tags, FGO.Operator));
 		results.addAll(findScreenComponents(container, conditions, toExclude, offset, limit, tags, FGO.BackendService));
 		return results;
 	}
 
-	public Set<URI> findScreenComponents(Screen container,
-			List<Condition> conditions, Set<ScreenComponent> toExclude,
-			int offset, int limit, Set<String> tags, URI typeBuildingBlock)
+	public List<URI> findScreenComponents(Screen container,
+			List<Condition> conditions, List<ScreenComponent> toExclude,
+			int offset, int limit, List<String> tags, URI typeBuildingBlock)
 			throws ClassCastException, ModelRuntimeException {
-		HashSet<URI> results = new HashSet<URI>();
+		ArrayList<URI> results = new ArrayList<URI>();
 
 		String queryString = "SELECT DISTINCT ?bb " 
 			+ " WHERE { { ?bb " + RDF.type.toSPARQL() + " " + typeBuildingBlock.toSPARQL() + " . ";
@@ -298,7 +296,7 @@ public class Catalogue {
 			queryString = queryString.concat("{");
 			for (Condition con : conditions) {
 				queryString = queryString.concat("{ ?bb " + FGO.hasAction.toSPARQL() + " ?a . ");
-				queryString = queryString.concat(" ?a " + FGO.hasPreCondition.toSPARQL() + " ?c . ");
+				queryString = queryString.concat(" ?a " + FGO.hasPreCondition.toSPARQL() + " ?c . log4j.appender.R.File");
 				queryString = queryString.concat(" ?c " + FGO.hasPattern.toSPARQL() + " ?p . ");
 				queryString = queryString.concat("GRAPH ?p {");
 				ClosableIterator<Statement> it = patternToRDF2GoModel(con.getPatternString()).iterator();
@@ -340,14 +338,14 @@ public class Catalogue {
 
 	/**
 	 * Search for screens inside the catalogue which satisfy the unsatisfied
-	 * preconditions of a set of screens and also takes into account the domain
-	 * context composed by a list of tags. If within the set of screens there
+	 * preconditions of a list of screens and also takes into account the domain
+	 * context composed by a list of tags. If within the list of screens there
 	 * are not unsatisfied preconditions, no screens will be returned because it
 	 * is assume that there is no need to satisfied any condition. If any tag is
-	 * given, the set of screens to be returned will be filtered by this tag. If
+	 * given, the list of screens to be returned will be filtered by this tag. If
 	 * no tag is given, no tag filter will be done. If the number of screens
 	 * returned is high, you can use the parameters OFFSET and LIMIT in order to
-	 * retrieve small sets of screens.
+	 * retrieve small lists of screens.
 	 * 
 	 * @param screens
 	 * @param plugin
@@ -355,27 +353,27 @@ public class Catalogue {
 	 * @param subsume
 	 *            ignored at this version
 	 * @param offset
-	 *            indicate the start of the set of screens to be returned
+	 *            indicate the start of the list of screens to be returned
 	 * @param limit
 	 *            specify the maximum number of screens to be returned [negative
 	 *            means no limit]
 	 * @param tags
 	 *            a list of tags for filtering the results
-	 * @return a recommended set of screens according to the input given
+	 * @return a recommended list of screens according to the input given
 	 * @throws ClassCastException
 	 * @throws ModelRuntimeException
 	 */
-	protected Set<URI> findScreens(Set<BuildingBlock> bbSet, boolean plugin,
-			boolean subsume, int offset, int limit, Set<String> tags,
+	protected List<URI> findScreens(List<BuildingBlock> bbList, boolean plugin,
+			boolean subsume, int offset, int limit, List<String> tags,
 			URI predicate) throws ClassCastException, ModelRuntimeException {
-		HashSet<URI> results = new HashSet<URI>();
-		ArrayList<Condition> unCon = getUnsatisfiedPreconditions(bbSet, plugin, subsume);
+		ArrayList<URI> results = new ArrayList<URI>();
+		ArrayList<Condition> unCon = getUnsatisfiedPreconditions(bbList, plugin, subsume);
 
 		String queryString = "SELECT DISTINCT ?bb " 
 			+ "WHERE { { ?bb " + RDF.type.toSPARQL() + " " + FGO.Screen.toSPARQL() + " . ";
 
 		// ///*** LOOK FOR SCREENS ***/////
-		for (BuildingBlock r : bbSet)
+		for (BuildingBlock r : bbList)
 			if (r instanceof Screen)
 				queryString = queryString.concat("FILTER (?bb != " + r.getUri().toSPARQL() + ") . ");
 
@@ -436,43 +434,43 @@ public class Catalogue {
 		return results;
 	}
 
-	public Set<URI> findBackwards(Set<BuildingBlock> bbSet, boolean plugin,
-			boolean subsume, int offset, int limit, Set<String> tags)
+	public List<URI> findBackwards(List<BuildingBlock> bbList, boolean plugin,
+			boolean subsume, int offset, int limit, List<String> tags)
 			throws ClassCastException, ModelRuntimeException {
-		return findScreens(bbSet, plugin, subsume, offset, limit, tags, FGO.hasPostCondition);
+		return findScreens(bbList, plugin, subsume, offset, limit, tags, FGO.hasPostCondition);
 	}
 
-	public Set<URI> findForwards(Set<BuildingBlock> bbSet, boolean plugin,
-			boolean subsume, int offset, int limit, Set<String> tags)
+	public List<URI> findForwards(List<BuildingBlock> bbList, boolean plugin,
+			boolean subsume, int offset, int limit, List<String> tags)
 			throws ClassCastException, ModelRuntimeException {
-		Set<BuildingBlock> tmpBBSet = new HashSet<BuildingBlock>();
-		for (BuildingBlock bb : bbSet) {
+		List<BuildingBlock> tmpBBList = new ArrayList<BuildingBlock>();
+		for (BuildingBlock bb : bbList) {
 			if (bb instanceof Screen) {
 				Screen s = BuildingBlockFactory.createScreen();
 				s.setUri(bb.getUri());
 				s.setPreconditions(((Screen) bb).getPostconditions());
-				tmpBBSet.add(s);
+				tmpBBList.add(s);
 			} else {
-				tmpBBSet.add(bb);
+				tmpBBList.add(bb);
 			}
 		}
-		return findScreens(tmpBBSet, plugin, subsume, offset, limit, tags, FGO.hasPreCondition);
+		return findScreens(tmpBBList, plugin, subsume, offset, limit, tags, FGO.hasPreCondition);
 	}
 
 	/**
-	 * Retrieves all the unsatisfied preconditions of a set of screens. It also
+	 * Retrieves all the unsatisfied preconditions of a list of screens. It also
 	 * checks whether a 'postcondition' is satisfied. NOTE: 'preconditions' are
 	 * always satisfied
 	 * 
 	 * @param screens
-	 *            The set of screens where the preconditions are obtained
+	 *            The list of screens where the preconditions are obtained
 	 * @param plugin
 	 *            ignored at this version
 	 * @param subsume
 	 *            ignored at this version
 	 * @return a list of conditions which are unsatisfied
 	 */
-	protected ArrayList<Condition> getUnsatisfiedPreconditions(Set<BuildingBlock> bbSet, boolean plugin, boolean subsume) {
+	protected ArrayList<Condition> getUnsatisfiedPreconditions(List<BuildingBlock> bbSet, boolean plugin, boolean subsume) {
 		ArrayList<Condition> unsatisfied = new ArrayList<Condition>();
 		for (BuildingBlock bb : bbSet) {
 			if (bb instanceof Screen) {
@@ -497,14 +495,14 @@ public class Catalogue {
 	}
 
 	/**
-	 * Determines if a specific precondition is satisfied by a set of screens,
-	 * in other words, check if any postcondition of the set of screens satisfy
-	 * the precondition. Usually the set of screens will include the screen
+	 * Determines if a specific precondition is satisfied by a list of screens,
+	 * in other words, check if any postcondition of the list of screens satisfy
+	 * the precondition. Usually the list of screens will include the screen
 	 * which the precondition belongs to, hence you can set if a screen has to
 	 * be excluded while checking.
 	 * 
 	 * @param screens
-	 *            a set of screens which might satisfy the precondition
+	 *            a list of screens which might satisfy the precondition
 	 * @param condition
 	 *            the condition to check if it is satisfied
 	 * @param plugin
@@ -515,20 +513,20 @@ public class Catalogue {
 	 *            the URI of the screen which will be ignored while checking
 	 * @return true if the condition is satisfied
 	 */
-	public boolean isConditionSatisfied(Set<BuildingBlock> bbSet,
+	public boolean isConditionSatisfied(List<BuildingBlock> bbList,
 			Condition condition, boolean plugin, boolean subsume, URI screenExcluded) {
-		Set<BuildingBlock> tmpBBSet = new HashSet<BuildingBlock>();
+		List<BuildingBlock> tmpBBList = new ArrayList<BuildingBlock>();
 
 		// if no condition is provided, then returns true
 		if (condition == null) return true;
 
-		// copy the set of screens except the screen to be excluded
-		for (BuildingBlock bb : bbSet) {
+		// copy the list of screens except the screen to be excluded
+		for (BuildingBlock bb : bbList) {
 			if (bb instanceof Precondition) {
-				tmpBBSet.add(bb);
+				tmpBBList.add(bb);
 			} else if (bb instanceof Screen 
 					&& !bb.getUri().equals(screenExcluded)) {
-				tmpBBSet.add((Screen) bb);
+				tmpBBList.add((Screen) bb);
 			}
 		}
 
@@ -554,7 +552,7 @@ public class Catalogue {
 		if (queryStr.equals("ASK {}")) return true;
 
 		// creates all possible combination of preconditions
-		Set<Model> models = createModels(tmpBBSet, plugin, subsume);
+		List<Model> models = createModels(tmpBBList, plugin, subsume);
 		boolean satisfied = false;
 
 		for (Model m : models) {
@@ -565,23 +563,23 @@ public class Catalogue {
 		return satisfied;
 	}
 
-	public boolean isConditionListSatisfied(Set<BuildingBlock> bbSet,
+	public boolean isConditionListSatisfied(List<BuildingBlock> bbList,
 			List<Condition> precondition, boolean plugin, boolean subsume,
 			URI screenExcluded) {
-		Set<BuildingBlock> tmpBBSet = new HashSet<BuildingBlock>();
+		List<BuildingBlock> tmpBBList = new ArrayList<BuildingBlock>();
 
 		// if no conditions are provided, then returns true
 		if (precondition.isEmpty()) return true;
 
-		// copy the set of screens except the screen to be excluded
-		for (BuildingBlock bb : bbSet)
+		// copy the list of screens except the screen to be excluded
+		for (BuildingBlock bb : bbList)
 			if (bb instanceof Precondition)
-				tmpBBSet.add(bb);
+				tmpBBList.add(bb);
 			else if (bb instanceof Screen && !bb.getUri().equals(screenExcluded))
-				tmpBBSet.add((Screen) bb);
+				tmpBBList.add((Screen) bb);
 
 		// creates all possible combination of preconditions
-		Set<Model> models = createModels(tmpBBSet, plugin, subsume);
+		List<Model> models = createModels(tmpBBList, plugin, subsume);
 		boolean satisfied = false;
 
 		// create the ASK sparql query for a precondition
@@ -615,12 +613,12 @@ public class Catalogue {
 		return satisfied;
 	}
 	
-	public Set<Model> createModels(Set<BuildingBlock> bbSet, boolean plugin, boolean subsume) {
-		Set<Model> models = new HashSet<Model>();
-		if (bbSet.isEmpty()) {
+	public List<Model> createModels(List<BuildingBlock> bbList, boolean plugin, boolean subsume) {
+		List<Model> models = new ArrayList<Model>();
+		if (bbList.isEmpty()) {
 			return models;
-		} else if (bbSet.size() == 1) {
-			BuildingBlock r = bbSet.iterator().next();
+		} else if (bbList.size() == 1) {
+			BuildingBlock r = bbList.iterator().next();
 			if (r instanceof Precondition) {
 				Model m = RDF2Go.getModelFactory().createModel();
 				m.open();
@@ -637,9 +635,9 @@ public class Catalogue {
 				models.add(m);
 			}
 		} else {
-			BuildingBlock bb = bbSet.iterator().next();
-			bbSet.remove(bb);
-			Set<Model> result = createModels(bbSet, plugin, subsume);
+			BuildingBlock bb = bbList.iterator().next();
+			bbList.remove(bb);
+			List<Model> result = createModels(bbList, plugin, subsume);
 			for (Model model : result) {
 				if (bb instanceof Precondition) {
 					Model m = RDF2Go.getModelFactory().createModel();
@@ -706,13 +704,13 @@ public class Catalogue {
 	 * are reachable within the given set. All preconditions are reachable by
 	 * default.
 	 * 
-	 * @param bbSet
+	 * @param bbList
 	 * @return
 	 */
-	public Set<BuildingBlock> filterReachableBuildingBlocks(Set<BuildingBlock> bbSet) {
-		HashSet<BuildingBlock> results = new HashSet<BuildingBlock>();
-		HashSet<BuildingBlock> toCheck = new HashSet<BuildingBlock>();
-		for (BuildingBlock bb : bbSet) {
+	public List<BuildingBlock> filterReachableBuildingBlocks(List<BuildingBlock> bbList) {
+		ArrayList<BuildingBlock> results = new ArrayList<BuildingBlock>();
+		ArrayList<BuildingBlock> toCheck = new ArrayList<BuildingBlock>();
+		for (BuildingBlock bb : bbList) {
 			if (bb instanceof Precondition) {
 				results.add(bb);
 			} else if (bb instanceof Screen) {
@@ -730,13 +728,13 @@ public class Catalogue {
 		return results;
 	}
 
-	protected Set<BuildingBlock> filterReachableBuildingBlocks(Set<BuildingBlock> reachables, Set<BuildingBlock> bbSet) {
-		HashSet<BuildingBlock> results = new HashSet<BuildingBlock>();
-		HashSet<BuildingBlock> toCheck = new HashSet<BuildingBlock>();
-		for (BuildingBlock bb : bbSet) {
+	protected List<BuildingBlock> filterReachableBuildingBlocks(List<BuildingBlock> reachables, List<BuildingBlock> bbList) {
+		ArrayList<BuildingBlock> results = new ArrayList<BuildingBlock>();
+		ArrayList<BuildingBlock> toCheck = new ArrayList<BuildingBlock>();
+		for (BuildingBlock bb : bbList) {
 			if (bb instanceof Screen) {
 				Screen s = (Screen) bb;
-				// check whether a set of preconditions is fulfilled => makes the screen reachable
+				// check whether a list of preconditions is fulfilled => makes the screen reachable
 				if (isConditionListSatisfied(reachables, s.getPreconditions(), true, true, s.getUri())) {
 					results.add(s);
 				} else {
@@ -1677,13 +1675,13 @@ public class Catalogue {
 	/**
 	 * 
 	 * @param uri
-	 * @param buildingBlockSet
+	 * @param bbList
 	 * @return
 	 */
-	public List<Plan> searchPlans(URI uri, Set<BuildingBlock> buildingBlockSet) {
+	public List<Plan> searchPlans(URI uri, List<BuildingBlock> bbList) {
 		List<Plan> planList = new ArrayList<Plan>();
 		if (planner != null) {
-			planList.addAll(planner.searchPlans(uri, buildingBlockSet));
+			planList.addAll(planner.searchPlans(uri, bbList));
 		}
 		return planList;
 	}
