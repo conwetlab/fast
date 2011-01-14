@@ -973,17 +973,30 @@ BuildingBlockDocument = Class.create(PaletteDocument, /** @lends BuildingBlockDo
         this._codeView.save();
 
         var showMessage = Utils.variableOrDefault(_showMessage, true);
-        var uri = (this._description.getId() == null)?
-            this._getSaveUri():
-            URIs.buildingblock + this._description.getId();
         var params = {
             'buildingblock': JSON.stringify(this._description)
         }
         if (showMessage) {
             Utils.showMessage("Saving " + this._typeName);
         }
-        PersistenceEngine.sendUpdate(uri, params, null,
+        if (this._description.getId() == null) {
+            PersistenceEngine.sendPost(this._getSaveUri(), params, null,
                 this, this._onSaveSuccess, this._onSaveError);
+        } else {
+            var uri = URIs.buildingblock + this._description.getId();
+            PersistenceEngine.sendUpdate(uri, params, null,
+                this, this._onSaveSuccess, this._onSaveError);
+        }
+    },
+
+    /**
+     * Returns the save uri
+     * @type String
+     * @private
+     * @override
+     */
+    _getSaveUri: function() {
+        return URIs[this._description.type]
     },
 
     /**
