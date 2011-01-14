@@ -143,7 +143,7 @@ class BuildingBlock(models.Model):
 
     def delete(self, *args, **kwargs):
         self.unshare()
-        super(BuildingBlock, self).save(*args, **kwargs)
+        super(BuildingBlock, self).delete(*args, **kwargs)
 
 class Screenflow(BuildingBlock):
     def __unicode__(self):
@@ -163,7 +163,6 @@ class Screenflow(BuildingBlock):
         for storage in self.storage_set.all():
             storage.delete()
         super(Screenflow, self).delete(*args, **kwargs)
-        super(BuildingBlock, self).delete(*args, **kwargs)
 
 
 
@@ -255,6 +254,7 @@ class Operator(BuildingBlock):
         c.code =  t.render(context)
         c.save()
         return c
+
 
 class Resource(BuildingBlock):
     def __unicode__(self):
