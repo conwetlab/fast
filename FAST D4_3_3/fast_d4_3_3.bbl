@@ -1,0 +1,42 @@
+\begin{thebibliography}{}
+
+\bibitem[Alonso et~al., 2003]{GustavoAlonso2003}
+Alonso, G., Casati, F., Kuno, H., and Machiraju, V. (2003).
+\newblock {\em Web Services}.
+\newblock Springer.
+
+\bibitem[Bray et~al., 2006]{XML1.1}
+Bray, T., Paoli, J., Sperberg-McQueen, C.~M., Maler, E., Yergeau, F., and Cowa,
+  J. (2006).
+\newblock Extensible markup language (xml) 1.1 (second edition).
+
+\bibitem[Chinnici et~al., 2007]{WSDL2.0}
+Chinnici, R., Moreau, J.-J., Ryman, A., and Weerawarana, S. (2007).
+\newblock Web services description language (wsdl) version 2.0.
+
+\bibitem[Fielding, 2000]{Fielding2000}
+Fielding, R.~T. (2000).
+\newblock {\em Architectural Styles and the Design of Network-based Software
+  Architectures}.
+\newblock PhD thesis, University of California, Irvine.
+
+\bibitem[Group, 2003]{SOAP1.2}
+Group, X.~P. (2003).
+\newblock Soap version 1.2.
+\newblock W3c recommendation, W3C.
+
+\bibitem[Jahnke et~al., 1997]{JSZ97c}
+Jahnke, J.-H., Schaefer, W., and Zuendorf, A. (1997).
+\newblock {A Design Environment for Migrating Relational to Object Oriented
+  Database Systems}.
+\newblock {\em {Software Engineering and Database Technology
+  (Dagstuhl-Seminar-Report 173)}}.
+
+\bibitem[Schuerr, 1994]{conf/wg/Schurr94}
+Schuerr, A. (1994).
+\newblock Specification of graph translators with triple graph grammars.
+\newblock In Mayr, E.~W., Schmidt, G., and Tinhofer, G., editors, {\em WG},
+  volume 903 of {\em Lecture Notes in Computer Science}, pages 151--163.
+  Springer.
+
+\end{thebibliography}

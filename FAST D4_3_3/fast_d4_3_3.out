@@ -1,0 +1,20 @@
+\BOOKMARK [1][-]{section.1}{Introduction}{}% 1
+\BOOKMARK [2][-]{subsection.1.1}{Goal and Scope}{section.1}% 2
+\BOOKMARK [2][-]{subsection.1.2}{Structure of the Document}{section.1}% 3
+\BOOKMARK [1][-]{section.2}{Web Services Wrapping}{}% 4
+\BOOKMARK [2][-]{subsection.2.1}{Building}{section.2}% 5
+\BOOKMARK [3][-]{subsubsection.2.1.1}{REST-based Web Services}{subsection.2.1}% 6
+\BOOKMARK [3][-]{subsubsection.2.1.2}{SOAP Web Services}{subsection.2.1}% 7
+\BOOKMARK [3][-]{subsubsection.2.1.3}{WSMO Web Services}{subsection.2.1}% 8
+\BOOKMARK [2][-]{subsection.2.2}{Discovering}{section.2}% 9
+\BOOKMARK [1][-]{section.3}{Web Service Wrapper Tool}{}% 10
+\BOOKMARK [2][-]{subsection.3.1}{Defining pre- and postconditions}{section.3}% 11
+\BOOKMARK [2][-]{subsection.3.2}{Constructing service requests}{section.3}% 12
+\BOOKMARK [3][-]{subsubsection.3.2.1}{Limitations}{subsection.3.2}% 13
+\BOOKMARK [2][-]{subsection.3.3}{Interpreting service responses}{section.3}% 14
+\BOOKMARK [3][-]{subsubsection.3.3.1}{Translation XML/JSON into Facts}{subsection.3.3}% 15
+\BOOKMARK [2][-]{subsection.3.4}{Generating a Resource Adapter}{section.3}% 16
+\BOOKMARK [2][-]{subsection.3.5}{Limitations}{section.3}% 17
+\BOOKMARK [1][-]{section.4}{Related Work}{}% 18
+\BOOKMARK [1][-]{section.4}{References}{}% 19
+\BOOKMARK [1][-]{section*.6}{Appendix A \(Lists of Tables and Figures\)}{}% 20

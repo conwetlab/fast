@@ -1,0 +1,11 @@
+This is BibTeX, Version 0.99cThe top-level auxiliary file: fast_d4_3_3.aux
+The style file: apalike.bst
+Database file #1: fast_d4_3_2.bib
+Warning--entry type for "XML1.1" isn't style-file defined
+--line 58 of file fast_d4_3_2.bib
+Warning--entry type for "WSDL2.0" isn't style-file defined
+--line 68 of file fast_d4_3_2.bib
+A bad cross reference---entry "conf/wg/Schurr94"
+refers to entry "conf/wg/1994", which doesn't exist
+Warning--I didn't find a database entry for "conf/wg/1994"
+(There was 1 error message)
