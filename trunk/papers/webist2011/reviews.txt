@@ -1,0 +1,82 @@
+Paper Reviews 	
+
+Paper Title: Web Service Wrapping, Discovery and Consumption --- More Power to the End-User
+Paper #: 128 		
+Paper Selection State: Short Paper 		
+My Status: Author 		
+Number of Reviews: 3
+
+
+	Review #: 1	
+
+Criterium	Description	Value
+Abstract and Introduction are adequate?	 	Too long
+Conclusions/Future Work are convincing?	 	No
+Figures are Adequate ?	in number and quality	No
+Improve critical discussion ?	validation	Yes
+Improve English?	 	No
+Needs comparative evaluation?	 	Yes
+Needs more experimental results?	 	No
+Originality	Newness of the ideas expressed	6
+Overall rating	Weighted value of above items	5
+Paper formatting needs adjustment?	 	Yes
+Presentation	Structure/Length/English	4
+References are up-to-date and appropriate?	 	Yes
+Relevance	Paper fits one or more of the topic areas?	6
+Significance	Is the problem worth the given attention?	6
+Technical Quality	Theoretical soundness/methodology	5
+Scale: 1:Lowest Value;6:Highest Value
+
+Observations for Author
+The paper presents an approach to facilitate the discovery and consumption of business web services by end-users, closing the gap between the two. The paper is an detailed overview of the issue web service wrappers, the experiences with a proposed technology but no theoretical base for it, no funadamental research results, excellent new technology, Is not clear what next steps in the future
+
+
+
+	Review #: 2	
+
+Criterium	Description	Value
+Abstract and Introduction are adequate?	 	Yes
+Conclusions/Future Work are convincing?	 	No
+Figures are Adequate ?	in number and quality	Yes
+Improve critical discussion ?	validation	Yes
+Improve English?	 	No
+Needs comparative evaluation?	 	Yes
+Needs more experimental results?	 	Yes
+Originality	Newness of the ideas expressed	2
+Overall rating	Weighted value of above items	3
+Paper formatting needs adjustment?	 	No
+Presentation	Structure/Length/English	1
+References are up-to-date and appropriate?	 	Yes
+Relevance	Paper fits one or more of the topic areas?	5
+Significance	Is the problem worth the given attention?	4
+Technical Quality	Theoretical soundness/methodology	3
+Scale: 1:Lowest Value;6:Highest Value
+
+Observations for Author
+The paper claims to facilitate a more user-friendly platform for discovery and consumption (i.e. deployment/enactment) of Web services. The paper is not convincing that this goal is accomplished successfully. Instead of focusing on a clear direction for improving usability of web services, it uses various paradigms (e.g. visualization, querying end-point, wrapper etc.) in a piece meal fashion. Evaluation and testing sections are also missing.
+
+
+
+	Review #: 3	
+
+Criterium	Description	Value
+Abstract and Introduction are adequate?	 	Yes
+Conclusions/Future Work are convincing?	 	No
+Figures are Adequate ?	in number and quality	Yes
+Improve critical discussion ?	validation	No
+Improve English?	 	No
+Needs comparative evaluation?	 	Yes
+Needs more experimental results?	 	Yes
+Originality	Newness of the ideas expressed	4
+Overall rating	Weighted value of above items	3
+Paper formatting needs adjustment?	 	No
+Presentation	Structure/Length/English	2
+References are up-to-date and appropriate?	 	Yes
+Relevance	Paper fits one or more of the topic areas?	6
+Significance	Is the problem worth the given attention?	5
+Technical Quality	Theoretical soundness/methodology	3
+Scale: 1:Lowest Value;6:Highest Value
+
+Observations for Author
+The authors propose a platform that aims to facilitate the end-users of web services in discovery and consumption operations. They introduce both a technique to create visually a service wrapper and a repository that can be used in the service discovery process. In my opinion the paper faces a relevant problem in literature, but it seems quite unclear in some points. First of all it lacks of a clear explanation of the whole process that involves service wrapping, publishing, discovery and consumption. I can't understand clearly what is the role of end-users in service wrapping, discovery, etc. There are many concepts without a clear definition, mainly in the description of the FAST platform. In the conceptual model in section 4.1 seems that there are no differences between inputs and preconditions (and also between outputs and postconditions), but in literature (e.g. WSMO) there is a clear distinction. The use case also does not help the reader to understand the information flows inside the proposed platform, and moreover it lacks of a comparative analysis for example for the proposed discovery algorithm. Finally, the figures about UI are quite unreadable.
+
