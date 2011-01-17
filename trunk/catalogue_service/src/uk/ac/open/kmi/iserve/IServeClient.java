@@ -3,6 +3,7 @@ package uk.ac.open.kmi.iserve;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -37,8 +38,9 @@ public class IServeClient {
 		if (this.iServeURL == null || this.iServeURL.equals(""))
 			throw new RuntimeException("iServe URL has not been configured. Please, set up an iServe URL.");
 		
-		LinkedList<IServeResponse> results = new LinkedList<IServeResponse>();
+		if (classes.isEmpty()) return new LinkedList<IServeResponse>();
 		
+		LinkedList<IServeResponse> results = new LinkedList<IServeResponse>();
 		String queryTemplate = 
 			"PREFIX rdfs:<http://www.w3.org/2000/01/rdf-schema#>\n" +
 			"PREFIX xsd:<http://www.w3.org/2001/XMLSchema#>\n" +
@@ -48,15 +50,17 @@ public class IServeClient {
 			"PREFIX sawsdl:<http://www.w3.org/ns/sawsdl#>\n" +
 			"PREFIX rest:<http://www.wsmo.org/ns/hrests#>\n" +
 			"PREFIX msm:<http://cms-wg.sti2.org/ns/minimal-service-model#>\n" +
-			"SELECT DISTINCT ?s ?def ?address WHERE {\n" +
-			"  { ?s msm:hasOperation ?o . ?o msm:hasInput ?in . ?in msm:hasPart ?p1 . ?p1 msm:hasPart ?p2 . ?p2 msm:hasPart ?p3 . ?p3 sawsdl:modelReference <class> . }  UNION \n" +
-			"  { ?s msm:hasOperation ?o . ?o msm:hasInput ?in . ?in msm:hasPart ?p1 . ?p1 msm:hasPart ?p2 . ?p2 sawsdl:modelReference <class> . } UNION \n" +
-			"  { ?s msm:hasOperation ?o . ?o msm:hasInput ?in . ?in msm:hasPart ?p1 . ?p1 sawsdl:modelReference <class> . } UNION \n" +
-			"  { ?s msm:hasOperation ?o . ?o msm:hasInput ?in . ?in sawsdl:modelReference <class> . } UNION \n" +
-			"  { ?s msm:hasOperation ?o . ?o sawsdl:modelReference <class> . } . " +
-			"  OPTIONAL { ?s rdfs:isDefinedBy ?def } . \n" +
+			"SELECT DISTINCT ?service ?label ?doc ?address WHERE {\n" +
+			"  { ?service msm:hasOperation ?o . ?o msm:hasInput ?in . ?in msm:hasPart ?p1 . ?p1 msm:hasPart ?p2 . ?p2 msm:hasPart ?p3 . ?p3 sawsdl:modelReference <class> . }  UNION \n" +
+			"  { ?service msm:hasOperation ?o . ?o msm:hasInput ?in . ?in msm:hasPart ?p1 . ?p1 msm:hasPart ?p2 . ?p2 sawsdl:modelReference <class> . } UNION \n" +
+			"  { ?service msm:hasOperation ?o . ?o msm:hasInput ?in . ?in msm:hasPart ?p1 . ?p1 sawsdl:modelReference <class> . } UNION \n" +
+			"  { ?service msm:hasOperation ?o . ?o msm:hasInput ?in . ?in sawsdl:modelReference <class> . } UNION \n" +
+			"  { ?service msm:hasOperation ?o . ?o sawsdl:modelReference <class> . } . " +
+			"  OPTIONAL { ?service rdfs:label ?label } . \n" +
+			"  OPTIONAL { ?service rdfs:isDefinedBy ?doc } . \n" +
 			"  OPTIONAL { ?o rest:hasAddress ?address } } \n";
 		
+		//TODO modify to do just 1 query, with all the classes inside the sparql query, and not several queries one of each class.
 		for (URI classUri : classes) {
 			String query = queryTemplate.replaceAll("<class>", classUri.toSPARQL());
 			if (log.isDebugEnabled()) log.debug(query);
@@ -77,6 +81,10 @@ public class IServeClient {
 					IServeResponse result = new IServeResponse();
 					for (int j = 0; j < children.getLength(); j++) {
 						result.put(children.item(j).getAttributes().getNamedItem("name").getNodeValue(), children.item(j).getTextContent());
+						//TODO change: in the response we should include the "class" and its properties, but this is not the best way.
+						ArrayList<URI> list = new ArrayList<URI>();
+						list.add(classUri);
+						result.put("classes", list);
 					}
 					results.add(result);
 					if (log.isDebugEnabled()) log.debug(result.toString());
