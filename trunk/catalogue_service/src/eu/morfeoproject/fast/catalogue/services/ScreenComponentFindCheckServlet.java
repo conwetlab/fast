@@ -164,7 +164,6 @@ public class ScreenComponentFindCheckServlet extends GenericServlet {
 				// add results of 'find' to the list of backend services
 				List<URI> bsResults = getCatalogue().findScreenComponents(null, conList, all, 0, -1, tags, FGO.BackendService);
 				for (URI uri : bsResults) {
-					System.out.println(uri);
 					backendServices.add(getCatalogue().getScreenComponent(uri));
 				}
 				// query iServe for more web services
