@@ -1,0 +1,60 @@
+{
+    "id":"300",
+    "name":"FOAF example",
+    "code":"http://some-url.html",
+    "creator":"admin",
+    "description":{
+        "en-gb":"This is an example using a FOAF person."
+    },
+    "tags":[
+        {
+            "label":{
+                "en-gb":"FOAF"
+            }
+        }
+    ],
+    "homepage":"http://www.deri.ie/",
+    "icon":"http://some-url.png",
+    "label":{
+        "en-gb":"FOAF example"
+    },
+    "rights":"http://creativecommons.org/",
+    "screenshot":"http://some-url.png",
+    "version":"1.0",
+    "libraries":[
+        
+    ],
+    "actions":[
+        {
+            "name":"init",
+            "preconditions":[
+                
+            ],
+            "uses":[
+                
+            ]
+        },
+        {
+            "name":"showTable",
+            "preconditions":[
+                {
+                    "id":"list",
+                    "label":{
+                        "en-gb":"A FOAF person"
+                    },
+                    "pattern":"?person http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://xmlns.com/foaf/0.1/Person",
+                    "positive":"true"
+                }
+            ],
+            "uses":[
+                
+            ]
+        }
+    ],
+    "postconditions":[
+        
+    ],
+    "triggers":[
+        
+    ]
+}
