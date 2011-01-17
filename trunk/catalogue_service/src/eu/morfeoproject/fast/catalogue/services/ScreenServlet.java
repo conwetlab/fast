@@ -96,8 +96,6 @@ public class ScreenServlet extends GenericServlet {
 							response.setCharacterEncoding(TemplateManager.getDefaultEncoding());
 						if (TemplateManager.getLocale() != null)
 							response.setLocale(TemplateManager.getLocale());
-						Catalogue c = getCatalogue();
-						c.printStatements();
 						CollectionTemplate.process(getCatalogue().getAllScreens(), writer);
 					} else { // by default returns APPLICATION_JSON
 						response.setContentType(MediaType.APPLICATION_JSON);
