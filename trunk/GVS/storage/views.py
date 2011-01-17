@@ -58,6 +58,8 @@ class GadgetStorage(resource.Resource):
                               owner=metadata['owner'],
                               version=metadata['version'],
                               screenflow = gadgetData['screenflow'])
+
+
             storage.save()
 
 
@@ -80,7 +82,7 @@ class GadgetStorage(resource.Resource):
         except Exception, e:
             transaction.rollback()
             storage.delete()
-            return HttpResponseServerError(json_encode({'message':unicode(e)}), mimetype='application/json; charset=UTF-8')
+            return HttpResponseServerError(unicode(e), mimetype='text/plain; charset=UTF-8')
 
     def __completeGadgetData(self, request):
         if request.POST.has_key('gadget'):
@@ -94,8 +96,8 @@ class GadgetStorage(resource.Resource):
         #Gadget Data
         metadata['label'] = valueOrDefault(json, 'label', {'en-gb': 'FAST Gadget'})
         metadata['name'] = metadata['label']['en-gb']
-        metadata['shortname'] =  valueOrEmpty(json, 'shortname')
-        metadata['owner'] =  valueOrDefault(json, 'owner', 'Morfeo')
+        metadata['shortname'] =  valueOrDefault(json, 'shortname', 'FAST Gadget')
+        metadata['owner'] =  notEmptyValueOrDefault(json, 'owner', 'Morfeo')
         metadata['vendor'] =  valueOrEmpty(json, 'vendor')
         metadata['version'] = notEmptyValueOrDefault(json, 'version', '1.0')
         metadata['description'] = valueOrDefault(json, 'description', {'en-gb': ''})
