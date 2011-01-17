@@ -129,11 +129,14 @@ public class BuildingBlockTest {
 		Screen s1 = (Screen) TestUtils.buildBBFromFile(TestUtils.getCatalogue().getServerURL(), "screen", "data/json/screens/amazonSearchCode.json");
 		Screen s2 = (Screen) TestUtils.buildBBFromFile(TestUtils.getCatalogue().getServerURL(), "screen", "data/json/screens/amazonListCode.json");
 		Screen s3 = (Screen) TestUtils.buildBBFromFile(TestUtils.getCatalogue().getServerURL(), "screen", "data/json/screens/amazonProductCode.json");
+		URI copy1 = TestUtils.getCatalogue().createCopy(s1);
+		URI copy2 = TestUtils.getCatalogue().createCopy(s1);
+		URI copy3 = TestUtils.getCatalogue().createCopy(s1);
 		TestUtils.getCatalogue().addScreens(s1, s2, s3);
 		ScreenFlow sf1 = (ScreenFlow) TestUtils.buildBBFromFile(TestUtils.getCatalogue().getServerURL(), "screenflow", "data/json/screenflows/amazonSF1.json");
-		sf1.getBuildingBlockList().add(s1.getUri());
-		sf1.getBuildingBlockList().add(s2.getUri());
-		sf1.getBuildingBlockList().add(s3.getUri());
+		sf1.getBuildingBlockList().add(copy1);
+		sf1.getBuildingBlockList().add(copy2);
+		sf1.getBuildingBlockList().add(copy3);
 		TestUtils.getCatalogue().addScreenFlow(sf1);
 		ScreenFlow sf2 = TestUtils.getCatalogue().getScreenFlow(sf1.getUri());
 		assertEquals(sf1.getUri(), sf2.getUri());
