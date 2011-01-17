@@ -238,7 +238,7 @@ public class BuildingBlockRDF2GoBuilder {
 				if (predicate.equals(FGO.contains)) {
 					// FIXME: this is not the best way to do it, but in the model I cannot know which the type of the elements
 					String strObj = object.toString();
-					if (strObj.contains("/forms/") || strObj.contains("/operators/") || strObj.contains("/backendservices/")) {
+					if (strObj.contains("/forms/") || strObj.contains("/operators/") || strObj.contains("/services/")) {
 						screen.getBuildingBlocks().add(object.asURI());
 					} else if (strObj.contains("/pipes/")) {
 						screen.getPipes().add(retrievePipe(screen, object.asURI(), model));
