@@ -124,8 +124,7 @@ public class BuildingBlockRDF2GoBuilder {
 		if (bbUri == null) return null;
 		// fill the information about the resource
 		bb.setUri(bbUri);
-		String strUri = model.getContextURI().toString();
-		bb.setId(strUri.substring(strUri.lastIndexOf("/") + 1));
+		bb.setId(bbUri.toString().substring(bbUri.toString().lastIndexOf("/") + 1));
 		ClosableIterator<Statement> cIt = model.findStatements(bbUri, Variable.ANY, Variable.ANY);
 		if (!cIt.hasNext()) // the resource does not exist
 			return null;
@@ -177,11 +176,11 @@ public class BuildingBlockRDF2GoBuilder {
 					} else if (tagPredicate.equals(CTAG.taggingDate)) {
 						tagTaggingDate = DateFormatter.parseDateISO8601(tagObject.asDatatypeLiteral().getValue());
 					}
-					tag = BuildingBlockFactory.createTag(tagType);
-					tag.getLabels().putAll(tagLabels);
-					tag.setMeans(tagMeans);
-					tag.setTaggingDate(tagTaggingDate);
 				}
+				tag = BuildingBlockFactory.createTag(tagType);
+				tag.getLabels().putAll(tagLabels);
+				tag.setMeans(tagMeans);
+				tag.setTaggingDate(tagTaggingDate);
 				bb.getTags().add(tag);
 			} else if (predicate.equals(FOAF.homepage)) {
 				bb.setHomepage(object.asURI());
@@ -363,6 +362,7 @@ public class BuildingBlockRDF2GoBuilder {
 	 */
 	private static Condition retrieveCondition(URI conUri, Model model) {
 		Condition condition = BuildingBlockFactory.createCondition(conUri);
+		condition.setId(conUri.toString().substring(conUri.toString().lastIndexOf("/") + 1));
 		ClosableIterator<Statement> cIt = model.findStatements(conUri, Variable.ANY, Variable.ANY);
 		for ( ; cIt.hasNext(); ) {
 			Statement st = cIt.next();

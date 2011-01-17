@@ -166,14 +166,4 @@ public class BuildingBlockTest {
 		assertTrue(TestUtils.getCatalogue().createCopy(s1) != null);
 	}
 	
-	@Test
-	public void checkGraphUriNotNull() throws Exception {
-		Screen s1 = (Screen) TestUtils.buildBBFromFile(TestUtils.getCatalogue().getServerURL(), "screen", "data/json/screens/amazonProductCode.json");
-		Form f1 = (Form) TestUtils.buildBBFromFile(TestUtils.getCatalogue().getServerURL(), "form", "data/json/forms/amazonList.json");
-		TestUtils.getCatalogue().addScreen(s1);
-		TestUtils.getCatalogue().addForm(f1);
-		assertTrue(TestUtils.getCatalogue().getGraphForBuildingBlock(s1) != null);
-		assertTrue(TestUtils.getCatalogue().getGraphForBuildingBlock(f1) != null);
-	}
-	
 }

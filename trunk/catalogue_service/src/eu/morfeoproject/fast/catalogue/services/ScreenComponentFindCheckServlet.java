@@ -17,6 +17,7 @@ import org.json.JSONObject;
 import org.ontoware.rdf2go.model.node.URI;
 import org.ontoware.rdf2go.model.node.impl.URIImpl;
 
+import uk.ac.open.kmi.iserve.IServeResponse;
 import eu.morfeoproject.fast.catalogue.NotFoundException;
 import eu.morfeoproject.fast.catalogue.builder.BuildingBlockJSONBuilder;
 import eu.morfeoproject.fast.catalogue.model.Action;
@@ -64,7 +65,7 @@ public class ScreenComponentFindCheckServlet extends GenericServlet {
 			ArrayList<ScreenComponent> canvas = new ArrayList<ScreenComponent>();
 			JSONArray jsonCanvas = input.getJSONArray("canvas");
 			for (int i = 0; i < jsonCanvas.length(); i++) {
-				URI uri = new URIImpl(((JSONObject)jsonCanvas.get(i)).getString("uri"));
+				URI uri = new URIImpl(((JSONObject) jsonCanvas.get(i)).getString("uri"));
 				ScreenComponent sc = (ScreenComponent) getCatalogue().getBuildingBlock(uri);
 				if (sc == null) 
 					throw new NotFoundException("Resource "+uri+" does not exist.");
@@ -74,7 +75,7 @@ public class ScreenComponentFindCheckServlet extends GenericServlet {
 			ArrayList<ScreenComponent> forms = new ArrayList<ScreenComponent>();
 			JSONArray jsonForms = input.getJSONArray("forms");
 			for (int i = 0; i < jsonForms.length(); i++) {
-				URI uri = new URIImpl(((JSONObject)jsonForms.get(i)).getString("uri"));
+				URI uri = new URIImpl(jsonForms.getString(i));
 				ScreenComponent sc = (ScreenComponent) getCatalogue().getBuildingBlock(uri);
 				if (sc == null) 
 					throw new NotFoundException("Resource "+uri+" does not exist.");
@@ -84,7 +85,7 @@ public class ScreenComponentFindCheckServlet extends GenericServlet {
 			ArrayList<ScreenComponent> operators = new ArrayList<ScreenComponent>();
 			JSONArray jsonOperators = input.getJSONArray("operators");
 			for (int i = 0; i < jsonOperators.length(); i++) {
-				URI uri = new URIImpl(((JSONObject)jsonOperators.get(i)).getString("uri"));
+				URI uri = new URIImpl(jsonOperators.getString(i));
 				ScreenComponent sc = (ScreenComponent) getCatalogue().getBuildingBlock(uri);
 				if (sc == null) 
 					throw new NotFoundException("Resource "+uri+" does not exist.");
@@ -94,7 +95,7 @@ public class ScreenComponentFindCheckServlet extends GenericServlet {
 			ArrayList<ScreenComponent> backendServices = new ArrayList<ScreenComponent>();
 			JSONArray jsonBackendServices = input.getJSONArray("backendservices");
 			for (int i = 0; i < jsonBackendServices.length(); i++) {
-				URI uri = new URIImpl(((JSONObject)jsonBackendServices.get(i)).getString("uri"));
+				URI uri = new URIImpl(jsonBackendServices.getString(i));
 				ScreenComponent sc = (ScreenComponent) getCatalogue().getBuildingBlock(uri);
 				if (sc == null) 
 					throw new NotFoundException("Resource "+uri+" does not exist.");
@@ -133,13 +134,17 @@ public class ScreenComponentFindCheckServlet extends GenericServlet {
 			all.addAll(forms);
 			all.addAll(operators);
 			all.addAll(backendServices);
+			ArrayList<IServeResponse> iServeList = new ArrayList<IServeResponse>();
 			
 			// preconditions of the screen and all postconditions of all components
 			// are used to find new components
 			ArrayList<Condition> conList = new ArrayList<Condition>();
 	    	conList.addAll(preconditions);
-			for (ScreenComponent comp : all) {
-				conList.addAll(comp.getPostconditions());
+			for (ScreenComponent sc : all) {
+				for (Action action : sc.getActions()) {
+					conList.addAll(action.getPreconditions());
+				}
+				conList.addAll(sc.getPostconditions());
 			}
 	    	
 			// create the output
@@ -159,8 +164,11 @@ public class ScreenComponentFindCheckServlet extends GenericServlet {
 				// add results of 'find' to the list of backend services
 				List<URI> bsResults = getCatalogue().findScreenComponents(null, conList, all, 0, -1, tags, FGO.BackendService);
 				for (URI uri : bsResults) {
+					System.out.println(uri);
 					backendServices.add(getCatalogue().getScreenComponent(uri));
 				}
+				// query iServe for more web services
+				iServeList.addAll(getCatalogue().findIServeWS(conList));
 			}
 			
 			// extract pipes which are well defined (precondition and
@@ -185,37 +193,37 @@ public class ScreenComponentFindCheckServlet extends GenericServlet {
 			}
 			output.put("pipes", jsonPipes);
 
-			JSONArray canvasOut = new JSONArray();
+			JSONArray canvasArray = new JSONArray();
 			for (ScreenComponent sc : canvas) {
-				canvasOut.put(processComponent(canvas, sc, pipes, reachableElements));
+				canvasArray.put(processComponent(canvas, sc, pipes, reachableElements));
 			}
-			output.put("canvas", canvasOut);
+			output.put("canvas", canvasArray);
 
 			if (search) {
-				JSONArray formsOut = new JSONArray();
+				JSONArray formsArray = new JSONArray();
 				for (ScreenComponent sc : forms) {
-					formsOut.put(sc.getUri());
+					formsArray.put(sc.getUri());
 				}
-				output.put("forms", formsOut);
+				output.put("forms", formsArray);
 	
-				JSONArray operatorsOut = new JSONArray();
+				JSONArray operatorsArray = new JSONArray();
 				for (ScreenComponent sc : operators) {
-					operatorsOut.put(sc.getUri());
+					operatorsArray.put(sc.getUri());
 				}
-				output.put("operators", operatorsOut);
+				output.put("operators", operatorsArray);
 	
-				JSONArray servicesOut = new JSONArray();
+				JSONArray bsArray = new JSONArray();
 				for (ScreenComponent sc : backendServices) {
-					servicesOut.put(sc.getUri());
+					bsArray.put(sc.getUri());
 				}
-				output.put("backendservices", servicesOut);
+				output.put("backendservices", bsArray);
 			}
 			
-			JSONArray postOut = new JSONArray();
+			JSONArray postArray = new JSONArray();
 			for (Condition con : postconditions) {
-				postOut.put(processPostcondition(canvas, con, pipes, reachableElements));
+				postArray.put(processPostcondition(canvas, con, pipes, reachableElements));
 			}
-			output.put("postconditions", postOut);
+			output.put("postconditions", postArray);
 		
 			if (selectedItem != null) {
 				JSONArray connectionsOut = new JSONArray();
@@ -224,6 +232,12 @@ public class ScreenComponentFindCheckServlet extends GenericServlet {
 					connectionsOut.put(pipe.toJSON());
 				output.put("connections", connectionsOut);
 			}
+			
+			JSONArray iServeArray = new JSONArray();
+			for (IServeResponse iServeResponse : iServeList) {
+				iServeArray.put(iServeResponse.toJSON());
+			}
+			output.put("iserve", iServeArray);
 			
 			writer.print(output.toString(2));
 			response.setContentType(MediaType.APPLICATION_JSON);

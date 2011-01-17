@@ -1,0 +1,21 @@
+{
+	"domainContext": {
+		"tags": [],
+		"user": null
+	},
+	"canvas": [
+		{ "uri": "<form1-copy>" },
+		{ "uri": "<service1-copy>" }
+	],
+	"forms": [
+		"<form1>"
+	],
+	"operators": [],
+	"backendservices": [
+		"<service1>"
+	],
+	"preconditions": [],
+	"postconditions": [],
+	"pipes": [],
+	"selectedItem": "<service1-copy>"
+}

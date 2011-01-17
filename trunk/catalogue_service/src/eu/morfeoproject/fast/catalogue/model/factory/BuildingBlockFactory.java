@@ -159,12 +159,10 @@ public class BuildingBlockFactory {
 	}
 	
 	public static CTag createTag(URI tagType) {
-		if (tagType.equals(CTAG.AuthorTag))
-			return new AuthorCTag();
-		else if (tagType.equals(CTAG.AutoTag))
-			return new AutoCTag();
-		else if (tagType.equals(CTAG.ReaderTag))
-			return new ReaderCTag();
+		if (tagType == null) 						return new CTag();
+		if (tagType.equals(CTAG.AuthorTag))			return new AuthorCTag();
+		else if (tagType.equals(CTAG.AutoTag))		return new AutoCTag();
+		else if (tagType.equals(CTAG.ReaderTag))	return new ReaderCTag();
 		return new CTag();
 	}
 

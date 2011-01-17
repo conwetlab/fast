@@ -83,6 +83,10 @@ public abstract class TripleStore {
 		persistentModelSet.close();
 	}
 
+	public void addModel(Model model) {
+		persistentModelSet.addModel(model);
+	}
+
 	public void addModel(Model model, URI uriModel) {
     	if (uriModel == null)
     		throw new IllegalArgumentException("uriModel is null");
