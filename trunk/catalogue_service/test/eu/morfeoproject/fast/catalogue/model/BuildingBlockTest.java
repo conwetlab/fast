@@ -206,7 +206,6 @@ public class BuildingBlockTest {
 		TestUtils.getCatalogue().addBackendServices(bs1, bs2);
 		TestUtils.getCatalogue().createCopy(bs1);
 		TestUtils.getCatalogue().createCopy(bs2);
-		TestUtils.getCatalogue().printStatements();
 		assertEquals(2, TestUtils.getCatalogue().getAllBackendServices().size());
 	}
 	
