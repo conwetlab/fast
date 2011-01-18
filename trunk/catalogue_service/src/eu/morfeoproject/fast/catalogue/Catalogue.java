@@ -1741,14 +1741,28 @@ public class Catalogue {
 
 	/**
 	 * 
-	 * @param uri
+	 * @param goal
 	 * @param bbList
 	 * @return
 	 */
-	public List<Plan> searchPlans(URI uri, List<BuildingBlock> bbList) {
+	public List<Plan> searchPlans(URI goal, List<BuildingBlock> bbList) {
 		List<Plan> planList = new ArrayList<Plan>();
 		if (planner != null) {
-			planList.addAll(planner.searchPlans(uri, bbList));
+			planList.addAll(planner.searchPlans(goal, bbList));
+		}
+		return planList;
+	}
+	
+	/**
+	 * 
+	 * @param goalList
+	 * @param bbList
+	 * @return
+	 */
+	public List<Plan> searchPlans(List<URI> goalList, List<BuildingBlock> bbList) {
+		List<Plan> planList = new ArrayList<Plan>();
+		if (planner != null) {
+			planList.addAll(planner.searchPlans(goalList, bbList));
 		}
 		return planList;
 	}

@@ -1,6 +1,7 @@
 package eu.morfeoproject.fast.catalogue.planner;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -25,20 +26,20 @@ public abstract class Planner extends Cacheable<List<Plan>> {
 	
 	/**
 	 * Creates a list of plans which 
-	 * @param uri
+	 * @param goal
 	 * @param resources
 	 * @return
 	 */
-	public List<Plan> searchPlans(URI uri, List<BuildingBlock> resources) {
+	public List<Plan> searchPlans(URI goal, List<BuildingBlock> resources) {
 		LinkedList<URI> uriList = new LinkedList<URI>();
 		for (BuildingBlock resource : resources)
 			uriList.add(resource.getUri());
 		
 		LinkedList<Plan> planList = new LinkedList<Plan>();
-		List<Plan> cacheList = cache.get(uri.toString());
+		List<Plan> cacheList = cache.get(goal.toString());
 		if (cacheList == null) {
-			List<Plan> searchList = searchPlans(uri);
-			cache.put(uri.toString(), searchList);
+			List<Plan> searchList = searchPlans(goal);
+			cache.put(goal.toString(), searchList);
 			planList.addAll(searchList);
 		} else {
 			planList.addAll(cacheList);
@@ -68,6 +69,61 @@ public abstract class Planner extends Cacheable<List<Plan>> {
 		}
 		
 		return newList;
+	}
+	
+	public List<Plan> searchPlans(List<URI> goalList, List<BuildingBlock> resources) {
+		HashMap<URI, List<Plan>> plansByGoal = new HashMap<URI, List<Plan>>();
+		List<Plan> combinedPlans;
+
+		for (URI goal : goalList) plansByGoal.put(goal, searchPlans(goal, resources));
+		combinedPlans = new LinkedList<Plan>();
+		for (URI goal : goalList) {
+			combinedPlans = combine(combinedPlans, plansByGoal.get(goal));
+		}
+		
+		return combinedPlans;
+	}
+	
+	
+	
+	/**
+	 * Creates a list of plans as a result of the combination of two lists.
+	 * Given a list of plans A: [[1, 2], [3, 4]] and a list of plans B: [[5, 6], [7, 8]]
+	 * it returns a list contaning 4 plans: [[1, 2, 5, 6], [1, 2, 7, 8], [3, 4, 5, 6], [3, 4, 7, 8]]
+	 * @param listA
+	 * @param listB
+	 * @return
+	 */
+	public List<Plan> combine(List<Plan> listA, List<Plan> listB) {
+		LinkedList<Plan> planList = new LinkedList<Plan>();
+
+		if (listA.isEmpty() && listB.isEmpty()) return planList;
+		
+		if (listA.isEmpty()) {
+			for (Plan pB : listB) {
+				Plan plan = new Plan();
+				plan.getUriList().addAll(pB.getUriList());
+				planList.add(plan);
+			}
+		} else if (listB.isEmpty()) {
+			for (Plan pA : listA) {
+				Plan plan = new Plan();
+				plan.getUriList().addAll(pA.getUriList());
+				planList.add(plan);
+			}
+			
+		} else {
+			for (Plan pA : listA) {
+				for (Plan pB : listB) {
+					Plan plan = new Plan();
+					plan.getUriList().addAll(pA.getUriList());
+					plan.merge(pB);
+					planList.add(plan);
+				}
+			}
+		}
+		
+		return planList;
 	}
 	
 	/**

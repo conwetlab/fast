@@ -1,0 +1,12 @@
+{
+	"domainContext": {
+		"tags": [],
+		"user": null
+	},
+	"canvas": [
+		{ "uri": "<screen5-copy>" }
+	],
+	"elements": [
+	],
+	"criterion": "reachability"
+}

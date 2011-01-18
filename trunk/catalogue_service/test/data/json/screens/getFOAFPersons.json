@@ -1,0 +1,29 @@
+{
+    "id":"73",
+    "creator":"admin",
+    "description":{
+        "en-gb":"This screen is used to test the import missing ontologies mechanism, using concepts from the wine ontology: http://www.w3.org/TR/2003/PR-owl-guide-20031215/wine."
+    },
+    "tags":[],
+    "homepage":"http://www.w3.org/TR/2003/PR-owl-guide-20031215/wine",
+    "icon":"http://demo.fast.morfeo-project.org/gvsdata/images/catalogue/amazonList.png",
+    "label":{
+        "en-gb":"Dummy example using FOAF person"
+    },
+    "rights":"http://creativecommons.org/",
+    "screenshot":"http://www.w3.org/TR/2003/PR-owl-guide-20031215/wine.png",
+    "version":"1.0",
+    "code":"http://www.w3.org/TR/2003/PR-owl-guide-20031215/wine.code",
+    "preconditions":[
+    ],
+    "postconditions":[
+        {
+            "id":"person",
+            "label":{
+                "en-gb":"A FOAF person"
+            },
+            "pattern":"?maker http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://xmlns.com/foaf/0.1/Person",
+            "positive":"true"
+        }
+    ]
+}

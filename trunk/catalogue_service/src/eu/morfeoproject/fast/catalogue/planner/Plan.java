@@ -29,6 +29,15 @@ public class Plan {
 		return newPlan;
 	}
 	
+	public void merge(Plan other) {
+		for (URI uri : other.getUriList()) {
+			// inserts elements from 2nd list avoiding duplicates
+			if (!this.getUriList().contains(uri)) {
+				this.getUriList().add(uri);
+			}
+		}
+	}
+	
 	public String toString() {
 		StringBuffer sb = new StringBuffer();
 		for (URI uri : getUriList())
@@ -36,5 +45,5 @@ public class Plan {
 		sb.delete(sb.length()-4, sb.length()-1);
 		return sb.toString();
 	}
-
+	
 }

@@ -16,7 +16,5 @@ public class MemoryPlanner extends Planner {
 		// stored permanently and cannot be recovered.
 		seed();
 	}
-	
-
 
 }
