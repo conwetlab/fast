@@ -1,0 +1,53 @@
+{
+	"domainContext": {
+		"tags": [],
+		"user": null
+	},
+	"canvas": [
+		{ "uri": "<form1-copy>" },
+		{ "uri": "<service1-copy>" },
+		{ "uri": "<service300-copy>" }
+	],
+	"forms": [
+		"<form1>"
+	],
+	"operators": [],
+	"backendservices": [
+		"<service1>", "<service300>"
+	],
+	"preconditions": [
+      {
+        "id": "c1",
+        "label": {"en-gb": "A search criteria"},
+        "pattern": "?F http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#SearchCriteria",
+        "positive": true,
+      }
+	],
+	"postconditions": [],
+	"pipes": [
+      {
+        "from": {
+          "buildingblock": null,
+          "condition": "c1"
+        },
+        "to": {
+          "action": "search",
+          "buildingblock": "<service1-copy>",
+          "condition": "filter"
+        }
+      },
+      {
+        "from": {
+          "buildingblock": "<service1-copy>",
+          "condition": "list"
+        },
+        "to": {
+          "action": "showTable",
+          "buildingblock": "<form1-copy>",
+          "condition": "list"
+        }
+      }
+	],
+	"selectedItem": "<service1-copy>",
+	"search": false
+}
