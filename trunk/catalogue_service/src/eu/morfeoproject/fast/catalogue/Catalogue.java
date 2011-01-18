@@ -862,6 +862,8 @@ public class Catalogue {
 				model.addModel(getModelForURI(object.asURI()));
 			} else if (predicate.equals(CTAG.tagged)) {
 				model.addModel(getModelForBlankNode(object.asBlankNode()));
+			} else if (predicate.equals(FGO.contains)) {
+				model.addModel(getModelForURI(object.asURI()));
 			}
 		}
 		return model;
