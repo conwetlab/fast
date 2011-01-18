@@ -433,7 +433,6 @@ public class Catalogue {
 		queryString = queryString.concat(" OFFSET " + offset);
 
 		if (log.isInfoEnabled()) log.info(queryString);
-		System.out.println(queryString);
 		QueryResultTable qrt = tripleStore.sparqlSelect(queryString);
 		ClosableIterator<QueryRow> itResults = qrt.iterator();
 		while (itResults.hasNext()) {
