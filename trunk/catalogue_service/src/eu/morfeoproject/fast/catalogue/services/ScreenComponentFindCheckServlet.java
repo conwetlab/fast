@@ -72,34 +72,34 @@ public class ScreenComponentFindCheckServlet extends GenericServlet {
 				canvas.add(sc);
 			}
 			// parses the list of forms
-			ArrayList<ScreenComponent> forms = new ArrayList<ScreenComponent>();
+			ArrayList<ScreenComponent> inForms = new ArrayList<ScreenComponent>();
 			JSONArray jsonForms = input.getJSONArray("forms");
 			for (int i = 0; i < jsonForms.length(); i++) {
 				URI uri = new URIImpl(jsonForms.getString(i));
 				ScreenComponent sc = (ScreenComponent) getCatalogue().getBuildingBlock(uri);
 				if (sc == null) 
 					throw new NotFoundException("Resource "+uri+" does not exist.");
-				forms.add(sc); 
+				inForms.add(sc); 
 			}
 			// parses the list of operators
-			ArrayList<ScreenComponent> operators = new ArrayList<ScreenComponent>();
+			ArrayList<ScreenComponent> inOperators = new ArrayList<ScreenComponent>();
 			JSONArray jsonOperators = input.getJSONArray("operators");
 			for (int i = 0; i < jsonOperators.length(); i++) {
 				URI uri = new URIImpl(jsonOperators.getString(i));
 				ScreenComponent sc = (ScreenComponent) getCatalogue().getBuildingBlock(uri);
 				if (sc == null) 
 					throw new NotFoundException("Resource "+uri+" does not exist.");
-				operators.add(sc); 
+				inOperators.add(sc); 
 			}
 			// parses the list of backend services
-			ArrayList<ScreenComponent> backendServices = new ArrayList<ScreenComponent>();
+			ArrayList<ScreenComponent> inBackendServices = new ArrayList<ScreenComponent>();
 			JSONArray jsonBackendServices = input.getJSONArray("backendservices");
 			for (int i = 0; i < jsonBackendServices.length(); i++) {
 				URI uri = new URIImpl(jsonBackendServices.getString(i));
 				ScreenComponent sc = (ScreenComponent) getCatalogue().getBuildingBlock(uri);
 				if (sc == null) 
 					throw new NotFoundException("Resource "+uri+" does not exist.");
-				backendServices.add(sc); 
+				inBackendServices.add(sc); 
 			}
 			// parses the domain context
 			JSONObject jsonDomainContext = input.getJSONObject("domainContext");
@@ -131,40 +131,54 @@ public class ScreenComponentFindCheckServlet extends GenericServlet {
 			//-----------------------------
 			ArrayList<ScreenComponent> all = new ArrayList<ScreenComponent>();
 			all.addAll(canvas);
-			all.addAll(forms);
-			all.addAll(operators);
-			all.addAll(backendServices);
+			all.addAll(inForms);
+			all.addAll(inOperators);
+			all.addAll(inBackendServices);
+			ArrayList<ScreenComponent> outForms = new ArrayList<ScreenComponent>();
+			ArrayList<ScreenComponent> outOperators = new ArrayList<ScreenComponent>();
+			ArrayList<ScreenComponent> outBackendServices = new ArrayList<ScreenComponent>();
 			ArrayList<IServeResponse> iServeList = new ArrayList<IServeResponse>();
 			
-			// preconditions of the screen and all postconditions of all components
-			// are used to find new components
-			ArrayList<Condition> conList = new ArrayList<Condition>();
-	    	conList.addAll(preconditions);
-			for (ScreenComponent sc : all) {
-				for (Action action : sc.getActions()) {
-					conList.addAll(action.getPreconditions());
-				}
-				conList.addAll(sc.getPostconditions());
-			}
-	    	
-			// create the output
-			JSONObject output = new JSONObject();
-			
-			// add results of 'find' to the list of forms
 			if (search) {
+				// prepares a list of conditions to use in the find method
+				// if a item has been selected, only its conditions will be used, otherwise
+				// conditions from all the elements from the canvas will be gathered
+				ArrayList<Condition> conList = new ArrayList<Condition>();
+				if (selectedItem != null) {
+					if (selectedItem instanceof Condition) {
+						conList.add((Condition) selectedItem);
+					} else if (selectedItem instanceof ScreenComponent) {
+						ScreenComponent sc = (ScreenComponent) selectedItem;
+						for (Action action : sc.getActions()) {
+							conList.addAll(action.getPreconditions());
+						}
+						conList.addAll(sc.getPostconditions());
+					}
+				} else {
+			    	conList.addAll(preconditions);
+			    	conList.addAll(postconditions);
+					for (ScreenComponent sc : all) {
+						for (Action action : sc.getActions()) {
+							conList.addAll(action.getPreconditions());
+						}
+						conList.addAll(sc.getPostconditions());
+					}
+				}
+
+				// add results of 'find' to the list of forms
 				List<URI> formResults = getCatalogue().findScreenComponents(null, conList, all, 0, -1, tags, FGO.Form);
 				for (URI uri : formResults) {
-					forms.add(getCatalogue().getScreenComponent(uri));
+					outForms.add(getCatalogue().getScreenComponent(uri));
 				}
 				// add results of 'find' to the list of operators
 				List<URI> opResults = getCatalogue().findScreenComponents(null, conList, all, 0, -1, tags, FGO.Operator);
 				for (URI uri : opResults) {
-					operators.add(getCatalogue().getScreenComponent(uri));
+					outOperators.add(getCatalogue().getScreenComponent(uri));
 				}
 				// add results of 'find' to the list of backend services
 				List<URI> bsResults = getCatalogue().findScreenComponents(null, conList, all, 0, -1, tags, FGO.BackendService);
 				for (URI uri : bsResults) {
-					backendServices.add(getCatalogue().getScreenComponent(uri));
+					outBackendServices.add(getCatalogue().getScreenComponent(uri));
 				}
 				// query iServe for more web services
 				iServeList.addAll(getCatalogue().findIServeWS(conList));
@@ -181,6 +195,9 @@ public class ScreenComponentFindCheckServlet extends GenericServlet {
 			// check if elements in the canvas + pre/postconditions are reachable
 			List<Object> reachableElements = new ArrayList<Object>();
 			reachableElements.addAll(getReachableElements(canvas, preconditions, postconditions, correctPipeList));
+			
+			// create the JSON output
+			JSONObject output = new JSONObject();
 			
 			// check if the pipes are well defined
 			JSONArray jsonPipes = new JSONArray();
@@ -200,19 +217,19 @@ public class ScreenComponentFindCheckServlet extends GenericServlet {
 
 			if (search) {
 				JSONArray formsArray = new JSONArray();
-				for (ScreenComponent sc : forms) {
+				for (ScreenComponent sc : outForms) {
 					formsArray.put(sc.getUri());
 				}
 				output.put("forms", formsArray);
 	
 				JSONArray operatorsArray = new JSONArray();
-				for (ScreenComponent sc : operators) {
+				for (ScreenComponent sc : outOperators) {
 					operatorsArray.put(sc.getUri());
 				}
 				output.put("operators", operatorsArray);
 	
 				JSONArray bsArray = new JSONArray();
-				for (ScreenComponent sc : backendServices) {
+				for (ScreenComponent sc : outBackendServices) {
 					bsArray.put(sc.getUri());
 				}
 				output.put("backendservices", bsArray);
@@ -252,8 +269,7 @@ public class ScreenComponentFindCheckServlet extends GenericServlet {
 	
 	private Condition getConditionById(List<Condition> conditions, String id) {
 		for (Condition condition : conditions) {
-			if (condition.getId() != null 
-					&& condition.getId().equals(id)) {
+			if (condition.getId() != null && condition.getId().equals(id)) {
 				return condition;
 			}
 		}
