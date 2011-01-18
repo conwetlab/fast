@@ -1,6 +1,5 @@
 {
     "id":"1",
-    "name":"Amazon Search Service",
     "code":"http://demo.fast.morfeo-project.org/gvsdata/resources/amazonSearchService.src.js",
     "creationDate":null,
     "creator":"admin",
