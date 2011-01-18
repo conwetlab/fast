@@ -129,10 +129,10 @@ public class BuildingBlockTest {
 		Screen s1 = (Screen) TestUtils.buildBBFromFile(TestUtils.getCatalogue().getServerURL(), "screen", "data/json/screens/amazonSearchCode.json");
 		Screen s2 = (Screen) TestUtils.buildBBFromFile(TestUtils.getCatalogue().getServerURL(), "screen", "data/json/screens/amazonListCode.json");
 		Screen s3 = (Screen) TestUtils.buildBBFromFile(TestUtils.getCatalogue().getServerURL(), "screen", "data/json/screens/amazonProductCode.json");
+		TestUtils.getCatalogue().addScreens(s1, s2, s3);
 		URI copy1 = TestUtils.getCatalogue().createCopy(s1);
 		URI copy2 = TestUtils.getCatalogue().createCopy(s1);
 		URI copy3 = TestUtils.getCatalogue().createCopy(s1);
-		TestUtils.getCatalogue().addScreens(s1, s2, s3);
 		ScreenFlow sf1 = (ScreenFlow) TestUtils.buildBBFromFile(TestUtils.getCatalogue().getServerURL(), "screenflow", "data/json/screenflows/amazonSF1.json");
 		sf1.getBuildingBlockList().add(copy1);
 		sf1.getBuildingBlockList().add(copy2);
@@ -167,6 +167,47 @@ public class BuildingBlockTest {
 		TestUtils.getCatalogue().addScreen(s1);
 		assertTrue(TestUtils.getCatalogue().createCopy(f1) != null);
 		assertTrue(TestUtils.getCatalogue().createCopy(s1) != null);
+	}
+	
+	@Test
+	public void getAllScreens() throws Exception {
+		Screen s1 = (Screen) TestUtils.buildBBFromFile(TestUtils.getCatalogue().getServerURL(), "screen", "data/json/screens/amazonSearchCode.json");
+		Screen s2 = (Screen) TestUtils.buildBBFromFile(TestUtils.getCatalogue().getServerURL(), "screen", "data/json/screens/amazonListCode.json");
+		Screen s3 = (Screen) TestUtils.buildBBFromFile(TestUtils.getCatalogue().getServerURL(), "screen", "data/json/screens/amazonProductCode.json");
+		TestUtils.getCatalogue().addScreens(s1, s2, s3);
+		TestUtils.getCatalogue().createCopy(s1);
+		TestUtils.getCatalogue().createCopy(s1);
+		TestUtils.getCatalogue().createCopy(s1);
+		assertEquals(3, TestUtils.getCatalogue().getAllScreens().size());
+	}
+	
+	@Test
+	public void getAllForms() throws Exception {
+		Form f1 = (Form) TestUtils.buildBBFromFile(TestUtils.getCatalogue().getServerURL(), "form", "data/json/forms/amazonList.json");
+		Form f2 = (Form) TestUtils.buildBBFromFile(TestUtils.getCatalogue().getServerURL(), "form", "data/json/forms/foafExample.json");
+		TestUtils.getCatalogue().addForms(f1, f2);
+		TestUtils.getCatalogue().createCopy(f1);
+		TestUtils.getCatalogue().createCopy(f2);
+		assertEquals(2, TestUtils.getCatalogue().getAllForms().size());
+	}
+	
+	@Test
+	public void getAllOperators() throws Exception {
+		Operator o1 = (Operator) TestUtils.buildBBFromFile(TestUtils.getCatalogue().getServerURL(), "operator", "data/json/operators/amazonEbayFilter.json");
+		TestUtils.getCatalogue().addOperator(o1);
+		TestUtils.getCatalogue().createCopy(o1);
+		assertEquals(1, TestUtils.getCatalogue().getAllOperators().size());
+	}
+	
+	@Test
+	public void getAllBackendServices() throws Exception {
+		BackendService bs1 = (BackendService) TestUtils.buildBBFromFile(TestUtils.getCatalogue().getServerURL(), "backendservice", "data/json/backendservices/amazonLookupService.json");
+		BackendService bs2 = (BackendService) TestUtils.buildBBFromFile(TestUtils.getCatalogue().getServerURL(), "backendservice", "data/json/backendservices/amazonSearchService.json");
+		TestUtils.getCatalogue().addBackendServices(bs1, bs2);
+		TestUtils.getCatalogue().createCopy(bs1);
+		TestUtils.getCatalogue().createCopy(bs2);
+		TestUtils.getCatalogue().printStatements();
+		assertEquals(2, TestUtils.getCatalogue().getAllBackendServices().size());
 	}
 	
 }

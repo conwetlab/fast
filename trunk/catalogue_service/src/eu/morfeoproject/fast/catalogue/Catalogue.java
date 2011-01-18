@@ -34,7 +34,6 @@ import org.ontoware.rdf2go.model.node.Resource;
 import org.ontoware.rdf2go.model.node.URI;
 import org.ontoware.rdf2go.model.node.UriOrVariable;
 import org.ontoware.rdf2go.model.node.Variable;
-import org.ontoware.rdf2go.model.node.impl.URIImpl;
 import org.ontoware.rdf2go.vocabulary.OWL;
 import org.ontoware.rdf2go.vocabulary.RDF;
 import org.ontoware.rdf2go.vocabulary.RDFS;
@@ -92,6 +91,8 @@ public class Catalogue {
 	private TripleStore tripleStore;
 	private Planner planner;
 	private String environment;
+	private URI templatesGraph;
+	private URI copiesGraph;
 
 	public Catalogue(CatalogueConfiguration conf) {
 		this(conf, "default");
@@ -122,6 +123,10 @@ public class Catalogue {
 				new LocalTripleStore(storageDir, indexes);
 		tripleStore.open();
 
+		// creates the URIs for the templates/copies graphs
+		templatesGraph = tripleStore.createURI(serverURL+"/templates");
+		copiesGraph = tripleStore.createURI(serverURL+"/copies");
+		
 		// creates the ontology manager
 		ontologyManager = new OntologyManager(getAllOntologies());
 
@@ -271,8 +276,8 @@ public class Catalogue {
 			throws ClassCastException, ModelRuntimeException {
 		ArrayList<URI> results = new ArrayList<URI>();
 
-		String queryString = "SELECT DISTINCT ?bb " 
-			+ " WHERE { { ?bb "	+ RDF.type.toSPARQL() + " " + typeBuildingBlock.toSPARQL() + " . ";
+		String queryString = "SELECT DISTINCT ?bb"
+			+ " WHERE { { GRAPH " + templatesGraph.toSPARQL() + " { ?bb " + RDF.type.toSPARQL() + " " + typeBuildingBlock.toSPARQL() + " } . ";
 
 		// doesn't include the building blocks where the postconditions were
 		// taken from
@@ -373,8 +378,8 @@ public class Catalogue {
 		ArrayList<URI> results = new ArrayList<URI>();
 		ArrayList<Condition> unCon = getUnsatisfiedPreconditions(bbList, plugin, subsume);
 
-		String queryString = "SELECT DISTINCT ?bb "
-			+ "WHERE { { ?bb " + RDF.type.toSPARQL() + " " + FGO.Screen.toSPARQL() + " . ";
+		String queryString = "SELECT DISTINCT ?bb"
+			+ " WHERE { { GRAPH " + templatesGraph.toSPARQL() + " { ?bb " + RDF.type.toSPARQL() + " " + FGO.Screen.toSPARQL() + " } . ";
 
 		// ///*** LOOK FOR SCREENS ***/////
 		for (BuildingBlock r : bbList)
@@ -428,6 +433,7 @@ public class Catalogue {
 		queryString = queryString.concat(" OFFSET " + offset);
 
 		if (log.isInfoEnabled()) log.info(queryString);
+		System.out.println(queryString);
 		QueryResultTable qrt = tripleStore.sparqlSelect(queryString);
 		ClosableIterator<QueryRow> itResults = qrt.iterator();
 		while (itResults.hasNext()) {
@@ -972,8 +978,8 @@ public class Catalogue {
 		URI sfUri = sf.getUri();
 		try {
 			Model model = sf.toRDF2GoModel();
-			tripleStore.addModel(model);
-			generateConditionsStatements(model, null);
+			tripleStore.addModel(model, templatesGraph);
+			generateConditionsStatements(model, templatesGraph);
 			model.close();
 		} catch (Exception e) {
 			log.error("Error while saving screen-flow " + sfUri, e);
@@ -1052,8 +1058,8 @@ public class Catalogue {
 		URI sUri = screen.getUri();
 		try {
 			Model model = screen.toRDF2GoModel();
-			tripleStore.addModel(model);
-			generateConditionsStatements(model, null);
+			tripleStore.addModel(model, templatesGraph);
+			generateConditionsStatements(model, templatesGraph);
 			model.close();
 		} catch (Exception e) {
 			log.error("Error while saving screen " + sUri, e);
@@ -1085,8 +1091,7 @@ public class Catalogue {
 		if (planner != null) planner.remove(screenUri);
 	}
 
-	public URI createCopy(URI bbUri) throws NotFoundException,
-			BuildingBlockException {
+	public URI createCopy(URI bbUri) throws NotFoundException, BuildingBlockException {
 		return createCopy(getBuildingBlock(bbUri));
 	}
 
@@ -1110,14 +1115,14 @@ public class Catalogue {
 			Statement stmt = it.next();
 			if (stmt.getPredicate().equals(DC.date)) {
 				// overrides the creation date
-				tripleStore.addStatement(copyUri, DC.date,
+				tripleStore.addStatement(copiesGraph, copyUri, DC.date,
 						tripleStore.createDatatypeLiteral(DateFormatter.formatDateISO8601(new Date()), XSD._date));
 			} else {
-				tripleStore.addStatement(stmt);
+				tripleStore.addStatement(copiesGraph, stmt.getSubject(), stmt.getPredicate(), stmt.getObject());
 			}
 		}
-		tripleStore.addStatement(copyUri, FGO.hasTemplate, bb.getUri());
-		tripleStore.addStatement(bb.getUri(), FGO.hasCopy, copyUri);
+		tripleStore.addStatement(copiesGraph, copyUri, FGO.hasTemplate, bb.getUri());
+		tripleStore.addStatement(templatesGraph, bb.getUri(), FGO.hasCopy, copyUri);
 
 		return copyUri;
 	}
@@ -1149,8 +1154,8 @@ public class Catalogue {
 		URI uri = preOrPost.getUri();
 		try {
 			Model model = preOrPost.toRDF2GoModel();
-			tripleStore.addModel(model);
-			generateConditionsStatements(model, null);
+			tripleStore.addModel(model, templatesGraph);
+			generateConditionsStatements(model, templatesGraph);
 			model.close();
 		} catch (Exception e) {
 			log.error("Error while saving pre/postcondition " + uri, e);
@@ -1205,8 +1210,8 @@ public class Catalogue {
 		URI scUri = sc.getUri();
 		try {
 			Model model = sc.toRDF2GoModel();
-			tripleStore.addModel(model);
-			generateConditionsStatements(model, null);
+			tripleStore.addModel(model, templatesGraph);
+			generateConditionsStatements(model, templatesGraph);
 			model.close();
 		} catch (Exception e) {
 			log.error("Error while saving screen component " + scUri, e);
@@ -1245,6 +1250,12 @@ public class Catalogue {
 		}
 	}
 
+	public void addForms(Form... forms)
+	throws DuplicatedException, OntologyInvalidException,
+			InvalidBuildingBlockTypeException, BuildingBlockException {
+		for (Form form : forms) addForm(form);
+	}
+
 	public void addForm(Form fe)
 	throws DuplicatedException, OntologyInvalidException,
 			InvalidBuildingBlockTypeException, BuildingBlockException {
@@ -1261,6 +1272,12 @@ public class Catalogue {
 		removeBuildingBlock(formUri);
 	}
 
+	public void addOperators(Operator... operators)
+	throws DuplicatedException, OntologyInvalidException,
+			InvalidBuildingBlockTypeException, BuildingBlockException {
+		for (Operator operator : operators) addOperator(operator);
+	}
+
 	public void addOperator(Operator op)
 	throws DuplicatedException, OntologyInvalidException,
 			InvalidBuildingBlockTypeException, BuildingBlockException {
@@ -1274,6 +1291,12 @@ public class Catalogue {
 
 	public void removeOperator(URI opUri) throws NotFoundException {
 		removeBuildingBlock(opUri);
+	}
+
+	public void addBackendServices(BackendService... backendservices)
+	throws DuplicatedException, OntologyInvalidException,
+			InvalidBuildingBlockTypeException, BuildingBlockException {
+		for (BackendService bs : backendservices) addBackendService(bs);
 	}
 
 	public void addBackendService(BackendService bs)
@@ -1294,7 +1317,7 @@ public class Catalogue {
 
 	public Collection<ScreenFlow> getAllScreenFlows() {
 		LinkedList<ScreenFlow> results = new LinkedList<ScreenFlow>();
-		ClosableIterator<Statement> it = tripleStore.findStatements(Variable.ANY, RDF.type, FGO.ScreenFlow);
+		ClosableIterator<Statement> it = tripleStore.findStatements(templatesGraph, Variable.ANY, RDF.type, FGO.ScreenFlow);
 		while (it.hasNext())
 			try {
 				results.add(getScreenFlow(it.next().getSubject().asURI()));
@@ -1307,7 +1330,7 @@ public class Catalogue {
 
 	public Collection<Screen> getAllScreens() {
 		LinkedList<Screen> results = new LinkedList<Screen>();
-		ClosableIterator<Statement> it = tripleStore.findStatements(Variable.ANY, RDF.type, FGO.Screen);
+		ClosableIterator<Statement> it = tripleStore.findStatements(templatesGraph, Variable.ANY, RDF.type, FGO.Screen);
 		while (it.hasNext()) {
 			try {
 				results.add(getScreen(it.next().getSubject().asURI()));
@@ -1321,7 +1344,7 @@ public class Catalogue {
 
 	public Collection<Form> getAllForms() {
 		LinkedList<Form> results = new LinkedList<Form>();
-		ClosableIterator<Statement> it = tripleStore.findStatements(Variable.ANY, RDF.type, FGO.Form);
+		ClosableIterator<Statement> it = tripleStore.findStatements(templatesGraph, Variable.ANY, RDF.type, FGO.Form);
 		while (it.hasNext()) {
 			try {
 				results.add(getForm(it.next().getSubject().asURI()));
@@ -1335,7 +1358,7 @@ public class Catalogue {
 
 	public Collection<Operator> getAllOperators() {
 		LinkedList<Operator> results = new LinkedList<Operator>();
-		ClosableIterator<Statement> it = tripleStore.findStatements(Variable.ANY, RDF.type, FGO.Operator);
+		ClosableIterator<Statement> it = tripleStore.findStatements(templatesGraph, Variable.ANY, RDF.type, FGO.Operator);
 		while (it.hasNext()) {
 			try {
 				results.add(getOperator(it.next().getSubject().asURI()));
@@ -1349,7 +1372,7 @@ public class Catalogue {
 
 	public Collection<BackendService> getAllBackendServices() {
 		LinkedList<BackendService> results = new LinkedList<BackendService>();
-		ClosableIterator<Statement> it = tripleStore.findStatements(Variable.ANY, RDF.type, FGO.BackendService);
+		ClosableIterator<Statement> it = tripleStore.findStatements(templatesGraph, Variable.ANY, RDF.type, FGO.BackendService);
 		while (it.hasNext()) {
 			try {
 				results.add(getBackendService(it.next().getSubject().asURI()));
@@ -1363,7 +1386,7 @@ public class Catalogue {
 
 	public Collection<Precondition> getAllPreconditions() {
 		LinkedList<Precondition> results = new LinkedList<Precondition>();
-		ClosableIterator<Statement> it = tripleStore.findStatements(Variable.ANY, RDF.type, FGO.Precondition);
+		ClosableIterator<Statement> it = tripleStore.findStatements(templatesGraph, Variable.ANY, RDF.type, FGO.Precondition);
 		while (it.hasNext()) {
 			try {
 				results.add(getPrecondition(it.next().getSubject().asURI()));
@@ -1377,8 +1400,7 @@ public class Catalogue {
 
 	public Collection<Postcondition> getAllPostconditions() {
 		LinkedList<Postcondition> results = new LinkedList<Postcondition>();
-		ClosableIterator<Statement> it = tripleStore.findStatements(
-				Variable.ANY, RDF.type, FGO.Postcondition);
+		ClosableIterator<Statement> it = tripleStore.findStatements(templatesGraph, Variable.ANY, RDF.type, FGO.Postcondition);
 		while (it.hasNext()) {
 			try {
 				results.add(getPostcondition(it.next().getSubject().asURI()));
@@ -1399,15 +1421,13 @@ public class Catalogue {
 		if (tags != null && tags.length > 0) {
 			queryString = queryString.concat("{");
 			for (String tag : tags)
-				queryString = queryString.concat(" { ?concept "
-						+ CTAG.tagged.toSPARQL() + " ?ctag . ?ctag "
-						+ CTAG.label.toSPARQL()
-						+ " ?tag . FILTER(regex(str(?tag), \"" + tag
-						+ "\", \"i\")) } UNION");
+				queryString = queryString.concat(
+						" { ?concept " + CTAG.tagged.toSPARQL() + " ?ctag . "
+						+ " ?ctag " + CTAG.label.toSPARQL() + " ?tag . "
+						+ " FILTER(regex(str(?tag), \"" + tag + "\", \"i\")) } UNION");
 			// remove last 'UNION'
 			if (queryString.endsWith("UNION"))
-				queryString = queryString
-						.substring(0, queryString.length() - 5);
+				queryString = queryString.substring(0, queryString.length() - 5);
 			queryString = queryString.concat("} . ");
 		}
 		queryString = queryString.concat("}");
@@ -1517,7 +1537,7 @@ public class Catalogue {
 			Statement stmt = it.next();
 			if (stmt.getPredicate().equals(FGO.hasPatternString)
 					&& isConditionPositive(model, stmt.getSubject().asURI())) {
-				URI pUri = tripleStore.createUniqueUriWithName(configuration.getURI(environment, "serverURL"), "/pattern/");
+				URI pUri = tripleStore.createUniqueUriWithName(configuration.getURI(environment, "serverURL"), "/patterns/");
 				String pattern = stmt.getObject().asDatatypeLiteral().getValue();
 				Model patternModel = patternToRDF2GoModel(pattern);
 				tripleStore.addStatement(graphURI, stmt.getSubject(), FGO.hasPattern, pUri);
