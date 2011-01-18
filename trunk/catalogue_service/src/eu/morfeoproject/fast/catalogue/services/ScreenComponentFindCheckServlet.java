@@ -429,8 +429,7 @@ public class ScreenComponentFindCheckServlet extends GenericServlet {
 								pipe.setBBTo(sc.getUri());
 								pipe.setActionTo(action.getName());
 								pipe.setConditionTo(pre.getId());
-								if (!pipes.contains(pipe))
-									pipeList.add(pipe);
+								if (!pipes.contains(pipe)) pipeList.add(pipe);
 							}
 						}
 					}
@@ -536,7 +535,7 @@ public class ScreenComponentFindCheckServlet extends GenericServlet {
 		for (Pipe pipe : pipes) {
 			if (bbFrom == null && pipe.getBBFrom() == null) {
 				results.add(pipe);
-			} else if (bbFrom != null && pipe.getBBFrom() != null && bbFrom.equals(pipe.getBBFrom())) {
+			} else if (bbFrom != null && pipe.getBBFrom() != null && bbFrom.equals(pipe.getBBFrom().toString())) {
 				results.add(pipe);
 			}
 		}

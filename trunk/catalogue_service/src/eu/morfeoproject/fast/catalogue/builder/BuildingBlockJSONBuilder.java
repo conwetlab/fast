@@ -332,11 +332,11 @@ public class BuildingBlockJSONBuilder {
 		Pipe pipe = BuildingBlockFactory.createPipe(screen);
 		JSONObject pipeFrom = jsonPipe.getJSONObject("from");
 		JSONObject pipeTo = jsonPipe.getJSONObject("to");
-		String bbFrom = pipeFrom.getString("buildingblock");
-		String conditionFrom = pipeFrom.getString("condition");
-		String bbTo = pipeTo.getString("buildingblock");
-		String actionTo = pipeTo.getString("action");
-		String conditionTo = pipeTo.getString("condition");
+		String bbFrom = pipeFrom.isNull("buildingblock") ? null : pipeFrom.getString("buildingblock");
+		String conditionFrom = pipeFrom.isNull("condition") ? null : pipeFrom.getString("condition");
+		String bbTo = pipeTo.isNull("buildingblock") ? null : pipeTo.getString("buildingblock");
+		String actionTo = pipeTo.isNull("action") ? null : pipeTo.getString("action");
+		String conditionTo = pipeTo.isNull("condition") ? null : pipeTo.getString("condition");
 		pipe.setBBFrom(bbFrom == null || bbFrom.equals("") ? null : rdfFactory.createURI(bbFrom));
 		pipe.setConditionFrom(conditionFrom == null || conditionFrom.equals("") ? null : conditionFrom);
 		pipe.setBBTo(bbTo == null || bbTo.equals("") ? null : rdfFactory.createURI(bbTo));
