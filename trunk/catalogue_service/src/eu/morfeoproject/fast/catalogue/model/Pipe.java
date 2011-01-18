@@ -5,6 +5,7 @@ import org.json.JSONObject;
 import org.ontoware.rdf2go.RDF2Go;
 import org.ontoware.rdf2go.model.Model;
 import org.ontoware.rdf2go.model.node.URI;
+import org.ontoware.rdf2go.model.node.impl.URIImpl;
 import org.ontoware.rdf2go.vocabulary.RDF;
 
 import eu.morfeoproject.fast.catalogue.MyRDFFactory;
@@ -142,8 +143,6 @@ public class Pipe implements Comparable<Pipe> {
 		return EQUAL;
 	}
 		
-		
-	
 	public JSONObject toJSON() throws JSONException {
 		JSONObject json = new JSONObject();
 		JSONObject jsonFrom = new JSONObject();
@@ -169,11 +168,10 @@ public class Pipe implements Comparable<Pipe> {
 //			return model;
 //		}
 		
-		URI from, to;
-		from = rdfFactory.createURI(bbFrom == null ? 
+		URI from = rdfFactory.createURI(bbFrom == null ? 
 				screen.getUri() + "/preconditions/" + conditionFrom : 
 					bbFrom + "/postconditions/" + conditionFrom);
-		to = rdfFactory.createURI(bbTo == null ? 
+		URI to = rdfFactory.createURI(bbTo == null ? 
 				screen.getUri() + "/postconditions/" + conditionTo : 
 					bbTo + "/actions/" + actionTo + "/preconditions/" + conditionTo);
 		
@@ -182,6 +180,17 @@ public class Pipe implements Comparable<Pipe> {
 		model.addStatement(uri, FGO.to, to);
 		
 		return model;
+	}
+	
+	@Override
+	public String toString() {
+		URI from = new URIImpl(bbFrom == null ? 
+				screen.getUri() + "/preconditions/" + conditionFrom : 
+					bbFrom + "/postconditions/" + conditionFrom);
+		URI to = new URIImpl(bbTo == null ? 
+				screen.getUri() + "/postconditions/" + conditionTo : 
+					bbTo + "/actions/" + actionTo + "/preconditions/" + conditionTo);
+		return from + " -> " + to;
 	}
 
 }
