@@ -53,14 +53,24 @@ public class PlannerServlet extends GenericServlet {
 		try {
 			// create JSON representation of the input
 			JSONObject input = new JSONObject(body);
-			//	parse the goal
-			URI goal = new URIImpl(input.getString("goal"));
+			//	parse the goal or goal list
+			ArrayList<URI> goalList = new ArrayList<URI>();
+			try {
+				JSONArray goalArray = input.getJSONArray("goal");
+				for (int g = 0; g < goalArray.length(); g++) {
+					goalList.add(new URIImpl(goalArray.getString(g)));
+				}
+			} catch (JSONException e) {
+				log.debug("Goal attribute is not a list, maybe a single goal URI?");
+				goalList.clear();
+				goalList.add(new URIImpl(input.getString("goal")));
+			}
 			// parse the canvas
 			ArrayList<URI> canvasUris = new ArrayList<URI>();
 			ArrayList<BuildingBlock> canvas = new ArrayList<BuildingBlock>();
 			JSONArray jsonCanvas = input.getJSONArray("canvas");
 			for (int i = 0; i < jsonCanvas.length(); i++) {
-				URI uri = new URIImpl(((JSONObject)jsonCanvas.get(i)).getString("uri"));
+				URI uri = new URIImpl(((JSONObject) jsonCanvas.get(i)).getString("uri"));
 				BuildingBlock r = getCatalogue().getBuildingBlock(uri);
 				if (r == null) 
 					throw new NotFoundException("Resource "+uri+" does not exist.");
@@ -72,8 +82,7 @@ public class PlannerServlet extends GenericServlet {
 			int perPage = input.has("per_page") ? input.getInt("per_page") : 0;
 			
 			// calculate the plans for a certain goal
-			List<Plan> plans = getCatalogue().searchPlans(goal, canvas);
-			if (log.isInfoEnabled()) log.info("Found "+plans.size()+" plans for "+goal);
+			List<Plan> plans = getCatalogue().searchPlans(goalList, canvas);
 			
 			// pagination
 			if (page < 1) page = 1; // if no page, show page 1
