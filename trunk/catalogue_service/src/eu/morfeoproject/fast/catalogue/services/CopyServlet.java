@@ -84,26 +84,4 @@ public class CopyServlet extends GenericServlet {
 		}	
 	}
 
-	/**
-	 * @see HttpServlet#doDelete(HttpServletRequest, HttpServletResponse)
-	 */
-	protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		String[] chunks = request.getRequestURI().split("/");
-		String id = chunks[chunks.length-1];
-		if (id.equalsIgnoreCase("operators")) id = null;
-		
-		if (id == null) {
-			response.sendError(HttpServletResponse.SC_BAD_REQUEST, "An ID must be specified.");
-		} else {
-			// Delete the addressed member of the collection.
-			String uri = request.getRequestURL().toString();
-			try {
-				getCatalogue().removeOperator(new URIImpl(uri));
-				response.setStatus(HttpServletResponse.SC_OK);
-			} catch (NotFoundException e) {
-				response.sendError(HttpServletResponse.SC_NOT_FOUND, "The resource "+uri+" has not been found.");
-			}
-		}
-	}
-
 }

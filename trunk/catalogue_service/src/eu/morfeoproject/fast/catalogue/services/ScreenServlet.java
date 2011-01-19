@@ -313,20 +313,29 @@ public class ScreenServlet extends GenericServlet {
 	 */
 	protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String[] chunks = request.getRequestURI().split("/");
-		String id = chunks[chunks.length-1];
-		if (id.equalsIgnoreCase("screens")) id = null;
+		String id = chunks[chunks.length-1].toLowerCase();
+		String type = chunks[chunks.length-2].toLowerCase();
+		String uri = request.getRequestURL().toString();
+		if (id.equals("screens") || id.equals("copies")) id = null;
 		
 		if (id == null) {
 			response.sendError(HttpServletResponse.SC_BAD_REQUEST, "An ID must be specified.");
-		} else {
-			// Delete the addressed member of the collection.
-			String uri = request.getRequestURL().toString();
+		} else if (type.equals("screens")) {
 			try {
 				getCatalogue().removeScreen(new URIImpl(uri));
 				response.setStatus(HttpServletResponse.SC_OK);
 			} catch (NotFoundException e) {
 				response.sendError(HttpServletResponse.SC_NOT_FOUND, "The resource "+uri+" has not been found.");
 			}
+		} else if (type.equals("copies")) {
+			try {
+				getCatalogue().removeCopy(new URIImpl(uri));
+				response.setStatus(HttpServletResponse.SC_OK);
+			} catch (NotFoundException e) {
+				response.sendError(HttpServletResponse.SC_NOT_FOUND, "The copy "+uri+" has not been found.");
+			}
+		} else {
+			response.sendError(HttpServletResponse.SC_BAD_REQUEST, "The URL is not well defined.");
 		}
 	}
 
