@@ -188,6 +188,9 @@ public class BuildingBlockJSONBuilder {
 	
 	@SuppressWarnings("unchecked")
 	private static void parseBuildingBlock(BuildingBlock bb, JSONObject jsonResource) throws JSONException, IOException {
+		if (jsonResource.has("template")) {
+			bb.setTemplate(new URIImpl(jsonResource.getString("template")));
+		}
 		if (jsonResource.has("label")) {
 			JSONObject jsonLabels = jsonResource.getJSONObject("label");
 			Iterator<String> labels = jsonLabels.keys();

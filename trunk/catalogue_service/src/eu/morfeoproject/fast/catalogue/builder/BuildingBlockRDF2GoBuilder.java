@@ -133,7 +133,9 @@ public class BuildingBlockRDF2GoBuilder {
 			Statement st = cIt.next();
 			URI predicate = st.getPredicate();
 			Node object = st.getObject();
-			if (predicate.equals(RDFS.label)) {
+			if (predicate.equals(FGO.hasTemplate)) {
+				bb.setTemplate(object.asURI());
+			} else if (predicate.equals(RDFS.label)) {
 				if (object instanceof LanguageTagLiteral) {
 					LanguageTagLiteral label = object.asLanguageTagLiteral();
 					bb.getLabels().put(label.getLanguageTag(), label.getValue());

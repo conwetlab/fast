@@ -31,6 +31,7 @@ import eu.morfeoproject.fast.catalogue.vocabulary.FOAF;
 public abstract class BuildingBlock {
 
 	private URI uri;
+	private URI template;
 	private Map<String, String> labels;
 	private URI creator;
 	private Map<String, String> descriptions;
@@ -58,6 +59,14 @@ public abstract class BuildingBlock {
 
 	public void setUri(URI uri) {
 		this.uri = uri;
+	}
+    
+    public URI getTemplate() {
+		return template;
+	}
+
+	public void setTemplate(URI template) {
+		this.template = template;
 	}
 
 	public Map<String, String> getLabels() {
@@ -183,6 +192,7 @@ public abstract class BuildingBlock {
 		JSONObject json = new JSONObject();
 
 		json.put("uri", getUri() == null ? JSONObject.NULL : getUri().toString());
+		json.put("template", getTemplate() == null ? JSONObject.NULL : getTemplate());
 		if (this.getLabels() == null) json.put("label", JSONObject.NULL);
 		else {
 			JSONObject jsonLabels = new JSONObject();
@@ -239,6 +249,8 @@ public abstract class BuildingBlock {
 		model.setNamespace("ctag", CTAG.NS_CTAG.toString());
 		
 		URI bbUri = this.getUri();
+		if (this.getTemplate() != null)
+			model.addStatement(bbUri, FGO.hasTemplate, this.template);
 		for (String key : this.getLabels().keySet())
 			model.addStatement(bbUri, RDFS.label, model.createLanguageTagLiteral(this.getLabels().get(key), key));
 		for (String key : this.getDescriptions().keySet())
