@@ -32,7 +32,7 @@ public class MediaType {
 			return MediaType.APPLICATION_RDF_XML;
 		else if (extension.equalsIgnoreCase("ttl") || extension.equalsIgnoreCase("turtle"))
 			return MediaType.APPLICATION_TURTLE;
-		return "";
+		return null;
 	}
 
 	public static String getExtension(String mimeType) {

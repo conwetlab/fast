@@ -51,11 +51,12 @@ public class OperatorServlet extends GenericServlet {
 		Accept accept = new Accept(request);
 		String format = accept.isEmpty() ? "" : accept.getDominating();
 		String servlet = request.getServletPath();
-		String url = request.getRequestURL().toString();
+		String url = request.getRequestURL().toString().toLowerCase();
 		String[] chunks = url.substring(url.indexOf(servlet) + 1).split("/");
-		String id = chunks.length > 1 ? chunks[1] : null;
-		String extension = chunks.length > 2 ? chunks[2] : null;
-		if (MediaType.forExtension(id) != "") {
+		int copy = chunks.length > 1 && chunks[1].equals("copies") ? 1 : 0;
+		String id = chunks.length > 1+copy ? chunks[1+copy] : null;
+		String extension = chunks.length > 2+copy ? chunks[2+copy] : null;
+		if (MediaType.forExtension(id) != null) {
 			extension = id;
 			id = null;
 		}
