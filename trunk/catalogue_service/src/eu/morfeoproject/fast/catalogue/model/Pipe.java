@@ -8,27 +8,25 @@ import org.ontoware.rdf2go.model.node.URI;
 import org.ontoware.rdf2go.model.node.impl.URIImpl;
 import org.ontoware.rdf2go.vocabulary.RDF;
 
-import eu.morfeoproject.fast.catalogue.MyRDFFactory;
-import eu.morfeoproject.fast.catalogue.RDFFactory;
 import eu.morfeoproject.fast.catalogue.vocabulary.FGO;
 
 public class Pipe implements Comparable<Pipe> {
 
 	private URI uri;
-	private Screen screen;
+	private URI screenURI;
 	private URI bbFrom;
 	private String conditionFrom;
 	private URI bbTo;
 	private String actionTo;
 	private String conditionTo;
 
-	public Pipe(Screen screen) {
+	public Pipe(URI screenURI) {
 		super();
-		this.screen = screen;
+		this.screenURI = screenURI;
 	}
 	
-	public Pipe(Screen screen, URI uri) {
-		this(screen);
+	public Pipe(URI screenURI, URI uri) {
+		this(screenURI);
 		this.uri = uri;
 	}
 	
@@ -40,12 +38,12 @@ public class Pipe implements Comparable<Pipe> {
 		this.uri = uri;
 	}
 
-	public Screen getScreen() {
-		return screen;
+	public URI getScreenUri() {
+		return screenURI;
 	}
 
-	public void setScreen(Screen screen) {
-		this.screen = screen;
+	public void setScreenUri(URI screenURI) {
+		this.screenURI = screenURI;
 	}
 
 	public URI getBBFrom() {
@@ -158,7 +156,6 @@ public class Pipe implements Comparable<Pipe> {
 	}
 	
 	public Model toRDF2GoModel() {
-		RDFFactory rdfFactory = new MyRDFFactory();
 		Model model = RDF2Go.getModelFactory().createModel();
 		model.open();
 		model.setNamespace("fgo", FGO.NS_FGO.toString());
@@ -168,11 +165,11 @@ public class Pipe implements Comparable<Pipe> {
 //			return model;
 //		}
 		
-		URI from = rdfFactory.createURI(bbFrom == null ? 
-				screen.getUri() + "/preconditions/" + conditionFrom : 
+		URI from = model.createURI(bbFrom == null ? 
+				screenURI + "/preconditions/" + conditionFrom : 
 					bbFrom + "/postconditions/" + conditionFrom);
-		URI to = rdfFactory.createURI(bbTo == null ? 
-				screen.getUri() + "/postconditions/" + conditionTo : 
+		URI to = model.createURI(bbTo == null ? 
+				screenURI + "/postconditions/" + conditionTo : 
 					bbTo + "/actions/" + actionTo + "/preconditions/" + conditionTo);
 		
 		model.addStatement(uri, RDF.type, FGO.Pipe);
@@ -185,12 +182,22 @@ public class Pipe implements Comparable<Pipe> {
 	@Override
 	public String toString() {
 		URI from = new URIImpl(bbFrom == null ? 
-				screen.getUri() + "/preconditions/" + conditionFrom : 
+				screenURI + "/preconditions/" + conditionFrom : 
 					bbFrom + "/postconditions/" + conditionFrom);
 		URI to = new URIImpl(bbTo == null ? 
-				screen.getUri() + "/postconditions/" + conditionTo : 
+				screenURI + "/postconditions/" + conditionTo : 
 					bbTo + "/actions/" + actionTo + "/preconditions/" + conditionTo);
 		return from + " -> " + to;
 	}
 
+	public Pipe clone(URI screenURI, URI uri) {
+		Pipe pipe = new Pipe(screenURI, uri);
+		pipe.setBBFrom(bbFrom);
+		pipe.setConditionFrom(conditionFrom);
+		pipe.setBBTo(bbTo);
+		pipe.setActionTo(actionTo);
+		pipe.setConditionTo(conditionTo);
+		return pipe;
+	}
+	
 }

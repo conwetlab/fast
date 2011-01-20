@@ -23,7 +23,7 @@ public class FindCheckTest {
 	@Test
 	public void testFindAndCheck1() throws Exception {
 		Form form = (Form) TestUtils.buildBBFromFile(TestUtils.getCatalogue().getServerURL(), "form", "data/json/forms/amazonList.json");
-		BackendService service = (BackendService) TestUtils.buildBBFromFile(TestUtils.getCatalogue().getServerURL(), "backendservice", "data/json/backendservices/amazonSearchService.json");
+		BackendService service = (BackendService) TestUtils.buildBBFromFile(TestUtils.getCatalogue().getServerURL(), "service", "data/json/backendservices/amazonSearchService.json");
 		TestUtils.getCatalogue().addForm(form);
 		TestUtils.getCatalogue().addBackendService(service);
 		TestUtils.getCatalogue().createCopy(form);

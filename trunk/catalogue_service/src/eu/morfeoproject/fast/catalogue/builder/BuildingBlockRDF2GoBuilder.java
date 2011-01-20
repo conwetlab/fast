@@ -16,6 +16,7 @@ import org.ontoware.rdf2go.model.node.LanguageTagLiteral;
 import org.ontoware.rdf2go.model.node.Node;
 import org.ontoware.rdf2go.model.node.URI;
 import org.ontoware.rdf2go.model.node.Variable;
+import org.ontoware.rdf2go.model.node.impl.URIImpl;
 import org.ontoware.rdf2go.vocabulary.RDF;
 import org.ontoware.rdf2go.vocabulary.RDFS;
 
@@ -384,7 +385,7 @@ public class BuildingBlockRDF2GoBuilder {
 	}
 	
 	private static Pipe retrievePipe(Screen screen, URI pipeURI, Model model) {
-		Pipe pipe = BuildingBlockFactory.createPipe(screen, pipeURI);
+		Pipe pipe = BuildingBlockFactory.createPipe(screen.getUri(), pipeURI);
 		ClosableIterator<Statement> cIt = model.findStatements(pipeURI, Variable.ANY, Variable.ANY);
 		for ( ; cIt.hasNext(); ) {
 			Statement stmt = cIt.next();
@@ -422,24 +423,33 @@ public class BuildingBlockRDF2GoBuilder {
 	}
 
 	private static Trigger retrieveTrigger(Screen screen, URI triggerURI, Model model) {
-		Trigger trigger = BuildingBlockFactory.createTrigger(screen, triggerURI);
-		ClosableIterator<Statement> tIt = model.findStatements(triggerURI, Variable.ANY, Variable.ANY);
-		//TODO retrieve triggers from RDF model
-		/*for ( ; tIt.hasNext(); ) {
-			Statement pipeSt = tIt.next();
-			URI tPredicate = pipeSt.getPredicate();
-			Node tObject = pipeSt.getObject();
-			if (tPredicate.equals(FGO.hasIdBBFrom)) {
-				trigger.setIdBBFrom(tObject.asLiteral().getValue());
-			} else if (tPredicate.equals(FGO.hasIdBBTo)) {
-				trigger.setIdBBFrom(tObject.asLiteral().getValue());
-			} else if (tPredicate.equals(FGO.hasIdActionTo)) {
-				trigger.setIdActionTo(tObject.asLiteral().getValue());
-			} else if (tPredicate.equals(FGO.hasNameFrom)) {
-				trigger.setNameFrom(tObject.asLiteral().getValue());
+		Trigger trigger = BuildingBlockFactory.createTrigger(screen.getUri(), triggerURI);
+		ClosableIterator<Statement> cIt = model.findStatements(triggerURI, Variable.ANY, Variable.ANY);
+		for ( ; cIt.hasNext(); ) {
+			Statement stmt = cIt.next();
+			URI predicate = stmt.getPredicate();
+			Node object = stmt.getObject();
+			if (predicate.equals(FGO.from)) {
+				String str = object.asURI().toString();
+				int pCur = str.indexOf("/triggers/");
+				URI uri = new URIImpl(str.substring(0, pCur));
+				String name = str.substring(pCur + 10);
+				if (uri.equals(screen.getUri())) uri = null;
+
+				trigger.setBBFrom(uri);
+				trigger.setNameFrom(name);
+			} else if (predicate.equals(FGO.to)) {
+				String str = object.asURI().toString();
+				int pCur = str.indexOf("/actions/");
+				URI uri = new URIImpl(str.substring(0, pCur));
+				String action = str.substring(pCur + 9);
+				if (uri.equals(screen.getUri())) uri = null;
+
+				trigger.setBBTo(uri);
+				trigger.setActionTo(action);
 			}
-		}*/
-		tIt.close();
+		}
+		cIt.close();
 		return trigger;
 	}
 

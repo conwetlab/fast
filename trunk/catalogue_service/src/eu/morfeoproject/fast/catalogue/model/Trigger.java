@@ -5,28 +5,27 @@ import org.json.JSONObject;
 import org.ontoware.rdf2go.RDF2Go;
 import org.ontoware.rdf2go.model.Model;
 import org.ontoware.rdf2go.model.node.URI;
+import org.ontoware.rdf2go.model.node.impl.URIImpl;
 import org.ontoware.rdf2go.vocabulary.RDF;
 
-import eu.morfeoproject.fast.catalogue.MyRDFFactory;
-import eu.morfeoproject.fast.catalogue.RDFFactory;
 import eu.morfeoproject.fast.catalogue.vocabulary.FGO;
 
-public class Trigger {
+public class Trigger implements Comparable<Trigger> {
 
 	private URI uri;
-	private Screen screen;
+	private URI screenURI;
 	private URI bbFrom;
 	private String nameFrom;
 	private URI bbTo;
 	private String actionTo;
 
-	public Trigger(Screen screen) {
+	public Trigger(URI screenURI) {
 		super();
-		this.screen = screen;
+		this.screenURI = screenURI;
 	}
 	
-	public Trigger(Screen screen, URI uri) {
-		this(screen);
+	public Trigger(URI screenURI, URI uri) {
+		this(screenURI);
 		this.uri = uri;
 	}
 	
@@ -38,12 +37,12 @@ public class Trigger {
 		this.uri = uri;
 	}
 
-	public Screen getScreen() {
-		return screen;
+	public URI getScreenUri() {
+		return screenURI;
 	}
 
-	public void setScreen(Screen screen) {
-		this.screen = screen;
+	public void setScreenUri(URI screenURI) {
+		this.screenURI = screenURI;
 	}
 
 	public URI getBBFrom() {
@@ -78,6 +77,55 @@ public class Trigger {
 		this.actionTo = actionTo;
 	}
 
+	@Override
+	public boolean equals(Object other) {
+		return other instanceof Trigger ? compareTo((Trigger) other) == 0 : false;
+	}
+
+	@Override
+	public int compareTo(Trigger other) {
+	    final int BEFORE = -1;
+	    final int EQUAL = 0;
+	    final int AFTER = 1;
+	    
+	    //this optimization is usually worthwhile, and can always be added
+	    if (this == other) return EQUAL;
+
+	    int comparison = EQUAL;
+		if (this.uri == null && other.getUri() != null) return AFTER;
+		if (this.uri != null && other.getUri() == null) return BEFORE;
+		if (this.uri != null && other.getUri() != null) {
+			comparison = this.uri.compareTo(other.getUri());
+			if (comparison != EQUAL) return comparison;
+		}	
+		if (this.bbFrom == null && other.getBBFrom() != null) return AFTER;
+		if (this.bbFrom != null && other.getBBFrom() == null) return BEFORE;
+		if (this.bbFrom != null && other.getBBFrom() != null) {
+			comparison = this.bbFrom.compareTo(other.getBBFrom());
+			if (comparison != EQUAL) return comparison;
+		}		
+		if (this.nameFrom == null && other.getNameFrom() != null) return AFTER;
+		if (this.nameFrom != null && other.getNameFrom() == null) return BEFORE;
+		if (this.nameFrom != null && other.getNameFrom() != null) {
+			comparison = this.nameFrom.compareTo(other.getNameFrom());
+			if (comparison != EQUAL) return comparison;
+		}
+		if (this.bbTo == null && other.getBBTo() != null) return AFTER;
+		if (this.bbTo != null && other.getBBTo() == null) return BEFORE;
+		if (this.bbTo != null && other.getBBTo() != null) {
+			comparison = this.bbTo.compareTo(other.getBBTo());
+			if (comparison != EQUAL) return comparison;
+		}		
+		if (this.actionTo == null && other.getActionTo() != null) return AFTER;
+		if (this.actionTo != null && other.getActionTo() == null) return BEFORE;
+		if (this.actionTo != null && other.getActionTo() != null) {
+			comparison = this.actionTo.compareTo(other.getActionTo());
+			if (comparison != EQUAL) return comparison;
+		}	
+		
+		return EQUAL;
+	}
+
 	public JSONObject toJSON() throws JSONException {
 		JSONObject json = new JSONObject();
 		JSONObject jsonFrom = new JSONObject();
@@ -92,20 +140,34 @@ public class Trigger {
 	}
 
 	public Model toRDF2GoModel() {
-		RDFFactory rdfFactory = new MyRDFFactory();
 		Model model = RDF2Go.getModelFactory().createModel();
 		model.open();
 		model.setNamespace("fgo", FGO.NS_FGO.toString());
 		
-		URI from, to;
-		from = rdfFactory.createURI((bbFrom == null ? screen.getUri() : bbFrom) + "/" + nameFrom);
-		to = rdfFactory.createURI((bbTo == null ? screen.getUri() : bbTo) + "/" + actionTo);
+		URI from = model.createURI((bbFrom == null ? screenURI : bbFrom) + "/triggers/" + nameFrom);
+		URI to = model.createURI((bbTo == null ? screenURI : bbTo) + "/actions/" + actionTo);
 		
 		model.addStatement(uri, RDF.type, FGO.Trigger);
 		model.addStatement(uri, FGO.from, from);
 		model.addStatement(uri, FGO.to, to);
 		
 		return model;
+	}
+	
+	@Override
+	public String toString() {
+		URI from = new URIImpl((bbFrom == null ? screenURI : bbFrom) + "/triggers/" + nameFrom);
+		URI to = new URIImpl((bbTo == null ? screenURI : bbTo) + "/actions/" + actionTo);
+		return from + " -> " + to;
+	}
+
+	public Trigger clone(URI screenURI, URI uri) {
+		Trigger trigger = new Trigger(screenURI, uri);
+		trigger.setBBFrom(bbFrom);
+		trigger.setNameFrom(nameFrom);
+		trigger.setBBTo(bbTo);
+		trigger.setActionTo(actionTo);
+		return trigger;
 	}
 
 }

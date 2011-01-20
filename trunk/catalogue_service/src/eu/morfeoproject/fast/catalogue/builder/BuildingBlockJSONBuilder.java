@@ -329,7 +329,7 @@ public class BuildingBlockJSONBuilder {
 	}
 	
 	private static Pipe parsePipe(Screen screen, JSONObject jsonPipe) throws JSONException, IOException {
-		Pipe pipe = BuildingBlockFactory.createPipe(screen);
+		Pipe pipe = BuildingBlockFactory.createPipe(screen == null ? null : screen.getUri());
 		JSONObject pipeFrom = jsonPipe.getJSONObject("from");
 		JSONObject pipeTo = jsonPipe.getJSONObject("to");
 		String bbFrom = pipeFrom.isNull("buildingblock") || pipeFrom.getString("buildingblock").equals("") ? null : pipeFrom.getString("buildingblock");
@@ -346,7 +346,7 @@ public class BuildingBlockJSONBuilder {
 	}
 	
 	private static Trigger parseTrigger(Screen screen, JSONObject jsonTrigger) throws JSONException, IOException {
-		Trigger trigger = new Trigger(screen);
+		Trigger trigger = new Trigger(screen == null ? null : screen.getUri());
 		JSONObject from = jsonTrigger.getJSONObject("from");
 		JSONObject to = jsonTrigger.getJSONObject("to");
 		String bbFrom = from.isNull("buildingblock") || from.getString("buildingblock").equals("") ? null : from.getString("buildingblock");

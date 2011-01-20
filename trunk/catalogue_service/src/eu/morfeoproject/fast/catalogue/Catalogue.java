@@ -46,12 +46,14 @@ import uk.ac.open.kmi.iserve.IServeConfiguration;
 import uk.ac.open.kmi.iserve.IServeResponse;
 import eu.morfeoproject.fast.catalogue.builder.BuildingBlockRDF2GoBuilder;
 import eu.morfeoproject.fast.catalogue.builder.SampleRDF2GoBuilder;
+import eu.morfeoproject.fast.catalogue.model.Action;
 import eu.morfeoproject.fast.catalogue.model.BackendService;
 import eu.morfeoproject.fast.catalogue.model.BuildingBlock;
 import eu.morfeoproject.fast.catalogue.model.Concept;
 import eu.morfeoproject.fast.catalogue.model.Condition;
 import eu.morfeoproject.fast.catalogue.model.Form;
 import eu.morfeoproject.fast.catalogue.model.Operator;
+import eu.morfeoproject.fast.catalogue.model.Pipe;
 import eu.morfeoproject.fast.catalogue.model.Postcondition;
 import eu.morfeoproject.fast.catalogue.model.PreOrPost;
 import eu.morfeoproject.fast.catalogue.model.Precondition;
@@ -60,6 +62,7 @@ import eu.morfeoproject.fast.catalogue.model.Sample;
 import eu.morfeoproject.fast.catalogue.model.Screen;
 import eu.morfeoproject.fast.catalogue.model.ScreenComponent;
 import eu.morfeoproject.fast.catalogue.model.ScreenFlow;
+import eu.morfeoproject.fast.catalogue.model.Trigger;
 import eu.morfeoproject.fast.catalogue.model.factory.BuildingBlockFactory;
 import eu.morfeoproject.fast.catalogue.ontologies.DefaultOntologies;
 import eu.morfeoproject.fast.catalogue.ontologies.OntologyFetcher;
@@ -1010,8 +1013,7 @@ public class Catalogue {
 	 *            the URI of the screen flow to be deleted
 	 * @throws NotFoundException
 	 */
-	public void removeScreenFlow(URI sfUri)
-	throws NotFoundException {
+	public void removeScreenFlow(URI sfUri) throws NotFoundException {
 		removeBuildingBlock(sfUri);
 	}
 
@@ -1098,15 +1100,16 @@ public class Catalogue {
 
 	public URI createCopy(BuildingBlock bb) throws BuildingBlockException {
 		String type = null;
-		if (bb instanceof ScreenFlow)				type = "screenflows";
-		else if (bb instanceof Screen)				type = "screens";
-		else if (bb instanceof Form)				type = "forms";
-		else if (bb instanceof Operator)			type = "operators";
-		else if (bb instanceof BackendService)		type = "services";
-
+		
+		if (bb instanceof Screen)				type = "screens";
+		else if (bb instanceof Form)			type = "forms";
+		else if (bb instanceof Operator)		type = "operators";
+		else if (bb instanceof BackendService)	type = "services";
+		
 		if (type == null)
-			throw new BuildingBlockException("Building block must be a 'screenflow', 'screen', 'form', 'operator' or 'backend service'.");
-
+			throw new BuildingBlockException("Building block must be a 'screen', 'form', 'operator' or 'backend service'.");
+		
+		// do a 'copy' of basic data of any building block
 		URI copyUri = tripleStore.createUniqueUriWithName(configuration.getURI(environment, "serverURL"), "/" + type + "/copies/");
 		String query = "CONSTRUCT { <copy> ?p ?o } WHERE { <bb> ?p ?o }";
 		query = query.replaceFirst("<copy>", copyUri.toSPARQL());
@@ -1114,18 +1117,125 @@ public class Catalogue {
 		ClosableIterator<Statement> it = tripleStore.sparqlConstruct(query).iterator();
 		while (it.hasNext()) {
 			Statement stmt = it.next();
-			if (stmt.getPredicate().equals(DC.date)) {
+			Resource subject = stmt.getSubject();
+			URI predicate = stmt.getPredicate();
+			Node object = stmt.getObject();
+			if (predicate.equals(FGO.hasPreCondition)
+					|| predicate.equals(FGO.hasPostCondition)
+					|| predicate.equals(FGO.hasAction)) {
+				// these triples are created with specific URIs for the copy, so they are now discarded
+			} else if (predicate.equals(FGO.contains)) {
+				String str = object.asURI().toString();
+				//FIXME pipes and triggers should not be saved from this triples, but the triples which points to other building blocks have to!
+				if (!str.contains("/pipes/") && !str.contains("/triggers/")) {
+					tripleStore.addStatement(copiesGraph, subject, predicate, object);
+				}
+			} else if (predicate.equals(DC.date)) {
 				// overrides the creation date
 				tripleStore.addStatement(copiesGraph, copyUri, DC.date,
 						tripleStore.createDatatypeLiteral(DateFormatter.formatDateISO8601(new Date()), XSD._date));
 			} else {
-				tripleStore.addStatement(copiesGraph, stmt.getSubject(), stmt.getPredicate(), stmt.getObject());
+				tripleStore.addStatement(copiesGraph, subject, predicate, object);
 			}
 		}
+		it.close();
 		tripleStore.addStatement(copiesGraph, copyUri, FGO.hasTemplate, bb.getUri());
 		tripleStore.addStatement(templatesGraph, bb.getUri(), FGO.hasCopy, copyUri);
-
+		
+		// adds data to the 'copy' based on the particular type of building block
+		if (bb instanceof Screen) {
+			Screen screen = (Screen) bb;
+			// copy preconditions of the screen
+			for (Condition condition : screen.getPreconditions()) {
+				URI cUri = tripleStore.createURI(copyUri.toString() + "/preconditions/" + condition.getId());
+				query = "CONSTRUCT { <copy> ?p ?o } WHERE { <bb> ?p ?o }";
+				query = query.replaceFirst("<copy>", cUri.toSPARQL());
+				query = query.replaceFirst("<bb>", condition.getUri().toSPARQL());
+				it = tripleStore.sparqlConstruct(query).iterator();
+				while (it.hasNext()) {
+					Statement stmt = it.next();
+					tripleStore.addStatement(copiesGraph, stmt.getSubject(), stmt.getPredicate(), stmt.getObject());
+				}
+				tripleStore.addStatement(copiesGraph, copyUri, FGO.hasPreCondition, cUri);
+			}
+			// copy postconditions of the screen
+			for (Condition condition : screen.getPostconditions()) {
+				URI cUri = tripleStore.createURI(copyUri.toString() + "/postconditions/" + condition.getId());
+				query = "CONSTRUCT { <copy> ?p ?o } WHERE { <bb> ?p ?o }";
+				query = query.replaceFirst("<copy>", cUri.toSPARQL());
+				query = query.replaceFirst("<bb>", condition.getUri().toSPARQL());
+				it = tripleStore.sparqlConstruct(query).iterator();
+				while (it.hasNext()) {
+					Statement stmt = it.next();
+					tripleStore.addStatement(copiesGraph, stmt.getSubject(), stmt.getPredicate(), stmt.getObject());
+				}
+				tripleStore.addStatement(copiesGraph, copyUri, FGO.hasPostCondition, cUri);
+			}
+			for (Pipe pipe : screen.getPipes()) {
+				URI pUri = tripleStore.createURI(copyUri+"/pipes/"+System.currentTimeMillis());
+				Pipe newPipe = pipe.clone(copyUri, pUri);
+				tripleStore.addModel(newPipe.toRDF2GoModel(), copiesGraph);
+				tripleStore.addStatement(copiesGraph, copyUri, FGO.contains, pUri);
+			}
+			for (Trigger trigger : screen.getTriggers()) {
+				URI tUri = tripleStore.createURI(copyUri+"/triggers/"+System.currentTimeMillis());
+				Trigger newTrigger = trigger.clone(copyUri, tUri);
+				tripleStore.addModel(newTrigger.toRDF2GoModel(), copiesGraph);
+				tripleStore.addStatement(copiesGraph, copyUri, FGO.contains, tUri);
+			}
+		} else if (bb instanceof ScreenComponent){
+			ScreenComponent sc = (ScreenComponent) bb;
+			// copy actions of the screen component
+			for (Action action : sc.getActions()) {
+				URI aUri = tripleStore.createURI(copyUri.toString() + "/actions/" + action.getName());
+				query = "CONSTRUCT { <copy> ?p ?o } WHERE { <bb> ?p ?o }";
+				query = query.replaceFirst("<copy>", aUri.toSPARQL());
+				query = query.replaceFirst("<bb>", action.getUri().toSPARQL());
+				it = tripleStore.sparqlConstruct(query).iterator();
+				while (it.hasNext()) {
+					Statement stmt = it.next();
+					URI predicate = stmt.getPredicate();
+					if (predicate.equals(FGO.hasPreCondition)) {
+						// these triples are created with specific URIs for the copy, so they are now discarded
+					} else {
+						tripleStore.addStatement(copiesGraph, stmt.getSubject(), stmt.getPredicate(), stmt.getObject());
+					}
+				}
+				tripleStore.addStatement(copiesGraph, copyUri, FGO.hasAction, aUri);
+				// copy preconditions of the action
+				for (Condition condition : action.getPreconditions()) {
+					URI cUri = tripleStore.createURI(aUri.toString() + "/preconditions/" + condition.getId());
+					query = "CONSTRUCT { <copy> ?p ?o } WHERE { <bb> ?p ?o }";
+					query = query.replaceFirst("<copy>", cUri.toSPARQL());
+					query = query.replaceFirst("<bb>", condition.getUri().toSPARQL());
+					it = tripleStore.sparqlConstruct(query).iterator();
+					while (it.hasNext()) {
+						Statement stmt = it.next();
+						tripleStore.addStatement(copiesGraph, stmt.getSubject(), stmt.getPredicate(), stmt.getObject());
+					}
+					tripleStore.addStatement(copiesGraph, aUri, FGO.hasPreCondition, cUri);
+				}
+			}
+			// copy postconditions of the screen component
+			for (Condition condition : sc.getPostconditions()) {
+				URI cUri = tripleStore.createURI(copyUri.toString() + "/postconditions/" + condition.getId());
+				query = "CONSTRUCT { <copy> ?p ?o } WHERE { <bb> ?p ?o }";
+				query = query.replaceFirst("<copy>", cUri.toSPARQL());
+				query = query.replaceFirst("<bb>", condition.getUri().toSPARQL());
+				it = tripleStore.sparqlConstruct(query).iterator();
+				while (it.hasNext()) {
+					Statement stmt = it.next();
+					tripleStore.addStatement(copiesGraph, stmt.getSubject(), stmt.getPredicate(), stmt.getObject());
+				}
+				tripleStore.addStatement(copiesGraph, copyUri, FGO.hasPostCondition, cUri);
+			}
+		}
+		
 		return copyUri;
+	}
+	
+	public void removeCopy(URI uri) throws NotFoundException {
+		tripleStore.removeResource(uri);
 	}
 
 	public void addPreOrPost(PreOrPost se)
@@ -1344,8 +1454,16 @@ public class Catalogue {
 	}
 
 	public Collection<Form> getAllForms() {
+		return getAllForms(true);
+	}
+	
+	public Collection<Form> getAllForms(boolean template) {
+		return getAllForms(template ? templatesGraph : copiesGraph);
+	}
+	
+	private Collection<Form> getAllForms(URI graph) {
 		LinkedList<Form> results = new LinkedList<Form>();
-		ClosableIterator<Statement> it = tripleStore.findStatements(templatesGraph, Variable.ANY, RDF.type, FGO.Form);
+		ClosableIterator<Statement> it = tripleStore.findStatements(graph, Variable.ANY, RDF.type, FGO.Form);
 		while (it.hasNext()) {
 			try {
 				results.add(getForm(it.next().getSubject().asURI()));
@@ -1356,7 +1474,7 @@ public class Catalogue {
 		it.close();
 		return results;
 	}
-
+	
 	public Collection<Operator> getAllOperators() {
 		LinkedList<Operator> results = new LinkedList<Operator>();
 		ClosableIterator<Statement> it = tripleStore.findStatements(templatesGraph, Variable.ANY, RDF.type, FGO.Operator);
