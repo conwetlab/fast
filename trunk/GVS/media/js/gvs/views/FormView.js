@@ -132,8 +132,7 @@ var FormView = Class.create(BuildingBlockView,
      * Removes the DOM Elements and frees building blocks
      * @override
      */
-    destroy: function () {
-        // Let the garbage collector to do its job
+    destroy: function ($super) {
 
         this._actions.each(function(pair) {
             pair.value.destroy();
@@ -142,6 +141,7 @@ var FormView = Class.create(BuildingBlockView,
         this._triggerIcons.each(function(pair) {
             pair.value.destroy();
         });
+        $super();
     }
 
     // **************** PRIVATE METHODS **************** //

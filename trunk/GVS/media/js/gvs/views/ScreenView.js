@@ -156,11 +156,11 @@ var ScreenView = Class.create(BuildingBlockView,
      * Removes the DOM Elements and frees building blocks
      * @override
      */
-    destroy: function () {
+    destroy: function ($super) {
         // Let the garbage collector to do its job
         this._preIcons = null;
         this._postIcons = null;
-        this._node = null;
+        $super();
     },
 
     /**

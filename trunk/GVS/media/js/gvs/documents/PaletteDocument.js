@@ -634,8 +634,8 @@ var PaletteDocument = Class.create(AbstractDocument, /** @lends PaletteDocument.
      * @private
      */
     _deleteInstance: function(instance) {
-        var node = instance.getView().getNode();
-        node.parentNode.removeChild(node);
+        /*var node = instance.getView().getNode();
+        node.parentNode.removeChild(node);*/
         this._setSelectedElement();
         instance.destroy(true);
         this._setDirty(true);

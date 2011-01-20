@@ -62,8 +62,10 @@ var ActionView = Class.create(
     destroy: function () {
         // Let the garbage collector to do its job
         this._preIcons = null;
+        this._node.remove();
         this._node = null;
     },
+
 
     setReachability: function(/** Object */ actionData) {
         var satisfeable = actionData.satisfied;

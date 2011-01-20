@@ -123,11 +123,12 @@ var ResourceView = Class.create(BuildingBlockView,
      * Removes the DOM Elements and frees building blocks
      * @override
      */
-    destroy: function () {
+    destroy: function ($super) {
         // Let the garbage collector to do its job
         this._icons = null;
-        this._node = null;
+        $super();
     }
+
 
     // **************** PRIVATE METHODS **************** //
 });
