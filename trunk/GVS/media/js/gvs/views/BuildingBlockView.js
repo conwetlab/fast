@@ -71,7 +71,11 @@ var BuildingBlockView = Class.create( /** @lends BuildingBlockView.prototype */ 
      * Removes the DOM Elements off the DOM Document
      */
     remove:function() {
-        this._node.remove();
+        try {
+            this._node.remove();
+        } catch (e) {
+            // Do nothing
+        }
     },
 
     /**
