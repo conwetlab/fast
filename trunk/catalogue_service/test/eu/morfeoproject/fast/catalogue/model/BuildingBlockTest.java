@@ -7,10 +7,6 @@ import org.json.JSONObject;
 import org.junit.Before;
 import org.junit.Test;
 import org.ontoware.rdf2go.model.node.URI;
-import org.ontoware.rdf2go.model.node.impl.URIImpl;
-import org.ontoware.rdf2go.vocabulary.OWL;
-
-import com.hp.hpl.jena.reasoner.rdfsReasoner1.AssertFRule;
 
 import eu.morfeoproject.fast.catalogue.NotFoundException;
 import eu.morfeoproject.fast.catalogue.builder.BuildingBlockJSONBuilder;
@@ -92,7 +88,6 @@ public class BuildingBlockTest {
 		Screen s1 = (Screen) TestUtils.buildBBFromText(TestUtils.getCatalogue().getServerURL(), "screen", text);
 		TestUtils.getCatalogue().addScreen(s1);
 		Screen s2 = TestUtils.getCatalogue().getScreen(s1.getUri());
-		TestUtils.getCatalogue().printStatements();
 		assertTrue(s1.equals(s2));
 		assertEquals(s1.getPreconditions().size(), s2.getPreconditions().size());
 		assertEquals(s1.getPostconditions().size(), s2.getPostconditions().size());
