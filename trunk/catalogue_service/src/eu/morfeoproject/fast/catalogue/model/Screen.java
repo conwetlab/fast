@@ -2,6 +2,7 @@ package eu.morfeoproject.fast.catalogue.model;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.UUID;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -112,7 +113,7 @@ public class Screen extends WithConditions {
 			for (Pipe pipe : getPipes()) {
 				URI pUri = pipe.getUri();
 				if (pUri == null) {
-					pUri = model.createURI(screenUri+"/pipes/"+System.currentTimeMillis());
+					pUri = model.createURI(screenUri+"/pipes/"+UUID.randomUUID().toString());
 					pipe.setUri(pUri);
 				}
 				model.addStatement(screenUri, FGO.contains, pUri);
@@ -122,7 +123,7 @@ public class Screen extends WithConditions {
 			for (Trigger trigger : getTriggers()) {
 				URI tUri = trigger.getUri();
 				if (tUri == null) {
-					tUri = model.createURI(screenUri+"/triggers/"+System.currentTimeMillis());
+					tUri = model.createURI(screenUri+"/triggers/"+UUID.randomUUID().toString());
 					trigger.setUri(tUri);
 				}
 				model.addStatement(screenUri, FGO.contains, tUri);

@@ -12,6 +12,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.StringTokenizer;
+import java.util.UUID;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -1172,13 +1173,13 @@ public class Catalogue {
 				tripleStore.addStatement(copiesGraph, copyUri, FGO.hasPostCondition, cUri);
 			}
 			for (Pipe pipe : screen.getPipes()) {
-				URI pUri = tripleStore.createURI(copyUri+"/pipes/"+System.currentTimeMillis());
+				URI pUri = tripleStore.createURI(copyUri+"/pipes/"+UUID.randomUUID().toString());
 				Pipe newPipe = pipe.clone(copyUri, pUri);
 				tripleStore.addModel(newPipe.toRDF2GoModel(), copiesGraph);
 				tripleStore.addStatement(copiesGraph, copyUri, FGO.contains, pUri);
 			}
 			for (Trigger trigger : screen.getTriggers()) {
-				URI tUri = tripleStore.createURI(copyUri+"/triggers/"+System.currentTimeMillis());
+				URI tUri = tripleStore.createURI(copyUri+"/triggers/"+UUID.randomUUID().toString());
 				Trigger newTrigger = trigger.clone(copyUri, tUri);
 				tripleStore.addModel(newTrigger.toRDF2GoModel(), copiesGraph);
 				tripleStore.addStatement(copiesGraph, copyUri, FGO.contains, tUri);
