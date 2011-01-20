@@ -17,6 +17,7 @@ import org.json.JSONObject;
 import org.ontoware.rdf2go.model.node.URI;
 import org.ontoware.rdf2go.model.node.impl.URIImpl;
 
+import eu.morfeoproject.fast.catalogue.BuildingBlockException;
 import eu.morfeoproject.fast.catalogue.NotFoundException;
 import eu.morfeoproject.fast.catalogue.model.BuildingBlock;
 import eu.morfeoproject.fast.catalogue.planner.Plan;
@@ -58,7 +59,11 @@ public class PlannerServlet extends GenericServlet {
 			try {
 				JSONArray goalArray = input.getJSONArray("goal");
 				for (int g = 0; g < goalArray.length(); g++) {
-					goalList.add(new URIImpl(goalArray.getString(g)));
+					URI uri = new URIImpl(goalArray.getString(g));
+					BuildingBlock bb = getCatalogue().getBuildingBlock(uri);
+					if (bb.getTemplate() == null) 
+						throw new BuildingBlockException("Resource "+uri+" must be a copy of a prototype.");
+					goalList.add(bb.getTemplate());
 				}
 			} catch (JSONException e) {
 				log.debug("Goal attribute is not a list, maybe a single goal URI?");
@@ -105,10 +110,13 @@ public class PlannerServlet extends GenericServlet {
 			response.setStatus(HttpServletResponse.SC_OK);
 		} catch (JSONException e) {
 			log.error(e.toString(), e);
-			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+			response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
 		} catch (NotFoundException e) {
 			log.error(e.toString(), e);
 			response.sendError(HttpServletResponse.SC_NOT_FOUND, e.getMessage());
+		} catch (BuildingBlockException e) {
+			log.error(e.toString(), e);
+			response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
 		}
 	}
 }
