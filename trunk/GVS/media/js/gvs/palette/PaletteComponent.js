@@ -171,31 +171,62 @@ var PaletteComponent = Class.create(DragSource,
      * @private
      */
     _createTooltip: function (/*DomNode View*/ node) {
-        var screenName =this._buildingBlockDescription.getTitle();
+        var screenName = this._buildingBlockDescription.getTitle();
         var screenVersion =  this._buildingBlockDescription.version;
         var screenDescription =  this._buildingBlockDescription.description['en-gb'];
+        var screenCreator = this._buildingBlockDescription.creator;
+        var screenshot = this._buildingBlockDescription.screenshot;
 
         var pres =  this._getPreConditions();
         var posts =  this._getPostConditions();
 
         var content = document.createElement('div');
         var title = document.createElement('h3');
+        content.appendChild(title);
         title.appendChild(document.createTextNode(screenName+' '));
+
         var version = document.createElement('span');
         version.style.color = '#444';
-        version.appendChild(document.createTextNode(screenVersion));
+        version.appendChild(document.createTextNode(screenVersion + ' '));
         title.appendChild(version);
-        content.appendChild(title);
+
+        var by = document.createElement('span');
+        by.style.fontSize = '85%';
+        by.style.fontWeight = 'normal';
+        by.appendChild(document.createTextNode('by '));
+        title.appendChild(by);
+
+        var creator = document.createElement('span');
+        creator.style.fontSize = '85%';
+        creator.style.fontStyle = 'italic';
+        creator.style.fontWeight = 'normal';
+        creator.style.color = '#999';
+        creator.appendChild(document.createTextNode(screenCreator));
+        title.appendChild(creator);
+
+        if (screenshot) {
+            var screenshotDiv = document.createElement('div');
+            screenshotDiv.style.textAlign = 'center';
+            content.appendChild(screenshotDiv);
+
+            var image = new Element('img', {
+                'src': screenshot,
+                'style': 'width: 250px'
+            });
+            screenshotDiv.appendChild(image);
+        }
 
         var description = document.createElement('p');
         description.appendChild(document.createTextNode(screenDescription));
         content.appendChild(description);
+
 
         function buildTableConditions(conditions) {
             var table = document.createElement('table');
             for (var i=0;conditions && i < conditions.length; i++) {
                 var condition = conditions[i];
                 var label = condition.label['en-gb'];
+                label += " (" + FactFactory.getFactUri(condition) + ")";
                 var preFact = FactFactory.getFactIcon(condition, "embedded");
 
                 var td1 = document.createElement('td');
