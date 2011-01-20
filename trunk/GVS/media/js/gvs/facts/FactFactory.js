@@ -54,6 +54,15 @@ Object.extend(FactFactory, {
         return uri;
     },
 
+    /**
+     * Returns the fact Shortcut
+     * @type String
+     */
+    getFactShortcut: function (/** Object */ factData) {
+        var fact = this._getFact(factData);
+        return fact.getShortcut();
+    },
+
     // **************** PRIVATE METHODS **************** //
 
     /**

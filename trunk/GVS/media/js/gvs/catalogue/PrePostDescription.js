@@ -16,6 +16,13 @@ var PrePostDescription = Class.create(BuildingBlockDescription,
         return new PrePostDescription(this.toJSON());
     },
 
+    /*
+     * @override
+     */
+    getOrder: function() {
+        return FactFactory.getFactShortcut(this);
+    },
+
     /**
      * Overriding getTitle.
      * @type String

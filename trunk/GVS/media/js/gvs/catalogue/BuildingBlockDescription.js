@@ -38,6 +38,14 @@ var BuildingBlockDescription = Class.create(
     },
 
     /**
+     * Return the field to order the building block in the catalogue
+     * @type String
+     */
+    getOrder: function() {
+        return this.getTitle();
+    },
+
+    /**
      * Implementing the TableModel interface
      * @type String
      */

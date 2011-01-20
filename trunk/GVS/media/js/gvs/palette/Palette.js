@@ -128,9 +128,13 @@ var Palette = Class.create(SetListener, /** @lends Palette.prototype */ {
          * @private
          */
         _updateComponents: function() {
+            var type = this._set.getBuildingBlockType();
             var descs = $A(this._set.getBuildingBlocks());
-            if (!GVS.getUser().getCatalogueMagic()){
-                descs = descs.sortBy(function(desc){ return desc.getTitle().toLowerCase() });
+            if (!GVS.getUser().getCatalogueMagic() ||
+                type == Constants.BuildingBlock.DOMAIN_CONCEPT) {
+                    descs = descs.sortBy(function(desc) {
+                        return desc.getOrder();
+                    });
             }
 
             // Emptying the current components
