@@ -968,36 +968,36 @@ h4{
 
 
 .standalone_fact .contentLayer {
-    width: 25px;
-    height: 25px;
-    line-height: 25px;
+    width: 35px;
+    height: 35px;
+    line-height: 35px;
     text-align: center;
     font-weight: bold;
     color: #808080;
-    background: url("../images/facts/25x25/grey.png") no-repeat center center;
+    background: url("../images/facts/35x35/grey.png") no-repeat center center;
 }
 .satisfeable.standalone_fact .contentLayer {
-    background: url("../images/facts/25x25/green.png") no-repeat center center;
+    background: url("../images/facts/35x35/green.png") no-repeat center center;
     color: #068106;
 }
 .unsatisfeable.standalone_fact .contentLayer {
-    background: url("../images/facts/25x25/red.png") no-repeat center center;
+    background: url("../images/facts/35x35/red.png") no-repeat center center;
     color: #B90000;
 }
 .selected .standalone_fact .contentLayer {
-    background: url("../images/facts/25x25/grey_selected.png") no-repeat center center;
+    background: url("../images/facts/35x35/grey_selected.png") no-repeat center center;
     color: #EAEAEA;
 }
 .selected .standalone_fact.satisfeable .contentLayer {
-    background: url("../images/facts/25x25/green_selected.png") no-repeat center center;
+    background: url("../images/facts/35x35/green_selected.png") no-repeat center center;
     color: #ddf7dd;
 }
 .selected .standalone_fact.unsatisfeable .contentLayer {
-    background: url("../images/facts/25x25/red_selected.png") no-repeat center center;
+    background: url("../images/facts/35x35/red_selected.png") no-repeat center center;
     color: #f5d9d9;
 }
 .standalone_fact.negative .contentLayer {
-    background: url("../images/facts/25x25/negative.png") no-repeat center center;
+    background: url("../images/facts/35x35/negative.png") no-repeat center center;
     color: #FFFFFF;
 }
 
@@ -1037,22 +1037,22 @@ h4{
 }
 
 .view.recommendation1 .standalone_fact .recommendationLayer {
-    background: url("../images/facts/33x33/recommendation1.png") no-repeat center center;
+    background: url("../images/facts/43x43/recommendation1.png") no-repeat center center;
 }
 .view.recommendation2 .standalone_fact .recommendationLayer {
-    background: url("../images/facts/33x33/recommendation2.png") no-repeat center center;
+    background: url("../images/facts/43x43/recommendation2.png") no-repeat center center;
 }
 .view.recommendation3 .standalone_fact .recommendationLayer {
-    background: url("../images/facts/33x33/recommendation3.png") no-repeat center center;
+    background: url("../images/facts/43x43/recommendation3.png") no-repeat center center;
 }
 .view.recommendation4 .standalone_fact .recommendationLayer {
-    background: url("../images/facts/33x33/recommendation4.png") no-repeat center center;
+    background: url("../images/facts/43x43/recommendation4.png") no-repeat center center;
 }
 .view.recommendation5 .standalone_fact .recommendationLayer {
-    background: url("../images/facts/33x33/recommendation5.png") no-repeat center center;
+    background: url("../images/facts/43x43/recommendation5.png") no-repeat center center;
 }
 .view.recommendation6 .standalone_fact .recommendationLayer {
-    background: url("../images/facts/33x33/recommendation6.png") no-repeat center center;
+    background: url("../images/facts/43x43/recommendation6.png") no-repeat center center;
 }
 
 

@@ -594,7 +594,7 @@ var ScreenDocument = Class.create(PaletteDocument,
                                         this.mine._inferenceEngine, false);
             var position = {
                 'top': 35,
-                'left': Geometry.getCenter(this.mine._prePostNodes[area]).left - 16
+                'left': Geometry.getCenter(this.mine._prePostNodes[area]).left - 21
             };
             var id = UIDGenerator.generate(prePostDesc.id);
             this.mine._prePostInstances[area].setId(id);

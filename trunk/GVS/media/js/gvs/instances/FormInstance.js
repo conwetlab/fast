@@ -1,8 +1,8 @@
 var FormInstance = Class.create(ScreenComponentInstance,
     /** @lends FormInstance.prototype */ {
 
-    _preOffsetPosition:  {top:6, left:2},
-    _postOffsetPosition: {top:9, left:2},
+    _preOffsetPosition:  {top:12, left:4},
+    _postOffsetPosition: {top:12, left:5},
 
     initialize:function($super, buildingBlockDescription, inferenceEngine) {
         $super(buildingBlockDescription, inferenceEngine);

@@ -229,8 +229,8 @@ var PrePostInstance = Class.create(ComponentInstance,
             options.alwaysSrc = true;
             options.direction = [1,0];
             options.offsetPosition = {
-                'top': 2,
-                'left': 15
+                'top': 9,
+                'left': 26
             };
             options.ddConfig = {// A precondition in screen design is an output
                                 // (data to be consumed inside the screen)
@@ -240,7 +240,7 @@ var PrePostInstance = Class.create(ComponentInstance,
         } else {
             options.direction = [-1,0];
             options.offsetPosition = {
-                'top': 2,
+                'top': 9,
                 'left': -8
             };
             options.ddConfig = { // Viceversa
