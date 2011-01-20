@@ -1235,6 +1235,32 @@ public class Catalogue {
 	}
 	
 	public void removeCopy(URI uri) throws NotFoundException {
+		ClosableIterator<Statement> cIt = tripleStore.findStatements(uri, Variable.ANY, Variable.ANY);
+		for (; cIt.hasNext(); ) {
+			Statement bbSt = cIt.next();
+			URI predicate = bbSt.getPredicate();
+			Node object = bbSt.getObject();
+			if (predicate.equals(FGO.hasAction)) {
+				ClosableIterator<Statement> aIt = tripleStore.findStatements(object.asURI(), Variable.ANY, Variable.ANY);
+				for (; aIt.hasNext(); ) {
+					Statement aSt = aIt.next();
+					if (aSt.getPredicate().equals(FGO.hasPreCondition)) {
+						tripleStore.removeResource(aSt.getObject().asURI());
+					}
+				}
+				aIt.close();
+				tripleStore.removeResource(object.asURI());
+			} else if (predicate.equals(FGO.hasPreCondition)
+					|| predicate.equals(FGO.hasPostCondition)) {
+				tripleStore.removeResource(object.asURI());
+			} else if (predicate.equals(FGO.contains)) {
+				String str = object.asURI().toString();
+				if (!str.contains("/pipes/") && !str.contains("/triggers/")) {
+					tripleStore.removeResource(object.asURI());
+				}
+			}
+		}
+		cIt.close();
 		tripleStore.removeResource(uri);
 	}
 
