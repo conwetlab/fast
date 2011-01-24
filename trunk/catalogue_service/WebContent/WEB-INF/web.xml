@@ -42,30 +42,6 @@
 	</servlet>
 	<servlet>
 		<description></description>
-		<display-name>PreconditionServlet</display-name>
-		<servlet-name>PreconditionServlet</servlet-name>
-		<servlet-class>eu.morfeoproject.fast.catalogue.services.PreconditionServlet</servlet-class>
-	</servlet>
-	<servlet>
-		<description></description>
-		<display-name>PostconditionServlet</display-name>
-		<servlet-name>PostconditionServlet</servlet-name>
-		<servlet-class>eu.morfeoproject.fast.catalogue.services.PostconditionServlet</servlet-class>
-	</servlet>
-	<servlet>
-		<description></description>
-		<display-name>ScreenFindServlet</display-name>
-		<servlet-name>ScreenFindServlet</servlet-name>
-		<servlet-class>eu.morfeoproject.fast.catalogue.services.ScreenFindServlet</servlet-class>
-	</servlet>
-	<servlet>
-		<description></description>
-		<display-name>ScreenCheckServlet</display-name>
-		<servlet-name>ScreenCheckServlet</servlet-name>
-		<servlet-class>eu.morfeoproject.fast.catalogue.services.ScreenCheckServlet</servlet-class>
-	</servlet>
-	<servlet>
-		<description></description>
 		<display-name>ScreenFindCheckServlet</display-name>
 		<servlet-name>ScreenFindCheckServlet</servlet-name>
 		<servlet-class>eu.morfeoproject.fast.catalogue.services.ScreenFindCheckServlet</servlet-class>
@@ -123,14 +99,6 @@
 	<servlet-mapping>
 		<servlet-name>ConceptServlet</servlet-name>
 		<url-pattern>/concepts/*</url-pattern>
-	</servlet-mapping>
-	<servlet-mapping>
-		<servlet-name>PreconditionServlet</servlet-name>
-		<url-pattern>/preconditions/*</url-pattern>
-	</servlet-mapping>
-	<servlet-mapping>
-		<servlet-name>PostconditionServlet</servlet-name>
-		<url-pattern>/postconditions/*</url-pattern>
 	</servlet-mapping>
 	<servlet-mapping>
 		<servlet-name>ConceptServlet</servlet-name>
