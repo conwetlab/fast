@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -34,13 +36,12 @@ public class IServeClient {
 		this.iServeURL = config.get("server");
 	}
 	
-	public List<IServeResponse> query(List<URI> classes) {
+	public Collection<IServeResponse> query(List<URI> classes) {
 		if (this.iServeURL == null || this.iServeURL.equals(""))
 			throw new RuntimeException("iServe URL has not been configured. Please, set up an iServe URL.");
 		
 		if (classes.isEmpty()) return new LinkedList<IServeResponse>();
 		
-		LinkedList<IServeResponse> results = new LinkedList<IServeResponse>();
 		String queryTemplate = 
 			"PREFIX rdfs:<http://www.w3.org/2000/01/rdf-schema#>\n" +
 			"PREFIX xsd:<http://www.w3.org/2001/XMLSchema#>\n" +
@@ -60,7 +61,8 @@ public class IServeClient {
 			"  OPTIONAL { ?service rdfs:isDefinedBy ?doc } . \n" +
 			"  OPTIONAL { ?o rest:hasAddress ?address } } \n";
 		
-		//TODO modify to do just 1 query, with all the classes inside the sparql query, and not several queries one of each class.
+		HashMap<String, IServeResponse> services = new HashMap<String, IServeResponse>();
+		// makes one query per class in order to identify which services are related with which classes
 		for (URI classUri : classes) {
 			String query = queryTemplate.replaceAll("<class>", classUri.toSPARQL());
 			if (log.isDebugEnabled()) log.debug(query);
@@ -74,20 +76,25 @@ public class IServeClient {
 				doc.getDocumentElement().normalize();
 				NodeList nodeList = doc.getElementsByTagName("result");
 				
-				if (log.isDebugEnabled()) log.debug(nodeList.getLength()+" services found.");
+				if (log.isDebugEnabled()) log.debug(nodeList.getLength()+" services found for "+classUri);
 				for (int i = 0; i < nodeList.getLength(); i++) {
 					Node node = nodeList.item(i);
 					NodeList children = node.getChildNodes();
-					IServeResponse result = new IServeResponse();
-					for (int j = 0; j < children.getLength(); j++) {
-						result.put(children.item(j).getAttributes().getNamedItem("name").getNodeValue(), children.item(j).getTextContent());
-						//TODO change: in the response we should include the "class" and its properties, but this is not the best way.
-						ArrayList<URI> list = new ArrayList<URI>();
-						list.add(classUri);
-						result.put("classes", list);
+					IServeResponse response = new IServeResponse();
+					if (services.containsKey(response.get("service"))) {
+						services.get(response.get("service")).getCollection("classes").add(classUri);
+					} else {
+						for (int j = 0; j < children.getLength(); j++) {
+							response.get("service");
+							response.put(children.item(j).getAttributes().getNamedItem("name").getNodeValue(), children.item(j).getTextContent());
+							//TODO change: in the response we should include the "class" and its properties, but this is not the best way.
+							ArrayList<URI> list = new ArrayList<URI>();
+							list.add(classUri);
+							response.put("classes", list);
+						}
+						services.put(response.get("service").toString(), response);
+						if (log.isDebugEnabled()) log.debug(response.toString());
 					}
-					results.add(result);
-					if (log.isDebugEnabled()) log.debug(result.toString());
 				}
 			} catch (IOException e) {
 				log.error(e.toString(), e);
@@ -98,6 +105,6 @@ public class IServeClient {
 			}
 		}
 		
-		return results;
+		return services.values();
 	}
 }

@@ -1,10 +1,9 @@
 package eu.morfeoproject.fast.catalogue.services;
 
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
-import java.util.List;
+import java.util.Collection;
 
 import org.junit.Test;
 import org.ontoware.rdf2go.model.node.URI;
@@ -22,7 +21,8 @@ public class IServeQueryTest {
 		IServeClient client = new IServeClient(new IServeConfiguration("iserve.properties"));
 		ArrayList<URI> list = new ArrayList<URI>();
 		list.add(new URIImpl("http://xmlns.com/foaf/0.1/Person"));
-		List<IServeResponse> results = client.query(list);
+		Collection<IServeResponse> results = client.query(list);
+		for (IServeResponse r : results) System.out.println(r.toJSON().toString(2));
 		assertTrue(results.size() > 0);
 	}
 
@@ -32,7 +32,8 @@ public class IServeQueryTest {
 		ArrayList<URI> list = new ArrayList<URI>();
 		list.add(new URIImpl("http://www.eyrie.org/%7Ezednenem/2002/rdfchannel#Channel"));
 		list.add(new URIImpl("http://coconut.tie.nl:8080/storage/repositories/wp7-ontologies/files/wp7-sap-m33-eval-ontology#Country"));
-		List<IServeResponse> results = client.query(list);
+		Collection<IServeResponse> results = client.query(list);
+		for (IServeResponse r : results) System.out.println(r.toJSON().toString(2));
 		assertTrue(results.size() > 0);
 	}
 

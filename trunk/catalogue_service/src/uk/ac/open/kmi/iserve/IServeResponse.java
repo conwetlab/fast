@@ -19,6 +19,10 @@ public class IServeResponse {
 		return this.data.get(key);
 	}
 	
+	public Collection getCollection(String key) {
+		return (Collection) this.data.get(key);
+	}
+	
 	public void put(String key, Object value) {
 		this.data.put(key, value);
 	}
