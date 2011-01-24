@@ -54,8 +54,8 @@ public class DefaultOntologies {
 //    			true);
 
     /**-- Ontologies for test purposes --**/
-//    public static Ontology AMAZON_MOCKUP =
-//    	new Ontology(new URIImpl("http://aws.amazon.com/AWSECommerceService#"), "amazon-mockup.rdf", Syntax.RdfXml, true);
+    public static Ontology AMAZON_ECOMMERCE =
+    	new Ontology(new URIImpl("http://example.com/AWSECommerceService#"), "amazon-ecommerce-v1.ttl", Syntax.Turtle, true);
 //    public static Ontology DEMO =
 //    	new Ontology(new URIImpl("http://www.morfeoproject.eu/fast/demo#"), "demo.rdf", Syntax.RdfXml, true);
 //    public static PublicOntology GR =

@@ -1,0 +1,114 @@
+# Amazon WS E-Commerce Service Ontology
+# 
+# developed as part of the EU FAST Project (FP7-ICT-2007-1-216048)
+# 
+# editor: Ismael Rivera, DERI, National Unversity of Ireland, Galway
+#
+# this turtle file is the original document, from which all other versions
+# (html, rdf/xml) are created
+
+@prefix amazon: <http://fast.morfeo-project.org/ontology/amazon#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>  .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix doap: <http://usefulinc.com/ns/doap#> .
+@prefix sioc: <http://rdfs.org/sioc/ns#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix ctag: <http://commontag.org/ns#> .
+@prefix fgo: <http://purl.oclc.org/fast/ontology/gadget#>  .
+  
+<http://fast.morfeo-project.org/ontology/amazon> a owl:Ontology ;
+    rdfs:label "Simple Amazon ontology for the E-commerce Web Service"@en ;
+    rdfs:comment """This ontology has been created as an example of ontology defining a web service. 
+        It has been developed as part of the EU project 'FAST' 
+		(FAST AND ADVANCED STORYBOARD TOOLS), FP7-ICT-2007-1-216048."""@en ;
+    dcterms:created "2011-01-24"@en ;
+    dcterms:modified "$Date: 2011-01-24 17:12:20 +0000 (Mon, 24 Jan 2011) $"@en ;
+    dcterms:creator <http://ismaelrivera.es/#me> ;
+    dcterms:contributor fgo:fast_members ;
+    foaf:maker <http://ismaelrivera.es/#me> ;
+    doap:revision "$Revision: 1 $" .
+
+<http://data.semanticweb.org/organization/deri-nui-galway> a foaf:Organization;
+	foaf:name "DERI"@en ;
+	foaf:homepage <http://www.deri.ie> ;
+	foaf:member <http://ismaelrivera.es/#me> .
+	
+fgo:fast_members a foaf:Group ;
+	foaf:name "Members of the FAST project"@en .
+
+<http://ismaelrivera.es/#me> a foaf:Person ;
+	foaf:name "Ismael Rivera"@en ;
+	foaf:homepage <http://ismaelrivera.es/> ;
+	rdfs:seeAlso <http://www.deri.ie/fileadmin/scripts/foaf.php?id=356> .
+
+# Classes
+
+amazon:SearchRequest a owl:Class ;
+	rdfs:label "A request to search for an item"@en ;
+	ctag:tagged [
+		ctag:label "amazon"@en ; 
+		ctag:means <http://www.amazon.com>
+		] .
+
+amazon:LookupRequest a owl:Class ;
+	rdfs:label "A request to lookup for an item using an ASIN"@en ;
+	ctag:tagged [
+		ctag:label "amazon"@en ; 
+		ctag:means <http://www.amazon.com>
+		] .
+
+amazon:Item a owl:Class ;
+	rdfs:label "An item handled by the Amazon Service"@en ;
+	ctag:tagged [
+		ctag:label "amazon"@en ; 
+		ctag:means <http://www.amazon.com>
+		] .
+
+amazon:ShoppingCart a owl:Class ;
+	rdfs:label "An Amazon shopping cart is represented by an ID and a list of items"@en ;
+	ctag:tagged [
+		ctag:label "amazon"@en ; 
+		ctag:means <http://www.amazon.com>
+		] .
+
+amazon:PurchaseURL a owl:Class ;
+	rdfs:label "URL generated as a result of the checkout of a shopping cart"@en ;
+	ctag:tagged [
+		ctag:label "amazon"@en ; 
+		ctag:means <http://www.amazon.com>
+		] .
+
+# Properties
+
+amazon:id a owl:DatatypeProperty ;
+	rdfs:label "id"@en ;
+	rdfs:domain amazon:ShoppingCart ;
+	rdfs:range xsd:string .
+
+amazon:purchaseUrl a owl:ObjectProperty ;
+	rdfs:label "purchaseUrl"@en ;
+	rdfs:domain amazon:ShoppingCart ;
+	rdfs:range foaf:Document .
+
+amazon:smallImage a owl:ObjectProperty ;
+	rdfs:label "smallImage"@en ;
+	rdfs:domain amazon:Item ;
+	rdfs:range foaf:Document .
+
+amazon:mediumImage a owl:ObjectProperty ;
+	rdfs:label "mediumImage"@en ;
+	rdfs:domain amazon:Item ;
+	rdfs:range foaf:Document .
+
+amazon:largeImage a owl:ObjectProperty ;
+	rdfs:label "largeImage"@en ;
+	rdfs:domain amazon:Item ;
+	rdfs:range foaf:Document .
+
+amazon:price a owl:DatatypeProperty ;
+	rdfs:label "price"@en ;
+	rdfs:domain amazon:Item ;
+	rdfs:range xsd:double .
