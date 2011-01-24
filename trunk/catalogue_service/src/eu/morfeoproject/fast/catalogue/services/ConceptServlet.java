@@ -48,14 +48,20 @@ public class ConceptServlet extends GenericServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		PrintWriter writer = response.getWriter();
 		String format = request.getHeader("accept") != null ? request.getHeader("accept") : MediaType.APPLICATION_JSON;
-		String[] chunks = request.getRequestURI().split("/");
-		String id = chunks[chunks.length-1];
-		if (id.equalsIgnoreCase("concepts")) id = null;
+		String servlet = request.getServletPath();
+		String url = request.getRequestURL().toString();
+		String[] chunks = url.substring(url.indexOf(servlet) + 1).split("/");
+		String name = null, domain = null;
 		String[] tags = null;
-		if (chunks[chunks.length-3].equalsIgnoreCase("tags"))
+		if (chunks[0].equals("tags")) {
 			tags = Util.splitTags(chunks[chunks.length-2]);
+		} else if (chunks.length == 3) {
+			name = chunks[chunks.length-1];
+			domain = chunks[chunks.length-2];
+		}
 		
-		if (id == null) {
+		
+		if (domain == null && name == null) {
 			// List the members of the collection
 			if (log.isInfoEnabled()) log.info("Retrieving all concepts");
 			try {
@@ -84,6 +90,16 @@ public class ConceptServlet extends GenericServlet {
 				log.error(e.getMessage(), e);
 				response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
 			}
+		} else if (domain != null && name != null) {
+			try {
+				Concept concept = getCatalogue().getConcept(new URIImpl(url));
+				writer.print(concept.toJSON().toString(2));
+			} catch (JSONException e) {
+				log.error(e.getMessage(), e);
+				response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
+			}
+		} else {
+			response.sendError(HttpServletResponse.SC_BAD_REQUEST, "URL is bad formed");
 		}
 		writer.close();
 	}

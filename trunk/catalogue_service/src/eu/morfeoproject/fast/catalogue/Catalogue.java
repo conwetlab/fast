@@ -1550,8 +1550,7 @@ public class Catalogue {
 				concept.getDescriptions().put(description.getLanguageTag(), description.getValue());
 			} else if (predicate.equals(CTAG.tagged)) {
 				CTag tag = new CTag();
-				BlankNode bnTag = object.asBlankNode();
-				ClosableIterator<Statement> tagIt = tripleStore.findStatements(bnTag, Variable.ANY, Variable.ANY);
+				ClosableIterator<Statement> tagIt = tripleStore.findStatements(object.asBlankNode(), Variable.ANY, Variable.ANY);
 				for (; tagIt.hasNext();) {
 					Statement tagSt = tagIt.next();
 					URI tagPredicate = tagSt.getPredicate();
@@ -1636,7 +1635,7 @@ public class Catalogue {
 		} catch (Exception e) {
 			log.error("Error while saving concept " + cUri, e);
 			try {
-				removeScreen(cUri);
+				removeConcept(cUri);
 			} catch (NotFoundException nfe) {
 				log.error("Concept " + cUri + " does not exist.", nfe);
 			}
@@ -1810,12 +1809,11 @@ public class Catalogue {
 		tripleStore.removeResource(uri);
 	}
 
-	public List<IServeResponse> findIServeWS(List<Condition> conList) {
+	public Collection<IServeResponse> findIServeWS(List<Condition> conList) {
 		if (conList.isEmpty())
 			return new LinkedList<IServeResponse>();
 
-		IServeClient client = new IServeClient(
-				new IServeConfiguration("iserve.properties"));
+		IServeClient client = new IServeClient(new IServeConfiguration("iserve.properties"));
 		ArrayList<URI> list = new ArrayList<URI>();
 		for (Condition con : conList) {
 			ClosableIterator<Statement> it = patternToRDF2GoModel(
@@ -1826,6 +1824,7 @@ public class Catalogue {
 			}
 			it.close();
 		}
+
 		return client.query(list);
 	}
 

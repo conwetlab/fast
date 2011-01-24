@@ -178,7 +178,7 @@ public class Concept {
 			if (tag.getMeans() != null)
 				model.addStatement(bnTag, CTAG.means, tag.getMeans());
 			for (String lang : tag.getLabels().keySet())
-				model.addStatement(bnTag, RDFS.label, model.createLanguageTagLiteral(lang, tag.getLabels().get(lang)));
+				model.addStatement(bnTag, CTAG.label, model.createLanguageTagLiteral(tag.getLabels().get(lang), lang));
 			if (tag.getTaggingDate() != null)
 				model.addStatement(bnTag, CTAG.taggingDate, model.createDatatypeLiteral(tag.getTaggingDate().toString(), XSD._date));
 		}
