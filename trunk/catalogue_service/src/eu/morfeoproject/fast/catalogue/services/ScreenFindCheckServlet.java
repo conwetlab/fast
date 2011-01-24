@@ -142,6 +142,7 @@ public class ScreenFindCheckServlet extends GenericServlet {
 					}
 					jsonScreen.put("preconditions", preArray);
 					jsonScreen.put("reachability", reachability);
+					screensOut.put(jsonScreen);
 				}
 				
 				JSONObject canvasOut = new JSONObject();

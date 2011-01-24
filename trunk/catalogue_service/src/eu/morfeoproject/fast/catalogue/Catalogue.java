@@ -630,7 +630,7 @@ public class Catalogue {
 				toCheck.add(screen);
 			}
 		}
-		if (!results.isEmpty() && !toCheck.isEmpty()) {
+		if (!results.isEmpty() || !toCheck.isEmpty()) {
 			results.addAll(filterReachableScreens(results, conditionList, toCheck));
 		}
 		return results;
