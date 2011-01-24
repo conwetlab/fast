@@ -65,15 +65,6 @@ public class BuildingBlockTest {
 	}
 	
 	@Test
-	public void createPostcondition() throws Exception {
-		Postcondition p1 = (Postcondition) TestUtils.buildBBFromFile(TestUtils.getCatalogue().getServerURL(), "postcondition", "data/json/postconditions/searchCriteria.json");
-		TestUtils.getCatalogue().addPreOrPost(p1);
-		Postcondition p2 = TestUtils.getCatalogue().getPostcondition(p1.getUri());
-		assertTrue(p1.equals(p2));
-		assertEquals(p1.getConditions().size(), p2.getConditions().size());
-	}
-	
-	@Test
 	public void createScreen1() throws Exception {
 		// create the screen components
 		Form f1 = (Form) TestUtils.buildBBFromFile(TestUtils.getCatalogue().getServerURL(), "form", "data/json/forms/amazonList.json");
@@ -96,6 +87,7 @@ public class BuildingBlockTest {
 		assertTrue(s2.getPipes().containsAll(s1.getPipes()));
 		assertEquals(s1.getTriggers().size(), s2.getTriggers().size());
 		assertTrue(s2.getTriggers().containsAll(s1.getTriggers()));
+		TestUtils.getCatalogue().printStatements();
 	}
 
 	@Test

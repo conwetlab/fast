@@ -27,8 +27,6 @@ import eu.morfeoproject.fast.catalogue.model.Form;
 import eu.morfeoproject.fast.catalogue.model.Library;
 import eu.morfeoproject.fast.catalogue.model.Operator;
 import eu.morfeoproject.fast.catalogue.model.Pipe;
-import eu.morfeoproject.fast.catalogue.model.Postcondition;
-import eu.morfeoproject.fast.catalogue.model.Precondition;
 import eu.morfeoproject.fast.catalogue.model.Property;
 import eu.morfeoproject.fast.catalogue.model.Screen;
 import eu.morfeoproject.fast.catalogue.model.ScreenComponent;
@@ -72,18 +70,12 @@ public class BuildingBlockJSONBuilder {
 		return bs;
 	}
 	
-	public static Precondition buildPrecondition(JSONObject json, URI uri) throws JSONException, IOException {
-		Precondition condition = BuildingBlockFactory.createPrecondition(uri);
-		parsePrecondition(condition, json);
+	public static Condition buildCondition(JSONObject json) throws JSONException, IOException {
+		Condition condition = BuildingBlockFactory.createCondition(null);
+		parseCondition(condition, json);
 		return condition;
 	}
 
-	public static Postcondition buildPostcondition(JSONObject json, URI uri) throws JSONException, IOException {
-		Postcondition condition = BuildingBlockFactory.createPostcondition(uri);
-		parsePostcondition(condition, json);
-		return condition;
-	}
-	
 	/**
 	 * Every statement of the conditions has to follow this rules:
 	 * <ul>
@@ -100,24 +92,7 @@ public class BuildingBlockJSONBuilder {
 	public static List<Condition> buildConditions(JSONArray conditionsArray) throws JSONException, IOException {
 		LinkedList<Condition> conditions = new LinkedList<Condition>();
 		for (int i = 0; i < conditionsArray.length(); i++) {
-			JSONObject cJson = conditionsArray.getJSONObject(i);
-			Condition c = BuildingBlockFactory.createCondition();
-			if (cJson.has("id") && !cJson.isNull("id") && cJson.getString("id") != "") { // optional
-				c.setId(cJson.getString("id"));
-			}
-			boolean positive = cJson.has("positive") ? cJson.getBoolean("positive") : true;
-			c.setPositive(positive);
-			if (cJson.get("label") != null) {
-				JSONObject jsonLabels = cJson.getJSONObject("label");
-				Iterator<String> labels = jsonLabels.keys();
-				for ( ; labels.hasNext(); ) {
-					String key = labels.next();
-					c.getLabels().put(key, jsonLabels.getString(key));
-				}
-			}
-			String patternString = cJson.getString("pattern");
-			c.setPatternString(patternString);
-			conditions.add(c);
+			conditions.add(buildCondition(conditionsArray.getJSONObject(i)));
 		}
 		return conditions;
 	}
@@ -224,6 +199,25 @@ public class BuildingBlockJSONBuilder {
 		}
 	}
 
+	private static Condition parseCondition(Condition condition, JSONObject cJson) throws JSONException, IOException {
+		if (cJson.has("id") && !cJson.isNull("id") && cJson.getString("id") != "") { // optional
+			condition.setId(cJson.getString("id"));
+		}
+		boolean positive = cJson.has("positive") ? cJson.getBoolean("positive") : true;
+		condition.setPositive(positive);
+		if (cJson.get("label") != null) {
+			JSONObject jsonLabels = cJson.getJSONObject("label");
+			Iterator<String> labels = jsonLabels.keys();
+			for ( ; labels.hasNext(); ) {
+				String key = labels.next();
+				condition.getLabels().put(key, jsonLabels.getString(key));
+			}
+		}
+		String patternString = cJson.getString("pattern");
+		condition.setPatternString(patternString);
+		return condition;
+	}
+	
 	private static ScreenFlow parseScreenFlow(ScreenFlow sf, JSONObject jsonScreenFlow) throws JSONException, IOException {
 		// fill common properties of the resource
 		parseBuildingBlock(sf, jsonScreenFlow);
@@ -279,22 +273,6 @@ public class BuildingBlockJSONBuilder {
 		return screen;
 	}
 	
-	private static Precondition parsePrecondition(Precondition pre, JSONObject jsonPre) throws JSONException, IOException {
-		pre.setId(jsonPre.getString("id"));
-		// conditions
-		JSONArray conditionsArray = jsonPre.getJSONArray("conditions");
-		pre.setConditions(buildConditions(conditionsArray));
-		return pre;
-	}
-	
-	private static Postcondition parsePostcondition(Postcondition post, JSONObject jsonPost) throws JSONException, IOException {
-		post.setId(jsonPost.getString("id"));
-		// conditions
-		JSONArray conditionsArray = jsonPost.getJSONArray("conditions");
-		post.setConditions(buildConditions(conditionsArray));
-		return post;
-	}
-	
 	private static Action parseAction(JSONObject jsonAction) throws JSONException, IOException {
 		Action action = BuildingBlockFactory.createAction();
 		
@@ -324,7 +302,9 @@ public class BuildingBlockJSONBuilder {
 		if (jsonLibrary.get("language") != null) {
 			library.setLanguage(jsonLibrary.getString("language"));
 		}
-		if (jsonLibrary.get("source") != null && !jsonLibrary.getString("source").equalsIgnoreCase("null")) {
+		if (jsonLibrary.get("source") != null 
+				&& !jsonLibrary.getString("source").equalsIgnoreCase("null")
+				&& !jsonLibrary.getString("source").equalsIgnoreCase("")) {
 			library.setSource(new URIImpl(jsonLibrary.getString("source")));
 		}
 		

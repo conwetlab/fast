@@ -30,7 +30,6 @@ import eu.morfeoproject.fast.catalogue.model.Form;
 import eu.morfeoproject.fast.catalogue.model.Library;
 import eu.morfeoproject.fast.catalogue.model.Operator;
 import eu.morfeoproject.fast.catalogue.model.Pipe;
-import eu.morfeoproject.fast.catalogue.model.PreOrPost;
 import eu.morfeoproject.fast.catalogue.model.Screen;
 import eu.morfeoproject.fast.catalogue.model.ScreenComponent;
 import eu.morfeoproject.fast.catalogue.model.ScreenFlow;
@@ -68,21 +67,6 @@ public class BuildingBlockRDF2GoBuilder {
 			log.error(""+e, e);
 		}
 		return screen;
-	}
-
-	public static PreOrPost buildPreOrPost(Model model, URI uri) {
-		PreOrPost pp = null;
-		try {
-			ClosableIterator<Statement> it = model.findStatements(uri, RDF.type, Variable.ANY);
-			URI type = null;
-			if (it.hasNext())
-				type = it.next().getObject().asURI();
-			it.close();
-			pp = (PreOrPost) retrievePreOrPost(type, model);
-		} catch (InvalidBuildingBlockTypeException e) {
-			log.error("Only pre/postcondition type are valid: "+e, e);
-		}
-		return pp;
 	}
 
 	public static Form buildForm(Model model) {
@@ -281,25 +265,6 @@ public class BuildingBlockRDF2GoBuilder {
 		}
 		
 		return withConditions;
-	}
-	
-	private static PreOrPost retrievePreOrPost(URI type, Model model) throws InvalidBuildingBlockTypeException {
-		if (!type.equals(FGO.Precondition) && !type.equals(FGO.Postcondition))
-			throw new InvalidBuildingBlockTypeException(type+" is not a valid screen component type.");
-		
-		PreOrPost pp = (PreOrPost) retrieveBuildingBlock(type, model);
-		if (pp != null) {
-			// find all the info related to a pre/postcondition
-			ClosableIterator<Statement> cIt = model.findStatements(pp.getUri(), Variable.ANY, Variable.ANY);
-			for ( ; cIt.hasNext(); ) {
-				Statement st = cIt.next();
-				URI predicate = st.getPredicate();
-				if (predicate.equals(FGO.hasCondition)) {
-					pp.getConditions().add(retrieveCondition(st.getObject().asURI(), model));
-				}
-			}
-		}
-		return pp;
 	}
 	
 	private static ScreenComponent retrieveScreenComponent(URI type, Model model) throws InvalidBuildingBlockTypeException {

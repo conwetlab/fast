@@ -46,10 +46,6 @@ public class TestUtils {
 			bb = BuildingBlockJSONBuilder.buildOperator(json, uri);
 		} else if (type.equals("service")) {
 			bb = BuildingBlockJSONBuilder.buildBackendService(json, uri);
-		} else if (type.equals("precondition")) {
-			bb = BuildingBlockJSONBuilder.buildPrecondition(json, uri);
-		} else if (type.equals("postcondition")) {
-			bb = BuildingBlockJSONBuilder.buildPostcondition(json, uri);
 		}
 		
 		return bb;

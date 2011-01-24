@@ -11,12 +11,8 @@ import org.ontoware.rdf2go.model.node.URI;
 
 import eu.morfeoproject.fast.catalogue.Catalogue;
 import eu.morfeoproject.fast.catalogue.cache.Cacheable;
-import eu.morfeoproject.fast.catalogue.model.BuildingBlock;
 import eu.morfeoproject.fast.catalogue.model.Condition;
-import eu.morfeoproject.fast.catalogue.model.Postcondition;
-import eu.morfeoproject.fast.catalogue.model.Precondition;
 import eu.morfeoproject.fast.catalogue.model.Screen;
-import eu.morfeoproject.fast.catalogue.model.factory.BuildingBlockFactory;
 
 public abstract class Planner extends Cacheable<List<Plan>> {
 	protected final transient Log log = LogFactory.getLog(this.getClass());
@@ -30,10 +26,10 @@ public abstract class Planner extends Cacheable<List<Plan>> {
 	 * @param resources
 	 * @return
 	 */
-	public List<Plan> searchPlans(URI goal, List<BuildingBlock> resources) {
+	public List<Plan> searchPlans(URI goal, List<Screen> screens) {
 		LinkedList<URI> uriList = new LinkedList<URI>();
-		for (BuildingBlock resource : resources)
-			uriList.add(resource.getUri());
+		for (Screen screen : screens)
+			uriList.add(screen.getUri());
 		
 		LinkedList<Plan> planList = new LinkedList<Plan>();
 		List<Plan> cacheList = cache.get(goal.toString());
@@ -71,11 +67,11 @@ public abstract class Planner extends Cacheable<List<Plan>> {
 		return newList;
 	}
 	
-	public List<Plan> searchPlans(List<URI> goalList, List<BuildingBlock> resources) {
+	public List<Plan> searchPlans(List<URI> goalList, List<Screen> screens) {
 		HashMap<URI, List<Plan>> plansByGoal = new HashMap<URI, List<Plan>>();
 		List<Plan> combinedPlans;
 
-		for (URI goal : goalList) plansByGoal.put(goal, searchPlans(goal, resources));
+		for (URI goal : goalList) plansByGoal.put(goal, searchPlans(goal, screens));
 		combinedPlans = new LinkedList<Plan>();
 		for (URI goal : goalList) {
 			combinedPlans = combine(combinedPlans, plansByGoal.get(goal));
@@ -165,28 +161,19 @@ public abstract class Planner extends Cacheable<List<Plan>> {
 		}
 	}
 	
-	public void add(BuildingBlock resource) {
-		calculateForwards(resource);
-		if (resource instanceof Screen) calculateBackwards(resource);
+	public void add(Screen screen) {
+		calculateForwards(screen);
+		calculateBackwards(screen);
 	}
 	
-	public void update(BuildingBlock newResource, BuildingBlock oldResource) {
-		if (newResource instanceof Screen && oldResource instanceof Screen) {
-			if (!equalListCondition(((Screen) newResource).getPreconditions(), ((Screen) oldResource).getPreconditions())) {
-				plannerStore.removeTo(newResource.getUri());
-				calculateBackwards(newResource);
-			}
-			if (!equalListCondition(((Screen) newResource).getPostconditions(), ((Screen) oldResource).getPostconditions())) {
-				plannerStore.removeFrom(newResource.getUri());
-				calculateForwards(newResource);
-			}
-		} else if (newResource instanceof Precondition && oldResource instanceof Precondition) {
-			if (!equalListCondition(((Precondition) newResource).getConditions(), ((Precondition) oldResource).getConditions())) {
-				plannerStore.removeFrom(newResource.getUri());
-				calculateForwards(newResource);
-			}
-		} else {
-			log.error(newResource.getUri()+" and "+oldResource+" are not the same type of resource.");
+	public void update(Screen newScreen, Screen oldScreen) {
+		if (!equalListCondition(newScreen.getPreconditions(), oldScreen.getPreconditions())) {
+			plannerStore.removeTo(newScreen.getUri());
+			calculateBackwards(newScreen);
+		}
+		if (!equalListCondition(newScreen.getPostconditions(), oldScreen.getPostconditions())) {
+			plannerStore.removeFrom(newScreen.getUri());
+			calculateForwards(newScreen);
 		}
 	}
 	
@@ -199,47 +186,30 @@ public abstract class Planner extends Cacheable<List<Plan>> {
 		plannerStore.clear();
 	}
 	
-	private void calculateForwards(BuildingBlock resource) {
-		ArrayList<BuildingBlock> resources = new ArrayList<BuildingBlock>();
-		if (resource instanceof Screen) {
-			if (((Screen) resource).getPostconditions().size() > 0) {
-				resources.add(resource);
-			}
-		} else if (resource instanceof Precondition) {
-			if (((Precondition) resource).getConditions().size() > 0) {
-				Postcondition post = BuildingBlockFactory.createPostcondition();
-				// need to create an Event for the FIND operation, Slots don't
-				// have unsatisfied preconditions
-				post.setUri(resource.getUri());
-				post.setConditions(((Precondition) resource).getConditions());
-				resources.add(post);
-			}
+	private void calculateForwards(Screen screen) {
+		ArrayList<Screen> screens = new ArrayList<Screen>();
+		if (screen.getPostconditions().size() > 0) {
+			screens.add(screen);
 		}
-		if (resources.size() > 0) {
+		if (screens.size() > 0) {
 			ArrayList<URI> results = new ArrayList<URI>();
-			results.addAll(catalogue.findForwards(resources, true, true, 0, -1, null));
+			results.addAll(catalogue.findForwards(screens, new ArrayList<Condition>(), new ArrayList<Condition>(), true, true, 0, -1, null));
 			for (URI result : results) {
-				plannerStore.add(resource.getUri(), result);
+				plannerStore.add(screen.getUri(), result);
 			}
 		}
 	}
 	
-	private void calculateBackwards(BuildingBlock resource) {
-		ArrayList<BuildingBlock> resources = new ArrayList<BuildingBlock>();
-		if (resource instanceof Screen) {
-			if (((Screen) resource).getPreconditions().size() > 0) {
-				resources.add(resource);
-			}
-		} else if (resource instanceof Precondition) {
-			if (((Precondition) resource).getConditions().size() > 0) {
-				resources.add(resource);
-			}
+	private void calculateBackwards(Screen screen) {
+		ArrayList<Screen> screens = new ArrayList<Screen>();
+		if (screen.getPreconditions().size() > 0) {
+			screens.add(screen);
 		}
-		if (resources.size() > 0) {
+		if (screens.size() > 0) {
 			ArrayList<URI> results = new ArrayList<URI>();
-			results.addAll(catalogue.findBackwards(resources, true, true, 0, -1, null));
+			results.addAll(catalogue.findBackwards(screens, new ArrayList<Condition>(), new ArrayList<Condition>(), true, true, 0, -1, null));
 			for (URI result : results) {
-				plannerStore.add(result, resource.getUri());
+				plannerStore.add(result, screen.getUri());
 			}
 		}
 	}
@@ -266,17 +236,17 @@ public abstract class Planner extends Cacheable<List<Plan>> {
 	 * Generates all the plans from a given list of screens, already stored in the catalogue
 	 */
 	protected void seed() {
-		for (Screen screen : catalogue.getAllScreens()) {
-			if (screen.getPreconditions().size() > 0) {
-				ArrayList<BuildingBlock> resources = new ArrayList<BuildingBlock>();
-				resources.add(screen);
-				ArrayList<URI> results = new ArrayList<URI>();
-				results.addAll(catalogue.findBackwards(resources, true, true, 0, -1, null));
-				for (URI result : results) {
-					plannerStore.add(result, screen.getUri());
-				}
-			}
-		}
+//		for (Screen screen : catalogue.getAllScreens()) {
+//			if (screen.getPreconditions().size() > 0) {
+//				ArrayList<BuildingBlock> resources = new ArrayList<BuildingBlock>();
+//				resources.add(screen);
+//				ArrayList<URI> results = new ArrayList<URI>();
+//				results.addAll(catalogue.findBackwards(resources, true, true, 0, -1, null));
+//				for (URI result : results) {
+//					plannerStore.add(result, screen.getUri());
+//				}
+//			}
+//		}
 	}
 	
 }

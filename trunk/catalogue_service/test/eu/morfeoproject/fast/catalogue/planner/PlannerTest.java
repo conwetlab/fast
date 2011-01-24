@@ -8,7 +8,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.ontoware.rdf2go.model.node.URI;
 
-import eu.morfeoproject.fast.catalogue.model.BuildingBlock;
 import eu.morfeoproject.fast.catalogue.model.Screen;
 import eu.morfeoproject.fast.util.TestUtils;
 
@@ -31,7 +30,7 @@ public class PlannerTest {
 		TestUtils.getCatalogue().addScreen((Screen) TestUtils.buildBBFromFile(TestUtils.getCatalogue().getServerURL(), "screen", "data/json/screens/amazonSuggestionCode.json"));
 
 		assertEquals(7, TestUtils.getCatalogue().getAllScreens().size());
-		ArrayList<BuildingBlock> canvas = new ArrayList<BuildingBlock>();
+		ArrayList<Screen> canvas = new ArrayList<Screen>();
 		canvas.add(goal);
 		long start = System.currentTimeMillis();
 		assertEquals(4, TestUtils.getCatalogue().searchPlans(goal.getUri(), canvas).size());
@@ -57,7 +56,7 @@ public class PlannerTest {
 		TestUtils.getCatalogue().addScreen((Screen) TestUtils.buildBBFromFile(TestUtils.getCatalogue().getServerURL(), "screen", "data/json/screens/getFOAFPersons.json"));
 
 		assertEquals(10, TestUtils.getCatalogue().getAllScreens().size());
-		ArrayList<BuildingBlock> canvas = new ArrayList<BuildingBlock>();
+		ArrayList<Screen> canvas = new ArrayList<Screen>();
 		canvas.add(goal1);
 		canvas.add(goal2);
 		long start = System.currentTimeMillis();

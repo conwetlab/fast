@@ -20,6 +20,7 @@ import org.ontoware.rdf2go.model.node.impl.URIImpl;
 import eu.morfeoproject.fast.catalogue.BuildingBlockException;
 import eu.morfeoproject.fast.catalogue.NotFoundException;
 import eu.morfeoproject.fast.catalogue.model.BuildingBlock;
+import eu.morfeoproject.fast.catalogue.model.Screen;
 import eu.morfeoproject.fast.catalogue.planner.Plan;
 
 /**
@@ -72,14 +73,14 @@ public class PlannerServlet extends GenericServlet {
 			}
 			// parse the canvas
 			ArrayList<URI> canvasUris = new ArrayList<URI>();
-			ArrayList<BuildingBlock> canvas = new ArrayList<BuildingBlock>();
+			ArrayList<Screen> canvas = new ArrayList<Screen>();
 			JSONArray jsonCanvas = input.getJSONArray("canvas");
 			for (int i = 0; i < jsonCanvas.length(); i++) {
 				URI uri = new URIImpl(((JSONObject) jsonCanvas.get(i)).getString("uri"));
-				BuildingBlock r = getCatalogue().getBuildingBlock(uri);
-				if (r == null) 
+				Screen screen = getCatalogue().getScreen(uri);
+				if (screen == null) 
 					throw new NotFoundException("Resource "+uri+" does not exist.");
-				canvas.add(r);
+				canvas.add(screen);
 				canvasUris.add(uri);
 			}
 			// parse 'page' and 'per_page' for pagination

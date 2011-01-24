@@ -15,13 +15,10 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.ontoware.rdf2go.model.node.URI;
-import org.ontoware.rdf2go.model.node.impl.URIImpl;
 
 import eu.morfeoproject.fast.catalogue.NotFoundException;
-import eu.morfeoproject.fast.catalogue.model.BuildingBlock;
+import eu.morfeoproject.fast.catalogue.builder.BuildingBlockJSONBuilder;
 import eu.morfeoproject.fast.catalogue.model.Condition;
-import eu.morfeoproject.fast.catalogue.model.Postcondition;
-import eu.morfeoproject.fast.catalogue.model.Precondition;
 import eu.morfeoproject.fast.catalogue.model.Screen;
 
 /**
@@ -54,26 +51,42 @@ public class ScreenFindCheckServlet extends GenericServlet {
 		try {
 			// create JSON representation of the input
 			JSONObject input = new JSONObject(body);
-			// parses the canvas
-			ArrayList<BuildingBlock> canvas = new ArrayList<BuildingBlock>();
-			JSONArray jsonCanvas = input.getJSONArray("canvas");
-			for (int i = 0; i < jsonCanvas.length(); i++) {
-				URI uri = new URIImpl(((JSONObject)jsonCanvas.get(i)).getString("uri"));
-				BuildingBlock r = getCatalogue().getBuildingBlock(uri);
-				if (r == null) 
+
+			// parses the canvas (screens and pre/postconditions)
+			ArrayList<Screen> screens = new ArrayList<Screen>();
+			ArrayList<Condition> preconditions = new ArrayList<Condition>();
+			ArrayList<Condition> postconditions = new ArrayList<Condition>();
+			JSONObject jsonCanvas = input.getJSONObject("canvas");
+			JSONArray jsonScreens = jsonCanvas.getJSONArray("screens");
+			for (int i = 0; i < jsonScreens.length(); i++) {
+				URI uri = rdfFactory.createURI(((JSONObject) jsonScreens.get(i)).getString("uri"));
+				Screen screen = getCatalogue().getScreen(uri);
+				if (screen == null) 
 					throw new NotFoundException("Resource "+uri+" does not exist.");
-				canvas.add(r); 
+				screens.add(screen); 
 			}
-			// parses the list of elements
-			ArrayList<BuildingBlock> elements = new ArrayList<BuildingBlock>();
-			JSONArray jsonElements = input.getJSONArray("elements");
-			for (int i = 0; i < jsonElements.length(); i++) {
-				URI uri = new URIImpl(((JSONObject)jsonElements.get(i)).getString("uri"));
-				BuildingBlock r = getCatalogue().getBuildingBlock(uri);
-				if (r == null) 
+			JSONArray jsonPreList = jsonCanvas.getJSONArray("preconditions");
+			for (int i = 0; i < jsonPreList.length(); i++) {
+				Condition condition = BuildingBlockJSONBuilder.buildCondition(jsonPreList.getJSONObject(i));
+				preconditions.add(condition); 
+			}
+			JSONArray jsonPostList = jsonCanvas.getJSONArray("postconditions");
+			for (int i = 0; i < jsonPostList.length(); i++) {
+				Condition condition = BuildingBlockJSONBuilder.buildCondition(jsonPostList.getJSONObject(i));
+				postconditions.add(condition); 
+			}
+			
+			// parses the list of screens in the palette
+			ArrayList<Screen> palette = new ArrayList<Screen>();
+			JSONArray jsonPalette = input.getJSONArray("palette");
+			for (int i = 0; i < jsonPalette.length(); i++) {
+				URI uri = rdfFactory.createURI(((JSONObject) jsonPalette.get(i)).getString("uri"));
+				Screen screen = getCatalogue().getScreen(uri);
+				if (screen == null) 
 					throw new NotFoundException("Resource "+uri+" does not exist.");
-				elements.add(r); 
+				palette.add(screen); 
 			}
+			
 			// parses the domain context
 			JSONObject jsonDomainContext = input.getJSONObject("domainContext");
 			JSONArray jsonTags = jsonDomainContext.getJSONArray("tags");
@@ -86,83 +99,77 @@ public class ScreenFindCheckServlet extends GenericServlet {
 			// TODO do something with the user
 			String user = jsonDomainContext.getString("user");
 			// parses the criterion
-			String criterion = input.getString("criterion");
+			String criterion = input.getString("criterion").toLowerCase();
 			
+			//-----------------
 			// do the real work
-			ArrayList<BuildingBlock> all = new ArrayList<BuildingBlock>();
-			all.addAll(canvas);
-			all.addAll(elements);
-			List<URI> results = getCatalogue().findBackwards(all, true, true, 0, -1, tags);
-			// add results of 'find' to the list of elements
-			for (URI uri : results)
-				elements.add(getCatalogue().getBuildingBlock(uri));
-			List<BuildingBlock> reachables = getCatalogue().filterReachableBuildingBlocks(canvas);
+			//-----------------
+			ArrayList<Screen> all = new ArrayList<Screen>();
+			all.addAll(screens);
+			all.addAll(palette);
+			List<URI> results = getCatalogue().findBackwards(all, preconditions, postconditions, true, true, 0, -1, tags);
+			for (URI uri : results) // add results of 'find' to the palette
+				palette.add(getCatalogue().getScreen(uri));
+			
 			JSONObject output = new JSONObject();
-			if (criterion.equalsIgnoreCase("reachability")) {
-				JSONArray canvasOut = new JSONArray();
-				for (BuildingBlock bb : canvas) {
-					JSONObject jsonResource = new JSONObject();
-					if (bb instanceof Screen) {
-						Screen s = (Screen) bb;
-						jsonResource.put("uri", s.getUri());
-						JSONArray preArray = new JSONArray();
-						boolean reachability = true, satisfied = false;
-						for (Condition condition : s.getPreconditions()) {
-							satisfied = getCatalogue().isConditionSatisfied(reachables, condition, true, true, s.getUri());
-							reachability = reachability & satisfied;
-							JSONObject jsonPre = condition.toJSON();
-							jsonPre.put("satisfied", satisfied);
-							preArray.put(jsonPre);
-						}
-						jsonResource.put("preconditions", preArray);
-						jsonResource.put("reachability", reachability);
-					} else if (bb instanceof Precondition) {
-						jsonResource.put("uri", bb.getUri());
-						jsonResource.put("reachability", true);
-					} else if (bb instanceof Postcondition) {
-						Postcondition p = (Postcondition) bb;
-						jsonResource.put("uri", p.getUri());
-						JSONArray conArray = new JSONArray();
-						boolean reachability = true, satisfied = false;
-						for (Condition condition : p.getConditions()) {
-							JSONObject jsonCon = condition.toJSON();
-							satisfied = getCatalogue().isConditionSatisfied(reachables, condition, true, true, p.getUri());						
-							reachability = reachability & satisfied;
-							jsonCon.put("satisfied", satisfied);
-							conArray.put(jsonCon);
-						}
-						jsonResource.put("conditions", conArray);
-						jsonResource.put("reachability", reachability);
-					}
-					canvasOut.put(jsonResource);
+			if (criterion.equals("reachability")) {
+				JSONArray screensOut = new JSONArray();
+				JSONArray preOut = new JSONArray();
+				JSONArray postOut = new JSONArray();
+
+				List<Screen> reachables = getCatalogue().filterReachableScreens(preconditions, screens);
+				for (Condition pre : preconditions) {
+					JSONObject jsonPre = pre.toJSON();
+					jsonPre.put("satisfied", true);
+					preOut.put(jsonPre);
 				}
+				for (Condition post : postconditions) {
+					JSONObject jsonPost = post.toJSON();
+					jsonPost.put("satisfied", getCatalogue().isConditionSatisfied(preconditions, reachables, post, true, true, null));
+					postOut.put(jsonPost);
+				}
+				for (Screen screen : screens) {
+					JSONObject jsonScreen = new JSONObject();
+					jsonScreen.put("uri", screen.getUri());
+					JSONArray preArray = new JSONArray();
+					boolean reachability = true, satisfied = false;
+					for (Condition condition : screen.getPreconditions()) {
+						satisfied = getCatalogue().isConditionSatisfied(preconditions, reachables, condition, true, true, screen.getUri());
+						reachability = reachability & satisfied;
+						JSONObject jsonPre = condition.toJSON();
+						jsonPre.put("satisfied", satisfied);
+						preArray.put(jsonPre);
+					}
+					jsonScreen.put("preconditions", preArray);
+					jsonScreen.put("reachability", reachability);
+				}
+				
+				JSONObject canvasOut = new JSONObject();
+				canvasOut.put("screens", screensOut);
+				canvasOut.put("preconditions", preOut);
+				canvasOut.put("postconditions", postOut);
 				output.put("canvas", canvasOut);
-				JSONArray elementsOut = new JSONArray();
-				for (BuildingBlock bb : elements) { //TODO finish it
-					JSONObject jsonResource = new JSONObject();
-					if (bb instanceof Screen) {
-						Screen s = (Screen)bb;
-						jsonResource.put("uri", s.getUri());
-						JSONArray preArray = new JSONArray();
-						boolean reachability = true, satisfied = false;
-						for (Condition condition : s.getPreconditions()) {
-							satisfied = getCatalogue().isConditionSatisfied(reachables, condition, true, true, s.getUri());
-							reachability = reachability & satisfied;
-							JSONObject jsonPre = condition.toJSON();
-							jsonPre.put("satisfied", satisfied);
-							preArray.put(jsonPre);
-						}
-						jsonResource.put("preconditions", preArray);
-						jsonResource.put("reachability", reachability);
-					} else if (bb instanceof Precondition) {
-						jsonResource.put("uri", bb.getUri());
-						jsonResource.put("reachability", true);
-					} else if (bb instanceof Postcondition) {
-						//TODO complete it
+				
+				// check reachability of the screens in the palette
+				JSONArray paletteOut = new JSONArray();
+				for (Screen screen : palette) { //TODO finish it
+					JSONObject jsonScreen = new JSONObject();
+					jsonScreen.put("uri", screen.getUri());
+					JSONArray preArray = new JSONArray();
+					boolean reachability = true, satisfied = false;
+					for (Condition condition : screen.getPreconditions()) {
+						satisfied = getCatalogue().isConditionSatisfied(preconditions, reachables, condition, true, true, screen.getUri());
+						reachability = reachability & satisfied;
+						JSONObject jsonPre = condition.toJSON();
+						jsonPre.put("satisfied", satisfied);
+						preArray.put(jsonPre);
 					}
-					elementsOut.put(jsonResource);
+					jsonScreen.put("preconditions", preArray);
+					jsonScreen.put("reachability", reachability);
+					paletteOut.put(jsonScreen);
 				}
-				output.put("elements", elementsOut);
+				output.put("palette", paletteOut);
+				
 				writer.print(output.toString(2));
 				response.setContentType(MediaType.APPLICATION_JSON);
 				response.setStatus(HttpServletResponse.SC_OK);

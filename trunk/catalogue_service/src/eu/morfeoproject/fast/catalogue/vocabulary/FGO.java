@@ -4,8 +4,8 @@ import org.ontoware.rdf2go.model.node.URI;
 import org.ontoware.rdf2go.model.node.impl.URIImpl;
 
 /**
- * Vocabulary File. Created by org.ontoware.rdf2go.util.VocabularyWriter on Tue Dec 07 19:30:34 GMT 2010
- * input file: src/eu/morfeoproject/fast/catalogue/ontologies/fgo2009-11-16.rdf
+ * Vocabulary File. Created by org.ontoware.rdf2go.util.VocabularyWriter on Fri Jan 21 12:41:36 GMT 2011
+ * input file: src/eu/morfeoproject/fast/catalogue/ontologies/fgo2010-11-30.rdf
  * namespace: http://purl.oclc.org/fast/ontology/gadget#
  */
 public interface FGO {
@@ -75,14 +75,14 @@ condition is fulfilled within a certain screen component. Examples are methods o
     public static final URI Screen = new URIImpl("http://purl.oclc.org/fast/ontology/gadget#Screen", false);
 
     /**
-     */
-    public static final URI OnlineAccount = new URIImpl("http://xmlns.com/foaf/0.1/OnlineAccount", false);
-
-    /**
      * Label: pipe or connector@en 
      * Comment: Pipes are used to explicitly define the flow of data within a screen, e.g., from service resource to operator to a specific form element.@en 
      */
     public static final URI Pipe = new URIImpl("http://purl.oclc.org/fast/ontology/gadget#Pipe", false);
+
+    /**
+     */
+    public static final URI OnlineAccount = new URIImpl("http://xmlns.com/foaf/0.1/OnlineAccount", false);
 
     /**
      * Label: With Post-condition@en 
@@ -158,12 +158,12 @@ A condition is made up of individual facts, where each fact is represented inter
     public static final URI name = new URIImpl("http://xmlns.com/foaf/0.1/name", false);
 
     /**
-     * Label: is positive@en 
-     * Comment: Facts can be set to a specific scope: design time, execution time, or both of them. This property defines how they have to be taken into account by the inference engine or reasoner.@en 
+     * Label: has pattern string@en 
+     * Comment: This property links to the textual representation of a fact (i.e., an RDF triple), e.g., in N3.@en 
      * Comment: http://purl.oclc.org/fast/ontology/gadget#Condition 
-     * Range: http://www.w3.org/2001/XMLSchema#boolean 
+     * Range: http://www.w3.org/2001/XMLSchema#String 
      */
-    public static final URI isPositive = new URIImpl("http://purl.oclc.org/fast/ontology/gadget#isPositive", false);
+    public static final URI hasPatternString = new URIImpl("http://purl.oclc.org/fast/ontology/gadget#hasPatternString", false);
 
     /**
      * Label: has trigger string@en 
@@ -174,12 +174,12 @@ A condition is made up of individual facts, where each fact is represented inter
     public static final URI hasTrigger = new URIImpl("http://purl.oclc.org/fast/ontology/gadget#hasTrigger", false);
 
     /**
-     * Label: has pattern string@en 
-     * Comment: This property links to the textual representation of a fact (i.e., an RDF triple), e.g., in N3.@en 
+     * Label: is positive@en 
+     * Comment: Facts can be set to a specific scope: design time, execution time, or both of them. This property defines how they have to be taken into account by the inference engine or reasoner.@en 
      * Comment: http://purl.oclc.org/fast/ontology/gadget#Condition 
-     * Range: http://www.w3.org/2001/XMLSchema#String 
+     * Range: http://www.w3.org/2001/XMLSchema#boolean 
      */
-    public static final URI hasPatternString = new URIImpl("http://purl.oclc.org/fast/ontology/gadget#hasPatternString", false);
+    public static final URI isPositive = new URIImpl("http://purl.oclc.org/fast/ontology/gadget#isPositive", false);
 
     /**
      * Label: has language string@en 
@@ -254,8 +254,19 @@ A condition is made up of individual facts, where each fact is represented inter
     public static final URI tagged = new URIImpl("http://commontag.org/ns#tagged", false);
 
     /**
+     * Label: from@en 
+     * Comment: This property defines the starting point of a pipe within a screen. 
+     * Comment: http://purl.oclc.org/fast/ontology/gadget#Pipe 
+     * Range: http://purl.oclc.org/fast/ontology/gadget#Condition 
      */
-    public static final URI interest = new URIImpl("http://xmlns.com/foaf/0.1/interest", false);
+    public static final URI from = new URIImpl("http://purl.oclc.org/fast/ontology/gadget#from", false);
+
+    /**
+     * Label: has parameter template@en 
+     * Comment: Building blocks which can receive parameters must specificy a template for it.@en 
+     * Comment: http://purl.oclc.org/fast/ontology/gadget#BuildingBlock 
+     */
+    public static final URI hasParameterTemplate = new URIImpl("http://purl.oclc.org/fast/ontology/gadget#hasParameterTemplate", false);
 
     /**
      * Label: has code@en 
@@ -266,10 +277,6 @@ A condition is made up of individual facts, where each fact is represented inter
     public static final URI hasCode = new URIImpl("http://purl.oclc.org/fast/ontology/gadget#hasCode", false);
 
     /**
-     */
-    public static final URI depiction = new URIImpl("http://xmlns.com/foaf/0.1/depiction", false);
-
-    /**
      * Label: has template@en 
      * Comment: Links the copy of a building block as used in a particular screen flow to its template, as used in the palette or catalogue of available building blocks.@en 
      * Comment: http://purl.oclc.org/fast/ontology/gadget#BuildingBlock 
@@ -278,20 +285,12 @@ A condition is made up of individual facts, where each fact is represented inter
     public static final URI hasTemplate = new URIImpl("http://purl.oclc.org/fast/ontology/gadget#hasTemplate", false);
 
     /**
-     * Label: from@en 
-     * Comment: This property defines the starting point of a pipe within a screen. 
-     * Comment: http://purl.oclc.org/fast/ontology/gadget#Pipe 
-     * Range: http://purl.oclc.org/fast/ontology/gadget#Condition 
      */
-    public static final URI from = new URIImpl("http://purl.oclc.org/fast/ontology/gadget#from", false);
+    public static final URI depiction = new URIImpl("http://xmlns.com/foaf/0.1/depiction", false);
 
     /**
-     * Label: has library@en 
-     * Comment: This property indicates which programming libraries are used by the code of a screen component.@en 
-     * Comment: http://purl.oclc.org/fast/ontology/gadget#WithCode 
-     * Range: http://purl.oclc.org/fast/ontology/gadget#Library 
      */
-    public static final URI hasLibrary = new URIImpl("http://purl.oclc.org/fast/ontology/gadget#hasLibrary", false);
+    public static final URI interest = new URIImpl("http://xmlns.com/foaf/0.1/interest", false);
 
     /**
      * Label: to@en 
@@ -302,8 +301,12 @@ A condition is made up of individual facts, where each fact is represented inter
     public static final URI to = new URIImpl("http://purl.oclc.org/fast/ontology/gadget#to", false);
 
     /**
+     * Label: has library@en 
+     * Comment: This property indicates which programming libraries are used by the code of a screen component.@en 
+     * Comment: http://purl.oclc.org/fast/ontology/gadget#WithCode 
+     * Range: http://purl.oclc.org/fast/ontology/gadget#Library 
      */
-    public static final URI rights = new URIImpl("http://purl.org/dc/terms/rights", false);
+    public static final URI hasLibrary = new URIImpl("http://purl.oclc.org/fast/ontology/gadget#hasLibrary", false);
 
     /**
      * Label: has form element@en 
@@ -320,6 +323,10 @@ A condition is made up of individual facts, where each fact is represented inter
      * Range: http://purl.oclc.org/fast/ontology/gadget#Condition 
      */
     public static final URI hasPreCondition = new URIImpl("http://purl.oclc.org/fast/ontology/gadget#hasPreCondition", false);
+
+    /**
+     */
+    public static final URI rights = new URIImpl("http://purl.org/dc/terms/rights", false);
 
     /**
      * Label: has pattern@en 
@@ -343,10 +350,6 @@ A condition is made up of individual facts, where each fact is represented inter
 
     /**
      */
-    public static final URI subject = new URIImpl("http://purl.org/dc/terms/subject", false);
-
-    /**
-     */
     public static final URI rightsHolder = new URIImpl("http://purl.org/dc/terms/rightsHolder", false);
 
     /**
@@ -354,6 +357,10 @@ A condition is made up of individual facts, where each fact is represented inter
      * Comment: A way to explicitly say that an ontology uses terms from another namespace.@en 
      */
     public static final URI integratesTerm = new URIImpl("http://data.semanticweb.org/ns/misc#integratesTerm", false);
+
+    /**
+     */
+    public static final URI subject = new URIImpl("http://purl.org/dc/terms/subject", false);
 
     /**
      * Label: has copy@en 
@@ -407,10 +414,4 @@ A condition is made up of individual facts, where each fact is represented inter
      */
     public static final URI hasScreenshot = new URIImpl("http://purl.oclc.org/fast/ontology/gadget#hasScreenshot", false);
 
-    
-    // FIXME: added just for backwards compatibility
-    public static final URI Precondition = new URIImpl("http://purl.oclc.org/fast/ontology/gadget#Precondition", false);
-    public static final URI Postcondition = new URIImpl("http://purl.oclc.org/fast/ontology/gadget#Postcondition", false);
-    public static final URI hasCondition = new URIImpl("http://purl.oclc.org/fast/ontology/gadget#hasCondition", false);
-    public static final URI hasParameterTemplate = new URIImpl("http://purl.oclc.org/fast/ontology/gadget#hasParameterTemplate", false);
 }

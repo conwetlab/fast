@@ -15,8 +15,6 @@ import eu.morfeoproject.fast.catalogue.model.Condition;
 import eu.morfeoproject.fast.catalogue.model.Form;
 import eu.morfeoproject.fast.catalogue.model.Operator;
 import eu.morfeoproject.fast.catalogue.model.Pipe;
-import eu.morfeoproject.fast.catalogue.model.Postcondition;
-import eu.morfeoproject.fast.catalogue.model.Precondition;
 import eu.morfeoproject.fast.catalogue.model.Property;
 import eu.morfeoproject.fast.catalogue.model.Sample;
 import eu.morfeoproject.fast.catalogue.model.Screen;
@@ -38,10 +36,6 @@ public class BuildingBlockFactory {
 			return BuildingBlockFactory.createOperator();
 		else if (type.equals(FGO.BackendService))
 			return BuildingBlockFactory.createBackendService();
-		else if (type.equals(FGO.Precondition))
-			return BuildingBlockFactory.createPrecondition();
-		else if (type.equals(FGO.Postcondition))
-			return BuildingBlockFactory.createPostcondition();
 		else
 			throw new InvalidBuildingBlockTypeException(type+" is not a valid building block type.");
 	}
@@ -84,22 +78,6 @@ public class BuildingBlockFactory {
 
 	public static BackendService createBackendService(URI uri) {
 		return new BackendService(uri);
-	}
-
-	public static Precondition createPrecondition() {
-		return new Precondition(null);
-	}
-	
-	public static Precondition createPrecondition(URI uri) {
-		return new Precondition(uri);
-	}
-	
-	public static Postcondition createPostcondition() {
-		return new Postcondition(null);
-	}
-	
-	public static Postcondition createPostcondition(URI uri) {
-		return new Postcondition(uri);
 	}
 
 	public static Condition createCondition() {

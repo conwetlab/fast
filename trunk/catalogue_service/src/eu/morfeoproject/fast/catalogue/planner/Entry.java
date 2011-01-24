@@ -28,4 +28,8 @@ public class Entry {
 		this.to = to;
 	}
 	
+	@Override
+	public String toString() {
+		return this.from + " -> " + this.to;
+	}
 }
