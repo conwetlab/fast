@@ -27,6 +27,8 @@ public class SampleTest {
 		TestUtils.getCatalogue().addSample(s1);
 		Sample s2 = TestUtils.getCatalogue().getSample(s1.getUri());
 		assertEquals(s1, s2);
+		assertEquals(s1.getType(), s2.getType());
+		assertEquals(2, s2.toJSON().getJSONArray("properties").length());
 	}
 	
 	@Test
