@@ -311,7 +311,7 @@ public class OperatorServlet extends GenericServlet {
 		
 		if (id == null) {
 			response.sendError(HttpServletResponse.SC_BAD_REQUEST, "An ID must be specified.");
-		} else if (type.equals("operatos")) {
+		} else if (type.equals("operators")) {
 			try {
 				getCatalogue().removeOperator(new URIImpl(uri));
 				response.setStatus(HttpServletResponse.SC_OK);
