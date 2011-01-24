@@ -16,6 +16,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.ontoware.rdf2go.model.node.URI;
 
+import eu.morfeoproject.fast.catalogue.BuildingBlockException;
 import eu.morfeoproject.fast.catalogue.NotFoundException;
 import eu.morfeoproject.fast.catalogue.builder.BuildingBlockJSONBuilder;
 import eu.morfeoproject.fast.catalogue.model.Condition;
@@ -63,6 +64,8 @@ public class ScreenFindCheckServlet extends GenericServlet {
 				Screen screen = getCatalogue().getScreen(uri);
 				if (screen == null) 
 					throw new NotFoundException("Resource "+uri+" does not exist.");
+				if (screen.getTemplate() == null)
+					throw new BuildingBlockException("Resource "+uri+" must be a clone of a prototype.");
 				screens.add(screen); 
 			}
 			JSONArray jsonPreList = jsonCanvas.getJSONArray("preconditions");
@@ -183,6 +186,9 @@ public class ScreenFindCheckServlet extends GenericServlet {
 		} catch (NotFoundException e) {
 			log.error(e.toString(), e);
 			response.sendError(HttpServletResponse.SC_NOT_FOUND, e.getMessage());
+		} catch (BuildingBlockException e) {
+			log.error(e.toString(), e);
+			response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
 		}
 	}
 	

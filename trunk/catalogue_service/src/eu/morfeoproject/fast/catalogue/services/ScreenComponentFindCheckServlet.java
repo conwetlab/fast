@@ -18,6 +18,7 @@ import org.ontoware.rdf2go.model.node.URI;
 import org.ontoware.rdf2go.model.node.impl.URIImpl;
 
 import uk.ac.open.kmi.iserve.IServeResponse;
+import eu.morfeoproject.fast.catalogue.BuildingBlockException;
 import eu.morfeoproject.fast.catalogue.NotFoundException;
 import eu.morfeoproject.fast.catalogue.builder.BuildingBlockJSONBuilder;
 import eu.morfeoproject.fast.catalogue.model.Action;
@@ -69,6 +70,8 @@ public class ScreenComponentFindCheckServlet extends GenericServlet {
 				ScreenComponent sc = (ScreenComponent) getCatalogue().getBuildingBlock(uri);
 				if (sc == null) 
 					throw new NotFoundException("Resource "+uri+" does not exist.");
+				if (sc.getTemplate() == null)
+					throw new BuildingBlockException("Resource "+uri+" must be a clone of a prototype.");
 				canvas.add(sc);
 			}
 			// parses the list of forms
@@ -79,6 +82,8 @@ public class ScreenComponentFindCheckServlet extends GenericServlet {
 				ScreenComponent sc = (ScreenComponent) getCatalogue().getBuildingBlock(uri);
 				if (sc == null) 
 					throw new NotFoundException("Resource "+uri+" does not exist.");
+				if (sc.getTemplate() != null)
+					throw new BuildingBlockException("Resource "+uri+" must be a prototype.");
 				inForms.add(sc); 
 			}
 			// parses the list of operators
@@ -89,6 +94,8 @@ public class ScreenComponentFindCheckServlet extends GenericServlet {
 				ScreenComponent sc = (ScreenComponent) getCatalogue().getBuildingBlock(uri);
 				if (sc == null) 
 					throw new NotFoundException("Resource "+uri+" does not exist.");
+				if (sc.getTemplate() != null)
+					throw new BuildingBlockException("Resource "+uri+" must be a prototype.");
 				inOperators.add(sc); 
 			}
 			// parses the list of backend services
@@ -99,6 +106,8 @@ public class ScreenComponentFindCheckServlet extends GenericServlet {
 				ScreenComponent sc = (ScreenComponent) getCatalogue().getBuildingBlock(uri);
 				if (sc == null) 
 					throw new NotFoundException("Resource "+uri+" does not exist.");
+				if (sc.getTemplate() != null)
+					throw new BuildingBlockException("Resource "+uri+" must be a prototype.");
 				inBackendServices.add(sc); 
 			}
 			// parses the domain context
@@ -267,6 +276,9 @@ public class ScreenComponentFindCheckServlet extends GenericServlet {
 		} catch (NotFoundException e) {
 			log.error(e.toString(), e);
 			response.sendError(HttpServletResponse.SC_NOT_FOUND, e.getMessage());
+		} catch (BuildingBlockException e) {
+			log.error(e.toString(), e);
+			response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
 		}
 	}
 	
