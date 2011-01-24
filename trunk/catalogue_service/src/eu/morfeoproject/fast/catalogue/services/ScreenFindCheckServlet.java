@@ -175,7 +175,7 @@ public class ScreenFindCheckServlet extends GenericServlet {
 				response.setContentType(MediaType.APPLICATION_JSON);
 				response.setStatus(HttpServletResponse.SC_OK);
 			} else {
-				response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Critetion not allowed.");
+				response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Criterion not allowed.");
 			}
 		} catch (JSONException e) {
 			log.error(e.toString(), e);
