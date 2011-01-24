@@ -51,7 +51,7 @@ public class FormServlet extends GenericServlet {
 		Accept accept = new Accept(request);
 		String format = accept.isEmpty() ? "" : accept.getDominating();
 		String servlet = request.getServletPath();
-		String url = request.getRequestURL().toString().toLowerCase();
+		String url = request.getRequestURL().toString();
 		String[] chunks = url.substring(url.indexOf(servlet) + 1).split("/");
 		int copy = chunks.length > 1 && chunks[1].equals("copies") ? 1 : 0;
 		String id = chunks.length > 1+copy ? chunks[1+copy] : null;
