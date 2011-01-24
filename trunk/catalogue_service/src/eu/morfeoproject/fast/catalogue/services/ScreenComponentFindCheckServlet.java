@@ -126,6 +126,7 @@ public class ScreenComponentFindCheckServlet extends GenericServlet {
 			} 
 			// flag to search or not for new components
 			boolean search = input.has("search") ? input.getBoolean("search") : true;
+			boolean iserve = input.has("iserve") ? input.getBoolean("iserve") : true;
 			
 			// do the real work
 			//-----------------------------
@@ -180,8 +181,10 @@ public class ScreenComponentFindCheckServlet extends GenericServlet {
 				for (URI uri : bsResults) {
 					outBackendServices.add(getCatalogue().getScreenComponent(uri));
 				}
-				// query iServe for more web services
-				iServeList.addAll(getCatalogue().findIServeWS(conList));
+				if (iserve) {
+					// query iServe for more web services
+					iServeList.addAll(getCatalogue().findIServeWS(conList));
+				}
 			}
 			
 			// extract pipes which are well defined (precondition and
