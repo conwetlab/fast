@@ -105,14 +105,6 @@
 		<url-pattern>/tags/*</url-pattern>
 	</servlet-mapping>
 	<servlet-mapping>
-		<servlet-name>ScreenFindServlet</servlet-name>
-		<url-pattern>/screens/find</url-pattern>
-	</servlet-mapping>
-	<servlet-mapping>
-		<servlet-name>ScreenCheckServlet</servlet-name>
-		<url-pattern>/screens/check</url-pattern>
-	</servlet-mapping>
-	<servlet-mapping>
 		<servlet-name>ScreenFindCheckServlet</servlet-name>
 		<url-pattern>/screens/findcheck</url-pattern>
 	</servlet-mapping>
