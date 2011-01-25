@@ -298,18 +298,20 @@ public class Catalogue {
 		}
 
 		// search for components which preconditions (from actions) are
-		// satisfied
-		// by any of the conditions given
+		// satisfied by any of the conditions given
+		System.out.println(conditions.size());
 		if (conditions.size() > 0) {
 			queryString = queryString.concat("{");
 			for (Condition con : conditions) {
-				queryString = queryString.concat("{ ?bb " + FGO.hasAction.toSPARQL() + " ?a . ");
+				ClosableIterator<Statement> cIt = null;
+				// query for building blocks with the condition as an action's precondition
+				queryString = queryString.concat(" { ?bb " + FGO.hasAction.toSPARQL() + " ?a . ");
 				queryString = queryString.concat(" ?a " + FGO.hasPreCondition.toSPARQL() + " ?c . ");
 				queryString = queryString.concat(" ?c " + FGO.hasPattern.toSPARQL() + " ?p . ");
 				queryString = queryString.concat("GRAPH ?p {");
-				ClosableIterator<Statement> it = patternToRDF2GoModel(con.getPatternString()).iterator();
-				for (; it.hasNext();) {
-					Statement st = it.next();
+				cIt = patternToRDF2GoModel(con.getPatternString()).iterator();
+				for (; cIt.hasNext();) {
+					Statement st = cIt.next();
 					Resource subject = st.getSubject();
 					Node object = st.getObject();
 					String s = (subject instanceof BlankNode) ?
@@ -320,15 +322,33 @@ public class Catalogue {
 								object.toSPARQL();
 					queryString = queryString.concat(s + " " + st.getPredicate().toSPARQL() + " " + o + " . ");
 				}
-				it.close();
+				cIt.close();
+				queryString = queryString.concat("} } UNION");
+				// query for building blocks with the condition as a postcondition
+				queryString = queryString.concat(" { ?bb " + FGO.hasPostCondition.toSPARQL() + " ?c . ");
+				queryString = queryString.concat(" ?c " + FGO.hasPattern.toSPARQL() + " ?p . ");
+				queryString = queryString.concat("GRAPH ?p {");
+				cIt = patternToRDF2GoModel(con.getPatternString()).iterator();
+				for (; cIt.hasNext();) {
+					Statement st = cIt.next();
+					Resource subject = st.getSubject();
+					Node object = st.getObject();
+					String s = (subject instanceof BlankNode) ?
+							toCleanVariable(subject.toString()) :
+								subject.toSPARQL();
+					String o = (object instanceof BlankNode) ?
+							toCleanVariable(object.toString()) :
+								object.toSPARQL();
+					queryString = queryString.concat(s + " " + st.getPredicate().toSPARQL() + " " + o + " . ");
+				}
+				cIt.close();
 				queryString = queryString.concat("} } UNION");
 			}
-			// remove last 'UNION'
-			if (queryString.endsWith("UNION"))
-				queryString = queryString.substring(0, queryString.length() - 5);
+			queryString = queryString.substring(0, queryString.length() - 5); // remove last 'UNION'
 			queryString = queryString.concat("}");
 		}
 		queryString = queryString.concat("} }");
+		System.out.println(queryString);
 
 		if (limit > 0) queryString = queryString.concat(" LIMIT " + limit);
 		queryString = queryString.concat(" OFFSET " + offset);
