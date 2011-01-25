@@ -24,23 +24,34 @@ public class FindCheckTest {
 	@Test
 	public void testFindAndCheck1() throws Exception {
 		Form form = (Form) TestUtils.buildBBFromFile(TestUtils.getCatalogue().getServerURL(), "form", "data/json/forms/amazonList.json");
-		BackendService service = (BackendService) TestUtils.buildBBFromFile(TestUtils.getCatalogue().getServerURL(), "service", "data/json/backendservices/amazonSearchService.json");
+		BackendService s1 = (BackendService) TestUtils.buildBBFromFile(TestUtils.getCatalogue().getServerURL(), "service", "data/json/backendservices/amazonSearchService.json");
+		BackendService s2 = (BackendService) TestUtils.buildBBFromFile(TestUtils.getCatalogue().getServerURL(), "service", "data/json/backendservices/foafExample.json");
+		BackendService s3 = (BackendService) TestUtils.buildBBFromFile(TestUtils.getCatalogue().getServerURL(), "service", "data/json/backendservices/kasselTest1.json");
 		TestUtils.getCatalogue().addForm(form);
-		TestUtils.getCatalogue().addBackendService(service);
+		TestUtils.getCatalogue().addBackendServices(s1, s2, s3);
 		TestUtils.getCatalogue().createCopy(form);
-		TestUtils.getCatalogue().createCopy(form);
-		TestUtils.getCatalogue().createCopy(service);
-		TestUtils.getCatalogue().createCopy(service);
-		TestUtils.getCatalogue().createCopy(service);
+		TestUtils.getCatalogue().createCopy(s1);
+		TestUtils.getCatalogue().createCopy(s2);
+		TestUtils.getCatalogue().createCopy(s3);
 		
 		ArrayList<Condition> conList = new ArrayList<Condition>();
+		for (Action action : form.getActions()) {
+			conList.addAll(action.getPreconditions());
+		}
+		conList.addAll(form.getPostconditions());
 		ArrayList<ScreenComponent> all = new ArrayList<ScreenComponent>();
 		all.add(form);
 		ArrayList<String> tags = new ArrayList<String>();
-		tags.add("amazon");
+		
 		List<URI> results = TestUtils.getCatalogue().findScreenComponents(null, conList, all, 0, -1, tags, FGO.BackendService);
+		assertEquals(2, results.size());
+		assertTrue(results.contains(s1.getUri()));
+		assertTrue(results.contains(s3.getUri()));
+
+		tags.add("amazon");
+		results = TestUtils.getCatalogue().findScreenComponents(null, conList, all, 0, -1, tags, FGO.BackendService);
 		assertEquals(1, results.size());
-		assertEquals(service.getUri(), results.toArray()[0]);
+		assertTrue(results.contains(s1.getUri()));
 	}
 	
 	@Test
