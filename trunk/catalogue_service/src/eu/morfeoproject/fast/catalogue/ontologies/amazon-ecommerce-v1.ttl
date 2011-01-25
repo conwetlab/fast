@@ -7,7 +7,7 @@
 # this turtle file is the original document, from which all other versions
 # (html, rdf/xml) are created
 
-@prefix amazon: <http://fast.morfeo-project.org/ontology/amazon#> .
+@prefix amazon: <http://fast.morfeo-project.org/ontologies/amazon#> .
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>  .
 @prefix owl: <http://www.w3.org/2002/07/owl#> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
@@ -69,6 +69,13 @@ amazon:Item a owl:Class ;
 
 amazon:ShoppingCart a owl:Class ;
 	rdfs:label "An Amazon shopping cart is represented by an ID and a list of items"@en ;
+	ctag:tagged [
+		ctag:label "amazon"@en ; 
+		ctag:means <http://www.amazon.com>
+		] .
+
+amazon:Message a owl:Class ;
+	rdfs:label "A message as a result of an operation of the Amazon Service"@en ;
 	ctag:tagged [
 		ctag:label "amazon"@en ; 
 		ctag:means <http://www.amazon.com>

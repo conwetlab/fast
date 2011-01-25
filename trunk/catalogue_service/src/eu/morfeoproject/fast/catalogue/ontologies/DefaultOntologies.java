@@ -38,7 +38,7 @@ public class DefaultOntologies {
     public static Ontology DOAP = 
         new Ontology(new URIImpl("http://usefulinc.com/ns/doap#"), "doap.rdf", Syntax.RdfXml, true);
     public static Ontology FGO =
-    	new Ontology(new URIImpl("http://purl.oclc.org/fast/ontology/gadget#"), "fgo20100408.ttl", Syntax.Turtle, true);
+    	new Ontology(new URIImpl("http://purl.oclc.org/fast/ontologies/gadget#"), "fgo20100408.ttl", Syntax.Turtle, true);
 //    public static Ontology FOAF =
 //    	new Ontology(new URIImpl("http://xmlns.com/foaf/0.1/"), "foaf.rdf", Syntax.RdfXml, true);
 //    public static Ontology SIOC =
