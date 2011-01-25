@@ -3,10 +3,34 @@
 		"tags": [],
 		"user": null
 	},
-	"canvas": [
-		{ "uri": "<screen5-copy>" }
-	],
-	"elements": [
+	"canvas": {
+		"screens": [ 
+			{ "uri": "<screen5-copy>" }
+		],
+		"preconditions": [
+			{
+				"id": "item",
+		        "label": {"en-gb": "An item"},
+		        "pattern": "?Item http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://fast.morfeo-project.org/ontologies/amazon#Item",
+		        "positive": true
+			},
+			{
+				"id": "person",
+				"label": {"en-gb": "A FOAF person"},
+				"pattern": "?person rdf:type foaf:Person",
+				"positive": true
+			}
+		],
+		"postconditions": [
+			{
+				"id": "cart",
+		        "label": {"en-gb": "A shopping cart"},
+		        "pattern": "?Item http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://fast.morfeo-project.org/ontologies/amazon#ShoppingCart",
+		        "positive": true
+			}
+		]
+	},
+	"palette": [
 	],
 	"criterion": "reachability"
 }

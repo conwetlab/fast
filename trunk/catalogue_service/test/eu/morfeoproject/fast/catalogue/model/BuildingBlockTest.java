@@ -65,6 +65,22 @@ public class BuildingBlockTest {
 	}
 	
 	@Test
+	public void createBackendService3() throws Exception {
+		BackendService bs1 = (BackendService) TestUtils.buildBBFromFile(TestUtils.getCatalogue().getServerURL(), "service", "data/json/backendservices/amazonAddOfferToCartService.json");
+		TestUtils.getCatalogue().addBackendService(bs1);
+		BackendService bs2 = TestUtils.getCatalogue().getBackendService(bs1.getUri());
+		assertTrue(bs1.equals(bs2));
+		//FIXME fails because it expects a list of URIs for "uses", but receives a list of JSON objects [{id, uri}]
+
+//		assertEquals(bs1.getActions().size(), bs2.getActions().size());
+//		for (Action action : bs2.getActions()) {
+//			action.getUses()
+//		}
+//		assertEquals(bs1.getPostconditions().size(), bs2.getPostconditions().size());
+//		assertEquals(bs1.getTriggers().size(), bs2.getTriggers().size());
+	}
+	
+	@Test
 	public void createScreen1() throws Exception {
 		// create the screen components
 		Form f1 = (Form) TestUtils.buildBBFromFile(TestUtils.getCatalogue().getServerURL(), "form", "data/json/forms/amazonList.json");
@@ -87,7 +103,6 @@ public class BuildingBlockTest {
 		assertTrue(s2.getPipes().containsAll(s1.getPipes()));
 		assertEquals(s1.getTriggers().size(), s2.getTriggers().size());
 		assertTrue(s2.getTriggers().containsAll(s1.getTriggers()));
-		TestUtils.getCatalogue().printStatements();
 	}
 
 	@Test

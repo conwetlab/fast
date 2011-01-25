@@ -38,7 +38,7 @@
                 "label":{
                     "en-gb":"A Amazon Purchase URL"
                 },
-                "pattern":"?P http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#PurchaseURL",
+                "pattern":"?P http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://fast.morfeo-project.org/ontologies/amazon#PurchaseURL",
                 "positive":"true"
             }
     ],

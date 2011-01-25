@@ -18,8 +18,8 @@
 	"preconditions": [
       {
         "id": "c1",
-        "label": {"en-gb": "A search criteria"},
-        "pattern": "?F http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#SearchCriteria",
+        "label": {"en-gb": "A search request"},
+        "pattern": "?F http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://fast.morfeo-project.org/ontologies/amazon#SearchRequest",
         "positive": true,
       }
 	],

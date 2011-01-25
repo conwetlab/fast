@@ -52,7 +52,7 @@
                     "label":{
                         "en-gb":"A search criteria"
                     },
-                    "pattern":"?F http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#SearchCriteria",
+                    "pattern":"?F http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://fast.morfeo-project.org/ontologies/amazon#SearchRequest",
                     "positive":"true"
                 }
             ],
@@ -67,7 +67,7 @@
                 "label":{
                     "en-gb":"An Amazon Item List"
                 },
-                "pattern":"?PList http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#ProductList",
+                "pattern":"?PList http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://fast.morfeo-project.org/ontologies/amazon#ProductList",
                 "positive":"true"
             }
     ],

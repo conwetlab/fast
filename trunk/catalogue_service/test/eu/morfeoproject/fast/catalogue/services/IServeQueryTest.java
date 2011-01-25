@@ -22,7 +22,6 @@ public class IServeQueryTest {
 		ArrayList<URI> list = new ArrayList<URI>();
 		list.add(new URIImpl("http://xmlns.com/foaf/0.1/Person"));
 		Collection<IServeResponse> results = client.query(list);
-		for (IServeResponse r : results) System.out.println(r.toJSON().toString(2));
 		assertTrue(results.size() > 0);
 	}
 
@@ -33,7 +32,6 @@ public class IServeQueryTest {
 		list.add(new URIImpl("http://www.eyrie.org/%7Ezednenem/2002/rdfchannel#Channel"));
 		list.add(new URIImpl("http://coconut.tie.nl:8080/storage/repositories/wp7-ontologies/files/wp7-sap-m33-eval-ontology#Country"));
 		Collection<IServeResponse> results = client.query(list);
-		for (IServeResponse r : results) System.out.println(r.toJSON().toString(2));
 		assertTrue(results.size() > 0);
 	}
 

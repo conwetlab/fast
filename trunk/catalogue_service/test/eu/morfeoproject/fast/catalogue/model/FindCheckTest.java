@@ -79,7 +79,7 @@ public class FindCheckTest {
 		ArrayList<String> tags = new ArrayList<String>();
 		ArrayList<Condition> postconditions = new ArrayList<Condition>();
 		Condition condition = BuildingBlockFactory.createCondition();
-		condition.setPatternString("?x http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#Item");
+		condition.setPatternString("?x http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://fast.morfeo-project.org/ontologies/amazon#Item");
 		condition.setPositive(true);
 		postconditions.add(condition);
 		List<URI> results = TestUtils.getCatalogue().findBackwards(all, new ArrayList<Condition>(), postconditions, true, true, 0, -1, tags);
@@ -87,7 +87,7 @@ public class FindCheckTest {
 		assertTrue(results.contains(s2.getUri()));
 		assertTrue(results.contains(s3.getUri()));
 		
-		condition.setPatternString("?x http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#ShoppingCart");
+		condition.setPatternString("?x http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://fast.morfeo-project.org/ontologies/amazon#ShoppingCart");
 		results = TestUtils.getCatalogue().findBackwards(all, new ArrayList<Condition>(), postconditions, true, true, 0, -1, tags);
 		assertEquals(1, results.size());
 		assertTrue(results.contains(s1.getUri()));
@@ -113,7 +113,7 @@ public class FindCheckTest {
 		ArrayList<String> tags = new ArrayList<String>();
 		ArrayList<Condition> preconditions = new ArrayList<Condition>();
 		Condition condition = BuildingBlockFactory.createCondition();
-		condition.setPatternString("?x http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#SearchCriteria");
+		condition.setPatternString("?x http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://fast.morfeo-project.org/ontologies/amazon#SearchRequest");
 		condition.setPositive(true);
 		preconditions.add(condition);
 		List<URI> results = TestUtils.getCatalogue().findBackwards(all, preconditions, new ArrayList<Condition>(), true, true, 0, -1, tags);

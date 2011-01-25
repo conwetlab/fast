@@ -13,5 +13,7 @@
 	"backendservices": [],
 	"preconditions": [],
 	"postconditions": [],
-	"pipes": []
+	"pipes": [],
+	"search": true,
+	"iserve": false
 }
