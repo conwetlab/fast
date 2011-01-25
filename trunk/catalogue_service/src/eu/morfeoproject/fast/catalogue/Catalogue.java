@@ -299,7 +299,6 @@ public class Catalogue {
 
 		// search for components which preconditions (from actions) are
 		// satisfied by any of the conditions given
-		System.out.println(conditions.size());
 		if (conditions.size() > 0) {
 			queryString = queryString.concat("{");
 			for (Condition con : conditions) {
@@ -348,7 +347,6 @@ public class Catalogue {
 			queryString = queryString.concat("}");
 		}
 		queryString = queryString.concat("} }");
-		System.out.println(queryString);
 
 		if (limit > 0) queryString = queryString.concat(" LIMIT " + limit);
 		queryString = queryString.concat(" OFFSET " + offset);
