@@ -19,7 +19,7 @@
 @prefix ctag: <http://commontag.org/ns#> .
 @prefix fgo: <http://purl.oclc.org/fast/ontology/gadget#>  .
   
-<http://fast.morfeo-project.org/ontology/amazon> a owl:Ontology ;
+<http://fast.morfeo-project.org/ontologies/amazon> a owl:Ontology ;
     rdfs:label "Simple Amazon ontology for the E-commerce Web Service"@en ;
     rdfs:comment """This ontology has been created as an example of ontology defining a web service. 
         It has been developed as part of the EU project 'FAST' 
