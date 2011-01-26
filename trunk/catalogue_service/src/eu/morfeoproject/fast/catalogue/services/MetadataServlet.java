@@ -18,10 +18,12 @@ import org.ontoware.rdf2go.model.node.impl.URIImpl;
 import eu.morfeoproject.fast.catalogue.NotFoundException;
 import eu.morfeoproject.fast.catalogue.model.BackendService;
 import eu.morfeoproject.fast.catalogue.model.BuildingBlock;
+import eu.morfeoproject.fast.catalogue.model.Concept;
 import eu.morfeoproject.fast.catalogue.model.Form;
 import eu.morfeoproject.fast.catalogue.model.Operator;
 import eu.morfeoproject.fast.catalogue.model.Screen;
 import eu.morfeoproject.fast.catalogue.model.ScreenFlow;
+import eu.morfeoproject.fast.util.TestUtils;
 
 /**
  * Servlet implementation class MetadataServlet
@@ -49,7 +51,7 @@ public class MetadataServlet extends GenericServlet {
 			line = reader.readLine();
 		}
 		String body = buffer.toString();
-		
+		TestUtils.getCatalogue().printStatements();
 		try {
 			// read and process the JSON input 
 			JSONArray input = new JSONArray(body);
@@ -58,21 +60,22 @@ public class MetadataServlet extends GenericServlet {
 			JSONArray arrayForms = new JSONArray();
 			JSONArray arrayOperators = new JSONArray();
 			JSONArray arrayBackendServices = new JSONArray();
+			JSONArray arrayClasses = new JSONArray();
 			
 			for (int i = 0; i < input.length(); i++) {
 				URI uri = new URIImpl(input.getString(i));
 				try {
-					BuildingBlock bb = getCatalogue().getBuildingBlock(uri);
-					if (bb instanceof ScreenFlow)
-						arrayScreenflows.put(bb.toJSON());
-					else if (bb instanceof Screen)
-						arrayScreens.put(bb.toJSON());
-					else if (bb instanceof Form)
-						arrayForms.put(bb.toJSON());
-					else if (bb instanceof Operator)
-						arrayOperators.put(bb.toJSON());
-					else if (bb instanceof BackendService)
-						arrayBackendServices.put(bb.toJSON());
+					Concept concept = getCatalogue().getConcept(uri);
+					if (concept != null) {
+						arrayClasses.put(concept.toJSON());
+					} else {
+						BuildingBlock bb = getCatalogue().getBuildingBlock(uri);
+						if (bb instanceof ScreenFlow)			arrayScreenflows.put(bb.toJSON());
+						else if (bb instanceof Screen)			arrayScreens.put(bb.toJSON());
+						else if (bb instanceof Form)			arrayForms.put(bb.toJSON());
+						else if (bb instanceof Operator)		arrayOperators.put(bb.toJSON());
+						else if (bb instanceof BackendService)	arrayBackendServices.put(bb.toJSON());
+					}
 				} catch (NotFoundException e) {
 					log.error(e.toString(), e);
 				}
@@ -90,6 +93,8 @@ public class MetadataServlet extends GenericServlet {
 				output.put("operators", arrayOperators);
 			if (arrayBackendServices.length() > 0)
 				output.put("backendservices", arrayBackendServices);
+			if (arrayClasses.length() > 0)
+				output.put("classes", arrayClasses);
 			
 			writer.print(output.toString(2));
 			response.setContentType(MediaType.APPLICATION_JSON);
