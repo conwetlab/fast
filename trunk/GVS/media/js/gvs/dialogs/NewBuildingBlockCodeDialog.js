@@ -14,6 +14,8 @@ var NewBuildingBlockCodeDialog = Class.create(ConfirmDialog /** @lends NewBuildi
          */
         this._available = true;
 
+        this._buildingblockName = "Building Block";
+
         $super("New Building Block", ConfirmDialog.OK_CANCEL, {'createMessageZone': true});
     },
 
@@ -73,6 +75,9 @@ var NewBuildingBlockCodeDialog = Class.create(ConfirmDialog /** @lends NewBuildi
                                 this._getForm().name.value = Utils.sanitize($F(this._getForm().name));
                             }.bind(this)
                 }
+            },
+            {
+                'type': 'advancedSeparator'
             },
             {
                 'type':'input',
@@ -176,8 +181,9 @@ var NewBuildingBlockCodeDialog = Class.create(ConfirmDialog /** @lends NewBuildi
      * @private
      */
     _scheduleAvailabilityCheck: function(e) {
-        // Ignore "control" keys, except "backspace" and "delete"
-        if ((e.charCode == 0) && (e.keyCode != 8 && e.keyCode != 46))
+        // Ignore "control" keys, except "backspace", "delete" and "enter"
+        if ((e.charCode == 0) && (e.keyCode != 8 && e.keyCode != 46 &&
+            e.keyCode != 13))
             return;
 
         this._available = false;
@@ -188,6 +194,12 @@ var NewBuildingBlockCodeDialog = Class.create(ConfirmDialog /** @lends NewBuildi
         this._setMessage('Checking if the ' + this._buildingblockName + ' already exists...');
         this._timeout = setTimeout(this._availabilityCheck.bind(this), 1000);
         this._setDisabled(true);
+
+        // Enabling submit on enter
+        if (e.keyCode == 13) {
+            this._onOk();
+            return;
+        }
     },
 
     /**

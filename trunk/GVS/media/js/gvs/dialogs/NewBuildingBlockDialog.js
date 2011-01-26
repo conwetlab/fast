@@ -173,9 +173,11 @@ var NewBuildingBlockDialog = Class.create(ConfirmDialog /** @lends NewBuildingBl
      * @private
      */
     _scheduleAvailabilityCheck: function(e) {
-        // Ignore "control" keys, except "backspace" and "delete"
-        if ((e.charCode == 0) && (e.keyCode != 8 && e.keyCode != 46))
+        // Ignore "control" keys, except "backspace", "delete" and "enter"
+        if ((e.charCode == 0) && (e.keyCode != 8 && e.keyCode != 46 &&
+            e.keyCode != 13))
             return;
+
 
         this._available = false;
         try {
@@ -185,6 +187,12 @@ var NewBuildingBlockDialog = Class.create(ConfirmDialog /** @lends NewBuildingBl
         this._setMessage('Checking if the ' + this._buildingblockName + ' already exists...');
         this._timeout = setTimeout(this._availabilityCheck.bind(this), 1000);
         this._setDisabled(true);
+
+        // Enabling submit on enter
+        if (e.keyCode == 13) {
+            this._onOk();
+            return;
+        }
     },
 
     /**
