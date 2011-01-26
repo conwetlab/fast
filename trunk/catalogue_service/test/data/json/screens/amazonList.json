@@ -34,8 +34,8 @@
     "version":"1.0",
     "definition":{
         "buildingblocks":[
-            "<amazon-list-form>",
-            "<amazon-search-service>"
+        	{ "uri": "<amazon-list-form>" },
+            { "uri": "<amazon-search-service>" }
         ],
         "pipes":[
             {
