@@ -64,17 +64,15 @@ public class MetadataServlet extends GenericServlet {
 			for (int i = 0; i < input.length(); i++) {
 				URI uri = new URIImpl(input.getString(i));
 				try {
-					Concept concept = getCatalogue().getConcept(uri);
-					if (concept != null) {
-						arrayClasses.put(concept.toJSON());
-					} else {
-						BuildingBlock bb = getCatalogue().getBuildingBlock(uri);
-						if (bb instanceof ScreenFlow)			arrayScreenflows.put(bb.toJSON());
-						else if (bb instanceof Screen)			arrayScreens.put(bb.toJSON());
-						else if (bb instanceof Form)			arrayForms.put(bb.toJSON());
-						else if (bb instanceof Operator)		arrayOperators.put(bb.toJSON());
-						else if (bb instanceof BackendService)	arrayBackendServices.put(bb.toJSON());
-					}
+					BuildingBlock bb = getCatalogue().getBuildingBlock(uri);
+					if (bb == null) {
+						Concept concept = getCatalogue().getConcept(uri);
+						if (concept != null) arrayClasses.put(concept.toJSON());
+					} else if (bb instanceof ScreenFlow)	arrayScreenflows.put(bb.toJSON());
+					else if (bb instanceof Screen)			arrayScreens.put(bb.toJSON());
+					else if (bb instanceof Form)			arrayForms.put(bb.toJSON());
+					else if (bb instanceof Operator)		arrayOperators.put(bb.toJSON());
+					else if (bb instanceof BackendService)	arrayBackendServices.put(bb.toJSON());
 				} catch (NotFoundException e) {
 					log.error(e.toString(), e);
 				}
