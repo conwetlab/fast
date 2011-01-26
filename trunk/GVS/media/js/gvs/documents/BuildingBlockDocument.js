@@ -555,7 +555,7 @@ function PreconditionsView(actions) {
             var description = instance.getBuildingBlockDescription();
             self.dropInstance(description, position);
             return true;
-        }, {splitter: true, region: 'left', minWidth: 35});
+        }, {splitter: true, region: 'left', minWidth: 45});
 
     this.actions.subscribe(this);
 }
@@ -614,7 +614,7 @@ function PostconditionsView(conditions) {
             var description = instance.getBuildingBlockDescription();
             self.dropInstance(description, position);
             return true;
-        }, {splitter: true, region: 'right', minWidth:35});
+        }, {splitter: true, region: 'right', minWidth: 45});
 
     this.conditions.subscribe(this);
 }
