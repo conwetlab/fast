@@ -51,7 +51,7 @@ public class MetadataServlet extends GenericServlet {
 			line = reader.readLine();
 		}
 		String body = buffer.toString();
-		TestUtils.getCatalogue().printStatements();
+		
 		try {
 			// read and process the JSON input 
 			JSONArray input = new JSONArray(body);
