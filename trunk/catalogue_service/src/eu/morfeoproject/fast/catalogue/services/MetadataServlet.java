@@ -23,7 +23,6 @@ import eu.morfeoproject.fast.catalogue.model.Form;
 import eu.morfeoproject.fast.catalogue.model.Operator;
 import eu.morfeoproject.fast.catalogue.model.Screen;
 import eu.morfeoproject.fast.catalogue.model.ScreenFlow;
-import eu.morfeoproject.fast.util.TestUtils;
 
 /**
  * Servlet implementation class MetadataServlet
