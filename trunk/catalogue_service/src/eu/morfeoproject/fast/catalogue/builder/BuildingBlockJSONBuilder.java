@@ -262,7 +262,7 @@ public class BuildingBlockJSONBuilder {
 		JSONArray bbArray = jsonDef.getJSONArray("buildingblocks");
 		screen.setBuildingBlocks(new LinkedList<URI>());
 		for (int i = 0; i < bbArray.length(); i++) {
-			screen.getBuildingBlocks().add(rdfFactory.createURI(bbArray.getString(i)));
+			screen.getBuildingBlocks().add(rdfFactory.createURI(bbArray.getJSONObject(i).getString("uri")));
 		}
 		// pipes
 		screen.setPipes(new LinkedList<Pipe>());
