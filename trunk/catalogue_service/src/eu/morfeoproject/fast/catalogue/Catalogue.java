@@ -270,18 +270,6 @@ public class Catalogue {
 		return isConcept(uri);
 	}
 
-//	NOT USED...
-//	public List<URI> findScreenComponents(Screen container,
-//			List<Condition> conditions, List<ScreenComponent> toExclude,
-//			int offset, int limit, List<String> tags)
-//			throws ClassCastException, ModelRuntimeException {
-//		ArrayList<URI> results = new ArrayList<URI>();
-//		results.addAll(findScreenComponents(container, conditions, toExclude, offset, limit, tags, FGO.Form));
-//		results.addAll(findScreenComponents(container, conditions, toExclude, offset, limit, tags, FGO.Operator));
-//		results.addAll(findScreenComponents(container, conditions, toExclude, offset, limit, tags, FGO.BackendService));
-//		return results;
-//	}
-
 	/* The list scList is a list of "clones" building blocks */
 	public List<URI> findScreenComponents(Screen container,
 			List<Condition> conditions, List<ScreenComponent> scList,
