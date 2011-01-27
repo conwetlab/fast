@@ -16,8 +16,6 @@ import java.util.UUID;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.apache.mahout.common.Pair;
-import org.apache.mahout.fpm.pfpgrowth.convertors.string.TopKStringPatterns;
 import org.commontag.AuthorCTag;
 import org.commontag.AutoCTag;
 import org.commontag.CTag;
@@ -37,7 +35,6 @@ import org.ontoware.rdf2go.model.node.Resource;
 import org.ontoware.rdf2go.model.node.URI;
 import org.ontoware.rdf2go.model.node.UriOrVariable;
 import org.ontoware.rdf2go.model.node.Variable;
-import org.ontoware.rdf2go.model.node.impl.URIImpl;
 import org.ontoware.rdf2go.vocabulary.OWL;
 import org.ontoware.rdf2go.vocabulary.RDF;
 import org.ontoware.rdf2go.vocabulary.RDFS;
@@ -75,7 +72,9 @@ import eu.morfeoproject.fast.catalogue.ontologies.DefaultOntologies.PublicOntolo
 import eu.morfeoproject.fast.catalogue.planner.Plan;
 import eu.morfeoproject.fast.catalogue.planner.Planner;
 import eu.morfeoproject.fast.catalogue.planner.PlannerFactory;
+import eu.morfeoproject.fast.catalogue.recommender.Recommender;
 import eu.morfeoproject.fast.catalogue.recommender.ScreenComponentRecommender;
+import eu.morfeoproject.fast.catalogue.recommender.ScreenRecommender;
 import eu.morfeoproject.fast.catalogue.util.DateFormatter;
 import eu.morfeoproject.fast.catalogue.util.MiscUtil;
 import eu.morfeoproject.fast.catalogue.vocabulary.CTAG;
@@ -95,6 +94,8 @@ public class Catalogue {
 	private OntologyManager ontologyManager; // TODO do it persistent, now it's just in memory, so when the catalogue is loaded, the ontology list is empty
 	private TripleStore tripleStore;
 	private Planner planner;
+	private Recommender screenRecommender;
+	private Recommender scRecommender;
 	private String environment;
 	private URI prototypesGraph;
 	private URI clonesGraph;
@@ -143,6 +144,10 @@ public class Catalogue {
 
 		// creates the planner
 		planner = PlannerFactory.createPlanner(this, this.environment);
+		
+		// creates the recommenders
+		screenRecommender = new ScreenRecommender(this);
+		scRecommender = new ScreenComponentRecommender(this);
 	}
 
 	public CatalogueConfiguration getConfiguration() {
@@ -295,7 +300,7 @@ public class Catalogue {
 		boolean patterns = Constants.PATTERNS == (strategy & Constants.PATTERNS);
 		
 		ArrayList<URI> queryList = new ArrayList<URI>();
-		List<URI> topKList = new ArrayList<URI>();
+		List<URI> suggestionList = new ArrayList<URI>();
 
 		//---------------------------//
 		// queries the repository searching for building blocks compatible in terms of their pre/postconditions 
@@ -402,13 +407,11 @@ public class Catalogue {
 					uriList.add(uri);
 			}
 	
-			ScreenComponentRecommender recommender = new ScreenComponentRecommender(this);
-			recommender.rebuild(); //FIXME do not rebuild every time we ask the recommender!!
-			topKList.addAll(recommender.getTopKList(uriList));
+			suggestionList.addAll(scRecommender.getSuggestionList(uriList));
 			if (log.isInfoEnabled()) {
-				log.info("TopKStringPattern recommendation");
+				log.info("--- Recommendation algorightm ---");
 				log.info("Input: " + uriList);
-				log.info("Ouput: " + topKList);
+				log.info("Ouput: " + suggestionList);
 			}
 		}
 		
@@ -417,7 +420,7 @@ public class Catalogue {
 		//---------------------------//
 		
 		ArrayList<URI> results = new ArrayList<URI>();
-		results.addAll(topKList); // most commonly used together
+		results.addAll(suggestionList); // most commonly used together
 		for (URI uri : queryList) { // adds compatible building blocks
 			if (!results.contains(uri)) {
 				results.add(uri);
@@ -1057,6 +1060,7 @@ public class Catalogue {
 			}
 			throw new BuildingBlockException("An error ocurred while saving the screen: " + e, e);
 		}
+		scRecommender.rebuild(); //FIXME do not rebuild every time a new screen is saved!
 	}
 
 	public void updateScreen(Screen screen)
@@ -1069,6 +1073,7 @@ public class Catalogue {
 		saveScreen(screen);
 		// calculate new plans
 		if (planner != null) planner.update(screen, oldScreen);
+		scRecommender.rebuild(); //FIXME do not rebuild every time a screen is updated!
 		if (log.isInfoEnabled()) log.info("Screen " + screen.getUri() + " updated.");
 	}
 
@@ -1076,6 +1081,7 @@ public class Catalogue {
 		removeBuildingBlock(screenUri);
 		// remove the screen from the planner
 		if (planner != null) planner.remove(screenUri);
+		scRecommender.rebuild(); //FIXME do not rebuild every time a screen is deleted!
 	}
 
 	public URI cloneBuildingBlockByURI(URI bbUri) throws NotFoundException, BuildingBlockException {

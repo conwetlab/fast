@@ -6,16 +6,16 @@ import java.io.FileWriter;
 import org.ontoware.rdf2go.model.node.URI;
 
 import eu.morfeoproject.fast.catalogue.Catalogue;
-import eu.morfeoproject.fast.catalogue.model.Screen;
+import eu.morfeoproject.fast.catalogue.model.ScreenFlow;
 
-public class ScreenComponentRecommender extends BuildingBlockRecommender {
+public class ScreenRecommender extends BuildingBlockRecommender {
 	
-	public ScreenComponentRecommender(Catalogue catalogue) {
+	public ScreenRecommender(Catalogue catalogue) {
 		super(catalogue);
-		this.params.set("input", "/home/ismriv/mahout-experiments/fpgrowth/sc-input.dat");
+		this.params.set("input", "/home/ismriv/mahout-experiments/fpgrowth/screen-input.dat");
 		this.params.set("encoding", "utf-8");
-		this.params.set("output", "/home/ismriv/mahout-experiments/fpgrowth/sc-output.dat");
-		this.fpgrowth = new FPGrowth(params);
+		this.params.set("output", "/home/ismriv/mahout-experiments/fpgrowth/screen-output.dat");
+		this.fpgrowth = new FPGrowth(this.params);
 	}
 	
 	public void rebuild() {
@@ -23,11 +23,9 @@ public class ScreenComponentRecommender extends BuildingBlockRecommender {
 			// generates input file reading the screen info from the catalogue
 			FileWriter fstream = new FileWriter(this.params.get("input"));
 			BufferedWriter out = new BufferedWriter(fstream);
-			for (Screen screen : this.catalogue.getAllScreens()) {
-				for (URI clone : screen.getBuildingBlocks()) {
-//					String feature = uriToFeature(catalogue.getPrototypeOfClone(clone));
-//					out.write(feature + "\t");
-					out.write(this.catalogue.getPrototypeOfClone(clone) + "\t");
+			for (ScreenFlow sf : this.catalogue.getAllScreenFlows()) {
+				for (URI clone : sf.getBuildingBlocks()) {
+					out.write(catalogue.getPrototypeOfClone(clone) + "\t");
 				}
 				out.write("\n");
 			}
@@ -37,7 +35,6 @@ public class ScreenComponentRecommender extends BuildingBlockRecommender {
 		} catch (Exception e) {
 			log.error(e.getMessage(), e);
 		}
-		
 	}
 	
 }
