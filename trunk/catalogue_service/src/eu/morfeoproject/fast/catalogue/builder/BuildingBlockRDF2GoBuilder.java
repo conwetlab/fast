@@ -191,7 +191,7 @@ public class BuildingBlockRDF2GoBuilder {
 				URI predicate = st.getPredicate();
 				Node object = st.getObject();
 			    if (predicate.equals(FGO.contains)) {
-			    	sf.getBuildingBlockList().add(object.asURI());
+			    	sf.getBuildingBlocks().add(object.asURI());
 			    }
 			}
 			sfIt.close();

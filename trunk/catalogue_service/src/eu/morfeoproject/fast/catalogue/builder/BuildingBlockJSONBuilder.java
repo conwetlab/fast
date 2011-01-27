@@ -225,7 +225,7 @@ public class BuildingBlockJSONBuilder {
 
 		JSONArray resources = jsonScreenFlow.getJSONArray("contains");
 		for (int i = 0; i < resources.length(); i++) {
-			sf.getBuildingBlockList().add(new URIImpl(resources.getString(i)));
+			sf.getBuildingBlocks().add(new URIImpl(resources.getString(i)));
 		}
 		
 		return sf;

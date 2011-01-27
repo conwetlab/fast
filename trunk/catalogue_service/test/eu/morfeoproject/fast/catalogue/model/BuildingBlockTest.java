@@ -167,14 +167,14 @@ public class BuildingBlockTest {
 		URI clone2 = TestUtils.getCatalogue().cloneBuildingBlock(s1);
 		URI clone3 = TestUtils.getCatalogue().cloneBuildingBlock(s1);
 		ScreenFlow sf1 = (ScreenFlow) TestUtils.buildBBFromFile(TestUtils.getCatalogue().getServerURL(), "screenflow", "data/json/screenflows/amazonSF1.json");
-		sf1.getBuildingBlockList().add(clone1);
-		sf1.getBuildingBlockList().add(clone2);
-		sf1.getBuildingBlockList().add(clone3);
+		sf1.getBuildingBlocks().add(clone1);
+		sf1.getBuildingBlocks().add(clone2);
+		sf1.getBuildingBlocks().add(clone3);
 		TestUtils.getCatalogue().addScreenFlow(sf1);
 		ScreenFlow sf2 = TestUtils.getCatalogue().getScreenFlow(sf1.getUri());
 		assertEquals(sf1.getUri(), sf2.getUri());
 		assertEquals(sf1.getHomepage(), sf2.getHomepage());
-		assertEquals(sf1.getBuildingBlockList().size(), sf2.getBuildingBlockList().size());
+		assertEquals(sf1.getBuildingBlocks().size(), sf2.getBuildingBlocks().size());
 	}
 
 	@Test
