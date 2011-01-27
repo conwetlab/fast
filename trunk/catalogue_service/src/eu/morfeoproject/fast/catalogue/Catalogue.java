@@ -16,6 +16,8 @@ import java.util.UUID;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.mahout.common.Pair;
+import org.apache.mahout.fpm.pfpgrowth.convertors.string.TopKStringPatterns;
 import org.commontag.AuthorCTag;
 import org.commontag.AutoCTag;
 import org.commontag.CTag;
@@ -35,6 +37,7 @@ import org.ontoware.rdf2go.model.node.Resource;
 import org.ontoware.rdf2go.model.node.URI;
 import org.ontoware.rdf2go.model.node.UriOrVariable;
 import org.ontoware.rdf2go.model.node.Variable;
+import org.ontoware.rdf2go.model.node.impl.URIImpl;
 import org.ontoware.rdf2go.vocabulary.OWL;
 import org.ontoware.rdf2go.vocabulary.RDF;
 import org.ontoware.rdf2go.vocabulary.RDFS;
@@ -72,6 +75,7 @@ import eu.morfeoproject.fast.catalogue.ontologies.DefaultOntologies.PublicOntolo
 import eu.morfeoproject.fast.catalogue.planner.Plan;
 import eu.morfeoproject.fast.catalogue.planner.Planner;
 import eu.morfeoproject.fast.catalogue.planner.PlannerFactory;
+import eu.morfeoproject.fast.catalogue.recommender.ScreenComponentRecommender;
 import eu.morfeoproject.fast.catalogue.util.DateFormatter;
 import eu.morfeoproject.fast.catalogue.util.MiscUtil;
 import eu.morfeoproject.fast.catalogue.vocabulary.CTAG;
@@ -276,106 +280,153 @@ public class Catalogue {
 	/* The list scList is a list of "clones" building blocks */
 	public List<URI> findScreenComponents(Screen container,
 			List<Condition> conditions, List<ScreenComponent> scList,
-			int offset, int limit, List<String> tags, URI typeBuildingBlock)
+			int offset, int limit, List<String> tags, int strategy)
 			throws ClassCastException, ModelRuntimeException {
-		return findScreenComponents(container, conditions, scList, new ArrayList<Pipe>(), offset, limit, tags, typeBuildingBlock);
+		return findScreenComponents(container, conditions, scList, new ArrayList<Pipe>(), offset, limit, tags, strategy);
 	}
 	
 	/* The list scList is a list of "clones" building blocks */
 	public List<URI> findScreenComponents(Screen container,
 			List<Condition> conditions, List<ScreenComponent> scList, List<Pipe> pipes,
-			int offset, int limit, List<String> tags, URI typeBuildingBlock)
+			int offset, int limit, List<String> tags, int strategy)
 			throws ClassCastException, ModelRuntimeException {
+		
+		boolean prepost = Constants.PREPOST == (strategy & Constants.PREPOST);
+		boolean patterns = Constants.PATTERNS == (strategy & Constants.PATTERNS);
+		
+		ArrayList<URI> queryList = new ArrayList<URI>();
+		List<URI> topKList = new ArrayList<URI>();
+
+		//---------------------------//
+		// queries the repository searching for building blocks compatible in terms of their pre/postconditions 
+		//---------------------------//
+		
+		if (prepost) {
+			String queryString = "SELECT DISTINCT ?bb WHERE {"
+				+ " { GRAPH " + prototypesGraph.toSPARQL() + " {"
+				+ " { ?bb " + RDF.type.toSPARQL() + " " + FGO.Form.toSPARQL() + " } UNION"
+				+ " { ?bb " + RDF.type.toSPARQL() + " " + FGO.Operator.toSPARQL() + " } UNION"
+				+ " { ?bb " + RDF.type.toSPARQL() + " " + FGO.BackendService.toSPARQL() + " } } .";
+	
+			// doesn't include the building blocks where the postconditions were taken from
+			for (ScreenComponent sc : scList) {
+				queryString = queryString.concat("FILTER (?bb != " + sc.getPrototype().toSPARQL() + ") . ");
+			}
+	
+			// tags
+			if (tags != null && tags.size() > 0) {
+				queryString = queryString.concat("{");
+				for (String tag : tags) {
+					queryString = queryString.concat(" { ?bb " + CTAG.tagged.toSPARQL() + " ?ctag . "
+							+ " ?ctag " + CTAG.label.toSPARQL() + " ?tag . "
+							+ " FILTER(regex(str(?tag), \"" + tag + "\", \"i\")) } UNION");
+				}
+				// remove last 'UNION'
+				if (queryString.endsWith("UNION"))
+					queryString = queryString.substring(0, queryString.length() - 5);
+				queryString = queryString.concat("} . ");
+			}
+	
+			// search for components which preconditions (from actions) are
+			// satisfied by any of the conditions given
+			if (conditions.size() > 0) {
+				queryString = queryString.concat("{");
+				for (Condition con : conditions) {
+					ClosableIterator<Statement> cIt = null;
+					// query for building blocks with the condition as an action's precondition
+					queryString = queryString.concat(" { ?bb " + FGO.hasAction.toSPARQL() + " ?a . ");
+					queryString = queryString.concat(" ?a " + FGO.hasPreCondition.toSPARQL() + " ?c . ");
+					queryString = queryString.concat(" ?c " + FGO.hasPattern.toSPARQL() + " ?p . ");
+					queryString = queryString.concat("GRAPH ?p {");
+					cIt = patternToRDF2GoModel(con.getPatternString()).iterator();
+					for (; cIt.hasNext();) {
+						Statement st = cIt.next();
+						Resource subject = st.getSubject();
+						Node object = st.getObject();
+						String s = (subject instanceof BlankNode) ?
+								toCleanVariable(subject.toString()) :
+									subject.toSPARQL();
+						String o = (object instanceof BlankNode) ?
+								toCleanVariable(object.toString()) :
+									object.toSPARQL();
+						queryString = queryString.concat(s + " " + st.getPredicate().toSPARQL() + " " + o + " . ");
+					}
+					cIt.close();
+					queryString = queryString.concat("} } UNION");
+					// query for building blocks with the condition as a postcondition
+					queryString = queryString.concat(" { ?bb " + FGO.hasPostCondition.toSPARQL() + " ?c . ");
+					queryString = queryString.concat(" ?c " + FGO.hasPattern.toSPARQL() + " ?p . ");
+					queryString = queryString.concat("GRAPH ?p {");
+					cIt = patternToRDF2GoModel(con.getPatternString()).iterator();
+					for (; cIt.hasNext();) {
+						Statement st = cIt.next();
+						Resource subject = st.getSubject();
+						Node object = st.getObject();
+						String s = (subject instanceof BlankNode) ?
+								toCleanVariable(subject.toString()) :
+									subject.toSPARQL();
+						String o = (object instanceof BlankNode) ?
+								toCleanVariable(object.toString()) :
+									object.toSPARQL();
+						queryString = queryString.concat(s + " " + st.getPredicate().toSPARQL() + " " + o + " . ");
+					}
+					cIt.close();
+					queryString = queryString.concat("} } UNION");
+				}
+				queryString = queryString.substring(0, queryString.length() - 5); // remove last 'UNION'
+				queryString = queryString.concat("}");
+			}
+			queryString = queryString.concat("} }");
+	
+			if (limit > 0) queryString = queryString.concat(" LIMIT " + limit);
+			queryString = queryString.concat(" OFFSET " + offset);
+	
+			if (log.isInfoEnabled()) log.info(queryString);
+			QueryResultTable qrt = tripleStore.sparqlSelect(queryString);
+			ClosableIterator<QueryRow> itResults = qrt.iterator();
+			while (itResults.hasNext()) {
+				queryList.add(itResults.next().getValue("bb").asURI());
+			}
+			itResults.close();
+		}
+
+		//---------------------------//
+		// ask the recommender for building blocks related to the current canvas
+		//---------------------------//
+		
+		if (patterns) {
+			ArrayList<URI> uriList = new ArrayList<URI>();
+			for (ScreenComponent sc : scList) {
+				URI uri = getPrototypeOfClone(sc.getUri());
+				if (uri != null && !uriList.contains(uri))
+					uriList.add(uri);
+			}
+	
+			ScreenComponentRecommender recommender = new ScreenComponentRecommender(this);
+			recommender.rebuild(); //FIXME do not rebuild every time we ask the recommender!!
+			topKList.addAll(recommender.getTopKList(uriList));
+			if (log.isInfoEnabled()) {
+				log.info("TopKStringPattern recommendation");
+				log.info("Input: " + uriList);
+				log.info("Ouput: " + topKList);
+			}
+		}
+		
+		//---------------------------//
+		// merge the results of both building blocks lists
+		//---------------------------//
+		
 		ArrayList<URI> results = new ArrayList<URI>();
-
-		String queryString = "SELECT DISTINCT ?bb"
-			+ " WHERE { { GRAPH " + prototypesGraph.toSPARQL() + " { ?bb " + RDF.type.toSPARQL() + " " + typeBuildingBlock.toSPARQL() + " } . ";
-
-		// doesn't include the building blocks where the postconditions were
-		// taken from
-		for (ScreenComponent sc : scList) {
-			queryString = queryString.concat("FILTER (?bb != " + sc.getPrototype().toSPARQL() + ") . ");
-		}
-
-		// tags
-		if (tags != null && tags.size() > 0) {
-			queryString = queryString.concat("{");
-			for (String tag : tags) {
-				queryString = queryString.concat(" { ?bb " + CTAG.tagged.toSPARQL() + " ?ctag . "
-						+ " ?ctag " + CTAG.label.toSPARQL() + " ?tag . "
-						+ " FILTER(regex(str(?tag), \"" + tag + "\", \"i\")) } UNION");
+		results.addAll(topKList); // most commonly used together
+		for (URI uri : queryList) { // adds compatible building blocks
+			if (!results.contains(uri)) {
+				results.add(uri);
 			}
-			// remove last 'UNION'
-			if (queryString.endsWith("UNION"))
-				queryString = queryString.substring(0, queryString.length() - 5);
-			queryString = queryString.concat("} . ");
 		}
-
-		// search for components which preconditions (from actions) are
-		// satisfied by any of the conditions given
-		if (conditions.size() > 0) {
-			queryString = queryString.concat("{");
-			for (Condition con : conditions) {
-				ClosableIterator<Statement> cIt = null;
-				// query for building blocks with the condition as an action's precondition
-				queryString = queryString.concat(" { ?bb " + FGO.hasAction.toSPARQL() + " ?a . ");
-				queryString = queryString.concat(" ?a " + FGO.hasPreCondition.toSPARQL() + " ?c . ");
-				queryString = queryString.concat(" ?c " + FGO.hasPattern.toSPARQL() + " ?p . ");
-				queryString = queryString.concat("GRAPH ?p {");
-				cIt = patternToRDF2GoModel(con.getPatternString()).iterator();
-				for (; cIt.hasNext();) {
-					Statement st = cIt.next();
-					Resource subject = st.getSubject();
-					Node object = st.getObject();
-					String s = (subject instanceof BlankNode) ?
-							toCleanVariable(subject.toString()) :
-								subject.toSPARQL();
-					String o = (object instanceof BlankNode) ?
-							toCleanVariable(object.toString()) :
-								object.toSPARQL();
-					queryString = queryString.concat(s + " " + st.getPredicate().toSPARQL() + " " + o + " . ");
-				}
-				cIt.close();
-				queryString = queryString.concat("} } UNION");
-				// query for building blocks with the condition as a postcondition
-				queryString = queryString.concat(" { ?bb " + FGO.hasPostCondition.toSPARQL() + " ?c . ");
-				queryString = queryString.concat(" ?c " + FGO.hasPattern.toSPARQL() + " ?p . ");
-				queryString = queryString.concat("GRAPH ?p {");
-				cIt = patternToRDF2GoModel(con.getPatternString()).iterator();
-				for (; cIt.hasNext();) {
-					Statement st = cIt.next();
-					Resource subject = st.getSubject();
-					Node object = st.getObject();
-					String s = (subject instanceof BlankNode) ?
-							toCleanVariable(subject.toString()) :
-								subject.toSPARQL();
-					String o = (object instanceof BlankNode) ?
-							toCleanVariable(object.toString()) :
-								object.toSPARQL();
-					queryString = queryString.concat(s + " " + st.getPredicate().toSPARQL() + " " + o + " . ");
-				}
-				cIt.close();
-				queryString = queryString.concat("} } UNION");
-			}
-			queryString = queryString.substring(0, queryString.length() - 5); // remove last 'UNION'
-			queryString = queryString.concat("}");
-		}
-		queryString = queryString.concat("} }");
-
-		if (limit > 0) queryString = queryString.concat(" LIMIT " + limit);
-		queryString = queryString.concat(" OFFSET " + offset);
-
-		if (log.isInfoEnabled()) log.info(queryString);
-		QueryResultTable qrt = tripleStore.sparqlSelect(queryString);
-		ClosableIterator<QueryRow> itResults = qrt.iterator();
-		while (itResults.hasNext()) {
-			results.add(itResults.next().getValue("bb").asURI());
-		}
-		itResults.close();
-
+		
 		return results;
 	}
-
+	
 	/**
 	 * Search for screens inside the catalogue which satisfy the unsatisfied
 	 * preconditions of a list of screens and also takes into account the domain

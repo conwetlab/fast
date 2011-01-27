@@ -19,13 +19,16 @@ import org.ontoware.rdf2go.model.node.impl.URIImpl;
 
 import uk.ac.open.kmi.iserve.IServeResponse;
 import eu.morfeoproject.fast.catalogue.BuildingBlockException;
+import eu.morfeoproject.fast.catalogue.Constants;
 import eu.morfeoproject.fast.catalogue.NotFoundException;
 import eu.morfeoproject.fast.catalogue.builder.BuildingBlockJSONBuilder;
 import eu.morfeoproject.fast.catalogue.model.Action;
+import eu.morfeoproject.fast.catalogue.model.BackendService;
 import eu.morfeoproject.fast.catalogue.model.Condition;
+import eu.morfeoproject.fast.catalogue.model.Form;
+import eu.morfeoproject.fast.catalogue.model.Operator;
 import eu.morfeoproject.fast.catalogue.model.Pipe;
 import eu.morfeoproject.fast.catalogue.model.ScreenComponent;
-import eu.morfeoproject.fast.catalogue.vocabulary.FGO;
 
 /**
  * Servlet implementation class ScreenComponentFindCheckServlet
@@ -138,12 +141,6 @@ public class ScreenComponentFindCheckServlet extends GenericServlet {
 			
 			// do the real work
 			//-----------------------------
-			// TODO this is unnecessary. remove?
-			/*ArrayList<ScreenComponent> all = new ArrayList<ScreenComponent>();
-			all.addAll(canvas);
-			all.addAll(inForms);
-			all.addAll(inOperators);
-			all.addAll(inBackendServices);*/
 			ArrayList<ScreenComponent> outForms = new ArrayList<ScreenComponent>();
 			ArrayList<ScreenComponent> outOperators = new ArrayList<ScreenComponent>();
 			ArrayList<ScreenComponent> outBackendServices = new ArrayList<ScreenComponent>();
@@ -168,21 +165,16 @@ public class ScreenComponentFindCheckServlet extends GenericServlet {
 					}
 				}
 
-				// add results of 'find' to the list of forms
-				List<URI> formResults = getCatalogue().findScreenComponents(null, conList, canvas, pipes, 0, -1, tags, FGO.Form);
-				for (URI uri : formResults) {
-					outForms.add(getCatalogue().getScreenComponent(uri));
+				// ask the catalogue for suggestions, and add the results to the list of forms, operators and services
+				int strategy = Constants.PREPOST + Constants.PATTERNS;
+				List<URI> findResults = getCatalogue().findScreenComponents(null, conList, canvas, pipes, 0, -1, tags, strategy);
+				for (URI uri : findResults) {
+					ScreenComponent sc = getCatalogue().getScreenComponent(uri);
+					if (sc instanceof Form) 				outForms.add(sc);
+					else if (sc instanceof Operator) 		outOperators.add(sc);
+					else if (sc instanceof BackendService)	outBackendServices.add(sc);
 				}
-				// add results of 'find' to the list of operators
-				List<URI> opResults = getCatalogue().findScreenComponents(null, conList, canvas, pipes, 0, -1, tags, FGO.Operator);
-				for (URI uri : opResults) {
-					outOperators.add(getCatalogue().getScreenComponent(uri));
-				}
-				// add results of 'find' to the list of backend services
-				List<URI> bsResults = getCatalogue().findScreenComponents(null, conList, canvas, pipes, 0, -1, tags, FGO.BackendService);
-				for (URI uri : bsResults) {
-					outBackendServices.add(getCatalogue().getScreenComponent(uri));
-				}
+				
 				if (iserve) {
 					// query iServe for more web services
 					iServeList.addAll(getCatalogue().findIServeWS(conList));

@@ -12,8 +12,8 @@ import org.junit.Test;
 import org.ontoware.rdf2go.model.node.URI;
 import org.ontoware.rdf2go.model.node.impl.URIImpl;
 
+import eu.morfeoproject.fast.catalogue.Constants;
 import eu.morfeoproject.fast.catalogue.model.factory.BuildingBlockFactory;
-import eu.morfeoproject.fast.catalogue.vocabulary.FGO;
 import eu.morfeoproject.fast.util.TestUtils;
 
 public class FindCheckTest {
@@ -45,13 +45,13 @@ public class FindCheckTest {
 		all.add(formCopy);
 		ArrayList<String> tags = new ArrayList<String>();
 		
-		List<URI> results = TestUtils.getCatalogue().findScreenComponents(null, conList, all, 0, -1, tags, FGO.BackendService);
+		List<URI> results = TestUtils.getCatalogue().findScreenComponents(null, conList, all, 0, -1, tags, Constants.PREPOST);
 		assertEquals(2, results.size());
 		assertTrue(results.contains(s1.getUri()));
 		assertTrue(results.contains(s3.getUri()));
 
 		tags.add("amazon");
-		results = TestUtils.getCatalogue().findScreenComponents(null, conList, all, 0, -1, tags, FGO.BackendService);
+		results = TestUtils.getCatalogue().findScreenComponents(null, conList, all, 0, -1, tags, Constants.PREPOST);
 		assertEquals(1, results.size());
 		assertTrue(results.contains(s1.getUri()));
 	}
@@ -199,25 +199,93 @@ public class FindCheckTest {
 		Screen sR1 = (Screen) TestUtils.buildBBFromFile(TestUtils.getCatalogue().getServerURL(), "screen", "data/json/screens/amazonList.json.composed", bbMap);
 		sR1.setId("1001");
 		sR1.setUri(new URIImpl("http://localhost:8080/FASTCatalogue/screens/1001"));
+		bbMap.clear();
+		bbMap.put("<list-form>", TestUtils.getCatalogue().cloneBuildingBlock(f1).toString());
+		bbMap.put("<search-service>", TestUtils.getCatalogue().cloneBuildingBlock(bs7).toString());
 		Screen sR2 = (Screen) TestUtils.buildBBFromFile(TestUtils.getCatalogue().getServerURL(), "screen", "data/json/screens/amazonList.json.composed", bbMap);
 		sR2.setId("1002");
 		sR2.setUri(new URIImpl("http://localhost:8080/FASTCatalogue/screens/1002"));
 		TestUtils.getCatalogue().addScreens(sR1, sR2);
-		assertEquals(9, TestUtils.getCatalogue().getAllScreens().size());
+		bbMap.clear();
+		bbMap.put("<shopping-form>", TestUtils.getCatalogue().cloneBuildingBlock(f6).toString());
+		bbMap.put("<searchcart-service>", TestUtils.getCatalogue().cloneBuildingBlock(bs6).toString());
+		bbMap.put("<updatecart-service>", TestUtils.getCatalogue().cloneBuildingBlock(bs1).toString());
+		bbMap.put("<clearcart-service>", TestUtils.getCatalogue().cloneBuildingBlock(bs3).toString());
+		Screen sR3 = (Screen) TestUtils.buildBBFromFile(TestUtils.getCatalogue().getServerURL(), "screen", "data/json/screens/amazonShopping.json.composed", bbMap);
+		sR3.setId("1003");
+		sR3.setUri(new URIImpl("http://localhost:8080/FASTCatalogue/screens/1003"));
+		bbMap.clear();
+		bbMap.put("<shopping-form>", TestUtils.getCatalogue().cloneBuildingBlock(f6).toString());
+		bbMap.put("<searchcart-service>", TestUtils.getCatalogue().cloneBuildingBlock(bs6).toString());
+		bbMap.put("<updatecart-service>", TestUtils.getCatalogue().cloneBuildingBlock(bs1).toString());
+		bbMap.put("<clearcart-service>", TestUtils.getCatalogue().cloneBuildingBlock(bs3).toString());
+		Screen sR4 = (Screen) TestUtils.buildBBFromFile(TestUtils.getCatalogue().getServerURL(), "screen", "data/json/screens/amazonShopping.json.composed", bbMap);
+		sR4.setId("1004");
+		sR4.setUri(new URIImpl("http://localhost:8080/FASTCatalogue/screens/1004"));
+		bbMap.clear();
+		bbMap.put("<shopping-form>", TestUtils.getCatalogue().cloneBuildingBlock(f6).toString());
+		bbMap.put("<searchcart-service>", TestUtils.getCatalogue().cloneBuildingBlock(bs6).toString());
+		bbMap.put("<updatecart-service>", TestUtils.getCatalogue().cloneBuildingBlock(bs1).toString());
+		bbMap.put("<clearcart-service>", TestUtils.getCatalogue().cloneBuildingBlock(bs3).toString());
+		Screen sR5 = (Screen) TestUtils.buildBBFromFile(TestUtils.getCatalogue().getServerURL(), "screen", "data/json/screens/amazonShopping.json.composed", bbMap);
+		sR5.setId("1005");
+		sR5.setUri(new URIImpl("http://localhost:8080/FASTCatalogue/screens/1005"));
+		TestUtils.getCatalogue().addScreens(sR3, sR4, sR5);
+		assertEquals(12, TestUtils.getCatalogue().getAllScreens().size());
 
-		//----- query the catalogue -----//
-//		ArrayList<Screen> all = new ArrayList<Screen>();
-//		all.add(s2);
-//		all.add(s4);
-//		ArrayList<String> tags = new ArrayList<String>();
-//		ArrayList<Condition> preconditions = new ArrayList<Condition>();
-//		Condition condition = BuildingBlockFactory.createCondition();
-//		condition.setPatternString("?x http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://fast.morfeo-project.org/ontologies/amazon#SearchRequest");
-//		condition.setPositive(true);
-//		preconditions.add(condition);
-//		List<URI> results = TestUtils.getCatalogue().findScreenComponents(container, conditions, scList, offset, limit, tags, typeBuildingBlock);
-//		assertEquals(1, results.size());
-//		assertTrue(results.contains(s3.getUri()));
+		//----- prepare the request to the catalogue -----//
+		ScreenComponent bs7Clone = TestUtils.getCatalogue().getScreenComponent(TestUtils.getCatalogue().cloneBuildingBlock(bs7));
+		ScreenComponent bs6Clone = TestUtils.getCatalogue().getScreenComponent(TestUtils.getCatalogue().cloneBuildingBlock(bs6));
+		ArrayList<ScreenComponent> scList = new ArrayList<ScreenComponent>();
+		scList.add(bs7Clone);
+		scList.add(bs6Clone);
+		ArrayList<Condition> conList = new ArrayList<Condition>();
+		for (ScreenComponent sc : scList) {
+			for (Action action : sc.getActions()) {
+				for (Condition condition : action.getPreconditions()) {
+					conList.add(condition);
+				}
+			}
+			for (Condition condition : sc.getPostconditions()) {
+				conList.add(condition);
+			}
+		}
+		
+		//----- search bb compatibles in terms of their pre/postconditions (order is not important) -----//
+		List<URI> results = TestUtils.getCatalogue().findScreenComponents(null, conList, scList, 0, -1, null, Constants.PREPOST);
+		assertEquals(10, results.size());
+		assertTrue(results.contains(f1.getUri()));
+		assertTrue(results.contains(f5.getUri()));
+		assertTrue(results.contains(f3.getUri()));
+		assertTrue(results.contains(f4.getUri()));
+		assertTrue(results.contains(f6.getUri()));
+		assertTrue(results.contains(f7.getUri()));
+		assertTrue(results.contains(bs1.getUri()));
+		assertTrue(results.contains(bs2.getUri()));
+		assertTrue(results.contains(bs3.getUri()));
+		assertTrue(results.contains(bs4.getUri()));
+
+		//----- search bb compatibles in terms of their pre/postconditions (order is important) -----//
+		results = TestUtils.getCatalogue().findScreenComponents(null, conList, scList, 0, -1, null, Constants.PATTERNS);
+		assertEquals(4, results.size());
+		assertTrue(results.get(0).equals(f6.getUri()));
+		assertTrue(results.get(1).equals(bs1.getUri()));
+		assertTrue(results.get(2).equals(bs3.getUri()));
+		assertTrue(results.get(3).equals(f1.getUri()));
+
+		//----- both strategies combined (order is important) -----//
+		results = TestUtils.getCatalogue().findScreenComponents(null, conList, scList, 0, -1, null, Constants.PREPOST + Constants.PATTERNS);
+		assertEquals(10, results.size());
+		assertTrue(results.get(0).equals(f6.getUri()));
+		assertTrue(results.get(1).equals(bs1.getUri()));
+		assertTrue(results.get(2).equals(bs3.getUri()));
+		assertTrue(results.get(3).equals(f1.getUri()));
+		assertTrue(results.contains(f5.getUri()));
+		assertTrue(results.contains(f3.getUri()));
+		assertTrue(results.contains(f4.getUri()));
+		assertTrue(results.contains(f7.getUri()));
+		assertTrue(results.contains(bs2.getUri()));
+		assertTrue(results.contains(bs4.getUri()));
 	}
 
 }
