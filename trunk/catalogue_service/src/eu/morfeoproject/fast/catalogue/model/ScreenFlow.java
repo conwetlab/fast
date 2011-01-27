@@ -20,7 +20,7 @@ public class ScreenFlow extends WithConditions {
 		super(uri);
 	}
 
-	public List<URI> getBuildingBlockList() {
+	public List<URI> getBuildingBlocks() {
 		if (buildingBlockList == null)
 			buildingBlockList = new ArrayList<URI>();
 		return buildingBlockList;
@@ -33,7 +33,7 @@ public class ScreenFlow extends WithConditions {
 	public JSONObject toJSON() throws JSONException {
 		JSONObject json = super.toJSON();
 		JSONArray list = new JSONArray();
-		for (URI r : getBuildingBlockList())
+		for (URI r : getBuildingBlocks())
 			list.put(r);
 		json.put("contains", list);
 		return json;
@@ -44,7 +44,7 @@ public class ScreenFlow extends WithConditions {
 		
 		URI sfUri = this.getUri();
 		model.addStatement(sfUri, RDF.type, FGO.ScreenFlow);
-		for (URI r : this.getBuildingBlockList())
+		for (URI r : this.getBuildingBlocks())
 			model.addStatement(sfUri, FGO.contains, r);
 		
 		return model;
