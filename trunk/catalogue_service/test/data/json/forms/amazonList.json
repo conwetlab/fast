@@ -1,6 +1,5 @@
 {
     "id":"1",
-    "name":"Amazon Product List",
     "code":"http://demo.fast.morfeo-project.org/gvsdata/forms/amazonList.src.html",
     "creationDate":"2009-04-20T17:00:00+0100",
     "creator":"admin",
@@ -60,22 +59,22 @@
         }
     ],
     "postconditions":[
-            {
-                "id":"item",
-                "label":{
-                    "en-gb":"An item"
-                },
-                "pattern":"?Item http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://fast.morfeo-project.org/ontologies/amazon#Item",
-                "positive":"true"
+        {
+            "id":"item",
+            "label":{
+                "en-gb":"An item"
             },
-            {
-                "id":"filter",
-                "label":{
-                    "en-gb":"A filter"
-                },
-                "pattern":"?Filter http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://fast.morfeo-project.org/ontologies/amazon#SearchRequest",
-                "positive":"true"
-            }
+            "pattern":"?Item http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://fast.morfeo-project.org/ontologies/amazon#Item",
+            "positive":"true"
+        },
+        {
+            "id":"filter",
+            "label":{
+                "en-gb":"A filter"
+            },
+            "pattern":"?Filter http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://fast.morfeo-project.org/ontologies/amazon#SearchRequest",
+            "positive":"true"
+        }
     ],
     "triggers":[
         

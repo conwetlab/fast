@@ -1,7 +1,9 @@
 package eu.morfeoproject.fast.catalogue.model;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -13,12 +15,12 @@ public class Action {
 	private URI uri;
 	private String name;
 	private List<Condition> preconditions;
-	private List<URI> uses;
+	private Map<String, URI> uses;
 	
 	public Action() {
 		super();
 		this.preconditions = new ArrayList<Condition>();
-		this.uses = new ArrayList<URI>();
+		this.uses = new HashMap<String, URI>();
 	}
 
 	public Action(URI uri) {
@@ -51,14 +53,24 @@ public class Action {
 	}
 
 	
-	public List<URI> getUses() {
+	public Map<String, URI> getUses() {
 		return uses;
 	}
 
-	public void setUses(List<URI> uses) {
+	public void setUses(Map<String, URI> uses) {
 		this.uses = uses;
 	}
 
+	//FIXME compare if everything an action contains, is equal to the other action
+	@Override
+	public boolean equals(Object other) {
+		Action action = (Action) other;
+		return action.getName().equals(this.name)
+			&& action.getUri().equals(this.uri)
+			&& action.getPreconditions().size() == this.preconditions.size()
+			&& action.getUses().size() == this.uses.size();
+	}
+	
 	public JSONObject toJSON() throws JSONException {
 		JSONObject json = new JSONObject();
 		json.put("name", getName() == null ? JSONObject.NULL : getName());
@@ -69,11 +81,7 @@ public class Action {
 		}
 		json.put("preconditions", preArray);
 		// uses
-		JSONArray usesArray = new JSONArray();
-		for (URI useUri : getUses()) {
-			usesArray.put(useUri);
-		}
-		json.put("uses", usesArray);
+		json.put("uses", getUses());
 		return json;
 	}
 

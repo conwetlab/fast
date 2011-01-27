@@ -64,7 +64,7 @@ public class ScreenFindCheckServlet extends GenericServlet {
 				Screen screen = getCatalogue().getScreen(uri);
 				if (screen == null) 
 					throw new NotFoundException("Resource "+uri+" does not exist.");
-				if (screen.getTemplate() == null)
+				if (screen.getPrototype() == null)
 					throw new BuildingBlockException("Resource "+uri+" must be a clone of a prototype.");
 				screens.add(screen); 
 			}

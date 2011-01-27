@@ -13,6 +13,7 @@ import org.ontoware.rdf2go.vocabulary.RDFS;
 import org.ontoware.rdf2go.vocabulary.XSD;
 
 import eu.morfeoproject.fast.catalogue.vocabulary.FGO;
+import eu.morfeoproject.fast.catalogue.vocabulary.FOAF;
 
 public abstract class ScreenComponent extends BuildingBlock {
 
@@ -129,8 +130,11 @@ public abstract class ScreenComponent extends BuildingBlock {
 				}
 			}
 			// uses
-			for (URI useURI : action.getUses()) {
-				model.addStatement(actionUri, FGO.uses, useURI);
+			for (String id : action.getUses().keySet()) {
+				BlankNode useNode = model.createBlankNode();
+				model.addStatement(actionUri, FGO.uses, useNode);
+				model.addStatement(useNode, RDFS.label, model.createPlainLiteral(id));
+				model.addStatement(useNode, FOAF.Document, action.getUses().get(id));
 			}
 		}
 		
@@ -138,7 +142,7 @@ public abstract class ScreenComponent extends BuildingBlock {
 		for (Library library : getLibraries()) {
 			BlankNode libNode = model.createBlankNode();
 			model.addStatement(scUri, FGO.hasLibrary, libNode);
-			model.addStatement(libNode, FGO.hasLanguage, model.createDatatypeLiteral(library.getLanguage(), XSD._string));
+			model.addStatement(libNode, FGO.hasLanguage, model.createPlainLiteral(library.getLanguage()));
 			model.addStatement(libNode, FGO.hasCode, library.getSource());
 		}
 		

@@ -1,0 +1,106 @@
+{
+	"id": "3",
+    "code":"http://demo.fast.morfeo-project.org/gvsdata/forms/amazonPrice.src.html",
+    "creationDate":"2009-04-20T17:00:00+0100",
+    "creator":"admin",
+    "description":{
+        "en-gb":"This screen shows a price comparative for a given product."
+    },
+    "tags":[
+        {
+            "label":{
+                "en-gb":"amazon"
+            },
+            "means":"http://dbpedia.org/page/Amazon.com"
+        },
+        {
+            "label":{
+                "en-gb":"price"
+            }
+        },
+        {
+            "label":{
+                "en-gb":"comparative"
+            }
+        },
+        {
+            "label":{
+                "en-gb":"list"
+            }
+        }
+    ],
+    "homepage":"http://www.deri.ie/amazonPrice",
+    "icon":"http://demo.fast.morfeo-project.org/gvsdata/images/catalogue/amazonPrice.png",
+    "label":{
+        "en-gb":"Price Comparative"
+    },
+    "rights":"http://creativecommons.org/",
+    "screenshot":"http://demo.fast.morfeo-project.org/gvsdata/images/screenshots/amazonPriceComparative.png",
+    "version":"1.0",
+    "libraries":[
+        
+    ],
+    "actions":[
+        {
+            "name":"init",
+            "preconditions":[
+                {
+                    "id":"item",
+                    "label":{
+                        "en-gb":"An item"
+                    },
+                    "pattern":"?Item http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://fast.morfeo-project.org/ontologies/amazon#Item",
+                    "positive":"true"
+                }
+            ],
+            "uses":[
+                
+            ]
+        },
+        {
+            "name":"showTable",
+            "preconditions":[
+                {
+                    "id":"list",
+                    "label":{
+                        "en-gb":"An offer list"
+                    },
+                    "pattern":"?OList http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://fast.morfeo-project.org/ontologies/amazon#OfferList",
+                    "positive":"true"
+                }
+            ],
+            "uses":[
+                
+            ]
+        },
+        {
+            "name":"showMessage",
+            "preconditions":[
+                {
+                    "id":"message",
+                    "label":{
+                        "en-gb":"A message"
+                    },
+                    "pattern":"?Message http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://fast.morfeo-project.org/ontologies/amazon#Message",
+                    "positive":"true"
+                }
+            ],
+            "uses":[
+                
+            ]
+        }
+    ],
+    "postconditions":[
+        {
+            "id":"offer",
+            "label":{
+                "en-gb":"An offer"
+            },
+            "pattern":"?Offer http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://fast.morfeo-project.org/ontologies/amazon#Offer",
+            "positive":"true"
+        }
+    ],
+    "triggers":[
+        "offer"
+    ]
+}

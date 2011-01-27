@@ -28,8 +28,9 @@ public abstract class Planner extends Cacheable<List<Plan>> {
 	 */
 	public List<Plan> searchPlans(URI goal, List<Screen> screens) {
 		LinkedList<URI> uriList = new LinkedList<URI>();
-		for (Screen screen : screens)
+		for (Screen screen : screens) {
 			uriList.add(screen.getUri());
+		}
 		
 		LinkedList<Plan> planList = new LinkedList<Plan>();
 		List<Plan> cacheList = cache.get(goal.toString());
@@ -196,6 +197,7 @@ public abstract class Planner extends Cacheable<List<Plan>> {
 			results.addAll(catalogue.findForwards(screens, new ArrayList<Condition>(), new ArrayList<Condition>(), true, true, 0, -1, null));
 			for (URI result : results) {
 				plannerStore.add(screen.getUri(), result);
+				if (log.isInfoEnabled()) log.info("added transition "+screen.getUri()+" -> "+result);
 			}
 		}
 	}
@@ -210,6 +212,7 @@ public abstract class Planner extends Cacheable<List<Plan>> {
 			results.addAll(catalogue.findBackwards(screens, new ArrayList<Condition>(), new ArrayList<Condition>(), true, true, 0, -1, null));
 			for (URI result : results) {
 				plannerStore.add(result, screen.getUri());
+				if (log.isInfoEnabled()) log.info("added transition "+result+" -> "+screen.getUri());
 			}
 		}
 	}
@@ -236,17 +239,17 @@ public abstract class Planner extends Cacheable<List<Plan>> {
 	 * Generates all the plans from a given list of screens, already stored in the catalogue
 	 */
 	protected void seed() {
-//		for (Screen screen : catalogue.getAllScreens()) {
-//			if (screen.getPreconditions().size() > 0) {
-//				ArrayList<BuildingBlock> resources = new ArrayList<BuildingBlock>();
-//				resources.add(screen);
-//				ArrayList<URI> results = new ArrayList<URI>();
-//				results.addAll(catalogue.findBackwards(resources, true, true, 0, -1, null));
-//				for (URI result : results) {
-//					plannerStore.add(result, screen.getUri());
-//				}
-//			}
-//		}
+		for (Screen screen : catalogue.getAllScreens()) {
+			if (screen.getPreconditions().size() > 0) {
+				ArrayList<Screen> screens = new ArrayList<Screen>();
+				screens.add(screen);
+				ArrayList<URI> results = new ArrayList<URI>();
+				results.addAll(catalogue.findBackwards(screens, new ArrayList<Condition>(), new ArrayList<Condition>(), true, true, 0, -1, null));
+				for (URI result : results) {
+					plannerStore.add(result, screen.getUri());
+				}
+			}
+		}
 	}
 	
 }

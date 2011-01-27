@@ -66,6 +66,15 @@ public class Condition {
 	public void setId(String id) {
 		this.id = id;
 	}
+
+	@Override
+	public boolean equals(Object other) {
+		Condition condition = (Condition) other;
+		return condition.getId().equals(this.id)
+			&& condition.getUri().equals(this.uri)
+			&& condition.getLabels().equals(this.labels)
+			&& condition.getPatternString().equals(this.getPatternString());
+	}
 	
 	@Override
 	public String toString() {

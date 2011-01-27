@@ -1,10 +1,10 @@
 {
-    "id":"2",
-    "code":"http://demo.fast.morfeo-project.org/gvsdata/resources/amazonAddOfferToCartService.src.js",
+    "id":"8",
+    "code":"http://demo.fast.morfeo-project.org/gvsdata/resources/amazonSuggetionListService.src.js",
     "creationDate":"2009-04-20T17:00:00+0100",
     "creator":"admin",
     "description":{
-        "en-gb":"This service adds offers to an Amazon shopping cart"
+        "en-gb":"This service provides suggestions related to a product in Amazon Catalogue"
     },
     "tags":[
         {
@@ -15,22 +15,22 @@
         },
         {
             "label":{
-                "en-gb":"offer"
+                "en-gb":"suggestion"
             }
         },
         {
             "label":{
-                "en-gb":"shopping"
+                "en-gb":"list"
             }
         }
     ],
-    "homepage":"http://www.deri.ie/amazonAddOfferToCartService",
-    "icon":"http://demo.fast.morfeo-project.org/gvsdata/images/catalogue/amazonAddOfferToCartService.png",
+    "homepage":"http://www.deri.ie/amazonSuggetionListService",
+    "icon":"http://demo.fast.morfeo-project.org/gvsdata/images/catalogue/amazonSuggetionListService.png",
     "label":{
-        "en-gb":"Add Offer To Amazon Shopping Cart"
+        "en-gb":"Amazon Suggestions"
     },
     "rights":"http://creativecommons.org/",
-    "screenshot":"http://www.deri.ie/amazonAddOfferToCartService.jpg",
+    "screenshot":"http://www.deri.ie/amazonSuggetionListService.jpg",
     "version":"1.0",
     "libraries":[
         {
@@ -44,32 +44,29 @@
     ],
     "actions":[
         {
-            "name":"addToCart",
+            "name":"fetch",
             "preconditions":[
                 {
-                    "id":"offer",
+                    "id":"item",
                     "label":{
-                        "en-gb":"An offer"
+                        "en-gb":"An Amazon item"
                     },
-                    "pattern":"?Offer http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://fast.morfeo-project.org/ontologies/amazon#Offer",
+                    "pattern":"?Item http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#Item",
                     "positive":"true"
                 }
             ],
             "uses":[
-                {
-                    "id":"cart",
-                    "uri":"http://fast.morfeo-project.org/ontologies/amazon#ShoppingCart"
-                }
+                
             ]
         }
     ],
     "postconditions":[
         {
-            "id":"cart",
+            "id":"list",
             "label":{
-                "en-gb":"A shopping cart"
+                "en-gb":"A product list"
             },
-            "pattern":"?Cart http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://fast.morfeo-project.org/ontologies/amazon#ShoppingCart",
+            "pattern":"?PList http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#ProductList",
             "positive":"true"
         },
         {
@@ -77,11 +74,11 @@
             "label":{
                 "en-gb":"A message"
             },
-            "pattern":"?Message http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://fast.morfeo-project.org/ontologies/amazon#Message",
+            "pattern":"?Message http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#Message",
             "positive":"true"
         }
     ],
     "triggers":[
-        "message"
+        "list"
     ]
 }

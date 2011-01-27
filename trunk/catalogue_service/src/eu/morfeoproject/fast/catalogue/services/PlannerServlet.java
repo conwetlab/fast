@@ -62,9 +62,9 @@ public class PlannerServlet extends GenericServlet {
 				for (int g = 0; g < goalArray.length(); g++) {
 					URI uri = new URIImpl(goalArray.getString(g));
 					BuildingBlock bb = getCatalogue().getBuildingBlock(uri);
-					if (bb.getTemplate() == null) 
+					if (bb.getPrototype() == null) 
 						throw new BuildingBlockException("Resource "+uri+" must be a clone of a prototype.");
-					goalList.add(bb.getTemplate());
+					goalList.add(bb.getPrototype());
 				}
 			} catch (JSONException e) {
 				log.debug("Goal attribute is not a list, maybe a single goal URI?");

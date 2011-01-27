@@ -282,7 +282,7 @@ A condition is made up of individual facts, where each fact is represented inter
      * Comment: http://purl.oclc.org/fast/ontology/gadget#BuildingBlock 
      * Range: http://purl.oclc.org/fast/ontology/gadget#BuildingBlock 
      */
-    public static final URI hasTemplate = new URIImpl("http://purl.oclc.org/fast/ontology/gadget#hasTemplate", false);
+    public static final URI hasPrototype = new URIImpl("http://purl.oclc.org/fast/ontology/gadget#hasTemplate", false);
 
     /**
      */
@@ -368,7 +368,7 @@ A condition is made up of individual facts, where each fact is represented inter
      * Comment: http://purl.oclc.org/fast/ontology/gadget#BuildingBlock 
      * Range: http://purl.oclc.org/fast/ontology/gadget#BuildingBlock 
      */
-    public static final URI hasCopy = new URIImpl("http://purl.oclc.org/fast/ontology/gadget#hasCopy", false);
+    public static final URI hasClone = new URIImpl("http://purl.oclc.org/fast/ontology/gadget#hasCopy", false);
 
     /**
      * Label: has action@en 

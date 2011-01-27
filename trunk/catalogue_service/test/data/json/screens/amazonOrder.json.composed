@@ -1,0 +1,79 @@
+{
+    "id":"2",
+    "creationDate":"2009-04-20T17:00:00+0100",
+    "creator":"admin",
+    "description":{
+        "en-gb":"This form allows users to purchase their shopping cart. It shows an Amazon interface to fulfill the required data to purchase the shopping cart"
+    },
+    "tags":[
+        {
+            "label":{
+                "en-gb":"compound"
+            }
+        },
+        {
+            "label":{
+                "en-gb":"amazon"
+            },
+            "means":"http://dbpedia.org/page/Amazon.com"
+        },
+        {
+            "label":{
+                "en-gb":"order"
+            }
+        }
+    ],
+    "homepage":"http://www.deri.ie/amazonOrder",
+    "icon":"http://demo.fast.morfeo-project.org/gvsdata/images/catalogue/amazonOrder.png",
+    "label":{
+        "en-gb":"Order Compound"
+    },
+    "rights":"http://creativecommons.org/",
+    "screenshot":"http://demo.fast.morfeo-project.org/gvsdata/images/screenshots/amazonOrder.png",
+    "version":"1.0",
+    "definition":{
+        "buildingblocks":[
+            {
+                "uri":"<order-form>"
+            }
+        ],
+        "pipes":[
+            {
+                "from":{
+                    "buildingblock":"",
+                    "condition":"purchase"
+                },
+                "to":{
+                    "buildingblock":"<order-form>",
+                    "condition":"purchase",
+                    "action":"init"
+                }
+            }
+        ],
+        "triggers":[
+            {
+                "from":{
+                    "buildingblock":"",
+                    "name":"_onload"
+                },
+                "to":{
+                    "buildingblock":"<order-form>",
+                    "action":"init"
+                }
+            }
+        ]
+    },
+    "preconditions":[
+        {
+            "id":"purchase",
+            "label":{
+                "en-gb":"A Amazon Purchase URL"
+            },
+            "pattern":"?P http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://fast.morfeo-project.org/ontologies/amazon#PurchaseURL",
+            "positive":"true"
+        }
+    ],
+    "postconditions":[
+        
+    ]
+}

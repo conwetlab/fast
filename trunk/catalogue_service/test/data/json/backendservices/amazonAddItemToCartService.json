@@ -1,10 +1,10 @@
 {
-    "id":"2",
-    "code":"http://demo.fast.morfeo-project.org/gvsdata/resources/amazonAddOfferToCartService.src.js",
+    "id":"1",
+    "code":"http://demo.fast.morfeo-project.org/gvsdata/resources/amazonAddItemToCartService.src.js",
     "creationDate":"2009-04-20T17:00:00+0100",
     "creator":"admin",
     "description":{
-        "en-gb":"This service adds offers to an Amazon shopping cart"
+        "en-gb":"This service adds items to an Amazon shopping cart"
     },
     "tags":[
         {
@@ -15,22 +15,22 @@
         },
         {
             "label":{
-                "en-gb":"offer"
+                "en-gb":"item"
             }
         },
         {
             "label":{
-                "en-gb":"shopping"
+                "en-gb":"cart"
             }
         }
     ],
-    "homepage":"http://www.deri.ie/amazonAddOfferToCartService",
-    "icon":"http://demo.fast.morfeo-project.org/gvsdata/images/catalogue/amazonAddOfferToCartService.png",
+    "homepage":"http://www.deri.ie/amazonAddItemToCartService",
+    "icon":"http://demo.fast.morfeo-project.org/gvsdata/images/catalogue/amazonAddItemToCartService.png",
     "label":{
-        "en-gb":"Add Offer To Amazon Shopping Cart"
+        "en-gb":"Add Item To Amazon Shopping Cart"
     },
     "rights":"http://creativecommons.org/",
-    "screenshot":"http://www.deri.ie/amazonAddOfferToCartService.jpg",
+    "screenshot":"http://www.deri.ie/amazonAddItemToCartService.jpg",
     "version":"1.0",
     "libraries":[
         {
@@ -44,14 +44,14 @@
     ],
     "actions":[
         {
-            "name":"addToCart",
+            "name":"add",
             "preconditions":[
                 {
-                    "id":"offer",
+                    "id":"item",
                     "label":{
-                        "en-gb":"An offer"
+                        "en-gb":"An item"
                     },
-                    "pattern":"?Offer http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://fast.morfeo-project.org/ontologies/amazon#Offer",
+                    "pattern":"?Item http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://fast.morfeo-project.org/ontologies/amazon#Item",
                     "positive":"true"
                 }
             ],

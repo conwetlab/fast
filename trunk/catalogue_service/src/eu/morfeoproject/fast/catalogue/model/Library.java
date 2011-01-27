@@ -24,6 +24,13 @@ public class Library {
 	public void setSource(URI source) {
 		this.source = source;
 	}
+	
+	@Override
+	public boolean equals(Object other) {
+		Library library = (Library) other;
+		return library.getLanguage().equals(this.language)
+			&& library.getSource().equals(this.source);
+	}
 
 	public JSONObject toJSON() throws JSONException {
 		JSONObject json = new JSONObject();

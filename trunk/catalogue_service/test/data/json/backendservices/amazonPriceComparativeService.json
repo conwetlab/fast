@@ -1,10 +1,10 @@
 {
-    "id":"7",
-    "code":"http://demo.fast.morfeo-project.org/gvsdata/resources/amazonSearchService.src.js",
-    "creationDate":null,
+    "id":"5",
+    "code":"http://demo.fast.morfeo-project.org/gvsdata/resources/amazonPriceComparativeService.src.js",
+    "creationDate":"2009-04-20T17:00:00+0100",
     "creator":"admin",
     "description":{
-        "en-gb":"This service provides information about products in Amazon Catalogue"
+        "en-gb":"This service provides a price comparative related to an Amazon product"
     },
     "tags":[
         {
@@ -15,23 +15,22 @@
         },
         {
             "label":{
-                "en-gb":"search"
+                "en-gb":"price"
             }
         },
         {
             "label":{
-                "en-gb":"list"
+                "en-gb":"comparative"
             }
         }
     ],
-    "homepage":"hhttp://www.deri.ie/amazonSearchService",
-    "icon":"http://demo.fast.morfeo-project.org/gvsdata/images/catalogue/amazonSearchService.png",
+    "homepage":"http://www.deri.ie/amazonPriceComparativeService",
+    "icon":"http://demo.fast.morfeo-project.org/gvsdata/images/catalogue/amazonPriceComparativeService.png",
     "label":{
-        "en-gb":"Amazon Search"
+        "en-gb":"Amazon Price Comparative"
     },
     "rights":"http://creativecommons.org/",
-    "screenshot":"http://www.deri.ie/amazonList-screenshot.jpg",
-    "type":"resource",
+    "screenshot":"http://www.deri.ie/amazonPriceComparativeService.jpg",
     "version":"1.0",
     "libraries":[
         {
@@ -45,14 +44,14 @@
     ],
     "actions":[
         {
-            "name":"search",
+            "name":"fetch",
             "preconditions":[
                 {
-                    "id":"filter",
+                    "id":"item",
                     "label":{
-                        "en-gb":"A search criteria"
+                        "en-gb":"An item"
                     },
-                    "pattern":"?F http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://fast.morfeo-project.org/ontologies/amazon#SearchRequest",
+                    "pattern":"?Item http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://fast.morfeo-project.org/ontologies/amazon#Item",
                     "positive":"true"
                 }
             ],
@@ -65,9 +64,9 @@
         {
             "id":"list",
             "label":{
-                "en-gb":"An Amazon Item List"
+                "en-gb":"A product list"
             },
-            "pattern":"?PList http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://fast.morfeo-project.org/ontologies/amazon#ProductList",
+            "pattern":"?OList http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://fast.morfeo-project.org/ontologies/amazon#OfferList",
             "positive":"true"
         }
     ],

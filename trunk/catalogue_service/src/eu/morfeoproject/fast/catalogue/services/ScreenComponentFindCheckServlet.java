@@ -68,48 +68,47 @@ public class ScreenComponentFindCheckServlet extends GenericServlet {
 			for (int i = 0; i < jsonCanvas.length(); i++) {
 				URI uri = new URIImpl(((JSONObject) jsonCanvas.get(i)).getString("uri"));
 				ScreenComponent sc = (ScreenComponent) getCatalogue().getBuildingBlock(uri);
-				if (sc == null) 
-					throw new NotFoundException("Resource "+uri+" does not exist.");
-				if (sc.getTemplate() == null)
-					throw new BuildingBlockException("Resource "+uri+" must be a clone of a prototype.");
+				if (sc == null || sc.getPrototype() == null)
+					throw new BuildingBlockException(uri+" does not exist or may not be a clone of a prototype.");
 				canvas.add(sc);
 			}
-			// parses the list of forms
-			ArrayList<ScreenComponent> inForms = new ArrayList<ScreenComponent>();
-			JSONArray jsonForms = input.getJSONArray("forms");
-			for (int i = 0; i < jsonForms.length(); i++) {
-				URI uri = new URIImpl(jsonForms.getString(i));
-				ScreenComponent sc = (ScreenComponent) getCatalogue().getBuildingBlock(uri);
-				if (sc == null) 
-					throw new NotFoundException("Resource "+uri+" does not exist.");
-				if (sc.getTemplate() != null)
-					throw new BuildingBlockException("Resource "+uri+" must be a prototype.");
-				inForms.add(sc); 
-			}
-			// parses the list of operators
-			ArrayList<ScreenComponent> inOperators = new ArrayList<ScreenComponent>();
-			JSONArray jsonOperators = input.getJSONArray("operators");
-			for (int i = 0; i < jsonOperators.length(); i++) {
-				URI uri = new URIImpl(jsonOperators.getString(i));
-				ScreenComponent sc = (ScreenComponent) getCatalogue().getBuildingBlock(uri);
-				if (sc == null) 
-					throw new NotFoundException("Resource "+uri+" does not exist.");
-				if (sc.getTemplate() != null)
-					throw new BuildingBlockException("Resource "+uri+" must be a prototype.");
-				inOperators.add(sc); 
-			}
-			// parses the list of backend services
-			ArrayList<ScreenComponent> inBackendServices = new ArrayList<ScreenComponent>();
-			JSONArray jsonBackendServices = input.getJSONArray("backendservices");
-			for (int i = 0; i < jsonBackendServices.length(); i++) {
-				URI uri = new URIImpl(jsonBackendServices.getString(i));
-				ScreenComponent sc = (ScreenComponent) getCatalogue().getBuildingBlock(uri);
-				if (sc == null) 
-					throw new NotFoundException("Resource "+uri+" does not exist.");
-				if (sc.getTemplate() != null)
-					throw new BuildingBlockException("Resource "+uri+" must be a prototype.");
-				inBackendServices.add(sc); 
-			}
+			// TODO this is unnecessary. remove?
+//			// parses the list of forms
+//			ArrayList<ScreenComponent> inForms = new ArrayList<ScreenComponent>();
+//			JSONArray jsonForms = input.getJSONArray("forms");
+//			for (int i = 0; i < jsonForms.length(); i++) {
+//				URI uri = new URIImpl(jsonForms.getString(i));
+//				ScreenComponent sc = (ScreenComponent) getCatalogue().getBuildingBlock(uri);
+//				if (sc == null) 
+//					throw new NotFoundException("Resource "+uri+" does not exist.");
+//				if (sc.getTemplate() != null)
+//					throw new BuildingBlockException("Resource "+uri+" must be a prototype.");
+//				inForms.add(sc); 
+//			}
+//			// parses the list of operators
+//			ArrayList<ScreenComponent> inOperators = new ArrayList<ScreenComponent>();
+//			JSONArray jsonOperators = input.getJSONArray("operators");
+//			for (int i = 0; i < jsonOperators.length(); i++) {
+//				URI uri = new URIImpl(jsonOperators.getString(i));
+//				ScreenComponent sc = (ScreenComponent) getCatalogue().getBuildingBlock(uri);
+//				if (sc == null) 
+//					throw new NotFoundException("Resource "+uri+" does not exist.");
+//				if (sc.getTemplate() != null)
+//					throw new BuildingBlockException("Resource "+uri+" must be a prototype.");
+//				inOperators.add(sc); 
+//			}
+//			// parses the list of backend services
+//			ArrayList<ScreenComponent> inBackendServices = new ArrayList<ScreenComponent>();
+//			JSONArray jsonBackendServices = input.getJSONArray("backendservices");
+//			for (int i = 0; i < jsonBackendServices.length(); i++) {
+//				URI uri = new URIImpl(jsonBackendServices.getString(i));
+//				ScreenComponent sc = (ScreenComponent) getCatalogue().getBuildingBlock(uri);
+//				if (sc == null) 
+//					throw new NotFoundException("Resource "+uri+" does not exist.");
+//				if (sc.getTemplate() != null)
+//					throw new BuildingBlockException("Resource "+uri+" must be a prototype.");
+//				inBackendServices.add(sc); 
+//			}
 			// parses the domain context
 			JSONObject jsonDomainContext = input.getJSONObject("domainContext");
 			JSONArray jsonTags = jsonDomainContext.getJSONArray("tags");
@@ -139,11 +138,12 @@ public class ScreenComponentFindCheckServlet extends GenericServlet {
 			
 			// do the real work
 			//-----------------------------
-			ArrayList<ScreenComponent> all = new ArrayList<ScreenComponent>();
+			// TODO this is unnecessary. remove?
+			/*ArrayList<ScreenComponent> all = new ArrayList<ScreenComponent>();
 			all.addAll(canvas);
 			all.addAll(inForms);
 			all.addAll(inOperators);
-			all.addAll(inBackendServices);
+			all.addAll(inBackendServices);*/
 			ArrayList<ScreenComponent> outForms = new ArrayList<ScreenComponent>();
 			ArrayList<ScreenComponent> outOperators = new ArrayList<ScreenComponent>();
 			ArrayList<ScreenComponent> outBackendServices = new ArrayList<ScreenComponent>();
@@ -158,35 +158,28 @@ public class ScreenComponentFindCheckServlet extends GenericServlet {
 					if (selectedItem instanceof Condition) {
 						conList.add((Condition) selectedItem);
 					} else if (selectedItem instanceof ScreenComponent) {
-						ScreenComponent sc = (ScreenComponent) selectedItem;
-						for (Action action : sc.getActions()) {
-							conList.addAll(action.getPreconditions());
-						}
-						conList.addAll(sc.getPostconditions());
+						conList.addAll(extractAllConditions((ScreenComponent) selectedItem));
 					}
 				} else {
 			    	conList.addAll(preconditions);
 			    	conList.addAll(postconditions);
-					for (ScreenComponent sc : all) {
-						for (Action action : sc.getActions()) {
-							conList.addAll(action.getPreconditions());
-						}
-						conList.addAll(sc.getPostconditions());
+					for (ScreenComponent sc : canvas) {
+				    	conList.addAll(extractAllConditions(sc));
 					}
 				}
 
 				// add results of 'find' to the list of forms
-				List<URI> formResults = getCatalogue().findScreenComponents(null, conList, all, 0, -1, tags, FGO.Form);
+				List<URI> formResults = getCatalogue().findScreenComponents(null, conList, canvas, pipes, 0, -1, tags, FGO.Form);
 				for (URI uri : formResults) {
 					outForms.add(getCatalogue().getScreenComponent(uri));
 				}
 				// add results of 'find' to the list of operators
-				List<URI> opResults = getCatalogue().findScreenComponents(null, conList, all, 0, -1, tags, FGO.Operator);
+				List<URI> opResults = getCatalogue().findScreenComponents(null, conList, canvas, pipes, 0, -1, tags, FGO.Operator);
 				for (URI uri : opResults) {
 					outOperators.add(getCatalogue().getScreenComponent(uri));
 				}
 				// add results of 'find' to the list of backend services
-				List<URI> bsResults = getCatalogue().findScreenComponents(null, conList, all, 0, -1, tags, FGO.BackendService);
+				List<URI> bsResults = getCatalogue().findScreenComponents(null, conList, canvas, pipes, 0, -1, tags, FGO.BackendService);
 				for (URI uri : bsResults) {
 					outBackendServices.add(getCatalogue().getScreenComponent(uri));
 				}
@@ -593,6 +586,15 @@ public class ScreenComponentFindCheckServlet extends GenericServlet {
 			}
 		}
 		return null;
+	}
+
+	protected List<Condition> extractAllConditions(ScreenComponent sc) {
+		ArrayList<Condition> conList = new ArrayList<Condition>();
+		for (Action action : sc.getActions()) {
+			conList.addAll(action.getPreconditions());
+		}
+		conList.addAll(sc.getPostconditions());
+		return conList;
 	}
 
 }

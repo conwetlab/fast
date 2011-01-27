@@ -2,6 +2,7 @@ package eu.morfeoproject.fast.catalogue.builder;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -285,11 +286,12 @@ public class BuildingBlockJSONBuilder {
 		action.setPreconditions(new ArrayList<Condition>());
 		action.getPreconditions().addAll(buildConditions(preArray));
 		// uses
-		action.setUses(new ArrayList<URI>());
+		action.setUses(new HashMap<String, URI>());
 		if (jsonAction.get("uses") != null) {
 			JSONArray usesArray = jsonAction.getJSONArray("uses");
 			for (int i = 0; i < usesArray.length(); i++) {
-				action.getUses().add(rdfFactory.createURI(usesArray.getString(i)));
+				JSONObject jsonUse = usesArray.getJSONObject(i);
+				action.getUses().put(jsonUse.getString("id"), rdfFactory.createURI(jsonUse.getString("uri")));
 			}
 		}
 

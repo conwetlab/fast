@@ -1,5 +1,5 @@
 {
-	"id": "2",
+    "id":"4",
     "code":"http://demo.fast.morfeo-project.org/gvsdata/resources/amazonLookupService.src.js",
     "creationDate":"2009-04-20T17:00:00+0100",
     "creator":"admin",
@@ -55,22 +55,22 @@
         }
     ],
     "postconditions":[
-            {
-                "id":"product",
-                "label":{
-                    "en-gb":"An item"
-                },
-                "pattern":"?Item http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://fast.morfeo-project.org/ontologies/amazon#Item",
-                "positive":"true"
+        {
+            "id":"product",
+            "label":{
+                "en-gb":"An item"
             },
-            {
-                "id":"message",
-                "label":{
-                    "en-gb":"A message"
-                },
-                "pattern":"?Message http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://fast.morfeo-project.org/ontologies/amazon#Message",
-                "positive":"true"
-            }
+            "pattern":"?Item http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://fast.morfeo-project.org/ontologies/amazon#Item",
+            "positive":"true"
+        },
+        {
+            "id":"message",
+            "label":{
+                "en-gb":"A message"
+            },
+            "pattern":"?Message http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://fast.morfeo-project.org/ontologies/amazon#Message",
+            "positive":"true"
+        }
     ],
     "triggers":[
         "newProduct"

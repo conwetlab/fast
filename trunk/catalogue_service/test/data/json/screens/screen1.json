@@ -1,0 +1,71 @@
+{
+	"definition": 
+	{
+		"pipes": [
+			{
+				"to": {"action": "showTable", "buildingblock": "<amazon-list-form>", "condition": "list"}, 
+				"from": {"buildingblock": "<amazon-search-service>", "condition": "list"}
+			},
+			{
+				"to": {"action": "search", "buildingblock": "<amazon-search-service>", "condition": "filter"}, 
+				"from": {"buildingblock": "", "condition": "filter_2"}
+			}
+		], 
+		"buildingblocks": [
+			{
+				"orientation": 0, 
+				"originalUri": "http://localhost:9000/FASTCatalogue/forms/4", 
+				"uri": "<amazon-list-form>", 
+				"position": {"top": 19, "left": 42}, 
+				"parameter": "{}", 
+				"id": "<amazon-list-form>"
+			}, 
+			{
+				"orientation": 0, 
+				"originalUri": "http://localhost:9000/FASTCatalogue/services/22",
+				"uri": "<amazon-search-service>", 
+				"position": {"top": 43, "left": 65}, 
+				"parameter": "{}", 
+				"id": "<amazon-search-service>"
+			}
+		], 
+		"triggers": [
+			{
+				"to": {"action": "init", "buildingblock": "<amazon-list-form>"}, 
+				"from": {"name": "_onload", "buildingblock": ""}
+			},
+			{
+				"to": {"action": "search", "buildingblock": "<amazon-search-service>"}, 
+				"from": {"name": "_onload", "buildingblock": ""}
+			}
+		]
+	},
+	"postconditions": [], 
+	"name": "list", 
+	"screenshot": "http://demo.fast.morfeo-project.org/gvsdata/images/screenshots/amazonProductList.png",
+	"tags": [], 
+	"homepage": "http://fast.morfeo-project.eu/", 
+	"description": {"en-gb": "Please fill the description..."}, 
+	"rights": "http://creativecommons.org/", 
+	"label": {"en-gb": "list"}, 
+	"creator": "admin", 
+	"version": "20110126-1528", 
+	"preconditions": [
+		{
+			"pattern": "?F http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://fast.morfeo-project.org/ontologies/amazon#SearchRequest", 
+			"uri": "http://fast.morfeo-project.org/ontologies/amazon#SearchRequest", 
+			"label": {"en-gb": "A search criteria"}, 
+			"positive": true, 
+			"position": {"top": 35, "left": 27.5}, 
+			"type": "pre", 
+			"id": "filter_2"
+		}
+	], 
+	"creationDate": "2011-01-26T15:28:43+0000", 
+	"type": "screen", 
+	"id": 53, 
+	"icon": "http://demo.fast.morfeo-project.org/gvsdata/images/catalogue/amazonList.png"
+}
+
+
+

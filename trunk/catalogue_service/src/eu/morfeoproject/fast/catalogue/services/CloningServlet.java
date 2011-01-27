@@ -22,13 +22,13 @@ import eu.morfeoproject.fast.catalogue.services.util.Accept;
 /**
  * Servlet implementation class OperatorServlet
  */
-public class CopyServlet extends GenericServlet {
+public class CloningServlet extends GenericServlet {
 	private static final long serialVersionUID = 1L;
 
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public CopyServlet() {
+    public CloningServlet() {
         super();
     }
 
@@ -57,17 +57,17 @@ public class CopyServlet extends GenericServlet {
 				for (int idx = 0; idx < json.length(); idx++) {
 					JSONObject element = json.getJSONObject(idx);
 					URI bbUri = new URIImpl(element.getString("uri"));
-					URI copyUri = getCatalogue().createCopy(bbUri);
+					URI cloneUri = getCatalogue().cloneBuildingBlockByURI(bbUri);
 					response.setContentType(MediaType.APPLICATION_JSON);
-					element.put("copy", copyUri);
+					element.put("clone", cloneUri);
 				}
 				output = json.toString(2);
 			} catch (JSONException e) {
 				JSONObject json = new JSONObject(body);
 				URI bbUri = new URIImpl(json.getString("uri"));
-				URI copyUri = getCatalogue().createCopy(bbUri);
+				URI cloneUri = getCatalogue().cloneBuildingBlockByURI(bbUri);
 				response.setContentType(MediaType.APPLICATION_JSON);
-				json.put("copy", copyUri);
+				json.put("clone", cloneUri);
 				output = json.toString(2);
 			}
 			writer.print(output);
@@ -83,5 +83,5 @@ public class CopyServlet extends GenericServlet {
 			response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
 		}	
 	}
-
+	
 }

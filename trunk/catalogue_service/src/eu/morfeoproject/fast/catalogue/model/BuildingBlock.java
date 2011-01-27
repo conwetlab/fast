@@ -31,7 +31,7 @@ import eu.morfeoproject.fast.catalogue.vocabulary.FOAF;
 public abstract class BuildingBlock {
 
 	private URI uri;
-	private URI template;
+	private URI prototype;
 	private Map<String, String> labels;
 	private URI creator;
 	private Map<String, String> descriptions;
@@ -61,12 +61,12 @@ public abstract class BuildingBlock {
 		this.uri = uri;
 	}
     
-    public URI getTemplate() {
-		return template;
+    public URI getPrototype() {
+		return prototype;
 	}
 
 	public void setTemplate(URI template) {
-		this.template = template;
+		this.prototype = template;
 	}
 
 	public Map<String, String> getLabels() {
@@ -192,7 +192,7 @@ public abstract class BuildingBlock {
 		JSONObject json = new JSONObject();
 
 		json.put("uri", getUri() == null ? JSONObject.NULL : getUri().toString());
-		json.put("template", getTemplate() == null ? JSONObject.NULL : getTemplate());
+		json.put("template", getPrototype() == null ? JSONObject.NULL : getPrototype());
 		if (this.getLabels() == null) json.put("label", JSONObject.NULL);
 		else {
 			JSONObject jsonLabels = new JSONObject();
@@ -249,8 +249,8 @@ public abstract class BuildingBlock {
 		model.setNamespace("ctag", CTAG.NS_CTAG.toString());
 		
 		URI bbUri = this.getUri();
-		if (this.getTemplate() != null)
-			model.addStatement(bbUri, FGO.hasTemplate, this.template);
+		if (this.getPrototype() != null)
+			model.addStatement(bbUri, FGO.hasPrototype, this.prototype);
 		for (String key : this.getLabels().keySet())
 			model.addStatement(bbUri, RDFS.label, model.createLanguageTagLiteral(this.getLabels().get(key), key));
 		for (String key : this.getDescriptions().keySet())

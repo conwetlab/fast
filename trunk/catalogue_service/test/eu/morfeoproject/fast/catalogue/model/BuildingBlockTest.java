@@ -70,14 +70,14 @@ public class BuildingBlockTest {
 		TestUtils.getCatalogue().addBackendService(bs1);
 		BackendService bs2 = TestUtils.getCatalogue().getBackendService(bs1.getUri());
 		assertTrue(bs1.equals(bs2));
-		//FIXME fails because it expects a list of URIs for "uses", but receives a list of JSON objects [{id, uri}]
-
-//		assertEquals(bs1.getActions().size(), bs2.getActions().size());
-//		for (Action action : bs2.getActions()) {
-//			action.getUses()
-//		}
-//		assertEquals(bs1.getPostconditions().size(), bs2.getPostconditions().size());
-//		assertEquals(bs1.getTriggers().size(), bs2.getTriggers().size());
+		assertEquals(bs1.getActions().size(), bs2.getActions().size());
+		assertTrue(bs1.getActions().containsAll(bs2.getActions()));
+		assertEquals(bs1.getPostconditions().size(), bs2.getPostconditions().size());
+		assertTrue(bs1.getPostconditions().containsAll(bs2.getPostconditions()));
+		assertEquals(bs1.getTriggers().size(), bs2.getTriggers().size());
+		assertTrue(bs1.getTriggers().containsAll(bs2.getTriggers()));
+		assertEquals(bs1.getLibraries().size(), bs2.getLibraries().size());
+		assertTrue(bs1.getLibraries().containsAll(bs2.getLibraries()));
 	}
 	
 	@Test
@@ -85,13 +85,13 @@ public class BuildingBlockTest {
 		// create the screen components
 		Form f1 = (Form) TestUtils.buildBBFromFile(TestUtils.getCatalogue().getServerURL(), "form", "data/json/forms/amazonList.json");
 		TestUtils.getCatalogue().addForm(f1);
-		URI f1Copy = TestUtils.getCatalogue().createCopy(f1);
+		URI f1Clone = TestUtils.getCatalogue().cloneBuildingBlock(f1);
 		BackendService bs1 = (BackendService) TestUtils.buildBBFromFile(TestUtils.getCatalogue().getServerURL(), "service", "data/json/backendservices/amazonSearchService.json");
 		TestUtils.getCatalogue().addBackendService(bs1);
-		URI bs1Copy = TestUtils.getCatalogue().createCopy(bs1);
+		URI bs1Clone = TestUtils.getCatalogue().cloneBuildingBlock(bs1);
 		// creates the actual screen
 		String text = Util.getFileContentAsString("data/json/screens/amazonList.json");
-		text = text.replaceAll("<amazon-list-form>", f1Copy.toString()).replaceAll("<amazon-search-service>", bs1Copy.toString());
+		text = text.replaceAll("<amazon-list-form>", f1Clone.toString()).replaceAll("<amazon-search-service>", bs1Clone.toString());
 		Screen s1 = (Screen) TestUtils.buildBBFromText(TestUtils.getCatalogue().getServerURL(), "screen", text);
 		TestUtils.getCatalogue().addScreen(s1);
 		Screen s2 = TestUtils.getCatalogue().getScreen(s1.getUri());
@@ -117,6 +117,31 @@ public class BuildingBlockTest {
 	}
 	
 	@Test
+	public void createScreen3() throws Exception {
+		// create the screen components
+		Form f1 = (Form) TestUtils.buildBBFromFile(TestUtils.getCatalogue().getServerURL(), "form", "data/json/forms/amazonList.json");
+		TestUtils.getCatalogue().addForm(f1);
+		URI f1Clone = TestUtils.getCatalogue().cloneBuildingBlock(f1);
+		BackendService bs1 = (BackendService) TestUtils.buildBBFromFile(TestUtils.getCatalogue().getServerURL(), "service", "data/json/backendservices/amazonSearchService.json");
+		TestUtils.getCatalogue().addBackendService(bs1);
+		URI bs1Clone = TestUtils.getCatalogue().cloneBuildingBlock(bs1);
+		// creates the actual screen
+		String text = Util.getFileContentAsString("data/json/screens/screen1.json");
+		text = text.replaceAll("<amazon-list-form>", f1Clone.toString()).replaceAll("<amazon-search-service>", bs1Clone.toString());
+		Screen s1 = (Screen) TestUtils.buildBBFromText(TestUtils.getCatalogue().getServerURL(), "screen", text);
+		TestUtils.getCatalogue().addScreen(s1);
+		Screen s2 = TestUtils.getCatalogue().getScreen(s1.getUri());
+		assertTrue(s1.equals(s2));
+		assertEquals(s1.getPreconditions().size(), s2.getPreconditions().size());
+		assertEquals(s1.getPostconditions().size(), s2.getPostconditions().size());
+		assertEquals(s1.getBuildingBlocks().size(), s2.getBuildingBlocks().size());
+		assertEquals(s1.getPipes().size(), s2.getPipes().size());
+		assertTrue(s2.getPipes().containsAll(s1.getPipes()));
+		assertEquals(s1.getTriggers().size(), s2.getTriggers().size());
+		assertTrue(s2.getTriggers().containsAll(s1.getTriggers()));
+	}
+	
+	@Test
 	public void removeScreen() throws Exception {
 		Screen s1 = (Screen) TestUtils.buildBBFromFile(TestUtils.getCatalogue().getServerURL(), "screen", "data/json/screens/amazonProductCode.json");
 		TestUtils.getCatalogue().addScreen(s1);
@@ -138,13 +163,13 @@ public class BuildingBlockTest {
 		Screen s2 = (Screen) TestUtils.buildBBFromFile(TestUtils.getCatalogue().getServerURL(), "screen", "data/json/screens/amazonListCode.json");
 		Screen s3 = (Screen) TestUtils.buildBBFromFile(TestUtils.getCatalogue().getServerURL(), "screen", "data/json/screens/amazonProductCode.json");
 		TestUtils.getCatalogue().addScreens(s1, s2, s3);
-		URI copy1 = TestUtils.getCatalogue().createCopy(s1);
-		URI copy2 = TestUtils.getCatalogue().createCopy(s1);
-		URI copy3 = TestUtils.getCatalogue().createCopy(s1);
+		URI clone1 = TestUtils.getCatalogue().cloneBuildingBlock(s1);
+		URI clone2 = TestUtils.getCatalogue().cloneBuildingBlock(s1);
+		URI clone3 = TestUtils.getCatalogue().cloneBuildingBlock(s1);
 		ScreenFlow sf1 = (ScreenFlow) TestUtils.buildBBFromFile(TestUtils.getCatalogue().getServerURL(), "screenflow", "data/json/screenflows/amazonSF1.json");
-		sf1.getBuildingBlockList().add(copy1);
-		sf1.getBuildingBlockList().add(copy2);
-		sf1.getBuildingBlockList().add(copy3);
+		sf1.getBuildingBlockList().add(clone1);
+		sf1.getBuildingBlockList().add(clone2);
+		sf1.getBuildingBlockList().add(clone3);
 		TestUtils.getCatalogue().addScreenFlow(sf1);
 		ScreenFlow sf2 = TestUtils.getCatalogue().getScreenFlow(sf1.getUri());
 		assertEquals(sf1.getUri(), sf2.getUri());
@@ -168,50 +193,50 @@ public class BuildingBlockTest {
 	}
 
 	@Test
-	public void createScreenCopy() throws Exception {
+	public void createScreenClone() throws Exception {
 		// create the screen components
 		Form f1 = (Form) TestUtils.buildBBFromFile(TestUtils.getCatalogue().getServerURL(), "form", "data/json/forms/amazonList.json");
 		TestUtils.getCatalogue().addForm(f1);
-		URI f1Copy = TestUtils.getCatalogue().createCopy(f1);
+		URI f1Clone = TestUtils.getCatalogue().cloneBuildingBlock(f1);
 		BackendService bs1 = (BackendService) TestUtils.buildBBFromFile(TestUtils.getCatalogue().getServerURL(), "service", "data/json/backendservices/amazonSearchService.json");
 		TestUtils.getCatalogue().addBackendService(bs1);
-		URI bs1Copy = TestUtils.getCatalogue().createCopy(bs1);
+		URI bs1Clone = TestUtils.getCatalogue().cloneBuildingBlock(bs1);
 		// creates the actual screen
 		String text = Util.getFileContentAsString("data/json/screens/amazonList.json");
-		text = text.replaceAll("<amazon-list-form>", f1Copy.toString()).replaceAll("<amazon-search-service>", bs1Copy.toString());
+		text = text.replaceAll("<amazon-list-form>", f1Clone.toString()).replaceAll("<amazon-search-service>", bs1Clone.toString());
 		Screen s1 = (Screen) TestUtils.buildBBFromText(TestUtils.getCatalogue().getServerURL(), "screen", text);
 		TestUtils.getCatalogue().addScreen(s1);
-		URI copy = TestUtils.getCatalogue().createCopy(s1);
-		assertTrue(copy != null);
-		Screen s1Copy = TestUtils.getCatalogue().getScreen(copy);
-		assertEquals(s1.getPreconditions().size(), s1Copy.getPreconditions().size());
-		assertEquals(s1.getPostconditions().size(), s1Copy.getPostconditions().size());
-		assertEquals(s1.getPipes().size(), s1Copy.getPipes().size());
-		assertTrue(!s1.getPipes().containsAll(s1Copy.getPipes())); // they are not identical, s1 and s1Copy URIs are different
-		assertEquals(s1.getTriggers().size(), s1Copy.getTriggers().size());
-		assertTrue(!s1.getTriggers().containsAll(s1Copy.getTriggers())); // they are not identical, s1 and s1Copy URIs are different
+		URI clone = TestUtils.getCatalogue().cloneBuildingBlock(s1);
+		assertTrue(clone != null);
+		Screen s1Clone = TestUtils.getCatalogue().getScreen(clone);
+		assertEquals(s1.getPreconditions().size(), s1Clone.getPreconditions().size());
+		assertEquals(s1.getPostconditions().size(), s1Clone.getPostconditions().size());
+		assertEquals(s1.getPipes().size(), s1Clone.getPipes().size());
+		assertTrue(!s1.getPipes().containsAll(s1Clone.getPipes())); // they are not identical, s1 and s1Clone URIs are different
+		assertEquals(s1.getTriggers().size(), s1Clone.getTriggers().size());
+		assertTrue(!s1.getTriggers().containsAll(s1Clone.getTriggers())); // they are not identical, s1 and s1Clone URIs are different
 	}
 	
 	@Test
-	public void createFormCopy() throws Exception {
+	public void createFormClone() throws Exception {
 		Form f1 = (Form) TestUtils.buildBBFromFile(TestUtils.getCatalogue().getServerURL(), "form", "data/json/forms/amazonList.json");
 		TestUtils.getCatalogue().addForm(f1);
-		URI copy = TestUtils.getCatalogue().createCopy(f1);
-		assertTrue(copy != null);
-		Form f1Copy = TestUtils.getCatalogue().getForm(copy);
-		assertEquals(f1.getActions().size(), f1Copy.getActions().size());
-		assertEquals(f1.getTriggers().size(), f1Copy.getTriggers().size());
-		assertEquals(f1.getPostconditions().size(), f1Copy.getPostconditions().size());
+		URI clone = TestUtils.getCatalogue().cloneBuildingBlock(f1);
+		assertTrue(clone != null);
+		Form f1Clone = TestUtils.getCatalogue().getForm(clone);
+		assertEquals(f1.getActions().size(), f1Clone.getActions().size());
+		assertEquals(f1.getTriggers().size(), f1Clone.getTriggers().size());
+		assertEquals(f1.getPostconditions().size(), f1Clone.getPostconditions().size());
 	}
 	
 	@Test
-	public void createOperatorCopy() throws Exception {
-		//TODO implement a TEST for operator copies
+	public void createOperatorClone() throws Exception {
+		//TODO implement a TEST for operator cloning
 	}
 	
 	@Test
-	public void createBackendServiceCopy() throws Exception {
-		//TODO implement a TEST for backend-service copies
+	public void createBackendServiceClone() throws Exception {
+		//TODO implement a TEST for backend-service cloning
 	}
 	
 	@Test
@@ -220,9 +245,9 @@ public class BuildingBlockTest {
 		Screen s2 = (Screen) TestUtils.buildBBFromFile(TestUtils.getCatalogue().getServerURL(), "screen", "data/json/screens/amazonListCode.json");
 		Screen s3 = (Screen) TestUtils.buildBBFromFile(TestUtils.getCatalogue().getServerURL(), "screen", "data/json/screens/amazonProductCode.json");
 		TestUtils.getCatalogue().addScreens(s1, s2, s3);
-		TestUtils.getCatalogue().createCopy(s1);
-		TestUtils.getCatalogue().createCopy(s1);
-		TestUtils.getCatalogue().createCopy(s1);
+		TestUtils.getCatalogue().cloneBuildingBlock(s1);
+		TestUtils.getCatalogue().cloneBuildingBlock(s1);
+		TestUtils.getCatalogue().cloneBuildingBlock(s1);
 		assertEquals(3, TestUtils.getCatalogue().getAllScreens().size());
 	}
 	
@@ -231,8 +256,8 @@ public class BuildingBlockTest {
 		Form f1 = (Form) TestUtils.buildBBFromFile(TestUtils.getCatalogue().getServerURL(), "form", "data/json/forms/amazonList.json");
 		Form f2 = (Form) TestUtils.buildBBFromFile(TestUtils.getCatalogue().getServerURL(), "form", "data/json/forms/foafExample.json");
 		TestUtils.getCatalogue().addForms(f1, f2);
-		TestUtils.getCatalogue().createCopy(f1);
-		TestUtils.getCatalogue().createCopy(f2);
+		TestUtils.getCatalogue().cloneBuildingBlock(f1);
+		TestUtils.getCatalogue().cloneBuildingBlock(f2);
 		assertEquals(2, TestUtils.getCatalogue().getAllForms().size());
 	}
 	
@@ -240,7 +265,7 @@ public class BuildingBlockTest {
 	public void getAllOperators() throws Exception {
 		Operator o1 = (Operator) TestUtils.buildBBFromFile(TestUtils.getCatalogue().getServerURL(), "operator", "data/json/operators/amazonEbayFilter.json");
 		TestUtils.getCatalogue().addOperator(o1);
-		TestUtils.getCatalogue().createCopy(o1);
+		TestUtils.getCatalogue().cloneBuildingBlock(o1);
 		assertEquals(1, TestUtils.getCatalogue().getAllOperators().size());
 	}
 	
@@ -249,8 +274,8 @@ public class BuildingBlockTest {
 		BackendService bs1 = (BackendService) TestUtils.buildBBFromFile(TestUtils.getCatalogue().getServerURL(), "service", "data/json/backendservices/amazonLookupService.json");
 		BackendService bs2 = (BackendService) TestUtils.buildBBFromFile(TestUtils.getCatalogue().getServerURL(), "service", "data/json/backendservices/amazonSearchService.json");
 		TestUtils.getCatalogue().addBackendServices(bs1, bs2);
-		TestUtils.getCatalogue().createCopy(bs1);
-		TestUtils.getCatalogue().createCopy(bs2);
+		TestUtils.getCatalogue().cloneBuildingBlock(bs1);
+		TestUtils.getCatalogue().cloneBuildingBlock(bs2);
 		assertEquals(2, TestUtils.getCatalogue().getAllBackendServices().size());
 	}
 	

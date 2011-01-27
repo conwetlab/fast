@@ -117,7 +117,7 @@ public class BuildingBlockRDF2GoBuilder {
 			Statement st = cIt.next();
 			URI predicate = st.getPredicate();
 			Node object = st.getObject();
-			if (predicate.equals(FGO.hasTemplate)) {
+			if (predicate.equals(FGO.hasPrototype)) {
 				bb.setTemplate(object.asURI());
 			} else if (predicate.equals(RDFS.label)) {
 				if (object instanceof LanguageTagLiteral) {
@@ -283,15 +283,30 @@ public class BuildingBlockRDF2GoBuilder {
 					Action action = new Action(scObj.asURI());
 					ClosableIterator<Statement> actionIt = model.findStatements(scObj.asURI(), Variable.ANY, Variable.ANY);
 					for ( ; actionIt.hasNext(); ) {
-						Statement acStmt = actionIt.next();
-						URI acPre = acStmt.getPredicate();
-						Node acObj = acStmt.getObject();
+						Statement actionSt = actionIt.next();
+						URI acPre = actionSt.getPredicate();
+						Node acObj = actionSt.getObject();
 						if (acPre.equals(RDFS.label)) {
-							action.setName(acObj.asLiteral().toString());
+							action.setName(acObj.asLiteral().getValue());
 						} else if (acPre.equals(FGO.hasPreCondition)) {
 							action.getPreconditions().add(retrieveCondition(acObj.asURI(), model));
 						} else if (acPre.equals(FGO.uses)) {
-							action.getUses().add(acObj.asURI());
+							ClosableIterator<Statement> useIt = model.findStatements(acObj.asBlankNode(), Variable.ANY, Variable.ANY);
+							String useId = null;
+							URI useUri = null;
+							for ( ; useIt.hasNext(); ) {
+								Statement useSt = useIt.next();
+								URI usePre = useSt.getPredicate();
+								if (usePre.equals(RDFS.label)) {
+									useId = useSt.getObject().asLiteral().getValue();
+								} else if (usePre.equals(FOAF.Document)) {
+									useUri = useSt.getObject().asURI();
+								}
+							}
+							useIt.close();
+							if (useId != null && useUri != null) {
+								action.getUses().put(useId, useUri);
+							}
 						}
 					}
 					actionIt.close();
@@ -310,7 +325,7 @@ public class BuildingBlockRDF2GoBuilder {
 						URI p = s.getPredicate();
 						Node o = s.getObject();
 						if (p.equals(FGO.hasLanguage)) {
-							library.setLanguage(o.asDatatypeLiteral().getValue());
+							library.setLanguage(o.asLiteral().getValue());
 						} else if (p.equals(FGO.hasCode)) {
 							library.setSource(o.asURI());
 						}

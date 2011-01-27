@@ -92,8 +92,8 @@ public class Catalogue {
 	private TripleStore tripleStore;
 	private Planner planner;
 	private String environment;
-	private URI templatesGraph;
-	private URI copiesGraph;
+	private URI prototypesGraph;
+	private URI clonesGraph;
 
 	public Catalogue(CatalogueConfiguration conf) {
 		this(conf, "default");
@@ -124,9 +124,9 @@ public class Catalogue {
 				new LocalTripleStore(storageDir, indexes);
 		tripleStore.open();
 
-		// creates the URIs for the templates/copies graphs
-		templatesGraph = tripleStore.createURI(serverURL+"/templates");
-		copiesGraph = tripleStore.createURI(serverURL+"/copies");
+		// creates the URIs for the prototypes/clones graphs
+		prototypesGraph = tripleStore.createURI(serverURL+"/prototypes");
+		clonesGraph = tripleStore.createURI(serverURL+"/clones");
 		
 		// creates the ontology manager
 		ontologyManager = new OntologyManager(getAllOntologies());
@@ -141,12 +141,15 @@ public class Catalogue {
 		planner = PlannerFactory.createPlanner(this, this.environment);
 	}
 
+	public CatalogueConfiguration getConfiguration() {
+		return this.configuration;
+	}
 	public URL getServerURL() {
 		return configuration.getURL(this.environment, "serverURL");
 	}
 
 	public Planner getPlanner() {
-		return planner;
+		return this.planner;
 	}
 
 	/**
@@ -258,30 +261,41 @@ public class Catalogue {
 		return isConcept(uri);
 	}
 
-	public List<URI> findScreenComponents(Screen container,
-			List<Condition> conditions, List<ScreenComponent> toExclude,
-			int offset, int limit, List<String> tags)
-			throws ClassCastException, ModelRuntimeException {
-		ArrayList<URI> results = new ArrayList<URI>();
-		results.addAll(findScreenComponents(container, conditions, toExclude, offset, limit, tags, FGO.Form));
-		results.addAll(findScreenComponents(container, conditions, toExclude, offset, limit, tags, FGO.Operator));
-		results.addAll(findScreenComponents(container, conditions, toExclude, offset, limit, tags, FGO.BackendService));
-		return results;
-	}
+//	NOT USED...
+//	public List<URI> findScreenComponents(Screen container,
+//			List<Condition> conditions, List<ScreenComponent> toExclude,
+//			int offset, int limit, List<String> tags)
+//			throws ClassCastException, ModelRuntimeException {
+//		ArrayList<URI> results = new ArrayList<URI>();
+//		results.addAll(findScreenComponents(container, conditions, toExclude, offset, limit, tags, FGO.Form));
+//		results.addAll(findScreenComponents(container, conditions, toExclude, offset, limit, tags, FGO.Operator));
+//		results.addAll(findScreenComponents(container, conditions, toExclude, offset, limit, tags, FGO.BackendService));
+//		return results;
+//	}
 
+	/* The list scList is a list of "clones" building blocks */
 	public List<URI> findScreenComponents(Screen container,
-			List<Condition> conditions, List<ScreenComponent> toExclude,
+			List<Condition> conditions, List<ScreenComponent> scList,
+			int offset, int limit, List<String> tags, URI typeBuildingBlock)
+			throws ClassCastException, ModelRuntimeException {
+		return findScreenComponents(container, conditions, scList, new ArrayList<Pipe>(), offset, limit, tags, typeBuildingBlock);
+	}
+	
+	/* The list scList is a list of "clones" building blocks */
+	public List<URI> findScreenComponents(Screen container,
+			List<Condition> conditions, List<ScreenComponent> scList, List<Pipe> pipes,
 			int offset, int limit, List<String> tags, URI typeBuildingBlock)
 			throws ClassCastException, ModelRuntimeException {
 		ArrayList<URI> results = new ArrayList<URI>();
 
 		String queryString = "SELECT DISTINCT ?bb"
-			+ " WHERE { { GRAPH " + templatesGraph.toSPARQL() + " { ?bb " + RDF.type.toSPARQL() + " " + typeBuildingBlock.toSPARQL() + " } . ";
+			+ " WHERE { { GRAPH " + prototypesGraph.toSPARQL() + " { ?bb " + RDF.type.toSPARQL() + " " + typeBuildingBlock.toSPARQL() + " } . ";
 
 		// doesn't include the building blocks where the postconditions were
 		// taken from
-		for (ScreenComponent sc : toExclude)
-			queryString = queryString.concat("FILTER (?bb != " + sc.getUri().toSPARQL() + ") . ");
+		for (ScreenComponent sc : scList) {
+			queryString = queryString.concat("FILTER (?bb != " + sc.getPrototype().toSPARQL() + ") . ");
+		}
 
 		// tags
 		if (tags != null && tags.size() > 0) {
@@ -374,6 +388,7 @@ public class Catalogue {
 	 * retrieve small lists of screens.
 	 * 
 	 * @param screens
+	 *            list of screens (must be a list of 'clones')
 	 * @param plugin
 	 *            ignored at this version
 	 * @param subsume
@@ -400,10 +415,13 @@ public class Catalogue {
 		ArrayList<URI> results = new ArrayList<URI>();
 
 		String queryString = "SELECT DISTINCT ?bb"
-			+ " WHERE { { GRAPH " + templatesGraph.toSPARQL() + " { ?bb " + RDF.type.toSPARQL() + " " + FGO.Screen.toSPARQL() + " } . ";
+			+ " WHERE { { GRAPH " + prototypesGraph.toSPARQL() + " { ?bb " + RDF.type.toSPARQL() + " " + FGO.Screen.toSPARQL() + " } . ";
 
-		for (Screen screen : screens)
-			queryString = queryString.concat("FILTER (?bb != " + screen.getUri().toSPARQL() + ") . ");
+		for (Screen screen : screens) {
+			//FIXME should we accept prototypes and clones in this method?
+			URI filterURI = screen.getPrototype() == null ? screen.getUri() : screen.getPrototype();
+			queryString = queryString.concat("FILTER (?bb != " + filterURI.toSPARQL() + ") . ");
+		}
 
 		if (tags != null && tags.size() > 0) {
 			queryString = queryString.concat("{");
@@ -776,6 +794,8 @@ public class Catalogue {
 				model.addModel(getModelForBlankNode(object.asBlankNode()));
 			} else if (predicate.equals(FGO.contains)) {
 				model.addModel(getModelForURI(object.asURI()));
+			} else if (predicate.equals(FGO.hasLibrary)) {
+				model.addModel(getModelForBlankNode(object.asBlankNode()));
 			}
 		}
 		return model;
@@ -790,6 +810,8 @@ public class Catalogue {
 			model.addStatement(stmt);
 			if (stmt.getPredicate().equals(FGO.hasPreCondition)) {
 				model.addModel(getModelForURI(stmt.getObject().asURI()));
+			} else if (stmt.getPredicate().equals(FGO.uses)) {
+				model.addModel(getModelForBlankNode(stmt.getObject().asBlankNode()));
 			}
 		}
 		aIt.close();
@@ -800,8 +822,9 @@ public class Catalogue {
 		Model model = RDF2Go.getModelFactory().createModel();
 		model.open();
 		ClosableIterator<Statement> cIt = tripleStore.findStatements(bn, Variable.ANY, Variable.ANY);
-		while (cIt.hasNext())
+		while (cIt.hasNext()) {
 			model.addStatement(cIt.next());
+		}
 		cIt.close();
 		return model;
 	}
@@ -810,8 +833,9 @@ public class Catalogue {
 		Model model = RDF2Go.getModelFactory().createModel();
 		model.open();
 		ClosableIterator<Statement> cIt = tripleStore.findStatements(uri, Variable.ANY, Variable.ANY);
-		while (cIt.hasNext())
+		while (cIt.hasNext()) {
 			model.addStatement(cIt.next());
+		}
 		cIt.close();
 		return model;
 	}
@@ -891,8 +915,8 @@ public class Catalogue {
 		URI sfUri = sf.getUri();
 		try {
 			Model model = sf.toRDF2GoModel();
-			tripleStore.addModel(model, templatesGraph);
-			processConditionsPatterns(model, templatesGraph);
+			tripleStore.addModel(model, prototypesGraph);
+			processConditionsPatterns(model, prototypesGraph);
 			model.close();
 		} catch (Exception e) {
 			log.error("Error while saving screen-flow " + sfUri, e);
@@ -970,8 +994,8 @@ public class Catalogue {
 		URI sUri = screen.getUri();
 		try {
 			Model model = screen.toRDF2GoModel();
-			tripleStore.addModel(model, templatesGraph);
-			processConditionsPatterns(model, templatesGraph);
+			tripleStore.addModel(model, prototypesGraph);
+			processConditionsPatterns(model, prototypesGraph);
 			model.close();
 		} catch (Exception e) {
 			log.error("Error while saving screen " + sUri, e);
@@ -1003,12 +1027,12 @@ public class Catalogue {
 		if (planner != null) planner.remove(screenUri);
 	}
 
-	public URI createCopy(URI bbUri) throws NotFoundException, BuildingBlockException {
-		return createCopy(getBuildingBlock(bbUri));
+	public URI cloneBuildingBlockByURI(URI bbUri) throws NotFoundException, BuildingBlockException {
+		return cloneBuildingBlock(getBuildingBlock(bbUri));
 	}
 
 	//FIXME this method should be rethink! and implemented in a more maintainable and reusable way
-	public URI createCopy(BuildingBlock bb) throws BuildingBlockException {
+	public URI cloneBuildingBlock(BuildingBlock bb) throws BuildingBlockException {
 		String type = null;
 		
 		if (bb instanceof Screen)				type = "screens";
@@ -1020,7 +1044,7 @@ public class Catalogue {
 			throw new BuildingBlockException("Building block must be a 'screen', 'form', 'operator' or 'backend service'.");
 		
 		// do a 'copy' of basic data of any building block
-		URI copyUri = tripleStore.createUniqueUriWithName(configuration.getURI(environment, "serverURL"), "/" + type + "/copies/");
+		URI copyUri = tripleStore.createUniqueUriWithName(configuration.getURI(environment, "serverURL"), "/" + type + "/clones/");
 		String query = "CONSTRUCT { <copy> ?p ?o } WHERE { <bb> ?p ?o }";
 		query = query.replaceFirst("<copy>", copyUri.toSPARQL());
 		query = query.replaceFirst("<bb>", bb.getUri().toSPARQL());
@@ -1038,19 +1062,19 @@ public class Catalogue {
 				String str = object.asURI().toString();
 				//FIXME pipes and triggers should not be saved from this triples, but the triples which points to other building blocks have to!
 				if (!str.contains("/pipes/") && !str.contains("/triggers/")) {
-					tripleStore.addStatement(copiesGraph, subject, predicate, object);
+					tripleStore.addStatement(clonesGraph, subject, predicate, object);
 				}
 			} else if (predicate.equals(DC.date)) {
 				// overrides the creation date
-				tripleStore.addStatement(copiesGraph, copyUri, DC.date,
+				tripleStore.addStatement(clonesGraph, copyUri, DC.date,
 						tripleStore.createDatatypeLiteral(DateFormatter.formatDateISO8601(new Date()), XSD._date));
 			} else {
-				tripleStore.addStatement(copiesGraph, subject, predicate, object);
+				tripleStore.addStatement(clonesGraph, subject, predicate, object);
 			}
 		}
 		it.close();
-		tripleStore.addStatement(copiesGraph, copyUri, FGO.hasTemplate, bb.getUri());
-		tripleStore.addStatement(templatesGraph, bb.getUri(), FGO.hasCopy, copyUri);
+		tripleStore.addStatement(clonesGraph, copyUri, FGO.hasPrototype, bb.getUri());
+		tripleStore.addStatement(prototypesGraph, bb.getUri(), FGO.hasClone, copyUri);
 		
 		// adds data to the 'copy' based on the particular type of building block
 		if (bb instanceof Screen) {
@@ -1064,9 +1088,9 @@ public class Catalogue {
 				it = tripleStore.sparqlConstruct(query).iterator();
 				while (it.hasNext()) {
 					Statement stmt = it.next();
-					tripleStore.addStatement(copiesGraph, stmt.getSubject(), stmt.getPredicate(), stmt.getObject());
+					tripleStore.addStatement(clonesGraph, stmt.getSubject(), stmt.getPredicate(), stmt.getObject());
 				}
-				tripleStore.addStatement(copiesGraph, copyUri, FGO.hasPreCondition, cUri);
+				tripleStore.addStatement(clonesGraph, copyUri, FGO.hasPreCondition, cUri);
 			}
 			// copy postconditions of the screen
 			for (Condition condition : screen.getPostconditions()) {
@@ -1077,21 +1101,21 @@ public class Catalogue {
 				it = tripleStore.sparqlConstruct(query).iterator();
 				while (it.hasNext()) {
 					Statement stmt = it.next();
-					tripleStore.addStatement(copiesGraph, stmt.getSubject(), stmt.getPredicate(), stmt.getObject());
+					tripleStore.addStatement(clonesGraph, stmt.getSubject(), stmt.getPredicate(), stmt.getObject());
 				}
-				tripleStore.addStatement(copiesGraph, copyUri, FGO.hasPostCondition, cUri);
+				tripleStore.addStatement(clonesGraph, copyUri, FGO.hasPostCondition, cUri);
 			}
 			for (Pipe pipe : screen.getPipes()) {
 				URI pUri = tripleStore.createURI(copyUri+"/pipes/"+UUID.randomUUID().toString());
 				Pipe newPipe = pipe.clone(copyUri, pUri);
-				tripleStore.addModel(newPipe.toRDF2GoModel(), copiesGraph);
-				tripleStore.addStatement(copiesGraph, copyUri, FGO.contains, pUri);
+				tripleStore.addModel(newPipe.toRDF2GoModel(), clonesGraph);
+				tripleStore.addStatement(clonesGraph, copyUri, FGO.contains, pUri);
 			}
 			for (Trigger trigger : screen.getTriggers()) {
 				URI tUri = tripleStore.createURI(copyUri+"/triggers/"+UUID.randomUUID().toString());
 				Trigger newTrigger = trigger.clone(copyUri, tUri);
-				tripleStore.addModel(newTrigger.toRDF2GoModel(), copiesGraph);
-				tripleStore.addStatement(copiesGraph, copyUri, FGO.contains, tUri);
+				tripleStore.addModel(newTrigger.toRDF2GoModel(), clonesGraph);
+				tripleStore.addStatement(clonesGraph, copyUri, FGO.contains, tUri);
 			}
 		} else if (bb instanceof ScreenComponent){
 			ScreenComponent sc = (ScreenComponent) bb;
@@ -1108,10 +1132,10 @@ public class Catalogue {
 					if (predicate.equals(FGO.hasPreCondition)) {
 						// these triples are created with specific URIs for the copy, so they are now discarded
 					} else {
-						tripleStore.addStatement(copiesGraph, stmt.getSubject(), stmt.getPredicate(), stmt.getObject());
+						tripleStore.addStatement(clonesGraph, stmt.getSubject(), stmt.getPredicate(), stmt.getObject());
 					}
 				}
-				tripleStore.addStatement(copiesGraph, copyUri, FGO.hasAction, aUri);
+				tripleStore.addStatement(clonesGraph, copyUri, FGO.hasAction, aUri);
 				// copy preconditions of the action
 				for (Condition condition : action.getPreconditions()) {
 					URI cUri = tripleStore.createURI(aUri.toString() + "/preconditions/" + condition.getId());
@@ -1121,9 +1145,9 @@ public class Catalogue {
 					it = tripleStore.sparqlConstruct(query).iterator();
 					while (it.hasNext()) {
 						Statement stmt = it.next();
-						tripleStore.addStatement(copiesGraph, stmt.getSubject(), stmt.getPredicate(), stmt.getObject());
+						tripleStore.addStatement(clonesGraph, stmt.getSubject(), stmt.getPredicate(), stmt.getObject());
 					}
-					tripleStore.addStatement(copiesGraph, aUri, FGO.hasPreCondition, cUri);
+					tripleStore.addStatement(clonesGraph, aUri, FGO.hasPreCondition, cUri);
 				}
 			}
 			// copy postconditions of the screen component
@@ -1135,16 +1159,16 @@ public class Catalogue {
 				it = tripleStore.sparqlConstruct(query).iterator();
 				while (it.hasNext()) {
 					Statement stmt = it.next();
-					tripleStore.addStatement(copiesGraph, stmt.getSubject(), stmt.getPredicate(), stmt.getObject());
+					tripleStore.addStatement(clonesGraph, stmt.getSubject(), stmt.getPredicate(), stmt.getObject());
 				}
-				tripleStore.addStatement(copiesGraph, copyUri, FGO.hasPostCondition, cUri);
+				tripleStore.addStatement(clonesGraph, copyUri, FGO.hasPostCondition, cUri);
 			}
 		}
 		
 		return copyUri;
 	}
 	
-	public void removeCopy(URI uri) throws NotFoundException {
+	public void removeClone(URI uri) throws NotFoundException {
 		ClosableIterator<Statement> cIt = tripleStore.findStatements(uri, Variable.ANY, Variable.ANY);
 		for (; cIt.hasNext(); ) {
 			Statement bbSt = cIt.next();
@@ -1174,6 +1198,13 @@ public class Catalogue {
 		tripleStore.removeResource(uri);
 	}
 
+	public URI getPrototypeOfClone(URI clone) {
+		ClosableIterator<Statement> cIt = tripleStore.findStatements(clone, FGO.hasPrototype, Variable.ANY);
+		URI prototype = cIt.hasNext() ? cIt.next().getObject().asURI() : null;
+		cIt.close();
+		return prototype;
+	}
+	
 	protected void addScreenComponent(URI type, ScreenComponent sc)
 			throws DuplicatedException, OntologyInvalidException,
 			InvalidBuildingBlockTypeException, BuildingBlockException {
@@ -1201,8 +1232,8 @@ public class Catalogue {
 		URI scUri = sc.getUri();
 		try {
 			Model model = sc.toRDF2GoModel();
-			tripleStore.addModel(model, templatesGraph);
-			processConditionsPatterns(model, templatesGraph);
+			tripleStore.addModel(model, prototypesGraph);
+			processConditionsPatterns(model, prototypesGraph);
 			model.close();
 		} catch (Exception e) {
 			log.error("Error while saving screen component " + scUri, e);
@@ -1301,8 +1332,16 @@ public class Catalogue {
 	}
 
 	public Collection<ScreenFlow> getAllScreenFlows() {
+		return getAllScreenFlows(true);
+	}
+	
+	public Collection<ScreenFlow> getAllScreenFlows(boolean isPrototype) {
+		return getAllScreenFlows(isPrototype ? prototypesGraph : clonesGraph);
+	}
+	
+	private Collection<ScreenFlow> getAllScreenFlows(URI graph) {
 		LinkedList<ScreenFlow> results = new LinkedList<ScreenFlow>();
-		ClosableIterator<Statement> it = tripleStore.findStatements(templatesGraph, Variable.ANY, RDF.type, FGO.ScreenFlow);
+		ClosableIterator<Statement> it = tripleStore.findStatements(graph, Variable.ANY, RDF.type, FGO.ScreenFlow);
 		while (it.hasNext())
 			try {
 				results.add(getScreenFlow(it.next().getSubject().asURI()));
@@ -1314,8 +1353,16 @@ public class Catalogue {
 	}
 
 	public Collection<Screen> getAllScreens() {
+		return getAllScreens(true);
+	}
+	
+	public Collection<Screen> getAllScreens(boolean isPrototype) {
+		return getAllScreens(isPrototype ? prototypesGraph : clonesGraph);
+	}
+	
+	private Collection<Screen> getAllScreens(URI graph) {
 		LinkedList<Screen> results = new LinkedList<Screen>();
-		ClosableIterator<Statement> it = tripleStore.findStatements(templatesGraph, Variable.ANY, RDF.type, FGO.Screen);
+		ClosableIterator<Statement> it = tripleStore.findStatements(graph, Variable.ANY, RDF.type, FGO.Screen);
 		while (it.hasNext()) {
 			try {
 				results.add(getScreen(it.next().getSubject().asURI()));
@@ -1331,8 +1378,8 @@ public class Catalogue {
 		return getAllForms(true);
 	}
 	
-	public Collection<Form> getAllForms(boolean template) {
-		return getAllForms(template ? templatesGraph : copiesGraph);
+	public Collection<Form> getAllForms(boolean isPrototype) {
+		return getAllForms(isPrototype ? prototypesGraph : clonesGraph);
 	}
 	
 	private Collection<Form> getAllForms(URI graph) {
@@ -1350,8 +1397,16 @@ public class Catalogue {
 	}
 	
 	public Collection<Operator> getAllOperators() {
+		return getAllOperators(true);
+	}
+	
+	public Collection<Operator> getAllOperators(boolean isPrototype) {
+		return getAllOperators(isPrototype ? prototypesGraph : clonesGraph);
+	}
+	
+	private Collection<Operator> getAllOperators(URI graph) {
 		LinkedList<Operator> results = new LinkedList<Operator>();
-		ClosableIterator<Statement> it = tripleStore.findStatements(templatesGraph, Variable.ANY, RDF.type, FGO.Operator);
+		ClosableIterator<Statement> it = tripleStore.findStatements(graph, Variable.ANY, RDF.type, FGO.Operator);
 		while (it.hasNext()) {
 			try {
 				results.add(getOperator(it.next().getSubject().asURI()));
@@ -1364,8 +1419,16 @@ public class Catalogue {
 	}
 
 	public Collection<BackendService> getAllBackendServices() {
+		return getAllBackendServices(true);
+	}
+	
+	public Collection<BackendService> getAllBackendServices(boolean isPrototype) {
+		return getAllBackendServices(isPrototype ? prototypesGraph : clonesGraph);
+	}
+	
+	private Collection<BackendService> getAllBackendServices(URI graph) {
 		LinkedList<BackendService> results = new LinkedList<BackendService>();
-		ClosableIterator<Statement> it = tripleStore.findStatements(templatesGraph, Variable.ANY, RDF.type, FGO.BackendService);
+		ClosableIterator<Statement> it = tripleStore.findStatements(graph, Variable.ANY, RDF.type, FGO.BackendService);
 		while (it.hasNext()) {
 			try {
 				results.add(getBackendService(it.next().getSubject().asURI()));
@@ -1379,20 +1442,19 @@ public class Catalogue {
 
 	public Collection<URI> getAllConcepts(String[] tags) {
 		LinkedList<URI> results = new LinkedList<URI>();
-		String queryString = "SELECT DISTINCT ?concept \n" + "WHERE {\n";
-		queryString = queryString.concat("{ { ?concept " + RDF.type.toSPARQL()
-				+ " " + RDFS.Class.toSPARQL() + " } UNION { ?concept "
-				+ RDF.type.toSPARQL() + " " + OWL.Class.toSPARQL() + " } } ");
+		String queryString = "SELECT DISTINCT ?concept \n" 
+			+ "WHERE {\n"
+			+ " { { ?concept " + RDF.type.toSPARQL() + " " + RDFS.Class.toSPARQL() + " } UNION { "
+			+ " ?concept " + RDF.type.toSPARQL() + " " + OWL.Class.toSPARQL() + " } } ";
 		if (tags != null && tags.length > 0) {
 			queryString = queryString.concat("{");
-			for (String tag : tags)
+			for (String tag : tags) {
 				queryString = queryString.concat(
 						" { ?concept " + CTAG.tagged.toSPARQL() + " ?ctag . "
 						+ " ?ctag " + CTAG.label.toSPARQL() + " ?tag . "
 						+ " FILTER(regex(str(?tag), \"" + tag + "\", \"i\")) } UNION");
-			// remove last 'UNION'
-			if (queryString.endsWith("UNION"))
-				queryString = queryString.substring(0, queryString.length() - 5);
+			}
+			queryString = queryString.substring(0, queryString.length() - 5); // remove last 'UNION'
 			queryString = queryString.concat("} . ");
 		}
 		queryString = queryString.concat("}");
@@ -1402,9 +1464,7 @@ public class Catalogue {
 			QueryRow qr = itResults.next();
 			Node node = qr.getValue("concept");
 
-			if (node instanceof BlankNode) {
-				// problems adding some ontologies, ie: DBPedia
-			} else {
+			if (node instanceof URI) { // some ontologies (ie: DBPedia) adds some concepts as Blank Nodes
 				results.add(qr.getValue("concept").asURI());
 			}
 		}
@@ -1689,29 +1749,71 @@ public class Catalogue {
 
 	/**
 	 * 
-	 * @param goal
-	 * @param screenList
+	 * @param cloneGoal
+	 * @param cloneList list of 'cloned' screens
 	 * @return
+	 * @throws BuildingBlockException
+	 * @throws NotFoundException 
 	 */
-	public List<Plan> searchPlans(URI goal, List<Screen> screenList) {
+	public List<Plan> searchPlans(URI cloneGoal, List<Screen> cloneList) throws BuildingBlockException, NotFoundException {
+		URI prototypeGoal = getPrototypeOfClone(cloneGoal);
+		if (prototypeGoal == null) {
+			throw new BuildingBlockException(cloneGoal + " must be a clone of a prototype.");
+		}
+		
+		ArrayList<Screen> prototypeList = new ArrayList<Screen>(); 
+		for (Screen screen : cloneList) {
+			if (screen.getPrototype() == null) {
+				throw new BuildingBlockException(screen.getUri() + " must be a clone of a prototype.");
+			}
+			Screen s = getScreen(screen.getPrototype());
+			if (!prototypeList.contains(s)) {
+				prototypeList.add(s);
+			}
+		}
+		
 		List<Plan> planList = new ArrayList<Plan>();
 		if (planner != null) {
-			planList.addAll(planner.searchPlans(goal, screenList));
+			planList.addAll(planner.searchPlans(prototypeGoal, prototypeList));
 		}
+		
 		return planList;
 	}
 	
 	/**
 	 * 
-	 * @param goalList
+	 * @param cloneGoalList
 	 * @param screenList
 	 * @return
+	 * @throws BuildingBlockException 
+	 * @throws NotFoundException 
 	 */
-	public List<Plan> searchPlans(List<URI> goalList, List<Screen> screenList) {
+	public List<Plan> searchPlans(List<URI> cloneGoalList, List<Screen> cloneList) throws BuildingBlockException, NotFoundException {
+		ArrayList<URI> prototypeGoalList = new ArrayList<URI>(); 
+		for (URI cloneGoal : cloneGoalList) {
+			URI prototypeGoal = getPrototypeOfClone(cloneGoal);
+			if (prototypeGoal == null) {
+				throw new BuildingBlockException(cloneGoal + " must be a clone of a prototype.");
+			}
+			prototypeGoalList.add(prototypeGoal);
+		}
+		
+		ArrayList<Screen> prototypeList = new ArrayList<Screen>(); 
+		for (Screen screen : cloneList) {
+			if (screen.getPrototype() == null) {
+				throw new BuildingBlockException(screen.getUri() + " must be a clone of a prototype.");
+			}
+			Screen s = getScreen(screen.getPrototype());
+			if (!prototypeList.contains(s)) {
+				prototypeList.add(s);
+			}
+		}
+		
 		List<Plan> planList = new ArrayList<Plan>();
 		if (planner != null) {
-			planList.addAll(planner.searchPlans(goalList, screenList));
+			planList.addAll(planner.searchPlans(prototypeGoalList, prototypeList));
 		}
+		
 		return planList;
 	}
 

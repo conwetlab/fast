@@ -4,11 +4,13 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.ontoware.rdf2go.model.node.URI;
+import org.ontoware.rdf2go.model.node.impl.URIImpl;
 
 import eu.morfeoproject.fast.catalogue.model.factory.BuildingBlockFactory;
 import eu.morfeoproject.fast.catalogue.vocabulary.FGO;
@@ -29,10 +31,10 @@ public class FindCheckTest {
 		BackendService s3 = (BackendService) TestUtils.buildBBFromFile(TestUtils.getCatalogue().getServerURL(), "service", "data/json/backendservices/kasselTest1.json");
 		TestUtils.getCatalogue().addForm(form);
 		TestUtils.getCatalogue().addBackendServices(s1, s2, s3);
-		TestUtils.getCatalogue().createCopy(form);
-		TestUtils.getCatalogue().createCopy(s1);
-		TestUtils.getCatalogue().createCopy(s2);
-		TestUtils.getCatalogue().createCopy(s3);
+		Form formCopy = TestUtils.getCatalogue().getForm(TestUtils.getCatalogue().cloneBuildingBlock(form));
+		TestUtils.getCatalogue().cloneBuildingBlock(s1);
+		TestUtils.getCatalogue().cloneBuildingBlock(s2);
+		TestUtils.getCatalogue().cloneBuildingBlock(s3);
 		
 		ArrayList<Condition> conList = new ArrayList<Condition>();
 		for (Action action : form.getActions()) {
@@ -40,7 +42,7 @@ public class FindCheckTest {
 		}
 		conList.addAll(form.getPostconditions());
 		ArrayList<ScreenComponent> all = new ArrayList<ScreenComponent>();
-		all.add(form);
+		all.add(formCopy);
 		ArrayList<String> tags = new ArrayList<String>();
 		
 		List<URI> results = TestUtils.getCatalogue().findScreenComponents(null, conList, all, 0, -1, tags, FGO.BackendService);
@@ -86,20 +88,20 @@ public class FindCheckTest {
 		TestUtils.getCatalogue().addScreens(s1, s2, s3);
 		
 		// query the catalogue
-		ArrayList<Screen> all = new ArrayList<Screen>();
+		ArrayList<Screen> canvas = new ArrayList<Screen>();
 		ArrayList<String> tags = new ArrayList<String>();
 		ArrayList<Condition> postconditions = new ArrayList<Condition>();
 		Condition condition = BuildingBlockFactory.createCondition();
 		condition.setPatternString("?x http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://fast.morfeo-project.org/ontologies/amazon#Item");
 		condition.setPositive(true);
 		postconditions.add(condition);
-		List<URI> results = TestUtils.getCatalogue().findBackwards(all, new ArrayList<Condition>(), postconditions, true, true, 0, -1, tags);
+		List<URI> results = TestUtils.getCatalogue().findBackwards(canvas, new ArrayList<Condition>(), postconditions, true, true, 0, -1, tags);
 		assertEquals(2, results.size());
 		assertTrue(results.contains(s2.getUri()));
 		assertTrue(results.contains(s3.getUri()));
 		
 		condition.setPatternString("?x http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://fast.morfeo-project.org/ontologies/amazon#ShoppingCart");
-		results = TestUtils.getCatalogue().findBackwards(all, new ArrayList<Condition>(), postconditions, true, true, 0, -1, tags);
+		results = TestUtils.getCatalogue().findBackwards(canvas, new ArrayList<Condition>(), postconditions, true, true, 0, -1, tags);
 		assertEquals(1, results.size());
 		assertTrue(results.contains(s1.getUri()));
 	}
@@ -116,20 +118,106 @@ public class FindCheckTest {
 		Screen s3 = (Screen) TestUtils.buildBBFromFile(TestUtils.getCatalogue().getServerURL(), "screen", "data/json/screens/amazonProductCode.json");
 		Screen s4 = (Screen) TestUtils.buildBBFromFile(TestUtils.getCatalogue().getServerURL(), "screen", "data/json/screens/amazonShoppingCode.json");
 		TestUtils.getCatalogue().addScreens(s1, s2, s3, s4);
+		URI s1Copy = TestUtils.getCatalogue().cloneBuildingBlock(s1);
+		URI s2Copy = TestUtils.getCatalogue().cloneBuildingBlock(s2);
+		URI s3Copy = TestUtils.getCatalogue().cloneBuildingBlock(s3);
+		URI s4Copy = TestUtils.getCatalogue().cloneBuildingBlock(s4);
 		
 		// query the catalogue
-		ArrayList<Screen> all = new ArrayList<Screen>();
-		all.add(s2);
-		all.add(s4);
+		ArrayList<Screen> canvas = new ArrayList<Screen>();
+		canvas.add(TestUtils.getCatalogue().getScreen(s2Copy));
+		canvas.add(TestUtils.getCatalogue().getScreen(s4Copy));
 		ArrayList<String> tags = new ArrayList<String>();
 		ArrayList<Condition> preconditions = new ArrayList<Condition>();
 		Condition condition = BuildingBlockFactory.createCondition();
 		condition.setPatternString("?x http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://fast.morfeo-project.org/ontologies/amazon#SearchRequest");
 		condition.setPositive(true);
 		preconditions.add(condition);
-		List<URI> results = TestUtils.getCatalogue().findBackwards(all, preconditions, new ArrayList<Condition>(), true, true, 0, -1, tags);
+		List<URI> results = TestUtils.getCatalogue().findBackwards(canvas, preconditions, new ArrayList<Condition>(), true, true, 0, -1, tags);
 		assertEquals(1, results.size());
 		assertTrue(results.contains(s3.getUri()));
+	}
+
+	@Test
+	public void testFindAndCheck5() throws Exception {
+		//----- sets up the catalogue -----//
+		Form f1 = (Form) TestUtils.buildBBFromFile(TestUtils.getCatalogue().getServerURL(), "form", "data/json/forms/amazonList.json");
+		Form f2 = (Form) TestUtils.buildBBFromFile(TestUtils.getCatalogue().getServerURL(), "form", "data/json/forms/amazonOrder.json");
+		Form f3 = (Form) TestUtils.buildBBFromFile(TestUtils.getCatalogue().getServerURL(), "form", "data/json/forms/amazonPrice.json");
+		Form f4 = (Form) TestUtils.buildBBFromFile(TestUtils.getCatalogue().getServerURL(), "form", "data/json/forms/amazonProduct.json");
+		Form f5 = (Form) TestUtils.buildBBFromFile(TestUtils.getCatalogue().getServerURL(), "form", "data/json/forms/amazonSearch.json");
+		Form f6 = (Form) TestUtils.buildBBFromFile(TestUtils.getCatalogue().getServerURL(), "form", "data/json/forms/amazonShopping.json");
+		Form f7 = (Form) TestUtils.buildBBFromFile(TestUtils.getCatalogue().getServerURL(), "form", "data/json/forms/amazonSuggestion.json");
+		BackendService bs1 = (BackendService) TestUtils.buildBBFromFile(TestUtils.getCatalogue().getServerURL(), "service", "data/json/backendservices/amazonAddItemToCartService.json");
+		BackendService bs2 = (BackendService) TestUtils.buildBBFromFile(TestUtils.getCatalogue().getServerURL(), "service", "data/json/backendservices/amazonAddOfferToCartService.json");
+		BackendService bs3 = (BackendService) TestUtils.buildBBFromFile(TestUtils.getCatalogue().getServerURL(), "service", "data/json/backendservices/amazonClearCartService.json");
+		BackendService bs4 = (BackendService) TestUtils.buildBBFromFile(TestUtils.getCatalogue().getServerURL(), "service", "data/json/backendservices/amazonLookupService.json");
+		BackendService bs5 = (BackendService) TestUtils.buildBBFromFile(TestUtils.getCatalogue().getServerURL(), "service", "data/json/backendservices/amazonPriceComparativeService.json");
+		BackendService bs6 = (BackendService) TestUtils.buildBBFromFile(TestUtils.getCatalogue().getServerURL(), "service", "data/json/backendservices/amazonSearchCartService.json");
+		BackendService bs7 = (BackendService) TestUtils.buildBBFromFile(TestUtils.getCatalogue().getServerURL(), "service", "data/json/backendservices/amazonSearchService.json");
+		BackendService bs8 = (BackendService) TestUtils.buildBBFromFile(TestUtils.getCatalogue().getServerURL(), "service", "data/json/backendservices/amazonSuggestionListService.json");
+		TestUtils.getCatalogue().addForms(f1, f2, f3, f4, f5, f6, f7);
+		TestUtils.getCatalogue().addBackendServices(bs1, bs2, bs3, bs4, bs5, bs6, bs7, bs8);
+		
+		HashMap<String, String> bbMap = new HashMap<String, String>();
+		bbMap.put("<search-form>", TestUtils.getCatalogue().cloneBuildingBlock(f5).toString());
+		Screen s1 = (Screen) TestUtils.buildBBFromFile(TestUtils.getCatalogue().getServerURL(), "screen", "data/json/screens/amazonSearch.json.composed", bbMap);
+		bbMap.clear();
+		bbMap.put("<list-form>", TestUtils.getCatalogue().cloneBuildingBlock(f1).toString());
+		bbMap.put("<search-service>", TestUtils.getCatalogue().cloneBuildingBlock(bs7).toString());
+		Screen s2 = (Screen) TestUtils.buildBBFromFile(TestUtils.getCatalogue().getServerURL(), "screen", "data/json/screens/amazonList.json.composed", bbMap);
+		bbMap.clear();
+		bbMap.put("<product-form>", TestUtils.getCatalogue().cloneBuildingBlock(f4).toString());
+		bbMap.put("<itemlookup-service>", TestUtils.getCatalogue().cloneBuildingBlock(bs4).toString());
+		bbMap.put("<additemtocart-service>", TestUtils.getCatalogue().cloneBuildingBlock(bs1).toString());
+		Screen s3 = (Screen) TestUtils.buildBBFromFile(TestUtils.getCatalogue().getServerURL(), "screen", "data/json/screens/amazonProduct.json.composed", bbMap);
+		bbMap.clear();
+		bbMap.put("<shopping-form>", TestUtils.getCatalogue().cloneBuildingBlock(f6).toString());
+		bbMap.put("<searchcart-service>", TestUtils.getCatalogue().cloneBuildingBlock(bs6).toString());
+		bbMap.put("<updatecart-service>", TestUtils.getCatalogue().cloneBuildingBlock(bs1).toString());
+		bbMap.put("<clearcart-service>", TestUtils.getCatalogue().cloneBuildingBlock(bs3).toString());
+		Screen s4 = (Screen) TestUtils.buildBBFromFile(TestUtils.getCatalogue().getServerURL(), "screen", "data/json/screens/amazonShopping.json.composed", bbMap);
+		bbMap.clear();
+		bbMap.put("<price-form>", TestUtils.getCatalogue().cloneBuildingBlock(f3).toString());
+		bbMap.put("<price-service>", TestUtils.getCatalogue().cloneBuildingBlock(bs5).toString());
+		bbMap.put("<addoffertocart-service>", TestUtils.getCatalogue().cloneBuildingBlock(bs2).toString());
+		Screen s5 = (Screen) TestUtils.buildBBFromFile(TestUtils.getCatalogue().getServerURL(), "screen", "data/json/screens/amazonPrice.json.composed", bbMap);
+		bbMap.clear();
+		bbMap.put("<suggestion-form>", TestUtils.getCatalogue().cloneBuildingBlock(f7).toString());
+		bbMap.put("<suggestion-service>", TestUtils.getCatalogue().cloneBuildingBlock(bs8).toString());
+		Screen s6 = (Screen) TestUtils.buildBBFromFile(TestUtils.getCatalogue().getServerURL(), "screen", "data/json/screens/amazonSuggestion.json.composed", bbMap);
+		bbMap.clear();
+		bbMap.put("<order-form>", TestUtils.getCatalogue().cloneBuildingBlock(f2).toString());
+		Screen s7 = (Screen) TestUtils.buildBBFromFile(TestUtils.getCatalogue().getServerURL(), "screen", "data/json/screens/amazonOrder.json.composed", bbMap);
+		TestUtils.getCatalogue().addScreens(s1, s2, s3, s4, s5, s6, s7);
+		assertEquals(7, TestUtils.getCatalogue().getAllScreens().size());
+		
+		// repeat some screens to create patterns for the recommender
+		bbMap.clear();
+		bbMap.put("<list-form>", TestUtils.getCatalogue().cloneBuildingBlock(f1).toString());
+		bbMap.put("<search-service>", TestUtils.getCatalogue().cloneBuildingBlock(bs7).toString());
+		Screen sR1 = (Screen) TestUtils.buildBBFromFile(TestUtils.getCatalogue().getServerURL(), "screen", "data/json/screens/amazonList.json.composed", bbMap);
+		sR1.setId("1001");
+		sR1.setUri(new URIImpl("http://localhost:8080/FASTCatalogue/screens/1001"));
+		Screen sR2 = (Screen) TestUtils.buildBBFromFile(TestUtils.getCatalogue().getServerURL(), "screen", "data/json/screens/amazonList.json.composed", bbMap);
+		sR2.setId("1002");
+		sR2.setUri(new URIImpl("http://localhost:8080/FASTCatalogue/screens/1002"));
+		TestUtils.getCatalogue().addScreens(sR1, sR2);
+		assertEquals(9, TestUtils.getCatalogue().getAllScreens().size());
+
+		//----- query the catalogue -----//
+//		ArrayList<Screen> all = new ArrayList<Screen>();
+//		all.add(s2);
+//		all.add(s4);
+//		ArrayList<String> tags = new ArrayList<String>();
+//		ArrayList<Condition> preconditions = new ArrayList<Condition>();
+//		Condition condition = BuildingBlockFactory.createCondition();
+//		condition.setPatternString("?x http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://fast.morfeo-project.org/ontologies/amazon#SearchRequest");
+//		condition.setPositive(true);
+//		preconditions.add(condition);
+//		List<URI> results = TestUtils.getCatalogue().findScreenComponents(container, conditions, scList, offset, limit, tags, typeBuildingBlock);
+//		assertEquals(1, results.size());
+//		assertTrue(results.contains(s3.getUri()));
 	}
 
 }

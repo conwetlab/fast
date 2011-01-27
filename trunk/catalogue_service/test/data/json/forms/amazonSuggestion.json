@@ -1,0 +1,101 @@
+{
+	"id": "7",
+    "code":"http://demo.fast.morfeo-project.org/gvsdata/forms/amazonSuggestion.src.html",
+    "creationDate":"2009-04-20T17:00:00+0100",
+    "creator":"admin",
+    "description":{
+        "en-gb":"This screen shows the list of products related to a given one. It allows users select a new product from this list."
+    },
+    "tags":[
+        {
+            "label":{
+                "en-gb":"amazon"
+            },
+            "means":"http://dbpedia.org/page/Amazon.com"
+        },
+        {
+            "label":{
+                "en-gb":"suggestion"
+            }
+        },
+        {
+            "label":{
+                "en-gb":"list"
+            }
+        }
+    ],
+    "homepage":"http://www.deri.ie/amazonSuggestion",
+    "icon":"http://demo.fast.morfeo-project.org/gvsdata/images/catalogue/amazonSuggestion.png",
+    "label":{
+        "en-gb":"Suggestion List"
+    },
+    "rights":"http://creativecommons.org/",
+    "screenshot":"http://demo.fast.morfeo-project.org/gvsdata/images/screenshots/amazonSuggestion.png",
+    "version":"1.0",
+    "libraries":[
+        
+    ],
+    "actions":[
+        {
+            "name":"init",
+            "preconditions":[
+                {
+                    "id":"item",
+                    "label":{
+                        "en-gb":"An item"
+                    },
+                    "pattern":"?Item http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://fast.morfeo-project.org/ontologies/amazon#Item",
+                    "positive":"true"
+                }
+            ],
+            "uses":[
+                
+            ]
+        },
+        {
+            "name":"showTable",
+            "preconditions":[
+                {
+                    "id":"list",
+                    "label":{
+                        "en-gb":"A product list"
+                    },
+                    "pattern":"?PList http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://fast.morfeo-project.org/ontologies/amazonProductList",
+                    "positive":"true"
+                }
+            ],
+            "uses":[
+                
+            ]
+        },
+        {
+            "name":"showMessage",
+            "preconditions":[
+                {
+                    "id":"message",
+                    "label":{
+                        "en-gb":"A message"
+                    },
+                    "pattern":"?Message http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://fast.morfeo-project.org/ontologies/amazon#Message",
+                    "positive":"true"
+                }
+            ],
+            "uses":[
+                
+            ]
+        }
+    ],
+    "postconditions":[
+        {
+            "id":"item",
+            "label":{
+                "en-gb":"An item"
+            },
+            "pattern":"?Item http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://fast.morfeo-project.org/ontologies/amazon#Item",
+            "positive":"true"
+        }
+    ],
+    "triggers":[
+        "item"
+    ]
+}

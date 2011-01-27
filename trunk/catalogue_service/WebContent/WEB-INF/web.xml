@@ -72,9 +72,9 @@
 	</servlet>
 	<servlet>
 		<description></description>
-		<display-name>CopyServlet</display-name>
-		<servlet-name>CopyServlet</servlet-name>
-		<servlet-class>eu.morfeoproject.fast.catalogue.services.CopyServlet</servlet-class>
+		<display-name>CloningServlet</display-name>
+		<servlet-name>CloningServlet</servlet-name>
+		<servlet-class>eu.morfeoproject.fast.catalogue.services.CloningServlet</servlet-class>
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>ScreenflowServlet</servlet-name>
@@ -125,8 +125,8 @@
 		<url-pattern>/planner</url-pattern>
 	</servlet-mapping>
 	<servlet-mapping>
-		<servlet-name>CopyServlet</servlet-name>
-		<url-pattern>/copies</url-pattern>
+		<servlet-name>CloningServlet</servlet-name>
+		<url-pattern>/clones</url-pattern>
 	</servlet-mapping>
 	<welcome-file-list>
 		<welcome-file>index.html</welcome-file>

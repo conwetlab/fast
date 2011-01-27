@@ -54,7 +54,7 @@ public class ScreenServlet extends GenericServlet {
 		String servlet = request.getServletPath();
 		String url = request.getRequestURL().toString();
 		String[] chunks = url.substring(url.indexOf(servlet) + 1).split("/");
-		int copy = chunks.length > 1 && chunks[1].equals("copies") ? 1 : 0;
+		int copy = chunks.length > 1 && chunks[1].equals("clones") ? 1 : 0;
 		String id = chunks.length > 1+copy ? chunks[1+copy] : null;
 		String extension = chunks.length > 2+copy ? chunks[2+copy] : null;
 		if (MediaType.forExtension(id) != null) {
@@ -316,7 +316,7 @@ public class ScreenServlet extends GenericServlet {
 		String id = chunks[chunks.length-1].toLowerCase();
 		String type = chunks[chunks.length-2].toLowerCase();
 		String uri = request.getRequestURL().toString();
-		if (id.equals("screens") || id.equals("copies")) id = null;
+		if (id.equals("screens") || id.equals("clones")) id = null;
 		
 		if (id == null) {
 			response.sendError(HttpServletResponse.SC_BAD_REQUEST, "An ID must be specified.");
@@ -327,9 +327,9 @@ public class ScreenServlet extends GenericServlet {
 			} catch (NotFoundException e) {
 				response.sendError(HttpServletResponse.SC_NOT_FOUND, "The resource "+uri+" has not been found.");
 			}
-		} else if (type.equals("copies")) {
+		} else if (type.equals("clones")) {
 			try {
-				getCatalogue().removeCopy(new URIImpl(uri));
+				getCatalogue().removeClone(new URIImpl(uri));
 				response.setStatus(HttpServletResponse.SC_OK);
 			} catch (NotFoundException e) {
 				response.sendError(HttpServletResponse.SC_NOT_FOUND, "The copy "+uri+" has not been found.");
