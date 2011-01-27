@@ -103,16 +103,25 @@ public class ScreenFindCheckServlet extends GenericServlet {
 			String user = jsonDomainContext.getString("user");
 			// parses the criterion
 			String criterion = input.getString("criterion").toLowerCase();
-			
+			// flag to search or not for new components
+			boolean search = input.has("search") ? input.getBoolean("search") : true;
+			// pagination variables
+			int offset = input.has("offset") ? input.getInt("offset") : 0;
+			int limit = input.has("limit") ? input.getInt("limit") : -1;
+
 			//-----------------
 			// do the real work
 			//-----------------
-			ArrayList<Screen> all = new ArrayList<Screen>();
-			all.addAll(screens);
-			all.addAll(palette);
-			List<URI> results = getCatalogue().findBackwards(all, preconditions, postconditions, true, true, 0, -1, tags);
-			for (URI uri : results) // add results of 'find' to the palette
-				palette.add(getCatalogue().getScreen(uri));
+			
+			if (search) {
+				ArrayList<Screen> all = new ArrayList<Screen>();
+				all.addAll(screens);
+				all.addAll(palette);
+				List<URI> results = getCatalogue().findBackwards(all, preconditions, postconditions, true, true, offset, limit, tags);
+				for (URI uri : results) { // add results of 'find' to the palette
+					palette.add(getCatalogue().getScreen(uri));
+				}
+			}
 			
 			JSONObject output = new JSONObject();
 			if (criterion.equals("reachability")) {

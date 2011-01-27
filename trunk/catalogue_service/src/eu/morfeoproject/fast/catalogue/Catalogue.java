@@ -284,6 +284,8 @@ public class Catalogue {
 			int offset, int limit, List<String> tags, int strategy)
 			throws ClassCastException, ModelRuntimeException {
 		
+		if (limit == 0) return new ArrayList<URI>();
+		
 		boolean prepost = Constants.PREPOST == (strategy & Constants.PREPOST);
 		boolean patterns = Constants.PATTERNS == (strategy & Constants.PATTERNS);
 		
@@ -371,9 +373,6 @@ public class Catalogue {
 			}
 			queryString = queryString.concat("} }");
 	
-			if (limit > 0) queryString = queryString.concat(" LIMIT " + limit);
-			queryString = queryString.concat(" OFFSET " + offset);
-	
 			if (log.isInfoEnabled()) log.info(queryString);
 			QueryResultTable qrt = tripleStore.sparqlSelect(queryString);
 			ClosableIterator<QueryRow> itResults = qrt.iterator();
@@ -397,7 +396,7 @@ public class Catalogue {
 	
 			suggestionList.addAll(scRecommender.getSuggestionList(uriList));
 			if (log.isInfoEnabled()) {
-				log.info("--- Recommendation algorightm ---");
+				log.info("--- Recommendation algorithm ---");
 				log.info("Input: " + uriList);
 				log.info("Ouput: " + suggestionList);
 			}
@@ -406,8 +405,8 @@ public class Catalogue {
 		//---------------------------//
 		// merge the results of both building blocks lists
 		//---------------------------//
-		
-		ArrayList<URI> results = new ArrayList<URI>();
+
+		List<URI> results = new ArrayList<URI>();
 		results.addAll(suggestionList); // most commonly used together
 		for (URI uri : queryList) { // adds compatible building blocks
 			if (!results.contains(uri)) {
@@ -415,6 +414,13 @@ public class Catalogue {
 			}
 		}
 		
+		// do pagination
+		if (offset > 0 || limit > -1) {
+			int toIndex = limit > -1 ? offset + limit : results.size();
+			System.out.println(offset+", "+toIndex);
+			results = results.subList(offset, toIndex);
+		}
+
 		return results;
 	}
 	
@@ -454,6 +460,9 @@ public class Catalogue {
 			int offset, int limit,
 			List<String> tags,
 			URI predicate) throws ModelRuntimeException {
+
+		if (limit == 0) return new ArrayList<URI>();
+		
 		ArrayList<URI> results = new ArrayList<URI>();
 
 		String queryString = "SELECT DISTINCT ?bb"
@@ -949,6 +958,7 @@ public class Catalogue {
 			sf.setCreationDate(new Date());
 		// persists the screen-flow
 		saveScreenFlow(sf);
+		screenRecommender.rebuild(); //FIXME do not rebuild every time a new screen-flow is added!
 		if (log.isInfoEnabled()) log.info("Screenflow " + sfUri + " added.");
 	}
 
@@ -977,6 +987,7 @@ public class Catalogue {
 		removeScreenFlow(screenflow.getUri());
 		// save new content with the same URI
 		saveScreenFlow(screenflow);
+		screenRecommender.rebuild(); //FIXME do not rebuild every time a new screen-flow is updated!
 		if (log.isInfoEnabled()) log.info("Screen-flow " + screenflow.getUri() + " updated.");
 	}
 
@@ -990,6 +1001,7 @@ public class Catalogue {
 	 */
 	public void removeScreenFlow(URI sfUri) throws NotFoundException {
 		removeBuildingBlock(sfUri);
+		screenRecommender.rebuild(); //FIXME do not rebuild every time a new screen-flow is deleted!
 	}
 
 	public void addScreens(Screen... screens)
@@ -1023,6 +1035,7 @@ public class Catalogue {
 		saveScreen(screen);
 		// create plans for the screen
 		if (planner != null) planner.add(screen);
+		scRecommender.rebuild(); //FIXME do not rebuild every time a new screen is added!
 	}
 
 	/**
@@ -1048,7 +1061,6 @@ public class Catalogue {
 			}
 			throw new BuildingBlockException("An error ocurred while saving the screen: " + e, e);
 		}
-		scRecommender.rebuild(); //FIXME do not rebuild every time a new screen is saved!
 	}
 
 	public void updateScreen(Screen screen)

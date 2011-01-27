@@ -266,20 +266,17 @@ public class FindCheckTest {
 		assertTrue(results.contains(bs4.getUri()));
 
 		//----- search bb compatibles in terms of their pre/postconditions (order is important) -----//
-		results = TestUtils.getCatalogue().findScreenComponents(null, conList, scList, 0, -1, null, Constants.PATTERNS);
-		assertEquals(4, results.size());
+		results = TestUtils.getCatalogue().findScreenComponents(null, conList, scList, 0, 3, null, Constants.PATTERNS);
+		assertEquals(3, results.size());
 		assertTrue(results.get(0).equals(f6.getUri()));
 		assertTrue(results.get(1).equals(bs1.getUri()));
 		assertTrue(results.get(2).equals(bs3.getUri()));
-		assertTrue(results.get(3).equals(f1.getUri()));
 
 		//----- both strategies combined (order is important) -----//
-		results = TestUtils.getCatalogue().findScreenComponents(null, conList, scList, 0, -1, null, Constants.PREPOST + Constants.PATTERNS);
-		assertEquals(10, results.size());
-		assertTrue(results.get(0).equals(f6.getUri()));
-		assertTrue(results.get(1).equals(bs1.getUri()));
-		assertTrue(results.get(2).equals(bs3.getUri()));
-		assertTrue(results.get(3).equals(f1.getUri()));
+		results = TestUtils.getCatalogue().findScreenComponents(null, conList, scList, 2, -1, null, Constants.PREPOST + Constants.PATTERNS);
+		assertEquals(8, results.size());
+		assertTrue(results.get(0).equals(bs3.getUri()));
+		assertTrue(results.get(1).equals(f1.getUri()));
 		assertTrue(results.contains(f5.getUri()));
 		assertTrue(results.contains(f3.getUri()));
 		assertTrue(results.contains(f4.getUri()));
