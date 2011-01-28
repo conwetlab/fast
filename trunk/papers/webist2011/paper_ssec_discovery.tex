@@ -18,8 +18,10 @@ In the following scenario, there are two
 screens: \emph{s1} and \emph{s2}. \emph{s1} has as a pre-condition: \emph{``there exists a search criteria''}, and as a 
 post-condition: \emph{``there exists a item''}. \emph{s2} has just a pre-condition stating: \emph{``there exists a search criteria''}.
 
-\begin{listing}
-\begin{verbatim}
+\lstset{
+	language=sparql
+}
+\begin{lstlisting}
 :G1 { :s1 a fgo:Screen .      
       :s1 fgo:hasPrecondition c1 .
       :s1 fgo:hasPostcondition c2 .
@@ -31,98 +33,64 @@ post-condition: \emph{``there exists a item''}. \emph{s2} has just a pre-conditi
 :GC1 { _:x a amazon:SearchCriteria }
 :GC2 { _:x a amazon:Item }
 :GC3 { _:x a amazon:SearchCriteria }
-\end{verbatim}
-\label{lis:discovery_example}
-\end{listing}
+\end{lstlisting}
 
 The algorithm will construct a SPARQL query to retrieve building blocks satisfying the pre-conditions \emph{c1} and \emph{c3}. 
 The query, although simplified for the sake of clarity, would look something like:
 
-\begin{listing}
-\begin{verbatim}
-PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
-PREFIX fgo: <http://purl.oclc.org/fast/ontology/gadget#>
-PREFIX amazon:<http://aws.amazon.com/AWSECommerceService#>
-
+\begin{lstlisting}
 SELECT DISTINCT ?bb 
 WHERE { 
-  ?bb rdf:type fgo:Screen . 
-  {
-    {
+  ?bb a fgo:Screen . 
+  { { 
       ?bb fgo:hasPostCondition ?c .
       ?c fgo:hasPattern ?p .
-      GRAPH ?p { ?x rdf:type amazon:SearchCriteria } 
-    }
-    UNION
-    {
+      GRAPH ?p { ?x a amazon:SearchCriteria } 
+    } UNION {
       ?bb fgo:hasPostCondition ?c .
       ?c fgo:hasPattern ?p .
-      GRAPH ?p { ?x rdf:type amazon:Item } 
-    }
-  }
+      GRAPH ?p { ?x a amazon:Item } 
+  } }
   FILTER (?bb != <http://fast.org/screens/S1>) 
-  FILTER (?bb != <http://fast.org/screens/S2>) 
-}
-\end{verbatim}
-\label{lis:sparql_find}
-\end{listing}
+  FILTER (?bb != <http://fast.org/screens/S2>) }
+\end{lstlisting}
 
-However, in the example presented, it is straight-forward to spot that the pre-condition \emph{c3} would be
-satisfied whether the screen \emph{s1} was reachable, being unnecessary to query the recommender algorithm 
-to retrieve screens satisfying this pre-condition, hence these pre-conditions are removed for the construction
-of the query reducing the complexity of the problem, hence improving the overall performance of the algorithm.
-Moreover, it leads to find better results for the user, since the focus is given to make satisfy the 
-pre-conditions which could not be satisfied by any of the elements of the current composition.
+% However, in the example presented, it is straight-forward to spot that the pre-condition \emph{c3} would be satisfied whether the screen \emph{s1} was reachable, being unnecessary to query the recommender algorithm to retrieve screens satisfying this pre-condition, hence these pre-conditions are removed for the construction of the query reducing the complexity of the problem, hence improving the overall performance of the algorithm. Moreover, it leads to find better results for the user, since the focus is given to make satisfy the pre-conditions which could not be satisfied by any of the elements of the current composition.
 
-\subsubsection{Enhanced discovery: search tree planning}
+\subsubsection{Enhanced Discovery: Search Tree Planning}
 \label{sssec:planning}
 
-In artiﬁcial intelligence, the term \emph{planning} originally meant a search for a sequence of logical operators or actions
-that transform an initial world state into a desired goal state. Presently, it also includes many decision-theoretic ideas,
-imperfect state information, and game-theoretic equilibria.
+In artificial intelligence, the term \emph{planning} originally meant to search for a sequence of logical operators or actions that transform an initial state into a desired goal state.% Presently, it also includes many decision-theoretic ideas, imperfect state information, and game-theoretic equilibria.
 
-This paper applies the concept of planning to the design of building blocks. Back to the screen-flow design, the goal
-would be to make the screen-flow executable; the initial state would be a certain screen which is not yet reachable, 
-and the plans would be sets of screens which are reachable by themselves, and accomplish the goal. 
-The algorithm has been influenced by the ideas behing the heuristic search. For a certain state, i.e. the initial 
-state which contains the screen to make reachable, a large tree of possible continuations is considered, in 
-fact any screen would fit. Those screens which post-conditions do not satisfy in any form the unsatisfied 
-pre-conditions are discarded, reducing the branches of the tree. A branch stops growing when a screens is
-already reachable (i.e. it has no pre-conditions) becoming a leaf of the tree. Once there are not screens 
-added in a certain step, the algorithm stops and discards the incomplete branches, in other words, 
-those branches where the leaf is not reachable.
+In contrast to the simple approach, the planning approach finds sets of building blocks to fulfil the pre-conditions of a given building block (e.g., a screen). For a certain state, i.e., the initial 
+state which contains the pre-condition to fulfil, a large search tree of possible continuations is considered. Those building blocks cannot satisfy the unsatisfied pre-conditions are discarded, reducing the branches of the tree. A branch stops growing when a building block is reachable (i.e., it has no unfulfilled pre-conditions). Once there are no screens 
+added in a certain step, the algorithm stops and discards all incomplete branches.
 
-It is worth pointing out some of the tree structure is pre-computed beforehand to speed up the querying process at runtime. 
+It should be pointed out that some of the tree structure is pre-computed to speed up the querying process at runtime. 
 Any time a building block is inserted into the catalogue, the algorithm is executed following two approaches: 
 \emph{forward search} and \emph{backward search}. The forward search approach finds the building blocks whose 
 pre-conditions will be satisfied by the post-conditions of the new building block while the backward search 
 finds the building blocks whose post-conditions will satisfy the pre-conditions of the recently
-created building block. This data is stored and used for the tree or plan builder algorithm, without
-needing to check the compatibility of pre- and post-conditions for every single building block at every 
-request. 
+created building block.
 
 \subsubsection{Results ranking}
 \label{sssec:ranking}
 
-Previous sections presented different mechanisms to search or discover building blocks which may satisfy the user needs.
-The results ensure compatibility based on the functional specification of the building blocks, however they are not
-ranked, and their quality is not measured. This section explains the ranking techniques applied for the different
-discovery mechanisms.
+This section explains the ranking techniques applied for the different discovery mechanisms.
 
-The ranking algorithm for~\ref{sssec:simple_discovery} applies the following rules:
-\begin{enumerate}
- \item it gives a higher position to those building blocks which satisfy the highest number of pre-conditions;
- \item it prioritise building blocks created by the same user who is querying;
- \item it adjust the rank by using the ratings given to the building blocks, and their popularity in terms of usage statistics;
- \item it weights the results according to non-functional features such as availability. This is only applied for what we call
-``web service wrapper'', and it is calculated periodically by invoking the wrapped web services generating an up-time rate.
-\end{enumerate}
+The ranking algorithm for the simple approach applies the following rules:
+\begin{inparaenum}[(1)]
+	\item it gives a higher position to those building blocks which satisfy the highest number of pre-conditions;
+	\item it prioritises building blocks created by the same user who is querying;
+	\item it adjusts the rank by using the ratings given to the building blocks, and their popularity in terms of usage statistics;
+	\item it weights the results according to non-functional features such as availability. This is only applied for what we call ``web service wrapper'', and it is calculated periodically by invoking the wrapped web services.
+\end{inparaenum}
 
 For the planning case, the objective is not only to produce a plan but also to satisfy user-specified preferences, or what is
 known as \emph{preference-based planning}. The ranking algorithm:
-\begin{enumerate}
- \item minimizes the size of the plans, after removing the elements of the plan which are already in the canvas, so it gives
+\begin{inparaenum}[(1)]
+ \item minimises the size of the plans, after removing the elements of the plan which are already in the canvas, so it gives
 priority to the elements the user has already inserted,
  \item adjust the rank by using the rules 2, 3 and 4 used from the ranking algorithm of simple discovery based on 
 pre- and post-conditions.
-\end{enumerate}
+\end{inparaenum}

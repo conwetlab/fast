@@ -19,9 +19,30 @@
 
 \usepackage{url}
 
-\newenvironment{listing}
-{\begin{list}{}{\setlength{\leftmargin}{1em}}\item\scriptsize\bfseries}
-{\end{list}}
+\usepackage{listings}
+\lstdefinelanguage{turtle} 
+{morekeywords={@prefix, a, true, false}, 
+sensitive=false, 
+morecomment=[l]{\#}, 
+morestring=[b]",
+}
+
+\lstdefinelanguage{sparql} 
+{morekeywords={PREFIX, a, SELECT, CONSTRUCT, WHERE, UNION, OPTIONAL, FILTER, DISTINCT, ORDER, BY, GRAPH}, 
+sensitive=false, 
+morecomment=[l]{\#}, 
+morestring=[b]",
+}
+
+\lstset{
+	captionpos=b, 
+	extendedchars=true,
+	% basicstyle=\footnotesize \sffamily, 
+	basicstyle={\scriptsize\ttfamily},
+	stringstyle=\bfseries,
+	showstringspaces=false,
+	breaklines=true,
+}
 
 
 \begin{document}
@@ -39,7 +60,7 @@
 
 \input{paper_sec_conclusions}
 
-\section*{ACKNOWLEDGEMENTS} This work is supported in part by the European Commission under the first call of its Seventh Framework Program (FAST STREP Project, grant INFSO-ICT-216048) and in part by Science Foundation Ireland under Grant No. SFI/08/CE/I1380 (L\'ion-2).
+\section*{ACKNOWLEDGEMENTS} This work is supported in part by the European Commission under the first call of its Seventh Framework Program (FAST STREP Project, ICT-216048) and in part by Science Foundation Ireland under Grant No. SFI/08/CE/I1380 (L\'ion-2).
 
 \renewcommand{\baselinestretch}{0.98}
 \bibliographystyle{apalike}
