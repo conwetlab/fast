@@ -216,6 +216,11 @@ public class Catalogue {
 	public void clear() {
 		// clear the repository
 		tripleStore.clear();
+		// clear the planner
+		planner.clear();
+		// clear recommenders
+		screenRecommender.rebuild();
+		scRecommender.rebuild();
 		// restores default ontologies
 		restore();
 	}
@@ -539,14 +544,14 @@ public class Catalogue {
 		return results;
 	}
 
-	public List<URI> findBackwards(
+	public List<URI> findScreensBackwards(
 			List<Screen> screens, List<Condition> preconditions, List<Condition> postconditions, 
 			boolean plugin, boolean subsume, int offset, int limit, 
 			List<String> tags) throws ModelRuntimeException {
 		return findScreens(screens, preconditions, postconditions, plugin, subsume, offset, limit, tags, FGO.hasPostCondition);
 	}
 
-	public List<URI> findForwards(
+	public List<URI> findScreensForwards(
 			List<Screen> screens, List<Condition> preconditions, List<Condition> postconditions,
 			boolean plugin, boolean subsume, int offset, int limit,
 			List<String> tags) throws ModelRuntimeException {
@@ -558,6 +563,74 @@ public class Catalogue {
 			tmpScreenList.add(s);
 		}
 		return findScreens(tmpScreenList, postconditions, preconditions, plugin, subsume, offset, limit, tags, FGO.hasPreCondition);
+	}
+	
+	public List<URI> findScreens(
+			List<Screen> screens, Screen selectedItem, 
+			List<Condition> preconditions, List<Condition> postconditions, 
+			boolean plugin, boolean subsume, int offset, int limit, 
+			List<String> tags, int strategy) {
+		
+		if (limit == 0) return new ArrayList<URI>();
+		
+		boolean prepost = Constants.PREPOST == (strategy & Constants.PREPOST);
+		boolean patterns = Constants.PATTERNS == (strategy & Constants.PATTERNS);
+		
+		ArrayList<URI> queryList = new ArrayList<URI>();
+		List<URI> suggestionList = new ArrayList<URI>();
+
+		//---------------------------//
+		// queries the repository searching for building blocks compatible in terms of their pre/postconditions 
+		//---------------------------//
+
+		if (prepost) {
+			queryList.addAll(findScreensBackwards(screens, preconditions, postconditions, plugin, subsume, offset, limit, tags));
+			if (!screens.isEmpty())
+				queryList.addAll(findScreensForwards(screens, new ArrayList<Condition>(), new ArrayList<Condition>(), plugin, subsume, offset, limit, tags));
+		}
+	
+		//---------------------------//
+		// ask the recommender for building blocks related to the current canvas
+		//---------------------------//
+		
+		if (patterns) {
+			ArrayList<URI> uriList = new ArrayList<URI>();
+			if (selectedItem == null) {
+				for (Screen screen : screens) {
+					URI uri = getPrototypeOfClone(screen.getUri());
+					if (uri != null && !uriList.contains(uri))
+						uriList.add(uri);
+				}
+			} else {
+				uriList.add(selectedItem.getUri());
+			}
+			suggestionList.addAll(screenRecommender.getSuggestionList(uriList));
+			if (log.isInfoEnabled()) {
+				log.info("--- Recommendation algorithm ---");
+				log.info("Input: " + uriList);
+				log.info("Ouput: " + suggestionList);
+			}
+		}
+		
+		//---------------------------//
+		// merge the results of both building blocks lists
+		//---------------------------//
+
+		List<URI> results = new ArrayList<URI>();
+		results.addAll(suggestionList); // most commonly used together
+		for (URI uri : queryList) { // adds compatible building blocks
+			if (!results.contains(uri)) {
+				results.add(uri);
+			}
+		}
+		
+		// do pagination
+		if (offset > 0 || limit > -1) {
+			int toIndex = limit > -1 ? offset + limit : results.size();
+			results = results.subList(offset, toIndex);
+		}
+
+		return results;
 	}
 
 	/**

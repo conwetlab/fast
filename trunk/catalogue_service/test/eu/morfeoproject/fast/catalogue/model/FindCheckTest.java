@@ -65,11 +65,11 @@ public class FindCheckTest {
 		TestUtils.getCatalogue().addScreens(s1, s2, s3);
 		
 		// query the catalogue
-		ArrayList<Screen> all = new ArrayList<Screen>();
-		all.add(s1);
+		ArrayList<Screen> canvas = new ArrayList<Screen>();
+		canvas.add(s1);
 		ArrayList<String> tags = new ArrayList<String>();
 		tags.add("amazon");
-		List<URI> results = TestUtils.getCatalogue().findBackwards(all, new ArrayList<Condition>(), new ArrayList<Condition>(), true, true, 0, -1, tags);
+		List<URI> results = TestUtils.getCatalogue().findScreensBackwards(canvas, new ArrayList<Condition>(), new ArrayList<Condition>(), true, true, 0, -1, tags);
 		assertEquals(2, results.size());
 		assertTrue(results.contains(s2.getUri()));
 		assertTrue(results.contains(s3.getUri()));
@@ -82,10 +82,10 @@ public class FindCheckTest {
 	@Test
 	public void testFindAndCheck3() throws Exception {
 		// sets up the catalogue
-		Screen s1 = (Screen) TestUtils.buildBBFromFile(TestUtils.getCatalogue().getServerURL(), "screen", "data/json/screens/amazonProductCode.json");
-		Screen s2 = (Screen) TestUtils.buildBBFromFile(TestUtils.getCatalogue().getServerURL(), "screen", "data/json/screens/amazonListCode.json");
-		Screen s3 = (Screen) TestUtils.buildBBFromFile(TestUtils.getCatalogue().getServerURL(), "screen", "data/json/screens/amazonSuggestionCode.json");
-		TestUtils.getCatalogue().addScreens(s1, s2, s3);
+		Screen s4 = (Screen) TestUtils.buildBBFromFile(TestUtils.getCatalogue().getServerURL(), "screen", "data/json/screens/amazonProductCode.json");
+		Screen s1 = (Screen) TestUtils.buildBBFromFile(TestUtils.getCatalogue().getServerURL(), "screen", "data/json/screens/amazonListCode.json");
+		Screen s7 = (Screen) TestUtils.buildBBFromFile(TestUtils.getCatalogue().getServerURL(), "screen", "data/json/screens/amazonSuggestionCode.json");
+		TestUtils.getCatalogue().addScreens(s4, s1, s7);
 		
 		// query the catalogue
 		ArrayList<Screen> canvas = new ArrayList<Screen>();
@@ -95,15 +95,15 @@ public class FindCheckTest {
 		condition.setPatternString("?x http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://fast.morfeo-project.org/ontologies/amazon#Item");
 		condition.setPositive(true);
 		postconditions.add(condition);
-		List<URI> results = TestUtils.getCatalogue().findBackwards(canvas, new ArrayList<Condition>(), postconditions, true, true, 0, -1, tags);
+		List<URI> results = TestUtils.getCatalogue().findScreens(canvas, null, new ArrayList<Condition>(), postconditions, true, true, 0, -1, tags, Constants.PREPOST);
 		assertEquals(2, results.size());
-		assertTrue(results.contains(s2.getUri()));
-		assertTrue(results.contains(s3.getUri()));
+		assertTrue(results.contains(s1.getUri()));
+		assertTrue(results.contains(s7.getUri()));
 		
 		condition.setPatternString("?x http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://fast.morfeo-project.org/ontologies/amazon#ShoppingCart");
-		results = TestUtils.getCatalogue().findBackwards(canvas, new ArrayList<Condition>(), postconditions, true, true, 0, -1, tags);
+		results = TestUtils.getCatalogue().findScreens(canvas, null, new ArrayList<Condition>(), postconditions, true, true, 0, -1, tags, Constants.PREPOST + Constants.PATTERNS);
 		assertEquals(1, results.size());
-		assertTrue(results.contains(s1.getUri()));
+		assertTrue(results.contains(s4.getUri()));
 	}
 	
 	/**
@@ -133,7 +133,7 @@ public class FindCheckTest {
 		condition.setPatternString("?x http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://fast.morfeo-project.org/ontologies/amazon#SearchRequest");
 		condition.setPositive(true);
 		preconditions.add(condition);
-		List<URI> results = TestUtils.getCatalogue().findBackwards(canvas, preconditions, new ArrayList<Condition>(), true, true, 0, -1, tags);
+		List<URI> results = TestUtils.getCatalogue().findScreensBackwards(canvas, preconditions, new ArrayList<Condition>(), true, true, 0, -1, tags);
 		assertEquals(1, results.size());
 		assertTrue(results.contains(s3.getUri()));
 	}

@@ -194,7 +194,7 @@ public abstract class Planner extends Cacheable<List<Plan>> {
 		}
 		if (screens.size() > 0) {
 			ArrayList<URI> results = new ArrayList<URI>();
-			results.addAll(catalogue.findForwards(screens, new ArrayList<Condition>(), new ArrayList<Condition>(), true, true, 0, -1, null));
+			results.addAll(catalogue.findScreensForwards(screens, new ArrayList<Condition>(), new ArrayList<Condition>(), true, true, 0, -1, null));
 			for (URI result : results) {
 				plannerStore.add(screen.getUri(), result);
 				if (log.isInfoEnabled()) log.info("added transition "+screen.getUri()+" -> "+result);
@@ -209,7 +209,7 @@ public abstract class Planner extends Cacheable<List<Plan>> {
 		}
 		if (screens.size() > 0) {
 			ArrayList<URI> results = new ArrayList<URI>();
-			results.addAll(catalogue.findBackwards(screens, new ArrayList<Condition>(), new ArrayList<Condition>(), true, true, 0, -1, null));
+			results.addAll(catalogue.findScreensBackwards(screens, new ArrayList<Condition>(), new ArrayList<Condition>(), true, true, 0, -1, null));
 			for (URI result : results) {
 				plannerStore.add(result, screen.getUri());
 				if (log.isInfoEnabled()) log.info("added transition "+result+" -> "+screen.getUri());
@@ -244,7 +244,7 @@ public abstract class Planner extends Cacheable<List<Plan>> {
 				ArrayList<Screen> screens = new ArrayList<Screen>();
 				screens.add(screen);
 				ArrayList<URI> results = new ArrayList<URI>();
-				results.addAll(catalogue.findBackwards(screens, new ArrayList<Condition>(), new ArrayList<Condition>(), true, true, 0, -1, null));
+				results.addAll(catalogue.findScreensBackwards(screens, new ArrayList<Condition>(), new ArrayList<Condition>(), true, true, 0, -1, null));
 				for (URI result : results) {
 					plannerStore.add(result, screen.getUri());
 				}

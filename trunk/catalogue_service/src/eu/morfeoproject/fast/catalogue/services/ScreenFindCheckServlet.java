@@ -17,6 +17,7 @@ import org.json.JSONObject;
 import org.ontoware.rdf2go.model.node.URI;
 
 import eu.morfeoproject.fast.catalogue.BuildingBlockException;
+import eu.morfeoproject.fast.catalogue.Constants;
 import eu.morfeoproject.fast.catalogue.NotFoundException;
 import eu.morfeoproject.fast.catalogue.builder.BuildingBlockJSONBuilder;
 import eu.morfeoproject.fast.catalogue.model.Condition;
@@ -57,16 +58,19 @@ public class ScreenFindCheckServlet extends GenericServlet {
 			ArrayList<Screen> screens = new ArrayList<Screen>();
 			ArrayList<Condition> preconditions = new ArrayList<Condition>();
 			ArrayList<Condition> postconditions = new ArrayList<Condition>();
+			Screen selectedScreen = null;
 			JSONObject jsonCanvas = input.getJSONObject("canvas");
 			JSONArray jsonScreens = jsonCanvas.getJSONArray("screens");
 			for (int i = 0; i < jsonScreens.length(); i++) {
-				URI uri = rdfFactory.createURI(((JSONObject) jsonScreens.get(i)).getString("uri"));
+				JSONObject jsonScreen = jsonScreens.getJSONObject(i);
+				URI uri = rdfFactory.createURI(jsonScreen.getString("uri"));
 				Screen screen = getCatalogue().getScreen(uri);
 				if (screen == null) 
 					throw new NotFoundException("Resource "+uri+" does not exist.");
 				if (screen.getPrototype() == null)
 					throw new BuildingBlockException("Resource "+uri+" must be a clone of a prototype.");
-				screens.add(screen); 
+				screens.add(screen);
+				selectedScreen = jsonScreen.getBoolean("selected") ? screen : selectedScreen;
 			}
 			JSONArray jsonPreList = jsonCanvas.getJSONArray("preconditions");
 			for (int i = 0; i < jsonPreList.length(); i++) {
@@ -113,11 +117,13 @@ public class ScreenFindCheckServlet extends GenericServlet {
 			// do the real work
 			//-----------------
 			
+			// ask the catalogue for suggestions, and add the results to the list of forms, operators and services
 			if (search) {
+				int strategy = Constants.PREPOST + Constants.PATTERNS;
 				ArrayList<Screen> all = new ArrayList<Screen>();
 				all.addAll(screens);
-				all.addAll(palette);
-				List<URI> results = getCatalogue().findBackwards(all, preconditions, postconditions, true, true, offset, limit, tags);
+//				all.addAll(palette);
+				List<URI> results = getCatalogue().findScreens(all, selectedScreen, preconditions, postconditions, true, true, offset, limit, tags, strategy);
 				for (URI uri : results) { // add results of 'find' to the palette
 					palette.add(getCatalogue().getScreen(uri));
 				}
