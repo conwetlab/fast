@@ -270,18 +270,23 @@ public class Catalogue {
 		return isConcept(uri);
 	}
 
-	/* The list scList is a list of "clones" building blocks */
-	public List<URI> findScreenComponents(Screen container,
-			List<Condition> conditions, List<ScreenComponent> scList,
-			int offset, int limit, List<String> tags, int strategy)
-			throws ClassCastException, ModelRuntimeException {
-		return findScreenComponents(container, conditions, scList, new ArrayList<Pipe>(), offset, limit, tags, strategy);
-	}
-	
-	/* The list scList is a list of "clones" building blocks */
-	public List<URI> findScreenComponents(Screen container,
-			List<Condition> conditions, List<ScreenComponent> scList, List<Pipe> pipes,
-			int offset, int limit, List<String> tags, int strategy)
+	/**
+	 * 
+	 * @param canvasList list of building blocks (clones) in a certain canvas. the results
+	 * will try satisfy this list, unless 'selectedItem' has a value
+	 * @param selectedItem the results will be optimised for this element, as if the canvas
+	 * has only one element (results won't contain repeated building blocks from the canvas)
+	 * @param conditions list of conditions to be satisfied
+	 * @param offset
+	 * @param limit
+	 * @param tags
+	 * @param strategy
+	 * @return a list of suggested building block URIs
+	 * @throws ClassCastException
+	 * @throws ModelRuntimeException
+	 */
+	public List<URI> findScreenComponents(List<ScreenComponent> canvasList, ScreenComponent selectedItem,
+			List<Condition> conditions, int offset, int limit, List<String> tags, int strategy)
 			throws ClassCastException, ModelRuntimeException {
 		
 		if (limit == 0) return new ArrayList<URI>();
@@ -304,7 +309,7 @@ public class Catalogue {
 				+ " { ?bb " + RDF.type.toSPARQL() + " " + FGO.BackendService.toSPARQL() + " } } .";
 	
 			// doesn't include the building blocks where the postconditions were taken from
-			for (ScreenComponent sc : scList) {
+			for (ScreenComponent sc : canvasList) {
 				queryString = queryString.concat("FILTER (?bb != " + sc.getPrototype().toSPARQL() + ") . ");
 			}
 	
@@ -388,12 +393,15 @@ public class Catalogue {
 		
 		if (patterns) {
 			ArrayList<URI> uriList = new ArrayList<URI>();
-			for (ScreenComponent sc : scList) {
-				URI uri = getPrototypeOfClone(sc.getUri());
-				if (uri != null && !uriList.contains(uri))
-					uriList.add(uri);
+			if (selectedItem == null) {
+				for (ScreenComponent sc : canvasList) {
+					URI uri = getPrototypeOfClone(sc.getUri());
+					if (uri != null && !uriList.contains(uri))
+						uriList.add(uri);
+				}
+			} else {
+				uriList.add(selectedItem.getUri());
 			}
-	
 			suggestionList.addAll(scRecommender.getSuggestionList(uriList));
 			if (log.isInfoEnabled()) {
 				log.info("--- Recommendation algorithm ---");
@@ -417,7 +425,6 @@ public class Catalogue {
 		// do pagination
 		if (offset > 0 || limit > -1) {
 			int toIndex = limit > -1 ? offset + limit : results.size();
-			System.out.println(offset+", "+toIndex);
 			results = results.subList(offset, toIndex);
 		}
 

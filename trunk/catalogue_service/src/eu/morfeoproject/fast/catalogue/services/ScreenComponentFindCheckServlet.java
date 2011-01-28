@@ -133,7 +133,8 @@ public class ScreenComponentFindCheckServlet extends GenericServlet {
 
 				// ask the catalogue for suggestions, and add the results to the list of forms, operators and services
 				int strategy = Constants.PREPOST + Constants.PATTERNS;
-				List<URI> findResults = getCatalogue().findScreenComponents(null, conList, canvas, pipes, offset, limit, tags, strategy);
+				ScreenComponent selected = selectedItem instanceof ScreenComponent ? (ScreenComponent) selectedItem : null;
+				List<URI> findResults = getCatalogue().findScreenComponents(canvas, selected, conList, offset, limit, tags, strategy);
 				for (URI uri : findResults) {
 					ScreenComponent sc = getCatalogue().getScreenComponent(uri);
 					if (sc instanceof Form) 				outForms.add(sc);

@@ -41,17 +41,17 @@ public class FindCheckTest {
 			conList.addAll(action.getPreconditions());
 		}
 		conList.addAll(form.getPostconditions());
-		ArrayList<ScreenComponent> all = new ArrayList<ScreenComponent>();
-		all.add(formCopy);
+		ArrayList<ScreenComponent> canvas = new ArrayList<ScreenComponent>();
+		canvas.add(formCopy);
 		ArrayList<String> tags = new ArrayList<String>();
 		
-		List<URI> results = TestUtils.getCatalogue().findScreenComponents(null, conList, all, 0, -1, tags, Constants.PREPOST);
+		List<URI> results = TestUtils.getCatalogue().findScreenComponents(canvas, null, conList, 0, -1, tags, Constants.PREPOST);
 		assertEquals(2, results.size());
 		assertTrue(results.contains(s1.getUri()));
 		assertTrue(results.contains(s3.getUri()));
 
 		tags.add("amazon");
-		results = TestUtils.getCatalogue().findScreenComponents(null, conList, all, 0, -1, tags, Constants.PREPOST);
+		results = TestUtils.getCatalogue().findScreenComponents(canvas, null, conList, 0, -1, tags, Constants.PREPOST);
 		assertEquals(1, results.size());
 		assertTrue(results.contains(s1.getUri()));
 	}
@@ -252,7 +252,7 @@ public class FindCheckTest {
 		}
 		
 		//----- search bb compatibles in terms of their pre/postconditions (order is not important) -----//
-		List<URI> results = TestUtils.getCatalogue().findScreenComponents(null, conList, scList, 0, -1, null, Constants.PREPOST);
+		List<URI> results = TestUtils.getCatalogue().findScreenComponents(scList, null, conList, 0, -1, null, Constants.PREPOST);
 		assertEquals(10, results.size());
 		assertTrue(results.contains(f1.getUri()));
 		assertTrue(results.contains(f5.getUri()));
@@ -266,14 +266,14 @@ public class FindCheckTest {
 		assertTrue(results.contains(bs4.getUri()));
 
 		//----- search bb compatibles in terms of their pre/postconditions (order is important) -----//
-		results = TestUtils.getCatalogue().findScreenComponents(null, conList, scList, 0, 3, null, Constants.PATTERNS);
+		results = TestUtils.getCatalogue().findScreenComponents(scList, null, conList, 0, 3, null, Constants.PATTERNS);
 		assertEquals(3, results.size());
 		assertTrue(results.get(0).equals(f6.getUri()));
 		assertTrue(results.get(1).equals(bs1.getUri()));
 		assertTrue(results.get(2).equals(bs3.getUri()));
 
 		//----- both strategies combined (order is important) -----//
-		results = TestUtils.getCatalogue().findScreenComponents(null, conList, scList, 2, -1, null, Constants.PREPOST + Constants.PATTERNS);
+		results = TestUtils.getCatalogue().findScreenComponents(scList, null, conList, 2, -1, null, Constants.PREPOST + Constants.PATTERNS);
 		assertEquals(8, results.size());
 		assertTrue(results.get(0).equals(bs3.getUri()));
 		assertTrue(results.get(1).equals(f1.getUri()));
