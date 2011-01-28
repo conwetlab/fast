@@ -1,27 +1,24 @@
 %!TEX root = paper.tex
 
-\section{Use case}
+\section{Context: The FAST Platform}
 \label{sec:use_case}
 
-The intention of this paper was to show the advances made regarding web service discovery and consumption through the two artifacts developed as part of our research. While these artifacts may be deployed and used separately by third-party applications, they were originally developed to form the backbone of the FAST platform.
-FAST constitutes a novel approach to application composition and business process definition from a top-down user-centric perspective. Therefore, it is aimed at allowing users (mainly business users at the management level, without programming experience) to create their own situational applications by visually combining different components, or building blocks, such as graphical forms and back-end services in terms of their inputs and outputs. The work covered in this paper are the components highlighted and surronded by a dashed frame in the Fig.~\ref{fig:fast_architecture}. These components have public interfaces to communicate with any application developed by a third-party developer or company, and as described in Sects. 3 and 4, are fully integrated and present a high cohesion with the rest of the components of the FAST architecture. 
+The intention of this paper is to demonstrate the advances made regarding web service discovery and consumption through two artifacts developed as part of our research: the \emph{publishing and discovery platform} and the \emph{service wrapper tool}. While these artifacts may be deployed and used separately by third-party applications, they were originally developed to form the backbone of the FAST platform~\cite{hoyer2009fast}.
+FAST constitutes a novel approach to application composition and business process definition from a user-centric perspective. It is aimed at allowing users without previous programming experience to create their own situational applications by visually combining different \emph{building blocks}, such as graphical forms and back-end services, based on their inputs and outputs (or \emph{pre-} and \emph{post-conditions}). The work covered in this paper are the components highlighted and surrounded by a dashed frame in the Fig.~\ref{fig:fast_architecture}. Communication within the platform is mostly done via a RESTful API, using JSON as an exchange syntax.
+%These components have public interfaces to communicate with any application developed by a third-party developer or company, and as described in Sects. 3 and 4, are fully integrated and present a high cohesion with the rest of the components of the FAST architecture. 
 
 \begin{figure}[ht]
   \begin{center}
-    \includegraphics[width=.9\linewidth]{images/fast_architecture.pdf}
+    \includegraphics[width=\linewidth]{images/fast_architecture.pdf}
     \caption{Overview of the FAST architecture}
     \label{fig:fast_architecture}
   \end{center}
 \end{figure}
 
-In order to facilitate a better understanding of the use case, we will describe a number of concepts related to FAST in this section. A \emph{gadget} is the end product of the platform, aimed to be used in a specific mashup platform. Within FAST, the platform-independent gadget is called \emph{screenflow}, which comprises a set of domain-specific \emph{screens} connected through their \emph{pre-} and \emph{post-conditions}. A screen is the most complex building block fully functional by itself. It is composed by a \emph{form} conveying the graphical interface, and a set of \emph{operators} and \emph{back-end services}, wrapped into so-called \emph{service resources}.
+In order to facilitate a better understanding of these components, we describe a number of concepts related to FAST in this section. 
+A \emph{gadget} is the end product of the platform, ready to be run in any ordinary web browser, usually through a mashup platform. 
+Within FAST, the platform-independent gadget is called \emph{screenflow}, which comprises a set of domain-specific \emph{screens} connected through their \emph{pre-} and \emph{post-conditions}. A screen is the most complex building block fully functional by itself. 
+Visually, it is similar to a tab in a tabbed application.
+It is composed by a \emph{form} conveying the graphical interface, and a set of \emph{operators} and \emph{back-end services}, wrapped into so-called \emph{service resources}.
 
-The web service wrapper tool is then used to create the formal definitions of back-end services, transforming them into building blocks to be stored and reused within the FAST platform. The tool is integrated directly into the graphical IDE, and for the storage interacts with the catalogue, where the formal service descriptions and the executable code encapsulating the service behaviour is stored.
-
-The publishing platform presented, also called ``Catalogue'' within the FAST platform, covers several important purposes:
-\begin{description}
-	\item[Publication and search of gadgets] The output of the FAST IDE are gadgets, which are self-contained and ready to use. They need to be made available for download, as well as being discovered according to their formal description.
-	\item[Publication and search of building blocks] Every single component or building block definition is stored in the catalogue, which facilitates searching, recommendation and planning (the suggestion of combinations of building blocks to fulfil certain requirements). 
-	\item[Storage and indexing of user profiles and histories] Each user of the FAST platform has a representation in the catalogue, thus making it possible for the IDE to make informed guesses about what they want in a particular situation, based on their previous behaviour.
-	\item[Facilitate ontology mediation] Because FAST allows the integration of third-party external services, it is not always guaranteed that all the data coming from a service is directly compatible with the FAST platform. In such cases, mediation between the different ontologies is necessary. The catalogues therefore provide additional mediation functionality (first steps in this direction are outlined in \cite{Ambrus:2009it}).
-\end{description}
+The service wrapper tool is used to create wrappers for third-party web services, transforming them into building blocks to be stored and reused within the FAST platform. The publishing platform presented, also called \emph{catalogue} within the FAST platform, covers several important purposes, such as storage, indexing, publication and search of gadgets, gadget building blocks and user profiles, as well as some level of ontology mediation to facilitate the integration of services from different parties (first steps in this direction are outlined in \cite{Ambrus:2009it}).

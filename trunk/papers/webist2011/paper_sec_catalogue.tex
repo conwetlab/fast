@@ -1,26 +1,20 @@
 %!TEX root = paper.tex
 
-\section{Publishing and discovery platform}
+\section{Publishing and Discovery Platform}
 \label{sec:discovery}
 
-The area of web service publication and discovery has been subject for a lot of research since the very beginning the 
-concept was coined. The current state of the art provides several solutions and strategies which providers and 
-consumers may take advantage of. However, as explained in previous sections, a large number of them suffer from 
-limited syntax-based descriptions and simple keyword-based search, while other more complex approach did not success
-to be widely spread regarding the few benefits offered compared to their drawbacks. Moreover, the gap between discovery 
-and consumption is an obstacle for their usage by non-technical end-users. In order to improve this issue, 
-this paper presents a novel publishing platform, permitting any enterprise or individual to publish their public 
-domain web services, with an enhanced semantic search based on the definition of the services, and serving web 
-service wrappers for easy consumption in web applications.
+As explained in previous sections, current solutions and strategies for web service publication and discovery suffer from 
+limited syntax-based descriptions and simple keyword-based search, while other more complex approach failed because the added complexity did not offer sufficient benefits. 
+This paper therefore presents a novel publishing platform (the \emph{catalogue}), permitting any enterprise or individual to publish their public web services, providing enhanced semantic search service wrappers for easy consumption in web applications.
 
 % Overview subsection
 \subsection{Overview}
 \label{ssec:overview}
 
-The main difference of this platform with regards to the state of the art is that it is targeting a different kind of user, and covers many deficiencies others tools do not tackle. As a brief overview, the platform being presented:
+One of the main difference of this platform with regards to the state of the art is that it is targeting a different kind of user. As a brief overview, the platform being presented:
 
 \begin{itemize}
-  \item allows functional discovery through web service pre- and post-conditions;
+	\item allows functional discovery through web service pre- and post-conditions;
 	\item serves web services wrappers ready to consume in web applications;
 	\item provides advanced search capabilities, based on the formal service definition and inferences extracted from it;
 	\item supports managing its resources via its RESTful API;
@@ -30,51 +24,51 @@ The main difference of this platform with regards to the state of the art is tha
 	\item supports content negotiation so that different clients may retrieve information in their preferred format, choosing from JSON, RDF/XML, RDF/N3 or a human-readable HTML version.
 \end{itemize}
 
-This platform was intended and it is being used as part of the storyboard tool of the FAST platform~\cite{hoyer2009fast}, and it communicates with other components through its RESTful API, using JSON for the input of the requests. This paper will focus on the functionality regarding web service publication and discovery, and the process to publish any third-party web service into the platform. This process requires two steps:
-\begin{inparaenum}[(i)]
-	\item generation of the wrapper (see Section \ref{sec:wrapping_web_services}), and 
-	\item creation of the resource in the publishing platform. 
-\end{inparaenum}
-The following is an example of part of a request sent to create a new wrapper into the platform (for the sake of clarity, some parts of the request have been omitted, but the main idea is shown):
+% This paper will focus on the functionality regarding web service publication and discovery, and the process to publish any third-party web service into the platform. This process requires two steps:
+% \begin{inparaenum}[(i)]
+% 	\item generation of the wrapper (see Section \ref{sec:wrapping_web_services}), and 
+% 	\item creation of the resource in the publishing platform. 
+% \end{inparaenum}
+% The following is an example of part of a request sent to create a new wrapper into the platform (for the sake of clarity, some parts of the request have been omitted, but the main idea is shown):
+% 
+% \begin{listing}
+% \begin{verbatim}
+% {
+%   "code": "http://fast.morfeo-project.org/amazon-search.js",
+%   "creationDate": "2010-01-26T17:01:13+0000",
+%   "description": {"en-gb": "Amazon web service - Search"},
+%   "label": {"en-gb": "Amazon search"},
+%   "actions": [{
+%     "name": "filter",
+%     "preconditions": [[{
+%       "id": "item",
+%       "label": {"en-gb": "Ebay List"},
+%       "pattern": "?item
+%         http://www.w3.org/1999/02/22-rdf-syntax-ns#type
+%         http://aws.amazon.com/AWSECommerceService#Item"
+%   }]],
+%   "postconditions": [
+%     ...
+%   ],
+%   ...
+% \end{verbatim}
+% \label{lis:json_request}
+% \end{listing}
 
-\begin{listing}
-\begin{verbatim}
-{
-  "code": "http://fast.morfeo-project.org/amazon-search.js",
-  "creationDate": "2010-01-26T17:01:13+0000",
-  "description": {"en-gb": "Amazon web service - Search"},
-  "label": {"en-gb": "Amazon search"},
-  "actions": [{
-    "name": "filter",
-    "preconditions": [[{
-      "id": "item",
-      "label": {"en-gb": "Ebay List"},
-      "pattern": "?item
-        http://www.w3.org/1999/02/22-rdf-syntax-ns#type
-        http://aws.amazon.com/AWSECommerceService#Item"
-  }]],
-  "postconditions": [
-    ...
-  ],
-  ...
-\end{verbatim}
-\label{lis:json_request}
-\end{listing}
+The enriched search capabilities are supported by the definition of pre- and post-conditions. They allow to define the inputs and outputs of the services and other building blocks using concepts from any ontology, and in this way to find web services or other building blocks which can be integrated. The concepts of pre-/post-conditions were strongly influenced by WSMO~\cite{roman2005}, simplified and implemented in RDFS for better live performance.
 
-The enriched search capabilities are supported by the definition of pre- and post-conditions. They allow to define the inputs and outputs of the services and other building blocks using concepts from any ontology, and in this way to find web services or other building blocks which match each other and can therefore be integrated. The concepts of pre-/post-conditions were strongly influenced by WSMO~\cite{roman2005}, simplified and implemented in RDFS for better live performance. The model used to define the web service wrappers and the ontology created are described in more detail in Section~\ref{ssec:ontology}.
+% % Architecture subsection
+% \subsection{Platform architecture}
+% \label{ssec:architecture}
 
-% Architecture subsection
-\subsection{Platform architecture}
-\label{ssec:architecture}
+The catalogue architecture comprises an RDF store used for persistence, a business layer dealing with the model and reasoning, and a public facade providing the core functionality as a RESTful API, as well as a SPARQL endpoint accessing the RDF store directly. This presentation layer is aimed to interact with the FAST Gadget Visual Storyboard (see Fig.~\ref{fig:fast_architecture}), or any other third-party application.
 
-The architecture comprises an RDF store used for persistence, a business layer dealing with the model and reasoning, and a public facade providing the core functionality as a RESTful API, as well as a SPARQL endpoint accessing the RDF store directly. This presentation layer is aimed to interact with the FAST Gadget Visual Storyboard (see Section~\ref{sec:use_case}), or any other third-party application.
-
-The RESTful API and the SPARQL endpoint are part of the presentation layer. The SPARQL endpoint is offered using the SPARQL protocol service as defined in the SPROT specification~\cite{sprot} and is aimed to enable third-party developers to directly query the knowledge base using SPARQL queries. This feature is supported by the Sesame RESTful HTTP interface for SPARQL Protocol for RDF.
-
-The business logic layer contains all the domain-specific processing and reasoning. It provides functions to interact with all the elements of the domain model specified in \ref{ssec:ontology},
-acting as a mediator between the public RESTful API and the persistence layer.
-
-The persistence layer provides an API allowing to work with a standard set of objects representing the model. The interaction with the underlying RDF store is made via RDF2Go, an abstraction over triple (and quad) stores, which allows to program against RDF2Go interfaces and choose any RDF store implementation. This allows having a completely extensible and configurable framework for storage mechanisms, inferencers, RDF file formats, query result formats and query languages.
+% The RESTful API and the SPARQL endpoint are part of the presentation layer. The SPARQL endpoint is offered using the SPARQL protocol service as defined in the SPROT specification~\cite{sprot} and is aimed to enable third-party developers to directly query the knowledge base using SPARQL queries. This feature is supported by the Sesame RESTful HTTP interface for SPARQL Protocol for RDF.
+% 
+% The business logic layer contains all the domain-specific processing and reasoning. It provides functions to interact with all the elements of the domain model specified in \ref{ssec:ontology},
+% acting as a mediator between the public RESTful API and the persistence layer.
+% 
+% The persistence layer provides an API allowing to work with a standard set of objects representing the model. The interaction with the underlying RDF store is made via RDF2Go, an abstraction over triple (and quad) stores, which allows to program against RDF2Go interfaces and choose any RDF store implementation. This allows having a completely extensible and configurable framework for storage mechanisms, inferencers, RDF file formats, query result formats and query languages.
 
 % Conceptual model subsection
 \input{paper_ssec_ontology}

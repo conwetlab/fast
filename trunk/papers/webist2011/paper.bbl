@@ -6,16 +6,9 @@ Ambrus, O., M{\"o}ller, K., and Handschuh, S. (2009).
 \newblock In {\em Workshop on User-generated Services (UGS2009) at ICSOC2009,
   Stockholm, Sweden}.
 
-\bibitem[Beatty et~al., 2005]{beatty2005}
-Beatty, J., Kakivaya, G., Kemp, D., Kuehnel, T., Lovering, B., Roe, B., John,
-  C.~S., (Editor), J.~S., Simonnet, G., Walter, D., Weast, J., Yarmosh, Y., and
-  Yendluri, P. (2005).
-\newblock Web services dynamic discovery {(WS-Discovery)}.
-\newblock Specification, Microsoft.
-
 \bibitem[Berrueta et~al., 2008]{berrueta2008}
 Berrueta, D., Phipps, J., and Swick, R. (2008).
-\newblock Best practice recipes for publishing rdf vocabularies.
+\newblock Best practice recipes for publishing {RDF} vocabularies.
 \newblock Technical report, W3C.
 
 \bibitem[Bizer et~al., 2009]{bizer_ijswis2009}
@@ -26,7 +19,7 @@ Bizer, C., Heath, T., and Berners-Lee, T. (2009).
 
 \bibitem[Clement et~al., 2004]{uddi2004}
 Clement, L., Hately, A., von Riegen, C., and Rogers, T. (2004).
-\newblock Uddi version 3.0.2 specification.
+\newblock {UDDI} version 3.0.2 specification.
 \newblock \url{http://uddi.org/pubs/uddi_v3.htm}.
 
 \bibitem[Crockford, 2009]{crockford2006}
@@ -38,17 +31,6 @@ Crockford, D. (2009).
 Fielding, R.~T., Gettys, J., Mogul, J., Frystyk, H., Masinter, L., Leach, P.,
   and Berners-Lee, T. (1999).
 \newblock Hypertext transfer protocol -- {HTTP}/1.1.
-
-\bibitem[Fuchsloch et~al., 2010]{fuchsloch2010}
-Fuchsloch, A., Janner, T., Hoyer, V., Urmetzer, F., Jubeh, R., and Fern\'andez,
-  R. (2010).
-\newblock Deliverable d6.1.2: Scenario definition.
-\newblock Deliverable, FAST Consortium.
-
-\bibitem[Grant et~al., 2008]{sprot}
-Grant, K., Feigenbaum, L., and Torres, E. (2008).
-\newblock {SPARQL} protocol for {RDF}.
-\newblock Recommendation, World Wide Web Consortium (W3C).
 
 \bibitem[Hoyer et~al., 2009]{hoyer2009fast}
 Hoyer, V., Janner, T., Delchev, I., L{\'o}pez, J., Ortega, S., Fern{\'a}ndez,
@@ -75,12 +57,6 @@ Pedrinaci, C., Liu, D., Maleshkova, M., Lambert, D., Kopeck\'y, J., and
 Pilioura, T. and Tsalgatidou, A. (2009).
 \newblock Unified publication and discovery of semantic web services.
 \newblock {\em ACM Trans. Web}, 3(3):1--44.
-
-\bibitem[Prud'hommeaux and Seaborne, 2008]{sparql2008spec}
-Prud'hommeaux, E. and Seaborne, A. (2008).
-\newblock {SPARQL} query language for {RDF}.
-\newblock Recommendation, W3C.
-\newblock \url{http://www.w3.org/TR/rdf-sparql-query/}.
 
 \bibitem[Roman et~al., 2005]{roman2005}
 Roman, D., Keller, U., Lausen, H., de~Bruijn, J., Lara, R., Stollberg, M.,

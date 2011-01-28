@@ -1,41 +1,22 @@
 %!TEX root = paper.tex
 
-\subsection{Discovery mechanisms} % (fold)
+\subsection{Discovery Mechanisms} % (fold)
 \label{ssec:discovery}
 
-The platform presented in this paper is intended to support web service discovery and recommendation capabilities.
-As explained in detail in Section~\ref{ssec:ontology}, there are different types of building blocks which can be modelled
-using the platform, leading to a necessity for different kinds of discovery or recommendation mechanisms, depending
-on the level of composition to deal with: screen-flow or screen. In the screen-flow composition, the smallest
-functional unit is the screen, meaning that a screen-flow is composed by interconnecting a number of screens between 
-each other. This composition can be applied to any sort of building block since they all share the
-same structure: a set of pre- and post-conditions, which make possible the communication with other building blocks.
-That said, technically the algorithms presented in this section could be used for the discovery and composition of
-any type of building block stored in the platform.
+% Due to the diversity of building blocks available, there is a necessity for different kinds of discovery or recommendation mechanisms, depending on the level of composition: screen-flow or screen.
 
-At the screen-flow design level, the composition is made using a set of screens, and the pre- and post-conditions 
-of the screen-flow itself used as entry and exit points of the screen-flow. A screen is only reachable when its 
-pre-conditions are satisfied as well, meaning that the post-conditions of another screen, or the pre-conditions of 
-the screen-flow are compatible with them.
+The main goal of the discovery process is to aid the user in finding suitable building blocks to complement the ones they are already using. E.g., on the screen-flow level, this would mean to suggest additional screens to make existing screens within a screen-flow reachable, and the screen-flow therefore executable.
+The platform offers two mechanisms to find and recommend screens (or other building blocks) stored in the catalogue: a simple discovery based on pre- and postconditions, and a multi-step discovery or planning algorithm. 
+Before being presented to the user, the results are being ranked, as discussed in Sect.~\ref{sssec:ranking}. 
 
-The main goal of the discovery process is to help the user to make the screen-flow executable, in other words, to make
-all the screens within a screen-flow reachable. The platform offers two mechanisms to find and recommend
-screens, previously stored in the building block base (the catalogue), which will make the screen-flow executable: a
-simple discovery based on pre- and postconditions, and a multi-step discovery or planning algorithm. Like any other
-search engine or recommender system, the results are ranked before being presented
-to the user. The ranking algorithm is covered in Section~\ref{sssec:ranking}. 
-
-\subsubsection{Simple discovery based on pre- and post-conditions}
+\subsubsection{Simple Discovery Based on Pre- and Post-Conditions}
 \label{sssec:simple_discovery}
 
-At a particular state of a composition, ie. at screen-flow design, several of the building blocks used to compose it, 
-screens in the case of a screen-flow, might be unreachable, therefore there must be pre-conditions not satisfied. The
-platform will assist the process by recommending building blocks which will satisfy these pre-conditions. In a nutshell,
-it collects the pre-conditions of all the unreachable building blocks, used as a graph pattern (see Section~\ref{ssec:ontology})
-in order to be matched against the post-conditions of any building block. In the following scenario, there are two 
-screens: \emph{s1} and \emph{s2}. \emph{s1} has as a pre-condition: ``there exists a search criteria'', and as a 
-post-condition: ``there exists a item''. \emph{s2} has just a pre-condition stating: ``there exists a search criteria''.
-Here you can see the same example but formally defined:
+In this simple approach, the platform will assist the process by recommending all building blocks which will satisfy currently unfulfilled pre-conditions. 
+The pre-conditions of all the unreachable building blocks are collected as a graph pattern, which is then matched against the post-conditions of all available building blocks. 
+In the following scenario, there are two 
+screens: \emph{s1} and \emph{s2}. \emph{s1} has as a pre-condition: \emph{``there exists a search criteria''}, and as a 
+post-condition: \emph{``there exists a item''}. \emph{s2} has just a pre-condition stating: \emph{``there exists a search criteria''}.
 
 \begin{listing}
 \begin{verbatim}
