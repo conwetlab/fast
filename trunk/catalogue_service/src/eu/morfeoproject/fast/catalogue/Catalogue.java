@@ -29,6 +29,7 @@ import org.ontoware.rdf2go.model.QueryRow;
 import org.ontoware.rdf2go.model.Statement;
 import org.ontoware.rdf2go.model.Syntax;
 import org.ontoware.rdf2go.model.node.BlankNode;
+import org.ontoware.rdf2go.model.node.DatatypeLiteral;
 import org.ontoware.rdf2go.model.node.LanguageTagLiteral;
 import org.ontoware.rdf2go.model.node.Node;
 import org.ontoware.rdf2go.model.node.Resource;
@@ -951,7 +952,19 @@ public class Catalogue {
 		model.open();
 		ClosableIterator<Statement> cIt = tripleStore.findStatements(bn, Variable.ANY, Variable.ANY);
 		while (cIt.hasNext()) {
-			model.addStatement(cIt.next());
+			Statement st = cIt.next();
+			Resource subject = st.getSubject();
+			URI predicate = st.getPredicate();
+			Node object = st.getObject();
+			if (object instanceof DatatypeLiteral) {
+				DatatypeLiteral literal = (DatatypeLiteral) object;
+				model.addStatement(subject, predicate, model.createDatatypeLiteral(literal.getValue(), literal.getDatatype()));
+			} else if (object instanceof LanguageTagLiteral) {
+				LanguageTagLiteral literal = (LanguageTagLiteral) object;
+				model.addStatement(subject, predicate, model.createLanguageTagLiteral(literal.getValue(), literal.getLanguageTag()));
+			} else {
+				model.addStatement(cIt.next());
+			}
 		}
 		cIt.close();
 		return model;
