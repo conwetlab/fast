@@ -150,9 +150,6 @@ public class Catalogue {
 		scRecommender = new ScreenComponentRecommender(this);
 	}
 
-	public CatalogueConfiguration getConfiguration() {
-		return this.configuration;
-	}
 	public URL getServerURL() {
 		return configuration.getURL(this.environment, "serverURL");
 	}
