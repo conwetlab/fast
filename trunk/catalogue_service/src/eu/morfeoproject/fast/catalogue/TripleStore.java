@@ -6,6 +6,7 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -221,41 +222,25 @@ public abstract class TripleStore {
      */
     public boolean addOntology(URI ontologyUri, InputStream ontology, Syntax syntax) 
     throws RepositoryException, RDFParseException, IOException, OntologyInvalidException {
+    	
     	if (containsOntology(ontologyUri)) {
     		log.info("The ontology " + ontologyUri + " already exists.");
     		return false;
     	}
     	
-    	RepositoryConnection connection = repository.getConnection();
-		ValueFactory factory = repository.getValueFactory();
 		RDFFormat format = RDFFormat.RDFXML; // RDF/XML by default
 		if (syntax.equals(Syntax.Ntriples)) format = RDFFormat.NTRIPLES;
 		else if (syntax.equals(Syntax.RdfXml)) format = RDFFormat.RDFXML;
 		else if (syntax.equals(Syntax.Trig)) format = RDFFormat.TRIG;
 		else if (syntax.equals(Syntax.Trix)) format = RDFFormat.TRIX;
 		else if (syntax.equals(Syntax.Turtle)) format = RDFFormat.TURTLE;
-    	// add the ontology to the repository
-		connection.add(ontology, ontologyUri.toString(), format, factory.createURI(ontologyUri.toString()));
-    	return true;
     	
-// 		Ismael: this doesn't work properly when working with the HTTP sesame server
-//    	it always launch a Exception when querying the triple store. it may be a bug
-//		in the RDF2Go library?
-//		Solution: above code using directly Sesame connection to the repository
+		// add the ontology to the repository
+    	RepositoryConnection connection = repository.getConnection();
+		ValueFactory factory = repository.getValueFactory();
+		connection.add(ontology, ontologyUri.toString(), format, factory.createURI(ontologyUri.toString()));
 		
-//	 	// creates a model for the ontology
-//  	Model ont = RDF2Go.getModelFactory().createModel(ontologyUri);
-//  	ont.open();
-//  	try {
-//  		// read the ontology from the inputstream
-//        ont.readFrom(ontology, syntax);
-//        // add the ontology to the persistent modelset
-//        persistentModelSet.addModel(ont);
-//    } catch (IOException e) {
-//        throw new OntologyInvalidException(e.getLocalizedMessage(), e);
-//    } finally{
-//    	ont.close();
-//    }		
+		return true;
     }
 	
 	/**
@@ -265,6 +250,7 @@ public abstract class TripleStore {
      * @param ontologyUri URI identifying the ontology in the passed rdf model
      * @param ontology a stream with a serialized form of the ontology
      * @param syntax the rdf syntax
+     * @param URL of the location where the ontology is stored
      * @throws NotFoundException if the passed ontology is not in the store at the moment
      * @throws SailUpdateException if the database breaks
      * @throws OntologyInvalidException if the ontology is not valid according to PimoChecker
@@ -680,6 +666,21 @@ public abstract class TripleStore {
 		}
 	}
 	
+	public String getNamespace(String preffix) {
+		return persistentModelSet.getNamespace(preffix);
+	}
+
+	public String getPreffixNamespace(String namespace) {
+		for (String preffix : persistentModelSet.getNamespaces().keySet())
+			if (namespace.equals(persistentModelSet.getNamespaces().get(preffix)))
+				return preffix;
+		return null;
+	}
+
+	public Map<String, String> getNamespaces() {
+		return persistentModelSet.getNamespaces();
+	}
+
 	/**
 	 * For debugging, dumps the content of the store
 	 */

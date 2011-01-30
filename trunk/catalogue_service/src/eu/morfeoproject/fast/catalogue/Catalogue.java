@@ -3,7 +3,6 @@ package eu.morfeoproject.fast.catalogue;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -66,7 +65,6 @@ import eu.morfeoproject.fast.catalogue.model.factory.BuildingBlockFactory;
 import eu.morfeoproject.fast.catalogue.ontologies.DefaultOntologies;
 import eu.morfeoproject.fast.catalogue.ontologies.OntologyFetcher;
 import eu.morfeoproject.fast.catalogue.ontologies.OntologyFinder;
-import eu.morfeoproject.fast.catalogue.ontologies.OntologyManager;
 import eu.morfeoproject.fast.catalogue.ontologies.SindiceOntologyFinder;
 import eu.morfeoproject.fast.catalogue.ontologies.DefaultOntologies.Ontology;
 import eu.morfeoproject.fast.catalogue.ontologies.DefaultOntologies.PublicOntology;
@@ -81,6 +79,7 @@ import eu.morfeoproject.fast.catalogue.util.MiscUtil;
 import eu.morfeoproject.fast.catalogue.vocabulary.CTAG;
 import eu.morfeoproject.fast.catalogue.vocabulary.DC;
 import eu.morfeoproject.fast.catalogue.vocabulary.FGO;
+import eu.morfeoproject.fast.catalogue.vocabulary.OMV;
 
 /**
  * Catalogue
@@ -92,7 +91,6 @@ public class Catalogue {
 	protected final Log log = LogFactory.getLog(this.getClass());
 
 	private CatalogueConfiguration configuration;
-	private OntologyManager ontologyManager; // TODO do it persistent, now it's just in memory, so when the catalogue is loaded, the ontology list is empty
 	private TripleStore tripleStore;
 	private Planner planner;
 	private Recommender screenRecommender;
@@ -100,7 +98,8 @@ public class Catalogue {
 	private String environment;
 	private URI prototypesGraph;
 	private URI clonesGraph;
-
+	private URI ontologiesMetadataGraph;
+	
 	public Catalogue(CatalogueConfiguration conf) {
 		this(conf, "default");
 	}
@@ -112,7 +111,7 @@ public class Catalogue {
 		try {
 			init();
 		} catch (Exception e) {
-			throw new RuntimeException("Unable to start the catalogue service.", e);
+			throw new RuntimeException("Unable to start the catalogue service: "+e, e);
 		}
 	}
 
@@ -134,8 +133,8 @@ public class Catalogue {
 		prototypesGraph = tripleStore.createURI(serverURL+"/prototypes");
 		clonesGraph = tripleStore.createURI(serverURL+"/clones");
 		
-		// creates the ontology manager
-		ontologyManager = new OntologyManager(getAllOntologies());
+		// creates a graph for keeping metadata about the ontologies
+		ontologiesMetadataGraph = tripleStore.createURI(serverURL+"/ontologies/metadata");
 
 		// check if the catalogue is correct
 		if (!check()) {
@@ -166,25 +165,22 @@ public class Catalogue {
 	protected void restore() {
 		// add default ontologies
 		for (DefaultOntologies.Ontology ontology : DefaultOntologies.getDefaults()) {
-			if (log.isInfoEnabled()) log.info("adding default ontology '" + ontology.getUri() + "'");
+			if (log.isInfoEnabled())
+				log.info("adding default ontology '" + ontology.getUri() + "'");
 			addOntology(ontology);
 		}
 	}
 
 	protected boolean addOntology(Ontology ontology) {
+		URI uri = ontology.getUri();
 		try {
-			return addOntology(ontology.getUri(), ontology.getInputStream(), ontology.getSyntax());
-		} catch (OntologyInvalidException e) {
-			log.error("Cannot add ontology '" + ontology.getUri() + "': " + e, e);
-		}
-		return false;
-	}
-
-	protected boolean addOntology(URI uri, InputStream in, Syntax syntax) {
-		try {
-			boolean added = tripleStore.addOntology(uri, in, syntax);
-			if (added) ontologyManager.add(uri);
-			return added;
+			boolean added = tripleStore.addOntology(uri, ontology.getInputStream(), ontology.getSyntax());
+			if (added) {
+				tripleStore.addStatement(ontologiesMetadataGraph, uri, RDF.type, OMV.Ontology);
+				tripleStore.addStatement(ontologiesMetadataGraph, uri, OMV.isLocatedAt, uri);
+				tripleStore.addStatement(ontologiesMetadataGraph, uri, OMV.resourceLocator, tripleStore.createURI(ontology.getLocation().toString()));
+				tripleStore.addStatement(ontologiesMetadataGraph, uri, OMV.hasSyntax, tripleStore.createDatatypeLiteral(ontology.getSyntax().toString(), XSD._string));
+			}
 		} catch (OntologyInvalidException e) {
 			log.error("Cannot add ontology '" + uri + "': " + e, e);
 		} catch (RepositoryException e) {
@@ -201,13 +197,22 @@ public class Catalogue {
 		return addOntology(new PublicOntology(uri, downloadUri, syntax));
 	}
 
+	public boolean containsOntology(URI ontUri) {
+		ClosableIterator<Statement> cIt = tripleStore.findStatements(ontologiesMetadataGraph, ontUri, RDF.type, OMV.Ontology);
+		boolean contains = cIt.hasNext();
+		cIt.close();
+		return contains;
+	}
+	
 	public List<URI> getAllOntologies() {
 		LinkedList<URI> ontologies = new LinkedList<URI>();
-		ClosableIterator<Statement> it = tripleStore.findStatements(Variable.ANY, RDF.type, OWL.Ontology);
-		for (; it.hasNext();) {
-			URI uri = it.next().getSubject().asURI();
-			if (!ontologies.contains(uri)) ontologies.add(uri);
+		ClosableIterator<Statement> cIt = tripleStore.findStatements(ontologiesMetadataGraph, Variable.ANY, RDF.type, OMV.Ontology);
+		for (; cIt.hasNext();) {
+			URI uri = cIt.next().getSubject().asURI();
+			if (!ontologies.contains(uri))
+				ontologies.add(uri);
 		}
+		cIt.close();
 		return ontologies;
 	}
 
@@ -237,9 +242,11 @@ public class Catalogue {
 		boolean result = false;
 		// are the default ontologies here?
 		for (DefaultOntologies.Ontology ont : DefaultOntologies.getDefaults()) {
-			if (log.isInfoEnabled()) log.info("checking ontology '" + ont.getUri() + "'...");
-			boolean misses = (!tripleStore.containsOntology(ont.getUri()));
-			if (log.isInfoEnabled()) log.info("default ontology '" + ont.getUri() + "' is in the store: " + !misses);
+			if (log.isInfoEnabled())
+				log.info("checking ontology '" + ont.getUri() + "'...");
+			boolean misses = !containsOntology(ont.getUri());
+			if (log.isInfoEnabled())
+				log.info("default ontology '" + ont.getUri() + "' is in the store: " + !misses);
 			result = result || misses;
 		}
 		return !result;
@@ -963,7 +970,7 @@ public class Catalogue {
 				LanguageTagLiteral literal = (LanguageTagLiteral) object;
 				model.addStatement(subject, predicate, model.createLanguageTagLiteral(literal.getValue(), literal.getLanguageTag()));
 			} else {
-				model.addStatement(cIt.next());
+				model.addStatement(st);
 			}
 		}
 		cIt.close();
@@ -975,7 +982,19 @@ public class Catalogue {
 		model.open();
 		ClosableIterator<Statement> cIt = tripleStore.findStatements(uri, Variable.ANY, Variable.ANY);
 		while (cIt.hasNext()) {
-			model.addStatement(cIt.next());
+			Statement st = cIt.next();
+			Resource subject = st.getSubject();
+			URI predicate = st.getPredicate();
+			Node object = st.getObject();
+			if (object instanceof DatatypeLiteral) {
+				DatatypeLiteral literal = (DatatypeLiteral) object;
+				model.addStatement(subject, predicate, model.createDatatypeLiteral(literal.getValue(), literal.getDatatype()));
+			} else if (object instanceof LanguageTagLiteral) {
+				LanguageTagLiteral literal = (LanguageTagLiteral) object;
+				model.addStatement(subject, predicate, model.createLanguageTagLiteral(literal.getValue(), literal.getLanguageTag()));
+			} else {
+				model.addStatement(st);
+			}
 		}
 		cIt.close();
 		return model;
@@ -1697,7 +1716,9 @@ public class Catalogue {
 				Model patternModel = patternToRDF2GoModel(pattern);
 				tripleStore.addStatement(graphURI, stmt.getSubject(), FGO.hasPattern, pUri);
 				tripleStore.addModel(patternModel, pUri);
-				if (configuration.getBoolean("import-ontologies", this.environment)) {
+				
+				// checks/imports the ontologies/vocabularies used in the condition pattern
+				if (configuration.getBoolean(this.environment, "import-ontologies")) {
 					importMissingOntologies(patternModel);
 				}
 			}
@@ -1982,33 +2003,50 @@ public class Catalogue {
 	 * @param model set of triples used to check for URIs
 	 */
 	protected void importMissingOntologies(Model model) {
-		ClosableIterator<Statement> it = model.iterator();
-		for (; it.hasNext();) {
-			Statement stmt = it.next();
+		ClosableIterator<Statement> cIt = model.iterator();
+		for (; cIt.hasNext();) {
+			Statement stmt = cIt.next();
 			Resource subject = stmt.getSubject();
 			URI predicate = stmt.getPredicate();
 			Node object = stmt.getObject();
-			if (isURI(subject)) importIfMissing(subject.asURI());
-			importIfMissing(predicate);
-			if (isURI(object)) importIfMissing(object.asURI());
+			if (isURI(subject)) {
+				importOntology(subject.asURI());
+			}
+			importOntology(predicate);
+			if (isURI(object)) {
+				importOntology(object.asURI());
+			}
 		}
-		it.close();
+		cIt.close();
 	}
 
 	/**
 	 * Figures out the ontology URI for a given concept or property URI, then it
 	 * fetches and store the ontology in the catalogue.
-	 * @param uri
+	 * @param classOrPropertyURI
 	 */
-	protected void importIfMissing(URI uri) {
-		OntologyFinder finder = new SindiceOntologyFinder();
-		for (URI ontUri : ontologyManager.list())
-			if (ontologyManager.isDefinedBy(uri, ontUri)) return;
+	protected void importOntology(URI classOrPropertyURI) {
+		// checks if there's already an ontology defining the class or property
+		for (URI oUri : getAllOntologies()) {
+			if (classOrPropertyURI.toString().startsWith(oUri.toString()))
+				return;
+		}
 
-		URI oUri = finder.find(uri);
-		if (oUri != null) {
-			Ontology ontology = OntologyFetcher.fetch(MiscUtil.RDF2GoURItoURL(oUri));
-			if (ontology != null) addOntology(ontology);
+		// try to fetch the URI in order to find the ontology content, as it should
+		// regarding the best practices of publishing ontologies
+		Ontology ontology = OntologyFetcher.fetch(MiscUtil.RDF2GoURItoURL(classOrPropertyURI));
+		if (ontology == null) {
+			// no ontology found, we try to check if Sindice knows where to find it
+			OntologyFinder finder = new SindiceOntologyFinder();
+			URI oUri = finder.find(classOrPropertyURI);
+			if (oUri != null) {
+				ontology = OntologyFetcher.fetch(MiscUtil.RDF2GoURItoURL(oUri));
+			}
+		}
+		if (ontology != null) {
+			if (addOntology(ontology)) {
+				if (log.isInfoEnabled()) log.info("Ontology "+ontology.getUri()+" has been added.");
+			}
 		}
 	}
 

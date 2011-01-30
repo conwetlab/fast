@@ -31,33 +31,34 @@ public class URLInputSource implements InputStreamSource {
         this.accept = accept;
     }
 
- 	/**
-	 * Fetches the given URL and prints the HTTP header fields and the content.
-	 */
-    public InputStream getInputStream() throws IOException {
+    public HttpResponse getHttpResponse() throws IOException {
         final HttpClient httpclient = new DefaultHttpClient();
 		try {
 			final HttpGet httpget = new HttpGet(url.toString());
 			httpget.getParams().setParameter(CoreProtocolPNames.USER_AGENT, "FASTbot");
 			if (accept != null) httpget.setHeader("Accept", accept);
 			
-			final HttpResponse response = httpclient.execute(httpget);
-			final HttpEntity entity = response.getEntity();
-			
-			if (entity == null) return null;
-
-			return entity.getContent();
-			/*
-			 * print the HTTP header fields
-			 */
-//			System.out.println(response.getStatusLine().toString());
-//			for (final Header header : response.getAllHeaders()) {
-//				System.out.println(header.toString());
-//  			}
-//  			return EntityUtils.toString(entity);
+			return httpclient.execute(httpget);
   		} catch (final Exception e) {
   			return null;
  		}
+    	
+    }
+    
+ 	/**
+	 * Fetches the given URL and prints the HTTP header fields and the content.
+	 */
+    public InputStream getInputStream() throws IOException {
+		try {
+	    	final HttpResponse response = getHttpResponse();
+			final HttpEntity entity = response.getEntity();
+			
+			if (entity == null) return null;
+	
+			return entity.getContent();
+		} catch (Exception e) {
+			return null;
+		}
     }
 
     public URL getURL() {

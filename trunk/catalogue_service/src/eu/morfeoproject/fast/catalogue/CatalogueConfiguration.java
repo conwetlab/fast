@@ -35,11 +35,8 @@ public class CatalogueConfiguration {
 		} else {
 			try {
 				properties.load(inStream);
-				properties.put("default-import-ontologies", true);
-				properties.put("test-import-ontologies", true);
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				log.error("Error reading configuration file "+confFile+": "+e, e);
 			}
 		}
 		// TODO do the necessary checks, and if no configuration at all, set the storageDir to a relative path where the catalogue is being executed
@@ -63,8 +60,7 @@ public class CatalogueConfiguration {
 	}
 	
 	public boolean getBoolean(String environment, String property) {
-		return true;
-//		return (Boolean) this.properties.get(environment+"-"+property);
+		return Boolean.valueOf(this.properties.getProperty(environment+"-"+property, "false"));
 	}
 
 	public URL getURL(String property) {

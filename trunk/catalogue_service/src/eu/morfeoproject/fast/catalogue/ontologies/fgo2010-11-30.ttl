@@ -689,3 +689,10 @@ ctag:tagged a owl:ObjectProperty .
 ctag:means a owl:ObjectProperty .
 
 <http://purl.oclc.org/fast/ontology/gadget> a owl:Thing.
+
+
+
+fgo:hasParameterTemplate a owl:ObjectProperty ;
+rdfs:label "has parameter template"@en ;
+rdfs:comment """Building blocks which can receive parameters must specificy a template for it."""@en ;
+rdfs:domain fgo:BuildingBlock .

@@ -1,0 +1,39 @@
+{
+	"id": "5001",
+    "code":"http://vocab.deri.ie/travel/requestForm.src.html",
+    "creator":"admin",
+    "description":{
+        "en-gb":"This form is used to test the automatic ontology import mechanism. It uses an ontology not stored in the catalogue by default."
+    },
+    "tags":[
+    ],
+    "homepage":"http://vocab.deri.ie/travel#",
+    "icon":"http://vocab.deri.ie/sites/all/modules/neologism/images/icons/rdf_w3c_icon.48.gif",
+    "label":{
+        "en-gb":"Travel Request Form"
+    },
+    "rights":"http://creativecommons.org/",
+    "screenshot":"http://vocab.deri.ie/sites/all/modules/neologism/images/icons/rdf_w3c_icon.48.gif",
+    "version":"1.0",
+    "libraries":[],
+    "actions":[
+        {
+            "name":"init",
+            "preconditions":[],
+            "uses":[]
+        }
+    ],
+    "postconditions":[
+        {
+            "id":"request",
+            "label":{
+                "en-gb":"A travel request"
+            },
+            "pattern":"?req http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://vocab.deri.ie/travel#Request",
+            "positive":"true"
+        }
+    ],
+    "triggers":[
+    	"newRequest"    
+    ]
+}
