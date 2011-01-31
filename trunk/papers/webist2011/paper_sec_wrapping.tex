@@ -10,13 +10,12 @@ Before third-party services can be used by our platform, they need to be provide
 \end{inparaenum}
 From this input, the tool then generates the actual wrapper --- JavaScript code to be embedded into web gadgets.
 
-\subsection{Constructing Service Requests} % (fold)
-\label{sub:constructing_service_requests}
+%\subsection{Constructing Service Requests} % (fold)
+%\label{sub:constructing_service_requests}
 
-In this section we illustrate the interaction with RESTful services on simple GET requests\footnote{Other methods such as POST or SOAP-based services are also supported.}. 
+We now illustrate the interaction with RESTful services on simple GET requests\footnote{Other methods such as POST or SOAP-based services are also supported.}. 
 In this case, a service request is assembled using its URL and a set of parameters. As an example, we will look at the eBay Shopping web service. 
 To define the desired pre-condition and the type of post-condition of a new service wrapper, the service wrapper tool provides a form (not shown here). For the current example, we assume that the user has defined a pre-condition \emph{search\_key}.
-
 We are invoking the service to retrieve a list of items corresponding to the search keyword ``USB'':
 
 \begin{lstlisting}
@@ -65,8 +64,8 @@ An example of service request construction is shown in the Fig.~\ref{fig:constru
 
 % subsection constructing_service_requests (end)
 
-\subsection{Interpreting Service Responses} % (fold)
-\label{sub:interpreting_service_responses}
+%\subsection{Interpreting Service Responses} % (fold)
+%\label{sub:interpreting_service_responses}
 
 % A web service can choose to send a response message in any desired structured format. In our example, we assume an XML tree, but a JSON structure is equally possible.
 
@@ -76,8 +75,8 @@ An example of service request construction is shown in the Fig.~\ref{fig:constru
 Once the service response has been retrieved, the transformation tab of the wrapper tool shows it as an interactive object tree, as seen in Fig.~\ref{fig:response_service_execution}. 
 
 \begin{figure}
-  \begin{center}
-    \includegraphics[width=\linewidth]{images/ServiceWrapperToolGVSWithTransformationRules.png}
+  \begin{center}     
+    \includegraphics[height=\linewidth, angle=90]{images/ServiceWrapperToolGVSWithTransformationRules.png}
     \caption{Rule-based transformation of service response}
     \label{fig:response_service_execution}
   \end{center}
@@ -119,8 +118,8 @@ Our tool follows an interactive paradigm. Any time a change to a transformation 
 
 % subsection interpreting_service_responses (end)
 
-\subsection{Generating the Service Wrapper} % (fold)
-\label{sub:generating_a_resource_adapter}
+%\subsection{Generating the Service Wrapper} % (fold)
+%\label{sub:generating_a_resource_adapter}
 
 Once the wrapping of a service has been defined and tested in the tool, we generate an implementation of the desired specification in XML, HTML, and JavaScript, ready to be deployed and executed inside a web gadget. 
 
