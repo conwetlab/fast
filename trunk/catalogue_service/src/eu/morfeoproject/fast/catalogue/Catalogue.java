@@ -433,8 +433,9 @@ public class Catalogue {
 		}
 		
 		// do pagination
+		int count = results.size();
 		if (offset > 0 || limit > -1) {
-			int toIndex = limit > -1 ? offset + limit : results.size();
+			int toIndex = limit > -1 ? Math.max(offset + limit, count) : count;
 			results = results.subList(offset, toIndex);
 		}
 
@@ -630,8 +631,9 @@ public class Catalogue {
 		}
 		
 		// do pagination
+		int count = results.size();
 		if (offset > 0 || limit > -1) {
-			int toIndex = limit > -1 ? offset + limit : results.size();
+			int toIndex = limit > -1 ? Math.max(offset + limit, count) : count;
 			results = results.subList(offset, toIndex);
 		}
 
