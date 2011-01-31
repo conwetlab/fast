@@ -81,7 +81,14 @@ public class Action {
 		}
 		json.put("preconditions", preArray);
 		// uses
-		json.put("uses", getUses());
+		JSONArray usesArray = new JSONArray();
+		for (String id : getUses().keySet()) {
+			JSONObject useObject = new JSONObject();
+			useObject.put("id", id);
+			useObject.put("uri", getUses().get(id));
+			usesArray.put(useObject);
+		}
+		json.put("uses", usesArray);
 		return json;
 	}
 
