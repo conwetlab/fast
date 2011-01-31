@@ -65,6 +65,9 @@ public class RequestServiceImpl extends RemoteServiceServlet implements RequestS
 		return responseBody;
 	}
 	
+	/**
+	 * TODO dk or tg: parse the header!
+	 * */
 	@Override
 	public String sendHttpRequest_POST(String url, HashMap<String, String> headers, String body)
 	{
@@ -72,7 +75,7 @@ public class RequestServiceImpl extends RemoteServiceServlet implements RequestS
 		HttpClient httpclient = new HttpClient();
 	    PostMethod method = new PostMethod(url);
 	    
-	    //needed for bis responses, but then we should cut the body not containing answerers
+	    //needed for big responses, but then we should cut the body not containing answerers
 //	    BufferedReader br = null;
 	    
 	    //parse given body and create parameters
@@ -157,7 +160,6 @@ public class RequestServiceImpl extends RemoteServiceServlet implements RequestS
 			boolean localDemo = true;
 			if (localDemo)
 			{
-				
 				path = "../../GVS/static/";
 			}
 			else if ( classLocation.contains("ServiceDesignerWep"))

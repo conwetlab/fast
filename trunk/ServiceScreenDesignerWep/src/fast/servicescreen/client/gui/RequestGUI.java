@@ -4,6 +4,7 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.FlexTable;
+import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.TextArea;
@@ -87,9 +88,13 @@ public class RequestGUI
 		designer.requestButton = new Button("Send Request", designer.requestHandler);
 		designer.requestButton.setStyleName("fastButton");
 		designer.requestButton.addStyleName("sc-FixedWidthButton");
-		requestTable.setWidget(numRows, 1, designer.requestButton);
+		
+		//the flow panel holds the "send request" and "WSDL" button 
+		FlowPanel flowPanel = new FlowPanel();
+		flowPanel.add(designer.requestButton);
+		flowPanel.add(wsdlButton);
+		requestTable.setWidget(numRows, 1, flowPanel);
 		requestTable.setCellSpacing(15);
-		requestTable.setWidget(numRows, 2, wsdlButton);
 		
 		numRows++;
 
