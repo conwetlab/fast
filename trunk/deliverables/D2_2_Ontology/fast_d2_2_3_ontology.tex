@@ -1,4 +1,7 @@
-\documentclass[twoside]{fast_latex}
+% \documentclass[twoside]{article}
+\documentclass{article}
+
+\usepackage{fast_latex}
 % yay! We can use any kind of funky diacritic:
 \usepackage[utf8]{inputenc}
 
@@ -74,7 +77,7 @@ morestring=[b]",
 
 \parindent0pt
 
-\newcommand\deliverableNumber{D2.2.2}
+\newcommand\deliverableNumber{D2.2.3}
 \newcommand\deliverableTitle{Ontology and Conceptual Model for the Semantic Characterisation of Complex Gadgets}
 \newcommand\deliverableTitleShort{Ontology and Conceptual Model}
 \newcommand\workpackageNumber{2}
@@ -130,7 +133,7 @@ morestring=[b]",
 		{\large \sffamily \authorFour}\\
 		\vspace{0.5cm}
 		\vfill
-		{\large \sffamily Date: 27/02/2010}\\
+		{\large \sffamily Date: 27/02/2011}\\
 		\vspace{1cm}
 		{\sffamily FAST is partially funded by the E.C. (grant code: FP7-ICT-2007-1-216048).}
 		
@@ -151,43 +154,6 @@ morestring=[b]",
 %\rofoot{\small{\thepage}}
 \cofoot{\small{FAST $\bullet$ 216048 $\bullet$ \deliverableTitleShort{} $\bullet$ Page \thepage\ of \pageref{LastPage}}}
 
-\newpage
-%
-%\section*{Authors}
-%\authorOne \\
-%%\authorTwo \\
-%%\authorThree\\
-%%\authorFour\\
-%
-%
-%\vfill
-%%\section*{Project Co-ordinator}
-%%\hspace*{-2,5cm}\begin{minipage}[p]{14cm}
-%%Dr. Ansgar Bernardi \\
-%%German Research Center for Artificial Intelligence (DFKI) GmbH \\
-%%Trippstadter Strasse 122 \\
-%%D 67663 Kaiserslautern \\
-%%Germany \\
-%%Email: bernardi@dfki.uni-kl.de, phone: +49 631 205 3582, fax: +49 631 205 4910 \\
-%%\end{minipage}
-%
-%
-%\section*{Partners}
-%Telef\'onica Investigaci\'on y Desarrollo (Telef\'onica I+D), Spain \\
-%National University of Ireland, Galway (NUIG), Republic of Ireland \\
-%Kassel University, Germany \\
-%Cyntelix Corporation, Republic of Ireland \\
-%SAP AG, Germany \\
-%Universidad Polit\'ecnica de Madrid (UPM), Spain
-%
-%
-%\vspace{0.3cm}
-%\begin{footnotesize}
-%Copyright: FAST Consortium 2009\\
-%\end{footnotesize}
-
-%\clearpage
-
 
 \section*{Version History}
 
@@ -202,6 +168,7 @@ morestring=[b]",
 %0.2 & 15.02.2009 & Knud M\"oller (NUIG) & content moved from wiki after internal review \\ \hline
 1.0 & 27.02.2009 & \authorOne & final version (D2.2.1) ready for external review \\ \hline
 2.0 & 27.02.2010 & \authorOne & final version (D2.2.2) ready for external review \\ \hline
+3.0 & 27.02.2011 & \authorOne & final version (D2.2.3) ready for external review \\ \hline
 \end{tabular}
 \end{small}
 
@@ -273,7 +240,7 @@ Throughout the document, we apply the \emph{Methontology} ontology development m
 \begin{tabular}
 	{| >{\columncolor{fast@lightgrey}}p{3.25cm}|p{1.4cm}|p{3.28cm}|p{1.6cm}|p{3.29cm}|}
 	\hline
-	\textcolor{white}{\textbf{Delivery data}} & {\textbf{Due date}} & {28/02/2010} & {\textbf{Submitted}} & {27/02/2010}\\ \hline
+	\textcolor{white}{\textbf{Delivery data}} & {\textbf{Due date}} & {28/02/2011} & {\textbf{Submitted}} & {27/02/2011}\\ \hline
 	\textcolor{white}{\textbf{Status}} & \multicolumn{2}{l|}{} & \multicolumn{2}{l|}{final}\\ \hline
 	\textcolor{white}{\textbf{Dissemination Level}} & \multicolumn{4}{l|}{Public $\boxtimes$ / Consortium $\square$}\\ \hline
 	\textcolor{white}{\textbf{Short description of contents}} & \multicolumn{4}{p{10.85cm}|}{\deliverableNumber{} is the second iteration of the FAST Gadget ontology. The ontology provides a formal description of the conceptual model of FAST in general, and of the screen/screenflow architecture in particular. The deliverable contains a number of successive intermediate representations which document the development process, and the final product in the form of an OWL ontology. Numerous code examples and visual representations of the ontology terms are provided.}\\ \hline
@@ -727,6 +694,11 @@ A more detailed list of classes and properties, complete with human-readable com
 \subsection{Classes, Instances and Templates} % (fold)
 \label{sub:classes_instances_and_templates}
 
+\todo{Rewrite this whole section with focus on prototypes, prototype theory, prototype-based programming, etc.}
+
+\cite{Taivalsaari96classes_vs_prototypes}
+
+
 In FAST, resources (gadgets, screenflows, screens and their components) exist in different stages throughout their lifecycle. Moving top-down from the high-level conceptual description to gadgets in use at runtime, the following differences can be made in terms of the level of instantiation:
 
 \begin{itemize}
@@ -739,7 +711,7 @@ In FAST, resources (gadgets, screenflows, screens and their components) exist in
 \begin{figure}
   \begin{center}
     \includegraphics[width=\linewidth]{images/classes_templates_instances.pdf}
-    \caption{Different levels of representation of FAST resources}
+    \caption{Different levels of representation of FAST building blocks}
     \label{fig:classes_templates}
   \end{center}
 \end{figure}
@@ -1283,6 +1255,13 @@ Below is the complete code of the FAST gadget ontology in Turtle syntax. The lat
 	language=turtle
 }
 \lstinputlisting{clean.ttl}
+
+\clearpage
+\phantomsection
+\section{The VocDoc Ontology Documentation Tool}
+\label{sec:vocdoc}
+
+\todo{include documentation for VocDoc}
 
 \clearpage
 \phantomsection
