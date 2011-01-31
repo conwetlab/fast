@@ -42,15 +42,13 @@ The query, although simplified for the sake of clarity, would look something lik
 SELECT DISTINCT ?bb 
 WHERE { 
   ?bb a fgo:Screen . 
-  { { 
-      ?bb fgo:hasPostCondition ?c .
+  { { ?bb fgo:hasPostCondition ?c .
       ?c fgo:hasPattern ?p .
       GRAPH ?p { ?x a amazon:SearchCriteria } 
     } UNION {
       ?bb fgo:hasPostCondition ?c .
       ?c fgo:hasPattern ?p .
-      GRAPH ?p { ?x a amazon:Item } 
-  } }
+      GRAPH ?p { ?x a amazon:Item } } }
   FILTER (?bb != <http://fast.org/screens/S1>) 
   FILTER (?bb != <http://fast.org/screens/S2>) }
 \end{lstlisting}
@@ -60,7 +58,7 @@ WHERE {
 \subsubsection{Enhanced Discovery: Search Tree Planning}
 \label{sssec:planning}
 
-In artificial intelligence, the term \emph{planning} originally meant to search for a sequence of logical operators or actions that transform an initial state into a desired goal state.% Presently, it also includes many decision-theoretic ideas, imperfect state information, and game-theoretic equilibria.
+% In artificial intelligence, the term \emph{planning} originally meant to search for a sequence of logical operators or actions that transform an initial state into a desired goal state.% Presently, it also includes many decision-theoretic ideas, imperfect state information, and game-theoretic equilibria.
 
 In contrast to the simple approach, the planning approach finds sets of building blocks to fulfil the pre-conditions of a given building block (e.g., a screen). For a certain state, i.e., the initial 
 state which contains the pre-condition to fulfil, a large search tree of possible continuations is considered. Those building blocks cannot satisfy the unsatisfied pre-conditions are discarded, reducing the branches of the tree. A branch stops growing when a building block is reachable (i.e., it has no unfulfilled pre-conditions). Once there are no screens 
