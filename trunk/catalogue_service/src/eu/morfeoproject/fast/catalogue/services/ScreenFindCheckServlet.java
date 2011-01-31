@@ -70,7 +70,7 @@ public class ScreenFindCheckServlet extends GenericServlet {
 				if (screen.getPrototype() == null)
 					throw new BuildingBlockException("Resource "+uri+" must be a clone of a prototype.");
 				screens.add(screen);
-				selectedScreen = jsonScreen.getBoolean("selected") ? screen : selectedScreen;
+				selectedScreen = jsonScreen.optBoolean("selected", false) ? screen : selectedScreen;
 			}
 			JSONArray jsonPreList = jsonCanvas.getJSONArray("preconditions");
 			for (int i = 0; i < jsonPreList.length(); i++) {
@@ -108,10 +108,10 @@ public class ScreenFindCheckServlet extends GenericServlet {
 			// parses the criterion
 			String criterion = input.getString("criterion").toLowerCase();
 			// flag to search or not for new components
-			boolean search = input.has("search") ? input.getBoolean("search") : true;
+			boolean search = input.optBoolean("search", true);
 			// pagination variables
-			int offset = input.has("offset") ? input.getInt("offset") : 0;
-			int limit = input.has("limit") ? input.getInt("limit") : -1;
+			int offset = input.optInt("offset", 0);
+			int limit = input.optInt("limit", -1);
 
 			//-----------------
 			// do the real work
