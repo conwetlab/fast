@@ -13,19 +13,19 @@ import eu.morfeoproject.fast.catalogue.vocabulary.FGO;
 public class Trigger implements Comparable<Trigger> {
 
 	private URI uri;
-	private URI screenURI;
+	private Screen screen;
 	private URI bbFrom;
 	private String nameFrom;
 	private URI bbTo;
 	private String actionTo;
 
-	public Trigger(URI screenURI) {
+	public Trigger(Screen screen) {
 		super();
-		this.screenURI = screenURI;
+		this.screen = screen;
 	}
 	
-	public Trigger(URI screenURI, URI uri) {
-		this(screenURI);
+	public Trigger(Screen screen, URI uri) {
+		this(screen);
 		this.uri = uri;
 	}
 	
@@ -37,12 +37,12 @@ public class Trigger implements Comparable<Trigger> {
 		this.uri = uri;
 	}
 
-	public URI getScreenUri() {
-		return screenURI;
+	public Screen getScreen() {
+		return screen;
 	}
 
-	public void setScreenUri(URI screenURI) {
-		this.screenURI = screenURI;
+	public void setScreen(Screen screen) {
+		this.screen = screen;
 	}
 
 	public URI getBBFrom() {
@@ -98,6 +98,12 @@ public class Trigger implements Comparable<Trigger> {
 			comparison = this.uri.compareTo(other.getUri());
 			if (comparison != EQUAL) return comparison;
 		}	
+//		if (this.screen == null && other.getScreen() != null) return AFTER;
+//		if (this.screen != null && other.getScreen() == null) return BEFORE;
+//		if (this.screen != null && other.getScreen() != null) {
+//			comparison = this.screen.compareTo(other.getScreen());
+//			if (comparison != EQUAL) return comparison;
+//		}
 		if (this.bbFrom == null && other.getBBFrom() != null) return AFTER;
 		if (this.bbFrom != null && other.getBBFrom() == null) return BEFORE;
 		if (this.bbFrom != null && other.getBBFrom() != null) {
@@ -144,8 +150,8 @@ public class Trigger implements Comparable<Trigger> {
 		model.open();
 		model.setNamespace("fgo", FGO.NS_FGO.toString());
 		
-		URI from = model.createURI((bbFrom == null ? screenURI : bbFrom) + "/triggers/" + nameFrom);
-		URI to = model.createURI((bbTo == null ? screenURI : bbTo) + "/actions/" + actionTo);
+		URI from = model.createURI((bbFrom == null ? screen.getUri() : bbFrom) + "/triggers/" + nameFrom);
+		URI to = model.createURI((bbTo == null ? screen.getUri() : bbTo) + "/actions/" + actionTo);
 		
 		model.addStatement(uri, RDF.type, FGO.Trigger);
 		model.addStatement(uri, FGO.from, from);
@@ -156,13 +162,13 @@ public class Trigger implements Comparable<Trigger> {
 	
 	@Override
 	public String toString() {
-		URI from = new URIImpl((bbFrom == null ? screenURI : bbFrom) + "/triggers/" + nameFrom);
-		URI to = new URIImpl((bbTo == null ? screenURI : bbTo) + "/actions/" + actionTo);
+		URI from = new URIImpl((bbFrom == null ? screen.getUri() : bbFrom) + "/triggers/" + nameFrom);
+		URI to = new URIImpl((bbTo == null ? screen.getUri() : bbTo) + "/actions/" + actionTo);
 		return from + " -> " + to;
 	}
 
-	public Trigger clone(URI screenURI, URI uri) {
-		Trigger trigger = new Trigger(screenURI, uri);
+	public Trigger clone(Screen screen, URI uri) {
+		Trigger trigger = new Trigger(screen, uri);
 		trigger.setBBFrom(bbFrom);
 		trigger.setNameFrom(nameFrom);
 		trigger.setBBTo(bbTo);

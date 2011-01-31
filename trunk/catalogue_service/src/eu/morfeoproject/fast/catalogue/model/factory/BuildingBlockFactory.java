@@ -88,20 +88,20 @@ public class BuildingBlockFactory {
 		return new Condition(uri);
 	}
 	
-	public static Pipe createPipe(URI screenUri) {
-		return new Pipe(screenUri);
+	public static Pipe createPipe(Screen screen) {
+		return new Pipe(screen);
 	}
 	
-	public static Pipe createPipe(URI screenUri, URI uri) {
-		return new Pipe(screenUri, uri);
+	public static Pipe createPipe(Screen screen, URI uri) {
+		return new Pipe(screen, uri);
 	}
 	
-	public static Trigger createTrigger(URI screenUri) {
-		return new Trigger(screenUri);
+	public static Trigger createTrigger(Screen screen) {
+		return new Trigger(screen);
 	}
 	
-	public static Trigger createTrigger(URI screenUri, URI uri) {
-		return new Trigger(screenUri, uri);
+	public static Trigger createTrigger(Screen screen, URI uri) {
+		return new Trigger(screen, uri);
 	}
 	
 	public static Action createAction() {

@@ -13,20 +13,20 @@ import eu.morfeoproject.fast.catalogue.vocabulary.FGO;
 public class Pipe implements Comparable<Pipe> {
 
 	private URI uri;
-	private URI screenURI;
+	private Screen screen;
 	private URI bbFrom;
 	private String conditionFrom;
 	private URI bbTo;
 	private String actionTo;
 	private String conditionTo;
 
-	public Pipe(URI screenURI) {
+	public Pipe(Screen screen) {
 		super();
-		this.screenURI = screenURI;
+		this.screen = screen;
 	}
 	
-	public Pipe(URI screenURI, URI uri) {
-		this(screenURI);
+	public Pipe(Screen screen, URI uri) {
+		this(screen);
 		this.uri = uri;
 	}
 	
@@ -38,12 +38,12 @@ public class Pipe implements Comparable<Pipe> {
 		this.uri = uri;
 	}
 
-	public URI getScreenUri() {
-		return screenURI;
+	public Screen getScreen() {
+		return screen;
 	}
 
-	public void setScreenUri(URI screenURI) {
-		this.screenURI = screenURI;
+	public void setScreen(Screen screen) {
+		this.screen = screen;
 	}
 
 	public URI getBBFrom() {
@@ -106,7 +106,13 @@ public class Pipe implements Comparable<Pipe> {
 		if (this.uri != null && other.getUri() != null) {
 			comparison = this.uri.compareTo(other.getUri());
 			if (comparison != EQUAL) return comparison;
-		}	
+		}
+//		if (this.screen == null && other.getScreen() != null) return AFTER;
+//		if (this.screen != null && other.getScreen() == null) return BEFORE;
+//		if (this.screen != null && other.getScreen() != null) {
+//			comparison = this.screen.compareTo(other.getScreen());
+//			if (comparison != EQUAL) return comparison;
+//		}
 		if (this.bbFrom == null && other.getBBFrom() != null) return AFTER;
 		if (this.bbFrom != null && other.getBBFrom() == null) return BEFORE;
 		if (this.bbFrom != null && other.getBBFrom() != null) {
@@ -166,10 +172,10 @@ public class Pipe implements Comparable<Pipe> {
 //		}
 		
 		URI from = model.createURI(bbFrom == null ? 
-				screenURI + "/preconditions/" + conditionFrom : 
+				screen.getUri() + "/preconditions/" + conditionFrom : 
 					bbFrom + "/postconditions/" + conditionFrom);
 		URI to = model.createURI(bbTo == null ? 
-				screenURI + "/postconditions/" + conditionTo : 
+				screen.getUri() + "/postconditions/" + conditionTo : 
 					bbTo + "/actions/" + actionTo + "/preconditions/" + conditionTo);
 		
 		model.addStatement(uri, RDF.type, FGO.Pipe);
@@ -182,16 +188,16 @@ public class Pipe implements Comparable<Pipe> {
 	@Override
 	public String toString() {
 		URI from = new URIImpl(bbFrom == null ? 
-				screenURI + "/preconditions/" + conditionFrom : 
+				screen.getUri() + "/preconditions/" + conditionFrom : 
 					bbFrom + "/postconditions/" + conditionFrom);
 		URI to = new URIImpl(bbTo == null ? 
-				screenURI + "/postconditions/" + conditionTo : 
+				screen.getUri() + "/postconditions/" + conditionTo : 
 					bbTo + "/actions/" + actionTo + "/preconditions/" + conditionTo);
 		return from + " -> " + to;
 	}
 
-	public Pipe clone(URI screenURI, URI uri) {
-		Pipe pipe = new Pipe(screenURI, uri);
+	public Pipe clone(Screen screen, URI uri) {
+		Pipe pipe = new Pipe(screen, uri);
 		pipe.setBBFrom(bbFrom);
 		pipe.setConditionFrom(conditionFrom);
 		pipe.setBBTo(bbTo);

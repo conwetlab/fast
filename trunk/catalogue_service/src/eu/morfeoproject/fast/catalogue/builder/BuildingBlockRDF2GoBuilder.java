@@ -367,7 +367,7 @@ public class BuildingBlockRDF2GoBuilder {
 	}
 	
 	private static Pipe retrievePipe(Screen screen, URI pipeURI, Model model) {
-		Pipe pipe = BuildingBlockFactory.createPipe(screen.getUri(), pipeURI);
+		Pipe pipe = BuildingBlockFactory.createPipe(screen, pipeURI);
 		ClosableIterator<Statement> cIt = model.findStatements(pipeURI, Variable.ANY, Variable.ANY);
 		for ( ; cIt.hasNext(); ) {
 			Statement stmt = cIt.next();
@@ -405,7 +405,7 @@ public class BuildingBlockRDF2GoBuilder {
 	}
 
 	private static Trigger retrieveTrigger(Screen screen, URI triggerURI, Model model) {
-		Trigger trigger = BuildingBlockFactory.createTrigger(screen.getUri(), triggerURI);
+		Trigger trigger = BuildingBlockFactory.createTrigger(screen, triggerURI);
 		ClosableIterator<Statement> cIt = model.findStatements(triggerURI, Variable.ANY, Variable.ANY);
 		for ( ; cIt.hasNext(); ) {
 			Statement stmt = cIt.next();

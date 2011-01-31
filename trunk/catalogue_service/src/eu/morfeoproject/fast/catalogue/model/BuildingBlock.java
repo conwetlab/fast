@@ -192,7 +192,7 @@ public abstract class BuildingBlock {
 		JSONObject json = new JSONObject();
 
 		json.put("uri", getUri() == null ? JSONObject.NULL : getUri().toString());
-		json.put("template", getPrototype() == null ? JSONObject.NULL : getPrototype());
+		json.put("prototype", getPrototype() == null ? JSONObject.NULL : getPrototype());
 		if (this.getLabels() == null) json.put("label", JSONObject.NULL);
 		else {
 			JSONObject jsonLabels = new JSONObject();

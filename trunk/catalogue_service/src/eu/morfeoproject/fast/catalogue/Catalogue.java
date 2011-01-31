@@ -1144,6 +1144,7 @@ public class Catalogue {
 			screen.setCreationDate(new Date());
 		// persists the screen
 		saveScreen(screen);
+		printStatements();
 		// create plans for the screen
 		if (planner != null) planner.add(screen);
 		scRecommender.rebuild(); //FIXME do not rebuild every time a new screen is added!
@@ -1275,13 +1276,15 @@ public class Catalogue {
 			}
 			for (Pipe pipe : screen.getPipes()) {
 				URI pUri = tripleStore.createURI(copyUri+"/pipes/"+UUID.randomUUID().toString());
-				Pipe newPipe = pipe.clone(copyUri, pUri);
+				Screen copy = BuildingBlockFactory.createScreen(copyUri);
+				Pipe newPipe = pipe.clone(copy, pUri);
 				tripleStore.addModel(newPipe.toRDF2GoModel(), clonesGraph);
 				tripleStore.addStatement(clonesGraph, copyUri, FGO.contains, pUri);
 			}
 			for (Trigger trigger : screen.getTriggers()) {
 				URI tUri = tripleStore.createURI(copyUri+"/triggers/"+UUID.randomUUID().toString());
-				Trigger newTrigger = trigger.clone(copyUri, tUri);
+				Screen copy = BuildingBlockFactory.createScreen(copyUri);
+				Trigger newTrigger = trigger.clone(copy, tUri);
 				tripleStore.addModel(newTrigger.toRDF2GoModel(), clonesGraph);
 				tripleStore.addStatement(clonesGraph, copyUri, FGO.contains, tUri);
 			}
