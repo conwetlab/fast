@@ -1784,7 +1784,8 @@ public class Catalogue {
 			Statement st = cIt.next();
 			URI predicate = st.getPredicate();
 			Node object = st.getObject();
-			if (predicate.equals(RDFS.subClassOf)) {
+			if (predicate.equals(RDFS.subClassOf)
+					&& object instanceof URI) {
 				concept.setSubClassOf(object.asURI());
 			} else if (predicate.equals(RDFS.label)) {
 				if (object instanceof LanguageTagLiteral) {
@@ -1834,9 +1835,11 @@ public class Catalogue {
 			Statement st = cIt.next();
 			URI predicate = st.getPredicate();
 			Node object = st.getObject();
-			if (predicate.equals(RDFS.subPropertyOf)) {
+			if (predicate.equals(RDFS.subPropertyOf)
+					&& object instanceof URI) {
 				att.setSubPropertyOf(object.asURI());
-			} else if (predicate.equals(RDFS.range)) {
+			} else if (predicate.equals(RDFS.range)
+					&& object instanceof URI) {
 				att.setType(object.asURI());
 			}
 		}
