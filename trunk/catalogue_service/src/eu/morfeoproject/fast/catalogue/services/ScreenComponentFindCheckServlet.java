@@ -99,11 +99,11 @@ public class ScreenComponentFindCheckServlet extends GenericServlet {
 				}
 			} 
 			// flag to search or not for new components
-			boolean search = input.has("search") ? input.getBoolean("search") : true;
-			boolean iserve = input.has("iserve") ? input.getBoolean("iserve") : true;
+			boolean search = input.optBoolean("search", true);
+			boolean iserve = input.optBoolean("iserve", true);
 			// pagination variables
-			int offset = input.has("offset") ? input.getInt("offset") : 0;
-			int limit = input.has("limit") ? input.getInt("limit") : -1;
+			int offset = input.optInt("offset", 0);
+			int limit = input.optInt("limit", -1);
 			
 			// do the real work
 			//-----------------------------
@@ -384,7 +384,7 @@ public class ScreenComponentFindCheckServlet extends GenericServlet {
 			}
 		} else {
 			Condition condition = (Condition) selectedItem;
-			if (preconditions.contains(condition)) {
+			if (getConditionById(preconditions, condition.getId()) != null) {
 				// look for pipes from the precondition to <somewhere>
 				for (ScreenComponent sc : canvas) {
 					for (Action action : sc.getActions()) {
@@ -401,7 +401,7 @@ public class ScreenComponentFindCheckServlet extends GenericServlet {
 						}
 					}
 				}
-			} else if (postconditions.contains(condition)) {
+			} else if (getConditionById(postconditions, condition.getId()) != null) {
 				// look for pipes from <somewhere> to the postcondition
 				for (ScreenComponent sc : canvas) {
 					for (Condition con : sc.getPostconditions()) {

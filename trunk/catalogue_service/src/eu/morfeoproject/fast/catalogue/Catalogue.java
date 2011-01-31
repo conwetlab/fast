@@ -1144,7 +1144,6 @@ public class Catalogue {
 			screen.setCreationDate(new Date());
 		// persists the screen
 		saveScreen(screen);
-		printStatements();
 		// create plans for the screen
 		if (planner != null) planner.add(screen);
 		scRecommender.rebuild(); //FIXME do not rebuild every time a new screen is added!
