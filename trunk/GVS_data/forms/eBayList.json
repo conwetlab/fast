@@ -33,16 +33,16 @@
     "screenshot":"http://demo.fast.morfeo-project.org/gvsdata/images/screenshots/ebayComparative.png",
     "version":"1.0",
     "libraries":[
-        
+
     ],
     "actions":[
         {
             "name":"init",
             "preconditions":[
-                
+
             ],
             "uses":[
-                
+
             ]
         },
         {
@@ -58,12 +58,11 @@
                 }
             ],
             "uses":[
-                
+
             ]
         }
     ],
     "postconditions":[
-        [
             {
                 "id":"itemEbay",
                 "label":{
@@ -80,7 +79,6 @@
                 "pattern":"?eFilter http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://developer.ebay.com/DevZone/shopping/docs/CallRef/FindItemsAdvanced.html#Request",
                 "positive":"true"
             }
-        ]
     ],
     "triggers":[
         "ebayItem",

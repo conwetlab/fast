@@ -32,7 +32,7 @@
     "screenshot":"http://www.deri.ie/ebaySearchService.jpg",
     "version":"1.0",
     "libraries":[
-        
+
     ],
     "actions":[
         {
@@ -48,12 +48,11 @@
                 }
             ],
             "uses":[
-                
+
             ]
         }
     ],
     "postconditions":[
-        [
             {
                 "id":"list",
                 "label":{
@@ -62,7 +61,6 @@
                 "pattern":"?eList http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://developer.ebay.com/DevZone/shopping/docs/CallRef/FindItemsAdvanced.html#Response",
                 "positive":"true"
             }
-        ]
     ],
     "triggers":[
         "productList"

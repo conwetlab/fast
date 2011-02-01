@@ -38,7 +38,6 @@
     "version":"1.0",
     "code":"http://demo.fast.morfeo-project.org/gvsdata/screens/amazonSuggestion.scr.html",
     "preconditions":[
-        [
             {
                 "id": "item",
                 "label":{
@@ -47,10 +46,8 @@
                 "pattern":"?Item http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#Item",
                 "positive":"true"
             }
-        ]
     ],
     "postconditions":[
-        [
             {
                 "id":"item",
                 "label":{
@@ -59,6 +56,5 @@
                 "pattern":"?Item http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#Item",
                 "positive":"true"
             }
-        ]
     ]
 }

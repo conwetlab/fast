@@ -28,7 +28,7 @@
     "screenshot":"http://demo.fast.morfeo-project.org/gvsdata/images/screenshots/amazonProductList.png",
     "version":"1.0",
     "libraries":[],
-    
+
     "parameterTemplate": "{\n    /*\n     * The title attribute is a string with a text to show in the top area of\n     * the screen.\n     */\n    \"title\": \"Item list\",\n\n    /*\n     * The logo attribute is a string containing the url of the logo to show in\n     * the top right area of the screen\n     */\n    \"logo\":  \"http://demo.fast.morfeo-project.org/fast/images/gui/fastLogo.png\",\n\n    /*\n     * The columns attribute is a list of column descriptions, each of them containing\n     * the following attributes:\n     *    - field  (required): the input data field to be shown in the column\n     *    - title  (required): the label to show in the header of the column\n     *    - type   (required): data type. It can be text or an image url (img)\n     *    - width  (optional): cell width\n     *    - height (optional): cell height\n     * \n     * If this attribute is not defined, the following columns will be used\n     */\n    \"columns\": [\n            {\n                \"field\": \"image\",\n                \"title\": \"\",\n                \"type\":  \"img\",\n                \"width\": \"80px\",\n                \"heigth\": \"80px\"\n            },{\n                \"field\": \"source\",\n                \"title\": \"Source\",\n                \"type\":  \"text\",\n                \"width\": \"10%\"\n            },{\n                \"field\": \"title\",\n                \"title\": \"Title\",\n                \"type\":  \"text\",\n                \"width\": \"50%\"\n            }, {\n                \"field\": \"type\",\n                \"title\": \"Product Group\",\n                \"width\": \"20%\"\n            }, {\n                \"field\": \"price\",\n                \"title\": \"Price\",\n                \"type\":  \"text\"\n            }\n    ]\n}",
 
     "actions":[
@@ -53,7 +53,6 @@
         }
     ],
     "postconditions":[
-        [
             {
                 "id":"item",
                 "label":{
@@ -62,7 +61,6 @@
                 "pattern":"?Element http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://localhost:9000/FASTCatalogue/concepts/generic/GenericElement",
                 "positive":"true"
             }
-        ]
     ],
     "triggers":[]
 }

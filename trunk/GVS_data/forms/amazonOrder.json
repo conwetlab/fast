@@ -33,7 +33,7 @@
     "screenshot":"http://demo.fast.morfeo-project.org/gvsdata/images/screenshots/amazonOrder.png",
     "version":"1.0",
     "libraries":[
-        
+
     ],
     "actions":[
         {
@@ -49,14 +49,14 @@
                 }
             ],
             "uses":[
-                
+
             ]
         }
     ],
     "postconditions":[
-        
+
     ],
     "triggers":[
-        
+
     ]
 }

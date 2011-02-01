@@ -38,7 +38,6 @@
     "version":"1.0",
     "code":"http://demo.fast.morfeo-project.org/gvsdata/screens/eBayList.scr.html",
     "preconditions":[
-        [
             {
                 "id": "item",
                 "label":{
@@ -47,10 +46,8 @@
                 "pattern":"?Item http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#Item",
                 "positive":"true"
             }
-        ]
     ],
     "postconditions":[
-        [
             {
                 "id":"itemEbay",
                 "label":{
@@ -59,6 +56,5 @@
                 "pattern":"?eItem http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://developer.ebay.com/DevZone/shopping/docs/CallRef/GetSingleItem.html#Request",
                 "positive":"true"
             }
-        ]
     ]
 }

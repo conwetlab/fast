@@ -33,7 +33,7 @@
     "screenshot":"http://www.deri.ie/eBayList-screenshot.jpg",
     "version":"1.0",
     "libraries":[
-        
+
     ],
     "actions":[
         {
@@ -49,12 +49,11 @@
                 }
             ],
             "uses":[
-                
+
             ]
         }
     ],
     "postconditions":[
-        [
             {
                 "id":"filterEbay",
                 "label":{
@@ -63,7 +62,6 @@
                 "pattern":"?eFilter http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://developer.ebay.com/DevZone/shopping/docs/CallRef/FindItemsAdvanced.html#Request",
                 "positive":"true"
             }
-        ]
     ],
     "triggers":[
         "filterEbay"

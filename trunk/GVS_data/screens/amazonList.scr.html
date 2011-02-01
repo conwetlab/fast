@@ -71,13 +71,20 @@
         var filter = ScreenflowEngineFactory.getInstance().getFact('http://aws.amazon.com/AWSECommerceService#SearchCriteria');
         var user = ScreenflowEngineFactory.getInstance().getFact('user');
         //Add the ItemSearch parameters
-        var productType = filter.data.productType;
-        if(!productType){
-            productType = 'All'
+        if (filter.data instanceof object) {
+            var productType = filter.data.productType;
+            if(!productType){
+                productType = 'All'
+            }
+            var keywords = filter.data.searchText;
+        } else {
+            var productType = 'All';
+            var keywords = filter.data;
         }
         var parameters = "";
         parameters += "&SearchIndex=" + productType;
-        parameters += "&Keywords=" + encodeURIComponent(filter.data.searchText);
+
+        parameters += "&Keywords=" + encodeURIComponent(keywords);
         //Add the page number (if is set)
         parameters += "&ItemPage=" + (list.lastPageFetched + 1);
         //Base URL of the REST Service

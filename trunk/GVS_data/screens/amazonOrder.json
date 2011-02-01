@@ -33,7 +33,6 @@
     "version":"1.0",
     "code":"http://demo.fast.morfeo-project.org/gvsdata/screens/amazonOrder.scr.html",
     "preconditions":[
-        [
             {
                 "id":"purchaseURL",
                 "label":{
@@ -42,7 +41,6 @@
                 "pattern":"?P http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#PurchaseURL",
                 "positive":"true"
             }
-        ]
     ],
     "postconditions":[
 
