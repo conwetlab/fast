@@ -60,11 +60,11 @@ var ScreenflowInferenceEngine = Class.create(InferenceEngine /** @lends Screenfl
             'user': GVS.getUser().getUserName()
         }
         var body = {
-            'canvas': canvas,
-            'elements': elements,
             'domainContext': domainContext,
             'criterion': criteria
         };
+        body = Object.extend(body, elements);
+        body.canvas.screens = canvas;
         return Object.toJSON(body);
     },
 
@@ -93,15 +93,15 @@ var ScreenflowInferenceEngine = Class.create(InferenceEngine /** @lends Screenfl
      */
     _findCheckOnSuccess: function(/**XMLHttpRequest*/ transport){
         var result = JSON.parse(transport.responseText);
-        if (result.elements) {
-            var paletteElements = result.elements;
+        if (result.palette) {
+            var paletteElements = result.palette;
         } else {
             var paletteElements = [];
         }
 
         var allElements = paletteElements.clone();
 
-        result.canvas.each(function(bb) {
+        result.canvas.screens.each(function(bb) {
             found = allElements.detect(function(element) {
                 return (element.uri == bb.uri);
             });
@@ -119,7 +119,7 @@ var ScreenflowInferenceEngine = Class.create(InferenceEngine /** @lends Screenfl
            screenURIs.push(element.uri);
         });
 
-        this.callback(screenURIs);
+        this.callback(screenURIs, result);
     },
 
     /**
@@ -129,7 +129,7 @@ var ScreenflowInferenceEngine = Class.create(InferenceEngine /** @lends Screenfl
      */
     _checkOnSuccess: function(transport){
         var result = JSON.parse(transport.responseText);
-        var elements = result.elements.concat(result.canvas).uniq();
+        var elements = result.palette.concat(result.canvas.screens).uniq();
 
         this.mine._updateReachability(elements);
         this.callback();

@@ -362,10 +362,14 @@ var PaletteDocument = Class.create(AbstractDocument, /** @lends PaletteDocument.
      * Select an element in the document
      * @param element ComponentInstance
      *      Element to be selected for the
-     *      Screenflow document.
+     *      document.
+     * @param _refresh Boolean (Optional)
      * @private
      */
-    _setSelectedElement: function (element) {
+    _setSelectedElement: function (element, _refresh) {
+        var refresh = Utils.variableOrDefault(_refresh, true);
+
+
         if (this._selectedElement != null) {
             this._selectedElement.getView().setSelected(false);
         }
@@ -379,7 +383,7 @@ var PaletteDocument = Class.create(AbstractDocument, /** @lends PaletteDocument.
 
         this._updateToolbar(this._selectedElement);
 
-        if (element) {
+        if (element && refresh) {
             this._refreshReachability();
         } else {
             this._updatePanes();
@@ -511,7 +515,7 @@ var PaletteDocument = Class.create(AbstractDocument, /** @lends PaletteDocument.
 
         this._description.getCanvasInstances().each(function(instance) {
             canvas.push({
-                'uri': instance.getUri()
+                "uri": instance.getUri()
             });
         });
         return canvas;
@@ -634,12 +638,12 @@ var PaletteDocument = Class.create(AbstractDocument, /** @lends PaletteDocument.
      * @private
      */
     _deleteInstance: function(instance) {
-        /*var node = instance.getView().getNode();
-        node.parentNode.removeChild(node);*/
         this._setSelectedElement();
         instance.destroy(true);
+        instance.deleteInstance();
         this._setDirty(true);
         this._refreshReachability();
+        this._save(false);
     },
 
     _addToArea:function(/** Area */ area, /** ComponentInstance */ instance,
@@ -674,14 +678,18 @@ var PaletteDocument = Class.create(AbstractDocument, /** @lends PaletteDocument.
             Object.toJSON(buildingblock.toObject())
         };
         params = Object.extend(params, this._getExtraParams());
+        var context = {
+            "mine": this,
+            "showMessage": showMessage
+        };
         if (this._description.getId() == null) {
             // Save it for the first time
             PersistenceEngine.sendPost(this._getSaveUri(), params, null,
-                                       this, this._onSaveSuccess, this._onSaveError);
+                                       context, this._onSaveSuccess, this._onSaveError);
         } else {
             var uri = URIs.buildingblock + this._description.getId();
             PersistenceEngine.sendUpdate(uri, params, null,
-                                      this, this._onSaveSuccess, this._onSaveError);
+                                      context, this._onSaveSuccess, this._onSaveError);
         }
     },
 
@@ -719,20 +727,22 @@ var PaletteDocument = Class.create(AbstractDocument, /** @lends PaletteDocument.
      * @private
      */
     _onSaveSuccess: function(/** XMLHttpRequest */ transport) {
-        this._setDirty(false);
-        Utils.showMessage("Saved", {
-            'hide': true
-        });
-        this._updatePanes();
-        if (this._description.getId() == null) {
+        this.mine._setDirty(false);
+        if (this.showMessage) {
+                Utils.showMessage("Saved", {
+                    'hide': true
+                });
+        }
+        this.mine._updatePanes();
+        if (this.mine._description.getId() == null) {
             var data = JSON.parse(transport.responseText);
-            this._description.addProperties({'id': data.id,
+            this.mine._description.addProperties({'id': data.id,
                                             'version': data.version,
                                             'creationDate': data.creationDate});
         }
-        if (this._pendingOperation) {
-            var operation = this._pendingOperation;
-            this._pendingOperation = null;
+        if (this.mine._pendingOperation) {
+            var operation = this.mine._pendingOperation;
+            this.mine._pendingOperation = null;
             operation();
         }
     },
@@ -780,6 +790,10 @@ var PaletteDocument = Class.create(AbstractDocument, /** @lends PaletteDocument.
                     instance.setCaption(caption);
                 }
                 var position = this._canvasCache.getPosition(id);
+                var originalUri = this._canvasCache.getOriginalUri(id);
+                if (originalUri) {
+                    instance.setOriginalUri(originalUri);
+                }
                 instance.onFinish(true, position);
                 var dropNode = area.getNode();
                 $("main").appendChild(instance.getView().getNode());

@@ -40,6 +40,14 @@ var ComponentInstance = Class.create(DragSource,
          */
         this._title = null;
 
+
+        /**
+         * Original BuildingBlock URI
+         * @private
+         * @type String
+         */
+         this._originalUri = null;
+
         /**
          * BuildingBlock description graphical representation
          * @type BuildingBlockView
@@ -76,11 +84,6 @@ var ComponentInstance = Class.create(DragSource,
         this._listener = null;
 
         this.document = null;
-
-        if (this.getUri()) {
-            this._inferenceEngine.addReachabilityListener(this.getUri(), this._view);
-        }
-
 
     },
 
@@ -149,6 +152,35 @@ var ComponentInstance = Class.create(DragSource,
         return info;
     },
 
+    /**
+     * Create a copy in the catalogue for the inferencing
+     */
+    createCatalogueCopy: function(eventHandler) {
+        var body = {
+            "uri": this._buildingBlockDescription.uri
+        };
+        var context = {
+            "mine": this,
+            "eventHandler": eventHandler
+        };
+        PersistenceEngine.sendPost(URIs.catalogueCopy, null, Object.toJSON(body), context,
+                                    this._onCopySuccess, Utils.onAJAXError);
+    },
+
+    /**
+     * Sets the uri of the instance, after copying.
+     */
+    setCopyUri: function(uri) {
+        var originalUri = this._buildingBlockDescription.uri;
+        var bb = this._buildingBlockDescription.clone();
+        bb.uri = uri;
+
+        this._buildingBlockDescription = bb;
+        this.setOriginalUri(originalUri);
+        this._inferenceEngine.addReachabilityListener(this.getUri(),
+                                                            this._view);
+    },
+
 
     /**
      * Adds event listener
@@ -160,10 +192,26 @@ var ComponentInstance = Class.create(DragSource,
 
     /**
      * Returns the uri of the instance
-     * @type
+     * @type String
      */
     getUri: function() {
         return this._buildingBlockDescription.uri;
+    },
+
+    /**
+     * Sets the URI of the original building block
+     */
+    setOriginalUri: function(/** String */ uri) {
+        this._originalUri = uri;
+
+        this.setId(this.getUri());
+    },
+
+    /**
+     * @type String
+     */
+    getOriginalUri: function() {
+        return this._originalUri;
     },
 
     /**
@@ -289,6 +337,16 @@ var ComponentInstance = Class.create(DragSource,
     },
 
     /**
+     * Deletes the instance in the catalogue
+     */
+    deleteInstance: function() {
+        if (this._originalUri) {
+            var uri = this._buildDeleteUri();
+            PersistenceEngine.sendDelete(uri, this, Prototype.emptyFunction, Utils.onAJAXError);
+        }
+    },
+
+    /**
      * Destroys the view
      * @public
      */
@@ -338,10 +396,14 @@ var ComponentInstance = Class.create(DragSource,
      * @type Array
      */
     getPreconditionTable: function(/** Hash */ reachability) {
-        var conditions = this._buildingBlockDescription.getPreconditionsList();
-        return $A(conditions).map(function(condition){
-            return this._getConditionItem(condition, reachability);
-        }.bind(this));
+        if (reachability != null) {
+            var conditions = this._buildingBlockDescription.getPreconditionsList();
+            return $A(conditions).map(function(condition){
+                return this._getConditionItem(condition, reachability);
+            }.bind(this));
+        } else {
+            return [];
+        }
     },
 
     /**
@@ -351,10 +413,14 @@ var ComponentInstance = Class.create(DragSource,
      * @type Array
      */
     getPostconditionTable: function(/** Boolean */ reachability) {
-        var conditions = this._buildingBlockDescription.getPostconditionsList();
-        return $A(conditions).map(function(condition){
-            return this._getConditionItem(condition, reachability);
-        }.bind(this));
+        if (reachability != null) {
+            var conditions = this._buildingBlockDescription.getPostconditionsList();
+            return $A(conditions).map(function(condition){
+                return this._getConditionItem(condition, reachability);
+            }.bind(this));
+        } else {
+            return [];
+        }
     },
 
     /**
@@ -385,6 +451,7 @@ var ComponentInstance = Class.create(DragSource,
             this._listener.elementClicked(this);
         }
     },
+
     /**
      * This function is called when the attached view is dbl-clicked
      * must be overriden by descendants
@@ -395,6 +462,21 @@ var ComponentInstance = Class.create(DragSource,
             this._listener.elementDblClicked(this, event);
         }
     },
+
+
+    /**
+     * _OnCopySuccess
+     * @private
+     */
+    _onCopySuccess: function(transport) {
+        var response = JSON.parse(transport.responseText);
+
+        // Cloning the BBDescription to assign it the new URI
+        this.mine.setCopyUri(response.clone);
+        this.eventHandler();
+
+    },
+
 
     /**
      * Gets a line of the list
@@ -418,6 +500,25 @@ var ComponentInstance = Class.create(DragSource,
         var description = condition.label['en-gb'];
 
         return [fact, description, uri];
+    },
+
+    /*
+     * @private
+     * @type String
+     */
+    _buildDeleteUri: function() {
+        if (this.getId()) {
+            var originalParts = this.getId().split("/");
+            var parts = [
+                originalParts[originalParts.length - 3],
+                originalParts[originalParts.length - 2],
+                originalParts[originalParts.length - 1]
+            ];
+            var uri = parts.join("/");
+            return URIs.catalogueDeleteCopy.replace("<id>", uri);
+        } else {
+            return "";
+        }
     }
 
 });

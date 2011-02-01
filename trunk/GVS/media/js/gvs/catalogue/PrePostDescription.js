@@ -45,6 +45,29 @@ var PrePostDescription = Class.create(BuildingBlockDescription,
         }
     },
 
+    getUriShortcut: function() {
+        var uri;
+        if (this.uri) {
+            uri = this.uri;
+        } else {
+            uri = Utils.extractURIfromPattern(this.pattern);
+        }
+        if (uri) {
+            var pieces = uri.split("#");
+            var identifier = "";
+            if (pieces.length > 1){
+                identifier = pieces[1];
+            }
+            else { //The uri has not identifier, try the last part of the url
+                pieces = uri.split("/");
+                identifier = pieces[pieces.length - 1];
+            }
+            return identifier;
+        } else {
+            return "Concept";
+        }
+    },
+
     // ******************** PRIVATE METHODS ************** //
 
     /**
@@ -63,17 +86,13 @@ var PrePostDescription = Class.create(BuildingBlockDescription,
             var languages = $H(this['label']).keys();
             if (languages.size() == 1) {
                 this.title = this['label'][languages[0]];
+            } else if (this['label']['en']) {
+                this.title = this['label']['en'];
             } else {
-                // TODO: What to do here?
+                this.title = "Concept";
             }
         } else { // Extract the title from the uri
-            var uri;
-            if (this.uri) {
-                uri = this.uri;
-            } else {
-                uri = Utils.extractURIfromPattern(this.pattern);
-            }
-            this.title = this._createTitle(uri);
+            this.title = this._createTitle();
         }
     },
 
@@ -83,21 +102,8 @@ var PrePostDescription = Class.create(BuildingBlockDescription,
      * @private
      * @type String
      */
-    _createTitle: function(/** String */ uri) {
-        if (uri) {
-            var pieces = uri.split("#");
-            var identifier = "";
-            if (pieces.length > 1){
-                identifier = pieces[1];
-            }
-            else { //The uri has not identifier, try the last part of the url
-                pieces = uri.split("/");
-                identifier = pieces[pieces.length - 1];
-            }
-            return this._sanitizeTitle(identifier);
-        } else {
-            return "Unknown Domain Concept";
-        }
+    _createTitle: function() {
+        return this._sanitizeTitle(this.getUriShortcut());
     },
 
     /**

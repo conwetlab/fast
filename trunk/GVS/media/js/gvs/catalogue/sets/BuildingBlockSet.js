@@ -44,7 +44,7 @@ var BuildingBlockSet = Class.create( /** @lends BuildingBlockSet.prototype */ {
      * @override
      */
     getBuildingBlocks: function () {
-        return this._factory.getBuildingBlocks(this._uris);
+        return this._factory.getBuildingBlocks(this._uris, false);
     },
 
     /**

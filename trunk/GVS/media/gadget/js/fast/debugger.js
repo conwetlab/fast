@@ -250,7 +250,7 @@ var Logger = Class.create({
                         this.dir(object[i]);
                         this.groupEnd();
                     } else {
-                        this.log(i, ": ", this._print(object[i]));
+                        this.log(i.toString(), ": ", this._print(object[i]));
                     }
                 }
                 break;

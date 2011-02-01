@@ -21,6 +21,61 @@ var BuildingBlockDescription = Class.create(
     },
 
     /**
+     * Clones the building block
+     * @type BuildingBlockDescription
+     */
+    clone: function() {
+
+        function _cloneElement(element) {
+            var result;
+            if ((element instanceof Array)) {
+                result = [];
+                element.each(function(subelement) {
+                    result.push(_cloneElement(subelement));
+                });
+            } else if (element instanceof Object) {
+                result = {};
+                $H(element).each(function(pair) {
+                    result[pair.key] = _cloneElement(pair.value);
+                });
+            } else {
+                result = element;
+            }
+            return result;
+        }
+
+        var elements = [
+            "code",
+            "creationDate",
+            "creator",
+            "description",
+            "homepage",
+            "icon",
+            "label",
+            "parameterTemplate",
+            "postconditions",
+            "preconditions",
+            "rights",
+            "screenshot",
+            "tags",
+            "template",
+            "type",
+            "uri",
+            "version",
+            "actions",
+            "libraries",
+            "triggers"
+        ];
+        var resultObject = {};
+        elements.each(function(element) {
+            if (this[element] !== undefined) {
+                resultObject[element] = _cloneElement(this[element]);
+            }
+        }, this);
+        return new BuildingBlockDescription(resultObject);
+    },
+
+    /**
      * This function translate the stored properties into
      * a JSON-like object
      * @type Object
@@ -101,11 +156,7 @@ var BuildingBlockDescription = Class.create(
     // **************** PRIVATE METHODS **************** //
 
     _getConditionsList: function(type){
-        if (this[type].length > 1){ //More than one set of conditions
-            console.log("OR support not implemented yet");
-            return null;
-        }
-        return this[type][0];
+        return this[type];
     }
 
 });

@@ -18,18 +18,14 @@ var ScreenflowCanvasCache = Class.create( /** @lends ScreenflowCanvasCache.proto
          * @type Array
          * @private
          */
-        this._preconditions = properties.definition.preconditions ?
-                              properties.definition.preconditions :
-                              new Array();
+        this._preconditions = properties.definition.preconditions || new Array();
 
         /**
          * Postconditions of the screenflow
          * @type Array
          * @private
          */
-        this._postconditions = properties.definition.postconditions
-                               ? properties.definition.postconditions:
-                               new Array();
+        this._postconditions = properties.definition.postconditions || new Array();
 
         /**
          * Array of already loaded building block types
@@ -133,6 +129,21 @@ var ScreenflowCanvasCache = Class.create( /** @lends ScreenflowCanvasCache.proto
         });
         if (element) {
             return element.position;
+        } else {
+            return null;
+        }
+    },
+
+    /**
+     * Returns the original uri of an element by its URI
+     * @type Object
+     */
+    getOriginalUri: function (/** String */ id) {
+        var element = this._screens.detect(function(element) {
+            return element.uri == id;
+        });
+        if (element) {
+            return element.originalUri;
         } else {
             return null;
         }

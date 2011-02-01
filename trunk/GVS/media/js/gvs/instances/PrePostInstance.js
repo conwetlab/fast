@@ -113,7 +113,6 @@ var PrePostInstance = Class.create(ComponentInstance,
         return {
             'conditions': [this._getCondition()],
             'id': this.getId(),
-            'catalogueUri': this._buildingBlockDescription.catalogueUri,
             'semantics': this._buildingBlockDescription.uri,
             'binding': this._buildingBlockDescription.properties.ezweb.binding,
             'friendcode': this._buildingBlockDescription.properties.ezweb.friendcode,
@@ -124,11 +123,22 @@ var PrePostInstance = Class.create(ComponentInstance,
         };
     },
 
+
+    /**
+     * Returns an object representing
+     * the fact
+     * @type Object
+     * @private
+     */
+    toJSONForCatalogue: function() {
+        return this._getCondition();
+    },
+
     /**
      * @override
      */
     getUri: function() {
-        return this._buildingBlockDescription.catalogueUri;
+        return this._id;
     },
 
     /**
@@ -152,8 +162,9 @@ var PrePostInstance = Class.create(ComponentInstance,
                 } else {
                      data = Object.extend(data, {
                         'binding': this._buildingBlockDescription.type == 'pre' ? 'slot' : 'event',
-                        'variableName': this.getTitle().replace(" ",""),
-                        'friendcode': this.getTitle().replace(" ", "")
+                        'variableName':
+                        this._buildingBlockDescription.getUriShortcut().replace(/\s+/gi,""),
+                        'friendcode': this._buildingBlockDescription.getUriShortcut().replace(/\s+/gi, "")
                     });
                 }
 
@@ -188,8 +199,7 @@ var PrePostInstance = Class.create(ComponentInstance,
         if (this._isConfigurable) {
             if (!this._dialog) {
                 this._dialog = new PrePostDialog(this._onChange.bind(this),
-                                                 this.getTitle(),
-                                                 this._buildingBlockDescription.type);
+                                                 this._buildingBlockDescription);
             }
             this._dialog.show();
         }
@@ -201,13 +211,13 @@ var PrePostInstance = Class.create(ComponentInstance,
      * ready to be set in the FactPane
      * @type Array
      */
-    getConditionTable: function(/** Boolean */ reachabilityInfo) {
+    getConditionTable: function() {
         var fact = FactFactory.getFactIcon(this._getCondition(), "embedded").getNode();
         var reachable;
-        if (reachabilityInfo !== undefined) {
-            reachable = reachabilityInfo;
+        if (this._reachable != null) {
+            reachable = this._reachable;
         } else {
-            reachable = this._view.getNode().hasClassName("satisfeable");
+            reachable = this._view.getReachability();
         }
         Utils.setSatisfeabilityClass(fact, reachable);
 
@@ -269,11 +279,6 @@ var PrePostInstance = Class.create(ComponentInstance,
      * @override
      */
     destroy: function($super, /** Boolean */ removeFromServer) {
-        if (this._buildingBlockDescription.catalogueUri && removeFromServer) {
-            var catalogueResource = (this._buildingBlockDescription.type == 'pre') ?
-                                    URIs.pre : URIs.post;
-            this._removeFromServer(catalogueResource + this.getId());
-        }
         if (this._terminal) {
             this._terminal.destroy();
             this._terminal = null;
@@ -323,23 +328,11 @@ var PrePostInstance = Class.create(ComponentInstance,
                 },
                 'pattern': this._buildingBlockDescription.pattern,
                 'positive': true,
-                'uri': this._buildingBlockDescription.uri
+                'uri': this._buildingBlockDescription.uri,
+                'id': this._id
             };
     },
 
-    /**
-     * Returns an object representing
-     * the fact
-     * @type Object
-     * @private
-     */
-    _toJSONForCatalogue: function() {
-        return {
-            'conditions': [this._getCondition()],
-            'id': this.getId(),
-            'name': this.getTitle()
-        };
-    },
 
     /**
      * This function is called when the dialog is saved
@@ -356,51 +349,7 @@ var PrePostInstance = Class.create(ComponentInstance,
                 }
             };
         }
-
-        if (!this._buildingBlockDescription.catalogueUri) {
-            // Calling the server to add the pre/post
-            var catalogueResource = (this._buildingBlockDescription.type == 'pre') ? URIs.pre : URIs.post;
-            this._id = new Date().valueOf();
-            PersistenceEngine.sendPost(catalogueResource,
-                            null, Object.toJSON(this._toJSONForCatalogue()), this,
-                            this._onPostSuccess, Utils.onAJAXError);
-        } else {
-            this._onClick();
-        }
-    },
-    /**
-     * onSuccess callback
-     * @private
-     */
-    _onPostSuccess: function (/** XMLHttpRequest */ transport) {
-        var result = JSON.parse(transport.responseText);
-        this._buildingBlockDescription.catalogueUri = result.uri;
-
-
-        this._inferenceEngine.addReachabilityListener(result.uri, this._view);
-
-        // Notify change
-        this._changeHandler(this);
-
-    },
-
-    /**
-     * onDeleteSucces
-     * @private
-     */
-    _onDeleteSuccess: function(/** XMLHttpRequest */ transport){
-        console.log('deleted');
-    },
-
-
-    /**
-     * This function removes a pre/post from the server
-     * @private
-     */
-    _removeFromServer: function(/** String */ uri) {
-        PersistenceEngine.sendDelete(uri,
-            this,
-            this._onDeleteSuccess, Utils.onAJAXError);
+        this._onClick();
     }
 
 });

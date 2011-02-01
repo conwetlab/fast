@@ -272,7 +272,7 @@ var PaletteComponent = Class.create(DragSource,
      * @type Array
      */
     _getPreConditions: function() {
-        return this._getConditions("preconditions")
+        return this._getConditions("preconditions");
     },
 
     /**
@@ -282,7 +282,7 @@ var PaletteComponent = Class.create(DragSource,
      * @type Array
      */
     _getPostConditions: function() {
-        return this._getConditions("postconditions")
+        return this._getConditions("postconditions");
     },
 
     /**
@@ -292,12 +292,7 @@ var PaletteComponent = Class.create(DragSource,
      * @type Array
      */
     _getConditions: function(/*String*/type) {
-        var result = [];
-        var conditions = this._buildingBlockDescription[type][0];
-        for (var i=0; conditions && i < conditions.length; i++) {
-            result.push(conditions[i]);
-        }
-        return result;
+        return this._buildingBlockDescription[type];
     }
 
 });

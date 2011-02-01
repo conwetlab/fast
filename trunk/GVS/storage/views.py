@@ -49,6 +49,7 @@ class GadgetStorage(resource.Resource):
         try:
             user = get_user_authentication(request)
 
+
             gadgetData = self.__completeGadgetData(request)
 
 
@@ -320,6 +321,7 @@ class GadgetPlayer(resource.Resource):
             else:
                 raise Exception('Invalid URL')
 
+
             playerHTML = getPlayerHTML(playerData, '/'.join([settings.MEDIA_URL, 'gadget']))
 
             return HttpResponse(playerHTML, mimetype='text/html; charset=UTF-8')
@@ -352,7 +354,7 @@ def getGadgetData(screenflowId):
     if (definition.has_key('screens')):
         scrs = definition['screens']
         for screen in scrs:
-            scr_obj = get_object_or_404(Screen, uri=screen['uri'])
+            scr_obj = get_object_or_404(Screen, uri=screen['originalUri'])
             screen_data = simplejson.loads(scr_obj.data)
             screen_data['label'] = screen_data['label']['en-gb']
             if screen.has_key("title"):

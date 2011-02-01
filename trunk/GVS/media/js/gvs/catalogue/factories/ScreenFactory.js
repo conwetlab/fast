@@ -35,9 +35,16 @@ var ScreenFactory = Class.create(BuildingBlockFactory,
      * @type {BuildingBlockDescription[]}
      * @override
      */
-    getBuildingBlocks: function (/** Array */ uris) {
+    getBuildingBlocks: function (/** Array */ uris, _includeCopies) {
+        var includeCopies = Utils.variableOrDefault(_includeCopies, true);
         var result = new Array();
-        $A(uris).each(function(uri){
+        var validUris = $A(uris);
+        if (!includeCopies) {
+            validUris = validUris.findAll(function(uri) {
+                return (uri.indexOf("clones") == -1);
+            });
+        }
+        validUris.each(function(uri){
             if(this._buildingBlockDescriptions.get(uri)) {
                 result.push(this._buildingBlockDescriptions.get(uri));
             } else {

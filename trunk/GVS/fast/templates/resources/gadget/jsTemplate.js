@@ -13,11 +13,9 @@
                 title: "{{ screen.label }}",
                 {% endif %}
                 contentEl:"__{{screen.id}}",
-                pre: [{% for pre in screen.preconditions %}
-                        [{% for ands in pre %}
-                            {pattern:'{{ ands.pattern }}', positive:{{ands.positive|lower}}}{% if not forloop.last %}, {% endif %}
-                         {% endfor %}]{% if not forloop.last %},{% endif %}
-                      {% endfor %}]
+                pre: [[{% for pre in screen.preconditions %}
+                            {pattern:'{{ pre.pattern }}', positive:{{pre.positive|lower}}}{% if not forloop.last %}, {% endif %}
+                         {% endfor %}]]
             }{% if not forloop.last %},{% endif %}
 {% endfor %}
         ];

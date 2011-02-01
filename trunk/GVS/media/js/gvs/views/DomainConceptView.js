@@ -27,6 +27,10 @@ var DomainConceptView = Class.create( BuildingBlockView,
         var reachability = (reachabilityData.reachability !== undefined) ?
                             reachabilityData.reachability : reachabilityData.satisfied;
         Utils.setSatisfeabilityClass(this._factIcon, reachability);
+    },
+
+    getReachability: function() {
+        return this._factIcon.hasClassName("satisfeable");
     }
 
 });

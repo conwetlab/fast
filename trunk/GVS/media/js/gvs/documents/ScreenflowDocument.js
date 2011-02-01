@@ -259,7 +259,13 @@ var ScreenflowDocument = Class.create(PaletteDocument,
      * @override
      */
     _getEmptyPalette: function() {
-        return [];
+        return {
+            "palette": [],
+            "canvas": {
+                "preconditions": [],
+                "postconditions": []
+            }
+        };
     },
 
 
@@ -272,24 +278,27 @@ var ScreenflowDocument = Class.create(PaletteDocument,
      *                                   will be defined by the dropzone and
      *                                   not by the draghandler
      */
-    _drop: function(/** Area */ area, /** ComponentInstance */ instance, /** Object */ position,
-        /** Boolean (Optional) */ _isLoading) {
+    _drop: function(/** Area */ area, /** ComponentInstance */ instance,
+                    /**Object */ position, /** Number */ orientation,
+                    /** Boolean (Optional) */ _isLoading) {
         var isLoading = Utils.variableOrDefault(_isLoading, false);
 
         // Reject repeated elements (except domain concepts)
-        if (this._description.contains(instance.getUri())) {
-            Utils.showMessage("There is another element like this. Cannot add it", {
-                'hide': true,
-                'error': true
-            });
-            return false;
-        }
-
-        if (!instance.getId()) {
-            instance.setId(UIDGenerator.generate(instance.getTitle()));
-        } else {
-            if (instance.constructor != PrePostInstance) {
-                UIDGenerator.setStartId(instance.getId());
+        if (instance.constructor != PrePostInstance &&
+            instance.constructor != PlanInstance) {
+            var uri;
+            if (isLoading) {
+                uri = instance.getOriginalUri();
+            } else {
+                // If the instance is new, _uri attribute is the original one
+                uri = instance.getUri();
+            }
+            if (this._description.contains(uri)) {
+                Utils.showMessage("There is another element like this. Cannot add it", {
+                    'hide': true,
+                    'error': true
+                });
+                return false;
             }
         }
 
@@ -301,9 +310,16 @@ var ScreenflowDocument = Class.create(PaletteDocument,
 
         switch (instance.constructor) {
             case ScreenInstance:
-                this._description.addScreen(instance, position);
-                if (!isLoading) {
-                    this._setSelectedElement(instance);
+                if (isLoading) {
+                    this._description.addScreen(instance, position);
+                    this._inferenceEngine.addReachabilityListener(instance.getUri(),
+                    instance.getView());
+                } else {
+                    instance.createCatalogueCopy(function() {
+                        this._description.addScreen(instance, position);
+                        this._refreshReachability();
+                        this._setSelectedElement(instance);
+                    }.bind(this));
                 }
 
                 break;
@@ -316,22 +332,35 @@ var ScreenflowDocument = Class.create(PaletteDocument,
                     }));
                 if (area.getNode().className.include("pre")) {
                     instance.setType("pre");
+                    instance.getView().setReachability({"satisfied": true});
                 } else if (area.getNode().className.include("post")) {
                     instance.setType("post");
                 }
+                if (!instance.getId()) {
+                    instance.setId(UIDGenerator.generate(instance.getTitle()));
+                } else {
+                    UIDGenerator.setStartId(instance.getId());
+                }
+                this._description.addPrePost(instance, position);
+                this._refreshReachability();
                 break;
 
             case PlanInstance:
                 this._planPanel.hide();
                 this._addPlan(instance, position);
-                this._refreshReachability();
-                this._setSelectedElement();
                 break;
         }
         this._setDirty(true);
         // Only for piping
         //instance.getView().addGhost();
         return true;
+    },
+
+    /**
+     * @override
+     */
+    _setSelectedElement: function($super, element) {
+        $super(element, false);
     },
 
     /**
@@ -352,11 +381,24 @@ var ScreenflowDocument = Class.create(PaletteDocument,
      * finishes
      * @private
      */
-    _findCheckCallback: function(/** Array */ uris) {
+    _findCheckCallback: function(/** Array */ uris, /** Object */ reachabilityData) {
         // Update screen palette
         var screenPalette = this._paletteController.getPalette(Constants.BuildingBlock.SCREEN);
         var screenSet = screenPalette.getBuildingBlockSet();
         screenSet.setURIs(uris);
+
+        if (reachabilityData.canvas.postconditions) {
+            reachabilityData.canvas.postconditions.each(function(post) {
+                var postInstance = this._description.getPost(post.id);
+                if (postInstance) {
+                    var view = postInstance.getView();
+                    if (view) {
+                        view.setReachability(post);
+                    }
+                }
+            }.bind(this));
+        }
+
         this._updatePanes();
     },
 
@@ -446,10 +488,17 @@ var ScreenflowDocument = Class.create(PaletteDocument,
     _refresh: function() {
         var canvas = this._getCanvasUris();
         var palette = this._paletteController.getComponentUris(Constants.BuildingBlock.SCREEN);
+        var body = {
+            'palette': this._paletteController.getComponentUris(Constants.BuildingBlock.SCREEN),
+            'canvas': {
+                'preconditions': this._description.getPreconditions(),
+                'postconditions': this._description.getPostconditions()
+            }
+        };
 
         this._inferenceEngine.findCheck(
                 canvas,
-                palette,
+                body,
                 this._tags,
                 'reachability',
                 this._findCheckCallback.bind(this)
@@ -524,13 +573,19 @@ var ScreenflowDocument = Class.create(PaletteDocument,
     _refreshReachability: function (/** Boolean (Optional) */_isFindCheck) {
         var isFindCheck = Utils.variableOrDefault(_isFindCheck, true);
         var canvas = this._getCanvasUris();
-        var palette = this._paletteController.getComponentUris(Constants.BuildingBlock.SCREEN);
+        var body = {
+            'palette': this._paletteController.getComponentUris(Constants.BuildingBlock.SCREEN),
+            'canvas': {
+                'preconditions': this._description.getPreconditionsCatalogue(),
+                'postconditions': this._description.getPostconditionsCatalogue()
+            }
+        };
 
         if (isFindCheck) {
-            this._inferenceEngine.findCheck(canvas, palette, this._tags,
+            this._inferenceEngine.findCheck(canvas, body, this._tags,
                                     'reachability', this._findCheckCallback.bind(this));
         } else {
-            this._inferenceEngine.check(canvas, palette, this._tags,
+            this._inferenceEngine.check(canvas, body, this._tags,
                                     'reachability', this._updatePanes.bind(this));
         }
 
@@ -569,9 +624,7 @@ var ScreenflowDocument = Class.create(PaletteDocument,
                 //PrePostInstance
                 if (this._selectedElement.getType()) {
                     //Pre or post condition
-                    var factInfo = [this._selectedElement.getConditionTable(
-                        this._inferenceEngine.isReachable(this._selectedElement.getUri())
-                    )];
+                    var factInfo = [this._selectedElement.getConditionTable()];
                     this._factPane.fillTable([], [], factInfo);
                 }
             }
@@ -579,44 +632,6 @@ var ScreenflowDocument = Class.create(PaletteDocument,
         this._refreshVisibility();
     },
 
-    /**
-     * This function returns the data array containing all the
-     * facts belonging to the screenflow
-     * @type Array
-     */
-    _getAllFacts: function() {
-        var resultHash = new Hash();
-        this._description.getCanvasInstances().each(function(instance) {
-            if (instance.constructor == ScreenInstance) {
-                var preReachability = this._inferenceEngine.getPreconditionReachability(
-                            instance.getUri());
-                var preconditions = instance.getPreconditionTable(preReachability);
-                preconditions.each(function(pre) {
-                    if (!resultHash.get(pre[2]/*The uri of the pre*/)) {
-                        resultHash.set(pre[2], pre);
-                    }
-                });
-
-                var postReachability = this._inferenceEngine.isReachable(
-                            instance.getUri());
-                var postconditions = instance.getPostconditionTable(postReachability);
-                postconditions.each(function(post) {
-                    if (!resultHash.get(post[2]/*The uri of the post*/)) {
-                        resultHash.set(post[2], post);
-                    }
-                });
-            } else {
-                //PrePostInstance
-                var factInfo = instance.getConditionTable(
-                    this._inferenceEngine.isReachable(instance.getUri())
-                );
-                if (!resultHash.get(factInfo[2]/*The uri of the pre/post*/)) {
-                    resultHash.set(factInfo[2], factInfo);
-                }
-            }
-        }.bind(this));
-        return resultHash.values();
-    },
 
     /**
      * Play a screenflow
@@ -706,20 +721,43 @@ var ScreenflowDocument = Class.create(PaletteDocument,
             'top': position.top + 3
         };
 
+        var pendingScreens = new Hash();
+
         plan.getPlanElements().each(function(screenDescription) {
             if (!this._description.contains(screenDescription.uri)) {
                 var screen = new ScreenInstance(screenDescription,
                         this._inferenceEngine);
-                this._description.addScreen(screen, screenPosition);
-                screen.onFinish(true);
-
-                this._addToArea(this._areas.get('screen'), screen, screenPosition);
-                //Incrementing the screen position for the next screen
-                screenPosition.left += 108; // Screen size=100 + margin=6 + border=2
-                screen.setEventListener(this);
-                screen.enableDragNDrop(this._areas.get('screen'),[this._areas.get('screen')]);
+                pendingScreens.set(screenDescription.uri, screen);
             }
         }.bind(this));
+
+        var request = pendingScreens.keys().collect(function(uri) {
+            return {"uri": uri};
+        });
+
+        PersistenceEngine.sendPost(URIs.catalogueCopy, null, Object.toJSON(request), this,
+            function(transport) {
+                var screens = JSON.parse(transport.responseText);
+                screens.each(function(screenData) {
+                    var screenInstance = pendingScreens.get(screenData.uri);
+                    screenInstance.setCopyUri(screenData.clone);
+
+                    this._addToArea(this._areas.get('screen'), screenInstance, screenPosition);
+                    this._description.addScreen(screenInstance, screenPosition);
+
+                    //Incrementing the screen position for the next screen
+                    screenPosition.left += 108; // Screen size=100 + margin=6 + border=2
+
+                    screenInstance.setEventListener(this);
+                    screenInstance.enableDragNDrop(this._areas.get('screen'),[this._areas.get('screen')]);
+                    screenInstance.onFinish(true);
+                }.bind(this));
+                this._setSelectedElement();
+                this._refreshReachability();
+
+            }.bind(this), Utils.onAJAXError);
+
+
     },
 
     /**

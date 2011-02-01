@@ -162,6 +162,13 @@ class Screenflow(BuildingBlock):
     def delete(self, *args, **kwargs):
         for storage in self.storage_set.all():
             storage.delete()
+        # Delete screen instances
+        json = simplejson.loads(self.data)
+        for screen in json['definition']['screens']:
+            conn = Connection(screen['uri'])
+            result = conn.request_delete('', headers={'Accept':'text/json'})
+            if not isValidResponse(result):
+                raise Exception(result['body'])
         super(Screenflow, self).delete(*args, **kwargs)
 
 
@@ -190,7 +197,7 @@ class Screen(BuildingBlock):
             bbcodes = {}
             definition = data.get('definition')
             for bbdefinition in definition['buildingblocks']:
-                bb_aux = get_object_or_404(BuildingBlock, uri=bbdefinition.get('uri'))
+                bb_aux = get_object_or_404(BuildingBlock, uri=bbdefinition.get('originalUri'))
                 bbdata = simplejson.loads(bb_aux.data)
                 bbdefinition['buildingblockId'] = bb_aux.id
                 bbdefinition['type'] = bb_aux.type

@@ -23,8 +23,8 @@ var ScreenflowDescription = Class.create(BuildingBlockDescription,
         var result = {
             "definition": {
                 "screens": this._getScreens(),
-                "preconditions": this.getPreconditions(),//.size() > 0 ? [this.getPreconditions()] : [],
-                "postconditions": this.getPostconditions()//.size() > 0 ? [this.getPostconditions()] : []
+                "preconditions": this.getPreconditions(),
+                "postconditions": this.getPostconditions()
             }
         };
         result = Object.extend(result,{
@@ -115,6 +115,24 @@ var ScreenflowDescription = Class.create(BuildingBlockDescription,
         return false;
     },
 
+    getPre: function(/** String */ uri)  {
+        var pre = this._preconditions.get(uri);
+        if (pre) {
+            return pre.buildingblock;
+        } else {
+            return null;
+        }
+    },
+
+    getPost: function(/** String */ uri)  {
+        var post = this._postconditions.get(uri);
+        if (post) {
+            return post.buildingblock;
+        } else {
+            return null;
+        }
+    },
+
 
     /**
      * Implementing the TableModel interface
@@ -159,13 +177,38 @@ var ScreenflowDescription = Class.create(BuildingBlockDescription,
     },
 
     /**
+     * Get a list of preconditions in form of a JSON Object
+     * @type Array
+     */
+    getPreconditionsCatalogue: function() {
+        var list = new Array();
+        this._preconditions.values().each(function(pre) {
+            var element = pre.buildingblock.toJSONForCatalogue();
+            list.push(element);
+        }.bind(this));
+        return list;
+    },
+
+    /**
+     * Get a list of postconditions in form of a JSON Object
+     * @type Array
+     */
+    getPostconditionsCatalogue: function() {
+        var list = new Array();
+        this._postconditions.values().each(function(post) {
+            var element = post.buildingblock.toJSONForCatalogue();
+            list.push(element);
+        }.bind(this));
+        return list;
+    },
+
+    /**
      * Get a list of canvas instances
      * @type Array
      */
     getCanvasInstances: function() {
         var result = new Array();
-        var list = this._screens.values().concat(this._preconditions.values());
-        list = list.concat(this._postconditions.values());
+        var list = this._screens.values();
         list.each(function(instance){
             result.push(instance.buildingblock);
         });
@@ -180,7 +223,7 @@ var ScreenflowDescription = Class.create(BuildingBlockDescription,
         var list = this._screens.values().concat(this._preconditions.values());
         list = list.concat(this._postconditions.values());
         var element = list.detect(function(instance) {
-                    return instance.buildingblock.getUri() == uri;
+                    return instance.buildingblock.getOriginalUri() == uri;
         });
         if (element) {
             return true;
@@ -190,11 +233,17 @@ var ScreenflowDescription = Class.create(BuildingBlockDescription,
     },
 
     /**
-     * Necessary for compatibility with other BuildingblockDescriptions
      * @type Array
      */
     getConditionInstances: function() {
-        return new Array();
+        var result = new Array();
+        this._preconditions.values().each(function(pre){
+            result.push(pre.buildingblock);
+        });
+        this._postconditions.values().each(function(post){
+            result.push(post.buildingblock);
+        });
+        return result;
     },
 
     //************************ PRIVATE METHODS *******************//
@@ -217,7 +266,8 @@ var ScreenflowDescription = Class.create(BuildingBlockDescription,
             var data = {
                 'uri': screen.buildingblock.getUri(),
                 'position': screen.position,
-                'title': screen.buildingblock.getTitle()
+                'title': screen.buildingblock.getTitle(),
+                'originalUri': screen.buildingblock.getOriginalUri()
             };
             var caption = screen.buildingblock.getCaption();
             if (caption != null && caption != "") {

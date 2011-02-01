@@ -67,33 +67,6 @@ Object.extend(Catalogue, {
 
         PersistenceEngine.sendGet(URIs.catalogueGetDomainConcepts,
             this, onDConceptsSuccess, onDConceptsError);
-    },
-
-    // TODO: redesign
-    createScreen: function(/**String*/screenJson) {
-        var createScreenOnSuccess = function(response){
-
-            var screen = JSON.parse(response.responseText);
-            //FIXME the catalogue should response with an http error
-            if (screen.uri == undefined || screen.uri == null) {
-                console.log("createScreenOnError");
-                alert("Server error in the Screen creation");
-            }
-            else {
-                var alertMsg = "Screen correctly created!\nLabel: " +
-                        screen.label['en-GB'] + "\nURI: " + screen.uri;
-                alert(alertMsg);
-            };
-        };
-
-        var createScreenOnError = function(transport, e){
-            alert(e.message);
-            //TODO error handling
-        };
-
-        var persistenceEngine = PersistenceEngineFactory.getInstance();
-        persistenceEngine.sendPost(URIs.catalogueCreateScreen, null, screenJson,
-            this, createScreenOnSuccess, createScreenOnError);
     }
 });
 

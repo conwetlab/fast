@@ -42,12 +42,7 @@ var ScreenView = Class.create(BuildingBlockView,
 
         var preArea = new Element("div", {"class": "preArea"});
 
-        if (description.preconditions.length > 1){ //More than one set of preconditions
-            console.log("OR precondition support not implemented yet");
-        }
-        else {
-            var preconditions = description.preconditions[0];
-        }
+        var preconditions = description.preconditions;
 
 
         $A(preconditions).each(
@@ -60,12 +55,7 @@ var ScreenView = Class.create(BuildingBlockView,
 
         var postArea = new Element("div", {"class": "postArea"});
 
-        if (description.postconditions.length > 1){ //More than one set of preconditions
-            console.log("OR postcondition support not implemented yet");
-        }
-        else {
-            var postconditions = description.postconditions[0];
-        }
+        var postconditions = description.postconditions;
 
         $A(postconditions).each(
                 function(post) {
@@ -108,8 +98,6 @@ var ScreenView = Class.create(BuildingBlockView,
             this._node.appendChild(imageContainer);
         }
         this._node.appendChild(postArea);
-
-        this._createTooltip(description);
     },
 
     // **************** PUBLIC METHODS **************** //
@@ -132,13 +120,7 @@ var ScreenView = Class.create(BuildingBlockView,
 
         // pres
         var preconditionList = reachabilityData.preconditions;
-        if (preconditionList.length > 1) {
-            //More than one set of preconditions is NOT YET SUPPORTED
-            console.log("OR precondition support not implemented yet");
-            return;
-        } else {
-            var preconditionData = preconditionList[0];
-        }
+        var preconditionData = preconditionList;
 
         //Setting precondition reachability
         var preReachability = new Hash();
@@ -168,37 +150,9 @@ var ScreenView = Class.create(BuildingBlockView,
      */
     setTitle: function(title) {
         this._titleNode.update(title);
-    },
+    }
 
     // **************** PRIVATE METHODS **************** //
-    /**
-     * This function creates the tooltip for the view
-     * @private
-     */
-    _createTooltip: function (/** ScreenDescription */ description) {
-        /*var content = new Element('div');
-
-        var title = new Element('h3').update(description.label['en-gb']);
-        content.appendChild(title);
-
-        var description = new Element('div').update(description.description['en-gb']);
-        content.appendChild(description);
-
-
-        if (description.preconditions.length > 1){ //More than one set of preconditions
-            console.log("OR precondition support not implemented yet");
-        }
-        else {
-            var preconditions = description.preconditions[0];
-        }
-        if (preconditions.length > 0){
-            var preTitle = new Element('h4').update('Preconditions');
-            content.appendChild(preTitle);
-            $A(preconditions).each(function(pre){
-                //TODO
-            });
-        }*/
-    }
 });
 
 // vim:ts=4:sw=4:et:

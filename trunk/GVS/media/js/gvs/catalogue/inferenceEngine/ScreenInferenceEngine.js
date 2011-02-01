@@ -25,7 +25,7 @@ var ScreenInferenceEngine = Class.create( /** @lends ScreenInferenceEngine.proto
     _constructBody: function(/**Array*/ canvas, /** Object */ elements,
                     /** Array */ tags,
                     /** String*/ criteria, /** String(Optional) */ _method) {
-        var method = Utils.variableOrDefault(_method, "");
+        var method = Utils.variableOrDefault(_method, "findcheck");
         /*var domainContext = {
             'tags': tags,
             'user': GVS.getUser().getUserName()
@@ -38,10 +38,14 @@ var ScreenInferenceEngine = Class.create( /** @lends ScreenInferenceEngine.proto
         var body = {
             'canvas': canvas,
             'domainContext': domainContext,
-            'criterion': criteria
+                'criterion': criteria
         };
         if (method == "check") {
             body.search = false;
+        } else {
+            body.search = true;
+            // TODO: Control this
+            body.iserve = false;
         }
         body = Object.extend(body, elements);
         return Object.toJSON(body);

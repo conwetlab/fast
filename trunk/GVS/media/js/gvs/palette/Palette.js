@@ -90,13 +90,18 @@ var Palette = Class.create(SetListener, /** @lends Palette.prototype */ {
          * All uris of all the components
          */
         getComponentUris: function() {
-            var uris = [];
-            this._set.getBuildingBlocks().each(function(buildingBlock) {
-                uris.push({
-                    uri: buildingBlock.uri
+            if (this._set.getBuildingBlockType() ==
+                Constants.BuildingBlock.SCREEN) {
+                var uris = [];
+                this._set.getBuildingBlocks().each(function(buildingBlock) {
+                    uris.push({
+                        "uri": buildingBlock.uri
+                    });
                 });
-            });
-            return uris;
+                return uris;
+            } else {
+                return this._set.getBuildingBlocks().pluck("uri");
+            }
         },
 
         // **************** PRIVATE METHODS **************** //

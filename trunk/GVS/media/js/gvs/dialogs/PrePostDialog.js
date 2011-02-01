@@ -6,21 +6,12 @@ var PrePostDialog = Class.create(ConfirmDialog /** @lends PrePostDialog.prototyp
      * @extends ConfirmDialog
      */
     initialize: function($super,
-            /** Function */ onChangeCallback, /** String */ label, /** String */ type) {
+            /** Function */ onChangeCallback,
+            /** PrePostDescription */ description) {
         $super("Pre/Post Condition");
 
-        /**
-         * @type String
-         * @private @member
-         */
-        this._label = label;
 
-        /**
-         * Type in pre/post
-         * @type String
-         * @private
-         */
-        this._type = type;
+        this._description = description;
 
 
         this._onChangeCallback = onChangeCallback;
@@ -49,14 +40,14 @@ var PrePostDialog = Class.create(ConfirmDialog /** @lends PrePostDialog.prototyp
                 'type':'input',
                 'label': 'Type:',
                 'name': 'type',
-                'value': this._type,
+                'value': this._description.type.toUpperCase(),
                 'disabled': true
             },
             {
                 'type': 'input',
                 'label': 'Label:',
                 'name': 'label',
-                'value': this._label,
+                'value': this._description.getTitle(),
                 'required': true
             },
             {
@@ -74,14 +65,14 @@ var PrePostDialog = Class.create(ConfirmDialog /** @lends PrePostDialog.prototyp
                 'type': 'input',
                 'label': 'Variable name:',
                 'name': 'variableName',
-                'value': this._label.replace(" ",""),
+                'value': this._description.properties.ezweb.variableName,
                 'required': true
             },
             {
                 'type': 'input',
                 'label': 'Friendcode:',
                 'name': 'friendcode',
-                'value': this._label.replace(" ",""),
+                'value': this._description.properties.ezweb.friendcode,
                 'required': true
             }
         ];
@@ -106,13 +97,13 @@ var PrePostDialog = Class.create(ConfirmDialog /** @lends PrePostDialog.prototyp
     _onTypeChange: function() {
 
         var bindings = new Array();
-        switch ($F(this._getForm().type)) {
-            case 'pre':
+        switch ($F(this._getForm().type).toUpperCase()) {
+            case 'PRE':
                 bindings.push({'value':'slot','label':'Slot'});
                 bindings.push({'value':'pref','label':'User Preference'});
                 bindings.push({'value':'context','label':'Platform Context'});
                 break;
-            case 'post':
+            case 'POST':
                 bindings.push({'value':'event','label':'Event'});
                 break;
             default:

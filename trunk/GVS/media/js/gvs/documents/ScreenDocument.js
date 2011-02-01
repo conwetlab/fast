@@ -323,18 +323,11 @@ var ScreenDocument = Class.create(PaletteDocument,
      * @private
      * @type Boolean
      */
-    _drop: function(/** Area */ area, /** ComponentInstance */ instance, /** Object */ position, /** Integer */ orientation,
-        /** Boolean (Optional) */ _isLoading) {
+    _drop: function(/** Area */ area, /** ComponentInstance */ instance,
+                    /** Object */ position, /** Integer */ orientation,
+                    /** Boolean (Optional) */ _isLoading) {
         var isLoading = Utils.variableOrDefault(_isLoading, false);
-        // Reject repeated elements (except domain concepts or operators)
-        if (instance.constructor != OperatorInstance  &&
-                this._description.contains(instance.getUri())) {
-            Utils.showMessage("There is another element like this. Cannot add it", {
-                'hide': true,
-                'error': true
-            });
-            return false;
-        }
+
         if (instance.constructor == FormInstance) {
             if (this._formInstance) {
                 Utils.showMessage("Only one form per screen is allowed", {
@@ -351,11 +344,6 @@ var ScreenDocument = Class.create(PaletteDocument,
 
         this._addToArea(area, instance, position, orientation);
 
-        if (!instance.getId()) {
-            instance.setId(UIDGenerator.generate(instance.getTitle()));
-        } else {
-            UIDGenerator.setStartId(instance.getId());
-        }
 
         var terminalHandlers = {
             'onPipeCreationStart': this._onPipeCreationStartHandler.bind(this),
@@ -366,10 +354,23 @@ var ScreenDocument = Class.create(PaletteDocument,
 
         if (instance.constructor != PrePostInstance) {
             instance.createTerminals(terminalHandlers);
-            this._description.addBuildingBlock(instance, position, orientation);
+            if (isLoading) {
+                this._description.addBuildingBlock(instance, position, orientation);
+                this._inferenceEngine.addReachabilityListener(instance.getUri(),instance.getView());
+            } else {
+                instance.createCatalogueCopy(function() {
+                    this._description.addBuildingBlock(instance, position, orientation);
+                    this._setSelectedElement(instance);
+                }.bind(this));
+            }
         } else {
             instance.setConfigurable(false);
 
+            if (!instance.getId()) {
+                instance.setId(UIDGenerator.generate(instance.getTitle()));
+            } else {
+                UIDGenerator.setStartId(instance.getId());
+            }
             if (area.getNode().className.include("pre")) {
                 instance.setType("pre");
                 instance.createTerminal(terminalHandlers);
@@ -379,6 +380,9 @@ var ScreenDocument = Class.create(PaletteDocument,
                 instance.setType("post");
                 instance.createTerminal(terminalHandlers);
                 this._description.addPost(instance, position);
+            }
+            if (!isLoading) {
+                this._setSelectedElement(instance);
             }
         }
         if (!isLoading) {
@@ -420,8 +424,6 @@ var ScreenDocument = Class.create(PaletteDocument,
                 var trigger = this._triggerMappingFactory.createTrigger(triggerData);
                 this._description.addTrigger(trigger);
             }
-
-            this._setSelectedElement(instance);
         }
         instance.setEventListener(this);
         instance.enableDragNDrop(area,[area]);
@@ -524,7 +526,9 @@ var ScreenDocument = Class.create(PaletteDocument,
             this._pipeFactory.removePipe(pipe);
             this._description.remove(pipe);
 
-            this._refreshReachability();
+            if (!this._removingInstance) {
+                this._refreshReachability();
+            }
             this._setDirty(true);
         }
     },
@@ -583,7 +587,7 @@ var ScreenDocument = Class.create(PaletteDocument,
                     return (ac.name == action);
                 }).preconditions;
             } else {
-                var conditionList = instanceDescription.postconditions[0];
+                var conditionList = instanceDescription.postconditions;
             }
             var condition = conditionList.detect(function(cond) {
                 return (cond.id == startTerminal.getConditionId());
@@ -630,11 +634,13 @@ var ScreenDocument = Class.create(PaletteDocument,
      */
     _deleteInstance: function($super, /** ComponentInstance */ instance) {
 
+
         if (instance.constructor == FormInstance) {
                 this._formInstance = null;
         }
         this._description.remove(instance);
 
+        this._removingInstance = true;
         this._pipeFactory.getPipes(instance).each(function(pipe){
             this._pipeFactory.removePipe(pipe);
             this._description.remove(pipe);
@@ -646,6 +652,7 @@ var ScreenDocument = Class.create(PaletteDocument,
         }.bind(this));
 
         $super(instance);
+        this._removingInstance = false;
     },
 
     /**

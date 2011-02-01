@@ -25,8 +25,8 @@ var ScreenDescription = Class.create(BuildingBlockDescription,
      */
     toJSON: function() {
         var result = {
-            "preconditions": this.getPreconditions().size() > 0 ? [this.getPreconditions()] : [],
-            "postconditions": this.getPostconditions().size() > 0 ? [this.getPostconditions()] : [],
+            "preconditions": this.getPreconditions(),
+            "postconditions": this.getPostconditions(),
             "definition": {
                 "buildingblocks": this._getScreenBuildingBlocks(),
                 "pipes": this._getScreenPipes(),
@@ -354,6 +354,7 @@ var ScreenDescription = Class.create(BuildingBlockDescription,
             buildingBlocks.push({
                 'id': block.buildingblock.getId(),
                 'uri': block.buildingblock.getUri(),
+                'originalUri': block.buildingblock.getOriginalUri(),
                 'position': block.position,
                 'orientation': block.buildingblock.getOrientation(),
                 'parameter': block.buildingblock.getParams()
