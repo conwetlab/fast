@@ -51,7 +51,7 @@
                     "label":{
                         "en-gb":"An item"
                     },
-                    "pattern":"?Item http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#Item",
+                    "pattern":"?Item http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://fast.morfeo-project.org/ontologies/amazon#Item",
                     "positive":"true"
                 }
             ],
@@ -66,7 +66,7 @@
                 "label":{
                     "en-gb":"A product list"
                 },
-                "pattern":"?OList http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#OfferList",
+                "pattern":"?OList http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://fast.morfeo-project.org/ontologies/amazon#OfferList",
                 "positive":"true"
             }
     ],

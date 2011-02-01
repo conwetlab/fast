@@ -43,7 +43,7 @@
                 "label":{
                     "en-gb":"An item"
                 },
-                "pattern":"?Item http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#Item",
+                "pattern":"?Item http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://fast.morfeo-project.org/ontologies/amazon#Item",
                 "positive":"true"
             }
     ],
@@ -53,7 +53,7 @@
                 "label":{
                     "en-gb":"An shopping cart"
                 },
-                "pattern":"?Cart http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#ShoppingCart",
+                "pattern":"?Cart http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://fast.morfeo-project.org/ontologies/amazon#ShoppingCart",
                 "positive":"true"
             }
     ]

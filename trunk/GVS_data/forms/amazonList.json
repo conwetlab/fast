@@ -49,7 +49,7 @@
 			    "label":{
 				"en-gb":"A product list"
 			    },
-			    "pattern":"?PList http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#ProductList",
+			    "pattern":"?PList http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://fast.morfeo-project.org/ontologies/amazon#ProductList",
 			    "positive":"true"
 			}
 		    ],
@@ -64,7 +64,7 @@
 			"label":{
 			    "en-gb":"An item"
 			},
-			"pattern":"?Item http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#Item",
+			"pattern":"?Item http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://fast.morfeo-project.org/ontologies/amazon#Item",
 			"positive":"true"
 		    },
 		    {
@@ -72,7 +72,7 @@
 			"label":{
 			    "en-gb":"A filter"
 			},
-			"pattern":"?Filter http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#SearchCriteria",
+			"pattern":"?Filter http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://fast.morfeo-project.org/ontologies/amazon#SearchRequest",
 			"positive":"true"
 		    }
 	    ],

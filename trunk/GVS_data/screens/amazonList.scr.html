@@ -68,10 +68,10 @@
     }
     List.prototype.search = function (){
         //Get the facts to invoke the service
-        var filter = ScreenflowEngineFactory.getInstance().getFact('http://aws.amazon.com/AWSECommerceService#SearchCriteria');
+        var filter = ScreenflowEngineFactory.getInstance().getFact('http://fast.morfeo-project.org/ontologies/amazon#SearchRequest');
         var user = ScreenflowEngineFactory.getInstance().getFact('user');
         //Add the ItemSearch parameters
-        if (filter.data instanceof object) {
+        if (filter.data instanceof Object) {
             var productType = filter.data.productType;
             if(!productType){
                 productType = 'All'
@@ -169,7 +169,7 @@
         list.clearSelected ();
         //select the element
         nodeElement.parentNode.parentNode.setStyle({background: "#FFF8E8"});
-        var item = {uri: 'http://aws.amazon.com/AWSECommerceService#Item', data:{ASIN: _ASIN, title: nodeElement.parentNode.parentNode.firstChild.firstChild.nodeValue}};
+        var item = {uri: 'http://fast.morfeo-project.org/ontologies/amazon#Item', data:{ASIN: _ASIN, title: nodeElement.parentNode.parentNode.firstChild.firstChild.nodeValue}};
         ScreenflowEngineFactory.getInstance().manageFacts([item],[]);
     }
     List.prototype.clearSelected = function (){

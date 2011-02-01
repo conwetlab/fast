@@ -71,7 +71,7 @@
             ShoppingCart.prototype.clearCart = function (){
 				//Ask the user to confirm the operation
 				if (confirm("Are you sure you want to empty your Shopping Cart?")) {
-					var cart = ScreenflowEngineFactory.getInstance().getFact('http://aws.amazon.com/AWSECommerceService#ShoppingCart');
+					var cart = ScreenflowEngineFactory.getInstance().getFact('http://fast.morfeo-project.org/ontologies/amazon#ShoppingCart');
 					var user = ScreenflowEngineFactory.getInstance().getFact('user');
 					
 					//Create the call
@@ -103,18 +103,18 @@
 			}
 
             ShoppingCart.prototype.clear_ok = function (){
-				ScreenflowEngineFactory.getInstance().manageFacts([],['http://aws.amazon.com/AWSECommerceService#PurchaseURL']);
+				ScreenflowEngineFactory.getInstance().manageFacts([],['http://fast.morfeo-project.org/ontologies/amazon#PurchaseURL']);
 				shoppingCart.fetch();
 			}
 			
 			ShoppingCart.prototype.checkout = function (){
-				var purchase = {uri:'http://aws.amazon.com/AWSECommerceService#PurchaseURL', data:{url: shoppingCart.purchaseURL}};
+				var purchase = {uri:'http://fast.morfeo-project.org/ontologies/amazon#PurchaseURL', data:{url: shoppingCart.purchaseURL}};
 				ScreenflowEngineFactory.getInstance().manageFacts([purchase],[]);
 			}
 			
 			ShoppingCart.prototype.update = function (){
 				if (shoppingCart.productList.length > 0) { //Only if there is something to update
-					var cart = ScreenflowEngineFactory.getInstance().getFact('http://aws.amazon.com/AWSECommerceService#ShoppingCart');
+					var cart = ScreenflowEngineFactory.getInstance().getFact('http://fast.morfeo-project.org/ontologies/amazon#ShoppingCart');
 					var user = ScreenflowEngineFactory.getInstance().getFact('user');
 					//Create the call
 					var url = "http://webservices.amazon.com/onca/xml?Service=AWSECommerceService";
@@ -150,13 +150,13 @@
 			}
 
 			ShoppingCart.prototype.update_ok = function (){
-				ScreenflowEngineFactory.getInstance().manageFacts([],['http://aws.amazon.com/AWSECommerceService#PurchaseURL']);
+				ScreenflowEngineFactory.getInstance().manageFacts([],['http://fast.morfeo-project.org/ontologies/amazon#PurchaseURL']);
 				shoppingCart.fetch();
 			}
 			
 			//Change the current Item Fact
 			ShoppingCart.prototype.productDetail = function (_ASIN,_title){
-				var item = ScreenflowEngineFactory.getInstance().getFact('http://aws.amazon.com/AWSECommerceService#Item');
+				var item = ScreenflowEngineFactory.getInstance().getFact('http://fast.morfeo-project.org/ontologies/amazon#Item');
 				item.data.ASIN = _ASIN;
 				item.data.title = _title;
 				ScreenflowEngineFactory.getInstance().manageFacts([item],['product']);
@@ -170,7 +170,7 @@
 				
                 //Get the facts to invoke the service
                 //TODO add error handling
-                var cart = ScreenflowEngineFactory.getInstance().getFact('http://aws.amazon.com/AWSECommerceService#ShoppingCart');
+                var cart = ScreenflowEngineFactory.getInstance().getFact('http://fast.morfeo-project.org/ontologies/amazon#ShoppingCart');
                 var user = ScreenflowEngineFactory.getInstance().getFact('user');
 				
                 //Invoke the service CartGet to retrieve the product list
@@ -263,7 +263,7 @@
 				if (shoppingCart.productList.length == 0) {//Empty shopping cart
 					$("info").update("Your Shopping Cart is empty");
 					$("buttonContainerDivCart").hide();
-					ScreenflowEngineFactory.getInstance().manageFacts([],['?Purchase http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://aws.amazon.com/AWSECommerceService#PurchaseURL']);	
+					ScreenflowEngineFactory.getInstance().manageFacts([],['?Purchase http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://fast.morfeo-project.org/ontologies/amazon#PurchaseURL']);	
 					return;
 				}else{
 					$("info").update("");
