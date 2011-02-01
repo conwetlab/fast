@@ -1,0 +1,127 @@
+%% FAST FP7-ICT-2007-1-216048 deliverable template
+%% based on NEPOMUK deliverable template
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Initial set up
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesClass{fast_latex}[2004/03/24 2004 CleanBook LaTeX class]
+\LoadClass{article}
+\PassOptionsToClass{a4paper}{article}
+\DeclareOption*{\PassOptionsToClass{\CurrentOption}{article}}
+\ProcessOptions
+
+%% Packages
+\RequirePackage{color}
+\RequirePackage{colortbl}
+\RequirePackage{helvet}
+\renewcommand{\familydefault}{\sfdefault}
+\usepackage{scrpage2}
+\usepackage{graphicx}
+\usepackage{color}
+\usepackage{colortbl}
+\usepackage{typearea}
+\usepackage[T1]{fontenc}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Page Layout
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\setlength{\textwidth}{15cm}
+\setlength{\topskip}{1cm}
+\setlength{\textheight}{23.5cm}
+\setlength{\oddsidemargin}{0.44cm}
+\setlength{\topmargin}{-1.0cm}
+\setlength\headsep{1cm}
+\reversemarginpar
+\setlength{\marginparwidth}{4cm}
+\renewcommand{\arraystretch}{1.7}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% NEPOMUK colors
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\definecolor{fast@lightgrey}{RGB}{140,140,140}
+\definecolor{nepomuk@lightblue}{RGB}{0,140,206}
+\definecolor{nepomuk@green}{RGB}{143,204,41}
+\definecolor{nepomuk@red}{RGB}{189,16,11}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Headers and footers
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\pagestyle{scrheadings}
+\clearscrheadings
+\clearscrplain
+\renewcommand{\headfont}{%
+\normalfont
+}
+\renewcommand{\pnumfont}{%
+\normalfont
+}
+\setheadsepline{.4pt} % Linie unter dem Head
+\setheadwidth{15cm}
+\setfootwidth{15cm}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Redefinitions (colored headings)
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%% Paragraph skipping and indenting
+\parskip 1.mm
+\parindent 7.mm
+
+\makeatletter
+\renewcommand%
+{\section}{\@startsection{section}%
+{1}%
+{0cm}%
+{2\baselineskip}%
+{1\baselineskip}%
+{\Large\bf}%
+}
+
+\renewcommand%
+{\subsection}{\@startsection{subsection}%
+{1}%
+{0cm}%
+{2\baselineskip}%
+{1\baselineskip}%
+{\large}%
+}
+
+\renewcommand%
+{\subsubsection}{\@startsection{subsubsection}%
+{1}%
+{0cm}%
+{2\baselineskip}%
+{1\baselineskip}%
+{\large}%
+}
+\makeatother
+\newcommand{\autor}[1]{{\Large \bf \sf #1}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Redefinitions (toc)
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\renewcommand{\contentsname}{Table of contents}
+\makeatletter
+\renewcommand*\@dotsep{1}
+\renewcommand*\l@section{\@dottedtocline{1}{1.5em} {2.3em}}
+\renewcommand*\l@subsection{\@dottedtocline{2}{3.8 em}{3.2em}}
+\renewcommand*\l@subsubsection{\@dottedtocline{3}{ 7.0em}{4.1em}}
+\renewcommand*\l@paragraph{\@dottedtocline{4}{10em }{5em}}
+\renewcommand*\l@subparagraph{\@dottedtocline{5}{1 2em}{6em}}
+\renewcommand*\l@figure{\@dottedtocline{1}{1.5em}{ 2.3em}}
+\renewcommand*\l@table{\@dottedtocline{1}{1.5em}{ 2.3em}}
+
+\makeatother 
+
+
+%\newfont{\affaddrit}{helvetica at 10pt} %13 Jan 00 gkmt
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Redefinitions (misc)
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newcommand{\marginlabel}[1]
+	{\mbox{}\marginpar{\raggedright\hspace{0pt}#1}}
+\renewcommand{\labelitemii}{$\circ$}
+
