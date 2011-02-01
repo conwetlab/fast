@@ -157,30 +157,31 @@ public class RequestServiceImpl extends RemoteServiceServlet implements RequestS
 			
 			answer += "pwd: " + classLocation;
 
-			boolean localDemo = true;
-			if (localDemo)
-			{
-				path = "../../GVS/static/";
-			}
-			else if ( classLocation.contains("ServiceDesignerWep"))
-			{
+//			boolean localDemo = true;
+//			if (localDemo)
+//			{
+//				
+//				path = "../../GVS/static/";
+//			}
+//			else if ( classLocation.contains("ServiceDesignerWep"))
+//			{
 				int prefixLength = classLocation.indexOf("ServiceDesignerWep");
 				prefixLength += "ServiceDesignerWep".length();
 				String installDir = classLocation.substring(0, prefixLength);
 				path = installDir;
 				
 				answer += " IsOnTomcat at " + installDir;
-			}
-			else
-			{
-				int prefixLength = classLocation.indexOf("ServiceScreenDesignerWep/war");
-				prefixLength += "ServiceScreenDesignerWep/war".length();
-				String installDir = classLocation.substring(0, prefixLength);
-				
-				answer += " IsLocal at " + installDir;
-			}
+//			}
+//			else
+//			{
+//				int prefixLength = classLocation.indexOf("ServiceScreenDesignerWep/war");
+//				prefixLength += "ServiceScreenDesignerWep/war".length();
+//				String installDir = classLocation.substring(0, prefixLength);
+//				
+//				answer += " IsLocal at " + installDir;
+//			}
 			
-			String baseFileName = path + "/servicescreendesignerwep/" + opName + "Op";
+			String baseFileName = path + "/ServiceScreenDesignerWep/wrapper/" + opName + "Op";
 			String fileName = baseFileName + ".html";
 			
 			answer += " fileName " + fileName;

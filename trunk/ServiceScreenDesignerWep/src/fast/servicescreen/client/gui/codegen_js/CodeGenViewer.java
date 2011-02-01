@@ -1,5 +1,6 @@
 package fast.servicescreen.client.gui.codegen_js;
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -19,6 +20,7 @@ import fast.common.client.BuildingBlock;
 import fast.mediation.client.gui.MediationRuleGUI;
 import fast.servicescreen.client.ServiceScreenDesignerWep;
 import fast.servicescreen.client.URL_Settings;
+import fast.servicescreen.client.rpc.ShareResourceHandler;
 
 /**
  * This Tab should show result steps of code generation.
@@ -135,7 +137,9 @@ public class CodeGenViewer
 			}
 		});
 		
-		String operatorURL = URL_Settings.getGVSOperatorStorage_URL() + generator.screen.getName() + "Op.html";
+		//TODO test
+		String baseURL = GWT.getModuleBaseURL();
+		String operatorURL = baseURL + "/wrapper/" + generator.screen.getName() + "Op.html";
 		Anchor a = new Anchor(operatorURL, operatorURL, "_blank");
 		
 		

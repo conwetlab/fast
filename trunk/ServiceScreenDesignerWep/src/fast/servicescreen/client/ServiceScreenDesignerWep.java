@@ -253,6 +253,7 @@ public class ServiceScreenDesignerWep extends FastTool implements EntryPoint
       
       tabPanel = new TabPanel();
       tabPanel.setStyleName("fastTabPanel");
+      tabPanel.setWidth("1300px");
       
       // build overview panel
       ServiceWrapperOverviewTab serviceWrapperOverviewTab = new ServiceWrapperOverviewTab();

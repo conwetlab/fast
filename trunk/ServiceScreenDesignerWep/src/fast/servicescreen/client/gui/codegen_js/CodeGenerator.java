@@ -5,16 +5,24 @@ import java.util.HashMap;
 import java.util.Iterator;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.json.client.JSONNumber;
+import com.google.gwt.json.client.JSONObject;
+import com.google.gwt.json.client.JSONParser;
+import com.google.gwt.json.client.JSONValue;
+import com.google.gwt.user.client.Cookies;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import fast.common.client.BuildingBlock;
 import fast.common.client.FASTMappingRule;
 import fast.common.client.FactPort;
+import fast.common.client.FactType;
+import fast.common.client.ServiceDesigner;
 import fast.common.client.ServiceScreen;
 import fast.servicescreen.client.RequestService;
 import fast.servicescreen.client.RequestServiceAsync;
 import fast.servicescreen.client.ServiceScreenDesignerWep;
+import fast.servicescreen.client.URL_Settings;
 import fast.servicescreen.client.gui.RuleUtil;
 import fast.servicescreen.client.gui.RequestTypeHandler.RequestMethodType;
 import fast.servicescreen.client.gui.codegen_js.CodeGenViewer.WrappingType;
@@ -476,7 +484,7 @@ public class CodeGenerator
 //		{ 
 			service = GWT.create(RequestService.class);
 //		}
-
+			
 		//send pre - trans - post code to server
 		service.saveJsFileOnServer(screen.getName(), prehtml, helperMethods + rootTemplate, posthtml, new AsyncCallback<String>()
 				{
@@ -496,9 +504,173 @@ public class CodeGenerator
 						Window.alert(caught.getLocalizedMessage());
 					}
 				});
+		
+		//shareBuildingBlock():
+		//url and header
+		String url = /*"http://127.0.0.1:13337/"*/ URL_Settings.getGVS_URL() + "buildingblock/resource";
+		final String cookie = "fastgvsid=" + Cookies.getCookie("fastgvsid");
+		final HashMap<String, String> headers = new HashMap<String, String>();
+		headers.put("Cookie", cookie);
+
+		//build operator
+		String body = "buildingblock=" + createBuildingBlock();
+		
+		//upload to GVS
+		service.sendHttpRequest_POST(url, headers, body, new AsyncCallback<String>(){
+			@Override
+			public void onFailure(Throwable caught) {}
+
+			@Override
+			public void onSuccess(String result) {
+				if(result != null && result != "-1")
+				{
+					JSONValue resourceVal = JSONParser.parse(result);
+					JSONObject resourceObj = resourceVal.isObject();
+					JSONValue idVal = resourceObj.get("id");
+					JSONNumber idNum = idVal.isNumber();
+					String id = idNum.toString();
+
+					if(id != null)
+					{
+						String shareUrl = "http://127.0.0.1:13337/" + "buildingblock/" + id + "/sharing";
+						service.sendHttpRequest_POST(shareUrl, headers, "", new AsyncCallback<String>(){
+							@Override
+							public void onFailure(Throwable caught)
+							{
+								//Resource couldn't be shared
+								System.out.println("Resource couldn't be shared" + caught.getMessage());
+							}
+
+							@Override
+							public void onSuccess(String result)
+							{
+								//Resource was shared
+								System.out.println("Resource was shared: " + result);
+							}
+						});
+					}
+				}
+			}
+		});
 	}
 	
+	/*
+	 * replace all parameters to have a functional buildingblock 
+	 * */
+	private String createBuildingBlock()
+	{
+		String buildingBlockString = buildingBlockTemplate;
+		
+		BuildingBlock buildingBlock = this.screen;
+		
+		//name
+		String bbName = buildingBlock.getName();
+		buildingBlockString = buildingBlockString.replace("<<name>>", bbName);
+		//code
+		String bbCodeUrl = /*servicescreendesignerURL*/"" + bbName + "Op.js";
+		buildingBlockString = buildingBlockString.replace("<<codeUrl>>", bbCodeUrl);
+		
+		//actionName
+		String bbActionName = "filter";
+		buildingBlockString = buildingBlockString.replace("<<actionName>>", bbActionName);
+		
+		//TODO tg preconditions
+		String bbPreconditions = "";
+		for (Iterator<FactPort> iterator = buildingBlock.iteratorOfPreconditions(); iterator.hasNext();) {
+			FactPort precondition = (FactPort) iterator.next();
+			FactType conditionType = retrieveFactType(precondition.getFactType());
+			bbPreconditions += createCondition(conditionType);
+			
+			if(iterator.hasNext())
+			{
+				bbPreconditions += ",";
+			}
+		}
+		buildingBlockString = buildingBlockString.replace("<<preconditions>>", bbPreconditions);
+		
+		//TODO tg postconditions
+		String bbPostconditions = "";
+		for (Iterator<FactPort> iterator = buildingBlock.iteratorOfPostconditions(); iterator.hasNext();) {
+			FactPort postcondition = (FactPort) iterator.next();
+			FactType conditionType = retrieveFactType(postcondition.getFactType());
+			bbPostconditions += createCondition(conditionType);
+			
+			if(iterator.hasNext())
+			{
+				bbPostconditions += ",";
+			}
+		}
+		buildingBlockString = buildingBlockString.replace("<<postconditions>>", bbPostconditions);
+		
+		//label
+		buildingBlockString = buildingBlockString.replace("<<label>>", bbName);
+		
+		//description
+		buildingBlockString = buildingBlockString.replace("<<description>>", "This is a " + bbName);
+
+		//?? libraries
+		buildingBlockString = buildingBlockString.replace("<<libraries>>", "");
+		
+		//?? tags
+		buildingBlockString = buildingBlockString.replace("<<tags>>", "");
+		
+		return buildingBlockString;
+	}
 	
+	private FactType retrieveFactType(String typeName)
+	{
+		FactType result = new FactType();
+		ServiceDesigner designer = ((ServiceScreen)screen).getServiceDesigner();
+		for (Iterator<FactType> iterator = designer.iteratorOfFactTypes(); iterator.hasNext();) {
+			FactType factType = (FactType) iterator.next();
+			
+			if(typeName.equals(factType.getTypeName()))
+			{
+				result = factType;
+				break;
+			}
+		}
+		
+		return result;
+	}
+	
+	/*
+	 * replace all parameters to have a functional pre- or postcondition
+	 * */
+	private String createCondition(FactType condition)
+	{
+		String conditionString = conditionTemplate;
+		
+		//id
+		conditionString.replaceAll("<<conditionID>>", condition.getLabel().toLowerCase()); 
+		
+//		replaceId();
+//		replaceLabel();
+		conditionString.replaceAll("<<conditionLabel>>", condition.getLabel());
+		
+//		replacePattern();
+		String patternString = "?" + condition.getTypeName() +
+							   " http://www.w3.org/1999/02/22-rdf-syntax-ns#type " + condition.getUri();
+		conditionString.replaceAll("<<conditionPattern>>", patternString);
+		
+		return conditionString;
+	}
+	
+	/*
+	 * replace all parameters to have a functional concept
+	 * */
+	public void createConcept()
+	{
+		String concept = conceptTemplate;
+		
+//		replaceDomain(concept);
+//		replaceName();
+//		replaceDescription();
+//		replaceLabel();
+//		replaceSubClassOf();
+//		replaceUri();
+//		replaceTags();
+	}
 	
 	// -------------- the template strings -------------- //
 	
@@ -587,16 +759,16 @@ public class CodeGenerator
 		"<head> \n" +
 		"<meta http-equiv='Content-Type' content='text/html; charset=ISO-8859-1'> \n" +
 		"<title>Insert title here</title> \n" +
-		"<script type=\"text/javascript\" language=\"javascript\" src=\"http://localhost:13337/static/1/js/prototype/prototype.js\"></script> \n" +
-		"<script type=\"text/javascript\" language=\"javascript\" src=\"http://localhost:13337/static/1/js/cjson_parse/cjson_parse.js\"></script> \n" +
-		"<script type=\"text/javascript\" language=\"javascript\" src=\"http://localhost:13337/static/1/js/fast/menu.js\"></script> \n" +
-		"<script type=\"text/javascript\" language=\"javascript\" src=\"http://localhost:13337/static/1/js/fast/screenflowEngine.js\"></script> \n" +
-		"<script type=\"text/javascript\" language=\"javascript\" src=\"http://localhost:13337/static/1/js/fast/screenEngine.js\"></script> \n" +
-		"<script type=\"text/javascript\" language=\"javascript\" src=\"http://localhost:13337/static/1/js/fast/buildingblock.js\"></script> \n" +
-		"<script type=\"text/javascript\" language=\"javascript\" src=\"http://localhost:13337/static/1/js/fast/debugger.js\"></script> \n" +
-		"<script type=\"text/javascript\" language=\"javascript\" src=\"http://localhost:13337/static/servicescreendesignerwep/kasselStringUtils.js\"></script> \n" +
-		"<script type=\"text/javascript\" language=\"javascript\" src=\"http://localhost:13337/static/1/js/fastAPI/fastAPI.js\"></script> \n" +
-		"<script type=\"text/javascript\" language=\"javascript\" src=\"http://localhost:13337/static/1/js/fastAPI/fastAPI_player.js\"></script> \n" +
+		"<script type=\"text/javascript\" language=\"javascript\" src=\"" + URL_Settings.getGVS_URL() + "static/1/js/prototype/prototype.js\"></script> \n" +
+		"<script type=\"text/javascript\" language=\"javascript\" src=\"" + URL_Settings.getGVS_URL() + "static/1/js/cjson_parse/cjson_parse.js\"></script> \n" +
+		"<script type=\"text/javascript\" language=\"javascript\" src=\"" + URL_Settings.getGVS_URL() + "static/1/js/fast/menu.js\"></script> \n" +
+		"<script type=\"text/javascript\" language=\"javascript\" src=\"" + URL_Settings.getGVS_URL() + "static/1/js/fast/screenflowEngine.js\"></script> \n" +
+		"<script type=\"text/javascript\" language=\"javascript\" src=\"" + URL_Settings.getGVS_URL() + "static/1/js/fast/screenEngine.js\"></script> \n" +
+		"<script type=\"text/javascript\" language=\"javascript\" src=\"" + URL_Settings.getGVS_URL() + "static/1/js/fast/buildingblock.js\"></script> \n" +
+		"<script type=\"text/javascript\" language=\"javascript\" src=\"" + URL_Settings.getGVS_URL() + "static/1/js/fast/debugger.js\"></script> \n" +
+		"<script type=\"text/javascript\" language=\"javascript\" src=\"" + URL_Settings.getGVS_URL() + "static/servicescreendesignerwep/kasselStringUtils.js\"></script> \n" +
+		"<script type=\"text/javascript\" language=\"javascript\" src=\"" + URL_Settings.getGVS_URL() + "static/1/js/fastAPI/fastAPI.js\"></script> \n" +
+		"<script type=\"text/javascript\" language=\"javascript\" src=\"" + URL_Settings.getGVS_URL() + "static/1/js/fastAPI/fastAPI_player.js\"></script> \n" +
 		"<script type='text/javascript'> \n \n" + 
 		"  var theOperator = { \n" + 
 		"\n";
@@ -627,51 +799,16 @@ public class CodeGenerator
 				depth3 + "\"name\" : \"<<actionName>>\"\n" +
 				
 				//preconditions = [{},{...}]
-				depth3 + "\"preconditions\" : [\n" +
-				
-					//a precondition
-					depth4 + "{\n" +
-					
-						//precondition id
-						depth5 + "\"id\" : \"<<preconditionID>>\"\n" +
-					
-						//precondition label
-						depth5 + "\"label\" : \"<<preconditionLabel>>\"\n" +
-						
-						//precondition pattern
-						depth5 + "\"pattern\" : \"<<preconditionPattern>>\"\n" +
-						
-						//precondition positive default = true
-						depth5 + "\"positive\" : \"true\"\n" +
-					
-					depth4 + "}\n" +
-					
-				depth3 + "]\n" +
-				
+				depth3 + "\"preconditions\" : [<<preconditions>>\n" +
+			
+			    depth3 + "]\n" +
 				//action uses
 				depth3 + "\"uses\" : []\n" +
 			
 			depth2 + "}\n" +
 			
 			//postconditions= [{},{...}]
-			depth2 + "\"postconditions\" : [\n" +
-			
-				//a postcondition
-				depth4 + "{\n" +
-			
-					//postcondition id
-					depth5 + "\"id\" : \"<<postconditionID>>\"\n" +
-				
-					//postcondition label
-					depth5 + "\"label\" : \"<<postconditionLabel>>\"\n" +
-					
-					//postcondition pattern
-					depth5 + "\"pattern\" : \"<<postconditionPattern>>\"\n" +
-					
-					//postcondition positive default = true
-					depth5 + "\"positive\" : \"true\"\n" +
-			
-				depth4 + "}\n" +
+			depth2 + "\"postconditions\" : [<<postconditions>>\n" +
 			
 			depth2 + "]\n" +
 			
@@ -685,7 +822,7 @@ public class CodeGenerator
 			depth2 + "\"description\" : \"<<description>>\"\n" +
 			
 			//external libs that the bb needs to work
-			depth2 + "\"libraries\" : []\n" +
+			depth2 + "\"libraries\" : [<<libraries>>]\n" +
 			
 			//triggers
 			depth2 + "\"triggers\" : []\n" +
@@ -705,7 +842,47 @@ public class CodeGenerator
 			//"default" screenshot
 			depth2 + "\"screenshot\" : \"http://www.deri.ie/<<name>>screenshot.jpg\"\n" +
 		depth + "}\n" +
-		"\n";
+	"\n";
+	
+	public String conditionTemplate =
+	//a condition
+	depth + "{\n" +
+	
+		//condition id
+		depth2 + "\"id\" : \"<<conditionID>>\"\n" +
+	
+		//condition label
+		depth2 + "\"label\" : \"<<conditionLabel>>\"\n" +
+		
+		//condition pattern
+		depth2 + "\"pattern\" : \"<<conditionPattern>>\"\n" +
+		
+		//condition positive default = true
+		depth2 + "\"positive\" : \"true\"\n" +
+	
+	depth + "}\n";
+	
+	public String conceptTemplate =
+		//declare JSON object 
+		depth + "{\n" +
+			//domain
+	    	depth2 + "\"domain\" : \"<<domain>>\"\n" +
+	    	//name
+	    	depth2 + "\"name\" : \"<<name>>\"\n" +
+	    	//description
+	    	depth2 + "\"description\" : \"<<description>>\"\n" +
+	    	//label
+	    	depth2 + "\"label\" : \"<<label>>\"\n" +
+	    	//subClassOf
+	    	depth2 + "\"subClassOf\" : \"<<subClassOf>>\"\n" +
+	    	//uri
+	    	depth2 + "\"uri\" : \"<<uri>>\"\n" +
+	    	//attributes
+	    	depth2 + "\"attributes\" : [<<attributes>>}\n" +
+	    	//tags
+	    	depth2 + "\"tags\" : [<<tags>>]\n" +
+	    depth + "}\n" +
+	"\n";
 	
 	public String helperMethods = "";
 }

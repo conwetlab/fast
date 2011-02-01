@@ -157,11 +157,12 @@ public class CTextChangeHandler implements ChangeHandler, PropertyChangeListener
 		   // typeName = typeName.substring(typeName.lastIndexOf(".") + 1) + " - " +
 		   // typeName.subSequence(0, typeName.lastIndexOf("."));
 		   //add to oracle words
-		   System.out.println("Add type to oracle: " + typeName);
+		   //System.out.println("Add type to oracle: " + typeName);
 		   if (typeName != null) 
 		   {
 			   words.add(typeName);
-			   words.add(typeName + "List");
+			   //TODO tg no fake typeNames
+//			   words.add(typeName + "List");
 		   }
 	   }
 	   

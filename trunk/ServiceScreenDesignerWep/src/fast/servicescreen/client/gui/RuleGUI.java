@@ -301,7 +301,6 @@ public class RuleGUI
             FactType factType = (FactType) typeIter.next();
             String typeName = factType.getTypeName();
 			types.add(typeName);
-			types.add(typeName + "List");
          }
       }
       else if ("fillAttributes".equals(kind))
