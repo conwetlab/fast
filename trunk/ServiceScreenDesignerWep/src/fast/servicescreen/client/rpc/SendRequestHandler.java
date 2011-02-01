@@ -74,7 +74,7 @@ public class SendRequestHandler implements ClickHandler
     * This method replace example values into input port tags, for post into body, for get into url.
     * Then toggle request
     * */
-   public void onClick(ClickEvent event) 
+   public void onClick(ClickEvent event)
    {
 	   String request = buildRequestUrl();
 	   
@@ -84,6 +84,7 @@ public class SendRequestHandler implements ClickHandler
 	   // Instantiate service
 	   if(service == null)
 	   {
+		   //TODO dk problem is here..
 		   service = GWT.create(RequestService.class);
 	   }
 	   

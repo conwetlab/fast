@@ -19,8 +19,6 @@ import com.google.gwt.user.client.ui.FlexTable.FlexCellFormatter;
 import fast.common.client.BuildingBlock;
 import fast.mediation.client.gui.MediationRuleGUI;
 import fast.servicescreen.client.ServiceScreenDesignerWep;
-import fast.servicescreen.client.URL_Settings;
-import fast.servicescreen.client.rpc.ShareResourceHandler;
 
 /**
  * This Tab should show result steps of code generation.
@@ -137,10 +135,13 @@ public class CodeGenViewer
 			}
 		});
 		
-		//TODO test
-		String baseURL = GWT.getModuleBaseURL();
-		String operatorURL = baseURL + "/wrapper/" + generator.screen.getName() + "Op.html";
-		Anchor a = new Anchor(operatorURL, operatorURL, "_blank");
+		//TODO dk get the fucking shit work
+		//Getting the path of the wrapper, config
+//		String baseURL = GWT.getModuleBaseURL();
+//		baseURL = baseURL.substring(0, baseURL.length()-25);
+//		
+//		String operatorURL = baseURL + "/wrapper/" + generator.screen.getName() + "Op.html";
+//		Anchor a = new Anchor(operatorURL, operatorURL, "_blank");
 		
 		
 		//create the template choose to make user changes possible 
@@ -165,7 +166,7 @@ public class CodeGenViewer
 		table.setWidget(row, 1, jsShowBox);
 		row++;
 		table.setWidget(row, 0, saveButton);
-		table.setWidget(row, 1, a);
+//		table.setWidget(row, 1, a);	//TODO dk here, too
 		
 		return table;
 	}

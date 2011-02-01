@@ -480,13 +480,15 @@ public class CodeGenerator
 	 * */
 	public void write_JS_File()
 	{
-//		if (service == null)
-//		{ 
-			service = GWT.create(RequestService.class);
-//		}
+		//TODO dk does not work -.- Fix it here and in server
+		//check, if the running app. is in hosted mode or not
+		boolean isLocal = GWT.isClient();
+		
+		//create GWT service impl.
+		service = GWT.create(RequestService.class);
 			
 		//send pre - trans - post code to server
-		service.saveJsFileOnServer(screen.getName(), prehtml, helperMethods + rootTemplate, posthtml, new AsyncCallback<String>()
+		service.saveJsFileOnServer(isLocal, screen.getName(), prehtml, helperMethods + rootTemplate, posthtml, new AsyncCallback<String>()
 				{
 					@Override
 					public void onSuccess(String result)
@@ -507,51 +509,51 @@ public class CodeGenerator
 		
 		//shareBuildingBlock():
 		//url and header
-		String url = /*"http://127.0.0.1:13337/"*/ URL_Settings.getGVS_URL() + "buildingblock/resource";
-		final String cookie = "fastgvsid=" + Cookies.getCookie("fastgvsid");
-		final HashMap<String, String> headers = new HashMap<String, String>();
-		headers.put("Cookie", cookie);
-
-		//build operator
-		String body = "buildingblock=" + createBuildingBlock();
-		
-		//upload to GVS
-		service.sendHttpRequest_POST(url, headers, body, new AsyncCallback<String>(){
-			@Override
-			public void onFailure(Throwable caught) {}
-
-			@Override
-			public void onSuccess(String result) {
-				if(result != null && result != "-1")
-				{
-					JSONValue resourceVal = JSONParser.parse(result);
-					JSONObject resourceObj = resourceVal.isObject();
-					JSONValue idVal = resourceObj.get("id");
-					JSONNumber idNum = idVal.isNumber();
-					String id = idNum.toString();
-
-					if(id != null)
-					{
-						String shareUrl = "http://127.0.0.1:13337/" + "buildingblock/" + id + "/sharing";
-						service.sendHttpRequest_POST(shareUrl, headers, "", new AsyncCallback<String>(){
-							@Override
-							public void onFailure(Throwable caught)
-							{
-								//Resource couldn't be shared
-								System.out.println("Resource couldn't be shared" + caught.getMessage());
-							}
-
-							@Override
-							public void onSuccess(String result)
-							{
-								//Resource was shared
-								System.out.println("Resource was shared: " + result);
-							}
-						});
-					}
-				}
-			}
-		});
+//		String url = /*"http://127.0.0.1:13337/"*/ URL_Settings.getGVS_URL() + "buildingblock/resource";
+//		final String cookie = "fastgvsid=" + Cookies.getCookie("fastgvsid");
+//		final HashMap<String, String> headers = new HashMap<String, String>();
+//		headers.put("Cookie", cookie);
+//
+//		//build operator
+//		String body = "buildingblock=" + createBuildingBlock();
+//		
+//		//upload to GVS
+//		service.sendHttpRequest_POST(url, headers, body, new AsyncCallback<String>(){
+//			@Override
+//			public void onFailure(Throwable caught) {}
+//
+//			@Override
+//			public void onSuccess(String result) {
+//				if(result != null && result != "-1")
+//				{
+//					JSONValue resourceVal = JSONParser.parse(result);
+//					JSONObject resourceObj = resourceVal.isObject();
+//					JSONValue idVal = resourceObj.get("id");
+//					JSONNumber idNum = idVal.isNumber();
+//					String id = idNum.toString();
+//
+//					if(id != null)
+//					{
+//						String shareUrl = "http://127.0.0.1:13337/" + "buildingblock/" + id + "/sharing";
+//						service.sendHttpRequest_POST(shareUrl, headers, "", new AsyncCallback<String>(){
+//							@Override
+//							public void onFailure(Throwable caught)
+//							{
+//								//Resource couldn't be shared
+//								System.out.println("Resource couldn't be shared" + caught.getMessage());
+//							}
+//
+//							@Override
+//							public void onSuccess(String result)
+//							{
+//								//Resource was shared
+//								System.out.println("Resource was shared: " + result);
+//							}
+//						});
+//					}
+//				}
+//			}
+//		});
 	}
 	
 	/*
@@ -565,6 +567,7 @@ public class CodeGenerator
 		
 		//name
 		String bbName = buildingBlock.getName();
+		
 		buildingBlockString = buildingBlockString.replace("<<name>>", bbName);
 		//code
 		String bbCodeUrl = /*servicescreendesignerURL*/"" + bbName + "Op.js";

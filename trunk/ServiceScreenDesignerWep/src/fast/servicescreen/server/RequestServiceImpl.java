@@ -1,14 +1,15 @@
 package fast.servicescreen.server;
 
+import java.io.File;
 import java.io.FileWriter;
+import java.net.URLDecoder;
 import java.util.HashMap;
 import java.util.Iterator;
 
-import org.apache.commons.httpclient.HttpClient;
-import org.apache.commons.httpclient.HttpStatus;
-import org.apache.commons.httpclient.methods.PostMethod;
+import org.apache.http.HttpResponse;
 import org.apache.http.client.ResponseHandler;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.BasicResponseHandler;
 import org.apache.http.impl.client.DefaultHttpClient;
 
@@ -21,9 +22,10 @@ import fast.servicescreen.client.RequestService;
  * This service is only available as source code. U can instantiate and
  * call it´s request methods to access HTTP requests and more..
  */
-@SuppressWarnings("serial")
 public class RequestServiceImpl extends RemoteServiceServlet implements RequestService
 {
+	private static final long serialVersionUID = 1L;
+	
 	// Saves the actual REST server response
 	private String responseBody = "";
 	private HttpGet httpget;
@@ -72,29 +74,31 @@ public class RequestServiceImpl extends RemoteServiceServlet implements RequestS
 	public String sendHttpRequest_POST(String url, HashMap<String, String> headers, String body)
 	{
 		//create client and method appending to url
-		HttpClient httpclient = new HttpClient();
-	    PostMethod method = new PostMethod(url);
+		DefaultHttpClient httpclient = new DefaultHttpClient();
+//	    PostMethod method = new PostMethod(url);
 	    
 	    //needed for big responses, but then we should cut the body not containing answerers
 //	    BufferedReader br = null;
 	    
 	    //parse given body and create parameters
-	    parse_andAdd_Parameters(method, body);
+//	    parse_andAdd_Parameters(method, body);
+	    
+	    HttpPost http_post = new HttpPost();
 	    
 	    //try to execute and watch for problems
 	    try
 	    {
-	    	int returnCode = httpclient.executeMethod(method);
+	    	HttpResponse resp = httpclient.execute(http_post);
 
-	    	if(returnCode == HttpStatus.SC_NOT_IMPLEMENTED)
-	    	{
-	    		System.err.println("The Post method is not implemented by this URI");
-	    		
+//	    	if(returnCode == HttpStatus.SC_NOT_IMPLEMENTED)
+//	    	{
+//	    		System.err.println("The Post method is not implemented by this URI");
+//	    		
 	    		// still consume the response body
-	    		responseBody  = method.getResponseBodyAsString();
-	    	}
-	    	else
-	    	{
+//	    		responseBody  = method.getResponseBodyAsString();
+//	    	}
+//	    	else
+//	    	{
 //	    		//catch response
 //	    		br = new BufferedReader(new InputStreamReader(method.getResponseBodyAsStream()));
 //	    		String readLine;
@@ -104,8 +108,8 @@ public class RequestServiceImpl extends RemoteServiceServlet implements RequestS
 //	    			responseBody += readLine;
 //	    		}
 	    		
-	    		responseBody  = method.getResponseBodyAsString();
-	    	}
+	    		responseBody  = resp.toString();//getResponseBodyAsString();
+//	    	}
 	    }
 	    catch (Exception e)
 	    {
@@ -113,7 +117,7 @@ public class RequestServiceImpl extends RemoteServiceServlet implements RequestS
 	    }
 	    finally
 	    {
-	    	method.releaseConnection();
+//	    	method.releaseConnection();
 	    }
 	    
 	    return responseBody;
@@ -123,27 +127,28 @@ public class RequestServiceImpl extends RemoteServiceServlet implements RequestS
 	 * This method split body string by \n and by =
 	 * and add decoded parameter to given PostMethod
 	 * */
-	protected void parse_andAdd_Parameters(PostMethod postMethod, String body)
-	{
-		String[] parameters = body.split("\n");
-		
-		for (int i = 0; i < parameters.length; i++)
-		{
-			String[] cut_NameValue = parameters[i].split("=");
-			
-			if(cut_NameValue.length == 2)
-			{
-				postMethod.addParameter(cut_NameValue[0], cut_NameValue[1]);
-			}
-		}
-	}
+//	protected void parse_andAdd_Parameters(PostMethod postMethod, String body)
+//	{
+//		String[] parameters = body.split("\n");
+//		
+//		for (int i = 0; i < parameters.length; i++)
+//		{
+//			String[] cut_NameValue = parameters[i].split("=");
+//			
+//			if(cut_NameValue.length == 2)
+//			{
+//				postMethod.addParameter(cut_NameValue[0], cut_NameValue[1]);
+//			}
+//		}
+//	}
 	
 	/**
 	 * This method try to form a given String
 	 * into a file, and save it as .js
 	 * */
+	@SuppressWarnings("deprecation")
 	@Override
-	public String saveJsFileOnServer(String opName, String preHTMLCode, String transCode, String postHTMLCode)
+	public String saveJsFileOnServer(boolean isLocal, String opName, String preHTMLCode, String transCode, String postHTMLCode)
 	{
 		//the HTML file content
 		String htmlContent = preHTMLCode + transCode + postHTMLCode;
@@ -151,54 +156,56 @@ public class RequestServiceImpl extends RemoteServiceServlet implements RequestS
 		
 		try
 		{
+			//getting class path
 			path = ".";
-			
 			String classLocation = getClassLocation ();
+//			answer += "pwd: " + classLocation;
+			String installDir;
+			int prefixLength;
 			
-			answer += "pwd: " + classLocation;
-
-//			boolean localDemo = true;
-//			if (localDemo)
+			//TODO dk why that does not work??
+			//if local save into war, if not save into webapps folder
+//			if (isLocal)
 //			{
+//				prefixLength = classLocation.indexOf("ServiceScreenDesignerWep/war");
+//				prefixLength += "ServiceScreenDesignerWep/war".length();
+//				installDir = classLocation.substring(0, prefixLength);
 //				
-//				path = "../../GVS/static/";
-//			}
-//			else if ( classLocation.contains("ServiceDesignerWep"))
-//			{
-				int prefixLength = classLocation.indexOf("ServiceDesignerWep");
-				prefixLength += "ServiceDesignerWep".length();
-				String installDir = classLocation.substring(0, prefixLength);
-				path = installDir;
-				
-				answer += " IsOnTomcat at " + installDir;
+//				answer += "if does not work";
 //			}
 //			else
 //			{
-//				int prefixLength = classLocation.indexOf("ServiceScreenDesignerWep/war");
-//				prefixLength += "ServiceScreenDesignerWep/war".length();
-//				String installDir = classLocation.substring(0, prefixLength);
-//				
-//				answer += " IsLocal at " + installDir;
+				prefixLength = classLocation.indexOf("ServiceDesignerWep");
+				prefixLength += "ServiceDesignerWep".length();
+				installDir = classLocation.substring(0, prefixLength);
+				path = URLDecoder.decode(installDir) + "/wrapper/";
+				
+				if(new File(path).mkdir())
+				{
+					answer += "Create folder 'wrapper'       ";
+				}
+				
+//				answer += "better..";
 //			}
 			
-			String baseFileName = path + "/ServiceScreenDesignerWep/wrapper/" + opName + "Op";
+			//configure filename (for html)
+			String baseFileName = path + opName + "Op";
 			String fileName = baseFileName + ".html";
 			
-			answer += " fileName " + fileName;
-			
+			//write file
 			FileWriter writer = new FileWriter(fileName, false);
-			
 			writer.write(htmlContent);
-			
 			writer.close();
 			
-			// write the pure json script, too
+			//configure filename (for javascript)
 			fileName = baseFileName + ".js";
 			writer = new FileWriter(fileName, false);
 			
+			//write file
 			writer.write(transCode);
-			
 			writer.close();
+			
+			answer += "The file now exists in: " + path;
 		}
 		catch (Exception e)
 		{
