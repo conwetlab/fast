@@ -1,0 +1,26 @@
+@prefix fgo: <http://purl.oclc.org/fast/ontology/gadget#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix catalogue: <http://fast.morfeo-project.org/catalogue/> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+
+# the class of screens, as defined in the FAST gadget ontology
+fgo:Screen a owl:Class .
+
+# an instance of Screen, the log in screen.
+# this acts as a prototype for screens used in screenflows.
+# represented in the palette of the GVS
+catalogue:prototype_graph {
+  catalogue:LogInScreen a fgo:Screen ;
+  fgo:hasClone catalogue:LogInScreen_74382 ;
+  dcterms:title "Log In Screen" ;
+  fgo:hasIcon catalogue:login.png .
+}
+
+# a clone of LogInScreen as used in a particular screenflow:
+# represented on the canvas of the GVS
+catalogue:clone_graph {
+  catalogue:LogInScreen_74382 a fgo:Screen ;
+  fgo:hasPrototype catalogue:LogInScreen ;
+  dcterms:title "Log In Screen" ;
+  fgo:hasIcon catalogue:login.png .
+}

@@ -19,6 +19,7 @@
 \usepackage{array}
 \usepackage{booktabs}
 \usepackage{amssymb}
+\usepackage{amsmath}
 \usepackage{paralist}
 \usepackage{courier}
 
@@ -691,13 +692,8 @@ A more detailed list of classes and properties, complete with human-readable com
 
 % subsection ontology_overview (end)
 
-\subsection{Classes, Instances and Templates} % (fold)
+\subsection{Levels of Representation} % (fold)
 \label{sub:classes_instances_and_templates}
-
-\todo{Rewrite this whole section with focus on prototypes, prototype theory, prototype-based programming, etc.}
-
-\cite{Taivalsaari96classes_vs_prototypes}
-
 
 In FAST, resources (gadgets, screenflows, screens and their components) exist in different stages throughout their lifecycle. Moving top-down from the high-level conceptual description to gadgets in use at runtime, the following differences can be made in terms of the level of instantiation:
 
@@ -716,34 +712,63 @@ In FAST, resources (gadgets, screenflows, screens and their components) exist in
   \end{center}
 \end{figure}
 
-When implementing these four stages, as illustrated in Fig.~\ref{fig:classes_templates}, to OWL DL semantics, one will be faced with an immediate problem. Conceptually, one would like to say that $Screen$ is a class, i.e., the set of all screens. As argued above, $LogInScreen$ would then be an instance of $Screen$ ($LogInScreen \subset Screen$), while a particular $LogInScreen_x$ in a particular screenflow would again be an instance of $LogInScreen$ ($LogInScreen_x \subset LogInScreen$). However, unless we want to move into OWL Full semantics, classes cannot be used as instances at the same time, so we cannot use this modelling approach. Furthermore, when we instantiate a resource such as a screen within a particular screenflow, we want to imply that the new instance ($LogInScreen_x$) has the same features such as label, icon or conditions, as $LogInScreen$. In other words, what we really require is a something like a \emph{copy} of the original $LogInScreen$. 
+When implementing these four stages, as illustrated in Fig.~\ref{fig:classes_templates}, in OWL DL semantics, we are faced with an immediate problem. Conceptually, we would like to say that $Screen$ is a class, i.e., the set of all screens. As argued above, $LogInScreen$ would then be an instance of $Screen$ ($LogInScreen \subset Screen$), while a particular $LogInScreen_x$ in a particular screenflow would again be an instance of $LogInScreen$ ($LogInScreen_x \subset LogInScreen$). However, unless we want to move into OWL Full semantics, classes cannot be used as instances at the same time, so we cannot use this modelling approach. Furthermore, when we instantiate a resource such as a screen within a particular screenflow, we want to imply that the new instance ($LogInScreen_x$) has the same features such as label, icon or conditions, as $LogInScreen$. In other words, what we really require is a something like a \emph{copy} or a \emph{clone} of the original $LogInScreen$. 
 
-Neither OWL nor RDFS semantics offer functionality to represent a relationship such as the copy of a resource formally. For this reason, we introduce the concept of \emph{templates for RDF instances} in FAST. Templates are similar to the notion of prototypes in programming languages such as JavaScript. One resource (e.g., $LogInScreen$) will play the role of a \emph{template}, while the other resource (e.g., $LogInScreen_x$) will be called a \emph{copy}. Conceptually, copying a resource involves the following steps:
+\subsubsection{Prototypes} % (fold)
+\label{ssub:prototypes}
+
+% subsubsection prototypes (end)
+
+Neither OWL nor RDFS semantics offer functionality to represent a relationship such as the clone of a resource formally. However, we can find inspiration for this kind of semantics in other areas, such as programming languages, and more particularly in object-oriented programming languages (OO). In OO, there is a general dichotomy between \emph{class-based} languages and \emph{prototype-based} languages. Both paradigms address the issue of defining similarity between objects, but do so in a different way. The class-based paradigm requires an a-priori classification and categorisation of the world (the class hierarchy), into which individual objects (the instances) are then grouped. All instances of a class inherit the attributes and functionality of the class. Changing this behaviour usually involves changing the class. Prototype-based languages, on the other hand, do not assume prior categorisations. Instead, one starts with specific examples and then generalises from there. These languages do not show a class vs. instance distinction. Instead, all objects have the same status, and new objects can be \emph{cloned} from other objects, which function as \emph{prototypical objects} in this situation. The new object (or clone) will inherit all attributes and functionality from the prototype. Changing behaviour can be done on each object individually.
+
+\todo{Rewrite this whole section with focus on prototypes, prototype theory, prototype-based programming, etc.}
+
+\cite{Taivalsaari96classes_vs_prototypes}
+
+\begin{itemize}
+	\item in a prototypical programming language, creating an object from a prototype means to clone it --- copy all its attributes\footnote{Whether or not this is true copy or merely a pointer is implementation-dependant. This is more or less transparent for the user.}
+	\item in RDF, what would ``all its attributes'' mean?
+	\item this is the old question of what constitutes an object in RDF
+	\item should we use the minimal self-contained graph \cite{Tummarello:2008kl}?
+	\item maybe some other named graph? But the RDF model doesn't feature named graphs
+	\item let's just assume some unspecified ``object graph'' for now --- the exact definition of the object graph is application dependent. In FAST, it is actually always known which triples constitute the object graph of a building block.
+	\item so, now that we can say that the prototype object, identified by its URI (we therefore call it $P_{URI}$), is defined by its object graph, we can define the relation between the prototype and its clone ($C_{URI}$) as follows:
+\end{itemize}
+
+\begin{equation}
+S:= \begin{cases}
+i = 0..M,\quad j =0..N  & \text{for }M >N \\
+i=0..M,\quad j=0..M & \text{for }N > M
+\end{cases}
+\end{equation}
+
+
+For this reason, we introduce the concept of \emph{templates for RDF instances} in FAST. Templates are similar to the notion of prototypes in programming languages such as JavaScript. One resource (e.g., $LogInScreen$) will play the role of a \emph{template}, while the other resource (e.g., $LogInScreen_x$) will be called a \emph{copy}. Conceptually, copying a resource involves the following steps:
 \begin{inparaenum}[(i)]
 	\item Defining a named graph $G_1$ that contains all statements about this resource considered to be relevant.
 	\item Creating a second graph $G_2$ with copies of all statements in $G_1$.
 	\item During this copying process, the identifiers for the main resource and certain other resources in the graph will be changed from $I_{template}$ to $I_{copy}$.
 \end{inparaenum}	
-In practice, this procedure can be implemented using a SPARQL CONSTRUCT query, where the WHERE clause defines the graph pattern of the template, and the CONSTRUCT query will build the copy from it. The corresponding data on all three levels is shown in List.~\ref{list:templating}, using TriG syntax~\cite{bizer2004trig} (an extension of Turtle syntax for named graphs).
+In practice, this procedure can be implemented using a SPARQL CONSTRUCT query, where the WHERE clause defines the graph pattern of the template, and the CONSTRUCT query will build the copy from it. The corresponding data on all three levels is shown in List.~\ref{list:prototyping}, using TriG syntax~\cite{bizer2004trig} (an extension of Turtle syntax for named graphs).
 
 \singlespacing
 \lstset{
-	caption={Templating example --- different levels of representation of a FAST screen (code)}, 
-	label=list:templating,
+	caption={Prototyping example --- different levels of representation of a FAST screen (code)}, 
+	label=list:prototyping,
 	language=turtle
 }
 \begin{figure}
-	\lstinputlisting{exampleCode/templating_example.ttl}
+	\lstinputlisting{exampleCode/prototypeExample.ttl}
 \end{figure}
 \doublespacing
 
-Figure \ref{fig:templating_example_graph} illustrates the same example graphically, using different colours to represent the two different graphs: the red graph $G_1$ in the background represents the original template resource, whereas the green graph $G_2$ in the front in represents the resource copy as it would be used in a concrete screen flow. \texttt{catalogue:LoginScreen} $\subset I_{template}$ has been changed to \texttt{catalogue:LoginScreen\_74382} $\subset I_{copy}$.
+Figure \ref{fig:prototype_example_graph} illustrates the same example graphically, using different colours to represent the two different graphs: the red graph $G_1$ in the background represents the original template resource, whereas the green graph $G_2$ in the front in represents the resource copy as it would be used in a concrete screen flow. \texttt{catalogue:LoginScreen} $\subset I_{template}$ has been changed to \texttt{catalogue:LoginScreen\_74382} $\subset I_{copy}$.
 
 \begin{figure}
   \begin{center}
-    \includegraphics[width=.75\linewidth]{images/templating_example.pdf}
-    \caption{Templating example --- different levels of representation of a FAST screen (diagramme)}
-    \label{fig:templating_example_graph}
+    \includegraphics[width=.75\linewidth]{images/prototypeExample.pdf}
+    \caption{Prototyping example --- different levels of representation of a FAST screen (diagram)}
+    \label{fig:prototype_example_graph}
   \end{center}
 \end{figure}
 
