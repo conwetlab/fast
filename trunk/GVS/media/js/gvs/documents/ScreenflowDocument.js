@@ -605,8 +605,8 @@ var ScreenflowDocument = Class.create(PaletteDocument,
      * @private
      */
     _updatePanes: function() {
-        var facts = this._getAllFacts();
         if (!this._selectedElement) {
+            var facts = this._getAllFacts();
             this._propertiesPane.fillTable(this._description);
             this._factPane.fillTable([], [], facts);
         } else {
@@ -631,7 +631,6 @@ var ScreenflowDocument = Class.create(PaletteDocument,
                 }
             }
         }
-        this._refreshVisibility();
     },
 
 
