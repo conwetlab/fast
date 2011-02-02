@@ -55,34 +55,33 @@ public class PlannerServlet extends GenericServlet {
 		try {
 			// create JSON representation of the input
 			JSONObject input = new JSONObject(body);
+
 			//	parse the goal or goal list
 			ArrayList<URI> goalList = new ArrayList<URI>();
-			try {
-				JSONArray goalArray = input.getJSONArray("goal");
-				for (int g = 0; g < goalArray.length(); g++) {
-					URI uri = new URIImpl(goalArray.getString(g));
-					BuildingBlock bb = getCatalogue().getBuildingBlock(uri);
-					if (bb.getPrototype() == null) 
-						throw new BuildingBlockException("Resource "+uri+" must be a clone of a prototype.");
-					goalList.add(bb.getPrototype());
-				}
-			} catch (JSONException e) {
-				log.debug("Goal attribute is not a list, maybe a single goal URI?");
-				goalList.clear();
+			JSONArray goalArray = input.optJSONArray("goal");
+			if (goalArray == null) {
+				// goal is defined by a single goal URI
 				goalList.add(new URIImpl(input.getString("goal")));
+			} else {
+				// goal is multiple (URIs list)
+				for (int g = 0; g < goalArray.length(); g++) {
+					goalList.add(new URIImpl(goalArray.getString(g)));
+				}
 			}
+			
 			// parse the canvas
 			ArrayList<URI> canvasUris = new ArrayList<URI>();
 			ArrayList<Screen> canvas = new ArrayList<Screen>();
 			JSONArray jsonCanvas = input.getJSONArray("canvas");
 			for (int i = 0; i < jsonCanvas.length(); i++) {
-				URI uri = new URIImpl(((JSONObject) jsonCanvas.get(i)).getString("uri"));
+				URI uri = new URIImpl(jsonCanvas.getJSONObject(i).getString("uri"));
 				Screen screen = getCatalogue().getScreen(uri);
 				if (screen == null) 
 					throw new NotFoundException("Resource "+uri+" does not exist.");
 				canvas.add(screen);
 				canvasUris.add(uri);
 			}
+
 			// parse 'page' and 'per_page' for pagination
 			int page = input.has("page") ? input.getInt("page") : 0;
 			int perPage = input.has("per_page") ? input.getInt("per_page") : 0;
