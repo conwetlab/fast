@@ -171,6 +171,7 @@ var PaletteDocument = Class.create(AbstractDocument, /** @lends PaletteDocument.
             // We are loading the document
             this._canvasCache = this._getCanvasCache(properties);
         }
+        this._updatePanes();
     },
 
     /**
