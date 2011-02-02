@@ -322,6 +322,7 @@ var ScreenflowDocument = Class.create(PaletteDocument,
                         this._description.addScreen(instance, position);
                         this._refreshReachability();
                         this._setSelectedElement(instance);
+                        this._save(false);
                     }.bind(this));
                 }
 
@@ -341,6 +342,7 @@ var ScreenflowDocument = Class.create(PaletteDocument,
                 }
                 if (!instance.getId()) {
                     instance.setId(UIDGenerator.generate(instance.getTitle()));
+                    this._save(false);
                 } else {
                     UIDGenerator.setStartId(instance.getId());
                 }

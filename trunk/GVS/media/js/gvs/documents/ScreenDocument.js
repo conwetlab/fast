@@ -361,6 +361,7 @@ var ScreenDocument = Class.create(PaletteDocument,
                 instance.createCatalogueCopy(function() {
                     this._description.addBuildingBlock(instance, position, orientation);
                     this._setSelectedElement(instance);
+                    this._save(false);
                 }.bind(this));
             }
         } else {
@@ -383,6 +384,7 @@ var ScreenDocument = Class.create(PaletteDocument,
             }
             if (!isLoading) {
                 this._setSelectedElement(instance);
+                this._save(false);
             }
         }
         if (!isLoading) {
@@ -428,7 +430,6 @@ var ScreenDocument = Class.create(PaletteDocument,
         instance.setEventListener(this);
         instance.enableDragNDrop(area,[area]);
         instance.getView().addGhost();
-        this._setDirty(true);
         return true;
     },
 

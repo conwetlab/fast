@@ -503,6 +503,7 @@ var PaletteDocument = Class.create(AbstractDocument, /** @lends PaletteDocument.
     _onPropertiesChange: function() {
         this._setTitle(this._description.name);
         this._setDirty(true);
+        this._save(false);
     },
 
 
