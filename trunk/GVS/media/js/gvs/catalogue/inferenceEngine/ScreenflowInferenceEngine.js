@@ -16,10 +16,10 @@ var ScreenflowInferenceEngine = Class.create(InferenceEngine /** @lends Screenfl
     /**
      * This function calls the catalogue to create a plan for a given screen
      */
-    getPlans: function(/** Array */ canvas, /** String */ screenUri,
+    getPlans: function(/** Array */ canvas, /** Array */ goal,
                         /** Function */ handler) {
         var body = {
-            "goal": screenUri,
+            "goal": goal,
             "canvas": canvas
         };
         var bodyJSON = Object.toJSON(body);

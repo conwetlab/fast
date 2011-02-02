@@ -130,12 +130,15 @@ var ScreenflowDocument = Class.create(PaletteDocument,
     },
 
     /**
-     * Creates a plan taking as end the Element
+     * Creates a plan from the canvas
      */
-    getPlansElement: function(element) {
-        var uri = element.getUri();
+    getPlansElement: function() {
+
+        var goal = this._getCanvasUris().collect(function(e) {
+            return e.uri;
+        });
         var canvas = this._getCanvasUris();
-        this._inferenceEngine.getPlans(canvas, uri,
+        this._inferenceEngine.getPlans(canvas, goal,
             this._onSuccessGetPlans.bind(this)
         );
     },
@@ -512,9 +515,8 @@ var ScreenflowDocument = Class.create(PaletteDocument,
     _updateToolbar: function(/** ComponentInstance */ element) {
         this._toolbarElements.get('deleteElement').setEnabled(element!=null);
         this._toolbarElements.get('previewElement').setEnabled(element!=null);
-        this._toolbarElements.get('planner').setEnabled(
-            element!=null && element.constructor == ScreenInstance
-        );
+        this._toolbarElements.get('planner').setEnabled(this._getCanvasUris().size()
+        > 0);
         var enableClone = (element!=null &&
                             element.constructor == ScreenInstance &&
                             element.getBuildingBlockDescription().definition != null);
@@ -693,7 +695,7 @@ var ScreenflowDocument = Class.create(PaletteDocument,
         if (this._planPanel.isVisible()) {
             this._planPanel.hide();
         } else {
-            this.getPlansElement(this._selectedElement);
+            this.getPlansElement();
         }
     },
 
