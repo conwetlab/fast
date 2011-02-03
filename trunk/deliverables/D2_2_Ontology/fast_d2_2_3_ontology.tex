@@ -62,6 +62,14 @@ morecomment=[l]{\#},
 morestring=[b]",
 }
 
+\lstdefinelanguage{javascript}
+{
+morekeywords={var},
+sensitive=false,
+morecomment=[l]{//},
+morestring=[b]",
+}
+
 \lstset{
 	captionpos=b, 
 	extendedchars=true,
@@ -87,7 +95,10 @@ morestring=[b]",
 \newcommand\authorTwo{Ismael Rivera, NUIG}
 \newcommand\authorThree{Marcos Reyes Ureña, TID}
 \newcommand\authorFour{Ciprian Alexandru Palaghita, Cyntelix}
+
 \newtheorem{example}{\emph{Example}}
+\newtheorem{theorem}{Theorem}
+\newtheorem{definition}[theorem]{Definition}
 
 \begin{document}
 % explicit hyphenations
@@ -717,28 +728,70 @@ When implementing these four stages, as illustrated in Fig.~\ref{fig:classes_tem
 \subsubsection{Prototypes} % (fold)
 \label{ssub:prototypes}
 
+Neither OWL nor RDFS semantics offer functionality to represent a relationship such as the clone of a resource formally. However, we can find inspiration for this kind of semantics in other areas, such as programming languages, and more particularly in object-oriented programming languages (OO). In OO, there is a general dichotomy between \emph{class-based} languages and \emph{prototype-based} languages. Java, C++ and Smalltalk are examples of the former, while JavaScript\footnote{The name of the standard is ECMAScript, but we will use JavaScript in this deliverable, since it is the most prominent dialect.} (as the most prominent) and Self (as the oldest) are examples of the latter. Both paradigms address the issue of defining similarity between objects, but do so in a different way. The class-based paradigm requires an a-priori classification and categorisation of the world (the class hierarchy), into which individual objects (the instances) are then grouped. All instances of a class inherit its attributes and functionality. Changing this behaviour usually involves changing the class. Prototype-based languages, on the other hand, do not assume prior categorisation. These languages do not show a class vs. instance distinction. Instead, all objects have the same status, and new objects can be \emph{cloned} from other objects, which function as \emph{prototypical objects} in this situation, thereby starting with a specific example and generalising from there. The new object (or clone) will inherit all attributes and functionality from the prototype. Changing behaviour can be done on each object individually. As an aside, the difference between the two paradigms can be traced all the way back to classical philosophy. In this sense, the class-based paradigm has its roots in Plato (ideal forms) and Aristotle (classification of things), while the origin of the prototype-based paradigm only appeared much later as a criticism of the classical model, e.g. by Wittgenstein (the idea of \emph{family resemblance}) and Eleanor Rosch, who introduced prototype theory within cognitive science. While most language designers, let alone programmers, are probably unaware of this heritage~\cite{Taivalsaari96classes_vs_prototypes}, it underlines the importance of this distinction to see how far back it goes.
+
 % subsubsection prototypes (end)
 
-Neither OWL nor RDFS semantics offer functionality to represent a relationship such as the clone of a resource formally. However, we can find inspiration for this kind of semantics in other areas, such as programming languages, and more particularly in object-oriented programming languages (OO). In OO, there is a general dichotomy between \emph{class-based} languages and \emph{prototype-based} languages. Both paradigms address the issue of defining similarity between objects, but do so in a different way. The class-based paradigm requires an a-priori classification and categorisation of the world (the class hierarchy), into which individual objects (the instances) are then grouped. All instances of a class inherit the attributes and functionality of the class. Changing this behaviour usually involves changing the class. Prototype-based languages, on the other hand, do not assume prior categorisations. Instead, one starts with specific examples and then generalises from there. These languages do not show a class vs. instance distinction. Instead, all objects have the same status, and new objects can be \emph{cloned} from other objects, which function as \emph{prototypical objects} in this situation. The new object (or clone) will inherit all attributes and functionality from the prototype. Changing behaviour can be done on each object individually.
 
-\todo{Rewrite this whole section with focus on prototypes, prototype theory, prototype-based programming, etc.}
+\subsubsection{Prototype-based Semantics for RDF} % (fold)
+\label{ssub:prototype_based_semantics_for_rdf}
 
-\cite{Taivalsaari96classes_vs_prototypes}
 
-\begin{itemize}
-	\item in a prototypical programming language, creating an object from a prototype means to clone it --- copy all its attributes\footnote{Whether or not this is true copy or merely a pointer is implementation-dependant. This is more or less transparent for the user.}
-	\item in RDF, what would ``all its attributes'' mean?
-	\item this is the old question of what constitutes an object in RDF
-	\item should we use the minimal self-contained graph \cite{Tummarello:2008kl}?
-	\item maybe some other named graph? But the RDF model doesn't feature named graphs
-	\item let's just assume some unspecified ``object graph'' for now --- the exact definition of the object graph is application dependent. In FAST, it is actually always known which triples constitute the object graph of a building block.
-	\item so, now that we can say that the prototype object, identified by its URI (we therefore call it $P_{URI}$), is defined by its object graph, we can define the relation between the prototype and its clone ($C_{URI}$) as follows:
-\end{itemize}
+While of course RDFS and OWL semantics are not identical to class-based OO semantics (the open and closed world assumption being one case in point), they are quite similar in their distinction between classes and instances, and the a-priori categorisation of the world. Along these lines, what we need for FAST is a similar RDF equivalent for prototype-based OO semantics. To achieve this, let's first look again at what creating a new object from a prototype means in a prototypical programming language: essentially, this process means to \emph{clone the prototype}, i.e., to copy all its properties and attributes to the new object\footnote{Whether or not this is true copy or merely a pointer is implementation-dependant. However, this is usually transparent for the user.}. Following our login screen example, a snippet of JavaScript code of what this can look like in practice is shown in List.~\ref{list:js_prototyping}. The \texttt{loginScreen} object is created with a number of properties, such as \texttt{label} and \texttt{icon}. A second \texttt{loginScreen\_74382} object is then created using the \texttt{create} function, using \texttt{loginScreen} as its prototype. \texttt{loginScreen\_74382} inherits all properties from its prototype, but can also overwrite or add individual ones.
+
+\singlespacing
+\lstset{
+	caption={Creation of a new object from a prototype in JavaScript}, 
+	label=list:js_prototyping,
+	language=javascript
+}
+\begin{figure}
+	\lstinputlisting{exampleCode/prototype.js}
+\end{figure}
+\doublespacing
+
+\paragraph{Determining the Prototype's Sub-graph} % (fold)
+\label{par:determining_the_correct_sub_graph}
+
+In an attempt to define prototype-based RDF semantics, we first have to specify what the RDF analogue to an object from OO is. Tentatively, we could say that the resource URI is analogous to the object. However, this will not help us when we want to create a new resource $C_{URI}$ from a prototypical resource $P_{URI}$: a URI merely \emph{identifies} a particular resource, without defining which statements belong to it. We will not know which properties should be cloned, or rather, which new RDF statements should hold for the clone. An RDF graph is simply a set of RDF triples, without any internal boundaries reflecting which of these triples make up a given real-world object (such as a login screen).  Exactly which triples these are is difficult to determine. A number of approximations are possible. For the remainder of this discussion, let $o$ be a real-world object, $URI_o$ the URI that identifies it, and $G_o$ the RDF graph containing all triples that are considered part of $o$. 
+Also, let $s$ be an arbitrary RDF statement, and let $Subj(s)$, $Pred(s)$ and $Obj(s)$ be the subject, predicate and object of $s$, respectively. The simplest approximation of which triples comprise a real-world object $o$ would be to select all those triples in which $URI_o$ is either subject or object\footnote{Note: there is potential for confusion between the term \emph{real-world object} (a tree, a person, a login screen) and the \emph{object} of an RDF triple. The two are two entirely different things!}:
+\begin{align}
+	\label{equation:simple_object_graph}
+	G_o := \{\;s\;|\;URI_o=Subj(s) \textnormal{ or } URI_o=Obj(s)\}
+\end{align}
+
+However, this definition can easily 
+\begin{inparaenum}[(i)]
+	\item contain false positives (triples that point to $URI_o$, but are not considered part of $o$), 
+	\item lack important triples (e.g., in the case where the object in a triple $<URI, Pred, Obj>$ is itself a complex object), or 
+	\item have dangling blank nodes. 
+\end{inparaenum}
+At least the dangling blank node problem can be addressed by extending the Def.~\ref{equation:simple_object_graph} to the \emph{minimal self-contained graph} (MSG)~\cite{Tummarello:2008kl}, which basically selects the sub-graph so that there are no blank node as leafs. Unfortunately, the MSG still does not necessarily give us the desired sub-graph, since problems (i) and (ii) are not addressed. At the end of the day, these issues are highly context- and interpretation-dependant, which is why there cannot be a deterministic way to know which triples in a graph belong to a particular real-world object. In the general case, we will therefore simply leave the definition of $G_o$ undefined, to be solved individually for each application and use case. A SPARQL graph pattern would be well suited for defining any particular occurrence of $G_o$. For the FAST use case of defining the object graph of a prototypical building block $p$, the definition of $G_p$ is as given in List.~\ref{list:prototype_graph_definition} (here showing the definition for a screen; other types of building blocks are slightly different).
+
+\singlespacing
+\lstset{
+	caption={SPARQL query to select the object graph of a screen in FAST}, 
+	label=list:prototype_graph_definition,
+	language=sparql
+}
+\begin{figure}
+	\lstinputlisting{exampleCode/screen_object_graph.sparql}
+\end{figure}
+\doublespacing
+
+% paragraph determining_the_correct_sub_graph (end)
+
+\paragraph{Deriving the Clone Graph} % (fold)
+\label{par:deriving_the_}
+
+Now that we know the (application-dependant) graph $G_p$ of the prototypical object $p$, we can define what it means to create a new graph $P_c$ for its clone $c$. In prose, the clone graph will contain all statements of the prototypical graph, but all mentions of $URI_p$ will be replaced with $URI_c$. Formally, we say that this mapping of $G_p$ into $G_c$ is the prototype mapping $pm$, defined as follows:
 
 \begin{equation}
-S:= \begin{cases}
-i = 0..M,\quad j =0..N  & \text{for }M >N \\
-i=0..M,\quad j=0..M & \text{for }N > M
+pm: G_p \mapsto G_c := \begin{cases}
+<URI_c, Pred, Obj >, \textnormal{ if } URI_p = Obj(s) \\
+<Subj, URI_c, Obj >, \textnormal{ if } URI_p = Pred(s) \\
+<Subj, Pred, URI_c >, \textnormal{ if } URI_p = Subj(s) \\
+<Subj, Pred, Obj >, \textnormal{ if } URI_p \notin s
 \end{cases}
 \end{equation}
 
@@ -774,6 +827,11 @@ Figure \ref{fig:prototype_example_graph} illustrates the same example graphicall
 
 
 It should be pointed out that the term \emph{RDF template} has been used before, but with a different meaning. \cite{davis2003rdf_template} use the term in analogy to XSLT, but acting on an RDF graph rather than an XML tree. \cite{kawamoto2006kawawiki} present a semantic wiki, where templates help non-technical users to create semantic descriptions. 
+
+% paragraph deriving_the_ (end)
+
+% subsubsection prototype_based_semantics_for_rdf (end)
+
 % subsection classes_instances_and_templates (end)
 
 \subsection{Basic Annotation} % (fold)

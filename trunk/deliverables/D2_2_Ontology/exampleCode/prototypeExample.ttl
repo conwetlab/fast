@@ -12,7 +12,7 @@ fgo:Screen a owl:Class .
 catalogue:prototype_graph {
   catalogue:LogInScreen a fgo:Screen ;
   fgo:hasClone catalogue:LogInScreen_74382 ;
-  dcterms:title "Log In Screen" ;
+  dcterms:title "Login Screen" ;
   fgo:hasIcon catalogue:login.png .
 }
 
@@ -21,6 +21,6 @@ catalogue:prototype_graph {
 catalogue:clone_graph {
   catalogue:LogInScreen_74382 a fgo:Screen ;
   fgo:hasPrototype catalogue:LogInScreen ;
-  dcterms:title "Log In Screen" ;
+  dcterms:title "Login Screen" ;
   fgo:hasIcon catalogue:login.png .
 }
