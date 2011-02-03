@@ -106,6 +106,9 @@ var PaletteComponent = Class.create(DragSource,
      */
     _createSlot: function () {
         var node = new Element("div", {"class": "slot"});
+        this._hover = new Element("div", {"class": "hover"});
+        this._hover.setStyle({"opacity": "0"});
+        node.appendChild(this._hover);
         node.appendChild(this._view.getNode());
         var titleNode = new Element("div", {"class": "slotTitle"}).update(this._getTitle());
         node.appendChild(titleNode);

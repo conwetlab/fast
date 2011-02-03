@@ -213,8 +213,13 @@ var InferenceEngine = Class.create( /** @lends InferenceEngine.prototype */ {
      */
     _updateReachability: function(/** Array */ elements) {
         elements.each(function(element) {
-            this._reachabilityData.set(element.uri, element);
-            this._notifyReachability(element.uri);
+            if (element instanceof Object) {
+                this._reachabilityData.set(element.uri, element);
+                this._notifyReachability(element.uri);
+            } else {
+                this._reachabilityData.set(element, true);
+                this._notifyReachability(element);
+            }
         }.bind(this));
     },
 

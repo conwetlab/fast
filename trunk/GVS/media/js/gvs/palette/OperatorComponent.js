@@ -9,10 +9,25 @@ var OperatorComponent = Class.create(PaletteComponent,
      */
     initialize: function($super, description, dropZones, inferenceEngine) {
         $super(description, dropZones, inferenceEngine);
+        this._inferenceEngine.addReachabilityListener(this._buildingBlockDescription.uri,this);
     },
 
 
     // **************** PUBLIC METHODS **************** //
+
+    /**
+     * Colorize the component depending on the reachability
+     * @public
+     */
+    setReachability: function( /** Boolean */ highlight) {
+        if (highlight) {
+            this._hover.setStyle({"opacity": "1"});
+            dojo.fadeOut({
+                "duration": 2500,
+                "node": this._hover
+            }).play(2500);
+        }
+    },
 
 
     // **************** PRIVATE METHODS **************** //

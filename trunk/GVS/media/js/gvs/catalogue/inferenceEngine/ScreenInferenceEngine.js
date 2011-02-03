@@ -70,7 +70,12 @@ var ScreenInferenceEngine = Class.create( /** @lends ScreenInferenceEngine.proto
 
         if (result.canvas && result.canvas.length > 0) {
             // There is some reachability information
-              this.mine._updateReachability(result.canvas);
+            this.mine._updateReachability(result.canvas);
+            if (!GVS.getUser().getCatalogueMagic()) {
+                var paletteComponents = result.forms.concat(result.operators,
+                result.backendservices);
+                this.mine._updateReachability(paletteComponents);
+            }
         }
 
         this.callback(result);

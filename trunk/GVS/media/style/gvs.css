@@ -541,10 +541,24 @@ h4{
 
 .slot {
     overflow: hidden;
+    position: relative;
+}
+
+.slot .hover {
+    position: absolute;
+    width: 98%;
+    height: 98%;
+    -moz-border-radius: 8px 8px;
+    -webkit-border-radius: 8px 8px;
+    background-color: #F8FF72;
+}
+.slot .view {
+    margin: 2px 5px 5px 2px;
 }
 
 .slotTitle {
     padding-top: 1ex;
+    position: relative;
 }
 
 
