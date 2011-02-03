@@ -355,10 +355,10 @@ var ScreenflowDocument = Class.create(PaletteDocument,
                 this._addPlan(instance, position);
                 break;
         }
+
         this._setDirty(true);
-        // Only for piping
-        //instance.getView().addGhost();
         return true;
+
     },
 
     /**
@@ -403,7 +403,7 @@ var ScreenflowDocument = Class.create(PaletteDocument,
                 }
             }.bind(this));
         }
-
+        this._refreshVisibility();
         this._updatePanes();
     },
 
