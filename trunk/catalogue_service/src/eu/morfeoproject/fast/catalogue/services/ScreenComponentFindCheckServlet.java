@@ -100,7 +100,7 @@ public class ScreenComponentFindCheckServlet extends GenericServlet {
 			} 
 			// flag to search or not for new components
 			boolean search = input.optBoolean("search", true);
-			boolean iserve = input.optBoolean("iserve", true);
+			boolean iserve = input.optBoolean("iserve", false);
 			// pagination variables
 			int offset = input.optInt("offset", 0);
 			int limit = input.optInt("limit", -1);
