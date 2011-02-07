@@ -14,13 +14,14 @@
 \usepackage{longtable}
 \usepackage{array}
 \usepackage{amssymb}
+\usepackage{amsmath}
 
 % This helps to get hyphenation in typewriter font (\texttt)
 \usepackage[htt]{hyphenat}
 
 \parindent0pt
 
-\newcommand\deliverableNumber{D5.1.1}
+\newcommand\deliverableNumber{D5.1.2}
 \newcommand\deliverableTitle{User Manual of the FAST Catalogue}
 \newcommand\deliverableTitleShort{Catalogue User Manual}
 \newcommand\workpackageNumber{5}
@@ -75,7 +76,7 @@
 		{\large \sffamily \authorTwo}\\
 		\vspace{0.5cm}
 		\vfill
-		{\large \sffamily Date: 19/02/2010}\\
+		{\large \sffamily Date: 17/02/2011}\\
 		\vspace{1cm}
 		{\sffamily FAST is partially funded by the E.C. (grant code: FP7-ICT-2007-1-216048).}
 		
@@ -113,6 +114,8 @@
                          \textcolor{white}{\textbf{Author (Partner)}} &
                          \textcolor{white}{\textbf{Change description}}\\ \hline
 1.0 & 19/02/2010 & Ciprian Palaghita (Cyntelix) & First version of the deliverable \\
+ & & Ismael Rivera (NUIG) & \\ \hline
+2.0 & 17/02/2011 & Ciprian Palaghita (Cyntelix) & Second version of the deliverable \\
  & & Ismael Rivera (NUIG) & \\ \hline
 \end{tabular}
 \end{small}
@@ -188,7 +191,7 @@ The present deliverable is intented to be the developer's manual of the prototyp
 \begin{tabular}
 	{| >{\columncolor{fast@lightgrey}}p{3.25cm}|p{1.4cm}|p{3.2cm}|p{1.6cm}|p{3.37cm}|}
 	\hline
-	\textcolor{white}{\textbf{Delivery data}} & {\textbf{Due date}} & {27/02/2010} & {\textbf{Submitted}} & {26/02/2010}\\ \hline
+	\textcolor{white}{\textbf{Delivery data}} & {\textbf{Due date}} & {28/02/2011} & {\textbf{Submitted}} & {25/02/2011}\\ \hline
 	\textcolor{white}{\textbf{Status}} & \multicolumn{2}{l|}{} & \multicolumn{2}{l|}{final}\\ \hline
 	\textcolor{white}{\textbf{Dissemination Level}} & \multicolumn{4}{l|}{Public $\boxtimes$ / Consortium $\square$}\\ \hline
 	\textcolor{white}{\textbf{Short description of contents}} & \multicolumn{4}{p{10.85cm}|}{This deliverable is the technical documentation for the prototype developed as part of the WP5. It describes the catalogue's architecture, data interchange formats, APIs and examples of how to interact with it.}\\ \hline
@@ -240,28 +243,21 @@ This is an introductory manual for developers who want to adopt and use the FAST
 \subsection{Structure of the document} % (fold)
 \label{sub:structure_of_the_document}
 
-The deliverable presents both the external and internal architecture in Section~\ref{sec:architecture_overview}, then in Section~\ref{sec:restful_catalogue_api} it is detailed the Catalogue API, query formats, interchange formats, error codes and so on.
+The deliverable presents both the external and internal architecture in Section~\ref{sec:architecture_overview}, then in Section~\ref{sec:catalogue_api} it is detailed the Catalogue API, query formats, interchange formats, error codes and so on.
 
 % subsection goal_and_scope (end)
 
 \subsection{Changes from previous version} % (fold)
 \label{sub:changes_from_previous_version}
 
-This is the first version of this deliverable since in M12 the deliverable 5.1 was not scheduled. Nevertheless, last year an extra document was written as an appendix to the FAST Catalogue in order to detail and clarify technical decisions and to have a technical reference manual, which the content was taken from as the initial draft the present deliverable. Hence, the deliverable D5.2.1 will evolve to become the D5.1.1, so it will be no longer needed by itself.
-
-There are several new sections and major changes which need to be mentioned:
-
+changes from M24 version:
 \begin{itemize}
-	\item Section~\ref{sec:installation_guide}. Installation Guide describes a set of steps to be followed in order to install and execute the FAST Catalogue. Also some configuration instructions are specified.
-	\item Section~\ref{sub:linked_data}. Content Negotiation states how the FAST Catalogue has adopted several of the content negotiation principles.
-	\item Section~\ref{sec:restful_catalogue_api}. RESTful Catalogue API has been intensively extended and modified in order to  reflect all the new functionality and how every request or response is constructed. Some of the most important features added in this iteration are:
-	\begin{itemize}
-		\item support for forms, operators and back-end services (see Section ...),
-		\item convenience operations for recommendation and checking satisfaction and reachability for forms, operators and back-end services (see Section ...),
-		\item and, last but not least, support for Screen planning (see Section~\ref{sub:planning}).
-	\end{itemize}
-	\item Several appendixes have been added with the JSON structure of every building block the Catalogue can deal with.
-	\item Appendix A. Last year an evaluation to choose the best technology for the Catalogue was done. It was not included in any formal deliverable, so this year it has been documented as an appendix.
+ \item 'find' and 'check' operations for screens (screen-flow design) has been removed. the same functionaly was offered by 'find\&check' doing just 1 request.
+ \item API calls (both find\&check, planner, metadata) updated to reflect the changes in the prototype
+ \item Adds operation for building block cloning.
+ \item added appendix explaining how the recommendation/planning is done
+ \item architecture have been modified reflecting the changes in the catalogue's architecture, and including new components such as the machine learning library (Mahout) and a library to query iServe.
+ \item uses Sindice in the 'ontology importer' mechanism
 \end{itemize}
 
 % subsection changes_from_previous_version (end)
@@ -272,7 +268,7 @@ There are several new sections and major changes which need to be mentioned:
 \section{Installation Guide} % (fold)
 \label{sec:installation_guide}
 
-This section  provides instructions on how to manually install and configure the FAST Catalogue. The first part of this guide presents some requirements to be considered before the installation, then it gives broad general instructions, and the last part contains a more detailed installation notes for specific configurations.
+This section provides instructions on how to manually install and configure the FAST Catalogue. The first part of this guide presents some requirements to be considered before the installation, then it gives broad general instructions, and the last part contains a more detailed installation notes for specific configurations.
 
 \subsection{System Requirements} % (fold)
 \label{sub:system_requirements}
@@ -338,19 +334,19 @@ Now you have successfully built the FAST catalogue, however we highly recommend 
 
 The following section covers the configuration options you may have to set up before start using the Catalogue. The FAST Catalogue relies on a Sesame repository for the persistent storage. Sesame repositories can be local or remote. Remote does not mean, it has to be installed in a different machine, but in a servlet container such as Apache Tomcat. The advantage of remote repositories is the possibility of accessing it via a SPARQL endpoint. These configuration aspect can be found in the file \emph{repository.properties} in the root directory where the Catalogue has been deployed.
 
-Independently the type of repository, the parameter \emph{serverURL} needs to take the value of the URL where the FAST Catalogue instance has been deployed. If you are testing the application in your machine, it may be something like \url{http://catalogueURL/FASTCatalogue}.
+Independently the type of repository, the parameter \emph{serverURL} needs to take the value of the URL where the FAST Catalogue instance has been deployed. If you are testing the application in your machine, it may be something like \verb|http://catalogueURL/FASTCatalogue|.
 
 Local repositories just need the parameter \emph{storageDir} pointing at a local directory, which has write permission in order to allow Sesame to create files in that directory or to delete any file in the directory. For instance:
 
 \begin{verbatim}
-storageDir=D:\\FAST\\catalogue\\repository
+storageDir=/opt/fast-catalogue/repository
 \end{verbatim}
 
 Nevertheless, setting up a remote repository requires a few more steps. First the OpenRDF Sesame Server needs to be installed. The installation guide of this server is detailed in the Chapter 5 and 6 of the User Guide for Sesame 2.2 \cite{sesame2.2}. Once the Sesame server is deployed, and a repository has been created, the parameters sesameServer and repositoryID will take the values of the Sesame server URL and the repository identifier. For instance:
 
 \begin{verbatim}
 sesameServer=http://localhost:8880/openrdf-sesame
-repositoryID=c2
+repositoryID=repository-ex1
 \end{verbatim}
 
 % subsection installation_instructions (end)
@@ -358,7 +354,7 @@ repositoryID=c2
 \subsection{Hello World!} % (fold)
 \label{sub:hello_world}
 
-It is recommended to check if the FAST Catalogue has been successfully installed. To do that, a simple HTTP request, using a Web browser, can be sent to the URL the Catalogue is deployed, and specifying a type of resource such as Screen. The URL would be similar to \url{http://catalogueURL/FASTCatalogue/screens}. Depending on the variant chosen, the response may be different. For JSON, the response should be \verb|[]|, but in HTML the message \verb|No screens found.| should be shown.
+It is recommended to check if the FAST Catalogue has been successfully installed. To do that, a simple HTTP request, using a Web browser, can be sent to the URL the Catalogue is deployed, and specifying a type of building block such as Screen. The URL would be similar to \verb|http://catalogueURL/FASTCatalogue/screens|. Depending on the variant chosen, the response may be different. For JSON, the response should be \verb|[]|, but in HTML the message \verb|No screens found.| should be shown.
 
 % subsection hello_world (end)
 
@@ -369,7 +365,12 @@ It is recommended to check if the FAST Catalogue has been successfully installed
 \section{Architecture Overview} % (fold)
 \label{sec:architecture_overview}
 
-This section presents a technical overview of the internal catalogue's architecture and which external components will interact with it. Basically three layers can be distinguished: Presentation, Business Logic and Persistence layer (see Figure~\ref{fig:catalogue_architecture}). 
+This sections presents a technical overview of the Catalogue's architecture (see Figure~\ref{fig:catalogue_architecture}), and how the interaction with external applications or APIs is done. The Catalogue platform has a modular design, which are spread in basically three layers, depending on the nature of each component:
+\begin{itemize}
+ \item The top layer represents the public API for the Catalogue. It puts together all the available information and services to offer the maximum powerful and flexibility for other IDEs or applications. In FAST, here is where the Gadget Visual Storyboard
+ \item The core layer implements the object model, and provides the business logic for the different processes involved in the Catalogue, integrating third party libraries where needed.
+ \item The pumbling layer offers an abstraction to RDF model logic and triple stores.
+\end{itemize}
 
 \begin{figure}[htb]
 \label{fig:catalogue_architecture}
@@ -379,20 +380,36 @@ This section presents a technical overview of the internal catalogue's architect
 \end{center}
 \end{figure}
 
-The Presentation layer will be the public interface of the catalogue. The main purpose of this layer is to provide its functionality to other components within the Gadget Visual Studio. The service is offered in a REST (REpresentational State Transfer) style, making it easy to consume than other complex APIs. REST is an architectural style, not a toolkit or a standard. Even though, it makes use of standards like HTTP, URI, Resource Representations (XML, HTML, JSON, JPEG, etc.) or MIME types (text/xml, text/html, application/json, image/jpeg, etc.). Another characteristic of the REST style is its stateless assumption. The catalogue adopts this strategy; therefore every request needs a complete set of information in order to prepare the response.
+\subsection{Presentation layer / API}
 
-As part of the Presentation layer, a SPARQL endpoint is offered using the SPARQL protocol service as defined in the SPROT \cite{sprot} specification. The SPARQL endpoint is mostly offered to enable other developers to query directly the catalogue knowledge base using SPARQL queries. This feature is supported by the Sesame RESTful HTTP interface for SPARQL Protocol for RDF.
+The Presentation layer will be the public interface or API of the Catalogue. The main purpose of this layer is to provide its functionality to the Gadget Visual Storyboard, or any other third party IDE or application. The API is offered in a REST (REpresentational State Transfer) style, making it easy to consume than other complex APIs. REST is an architectural style, not a toolkit or a standard. Even though, it makes use of standards like HTTP, URI, Resource Representations or MIME types. Another characteristic of the REST style is its stateless assumption. The Catalogue adopts this strategy; therefore every request needs a complete set of information in order to prepare the response. The API provided is explained in detail in Section~\ref{sec:catalogue_api}.
 
-The Business Logic layer contains all the FAST domain-specific processing. It provides functions to interact with all the elements of the domain model specified in \cite{moeller2009fast_ontology}. It processes the input from the Presentation layer, creating specific objects modelling the business logic, and vice versa. In addition it interacts with the Persistence layer in order to persist the model.
+As part of the Presentation layer, a SPARQL endpoint has been implemented using the SPARQL protocol service as defined in the SPROT \cite{sprot} specification. The SPARQL endpoint is mostly offered to enable other developers to query directly the Catalogue knowledge base using SPARQL queries. This feature is supported by the Sesame RESTful HTTP interface for SPARQL Protocol for RDF.
 
-The Persistence layer provides an API which allows the Business layer to work with a standard set of objects that read and save their state to the triple store. For this reason, on top of this layer it is used RDF2Go, an abstraction over triple (and quad) stores. The RDF2Go API allows interacting with the semantic representation of the model (triples) in a generic manner, and also brings the flexibility of choosing different triple stores to persist them. The selected implementation for the triple stored is Sesame 2. Moreover, this framework is completely extensible and configurable regarding to storage mechanisms, inferencers, RDF file formats, query result formats and query languages. For the actual catalogue prototype, the storage mechanism used is the native file storage system of Sesame, the inferencer used is a subset of the RDFS entailment rules \cite{rdfsrules} following a forward-chaining policy. 
+\subsection{Core layer}
+
+The Core or Business Logic layer contains all the FAST domain-specific processing. The resources and relations between each other, which define the domain model, are extracted from the FAST ontology~\cite{moeller2011fast_ontology}. These layer provides support to the functions defined in the API, and interact with the persistence layer to retrieve and store any information of the data model.
+
+This layer provides several mechanisms to search and browse these different resources. To know more about these capabilities, please read Sections~\ref{ssub:screen_findcheck},~\ref{ssub:screen_component_findcheck} and~\ref{sub:planning} where the API calls are defined, and Appendix F for more details about the implementation.
+
+At the bottom part of the Gadget Architecture~\cite{reyes2011gadget_architecture} are the back-end services. These are RESTful services, SOAP-based web services, or similar. In FAST, these web services are wrapped, extracting their definition and encapsulation their behaviour. To creation of these service wrappers is on demand, and the input for this process is a particular definition of a web service. However, the Catalogue does not crawl the Web looking for Web services. Instead, and to enrich the collection of available web services, the Catalogue integrates and queries iServe\footnote{http://iserve.kmi.open.ac.uk/}, a platform for publishing Semantic Web Services as linked data, no matter their original format. Therefore, thousands of web services defined or annotated in a semantic way, are also served from the Catalogue, in a uniform manner.
+
+The Catalogue is a semantic application. As a result, it has to handle with ontologies. Apart from the core ontologies being used across the whole application (see~\cite{moeller2011fast_ontology}), the building blocks may reference classes and properties from diverse vocabularies and ontologies. To have a better understanding of them, the Catalogue imports them inside its repository any time it detects a building block is using an unknown class, property, or in other words, an unknown ontology. While importing an ontology, the Catalogue tries to get its definition from the URI of a given class or property (as stated in~\cite{berrueta2008}). However, sometimes this may be not succesful, and the Catalogue will try to get its definition querying Sindice\footnote{http://www.sindice.com/}, a semantic search engine, which cralws the web and keeps provenance metadata for the ontologies.
+
+\subsection{Plumbing layer}
+
+The Plumbing layer abstract the interaction with triple stores, RDF models and physical persistence to disk, database, etc. It provides the different mechanisms to allow the Catalogue the storage of the domain objects into a triple store in its underlying representation of RDF.
+
+There are many triple stores solutions, any of them with its own advantages and disadvantages. To make the Catalogue independent of the solution adopted, it makes uses of RDF2Go, an abstraction over triple (and quad) stores. The RDF2Go API allows interacting with the semantic representation of the model (triples) in a generic manner, and also brings the flexibility of choosing different triple stores to persist them.
+
+The current implementation of the Catalogue prototype at M36 uses Sesame 2 as triple store. This solution has a wide community behind, and it has attractive advantages such as being completely extensible and configurable regarding to storage mechanisms, inferencers, RDF file formats, query result formats and query languages.
 
 % section architecture_overview (end)
 
 
 \clearpage
-\section{RESTful Catalogue API} % (fold)
-\label{sec:restful_catalogue_api}
+\section{Catalogue API} % (fold)
+\label{sec:catalogue_api}
 
 This section provides a high-level overview of the Catalogue API. It describes the calls or operations supported, specific parameters and responses for each operation, supported interchange formats and some examples to facilitate the understanding of the API.
 
@@ -410,11 +427,11 @@ The following is an example of a Find \& Check request:
 \begin{verbatim}
 {
   "canvas": [
-    { "uri": "http://catalogueURL/catalogue/screens/238" },
-    { "uri": "http://catalogueURL/catalogue/screens/323" }
+    { "uri": "http://catalogueURL/screens/238" },
+    { "uri": "http://catalogueURL/screens/323" }
   ],
-  "elements": [
-    { "uri": "http://catalogueURL/catalogue/screens/636" }
+  "palette": [
+    { "uri": "http://catalogueURL/screens/636" }
   ],
   "domainContext": {
     "tags": [
@@ -423,7 +440,7 @@ The following is an example of a Find \& Check request:
         "means": "http://dbpedia.org/page/Amazon.com"
       }
     ],
-    "user": "irivera",
+    "user": "http://ismaelrivera.es/#me",
   },
   "criterion": "reachability"
 }
@@ -439,12 +456,12 @@ In order to offers an adaptable solution to various languages and regions withou
 {
   "label": {
     "en-GB": "Product Search",
-    "es-ES": "Búsqueda de productos",
+    "es-ES": "BÃºsqueda de productos",
     "de-DE": "Produktsuche"
   },
   "description": {
     "en-GB": "On this screen, the user can enter a search term.",
-    "es-ES": "En esta ventana, el usuario puede introducir el criterio de búsqueda",
+    "es-ES": "En esta ventana, el usuario puede introducir el criterio de bÃºsqueda",
     "de-DE": "Auf diesem Screen kann der Benutzer einen Suchbegriff eingeben."
   }
 }
@@ -464,12 +481,12 @@ In order to offers an adaptable solution to various languages and regions withou
   <rdf:Description rdf:about="http://demo.fast.morfeo-project.org/FASTCatalogue/screens/1">
     <rdf:type rdf:resource="http://purl.oclc.org/fast/ontology/gadget#Screen"/>
     <rdfs:label xml:lang="en-gb">Product Search</rdfs:label>
-    <rdfs:label xml:lang="en-es">Búsqueda de productos</rdfs:label>
+    <rdfs:label xml:lang="en-es">BÃºsqueda de productos</rdfs:label>
     <rdfs:label xml:lang="en-de">Produktsuche</rdfs:label>
     <dc:description xml:lang="en-gb">On this screen, the user can enter a search
     term.</dc:description>
     <dc:description xml:lang="en-gb">En esta ventana, el usuario puede introducir
-    el criterio de búsqueda.</dc:description>
+    el criterio de bÃºsqueda.</dc:description>
     <dc:description xml:lang="en-gb">Auf diesem Screen kann der Benutzer einen
     Suchbegriff eingeben.</dc:description>
   </rdf:Description>
@@ -477,7 +494,7 @@ In order to offers an adaptable solution to various languages and regions withou
 \end{verbatim}
 \doublespacing
 
-Internationalisation is being used by the attributes \emph{label} and \emph{description} of any building block, \emph{label} of the pre/postconditions and \emph{label} of the tags.
+Internationalisation is being used by the attributes \emph{label} and \emph{description} of any building block, \emph{label} of the pre-/post-conditions and \emph{label} of the tags.
 
 % subsection json_interchange_format (end)
 
@@ -488,7 +505,7 @@ Apart from serving as the back-end system for the Gadget Visual Storyboard (GVS)
 Following the principles and best practices proposed in \cite{berrueta2008} and \cite{sauermann2008cool_uris}, these representations are served based on the request issued by the requesting agent, using a technique called \emph{content negotiation}.
 As required by the forth rule of linked data, individual building blocks link to other data on the Web, thereby preventing so-called isolated ``data islands''.
 
-In order to understand how content negotiation is implemented in the catalogue, a few concepts need to be understood. The URI of a particular building block must be understood as the identifier of the building block as such, as opposed to a particular representation (JSON, HTML, etc.) of it. In fact, each such representation has its own URI, under which it can be retrieved. Using the terminology established in \cite{w3c2004webArchitecture}, the building block is a \emph{non-information resource}, whereas each representation is an \emph{information resource}. In the process of content negotiation, the requesting agent will first request the URI of the building block as such (e.g., \texttt{http://catalogue.com/screens/235}), as well as the required representation format (e.g., JSON). The catalogue will then inspect the request and redirect the requester to the appropriate representation (e.g., \texttt{http://catalogue.com/screens/235.json}), as illustrated in Fig.~\ref{fig:content_negotiation}.
+In order to understand how content negotiation is implemented in the catalogue, a few concepts need to be understood. The URI of a particular building block must be understood as the identifier of the building block as such, as opposed to a particular representation (JSON, HTML, etc.) of it. In fact, each such representation has its own URI, under which it can be retrieved. Using the terminology established in \cite{w3c2004webArchitecture}, the building block is a \emph{non-information resource}, whereas each representation is an \emph{information resource}. In the process of content negotiation, the requesting agent will first request the URI of the building block as such (e.g., \verb|http://catalogueURL/screens/235|), as well as the required representation format (e.g., JSON). The catalogue will then inspect the request and redirect the requester to the appropriate representation (e.g., \verb|http://catalogueURL/screens/235.json|), as illustrated in Fig.~\ref{fig:content_negotiation}.
 On the Web, different representations for the same resource are called \emph{variants}, and content negotiation is the mechanism used to determine which of the representations of most appropriate for a given request.
 
 \begin{figure}[htb]
@@ -510,11 +527,14 @@ Lastly, content negotiation needs to identify which player is going to take the 
 \subsection{API Calls} % (fold)
 \label{sub:api_calls}
 
-This section contains detailed descriptions of the interface provided by the catalogue via REST services, detailing request parameters, response elements, any special errors and examples of requests and responses. The URL format is also specified for each operation, where 'catalogueURL' has to be replaced for the real URL the service is installed (e.g. http://demo.fast.morfeo-project.org/catalogue).
+The Catalogue API is a programmatic interface into many of the Catalogue's features. It includes not only control over creation, modification and deletion of building blocks, but it has been extended to support advanced search and recommendation capabilities.
 
-\subsubsection{CRUD operations} % (fold)
+This section contains detailed descriptions of the operations permitted by the API, detailing request parameters, response elements, any special errors and examples of requests and responses. The URL format is also specified for each operation, where \emph{catalogueURL} has to be replaced for the real URL the service is installed (e.g. http://demo.fast.morfeo-project.org/catalogue).
 
-Any building block within the Catalogue is a resource in terms of REST philosophy, hence it can be created, retrieved, modified or deleted, using a certaing URL and a specific HTTP method for every operation. Two concepts have to be defined: \emph{collection}, as a set of resources which access URI is http://catalogueURL/<type>/ where catalogueURL is the specific URL where the Catalogue server is installed and <type> is the plural of the name of the building block (e.g. screens, services), and \emph{member} of the collection, in other words, the building block itself, which access URI is http://catalogueURL/<type>/<id> where the <id> has to be replaced by the identifier of a specific building block. The details of the operations and which HTTP verb has to be used can be found in the Table~\ref{tab:crud_operations}.
+\subsection{Managing Building Blocks} % (fold)
+\label{sub:managing_building_blocks}
+
+Any building block within the Catalogue is a resource in terms of REST philosophy, therefore it can be created, retrieved, modified or deleted, using a certaing URL and a specific HTTP method for every operation. Two concepts should be clarified: \emph{collection}, as a set of resources which access URI is \verb|http://catalogueURL/[type]| where \emph{catalogueURL} is  where the Catalogue server is installed and \verb|[type]| is the plural of the name of the building block (e.g. screens, operators), and \emph{member} of the collection, in other words, the building block itself, which access URI is \verb|http://catalogueURL/[type]/[id]| where \verb|[id]| has to be replaced by the identifier of a specific building block. The details of the operations and which HTTP verb has to be used can be found in the Table~\ref{tab:crud_operations}. These methods are to what is called \emph{Prototype} of building blocks (see \cite{moeller2011fast_ontology}).
 
 \begin{table}[htb]
 \caption{CRUD operations}
@@ -547,41 +567,36 @@ To create a new screen, a POST request is sent to the catalogue server, concrete
 {
   "code": "http://demo.fast.morfeo-project.org/code/amazonList.js",
   "creationDate": "2010-01-26T17:01:13+0000",
-  "creator": "irivera",
+  "creator": "http://ismaelrivera.es/#me",
   "description": {"en-gb": "Please fill the description..."},
   "homepage": "http://fast.morfeo-project.eu/",
   "icon": "http://demo.fast.morfeo-project.org/images/amazonList.png",
   "id": "28",
   "label": {"en-gb": "Amazon Product List"},
-  "name": "ProductList",
   "postconditions": [
-    [
-      {
-        "id": "item",
-        "label": { "en-gb": "An item" },
-        "pattern": "?I 
-                    http://www.w3.org/1999/02/22-rdf-syntax-ns#type
-                    http://aws.amazon.com/AWSECommerceService#Item",
-        "positive": "true"
-      }
-    ]
+    {
+      "id": "item",
+      "label": { "en-gb": "An item" },
+      "pattern": "?item 
+                  http://www.w3.org/1999/02/22-rdf-syntax-ns#type
+                  http://fast.morfeo-project.org/ontologies/amazon#Item",
+      "positive": "true"
+    }
   ],
   "preconditions": [
-    [
-      {
-        "id": "filter",
-        "label": { "en-gb": "A search criteria" },
-        "pattern": "?F
-                    http://www.w3.org/1999/02/22-rdf-syntax-ns#type
-                    http://aws.amazon.com/AWSECommerceService#SearchCriteria",
-        "positive": "true"
-      }
-    ]
+    {
+      "id": "filter",
+      "label": { "en-gb": "A search request" },
+      "pattern": "?search
+                  http://www.w3.org/1999/02/22-rdf-syntax-ns#type
+                  http://fast.morfeo-project.org/ontologies/amazon#SearchRequest",
+      "positive": "true"
+    }
   ],
   "rights": "http://creativecommons.org/",
   "screenshot": "http://demo.fast.morfeo-project.org/images/amazonProductList.png",
   "tags": [{"label": {"en-gb": "amazon"}}],
-  "version": "0.1"
+  "version": "1.0"
 }
 \end{verbatim}
 \doublespacing
@@ -593,21 +608,19 @@ The URI of the screen is created using the id specified in the JSON request. So,
 {
   "code": "http://demo.fast.morfeo-project.org/code/amazonList.js",
   "creationDate": "2010-01-26T17:01:13+0000",
-  "creator": "irivera",
+  "creator": "http://ismaelrivera.es/#me",
   "description": {"en-gb": "Please fill the description..."},
   "homepage": "http://fast.morfeo-project.eu/",
   "icon": "http://demo.fast.morfeo-project.org/images/amazonList.png",
   "id": "28",
   "label": {"en-gb": "Prueba1"},
-  "name": "ProductList",
   "postconditions": [
-    [
       {
         "id": "item",
         "label": { "en-gb": "An item" },
-        "pattern": "?I
+        "pattern": "?item
                     http://www.w3.org/1999/02/22-rdf-syntax-ns#type
-                    http://aws.amazon.com/AWSECommerceService#Item",
+                    http://fast.morfeo-project.org/ontologies/amazon#Item",
         "positive": "true"
       }
     ]
@@ -616,10 +629,10 @@ The URI of the screen is created using the id specified in the JSON request. So,
     [
       {
         "id": "filter",
-        "label": { "en-gb": "A search criteria" },
-        "pattern": "?F
+        "label": { "en-gb": "A search request" },
+        "pattern": "?search
                     http://www.w3.org/1999/02/22-rdf-syntax-ns#type
-                    http://aws.amazon.com/AWSECommerceService#SearchCriteria",
+                    http://fast.morfeo-project.org/ontologies/amazon#SearchRequest",
         "positive": "true"
       }
     ]
@@ -628,7 +641,7 @@ The URI of the screen is created using the id specified in the JSON request. So,
   "screenshot": "http://demo.fast.morfeo-project.org/images/amazonProductList.png",
   "tags": [{"label": {"en-gb": "amazon"}}],
   "type": "screen",
-  "uri": "http://catalogueURL/catalogue/screens/28",
+  "uri": "http://catalogueURL/screens/28",
   "version": "0.1"
 }
 \end{verbatim}
@@ -642,21 +655,20 @@ To obtain all the screens stored in the catalogue a HTTP GET request is sent to 
   {
     "code": "http://demo.fast.morfeo-project.org/code/amazonList.js",
     "creationDate": "2010-01-26T17:01:13+0000",
-    "creator": "irivera",
+    "creator": "http://ismaelrivera.es/#me",
     "description": {"en-gb": "Please fill the description..."},
     "homepage": "http://fast.morfeo-project.eu/",
     "icon": "http://demo.fast.morfeo-project.org/images/amazonList.png",
     "id": "28",
     "label": {"en-gb": "Prueba1"},
-    "name": "ProductList",
     "postconditions": [
       [
         {
           "id": "item",
           "label": { "en-gb": "An item" },
-          "pattern": "?I
+          "pattern": "?item
                       http://www.w3.org/1999/02/22-rdf-syntax-ns#type
-                      http://aws.amazon.com/AWSECommerceService#Item",
+                      http://fast.morfeo-project.org/ontologies/amazon#Item",
           "positive": "true"
         }
       ]
@@ -665,10 +677,10 @@ To obtain all the screens stored in the catalogue a HTTP GET request is sent to 
       [
         {
           "id": "filter",
-          "label": { "en-gb": "A search criteria" },
-          "pattern": "?F
+          "label": { "en-gb": "A search request" },
+          "pattern": "?search
                       http://www.w3.org/1999/02/22-rdf-syntax-ns#type
-                      http://aws.amazon.com/AWSECommerceService#SearchCriteria",
+                      http://fast.morfeo-project.org/ontologies/amazon#SearchRequest",
           "positive": "true"
         }
       ]
@@ -677,183 +689,175 @@ To obtain all the screens stored in the catalogue a HTTP GET request is sent to 
     "screenshot": "http://demo.fast.morfeo-project.org/images/amazonProductList.png",
     "tags": [{"label": {"en-gb": "amazon"}}],
     "type": "screen",
-    "uri": "http://catalogueURL/catalogue/screens/28",
+    "uri": "http://catalogueURL/screens/28",
     "version": "0.1"
   },
   {
-    "creationDate": "2009-02-07T09:59:52+0000",
+    "creationDate": "2011-02-07T09:59:52+0000",
     "creator": "fabio",
     ...,
-	  "uri": "http://catalogueURL/catalogue/screens/14",
+    "uri": "http://catalogueURL/screens/14",
     "version": "1.0"
   },
   {
-    "creationDate": "2009-02-07T09:59:52+0000",
+    "creationDate": "2011-02-07T09:59:52+0000",
     "creator": "javier",
     ...,
-	  "uri": "http://catalogueURL/catalogue/screens/564",
+    "uri": "http://catalogueURL/screens/564",
     "version": "1.0"
   }
 ]
 \end{verbatim}
 \doublespacing
 
-\subsubsection{Screen Find} % (fold)
-\label{ssub:screen_find}
 
-The find operation searches inside the catalogue for any screen which could be somehow related to the gadget the user is creating. It provides a recommended set of screens depending on the domain context, the canvas, and so on.
-
-The specific URL to access this operation is http://catalogueURL/screens/find using HTTP POST method. From now on, the method 'find' only considers the domain context and the pre/postconditions of the screens. It will try to satisfy all the unsatisfied preconditions of a given list of screens also known as canvas. The results will be all the screens stored in the catalogue which fulfil some of these preconditions, and are tagged with the tags specified in the domain context. The request parameters are shown in Table~\ref{tab:screen_find_request} and the response parameters are shown in Table~\ref{tab:screen_find_response}.
-
-\begin{table}[htb]
-\caption{Screen Find Request Parameters}
-\label{tab:screen_find_request}
-\begin{center}
-\begin{tabular}{|p{2.5cm}|p{9cm}|p{2cm}|}
-\hline
-\rowcolor{fast@lightgrey}\textcolor{white}{Name} &
-                         \textcolor{white}{Description} &
-                         \textcolor{white}{Type}\\ \hline
-canvas & The canvas is composed by a list of screens. Only the URI is needed. & Optional \\ \hline
-domainContext & The domain context contains a list of tags and a user. & Optional \\ \hline
-elements & It is a list of resources, previously stored in the catalogue. For example, the list of screens recommended last execution. Only accepts screens. & Optional \\ \hline
-\end{tabular}
-\end{center}
-\end{table}
-
-\begin{table}[htb]
-\caption{Screen Find Response Parameters}
-\label{tab:screen_find_response}
-\begin{center}
-\begin{tabular}{|p{2.5cm}|p{9cm}|p{2cm}|}
-\hline
-\rowcolor{fast@lightgrey}\textcolor{white}{Name} &
-                         \textcolor{white}{Description} &
-                         \textcolor{white}{Type}\\ \hline
-N/A & A list of recommended screens URIs is returned. & Required \\ \hline
-\end{tabular}
-\end{center}
-\end{table}
-
-Following is shown an example of usage of this operation considering a canvas with the screen \texttt{http://catalogueURL/catalogue/screens/654}.
+\subsubsection{Prototype cloning} % (fold)
+\label{ssub:prototype_cloning}
+A building block can be cloned. Making a clone of a prototype is as simple as sending a HTTP POST request to \verb|http://catalogueURL/cloning| indicating the URI of the building block to be clone, as in this example:
 
 \singlespacing
 \begin{verbatim}
 {
-  canvas: [
-    { uri: "http://catalogueURL/catalogue/screens/654" }
-  ],
-  domainContext: {
-    tags: [],
-	  user: null
-  },
-  elements: []
+  "uri": "http://catalogueURL/forms/7"
 }
 \end{verbatim}
 \doublespacing
 
-After the execution of the recommendation algorithm, the response given by the catalogue is:
+Example of response:
+
+\singlespacing
+\begin{verbatim}
+{
+  "clone": "http://catalogueURL/forms/clones/745"
+  "uri": "http://catalogueURL/forms/7"
+}
+\end{verbatim}
+\doublespacing
+
+As clones are building blocks as well, the operations explained in Section~\ref{sub:managing_building_blocks} are valid to retrieve and delete them.
+
+
+\subsubsection{GetMetadata} % (fold)
+
+Retrieves all the metadata about a list of building blocks or classes (concepts) stored in the catalogue. All building blocks are supported, no matter if it is a prototype or a clone.
+
+The URL to access this operation is \verb|http://catalogueURL/getmetadata| using HTTP POST method. Table~\ref{tab:getmetadata_request} shows the parameters needed for the invocation and Table~\ref{tab:getmetadata_response} details the different parameters of a response.
+
+\begin{table}[htb]
+\caption{GetMetadata Request Parameters}
+\label{tab:getmetadata_request}
+\begin{center}
+\begin{tabular}{|p{2.5cm}|p{9cm}|p{2cm}|}
+\hline
+\rowcolor{fast@lightgrey}\textcolor{white}{Name} &
+                         \textcolor{white}{Description} &
+                         \textcolor{white}{Type}\\ \hline
+N/A & A list of URIs. & Required\\ \hline
+\end{tabular}
+\end{center}
+\end{table}
+
+\begin{table}[htb]
+\caption{GetMetadata Response Parameters}
+\label{tab:getmetadata_response}
+\begin{center}
+\begin{tabular}{|p{2.5cm}|p{11.5cm}|}
+\hline
+\rowcolor{fast@lightgrey}\textcolor{white}{Name} &
+                         \textcolor{white}{Description}\\ \hline
+screen-flows & A list of screen-flows with all the metadata associated to them.\\ \hline
+screens & A list of screens with all the metadata associated to them.\\ \hline
+forms & A list of forms with all the metadata associated to them.\\ \hline
+operators & A list of operators with all the metadata associated to them.\\ \hline
+backendservices & A list of back-end services with all the metadata associated to them.\\ \hline
+classes & A list of classes or concepts, with metadata such as label, properties, subclasses, etc.\\ \hline
+\end{tabular}
+\end{center}
+\end{table}
+
+Example request:
 
 \singlespacing
 \begin{verbatim}
 [
-  "http://catalogueURL/catalogue/screens/371",
-  "http://catalogueURL/catalogue/screens/24",
-  "http://catalogueURL/catalogue/screens/253",
-  "http://catalogueURL/catalogue/screens/12"
+  "http://catalogueURL/screens/48",
+  "http://catalogueURL/forms/clones/339",
+  "http://fast.morfeo-project.org/ontologies/amazon#Item",
 ]
 \end{verbatim}
 \doublespacing
 
-
-\subsubsection{Screen Check} % (fold)
-\label{ssub:screen_check}
-
-This operation verifies the state of certain list of screens depending on a specific criterion. The only criterion accepted in this stage of the prototype is 'reachability'. A screen will be reachable if it all its preconditions are satisfied by postconditions of the screens the canvas contain. The specific URL to access this operation is http://catalogueURL/screens/check using HTTP POST method. 
-
-\begin{table}[htb]
-\caption{Screen Check Request Parameters}
-\label{tab:screen_check_request}
-\begin{center}
-\begin{tabular}{|p{2.5cm}|p{9cm}|p{2cm}|}
-\hline
-\rowcolor{fast@lightgrey}\textcolor{white}{Name} &
-                         \textcolor{white}{Description} &
-                         \textcolor{white}{Type}\\ \hline
-canvas & The canvas is composed by a list of screens. Only the URI is needed. & Optional\\ \hline
-domainContext & The domain context contains a list of tags and a user. & Optional\\ \hline
-elements & It is a list of resources, previously stored in the catalogue. For example, the list of screens recommended last execution. Only accepts screens. & Optional\\ \hline
-criterion & The criterion specifies what it has to be check. The only possible supported now is 'reachability' in order to check if the preconditions of a screen are satisfied. & Required\\ \hline
-\end{tabular}
-\end{center}
-\end{table}
-
-\begin{table}[htb]
-\caption{Screen Check Response Parameters}
-\label{tab:screen_check_response}
-\begin{center}
-\begin{tabular}{|p{2.5cm}|p{9cm}|p{2cm}|}
-\hline
-\rowcolor{fast@lightgrey}\textcolor{white}{Name} &
-                         \textcolor{white}{Description} &
-                         \textcolor{white}{Type}\\ \hline
-canvas & The canvas indicating which screens satisfy the critetion. More aditional information may be included, for example, a satisfaction attribute for every precondition for reachability. & Optional\\ \hline
-domainContext & The domain context contains a list of tags and a user. & Optional\\ \hline
-elements & The elements indicating which satisfy the critetion. More aditional information may be included as in the Canvas. & Optional\\ \hline
-\end{tabular}
-\end{center}
-\end{table}
-
-The scenario for the following example is composed by a screen in the canvas which precondition is a foaf:Person which foaf:workplaceHomepage is \url{http://www.deri.ie/}, and a screen in the elements list which precondition is a foaf:Person. The state to check in this case is the reachability and satisfaction of the screens and preconditions.
+Example response:
 
 \singlespacing
 \begin{verbatim}
 {
-  "canvas": [
-    { "uri": "http://catalogueURL/catalogue/screens/238" }
+  "screenflows": [],
+  "screens": [
+    {
+      "creationDate": "2011-02-07T09:59:52+0000",
+      "creator": "http://ismaelrivera.es/#me",
+      ...,
+      "uri": "http://catalogueURL/screens/48",
+      "version": "1.0"
+    }
   ],
-  "elements": [
-    { "uri": "http://catalogueURL/catalogue/screens/636" }
+  "forms": [
+    {
+      "actions": [
+        {
+          "name": "init",
+          "preconditions": [],
+          "uses": []
+        },
+        {
+          "name": "showTable",
+          "preconditions": [{
+            "id": "list",
+            "label": {"en-gb": "A product list"},
+            "pattern": "?urlList
+                        http://www.w3.org/1999/02/22-rdf-syntax-ns#type
+                        http://fast.morfeo-project.org/ontologies/amazon#ProductList",
+            "positive": true
+          }],
+          "uses": []
+        }
+      ],
+      ...,
+      "uri": "http://catalogueURL/FASTCatalogue/forms/clones/249",
+      "version": "1.0"
+    },
   ],
-  "domainContext": {
-    "tags": [
-      {
-        "label": { "en-GB": "Amazon" },
-        "means": "http://dbpedia.org/page/Amazon.com"
-      }
-    ],
-    "user": "irivera",
-  },
-  criterion: "reachability"
-}
-\end{verbatim}
-\doublespacing
-
-The response shows that there are not reachable screens at the moment, and preconditions are not satisfied.
-
-\singlespacing
-\begin{verbatim}
-{
-  "canvas": [{
-    "preconditions": [{
-      "label": {"en-gb": "A person working in DERI"},
-      "pattern": "?person rdf:type foaf:Person . 
-                  ?person foaf:workplaceHomepage http://www.deri.ie/",
-      "positive": true,
-      "satisfied": false
-    }],
-    "reachability": false,
-    "uri": "http://catalogueURL/catalogue/screens/238"
-  }],
-  "elements": [{
-    "preconditions": [{
-      "label": {"en-gb": "A person"},
-      "pattern": "?person rdf:type foaf:Person",
-      "satisfied": false
-    }],
-    "reachability": false,
-    "uri": "http://catalogueURL/catalogue/screens/636"
-  }]
+  "operators": [],
+  "backendservices": []
+  "classes": [
+    {
+      "attributes": [
+        {
+          "type": "http://xmlns.com/foaf/0.1/Document",
+          "uri": "http://fast.morfeo-project.org/ontologies/amazon#smallImage"
+        },
+        {
+          "type": "http://xmlns.com/foaf/0.1/Document",
+          "uri": "http://fast.morfeo-project.org/ontologies/amazon#mediumImage"
+        },
+        {
+          "type": "http://xmlns.com/foaf/0.1/Document",
+          "uri": "http://fast.morfeo-project.org/ontologies/amazon#largeImage"
+        },
+        {
+          "type": "http://www.w3.org/2001/XMLSchema#double",
+          "uri": "http://fast.morfeo-project.org/ontologies/amazon#price"
+        }
+      ],
+      "label": {"en": "An item handled by the Amazon Service"},
+      "tags": [{
+        "label": {"en": "amazon"},
+        "means": "http://www.amazon.com"
+      }],
+      "uri": "http://fast.morfeo-project.org/ontologies/amazon#Item"
+    }
+  ]
 }
 \end{verbatim}
 \doublespacing
@@ -862,18 +866,52 @@ The response shows that there are not reachable screens at the moment, and preco
 \subsubsection{Screen Find \& Check} % (fold)
 \label{ssub:screen_findcheck}
 
-For convenience and to minimise the number of request, the Find operation may be combined with the Check operation. This operation will look for new screens based on the given information, and will perform the Check to both the screens in the canvas and the screens in the \emph{elements} attribute.
+Searches screens and check the compatibility/reachability of a given screen-flow.
 
-The format of the request is the same as the one used in the Check operation:
+\begin{table}[htb]
+\caption{Screen Find \& Check Request Parameters}
+\label{tab:screen_check_request}
+\begin{center}
+\begin{tabular}{|p{2.5cm}|p{9cm}|p{2cm}|}
+\hline
+\rowcolor{fast@lightgrey}\textcolor{white}{Name} &
+                         \textcolor{white}{Description} &
+                         \textcolor{white}{Type}\\ \hline
+canvas & The canvas is composed by a list of screens (clones). Only the URI is needed. & Required\\ \hline
+palette & It is a list of screens (prototypes), not in the canvas but which must be check based on the specified criterion. & Required\\ \hline
+domainContext & The domain context contains a list of tags and the user who makes the request. & Required\\ \hline
+criterion & The criterion specifies what it has to be check. The only possible supported now is 'reachability' in order to check if the pre-conditions of a screen are satisfied. & Required\\ \hline
+\end{tabular}
+\end{center}
+\end{table}
+
+\begin{table}[htb]
+\caption{Screen Find \& Check Response Parameters}
+\label{tab:screen_check_response}
+\begin{center}
+\begin{tabular}{|p{2.5cm}|p{11.5cm}|}
+\hline
+\rowcolor{fast@lightgrey}\textcolor{white}{Name} &
+                         \textcolor{white}{Description}\\ \hline
+canvas & List of screens in the canvas, which extra information indicating satisfaction of the criterion, for the screens themselves and their pre-conditions.\\ \hline
+palette & A list of screens obtained by the search, attaching information about the satisfaction of the criterion.\\ \hline
+domainContext & It contains the same value as in the request.\\ \hline
+limit & Integer. It is used to limit the number of results returned. Default value is -1 (no limit).\\ \hline
+offset & Integer. It is used to jump or skip a number of results to be returned. Default value is 0.\\ \hline
+\end{tabular}
+\end{center}
+\end{table}
+
+Example of the request:
 
 \singlespacing
 \begin{verbatim}
 {
   "canvas": [
-    { "uri": "http://catalogueURL/catalogue/screens/238" }
+    { "uri": "http://catalogueURL/screens/clones/338" }
   ],
-  "elements": [
-    { "uri": "http://catalogueURL/catalogue/screens/636" }
+  "palette": [
+    { "uri": "http://catalogueURL/screens/636" }
   ],
   "domainContext": {
     "tags": [
@@ -882,7 +920,7 @@ The format of the request is the same as the one used in the Check operation:
         "means": "http://dbpedia.org/page/Amazon.com"
       }
     ],
-    "user": "irivera",
+    "user": "http://ismaelrivera.es/#me",
   },
   criterion: "reachability"
 }
@@ -903,9 +941,9 @@ The response for the above request is:
       "satisfied": false
     }],
     "reachability": false,
-    "uri": "http://catalogueURL/catalogue/screens/238"
+    "uri": "http://catalogueURL/screens/clones/338"
   }],
-  "elements": [
+  "palette": [
     {
       "preconditions": [{
         "label": {"en-gb": "A person"},
@@ -913,160 +951,60 @@ The response for the above request is:
         "satisfied": false
       }],
       "reachability": false,
-      "uri": "http://catalogueURL/catalogue/screens/636"
+      "uri": "http://catalogueURL/screens/636"
     },
     {
       "preconditions": [],
       "reachability": true,
-      "uri": "http://catalogueURL/catalogue/screens/132"
+      "uri": "http://catalogueURL/screens/132"
     }
   ]
 }
 \end{verbatim}
 \doublespacing
 
-
-\subsubsection{GetMetadata} % (fold)
-
-Although the information about a resource can be obtained by its specific retrieval operation supported by the CRUD interface, sometimes is needed to retrieve information which would imply a request per resource, hence this operation allow to get the metadata of a list of resources in only one request. This prototype supports this operation for screen-flows and screens. The specific URL to access this operation is http://catalogueURL/getmetadata using HTTP POST method. Table~\ref{tab:getmetadata_request} shows the parameters needed for the invocation and Table~\ref{tab:getmetadata_response} details the different parameters may contain a response.
-
-\begin{table}[htb]
-\caption{GetMetadata Request Parameters}
-\label{tab:getmetadata_request}
-\begin{center}
-\begin{tabular}{|p{2.5cm}|p{9cm}|p{2cm}|}
-\hline
-\rowcolor{fast@lightgrey}\textcolor{white}{Name} &
-                         \textcolor{white}{Description} &
-                         \textcolor{white}{Type}\\ \hline
-N/A & A list of URIs. & Required\\ \hline
-\end{tabular}
-\end{center}
-\end{table}
-
-\begin{table}[htb]
-\caption{GetMetadata Response Parameters}
-\label{tab:getmetadata_response}
-\begin{center}
-\begin{tabular}{|p{2.5cm}|p{9cm}|p{2cm}|}
-\hline
-\rowcolor{fast@lightgrey}\textcolor{white}{Name} &
-                         \textcolor{white}{Description} &
-                         \textcolor{white}{Type}\\ \hline
-screen-flows & A set of screen-flows with all the metadata associated to them.. & Optional\\ \hline
-screens & A set of screens with all the metadata associated to them. & Optional\\ \hline
-forms & A set of forms with all the metadata associated to them. & Optional\\ \hline
-operators & A set of operators with all the metadata associated to them. & Optional\\ \hline
-backendservices & A set of back-end services with all the metadata associated to them. & Optional\\ \hline
-\end{tabular}
-\end{center}
-\end{table}
-
-The following example send two URIs of screens and a URI of a screen-flow to the GetMetadata operation:
-
-\singlespacing
-\begin{verbatim}
-[
-  "http://catalogueURL/catalogue/screens/12",
-  "http://catalogueURL/catalogue/screens/48",
-  "http://catalogueURL/catalogue/forms/9",
-]
-\end{verbatim}
-\doublespacing
-
-The response obtained are two lists, one containing all the metadata regarding to the screen-flows and another one with the information about the screens:
-
-\singlespacing
-\begin{verbatim}
-{
-  "screenflows": [],
-  "screens": [
-    {
-      "creationDate": "2009-02-07T09:59:52+0000",
-      "creator": "irivera",
-      ...,
-      "uri": "http://catalogueURL/catalogue/screens/12",
-      "version": "1.0"
-    },
-    {
-      "creationDate": "2009-02-07T09:59:52+0000",
-      "creator": "irivera",
-      ...,
-      "uri": "http://catalogueURL/catalogue/screens/12",
-      "version": "1.0"
-    }
-  ],
-  "forms": [
-    {
-      "actions": [
-        {
-          "name": "init",
-          "preconditions": [],
-          "uses": []
-        },
-        {
-          "name": "showTable",
-          "preconditions": [{
-            "id": "list",
-            "label": {"en-gb": "A product list"},
-            "pattern": "?PList
-                        http://www.w3.org/1999/02/22-rdf-syntax-ns#type
-                        http://aws.amazon.com/AWSECommerceService#ProductList",
-            "positive": true
-          }],
-          "uses": []
-        }
-      ],
-      ...,
-      "uri": "http://catalogueURL/FASTCatalogue/forms/9",
-      "version": "1.0"
-    },
-  ],
-  "operators": [],
-  "backendservices": []
-}
-\end{verbatim}
-\doublespacing
+A more detailed explanation regarding the search, recommendation, and ranking algorithms used by this operation can be found in Appendix F.
 
 \subsubsection{Screen Component Find \& Check} % (fold)
 \label{ssub:screen_component_findcheck}
 
-Similarly to the Screen Find \& Check described in Section~\ref{ssub:screen_findcheck}, this operation search for screen components (forms, operators and back-end services) through the catalogue in order to satisfy a given request, and it will attach information about satisfaction and reachability as well.
+Similarly to the Screen Find \& Check described in Section~\ref{ssub:screen_findcheck}, this operation search for screen components (forms, operators and back-end services) through the catalogue in order to satisfy a given request, and attaches information regarding building block satisfaction and reachability as well.
 
 A request is formed of the following parameters:
 
 \begin{description}
 	\item[preconditions] Preconditions of the screen.
 	\item[postconditions] Postcondition of the screen.
-	\item[canvas] The canvas is composed by a list of screens. Only the URI is needed.
-	\item[forms] It is a list of forms, such as the list of forms recommended last execution.
-	\item[operators] It is a list of operators, such as the list of operators recommended last execution.
-	\item[backendservices] It is a list of back-end services, such as the list of back-end services recommended last execution.
-	\item[search] Boolean indicating if forms/operators/services are required to be looked for. If \emph{false} the operation performed is just a check. If missed, it will act as \emph{true}.
-	\item[domainContext] The domain context contains a list of tags and a user.
-	\item[pipes] List of pipes for the connection between screen components.
-	\item[selectedItem] URI of a screen component from the canvas.
+	\item[canvas] The canvas is composed by a list of clones of forms, operators and back-end services. Only the URI is needed.
+	\item[forms] It is a list of forms (prototypes), not in the canvas, but related to the request (may be the list of forms retrieved in previous searches).
+	\item[operators] It is a list of operators (prototypes), not in the canvas, but related to the request (may be the list of operators retrieved in previous searches).
+	\item[backendservices] It is a list of back-end services (prototypes), not in the canvas, but related to the request (may be the list of back-end services retrieved in previous searches).
+	\item[domainContext] The domain context contains a list of tags and the user who makes the request.
+	\item[pipes] List of pipes for the connection between screen components and conditions. If the building block in a pipe is the screen itself, the value must be set to \emph{null}.
+	\item[selectedItem] URI of a screen component from the canvas, or id of a pre-/post-condition.
+	\item[search] Boolean indicating if forms/operators/services are required to be looked for. If \emph{false} the operation performed is just a check. If omitted, default value is \emph{true}.
+	\item[iserve] Boolean indicating if a search has to be perfomed in the iServe service. If omitted, default value is \emph{false}. If \emph{search} is false, this parameter is discarded.
+	\item[limit] Integer. It is used to limit the number of results returned. Default value is -1 (no limit).
+	\item[offset] Integer. It is used to jump or skip a number of results to be returned. Default value is 0.
 \end{description}
 
-The screen components recommended are based on the given domain context and the pre/postconditions of the any of the resources in the canvas or the conditions of the parameters preconditions and postconditions. Hence, any screen component from the catalogue which has any of these conditions may be suitable for the screen, so it is included in the response, in the list corresponding to the type of screen component.
-
-An example of request is the following:
+Example request:
 
 \singlespacing
 \begin{verbatim}
 {
   "preconditions": [{
     "id": "Searchcriteria_1",
-    "label": {"en-gb": "A search criteria"},
-    "pattern": "?F
+    "label": {"en-gb": "A search request"},
+    "pattern": "?search
                 http://www.w3.org/1999/02/22-rdf-syntax-ns#type
-                http://aws.amazon.com/AWSECommerceService#SearchCriteria",
+                http://fast.morfeo-project.org/ontologies/amazon#SearchRequest",
     "positive": true,
   }],
   "postconditions": [],
   "canvas": [
-    { "uri": "http://catalogueURL/catalogue/forms/1" },
-    { "uri": "http://catalogueURL/catalogue/services/1" }
+    { "uri": "http://catalogueURL/forms/clones/112" },
+    { "uri": "http://catalogueURL/services/clones/312" }
   ],
   "forms": [],
   "operators": [],
@@ -1074,27 +1012,29 @@ An example of request is the following:
   "search": true,
   "domainContext": {
     "tags": [],
-    "user": null
+    "user": "http://ismaelrivera.es#me"
   },
   "pipes": [
     {
       "from": {
-        "buildingblock": "http://catalogueURL/catalogue/services/1",
+        "buildingblock": "http://catalogueURL/services/clones/312",
         "condition": "list"
       },
       "to": {
         "action": "showTable",
-        "buildingblock": "http://catalogueURL/catalogue/forms/1",
+        "buildingblock": "http://catalogueURL/forms/clones/112",
         "condition": "list"
       }
     }
   ],
-  "selectedItem": "http://catalogueURL/catalogue/forms/1"
+  "selectedItem": "http://catalogueURL/forms/clones/112"
+  "search": true,
+  "iserve": true
 }
 \end{verbatim}
 \doublespacing
 
-And the response according to the above request is:
+Example response:
 
 \singlespacing
 \begin{verbatim}
@@ -1106,10 +1046,10 @@ And the response according to the above request is:
         "name": "search",
         "preconditions": [{
           "id": "filter",
-          "label": {"en-gb": "A search criteria"},
-          "pattern": "?F 
+          "label": {"en-gb": "A search request"},
+          "pattern": "?search 
                       http://www.w3.org/1999/02/22-rdf-syntax-ns#type
-                      http://aws.amazon.com/AWSECommerceService#SearchCriteria",
+                      http://fast.morfeo-project.org/ontologies/amazon#SearchRequest",
           "positive": true,
           "satisfied": false
         }],
@@ -1117,7 +1057,7 @@ And the response according to the above request is:
         "uses": []
       }],
       "reachability": false,
-      "uri": "http://catalogueURL/catalogue/services/1"
+      "uri": "http://catalogueURL/services/clones/312"
     },
     {
       "actions": [
@@ -1132,9 +1072,9 @@ And the response according to the above request is:
           "preconditions": [{
             "id": "list",
             "label": {"en-gb": "A product list"},
-            "pattern": "?PList
+            "pattern": "?urlList
                         http://www.w3.org/1999/02/22-rdf-syntax-ns#type
-                        http://aws.amazon.com/AWSECommerceService#ProductList",
+                        http://fast.morfeo-project.org/ontologies/amazon#ProductList",
             "positive": true,
             "satisfied": false
           }],
@@ -1143,7 +1083,7 @@ And the response according to the above request is:
         }
       ],
       "reachability": true,
-      "uri": "http://catalogueURL/catalogue/forms/1"
+      "uri": "http://catalogueURL/forms/clones/112"
     }
   ],
   "connections": [
@@ -1154,7 +1094,7 @@ And the response according to the above request is:
       },
       "to": {
         "action": "search",
-        "buildingblock": "http://catalogueURL/catalogue/services/1",
+        "buildingblock": "http://catalogueURL/services/clones/312",
         "condition": "filter"
       }
     },
@@ -1164,25 +1104,38 @@ And the response according to the above request is:
   "pipes": [
     {
       "from": {
-        "buildingblock": "http://catalogueURL/catalogue/services/1",
+        "buildingblock": "http://catalogueURL/services/clones/312",
         "condition": "list"
       },
       "satisfied": true,
       "to": {
         "action": "showTable",
-        "buildingblock": "http://catalogueURL/catalogue/forms/1",
+        "buildingblock": "http://catalogueURL/forms/clones/112",
         "condition": "list"
       }
     }
   ],
-  "postconditions": []
+  "postconditions": [],
+  "iserve": [
+    {
+      "address": "http://ws.audioscrobbler.com/2.0/?method=user.getfriends
+                  &user={http://xmlns.com/foaf/0.1/Person}&api_key={APIKey}",
+      "classes": ["http://xmlns.com/foaf/0.1/Person"],
+      "doc": "http://iserve.kmi.open.ac.uk/resource/documents/[id]/hrest.html",
+      "label": "LastFm Friends",
+      "service": "http://iserve.kmi.open.ac.uk/resource/services/[id]#LastFmFriends"
+    },
+    ...
+  ]
 }
 \end{verbatim}
 \doublespacing
 
-For a screen component to be reachable, its preconditions need to be connected by a pipe to any other screen component which is already reachable, or to any of the screen preconditions. Moreover, the pipe needs to be satisfied, in other words, conditions in both edges are compatible.
+For a screen component to be reachable, its pre-conditions need to be connected by a pipe to any other screen component which is already reachable, or to any of the screen pre-conditions. Moreover, the pipe needs to be satisfied, in other words, conditions in both edges are compatible.
 
 The response includes an attribute called "connections". This attribute will be retrieved when "selectedItem" is given, and it will contain a list of potential pipes to connect to that item.
+
+A more detailed explanation regarding the search, recommendation, and ranking algorithms used by this operation can be found in Appendix F.
 
 % subsubsection screen_component_findcheck (end)
 
@@ -1191,29 +1144,27 @@ The response includes an attribute called "connections". This attribute will be 
 \subsection{Planning}
 \label{sub:planning}
 
-While creating a screen-flow, the user need to find proper screens which will satisfy her necessity. Once the user has selected one or several screens to be included in her screen-flow, she needs to find screens which satisfy the preconditions of these screens, in order to create an executable screen-flow. The operation Find, detailed in Section~\ref{ssub:screen_find}, helps the user to find these screens, however the response is just a set of screens which somehow may help to accomplish her goal, but not in a single and straight-forward step.
+Search for plans (sets of screens) which accomplish a goal. A goal is a screen or set of screens which must be made reachable.
 
-This functionality offers to the user the possibility to receive a whole set of screens, or plan, which will make a given screen, or goal, reachable. These plans take into account the screen which are already in the canvas, in order to minimise the number of screens.
-
-The specific URL to access this operation is \url{http://catalogueURL/planner}, and to execute the operation a POST request needs to be done. The request body is composed of:
+The URL to access this operation is \verb|http://catalogueURL/planner|. This operation is invoked sending an HTTP POST request with the following parameters:
 
 \begin{description}
-	\item[goal] Required. URI of the goal screen.
-	\item[canvas] Required. List of screens URIs.
+	\item[goal] Required. URI or list of URIs (clones) conforming the goal.
+	\item[canvas] Required. List of screens URIs (clones).
 	\item[page] Optional. Number of the page to be retrieved.
 	\item[per\_page] Optional. Number of plans to be included per page in the response.
 \end{description}
 
-Let's see the following example:
+Example request (single goal):
 
-Request
 \singlespacing
 \begin{verbatim}
 {
-  "goal": "http://catalogueURL/catalogue/screens/35",
+  "goal": "http://catalogueURL/screens/clones/135",
   "canvas": [
-    { "uri": "http://catalogueURL/catalogue/screens/56" },
-    { "uri": "http://catalogueURL/catalogue/screens/85" }
+    { "uri": "http://catalogueURL/screens/clones/135" },
+    { "uri": "http://catalogueURL/screens/clones/656" },
+    { "uri": "http://catalogueURL/screens/clones/385" }
   ],
   "page": 1,
   "per_page": 10 
@@ -1221,33 +1172,54 @@ Request
 \end{verbatim}
 \doublespacing
 
-Response
+Example request (multi goal):
+
+\singlespacing
+\begin{verbatim}
+{
+  "goal": [
+    "http://catalogueURL/screens/clones/135",
+    "http://catalogueURL/screens/clones/537"
+  ]
+  "canvas": [
+    { "uri": "http://catalogueURL/screens/clones/135" },
+    { "uri": "http://catalogueURL/screens/clones/537" },
+    { "uri": "http://catalogueURL/screens/clones/656" },
+    { "uri": "http://catalogueURL/screens/clones/385" }
+  ],
+  "page": 1,
+  "per_page": 10 
+}
+\end{verbatim}
+\doublespacing
+
+Example response:
+
 \singlespacing
 \begin{verbatim}
 [
   [
-    "http://catalogueURL/catalogue/screens/13",
-    "http://catalogueURL/catalogue/screens/23"
+    "http://catalogueURL/screens/clones/113",
+    "http://catalogueURL/screens/clones/423"
   ],
   [
-    "http://catalogueURL/catalogue/screens/79",
-    "http://catalogueURL/catalogue/screens/37",
-    "http://catalogueURL/catalogue/screens/14"
+    "http://catalogueURL/screens/clones/669",
+    "http://catalogueURL/screens/clones/37",
+    "http://catalogueURL/screens/clones/114"
   ],
   [
-    "http://catalogueURL/catalogue/screens/16",
-    "http://catalogueURL/catalogue/screens/44",
-    "http://catalogueURL/catalogue/screens/32"
+    "http://catalogueURL/screens/clones/711",
+    "http://catalogueURL/screens/clones/464",
+    "http://catalogueURL/screens/clones/322"
   ]
 ]
 \end{verbatim}
 \doublespacing
 
-The response is ranked based on adding the minimum number of new screens into the canvas, and giving preference to the screens the user has previously selected (canvas).
-
-In the above example, let's assume the first plan is using the two screens from the canvas to accomplish the goal, and the second plan is able to make the goal reachable by itself. That said, a screen-flow with the goal and the second plan could be executable, and it would be composed of just four screens, however, taking the first plan, the resulting screen-flow will be composed of five screens. It could make sense to place the second plan in first position, but the plan with just two screens reuse the screens from the canvas which has been added by the user.
+A more detailed explanation regarding the algorithms used for the planning can be found in Appendix F.
 
 % subsection planning (end)
+
 
 \subsection{API Error Codes} % (fold)
 There are two types of error codes, client and server.
@@ -1256,9 +1228,10 @@ There are two types of error codes, client and server.
 	\item Server error codes are generally caused by a server-side issue and should be reported. These errors are accompanied by a 5xx HTTP response code. For example: ServerUnavailable.
 \end{itemize}
 
-The following table lists all the error codes.
+The possible error codes are listed in Table~\ref{table:error_codes}.
 
 \begin{table}[htb]
+\label{table:error_codes}
 \caption{API Error Codes}
 \begin{center}
 \begin{tabular}{|p{3.5cm}|p{7cm}|p{3cm}|}
@@ -1269,12 +1242,8 @@ The following table lists all the error codes.
 ResourceNotFound & The resource <resourceURI> has not been found. & 404 Not Found \\ \hline
 AccessFailure & Access to the resource <resourceName> is denied. & 403 Forbidden \\ \hline
 InternalError & Request could not be executed due to an internal service error. & 500 Internal Server Error \\ \hline
-InvalidAction & The action <actionName> is not valid for this web service.  & 404 Bad Request \\ \hline
 InvalidHttpRequest & The HTTP request is invalid. Reason: <reason>. & 400 Bad Request \\ \hline
-InvalidLiteral & Illegal literal in the filter expression. & 400 Bad Request \\ \hline
-InvalidParameterValue & The specified parameter value is not valid. & 400 Bad Request \\ \hline
 InvalidURI & The URI <requestURI> is not valid. & 400 Bad Request \\ \hline
-MissingAction & No action was supplied with this request. & 400 Bad Request \\ \hline
 MissingParameter & The request must contain the specified missing parameter. & 400 Bad Request \\ \hline
 NotYetImplemented & Feature <feature> is not yet available. & 401 Unauthorized \\ \hline
 ServiceUnavailable & The service is currently unavailable. Please try again later. &  \\ \hline
@@ -1287,7 +1256,7 @@ URITooLong & The URI exceeded the maximum limit of <maxLength>. & 400 Bad Reques
 
 \clearpage
 \bibliographystyle{apalike}
-\bibliography{fast_d5_1_1}
+\bibliography{fast_d5_1_2}
 
 
 \clearpage
@@ -1323,7 +1292,7 @@ It can be seen that RDFS performs rather well, even in the 10.000 size set, wher
 \begin{verbatim}
 {
   "code": "http://url.com/.../code.js",
-  "creationDate": "2009-04-20T17:00:00+0100",
+  "creationDate": "2011-04-20T17:00:00+0100",
   "creator": "username",
   "description": {"en-gb": "This is a description of the building block"},
     "tags":[
@@ -1340,10 +1309,9 @@ It can be seen that RDFS performs rather well, even in the 10.000 size set, wher
   "icon": "http://url.com/images/.../icon.png",
   "id": "Id of the building block", // i.e. 3545
   "label": {"en-gb": "Label or title of the building block"},
-  "name": "User-friendly name of the building block",
   "rights": "http://creativecommons.org/",
   "screenshot": "http://url.com/.../screenshot.jpg",
-  "type": "type of the building block", // screenflow, screen, form, operator or resource
+  "type": "type of the building block", // screenflow, screen, form, operator or service
   "uri": "http://url.com/screens/525",
   "version": "1.0"
 }
@@ -1361,8 +1329,8 @@ It can be seen that RDFS performs rather well, even in the 10.000 size set, wher
 {
   <GENERIC BUILDING BLOCK JSON>,
   "contains": [
-    "http://url.com/screens/72723",
-    "http://url.com/screens/20035",
+    "http://url.com/screens/clones/72723",
+    "http://url.com/screens/clones/20035",
   ],
 }
 \end{verbatim}
@@ -1379,58 +1347,50 @@ It can be seen that RDFS performs rather well, even in the 10.000 size set, wher
 {
   <GENERIC BUILDING BLOCK JSON>,
   "postconditions": [[{
-    "id": <identifier:String>,
+    "id": "Id of the building block", // i.e. 3545
     "label": {"en-gb": "Purchase URL"},
-    "pattern": "?P
+    "pattern": "?url
                 http://www.w3.org/1999/02/22-rdf-syntax-ns#type
-                http://aws.amazon.com/AWSECommerceService#PurchaseURL",
+                http://fast.morfeo-project.org/ontologies/amazon#PurchaseURL",
     "positive": true
   }]],
   "preconditions": [[{
     "id": "cart",
     "label": {"en-gb": "A shopping cart"},
-    "pattern": "?C
+    "pattern": "?cart
                 http://www.w3.org/1999/02/22-rdf-syntax-ns#type
-                http://aws.amazon.com/AWSECommerceService#ShoppingCart",
+                http://fast.morfeo-project.org/ontologies/amazon#ShoppingCart",
     "positive": true
   }]],
   "code": "URL of the code",
   "definition": {
     "buildingblocks: [
-      { // Form
-        "id": "form1", // unique for the container screen
-        "uri": "http://purl.oclc.org/fast/ontology/gadget#Form670238"
+      {
+        "uri": "http://catalogueURL/forms/clones/670238"
+        "uri": "http://catalogueURL/operators/clones/213487"
+        "uri": "http://catalogueURL/services/clones/38399"
       },
-      { // Operators
-        "id": "op1",
-        "uri": "http://purl.oclc.org/fast/ontology/gadget#Operator213487"
-      },
-      {  // Backend services
-        "id": "bs1",
-        "uri": "http://purl.oclc.org/fast/ontology/gadget#Backendservice38399"
-      },
-      {...}
     ]
     "pipes": [
       {
         "from": {
-          "buildingblock": "bs1",
+          "buildingblock": "http://catalogueURL/services/clones/38399",
           "condition": "cA"
         },
         "to": {
-          "buildingblock": "op1",
-          "condition": "cA", // can be the same id, unique for the building block
+          "buildingblock": "http://catalogueURL/operators/clones/213487",
           "action": "filter"
+          "condition": "cA",
         }
       },
     "triggers": [
       {
         "from": {
-          "buildingblock": "form1",
+          "buildingblock": "http://catalogueURL/forms/clones/670238",
           "name": "refresh"
         },
         "to": {
-          "buildingblock": "bs1",
+          "buildingblock": "http://catalogueURL/services/clones/38399",
           "action": "list"
         }
       }
@@ -1455,14 +1415,14 @@ It can be seen that RDFS performs rather well, even in the 10.000 size set, wher
     "preconditions": [[{
       "id": "item",
       "label": {"en-gb": "Ebay List"},
-      "pattern": "?Item
+      "pattern": "?item
                   http://www.w3.org/1999/02/22-rdf-syntax-ns#type
-                  http://aws.amazon.com/AWSECommerceService#Item",
+                  http://fast.morfeo-project.org/ontologies/amazon#Item",
       "positive": true
     }]],
     "uses": [{
       "id":"cart",
-      "uri":"http://aws.amazon.com/AWSECommerceService#ShoppingCart"
+      "uri":"http://fast.morfeo-project.org/ontologies/amazon#ShoppingCart"
     }]
   }],
   "libraries": [{
@@ -1481,5 +1441,77 @@ It can be seen that RDFS performs rather well, even in the 10.000 size set, wher
 }
 \end{verbatim}
 \doublespacing
+
+
+\clearpage
+\section*{Appendix F. Algorithms for building block recommendation}
+\label{appendix_f}
+\addcontentsline{toc}{section}{Appendix F. Algorithms for building block recommendation}
+
+The Catalogue serves as a metadata repository for the different kind of building blocks used by the Gadgets in the FAST platform, or so-called building blocks. The number of building blocks stored in the catalogue is arbitrary, and a simple browsing or keyword-based search through the whole catalogue would be not usable if the number is relatively high.
+
+There are two scenarios where the user may be assisted: screen-flow design, and screen design. At screen-flow design, a user needs to find the proper screens to fulfil her goal. At screen design, the scenario is a bit more complex, where different types of building blocks are involved, making screen creation process more challenging. Therefore, the Catalogue includes several mechanisms in order to help in these situations.
+
+
+\subsection*{F.1 Pre-/post-conditions matching search}
+
+The building blocks are connected (implicit or explicitaly) to each other via their pre- and post-conditions. These connections are guaranteed by a matching method which determine when a pre-condition is satisfied by a post-condition.
+
+At screen-flow or screen design, the user needs to find new building blocks which may satisfy elements from the canvas. There is a high probability that building blocks which pre-/post-conditions are compatible might be used to accomplish her goal. The goal for the algorithm is to satisfy a set of pre-conditions, which are still not satisfied from the elements in the canvas. Therefore, this algorithm searchs the Catalogue for building blocks which post-conditions satisfy in a certain way some or all of these pre-conditions.
+
+
+\subsection*{F.2 Planning}
+
+One of the limitations of the pre-/post-conditions matching algorithm is that the output is limited to satisfy a given set of conditions, but the building blocks suggested may include new pre-conditions to be satisfied, where the user has to add building blocks iteratively until the goal is accomplished (screen-flow or screen is executable).
+
+A set of screens can be seen as a graph (see Figure~\ref{fig:screens_graph}), where the vertices (or nodes) are the screens, and the edges represent whether a screen satisfied or is satisfied but another screen. There is a special node connected to all the screens with no pre-conditions (those are reachable by default). For a given screen, a plan is the path from itself to the special node. These paths or plans are then offered to the user as a set of screens which makes a specific screen reachable.
+
+\begin{figure}[htb]
+\label{fig:screens_graph}
+\begin{center}
+	\includegraphics{images/screens_graph}
+	\caption{Graph of compatible screens by pre-/post-conditions}
+\end{center}
+\end{figure}
+
+If the number of vertices and edges is high, the number of different paths can be as well high. This cause problems such as a huge number of different paths between two vertices, or paths which are incredible long, in other words, the number of results or their quality may not be appropiate to be presented to the user, which may expect a few results and with the minimum number of screens as possible. This is a common problem, and there exist many are many algorithms which solve it, such as Dijkstra or the A* search algorithm which are complete and will always find a solution if one exists.
+
+Our approach has been to implement the A* algorithm, as it calculates a heuristic estimate of the distance to the goal for each node, apart from the path-cost function also included in Dijkstra. In our case, the cost for all edges is the same, and the heuristic function is used to prioritize the screens which are being used already by a given canvas. This way, we try to minimise the number of screens to be used.
+
+
+\subsection*{F.3 Association Rule Mining}
+
+Association Rule Mining is a well known method for the discovery of relations between variables in large databases. Given a set of transactions, find rules that will predict the occurrence of an item based on the occurrences of other items in the transaction. For example, the rule \verb|{onions, potatoes} = {burger}| found in the sales data of a supermarket would indicate that if a customer buys onions and potatoes together, he or she is likely to also buy burger. 
+
+This method is divided in two steps: frequent itemset mining and rule generation. There are many algorithms for frequent itemset mining as Apriori, Eclat and FP-Growth. This is still a computationally expensive task, and when a mined dataset has a considerable size it is resource intensive \cite{Han:2000:MFP:335191.335372}. However, FP-Growth has demostrated to execute faster than the rest, which lead the open source project called Mahout\footnote{http://mahout.apache.org/} to create its parallel implementation of the algorithm \cite{Li:2008:PPF:1454008.1454027}.
+
+We are not reinventing the wheel doing our own implementation of any algorithm for frequent pattern mining. We opted for integrating the Catalogue with Mahout to make uses of its power, and its scalability advantages.
+
+This algorithm is used both in screen-flow design and screen-design. The approach is similar in both cases, finding building blocks which co-ocurrence is high.
+
+As an example, given the following set of screen-flows:
+
+\begin{table}[h]
+\begin{center}
+\begin{tabular}{|p{3.5cm}|p{10cm}|}
+\hline
+\rowcolor{fast@lightgrey}\textcolor{white}{Screen-flow} &
+                         \textcolor{white}{Screens} \\ \hline
+screenflow-A & screen-1, screen-2 \\ \hline
+screenflow-B & screen-1, screen-3, screen-4 \\ \hline
+screenflow-C & screen-1, screen-4 \\ \hline
+screenflow-D & screen-4, screen-5, screen-7, screen-8 \\ \hline
+screenflow-E & screen-3, screen-4, screen-9 \\ \hline
+screenflow-F & screen-5, screen-7, screen-2 \\ \hline
+screenflow-G & screen-10, screen-11, screen-5, screen-7 \\ \hline
+screenflow-H & screen-1, screen-2, screen-3 \\ \hline
+\end{tabular}
+\end{center}
+\end{table}
+
+The algorithm will search for the screens with the highest co-ocurrence for a given input, i.e. a screen-flow during its design phase. For example, for a screen-flow which contains the screen-5, the algorithm will recommend screen-7 as its co-ocurrence is high.
+
+However, the algorithm used for the operations Find \& Check at screen-flow and screen design, are a combination of the pre-/post-conditions matching and frequent itemset mining algorithms. The output items of the frequent itemset mining algorithm are ranked depending on their co-ocurrence, adding the output of the pre-/post-conditions matching search algorithm as if their co-ocurrence was one.
+
 
 \end{document}
