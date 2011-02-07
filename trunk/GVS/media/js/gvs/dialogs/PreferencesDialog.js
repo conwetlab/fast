@@ -42,9 +42,12 @@ var PreferencesDialog = Class.create(ConfirmDialog /** @lends PreferencesDialog.
                     'value': user.getEzWebURL(),
                     'regExp': FormDialog.URL_VALIDATION,
                     'message': FormDialog.INVALID_URL_MESSAGE},
-            {'type':'checkbox', 'label': 'Magic Catalogue Enabled',
+            {'type':'checkbox', 'label': 'Magic Catalogue:',
                     'name': 'catalogueMagic',
-                    'checked': user.getCatalogueMagic()}
+                    'checked': user.getCatalogueMagic()},
+            {'type':'checkbox', 'label': 'Search iServe services: <br /> (It may be slow)',
+                    'name': 'iServe',
+                    'checked': user.getiServe()}
         ];
 
         this._setContent(formData);
@@ -79,6 +82,7 @@ var PreferencesDialog = Class.create(ConfirmDialog /** @lends PreferencesDialog.
         this._getForm().email.value = user.getEmail();
         this._getForm().ezWebURL.value = user.getEzWebURL();
         this._getForm().catalogueMagic.checked = user.getCatalogueMagic() ? 'checked' : 'unchecked';
+        this._getForm().iServe.checked = user.getiServe() ? 'checked' : 'unchecked';
         $super();
     }
 });

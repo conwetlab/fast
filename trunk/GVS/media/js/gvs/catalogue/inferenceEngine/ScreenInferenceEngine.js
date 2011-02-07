@@ -44,8 +44,11 @@ var ScreenInferenceEngine = Class.create( /** @lends ScreenInferenceEngine.proto
             body.search = false;
         } else {
             body.search = true;
-            // TODO: Control this
-            body.iserve = false;
+            if (GVS.getUser().getiServe()) {
+                body.iserve = true;
+            } else {
+                body.iserve = false;
+            }
         }
         body = Object.extend(body, elements);
         return Object.toJSON(body);

@@ -45,6 +45,13 @@ var User = Class.create( /** @lends User.prototype */ {
          */
         this._catalogueMagic = false;
 
+        /**
+         * Do you want iserve integration?
+         * @private
+         * @type Boolean
+         */
+        this._iServe = false;
+
         //Bring the user from the server
         this._getUser();
     },
@@ -115,6 +122,20 @@ var User = Class.create( /** @lends User.prototype */ {
     },
 
     /**
+     * @type Boolean
+     */
+    getiServe: function() {
+        return this._iServe;
+    },
+
+    /**
+     * @param Boolean
+     */
+    setiServe: function(iServe) {
+        this._iServe = iServe;
+    },
+
+    /**
      * This function updates the user object
      * based on the data passed
      */
@@ -123,7 +144,8 @@ var User = Class.create( /** @lends User.prototype */ {
         this._firstName = userData.firstName;
         this._lastName = userData.lastName;
         this._email = userData.email;
-        this._catalogueMagic = (userData.catalogueMagic != undefined);
+        this._catalogueMagic = (userData.catalogueMagic !== undefined);
+        this._iServe = (userData.iServe !== undefined);
 
         this._ezWebURL = userData.ezWebURL;
 

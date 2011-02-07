@@ -109,6 +109,10 @@ Object.extend(Utils, {
         }
     },
 
+    hideMessage: function() {
+        $("messages").setStyle({"opacity": "0"});
+    },
+
     showErrorMessage: function(/** String */ text, /** Object(optional) */ options) {
         this.showMessage(text, Object.extend(options || {}, {'error':true}));
     },

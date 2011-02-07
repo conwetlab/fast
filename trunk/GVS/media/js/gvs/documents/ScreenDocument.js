@@ -970,6 +970,22 @@ var ScreenDocument = Class.create(PaletteDocument,
         if (GVS.getUser().getCatalogueMagic()) {
             this._findCheckCallback(reachabilityData);
         }
+        if (reachabilityData.iserve && reachabilityData.iserve.length > 0) {
+
+            var text = new Element("span");
+            text.update("Don't find a service in the catalogue? <br /> Some " +
+                        "external services could fit your needs. ");
+            var link = new Element("a", {"href": "javascript:"}).update("Show them");
+            link.observe("click", function() {
+                this._showiServe(reachabilityData.iserve);
+            }.bind(this));
+            text.appendChild(link);
+            Utils.showMessage(text);
+        } else {
+            Utils.hideMessage();
+        }
+
+
         this._updatePanes();
     },
 
@@ -1330,6 +1346,15 @@ var ScreenDocument = Class.create(PaletteDocument,
             }
             GVS.getDocumentController().openExternalTool("Screen Debugger", uri);
         }
+    },
+
+    /**
+     * Show iserve services
+     * @private
+     */
+    _showiServe: function(iServeList) {
+        var dialog = new iServeDialog(iServeList);
+        dialog.show();
     }
 });
 

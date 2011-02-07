@@ -380,6 +380,7 @@ var PaletteDocument = Class.create(AbstractDocument, /** @lends PaletteDocument.
             this._selectedElement.getView().setSelected(true);
         } else {
             this._selectedElement = null;
+            Utils.hideMessage();
         }
 
         this._updateToolbar(this._selectedElement);
