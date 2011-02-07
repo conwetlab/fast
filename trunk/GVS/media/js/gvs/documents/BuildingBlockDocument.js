@@ -962,8 +962,14 @@ BuildingBlockDocument = Class.create(PaletteDocument, /** @lends BuildingBlockDo
         description.subscribe(this);
         description.actions.subscribe(this);
         description.postconditions.subscribe(this);
+
+        this.update();
+        this._setDirty(false);
     },
     update: function() {
+        var enable = this._description.type == 'operator' ||
+            this._description.type == 'resource';
+        this._toolbarElements.get('debugger').setEnabled(enable);
         this._setDirty(true);
     },
 
@@ -979,13 +985,17 @@ BuildingBlockDocument = Class.create(PaletteDocument, /** @lends BuildingBlockDo
         if (showMessage) {
             Utils.showMessage("Saving " + this._typeName);
         }
+        var context = {
+            "mine": this,
+            "showMessage": showMessage
+        };
         if (this._description.getId() == null) {
             PersistenceEngine.sendPost(this._getSaveUri(), params, null,
-                this, this._onSaveSuccess, this._onSaveError);
+                context, this._onSaveSuccess, this._onSaveError);
         } else {
             var uri = URIs.buildingblock + this._description.getId();
             PersistenceEngine.sendUpdate(uri, params, null,
-                this, this._onSaveSuccess, this._onSaveError);
+                context, this._onSaveSuccess, this._onSaveError);
         }
     },
 
@@ -997,17 +1007,6 @@ BuildingBlockDocument = Class.create(PaletteDocument, /** @lends BuildingBlockDo
      */
     _getSaveUri: function() {
         return URIs[this._description.type]
-    },
-
-    /**
-     * @private
-     * @override
-     */
-    _start: function($super) {
-        $super();
-        if (this._description.type in ['operator', 'resource']) {
-            this._toolbarElements.get('debugger').setEnabled(true);
-        }
     },
 
     /**
@@ -1160,21 +1159,27 @@ BuildingBlockDocument = Class.create(PaletteDocument, /** @lends BuildingBlockDo
                 break;
         }
     },
-        /*
+    /*
      * @override
      */
-    _onSaveSuccess: function($super, /** XMLHttpRequest */ transport) {
-        if (this._description.getId() == null) {
+    _onSaveSuccess: function(/** XMLHttpRequest */ transport) {
+        if (this.showMessage) {
+            Utils.showMessage("Saved", {hide:true});
+        }
+        if (this.mine._description.getId() == null) {
             var data = JSON.parse(transport.responseText);
-            this._description.addProperties({
+            this.mine._description.addProperties({
                     "id": data.id,
                     "version": data.version,
                     "creationDate": data.creationDate,
                     "code": data.code
             });
-            this._save(false);
-        } else {
-            $super(transport);
+        }
+        this.mine._setDirty(false);
+        if (this.mine._pendingOperation) {
+            var operation = this.mine._pendingOperation;
+            this.mine._pendingOperation = null;
+            operation();
         }
     },
 
