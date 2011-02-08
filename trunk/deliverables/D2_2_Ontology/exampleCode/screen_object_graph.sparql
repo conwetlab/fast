@@ -1,0 +1,25 @@
+@prefix fgo: <http://purl.oclc.org/fast/ontology/gadget#> . 
+
+{
+  # the screen is identified by URI_p
+  # select all triples with URI_p in subject position
+  # this will match basic annotations, such as label, icon, etc.
+  { ?URI_p ?p ?o . }
+  UNION
+  
+  # select all conditions of the screen (both pre- and post), as
+  # well as all triples with ?cond in subject position.
+  { 
+    ?URI_p ?p2 ?cond .
+    ?cond a fgo:Condition ;
+       ?p_cond ?o_cond .
+  }
+  UNION
+  
+  # select the pipes and triggers of the screen.
+  {
+    ?URI_p fgo:contains ?x .
+    ?x fgo:from ?source ;
+       fgo:to ?target.
+  }
+}

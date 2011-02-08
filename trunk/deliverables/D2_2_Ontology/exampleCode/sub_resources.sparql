@@ -1,0 +1,15 @@
+@prefix fgo: <http://purl.oclc.org/fast/ontology/gadget#> . 
+
+SELECT DISTINCT ?sub_res
+WHERE {
+  { 
+    ?URI_p ?p ?sub_res . 
+    ?sub_res a fgo:Condition
+  }
+  UNION
+  {
+    ?URI_p fgo:contains ?sub_res .
+    ?sub_res fgo:from ?source ;
+       fgo:to ?target.
+  }
+}

@@ -770,7 +770,7 @@ At least the dangling blank node problem can be addressed by extending the Def.~
 
 In many cases, a SPARQL graph pattern would be well suited for defining $G_o$. Depending on the form of the query and the optimisations available on the query processor, evaluating this graph pattern directly might not scale, so that a programmatic solution should be preferred. However, even in those cases defining $G_o$ with a SPARQL graph pattern is still useful for its explanatory benefits.
 For the FAST use case of defining the object graph of a prototypical building block $p$, the definition of $G_p$ is as given in List.~\ref{list:prototype_graph_definition} (here showing the definition for a screen; other types of building blocks are slightly different).
-In essence, the object graph we would like to define for a screen contains its basic annotations (label, icon, etc.), its pre- and post-conditions, its tags and its pipes and triggers.
+In essence, the object graph we would like to define for a screen contains its basic annotations (label, icon, etc.), its pre- and post-conditions and its pipes and triggers.
 
 \singlespacing
 \lstset{
@@ -807,6 +807,7 @@ In essence, the object graph we would like to define for a screen contains its b
 Now that we know the (application-dependant) graph $G_p$ of the prototypical object $p$, we can define what it means to create a new graph $G_c$ for its clone $c$. In prose, the clone graph will contain all statements of the prototypical graph, but all mentions of $URI_p$ will be replaced with $URI_c$. Formally, we say that this mapping of $G_p$ into $G_c$ is the prototype mapping $pm$, defined as follows:
 
 \begin{equation}
+	\label{equation:prototype_mapping}
 pm: G_p \mapsto G_c := \begin{cases}
 <URI_c, Pred, Obj >, \textnormal{ if } URI_p = Obj(s) \\
 <Subj, URI_c, Obj >, \textnormal{ if } URI_p = Pred(s) \\
@@ -815,14 +816,21 @@ pm: G_p \mapsto G_c := \begin{cases}
 \end{cases}
 \end{equation}
 
+However, there are cases in which this mapping will not be sufficient. More specifically, when the prototype's object graph contains resources which themselves need to be cloned, their URIs need to be replaced in the same fashion as shown in Def.~\ref{equation:prototype_mapping}. An example of this in FAST is the cloning of screens: the URIs of conditions, triggers and pipes are based on their screen, and therefore need to change along with it. As discussed for the definition of the object graph above, selecting which sub-resources need to be cloned is application-dependant. While we do not propose any particular mechanism for selecting sub-resources, also here a SPARQL graph pattern is a possibility, as shown in List.~\ref{list:sub_resources}. Here, the replacement algorithm would have to be performed for each \texttt{?sub\_res}.
 
-For this reason, we introduce the concept of \emph{templates for RDF instances} in FAST. Templates are similar to the notion of prototypes in programming languages such as JavaScript. One resource (e.g., $LogInScreen$) will play the role of a \emph{template}, while the other resource (e.g., $LogInScreen_x$) will be called a \emph{copy}. Conceptually, copying a resource involves the following steps:
-\begin{inparaenum}[(i)]
-	\item Defining a named graph $G_1$ that contains all statements about this resource considered to be relevant.
-	\item Creating a second graph $G_2$ with copies of all statements in $G_1$.
-	\item During this copying process, the identifiers for the main resource and certain other resources in the graph will be changed from $I_{template}$ to $I_{copy}$.
-\end{inparaenum}	
-In practice, this procedure can be implemented using a SPARQL CONSTRUCT query, where the WHERE clause defines the graph pattern of the template, and the CONSTRUCT query will build the copy from it. The corresponding data on all three levels is shown in List.~\ref{list:prototyping}, using TriG syntax~\cite{bizer2004trig} (an extension of Turtle syntax for named graphs).
+\singlespacing
+\lstset{
+	caption={SPARQL SELECT to select sub-resources of a screen in FAST}, 
+	label=list:sub_resources,
+	language=sparql
+}
+\begin{figure}
+	\lstinputlisting{exampleCode/sub_resources.sparql}
+\end{figure}
+\doublespacing
+
+
+Finally, coming back to the levels of representation in FAST, List.~\ref{list:prototyping} shows the class level, prototypical instance and cloned instance of a screen, using TriG syntax~\cite{bizer2004trig} (an extension of Turtle syntax for named graphs). Using the terminology established so far, $URI_p$ is \texttt{catalogue:LogInScreen} and $URI_c$ is \texttt{catalogue:LogInScreen\_74382}, while the corresponding object graphs $G_p$ and $G_c$ are \texttt{catalogue:prototype\_graph} and \texttt{catalogue:clone\_graph}, respectively. Prototype and clone refer to each other using the \texttt{fgo:has-Prototype} and \texttt{fgo:hasClone} properties.
 
 \singlespacing
 \lstset{
@@ -835,7 +843,8 @@ In practice, this procedure can be implemented using a SPARQL CONSTRUCT query, w
 \end{figure}
 \doublespacing
 
-Figure \ref{fig:prototype_example_graph} illustrates the same example graphically, using different colours to represent the two different graphs: the red graph $G_1$ in the background represents the original template resource, whereas the green graph $G_2$ in the front in represents the resource copy as it would be used in a concrete screen flow. \texttt{catalogue:LoginScreen} $\subset I_{template}$ has been changed to \texttt{catalogue:LoginScreen\_74382} $\subset I_{copy}$.
+Figure \ref{fig:prototype_example_graph} illustrates the same example graphically, using different colours to represent the two different object graphs: the red graph $G_p$ in the background represents the graph of the prototypical instance, whereas the green graph $G_c$ in the front in represents the new clone as it would be used in a concrete screen flow. 
+% \texttt{catalogue:LoginScreen} $\subset I_{template}$ has been changed to \texttt{catalogue:LoginScreen\_74382} $\subset I_{copy}$.
 
 \begin{figure}
   \begin{center}
@@ -846,8 +855,6 @@ Figure \ref{fig:prototype_example_graph} illustrates the same example graphicall
 \end{figure}
 
 
-It should be pointed out that the term \emph{RDF template} has been used before, but with a different meaning. \cite{davis2003rdf_template} use the term in analogy to XSLT, but acting on an RDF graph rather than an XML tree. \cite{kawamoto2006kawawiki} present a semantic wiki, where templates help non-technical users to create semantic descriptions. 
-
 % paragraph deriving_the_ (end)
 
 % subsubsection prototype_based_semantics_for_rdf (end)
@@ -855,7 +862,12 @@ It should be pointed out that the term \emph{RDF template} has been used before,
 \subsubsection{Discussion} % (fold)
 \label{ssub:discussion}
 
-This section proposed an approach for prototype-based semantics for RDF. This was done on the backdrop of different levels of building block representations within FAST, but could have much wider use. Business function modelling and other use cases have been mentioned in private discussions. E.g., there might be a class \texttt{BusinessFunction} with a concrete instance \texttt{ShippingBF}. If we want to say that there are further specialisations of \texttt{ShippingBF}, such as a \texttt{FedexBF} and a \texttt{TNTBF}, the usual class-based modelling paradigm won't help us, but prototype-based modelling will \cite{bhiri2010businessFunctionModelling}.
+This section proposed an approach for prototype-based semantics for RDF. This was done against the backdrop of different levels of building block representations within FAST, but could have much wider use. Business function modelling and other use cases have been mentioned in private discussions. E.g., there might be a class \texttt{BusinessFunction} with a concrete instance \texttt{ShippingBF}. If we want to say that there are further specialisations of \texttt{ShippingBF}, such as a \texttt{FedexBF} and a \texttt{TNTBF}, the usual class-based modelling paradigm won't help us, but prototype-based modelling will \cite{bhiri2010businessFunctionModelling}.
+
+Additionally, it should  be pointed out that in practice FAST does not currently make use of the prototyping mechanism to the fullest extent. Certain situations \emph{require} the creation of new objects from prototypes (e.g., the use of several operators of the same kind in a single screen during the screen design phase), while other situations simply benefit from the approach because it leads to a more coherent URI minting scheme (e.g., the cloning of conditions, pipes and triggers for screens). However, in yet other situations no new objects are generated, since there is no compelling reason to do so (e.g., screen components such as forms, operators and service resources are not considered part of a screen's object graph, and are therefore not cloned with it). With this in mind, FAST should be considered a first ``testing in the field'' of our proposal for prototype-based semantics, rather than a fully-fledged implementation.
+
+Finally, in previous versions of this deliverable we used the terms \emph{template} and \emph{copy} instead of \emph{prototype} and \emph{clone}. The change to the new terminology was done because it is much more established and well-defined. Also, the term \emph{RDF template} had been used in prior work in the community, but with a different meaning. \cite{davis2003rdf_template} use the term in analogy to XSLT, but acting on an RDF graph rather than an XML tree. \cite{kawamoto2006kawawiki} present a semantic wiki, where templates help non-technical users to create semantic descriptions. 
+
 
 % subsubsection discussion (end)
 
@@ -929,7 +941,7 @@ The facts which define the pre- and post-conditions of screens and screenflows i
 \end{figure}
 \doublespacing
 
-Post-conditions are expressed in a similar fashion. In the prototypical phase (i.e., as part of templates), post-condition patterns have variables in the same way as pre-condition patterns. When a building block is copied to the canvas, the pattern needs to be materialised. To do this, each variable will be replaced with a randomly generated URI or blank node. At runtime, variables are then replaced with actual values once the screen for which the post-condition holds has been executed. As an example, consider the post-condition of a login screen. In natural language, it could be \emph{``Once the login process has finished, there will be a user object''}. Using the same notation as before, this could be expressed as shown in List.~\ref{ex:postcondition}, extended with some additional facts (\emph{``There is a user object which has an account name. There is also a person which has a name, and which has the user object as an online account.''}).
+Post-conditions are expressed in a similar fashion. As part of prototypical instances, post-condition patterns have variables in the same way as pre-condition patterns. When a building block is cloned to the canvas, the pattern needs to be materialised. To do this, each variable will be replaced with a randomly generated URI or blank node. At runtime, variables are then replaced with actual values once the screen for which the post-condition holds has been executed. As an example, consider the post-condition of a login screen. In natural language, it could be \emph{``Once the login process has finished, there will be a user object''}. Using the same notation as before, this could be expressed as shown in List.~\ref{ex:postcondition}, extended with some additional facts (\emph{``There is a user object which has an account name. There is also a person which has a name, and which has the user object as an online account.''}).
 
 \singlespacing
 \lstset{

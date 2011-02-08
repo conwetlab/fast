@@ -24,3 +24,5 @@ catalogue:clone_graph {
   dcterms:title "Login Screen" ;
   fgo:hasIcon catalogue:login.png .
 }
+
+#todo - conditions, triggers and pipes are missing
