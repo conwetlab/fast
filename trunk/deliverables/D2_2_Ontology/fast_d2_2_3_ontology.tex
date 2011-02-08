@@ -764,13 +764,17 @@ However, this definition can easily
 \begin{inparaenum}[(i)]
 	\item contain false positives (triples that point to $URI_o$, but are not considered part of $o$), 
 	\item lack important triples (e.g., in the case where the object in a triple $<URI, Pred, Obj>$ is itself a complex object), or 
-	\item have dangling blank nodes. 
+	\item have dangling blank nodes.
 \end{inparaenum}
-At least the dangling blank node problem can be addressed by extending the Def.~\ref{equation:simple_object_graph} to the \emph{minimal self-contained graph} (MSG)~\cite{Tummarello:2008kl}, which basically selects the sub-graph so that there are no blank node as leafs. Unfortunately, the MSG still does not necessarily give us the desired sub-graph, since problems (i) and (ii) are not addressed. At the end of the day, these issues are highly context- and interpretation-dependant, which is why there cannot be a deterministic way to know which triples in a graph belong to a particular real-world object. In the general case, we will therefore simply leave the definition of $G_o$ undefined, to be solved individually for each application and use case. A SPARQL graph pattern would be well suited for defining any particular occurrence of $G_o$. For the FAST use case of defining the object graph of a prototypical building block $p$, the definition of $G_p$ is as given in List.~\ref{list:prototype_graph_definition} (here showing the definition for a screen; other types of building blocks are slightly different).
+At least the dangling blank node problem can be addressed by extending the Def.~\ref{equation:simple_object_graph} to the \emph{minimal self-contained graph} (MSG)~\cite{Tummarello:2008kl}, which basically selects the sub-graph so that there are no blank node as leafs. Unfortunately, the MSG still does not necessarily give us the desired sub-graph, since problems (i) and (ii) are not addressed. At the end of the day, these issues are highly context- and interpretation-dependant, which is why there cannot be a deterministic way to know which triples in a graph belong to a particular real-world object. In the general case, we will therefore simply leave the definition of $G_o$ undefined, to be solved individually for each application and use case. 
+
+In many cases, a SPARQL graph pattern would be well suited for defining $G_o$. Depending on the form of the query and the optimisations available on the query processor, evaluating this graph pattern directly might not scale, so that a programmatic solution should be preferred. However, even in those cases defining $G_o$ with a SPARQL graph pattern is still useful for its explanatory benefits.
+For the FAST use case of defining the object graph of a prototypical building block $p$, the definition of $G_p$ is as given in List.~\ref{list:prototype_graph_definition} (here showing the definition for a screen; other types of building blocks are slightly different).
+In essence, the object graph we would like to define for a screen contains its basic annotations (label, icon, etc.), its pre- and post-conditions, its tags and its pipes and triggers.
 
 \singlespacing
 \lstset{
-	caption={SPARQL query to select the object graph of a screen in FAST}, 
+	caption={SPARQL graph pattern to select the object graph of a screen in FAST}, 
 	label=list:prototype_graph_definition,
 	language=sparql
 }
@@ -779,12 +783,28 @@ At least the dangling blank node problem can be addressed by extending the Def.~
 \end{figure}
 \doublespacing
 
+% The SPARQL thing is much harder than I thought. Here is an example of the general problem:
+% I have a large RDF graph with many person instances, as well as other data. I want to define a graph pattern in SPARQL to select all relevant triples for a person P. I define this patterns as follows in prose:
+% - all triples with P as the subject
+% - for each triples (P foo:address A) I also want all triples with A as the subject
+% The first question is: how do I efficiently express that as a SPARQL graph pattern?
+% The other question is: how do I build the CONSTRUCT clause to output this from a SPARQL-based filter?
+% Maybe the answer is that I shouldn't use SPARQL at all?
+
+% SELECT DISTINCT *
+% WHERE {
+% <http://data.semanticweb.org/person/knud-moeller> ?p ?pub .
+% ?pub a swrc:InProceedings .
+% ?pub ?p_pred ?p_obj .
+% }
+
+
 % paragraph determining_the_correct_sub_graph (end)
 
 \paragraph{Deriving the Clone Graph} % (fold)
 \label{par:deriving_the_}
 
-Now that we know the (application-dependant) graph $G_p$ of the prototypical object $p$, we can define what it means to create a new graph $P_c$ for its clone $c$. In prose, the clone graph will contain all statements of the prototypical graph, but all mentions of $URI_p$ will be replaced with $URI_c$. Formally, we say that this mapping of $G_p$ into $G_c$ is the prototype mapping $pm$, defined as follows:
+Now that we know the (application-dependant) graph $G_p$ of the prototypical object $p$, we can define what it means to create a new graph $G_c$ for its clone $c$. In prose, the clone graph will contain all statements of the prototypical graph, but all mentions of $URI_p$ will be replaced with $URI_c$. Formally, we say that this mapping of $G_p$ into $G_c$ is the prototype mapping $pm$, defined as follows:
 
 \begin{equation}
 pm: G_p \mapsto G_c := \begin{cases}
@@ -832,12 +852,19 @@ It should be pointed out that the term \emph{RDF template} has been used before,
 
 % subsubsection prototype_based_semantics_for_rdf (end)
 
+\subsubsection{Discussion} % (fold)
+\label{ssub:discussion}
+
+This section proposed an approach for prototype-based semantics for RDF. This was done on the backdrop of different levels of building block representations within FAST, but could have much wider use. Business function modelling and other use cases have been mentioned in private discussions. E.g., there might be a class \texttt{BusinessFunction} with a concrete instance \texttt{ShippingBF}. If we want to say that there are further specialisations of \texttt{ShippingBF}, such as a \texttt{FedexBF} and a \texttt{TNTBF}, the usual class-based modelling paradigm won't help us, but prototype-based modelling will \cite{bhiri2010businessFunctionModelling}.
+
+% subsubsection discussion (end)
+
 % subsection classes_instances_and_templates (end)
 
 \subsection{Basic Annotation} % (fold)
 \label{sub:basic_annotation}
 
-In this section, we will present the use of some basic resource annotation properties in FAST. In general, since screenflows, screens and their components are sub-classes of \htmlref{\texttt{fgo:Resource}}{subs:Resource}, all properties defined to have a domain of \htmlref{\texttt{fgo:Resource}}{subs:Resource} should be used. In addition, a number of terms from external ontologies should also be used to annotate resources. Note that all of these annotations are valid both for the prototypical component definitions (templates) and the design time instances (copies). A detailed description of all terms from the FAST gadget ontology namespace can be found in Sect.~\ref{sec:ontology_terms} of this document.
+In this section, we will present the use of some basic resource annotation properties in FAST. In general, since screenflows, screens and their components are sub-classes of \htmlref{\texttt{fgo:Resource}}{subs:Resource}, all properties defined to have a domain of \htmlref{\texttt{fgo:Resource}}{subs:Resource} should be used. In addition, a number of terms from external ontologies should also be used to annotate resources. Note that all of these annotations are valid both for the prototypical component definitions (prototypes) and the design time instances (clones). A detailed description of all terms from the FAST gadget ontology namespace can be found in Sect.~\ref{sec:ontology_terms} of this document.
 
 \singlespacing
 \lstset{
