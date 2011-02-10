@@ -1791,15 +1791,16 @@ public class Catalogue {
 			if (predicate.equals(RDFS.subClassOf)
 					&& object instanceof URI) {
 				concept.setSubClassOf(object.asURI());
-			} else if (predicate.equals(RDFS.label)) {
-				if (object instanceof LanguageTagLiteral) {
-					LanguageTagLiteral label = object.asLanguageTagLiteral();
-					concept.getLabels().put(label.getLanguageTag(), label.getValue());
-				}
-			} else if (predicate.equals(DC.description)) {
+			} else if (predicate.equals(RDFS.label)
+					&& object instanceof LanguageTagLiteral) {
+				LanguageTagLiteral label = object.asLanguageTagLiteral();
+				concept.getLabels().put(label.getLanguageTag(), label.getValue());
+			} else if (predicate.equals(DC.description)
+					&& object instanceof LanguageTagLiteral) {
 				LanguageTagLiteral description = object.asLanguageTagLiteral();
 				concept.getDescriptions().put(description.getLanguageTag(), description.getValue());
-			} else if (predicate.equals(CTAG.tagged)) {
+			} else if (predicate.equals(CTAG.tagged)
+					&& object instanceof BlankNode) {
 				CTag tag = new CTag();
 				ClosableIterator<Statement> tagIt = tripleStore.findStatements(object.asBlankNode(), Variable.ANY, Variable.ANY);
 				for (; tagIt.hasNext();) {
