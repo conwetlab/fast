@@ -114,7 +114,7 @@
 	</servlet-mapping>
 	<servlet-mapping>
 		<servlet-name>MetadataServlet</servlet-name>
-		<url-pattern>/getmetadata</url-pattern>
+		<url-pattern>/metadata</url-pattern>
 	</servlet-mapping>
 	<servlet-mapping>
 		<servlet-name>OntologyServlet</servlet-name>
