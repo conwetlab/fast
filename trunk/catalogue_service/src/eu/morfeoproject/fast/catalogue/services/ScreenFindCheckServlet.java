@@ -60,8 +60,8 @@ public class ScreenFindCheckServlet extends GenericServlet {
 			ArrayList<Condition> postconditions = new ArrayList<Condition>();
 			Screen selectedScreen = null;
 			JSONObject jsonCanvas = input.getJSONObject("canvas");
-			JSONArray jsonScreens = jsonCanvas.getJSONArray("screens");
-			for (int i = 0; i < jsonScreens.length(); i++) {
+			JSONArray jsonScreens = jsonCanvas.optJSONArray("screens");
+			for (int i = 0; jsonScreens != null && i < jsonScreens.length(); i++) {
 				JSONObject jsonScreen = jsonScreens.getJSONObject(i);
 				URI uri = rdfFactory.createURI(jsonScreen.getString("uri"));
 				Screen screen = getCatalogue().getScreen(uri);
@@ -72,22 +72,22 @@ public class ScreenFindCheckServlet extends GenericServlet {
 				screens.add(screen);
 				selectedScreen = jsonScreen.optBoolean("selected", false) ? screen : selectedScreen;
 			}
-			JSONArray jsonPreList = jsonCanvas.getJSONArray("preconditions");
-			for (int i = 0; i < jsonPreList.length(); i++) {
+			JSONArray jsonPreList = jsonCanvas.optJSONArray("preconditions");
+			for (int i = 0; jsonPreList != null && i < jsonPreList.length(); i++) {
 				Condition condition = BuildingBlockJSONBuilder.buildCondition(jsonPreList.getJSONObject(i));
 				preconditions.add(condition); 
 			}
-			JSONArray jsonPostList = jsonCanvas.getJSONArray("postconditions");
-			for (int i = 0; i < jsonPostList.length(); i++) {
+			JSONArray jsonPostList = jsonCanvas.optJSONArray("postconditions");
+			for (int i = 0; jsonPostList != null && i < jsonPostList.length(); i++) {
 				Condition condition = BuildingBlockJSONBuilder.buildCondition(jsonPostList.getJSONObject(i));
 				postconditions.add(condition); 
 			}
 			
 			// parses the list of screens in the palette
 			ArrayList<Screen> palette = new ArrayList<Screen>();
-			JSONArray jsonPalette = input.getJSONArray("palette");
-			for (int i = 0; i < jsonPalette.length(); i++) {
-				URI uri = rdfFactory.createURI(((JSONObject) jsonPalette.get(i)).getString("uri"));
+			JSONArray jsonPalette = input.optJSONArray("palette");
+			for (int i = 0; jsonPalette != null && i < jsonPalette.length(); i++) {
+				URI uri = rdfFactory.createURI(jsonPalette.getJSONObject(i).getString("uri"));
 				Screen screen = getCatalogue().getScreen(uri);
 				if (screen == null) 
 					throw new NotFoundException("Resource "+uri+" does not exist.");
@@ -107,7 +107,7 @@ public class ScreenFindCheckServlet extends GenericServlet {
 			String user = jsonDomainContext.getString("user");
 			// parses the criterion
 			String criterion = input.getString("criterion").toLowerCase();
-			// flag to search or not for new components
+			// flag to search or not for new screens
 			boolean search = input.optBoolean("search", true);
 			// pagination variables
 			int offset = input.optInt("offset", 0);
