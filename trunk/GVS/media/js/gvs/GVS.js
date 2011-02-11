@@ -386,16 +386,27 @@ var GVS = Class.create(ToolbarModel,    /** @lends GVS.prototype */
                 'weight': MenuElement.MAXIMUM_WEIGHT,
                 'label': 'Help',
                 'children': {
+                    'developer': {
+                        'type': 'Action',
+                        'action': new MenuAction({
+                            'label': 'Developing Building Blocks',
+                            'weight': 1,
+                            'handler': function() {
+                                 window.open(URIs.tutorial);
+                            }
+                        }),
+                        'group': 0
+                    },
                     'website': {
                         'type': 'Action',
                         'action': new MenuAction({
                             'label': 'Fast Website',
-                            'weight': 1,
+                            'weight': 3,
                             'handler': function() {
                                  window.open('http://fast.morfeo-project.eu');
                             }
                         }),
-                        'group': 0
+                        'group': 1
                     },
                     'about': {
                         'type': 'Action',
@@ -406,18 +417,18 @@ var GVS = Class.create(ToolbarModel,    /** @lends GVS.prototype */
                                 this.action("showAbout");
                             }.bind(this)
                         }),
-                        'group': 0
+                        'group': 1
                     },
                     'feedback': {
                         'type': 'Action',
                         'action': new MenuAction({
                             'label': 'Send us feedback',
-                            'weight': 3,
+                            'weight': 1,
                             'handler': function() {
                                 UserVoice.Popin.show(uservoiceOptions);
                             }.bind(this)
                         }),
-                        'group': 0
+                        'group': 1
                     }
                 }
 
