@@ -5,7 +5,7 @@
 	},
 	"canvas": [
 		{ "uri": "<form1-copy>" },
-		{ "uri": "<service1-copy>" },
+		{ "uri": "<service7-copy>" },
 		{ "uri": "<service300-copy>" }
 	],
 	"forms": [
@@ -13,7 +13,7 @@
 	],
 	"operators": [],
 	"backendservices": [
-		"<service1>", "<service300>"
+		"<service7>", "<service300>"
 	],
 	"preconditions": [
       {
@@ -25,29 +25,7 @@
 	],
 	"postconditions": [],
 	"pipes": [
-      {
-        "from": {
-          "buildingblock": null,
-          "condition": "c1"
-        },
-        "to": {
-          "action": "search",
-          "buildingblock": "<service1-copy>",
-          "condition": "filter"
-        }
-      },
-      {
-        "from": {
-          "buildingblock": "<service1-copy>",
-          "condition": "list"
-        },
-        "to": {
-          "action": "showTable",
-          "buildingblock": "<form1-copy>",
-          "condition": "list"
-        }
-      }
+
 	],
-	"selectedItem": "<service1-copy>",
-	"search": false
+	"actions": ["find", "check", "iserve"]
 }

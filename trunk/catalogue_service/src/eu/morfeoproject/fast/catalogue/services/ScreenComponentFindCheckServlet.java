@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Vector;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -98,9 +99,17 @@ public class ScreenComponentFindCheckServlet extends GenericServlet {
 						selectedItem = getCatalogue().getScreenComponent(new URIImpl(input.getString("selectedItem")));
 				}
 			} 
-			// flag to search or not for new components
-			boolean search = input.optBoolean("search", true);
-			boolean iserve = input.optBoolean("iserve", false);
+			// extract the array of actions to perform (find, check, iserve)
+			Vector<String> actions = new Vector<String>();
+			JSONArray actionsArray = input.optJSONArray("actions");
+			for (int idx = 0; actionsArray != null && idx < actionsArray.length(); idx++)
+				actions.add(actionsArray.getString(idx));			
+			boolean find = actions.contains("find");
+			boolean check = actions.contains("check");
+			boolean iserve = actions.contains("iserve");
+			
+			System.out.println("find: "+find+"\ncheck: "+check+"\niserve: "+iserve);
+			
 			// pagination variables
 			int offset = input.optInt("offset", 0);
 			int limit = input.optInt("limit", -1);
@@ -112,8 +121,8 @@ public class ScreenComponentFindCheckServlet extends GenericServlet {
 			ArrayList<ScreenComponent> outBackendServices = new ArrayList<ScreenComponent>();
 			ArrayList<IServeResponse> iServeList = new ArrayList<IServeResponse>();
 			
-			if (search) {
-				// prepares a list of conditions to use in the find method
+			if (find || iserve) {
+				// list of conditions to use for the find and iserve actions
 				// if a item has been selected, only its conditions will be used, otherwise
 				// conditions from all the elements from the canvas will be gathered
 				ArrayList<Condition> conList = new ArrayList<Condition>();
@@ -130,35 +139,41 @@ public class ScreenComponentFindCheckServlet extends GenericServlet {
 				    	conList.addAll(extractAllConditions(sc));
 					}
 				}
-
-				// ask the catalogue for suggestions, and add the results to the list of forms, operators and services
-				int strategy = Constants.PREPOST + Constants.PATTERNS;
-				ScreenComponent selected = selectedItem instanceof ScreenComponent ? (ScreenComponent) selectedItem : null;
-				List<URI> findResults = getCatalogue().findScreenComponents(canvas, selected, conList, offset, limit, tags, strategy);
-				for (URI uri : findResults) {
-					ScreenComponent sc = getCatalogue().getScreenComponent(uri);
-					if (sc instanceof Form) 				outForms.add(sc);
-					else if (sc instanceof Operator) 		outOperators.add(sc);
-					else if (sc instanceof BackendService)	outBackendServices.add(sc);
+			
+				if (find) {
+					// ask the catalogue for suggestions, and add the results to the list of forms, operators and services
+					int strategy = Constants.PREPOST + Constants.PATTERNS;
+					ScreenComponent selected = selectedItem instanceof ScreenComponent ? (ScreenComponent) selectedItem : null;
+					List<URI> findResults = getCatalogue().findScreenComponents(canvas, selected, conList, offset, limit, tags, strategy);
+					for (URI uri : findResults) {
+						ScreenComponent sc = getCatalogue().getScreenComponent(uri);
+						if (sc instanceof Form) 				outForms.add(sc);
+						else if (sc instanceof Operator) 		outOperators.add(sc);
+						else if (sc instanceof BackendService)	outBackendServices.add(sc);
+					}
 				}
-				
+			
 				if (iserve) {
 					// query iServe for more web services
 					iServeList.addAll(getCatalogue().findIServeWS(conList));
 				}
 			}
-			
+				
 			// extract pipes which are well defined (precondition and
 			// postcondition match)
 			ArrayList<Pipe> correctPipeList = new ArrayList<Pipe>();
-			for (Pipe pipe : pipes) {
-				if (isPipeCorrect(pipe, preconditions, postconditions))
-					correctPipeList.add(pipe);
+			if (check) {
+				for (Pipe pipe : pipes) {
+					if (isPipeCorrect(pipe, preconditions, postconditions))
+						correctPipeList.add(pipe);
+				}
 			}
 			
 			// check if elements in the canvas + pre/postconditions are reachable
 			List<Object> reachableElements = new ArrayList<Object>();
-			reachableElements.addAll(getReachableElements(canvas, preconditions, postconditions, correctPipeList));
+			if (check) {
+				reachableElements.addAll(getReachableElements(canvas, preconditions, postconditions, correctPipeList));
+			}
 			
 			// create the JSON output
 			JSONObject output = new JSONObject();
@@ -167,19 +182,23 @@ public class ScreenComponentFindCheckServlet extends GenericServlet {
 			JSONArray jsonPipes = new JSONArray();
 			for (Pipe pipe : pipes) {
 				JSONObject jsonPipe = pipe.toJSON();
-				jsonPipe.put("correct", correctPipeList.contains(pipe));
-				jsonPipe.put("satisfied", reachableElements.contains(pipe));
+				if (check) {
+					jsonPipe.put("correct", correctPipeList.contains(pipe));
+					jsonPipe.put("satisfied", reachableElements.contains(pipe));
+				}
 				jsonPipes.put(jsonPipe);
 			}
 			output.put("pipes", jsonPipes);
 
 			JSONArray canvasArray = new JSONArray();
 			for (ScreenComponent sc : canvas) {
-				canvasArray.put(processComponent(canvas, sc, pipes, reachableElements));
+				JSONObject cObject = check ? processComponent(canvas, sc, pipes, reachableElements) : new JSONObject();
+				cObject.put("uri", sc.getUri());
+				canvasArray.put(cObject);
 			}
 			output.put("canvas", canvasArray);
 
-			if (search) {
+			if (find) {
 				JSONArray formsArray = new JSONArray();
 				for (ScreenComponent sc : outForms) {
 					formsArray.put(sc.getUri());
@@ -199,26 +218,37 @@ public class ScreenComponentFindCheckServlet extends GenericServlet {
 				output.put("backendservices", bsArray);
 			}
 			
+			if (iserve) {
+				JSONArray iServeArray = new JSONArray();
+				for (IServeResponse iServeResponse : iServeList) {
+					iServeArray.put(iServeResponse.toJSON());
+				}
+				output.put("iserve", iServeArray);
+			}
+			
+			JSONArray preArray = new JSONArray();
+			for (Condition con : preconditions) {
+				JSONObject cObject = con.toJSON();
+				if (check) cObject.put("satisfied", true);
+				preArray.put(cObject);
+			}
+			output.put("preconditions", preArray);
+			
 			JSONArray postArray = new JSONArray();
 			for (Condition con : postconditions) {
-				postArray.put(processPostcondition(canvas, con, pipes, reachableElements));
+				JSONObject cObject = check ? processPostcondition(canvas, con, pipes, reachableElements) : con.toJSON();
+				postArray.put(cObject);
 			}
 			output.put("postconditions", postArray);
 		
-			if (selectedItem != null) {
+			if (check && selectedItem != null) {
 				JSONArray connectionsOut = new JSONArray();
 				List<Pipe> connections = generatePipes(canvas, preconditions, postconditions, selectedItem, pipes);
 				for (Pipe pipe : connections)
 					connectionsOut.put(pipe.toJSON());
 				output.put("connections", connectionsOut);
 			}
-			
-			JSONArray iServeArray = new JSONArray();
-			for (IServeResponse iServeResponse : iServeList) {
-				iServeArray.put(iServeResponse.toJSON());
-			}
-			output.put("iserve", iServeArray);
-			
+						
 			writer.print(output.toString(2));
 			response.setContentType(MediaType.APPLICATION_JSON);
 			response.setStatus(HttpServletResponse.SC_OK);
@@ -270,11 +300,9 @@ public class ScreenComponentFindCheckServlet extends GenericServlet {
 	}
 	
 	private JSONObject processPostcondition(List<ScreenComponent> canvas, Condition postcondition, List<Pipe> pipes, List<Object> elements) throws JSONException, IOException {
-		JSONObject jsonCon = new JSONObject();
+		JSONObject jsonCon = postcondition.toJSON();
 		Pipe pipe = getPipeToPostcondition(postcondition, pipes);
-		boolean satisfied = pipe == null ? false : elements.contains(pipe);
-		jsonCon.put("id", postcondition.getId());
-		jsonCon.put("satisfied", satisfied);
+		jsonCon.put("satisfied", pipe == null ? false : elements.contains(pipe));
 		return jsonCon;
 	}
 	
