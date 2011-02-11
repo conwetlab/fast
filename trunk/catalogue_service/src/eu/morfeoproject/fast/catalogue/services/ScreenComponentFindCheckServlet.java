@@ -108,8 +108,6 @@ public class ScreenComponentFindCheckServlet extends GenericServlet {
 			boolean check = actions.contains("check");
 			boolean iserve = actions.contains("iserve");
 			
-			System.out.println("find: "+find+"\ncheck: "+check+"\niserve: "+iserve);
-			
 			// pagination variables
 			int offset = input.optInt("offset", 0);
 			int limit = input.optInt("limit", -1);
