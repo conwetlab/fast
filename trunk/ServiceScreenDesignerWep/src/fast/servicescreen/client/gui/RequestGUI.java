@@ -142,7 +142,6 @@ public class RequestGUI
 	{
 		designer.templateBox.setText(requestURL);
 		
-		//TODO tg and dk: wtf why no updates come in?!?!?!?!
 		templateBoxHandler.doAction();
 	}
 	

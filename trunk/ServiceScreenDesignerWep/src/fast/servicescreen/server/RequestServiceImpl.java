@@ -2,16 +2,20 @@ package fast.servicescreen.server;
 
 import java.io.File;
 import java.io.FileWriter;
+import java.io.InputStream;
 import java.net.URLDecoder;
 import java.util.HashMap;
 import java.util.Iterator;
 
+import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ResponseHandler;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.BasicResponseHandler;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.params.HttpProtocolParams;
 
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
@@ -40,7 +44,7 @@ public class RequestServiceImpl extends RemoteServiceServlet implements RequestS
 		// create httpClient and httpGET container
 		DefaultHttpClient httpclient_GET = new DefaultHttpClient();
 		httpget = new HttpGet(url);
-
+ 
 		//add all headers
 		if(headers != null)
 		{
@@ -68,59 +72,70 @@ public class RequestServiceImpl extends RemoteServiceServlet implements RequestS
 	}
 	
 	/**
-	 * TODO dk or tg: parse the header!
+	 * This method receive a requestURL, a hash map within header names and values and
+	 * a body.
+	 * 
+	 *  TODO dk currently this works for SOAP requests.. get it work for nbormal POST, too
 	 * */
 	@Override
 	public String sendHttpRequest_POST(String url, HashMap<String, String> headers, String body)
 	{
 		//create client and method appending to url
 		DefaultHttpClient httpclient = new DefaultHttpClient();
-//	    PostMethod method = new PostMethod(url);
-	    
-	    //needed for big responses, but then we should cut the body not containing answerers
-//	    BufferedReader br = null;
-	    
-	    //parse given body and create parameters
-//	    parse_andAdd_Parameters(method, body);
-	    
-	    HttpPost http_post = new HttpPost();
-	    
-	    //try to execute and watch for problems
-	    try
-	    {
-	    	HttpResponse resp = httpclient.execute(http_post);
+        HttpProtocolParams.setUseExpectContinue(httpclient.getParams(), false);
+        HttpPost post = new HttpPost(url);
+        
+        //adds the given header
+        addHeader(post, headers);
 
-//	    	if(returnCode == HttpStatus.SC_NOT_IMPLEMENTED)
-//	    	{
-//	    		System.err.println("The Post method is not implemented by this URI");
-//	    		
-	    		// still consume the response body
-//	    		responseBody  = method.getResponseBodyAsString();
-//	    	}
-//	    	else
-//	    	{
-//	    		//catch response
-//	    		br = new BufferedReader(new InputStreamReader(method.getResponseBodyAsStream()));
-//	    		String readLine;
-//	    		
-//	    		while(((readLine = br.readLine()) != null))
-//	    		{
-//	    			responseBody += readLine;
-//	    		}
-	    		
-	    		responseBody  = resp.toString();//getResponseBodyAsString();
-//	    	}
-	    }
-	    catch (Exception e)
-	    {
-	    	System.err.println(e);
-	    }
-	    finally
-	    {
-//	    	method.releaseConnection();
-	    }
-	    
-	    return responseBody;
+        String result = "";
+        try
+        {
+        	HttpEntity entity = new StringEntity(body);
+        	post.setEntity(entity);
+        	
+        	HttpResponse response = httpclient.execute(post);
+        	
+        	HttpEntity r_entity = response.getEntity();
+
+        	if( r_entity != null )
+        	{
+        		int sign = 0;
+        		InputStream inStream = r_entity.getContent();
+        		
+        		while((sign = inStream.read()) > -1)
+        		{
+        			result += new String(new byte[] {(byte) sign});
+        		}
+        	}
+        }
+        catch(Exception e)
+        {
+        	e.printStackTrace();
+        }
+  
+        //delete connection
+        httpclient.getConnectionManager().shutdown();
+
+        
+        return result;
+	}
+	
+	/**
+	 * This method forms <key=name, value=value> map into
+	 * several headers and ad those to the given post method
+	 * */
+	protected void addHeader(HttpPost post, HashMap<String, String> nameValueHeader)
+	{
+		String name = "";
+		String value = "";
+		for (Iterator<String> iterator = nameValueHeader.keySet().iterator(); iterator.hasNext();)
+		{
+			name = iterator.next();
+			value = nameValueHeader.get(name);
+			
+			post.addHeader(name, value);
+		}
 	}
 	
 	/**
@@ -159,22 +174,18 @@ public class RequestServiceImpl extends RemoteServiceServlet implements RequestS
 			//getting class path
 			path = ".";
 			String classLocation = getClassLocation ();
-//			answer += "pwd: " + classLocation;
 			String installDir;
 			int prefixLength;
 			
-			//TODO dk why that does not work??
 			//if local save into war, if not save into webapps folder
-//			if (isLocal)
-//			{
-//				prefixLength = classLocation.indexOf("ServiceScreenDesignerWep/war");
-//				prefixLength += "ServiceScreenDesignerWep/war".length();
-//				installDir = classLocation.substring(0, prefixLength);
-//				
-//				answer += "if does not work";
-//			}
-//			else
-//			{
+			if (isLocal)
+			{
+				prefixLength = classLocation.indexOf("ServiceScreenDesignerWep/war");
+				prefixLength += "ServiceScreenDesignerWep/war".length();
+				path = classLocation.substring(0, prefixLength) + "/wrapper/";
+			}
+			else
+			{
 				prefixLength = classLocation.indexOf("ServiceDesignerWep");
 				prefixLength += "ServiceDesignerWep".length();
 				installDir = classLocation.substring(0, prefixLength);
@@ -184,9 +195,7 @@ public class RequestServiceImpl extends RemoteServiceServlet implements RequestS
 				{
 					answer += "Create folder 'wrapper'       ";
 				}
-				
-//				answer += "better..";
-//			}
+			}
 			
 			//configure filename (for html)
 			String baseFileName = path + opName + "Op";

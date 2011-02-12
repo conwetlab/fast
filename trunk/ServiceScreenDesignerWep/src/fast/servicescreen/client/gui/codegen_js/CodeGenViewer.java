@@ -29,6 +29,7 @@ public class CodeGenViewer
 	private FlexTable table = null;
 	private TextArea templateShowBox, jsShowBox;
 	public CodeGenerator generator = null;
+	public boolean isLocal = false;
 	
 	/**
 	 * A type should be set, that marks if we handle XML or JSON, and if we have to request or get
@@ -121,28 +122,32 @@ public class CodeGenViewer
 		//create a save - Button
 		Button saveButton = new Button("save File");
 		saveButton.setStyleName("fastButton");
+
 		saveButton.addClickHandler(new ClickHandler()
 		{
 			@Override
 			public void onClick(ClickEvent event)
 			{
-					generator.write_JS_File();
-					
-					//TODO dk remove share method/handler. Code should be generatet by generator
-					//then this save button just have to call the post mehtod, currently called in sharedHandler
-//					ShareResourceHandler shOpHandler = new ShareResourceHandler();
-//					shOpHandler.share(generator.screen);
+				//TODO dk this is a hack.. Fix it here and in server
+				String wrapperPath = GWT.getHostPageBaseURL() + GWT.getModuleName();
+				if(wrapperPath.contains("8888"))
+				{
+					isLocal = true;
+				}
+
+				generator.write_JS_File(isLocal);
+
+				//TODO dk remove share method/handler. Code should be generatet by generator
+				//then this save button just have to call the post mehtod, currently called in sharedHandler
+				//					ShareResourceHandler shOpHandler = new ShareResourceHandler();
+				//					shOpHandler.share(generator.screen);
 			}
 		});
-		
-		//TODO dk get the fucking shit work
-		//Getting the path of the wrapper, config
-//		String baseURL = GWT.getModuleBaseURL();
-//		baseURL = baseURL.substring(0, baseURL.length()-25);
-//		
-//		String operatorURL = baseURL + "/wrapper/" + generator.screen.getName() + "Op.html";
-//		Anchor a = new Anchor(operatorURL, operatorURL, "_blank");
-		
+
+		//the path to the wrapper in webapps folder
+		String baseURL = GWT.getHostPageBaseURL();
+		String operatorURL = baseURL + "wrapper/" + generator.screen.getName() + "Op.html";
+		Anchor a = new Anchor(operatorURL, operatorURL, "_blank");
 		
 		//create the template choose to make user changes possible 
 		// -> Only things that make sense at time are lited here
@@ -166,7 +171,7 @@ public class CodeGenViewer
 		table.setWidget(row, 1, jsShowBox);
 		row++;
 		table.setWidget(row, 0, saveButton);
-//		table.setWidget(row, 1, a);	//TODO dk here, too
+		table.setWidget(row, 1, a);
 		
 		return table;
 	}

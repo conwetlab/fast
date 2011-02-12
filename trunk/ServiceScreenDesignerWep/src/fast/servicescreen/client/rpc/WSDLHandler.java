@@ -33,10 +33,15 @@ public class WSDLHandler implements ClickHandler
 	protected RequestServiceAsync service;
 	protected WSDLWidget widget;
 	protected ListBox methods;
+	protected RequestGUI requestGUI;
+	
 	protected HashMap<String, String> methodsAndParameters_GET;
 	protected HashMap<String, String> methodsAndParameters_POST;
+	
 	protected String wsdlBaseURl;
-	protected RequestGUI requestGUI;
+	protected String xmlNameSpaceURL;
+	protected String requestAction;
+	
 	
 	/**
 	 * This handler should be added to the WSDl widget, to handle 
@@ -56,6 +61,9 @@ public class WSDLHandler implements ClickHandler
 	@Override
 	public void onClick(ClickEvent event)
 	{
+		xmlNameSpaceURL = null;
+		wsdlBaseURl = null;
+		
 		String wsdlURI = widget.getWSDLPath();
 
 		//if it was empty, take default to a default
@@ -80,9 +88,16 @@ public class WSDLHandler implements ClickHandler
 						{
 							wsdlBaseURl = RuleUtil.get_AttributeByName(elements.item(0), "location");
 						}
+						
+						//search for nameSpace_URL
+						elements = RuleUtil.get_ElementsByTagname(xmlDoc, "definitions");
+						if(elements.getLength() >= 1)
+						{
+							xmlNameSpaceURL = RuleUtil.get_AttributeByName(elements.item(0), "targetNamespace");
+						}
 
 						//if not found, abort
-						if(elements.getLength() < 1 || wsdlBaseURl == null)
+						if(xmlNameSpaceURL == null || wsdlBaseURl == null)
 						{
 							//Abort, if no base URL is found
 							Window.alert("Cannot find base URL in WSDl description..");
@@ -107,6 +122,8 @@ public class WSDLHandler implements ClickHandler
 	 * */
 	protected void createMethodInformations(Document xmlDoc)
 	{
+		//This could be done more flexible with reading the s:schema tag only. 
+		
 		methodsAndParameters_GET = new HashMap<String, String>();
 		methodsAndParameters_POST = new HashMap<String, String>();
 		
@@ -120,7 +137,7 @@ public class WSDLHandler implements ClickHandler
 		String getParameter = "";
 		String postParameter = "";
 		
-		//for each type
+		//search operations and params. for each type:
 		for (int i = 0; i < types.getLength(); i++)
 		{
 			elements = RuleUtil.get_ElementsByTagname(types.item(i), "element");
@@ -145,16 +162,15 @@ public class WSDLHandler implements ClickHandler
 							
 							if(k > 0)
 							{
-								getParameter += "&" + postParameter + "=";
+								getParameter += "&" + postParameter + "=<<" + postParameter + ">>";
 							}
 							//if k = 0
 							else
 							{
-								getParameter += "?" + postParameter + "=";
+								getParameter += "?" + postParameter + "=<<" + postParameter + ">>";
 							}
 							
-							
-							postParameter = postParameter + "=<" + postParameter + ">";
+							postParameter = "<" + postParameter + "><<" + postParameter + ">></" + postParameter + ">";
 						}
 						
 						methodsAndParameters_POST.put(methodName, postParameter);
@@ -200,33 +216,75 @@ public class WSDLHandler implements ClickHandler
 		{
 			//get chosen entry
 			ListBox box = (ListBox) sender; 
-			String currentMethod = box.getItemText(box.getSelectedIndex());
+			requestAction = box.getItemText(box.getSelectedIndex());
 			
 			if(requestGUI.reqTypeHandler.getRequestType() == RequestMethodType.GET_REQUEST)
 			{
 				//find the bounded parameter
-				String parameter = methodsAndParameters_GET.get(currentMethod);
+				String parameter = methodsAndParameters_GET.get(requestAction);
 
 				//build request URL out of node List
-				String requestURL = wsdlBaseURl + "/" + currentMethod + parameter;
+				String requestURL = wsdlBaseURl + "/" + requestAction + parameter;
 
 				//set the builded URL to the Request GUI
 				requestGUI.setRequestURL(requestURL);
 			}
 			else if(requestGUI.reqTypeHandler.getRequestType() == RequestMethodType.POST_REQUEST)
 			{
-				//find the bounded parameter
-				String parameter = methodsAndParameters_POST.get(currentMethod);
-
-				//build request URL out of node List
-				String requestURL = wsdlBaseURl + "/" + currentMethod;
-
-				//set the builded URL to the Request GUI
+				//build and set up request URL
+				String requestURL = wsdlBaseURl;
 				requestGUI.setRequestURL(requestURL);
 				
-				//set body field for POST request to parameter
-				requestGUI.reqTypeHandler.setBody(parameter);
+				//creates request body and set up in body field
+				String newBody = createBody();
+				requestGUI.reqTypeHandler.setBody(newBody);
 			}
 		}
 	}
+
+	/**
+	 * Returns the SOPA body of the POST request
+	 * */
+	protected String createBody()
+	{
+		String body = this.bodyTemplate;
+		
+		body = replace(body, "<<requestAction>>", requestAction);
+		
+		body = replace(body, "<<xmlNamespaceURL>>", xmlNameSpaceURL);
+		
+		body = replace(body, "<<parameter>>", methodsAndParameters_POST.get(requestAction));
+		
+		return body;
+	}
+	
+	/**
+	 * 
+	 * */
+	protected String replace(String text, String key, String value) 
+	{
+		// find key and replace by value
+		String result = text;
+		int pos = text.indexOf(key);
+		while (pos >= 0)
+		{
+			result = result.substring(0, pos) + value + result.substring(pos + key.length());
+			pos = result.indexOf(key);
+		}
+		return result;
+	}
+	
+	/**
+	 * 
+	 * */
+	protected String bodyTemplate =
+            "<?xml version='1.0' encoding='utf-8'?>\n" +
+            "<soap:Envelope xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xmlns:xsd='http://www.w3.org/2001/XMLSchema' " +
+            "xmlns:soap='http://schemas.xmlsoap.org/soap/envelope/'>\n" + 
+            	"<soap:Body>\n" +
+            		"<<<requestAction>> xmlns='<<xmlNamespaceURL>>'>" +
+            		"<<parameter>>" +
+            		"</<<requestAction>>>" +
+            	"</soap:Body>\n" +
+            "</soap:Envelope>";
 }

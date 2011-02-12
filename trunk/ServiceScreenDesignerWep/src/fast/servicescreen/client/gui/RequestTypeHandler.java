@@ -21,7 +21,7 @@ public class RequestTypeHandler
 	
 	//To fill in header and body for WSDL 
 	protected HorizontalPanel hHeaderBody;
-	protected TextArea header, body;
+	protected TextArea /*header,*/ body;
 	
 	//start resType
 	WrappingType currentRequestType = WrappingType.WRAP_AND_REQUEST_XML;
@@ -39,15 +39,18 @@ public class RequestTypeHandler
 		
 		//create structured panels for fill header, body
 		hHeaderBody = new HorizontalPanel();
-		header = new TextArea();
 		body = new TextArea();
-		header.setSize("378px", "150px");
-		body.setSize("378px", "150px");
-		header.setText("put header here");
+		body.setSize("756px", "150px");
+		
+		//TODO dk make headers changable
+//		header = new TextArea();
+//		header.setText("put header here");
+//		header.setSize("378px", "150px");
+		
 		body.setText("put body here");
-		header.addClickHandler(new EmptyTextAreaHandler(header));
+//		header.addClickHandler(new EmptyTextAreaHandler(header));
 		body.addClickHandler(new EmptyTextAreaHandler(body));
-		hHeaderBody.add(header);
+//		hHeaderBody.add(header);
 		hHeaderBody.add(body);
 		hHeaderBody.setVisible(false);	//activate when clicking POST
 		
@@ -193,13 +196,13 @@ public class RequestTypeHandler
 		return hHeaderBody;
 	}
 	
-	public String getHeader()
-	{
-		if(header != null)
-			return header.getText();
-		
-		return "";
-	}
+//	public String getHeader()
+//	{
+//		if(header != null)
+//			return header.getText();
+//		
+//		return "";
+//	}
 	
 	public String getBody()
 	{

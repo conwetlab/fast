@@ -1,5 +1,6 @@
 package fast.servicescreen.client.rpc;
 
+import java.util.HashMap;
 import java.util.Iterator;
 
 import com.google.gwt.core.client.GWT;
@@ -63,7 +64,7 @@ public class SendRequestHandler implements ClickHandler
 		   {
 			   // do expansion
 			   String encodedValue = URL.encode(exampleValue);
-			   url_or_body = url_or_body.replaceAll("<" + portName + ">", encodedValue);
+			   url_or_body = url_or_body.replaceAll("<<" + portName + ">>", encodedValue);
 		   }
 	   }
 	   
@@ -84,7 +85,6 @@ public class SendRequestHandler implements ClickHandler
 	   // Instantiate service
 	   if(service == null)
 	   {
-		   //TODO dk problem is here..
 		   service = GWT.create(RequestService.class);
 	   }
 	   
@@ -97,21 +97,26 @@ public class SendRequestHandler implements ClickHandler
 	   }
 	   else if(methodType.equals(RequestMethodType.POST_REQUEST))
 	   {
-		   //	    	  header = designer.requestGui.reqTypeHandler.getHeader();
-		   //	    	  HashMap<String, String> headerMap = new HashMap<String, String>();
-		   //	    	  headerMap.put("testKey", header);
-		   
 		   body = designer.requestGui.reqTypeHandler.getBody();
 		   body = replaceInPorts_byExampleValues(body);
 
 		   //invoke service
-		   service.sendHttpRequest_POST(request, null/*TODO dk&tg what about headers?*/, body, new ParseXMLAction());
+		   service.sendHttpRequest_POST(request, /*TODO dk make headers changable*/getDefaultHeader(), body, new ParseXMLAction());
 	   }
 
 	   //show ready request url to user
 	   designer.requestUrlBox.setText(request);
 
 	   designer.getResultText().setText("Waiting for server response ...");
+   }
+   
+   protected HashMap<String, String> getDefaultHeader()
+   {
+	   HashMap<String, String> headers = new HashMap<String, String>();
+
+	   headers.put("Content-Type", "text/xml; charset=utf-8");
+	   
+	   return headers;
    }
 
    @SuppressWarnings("unchecked")

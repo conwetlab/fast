@@ -116,13 +116,39 @@ public class CodeGenerator
 		
 		//Build the request
 		add_PreRequest_toTable();
-		add_PreRequestReplaces_toTable();
 		
 		//Build the exRules - feature
 		add_Translation_toTable();
 		
 		//Build the method request type, get or json
 		add_MethodType_toTable();
+		
+		//Add or leave empty the parameter replaces and FastAPI config
+		RequestMethodType type = serviceDesigner.requestGui.reqTypeHandler.getRequestType();
+		if(type.equals(RequestMethodType.POST_REQUEST))
+		{
+			//add content type line
+			add_contentType_toTable();
+			
+			//replace params in postBody
+			add_postBodyReplaces_toTable();
+			
+			//adds FastAPI config. line
+			add_postBody_toTable();
+			
+			//leave prerequest replaces emtpy
+			table.put("<<prerequestreplaces>>", "");
+		}
+		else if(type.equals(RequestMethodType.GET_REQUEST))
+		{
+			//replace params in GET URL
+			add_PreRequestReplaces_toTable();
+			
+			//delete place holders for post requests
+			table.put("<<contentType>>", "");
+			table.put("<<postBody>>", "");
+			table.put("<<postBodyReplaces>>", "");
+		}
 		
 		//fill founded values into the <keywords> in rootTemplate
 		String tmp = rootTemplate;
@@ -134,6 +160,41 @@ public class CodeGenerator
 
 		return rootTemplate;
 	}
+	
+	public void add_contentType_toTable()
+	{
+		table.put("<<contentType>>", depth2 + "        'contentType':  'text/xml',");
+	}
+	
+	public void add_postBody_toTable()
+	{
+		String preBody = depth2 + "        'postBody':     postBody,";
+		
+		table.put("<<postBody>>", preBody);
+	}
+	
+	@SuppressWarnings("unchecked")
+	public void add_postBodyReplaces_toTable()
+	{
+		FactPort currentInpPort = null;
+		String name = "";
+		String bodyReplaces = "";
+		String body = serviceDesigner.requestGui.reqTypeHandler.getBody();
+		bodyReplaces += depth2 + "var postBody = \"" + body.replaceAll("\n", "") + "\"; \n\n";
+		
+		for (Iterator<FactPort> iterator = screen.iteratorOfPreconditions(); iterator.hasNext();)
+		{
+			currentInpPort = iterator.next();
+			name = "" + currentInpPort.get("name");
+			
+			if(body.contains("<<" + name + ">>"))
+			{
+				bodyReplaces += depth2 + "postBody = postBody.replace(/<<" + name + ">>/g, " + name + "); \n"; 
+			}
+		}
+		
+		table.put("<<postBodyReplaces>>", bodyReplaces + "\n");
+	} 
 	
 	public void add_MethodType_toTable()
 	{
@@ -172,9 +233,9 @@ public class CodeGenerator
 			currentInpPort = iterator.next();
 			
 			//build prerequestreplaces
-			preReqRepText += indent + "prerequest = prerequest.replace(/<";
+			preReqRepText += indent + "prerequest = prerequest.replace(/<<";
 			preReqRepText += currentInpPort.get("name");
-			preReqRepText += ">/g,encodeURIComponent("; 
+			preReqRepText += ">>/g,encodeURIComponent("; 
 			preReqRepText += currentInpPort.get("name");
 			preReqRepText += ")); \n ";
 			indent = depth2;
@@ -459,7 +520,6 @@ public class CodeGenerator
 		return template;
 	}
 	
-	
 	protected String replaceKey(String text, String key, String value) 
 	{
 		// find key and replace by value
@@ -478,12 +538,8 @@ public class CodeGenerator
 	 * This method send the current template to
 	 * an service which writes a js and a html file with it as content. 
 	 * */
-	public void write_JS_File()
-	{
-		//TODO dk does not work -.- Fix it here and in server
-		//check, if the running app. is in hosted mode or not
-		boolean isLocal = GWT.isClient();
-		
+	public void write_JS_File(boolean isLocal)
+	{		
 		//create GWT service impl.
 		service = GWT.create(RequestService.class);
 			
@@ -691,7 +747,9 @@ public class CodeGenerator
 			depth2 + "var prerequest = '<<prerequest>>';\n" +
 			
 			//should replace inports to real values in runtime!
-			depth2 + "<<prerequestreplaces>>\n\n" +
+			depth2 + "<<prerequestreplaces>>\n" +
+			
+			"<<postBodyReplaces>>" + 
 			
 			//save the complete url with an xmlHttp request (made for Ajax access to SameDomain Resources)
 			depth2 + "var request = prerequest;\n" +
@@ -701,11 +759,18 @@ public class CodeGenerator
 			depth2 + "    new FastAPI.Request(request,{\n" +
 			depth2 + "        'method':       '<<methodType>>',\n" +
 			depth2 + "        'content':      'xml',\n" +
+			
+			"<<contentType>> \n" + 
+			
 			depth2 + "        'context':      theOperator,\n" +
+			
+			"<<postBody>> \n" + 
+			
 			depth2 + "        'onSuccess':    theOperator.addToList\n" +
-			depth2 + "    });\n\n" +
+			depth2 + "    });\n" +
 		depth + "},\n" +
 		depth + "\n" +
+		
 		//next method rump 
 		depth + "addToList: function (transport) \n" +
 		depth + "{ \n" +
