@@ -1,6 +1,6 @@
 \documentclass{fast_latex}
 
-\usepackage{inputenc}
+\usepackage[utf8]{inputenc}
 \usepackage{lastpage}
 \usepackage{setspace}
 \usepackage{graphicx}
@@ -113,9 +113,9 @@
                          \textcolor{white}{\textbf{Date}} &
                          \textcolor{white}{\textbf{Author (Partner)}} &
                          \textcolor{white}{\textbf{Change description}}\\ \hline
-1.0 & 19/02/2010 & Ciprian Palaghita (Cyntelix) & First version of the deliverable \\
+1.0 & 19/02/2010 & Ciprian Palaghita (Cyntelix) & Release for M24 \\
  & & Ismael Rivera (NUIG) & \\ \hline
-2.0 & 17/02/2011 & Ciprian Palaghita (Cyntelix) & Second version of the deliverable \\
+2.0 & 17/02/2011 & Ciprian Palaghita (Cyntelix) & Release for M36 \\
  & & Ismael Rivera (NUIG) & \\ \hline
 \end{tabular}
 \end{small}
@@ -250,14 +250,17 @@ The deliverable presents both the external and internal architecture in Section~
 \subsection{Changes from previous version} % (fold)
 \label{sub:changes_from_previous_version}
 
-changes from M24 version:
+This sections enumerates and gives a brief overview of the changes made in the deliverable with regards to the version 1.0 released for the milestone M24.
+
 \begin{itemize}
- \item 'find' and 'check' operations for screens (screen-flow design) has been removed. the same functionaly was offered by 'find\&check' doing just 1 request.
- \item API calls (both find\&check, planner, metadata) updated to reflect the changes in the prototype
- \item Adds operation for building block cloning.
- \item added appendix explaining how the recommendation/planning is done
- \item architecture have been modified reflecting the changes in the catalogue's architecture, and including new components such as the machine learning library (Mahout) and a library to query iServe.
- \item uses Sindice in the 'ontology importer' mechanism
+ \item The installation guide has been modified to include some minor changes in the configuration, and a better example for the ``Hello World!''.
+ \item Two operations have been removed: 'Find' and 'Check' for screens, used at screen-flow design, since the same functionaly was offered by the operation Find\&Check, so no functionality is duplicated or overlapped. However, using this unique operation does not mean that every request does a \emph{find} and a \emph{check}, these actions are optional and can be specified in the request.
+ \item There have been some substantial changes in the API methods Find\&Check and Planner and Metadata reflect the changes made in the Catalogue prototype.
+ \item There have been created new operations in the API to support the prototype-based semantics for RDF as defined in D2.2.3~\cite{moeller2011fast_ontology}.
+ \item The Catalogue Architecture has been updated to reflect the new functionality and other changes.
+ \item There have been implemented new mechanisms for managing and importing ontologies. These mechanism are explained in~\ref{ssec:logic_tier}.
+ \item A new appendix has been added in order to explain the decisions and logic behind the main methods of the API, how the building block recommendation works, algorithm supporting the building block planning, matching and inferencing in pre-/post-conditions, and the integration with iServe\footnote{http://iserve.kmi.open.ac.uk/}, enhancing the web service discovery.
+ \item There are two new resources, and its CRUD operations: concepts (classes) and samples (instances).
 \end{itemize}
 
 % subsection changes_from_previous_version (end)
@@ -332,29 +335,69 @@ Now you have successfully built the FAST catalogue, however we highly recommend 
 \subsection{Configuration} % (fold)
 \label{sub:configuration}
 
-The following section covers the configuration options you may have to set up before start using the Catalogue. The FAST Catalogue relies on a Sesame repository for the persistent storage. Sesame repositories can be local or remote. Remote does not mean, it has to be installed in a different machine, but in a servlet container such as Apache Tomcat. The advantage of remote repositories is the possibility of accessing it via a SPARQL endpoint. These configuration aspect can be found in the file \emph{repository.properties} in the root directory where the Catalogue has been deployed.
+The following section covers the configuration options you may have to set up before start using the Catalogue. The configuration is done in the file \emph{repository.properties} in the root directory where the Catalogue has been deployed.
 
-Independently the type of repository, the parameter \emph{serverURL} needs to take the value of the URL where the FAST Catalogue instance has been deployed. If you are testing the application in your machine, it may be something like \verb|http://catalogueURL/FASTCatalogue|.
+The resources (building blocks) created in the Catalogue have an unique identifier or URI. This URI is constructed relatively to the Catalogue URL which is configured by the parameter \emph{serverURL}. If you are testing the application in your machine, it may look like \verb|http://localhost:8080/FASTCatalogue|.
 
-Local repositories just need the parameter \emph{storageDir} pointing at a local directory, which has write permission in order to allow Sesame to create files in that directory or to delete any file in the directory. For instance:
+The FAST Catalogue relies on a Sesame repository for the persistent storage. Sesame repositories can be \emph{local} or \emph{remote}. Local repositories just need the parameter \emph{storageDir} pointing at a local directory, with write permission in order to allow Sesame to create and delete the necessary binary files to store and retrieve the data.
 
 \begin{verbatim}
 storageDir=/opt/fast-catalogue/repository
 \end{verbatim}
 
-Nevertheless, setting up a remote repository requires a few more steps. First the OpenRDF Sesame Server needs to be installed. The installation guide of this server is detailed in the Chapter 5 and 6 of the User Guide for Sesame 2.2 \cite{sesame2.2}. Once the Sesame server is deployed, and a repository has been created, the parameters sesameServer and repositoryID will take the values of the Sesame server URL and the repository identifier. For instance:
+Setting up a remote repository requires a few more steps. \emph{Remote} means the repository is installed in a web server and accessed via HTTP, independently if it is in the same machine or in a different dedicated machine. First the OpenRDF Sesame Server needs to be installed. The installation guide of this server is detailed in the Chapter 5 and 6 of the User Guide for Sesame 2.2 \cite{sesame2.2}. Once the Sesame server is deployed, and a repository has been created, the parameters sesameServer and repositoryID will take the values of the Sesame server URL and the repository identifier.
 
 \begin{verbatim}
-sesameServer=http://localhost:8880/openrdf-sesame
-repositoryID=repository-ex1
+sesameServer=http://sesameServerURL/openrdf-sesame
+repositoryID=repository-id
 \end{verbatim}
+
+Note: If you want to provide the data of in the repository via a SPARQL endpoint, the easiest way it is to configure the Catalogue using a remote repository, as in this case Sesame provides an HTTP accessible SPARQL endpoint by default.
+
 
 % subsection installation_instructions (end)
 
 \subsection{Hello World!} % (fold)
 \label{sub:hello_world}
 
-It is recommended to check if the FAST Catalogue has been successfully installed. To do that, a simple HTTP request, using a Web browser, can be sent to the URL the Catalogue is deployed, and specifying a type of building block such as Screen. The URL would be similar to \verb|http://catalogueURL/FASTCatalogue/screens|. Depending on the variant chosen, the response may be different. For JSON, the response should be \verb|[]|, but in HTML the message \verb|No screens found.| should be shown.
+It is recommended to check if the FAST Catalogue has been successfully installed. The simpliest manner is to send a HTTP GET request to retrieve concepts (classes) and attributes (properties) of the predefined ontologies to \verb|http://catalogueURL/FASTCatalogue/concepts| (e.g. typing the address in a Web browser). The response is a list of all the concepts and their associated metadata, as in the following example:
+
+\singlespacing
+\begin{verbatim}
+[
+  {
+    "attributes": [],
+    "label": {"en": "A request to search for an item"},
+    "tags": [{
+      "label": {"en": "amazon"},
+      "means": "http://www.amazon.com"
+    }],
+    "uri": "http://fast.morfeo-project.org/ontologies/amazon#SearchRequest"
+  },
+  {
+    "attributes": [
+      {
+        "type": "http://xmlns.com/foaf/0.1/Document",
+        "uri": "http://fast.morfeo-project.org/ontologies/amazon#smallImage"
+      },
+      {
+        "type": "http://www.w3.org/2001/XMLSchema#double",
+        "uri": "http://fast.morfeo-project.org/ontologies/amazon#price"
+      }
+    ],
+    "label": {"en": "An item handled by the Amazon Service"},
+    "tags": [{
+      "label": {"en": "amazon"},
+      "means": "http://www.amazon.com"
+    }],
+    "uri": "http://fast.morfeo-project.org/ontologies/amazon#Item"
+  },
+  ...
+]
+\end{verbatim}
+\doublespacing
+
+By default, the Catalogue does not include any building block, therefore any GET request for any type of building block, as for instance to \verb|http://catalogueURL/FASTCatalogue/screens| should return an empty list \verb|[]| (if JSON requested) or \verb|No screens found| (if HTML requested).
 
 % subsection hello_world (end)
 
@@ -367,42 +410,45 @@ It is recommended to check if the FAST Catalogue has been successfully installed
 
 This sections presents a technical overview of the Catalogue's architecture (see Figure~\ref{fig:catalogue_architecture}), and how the interaction with external applications or APIs is done. The Catalogue platform has a modular design, which are spread in basically three layers, depending on the nature of each component:
 \begin{itemize}
- \item The top layer represents the public API for the Catalogue. It puts together all the available information and services to offer the maximum powerful and flexibility for other IDEs or applications. In FAST, here is where the Gadget Visual Storyboard
- \item The core layer implements the object model, and provides the business logic for the different processes involved in the Catalogue, integrating third party libraries where needed.
- \item The pumbling layer offers an abstraction to RDF model logic and triple stores.
+ \item \emph{Presentation tier} is the top layer which represents the public API for the Catalogue. It brings together all the relaying functionality in a simple but flexible manner to be used by other IDEs or applications. In FAST, this is the unifying interface with other components such as the Gadget Visual Storyboard or the Service Wrapper.
+ \item \emph{Logic tier} is the core layer which implements the business logic for the different processes involved in the Catalogue, and communicates with third party libraries or APIs.
+ \item \emph{Data tier} is the bottom layer. It offers storage capabilities in triple stores, relational databases and binary files, and acts as an abstraction to RDF model logic.
 \end{itemize}
 
 \begin{figure}[htb]
 \label{fig:catalogue_architecture}
 \begin{center}
-	\includegraphics[width=12cm]{images/catalogue_architecture}
+	\includegraphics[width=13cm]{images/catalogue_architecture}
 	\caption{Catalogue's Architecture}
 \end{center}
 \end{figure}
 
-\subsection{Presentation layer / API}
+\subsection{Presentation tier / Public API}
 
-The Presentation layer will be the public interface or API of the Catalogue. The main purpose of this layer is to provide its functionality to the Gadget Visual Storyboard, or any other third party IDE or application. The API is offered in a REST (REpresentational State Transfer) style, making it easy to consume than other complex APIs. REST is an architectural style, not a toolkit or a standard. Even though, it makes use of standards like HTTP, URI, Resource Representations or MIME types. Another characteristic of the REST style is its stateless assumption. The Catalogue adopts this strategy; therefore every request needs a complete set of information in order to prepare the response. The API provided is explained in detail in Section~\ref{sec:catalogue_api}.
+The Presentation tier is the public interface or API of the Catalogue. The main purpose of this layer is to provide its functionality to the Gadget Visual Storyboard, or any other third party IDE or application. The API is offered in a REST (REpresentational State Transfer) style, making it easy to consume than other complex APIs. REST is an architectural style, not a toolkit or a standard , even though, it makes use of standards like HTTP, URI, Resource Representations or MIME types. Another characteristic of the REST style is its stateless assumption. The Catalogue adopts this strategy; therefore every request needs a complete set of information in order to prepare the response. The API provided is explained in detail in Section~\ref{sec:catalogue_api}.
 
-As part of the Presentation layer, a SPARQL endpoint has been implemented using the SPARQL protocol service as defined in the SPROT \cite{sprot} specification. The SPARQL endpoint is mostly offered to enable other developers to query directly the Catalogue knowledge base using SPARQL queries. This feature is supported by the Sesame RESTful HTTP interface for SPARQL Protocol for RDF.
+As part of the Presentation tier, a SPARQL endpoint has been implemented using the SPARQL protocol service as defined in the SPROT \cite{sprot} specification. The SPARQL endpoint is mostly offered to enable other developers to query directly the Catalogue knowledge base using SPARQL queries. This feature is supported by the Sesame RESTful HTTP interface for SPARQL Protocol for RDF.
 
-\subsection{Core layer}
+\subsection{Logic tier}
+\label{ssec:logic_tier}
 
-The Core or Business Logic layer contains all the FAST domain-specific processing. The resources and relations between each other, which define the domain model, are extracted from the FAST ontology~\cite{moeller2011fast_ontology}. These layer provides support to the functions defined in the API, and interact with the persistence layer to retrieve and store any information of the data model.
+The Logic tier or business logic layer contains all the FAST domain-specific processing. The resources and relations between each other, which define the domain model, are extracted from the FAST ontology~\cite{moeller2011fast_ontology}. This layer provides support to the functions defined in the API, and interact with the data tier to retrieve and store any information of the data model.
 
 This layer provides several mechanisms to search and browse these different resources. To know more about these capabilities, please read Sections~\ref{ssub:screen_findcheck},~\ref{ssub:screen_component_findcheck} and~\ref{sub:planning} where the API calls are defined, and Appendix F for more details about the implementation.
 
-At the bottom part of the Gadget Architecture~\cite{reyes2011gadget_architecture} are the back-end services. These are RESTful services, SOAP-based web services, or similar. In FAST, these web services are wrapped, extracting their definition and encapsulation their behaviour. To creation of these service wrappers is on demand, and the input for this process is a particular definition of a web service. However, the Catalogue does not crawl the Web looking for Web services. Instead, and to enrich the collection of available web services, the Catalogue integrates and queries iServe\footnote{http://iserve.kmi.open.ac.uk/}, a platform for publishing Semantic Web Services as linked data, no matter their original format. Therefore, thousands of web services defined or annotated in a semantic way, are also served from the Catalogue, in a uniform manner.
+At the bottom level of the Gadget Architecture~\cite{reyes2011gadget_architecture} are the back-end services. These are RESTful services, SOAP-based web services, or similar. In FAST, these web services are wrapped, extracting their definition and encapsulating their behaviour. The creation of these service wrappers is on demand, and the input for this process is a particular definition of a web service. However, the Catalogue does not crawl the Web looking for Web services. Instead, and to enrich the collection of available web services, the Catalogue integrates and queries iServe, a platform for publishing Semantic Web Services as linked data, no matter their original format. Therefore, thousands of web services defined or annotated in a semantic way, are also served from the Catalogue, in a uniform manner.
 
-The Catalogue is a semantic application. As a result, it has to handle with ontologies. Apart from the core ontologies being used across the whole application (see~\cite{moeller2011fast_ontology}), the building blocks may reference classes and properties from diverse vocabularies and ontologies. To have a better understanding of them, the Catalogue imports them inside its repository any time it detects a building block is using an unknown class, property, or in other words, an unknown ontology. While importing an ontology, the Catalogue tries to get its definition from the URI of a given class or property (as stated in~\cite{berrueta2008}). However, sometimes this may be not succesful, and the Catalogue will try to get its definition querying Sindice\footnote{http://www.sindice.com/}, a semantic search engine, which cralws the web and keeps provenance metadata for the ontologies.
+The Catalogue is a semantic application. As a consequence, it must handle and work with ontologies and vocabularies. The business model itself is described by in the FAST ontology, and the Catalogue goes along with a few established ontologies integrated in its core (see~\cite{moeller2011fast_ontology}). However, the definition of the pre-/post-conditions of the building blocks are open to any ontology or vocabulary, and they may reference classes and properties from any of them. To have a better understanding of these classes, properties, and so on, the Catalogue needs to import into its own knowledge base the ontology in which they are described along with the relations with other classes and properties. In order to adquire these vocabularies, it follows the basic recipe dictated in~\cite{berrueta2008} which says that deferencing a vocabulary URI should provide a machine-processable (RDF) content back. Nonetheless, this is just a good practice and not every ontology published on the Internet follows it. Hence, going a step further, whenever an ontology cannot be retrieved by deferencing its URI, the Catalogue queries Sindice\footnote{http://www.sindice.com/}, a semantic search engine, which crawls and contains thousands of vocabularies and metadata as their provenance, which the Catalogue can take advantage of.
 
-\subsection{Plumbing layer}
 
-The Plumbing layer abstract the interaction with triple stores, RDF models and physical persistence to disk, database, etc. It provides the different mechanisms to allow the Catalogue the storage of the domain objects into a triple store in its underlying representation of RDF.
+\subsection{Data tier}
 
-There are many triple stores solutions, any of them with its own advantages and disadvantages. To make the Catalogue independent of the solution adopted, it makes uses of RDF2Go, an abstraction over triple (and quad) stores. The RDF2Go API allows interacting with the semantic representation of the model (triples) in a generic manner, and also brings the flexibility of choosing different triple stores to persist them.
+The Data tier abstracts the interaction with triple stores, RDF models and physical persistence to disk, database, etc. It provides different mechanisms to allow the Catalogue the storage of domain objects into a triple store in its underlying representation of RDF.
+
+There are many triple stores solutions, all of them with their own advantages and disadvantages. To make the Catalogue independent of the solution adopted, it makes uses of RDF2Go, an abstraction over triple (and quad) stores. The RDF2Go API allows interacting with the semantic representation of the model (triples) in a generic manner, and also brings the flexibility of choosing different triple stores to persist them.
 
 The current implementation of the Catalogue prototype at M36 uses Sesame 2 as triple store. This solution has a wide community behind, and it has attractive advantages such as being completely extensible and configurable regarding to storage mechanisms, inferencers, RDF file formats, query result formats and query languages.
+
 
 % section architecture_overview (end)
 
@@ -417,7 +463,7 @@ This section provides a high-level overview of the Catalogue API. It describes t
 \subsection{JSON Interchange Format} % (fold)
 \label{sec:json_interchange_format}
 
-The format supported, and in which they must be constructed, by every HTTP request is JSON\footnote{http://www.json.org/}. JSON is a lightweight data interchange format whose simplicity has resulted in widespread use among web developers, easy to read and write and able to using any programming language because its structures map directly to data structures used in most programming languages.
+The body of the requests to the API must be in JSON\footnote{http://www.json.org/}. JSON is a lightweight data interchange format which simplicity has resulted in widespread use among web developers, easy to read and write and able to process and parse using any programming language because its structures map directly to data structures used in most programming languages.
 
 Every HTTP request should be encoded using the MIME type \texttt{application/json} and the charset \texttt{UTF-8}.
 
@@ -427,8 +473,8 @@ The following is an example of a Find \& Check request:
 \begin{verbatim}
 {
   "canvas": [
-    { "uri": "http://catalogueURL/screens/238" },
-    { "uri": "http://catalogueURL/screens/323" }
+    { "uri": "http://catalogueURL/screens/clones/2338" },
+    { "uri": "http://catalogueURL/screens/clones/1323" }
   ],
   "palette": [
     { "uri": "http://catalogueURL/screens/636" }
@@ -478,7 +524,7 @@ In order to offers an adaptable solution to various languages and regions withou
     xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
     xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
     xmlns:ctag="http://commontag.org/ns#">
-  <rdf:Description rdf:about="http://demo.fast.morfeo-project.org/FASTCatalogue/screens/1">
+  <rdf:Description rdf:about="http://catalogueURL/screens/1">
     <rdf:type rdf:resource="http://purl.oclc.org/fast/ontology/gadget#Screen"/>
     <rdfs:label xml:lang="en-gb">Product Search</rdfs:label>
     <rdfs:label xml:lang="en-es">Búsqueda de productos</rdfs:label>
@@ -505,8 +551,8 @@ Apart from serving as the back-end system for the Gadget Visual Storyboard (GVS)
 Following the principles and best practices proposed in \cite{berrueta2008} and \cite{sauermann2008cool_uris}, these representations are served based on the request issued by the requesting agent, using a technique called \emph{content negotiation}.
 As required by the forth rule of linked data, individual building blocks link to other data on the Web, thereby preventing so-called isolated ``data islands''.
 
-In order to understand how content negotiation is implemented in the catalogue, a few concepts need to be understood. The URI of a particular building block must be understood as the identifier of the building block as such, as opposed to a particular representation (JSON, HTML, etc.) of it. In fact, each such representation has its own URI, under which it can be retrieved. Using the terminology established in \cite{w3c2004webArchitecture}, the building block is a \emph{non-information resource}, whereas each representation is an \emph{information resource}. In the process of content negotiation, the requesting agent will first request the URI of the building block as such (e.g., \verb|http://catalogueURL/screens/235|), as well as the required representation format (e.g., JSON). The catalogue will then inspect the request and redirect the requester to the appropriate representation (e.g., \verb|http://catalogueURL/screens/235.json|), as illustrated in Fig.~\ref{fig:content_negotiation}.
-On the Web, different representations for the same resource are called \emph{variants}, and content negotiation is the mechanism used to determine which of the representations of most appropriate for a given request.
+In order to understand how content negotiation is implemented in the catalogue, a few concepts need to be understood. The URI of a particular building block must be understood as the identifier of the building block such, as opposed to a particular representation (JSON, HTML, etc.) of it. In fact, each such representation has its own URI, under which it can be retrieved. Using the terminology established in \cite{w3c2004webArchitecture}, the building block is a \emph{non-information resource}, whereas each representation is an \emph{information resource}. In the process of content negotiation, the requesting agent will first request the URI of the building block as such (e.g., \verb|http://catalogueURL/screens/235|), as well as the required representation format (e.g., JSON). The catalogue will then inspect the request and redirect the requester to the appropriate representation (e.g., \verb|http://catalogueURL/screens/235.json|), as illustrated in Fig.~\ref{fig:content_negotiation}.
+On the Web, different representations for the same resource are called \emph{variants}, and content negotiation is the mechanism used to determine which of the representations is most appropriate for a given request.
 
 \begin{figure}[htb]
 \label{fig:content_negotiation}
@@ -518,25 +564,25 @@ On the Web, different representations for the same resource are called \emph{var
 
 In summary, the basic idea of content negotiation, as stated in the \cite{http1.1}, is to serve the best variant for a resource, taking into account what variants are available, what variants the server may prefer to serve, what the client can accept, and with which preferences. In HTTP, this is done by the client which may send, in its request, accept headers (\texttt{Accept}, \texttt{Accept-Language} and \texttt{Accept-Encoding}), to communicate its capabilities and preferences in format, language and encoding, respectively.
 
-In fact, what the catalogue really does is ``format negotiation'' since the alternate representations are just based on the selection of the media type, through the accept header, but does not consider different languages or encoding types. The formats supported are JSON, RDF/XML, Turtle and HTML+RDFa. Even though the accept header is desired, the different representations can also be retrieved directly by dereferencing their own URI. The convention used in the catalogue for deriving a representation URI from a building block URI is to simply attach a matching suffix, such as \texttt{.rdf}, \texttt{.json} or \texttt{.html}.
+In fact, what the catalogue really does is ``format negotiation'' since the alternate representations are just based on the selection of the media type, through the accept header, but does not consider different languages or encoding types. The formats supported are JSON, RDF/XML, Turtle and HTML+RDFa. Even though the accept header is desired, the different representations can also be retrieved directly by dereferencing their own URI. The convention used in the catalogue for deriving a representation URI from a building block URI is to simply attach a matching suffix, such as \texttt{.rdf}, \texttt{.ttl}, \texttt{.json} or \texttt{.html} for RDF/XML, Turle, JSON or HTML respectively.
 
 Lastly, content negotiation needs to identify which player is going to take the lead on it. There are two kinds of content negotiation which are possible in HTTP: server-driven and agent-driven negotiation. The approach followed by the catalogue is agent-driven negotiation, hence selecting a specific representation for a resource is responsibility of the user agent. If none is specified, by default, the server will choose the JSON representation.
 
 % subsection content_negotiation (end)
 
-\subsection{API Calls} % (fold)
+\subsection{API calls} % (fold)
 \label{sub:api_calls}
 
 The Catalogue API is a programmatic interface into many of the Catalogue's features. It includes not only control over creation, modification and deletion of building blocks, but it has been extended to support advanced search and recommendation capabilities.
 
 This section contains detailed descriptions of the operations permitted by the API, detailing request parameters, response elements, any special errors and examples of requests and responses. The URL format is also specified for each operation, where \emph{catalogueURL} has to be replaced for the real URL the service is installed (e.g. http://demo.fast.morfeo-project.org/catalogue).
 
-\subsection{Managing Building Blocks} % (fold)
+\subsection{Managing building blocks} % (fold)
 \label{sub:managing_building_blocks}
 
-Any building block within the Catalogue is a resource in terms of REST philosophy, therefore it can be created, retrieved, modified or deleted, using a certaing URL and a specific HTTP method for every operation. Two concepts should be clarified: \emph{collection}, as a set of resources which access URI is \verb|http://catalogueURL/[type]| where \emph{catalogueURL} is  where the Catalogue server is installed and \verb|[type]| is the plural of the name of the building block (e.g. screens, operators), and \emph{member} of the collection, in other words, the building block itself, which access URI is \verb|http://catalogueURL/[type]/[id]| where \verb|[id]| has to be replaced by the identifier of a specific building block. The details of the operations and which HTTP verb has to be used can be found in the Table~\ref{tab:crud_operations}. These methods are to what is called \emph{Prototype} of building blocks (see \cite{moeller2011fast_ontology}).
+Any building block within the Catalogue is a resource in terms of REST philosophy, therefore it can be created, retrieved, modified or deleted, using a certaing URL and a specific HTTP method for every operation. Two concepts should be clarified: \emph{collection}, as a set of resources are accessed at the URL \verb|http://catalogueURL/[type]| where \emph{catalogueURL} is  where the Catalogue server is installed and \verb|[type]| is the plural of the name of the building block (e.g. screens, operators), and \emph{member} of the collection, in other words, the building block itself, being accessed at the URL \verb|http://catalogueURL/[type]/[id]| where \verb|[id]| has to be replaced by the identifier of a specific building block. The details of the operations and which HTTP verb has to be used can be found in the Table~\ref{tab:crud_operations}.
 
-\begin{table}[htb]
+\begin{table}[htb!]
 \caption{CRUD operations}
 \label{tab:crud_operations}
 \begin{center}
@@ -558,7 +604,7 @@ Member URI & DELETE & N/A & \textbf{Delete} the addressed member of the collecti
 \end{center}
 \end{table}
 
-The JSON structure for create any building bock can be found in the appendixes. All of them are composed of a common structure which can be found in Section Appendix B, and some specific information depending on the type. Screen-flows are defined in Appendix C, screens in Appendix D and forms, operators and back-end services share the same structure detailed in Appendix E. However, a few examples of request and responses are shown in order to clarify how the request are constructed and sent, and how the responses look like.
+The JSON structure for creating any building block can be found in the appendixes. All of them are composed of a common structure which can be found in Section Appendix B, and some specific information depending on the type. Screen-flows are defined in Appendix C, screens in Appendix D and forms, operators and back-end services share the same structure detailed in Appendix E. However, a few examples of request and responses are shown in order to clarify how the requests are constructed and sent, and how the responses look like.
 
 To create a new screen, a POST request is sent to the catalogue server, concretely to \texttt{http://cata\-logueURL/screens}, including the JSON representation of the screen in the body of the request:
 
@@ -640,7 +686,6 @@ The URI of the screen is created using the id specified in the JSON request. So,
   "rights": "http://creativecommons.org/",
   "screenshot": "http://demo.fast.morfeo-project.org/images/amazonProductList.png",
   "tags": [{"label": {"en-gb": "amazon"}}],
-  "type": "screen",
   "uri": "http://catalogueURL/screens/28",
   "version": "0.1"
 }
@@ -688,7 +733,6 @@ To obtain all the screens stored in the catalogue a HTTP GET request is sent to 
     "rights": "http://creativecommons.org/",
     "screenshot": "http://demo.fast.morfeo-project.org/images/amazonProductList.png",
     "tags": [{"label": {"en-gb": "amazon"}}],
-    "type": "screen",
     "uri": "http://catalogueURL/screens/28",
     "version": "0.1"
   },
@@ -711,9 +755,73 @@ To obtain all the screens stored in the catalogue a HTTP GET request is sent to 
 \doublespacing
 
 
+\subsection{Managing concepts (classes) and attributes (properties)} % (fold)
+\label{sub:managing_concepts_attributes}
+
+This method allows the creation of new classes and properties which do not belong to any existing ontology or vocabulary. The URI of this new class has the Catalogue URL as prefix, in order to be dereferenceable, followed by a domain, which groups these classes, and a name (http://catalogueURL/concepts/[domain]/[name]).
+
+The URL for this operation is \verb|http://catalogueURL/concepts|.
+
+The concepts are another type of resource, hence the common CRUD operations (GET to retrieve, POST to create, PUT to update and DELETE to remove) are supported for them.
+
+Example of concept:
+
+\singlespacing
+\begin{verbatim}
+{          
+  "description": {"en-gb": "Represents a school with its coordinates."}, 
+  "label": {"en-gb": "School"},
+  "tags":[{
+    "label": {"en-gb": "school"}
+   }],
+  "subclassOf": "http://www.w3.org/2003/01/geo/wgs84_pos#SpatialThing",
+  "attributes": [
+    {
+      "uri": "http://www.w3.org/2003/01/geo/wgs84_pos#lat",
+      "type": "http://www.w3.org/2001/XMLSchema#double"
+    },
+    {
+      "uri": "http://www.w3.org/2003/01/geo/wgs84_pos#long",
+      "type": "http://www.w3.org/2001/XMLSchema#double"
+    }
+  "name": "school",
+  "domain": "institutions"
+}
+\end{verbatim}
+\doublespacing
+
+
+\subsection{Managing samples/instances of concepts} % (fold)
+\label{sub:managing_samples}
+
+It is allowed to create instances of classes, or so-called samples of concepts. The samples are another type of resource, hence the common CRUD operations (GET to retrieve, POST to create, PUT to update and DELETE to remove) are supported for them.
+
+Example of sample:
+
+\singlespacing
+\begin{verbatim}
+{
+  "concept": "http://catalogueURL/concepts/institutions/school",
+  "attributes": [
+    {
+      "uri": "http://www.w3.org/2003/01/geo/wgs84_pos#lat",
+      "value": "60.025"
+    },
+    {
+      "uri": "http://www.w3.org/2003/01/geo/wgs84_pos#long",
+      "value": "34.224"
+    }
+}
+\end{verbatim}
+\doublespacing
+
+
 \subsubsection{Prototype cloning} % (fold)
 \label{ssub:prototype_cloning}
-A building block can be cloned. Making a clone of a prototype is as simple as sending a HTTP POST request to \verb|http://catalogueURL/cloning| indicating the URI of the building block to be clone, as in this example:
+
+The resources created by the requests~\ref{ssub:managing_building_blocks} are prototypes. To create a clone of a prototype is as simple as sending a HTTP POST request to \verb|http://catalogueURL/cloning| indicating the URI of the building block to be cloned. It is no the aim of this deliverable to explain the logic behind the prototypes and clones. For a better understanding on this topic,~\cite{moeller2011fast_ontology} contains an extend section about prototype-based semantics for RDF, 
+
+Request example:
 
 \singlespacing
 \begin{verbatim}
@@ -737,15 +845,16 @@ Example of response:
 As clones are building blocks as well, the operations explained in Section~\ref{sub:managing_building_blocks} are valid to retrieve and delete them.
 
 
-\subsubsection{GetMetadata} % (fold)
+\subsubsection{Metadata} % (fold)
+\label{ssub:metadata}
 
-Retrieves all the metadata about a list of building blocks or classes (concepts) stored in the catalogue. All building blocks are supported, no matter if it is a prototype or a clone.
+Retrieves all the metadata about a list of building blocks or classes (concepts) stored in the catalogue. This functionality is already provided by~\ref{sub:managing_building_blocks} if one specific building block, or the entire collection, is to be retrieved. However, this operation provides a way to get the metadata of an arbitrary number of resources, specified by their URIs, with no disctintion of their type.
 
-The URL to access this operation is \verb|http://catalogueURL/getmetadata| using HTTP POST method. Table~\ref{tab:getmetadata_request} shows the parameters needed for the invocation and Table~\ref{tab:getmetadata_response} details the different parameters of a response.
+The URL to access this operation is \verb|http://catalogueURL/metadata|. The operation is invoked sending a HTTP POST request, Table~\ref{tab:metadata_request} shows the parameters needed for the invocation and Table~\ref{tab:metadata_response} details the different parameters of the response.
 
-\begin{table}[htb]
-\caption{GetMetadata Request Parameters}
-\label{tab:getmetadata_request}
+\begin{table}[htb!]
+\caption{Metadata Request Parameters}
+\label{tab:metadata_request}
 \begin{center}
 \begin{tabular}{|p{2.5cm}|p{9cm}|p{2cm}|}
 \hline
@@ -758,8 +867,8 @@ N/A & A list of URIs. & Required\\ \hline
 \end{table}
 
 \begin{table}[htb]
-\caption{GetMetadata Response Parameters}
-\label{tab:getmetadata_response}
+\caption{Metadata Response Parameters}
+\label{tab:metadata_response}
 \begin{center}
 \begin{tabular}{|p{2.5cm}|p{11.5cm}|}
 \hline
@@ -866,9 +975,11 @@ Example response:
 \subsubsection{Screen Find \& Check} % (fold)
 \label{ssub:screen_findcheck}
 
-Searches screens and check the compatibility/reachability of a given screen-flow.
+Searches for new screens and checks the satisfaction/reachability of screens in a given screen-flow. The response will contain all the elements pass on the request, plus information regarding the conditions satisfaction, and therefore whether the screens are reachable. Moreover, if screens are not reachable (their pre-conditions are not satisfied), it searchs for new screens which make these screens to be reachable.
 
-\begin{table}[htb]
+The URL for this operation is \verb|http://catalogueURL/screens/findcheck|.
+
+\begin{table}[htb!]
 \caption{Screen Find \& Check Request Parameters}
 \label{tab:screen_check_request}
 \begin{center}
@@ -877,15 +988,20 @@ Searches screens and check the compatibility/reachability of a given screen-flow
 \rowcolor{fast@lightgrey}\textcolor{white}{Name} &
                          \textcolor{white}{Description} &
                          \textcolor{white}{Type}\\ \hline
-canvas & The canvas is composed by a list of screens (clones). Only the URI is needed. & Required\\ \hline
-palette & It is a list of screens (prototypes), not in the canvas but which must be check based on the specified criterion. & Required\\ \hline
-domainContext & The domain context contains a list of tags and the user who makes the request. & Required\\ \hline
-criterion & The criterion specifies what it has to be check. The only possible supported now is 'reachability' in order to check if the pre-conditions of a screen are satisfied. & Required\\ \hline
+canvas & The canvas is subdivided in three lists:
+\begin{description}
+ \item[screens] List of the screens of the screen-flow. Only the URI is needed.
+ \item[preconditions] List of the pre-conditions of the screen-flow.
+ \item[postconditions] List of the post-conditions of the screen-flow.
+ \end{description} & Required\\ \hline
+palette & It is a list of screens (prototypes), which are not in the canvas but need to be checked based on the specified criterion. & Optional\\ \hline
+domainContext & The domain context contains a list of tags and the user who makes the request. & Optional\\ \hline
+criterion & The criterion specifies what it has to be check. At the moment, only 'reachability' (checks conditions satisfaction and screen reachability) is supported, but this parameter may support other values. & Required\\ \hline
 \end{tabular}
 \end{center}
 \end{table}
 
-\begin{table}[htb]
+\begin{table}[htb!]
 \caption{Screen Find \& Check Response Parameters}
 \label{tab:screen_check_response}
 \begin{center}
@@ -893,7 +1009,7 @@ criterion & The criterion specifies what it has to be check. The only possible s
 \hline
 \rowcolor{fast@lightgrey}\textcolor{white}{Name} &
                          \textcolor{white}{Description}\\ \hline
-canvas & List of screens in the canvas, which extra information indicating satisfaction of the criterion, for the screens themselves and their pre-conditions.\\ \hline
+canvas & List of screens in the canvas, with extra information indicating satisfaction of the criterion, for the screens themselves and their pre-conditions.\\ \hline
 palette & A list of screens obtained by the search, attaching information about the satisfaction of the criterion.\\ \hline
 domainContext & It contains the same value as in the request.\\ \hline
 limit & Integer. It is used to limit the number of results returned. Default value is -1 (no limit).\\ \hline
@@ -970,6 +1086,8 @@ A more detailed explanation regarding the search, recommendation, and ranking al
 
 Similarly to the Screen Find \& Check described in Section~\ref{ssub:screen_findcheck}, this operation search for screen components (forms, operators and back-end services) through the catalogue in order to satisfy a given request, and attaches information regarding building block satisfaction and reachability as well.
 
+The URL for this operation is \verb|http://catalogueURL/components/findcheck|.
+
 A request is formed of the following parameters:
 
 \begin{description}
@@ -982,8 +1100,7 @@ A request is formed of the following parameters:
 	\item[domainContext] The domain context contains a list of tags and the user who makes the request.
 	\item[pipes] List of pipes for the connection between screen components and conditions. If the building block in a pipe is the screen itself, the value must be set to \emph{null}.
 	\item[selectedItem] URI of a screen component from the canvas, or id of a pre-/post-condition.
-	\item[search] Boolean indicating if forms/operators/services are required to be looked for. If \emph{false} the operation performed is just a check. If omitted, default value is \emph{true}.
-	\item[iserve] Boolean indicating if a search has to be perfomed in the iServe service. If omitted, default value is \emph{false}. If \emph{search} is false, this parameter is discarded.
+	\item[actions] List of actions to be executed in the operation. Three actions can be specified: \emph{find}, \emph{check} and \emph{iserve}. The action \emph{find} indicates that it must search for forms/operators/services. The action \emph{check} checks whether the components/conditions/pipes are satisfied/reachable. \emph{iserve} is set to look for web services descriptions in the iServe platform.
 	\item[limit] Integer. It is used to limit the number of results returned. Default value is -1 (no limit).
 	\item[offset] Integer. It is used to jump or skip a number of results to be returned. Default value is 0.
 \end{description}
@@ -1009,7 +1126,6 @@ Example request:
   "forms": [],
   "operators": [],
   "backendservices": [],
-  "search": true,
   "domainContext": {
     "tags": [],
     "user": "http://ismaelrivera.es#me"
@@ -1027,9 +1143,8 @@ Example request:
       }
     }
   ],
-  "selectedItem": "http://catalogueURL/forms/clones/112"
-  "search": true,
-  "iserve": true
+  "selectedItem": "http://catalogueURL/forms/clones/112",
+  "actions": ["find", "check", "iserve"]
 }
 \end{verbatim}
 \doublespacing
@@ -1221,7 +1336,7 @@ A more detailed explanation regarding the algorithms used for the planning can b
 % subsection planning (end)
 
 
-\subsection{API Error Codes} % (fold)
+\subsection{API error codes} % (fold)
 There are two types of error codes, client and server.
 \begin{itemize}
 	\item Client error codes are generally caused by the client and might be an invalid domain or an invalid request parameter. These errors are accompanied by a 4xx HTTP response code. For example: ResourceNotFound.
@@ -1230,7 +1345,7 @@ There are two types of error codes, client and server.
 
 The possible error codes are listed in Table~\ref{table:error_codes}.
 
-\begin{table}[htb]
+\begin{table}[htb!]
 \label{table:error_codes}
 \caption{API Error Codes}
 \begin{center}
@@ -1260,7 +1375,7 @@ URITooLong & The URI exceeded the maximum limit of <maxLength>. & 400 Bad Reques
 
 
 \clearpage
-\section*{Appendix A. Semantic Web Technologies Evaluation}
+\section*{Appendix A. Semantic Web technologies evaluation}
 \label{appendix_a}
 \addcontentsline{toc}{section}{Appendix A. Semantic Web Technologies Evaluation}
 
@@ -1268,7 +1383,7 @@ In \cite{urmetzer2010fast_state_of_the_art} were presented different technologie
 
 Basically, two general solutions were considered. One was to build the Catalogue, and the internal components or building block of the gadgets, based on a dedicated SWS platform. The other was to build a light-weight solution from scratch based on RDF and RDFS.
 
-For both solutions, a few ideas about their potential benefits and disadvantages were in mind beforehand. SWS platforms were very tempting to use, because the modelling approach for screens in FAST is quite similar to SWS, in how they define their inputs and outputs. E.g., both FAST and WSMO have pre- and post-conditions, OWL-S has inputs/outputs. Also, SWS platforms come with ready-made implementations for service composition, which could have been used for automatically combining screens to screen-flows. On the downside, it was expected that SWS platforms a bit too slow for some FAST requirements, as the need of real-time discovery. On the other hand, building a light-weight implementation directly on RDFS promised to be faster. Moreover, there is a broader, more mature and probably more active tool support. However, going in this direction would imply to invest a lot more work in modelling and implementation efforts, since all the features that SWS would bring straight away are could not be reused.
+For both solutions, a few ideas about their potential benefits and disadvantages were in mind beforehand. SWS platforms were very tempting to use, because the modelling approach for screens in FAST is quite similar to SWS, in how they define their inputs and outputs. E.g., both FAST and WSMO have pre- and post-conditions, OWL-S has inputs/outputs. Also, SWS platforms come with ready-made implementations for service composition, which could have been used for automatically combining screens to screen-flows. On the downside, it was concluded that SWS platforms a bit too slow for some FAST requirements, as the need of real-time discovery. On the other hand, building a light-weight implementation directly on RDFS promised to be faster. Moreover, there is a broader, more mature and probably more active tool support. However, going in this direction would imply to invest a lot more work in modelling and implementation efforts, since all the features that SWS would bring straight away are could not be reused.
 
 To perform the evaluation of the different approaches, an abstract random ontology of 40 concepts was created. About 70\% of those were randomly assigned to be sub-concepts of other concepts. The abstract ontology was instantiated in WSMO, OWLS and RDFS. Then, 3 sample sets of random screens of three different sizes (100, 1000 and 10000) were created, such that each screen has 0..3 random pre- and post-conditions. For each set in each technology, every screen was taken to perform a match with any other screen, and the average response time was measured. Figure~\ref{fig:comparison_chart} shows the results of the evaluation (RDFS in blue, WSMO in yellow and OWL-S in green). Be aware that the scale of the time is logarithmic.
 
@@ -1284,7 +1399,7 @@ It can be seen that RDFS performs rather well, even in the 10.000 size set, wher
 
 
 \clearpage
-\section*{Appendix B. Generic Building Block JSON Structure}
+\section*{Appendix B. Generic building block JSON structure}
 \label{appendix_b}
 \addcontentsline{toc}{section}{Appendix B. Generic Building Block JSON Structure}
 
@@ -1311,7 +1426,6 @@ It can be seen that RDFS performs rather well, even in the 10.000 size set, wher
   "label": {"en-gb": "Label or title of the building block"},
   "rights": "http://creativecommons.org/",
   "screenshot": "http://url.com/.../screenshot.jpg",
-  "type": "type of the building block", // screenflow, screen, form, operator or service
   "uri": "http://url.com/screens/525",
   "version": "1.0"
 }
@@ -1338,7 +1452,7 @@ It can be seen that RDFS performs rather well, even in the 10.000 size set, wher
 
 
 \clearpage
-\section*{Appendix D. Screen JSON Structure}
+\section*{Appendix D. Screen JSON structure}
 \label{appendix_d}
 \addcontentsline{toc}{section}{Appendix D. Screen JSON Structure}
 
@@ -1402,7 +1516,7 @@ It can be seen that RDFS performs rather well, even in the 10.000 size set, wher
 
 
 \clearpage
-\section*{Appendix E. Screen Component JSON Structure}
+\section*{Appendix E. Screen Component JSON structure}
 \label{appendix_e}
 \addcontentsline{toc}{section}{Appendix E. Screen Component JSON Structure}
 
@@ -1448,7 +1562,7 @@ It can be seen that RDFS performs rather well, even in the 10.000 size set, wher
 \label{appendix_f}
 \addcontentsline{toc}{section}{Appendix F. Algorithms for building block recommendation}
 
-The Catalogue serves as a metadata repository for the different kind of building blocks used by the Gadgets in the FAST platform, or so-called building blocks. The number of building blocks stored in the catalogue is arbitrary, and a simple browsing or keyword-based search through the whole catalogue would be not usable if the number is relatively high.
+The Catalogue serves as a metadata repository for the different kind of resources used by the Gadgets in the FAST platform, or so-called building blocks. The number of building blocks stored in the catalogue is arbitrary, and a simple browsing or keyword-based search through the whole catalogue would be not usable if the number is relatively high.
 
 There are two scenarios where the user may be assisted: screen-flow design, and screen design. At screen-flow design, a user needs to find the proper screens to fulfil her goal. At screen design, the scenario is a bit more complex, where different types of building blocks are involved, making screen creation process more challenging. Therefore, the Catalogue includes several mechanisms in order to help in these situations.
 
@@ -1457,14 +1571,16 @@ There are two scenarios where the user may be assisted: screen-flow design, and 
 
 The building blocks are connected (implicit or explicitaly) to each other via their pre- and post-conditions. These connections are guaranteed by a matching method which determine when a pre-condition is satisfied by a post-condition.
 
-At screen-flow or screen design, the user needs to find new building blocks which may satisfy elements from the canvas. There is a high probability that building blocks which pre-/post-conditions are compatible might be used to accomplish her goal. The goal for the algorithm is to satisfy a set of pre-conditions, which are still not satisfied from the elements in the canvas. Therefore, this algorithm searchs the Catalogue for building blocks which post-conditions satisfy in a certain way some or all of these pre-conditions.
+At screen-flow or screen design level, the user needs to find new building blocks which may satisfy elements from the canvas. There is a high probability that building blocks which have compatible pre-/post-conditions might be used to accomplish her goal. The goal for the algorithm is to satisfy a set of pre-conditions, which are still not satisfied, of the elements in the canvas. Therefore, this algorithm searches the Catalogue for building blocks which have post-conditions that satisfy in a certain way some or all of these pre-conditions.
+
+\textcolor{red}{TODO: write about inferencing/reasoning done in the Catalogue}
 
 
 \subsection*{F.2 Planning}
 
 One of the limitations of the pre-/post-conditions matching algorithm is that the output is limited to satisfy a given set of conditions, but the building blocks suggested may include new pre-conditions to be satisfied, where the user has to add building blocks iteratively until the goal is accomplished (screen-flow or screen is executable).
 
-A set of screens can be seen as a graph (see Figure~\ref{fig:screens_graph}), where the vertices (or nodes) are the screens, and the edges represent whether a screen satisfied or is satisfied but another screen. There is a special node connected to all the screens with no pre-conditions (those are reachable by default). For a given screen, a plan is the path from itself to the special node. These paths or plans are then offered to the user as a set of screens which makes a specific screen reachable.
+A set of screens can be seen as a graph (see Figure~\ref{fig:screens_graph}), where the vertices (or nodes) are the screens, and the edges represent whether a screen satisfies or is satisfied by another screen (the arrow points towards the screen which gets satisfied). There is a special node connected to all the screens with no pre-conditions (those are reachable by default). For a given screen, a plan is the path from itself to the special node. These paths or plans are then offered to the user as a set of screens which makes a specific screen reachable.
 
 \begin{figure}[htb]
 \label{fig:screens_graph}
@@ -1474,7 +1590,7 @@ A set of screens can be seen as a graph (see Figure~\ref{fig:screens_graph}), wh
 \end{center}
 \end{figure}
 
-If the number of vertices and edges is high, the number of different paths can be as well high. This cause problems such as a huge number of different paths between two vertices, or paths which are incredible long, in other words, the number of results or their quality may not be appropiate to be presented to the user, which may expect a few results and with the minimum number of screens as possible. This is a common problem, and there exist many are many algorithms which solve it, such as Dijkstra or the A* search algorithm which are complete and will always find a solution if one exists.
+If the number of vertices and edges is high, the number of different paths can be as well high. This causes problems such as a huge number of different paths between two vertices, or paths which are incredible long, in other words, the number of results or their quality may not be appropiate to be presented to the user, which may expect a few results and with the minimum number of screens as possible. This is a common problem, and there  are many algorithms which solve it, such as Dijkstra or the A* search algorithm which are complete and will always find a solution if one exists.
 
 Our approach has been to implement the A* algorithm, as it calculates a heuristic estimate of the distance to the goal for each node, apart from the path-cost function also included in Dijkstra. In our case, the cost for all edges is the same, and the heuristic function is used to prioritize the screens which are being used already by a given canvas. This way, we try to minimise the number of screens to be used.
 
@@ -1511,7 +1627,11 @@ screenflow-H & screen-1, screen-2, screen-3 \\ \hline
 
 The algorithm will search for the screens with the highest co-ocurrence for a given input, i.e. a screen-flow during its design phase. For example, for a screen-flow which contains the screen-5, the algorithm will recommend screen-7 as its co-ocurrence is high.
 
-However, the algorithm used for the operations Find \& Check at screen-flow and screen design, are a combination of the pre-/post-conditions matching and frequent itemset mining algorithms. The output items of the frequent itemset mining algorithm are ranked depending on their co-ocurrence, adding the output of the pre-/post-conditions matching search algorithm as if their co-ocurrence was one.
+However, the algorithm used for the operations Find \& Check at screen-flow and screen design, is a combination of the pre-/post-conditions matching and frequent itemset mining algorithms. The output items of the frequent itemset mining algorithm are ranked depending on their co-ocurrence, adding the output of the pre-/post-conditions matching search algorithm as if their co-ocurrence was one.
 
+
+\subsection*{F.4 iServe platform integration}
+
+\textcolor{red}{TODO: write this section}
 
 \end{document}
