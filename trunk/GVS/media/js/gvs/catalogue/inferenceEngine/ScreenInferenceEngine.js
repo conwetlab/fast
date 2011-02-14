@@ -40,16 +40,16 @@ var ScreenInferenceEngine = Class.create( /** @lends ScreenInferenceEngine.proto
             'domainContext': domainContext,
                 'criterion': criteria
         };
-        if (method == "check") {
-            body.search = false;
-        } else {
-            body.search = true;
+        var actions = ["check"];
+
+        if (method == "findcheck") {
+            actions.push("find");
             if (GVS.getUser().getiServe()) {
-                body.iserve = true;
-            } else {
-                body.iserve = false;
+                actions.push("iserve");
             }
+
         }
+        body.actions = actions;
         body = Object.extend(body, elements);
         return Object.toJSON(body);
     },
