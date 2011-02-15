@@ -313,8 +313,8 @@ In FAST, we have adopted the term \emph{gadget} for the small, Web-based softwar
 
 This deliverable is structured as follows: 
 we will start off by outlining the main changes that this document has undergone since its previous version, so as to enable the reader to quickly identify new material.
-After briefly addressing the topic of related work in Sect.~\ref{sec:related_work} --- which is mainly covered in a different deliverable from this work package, \cite{urmetzer2010fast_state_of_the_art} --- the structure of the following sections follows directly from our adopted ontology development methodology: we will perform a domain analysis in Sect.~\ref{sec:domain_analysis}, covering the stages of specification, conceptualisation and integration of existing vocabularies. This is then followed by the implementation step in Sect.~\ref{sec:ontology}, which covers the concrete ontology in its form at this moment of the project. 
-After a section discussing an evaluation of the FAST gadget ontology, the deliverable will be concluded with a summary of our work in Sect.~\ref{sec:conclusions}.\ref{sub:methontology_a_methodology_for_ontology_development}
+After briefly addressing the topic of related work in Sect.~\ref{sec:related_work} --- which is mainly covered in a different deliverable from this work package, \cite{urmetzer2010fast_state_of_the_art} --- the structure of the following sections follows directly from our adopted ontology development methodology: we will perform a domain analysis in Sect.~\ref{sec:domain_analysis}, covering the stages of specification, conceptualisation and integration of existing vocabularies. This is then followed by the implementation step in Sect.~\ref{sec:ontology}, which covers the concrete ontology in its form at this moment of the project, as well as some basic considerations such as an early proposal for prototypical semantics for RDF. 
+After a section discussing an evaluation of the FAST gadget ontology in Sect.~\ref{sec:evaluation}, the deliverable will be concluded with a summary of our work in Sect.~\ref{sec:conclusions}.\ref{sub:methontology_a_methodology_for_ontology_development}
 A number of appendices have been added to the document: App.~\ref{sec:methodology} presents the development methodology adopted by us, App.~\ref{sec:ontology_terms} provides documentation for the ontology in the form of a detailed list of terms, while App.~\ref{sec:ontology_code} contains the complete code of the ontology.
 
 % subsection structure_of_the_document (end)
@@ -322,22 +322,13 @@ A number of appendices have been added to the document: App.~\ref{sec:methodolog
 \subsection{Changes from Previous Version} % (fold)
 \label{sub:changes_from_previous_version}
 
-The following changes have been made with respect to the previous version of this deliverable, D2.2.1.~\cite{moeller2009fast_ontology}:
+The following changes have been made with respect to the previous version of this deliverable, D2.2.2.~\cite{moeller2010fast_ontology}. A history of previous changes is kept in App.~\ref{sec:old_changes}.
 
 \begin{itemize}
-	\item Sect.~\ref{sub:goal_and_scope} has been revised to better define the scope of this deliverable with respect to other deliverables.
-	\item The list of classes and properties has been moved to the appendix section at the back of the document (App.~\ref{sec:ontology_terms}), because it was felt that it would otherwise hinder the flow of the text.
-	\item In response to the M12 review, numerous graphical representations both of the underlying conceptual model as well as the concrete gadget ontology have been added to the document, using UML notation. As an example, Sect.~\ref{sub:ontology_overview} now provides a complete overview of the ontology with all classes and properties.
-	\item Also in response to the previous review, conceptual model and ontology have been extended both in breadth and depth.
-	\item As an addition to the glossary of terms in the conceptualisation phase, a section discussing and illustrating the relations between the different classes has been provided.
-	\item In order to reflect the extension of the scope of FAST towards screen creation (as opposed to screen flow creation), the conceptual model and ontology have been extended accordingly.
-	\item A mechanism for RDF templating has been devised and is discussed in Sect.~\ref{sub:classes_instances_and_templates}.
-	\item As the result of the ongoing dialogue between ontology developers and application implementers, many classes and properties have been added, changed or removed.
-	\item The section on our adopted development methodology (previously Sect.~1.3) has been moved to the end of the document (App.~\ref{sub:methontology_a_methodology_for_ontology_development}), but otherwise did not change significantly.
-	\item An evaluation section has been added (Sect.~\ref{sec:evaluation}), based on research done by the authors within the past year.
-	\item The section on design principles (previously Sect.~1.4, now Sect.~\ref{sub:general_design_decisions}) has been moved to the general evaluation section.
-	\item In the integration section (Sect.~\ref{sub:integration}) of the ontology definition, the Common Tag vocabulary for complex tagging has been added. It is briefly introduced, and the integrated terms are specified.
-	\item On a technical note, the namespace abbreviation for the FAST gadget ontology changed from \texttt{fast} to \texttt{fgo}, in order to distinguish from other FAST ontologies which may be added in the future.
+	\item Section~\ref{sub:classes_instances_and_templates} has been significantly extended with a more in-depth discussion of prototype theory, and a first proposal for prototype-based semantics for RDF, as they are employed in FAST.
+	\item A section for the \emph{VocDoc} tool, which was developed in part for generating online and PDF documentation for the FAST ontology, has been added as App.~\ref{sec:vocdoc}.
+	\item The ontology itself has remained more or less stable since D2.2.2.~\cite{moeller2010fast_ontology}. However, a handful of small changes and corrections have been performed, e.g., to reflect the terminology changes in the prototype section (\emph{prototype} instead of \emph{template}, \emph{clone} instead of \emph{copy}).
+	\item The document as a whole has been revised, and minor changes (mostly, spelling, grammar and small updates to reflect latest developments) have been throughout the deliverable.
 \end{itemize}
 
 % subsection changes_from_previous_version (end)
@@ -1378,13 +1369,121 @@ Below is the complete code of the FAST gadget ontology in Turtle syntax. The lat
 }
 \lstinputlisting{clean.ttl}
 
+\doublespacing
 \clearpage
 \phantomsection
 \section{The VocDoc Ontology Documentation Tool}
 \label{sec:vocdoc}
 
-\todo{include documentation for VocDoc}
+\emph{VocDoc} is a tool for the auto-generation of documentation for RDF vocabularies and ontologies. VocDoc was originally developed for use within the FAST project, but has since been used in other contexts as well, such as for generating the online documentation of the Semantic Web Conference Ontology\footnote{\url{http://data.semanticweb.org/ns/swc/ontology}}. As input, VocDoc parses the original RDF source files of the ontology, and then produces documentation in different output formats, such as HTML for online purposes, and La\TeX{} for print purposes.
 
+\subsection{Configuring VocDoc Processing} % (fold)
+\label{sub:configuration}
+
+In principle, VocDoc will parse any input RDF and produce output accordingly, scanning the graph for T-Box statements from the \texttt{rdf}\footnote{\url{http://www.w3.org/1999/02/22-rdf-syntax-ns\#}}, 
+\texttt{rdfs}\footnote{\url{http://www.w3.org/2000/01/rdf-schema\#}} and 
+\texttt{owl}\footnote{\url{http://www.w3.org/2002/07/owl\#}} 
+namespaces such as class and property definitions, class hierarchies or domain and range specifications. However, the output of VocDoc can be further manipulated and improved by using specific annotation statements in the input graph, providing a configuration file and using command line parameters.
+
+\subsubsection{Annotation Properties} % (fold)
+\label{ssub:annotation_properties}
+
+VocDoc looks for a number of special annotation properties to structure and enhance its output. All of these properties must be used on the main \texttt{owl:Ontology} instance in the input graph. Examples for these annotations can be found in App.~\ref{sec:ontology_code}.
+
+\paragraph{Title and Logo} % (fold)
+\label{par:title_and_logo}
+
+\texttt{rdfs:label} is used to specify the name of the vocabulary, which will appear as the ontology title in the output document. \texttt{foaf:logo} is used to specify the URL of a logo image, which will also be added to the output.
+
+% paragraph title_and_logo (end)
+
+\paragraph{Dates} % (fold)
+\label{par:dates}
+
+The Dublin Core vocabulary is used to specify relevant dates in the ontology development process. Specifically, \texttt{dcterms:created} indicates the date when the vocabulary was first created, while \texttt{dcterms:modified} indicates the date when the vocabulary was last changed (i.e., this would always be the date when the current version of the ontology was created).
+
+% paragraph dates (end)
+
+
+\paragraph{Authors} % (fold)
+\label{par:authors}
+
+\texttt{dcterms:creator}  is used to specify the main authors of the vocabulary or ontology. There can be several creators, but each one must be an instance of \texttt{foaf:Person}, complete with a \texttt{foaf:name}, \texttt{foaf:surname} and \texttt{foaf:homepage}. Optionally, it is also possible to instantiate a \texttt{foaf:Organization} with name and homepage and say that the person is \texttt{foaf:member} of it. Additional  contributors to the vocabulary can be added can be added using \texttt{dcterms:contributor}. Details for contributors are defined in the same way as authors. However, it is also possible to have any kind of \texttt{foaf:Agent} as the value. This way, it is possible to have a group as a contributor, e.g., ``members of the FAST project''.
+
+% paragraph authors (end)
+
+\paragraph{Licensing Information} % (fold)
+\label{par:licensing_information}
+
+Human-readable licensing information can be added using the property \texttt{dc:license} to point to a resource which contains human-readable licensing information. The license resource itself should be modelled with an \texttt{rdfs:label} (e.g. ``License Statement'') and an \texttt{rdfs:comment} containing the actual license text as it should appear in the output document. \texttt{rdfs:seeAlso} can be used to point to a detailed version of the license (e.g., \texttt{http://creative-commons.org/licenses/by-nc/3.0/}).
+
+% paragraph licensing_information (end)
+
+\paragraph{General Documentation} % (fold)
+\label{par:general_documentation}
+
+An arbitrary number of sections containing further human-readable documentation can be added. Each section is defined as an individual RDF resource (of arbitrary type), using \texttt{rdfs:label} (for the section's title) and \texttt{rdfs:comment} (for the section's content). These sections are linked to the ontology in the desired order using the \texttt{vs:userDocs} property. The object of the \texttt{userDocs} statement must be a list construct with the sections in the desired order.
+
+% paragraph general_documentation (end)
+
+% subsubsection annotation_properties (end)
+
+
+% subsection configuration (end)
+
+\begin{itemize}
+	\item document configuration file
+	\item will take any RDF, but the use of specific annotations will improve the usefulness of the output 
+	\item document RDF annotation vocabulary 
+	\item describe HTML output (example screenshots)
+	\item describe latex output (part of this deliverable was produced with VocDoc)
+\end{itemize}
+
+\begin{figure}
+  \begin{center}
+    \includegraphics[width=\linewidth]{images/vocdoc_preamble}
+    \caption{Screenshot showing the HTML output of VocDoc}
+    \label{fig:vocdoc_preamble}
+  \end{center}
+\end{figure}
+
+\begin{figure}
+  \begin{center}
+    \includegraphics[width=\linewidth]{images/vocdoc_overview}
+    \caption{Screenshot showing the HTML output of VocDoc}
+    \label{fig:vocdoc_overview}
+  \end{center}
+\end{figure}
+
+
+
+\clearpage
+\phantomsection
+\section{Past Changes} % (fold)
+\label{sec:old_changes}
+
+For keeping a record of past changes, this section simply lists the changes that were made between the previous two versions of this deliverable, D2.2.1~\cite{moeller2009fast_ontology} and D2.2.2~\cite{moeller2010fast_ontology}.
+
+\begin{itemize}
+	\item Sect.~\ref{sub:goal_and_scope} has been revised to better define the scope of this deliverable with respect to other deliverables.
+	\item The list of classes and properties has been moved to the appendix section at the back of the document (App.~\ref{sec:ontology_terms}), because it was felt that it would otherwise hinder the flow of the text.
+	\item In response to the M12 review, numerous graphical representations both of the underlying conceptual model as well as the concrete gadget ontology have been added to the document, using UML notation. As an example, Sect.~\ref{sub:ontology_overview} now provides a complete overview of the ontology with all classes and properties.
+	\item Also in response to the previous review, conceptual model and ontology have been extended both in breadth and depth.
+	\item As an addition to the glossary of terms in the conceptualisation phase, a section discussing and illustrating the relations between the different classes has been provided.
+	\item In order to reflect the extension of the scope of FAST towards screen creation (as opposed to screen flow creation), the conceptual model and ontology have been extended accordingly.
+	\item A mechanism for RDF templating has been devised and is discussed in Sect.~\ref{sub:classes_instances_and_templates}.
+	\item As the result of the ongoing dialogue between ontology developers and application implementers, many classes and properties have been added, changed or removed.
+	\item The section on our adopted development methodology (previously Sect.~1.3) has been moved to the end of the document (App.~\ref{sub:methontology_a_methodology_for_ontology_development}), but otherwise did not change significantly.
+	\item An evaluation section has been added (Sect.~\ref{sec:evaluation}), based on research done by the authors within the past year.
+	\item The section on design principles (previously Sect.~1.4, now Sect.~\ref{sub:general_design_decisions}) has been moved to the general evaluation section.
+	\item In the integration section (Sect.~\ref{sub:integration}) of the ontology definition, the Common Tag vocabulary for complex tagging has been added. It is briefly introduced, and the integrated terms are specified.
+	\item On a technical note, the namespace abbreviation for the FAST gadget ontology changed from \texttt{fast} to \texttt{fgo}, in order to distinguish from other FAST ontologies which may be added in the future.
+\end{itemize}
+
+% section changes_from_previous_version (end)
+
+
+\singlespacing
 \clearpage
 \phantomsection
 \bibliographystyle{apalike}
