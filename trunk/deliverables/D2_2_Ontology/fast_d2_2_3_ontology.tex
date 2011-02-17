@@ -22,6 +22,7 @@
 \usepackage{amsmath}
 \usepackage{paralist}
 \usepackage{courier}
+\usepackage{subfig}
 
 % This helps to get hyphenation in typewriter font (\texttt)
 \usepackage[htt]{hyphenat}
@@ -329,6 +330,7 @@ The following changes have been made with respect to the previous version of thi
 	\item A section for the \emph{VocDoc} tool, which was developed in part for generating online and PDF documentation for the FAST ontology, has been added as App.~\ref{sec:vocdoc}.
 	\item The ontology itself has remained more or less stable since D2.2.2.~\cite{moeller2010fast_ontology}. However, a handful of small changes and corrections have been performed, e.g., to reflect the terminology changes in the prototype section (\emph{prototype} instead of \emph{template}, \emph{clone} instead of \emph{copy}).
 	\item The document as a whole has been revised, and minor changes (mostly, spelling, grammar and small updates to reflect latest developments) have been throughout the deliverable.
+	\item The online documentation of the FAST Gadget ontology at \url{http://purl.oclc.org/fast/ontology/gadget} has been updated to reflect the changes in this version of the deliverable.
 \end{itemize}
 
 % subsection changes_from_previous_version (end)
@@ -686,7 +688,7 @@ A more detailed list of classes and properties, complete with human-readable com
 \begin{figure}
   \begin{center}
     \includegraphics[width=\linewidth]{images/fgo_uml_diagram}
-    \caption{FAST Gadget Class Hierarchy}
+    \caption{FAST Gadget Ontology Class Hierarchy}
     \label{fig:ontology_uml}
   \end{center}
 \end{figure}
@@ -856,6 +858,8 @@ Figure \ref{fig:prototype_example_graph} illustrates the same example graphicall
 This section proposed an approach for prototype-based semantics for RDF. This was done against the backdrop of different levels of building block representations within FAST, but could have much wider use. Business function modelling and other use cases have been mentioned in private discussions. E.g., there might be a class \texttt{BusinessFunction} with a concrete instance \texttt{ShippingBF}. If we want to say that there are further specialisations of \texttt{ShippingBF}, such as a \texttt{FedexBF} and a \texttt{TNTBF}, the usual class-based modelling paradigm won't help us, but prototype-based modelling will \cite{bhiri2010businessFunctionModelling}.
 
 Additionally, it should  be pointed out that in practice FAST does not currently make use of the prototyping mechanism to the fullest extent. Certain situations \emph{require} the creation of new objects from prototypes (e.g., the use of several operators of the same kind in a single screen during the screen design phase), while other situations simply benefit from the approach because it leads to a more coherent URI minting scheme (e.g., the cloning of conditions, pipes and triggers for screens). However, in yet other situations no new objects are generated, since there is no compelling reason to do so (e.g., screen components such as forms, operators and service resources are not considered part of a screen's object graph, and are therefore not cloned with it). With this in mind, FAST should be considered a first ``testing in the field'' of our proposal for prototype-based semantics, rather than a fully-fledged implementation.
+
+Furthermore, it should be mentioned that our proposal makes no assumption on how the cloning process is actually implemented, i.e., whether any cloned triples are actually materialised into the database, or if the cloning process should be handled as inference rules on top of the RDF layer. In the FAST catalogue, we are currently following the former approach.
 
 Finally, in previous versions of this deliverable we used the terms \emph{template} and \emph{copy} instead of \emph{prototype} and \emph{clone}. The change to the new terminology was done because it is much more established and well-defined. Also, the term \emph{RDF template} had been used in prior work in the community, but with a different meaning. \cite{davis2003rdf_template} use the term in analogy to XSLT, but acting on an RDF graph rather than an XML tree. \cite{kawamoto2006kawawiki} present a semantic wiki, where templates help non-technical users to create semantic descriptions. 
 
@@ -1367,7 +1371,7 @@ Below is the complete code of the FAST gadget ontology in Turtle syntax. The lat
 	label=list:ontology,
 	language=turtle
 }
-\lstinputlisting{clean.ttl}
+\lstinputlisting{fgo2011-02-11.ttl}
 
 \doublespacing
 \clearpage
@@ -1375,17 +1379,77 @@ Below is the complete code of the FAST gadget ontology in Turtle syntax. The lat
 \section{The VocDoc Ontology Documentation Tool}
 \label{sec:vocdoc}
 
-\emph{VocDoc} is a tool for the auto-generation of documentation for RDF vocabularies and ontologies. VocDoc was originally developed for use within the FAST project, but has since been used in other contexts as well, such as for generating the online documentation of the Semantic Web Conference Ontology\footnote{\url{http://data.semanticweb.org/ns/swc/ontology}}. As input, VocDoc parses the original RDF source files of the ontology, and then produces documentation in different output formats, such as HTML for online purposes, and La\TeX{} for print purposes.
+\emph{VocDoc} is a tool for the auto-generation of documentation for RDF vocabularies and ontologies. VocDoc was originally developed for use within the FAST project, but has since been used in other contexts as well, such as for generating the online documentation of the Semantic Web Conference Ontology\footnote{\url{http://data.semanticweb.org/ns/swc/ontology}}. As input, VocDoc parses the original RDF source files of the ontology, and then produces documentation in different output formats, such as HTML for online purposes, DOT\footnote{\url{http://www.graphviz.org/doc/info/lang.html}} for a visual overview and La\TeX{} for print purposes.
+
+VocDoc is available at \url{http://kantenwerk.org/vocdoc}.
+
+\subsection{VocDoc Output} % (fold)
+\label{sub:vocdoc_output}
+
+At the moment, VocDoc will either produce La\TeX{}, DOT or HTML output, depending on the parameters specified when running the tool (see Sect.~\ref{ssub:command_line_parameters}). 
+
+The La\TeX{} output is currently intended for inclusion in other documents. It consists of a list ontology terms, divided into classes and properties, with a detailed description for each. These descriptions include relations to other ontology terms (hierarchical or other), as well as various other attributes available through OWL and RDFS semantics. Related terms are linked to each other via hyperlinks. App.~\ref{sec:ontology_terms} of this deliverable was created entirely via VocDoc and serves as an example of this kind of output.
+
+The DOT output of VocDoc will produce a UML class hierarchy of the input ontology's classes in the DOT language. The ontology overview in Fig.~\ref{fig:ontology_uml} was produced in this fashion.
+
+The HTML option of VocDoc produces a stand-alone HTML document for publishing on the Web. It includes the same interlinked term list as the La\TeX{} output. In addition, and if the appropriate annotations are present in the input graph (see Sect.~\ref{sub:configuration}), the output document will also include a preamble with metadata such as authors and change date, licensing information, an overview with terms group by topic, and extended additional documentation.
+
+
+\begin{figure}
+  \begin{center}
+	\subfloat[Preamble of the HTML output]{
+	    \includegraphics[width=0.485\linewidth]{images/vocdoc_preamble}
+	    \label{fig:vocdoc_preamble}
+	}
+	\subfloat[Overview section of the HTML output]{
+	    \includegraphics[width=0.485\linewidth]{images/vocdoc_overview}
+	    \label{fig:vocdoc_overview}
+	}
+	\caption{Screenshots showing the HTML output of VocDoc}
+	\label{fig:vocdoc_html}
+  \end{center}
+\end{figure}
+
+% \begin{figure}
+%   \begin{center}
+%     \includegraphics[width=\linewidth]{images/vocdoc_overview}
+%     \caption{Screenshot showing the HTML output of VocDoc}
+%     \label{fig:vocdoc_overview}
+%   \end{center}
+% \end{figure}
+
+
+
+% subsection vocdoc_output (end)
 
 \subsection{Configuring VocDoc Processing} % (fold)
 \label{sub:configuration}
 
-In principle, VocDoc will parse any input RDF and produce output accordingly, scanning the graph for T-Box statements from the \texttt{rdf}\footnote{\url{http://www.w3.org/1999/02/22-rdf-syntax-ns\#}}, 
+In principle, VocDoc will parse any input RDF and produce output accordingly, scanning the graph for T-Box terms from the \texttt{rdf}\footnote{\url{http://www.w3.org/1999/02/22-rdf-syntax-ns\#}}, 
 \texttt{rdfs}\footnote{\url{http://www.w3.org/2000/01/rdf-schema\#}} and 
 \texttt{owl}\footnote{\url{http://www.w3.org/2002/07/owl\#}} 
-namespaces such as class and property definitions, class hierarchies or domain and range specifications. However, the output of VocDoc can be further manipulated and improved by using specific annotation statements in the input graph, providing a configuration file and using command line parameters.
+namespaces such as class and property definitions, class hierarchies or domain and range specifications. However, the output of VocDoc can be further manipulated and improved by using specific annotation statements in the input graph, providing a configuration file and using command line parameters, as explained in the sections below.
 
-\subsubsection{Annotation Properties} % (fold)
+\subsubsection{T-Box Definitions and Annotations} % (fold)
+\label{ssub:recognised_t_box_terms}
+
+VocDoc will scan the input graph for instances of the following classes from the \texttt{owl} namespace:
+
+\begin{itemize}
+	\item \textbf{Classes}: \texttt{owl:Class} and \texttt{owl:DeprecatedClass}
+	\item \textbf{Properties}: \texttt{owl:ObjectProperty}, \texttt{owl:DatatypeProperty}, \texttt{owl:FunctionalProp-erty}, \texttt{owl:InverseFunctionalProperty}, \texttt{owl:TransitiveProperty}, \texttt{owl:Symme-tricProperty} and \texttt{owl:DeprecatedProperty}
+	\item \textbf{Individuals}: instances of any of the classes defined in this ontology
+\end{itemize}
+
+For each class, the tool will furthermore find the class hierarchy (via \texttt{rdfs:subClassOf}), as well as class definitions based on OWL constructs such as \texttt{owl:unionOf}, \texttt{owl:intersectionOf} and \texttt{owl:oneOf}. Additionally, it is checked if the class is in the \texttt{rdfs:domain} or \texttt{rdfs:range} of any property defined in the same ontology.
+
+Each property is checked for its domain and range \texttt{rdfs:range} and \texttt{rdfs:domain}, placed in a term hierarchy using \texttt{rdfs:subPropertyOf} and \texttt{rdfs:superPropertyOf} and checked for \texttt{owl:inverseOf} statements.
+
+All terms in the ontology (classes and properties) can also have further annotations, such as \texttt{rdfs:label}, \texttt{rdfs:comment} (the documentation for an individual term), \texttt{dc:subject} (for grouping ontology terms in different thematic categories) and \texttt{vs:term\_status}, which can have values such as ``testing'' or ``stable''.
+
+% subsubsection recognised_t_box_terms (end)
+
+\subsubsection{Ontology Annotations} % (fold)
 \label{ssub:annotation_properties}
 
 VocDoc looks for a number of special annotation properties to structure and enhance its output. All of these properties must be used on the main \texttt{owl:Ontology} instance in the input graph. Examples for these annotations can be found in App.~\ref{sec:ontology_code}.
@@ -1428,34 +1492,66 @@ An arbitrary number of sections containing further human-readable documentation 
 
 % subsubsection annotation_properties (end)
 
+\subsubsection{Configuration File} % (fold)
+\label{ssub:configuration_file}
+
+VocDoc requires the presence of a configuration file, which is used to provide the tool with additional data required for processing the input ontology. The configuration file consists of the following simple key-value pairs (\texttt{key=value}):
+
+\begin{itemize}
+	\item \texttt{ontology\_namespace}: The namespace URI in which the ontology resides. This is used to disambiguate between different instances of \texttt{owl:Ontology}. This parameter is mandatory.
+	\item \texttt{doc\_root}: If HTML output is produced, this URI indicates where the ontology documentation and source will eventually be located online. This parameter is mandatory.
+	\item \texttt{alphabetise}: A boolean which sets if term lists should be outputted in alphabetical order.
+	\item \texttt{GA\_code}: If HTML output is produced, VocDoc can append special code needed to make Google Analytics\footnote{\url{http://www.google.com/analytics/}} work with the documentation. The code is the application code provided by Google for the user.
+\end{itemize}
+
+% subsubsection configuration_file (end)
 
 % subsection configuration (end)
 
+\subsection{Running VocDoc} % (fold)
+\label{sub:running_vocdoc}
+
+VocDoc is implemented in the Ruby scripting language as a command line tool, using the Redland RDF API\footnote{\url{http://librdf.org/}} for parsing and querying the input RDF graph. The general syntax for running as shown below, where \texttt{source\_file} indicates the input RDF file (in Turtle syntax) and \texttt{target\_folder} indicates the folder in which to write the output La\TeX{} or HTML files.
+
+\begin{verbatim}
+ruby vocdoc.rb [parameters] source_file target_folder
+\end{verbatim}
+
+\subsubsection{Command-line Parameters} % (fold)
+\label{ssub:command_line_parameters}
+
+The following command-line parameters are available:
+
+\singlespacing
+\begin{verbatim}
+-h, --help          Displays help message
+-v, --version       Display the version, then exit
+-q, --quiet         Output as little as possible, overrides verbose
+-V, --verbose       Verbose output
+--latex             output latex source into target folder, divided
+                      into "classes.tex" and "properties.tex". This 
+                      is the default.
+--html              output html source ("ontology.html") into 
+                      target folder
+\end{verbatim}
+\doublespacing
+
+% subsubsection command_line_parameters (end)
+
+\subsubsection{Requirements} % (fold)
+\label{ssub:requirements}
+
+The following requirements must be fulfilled in order to run VocDoc:
+
 \begin{itemize}
-	\item document configuration file
-	\item will take any RDF, but the use of specific annotations will improve the usefulness of the output 
-	\item document RDF annotation vocabulary 
-	\item describe HTML output (example screenshots)
-	\item describe latex output (part of this deliverable was produced with VocDoc)
+	\item Ruby must be installed.
+	\item The Redland RDF library and Ruby language bindings must be installed.
+	\item A configuration file \texttt{owl\_doc.conf} must be present in the folder where VocDoc is run.
 \end{itemize}
 
-\begin{figure}
-  \begin{center}
-    \includegraphics[width=\linewidth]{images/vocdoc_preamble}
-    \caption{Screenshot showing the HTML output of VocDoc}
-    \label{fig:vocdoc_preamble}
-  \end{center}
-\end{figure}
+% subsubsection requirements (end)
 
-\begin{figure}
-  \begin{center}
-    \includegraphics[width=\linewidth]{images/vocdoc_overview}
-    \caption{Screenshot showing the HTML output of VocDoc}
-    \label{fig:vocdoc_overview}
-  \end{center}
-\end{figure}
-
-
+% subsection running_vocdoc (end)
 
 \clearpage
 \phantomsection
