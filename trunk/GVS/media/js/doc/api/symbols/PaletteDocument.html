@@ -213,11 +213,17 @@ ul.inheritsList
 	
 	<li><a href="../symbols/BuildingBlockDescription.html">BuildingBlockDescription</a></li>
 	
+	<li><a href="../symbols/BuildingBlockDocument.html">BuildingBlockDocument</a></li>
+	
 	<li><a href="../symbols/BuildingBlockFactory.html">BuildingBlockFactory</a></li>
 	
 	<li><a href="../symbols/BuildingBlockSet.html">BuildingBlockSet</a></li>
 	
 	<li><a href="../symbols/BuildingBlockView.html">BuildingBlockView</a></li>
+	
+	<li><a href="../symbols/ButtonArrayDialog.html">ButtonArrayDialog</a></li>
+	
+	<li><a href="../symbols/CaptionDialog.html">CaptionDialog</a></li>
 	
 	<li><a href="../symbols/ComponentInstance.html">ComponentInstance</a></li>
 	
@@ -253,11 +259,11 @@ ul.inheritsList
 	
 	<li><a href="../symbols/FormComponent.html">FormComponent</a></li>
 	
+	<li><a href="../symbols/FormDescription.html">FormDescription</a></li>
+	
 	<li><a href="../symbols/FormDialog.html">FormDialog</a></li>
 	
 	<li><a href="../symbols/FormFactory.html">FormFactory</a></li>
-	
-	<li><a href="../symbols/FormInstance.html">FormInstance</a></li>
 	
 	<li><a href="../symbols/FormSnapshotView.html">FormSnapshotView</a></li>
 	
@@ -268,6 +274,8 @@ ul.inheritsList
 	<li><a href="../symbols/GVS.html">GVS</a></li>
 	
 	<li><a href="../symbols/InferenceEngine.html">InferenceEngine</a></li>
+	
+	<li><a href="../symbols/iServeDialog.html">iServeDialog</a></li>
 	
 	<li><a href="../symbols/KeyPressRegistry.html">KeyPressRegistry</a></li>
 	
@@ -281,15 +289,11 @@ ul.inheritsList
 	
 	<li><a href="../symbols/MenuElement.html">MenuElement</a></li>
 	
-	<li><a href="../symbols/NewScreenDialog.html">NewScreenDialog</a></li>
-	
-	<li><a href="../symbols/NewScreenflowDialog.html">NewScreenflowDialog</a></li>
+	<li><a href="../symbols/NewBuildingBlockDialog.html">NewBuildingBlockDialog</a></li>
 	
 	<li><a href="../symbols/OperatorComponent.html">OperatorComponent</a></li>
 	
 	<li><a href="../symbols/OperatorFactory.html">OperatorFactory</a></li>
-	
-	<li><a href="../symbols/OperatorInstance.html">OperatorInstance</a></li>
 	
 	<li><a href="../symbols/OperatorView.html">OperatorView</a></li>
 	
@@ -300,6 +304,10 @@ ul.inheritsList
 	<li><a href="../symbols/PaletteController.html">PaletteController</a></li>
 	
 	<li><a href="../symbols/PaletteDocument.html">PaletteDocument</a></li>
+	
+	<li><a href="../symbols/PaletteSearchBox.html">PaletteSearchBox</a></li>
+	
+	<li><a href="../symbols/ParamsDialog.html">ParamsDialog</a></li>
 	
 	<li><a href="../symbols/Pipe.html">Pipe</a></li>
 	
@@ -331,13 +339,15 @@ ul.inheritsList
 	
 	<li><a href="../symbols/PublishGadgetDialog.html">PublishGadgetDialog</a></li>
 	
+	<li><a href="../symbols/RecommendationManager.html">RecommendationManager</a></li>
+	
 	<li><a href="../symbols/ResourceComponent.html">ResourceComponent</a></li>
 	
 	<li><a href="../symbols/ResourceFactory.html">ResourceFactory</a></li>
 	
-	<li><a href="../symbols/ResourceInstance.html">ResourceInstance</a></li>
-	
 	<li><a href="../symbols/ResourceView.html">ResourceView</a></li>
+	
+	<li><a href="../symbols/SaveAsDialog.html">SaveAsDialog</a></li>
 	
 	<li><a href="../symbols/ScreenCanvasCache.html">ScreenCanvasCache</a></li>
 	
@@ -359,7 +369,7 @@ ul.inheritsList
 	
 	<li><a href="../symbols/ScreenflowInferenceEngine.html">ScreenflowInferenceEngine</a></li>
 	
-	<li><a href="../symbols/ScreenflowInstance.html">ScreenflowInstance</a></li>
+	<li><a href="../symbols/ScreenflowPlayer.html">ScreenflowPlayer</a></li>
 	
 	<li><a href="../symbols/ScreenInferenceEngine.html">ScreenInferenceEngine</a></li>
 	
@@ -570,7 +580,8 @@ ul.inheritsList
 								<div class="fixedFont">
 								<b><a href="../symbols/PaletteDocument.html#_pendingOperation">_pendingOperation</a></b>
 								</div>
-								<div class="description">An operation pending to be executed whenthe saving process is finished</div>
+								<div class="description">An operation pending to be executed when
+the saving process is finished</div>
 							</td>
 						</tr>
 					
@@ -652,7 +663,7 @@ ul.inheritsList
 						<tr>
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/PaletteDocument.html#_addToArea">_addToArea</a></b>(area, instance, position)
+								<div class="fixedFont"><b><a href="../symbols/PaletteDocument.html#_addToArea">_addToArea</a></b>(area, instance, position, orientation)
 								</div>
 								<div class="description"></div>
 							</td>
@@ -695,11 +706,21 @@ ul.inheritsList
 						</tr>
 					
 						<tr>
+							<td class="attributes">&lt;private&gt; &nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/PaletteDocument.html#_effectiveCloseDocument">_effectiveCloseDocument</a></b>(status)
+								</div>
+								<div class="description">Effectively close the document</div>
+							</td>
+						</tr>
+					
+						<tr>
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
 								<div class="fixedFont"><b><a href="../symbols/PaletteDocument.html#_getAllFacts">_getAllFacts</a></b>()
 								</div>
-								<div class="description">This function returns the data array containing all thefacts belonging to the screenflow</div>
+								<div class="description">This function returns the data array containing all the
+facts belonging to the screenflow</div>
 							</td>
 						</tr>
 					
@@ -751,6 +772,24 @@ ul.inheritsList
 						<tr>
 							<td class="attributes">&lt;private&gt; &nbsp;</td>
 							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/PaletteDocument.html#_getExtraParams">_getExtraParams</a></b>()
+								</div>
+								<div class="description">Returns extra params for specific building blocks</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;private&gt; &nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/PaletteDocument.html#_getExtraProperties">_getExtraProperties</a></b>()
+								</div>
+								<div class="description">Returns extra properties of the building block</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;private&gt; &nbsp;</td>
+							<td class="nameDescription">
 								<div class="fixedFont"><b><a href="../symbols/PaletteDocument.html#_getSaveUri">_getSaveUri</a></b>()
 								</div>
 								<div class="description">Returns the save uri</div>
@@ -769,6 +808,15 @@ ul.inheritsList
 						<tr>
 							<td class="attributes">&lt;private&gt; &nbsp;</td>
 							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/PaletteDocument.html#_getType">_getType</a></b>()
+								</div>
+								<div class="description">Get the document type for saving purposes</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;private&gt; &nbsp;</td>
+							<td class="nameDescription">
 								<div class="fixedFont"><b><a href="../symbols/PaletteDocument.html#_onClick">_onClick</a></b>()
 								</div>
 								<div class="description">onClick handler</div>
@@ -781,6 +829,15 @@ ul.inheritsList
 								<div class="fixedFont"><b><a href="../symbols/PaletteDocument.html#_onPropertiesChange">_onPropertiesChange</a></b>()
 								</div>
 								<div class="description">Call whenever a properties dialog has been changed</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/PaletteDocument.html#_onSaveAsSuccess">_onSaveAsSuccess</a></b>(name, version)
+								</div>
+								<div class="description"></div>
 							</td>
 						</tr>
 					
@@ -807,7 +864,9 @@ ul.inheritsList
 							<td class="nameDescription">
 								<div class="fixedFont"><b><a href="../symbols/PaletteDocument.html#_previewSelectedElement">_previewSelectedElement</a></b>()
 								</div>
-								<div class="description">Previews the selected elementdepending on the type of theselected element</div>
+								<div class="description">Previews the selected element
+depending on the type of the
+selected element</div>
 							</td>
 						</tr>
 					
@@ -816,7 +875,8 @@ ul.inheritsList
 							<td class="nameDescription">
 								<div class="fixedFont"><b><a href="../symbols/PaletteDocument.html#_renderCenterContainer">_renderCenterContainer</a></b>()
 								</div>
-								<div class="description">This function creates the area containing the canvasand the inspectors</div>
+								<div class="description">This function creates the area containing the canvas
+and the inspectors</div>
 							</td>
 						</tr>
 					
@@ -841,9 +901,28 @@ ul.inheritsList
 						<tr>
 							<td class="attributes">&lt;private&gt; &nbsp;</td>
 							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/PaletteDocument.html#_rotateSelectedElement">_rotateSelectedElement</a></b>()
+								</div>
+								<div class="description">This function rotate the element</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;private&gt; &nbsp;</td>
+							<td class="nameDescription">
 								<div class="fixedFont"><b><a href="../symbols/PaletteDocument.html#_save">_save</a></b>(_showMessage)
 								</div>
 								<div class="description">Starts the process of saving the screenflow</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;private&gt; &nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/PaletteDocument.html#_saveAs">_saveAs</a></b>(cloned)
+								</div>
+								<div class="description">Create a copy of the document with a new name/version
+To be extended</div>
 							</td>
 						</tr>
 					
@@ -859,7 +938,7 @@ ul.inheritsList
 						<tr>
 							<td class="attributes">&lt;private&gt; &nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/PaletteDocument.html#_setSelectedElement">_setSelectedElement</a></b>(element)
+								<div class="fixedFont"><b><a href="../symbols/PaletteDocument.html#_setSelectedElement">_setSelectedElement</a></b>(element, _refresh)
 								</div>
 								<div class="description">Select an element in the document</div>
 							</td>
@@ -886,6 +965,15 @@ ul.inheritsList
 						<tr>
 							<td class="attributes">&lt;private&gt; &nbsp;</td>
 							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/PaletteDocument.html#_updatePanes">_updatePanes</a></b>()
+								</div>
+								<div class="description">Updates the panes with the selected element</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;private&gt; &nbsp;</td>
+							<td class="nameDescription">
 								<div class="fixedFont"><b><a href="../symbols/PaletteDocument.html#_updateToolbar">_updateToolbar</a></b>(element)
 								</div>
 								<div class="description">Updates the toolbar with the selected element</div>
@@ -895,7 +983,16 @@ ul.inheritsList
 						<tr>
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/PaletteDocument.html#elementClicked">elementClicked</a></b>(element, e)
+								<div class="fixedFont"><b><a href="../symbols/PaletteDocument.html#deleteInstance">deleteInstance</a></b>(instanceId)
+								</div>
+								<div class="description"></div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/PaletteDocument.html#elementClicked">elementClicked</a></b>(element)
 								</div>
 								<div class="description">Implementing event listener</div>
 							</td>
@@ -940,6 +1037,15 @@ ul.inheritsList
 						<tr>
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/PaletteDocument.html#modified">modified</a></b>(element)
+								</div>
+								<div class="description">Implementing event listener</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
 								<div class="fixedFont"><b><a href="../symbols/PaletteDocument.html#onKeyPressed">onKeyPressed</a></b>(key)
 								</div>
 								<div class="description">Key press event handler</div>
@@ -949,9 +1055,27 @@ ul.inheritsList
 						<tr>
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/PaletteDocument.html#orientationUpdated">orientationUpdated</a></b>(element, orientation)
+								</div>
+								<div class="description">Implementing event listener</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
 								<div class="fixedFont"><b><a href="../symbols/PaletteDocument.html#positionUpdated">positionUpdated</a></b>(element, position)
 								</div>
 								<div class="description">Implementing event listener</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/PaletteDocument.html#rotateInstance">rotateInstance</a></b>(element)
+								</div>
+								<div class="description"></div>
 							</td>
 						</tr>
 					
@@ -978,7 +1102,8 @@ ul.inheritsList
 				</div>
 				
 				<div class="description">
-					Represents a document and its tab. Subclasses must provide the inner content.
+					Represents a document and its tab. Subclasses must provide the
+inner content.
 					
 				</div>
 				
@@ -1281,7 +1406,8 @@ ul.inheritsList
 					
 					</div>
 					<div class="description">
-						An operation pending to be executed whenthe saving process is finished
+						An operation pending to be executed when
+the saving process is finished
 						
 						
 					</div>
@@ -1417,7 +1543,7 @@ ul.inheritsList
 					<div class="fixedFont">
 					
 					
-					<b>_addToArea</b>(area, instance, position)
+					<b>_addToArea</b>(area, instance, position, orientation)
 					
 					</div>
 					<div class="description">
@@ -1446,6 +1572,12 @@ ul.inheritsList
 							
 								<dt>
 									<span class="light fixedFont">{Object}</span> <b>position</b>
+									
+								</dt>
+								<dd></dd>
+							
+								<dt>
+									<span class="light fixedFont">{Integer}</span> <b>orientation</b>
 									
 								</dt>
 								<dd></dd>
@@ -1557,7 +1689,9 @@ ul.inheritsList
 									<b>instance</b>
 									
 								</dt>
-								<dd>ComponentInstance     Instance to be deleted from the     Screenflow document.</dd>
+								<dd>ComponentInstance
+     Instance to be deleted from the
+     Screenflow document.</dd>
 							
 							</dl>
 						
@@ -1595,6 +1729,42 @@ ul.inheritsList
 
 					<hr />
 				
+					<a name="_effectiveCloseDocument"> </a>
+					<div class="fixedFont">&lt;private&gt; 
+					
+					
+					<b>_effectiveCloseDocument</b>(status)
+					
+					</div>
+					<div class="description">
+						Effectively close the document
+						
+						
+					</div>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>status</b>
+									
+								</dt>
+								<dd></dd>
+							
+							</dl>
+						
+						
+						
+						
+						
+						
+						
+
+					<hr />
+				
 					<a name="_getAllFacts"> </a>
 					<div class="fixedFont">
 					
@@ -1603,7 +1773,8 @@ ul.inheritsList
 					
 					</div>
 					<div class="description">
-						This function returns the data array containing all thefacts belonging to the screenflow
+						This function returns the data array containing all the
+facts belonging to the screenflow
 						
 						
 					</div>
@@ -1767,6 +1938,56 @@ ul.inheritsList
 
 					<hr />
 				
+					<a name="_getExtraParams"> </a>
+					<div class="fixedFont">&lt;private&gt; 
+					
+					<span class="light">{Object}</span>
+					<b>_getExtraParams</b>()
+					
+					</div>
+					<div class="description">
+						Returns extra params for specific building blocks
+						
+						
+					</div>
+					
+					
+					
+						
+						
+						
+						
+						
+						
+						
+
+					<hr />
+				
+					<a name="_getExtraProperties"> </a>
+					<div class="fixedFont">&lt;private&gt; 
+					
+					<span class="light">{Object}</span>
+					<b>_getExtraProperties</b>()
+					
+					</div>
+					<div class="description">
+						Returns extra properties of the building block
+						
+						
+					</div>
+					
+					
+					
+						
+						
+						
+						
+						
+						
+						
+
+					<hr />
+				
 					<a name="_getSaveUri"> </a>
 					<div class="fixedFont">&lt;private&gt; 
 					
@@ -1801,6 +2022,31 @@ ul.inheritsList
 					</div>
 					<div class="description">
 						Returns the sets of the document
+						
+						
+					</div>
+					
+					
+					
+						
+						
+						
+						
+						
+						
+						
+
+					<hr />
+				
+					<a name="_getType"> </a>
+					<div class="fixedFont">&lt;private&gt; 
+					
+					<span class="light">{String}</span>
+					<b>_getType</b>()
+					
+					</div>
+					<div class="description">
+						Get the document type for saving purposes
 						
 						
 					</div>
@@ -1857,6 +2103,48 @@ ul.inheritsList
 					
 					
 					
+						
+						
+						
+						
+						
+						
+						
+
+					<hr />
+				
+					<a name="_onSaveAsSuccess"> </a>
+					<div class="fixedFont">
+					
+					
+					<b>_onSaveAsSuccess</b>(name, version)
+					
+					</div>
+					<div class="description">
+						
+						
+						
+					</div>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>name</b>
+									
+								</dt>
+								<dd></dd>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>version</b>
+									
+								</dt>
+								<dd></dd>
+							
+							</dl>
 						
 						
 						
@@ -1947,7 +2235,9 @@ ul.inheritsList
 					
 					</div>
 					<div class="description">
-						Previews the selected elementdepending on the type of theselected element
+						Previews the selected element
+depending on the type of the
+selected element
 						
 						
 					</div>
@@ -1972,7 +2262,8 @@ ul.inheritsList
 					
 					</div>
 					<div class="description">
-						This function creates the area containing the canvasand the inspectors
+						This function creates the area containing the canvas
+and the inspectors
 						
 						
 					</div>
@@ -2039,6 +2330,31 @@ ul.inheritsList
 
 					<hr />
 				
+					<a name="_rotateSelectedElement"> </a>
+					<div class="fixedFont">&lt;private&gt; 
+					
+					
+					<b>_rotateSelectedElement</b>()
+					
+					</div>
+					<div class="description">
+						This function rotate the element
+						
+						
+					</div>
+					
+					
+					
+						
+						
+						
+						
+						
+						
+						
+
+					<hr />
+				
 					<a name="_save"> </a>
 					<div class="fixedFont">&lt;private&gt; 
 					
@@ -2060,6 +2376,43 @@ ul.inheritsList
 							
 								<dt>
 									<span class="light fixedFont">{Boolean (Optional)}</span> <b>_showMessage</b>
+									
+								</dt>
+								<dd></dd>
+							
+							</dl>
+						
+						
+						
+						
+						
+						
+						
+
+					<hr />
+				
+					<a name="_saveAs"> </a>
+					<div class="fixedFont">&lt;private&gt; 
+					
+					
+					<b>_saveAs</b>(cloned)
+					
+					</div>
+					<div class="description">
+						Create a copy of the document with a new name/version
+To be extended
+						
+						
+					</div>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{Boolean}</span> <b>cloned</b>
 									
 								</dt>
 								<dd></dd>
@@ -2115,7 +2468,7 @@ ul.inheritsList
 					<div class="fixedFont">&lt;private&gt; 
 					
 					
-					<b>_setSelectedElement</b>(element)
+					<b>_setSelectedElement</b>(element, _refresh)
 					
 					</div>
 					<div class="description">
@@ -2134,7 +2487,15 @@ ul.inheritsList
 									<b>element</b>
 									
 								</dt>
-								<dd>ComponentInstance     Element to be selected for the     Screenflow document.</dd>
+								<dd>ComponentInstance
+     Element to be selected for the
+     document.</dd>
+							
+								<dt>
+									<b>_refresh</b>
+									
+								</dt>
+								<dd>Boolean (Optional)</dd>
 							
 							</dl>
 						
@@ -2197,6 +2558,31 @@ ul.inheritsList
 
 					<hr />
 				
+					<a name="_updatePanes"> </a>
+					<div class="fixedFont">&lt;private&gt; 
+					
+					
+					<b>_updatePanes</b>()
+					
+					</div>
+					<div class="description">
+						Updates the panes with the selected element
+						
+						
+					</div>
+					
+					
+					
+						
+						
+						
+						
+						
+						
+						
+
+					<hr />
+				
 					<a name="_updateToolbar"> </a>
 					<div class="fixedFont">&lt;private&gt; 
 					
@@ -2233,11 +2619,47 @@ ul.inheritsList
 
 					<hr />
 				
+					<a name="deleteInstance"> </a>
+					<div class="fixedFont">
+					
+					
+					<b>deleteInstance</b>(instanceId)
+					
+					</div>
+					<div class="description">
+						
+						
+						
+					</div>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<b>instanceId</b>
+									
+								</dt>
+								<dd></dd>
+							
+							</dl>
+						
+						
+						
+						
+						
+						
+						
+
+					<hr />
+				
 					<a name="elementClicked"> </a>
 					<div class="fixedFont">
 					
 					
-					<b>elementClicked</b>(element, e)
+					<b>elementClicked</b>(element)
 					
 					</div>
 					<div class="description">
@@ -2254,12 +2676,6 @@ ul.inheritsList
 							
 								<dt>
 									<span class="light fixedFont">{<a href="../symbols/ComponentInstance.html#constructor">ComponentInstance</a>}</span> <b>element</b>
-									
-								</dt>
-								<dd></dd>
-							
-								<dt>
-									<span class="light fixedFont">{Event}</span> <b>e</b>
 									
 								</dt>
 								<dd></dd>
@@ -2392,6 +2808,42 @@ ul.inheritsList
 
 					<hr />
 				
+					<a name="modified"> </a>
+					<div class="fixedFont">
+					
+					
+					<b>modified</b>(element)
+					
+					</div>
+					<div class="description">
+						Implementing event listener
+						
+						
+					</div>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{<a href="../symbols/ComponentInstance.html#constructor">ComponentInstance</a>}</span> <b>element</b>
+									
+								</dt>
+								<dd></dd>
+							
+							</dl>
+						
+						
+						
+						
+						
+						
+						
+
+					<hr />
+				
 					<a name="onKeyPressed"> </a>
 					<div class="fixedFont">
 					
@@ -2413,6 +2865,48 @@ ul.inheritsList
 							
 								<dt>
 									<span class="light fixedFont">{String}</span> <b>key</b>
+									
+								</dt>
+								<dd></dd>
+							
+							</dl>
+						
+						
+						
+						
+						
+						
+						
+
+					<hr />
+				
+					<a name="orientationUpdated"> </a>
+					<div class="fixedFont">
+					
+					
+					<b>orientationUpdated</b>(element, orientation)
+					
+					</div>
+					<div class="description">
+						Implementing event listener
+						
+						
+					</div>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{<a href="../symbols/ComponentInstance.html#constructor">ComponentInstance</a>}</span> <b>element</b>
+									
+								</dt>
+								<dd></dd>
+							
+								<dt>
+									<span class="light fixedFont">{Integer}</span> <b>orientation</b>
 									
 								</dt>
 								<dd></dd>
@@ -2468,6 +2962,42 @@ ul.inheritsList
 						
 						
 
+					<hr />
+				
+					<a name="rotateInstance"> </a>
+					<div class="fixedFont">
+					
+					
+					<b>rotateInstance</b>(element)
+					
+					</div>
+					<div class="description">
+						
+						
+						
+					</div>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<b>element</b>
+									
+								</dt>
+								<dd></dd>
+							
+							</dl>
+						
+						
+						
+						
+						
+						
+						
+
 					
 				
 			
@@ -2478,7 +3008,7 @@ ul.inheritsList
 <!-- ============================== footer ================================= -->
 		<div class="fineprint" style="clear:both">
 			
-			Documentation generated by <a href="http://www.jsdoctoolkit.org/" target="_blank">JsDoc Toolkit</a> 2.0.2 on Tue Feb 23 2010 17:57:00 GMT+0100 (CET)
+			Documentation generated by <a href="http://www.jsdoctoolkit.org/" target="_blank">JsDoc Toolkit</a> 2.0.2 on Fri Feb 18 2011 12:18:15 GMT+0100 (CET)
 		</div>
 	</body>
 </html>

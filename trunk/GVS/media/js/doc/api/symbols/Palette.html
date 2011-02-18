@@ -213,11 +213,17 @@ ul.inheritsList
 	
 	<li><a href="../symbols/BuildingBlockDescription.html">BuildingBlockDescription</a></li>
 	
+	<li><a href="../symbols/BuildingBlockDocument.html">BuildingBlockDocument</a></li>
+	
 	<li><a href="../symbols/BuildingBlockFactory.html">BuildingBlockFactory</a></li>
 	
 	<li><a href="../symbols/BuildingBlockSet.html">BuildingBlockSet</a></li>
 	
 	<li><a href="../symbols/BuildingBlockView.html">BuildingBlockView</a></li>
+	
+	<li><a href="../symbols/ButtonArrayDialog.html">ButtonArrayDialog</a></li>
+	
+	<li><a href="../symbols/CaptionDialog.html">CaptionDialog</a></li>
 	
 	<li><a href="../symbols/ComponentInstance.html">ComponentInstance</a></li>
 	
@@ -253,11 +259,11 @@ ul.inheritsList
 	
 	<li><a href="../symbols/FormComponent.html">FormComponent</a></li>
 	
+	<li><a href="../symbols/FormDescription.html">FormDescription</a></li>
+	
 	<li><a href="../symbols/FormDialog.html">FormDialog</a></li>
 	
 	<li><a href="../symbols/FormFactory.html">FormFactory</a></li>
-	
-	<li><a href="../symbols/FormInstance.html">FormInstance</a></li>
 	
 	<li><a href="../symbols/FormSnapshotView.html">FormSnapshotView</a></li>
 	
@@ -268,6 +274,8 @@ ul.inheritsList
 	<li><a href="../symbols/GVS.html">GVS</a></li>
 	
 	<li><a href="../symbols/InferenceEngine.html">InferenceEngine</a></li>
+	
+	<li><a href="../symbols/iServeDialog.html">iServeDialog</a></li>
 	
 	<li><a href="../symbols/KeyPressRegistry.html">KeyPressRegistry</a></li>
 	
@@ -281,15 +289,11 @@ ul.inheritsList
 	
 	<li><a href="../symbols/MenuElement.html">MenuElement</a></li>
 	
-	<li><a href="../symbols/NewScreenDialog.html">NewScreenDialog</a></li>
-	
-	<li><a href="../symbols/NewScreenflowDialog.html">NewScreenflowDialog</a></li>
+	<li><a href="../symbols/NewBuildingBlockDialog.html">NewBuildingBlockDialog</a></li>
 	
 	<li><a href="../symbols/OperatorComponent.html">OperatorComponent</a></li>
 	
 	<li><a href="../symbols/OperatorFactory.html">OperatorFactory</a></li>
-	
-	<li><a href="../symbols/OperatorInstance.html">OperatorInstance</a></li>
 	
 	<li><a href="../symbols/OperatorView.html">OperatorView</a></li>
 	
@@ -300,6 +304,10 @@ ul.inheritsList
 	<li><a href="../symbols/PaletteController.html">PaletteController</a></li>
 	
 	<li><a href="../symbols/PaletteDocument.html">PaletteDocument</a></li>
+	
+	<li><a href="../symbols/PaletteSearchBox.html">PaletteSearchBox</a></li>
+	
+	<li><a href="../symbols/ParamsDialog.html">ParamsDialog</a></li>
 	
 	<li><a href="../symbols/Pipe.html">Pipe</a></li>
 	
@@ -331,13 +339,15 @@ ul.inheritsList
 	
 	<li><a href="../symbols/PublishGadgetDialog.html">PublishGadgetDialog</a></li>
 	
+	<li><a href="../symbols/RecommendationManager.html">RecommendationManager</a></li>
+	
 	<li><a href="../symbols/ResourceComponent.html">ResourceComponent</a></li>
 	
 	<li><a href="../symbols/ResourceFactory.html">ResourceFactory</a></li>
 	
-	<li><a href="../symbols/ResourceInstance.html">ResourceInstance</a></li>
-	
 	<li><a href="../symbols/ResourceView.html">ResourceView</a></li>
+	
+	<li><a href="../symbols/SaveAsDialog.html">SaveAsDialog</a></li>
 	
 	<li><a href="../symbols/ScreenCanvasCache.html">ScreenCanvasCache</a></li>
 	
@@ -359,7 +369,7 @@ ul.inheritsList
 	
 	<li><a href="../symbols/ScreenflowInferenceEngine.html">ScreenflowInferenceEngine</a></li>
 	
-	<li><a href="../symbols/ScreenflowInstance.html">ScreenflowInstance</a></li>
+	<li><a href="../symbols/ScreenflowPlayer.html">ScreenflowPlayer</a></li>
 	
 	<li><a href="../symbols/ScreenInferenceEngine.html">ScreenInferenceEngine</a></li>
 	
@@ -485,6 +495,16 @@ ul.inheritsList
 						</tr>
 					
 						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">
+								<b><a href="../symbols/Palette.html#_filterComponents">_filterComponents</a></b>
+								</div>
+								<div class="description">Hiden component if not match filter</div>
+							</td>
+						</tr>
+					
+						<tr>
 							<td class="attributes">&lt;private&gt; &nbsp;</td>
 							<td class="nameDescription">
 								<div class="fixedFont">
@@ -542,9 +562,9 @@ ul.inheritsList
 						<tr>
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/Palette.html#_addComponentFor">_addComponentFor</a></b>(desc)
+								<div class="fixedFont"><b><a href="../symbols/Palette.html#_buildComponentFor">_buildComponentFor</a></b>(desc)
 								</div>
-								<div class="description">Adds a new component to the palette</div>
+								<div class="description">Build a new component</div>
 							</td>
 						</tr>
 					
@@ -587,6 +607,15 @@ ul.inheritsList
 						<tr>
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/Palette.html#getContentNode">getContentNode</a></b>()
+								</div>
+								<div class="description">Gets the node of the contents</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
 								<div class="fixedFont"><b><a href="../symbols/Palette.html#getNode">getNode</a></b>()
 								</div>
 								<div class="description">Gets the node of the accordion pane</div>
@@ -598,7 +627,8 @@ ul.inheritsList
 							<td class="nameDescription">
 								<div class="fixedFont"><b><a href="../symbols/Palette.html#setChanged">setChanged</a></b>()
 								</div>
-								<div class="description">This function will be called wheneverthe set of building blocks changes</div>
+								<div class="description">This function will be called whenever
+the set of building blocks changes</div>
 							</td>
 						</tr>
 					
@@ -738,6 +768,28 @@ ul.inheritsList
 
 					<hr />
 				
+					<a name="_filterComponents"> </a>
+					<div class="fixedFont">
+					
+					
+					<b>_filterComponents</b>
+					
+					</div>
+					<div class="description">
+						Hiden component if not match filter
+						
+						
+					</div>
+					
+					
+
+						
+						
+						
+						
+
+					<hr />
+				
 					<a name="_inferenceEngine"> </a>
 					<div class="fixedFont">&lt;private&gt; 
 					
@@ -812,15 +864,15 @@ ul.inheritsList
 					Method Detail
 				</div>
 				
-					<a name="_addComponentFor"> </a>
+					<a name="_buildComponentFor"> </a>
 					<div class="fixedFont">
 					
 					
-					<b>_addComponentFor</b>(desc)
+					<b>_buildComponentFor</b>(desc)
 					
 					</div>
 					<div class="description">
-						Adds a new component to the palette
+						Build a new component
 						
 						
 					</div>
@@ -948,6 +1000,31 @@ ul.inheritsList
 
 					<hr />
 				
+					<a name="getContentNode"> </a>
+					<div class="fixedFont">
+					
+					<span class="light">{DOMNode}</span>
+					<b>getContentNode</b>()
+					
+					</div>
+					<div class="description">
+						Gets the node of the contents
+						
+						
+					</div>
+					
+					
+					
+						
+						
+						
+						
+						
+						
+						
+
+					<hr />
+				
 					<a name="getNode"> </a>
 					<div class="fixedFont">
 					
@@ -981,7 +1058,8 @@ ul.inheritsList
 					
 					</div>
 					<div class="description">
-						This function will be called wheneverthe set of building blocks changes
+						This function will be called whenever
+the set of building blocks changes
 						
 						
 					</div>
@@ -1006,7 +1084,7 @@ ul.inheritsList
 <!-- ============================== footer ================================= -->
 		<div class="fineprint" style="clear:both">
 			
-			Documentation generated by <a href="http://www.jsdoctoolkit.org/" target="_blank">JsDoc Toolkit</a> 2.0.2 on Tue Feb 23 2010 17:57:00 GMT+0100 (CET)
+			Documentation generated by <a href="http://www.jsdoctoolkit.org/" target="_blank">JsDoc Toolkit</a> 2.0.2 on Fri Feb 18 2011 12:18:15 GMT+0100 (CET)
 		</div>
 	</body>
 </html>

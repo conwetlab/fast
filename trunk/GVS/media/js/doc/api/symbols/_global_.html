@@ -213,11 +213,17 @@ ul.inheritsList
 	
 	<li><a href="../symbols/BuildingBlockDescription.html">BuildingBlockDescription</a></li>
 	
+	<li><a href="../symbols/BuildingBlockDocument.html">BuildingBlockDocument</a></li>
+	
 	<li><a href="../symbols/BuildingBlockFactory.html">BuildingBlockFactory</a></li>
 	
 	<li><a href="../symbols/BuildingBlockSet.html">BuildingBlockSet</a></li>
 	
 	<li><a href="../symbols/BuildingBlockView.html">BuildingBlockView</a></li>
+	
+	<li><a href="../symbols/ButtonArrayDialog.html">ButtonArrayDialog</a></li>
+	
+	<li><a href="../symbols/CaptionDialog.html">CaptionDialog</a></li>
 	
 	<li><a href="../symbols/ComponentInstance.html">ComponentInstance</a></li>
 	
@@ -253,11 +259,11 @@ ul.inheritsList
 	
 	<li><a href="../symbols/FormComponent.html">FormComponent</a></li>
 	
+	<li><a href="../symbols/FormDescription.html">FormDescription</a></li>
+	
 	<li><a href="../symbols/FormDialog.html">FormDialog</a></li>
 	
 	<li><a href="../symbols/FormFactory.html">FormFactory</a></li>
-	
-	<li><a href="../symbols/FormInstance.html">FormInstance</a></li>
 	
 	<li><a href="../symbols/FormSnapshotView.html">FormSnapshotView</a></li>
 	
@@ -268,6 +274,8 @@ ul.inheritsList
 	<li><a href="../symbols/GVS.html">GVS</a></li>
 	
 	<li><a href="../symbols/InferenceEngine.html">InferenceEngine</a></li>
+	
+	<li><a href="../symbols/iServeDialog.html">iServeDialog</a></li>
 	
 	<li><a href="../symbols/KeyPressRegistry.html">KeyPressRegistry</a></li>
 	
@@ -281,15 +289,11 @@ ul.inheritsList
 	
 	<li><a href="../symbols/MenuElement.html">MenuElement</a></li>
 	
-	<li><a href="../symbols/NewScreenDialog.html">NewScreenDialog</a></li>
-	
-	<li><a href="../symbols/NewScreenflowDialog.html">NewScreenflowDialog</a></li>
+	<li><a href="../symbols/NewBuildingBlockDialog.html">NewBuildingBlockDialog</a></li>
 	
 	<li><a href="../symbols/OperatorComponent.html">OperatorComponent</a></li>
 	
 	<li><a href="../symbols/OperatorFactory.html">OperatorFactory</a></li>
-	
-	<li><a href="../symbols/OperatorInstance.html">OperatorInstance</a></li>
 	
 	<li><a href="../symbols/OperatorView.html">OperatorView</a></li>
 	
@@ -300,6 +304,10 @@ ul.inheritsList
 	<li><a href="../symbols/PaletteController.html">PaletteController</a></li>
 	
 	<li><a href="../symbols/PaletteDocument.html">PaletteDocument</a></li>
+	
+	<li><a href="../symbols/PaletteSearchBox.html">PaletteSearchBox</a></li>
+	
+	<li><a href="../symbols/ParamsDialog.html">ParamsDialog</a></li>
 	
 	<li><a href="../symbols/Pipe.html">Pipe</a></li>
 	
@@ -331,13 +339,15 @@ ul.inheritsList
 	
 	<li><a href="../symbols/PublishGadgetDialog.html">PublishGadgetDialog</a></li>
 	
+	<li><a href="../symbols/RecommendationManager.html">RecommendationManager</a></li>
+	
 	<li><a href="../symbols/ResourceComponent.html">ResourceComponent</a></li>
 	
 	<li><a href="../symbols/ResourceFactory.html">ResourceFactory</a></li>
 	
-	<li><a href="../symbols/ResourceInstance.html">ResourceInstance</a></li>
-	
 	<li><a href="../symbols/ResourceView.html">ResourceView</a></li>
+	
+	<li><a href="../symbols/SaveAsDialog.html">SaveAsDialog</a></li>
 	
 	<li><a href="../symbols/ScreenCanvasCache.html">ScreenCanvasCache</a></li>
 	
@@ -359,7 +369,7 @@ ul.inheritsList
 	
 	<li><a href="../symbols/ScreenflowInferenceEngine.html">ScreenflowInferenceEngine</a></li>
 	
-	<li><a href="../symbols/ScreenflowInstance.html">ScreenflowInstance</a></li>
+	<li><a href="../symbols/ScreenflowPlayer.html">ScreenflowPlayer</a></li>
 	
 	<li><a href="../symbols/ScreenInferenceEngine.html">ScreenInferenceEngine</a></li>
 	
@@ -455,7 +465,8 @@ ul.inheritsList
 								<div class="fixedFont">
 								<b><a href="../symbols/_global_.html#_cachedShortcuts">_cachedShortcuts</a></b>
 								</div>
-								<div class="description">This array stores the shortcutsbeing used in the execution</div>
+								<div class="description">This array stores the shortcuts
+being used in the execution</div>
 							</td>
 						</tr>
 					
@@ -564,6 +575,17 @@ resource that contains the terminal</div>
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
 								<div class="fixedFont">
+								<b><a href="../symbols/_global_.html#DumbInferenceEngine">DumbInferenceEngine</a></b>
+								</div>
+								<div class="description">This class is included here due to PaletteDocument restrictions,
+which need an instance of an InferenceEngine.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">
 								<b><a href="../symbols/_global_.html#FactFactory">FactFactory</a></b>
 								</div>
 								<div class="description">This class is used to create facts representations.</div>
@@ -576,7 +598,12 @@ resource that contains the terminal</div>
 								<div class="fixedFont">
 								<b><a href="../symbols/_global_.html#Geometry">Geometry</a></b>
 								</div>
-								<div class="description">Notation:   Rectangles are represented as objects:      rectangle.left      rectangle.top      rectangle.botttom      rectangle.right</div>
+								<div class="description">Notation:
+   Rectangles are represented as objects:
+      rectangle.left
+      rectangle.top
+      rectangle.botttom
+      rectangle.right</div>
 							</td>
 						</tr>
 					
@@ -612,6 +639,24 @@ resource that contains the terminal</div>
 					<tbody>
 					
 						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/_global_.html#_buildLine">_buildLine</a></b>(line, events)
+								</div>
+								<div class="description"></div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/_global_.html#_createLine">_createLine</a></b>(label, inputNode)
+								</div>
+								<div class="description"></div>
+							</td>
+						</tr>
+					
+						<tr>
 							<td class="attributes">&lt;private&gt; &nbsp;</td>
 							<td class="nameDescription">
 								<div class="fixedFont"><b><a href="../symbols/_global_.html#_extractDescription">_extractDescription</a></b>(factData)
@@ -625,7 +670,8 @@ resource that contains the terminal</div>
 							<td class="nameDescription">
 								<div class="fixedFont"><b><a href="../symbols/_global_.html#_extractShortcut">_extractShortcut</a></b>(uri)
 								</div>
-								<div class="description">This function returns a shortcut coming from the URITODO: Add more criteria to determine the shortcut</div>
+								<div class="description">This function returns a shortcut coming from the URI
+TODO: Add more criteria to determine the shortcut</div>
 							</td>
 						</tr>
 					
@@ -696,15 +742,6 @@ Called when something happens (a model has been added or removed)</div>
 						<tr>
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/_global_.html#createScreen">createScreen</a></b>(screenJson)
-								</div>
-								<div class="description"></div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="attributes">&nbsp;</td>
-							<td class="nameDescription">
 								<div class="fixedFont"><b><a href="../symbols/_global_.html#dragRanges">dragRanges</a></b>(container, element)
 								</div>
 								<div class="description"></div>
@@ -726,6 +763,15 @@ Called when something happens (a model has been added or removed)</div>
 								<div class="fixedFont"><b><a href="../symbols/_global_.html#getBuildingBlockFactory">getBuildingBlockFactory</a></b>(buildingBlockType)
 								</div>
 								<div class="description">Gets a building block factory for a given type of building blocks</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/_global_.html#getCenter">getCenter</a></b>(node)
+								</div>
+								<div class="description"></div>
 							</td>
 						</tr>
 					
@@ -762,6 +808,15 @@ Called when something happens (a model has been added or removed)</div>
 								<div class="fixedFont"><b><a href="../symbols/_global_.html#getFacts">getFacts</a></b>()
 								</div>
 								<div class="description"></div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/_global_.html#getFactShortcut">getFactShortcut</a></b>(factData)
+								</div>
+								<div class="description">Returns the fact Shortcut</div>
 							</td>
 						</tr>
 					
@@ -824,7 +879,8 @@ Called when something happens (a model has been added or removed)</div>
 							<td class="nameDescription">
 								<div class="fixedFont"><b><a href="../symbols/_global_.html#isLeftButton">isLeftButton</a></b>(button)
 								</div>
-								<div class="description">Determines if a button code is the left one(right button for left-handed people).</div>
+								<div class="description">Determines if a button code is the left one
+(right button for left-handed people).</div>
 							</td>
 						</tr>
 					
@@ -861,7 +917,8 @@ and WireIt.Wire classes.</div>
 							<td class="nameDescription">
 								<div class="fixedFont"><b><a href="../symbols/_global_.html#updateAxis">updateAxis</a></b>(Object, Object, Object)
 								</div>
-								<div class="description">Calculate the cumulative offLimit offset and the effective delta foran axis given the axis range and the current offLimit offset.</div>
+								<div class="description">Calculate the cumulative offLimit offset and the effective delta for
+an axis given the axis range and the current offLimit offset.</div>
 							</td>
 						</tr>
 					
@@ -939,7 +996,8 @@ and WireIt.Wire classes.</div>
 					
 					</div>
 					<div class="description">
-						This array stores the shortcutsbeing used in the execution
+						This array stores the shortcuts
+being used in the execution
 						
 							<br />
 							<i>Defined in: </i> <a href="../symbols/src/gvs_facts_FactFactory.js.html">FactFactory.js</a>.
@@ -1113,7 +1171,7 @@ resource that contains the terminal
 					</div>
 					<div class="description">
 						List of section elements.
-Each section have another array with the Widget of the buttons plus a 
+Each section have another array with the Widget of the buttons plus a
 separator on the first position (index 0).
 						
 						
@@ -1200,6 +1258,33 @@ separator on the first position (index 0).
 
 					<hr />
 				
+					<a name="DumbInferenceEngine"> </a>
+					<div class="fixedFont">
+					
+					
+					<b>DumbInferenceEngine</b>
+					
+					</div>
+					<div class="description">
+						This class is included here due to PaletteDocument restrictions,
+which need an instance of an InferenceEngine. As this document
+does not need any kind of inference, the class does nothing
+						
+							<br />
+							<i>Defined in: </i> <a href="../symbols/src/gvs_documents_BuildingBlockDocument.js.html">BuildingBlockDocument.js</a>.
+						
+						
+					</div>
+					
+					
+
+						
+						
+						
+						
+
+					<hr />
+				
 					<a name="FactFactory"> </a>
 					<div class="fixedFont">
 					
@@ -1233,7 +1318,12 @@ separator on the first position (index 0).
 					
 					</div>
 					<div class="description">
-						Notation:   Rectangles are represented as objects:      rectangle.left      rectangle.top      rectangle.botttom      rectangle.right
+						Notation:
+   Rectangles are represented as objects:
+      rectangle.left
+      rectangle.top
+      rectangle.botttom
+      rectangle.right
 						
 							<br />
 							<i>Defined in: </i> <a href="../symbols/src/gvs_utils_Geometry.js.html">Geometry.js</a>.
@@ -1283,6 +1373,96 @@ separator on the first position (index 0).
 					Method Detail
 				</div>
 				
+					<a name="_buildLine"> </a>
+					<div class="fixedFont">
+					
+					
+					<b>_buildLine</b>(line, events)
+					
+					</div>
+					<div class="description">
+						
+						
+							<br />
+							<i>Defined in: </i> <a href="../symbols/src/gvs_documents_BuildingBlockDocument.js.html">BuildingBlockDocument.js</a>.
+						
+						
+					</div>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<b>line</b>
+									
+								</dt>
+								<dd></dd>
+							
+								<dt>
+									<b>events</b>
+									
+								</dt>
+								<dd></dd>
+							
+							</dl>
+						
+						
+						
+						
+						
+						
+						
+
+					<hr />
+				
+					<a name="_createLine"> </a>
+					<div class="fixedFont">
+					
+					
+					<b>_createLine</b>(label, inputNode)
+					
+					</div>
+					<div class="description">
+						
+						
+							<br />
+							<i>Defined in: </i> <a href="../symbols/src/gvs_documents_BuildingBlockDocument.js.html">BuildingBlockDocument.js</a>.
+						
+						
+					</div>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>label</b>
+									
+								</dt>
+								<dd></dd>
+							
+								<dt>
+									<span class="light fixedFont">{DOMNode}</span> <b>inputNode</b>
+									
+								</dt>
+								<dd></dd>
+							
+							</dl>
+						
+						
+						
+						
+						
+						
+						
+
+					<hr />
+				
 					<a name="_extractDescription"> </a>
 					<div class="fixedFont">&lt;private&gt; 
 					
@@ -1330,7 +1510,8 @@ separator on the first position (index 0).
 					
 					</div>
 					<div class="description">
-						This function returns a shortcut coming from the URITODO: Add more criteria to determine the shortcut
+						This function returns a shortcut coming from the URI
+TODO: Add more criteria to determine the shortcut
 						
 							<br />
 							<i>Defined in: </i> <a href="../symbols/src/gvs_facts_FactFactory.js.html">FactFactory.js</a>.
@@ -1639,45 +1820,6 @@ Called when something happens (a model has been added or removed)
 
 					<hr />
 				
-					<a name="createScreen"> </a>
-					<div class="fixedFont">
-					
-					
-					<b>createScreen</b>(screenJson)
-					
-					</div>
-					<div class="description">
-						
-						
-							<br />
-							<i>Defined in: </i> <a href="../symbols/src/gvs_catalogue_Catalogue.js.html">Catalogue.js</a>.
-						
-						
-					</div>
-					
-					
-					
-						
-							<dl class="detailList">
-							<dt class="heading">Parameters:</dt>
-							
-								<dt>
-									<span class="light fixedFont">{String}</span> <b>screenJson</b>
-									
-								</dt>
-								<dd></dd>
-							
-							</dl>
-						
-						
-						
-						
-						
-						
-						
-
-					<hr />
-				
 					<a name="dragRanges"> </a>
 					<div class="fixedFont">
 					
@@ -1786,6 +1928,45 @@ Called when something happens (a model has been added or removed)
 							
 								<dt>
 									<span class="light fixedFont">{String}</span> <b>buildingBlockType</b>
+									
+								</dt>
+								<dd></dd>
+							
+							</dl>
+						
+						
+						
+						
+						
+						
+						
+
+					<hr />
+				
+					<a name="getCenter"> </a>
+					<div class="fixedFont">
+					
+					
+					<b>getCenter</b>(node)
+					
+					</div>
+					<div class="description">
+						
+						
+							<br />
+							<i>Defined in: </i> <a href="../symbols/src/gvs_utils_Geometry.js.html">Geometry.js</a>.
+						
+						
+					</div>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{DOMNode}</span> <b>node</b>
 									
 								</dt>
 								<dd></dd>
@@ -1931,6 +2112,45 @@ Called when something happens (a model has been added or removed)
 					
 					
 					
+						
+						
+						
+						
+						
+						
+						
+
+					<hr />
+				
+					<a name="getFactShortcut"> </a>
+					<div class="fixedFont">
+					
+					<span class="light">{String}</span>
+					<b>getFactShortcut</b>(factData)
+					
+					</div>
+					<div class="description">
+						Returns the fact Shortcut
+						
+							<br />
+							<i>Defined in: </i> <a href="../symbols/src/gvs_facts_FactFactory.js.html">FactFactory.js</a>.
+						
+						
+					</div>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{Object}</span> <b>factData</b>
+									
+								</dt>
+								<dd></dd>
+							
+							</dl>
 						
 						
 						
@@ -2156,7 +2376,8 @@ Called when something happens (a model has been added or removed)
 					
 					</div>
 					<div class="description">
-						Determines if a button code is the left one(right button for left-handed people).
+						Determines if a button code is the left one
+(right button for left-handed people).
 						
 							<br />
 							<i>Defined in: </i> <a href="../symbols/src/gvs_utils_BrowserUtils.js.html">BrowserUtils.js</a>.
@@ -2282,10 +2503,10 @@ ToolbarModel must provide objects implementing the following interface:
 					<div class="description">
 						This class handles the creation of pipes based on WireIt.Terminal
 and WireIt.Wire classes. Due to the use of these classes, which are
-not Prototype compliant classes, the syntax of the class is quite 
+not Prototype compliant classes, the syntax of the class is quite
 different than usual
 The terminal object will be attached to each pre or post condition
-of the instances (specifically, to the condition nodes of their 
+of the instances (specifically, to the condition nodes of their
 respective view)
 						
 							<br />
@@ -2344,12 +2565,15 @@ respective view)
 					<a name="updateAxis"> </a>
 					<div class="fixedFont">
 					
-					<span class="light">{Object result    result.delta    result.offLimit}</span>
+					<span class="light">{Object result
+    result.delta
+    result.offLimit}</span>
 					<b>updateAxis</b>(Object, Object, Object)
 					
 					</div>
 					<div class="description">
-						Calculate the cumulative offLimit offset and the effective delta foran axis given the axis range and the current offLimit offset.
+						Calculate the cumulative offLimit offset and the effective delta for
+an axis given the axis range and the current offLimit offset.
 						
 							<br />
 							<i>Defined in: </i> <a href="../symbols/src/gvs_utils_Geometry.js.html">Geometry.js</a>.
@@ -2367,7 +2591,9 @@ respective view)
 									<span class="light fixedFont">{Object}</span> <b>Object</b>
 									
 								</dt>
-								<dd>range    range.min    range.max</dd>
+								<dd>range
+    range.min
+    range.max</dd>
 							
 								<dt>
 									<span class="light fixedFont">{Number}</span> <b>Object</b>
@@ -2400,7 +2626,7 @@ respective view)
 <!-- ============================== footer ================================= -->
 		<div class="fineprint" style="clear:both">
 			
-			Documentation generated by <a href="http://www.jsdoctoolkit.org/" target="_blank">JsDoc Toolkit</a> 2.0.2 on Tue Feb 23 2010 17:56:57 GMT+0100 (CET)
+			Documentation generated by <a href="http://www.jsdoctoolkit.org/" target="_blank">JsDoc Toolkit</a> 2.0.2 on Fri Feb 18 2011 12:18:13 GMT+0100 (CET)
 		</div>
 	</body>
 </html>

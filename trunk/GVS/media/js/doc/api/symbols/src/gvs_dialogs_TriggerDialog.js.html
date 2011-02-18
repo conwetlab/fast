@@ -11,11 +11,11 @@
 <span class='line'>  4</span>      * to assign triggers to actions
 <span class='line'>  5</span>      * @constructs
 <span class='line'>  6</span>      * @extends ConfirmDialog
-<span class='line'>  7</span>      */</span><span class="WHIT"> 
+<span class='line'>  7</span>      */</span><span class="WHIT">
 <span class='line'>  8</span>     </span><span class="NAME">initialize</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">$super</span><span class="PUNC">,</span><span class="WHIT">
 <span class='line'>  9</span>                         </span><span class="COMM">/** String */</span><span class="WHIT"> </span><span class="NAME">actionName</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="COMM">/** Array */</span><span class="WHIT"> </span><span class="NAME">initialTriggerList</span><span class="PUNC">,</span><span class="WHIT">
 <span class='line'> 10</span>                         </span><span class="COMM">/** Array */</span><span class="WHIT">  </span><span class="NAME">canvasInstances</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="COMM">/** Function */</span><span class="WHIT"> </span><span class="NAME">onChangeCallback</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'> 11</span>         
+<span class='line'> 11</span> 
 <span class='line'> 12</span>         </span><span class="NAME">$super</span><span class="PUNC">(</span><span class="STRN">"Assign triggers to "</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">actionName</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'> 13</span> 
 <span class='line'> 14</span>         </span><span class="COMM">/**
@@ -79,7 +79,7 @@
 <span class='line'> 72</span> 
 <span class='line'> 73</span>         </span><span class="NAME">this._removeTriggerButton</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'> 74</span>     </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'> 75</span>     
+<span class='line'> 75</span> 
 <span class='line'> 76</span>     </span><span class="COMM">// **************** PUBLIC METHODS **************** //</span><span class="WHIT">
 <span class='line'> 77</span> 
 <span class='line'> 78</span>     </span><span class="COMM">/**
@@ -96,7 +96,7 @@
 <span class='line'> 89</span>     </span><span class="COMM">// **************** PRIVATE METHODS **************** //</span><span class="WHIT">
 <span class='line'> 90</span> 
 <span class='line'> 91</span> 
-<span class='line'> 92</span>     </span><span class="COMM">/** 
+<span class='line'> 92</span>     </span><span class="COMM">/**
 <span class='line'> 93</span>      * initDialogInterface
 <span class='line'> 94</span>      * This function creates the dom structure
 <span class='line'> 95</span>      * @private
@@ -144,7 +144,7 @@
 <span class='line'>137</span>                 </span><span class="PUNC">}</span><span class="WHIT">
 <span class='line'>138</span>             </span><span class="PUNC">}</span><span class="PUNC">.</span><span class="NAME">bind</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'>139</span>         </span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>140</span>        
+<span class='line'>140</span> 
 <span class='line'>141</span>         </span><span class="NAME">content.appendChild</span><span class="PUNC">(</span><span class="NAME">this._selectedTriggerListNode</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'>142</span> 
 <span class='line'>143</span>         </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">addRemoveZone</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">Element</span><span class="PUNC">(</span><span class="STRN">'div'</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
@@ -153,7 +153,7 @@
 <span class='line'>146</span>         </span><span class="NAME">this._addTriggerButton</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">dijit.form.Button</span><span class="PUNC">(</span><span class="PUNC">{</span><span class="WHIT">
 <span class='line'>147</span>             </span><span class="STRN">'iconClass'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">'plusIcon'</span><span class="PUNC">,</span><span class="WHIT">
 <span class='line'>148</span>             </span><span class="STRN">'showLabel'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">true</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>149</span>             </span><span class="STRN">'label'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">'+'</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>149</span>             </span><span class="STRN">'label'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">'&lt;'</span><span class="PUNC">,</span><span class="WHIT">
 <span class='line'>150</span>             </span><span class="STRN">'style'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">'width:25px'</span><span class="PUNC">,</span><span class="WHIT">
 <span class='line'>151</span>             </span><span class="STRN">'onClick'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">this._onAddTrigger.bind</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">)</span><span class="WHIT">
 <span class='line'>152</span>         </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
@@ -162,7 +162,7 @@
 <span class='line'>155</span>         </span><span class="NAME">this._removeTriggerButton</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">dijit.form.Button</span><span class="PUNC">(</span><span class="PUNC">{</span><span class="WHIT">
 <span class='line'>156</span>             </span><span class="STRN">'iconClass'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">'minusIcon'</span><span class="PUNC">,</span><span class="WHIT">
 <span class='line'>157</span>             </span><span class="STRN">'showLabel'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">true</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>158</span>             </span><span class="STRN">'label'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">'-'</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>158</span>             </span><span class="STRN">'label'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">'>'</span><span class="PUNC">,</span><span class="WHIT">
 <span class='line'>159</span>             </span><span class="STRN">'style'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">'width:25px'</span><span class="PUNC">,</span><span class="WHIT">
 <span class='line'>160</span>             </span><span class="STRN">'onClick'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">this._onRemoveTrigger.bind</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">)</span><span class="WHIT">
 <span class='line'>161</span>         </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
@@ -200,7 +200,7 @@
 <span class='line'>193</span>         </span><span class="PUNC">}</span><span class="PUNC">.</span><span class="NAME">bind</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'>194</span> 
 <span class='line'>195</span>         </span><span class="NAME">content.appendChild</span><span class="PUNC">(</span><span class="NAME">this._unselectedTriggerListNode</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>196</span>         
+<span class='line'>196</span> 
 <span class='line'>197</span>         </span><span class="NAME">this._setContent</span><span class="PUNC">(</span><span class="NAME">content</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'>198</span> 
 <span class='line'>199</span>         </span><span class="NAME">this._onListChange</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
@@ -312,13 +312,14 @@
 <span class='line'>305</span> 
 <span class='line'>306</span>     </span><span class="COMM">/**
 <span class='line'>307</span>      * Unselect all the elements from a list
-<span class='line'>308</span>      */</span><span class="WHIT">
-<span class='line'>309</span>     </span><span class="NAME">_unselectAll</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="COMM">/** DOMNode */</span><span class="WHIT"> </span><span class="NAME">selectNode</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>310</span>         </span><span class="KEYW">while</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">selectNode.selectedIndex</span><span class="WHIT"> </span><span class="PUNC">!=</span><span class="WHIT"> </span><span class="PUNC">-</span><span class="NUMB">1</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>311</span>             </span><span class="NAME">selectNode.options</span><span class="PUNC">[</span><span class="NAME">selectNode.selectedIndex</span><span class="PUNC">]</span><span class="PUNC">.</span><span class="NAME">selected</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">false</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>312</span>         </span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>313</span>     </span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>314</span> </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>315</span> 
-<span class='line'>316</span> </span><span class="COMM">// vim:ts=4:sw=4:et:</span><span class="WHIT">
-<span class='line'>317</span> </span></pre></body></html>
+<span class='line'>308</span>      * @private
+<span class='line'>309</span>      */</span><span class="WHIT">
+<span class='line'>310</span>     </span><span class="NAME">_unselectAll</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="COMM">/** DOMNode */</span><span class="WHIT"> </span><span class="NAME">selectNode</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>311</span>         </span><span class="KEYW">while</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">selectNode.selectedIndex</span><span class="WHIT"> </span><span class="PUNC">!=</span><span class="WHIT"> </span><span class="PUNC">-</span><span class="NUMB">1</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>312</span>             </span><span class="NAME">selectNode.options</span><span class="PUNC">[</span><span class="NAME">selectNode.selectedIndex</span><span class="PUNC">]</span><span class="PUNC">.</span><span class="NAME">selected</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">false</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>313</span>         </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>314</span>     </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>315</span> </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>316</span> 
+<span class='line'>317</span> </span><span class="COMM">// vim:ts=4:sw=4:et:</span><span class="WHIT">
+<span class='line'>318</span> </span></pre></body></html>

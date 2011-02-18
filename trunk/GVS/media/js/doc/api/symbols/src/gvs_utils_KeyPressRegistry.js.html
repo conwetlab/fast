@@ -10,7 +10,7 @@
 <span class='line'>  3</span>      * This class handles the different
 <span class='line'>  4</span>      * onKeyPressed listeners, and the enabling and disabling of these events
 <span class='line'>  5</span>      * @constructs
-<span class='line'>  6</span>      */</span><span class="WHIT"> 
+<span class='line'>  6</span>      */</span><span class="WHIT">
 <span class='line'>  7</span>     </span><span class="NAME">initialize</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
 <span class='line'>  8</span>         </span><span class="COMM">/**
 <span class='line'>  9</span>          * Hash of registered handlers
@@ -18,21 +18,21 @@
 <span class='line'> 11</span>          * @private
 <span class='line'> 12</span>          */</span><span class="WHIT">
 <span class='line'> 13</span>         </span><span class="NAME">this._handlers</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">Hash</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'> 14</span>         
+<span class='line'> 14</span> 
 <span class='line'> 15</span>         </span><span class="COMM">/**
 <span class='line'> 16</span>          * The Keypress events are enabled
 <span class='line'> 17</span>          */</span><span class="WHIT">
 <span class='line'> 18</span>         </span><span class="NAME">this._enabled</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">true</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'> 19</span>         
+<span class='line'> 19</span> 
 <span class='line'> 20</span>         </span><span class="NAME">this.setEnabled</span><span class="PUNC">(</span><span class="NAME">this._enabled</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'> 21</span>     </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'> 22</span>     
+<span class='line'> 22</span> 
 <span class='line'> 23</span> 
 <span class='line'> 24</span>     </span><span class="COMM">// **************** PUBLIC METHODS **************** //</span><span class="WHIT">
 <span class='line'> 25</span> 
-<span class='line'> 26</span>     
+<span class='line'> 26</span> 
 <span class='line'> 27</span>     </span><span class="COMM">/**
-<span class='line'> 28</span>      * This function adds a listener to a specific key 
+<span class='line'> 28</span>      * This function adds a listener to a specific key
 <span class='line'> 29</span>      * or key combination.
 <span class='line'> 30</span>      */</span><span class="WHIT">
 <span class='line'> 31</span>     </span><span class="NAME">addHandler</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="COMM">/** String  */</span><span class="WHIT"> </span><span class="NAME">accelKey</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="COMM">/** Function */</span><span class="WHIT"> </span><span class="NAME">handler</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
@@ -43,15 +43,15 @@
 <span class='line'> 36</span>         </span><span class="NAME">this._handlers.set</span><span class="PUNC">(</span><span class="NAME">key</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">handler</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'> 37</span>         </span><span class="NAME">shortcut.add</span><span class="PUNC">(</span><span class="NAME">key</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">this._executeHandler.bind</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">)</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="STRN">'disable_in_input'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">true</span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'> 38</span>     </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'> 39</span>     
+<span class='line'> 39</span> 
 <span class='line'> 40</span>     </span><span class="COMM">/**
 <span class='line'> 41</span>      * Asks if a key stroke is being used
 <span class='line'> 42</span>      * @type Boolean
 <span class='line'> 43</span>      */</span><span class="WHIT">
 <span class='line'> 44</span>     </span><span class="NAME">isRegistered</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="COMM">/** String */</span><span class="WHIT"> </span><span class="NAME">key</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'> 45</span>         </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">this._handler.get</span><span class="PUNC">(</span><span class="NAME">key</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">?</span><span class="WHIT"> </span><span class="KEYW">true</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">false</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">    
+<span class='line'> 45</span>         </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">this._handler.get</span><span class="PUNC">(</span><span class="NAME">key</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">?</span><span class="WHIT"> </span><span class="KEYW">true</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">false</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'> 46</span>     </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'> 47</span>     
+<span class='line'> 47</span> 
 <span class='line'> 48</span>     </span><span class="COMM">/**
 <span class='line'> 49</span>      * This function removes the handler for a key combination
 <span class='line'> 50</span>      */</span><span class="WHIT">
@@ -60,25 +60,25 @@
 <span class='line'> 53</span>         </span><span class="NAME">this._handlers.unset</span><span class="PUNC">(</span><span class="NAME">key</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'> 54</span>         </span><span class="COMM">//shortcut.remove(key);</span><span class="WHIT">
 <span class='line'> 55</span>     </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'> 56</span>     
+<span class='line'> 56</span> 
 <span class='line'> 57</span>     </span><span class="COMM">/**
 <span class='line'> 58</span>      * This function enables or disables the onkeypress events
 <span class='line'> 59</span>      */</span><span class="WHIT">
 <span class='line'> 60</span>     </span><span class="NAME">setEnabled</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="COMM">/** Boolean */</span><span class="WHIT"> </span><span class="NAME">enabled</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'> 61</span>         </span><span class="NAME">this._enabled</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">enabled</span><span class="PUNC">;</span><span class="WHIT">       
+<span class='line'> 61</span>         </span><span class="NAME">this._enabled</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">enabled</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'> 62</span>     </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'> 63</span>     
+<span class='line'> 63</span> 
 <span class='line'> 64</span>     </span><span class="COMM">// ********************** PRIVATE METHODS ********************* //</span><span class="WHIT">
-<span class='line'> 65</span>     
+<span class='line'> 65</span> 
 <span class='line'> 66</span>     </span><span class="COMM">/**
-<span class='line'> 67</span>      * This function actually receives the keypress events and calls 
+<span class='line'> 67</span>      * This function actually receives the keypress events and calls
 <span class='line'> 68</span>      * the handlers when necessary
 <span class='line'> 69</span>      * @private
 <span class='line'> 70</span>      */</span><span class="WHIT">
 <span class='line'> 71</span>     </span><span class="NAME">_executeHandler</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="COMM">/** Event */</span><span class="WHIT"> </span><span class="NAME">e</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="COMM">/** String */</span><span class="WHIT"> </span><span class="NAME">key</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
 <span class='line'> 72</span>         </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">this._enabled</span><span class="WHIT"> </span><span class="PUNC">&&</span><span class="WHIT"> </span><span class="NAME">this._handlers.get</span><span class="PUNC">(</span><span class="NAME">key</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
 <span class='line'> 73</span>             </span><span class="NAME">this._handlers.get</span><span class="PUNC">(</span><span class="NAME">key</span><span class="PUNC">)</span><span class="PUNC">(</span><span class="NAME">key</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'> 74</span>         </span><span class="PUNC">}</span><span class="WHIT"> 
+<span class='line'> 74</span>         </span><span class="PUNC">}</span><span class="WHIT">
 <span class='line'> 75</span>     </span><span class="PUNC">}</span><span class="WHIT">
 <span class='line'> 76</span> </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'> 77</span> 

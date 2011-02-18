@@ -213,11 +213,17 @@ ul.inheritsList
 	
 	<li><a href="../symbols/BuildingBlockDescription.html">BuildingBlockDescription</a></li>
 	
+	<li><a href="../symbols/BuildingBlockDocument.html">BuildingBlockDocument</a></li>
+	
 	<li><a href="../symbols/BuildingBlockFactory.html">BuildingBlockFactory</a></li>
 	
 	<li><a href="../symbols/BuildingBlockSet.html">BuildingBlockSet</a></li>
 	
 	<li><a href="../symbols/BuildingBlockView.html">BuildingBlockView</a></li>
+	
+	<li><a href="../symbols/ButtonArrayDialog.html">ButtonArrayDialog</a></li>
+	
+	<li><a href="../symbols/CaptionDialog.html">CaptionDialog</a></li>
 	
 	<li><a href="../symbols/ComponentInstance.html">ComponentInstance</a></li>
 	
@@ -253,11 +259,11 @@ ul.inheritsList
 	
 	<li><a href="../symbols/FormComponent.html">FormComponent</a></li>
 	
+	<li><a href="../symbols/FormDescription.html">FormDescription</a></li>
+	
 	<li><a href="../symbols/FormDialog.html">FormDialog</a></li>
 	
 	<li><a href="../symbols/FormFactory.html">FormFactory</a></li>
-	
-	<li><a href="../symbols/FormInstance.html">FormInstance</a></li>
 	
 	<li><a href="../symbols/FormSnapshotView.html">FormSnapshotView</a></li>
 	
@@ -268,6 +274,8 @@ ul.inheritsList
 	<li><a href="../symbols/GVS.html">GVS</a></li>
 	
 	<li><a href="../symbols/InferenceEngine.html">InferenceEngine</a></li>
+	
+	<li><a href="../symbols/iServeDialog.html">iServeDialog</a></li>
 	
 	<li><a href="../symbols/KeyPressRegistry.html">KeyPressRegistry</a></li>
 	
@@ -281,15 +289,11 @@ ul.inheritsList
 	
 	<li><a href="../symbols/MenuElement.html">MenuElement</a></li>
 	
-	<li><a href="../symbols/NewScreenDialog.html">NewScreenDialog</a></li>
-	
-	<li><a href="../symbols/NewScreenflowDialog.html">NewScreenflowDialog</a></li>
+	<li><a href="../symbols/NewBuildingBlockDialog.html">NewBuildingBlockDialog</a></li>
 	
 	<li><a href="../symbols/OperatorComponent.html">OperatorComponent</a></li>
 	
 	<li><a href="../symbols/OperatorFactory.html">OperatorFactory</a></li>
-	
-	<li><a href="../symbols/OperatorInstance.html">OperatorInstance</a></li>
 	
 	<li><a href="../symbols/OperatorView.html">OperatorView</a></li>
 	
@@ -300,6 +304,10 @@ ul.inheritsList
 	<li><a href="../symbols/PaletteController.html">PaletteController</a></li>
 	
 	<li><a href="../symbols/PaletteDocument.html">PaletteDocument</a></li>
+	
+	<li><a href="../symbols/PaletteSearchBox.html">PaletteSearchBox</a></li>
+	
+	<li><a href="../symbols/ParamsDialog.html">ParamsDialog</a></li>
 	
 	<li><a href="../symbols/Pipe.html">Pipe</a></li>
 	
@@ -331,13 +339,15 @@ ul.inheritsList
 	
 	<li><a href="../symbols/PublishGadgetDialog.html">PublishGadgetDialog</a></li>
 	
+	<li><a href="../symbols/RecommendationManager.html">RecommendationManager</a></li>
+	
 	<li><a href="../symbols/ResourceComponent.html">ResourceComponent</a></li>
 	
 	<li><a href="../symbols/ResourceFactory.html">ResourceFactory</a></li>
 	
-	<li><a href="../symbols/ResourceInstance.html">ResourceInstance</a></li>
-	
 	<li><a href="../symbols/ResourceView.html">ResourceView</a></li>
+	
+	<li><a href="../symbols/SaveAsDialog.html">SaveAsDialog</a></li>
 	
 	<li><a href="../symbols/ScreenCanvasCache.html">ScreenCanvasCache</a></li>
 	
@@ -359,7 +369,7 @@ ul.inheritsList
 	
 	<li><a href="../symbols/ScreenflowInferenceEngine.html">ScreenflowInferenceEngine</a></li>
 	
-	<li><a href="../symbols/ScreenflowInstance.html">ScreenflowInstance</a></li>
+	<li><a href="../symbols/ScreenflowPlayer.html">ScreenflowPlayer</a></li>
 	
 	<li><a href="../symbols/ScreenInferenceEngine.html">ScreenInferenceEngine</a></li>
 	
@@ -550,6 +560,15 @@ ul.inheritsList
 						<tr>
 							<td class="attributes">&lt;private&gt; &nbsp;</td>
 							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/GVS.html#_browseBuildingBlocks">_browseBuildingBlocks</a></b>()
+								</div>
+								<div class="description">browse building blocks</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;private&gt; &nbsp;</td>
+							<td class="nameDescription">
 								<div class="fixedFont"><b><a href="../symbols/GVS.html#_browseScreenflows">_browseScreenflows</a></b>()
 								</div>
 								<div class="description">browse screenflows</div>
@@ -562,6 +581,15 @@ ul.inheritsList
 								<div class="fixedFont"><b><a href="../symbols/GVS.html#_browseScreens">_browseScreens</a></b>()
 								</div>
 								<div class="description">browse screens</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;private&gt; &nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/GVS.html#_newBuildingBlock">_newBuildingBlock</a></b>()
+								</div>
+								<div class="description">Opens a dialog to choose which building block to create</div>
 							</td>
 						</tr>
 					
@@ -589,6 +617,24 @@ ul.inheritsList
 								<div class="fixedFont"><b><a href="../symbols/GVS.html#_onSuccessAbout">_onSuccessAbout</a></b>(transport)
 								</div>
 								<div class="description">OnSuccess handler</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;private&gt; &nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/GVS.html#_openFactTool">_openFactTool</a></b>()
+								</div>
+								<div class="description"></div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;private&gt; &nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/GVS.html#_openMediationTool">_openMediationTool</a></b>()
+								</div>
+								<div class="description"></div>
 							</td>
 						</tr>
 					
@@ -660,7 +706,8 @@ ul.inheritsList
 							<td class="nameDescription">
 								<div class="fixedFont"><b><a href="../symbols/GVS.html#init">init</a></b>()
 								</div>
-								<div class="description">Creates all the other objects and installs the eventhandlers.</div>
+								<div class="description">Creates all the other objects and installs the event
+handlers.</div>
 							</td>
 						</tr>
 					
@@ -669,7 +716,8 @@ ul.inheritsList
 							<td class="nameDescription">
 								<div class="fixedFont"><b><a href="../symbols/GVS.html#setEnabled">setEnabled</a></b>(enabled)
 								</div>
-								<div class="description">Sets the platform itself enabled or disabled(for modal dialogs)</div>
+								<div class="description">Sets the platform itself enabled or disabled
+(for modal dialogs)</div>
 							</td>
 						</tr>
 					
@@ -899,6 +947,31 @@ ul.inheritsList
 
 					<hr />
 				
+					<a name="_browseBuildingBlocks"> </a>
+					<div class="fixedFont">&lt;private&gt; 
+					
+					
+					<b>_browseBuildingBlocks</b>()
+					
+					</div>
+					<div class="description">
+						browse building blocks
+						
+						
+					</div>
+					
+					
+					
+						
+						
+						
+						
+						
+						
+						
+
+					<hr />
+				
 					<a name="_browseScreenflows"> </a>
 					<div class="fixedFont">&lt;private&gt; 
 					
@@ -933,6 +1006,31 @@ ul.inheritsList
 					</div>
 					<div class="description">
 						browse screens
+						
+						
+					</div>
+					
+					
+					
+						
+						
+						
+						
+						
+						
+						
+
+					<hr />
+				
+					<a name="_newBuildingBlock"> </a>
+					<div class="fixedFont">&lt;private&gt; 
+					
+					
+					<b>_newBuildingBlock</b>()
+					
+					</div>
+					<div class="description">
+						Opens a dialog to choose which building block to create
 						
 						
 					</div>
@@ -1025,6 +1123,56 @@ ul.inheritsList
 								<dd></dd>
 							
 							</dl>
+						
+						
+						
+						
+						
+						
+						
+
+					<hr />
+				
+					<a name="_openFactTool"> </a>
+					<div class="fixedFont">&lt;private&gt; 
+					
+					
+					<b>_openFactTool</b>()
+					
+					</div>
+					<div class="description">
+						
+						
+						
+					</div>
+					
+					
+					
+						
+						
+						
+						
+						
+						
+						
+
+					<hr />
+				
+					<a name="_openMediationTool"> </a>
+					<div class="fixedFont">&lt;private&gt; 
+					
+					
+					<b>_openMediationTool</b>()
+					
+					</div>
+					<div class="description">
+						
+						
+						
+					</div>
+					
+					
+					
 						
 						
 						
@@ -1229,7 +1377,8 @@ ul.inheritsList
 					
 					</div>
 					<div class="description">
-						Creates all the other objects and installs the eventhandlers.
+						Creates all the other objects and installs the event
+handlers.
 						
 						
 					</div>
@@ -1254,7 +1403,8 @@ ul.inheritsList
 					
 					</div>
 					<div class="description">
-						Sets the platform itself enabled or disabled(for modal dialogs)
+						Sets the platform itself enabled or disabled
+(for modal dialogs)
 						
 						
 					</div>
@@ -1290,7 +1440,7 @@ ul.inheritsList
 <!-- ============================== footer ================================= -->
 		<div class="fineprint" style="clear:both">
 			
-			Documentation generated by <a href="http://www.jsdoctoolkit.org/" target="_blank">JsDoc Toolkit</a> 2.0.2 on Tue Feb 23 2010 17:56:59 GMT+0100 (CET)
+			Documentation generated by <a href="http://www.jsdoctoolkit.org/" target="_blank">JsDoc Toolkit</a> 2.0.2 on Fri Feb 18 2011 12:18:14 GMT+0100 (CET)
 		</div>
 	</body>
 </html>

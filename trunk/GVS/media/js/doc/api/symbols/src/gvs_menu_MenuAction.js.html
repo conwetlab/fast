@@ -14,8 +14,8 @@
 <span class='line'>  7</span>      *           Hash containing some of these extra params
 <span class='line'>  8</span>      *           * (String)iconName Name of the icon if present
 <span class='line'>  9</span>      *           * (Boolean)enabled state of the element
-<span class='line'> 10</span>      *           * (String)accelKey key shortcut to access to the element   
-<span class='line'> 11</span>      */</span><span class="WHIT"> 
+<span class='line'> 10</span>      *           * (String)accelKey key shortcut to access to the element
+<span class='line'> 11</span>      */</span><span class="WHIT">
 <span class='line'> 12</span>     </span><span class="NAME">initialize</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">$super</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="COMM">/** Object */</span><span class="WHIT"> </span><span class="NAME">data</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="COMM">/** Boolean */</span><span class="WHIT"> </span><span class="NAME">mainMenu</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
 <span class='line'> 13</span>         </span><span class="NAME">$super</span><span class="PUNC">(</span><span class="NAME">data.weight</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'> 14</span>         </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">mainMenu</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
@@ -29,9 +29,9 @@
 <span class='line'> 22</span>                 </span><span class="STRN">'label'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">data.label</span><span class="PUNC">,</span><span class="WHIT">
 <span class='line'> 23</span>                 </span><span class="STRN">'onClick'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">data.handler</span><span class="PUNC">,</span><span class="WHIT">
 <span class='line'> 24</span>                 </span><span class="STRN">'showLabel'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">true</span><span class="WHIT">
-<span class='line'> 25</span>             </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">    
+<span class='line'> 25</span>             </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'> 26</span>         </span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'> 27</span>         
+<span class='line'> 27</span> 
 <span class='line'> 28</span>         </span><span class="COMM">/**
 <span class='line'> 29</span>          * Handler function
 <span class='line'> 30</span>          * @type Function
@@ -46,7 +46,7 @@
 <span class='line'> 39</span>          * @private
 <span class='line'> 40</span>          */</span><span class="WHIT">
 <span class='line'> 41</span>         </span><span class="NAME">this._shortcut</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">data.shortcut</span><span class="WHIT"> </span><span class="PUNC">?</span><span class="WHIT"> </span><span class="NAME">data.shortcut</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'> 42</span>         
+<span class='line'> 42</span> 
 <span class='line'> 43</span>         </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">this._shortcut</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
 <span class='line'> 44</span>             </span><span class="NAME">this._widget.attr</span><span class="PUNC">(</span><span class="STRN">'accelKey'</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">this._shortcut</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'> 45</span>         </span><span class="PUNC">}</span><span class="WHIT">
@@ -57,28 +57,28 @@
 <span class='line'> 50</span>          * @private
 <span class='line'> 51</span>          */</span><span class="WHIT">
 <span class='line'> 52</span>         </span><span class="NAME">this._enabled</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'> 53</span>         </span><span class="NAME">this.setEnabled</span><span class="PUNC">(</span><span class="NAME">data.enabled</span><span class="WHIT"> </span><span class="PUNC">!==</span><span class="WHIT"> </span><span class="NAME">undefined</span><span class="WHIT"> </span><span class="PUNC">?</span><span class="WHIT"> </span><span class="NAME">data.enabled</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">true</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">  
-<span class='line'> 54</span>         
+<span class='line'> 53</span>         </span><span class="NAME">this.setEnabled</span><span class="PUNC">(</span><span class="NAME">data.enabled</span><span class="WHIT"> </span><span class="PUNC">!==</span><span class="WHIT"> </span><span class="NAME">undefined</span><span class="WHIT"> </span><span class="PUNC">?</span><span class="WHIT"> </span><span class="NAME">data.enabled</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">true</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 54</span> 
 <span class='line'> 55</span>         </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">data.iconName</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
 <span class='line'> 56</span>             </span><span class="NAME">this._widget.attr</span><span class="PUNC">(</span><span class="STRN">'iconClass'</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">'dijitMenuItemIcon menuIcon '</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">data.iconName</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="STRN">'MenuIcon'</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'> 57</span>         </span><span class="PUNC">}</span><span class="WHIT">
 <span class='line'> 58</span>     </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'> 59</span>     
+<span class='line'> 59</span> 
 <span class='line'> 60</span> 
 <span class='line'> 61</span>     </span><span class="COMM">// **************** PUBLIC METHODS **************** //</span><span class="WHIT">
 <span class='line'> 62</span> 
-<span class='line'> 63</span>     
+<span class='line'> 63</span> 
 <span class='line'> 64</span>     </span><span class="COMM">/**
 <span class='line'> 65</span>      * Sets the element enabled
 <span class='line'> 66</span>      * It must be called to set it disabled
 <span class='line'> 67</span>      * when the menuitem is going to be left
-<span class='line'> 68</span>      * outside of the menu 
+<span class='line'> 68</span>      * outside of the menu
 <span class='line'> 69</span>      */</span><span class="WHIT">
 <span class='line'> 70</span>     </span><span class="NAME">setEnabled</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="COMM">/** Boolean */</span><span class="WHIT"> </span><span class="NAME">enabled</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
 <span class='line'> 71</span>         </span><span class="NAME">this._enabled</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">enabled</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'> 72</span>         </span><span class="NAME">this._widget.attr</span><span class="PUNC">(</span><span class="STRN">'disabled'</span><span class="PUNC">,</span><span class="PUNC">!</span><span class="NAME">enabled</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'> 73</span>     </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'> 74</span>     
+<span class='line'> 74</span> 
 <span class='line'> 75</span>     </span><span class="COMM">/**
 <span class='line'> 76</span>      * Register key handlers
 <span class='line'> 77</span>      * @override
@@ -86,9 +86,9 @@
 <span class='line'> 79</span>     </span><span class="NAME">register</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="COMM">/** KeyPressRegistry */</span><span class="WHIT"> </span><span class="NAME">registry</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
 <span class='line'> 80</span>         </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">this._shortcut</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
 <span class='line'> 81</span>             </span><span class="NAME">registry.addHandler</span><span class="PUNC">(</span><span class="NAME">this._shortcut</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">this._keyPressHandler.bind</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'> 82</span>         </span><span class="PUNC">}</span><span class="WHIT">    
+<span class='line'> 82</span>         </span><span class="PUNC">}</span><span class="WHIT">
 <span class='line'> 83</span>     </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'> 84</span>     
+<span class='line'> 84</span> 
 <span class='line'> 85</span>     </span><span class="COMM">/**
 <span class='line'> 86</span>      * Unregister key handlers
 <span class='line'> 87</span>      * @override
@@ -98,17 +98,17 @@
 <span class='line'> 91</span>             </span><span class="NAME">registry.removeHandler</span><span class="PUNC">(</span><span class="NAME">this._shortcut</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'> 92</span>         </span><span class="PUNC">}</span><span class="WHIT">
 <span class='line'> 93</span>     </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'> 94</span>     
+<span class='line'> 94</span> 
 <span class='line'> 95</span>     </span><span class="COMM">// ************** PRIVATE METHODS **************** //</span><span class="WHIT">
-<span class='line'> 96</span>     
+<span class='line'> 96</span> 
 <span class='line'> 97</span>     </span><span class="COMM">/**
-<span class='line'> 98</span>      * function to capture key strokes and decide if 
+<span class='line'> 98</span>      * function to capture key strokes and decide if
 <span class='line'> 99</span>      * calling the handler depending on the status of the
 <span class='line'>100</span>      * action (enabled or disabled)
 <span class='line'>101</span>      */</span><span class="WHIT">
 <span class='line'>102</span>     </span><span class="NAME">_keyPressHandler</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
 <span class='line'>103</span>         </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">this._enabled</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>104</span>            </span><span class="NAME">this._handler</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT"> 
+<span class='line'>104</span>            </span><span class="NAME">this._handler</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'>105</span>         </span><span class="PUNC">}</span><span class="WHIT">
 <span class='line'>106</span>     </span><span class="PUNC">}</span><span class="WHIT">
 <span class='line'>107</span> </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">

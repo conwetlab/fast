@@ -213,11 +213,17 @@ ul.inheritsList
 	
 	<li><a href="../symbols/BuildingBlockDescription.html">BuildingBlockDescription</a></li>
 	
+	<li><a href="../symbols/BuildingBlockDocument.html">BuildingBlockDocument</a></li>
+	
 	<li><a href="../symbols/BuildingBlockFactory.html">BuildingBlockFactory</a></li>
 	
 	<li><a href="../symbols/BuildingBlockSet.html">BuildingBlockSet</a></li>
 	
 	<li><a href="../symbols/BuildingBlockView.html">BuildingBlockView</a></li>
+	
+	<li><a href="../symbols/ButtonArrayDialog.html">ButtonArrayDialog</a></li>
+	
+	<li><a href="../symbols/CaptionDialog.html">CaptionDialog</a></li>
 	
 	<li><a href="../symbols/ComponentInstance.html">ComponentInstance</a></li>
 	
@@ -253,11 +259,11 @@ ul.inheritsList
 	
 	<li><a href="../symbols/FormComponent.html">FormComponent</a></li>
 	
+	<li><a href="../symbols/FormDescription.html">FormDescription</a></li>
+	
 	<li><a href="../symbols/FormDialog.html">FormDialog</a></li>
 	
 	<li><a href="../symbols/FormFactory.html">FormFactory</a></li>
-	
-	<li><a href="../symbols/FormInstance.html">FormInstance</a></li>
 	
 	<li><a href="../symbols/FormSnapshotView.html">FormSnapshotView</a></li>
 	
@@ -268,6 +274,8 @@ ul.inheritsList
 	<li><a href="../symbols/GVS.html">GVS</a></li>
 	
 	<li><a href="../symbols/InferenceEngine.html">InferenceEngine</a></li>
+	
+	<li><a href="../symbols/iServeDialog.html">iServeDialog</a></li>
 	
 	<li><a href="../symbols/KeyPressRegistry.html">KeyPressRegistry</a></li>
 	
@@ -281,15 +289,11 @@ ul.inheritsList
 	
 	<li><a href="../symbols/MenuElement.html">MenuElement</a></li>
 	
-	<li><a href="../symbols/NewScreenDialog.html">NewScreenDialog</a></li>
-	
-	<li><a href="../symbols/NewScreenflowDialog.html">NewScreenflowDialog</a></li>
+	<li><a href="../symbols/NewBuildingBlockDialog.html">NewBuildingBlockDialog</a></li>
 	
 	<li><a href="../symbols/OperatorComponent.html">OperatorComponent</a></li>
 	
 	<li><a href="../symbols/OperatorFactory.html">OperatorFactory</a></li>
-	
-	<li><a href="../symbols/OperatorInstance.html">OperatorInstance</a></li>
 	
 	<li><a href="../symbols/OperatorView.html">OperatorView</a></li>
 	
@@ -300,6 +304,10 @@ ul.inheritsList
 	<li><a href="../symbols/PaletteController.html">PaletteController</a></li>
 	
 	<li><a href="../symbols/PaletteDocument.html">PaletteDocument</a></li>
+	
+	<li><a href="../symbols/PaletteSearchBox.html">PaletteSearchBox</a></li>
+	
+	<li><a href="../symbols/ParamsDialog.html">ParamsDialog</a></li>
 	
 	<li><a href="../symbols/Pipe.html">Pipe</a></li>
 	
@@ -331,13 +339,15 @@ ul.inheritsList
 	
 	<li><a href="../symbols/PublishGadgetDialog.html">PublishGadgetDialog</a></li>
 	
+	<li><a href="../symbols/RecommendationManager.html">RecommendationManager</a></li>
+	
 	<li><a href="../symbols/ResourceComponent.html">ResourceComponent</a></li>
 	
 	<li><a href="../symbols/ResourceFactory.html">ResourceFactory</a></li>
 	
-	<li><a href="../symbols/ResourceInstance.html">ResourceInstance</a></li>
-	
 	<li><a href="../symbols/ResourceView.html">ResourceView</a></li>
+	
+	<li><a href="../symbols/SaveAsDialog.html">SaveAsDialog</a></li>
 	
 	<li><a href="../symbols/ScreenCanvasCache.html">ScreenCanvasCache</a></li>
 	
@@ -359,7 +369,7 @@ ul.inheritsList
 	
 	<li><a href="../symbols/ScreenflowInferenceEngine.html">ScreenflowInferenceEngine</a></li>
 	
-	<li><a href="../symbols/ScreenflowInstance.html">ScreenflowInstance</a></li>
+	<li><a href="../symbols/ScreenflowPlayer.html">ScreenflowPlayer</a></li>
 	
 	<li><a href="../symbols/ScreenInferenceEngine.html">ScreenInferenceEngine</a></li>
 	
@@ -493,15 +503,6 @@ ul.inheritsList
 						</tr>
 					
 						<tr>
-							<td class="attributes">&lt;private&gt; &nbsp;</td>
-							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/PipeFactory.html#_getPipeIdFromJSON">_getPipeIdFromJSON</a></b>(data)
-								</div>
-								<div class="description">Gets an id from its json data</div>
-							</td>
-						</tr>
-					
-						<tr>
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
 								<div class="fixedFont"><b><a href="../symbols/PipeFactory.html#getPipe">getPipe</a></b>()
@@ -513,9 +514,9 @@ ul.inheritsList
 						<tr>
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/PipeFactory.html#getPipeFromJSON">getPipeFromJSON</a></b>(data)
+								<div class="fixedFont"><b><a href="../symbols/PipeFactory.html#getPipeFromTerminals">getPipeFromTerminals</a></b>(src, dst)
 								</div>
-								<div class="description">Returns a pipe instance from its JSON data</div>
+								<div class="description">Returns a pipe given its source and destination terminals</div>
 							</td>
 						</tr>
 					
@@ -524,7 +525,8 @@ ul.inheritsList
 							<td class="nameDescription">
 								<div class="fixedFont"><b><a href="../symbols/PipeFactory.html#getPipes">getPipes</a></b>(instance)
 								</div>
-								<div class="description">Returns the list of pipes in which an instance is involved(as the source or the destination)</div>
+								<div class="description">Returns the list of pipes in which an instance is involved
+(as the source or the destination)</div>
 							</td>
 						</tr>
 					
@@ -670,42 +672,6 @@ ul.inheritsList
 
 					<hr />
 				
-					<a name="_getPipeIdFromJSON"> </a>
-					<div class="fixedFont">&lt;private&gt; 
-					
-					<span class="light">{String}</span>
-					<b>_getPipeIdFromJSON</b>(data)
-					
-					</div>
-					<div class="description">
-						Gets an id from its json data
-						
-						
-					</div>
-					
-					
-					
-						
-							<dl class="detailList">
-							<dt class="heading">Parameters:</dt>
-							
-								<dt>
-									<span class="light fixedFont">{Object}</span> <b>data</b>
-									
-								</dt>
-								<dd></dd>
-							
-							</dl>
-						
-						
-						
-						
-						
-						
-						
-
-					<hr />
-				
 					<a name="getPipe"> </a>
 					<div class="fixedFont">
 					
@@ -731,15 +697,15 @@ ul.inheritsList
 
 					<hr />
 				
-					<a name="getPipeFromJSON"> </a>
+					<a name="getPipeFromTerminals"> </a>
 					<div class="fixedFont">
 					
 					<span class="light">{<a href="../symbols/Pipe.html#constructor">Pipe</a>}</span>
-					<b>getPipeFromJSON</b>(data)
+					<b>getPipeFromTerminals</b>(src, dst)
 					
 					</div>
 					<div class="description">
-						Returns a pipe instance from its JSON data
+						Returns a pipe given its source and destination terminals
 						
 						
 					</div>
@@ -751,7 +717,13 @@ ul.inheritsList
 							<dt class="heading">Parameters:</dt>
 							
 								<dt>
-									<span class="light fixedFont">{Object}</span> <b>data</b>
+									<span class="light fixedFont">{<a href="../symbols/_global_.html#Terminal">Terminal</a>}</span> <b>src</b>
+									
+								</dt>
+								<dd></dd>
+							
+								<dt>
+									<span class="light fixedFont">{<a href="../symbols/_global_.html#Terminal">Terminal</a>}</span> <b>dst</b>
 									
 								</dt>
 								<dd></dd>
@@ -775,7 +747,8 @@ ul.inheritsList
 					
 					</div>
 					<div class="description">
-						Returns the list of pipes in which an instance is involved(as the source or the destination)
+						Returns the list of pipes in which an instance is involved
+(as the source or the destination)
 						
 						
 					</div>
@@ -897,7 +870,7 @@ ul.inheritsList
 <!-- ============================== footer ================================= -->
 		<div class="fineprint" style="clear:both">
 			
-			Documentation generated by <a href="http://www.jsdoctoolkit.org/" target="_blank">JsDoc Toolkit</a> 2.0.2 on Tue Feb 23 2010 17:57:00 GMT+0100 (CET)
+			Documentation generated by <a href="http://www.jsdoctoolkit.org/" target="_blank">JsDoc Toolkit</a> 2.0.2 on Fri Feb 18 2011 12:18:15 GMT+0100 (CET)
 		</div>
 	</body>
 </html>

@@ -213,11 +213,17 @@ ul.inheritsList
 	
 	<li><a href="../symbols/BuildingBlockDescription.html">BuildingBlockDescription</a></li>
 	
+	<li><a href="../symbols/BuildingBlockDocument.html">BuildingBlockDocument</a></li>
+	
 	<li><a href="../symbols/BuildingBlockFactory.html">BuildingBlockFactory</a></li>
 	
 	<li><a href="../symbols/BuildingBlockSet.html">BuildingBlockSet</a></li>
 	
 	<li><a href="../symbols/BuildingBlockView.html">BuildingBlockView</a></li>
+	
+	<li><a href="../symbols/ButtonArrayDialog.html">ButtonArrayDialog</a></li>
+	
+	<li><a href="../symbols/CaptionDialog.html">CaptionDialog</a></li>
 	
 	<li><a href="../symbols/ComponentInstance.html">ComponentInstance</a></li>
 	
@@ -253,11 +259,11 @@ ul.inheritsList
 	
 	<li><a href="../symbols/FormComponent.html">FormComponent</a></li>
 	
+	<li><a href="../symbols/FormDescription.html">FormDescription</a></li>
+	
 	<li><a href="../symbols/FormDialog.html">FormDialog</a></li>
 	
 	<li><a href="../symbols/FormFactory.html">FormFactory</a></li>
-	
-	<li><a href="../symbols/FormInstance.html">FormInstance</a></li>
 	
 	<li><a href="../symbols/FormSnapshotView.html">FormSnapshotView</a></li>
 	
@@ -268,6 +274,8 @@ ul.inheritsList
 	<li><a href="../symbols/GVS.html">GVS</a></li>
 	
 	<li><a href="../symbols/InferenceEngine.html">InferenceEngine</a></li>
+	
+	<li><a href="../symbols/iServeDialog.html">iServeDialog</a></li>
 	
 	<li><a href="../symbols/KeyPressRegistry.html">KeyPressRegistry</a></li>
 	
@@ -281,15 +289,11 @@ ul.inheritsList
 	
 	<li><a href="../symbols/MenuElement.html">MenuElement</a></li>
 	
-	<li><a href="../symbols/NewScreenDialog.html">NewScreenDialog</a></li>
-	
-	<li><a href="../symbols/NewScreenflowDialog.html">NewScreenflowDialog</a></li>
+	<li><a href="../symbols/NewBuildingBlockDialog.html">NewBuildingBlockDialog</a></li>
 	
 	<li><a href="../symbols/OperatorComponent.html">OperatorComponent</a></li>
 	
 	<li><a href="../symbols/OperatorFactory.html">OperatorFactory</a></li>
-	
-	<li><a href="../symbols/OperatorInstance.html">OperatorInstance</a></li>
 	
 	<li><a href="../symbols/OperatorView.html">OperatorView</a></li>
 	
@@ -300,6 +304,10 @@ ul.inheritsList
 	<li><a href="../symbols/PaletteController.html">PaletteController</a></li>
 	
 	<li><a href="../symbols/PaletteDocument.html">PaletteDocument</a></li>
+	
+	<li><a href="../symbols/PaletteSearchBox.html">PaletteSearchBox</a></li>
+	
+	<li><a href="../symbols/ParamsDialog.html">ParamsDialog</a></li>
 	
 	<li><a href="../symbols/Pipe.html">Pipe</a></li>
 	
@@ -331,13 +339,15 @@ ul.inheritsList
 	
 	<li><a href="../symbols/PublishGadgetDialog.html">PublishGadgetDialog</a></li>
 	
+	<li><a href="../symbols/RecommendationManager.html">RecommendationManager</a></li>
+	
 	<li><a href="../symbols/ResourceComponent.html">ResourceComponent</a></li>
 	
 	<li><a href="../symbols/ResourceFactory.html">ResourceFactory</a></li>
 	
-	<li><a href="../symbols/ResourceInstance.html">ResourceInstance</a></li>
-	
 	<li><a href="../symbols/ResourceView.html">ResourceView</a></li>
+	
+	<li><a href="../symbols/SaveAsDialog.html">SaveAsDialog</a></li>
 	
 	<li><a href="../symbols/ScreenCanvasCache.html">ScreenCanvasCache</a></li>
 	
@@ -359,7 +369,7 @@ ul.inheritsList
 	
 	<li><a href="../symbols/ScreenflowInferenceEngine.html">ScreenflowInferenceEngine</a></li>
 	
-	<li><a href="../symbols/ScreenflowInstance.html">ScreenflowInstance</a></li>
+	<li><a href="../symbols/ScreenflowPlayer.html">ScreenflowPlayer</a></li>
 	
 	<li><a href="../symbols/ScreenInferenceEngine.html">ScreenInferenceEngine</a></li>
 	
@@ -433,7 +443,8 @@ ul.inheritsList
 							<div class="fixedFont">
 								<b><a href="../symbols/ComponentInstance.html#constructor">ComponentInstance</a></b>($super, buildingBlockDescription, inferenceEngine)
 							</div>
-							<div class="description">This class is an instance of a palette componentin the Document area</div>
+							<div class="description">This class is an instance of a palette component
+in the Document area</div>
 						</td>
 					</tr>
 				</tbody>
@@ -498,6 +509,46 @@ ul.inheritsList
 							<td class="attributes">&lt;private&gt; &nbsp;</td>
 							<td class="nameDescription">
 								<div class="fixedFont">
+								<b><a href="../symbols/ComponentInstance.html#_orientation">_orientation</a></b>
+								</div>
+								<div class="description">Orientation of the instance inside its container</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;private&gt; &nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">
+								<b><a href="../symbols/ComponentInstance.html#_originalUri">_originalUri</a></b>
+								</div>
+								<div class="description">Original BuildingBlock URI</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;private&gt; &nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">
+								<b><a href="../symbols/ComponentInstance.html#_params">_params</a></b>
+								</div>
+								<div class="description">BuildingBlock params</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;private&gt; &nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">
+								<b><a href="../symbols/ComponentInstance.html#_title">_title</a></b>
+								</div>
+								<div class="description">Title of the instance</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;private&gt; &nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">
 								<b><a href="../symbols/ComponentInstance.html#_view">_view</a></b>
 								</div>
 								<div class="description">BuildingBlock description graphical representation</div>
@@ -532,6 +583,15 @@ ul.inheritsList
 						<tr>
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/ComponentInstance.html#_buildDeleteUri">_buildDeleteUri</a></b>()
+								</div>
+								<div class="description"></div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
 								<div class="fixedFont"><b><a href="../symbols/ComponentInstance.html#_createView">_createView</a></b>()
 								</div>
 								<div class="description">Creates a new View instance for the component</div>
@@ -550,18 +610,19 @@ ul.inheritsList
 						<tr>
 							<td class="attributes">&lt;private&gt; &nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/ComponentInstance.html#_getConditionList">_getConditionList</a></b>(type, reachability)
+								<div class="fixedFont"><b><a href="../symbols/ComponentInstance.html#_onClick">_onClick</a></b>()
 								</div>
-								<div class="description">Creates the data hash to be passed to thetable</div>
+								<div class="description">This function is called when the attached view is clicked
+must be overriden by descendants</div>
 							</td>
 						</tr>
 					
 						<tr>
 							<td class="attributes">&lt;private&gt; &nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/ComponentInstance.html#_onClick">_onClick</a></b>(event)
+								<div class="fixedFont"><b><a href="../symbols/ComponentInstance.html#_onCopySuccess">_onCopySuccess</a></b>(transport)
 								</div>
-								<div class="description">This function is called when the attached view is clickedmust be overriden by descendants</div>
+								<div class="description">_OnCopySuccess</div>
 							</td>
 						</tr>
 					
@@ -570,7 +631,26 @@ ul.inheritsList
 							<td class="nameDescription">
 								<div class="fixedFont"><b><a href="../symbols/ComponentInstance.html#_onDoubleClick">_onDoubleClick</a></b>(event)
 								</div>
-								<div class="description">This function is called when the attached view is dbl-clickedmust be overriden by descendants</div>
+								<div class="description">This function is called when the attached view is dbl-clicked
+must be overriden by descendants</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/ComponentInstance.html#createCatalogueCopy">createCatalogueCopy</a></b>(eventHandler)
+								</div>
+								<div class="description">Create a copy in the catalogue for the inferencing</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/ComponentInstance.html#deleteInstance">deleteInstance</a></b>()
+								</div>
+								<div class="description">Deletes the instance in the catalogue</div>
 							</td>
 						</tr>
 					
@@ -633,16 +713,37 @@ ul.inheritsList
 							<td class="nameDescription">
 								<div class="fixedFont"><b><a href="../symbols/ComponentInstance.html#getInfo">getInfo</a></b>()
 								</div>
-								<div class="description">This function returns an array of lines representing thekey information of the building block, in order to be shown ina tableImplementing TableModel interface</div>
+								<div class="description">This function returns an array of lines representing the
+key information of the building block, in order to be shown in
+a table
+Implementing TableModel interface</div>
 							</td>
 						</tr>
 					
 						<tr>
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/ComponentInstance.html#getPosition">getPosition</a></b>()
+								<div class="fixedFont"><b><a href="../symbols/ComponentInstance.html#getOrientation">getOrientation</a></b>()
 								</div>
-								<div class="description">Gets the component position</div>
+								<div class="description">Gets the component orientation</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/ComponentInstance.html#getOriginalUri">getOriginalUri</a></b>()
+								</div>
+								<div class="description"></div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/ComponentInstance.html#getParams">getParams</a></b>()
+								</div>
+								<div class="description">Gets the component params</div>
 							</td>
 						</tr>
 					
@@ -651,7 +752,9 @@ ul.inheritsList
 							<td class="nameDescription">
 								<div class="fixedFont"><b><a href="../symbols/ComponentInstance.html#getPostconditionTable">getPostconditionTable</a></b>(reachability)
 								</div>
-								<div class="description">This function returns a list with all thepostconditions of the instance,ready to be set in the FactPane</div>
+								<div class="description">This function returns a list with all the
+postconditions of the instance,
+ready to be set in the FactPane</div>
 							</td>
 						</tr>
 					
@@ -660,7 +763,9 @@ ul.inheritsList
 							<td class="nameDescription">
 								<div class="fixedFont"><b><a href="../symbols/ComponentInstance.html#getPreconditionTable">getPreconditionTable</a></b>(reachability)
 								</div>
-								<div class="description">This function returns a list with all thepreconditions of the instance,ready to be set in the FactPane</div>
+								<div class="description">This function returns a list with all the
+preconditions of the instance,
+ready to be set in the FactPane</div>
 							</td>
 						</tr>
 					
@@ -669,7 +774,8 @@ ul.inheritsList
 							<td class="nameDescription">
 								<div class="fixedFont"><b><a href="../symbols/ComponentInstance.html#getTitle">getTitle</a></b>()
 								</div>
-								<div class="description">Somehow something the user can comprehendImplementing TableModel interface</div>
+								<div class="description">Somehow something the user can comprehend
+Implementing TableModel interface</div>
 							</td>
 						</tr>
 					
@@ -703,18 +809,18 @@ ul.inheritsList
 						<tr>
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/ComponentInstance.html#onScroll">onScroll</a></b>()
+								<div class="fixedFont"><b><a href="../symbols/ComponentInstance.html#onUpdate">onUpdate</a></b>(x, y)
 								</div>
-								<div class="description">Called when the scroll has been movedImplementing Scroll Listener interface</div>
+								<div class="description">On position update</div>
 							</td>
 						</tr>
 					
 						<tr>
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/ComponentInstance.html#onUpdate">onUpdate</a></b>(x, y)
+								<div class="fixedFont"><b><a href="../symbols/ComponentInstance.html#setCopyUri">setCopyUri</a></b>(uri)
 								</div>
-								<div class="description">On position update</div>
+								<div class="description">Sets the uri of the instance, after copying.</div>
 							</td>
 						</tr>
 					
@@ -739,9 +845,54 @@ ul.inheritsList
 						<tr>
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/ComponentInstance.html#setOrientation">setOrientation</a></b>(orientation)
+								</div>
+								<div class="description">Sets the component orientation</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/ComponentInstance.html#setOriginalUri">setOriginalUri</a></b>(uri)
+								</div>
+								<div class="description">Sets the URI of the original building block</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/ComponentInstance.html#setParams">setParams</a></b>(params)
+								</div>
+								<div class="description">Sets the component params</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
 								<div class="fixedFont"><b><a href="../symbols/ComponentInstance.html#setPosition">setPosition</a></b>(position)
 								</div>
-								<div class="description">Sets the component position</div>
+								<div class="description">set position</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/ComponentInstance.html#setTitle">setTitle</a></b>(title)
+								</div>
+								<div class="description">Sets the title of the instance</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/ComponentInstance.html#toElement">toElement</a></b>()
+								</div>
+								<div class="description">return the dom element for use in the prototype.js functions</div>
 							</td>
 						</tr>
 					
@@ -768,7 +919,8 @@ ul.inheritsList
 				</div>
 				
 				<div class="description">
-					This class is an instance of a palette componentin the Document area
+					This class is an instance of a palette component
+in the Document area
 					
 				</div>
 				
@@ -903,6 +1055,94 @@ ul.inheritsList
 
 					<hr />
 				
+					<a name="_orientation"> </a>
+					<div class="fixedFont">&lt;private&gt; 
+					
+					<span class="light">{Integer}</span>
+					<b>_orientation</b>
+					
+					</div>
+					<div class="description">
+						Orientation of the instance inside its container
+						
+						
+					</div>
+					
+					
+
+						
+						
+						
+						
+
+					<hr />
+				
+					<a name="_originalUri"> </a>
+					<div class="fixedFont">&lt;private&gt; 
+					
+					<span class="light">{String}</span>
+					<b>_originalUri</b>
+					
+					</div>
+					<div class="description">
+						Original BuildingBlock URI
+						
+						
+					</div>
+					
+					
+
+						
+						
+						
+						
+
+					<hr />
+				
+					<a name="_params"> </a>
+					<div class="fixedFont">&lt;private&gt; 
+					
+					<span class="light">{String}</span>
+					<b>_params</b>
+					
+					</div>
+					<div class="description">
+						BuildingBlock params
+						
+						
+					</div>
+					
+					
+
+						
+						
+						
+						
+
+					<hr />
+				
+					<a name="_title"> </a>
+					<div class="fixedFont">&lt;private&gt; 
+					
+					<span class="light">{String}</span>
+					<b>_title</b>
+					
+					</div>
+					<div class="description">
+						Title of the instance
+						
+						
+					</div>
+					
+					
+
+						
+						
+						
+						
+
+					<hr />
+				
 					<a name="_view"> </a>
 					<div class="fixedFont">&lt;private&gt; 
 					
@@ -932,6 +1172,31 @@ ul.inheritsList
 				<div class="sectionTitle">
 					Method Detail
 				</div>
+				
+					<a name="_buildDeleteUri"> </a>
+					<div class="fixedFont">
+					
+					
+					<b>_buildDeleteUri</b>()
+					
+					</div>
+					<div class="description">
+						
+						
+						
+					</div>
+					
+					
+					
+						
+						
+						
+						
+						
+						
+						
+
+					<hr />
 				
 					<a name="_createView"> </a>
 					<div class="fixedFont">
@@ -1000,38 +1265,22 @@ ul.inheritsList
 
 					<hr />
 				
-					<a name="_getConditionList"> </a>
+					<a name="_onClick"> </a>
 					<div class="fixedFont">&lt;private&gt; 
 					
-					<span class="light">{Array}</span>
-					<b>_getConditionList</b>(type, reachability)
+					
+					<b>_onClick</b>()
 					
 					</div>
 					<div class="description">
-						Creates the data hash to be passed to thetable
+						This function is called when the attached view is clicked
+must be overriden by descendants
 						
 						
 					</div>
 					
 					
 					
-						
-							<dl class="detailList">
-							<dt class="heading">Parameters:</dt>
-							
-								<dt>
-									<span class="light fixedFont">{String}</span> <b>type</b>
-									
-								</dt>
-								<dd></dd>
-							
-								<dt>
-									<span class="light fixedFont">{Hash | Boolean}</span> <b>reachability</b>
-									
-								</dt>
-								<dd></dd>
-							
-							</dl>
 						
 						
 						
@@ -1042,15 +1291,15 @@ ul.inheritsList
 
 					<hr />
 				
-					<a name="_onClick"> </a>
+					<a name="_onCopySuccess"> </a>
 					<div class="fixedFont">&lt;private&gt; 
 					
 					
-					<b>_onClick</b>(event)
+					<b>_onCopySuccess</b>(transport)
 					
 					</div>
 					<div class="description">
-						This function is called when the attached view is clickedmust be overriden by descendants
+						_OnCopySuccess
 						
 						
 					</div>
@@ -1062,7 +1311,7 @@ ul.inheritsList
 							<dt class="heading">Parameters:</dt>
 							
 								<dt>
-									<span class="light fixedFont">{Event}</span> <b>event</b>
+									<b>transport</b>
 									
 								</dt>
 								<dd></dd>
@@ -1086,7 +1335,8 @@ ul.inheritsList
 					
 					</div>
 					<div class="description">
-						This function is called when the attached view is dbl-clickedmust be overriden by descendants
+						This function is called when the attached view is dbl-clicked
+must be overriden by descendants
 						
 						
 					</div>
@@ -1104,6 +1354,67 @@ ul.inheritsList
 								<dd></dd>
 							
 							</dl>
+						
+						
+						
+						
+						
+						
+						
+
+					<hr />
+				
+					<a name="createCatalogueCopy"> </a>
+					<div class="fixedFont">
+					
+					
+					<b>createCatalogueCopy</b>(eventHandler)
+					
+					</div>
+					<div class="description">
+						Create a copy in the catalogue for the inferencing
+						
+						
+					</div>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<b>eventHandler</b>
+									
+								</dt>
+								<dd></dd>
+							
+							</dl>
+						
+						
+						
+						
+						
+						
+						
+
+					<hr />
+				
+					<a name="deleteInstance"> </a>
+					<div class="fixedFont">
+					
+					
+					<b>deleteInstance</b>()
+					
+					</div>
+					<div class="description">
+						Deletes the instance in the catalogue
+						
+						
+					</div>
+					
+					
+					
 						
 						
 						
@@ -1272,7 +1583,10 @@ ul.inheritsList
 					
 					</div>
 					<div class="description">
-						This function returns an array of lines representing thekey information of the building block, in order to be shown ina tableImplementing TableModel interface
+						This function returns an array of lines representing the
+key information of the building block, in order to be shown in
+a table
+Implementing TableModel interface
 						
 						
 					</div>
@@ -1289,15 +1603,65 @@ ul.inheritsList
 
 					<hr />
 				
-					<a name="getPosition"> </a>
+					<a name="getOrientation"> </a>
 					<div class="fixedFont">
 					
-					<span class="light">{Object}</span>
-					<b>getPosition</b>()
+					<span class="light">{Integer}</span>
+					<b>getOrientation</b>()
 					
 					</div>
 					<div class="description">
-						Gets the component position
+						Gets the component orientation
+						
+						
+					</div>
+					
+					
+					
+						
+						
+						
+						
+						
+						
+						
+
+					<hr />
+				
+					<a name="getOriginalUri"> </a>
+					<div class="fixedFont">
+					
+					<span class="light">{String}</span>
+					<b>getOriginalUri</b>()
+					
+					</div>
+					<div class="description">
+						
+						
+						
+					</div>
+					
+					
+					
+						
+						
+						
+						
+						
+						
+						
+
+					<hr />
+				
+					<a name="getParams"> </a>
+					<div class="fixedFont">
+					
+					<span class="light">{Object}</span>
+					<b>getParams</b>()
+					
+					</div>
+					<div class="description">
+						Gets the component params
 						
 						
 					</div>
@@ -1322,7 +1686,9 @@ ul.inheritsList
 					
 					</div>
 					<div class="description">
-						This function returns a list with all thepostconditions of the instance,ready to be set in the FactPane
+						This function returns a list with all the
+postconditions of the instance,
+ready to be set in the FactPane
 						
 						
 					</div>
@@ -1358,7 +1724,9 @@ ul.inheritsList
 					
 					</div>
 					<div class="description">
-						This function returns a list with all thepreconditions of the instance,ready to be set in the FactPane
+						This function returns a list with all the
+preconditions of the instance,
+ready to be set in the FactPane
 						
 						
 					</div>
@@ -1394,7 +1762,8 @@ ul.inheritsList
 					
 					</div>
 					<div class="description">
-						Somehow something the user can comprehendImplementing TableModel interface
+						Somehow something the user can comprehend
+Implementing TableModel interface
 						
 						
 					</div>
@@ -1414,7 +1783,7 @@ ul.inheritsList
 					<a name="getUri"> </a>
 					<div class="fixedFont">
 					
-					
+					<span class="light">{String}</span>
 					<b>getUri</b>()
 					
 					</div>
@@ -1484,7 +1853,8 @@ ul.inheritsList
 									<b>changingZone</b>
 									
 								</dt>
-								<dd>True if a new Instance has     been added to the new zone.</dd>
+								<dd>True if a new Instance has
+     been added to the new zone.</dd>
 							
 								<dt>
 									<span class="light fixedFont">{Object}</span> <b>position</b>
@@ -1493,31 +1863,6 @@ ul.inheritsList
 								<dd></dd>
 							
 							</dl>
-						
-						
-						
-						
-						
-						
-						
-
-					<hr />
-				
-					<a name="onScroll"> </a>
-					<div class="fixedFont">
-					
-					
-					<b>onScroll</b>()
-					
-					</div>
-					<div class="description">
-						Called when the scroll has been movedImplementing Scroll Listener interface
-						
-						
-					</div>
-					
-					
-					
 						
 						
 						
@@ -1555,6 +1900,42 @@ ul.inheritsList
 							
 								<dt>
 									<span class="light fixedFont">{Number}</span> <b>y</b>
+									
+								</dt>
+								<dd></dd>
+							
+							</dl>
+						
+						
+						
+						
+						
+						
+						
+
+					<hr />
+				
+					<a name="setCopyUri"> </a>
+					<div class="fixedFont">
+					
+					
+					<b>setCopyUri</b>(uri)
+					
+					</div>
+					<div class="description">
+						Sets the uri of the instance, after copying.
+						
+						
+					</div>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<b>uri</b>
 									
 								</dt>
 								<dd></dd>
@@ -1642,15 +2023,15 @@ ul.inheritsList
 
 					<hr />
 				
-					<a name="setPosition"> </a>
+					<a name="setOrientation"> </a>
 					<div class="fixedFont">
 					
 					
-					<b>setPosition</b>(position)
+					<b>setOrientation</b>(orientation)
 					
 					</div>
 					<div class="description">
-						Sets the component position
+						Sets the component orientation
 						
 						
 					</div>
@@ -1662,12 +2043,181 @@ ul.inheritsList
 							<dt class="heading">Parameters:</dt>
 							
 								<dt>
-									<span class="light fixedFont">{Object}</span> <b>position</b>
+									<span class="light fixedFont">{Object}</span> <b>orientation</b>
 									
 								</dt>
 								<dd></dd>
 							
 							</dl>
+						
+						
+						
+						
+						
+						
+						
+
+					<hr />
+				
+					<a name="setOriginalUri"> </a>
+					<div class="fixedFont">
+					
+					
+					<b>setOriginalUri</b>(uri)
+					
+					</div>
+					<div class="description">
+						Sets the URI of the original building block
+						
+						
+					</div>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>uri</b>
+									
+								</dt>
+								<dd></dd>
+							
+							</dl>
+						
+						
+						
+						
+						
+						
+						
+
+					<hr />
+				
+					<a name="setParams"> </a>
+					<div class="fixedFont">
+					
+					
+					<b>setParams</b>(params)
+					
+					</div>
+					<div class="description">
+						Sets the component params
+						
+						
+					</div>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{Object}</span> <b>params</b>
+									
+								</dt>
+								<dd></dd>
+							
+							</dl>
+						
+						
+						
+						
+						
+						
+						
+
+					<hr />
+				
+					<a name="setPosition"> </a>
+					<div class="fixedFont">
+					
+					
+					<b>setPosition</b>(position)
+					
+					</div>
+					<div class="description">
+						set position
+						
+						
+					</div>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<b>position</b>
+									
+								</dt>
+								<dd></dd>
+							
+							</dl>
+						
+						
+						
+						
+						
+						
+						
+
+					<hr />
+				
+					<a name="setTitle"> </a>
+					<div class="fixedFont">
+					
+					
+					<b>setTitle</b>(title)
+					
+					</div>
+					<div class="description">
+						Sets the title of the instance
+						
+						
+					</div>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>title</b>
+									
+								</dt>
+								<dd></dd>
+							
+							</dl>
+						
+						
+						
+						
+						
+						
+						
+
+					<hr />
+				
+					<a name="toElement"> </a>
+					<div class="fixedFont">
+					
+					<span class="light">{DOMNode}</span>
+					<b>toElement</b>()
+					
+					</div>
+					<div class="description">
+						return the dom element for use in the prototype.js functions
+						
+						
+					</div>
+					
+					
+					
 						
 						
 						
@@ -1686,7 +2236,7 @@ ul.inheritsList
 <!-- ============================== footer ================================= -->
 		<div class="fineprint" style="clear:both">
 			
-			Documentation generated by <a href="http://www.jsdoctoolkit.org/" target="_blank">JsDoc Toolkit</a> 2.0.2 on Tue Feb 23 2010 17:56:58 GMT+0100 (CET)
+			Documentation generated by <a href="http://www.jsdoctoolkit.org/" target="_blank">JsDoc Toolkit</a> 2.0.2 on Fri Feb 18 2011 12:18:14 GMT+0100 (CET)
 		</div>
 	</body>
 </html>

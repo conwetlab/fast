@@ -213,11 +213,17 @@ ul.inheritsList
 	
 	<li><a href="../symbols/BuildingBlockDescription.html">BuildingBlockDescription</a></li>
 	
+	<li><a href="../symbols/BuildingBlockDocument.html">BuildingBlockDocument</a></li>
+	
 	<li><a href="../symbols/BuildingBlockFactory.html">BuildingBlockFactory</a></li>
 	
 	<li><a href="../symbols/BuildingBlockSet.html">BuildingBlockSet</a></li>
 	
 	<li><a href="../symbols/BuildingBlockView.html">BuildingBlockView</a></li>
+	
+	<li><a href="../symbols/ButtonArrayDialog.html">ButtonArrayDialog</a></li>
+	
+	<li><a href="../symbols/CaptionDialog.html">CaptionDialog</a></li>
 	
 	<li><a href="../symbols/ComponentInstance.html">ComponentInstance</a></li>
 	
@@ -253,11 +259,11 @@ ul.inheritsList
 	
 	<li><a href="../symbols/FormComponent.html">FormComponent</a></li>
 	
+	<li><a href="../symbols/FormDescription.html">FormDescription</a></li>
+	
 	<li><a href="../symbols/FormDialog.html">FormDialog</a></li>
 	
 	<li><a href="../symbols/FormFactory.html">FormFactory</a></li>
-	
-	<li><a href="../symbols/FormInstance.html">FormInstance</a></li>
 	
 	<li><a href="../symbols/FormSnapshotView.html">FormSnapshotView</a></li>
 	
@@ -268,6 +274,8 @@ ul.inheritsList
 	<li><a href="../symbols/GVS.html">GVS</a></li>
 	
 	<li><a href="../symbols/InferenceEngine.html">InferenceEngine</a></li>
+	
+	<li><a href="../symbols/iServeDialog.html">iServeDialog</a></li>
 	
 	<li><a href="../symbols/KeyPressRegistry.html">KeyPressRegistry</a></li>
 	
@@ -281,15 +289,11 @@ ul.inheritsList
 	
 	<li><a href="../symbols/MenuElement.html">MenuElement</a></li>
 	
-	<li><a href="../symbols/NewScreenDialog.html">NewScreenDialog</a></li>
-	
-	<li><a href="../symbols/NewScreenflowDialog.html">NewScreenflowDialog</a></li>
+	<li><a href="../symbols/NewBuildingBlockDialog.html">NewBuildingBlockDialog</a></li>
 	
 	<li><a href="../symbols/OperatorComponent.html">OperatorComponent</a></li>
 	
 	<li><a href="../symbols/OperatorFactory.html">OperatorFactory</a></li>
-	
-	<li><a href="../symbols/OperatorInstance.html">OperatorInstance</a></li>
 	
 	<li><a href="../symbols/OperatorView.html">OperatorView</a></li>
 	
@@ -300,6 +304,10 @@ ul.inheritsList
 	<li><a href="../symbols/PaletteController.html">PaletteController</a></li>
 	
 	<li><a href="../symbols/PaletteDocument.html">PaletteDocument</a></li>
+	
+	<li><a href="../symbols/PaletteSearchBox.html">PaletteSearchBox</a></li>
+	
+	<li><a href="../symbols/ParamsDialog.html">ParamsDialog</a></li>
 	
 	<li><a href="../symbols/Pipe.html">Pipe</a></li>
 	
@@ -331,13 +339,15 @@ ul.inheritsList
 	
 	<li><a href="../symbols/PublishGadgetDialog.html">PublishGadgetDialog</a></li>
 	
+	<li><a href="../symbols/RecommendationManager.html">RecommendationManager</a></li>
+	
 	<li><a href="../symbols/ResourceComponent.html">ResourceComponent</a></li>
 	
 	<li><a href="../symbols/ResourceFactory.html">ResourceFactory</a></li>
 	
-	<li><a href="../symbols/ResourceInstance.html">ResourceInstance</a></li>
-	
 	<li><a href="../symbols/ResourceView.html">ResourceView</a></li>
+	
+	<li><a href="../symbols/SaveAsDialog.html">SaveAsDialog</a></li>
 	
 	<li><a href="../symbols/ScreenCanvasCache.html">ScreenCanvasCache</a></li>
 	
@@ -359,7 +369,7 @@ ul.inheritsList
 	
 	<li><a href="../symbols/ScreenflowInferenceEngine.html">ScreenflowInferenceEngine</a></li>
 	
-	<li><a href="../symbols/ScreenflowInstance.html">ScreenflowInstance</a></li>
+	<li><a href="../symbols/ScreenflowPlayer.html">ScreenflowPlayer</a></li>
 	
 	<li><a href="../symbols/ScreenInferenceEngine.html">ScreenInferenceEngine</a></li>
 	
@@ -459,6 +469,16 @@ to open an existing screen</div>
 							<td class="attributes">&lt;private&gt; &nbsp;</td>
 							<td class="nameDescription">
 								<div class="fixedFont">
+								<b><a href="../symbols/ManageScreensDialog.html#_buildingBlocks">_buildingBlocks</a></b>
+								</div>
+								<div class="description">List of building blocks</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;private&gt; &nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">
 								<b><a href="../symbols/ManageScreensDialog.html#_screens">_screens</a></b>
 								</div>
 								<div class="description">List of screens</div>
@@ -500,11 +520,29 @@ to open an existing screen</div>
 						</tr>
 					
 						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/ManageScreensDialog.html#_cloneScreen">_cloneScreen</a></b>(id)
+								</div>
+								<div class="description"></div>
+							</td>
+						</tr>
+					
+						<tr>
 							<td class="attributes">&lt;private&gt; &nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/ManageScreensDialog.html#_confirmDelete">_confirmDelete</a></b>()
+								<div class="fixedFont"><b><a href="../symbols/ManageScreensDialog.html#_confirmDelete">_confirmDelete</a></b>(value)
 								</div>
 								<div class="description">Execute the deletion of the screen</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;private&gt; &nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/ManageScreensDialog.html#_createBuildingBlockList">_createBuildingBlockList</a></b>()
+								</div>
+								<div class="description">Creates the building block list to be handled by its parent class</div>
 							</td>
 						</tr>
 					
@@ -520,9 +558,36 @@ to open an existing screen</div>
 						<tr>
 							<td class="attributes">&lt;private&gt; &nbsp;</td>
 							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/ManageScreensDialog.html#_createSearchBar">_createSearchBar</a></b>($super)
+								</div>
+								<div class="description">Create the search bar</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;private&gt; &nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/ManageScreensDialog.html#_deleteBuildingBlock">_deleteBuildingBlock</a></b>(id)
+								</div>
+								<div class="description">Starts the deletion of a building block</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;private&gt; &nbsp;</td>
+							<td class="nameDescription">
 								<div class="fixedFont"><b><a href="../symbols/ManageScreensDialog.html#_deleteScreen">_deleteScreen</a></b>(id)
 								</div>
 								<div class="description">Starts the deletion of a screen</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;private&gt; &nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/ManageScreensDialog.html#_getBuildingBlocks">_getBuildingBlocks</a></b>(types, context, onSucess)
+								</div>
+								<div class="description">Get selected building blocks</div>
 							</td>
 						</tr>
 					
@@ -533,6 +598,15 @@ to open an existing screen</div>
 								</div>
 								<div class="description">initDialogInterface
 This function creates the dom structure</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;private&gt; &nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/ManageScreensDialog.html#_loadBuildinBlocks">_loadBuildinBlocks</a></b>(onSucess)
+								</div>
+								<div class="description">Load selected building blocks</div>
 							</td>
 						</tr>
 					
@@ -557,6 +631,15 @@ This function creates the dom structure</div>
 						<tr>
 							<td class="attributes">&lt;private&gt; &nbsp;</td>
 							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/ManageScreensDialog.html#_openBuildingBlock">_openBuildingBlock</a></b>(id)
+								</div>
+								<div class="description">Open a building block by its id</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;private&gt; &nbsp;</td>
+							<td class="nameDescription">
 								<div class="fixedFont"><b><a href="../symbols/ManageScreensDialog.html#_openScreen">_openScreen</a></b>(id)
 								</div>
 								<div class="description">Open a screen by its id</div>
@@ -569,6 +652,15 @@ This function creates the dom structure</div>
 								<div class="fixedFont"><b><a href="../symbols/ManageScreensDialog.html#_reload">_reload</a></b>()
 								</div>
 								<div class="description">Reloads the screen list</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;private&gt; &nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/ManageScreensDialog.html#_shareBuildingBlock">_shareBuildingBlock</a></b>(id)
+								</div>
+								<div class="description">Share or unshare a screen depending of its status</div>
 							</td>
 						</tr>
 					
@@ -596,7 +688,7 @@ This function creates the dom structure</div>
 				
 				
 				<dl class="inheritsList">
-				<dt>Methods borrowed from class <a href="../symbols/GalleryDialog.html#constructor">GalleryDialog</a>: </dt><dd><a href="../symbols/GalleryDialog.html#_addRow">_addRow</a>, <a href="../symbols/GalleryDialog.html#_emptyRows">_emptyRows</a>, <a href="../symbols/GalleryDialog.html#_render">_render</a>, <a href="../symbols/GalleryDialog.html#_setButtons">_setButtons</a>, <a href="../symbols/GalleryDialog.html#_setFields">_setFields</a>, <a href="../symbols/GalleryDialog.html#_show">_show</a></dd><dt>Methods borrowed from class <a href="../symbols/FormDialog.html#constructor">FormDialog</a>: </dt><dd><a href="../symbols/FormDialog.html#_addButton">_addButton</a>, <a href="../symbols/FormDialog.html#_armEvents">_armEvents</a>, <a href="../symbols/FormDialog.html#_createLine">_createLine</a>, <a href="../symbols/FormDialog.html#_getForm">_getForm</a>, <a href="../symbols/FormDialog.html#_getFormWidget">_getFormWidget</a>, <a href="../symbols/FormDialog.html#_hide">_hide</a>, <a href="../symbols/FormDialog.html#_removeButtons">_removeButtons</a>, <a href="../symbols/FormDialog.html#_reset">_reset</a>, <a href="../symbols/FormDialog.html#_setContent">_setContent</a>, <a href="../symbols/FormDialog.html#_setHeader">_setHeader</a>, <a href="../symbols/FormDialog.html#_setMessage">_setMessage</a></dd>
+				<dt>Methods borrowed from class <a href="../symbols/GalleryDialog.html#constructor">GalleryDialog</a>: </dt><dd><a href="../symbols/GalleryDialog.html#_addRow">_addRow</a>, <a href="../symbols/GalleryDialog.html#_emptyRows">_emptyRows</a>, <a href="../symbols/GalleryDialog.html#_render">_render</a>, <a href="../symbols/GalleryDialog.html#_setButtons">_setButtons</a>, <a href="../symbols/GalleryDialog.html#_setFields">_setFields</a>, <a href="../symbols/GalleryDialog.html#_show">_show</a>, <a href="../symbols/GalleryDialog.html#_unselectElements">_unselectElements</a></dd><dt>Methods borrowed from class <a href="../symbols/FormDialog.html#constructor">FormDialog</a>: </dt><dd><a href="../symbols/FormDialog.html#_addButton">_addButton</a>, <a href="../symbols/FormDialog.html#_armEvents">_armEvents</a>, <a href="../symbols/FormDialog.html#_createLine">_createLine</a>, <a href="../symbols/FormDialog.html#_getForm">_getForm</a>, <a href="../symbols/FormDialog.html#_getFormWidget">_getFormWidget</a>, <a href="../symbols/FormDialog.html#_hide">_hide</a>, <a href="../symbols/FormDialog.html#_removeButtons">_removeButtons</a>, <a href="../symbols/FormDialog.html#_reset">_reset</a>, <a href="../symbols/FormDialog.html#_setContent">_setContent</a>, <a href="../symbols/FormDialog.html#_setHeader">_setHeader</a>, <a href="../symbols/FormDialog.html#_setMessage">_setMessage</a>, <a href="../symbols/FormDialog.html#_setTitle">_setTitle</a>, <a href="../symbols/FormDialog.html#_validate">_validate</a>, <a href="../symbols/FormDialog.html#isVisible">isVisible</a></dd>
 				</dl>
 				
 			
@@ -648,6 +740,31 @@ to open an existing screen
 				<div class="sectionTitle">
 					Field Detail
 				</div>
+				
+					<a name="_buildingBlocks"> </a>
+					<div class="fixedFont">&lt;private&gt; 
+					
+					<span class="light">{Array}</span>
+					<b>_buildingBlocks</b>
+					
+					</div>
+					<div class="description">
+						List of building blocks
+						
+							<br />
+							<i>Defined in: </i> <a href="../symbols/src/gvs_dialogs_ManageBuildingBlocksDialog.js.html">ManageBuildingBlocksDialog.js</a>.
+						
+						
+					</div>
+					
+					
+
+						
+						
+						
+						
+
+					<hr />
 				
 					<a name="_screens"> </a>
 					<div class="fixedFont">&lt;private&gt; 
@@ -704,15 +821,90 @@ to open an existing screen
 
 					<hr />
 				
+					<a name="_cloneScreen"> </a>
+					<div class="fixedFont">
+					
+					
+					<b>_cloneScreen</b>(id)
+					
+					</div>
+					<div class="description">
+						
+						
+						
+					</div>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>id</b>
+									
+								</dt>
+								<dd></dd>
+							
+							</dl>
+						
+						
+						
+						
+						
+						
+						
+
+					<hr />
+				
 					<a name="_confirmDelete"> </a>
 					<div class="fixedFont">&lt;private&gt; 
 					
 					
-					<b>_confirmDelete</b>()
+					<b>_confirmDelete</b>(value)
 					
 					</div>
 					<div class="description">
 						Execute the deletion of the screen
+						
+						
+					</div>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<b>value</b>
+									
+								</dt>
+								<dd></dd>
+							
+							</dl>
+						
+						
+						
+						
+						
+						
+						
+
+					<hr />
+				
+					<a name="_createBuildingBlockList"> </a>
+					<div class="fixedFont">&lt;private&gt; 
+					
+					
+					<b>_createBuildingBlockList</b>()
+					
+					</div>
+					<div class="description">
+						Creates the building block list to be handled by its parent class
+						
+							<br />
+							<i>Defined in: </i> <a href="../symbols/src/gvs_dialogs_ManageBuildingBlocksDialog.js.html">ManageBuildingBlocksDialog.js</a>.
 						
 						
 					</div>
@@ -744,6 +936,84 @@ to open an existing screen
 					
 					
 					
+						
+						
+						
+						
+						
+						
+						
+
+					<hr />
+				
+					<a name="_createSearchBar"> </a>
+					<div class="fixedFont">&lt;private&gt; 
+					
+					<span class="light">{HTMLNode}</span>
+					<b>_createSearchBar</b>($super)
+					
+					</div>
+					<div class="description">
+						Create the search bar
+						
+							<br />
+							<i>Defined in: </i> <a href="../symbols/src/gvs_dialogs_ManageBuildingBlocksDialog.js.html">ManageBuildingBlocksDialog.js</a>.
+						
+						
+					</div>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<b>$super</b>
+									
+								</dt>
+								<dd></dd>
+							
+							</dl>
+						
+						
+						
+						
+						
+						
+						
+
+					<hr />
+				
+					<a name="_deleteBuildingBlock"> </a>
+					<div class="fixedFont">&lt;private&gt; 
+					
+					
+					<b>_deleteBuildingBlock</b>(id)
+					
+					</div>
+					<div class="description">
+						Starts the deletion of a building block
+						
+							<br />
+							<i>Defined in: </i> <a href="../symbols/src/gvs_dialogs_ManageBuildingBlocksDialog.js.html">ManageBuildingBlocksDialog.js</a>.
+						
+						
+					</div>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>id</b>
+									
+								</dt>
+								<dd></dd>
+							
+							</dl>
 						
 						
 						
@@ -790,6 +1060,57 @@ to open an existing screen
 
 					<hr />
 				
+					<a name="_getBuildingBlocks"> </a>
+					<div class="fixedFont">&lt;private&gt; 
+					
+					
+					<b>_getBuildingBlocks</b>(types, context, onSucess)
+					
+					</div>
+					<div class="description">
+						Get selected building blocks
+						
+							<br />
+							<i>Defined in: </i> <a href="../symbols/src/gvs_dialogs_ManageBuildingBlocksDialog.js.html">ManageBuildingBlocksDialog.js</a>.
+						
+						
+					</div>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<b>types</b>
+									
+								</dt>
+								<dd></dd>
+							
+								<dt>
+									<b>context</b>
+									
+								</dt>
+								<dd></dd>
+							
+								<dt>
+									<b>onSucess</b>
+									
+								</dt>
+								<dd></dd>
+							
+							</dl>
+						
+						
+						
+						
+						
+						
+						
+
+					<hr />
+				
 					<a name="_initDialogInterface"> </a>
 					<div class="fixedFont">&lt;private&gt; 
 					
@@ -806,6 +1127,45 @@ This function creates the dom structure
 					
 					
 					
+						
+						
+						
+						
+						
+						
+						
+
+					<hr />
+				
+					<a name="_loadBuildinBlocks"> </a>
+					<div class="fixedFont">&lt;private&gt; 
+					
+					
+					<b>_loadBuildinBlocks</b>(onSucess)
+					
+					</div>
+					<div class="description">
+						Load selected building blocks
+						
+							<br />
+							<i>Defined in: </i> <a href="../symbols/src/gvs_dialogs_ManageBuildingBlocksDialog.js.html">ManageBuildingBlocksDialog.js</a>.
+						
+						
+					</div>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<b>onSucess</b>
+									
+								</dt>
+								<dd></dd>
+							
+							</dl>
 						
 						
 						
@@ -888,6 +1248,45 @@ This function creates the dom structure
 
 					<hr />
 				
+					<a name="_openBuildingBlock"> </a>
+					<div class="fixedFont">&lt;private&gt; 
+					
+					
+					<b>_openBuildingBlock</b>(id)
+					
+					</div>
+					<div class="description">
+						Open a building block by its id
+						
+							<br />
+							<i>Defined in: </i> <a href="../symbols/src/gvs_dialogs_ManageBuildingBlocksDialog.js.html">ManageBuildingBlocksDialog.js</a>.
+						
+						
+					</div>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>id</b>
+									
+								</dt>
+								<dd></dd>
+							
+							</dl>
+						
+						
+						
+						
+						
+						
+						
+
+					<hr />
+				
 					<a name="_openScreen"> </a>
 					<div class="fixedFont">&lt;private&gt; 
 					
@@ -939,6 +1338,45 @@ This function creates the dom structure
 					
 					
 					
+						
+						
+						
+						
+						
+						
+						
+
+					<hr />
+				
+					<a name="_shareBuildingBlock"> </a>
+					<div class="fixedFont">&lt;private&gt; 
+					
+					
+					<b>_shareBuildingBlock</b>(id)
+					
+					</div>
+					<div class="description">
+						Share or unshare a screen depending of its status
+						
+							<br />
+							<i>Defined in: </i> <a href="../symbols/src/gvs_dialogs_ManageBuildingBlocksDialog.js.html">ManageBuildingBlocksDialog.js</a>.
+						
+						
+					</div>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>id</b>
+									
+								</dt>
+								<dd></dd>
+							
+							</dl>
 						
 						
 						
@@ -1018,7 +1456,7 @@ This function creates the dom structure
 <!-- ============================== footer ================================= -->
 		<div class="fineprint" style="clear:both">
 			
-			Documentation generated by <a href="http://www.jsdoctoolkit.org/" target="_blank">JsDoc Toolkit</a> 2.0.2 on Tue Feb 23 2010 17:56:59 GMT+0100 (CET)
+			Documentation generated by <a href="http://www.jsdoctoolkit.org/" target="_blank">JsDoc Toolkit</a> 2.0.2 on Fri Feb 18 2011 12:18:14 GMT+0100 (CET)
 		</div>
 	</body>
 </html>

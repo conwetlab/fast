@@ -213,11 +213,17 @@ ul.inheritsList
 	
 	<li><a href="../symbols/BuildingBlockDescription.html">BuildingBlockDescription</a></li>
 	
+	<li><a href="../symbols/BuildingBlockDocument.html">BuildingBlockDocument</a></li>
+	
 	<li><a href="../symbols/BuildingBlockFactory.html">BuildingBlockFactory</a></li>
 	
 	<li><a href="../symbols/BuildingBlockSet.html">BuildingBlockSet</a></li>
 	
 	<li><a href="../symbols/BuildingBlockView.html">BuildingBlockView</a></li>
+	
+	<li><a href="../symbols/ButtonArrayDialog.html">ButtonArrayDialog</a></li>
+	
+	<li><a href="../symbols/CaptionDialog.html">CaptionDialog</a></li>
 	
 	<li><a href="../symbols/ComponentInstance.html">ComponentInstance</a></li>
 	
@@ -253,11 +259,11 @@ ul.inheritsList
 	
 	<li><a href="../symbols/FormComponent.html">FormComponent</a></li>
 	
+	<li><a href="../symbols/FormDescription.html">FormDescription</a></li>
+	
 	<li><a href="../symbols/FormDialog.html">FormDialog</a></li>
 	
 	<li><a href="../symbols/FormFactory.html">FormFactory</a></li>
-	
-	<li><a href="../symbols/FormInstance.html">FormInstance</a></li>
 	
 	<li><a href="../symbols/FormSnapshotView.html">FormSnapshotView</a></li>
 	
@@ -268,6 +274,8 @@ ul.inheritsList
 	<li><a href="../symbols/GVS.html">GVS</a></li>
 	
 	<li><a href="../symbols/InferenceEngine.html">InferenceEngine</a></li>
+	
+	<li><a href="../symbols/iServeDialog.html">iServeDialog</a></li>
 	
 	<li><a href="../symbols/KeyPressRegistry.html">KeyPressRegistry</a></li>
 	
@@ -281,15 +289,11 @@ ul.inheritsList
 	
 	<li><a href="../symbols/MenuElement.html">MenuElement</a></li>
 	
-	<li><a href="../symbols/NewScreenDialog.html">NewScreenDialog</a></li>
-	
-	<li><a href="../symbols/NewScreenflowDialog.html">NewScreenflowDialog</a></li>
+	<li><a href="../symbols/NewBuildingBlockDialog.html">NewBuildingBlockDialog</a></li>
 	
 	<li><a href="../symbols/OperatorComponent.html">OperatorComponent</a></li>
 	
 	<li><a href="../symbols/OperatorFactory.html">OperatorFactory</a></li>
-	
-	<li><a href="../symbols/OperatorInstance.html">OperatorInstance</a></li>
 	
 	<li><a href="../symbols/OperatorView.html">OperatorView</a></li>
 	
@@ -300,6 +304,10 @@ ul.inheritsList
 	<li><a href="../symbols/PaletteController.html">PaletteController</a></li>
 	
 	<li><a href="../symbols/PaletteDocument.html">PaletteDocument</a></li>
+	
+	<li><a href="../symbols/PaletteSearchBox.html">PaletteSearchBox</a></li>
+	
+	<li><a href="../symbols/ParamsDialog.html">ParamsDialog</a></li>
 	
 	<li><a href="../symbols/Pipe.html">Pipe</a></li>
 	
@@ -331,13 +339,15 @@ ul.inheritsList
 	
 	<li><a href="../symbols/PublishGadgetDialog.html">PublishGadgetDialog</a></li>
 	
+	<li><a href="../symbols/RecommendationManager.html">RecommendationManager</a></li>
+	
 	<li><a href="../symbols/ResourceComponent.html">ResourceComponent</a></li>
 	
 	<li><a href="../symbols/ResourceFactory.html">ResourceFactory</a></li>
 	
-	<li><a href="../symbols/ResourceInstance.html">ResourceInstance</a></li>
-	
 	<li><a href="../symbols/ResourceView.html">ResourceView</a></li>
+	
+	<li><a href="../symbols/SaveAsDialog.html">SaveAsDialog</a></li>
 	
 	<li><a href="../symbols/ScreenCanvasCache.html">ScreenCanvasCache</a></li>
 	
@@ -359,7 +369,7 @@ ul.inheritsList
 	
 	<li><a href="../symbols/ScreenflowInferenceEngine.html">ScreenflowInferenceEngine</a></li>
 	
-	<li><a href="../symbols/ScreenflowInstance.html">ScreenflowInstance</a></li>
+	<li><a href="../symbols/ScreenflowPlayer.html">ScreenflowPlayer</a></li>
 	
 	<li><a href="../symbols/ScreenInferenceEngine.html">ScreenInferenceEngine</a></li>
 	
@@ -410,7 +420,7 @@ ul.inheritsList
 				
 				
 				
-					<br /><i>Defined in: </i> <a href="../symbols/src/gvs_build_Builder.js.html">Builder.js</a>.
+					<br /><i>Defined in: </i> <a href="../symbols/src/gvs_build_GadgetDialog.js.html">GadgetDialog.js</a>.
 				
 			</p>
 
@@ -429,7 +439,7 @@ ul.inheritsList
 						<td class="attributes">&nbsp;</td>
 						<td class="nameDescription" >
 							<div class="fixedFont">
-								<b><a href="../symbols/Builder.html#constructor">Builder</a></b>()
+								<b><a href="../symbols/Builder.html#constructor">Builder</a></b>($super, description)
 							</div>
 							<div class="description">On charge of building screenflows and showing the possibility to
 Deploy the gadget into the mashup platrom</div>
@@ -483,6 +493,16 @@ Deploy the gadget into the mashup platrom</div>
 							</td>
 						</tr>
 					
+						<tr>
+							<td class="attributes">&lt;private&gt; &nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">
+								<b><a href="../symbols/Builder.html#_storedGadgets">_storedGadgets</a></b>
+								</div>
+								<div class="description">Array of stored gadgets</div>
+							</td>
+						</tr>
+					
 					</tbody>
 				</table>
 				
@@ -505,6 +525,52 @@ Deploy the gadget into the mashup platrom</div>
 					<tbody>
 					
 						<tr>
+							<td class="attributes">&lt;private&gt; &nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/Builder.html#_buildGadget">_buildGadget</a></b>()
+								</div>
+								<div class="description">Creates a gadget deployment from the ScreenflowDescription</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/Builder.html#_confirmDeleteGadget">_confirmDeleteGadget</a></b>(gadget_id)
+								</div>
+								<div class="description"></div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;private&gt; &nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/Builder.html#_createGadgetList">_createGadgetList</a></b>()
+								</div>
+								<div class="description">Creates the gadget list to be handled by its parent class</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/Builder.html#_deleteGadget">_deleteGadget</a></b>(gadget_id)
+								</div>
+								<div class="description"></div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;private&gt; &nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/Builder.html#_initDialogInterface">_initDialogInterface</a></b>()
+								</div>
+								<div class="description">initDialogInterface
+This function creates the dom structure</div>
+							</td>
+						</tr>
+					
+						<tr>
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
 								<div class="fixedFont"><b><a href="../symbols/Builder.html#_onBuildGadgetDialogCallback">_onBuildGadgetDialogCallback</a></b>(data)
@@ -525,7 +591,7 @@ Deploy the gadget into the mashup platrom</div>
 						<tr>
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/Builder.html#_onError">_onError</a></b>(transport, e)
+								<div class="fixedFont"><b><a href="../symbols/Builder.html#_onDelete">_onDelete</a></b>()
 								</div>
 								<div class="description"></div>
 							</td>
@@ -534,9 +600,36 @@ Deploy the gadget into the mashup platrom</div>
 						<tr>
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/Builder.html#buildGadget">buildGadget</a></b>(description)
+								<div class="fixedFont"><b><a href="../symbols/Builder.html#_onError">_onError</a></b>(transport, e)
 								</div>
-								<div class="description">Creates a gadget deployment from the ScreenflowDescription</div>
+								<div class="description"></div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;private&gt; &nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/Builder.html#_onLoadSuccess">_onLoadSuccess</a></b>(transport)
+								</div>
+								<div class="description">On storage list loaded</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/Builder.html#_showDeploymentInfo">_showDeploymentInfo</a></b>(gadget_id)
+								</div>
+								<div class="description"></div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/Builder.html#show">show</a></b>()
+								</div>
+								<div class="description">Start the process of showing the Gadget dialog</div>
 							</td>
 						</tr>
 					
@@ -555,7 +648,7 @@ Deploy the gadget into the mashup platrom</div>
 				</div>
 				
 				<div class="fixedFont">
-						<b>Builder</b>()
+						<b>Builder</b>($super, description)
 				</div>
 				
 				<div class="description">
@@ -567,6 +660,23 @@ Deploy the gadget into the mashup platrom
 				
 				
 				
+					
+						<dl class="detailList">
+						<dt class="heading">Parameters:</dt>
+						
+							<dt>
+								 <b>$super</b>
+								
+							</dt>
+								<dd></dd>
+						
+							<dt>
+								<span class="light fixedFont">{<a href="../symbols/ScreenflowDescription.html#constructor">ScreenflowDescription</a>}</span>  <b>description</b>
+								
+							</dt>
+								<dd></dd>
+						
+						</dl>
 					
 					
 					
@@ -648,6 +758,28 @@ Deploy the gadget into the mashup platrom
 						
 						
 
+					<hr />
+				
+					<a name="_storedGadgets"> </a>
+					<div class="fixedFont">&lt;private&gt; 
+					
+					<span class="light">{Hash}</span>
+					<b>_storedGadgets</b>
+					
+					</div>
+					<div class="description">
+						Array of stored gadgets
+						
+						
+					</div>
+					
+					
+
+						
+						
+						
+						
+
 					
 				
 			
@@ -657,6 +789,154 @@ Deploy the gadget into the mashup platrom
 				<div class="sectionTitle">
 					Method Detail
 				</div>
+				
+					<a name="_buildGadget"> </a>
+					<div class="fixedFont">&lt;private&gt; 
+					
+					
+					<b>_buildGadget</b>()
+					
+					</div>
+					<div class="description">
+						Creates a gadget deployment from the ScreenflowDescription
+						
+						
+					</div>
+					
+					
+					
+						
+						
+						
+						
+						
+						
+						
+
+					<hr />
+				
+					<a name="_confirmDeleteGadget"> </a>
+					<div class="fixedFont">
+					
+					
+					<b>_confirmDeleteGadget</b>(gadget_id)
+					
+					</div>
+					<div class="description">
+						
+						
+						
+					</div>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>gadget_id</b>
+									
+								</dt>
+								<dd></dd>
+							
+							</dl>
+						
+						
+						
+						
+						
+						
+						
+
+					<hr />
+				
+					<a name="_createGadgetList"> </a>
+					<div class="fixedFont">&lt;private&gt; 
+					
+					
+					<b>_createGadgetList</b>()
+					
+					</div>
+					<div class="description">
+						Creates the gadget list to be handled by its parent class
+						
+						
+					</div>
+					
+					
+					
+						
+						
+						
+						
+						
+						
+						
+
+					<hr />
+				
+					<a name="_deleteGadget"> </a>
+					<div class="fixedFont">
+					
+					
+					<b>_deleteGadget</b>(gadget_id)
+					
+					</div>
+					<div class="description">
+						
+						
+						
+					</div>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>gadget_id</b>
+									
+								</dt>
+								<dd></dd>
+							
+							</dl>
+						
+						
+						
+						
+						
+						
+						
+
+					<hr />
+				
+					<a name="_initDialogInterface"> </a>
+					<div class="fixedFont">&lt;private&gt; 
+					
+					
+					<b>_initDialogInterface</b>()
+					
+					</div>
+					<div class="description">
+						initDialogInterface
+This function creates the dom structure
+						
+						
+					</div>
+					
+					
+					
+						
+						
+						
+						
+						
+						
+						
+
+					<hr />
 				
 					<a name="_onBuildGadgetDialogCallback"> </a>
 					<div class="fixedFont">
@@ -730,6 +1010,31 @@ Deploy the gadget into the mashup platrom
 
 					<hr />
 				
+					<a name="_onDelete"> </a>
+					<div class="fixedFont">
+					
+					
+					<b>_onDelete</b>()
+					
+					</div>
+					<div class="description">
+						
+						
+						
+					</div>
+					
+					
+					
+						
+						
+						
+						
+						
+						
+						
+
+					<hr />
+				
 					<a name="_onError"> </a>
 					<div class="fixedFont">
 					
@@ -772,15 +1077,15 @@ Deploy the gadget into the mashup platrom
 
 					<hr />
 				
-					<a name="buildGadget"> </a>
-					<div class="fixedFont">
+					<a name="_onLoadSuccess"> </a>
+					<div class="fixedFont">&lt;private&gt; 
 					
 					
-					<b>buildGadget</b>(description)
+					<b>_onLoadSuccess</b>(transport)
 					
 					</div>
 					<div class="description">
-						Creates a gadget deployment from the ScreenflowDescription
+						On storage list loaded
 						
 						
 					</div>
@@ -792,12 +1097,73 @@ Deploy the gadget into the mashup platrom
 							<dt class="heading">Parameters:</dt>
 							
 								<dt>
-									<span class="light fixedFont">{<a href="../symbols/ScreenflowDescription.html#constructor">ScreenflowDescription</a>}</span> <b>description</b>
+									<span class="light fixedFont">{XMLHttpRequest}</span> <b>transport</b>
 									
 								</dt>
 								<dd></dd>
 							
 							</dl>
+						
+						
+						
+						
+						
+						
+						
+
+					<hr />
+				
+					<a name="_showDeploymentInfo"> </a>
+					<div class="fixedFont">
+					
+					
+					<b>_showDeploymentInfo</b>(gadget_id)
+					
+					</div>
+					<div class="description">
+						
+						
+						
+					</div>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>gadget_id</b>
+									
+								</dt>
+								<dd></dd>
+							
+							</dl>
+						
+						
+						
+						
+						
+						
+						
+
+					<hr />
+				
+					<a name="show"> </a>
+					<div class="fixedFont">
+					
+					
+					<b>show</b>()
+					
+					</div>
+					<div class="description">
+						Start the process of showing the Gadget dialog
+						
+						
+					</div>
+					
+					
+					
 						
 						
 						
@@ -816,7 +1182,7 @@ Deploy the gadget into the mashup platrom
 <!-- ============================== footer ================================= -->
 		<div class="fineprint" style="clear:both">
 			
-			Documentation generated by <a href="http://www.jsdoctoolkit.org/" target="_blank">JsDoc Toolkit</a> 2.0.2 on Tue Feb 23 2010 17:56:58 GMT+0100 (CET)
+			Documentation generated by <a href="http://www.jsdoctoolkit.org/" target="_blank">JsDoc Toolkit</a> 2.0.2 on Fri Feb 18 2011 12:18:13 GMT+0100 (CET)
 		</div>
 	</body>
 </html>

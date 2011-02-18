@@ -8,24 +8,24 @@
 	</style></head><body><pre><span class='line'>  1</span> <span class="COMM">/**
 <span class='line'>  2</span>  * This class handles the creation of pipes based on WireIt.Terminal
 <span class='line'>  3</span>  * and WireIt.Wire classes. Due to the use of these classes, which are
-<span class='line'>  4</span>  * not Prototype compliant classes, the syntax of the class is quite 
+<span class='line'>  4</span>  * not Prototype compliant classes, the syntax of the class is quite
 <span class='line'>  5</span>  * different than usual
 <span class='line'>  6</span>  * The terminal object will be attached to each pre or post condition
-<span class='line'>  7</span>  * of the instances (specifically, to the condition nodes of their 
+<span class='line'>  7</span>  * of the instances (specifically, to the condition nodes of their
 <span class='line'>  8</span>  * respective view)
-<span class='line'>  9</span>  * 
+<span class='line'>  9</span>  *
 <span class='line'> 10</span>  * @constructs
 <span class='line'> 11</span>  */</span><span class="WHIT">
-<span class='line'> 12</span> </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">Terminal</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="COMM">/** DOMNode */</span><span class="WHIT"> </span><span class="NAME">conditionNode</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="COMM">/** Object */</span><span class="WHIT"> </span><span class="NAME">options</span><span class="PUNC">,</span><span class="WHIT"> 
+<span class='line'> 12</span> </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">Terminal</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="COMM">/** DOMNode */</span><span class="WHIT"> </span><span class="NAME">conditionNode</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="COMM">/** Object */</span><span class="WHIT"> </span><span class="NAME">options</span><span class="PUNC">,</span><span class="WHIT">
 <span class='line'> 13</span>                         </span><span class="COMM">/** ComponentInstance */</span><span class="WHIT"> </span><span class="NAME">instance</span><span class="PUNC">,</span><span class="WHIT">
 <span class='line'> 14</span>                         </span><span class="COMM">/** String */</span><span class="WHIT"> </span><span class="NAME">conditionId</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="COMM">/** String(optional) */</span><span class="WHIT"> </span><span class="NAME">action</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'> 15</span>     
+<span class='line'> 15</span> 
 <span class='line'> 16</span>     </span><span class="COMM">/**
 <span class='line'> 17</span>      * @private
 <span class='line'> 18</span>      * @type DOMNode
 <span class='line'> 19</span>      */</span><span class="WHIT">
 <span class='line'> 20</span>     </span><span class="NAME">this._conditionNode</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">conditionNode</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'> 21</span>     
+<span class='line'> 21</span> 
 <span class='line'> 22</span>     </span><span class="COMM">/**
 <span class='line'> 23</span>      * @private
 <span class='line'> 24</span>      * @type DOMNode
@@ -34,17 +34,17 @@
 <span class='line'> 27</span>     </span><span class="PUNC">{</span><span class="WHIT">
 <span class='line'> 28</span>         </span><span class="STRN">'title'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">this._conditionNode.title</span><span class="WHIT">
 <span class='line'> 29</span>     </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'> 30</span>     
+<span class='line'> 30</span> 
 <span class='line'> 31</span>     </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">style</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
 <span class='line'> 32</span>         </span><span class="STRN">'position'</span><span class="PUNC">:</span><span class="STRN">'absolute'</span><span class="PUNC">,</span><span class="WHIT">
 <span class='line'> 33</span>         </span><span class="STRN">'width'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">'1px'</span><span class="PUNC">,</span><span class="WHIT">
 <span class='line'> 34</span>         </span><span class="STRN">'height'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">'1px'</span><span class="PUNC">,</span><span class="WHIT">
 <span class='line'> 35</span>         </span><span class="STRN">'z-index'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">'50'</span><span class="WHIT">
 <span class='line'> 36</span>     </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'> 37</span>     </span><span class="NAME">this._terminalNode.setStyle</span><span class="PUNC">(</span><span class="NAME">style</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">  
+<span class='line'> 37</span>     </span><span class="NAME">this._terminalNode.setStyle</span><span class="PUNC">(</span><span class="NAME">style</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'> 38</span>     </span><span class="NAME">this._recalculatePosition</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'> 39</span>     </span><span class="NAME">document.body.appendChild</span><span class="PUNC">(</span><span class="NAME">this._terminalNode</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT"> 
-<span class='line'> 40</span>    
+<span class='line'> 39</span>     </span><span class="NAME">document.body.appendChild</span><span class="PUNC">(</span><span class="NAME">this._terminalNode</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 40</span> 
 <span class='line'> 41</span>     </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">wireConfig</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
 <span class='line'> 42</span>             </span><span class="STRN">'width'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NUMB">2</span><span class="PUNC">,</span><span class="WHIT">
 <span class='line'> 43</span>             </span><span class="STRN">'borderwidth'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NUMB">2</span><span class="PUNC">,</span><span class="WHIT">
@@ -54,7 +54,7 @@
 <span class='line'> 47</span>     </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">extendedOptions</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'> 48</span>     </span><span class="NAME">extendedOptions</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">Object.extend</span><span class="PUNC">(</span><span class="NAME">extendedOptions</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">options</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'> 49</span>     </span><span class="NAME">extendedOptions.wireConfig</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">Object.extend</span><span class="PUNC">(</span><span class="NAME">wireConfig</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">options.wireConfig</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'> 50</span>          
+<span class='line'> 50</span> 
 <span class='line'> 51</span>     </span><span class="NAME">WireIt.Terminal.call</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">this._terminalNode</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">extendedOptions</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'> 52</span> 
 <span class='line'> 53</span>     </span><span class="COMM">/**
@@ -63,7 +63,7 @@
 <span class='line'> 56</span>      * @private
 <span class='line'> 57</span>      */</span><span class="WHIT">
 <span class='line'> 58</span>     </span><span class="NAME">this._instance</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">instance</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'> 59</span>     
+<span class='line'> 59</span> 
 <span class='line'> 60</span>     </span><span class="COMM">/**
 <span class='line'> 61</span>      * This is the id of the condition inside the
 <span class='line'> 62</span>      * resource that contains the terminal
@@ -78,14 +78,14 @@
 <span class='line'> 71</span>      * @type String
 <span class='line'> 72</span>      */</span><span class="WHIT">
 <span class='line'> 73</span>     </span><span class="NAME">this._action</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">action</span><span class="WHIT"> </span><span class="PUNC">?</span><span class="WHIT"> </span><span class="NAME">action</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">""</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'> 74</span> </span><span class="PUNC">}</span><span class="WHIT"> 
+<span class='line'> 74</span> </span><span class="PUNC">}</span><span class="WHIT">
 <span class='line'> 75</span> 
 <span class='line'> 76</span> </span><span class="COMM">// Inheriting all methods</span><span class="WHIT">
 <span class='line'> 77</span> </span><span class="NAME">Object.extend</span><span class="PUNC">(</span><span class="NAME">Terminal.prototype</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">WireIt.Terminal.prototype</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'> 78</span> 
-<span class='line'> 79</span> </span><span class="NAME">Object.extend</span><span class="PUNC">(</span><span class="NAME">Terminal.prototype</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="COMM">/** @lends Terminal.prototype */</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT"> 
+<span class='line'> 79</span> </span><span class="NAME">Object.extend</span><span class="PUNC">(</span><span class="NAME">Terminal.prototype</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="COMM">/** @lends Terminal.prototype */</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
 <span class='line'> 80</span> 
-<span class='line'> 81</span>     
+<span class='line'> 81</span> 
 <span class='line'> 82</span>     </span><span class="COMM">// **************** PUBLIC METHODS **************** //</span><span class="WHIT">
 <span class='line'> 83</span> 
 <span class='line'> 84</span>     </span><span class="COMM">/**
@@ -103,7 +103,7 @@
 <span class='line'> 96</span>         </span><span class="PUNC">}</span><span class="WHIT">
 <span class='line'> 97</span>         </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">uri</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'> 98</span>     </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'> 99</span>     
+<span class='line'> 99</span> 
 <span class='line'>100</span>     </span><span class="COMM">/**
 <span class='line'>101</span>      * Returns the resourceId
 <span class='line'>102</span>      * @type String
@@ -143,78 +143,94 @@
 <span class='line'>136</span>     </span><span class="NAME">getInstance</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
 <span class='line'>137</span>         </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">this._instance</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'>138</span>     </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>139</span>     
+<span class='line'>139</span> 
 <span class='line'>140</span>     </span><span class="COMM">/**
 <span class='line'>141</span>      * Destroy the terminal
 <span class='line'>142</span>      */</span><span class="WHIT">
 <span class='line'>143</span>     </span><span class="NAME">destroy</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>144</span>         </span><span class="NAME">this.eventAddWire.unsubscribeAll</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>145</span>         </span><span class="NAME">this.eventRemoveWire.unsubscribeAll</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>144</span>         </span><span class="NAME">this.removeAllWires</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>145</span>         </span><span class="NAME">this.remove</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'>146</span>         </span><span class="NAME">this._terminalNode.parentNode.removeChild</span><span class="PUNC">(</span><span class="NAME">this._terminalNode</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'>147</span>     </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>148</span>     
+<span class='line'>148</span> 
 <span class='line'>149</span>     </span><span class="COMM">/**
 <span class='line'>150</span>      * Updates the position when the container is moving
 <span class='line'>151</span>      */</span><span class="WHIT">
 <span class='line'>152</span>     </span><span class="NAME">updatePosition</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
 <span class='line'>153</span>         </span><span class="NAME">this._recalculatePosition</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>154</span>         </span><span class="NAME">this.redrawAllWires</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">        
+<span class='line'>154</span>         </span><span class="NAME">this.redrawAllWires</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'>155</span>     </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>156</span>     
+<span class='line'>156</span> 
 <span class='line'>157</span>     </span><span class="COMM">/**
 <span class='line'>158</span>      * Adds a handler listening for the connection or deconnection of wires
 <span class='line'>159</span>      */</span><span class="WHIT">
-<span class='line'>160</span>     </span><span class="NAME">onWireHandler</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="COMM">/** Function */</span><span class="WHIT"> </span><span class="NAME">handler</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>161</span>         </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">context</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>162</span>             </span><span class="STRN">'handler'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">handler</span><span class="WHIT">
-<span class='line'>163</span>         </span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>164</span>         </span><span class="NAME">this.eventAddWire.subscribe</span><span class="PUNC">(</span><span class="NAME">this._wireAddHandler.bind</span><span class="PUNC">(</span><span class="NAME">context</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>165</span>         </span><span class="NAME">this.eventRemoveWire.subscribe</span><span class="PUNC">(</span><span class="NAME">this._wireRemoveHandler.bind</span><span class="PUNC">(</span><span class="NAME">context</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">    
-<span class='line'>166</span>     </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>167</span> 
-<span class='line'>168</span>     </span><span class="COMM">/**
-<span class='line'>169</span>      * Sets the visibility of the terminal
-<span class='line'>170</span>      */</span><span class="WHIT">
-<span class='line'>171</span>     </span><span class="NAME">setVisible</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="COMM">/** Boolean */</span><span class="WHIT"> </span><span class="NAME">visible</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>172</span>         </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">style</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>173</span>             </span><span class="STRN">'visibility'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">visible</span><span class="WHIT"> </span><span class="PUNC">?</span><span class="WHIT"> </span><span class="STRN">'visible'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">'hidden'</span><span class="WHIT">
-<span class='line'>174</span>         </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>175</span>         </span><span class="NAME">this.el.setStyle</span><span class="PUNC">(</span><span class="NAME">style</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>176</span>     </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>177</span>     
-<span class='line'>178</span>      </span><span class="COMM">// **************** PRIVATE METHODS **************** //</span><span class="WHIT">
-<span class='line'>179</span> 
+<span class='line'>160</span>     </span><span class="NAME">onWireHandler</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="COMM">/** Hash */</span><span class="WHIT"> </span><span class="NAME">handlers</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>161</span>     	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">context</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>162</span>     	</span><span class="NAME">context</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">Object.extend</span><span class="PUNC">(</span><span class="NAME">context</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">handlers</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>163</span>     	</span><span class="NAME">context</span><span class="PUNC">[</span><span class="STRN">'refTerminal'</span><span class="PUNC">]</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">this</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>164</span> 
+<span class='line'>165</span>         </span><span class="NAME">this.eventAddWire.subscribe</span><span class="PUNC">(</span><span class="NAME">this._wireAddHandler.bind</span><span class="PUNC">(</span><span class="NAME">context</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>166</span>         </span><span class="NAME">this.eventRemoveWire.subscribe</span><span class="PUNC">(</span><span class="NAME">this._wireRemoveHandler.bind</span><span class="PUNC">(</span><span class="NAME">context</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>167</span>     </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>168</span> 
+<span class='line'>169</span>     </span><span class="COMM">/**
+<span class='line'>170</span>      * Sets the visibility of the terminal
+<span class='line'>171</span>      */</span><span class="WHIT">
+<span class='line'>172</span>     </span><span class="NAME">setVisible</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="COMM">/** Boolean */</span><span class="WHIT"> </span><span class="NAME">visible</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>173</span>         </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">style</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>174</span>             </span><span class="STRN">'visibility'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">visible</span><span class="WHIT"> </span><span class="PUNC">?</span><span class="WHIT"> </span><span class="STRN">'visible'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">'hidden'</span><span class="WHIT">
+<span class='line'>175</span>         </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>176</span>         </span><span class="NAME">this.el.setStyle</span><span class="PUNC">(</span><span class="NAME">style</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>177</span>     </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>178</span> 
+<span class='line'>179</span>      </span><span class="COMM">// **************** PRIVATE METHODS **************** //</span><span class="WHIT">
 <span class='line'>180</span> 
-<span class='line'>181</span>      </span><span class="COMM">/**
-<span class='line'>182</span>       * Recalculates the position of the terminal
-<span class='line'>183</span>       * @private
-<span class='line'>184</span>       */</span><span class="WHIT">
-<span class='line'>185</span>     </span><span class="NAME">_recalculatePosition</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>186</span>         </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">position</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">Utils.getPosition</span><span class="PUNC">(</span><span class="NAME">this._conditionNode</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>187</span>         </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">style</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>188</span>             </span><span class="STRN">'top'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">position.top</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="STRN">'px'</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>189</span>             </span><span class="STRN">'left'</span><span class="PUNC">:</span><span class="WHIT">  </span><span class="NAME">position.left</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="STRN">'px'</span><span class="WHIT">
-<span class='line'>190</span>         </span><span class="PUNC">}</span><span class="WHIT">     
-<span class='line'>191</span>         </span><span class="NAME">this._terminalNode.setStyle</span><span class="PUNC">(</span><span class="NAME">style</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>192</span>     </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>193</span> 
+<span class='line'>181</span> 
+<span class='line'>182</span>      </span><span class="COMM">/**
+<span class='line'>183</span>       * Recalculates the position of the terminal
+<span class='line'>184</span>       * @private
+<span class='line'>185</span>       */</span><span class="WHIT">
+<span class='line'>186</span>     </span><span class="NAME">_recalculatePosition</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>187</span>         </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">position</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">Utils.getPosition</span><span class="PUNC">(</span><span class="NAME">this._conditionNode</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>188</span>         </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">style</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>189</span>             </span><span class="STRN">'top'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">position.top</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="STRN">'px'</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>190</span>             </span><span class="STRN">'left'</span><span class="PUNC">:</span><span class="WHIT">  </span><span class="NAME">position.left</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="STRN">'px'</span><span class="WHIT">
+<span class='line'>191</span>         </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>192</span>         </span><span class="NAME">this._terminalNode.setStyle</span><span class="PUNC">(</span><span class="NAME">style</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>193</span>     </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
 <span class='line'>194</span> 
-<span class='line'>195</span>     </span><span class="COMM">/**
-<span class='line'>196</span>      * Handler called whenever a new wire is added to the terminal
-<span class='line'>197</span>      * @private
-<span class='line'>198</span>      */</span><span class="WHIT">
-<span class='line'>199</span>     </span><span class="NAME">_wireAddHandler</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="COMM">/** Event */</span><span class="WHIT"> </span><span class="NAME">event</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="COMM">/** Array */</span><span class="WHIT"> </span><span class="NAME">params</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>200</span>         </span><span class="NAME">this.handler</span><span class="PUNC">(</span><span class="NAME">event</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">params</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">true</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">    
-<span class='line'>201</span>     </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>202</span> 
-<span class='line'>203</span> 
-<span class='line'>204</span>     </span><span class="COMM">/**
-<span class='line'>205</span>      * Handler called whenever a wire is removed from the terminal
-<span class='line'>206</span>      * @private
-<span class='line'>207</span>      */</span><span class="WHIT">
-<span class='line'>208</span>     </span><span class="NAME">_wireRemoveHandler</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="COMM">/** Event */</span><span class="WHIT"> </span><span class="NAME">event</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="COMM">/** Array */</span><span class="WHIT"> </span><span class="NAME">params</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>209</span>         </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="PUNC">!</span><span class="NAME">this._destroyed</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>210</span>             </span><span class="NAME">this.handler</span><span class="PUNC">(</span><span class="NAME">event</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">params</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">false</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>211</span>         </span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>212</span>     </span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>213</span> </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span></pre></body></html>
+<span class='line'>195</span> 
+<span class='line'>196</span>     </span><span class="COMM">/**
+<span class='line'>197</span>      * Handler called whenever a new wire is added to the terminal
+<span class='line'>198</span>      * @private
+<span class='line'>199</span>      */</span><span class="WHIT">
+<span class='line'>200</span>     </span><span class="NAME">_wireAddHandler</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="COMM">/** Event */</span><span class="WHIT"> </span><span class="NAME">event</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="COMM">/** Array */</span><span class="WHIT"> </span><span class="NAME">params</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>201</span>     	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">wire</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">params</span><span class="PUNC">[</span><span class="NUMB">0</span><span class="PUNC">]</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>202</span>     	</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">wire.terminal1.parentEl</span><span class="WHIT"> </span><span class="PUNC">&&</span><span class="WHIT"> </span><span class="NAME">wire.terminal2.parentEl</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>203</span>     		</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">wire.terminal1</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="NAME">this.refTerminal</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>204</span>     			</span><span class="NAME">this.onPipeCreation</span><span class="PUNC">(</span><span class="NAME">wire</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>205</span>     		</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>206</span>     	</span><span class="PUNC">}</span><span class="WHIT"> </span><span class="KEYW">else</span><span class="WHIT"> </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">wire.terminal1</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="NAME">this.refTerminal</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>207</span>     		</span><span class="NAME">this.onPipeCreationStart</span><span class="PUNC">(</span><span class="NAME">wire</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">wire.terminal1</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>208</span>     	</span><span class="PUNC">}</span><span class="WHIT"> </span><span class="KEYW">else</span><span class="WHIT"> </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">wire.terminal2</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="NAME">this.refTerminal</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>209</span>     		</span><span class="NAME">this.onPipeCreationStart</span><span class="PUNC">(</span><span class="NAME">wire</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">wire.terminal2</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>210</span>     	</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>211</span>     </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>212</span> 
+<span class='line'>213</span> 
+<span class='line'>214</span>     </span><span class="COMM">/**
+<span class='line'>215</span>      * Handler called whenever a wire is removed from the terminal
+<span class='line'>216</span>      * @private
+<span class='line'>217</span>      */</span><span class="WHIT">
+<span class='line'>218</span>     </span><span class="NAME">_wireRemoveHandler</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="COMM">/** Event */</span><span class="WHIT"> </span><span class="NAME">event</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="COMM">/** Array */</span><span class="WHIT"> </span><span class="NAME">params</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>219</span>     	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">wire</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">params</span><span class="PUNC">[</span><span class="NUMB">0</span><span class="PUNC">]</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>220</span>     	</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">wire.terminal1.parentEl</span><span class="WHIT"> </span><span class="PUNC">&&</span><span class="WHIT"> </span><span class="NAME">wire.terminal2.parentEl</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>221</span>     		</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">wire.terminal1</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="NAME">this.refTerminal</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>222</span>     			</span><span class="NAME">this.onPipeDeletion</span><span class="PUNC">(</span><span class="NAME">wire</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>223</span>     		</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>224</span>     	</span><span class="PUNC">}</span><span class="WHIT"> </span><span class="KEYW">else</span><span class="WHIT"> </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">wire.terminal1</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="NAME">this.refTerminal</span><span class="WHIT"> </span><span class="PUNC">||</span><span class="WHIT"> </span><span class="NAME">wire.terminal2</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="NAME">this.refTerminal</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>225</span>     		</span><span class="NAME">this.onPipeCreationCancel</span><span class="PUNC">(</span><span class="NAME">wire</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>226</span>     	</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>227</span>     </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>228</span> </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>229</span> </span></pre></body></html>

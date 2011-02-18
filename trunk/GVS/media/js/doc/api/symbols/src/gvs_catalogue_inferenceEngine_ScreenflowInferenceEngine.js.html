@@ -11,43 +11,43 @@
 <span class='line'>  4</span>      * It communicates with the serverside catalogue to retrieve this information
 <span class='line'>  5</span>      * @extends InferenceEngine
 <span class='line'>  6</span>      * @constructs
-<span class='line'>  7</span>      */</span><span class="WHIT"> 
+<span class='line'>  7</span>      */</span><span class="WHIT">
 <span class='line'>  8</span>     </span><span class="NAME">initialize</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">$super</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>  9</span>         </span><span class="NAME">$super</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">   
+<span class='line'>  9</span>         </span><span class="NAME">$super</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'> 10</span>     </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'> 11</span>     
+<span class='line'> 11</span> 
 <span class='line'> 12</span> 
 <span class='line'> 13</span>     </span><span class="COMM">// **************** PUBLIC METHODS **************** //</span><span class="WHIT">
-<span class='line'> 14</span>     
-<span class='line'> 15</span>     
+<span class='line'> 14</span> 
+<span class='line'> 15</span> 
 <span class='line'> 16</span>     </span><span class="COMM">/**
 <span class='line'> 17</span>      * This function calls the catalogue to create a plan for a given screen
 <span class='line'> 18</span>      */</span><span class="WHIT">
-<span class='line'> 19</span>     </span><span class="NAME">getPlans</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="COMM">/** Array */</span><span class="WHIT"> </span><span class="NAME">canvas</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="COMM">/** String */</span><span class="WHIT"> </span><span class="NAME">screenUri</span><span class="PUNC">,</span><span class="WHIT"> 
+<span class='line'> 19</span>     </span><span class="NAME">getPlans</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="COMM">/** Array */</span><span class="WHIT"> </span><span class="NAME">canvas</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="COMM">/** Array */</span><span class="WHIT"> </span><span class="NAME">goal</span><span class="PUNC">,</span><span class="WHIT">
 <span class='line'> 20</span>                         </span><span class="COMM">/** Function */</span><span class="WHIT"> </span><span class="NAME">handler</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
 <span class='line'> 21</span>         </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">body</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'> 22</span>             </span><span class="STRN">"goal"</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">screenUri</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 22</span>             </span><span class="STRN">"goal"</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">goal</span><span class="PUNC">,</span><span class="WHIT">
 <span class='line'> 23</span>             </span><span class="STRN">"canvas"</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">canvas</span><span class="WHIT">
 <span class='line'> 24</span>         </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'> 25</span>         </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">bodyJSON</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">Object.toJSON</span><span class="PUNC">(</span><span class="NAME">body</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'> 26</span>         </span><span class="NAME">PersistenceEngine.sendPost</span><span class="PUNC">(</span><span class="NAME">URIs.cataloguePlanner</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">bodyJSON</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="STRN">'handler'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">handler</span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
 <span class='line'> 27</span>                                     </span><span class="NAME">this._planOnSuccess</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">this._onError</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'> 28</span>     </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'> 29</span>     
+<span class='line'> 29</span> 
 <span class='line'> 30</span>     </span><span class="COMM">// **************** PRIVATE METHODS **************** //</span><span class="WHIT">
-<span class='line'> 31</span>     
+<span class='line'> 31</span> 
 <span class='line'> 32</span>     </span><span class="COMM">/**
 <span class='line'> 33</span>      * plan onSuccess
 <span class='line'> 34</span>      * @private
 <span class='line'> 35</span>      */</span><span class="WHIT">
 <span class='line'> 36</span>     </span><span class="NAME">_planOnSuccess</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">transport</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
 <span class='line'> 37</span>         </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">result</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">JSON.parse</span><span class="PUNC">(</span><span class="NAME">transport.responseText</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'> 38</span>         </span><span class="NAME">this.handler</span><span class="PUNC">(</span><span class="NAME">result</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT"> 
+<span class='line'> 38</span>         </span><span class="NAME">this.handler</span><span class="PUNC">(</span><span class="NAME">result</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'> 39</span>     </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'> 40</span>     
-<span class='line'> 41</span>     
+<span class='line'> 40</span> 
+<span class='line'> 41</span> 
 <span class='line'> 42</span>     </span><span class="COMM">/**
-<span class='line'> 43</span>      * Creates a body to be sent in an AJAX call to the 
+<span class='line'> 43</span>      * Creates a body to be sent in an AJAX call to the
 <span class='line'> 44</span>      * catalogue
 <span class='line'> 45</span>      * @private
 <span class='line'> 46</span>      * @overrides
@@ -67,19 +67,19 @@
 <span class='line'> 60</span>             </span><span class="STRN">'user'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">GVS.getUser</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">getUserName</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT">
 <span class='line'> 61</span>         </span><span class="PUNC">}</span><span class="WHIT">
 <span class='line'> 62</span>         </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">body</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'> 63</span>             </span><span class="STRN">'canvas'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">canvas</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'> 64</span>             </span><span class="STRN">'elements'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">elements</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'> 65</span>             </span><span class="STRN">'domainContext'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">domainContext</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'> 66</span>             </span><span class="STRN">'criterion'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">criteria</span><span class="WHIT">
-<span class='line'> 67</span>         </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 63</span>             </span><span class="STRN">'domainContext'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">domainContext</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 64</span>             </span><span class="STRN">'criterion'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">criteria</span><span class="WHIT">
+<span class='line'> 65</span>         </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 66</span>         </span><span class="NAME">body</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">Object.extend</span><span class="PUNC">(</span><span class="NAME">body</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">elements</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 67</span>         </span><span class="NAME">body.canvas.screens</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">canvas</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'> 68</span>         </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">Object.toJSON</span><span class="PUNC">(</span><span class="NAME">body</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'> 69</span>     </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'> 70</span>     
+<span class='line'> 70</span> 
 <span class='line'> 71</span>     </span><span class="COMM">/**
 <span class='line'> 72</span>      * Gets the uri for a given operation
 <span class='line'> 73</span>      * @private
 <span class='line'> 74</span>      * @overrides
-<span class='line'> 75</span>      */</span><span class="WHIT"> 
+<span class='line'> 75</span>      */</span><span class="WHIT">
 <span class='line'> 76</span>     </span><span class="NAME">_getUri</span><span class="PUNC">:</span><span class="KEYW">function</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="COMM">/** String */</span><span class="WHIT"> </span><span class="NAME">operation</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
 <span class='line'> 77</span>         </span><span class="KEYW">switch</span><span class="PUNC">(</span><span class="NAME">operation</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
 <span class='line'> 78</span>             </span><span class="KEYW">case</span><span class="WHIT"> </span><span class="STRN">"findCheck"</span><span class="PUNC">:</span><span class="WHIT">
@@ -89,46 +89,59 @@
 <span class='line'> 82</span>                 </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">URIs.catalogueScreenflowCheck</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'> 83</span>                 </span><span class="KEYW">break</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'> 84</span>             </span><span class="KEYW">default</span><span class="PUNC">:</span><span class="WHIT">
-<span class='line'> 85</span>                 </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="STRN">""</span><span class="PUNC">;</span><span class="WHIT"> 
+<span class='line'> 85</span>                 </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="STRN">""</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'> 86</span>         </span><span class="PUNC">}</span><span class="WHIT">
 <span class='line'> 87</span>     </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'> 88</span>         
-<span class='line'> 89</span>     </span><span class="COMM">/** 
+<span class='line'> 88</span> 
+<span class='line'> 89</span>     </span><span class="COMM">/**
 <span class='line'> 90</span>      * onSuccess callback
 <span class='line'> 91</span>      * @private
 <span class='line'> 92</span>      * @overrides
 <span class='line'> 93</span>      */</span><span class="WHIT">
 <span class='line'> 94</span>     </span><span class="NAME">_findCheckOnSuccess</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="COMM">/**XMLHttpRequest*/</span><span class="WHIT"> </span><span class="NAME">transport</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
 <span class='line'> 95</span>         </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">result</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">JSON.parse</span><span class="PUNC">(</span><span class="NAME">transport.responseText</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'> 96</span>         </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">result.elements</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'> 97</span>             </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">paletteElements</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">result.elements</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'> 98</span>         </span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'> 99</span>         
-<span class='line'>100</span>         
-<span class='line'>101</span>         </span><span class="NAME">this.mine._updateReachability</span><span class="PUNC">(</span><span class="NAME">paletteElements</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>102</span>         
-<span class='line'>103</span>         </span><span class="COMM">// Notifying about new uris</span><span class="WHIT">
-<span class='line'>104</span>         </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">screenURIs</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">Array</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>105</span>         </span><span class="NAME">$A</span><span class="PUNC">(</span><span class="NAME">paletteElements</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">each</span><span class="PUNC">(</span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">element</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>106</span>            </span><span class="NAME">screenURIs.push</span><span class="PUNC">(</span><span class="NAME">element.uri</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT"> 
-<span class='line'>107</span>         </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT"> 
-<span class='line'>108</span> 
-<span class='line'>109</span>         </span><span class="NAME">this.callback</span><span class="PUNC">(</span><span class="NAME">screenURIs</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">        
-<span class='line'>110</span>     </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>111</span>     
-<span class='line'>112</span>     </span><span class="COMM">/**
-<span class='line'>113</span>      * onSuccess callback
-<span class='line'>114</span>      * @private
-<span class='line'>115</span>      * @overrides
-<span class='line'>116</span>      */</span><span class="WHIT">
-<span class='line'>117</span>     </span><span class="NAME">_checkOnSuccess</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">transport</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>118</span>         </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">result</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">JSON.parse</span><span class="PUNC">(</span><span class="NAME">transport.responseText</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>119</span>         </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">elements</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">result.elements.concat</span><span class="PUNC">(</span><span class="NAME">result.canvas</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">uniq</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>120</span>         
-<span class='line'>121</span>         </span><span class="NAME">this.mine._updateReachability</span><span class="PUNC">(</span><span class="NAME">elements</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">       
-<span class='line'>122</span>         </span><span class="NAME">this.callback</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>123</span>     </span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>124</span> </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>125</span> 
-<span class='line'>126</span> </span><span class="COMM">// vim:ts=4:sw=4:et:</span><span class="WHIT">
-<span class='line'>127</span> </span></pre></body></html>
+<span class='line'> 96</span>         </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">result.palette</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 97</span>             </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">paletteElements</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">result.palette</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 98</span>         </span><span class="PUNC">}</span><span class="WHIT"> </span><span class="KEYW">else</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 99</span>             </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">paletteElements</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">[</span><span class="PUNC">]</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>100</span>         </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>101</span> 
+<span class='line'>102</span>         </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">allElements</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">paletteElements.clone</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>103</span> 
+<span class='line'>104</span>         </span><span class="NAME">result.canvas.screens.each</span><span class="PUNC">(</span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">bb</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>105</span>             </span><span class="NAME">found</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">allElements.detect</span><span class="PUNC">(</span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">element</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>106</span>                 </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">element.uri</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="NAME">bb.uri</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>107</span>             </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>108</span>             </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="PUNC">!</span><span class="NAME">found</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>109</span>                 </span><span class="NAME">allElements.push</span><span class="PUNC">(</span><span class="NAME">bb</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>110</span>             </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>111</span>         </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">this</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>112</span> 
+<span class='line'>113</span> 
+<span class='line'>114</span>         </span><span class="NAME">this.mine._updateReachability</span><span class="PUNC">(</span><span class="NAME">allElements</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>115</span> 
+<span class='line'>116</span>         </span><span class="COMM">// Notifying about new uris</span><span class="WHIT">
+<span class='line'>117</span>         </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">screenURIs</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">Array</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>118</span>         </span><span class="NAME">$A</span><span class="PUNC">(</span><span class="NAME">paletteElements</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">each</span><span class="PUNC">(</span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">element</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>119</span>            </span><span class="NAME">screenURIs.push</span><span class="PUNC">(</span><span class="NAME">element.uri</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>120</span>         </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>121</span> 
+<span class='line'>122</span>         </span><span class="NAME">this.callback</span><span class="PUNC">(</span><span class="NAME">screenURIs</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">result</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>123</span>     </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>124</span> 
+<span class='line'>125</span>     </span><span class="COMM">/**
+<span class='line'>126</span>      * onSuccess callback
+<span class='line'>127</span>      * @private
+<span class='line'>128</span>      * @overrides
+<span class='line'>129</span>      */</span><span class="WHIT">
+<span class='line'>130</span>     </span><span class="NAME">_checkOnSuccess</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">transport</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>131</span>         </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">result</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">JSON.parse</span><span class="PUNC">(</span><span class="NAME">transport.responseText</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>132</span>         </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">elements</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">result.palette.concat</span><span class="PUNC">(</span><span class="NAME">result.canvas.screens</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">uniq</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>133</span> 
+<span class='line'>134</span>         </span><span class="NAME">this.mine._updateReachability</span><span class="PUNC">(</span><span class="NAME">elements</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>135</span>         </span><span class="NAME">this.callback</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>136</span>     </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>137</span> </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>138</span> 
+<span class='line'>139</span> </span><span class="COMM">// vim:ts=4:sw=4:et:</span><span class="WHIT">
+<span class='line'>140</span> </span></pre></body></html>

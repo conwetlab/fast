@@ -6,92 +6,92 @@
 	.REGX {color: #339;}
 	.line {border-right: 1px dotted #666; color: #666; font-style: normal;}
 	</style></head><body><pre><span class='line'>  1</span> <span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">Trigger</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">Class.create</span><span class="PUNC">(</span><span class="WHIT">
-<span class='line'>  2</span> </span><span class="WHIT">    </span><span class="COMM">/** @lends Trigger.prototype */</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>  2</span>     </span><span class="COMM">/** @lends Trigger.prototype */</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
 <span class='line'>  3</span> 
-<span class='line'>  4</span> </span><span class="WHIT">    </span><span class="COMM">/**
+<span class='line'>  4</span>     </span><span class="COMM">/**
 <span class='line'>  5</span>      * Triggers representation
 <span class='line'>  6</span>      * @constructs
-<span class='line'>  7</span>      */</span><span class="WHIT"> </span><span class="WHIT">
-<span class='line'>  8</span> </span><span class="WHIT">    </span><span class="NAME">initialize</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="COMM">/** Object */</span><span class="WHIT"> </span><span class="NAME">from</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="COMM">/** Object */</span><span class="WHIT"> </span><span class="NAME">to</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>  7</span>      */</span><span class="WHIT">
+<span class='line'>  8</span>     </span><span class="NAME">initialize</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="COMM">/** Object */</span><span class="WHIT"> </span><span class="NAME">from</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="COMM">/** Object */</span><span class="WHIT"> </span><span class="NAME">to</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
 <span class='line'>  9</span> 
-<span class='line'> 10</span> </span><span class="WHIT">        </span><span class="COMM">/**
+<span class='line'> 10</span>         </span><span class="COMM">/**
 <span class='line'> 11</span>          * Trigger source
 <span class='line'> 12</span>          * @private
 <span class='line'> 13</span>          * @type Object
 <span class='line'> 14</span>          */</span><span class="WHIT">
-<span class='line'> 15</span> </span><span class="WHIT">        </span><span class="NAME">this._from</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">from</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 15</span>         </span><span class="NAME">this._from</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">from</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'> 16</span> 
-<span class='line'> 17</span> </span><span class="WHIT">        </span><span class="COMM">/**
+<span class='line'> 17</span>         </span><span class="COMM">/**
 <span class='line'> 18</span>          * Trigger destination
 <span class='line'> 19</span>          * @prvate
 <span class='line'> 20</span>          * @type Object
 <span class='line'> 21</span>          */</span><span class="WHIT">
-<span class='line'> 22</span> </span><span class="WHIT">        </span><span class="NAME">this._to</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">to</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 22</span>         </span><span class="NAME">this._to</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">to</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'> 23</span> 
-<span class='line'> 24</span> </span><span class="WHIT">        </span><span class="COMM">/**
+<span class='line'> 24</span>         </span><span class="COMM">/**
 <span class='line'> 25</span>          * Trigger id
 <span class='line'> 26</span>          * @private
 <span class='line'> 27</span>          * @type String
 <span class='line'> 28</span>          */</span><span class="WHIT">
-<span class='line'> 29</span> </span><span class="WHIT">        </span><span class="NAME">this._id</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this._createId</span><span class="PUNC">(</span><span class="NAME">from</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">to</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'> 30</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 29</span>         </span><span class="NAME">this._id</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this._createId</span><span class="PUNC">(</span><span class="NAME">from</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">to</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 30</span>     </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
 <span class='line'> 31</span> 
-<span class='line'> 32</span> </span><span class="WHIT">    </span><span class="COMM">/**
+<span class='line'> 32</span>     </span><span class="COMM">/**
 <span class='line'> 33</span>      * Returns the trigger id
 <span class='line'> 34</span>      * @type String
 <span class='line'> 35</span>      */</span><span class="WHIT">
-<span class='line'> 36</span> </span><span class="WHIT">    </span><span class="NAME">getId</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'> 37</span> </span><span class="WHIT">        </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">this._id</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'> 38</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 36</span>     </span><span class="NAME">getId</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 37</span>         </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">this._id</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 38</span>     </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
 <span class='line'> 39</span> 
-<span class='line'> 40</span> </span><span class="WHIT">    </span><span class="NAME">getDestinationId</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'> 41</span> </span><span class="WHIT">        </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">this._to.instance.getId</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'> 42</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 40</span>     </span><span class="NAME">getDestinationId</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 41</span>         </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">this._to.instance.getId</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 42</span>     </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
 <span class='line'> 43</span> 
-<span class='line'> 44</span> </span><span class="WHIT">    </span><span class="NAME">getDestinationAction</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'> 45</span> </span><span class="WHIT">        </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">this._to.action</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'> 46</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 44</span>     </span><span class="NAME">getDestinationAction</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 45</span>         </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">this._to.action</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 46</span>     </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
 <span class='line'> 47</span> 
-<span class='line'> 48</span> </span><span class="WHIT">    </span><span class="NAME">getTriggerName</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'> 49</span> </span><span class="WHIT">        </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">this._from.name</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'> 50</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 48</span>     </span><span class="NAME">getTriggerName</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 49</span>         </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">this._from.name</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 50</span>     </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
 <span class='line'> 51</span> 
-<span class='line'> 52</span> </span><span class="WHIT">    </span><span class="NAME">getSourceId</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'> 53</span> </span><span class="WHIT">        </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">this._from.instance.getId</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'> 54</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 52</span>     </span><span class="NAME">getSourceId</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 53</span>         </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">this._from.instance.getId</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 54</span>     </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
 <span class='line'> 55</span> 
-<span class='line'> 56</span> </span><span class="WHIT">    </span><span class="NAME">getSourceInstance</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'> 57</span> </span><span class="WHIT">        </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">this._from.instance</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'> 58</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 56</span>     </span><span class="NAME">getSourceInstance</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 57</span>         </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">this._from.instance</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 58</span>     </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
 <span class='line'> 59</span> 
-<span class='line'> 60</span> </span><span class="WHIT">    </span><span class="COMM">/**
+<span class='line'> 60</span>     </span><span class="COMM">/**
 <span class='line'> 61</span>      * Returns the JSON object representing the Trigger
 <span class='line'> 62</span>      * @type Object
 <span class='line'> 63</span>      */</span><span class="WHIT">
-<span class='line'> 64</span> </span><span class="WHIT">    </span><span class="NAME">toJSON</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'> 65</span> </span><span class="WHIT">        </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'> 66</span> </span><span class="WHIT">            </span><span class="STRN">'from'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'> 67</span> </span><span class="WHIT">                </span><span class="STRN">'buildingblock'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">this.getSourceId</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'> 68</span> </span><span class="WHIT">                </span><span class="STRN">'name'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">this.getTriggerName</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT">
-<span class='line'> 69</span> </span><span class="WHIT">            </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'> 70</span> </span><span class="WHIT">            </span><span class="STRN">'to'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'> 71</span> </span><span class="WHIT">                </span><span class="STRN">'buildingblock'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">this.getDestinationId</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'> 72</span> </span><span class="WHIT">                </span><span class="STRN">'action'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">this.getDestinationAction</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT">
-<span class='line'> 73</span> </span><span class="WHIT">            </span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'> 74</span> </span><span class="WHIT">        </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'> 75</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'> 76</span> </span><span class="WHIT">    </span><span class="WHIT">
-<span class='line'> 77</span> </span><span class="WHIT">    </span><span class="COMM">// **************** PRIVATE METHODS **************** //</span><span class="WHIT">
+<span class='line'> 64</span>     </span><span class="NAME">toJSON</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 65</span>         </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 66</span>             </span><span class="STRN">'from'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 67</span>                 </span><span class="STRN">'buildingblock'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">this.getSourceId</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 68</span>                 </span><span class="STRN">'name'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">this.getTriggerName</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT">
+<span class='line'> 69</span>             </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 70</span>             </span><span class="STRN">'to'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 71</span>                 </span><span class="STRN">'buildingblock'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">this.getDestinationId</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 72</span>                 </span><span class="STRN">'action'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">this.getDestinationAction</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT">
+<span class='line'> 73</span>             </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'> 74</span>         </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 75</span>     </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 76</span> 
+<span class='line'> 77</span>     </span><span class="COMM">// **************** PRIVATE METHODS **************** //</span><span class="WHIT">
 <span class='line'> 78</span> 
-<span class='line'> 79</span> </span><span class="WHIT">    </span><span class="COMM">/**
+<span class='line'> 79</span>     </span><span class="COMM">/**
 <span class='line'> 80</span>      * Creates the trigger id
 <span class='line'> 81</span>      * @private
 <span class='line'> 82</span>      * @type String
 <span class='line'> 83</span>      */</span><span class="WHIT">
-<span class='line'> 84</span> </span><span class="WHIT">    </span><span class="NAME">_createId</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="COMM">/** Object */</span><span class="WHIT"> </span><span class="NAME">from</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="COMM">/** Object */</span><span class="WHIT"> </span><span class="NAME">to</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'> 85</span> </span><span class="WHIT">        </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">from.instance.getId</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">from.name</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT">
-<span class='line'> 86</span> </span><span class="WHIT">                </span><span class="NAME">to.instance.getId</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">to.action</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'> 87</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'> 84</span>     </span><span class="NAME">_createId</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="COMM">/** Object */</span><span class="WHIT"> </span><span class="NAME">from</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="COMM">/** Object */</span><span class="WHIT"> </span><span class="NAME">to</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 85</span>         </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">from.instance.getId</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">from.name</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT">
+<span class='line'> 86</span>                 </span><span class="NAME">to.instance.getId</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">to.action</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 87</span>     </span><span class="PUNC">}</span><span class="WHIT">
 <span class='line'> 88</span> 
 <span class='line'> 89</span> </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'> 90</span> 

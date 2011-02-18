@@ -11,27 +11,27 @@
 <span class='line'>  4</span>      * to preview a component
 <span class='line'>  5</span>      * @constructs
 <span class='line'>  6</span>      * @extends ConfirmDialog
-<span class='line'>  7</span>      */</span><span class="WHIT"> 
+<span class='line'>  7</span>      */</span><span class="WHIT">
 <span class='line'>  8</span>     </span><span class="NAME">initialize</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">$super</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="COMM">/** String */</span><span class="WHIT"> </span><span class="NAME">title</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="COMM">/** DOMNode */</span><span class="WHIT"> </span><span class="NAME">content</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>  9</span>         </span><span class="NAME">$super</span><span class="PUNC">(</span><span class="STRN">"Preview of "</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">title</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">"ok"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>  9</span>         </span><span class="NAME">$super</span><span class="PUNC">(</span><span class="STRN">"Preview of "</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">title</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">ConfirmDialog.OK</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'> 10</span>         </span><span class="NAME">this._setContent</span><span class="PUNC">(</span><span class="NAME">content</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'> 11</span>     </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'> 12</span>     
-<span class='line'> 13</span>     
+<span class='line'> 12</span> 
+<span class='line'> 13</span> 
 <span class='line'> 14</span>     </span><span class="COMM">// **************** PUBLIC METHODS **************** //</span><span class="WHIT">
 <span class='line'> 15</span> 
-<span class='line'> 16</span> 
-<span class='line'> 17</span>     </span><span class="COMM">// **************** PRIVATE METHODS **************** //</span><span class="WHIT">
-<span class='line'> 18</span> 
-<span class='line'> 19</span> 
-<span class='line'> 20</span>     </span><span class="COMM">/** 
-<span class='line'> 21</span>      * initDialogInterface
-<span class='line'> 22</span>      * This function creates the dom structure
-<span class='line'> 23</span>      * @private
-<span class='line'> 24</span>      * @override
-<span class='line'> 25</span>      */</span><span class="WHIT">
-<span class='line'> 26</span>     </span><span class="NAME">_initDialogInterface</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'> 27</span>     </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'> 16</span>     </span><span class="COMM">/**
+<span class='line'> 17</span>      * This function set the form content based on a array-like
+<span class='line'> 18</span>      * structure, containing the different elements of the form,
+<span class='line'> 19</span>      * and, optionally, form parameters
+<span class='line'> 20</span>      * @private
+<span class='line'> 21</span>      */</span><span class="WHIT">
+<span class='line'> 22</span>     </span><span class="NAME">setContent</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="COMM">/** Array | DOMNode */</span><span class="WHIT"> </span><span class="NAME">data</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="COMM">/** Hash */</span><span class="WHIT"> </span><span class="NAME">formParams</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 23</span>         </span><span class="NAME">this._setContent</span><span class="PUNC">(</span><span class="NAME">data</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">formParams</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 24</span>     </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'> 25</span> 
+<span class='line'> 26</span>     </span><span class="COMM">// **************** PRIVATE METHODS **************** //</span><span class="WHIT">
+<span class='line'> 27</span> 
 <span class='line'> 28</span> </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'> 29</span> 
 <span class='line'> 30</span> </span><span class="COMM">// vim:ts=4:sw=4:et:</span><span class="WHIT">

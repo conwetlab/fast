@@ -213,11 +213,17 @@ ul.inheritsList
 	
 	<li><a href="../symbols/BuildingBlockDescription.html">BuildingBlockDescription</a></li>
 	
+	<li><a href="../symbols/BuildingBlockDocument.html">BuildingBlockDocument</a></li>
+	
 	<li><a href="../symbols/BuildingBlockFactory.html">BuildingBlockFactory</a></li>
 	
 	<li><a href="../symbols/BuildingBlockSet.html">BuildingBlockSet</a></li>
 	
 	<li><a href="../symbols/BuildingBlockView.html">BuildingBlockView</a></li>
+	
+	<li><a href="../symbols/ButtonArrayDialog.html">ButtonArrayDialog</a></li>
+	
+	<li><a href="../symbols/CaptionDialog.html">CaptionDialog</a></li>
 	
 	<li><a href="../symbols/ComponentInstance.html">ComponentInstance</a></li>
 	
@@ -253,11 +259,11 @@ ul.inheritsList
 	
 	<li><a href="../symbols/FormComponent.html">FormComponent</a></li>
 	
+	<li><a href="../symbols/FormDescription.html">FormDescription</a></li>
+	
 	<li><a href="../symbols/FormDialog.html">FormDialog</a></li>
 	
 	<li><a href="../symbols/FormFactory.html">FormFactory</a></li>
-	
-	<li><a href="../symbols/FormInstance.html">FormInstance</a></li>
 	
 	<li><a href="../symbols/FormSnapshotView.html">FormSnapshotView</a></li>
 	
@@ -268,6 +274,8 @@ ul.inheritsList
 	<li><a href="../symbols/GVS.html">GVS</a></li>
 	
 	<li><a href="../symbols/InferenceEngine.html">InferenceEngine</a></li>
+	
+	<li><a href="../symbols/iServeDialog.html">iServeDialog</a></li>
 	
 	<li><a href="../symbols/KeyPressRegistry.html">KeyPressRegistry</a></li>
 	
@@ -281,15 +289,11 @@ ul.inheritsList
 	
 	<li><a href="../symbols/MenuElement.html">MenuElement</a></li>
 	
-	<li><a href="../symbols/NewScreenDialog.html">NewScreenDialog</a></li>
-	
-	<li><a href="../symbols/NewScreenflowDialog.html">NewScreenflowDialog</a></li>
+	<li><a href="../symbols/NewBuildingBlockDialog.html">NewBuildingBlockDialog</a></li>
 	
 	<li><a href="../symbols/OperatorComponent.html">OperatorComponent</a></li>
 	
 	<li><a href="../symbols/OperatorFactory.html">OperatorFactory</a></li>
-	
-	<li><a href="../symbols/OperatorInstance.html">OperatorInstance</a></li>
 	
 	<li><a href="../symbols/OperatorView.html">OperatorView</a></li>
 	
@@ -300,6 +304,10 @@ ul.inheritsList
 	<li><a href="../symbols/PaletteController.html">PaletteController</a></li>
 	
 	<li><a href="../symbols/PaletteDocument.html">PaletteDocument</a></li>
+	
+	<li><a href="../symbols/PaletteSearchBox.html">PaletteSearchBox</a></li>
+	
+	<li><a href="../symbols/ParamsDialog.html">ParamsDialog</a></li>
 	
 	<li><a href="../symbols/Pipe.html">Pipe</a></li>
 	
@@ -331,13 +339,15 @@ ul.inheritsList
 	
 	<li><a href="../symbols/PublishGadgetDialog.html">PublishGadgetDialog</a></li>
 	
+	<li><a href="../symbols/RecommendationManager.html">RecommendationManager</a></li>
+	
 	<li><a href="../symbols/ResourceComponent.html">ResourceComponent</a></li>
 	
 	<li><a href="../symbols/ResourceFactory.html">ResourceFactory</a></li>
 	
-	<li><a href="../symbols/ResourceInstance.html">ResourceInstance</a></li>
-	
 	<li><a href="../symbols/ResourceView.html">ResourceView</a></li>
+	
+	<li><a href="../symbols/SaveAsDialog.html">SaveAsDialog</a></li>
 	
 	<li><a href="../symbols/ScreenCanvasCache.html">ScreenCanvasCache</a></li>
 	
@@ -359,7 +369,7 @@ ul.inheritsList
 	
 	<li><a href="../symbols/ScreenflowInferenceEngine.html">ScreenflowInferenceEngine</a></li>
 	
-	<li><a href="../symbols/ScreenflowInstance.html">ScreenflowInstance</a></li>
+	<li><a href="../symbols/ScreenflowPlayer.html">ScreenflowPlayer</a></li>
 	
 	<li><a href="../symbols/ScreenInferenceEngine.html">ScreenInferenceEngine</a></li>
 	
@@ -469,9 +479,19 @@ able to publish a created gadget into a mashup platform</div>
 							<td class="attributes">&lt;private&gt; &nbsp;</td>
 							<td class="nameDescription">
 								<div class="fixedFont">
-								<b><a href="../symbols/PublishGadgetDialog.html#_gadgetBaseUrl">_gadgetBaseUrl</a></b>
+								<b><a href="../symbols/PublishGadgetDialog.html#_publication">_publication</a></b>
 								</div>
-								<div class="description">Base url of the gadget being published</div>
+								<div class="description">Publication Info</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;private&gt; &nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">
+								<b><a href="../symbols/PublishGadgetDialog.html#_standaloneDialog">_standaloneDialog</a></b>
+								</div>
+								<div class="description">Standalone Dialog</div>
 							</td>
 						</tr>
 					
@@ -503,6 +523,24 @@ able to publish a created gadget into a mashup platform</div>
 						<tr>
 							<td class="attributes">&lt;private&gt; &nbsp;</td>
 							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/PublishGadgetDialog.html#_createPlatformRow">_createPlatformRow</a></b>(options)
+								</div>
+								<div class="description">This function create a row for a destination platform</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;private&gt; &nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/PublishGadgetDialog.html#_deploy">_deploy</a></b>(buttonNode, options, url)
+								</div>
+								<div class="description">This function deploy a gadget to EzWeb</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;private&gt; &nbsp;</td>
+							<td class="nameDescription">
 								<div class="fixedFont"><b><a href="../symbols/PublishGadgetDialog.html#_fillTable">_fillTable</a></b>(tableNode, data)
 								</div>
 								<div class="description">This function fills a table with data</div>
@@ -522,7 +560,7 @@ This function creates the dom structure</div>
 						<tr>
 							<td class="attributes">&lt;private&gt; &nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/PublishGadgetDialog.html#_publishGadget">_publishGadget</a></b>(button, mashupPlatform)
+								<div class="fixedFont"><b><a href="../symbols/PublishGadgetDialog.html#_publishGadget">_publishGadget</a></b>(button, options)
 								</div>
 								<div class="description">Publishes the created gadget</div>
 							</td>
@@ -531,7 +569,7 @@ This function creates the dom structure</div>
 						<tr>
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/PublishGadgetDialog.html#show">show</a></b>($super, gadgetBaseUrl)
+								<div class="fixedFont"><b><a href="../symbols/PublishGadgetDialog.html#show">show</a></b>($super, publication)
 								</div>
 								<div class="description">show</div>
 							</td>
@@ -543,7 +581,7 @@ This function creates the dom structure</div>
 				
 				
 				<dl class="inheritsList">
-				<dt>Methods borrowed from class <a href="../symbols/ConfirmDialog.html#constructor">ConfirmDialog</a>: </dt><dd><a href="../symbols/ConfirmDialog.html#_onCancel">_onCancel</a>, <a href="../symbols/ConfirmDialog.html#_onOk">_onOk</a>, <a href="../symbols/ConfirmDialog.html#_reset">_reset</a>, <a href="../symbols/ConfirmDialog.html#_setDisabled">_setDisabled</a></dd><dt>Methods borrowed from class <a href="../symbols/FormDialog.html#constructor">FormDialog</a>: </dt><dd><a href="../symbols/FormDialog.html#_addButton">_addButton</a>, <a href="../symbols/FormDialog.html#_armEvents">_armEvents</a>, <a href="../symbols/FormDialog.html#_createLine">_createLine</a>, <a href="../symbols/FormDialog.html#_getForm">_getForm</a>, <a href="../symbols/FormDialog.html#_getFormWidget">_getFormWidget</a>, <a href="../symbols/FormDialog.html#_hide">_hide</a>, <a href="../symbols/FormDialog.html#_removeButtons">_removeButtons</a>, <a href="../symbols/FormDialog.html#_setContent">_setContent</a>, <a href="../symbols/FormDialog.html#_setHeader">_setHeader</a>, <a href="../symbols/FormDialog.html#_setMessage">_setMessage</a></dd>
+				<dt>Methods borrowed from class <a href="../symbols/ConfirmDialog.html#constructor">ConfirmDialog</a>: </dt><dd><a href="../symbols/ConfirmDialog.html#_onButtonPressed">_onButtonPressed</a>, <a href="../symbols/ConfirmDialog.html#_onCancel">_onCancel</a>, <a href="../symbols/ConfirmDialog.html#_onOk">_onOk</a>, <a href="../symbols/ConfirmDialog.html#_reset">_reset</a>, <a href="../symbols/ConfirmDialog.html#_setDisabled">_setDisabled</a></dd><dt>Methods borrowed from class <a href="../symbols/FormDialog.html#constructor">FormDialog</a>: </dt><dd><a href="../symbols/FormDialog.html#_addButton">_addButton</a>, <a href="../symbols/FormDialog.html#_armEvents">_armEvents</a>, <a href="../symbols/FormDialog.html#_createLine">_createLine</a>, <a href="../symbols/FormDialog.html#_getForm">_getForm</a>, <a href="../symbols/FormDialog.html#_getFormWidget">_getFormWidget</a>, <a href="../symbols/FormDialog.html#_hide">_hide</a>, <a href="../symbols/FormDialog.html#_removeButtons">_removeButtons</a>, <a href="../symbols/FormDialog.html#_setContent">_setContent</a>, <a href="../symbols/FormDialog.html#_setHeader">_setHeader</a>, <a href="../symbols/FormDialog.html#_setMessage">_setMessage</a>, <a href="../symbols/FormDialog.html#_setTitle">_setTitle</a>, <a href="../symbols/FormDialog.html#_validate">_validate</a>, <a href="../symbols/FormDialog.html#isVisible">isVisible</a></dd>
 				</dl>
 				
 			
@@ -618,15 +656,37 @@ able to publish a created gadget into a mashup platform
 
 					<hr />
 				
-					<a name="_gadgetBaseUrl"> </a>
+					<a name="_publication"> </a>
 					<div class="fixedFont">&lt;private&gt; 
 					
-					<span class="light">{String}</span>
-					<b>_gadgetBaseUrl</b>
+					<span class="light">{Object}</span>
+					<b>_publication</b>
 					
 					</div>
 					<div class="description">
-						Base url of the gadget being published
+						Publication Info
+						
+						
+					</div>
+					
+					
+
+						
+						
+						
+						
+
+					<hr />
+				
+					<a name="_standaloneDialog"> </a>
+					<div class="fixedFont">&lt;private&gt; 
+					
+					<span class="light">{StandaloneEmbeddingDialog}</span>
+					<b>_standaloneDialog</b>
+					
+					</div>
+					<div class="description">
+						Standalone Dialog
 						
 						
 					</div>
@@ -647,6 +707,90 @@ able to publish a created gadget into a mashup platform
 				<div class="sectionTitle">
 					Method Detail
 				</div>
+				
+					<a name="_createPlatformRow"> </a>
+					<div class="fixedFont">&lt;private&gt; 
+					
+					
+					<b>_createPlatformRow</b>(options)
+					
+					</div>
+					<div class="description">
+						This function create a row for a destination platform
+						
+						
+					</div>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{Hash}</span> <b>options</b>
+									
+								</dt>
+								<dd></dd>
+							
+							</dl>
+						
+						
+						
+						
+						
+						
+						
+
+					<hr />
+				
+					<a name="_deploy"> </a>
+					<div class="fixedFont">&lt;private&gt; 
+					
+					
+					<b>_deploy</b>(buttonNode, options, url)
+					
+					</div>
+					<div class="description">
+						This function deploy a gadget to EzWeb
+						
+						
+					</div>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{domNode}</span> <b>buttonNode</b>
+									
+								</dt>
+								<dd></dd>
+							
+								<dt>
+									<span class="light fixedFont">{Hash}</span> <b>options</b>
+									
+								</dt>
+								<dd></dd>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>url</b>
+									
+								</dt>
+								<dd></dd>
+							
+							</dl>
+						
+						
+						
+						
+						
+						
+						
+
+					<hr />
 				
 					<a name="_fillTable"> </a>
 					<div class="fixedFont">&lt;private&gt; 
@@ -720,7 +864,7 @@ This function creates the dom structure
 					<div class="fixedFont">&lt;private&gt; 
 					
 					
-					<b>_publishGadget</b>(button, mashupPlatform)
+					<b>_publishGadget</b>(button, options)
 					
 					</div>
 					<div class="description">
@@ -742,7 +886,7 @@ This function creates the dom structure
 								<dd></dd>
 							
 								<dt>
-									<span class="light fixedFont">{String}</span> <b>mashupPlatform</b>
+									<span class="light fixedFont">{Hash}</span> <b>options</b>
 									
 								</dt>
 								<dd></dd>
@@ -762,7 +906,7 @@ This function creates the dom structure
 					<div class="fixedFont">
 					
 					
-					<b>show</b>($super, gadgetBaseUrl)
+					<b>show</b>($super, publication)
 					
 					</div>
 					<div class="description">
@@ -784,7 +928,7 @@ This function creates the dom structure
 								<dd></dd>
 							
 								<dt>
-									<span class="light fixedFont">{String}</span> <b>gadgetBaseUrl</b>
+									<span class="light fixedFont">{Object}</span> <b>publication</b>
 									
 								</dt>
 								<dd></dd>
@@ -808,7 +952,7 @@ This function creates the dom structure
 <!-- ============================== footer ================================= -->
 		<div class="fineprint" style="clear:both">
 			
-			Documentation generated by <a href="http://www.jsdoctoolkit.org/" target="_blank">JsDoc Toolkit</a> 2.0.2 on Tue Feb 23 2010 17:57:01 GMT+0100 (CET)
+			Documentation generated by <a href="http://www.jsdoctoolkit.org/" target="_blank">JsDoc Toolkit</a> 2.0.2 on Fri Feb 18 2011 12:18:15 GMT+0100 (CET)
 		</div>
 	</body>
 </html>

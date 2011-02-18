@@ -6,351 +6,529 @@
 	.REGX {color: #339;}
 	.line {border-right: 1px dotted #666; color: #666; font-style: normal;}
 	</style></head><body><pre><span class='line'>  1</span> <span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">ComponentInstance</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">Class.create</span><span class="PUNC">(</span><span class="NAME">DragSource</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>  2</span> </span><span class="WHIT">    </span><span class="COMM">/** @lends ComponentInstance.prototype */</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>  2</span>     </span><span class="COMM">/** @lends ComponentInstance.prototype */</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
 <span class='line'>  3</span> 
-<span class='line'>  4</span> </span><span class="WHIT">    </span><span class="COMM">/**
+<span class='line'>  4</span>     </span><span class="COMM">/**
 <span class='line'>  5</span>      * This class is an instance of a palette component
 <span class='line'>  6</span>      * in the Document area
 <span class='line'>  7</span>      * @constructs
 <span class='line'>  8</span>      * @extends DragSource
-<span class='line'>  9</span>      */</span><span class="WHIT"> </span><span class="WHIT">
-<span class='line'> 10</span> </span><span class="WHIT">    </span><span class="NAME">initialize</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">$super</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="COMM">/**BuildingBlockDescription*/</span><span class="WHIT"> </span><span class="NAME">buildingBlockDescription</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="WHIT">
-<span class='line'> 11</span> </span><span class="WHIT">             </span><span class="COMM">/** InferenceEngine */</span><span class="WHIT"> </span><span class="NAME">inferenceEngine</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'> 12</span> </span><span class="WHIT">        </span><span class="NAME">$super</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'> 13</span> </span><span class="WHIT">        </span><span class="WHIT">
-<span class='line'> 14</span> </span><span class="WHIT">        </span><span class="COMM">/** 
+<span class='line'>  9</span>      */</span><span class="WHIT">
+<span class='line'> 10</span>     </span><span class="NAME">initialize</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">$super</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="COMM">/**BuildingBlockDescription*/</span><span class="WHIT"> </span><span class="NAME">buildingBlockDescription</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 11</span>              </span><span class="COMM">/** InferenceEngine */</span><span class="WHIT"> </span><span class="NAME">inferenceEngine</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 12</span>         </span><span class="NAME">$super</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 13</span> 
+<span class='line'> 14</span>         </span><span class="COMM">/**
 <span class='line'> 15</span>          * BuildingBlock description this class is instance of
 <span class='line'> 16</span>          * @type BuildingBlockDescription
 <span class='line'> 17</span>          * @private @member
 <span class='line'> 18</span>          */</span><span class="WHIT">
-<span class='line'> 19</span> </span><span class="WHIT">        </span><span class="NAME">this._buildingBlockDescription</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">buildingBlockDescription</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 19</span>         </span><span class="NAME">this._buildingBlockDescription</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">buildingBlockDescription</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'> 20</span> 
-<span class='line'> 21</span> </span><span class="WHIT">        </span><span class="COMM">/**
+<span class='line'> 21</span>         </span><span class="COMM">/**
 <span class='line'> 22</span>          * Identification of the instance inside its container
 <span class='line'> 23</span>          * @type String
 <span class='line'> 24</span>          * @private
 <span class='line'> 25</span>          */</span><span class="WHIT">
-<span class='line'> 26</span> </span><span class="WHIT">        </span><span class="NAME">this._id</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 26</span>         </span><span class="NAME">this._id</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'> 27</span> 
-<span class='line'> 28</span> </span><span class="WHIT">        </span><span class="COMM">/**
-<span class='line'> 29</span>          * BuildingBlock description graphical representation
-<span class='line'> 30</span>          * @type BuildingBlockView
+<span class='line'> 28</span>         </span><span class="COMM">/**
+<span class='line'> 29</span>          * Orientation of the instance inside its container
+<span class='line'> 30</span>          * @type Integer
 <span class='line'> 31</span>          * @private
 <span class='line'> 32</span>          */</span><span class="WHIT">
-<span class='line'> 33</span> </span><span class="WHIT">        </span><span class="NAME">this._view</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this._createView</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'> 34</span> </span><span class="WHIT">        </span><span class="COMM">/**
-<span class='line'> 35</span>          * Inference engine to receive reachability updates
-<span class='line'> 36</span>          * @type InferenceEngine
-<span class='line'> 37</span>          * @private
-<span class='line'> 38</span>          */</span><span class="WHIT">
-<span class='line'> 39</span> </span><span class="WHIT">        </span><span class="NAME">this._inferenceEngine</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">inferenceEngine</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'> 40</span> </span><span class="WHIT">        </span><span class="WHIT">
-<span class='line'> 41</span> </span><span class="WHIT">        </span><span class="COMM">/**
-<span class='line'> 42</span>          * Event listener
-<span class='line'> 43</span>          * @type Object
-<span class='line'> 44</span>          * @private
-<span class='line'> 45</span>          */</span><span class="WHIT">
-<span class='line'> 46</span> </span><span class="WHIT">        </span><span class="NAME">this._listener</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'> 47</span> </span><span class="WHIT">        </span><span class="WHIT">
-<span class='line'> 48</span> </span><span class="WHIT">        </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">this.getUri</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'> 49</span> </span><span class="WHIT">            </span><span class="NAME">this._inferenceEngine.addReachabilityListener</span><span class="PUNC">(</span><span class="NAME">this.getUri</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">this._view</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">           </span><span class="WHIT">
-<span class='line'> 50</span> </span><span class="WHIT">        </span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'> 51</span> </span><span class="WHIT">        </span><span class="WHIT">
-<span class='line'> 52</span> </span><span class="WHIT">        </span><span class="WHIT">
-<span class='line'> 53</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'> 54</span> </span><span class="WHIT">    </span><span class="WHIT">
-<span class='line'> 55</span> 
-<span class='line'> 56</span> </span><span class="WHIT">    </span><span class="COMM">// **************** PUBLIC METHODS **************** //</span><span class="WHIT">
-<span class='line'> 57</span> </span><span class="WHIT">    </span><span class="WHIT">
-<span class='line'> 58</span> </span><span class="WHIT">    </span><span class="COMM">/**
-<span class='line'> 59</span>      * Somehow something the user can comprehend
-<span class='line'> 60</span>      * Implementing TableModel interface
-<span class='line'> 61</span>      * @abstract
-<span class='line'> 62</span>      * @type String
-<span class='line'> 63</span>      */</span><span class="WHIT">
-<span class='line'> 64</span> </span><span class="WHIT">    </span><span class="NAME">getTitle</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'> 65</span> </span><span class="WHIT">        </span><span class="KEYW">throw</span><span class="WHIT"> </span><span class="STRN">"Abstract method invocation. ComponentInstance::getTitle"</span><span class="PUNC">;</span><span class="WHIT">    </span><span class="WHIT">
-<span class='line'> 66</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'> 67</span> 
-<span class='line'> 68</span> </span><span class="WHIT">    </span><span class="COMM">/**
-<span class='line'> 69</span>      * This function returns an array of lines representing the
-<span class='line'> 70</span>      * key information of the building block, in order to be shown in
-<span class='line'> 71</span>      * a table
-<span class='line'> 72</span>      * Implementing TableModel interface
-<span class='line'> 73</span>      * @type Hash
-<span class='line'> 74</span>      */</span><span class="WHIT">
-<span class='line'> 75</span> </span><span class="WHIT">    </span><span class="NAME">getInfo</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'> 76</span> </span><span class="WHIT">        </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">info</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">Hash</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'> 77</span> </span><span class="WHIT">        </span><span class="NAME">info.set</span><span class="PUNC">(</span><span class="STRN">'Title'</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">this.getTitle</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'> 78</span> </span><span class="WHIT">        </span><span class="NAME">info.set</span><span class="PUNC">(</span><span class="STRN">'Description'</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">this._buildingBlockDescription.description</span><span class="PUNC">[</span><span class="STRN">'en-gb'</span><span class="PUNC">]</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'> 79</span> </span><span class="WHIT">        </span><span class="NAME">info.set</span><span class="PUNC">(</span><span class="STRN">'Tags'</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">this._buildingBlockDescription.tags.collect</span><span class="PUNC">(</span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">tag</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'> 80</span> </span><span class="WHIT">                </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">tag.label</span><span class="PUNC">[</span><span class="STRN">'en-gb'</span><span class="PUNC">]</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'> 81</span> </span><span class="WHIT">            </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">join</span><span class="PUNC">(</span><span class="STRN">", "</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'> 82</span> </span><span class="WHIT">        </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">info</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'> 83</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'> 84</span> 
+<span class='line'> 33</span>         </span><span class="NAME">this._orientation</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 34</span> 
+<span class='line'> 35</span> 
+<span class='line'> 36</span>         </span><span class="COMM">/**
+<span class='line'> 37</span>          * Title of the instance
+<span class='line'> 38</span>          * @private
+<span class='line'> 39</span>          * @type String
+<span class='line'> 40</span>          */</span><span class="WHIT">
+<span class='line'> 41</span>         </span><span class="NAME">this._title</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 42</span> 
+<span class='line'> 43</span> 
+<span class='line'> 44</span>         </span><span class="COMM">/**
+<span class='line'> 45</span>          * Original BuildingBlock URI
+<span class='line'> 46</span>          * @private
+<span class='line'> 47</span>          * @type String
+<span class='line'> 48</span>          */</span><span class="WHIT">
+<span class='line'> 49</span>          </span><span class="NAME">this._originalUri</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 50</span> 
+<span class='line'> 51</span>         </span><span class="COMM">/**
+<span class='line'> 52</span>          * BuildingBlock description graphical representation
+<span class='line'> 53</span>          * @type BuildingBlockView
+<span class='line'> 54</span>          * @private
+<span class='line'> 55</span>          */</span><span class="WHIT">
+<span class='line'> 56</span>         </span><span class="NAME">this._view</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this._createView</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 57</span> 
+<span class='line'> 58</span>         </span><span class="NAME">this._menu</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">MenuOptions</span><span class="PUNC">(</span><span class="NAME">this._view.getNode</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 59</span>         </span><span class="NAME">this._menu.addOption</span><span class="PUNC">(</span><span class="STRN">'Delete'</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 60</span>             </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">this.document</span><span class="WHIT"> </span><span class="PUNC">&&</span><span class="WHIT"> </span><span class="NAME">this.document.deleteInstance</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 61</span>                 </span><span class="NAME">this.document.deleteInstance</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 62</span>             </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'> 63</span>         </span><span class="PUNC">}</span><span class="PUNC">.</span><span class="NAME">bind</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 64</span> 
+<span class='line'> 65</span>         </span><span class="COMM">/**
+<span class='line'> 66</span>          * BuildingBlock params
+<span class='line'> 67</span>          * @type String
+<span class='line'> 68</span>          * @private
+<span class='line'> 69</span>          */</span><span class="WHIT">
+<span class='line'> 70</span>         </span><span class="NAME">this._params</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">'{}'</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 71</span> 
+<span class='line'> 72</span>         </span><span class="COMM">/**
+<span class='line'> 73</span>          * Inference engine to receive reachability updates
+<span class='line'> 74</span>          * @type InferenceEngine
+<span class='line'> 75</span>          * @private
+<span class='line'> 76</span>          */</span><span class="WHIT">
+<span class='line'> 77</span>         </span><span class="NAME">this._inferenceEngine</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">inferenceEngine</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 78</span> 
+<span class='line'> 79</span>         </span><span class="COMM">/**
+<span class='line'> 80</span>          * Event listener
+<span class='line'> 81</span>          * @type Object
+<span class='line'> 82</span>          * @private
+<span class='line'> 83</span>          */</span><span class="WHIT">
+<span class='line'> 84</span>         </span><span class="NAME">this._listener</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'> 85</span> 
-<span class='line'> 86</span> </span><span class="WHIT">    </span><span class="COMM">/**
-<span class='line'> 87</span>      * Adds event listener
-<span class='line'> 88</span>      */</span><span class="WHIT">
-<span class='line'> 89</span> </span><span class="WHIT">    </span><span class="NAME">setEventListener</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="COMM">/** Object */</span><span class="WHIT"> </span><span class="NAME">listener</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'> 90</span> </span><span class="WHIT">        </span><span class="NAME">this._listener</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">listener</span><span class="PUNC">;</span><span class="WHIT">    </span><span class="WHIT">
-<span class='line'> 91</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'> 92</span> 
-<span class='line'> 93</span> </span><span class="WHIT">    </span><span class="COMM">/**
-<span class='line'> 94</span>      * Returns the uri of the instance
-<span class='line'> 95</span>      * @type
+<span class='line'> 86</span>         </span><span class="NAME">this.document</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 87</span> 
+<span class='line'> 88</span>     </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 89</span> 
+<span class='line'> 90</span>     </span><span class="COMM">// **************** PUBLIC METHODS **************** //</span><span class="WHIT">
+<span class='line'> 91</span> 
+<span class='line'> 92</span>     </span><span class="COMM">/**
+<span class='line'> 93</span>      * Somehow something the user can comprehend
+<span class='line'> 94</span>      * Implementing TableModel interface
+<span class='line'> 95</span>      * @type String
 <span class='line'> 96</span>      */</span><span class="WHIT">
-<span class='line'> 97</span> </span><span class="WHIT">    </span><span class="NAME">getUri</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'> 98</span> </span><span class="WHIT">        </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">this._buildingBlockDescription.uri</span><span class="PUNC">;</span><span class="WHIT">    </span><span class="WHIT">
-<span class='line'> 99</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>100</span> 
-<span class='line'>101</span> </span><span class="WHIT">    </span><span class="COMM">/**
-<span class='line'>102</span>      * Returns the node that can be clicked to start a drag-n-drop operation.
-<span class='line'>103</span>      * @type DOMNode
-<span class='line'>104</span>      * @override
-<span class='line'>105</span>      */</span><span class="WHIT">
-<span class='line'>106</span> </span><span class="WHIT">    </span><span class="NAME">getHandlerNode</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>107</span> </span><span class="WHIT">        </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">this._view.getNode</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>108</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>109</span> 
-<span class='line'>110</span> </span><span class="WHIT">    </span><span class="COMM">/**
-<span class='line'>111</span>      * Returns the node that is going to be moved in drag-n-drop operation.
-<span class='line'>112</span>      * @type DOMNode
-<span class='line'>113</span>      * @override
-<span class='line'>114</span>      */</span><span class="WHIT">
-<span class='line'>115</span> </span><span class="WHIT">    </span><span class="NAME">getDraggableObject</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>116</span> </span><span class="WHIT">        </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">this</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>117</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>118</span> 
-<span class='line'>119</span> </span><span class="WHIT">     </span><span class="COMM">/**
-<span class='line'>120</span>      * Returns the root node
-<span class='line'>121</span>      * @type DOMNode
-<span class='line'>122</span>      * @public
-<span class='line'>123</span>      */</span><span class="WHIT">
-<span class='line'>124</span> </span><span class="WHIT">    </span><span class="NAME">getView</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>125</span> </span><span class="WHIT">        </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">this._view</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>126</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>127</span> 
-<span class='line'>128</span> </span><span class="WHIT">    </span><span class="COMM">/**
-<span class='line'>129</span>      * Gets the component position
-<span class='line'>130</span>      * @type Object
-<span class='line'>131</span>      * @public
-<span class='line'>132</span>      */</span><span class="WHIT">
-<span class='line'>133</span> </span><span class="WHIT">    </span><span class="NAME">getPosition</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>134</span> </span><span class="WHIT">        </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">left</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">parseInt</span><span class="PUNC">(</span><span class="NAME">this.getHandlerNode</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">offsetLeft</span><span class="PUNC">)</span><span class="PUNC">-</span><span class="NAME">parseInt</span><span class="PUNC">(</span><span class="NAME">this.getHandlerNode</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">getStyle</span><span class="PUNC">(</span><span class="STRN">"margin-left"</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>135</span> </span><span class="WHIT">        </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">top</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">parseInt</span><span class="PUNC">(</span><span class="NAME">this.getHandlerNode</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">offsetTop</span><span class="PUNC">)</span><span class="PUNC">-</span><span class="NAME">parseInt</span><span class="PUNC">(</span><span class="NAME">this.getHandlerNode</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">getStyle</span><span class="PUNC">(</span><span class="STRN">"margin-top"</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>136</span> </span><span class="WHIT">        </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">position</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>137</span> </span><span class="WHIT">            </span><span class="STRN">"left"</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">left</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>138</span> </span><span class="WHIT">            </span><span class="STRN">"top"</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">top</span><span class="WHIT">
-<span class='line'>139</span> </span><span class="WHIT">        </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>140</span> </span><span class="WHIT">        </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">position</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>141</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>142</span> 
-<span class='line'>143</span> </span><span class="WHIT">    </span><span class="COMM">/**
-<span class='line'>144</span>      * Sets the component position
-<span class='line'>145</span>      * @params Object
-<span class='line'>146</span>      * @public
-<span class='line'>147</span>      */</span><span class="WHIT">
-<span class='line'>148</span> </span><span class="WHIT">    </span><span class="NAME">setPosition</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="COMM">/** Object */</span><span class="WHIT"> </span><span class="NAME">position</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>149</span> </span><span class="WHIT">        </span><span class="NAME">this.getHandlerNode</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">style.left</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">position.left</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="STRN">"px"</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>150</span> </span><span class="WHIT">        </span><span class="NAME">this.getHandlerNode</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">style.top</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">position.top</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="STRN">"px"</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>151</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>152</span> 
-<span class='line'>153</span> 
-<span class='line'>154</span> </span><span class="WHIT">    </span><span class="COMM">/**
-<span class='line'>155</span>      * Returns the building block description
-<span class='line'>156</span>      * @public
+<span class='line'> 97</span>     </span><span class="NAME">getTitle</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 98</span>         </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="PUNC">!</span><span class="NAME">this._title</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 99</span>             </span><span class="NAME">this._title</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this._buildingBlockDescription.getTitle</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>100</span>         </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>101</span>         </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">this._title</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>102</span>     </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>103</span> 
+<span class='line'>104</span>     </span><span class="COMM">/**
+<span class='line'>105</span>      * This function returns an array of lines representing the
+<span class='line'>106</span>      * key information of the building block, in order to be shown in
+<span class='line'>107</span>      * a table
+<span class='line'>108</span>      * Implementing TableModel interface
+<span class='line'>109</span>      * @type Hash
+<span class='line'>110</span>      */</span><span class="WHIT">
+<span class='line'>111</span>     </span><span class="NAME">getInfo</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>112</span>         </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">info</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">Hash</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>113</span> 
+<span class='line'>114</span>         </span><span class="NAME">info.set</span><span class="PUNC">(</span><span class="STRN">'Title'</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">this.getTitle</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>115</span>         </span><span class="NAME">info.set</span><span class="PUNC">(</span><span class="STRN">'Description'</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">this._buildingBlockDescription.description</span><span class="PUNC">[</span><span class="STRN">'en-gb'</span><span class="PUNC">]</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>116</span>         </span><span class="NAME">info.set</span><span class="PUNC">(</span><span class="STRN">'Tags'</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">this._buildingBlockDescription.tags.collect</span><span class="PUNC">(</span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">tag</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>117</span>                 </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">tag.label</span><span class="PUNC">[</span><span class="STRN">'en-gb'</span><span class="PUNC">]</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>118</span>             </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">join</span><span class="PUNC">(</span><span class="STRN">", "</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>119</span> 
+<span class='line'>120</span>         </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">params</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">document.createElement</span><span class="PUNC">(</span><span class="STRN">'div'</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>121</span>         </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">paramsText</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this.getParams</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>122</span>         </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">parameterized</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">paramsText.strip</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">length</span><span class="WHIT"> </span><span class="PUNC">></span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>123</span>         </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">parameterized</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>124</span>             </span><span class="KEYW">try</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>125</span>                 </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">json</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">json</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">cjson_parse</span><span class="PUNC">(</span><span class="NAME">paramsText</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>126</span> 
+<span class='line'>127</span>                 </span><span class="NAME">parameterized</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">false</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>128</span>                 </span><span class="KEYW">for</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">i</span><span class="WHIT"> </span><span class="KEYW">in</span><span class="WHIT"> </span><span class="NAME">json</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>129</span>                     </span><span class="NAME">params.addClassName</span><span class="PUNC">(</span><span class="STRN">'json-icon-bg'</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>130</span>                     </span><span class="NAME">parameterized</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">true</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>131</span>                     </span><span class="KEYW">break</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>132</span>                 </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>133</span>             </span><span class="PUNC">}</span><span class="WHIT"> </span><span class="KEYW">catch</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">e</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>134</span>                 </span><span class="NAME">params.addClassName</span><span class="PUNC">(</span><span class="STRN">'text-icon-bg'</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>135</span>             </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>136</span>         </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>137</span> 
+<span class='line'>138</span>         </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="PUNC">!</span><span class="NAME">parameterized</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>139</span>             </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">span</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">document.createElement</span><span class="PUNC">(</span><span class="STRN">'span'</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>140</span>             </span><span class="NAME">span.addClassName</span><span class="PUNC">(</span><span class="STRN">'triggerInfo'</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>141</span>             </span><span class="NAME">span.appendChild</span><span class="PUNC">(</span><span class="NAME">document.createTextNode</span><span class="PUNC">(</span><span class="STRN">'No parameterized'</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>142</span>             </span><span class="NAME">params.appendChild</span><span class="PUNC">(</span><span class="NAME">span</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>143</span>         </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>144</span> 
+<span class='line'>145</span>         </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">paramsDialog</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">ParamsDialog</span><span class="PUNC">(</span><span class="NAME">this.getTitle</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>146</span>                                </span><span class="NAME">this.getParams</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>147</span>                                </span><span class="NAME">this._buildingBlockDescription.parameterTemplate</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>148</span>                                </span><span class="NAME">this.setParams.bind</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>149</span>         </span><span class="NAME">params.appendChild</span><span class="PUNC">(</span><span class="NAME">paramsDialog.getButtonNode</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>150</span> 
+<span class='line'>151</span>         </span><span class="NAME">info.set</span><span class="PUNC">(</span><span class="STRN">'Parameters'</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">params</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>152</span>         </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">info</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>153</span>     </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>154</span> 
+<span class='line'>155</span>     </span><span class="COMM">/**
+<span class='line'>156</span>      * Create a copy in the catalogue for the inferencing
 <span class='line'>157</span>      */</span><span class="WHIT">
-<span class='line'>158</span> </span><span class="WHIT">    </span><span class="NAME">getBuildingBlockDescription</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>159</span> </span><span class="WHIT">        </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">this._buildingBlockDescription</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>160</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>161</span> 
-<span class='line'>162</span> 
-<span class='line'>163</span> </span><span class="WHIT">    </span><span class="COMM">/**
-<span class='line'>164</span>      * Returns the building block type of this class
-<span class='line'>165</span>      * @public
-<span class='line'>166</span>      */</span><span class="WHIT">
-<span class='line'>167</span> </span><span class="WHIT">    </span><span class="NAME">getBuildingBlockType</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>168</span> </span><span class="WHIT">        </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">this._buildingBlockType</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>169</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>170</span> 
-<span class='line'>171</span> </span><span class="WHIT">    </span><span class="WHIT">
-<span class='line'>172</span> </span><span class="WHIT">    </span><span class="COMM">/**
-<span class='line'>173</span>      * Gets the id
-<span class='line'>174</span>      */</span><span class="WHIT">
-<span class='line'>175</span> </span><span class="WHIT">    </span><span class="NAME">getId</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>176</span> </span><span class="WHIT">        </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">this._id</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>177</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>178</span> 
-<span class='line'>179</span> 
-<span class='line'>180</span> </span><span class="WHIT">    </span><span class="COMM">/**
-<span class='line'>181</span>      * Sets the id
-<span class='line'>182</span>      */</span><span class="WHIT">
-<span class='line'>183</span> </span><span class="WHIT">    </span><span class="NAME">setId</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">id</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>184</span> </span><span class="WHIT">        </span><span class="NAME">this._id</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">id</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>185</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>186</span> 
-<span class='line'>187</span> </span><span class="WHIT">    </span><span class="COMM">/**
-<span class='line'>188</span>      * Destroys the view
-<span class='line'>189</span>      * @public
-<span class='line'>190</span>      */</span><span class="WHIT">
-<span class='line'>191</span> </span><span class="WHIT">    </span><span class="NAME">destroy</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>192</span> </span><span class="WHIT">        </span><span class="NAME">this._inferenceEngine.removeReachabilityListener</span><span class="PUNC">(</span><span class="NAME">this._buildingBlockDescription.uri</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">this._view</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>193</span> </span><span class="WHIT">        </span><span class="NAME">this._view.destroy</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>194</span> </span><span class="WHIT">        </span><span class="NAME">this._view</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>195</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>196</span> 
-<span class='line'>197</span> </span><span class="WHIT">    </span><span class="COMM">/**
-<span class='line'>198</span>      * On position update
-<span class='line'>199</span>      */</span><span class="WHIT">
-<span class='line'>200</span> </span><span class="WHIT">    </span><span class="NAME">onUpdate</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="COMM">/** Number */</span><span class="WHIT"> </span><span class="NAME">x</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="COMM">/** Number */</span><span class="WHIT"> </span><span class="NAME">y</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>201</span> 
-<span class='line'>202</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>203</span> </span><span class="WHIT">    </span><span class="WHIT">
-<span class='line'>204</span> </span><span class="WHIT">    </span><span class="COMM">/**
-<span class='line'>205</span>      * Drop event handler for the DragSource
-<span class='line'>206</span>      * @param changingZone
-<span class='line'>207</span>      *      True if a new Instance has
-<span class='line'>208</span>      *      been added to the new zone.
-<span class='line'>209</span>      * @override
-<span class='line'>210</span>      */</span><span class="WHIT">
-<span class='line'>211</span> </span><span class="WHIT">    </span><span class="NAME">onFinish</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">changingZone</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="COMM">/** Object */</span><span class="WHIT"> </span><span class="NAME">position</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>212</span> </span><span class="WHIT">        </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">changingZone</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>213</span> </span><span class="WHIT">            </span><span class="NAME">this._view.addEventListener</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">event</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>214</span> </span><span class="WHIT">                </span><span class="NAME">event.stop</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>215</span> </span><span class="WHIT">                </span><span class="NAME">this._onClick</span><span class="PUNC">(</span><span class="NAME">event</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>216</span> </span><span class="WHIT">            </span><span class="PUNC">}</span><span class="PUNC">.</span><span class="NAME">bind</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">)</span><span class="PUNC">,</span><span class="STRN">'click'</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>217</span> </span><span class="WHIT">            </span><span class="NAME">this._view.addEventListener</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">event</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>218</span> </span><span class="WHIT">                </span><span class="NAME">event.stop</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>219</span> </span><span class="WHIT">                </span><span class="NAME">this._onDoubleClick</span><span class="PUNC">(</span><span class="NAME">event</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>220</span> </span><span class="WHIT">            </span><span class="PUNC">}</span><span class="PUNC">.</span><span class="NAME">bind</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">)</span><span class="PUNC">,</span><span class="STRN">'dblclick'</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>221</span> </span><span class="WHIT">        </span><span class="PUNC">}</span><span class="WHIT"> </span><span class="KEYW">else</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>222</span> </span><span class="WHIT">            </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">this._listener</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>223</span> </span><span class="WHIT">                </span><span class="NAME">this._listener.positionUpdated</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">position</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>224</span> </span><span class="WHIT">            </span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>225</span> </span><span class="WHIT">        </span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>226</span> </span><span class="WHIT">        </span><span class="NAME">this.onUpdate</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>227</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>228</span> </span><span class="WHIT">    </span><span class="WHIT">
-<span class='line'>229</span> </span><span class="WHIT">    </span><span class="COMM">/**
-<span class='line'>230</span>      * Called when the scroll has been moved
-<span class='line'>231</span>      * Implementing Scroll Listener interface
-<span class='line'>232</span>      * 
-<span class='line'>233</span>      */</span><span class="WHIT">
-<span class='line'>234</span> </span><span class="WHIT">    </span><span class="NAME">onScroll</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>235</span> </span><span class="WHIT">        </span><span class="NAME">this.onUpdate</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>236</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>237</span> </span><span class="WHIT">    </span><span class="WHIT">
-<span class='line'>238</span> </span><span class="WHIT">    </span><span class="COMM">/**
-<span class='line'>239</span>      * This function returns a list with all the
-<span class='line'>240</span>      * preconditions of the instance,
-<span class='line'>241</span>      * ready to be set in the FactPane
-<span class='line'>242</span>      * @type Array
-<span class='line'>243</span>      */</span><span class="WHIT">
-<span class='line'>244</span> </span><span class="WHIT">    </span><span class="NAME">getPreconditionTable</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="COMM">/** Hash */</span><span class="WHIT"> </span><span class="NAME">reachability</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>245</span> </span><span class="WHIT">        </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">Array</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>246</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>247</span> 
-<span class='line'>248</span> </span><span class="WHIT">    </span><span class="COMM">/**
-<span class='line'>249</span>      * This function returns a list with all the
-<span class='line'>250</span>      * postconditions of the instance,
-<span class='line'>251</span>      * ready to be set in the FactPane
-<span class='line'>252</span>      * @type Array
-<span class='line'>253</span>      */</span><span class="WHIT">
-<span class='line'>254</span> </span><span class="WHIT">    </span><span class="NAME">getPostconditionTable</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="COMM">/** Boolean */</span><span class="WHIT"> </span><span class="NAME">reachability</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>255</span> </span><span class="WHIT">        </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">this._getConditionList</span><span class="PUNC">(</span><span class="STRN">"postconditions"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">reachability</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>256</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>257</span> 
-<span class='line'>258</span> </span><span class="WHIT">    </span><span class="COMM">// **************** PRIVATE METHODS **************** //</span><span class="WHIT">
-<span class='line'>259</span> </span><span class="WHIT">    </span><span class="WHIT">
-<span class='line'>260</span> </span><span class="WHIT">    </span><span class="COMM">/**
-<span class='line'>261</span>      * Creates a new View instance for the component
-<span class='line'>262</span>      * @type BuildingBlockView
-<span class='line'>263</span>      * @abstract
-<span class='line'>264</span>      */</span><span class="WHIT">
-<span class='line'>265</span> </span><span class="WHIT">    </span><span class="NAME">_createView</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>266</span> </span><span class="WHIT">        </span><span class="KEYW">throw</span><span class="WHIT"> </span><span class="STRN">"Abstract Method invocation: ComponentInstance::_createView"</span><span class="WHIT">
-<span class='line'>267</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>268</span> </span><span class="WHIT">    </span><span class="WHIT">
-<span class='line'>269</span> </span><span class="WHIT">    </span><span class="COMM">/**
-<span class='line'>270</span>      * This function is called when the attached view is clicked
-<span class='line'>271</span>      * must be overriden by descendants
-<span class='line'>272</span>      * @private
-<span class='line'>273</span>      */</span><span class="WHIT">
-<span class='line'>274</span> </span><span class="WHIT">    </span><span class="NAME">_onClick</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="COMM">/** Event */</span><span class="WHIT"> </span><span class="NAME">event</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>275</span> </span><span class="WHIT">        </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">this._listener</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>276</span> </span><span class="WHIT">            </span><span class="NAME">this._listener.elementClicked</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">event</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>277</span> </span><span class="WHIT">        </span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>278</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>279</span> </span><span class="WHIT">    </span><span class="COMM">/**
-<span class='line'>280</span>      * This function is called when the attached view is dbl-clicked
-<span class='line'>281</span>      * must be overriden by descendants
-<span class='line'>282</span>      * @private
-<span class='line'>283</span>      */</span><span class="WHIT">
-<span class='line'>284</span> </span><span class="WHIT">    </span><span class="NAME">_onDoubleClick</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="COMM">/** Event */</span><span class="WHIT"> </span><span class="NAME">event</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>285</span> </span><span class="WHIT">        </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">this._listener</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>286</span> </span><span class="WHIT">            </span><span class="NAME">this._listener.elementDblClicked</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">event</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>287</span> </span><span class="WHIT">        </span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>288</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>289</span> 
-<span class='line'>290</span> </span><span class="WHIT">    </span><span class="COMM">/**
-<span class='line'>291</span>      * Creates the data hash to be passed to the
-<span class='line'>292</span>      * table
-<span class='line'>293</span>      * @private
-<span class='line'>294</span>      * @type Array
-<span class='line'>295</span>      */</span><span class="WHIT">
-<span class='line'>296</span> </span><span class="WHIT">    </span><span class="NAME">_getConditionList</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="COMM">/** String */</span><span class="WHIT"> </span><span class="NAME">type</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="COMM">/** Hash | Boolean */</span><span class="WHIT"> </span><span class="NAME">reachability</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>297</span> 
-<span class='line'>298</span> </span><span class="WHIT">        </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">type</span><span class="WHIT"> </span><span class="PUNC">!=</span><span class="WHIT"> </span><span class="STRN">"actions"</span><span class="WHIT"> </span><span class="PUNC">&&</span><span class="WHIT">
-<span class='line'>299</span> </span><span class="WHIT">            </span><span class="NAME">this._buildingBlockDescription</span><span class="PUNC">[</span><span class="NAME">type</span><span class="PUNC">]</span><span class="PUNC">.</span><span class="NAME">length</span><span class="WHIT"> </span><span class="PUNC">></span><span class="WHIT"> </span><span class="NUMB">1</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT"> </span><span class="COMM">//More than one set of conditions</span><span class="WHIT">
-<span class='line'>300</span> </span><span class="WHIT">            </span><span class="NAME">console.log</span><span class="PUNC">(</span><span class="STRN">"OR support not implemented yet"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>301</span> </span><span class="WHIT">            </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>302</span> </span><span class="WHIT">        </span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>303</span> </span><span class="WHIT">        </span><span class="KEYW">else</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>304</span> </span><span class="WHIT">            </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">result</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">Array</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>305</span> </span><span class="WHIT">            </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">type</span><span class="WHIT"> </span><span class="PUNC">!=</span><span class="WHIT"> </span><span class="STRN">"actions"</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>306</span> </span><span class="WHIT">                </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">conditions</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this._buildingBlockDescription</span><span class="PUNC">[</span><span class="NAME">type</span><span class="PUNC">]</span><span class="PUNC">[</span><span class="NUMB">0</span><span class="PUNC">]</span><span class="PUNC">;</span><span class="WHIT">  </span><span class="WHIT">
-<span class='line'>307</span> </span><span class="WHIT">                </span><span class="NAME">$A</span><span class="PUNC">(</span><span class="NAME">conditions</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">each</span><span class="PUNC">(</span><span class="WHIT">
-<span class='line'>308</span> </span><span class="WHIT">                    </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">condition</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>309</span> </span><span class="WHIT">                        </span><span class="NAME">result.push</span><span class="PUNC">(</span><span class="NAME">this._getConditionItem</span><span class="PUNC">(</span><span class="NAME">condition</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">reachability</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>310</span> </span><span class="WHIT">                    </span><span class="PUNC">}</span><span class="PUNC">.</span><span class="NAME">bind</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">)</span><span class="WHIT">
-<span class='line'>311</span> </span><span class="WHIT">                </span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>312</span> </span><span class="WHIT">            </span><span class="PUNC">}</span><span class="WHIT"> </span><span class="KEYW">else</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>313</span> </span><span class="WHIT">                </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">actions</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this._buildingBlockDescription.actions</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>158</span>     </span><span class="NAME">createCatalogueCopy</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">eventHandler</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>159</span>         </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">body</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>160</span>             </span><span class="STRN">"uri"</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">this._buildingBlockDescription.uri</span><span class="WHIT">
+<span class='line'>161</span>         </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>162</span>         </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">context</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>163</span>             </span><span class="STRN">"mine"</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">this</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>164</span>             </span><span class="STRN">"eventHandler"</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">eventHandler</span><span class="WHIT">
+<span class='line'>165</span>         </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>166</span>         </span><span class="NAME">PersistenceEngine.sendPost</span><span class="PUNC">(</span><span class="NAME">URIs.catalogueCopy</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">Object.toJSON</span><span class="PUNC">(</span><span class="NAME">body</span><span class="PUNC">)</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">context</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>167</span>                                     </span><span class="NAME">this._onCopySuccess</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">Utils.onAJAXError</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>168</span>     </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>169</span> 
+<span class='line'>170</span>     </span><span class="COMM">/**
+<span class='line'>171</span>      * Sets the uri of the instance, after copying.
+<span class='line'>172</span>      */</span><span class="WHIT">
+<span class='line'>173</span>     </span><span class="NAME">setCopyUri</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">uri</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>174</span>         </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">originalUri</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this._buildingBlockDescription.uri</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>175</span>         </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">bb</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this._buildingBlockDescription.clone</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>176</span>         </span><span class="NAME">bb.uri</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">uri</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>177</span> 
+<span class='line'>178</span>         </span><span class="NAME">this._buildingBlockDescription</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">bb</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>179</span>         </span><span class="NAME">this.setOriginalUri</span><span class="PUNC">(</span><span class="NAME">originalUri</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>180</span>         </span><span class="NAME">this._inferenceEngine.addReachabilityListener</span><span class="PUNC">(</span><span class="NAME">this.getUri</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>181</span>                                                             </span><span class="NAME">this._view</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>182</span>     </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>183</span> 
+<span class='line'>184</span> 
+<span class='line'>185</span>     </span><span class="COMM">/**
+<span class='line'>186</span>      * Adds event listener
+<span class='line'>187</span>      */</span><span class="WHIT">
+<span class='line'>188</span>     </span><span class="NAME">setEventListener</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="COMM">/** Object */</span><span class="WHIT"> </span><span class="NAME">listener</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>189</span>         </span><span class="NAME">this._listener</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">listener</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>190</span>         </span><span class="NAME">this.document</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">listener</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>191</span>     </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>192</span> 
+<span class='line'>193</span>     </span><span class="COMM">/**
+<span class='line'>194</span>      * Returns the uri of the instance
+<span class='line'>195</span>      * @type String
+<span class='line'>196</span>      */</span><span class="WHIT">
+<span class='line'>197</span>     </span><span class="NAME">getUri</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>198</span>         </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">this._buildingBlockDescription.uri</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>199</span>     </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>200</span> 
+<span class='line'>201</span>     </span><span class="COMM">/**
+<span class='line'>202</span>      * Sets the URI of the original building block
+<span class='line'>203</span>      */</span><span class="WHIT">
+<span class='line'>204</span>     </span><span class="NAME">setOriginalUri</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="COMM">/** String */</span><span class="WHIT"> </span><span class="NAME">uri</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>205</span>         </span><span class="NAME">this._originalUri</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">uri</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>206</span> 
+<span class='line'>207</span>         </span><span class="NAME">this.setId</span><span class="PUNC">(</span><span class="NAME">this.getUri</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>208</span>     </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>209</span> 
+<span class='line'>210</span>     </span><span class="COMM">/**
+<span class='line'>211</span>      * @type String
+<span class='line'>212</span>      */</span><span class="WHIT">
+<span class='line'>213</span>     </span><span class="NAME">getOriginalUri</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>214</span>         </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">this._originalUri</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>215</span>     </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>216</span> 
+<span class='line'>217</span>     </span><span class="COMM">/**
+<span class='line'>218</span>      * Returns the node that can be clicked to start a drag-n-drop operation.
+<span class='line'>219</span>      * @type DOMNode
+<span class='line'>220</span>      * @override
+<span class='line'>221</span>      */</span><span class="WHIT">
+<span class='line'>222</span>     </span><span class="NAME">getHandlerNode</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>223</span>         </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">this._view.getNode</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>224</span>     </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>225</span> 
+<span class='line'>226</span>     </span><span class="COMM">/**
+<span class='line'>227</span>      * Returns the node that is going to be moved in drag-n-drop operation.
+<span class='line'>228</span>      * @type DOMNode
+<span class='line'>229</span>      * @override
+<span class='line'>230</span>      */</span><span class="WHIT">
+<span class='line'>231</span>     </span><span class="NAME">getDraggableObject</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>232</span>         </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">this</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>233</span>     </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>234</span> 
+<span class='line'>235</span>      </span><span class="COMM">/**
+<span class='line'>236</span>      * Returns the root node
+<span class='line'>237</span>      * @type DOMNode
+<span class='line'>238</span>      * @public
+<span class='line'>239</span>      */</span><span class="WHIT">
+<span class='line'>240</span>     </span><span class="NAME">getView</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>241</span>         </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">this._view</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>242</span>     </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>243</span> 
+<span class='line'>244</span>      </span><span class="COMM">/**
+<span class='line'>245</span>      * return the dom element for use in the prototype.js functions
+<span class='line'>246</span>      * @type DOMNode
+<span class='line'>247</span>      * @public
+<span class='line'>248</span>      */</span><span class="WHIT">
+<span class='line'>249</span>     </span><span class="NAME">toElement</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>250</span>         </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">this._view.toElement</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>251</span>     </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>252</span> 
+<span class='line'>253</span>     </span><span class="COMM">/**
+<span class='line'>254</span>      * Gets the component orientation
+<span class='line'>255</span>      * @type Integer
+<span class='line'>256</span>      * @public
+<span class='line'>257</span>      */</span><span class="WHIT">
+<span class='line'>258</span>     </span><span class="NAME">getOrientation</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>259</span>         </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">this._orientation</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>260</span>     </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>261</span> 
+<span class='line'>262</span>     </span><span class="COMM">/**
+<span class='line'>263</span>      * Sets the component orientation
+<span class='line'>264</span>      * @params Integer
+<span class='line'>265</span>      * @public
+<span class='line'>266</span>      */</span><span class="WHIT">
+<span class='line'>267</span>     </span><span class="NAME">setOrientation</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="COMM">/** Object */</span><span class="WHIT"> </span><span class="NAME">orientation</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>268</span>         </span><span class="NAME">this._orientation</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">orientation</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>269</span>     </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>270</span> 
+<span class='line'>271</span>     </span><span class="COMM">/**
+<span class='line'>272</span>      * Gets the component params
+<span class='line'>273</span>      * @type Object
+<span class='line'>274</span>      * @public
+<span class='line'>275</span>      */</span><span class="WHIT">
+<span class='line'>276</span>     </span><span class="NAME">getParams</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>277</span>         </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">this._params</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>278</span>     </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>279</span> 
+<span class='line'>280</span>     </span><span class="COMM">/**
+<span class='line'>281</span>      * Sets the component params
+<span class='line'>282</span>      * @params Object
+<span class='line'>283</span>      * @public
+<span class='line'>284</span>      */</span><span class="WHIT">
+<span class='line'>285</span>     </span><span class="NAME">setParams</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="COMM">/** Object */</span><span class="WHIT"> </span><span class="NAME">params</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>286</span>         </span><span class="NAME">this._params</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">params</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>287</span> 
+<span class='line'>288</span>         </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">this._listener</span><span class="WHIT"> </span><span class="PUNC">&&</span><span class="WHIT"> </span><span class="NAME">this._listener.modified</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>289</span>             </span><span class="NAME">this._listener.modified</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>290</span>         </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>291</span>     </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>292</span> 
+<span class='line'>293</span>     </span><span class="COMM">/**
+<span class='line'>294</span>      * Sets the title of the instance
+<span class='line'>295</span>      * @public
+<span class='line'>296</span>      */</span><span class="WHIT">
+<span class='line'>297</span>     </span><span class="NAME">setTitle</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="COMM">/** String */</span><span class="WHIT"> </span><span class="NAME">title</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>298</span>         </span><span class="NAME">this._title</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">title</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>299</span>         </span><span class="NAME">this._view.setTitle</span><span class="PUNC">(</span><span class="NAME">title</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>300</span> 
+<span class='line'>301</span>         </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">this._listener</span><span class="WHIT"> </span><span class="PUNC">&&</span><span class="WHIT"> </span><span class="NAME">this._listener.modified</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>302</span>             </span><span class="NAME">this._listener.modified</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>303</span>         </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>304</span>     </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>305</span> 
+<span class='line'>306</span>     </span><span class="COMM">/**
+<span class='line'>307</span>      * Returns the building block description
+<span class='line'>308</span>      * @public
+<span class='line'>309</span>      */</span><span class="WHIT">
+<span class='line'>310</span>     </span><span class="NAME">getBuildingBlockDescription</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>311</span>         </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">this._buildingBlockDescription</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>312</span>     </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>313</span> 
 <span class='line'>314</span> 
-<span class='line'>315</span> </span><span class="WHIT">                </span><span class="NAME">$A</span><span class="PUNC">(</span><span class="NAME">actions</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">each</span><span class="PUNC">(</span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">action</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>316</span> </span><span class="WHIT">                    </span><span class="NAME">$A</span><span class="PUNC">(</span><span class="NAME">action.preconditions</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">each</span><span class="PUNC">(</span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">pre</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>317</span> </span><span class="WHIT">                        </span><span class="NAME">result.push</span><span class="PUNC">(</span><span class="NAME">this._getConditionItem</span><span class="PUNC">(</span><span class="NAME">pre</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">reachability</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>318</span> </span><span class="WHIT">                    </span><span class="PUNC">}</span><span class="PUNC">.</span><span class="NAME">bind</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>319</span> </span><span class="WHIT">                </span><span class="PUNC">}</span><span class="PUNC">.</span><span class="NAME">bind</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>320</span> </span><span class="WHIT">            </span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>321</span> </span><span class="WHIT">            </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">result</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>322</span> </span><span class="WHIT">        </span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>323</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>324</span> 
-<span class='line'>325</span> </span><span class="WHIT">    </span><span class="COMM">/**
-<span class='line'>326</span>      * Gets a line of the list
-<span class='line'>327</span>      * @private
-<span class='line'>328</span>      * @type String
-<span class='line'>329</span>      */</span><span class="WHIT">
-<span class='line'>330</span> </span><span class="WHIT">    </span><span class="NAME">_getConditionItem</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="COMM">/** Object */</span><span class="WHIT"> </span><span class="NAME">condition</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="COMM">/** Object */</span><span class="WHIT"> </span><span class="NAME">reachability</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>331</span> </span><span class="WHIT">        </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">uri</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">FactFactory.getFactUri</span><span class="PUNC">(</span><span class="NAME">condition</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>332</span> 
-<span class='line'>333</span> </span><span class="WHIT">        </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">fact</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">FactFactory.getFactIcon</span><span class="PUNC">(</span><span class="NAME">condition</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">"embedded"</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">getNode</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>334</span> </span><span class="WHIT">        </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">reachability.constructor</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="NAME">Hash</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>335</span> </span><span class="WHIT">            </span><span class="NAME">Utils.setSatisfeabilityClass</span><span class="PUNC">(</span><span class="NAME">fact</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">reachability.get</span><span class="PUNC">(</span><span class="NAME">uri</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>336</span> </span><span class="WHIT">        </span><span class="PUNC">}</span><span class="WHIT"> </span><span class="KEYW">else</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>337</span> </span><span class="WHIT">            </span><span class="NAME">Utils.setSatisfeabilityClass</span><span class="PUNC">(</span><span class="NAME">fact</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">reachability</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>338</span> </span><span class="WHIT">        </span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>339</span> 
-<span class='line'>340</span> </span><span class="WHIT">        </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">description</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">condition.label</span><span class="PUNC">[</span><span class="STRN">'en-gb'</span><span class="PUNC">]</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>341</span> 
-<span class='line'>342</span> </span><span class="WHIT">        </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="PUNC">[</span><span class="NAME">fact</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">description</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">uri</span><span class="PUNC">]</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>343</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>344</span> 
-<span class='line'>345</span> </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>346</span> 
-<span class='line'>347</span> </span><span class="COMM">// vim:ts=4:sw=4:et:</span><span class="WHIT">
+<span class='line'>315</span>     </span><span class="COMM">/**
+<span class='line'>316</span>      * Returns the building block type of this class
+<span class='line'>317</span>      * @public
+<span class='line'>318</span>      */</span><span class="WHIT">
+<span class='line'>319</span>     </span><span class="NAME">getBuildingBlockType</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>320</span>         </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">this._buildingBlockType</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>321</span>     </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>322</span> 
+<span class='line'>323</span> 
+<span class='line'>324</span>     </span><span class="COMM">/**
+<span class='line'>325</span>      * Gets the id
+<span class='line'>326</span>      */</span><span class="WHIT">
+<span class='line'>327</span>     </span><span class="NAME">getId</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>328</span>         </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">this._id</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>329</span>     </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>330</span> 
+<span class='line'>331</span> 
+<span class='line'>332</span>     </span><span class="COMM">/**
+<span class='line'>333</span>      * Sets the id
+<span class='line'>334</span>      */</span><span class="WHIT">
+<span class='line'>335</span>     </span><span class="NAME">setId</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">id</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>336</span>         </span><span class="NAME">this._id</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">id</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>337</span>     </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>338</span> 
+<span class='line'>339</span>     </span><span class="COMM">/**
+<span class='line'>340</span>      * Deletes the instance in the catalogue
+<span class='line'>341</span>      */</span><span class="WHIT">
+<span class='line'>342</span>     </span><span class="NAME">deleteInstance</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>343</span>         </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">this._originalUri</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>344</span>             </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">uri</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this._buildDeleteUri</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>345</span>             </span><span class="NAME">PersistenceEngine.sendDelete</span><span class="PUNC">(</span><span class="NAME">uri</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">this</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">Prototype.emptyFunction</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">Utils.onAJAXError</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>346</span>         </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>347</span>     </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
 <span class='line'>348</span> 
-<span class='line'>349</span> </span></pre></body></html>
+<span class='line'>349</span>     </span><span class="COMM">/**
+<span class='line'>350</span>      * Destroys the view
+<span class='line'>351</span>      * @public
+<span class='line'>352</span>      */</span><span class="WHIT">
+<span class='line'>353</span>     </span><span class="NAME">destroy</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>354</span>         </span><span class="NAME">this._inferenceEngine.removeReachabilityListener</span><span class="PUNC">(</span><span class="NAME">this._buildingBlockDescription.uri</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">this._view</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>355</span>         </span><span class="NAME">this._view.destroy</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>356</span>         </span><span class="NAME">this._view</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>357</span>     </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>358</span> 
+<span class='line'>359</span>     </span><span class="COMM">/**
+<span class='line'>360</span>      * On position update
+<span class='line'>361</span>      */</span><span class="WHIT">
+<span class='line'>362</span>     </span><span class="NAME">onUpdate</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="COMM">/** Number */</span><span class="WHIT"> </span><span class="NAME">x</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="COMM">/** Number */</span><span class="WHIT"> </span><span class="NAME">y</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>363</span> 
+<span class='line'>364</span>     </span><span class="COMM">/**
+<span class='line'>365</span>      * Drop event handler for the DragSource
+<span class='line'>366</span>      * @param changingZone
+<span class='line'>367</span>      *      True if a new Instance has
+<span class='line'>368</span>      *      been added to the new zone.
+<span class='line'>369</span>      * @override
+<span class='line'>370</span>      */</span><span class="WHIT">
+<span class='line'>371</span>     </span><span class="NAME">onFinish</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">changingZone</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="COMM">/** Object */</span><span class="WHIT"> </span><span class="NAME">position</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>372</span>         </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">changingZone</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>373</span>             </span><span class="NAME">this._view.addEventListener</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">event</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>374</span>                 </span><span class="NAME">event.stop</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>375</span>                 </span><span class="NAME">this._onClick</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>376</span>             </span><span class="PUNC">}</span><span class="PUNC">.</span><span class="NAME">bind</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">)</span><span class="PUNC">,</span><span class="STRN">'mousedown'</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>377</span>             </span><span class="NAME">this._view.addEventListener</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">event</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>378</span>                 </span><span class="NAME">event.stop</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>379</span>             </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="STRN">'click'</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>380</span>             </span><span class="NAME">this._view.addEventListener</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">event</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>381</span>                 </span><span class="NAME">event.stop</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>382</span>                 </span><span class="NAME">this._onDoubleClick</span><span class="PUNC">(</span><span class="NAME">event</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>383</span>             </span><span class="PUNC">}</span><span class="PUNC">.</span><span class="NAME">bind</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">)</span><span class="PUNC">,</span><span class="STRN">'dblclick'</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>384</span>         </span><span class="PUNC">}</span><span class="WHIT"> </span><span class="KEYW">else</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>385</span>             </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">this._listener</span><span class="WHIT"> </span><span class="PUNC">&&</span><span class="WHIT"> </span><span class="NAME">this._listener.positionUpdated</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>386</span>                 </span><span class="NAME">this._listener.positionUpdated</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">position</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>387</span>             </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>388</span>         </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>389</span>         </span><span class="NAME">this.onUpdate</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>390</span>     </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>391</span> 
+<span class='line'>392</span>     </span><span class="COMM">/**
+<span class='line'>393</span>      * This function returns a list with all the
+<span class='line'>394</span>      * preconditions of the instance,
+<span class='line'>395</span>      * ready to be set in the FactPane
+<span class='line'>396</span>      * @type Array
+<span class='line'>397</span>      */</span><span class="WHIT">
+<span class='line'>398</span>     </span><span class="NAME">getPreconditionTable</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="COMM">/** Hash */</span><span class="WHIT"> </span><span class="NAME">reachability</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>399</span>         </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">reachability</span><span class="WHIT"> </span><span class="PUNC">!=</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>400</span>             </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">conditions</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this._buildingBlockDescription.getPreconditionsList</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>401</span>             </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">$A</span><span class="PUNC">(</span><span class="NAME">conditions</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">map</span><span class="PUNC">(</span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">condition</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>402</span>                 </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">this._getConditionItem</span><span class="PUNC">(</span><span class="NAME">condition</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">reachability</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>403</span>             </span><span class="PUNC">}</span><span class="PUNC">.</span><span class="NAME">bind</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>404</span>         </span><span class="PUNC">}</span><span class="WHIT"> </span><span class="KEYW">else</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>405</span>             </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="PUNC">[</span><span class="PUNC">]</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>406</span>         </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>407</span>     </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>408</span> 
+<span class='line'>409</span>     </span><span class="COMM">/**
+<span class='line'>410</span>      * This function returns a list with all the
+<span class='line'>411</span>      * postconditions of the instance,
+<span class='line'>412</span>      * ready to be set in the FactPane
+<span class='line'>413</span>      * @type Array
+<span class='line'>414</span>      */</span><span class="WHIT">
+<span class='line'>415</span>     </span><span class="NAME">getPostconditionTable</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="COMM">/** Boolean */</span><span class="WHIT"> </span><span class="NAME">reachability</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>416</span>         </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">reachability</span><span class="WHIT"> </span><span class="PUNC">!=</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>417</span>             </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">conditions</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this._buildingBlockDescription.getPostconditionsList</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>418</span>             </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">$A</span><span class="PUNC">(</span><span class="NAME">conditions</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">map</span><span class="PUNC">(</span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">condition</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>419</span>                 </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">this._getConditionItem</span><span class="PUNC">(</span><span class="NAME">condition</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">reachability</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>420</span>             </span><span class="PUNC">}</span><span class="PUNC">.</span><span class="NAME">bind</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>421</span>         </span><span class="PUNC">}</span><span class="WHIT"> </span><span class="KEYW">else</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>422</span>             </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="PUNC">[</span><span class="PUNC">]</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>423</span>         </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>424</span>     </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>425</span> 
+<span class='line'>426</span>     </span><span class="COMM">/**
+<span class='line'>427</span>      * set position
+<span class='line'>428</span>      */</span><span class="WHIT">
+<span class='line'>429</span>     </span><span class="NAME">setPosition</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">position</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>430</span>         </span><span class="NAME">this._view.setPosition</span><span class="PUNC">(</span><span class="NAME">position</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>431</span>     </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>432</span> 
+<span class='line'>433</span>     </span><span class="COMM">// **************** PRIVATE METHODS **************** //</span><span class="WHIT">
+<span class='line'>434</span> 
+<span class='line'>435</span>     </span><span class="COMM">/**
+<span class='line'>436</span>      * Creates a new View instance for the component
+<span class='line'>437</span>      * @type BuildingBlockView
+<span class='line'>438</span>      * @abstract
+<span class='line'>439</span>      */</span><span class="WHIT">
+<span class='line'>440</span>     </span><span class="NAME">_createView</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>441</span>         </span><span class="KEYW">throw</span><span class="WHIT"> </span><span class="STRN">"Abstract Method invocation: ComponentInstance::_createView"</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>442</span>     </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>443</span> 
+<span class='line'>444</span>     </span><span class="COMM">/**
+<span class='line'>445</span>      * This function is called when the attached view is clicked
+<span class='line'>446</span>      * must be overriden by descendants
+<span class='line'>447</span>      * @private
+<span class='line'>448</span>      */</span><span class="WHIT">
+<span class='line'>449</span>     </span><span class="NAME">_onClick</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>450</span>         </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">this._listener</span><span class="WHIT"> </span><span class="PUNC">&&</span><span class="WHIT"> </span><span class="NAME">this._listener.elementClicked</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>451</span>             </span><span class="NAME">this._listener.elementClicked</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>452</span>         </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>453</span>     </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>454</span> 
+<span class='line'>455</span>     </span><span class="COMM">/**
+<span class='line'>456</span>      * This function is called when the attached view is dbl-clicked
+<span class='line'>457</span>      * must be overriden by descendants
+<span class='line'>458</span>      * @private
+<span class='line'>459</span>      */</span><span class="WHIT">
+<span class='line'>460</span>     </span><span class="NAME">_onDoubleClick</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="COMM">/** Event */</span><span class="WHIT"> </span><span class="NAME">event</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>461</span>         </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">this._listener</span><span class="WHIT"> </span><span class="PUNC">&&</span><span class="WHIT"> </span><span class="NAME">this._listener.elementDblClicked</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>462</span>             </span><span class="NAME">this._listener.elementDblClicked</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">event</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>463</span>         </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>464</span>     </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>465</span> 
+<span class='line'>466</span> 
+<span class='line'>467</span>     </span><span class="COMM">/**
+<span class='line'>468</span>      * _OnCopySuccess
+<span class='line'>469</span>      * @private
+<span class='line'>470</span>      */</span><span class="WHIT">
+<span class='line'>471</span>     </span><span class="NAME">_onCopySuccess</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">transport</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>472</span>         </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">response</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">JSON.parse</span><span class="PUNC">(</span><span class="NAME">transport.responseText</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>473</span> 
+<span class='line'>474</span>         </span><span class="COMM">// Cloning the BBDescription to assign it the new URI</span><span class="WHIT">
+<span class='line'>475</span>         </span><span class="NAME">this.mine.setCopyUri</span><span class="PUNC">(</span><span class="NAME">response.clone</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>476</span>         </span><span class="NAME">this.eventHandler</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>477</span> 
+<span class='line'>478</span>     </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>479</span> 
+<span class='line'>480</span> 
+<span class='line'>481</span>     </span><span class="COMM">/**
+<span class='line'>482</span>      * Gets a line of the list
+<span class='line'>483</span>      * @private
+<span class='line'>484</span>      * @type String
+<span class='line'>485</span>      */</span><span class="WHIT">
+<span class='line'>486</span>     </span><span class="NAME">_getConditionItem</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="COMM">/** Object */</span><span class="WHIT"> </span><span class="NAME">condition</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="COMM">/** Object */</span><span class="WHIT"> </span><span class="NAME">reachability</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>487</span>         </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">uri</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">FactFactory.getFactUri</span><span class="PUNC">(</span><span class="NAME">condition</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>488</span> 
+<span class='line'>489</span>         </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">fact</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">FactFactory.getFactIcon</span><span class="PUNC">(</span><span class="NAME">condition</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">"embedded"</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">getNode</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>490</span>         </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">reachability.constructor</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="NAME">Hash</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>491</span>             </span><span class="NAME">Utils.setSatisfeabilityClass</span><span class="PUNC">(</span><span class="NAME">fact</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">reachability.get</span><span class="PUNC">(</span><span class="NAME">uri</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>492</span>         </span><span class="PUNC">}</span><span class="WHIT"> </span><span class="KEYW">else</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>493</span>             </span><span class="NAME">Utils.setSatisfeabilityClass</span><span class="PUNC">(</span><span class="NAME">fact</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">reachability</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>494</span>         </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>495</span> 
+<span class='line'>496</span>         </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">condition.positive</span><span class="WHIT"> </span><span class="PUNC">===</span><span class="WHIT"> </span><span class="KEYW">false</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>497</span>             </span><span class="NAME">fact.addClassName</span><span class="PUNC">(</span><span class="STRN">'negative'</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>498</span>         </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>499</span> 
+<span class='line'>500</span>         </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">description</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">condition.label</span><span class="PUNC">[</span><span class="STRN">'en-gb'</span><span class="PUNC">]</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>501</span> 
+<span class='line'>502</span>         </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="PUNC">[</span><span class="NAME">fact</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">description</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">uri</span><span class="PUNC">]</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>503</span>     </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>504</span> 
+<span class='line'>505</span>     </span><span class="COMM">/*
+<span class='line'>506</span>      * @private
+<span class='line'>507</span>      * @type String
+<span class='line'>508</span>      */</span><span class="WHIT">
+<span class='line'>509</span>     </span><span class="NAME">_buildDeleteUri</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>510</span>         </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">this.getId</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>511</span>             </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">originalParts</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this.getId</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">split</span><span class="PUNC">(</span><span class="STRN">"/"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>512</span>             </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">parts</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">[</span><span class="WHIT">
+<span class='line'>513</span>                 </span><span class="NAME">originalParts</span><span class="PUNC">[</span><span class="NAME">originalParts.length</span><span class="WHIT"> </span><span class="PUNC">-</span><span class="WHIT"> </span><span class="NUMB">3</span><span class="PUNC">]</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>514</span>                 </span><span class="NAME">originalParts</span><span class="PUNC">[</span><span class="NAME">originalParts.length</span><span class="WHIT"> </span><span class="PUNC">-</span><span class="WHIT"> </span><span class="NUMB">2</span><span class="PUNC">]</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>515</span>                 </span><span class="NAME">originalParts</span><span class="PUNC">[</span><span class="NAME">originalParts.length</span><span class="WHIT"> </span><span class="PUNC">-</span><span class="WHIT"> </span><span class="NUMB">1</span><span class="PUNC">]</span><span class="WHIT">
+<span class='line'>516</span>             </span><span class="PUNC">]</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>517</span>             </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">uri</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">parts.join</span><span class="PUNC">(</span><span class="STRN">"/"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>518</span>             </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">URIs.catalogueDeleteCopy.replace</span><span class="PUNC">(</span><span class="STRN">"&lt;id>"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">uri</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>519</span>         </span><span class="PUNC">}</span><span class="WHIT"> </span><span class="KEYW">else</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>520</span>             </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="STRN">""</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>521</span>         </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>522</span>     </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>523</span> 
+<span class='line'>524</span> </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>525</span> 
+<span class='line'>526</span> </span><span class="COMM">// vim:ts=4:sw=4:et:</span><span class="WHIT">
+<span class='line'>527</span> </span></pre></body></html>

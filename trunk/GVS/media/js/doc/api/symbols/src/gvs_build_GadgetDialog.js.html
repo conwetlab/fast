@@ -1,0 +1,244 @@
+<html><head><meta http-equiv="content-type" content="text/html; charset=utf-8"> <style>
+	.KEYW {color: #933;}
+	.COMM {color: #bbb; font-style: italic;}
+	.NUMB {color: #393;}
+	.STRN {color: #393;}
+	.REGX {color: #339;}
+	.line {border-right: 1px dotted #666; color: #666; font-style: normal;}
+	</style></head><body><pre><span class='line'>  1</span> <span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">GadgetDialog</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">Class.create</span><span class="PUNC">(</span><span class="NAME">GalleryDialog</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="COMM">/** @lends Builder.prototype */</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>  2</span>     </span><span class="COMM">/**
+<span class='line'>  3</span>      * On charge of building screenflows and showing the possibility to
+<span class='line'>  4</span>      * Deploy the gadget into the mashup platrom
+<span class='line'>  5</span>      * @constructs
+<span class='line'>  6</span>      */</span><span class="WHIT">
+<span class='line'>  7</span>     </span><span class="NAME">initialize</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">$super</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="COMM">/** ScreenflowDescription */</span><span class="WHIT"> </span><span class="NAME">description</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>  8</span>         </span><span class="NAME">$super</span><span class="PUNC">(</span><span class="STRN">"Available gadgets for the screenflow"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>  9</span>             </span><span class="STRN">"onDblClick"</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">this._showDeploymentInfo.bind</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">)</span><span class="WHIT">
+<span class='line'> 10</span>         </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 11</span> 
+<span class='line'> 12</span>         </span><span class="COMM">/**
+<span class='line'> 13</span>          * @type StoreGadgetDialog
+<span class='line'> 14</span>          * @private @member
+<span class='line'> 15</span>          */</span><span class="WHIT">
+<span class='line'> 16</span>         </span><span class="NAME">this._buildGadgetDialog</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">BuildGadgetDialog</span><span class="PUNC">(</span><span class="NAME">this._onBuildGadgetDialogCallback.bind</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 17</span> 
+<span class='line'> 18</span>         </span><span class="COMM">/**
+<span class='line'> 19</span>          * @type PublishGadgetDialog
+<span class='line'> 20</span>          * @private @member
+<span class='line'> 21</span>          */</span><span class="WHIT">
+<span class='line'> 22</span>         </span><span class="NAME">this._publishGadgetDialog</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">PublishGadgetDialog</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 23</span> 
+<span class='line'> 24</span> 
+<span class='line'> 25</span>         </span><span class="COMM">/**
+<span class='line'> 26</span>          * @type ScreenflowDescription
+<span class='line'> 27</span>          * @private @member
+<span class='line'> 28</span>          */</span><span class="WHIT">
+<span class='line'> 29</span>         </span><span class="NAME">this._description</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">description</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 30</span> 
+<span class='line'> 31</span>         </span><span class="COMM">/**
+<span class='line'> 32</span>          * Array of stored gadgets
+<span class='line'> 33</span>          * @private @member
+<span class='line'> 34</span>          * @type Hash
+<span class='line'> 35</span>          */</span><span class="WHIT">
+<span class='line'> 36</span>         </span><span class="NAME">this._storedGadgets</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">Hash</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 37</span>     </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 38</span> 
+<span class='line'> 39</span> 
+<span class='line'> 40</span>     </span><span class="COMM">// **************** PUBLIC METHODS **************** //</span><span class="WHIT">
+<span class='line'> 41</span> 
+<span class='line'> 42</span>     </span><span class="COMM">/**
+<span class='line'> 43</span>      * Start the process of showing the Gadget dialog
+<span class='line'> 44</span>      * @override
+<span class='line'> 45</span>      */</span><span class="WHIT">
+<span class='line'> 46</span>     </span><span class="NAME">show</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 47</span>         </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">uri</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">URIs.getStore.replace</span><span class="PUNC">(</span><span class="STRN">"&lt;screenflow_id>"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">this._description.id</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 48</span>         </span><span class="NAME">PersistenceEngine.sendGet</span><span class="PUNC">(</span><span class="NAME">uri</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">this</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">this._onLoadSuccess</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">Utils.onAJAXError</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 49</span>     </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 50</span> 
+<span class='line'> 51</span> 
+<span class='line'> 52</span>     </span><span class="COMM">// **************** PRIVATE METHODS **************** //</span><span class="WHIT">
+<span class='line'> 53</span> 
+<span class='line'> 54</span>     </span><span class="COMM">/**
+<span class='line'> 55</span>      * On storage list loaded
+<span class='line'> 56</span>      * @private
+<span class='line'> 57</span>      */</span><span class="WHIT">
+<span class='line'> 58</span>     </span><span class="NAME">_onLoadSuccess</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="COMM">/** XMLHttpRequest */</span><span class="WHIT"> </span><span class="NAME">transport</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 59</span>         </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">gadgets</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">JSON.parse</span><span class="PUNC">(</span><span class="NAME">transport.responseText</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 60</span>         </span><span class="NAME">gadgets.each</span><span class="PUNC">(</span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">gadget</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 61</span>             </span><span class="NAME">this._storedGadgets.set</span><span class="PUNC">(</span><span class="NAME">gadget.id</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">gadget</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 62</span>         </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">this</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 63</span>         </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">this._storedGadgets.values</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">size</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">></span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 64</span>             </span><span class="NAME">this._show</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 65</span>         </span><span class="PUNC">}</span><span class="WHIT"> </span><span class="KEYW">else</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 66</span>             </span><span class="NAME">this._buildGadget</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 67</span>         </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'> 68</span>     </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 69</span> 
+<span class='line'> 70</span>     </span><span class="COMM">/**
+<span class='line'> 71</span>      * initDialogInterface
+<span class='line'> 72</span>      * This function creates the dom structure
+<span class='line'> 73</span>      * @private
+<span class='line'> 74</span>      * @override
+<span class='line'> 75</span>      */</span><span class="WHIT">
+<span class='line'> 76</span>     </span><span class="NAME">_initDialogInterface</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 77</span> 
+<span class='line'> 78</span>         </span><span class="NAME">this._setHeader</span><span class="PUNC">(</span><span class="STRN">"Stored Gadgets for this screenflow"</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 79</span>                 </span><span class="STRN">"These are the gadgets you have created for the current screenflow."</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT">
+<span class='line'> 80</span>                 </span><span class="STRN">"Here you can deploy them to several mashup platforms or create "</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT">
+<span class='line'> 81</span>                 </span><span class="STRN">"new ones"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 82</span> 
+<span class='line'> 83</span>         </span><span class="NAME">this._setFields</span><span class="PUNC">(</span><span class="PUNC">[</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 84</span>                 </span><span class="STRN">'title'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">'Gadget Name'</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 85</span>                 </span><span class="STRN">'className'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">'name'</span><span class="WHIT">
+<span class='line'> 86</span>             </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 87</span>                 </span><span class="STRN">'title'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">'Gadget Vendor'</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 88</span>                 </span><span class="STRN">'className'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">'vendor'</span><span class="WHIT">
+<span class='line'> 89</span>             </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 90</span>                 </span><span class="STRN">'title'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">'Gadget Version'</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 91</span>                 </span><span class="STRN">'className'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">'version'</span><span class="WHIT">
+<span class='line'> 92</span>             </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 93</span>                 </span><span class="STRN">'title'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">'Mashup Platforms'</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 94</span>                 </span><span class="STRN">'className'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">'platforms'</span><span class="WHIT">
+<span class='line'> 95</span>             </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 96</span>                 </span><span class="STRN">'title'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">'Description'</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 97</span>                 </span><span class="STRN">'className'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">'description'</span><span class="WHIT">
+<span class='line'> 98</span>             </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'> 99</span>         </span><span class="PUNC">]</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>100</span> 
+<span class='line'>101</span>         </span><span class="NAME">this._setButtons</span><span class="PUNC">(</span><span class="PUNC">[</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>102</span>                 </span><span class="STRN">'value'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">'Create new gadget'</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>103</span>                 </span><span class="STRN">'handler'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">this._buildGadget.bind</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">)</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>104</span>                 </span><span class="STRN">'disableIfNotValid'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">false</span><span class="WHIT">
+<span class='line'>105</span>             </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>106</span>                 </span><span class="STRN">'value'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">'Show Available platforms'</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>107</span>                 </span><span class="STRN">'handler'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">this._showDeploymentInfo.bind</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">)</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>108</span>                 </span><span class="STRN">'disableIfNotValid'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">true</span><span class="WHIT">
+<span class='line'>109</span>             </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>110</span>                 </span><span class="STRN">'value'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">'Delete Gadget'</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>111</span>                 </span><span class="STRN">'handler'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">this._confirmDeleteGadget.bind</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">)</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>112</span>                 </span><span class="STRN">'disableIfNotValid'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">true</span><span class="WHIT">
+<span class='line'>113</span>             </span><span class="PUNC">}</span><span class="PUNC">]</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>114</span>         </span><span class="NAME">this._createGadgetList</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>115</span>         </span><span class="NAME">this._render</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>116</span>     </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>117</span> 
+<span class='line'>118</span> 
+<span class='line'>119</span>     </span><span class="COMM">/**
+<span class='line'>120</span>      * Creates the gadget list to be handled by its parent class
+<span class='line'>121</span>      * @private
+<span class='line'>122</span>      */</span><span class="WHIT">
+<span class='line'>123</span>     </span><span class="NAME">_createGadgetList</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>124</span>         </span><span class="NAME">this._emptyRows</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>125</span>         </span><span class="NAME">this._storedGadgets.values</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">each</span><span class="PUNC">(</span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">gadget</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>126</span>             </span><span class="NAME">this._addRow</span><span class="PUNC">(</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>127</span>                             </span><span class="STRN">'key'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">gadget.id</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>128</span>                             </span><span class="STRN">'values'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="PUNC">[</span><span class="WHIT">
+<span class='line'>129</span>                                        </span><span class="NAME">gadget.name</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>130</span>                                        </span><span class="STRN">'&lt;span class="bold">Vendor: &lt;/span>'</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT">
+<span class='line'>131</span>                                          </span><span class="NAME">gadget.vendor</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>132</span>                                        </span><span class="STRN">'&lt;span class="bold">Version: &lt;/span>'</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT">
+<span class='line'>133</span>                                          </span><span class="NAME">gadget.version</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>134</span>                                        </span><span class="STRN">'&lt;span class="bold">Mashup platforms: &lt;/span>'</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT">
+<span class='line'>135</span>                                          </span><span class="NAME">gadget.platforms</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>136</span>                                        </span><span class="STRN">'&lt;span class="bold">Description &lt;/span>&lt;br />'</span><span class="PUNC">+</span><span class="WHIT">
+<span class='line'>137</span>                                 	     </span><span class="NAME">gadget.description</span><span class="WHIT">
+<span class='line'>138</span>                                       </span><span class="PUNC">]</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>139</span>                             </span><span class="STRN">'isValid'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">true</span><span class="WHIT">
+<span class='line'>140</span>                         </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>141</span>         </span><span class="PUNC">}</span><span class="PUNC">.</span><span class="NAME">bind</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>142</span>     </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>143</span> 
+<span class='line'>144</span>     </span><span class="COMM">/**
+<span class='line'>145</span>      * Creates a gadget deployment from the ScreenflowDescription
+<span class='line'>146</span>      * @private
+<span class='line'>147</span>      */</span><span class="WHIT">
+<span class='line'>148</span>     </span><span class="NAME">_buildGadget</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>149</span>         </span><span class="NAME">this._hide</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>150</span>         </span><span class="NAME">this._buildGadgetDialog.show</span><span class="PUNC">(</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>151</span>             </span><span class="STRN">'name'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">this._description.name</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>152</span>             </span><span class="STRN">'shortname'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">this._description.name</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>153</span>             </span><span class="STRN">'desc'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">this._description.description</span><span class="PUNC">[</span><span class="STRN">'en-gb'</span><span class="PUNC">]</span><span class="WHIT">
+<span class='line'>154</span>         </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>155</span>     </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>156</span> 
+<span class='line'>157</span>     </span><span class="NAME">_onBuildGadgetDialogCallback</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="COMM">/** Object */</span><span class="WHIT"> </span><span class="NAME">data</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>158</span> 
+<span class='line'>159</span>        </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">gadgetInfo</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">Object.extend</span><span class="PUNC">(</span><span class="NAME">data</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>160</span>                                             </span><span class="STRN">'description'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>161</span>                                                 </span><span class="STRN">'en-gb'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">data.desc</span><span class="WHIT">
+<span class='line'>162</span>                                              </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>163</span>                                              </span><span class="STRN">'uri'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">'buildingblock/'</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT">
+<span class='line'>164</span>                                                     </span><span class="NAME">this._description.getId</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>165</span>                                              </span><span class="STRN">'label'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>166</span>                                                  </span><span class="STRN">'en-gb'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">data.name</span><span class="WHIT">
+<span class='line'>167</span>                                                 </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>168</span>                                              </span><span class="STRN">'id'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">this._description.getId</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT">
+<span class='line'>169</span>                                             </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>170</span>        </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">storeParams</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>171</span>             </span><span class="STRN">'gadget'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">Object.toJSON</span><span class="PUNC">(</span><span class="NAME">gadgetInfo</span><span class="PUNC">)</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>172</span>             </span><span class="STRN">'screenflow'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">this._description.getId</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT">
+<span class='line'>173</span>         </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>174</span>        </span><span class="NAME">PersistenceEngine.sendPost</span><span class="PUNC">(</span><span class="NAME">URIs.store</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">storeParams</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>175</span>                 </span><span class="KEYW">this</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">this._onBuildSuccess</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">this._onError</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>176</span>        </span><span class="NAME">Utils.showMessage</span><span class="PUNC">(</span><span class="STRN">"Creating and storing the gadget..."</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>177</span>     </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>178</span> 
+<span class='line'>179</span>     </span><span class="NAME">_onBuildSuccess</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="COMM">/** XMLHttpRequest */</span><span class="WHIT"> </span><span class="NAME">transport</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>180</span>         </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">result</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">JSON.parse</span><span class="PUNC">(</span><span class="NAME">transport.responseText</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>181</span>         </span><span class="NAME">this._storedGadgets.set</span><span class="PUNC">(</span><span class="NAME">result.id</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">result</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>182</span>         </span><span class="NAME">this._createGadgetList</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>183</span>         </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">this.isVisible</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>184</span>             </span><span class="NAME">this._render</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>185</span>         </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>186</span>         </span><span class="NAME">Utils.showMessage</span><span class="PUNC">(</span><span class="STRN">"Creating and storing the gadget...Done"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>187</span>             </span><span class="STRN">"hide"</span><span class="PUNC">:</span><span class="KEYW">true</span><span class="WHIT">
+<span class='line'>188</span>         </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>189</span>         </span><span class="NAME">this._showDeploymentInfo</span><span class="PUNC">(</span><span class="NAME">result.id</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>190</span>     </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>191</span> 
+<span class='line'>192</span>     </span><span class="NAME">_showDeploymentInfo</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="COMM">/** String */</span><span class="WHIT"> </span><span class="NAME">gadget_id</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>193</span>         </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">result</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this._storedGadgets.get</span><span class="PUNC">(</span><span class="NAME">gadget_id</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>194</span>         </span><span class="NAME">this._publishGadgetDialog.show</span><span class="PUNC">(</span><span class="NAME">result</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>195</span>     </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>196</span> 
+<span class='line'>197</span>     </span><span class="NAME">_confirmDeleteGadget</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="COMM">/** String */</span><span class="WHIT"> </span><span class="NAME">gadget_id</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>198</span>         </span><span class="NAME">confirm</span><span class="PUNC">(</span><span class="STRN">"Are you sure you want to delete the gadget? This action"</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT">
+<span class='line'>199</span>         </span><span class="STRN">" cannot be undone"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">ok</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>200</span>             </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">ok</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>201</span>                 </span><span class="NAME">this._deleteGadget</span><span class="PUNC">(</span><span class="NAME">gadget_id</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>202</span>             </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>203</span>         </span><span class="PUNC">}</span><span class="PUNC">.</span><span class="NAME">bind</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>204</span>     </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>205</span> 
+<span class='line'>206</span>     </span><span class="NAME">_deleteGadget</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="COMM">/** String */</span><span class="WHIT"> </span><span class="NAME">gadget_id</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>207</span>         </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">uri</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">URIs.store</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">gadget_id</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>208</span>         </span><span class="NAME">PersistenceEngine.sendDelete</span><span class="PUNC">(</span><span class="NAME">uri</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">this</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>209</span>             </span><span class="NAME">this._storedGadgets.unset</span><span class="PUNC">(</span><span class="NAME">gadget_id</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>210</span>             </span><span class="NAME">this._createGadgetList</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>211</span>             </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">this.isVisible</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>212</span>                 </span><span class="NAME">this._render</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>213</span>             </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>214</span>         </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">this._onError</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>215</span>     </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>216</span> 
+<span class='line'>217</span>     </span><span class="NAME">_onDelete</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>218</span> 
+<span class='line'>219</span>     </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>220</span> 
+<span class='line'>221</span>     </span><span class="NAME">_onError</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="COMM">/** XMLHttpRequest */</span><span class="WHIT"> </span><span class="NAME">transport</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="COMM">/** Exception */</span><span class="WHIT"> </span><span class="NAME">e</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>222</span>         </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">message</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>223</span>         </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">e</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>224</span>             </span><span class="NAME">message</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">e</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>225</span>         </span><span class="PUNC">}</span><span class="WHIT"> </span><span class="KEYW">else</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>226</span>             </span><span class="NAME">message</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">transport.responseText</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>227</span>         </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>228</span>         </span><span class="NAME">Utils.showMessage</span><span class="PUNC">(</span><span class="STRN">"Cannot store the gadget: "</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">message</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>229</span>             </span><span class="STRN">"error"</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">true</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>230</span>             </span><span class="STRN">"hide"</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">true</span><span class="WHIT">
+<span class='line'>231</span>         </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>232</span>     </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>233</span> 
+<span class='line'>234</span> </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>235</span> 
+<span class='line'>236</span> </span><span class="COMM">// vim:ts=4:sw=4:et:</span><span class="WHIT">
+<span class='line'>237</span> </span></pre></body></html>

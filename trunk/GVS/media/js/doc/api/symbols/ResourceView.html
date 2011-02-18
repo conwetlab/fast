@@ -213,11 +213,17 @@ ul.inheritsList
 	
 	<li><a href="../symbols/BuildingBlockDescription.html">BuildingBlockDescription</a></li>
 	
+	<li><a href="../symbols/BuildingBlockDocument.html">BuildingBlockDocument</a></li>
+	
 	<li><a href="../symbols/BuildingBlockFactory.html">BuildingBlockFactory</a></li>
 	
 	<li><a href="../symbols/BuildingBlockSet.html">BuildingBlockSet</a></li>
 	
 	<li><a href="../symbols/BuildingBlockView.html">BuildingBlockView</a></li>
+	
+	<li><a href="../symbols/ButtonArrayDialog.html">ButtonArrayDialog</a></li>
+	
+	<li><a href="../symbols/CaptionDialog.html">CaptionDialog</a></li>
 	
 	<li><a href="../symbols/ComponentInstance.html">ComponentInstance</a></li>
 	
@@ -253,11 +259,11 @@ ul.inheritsList
 	
 	<li><a href="../symbols/FormComponent.html">FormComponent</a></li>
 	
+	<li><a href="../symbols/FormDescription.html">FormDescription</a></li>
+	
 	<li><a href="../symbols/FormDialog.html">FormDialog</a></li>
 	
 	<li><a href="../symbols/FormFactory.html">FormFactory</a></li>
-	
-	<li><a href="../symbols/FormInstance.html">FormInstance</a></li>
 	
 	<li><a href="../symbols/FormSnapshotView.html">FormSnapshotView</a></li>
 	
@@ -268,6 +274,8 @@ ul.inheritsList
 	<li><a href="../symbols/GVS.html">GVS</a></li>
 	
 	<li><a href="../symbols/InferenceEngine.html">InferenceEngine</a></li>
+	
+	<li><a href="../symbols/iServeDialog.html">iServeDialog</a></li>
 	
 	<li><a href="../symbols/KeyPressRegistry.html">KeyPressRegistry</a></li>
 	
@@ -281,15 +289,11 @@ ul.inheritsList
 	
 	<li><a href="../symbols/MenuElement.html">MenuElement</a></li>
 	
-	<li><a href="../symbols/NewScreenDialog.html">NewScreenDialog</a></li>
-	
-	<li><a href="../symbols/NewScreenflowDialog.html">NewScreenflowDialog</a></li>
+	<li><a href="../symbols/NewBuildingBlockDialog.html">NewBuildingBlockDialog</a></li>
 	
 	<li><a href="../symbols/OperatorComponent.html">OperatorComponent</a></li>
 	
 	<li><a href="../symbols/OperatorFactory.html">OperatorFactory</a></li>
-	
-	<li><a href="../symbols/OperatorInstance.html">OperatorInstance</a></li>
 	
 	<li><a href="../symbols/OperatorView.html">OperatorView</a></li>
 	
@@ -300,6 +304,10 @@ ul.inheritsList
 	<li><a href="../symbols/PaletteController.html">PaletteController</a></li>
 	
 	<li><a href="../symbols/PaletteDocument.html">PaletteDocument</a></li>
+	
+	<li><a href="../symbols/PaletteSearchBox.html">PaletteSearchBox</a></li>
+	
+	<li><a href="../symbols/ParamsDialog.html">ParamsDialog</a></li>
 	
 	<li><a href="../symbols/Pipe.html">Pipe</a></li>
 	
@@ -331,13 +339,15 @@ ul.inheritsList
 	
 	<li><a href="../symbols/PublishGadgetDialog.html">PublishGadgetDialog</a></li>
 	
+	<li><a href="../symbols/RecommendationManager.html">RecommendationManager</a></li>
+	
 	<li><a href="../symbols/ResourceComponent.html">ResourceComponent</a></li>
 	
 	<li><a href="../symbols/ResourceFactory.html">ResourceFactory</a></li>
 	
-	<li><a href="../symbols/ResourceInstance.html">ResourceInstance</a></li>
-	
 	<li><a href="../symbols/ResourceView.html">ResourceView</a></li>
+	
+	<li><a href="../symbols/SaveAsDialog.html">SaveAsDialog</a></li>
 	
 	<li><a href="../symbols/ScreenCanvasCache.html">ScreenCanvasCache</a></li>
 	
@@ -359,7 +369,7 @@ ul.inheritsList
 	
 	<li><a href="../symbols/ScreenflowInferenceEngine.html">ScreenflowInferenceEngine</a></li>
 	
-	<li><a href="../symbols/ScreenflowInstance.html">ScreenflowInstance</a></li>
+	<li><a href="../symbols/ScreenflowPlayer.html">ScreenflowPlayer</a></li>
 	
 	<li><a href="../symbols/ScreenInferenceEngine.html">ScreenInferenceEngine</a></li>
 	
@@ -458,19 +468,9 @@ ul.inheritsList
 							<td class="attributes">&lt;private&gt; &nbsp;</td>
 							<td class="nameDescription">
 								<div class="fixedFont">
-								<b><a href="../symbols/ResourceView.html#_postIcons">_postIcons</a></b>
+								<b><a href="../symbols/ResourceView.html#_icons">_icons</a></b>
 								</div>
-								<div class="description">Postcondition Icons</div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="attributes">&lt;private&gt; &nbsp;</td>
-							<td class="nameDescription">
-								<div class="fixedFont">
-								<b><a href="../symbols/ResourceView.html#_preIcons">_preIcons</a></b>
-								</div>
-								<div class="description">Precondition Icons</div>
+								<div class="description">Fact Icons</div>
 							</td>
 						</tr>
 					
@@ -502,7 +502,7 @@ ul.inheritsList
 						<tr>
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/ResourceView.html#destroy">destroy</a></b>()
+								<div class="fixedFont"><b><a href="../symbols/ResourceView.html#destroy">destroy</a></b>($super)
 								</div>
 								<div class="description">Removes the DOM Elements and frees building blocks</div>
 							</td>
@@ -511,9 +511,10 @@ ul.inheritsList
 						<tr>
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/ResourceView.html#getConditionNode">getConditionNode</a></b>(id)
+								<div class="fixedFont"><b><a href="../symbols/ResourceView.html#getConditionNode">getConditionNode</a></b>(id, action)
 								</div>
-								<div class="description">This function returns the domNode of the condition that hasthe identification passed as parameter</div>
+								<div class="description">This function returns the domNode of the precondition that has
+the identification passed as parameter</div>
 							</td>
 						</tr>
 					
@@ -532,7 +533,7 @@ ul.inheritsList
 				
 				
 				<dl class="inheritsList">
-				<dt>Methods borrowed from class <a href="../symbols/BuildingBlockView.html#constructor">BuildingBlockView</a>: </dt><dd><a href="../symbols/BuildingBlockView.html#_setViewReachability">_setViewReachability</a>, <a href="../symbols/BuildingBlockView.html#addEventListener">addEventListener</a>, <a href="../symbols/BuildingBlockView.html#addGhost">addGhost</a>, <a href="../symbols/BuildingBlockView.html#getNode">getNode</a>, <a href="../symbols/BuildingBlockView.html#setSelected">setSelected</a></dd>
+				<dt>Methods borrowed from class <a href="../symbols/BuildingBlockView.html#constructor">BuildingBlockView</a>: </dt><dd><a href="../symbols/BuildingBlockView.html#_setViewReachability">_setViewReachability</a>, <a href="../symbols/BuildingBlockView.html#addEventListener">addEventListener</a>, <a href="../symbols/BuildingBlockView.html#addGhost">addGhost</a>, <a href="../symbols/BuildingBlockView.html#getNode">getNode</a>, <a href="../symbols/BuildingBlockView.html#remove">remove</a>, <a href="../symbols/BuildingBlockView.html#setPosition">setPosition</a>, <a href="../symbols/BuildingBlockView.html#setSelected">setSelected</a>, <a href="../symbols/BuildingBlockView.html#setTitle">setTitle</a>, <a href="../symbols/BuildingBlockView.html#toElement">toElement</a></dd>
 				</dl>
 				
 			
@@ -590,37 +591,15 @@ ul.inheritsList
 					Field Detail
 				</div>
 				
-					<a name="_postIcons"> </a>
+					<a name="_icons"> </a>
 					<div class="fixedFont">&lt;private&gt; 
 					
 					<span class="light">{Hash}</span>
-					<b>_postIcons</b>
+					<b>_icons</b>
 					
 					</div>
 					<div class="description">
-						Postcondition Icons
-						
-						
-					</div>
-					
-					
-
-						
-						
-						
-						
-
-					<hr />
-				
-					<a name="_preIcons"> </a>
-					<div class="fixedFont">&lt;private&gt; 
-					
-					<span class="light">{Hash}</span>
-					<b>_preIcons</b>
-					
-					</div>
-					<div class="description">
-						Precondition Icons
+						Fact Icons
 						
 						
 					</div>
@@ -646,7 +625,7 @@ ul.inheritsList
 					<div class="fixedFont">
 					
 					
-					<b>destroy</b>()
+					<b>destroy</b>($super)
 					
 					</div>
 					<div class="description">
@@ -657,6 +636,17 @@ ul.inheritsList
 					
 					
 					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<b>$super</b>
+									
+								</dt>
+								<dd></dd>
+							
+							</dl>
 						
 						
 						
@@ -671,11 +661,12 @@ ul.inheritsList
 					<div class="fixedFont">
 					
 					
-					<b>getConditionNode</b>(id)
+					<b>getConditionNode</b>(id, action)
 					
 					</div>
 					<div class="description">
-						This function returns the domNode of the condition that hasthe identification passed as parameter
+						This function returns the domNode of the precondition that has
+the identification passed as parameter
 						
 						
 					</div>
@@ -688,6 +679,12 @@ ul.inheritsList
 							
 								<dt>
 									<span class="light fixedFont">{String}</span> <b>id</b>
+									
+								</dt>
+								<dd></dd>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>action</b>
 									
 								</dt>
 								<dd></dd>
@@ -747,7 +744,7 @@ ul.inheritsList
 <!-- ============================== footer ================================= -->
 		<div class="fineprint" style="clear:both">
 			
-			Documentation generated by <a href="http://www.jsdoctoolkit.org/" target="_blank">JsDoc Toolkit</a> 2.0.2 on Tue Feb 23 2010 17:57:01 GMT+0100 (CET)
+			Documentation generated by <a href="http://www.jsdoctoolkit.org/" target="_blank">JsDoc Toolkit</a> 2.0.2 on Fri Feb 18 2011 12:18:15 GMT+0100 (CET)
 		</div>
 	</body>
 </html>

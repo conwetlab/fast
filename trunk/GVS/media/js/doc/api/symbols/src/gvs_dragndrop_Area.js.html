@@ -11,7 +11,7 @@
 <span class='line'>  4</span>      * It implements the DropZone interface
 <span class='line'>  5</span>      * @param Function onDropHandler(DropZone zone, ComponentInstance droppedInstance)
 <span class='line'>  6</span>      * @constructs
-<span class='line'>  7</span>      */</span><span class="WHIT"> 
+<span class='line'>  7</span>      */</span><span class="WHIT">
 <span class='line'>  8</span>     </span><span class="NAME">initialize</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="COMM">/** String */</span><span class="WHIT"> </span><span class="NAME">areaClass</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="COMM">/** Array */</span><span class="WHIT"> </span><span class="NAME">acceptedElements</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="COMM">/** Function */</span><span class="WHIT"> </span><span class="NAME">onDropHandler</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="COMM">/** Object */</span><span class="WHIT"> </span><span class="NAME">_options</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
 <span class='line'>  9</span>         </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">options</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">Utils.variableOrDefault</span><span class="PUNC">(</span><span class="NAME">_options</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'> 10</span>         </span><span class="NAME">options</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">Object.extend</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="PUNC">{</span><span class="WHIT">
@@ -24,8 +24,8 @@
 <span class='line'> 17</span>          * @private
 <span class='line'> 18</span>          */</span><span class="WHIT">
 <span class='line'> 19</span>         </span><span class="NAME">this._acceptedElements</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">acceptedElements</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'> 20</span>         
-<span class='line'> 21</span>         
+<span class='line'> 20</span> 
+<span class='line'> 21</span> 
 <span class='line'> 22</span>         </span><span class="COMM">/**
 <span class='line'> 23</span>          * Function to be called whenever an element
 <span class='line'> 24</span>          * is dropped into the area
@@ -60,57 +60,81 @@
 <span class='line'> 53</span>             </span><span class="STRN">'class'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">'dropArea '</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">areaClass</span><span class="WHIT">
 <span class='line'> 54</span>         </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'> 55</span>         </span><span class="NAME">this._contentPane.setContent</span><span class="PUNC">(</span><span class="NAME">this._node</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'> 56</span>     </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'> 57</span>     
+<span class='line'> 56</span> 
+<span class='line'> 57</span>     </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
 <span class='line'> 58</span> 
-<span class='line'> 59</span>     </span><span class="COMM">// **************** PUBLIC METHODS **************** //</span><span class="WHIT">
-<span class='line'> 60</span> 
-<span class='line'> 61</span>     </span><span class="COMM">/**
-<span class='line'> 62</span>      * Implementing DropZone Interface: getNode
-<span class='line'> 63</span>      * @type DOMNode
-<span class='line'> 64</span>      */</span><span class="WHIT">
-<span class='line'> 65</span>     </span><span class="NAME">getNode</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'> 66</span>         </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">this._node</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'> 67</span>     </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'> 68</span>     
-<span class='line'> 69</span>     </span><span class="COMM">/**
-<span class='line'> 70</span>      * Returns the  widget
-<span class='line'> 71</span>      * @type dijit.*
-<span class='line'> 72</span>      */</span><span class="WHIT">
-<span class='line'> 73</span>     </span><span class="NAME">getWidget</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'> 74</span>         </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">this._contentPane</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'> 75</span>     </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'> 76</span> 
-<span class='line'> 77</span>     </span><span class="COMM">/**
-<span class='line'> 78</span>      * Implementing DropZone Interface: drop
-<span class='line'> 79</span>      * @type DOMNode
-<span class='line'> 80</span>      */</span><span class="WHIT">
-<span class='line'> 81</span>     </span><span class="NAME">drop</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="COMM">/** ComponentInstance */</span><span class="WHIT"> </span><span class="NAME">element</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="COMM">/** Object */</span><span class="WHIT"> </span><span class="NAME">position</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'> 82</span>         
-<span class='line'> 83</span>         </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">accepted</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT">  </span><span class="NAME">this._onDropHandler</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">element</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">position</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'> 84</span>         </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">accepted</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'> 85</span>     </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'> 86</span> 
-<span class='line'> 87</span>    
-<span class='line'> 88</span>     </span><span class="COMM">/**
-<span class='line'> 89</span>      * Implementing DropZone Interface: accepts
-<span class='line'> 90</span>      * @type DOMNode
-<span class='line'> 91</span>      */</span><span class="WHIT">
-<span class='line'> 92</span>     </span><span class="NAME">accepts</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'> 93</span>         </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">this._acceptedElements</span><span class="PUNC">;</span><span class="WHIT">    
-<span class='line'> 94</span>     </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'> 95</span>     
-<span class='line'> 96</span>     
-<span class='line'> 97</span>     </span><span class="NAME">setLayout</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'> 98</span>         </span><span class="COMM">//TODO: Think about Layouts    </span><span class="WHIT">
-<span class='line'> 99</span>     </span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>100</span>    
-<span class='line'>101</span>    
-<span class='line'>102</span>     </span><span class="COMM">// **************** PRIVATE METHODS **************** //</span><span class="WHIT">
+<span class='line'> 59</span> 
+<span class='line'> 60</span>     </span><span class="COMM">// **************** PUBLIC METHODS **************** //</span><span class="WHIT">
+<span class='line'> 61</span> 
+<span class='line'> 62</span>     </span><span class="COMM">/**
+<span class='line'> 63</span>      * Implementing DropZone Interface: getNode
+<span class='line'> 64</span>      * @type DOMNode
+<span class='line'> 65</span>      */</span><span class="WHIT">
+<span class='line'> 66</span>     </span><span class="NAME">getNode</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 67</span>         </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">this._node</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 68</span>     </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 69</span> 
+<span class='line'> 70</span>     </span><span class="COMM">/**
+<span class='line'> 71</span>      * Returns the  widget
+<span class='line'> 72</span>      * @type dijit.*
+<span class='line'> 73</span>      */</span><span class="WHIT">
+<span class='line'> 74</span>     </span><span class="NAME">getWidget</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 75</span>         </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">this._contentPane</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 76</span>     </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 77</span> 
+<span class='line'> 78</span>     </span><span class="COMM">/**
+<span class='line'> 79</span>      * Implementing DropZone Interface: drop
+<span class='line'> 80</span>      * @type DOMNode
+<span class='line'> 81</span>      */</span><span class="WHIT">
+<span class='line'> 82</span>     </span><span class="NAME">drop</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="COMM">/** ComponentInstance */</span><span class="WHIT"> </span><span class="NAME">element</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="COMM">/** Object */</span><span class="WHIT"> </span><span class="NAME">position</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 83</span> 
+<span class='line'> 84</span>         </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">accepted</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT">  </span><span class="NAME">this._onDropHandler</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">element</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">position</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 85</span>         </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">accepted</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 86</span>     </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 87</span> 
+<span class='line'> 88</span> 
+<span class='line'> 89</span>     </span><span class="COMM">/**
+<span class='line'> 90</span>      * Implementing DropZone Interface: accepts
+<span class='line'> 91</span>      * @type DOMNode
+<span class='line'> 92</span>      */</span><span class="WHIT">
+<span class='line'> 93</span>     </span><span class="NAME">accepts</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 94</span>         </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">this._acceptedElements</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 95</span>     </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 96</span> 
+<span class='line'> 97</span>     </span><span class="COMM">/**
+<span class='line'> 98</span>      * Observe node
+<span class='line'> 99</span>      */</span><span class="WHIT">
+<span class='line'>100</span>     </span><span class="NAME">observe</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="COMM">/** String */</span><span class="WHIT"> </span><span class="NAME">eventName</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="COMM">/** Function */</span><span class="WHIT"> </span><span class="NAME">observer</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>101</span>         </span><span class="NAME">this.getNode</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">observe</span><span class="PUNC">(</span><span class="NAME">eventName</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">observer</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>102</span>     </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
 <span class='line'>103</span> 
-<span class='line'>104</span>     
-<span class='line'>105</span>     
-<span class='line'>106</span> </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>104</span>     </span><span class="NAME">stopObserving</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="COMM">/** String */</span><span class="WHIT"> </span><span class="NAME">eventName</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>105</span>         </span><span class="NAME">this.getNode</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">stopObserving</span><span class="PUNC">(</span><span class="NAME">eventName</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>106</span>     </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
 <span class='line'>107</span> 
-<span class='line'>108</span> </span><span class="COMM">// vim:ts=4:sw=4:et:</span><span class="WHIT">
-<span class='line'>109</span> </span></pre></body></html>
+<span class='line'>108</span>     </span><span class="NAME">setLayout</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>109</span>         </span><span class="COMM">//TODO: Think about Layouts</span><span class="WHIT">
+<span class='line'>110</span>     </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>111</span> 
+<span class='line'>112</span>     </span><span class="COMM">/**
+<span class='line'>113</span>      * Insert a Element
+<span class='line'>114</span>      */</span><span class="WHIT">
+<span class='line'>115</span>     </span><span class="NAME">insert</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="COMM">/* Element */</span><span class="WHIT"> </span><span class="NAME">element</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="COMM">/* Object */</span><span class="WHIT"> </span><span class="NAME">position</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>116</span>         </span><span class="NAME">$</span><span class="PUNC">(</span><span class="STRN">"main"</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">insert</span><span class="PUNC">(</span><span class="NAME">element</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>117</span>         </span><span class="NAME">position</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">Geometry.adaptInitialPosition</span><span class="PUNC">(</span><span class="WHIT">
+<span class='line'>118</span>             </span><span class="NAME">this._node</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>119</span>             </span><span class="NAME">element.toElement</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>120</span>             </span><span class="NAME">Object.extend</span><span class="PUNC">(</span><span class="PUNC">{</span><span class="NAME">top</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NUMB">33</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">left</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NUMB">33</span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">position</span><span class="PUNC">)</span><span class="WHIT">
+<span class='line'>121</span>         </span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>122</span>         </span><span class="NAME">element.setPosition</span><span class="PUNC">(</span><span class="NAME">position</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>123</span>         </span><span class="NAME">this._node.insert</span><span class="PUNC">(</span><span class="NAME">element</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>124</span>     </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>125</span> 
+<span class='line'>126</span>     </span><span class="COMM">// **************** PRIVATE METHODS **************** //</span><span class="WHIT">
+<span class='line'>127</span> 
+<span class='line'>128</span> 
+<span class='line'>129</span> 
+<span class='line'>130</span> </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>131</span> 
+<span class='line'>132</span> </span><span class="COMM">// vim:ts=4:sw=4:et:</span><span class="WHIT">
+<span class='line'>133</span> </span></pre></body></html>

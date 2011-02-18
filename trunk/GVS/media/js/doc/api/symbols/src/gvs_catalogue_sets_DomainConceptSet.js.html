@@ -11,19 +11,19 @@
 <span class='line'>  4</span>      * This list will be updated.
 <span class='line'>  5</span>      * @constructs
 <span class='line'>  6</span>      * @extends BuildingBlockSet
-<span class='line'>  7</span>      */</span><span class="WHIT"> 
+<span class='line'>  7</span>      */</span><span class="WHIT">
 <span class='line'>  8</span>     </span><span class="NAME">initialize</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">$super</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="COMM">/** Array */</span><span class="WHIT"> </span><span class="NAME">tags</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="COMM">/** DomainConceptFactory */</span><span class="WHIT"> </span><span class="NAME">factory</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
 <span class='line'>  9</span>         </span><span class="NAME">$super</span><span class="PUNC">(</span><span class="NAME">tags</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">factory</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'> 10</span>         
+<span class='line'> 10</span> 
 <span class='line'> 11</span>         </span><span class="COMM">/**
 <span class='line'> 12</span>          * Domain concepts
 <span class='line'> 13</span>          * @type Array
 <span class='line'> 14</span>          * @private
 <span class='line'> 15</span>          */</span><span class="WHIT">
 <span class='line'> 16</span>         </span><span class="NAME">this._domainConcepts</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">Array</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'> 17</span>         
+<span class='line'> 17</span> 
 <span class='line'> 18</span>     </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'> 19</span>     
+<span class='line'> 19</span> 
 <span class='line'> 20</span> 
 <span class='line'> 21</span>     </span><span class="COMM">// **************** PUBLIC METHODS **************** //</span><span class="WHIT">
 <span class='line'> 22</span> 
@@ -33,8 +33,8 @@
 <span class='line'> 26</span>     </span><span class="NAME">startRetrievingData</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
 <span class='line'> 27</span>         </span><span class="NAME">this._factory.getBuildingBlocks</span><span class="PUNC">(</span><span class="NAME">this._tags</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">this._onSuccess.bind</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'> 28</span>     </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'> 29</span>     
-<span class='line'> 30</span>     
+<span class='line'> 29</span> 
+<span class='line'> 30</span> 
 <span class='line'> 31</span>     </span><span class="COMM">/**
 <span class='line'> 32</span>      * Returns all the building block descriptions from the set
 <span class='line'> 33</span>      * @type Array
@@ -43,9 +43,9 @@
 <span class='line'> 36</span>     </span><span class="NAME">getBuildingBlocks</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
 <span class='line'> 37</span>         </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">this._domainConcepts</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'> 38</span>     </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'> 39</span>     
+<span class='line'> 39</span> 
 <span class='line'> 40</span>     </span><span class="COMM">// **************** PRIVATE METHODS **************** //</span><span class="WHIT">
-<span class='line'> 41</span>     
+<span class='line'> 41</span> 
 <span class='line'> 42</span>     </span><span class="COMM">/**
 <span class='line'> 43</span>      * @private
 <span class='line'> 44</span>      */</span><span class="WHIT">
