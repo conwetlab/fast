@@ -102,33 +102,43 @@ public class Screen extends WithConditions {
 		URI screenUri = getUri();
 		
 		model.addStatement(screenUri, RDF.type, FGO.Screen);
+		
+		/* 
+		 * 'code' and 'definition' define the behaviour of the building block.
+		 * only one of them should be declared, but it's up to the application
+		 * to decide whether code or the definition will be used, here both
+		 * elements are supported and retrieved.
+		 */
+		
+		//--- CODE ---//
 		if (getCode() != null) {
 			model.addStatement(screenUri, FGO.hasCode, this.getCode());
-		} else {
-			// building blocks
-			for (URI uri : getBuildingBlocks()) {
-				model.addStatement(screenUri, FGO.contains, uri);
+		}
+		
+		//--- DEFINITION ---//
+		// building blocks
+		for (URI uri : getBuildingBlocks()) {
+			model.addStatement(screenUri, FGO.contains, uri);
+		}
+		// pipes
+		for (Pipe pipe : getPipes()) {
+			URI pUri = pipe.getUri();
+			if (pUri == null) {
+				pUri = model.createURI(screenUri+"/pipes/"+UUID.randomUUID().toString());
+				pipe.setUri(pUri);
 			}
-			// pipes
-			for (Pipe pipe : getPipes()) {
-				URI pUri = pipe.getUri();
-				if (pUri == null) {
-					pUri = model.createURI(screenUri+"/pipes/"+UUID.randomUUID().toString());
-					pipe.setUri(pUri);
-				}
-				model.addStatement(screenUri, FGO.contains, pUri);
-				model.addModel(pipe.toRDF2GoModel());
+			model.addStatement(screenUri, FGO.contains, pUri);
+			model.addModel(pipe.toRDF2GoModel());
+		}
+		// triggers
+		for (Trigger trigger : getTriggers()) {
+			URI tUri = trigger.getUri();
+			if (tUri == null) {
+				tUri = model.createURI(screenUri+"/triggers/"+UUID.randomUUID().toString());
+				trigger.setUri(tUri);
 			}
-			// triggers
-			for (Trigger trigger : getTriggers()) {
-				URI tUri = trigger.getUri();
-				if (tUri == null) {
-					tUri = model.createURI(screenUri+"/triggers/"+UUID.randomUUID().toString());
-					trigger.setUri(tUri);
-				}
-				model.addStatement(screenUri, FGO.contains, tUri);
-				model.addModel(trigger.toRDF2GoModel());
-			}
+			model.addStatement(screenUri, FGO.contains, tUri);
+			model.addModel(trigger.toRDF2GoModel());
 		}
 		
 		return model;
