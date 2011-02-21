@@ -458,6 +458,37 @@ However, there are some transformations that these rules cannot perform. For exa
 
 % subsection limitations (end)
 
+\subsection{Other approaches} % (fold)
+\label{sub:other_approaches}
+
+There is a number of related work that we have consider to use for service wrapping instead of building a Service Wrapper
+Tool ourself. However, due to the special needs of the Gadget Development Process it turned out that we were not able 
+to use an existing approach directly but we were only able to grab 
+ideas from existing approaches and come up with our own implementation. 
+As discussed, service wrapping requires three steps. First we have to define the connection between the desired service wrapper and the other building blocks of FAST. This is achieved by the definition of pre- and postconditions in our tool. Since this is very FAST specific, finding an existing tool for this purpose did not work. However, this is a simple step anyhow requiring only 
+limited implementation efforts. 
+
+Second, we have to construct the request and to send it to the target service. There is already a number of REST clients 
+for this purpose. There are even web based REST clients that may be used in a browser. We could easily have used such 
+a standard REST client. However, we considered the user interfaces of these REST clients as too complicated for our
+end users. In addition, we wanted an easy and simple connection to the pre- and postconditions of the service wrapper. 
+This required the integration of a template expansion mechanism into the REST client which was most easy to achieve 
+with a new interface build by ourself. Again the effort for this step was limited and justified by the smooth integration into 
+the overall tool. 
+
+Third, we needed a data mediation step. This might have been achieved by e.g. XSLT tools. XSLT tools work on 
+XML input and provide a template based generation of textual output. The problem with XSLT is a quite 
+complex syntax which is not adequate for our end users. It would also have been difficult to provide our end users 
+with direct feedback, as required by FAST's  storyboard philosophy. Similarly, interactive help e.g. by selection boxes for target 
+types and target attribute name would not have been possible, easily. Instead of XSLT we might also have used model based transformation languages like ATL (Atlas Transformation Language) or TGGs (Triple Graph Grammars). While these 
+approaches work on a higher level of abstraction compared to XSLT, we still consider them too complicated for our end users. 
+In addition, it would have been rather difficult to achieve an integrated interactive support as we have achieved in our 
+own implementation. However, our translation rules are heavily influenced by TGGs which was a tremendous help 
+for coming up with a simple and easy to use yet powerful approach. 
+
+
+% subsection Other approaches (end)
+
 % section restful_web_services_wrapper_tool (end)
 
 \clearpage
