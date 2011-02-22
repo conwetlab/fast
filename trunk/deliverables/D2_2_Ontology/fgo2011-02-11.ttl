@@ -419,8 +419,8 @@ rdfs:range fgo:BuildingBlock ;
 owl:inverseOf fgo:hasClone .
 
 fgo:hasClone a owl:ObjectProperty ;
-rdfs:label "has copy"@en ;
-rdfs:comment "Links the property of a building block as used in the palette or catalogue of available building blocks to its clone, as used in a particular screen flow or screen."@en ;
+rdfs:label "has clone"@en ;
+rdfs:comment "Links the prototype of a building block as used in the palette or catalogue of available building blocks to its clone, as used in a particular screen flow or screen."@en ;
 rdfs:domain fgo:BuildingBlock ;
 rdfs:range fgo:BuildingBlock ;
 owl:inverseOf fgo:hasPrototype .

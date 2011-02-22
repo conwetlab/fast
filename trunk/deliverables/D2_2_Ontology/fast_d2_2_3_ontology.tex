@@ -316,7 +316,7 @@ This deliverable is structured as follows:
 we will start off by outlining the main changes that this document has undergone since its previous version, so as to enable the reader to quickly identify new material.
 After briefly addressing the topic of related work in Sect.~\ref{sec:related_work} --- which is mainly covered in a different deliverable from this work package, \cite{urmetzer2010fast_state_of_the_art} --- the structure of the following sections follows directly from our adopted ontology development methodology: we will perform a domain analysis in Sect.~\ref{sec:domain_analysis}, covering the stages of specification, conceptualisation and integration of existing vocabularies. This is then followed by the implementation step in Sect.~\ref{sec:ontology}, which covers the concrete ontology in its form at this moment of the project, as well as some basic considerations such as an early proposal for prototypical semantics for RDF. 
 After a section discussing an evaluation of the FAST gadget ontology in Sect.~\ref{sec:evaluation}, the deliverable will be concluded with a summary of our work in Sect.~\ref{sec:conclusions}.\ref{sub:methontology_a_methodology_for_ontology_development}
-A number of appendices have been added to the document: App.~\ref{sec:methodology} presents the development methodology adopted by us, App.~\ref{sec:ontology_terms} provides documentation for the ontology in the form of a detailed list of terms, while App.~\ref{sec:ontology_code} contains the complete code of the ontology.
+A number of appendices have been added to the document: App.~\ref{sec:methodology} presents the development methodology adopted by us, App.~\ref{sec:ontology_terms} provides documentation for the ontology in the form of a detailed list of terms, while App.~\ref{sec:ontology_code} contains the complete code of the ontology. Appendix~\ref{sec:vocdoc} describes and documents the VocDoc tool, which was developed to automatically create ontology documentation from the original ontology code.
 
 % subsection structure_of_the_document (end)
 
@@ -330,8 +330,9 @@ The following changes have been made with respect to the previous version of thi
 	\item A section for the \emph{VocDoc} tool, which was developed in part for generating online and PDF documentation for the FAST ontology, has been added as App.~\ref{sec:vocdoc}.
 	\item The ontology itself has remained more or less stable since D2.2.2.~\cite{moeller2010fast_ontology}. However, a handful of small changes and corrections have been performed, e.g., to reflect the terminology changes in the prototype section (\emph{prototype} instead of \emph{template}, \emph{clone} instead of \emph{copy}).
 	\item Based on comments from the previous review, Fig.~\ref{fig:ontology_uml} has been corrected and improved with a legend.
-	\item The document as a whole has been revised, and minor changes (mostly, spelling, grammar and small updates to reflect latest developments) have been throughout the deliverable.
-	\item The online documentation of the FAST Gadget ontology at \url{http://purl.oclc.org/fast/ontology/gadget} has been updated to reflect the changes in this version of the deliverable.
+	\item Also in response to reviewer comments, some concrete examples for instances of the various classes in the FAST ontology have been added to Sect.~\ref{ssub:term_relations_within_the_conceptual_model}.
+	\item The document as a whole has been revised, and minor changes (mostly, spelling, grammar and small updates to reflect latest developments) have been made throughout the deliverable.
+	\item The online documentation of the FAST Gadget ontology at \url{http://purl.oclc.org/fast/ontology/gadget} has been updated to reflect the changes in this version of the ontology.
 \end{itemize}
 
 % subsection changes_from_previous_version (end)
@@ -376,7 +377,7 @@ In summary, the ontology is supposed to facilitate support for the user in the d
 \textcolor{white}{\textbf{Scope}} & \textbf{Concepts:} \emph{Component}, \emph{Resource}, \emph{Screen}, \emph{Screen flow}, \emph{Backend Service}, \emph{Flow Control Element}, \emph{Operator}, \emph{Screenflow Start}, \emph{Screenflow End}, \emph{Connector}, \emph{Form Element}, \emph{Pre-condition}, \emph{Post-condition}, \emph{Query}, \emph{Label}, \emph{Icon}, \emph{User}, \emph{User Profile}, \emph{Tag}
 
 \textbf{Properties:} \emph{containsScreen}, \emph{hasLabel}, \emph{hasIcon}, \emph{hasPreCondition}, \emph{hasPostCondition}, \emph{hasTag}, \emph{hasProfile}\\ \hline
-\textcolor{white}{\textbf{Sources of Knowledge}} & FAST Architecture deliverable~\cite{urena2010fast_architecture}, FAST Requirements Specification~\cite{villoslada2010fast_requirements}, FAST State-of-the-art Document~\cite{urmetzer2010fast_state_of_the_art}, EzWeb documentation~\cite{lizcano2008ezweb} \\ \hline
+\textcolor{white}{\textbf{Sources of Knowledge}} & FAST Architecture deliverable~\cite{lopez2011fast_architecture}, FAST Requirements Specification~\cite{villoslada2010fast_requirements}, FAST State-of-the-art Document~\cite{urmetzer2010fast_state_of_the_art}, EzWeb documentation~\cite{lizcano2008ezweb} \\ \hline
 \end{longtable}
 \end{small}
 \doublespacing
@@ -424,7 +425,7 @@ In the conceptualisation phase, we first produce a \emph{glossary of terms} whic
 \texttt{Pre-condition} & The pre-condition of a building block comprises of a set of \texttt{Fact}s that need to be fulfilled or available in order for the building block to be activated. \\ \hline
 \texttt{Post-condition} & The post-condition of a building block is a set of \texttt{Fact}s it can produce, and which will be thus become available to other building blocks. \\ \hline
 \texttt{Pattern} & A set of facts which formally defines a condition. A pattern may contain one or more variables. \\ \hline
-\texttt{Fact} & The ``basic information unit of a FAST gadget''~\cite{urena2010fast_architecture}. In terms of RDF, a fact is a statement consisting of a subject, predicate and object \emph{(S, P, O)}. \\ \hline
+\texttt{Fact} & The ``basic information unit of a FAST gadget''~\cite{lopez2011fast_architecture}. In terms of RDF, a fact is a statement consisting of a subject, predicate and object \emph{(S, P, O)}. \\ \hline
 \texttt{Ontology} & \texttt{Fact}s in FAST are represented as RDF triples, using terminology from a particular vocabulary or ontology. A building block can explicitly specify which ontology or ontologies it uses to specify its pre- and post-conditions (e.g., in the case of a \texttt{Screen}), or which ontology or ontologies it can otherwise handle (e.g., in terms of a mediation \texttt{Operator}). \\ \hline
 \multicolumn{2}{|c|}{\textbf{Implementation}} \\ \hline
 \texttt{Code} & In case the implementation of a building block is hard-coded, the \texttt{Code} represents the source code that defines it. \\ \hline
@@ -496,8 +497,7 @@ All relevant properties of the FAST conceptual model are listed in Tab.~\ref{tab
 \subsubsection{Term Relations within the Conceptual Model} % (fold)
 \label{ssub:term_relations_within_the_conceptual_model}
 
-Regarding the layering from the actual gadget down to the embedded Web services, the central classes in the conceptual model of FAST can be grouped into three levels: the gadget and screen flow level at the top, the level of individual screens in the middle, and the level of Web services at the bottom. This layering is reflected in Fig.~\ref{fig:uml_composition}, which illustrates the central compositional relationships of the model. As the figure shows, a \emph{gadget} in FAST is mainly composed of a \emph{screen flow}, which it wraps. The \emph{screen flow} is composed of one or more \emph{screens}, which in turn comprises the three \emph{screen components} of the visual front-end (the \emph{form}), the back end service (the \emph{resource}) and the data \emph{operator}. Finally, \emph{forms} are assembled from \emph{form elements}, while \emph{resources} wrap \emph{backend services}.
-
+Regarding the layering from the actual gadget down to the embedded Web services, the central classes in the conceptual model of FAST can be grouped into three levels: the gadget and screen flow level at the top, the level of individual screens in the middle, and the level of Web services at the bottom. This layering is reflected in Fig.~\ref{fig:uml_composition}, which illustrates the central compositional relationships of the model. As the figure shows, a \emph{gadget} in FAST is mainly composed of a \emph{screen flow}, which it wraps. The \emph{screen flow} is composed of one or more \emph{screens}, which in turn comprises the three \emph{screen components} of the visual front-end (the \emph{form}), the back end service (the \emph{resource}) and the data \emph{operator}. Finally, \emph{forms} are assembled from \emph{form elements}, while \emph{resources} wrap \emph{backend services}. To illustrate, Fig.~\ref{fig:screen} shows the picture of a screen, as it is actually rendered in a web browser.
 
 \begin{figure}
   \begin{center}
@@ -507,13 +507,29 @@ Regarding the layering from the actual gadget down to the embedded Web services,
   \end{center}
 \end{figure}
 
-Figure~\ref{fig:uml_screen_component} looks closer at the features of individual screens. These are forms, resources and operators, which are all specialisations of the general \emph{screen component} concept. Each such screen component may or may not have an action or trigger associated with them, which declaratively define their behaviour in terms of their own functionality or functionality they can trigger in other building blocks.
+\begin{figure}
+  \begin{center}
+    \includegraphics[scale=.5]{images/screen.png}
+    \caption{A FAST screen in a web browser}
+    \label{fig:screen}
+  \end{center}
+\end{figure}
+
+Figure~\ref{fig:uml_screen_component} looks closer at the features of individual screens. These are forms, resources and operators, which are all specialisations of the general \emph{screen component} concept. Each such screen component may or may not have an action or trigger associated with them, which declaratively define their behaviour in terms of their own functionality or functionality they can trigger in other building blocks. Some concrete examples of various different screen components are given in Fig.~\ref{fig:building_blocks}, which shows a screenshot from the screen composition tool in the FAST GVS \cite{lopez2011fast_architecture}.
 
 \begin{figure}
   \begin{center}
     \includegraphics[scale=.66]{images/uml_screen_component.pdf}
     \caption{Aggregation of screen components}
     \label{fig:uml_screen_component}
+  \end{center}
+\end{figure}
+
+\begin{figure}
+  \begin{center}
+    \includegraphics[scale=.66]{images/building_blocks.pdf}
+    \caption{Examples of FAST building blocks during screen composition}
+    \label{fig:building_blocks}
   \end{center}
 \end{figure}
 
@@ -1076,15 +1092,15 @@ Since SPARQL has no direct support for negation, and since there is a need to al
 
 In year two of the FAST project, work has been started to extend the flexibility of the GVS to also include the creation of new screens from building blocks, as opposed to only assembling pre-made screens into screen flows. The gadget ontology supports this by modelling screen internals such as \emph{forms}, \emph{service resources} and \emph{operators}. Each of those building blocks can have their own pre- and post-conditions (either directly or through their \emph{actions}). However, while conditions on the screen/screen flow level are matched automatically and the flow of data is establish dynamically, on the screen-internal level this is defined explicitly through \emph{pipes}. Pipes are themselves components of a particular screen and connect matching post- and pre-conditions of other components in the same screen. 
 
-\begin{figure}
+The concept of piping on this level of the FAST platform is illustrated graphically in Fig.~\ref{fig:piping}, and in code in List.~\ref{list:piping}\footnote{The example does not show a complete screen definition, but only the aspects which are relevant for this section.}. The screen is composed of (possibly among other things) a backend service resource, which wraps the Amazon search service, as well as a frontend Web form, which shows a list of Amazon products to the user. Additionally, the screen contains an instance of \texttt{fgo:Pipe}, which links the resource's post-condition (a product list) to the matching pre-condition of the form's ``showTable'' action. The desired functionality of this arrangement is that, whenever the service has returned a list of products in response to a search, this list will be piped to the form, where it will be displayed to the gadget's user.
+
+\begin{figure}[h]
   \begin{center}
     \includegraphics[width=\linewidth]{images/declarativeDefinitionExample.pdf}
-    \caption{Explicit piping within a screen from a post- to a pre-condition (diagramme)}
+    \caption{Explicit piping within a screen from a post- to a pre-condition (diagram)}
     \label{fig:piping}
   \end{center}
 \end{figure}
-
-The concept of piping on this level of the FAST platform is illustrated graphically in Fig.~\ref{fig:piping}, and in code in List.~\ref{list:piping}\footnote{The example does not show a complete screen definition, but only the aspects which are relevant for this section.}. The screen is composed of (possibly among other things) a backend service resource, which wraps the Amazon search service, as well as a frontend Web form, which shows a list of Amazon products to the user. Additionally, the screen contains an instance of \texttt{fgo:Pipe}, which links the resource's post-condition (a product list) to the matching pre-condition of the form's ``showTable'' action. The desired functionality of this arrangement is that, whenever the service has returned a list of products in response to a search, this list will be piped to the form, where it will be displayed to the gadget's user.
 
 \singlespacing
 \lstset{

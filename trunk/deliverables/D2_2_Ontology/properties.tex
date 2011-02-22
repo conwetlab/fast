@@ -28,6 +28,17 @@
 \textcolor{white}{\textbf{domain}} & \htmlref{\texttt{fgo:ScreenComponent}}{subs:ScreenComponent} \\ \hline
 \textcolor{white}{\textbf{range}} & \htmlref{\texttt{fgo:Action}}{subs:Action} \\ \hline
 \end{tabular}
+\subsubsection*{Property: \texttt{fgo:hasClone}}
+\label{subs:hasClone}
+\begin{tabular}{| >{\columncolor{fast@lightgrey}}p{2.5cm}|p{12cm}|}
+\hline
+\textcolor{white}{\textbf{label}} & has clone \\ \hline
+\textcolor{white}{\textbf{description}} & Links the prototype of a building block as used in the palette or catalogue of available building blocks to its clone, as used in a particular screen flow or screen. \\ \hline
+\textcolor{white}{\textbf{type}} & \texttt{owl:ObjectProperty} \\ \hline
+\textcolor{white}{\textbf{domain}} & \htmlref{\texttt{fgo:BuildingBlock}}{subs:BuildingBlock} \\ \hline
+\textcolor{white}{\textbf{range}} & \htmlref{\texttt{fgo:BuildingBlock}}{subs:BuildingBlock} \\ \hline
+\textcolor{white}{\textbf{inverse\_of}} & \htmlref{\texttt{fgo:hasPrototype}}{subs:hasPrototype} \\ \hline
+\end{tabular}
 \subsubsection*{Property: \texttt{fgo:hasCode}}
 \label{subs:hasCode}
 \begin{tabular}{| >{\columncolor{fast@lightgrey}}p{2.5cm}|p{12cm}|}
@@ -37,16 +48,6 @@
 \textcolor{white}{\textbf{type}} & \texttt{owl:ObjectProperty} \\ \hline
 \textcolor{white}{\textbf{domain}} & \htmlref{\texttt{fgo:WithCode}}{subs:WithCode} \\ \hline
 \textcolor{white}{\textbf{range}} & \texttt{foaf:Document} \\ \hline
-\end{tabular}
-\subsubsection*{Property: \texttt{fgo:hasCopy}}
-\label{subs:hasCopy}
-\begin{tabular}{| >{\columncolor{fast@lightgrey}}p{2.5cm}|p{12cm}|}
-\hline
-\textcolor{white}{\textbf{label}} & has copy \\ \hline
-\textcolor{white}{\textbf{description}} & Links the template of a building block as used in the palette or catalogue of available building blocks to its copy, as used in a particular screen flow. \\ \hline
-\textcolor{white}{\textbf{type}} & \texttt{owl:ObjectProperty} \\ \hline
-\textcolor{white}{\textbf{domain}} & \htmlref{\texttt{fgo:BuildingBlock}}{subs:BuildingBlock} \\ \hline
-\textcolor{white}{\textbf{range}} & \htmlref{\texttt{fgo:BuildingBlock}}{subs:BuildingBlock} \\ \hline
 \end{tabular}
 \subsubsection*{Property: \texttt{fgo:hasForm}}
 \label{subs:hasForm}
@@ -148,6 +149,17 @@
 \textcolor{white}{\textbf{domain}} & \htmlref{\texttt{fgo:WithPreConditions}}{subs:WithPreConditions} \\ \hline
 \textcolor{white}{\textbf{range}} & \htmlref{\texttt{fgo:Condition}}{subs:Condition} \\ \hline
 \end{tabular}
+\subsubsection*{Property: \texttt{fgo:hasPrototype}}
+\label{subs:hasPrototype}
+\begin{tabular}{| >{\columncolor{fast@lightgrey}}p{2.5cm}|p{12cm}|}
+\hline
+\textcolor{white}{\textbf{label}} & has prototype \\ \hline
+\textcolor{white}{\textbf{description}} & Links the clone of a building block as used in a particular screen flow or screen to its prototype, as used in the palette or catalogue of available building blocks. \\ \hline
+\textcolor{white}{\textbf{type}} & \texttt{owl:ObjectProperty} \\ \hline
+\textcolor{white}{\textbf{domain}} & \htmlref{\texttt{fgo:BuildingBlock}}{subs:BuildingBlock} \\ \hline
+\textcolor{white}{\textbf{range}} & \htmlref{\texttt{fgo:BuildingBlock}}{subs:BuildingBlock} \\ \hline
+\textcolor{white}{\textbf{inverse\_of}} & \htmlref{\texttt{fgo:hasClone}}{subs:hasClone} \\ \hline
+\end{tabular}
 \subsubsection*{Property: \texttt{fgo:hasResource}}
 \label{subs:hasResource}
 \begin{tabular}{| >{\columncolor{fast@lightgrey}}p{2.5cm}|p{12cm}|}
@@ -167,16 +179,6 @@
 \textcolor{white}{\textbf{type}} & \texttt{owl:ObjectProperty} \\ \hline
 \textcolor{white}{\textbf{domain}} & \htmlref{\texttt{fgo:BuildingBlock}}{subs:BuildingBlock} \\ \hline
 \textcolor{white}{\textbf{range}} & \texttt{foaf:Image} \\ \hline
-\end{tabular}
-\subsubsection*{Property: \texttt{fgo:hasTemplate}}
-\label{subs:hasTemplate}
-\begin{tabular}{| >{\columncolor{fast@lightgrey}}p{2.5cm}|p{12cm}|}
-\hline
-\textcolor{white}{\textbf{label}} & has template \\ \hline
-\textcolor{white}{\textbf{description}} & Links the copy of a building block as used in a particular screen flow to its template, as used in the palette or catalogue of available building blocks. \\ \hline
-\textcolor{white}{\textbf{type}} & \texttt{owl:ObjectProperty} \\ \hline
-\textcolor{white}{\textbf{domain}} & \htmlref{\texttt{fgo:BuildingBlock}}{subs:BuildingBlock} \\ \hline
-\textcolor{white}{\textbf{range}} & \htmlref{\texttt{fgo:BuildingBlock}}{subs:BuildingBlock} \\ \hline
 \end{tabular}
 \subsubsection*{Property: \texttt{fgo:hasTrigger}}
 \label{subs:hasTrigger}
