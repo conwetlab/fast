@@ -969,7 +969,7 @@ BuildingBlockDocument = Class.create(PaletteDocument, /** @lends BuildingBlockDo
     update: function() {
         var enable = this._description.type == 'operator' ||
             this._description.type == 'resource';
-        this._toolbarElements.get('debugger').setEnabled(enable);
+        this._toolbarElements.get('debugger').setEnabled(true);
         this._setDirty(true);
     },
 
@@ -1213,10 +1213,15 @@ BuildingBlockDocument = Class.create(PaletteDocument, /** @lends BuildingBlockDo
                 'debugger',
                 function() {
                     this._pendingOperation = function() {
-                        var url = URIs.bbDebugger + '?url=' + encodeURIComponent(this._getCodeURI());
-                        var title = "BuildingBlockTest " + this.getTitle();
-                        var options = 'menubar=no,toolbar=no,width=800,height=600';
-                        window.open(url, title, options);
+                        var url,
+                            name = this._description.name;
+                        if (this._description.type == 'form') {
+                            var debugUrl = '../' + URIs.formDebug.replace("<id>", this._description.getId());
+                            url = 'formdebugger/?url=' + encodeURIComponent(debugUrl);
+                        } else {
+                            url = URIs.bbDebugger + '?url=' + encodeURIComponent(this._getCodeURI());
+                        }
+                        GVS.getDocumentController().openExternalTool("BBTest: " + name, url);
                     }.bind(this);
                     this._save(true);
                 }.bind(this),

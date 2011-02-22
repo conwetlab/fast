@@ -6,6 +6,7 @@ urlpatterns = patterns('fast.views',
     (r'^signup$', 'signup'),
     (r'^confirm/(?P<activation_key>\w+)$', 'confirm'),
     (r'^debugger[/]?$', 'buildingblock_debugger'),
+    (r'^formdebugger[/]?$', 'form_debugger'),
     # Comment on production
     (r'^unittests/(?P<test_name>\w+)$', 'unittest'),
 )

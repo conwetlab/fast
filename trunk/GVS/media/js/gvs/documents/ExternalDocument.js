@@ -17,13 +17,19 @@ var ExternalDocument = Class.create(AbstractDocument, /** @lends ExternalDocumen
          */
         this._url = url;
 
-
         $super(title);
 
-        this._tabContent.appendChild(new Element('iframe', {
-            'src': this._url,
-            'style':'border: 0px; width: 100%; height: 100%; margin: 0px; padding:0px;'
-        }));
+        var iframe = new Element('iframe', {
+            src: url,
+            style:'border: 0px; width: 100%; height: 100%; margin: 0px; padding:0px;'
+        });
+        this._tabContent.appendChild(iframe);
+        this._addToolbarElement('reload', new ToolbarButton(
+            'Reload current tab',
+            'refresh',
+            function() { iframe.contentWindow.location.reload(); },
+            true
+        ));
     },
 
     // **************** PRIVATE METHODS **************** //

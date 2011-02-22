@@ -242,6 +242,33 @@ class Form(BuildingBlock):
         c.save()
         return c
 
+    def get_debug_html(self):
+        js_to_include = [
+            "js/buildingblockdebugger/prototype.js",
+            "js/buildingblockdebugger/fastAPI.js",
+            "js/buildingblockdebugger/fastAPI_debugger.js",
+            "js/buildingblockdebugger/codeInForm.js"
+        ]
+        context = Context({"buildingblockId": "FORM", "screenId": "screen",
+        "buildingblockInstance": "form"})
+        t = Template(self.compile_code().code)
+        html = t.render(context)
+
+        includes = ""
+        for js in js_to_include:
+            includes += '<script type="text/javascript" src="%s%s"></script>\n' % (settings.MEDIA_URL, js)
+
+        # Find head
+        pos = html.find("<head>")
+        if pos >= 0:
+            insert_in = pos + 6
+            final_html = html[0:insert_in] + "\n" + includes + html[insert_in:]
+        else:
+            final_html = includes + html
+        return final_html
+
+
+
 
 class Operator(BuildingBlock):
     def __unicode__(self):

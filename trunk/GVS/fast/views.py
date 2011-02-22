@@ -112,3 +112,7 @@ def unittest(request, test_name):
 def buildingblock_debugger(request):
     return render_to_response('buildingblockdebugger/test.html',
     {}, context_instance=RequestContext(request))
+
+def form_debugger(request):
+    return render_to_response('buildingblockdebugger/formDebugger.html',
+    {}, context_instance=RequestContext(request))

@@ -3,7 +3,7 @@ var Logger = Class.create({
     /**
      * @constructs
      */
-    initialize: function(debuggerNode) {
+    initialize: function(/* element */ debuggerNode) {
         this._loggerNode = new Element("div", {
             "style": "margin-top:3px"
         });
@@ -11,7 +11,6 @@ var Logger = Class.create({
         var title = new Element("div", {
             "class": "title"
         }).update("Event Log");
-
 
         var clearButton = new Element("div", {
             "class": "clear",
@@ -21,14 +20,16 @@ var Logger = Class.create({
             this._currentLevel = this._loggerNode;
         }.bind(this));
 
-        var loggerContainer = new Element("div", {
+        var loggerContainer = this.domNode = new Element("div", {
             "class": "logger"
         });
         loggerContainer.appendChild(title);
         loggerContainer.appendChild(clearButton);
         loggerContainer.appendChild(this._loggerNode);
 
-        debuggerNode.appendChild(loggerContainer);
+        if (debuggerNode) {
+            debuggerNode.appendChild(loggerContainer);
+        }
 
         /**
          * Current DOM level of the log writing
@@ -37,6 +38,10 @@ var Logger = Class.create({
          * @type DOMNode
          */
         this._currentLevel = this._loggerNode;
+    },
+
+    toElement: function() {
+        return this.domNode;
     },
 
     log: function(/* arguments ... */) {

@@ -114,6 +114,7 @@
             URIs.tutorial = "{{ MEDIA_URL}}docs/tutorial.html";
 
             URIs.bbDebugger = "debugger/";
+            URIs.formDebug = "buildingblock/<id>/debug_code";
 
             // Proxy
             URIs.proxy = "proxy";
@@ -274,10 +275,10 @@
 <script type="text/javascript">
   var uservoiceOptions = {
     key: 'fast',
-    host: 'fast.uservoice.com', 
+    host: 'fast.uservoice.com',
     forum: '81243',
     lang: 'en',
-    showTab: false 
+    showTab: false
   };
   function _loadUserVoice() {
     var s = document.createElement('script');
@@ -285,7 +286,7 @@
     document.getElementsByTagName('head')[0].appendChild(s);
   }
   _loadSuper = window.onload;
-  window.onload = (typeof window.onload != 'function') ? _loadUserVoice : function() { _loadSuper(); _loadUserVoice(); 
+  window.onload = (typeof window.onload != 'function') ? _loadUserVoice : function() { _loadSuper(); _loadUserVoice();
   };
 
 </script>

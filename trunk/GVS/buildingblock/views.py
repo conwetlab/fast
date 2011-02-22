@@ -273,6 +273,19 @@ class UnboundCode(resource.Resource):
                 json_encode({'message':'this Building block does not have unbound code'}),
                 mimetype='application/json; charset=UTF-8')
 
+class DebugCode(resource.Resource):
+    def read(self, request, buildingblock_id):
+        user = get_user_authentication(request)
+
+        bb = get_object_or_404(BuildingBlock, id=buildingblock_id)
+        if bb.type == 'form':
+            return HttpResponse(bb.child_model().get_debug_html(),
+                    mimetype="text/html; charset=UTF-8")
+        else:
+            return HttpResponseServerError(
+                json_encode({'message':'this Building block does not have unbound code'}),
+                mimetype='application/json; charset=UTF-8')
+
 
 
 class TagCollection(resource.Resource):

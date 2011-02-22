@@ -20,4 +20,6 @@ urlpatterns = patterns('buildingblock.views',
         Code(permitted_methods=('GET',))),
     (r'^(?P<buildingblock_id>\d+)/unbound_code[/]?$',
         UnboundCode(permitted_methods=('GET',))),
+    (r'^(?P<buildingblock_id>\d+)/debug_code[/]?$',
+        DebugCode(permitted_methods=('GET',))),
 )

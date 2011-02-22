@@ -1,0 +1,48 @@
+.logger {
+  height: 100%;
+  overflow: auto;
+  background-color: #EEE;
+/*  font-size:110%; */
+  font-family: Tahoma, Arial, Helvetica, sans-serif;
+}
+
+.logger .clear {
+  color: #777;
+  font-weight: bold;
+  text-decoration: underline;
+  position: absolute;
+  right: 20px;
+  top: 2px;
+  cursor: pointer;
+}
+
+.logger a.clear:hover {
+  cursor: pointer;
+  color: #F8A704;
+}
+
+.logger .group {
+  margin-left: 15px;
+  border: 1px solid #CCC;
+  padding: 5px;
+}
+
+.logger .groupButton {
+  float: left;
+  margin-right: 3px;
+  width: 12px;
+  cursor: pointer;
+}
+
+.logger .groupTitle {
+  font-weight: bold;
+  margin-bottom: 3px;
+}
+
+.logger .title {
+    color: #8BA0BD;
+    padding: 5px;
+    font-weight: bold;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 16px;
+}
