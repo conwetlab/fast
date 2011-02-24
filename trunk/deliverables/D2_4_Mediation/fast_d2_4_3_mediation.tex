@@ -1,0 +1,349 @@
+\documentclass{fast_latex}
+% yay! We can use any kind of funky diacritic:
+\usepackage[utf8]{inputenc}
+
+\usepackage{lastpage}
+\usepackage{setspace}
+\usepackage[pdfborder={0 0 0}]{hyperref}        % turn on when latex is used (not miktec)
+\usepackage{url} % LEO: urls \url{}
+\usepackage{verbatim} % code and comment
+\usepackage{longtable}
+\usepackage{xspace}   % whitespace after a macro if no punctuation after the macro
+\usepackage{lipsum}
+\usepackage{multirow}
+\usepackage{colortbl}
+\usepackage{array}
+\usepackage{textcomp} %vertical apostrophe
+\usepackage{listings} %source code listings
+\usepackage{amssymb} %math symbols
+\usepackage{graphicx} %image placement
+\usepackage{supertabular}
+
+\usepackage{amsmath}
+\usepackage{pgf} %graph plot
+\usepackage{tikz}
+\usetikzlibrary{plotmarks}
+
+\usepackage{listings} %source code listings
+\usepackage{paralist}
+\usepackage{booktabs}
+
+\parindent0pt
+
+\newcommand\deliverableNumber{D2.4.2}
+\newcommand\deliverableTitle{Mediation amongst ontologies: Application to the FAST platform}
+\newcommand\deliverableTitleShort{Mediation amongst ontologies}
+\newcommand\workpackageNumber{2}
+\newcommand\workpackageTitle{Definition of Conceptual Model}
+\newcommand\authorOne{Oszk\'{a}r Ambrus (NUIG)}
+\newcommand\authorTwo{Albert Z\"{u}ndorf (UniKassel)}
+\newcommand\authorThree{J\"{o}rn Friedrich Dreyer (UniKassel)}
+\newcommand\authorFour{Sebasti\'{a}n Ortega (UPM)}
+\newtheorem{example}{\emph{Example}}
+
+\begin{document}
+% explicit hyphenations
+\hyphenation{RDF-Re-po-si-to-ry}
+\hyphenation{name-space}
+\hyphenation{So-cket-A-dap-ter}
+
+%\fontfamily{tahoma}\selectfont
+\def\note#1{\marginpar{\footnotesize#1}} % use this to show the notes in the document
+%\def\note#1{} % use this to hide the notes
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% TITLE PAGES 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\thispagestyle{empty}
+
+%\pagenumbering{roman}
+\pagenumbering{arabic}
+
+\begin{flushright}
+    \includegraphics[width=3cm]{images/FP7_logo.png}
+\end{flushright}
+
+\vspace{1cm}
+
+%\begin{minipage}[p]{15cm}
+    \begin{center}
+        \includegraphics{images/FAST_logo}\\
+        \vspace{1cm}
+        {\LARGE{\sffamily \emph{FAST AND ADVANCED STORYBOARD TOOLS}}}\\
+        \vspace{0.5cm}
+        {\LARGE \sffamily \emph{FP7-ICT-2007-1-216048}}\\
+        \vspace{0.5cm}
+        {\LARGE \sffamily \emph{http://fast.morfeo-project.eu}}\\
+        \vspace{4cm}
+        {\LARGE \sffamily \textbf{Deliverable \deliverableNumber}}\\
+        \vspace{0.5cm}
+        {\LARGE \sffamily \textbf{\deliverableTitle}}\\
+        \vspace{2cm}
+        {\large \sffamily \authorOne} \\
+        {\large \sffamily \authorTwo} \\
+        {\large \sffamily \authorThree} \\
+        {\large \sffamily \authorFour} \\
+        \vspace{0.5cm}
+        \vfill
+        {\large \sffamily Date: 27/02/2010}\\
+        \vspace{1cm}
+        {\sffamily FAST is partially funded by the E.C. (grant code: FP7-ICT-2007-1-216048).}
+        
+    \end{center}
+%\end{minipage}
+
+
+\clearpage
+%%%%%%%%%%%%%%
+% NEXT PAGES %
+%%%%%%%%%%%%%%
+\pagestyle{scrheadings}
+
+\lohead{\includegraphics[width=4cm]{images/FAST_logo_transparent}}
+%\cohead{\small\textcolor{fast@lightgrey}{\deliverableTitle}}
+%\rohead{\small{\today}}
+%\lofoot{\small\textcolor{fast@lightgrey}{Task Force Ontologies}}
+\cofoot{\small{FAST $\bullet$ 216048 $\bullet$ \deliverableTitleShort\ $\bullet$ Page \thepage\ of \pageref{LastPage}}}
+%\rofoot{\small{}}
+%\rofoot{\small{\thepage}}
+
+\newpage
+%
+%\section*{Authors}
+%\authorOne \\
+%%\authorTwo \\
+%%\authorThree\\
+%%\authorFour\\
+%
+%
+%\vfill
+%%\section*{Project Co-ordinator}
+%%\hspace*{-2,5cm}\begin{minipage}[p]{14cm}
+%%Dr. Ansgar Bernardi \\
+%%German Research Center for Artificial Intelligence (DFKI) GmbH \\
+%%Trippstadter Strasse 122 \\
+%%D 67663 Kaiserslautern \\
+%%Germany \\
+%%Email: bernardi@dfki.uni-kl.de, phone: +49 631 205 3582, fax: +49 631 205 4910 \\
+%%\end{minipage}
+%
+%
+%\section*{Partners}
+%Telef\'onica Investigaci\'on y Desarrollo (Telef\'onica I+D), Spain \\
+%National University of Ireland, Galway (NUIG), Republic of Ireland \\
+%Kassel University, Germany \\
+%Cyntelix Corporation, Republic of Ireland \\
+%SAP AG, Germany \\
+%Universidad Polit\'ecnica de Madrid (UPM), Spain
+%
+%
+%\vspace{0.3cm}
+%\begin{footnotesize}
+%Copyright: FAST Consortium 2009\\
+%\end{footnotesize}
+
+%\clearpage
+
+
+\section*{Version History}
+
+\begin{small}
+\begin{tabular}{|l|l|l|p{7.5cm}|}
+\hline
+\rowcolor{fast@lightgrey}\textcolor{white}{\textbf{Rev. No.}} &
+                            \textcolor{white}{\textbf{Date}} &
+                            \textcolor{white}{\textbf{Author (Partner)}} &
+                            \textcolor{white}{\textbf{Change description}}\\ \hline
+% 0.1 & 09.05.2009 & \authorOne & Initial content \\ \hline
+% 0.4 & 30.11.2009 & \authorOne & Sections 2 and 3 \\ \hline
+% 0.5 & 07.01.2010 & \authorOne & New structure, Section 4 and 5 \\ \hline
+% 0.7 & 03.02.2010 & \authorTwo & Section 3.5, 3.6, updated Section 5  \\ \hline
+% 0.8 & 03.02.2010 & \authorOne & Integration and preliminary finalization  \\ \hline
+% 0.9 & 03.02.2010 & NUIG, UniKassel & Corrections  \\ \hline
+% 1.0 & 03.02.2010 & \authorOne & Integration and finalization  \\ \hline
+%0.2 & 19.02.2009 & Oszkar Ambrus (NUIG) & content moved from wiki after internal review \\ \hline
+%0.1 & 07.01.2009 & Oszkar Ambrus (NUIG) & final version ready for external review \\ \hline
+1.0 & 27.02.2009 & \authorOne & final version (D2.4.1) ready for external review \\ \hline
+2.0 & 27.02.2010 & \authorOne & final version (D2.4.2) ready for external review \\ \hline
+\end{tabular}
+\end{small}
+
+\color{black}
+
+\vfill
+%{\bf Explanations of abbreviations on front page}\\
+%\\
+%%Nature \\
+%R: Report \\
+%P: Prototype \\
+%R/P: Report and Prototype \\
+%O: Other \\
+% \\
+%Dissemination level \\
+%PU: Public \\
+%PP: Restricted to other FP6 participants \\
+%RE: Restricted to specified group \\
+%CO: Confidential, only for NEPOMUK partners \\
+
+\newpage
+
+%%%%%%%%%%%%%%%%%%%%%
+% Executive Summary %
+%%%%%%%%%%%%%%%%%%%%%
+
+\clearpage
+
+\section*{Executive Summary}
+\doublespacing
+Ontology mediation is a critical problem in heterogeneous environments, since inter-operating services and agents often use different
+ontologies, and the differences between them need to be determined and overcome to allow for a seamless data exchange between these parties.
+This is a difficult task, with which web-based agents must cope. 
+
+In D2.4.1 we reviewed current work and literature, discussing the main areas of the topic, that is the core problem of ontology mediation, the types of mismatches that occur between ontologies, and the three main ontology mediation approaches, namely (1) the representation of correspondences between ontologies, (2) the (semi-)automatic process of discovering these correspondences and (3) creation of a new ontology from the source ontologies. 
+
+Based on the theoretical foundations laid down in D2.4.1 we present our approach to integrating ontology matching into the FAST platform. We present the roles related to ontology matching in FAST, and the way ontology matching is achieved within each one of those roles.
+
+\newpage
+
+%%%%%%%%%%%%%%%%%%%%%
+% Document Summary %
+%%%%%%%%%%%%%%%%%%%%%
+
+\clearpage
+
+\section*{Document Summary}
+% double spacing from here on:
+\singlespacing
+\begin{small}
+
+\begin{tabular}
+    %{| >{\columncolor{fast@lightgrey}}p{3.25cm}|p{6cm}|p{2cm}|p{2cm}|}
+    {| >{\columncolor{fast@lightgrey}}p{3.25cm}|p{6cm}|p{2cm}|p{2cm}|}
+    \hline
+    \textcolor{white}{\textbf{Code}} & {FP7-ICT-2007-1-216048} & {\textbf{Acronym}} & {FAST}\\ \hline
+    \textcolor{white}{\textbf{Full title}} & \multicolumn{3}{l|}{Fast and Advanced Storyboard Tools}\\ \hline
+    \textcolor{white}{\textbf{URL}} & \multicolumn{3}{l|}{\url{http://fast.morfeo-project.eu}}\\ \hline
+    \textcolor{white}{\textbf{Project officer}} & \multicolumn{3}{l|}{Annalisa Bogliolo}\\ \hline
+\end{tabular}
+
+\vspace{0.5cm}
+
+\begin{tabular}
+    {| >{\columncolor{fast@lightgrey}}p{3.25cm}|p{1.25cm}|p{1cm}|p{1cm}|p{6.32cm}|}
+    \hline
+    \textcolor{white}{\textbf{Deliverable}} & {\textbf{Number}} & {\deliverableNumber} & {\textbf{Name}} & {\deliverableTitle}\\ \hline
+    \textcolor{white}{\textbf{Work package}} & {\textbf{Number}} & {\workpackageNumber} & {\textbf{Name}} & {\workpackageTitle}\\ \hline
+\end{tabular}
+
+\vspace{0.5cm}
+
+\begin{tabular}
+    {| >{\columncolor{fast@lightgrey}}p{3.25cm}|p{1.4cm}|p{3.28cm}|p{1.6cm}|p{3.29cm}|}
+    \hline
+    \textcolor{white}{\textbf{Delivery data}} & {\textbf{Due date}} & {28/02/2010} & {\textbf{Submitted}} & {27/02/2010}\\ \hline
+    \textcolor{white}{\textbf{Status}} & \multicolumn{2}{l|}{} & \multicolumn{2}{l|}{final}\\ \hline
+    \textcolor{white}{\textbf{Dissemination Level}} & \multicolumn{4}{l|}{Public $\boxtimes$ / Consortium $\square$}\\ \hline
+    \textcolor{white}{\textbf{Short description of contents}} & \multicolumn{4}{p{10.85cm}|}{D2.4.2 is the second iteration of the FAST ontology matching approach. The first iteration contained a general overview of the literature regarding ontology mediation, paving the way for futher analysis of the scenarios arising in FAST that require ontology mediation. Based on that general overview, this current interation presents the approach to implement ontology matching within FAST. We present the different roles within the platform, tasks and challenges related to them, and the way ontology matching is integrated within each role.}\\ \hline
+    \textcolor{white}{\textbf{Authors}} & \multicolumn{4}{p{10.85cm}|}{\authorOne,  \authorTwo, \authorThree, \authorFour}\\
+%   {} & \multicolumn{4}{l|}{}\\ 
+%   {} & \multicolumn{4}{l|}{}\\ 
+%   {} & \multicolumn{4}{l|}{}\\
+    \hline
+    \textcolor{white}{\textbf{Deliverable Owner}} & \multicolumn{2}{l|}{\authorOne} & \textbf{email} & {oszkar.ambrus@deri.org} \\ \cline{4-5}
+    \textcolor{white}{\textbf{(Partner)}} & \multicolumn{2}{l|}{} & \textbf{phone} & {+353 91 495112} \\ \hline
+    \textcolor{white}{\textbf{Keywords}} & \multicolumn{4}{p{10.85cm}|}{FAST, ontology mediation, ontology matching, ontology alignment}\\ \hline
+\end{tabular}
+\end{small}
+\newpage
+
+%%%%%%%%%%%%%%%%%%%%%
+% TABLE OF CONTENTS %
+%%%%%%%%%%%%%%%%%%%%%
+\doublespacing
+\setcounter{tocdepth}{3}
+\tableofcontents
+\clearpage
+\section*{Lists of Tables and Figures}
+\listoftables
+\listoffigures
+\cleardoublepage
+%\pagenumbering{arabic}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%
+% BEGINNING OF SECTIONS %
+%%%%%%%%%%%%%%%%%%%%%%%%%
+\clearpage
+\rofoot{\small{Page \thepage\ of \pageref{LastPage}}}
+
+
+\section{Introduction} %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\label{sec:intro}
+\subsection{Goal and Scope.}
+FAST is a visual programming platform allowing business users to build enterprise-class mashups, employing various underlying services and generating new ones. Resources in FAST are described semantically using different ontologies and vocabularies, and can therefore be combined to what we can call ``intelligent gadgets'', that rely on semantically enriched building blocks. In the services used within the FAST environment, the ontologies involved in the creation of gadgets and building blocks come from different parties. These ontologies, though different, will sometimes cover the same domain, making ontology matching necessary as the means to reconcile differences in the various conceptualisations.
+
+We aim to integrate ontology matching into the FAST platform to allow for discrepant systems to intercommunicate.  We try to find a solution to these differences which range from simple naming differences to more complex data heterogeneity, behavioural differences, discrepant paradigms and other disparities. The reconciliation of these differences is called ontology matching (often mentioned in the specialised literature as ontology mediation, or ontology alignment, thus we will sometimes use these terms as well). 
+
+\subsubsection{Changes to Previous Version}
+
+The first iteration, dealing with the theoretical foundations of ontology matching, is now contained in the Appendix, and the whole body of this document is newly added content, based on the comments of the last review. As such, it tackles design and development issues for integrating ontology matching within the FAST platform: it presents the overall strategy and deals with specific problems belonging to each phase of ontology matching in FAST.
+
+
+\subsection{Structure of the Document.}
+This document describes the approach of integrating ontology matching into the FAST environment. Sect.~\ref{sec:overview} gives the big picture of ontology matching in fast, which the remaining three sections expand. Thus, Sect.~\ref{sec:ontologyengineering} describes a tool to automatically discover alignments, a scenario and example ontologies to demonstrate the capabilites of the tool, and the testing procedure with the results. The remaing part of the section deals with a tool to define the discovered mapping rules in a way that is consistent with other similar tasks within the FAST platform, and describes the way in which matching operators are stored within the Semantic Catalogue. Sect.~\ref{sec:gadgetbuilding} shortly describes the way the matching operator is used when composing screenflows and Sect.~\ref{sec:runtime} describes how the matching operator and the defined rules are converted and used in the final, deployed gadget.
+
+%Describe the rest.
+The Appendix contains the first iteration of this document, D2.4.1, laying down the theoretical foundations of ontology matching. We discuss ontologies in general in App.~\ref{sec:ontologies}, present the ontology mediation problem in App.~\ref{sec:mediationproblem} , discuss the types  of mismatches between ontologies in App.~\ref{sec:ontologymismatches} and detail the main approaches to ontology mediation in App.~\ref{sec:mediationapproaches}.
+
+\subsection{Overall Approach for WP2 and relation to other Work Packages and Deliverables.}
+Ontology matching will play an important role for the integration of different underlying resources in the user-built gadgets. 
+We present our initial research in the implementation of ontology matching in this second iteration of D2.4, after having laid the theoretical ground work of ontology matching in the first iteration. The final version of the deliverable (i.e., D2.4.3) will complete the implementation of ontology mediation within the FAST platform. 
+
+Parts of this work rely on the results of D4.3.2, where a service wrapper tool is described, that will be modified to be used in matching ontologies.
+
+%\pagebreak
+%\part{Implementing Ontology Matching within the FAST Platform}
+%\label{part:d2.4.2}
+
+\include{fast_d2_4_2_part1}
+
+\section{Summary}
+\label{sec:summary}
+With the Semantic Web winning more and more ground both in research and industry, the mismatches between ontologies used by the inter-operating systems present an increasing problem. Ontology matching deals with identifying these mismatches, and overcoming them. 
+
+In the first iteration (described in the Appendix) we laid the theoretical foundations of ontology matching. After presenting the main problem, and the types of mismatches between ontologies, we have discussed - based on the most prominent research results in these areas - the three main approaches to ontology mediation, that is \textit{ontology mapping} (representing  correspondences between entities), \textit{ontology alignment} (the process of finding the correspondences between ontologies) and \textit{ontology merging }(the process of creating a new ontology based
+on the source ontologies that need to be reconciled). 
+
+In this second iteration (described in the main body of this document) we established the approach to integrate ontology matching into FAST, and we have shown how this matching is done at the different phases of the gadget life cycle and the approach taken at every level. Firstly, we have shown the implementation details as well as test scenarios, we have presented a tool for finding the alignments between ontologies as well as a powerful language to represent them, we have described a tool to compose mapping rules in a consistent manner with other FAST components and the means to save them in the Semantic Catalogue. Secondly, we described the way in which mapping operators are used in the GVS to combine discrepant screens. Lastly, we presented the way the matching operator and mapping rules are deployed and exploited in the JavaScript gadget.
+
+For the last and final iteration of deliverable D2.4 we plan to evaluate real-life scenarios and finalize the implementation of ontology matching for the FAST platform.
+
+
+%\pagebreak
+%\part{D2.4.1: Theoretical Foundations for Ontology Mediation}
+%\label{part:d2.4.1}
+
+\clearpage
+\phantomsection
+\appendix
+
+\include{fast_d2_4_2_part2}
+
+\clearpage
+\doublespacing
+\appendix
+% \section{Lists of Tables and Figures}
+% %\addcontentsline{toc}{section}{Appendix A (Lists of Tables and Figures)}
+% 
+% \listoftables
+% \listoffigures
+
+\clearpage
+\bibliographystyle{apalike}
+\addcontentsline{toc}{section}{References}
+\bibliography{fast_d2_4_mediation_bib}
+
+
+
+\end{document}
