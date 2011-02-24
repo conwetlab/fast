@@ -399,14 +399,15 @@ Now we have to connect the request parameters to the parameter values passed via
 In our example, we use a simple HTTP GET request. The Service Wrapper Tool also supports the other kinds of HTTP methods as POST, PUT or DELETE. For POST requests, one usually passes parameters within a special post body. For unstructured POST bodies, we provide a text area allowing the user to fill in placeholders for references to pre-condition values. In case of structured POST bodies as in the case of WSDL and WSMO services the POST body uses a structured text format based e.g. on JSON or XML. In that case, our tool parses the body text and the user is able to adapt the parameters via the request parameter form part. This means, the user may easily use the request parameter form part to fill in pre-condition placeholders.
 
 \textcolor{red}{WSDL is usually used with SOAP and XML, JSON wouldn't be common in this case. And from my understanding, the user has to hand-write the POST body? therefore the SOAP message? that's doable, but pretty hard and tedious. - Ismael
-Well as I understood, in case of WSDL the post body is structured (XML?). Thus, we parse that body, identify the key value pairs of the parameters and come up with an input form as we do for URL parameters. Easily done. 
-I have changed the text above slightly to reflect this better.
-}
+\textcolor{blue}{Well as I understood, in case of WSDL the post body is structured (XML?). Thus, we parse that body, identify the key value pairs of the parameters and come up with an input form as we do for URL parameters. Easily done. 
+I have changed the text above slightly to reflect this better. - Albert}
+\textcolor{red}{yes and no. it uses SOAP, which relies on XML, but it's something different. the SOAP message will have more info that pre-/post-condition needs. - Ismael}
 
-\textcolor{red}{Is PUT and DELETE supported? if so, how? - Ismael
-Well, it will be supported for the review meeting. Actually Dennis has done a lot of work on this and it is pretty complete. 
-After all a post request looks very much like a get request. Yes, the data is provided in some body. But, the FAST API, that works as relay for us, provides a method, where you pass an url, the request kind (GET, PUT, DELETE, ...) and the parameters. Depending on the kind, this method puts the parameters either in the URL or in some body. No difference for us.
-}
+
+\textcolor{red}{Is PUT and DELETE supported? if so, how? - Ismael}
+\textcolor{blue}{Well, it will be supported for the review meeting. Actually Dennis has done a lot of work on this and it is pretty complete. 
+After all a post request looks very much like a get request. Yes, the data is provided in some body. But, the FAST API, that works as relay for us, provides a method, where you pass an url, the request kind (GET, PUT, DELETE, ...) and the parameters. Depending on the kind, this method puts the parameters either in the URL or in some body. No difference for us.}
+\textcolor{red}{ok, grand!}
 
 Figure~\ref{fig:construct_service_request} shows the screen to construct the service requests.
 
