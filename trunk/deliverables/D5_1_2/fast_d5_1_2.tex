@@ -1600,21 +1600,25 @@ A screen A which pre-condition pattern is \verb|?user a sioc:User| would be sati
 
 \subsection*{F.2 Planning}
 
-One of the limitations of the pre-/post-conditions matching algorithm is that the output is limited to satisfy a given set of conditions, but the building blocks suggested may include new pre-conditions to be satisfied, where the user has to add building blocks iteratively until the goal is accomplished (screen-flow or screen is executable).
+One of the limitations of the pre-/post-conditions matching algorithm is that its output is limited to a set of building blocks which satisfy a given set of conditions, but they may include new pre-conditions which are not yet satisfied. The consequence is that the user has to add building blocks iteratively until her goal is accomplished (screen-flow is executable). 
 
-A set of screens can be seen as a graph (see Figure~\ref{fig:screens_graph}), where the vertices (or nodes) are the screens, and the edges represent whether a screen satisfies or is satisfied by another screen (the arrow points towards the screen which gets satisfied). There is a special node connected to all the screens with no pre-conditions (those are reachable by default). For a given screen, a plan is the path from itself to the special node. These paths or plans are then offered to the user as a set of screens which makes a specific screen reachable.
+The approach followed by this algorithm is to find sets of screens, or so-called \emph{plans}, which fully accomplish a certain goal in a one-step action. 
+
+From the point of view of this algorithm, the screen knowledge base is seen as a graph, as represented in Figure~\ref{fig:screens_graph}), where the vertices (or nodes) are the screens, and the edges represent whether a screen satisfies or is satisfied by another screen (the arrow points towards the screen which satisfies). There is a special node connected to all the screens with no pre-conditions (those are reachable by default). 
 
 \begin{figure}[htb]
 \label{fig:screens_graph}
 \begin{center}
 	\includegraphics{images/screens_graph}
-	\caption{Graph of compatible screens by pre-/post-conditions}
+	\caption{Graph of compatible screens by their pre-/post-conditions}
 \end{center}
 \end{figure}
 
-If the number of vertices and edges is high, the number of different paths can be as well high. This causes problems such as a huge number of different paths between two vertices, or paths which are incredible long, in other words, the number of results or their quality may not be appropiate to be presented to the user, which may expect a few results and with the minimum number of screens as possible. This is a common problem, and there  are many algorithms which solve it, such as Dijkstra or the A* search algorithm which are complete and will always find a solution if one exists.
+Therefore, the aim of the algorithm is to find the paths or plans from a given screen to the special node or root. This is a very well-known problem in graph theory, and therefore there are many graph and tree search algorithms dealing with it, such as Floyd's, Dijkstra, A* or depth-first search, among others.
 
-Our approach has been to implement the A* algorithm, as it calculates a heuristic estimate of the distance to the goal for each node, apart from the path-cost function also included in Dijkstra. In our case, the cost for all edges is the same, and the heuristic function is used to prioritize the screens which are being used already by a given canvas. This way, we try to minimise the number of screens to be used.
+Floyd's, Dijkstra and A* are focused on finding shortest paths for a given problem. In the case of A*, the advantage is that a heuristic function may be define to prioritise a set of screens (i.e. screens in the current canvas). However, finding the shortest path is not the intention of this algorithm. In fact, it is preferred to find a small set of possible solutions, where depth-first search is a good fit as it finds all the paths from a given node to another, avoiding cycles. The paths returned by depth-first are then ranked in order to minimise the path lenght, and to maximise the number of co-occurrences of elements in the path and the canvas.
+
+The depth-first search algorithm has not been re-implemented for the catalogue. Instead, it relies on Neo4j\footnote{http://neo4j.org/}, a flexible graph database, which apart from providing the algorithm, it allows the storage and access of the graph. The advantages of using Neo4j are that it is highly optimized for storing graph structures for maximum performance and scalability, and supports several search algorithms, including as well Dijkstra and A*, which provides a great flexibility to the catalogue.
 
 
 \subsection*{F.3 Association Rule Mining}
