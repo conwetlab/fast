@@ -76,7 +76,7 @@
 		{\large \sffamily \authorTwo}\\
 		\vspace{0.5cm}
 		\vfill
-		{\large \sffamily Date: 17/02/2011}\\
+		{\large \sffamily Date: 25/02/2011}\\
 		\vspace{1cm}
 		{\sffamily FAST is partially funded by the E.C. (grant code: FP7-ICT-2007-1-216048).}
 		
@@ -115,7 +115,7 @@
                          \textcolor{white}{\textbf{Change description}}\\ \hline
 1.0 & 19/02/2010 & Ciprian Palaghita (Cyntelix) & Release for M24 \\
  & & Ismael Rivera (NUIG) & \\ \hline
-2.0 & 17/02/2011 & Ciprian Palaghita (Cyntelix) & Release for M36 \\
+2.0 & 25/02/2011 & Ciprian Palaghita (Cyntelix) & Release for M36 \\
  & & Ismael Rivera (NUIG) & \\ \hline
 \end{tabular}
 \end{small}
@@ -1604,7 +1604,7 @@ One of the limitations of the pre-/post-conditions matching algorithm is that it
 
 The approach followed by this algorithm is to find sets of screens, or so-called \emph{plans}, which fully accomplish a certain goal in a one-step action. 
 
-From the point of view of this algorithm, the screen knowledge base is seen as a graph, as represented in Figure~\ref{fig:screens_graph}), where the vertices (or nodes) are the screens, and the edges represent whether a screen satisfies or is satisfied by another screen (the arrow points towards the screen which satisfies). There is a special node connected to all the screens with no pre-conditions (those are reachable by default). 
+From the point of view of this algorithm, the screen knowledge base is seen as a graph, as represented in Figure~\ref{fig:screens_graph}, where the vertices (or nodes) are the screens, and the edges represent whether a screen satisfies or is satisfied by another screen (the arrow points towards the screen which satisfies). There is a special node connected to all the screens with no pre-conditions (those are reachable by default). 
 
 \begin{figure}[htb]
 \label{fig:screens_graph}
@@ -1616,9 +1616,9 @@ From the point of view of this algorithm, the screen knowledge base is seen as a
 
 Therefore, the aim of the algorithm is to find the paths or plans from a given screen to the special node or root. This is a very well-known problem in graph theory, and therefore there are many graph and tree search algorithms dealing with it, such as Floyd's, Dijkstra, A* or depth-first search, among others.
 
-Floyd's, Dijkstra and A* are focused on finding shortest paths for a given problem. In the case of A*, the advantage is that a heuristic function may be define to prioritise a set of screens (i.e. screens in the current canvas). However, finding the shortest path is not the intention of this algorithm. In fact, it is preferred to find a small set of possible solutions, where depth-first search is a good fit as it finds all the paths from a given node to another, avoiding cycles. The paths returned by depth-first are then ranked in order to minimise the path lenght, and to maximise the number of co-occurrences of elements in the path and the canvas.
+Floyd's, Dijkstra and A* are focused on finding shortest paths for a given problem. In the case of A*, the advantage is that a heuristic function may be define to prioritise a set of screens (i.e. screens in the current canvas). However, finding the shortest path is not the intention of this algorithm. In fact, it is preferred to find a small set of possible solutions, thus depth-first search is a good fit as it finds all the paths from a given node to another, avoiding cycles. Then, the paths returned by depth-first are then ranked in order to minimise the path lenght, and to maximise the number of co-occurrences of elements in the path and the canvas.
 
-The depth-first search algorithm has not been re-implemented for the catalogue. Instead, it relies on Neo4j\footnote{http://neo4j.org/}, a flexible graph database, which apart from providing the algorithm, it allows the storage and access of the graph. The advantages of using Neo4j are that it is highly optimized for storing graph structures for maximum performance and scalability, and supports several search algorithms, including as well Dijkstra and A*, which provides a great flexibility to the catalogue.
+The depth-first search algorithm has not been re-implemented for the catalogue. Instead, it relies on Neo4j\footnote{http://neo4j.org/}, a flexible graph database, which apart from providing the aforesaid algorithm, it provides the necessary mechanism to store, access and query the graph. The advantages of using Neo4j are that it is highly optimized for storing graph structures for maximum performance and scalability, and supports several search algorithms, including as well Dijkstra and A*, which provides a great flexibility to the catalogue.
 
 
 \subsection*{F.3 Association Rule Mining}
