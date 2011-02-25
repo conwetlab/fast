@@ -25,7 +25,7 @@
 \newcommand\workpackageTitle{Visual composition of screen-flow resources and interoperability with back-end Web Services}
 \newcommand\authorOne{Ismael Rivera (NUIG)}
 \newcommand\authorTwo{Albert Zündorf (UniKas)}
-\newcommand\authorThree{Knud M\"oller (NUIG)}
+\newcommand\authorThree{Author 3}
 \newcommand\authorFour{Author 4}
 \newtheorem{example}{\emph{Example}}
 
@@ -69,10 +69,9 @@
 		\vspace{2cm}
 		{\large \sffamily \authorOne}\\
 		{\large \sffamily \authorTwo}\\
-		{\large \sffamily \authorThree}\\
 		\vspace{0.5cm}
 		\vfill
-		{\large \sffamily Date: 27/02/2010}\\
+		{\large \sffamily Date: 25/02/2010}\\
 		\vspace{1cm}
 		{\sffamily FAST is partially funded by the E.C. (grant code: FP7-ICT-2007-1-216048).}
 		
@@ -140,13 +139,10 @@
                             \textcolor{white}{\textbf{Date}} &
                             \textcolor{white}{\textbf{Author (Partner)}} &
 							\textcolor{white}{\textbf{Change description}}\\ \hline
-%0.1 & 15.12.2008 & Knud M\"oller (NUIG) & template modelled \\ \hline
-%0.2 & 15.02.2009 & Knud M\"oller (NUIG) & content moved from wiki after internal review \\ \hline
 1.0 & 26.02.2010 & Ismael Rivera (NUIG), & Final version ready for external review \\ 
  & & Albert Zündorf (UniKas) & \\ \hline
 2.0 & 27.02.2011 & Ismael Rivera (NUIG), & Final version ready for external review \\ 
- & & Albert Zündorf (UniKas) & \\
- & & Knud M\"oller (NUIG) & \\ \hline
+ & & Albert Zündorf (UniKas) & \\ \hline
 \end{tabular}
 \end{small}
 
@@ -221,18 +217,18 @@ Therefore, the focus of this deliverable is to define how these wrappers will be
 \begin{tabular}
 	{| >{\columncolor{fast@lightgrey}}p{3.25cm}|p{1.4cm}|p{3.28cm}|p{1.6cm}|p{3.29cm}|}
 	\hline
-	\textcolor{white}{\textbf{Delivery data}} & {\textbf{Due date}} & {28/02/2011} & {\textbf{Submitted}} & {27/02/2011}\\ \hline
+	\textcolor{white}{\textbf{Delivery data}} & {\textbf{Due date}} & {28/02/2011} & {\textbf{Submitted}} & {25/02/2011}\\ \hline
 	\textcolor{white}{\textbf{Status}} & \multicolumn{2}{l|}{} & \multicolumn{2}{l|}{final}\\ \hline
 	\textcolor{white}{\textbf{Dissemination Level}} & \multicolumn{4}{l|}{Public $\boxtimes$ / Consortium $\square$}\\ \hline
-	\textcolor{white}{\textbf{Short description of contents}} & \multicolumn{4}{p{10.85cm}|}{D4.3.2 is...}\\ \hline
-	\textcolor{white}{\textbf{Authors}} & \multicolumn{4}{l|}{\authorOne, \authorTwo, \authorThree}\\
+	\textcolor{white}{\textbf{Short description of contents}} & \multicolumn{4}{p{10.85cm}|}{This deliverable presents techniques to exploit different kind of web services such as RESTful, SOAP-based and WSMO services. It gives an overview of the characteristics of each type, and how they match into the FAST philosophy, where the Resource Adapter encapsulates they functionality and make possible their execution. Then, the Service Wrapper Tool, which creates the resource adapters, is described, and how it addresses the different kind of supported web services.}\\ \hline
+	\textcolor{white}{\textbf{Authors}} & \multicolumn{4}{l|}{\authorOne, \authorTwo}\\
 %	{} & \multicolumn{4}{l|}{}\\ 
 %	{} & \multicolumn{4}{l|}{}\\ 
 %	{} & \multicolumn{4}{l|}{}\\
 	\hline
 	\textcolor{white}{\textbf{Deliverable Owner}} & \multicolumn{2}{l|}{\authorOne} & \textbf{email} & {ismael.rivera@deri.org} \\ \cline{4-5}
-	\textcolor{white}{\textbf{(Partner)}} & \multicolumn{2}{l|}{} & \textbf{phone} & {+353 91 ?????} \\ \hline
-	\textcolor{white}{\textbf{Keywords}} & \multicolumn{4}{p{10.85cm}|}{FAST, web services, WSDL, REST, SOAP, WSMO}\\ \hline
+	\textcolor{white}{\textbf{(Partner)}} & \multicolumn{2}{l|}{} & \textbf{phone} & {+353 91 495338} \\ \hline
+	\textcolor{white}{\textbf{Keywords}} & \multicolumn{4}{p{10.85cm}|}{FAST, web service, WSDL, REST, SOAP, WSMO, Resource Adapter}\\ \hline
 \end{tabular}
 \end{small}
 \newpage
@@ -266,17 +262,21 @@ The objective of this deliverable is the analysis and development of mechanisms 
 \subsection{Structure of the Document} % (fold)
 \label{sub:structure_of_the_document}
 
-This deliverable is structured as follows. Section~\ref{sec:introduction} states the goal, scope and structure of the document. Section~\ref{sec:web_services_wrapping} describes what a service wrapper is, how the platform is able to interact with web services, how these wrappers are build and then discovered to be reused in any gadget. Finally, Section~\ref{sec:restful_web_services_wrapper_tool} defines the service wrapper tool built to facilitate FAST users to create Resource Adapters of RESTful web services.
+This deliverable is structured as follows. Section~\ref{sec:introduction} states the goal, scope and structure of the document. Section~\ref{sec:web_services_wrapping} describes what a service wrapper is, how the platform is able to interact with web services, and how these wrappers are built and discovered to be reused in the gadgets. Then, Section~\ref{sec:restful_web_services_wrapper_tool} defines the Service Wrapper Tool, built to facilitate FAST users to create Resource Adapters of different kind of web services. Finally, Section~\ref{sec:related_work} presents similar approaches and related work that have been investigated and re-used in a certain level.
 
-\textcolor{red}{Check if this section reflects the structure...}
 
 % subsection structure_of_the_document (end)
 
 \subsection{Changes from Previous Version} % (fold)
 \label{sub:changes_from_previous_version}
 
-\textcolor{red}{To be done...}
+This section enumerates and gives a brief overview of the changes made in the deliverable with regards to the version 1.0 released for the milestone M24.
 
+\begin{itemize}
+ \item The related work section has been renamed to ``Similar Approaches and Related Work'', and includes new approaches dealing with the topics covered by the Service Wrapper Tool, and how it re-uses concepts and techniques of some of them.
+ \item ``Resources Adapters'' sections has been renamed to ``Wrapping Services'', and small changes have been made to this section.
+ \item ``RESTful Web Service Wrapper Tool'' has been renamed to ``Service Wrapper Tool'' as the tool has evolved and now it supports the wrapping of WSDL and WSMO services, as well as RESTful services. Hence, this section describes how these web services are supported and how to construct them.
+\end{itemize}
 
 % subsection changes_from_previous_version (end)
 
@@ -412,21 +412,9 @@ Following with the proposed example, the service request consists of a URL templ
 
 For WSDL or WSMO services, the Service Wrapper Tool provides additional support for the construction of the request. The user may point to the WSDL or WSMO definition of the targeted service. The Service Wrapper Tool then reads this definition and analyses it. With the help of this information, the Service Wrapper Tool provides interactive guidance for selecting the desired operation from a service and then it retrieves the operation descriptions and fills the request parameter form adequately.
 
-Now we have to connect the request parameters to the parameter values passed via the pre-conditions to the Resource Adapter. In our case, we replace the year part of the URL with a placeholder for the pre-condition season \verb|<season>|, see Request URL input field at the top of Figure~\ref{fig:construct_service_request}.
+Now we have to connect the request parameters to the parameter values passed via the pre-conditions to the Resource Adapter. In our case, we replace the year part of the URL with a placeholder for the pre-condition season \verb|<season>|, see Request URL input field at the top of Figure~\ref{fig:construct_service_request}, which shows the screen to construct the service requests.
 
-In our example, we use a simple HTTP GET request. The Service Wrapper Tool also supports the other kinds of HTTP methods as POST request. We might support PUT and DELETE requests in the future, too. For POST requests, one usually passes parameters within a special post body. For unstructured POST bodies, we provide a text area allowing the user to fill in placeholders for references to pre-condition values. In case of structured POST bodies as in the case of WSDL and WSMO services the POST body uses a structured text format. In Figure~\ref{fig:construct_service_request_wsdl} the user has visited the semantic description of a WSDL service for a geoip service. This pops up a window with a drop down box with a list of operations offered by that service.
-In our example the user chooses the GetGeoIP operation. This allows our tool to retrieve the list of parameters for the GetGEoIP operation and to prefill the post body text area shown in the right center of the screen with parameter settings. In our example only one paramter with name IPAddress is required. Then the user might connect parameters to preconditions using \verb|<IPAddress>| as the value for the parameter. Similar support for WSMO service will be provided in the future. 
-
-%\textcolor{red}{WSDL is usually used with SOAP and XML, JSON wouldn't be common in this case. And from my understanding, the user has to hand-write the POST body? therefore the SOAP message? that's doable, but pretty hard and tedious. - Ismael}
-%\textcolor{blue}{Well as I understood, in case of WSDL the post body is structured (XML?). Thus, we parse that body, identify %the key value pairs of the parameters and come up with an input form as we do for URL parameters. Easily done. 
-%I have changed the text above slightly to reflect this better. - Albert}
-%\textcolor{red}{yes and no. it uses SOAP, which relies on XML, but it's something different. the SOAP message will have more info that pre-/post-condition needs. - Ismael}
-%\textcolor{red}{Is PUT and DELETE supported? if so, how? - Ismael}
-%\textcolor{blue}{Well, it will be supported for the review meeting. Actually Dennis has done a lot of work on this and it is pretty complete. 
-%After all a post request looks very much like a get request. Yes, the data is provided in some body. But, the FAST API, that works as relay for us, provides a method, where you pass an url, the request kind (GET, PUT, DELETE, ...) and the parameters. Depending on the kind, this method puts the parameters either in the URL or in some body. No difference for us.}
-%\textcolor{red}{ok, grand!}
-
-Figure~\ref{fig:construct_service_request} shows the screen to construct the service requests.
+In this example, an HTTP GET request has to be constructed. The Service Wrapper Tool supports HTTP POST requests, and its design makes possible the addition of other HTTP verbs as HEAD, PUT or DELETE, among others. While in GET request the parameters are set in the URL itself, POST requests may include a body of data sent after the header lines. For unstructured POST bodies, a text area is provided allowing the user to fill in placeholders for references to pre-condition values. However, in structured POST bodies as in the case of WSDL and WSMO services, the POST body uses a structured text format. In Figure~\ref{fig:construct_service_request_wsdl} the user has loaded a WSDL definition of a \emph{geoip} web service into the tool. Then, a modal window shows a drop-down list with the different operations offered by the service. After the user selects an operation, in this example the GetGeoIP operation, the service wrapper tool retrieves the list of parameters for the GetGEoIP operation and construct the template of the POST body which is inserted in its specific textarea. The GetGeoIP operations accepts one parameter: IPAddress. Then the user is allow to connect parameters to preconditions using \verb|<IPAddress>| as the value for the parameter. 
 
 \begin{figure}
   \begin{center}
@@ -444,7 +432,7 @@ Figure~\ref{fig:construct_service_request} shows the screen to construct the ser
   \end{center}
 \end{figure}
 
-Below the request parameter editing form of Figure~\ref{fig:construct_service_request}, a \textit{Send Request} button allows to validate the constructed request by sending it to the specified service address (via a server relay). Then the placeholders for pre-conditions are replaced with example values and the resulting request is shown below the parameter form. In addition, the request is sent and the response is shown on the bottom of that page. This gives the user a fast feedback whether the constructed request works as desired. 
+Below the request parameter editing form of Figure~\ref{fig:construct_service_request}, a \emph{Send Request} button allows to validate the constructed request by sending it to the specified service address. Then the placeholders for pre-conditions are replaced with example values and the resulting request is shown below the parameter form. In addition, the request is sent and the response is shown at the bottom of interface. This gives the user a fast feedback whether the constructed request works as desired. 
 
 % subsection constructing_service_requests (end)
 
@@ -461,20 +449,24 @@ Once the service response has been retrieved, it is shown in the transformation 
 \begin{figure}
   \begin{center}
       \includegraphics[angle=90,width=0.8\linewidth]{images/ServiceWrapperToolGVSWithTransformationRulesF1.png}
-    \caption{Interactive, rule based transforming of an XML response to FAST facts}
+    \caption{Interactive, rule based transformation of a XML response into FAST facts}
     \label{fig:response_service_execution}
   \end{center}
 \end{figure}
 
-A transformation rule is used to analyse the XML/JSON data and to generate domain-specific facts from concepts from the ontologies used by the pre-/post-conditions of the different building blocks. A transformation rule is composed of three elements, as the middle part of Figure~\ref{fig:response_service_execution} shows. First, the \textit{from} field indicates the XML elements to be translated by rule. These XML elements are identified by the tagname of a DOM element from the XML document. Second, the type of the rule, taking one of the following values: \emph{createObject}, \emph{fillAttributes} or \emph{dummy}. And third, the target of the rule specifies a certain concept or attribute, to be created or filled. A detailed explanation of the type of actions to be triggered from the transformation rules is:
+A transformation rule approach is used to analyse the XML/JSON data and to generate domain-specific facts from concepts of the ontologies used by the pre-/post-conditions of the different building blocks. A transformation rule is composed of three elements, as the middle part of Figure~\ref{fig:response_service_execution} shows. First, the \textit{from} field indicates the XML elements to be translated by rule. These XML elements are identified by the tagname of a DOM element from the XML document. Second, the type of the rule, taking one of the following values: \emph{createObject}, \emph{fillAttributes} or \emph{dummy}. And third, the target of the rule specifies a certain concept or attribute, to be created or filled. A detailed explanation of the type of actions to be triggered from the transformation rules is:
 \begin{description}
 	\item[action \emph{createObject}] specifies the creation of a new fact object. The type of that new fact is provided in the third input box. In the example being explained, the root rule searches for XML elements with tagname \emph{DriverTable} and for each such element a \emph{List} fact is created. The resulting facts are shown in a facts tree in the right of Figure~\ref{fig:response_service_execution}.
 	\item[action \emph{fillAttributes}] does not create a new fact but it fills the value of the attribute provided as third part of such rules. In our example, the third transformation rule searches for XML elements with tagname \emph{FamilyName}. Note, the rule is a sub-rule of the second rule, which generates \emph{Person} facts. Thus, the sub-rule searches for \emph{FamilyName} tags only in the subtree of the XML data that has been identified by an application of the parent rule before. For example, the \emph{Driver} rule may just have been applied to the first \emph{Driver} element of the XML data. Then, the \emph{FamilyName} rule is applied only to the first \emph{Driver} sub-tree of the XML data and thus it will find only one \emph{FamilyName} element in that sub-tree. The value of that \emph{FamilyName} element is then transfered to the \emph{name} attribute of the corresponding \emph{Person} fact. Actually, our \textit{from} fields allows also to refer to parts of an XML attribute e.g. to \textit{words} 1 through 3. It is also possible to combine constant text and elements of multiple XML tree elements. A \textit{from} field may also refer to multiple tags of the source tree, e.g. to combine a full name from a first name and a family name field.  
 	\item[action \emph{dummy}] does not create or modify any facts but such rules are just used to narrow the search space for their sub-rules. For example, in the Amazon case, the XML data for an item contains sections for \emph{minimum price}, \emph{maximum price}, and \emph{average price}. Each such section contains the \emph{plain price} and the \emph{formatted price}. Thus, in the Amazon case, a rule that searches for \emph{formatted price} elements within an \emph{Item} element would retrieve three matches. Using a dummy rule, we may first search for \emph{minimum price} elements and then search for \emph{formatted price} elements within that sub-tree.
 \end{description}
 
-Since FAST is storyboard oriented, the Service Wrapper Tool follows the storyboard idea as well. Any time, a change to a transformation rule is done, the transformation process is triggered and the resulting facts tree is directly shown. This process helps the user to deal with the slightly complex semantics of the transformation rules avoiding errors or mistakes. In addition, FAST is semantic-driven, therefore, the service wrapper designer retrieves the domain-specific types from the Catalogue server together with the structure of each type, i.e. a list of the properties or attributes of each concept. Therefore, the transformation rule editor is able to provide selection boxes for the target element of the rules. For a \emph{createObject} rule, this selection box shows the fact types available for that domain. For the \emph{fillAttributes} rules, the selection box shows the attributes of the fact type chosen in the parent rule. This rule ensures that the attributes of the generated fact match the type of the concept's properties defined in the ontology, and guarantees all mandatory attributes have a mapping rule.
+This rule driven approach is highly intuitive and eases the mapping process from the services responses to the FAST facts.
+It allows mapping basic types attributes, but also the creation of nested facts, such as having a fact \emph{Address} inside a fact \emph{Person}. Besides, it supports special operations, as attribute concatenation, in order to mediate with certain problems, for example, the fact Person has an attribute \emph{fullname} which is composed by the \emph{firstname} and \emph{lastname} elements of the response. This is done by setting \emph{lastname"', "`firstname} into the \emph{from} field of the transformation rule. Another special operation is the access to inner elements in the XML DOM. For example, an hypothetical attribute \emph{grandmother} could be filled using the rule \emph{mother.mother}. 
 
+However, not every imaginable problem can be solved by a transformation rule. Mathematical operations, as converting temperatures from Fahrenheit into Celsius, or similar are not supported. However, complex cases as these may be solved by the use or creation of another kind of building block: the operator. More information about operators and the Data Mediation Tool can be found in~\cite{ambrus2011_mediation}.
+
+Since FAST is storyboard oriented, the Service Wrapper Tool follows the storyboard idea as well. Any time, a change to a transformation rule is done, the transformation process is triggered and the resulting facts tree is directly shown. This process helps the user to deal with the slightly complex semantics of the transformation rules avoiding errors or mistakes. In addition, FAST is semantic-driven, therefore, the service wrapper designer retrieves the domain-specific types from the Catalogue server together with the structure of each type, i.e. a list of the properties or attributes of each concept. Therefore, the transformation rule editor is able to provide selection boxes for the target element of the rules. For a \emph{createObject} rule, this selection box shows the fact types available for that domain. For the \emph{fillAttributes} rules, the selection box shows the attributes of the fact type chosen in the parent rule. This rule ensures that the attributes of the generated fact match the type of the concept's properties defined in the ontology, and guarantees all mandatory attributes have a mapping rule.
 
 % subsubsection translation_xml_into_facts (end)
 
@@ -485,26 +477,12 @@ Since FAST is storyboard oriented, the Service Wrapper Tool follows the storyboa
 
 Once the wrapping of a service has been defined and tested in the Service Wrapper Tool, the user can invoke the creation of the Resource Adapter. This process triggers two actions: the generation of the Javascript code which encapsulates the calls to the Web service, and the creation of a new building block in the Catalogue, with its proper metadata. Thereby, the new Resource Adapter becomes available for the creation of new screens, and ready to be embedded in a gadget.
 
-
 % subsection generating_a_resource_adapter (end)
-
-\subsection{Limitations} % (fold)
-\label{sub:limitations}
-
-The rule driven approach presented above is somewhat limited. It is deliberately restricted to such a simple rule mechanism in order to keep things simple enough for end users. However, the selected approach suffices for most practical and real world cases. As a more complex example, the XML data for a person may provide two different tags for the first and the last name of a person. Contrarily, a person fact which conforms to a certain ontology for that domain may provide only one \emph{fullname} attribute that shall be filled by a concatenation of the first and the last name. To achieve this, the \textit{from} field of that tranforamtion rule might look like: \texttt{lastname"', "`firstname}. We are also able to do some navigation in the XML tree to follow XRef elements. For example the attribute \texttt{grandmother} could be filled using \texttt{mother.mother} in the \textit{from} field.
-\textcolor{red}{This paragraph doesn't talk about limitations, these are features! - Ismael} 
-
-However, there are some transformations that these rules cannot perform. For example, we do not support any mathematical operations. Thus, transforming e.g. Fahrenheit into Celsius temperatures is not supported. To cover such cases, intermediate fact formats can be used which would allow generating facts to be further processed by additional filters. Such additional filters may be realized using hard-coded operators, since some generic operators can act as filters for aggregation and conversions of facts from multiple sources. Then, service wrappers in combination with these filter operators will allow covering these complex cases.
-
-\textcolor{red}{Wait for Albert's answer regarding this (and the Javascript eval()). and then rewrite this section as something we do, not limitations - Ismael} 
-
-
-% subsection limitations (end)
 
 % section restful_web_services_wrapper_tool (end)
 
 \clearpage
-\section{Related Work} % (fold)
+\section{Similar Approaches and Related Work} % (fold)
 \label{sec:related_work}
 
 There is a number of related work that we have consider to use for service wrapping instead of building a Service Wrapper
@@ -535,10 +513,10 @@ for coming up with a simple and easy to use yet powerful approach.
 
 \clearpage
 \doublespacing
-\section*{Appendix A (Lists of Tables and Figures)}
-\addcontentsline{toc}{section}{Appendix A (Lists of Tables and Figures)}
+\section*{Appendix A (Lists of Figures)}
+\addcontentsline{toc}{section}{Appendix A (Lists of Figures)}
 
-\listoftables
+%\listoftables
 
 \listoffigures
 
