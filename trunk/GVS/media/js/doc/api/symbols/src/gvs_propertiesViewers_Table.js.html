@@ -5,142 +5,167 @@
 	.STRN {color: #393;}
 	.REGX {color: #339;}
 	.line {border-right: 1px dotted #666; color: #666; font-style: normal;}
-	</style></head><body><pre><span class='line'>  1</span> <span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">Table</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">Class.create</span><span class="PUNC">(</span><span class="WHIT"> </span><span class="COMM">/** @lends Table.prototype */</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>  2</span>     </span><span class="COMM">/**
-<span class='line'>  3</span>      * This abstract class handles the different properties tables
-<span class='line'>  4</span>      * belonging to different documents
-<span class='line'>  5</span>      * @abstract
-<span class='line'>  6</span>      * @constructs
-<span class='line'>  7</span>      */</span><span class="WHIT">
-<span class='line'>  8</span>     </span><span class="NAME">initialize</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="COMM">/** DOMNode */</span><span class="WHIT"> </span><span class="NAME">parentNode</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="COMM">/** String */</span><span class="WHIT"> </span><span class="NAME">baseTitle</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>  9</span>             </span><span class="COMM">/** String */</span><span class="WHIT"> </span><span class="NAME">region</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="COMM">/** String (optional) */</span><span class="WHIT"> </span><span class="NAME">minSize</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'> 10</span>         </span><span class="COMM">/**
-<span class='line'> 11</span>          * Parent node
-<span class='line'> 12</span>          * @type DOMNode
-<span class='line'> 13</span>          * @private @member
-<span class='line'> 14</span>          */</span><span class="WHIT">
-<span class='line'> 15</span>         </span><span class="NAME">this._parentNode</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">parentNode</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'> 16</span> 
-<span class='line'> 17</span>         </span><span class="COMM">/**
-<span class='line'> 18</span>          * Title of the table
-<span class='line'> 19</span>          * @type String
-<span class='line'> 20</span>          * @private @member
-<span class='line'> 21</span>          */</span><span class="WHIT">
-<span class='line'> 22</span>         </span><span class="NAME">this._title</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">baseTitle</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'> 23</span> 
-<span class='line'> 24</span>         </span><span class="COMM">/**
-<span class='line'> 25</span>          * Node of the title
-<span class='line'> 26</span>          * @type DOMNode
-<span class='line'> 27</span>          * @private @member
-<span class='line'> 28</span>          */</span><span class="WHIT">
-<span class='line'> 29</span>         </span><span class="NAME">this._titleNode</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">Element</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="STRN">'div'</span><span class="PUNC">,</span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'> 30</span>             </span><span class="STRN">'class'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">'dijitAccordionTitle '</span><span class="WHIT">
-<span class='line'> 31</span>         </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">update</span><span class="PUNC">(</span><span class="NAME">this._title</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'> 32</span> 
-<span class='line'> 33</span>         </span><span class="COMM">/**
-<span class='line'> 34</span>          * Node of the table
-<span class='line'> 35</span>          * @type DOMNode
-<span class='line'> 36</span>          * @private @member
-<span class='line'> 37</span>          */</span><span class="WHIT">
-<span class='line'> 38</span>         </span><span class="NAME">this._tableNode</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">Element</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="STRN">'table'</span><span class="PUNC">,</span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'> 39</span>             </span><span class="STRN">'class'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">'propertiesTable'</span><span class="WHIT">
-<span class='line'> 40</span>         </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+	</style></head><body><pre><span class='line'>  1</span> <span class="COMM">/*...............................licence...........................................
+<span class='line'>  2</span>  *
+<span class='line'>  3</span>  *    (C) Copyright 2011 FAST Consortium
+<span class='line'>  4</span>  *
+<span class='line'>  5</span>  *     This file is part of FAST Platform.
+<span class='line'>  6</span>  *
+<span class='line'>  7</span>  *     FAST Platform is free software: you can redistribute it and/or modify
+<span class='line'>  8</span>  *     it under the terms of the GNU Affero General Public License as published by
+<span class='line'>  9</span>  *     the Free Software Foundation, either version 3 of the License, or
+<span class='line'> 10</span>  *     (at your option) any later version.
+<span class='line'> 11</span>  *
+<span class='line'> 12</span>  *     FAST Platform is distributed in the hope that it will be useful,
+<span class='line'> 13</span>  *     but WITHOUT ANY WARRANTY; without even the implied warranty of
+<span class='line'> 14</span>  *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+<span class='line'> 15</span>  *     GNU Affero General Public License for more details.
+<span class='line'> 16</span>  *
+<span class='line'> 17</span>  *     You should have received a copy of the GNU Affero General Public License
+<span class='line'> 18</span>  *     along with FAST Platform.  If not, see &lt;http://www.gnu.org/licenses/>.
+<span class='line'> 19</span>  *
+<span class='line'> 20</span>  *     Info about members and contributors of the FAST Consortium
+<span class='line'> 21</span>  *     is available at
+<span class='line'> 22</span>  *
+<span class='line'> 23</span>  *     http://fast.morfeo-project.eu
+<span class='line'> 24</span>  *
+<span class='line'> 25</span>  *...............................licence...........................................*/</span><span class="WHIT">
+<span class='line'> 26</span> </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">Table</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">Class.create</span><span class="PUNC">(</span><span class="WHIT"> </span><span class="COMM">/** @lends Table.prototype */</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 27</span>     </span><span class="COMM">/**
+<span class='line'> 28</span>      * This abstract class handles the different properties tables
+<span class='line'> 29</span>      * belonging to different documents
+<span class='line'> 30</span>      * @abstract
+<span class='line'> 31</span>      * @constructs
+<span class='line'> 32</span>      */</span><span class="WHIT">
+<span class='line'> 33</span>     </span><span class="NAME">initialize</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="COMM">/** DOMNode */</span><span class="WHIT"> </span><span class="NAME">parentNode</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="COMM">/** String */</span><span class="WHIT"> </span><span class="NAME">baseTitle</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 34</span>             </span><span class="COMM">/** String */</span><span class="WHIT"> </span><span class="NAME">region</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="COMM">/** String (optional) */</span><span class="WHIT"> </span><span class="NAME">minSize</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 35</span>         </span><span class="COMM">/**
+<span class='line'> 36</span>          * Parent node
+<span class='line'> 37</span>          * @type DOMNode
+<span class='line'> 38</span>          * @private @member
+<span class='line'> 39</span>          */</span><span class="WHIT">
+<span class='line'> 40</span>         </span><span class="NAME">this._parentNode</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">parentNode</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'> 41</span> 
-<span class='line'> 42</span>         </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">style</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">region</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="STRN">"left"</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">?</span><span class="WHIT"> </span><span class="STRN">'width: 50%'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">'width: auto'</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'> 43</span>         </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">container</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">dijit.layout.ContentPane</span><span class="PUNC">(</span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'> 44</span>             </span><span class="STRN">'region'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">region</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'> 45</span>             </span><span class="STRN">'splitter'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">true</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'> 46</span>             </span><span class="STRN">'style'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">style</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'> 47</span>             </span><span class="STRN">'class'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">'tableArea'</span><span class="WHIT">
-<span class='line'> 48</span>         </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'> 49</span>         </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">minSize</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'> 50</span>             </span><span class="NAME">container.attr</span><span class="PUNC">(</span><span class="STRN">'minSize'</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">minSize</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'> 51</span>         </span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'> 52</span> 
-<span class='line'> 53</span>         </span><span class="NAME">container.domNode.insert</span><span class="PUNC">(</span><span class="NAME">this._titleNode</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'> 54</span>         </span><span class="NAME">container.domNode.insert</span><span class="PUNC">(</span><span class="NAME">this._tableNode</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'> 55</span>         </span><span class="NAME">this._parentNode.addChild</span><span class="PUNC">(</span><span class="NAME">container</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'> 56</span>     </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 42</span>         </span><span class="COMM">/**
+<span class='line'> 43</span>          * Title of the table
+<span class='line'> 44</span>          * @type String
+<span class='line'> 45</span>          * @private @member
+<span class='line'> 46</span>          */</span><span class="WHIT">
+<span class='line'> 47</span>         </span><span class="NAME">this._title</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">baseTitle</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 48</span> 
+<span class='line'> 49</span>         </span><span class="COMM">/**
+<span class='line'> 50</span>          * Node of the title
+<span class='line'> 51</span>          * @type DOMNode
+<span class='line'> 52</span>          * @private @member
+<span class='line'> 53</span>          */</span><span class="WHIT">
+<span class='line'> 54</span>         </span><span class="NAME">this._titleNode</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">Element</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="STRN">'div'</span><span class="PUNC">,</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 55</span>             </span><span class="STRN">'class'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">'dijitAccordionTitle '</span><span class="WHIT">
+<span class='line'> 56</span>         </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">update</span><span class="PUNC">(</span><span class="NAME">this._title</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'> 57</span> 
-<span class='line'> 58</span> 
-<span class='line'> 59</span>     </span><span class="COMM">// **************** PUBLIC METHODS **************** //</span><span class="WHIT">
-<span class='line'> 60</span> 
-<span class='line'> 61</span>     </span><span class="COMM">/**
-<span class='line'> 62</span>      * Set the table title
-<span class='line'> 63</span>      */</span><span class="WHIT">
-<span class='line'> 64</span>     </span><span class="NAME">setTitle</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="COMM">/** String */</span><span class="WHIT"> </span><span class="NAME">title</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'> 65</span>         </span><span class="NAME">this._title</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">title</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'> 66</span>         </span><span class="NAME">this._titleNode.update</span><span class="PUNC">(</span><span class="NAME">title</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'> 67</span>     </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'> 68</span> 
-<span class='line'> 69</span>     </span><span class="COMM">/**
-<span class='line'> 70</span>      * Returns the table title
-<span class='line'> 71</span>      * @type String
-<span class='line'> 72</span>      */</span><span class="WHIT">
-<span class='line'> 73</span>     </span><span class="NAME">getTitle</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'> 74</span>         </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">this._title</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'> 75</span>     </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'> 76</span> 
-<span class='line'> 77</span>     </span><span class="COMM">/**
-<span class='line'> 78</span>      * Returns the table Node
-<span class='line'> 79</span>      * @type DOM
-<span class='line'> 80</span>      */</span><span class="WHIT">
-<span class='line'> 81</span>     </span><span class="NAME">getTableNode</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'> 82</span>         </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">this._tableNode</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'> 83</span>     </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'> 84</span> 
-<span class='line'> 85</span>     </span><span class="COMM">/**
-<span class='line'> 86</span>      * Sets the field titles
-<span class='line'> 87</span>      * @type String
+<span class='line'> 58</span>         </span><span class="COMM">/**
+<span class='line'> 59</span>          * Node of the table
+<span class='line'> 60</span>          * @type DOMNode
+<span class='line'> 61</span>          * @private @member
+<span class='line'> 62</span>          */</span><span class="WHIT">
+<span class='line'> 63</span>         </span><span class="NAME">this._tableNode</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">Element</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="STRN">'table'</span><span class="PUNC">,</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 64</span>             </span><span class="STRN">'class'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">'propertiesTable'</span><span class="WHIT">
+<span class='line'> 65</span>         </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 66</span> 
+<span class='line'> 67</span>         </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">style</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">region</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="STRN">"left"</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">?</span><span class="WHIT"> </span><span class="STRN">'width: 50%'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">'width: auto'</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 68</span>         </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">container</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">dijit.layout.ContentPane</span><span class="PUNC">(</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 69</span>             </span><span class="STRN">'region'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">region</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 70</span>             </span><span class="STRN">'splitter'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">true</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 71</span>             </span><span class="STRN">'style'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">style</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 72</span>             </span><span class="STRN">'class'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">'tableArea'</span><span class="WHIT">
+<span class='line'> 73</span>         </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 74</span>         </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">minSize</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 75</span>             </span><span class="NAME">container.attr</span><span class="PUNC">(</span><span class="STRN">'minSize'</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">minSize</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 76</span>         </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'> 77</span> 
+<span class='line'> 78</span>         </span><span class="NAME">container.domNode.insert</span><span class="PUNC">(</span><span class="NAME">this._titleNode</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 79</span>         </span><span class="NAME">container.domNode.insert</span><span class="PUNC">(</span><span class="NAME">this._tableNode</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 80</span>         </span><span class="NAME">this._parentNode.addChild</span><span class="PUNC">(</span><span class="NAME">container</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 81</span>     </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 82</span> 
+<span class='line'> 83</span> 
+<span class='line'> 84</span>     </span><span class="COMM">// **************** PUBLIC METHODS **************** //</span><span class="WHIT">
+<span class='line'> 85</span> 
+<span class='line'> 86</span>     </span><span class="COMM">/**
+<span class='line'> 87</span>      * Set the table title
 <span class='line'> 88</span>      */</span><span class="WHIT">
-<span class='line'> 89</span>     </span><span class="NAME">insertFieldTitles</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="COMM">/** Array */</span><span class="WHIT"> </span><span class="NAME">fieldTitles</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'> 90</span>         </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">tr</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">Element</span><span class="PUNC">(</span><span class="STRN">'tr'</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'> 91</span>             </span><span class="STRN">'class'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">'tableHeader'</span><span class="WHIT">
-<span class='line'> 92</span>         </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 89</span>     </span><span class="NAME">setTitle</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="COMM">/** String */</span><span class="WHIT"> </span><span class="NAME">title</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 90</span>         </span><span class="NAME">this._title</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">title</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 91</span>         </span><span class="NAME">this._titleNode.update</span><span class="PUNC">(</span><span class="NAME">title</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 92</span>     </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
 <span class='line'> 93</span> 
-<span class='line'> 94</span>         </span><span class="NAME">fieldTitles.each</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">title</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'> 95</span>            </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">td</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">Element</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="STRN">'td'</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">update</span><span class="PUNC">(</span><span class="NAME">title</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'> 96</span>            </span><span class="NAME">tr.insert</span><span class="PUNC">(</span><span class="NAME">td</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'> 97</span>         </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'> 98</span> 
-<span class='line'> 99</span>         </span><span class="NAME">this._tableNode.insert</span><span class="PUNC">(</span><span class="NAME">tr</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 94</span>     </span><span class="COMM">/**
+<span class='line'> 95</span>      * Returns the table title
+<span class='line'> 96</span>      * @type String
+<span class='line'> 97</span>      */</span><span class="WHIT">
+<span class='line'> 98</span>     </span><span class="NAME">getTitle</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 99</span>         </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">this._title</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'>100</span>     </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
 <span class='line'>101</span> 
 <span class='line'>102</span>     </span><span class="COMM">/**
-<span class='line'>103</span>      * Updates the data in the table
-<span class='line'>104</span>      */</span><span class="WHIT">
-<span class='line'>105</span>     </span><span class="NAME">insertDataValues</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="COMM">/** Hash */</span><span class="WHIT"> </span><span class="NAME">data</span><span class="PUNC">)</span><span class="WHIT">  </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>106</span> 
-<span class='line'>107</span>         </span><span class="NAME">data.each</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">line</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>108</span>             </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">tr</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">Element</span><span class="PUNC">(</span><span class="STRN">'tr'</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>103</span>      * Returns the table Node
+<span class='line'>104</span>      * @type DOM
+<span class='line'>105</span>      */</span><span class="WHIT">
+<span class='line'>106</span>     </span><span class="NAME">getTableNode</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>107</span>         </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">this._tableNode</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>108</span>     </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
 <span class='line'>109</span> 
-<span class='line'>110</span>             </span><span class="COMM">//TODO: What happen with the classes, maybe another method?</span><span class="WHIT">
-<span class='line'>111</span>             </span><span class="NAME">line.each</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">field</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>112</span>                </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">td</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">Element</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="STRN">'td'</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>113</span>                </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">div</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">Element</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="STRN">'div'</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">update</span><span class="PUNC">(</span><span class="NAME">field</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>114</span>                </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="KEYW">typeof</span><span class="WHIT"> </span><span class="NAME">field</span><span class="WHIT"> </span><span class="PUNC">===</span><span class="WHIT"> </span><span class="STRN">"string"</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>115</span>                    </span><span class="NAME">div.setAttribute</span><span class="PUNC">(</span><span class="STRN">'title'</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">field</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>116</span>                </span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>117</span>                </span><span class="NAME">td.insert</span><span class="PUNC">(</span><span class="NAME">div</span><span class="PUNC">)</span><span class="WHIT">
-<span class='line'>118</span>                </span><span class="NAME">tr.insert</span><span class="PUNC">(</span><span class="NAME">td</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>119</span>             </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>120</span>             </span><span class="NAME">this._tableNode.insert</span><span class="PUNC">(</span><span class="NAME">tr</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>121</span>         </span><span class="PUNC">}</span><span class="PUNC">.</span><span class="NAME">bind</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>122</span>     </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>110</span>     </span><span class="COMM">/**
+<span class='line'>111</span>      * Sets the field titles
+<span class='line'>112</span>      * @type String
+<span class='line'>113</span>      */</span><span class="WHIT">
+<span class='line'>114</span>     </span><span class="NAME">insertFieldTitles</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="COMM">/** Array */</span><span class="WHIT"> </span><span class="NAME">fieldTitles</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>115</span>         </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">tr</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">Element</span><span class="PUNC">(</span><span class="STRN">'tr'</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>116</span>             </span><span class="STRN">'class'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">'tableHeader'</span><span class="WHIT">
+<span class='line'>117</span>         </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>118</span> 
+<span class='line'>119</span>         </span><span class="NAME">fieldTitles.each</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">title</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>120</span>            </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">td</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">Element</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="STRN">'td'</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">update</span><span class="PUNC">(</span><span class="NAME">title</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>121</span>            </span><span class="NAME">tr.insert</span><span class="PUNC">(</span><span class="NAME">td</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>122</span>         </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'>123</span> 
-<span class='line'>124</span>     </span><span class="COMM">/**
-<span class='line'>125</span>      * Empty the data in the table
-<span class='line'>126</span>      */</span><span class="WHIT">
-<span class='line'>127</span>     </span><span class="NAME">emptyTable</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>128</span>         </span><span class="NAME">this._tableNode.update</span><span class="PUNC">(</span><span class="STRN">""</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>129</span>     </span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>130</span> 
+<span class='line'>124</span>         </span><span class="NAME">this._tableNode.insert</span><span class="PUNC">(</span><span class="NAME">tr</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>125</span>     </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>126</span> 
+<span class='line'>127</span>     </span><span class="COMM">/**
+<span class='line'>128</span>      * Updates the data in the table
+<span class='line'>129</span>      */</span><span class="WHIT">
+<span class='line'>130</span>     </span><span class="NAME">insertDataValues</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="COMM">/** Hash */</span><span class="WHIT"> </span><span class="NAME">data</span><span class="PUNC">)</span><span class="WHIT">  </span><span class="PUNC">{</span><span class="WHIT">
 <span class='line'>131</span> 
-<span class='line'>132</span> 
-<span class='line'>133</span>     </span><span class="COMM">// **************** PRIVATE METHODS **************** //</span><span class="WHIT">
+<span class='line'>132</span>         </span><span class="NAME">data.each</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">line</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>133</span>             </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">tr</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">Element</span><span class="PUNC">(</span><span class="STRN">'tr'</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'>134</span> 
-<span class='line'>135</span> 
-<span class='line'>136</span> </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>137</span> 
-<span class='line'>138</span> </span><span class="COMM">// vim:ts=4:sw=4:et:</span><span class="WHIT">
-<span class='line'>139</span> </span></pre></body></html>
+<span class='line'>135</span>             </span><span class="COMM">//TODO: What happen with the classes, maybe another method?</span><span class="WHIT">
+<span class='line'>136</span>             </span><span class="NAME">line.each</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">field</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>137</span>                </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">td</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">Element</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="STRN">'td'</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>138</span>                </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">div</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">Element</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="STRN">'div'</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">update</span><span class="PUNC">(</span><span class="NAME">field</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>139</span>                </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="KEYW">typeof</span><span class="WHIT"> </span><span class="NAME">field</span><span class="WHIT"> </span><span class="PUNC">===</span><span class="WHIT"> </span><span class="STRN">"string"</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>140</span>                    </span><span class="NAME">div.setAttribute</span><span class="PUNC">(</span><span class="STRN">'title'</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">field</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>141</span>                </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>142</span>                </span><span class="NAME">td.insert</span><span class="PUNC">(</span><span class="NAME">div</span><span class="PUNC">)</span><span class="WHIT">
+<span class='line'>143</span>                </span><span class="NAME">tr.insert</span><span class="PUNC">(</span><span class="NAME">td</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>144</span>             </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>145</span>             </span><span class="NAME">this._tableNode.insert</span><span class="PUNC">(</span><span class="NAME">tr</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>146</span>         </span><span class="PUNC">}</span><span class="PUNC">.</span><span class="NAME">bind</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>147</span>     </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>148</span> 
+<span class='line'>149</span>     </span><span class="COMM">/**
+<span class='line'>150</span>      * Empty the data in the table
+<span class='line'>151</span>      */</span><span class="WHIT">
+<span class='line'>152</span>     </span><span class="NAME">emptyTable</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>153</span>         </span><span class="NAME">this._tableNode.update</span><span class="PUNC">(</span><span class="STRN">""</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>154</span>     </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>155</span> 
+<span class='line'>156</span> 
+<span class='line'>157</span> 
+<span class='line'>158</span>     </span><span class="COMM">// **************** PRIVATE METHODS **************** //</span><span class="WHIT">
+<span class='line'>159</span> 
+<span class='line'>160</span> 
+<span class='line'>161</span> </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>162</span> 
+<span class='line'>163</span> </span><span class="COMM">// vim:ts=4:sw=4:et:</span><span class="WHIT">
+<span class='line'>164</span> </span></pre></body></html>

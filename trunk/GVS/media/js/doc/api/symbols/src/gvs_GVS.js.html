@@ -5,452 +5,477 @@
 	.STRN {color: #393;}
 	.REGX {color: #339;}
 	.line {border-right: 1px dotted #666; color: #666; font-style: normal;}
-	</style></head><body><pre><span class='line'>  1</span> <span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">GVS</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">Class.create</span><span class="PUNC">(</span><span class="NAME">ToolbarModel</span><span class="PUNC">,</span><span class="WHIT">    </span><span class="COMM">/** @lends GVS.prototype */</span><span class="WHIT">
-<span class='line'>  2</span> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>  3</span> 
-<span class='line'>  4</span>     </span><span class="COMM">/**
-<span class='line'>  5</span>      * GVS is the system facade.
-<span class='line'>  6</span>      * @constructs
-<span class='line'>  7</span>      * @extends ToolbarModel
-<span class='line'>  8</span>      */</span><span class="WHIT">
-<span class='line'>  9</span>     </span><span class="NAME">initialize</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">$super</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'> 10</span>         </span><span class="NAME">$super</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'> 11</span> 
-<span class='line'> 12</span>         </span><span class="COMM">/**
-<span class='line'> 13</span>          * @type DocumentController
-<span class='line'> 14</span>          * @private @member
-<span class='line'> 15</span>          */</span><span class="WHIT">
-<span class='line'> 16</span>         </span><span class="NAME">this._documentController</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'> 17</span> 
-<span class='line'> 18</span>         </span><span class="COMM">/**
-<span class='line'> 19</span>          * Hash keeping the action implementations.
-<span class='line'> 20</span>          * @type Hash
-<span class='line'> 21</span>          * @private @member
-<span class='line'> 22</span>          */</span><span class="WHIT">
-<span class='line'> 23</span>         </span><span class="NAME">this._actions</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'> 24</span> 
-<span class='line'> 25</span>         </span><span class="COMM">/**
-<span class='line'> 26</span>          * User data object
-<span class='line'> 27</span>          * @type User
-<span class='line'> 28</span>          * @private @member
-<span class='line'> 29</span>          */</span><span class="WHIT">
-<span class='line'> 30</span>         </span><span class="NAME">this._user</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">User</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'> 31</span> 
-<span class='line'> 32</span>         </span><span class="COMM">/**
-<span class='line'> 33</span>          * Hash containing the different dialogs used in the welcome document
-<span class='line'> 34</span>          * @type Hash
-<span class='line'> 35</span>          * @private @member
-<span class='line'> 36</span>          */</span><span class="WHIT">
-<span class='line'> 37</span>         </span><span class="NAME">this._dialogs</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">Hash</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'> 38</span> 
-<span class='line'> 39</span> 
-<span class='line'> 40</span>         </span><span class="COMM">/**
-<span class='line'> 41</span>          * Object that contains the menu configuration for the GVS
-<span class='line'> 42</span>          * @type Object
-<span class='line'> 43</span>          * @private
-<span class='line'> 44</span>          */</span><span class="WHIT">
-<span class='line'> 45</span>         </span><span class="NAME">this._menuConfig</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'> 46</span>     </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'> 47</span> 
-<span class='line'> 48</span> 
-<span class='line'> 49</span>     </span><span class="COMM">// **************** PUBLIC METHODS **************** //</span><span class="WHIT">
-<span class='line'> 50</span> 
-<span class='line'> 51</span> 
-<span class='line'> 52</span>     </span><span class="COMM">/**
-<span class='line'> 53</span>      * Creates all the other objects and installs the event
-<span class='line'> 54</span>      * handlers.
-<span class='line'> 55</span>      * @public
-<span class='line'> 56</span>      */</span><span class="WHIT">
-<span class='line'> 57</span>     </span><span class="NAME">init</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'> 58</span> 
-<span class='line'> 59</span>         </span><span class="NAME">this._actions</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'> 60</span>             </span><span class="NAME">newBuildingBlock</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">this._newBuildingBlock.bind</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">)</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'> 61</span>             </span><span class="NAME">newScreenflow</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">this._newScreenflow.bind</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">)</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'> 62</span>             </span><span class="NAME">addScreen</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">this._addScreen.bind</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">)</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'> 63</span>             </span><span class="NAME">newScreen</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">this._newScreen.bind</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">)</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'> 64</span>             </span><span class="NAME">browseScreenflows</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">this._browseScreenflows.bind</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">)</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'> 65</span>             </span><span class="NAME">browseScreens</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">this._browseScreens.bind</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">)</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'> 66</span>             </span><span class="NAME">browseBuildingBlocks</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">this._browseBuildingBlocks.bind</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">)</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'> 67</span>             </span><span class="NAME">showAbout</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">this._showAboutDialog.bind</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">)</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'> 68</span>             </span><span class="NAME">wrapperService</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">this._openWrapperService.bind</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">)</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'> 69</span>             </span><span class="NAME">mediation</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">this._openMediationTool.bind</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">)</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'> 70</span>             </span><span class="NAME">manageConcepts</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">this._openFactTool.bind</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">)</span><span class="WHIT">
-<span class='line'> 71</span>         </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+	</style></head><body><pre><span class='line'>  1</span> <span class="COMM">/*...............................licence...........................................
+<span class='line'>  2</span>  *
+<span class='line'>  3</span>  *    (C) Copyright 2011 FAST Consortium
+<span class='line'>  4</span>  *
+<span class='line'>  5</span>  *     This file is part of FAST Platform.
+<span class='line'>  6</span>  *
+<span class='line'>  7</span>  *     FAST Platform is free software: you can redistribute it and/or modify
+<span class='line'>  8</span>  *     it under the terms of the GNU Affero General Public License as published by
+<span class='line'>  9</span>  *     the Free Software Foundation, either version 3 of the License, or
+<span class='line'> 10</span>  *     (at your option) any later version.
+<span class='line'> 11</span>  *
+<span class='line'> 12</span>  *     FAST Platform is distributed in the hope that it will be useful,
+<span class='line'> 13</span>  *     but WITHOUT ANY WARRANTY; without even the implied warranty of
+<span class='line'> 14</span>  *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+<span class='line'> 15</span>  *     GNU Affero General Public License for more details.
+<span class='line'> 16</span>  *
+<span class='line'> 17</span>  *     You should have received a copy of the GNU Affero General Public License
+<span class='line'> 18</span>  *     along with FAST Platform.  If not, see &lt;http://www.gnu.org/licenses/>.
+<span class='line'> 19</span>  *
+<span class='line'> 20</span>  *     Info about members and contributors of the FAST Consortium
+<span class='line'> 21</span>  *     is available at
+<span class='line'> 22</span>  *
+<span class='line'> 23</span>  *     http://fast.morfeo-project.eu
+<span class='line'> 24</span>  *
+<span class='line'> 25</span>  *...............................licence...........................................*/</span><span class="WHIT">
+<span class='line'> 26</span> </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">GVS</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">Class.create</span><span class="PUNC">(</span><span class="NAME">ToolbarModel</span><span class="PUNC">,</span><span class="WHIT">    </span><span class="COMM">/** @lends GVS.prototype */</span><span class="WHIT">
+<span class='line'> 27</span> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 28</span> 
+<span class='line'> 29</span>     </span><span class="COMM">/**
+<span class='line'> 30</span>      * GVS is the system facade.
+<span class='line'> 31</span>      * @constructs
+<span class='line'> 32</span>      * @extends ToolbarModel
+<span class='line'> 33</span>      */</span><span class="WHIT">
+<span class='line'> 34</span>     </span><span class="NAME">initialize</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">$super</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 35</span>         </span><span class="NAME">$super</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 36</span> 
+<span class='line'> 37</span>         </span><span class="COMM">/**
+<span class='line'> 38</span>          * @type DocumentController
+<span class='line'> 39</span>          * @private @member
+<span class='line'> 40</span>          */</span><span class="WHIT">
+<span class='line'> 41</span>         </span><span class="NAME">this._documentController</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 42</span> 
+<span class='line'> 43</span>         </span><span class="COMM">/**
+<span class='line'> 44</span>          * Hash keeping the action implementations.
+<span class='line'> 45</span>          * @type Hash
+<span class='line'> 46</span>          * @private @member
+<span class='line'> 47</span>          */</span><span class="WHIT">
+<span class='line'> 48</span>         </span><span class="NAME">this._actions</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 49</span> 
+<span class='line'> 50</span>         </span><span class="COMM">/**
+<span class='line'> 51</span>          * User data object
+<span class='line'> 52</span>          * @type User
+<span class='line'> 53</span>          * @private @member
+<span class='line'> 54</span>          */</span><span class="WHIT">
+<span class='line'> 55</span>         </span><span class="NAME">this._user</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">User</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 56</span> 
+<span class='line'> 57</span>         </span><span class="COMM">/**
+<span class='line'> 58</span>          * Hash containing the different dialogs used in the welcome document
+<span class='line'> 59</span>          * @type Hash
+<span class='line'> 60</span>          * @private @member
+<span class='line'> 61</span>          */</span><span class="WHIT">
+<span class='line'> 62</span>         </span><span class="NAME">this._dialogs</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">Hash</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 63</span> 
+<span class='line'> 64</span> 
+<span class='line'> 65</span>         </span><span class="COMM">/**
+<span class='line'> 66</span>          * Object that contains the menu configuration for the GVS
+<span class='line'> 67</span>          * @type Object
+<span class='line'> 68</span>          * @private
+<span class='line'> 69</span>          */</span><span class="WHIT">
+<span class='line'> 70</span>         </span><span class="NAME">this._menuConfig</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 71</span>     </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
 <span class='line'> 72</span> 
-<span class='line'> 73</span>         </span><span class="NAME">this._dialogs.set</span><span class="PUNC">(</span><span class="STRN">"addScreen"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">AddScreenDialog</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'> 74</span>         </span><span class="NAME">this._dialogs.set</span><span class="PUNC">(</span><span class="STRN">"newScreenflow"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">NewBuildingBlockDialog</span><span class="PUNC">(</span><span class="STRN">'Screenflow'</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'> 75</span>         </span><span class="NAME">this._dialogs.set</span><span class="PUNC">(</span><span class="STRN">"newScreen"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">NewBuildingBlockDialog</span><span class="PUNC">(</span><span class="STRN">'Screen'</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'> 76</span>         </span><span class="NAME">this._dialogs.set</span><span class="PUNC">(</span><span class="STRN">"newForm"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">NewBuildingBlockDialog</span><span class="PUNC">(</span><span class="STRN">'Form'</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'> 77</span>         </span><span class="NAME">this._dialogs.set</span><span class="PUNC">(</span><span class="STRN">"newOperator"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">NewBuildingBlockDialog</span><span class="PUNC">(</span><span class="STRN">'Operator'</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'> 78</span>         </span><span class="NAME">this._dialogs.set</span><span class="PUNC">(</span><span class="STRN">"newResource"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">NewBuildingBlockDialog</span><span class="PUNC">(</span><span class="STRN">'Resource'</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'> 79</span>         </span><span class="NAME">this._dialogs.set</span><span class="PUNC">(</span><span class="STRN">"browseScreenflows"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">ManageScreenflowsDialog</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'> 80</span>         </span><span class="NAME">this._dialogs.set</span><span class="PUNC">(</span><span class="STRN">"browseScreens"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">ManageScreensDialog</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'> 81</span>         </span><span class="NAME">this._dialogs.set</span><span class="PUNC">(</span><span class="STRN">"browseBuildingBlocks"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">ManageBuildingBlocksDialog</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'> 82</span>         </span><span class="NAME">this._dialogs.set</span><span class="PUNC">(</span><span class="STRN">"preferences"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">PreferencesDialog</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'> 83</span>         </span><span class="NAME">this._dialogs.set</span><span class="PUNC">(</span><span class="STRN">"newBuildingBlock"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">NewBuildingBlockCodeDialog</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'> 84</span> 
-<span class='line'> 85</span>         </span><span class="NAME">this._documentController</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">DocumentController</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'> 86</span> 
-<span class='line'> 87</span>         </span><span class="COMM">// Toolbar</span><span class="WHIT">
-<span class='line'> 88</span>         </span><span class="NAME">this._addToolbarButtons</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'> 89</span> 
-<span class='line'> 90</span>         </span><span class="COMM">// Menu</span><span class="WHIT">
-<span class='line'> 91</span>         </span><span class="NAME">this._setMenuItems</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'> 92</span> 
-<span class='line'> 93</span>         </span><span class="NAME">this._documentController.getToolbar</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">setModel</span><span class="PUNC">(</span><span class="NUMB">0</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">this</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'> 94</span> 
-<span class='line'> 95</span>         </span><span class="NAME">this._documentController.getMenu</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">setModel</span><span class="PUNC">(</span><span class="STRN">'GVS'</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">this</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'> 96</span>     </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 73</span> 
+<span class='line'> 74</span>     </span><span class="COMM">// **************** PUBLIC METHODS **************** //</span><span class="WHIT">
+<span class='line'> 75</span> 
+<span class='line'> 76</span> 
+<span class='line'> 77</span>     </span><span class="COMM">/**
+<span class='line'> 78</span>      * Creates all the other objects and installs the event
+<span class='line'> 79</span>      * handlers.
+<span class='line'> 80</span>      * @public
+<span class='line'> 81</span>      */</span><span class="WHIT">
+<span class='line'> 82</span>     </span><span class="NAME">init</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 83</span> 
+<span class='line'> 84</span>         </span><span class="NAME">this._actions</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 85</span>             </span><span class="NAME">newBuildingBlock</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">this._newBuildingBlock.bind</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">)</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 86</span>             </span><span class="NAME">newScreenflow</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">this._newScreenflow.bind</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">)</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 87</span>             </span><span class="NAME">addScreen</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">this._addScreen.bind</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">)</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 88</span>             </span><span class="NAME">newScreen</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">this._newScreen.bind</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">)</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 89</span>             </span><span class="NAME">browseScreenflows</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">this._browseScreenflows.bind</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">)</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 90</span>             </span><span class="NAME">browseScreens</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">this._browseScreens.bind</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">)</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 91</span>             </span><span class="NAME">browseBuildingBlocks</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">this._browseBuildingBlocks.bind</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">)</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 92</span>             </span><span class="NAME">showAbout</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">this._showAboutDialog.bind</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">)</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 93</span>             </span><span class="NAME">wrapperService</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">this._openWrapperService.bind</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">)</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 94</span>             </span><span class="NAME">mediation</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">this._openMediationTool.bind</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">)</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 95</span>             </span><span class="NAME">manageConcepts</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">this._openFactTool.bind</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">)</span><span class="WHIT">
+<span class='line'> 96</span>         </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'> 97</span> 
-<span class='line'> 98</span>     </span><span class="COMM">/**
-<span class='line'> 99</span>      * Ask the GVS application to perform a high-level action.
-<span class='line'>100</span>      * @public
-<span class='line'>101</span>      */</span><span class="WHIT">
-<span class='line'>102</span>     </span><span class="NAME">action</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="COMM">/** String */</span><span class="NAME">actionName</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>103</span>         </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">this._actions</span><span class="PUNC">[</span><span class="NAME">actionName</span><span class="PUNC">]</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>104</span>             </span><span class="COMM">// Execute the action</span><span class="WHIT">
-<span class='line'>105</span>             </span><span class="NAME">this._actions</span><span class="PUNC">[</span><span class="NAME">actionName</span><span class="PUNC">]</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>106</span>         </span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>107</span>         </span><span class="KEYW">else</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>108</span>             </span><span class="NAME">alert</span><span class="PUNC">(</span><span class="STRN">"This function is being implemented. Stay tuned"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>109</span>         </span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>110</span>     </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 98</span>         </span><span class="NAME">this._dialogs.set</span><span class="PUNC">(</span><span class="STRN">"addScreen"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">AddScreenDialog</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 99</span>         </span><span class="NAME">this._dialogs.set</span><span class="PUNC">(</span><span class="STRN">"newScreenflow"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">NewBuildingBlockDialog</span><span class="PUNC">(</span><span class="STRN">'Screenflow'</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>100</span>         </span><span class="NAME">this._dialogs.set</span><span class="PUNC">(</span><span class="STRN">"newScreen"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">NewBuildingBlockDialog</span><span class="PUNC">(</span><span class="STRN">'Screen'</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>101</span>         </span><span class="NAME">this._dialogs.set</span><span class="PUNC">(</span><span class="STRN">"newForm"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">NewBuildingBlockDialog</span><span class="PUNC">(</span><span class="STRN">'Form'</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>102</span>         </span><span class="NAME">this._dialogs.set</span><span class="PUNC">(</span><span class="STRN">"newOperator"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">NewBuildingBlockDialog</span><span class="PUNC">(</span><span class="STRN">'Operator'</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>103</span>         </span><span class="NAME">this._dialogs.set</span><span class="PUNC">(</span><span class="STRN">"newResource"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">NewBuildingBlockDialog</span><span class="PUNC">(</span><span class="STRN">'Resource'</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>104</span>         </span><span class="NAME">this._dialogs.set</span><span class="PUNC">(</span><span class="STRN">"browseScreenflows"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">ManageScreenflowsDialog</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>105</span>         </span><span class="NAME">this._dialogs.set</span><span class="PUNC">(</span><span class="STRN">"browseScreens"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">ManageScreensDialog</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>106</span>         </span><span class="NAME">this._dialogs.set</span><span class="PUNC">(</span><span class="STRN">"browseBuildingBlocks"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">ManageBuildingBlocksDialog</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>107</span>         </span><span class="NAME">this._dialogs.set</span><span class="PUNC">(</span><span class="STRN">"preferences"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">PreferencesDialog</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>108</span>         </span><span class="NAME">this._dialogs.set</span><span class="PUNC">(</span><span class="STRN">"newBuildingBlock"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">NewBuildingBlockCodeDialog</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>109</span> 
+<span class='line'>110</span>         </span><span class="NAME">this._documentController</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">DocumentController</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'>111</span> 
-<span class='line'>112</span>     </span><span class="COMM">/**
-<span class='line'>113</span>      * Gets the document controller
-<span class='line'>114</span>      * @type DocumentController
-<span class='line'>115</span>      * @public
-<span class='line'>116</span>      */</span><span class="WHIT">
-<span class='line'>117</span>     </span><span class="NAME">getDocumentController</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>118</span>         </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">this._documentController</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>119</span>     </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>120</span> 
-<span class='line'>121</span>     </span><span class="COMM">/**
-<span class='line'>122</span>      * Gets the user account object
-<span class='line'>123</span>      * @type User
-<span class='line'>124</span>      * @public
-<span class='line'>125</span>      */</span><span class="WHIT">
-<span class='line'>126</span>     </span><span class="NAME">getUser</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>127</span>         </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">this._user</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>128</span>     </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>129</span> 
-<span class='line'>130</span>     </span><span class="COMM">/**
-<span class='line'>131</span>      * Sets the platform itself enabled or disabled
-<span class='line'>132</span>      * (for modal dialogs)
-<span class='line'>133</span>      */</span><span class="WHIT">
-<span class='line'>134</span>     </span><span class="NAME">setEnabled</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="COMM">/** Boolean */</span><span class="NAME">enabled</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>135</span>         </span><span class="NAME">this._documentController.getKeyPressRegistry</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">setEnabled</span><span class="PUNC">(</span><span class="NAME">enabled</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>136</span>     </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>137</span> 
-<span class='line'>138</span>     </span><span class="COMM">/**
-<span class='line'>139</span>      * Implementing MenuModel interface
-<span class='line'>140</span>      * @type Object
+<span class='line'>112</span>         </span><span class="COMM">// Toolbar</span><span class="WHIT">
+<span class='line'>113</span>         </span><span class="NAME">this._addToolbarButtons</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>114</span> 
+<span class='line'>115</span>         </span><span class="COMM">// Menu</span><span class="WHIT">
+<span class='line'>116</span>         </span><span class="NAME">this._setMenuItems</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>117</span> 
+<span class='line'>118</span>         </span><span class="NAME">this._documentController.getToolbar</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">setModel</span><span class="PUNC">(</span><span class="NUMB">0</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">this</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>119</span> 
+<span class='line'>120</span>         </span><span class="NAME">this._documentController.getMenu</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">setModel</span><span class="PUNC">(</span><span class="STRN">'GVS'</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">this</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>121</span>     </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>122</span> 
+<span class='line'>123</span>     </span><span class="COMM">/**
+<span class='line'>124</span>      * Ask the GVS application to perform a high-level action.
+<span class='line'>125</span>      * @public
+<span class='line'>126</span>      */</span><span class="WHIT">
+<span class='line'>127</span>     </span><span class="NAME">action</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="COMM">/** String */</span><span class="NAME">actionName</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>128</span>         </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">this._actions</span><span class="PUNC">[</span><span class="NAME">actionName</span><span class="PUNC">]</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>129</span>             </span><span class="COMM">// Execute the action</span><span class="WHIT">
+<span class='line'>130</span>             </span><span class="NAME">this._actions</span><span class="PUNC">[</span><span class="NAME">actionName</span><span class="PUNC">]</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>131</span>         </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>132</span>         </span><span class="KEYW">else</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>133</span>             </span><span class="NAME">alert</span><span class="PUNC">(</span><span class="STRN">"This function is being implemented. Stay tuned"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>134</span>         </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>135</span>     </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>136</span> 
+<span class='line'>137</span>     </span><span class="COMM">/**
+<span class='line'>138</span>      * Gets the document controller
+<span class='line'>139</span>      * @type DocumentController
+<span class='line'>140</span>      * @public
 <span class='line'>141</span>      */</span><span class="WHIT">
-<span class='line'>142</span>     </span><span class="NAME">getMenuElements</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>143</span>         </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">this._menuConfig</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>142</span>     </span><span class="NAME">getDocumentController</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>143</span>         </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">this._documentController</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'>144</span>     </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
 <span class='line'>145</span> 
-<span class='line'>146</span>     </span><span class="COMM">// **************** PRIVATE METHODS **************** //</span><span class="WHIT">
-<span class='line'>147</span> 
-<span class='line'>148</span>     </span><span class="COMM">/**
-<span class='line'>149</span>      * High-level action for creating a new screenflow.
-<span class='line'>150</span>      *
-<span class='line'>151</span>      * @private
-<span class='line'>152</span>      */</span><span class="WHIT">
-<span class='line'>153</span>     </span><span class="NAME">_newScreenflow</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>154</span>         </span><span class="NAME">this._dialogs.get</span><span class="PUNC">(</span><span class="STRN">"newScreenflow"</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">show</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>155</span>     </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>156</span> 
-<span class='line'>157</span>     </span><span class="COMM">/**
-<span class='line'>158</span>      * High-level action for creating a new screen.
-<span class='line'>159</span>      *
-<span class='line'>160</span>      * @private
-<span class='line'>161</span>      */</span><span class="WHIT">
-<span class='line'>162</span>     </span><span class="NAME">_newScreen</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>163</span>         </span><span class="NAME">this._dialogs.get</span><span class="PUNC">(</span><span class="STRN">"newScreen"</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">show</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>164</span>     </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>165</span> 
-<span class='line'>166</span>     </span><span class="COMM">/**
-<span class='line'>167</span>      * High-level action for adding a new screen to the catalogue
-<span class='line'>168</span>      * @private
-<span class='line'>169</span>      */</span><span class="WHIT">
-<span class='line'>170</span>     </span><span class="NAME">_addScreen</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>171</span>         </span><span class="NAME">this._dialogs.get</span><span class="PUNC">(</span><span class="STRN">"addScreen"</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">show</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>172</span>     </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>173</span> 
-<span class='line'>174</span>     </span><span class="COMM">/**
-<span class='line'>175</span>      * browse screenflows
+<span class='line'>146</span>     </span><span class="COMM">/**
+<span class='line'>147</span>      * Gets the user account object
+<span class='line'>148</span>      * @type User
+<span class='line'>149</span>      * @public
+<span class='line'>150</span>      */</span><span class="WHIT">
+<span class='line'>151</span>     </span><span class="NAME">getUser</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>152</span>         </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">this._user</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>153</span>     </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>154</span> 
+<span class='line'>155</span>     </span><span class="COMM">/**
+<span class='line'>156</span>      * Sets the platform itself enabled or disabled
+<span class='line'>157</span>      * (for modal dialogs)
+<span class='line'>158</span>      */</span><span class="WHIT">
+<span class='line'>159</span>     </span><span class="NAME">setEnabled</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="COMM">/** Boolean */</span><span class="NAME">enabled</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>160</span>         </span><span class="NAME">this._documentController.getKeyPressRegistry</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">setEnabled</span><span class="PUNC">(</span><span class="NAME">enabled</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>161</span>     </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>162</span> 
+<span class='line'>163</span>     </span><span class="COMM">/**
+<span class='line'>164</span>      * Implementing MenuModel interface
+<span class='line'>165</span>      * @type Object
+<span class='line'>166</span>      */</span><span class="WHIT">
+<span class='line'>167</span>     </span><span class="NAME">getMenuElements</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>168</span>         </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">this._menuConfig</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>169</span>     </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>170</span> 
+<span class='line'>171</span>     </span><span class="COMM">// **************** PRIVATE METHODS **************** //</span><span class="WHIT">
+<span class='line'>172</span> 
+<span class='line'>173</span>     </span><span class="COMM">/**
+<span class='line'>174</span>      * High-level action for creating a new screenflow.
+<span class='line'>175</span>      *
 <span class='line'>176</span>      * @private
 <span class='line'>177</span>      */</span><span class="WHIT">
-<span class='line'>178</span>     </span><span class="NAME">_browseScreenflows</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>179</span>         </span><span class="NAME">this._dialogs.get</span><span class="PUNC">(</span><span class="STRN">"browseScreenflows"</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">show</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>178</span>     </span><span class="NAME">_newScreenflow</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>179</span>         </span><span class="NAME">this._dialogs.get</span><span class="PUNC">(</span><span class="STRN">"newScreenflow"</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">show</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'>180</span>     </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
 <span class='line'>181</span> 
 <span class='line'>182</span>     </span><span class="COMM">/**
-<span class='line'>183</span>      * browse screens
-<span class='line'>184</span>      * @private
-<span class='line'>185</span>      */</span><span class="WHIT">
-<span class='line'>186</span>     </span><span class="NAME">_browseScreens</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>187</span>         </span><span class="NAME">this._dialogs.get</span><span class="PUNC">(</span><span class="STRN">"browseScreens"</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">show</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>188</span>     </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>189</span> 
-<span class='line'>190</span>     </span><span class="COMM">/**
-<span class='line'>191</span>      * browse building blocks
-<span class='line'>192</span>      * @private
-<span class='line'>193</span>      */</span><span class="WHIT">
-<span class='line'>194</span>     </span><span class="NAME">_browseBuildingBlocks</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>195</span>         </span><span class="NAME">this._dialogs.get</span><span class="PUNC">(</span><span class="STRN">"browseBuildingBlocks"</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">show</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>196</span>     </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>197</span> 
-<span class='line'>198</span>     </span><span class="COMM">/**
-<span class='line'>199</span>      * Open wrapper service
-<span class='line'>200</span>      * @private
-<span class='line'>201</span>      */</span><span class="WHIT">
-<span class='line'>202</span>     </span><span class="NAME">_openWrapperService</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>203</span>         </span><span class="NAME">this._documentController.openExternalTool</span><span class="PUNC">(</span><span class="STRN">"Wrap a service"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">URIs.wrapperService</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>204</span>     </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>205</span> 
-<span class='line'>206</span>     </span><span class="COMM">/**
-<span class='line'>207</span>      * @private
-<span class='line'>208</span>      */</span><span class="WHIT">
-<span class='line'>209</span>     </span><span class="NAME">_openMediationTool</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>210</span>         </span><span class="NAME">this._documentController.openExternalTool</span><span class="PUNC">(</span><span class="STRN">"Mediation between concepts"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">URIs.dataMediation</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>211</span>     </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>212</span> 
-<span class='line'>213</span>     </span><span class="COMM">/**
-<span class='line'>214</span>      * @private
-<span class='line'>215</span>      */</span><span class="WHIT">
-<span class='line'>216</span>     </span><span class="NAME">_openFactTool</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>217</span>         </span><span class="NAME">this._documentController.openExternalTool</span><span class="PUNC">(</span><span class="STRN">"Manage concepts"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">URIs.factTool</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>218</span>     </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>219</span> 
-<span class='line'>220</span>     </span><span class="COMM">/**
-<span class='line'>221</span>      * Opens a dialog to choose which building block to create
-<span class='line'>222</span>      * @private
-<span class='line'>223</span>      */</span><span class="WHIT">
-<span class='line'>224</span>     </span><span class="NAME">_newBuildingBlock</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>225</span>         </span><span class="NAME">this._dialogs.get</span><span class="PUNC">(</span><span class="STRN">"newBuildingBlock"</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">show</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>226</span>     </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>227</span> 
-<span class='line'>228</span>     </span><span class="COMM">/**
-<span class='line'>229</span>      * Adds the toolbar buttons to the model
-<span class='line'>230</span>      * @private
-<span class='line'>231</span>      */</span><span class="WHIT">
-<span class='line'>232</span>     </span><span class="NAME">_addToolbarButtons</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>233</span>         </span><span class="NAME">this._addToolbarElement</span><span class="PUNC">(</span><span class="STRN">'home'</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">ToolbarButton</span><span class="PUNC">(</span><span class="STRN">'Home'</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">'home'</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">this._documentController.showWelcomeDocument.bind</span><span class="PUNC">(</span><span class="NAME">this._documentController</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>234</span> 
-<span class='line'>235</span>         </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">preferencesDialog</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this._dialogs.get</span><span class="PUNC">(</span><span class="STRN">"preferences"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>236</span>         </span><span class="NAME">this._addToolbarElement</span><span class="PUNC">(</span><span class="STRN">'preferences'</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">ToolbarButton</span><span class="PUNC">(</span><span class="STRN">'User Preferences'</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">'preferences'</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">preferencesDialog.show.bind</span><span class="PUNC">(</span><span class="NAME">preferencesDialog</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>237</span>     </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>238</span> 
-<span class='line'>239</span>     </span><span class="COMM">/**
-<span class='line'>240</span>      * Init the loading of the about section
-<span class='line'>241</span>      * @private
-<span class='line'>242</span>      */</span><span class="WHIT">
-<span class='line'>243</span>     </span><span class="NAME">_showAboutDialog</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>244</span>         </span><span class="NAME">PersistenceEngine.sendGet</span><span class="PUNC">(</span><span class="NAME">URIs.about</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">this</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">this._onSuccessAbout</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">Utils.onAJAXError</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>245</span>     </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>246</span>     </span><span class="COMM">/**
-<span class='line'>247</span>      * OnSuccess handler
+<span class='line'>183</span>      * High-level action for creating a new screen.
+<span class='line'>184</span>      *
+<span class='line'>185</span>      * @private
+<span class='line'>186</span>      */</span><span class="WHIT">
+<span class='line'>187</span>     </span><span class="NAME">_newScreen</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>188</span>         </span><span class="NAME">this._dialogs.get</span><span class="PUNC">(</span><span class="STRN">"newScreen"</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">show</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>189</span>     </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>190</span> 
+<span class='line'>191</span>     </span><span class="COMM">/**
+<span class='line'>192</span>      * High-level action for adding a new screen to the catalogue
+<span class='line'>193</span>      * @private
+<span class='line'>194</span>      */</span><span class="WHIT">
+<span class='line'>195</span>     </span><span class="NAME">_addScreen</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>196</span>         </span><span class="NAME">this._dialogs.get</span><span class="PUNC">(</span><span class="STRN">"addScreen"</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">show</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>197</span>     </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>198</span> 
+<span class='line'>199</span>     </span><span class="COMM">/**
+<span class='line'>200</span>      * browse screenflows
+<span class='line'>201</span>      * @private
+<span class='line'>202</span>      */</span><span class="WHIT">
+<span class='line'>203</span>     </span><span class="NAME">_browseScreenflows</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>204</span>         </span><span class="NAME">this._dialogs.get</span><span class="PUNC">(</span><span class="STRN">"browseScreenflows"</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">show</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>205</span>     </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>206</span> 
+<span class='line'>207</span>     </span><span class="COMM">/**
+<span class='line'>208</span>      * browse screens
+<span class='line'>209</span>      * @private
+<span class='line'>210</span>      */</span><span class="WHIT">
+<span class='line'>211</span>     </span><span class="NAME">_browseScreens</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>212</span>         </span><span class="NAME">this._dialogs.get</span><span class="PUNC">(</span><span class="STRN">"browseScreens"</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">show</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>213</span>     </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>214</span> 
+<span class='line'>215</span>     </span><span class="COMM">/**
+<span class='line'>216</span>      * browse building blocks
+<span class='line'>217</span>      * @private
+<span class='line'>218</span>      */</span><span class="WHIT">
+<span class='line'>219</span>     </span><span class="NAME">_browseBuildingBlocks</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>220</span>         </span><span class="NAME">this._dialogs.get</span><span class="PUNC">(</span><span class="STRN">"browseBuildingBlocks"</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">show</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>221</span>     </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>222</span> 
+<span class='line'>223</span>     </span><span class="COMM">/**
+<span class='line'>224</span>      * Open wrapper service
+<span class='line'>225</span>      * @private
+<span class='line'>226</span>      */</span><span class="WHIT">
+<span class='line'>227</span>     </span><span class="NAME">_openWrapperService</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>228</span>         </span><span class="NAME">this._documentController.openExternalTool</span><span class="PUNC">(</span><span class="STRN">"Wrap a service"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">URIs.wrapperService</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>229</span>     </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>230</span> 
+<span class='line'>231</span>     </span><span class="COMM">/**
+<span class='line'>232</span>      * @private
+<span class='line'>233</span>      */</span><span class="WHIT">
+<span class='line'>234</span>     </span><span class="NAME">_openMediationTool</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>235</span>         </span><span class="NAME">this._documentController.openExternalTool</span><span class="PUNC">(</span><span class="STRN">"Mediation between concepts"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">URIs.dataMediation</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>236</span>     </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>237</span> 
+<span class='line'>238</span>     </span><span class="COMM">/**
+<span class='line'>239</span>      * @private
+<span class='line'>240</span>      */</span><span class="WHIT">
+<span class='line'>241</span>     </span><span class="NAME">_openFactTool</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>242</span>         </span><span class="NAME">this._documentController.openExternalTool</span><span class="PUNC">(</span><span class="STRN">"Manage concepts"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">URIs.factTool</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>243</span>     </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>244</span> 
+<span class='line'>245</span>     </span><span class="COMM">/**
+<span class='line'>246</span>      * Opens a dialog to choose which building block to create
+<span class='line'>247</span>      * @private
 <span class='line'>248</span>      */</span><span class="WHIT">
-<span class='line'>249</span>     </span><span class="NAME">_onSuccessAbout</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="COMM">/** XMLHttpRequest */</span><span class="WHIT"> </span><span class="NAME">transport</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>250</span>         </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">dialog</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">ExternalContentDialog</span><span class="PUNC">(</span><span class="STRN">"About GVS"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>251</span>         </span><span class="NAME">dialog.show</span><span class="PUNC">(</span><span class="NAME">transport.responseText</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>252</span>     </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>253</span> 
-<span class='line'>254</span> 
-<span class='line'>255</span>     </span><span class="COMM">/**
-<span class='line'>256</span>      * Creates the menu structure for the GVS
-<span class='line'>257</span>      * @private
-<span class='line'>258</span>      */</span><span class="WHIT">
-<span class='line'>259</span>     </span><span class="NAME">_setMenuItems</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>260</span>         </span><span class="NAME">this._menuConfig</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>261</span>             </span><span class="STRN">'file'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>262</span>                 </span><span class="STRN">'type'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">'SubMenu'</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>263</span>                 </span><span class="STRN">'label'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">'File'</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>264</span>                 </span><span class="STRN">'weight'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NUMB">1</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>265</span>                 </span><span class="STRN">'children'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>266</span>                     </span><span class="STRN">'new'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>267</span>                         </span><span class="STRN">'type'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">'SubMenu'</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>268</span>                         </span><span class="STRN">'label'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">'New...'</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>269</span>                         </span><span class="STRN">'weight'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NUMB">1</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>270</span>                         </span><span class="STRN">'group'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>271</span>                         </span><span class="STRN">'children'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>272</span>                             </span><span class="STRN">'newScreenflow'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>273</span>                                 </span><span class="STRN">'type'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">'Action'</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>274</span>                                 </span><span class="STRN">'action'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">MenuAction</span><span class="PUNC">(</span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>275</span>                                     </span><span class="STRN">'label'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">'Screenflow'</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>276</span>                                     </span><span class="STRN">'weight'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NUMB">1</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>277</span>                                     </span><span class="STRN">'handler'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>278</span>                                         </span><span class="NAME">this.action</span><span class="PUNC">(</span><span class="STRN">"newScreenflow"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>279</span>                                     </span><span class="PUNC">}</span><span class="PUNC">.</span><span class="NAME">bind</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">)</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>280</span>                                     </span><span class="STRN">'shortcut'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">'Shift+N'</span><span class="WHIT">
-<span class='line'>281</span>                                 </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>282</span>                                 </span><span class="STRN">'group'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="WHIT">
-<span class='line'>283</span>                             </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>284</span>                             </span><span class="STRN">'newScreen'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>285</span>                                 </span><span class="STRN">'type'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">'Action'</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>286</span>                                 </span><span class="STRN">'action'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">MenuAction</span><span class="PUNC">(</span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>287</span>                                     </span><span class="STRN">'label'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">'Screen'</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>288</span>                                     </span><span class="STRN">'weight'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NUMB">10</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>289</span>                                     </span><span class="STRN">'handler'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>290</span>                                         </span><span class="NAME">this.action</span><span class="PUNC">(</span><span class="STRN">"newScreen"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>291</span>                                     </span><span class="PUNC">}</span><span class="PUNC">.</span><span class="NAME">bind</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">)</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>292</span>                                     </span><span class="STRN">'shortcut'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">'Alt+N'</span><span class="WHIT">
-<span class='line'>293</span>                                 </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>294</span>                                 </span><span class="STRN">'group'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="WHIT">
-<span class='line'>295</span>                             </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>296</span>                             </span><span class="STRN">'newOperator'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>297</span>                                 </span><span class="STRN">'type'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">'Action'</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>298</span>                                 </span><span class="STRN">'action'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">MenuAction</span><span class="PUNC">(</span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>299</span>                                     </span><span class="STRN">'label'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">'Operator'</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>300</span>                                     </span><span class="STRN">'weight'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NUMB">2</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>301</span>                                     </span><span class="STRN">'handler'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>302</span>                                         </span><span class="NAME">this.action</span><span class="PUNC">(</span><span class="STRN">"newOperator"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>303</span>                                     </span><span class="PUNC">}</span><span class="PUNC">.</span><span class="NAME">bind</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">)</span><span class="WHIT">
-<span class='line'>304</span>                                 </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>305</span>                                 </span><span class="STRN">'group'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NUMB">1</span><span class="WHIT">
-<span class='line'>306</span>                             </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>307</span>                             </span><span class="STRN">'newForm'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>308</span>                                 </span><span class="STRN">'type'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">'Action'</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>309</span>                                 </span><span class="STRN">'action'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">MenuAction</span><span class="PUNC">(</span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>310</span>                                     </span><span class="STRN">'label'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">'Form'</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>311</span>                                     </span><span class="STRN">'weight'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NUMB">1</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>312</span>                                     </span><span class="STRN">'handler'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>313</span>                                         </span><span class="NAME">this.action</span><span class="PUNC">(</span><span class="STRN">"newForm"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>314</span>                                     </span><span class="PUNC">}</span><span class="PUNC">.</span><span class="NAME">bind</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">)</span><span class="WHIT">
-<span class='line'>315</span>                                 </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>316</span>                                 </span><span class="STRN">'group'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NUMB">1</span><span class="WHIT">
-<span class='line'>317</span>                             </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>318</span>                             </span><span class="STRN">'newResource'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>319</span>                                 </span><span class="STRN">'type'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">'Action'</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>320</span>                                 </span><span class="STRN">'action'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">MenuAction</span><span class="PUNC">(</span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>321</span>                                     </span><span class="STRN">'label'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">'Resource'</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>322</span>                                     </span><span class="STRN">'weight'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NUMB">3</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>323</span>                                     </span><span class="STRN">'handler'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>324</span>                                         </span><span class="NAME">this.action</span><span class="PUNC">(</span><span class="STRN">"newResource"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>325</span>                                     </span><span class="PUNC">}</span><span class="PUNC">.</span><span class="NAME">bind</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">)</span><span class="WHIT">
-<span class='line'>326</span>                                 </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>327</span>                                 </span><span class="STRN">'group'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NUMB">1</span><span class="WHIT">
-<span class='line'>328</span>                             </span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>329</span>                         </span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>330</span>                     </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>331</span>                     </span><span class="STRN">'browse'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>332</span>                         </span><span class="STRN">'type'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">'SubMenu'</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>333</span>                         </span><span class="STRN">'label'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">'Browse...'</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>334</span>                         </span><span class="STRN">'weight'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NUMB">2</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>335</span>                         </span><span class="STRN">'group'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>336</span>                         </span><span class="STRN">'children'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>337</span>                             </span><span class="STRN">'browseScreenflows'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>338</span>                                 </span><span class="STRN">'type'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">'Action'</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>339</span>                                 </span><span class="STRN">'action'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">MenuAction</span><span class="PUNC">(</span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>340</span>                                     </span><span class="STRN">'label'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">'Screenflows'</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>341</span>                                     </span><span class="STRN">'weight'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NUMB">2</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>342</span>                                     </span><span class="STRN">'handler'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>343</span>                                         </span><span class="NAME">this.action</span><span class="PUNC">(</span><span class="STRN">"browseScreenflows"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>344</span>                                     </span><span class="PUNC">}</span><span class="PUNC">.</span><span class="NAME">bind</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">)</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>345</span>                                     </span><span class="STRN">'shortcut'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">'Shift+O'</span><span class="WHIT">
-<span class='line'>346</span>                                 </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>347</span>                                 </span><span class="STRN">'group'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="WHIT">
-<span class='line'>348</span>                             </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>349</span>                             </span><span class="STRN">'browseScreens'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>350</span>                                 </span><span class="STRN">'type'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">'Action'</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>351</span>                                 </span><span class="STRN">'action'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">MenuAction</span><span class="PUNC">(</span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>352</span>                                     </span><span class="STRN">'label'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">'Screens'</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>353</span>                                     </span><span class="STRN">'weight'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NUMB">10</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>354</span>                                     </span><span class="STRN">'handler'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>355</span>                                         </span><span class="NAME">this.action</span><span class="PUNC">(</span><span class="STRN">"browseScreens"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>356</span>                                     </span><span class="PUNC">}</span><span class="PUNC">.</span><span class="NAME">bind</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">)</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>357</span>                                     </span><span class="STRN">'shortcut'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">'Alt+N'</span><span class="WHIT">
-<span class='line'>358</span>                                 </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>359</span>                                 </span><span class="STRN">'group'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="WHIT">
-<span class='line'>360</span>                             </span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>361</span>                         </span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>362</span>                     </span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>363</span>                 </span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>364</span>             </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>365</span>             </span><span class="STRN">'edit'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>366</span>                 </span><span class="STRN">'type'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">'SubMenu'</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>367</span>                 </span><span class="STRN">'weight'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NUMB">2</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>368</span>                 </span><span class="STRN">'label'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">'Edit'</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>369</span>                 </span><span class="STRN">'children'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>370</span>                     </span><span class="STRN">'preferences'</span><span class="PUNC">:</span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>371</span>                         </span><span class="STRN">'type'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">'Action'</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>372</span>                         </span><span class="STRN">'action'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">MenuAction</span><span class="PUNC">(</span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>373</span>                             </span><span class="STRN">'label'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">'User Preferences'</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>374</span>                             </span><span class="STRN">'weight'</span><span class="PUNC">:</span><span class="NUMB">1</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>375</span>                             </span><span class="STRN">'handler'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>376</span>                                 </span><span class="NAME">this._dialogs.get</span><span class="PUNC">(</span><span class="STRN">"preferences"</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">show</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>377</span>                             </span><span class="PUNC">}</span><span class="PUNC">.</span><span class="NAME">bind</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">)</span><span class="WHIT">
-<span class='line'>378</span>                         </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>379</span>                         </span><span class="STRN">'group'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NUMB">1</span><span class="WHIT">
-<span class='line'>380</span>                     </span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>381</span>                 </span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>382</span> 
-<span class='line'>383</span>             </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>384</span>             </span><span class="STRN">'help'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>385</span>                 </span><span class="STRN">'type'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">'Submenu'</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>386</span>                 </span><span class="STRN">'weight'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">MenuElement.MAXIMUM_WEIGHT</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>387</span>                 </span><span class="STRN">'label'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">'Help'</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>388</span>                 </span><span class="STRN">'children'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>389</span>                     </span><span class="STRN">'developer'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>390</span>                         </span><span class="STRN">'type'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">'Action'</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>391</span>                         </span><span class="STRN">'action'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">MenuAction</span><span class="PUNC">(</span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>392</span>                             </span><span class="STRN">'label'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">'Developing Building Blocks'</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>393</span>                             </span><span class="STRN">'weight'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NUMB">1</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>394</span>                             </span><span class="STRN">'handler'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>395</span>                                  </span><span class="NAME">window.open</span><span class="PUNC">(</span><span class="NAME">URIs.tutorial</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>396</span>                             </span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>397</span>                         </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>398</span>                         </span><span class="STRN">'group'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="WHIT">
-<span class='line'>399</span>                     </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>400</span>                     </span><span class="STRN">'website'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>401</span>                         </span><span class="STRN">'type'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">'Action'</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>402</span>                         </span><span class="STRN">'action'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">MenuAction</span><span class="PUNC">(</span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>403</span>                             </span><span class="STRN">'label'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">'Fast Website'</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>404</span>                             </span><span class="STRN">'weight'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NUMB">3</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>405</span>                             </span><span class="STRN">'handler'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>406</span>                                  </span><span class="NAME">window.open</span><span class="PUNC">(</span><span class="STRN">'http://fast.morfeo-project.eu'</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>407</span>                             </span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>408</span>                         </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>409</span>                         </span><span class="STRN">'group'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NUMB">1</span><span class="WHIT">
-<span class='line'>410</span>                     </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>411</span>                     </span><span class="STRN">'about'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>412</span>                         </span><span class="STRN">'type'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">'Action'</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>413</span>                         </span><span class="STRN">'action'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">MenuAction</span><span class="PUNC">(</span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>414</span>                             </span><span class="STRN">'label'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">'About GVS'</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>415</span>                             </span><span class="STRN">'weight'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NUMB">2</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>416</span>                             </span><span class="STRN">'handler'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>417</span>                                 </span><span class="NAME">this.action</span><span class="PUNC">(</span><span class="STRN">"showAbout"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>418</span>                             </span><span class="PUNC">}</span><span class="PUNC">.</span><span class="NAME">bind</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">)</span><span class="WHIT">
-<span class='line'>419</span>                         </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>420</span>                         </span><span class="STRN">'group'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NUMB">1</span><span class="WHIT">
-<span class='line'>421</span>                     </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>422</span>                     </span><span class="STRN">'feedback'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>423</span>                         </span><span class="STRN">'type'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">'Action'</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>424</span>                         </span><span class="STRN">'action'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">MenuAction</span><span class="PUNC">(</span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>425</span>                             </span><span class="STRN">'label'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">'Send us feedback'</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>426</span>                             </span><span class="STRN">'weight'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NUMB">1</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>427</span>                             </span><span class="STRN">'handler'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>428</span>                                 </span><span class="NAME">UserVoice.Popin.show</span><span class="PUNC">(</span><span class="NAME">uservoiceOptions</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>429</span>                             </span><span class="PUNC">}</span><span class="PUNC">.</span><span class="NAME">bind</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">)</span><span class="WHIT">
-<span class='line'>430</span>                         </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>431</span>                         </span><span class="STRN">'group'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NUMB">1</span><span class="WHIT">
-<span class='line'>432</span>                     </span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>433</span>                 </span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>434</span> 
-<span class='line'>435</span>             </span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>436</span>         </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>437</span>         </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="PUNC">!</span><span class="NAME">GlobalOptions.isPublicDemo</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>438</span>             </span><span class="COMM">// Include the new screen feature</span><span class="WHIT">
-<span class='line'>439</span>         </span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>440</span>     </span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>441</span> </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>442</span> </span><span class="COMM">// Hack to transform GVS into a static class</span><span class="WHIT">
-<span class='line'>443</span> </span><span class="COMM">// It cannot be defined as other static class, as it is derived</span><span class="WHIT">
-<span class='line'>444</span> </span><span class="COMM">// from a non static class</span><span class="WHIT">
-<span class='line'>445</span> </span><span class="NAME">GVS</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">GVS</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>446</span> 
-<span class='line'>447</span> 
-<span class='line'>448</span> </span><span class="COMM">// vim:ts=4:sw=4:et:</span><span class="WHIT">
-<span class='line'>449</span> </span></pre></body></html>
+<span class='line'>249</span>     </span><span class="NAME">_newBuildingBlock</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>250</span>         </span><span class="NAME">this._dialogs.get</span><span class="PUNC">(</span><span class="STRN">"newBuildingBlock"</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">show</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>251</span>     </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>252</span> 
+<span class='line'>253</span>     </span><span class="COMM">/**
+<span class='line'>254</span>      * Adds the toolbar buttons to the model
+<span class='line'>255</span>      * @private
+<span class='line'>256</span>      */</span><span class="WHIT">
+<span class='line'>257</span>     </span><span class="NAME">_addToolbarButtons</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>258</span>         </span><span class="NAME">this._addToolbarElement</span><span class="PUNC">(</span><span class="STRN">'home'</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">ToolbarButton</span><span class="PUNC">(</span><span class="STRN">'Home'</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">'home'</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">this._documentController.showWelcomeDocument.bind</span><span class="PUNC">(</span><span class="NAME">this._documentController</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>259</span> 
+<span class='line'>260</span>         </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">preferencesDialog</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this._dialogs.get</span><span class="PUNC">(</span><span class="STRN">"preferences"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>261</span>         </span><span class="NAME">this._addToolbarElement</span><span class="PUNC">(</span><span class="STRN">'preferences'</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">ToolbarButton</span><span class="PUNC">(</span><span class="STRN">'User Preferences'</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">'preferences'</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">preferencesDialog.show.bind</span><span class="PUNC">(</span><span class="NAME">preferencesDialog</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>262</span>     </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>263</span> 
+<span class='line'>264</span>     </span><span class="COMM">/**
+<span class='line'>265</span>      * Init the loading of the about section
+<span class='line'>266</span>      * @private
+<span class='line'>267</span>      */</span><span class="WHIT">
+<span class='line'>268</span>     </span><span class="NAME">_showAboutDialog</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>269</span>         </span><span class="NAME">PersistenceEngine.sendGet</span><span class="PUNC">(</span><span class="NAME">URIs.about</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">this</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">this._onSuccessAbout</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">Utils.onAJAXError</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>270</span>     </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>271</span>     </span><span class="COMM">/**
+<span class='line'>272</span>      * OnSuccess handler
+<span class='line'>273</span>      */</span><span class="WHIT">
+<span class='line'>274</span>     </span><span class="NAME">_onSuccessAbout</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="COMM">/** XMLHttpRequest */</span><span class="WHIT"> </span><span class="NAME">transport</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>275</span>         </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">dialog</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">ExternalContentDialog</span><span class="PUNC">(</span><span class="STRN">"About GVS"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>276</span>         </span><span class="NAME">dialog.show</span><span class="PUNC">(</span><span class="NAME">transport.responseText</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>277</span>     </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>278</span> 
+<span class='line'>279</span> 
+<span class='line'>280</span>     </span><span class="COMM">/**
+<span class='line'>281</span>      * Creates the menu structure for the GVS
+<span class='line'>282</span>      * @private
+<span class='line'>283</span>      */</span><span class="WHIT">
+<span class='line'>284</span>     </span><span class="NAME">_setMenuItems</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>285</span>         </span><span class="NAME">this._menuConfig</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>286</span>             </span><span class="STRN">'file'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>287</span>                 </span><span class="STRN">'type'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">'SubMenu'</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>288</span>                 </span><span class="STRN">'label'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">'File'</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>289</span>                 </span><span class="STRN">'weight'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NUMB">1</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>290</span>                 </span><span class="STRN">'children'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>291</span>                     </span><span class="STRN">'new'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>292</span>                         </span><span class="STRN">'type'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">'SubMenu'</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>293</span>                         </span><span class="STRN">'label'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">'New...'</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>294</span>                         </span><span class="STRN">'weight'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NUMB">1</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>295</span>                         </span><span class="STRN">'group'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>296</span>                         </span><span class="STRN">'children'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>297</span>                             </span><span class="STRN">'newScreenflow'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>298</span>                                 </span><span class="STRN">'type'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">'Action'</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>299</span>                                 </span><span class="STRN">'action'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">MenuAction</span><span class="PUNC">(</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>300</span>                                     </span><span class="STRN">'label'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">'Screenflow'</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>301</span>                                     </span><span class="STRN">'weight'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NUMB">1</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>302</span>                                     </span><span class="STRN">'handler'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>303</span>                                         </span><span class="NAME">this.action</span><span class="PUNC">(</span><span class="STRN">"newScreenflow"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>304</span>                                     </span><span class="PUNC">}</span><span class="PUNC">.</span><span class="NAME">bind</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">)</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>305</span>                                     </span><span class="STRN">'shortcut'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">'Shift+N'</span><span class="WHIT">
+<span class='line'>306</span>                                 </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>307</span>                                 </span><span class="STRN">'group'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="WHIT">
+<span class='line'>308</span>                             </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>309</span>                             </span><span class="STRN">'newScreen'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>310</span>                                 </span><span class="STRN">'type'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">'Action'</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>311</span>                                 </span><span class="STRN">'action'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">MenuAction</span><span class="PUNC">(</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>312</span>                                     </span><span class="STRN">'label'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">'Screen'</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>313</span>                                     </span><span class="STRN">'weight'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NUMB">10</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>314</span>                                     </span><span class="STRN">'handler'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>315</span>                                         </span><span class="NAME">this.action</span><span class="PUNC">(</span><span class="STRN">"newScreen"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>316</span>                                     </span><span class="PUNC">}</span><span class="PUNC">.</span><span class="NAME">bind</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">)</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>317</span>                                     </span><span class="STRN">'shortcut'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">'Alt+N'</span><span class="WHIT">
+<span class='line'>318</span>                                 </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>319</span>                                 </span><span class="STRN">'group'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="WHIT">
+<span class='line'>320</span>                             </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>321</span>                             </span><span class="STRN">'newOperator'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>322</span>                                 </span><span class="STRN">'type'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">'Action'</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>323</span>                                 </span><span class="STRN">'action'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">MenuAction</span><span class="PUNC">(</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>324</span>                                     </span><span class="STRN">'label'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">'Operator'</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>325</span>                                     </span><span class="STRN">'weight'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NUMB">2</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>326</span>                                     </span><span class="STRN">'handler'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>327</span>                                         </span><span class="NAME">this.action</span><span class="PUNC">(</span><span class="STRN">"newOperator"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>328</span>                                     </span><span class="PUNC">}</span><span class="PUNC">.</span><span class="NAME">bind</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">)</span><span class="WHIT">
+<span class='line'>329</span>                                 </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>330</span>                                 </span><span class="STRN">'group'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NUMB">1</span><span class="WHIT">
+<span class='line'>331</span>                             </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>332</span>                             </span><span class="STRN">'newForm'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>333</span>                                 </span><span class="STRN">'type'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">'Action'</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>334</span>                                 </span><span class="STRN">'action'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">MenuAction</span><span class="PUNC">(</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>335</span>                                     </span><span class="STRN">'label'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">'Form'</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>336</span>                                     </span><span class="STRN">'weight'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NUMB">1</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>337</span>                                     </span><span class="STRN">'handler'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>338</span>                                         </span><span class="NAME">this.action</span><span class="PUNC">(</span><span class="STRN">"newForm"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>339</span>                                     </span><span class="PUNC">}</span><span class="PUNC">.</span><span class="NAME">bind</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">)</span><span class="WHIT">
+<span class='line'>340</span>                                 </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>341</span>                                 </span><span class="STRN">'group'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NUMB">1</span><span class="WHIT">
+<span class='line'>342</span>                             </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>343</span>                             </span><span class="STRN">'newResource'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>344</span>                                 </span><span class="STRN">'type'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">'Action'</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>345</span>                                 </span><span class="STRN">'action'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">MenuAction</span><span class="PUNC">(</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>346</span>                                     </span><span class="STRN">'label'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">'Resource'</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>347</span>                                     </span><span class="STRN">'weight'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NUMB">3</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>348</span>                                     </span><span class="STRN">'handler'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>349</span>                                         </span><span class="NAME">this.action</span><span class="PUNC">(</span><span class="STRN">"newResource"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>350</span>                                     </span><span class="PUNC">}</span><span class="PUNC">.</span><span class="NAME">bind</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">)</span><span class="WHIT">
+<span class='line'>351</span>                                 </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>352</span>                                 </span><span class="STRN">'group'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NUMB">1</span><span class="WHIT">
+<span class='line'>353</span>                             </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>354</span>                         </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>355</span>                     </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>356</span>                     </span><span class="STRN">'browse'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>357</span>                         </span><span class="STRN">'type'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">'SubMenu'</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>358</span>                         </span><span class="STRN">'label'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">'Browse...'</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>359</span>                         </span><span class="STRN">'weight'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NUMB">2</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>360</span>                         </span><span class="STRN">'group'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>361</span>                         </span><span class="STRN">'children'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>362</span>                             </span><span class="STRN">'browseScreenflows'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>363</span>                                 </span><span class="STRN">'type'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">'Action'</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>364</span>                                 </span><span class="STRN">'action'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">MenuAction</span><span class="PUNC">(</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>365</span>                                     </span><span class="STRN">'label'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">'Screenflows'</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>366</span>                                     </span><span class="STRN">'weight'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NUMB">2</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>367</span>                                     </span><span class="STRN">'handler'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>368</span>                                         </span><span class="NAME">this.action</span><span class="PUNC">(</span><span class="STRN">"browseScreenflows"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>369</span>                                     </span><span class="PUNC">}</span><span class="PUNC">.</span><span class="NAME">bind</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">)</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>370</span>                                     </span><span class="STRN">'shortcut'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">'Shift+O'</span><span class="WHIT">
+<span class='line'>371</span>                                 </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>372</span>                                 </span><span class="STRN">'group'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="WHIT">
+<span class='line'>373</span>                             </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>374</span>                             </span><span class="STRN">'browseScreens'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>375</span>                                 </span><span class="STRN">'type'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">'Action'</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>376</span>                                 </span><span class="STRN">'action'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">MenuAction</span><span class="PUNC">(</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>377</span>                                     </span><span class="STRN">'label'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">'Screens'</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>378</span>                                     </span><span class="STRN">'weight'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NUMB">10</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>379</span>                                     </span><span class="STRN">'handler'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>380</span>                                         </span><span class="NAME">this.action</span><span class="PUNC">(</span><span class="STRN">"browseScreens"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>381</span>                                     </span><span class="PUNC">}</span><span class="PUNC">.</span><span class="NAME">bind</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">)</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>382</span>                                     </span><span class="STRN">'shortcut'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">'Alt+N'</span><span class="WHIT">
+<span class='line'>383</span>                                 </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>384</span>                                 </span><span class="STRN">'group'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="WHIT">
+<span class='line'>385</span>                             </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>386</span>                         </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>387</span>                     </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>388</span>                 </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>389</span>             </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>390</span>             </span><span class="STRN">'edit'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>391</span>                 </span><span class="STRN">'type'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">'SubMenu'</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>392</span>                 </span><span class="STRN">'weight'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NUMB">2</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>393</span>                 </span><span class="STRN">'label'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">'Edit'</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>394</span>                 </span><span class="STRN">'children'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>395</span>                     </span><span class="STRN">'preferences'</span><span class="PUNC">:</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>396</span>                         </span><span class="STRN">'type'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">'Action'</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>397</span>                         </span><span class="STRN">'action'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">MenuAction</span><span class="PUNC">(</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>398</span>                             </span><span class="STRN">'label'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">'User Preferences'</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>399</span>                             </span><span class="STRN">'weight'</span><span class="PUNC">:</span><span class="NUMB">1</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>400</span>                             </span><span class="STRN">'handler'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>401</span>                                 </span><span class="NAME">this._dialogs.get</span><span class="PUNC">(</span><span class="STRN">"preferences"</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">show</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>402</span>                             </span><span class="PUNC">}</span><span class="PUNC">.</span><span class="NAME">bind</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">)</span><span class="WHIT">
+<span class='line'>403</span>                         </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>404</span>                         </span><span class="STRN">'group'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NUMB">1</span><span class="WHIT">
+<span class='line'>405</span>                     </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>406</span>                 </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>407</span> 
+<span class='line'>408</span>             </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>409</span>             </span><span class="STRN">'help'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>410</span>                 </span><span class="STRN">'type'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">'Submenu'</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>411</span>                 </span><span class="STRN">'weight'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">MenuElement.MAXIMUM_WEIGHT</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>412</span>                 </span><span class="STRN">'label'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">'Help'</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>413</span>                 </span><span class="STRN">'children'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>414</span>                     </span><span class="STRN">'developer'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>415</span>                         </span><span class="STRN">'type'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">'Action'</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>416</span>                         </span><span class="STRN">'action'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">MenuAction</span><span class="PUNC">(</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>417</span>                             </span><span class="STRN">'label'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">'Developing Building Blocks'</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>418</span>                             </span><span class="STRN">'weight'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NUMB">1</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>419</span>                             </span><span class="STRN">'handler'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>420</span>                                  </span><span class="NAME">window.open</span><span class="PUNC">(</span><span class="NAME">URIs.tutorial</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>421</span>                             </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>422</span>                         </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>423</span>                         </span><span class="STRN">'group'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="WHIT">
+<span class='line'>424</span>                     </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>425</span>                     </span><span class="STRN">'website'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>426</span>                         </span><span class="STRN">'type'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">'Action'</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>427</span>                         </span><span class="STRN">'action'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">MenuAction</span><span class="PUNC">(</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>428</span>                             </span><span class="STRN">'label'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">'Fast Website'</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>429</span>                             </span><span class="STRN">'weight'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NUMB">3</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>430</span>                             </span><span class="STRN">'handler'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>431</span>                                  </span><span class="NAME">window.open</span><span class="PUNC">(</span><span class="STRN">'http://fast.morfeo-project.eu'</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>432</span>                             </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>433</span>                         </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>434</span>                         </span><span class="STRN">'group'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NUMB">1</span><span class="WHIT">
+<span class='line'>435</span>                     </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>436</span>                     </span><span class="STRN">'about'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>437</span>                         </span><span class="STRN">'type'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">'Action'</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>438</span>                         </span><span class="STRN">'action'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">MenuAction</span><span class="PUNC">(</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>439</span>                             </span><span class="STRN">'label'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">'About GVS'</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>440</span>                             </span><span class="STRN">'weight'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NUMB">2</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>441</span>                             </span><span class="STRN">'handler'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>442</span>                                 </span><span class="NAME">this.action</span><span class="PUNC">(</span><span class="STRN">"showAbout"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>443</span>                             </span><span class="PUNC">}</span><span class="PUNC">.</span><span class="NAME">bind</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">)</span><span class="WHIT">
+<span class='line'>444</span>                         </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>445</span>                         </span><span class="STRN">'group'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NUMB">1</span><span class="WHIT">
+<span class='line'>446</span>                     </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>447</span>                     </span><span class="STRN">'feedback'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>448</span>                         </span><span class="STRN">'type'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">'Action'</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>449</span>                         </span><span class="STRN">'action'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">MenuAction</span><span class="PUNC">(</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>450</span>                             </span><span class="STRN">'label'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">'Send us feedback'</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>451</span>                             </span><span class="STRN">'weight'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NUMB">1</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>452</span>                             </span><span class="STRN">'handler'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>453</span>                                 </span><span class="NAME">UserVoice.Popin.show</span><span class="PUNC">(</span><span class="NAME">uservoiceOptions</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>454</span>                             </span><span class="PUNC">}</span><span class="PUNC">.</span><span class="NAME">bind</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">)</span><span class="WHIT">
+<span class='line'>455</span>                         </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>456</span>                         </span><span class="STRN">'group'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NUMB">1</span><span class="WHIT">
+<span class='line'>457</span>                     </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>458</span>                 </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>459</span> 
+<span class='line'>460</span>             </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>461</span>         </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>462</span>         </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="PUNC">!</span><span class="NAME">GlobalOptions.isPublicDemo</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>463</span>             </span><span class="COMM">// Include the new screen feature</span><span class="WHIT">
+<span class='line'>464</span>         </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>465</span>     </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>466</span> </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>467</span> </span><span class="COMM">// Hack to transform GVS into a static class</span><span class="WHIT">
+<span class='line'>468</span> </span><span class="COMM">// It cannot be defined as other static class, as it is derived</span><span class="WHIT">
+<span class='line'>469</span> </span><span class="COMM">// from a non static class</span><span class="WHIT">
+<span class='line'>470</span> </span><span class="NAME">GVS</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">GVS</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>471</span> 
+<span class='line'>472</span> 
+<span class='line'>473</span> </span><span class="COMM">// vim:ts=4:sw=4:et:</span><span class="WHIT">
+<span class='line'>474</span> </span></pre></body></html>

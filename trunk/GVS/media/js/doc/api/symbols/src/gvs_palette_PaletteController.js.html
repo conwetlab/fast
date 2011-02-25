@@ -5,76 +5,101 @@
 	.STRN {color: #393;}
 	.REGX {color: #339;}
 	.line {border-right: 1px dotted #666; color: #666; font-style: normal;}
-	</style></head><body><pre><span class='line'>  1</span> <span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">PaletteController</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">Class.create</span><span class="PUNC">(</span><span class="WHIT">
-<span class='line'>  2</span>     </span><span class="COMM">/** @lends PaletteController.prototype */</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>  3</span> 
-<span class='line'>  4</span>     </span><span class="COMM">/**
-<span class='line'>  5</span>      * Manages a set of palettes.
-<span class='line'>  6</span>      * @constructs
-<span class='line'>  7</span>      * @param buildingBlocks
-<span class='line'>  8</span>      *      Is an array of objects.
-<span class='line'>  9</span>      *      Each objects contains the set for the building block
-<span class='line'> 10</span>      *      and its associated drop zone
-<span class='line'> 11</span>      */</span><span class="WHIT">
-<span class='line'> 12</span>     </span><span class="NAME">initialize</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="COMM">/** Array */</span><span class="WHIT"> </span><span class="NAME">buildingBlockSets</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="COMM">/** Array */</span><span class="WHIT"> </span><span class="NAME">dropZones</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'> 13</span>         </span><span class="COMM">/** InferenceEngine */</span><span class="WHIT"> </span><span class="NAME">inferenceEngine</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'> 14</span> 
-<span class='line'> 15</span> 
-<span class='line'> 16</span>         </span><span class="COMM">/**
-<span class='line'> 17</span>          * List of available palettes
-<span class='line'> 18</span>          * @type {Hash}
-<span class='line'> 19</span>          * @private @member
-<span class='line'> 20</span>          */</span><span class="WHIT">
-<span class='line'> 21</span>         </span><span class="NAME">this._palettes</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">Hash</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'> 22</span> 
-<span class='line'> 23</span>         </span><span class="COMM">/**
-<span class='line'> 24</span>          * AccordionContainer which contains the different palettes
-<span class='line'> 25</span>          * @type AccordionContainer
-<span class='line'> 26</span>          * @private @member
-<span class='line'> 27</span>          */</span><span class="WHIT">
-<span class='line'> 28</span>         </span><span class="NAME">this._node</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">dijit.layout.AccordionContainer</span><span class="PUNC">(</span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'> 29</span>                 </span><span class="STRN">"class"</span><span class="PUNC">:</span><span class="STRN">"palettePane"</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'> 30</span>                 </span><span class="STRN">"region"</span><span class="PUNC">:</span><span class="STRN">"left"</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'> 31</span>                 </span><span class="STRN">"minSize"</span><span class="PUNC">:</span><span class="STRN">"170"</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'> 32</span>                 </span><span class="STRN">"maxSize"</span><span class="PUNC">:</span><span class="STRN">"300"</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'> 33</span>                 </span><span class="STRN">"splitter"</span><span class="PUNC">:</span><span class="STRN">"true"</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'> 34</span>                 </span><span class="STRN">"livesplitters"</span><span class="PUNC">:</span><span class="STRN">"false"</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'> 35</span>                 </span><span class="STRN">"style"</span><span class="PUNC">:</span><span class="STRN">"width:260px;"</span><span class="WHIT">
-<span class='line'> 36</span>                 </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'> 37</span> 
-<span class='line'> 38</span>         </span><span class="COMM">//Create all the document necessary palettes</span><span class="WHIT">
-<span class='line'> 39</span>         </span><span class="NAME">$A</span><span class="PUNC">(</span><span class="NAME">buildingBlockSets</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">each</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">set</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'> 40</span>             </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">validDropZones</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">Array</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'> 41</span>             </span><span class="NAME">dropZones.each</span><span class="PUNC">(</span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">dropZone</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'> 42</span>                 </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">dropZone.accepts</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">include</span><span class="PUNC">(</span><span class="NAME">set.getBuildingBlockType</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'> 43</span>                     </span><span class="NAME">validDropZones.push</span><span class="PUNC">(</span><span class="NAME">dropZone</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'> 44</span>                 </span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'> 45</span>             </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'> 46</span>             </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">palette</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">Palette</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">set</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">validDropZones</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">inferenceEngine</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'> 47</span>             </span><span class="NAME">this._palettes.set</span><span class="PUNC">(</span><span class="NAME">set.getBuildingBlockType</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">palette</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'> 48</span>             </span><span class="NAME">this._node.addChild</span><span class="PUNC">(</span><span class="NAME">palette.getNode</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'> 49</span>         </span><span class="PUNC">}</span><span class="PUNC">.</span><span class="NAME">bind</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'> 50</span>     </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'> 51</span> 
-<span class='line'> 52</span>     </span><span class="COMM">// **************** PUBLIC METHODS **************** //</span><span class="WHIT">
-<span class='line'> 53</span>     </span><span class="NAME">getPalette</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="COMM">/** String */</span><span class="WHIT"> </span><span class="NAME">type</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'> 54</span>         </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">this._palettes.get</span><span class="PUNC">(</span><span class="NAME">type</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'> 55</span>     </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'> 56</span> 
-<span class='line'> 57</span>     </span><span class="NAME">getNode</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'> 58</span>         </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">this._node</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'> 59</span>     </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'> 60</span> 
-<span class='line'> 61</span>     </span><span class="COMM">/**
-<span class='line'> 62</span>      * All uris of all the components (of all the palettes)
-<span class='line'> 63</span>      */</span><span class="WHIT">
-<span class='line'> 64</span>     </span><span class="NAME">getComponentUris</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="COMM">/** String */</span><span class="WHIT"> </span><span class="NAME">palette</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'> 65</span>         </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">this._palettes.get</span><span class="PUNC">(</span><span class="NAME">palette</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">getComponentUris</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'> 66</span>     </span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'> 67</span> 
-<span class='line'> 68</span>     </span><span class="COMM">// **************** PRIVATE METHODS **************** //</span><span class="WHIT">
-<span class='line'> 69</span> 
-<span class='line'> 70</span> </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'> 71</span> 
-<span class='line'> 72</span> </span><span class="COMM">// vim:ts=4:sw=4:et:</span><span class="WHIT">
-<span class='line'> 73</span> </span></pre></body></html>
+	</style></head><body><pre><span class='line'>  1</span> <span class="COMM">/*...............................licence...........................................
+<span class='line'>  2</span>  *
+<span class='line'>  3</span>  *    (C) Copyright 2011 FAST Consortium
+<span class='line'>  4</span>  *
+<span class='line'>  5</span>  *     This file is part of FAST Platform.
+<span class='line'>  6</span>  *
+<span class='line'>  7</span>  *     FAST Platform is free software: you can redistribute it and/or modify
+<span class='line'>  8</span>  *     it under the terms of the GNU Affero General Public License as published by
+<span class='line'>  9</span>  *     the Free Software Foundation, either version 3 of the License, or
+<span class='line'> 10</span>  *     (at your option) any later version.
+<span class='line'> 11</span>  *
+<span class='line'> 12</span>  *     FAST Platform is distributed in the hope that it will be useful,
+<span class='line'> 13</span>  *     but WITHOUT ANY WARRANTY; without even the implied warranty of
+<span class='line'> 14</span>  *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+<span class='line'> 15</span>  *     GNU Affero General Public License for more details.
+<span class='line'> 16</span>  *
+<span class='line'> 17</span>  *     You should have received a copy of the GNU Affero General Public License
+<span class='line'> 18</span>  *     along with FAST Platform.  If not, see &lt;http://www.gnu.org/licenses/>.
+<span class='line'> 19</span>  *
+<span class='line'> 20</span>  *     Info about members and contributors of the FAST Consortium
+<span class='line'> 21</span>  *     is available at
+<span class='line'> 22</span>  *
+<span class='line'> 23</span>  *     http://fast.morfeo-project.eu
+<span class='line'> 24</span>  *
+<span class='line'> 25</span>  *...............................licence...........................................*/</span><span class="WHIT">
+<span class='line'> 26</span> </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">PaletteController</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">Class.create</span><span class="PUNC">(</span><span class="WHIT">
+<span class='line'> 27</span>     </span><span class="COMM">/** @lends PaletteController.prototype */</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 28</span> 
+<span class='line'> 29</span>     </span><span class="COMM">/**
+<span class='line'> 30</span>      * Manages a set of palettes.
+<span class='line'> 31</span>      * @constructs
+<span class='line'> 32</span>      * @param buildingBlocks
+<span class='line'> 33</span>      *      Is an array of objects.
+<span class='line'> 34</span>      *      Each objects contains the set for the building block
+<span class='line'> 35</span>      *      and its associated drop zone
+<span class='line'> 36</span>      */</span><span class="WHIT">
+<span class='line'> 37</span>     </span><span class="NAME">initialize</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="COMM">/** Array */</span><span class="WHIT"> </span><span class="NAME">buildingBlockSets</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="COMM">/** Array */</span><span class="WHIT"> </span><span class="NAME">dropZones</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 38</span>         </span><span class="COMM">/** InferenceEngine */</span><span class="WHIT"> </span><span class="NAME">inferenceEngine</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 39</span> 
+<span class='line'> 40</span> 
+<span class='line'> 41</span>         </span><span class="COMM">/**
+<span class='line'> 42</span>          * List of available palettes
+<span class='line'> 43</span>          * @type {Hash}
+<span class='line'> 44</span>          * @private @member
+<span class='line'> 45</span>          */</span><span class="WHIT">
+<span class='line'> 46</span>         </span><span class="NAME">this._palettes</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">Hash</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 47</span> 
+<span class='line'> 48</span>         </span><span class="COMM">/**
+<span class='line'> 49</span>          * AccordionContainer which contains the different palettes
+<span class='line'> 50</span>          * @type AccordionContainer
+<span class='line'> 51</span>          * @private @member
+<span class='line'> 52</span>          */</span><span class="WHIT">
+<span class='line'> 53</span>         </span><span class="NAME">this._node</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">dijit.layout.AccordionContainer</span><span class="PUNC">(</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 54</span>                 </span><span class="STRN">"class"</span><span class="PUNC">:</span><span class="STRN">"palettePane"</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 55</span>                 </span><span class="STRN">"region"</span><span class="PUNC">:</span><span class="STRN">"left"</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 56</span>                 </span><span class="STRN">"minSize"</span><span class="PUNC">:</span><span class="STRN">"170"</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 57</span>                 </span><span class="STRN">"maxSize"</span><span class="PUNC">:</span><span class="STRN">"300"</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 58</span>                 </span><span class="STRN">"splitter"</span><span class="PUNC">:</span><span class="STRN">"true"</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 59</span>                 </span><span class="STRN">"livesplitters"</span><span class="PUNC">:</span><span class="STRN">"false"</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 60</span>                 </span><span class="STRN">"style"</span><span class="PUNC">:</span><span class="STRN">"width:260px;"</span><span class="WHIT">
+<span class='line'> 61</span>                 </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 62</span> 
+<span class='line'> 63</span>         </span><span class="COMM">//Create all the document necessary palettes</span><span class="WHIT">
+<span class='line'> 64</span>         </span><span class="NAME">$A</span><span class="PUNC">(</span><span class="NAME">buildingBlockSets</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">each</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">set</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 65</span>             </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">validDropZones</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">Array</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 66</span>             </span><span class="NAME">dropZones.each</span><span class="PUNC">(</span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">dropZone</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 67</span>                 </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">dropZone.accepts</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">include</span><span class="PUNC">(</span><span class="NAME">set.getBuildingBlockType</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 68</span>                     </span><span class="NAME">validDropZones.push</span><span class="PUNC">(</span><span class="NAME">dropZone</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 69</span>                 </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'> 70</span>             </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 71</span>             </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">palette</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">Palette</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">set</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">validDropZones</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">inferenceEngine</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 72</span>             </span><span class="NAME">this._palettes.set</span><span class="PUNC">(</span><span class="NAME">set.getBuildingBlockType</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">palette</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 73</span>             </span><span class="NAME">this._node.addChild</span><span class="PUNC">(</span><span class="NAME">palette.getNode</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 74</span>         </span><span class="PUNC">}</span><span class="PUNC">.</span><span class="NAME">bind</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 75</span>     </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 76</span> 
+<span class='line'> 77</span>     </span><span class="COMM">// **************** PUBLIC METHODS **************** //</span><span class="WHIT">
+<span class='line'> 78</span>     </span><span class="NAME">getPalette</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="COMM">/** String */</span><span class="WHIT"> </span><span class="NAME">type</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 79</span>         </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">this._palettes.get</span><span class="PUNC">(</span><span class="NAME">type</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 80</span>     </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 81</span> 
+<span class='line'> 82</span>     </span><span class="NAME">getNode</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 83</span>         </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">this._node</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 84</span>     </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 85</span> 
+<span class='line'> 86</span>     </span><span class="COMM">/**
+<span class='line'> 87</span>      * All uris of all the components (of all the palettes)
+<span class='line'> 88</span>      */</span><span class="WHIT">
+<span class='line'> 89</span>     </span><span class="NAME">getComponentUris</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="COMM">/** String */</span><span class="WHIT"> </span><span class="NAME">palette</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 90</span>         </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">this._palettes.get</span><span class="PUNC">(</span><span class="NAME">palette</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">getComponentUris</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 91</span>     </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'> 92</span> 
+<span class='line'> 93</span>     </span><span class="COMM">// **************** PRIVATE METHODS **************** //</span><span class="WHIT">
+<span class='line'> 94</span> 
+<span class='line'> 95</span> </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 96</span> 
+<span class='line'> 97</span> </span><span class="COMM">// vim:ts=4:sw=4:et:</span><span class="WHIT">
+<span class='line'> 98</span> </span></pre></body></html>

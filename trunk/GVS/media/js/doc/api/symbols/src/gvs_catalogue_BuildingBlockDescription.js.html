@@ -5,168 +5,193 @@
 	.STRN {color: #393;}
 	.REGX {color: #339;}
 	.line {border-right: 1px dotted #666; color: #666; font-style: normal;}
-	</style></head><body><pre><span class='line'>  1</span> <span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">BuildingBlockDescription</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">Class.create</span><span class="PUNC">(</span><span class="WHIT">
-<span class='line'>  2</span>     </span><span class="COMM">/** @lends BuildingBlockDescription.prototype */</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>  3</span> 
-<span class='line'>  4</span>     </span><span class="COMM">/**
-<span class='line'>  5</span>      * Generic building block description. All the building block classes extends
-<span class='line'>  6</span>      * this one.
-<span class='line'>  7</span>      * @constructs
-<span class='line'>  8</span>      */</span><span class="WHIT">
-<span class='line'>  9</span>     </span><span class="NAME">initialize</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="COMM">/** Hash */</span><span class="WHIT"> </span><span class="NAME">properties</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'> 10</span>         </span><span class="NAME">Utils.addProperties</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">properties</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'> 11</span>     </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'> 12</span> 
-<span class='line'> 13</span> 
-<span class='line'> 14</span>     </span><span class="COMM">// **************** PUBLIC METHODS **************** //</span><span class="WHIT">
-<span class='line'> 15</span> 
-<span class='line'> 16</span>     </span><span class="COMM">/**
-<span class='line'> 17</span>      * Adds properties to the ScreenflowDescription
-<span class='line'> 18</span>      */</span><span class="WHIT">
-<span class='line'> 19</span>     </span><span class="NAME">addProperties</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">properties</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'> 20</span>         </span><span class="NAME">Utils.addProperties</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">properties</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'> 21</span>     </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'> 22</span> 
-<span class='line'> 23</span>     </span><span class="COMM">/**
-<span class='line'> 24</span>      * Clones the building block
-<span class='line'> 25</span>      * @type BuildingBlockDescription
-<span class='line'> 26</span>      */</span><span class="WHIT">
-<span class='line'> 27</span>     </span><span class="NAME">clone</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+	</style></head><body><pre><span class='line'>  1</span> <span class="COMM">/*...............................licence...........................................
+<span class='line'>  2</span>  *
+<span class='line'>  3</span>  *    (C) Copyright 2011 FAST Consortium
+<span class='line'>  4</span>  *
+<span class='line'>  5</span>  *     This file is part of FAST Platform.
+<span class='line'>  6</span>  *
+<span class='line'>  7</span>  *     FAST Platform is free software: you can redistribute it and/or modify
+<span class='line'>  8</span>  *     it under the terms of the GNU Affero General Public License as published by
+<span class='line'>  9</span>  *     the Free Software Foundation, either version 3 of the License, or
+<span class='line'> 10</span>  *     (at your option) any later version.
+<span class='line'> 11</span>  *
+<span class='line'> 12</span>  *     FAST Platform is distributed in the hope that it will be useful,
+<span class='line'> 13</span>  *     but WITHOUT ANY WARRANTY; without even the implied warranty of
+<span class='line'> 14</span>  *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+<span class='line'> 15</span>  *     GNU Affero General Public License for more details.
+<span class='line'> 16</span>  *
+<span class='line'> 17</span>  *     You should have received a copy of the GNU Affero General Public License
+<span class='line'> 18</span>  *     along with FAST Platform.  If not, see &lt;http://www.gnu.org/licenses/>.
+<span class='line'> 19</span>  *
+<span class='line'> 20</span>  *     Info about members and contributors of the FAST Consortium
+<span class='line'> 21</span>  *     is available at
+<span class='line'> 22</span>  *
+<span class='line'> 23</span>  *     http://fast.morfeo-project.eu
+<span class='line'> 24</span>  *
+<span class='line'> 25</span>  *...............................licence...........................................*/</span><span class="WHIT">
+<span class='line'> 26</span> </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">BuildingBlockDescription</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">Class.create</span><span class="PUNC">(</span><span class="WHIT">
+<span class='line'> 27</span>     </span><span class="COMM">/** @lends BuildingBlockDescription.prototype */</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
 <span class='line'> 28</span> 
-<span class='line'> 29</span>         </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="NAME">_cloneElement</span><span class="PUNC">(</span><span class="NAME">element</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'> 30</span>             </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">result</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'> 31</span>             </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="PUNC">(</span><span class="NAME">element</span><span class="WHIT"> </span><span class="KEYW">instanceof</span><span class="WHIT"> </span><span class="NAME">Array</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'> 32</span>                 </span><span class="NAME">result</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">[</span><span class="PUNC">]</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'> 33</span>                 </span><span class="NAME">element.each</span><span class="PUNC">(</span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">subelement</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'> 34</span>                     </span><span class="NAME">result.push</span><span class="PUNC">(</span><span class="NAME">_cloneElement</span><span class="PUNC">(</span><span class="NAME">subelement</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'> 35</span>                 </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'> 36</span>             </span><span class="PUNC">}</span><span class="WHIT"> </span><span class="KEYW">else</span><span class="WHIT"> </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">element</span><span class="WHIT"> </span><span class="KEYW">instanceof</span><span class="WHIT"> </span><span class="NAME">Object</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'> 37</span>                 </span><span class="NAME">result</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'> 38</span>                 </span><span class="NAME">$H</span><span class="PUNC">(</span><span class="NAME">element</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">each</span><span class="PUNC">(</span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">pair</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'> 39</span>                     </span><span class="NAME">result</span><span class="PUNC">[</span><span class="NAME">pair.key</span><span class="PUNC">]</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">_cloneElement</span><span class="PUNC">(</span><span class="NAME">pair.value</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'> 40</span>                 </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'> 41</span>             </span><span class="PUNC">}</span><span class="WHIT"> </span><span class="KEYW">else</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'> 42</span>                 </span><span class="NAME">result</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">element</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'> 43</span>             </span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'> 44</span>             </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">result</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'> 45</span>         </span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'> 46</span> 
-<span class='line'> 47</span>         </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">elements</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">[</span><span class="WHIT">
-<span class='line'> 48</span>             </span><span class="STRN">"code"</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'> 49</span>             </span><span class="STRN">"creationDate"</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'> 50</span>             </span><span class="STRN">"creator"</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'> 51</span>             </span><span class="STRN">"description"</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'> 52</span>             </span><span class="STRN">"homepage"</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'> 53</span>             </span><span class="STRN">"icon"</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'> 54</span>             </span><span class="STRN">"label"</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'> 55</span>             </span><span class="STRN">"parameterTemplate"</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'> 56</span>             </span><span class="STRN">"postconditions"</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'> 57</span>             </span><span class="STRN">"preconditions"</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'> 58</span>             </span><span class="STRN">"rights"</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'> 59</span>             </span><span class="STRN">"screenshot"</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'> 60</span>             </span><span class="STRN">"tags"</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'> 61</span>             </span><span class="STRN">"template"</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'> 62</span>             </span><span class="STRN">"type"</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'> 63</span>             </span><span class="STRN">"uri"</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'> 64</span>             </span><span class="STRN">"version"</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'> 65</span>             </span><span class="STRN">"actions"</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'> 66</span>             </span><span class="STRN">"libraries"</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'> 67</span>             </span><span class="STRN">"triggers"</span><span class="WHIT">
-<span class='line'> 68</span>         </span><span class="PUNC">]</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'> 69</span>         </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">resultObject</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'> 70</span>         </span><span class="NAME">elements.each</span><span class="PUNC">(</span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">element</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'> 71</span>             </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">[</span><span class="NAME">element</span><span class="PUNC">]</span><span class="WHIT"> </span><span class="PUNC">!==</span><span class="WHIT"> </span><span class="NAME">undefined</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'> 72</span>                 </span><span class="NAME">resultObject</span><span class="PUNC">[</span><span class="NAME">element</span><span class="PUNC">]</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">_cloneElement</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">[</span><span class="NAME">element</span><span class="PUNC">]</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'> 73</span>             </span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'> 74</span>         </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">this</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'> 75</span>         </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">BuildingBlockDescription</span><span class="PUNC">(</span><span class="NAME">resultObject</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'> 76</span>     </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'> 77</span> 
-<span class='line'> 78</span>     </span><span class="COMM">/**
-<span class='line'> 79</span>      * This function translate the stored properties into
-<span class='line'> 80</span>      * a JSON-like object
-<span class='line'> 81</span>      * @type Object
-<span class='line'> 82</span>      */</span><span class="WHIT">
-<span class='line'> 83</span>     </span><span class="NAME">toJSON</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'> 84</span>         </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">result</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'> 85</span>         </span><span class="NAME">$H</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">each</span><span class="PUNC">(</span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">pair</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'> 86</span>             </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="PUNC">!</span><span class="PUNC">(</span><span class="NAME">pair.value</span><span class="WHIT"> </span><span class="KEYW">instanceof</span><span class="WHIT"> </span><span class="NAME">Function</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'> 87</span>                 </span><span class="NAME">result</span><span class="PUNC">[</span><span class="NAME">pair.key</span><span class="PUNC">]</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">pair.value</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'> 88</span>             </span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'> 89</span>         </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'> 90</span> 
-<span class='line'> 91</span>         </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">result</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'> 92</span> 
-<span class='line'> 93</span>     </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'> 94</span> 
-<span class='line'> 95</span>     </span><span class="COMM">/**
-<span class='line'> 96</span>      * Return the field to order the building block in the catalogue
-<span class='line'> 97</span>      * @type String
-<span class='line'> 98</span>      */</span><span class="WHIT">
-<span class='line'> 99</span>     </span><span class="NAME">getOrder</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>100</span>         </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">this.getTitle</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 29</span>     </span><span class="COMM">/**
+<span class='line'> 30</span>      * Generic building block description. All the building block classes extends
+<span class='line'> 31</span>      * this one.
+<span class='line'> 32</span>      * @constructs
+<span class='line'> 33</span>      */</span><span class="WHIT">
+<span class='line'> 34</span>     </span><span class="NAME">initialize</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="COMM">/** Hash */</span><span class="WHIT"> </span><span class="NAME">properties</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 35</span>         </span><span class="NAME">Utils.addProperties</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">properties</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 36</span>     </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 37</span> 
+<span class='line'> 38</span> 
+<span class='line'> 39</span>     </span><span class="COMM">// **************** PUBLIC METHODS **************** //</span><span class="WHIT">
+<span class='line'> 40</span> 
+<span class='line'> 41</span>     </span><span class="COMM">/**
+<span class='line'> 42</span>      * Adds properties to the ScreenflowDescription
+<span class='line'> 43</span>      */</span><span class="WHIT">
+<span class='line'> 44</span>     </span><span class="NAME">addProperties</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">properties</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 45</span>         </span><span class="NAME">Utils.addProperties</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">properties</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 46</span>     </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 47</span> 
+<span class='line'> 48</span>     </span><span class="COMM">/**
+<span class='line'> 49</span>      * Clones the building block
+<span class='line'> 50</span>      * @type BuildingBlockDescription
+<span class='line'> 51</span>      */</span><span class="WHIT">
+<span class='line'> 52</span>     </span><span class="NAME">clone</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 53</span> 
+<span class='line'> 54</span>         </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="NAME">_cloneElement</span><span class="PUNC">(</span><span class="NAME">element</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 55</span>             </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">result</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 56</span>             </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="PUNC">(</span><span class="NAME">element</span><span class="WHIT"> </span><span class="KEYW">instanceof</span><span class="WHIT"> </span><span class="NAME">Array</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 57</span>                 </span><span class="NAME">result</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">[</span><span class="PUNC">]</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 58</span>                 </span><span class="NAME">element.each</span><span class="PUNC">(</span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">subelement</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 59</span>                     </span><span class="NAME">result.push</span><span class="PUNC">(</span><span class="NAME">_cloneElement</span><span class="PUNC">(</span><span class="NAME">subelement</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 60</span>                 </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 61</span>             </span><span class="PUNC">}</span><span class="WHIT"> </span><span class="KEYW">else</span><span class="WHIT"> </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">element</span><span class="WHIT"> </span><span class="KEYW">instanceof</span><span class="WHIT"> </span><span class="NAME">Object</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 62</span>                 </span><span class="NAME">result</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 63</span>                 </span><span class="NAME">$H</span><span class="PUNC">(</span><span class="NAME">element</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">each</span><span class="PUNC">(</span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">pair</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 64</span>                     </span><span class="NAME">result</span><span class="PUNC">[</span><span class="NAME">pair.key</span><span class="PUNC">]</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">_cloneElement</span><span class="PUNC">(</span><span class="NAME">pair.value</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 65</span>                 </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 66</span>             </span><span class="PUNC">}</span><span class="WHIT"> </span><span class="KEYW">else</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 67</span>                 </span><span class="NAME">result</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">element</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 68</span>             </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'> 69</span>             </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">result</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 70</span>         </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'> 71</span> 
+<span class='line'> 72</span>         </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">elements</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">[</span><span class="WHIT">
+<span class='line'> 73</span>             </span><span class="STRN">"code"</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 74</span>             </span><span class="STRN">"creationDate"</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 75</span>             </span><span class="STRN">"creator"</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 76</span>             </span><span class="STRN">"description"</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 77</span>             </span><span class="STRN">"homepage"</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 78</span>             </span><span class="STRN">"icon"</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 79</span>             </span><span class="STRN">"label"</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 80</span>             </span><span class="STRN">"parameterTemplate"</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 81</span>             </span><span class="STRN">"postconditions"</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 82</span>             </span><span class="STRN">"preconditions"</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 83</span>             </span><span class="STRN">"rights"</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 84</span>             </span><span class="STRN">"screenshot"</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 85</span>             </span><span class="STRN">"tags"</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 86</span>             </span><span class="STRN">"template"</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 87</span>             </span><span class="STRN">"type"</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 88</span>             </span><span class="STRN">"uri"</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 89</span>             </span><span class="STRN">"version"</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 90</span>             </span><span class="STRN">"actions"</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 91</span>             </span><span class="STRN">"libraries"</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 92</span>             </span><span class="STRN">"triggers"</span><span class="WHIT">
+<span class='line'> 93</span>         </span><span class="PUNC">]</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 94</span>         </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">resultObject</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 95</span>         </span><span class="NAME">elements.each</span><span class="PUNC">(</span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">element</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 96</span>             </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">[</span><span class="NAME">element</span><span class="PUNC">]</span><span class="WHIT"> </span><span class="PUNC">!==</span><span class="WHIT"> </span><span class="NAME">undefined</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 97</span>                 </span><span class="NAME">resultObject</span><span class="PUNC">[</span><span class="NAME">element</span><span class="PUNC">]</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">_cloneElement</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">[</span><span class="NAME">element</span><span class="PUNC">]</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 98</span>             </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'> 99</span>         </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">this</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>100</span>         </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">BuildingBlockDescription</span><span class="PUNC">(</span><span class="NAME">resultObject</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'>101</span>     </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
 <span class='line'>102</span> 
 <span class='line'>103</span>     </span><span class="COMM">/**
-<span class='line'>104</span>      * Implementing the TableModel interface
-<span class='line'>105</span>      * @type String
-<span class='line'>106</span>      */</span><span class="WHIT">
-<span class='line'>107</span>     </span><span class="NAME">getTitle</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>108</span>         </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">this.label</span><span class="WHIT"> </span><span class="PUNC">?</span><span class="WHIT"> </span><span class="NAME">this.label</span><span class="PUNC">[</span><span class="STRN">'en-gb'</span><span class="PUNC">]</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">this.name</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>109</span>     </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>110</span> 
-<span class='line'>111</span>     </span><span class="COMM">/**
-<span class='line'>112</span>      * Returns the id of the building block
-<span class='line'>113</span>      * @type String
-<span class='line'>114</span>      */</span><span class="WHIT">
-<span class='line'>115</span>     </span><span class="NAME">getId</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>116</span>         </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">this.id</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>117</span>     </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>118</span> 
-<span class='line'>119</span>     </span><span class="COMM">/**
-<span class='line'>120</span>      * This function returns if the data inside the description is valid
-<span class='line'>121</span>      * @type Boolean
-<span class='line'>122</span>      */</span><span class="WHIT">
-<span class='line'>123</span>     </span><span class="NAME">isValid</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>124</span>         </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">true</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>125</span>     </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>126</span> 
-<span class='line'>127</span>     </span><span class="COMM">/**
-<span class='line'>128</span>      * For document descriptions, return the existing canvas instancies
-<span class='line'>129</span>      */</span><span class="WHIT">
-<span class='line'>130</span>     </span><span class="NAME">getCanvasInstances</span><span class="PUNC">:</span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>131</span>         </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="PUNC">[</span><span class="PUNC">]</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>132</span>     </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>133</span> 
-<span class='line'>134</span>     </span><span class="COMM">/**
-<span class='line'>135</span>      * For document descriptions, return the existing canvas instancies
-<span class='line'>136</span>      */</span><span class="WHIT">
-<span class='line'>137</span>     </span><span class="NAME">getConditionInstances</span><span class="PUNC">:</span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>138</span>         </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="PUNC">[</span><span class="PUNC">]</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>139</span>     </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>140</span> 
-<span class='line'>141</span>     </span><span class="NAME">getPreconditionsList</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>142</span>         </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="PUNC">!</span><span class="WHIT"> </span><span class="NAME">this.actions</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>143</span>             </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">this._getConditionsList</span><span class="PUNC">(</span><span class="STRN">"preconditions"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>144</span>         </span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>145</span>         </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">result</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">[</span><span class="PUNC">]</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>146</span>         </span><span class="NAME">$A</span><span class="PUNC">(</span><span class="NAME">this.actions</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">each</span><span class="PUNC">(</span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">action</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>147</span>             </span><span class="NAME">$A</span><span class="PUNC">(</span><span class="NAME">action.preconditions</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">each</span><span class="PUNC">(</span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">p</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT"> </span><span class="NAME">result.push</span><span class="PUNC">(</span><span class="NAME">p</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>148</span>         </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>149</span>         </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">result</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>104</span>      * This function translate the stored properties into
+<span class='line'>105</span>      * a JSON-like object
+<span class='line'>106</span>      * @type Object
+<span class='line'>107</span>      */</span><span class="WHIT">
+<span class='line'>108</span>     </span><span class="NAME">toJSON</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>109</span>         </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">result</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>110</span>         </span><span class="NAME">$H</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">each</span><span class="PUNC">(</span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">pair</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>111</span>             </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="PUNC">!</span><span class="PUNC">(</span><span class="NAME">pair.value</span><span class="WHIT"> </span><span class="KEYW">instanceof</span><span class="WHIT"> </span><span class="NAME">Function</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>112</span>                 </span><span class="NAME">result</span><span class="PUNC">[</span><span class="NAME">pair.key</span><span class="PUNC">]</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">pair.value</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>113</span>             </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>114</span>         </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>115</span> 
+<span class='line'>116</span>         </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">result</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>117</span> 
+<span class='line'>118</span>     </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>119</span> 
+<span class='line'>120</span>     </span><span class="COMM">/**
+<span class='line'>121</span>      * Return the field to order the building block in the catalogue
+<span class='line'>122</span>      * @type String
+<span class='line'>123</span>      */</span><span class="WHIT">
+<span class='line'>124</span>     </span><span class="NAME">getOrder</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>125</span>         </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">this.getTitle</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>126</span>     </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>127</span> 
+<span class='line'>128</span>     </span><span class="COMM">/**
+<span class='line'>129</span>      * Implementing the TableModel interface
+<span class='line'>130</span>      * @type String
+<span class='line'>131</span>      */</span><span class="WHIT">
+<span class='line'>132</span>     </span><span class="NAME">getTitle</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>133</span>         </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">this.label</span><span class="WHIT"> </span><span class="PUNC">?</span><span class="WHIT"> </span><span class="NAME">this.label</span><span class="PUNC">[</span><span class="STRN">'en-gb'</span><span class="PUNC">]</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">this.name</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>134</span>     </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>135</span> 
+<span class='line'>136</span>     </span><span class="COMM">/**
+<span class='line'>137</span>      * Returns the id of the building block
+<span class='line'>138</span>      * @type String
+<span class='line'>139</span>      */</span><span class="WHIT">
+<span class='line'>140</span>     </span><span class="NAME">getId</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>141</span>         </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">this.id</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>142</span>     </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>143</span> 
+<span class='line'>144</span>     </span><span class="COMM">/**
+<span class='line'>145</span>      * This function returns if the data inside the description is valid
+<span class='line'>146</span>      * @type Boolean
+<span class='line'>147</span>      */</span><span class="WHIT">
+<span class='line'>148</span>     </span><span class="NAME">isValid</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>149</span>         </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">true</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'>150</span>     </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
 <span class='line'>151</span> 
-<span class='line'>152</span>     </span><span class="NAME">getPostconditionsList</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>153</span>         </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">this._getConditionsList</span><span class="PUNC">(</span><span class="STRN">"postconditions"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>154</span>     </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>155</span> 
-<span class='line'>156</span>     </span><span class="COMM">// **************** PRIVATE METHODS **************** //</span><span class="WHIT">
-<span class='line'>157</span> 
-<span class='line'>158</span>     </span><span class="NAME">_getConditionsList</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">type</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>159</span>         </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">this</span><span class="PUNC">[</span><span class="NAME">type</span><span class="PUNC">]</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>160</span>     </span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>161</span> 
-<span class='line'>162</span> </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>163</span> 
-<span class='line'>164</span> </span><span class="COMM">// vim:ts=4:sw=4:et:</span><span class="WHIT">
-<span class='line'>165</span> </span></pre></body></html>
+<span class='line'>152</span>     </span><span class="COMM">/**
+<span class='line'>153</span>      * For document descriptions, return the existing canvas instancies
+<span class='line'>154</span>      */</span><span class="WHIT">
+<span class='line'>155</span>     </span><span class="NAME">getCanvasInstances</span><span class="PUNC">:</span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>156</span>         </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="PUNC">[</span><span class="PUNC">]</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>157</span>     </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>158</span> 
+<span class='line'>159</span>     </span><span class="COMM">/**
+<span class='line'>160</span>      * For document descriptions, return the existing canvas instancies
+<span class='line'>161</span>      */</span><span class="WHIT">
+<span class='line'>162</span>     </span><span class="NAME">getConditionInstances</span><span class="PUNC">:</span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>163</span>         </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="PUNC">[</span><span class="PUNC">]</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>164</span>     </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>165</span> 
+<span class='line'>166</span>     </span><span class="NAME">getPreconditionsList</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>167</span>         </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="PUNC">!</span><span class="WHIT"> </span><span class="NAME">this.actions</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>168</span>             </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">this._getConditionsList</span><span class="PUNC">(</span><span class="STRN">"preconditions"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>169</span>         </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>170</span>         </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">result</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">[</span><span class="PUNC">]</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>171</span>         </span><span class="NAME">$A</span><span class="PUNC">(</span><span class="NAME">this.actions</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">each</span><span class="PUNC">(</span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">action</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>172</span>             </span><span class="NAME">$A</span><span class="PUNC">(</span><span class="NAME">action.preconditions</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">each</span><span class="PUNC">(</span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">p</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT"> </span><span class="NAME">result.push</span><span class="PUNC">(</span><span class="NAME">p</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>173</span>         </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>174</span>         </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">result</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>175</span>     </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>176</span> 
+<span class='line'>177</span>     </span><span class="NAME">getPostconditionsList</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>178</span>         </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">this._getConditionsList</span><span class="PUNC">(</span><span class="STRN">"postconditions"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>179</span>     </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>180</span> 
+<span class='line'>181</span>     </span><span class="COMM">// **************** PRIVATE METHODS **************** //</span><span class="WHIT">
+<span class='line'>182</span> 
+<span class='line'>183</span>     </span><span class="NAME">_getConditionsList</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">type</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>184</span>         </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">this</span><span class="PUNC">[</span><span class="NAME">type</span><span class="PUNC">]</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>185</span>     </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>186</span> 
+<span class='line'>187</span> </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>188</span> 
+<span class='line'>189</span> </span><span class="COMM">// vim:ts=4:sw=4:et:</span><span class="WHIT">
+<span class='line'>190</span> </span></pre></body></html>

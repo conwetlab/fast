@@ -5,286 +5,311 @@
 	.STRN {color: #393;}
 	.REGX {color: #339;}
 	.line {border-right: 1px dotted #666; color: #666; font-style: normal;}
-	</style></head><body><pre><span class='line'>  1</span> <span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">GalleryDialog</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">Class.create</span><span class="PUNC">(</span><span class="NAME">FormDialog</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="COMM">/** @lends GalleryDialog.prototype */</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>  2</span>     </span><span class="COMM">/**
-<span class='line'>  3</span>      * This class handles dialogs with a gallery (a table) of elements
-<span class='line'>  4</span>      * Any descendant must use this class as follows:
-<span class='line'>  5</span>      *      It must call to _setFields, _setButtons and _addRows, before calling
-<span class='line'>  6</span>      *      _render, which will be the method that builds the interface, using
-<span class='line'>  7</span>      *      the information that has been stated in the previous methods.
-<span class='line'>  8</span>      * TODO: Add pagination
-<span class='line'>  9</span>      * @abstract
-<span class='line'> 10</span>      * @extends FormDialog
-<span class='line'> 11</span>      * @constructs
-<span class='line'> 12</span>      */</span><span class="WHIT">
-<span class='line'> 13</span>     </span><span class="NAME">initialize</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">$super</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="COMM">/** String */</span><span class="WHIT"> </span><span class="NAME">title</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'> 14</span>                         </span><span class="COMM">/** Object (Optional) */</span><span class="WHIT"> </span><span class="NAME">_properties</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'> 15</span>         </span><span class="NAME">$super</span><span class="PUNC">(</span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'> 16</span>             </span><span class="STRN">'title'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">title</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'> 17</span>             </span><span class="STRN">'style'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">'display:none;'</span><span class="WHIT">
-<span class='line'> 18</span>         </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'> 19</span>             </span><span class="STRN">'buttonPosition'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">FormDialog.POSITION_TOP</span><span class="WHIT">
-<span class='line'> 20</span>         </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'> 21</span> 
-<span class='line'> 22</span>         </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">properties</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">Utils.variableOrDefault</span><span class="PUNC">(</span><span class="NAME">_properties</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'> 23</span> 
-<span class='line'> 24</span>         </span><span class="COMM">/**
-<span class='line'> 25</span>          * Hash of properties of the gallery
-<span class='line'> 26</span>          * @type Hash
-<span class='line'> 27</span>          * @private
-<span class='line'> 28</span>          */</span><span class="WHIT">
-<span class='line'> 29</span>         </span><span class="NAME">this._properties</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">Hash</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'> 30</span> 
-<span class='line'> 31</span> 
-<span class='line'> 32</span>         </span><span class="COMM">// Assigning the passed parameters, or defaults</span><span class="WHIT">
-<span class='line'> 33</span>         </span><span class="NAME">this._properties.set</span><span class="PUNC">(</span><span class="STRN">'showTitleRow'</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">properties.showTitleRow</span><span class="WHIT"> </span><span class="PUNC">||</span><span class="WHIT"> </span><span class="KEYW">false</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'> 34</span>         </span><span class="NAME">this._properties.set</span><span class="PUNC">(</span><span class="STRN">'elementsPerPage'</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">properties.elementsPerPage</span><span class="WHIT"> </span><span class="PUNC">||</span><span class="WHIT"> </span><span class="NUMB">10</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'> 35</span>         </span><span class="NAME">this._properties.set</span><span class="PUNC">(</span><span class="STRN">'onDblClick'</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">properties.onDblClick</span><span class="WHIT"> </span><span class="PUNC">||</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'> 36</span>         </span><span class="COMM">// Disable all the events if the selected row is not valid</span><span class="WHIT">
-<span class='line'> 37</span>         </span><span class="NAME">this._properties.set</span><span class="PUNC">(</span><span class="STRN">'disableIfNotValid'</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">properties.disableIfNotValid</span><span class="WHIT"> </span><span class="PUNC">||</span><span class="WHIT"> </span><span class="KEYW">false</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'> 38</span> 
-<span class='line'> 39</span>         </span><span class="COMM">/**
-<span class='line'> 40</span>          * Table fields
-<span class='line'> 41</span>          * @type Array
-<span class='line'> 42</span>          * @private
-<span class='line'> 43</span>          */</span><span class="WHIT">
-<span class='line'> 44</span>         </span><span class="NAME">this._fields</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'> 45</span> 
-<span class='line'> 46</span>         </span><span class="COMM">/**
-<span class='line'> 47</span>          * Buttons that will be shown when an element is clicked
-<span class='line'> 48</span>          * @type Array
-<span class='line'> 49</span>          * @private
-<span class='line'> 50</span>          */</span><span class="WHIT">
-<span class='line'> 51</span>         </span><span class="NAME">this._buttons</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'> 52</span> 
-<span class='line'> 53</span>         </span><span class="COMM">/**
-<span class='line'> 54</span>          * List of buttons that will be disabled if the selected row
-<span class='line'> 55</span>          * is not valid
-<span class='line'> 56</span>          * @type Array
-<span class='line'> 57</span>          * @private
-<span class='line'> 58</span>          */</span><span class="WHIT">
-<span class='line'> 59</span>         </span><span class="NAME">this._disabledButtons</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">Array</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'> 60</span> 
-<span class='line'> 61</span>         </span><span class="COMM">/**
-<span class='line'> 62</span>          * List of rows
-<span class='line'> 63</span>          * @type Array
-<span class='line'> 64</span>          * @private
-<span class='line'> 65</span>          */</span><span class="WHIT">
-<span class='line'> 66</span>         </span><span class="NAME">this._rows</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">Array</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'> 67</span> 
-<span class='line'> 68</span>         </span><span class="COMM">/**
-<span class='line'> 69</span>          * Currently selected row
-<span class='line'> 70</span>          * @type Object
-<span class='line'> 71</span>          * @private
-<span class='line'> 72</span>          */</span><span class="WHIT">
-<span class='line'> 73</span>         </span><span class="NAME">this._selectedRow</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'> 74</span>     </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'> 75</span> 
-<span class='line'> 76</span> 
-<span class='line'> 77</span>     </span><span class="COMM">// **************** PUBLIC METHODS **************** //</span><span class="WHIT">
-<span class='line'> 78</span> 
-<span class='line'> 79</span>     </span><span class="COMM">/**
-<span class='line'> 80</span>      * @override
-<span class='line'> 81</span>      */</span><span class="WHIT">
-<span class='line'> 82</span>     </span><span class="NAME">show</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'> 83</span>         </span><span class="COMM">// Do nothing. To be overriden</span><span class="WHIT">
-<span class='line'> 84</span>     </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+	</style></head><body><pre><span class='line'>  1</span> <span class="COMM">/*...............................licence...........................................
+<span class='line'>  2</span>  *
+<span class='line'>  3</span>  *    (C) Copyright 2011 FAST Consortium
+<span class='line'>  4</span>  *
+<span class='line'>  5</span>  *     This file is part of FAST Platform.
+<span class='line'>  6</span>  *
+<span class='line'>  7</span>  *     FAST Platform is free software: you can redistribute it and/or modify
+<span class='line'>  8</span>  *     it under the terms of the GNU Affero General Public License as published by
+<span class='line'>  9</span>  *     the Free Software Foundation, either version 3 of the License, or
+<span class='line'> 10</span>  *     (at your option) any later version.
+<span class='line'> 11</span>  *
+<span class='line'> 12</span>  *     FAST Platform is distributed in the hope that it will be useful,
+<span class='line'> 13</span>  *     but WITHOUT ANY WARRANTY; without even the implied warranty of
+<span class='line'> 14</span>  *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+<span class='line'> 15</span>  *     GNU Affero General Public License for more details.
+<span class='line'> 16</span>  *
+<span class='line'> 17</span>  *     You should have received a copy of the GNU Affero General Public License
+<span class='line'> 18</span>  *     along with FAST Platform.  If not, see &lt;http://www.gnu.org/licenses/>.
+<span class='line'> 19</span>  *
+<span class='line'> 20</span>  *     Info about members and contributors of the FAST Consortium
+<span class='line'> 21</span>  *     is available at
+<span class='line'> 22</span>  *
+<span class='line'> 23</span>  *     http://fast.morfeo-project.eu
+<span class='line'> 24</span>  *
+<span class='line'> 25</span>  *...............................licence...........................................*/</span><span class="WHIT">
+<span class='line'> 26</span> </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">GalleryDialog</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">Class.create</span><span class="PUNC">(</span><span class="NAME">FormDialog</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="COMM">/** @lends GalleryDialog.prototype */</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 27</span>     </span><span class="COMM">/**
+<span class='line'> 28</span>      * This class handles dialogs with a gallery (a table) of elements
+<span class='line'> 29</span>      * Any descendant must use this class as follows:
+<span class='line'> 30</span>      *      It must call to _setFields, _setButtons and _addRows, before calling
+<span class='line'> 31</span>      *      _render, which will be the method that builds the interface, using
+<span class='line'> 32</span>      *      the information that has been stated in the previous methods.
+<span class='line'> 33</span>      * TODO: Add pagination
+<span class='line'> 34</span>      * @abstract
+<span class='line'> 35</span>      * @extends FormDialog
+<span class='line'> 36</span>      * @constructs
+<span class='line'> 37</span>      */</span><span class="WHIT">
+<span class='line'> 38</span>     </span><span class="NAME">initialize</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">$super</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="COMM">/** String */</span><span class="WHIT"> </span><span class="NAME">title</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 39</span>                         </span><span class="COMM">/** Object (Optional) */</span><span class="WHIT"> </span><span class="NAME">_properties</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 40</span>         </span><span class="NAME">$super</span><span class="PUNC">(</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 41</span>             </span><span class="STRN">'title'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">title</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 42</span>             </span><span class="STRN">'style'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">'display:none;'</span><span class="WHIT">
+<span class='line'> 43</span>         </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 44</span>             </span><span class="STRN">'buttonPosition'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">FormDialog.POSITION_TOP</span><span class="WHIT">
+<span class='line'> 45</span>         </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 46</span> 
+<span class='line'> 47</span>         </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">properties</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">Utils.variableOrDefault</span><span class="PUNC">(</span><span class="NAME">_properties</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 48</span> 
+<span class='line'> 49</span>         </span><span class="COMM">/**
+<span class='line'> 50</span>          * Hash of properties of the gallery
+<span class='line'> 51</span>          * @type Hash
+<span class='line'> 52</span>          * @private
+<span class='line'> 53</span>          */</span><span class="WHIT">
+<span class='line'> 54</span>         </span><span class="NAME">this._properties</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">Hash</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 55</span> 
+<span class='line'> 56</span> 
+<span class='line'> 57</span>         </span><span class="COMM">// Assigning the passed parameters, or defaults</span><span class="WHIT">
+<span class='line'> 58</span>         </span><span class="NAME">this._properties.set</span><span class="PUNC">(</span><span class="STRN">'showTitleRow'</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">properties.showTitleRow</span><span class="WHIT"> </span><span class="PUNC">||</span><span class="WHIT"> </span><span class="KEYW">false</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 59</span>         </span><span class="NAME">this._properties.set</span><span class="PUNC">(</span><span class="STRN">'elementsPerPage'</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">properties.elementsPerPage</span><span class="WHIT"> </span><span class="PUNC">||</span><span class="WHIT"> </span><span class="NUMB">10</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 60</span>         </span><span class="NAME">this._properties.set</span><span class="PUNC">(</span><span class="STRN">'onDblClick'</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">properties.onDblClick</span><span class="WHIT"> </span><span class="PUNC">||</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 61</span>         </span><span class="COMM">// Disable all the events if the selected row is not valid</span><span class="WHIT">
+<span class='line'> 62</span>         </span><span class="NAME">this._properties.set</span><span class="PUNC">(</span><span class="STRN">'disableIfNotValid'</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">properties.disableIfNotValid</span><span class="WHIT"> </span><span class="PUNC">||</span><span class="WHIT"> </span><span class="KEYW">false</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 63</span> 
+<span class='line'> 64</span>         </span><span class="COMM">/**
+<span class='line'> 65</span>          * Table fields
+<span class='line'> 66</span>          * @type Array
+<span class='line'> 67</span>          * @private
+<span class='line'> 68</span>          */</span><span class="WHIT">
+<span class='line'> 69</span>         </span><span class="NAME">this._fields</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 70</span> 
+<span class='line'> 71</span>         </span><span class="COMM">/**
+<span class='line'> 72</span>          * Buttons that will be shown when an element is clicked
+<span class='line'> 73</span>          * @type Array
+<span class='line'> 74</span>          * @private
+<span class='line'> 75</span>          */</span><span class="WHIT">
+<span class='line'> 76</span>         </span><span class="NAME">this._buttons</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 77</span> 
+<span class='line'> 78</span>         </span><span class="COMM">/**
+<span class='line'> 79</span>          * List of buttons that will be disabled if the selected row
+<span class='line'> 80</span>          * is not valid
+<span class='line'> 81</span>          * @type Array
+<span class='line'> 82</span>          * @private
+<span class='line'> 83</span>          */</span><span class="WHIT">
+<span class='line'> 84</span>         </span><span class="NAME">this._disabledButtons</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">Array</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'> 85</span> 
-<span class='line'> 86</span>     </span><span class="COMM">// **************** PRIVATE METHODS **************** //</span><span class="WHIT">
-<span class='line'> 87</span>     </span><span class="COMM">/**
-<span class='line'> 88</span>      * Set the field list
-<span class='line'> 89</span>      * Each of the fields is an object with the following structure:
-<span class='line'> 90</span>      *  * String title. Field human readable title
-<span class='line'> 91</span>      *  * Boolean hidden. The field won't be shown in the interface
-<span class='line'> 92</span>      *  * String className. CSS class that will be applied to the whole
-<span class='line'> 93</span>      *                  column
-<span class='line'> 94</span>      * @private
-<span class='line'> 95</span>      */</span><span class="WHIT">
-<span class='line'> 96</span>     </span><span class="NAME">_setFields</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="COMM">/** Array */</span><span class="WHIT"> </span><span class="NAME">fields</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'> 97</span>         </span><span class="NAME">this._fields</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">fields</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'> 98</span>     </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'> 99</span> 
-<span class='line'>100</span>     </span><span class="COMM">/**
-<span class='line'>101</span>      * Set the button list.
-<span class='line'>102</span>      * Each element is an object with the following structure:
-<span class='line'>103</span>      *  * String value: Text of the button
-<span class='line'>104</span>      *  * Function handler: function which will be called when the button
-<span class='line'>105</span>      *              is clicked. The function will receive the key value of
-<span class='line'>106</span>      *              the selected element
-<span class='line'>107</span>      * @private
-<span class='line'>108</span>      */</span><span class="WHIT">
-<span class='line'>109</span>     </span><span class="NAME">_setButtons</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="COMM">/** Array */</span><span class="WHIT"> </span><span class="NAME">buttons</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>110</span>         </span><span class="NAME">this._buttons</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">buttons</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>111</span>     </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>112</span> 
-<span class='line'>113</span>     </span><span class="COMM">/**
-<span class='line'>114</span>      * Adds a new row to the gallery.
-<span class='line'>115</span>      * It has to be an Object with this structure:
-<span class='line'>116</span>      *    * String key: key of the row
-<span class='line'>117</span>      *    * Array values: List with all the fields. Each of them must be
-<span class='line'>118</span>      *                    a String or a DOM node
+<span class='line'> 86</span>         </span><span class="COMM">/**
+<span class='line'> 87</span>          * List of rows
+<span class='line'> 88</span>          * @type Array
+<span class='line'> 89</span>          * @private
+<span class='line'> 90</span>          */</span><span class="WHIT">
+<span class='line'> 91</span>         </span><span class="NAME">this._rows</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">Array</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 92</span> 
+<span class='line'> 93</span>         </span><span class="COMM">/**
+<span class='line'> 94</span>          * Currently selected row
+<span class='line'> 95</span>          * @type Object
+<span class='line'> 96</span>          * @private
+<span class='line'> 97</span>          */</span><span class="WHIT">
+<span class='line'> 98</span>         </span><span class="NAME">this._selectedRow</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 99</span>     </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>100</span> 
+<span class='line'>101</span> 
+<span class='line'>102</span>     </span><span class="COMM">// **************** PUBLIC METHODS **************** //</span><span class="WHIT">
+<span class='line'>103</span> 
+<span class='line'>104</span>     </span><span class="COMM">/**
+<span class='line'>105</span>      * @override
+<span class='line'>106</span>      */</span><span class="WHIT">
+<span class='line'>107</span>     </span><span class="NAME">show</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>108</span>         </span><span class="COMM">// Do nothing. To be overriden</span><span class="WHIT">
+<span class='line'>109</span>     </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>110</span> 
+<span class='line'>111</span>     </span><span class="COMM">// **************** PRIVATE METHODS **************** //</span><span class="WHIT">
+<span class='line'>112</span>     </span><span class="COMM">/**
+<span class='line'>113</span>      * Set the field list
+<span class='line'>114</span>      * Each of the fields is an object with the following structure:
+<span class='line'>115</span>      *  * String title. Field human readable title
+<span class='line'>116</span>      *  * Boolean hidden. The field won't be shown in the interface
+<span class='line'>117</span>      *  * String className. CSS class that will be applied to the whole
+<span class='line'>118</span>      *                  column
 <span class='line'>119</span>      * @private
 <span class='line'>120</span>      */</span><span class="WHIT">
-<span class='line'>121</span>     </span><span class="NAME">_addRow</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="COMM">/** Object */</span><span class="WHIT"> </span><span class="NAME">row</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>122</span>         </span><span class="NAME">this._rows.push</span><span class="PUNC">(</span><span class="NAME">row</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>121</span>     </span><span class="NAME">_setFields</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="COMM">/** Array */</span><span class="WHIT"> </span><span class="NAME">fields</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>122</span>         </span><span class="NAME">this._fields</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">fields</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'>123</span>     </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
 <span class='line'>124</span> 
 <span class='line'>125</span>     </span><span class="COMM">/**
-<span class='line'>126</span>      * Builds the user interface, using the gathered information
-<span class='line'>127</span>      * @private
-<span class='line'>128</span>      */</span><span class="WHIT">
-<span class='line'>129</span>     </span><span class="NAME">_render</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="COMM">/** Boolean(Optional) */</span><span class="WHIT"> </span><span class="NAME">_loadAll</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>130</span>         </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">loadAll</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">Utils.variableOrDefault</span><span class="PUNC">(</span><span class="NAME">_loadAll</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">true</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>131</span> 
-<span class='line'>132</span>         </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">content</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">Element</span><span class="PUNC">(</span><span class="STRN">'div'</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>133</span>             </span><span class="STRN">'class'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">'gallery'</span><span class="WHIT">
-<span class='line'>134</span>         </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>135</span> 
-<span class='line'>136</span>         </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">this._properties.get</span><span class="PUNC">(</span><span class="STRN">"showTitleRow"</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>137</span>             </span><span class="COMM">// TODO</span><span class="WHIT">
-<span class='line'>138</span>         </span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>139</span> 
-<span class='line'>140</span>         </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">lastSelectedRowKey</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this._selectedRow</span><span class="WHIT"> </span><span class="PUNC">&&</span><span class="WHIT"> </span><span class="NAME">this._selectedRow</span><span class="PUNC">[</span><span class="STRN">'key'</span><span class="PUNC">]</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>141</span>         </span><span class="NAME">this._selectedRow</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>142</span> 
-<span class='line'>143</span>         </span><span class="NAME">this._rows.each</span><span class="PUNC">(</span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">row</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>144</span>             </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">rowNode</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">Element</span><span class="PUNC">(</span><span class="STRN">'div'</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>145</span>                 </span><span class="STRN">'class'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">'row'</span><span class="WHIT">
-<span class='line'>146</span>             </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>147</span> 
-<span class='line'>148</span>             </span><span class="KEYW">for</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">i</span><span class="PUNC">=</span><span class="NUMB">0</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">rValues</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">row.values</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="NAME">i</span><span class="WHIT"> </span><span class="PUNC">&lt;</span><span class="WHIT"> </span><span class="NAME">rValues.size</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="NAME">i</span><span class="PUNC">++</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>149</span>                 </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="PUNC">!</span><span class="NAME">this._fields</span><span class="PUNC">[</span><span class="NAME">i</span><span class="PUNC">]</span><span class="PUNC">.</span><span class="NAME">hidden</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>150</span>                     </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">field</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">Element</span><span class="PUNC">(</span><span class="STRN">'div'</span><span class="PUNC">,</span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>151</span>                         </span><span class="STRN">'class'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">"field "</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">this._fields</span><span class="PUNC">[</span><span class="NAME">i</span><span class="PUNC">]</span><span class="PUNC">.</span><span class="NAME">className</span><span class="WHIT">
-<span class='line'>152</span>                     </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">update</span><span class="PUNC">(</span><span class="NAME">rValues</span><span class="PUNC">[</span><span class="NAME">i</span><span class="PUNC">]</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>153</span>                     </span><span class="NAME">rowNode.appendChild</span><span class="PUNC">(</span><span class="NAME">field</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>154</span>                 </span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>155</span>             </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>126</span>      * Set the button list.
+<span class='line'>127</span>      * Each element is an object with the following structure:
+<span class='line'>128</span>      *  * String value: Text of the button
+<span class='line'>129</span>      *  * Function handler: function which will be called when the button
+<span class='line'>130</span>      *              is clicked. The function will receive the key value of
+<span class='line'>131</span>      *              the selected element
+<span class='line'>132</span>      * @private
+<span class='line'>133</span>      */</span><span class="WHIT">
+<span class='line'>134</span>     </span><span class="NAME">_setButtons</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="COMM">/** Array */</span><span class="WHIT"> </span><span class="NAME">buttons</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>135</span>         </span><span class="NAME">this._buttons</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">buttons</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>136</span>     </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>137</span> 
+<span class='line'>138</span>     </span><span class="COMM">/**
+<span class='line'>139</span>      * Adds a new row to the gallery.
+<span class='line'>140</span>      * It has to be an Object with this structure:
+<span class='line'>141</span>      *    * String key: key of the row
+<span class='line'>142</span>      *    * Array values: List with all the fields. Each of them must be
+<span class='line'>143</span>      *                    a String or a DOM node
+<span class='line'>144</span>      * @private
+<span class='line'>145</span>      */</span><span class="WHIT">
+<span class='line'>146</span>     </span><span class="NAME">_addRow</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="COMM">/** Object */</span><span class="WHIT"> </span><span class="NAME">row</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>147</span>         </span><span class="NAME">this._rows.push</span><span class="PUNC">(</span><span class="NAME">row</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>148</span>     </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>149</span> 
+<span class='line'>150</span>     </span><span class="COMM">/**
+<span class='line'>151</span>      * Builds the user interface, using the gathered information
+<span class='line'>152</span>      * @private
+<span class='line'>153</span>      */</span><span class="WHIT">
+<span class='line'>154</span>     </span><span class="NAME">_render</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="COMM">/** Boolean(Optional) */</span><span class="WHIT"> </span><span class="NAME">_loadAll</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>155</span>         </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">loadAll</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">Utils.variableOrDefault</span><span class="PUNC">(</span><span class="NAME">_loadAll</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">true</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'>156</span> 
-<span class='line'>157</span>             </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">selectRow</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>158</span>                 </span><span class="NAME">this._unselectElements</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>159</span>                 </span><span class="NAME">this._selectedRow</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">row</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>160</span>                 </span><span class="NAME">rowNode.addClassName</span><span class="PUNC">(</span><span class="STRN">"selected"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>161</span>                 </span><span class="KEYW">for</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">i</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="NAME">i</span><span class="WHIT"> </span><span class="PUNC">&lt;</span><span class="WHIT"> </span><span class="NAME">this._disabledButtons.length</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="NAME">i</span><span class="PUNC">++</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>162</span>                     </span><span class="NAME">this._disabledButtons</span><span class="PUNC">[</span><span class="NAME">i</span><span class="PUNC">]</span><span class="PUNC">.</span><span class="NAME">attr</span><span class="PUNC">(</span><span class="STRN">'disabled'</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="PUNC">!</span><span class="WHIT"> </span><span class="NAME">row.isValid</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>163</span>                 </span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>164</span>             </span><span class="PUNC">}</span><span class="PUNC">.</span><span class="NAME">bind</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>165</span> 
-<span class='line'>166</span>             </span><span class="NAME">rowNode.observe</span><span class="PUNC">(</span><span class="STRN">'click'</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">selectRow</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>157</span>         </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">content</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">Element</span><span class="PUNC">(</span><span class="STRN">'div'</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>158</span>             </span><span class="STRN">'class'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">'gallery'</span><span class="WHIT">
+<span class='line'>159</span>         </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>160</span> 
+<span class='line'>161</span>         </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">this._properties.get</span><span class="PUNC">(</span><span class="STRN">"showTitleRow"</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>162</span>             </span><span class="COMM">// TODO</span><span class="WHIT">
+<span class='line'>163</span>         </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>164</span> 
+<span class='line'>165</span>         </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">lastSelectedRowKey</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this._selectedRow</span><span class="WHIT"> </span><span class="PUNC">&&</span><span class="WHIT"> </span><span class="NAME">this._selectedRow</span><span class="PUNC">[</span><span class="STRN">'key'</span><span class="PUNC">]</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>166</span>         </span><span class="NAME">this._selectedRow</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'>167</span> 
-<span class='line'>168</span>             </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">this._properties.get</span><span class="PUNC">(</span><span class="STRN">'onDblClick'</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">&&</span><span class="WHIT">
-<span class='line'>169</span>                </span><span class="PUNC">(</span><span class="PUNC">!</span><span class="WHIT"> </span><span class="NAME">this._properties.get</span><span class="PUNC">(</span><span class="STRN">'disableIfNotValid'</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">||</span><span class="WHIT"> </span><span class="NAME">row.isValid</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="WHIT">
-<span class='line'>170</span>             </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>171</span>                 </span><span class="NAME">rowNode.observe</span><span class="PUNC">(</span><span class="STRN">'dblclick'</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>172</span>                     </span><span class="NAME">this._properties.get</span><span class="PUNC">(</span><span class="STRN">'onDblClick'</span><span class="PUNC">)</span><span class="PUNC">(</span><span class="NAME">row.key</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>173</span>                 </span><span class="PUNC">}</span><span class="PUNC">.</span><span class="NAME">bind</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>174</span>             </span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>175</span> 
-<span class='line'>176</span>             </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">lastSelectedRowKey</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="NAME">row.key</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>177</span>                 </span><span class="NAME">selectRow</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>178</span>             </span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>179</span> 
-<span class='line'>180</span>             </span><span class="NAME">content.appendChild</span><span class="PUNC">(</span><span class="NAME">rowNode</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>181</span>         </span><span class="PUNC">}</span><span class="PUNC">.</span><span class="NAME">bind</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>182</span> 
-<span class='line'>183</span> 
-<span class='line'>184</span>         </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">loadAll</span><span class="WHIT"> </span><span class="PUNC">&&</span><span class="WHIT"> </span><span class="NAME">this._rows.size</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">></span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>185</span>             </span><span class="NAME">this._removeButtons</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>186</span>             </span><span class="NAME">this._buttons.each</span><span class="PUNC">(</span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">button</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>187</span>                 </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">buttonWidget</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this._addButton</span><span class="PUNC">(</span><span class="NAME">button.value</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>188</span>                     </span><span class="NAME">button.handler</span><span class="PUNC">(</span><span class="NAME">this._selectedRow.key</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>189</span>                 </span><span class="PUNC">}</span><span class="PUNC">.</span><span class="NAME">bind</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>190</span>                 </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">button.disableIfNotValid</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>191</span>                     </span><span class="NAME">this._disabledButtons.push</span><span class="PUNC">(</span><span class="NAME">buttonWidget</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>192</span>                 </span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>193</span>             </span><span class="PUNC">}</span><span class="PUNC">.</span><span class="NAME">bind</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>194</span>         </span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>195</span> 
-<span class='line'>196</span>         </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">this._rows.size</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>197</span>             </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">info</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">Element</span><span class="PUNC">(</span><span class="STRN">"div"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>198</span>                 </span><span class="STRN">'class'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">'info'</span><span class="WHIT">
-<span class='line'>199</span>             </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">update</span><span class="PUNC">(</span><span class="STRN">"Uppss....Nothing here"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>200</span>             </span><span class="NAME">content.appendChild</span><span class="PUNC">(</span><span class="NAME">info</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>201</span>             </span><span class="NAME">this._removeButtons</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>202</span>             </span><span class="NAME">this._addButton</span><span class="PUNC">(</span><span class="STRN">"Close"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">this._dialog.hide.bind</span><span class="PUNC">(</span><span class="NAME">this._dialog</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>203</span>         </span><span class="PUNC">}</span><span class="WHIT"> </span><span class="KEYW">else</span><span class="WHIT"> </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="PUNC">!</span><span class="WHIT"> </span><span class="NAME">this._selectedRow</span><span class="WHIT"> </span><span class="PUNC">&&</span><span class="WHIT">
-<span class='line'>204</span>                    </span><span class="PUNC">!</span><span class="WHIT"> </span><span class="NAME">this._properties.get</span><span class="PUNC">(</span><span class="STRN">"showTitleRow"</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">&&</span><span class="WHIT">
-<span class='line'>205</span>                    </span><span class="NAME">content.firstChild</span><span class="PUNC">)</span><span class="WHIT">
-<span class='line'>206</span>         </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>207</span>             </span><span class="NAME">content.firstChild.addClassName</span><span class="PUNC">(</span><span class="STRN">"selected"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>208</span>             </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">row</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this._selectedRow</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this._rows</span><span class="PUNC">[</span><span class="NUMB">0</span><span class="PUNC">]</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>209</span>             </span><span class="KEYW">for</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">i</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="NAME">i</span><span class="WHIT"> </span><span class="PUNC">&lt;</span><span class="WHIT"> </span><span class="NAME">this._disabledButtons.length</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="NAME">i</span><span class="PUNC">++</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>210</span>                 </span><span class="NAME">this._disabledButtons</span><span class="PUNC">[</span><span class="NAME">i</span><span class="PUNC">]</span><span class="PUNC">.</span><span class="NAME">attr</span><span class="PUNC">(</span><span class="STRN">'disabled'</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="PUNC">!</span><span class="WHIT"> </span><span class="NAME">row.isValid</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>211</span>             </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>212</span>         </span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>213</span> 
-<span class='line'>214</span>         </span><span class="NAME">this._setContent</span><span class="PUNC">(</span><span class="NAME">content</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>215</span>         </span><span class="NAME">this._contentNode.appendChild</span><span class="PUNC">(</span><span class="NAME">this._createSearchBar</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>216</span>     </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>217</span> 
-<span class='line'>218</span>     </span><span class="COMM">/**
-<span class='line'>219</span>      * Unselect all elements
-<span class='line'>220</span>      * @private
-<span class='line'>221</span>      */</span><span class="WHIT">
-<span class='line'>222</span>     </span><span class="NAME">_unselectElements</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>223</span>             </span><span class="NAME">$$</span><span class="PUNC">(</span><span class="STRN">'.gallery .row.selected'</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">each</span><span class="PUNC">(</span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">node</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>224</span>                 </span><span class="NAME">node.removeClassName</span><span class="PUNC">(</span><span class="STRN">"selected"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>225</span>             </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>226</span>             </span><span class="NAME">this._disabledButtons.each</span><span class="PUNC">(</span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">button</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>227</span>                 </span><span class="NAME">button.attr</span><span class="PUNC">(</span><span class="STRN">'disabled'</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">true</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>228</span>             </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>229</span>             </span><span class="NAME">this._selectedRow</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>230</span>     </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>231</span> 
-<span class='line'>232</span>     </span><span class="COMM">/**
-<span class='line'>233</span>      * Create the search bar
-<span class='line'>234</span>      * @private
-<span class='line'>235</span>      * @type HTMLNode
-<span class='line'>236</span>      */</span><span class="WHIT">
-<span class='line'>237</span>     </span><span class="NAME">_createSearchBar</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>238</span>         </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">unselectElements</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this._unselectElements.bind</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>239</span>         </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">searchBar</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">Element</span><span class="PUNC">(</span><span class="STRN">'div'</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="STRN">'class'</span><span class="PUNC">:</span><span class="STRN">'searchBar'</span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>240</span>         </span><span class="NAME">searchBar.style.marginTop</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">'3px'</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>241</span>         </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">searchBox</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">PaletteSearchBox</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>242</span>         </span><span class="NAME">searchBox.addEventListener</span><span class="PUNC">(</span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">obj</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">value</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>243</span>             </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">searchValue</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">value.toLowerCase</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>244</span>             </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">elements</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">$$</span><span class="PUNC">(</span><span class="STRN">'.gallery .row .field.name'</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>245</span>             </span><span class="NAME">elements.each</span><span class="PUNC">(</span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">elem</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>246</span>                 </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">text</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">elem.textContent.toLowerCase</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>247</span>                 </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">searchValue.blank</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">||</span><span class="WHIT"> </span><span class="NAME">text.match</span><span class="PUNC">(</span><span class="NAME">searchValue</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>248</span>                     </span><span class="NAME">elem.parentNode.show</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>249</span>                 </span><span class="PUNC">}</span><span class="WHIT"> </span><span class="KEYW">else</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>250</span>                     </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">row</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="NAME">elem.parentNode</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>251</span>                     </span><span class="NAME">row.hide</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>252</span>                     </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">row.hasClassName</span><span class="PUNC">(</span><span class="STRN">'selected'</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>253</span>                         </span><span class="NAME">unselectElements</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>254</span>                     </span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>255</span>                 </span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>256</span>             </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>257</span>         </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>258</span> 
-<span class='line'>259</span>         </span><span class="NAME">searchBar.appendChild</span><span class="PUNC">(</span><span class="NAME">searchBox.getDOMNode</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>260</span>         </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">searchBar</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>261</span>     </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>262</span> 
-<span class='line'>263</span>     </span><span class="COMM">/**
-<span class='line'>264</span>      * Empty the list of rows
-<span class='line'>265</span>      * @private
-<span class='line'>266</span>      */</span><span class="WHIT">
-<span class='line'>267</span>     </span><span class="NAME">_emptyRows</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>268</span>         </span><span class="NAME">this._rows</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">Array</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>269</span>     </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>270</span> 
-<span class='line'>271</span>     </span><span class="COMM">/**
-<span class='line'>272</span>      * Function called when the content is loaded
-<span class='line'>273</span>      * @private
-<span class='line'>274</span>      */</span><span class="WHIT">
-<span class='line'>275</span>     </span><span class="NAME">_show</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>276</span>         </span><span class="NAME">this._initDialogInterface</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>277</span>         </span><span class="NAME">GVS.setEnabled</span><span class="PUNC">(</span><span class="KEYW">false</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>278</span>         </span><span class="NAME">this._dialog.show</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>279</span>     </span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>280</span> </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>281</span> 
-<span class='line'>282</span> </span><span class="COMM">// vim:ts=4:sw=4:et:</span><span class="WHIT">
-<span class='line'>283</span> </span></pre></body></html>
+<span class='line'>168</span>         </span><span class="NAME">this._rows.each</span><span class="PUNC">(</span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">row</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>169</span>             </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">rowNode</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">Element</span><span class="PUNC">(</span><span class="STRN">'div'</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>170</span>                 </span><span class="STRN">'class'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">'row'</span><span class="WHIT">
+<span class='line'>171</span>             </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>172</span> 
+<span class='line'>173</span>             </span><span class="KEYW">for</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">i</span><span class="PUNC">=</span><span class="NUMB">0</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">rValues</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">row.values</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="NAME">i</span><span class="WHIT"> </span><span class="PUNC">&lt;</span><span class="WHIT"> </span><span class="NAME">rValues.size</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="NAME">i</span><span class="PUNC">++</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>174</span>                 </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="PUNC">!</span><span class="NAME">this._fields</span><span class="PUNC">[</span><span class="NAME">i</span><span class="PUNC">]</span><span class="PUNC">.</span><span class="NAME">hidden</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>175</span>                     </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">field</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">Element</span><span class="PUNC">(</span><span class="STRN">'div'</span><span class="PUNC">,</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>176</span>                         </span><span class="STRN">'class'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">"field "</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">this._fields</span><span class="PUNC">[</span><span class="NAME">i</span><span class="PUNC">]</span><span class="PUNC">.</span><span class="NAME">className</span><span class="WHIT">
+<span class='line'>177</span>                     </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">update</span><span class="PUNC">(</span><span class="NAME">rValues</span><span class="PUNC">[</span><span class="NAME">i</span><span class="PUNC">]</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>178</span>                     </span><span class="NAME">rowNode.appendChild</span><span class="PUNC">(</span><span class="NAME">field</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>179</span>                 </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>180</span>             </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>181</span> 
+<span class='line'>182</span>             </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">selectRow</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>183</span>                 </span><span class="NAME">this._unselectElements</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>184</span>                 </span><span class="NAME">this._selectedRow</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">row</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>185</span>                 </span><span class="NAME">rowNode.addClassName</span><span class="PUNC">(</span><span class="STRN">"selected"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>186</span>                 </span><span class="KEYW">for</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">i</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="NAME">i</span><span class="WHIT"> </span><span class="PUNC">&lt;</span><span class="WHIT"> </span><span class="NAME">this._disabledButtons.length</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="NAME">i</span><span class="PUNC">++</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>187</span>                     </span><span class="NAME">this._disabledButtons</span><span class="PUNC">[</span><span class="NAME">i</span><span class="PUNC">]</span><span class="PUNC">.</span><span class="NAME">attr</span><span class="PUNC">(</span><span class="STRN">'disabled'</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="PUNC">!</span><span class="WHIT"> </span><span class="NAME">row.isValid</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>188</span>                 </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>189</span>             </span><span class="PUNC">}</span><span class="PUNC">.</span><span class="NAME">bind</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>190</span> 
+<span class='line'>191</span>             </span><span class="NAME">rowNode.observe</span><span class="PUNC">(</span><span class="STRN">'click'</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">selectRow</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>192</span> 
+<span class='line'>193</span>             </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">this._properties.get</span><span class="PUNC">(</span><span class="STRN">'onDblClick'</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">&&</span><span class="WHIT">
+<span class='line'>194</span>                </span><span class="PUNC">(</span><span class="PUNC">!</span><span class="WHIT"> </span><span class="NAME">this._properties.get</span><span class="PUNC">(</span><span class="STRN">'disableIfNotValid'</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">||</span><span class="WHIT"> </span><span class="NAME">row.isValid</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="WHIT">
+<span class='line'>195</span>             </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>196</span>                 </span><span class="NAME">rowNode.observe</span><span class="PUNC">(</span><span class="STRN">'dblclick'</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>197</span>                     </span><span class="NAME">this._properties.get</span><span class="PUNC">(</span><span class="STRN">'onDblClick'</span><span class="PUNC">)</span><span class="PUNC">(</span><span class="NAME">row.key</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>198</span>                 </span><span class="PUNC">}</span><span class="PUNC">.</span><span class="NAME">bind</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>199</span>             </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>200</span> 
+<span class='line'>201</span>             </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">lastSelectedRowKey</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="NAME">row.key</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>202</span>                 </span><span class="NAME">selectRow</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>203</span>             </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>204</span> 
+<span class='line'>205</span>             </span><span class="NAME">content.appendChild</span><span class="PUNC">(</span><span class="NAME">rowNode</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>206</span>         </span><span class="PUNC">}</span><span class="PUNC">.</span><span class="NAME">bind</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>207</span> 
+<span class='line'>208</span> 
+<span class='line'>209</span>         </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">loadAll</span><span class="WHIT"> </span><span class="PUNC">&&</span><span class="WHIT"> </span><span class="NAME">this._rows.size</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">></span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>210</span>             </span><span class="NAME">this._removeButtons</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>211</span>             </span><span class="NAME">this._buttons.each</span><span class="PUNC">(</span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">button</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>212</span>                 </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">buttonWidget</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this._addButton</span><span class="PUNC">(</span><span class="NAME">button.value</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>213</span>                     </span><span class="NAME">button.handler</span><span class="PUNC">(</span><span class="NAME">this._selectedRow.key</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>214</span>                 </span><span class="PUNC">}</span><span class="PUNC">.</span><span class="NAME">bind</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>215</span>                 </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">button.disableIfNotValid</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>216</span>                     </span><span class="NAME">this._disabledButtons.push</span><span class="PUNC">(</span><span class="NAME">buttonWidget</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>217</span>                 </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>218</span>             </span><span class="PUNC">}</span><span class="PUNC">.</span><span class="NAME">bind</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>219</span>         </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>220</span> 
+<span class='line'>221</span>         </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">this._rows.size</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>222</span>             </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">info</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">Element</span><span class="PUNC">(</span><span class="STRN">"div"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>223</span>                 </span><span class="STRN">'class'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">'info'</span><span class="WHIT">
+<span class='line'>224</span>             </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">update</span><span class="PUNC">(</span><span class="STRN">"Uppss....Nothing here"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>225</span>             </span><span class="NAME">content.appendChild</span><span class="PUNC">(</span><span class="NAME">info</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>226</span>             </span><span class="NAME">this._removeButtons</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>227</span>             </span><span class="NAME">this._addButton</span><span class="PUNC">(</span><span class="STRN">"Close"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">this._dialog.hide.bind</span><span class="PUNC">(</span><span class="NAME">this._dialog</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>228</span>         </span><span class="PUNC">}</span><span class="WHIT"> </span><span class="KEYW">else</span><span class="WHIT"> </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="PUNC">!</span><span class="WHIT"> </span><span class="NAME">this._selectedRow</span><span class="WHIT"> </span><span class="PUNC">&&</span><span class="WHIT">
+<span class='line'>229</span>                    </span><span class="PUNC">!</span><span class="WHIT"> </span><span class="NAME">this._properties.get</span><span class="PUNC">(</span><span class="STRN">"showTitleRow"</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">&&</span><span class="WHIT">
+<span class='line'>230</span>                    </span><span class="NAME">content.firstChild</span><span class="PUNC">)</span><span class="WHIT">
+<span class='line'>231</span>         </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>232</span>             </span><span class="NAME">content.firstChild.addClassName</span><span class="PUNC">(</span><span class="STRN">"selected"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>233</span>             </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">row</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this._selectedRow</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this._rows</span><span class="PUNC">[</span><span class="NUMB">0</span><span class="PUNC">]</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>234</span>             </span><span class="KEYW">for</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">i</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="NAME">i</span><span class="WHIT"> </span><span class="PUNC">&lt;</span><span class="WHIT"> </span><span class="NAME">this._disabledButtons.length</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="NAME">i</span><span class="PUNC">++</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>235</span>                 </span><span class="NAME">this._disabledButtons</span><span class="PUNC">[</span><span class="NAME">i</span><span class="PUNC">]</span><span class="PUNC">.</span><span class="NAME">attr</span><span class="PUNC">(</span><span class="STRN">'disabled'</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="PUNC">!</span><span class="WHIT"> </span><span class="NAME">row.isValid</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>236</span>             </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>237</span>         </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>238</span> 
+<span class='line'>239</span>         </span><span class="NAME">this._setContent</span><span class="PUNC">(</span><span class="NAME">content</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>240</span>         </span><span class="NAME">this._contentNode.appendChild</span><span class="PUNC">(</span><span class="NAME">this._createSearchBar</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>241</span>     </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>242</span> 
+<span class='line'>243</span>     </span><span class="COMM">/**
+<span class='line'>244</span>      * Unselect all elements
+<span class='line'>245</span>      * @private
+<span class='line'>246</span>      */</span><span class="WHIT">
+<span class='line'>247</span>     </span><span class="NAME">_unselectElements</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>248</span>             </span><span class="NAME">$$</span><span class="PUNC">(</span><span class="STRN">'.gallery .row.selected'</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">each</span><span class="PUNC">(</span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">node</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>249</span>                 </span><span class="NAME">node.removeClassName</span><span class="PUNC">(</span><span class="STRN">"selected"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>250</span>             </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>251</span>             </span><span class="NAME">this._disabledButtons.each</span><span class="PUNC">(</span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">button</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>252</span>                 </span><span class="NAME">button.attr</span><span class="PUNC">(</span><span class="STRN">'disabled'</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">true</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>253</span>             </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>254</span>             </span><span class="NAME">this._selectedRow</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>255</span>     </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>256</span> 
+<span class='line'>257</span>     </span><span class="COMM">/**
+<span class='line'>258</span>      * Create the search bar
+<span class='line'>259</span>      * @private
+<span class='line'>260</span>      * @type HTMLNode
+<span class='line'>261</span>      */</span><span class="WHIT">
+<span class='line'>262</span>     </span><span class="NAME">_createSearchBar</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>263</span>         </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">unselectElements</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this._unselectElements.bind</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>264</span>         </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">searchBar</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">Element</span><span class="PUNC">(</span><span class="STRN">'div'</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="STRN">'class'</span><span class="PUNC">:</span><span class="STRN">'searchBar'</span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>265</span>         </span><span class="NAME">searchBar.style.marginTop</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">'3px'</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>266</span>         </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">searchBox</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">PaletteSearchBox</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>267</span>         </span><span class="NAME">searchBox.addEventListener</span><span class="PUNC">(</span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">obj</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">value</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>268</span>             </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">searchValue</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">value.toLowerCase</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>269</span>             </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">elements</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">$$</span><span class="PUNC">(</span><span class="STRN">'.gallery .row .field.name'</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>270</span>             </span><span class="NAME">elements.each</span><span class="PUNC">(</span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">elem</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>271</span>                 </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">text</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">elem.textContent.toLowerCase</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>272</span>                 </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">searchValue.blank</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">||</span><span class="WHIT"> </span><span class="NAME">text.match</span><span class="PUNC">(</span><span class="NAME">searchValue</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>273</span>                     </span><span class="NAME">elem.parentNode.show</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>274</span>                 </span><span class="PUNC">}</span><span class="WHIT"> </span><span class="KEYW">else</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>275</span>                     </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">row</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="NAME">elem.parentNode</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>276</span>                     </span><span class="NAME">row.hide</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>277</span>                     </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">row.hasClassName</span><span class="PUNC">(</span><span class="STRN">'selected'</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>278</span>                         </span><span class="NAME">unselectElements</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>279</span>                     </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>280</span>                 </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>281</span>             </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>282</span>         </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>283</span> 
+<span class='line'>284</span>         </span><span class="NAME">searchBar.appendChild</span><span class="PUNC">(</span><span class="NAME">searchBox.getDOMNode</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>285</span>         </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">searchBar</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>286</span>     </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>287</span> 
+<span class='line'>288</span>     </span><span class="COMM">/**
+<span class='line'>289</span>      * Empty the list of rows
+<span class='line'>290</span>      * @private
+<span class='line'>291</span>      */</span><span class="WHIT">
+<span class='line'>292</span>     </span><span class="NAME">_emptyRows</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>293</span>         </span><span class="NAME">this._rows</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">Array</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>294</span>     </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>295</span> 
+<span class='line'>296</span>     </span><span class="COMM">/**
+<span class='line'>297</span>      * Function called when the content is loaded
+<span class='line'>298</span>      * @private
+<span class='line'>299</span>      */</span><span class="WHIT">
+<span class='line'>300</span>     </span><span class="NAME">_show</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>301</span>         </span><span class="NAME">this._initDialogInterface</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>302</span>         </span><span class="NAME">GVS.setEnabled</span><span class="PUNC">(</span><span class="KEYW">false</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>303</span>         </span><span class="NAME">this._dialog.show</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>304</span>     </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>305</span> </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>306</span> 
+<span class='line'>307</span> </span><span class="COMM">// vim:ts=4:sw=4:et:</span><span class="WHIT">
+<span class='line'>308</span> </span></pre></body></html>

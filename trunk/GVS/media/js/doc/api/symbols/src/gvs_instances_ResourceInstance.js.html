@@ -5,24 +5,49 @@
 	.STRN {color: #393;}
 	.REGX {color: #339;}
 	.line {border-right: 1px dotted #666; color: #666; font-style: normal;}
-	</style></head><body><pre><span class='line'>  1</span> <span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">ResourceInstance</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">Class.create</span><span class="PUNC">(</span><span class="NAME">ScreenComponentInstance</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>  2</span>     </span><span class="COMM">/** @lends ResourceInstance.prototype */</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>  3</span> 
-<span class='line'>  4</span>     </span><span class="NAME">_preOffsetPosition</span><span class="PUNC">:</span><span class="WHIT">  </span><span class="PUNC">{</span><span class="NAME">top</span><span class="PUNC">:</span><span class="PUNC">-</span><span class="NUMB">6</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">left</span><span class="PUNC">:</span><span class="NUMB">4</span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>  5</span>     </span><span class="NAME">_postOffsetPosition</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="NAME">top</span><span class="PUNC">:</span><span class="PUNC">-</span><span class="NUMB">6</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">left</span><span class="PUNC">:</span><span class="NUMB">4</span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>  6</span> 
-<span class='line'>  7</span>     </span><span class="COMM">// **************** PRIVATE METHODS **************** //</span><span class="WHIT">
-<span class='line'>  8</span> 
-<span class='line'>  9</span>     </span><span class="COMM">/**
-<span class='line'> 10</span>      * Creates a new View instance for the component
-<span class='line'> 11</span>      * @type BuildingBlockView
-<span class='line'> 12</span>      * @override
-<span class='line'> 13</span>      */</span><span class="WHIT">
-<span class='line'> 14</span>     </span><span class="NAME">_createView</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'> 15</span>         </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">ResourceView</span><span class="PUNC">(</span><span class="NAME">this._buildingBlockDescription</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'> 16</span>     </span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'> 17</span> 
-<span class='line'> 18</span> </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'> 19</span> 
-<span class='line'> 20</span> </span><span class="COMM">// vim:ts=4:sw=4:et:</span><span class="WHIT">
-<span class='line'> 21</span> </span></pre></body></html>
+	</style></head><body><pre><span class='line'>  1</span> <span class="COMM">/*...............................licence...........................................
+<span class='line'>  2</span>  *
+<span class='line'>  3</span>  *    (C) Copyright 2011 FAST Consortium
+<span class='line'>  4</span>  *
+<span class='line'>  5</span>  *     This file is part of FAST Platform.
+<span class='line'>  6</span>  *
+<span class='line'>  7</span>  *     FAST Platform is free software: you can redistribute it and/or modify
+<span class='line'>  8</span>  *     it under the terms of the GNU Affero General Public License as published by
+<span class='line'>  9</span>  *     the Free Software Foundation, either version 3 of the License, or
+<span class='line'> 10</span>  *     (at your option) any later version.
+<span class='line'> 11</span>  *
+<span class='line'> 12</span>  *     FAST Platform is distributed in the hope that it will be useful,
+<span class='line'> 13</span>  *     but WITHOUT ANY WARRANTY; without even the implied warranty of
+<span class='line'> 14</span>  *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+<span class='line'> 15</span>  *     GNU Affero General Public License for more details.
+<span class='line'> 16</span>  *
+<span class='line'> 17</span>  *     You should have received a copy of the GNU Affero General Public License
+<span class='line'> 18</span>  *     along with FAST Platform.  If not, see &lt;http://www.gnu.org/licenses/>.
+<span class='line'> 19</span>  *
+<span class='line'> 20</span>  *     Info about members and contributors of the FAST Consortium
+<span class='line'> 21</span>  *     is available at
+<span class='line'> 22</span>  *
+<span class='line'> 23</span>  *     http://fast.morfeo-project.eu
+<span class='line'> 24</span>  *
+<span class='line'> 25</span>  *...............................licence...........................................*/</span><span class="WHIT">
+<span class='line'> 26</span> </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">ResourceInstance</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">Class.create</span><span class="PUNC">(</span><span class="NAME">ScreenComponentInstance</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 27</span>     </span><span class="COMM">/** @lends ResourceInstance.prototype */</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 28</span> 
+<span class='line'> 29</span>     </span><span class="NAME">_preOffsetPosition</span><span class="PUNC">:</span><span class="WHIT">  </span><span class="PUNC">{</span><span class="NAME">top</span><span class="PUNC">:</span><span class="PUNC">-</span><span class="NUMB">6</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">left</span><span class="PUNC">:</span><span class="NUMB">4</span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 30</span>     </span><span class="NAME">_postOffsetPosition</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="NAME">top</span><span class="PUNC">:</span><span class="PUNC">-</span><span class="NUMB">6</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">left</span><span class="PUNC">:</span><span class="NUMB">4</span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 31</span> 
+<span class='line'> 32</span>     </span><span class="COMM">// **************** PRIVATE METHODS **************** //</span><span class="WHIT">
+<span class='line'> 33</span> 
+<span class='line'> 34</span>     </span><span class="COMM">/**
+<span class='line'> 35</span>      * Creates a new View instance for the component
+<span class='line'> 36</span>      * @type BuildingBlockView
+<span class='line'> 37</span>      * @override
+<span class='line'> 38</span>      */</span><span class="WHIT">
+<span class='line'> 39</span>     </span><span class="NAME">_createView</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 40</span>         </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">ResourceView</span><span class="PUNC">(</span><span class="NAME">this._buildingBlockDescription</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 41</span>     </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'> 42</span> 
+<span class='line'> 43</span> </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 44</span> 
+<span class='line'> 45</span> </span><span class="COMM">// vim:ts=4:sw=4:et:</span><span class="WHIT">
+<span class='line'> 46</span> </span></pre></body></html>
