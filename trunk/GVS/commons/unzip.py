@@ -1,3 +1,28 @@
+#...............................licence...........................................#
+#
+#    (C) Copyright 2011 FAST Consortium
+#
+#     This file is part of FAST Platform.
+#
+#     FAST Platform is free software: you can redistribute it and/or modify
+#     it under the terms of the GNU Affero General Public License as published by
+#     the Free Software Foundation, either version 3 of the License, or
+#     (at your option) any later version.
+#
+#     FAST Platform is distributed in the hope that it will be useful,
+#     but WITHOUT ANY WARRANTY; without even the implied warranty of
+#     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#     GNU Affero General Public License for more details.
+#
+#     You should have received a copy of the GNU Affero General Public License
+#     along with FAST Platform.  If not, see <http://www.gnu.org/licenses/>.
+#
+#     Info about members and contributors of the FAST Consortium
+#     is available at
+#
+#     http://fast.morfeo-project.eu
+#
+#...............................licence...........................................#
 """ unzip.py
     Version: 1.1
 
@@ -13,7 +38,7 @@
     import unzip
     un = unzip.unzip()
     un.extract(r'c:\testfile.zip', 'c:\testoutput')
-    
+
 
     By Doug Tolton
 """
@@ -28,7 +53,7 @@ class unzip:
     def __init__(self, verbose = False, percent = 10):
         self.verbose = verbose
         self.percent = percent
-        
+
     def extract(self, file, dir):
         if not dir.endswith(':') and not os.path.exists(dir):
             os.mkdir(dir)
@@ -45,13 +70,13 @@ class unzip:
 
         # extract files to directory structure
         for i, name in enumerate(zf.namelist()):
-            
+
             #if self.verbose == True:
             #    print "Extracting %s" % name
             #elif perc > 0 and (i % perc) == 0 and i > 0:
             #    complete = int (i / perc) * percent
             #    print "%s%% complete" % complete
-            
+
             if not name.endswith('/'):
                 outfile = open(os.path.join(dir, name), 'wb')
                 outfile.write(zf.read(name))
@@ -100,7 +125,7 @@ def usage():
     --percent=10
     --zipfile=<zipfile>
     --outdir=<targetdir>"""
-    
+
 
 def main():
     shortargs = 'vhp:z:o:'
@@ -134,7 +159,7 @@ def main():
     if zipsource == "" or zipdest == "":
         usage()
         sys.exit()
-            
+
     unzipper.extract(zipsource, zipdest)
 
 if __name__ == '__main__': main()

@@ -1,3 +1,28 @@
+#...............................licence...........................................#
+#
+#    (C) Copyright 2011 FAST Consortium
+#
+#     This file is part of FAST Platform.
+#
+#     FAST Platform is free software: you can redistribute it and/or modify
+#     it under the terms of the GNU Affero General Public License as published by
+#     the Free Software Foundation, either version 3 of the License, or
+#     (at your option) any later version.
+#
+#     FAST Platform is distributed in the hope that it will be useful,
+#     but WITHOUT ANY WARRANTY; without even the implied warranty of
+#     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#     GNU Affero General Public License for more details.
+#
+#     You should have received a copy of the GNU Affero General Public License
+#     along with FAST Platform.  If not, see <http://www.gnu.org/licenses/>.
+#
+#     Info about members and contributors of the FAST Consortium
+#     is available at
+#
+#     http://fast.morfeo-project.eu
+#
+#...............................licence...........................................#
 # -*- coding: utf-8 -*-
 
 #...............................licence...........................................
@@ -48,37 +73,37 @@ URL_RE = re.compile(
 
 def download_http_content (uri, params=None):
     urlcleanup()
-    
+
     #proxy = settings.PROXY_SERVER
-    
+
     #The proxy must not be used with local address
     host = urlparse(uri)[1]
 
     #manage proxies with authentication (get it from environment)
-    proxy=None   
+    proxy=None
     for proxy_name in settings.NOT_PROXY_FOR:
         if host.startswith(proxy_name):
             proxy = urllib2.ProxyHandler({})#no proxy
             break
-    
+
     if not proxy:
         #Host is not included in the NOT_PROXY_FOR list => proxy is needed!
         proxy = urllib2.ProxyHandler()#proxies from environment
 
     opener = urllib2.build_opener(proxy)
-    
+
     if params:
         return opener.open(uri,data=urlencode(params)).read()
     else:
         return opener.open(uri).read()
-    
+
 def validate_url (url):
     result = URL_RE.match(url)
     if result == None:
         return False
     return True
 
-def PUT_parameter (request, parameter_name):    
+def PUT_parameter (request, parameter_name):
     # Checking GET and POST space!
     return request.POST[parameter_name]
 

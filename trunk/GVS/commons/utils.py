@@ -1,3 +1,28 @@
+#...............................licence...........................................#
+#
+#    (C) Copyright 2011 FAST Consortium
+#
+#     This file is part of FAST Platform.
+#
+#     FAST Platform is free software: you can redistribute it and/or modify
+#     it under the terms of the GNU Affero General Public License as published by
+#     the Free Software Foundation, either version 3 of the License, or
+#     (at your option) any later version.
+#
+#     FAST Platform is distributed in the hope that it will be useful,
+#     but WITHOUT ANY WARRANTY; without even the implied warranty of
+#     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#     GNU Affero General Public License for more details.
+#
+#     You should have received a copy of the GNU Affero General Public License
+#     along with FAST Platform.  If not, see <http://www.gnu.org/licenses/>.
+#
+#     Info about members and contributors of the FAST Consortium
+#     is available at
+#
+#     http://fast.morfeo-project.eu
+#
+#...............................licence...........................................#
 # -*- coding: utf-8 -*-
 
 #...............................licence...........................................
@@ -45,7 +70,7 @@ def cleanUrl(data):
 def json_encode(data, ensure_ascii=False, fields=None):
     """
     The main issues with django's default json serializer is that properties that
-    had been added to a object dynamically are being ignored (and it also has 
+    had been added to a object dynamically are being ignored (and it also has
     problems with some models).
     """
 
@@ -66,7 +91,7 @@ def json_encode(data, ensure_ascii=False, fields=None):
         else:
             ret = data
         return ret
-    
+
     def _model(data, fields):
         ret = {}
         # If we only have a model, we only want to encode the fields.
@@ -80,34 +105,34 @@ def json_encode(data, ensure_ascii=False, fields=None):
             if(_validateField(k, fields)):
                 ret[k] = _any(getattr(data, k), _getFields(k, fields))
         return ret
-    
+
     def _list(data):
         ret = []
         for v in data:
             ret.append(_any(v))
         return ret
-    
+
     def _dict(data, fields):
         ret = {}
         for k,v in data.items():
             if(_validateField(k, fields)):
                 ret[k] = _any(v, _getFields(k, fields))
         return ret
-    
+
     def _validateField(field, fields):
         if fields == None:
             return True
         return fields.has_key(field)
-    
+
     def _getFields(field_name, fields):
         if fields == None:
             return None
         elif fields.has_key(field_name):
             return fields[field_name]
         return None
-    
+
     ret = _any(data, fields)
-    
+
     return simplejson.dumps(ret, cls=DateTimeAwareJSONEncoder, ensure_ascii=ensure_ascii)
 
 def get_xml_error(value):
