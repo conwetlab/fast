@@ -3,7 +3,7 @@
   <!-- set global properties for this build -->
   <property name="app.name"      value="FASTCatalogue"/>
   <property name="app.path"      value="/${app.name}"/>
-  <property name="app.version"   value="0.1-dev"/>
+  <property name="app.version"   value="3.0-stable"/>
   <property name="build.dir"    value="${basedir}/build"/>
   <!--property name="catalina.dir" value="C:\\Program Files\\Apache Software Foundation\\Tomcat 5.5"/-->
   <property name="catalina.dir" value="/opt/apache-tomcat-6.0.29/"/>
@@ -141,4 +141,24 @@
       </batchtest>
     </junit>
   </target>
+	
+  <!--target name="copyright" description="prepends a copyright notice to all source code Java files">
+    <copy todir="${basedir}/copyright/src">
+      <fileset dir="${src.dir}">
+    	<include name="eu/morfeoproject/**/*.java"/>
+      </fileset>
+      <filterchain>
+        <concatfilter prepend="copyright.txt"/>
+      </filterchain>
+    </copy>
+    <copy todir="${basedir}/copyright/test">
+      <fileset dir="${test.dir}">
+    	<include name="eu/morfeoproject/**/*.java"/>
+      </fileset>
+      <filterchain>
+        <concatfilter prepend="copyright.txt"/>
+      </filterchain>
+    </copy>
+  </target-->
+
 </project>
